@@ -6,6 +6,8 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorInfiniteOrbit
+import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorAdmissibleChargedRelation
+import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 
 /-!
 # Search consequences of the quitting terminal exploitability witness
@@ -26,7 +28,11 @@ The same prefix bound has an all-orbits consequence.  Every arbitrary
 infinite exact punishment-floor Nash--Bellman orbit has total absorption at
 most the common bound.  Its absorption masses, and every player's individual
 quit probabilities, are summable; the roots therefore converge
-coordinatewise to all-Continue.
+coordinatewise to all-Continue.  More sharply, every visit to a state with a
+fixed positive singleton deficit spends a fixed positive amount of that same
+budget, even after arbitrary exits, re-entry, and changes of deficit owner.
+Consequently every coherent infinite orbit drives all one-sided singleton
+deficits to zero.
 
 The cycle-rejection statements concern the exact punishment-floor reachable
 relation; the all-orbits statement uses the larger finite-prefix family whose
@@ -44,6 +50,49 @@ open Math.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+
+/-- A payoff has singleton deficit at least `eta` when some player is at least
+`eta` below that player's own singleton reward. -/
+def HasQuittingSingletonDeficitAtLeast
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (eta : ℝ) (payoff : Payoff ι) : Prop :=
+  ∃ who, payoff who ≤ reward (quittingSingletonTerminal who) who - eta
+
+namespace QuittingPunishmentFloorAdmissibleChargedRelation
+
+private abbrev AdmissibleRelation :=
+  quittingPunishmentFloorAdmissibleChargedRelation reward
+
+/-- Number of outgoing path edges whose tail payoff has some singleton deficit
+at least `eta`.  Re-entry into the deficit region is counted again. -/
+noncomputable def singletonDeficitVisitCount
+    (eta : ℝ) {source target : QuittingPunishmentFloorAdmissibleState reward}
+    (path : AdmissibleRelation.Path source target) : ℕ :=
+  path.sourceVisitCount fun state =>
+    HasQuittingSingletonDeficitAtLeast reward eta state.1.1.1
+
+/-- Every visit to an `eta`-singleton-deficit tail pays the same explicit
+absorption charge.  The path may leave and re-enter the deficit region, and
+the player witnessing the deficit may change at every visit. -/
+theorem singletonDeficitVisitCount_mul_ratio_le_chargeSum
+    (eta : ℝ) (heta : 0 < eta)
+    {source target : QuittingPunishmentFloorAdmissibleState reward}
+    (path : AdmissibleRelation.Path source target) :
+    (singletonDeficitVisitCount eta path : ℝ) *
+        (eta / (eta + 2 * quittingRewardBound reward)) ≤ path.chargeSum := by
+  unfold singletonDeficitVisitCount
+  apply path.sourceVisitCount_mul_le_chargeSum
+  intro edge hedge
+  rcases hedge with ⟨who, hgap⟩
+  exact gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
+    reward edge.tail.1.1.1 edge.toBoxEdge.root who heta
+    (abs_reward_le_quittingRewardBound reward) hgap (by
+      simpa only [QuittingPunishmentFloorAdmissibleEdge.toBoxEdge,
+        QuittingPunishmentFloorBoxEdge.root] using edge.exactEdge.2)
+
+end QuittingPunishmentFloorAdmissibleChargedRelation
+
+open QuittingPunishmentFloorAdmissibleChargedRelation
 
 namespace QuittingTerminalExploitabilityWitness
 
@@ -76,6 +125,42 @@ theorem highAbsorptionStageCount_mul_threshold_le_prefixChargeBound
       quittingPunishmentFloorPrefixChargeBound reward := by
   exact (cert.highAbsorptionStageCount_mul_le_charge threshold).trans
     (witness.prefixCharge_le cert)
+
+/-- Under a terminal exploitability witness, every exact floor-admissible path
+has a uniform budget on all visits to a fixed singleton-deficit region.  The
+bound counts arbitrary re-entry and changing deficit owners. -/
+theorem admissiblePath_singletonDeficitVisitCount_mul_ratio_le_prefixChargeBound
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (eta : ℝ) (heta : 0 < eta)
+    {source target : QuittingPunishmentFloorAdmissibleState reward}
+    (path : (quittingPunishmentFloorAdmissibleChargedRelation reward).Path
+      source target) :
+    (QuittingPunishmentFloorAdmissibleChargedRelation.singletonDeficitVisitCount
+        eta path : ℝ) *
+          (eta / (eta + 2 * quittingRewardBound reward)) ≤
+      quittingPunishmentFloorPrefixChargeBound reward := by
+  exact
+    (singletonDeficitVisitCount_mul_ratio_le_chargeSum eta heta path).trans
+      (by
+        rw [← pathToFinitePrefix_charge path]
+        exact witness.prefixCharge_le _)
+
+/-- Division form of the uniform singleton-deficit visit budget. -/
+theorem admissiblePath_singletonDeficitVisitCount_le
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (eta : ℝ) (heta : 0 < eta)
+    {source target : QuittingPunishmentFloorAdmissibleState reward}
+    (path : (quittingPunishmentFloorAdmissibleChargedRelation reward).Path
+      source target) :
+    (QuittingPunishmentFloorAdmissibleChargedRelation.singletonDeficitVisitCount
+        eta path : ℝ) ≤
+      quittingPunishmentFloorPrefixChargeBound reward /
+        (eta / (eta + 2 * quittingRewardBound reward)) := by
+  have hdenominator : 0 < eta + 2 * quittingRewardBound reward := by
+    linarith [quittingRewardBound_nonneg reward]
+  apply (le_div_iff₀ (div_pos heta hdenominator)).2
+  exact witness.admissiblePath_singletonDeficitVisitCount_mul_ratio_le_prefixChargeBound
+    eta heta path
 
 /-- Every finite partial absorption sum along every exact punishment-floor
 orbit is bounded by the common prefix-charge bound. -/
@@ -123,6 +208,57 @@ theorem infiniteOrbit_absorptionMass_tendsto_zero
     Tendsto (fun time => quittingRootAbsorptionMass (orbit.roots time))
       atTop (nhds 0) :=
   (witness.infiniteOrbit_absorptionMass_summable orbit).tendsto_atTop_zero
+
+/-- Along every arbitrary exact floor-admissible orbit, each player's positive
+singleton deficit tends to zero.  This asserts neither convergence of payoff
+states nor recurrence of stored roots. -/
+theorem infiniteOrbit_singletonDeficit_tendsto_zero
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
+    (who : ι) :
+    Tendsto (fun time => max 0
+        (reward (quittingSingletonTerminal who) who - orbit.value time who))
+      atTop (nhds 0) := by
+  rw [Metric.tendsto_atTop]
+  intro eta heta
+  have hratio : 0 < eta / (eta + 2 * quittingRewardBound reward) := by
+    apply div_pos heta
+    linarith [quittingRewardBound_nonneg reward]
+  obtain ⟨start, hstart⟩ := Metric.tendsto_atTop.mp
+    (witness.infiniteOrbit_absorptionMass_tendsto_zero orbit)
+      (eta / (eta + 2 * quittingRewardBound reward)) hratio
+  refine ⟨start, fun time htime => ?_⟩
+  have habsorption : quittingRootAbsorptionMass (orbit.roots time) <
+      eta / (eta + 2 * quittingRewardBound reward) := by
+    have hdist := hstart time htime
+    rw [Real.dist_eq, sub_zero,
+      abs_of_nonneg (orbit.absorptionMass_nonneg time)] at hdist
+    exact hdist
+  have hgap : reward (quittingSingletonTerminal who) who -
+      orbit.value time who < eta := by
+    by_contra hnot
+    have hlower := gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash
+      reward (orbit.value time) (orbit.roots time) who heta
+      (abs_reward_le_quittingRewardBound reward) (by linarith)
+      ((isεQuittingRootEndpointNash_iff_isεQuittingRootNash
+        reward (orbit.value time) 0 (orbit.roots time)).2
+          (orbit.exactNash time))
+    linarith
+  rw [Real.dist_eq, sub_zero,
+    abs_of_nonneg (le_max_left 0
+      (reward (quittingSingletonTerminal who) who - orbit.value time who))]
+  exact max_lt heta hgap
+
+/-- The whole vector of one-sided singleton deficits tends coordinatewise to
+zero along every arbitrary exact floor-admissible orbit. -/
+theorem infiniteOrbit_singletonDeficits_tendsto_zero
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
+    Tendsto (fun time who => max 0
+        (reward (quittingSingletonTerminal who) who - orbit.value time who))
+      atTop (nhds 0) := by
+  rw [tendsto_pi_nhds]
+  exact fun who => witness.infiniteOrbit_singletonDeficit_tendsto_zero orbit who
 
 /-- Every player's quit probability tends to zero along every arbitrary exact
 punishment-floor orbit. -/

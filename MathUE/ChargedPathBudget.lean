@@ -175,6 +175,45 @@ theorem highChargeCount_mul_le_chargeSum
       · simp only [highChargeCount_cons, hedge, if_false, chargeSum_cons]
         nlinarith [R.charge_nonneg edge]
 
+noncomputable local instance (proposition : Prop) : Decidable proposition :=
+  Classical.propDecidable proposition
+
+/-- Number of path edges whose source state satisfies `property`.  Thus a
+state revisited several times is counted once for each outgoing traversal. -/
+noncomputable def sourceVisitCount (property : State → Prop) :
+    {source target : State} → R.Path source target → ℕ
+  | _, _, .nil _ => 0
+  | _, _, .cons edge rest =>
+      if property (R.src edge) then sourceVisitCount property rest + 1
+      else sourceVisitCount property rest
+
+@[simp] theorem sourceVisitCount_nil (property : State → Prop) (state : State) :
+    sourceVisitCount property (Path.nil state : R.Path state state) = 0 := rfl
+
+@[simp] theorem sourceVisitCount_cons (property : State → Prop) (edge : Edge)
+    {target : State} (rest : R.Path (R.tgt edge) target) :
+    sourceVisitCount property (Path.cons edge rest) =
+      if property (R.src edge) then sourceVisitCount property rest + 1
+      else sourceVisitCount property rest := rfl
+
+/-- If leaving any state with `property` costs at least `threshold`, then the
+number of such traversals times `threshold` is bounded by total path charge.
+No invariance or consecutiveness of the marked states is required. -/
+theorem sourceVisitCount_mul_le_chargeSum
+    (property : State → Prop) (threshold : ℝ)
+    (hcharge : ∀ edge, property (R.src edge) → threshold ≤ R.charge edge)
+    {source target : State} (path : R.Path source target) :
+    (sourceVisitCount property path : ℝ) * threshold ≤ path.chargeSum := by
+  induction path with
+  | nil state => simp
+  | cons edge rest ih =>
+      by_cases hedge : property (R.src edge)
+      · simp only [sourceVisitCount_cons, hedge, if_true,
+          Nat.cast_add, Nat.cast_one, chargeSum_cons]
+        nlinarith [hcharge edge hedge]
+      · simp only [sourceVisitCount_cons, hedge, if_false, chargeSum_cons]
+        nlinarith [R.charge_nonneg edge]
+
 /-- The one-edge path. -/
 def single (e : Edge) : R.Path (R.src e) (R.tgt e) := .cons e (.nil _)
 
