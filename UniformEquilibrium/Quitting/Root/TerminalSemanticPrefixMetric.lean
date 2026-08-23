@@ -345,6 +345,37 @@ theorem semanticDebtSum_ge_floor_of_mem_tube
   linarith [abs_le.mp hdebt]
 
 omit [DecidableEq ι] in
+/-- Quantitative separation from an invariant debt-floor set, stated without
+choosing a metric-space structure on semantic pairs.  A point whose debt is
+at most `ceiling` cannot be coordinatewise closer than the displayed
+cardinality-scaled floor gap to any point of `K`. -/
+theorem semanticDebtSum_floor_sub_ceiling_le_of_within
+    {K : Set (QuittingTerminalSemanticPair ι)}
+    {Dstar ceiling δ : ℝ} {p q : QuittingTerminalSemanticPair ι}
+    (hfloor : ∀ candidate ∈ K, Dstar ≤ semanticDebtSum candidate)
+    (hq : q ∈ K) (hp : semanticDebtSum p ≤ ceiling)
+    (hδ : 0 ≤ δ) (hpq : semanticPairWithin δ p q) :
+    Dstar - ceiling ≤ (2 * Fintype.card ι : ℝ) * δ := by
+  have hdebt := abs_semanticDebtSum_sub_le_of_within hδ hpq
+  have hqfloor := hfloor q hq
+  linarith [abs_le.mp hdebt]
+
+omit [DecidableEq ι] in
+/-- Low-debt points lie outside every tube whose cardinality-scaled radius is
+strictly smaller than the debt-floor gap. -/
+theorem not_mem_semanticPairTube_of_debt_ceiling
+    {K : Set (QuittingTerminalSemanticPair ι)}
+    {Dstar ceiling δ : ℝ} {p : QuittingTerminalSemanticPair ι}
+    (hfloor : ∀ candidate ∈ K, Dstar ≤ semanticDebtSum candidate)
+    (hp : semanticDebtSum p ≤ ceiling) (hδ : 0 ≤ δ)
+    (hseparated : (2 * Fintype.card ι : ℝ) * δ < Dstar - ceiling) :
+    p ∉ semanticPairTube K δ := by
+  rintro ⟨q, hq, hpq⟩
+  exact (not_le_of_gt hseparated)
+    (semanticDebtSum_floor_sub_ceiling_le_of_within
+      hfloor hq hp hδ hpq)
+
+omit [DecidableEq ι] in
 theorem semanticDebtSum_pos_of_mem_tube_of_floor_pos
     {K : Set (QuittingTerminalSemanticPair ι)}
     {Dstar δ : ℝ} {p : QuittingTerminalSemanticPair ι}

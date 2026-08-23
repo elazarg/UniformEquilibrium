@@ -20,6 +20,7 @@ import MathUE.CaristiFixedPoint
 import MathUE.ChargedPathBudget
 import MathUE.ChargedPathBudgetCounterexamples
 import MathUE.ChargedPathExecution
+import MathUE.ChargedPacketAmplification
 import MathUE.ChargedPathFiniteHorizon
 import MathUE.ChargedPathSelection
 import MathUE.ChargedPathSelectionCounterexamples
