@@ -238,7 +238,7 @@ theorem not_atomicSoloLimit_of_punishment_le_tightBoundary
 
 end QuittingCounterexampleRegime
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 variable {regime : QuittingCounterexampleRegime reward}
 
@@ -253,7 +253,7 @@ exact endpoint Nash of the converging solo rows.  The seam supplies the
 punishment inequality, while boundary tightness turns it into the precise
 punishment-completion gate. -/
 theorem not_atomicSoloLimit_of_limitValue_eq_singleton
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -273,7 +273,7 @@ theorem not_atomicSoloLimit_of_limitValue_eq_singleton
       hlimitPositive hlimitOne hrate htail hnash
       (seam.punishmentValue_le_limitValue owner) htight
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 /-- In a counterexample, every positive-rate solo endpoint equilibrium lands
 in the isolated-negative branch, and its owner payoff is separated from zero

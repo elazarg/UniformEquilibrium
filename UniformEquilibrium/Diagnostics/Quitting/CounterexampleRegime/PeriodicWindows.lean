@@ -57,9 +57,9 @@ theorem exists_periodicCap_gain
 
 end QuittingCounterexampleRegime
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- The canonical increasing family: window `n` starts at tail date `n` and
 contains `n+1` roots before periodic restart. -/
@@ -222,6 +222,6 @@ theorem exists_infinite_fixedPlayer_fixedBranch :
         split at hbranch <;> simp_all
       simpa [hwho] using hrefusal
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

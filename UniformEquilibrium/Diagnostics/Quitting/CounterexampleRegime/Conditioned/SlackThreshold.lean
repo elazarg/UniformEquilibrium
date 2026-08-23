@@ -28,9 +28,9 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 namespace CounterexampleRegimePeriodOneTangentReadout
 
@@ -56,7 +56,7 @@ theorem periodOneReadoutDelivery_tendsto_boundary_add_tangent (who : ι) :
       atTop (nhds (seam.limit.value who)) :=
     (seam.value_tendsto who).comp hstartSucc
   have hsum := (readout.tangent_tendsto who).add hboundary
-  simpa [QuittingCounterexampleSeamWitness.periodOneReadoutTangent,
+  simpa [QuittingCounterexampleDynamicTailWitness.periodOneReadoutTangent,
     add_comm] using hsum
 
 /-- The limiting delivery is punishment-rational exactly when the negative
@@ -122,6 +122,6 @@ theorem neg_tangent_le_punishmentSlack_or_eventually_phaseGain_and_underfloor
 
 end CounterexampleRegimePeriodOneTangentReadout
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

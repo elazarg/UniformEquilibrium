@@ -26,10 +26,10 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 variable {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- The optimized tail value after removing the positive-survival phantom
 boundary and conditioning on eventual absorption. -/
@@ -208,6 +208,6 @@ theorem punishmentValue_le_conditionedTailValue_of_limit_eq_punishment
     time who hpositive
   exact congrFun hboundary who
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

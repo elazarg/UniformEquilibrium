@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 
 The production semantic-chronology owner identifies exact dynamic-debt edges
 and finite chains with literal terminal semantics.  Here those interfaces are
-applied to the counterexample seam: fixed-time projective limits first give
+applied to the counterexample dynamic tail: fixed-time projective limits give
 carrier membership, and a separate chronological limit gives the
 all-Continue self-loop pair.  No interchange of the two limits is used.
 
@@ -39,131 +39,131 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (tailWitness : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Each fixed-time projective exact-D tail point is a literal point of the
 terminal-semantic carrier.  The finite cutoff limit is taken with `time`
 fixed. -/
 theorem dynamicDebtSemanticPair_tail_mem_carrier (time : ℕ) :
-    quittingDynamicDebtSemanticPair (seam.tail time) ∈
+    quittingDynamicDebtSemanticPair (tailWitness.tail time) ∈
       quittingTerminalSemanticCarrier reward := by
   letI : Nonempty ι := regime.nonempty_players
   have hpoint : Tendsto (fun family ↦
-      quittingFiniteMinMaxDynamicDebtTail reward (seam.subseq family) time)
-      atTop (nhds (seam.tail time)) := by
-    exact ((continuous_apply time).tendsto seam.tail).comp
-      seam.projective_limit
+      quittingFiniteMinMaxDynamicDebtTail reward (tailWitness.subseq family) time)
+      atTop (nhds (tailWitness.tail time)) := by
+    exact ((continuous_apply time).tendsto tailWitness.tail).comp
+      tailWitness.projective_limit
   have hsemantic : Tendsto (fun family ↦ quittingDynamicDebtSemanticPair
       (quittingFiniteMinMaxDynamicDebtTail reward
-        (seam.subseq family) time)) atTop
-      (nhds (quittingDynamicDebtSemanticPair (seam.tail time))) :=
+        (tailWitness.subseq family) time)) atTop
+      (nhds (quittingDynamicDebtSemanticPair (tailWitness.tail time))) :=
     (continuous_quittingDynamicDebtSemanticPair.tendsto
-      (seam.tail time)).comp hpoint
-  have hcutoff : ∀ᶠ family in atTop, time < seam.subseq family := by
+      (tailWitness.tail time)).comp hpoint
+  have hcutoff : ∀ᶠ family in atTop, time < tailWitness.subseq family := by
     filter_upwards
-      [seam.subseq_strict.tendsto_atTop.eventually_ge_atTop (time + 1)]
+      [tailWitness.subseq_strict.tendsto_atTop.eventually_ge_atTop (time + 1)]
       with family hfamily
     omega
   have hfinite : ∀ᶠ family in atTop,
       quittingDynamicDebtSemanticPair
           (quittingFiniteMinMaxDynamicDebtTail reward
-            (seam.subseq family) time) ∈
+            (tailWitness.subseq family) time) ∈
         quittingTerminalSemanticCarrier reward := by
     filter_upwards [hcutoff] with family htime
     unfold quittingFiniteMinMaxDynamicDebtTail
     rw [quittingFiniteNashBellmanPathDynamicDebtSemanticPair_eq_completion
-      reward (seam.subseq family)
+      reward (tailWitness.subseq family)
       (quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer
-        reward (seam.subseq family))
+        reward (tailWitness.subseq family))
       (quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer_mem
-        reward (seam.subseq family)) time htime]
+        reward (tailWitness.subseq family)) time htime]
     apply subset_closure
     exact ⟨quittingRootSequenceProfile reward
-        (quittingFiniteNashBellmanPathRoots (seam.subseq family)
+        (quittingFiniteNashBellmanPathRoots (tailWitness.subseq family)
           (quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer
-            reward (seam.subseq family))) time, rfl⟩
+            reward (tailWitness.subseq family))) time, rfl⟩
   exact isClosed_closure.mem_of_tendsto hsemantic hfinite
 
 /-- Every chronological tail edge is a state-matched terminal-semantic
 prefix between literal carrier points, with exact root Nash at the displayed
 root and a nonnegative successor debt. -/
 theorem dynamicDebtSemanticPair_tail_chronology (time : ℕ) :
-    quittingDynamicDebtSemanticPair (seam.tail time) ∈
+    quittingDynamicDebtSemanticPair (tailWitness.tail time) ∈
         quittingTerminalSemanticCarrier reward ∧
-      quittingDynamicDebtSemanticPair (seam.tail (time + 1)) ∈
+      quittingDynamicDebtSemanticPair (tailWitness.tail (time + 1)) ∈
         quittingTerminalSemanticCarrier reward ∧
-      quittingDynamicDebtSemanticPair (seam.tail time) =
+      quittingDynamicDebtSemanticPair (tailWitness.tail time) =
         quittingTerminalSemanticPrefix reward
-          (quittingRootOfSimplex (seam.tail time).1.2)
-          (quittingDynamicDebtSemanticPair (seam.tail (time + 1))) ∧
-      IsεQuittingRootNash reward (seam.tail (time + 1)).1.1 0
-        (quittingRootOfSimplex (seam.tail time).1.2) := by
+          (quittingRootOfSimplex (tailWitness.tail time).1.2)
+          (quittingDynamicDebtSemanticPair (tailWitness.tail (time + 1))) ∧
+      IsεQuittingRootNash reward (tailWitness.tail (time + 1)).1.1 0
+        (quittingRootOfSimplex (tailWitness.tail time).1.2) := by
   have hchronology := quittingDynamicDebtEdge_semanticPrefixChronology
-    reward (seam.tail time) (seam.tail (time + 1)) (seam.tail_edge time)
-      (seam.tail_mem (time + 1)).2.1
-  exact ⟨seam.dynamicDebtSemanticPair_tail_mem_carrier time,
-    seam.dynamicDebtSemanticPair_tail_mem_carrier (time + 1),
+    reward (tailWitness.tail time) (tailWitness.tail (time + 1)) (tailWitness.tail_edge time)
+      (tailWitness.tail_mem (time + 1)).2.1
+  exact ⟨tailWitness.dynamicDebtSemanticPair_tail_mem_carrier time,
+    tailWitness.dynamicDebtSemanticPair_tail_mem_carrier (time + 1),
     hchronology.1, hchronology.2.1⟩
 
 /-- The all-Continue limiting value/debt pair, with its debt reinterpreted as
 the gap between prescribed value and augmented envelope. -/
 def limitDynamicDebtSemanticPair : QuittingTerminalSemanticPair ι :=
-  (seam.limit.value, seam.limit.value + seam.limit.debt)
+  (tailWitness.limit.value, tailWitness.limit.value + tailWitness.limit.debt)
 
 @[simp]
 theorem limitDynamicDebtSemanticPair_debt (who : ι) :
-    quittingTerminalSemanticDebt seam.limitDynamicDebtSemanticPair who =
-      seam.limit.debt who := by
+    quittingTerminalSemanticDebt tailWitness.limitDynamicDebtSemanticPair who =
+      tailWitness.limit.debt who := by
   simp [limitDynamicDebtSemanticPair, quittingTerminalSemanticDebt]
 
 /-- The chronological tail semantic pairs converge to the all-Continue
 semantic pair.  This is a second, separate limit after fixed-time carrier
 membership has already been proved. -/
 theorem dynamicDebtSemanticPair_tail_tendsto :
-    Tendsto (fun time ↦ quittingDynamicDebtSemanticPair (seam.tail time))
-      atTop (nhds seam.limitDynamicDebtSemanticPair) := by
-  have hvalue : Tendsto (fun time ↦ (seam.tail time).1.1) atTop
-      (nhds seam.limit.value) :=
-    tendsto_pi_nhds.2 seam.value_tendsto
+    Tendsto (fun time ↦ quittingDynamicDebtSemanticPair (tailWitness.tail time))
+      atTop (nhds tailWitness.limitDynamicDebtSemanticPair) := by
+  have hvalue : Tendsto (fun time ↦ (tailWitness.tail time).1.1) atTop
+      (nhds tailWitness.limit.value) :=
+    tendsto_pi_nhds.2 tailWitness.value_tendsto
   have hcap : Tendsto
-      (fun time ↦ quittingDynamicDebtCap (seam.tail time)) atTop
-      (nhds (seam.limit.value + seam.limit.debt)) := by
+      (fun time ↦ quittingDynamicDebtCap (tailWitness.tail time)) atTop
+      (nhds (tailWitness.limit.value + tailWitness.limit.debt)) := by
     apply tendsto_pi_nhds.2
     intro who
     simpa [quittingDynamicDebtCap_apply] using
-      (seam.value_tendsto who).add (seam.debt_tendsto who)
+      (tailWitness.value_tendsto who).add (tailWitness.debt_tendsto who)
   change Tendsto
-    (fun time ↦ ((seam.tail time).1.1,
-      quittingDynamicDebtCap (seam.tail time))) atTop
-    (nhds (seam.limit.value, seam.limit.value + seam.limit.debt))
+    (fun time ↦ ((tailWitness.tail time).1.1,
+      quittingDynamicDebtCap (tailWitness.tail time))) atTop
+    (nhds (tailWitness.limit.value, tailWitness.limit.value + tailWitness.limit.debt))
   simpa only [nhds_prod_eq] using hvalue.prodMk hcap
 
 /-- The all-Continue chronological limit is itself a literal point of the
 closed terminal-semantic carrier. -/
 theorem limitDynamicDebtSemanticPair_mem_carrier :
-    seam.limitDynamicDebtSemanticPair ∈
+    tailWitness.limitDynamicDebtSemanticPair ∈
       quittingTerminalSemanticCarrier reward := by
   exact isClosed_closure.mem_of_tendsto
-    seam.dynamicDebtSemanticPair_tail_tendsto
+    tailWitness.dynamicDebtSemanticPair_tail_tendsto
       (Filter.Eventually.of_forall
-        seam.dynamicDebtSemanticPair_tail_mem_carrier)
+        tailWitness.dynamicDebtSemanticPair_tail_mem_carrier)
 
 /-- The limiting semantic carrier point is a literal all-Continue prefix
 fixed point, inherited from the exact dynamic-debt self-loop. -/
 theorem limitDynamicDebtSemanticPair_allContinue_prefix :
-    seam.limitDynamicDebtSemanticPair =
+    tailWitness.limitDynamicDebtSemanticPair =
       quittingTerminalSemanticPrefix reward quittingAllContinueRoot
-        seam.limitDynamicDebtSemanticPair := by
+        tailWitness.limitDynamicDebtSemanticPair := by
   have h := quittingDynamicDebtSemanticPair_eq_prefix reward
-    (((seam.limit.value, quittingAllContinueSimplexRoot), seam.limit.debt) :
+    (((tailWitness.limit.value, quittingAllContinueSimplexRoot), tailWitness.limit.debt) :
       QuittingDebtPoint ι)
-    (((seam.limit.value, quittingAllContinueSimplexRoot), seam.limit.debt) :
-      QuittingDebtPoint ι) seam.limit.exactSelfLoop
+    (((tailWitness.limit.value, quittingAllContinueSimplexRoot), tailWitness.limit.debt) :
+      QuittingDebtPoint ι) tailWitness.limit.exactSelfLoop
   have hpair : quittingDynamicDebtSemanticPair
-      (((seam.limit.value, quittingAllContinueSimplexRoot), seam.limit.debt) :
-        QuittingDebtPoint ι) = seam.limitDynamicDebtSemanticPair := by
+      (((tailWitness.limit.value, quittingAllContinueSimplexRoot), tailWitness.limit.debt) :
+        QuittingDebtPoint ι) = tailWitness.limitDynamicDebtSemanticPair := by
     apply Prod.ext
     · rfl
     · funext who
@@ -175,42 +175,43 @@ theorem limitDynamicDebtSemanticPair_allContinue_prefix :
 /-- The limiting all-Continue root is exact Nash against the limiting
 prescribed value. -/
 theorem limitDynamicDebtSemanticPair_allContinue_nash :
-    IsεQuittingRootNash reward seam.limitDynamicDebtSemanticPair.1 0
+    IsεQuittingRootNash reward tailWitness.limitDynamicDebtSemanticPair.1 0
       (quittingAllContinueRoot : ι → PMF Bool) := by
   have h := quittingDynamicDebtEdge_exactNash reward
-    (((seam.limit.value, quittingAllContinueSimplexRoot), seam.limit.debt) :
+    (((tailWitness.limit.value, quittingAllContinueSimplexRoot), tailWitness.limit.debt) :
       QuittingDebtPoint ι)
-    (((seam.limit.value, quittingAllContinueSimplexRoot), seam.limit.debt) :
-      QuittingDebtPoint ι) seam.limit.exactSelfLoop
+    (((tailWitness.limit.value, quittingAllContinueSimplexRoot), tailWitness.limit.debt) :
+      QuittingDebtPoint ι) tailWitness.limit.exactSelfLoop
   simpa [limitDynamicDebtSemanticPair,
     quittingRootOfSimplex_allContinueSimplexRoot] using h
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+variable (tailWitness : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- The independent frontier minimum is no larger than the total exact debt
 of any chronological projective-tail point.  This does not assert equality.
 -/
-theorem baseDebtSum_le_seamTailDebtSum (time : ℕ) :
+theorem baseDebtSum_le_dynamicTailDebtSum (time : ℕ) :
     quittingTerminalSemanticDebtSum frontier.base ≤
-      ∑ who, (frontier.seam.tail time).2 who := by
+      ∑ who, (tailWitness.tail time).2 who := by
   have h := frontier.base_minimum
-    (quittingDynamicDebtSemanticPair (frontier.seam.tail time))
-    (frontier.seam.dynamicDebtSemanticPair_tail_mem_carrier time)
+    (quittingDynamicDebtSemanticPair (tailWitness.tail time))
+    (tailWitness.dynamicDebtSemanticPair_tail_mem_carrier time)
   simpa [quittingTerminalSemanticDebtSum] using h
 
 /-- The independent frontier minimum is no larger than the total debt of the
 all-Continue chronological limit.  Again, no minimizer identification or
 reverse inequality is claimed. -/
-theorem baseDebtSum_le_seamLimitDebtSum :
+theorem baseDebtSum_le_dynamicTailLimitDebtSum :
     quittingTerminalSemanticDebtSum frontier.base ≤
-      ∑ who, frontier.seam.limit.debt who := by
+      ∑ who, tailWitness.limit.debt who := by
   have h := frontier.base_minimum
-    frontier.seam.limitDynamicDebtSemanticPair
-    frontier.seam.limitDynamicDebtSemanticPair_mem_carrier
+    tailWitness.limitDynamicDebtSemanticPair
+    tailWitness.limitDynamicDebtSemanticPair_mem_carrier
   simpa [quittingTerminalSemanticDebtSum] using h
 
 end QuittingCounterexampleStoppingLawFrontier

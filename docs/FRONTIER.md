@@ -122,56 +122,86 @@ and, in the common-passport branch, a chronological carrier-path producer
 whose ordered Bellman blocks have vanishing Green ratios and divergent
 opponent exposure. The static cube does not supply that chronology.
 
-## Live formal leaves
+## Current proved dependency DAG
 
-The quitting counterexample-regime search is maintained as an explicit finite
-antichain of formal leaves. The ledger records each representative, source
-producer, obstruction class, the evidence attached to transitions, and the
-evidence seals carried by each. This is a proof-search decomposition inside the
-formalized regime, not an exhaustive classification of every equilibrium
-profile.
+The maintained ledger is now a dependency DAG, not a history of named search
+leaves. It begins at positive minimum terminal semantic debt, records the
+exact-diagonal stopping-law extraction and finite support-rank exit, and then
+shows both the four tagged exit arms and the checked consumers beyond the
+remaining producer gaps.
 
-Leaves and transitions are grouped by the cover clause they bear on. The four
-clauses are those of the necessary-condition manuscript — (A) periodic block
-profiles with fixed hazards, (B) solo tails with exact one-shot roots, (C)
-trigger repairs, and (D) player count — and two further groups collect the
-results that close a parameterized family of tables and the results about one
-named table. A seventh group collects restrictions derived inside the regime
-itself, which belong to none of the profile classes. The group definitions are
-in the ledger; a transition may bear on more than one.
+Finite support-rank termination leaves positive total slope, zero-debt support
+entry, flat charged circulation, or an eventually paid first-disagreement row.
+These are mathematically distinct tags, not an asserted equivalence. There is
+also a stronger branch-independent adapter: every extracted frontier already
+has fixed vanishing-debt atom access. In the support-entry arm the actual
+zero-debt recipient can be retained as the atom observer.
 
-Seals are recorded per entry in the `M`/`L`/`A`/`C` language of
-[`STATUS.md`](STATUS.md) and are independent: `A` and `C` are never inferred
-from `L`. An entry marked as unchecked carries no seal at all.
+Two concrete producer arrows remain explicit. Static vanishing-debt atom data
+must be serialized into chronological debt-shadowing certificates at every
+positive accuracy, or an eventually paid row must be re-entered as a positive
+exact admissible edge with an exact return. The chronological and
+admissible-return consumers themselves are proved in Lean.
+
+Seals use the independent `M`/`L`/`A`/`C` language of
+[`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
+proposition interface is checked, not that the implication has been proved.
 
 <!-- BEGIN GENERATED OPEN LEAVES -->
-This table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
+This dependency table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
-| Manuscript alternative | GitHub issue | Leaf | Cover clause | Obstruction | Seals | Representative | Source producer |
-| --- | --- | --- | --- | --- | --- | --- | --- |
-| 5 | [#40](https://github.com/elazarg/UniformEquilibrium/issues/40) | `IMMEDIATE-SINGLETON-PREEMPTION-CYCLE` | `REGIME-LOCALIZATION`, `COVER-D` | `OB-COLLISION` | `M`, `L` | `Nonempty (QuittingCounterexampleDynamicLocalization regime)` | [`QuittingCounterexampleRegime.nonempty_dynamicLocalization`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/ActiveTransferCycle.lean) |
+| From | Status | To | Seals | Checked declaration or open interface |
+| --- | --- | --- | --- | --- |
+| `POSITIVE-MINIMUM-DEBT` | `proved` | `EXACT-DIAGONAL-FRONTIER` | `M`, `L`, `A` | [`GameTheory.hasFiniteSupportRankExit_of_hasPositiveMinimumTerminalSemanticDebt`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `EXACT-DIAGONAL-FRONTIER` | `proved` | `FINITE-SUPPORT-RANK-EXIT` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_finiteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `POSITIVE-TOTAL-SLOPE` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `ZERO-DEBT-SUPPORT-ENTRY` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `FLAT-CHARGED-CIRCULATION` | `M`, `L` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.HasQuittingStoppingLawFiniteSupportRankExit`](../UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/OffDiagonal/PotentialCoDecreaseCurvature.lean) |
+| `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingCounterexampleStoppingLawFrontier.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `L` | [`GameTheory.VanishingDebtAtomChronologicalConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-RETURN` | `L` | [`GameTheory.PaidFirstDisagreementAdmissibleReturnConsumer`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
+| `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
+| `POSITIVE-ADMISSIBLE-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformPayoff_of_positive_admissible_return`](../UniformEquilibrium/Quitting/Bellman/Finite/PositiveAdmissibleCycle.lean) |
 
-The manuscript numbering has five fixed slots. Alternative 1 ([issue #3](https://github.com/elazarg/UniformEquilibrium/issues/3)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`; Alternative 2 ([issue #4](https://github.com/elazarg/UniformEquilibrium/issues/4)) is eliminated by `ELIMINATE-ABSENT-BY-IMMEDIATE-SINGLETON-COLLISION`; Alternative 3 ([issue #5](https://github.com/elazarg/UniformEquilibrium/issues/5)) is eliminated by `ELIMINATE-SINGLETON-BY-SIGNED-ACTUAL-ROW`; Alternative 4 ([issue #6](https://github.com/elazarg/UniformEquilibrium/issues/6)) is eliminated by `ELIMINATE-PRESCRIBED-AND-NEGATIVE-BY-BOUNDED-SELF-RESET`.
+The open producer arrows are:
+
+- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: serialize the static whole-law atom alternatives into executable tails with bounded forcing, vanishing survival, and small initial debt at every accuracy.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-RETURN`: Missing: re-enter the paid strategic row as a positive exact floor-admissible edge and construct an exact return to its tail state.
+
+The DAG nodes have these mathematical meanings:
+
+- `POSITIVE-MINIMUM-DEBT`: The attainable terminal semantic carrier has strictly positive minimum total debt; for a nonempty finite player type this is equivalent to nonexistence of a uniform-equilibrium payoff.
+- `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one stopping-law frontier whose active mover diagonal is exactly minus base debt and whose full-reset mover debt tends to zero.
+- `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases.
+- `POSITIVE-TOTAL-SLOPE`: One active mover has strictly positive total tangent slope.
+- `ZERO-DEBT-SUPPORT-ENTRY`: A flat active tangent column has a positive coordinate at an actual zero-debt recipient.
+- `FLAT-CHARGED-CIRCULATION`: The flat tangent columns admit normalized positive charged balance.
+- `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-reset endpoint carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.
+- `VANISHING-DEBT-ATOM-ACCESS`: Every extracted frontier has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
+- `CHRONOLOGICAL-DEBT-SHADOWING`: Certificates at every positive accuracy compile to terminal approximate Nash profiles and one uniform-equilibrium payoff.
+- `POSITIVE-ADMISSIBLE-RETURN`: One positive exact punishment-floor admissible edge followed by an exact return path compiles to a uniform-equilibrium payoff.
+- `UNIFORM-EQUILIBRIUM-PAYOFF`: Existence of one fixed payoff target satisfying the uniform finite-horizon equilibrium contract.
 
 <!-- END GENERATED OPEN LEAVES -->
 
-The obstruction classes have the following durable readings:
-
-- `OB-COLLISION`: the canonical singleton row gives a distinct player a
-  source-matched legal collision gain equal to positive semantic debt. The
-  remaining task is to consume this geometry using the full counterexample
-  regime or characterize a genuine counterexample realizing it.
-
-A change to these leaves belongs first in `QuittingProofFrontier.json`. The
-generated table above must not be hand-edited.
+A change to this DAG belongs first in `QuittingProofFrontier.json`. The
+generated block above must not be hand-edited. Earlier named-leaf censuses,
+issue mappings, strengthening chronology, and keep/drop records are
+repository-transition provenance and belong only in `TRANSITION.md`, not in
+the live mathematical ledger.
 
 ## Serious routes that remain available
 
 - **Positive construction:** produce one of the inputs accepted by an
   integrated compiler, or add a new compiler whose output reaches terminal
   approximate Nash existence.
-- **Source-matched transport:** carry a local or endpoint gain back to a legal
-  reached history while preserving the player, state, payoff, and error budget.
+- **Chronological atom production:** serialize the fixed vanishing-debt atom
+  access into executable reached tails satisfying the checked shadowing
+  certificate at every positive accuracy.
+- **Exact return production:** re-enter a paid first-disagreement row as a
+  positive punishment-floor admissible edge and construct an exact return.
 - **Global barrier:** find a forward-invariant coupled semantic barrier with a
   positive debt floor, then consume it through the terminal-gap theorem.
 - **Vanishing discount:** decode analytic Bellman data into a strategically
@@ -208,8 +238,8 @@ fixed positive gap, with a theorem that every behavioral profile admits a
 unilateral terminal gain at least that gap, followed by the integrated
 nonexistence transfer.
 
-**Meaningful intermediate resolution:** eliminate or consume a live formal
-leaf, produce a substantial new unconditional class, prove a sharp
+**Meaningful intermediate resolution:** prove or consume one of the open DAG
+arrows, produce a substantial new unconditional class, prove a sharp
 nonclosedness or no-go theorem that changes the required state, or connect a
 producer to a semantic consumer with an actual-data
 adapter.

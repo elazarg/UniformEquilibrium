@@ -103,54 +103,34 @@ def render_status(status: dict[str, Any]) -> str:
 
 
 def render_open_leaves(frontier: dict[str, Any]) -> str:
-    alternatives = {
-        alternative["leaf_id"]: alternative
-        for alternative in frontier["manuscript_alternatives"]
-        if alternative["status"] == "open"
-    }
-    eliminated = [
-        alternative
-        for alternative in frontier["manuscript_alternatives"]
-        if alternative["status"] == "eliminated"
-    ]
+    nodes = {node["id"]: node for node in frontier["nodes"]}
     lines = [
         FRONTIER_BEGIN,
-        "This table is generated from "
+        "This dependency table is generated from "
         "[`QuittingProofFrontier.json`](QuittingProofFrontier.json).",
         "",
-        "| Manuscript alternative | GitHub issue | Leaf | Cover clause | Obstruction | Seals | Representative | Source producer |",
-        "| --- | --- | --- | --- | --- | --- | --- | --- |",
+        "| From | Status | To | Seals | Checked declaration or open interface |",
+        "| --- | --- | --- | --- | --- |",
     ]
-    for leaf in frontier["formal_leaves"]:
-        alternative = alternatives[leaf["id"]]
-        issue = alternative["issue_number"]
-        source = leaf["source"]
-        producer = leaf["producer"]
-        source_link = f"[`{producer}`](../{source})"
-        clauses = ", ".join(f"`{clause}`" for clause in leaf.get("cover_clause_ids", []))
-        seals = ", ".join(f"`{seal}`" for seal in leaf.get("evidence_seals", []))
+    for edge in frontier["edges"]:
+        source = edge["source"]
+        declaration = edge["declaration"]
+        source_link = f"[`{declaration}`](../{source})"
+        seals = ", ".join(f"`{seal}`" for seal in edge.get("evidence_seals", []))
         lines.append(
-            f"| {alternative['alternative_number']} | "
-            f"[#{issue}](https://github.com/elazarg/UniformEquilibrium/issues/{issue}) | "
-            f"`{leaf['id']}` | {clauses} | `{leaf['obstruction_class']}` | {seals} | "
-            f"`{leaf['representative']}` | {source_link} |"
+            f"| `{edge['from']}` | `{edge['status']}` | `{edge['to']}` | "
+            f"{seals} | {source_link} |"
         )
-    if eliminated:
-        descriptions = []
-        for alternative in eliminated:
-            issue = alternative["issue_number"]
-            descriptions.append(
-                f"Alternative {alternative['alternative_number']} "
-                f"([issue #{issue}]"
-                f"(https://github.com/elazarg/UniformEquilibrium/issues/{issue})) "
-                f"is eliminated by `{alternative['resolution']}`"
+    open_edges = [edge for edge in frontier["edges"] if edge["status"] == "open-producer"]
+    if open_edges:
+        lines.extend(["", "The open producer arrows are:", ""])
+        for edge in open_edges:
+            lines.append(
+                f"- `{edge['from']}` to `{edge['to']}`: {edge['meaning']}"
             )
-        lines.extend(
-            [
-                "",
-                "The manuscript numbering has five fixed slots. " + "; ".join(descriptions) + ".",
-            ]
-        )
+    lines.extend(["", "The DAG nodes have these mathematical meanings:", ""])
+    for node in frontier["nodes"]:
+        lines.append(f"- `{node['id']}`: {node['meaning']}")
     lines.extend(["", FRONTIER_END])
     return "\n".join(lines)
 

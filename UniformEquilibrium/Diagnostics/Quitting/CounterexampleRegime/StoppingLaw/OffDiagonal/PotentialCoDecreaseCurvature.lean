@@ -534,7 +534,7 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
       (reward := reward) endpoint.cluster endpoint.cluster_mem hminimum hpositive
   obtain ⟨next, hbase⟩ :=
     exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
-      regime frontier.seam endpoint.cluster endpoint.cluster_mem hminimum
+      regime endpoint.cluster endpoint.cluster_mem hminimum
         hcoordinate hnash hprefix
   have hactive : next.active = Finset.univ.filter fun who ↦
       0 < quittingTerminalSemanticDebt endpoint.cluster who := by

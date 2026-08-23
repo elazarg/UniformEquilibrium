@@ -39,10 +39,10 @@ open Filter Math.Probability Math.ProbabilityMassFunction
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
 variable {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- The selected owner's limiting prescribed value retains the whole
 counterexample margin. -/
@@ -314,6 +314,6 @@ theorem ownerSemanticGap_tendsto_limitValue :
   simpa using (seam.value_tendsto seam.limit.owner).sub
     (seam.terminalValue_tendsto_zero seam.limit.owner)
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

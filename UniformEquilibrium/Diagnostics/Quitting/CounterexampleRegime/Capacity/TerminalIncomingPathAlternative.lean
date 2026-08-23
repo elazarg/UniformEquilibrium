@@ -285,7 +285,7 @@ used only to certify that zero is the attained supporting value of the
 compact carrier. -/
 theorem all_debtSourceZeroFaces_of_source_eq_zero
     {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (time : ℕ) (htime : time < cutoff)
     (hsource : source (reward := reward) path time = 0) :
     ∀ selected,
@@ -337,7 +337,7 @@ theorem all_debtSourceZeroFaces_of_source_eq_zero
 all-player zero-source exposed face at the first or second finite edge. -/
 theorem all_debtSourceZeroFaces_zero_or_one_of_frozenRootLift_and_initial_tight
     {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (hcutoff : 0 < cutoff)
     (hterminal : 0 < debt (reward := reward) path cutoff)
     (root : ι → PMF Bool) (support : Finset ι)
@@ -584,7 +584,7 @@ missing reverse objective comparison; terminal boundary domination alone
 cannot do it. -/
 theorem zeroFace_zero_or_one_or_initialCapacitySlack_or_farkas
     (regime : QuittingCounterexampleRegime reward)
-    (seam : QuittingCounterexampleSeamWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness regime)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0) :
     anchor.IsAllDebtSourceZeroFace 0 ∨

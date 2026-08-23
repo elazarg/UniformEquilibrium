@@ -41,9 +41,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Coordinatewise endpoint displacement divided by literal window
 absorption. -/
@@ -229,7 +229,7 @@ theorem exists_chargeTangentData_of_windows
   · intro who
     exact htangent who
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 namespace QuittingCounterexampleRegime
 
@@ -295,9 +295,9 @@ theorem chargeTangentPacket_underfunded_or_active_funded
 
 end QuittingCounterexampleRegime
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- **One-stage counterexample tail alternative.**  Either the selected
 exact-D tail is eventually the literal all-Continue root, or positive-
@@ -370,6 +370,6 @@ theorem eventually_allContinue_or_exists_oneStage_chargeTangentPacket :
     · intro who
       exact htangent who
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

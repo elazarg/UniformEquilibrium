@@ -27,9 +27,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Every canonical one-stage tail edge belongs to the exact enriched carrier
 and retains its actual diagonal dynamic-debt source. -/
@@ -74,11 +74,11 @@ theorem limitDebtPoint_source_eq_zero (who : ι) :
     quittingRootOfSimplex_allContinueSimplexRoot,
     quittingAllContinueRoot, PMF.pure_apply]
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 include seam in
 /-- The negative selected-source co-state exposes exactly the flows whose
@@ -135,6 +135,6 @@ theorem debtSourceFlow_mem_all_zeroFaces_iff_cap_transport
       seam.limitDebtSourceObstructionFlow_mem
         seam.limitDebtPoint_source_eq_zero edge hedge
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

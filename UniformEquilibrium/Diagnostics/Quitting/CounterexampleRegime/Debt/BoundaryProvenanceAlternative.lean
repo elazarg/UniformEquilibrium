@@ -50,9 +50,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- Raw chronological decrease of the capacity-derived debt account. -/
 def killedCapacityDebtAccountDrop (who : ι) (time : ℕ) : ℝ :=
@@ -204,6 +204,6 @@ theorem boundaryMismatch_one_sub_initialMismatch_tendsto_zero
   rw [heq]
   exact seam.killedCapacityDissipation_tendsto_zero who
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

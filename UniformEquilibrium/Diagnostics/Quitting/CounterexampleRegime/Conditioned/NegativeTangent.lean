@@ -39,9 +39,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {regime : QuittingCounterexampleRegime reward}
 
-namespace QuittingCounterexampleSeamWitness
+namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleSeamWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 namespace CounterexampleRegimePeriodOneTangentReadout
 
@@ -230,6 +230,6 @@ theorem eventually_phaseGain_of_mass_pos_of_tangent_neg
 
 end CounterexampleRegimePeriodOneTangentReadout
 
-end QuittingCounterexampleSeamWitness
+end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory
