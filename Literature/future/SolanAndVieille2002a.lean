@@ -61,7 +61,7 @@ theorem periodTwoEquilibriumClaim : PeriodTwoEquilibriumClaim :=
 def record : Literature.PaperRecord where
   paperId := "solan_and_vieille_2002a"
   bibliographyLabel := "Solan & Vieille 2002a"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2002a"
+  bibliographyLocator := "Published source: Solan & Vieille 2002a"
   role := .nonzeroSumExistence
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

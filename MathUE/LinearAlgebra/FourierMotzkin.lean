@@ -143,8 +143,7 @@ abbrev FMRowIndex (A : I → Fin (n + 1) → 𝕜) : Type _ :=
 
 /-! ### Fourier-Motzkin reduced matrix and RHS
 
-Per blueprint
-`docs/knowledge/nodes/core/linear_algebra.theorem_of_alternative.fourier_motzkin.md`:
+The Fourier–Motzkin reduction proceeds as follows:
 
 * zero rows: copy the original row, dropping the last column entry;
 * combination rows: for `(p, q) ∈ PosRows × NegRows`, take the nonneg

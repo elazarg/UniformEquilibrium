@@ -2,9 +2,8 @@
 # K11 preconditioner payload
 
 This checked-in file is concrete experimental evidence.
-`scripts/check_k11_generated_data.py` validates its structure and freshness
-but does not regenerate the numeric computation. Historical provenance is
-recorded in `TRANSITION.md`.
+This file is concrete checked-in evidence; its structure and freshness are
+validated separately, while the numeric computation is not regenerated here.
 -/
 import Experiments.certsearch.block_pair.K11.DyadicData
 

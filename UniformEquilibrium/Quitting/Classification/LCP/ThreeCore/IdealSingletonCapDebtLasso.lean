@@ -59,7 +59,7 @@ theorem idealSingletonDebt_eq_mul_of_zeroCost
     linarith [hnonneg who hne]
   rw [hsum, add_zero]
 
-namespace Question193ThreeCore
+namespace ThreeCore
 
 open QuittingLCPClassification.ThreeByThreeZeroDiagonalQ
 
@@ -418,6 +418,6 @@ theorem three_ratio_product_le_fixed_contraction
       _ = firstRatio e H := mul_one _
   exact hproductFirst.trans (firstRatio_le_of_height_lower he hlower hlowerH)
 
-end Question193ThreeCore
+end ThreeCore
 
 end GameTheory

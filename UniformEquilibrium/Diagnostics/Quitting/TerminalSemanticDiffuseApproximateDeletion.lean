@@ -209,7 +209,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_collisionMass_of_singleto
   rw [← hleft, ← hright]
   exact hmono
 
-/-- One-row approximate version of the Q175 ride inequality.  The only
+/-- One-row approximate version of the ride inequality.  The only
 error is the collision mass among opponents after deleting the owner. -/
 theorem quittingPunishmentValue_ride_le_add_collision_of_singleton
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -506,7 +506,7 @@ theorem quittingOwnerCollisionErrorAccum_le_of_opponentAbsorptionMesh
     _ = 2 * M * ((Fintype.card ι).choose 2 : ℝ) * mesh := by
       rfl
 
-/-- Perturbed live-ledger account.  Compared with the exact Q175 ledger,
+/-- Perturbed live-ledger account.  Compared with the exact ledger,
 the survival-weighted opponent-collision error is the only extra term. -/
 theorem le_quittingLiveLedgerAccum_add_collisionError_add_survival_mul_from
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -1049,7 +1049,7 @@ theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_le_two_mul_budget
 
 /-- Zero-budget form of the diffuse deletion dispatcher.  This is exact for
 the displayed opponent chronology.  It does not by itself justify subtype
-deletion, which would require the universal-opponent conclusion of Q175. -/
+deletion, which would require the corresponding universal-opponent conclusion. -/
 theorem exists_strict_owner_singleton_toggle_or_neverFaceDebt_eq_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (owner : ι)

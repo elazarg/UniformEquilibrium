@@ -15,7 +15,7 @@ namespace Literature.OliuBarton2014
 def record : Literature.PaperRecord where
   paperId := "oliu_barton_2014"
   bibliographyLabel := "Oliu-Barton 2014"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Oliu-Barton 2014"
+  bibliographyLocator := "Published source: Oliu-Barton 2014"
   role := .zeroSumUniformValue
   paperEvidence := .bibliographic
   auditStatus := .catalogued

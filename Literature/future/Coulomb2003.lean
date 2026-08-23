@@ -15,7 +15,7 @@ namespace Literature.Coulomb2003
 def record : Literature.PaperRecord where
   paperId := "coulomb_2003"
   bibliographyLabel := "Coulomb 2003"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Coulomb 2003"
+  bibliographyLocator := "Published source: Coulomb 2003"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

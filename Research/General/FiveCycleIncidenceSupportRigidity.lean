@@ -11,8 +11,8 @@ import UniformEquilibrium.Diagnostics.Quitting.FiveCycleResetWindowHelix
 
 The production helix theorem classifies one selected incidence label at each
 of five reset phases.  A complete stopping-law reset actually retains all
-finite terminal windows simultaneously (see the experimental global-retention
-adapter), so the incidence witness may be selected after the reset edge and
+finite terminal windows simultaneously, so the incidence witness may be
+selected after the reset edge and
 its debt recipient are known.
 
 This file upgrades the finite classification accordingly.  Give every phase

@@ -351,8 +351,7 @@ theorem quittingCyclePinnedDynamicDebt_eq_periodic
 
 /-- **General nonnegativity of the cycle-pinned dynamic debt.**  Every chain
 anchored at a self-consistent cyclic continuation has nonnegative exact
-backward Bellman debt at every time.  This closes the gap recorded in the
-module docstring of `QuittingCyclePinnedDebt`. -/
+backward Bellman debt at every time. -/
 theorem quittingCyclePinnedDynamicDebt_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (terminal : Payoff ι)
     (hterminal : IsQuittingCyclicContinuation reward terminal)

@@ -15,7 +15,7 @@ namespace Literature.LarakiAndSorin
 def record : Literature.PaperRecord where
   paperId := "laraki_and_sorin"
   bibliographyLabel := "Laraki & Sorin"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Laraki & Sorin"
+  bibliographyLocator := "Published source: Laraki & Sorin"
   role := .surveys
   paperEvidence := .bibliographic
   auditStatus := .catalogued

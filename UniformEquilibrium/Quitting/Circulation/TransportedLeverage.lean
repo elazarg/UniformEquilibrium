@@ -26,7 +26,7 @@ re-closing identity for the value channel, states and proves the corrected
 obstruction, exhibits the incomparability of "leverage" and "support size",
 and records where the deviation channel's leverage is undefined.
 
-## Verification against the repository's own objects
+## Verification against the own objects
 
 Every quantity the source names already has a home:
 

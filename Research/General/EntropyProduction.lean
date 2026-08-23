@@ -8,15 +8,15 @@ import Mathlib
 /-!
 # Entropy production of a stationary edge flow
 
-`ideas/wild/Physics.md` §2 ("Entropy production and information-payable currents") writes the
+For a finite Markov chain, the stationary entropy-production rate is written as
 stationary entropy-production rate of a finite Markov chain as
 
 `EP(P, π) = ∑_{x,y} F(x,y) log (F(x,y) / F(y,x))`, where `F(x,y) = π(x) P(x,y)`
 
 is the stationary edge flow, and claims it is nonnegative and vanishes at detailed balance.
-Experiment **E26** (`experiments/entropy_current_debt.py`, `experiments/RESULTS.md`) checked this
-numerically near detailed balance in a biased cyclic chain. This file upgrades that numeric
-picture to a machine-checked theorem, working with edge flows directly (no measure-theoretic
+Numerical evidence near detailed balance in a biased cyclic chain motivates this
+file. It upgrades that observation to a machine-checked theorem, working with edge
+flows directly (no measure-theoretic
 `klDiv`, no stationarity equation `∑ₓ F x y = ∑ₓ F y x`, no total-mass normalization) to keep the
 argument elementary.
 
@@ -86,12 +86,10 @@ nonnegative stationary weights `π` and nonnegative kernel `P` — is recorded s
 * **No monitoring or strategic consequence.** This file proves a scalar inequality about a
   static edge flow; it says nothing about detection, punishment, or credibility debt. The
   scale fence between a linear deviation and its (generically quadratic) information signature
-  is `ideas/wild/Physics.md` §2's own caveat, machine-checked separately: the single-observation
-  core is `experiments/BinaryKLQuadratic.lean` (experiment **E51**), and the numeric process-level
-  picture (current, entropy production, tilted pressure, and linear debt all scaling near
-  detailed balance) is experiment **E26** (`experiments/entropy_current_debt.py`) and question
-  **Q38** (`questions/old/Question38-LinearDebtQuadraticInformation.md`). Neither is revisited or
-  strengthened here.
+  has a single-observation core in the companion binary-KL development, while
+  the process-level picture (current, entropy production, tilted pressure, and
+  linear debt all scaling near
+  detailed balance) is not revisited or strengthened here.
 * **No connection to `condEntropy` or Mathlib's `klDiv`.** `EP` is defined and proved directly on
   `Finset.sum`, with no detour through conditional entropy or measure-theoretic KL divergence
   (unlike `InformationTheory.gibbs_sum_log_ratio_nonneg_of_ac`, whose statement was consulted but
@@ -127,7 +125,7 @@ theorem stationaryEdgeFlow_nonneg {π : S → ℝ} {P : S → S → ℝ}
 /-! ## Entropy production -/
 
 /-- Entropy production of an edge-weight function `F`, in the finite edge-flow form of
-`ideas/wild/Physics.md` §2:
+the finite edge-flow form:
 
 `EP F = ∑ x, ∑ y, F x y * Real.log (F x y / F y x)`.
 

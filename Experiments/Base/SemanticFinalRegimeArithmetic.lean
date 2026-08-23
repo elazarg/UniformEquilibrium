@@ -1,5 +1,5 @@
 /-
-Exact arithmetic replay for `semantic_final_regime_search.py`.
+Exact arithmetic for the semantic final-regime calculation.
 
 These are deliberately only the finite scalar consequences of the final
 minimum-semantic passports. No theorem below asserts minimum-carrier

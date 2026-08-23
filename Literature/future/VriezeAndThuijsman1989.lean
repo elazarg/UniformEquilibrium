@@ -15,7 +15,7 @@ namespace Literature.VriezeAndThuijsman1989
 def record : Literature.PaperRecord where
   paperId := "vrieze_and_thuijsman_1989"
   bibliographyLabel := "Vrieze & Thuijsman 1989"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Vrieze & Thuijsman 1989"
+  bibliographyLocator := "Published source: Vrieze & Thuijsman 1989"
   role := .nonzeroSumExistence
   paperEvidence := .bibliographic
   auditStatus := .catalogued

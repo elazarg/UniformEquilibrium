@@ -1,0 +1,33 @@
+/-
+Copyright (c) 2026 UniformEquilibrium contributors. All rights reserved.
+Released under the MIT license as described in the file LICENSE.
+Authors: UniformEquilibrium contributors
+-/
+
+import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
+import UniformEquilibrium.Quitting.Classification.Existence.CorrectedFixedBranch
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtractionReduction
+import UniformEquilibrium.Quitting.Classification.Existence.PureTimeDeviationLedger
+import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
+import UniformEquilibrium.Quitting.Classification.Existence.RootSequenceWindowLedger
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedCompactnessObstruction
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedPositiveLiveLimit
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedSemanticCarrier
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedWitnessRegimes
+import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbingSequence
+
+/-!
+# Quitting classification existence inventory
+
+Import-only inventory of the finite-quitting existence and corrected
+classification layer.  In particular, the corrected fixed-branch theorem has
+a fourth, stationarily generated residual; this inventory does not assert the
+additional compactification needed to recover a three-way classification.
+
+Ordinary consumers should import the narrow module that owns the declarations
+they use.
+-/

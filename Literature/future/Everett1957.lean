@@ -15,7 +15,7 @@ namespace Literature.Everett1957
 def record : Literature.PaperRecord where
   paperId := "everett_1957"
   bibliographyLabel := "Everett 1957"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Everett 1957"
+  bibliographyLocator := "Published source: Everett 1957"
   role := .foundations
   paperEvidence := .bibliographic
   auditStatus := .catalogued

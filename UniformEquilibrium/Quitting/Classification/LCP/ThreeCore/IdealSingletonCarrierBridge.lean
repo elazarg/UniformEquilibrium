@@ -766,9 +766,9 @@ theorem varyingThreeIdealSingletonLassoOrbit_mem_and_debt_tendsto_zero
 
 /-! ## The varying-height directed three-core cycle -/
 
-namespace Question193ThreeCoreCarrier
+namespace ThreeCoreCarrier
 
-open Question193ThreeCore
+open ThreeCore
 open QuittingLCPClassification.ThreeByThreeZeroDiagonalQ
 
 abbrev Player := Fin 3
@@ -940,13 +940,13 @@ theorem directedCycle_semanticOrbit_mem_and_debt_tendsto_zero
       (hcompiled.1 n).1
   · simpa [semanticOrbit, α₁, α₂, α₃, H, H₂, H₁] using hcompiled.2
 
-end Question193ThreeCoreCarrier
+end ThreeCoreCarrier
 
 /-! ## Lifting the three-cycle through a three-element normal core -/
 
-namespace Question193ThreeCoreLift
+namespace ThreeCoreLift
 
-open Question193ThreeCore
+open ThreeCore
 open QuittingLCPClassification
 open QuittingLCPClassification.ThreeByThreeZeroDiagonalQ
 open Math.LinearProgramming
@@ -1082,7 +1082,7 @@ def ambientClearanceOrbit
     (a b c d e f H₀ : ℝ) (t₀ : ι → ℝ) : ℕ → ι → ℝ
   | 0 => t₀
   | n + 1 =>
-      let H := Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n
+      let H := ThreeCoreCarrier.heightOrbit a b c d e f H₀ n
       threeIdealSingletonClearance M
         (coreOwner label 0) (coreOwner label 2) (coreOwner label 1)
         (firstRatio e H)
@@ -1104,7 +1104,7 @@ theorem ambientClearanceOrbit_nonneg
       have hone : ∀ who, 0 ≤ idealSingletonClearance M
           (coreOwner label 0)
           (firstRatio e
-            (Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n))
+            (ThreeCoreCarrier.heightOrbit a b c d e f H₀ n))
           (ambientClearanceOrbit M label a b c d e f H₀ t₀ n) who := by
         intro who
         by_cases hwho : who = coreOwner label 0
@@ -1113,10 +1113,10 @@ theorem ambientClearanceOrbit_nonneg
       have htwo : ∀ who, 0 ≤ idealSingletonClearance M
           (coreOwner label 2)
           (secondRatio d (secondHeight c e
-            (Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n)))
+            (ThreeCoreCarrier.heightOrbit a b c d e f H₀ n)))
           (idealSingletonClearance M (coreOwner label 0)
             (firstRatio e
-              (Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n))
+              (ThreeCoreCarrier.heightOrbit a b c d e f H₀ n))
             (ambientClearanceOrbit M label a b c d e f H₀ t₀ n)) who := by
         intro who
         by_cases hwho : who = coreOwner label 2
@@ -1138,14 +1138,14 @@ theorem coreRestriction_ambientClearanceOrbit
     (t₀ : ι → ℝ) (ht₀ : coreRestriction label t₀ = axisTwo H₀) :
     ∀ n, coreRestriction label
         (ambientClearanceOrbit M label a b c d e f H₀ t₀ n) =
-      axisTwo (Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n) := by
+      axisTwo (ThreeCoreCarrier.heightOrbit a b c d e f H₀ n) := by
   intro n
   induction n with
   | zero => exact ht₀
   | succ n ih =>
-      let H := Question193ThreeCoreCarrier.heightOrbit a b c d e f H₀ n
+      let H := ThreeCoreCarrier.heightOrbit a b c d e f H₀ n
       have hH : 0 < H :=
-        Question193ThreeCoreCarrier.heightOrbit_pos hH₀ ha hb hc hd he hf n
+        ThreeCoreCarrier.heightOrbit_pos hH₀ ha hb hc hd he hf n
       unfold ambientClearanceOrbit threeIdealSingletonClearance
       rw [coreRestriction_idealSingletonClearance M label a b c d e f hmatrix]
       rw [coreRestriction_idealSingletonClearance M label a b c d e f hmatrix]
@@ -1176,7 +1176,7 @@ theorem outside_core_affine_nonneg
     (mul_nonneg (sub_nonneg.mpr hα1)
       (normalCore_entry_pos_of_notMem M hwho (coreOwner_mem label owner)).le)
 
-end Question193ThreeCoreLift
+end ThreeCoreLift
 
 end IdealSingletonCarrierBridge
 end GameTheory

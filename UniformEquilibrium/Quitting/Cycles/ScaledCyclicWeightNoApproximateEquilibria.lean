@@ -705,7 +705,7 @@ configuration with an arbitrary feasible punishment, is a global equilibrium
 at every positive tolerance. Combined with `no_motion_price_scaledCyclicWeight`
 of `WeightedRowMotionSeparation.lean` — no positive `ρ` prices motion by quit
 mass on the weighted correspondence at this same weight — this completes the
-`WeightedOneStageNashCannotPriceMotion.md` counterexample end to end: (K1)
+the counterexample end to end: (K1)
 is granted exactly for weights meeting this package, `scaledCyclicWeight`
 meets it, and yet no such `ρ` exists. -/
 theorem scaledCyclicWeight_neither_stationary_nor_instant :

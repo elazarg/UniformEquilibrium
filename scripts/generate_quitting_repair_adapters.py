@@ -73,7 +73,7 @@ def render_block(game: RationalQuittingGame | None = None) -> str:
     return "\n".join(
         (
             BEGIN,
-            f"-- source: Experiments/quitting_repair_cegis/tables/cutoff_one_mixed.json",
+            "-- checked finite table",
             f"-- fingerprint: {fingerprint}",
             "abbrev Player := Fin 2",
             "abbrev Terminal := {S : Finset Player // S.Nonempty}",

@@ -10,10 +10,9 @@ import Mathlib.Data.Set.Finite.Lattice
 /-!
 # Guarded routing audit: the abstract skeleton
 
-Provenance: this file is the game-free skeleton of the guarded-routing audit,
-whose full statement is recorded in an untracked local research note.  It formalizes
-only the bookkeeping layer of that audit -- the part which is genuinely
-independent of the analytic atlas -- over an arbitrary node type.  It is
+This file is the game-free skeleton of the guarded-routing audit.  It formalizes
+only the bookkeeping layer -- the part which is genuinely independent of the
+analytic atlas -- over an arbitrary node type.  It is
 deliberately *not* the full guarded registry (refined obstruction cells, the
 coverage formulas, the status-refined neutral graph and its phase map); that
 full registry is future work gated on the rank re-review.

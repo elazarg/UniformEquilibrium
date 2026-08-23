@@ -14,7 +14,7 @@ namespace Literature.SolanAndVieille2002b
 def record : Literature.PaperRecord where
   paperId := "solan_and_vieille_2002b"
   bibliographyLabel := "Solan & Vieille 2002b"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2002b"
+  bibliographyLocator := "Published source: Solan & Vieille 2002b"
   role := .nonzeroSumExistence
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

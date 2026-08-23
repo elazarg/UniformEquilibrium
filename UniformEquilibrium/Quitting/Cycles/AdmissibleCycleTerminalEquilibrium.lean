@@ -46,12 +46,12 @@ That disjunction is exactly the repository's own deviation-machinery branch
 condition -- it is the `hbranch` argument of the umbrella local-to-global bound
 `quittingRootSequenceHazardTerminalGap_le_tsum_residual_of_zero_or_nonnegativeSolo`
 -- and it is exactly the characterization of vanishing deviation mismatch
-recorded in the program notes: the deleted survival product `P_who` of an
+the deleted survival product `P_who` of an
 absorbing cycle is `1` only in the *isolated* configuration where every opponent
 of `who` is silent at every phase, and there the mismatch is `[-r_who({who})]₊`,
 so it vanishes precisely when `r_who({who}) ≥ 0`.
 
-**(H2) is not redundant** -- *hand check, not formalized here.*  Take two
+**(H2) is not redundant** -- *direct calculation, not formalized here.*  Take two
 players, let player `1` quit with probability `1/2` at the single block stage
 and player `2` never quit, and set `r_1({1}) = -1`, `r_1({2}) = r_1({1,2})` and
 player `2`'s entries all `0`.  Every clause of

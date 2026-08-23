@@ -9,7 +9,7 @@ import UniformEquilibrium.VanishingDiscount.Analytic.Accounting.ProcessedHarmoni
 /-!
 # Public-response enforcement from a processed harmonic account
 
-This file is the direct downstream consumer of the deviation-law telescope
+This file directly applies the deviation-law telescope
 for a processed harmonic endpoint coordinate.
 
 The input keeps every prescribed-play, monitoring, and total-budget

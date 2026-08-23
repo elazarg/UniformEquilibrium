@@ -9,10 +9,10 @@ import UniformEquilibrium.Quitting.Cycles.CycleIsolatedCoordinate
 /-!
 # The candidate hard weight's isolated-negative cycle
 
-A solver reports an explicit two-player weight family, parametrized by
+Consider an explicit two-player weight family, parametrized by
 `0 < α < 1`, and claims that *every* complementary sequence for it has
-deviation gain bounded below by `α`.  This file checks the reported cycle
-and its gain -- the concrete part of that claim -- against the repository's
+deviation gain bounded below by `α`.  This file checks the cycle
+and its gain -- the concrete part of that claim -- against the
 own quitting-game machinery.  The universally quantified floor over *every*
 complementary sequence is **not** attempted here; see the closing remarks.
 
@@ -38,13 +38,13 @@ phase.
 Its value at coordinate `1` is exactly the solo reward `r_1({1}) = -α`
 (`quittingCyclicContinuationBlock_value_eq_soloReward_of_isolated`, not
 restated here), and its anchored companion mismatch there is *exactly* `α`
-(`mismatch_eq_alpha`) -- confirming both reported numbers.  In particular the
+(`mismatch_eq_alpha`) -- confirming both values.  In particular the
 boundary-option supremum really is `max {0, -α} = 0`: the isolated companion
 map is `w ↦ max {r_1({1}), w}` (`quittingRootCompanionMap_of_isolated`), so
 the anchored orbit from `Λ_1 = max {0, r_1({1})}` never moves, and `Λ_1 = 0`
 here (`soloQuitCap`) because `r_1({1}) = -α < 0`.  The deviation supremum is
 contributed entirely by the "never activate coordinate `1`" option, matching
-the reported route exactly; no finite-time deviation contributes anything
+the corresponding route exactly; no finite-time deviation contributes anything
 beyond what the fixed point already selects.
 
 ## What this file does not cover
@@ -219,7 +219,7 @@ theorem tendsto_iterate_soloQuitAnchor (α p : ℝ) (hp0 : 0 < p) (hp1 : p < 1) 
       Filter.atTop (nhds (quittingPositiveSingletonDebtCap (reward α) false)) :=
   tendsto_iterate_soloQuitAnchor_of_isolated (reward α) _ false 1 (isIsolated α p hp0 hp1)
 
-/-- **The cycle's mismatch is exactly `α`, confirming the reported value.**
+/-- **The cycle's mismatch is exactly `α`.**
 This is `Λ_1 - r_1({1}) = 0 - (-α) = α`, so the deviation supremum against
 this cycle is exactly the "never activate coordinate `1`" boundary option
 `max {0, -α} = 0`, and no finite-time deviation contributes more. -/

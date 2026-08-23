@@ -55,7 +55,7 @@ than asserting that the original rotation never liquidates almost surely.
 The exact three-fraud evaluation of periodic audits (underpayment, profitable
 refusal, and a negative Never ray) is deliberately not claimed here.  It is
 proved in the prose solution of
-`questions/Question171-PeriodicWindowRestartExploitability.md`, but has not
+the periodic-window restart analysis, but has not
 yet been promoted to a kernel-checked Lean theorem.
 -/
 
@@ -411,7 +411,7 @@ namespace CyclicStress
 /-- Four cyclic club members. -/
 abbrev Member := Fin 4
 
-/-- The Question 171 stress table: a sole walker receives `1`, its cyclic
+/-- The periodic-window stress table: a sole walker receives `1`, its cyclic
 successor receives `2`, and everyone else receives `0`; every collision pays
 zero. -/
 def severance

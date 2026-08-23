@@ -13,7 +13,7 @@ import MathUE.BonferroniProductBounds
 import UniformEquilibrium.Quitting.RewardBound
 
 /-!
-# Singular weighted-debt limits and a source-matched singleton insertion experiment
+# Singular weighted-debt limits and a source-matched singleton insertion
 
 The positive-costate moat can be sent to a boundary costate.  Giving one
 player weight tending to zero and every other player weight one produces a

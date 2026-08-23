@@ -15,7 +15,7 @@ namespace Literature.Vigeral2013
 def record : Literature.PaperRecord where
   paperId := "vigeral_2013"
   bibliographyLabel := "Vigeral 2013"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Vigeral 2013"
+  bibliographyLocator := "Published source: Vigeral 2013"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactP
 # The four-player singleton blocker nevertheless circulates
 
 `FourPlayerSingletonBlocker` rules out a static complementary distribution.
-This experiment shows that the same rational reward table has a dynamic
+This module shows that the same rational reward table has a dynamic
 four-phase singleton-face circulation.  The four contraction ratios are a
 fixed point of an explicit continuous self-map of a compact cube.
 -/

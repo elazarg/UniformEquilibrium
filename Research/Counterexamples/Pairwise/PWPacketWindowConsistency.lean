@@ -9,8 +9,7 @@ import Mathlib
 /-!
 # Exact arithmetic for the P x W consistency witness
 
-This file checks the two quantitative estimates used by
-`PW_PACKET_WINDOW_REPORT.md`.
+This file checks two quantitative packet-window consistency estimates.
 
 The four singleton rows are `1 + b_i`, where
 

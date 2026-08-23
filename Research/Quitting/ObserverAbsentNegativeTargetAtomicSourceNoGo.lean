@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
+import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import UniformEquilibrium.Quitting.Debt.Dynamic.DebtOwnerTransferCounterexample
 

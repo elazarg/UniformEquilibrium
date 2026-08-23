@@ -1,10 +1,9 @@
 import Mathlib
 
 /-!
-# Q38's anytime-detection impossibility, conditional on the Kakutani dichotomy
+# Anytime-detection impossibility, conditional on the Kakutani dichotomy
 
-`questions/old/Question38-LinearDebtQuadraticInformation.md` (Part B) shows that a
-deviation rate `p_t := ε/(t+1)` accumulates unbounded incentive debt
+A deviation rate `p_t := ε/(t+1)` accumulates unbounded incentive debt
 (`∑ p_t = ∞`) while its squared rate is summable (`∑ p_t^2 < ∞`); under that
 square-summability, the baseline and deviation path laws on infinite play are
 mutually absolutely continuous, so every level-`α` anytime detector under the
@@ -20,7 +19,7 @@ argument consumes (`P ≪ Q`, not the full equivalence `P ~ Q`). This file is
 the exact consumer a future `kakutani-dichotomy` library must serve: supply a
 term of type `Summable (fun t => δ t ^ 2) → P ≪ Q` for the adapted path laws
 `P` (baseline) and `Q` (deviation), and `undetectable_unbounded_debt_of_dichotomy`
-below discharges the rest of Q38 Part B's impossibility shape.
+below discharges the remaining impossibility argument.
 
 ## Contents
 
@@ -90,7 +89,7 @@ theorem detector_misses_of_mutuallyAC (P Q : Measure Ω) [IsProbabilityMeasure P
 
 Pure analysis, no measure theory: the harmonic rate `δ t := 1/(t+1)` has
 divergent partial sums (linear incentive debt) but summable squares
-(quadratic statistical information), matching Q38 Part B's example
+(quadratic statistical information), matching the harmonic example
 `p_t = ε/(t+1)`. -/
 
 /-- The harmonic series diverges: `∑ 1/(t+1)` is not summable. -/

@@ -17,7 +17,7 @@ triple-specific facts:
 
 The strategic passage from deterministic stopping times to arbitrary
 behavioral deviations is the repository's `BehaviorPureTimeExtremality`
-theorem; this file isolates only the rational algebra needed by the report.
+theorem; this file isolates only the rational algebra needed by the argument.
 -/
 
 namespace GameTheory.CounterexamplePairwiseConsistency.TPW

@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.MinimumFiberResetSquareSourceMatchNoGo
-import Research.Quitting.Q182EndpointRecipientAtomInterfaceNoGo
+import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawTransferBalanceRegression
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
@@ -24,7 +24,7 @@ This is a local compatibility witness, not a counterexample to uniform
 equilibrium existence.  Since the game has two players, its attainable
 semantic carrier cannot have a positive global debt minimum.  Thus positive
 *global-minimum provenance*, rather than equality on one positive fiber, is
-the only part of the corrected Q186 compatibility problem not realized here.
+the only part of the corrected compatibility problem not realized here.
 -/
 
 noncomputable section
@@ -182,7 +182,7 @@ theorem source_observer_gain_eq_neg_one :
     quittingTerminalPayoff_pureSetRoot]
   norm_num [quittingSetReward, reward, mover, observer, Finset.ext_iff]
 
-/-- **Strict local compatibility for the corrected Q186 hypotheses.** -/
+/-- **Strict local compatibility for the corrected hypotheses.** -/
 theorem positiveCommonFiber_signedSourceMismatch :
     Function.update source mover moverTarget = first ∧
       Function.update source observer observerResponse = observerFirst ∧

@@ -22,6 +22,5 @@ Production entry point for the reverse-consequence layer:
 * bounded expected-potential gauge invariance; and
 * discontinuity under transition-kernel perturbations.
 
-The accompanying mathematical guide is
-`docs/uniform-equilibrium/ReverseConsequences.md`.
+The declarations above provide the uniform-equilibrium reverse consequences.
 -/

@@ -16,7 +16,7 @@ def record : Literature.PaperRecord where
   paperId := "jointly_controlled_lotteries_with_biased_coins"
   bibliographyLabel := "Jointly Controlled Lotteries with Biased Coins"
   bibliographyLocator :=
-    "docs/references/00_BIBLIOGRAPHY.md :: " ++
+    "Published source: " ++
       "Jointly Controlled Lotteries with Biased Coins"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic

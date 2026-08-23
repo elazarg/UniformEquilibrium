@@ -25,8 +25,8 @@ namespace ThreeCoreAmbientCarrierElimination
 
 open Filter Finset
 open IdealSingletonBlockApproximation IdealSingletonCarrierBridge
-open IdealSingletonCarrierBridge.Question193ThreeCoreLift
-open Question193ThreeCore
+open IdealSingletonCarrierBridge.ThreeCoreLift
+open ThreeCore
 open QuittingLCPClassification
 open QuittingLCPClassification.ThreeByThreeZeroDiagonalQ
 open Math.LinearProgramming
@@ -180,13 +180,13 @@ def ambientSemanticOrbit
   varyingThreeIdealSingletonLassoOrbit reward
     (coreOwner label 0) (coreOwner label 2) (coreOwner label 1)
     (fun n => firstRatio e
-      (IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.heightOrbit
+      (IdealSingletonCarrierBridge.ThreeCoreCarrier.heightOrbit
         a b c d e f f n))
     (fun n => secondRatio d (secondHeight c e
-      (IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.heightOrbit
+      (IdealSingletonCarrierBridge.ThreeCoreCarrier.heightOrbit
         a b c d e f f n)))
     (fun n => thirdRatio a (firstHeight b d (secondHeight c e
-      (IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.heightOrbit
+      (IdealSingletonCarrierBridge.ThreeCoreCarrier.heightOrbit
         a b c d e f f n))))
     (resetPair reward label)
 
@@ -210,7 +210,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
   let M := normalizedSoloMatrix reward
   let start := resetPair reward label
   let H : ℕ → ℝ :=
-    IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.heightOrbit
+    IdealSingletonCarrierBridge.ThreeCoreCarrier.heightOrbit
       a b c d e f f
   let H₂ : ℕ → ℝ := fun n => secondHeight c e (H n)
   let H₁ : ℕ → ℝ := fun n => firstHeight b d (H₂ n)
@@ -224,7 +224,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
   let q : ℝ := e / (lower + e)
   have hH : ∀ n, 0 < H n := by
     intro n
-    exact IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.heightOrbit_pos
+    exact IdealSingletonCarrierBridge.ThreeCoreCarrier.heightOrbit_pos
       hf ha hb hc hd he hf n
   have hH₂ : ∀ n, 0 < H₂ n := by
     intro n
@@ -327,7 +327,7 @@ theorem labeled_directedCycle_ambientOrbit_mem_and_debt_tendsto_zero
   have hq := fixed_height_contraction_nonneg_lt_one he hlower
   have hheightLower : ∀ n, lower ≤ H n := by
     intro n
-    exact IdealSingletonCarrierBridge.Question193ThreeCoreCarrier.min_height_le_heightOrbit
+    exact IdealSingletonCarrierBridge.ThreeCoreCarrier.min_height_le_heightOrbit
       hf ha hb hc hd he hdet n
   have hcontract : ∀ n, α₁ n * α₂ n * α₃ n ≤ q := by
     intro n

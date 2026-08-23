@@ -15,7 +15,7 @@ namespace Literature.Renault2011
 def record : Literature.PaperRecord where
   paperId := "renault_2011"
   bibliographyLabel := "Renault 2011"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Renault 2011"
+  bibliographyLocator := "Published source: Renault 2011"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

@@ -3,8 +3,8 @@ import Mathlib
 /-!
 # Finite-group orbit gluing
 
-This file formalizes the independent order-theoretic note
-`ideas/FiniteGroupOrbitGluing.md`.
+This file formalizes an independent order-theoretic finite-group orbit-gluing
+construction.
 
 A group acting monotonically on a complete lattice acts by order
 automorphisms.  The supremum of an orbit is invariant and glues any family of
@@ -19,7 +19,7 @@ namespace Research.FiniteGroupOrbitGluing
 variable {Gamma L : Type} [Group Gamma]
   [CompleteLattice L] [MulAction Gamma L]
 
-/-- Upward-closed predicate, kept local to this independent experiment. -/
+/-- Upward-closed predicate, kept local to this construction. -/
 def IsUpwardClosed (set : Set L) : Prop :=
   ∀ ⦃x y⦄, x ∈ set → x ≤ y → y ∈ set
 

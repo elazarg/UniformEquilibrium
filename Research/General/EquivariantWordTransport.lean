@@ -3,8 +3,8 @@ import Mathlib
 /-!
 # Equivariant transport of finite block words
 
-This independent experiment formalizes the action-groupoid calculation in
-`ideas/EquivariantWordTransport.md`.
+This independent module formalizes the action-groupoid calculation in
+the equivariant word-transport construction.
 
 An external group acts on fully labelled edges and on the continuation fiber.
 If every block map intertwines those actions, then every finite composite does

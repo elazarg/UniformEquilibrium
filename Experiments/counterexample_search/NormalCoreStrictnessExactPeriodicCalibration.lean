@@ -34,7 +34,7 @@ arbitrary interior hazard.
 
 ## Reproduction
 
-`lake env lean Experiments/counterexample_search/NormalCoreStrictnessExactPeriodicCalibration.lean`
+This module can be checked independently with Lean.
 
 ## Scope
 

@@ -15,7 +15,7 @@ namespace Literature.Solan2022
 def record : Literature.PaperRecord where
   paperId := "solan_2022"
   bibliographyLabel := "Solan 2022"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan 2022"
+  bibliographyLocator := "Published source: Solan 2022"
   role := .surveys
   paperEvidence := .bibliographic
   auditStatus := .catalogued

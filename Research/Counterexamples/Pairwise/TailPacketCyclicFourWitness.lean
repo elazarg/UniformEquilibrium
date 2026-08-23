@@ -4,7 +4,7 @@ import Mathlib
 # Exact scalar checks for the cyclic four-player T x P witness
 
 This probe deliberately isolates the two pieces of real algebra that carry
-universal quantifiers in the accompanying report:
+universal quantifiers in the argument:
 
 * every normalized packet admitted by the cyclic singleton table has a
   refusal gain at least `1 / 52` for some owner; and
@@ -12,7 +12,7 @@ universal quantifiers in the accompanying report:
   one-stage slack to deter a nonowner's pure Quit deviation.
 
 It does not claim counterexample-regime provenance or the global properties
-(A) and (B) of Question 172.
+(A) and (B) of the companion tail-packet analysis.
 -/
 
 namespace CounterexamplePairwiseConsistency

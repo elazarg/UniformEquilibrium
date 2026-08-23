@@ -15,7 +15,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 /-!
 # Exact dynamic debt is terminal semantic debt
 
-This experiment closes a semantic identification which is needed before the
+This module closes a semantic identification which is needed before the
 fixed-port stopping-law geometry can interact with the production exact-`D`
 state space.
 
@@ -147,7 +147,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebt_eq_terminalSemanticDebt
 /-! ## Full production-port identification -/
 
 /-- Raw-root presentation of the payoff/root/debt terminal port.  This is the
-same tuple used by the stopping-law fixed-port experiment, restated here to
+same tuple used by the stopping-law fixed-port construction, restated here to
 keep the Lean experiments independently compilable. -/
 abbrev QuittingRawTerminalPort (ι : Type) [Fintype ι] :=
   (Payoff ι × (ι → PMF Bool)) × Payoff ι

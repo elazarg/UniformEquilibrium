@@ -1,7 +1,7 @@
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 
 /-!
-# E35: monotonicity and non-necessity of the minimum finite quitting debt
+# Monotonicity and non-necessity of the minimum finite quitting debt
 
 Proof-mining probe for the finite quitting Nash--Bellman chain lane.
 
@@ -27,7 +27,7 @@ Three claims are checked here.
    equilibrium is obvious (quit at stage zero).  Hence vanishing minimum debt
    is sufficient but not necessary, and the residual question concerns
    `2 ≤ card ι` only.  The uniform-equilibrium half of this fence is argued by
-   hand in the report, not here.
+  separately, not here.
 
 This is a probe: it checks the theorems it declares and is not imported by
 any production module.
@@ -36,7 +36,7 @@ any production module.
 
 noncomputable section
 
-namespace GameTheory.Experiment35
+namespace GameTheory.FiniteDebtMonotonicity
 
 open Filter Topology
 
@@ -160,4 +160,4 @@ theorem onePlayer_iInf_ne_zero {payoff : ℝ} (hpayoff : 0 < payoff) :
   rw [hconst, ciInf_const]
   exact ne_of_gt hpayoff
 
-end GameTheory.Experiment35
+end GameTheory.FiniteDebtMonotonicity

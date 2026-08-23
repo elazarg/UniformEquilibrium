@@ -10,7 +10,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawMinimu
 /-!
 # A source-active actual-deviation rectangle on a near-minimum reset
 
-This file packages the genuinely new part of the answer to Question 182.  A
+This file packages the genuinely new part of the endpoint-recipient analysis.  A
 near-minimum complete-law reset does not merely create an unlabelled debt
 recipient.  One recipient and one actual behavioral deviation can be selected
 so that the same deviation is approximately optimal at the mixed point, its
@@ -40,7 +40,7 @@ strict scale assumption says that this gain, at the chosen reset weight,
 dominates the source's near-minimum error.  The selected deviation is
 `eta`-optimal at the mixed profile.  Its gain is exactly affine on the reset
 edge; its full-endpoint minus source gain satisfies the quantitative
-rectangle estimate from Question 182; and at the source it loses at most
+rectangle estimate; and at the source it loses at most
 `8 * M * lambda + eta` relative to the recipient's full behavioral debt.
 
 No best response is assumed to be attained. -/

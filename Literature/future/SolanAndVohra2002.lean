@@ -15,7 +15,7 @@ namespace Literature.SolanAndVohra2002
 def record : Literature.PaperRecord where
   paperId := "solan_and_vohra_2002"
   bibliographyLabel := "Solan & Vohra 2002"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vohra 2002"
+  bibliographyLocator := "Published source: Solan & Vohra 2002"
   role := .nonzeroSumExistence
   paperEvidence := .bibliographic
   auditStatus := .catalogued

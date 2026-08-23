@@ -3,8 +3,7 @@ import UniformEquilibrium.ProofView.Concepts.Welfare.FolkTheorem.Periodic
 /-!
 # Cyclic Reynolds decomposition
 
-This file formalizes the independent phase-analysis note
-`ideas/CyclicPhaseReynolds.md`.
+This file formalizes an independent cyclic phase/Reynolds construction.
 
 For a real signal on a nonempty finite cycle, the only persistent component is
 its cycle mean.  The centered component is an exact cyclic coboundary.  Finite

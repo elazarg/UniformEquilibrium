@@ -21,7 +21,7 @@ anchor `Λ_who = max {0, r_who({who})}`
 `quittingCyclicContinuationBlock_isolated_mismatch_eq_negPart`), landing on
 `[-r_who({who})]₊`.
 
-A design note reports that these are "the same object": the signed
+It is natural to ask whether these are "the same object": the signed
 accumulation, evaluated at `P_who = 1`, should also equal `[-r_who({who})]₊`.
 **This file computes what `quittingRelaxedCycleGain` actually evaluates to at
 `P_who = 1`, and the two do not coincide.**
@@ -47,7 +47,7 @@ This is a genuine, fully general closed form, but it is **not**
 
 ## The discrepancy
 
-In exactly the regime the design note has in mind -- a cyclic continuation
+In exactly the cyclic-continuation regime --
 block, where absorption plus the wraparound hypothesis force
 `prescribed 0 = r_who({who})` (`QuittingCycleIsolatedCoordinate.lean`'s own
 Step 2, `quittingCyclicContinuationBlock_value_eq_soloReward_of_isolated`) --
@@ -178,7 +178,7 @@ theorem quittingSignedStopGap_eq_of_isolatedWindow
 /-- **The isolated continuation gap.** Under isolation on `[k, k + m]`, the
 continuation excess telescopes exactly to `prescribed (k + m + 1) -
 prescribed k`, no absorption or wraparound needed. Under an additional
-periodic wraparound this vanishes -- matching `C_i = 0` in the design note --
+periodic wraparound this vanishes -- matching `C_i = 0` --
 but the pure telescoping identity holds regardless. -/
 theorem quittingSignedContinueGap_eq_of_isolatedWindow
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -236,9 +236,8 @@ theorem quittingSignedContinueGap_eq_of_isolatedWindow
 the survival weight `1`, so the continuation branch of the defining `max` is
 silently erased by Lean's `x / 0 = 0` convention; only the stop-gap closed
 form survives, giving `max 0 (r_who({who}) - prescribed 0)`. This is a fully
-general, provable closed form -- but see the module docstring for why it does
-**not** compute `[-r_who({who})]₊` in the regime the design note has in
-mind. -/
+general, provable closed form. It does not compute `[-r_who({who})]₊` in
+the cyclic-continuation regime. -/
 theorem quittingRelaxedCycleGain_eq_of_isolatedWindow
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) (prescribed : ℕ → ℝ) (m : ℕ)

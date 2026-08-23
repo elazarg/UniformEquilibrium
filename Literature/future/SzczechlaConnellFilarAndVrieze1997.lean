@@ -16,7 +16,7 @@ def record : Literature.PaperRecord where
   paperId := "szczechla_connell_filar_and_vrieze_1997"
   bibliographyLabel := "Szczechla, Connell, Filar & Vrieze 1997"
   bibliographyLocator :=
-    "docs/references/00_BIBLIOGRAPHY.md :: " ++
+    "Published source: " ++
       "Szczechla, Connell, Filar & Vrieze 1997"
   role := .zeroSumUniformValue
   paperEvidence := .bibliographic

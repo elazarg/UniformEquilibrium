@@ -15,7 +15,7 @@ namespace Literature.FleschAndSolan2023
 def record : Literature.PaperRecord where
   paperId := "flesch_and_solan_2023"
   bibliographyLabel := "Flesch & Solan 2023"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Flesch & Solan 2023"
+  bibliographyLocator := "Published source: Flesch & Solan 2023"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

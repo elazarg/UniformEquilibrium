@@ -11,10 +11,10 @@ import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 
 /-!
-# Question 175: the negative antitone owner has a Never floor
+# Negative antitone owners have a Never floor
 
-This experiment formalizes the boundary-sensitive part of the proposed
-coalition-toggle/deletion answer to Question 175.  If an owner weakly loses
+This module formalizes the boundary-sensitive part of the proposed
+coalition-toggle/deletion argument.  If an owner weakly loses
 by joining every nonempty opponent quitting coalition, its solo reward lies
 strictly below its punishment value, and that punishment value is nonpositive,
 then literal `Never` earns at least the punishment value against every
@@ -29,7 +29,7 @@ mass remains at infinity; this is where the nonpositive sign is essential.
 noncomputable section
 
 namespace GameTheory
-namespace Question175OwnerNeverFloor
+namespace NegativeOwnerNeverFloor
 
 open Filter Math.Probability Math.PMFProduct
 
@@ -120,7 +120,7 @@ theorem quittingPunishmentValue_mul_one_sub_continueMass_le_continueReward_of_ow
     change chi ≤ max quitValue (absorb / (1 - mass)) at hcap
     linarith [max_lt hquitLt hrideLt]
 
-/-- **Infinite-survival boundary theorem for Question 175.**  Against every
+/-- **Infinite-survival boundary theorem.**  Against every
 arbitrary nonstationary product plan, literal `Never` earns at least the
 owner's punishment value under the negative join-antitone gate. -/
 theorem quittingPunishmentValue_le_never_of_ownerJoinAntitone
@@ -166,7 +166,7 @@ theorem quittingRootSequencePureTimeTerminalValue_none_eq_shift
   rw [quittingRootSequenceTerminalValue_eq_shift]
   congr 2
 
-/-- **Full stopping-time theorem for Question 175.**  Literal `Never` is a
+/-- **Full stopping-time theorem.**  Literal `Never` is a
 best response against every arbitrary behavioral opponent profile under the
 negative join-antitone gate.  The arbitrary-deviation step is discharged by
 behavioral pure-time extremality, so no stationary-deviation restriction is
@@ -198,5 +198,5 @@ theorem quittingTerminalPayoff_update_le_never_of_ownerJoinAntitone
       reward profile owner none] at hpure
   linarith
 
-end Question175OwnerNeverFloor
+end NegativeOwnerNeverFloor
 end GameTheory

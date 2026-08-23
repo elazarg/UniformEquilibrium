@@ -15,7 +15,7 @@ namespace Literature.SolanAndVieille2025b
 def record : Literature.PaperRecord where
   paperId := "solan_and_vieille_2025b"
   bibliographyLabel := "Solan & Vieille 2025b"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan & Vieille 2025b"
+  bibliographyLocator := "Published source: Solan & Vieille 2025b"
   role := .recentNonzeroSum
   paperEvidence := .bibliographic
   auditStatus := .catalogued

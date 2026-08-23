@@ -13,7 +13,7 @@ Applied Mathematics **38**(1), 1--26 (2007), DOI
 
 This statement-level formalization follows the definitions and named claims in
 paper order.  The primary article supplied in
-`ephemeral/literature/incoming/ScienceDirect_articles_05Aug2026_00-15-50.605.zip`
+the published source archive
 is the reference text followed here.  Unproved paper claims end in `sorry`.
 
 The paper's probability laws and conditional laws are represented by explicit

@@ -11,18 +11,16 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawExploi
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 
 /-!
-# Q182: the endpoint-recipient atom interface does not source-match
+# Endpoint-recipient atoms need not source-match
 
-Passport:
-
-* Frontier seam attacked: Q182, from a positive endpoint debt recipient and
+This analyzes a positive endpoint debt recipient and
   its literal atom/rectangle to one legal source-matched gain.
 * Existing theorem consumed: `hasQuittingEndpointDebtRecipientAtom_of_pos`
   and the exact-prefix counterfactual-atom regression.
 * Stronger theorem delivered: the exact exported recipient-atom interface is
   inhabited while every recipient deviation from the source is nonprofitable,
   even with arbitrarily deep exact all-Continue prefix stacks.
-* Named downstream consumer: Q182 must add global-minimum state return or an
+* Any subsequent use must add global-minimum state return or an
   independently signed source edge; the recipient-atom decoder itself cannot
   be iterated into strategic closure.
 
@@ -34,7 +32,7 @@ observer has no profitable unilateral deviation from the source.  Empty-prefix
 source matching already fails, while replicated exact Nash roots show that
 arbitrarily deep literal prefix access does not repair it.
 
-This experiment does not satisfy positive global-minimum provenance: the
+This finite table does not satisfy positive global-minimum provenance: the
 reward table has zero-debt profiles.  Consequently it rules out closure from
 the exported local interface, but it does not rule out a theorem which uses
 global minimality to return the reset endpoint to the same state-matched

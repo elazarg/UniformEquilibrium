@@ -12,8 +12,8 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSele
 /-!
 # Kernel-checked certificate types for the finite quitting repair ladder
 
-The search code in `Experiments/quitting_repair_cegis/` works with exact
-rational tables. Its JSON output is external candidate data, not a Lean proof;
+An exact finite search produces rational tables. Such candidate data is not a
+Lean proof;
 promotion consists of constructing one of the following certificate types,
 whose fields are exactly the hypotheses of three existing semantic compilers:
 

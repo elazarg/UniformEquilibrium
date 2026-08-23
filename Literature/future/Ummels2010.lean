@@ -14,7 +14,7 @@ namespace Literature.Ummels2010
 def record : Literature.PaperRecord where
   paperId := "ummels_2010"
   bibliographyLabel := "Ummels 2010"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ummels 2010"
+  bibliographyLocator := "Published source: Ummels 2010"
   role := .finiteMemoryAlgorithms
   paperEvidence := .primaryInspected
   auditStatus := .claimAuditInProgress

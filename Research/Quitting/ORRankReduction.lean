@@ -11,7 +11,7 @@ import Mathlib.Tactic
 /-!
 # Local OR rank reduction for five-player quitting roots
 
-This experiment formalizes the exact local compiler suggested by the
+This module formalizes the exact local compiler suggested by the
 five-cycle reset geometry.
 
 At one independent product root, merge a spectator button and a host button
@@ -56,7 +56,7 @@ namespace Research.QuittingORRankReduction
 open GameTheory
 open scoped BigOperators
 
-/-! ## The hidden two-button OR experiment -/
+/-! ## The hidden two-button OR construction -/
 
 /-- Quit probability of the OR of two independent Bernoulli buttons. -/
 def orQuit (spectatorQuit hostQuit : ℝ) : ℝ :=
@@ -123,7 +123,7 @@ theorem pairExpectation_eq_orExpectation_conditional
 /-! ## Exact preservation of a protected unilateral audit -/
 
 /-- Source action value for a protected player.  Its own Boolean action is
-outside the hidden spectator/host experiment. -/
+outside the hidden spectator/host construction. -/
 def protectedSourceActionValue (spectatorQuit hostQuit : ℝ)
     (value : Bool → Bool → Bool → ℝ) (own : Bool) : ℝ :=
   pairExpectation spectatorQuit hostQuit (value own)

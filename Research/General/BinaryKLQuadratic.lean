@@ -8,10 +8,8 @@ import Mathlib
 /-!
 # The quadratic information fence for binary KL divergence
 
-Experiment E07 (`experiments/kelly_debt_boundary.py`) and the analytic core of
-Question 38 (`ideas/wild/DynamicSignalProcessing.md` §4, "Detection, isolation,
-and recovery"; see also `ideas/wild/Physics.md` §2, "Entropy production and
-information-payable currents") both rest on one scalar fact: the binary
+The information-theoretic analysis of sequential detection and entropy production
+rests on one scalar fact: the binary
 Kullback-Leibler divergence between `Bernoulli q` and `Bernoulli p` is
 `Θ(δ²)` in the deviation `δ = q - p`, while a deviator's incentive gain from
 mixing in a probability-`δ` response is generically linear in `δ`. This file
@@ -45,24 +43,21 @@ in the survey write-up: for `1/2 + δ ∈ (0, 1)`,
   static) bound on two Bernoulli laws. It says nothing about sequential
   detection, stopping times, or accumulated evidence over many rounds; a
   process-level version would need a martingale or renewal argument on top
-  of this scalar fact, which is exactly what `ideas/wild/DynamicSignalProcessing.md`
-  §4 flags as still open.
+  of this scalar fact and remains open here.
 * **No detector.** No test, estimator, or decision rule is constructed or
   analyzed. `klBin` bounds the *best possible* expected log-likelihood
   growth rate (via Stein's lemma / the Kelly-optimal bankroll), but no
   concrete statistic achieving that rate appears here.
 * **No incentive or payoff structure.** The claim "deviation gain can be
-  linear" is a fact about strategic payoffs elsewhere (see E07's punishment
-  ledger); this file supplies only the information-side quadratic fence, not
+  linear" is a fact about strategic payoffs elsewhere; this file supplies only
+  the information-side quadratic fence, not
   the incentive-side linear term, and does not combine the two into a
   finance inequality.
 
-## References
+## Scope
 
-`ideas/wild/Physics.md` §2 and `ideas/wild/DynamicSignalProcessing.md` §4;
-`experiments/RESULTS.md` (E07 entry); `ephemeral/old/SummaryQuestions37-43.md`
-(Question 38, "Linear Incentive Debt versus Quadratic Statistical
-Information").
+This file supplies the information-side quadratic fence without assuming a
+particular detector, game, or sequential process.
 -/
 
 

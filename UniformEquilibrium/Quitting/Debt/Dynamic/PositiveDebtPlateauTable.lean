@@ -41,8 +41,8 @@ date-zero debt itself stays pinned at `1/8`.
 We prove this explicit chain is legal and compute its exact dynamic debt
 directly, for both players, at every cutoff.  We do **not** prove that this
 chain is the debt-minimizing chain at each cutoff; that stronger optimality
-statement is not established here.  A hand computation (not formalized in
-this file) suggests the zero-tail root at row `m - 1` is the *unique* exact
+statement is not established here.  The zero-tail root at row `m - 1` may be
+the *unique* exact
 endpoint-Nash root against a zero continuation value for this table, which
 would be the structural reason a minimizing search cannot avoid this
 positive-debt row -- but that uniqueness claim itself carries no Lean proof
@@ -62,7 +62,7 @@ poses any obstruction to approximate equilibrium.
 
 The positive plateau proved below may simply be an artifact of pinning the
 terminal continuation to zero rather than a property of the game.  A
-by-hand (unformalized) check at the end of this file, done at the
+explicitly (unformalized) check at the end of this file, done at the
 coordinator's request, finds a candidate exact zero-debt stationary
 equilibrium for this exact table once the terminal continuation is freed --
 consistent with exactly that "pinning artifact" reading.  See the postscript
@@ -564,11 +564,9 @@ theorem plateauPath_dynamicDebt (cutoff : ℕ) (hcutoff : 0 < cutoff) :
 
 /-! ## Postscript: a free-continuation stationary check (not formalized)
 
-Everything above is about the *zero-pinned* chain family.  This postscript
-reports a by-hand check of whether the plateau survives once the terminal
-continuation is freed to a profile's own value, per the module docstring.
-**None of this postscript is a Lean proof**; it is prose only, to be
-verified or refuted by later formalization work.
+Everything above is about the *zero-pinned* chain family.  The following
+remarks do not assert a theorem about freeing the terminal continuation to a
+profile's own value; no theorem below establishes the claim.
 
 Consider the stationary profile in which player one (`false`) Quits with
 probability `1/2` every stage and player two (`true`) never Quits: hazards

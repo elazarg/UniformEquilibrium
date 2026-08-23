@@ -15,7 +15,7 @@ namespace Literature.Ziliotto2024
 def record : Literature.PaperRecord where
   paperId := "ziliotto_2024"
   bibliographyLabel := "Ziliotto 2024"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Ziliotto 2024"
+  bibliographyLocator := "Published source: Ziliotto 2024"
   role := .zeroSumBoundary
   paperEvidence := .bibliographic
   auditStatus := .catalogued

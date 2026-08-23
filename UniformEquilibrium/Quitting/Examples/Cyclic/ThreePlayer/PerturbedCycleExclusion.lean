@@ -33,8 +33,7 @@ unformalized here.  Nothing below states or implies it.
 ## Scope of the two period-one results
 
 Two period-one theorems are proved.  `not_quittingSoloQuitterCriterion_perturbedReward`
-is the literal fence recorded in `FRONTIER.md` and in the hand computation:
-the repository's own name for the classical affine no-join condition,
+is the classical affine no-join condition. In the direct calculation,
 `QuittingSoloQuitterCriterion`, fails at every coordinate and every rate.
 
 The stronger `not_isQuittingCyclicContinuationBlock_of_isolated` goes past that
@@ -55,7 +54,7 @@ machinery for that shape, so that case is open.
 for the unperturbed table -- is
 **not** an `IsQuittingCyclicContinuationBlock` for the `ε`-perturbed table, at
 any `ε > 0`.  This is a statement about *that one block*, reproducing the
-hand computation's preemption mechanism exactly: recomputing the deviation
+direct preemption mechanism exactly: recomputing the deviation
 payoff from the repository's own `quittingRootQuitPayoff`/
 `quittingRootContinuePayoff` gives `½·(1+ε) + ½·1 = 1 + ε/2` against a
 continuation payoff of `1`, a strictly profitable deviation of size `ε/2`.  It
@@ -144,7 +143,7 @@ theorem perturbedReward_soloSelf (ε : ℝ) (i : Player) :
 
 /-- The unperturbed collision reward at the pair `{i, prevThree i}`, read at
 its non-bonus coordinate `prevThree i`, is `1` for every `i`: this is the
-`r_j({i,j}) = 1` entry the hand computation reads off the printed table. -/
+`r_j({i,j}) = 1` entry follows directly from the displayed table. -/
 theorem reward_collision_prevThree (i : Player) :
     quittingSingletonCollisionReward reward i (prevThree i) = 1 := by
   fin_cases i <;> rfl
@@ -189,9 +188,9 @@ theorem perturbedReward_soloOther_prevThree (ε : ℝ) (i : Player) :
 /-! ## Deliverable 2: no period-one cycle -/
 
 /-- **The affine no-join condition fails at every coordinate, for every
-non-negative rate.**  `QuittingSoloQuitterCriterion` is the repository's own
-name (`QuittingSoloQuitterEquilibrium.lean`) for the classical affine
-no-join condition of `FRONTIER.md`.  Tested at owner `i` against opponent
+non-negative rate.**  `QuittingSoloQuitterCriterion` in
+`QuittingSoloQuitterEquilibrium.lean` is the classical affine
+no-join condition. Tested at owner `i` against opponent
 `j = prevThree i`, it reads `(1-p)·r_j({j}) + p·r_j({i,j}) ≤ r_j({i})`, i.e.
 `(1-p)·1 + p·(1+ε) ≤ 0`, i.e. `1 + p·ε ≤ 0` -- false for every `p ≥ 0` once
 `ε ≥ 0`.  Stated at every `i`, matching the cyclic symmetry of the hand
@@ -276,7 +275,7 @@ endpoint formulas.**  At phase `c`, deviating the silent coordinate
 `½·r_{prevThree c}({prevThree c}) + ½·r_{prevThree c}({c, prevThree c}) =
 ½·1 + ½·(1+ε) = 1 + ε/2`; continuing pays `½·r_{prevThree c}({c}) +
 ½·(promise) = ½·0 + ½·2 = 1`.  The gap is exactly `ε/2`, reproducing the
-hand computation. -/
+direct calculation. -/
 theorem quittingRootEndpointDifference_phaseRoot_eps (ε : ℝ) (c : Player) :
     quittingRootEndpointDifference (perturbedReward ε) (standardPromise (nextThree c))
         (phaseRoot c) (prevThree c) = ε / 2 := by

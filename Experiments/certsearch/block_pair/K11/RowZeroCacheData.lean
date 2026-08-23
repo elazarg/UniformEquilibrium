@@ -3,7 +3,7 @@
 
 This checked-in file is concrete experimental evidence. Evaluator soundness
 is proved separately for the phase-local slices and is not inferred from the
-payload integrity check. Historical provenance is recorded in `TRANSITION.md`.
+payload integrity check.
 -/
 import MathUE.Interval.DyadicInterval
 import Mathlib.Data.Fin.VecNotation

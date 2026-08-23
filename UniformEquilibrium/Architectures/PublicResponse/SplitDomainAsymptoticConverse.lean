@@ -51,7 +51,7 @@ noncomputable def prescribedConfigCesaroPayoff
     expect (Math.PMFIter.iter A.prescribedConfigDist t z)
       (fun y => A.prescribedStagePayoff y who)
 
-/-- Payoff of the configuration-level experiment that first uses the pure
+/-- Payoff of the configuration-level construction that first uses the pure
 row `act` for player `who` at `z`, and then follows prescribed play for `T`
 further stages. -/
 noncomputable def purePrefixConfigCesaroPayoff

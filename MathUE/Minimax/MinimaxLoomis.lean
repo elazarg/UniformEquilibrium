@@ -13,7 +13,7 @@ import Mathlib.Topology.Order.Compact
 LRS-style "simplified Loomis" proof of the finite minimax theorem.
 
 This file ports the layered scaffolding from
-[math-xmum/gametheory](https://github.com/math-xmum/gametheory)'s
+the upstream GameTheory library's
 `GameTheory/Zerosum.lean`. It is specialised to `ℝ` because the strategy
 spaces use compactness and continuity for the existence of optimisers.
 
@@ -37,7 +37,7 @@ general positive-`B` Loomis theorem, exported as
 ## Attribution
 
 Ported from `GameTheory/Zerosum.lean` in
-[math-xmum/gametheory](https://github.com/math-xmum/gametheory).
+the upstream GameTheory library.
 -/
 
 open Finset BigOperators

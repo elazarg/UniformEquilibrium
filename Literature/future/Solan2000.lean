@@ -15,7 +15,7 @@ namespace Literature.Solan2000
 def record : Literature.PaperRecord where
   paperId := "solan_2000"
   bibliographyLabel := "Solan 2000"
-  bibliographyLocator := "docs/references/00_BIBLIOGRAPHY.md :: Solan 2000"
+  bibliographyLocator := "Published source: Solan 2000"
   role := .nonzeroSumExistence
   paperEvidence := .bibliographic
   auditStatus := .catalogued

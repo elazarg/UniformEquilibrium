@@ -44,7 +44,7 @@ machinery, with the resulting factor `1 / min x y`.
   instantiated at a root Nash row, giving the same conversion factor
   `1 / min x y` for the raw endpoint gap.
 * `exists_exact_ownShift_abs_eq_abs_quittingRootEndpointDifference`: **the
-  headline.** At an interior coordinate, E64's own-set shift magnitude and
+  headline.** At an interior coordinate, the own-set shift magnitude and
   the raw endpoint gap controlled by the conversion factor are *equal*, not
   merely bounded by the same formula -- so the backward condition number and
   the weighted-to-unweighted conversion factor coincide as literal real
@@ -52,7 +52,7 @@ machinery, with the resulting factor `1 / min x y`.
 * `min_lt_inv_of_exists_weighted_bound_not_isεRowComplementary`: the
   conversion factor applied to `QuittingRelaxedHazardRowBridge.lean`'s
   reverse-bridge-failure witness. The witness's hazard is forced below
-  `1 / εRow` -- the same `1/m` blowup that makes E64's condition number
+  `1 / εRow` -- the same `1/m` blowup that makes the condition number
   diverge at a near-pure row *is* the reason the reverse `ε`-bridge
   direction cannot be salvaged at any fixed row tolerance: it is not a
   coincidence of formulas, it is the conversion factor witnessing its own
@@ -104,7 +104,7 @@ theorem abs_le_div_min_of_weighted_bounds
 
 /-- The conversion factor bounds the raw endpoint gap of any `ε`-complementary
 root row at an interior coordinate, with the same `1 / min x y` that governs
-E64's shift bound. -/
+the shift bound. -/
 theorem abs_quittingRootEndpointDifference_le_div_min_of_isεQuittingRootEndpointNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (ε : ℝ) (root : ι → PMF Bool) (hε : 0 ≤ ε)
@@ -165,7 +165,7 @@ tolerance `εRow`, a weighted-bound-respecting pair `(x, g)` with `g < -εRow`.
 Feeding that witness through `abs_le_div_min_of_weighted_bounds` shows this
 is not a free construction: the witnessing margin `min x (1 - x)` is forced
 below `1 / εRow`, the exact reciprocal-condition-number threshold. So the
-reverse direction's failure at every fixed tolerance and E64's condition
+reverse direction's failure at every fixed tolerance and the condition
 number blowup as the row approaches a pure endpoint are the same
 phenomenon, read through the same inequality. -/
 theorem min_lt_inv_of_exists_weighted_bound_not_isεRowComplementary

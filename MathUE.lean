@@ -92,6 +92,7 @@ import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
+import MathUE.Finset.FreshSquareExtraction
 import MathUE.Finset.InsertExtremum
 import MathUE.Finset.MinimalMemberSum
 import MathUE.Finset.MonotoneChainChangeBudget
@@ -158,6 +159,7 @@ import MathUE.LinearProgramming.Tournament
 import MathUE.List
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
+import MathUE.MeasurableSelection
 import MathUE.MeshContraction
 import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
@@ -265,6 +267,7 @@ import MathUE.Probability.MaximalCoupling
 import MathUE.Probability.MovingEndpointOccupationEvidence
 import MathUE.Probability.MovingKernelEpochPotentialAccount
 import MathUE.Probability.OccupationFlowAlternative
+import MathUE.Probability.OneSidedDebtShadowing
 import MathUE.Probability.OptionalTargetTransport
 import MathUE.Probability.OwnerChargedOccupationAlternative
 import MathUE.Probability.PhaseOccupationDuality
@@ -317,8 +320,11 @@ import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
+import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactSerialRelation
+import MathUE.Topology.ExtendedOrbit
+import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
@@ -326,6 +332,8 @@ import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
+import MathUE.Topology.SimonViabilityBudgetCompiler
+import MathUE.Topology.SimonViabilityQuestion
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit
