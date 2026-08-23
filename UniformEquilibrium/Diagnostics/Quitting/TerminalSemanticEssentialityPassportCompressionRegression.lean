@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.GroupTheory.Perm.Fin
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
+import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.MixingCompatibility
 
 /-!
 # Essentiality passports do not imply bounded player compression
@@ -131,11 +132,6 @@ theorem not_exists_four_witnessClosed_kernel_containing_roles
 
 /-! ## Realization by a quitting reward table -/
 
-/-- The nonempty two-player terminal coalition. -/
-def quittingPairTerminal {ι : Type} [DecidableEq ι] (first second : ι) :
-    {S : Finset ι // S.Nonempty} :=
-  ⟨{first, second}, by simp⟩
-
 /-- Reward table realizing the cyclic singleton witnesses.  Player `joiner`
 gets one exactly on the pair consisting of itself and its predecessor in the
 cycle, and zero on every other terminal coalition. -/
@@ -154,7 +150,7 @@ theorem quittingCyclicSingletonJoinReward_strict_witness
       quittingCyclicSingletonJoinReward n (quittingSingletonTerminal owner)
           joiner <
         quittingCyclicSingletonJoinReward n
-          (quittingPairTerminal owner joiner) joiner := by
+          (quittingPairJoinTerminal joiner owner) joiner := by
   let joiner := finRotate n owner
   have hjoiner : joiner ≠ owner := by
     have hmem : owner ∈ (finRotate n).support := by
@@ -180,9 +176,13 @@ theorem quittingCyclicSingletonJoinReward_strict_witness
     exact hsingletonNe
   change (if ({owner} : Finset (Fin n)) =
       {(finRotate n).symm joiner, joiner} then 1 else 0) <
-    if ({owner, joiner} : Finset (Fin n)) =
-      {(finRotate n).symm joiner, joiner} then 1 else 0
-  rw [if_neg hsingletonNe', if_pos hpairEq]
+    if ({joiner, owner} : Finset (Fin n)) =
+        {(finRotate n).symm joiner, joiner} then 1 else 0
+  have hpairEq' : ({joiner, owner} : Finset (Fin n)) =
+      {(finRotate n).symm joiner, joiner} := by
+    rw [hpred]
+    exact Finset.pair_comm _ _
+  rw [if_neg hsingletonNe', if_pos hpairEq']
   norm_num
 
 /-- Game-facing unbounded-passport family: for every `n ≥ 5` there is an
@@ -197,7 +197,7 @@ theorem exists_unbounded_quittingSingletonPassport_no_fourKernel
       let joiner := graph.witness owner
       joiner ≠ owner ∧
         reward (quittingSingletonTerminal owner) joiner <
-          reward (quittingPairTerminal owner joiner) joiner) ∧
+          reward (quittingPairJoinTerminal joiner owner) joiner) ∧
       ∀ players : Finset (Fin n), players.Nonempty →
         graph.WitnessClosed players → 4 < players.card := by
   dsimp only

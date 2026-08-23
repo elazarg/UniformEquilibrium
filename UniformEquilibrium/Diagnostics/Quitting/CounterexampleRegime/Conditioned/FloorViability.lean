@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AbsorptionClockBallisticity
 import UniformEquilibrium.Quitting.Cycles.ConditionedFloorViability
 
 /-!
@@ -26,10 +26,10 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 variable {witness : QuittingTerminalExploitabilityWitness reward}
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The optimized tail value after removing the positive-survival phantom
 boundary and conditioning on eventual absorption. -/
@@ -208,6 +208,6 @@ theorem punishmentValue_le_conditionedTailValue_of_limit_eq_punishment
     time who hpositive
   exact congrFun hboundary who
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

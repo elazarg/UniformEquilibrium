@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetExcursionReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Incidence-preserving compactification of reset excursions
@@ -511,14 +512,6 @@ theorem quittingTerminalSemanticLawPrefix_mem_carrier
       reward root profile
   · exact (quittingTerminalOutcomeLawPrefix_outcomeMass
       reward root profile).symm
-
-/-- First-stage root incidence for a displayed opponent label. -/
-def quittingRootOpponentIncidenceMass
-    (who other : ι) (root : ι → PMF Bool) : ℝ :=
-  ∑ terminal ∈ Finset.univ.filter
-      (fun terminal : {S : Finset ι // S.Nonempty} =>
-        other ∈ terminal.val ∧ other ≠ who),
-    quittingRootCoalitionMass root terminal.val
 
 /-- **Exact incidence action of a prefix.**  New first-stage incidence is
 added to the old same-law incidence transported by root survival. -/

@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.Quantitative
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
+import UniformEquilibrium.Diagnostics.Quitting.Debt.QuantitativeTail
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Debt.Dynamic.DynamicDebtConservation
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
@@ -39,10 +39,10 @@ open Filter Math.Probability Math.ProbabilityMassFunction
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 variable {witness : QuittingTerminalExploitabilityWitness reward}
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The selected owner's limiting prescribed value retains the whole
 counterexample margin. -/
@@ -314,6 +314,6 @@ theorem ownerSemanticGap_tendsto_limitValue :
   simpa using (seam.value_tendsto seam.limit.owner).sub
     (seam.terminalValue_tendsto_zero seam.limit.owner)
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

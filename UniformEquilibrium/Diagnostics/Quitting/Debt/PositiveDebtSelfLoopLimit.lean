@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Capacity.InfiniteOrbitLimit
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.ViolationCollapse
+import UniformEquilibrium.Diagnostics.Quitting.Debt.ViolationCollapse
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDebtSelfLoopLimit
 
 /-!

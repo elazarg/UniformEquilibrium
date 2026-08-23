@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.StoppingLaw.Frontier
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
 import UniformEquilibrium.Quitting.Debt.Dynamic.SemanticChronology
 
 /-!
@@ -39,9 +40,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (tailWitness : QuittingCounterexampleDynamicTailWitness witness)
+variable (tailWitness : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- Each fixed-time projective exact-D tail point is a literal point of the
 terminal-semantic carrier.  The finite cutoff limit is taken with `time`
@@ -185,12 +186,12 @@ theorem limitDynamicDebtSemanticPair_allContinue_nash :
   simpa [limitDynamicDebtSemanticPair,
     quittingRootOfSimplex_allContinueSimplexRoot] using h
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable (frontier : QuittingCounterexampleStoppingLawFrontier witness)
-variable (tailWitness : QuittingCounterexampleDynamicTailWitness witness)
+variable (tailWitness : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The independent frontier minimum is no larger than the total exact debt
 of any chronological projective-tail point.  This does not assert equality.

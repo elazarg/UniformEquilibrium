@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Tangent.Packet
+import UniformEquilibrium.Diagnostics.Quitting.Debt.ChargeTangentPacket
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
 
 /-!
@@ -32,9 +32,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The operational product root on a selected one-stage edge. -/
 def periodOneReadoutRoot (start : ℕ → ℕ) (index : ℕ) : ι → PMF Bool :=
@@ -763,6 +763,6 @@ theorem eventually_allContinue_or_exists_periodOneTangentReadout :
       signed_coordinate := hsigned
     }⟩
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

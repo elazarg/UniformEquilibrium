@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticWeightedAuxiliaryNashBudget
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
+import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import MathUE.BonferroniProductBounds

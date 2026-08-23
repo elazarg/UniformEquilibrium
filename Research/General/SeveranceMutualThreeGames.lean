@@ -8,7 +8,8 @@ import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Energy
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySmallPlayers
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PeriodicWindows
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AbsorptionClockBallisticity
+import UniformEquilibrium.Diagnostics.Quitting.Collision.StrictSingletonRefusalSourceWitness
 import UniformEquilibrium.Quitting.Cycles.PeriodicNormalizedSeam
 
 /-!
@@ -134,8 +135,8 @@ The source packet and dynamic tail are stored as independent consequences;
 no relation between them is asserted. -/
 structure ThreeGameDossier where
   witness : QuittingTerminalExploitabilityWitness club.settlement
-  source : QuittingCounterexampleSourceWitness witness
-  dynamicTail : QuittingCounterexampleDynamicTailWitness witness
+  source : QuittingStrictSingletonRefusalSourceWitness witness
+  dynamicTail : QuittingPositiveDebtDynamicTailWitness witness
 
 namespace ThreeGameDossier
 
@@ -147,8 +148,8 @@ def ofTerminalExploitabilityWitness
     (witness : QuittingTerminalExploitabilityWitness club.settlement) :
   club.ThreeGameDossier where
   witness := witness
-  source := Classical.choice witness.nonempty_sourceWitness
-  dynamicTail := Classical.choice witness.nonempty_dynamicTailWitness
+  source := Classical.choice witness.nonempty_strictSingletonRefusalSourceWitness
+  dynamicTail := Classical.choice witness.nonempty_positiveDebtDynamicTailWitness
 
 /-- A dossier itself refutes every uniform-equilibrium payoff. -/
 theorem not_hasUniformPayoff (dossier : club.ThreeGameDossier) :

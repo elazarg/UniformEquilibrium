@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.CapCarrier
+import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailCapCarrier
 import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.Defect
 import UniformEquilibrium.Quitting.AbsorptionPath.NormalizedFiniteWindowOccupation
 
@@ -42,23 +42,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- A source-typed finite window of the optimized exact-D tail. -/
 def finiteRootWindow (start fuel : ℕ) :
     QuittingFiniteRootWindow (quittingDynamicDebtTailRoots seam.tail) where
   start := start
   fuel := fuel
-
-@[simp]
-theorem finiteRootWindow_start (start fuel : ℕ) :
-    (seam.finiteRootWindow start fuel).start = start := rfl
-
-@[simp]
-theorem finiteRootWindow_fuel (start fuel : ℕ) :
-    (seam.finiteRootWindow start fuel).fuel = fuel := rfl
 
 /-- Endpoint displacement divided by literal absorbed mass.  The positive
 denominator branch is explicit in every semantic use. -/
@@ -451,6 +443,6 @@ theorem exists_pos_eventually_endpointDistance_ge_absorptionMass :
   exact seam.not_exists_sublinearAbsorptionReturn window hstartTendsto
     habsorptionWindow hdrift
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

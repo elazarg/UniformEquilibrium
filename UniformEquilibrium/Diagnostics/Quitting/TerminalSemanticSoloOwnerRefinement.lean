@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AtomicOwner
+import UniformEquilibrium.Diagnostics.Quitting.Collision.AtomicSoloLimitConsequences
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 
 /-!

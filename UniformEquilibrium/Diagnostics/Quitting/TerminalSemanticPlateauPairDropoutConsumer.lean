@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauFractionalResetDropout
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNegativeVertexGerm
+import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 
 /-!
 # Consuming the pair-to-singleton fractional-reset dropout

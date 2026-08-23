@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.CapCarrier
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Debt.KilledTailPotential
+import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailCapCarrier
+import UniformEquilibrium.Diagnostics.Quitting.Debt.KilledTailPotential
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorAdmissibleChargedRelation
 
 /-!
@@ -38,12 +38,12 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 /-- The unaugmented counterexample-tail point, with its box and punishment-
 floor certificates, as a state of the full admissible charged relation. -/
 def killedCapacityAdmissibleState
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     QuittingPunishmentFloorAdmissibleState reward :=
   ⟨⟨(seam.tail time).1, (seam.tail_mem time).1⟩,
     seam.punishmentValue_le_tailValue time⟩
@@ -51,7 +51,7 @@ def killedCapacityAdmissibleState
 /-- One chronological tail step, represented in the reverse orientation of
 the charged predecessor relation. -/
 def killedCapacityAdmissibleEdge
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     QuittingPunishmentFloorAdmissibleEdge reward where
   tail := seam.killedCapacityAdmissibleState (time + 1)
   current := seam.killedCapacityAdmissibleState time
@@ -60,14 +60,14 @@ def killedCapacityAdmissibleEdge
 /-- The canonical admissible budget-to-go evaluated on the chronological
 counterexample tail. -/
 def killedCapacityPotential
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) : ℝ :=
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) : ℝ :=
   quittingPunishmentFloorAdmissiblePotential reward
     (seam.killedCapacityAdmissibleState time)
 
 /-- The canonical prefix-charge bound bounds the admissible potential at
 every counterexample-tail state. -/
 theorem killedCapacityPotential_le_prefixChargeBound
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     seam.killedCapacityPotential time ≤
       quittingPunishmentFloorPrefixChargeBound reward := by
   apply
@@ -81,7 +81,7 @@ theorem killedCapacityPotential_le_prefixChargeBound
 /-- Along chronological time, the canonical admissible potential increases
 by at least the literal joint absorption charge. -/
 theorem killedCapacityPotential_add_absorption_le_succ
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     seam.killedCapacityPotential time +
         quittingDynamicDebtTailAbsorptionCharge seam.tail time ≤
       seam.killedCapacityPotential (time + 1) := by
@@ -97,12 +97,12 @@ theorem killedCapacityPotential_add_absorption_le_succ
 
 /-- Capacity still available beyond the selected chronological tail state. -/
 def killedRemainingCapacity
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) : ℝ :=
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) : ℝ :=
   quittingPunishmentFloorPrefixChargeBound reward -
     seam.killedCapacityPotential time
 
 theorem killedRemainingCapacity_nonneg
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     0 ≤ seam.killedRemainingCapacity time := by
   unfold killedRemainingCapacity
   linarith [seam.killedCapacityPotential_le_prefixChargeBound time]
@@ -110,7 +110,7 @@ theorem killedRemainingCapacity_nonneg
 /-- The remaining capacity pays the current absorption charge before passing
 to the next chronological state. -/
 theorem absorption_add_killedRemainingCapacity_succ_le
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (time : ℕ) :
     quittingDynamicDebtTailAbsorptionCharge seam.tail time +
         seam.killedRemainingCapacity (time + 1) ≤
       seam.killedRemainingCapacity time := by
@@ -119,13 +119,13 @@ theorem absorption_add_killedRemainingCapacity_succ_le
 
 /-- The remaining capacity scaled by one player's singleton debt cap. -/
 def killedCapacityDebtAccount
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (time : ℕ) : ℝ :=
   quittingPositiveSingletonDebtCap reward who *
     seam.killedRemainingCapacity time
 
 theorem killedCapacityDebtAccount_nonneg
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (time : ℕ) :
     0 ≤ seam.killedCapacityDebtAccount who time :=
   mul_nonneg (le_max_left _ _) (seam.killedRemainingCapacity_nonneg time)
@@ -133,7 +133,7 @@ theorem killedCapacityDebtAccount_nonneg
 /-- The scaled remaining capacity pays the full diagonal debt source and
 still dominates its un-killed successor account. -/
 theorem killedDebtSource_add_capacityDebtAccount_succ_le
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (time : ℕ) :
     seam.killedDebtSource who time +
         seam.killedCapacityDebtAccount who (time + 1) ≤
@@ -167,7 +167,7 @@ theorem killedDebtSource_add_capacityDebtAccount_succ_le
 source.  The proof weakens its stronger additive successor inequality by the
 fact that joint Continue mass is at most one. -/
 theorem killedCapacityDebtAccount_isKilledExcessive
-    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) (who : ι) :
     IsKilledExcessive seam.killedDebtSurvival
       (seam.killedDebtSource who) (seam.killedCapacityDebtAccount who) := by
   intro time
@@ -189,7 +189,7 @@ theorem killedCapacityDebtAccount_isKilledExcessive
 /-- Exact initial normalization defect of the capacity-derived account
 relative to the playerwise dynamic-debt reference. -/
 def killedCapacityInitialMismatch
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (start : ℕ) : ℝ :=
   seam.killedDebtReference who start -
     seam.killedCapacityDebtAccount who start
@@ -198,7 +198,7 @@ def killedCapacityInitialMismatch
 hypothesis.  No sign or vanishing theorem for this quantity follows from the
 landed capacity bounds. -/
 theorem killedCapacityInitialMismatch_eq_zero_iff
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (start : ℕ) :
     seam.killedCapacityInitialMismatch who start = 0 ↔
       seam.killedDebtReference who start =
@@ -209,7 +209,7 @@ theorem killedCapacityInitialMismatch_eq_zero_iff
 at the selected start.  This equality alone does not assert that the shifted
 account remains excessive. -/
 theorem killedCapacityDebtAccount_add_initialMismatch
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (who : ι) (start : ℕ) :
     seam.killedCapacityDebtAccount who start +
         seam.killedCapacityInitialMismatch who start =
@@ -217,6 +217,6 @@ theorem killedCapacityDebtAccount_add_initialMismatch
   unfold killedCapacityInitialMismatch
   ring
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

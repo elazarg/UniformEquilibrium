@@ -186,6 +186,13 @@ theorem quittingStationaryContinueMass_le_update_pure_false
 def quittingRootAbsorptionMass (root : ι → PMF Bool) : ℝ :=
   1 - quittingStationaryContinueMass root
 
+omit [DecidableEq ι] in
+/-- Root absorption mass is nonnegative. -/
+theorem quittingRootAbsorptionMass_nonneg
+    (root : ι → PMF Bool) :
+    0 ≤ quittingRootAbsorptionMass root := by
+  exact sub_nonneg.mpr (quittingStationaryContinueMass_le_one root)
+
 /-- One-stage absorption probability after forcing `who` to Continue.  This
 is the opponent-absorption hazard faced by `who`. -/
 def quittingRootOpponentAbsorptionMass

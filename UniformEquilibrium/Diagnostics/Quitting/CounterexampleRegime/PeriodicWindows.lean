@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Seam
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.PositiveDebtDynamicTailWitness
 import Mathlib.Data.Fintype.Pigeonhole
 
 /-!
@@ -57,9 +57,9 @@ theorem exists_periodicCap_gain
 
 end QuittingTerminalExploitabilityWitness
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- The canonical increasing family: window `n` starts at tail date `n` and
 contains `n+1` roots before periodic restart. -/
@@ -222,6 +222,6 @@ theorem exists_infinite_fixedPlayer_fixedBranch :
         split at hbranch <;> simp_all
       simpa [hwho] using hrefusal
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

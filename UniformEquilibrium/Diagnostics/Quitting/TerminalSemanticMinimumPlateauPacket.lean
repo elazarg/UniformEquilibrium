@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Tangent.Packet
+import UniformEquilibrium.Diagnostics.Quitting.Debt.ChargeTangentPacket
 
 /-!
 # Charge packets at a minimum terminal-semantic boundary

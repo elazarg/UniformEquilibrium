@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AbsorptionClockBallisticity
 import UniformEquilibrium.Quitting.Debt.Dynamic.OneStageObstructionCarrier
 
 /-!
@@ -27,9 +27,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- Every adjacent pair of canonical tail states is an exact boxed
 floor-admissible source edge. -/
@@ -57,6 +57,7 @@ theorem quittingDebtEdgeObstructionFlow_tailEdge_eq (time : ℕ) :
           cases channel with
           | singleton owner =>
               simp [QuittingFiniteRootWindow.toObstructionRawGradedFlow_charge,
+                QuittingPositiveDebtDynamicTailWitness.finiteRootWindow,
                 QuittingFiniteRootWindow.rawCharge_singleton_value,
                 QuittingFiniteRootWindow.singletonMass,
                 QuittingFiniteRootWindow.survivalWeight,
@@ -64,6 +65,7 @@ theorem quittingDebtEdgeObstructionFlow_tailEdge_eq (time : ℕ) :
                 quittingDynamicDebtTailRoots]
           | collision =>
               simp [QuittingFiniteRootWindow.toObstructionRawGradedFlow_charge,
+                QuittingPositiveDebtDynamicTailWitness.finiteRootWindow,
                 QuittingFiniteRootWindow.rawCharge_collision_value,
                 QuittingFiniteRootWindow.collisionMass,
                 QuittingFiniteRootWindow.survivalWeight,
@@ -87,20 +89,20 @@ theorem oneStageTailFlow_mem_quittingOneStageObstructionCarrier (time : ℕ) :
 
 /-- The canonical tail makes the exact one-stage carrier nonempty. -/
 theorem quittingOneStageObstructionCarrier_nonempty
-    (seam : QuittingCounterexampleDynamicTailWitness witness) :
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) :
     (quittingOneStageObstructionCarrier reward).Nonempty :=
   ⟨(seam.finiteRootWindow 0 1).toObstructionRawGradedFlow
       (fun date ↦ (seam.tail date).1.1),
     seam.oneStageTailFlow_mem_quittingOneStageObstructionCarrier 0⟩
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
 /-- In a terminal exploitability witness, the canonical tail supplies nonemptiness, so
 every finite co-state has an attained support value on the exact carrier. -/
 theorem exists_hasSupportValue_oneStageObstructionCarrier
-    (seam : QuittingCounterexampleDynamicTailWitness witness)
+    (seam : QuittingPositiveDebtDynamicTailWitness witness)
     (costate : Costate QuittingObstructionGrade
       (QuittingObstructionCoordinate ι)) :
     ∃ value,
@@ -109,6 +111,6 @@ theorem exists_hasSupportValue_oneStageObstructionCarrier
   exists_hasSupportValue_quittingOneStageObstructionCarrier reward
     (quittingOneStageObstructionCarrier_nonempty seam) costate
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

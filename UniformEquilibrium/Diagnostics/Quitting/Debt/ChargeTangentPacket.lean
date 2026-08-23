@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Ballisticity
+import UniformEquilibrium.Diagnostics.Quitting.Chronology.AbsorptionClockBallisticity
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent
 
 /-!
@@ -41,9 +41,9 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 variable {witness : QuittingTerminalExploitabilityWitness reward}
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- Coordinatewise endpoint displacement divided by literal window
 absorption. -/
@@ -229,7 +229,7 @@ theorem exists_chargeTangentData_of_windows
   · intro who
     exact htangent who
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 namespace QuittingTerminalExploitabilityWitness
 
@@ -295,9 +295,9 @@ theorem chargeTangentPacket_underfunded_or_active_funded
 
 end QuittingTerminalExploitabilityWitness
 
-namespace QuittingCounterexampleDynamicTailWitness
+namespace QuittingPositiveDebtDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (seam : QuittingPositiveDebtDynamicTailWitness witness)
 
 /-- **One-stage counterexample tail alternative.**  Either the selected
 exact-D tail is eventually the literal all-Continue root, or positive-
@@ -363,13 +363,13 @@ theorem eventually_allContinue_or_exists_oneStage_chargeTangentPacket :
     refine ⟨packet, selectedWindow, ?_, ?_, ?_, ?_, ?_⟩
     · exact hstartTendsto.comp hsubseq.tendsto_atTop
     · intro index
-      simp [selectedWindow, window]
+      simp [selectedWindow, window, finiteRootWindow]
     · exact fun index ↦ habsorption (subseq index)
     · intro owner
       exact hoccupation owner
     · intro who
       exact htangent who
 
-end QuittingCounterexampleDynamicTailWitness
+end QuittingPositiveDebtDynamicTailWitness
 
 end GameTheory

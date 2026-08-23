@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTightness
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloSpineOccupation
+import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
 # Quantitative terminal atoms on a semantic plateau

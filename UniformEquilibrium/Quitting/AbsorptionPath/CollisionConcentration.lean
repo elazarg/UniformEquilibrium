@@ -189,13 +189,6 @@ theorem continueMass_quittingRootQuitRates (root : ι → PMF Bool) :
   change 1 - (root who true).toReal = (root who false).toReal
   linarith
 
-omit [DecidableEq ι] in
-/-- Root absorption is nonnegative. -/
-theorem quittingRootAbsorptionMass_nonneg
-    (root : ι → PMF Bool) :
-    0 ≤ quittingRootAbsorptionMass root := by
-  exact sub_nonneg.mpr (quittingStationaryContinueMass_le_one root)
-
 /-- Root collision mass is nonnegative. -/
 theorem quittingRootCollisionMass_nonneg
     (root : ι → PMF Bool) :
