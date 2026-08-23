@@ -33,8 +33,8 @@ survival and therefore also consumes the singleton-active preemption branch.
 -/
 theorem continuePrefix_atomAlternative_eventually
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier) :
     ∀ᶠ rank in atTop,
       HasQuittingContinuePrefixDebtSlopeAtomAlternative reward
@@ -63,8 +63,8 @@ mover of the accessed atom, so all possible owner preemption is removed by
 the same legal Continue-through deviation. -/
 theorem singletonActive_continuePrefix_atomAlternative_eventually
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
     (owner : ι) (hactive : frontier.active = {owner}) :
     chronology.mover.1 = owner ∧

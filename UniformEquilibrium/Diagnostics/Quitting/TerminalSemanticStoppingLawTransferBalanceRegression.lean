@@ -415,7 +415,7 @@ bonus when both players quit together.
 This is already a literal, state-matched root insertion effect.  The
 zero-debt grand-coalition profile below shows that even this stronger
 special case of a positive same-deviation terminal chord is strategically
-benign unless some further counterexample-regime or minimum-fiber property
+benign unless some further terminal exploitability witness or minimum-fiber property
 connects it to a contradiction. -/
 theorem quittingFinThreePassiveShear_quitNowRectangle_eq_two
     (mover : Fin 3) :

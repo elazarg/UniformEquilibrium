@@ -16,7 +16,7 @@
       "status": "proved",
       "meaning": "A positive minimum supplies one stopping-law frontier whose active mover diagonal is exactly minus base debt and whose full-reset mover debt tends to zero.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/StoppingLaw/Frontier.lean",
-      "declaration": "GameTheory.QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier",
+      "declaration": "GameTheory.QuittingTerminalExploitabilityWitness.exists_stoppingLaw_exhaustiveFrontier",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -98,7 +98,7 @@
       "status": "proved",
       "from": "POSITIVE-MINIMUM-DEBT",
       "to": "EXACT-DIAGONAL-FRONTIER",
-      "meaning": "Positive minimum gives nonexistence, hence the canonical counterexample regime and its exact-diagonal stopping-law frontier.",
+      "meaning": "A positive minimum supplies a terminal exploitability witness and its exact-diagonal stopping-law frontier; the witness certifies nonexistence of a uniform-equilibrium payoff.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
       "declaration": "GameTheory.hasFiniteSupportRankExit_of_hasPositiveMinimumTerminalSemanticDebt",
       "evidence_seals": ["M", "L", "A"]

@@ -42,7 +42,7 @@ The rescaled owner endpoint gap is exactly `1` at every date
 (`svRescaledEndpointDifference_owner`), so the schedule assembles with
 `endpoint_eta = 2`.
 
-No counterexample regime, seam witness, minmax datum, or debt provenance is
+No terminal exploitability witness, seam witness, minmax datum, or debt provenance is
 consumed anywhere in that construction; the only input is "player `1` can quit
 alone, and player `2` is paid `0` by that exit".  Consequently
 `uniformPayoff_solanVieilleBoundary_of_purification` is checked: assuming
@@ -52,7 +52,7 @@ uniform-equilibrium payoff for that table.
 Two honesty caveats.  This module does not decide whether the Solan--Vieille
 table has such a payoff, and therefore does not refute the interface.  Its
 theorems show that an implementation of the interface cannot be powered by
-counterexample-regime data reaching it through the candidate, because the
+data from a terminal exploitability witness reaching it through the candidate, because the
 interface certifies candidates carrying no such data.  The proposition
 definition `SourceMatchedSnellCandidateFromPreemptionEdge` generalizes
 `svCandidate` from the Solan--Vieille table to every reward carrying a strict
@@ -139,7 +139,7 @@ theorem sourceMatchedSnellStep_of_face_ssubset
     (Finset.ne_of_mem_erase hjmem)
 
 /-- The edge-local assembly proposition: a strict solo-preemption edge alone
-assembles a certified candidate with a schedule, with no counterexample-regime
+assembles a certified candidate with a schedule, with no data from a terminal exploitability witness
 input.  `svCandidate` proves its Solan--Vieille instance. -/
 def SourceMatchedSnellCandidateFromPreemptionEdge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
@@ -615,7 +615,7 @@ theorem svRescaledEndpointDifference_owner (t : ℕ) :
 /-! ### The certified candidate and its schedule -/
 
 /-- **The regime-free certified candidate.**  Every field is discharged by the
-explicit solo-hazard tail above; no counterexample-regime datum enters. -/
+explicit solo-hazard tail above; no datum from a terminal exploitability witness enters. -/
 def svCandidate : SourceMatchedSnellCandidate boundaryReward where
   roots := svRoots
   value := svValue

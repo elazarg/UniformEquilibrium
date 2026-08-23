@@ -15,7 +15,7 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 # The stopping-law singleton handoff is not a strategic closure interface
 
 The strategic conjunct of `HasQuittingStoppingLawSingletonStrategicOrientation`
-is supplied by `QuittingCounterexampleRegime.singletonStaticStrategicDispatch`
+is supplied by `QuittingTerminalExploitabilityWitness.singletonStaticStrategicDispatch`
 for every player, without using the rectangle packet.  Consequently the
 purported handoff is equivalent to the bare label identity
 `packet.terminal.val = {packet.observer}`.
@@ -40,12 +40,12 @@ open QuittingSureSetOwnerRepair
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
-/-- In a counterexample regime, the named singleton strategic orientation
+/-- In a terminal exploitability witness, the named singleton strategic orientation
 contains no information beyond the singleton label itself. -/
 theorem hasQuittingStoppingLawSingletonStrategicOrientation_iff_terminal_eq
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     HasQuittingStoppingLawSingletonStrategicOrientation packet ↔
       packet.terminal.val = {packet.observer} := by
@@ -58,7 +58,7 @@ theorem hasQuittingStoppingLawSingletonStrategicOrientation_iff_terminal_eq
       simpa using hmem
     simpa [hobserver] using hterminal
   · intro hterminal
-    refine ⟨?_, ?_, regime.singletonStaticStrategicDispatch packet.observer⟩
+    refine ⟨?_, ?_, witness.singletonStaticStrategicDispatch packet.observer⟩
     · rw [hterminal]
       simp
     · rw [hterminal]
@@ -68,7 +68,7 @@ namespace MinimalFinQuittingCounterexample
 
 /-- **Common-object correction.**  The static atomic handoff is not specific
 to the singleton stopping-law leaf.  The compression theorem supplies it or
-exact player deletion for every owner of every counterexample regime, and
+exact player deletion for every owner of every terminal exploitability witness, and
 cardinal minimality rules out the deletion disjunct.  Hence all five formal
 stopping-law leaves share this same game-wide object. -/
 theorem hasStaticAtomicToggleHandoff
@@ -78,8 +78,8 @@ theorem hasStaticAtomicToggleHandoff
     exact lt_of_lt_of_le (by norm_num) minimal.four_le_playerCount
   let owner : Fin minimal.playerCount :=
     ⟨0, hcount⟩
-  rcases minimal.regime.singletonStaticStrategicDispatch_compress owner
-      (minimal.regime.singletonStaticStrategicDispatch owner) with
+  rcases minimal.witness.singletonStaticStrategicDispatch_compress owner
+      (minimal.witness.singletonStaticStrategicDispatch owner) with
     hatomic | hdelete
   · exact hatomic
   · obtain ⟨hnonempty, hgap⟩ := hdelete
@@ -89,8 +89,8 @@ theorem hasStaticAtomicToggleHandoff
         (quittingGame reducedReward).IsUniformEquilibriumPayoff none payoff :=
       (not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap
         reducedReward).2
-          ⟨minimal.regime.terminalGap,
-            minimal.regime.terminalGap_pos, hgap⟩
+          ⟨minimal.witness.terminalGap,
+            minimal.witness.terminalGap_pos, hgap⟩
     have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
         minimal.playerCount := by
       simpa using card_quittingDeletedPlayer_lt owner

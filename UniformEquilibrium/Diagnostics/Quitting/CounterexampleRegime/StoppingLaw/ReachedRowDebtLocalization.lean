@@ -35,8 +35,8 @@ variable {iota : Type} [Fintype iota] [DecidableEq iota]
 evaluated. -/
 def quittingStoppingLawPositiveTargetReachedRowProfile
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (rank : Nat) : (quittingGame reward).BehaviorProfile :=
   Function.update
@@ -48,8 +48,8 @@ def quittingStoppingLawPositiveTargetReachedRowProfile
 -/
 def quittingStoppingLawPositiveTargetReachedRowGain
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (stop : Nat -> Nat) (other : iota) (rank : Nat) : Real :=
   let profile := quittingStoppingLawPositiveTargetReachedRowProfile
@@ -68,8 +68,8 @@ def quittingStoppingLawPositiveTargetReachedRowGain
 /-- The explicit gain floor delivered by reached-row localization. -/
 def quittingStoppingLawPositiveTargetReachedRowGainFloor
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : Real) : Real :=
   lower * quittingTerminalSemanticDebtSum frontier.base /
@@ -81,8 +81,8 @@ profiles have a uniformly reached sure-Quit row and one fixed non-observer's
 canonical legal gain is bounded below by the displayed positive floor. -/
 def HasQuittingStoppingLawPositiveTargetReachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : Real) : Prop :=
   0 < lower ∧
@@ -102,8 +102,8 @@ player's full canonical gain sequence.  This is a mathematical projection:
 it uses the positive gain floor on the stored strict subsequence. -/
 theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.exists_gain_not_tendsto_zero
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {lower : Real}
     (certificate :
@@ -133,8 +133,8 @@ theorem HasQuittingStoppingLawPositiveTargetReachedRowLocalization.exists_gain_n
 produce the quantitative reached-row localization. -/
 theorem positiveTargetReachedRowLocalization_of_eventually_stop_mass
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real} (hlower : 0 < lower) (stop baseSubseq : Nat -> Nat)
     (hbaseSubseq : StrictMono baseSubseq)
@@ -219,8 +219,8 @@ literal reached-row localization.  Its stored tail cluster and escape/fiber
 alternative are not needed for this consumer. -/
 theorem positiveCollisionMarkedTailDispatch_reachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : Real} (hlower : 0 < lower)
     (dispatch : HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
@@ -241,8 +241,8 @@ canonical legal row deviation to have a uniform positive gain along a strict
 subsequence. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_reachedRowLocalization
     {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) :

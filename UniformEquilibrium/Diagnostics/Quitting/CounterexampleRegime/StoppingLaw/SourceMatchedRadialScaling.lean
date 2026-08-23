@@ -34,14 +34,14 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- The actual reset strategy which realizes one extracted normalized chord at
 one selected common-source rank. -/
 def sourceMatchedInnerResetStrategy
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
     (quittingGame reward).BehaviorStrategy mover.1 :=
   quittingStoppingLawMixtureBehaviorStrategy reward mover.1
@@ -54,7 +54,7 @@ def sourceMatchedInnerResetStrategy
 /-- A literal radial scaling of one source-matched reset.  The outer weight is
 independent of the frontier reset scale. -/
 def sourceMatchedRadialResetProfile
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
     (quittingGame reward).BehaviorProfile :=
@@ -68,7 +68,7 @@ def sourceMatchedRadialResetProfile
 /-- Debt direction of the radial reset, normalized by the original frontier
 scale rather than by the outer coefficient. -/
 def sourceMatchedRadialDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active})
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
     (observer : ι) : ℝ :=
@@ -83,7 +83,7 @@ def sourceMatchedRadialDebtDirection
 /-- The total normalized debt slope of one actual source-matched reset is the
 sum of its normalized coordinate directions. -/
 theorem sourceMatched_totalDebtDirection_eq_sum
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
     (quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -108,7 +108,7 @@ radial reset column is nonnegative coordinatewise.  After normalization by the
 frontier scale it is bounded by the normalized source excess plus the outer
 weight times the full column's total normalized slope. -/
 theorem sourceMatchedRadialDebtDirection_gap_bounds
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active})
     (observer : ι) (weight : ℝ)
     (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1) :
@@ -215,7 +215,7 @@ converges to that coefficient times the extracted tangent column.  The proof
 uses the source-excess rate retained by the frontier and the vanishing total
 slope of the flat column. -/
 theorem sourceMatchedRadialDebtDirection_tendsto
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (observer : ι)
     (weight : ℝ) (hweight0 : 0 ≤ weight) (hweight1 : weight ≤ 1)
     (hflat : ∑ who, frontier.tangent mover who = 0) :
@@ -270,7 +270,7 @@ theorem sourceMatchedRadialDebtDirection_tendsto
 coefficient in `[0, 1]` for each active mover.  Balance is preserved and the
 aggregate diagonal charge remains strictly positive. -/
 theorem exists_boundedRadialCirculationWeights
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :
     ∃ weight : {who // who ∈ frontier.active} → ℝ,
@@ -336,7 +336,7 @@ into legal outer stopping-law mixture weights.  The finite sum of the literal
 normalized reset directions converges coordinatewise to zero, while its
 aggregate mover-diagonal charge converges to a strictly positive number. -/
 theorem exists_boundedRadialSourceMatchedCirculation
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :

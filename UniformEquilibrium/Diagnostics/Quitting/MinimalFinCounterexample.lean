@@ -64,11 +64,11 @@ table on the included coalition and player. -/
         who.1 :=
   rfl
 
-/-- There is a combined quitting counterexample regime on the canonical
+/-- There is a quitting terminal exploitability witness on the canonical
 `n`-player type. -/
 def HasQuittingCounterexampleAtCard (n : ℕ) : Prop :=
   ∃ reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n),
-    Nonempty (QuittingCounterexampleRegime reward)
+    Nonempty (QuittingTerminalExploitabilityWitness reward)
 
 /-- Every player either has positive punishment value, has solo payoff at
 least its punishment value, or strictly gains by joining a nonempty coalition
@@ -87,7 +87,8 @@ def HasQuittingOwnerEntryTrichotomy [Fintype ι]
                 Finset.insert_nonempty owner quitters⟩ owner
 
 /-- A cardinality-minimal finite quitting-game counterexample in canonical
-coordinates.  Minimality is stated directly in terms of the combined regime;
+coordinates.  Minimality is stated directly in terms of the terminal
+exploitability witness;
 the nonexistence characterization turns it into equilibrium existence below. -/
 structure MinimalFinQuittingCounterexample where
   /-- Number of players in the minimal counterexample. -/
@@ -95,10 +96,10 @@ structure MinimalFinQuittingCounterexample where
   /-- Canonically indexed terminal reward table. -/
   reward : {S : Finset (Fin playerCount) // S.Nonempty} →
     Payoff (Fin playerCount)
-  /-- The table is a genuine counterexample regime. -/
-  regime : QuittingCounterexampleRegime reward
-  /-- No smaller canonical player cardinality carries a counterexample
-  regime. -/
+  /-- The table is a genuine terminal exploitability witness. -/
+  witness : QuittingTerminalExploitabilityWitness reward
+  /-- No smaller canonical player cardinality carries a terminal exploitability
+  witness. -/
   minimal : ∀ m, m < playerCount → ¬ HasQuittingCounterexampleAtCard m
 
 /-- Small-player existence forces every minimal counterexample to have at
@@ -106,7 +107,7 @@ least four players. -/
 theorem MinimalFinQuittingCounterexample.four_le_playerCount
     (minimal : MinimalFinQuittingCounterexample) :
     4 ≤ minimal.playerCount := by
-  have hcard := minimal.regime.three_lt_card
+  have hcard := minimal.witness.three_lt_card
   simp only [Fintype.card_fin] at hcard
   omega
 
@@ -115,22 +116,22 @@ cardinality-minimal one exists on `Fin n`. -/
 theorem exists_minimalFinQuittingCounterexample
     [Fintype ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcounterexample : Nonempty (QuittingCounterexampleRegime reward)) :
+    (hcounterexample : Nonempty (QuittingTerminalExploitabilityWitness reward)) :
     Nonempty MinimalFinQuittingCounterexample := by
   classical
   letI : Nonempty ι := hcounterexample.some.nonempty_players
-  have hcanonical : Nonempty (QuittingCounterexampleRegime
+  have hcanonical : Nonempty (QuittingTerminalExploitabilityWitness
       (quittingRewardReindex (Fintype.equivFin ι) reward)) :=
-    (nonempty_counterexampleRegime_reindex_fin_iff reward).2 hcounterexample
+    (nonempty_terminalExploitabilityWitness_reindex_fin_iff reward).2 hcounterexample
   have hexists : ∃ n, HasQuittingCounterexampleAtCard n :=
     ⟨Fintype.card ι, _, hcanonical⟩
   let n := Nat.find hexists
   have hn : HasQuittingCounterexampleAtCard n := Nat.find_spec hexists
-  obtain ⟨minimalReward, ⟨minimalRegime⟩⟩ := hn
+  obtain ⟨minimalReward, ⟨minimalWitness⟩⟩ := hn
   refine ⟨{
     playerCount := n
     reward := minimalReward
-    regime := minimalRegime
+    witness := minimalWitness
     minimal := ?_ }⟩
   intro m hm hcounter
   have hleast : n ≤ m := Nat.find_min' hexists hcounter
@@ -149,12 +150,12 @@ theorem exists_uniformEquilibriumPayoff_of_card_lt
     ∃ payoff : Payoff κ,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   by_contra hno
-  have hregime : Nonempty (QuittingCounterexampleRegime reward) :=
-    (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
+  have hwitness : Nonempty (QuittingTerminalExploitabilityWitness reward) :=
+    (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
       reward).1 hno
-  have hcanonical : Nonempty (QuittingCounterexampleRegime
+  have hcanonical : Nonempty (QuittingTerminalExploitabilityWitness
       (quittingRewardReindex (Fintype.equivFin κ) reward)) :=
-    (nonempty_counterexampleRegime_reindex_fin_iff reward).2 hregime
+    (nonempty_terminalExploitabilityWitness_reindex_fin_iff reward).2 hwitness
   exact minimal.minimal (Fintype.card κ) hcard ⟨_, hcanonical⟩
 
 /-- Every nonempty proper player restriction of a minimal table has a
@@ -183,7 +184,7 @@ theorem not_hasQuittingExactPlayerDeletionAtGap
     (minimal : MinimalFinQuittingCounterexample)
     (owner : Fin minimal.playerCount) :
     ¬ HasQuittingExactPlayerDeletionAtGap minimal.reward owner
-      minimal.regime.terminalGap := by
+      minimal.witness.terminalGap := by
   rintro ⟨hdeletedNonempty, hdeletedGap⟩
   letI : Nonempty (QuittingDeletedPlayer owner) := hdeletedNonempty
   have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
@@ -194,7 +195,7 @@ theorem not_hasQuittingExactPlayerDeletionAtGap
   exact
     (quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
       (quittingDeletePlayerReward minimal.reward owner)
-      minimal.regime.terminalGap_pos hdeletedGap) hpayoff
+      minimal.witness.terminalGap_pos hdeletedGap) hpayoff
 
 /-- At the negative singleton gate of a cardinality-minimal counterexample,
 the deleted player must gain strictly by joining some nonempty coalition of
@@ -217,8 +218,8 @@ theorem exists_strict_owner_entry_of_solo_lt_punishment_of_nonpos
       quittingPunishmentValue minimal.reward owner := by
     exact hsolo
   rcases exists_strict_owner_toggle_or_exact_playerDeletion
-      minimal.reward owner minimal.regime.terminalGap_pos
-      minimal.regime.terminalExploitability hsolo' hpunishment with
+      minimal.reward owner minimal.witness.terminalGap_pos
+      minimal.witness.terminalExploitability hsolo' hpunishment with
     hentry | hdeletion
   · exact hentry
   · exact False.elim
@@ -247,12 +248,12 @@ arm of the general compression is eliminated by minimality rather than
 retained as a second leaf. -/
 theorem stoppingLawSingletonStrategicOrientation_atomicHandoff
     (minimal : MinimalFinQuittingCounterexample)
-    {frontier : QuittingCounterexampleStoppingLawFrontier minimal.regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier minimal.witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (horientation :
       HasQuittingStoppingLawSingletonStrategicOrientation packet) :
     HasQuittingStaticAtomicToggleHandoff minimal.reward := by
-  rcases minimal.regime.stoppingLawSingletonStrategicOrientation_compress
+  rcases minimal.witness.stoppingLawSingletonStrategicOrientation_compress
       packet horientation with hatomic | hdeletion
   · exact hatomic
   · exact False.elim
@@ -268,7 +269,7 @@ nonempty proper restriction of its own reward table. -/
 theorem exists_minimalFinQuittingCounterexample_with_ownerEntryTrichotomy
     [Fintype ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcounterexample : Nonempty (QuittingCounterexampleRegime reward)) :
+    (hcounterexample : Nonempty (QuittingTerminalExploitabilityWitness reward)) :
     ∃ minimal : MinimalFinQuittingCounterexample,
       HasQuittingOwnerEntryTrichotomy minimal.reward := by
   obtain ⟨minimal⟩ :=

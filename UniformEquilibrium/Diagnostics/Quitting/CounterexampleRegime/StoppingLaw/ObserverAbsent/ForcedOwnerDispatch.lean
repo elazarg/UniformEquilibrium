@@ -19,7 +19,7 @@ which carries a uniform amount of this preemption mass.
 
 Choose one fixed member of the terminal coalition.  At every row in the
 preemption clock, forcing only this owner to Quit preserves the displayed
-coalition cylinder and enters the counterexample regime's atomic-blocker
+coalition cylinder and enters the terminal exploitability witness's atomic-blocker
 barrier against the literal shifted tail.  The output below retains the
 exact finite/`tsum` accounting and the mass-weighted barrier at every row.
 
@@ -41,8 +41,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 pure-time strategy. -/
 def quittingStoppingLawRectangleTargetObserverProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   Function.update (quittingStoppingLawRectangleTargetProfile packet n)
@@ -54,8 +54,8 @@ def quittingStoppingLawRectangleTargetObserverProfile
 label sequence. -/
 def quittingStoppingLawObserverAbsentCarrierProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   if 0 < reward packet.terminal packet.observer then
@@ -65,8 +65,8 @@ def quittingStoppingLawObserverAbsentCarrierProfile
 /-- Uniform terminal-mass scale carried by the selected endpoint. -/
 def quittingStoppingLawObserverAbsentMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
   (packet.charge / 4) /
     ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -75,15 +75,15 @@ def quittingStoppingLawObserverAbsentMassLower
 /-- One fixed member of the fixed nonempty terminal label. -/
 def quittingStoppingLawObserverAbsentOwner
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ι :=
   packet.terminal.property.choose
 
 theorem quittingStoppingLawObserverAbsentOwner_mem
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     quittingStoppingLawObserverAbsentOwner packet ∈ packet.terminal.val :=
   packet.terminal.property.choose_spec
@@ -92,8 +92,8 @@ theorem quittingStoppingLawObserverAbsentOwner_mem
 Quit at one actual carrier row and resuming the carrier profile afterwards. -/
 def quittingStoppingLawObserverAbsentForcedOwnerProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : (quittingGame reward).BehaviorProfile :=
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
@@ -105,8 +105,8 @@ def quittingStoppingLawObserverAbsentForcedOwnerProfile
 carrier profile's literal continuation after that row. -/
 def quittingStoppingLawObserverAbsentRowBarrier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : ℝ :=
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
@@ -123,8 +123,8 @@ forced-owner profile which retains the selected cylinder and carries the
 mass-weighted counterexample barrier. -/
 def HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : ℝ) : Prop :=
   let owner := quittingStoppingLawObserverAbsentOwner packet
@@ -137,9 +137,9 @@ def HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch
         ∀ n, profile n = quittingStoppingLawRectangleSourceProfile packet n)) ∧
     (∀ n, lower ≤ quittingTerminalOutcomeMass reward (profile n)
       (some packet.terminal)) ∧
-    (∀ n, lower * regime.terminalGap ≤
+    (∀ n, lower * witness.terminalGap ≤
       quittingTerminalOutcomeMass reward (profile n) (some packet.terminal) *
-        regime.terminalGap) ∧
+        witness.terminalGap) ∧
     (∀ n,
       quittingTerminalOutcomeMass reward (profile n) (some packet.terminal) =
         match packet.quitTime n with
@@ -163,26 +163,26 @@ def HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch
         quittingProfileLiveRoot reward forcedProfile time = forcedRoot ∧
         mass ≤ quittingLiveMass reward (profile n) time *
           quittingRootCoalitionMass forcedRoot packet.terminal.val ∧
-        regime.terminalGap ≤
+        witness.terminalGap ≤
           quittingStoppingLawObserverAbsentRowBarrier packet n time ∧
-        mass * regime.terminalGap ≤
+        mass * witness.terminalGap ≤
           mass * quittingStoppingLawObserverAbsentRowBarrier packet n time ∧
         ((∃ who, who ≠ owner ∧
-            regime.terminalGap ≤
+            witness.terminalGap ≤
               quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
-            mass * regime.terminalGap ≤
+            mass * witness.terminalGap ≤
               mass * quittingRootCoordinateNashDefect reward tail.1
                 forcedRoot who) ∨
-          (regime.terminalGap ≤
+          (witness.terminalGap ≤
               max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
-            mass * regime.terminalGap ≤
+            mass * witness.terminalGap ≤
               mass * max 0
                 (-quittingAtomicBlockerBalance reward forcedRoot owner)))
 
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsentMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingStoppingLawObserverAbsentMassLower packet := by
   unfold quittingStoppingLawObserverAbsentMassLower
@@ -193,8 +193,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsentMassLowe
 fixed terminal mass. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrierMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) :
     quittingStoppingLawObserverAbsentMassLower packet ≤
@@ -260,8 +260,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
 /-- Exact pre-observer-stop accounting for the selected endpoint. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrierMass_eq_clock
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val) (n : ℕ) :
     quittingTerminalOutcomeMass reward
@@ -300,8 +300,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
 playing Continue. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrierRoot_observer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ)
     (hbefore : match packet.quitTime n with
@@ -341,8 +341,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
 product root at its selected row. -/
 theorem quittingProfileLiveRoot_observerAbsentForcedOwnerProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) :
     quittingProfileLiveRoot reward
@@ -365,8 +365,8 @@ theorem quittingProfileLiveRoot_observerAbsentForcedOwnerProfile
 decrease that coalition's actual stage cylinder. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.stageMass_le_forcedOwnerCylinder
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) :
     quittingStageCoalitionMass reward
@@ -398,8 +398,8 @@ fixed owner whose counterfactual one-row Quit walls retain the charged
 cylinder and satisfy the mass-weighted atomic blocker barrier. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedOwnerDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val) :
     HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet
@@ -435,12 +435,12 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
     intro n
     simpa only [profile] using packet.observerAbsent_carrierMassLower n
   have hmassWeighted : ∀ n,
-      quittingStoppingLawObserverAbsentMassLower packet * regime.terminalGap ≤
+      quittingStoppingLawObserverAbsentMassLower packet * witness.terminalGap ≤
         quittingTerminalOutcomeMass reward (profile n)
-            (some packet.terminal) * regime.terminalGap := by
+            (some packet.terminal) * witness.terminalGap := by
     intro n
     exact mul_le_mul_of_nonneg_right (hmassLower n)
-      regime.terminalGap_pos.le
+      witness.terminalGap_pos.le
   refine ⟨hownerMem, hownerNe, packet.observerAbsentMassLower_pos, hside,
     hmassLower, hmassWeighted,
     packet.observerAbsent_carrierMass_eq_clock habsent, ?_⟩
@@ -465,30 +465,30 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
       packet.stageMass_le_forcedOwnerCylinder n time
   have hownerForced : forcedRoot owner = PMF.pure true := by
     simp [forcedRoot]
-  have hbarrier : regime.terminalGap ≤
+  have hbarrier : witness.terminalGap ≤
       quittingStoppingLawObserverAbsentRowBarrier packet n time := by
     simpa only [quittingStoppingLawObserverAbsentRowBarrier, forcedRoot,
       actualRoot, owner, profile] using
-      regime.terminalGap_le_atomicBlockerBarrier hownerForced
+      witness.terminalGap_le_atomicBlockerBarrier hownerForced
   have hmassNonneg : 0 ≤ mass := by
     exact quittingStageCoalitionMass_nonneg reward (profile n) time
       packet.terminal
-  have hweightedBarrier : mass * regime.terminalGap ≤
+  have hweightedBarrier : mass * witness.terminalGap ≤
       mass * quittingStoppingLawObserverAbsentRowBarrier packet n time :=
     mul_le_mul_of_nonneg_left hbarrier hmassNonneg
   have halternative :
       (∃ who, who ≠ owner ∧
-          regime.terminalGap ≤
+          witness.terminalGap ≤
             quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
-          mass * regime.terminalGap ≤
+          mass * witness.terminalGap ≤
             mass * quittingRootCoordinateNashDefect reward tail.1
               forcedRoot who) ∨
-        (regime.terminalGap ≤
+        (witness.terminalGap ≤
             max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
-          mass * regime.terminalGap ≤
+          mass * witness.terminalGap ≤
             mass * max 0
               (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
-    have hraw : regime.terminalGap ≤
+    have hraw : witness.terminalGap ≤
         max (quittingForcedOwnerOutsiderDefect reward forcedRoot owner)
           (max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
       simpa only [quittingStoppingLawObserverAbsentRowBarrier, forcedRoot,
@@ -497,7 +497,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
     · left
       obtain ⟨who, hwho, hcoordinate⟩ :=
         exists_outsider_coordinateNashDefect_ge_of_forcedOwnerDefect_ge
-          reward tail.1 forcedRoot owner hownerForced regime.terminalGap_pos
+          reward tail.1 forcedRoot owner hownerForced witness.terminalGap_pos
             hdefect
       exact ⟨who, hwho, hcoordinate,
         mul_le_mul_of_nonneg_left hcoordinate hmassNonneg⟩
@@ -513,8 +513,8 @@ claimed to close the conjecture-facing branch.  The only remaining bare
 atom orientation is the prescribed comparison sequence. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_strategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         HasQuittingStoppingLawObserverAbsentForcedOwnerDispatch packet
@@ -542,8 +542,8 @@ retains the terminal membership, cardinality, and reward-sign data which
 selected its named consumer. -/
 def HasQuittingStoppingLawOrientationPreservingStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     Prop :=
   (packet.observer ∉ packet.terminal.val ∧
@@ -572,8 +572,8 @@ Each geometry is returned together with the strategic dispatch constructed
 from it, so no discarded provenance must be recovered. -/
 theorem exists_prescribed_or_orientationPreservingStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         HasQuittingStoppingLawOrientationPreservingStrategicDispatch packet := by

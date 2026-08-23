@@ -30,11 +30,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- The operational product root on a selected one-stage edge. -/
 def periodOneReadoutRoot (start : ℕ → ℕ) (index : ℕ) : ι → PMF Bool :=
@@ -117,7 +117,7 @@ private theorem oneStageWindow_normalizedSingletonOccupation_eq
 
 /-- Subsequence data on which the actual one-stage roots have convergent
 owner shares and semantic endpoint tangents. -/
-structure CounterexampleRegimePeriodOneTangentReadout where
+structure TerminalExploitabilityWitnessPeriodOneTangentReadout where
   packet : QuittingChargeTangentPacket reward
   start : ℕ → ℕ
   start_tendsto : Tendsto start atTop atTop
@@ -138,9 +138,9 @@ structure CounterexampleRegimePeriodOneTangentReadout where
         0 < seam.periodOneReadoutMass start index owner ∧
           0 < seam.periodOneReadoutTangent start index owner
 
-namespace CounterexampleRegimePeriodOneTangentReadout
+namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (readout : CounterexampleRegimePeriodOneTangentReadout seam)
+variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- The selected root's owner coefficient is exactly its normalized mass
 coordinate. -/
@@ -671,7 +671,7 @@ theorem activePositive_actualAttachmentNever_profitable
   exact actualAttachmentNever_profitable_of_boundaryDefect
     seam readout index owner hrealizeIndex hdefect
 
-end CounterexampleRegimePeriodOneTangentReadout
+end TerminalExploitabilityWitnessPeriodOneTangentReadout
 
 /-- Either the optimized tail is eventually all-Continue, or its literal
 one-stage extraction supplies a period-one tangent readout. -/
@@ -679,7 +679,7 @@ theorem eventually_allContinue_or_exists_periodOneTangentReadout :
     (∃ threshold, ∀ time, threshold ≤ time →
       quittingDynamicDebtTailRoots seam.tail time =
         (quittingAllContinueRoot : ι → PMF Bool)) ∨
-      Nonempty (CounterexampleRegimePeriodOneTangentReadout seam) := by
+      Nonempty (TerminalExploitabilityWitnessPeriodOneTangentReadout seam) := by
   rcases seam.eventually_allContinue_or_exists_oneStage_chargeTangentPacket with
     hplateau | ⟨packet, window, hstart, hfuel, habsorption,
       hmass, htangent⟩
@@ -742,7 +742,7 @@ theorem eventually_allContinue_or_exists_periodOneTangentReadout :
           ∀ᶠ index in atTop,
             0 < seam.periodOneReadoutMass start index owner ∧
               0 < seam.periodOneReadoutTangent start index owner := by
-      rcases regime.chargeTangentPacket_underfunded_or_active_funded packet with
+      rcases witness.chargeTangentPacket_underfunded_or_active_funded packet with
         ⟨who, hnegative⟩ | ⟨owner, hmassPos, htangentPos⟩
       · exact Or.inl
           ⟨who, hnegative,

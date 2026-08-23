@@ -8,11 +8,11 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Surpl
 import UniformEquilibrium.Quitting.Classification.SingletonPacketDefect
 
 /-!
-# Uniform packet defect in a counterexample regime
+# Uniform packet defect in a terminal exploitability witness
 
 The generic compact coordinate model and continuous defect live in
 `Quitting.Classification.SingletonPacketDefect`.  This adapter proves that a
-counterexample regime makes the defect pointwise positive, obtains one
+terminal exploitability witness makes the defect pointwise positive, obtains one
 positive margin over every normalized packet, and converts that margin into
 a uniform refusal advantage.
 
@@ -29,17 +29,17 @@ open Finset Set
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- In a counterexample regime, the defect is positive at every raw packet. -/
+/-- In a terminal exploitability witness, the defect is positive at every raw packet. -/
 theorem quittingNormalizedSingletonPacketDefect_pos
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (data : QuittingNormalizedSingletonPacketData ι)
     (hdata : data ∈ quittingNormalizedSingletonPacketDataSet reward) :
     0 < @quittingNormalizedSingletonPacketDefect ι _
-      regime.nonempty_players reward data := by
-  letI : Nonempty ι := regime.nonempty_players
+      witness.nonempty_players reward data := by
+  letI : Nonempty ι := witness.nonempty_players
   let packet := quittingNormalizedSingletonSourcePacketOfData data hdata
   obtain ⟨owner, hmass, hsurplus⟩ :=
-    regime.exists_active_strictSingletonSurplus packet
+    witness.exists_active_strictSingletonSurplus packet
   have hterm : 0 < data.1 owner *
       (quittingSingletonMixture reward data.1 owner - data.2 owner) :=
     mul_pos hmass (sub_pos.mpr hsurplus)
@@ -48,18 +48,18 @@ theorem quittingNormalizedSingletonPacketDefect_pos
       (quittingSingletonMixture reward data.1 who - data.2 who))
     (Finset.mem_univ owner))
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Uniform packet-defect margin.** One positive number works for every
 normalized singleton packet of the fixed counterexample reward table. -/
 theorem exists_pos_uniform_normalizedSingletonPacketDefect
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ δ : ℝ, 0 < δ ∧
       ∀ packet : QuittingNormalizedSingletonSourcePacket reward,
         δ ≤ @quittingNormalizedSingletonPacketDefect ι _
-          regime.nonempty_players reward (packet.mass, packet.target) := by
-  letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨packet⟩ := regime.nonempty_normalizedSingletonSourcePacket
+          witness.nonempty_players reward (packet.mass, packet.target) := by
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨packet⟩ := witness.nonempty_normalizedSingletonSourcePacket
   have hnonempty :
       (quittingNormalizedSingletonPacketDataSet reward).Nonempty :=
     ⟨(packet.mass, packet.target), packet.data_mem⟩
@@ -68,13 +68,13 @@ theorem exists_pos_uniform_normalizedSingletonPacketDefect
       hnonempty
       continuous_quittingNormalizedSingletonPacketDefect.continuousOn
   exact ⟨quittingNormalizedSingletonPacketDefect reward data,
-    quittingNormalizedSingletonPacketDefect_pos regime data hdata,
+    quittingNormalizedSingletonPacketDefect_pos witness data hdata,
     fun candidate ↦ hmin candidate.data_mem⟩
 
 /-- The uniform defect is a uniform refusal advantage on one active atom of
 every normalized packet. -/
 theorem exists_pos_uniform_normalizedSingletonPacketRefusal
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ δ : ℝ, 0 < δ ∧
       ∀ packet : QuittingNormalizedSingletonSourcePacket reward,
         ∃ owner,
@@ -83,9 +83,9 @@ theorem exists_pos_uniform_normalizedSingletonPacketRefusal
             quittingSingletonMixture reward packet.mass owner ∧
           quittingSingletonMixture reward packet.mass owner + δ ≤
             quittingSingletonRefusalValue reward packet.mass owner owner := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨δ, hδ, hdefect⟩ :=
-    regime.exists_pos_uniform_normalizedSingletonPacketDefect
+    witness.exists_pos_uniform_normalizedSingletonPacketDefect
   refine ⟨δ, hδ, fun packet ↦ ?_⟩
   obtain ⟨owner, _, howner⟩ := Finset.exists_mem_eq_sup'
     Finset.univ_nonempty
@@ -135,6 +135,6 @@ theorem exists_pos_uniform_normalizedSingletonPacketRefusal
   refine ⟨owner, hmass, hmassLt, hsurplus, ?_⟩
   linarith
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

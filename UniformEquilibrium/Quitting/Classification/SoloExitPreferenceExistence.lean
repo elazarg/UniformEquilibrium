@@ -19,7 +19,7 @@ Theorem 1.2, in this development's semantics.  It is proved in Lean by
 Its conclusion is the source's, namely a uniform `ε`-equilibrium for each
 positive `ε`, with the profile and its payoff vector free to move with `ε`.
 That is weaker than one fixed uniform-equilibrium payoff, which is the notion
-the quitting conjecture and the counterexample regime are stated at.  For
+the quitting conjecture and the terminal exploitability witness are stated at.  For
 finite quitting games the two are nonetheless equivalent, by
 `quittingGame_exists_uniformEquilibriumPayoff_iff_uniformεEquilibrium_all_errors`;
 `exists_uniformEquilibriumPayoff_of_cappedJointExit` is that bridge applied to

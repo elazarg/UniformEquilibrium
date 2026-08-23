@@ -49,20 +49,20 @@ open Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Quantitative atomic-monopoly restriction.**  If a positive-rate solo
 row is exact endpoint Nash against its own singleton payoff vector, then a
 counterexample's fixed terminal gap fits entirely inside the owner's gain
 from refusing forever. -/
 theorem terminalGap_le_neg_soloReward_of_soloEndpointNash
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (hazard : PMF Bool)
     (hpositive : 0 < (hazard true).toReal)
     (hnash : IsεQuittingRootEndpointNash reward
       (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard)) :
-    regime.terminalGap ≤ -quittingSoloReward reward owner owner := by
+    witness.terminalGap ≤ -quittingSoloReward reward owner owner := by
   have hinactive : ∀ other, other ≠ owner →
       (hazard false).toReal * quittingSoloReward reward other other +
           (hazard true).toReal *
@@ -76,9 +76,9 @@ theorem terminalGap_le_neg_soloReward_of_soloEndpointNash
       le_of_not_gt hnotNeg
     have huniform := isUniformEquilibriumPayoff_soloReward_of_inactive
       reward owner hazard hpositive hownerNonneg hinactive
-    exact regime.not_exists_uniformEquilibriumPayoff
+    exact witness.not_exists_uniformEquilibriumPayoff
       ⟨quittingSoloReward reward owner, huniform⟩
-  obtain ⟨who, hgain⟩ := regime.exists_stationaryCap_gain
+  obtain ⟨who, hgain⟩ := witness.exists_stationaryCap_gain
     (quittingSoloStationaryRoot owner hazard)
   by_cases hwho : who = owner
   · subst who
@@ -99,18 +99,18 @@ theorem terminalGap_le_neg_soloReward_of_soloEndpointNash
       quittingStationaryUnilateralCap_solo_other reward hwho hazard
         hpositive,
       max_eq_right hfixed] at hgain
-    linarith [regime.terminalGap_pos]
+    linarith [witness.terminalGap_pos]
 
 /-- The quantitative restriction in its direct sign form. -/
 theorem soloReward_le_neg_terminalGap_of_soloEndpointNash
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (hazard : PMF Bool)
     (hpositive : 0 < (hazard true).toReal)
     (hnash : IsεQuittingRootEndpointNash reward
       (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard)) :
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap := by
-  linarith [regime.terminalGap_le_neg_soloReward_of_soloEndpointNash
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap := by
+  linarith [witness.terminalGap_le_neg_soloReward_of_soloEndpointNash
     owner hazard hpositive hnash]
 
 /-- **Atomic conditioned-limit restriction.**  When conditioned solo rows
@@ -119,7 +119,7 @@ to the owner's singleton payoff vector, the limiting owner payoff is at most
 the negated counterexample gap.  This is the quantitative strengthening of
 the sign-only atomic restriction. -/
 theorem soloReward_le_neg_terminalGap_of_atomicSoloLimit
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -132,11 +132,11 @@ theorem soloReward_le_neg_terminalGap_of_atomicSoloLimit
         (quittingSoloStationaryRoot owner
           (quittingHazardCoin (rate time)
             (hrateNonneg time) (hrateOne time)))) :
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap := by
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap := by
   have hlimitNash := isEndpointNash_soloRate_of_tendsto
     reward owner rate tail limitRate hrateNonneg hrateOne
       hlimitPositive.le hlimitOne hrate htail hnash
-  exact regime.soloReward_le_neg_terminalGap_of_soloEndpointNash
+  exact witness.soloReward_le_neg_terminalGap_of_soloEndpointNash
     owner (quittingHazardCoin limitRate hlimitPositive.le hlimitOne)
       (by simpa using hlimitPositive) hlimitNash
 
@@ -145,7 +145,7 @@ positive-rate solo endpoint equilibrium cannot have a punishment floor below
 the owner's singleton payoff: punishment completion would enforce the
 period-one solo cycle. -/
 theorem soloReward_lt_punishmentValue_of_soloEndpointNash
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (hazard : PMF Bool)
     (hpositive : 0 < (hazard true).toReal)
     (hnash : IsεQuittingRootEndpointNash reward
@@ -159,13 +159,13 @@ theorem soloReward_lt_punishmentValue_of_soloEndpointNash
   have huniform :=
     isUniformEquilibriumPayoff_soloReward_of_endpointNash_of_punishmentIR
       reward owner hazard hpositive hnash hpunishment
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     ⟨quittingSoloReward reward owner, huniform⟩
 
 /-- The punishment obstruction transferred through an atomic conditioned
 limit. -/
 theorem soloReward_lt_punishmentValue_of_atomicSoloLimit
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -183,7 +183,7 @@ theorem soloReward_lt_punishmentValue_of_atomicSoloLimit
   have hlimitNash := isEndpointNash_soloRate_of_tendsto
     reward owner rate tail limitRate hrateNonneg hrateOne
       hlimitPositive.le hlimitOne hrate htail hnash
-  exact regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+  exact witness.soloReward_lt_punishmentValue_of_soloEndpointNash
     owner (quittingHazardCoin limitRate hlimitPositive.le hlimitOne)
       (by simpa using hlimitPositive) hlimitNash
 
@@ -191,7 +191,7 @@ theorem soloReward_lt_punishmentValue_of_atomicSoloLimit
 limit is impossible whenever the owner's punishment value is bounded by its
 singleton payoff. -/
 theorem not_atomicSoloLimit_of_punishment_le_soloReward
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -206,7 +206,7 @@ theorem not_atomicSoloLimit_of_punishment_le_soloReward
             (hrateNonneg time) (hrateOne time))))
     (hpunishment : quittingPunishmentValue reward owner ≤
       quittingSoloReward reward owner owner) : False := by
-  have hstrict := regime.soloReward_lt_punishmentValue_of_atomicSoloLimit
+  have hstrict := witness.soloReward_lt_punishmentValue_of_atomicSoloLimit
     owner rate tail limitRate hrateNonneg hrateOne hlimitPositive hlimitOne
       hrate htail hnash
   linarith
@@ -215,7 +215,7 @@ theorem not_atomicSoloLimit_of_punishment_le_soloReward
 lower bound on the phantom boundary and tightness of the owner's boundary
 coordinate eliminate the atomic owner limit. -/
 theorem not_atomicSoloLimit_of_punishment_le_tightBoundary
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (boundary : Payoff ι)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
@@ -231,16 +231,16 @@ theorem not_atomicSoloLimit_of_punishment_le_tightBoundary
             (hrateNonneg time) (hrateOne time))))
     (hpunishment : quittingPunishmentValue reward owner ≤ boundary owner)
     (htight : boundary owner = quittingSoloReward reward owner owner) : False := by
-  apply regime.not_atomicSoloLimit_of_punishment_le_soloReward
+  apply witness.not_atomicSoloLimit_of_punishment_le_soloReward
     owner rate tail limitRate hrateNonneg hrateOne hlimitPositive hlimitOne
       hrate htail hnash
   exact hpunishment.trans_eq htight
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- **Direct conditioned-seam exclusion.**  On a counterexample seam, a
 singleton-tight boundary coordinate cannot be the positive-rate atomic limit
@@ -253,7 +253,7 @@ exact endpoint Nash of the converging solo rows.  The seam supplies the
 punishment inequality, while boundary tightness turns it into the precise
 punishment-completion gate. -/
 theorem not_atomicSoloLimit_of_limitValue_eq_singleton
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -268,7 +268,7 @@ theorem not_atomicSoloLimit_of_limitValue_eq_singleton
             (hrateNonneg time) (hrateOne time))))
     (htight : seam.limit.value owner =
       quittingSoloReward reward owner owner) : False := by
-  exact regime.not_atomicSoloLimit_of_punishment_le_tightBoundary
+  exact witness.not_atomicSoloLimit_of_punishment_le_tightBoundary
     owner rate tail limitRate seam.limit.value hrateNonneg hrateOne
       hlimitPositive hlimitOne hrate htail hnash
       (seam.punishmentValue_le_limitValue owner) htight
@@ -279,25 +279,25 @@ end QuittingCounterexampleDynamicTailWitness
 in the isolated-negative branch, and its owner payoff is separated from zero
 by at least the counterexample's terminal gap. -/
 theorem exists_isolatedNegativeCycle_and_soloReward_le_neg_terminalGap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (hazard : PMF Bool)
     (hpositive : 0 < (hazard true).toReal)
     (hnash : IsεQuittingRootEndpointNash reward
       (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard)) :
     HasIsolatedNegativeAbsorbingQuittingCycle reward ∧
-      quittingSoloReward reward owner owner ≤ -regime.terminalGap := by
-  have hbound := regime.soloReward_le_neg_terminalGap_of_soloEndpointNash
+      quittingSoloReward reward owner owner ≤ -witness.terminalGap := by
+  have hbound := witness.soloReward_le_neg_terminalGap_of_soloEndpointNash
     owner hazard hpositive hnash
   have hnegative : quittingSoloReward reward owner owner < 0 :=
-    lt_of_le_of_lt hbound (neg_neg_of_pos regime.terminalGap_pos)
+    lt_of_le_of_lt hbound (neg_neg_of_pos witness.terminalGap_pos)
   exact ⟨hasIsolatedNegativeAbsorbingQuittingCycle_of_soloEndpointNash
     reward owner hazard hpositive hnash hnegative, hbound⟩
 
 /-- The atomic conditioned limit lands quantitatively in the existing
 isolated-negative cyclic branch. -/
 theorem atomicSoloLimit_isolatedNegativeCycle_and_gap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (rate : ℕ → ℝ) (tail : ℕ → Payoff ι) (limitRate : ℝ)
     (hrateNonneg : ∀ time, 0 ≤ rate time)
     (hrateOne : ∀ time, rate time ≤ 1)
@@ -311,12 +311,12 @@ theorem atomicSoloLimit_isolatedNegativeCycle_and_gap
           (quittingHazardCoin (rate time)
             (hrateNonneg time) (hrateOne time)))) :
     HasIsolatedNegativeAbsorbingQuittingCycle reward ∧
-      quittingSoloReward reward owner owner ≤ -regime.terminalGap := by
+      quittingSoloReward reward owner owner ≤ -witness.terminalGap := by
   have hlimitNash := isEndpointNash_soloRate_of_tendsto
     reward owner rate tail limitRate hrateNonneg hrateOne
       hlimitPositive.le hlimitOne hrate htail hnash
   exact exists_isolatedNegativeCycle_and_soloReward_le_neg_terminalGap
-    regime owner (quittingHazardCoin limitRate hlimitPositive.le hlimitOne)
+    witness owner (quittingHazardCoin limitRate hlimitPositive.le hlimitOne)
       (by simpa using hlimitPositive) hlimitNash
 
 end GameTheory

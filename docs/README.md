@@ -52,7 +52,7 @@ by being linked from this directory.
 - [UNIFORM_CONSEQUENCES.md](UNIFORM_CONSEQUENCES.md)
 - [NOTION_LATTICE.md](NOTION_LATTICE.md)
 - [LLM_REVERSE_COMPILATION_EXPERIMENT.md](LLM_REVERSE_COMPILATION_EXPERIMENT.md)
-- [design/COUNTEREXAMPLE_SEARCH_REGIME.md](design/COUNTEREXAMPLE_SEARCH_REGIME.md)
+- [design/TERMINAL_EXPLOITABILITY_WITNESS.md](design/TERMINAL_EXPLOITABILITY_WITNESS.md)
 
 These files describe current mathematical interfaces and scope boundaries.
 

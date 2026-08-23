@@ -286,16 +286,16 @@ theorem half_minimumDebt_le_capContinueGap_of_small_root
 
 /-- Every carrier point of a counterexample has total debt at least the
 stored terminal gap. -/
-theorem QuittingCounterexampleRegime.terminalGap_le_semanticDebtSum
+theorem QuittingTerminalExploitabilityWitness.terminalGap_le_semanticDebtSum
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
-    regime.terminalGap ≤ quittingTerminalSemanticDebtSum pair := by
-  have hfloor : regime.terminalGap ≤
+    witness.terminalGap ≤ quittingTerminalSemanticDebtSum pair := by
+  have hfloor : witness.terminalGap ≤
       quittingTerminalSemanticExploitability pair :=
     (terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
-      reward regime.terminalExploitability).trans
+      reward witness.terminalExploitability).trans
       (quittingTerminalExploitabilityInf_le_semanticCarrier reward hpair)
   have hdebtNonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt pair who :=
@@ -314,9 +314,9 @@ theorem QuittingCounterexampleRegime.terminalGap_le_semanticDebtSum
 
 /-- A positive costate has a positive weighted minimum throughout a
 counterexample carrier. -/
-theorem QuittingCounterexampleRegime.weightedDebtSum_pos
+theorem QuittingTerminalExploitabilityWitness.weightedDebtSum_pos
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (theta : Payoff ι) (htheta : ∀ who, 0 < theta who)
     (pair : QuittingTerminalSemanticPair ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
@@ -326,8 +326,8 @@ theorem QuittingCounterexampleRegime.weightedDebtSum_pos
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier
       reward hpair
   have hsumPositive : 0 < quittingTerminalSemanticDebtSum pair :=
-    regime.terminalGap_pos.trans_le
-      (regime.terminalGap_le_semanticDebtSum pair hpair)
+    witness.terminalGap_pos.trans_le
+      (witness.terminalGap_le_semanticDebtSum pair hpair)
   obtain ⟨who, _, hwho⟩ := (Finset.sum_pos_iff_of_nonneg
     (fun player _ => hdebtNonneg player)).mp hsumPositive
   unfold quittingTerminalSemanticWeightedDebtSum
@@ -339,18 +339,18 @@ theorem QuittingCounterexampleRegime.weightedDebtSum_pos
 supported on any prescribed coordinate.  The surviving debt remains at
 least the counterexample's terminal gap, and the point is an exact
 all-Continue plateau. -/
-theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
-    (regime : QuittingCounterexampleRegime reward) (owner : ι) :
+theorem QuittingTerminalExploitabilityWitness.exists_terminalSemanticDebtAxis
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι) :
     ∃ pair : QuittingTerminalSemanticPair ι,
       pair ∈ quittingTerminalSemanticCarrier reward ∧
-      regime.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
+      witness.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
       (∀ other, other ≠ owner →
         quittingTerminalSemanticDebt pair other = 0) ∧
       IsεQuittingRootNash reward pair.1 0
         (quittingAllContinueRoot : ι → PMF Bool) := by
   obtain ⟨M, -, hreward⟩ :=
     exists_quittingRewardBound reward
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let theta : ℕ → Payoff ι := quittingDebtAxisCostate owner
   have hcompact := quittingTerminalSemanticCarrier_isCompact reward
   have hnonempty := quittingTerminalSemanticCarrier_nonempty reward
@@ -366,7 +366,7 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
   choose pair hpair hminimum using hmin
   have hpositive : ∀ index,
       0 < quittingTerminalSemanticWeightedDebtSum (theta index) (pair index) :=
-    fun index => regime.weightedDebtSum_pos (theta index)
+    fun index => witness.weightedDebtSum_pos (theta index)
       (quittingDebtAxisCostate_pos owner index) (pair index)
       (hpair index)
   have hplateau : ∀ index,
@@ -482,9 +482,9 @@ theorem QuittingCounterexampleRegime.exists_terminalSemanticDebtAxis
         exact hsingle.trans (hotherSumBound (subseq index))
       · simpa using hrateSubseq.const_mul (2 * M)
     exact tendsto_nhds_unique hdebtLimit hdebtZero
-  have hgapLimit : regime.terminalGap ≤
+  have hgapLimit : witness.terminalGap ≤
       quittingTerminalSemanticDebt limit owner := by
-    have hgapSum := regime.terminalGap_le_semanticDebtSum
+    have hgapSum := witness.terminalGap_le_semanticDebtSum
       limit hlimitCarrier
     have hsumOwner : quittingTerminalSemanticDebtSum limit =
         quittingTerminalSemanticDebt limit owner := by
@@ -517,18 +517,18 @@ player has a carrier state with debt supported on that player.  Moreover one
 positive-solo owner has such a state at which a fixed-rate solo prefix carries
 singleton incidence at least one half and a distinct player's exact endpoint
 gain equals half of its positive singleton-insertion gain. -/
-theorem QuittingCounterexampleRegime.exists_debtAxes_and_sourceMatchedInsertion
-    (regime : QuittingCounterexampleRegime reward) :
+theorem QuittingTerminalExploitabilityWitness.exists_debtAxes_and_sourceMatchedInsertion
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     (∀ owner, ∃ pair : QuittingTerminalSemanticPair ι,
       pair ∈ quittingTerminalSemanticCarrier reward ∧
-      regime.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
+      witness.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
       (∀ other, other ≠ owner →
         quittingTerminalSemanticDebt pair other = 0)) ∧
     ∃ (owner other : ι) (pair : QuittingTerminalSemanticPair ι)
         (rate gain : ℝ) (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1),
       other ≠ owner ∧
       pair ∈ quittingTerminalSemanticCarrier reward ∧
-      regime.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
+      witness.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
       (∀ player, player ≠ owner →
         quittingTerminalSemanticDebt pair player = 0) ∧
       quittingTerminalSemanticPrefix reward
@@ -536,35 +536,35 @@ theorem QuittingCounterexampleRegime.exists_debtAxes_and_sourceMatchedInsertion
             (quittingHazardCoin rate hrate0 hrate1)) pair ∈
         quittingTerminalSemanticCarrier reward ∧
       1 / 2 ≤ rate ∧
-      regime.terminalGap ≤ gain ∧
+      witness.terminalGap ≤ gain ∧
       gain = quittingSingletonCollisionReward reward owner other -
         quittingSoloReward reward owner other ∧
       quittingRootEndpointDifference reward pair.1
           (quittingSoloStationaryRoot owner
             (quittingHazardCoin rate hrate0 hrate1)) other = gain / 2 := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have haxes : ∀ owner, ∃ pair : QuittingTerminalSemanticPair ι,
       pair ∈ quittingTerminalSemanticCarrier reward ∧
-      regime.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
+      witness.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧
       (∀ other, other ≠ owner →
         quittingTerminalSemanticDebt pair other = 0) := by
     intro owner
     obtain ⟨pair, hpair, hdebt, hother, _hnash⟩ :=
-      regime.exists_terminalSemanticDebtAxis owner
+      witness.exists_terminalSemanticDebtAxis owner
     exact ⟨pair, hpair, hdebt, hother⟩
   refine ⟨haxes, ?_⟩
-  obtain ⟨owner, hownerSolo⟩ := regime.exists_terminalGap_le_soloReward
+  obtain ⟨owner, hownerSolo⟩ := witness.exists_terminalGap_le_soloReward
   obtain ⟨pair, hpair, hownerDebt, hotherDebt, hnashAll⟩ :=
-    regime.exists_terminalSemanticDebtAxis owner
-  obtain ⟨other, hne, hinsertion⟩ := regime.exists_collision_gain
-    (owner := owner) (by linarith [regime.terminalGap_pos])
+    witness.exists_terminalSemanticDebtAxis owner
+  obtain ⟨other, hne, hinsertion⟩ := witness.exists_collision_gain
+    (owner := owner) (by linarith [witness.terminalGap_pos])
   let gain := quittingSingletonCollisionReward reward owner other -
     quittingSoloReward reward owner other
   let slack := pair.1 other - quittingSoloReward reward other other
-  have hgain : regime.terminalGap ≤ gain := by
+  have hgain : witness.terminalGap ≤ gain := by
     dsimp only [gain]
     linarith
-  have hgainPos : 0 < gain := regime.terminalGap_pos.trans_le hgain
+  have hgainPos : 0 < gain := witness.terminalGap_pos.trans_le hgain
   have hslackNonneg : 0 ≤ slack := by
     dsimp only [slack]
     have hsingleton := (isZeroQuittingRootNash_allContinue_iff_singleton_le

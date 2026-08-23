@@ -27,61 +27,61 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
-namespace CounterexampleRegimePeriodOneTangentReadout
+namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
-variable (readout : CounterexampleRegimePeriodOneTangentReadout seam)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
+variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- Every selected one-root prefix inherits the regime's terminal-gap floor
 for the infimum over all co-realized behavioral tails.  This conclusion is
 independent of tangent sign; it is the existing terminal obstruction, not an
 attachment theorem for the active owner. -/
 theorem terminalGap_le_periodOne_behavioralTailRepairValue (index : ℕ) :
-    regime.terminalGap ≤
+    witness.terminalGap ≤
       @QuittingBoundaryHolonomy.behavioralTailRepairValue ι _ _
-        regime.nonempty_players reward
+        witness.nonempty_players reward
         (quittingFiniteBoundaryHolonomy reward
           (quittingPeriodOneRootSequence
             (seam.periodOneReadoutRoot readout.start index)) 0 0) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact terminalExploitabilityGap_le_behavioralTailRepairValue reward
     (quittingPeriodOneRootSequence
       (seam.periodOneReadoutRoot readout.start index)) 1 (by omega)
-    regime.terminalExploitability
+    witness.terminalExploitability
 
 /-- For every selected root, elementary compression of its actual suffix
 returns a co-realized terminal obstruction larger than half the regime gap.
 This is likewise independent of the active-positive packet branch. -/
 theorem exists_elementaryTailCap_periodOne_terminalObstruction (index : ℕ) :
     ∃ cap : QuittingElementaryTailCap ι, ∃ cutoff,
-      regime.terminalGap / 2 < @quittingTerminalExploitability ι _ _
-        regime.nonempty_players reward
+      witness.terminalGap / 2 < @quittingTerminalExploitability ι _ _
+        witness.nonempty_players reward
         (quittingPhaseSwitchProfile reward
           (quittingPeriodOneRootSequence
             (seam.periodOneReadoutRoot readout.start index))
           (quittingElementaryTailRoots
             (seam.periodOneReadoutActualSuffix readout.start index)
             cutoff cap) 1) := by
-  letI : Nonempty ι := regime.nonempty_players
-  have hhalf : 0 < regime.terminalGap / 2 := by
-    linarith [regime.terminalGap_pos]
+  letI : Nonempty ι := witness.nonempty_players
+  have hhalf : 0 < witness.terminalGap / 2 := by
+    linarith [witness.terminalGap_pos]
   obtain ⟨cap, cutoff, hcap⟩ :=
     exists_elementaryTailCap_terminalExploitability_gt_sub reward
       (quittingPeriodOneRootSequence
         (seam.periodOneReadoutRoot readout.start index))
       (seam.periodOneReadoutActualSuffix readout.start index) 1
       (by omega) hhalf
-      regime.terminalExploitability
+      witness.terminalExploitability
   refine ⟨cap, cutoff, ?_⟩
-  have hhalfEq : regime.terminalGap - regime.terminalGap / 2 =
-      regime.terminalGap / 2 := by ring
+  have hhalfEq : witness.terminalGap - witness.terminalGap / 2 =
+      witness.terminalGap / 2 := by ring
   rw [← hhalfEq]
   exact hcap
 
-end CounterexampleRegimePeriodOneTangentReadout
+end TerminalExploitabilityWitnessPeriodOneTangentReadout
 end QuittingCounterexampleDynamicTailWitness
 
 end GameTheory

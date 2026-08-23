@@ -28,7 +28,7 @@ deviation at the original prefixed profile.  The reset merely transfers the
 unit debt from `mover` to `observer`, leaving total debt unchanged.
 
 This does not satisfy the positive *global-minimum* provenance of a quitting
-counterexample regime: the same reward table has other zero-debt profiles.
+terminal exploitability witness: the same reward table has other zero-debt profiles.
 Accordingly it is a sharp local fence, not a counterexample to uniform
 equilibrium existence.  Any atom-to-strategy compiler must use global
 minimum provenance after the counterfactual reset (or add an explicit

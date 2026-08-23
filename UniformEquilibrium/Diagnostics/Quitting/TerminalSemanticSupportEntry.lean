@@ -626,7 +626,7 @@ also has positive Continue mass, the data include a first feasible tight
 support boundary at which either the owner's collision increment is nonzero
 or a second outsider is cotight. -/
 def HasProvenanceAtomicMinimumSemanticSoloRow
-    (regime : QuittingCounterexampleRegime reward) : Prop :=
+    (witness : QuittingTerminalExploitabilityWitness reward) : Prop :=
   ∃ (current tail : QuittingTerminalSemanticPair ι)
       (owner : ι) (hazard : PMF Bool) (anchor : ι),
     current ∈ quittingTerminalSemanticCarrier reward ∧
@@ -654,7 +654,7 @@ def HasProvenanceAtomicMinimumSemanticSoloRow
       (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard) ∧
     HasIsolatedNegativeAbsorbingQuittingCycle reward ∧
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
     quittingSoloReward reward owner owner <
       quittingPunishmentValue reward owner ∧
     ((hazard false).toReal = 0 ∨
@@ -669,12 +669,12 @@ semantic pairs.  In the interior-hazard case the same tail exposes the
 nonzero-collision-or-cotight support-entry boundary. -/
 theorem exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
-      HasProvenanceAtomicMinimumSemanticSoloRow regime := by
+      HasProvenanceAtomicMinimumSemanticSoloRow witness := by
   rcases
       exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_uniformPayoff
-        reward regime.not_exists_uniformEquilibriumPayoff with
+        reward witness.not_exists_uniformEquilibriumPayoff with
     hplateau | ⟨pair, root, owner, debt, hdebt, hpair, hminimum,
       hprefix, hnash, _hnoPlateau, hnoMinimumPlateau, hownerDebt,
       hotherDebt, hquit, hpure, hrootSolo, _hopponentSurvival,
@@ -730,10 +730,10 @@ theorem exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
       exact hdebt
     have hisolated :=
       exists_isolatedNegativeCycle_and_soloReward_le_neg_terminalGap
-        regime owner hazard (hquit 0) hendpointSolo
+        witness owner hazard (hquit 0) hendpointSolo
     have hpunishment : quittingSoloReward reward owner owner <
         quittingPunishmentValue reward owner :=
-      regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+      witness.soloReward_lt_punishmentValue_of_soloEndpointNash
         owner hazard (hquit 0) hendpointSolo
     refine ⟨pair 0, pair 1, owner, hazard, anchor,
       hpair 0, hpair 1, hminimum 0, hminimum 1,

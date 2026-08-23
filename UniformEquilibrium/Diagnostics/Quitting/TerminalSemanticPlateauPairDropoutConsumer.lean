@@ -37,7 +37,7 @@ open Math.Probability Math.PMFProduct
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- A positive-mass singleton in a counterexample either belongs to the
 negative punishment-moat branch or admits a literal positive-mass
@@ -48,17 +48,17 @@ join improvement retains the full quantitative terminal-gap margin.  In the
 lower singleton stratum the selected joiner, if present, is only asserted to
 be strict; otherwise the negative-vertex punishment moat is returned. -/
 theorem negativeMoat_or_positive_pairReplacement
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner : ι) (root : ι → PMF Bool)
     (hmass : 0 < quittingRootCoalitionMass root ({owner} : Finset ι)) :
-    (quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+    (quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
         quittingSoloReward reward owner owner <
           quittingPunishmentValue reward owner) ∨
       ∃ outsider, outsider ≠ owner ∧
         quittingSoloReward reward owner outsider <
           quittingSingletonCollisionReward reward owner outsider ∧
-        (-regime.terminalGap < quittingSoloReward reward owner owner →
-          quittingSoloReward reward owner outsider + regime.terminalGap ≤
+        (-witness.terminalGap < quittingSoloReward reward owner owner →
+          quittingSoloReward reward owner outsider + witness.terminalGap ≤
             quittingSingletonCollisionReward reward owner outsider) ∧
         0 < quittingRootCoalitionMass
           (Function.update root outsider (PMF.pure true))
@@ -78,22 +78,22 @@ theorem negativeMoat_or_positive_pairReplacement
     rw [hrouted] at hroute
     exact hmass.trans_le hroute
   by_cases hnegative :
-      quittingSoloReward reward owner owner ≤ -regime.terminalGap
-  · rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+      quittingSoloReward reward owner owner ≤ -witness.terminalGap
+  · rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
       hjoin | hmoat
     · obtain ⟨outsider, hne, hstrict⟩ := hjoin
       exact Or.inr ⟨outsider, hne, hstrict, by
         intro habove
         linarith, routedMassPos outsider hne⟩
     · exact Or.inl ⟨hnegative, hmoat⟩
-  · have habove : -regime.terminalGap <
+  · have habove : -witness.terminalGap <
         quittingSoloReward reward owner owner := lt_of_not_ge hnegative
-    obtain ⟨outsider, hne, hmargin⟩ := regime.exists_collision_gain habove
+    obtain ⟨outsider, hne, hmargin⟩ := witness.exists_collision_gain habove
     exact Or.inr ⟨outsider, hne, by
-      linarith [regime.terminalGap_pos], fun _ => hmargin,
+      linarith [witness.terminalGap_pos], fun _ => hmargin,
       routedMassPos outsider hne⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 /-! ## The literal dropout consumer -/
 
@@ -109,8 +109,8 @@ positive mass on an overlapping pair.
 
 The outsider update is only a static, table-certified endpoint replacement;
 no chronological or Bellman compatibility is claimed. -/
-theorem QuittingCounterexampleRegime.exists_negativeMoat_or_pairReplacement_of_dropout
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_negativeMoat_or_pairReplacement_of_dropout
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
@@ -142,7 +142,7 @@ theorem QuittingCounterexampleRegime.exists_negativeMoat_or_pairReplacement_of_d
         afterRoot = Function.update beforeRoot move.who (PMF.pure false) ∧
         0 < quittingRootCoalitionMass beforeRoot beforeCoalition ∧
         0 < quittingRootCoalitionMass afterRoot afterCoalition ∧
-        ((quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+        ((quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
             quittingSoloReward reward owner owner <
               quittingPunishmentValue reward owner) ∨
           ∃ outsider replacementRoot replacementCoalition,
@@ -155,10 +155,10 @@ theorem QuittingCounterexampleRegime.exists_negativeMoat_or_pairReplacement_of_d
               replacementCoalition.card = 2 ∧
               quittingSoloReward reward owner outsider <
                 quittingSingletonCollisionReward reward owner outsider ∧
-              (-regime.terminalGap <
+              (-witness.terminalGap <
                     quittingSoloReward reward owner owner →
                 quittingSoloReward reward owner outsider +
-                    regime.terminalGap ≤
+                    witness.terminalGap ≤
                   quittingSingletonCollisionReward reward owner outsider) ∧
               0 < quittingRootCoalitionMass replacementRoot
                 replacementCoalition) := by
@@ -197,7 +197,7 @@ theorem QuittingCounterexampleRegime.exists_negativeMoat_or_pairReplacement_of_d
   have hsingletonMass :
       0 < quittingRootCoalitionMass afterRoot ({owner} : Finset ι) := by
     simpa [hsingleton] using hafterMass'
-  rcases regime.negativeMoat_or_positive_pairReplacement owner afterRoot
+  rcases witness.negativeMoat_or_positive_pairReplacement owner afterRoot
       hsingletonMass with hnegative | hreplacement
   · exact ⟨before, move, after, beforeRoot, afterRoot, beforeCoalition,
       afterCoalition, owner, hsplit, rfl, rfl, hbeforeCoalition,

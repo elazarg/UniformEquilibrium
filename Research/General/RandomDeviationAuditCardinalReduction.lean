@@ -83,10 +83,10 @@ def AllMinimalCounterexamplesHaveFourPlayers : Prop :=
   ∀ minimal : MinimalFinQuittingCounterexample,
     minimal.playerCount = 4
 
-/-! ## Audit and counterexample-regime dictionaries -/
+/-! ## Audit and terminal exploitability witness dictionaries -/
 
 /-- Positive uniform audit on `Fin 4` is exactly existence of the canonical
-four-player counterexample regime. -/
+four-player terminal exploitability witness. -/
 theorem hasPositiveFourPlayerAudit_iff_counterexampleAtCardFour :
     HasPositiveFourPlayerAudit ↔ HasQuittingCounterexampleAtCard 4 := by
   constructor
@@ -95,13 +95,13 @@ theorem hasPositiveFourPlayerAudit_iff_counterexampleAtCardFour :
         (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
       (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mp hpositive
     exact ⟨reward,
-      (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
+      (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
         reward).mp hno⟩
-  · rintro ⟨reward, hregime⟩
+  · rintro ⟨reward, hwitness⟩
     have hno : ¬ ∃ payoff : Payoff (Fin 4),
         (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-      (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
-        reward).mpr hregime
+      (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
+        reward).mpr hwitness
     exact ⟨reward,
       (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mpr hno⟩
 
@@ -116,12 +116,12 @@ theorem hasPositiveFourPlayerAudit_of_cardinalReduction
   have hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
     (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mp hpositive
-  have hregime : Nonempty (QuittingCounterexampleRegime reward) :=
-    (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
+  have hwitness : Nonempty (QuittingTerminalExploitabilityWitness reward) :=
+    (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
       reward).mp hno
-  have hcanonical : Nonempty (QuittingCounterexampleRegime
+  have hcanonical : Nonempty (QuittingTerminalExploitabilityWitness
       (quittingRewardReindex (Fintype.equivFin ι) reward)) :=
-    (nonempty_counterexampleRegime_reindex_fin_iff reward).2 hregime
+    (nonempty_terminalExploitabilityWitness_reindex_fin_iff reward).2 hwitness
   have hany : ∃ n, HasQuittingCounterexampleAtCard n :=
     ⟨Fintype.card ι, _, hcanonical⟩
   exact hasPositiveFourPlayerAudit_iff_counterexampleAtCardFour.mpr
@@ -141,14 +141,14 @@ formulation. -/
 theorem counterexampleCardinalReductionToFour_of_auditCardinalReduction
     (hreduction : AuditCardinalReductionToFour) :
     CounterexampleCardinalReductionToFour := by
-  rintro ⟨n, reward, hregime⟩
+  rintro ⟨n, reward, hwitness⟩
   have hthree : 3 < n := by
-    simpa using (Classical.choice hregime).three_lt_card
+    simpa using (Classical.choice hwitness).three_lt_card
   have hnpos : 0 < n := by omega
   letI : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hnpos)
   have hno : ¬ ∃ payoff : Payoff (Fin n),
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
-    (Classical.choice hregime).not_exists_uniformEquilibriumPayoff
+    (Classical.choice hwitness).not_exists_uniformEquilibriumPayoff
   have hpositive : 0 < value reward (Law.uniform : Law (Fin n)) :=
     (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mpr hno
   exact hasPositiveFourPlayerAudit_iff_counterexampleAtCardFour.mp
@@ -169,17 +169,17 @@ at all supplies a four-player one. -/
 theorem counterexampleCardinalReductionToFour_of_allMinimal
     (hminimal : AllMinimalCounterexamplesHaveFourPlayers) :
     CounterexampleCardinalReductionToFour := by
-  rintro ⟨n, reward, hregime⟩
+  rintro ⟨n, reward, hwitness⟩
   have hn : 0 < n := by
     have hthree : 3 < n := by
-      simpa using (Classical.choice hregime).three_lt_card
+      simpa using (Classical.choice hwitness).three_lt_card
     omega
   letI : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hn)
   obtain ⟨minimal⟩ :=
-    exists_minimalFinQuittingCounterexample reward hregime
+    exists_minimalFinQuittingCounterexample reward hwitness
   have hcount : minimal.playerCount = 4 := hminimal minimal
   have hatCount : HasQuittingCounterexampleAtCard minimal.playerCount :=
-    ⟨minimal.reward, ⟨minimal.regime⟩⟩
+    ⟨minimal.reward, ⟨minimal.witness⟩⟩
   simpa [hcount] using hatCount
 
 /-- Conversely, if every finite counterexample implies existence of a
@@ -190,13 +190,13 @@ theorem allMinimal_of_counterexampleCardinalReductionToFour
     AllMinimalCounterexamplesHaveFourPlayers := by
   intro minimal
   have hany : ∃ n, HasQuittingCounterexampleAtCard n :=
-    ⟨minimal.playerCount, minimal.reward, ⟨minimal.regime⟩⟩
+    ⟨minimal.playerCount, minimal.reward, ⟨minimal.witness⟩⟩
   have hfourCounter : HasQuittingCounterexampleAtCard 4 :=
     hreduction hany
   have hnotLt : ¬ 4 < minimal.playerCount :=
     fun hlt ↦ minimal.minimal 4 hlt hfourCounter
   have hthree : 3 < minimal.playerCount := by
-    simpa using minimal.regime.three_lt_card
+    simpa using minimal.witness.three_lt_card
   omega
 
 /-- The fixed larger-to-four statement is exactly the assertion that every
@@ -349,19 +349,19 @@ theorem allFiniteQuittingGames_of_cardinalReduction_of_fourPlayer
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   by_contra hno
-  have hregime : Nonempty (QuittingCounterexampleRegime reward) :=
-    (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
+  have hwitness : Nonempty (QuittingTerminalExploitabilityWitness reward) :=
+    (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
       reward).mp hno
-  have hcanonical : Nonempty (QuittingCounterexampleRegime
+  have hcanonical : Nonempty (QuittingTerminalExploitabilityWitness
       (quittingRewardReindex (Fintype.equivFin ι) reward)) :=
-    (nonempty_counterexampleRegime_reindex_fin_iff reward).2 hregime
+    (nonempty_terminalExploitabilityWitness_reindex_fin_iff reward).2 hwitness
   have hany : ∃ n, HasQuittingCounterexampleAtCard n :=
     ⟨Fintype.card ι, _, hcanonical⟩
-  obtain ⟨targetReward, htargetRegime⟩ := hreduction hany
+  obtain ⟨targetReward, htargetWitness⟩ := hreduction hany
   have htargetNo : ¬ ∃ payoff : Payoff (Fin 4),
       (quittingGame targetReward).IsUniformEquilibriumPayoff none payoff :=
-    (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
-      targetReward).mpr htargetRegime
+    (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
+      targetReward).mpr htargetWitness
   exact htargetNo (hfour targetReward)
 
 /-- The operational producer is therefore a sufficient reduction of the

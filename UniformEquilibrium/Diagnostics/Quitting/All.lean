@@ -194,7 +194,7 @@ import UniformEquilibrium.Diagnostics.Quitting.UniformExistenceBoundary
 # Quitting diagnostics inventory
 
 Import-only inventory of the integrated finite-quitting diagnostic surface.
-The counterexample-regime subtree is represented by its narrow inventory; all
+The terminal exploitability witness subtree is represented by its narrow inventory; all
 other imports are diagnostics organized by their mathematical subject.
 Production game-semantic modules are inventoried by `UniformEquilibrium.lean`,
 not through this facade.

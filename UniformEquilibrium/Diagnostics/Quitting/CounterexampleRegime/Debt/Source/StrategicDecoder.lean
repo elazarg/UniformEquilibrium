@@ -51,7 +51,7 @@ open scoped Topology
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-! ## A literal common zero-face return word -/
 
@@ -61,7 +61,7 @@ variable (word : QuittingDebtSourceFaceReturnWord reward K)
 
 /-- Every zero-face source edge lifts to an exact Nash--Bellman edge between
 the corresponding augmented-cap states. -/
-theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness regime)
+theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness witness)
     (current : Fin K) :
     IsQuittingNashBellmanEdge reward
       (quittingDynamicDebtCapPoint (word.state current))
@@ -81,7 +81,7 @@ theorem capEdge (seam : QuittingCounterexampleDynamicTailWitness regime)
 
 /-- A literal common zero-face return word is a solved exact quitting cycle. -/
 theorem isSolvedExactQuittingCycle
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     IsSolvedExactQuittingCycle reward word.cycle word.value := by
   refine ⟨⟨?_, ?_⟩, ?_, ?_⟩
   · intro current
@@ -97,7 +97,7 @@ end QuittingDebtSourceFaceReturnWord
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 include seam in
 /-- A common zero-face return word lands directly in the solved exact-cycle
@@ -115,7 +115,7 @@ because that word would compile to a uniform-equilibrium payoff. -/
 theorem not_hasQuittingDebtSourceFaceReturnWord :
     ¬ HasQuittingDebtSourceFaceReturnWord reward := by
   intro hword
-  exact regime.not_hasSolvedExactQuittingCycle
+  exact witness.not_hasSolvedExactQuittingCycle
     (seam.hasSolvedExactQuittingCycle_of_hasDebtSourceFaceReturnWord hword)
 
 /-! ## Exact signed one-stage diagnostics -/
@@ -124,7 +124,7 @@ theorem not_hasQuittingDebtSourceFaceReturnWord :
 readout.  The phase evaluator is game-facing, while the zero-probability
 branch records that this coordinate is absent from the selected root support. -/
 structure DebtSourceNegativePhaseDiagnostic where
-  readout : CounterexampleRegimePeriodOneTangentReadout seam
+  readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam
   player : ι
   tangent_neg : readout.packet.tangent player < 0
   eventually_offSupport_or_phaseGain : ∀ᶠ index in atTop,
@@ -140,7 +140,7 @@ structure DebtSourceNegativePhaseDiagnostic where
 refusal gain, it retains the finite reciprocal singleton pair selected by
 packet energy.  This is the support-enlargement input, not the enlargement. -/
 structure DebtSourceActiveSupportDiagnostic where
-  readout : CounterexampleRegimePeriodOneTangentReadout seam
+  readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam
   active : ι
   tangent_nonneg : ∀ who, 0 ≤ readout.packet.tangent who
   active_mass_pos : 0 < readout.packet.mass active
@@ -158,9 +158,9 @@ structure DebtSourceActiveSupportDiagnostic where
           (quittingPeriodOneRootSequence
             (seam.periodOneReadoutRoot readout.start index)) active 0 1
 
-namespace CounterexampleRegimePeriodOneTangentReadout
+namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (readout : CounterexampleRegimePeriodOneTangentReadout seam)
+variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- A negative tangent coordinate has a sharp one-stage alternative: once
 joint survival is positive, either that player has zero prescribed Quit
@@ -213,9 +213,9 @@ theorem eventually_offSupport_or_phaseGain_of_tangent_neg
       mul_neg_of_pos_of_neg hcontinueIndex htangentIndex
     simpa only [neg_mul] using (neg_pos.mpr hproduct)
 
-end CounterexampleRegimePeriodOneTangentReadout
+end TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-open CounterexampleRegimePeriodOneTangentReadout
+open TerminalExploitabilityWitnessPeriodOneTangentReadout
 
 /-! ## The literal priced-current alternative -/
 
@@ -300,7 +300,7 @@ theorem eventually_allContinue_or_debtSource_signedDiagnostic :
         intro who
         exact le_of_not_gt (fun hwho ↦ hnegative ⟨who, hwho⟩)
       obtain ⟨active, hmass, htangent⟩ :=
-        (regime.chargeTangentPacket_underfunded_or_active_funded
+        (witness.chargeTangentPacket_underfunded_or_active_funded
           readout.packet).resolve_left hnegative
       have hpair := readout.packet.exists_supported_pair_pos_reciprocalSoloEffect
         htangentNonneg active hmass htangent

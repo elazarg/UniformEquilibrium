@@ -30,8 +30,8 @@ owner-Continue-face loss.  Thus the last line, not a vague rectangle, is the
 sole residual of the observer-absent finite clock. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_faceLoss
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -39,7 +39,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     let charge := quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap
+      witness.terminalGap
     (∃ deviation : (quittingGame reward).BehaviorStrategy owner,
       charge / 2 - δ ≤
         quittingTerminalPayoff reward
@@ -86,7 +86,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let charge := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   have hdispatch := packet.observerAbsent_finiteClock_defectPolarity habsent
     n stop hstop δ hδ
   rcases hdispatch with hrefusal | hcontinue | hquit | hrectangle

@@ -25,11 +25,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Every adjacent pair of canonical tail states is an exact boxed
 floor-admissible source edge. -/
@@ -87,7 +87,7 @@ theorem oneStageTailFlow_mem_quittingOneStageObstructionCarrier (time : ℕ) :
 
 /-- The canonical tail makes the exact one-stage carrier nonempty. -/
 theorem quittingOneStageObstructionCarrier_nonempty
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     (quittingOneStageObstructionCarrier reward).Nonempty :=
   ⟨(seam.finiteRootWindow 0 1).toObstructionRawGradedFlow
       (fun date ↦ (seam.tail date).1.1),
@@ -97,10 +97,10 @@ end QuittingCounterexampleDynamicTailWitness
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-/-- In a counterexample regime, the canonical tail supplies nonemptiness, so
+/-- In a terminal exploitability witness, the canonical tail supplies nonemptiness, so
 every finite co-state has an attained support value on the exact carrier. -/
 theorem exists_hasSupportValue_oneStageObstructionCarrier
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (costate : Costate QuittingObstructionGrade
       (QuittingObstructionCoordinate ι)) :
     ∃ value,

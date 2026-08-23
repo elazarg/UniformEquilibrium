@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.StatePreservingChronologyCapacit
 # Counterexample adapters for state-preserving chronology capacity
 
 The production owner defines the exact-D chronology capacity and its generic
-near-maximality and charge-time interfaces. The counterexample regime bounds
+near-maximality and charge-time interfaces. The terminal exploitability witness bounds
 that capacity and gives every member chain aggregate debt at least its terminal
 gap.
 
@@ -37,14 +37,14 @@ variable {cutoff : ℕ}
 /-- The terminal gap is retained by every admissible zero-boundary chain,
 not only by the selected minimizer. -/
 theorem terminalGap_le_zeroBoundaryChainAggregateDebt
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (cutoff : ℕ) (path : QuittingFiniteNashBellmanPath ι cutoff)
     (hpath : path ∈
       quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff) :
-    regime.terminalGap ≤
+    witness.terminalGap ≤
       quittingFiniteNashBellmanPathAggregateDynamicDebt reward cutoff path := by
-  letI : Nonempty ι := regime.nonempty_players
-  exact (regime.terminalGap_le_finiteMinMaxDynamicDebt cutoff).trans
+  letI : Nonempty ι := witness.nonempty_players
+  exact (witness.terminalGap_le_finiteMinMaxDynamicDebt cutoff).trans
     ((quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt_le
         reward cutoff path hpath).trans
       (quittingFiniteNashBellmanPathMaxDynamicDebt_le_aggregate
@@ -54,12 +54,12 @@ theorem terminalGap_le_zeroBoundaryChainAggregateDebt
 simultaneously carries aggregate initial debt at least the regime gap and has
 less than `ε` absorption available at every exact bounded prepend. -/
 theorem exists_nearMaximal_positiveDebt_zeroBoundaryChronology
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ cutoff : ℕ, ∃ path : QuittingFiniteNashBellmanPath ι cutoff,
       path ∈ quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff ∧
-      regime.terminalGap ≤
+      witness.terminalGap ≤
         quittingFiniteNashBellmanPathAggregateDynamicDebt reward cutoff path ∧
       quittingZeroBoundaryChronologyCapacity reward - ε <
         quittingFiniteZeroBoundaryChainCharge cutoff path ∧
@@ -70,24 +70,24 @@ theorem exists_nearMaximal_positiveDebt_zeroBoundaryChronology
           (quittingRootOfSimplex predecessor.2) < ε := by
   have hbounded : BddAbove (quittingZeroBoundaryChronologyCharges reward) :=
     quittingZeroBoundaryChronologyCharges_bddAbove
-      hpunishment regime.prefixCharge_le
+      hpunishment witness.prefixCharge_le
   obtain ⟨cutoff, path, hpath, hnear, hprepend⟩ :=
     exists_nearMaximal_zeroBoundaryChronology hbounded hε
   exact ⟨cutoff, path, hpath,
-    terminalGap_le_zeroBoundaryChainAggregateDebt regime cutoff path hpath,
+    terminalGap_le_zeroBoundaryChainAggregateDebt witness cutoff path hpath,
     hnear, hprepend⟩
 
 /-- The compact Nash--Bellman predecessor correspondence turns the universal
 small-prepend conclusion into one actual state-matched edge.  Its successor
 is the positive-debt initial point of the same near-maximal chronology. -/
 theorem exists_nearMaximal_positiveDebtChronology_smallPredecessor
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ cutoff : ℕ, ∃ path : QuittingFiniteNashBellmanPath ι cutoff,
       ∃ predecessor : QuittingNashBellmanPoint ι,
         path ∈ quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff ∧
-        regime.terminalGap ≤
+        witness.terminalGap ≤
           quittingFiniteNashBellmanPathAggregateDynamicDebt reward cutoff path ∧
         predecessor ∈ quittingNashBellmanBox (quittingRewardBound reward) ∧
         IsQuittingNashBellmanEdge reward predecessor (path 0) ∧
@@ -95,7 +95,7 @@ theorem exists_nearMaximal_positiveDebtChronology_smallPredecessor
           (quittingRootOfSimplex predecessor.2) < ε := by
   obtain ⟨cutoff, path, hpath, hdebt, _hnear, hsmall⟩ :=
     exists_nearMaximal_positiveDebt_zeroBoundaryChronology
-      regime hpunishment hε
+      witness hpunishment hε
   obtain ⟨predecessor, hpredecessor, hedge⟩ :=
     exists_quittingNashBellmanPredecessor reward
       (abs_reward_le_quittingRewardBound reward) (path 0) (hpath.1 0)
@@ -108,14 +108,14 @@ retains aggregate debt at least the terminal gap and whose absorption is below
 that scale.  Either the edge is already on the zero-absorption face, or its
 normalized value drift is uniformly bounded coordinatewise. -/
 theorem exists_nearMaximal_positiveDebt_smallDynamicDebtEdge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ current successor : QuittingDebtPoint ι,
       current ∈ quittingDebtBox reward ∧
       successor ∈ quittingDebtBox reward ∧
       IsQuittingDynamicDebtEdge reward current successor ∧
-      regime.terminalGap ≤ ∑ who, successor.2 who ∧
+      witness.terminalGap ≤ ∑ who, successor.2 who ∧
       quittingRootAbsorptionMass
           (quittingRootOfSimplex current.1.2) < ε ∧
       (quittingRootAbsorptionMass
@@ -130,7 +130,7 @@ theorem exists_nearMaximal_positiveDebt_smallDynamicDebtEdge
   obtain ⟨cutoff, path, predecessor, hpath, hdebt, hpredecessor, hedge,
       hsmall⟩ :=
     exists_nearMaximal_positiveDebtChronology_smallPredecessor
-      regime hpunishment hε
+      witness hpunishment hε
   let extended :=
     quittingFiniteNashBellmanPathPrependPoint cutoff predecessor path
   have hextended : extended ∈
@@ -151,9 +151,9 @@ theorem exists_nearMaximal_positiveDebt_smallDynamicDebtEdge
     quittingFiniteNashBellmanPathDynamicDebtPoint_edge
       reward (cutoff + 1) extended hextended 0 (by omega)
   have hsuccessorDebt :
-      regime.terminalGap ≤ ∑ who, successor.2 who := by
+      witness.terminalGap ≤ ∑ who, successor.2 who := by
     calc
-      regime.terminalGap ≤
+      witness.terminalGap ≤
           quittingFiniteNashBellmanPathAggregateDynamicDebt
             reward cutoff path := hdebt
       _ = ∑ who, successor.2 who := by
@@ -195,14 +195,14 @@ uniformly bounded normalized payoff drift, debt loss, and marginal Quit
 hazards whenever its absorption is positive.  These are exactly the bounded
 coordinates available to a charge-time compactness argument. -/
 theorem exists_nearMaximal_positiveDebt_chargeTimeCompactEdge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ current successor : QuittingDebtPoint ι,
       current ∈ quittingDebtBox reward ∧
       successor ∈ quittingDebtBox reward ∧
       IsQuittingDynamicDebtEdge reward current successor ∧
-      regime.terminalGap ≤ ∑ who, successor.2 who ∧
+      witness.terminalGap ≤ ∑ who, successor.2 who ∧
       quittingRootAbsorptionMass
           (quittingRootOfSimplex current.1.2) < ε ∧
       (quittingRootAbsorptionMass
@@ -227,7 +227,7 @@ theorem exists_nearMaximal_positiveDebt_chargeTimeCompactEdge
   obtain ⟨current, successor, hcurrent, hsuccessor, hedge, hdebt,
       hsmall, hactiveOrZero⟩ :=
     exists_nearMaximal_positiveDebt_smallDynamicDebtEdge
-      regime hpunishment hε
+      witness hpunishment hε
   refine ⟨current, successor, hcurrent, hsuccessor, hedge, hdebt,
     hsmall, ?_⟩
   rcases hactiveOrZero with hzero | ⟨hactive, hvalue⟩

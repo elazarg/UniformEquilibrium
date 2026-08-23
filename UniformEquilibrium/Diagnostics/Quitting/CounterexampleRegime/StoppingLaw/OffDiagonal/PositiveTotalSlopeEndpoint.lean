@@ -19,7 +19,7 @@ replacement strategy.
 Compactness then yields an endpoint cluster retaining every coordinate
 inequality, equality in the moved coordinate, strict total-debt separation,
 and the moved player's fixed prescribed-payoff gain.  No root prefix, Bellman
-return, or contradiction to the counterexample regime is asserted here.
+return, or contradiction to the terminal exploitability witness is asserted here.
 -/
 
 noncomputable section
@@ -34,11 +34,11 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {regime : QuittingCounterexampleRegime reward}
+  {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- The actual source semantic pair at one rank of the frontier's selected
 tangent subsequence. -/
-def sourcePair (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+def sourcePair (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) : QuittingTerminalSemanticPair ι :=
   quittingTerminalSemanticPair reward
     (frontier.profiles (frontier.subseq rank))
@@ -46,7 +46,7 @@ def sourcePair (frontier : QuittingCounterexampleStoppingLawFrontier regime)
 /-- The literal full unilateral reset using the frontier's supplied mover and
 its actual selected replacement strategy at the original source rank. -/
 def fullResetProfile
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     (quittingGame reward).BehaviorProfile :=
   Function.update (frontier.profiles (frontier.subseq rank)) mover.1
@@ -54,7 +54,7 @@ def fullResetProfile
 
 /-- Terminal semantic pair of the literal full unilateral reset endpoint. -/
 def fullResetPair
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     QuittingTerminalSemanticPair ι :=
   quittingTerminalSemanticPair reward (frontier.fullResetProfile mover rank)
@@ -62,7 +62,7 @@ def fullResetPair
 /-- Prescribed-payoff gain of the supplied mover at its literal full reset,
 measured from the actual source profile at the same selected rank. -/
 def fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) : ℝ :=
   quittingTerminalPayoff reward (frontier.fullResetProfile mover rank) mover.1 -
     quittingTerminalPayoff reward
@@ -72,7 +72,7 @@ def fullResetPrescribedGain
 partial reset is bounded by the full endpoint's debt change from the same
 literal source. -/
 theorem normalizedDebtDirection_le_fullResetDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (observer : ι) (rank : ℕ) :
     quittingStoppingLawNormalizedDebtDirection reward
         (frontier.profiles (frontier.subseq rank)) mover.1
@@ -99,7 +99,7 @@ theorem normalizedDebtDirection_le_fullResetDebtChange
 /-- In the moved coordinate, scale cancellation is an equality because the
 best-response envelope depends only on the fixed opponents. -/
 theorem normalizedDebtDirection_self_eq_fullResetDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     quittingStoppingLawNormalizedDebtDirection reward
         (frontier.profiles (frontier.subseq rank)) mover.1
@@ -128,7 +128,7 @@ theorem normalizedDebtDirection_self_eq_fullResetDebtChange
 /-- The mover's full-reset prescribed gain is exactly the negative normalized
 self-debt direction at every original tangent rank. -/
 theorem fullResetPrescribedGain_eq_neg_normalizedDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     frontier.fullResetPrescribedGain mover rank =
       -quittingStoppingLawNormalizedDebtDirection reward
@@ -148,7 +148,7 @@ theorem fullResetPrescribedGain_eq_neg_normalizedDebtDirection
 /-- The literal full-reset gain is exactly the mover's source debt minus its
 remaining debt at the full replacement endpoint. -/
 theorem fullResetPrescribedGain_eq_sourceDebt_sub_endpointDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     frontier.fullResetPrescribedGain mover rank =
       quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 -
@@ -162,7 +162,7 @@ theorem fullResetPrescribedGain_eq_sourceDebt_sub_endpointDebt
 /-- The selected full reset has own debt at most the square of the original
 reset scale at every tangent rank. -/
 theorem fullReset_moverDebt_le_lambda_sq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     quittingTerminalSemanticDebt (frontier.fullResetPair mover rank) mover.1 ≤
       frontier.lambda (frontier.subseq rank) ^ 2 := by
@@ -172,7 +172,7 @@ theorem fullReset_moverDebt_le_lambda_sq
 /-- Pointwise full-reset gain loses at most the squared reset scale from the
 mover's actual source debt. -/
 theorem sourceDebt_sub_lambda_sq_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 -
         frontier.lambda (frontier.subseq rank) ^ 2 ≤
@@ -183,7 +183,7 @@ theorem sourceDebt_sub_lambda_sq_le_fullResetPrescribedGain
 /-- Pointwise, not merely eventually, the selected full replacement gains at
 least half of the mover's actual source debt. -/
 theorem sourceDebt_half_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     quittingTerminalSemanticDebt (frontier.sourcePair rank) mover.1 / 2 ≤
       frontier.fullResetPrescribedGain mover rank := by
@@ -198,7 +198,7 @@ theorem sourceDebt_half_le_fullResetPrescribedGain
 /-- The supplied mover's literal full-reset payoff gain converges, along all
 selected frontier ranks, to the negative diagonal tangent. -/
 theorem fullResetPrescribedGain_tendsto_neg_tangentDiagonal
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     Tendsto (fun rank => frontier.fullResetPrescribedGain mover rank) atTop
       (nhds (-frontier.tangent mover mover.1)) := by
@@ -211,7 +211,7 @@ theorem fullResetPrescribedGain_tendsto_neg_tangentDiagonal
 /-- Exact-diagonal extraction identifies the limiting full-reset gain with
 the mover's entire base debt. -/
 theorem fullResetPrescribedGain_tendsto_baseDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     Tendsto (fun rank => frontier.fullResetPrescribedGain mover rank) atTop
       (nhds (quittingTerminalSemanticDebt frontier.base mover.1)) := by
@@ -221,7 +221,7 @@ theorem fullResetPrescribedGain_tendsto_baseDebt
 /-- Every threshold strictly below the mover's base debt is eventually below
 the literal full-reset payoff gain. -/
 theorem eventually_lt_fullResetPrescribedGain_of_lt_baseDebt
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (threshold : ℝ)
     (hthreshold : threshold <
       quittingTerminalSemanticDebt frontier.base mover.1) :
@@ -233,7 +233,7 @@ theorem eventually_lt_fullResetPrescribedGain_of_lt_baseDebt
 /-- Every supplied active mover is eventually a fixed-gain legal deviation
 from its literal source to its full reset endpoint. -/
 theorem eventually_baseDebt_quarter_le_fullResetPrescribedGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     ∀ᶠ rank in atTop,
       quittingTerminalSemanticDebt frontier.base mover.1 / 4 ≤
@@ -247,7 +247,7 @@ theorem eventually_baseDebt_quarter_le_fullResetPrescribedGain
 /-- The sum of normalized coordinate changes is bounded by the full
 endpoint's total-debt change from the actual source. -/
 theorem sum_normalizedDebtDirection_le_fullReset_totalDebtChange
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (rank : ℕ) :
     (∑ observer,
       quittingStoppingLawNormalizedDebtDirection reward
@@ -281,7 +281,7 @@ source profile at the same frontier rank.  This is the strongest finite-rank
 form of the endpoint amplification: no passage to the limiting minimum is
 needed. -/
 theorem eventually_fullReset_sourceRelative_totalDebtChange_of_lt_totalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (eta : ℝ)
     (heta : eta < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
@@ -307,7 +307,7 @@ theorem eventually_fullReset_sourceRelative_totalDebtChange_of_lt_totalSlope
 amplification.  Every source semantic pair lies above the frontier's global
 minimum, so forgetting the source only weakens the conclusion. -/
 theorem eventually_fullReset_totalDebt_excess_of_lt_positiveTotalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (eta : ℝ)
     (heta : eta < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
@@ -325,7 +325,7 @@ theorem eventually_fullReset_totalDebt_excess_of_lt_positiveTotalSlope
 /-- A positive total tangent slope yields the canonical half-slope endpoint
 excursion, with no residual reset-scale factor. -/
 theorem eventually_fullReset_totalDebt_excess_of_positiveTotalSlope
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active})
     (hslope : 0 < ∑ observer, frontier.tangent mover observer) :
     ∀ᶠ rank in atTop,
@@ -340,7 +340,7 @@ theorem eventually_fullReset_totalDebt_excess_of_positiveTotalSlope
 Its tangent entry is at least the average of the total slope plus the mover's
 entire base debt over all other players. -/
 theorem exists_offDiagonal_tangent_ge_average
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     ∃ observer : ι, observer ≠ mover.1 ∧
       ((∑ who, frontier.tangent mover who) +
@@ -382,7 +382,7 @@ theorem exists_offDiagonal_tangent_ge_average
 mover.  Every field retains the actual frontier subsequence and replacement
 strategies. -/
 structure PositiveTotalSlopeEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) where
   cluster : QuittingTerminalSemanticPair ι
   subseq : ℕ → ℕ
@@ -416,7 +416,7 @@ cluster with coordinatewise tangent domination, exact self-coordinate
 change, half-debt reduction, strict total separation, and fixed prescribed
 gain along the same source-matched reset sequence. -/
 theorem exists_positiveTotalSlopeEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active})
     (hslope : 0 < ∑ observer, frontier.tangent mover observer) :
     Nonempty (PositiveTotalSlopeEndpointCluster frontier mover) := by
@@ -561,7 +561,7 @@ theorem exists_positiveTotalSlopeEndpointCluster
 /-- Exact diagonal upgrades every positive-slope full-reset endpoint's
 half-debt estimate to zero own debt. -/
 theorem PositiveTotalSlopeEndpointCluster.mover_debt_eq_zero
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {mover : {who // who ∈ frontier.active}}
     (endpoint : PositiveTotalSlopeEndpointCluster frontier mover) :
     quittingTerminalSemanticDebt endpoint.cluster mover.1 = 0 := by
@@ -576,7 +576,7 @@ scales, and frontier subsequence while a distinct positive observer and fixed
 atom charge are selected.  In particular, this applies to the mover already
 supplied by a positive-total-slope branch. -/
 theorem exists_fixedAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧
@@ -634,7 +634,7 @@ theorem exists_fixedAtomAlternative_of_mover
 /-- A supplied positive off-diagonal tangent entry exports the strong
 common-response atom alternative at exactly `7/16` of that entry. -/
 theorem exists_fixedStrongVanishingDebtAtomAlternative_of_positiveOffDiagonal
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (observer : ι)
     (hpositive : 0 < frontier.tangent mover observer) :
     ∃ charge : ℝ,
@@ -699,7 +699,7 @@ exports the common-response vanishing-debt atom alternative.  If the tangent
 entry is `tau`, the retained atom-interface charge is exactly `7 * tau / 16`.
 No zero-debt assumption on the observer is used. -/
 theorem exists_fixedStrongVanishingDebtAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧
@@ -723,7 +723,7 @@ theorem exists_fixedStrongVanishingDebtAtomAlternative_of_mover
 observer is at least the average forced by the total slope and the mover's
 negative diagonal, and its atom charge remains exactly `7/16` of that entry. -/
 theorem exists_quantitativeStrongVanishingDebtAtomAlternative_of_mover
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     ∃ (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧

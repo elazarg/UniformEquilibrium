@@ -33,11 +33,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Every augmented cap of the optimized projective tail lies in the
 canonical reward carrier and dominates the behavioral punishment floor. -/
@@ -46,7 +46,7 @@ theorem tailDynamicDebtCap_mem_and_floor (time : ℕ) :
         quittingPunishmentFloorForwardCarrier reward ∧
       ∀ who, quittingPunishmentValue reward who ≤
         quittingDynamicDebtCap (seam.tail time) who := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hpoint : Tendsto (fun family ↦
       quittingFiniteMinMaxDynamicDebtTail reward (seam.subseq family) time)
       atTop (nhds (seam.tail time)) := by
@@ -95,7 +95,7 @@ is the augmented-cap inequality with the augmentation removed; if it is
 positive, exact-debt persistence and the limiting self-loop remove it. -/
 theorem punishmentValue_le_tailValue (time : ℕ) (who : ι) :
     quittingPunishmentValue reward who ≤ (seam.tail time).1.1 who := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   by_cases hdebt : (seam.tail time).2 who = 0
   · have hfloor := (seam.tailDynamicDebtCap_mem_and_floor time).2 who
     simpa [quittingDynamicDebtCap_apply, hdebt] using hfloor
@@ -108,7 +108,7 @@ reversed from its far endpoint, is a literal punishment-floor predecessor
 prefix.  No endpoint-floor hypothesis remains for this selected tail. -/
 def tailSegmentPunishmentFloorPrefix (horizon : ℕ) :
     QuittingPunishmentFloorFinitePrefix reward := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact quittingDynamicDebtSegmentToPunishmentFloorPrefix seam.tail horizon
     (fun time _ ↦ seam.tail_mem time)
     (fun time _ ↦ seam.tail_edge time)
@@ -120,7 +120,7 @@ theorem tailSegmentPunishmentFloorPrefix_charge (horizon : ℕ) :
     (seam.tailSegmentPunishmentFloorPrefix horizon).charge =
       ∑ time ∈ Finset.range horizon,
         quittingDynamicDebtTailAbsorptionCharge seam.tail time := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact quittingDynamicDebtSegmentToPunishmentFloorPrefix_charge seam.tail
     horizon (fun time _ ↦ seam.tail_mem time)
       (fun time _ ↦ seam.tail_edge time)

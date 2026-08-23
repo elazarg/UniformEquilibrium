@@ -54,7 +54,7 @@ exactly which bonuses that one reaches.
 ## Main results
 
 * `isCirculantPairTable_colliderBonusReward` — the singleton and pair rows
-* `isEmpty_counterexampleRegime_candidateReward_of_nonpos` — the family is
+* `isEmpty_terminalExploitabilityWitness_candidateReward_of_nonpos` — the family is
   closed for `bonus ≤ 0`
 * `stepAnchor_candidateMargin_two_pos`, `stepAnchor_candidateMargin_three_pos`
   — the two root-free anchors
@@ -211,11 +211,11 @@ theorem exists_uniformEquilibriumPayoff_candidateReward_of_nonpos
     (by rw [colliderBonusJoin_four]; exact hbonus)
     (by rw [hone]; norm_num) (by rw [htwo]; norm_num)
 
-/-- The closed region below, as emptiness of the counterexample regime. -/
-theorem isEmpty_counterexampleRegime_candidateReward_of_nonpos
+/-- The closed region below, as emptiness of the terminal exploitability witness. -/
+theorem isEmpty_terminalExploitabilityWitness_candidateReward_of_nonpos
     {bonus : ℝ} (hbonus : bonus ≤ 0) :
-    IsEmpty (QuittingCounterexampleRegime (candidateReward bonus)) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+    IsEmpty (QuittingTerminalExploitabilityWitness (candidateReward bonus)) :=
+  ⟨fun witness => witness.not_exists_uniformEquilibriumPayoff
     (exists_uniformEquilibriumPayoff_candidateReward_of_nonpos hbonus)⟩
 
 /-! ## Sharpness: the two root-free anchors -/

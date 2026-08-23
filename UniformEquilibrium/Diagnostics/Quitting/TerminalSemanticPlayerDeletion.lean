@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionDiffuseClockBridge
 import UniformEquilibrium.Quitting.Boundary.Repair.AtomicBlockerCompletion
 import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
@@ -13,13 +13,13 @@ import UniformEquilibrium.Quitting.Cycles.ConditionedProperFaceDeficientClock
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
-# Player deletion inside a counterexample regime
+# Player deletion inside a terminal exploitability witness
 
 `UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean` deletes a
 universal Never player exactly: a witnessed terminal exploitability gap
 descends to the smaller player subtype whenever the owner weakly loses by
 joining every nonempty opponent coalition.  This module routes that descent
-against the alternative branches available to a counterexample regime.
+against the alternative branches available to a terminal exploitability witness.
 
 The dispatcher `exists_strict_owner_toggle_or_exact_playerDeletion` splits on
 `exists_strict_owner_toggle_or_ownerJoinAntitone`: either the table exposes a
@@ -28,7 +28,7 @@ nonempty, strictly smaller player type.  The toggle side is then handed to the
 atomic blocker geometry, where the joined-coalition row cannot be a forced
 owner Nash row, so some outsider has a strict one-stage deviation.
 
-`QuittingCounterexampleRegime.strictToggle_or_playerDeletion_of_summableConditionedDeletedClock`
+`QuittingTerminalExploitabilityWitness.strictToggle_or_playerDeletion_of_summableConditionedDeletedClock`
 closes the summable conditioned deleted clock against a regime: either the
 solo compiler contradicts the regime outright, or the dispatcher applies.
 -/
@@ -193,16 +193,16 @@ theorem strictToggle_or_playerDeletion_to_atomicHandoff
         hexploit owner quitters hquitters howner hstrict⟩
   · exact Or.inr hdelete
 
-/-- **Deficient-clock closure in a counterexample regime.**  A summable
+/-- **Deficient-clock closure in a terminal exploitability witness.**  A summable
 conditioned deleted clock has no residual analytic branch.  If the limiting
 solo payoff clears the owner's punishment floor, the existing solo compiler
 contradicts the regime.  Otherwise, at a nonpositive punishment floor, the
 reward table itself exposes either a strict coalition toggle or an exact
 smaller-player exploitability-floor instance. -/
 theorem
-    QuittingCounterexampleRegime.strictToggle_or_playerDeletion_of_summableConditionedDeletedClock
+    QuittingTerminalExploitabilityWitness.strictToggle_or_playerDeletion_of_summableConditionedDeletedClock
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι)
     (boundary : Payoff ι) (owner : ι) (start : ℕ)
     (hpolicy : ∀ time, value time =
@@ -232,7 +232,7 @@ theorem
                 Finset.insert_nonempty owner quitters⟩ owner) ∨
       (Nonempty (QuittingDeletedPlayer owner) ∧
         HasTerminalExploitabilityGap
-          (quittingDeletePlayerReward reward owner) regime.terminalGap ∧
+          (quittingDeletePlayerReward reward owner) witness.terminalGap ∧
         Fintype.card (QuittingDeletedPlayer owner) < Fintype.card ι) := by
   by_cases hpunishment : quittingPunishmentValue reward owner ≤
       quittingSoloReward reward owner owner
@@ -241,7 +241,7 @@ theorem
         reward roots value boundary owner start hpolicy hnash hpositive
         heventualZero hconditionedBound htight hmesh hsmall hsummable
         hpunishment
-    exact False.elim (regime.not_exists_uniformEquilibriumPayoff
+    exact False.elim (witness.not_exists_uniformEquilibriumPayoff
       ⟨quittingSoloReward reward owner, huniform⟩)
   · have hsolo : reward (quittingSingletonTerminal owner) owner <
         quittingPunishmentValue reward owner := by
@@ -249,7 +249,7 @@ theorem
         quittingPunishmentValue reward owner
       exact lt_of_not_ge hpunishment
     exact exists_strict_owner_toggle_or_exact_playerDeletion reward owner
-      regime.terminalGap_pos regime.terminalExploitability hsolo hchi
+      witness.terminalGap_pos witness.terminalExploitability hsolo hchi
 
 
 end GameTheory

@@ -89,8 +89,8 @@ theorem exists_compensating_probability_coordinate
 /-- The quantitative target-endpoint compensation scale. -/
 def quittingStoppingLawNegativeCompensationLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
   quittingStoppingLawNegativeTargetMassLower packet /
     (Fintype.card (QuittingTerminalOutcome ι) : ℝ)
@@ -100,8 +100,8 @@ namespace QuittingStoppingLawVanishingDebtRectangleSequence
 /-- **One negative rectangle has compensating target mass.** -/
 theorem exists_negativeObserver_targetCompensation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hnegative : reward packet.terminal packet.observer < 0) (n : ℕ) :
     ∃ outcome : QuittingTerminalOutcome ι,
@@ -184,8 +184,8 @@ different from the lost terminal label carries a uniform amount of target
 mass. -/
 theorem exists_fixed_negativeObserver_targetCompensation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hnegative : reward packet.terminal packet.observer < 0) :
     ∃ outcome : QuittingTerminalOutcome ι,
@@ -226,8 +226,8 @@ coalition.  In both cases it occurs on literal target endpoints whose observer
 debt tends to zero. -/
 theorem negativeObserver_harmonic_or_absorbingResetFaceCompensation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hnegative : reward packet.terminal packet.observer < 0) :
     (∃ subseq : ℕ → ℕ,
@@ -290,8 +290,8 @@ theorem negativeObserver_harmonic_or_absorbingResetFaceCompensation
 /-- **Absorbing compensation has a law-preserving reset-face limit.** -/
 theorem exists_negativeObserver_absorbingCompensationResetFaceLawPoint
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (terminal : {S : Finset ι // S.Nonempty})
     (subseq : ℕ → ℕ)
@@ -353,8 +353,8 @@ law has recurrent same-profile stage representatives; the diffuse branch is
 impossible. -/
 theorem exists_negativeObserver_absorbingCompensationConcentratedPacket
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (terminal : {S : Finset ι // S.Nonempty})
     (hcollision : 1 < terminal.val.card)

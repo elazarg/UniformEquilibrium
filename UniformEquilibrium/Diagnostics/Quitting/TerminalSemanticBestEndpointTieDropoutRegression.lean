@@ -20,7 +20,7 @@ tie-broken best endpoint, yet its local defect and payoff gain are both zero.
 The surviving singleton owner has reward `-1` against continuation `0`, so
 the usual negative-singleton punishment geometry is present as well.
 
-This is not an instance of the counterexample regime, but the obstruction
+This is not an instance of the terminal exploitability witness, but the obstruction
 lifts exactly to the global terminal-semantic carrier.  The pair profile is a
 global minimum with total debt zero.  Deleting the indifferent player
 preserves that player's debt while raising the survivor's debt by one, so the

@@ -31,14 +31,14 @@ open Math.Probability Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- The complete product root read at `time` from the scheduled literal
 source-matched radial reset profile. -/
 def sourceMatchedRadialScheduledRoot
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -52,7 +52,7 @@ def sourceMatchedRadialScheduledRoot
 All other players are subsequently purified to Continue by
 `sourceMatchedRadialSingletonRoot`. -/
 def sourceMatchedRadialSingletonMarginal
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -63,7 +63,7 @@ def sourceMatchedRadialSingletonMarginal
 /-- The executable singleton-purified root obtained from the scheduled reset
 profile at one live time. -/
 def sourceMatchedRadialSingletonRoot
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -75,7 +75,7 @@ def sourceMatchedRadialSingletonRoot
 /-- The retained marginal is exactly the stopping-law mixture of the common
 source hazard and its source-matched reset hazard at the same live time. -/
 theorem sourceMatchedRadialSingletonMarginal_eq_convexMix
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -97,7 +97,7 @@ theorem sourceMatchedRadialSingletonMarginal_eq_convexMix
 
 @[simp]
 theorem sourceMatchedRadialSingletonRoot_owner
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -110,7 +110,7 @@ theorem sourceMatchedRadialSingletonRoot_owner
 
 /-- Every nonscheduled player literally Continues at the produced root. -/
 theorem sourceMatchedRadialSingletonRoot_of_ne
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -124,7 +124,7 @@ theorem sourceMatchedRadialSingletonRoot_of_ne
 product roots.  No claim equates them with the frozen whole-profile endpoint
 semantics. -/
 def sourceMatchedRadialChronologicalData
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -136,7 +136,7 @@ def sourceMatchedRadialChronologicalData
 
 @[simp]
 theorem sourceMatchedRadialChronologicalData_root
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -150,7 +150,7 @@ theorem sourceMatchedRadialChronologicalData_root
 forcing: its candidate values are its literal reached-tail values. -/
 @[simp]
 theorem sourceMatchedRadialChronologicalData_prescribedDefect
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -164,7 +164,7 @@ theorem sourceMatchedRadialChronologicalData_prescribedDefect
 is the literal reached-tail exploitability. -/
 @[simp]
 theorem sourceMatchedRadialChronologicalData_directDebtDefect
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)

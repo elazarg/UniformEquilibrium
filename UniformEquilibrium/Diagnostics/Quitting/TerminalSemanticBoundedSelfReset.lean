@@ -23,7 +23,7 @@ quit time is reached.
 
 The resulting inductive chain records every literal unilateral update, its
 source debt floor, the reset debt bound, and the exact payoff/debt identity.
-No counterexample regime, stopping-law packet, reward sign, or semantic
+No terminal exploitability witness, stopping-law packet, reward sign, or semantic
 compactness argument is used.
 -/
 

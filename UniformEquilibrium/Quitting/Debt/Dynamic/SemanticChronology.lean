@@ -21,7 +21,7 @@ an exact Nash root against the successor prescribed value.
 
 For a finite zero-boundary exact Nash--Bellman chain, each preterminal row is
 the semantic pair of its executable all-Continue completion.  These identities
-are independent of any counterexample regime or projective-limit selection.
+are independent of any terminal exploitability witness or projective-limit selection.
 -/
 
 noncomputable section

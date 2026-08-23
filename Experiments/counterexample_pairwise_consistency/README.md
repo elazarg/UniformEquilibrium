@@ -1,8 +1,8 @@
-# Pairwise consistency program for the quitting counterexample regime
+# Pairwise consistency program for the quitting terminal exploitability witness
 
 ## Purpose
 
-This experiment treats the remaining finite-quitting counterexample regime as
+This experiment treats the remaining finite-quitting terminal exploitability witness as
 a constraint system.  Pairwise inconsistency of any two necessary condition
 clusters rules out the full regime.  Pairwise consistency does not prove joint
 consistency, but an explicit pair model is a valuable regression and tells us

@@ -174,8 +174,8 @@ resources:
 The harmonic conclusion is intentionally a no-go certificate.  Its strict
 punishment moat is the reverse of the hypothesis needed by the completed
 solo-cycle theorem. -/
-theorem QuittingCounterexampleRegime.exists_joiner_or_harmonicObstruction_or_resetDispatch
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_joiner_or_harmonicObstruction_or_resetDispatch
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source : QuittingTerminalSemanticPair ι) (owner : ι) {M theta : ℝ}
     (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
@@ -206,7 +206,7 @@ theorem QuittingCounterexampleRegime.exists_joiner_or_harmonicObstruction_or_res
               QuittingFixedLawResetDispatch (reward := reward)
                 source cluster mass owner other returned)) := by
   by_cases hnoJoin : IsQuittingInstantNoJoin reward owner
-  · rcases regime.exists_twoReservoir_sameLaw_resetDispatch source owner hM
+  · rcases witness.exists_twoReservoir_sameLaw_resetDispatch source owner hM
         hreward hsource hminimum hpositive hnash hgate htheta hthetaOne with
       hjoin | hreservoir
     · obtain ⟨other, hother, hstrict⟩ := hjoin

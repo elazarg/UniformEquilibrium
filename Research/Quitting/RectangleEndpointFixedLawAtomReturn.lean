@@ -44,8 +44,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- Joint semantic/law point of one literal rectangle double endpoint. -/
 def quittingStoppingLawRectangleDoubleEndpointPoint
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : QuittingTerminalSemanticLawPoint ι :=
   (quittingTerminalSemanticPair reward
@@ -58,8 +58,8 @@ converge.  The endpoint limit is the exact joint cluster already selected by
 the semantic reset-face dispatch. -/
 structure QuittingStoppingLawRectangleJointAtomLimit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     (dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet) where
   subseq : ℕ → ℕ
@@ -92,8 +92,8 @@ structure QuittingStoppingLawRectangleJointAtomLimit
 already-selected endpoint cluster. -/
 theorem QuittingStoppingLawRectangleResetFaceDispatch.nonempty_jointAtomLimit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     (dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet) :
     Nonempty (QuittingStoppingLawRectangleJointAtomLimit dispatch) := by
@@ -168,8 +168,8 @@ theorem QuittingStoppingLawRectangleResetFaceDispatch.nonempty_jointAtomLimit
 mass on the endpoint cluster's displayed terminal. -/
 theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_terminalMass_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     (limit : QuittingStoppingLawRectangleJointAtomLimit dispatch)
@@ -201,8 +201,8 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_terminalMass_pos
 positive incidence coordinate in the exact endpoint cluster law. -/
 theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_opponentIncidence_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     (limit : QuittingStoppingLawRectangleJointAtomLimit dispatch)
@@ -231,8 +231,8 @@ incidence survive reset-face minimization, together with a strict toggle and
 the absorbing-return/all-Continue dynamic alternative. -/
 theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     (limit : QuittingStoppingLawRectangleJointAtomLimit dispatch)
@@ -246,7 +246,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.exists_fixedLawResetDispatch
     hreward other hother hotherNe
   obtain ⟨returned, hjoint, _hcarrier, hreset, hsourceLe, htargetGe,
       htransfer, htoggle, hdynamic⟩ :=
-    regime.exists_fixedLaw_resetFace_dispatch frontier.base
+    witness.exists_fixedLaw_resetFace_dispatch frontier.base
       dispatch.cluster.1 dispatch.cluster.2 packet.observer other
       frontier.base_minimum
       frontier.base_positive dispatch.cluster_mem
@@ -316,8 +316,8 @@ branch records the exact positive price of retaining that law.  Its
 descent/all-Continue alternative; no claim is made that this price vanishes. -/
 structure QuittingStoppingLawRectangleMinimizerBridge
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     (limit : QuittingStoppingLawRectangleJointAtomLimit dispatch)
@@ -357,8 +357,8 @@ named positive scalar separation, still carrying the full fixed-law dynamic
 exit and supported-toggle passport. -/
 theorem QuittingStoppingLawRectangleJointAtomLimit.nonempty_minimizerBridge
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     (limit : QuittingStoppingLawRectangleJointAtomLimit dispatch)
@@ -427,8 +427,8 @@ profitable deviation: the atom still compares two counterfactual mover
 endpoints. -/
 theorem QuittingStoppingLawRectangleMinimizerBridge.eventually_literal_lawPremium
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     {dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet}
     {limit : QuittingStoppingLawRectangleJointAtomLimit dispatch}

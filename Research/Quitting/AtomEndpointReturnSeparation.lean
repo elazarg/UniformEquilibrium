@@ -116,8 +116,8 @@ fixed mover, observer, charge, terminal label, and rank subsequence through
 the underlying sequence. -/
 structure QuittingPrescribedAtomEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     where
@@ -158,8 +158,8 @@ The fixed atom and exact stack remain available at every `sequence.rank
 (cluster.subseq n)`. -/
 theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.nonempty_endpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet) :
     Nonempty (QuittingPrescribedAtomEndpointCluster sequence) := by
@@ -284,8 +284,8 @@ applies.  Otherwise the strictly positive residual is exactly why neither
 surface tension nor reset reprojection is available. -/
 theorem QuittingPrescribedAtomEndpointCluster.return_or_resetFaceConsumer_or_positiveResidual
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     {sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet}
     (cluster : QuittingPrescribedAtomEndpointCluster sequence) :
@@ -316,8 +316,8 @@ theorem QuittingPrescribedAtomEndpointCluster.return_or_resetFaceConsumer_or_pos
 /-- Literal double endpoint from the enriched rectangle sequence. -/
 def quittingRectangleDoubleEndpointProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
@@ -335,8 +335,8 @@ point, with all fixed labels and atom bounds retained along the selected
 subsequence. -/
 structure QuittingRectangleDoubleEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) where
   subseq : ℕ → ℕ
@@ -358,8 +358,8 @@ structure QuittingRectangleDoubleEndpointCluster
 /-- Extract the exact double-endpoint reset cluster. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.nonempty_doubleEndpointCluster
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) :
     Nonempty (QuittingRectangleDoubleEndpointCluster sequence) := by
@@ -395,8 +395,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.nonempty_doubleEndpoint
 named reset-face return/all-Continue separation consumer unconditionally. -/
 theorem QuittingRectangleDoubleEndpointCluster.has_resetFaceConsumer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     {sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet}
     (cluster : QuittingRectangleDoubleEndpointCluster sequence) :

@@ -17,7 +17,7 @@ sharp slack consequence.
 It also develops the canonical affine shrink toward a floor-safe boundary.
 Exact coefficient transport preserves the removed boundary share, so a
 nontrivial shrink recreates positive survival rather than eliminating it.
-These are generic accounting and viability results; no counterexample regime
+These are generic accounting and viability results; no terminal exploitability witness
 or strategic realization hypothesis is used.
 -/
 

@@ -34,8 +34,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {regime : QuittingCounterexampleRegime reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+  {witness : QuittingTerminalExploitabilityWitness reward}
+  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
   {mover : {who // who ∈ frontier.active}}
 
 namespace FullResetEndpointCluster
@@ -309,8 +309,8 @@ theorem exists_paidFirstDisagreementRow_of_stoppingLawNormalizedCurvature
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {regime : QuittingCounterexampleRegime reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+  {witness : QuittingTerminalExploitabilityWitness reward}
+  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
   {mover : {who // who ∈ frontier.active}}
 
 namespace FullResetEndpointCluster
@@ -402,7 +402,7 @@ positive paid first-disagreement row along the same source/reset subsequence.
 
 The second arm retains the exact row but does not consume it chronologically. -/
 theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
       frontier.base frontier.active frontier.tangent)
@@ -453,7 +453,7 @@ theorem potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
 all-Continue plateau and can therefore serve as the base of a fresh
 stopping-law extraction. -/
 theorem FullResetEndpointCluster.hasPositiveMinimumTerminalSemanticPlateau_of_minimumFiber
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {mover : {who // who ∈ frontier.active}}
     (endpoint : FullResetEndpointCluster frontier mover)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
@@ -494,7 +494,7 @@ the active-support cardinal rank.  This is the reusable adapter needed for
 well-founded iteration; it asserts no relation between the old and new
 tangent families beyond their semantic base. -/
 theorem exists_reextractedFrontier_of_minimumFiberEndpoint
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     {mover : {who // who ∈ frontier.active}}
     (endpoint : FullResetEndpointCluster frontier mover)
     (hflat : ∀ source, ∑ observer, frontier.tangent source observer = 0)
@@ -502,7 +502,7 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
       frontier.base frontier.active frontier.tangent)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
       quittingTerminalSemanticDebtSum frontier.base) :
-    ∃ next : QuittingCounterexampleStoppingLawFrontier regime,
+    ∃ next : QuittingCounterexampleStoppingLawFrontier witness,
       next.base = endpoint.cluster ∧
       next.active.card < frontier.active.card := by
   have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -534,7 +534,7 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
       (reward := reward) endpoint.cluster endpoint.cluster_mem hminimum hpositive
   obtain ⟨next, hbase⟩ :=
     exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
-      regime endpoint.cluster endpoint.cluster_mem hminimum
+      witness endpoint.cluster endpoint.cluster_mem hminimum
         hcoordinate hnash hprefix
   have hactive : next.active = Finset.univ.filter fun who ↦
       0 < quittingTerminalSemanticDebt endpoint.cluster who := by
@@ -551,8 +551,8 @@ positive total slope, flat support entry, flat charged circulation, or an
 off-minimum endpoint with an exact eventually paid first-disagreement row.
 The final branch stores the row but does not claim a chronological consumer. -/
 def HasQuittingStoppingLawFiniteSupportRankExit
-    (regime : QuittingCounterexampleRegime reward) : Prop :=
-  ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+    (witness : QuittingTerminalExploitabilityWitness reward) : Prop :=
+  ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
     (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
     ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧
       HasQuittingStoppingLawFlatSupportEntry
@@ -583,8 +583,8 @@ eventually paid first-disagreement row.
 This theorem deliberately does not turn the paid row into a chronology or a
 directed recipient-return consumer. -/
 theorem exists_finiteSupportRankExit
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
-    HasQuittingStoppingLawFiniteSupportRankExit regime := by
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
+    HasQuittingStoppingLawFiniteSupportRankExit witness := by
   classical
   generalize hrank : frontier.active.card = rank
   induction rank using Nat.strong_induction_on generalizing frontier with

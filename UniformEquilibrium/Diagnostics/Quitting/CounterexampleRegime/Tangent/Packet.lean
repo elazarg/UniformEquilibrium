@@ -39,11 +39,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Coordinatewise endpoint displacement divided by literal window
 absorption. -/
@@ -231,18 +231,18 @@ theorem exists_chargeTangentData_of_windows
 
 end QuittingCounterexampleDynamicTailWitness
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- A tail-derived tangent datum in a counterexample is either underfunded in
 some coordinate or, after all underfunding is excluded, strictly funded on an
 active owner coordinate.  The excluded third case is exactly a complementary
 singleton packet and is already compiled to a uniform payoff. -/
 theorem chargeTangentData_underfunded_or_active_funded
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (data : QuittingChargeTangentData reward) :
     (∃ who, data.tangent who < 0) ∨
       ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   by_contra hsign
   push Not at hsign
   have hmix : ∀ who,
@@ -262,7 +262,7 @@ theorem chargeTangentData_underfunded_or_active_funded
     have hpin := data.positive_mass_pins_boundary owner hmass
     have htangent := data.tangent_eq owner
     linarith
-  apply regime.not_exists_uniformEquilibriumPayoff
+  apply witness.not_exists_uniformEquilibriumPayoff
   exact exists_uniformEquilibriumPayoff_of_complementarySingletonMixture
     reward data.mass data.boundary data.mass_nonneg data.mass_sum hmix
       hactive data.solo_le_boundary data.punishment_le_boundary
@@ -270,13 +270,13 @@ theorem chargeTangentData_underfunded_or_active_funded
 /-- Every charge-tangent datum extracted in a counterexample has nonzero
 tangent and therefore upgrades canonically to a charge-tangent packet. -/
 def chargeTangentPacketOfData
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (data : QuittingChargeTangentData reward) :
     QuittingChargeTangentPacket reward where
   toQuittingChargeTangentData := data
   tangent_ne_zero := by
     obtain hnegative | hpositive :=
-      regime.chargeTangentData_underfunded_or_active_funded data
+      witness.chargeTangentData_underfunded_or_active_funded data
     · rintro htangent
       obtain ⟨who, hwho⟩ := hnegative
       simp [htangent] at hwho
@@ -286,18 +286,18 @@ def chargeTangentPacketOfData
 
 /-- The same finite sign dispatch for a packaged nonzero tangent. -/
 theorem chargeTangentPacket_underfunded_or_active_funded
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingChargeTangentPacket reward) :
     (∃ who, packet.tangent who < 0) ∨
       ∃ owner, 0 < packet.mass owner ∧ 0 < packet.tangent owner :=
-  regime.chargeTangentData_underfunded_or_active_funded
+  witness.chargeTangentData_underfunded_or_active_funded
     packet.toQuittingChargeTangentData
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- **One-stage counterexample tail alternative.**  Either the selected
 exact-D tail is eventually the literal all-Continue root, or positive-
@@ -359,7 +359,7 @@ theorem eventually_allContinue_or_exists_oneStage_chargeTangentPacket :
     let selectedWindow : ℕ → QuittingFiniteRootWindow
         (quittingDynamicDebtTailRoots seam.tail) :=
       fun index ↦ window (subseq index)
-    let packet := regime.chargeTangentPacketOfData data
+    let packet := witness.chargeTangentPacketOfData data
     refine ⟨packet, selectedWindow, ?_, ?_, ?_, ?_, ?_⟩
     · exact hstartTendsto.comp hsubseq.tendsto_atTop
     · intro index

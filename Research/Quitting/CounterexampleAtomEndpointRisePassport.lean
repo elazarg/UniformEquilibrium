@@ -39,8 +39,8 @@ scaled mixed-edge inequality, the full-endpoint debt rise, and the stronger
 vanishing-debt atom decoder. -/
 structure QuittingStoppingLawAtomEndpointRiseChronology
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   chronology : QuittingStoppingLawAtomExactPrefixChronology frontier
   normalizedSlope_eventually : ∀ᶠ rank in atTop,
     chronology.charge ≤ quittingStoppingLawNormalizedDebtDirection reward
@@ -92,8 +92,8 @@ factor `lambda` appears only on the mixed edge; convexity removes it when
 passing to the full endpoint. -/
 theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChronology
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawAtomEndpointRiseChronology frontier) := by
   classical
   have hactiveNonempty : frontier.active.Nonempty := by
@@ -219,8 +219,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.nonempty_atomEndpointRiseChron
 debt-rise provenance retained. -/
 structure QuittingStoppingLawPrescribedAtomEndpointRiseSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) where
   rank : ℕ → ℕ
   rank_strictMono : StrictMono rank
@@ -273,8 +273,8 @@ structure QuittingStoppingLawPrescribedAtomEndpointRiseSequence
 and vanishing observer-debt provenance. -/
 structure QuittingStoppingLawRectangleEndpointRiseSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) where
   rank : ℕ → ℕ
   rank_strictMono : StrictMono rank
@@ -364,8 +364,8 @@ structure QuittingStoppingLawRectangleEndpointRiseSequence
 enriched chronology. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.exactStack
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) :
@@ -378,8 +378,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.exactStack
 profiles still converge in total debt to the global minimum fiber. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.prefixDebt_tendsto_minimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet) :
     Tendsto (fun n => quittingTerminalSemanticDebtSum
@@ -394,8 +394,8 @@ theorem QuittingStoppingLawRectangleEndpointRiseSequence.prefixDebt_tendsto_mini
 /-- Fixed-label extraction from the enriched exact-prefix chronology. -/
 theorem QuittingStoppingLawAtomEndpointRiseChronology.exists_prescribed_or_rectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawAtomEndpointRiseChronology frontier) :
     Nonempty (QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet) ∨
       Nonempty (QuittingStoppingLawRectangleEndpointRiseSequence packet) := by
@@ -626,8 +626,8 @@ has a fixed excess or the literal observer-response edge transfers a fixed
 amount to another named player. -/
 theorem QuittingStoppingLawRectangleEndpointRiseSequence.excess_or_secondTransfer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (n : ℕ) :
@@ -682,8 +682,8 @@ square dispatch eventually leaves only a uniformly positive second transfer.
 theorem
     QuittingStoppingLawRectangleEndpointRiseSequence.eventually_secondTransfer_of_firstNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (hnear : Tendsto (fun n =>
@@ -734,8 +734,8 @@ late square gives either a fixed literal total-debt descent on the observer
 edge or the same uniformly positive second-transfer certificate. -/
 theorem eventually_descent_or_secondTransfer_of_bothNearMinimum
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawRectangleEndpointRiseSequence packet)
     (hnear : Tendsto (fun n =>
@@ -800,8 +800,8 @@ endpoint debt-rise passport; the rectangle branch additionally carries the
 literal reset-square alternative at every fixed-label rank. -/
 theorem exists_prescribedEndpointRise_or_rectangleSquareDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     (∃ packet : QuittingStoppingLawAtomEndpointRiseChronology frontier,
         Nonempty
           (QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)) ∨

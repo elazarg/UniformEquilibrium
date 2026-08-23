@@ -48,7 +48,7 @@ of `MathUE/LinearProgramming/CirculantPocketR0.lean` is unavailable.
 
 What remains of the family is therefore the distant pocket `m 2 < 0`,
 `m 3 < 0`, `0 ≤ m 1`, `0 ≤ m 4` of positive margin sum, and nothing else.  The
-census against `QuittingCounterexampleRegime` is read off in
+census against `QuittingTerminalExploitabilityWitness` is read off in
 `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/ColliderCompletion.lean`.
 
 ## Main definitions
@@ -320,7 +320,7 @@ theorem isR0Matrix_normalizedSoloMatrix_colliderPocket
 
 /-! ## A margin vector on the face `m 1 = 0`
 
-The step-four equilibrium region of `isEmpty_counterexampleRegime_colliderPocket`
+The step-four equilibrium region of `isEmpty_terminalExploitabilityWitness_colliderPocket`
 asks only `m 1 ≤ 0`, whereas the pocket sign condition of
 `isR0Matrix_normalizedSoloMatrix_colliderPocket` — inherited from
 `Math.LinearProgramming.isR0Matrix_rowCirculant_pentagon_pocket` — asks

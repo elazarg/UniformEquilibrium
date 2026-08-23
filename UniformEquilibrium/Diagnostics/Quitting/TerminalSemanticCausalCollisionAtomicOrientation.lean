@@ -12,7 +12,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicBlockerBarr
 
 The endpoint-debt recipient is needed only when the causal best endpoint is
 Continue.  If the same reached-row endpoint is Quit, the target row has a
-surely quitting owner and enters the counterexample regime's atomic-blocker
+surely quitting owner and enters the terminal exploitability witness's atomic-blocker
 barrier immediately.  The routed collision retains quantitative stage mass.
 -/
 
@@ -92,8 +92,8 @@ the same row satisfies the counterexample atomic barrier: either a forced-
 owner outsider defect or a punishment-refusal balance pays the full terminal
 gap.  If it is Continue, the recipient atom packet is returned unchanged.
 -/
-theorem QuittingCounterexampleRegime.causalCollisionEndpoint_atomicBarrier_or_continueRecipient
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.causalCollisionEndpoint_atomicBarrier_or_continueRecipient
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset iota // S.Nonempty})
     (lower epsilon : ℝ) (who : iota)
@@ -141,9 +141,9 @@ theorem QuittingCounterexampleRegime.causalCollisionEndpoint_atomicBarrier_or_co
               exact
                 quittingPureEndpointRoutedCoalition_nonempty_of_one_lt_card
                   terminal.val who action hcollision⟩ ∧
-        (regime.terminalGap ≤
+        (witness.terminalGap ≤
             quittingForcedOwnerOutsiderDefect reward targetRoot who ∨
-          regime.terminalGap ≤
+          witness.terminalGap ≤
             max 0 (-quittingAtomicBlockerBalance reward targetRoot who))) ∨
       (action = false ∧
         (epsilon < gain →
@@ -197,7 +197,7 @@ theorem QuittingCounterexampleRegime.causalCollisionEndpoint_atomicBarrier_or_co
       have howner : targetRoot who = PMF.pure true := by
         rw [hroot, haction]
         simp
-      have hbarrier := regime.terminalGap_le_atomicBlockerBarrier howner
+      have hbarrier := witness.terminalGap_le_atomicBlockerBarrier howner
       refine ⟨haction, hstage, ?_⟩
       exact (le_max_iff.mp hbarrier)
 
@@ -214,9 +214,9 @@ If `epsilon < gain`, then either:
 
 The atomic barrier is a strategic handoff, not by itself an equilibrium
 closure theorem. -/
-theorem QuittingCounterexampleRegime.causalCollision_tailEscape_or_atomicQuit_or_continueRecipient
+theorem QuittingTerminalExploitabilityWitness.causalCollision_tailEscape_or_atomicQuit_or_continueRecipient
     [Nonempty iota]
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (minimum : QuittingTerminalSemanticPair iota)
     (profile : (quittingGame reward).BehaviorProfile)
     (stage : ℕ) (terminal : {S : Finset iota // S.Nonempty})
@@ -289,9 +289,9 @@ theorem QuittingCounterexampleRegime.causalCollision_tailEscape_or_atomicQuit_or
                     ⟨routed,
                       quittingPureEndpointRoutedCoalition_nonempty_of_one_lt_card
                         terminal.val who action hcollision⟩ ∧
-                (regime.terminalGap ≤
+                (witness.terminalGap ≤
                     quittingForcedOwnerOutsiderDefect reward targetRoot who ∨
-                  regime.terminalGap ≤
+                  witness.terminalGap ≤
                     max 0
                       (-quittingAtomicBlockerBalance reward targetRoot who))) ∨
               (action = false ∧
@@ -310,7 +310,7 @@ theorem QuittingCounterexampleRegime.causalCollision_tailEscape_or_atomicQuit_or
     refine ⟨who, hpositive, hquantitative, htarget, hmover, htransfer,
       hrouted, horientation, ?_⟩
     intro hepsilon
-    have horiented := regime.causalCollisionEndpoint_atomicBarrier_or_continueRecipient
+    have horiented := witness.causalCollisionEndpoint_atomicBarrier_or_continueRecipient
       profile stage terminal lower epsilon who hlower hcollision hmass hrouted
         hrecipient
     rcases horiented with hquit | hcontinue

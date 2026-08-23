@@ -118,7 +118,7 @@ applies.
 ## Promotion decisions
 
 - Promote the general stable-coalition/singleton-lock exclusion: it is a new
-  finite restriction on every counterexample regime.
+  finite restriction on every terminal exploitability witness.
 - Experimentally formalize the quantitative suffix, ghost-support, and branch
   lemmas extracted from the first Q172 answer before deciding promotion.
 - Keep the exact pair tables and probes here as regressions until the triple

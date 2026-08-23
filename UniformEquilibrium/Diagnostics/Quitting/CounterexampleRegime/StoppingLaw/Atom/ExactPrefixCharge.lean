@@ -64,8 +64,8 @@ namespace QuittingStoppingLawAtomExactPrefixChronology
 the exact access stack tends to zero. -/
 theorem absorptionSum_tendsto_zero_of_twoActive
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
     {first second : ι} (hfirst : first ∈ frontier.active)
     (hsecond : second ∈ frontier.active) (hne : first ≠ second) :

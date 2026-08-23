@@ -4,33 +4,33 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.CollisionAwareFiniteReturn
 
 /-!
-# Collision-aware finite-return exclusion in a counterexample regime
+# Collision-aware finite-return exclusion in a terminal exploitability witness
 
 The production verifier compiles every collision-aware finite return to a
-uniform payoff at its prescribed boundary.  A counterexample regime therefore
+uniform payoff at its prescribed boundary.  A terminal exploitability witness therefore
 excludes such a return at every positive cycle length and every boundary.
 -/
 
 namespace GameTheory
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- A counterexample regime forbids every finite collision-aware normalized
+/-- A terminal exploitability witness forbids every finite collision-aware normalized
 return, at any prescribed boundary. -/
 theorem not_nonempty_collisionAwareFiniteReturn
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (boundary : Payoff ι)
     (K : ℕ) [NeZero K] :
     ¬ Nonempty (QuittingCollisionAwareFiniteReturn reward boundary K) := by
   rintro ⟨returnData⟩
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     ⟨boundary, returnData.boundary_isUniformEquilibriumPayoff⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 end GameTheory

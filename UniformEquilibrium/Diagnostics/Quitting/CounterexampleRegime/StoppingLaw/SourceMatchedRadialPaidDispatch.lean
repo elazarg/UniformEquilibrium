@@ -35,13 +35,13 @@ open Math.Finset.CubicalResetIntegrability Math.Optimization
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- Full data retained after localizing and consuming one negative radial cap
 square.  `diagonal` records which of the two literal receiving diagonals was
 selected by the oriented supremum switch. -/
 structure QuittingSourceMatchedRadialPaidSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -78,7 +78,7 @@ structure QuittingSourceMatchedRadialPaidSquare
 /-- A localized negative cap square above the fixed-witness quadratic budget
 produces a data-bearing paid first-disagreement carrier. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_radialPaidSquare_of_negativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -215,7 +215,7 @@ branch stores a full legal behavior deviation of size `charge + eta`.  The
 outsider branch stores both the reached endpoint gain and its full behavior
 splice at the exact first-disagreement history. -/
 inductive QuittingSourceMatchedRadialStrategicDispatch
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
@@ -263,10 +263,10 @@ inductive QuittingSourceMatchedRadialStrategicDispatch
 /-- **Finite-scale radial temporal dispatch.**  A negative cap square above
 the exact fixed-witness `4 M lambda^2` budget produces a literal paid square
 and consumes its temporal orientation.  The earlier-receiving branch uses
-the counterexample regime's global terminal gap; the displayed strict error
+the terminal exploitability witness's global terminal gap; the displayed strict error
 budget is exactly the hypothesis needed by the atomic barrier argument. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch_of_negativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -275,7 +275,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch
     (hbudget : charge +
         4 * quittingRewardBound reward * frontier.lambda (frontier.subseq rank) *
           frontier.lambda (frontier.subseq rank) + 3 * eta ≤ threshold)
-    (hsmall : eta < regime.terminalGap * (charge + eta) /
+    (hsmall : eta < witness.terminalGap * (charge + eta) /
       (2 * quittingRewardBound reward))
     (hnegative : HasSquareAboveAlong
       (fun face ↦ -frontier.sourceMatchedRadialFaceCap rank weight hweight0
@@ -284,7 +284,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch
     ∃ carrier : QuittingSourceMatchedRadialPaidSquare frontier rank weight
         hweight0 hweight1 observer threshold charge eta,
       Nonempty (QuittingSourceMatchedRadialStrategicDispatch
-        (gamma := regime.terminalGap) carrier) := by
+        (gamma := witness.terminalGap) carrier) := by
   obtain ⟨carrier⟩ := frontier.exists_radialPaidSquare_of_negativeSquare
     rank weight hweight0 hweight1 observer threshold charge eta hcharge heta
       hbudget hnegative
@@ -306,13 +306,13 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_radialStrategicDispatch
   | true =>
       obtain ⟨who, hwho, action, hendpoint, hbehavior⟩ :=
         carrier.row.exists_outsiderDeviation_of_receivingEarlier htime hpositive
-          regime.terminalGap_pos regime.terminalExploitability happrox hsmall
+          witness.terminalGap_pos witness.terminalExploitability happrox hsmall
       exact ⟨carrier, ⟨.outsider htime who hwho action hendpoint hbehavior⟩⟩
 
 /-- Cap nonadditivity is either within the triangular square budget or is
 consumed by the data-bearing temporal strategic dispatch. -/
 theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_strategicDispatch
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -321,7 +321,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_s
     (hbudget : charge +
         4 * quittingRewardBound reward * frontier.lambda (frontier.subseq rank) *
           frontier.lambda (frontier.subseq rank) + 3 * eta ≤ threshold)
-    (hsmall : eta < regime.terminalGap * (charge + eta) /
+    (hsmall : eta < witness.terminalGap * (charge + eta) /
       (2 * quittingRewardBound reward)) :
     finiteCubeCapNonadditivity
           (frontier.sourceMatchedRadialFaceCap rank weight hweight0 hweight1
@@ -332,7 +332,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_s
       ∃ carrier : QuittingSourceMatchedRadialPaidSquare frontier rank weight
           hweight0 hweight1 observer threshold charge eta,
         Nonempty (QuittingSourceMatchedRadialStrategicDispatch
-          (gamma := regime.terminalGap) carrier) := by
+          (gamma := witness.terminalGap) carrier) := by
   rcases frontier.sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare
       rank weight hweight0 hweight1 observer threshold with hnear | hnegative
   · exact Or.inl hnear
@@ -345,7 +345,7 @@ theorem QuittingCounterexampleStoppingLawFrontier.radialCapNonadditivity_le_or_s
 owner branch has one common label; an outsider branch remembers the actual
 outsider. -/
 def QuittingSourceMatchedRadialStrategicDispatch.label
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
@@ -360,7 +360,7 @@ def QuittingSourceMatchedRadialStrategicDispatch.label
 
 /-- The legal source-unit gain certified by a radial temporal dispatch. -/
 def QuittingSourceMatchedRadialStrategicDispatch.gain
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
@@ -377,7 +377,7 @@ def QuittingSourceMatchedRadialStrategicDispatch.gain
 /-- Every temporal branch retains at least the smaller of the owner factor
 `1` and the outsider factor `gamma / (2M)` times the paid receiving edge. -/
 theorem QuittingSourceMatchedRadialStrategicDispatch.min_factor_mul_le_gain
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {rank : ℕ} {weight : {who // who ∈ frontier.active} → ℝ}
     {hweight0 : ∀ mover, 0 ≤ weight mover}
     {hweight1 : ∀ mover, weight mover ≤ 1}
@@ -423,7 +423,7 @@ owner/outsider label with lower bound
 This statement permits the first-disagreement dates to diverge: their exact
 live masses have already been incorporated into each dispatch's legal gain. -/
 theorem exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ → ℕ)
     (weight : ℕ → {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ n mover, 0 ≤ weight n mover)
@@ -433,7 +433,7 @@ theorem exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower
       (weight n) (hweight0 n) (hweight1 n) observer (threshold n)
         (charge n) (eta n))
     (dispatch : ∀ n, QuittingSourceMatchedRadialStrategicDispatch
-      (gamma := regime.terminalGap) (carrier n))
+      (gamma := witness.terminalGap) (carrier n))
     (hscale : ∀ n, 0 < scale n)
     (hpaid : ∀ n, 0 < charge n + eta n)
     (kappa : ℝ)
@@ -445,10 +445,10 @@ theorem exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower
         Math.HasScaleNormalizedLiminfLower
           ((fun n ↦ (dispatch n).gain) ∘ subseq)
           (scale ∘ subseq)
-          (min 1 (regime.terminalGap /
+          (min 1 (witness.terminalGap /
               (2 * quittingRewardBound reward)) * kappa) := by
   let factor := min 1
-    (regime.terminalGap / (2 * quittingRewardBound reward))
+    (witness.terminalGap / (2 * quittingRewardBound reward))
   have hbound : 0 < quittingRewardBound reward := by
     have hlive0 : 0 ≤ (carrier 0).row.liveMass := by
       rw [(carrier 0).row.liveMass_eq]
@@ -457,12 +457,12 @@ theorem exists_fixed_radialStrategicLabel_of_scaleNormalizedLiminfLower
   have hfactor : 0 < factor := by
     dsimp only [factor]
     exact lt_min (by norm_num)
-      (div_pos regime.terminalGap_pos (mul_pos (by norm_num) hbound))
+      (div_pos witness.terminalGap_pos (mul_pos (by norm_num) hbound))
   have hdispatchLower : ∀ n,
       factor * (charge n + eta n) ≤ (dispatch n).gain := by
     intro n
     exact (dispatch n).min_factor_mul_le_gain (hpaid n)
-      regime.terminalGap_pos
+      witness.terminalGap_pos
   have hgainLower : Math.HasScaleNormalizedLiminfLower
       (fun n ↦ (dispatch n).gain) scale (factor * kappa) :=
     hlower.of_factor_le hfactor hscale hdispatchLower

@@ -26,14 +26,14 @@ open Filter Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
 /-! The fixed-player conclusion, with the singleton/conditioned-value
     consequence retained at the same selected dates. -/
 theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -64,7 +64,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
     quittingTailConditionedValue roots value boundary time who
   let defect : ℕ → ι → ℝ := fun time who ↦
     max 0 (quitValue time who - conditionedValue time who)
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) := by
     intro time
@@ -271,7 +271,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
 /-! The same fixed outsider also creates a literal endpoint gap.  The extra
     half-`eta` loss is only the deleted-clock Continue charge. -/
 theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -304,7 +304,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
   let boundary := seam.limit.value
   let alpha : ℕ → ℝ := fun time ↦
     quittingTailConditionedAbsorptionWeight roots time
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) := by
     intro time
@@ -434,7 +434,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
     fixes the violating coordinate and the floor module exposes the exact
     phantom-survival account financing the violation. -/
 theorem exists_cofinal_endpoint_reset_or_fixed_underfloor_slack
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight

@@ -30,8 +30,8 @@ deviation, a fixed Quit-directed coalition atom, or a fixed outsider/action
 same-witness rectangle.  The last alternative is the sole uncompiled term. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_defectPolarity
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -39,7 +39,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     let charge := quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap
+      witness.terminalGap
     (∃ deviation : (quittingGame reward).BehaviorStrategy owner,
       charge / 2 - δ ≤
         quittingTerminalPayoff reward
@@ -70,9 +70,9 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let charge := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   have hchargePos : 0 < charge := mul_pos
-    packet.observerAbsentMassLower_pos regime.terminalGap_pos
+    packet.observerAbsentMassLower_pos witness.terminalGap_pos
   have hsplit := packet.observerAbsent_finiteClock_strategicSplit habsent
     n stop hstop δ hδ
   rcases hsplit with houtside | ⟨deviation, hdeviation⟩

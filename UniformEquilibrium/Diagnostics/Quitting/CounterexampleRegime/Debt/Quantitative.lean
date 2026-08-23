@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Debt.Dynamic.OptimizedDynamicDebtBounds
 
 /-!
-# Quantitative restrictions on the quitting counterexample regime
+# Quantitative restrictions on the quitting terminal exploitability witness
 
-The terminal exploitability gap of a counterexample regime bounds every
+The terminal exploitability gap of a terminal exploitability witness bounds every
 optimized exact-debt value from below and the largest positive singleton debt
 cap from above. It also survives in a specific coordinate of a projective
 exact-debt tail with a summable opponent clock.
@@ -25,77 +25,77 @@ open Filter
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- The regime's terminal margin is below every optimized exact-debt value. -/
 theorem terminalGap_le_finiteMinMaxDynamicDebt
-    (regime : QuittingCounterexampleRegime reward) (cutoff : ℕ) :
-    regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (cutoff : ℕ) :
+    witness.terminalGap ≤
       @quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt ι _ _
-        regime.nonempty_players reward cutoff :=
+        witness.nonempty_players reward cutoff :=
   terminalExploitabilityGap_le_finiteMinMaxDynamicDebt
-    reward regime.terminalExploitability cutoff
+    reward witness.terminalExploitability cutoff
 
 /-- The regime's terminal margin is below the limiting exact-debt
 obstruction. -/
 theorem terminalGap_le_iInf_minMaxDynamicDebt
-    (regime : QuittingCounterexampleRegime reward) :
-    regime.terminalGap ≤ ⨅ cutoff : ℕ,
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    witness.terminalGap ≤ ⨅ cutoff : ℕ,
       @quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt ι _ _
-        regime.nonempty_players reward cutoff :=
+        witness.nonempty_players reward cutoff :=
   terminalExploitabilityGap_le_iInf_finiteMinMaxDynamicDebt
-    reward regime.terminalExploitability
+    reward witness.terminalExploitability
 
 /-- The limiting optimized exact-debt obstruction is positive. -/
 theorem iInf_minMaxDynamicDebt_pos_of_terminalGap
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     0 < ⨅ cutoff : ℕ,
       @quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt ι _ _
-        regime.nonempty_players reward cutoff :=
-  regime.terminalGap_pos.trans_le
-    regime.terminalGap_le_iInf_minMaxDynamicDebt
+        witness.nonempty_players reward cutoff :=
+  witness.terminalGap_pos.trans_le
+    witness.terminalGap_le_iInf_minMaxDynamicDebt
 
 /-- The terminal margin is bounded by the largest positive singleton reward. -/
 theorem terminalGap_le_maxPositiveSingletonDebtCap
-    (regime : QuittingCounterexampleRegime reward) :
-    regime.terminalGap ≤ @quittingMaxPositiveSingletonDebtCap ι _
-      regime.nonempty_players reward := by
-  letI : Nonempty ι := regime.nonempty_players
-  exact (regime.terminalGap_le_finiteMinMaxDynamicDebt 0).trans
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    witness.terminalGap ≤ @quittingMaxPositiveSingletonDebtCap ι _
+      witness.nonempty_players reward := by
+  letI : Nonempty ι := witness.nonempty_players
+  exact (witness.terminalGap_le_finiteMinMaxDynamicDebt 0).trans
     (quittingFiniteMinMaxDynamicDebt_le_maxPositiveSingletonDebtCap reward 0)
 
-/-- A counterexample regime forces a player to have a strictly positive own
+/-- A terminal exploitability witness forces a player to have a strictly positive own
 reward at their singleton quitting terminal. -/
 theorem maxPositiveSingletonDebtCap_pos
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     0 < @quittingMaxPositiveSingletonDebtCap ι _
-      regime.nonempty_players reward := by
-  letI : Nonempty ι := regime.nonempty_players
-  exact regime.terminalGap_pos.trans_le
-    regime.terminalGap_le_maxPositiveSingletonDebtCap
+      witness.nonempty_players reward := by
+  letI : Nonempty ι := witness.nonempty_players
+  exact witness.terminalGap_pos.trans_le
+    witness.terminalGap_le_maxPositiveSingletonDebtCap
 
 /-- The regime has a projective exact-debt tail with one owner whose initial
 debt is at least the terminal exploitability gap and whose opponent clock is
 summable. -/
 theorem exists_terminalGapDynamicDebtTail
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ (limit : ℕ → QuittingDebtPoint ι) (subseq : ℕ → ℕ) (who : ι),
       StrictMono subseq ∧
       Tendsto
         ((fun cutoff ↦ @quittingFiniteMinMaxDynamicDebtTail ι _ _
-            regime.nonempty_players reward cutoff) ∘ subseq)
+            witness.nonempty_players reward cutoff) ∘ subseq)
           atTop (nhds limit) ∧
       (∀ time, limit time ∈ quittingDebtBox reward) ∧
       (∀ time, IsQuittingDynamicDebtEdge reward
         (limit time) (limit (time + 1))) ∧
-      regime.terminalGap ≤ (limit 0).2 who ∧
+      witness.terminalGap ≤ (limit 0).2 who ∧
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact exists_projectiveDynamicDebtTail_of_pos_le_iInf_minMax
-    reward regime.terminalGap_pos
-      regime.terminalGap_le_iInf_minMaxDynamicDebt
+    reward witness.terminalGap_pos
+      witness.terminalGap_le_iInf_minMaxDynamicDebt
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

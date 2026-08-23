@@ -40,8 +40,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 observer's selected pure-time response. -/
 def quittingStoppingLawRectangleSourceProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   Function.update (frontier.profiles (frontier.subseq (packet.rank n)))
@@ -52,8 +52,8 @@ def quittingStoppingLawRectangleSourceProfile
 /-- The normalized persistent mass supplied by a negative rectangle atom. -/
 def quittingStoppingLawNegativeTargetMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
   (packet.charge / 4) /
     ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -66,8 +66,8 @@ gap as a state-matched root Nash defect or the observer carries the same gap
 as an atomic punishment-refusal certificate. -/
 def HasQuittingStoppingLawNegativeTargetAtomicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : ℝ) : Prop :=
   ∃ stop : ℕ → ℕ,
@@ -81,16 +81,16 @@ def HasQuittingStoppingLawNegativeTargetAtomicDispatch
           packet.terminal ∧
         root packet.observer = PMF.pure true ∧
         ((∃ who, who ≠ packet.observer ∧
-            regime.terminalGap ≤
+            witness.terminalGap ≤
               quittingRootCoordinateNashDefect reward tail.1 root who ∧
-            lower * regime.terminalGap ≤
+            lower * witness.terminalGap ≤
               quittingStageCoalitionMass reward profile (stop n)
                 packet.terminal *
                   quittingRootCoordinateNashDefect reward tail.1 root who) ∨
-          (regime.terminalGap ≤
+          (witness.terminalGap ≤
               max 0
                 (-quittingAtomicBlockerBalance reward root packet.observer) ∧
-            lower * regime.terminalGap ≤
+            lower * witness.terminalGap ≤
               quittingStageCoalitionMass reward profile (stop n)
                 packet.terminal *
                   max 0
@@ -101,8 +101,8 @@ def HasQuittingStoppingLawNegativeTargetAtomicDispatch
 target orientation. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTargetMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingStoppingLawNegativeTargetMassLower packet := by
   unfold quittingStoppingLawNegativeTargetMassLower
@@ -114,8 +114,8 @@ This is the negative-reward counterpart of the target-mass estimate used by
 the positive marked-collision consumer. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_sourceMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hnegative : reward packet.terminal packet.observer < 0) (n : ℕ) :
     quittingStoppingLawNegativeTargetMassLower packet ≤
@@ -187,8 +187,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_sourceM
 mass is concentrated at the observer's displayed finite pure stopping date. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.exists_sourceStop_with_stageMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hnegative : reward packet.terminal packet.observer < 0) :
@@ -232,8 +232,8 @@ the full counterexample-gap Nash defect or the observer has a punishment
 refusal certificate of the same size. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_atomicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hnegative : reward packet.terminal packet.observer < 0) :
@@ -252,35 +252,35 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_atomicD
     dsimp only [root, profile, quittingStoppingLawRectangleSourceProfile]
     rw [quittingProfileLiveRoot_update_pureTime_self, hstop n,
       quittingPureTimeHazard_some_self]
-  have hbarrier := regime.terminalGap_le_atomicBlockerBarrier howner
+  have hbarrier := witness.terminalGap_le_atomicBlockerBarrier howner
   have hstageN : quittingStoppingLawNegativeTargetMassLower packet ≤
       quittingStageCoalitionMass reward profile (stop n) packet.terminal := by
     simpa only [profile] using hstage n
   refine ⟨hstageN, howner, ?_⟩
-  by_cases hdefect : regime.terminalGap ≤
+  by_cases hdefect : witness.terminalGap ≤
       quittingForcedOwnerOutsiderDefect reward root packet.observer
   · left
     obtain ⟨who, hwho, hcoordinate⟩ :=
       exists_outsider_coordinateNashDefect_ge_of_forcedOwnerDefect_ge
-        reward tail.1 root packet.observer howner regime.terminalGap_pos
+        reward tail.1 root packet.observer howner witness.terminalGap_pos
           hdefect
     refine ⟨who, hwho, hcoordinate, ?_⟩
-    exact mul_le_mul hstageN hcoordinate regime.terminalGap_pos.le
+    exact mul_le_mul hstageN hcoordinate witness.terminalGap_pos.le
       (quittingStageCoalitionMass_nonneg reward profile (stop n)
         packet.terminal)
   · right
-    have hrefusal : regime.terminalGap ≤
+    have hrefusal : witness.terminalGap ≤
         max 0 (-quittingAtomicBlockerBalance reward root packet.observer) := by
       have hdefectLt :
           quittingForcedOwnerOutsiderDefect reward root packet.observer <
-            regime.terminalGap := lt_of_not_ge hdefect
+            witness.terminalGap := lt_of_not_ge hdefect
       by_contra hnot
       have hrefusalLt :
           max 0 (-quittingAtomicBlockerBalance reward root packet.observer) <
-            regime.terminalGap := lt_of_not_ge hnot
+            witness.terminalGap := lt_of_not_ge hnot
       exact (not_lt_of_ge hbarrier) (max_lt hdefectLt hrefusalLt)
     refine ⟨hrefusal, ?_⟩
-    exact mul_le_mul hstageN hrefusal regime.terminalGap_pos.le
+    exact mul_le_mul hstageN hrefusal witness.terminalGap_pos.le
       (quittingStageCoalitionMass_nonneg reward profile (stop n)
         packet.terminal)
 
@@ -297,8 +297,8 @@ No positivity premise on `lower` is required for this exact projection.  When
 separately from `negativeTargetMassLower_pos`. -/
 theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     {lower : ℝ}
     (dispatch : HasQuittingStoppingLawNegativeTargetAtomicDispatch
@@ -320,14 +320,14 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
           lower ≤ quittingStageCoalitionMass reward profile
               (stop (subseq rank)) packet.terminal ∧
             root packet.observer = PMF.pure true ∧
-            regime.terminalGap ≤
+            witness.terminalGap ≤
               quittingRootCoordinateNashDefect reward tail.1 root who ∧
             quittingTerminalPayoff reward
                   (Function.update profile who deviation) who -
                 quittingTerminalPayoff reward profile who =
               quittingLiveMass reward profile (stop (subseq rank)) *
                 quittingRootCoordinateNashDefect reward tail.1 root who ∧
-            lower * regime.terminalGap ≤
+            lower * witness.terminalGap ≤
               quittingTerminalPayoff reward
                   (Function.update profile who deviation) who -
                 quittingTerminalPayoff reward profile who) ∨
@@ -339,10 +339,10 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
           lower ≤ quittingStageCoalitionMass reward profile
               (stop (subseq rank)) packet.terminal ∧
             root packet.observer = PMF.pure true ∧
-            regime.terminalGap ≤
+            witness.terminalGap ≤
               max 0 (-quittingAtomicBlockerBalance reward root
                 packet.observer) ∧
-            lower * regime.terminalGap ≤
+            lower * witness.terminalGap ≤
               quittingStageCoalitionMass reward profile
                 (stop (subseq rank)) packet.terminal *
                 max 0 (-quittingAtomicBlockerBalance reward root
@@ -355,9 +355,9 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
     let tail := quittingTerminalSemanticPair reward
       (quittingAllContinueProfileSpine reward profile (stop n + 1))
     who ≠ packet.observer ∧
-      regime.terminalGap ≤
+      witness.terminalGap ≤
         quittingRootCoordinateNashDefect reward tail.1 root who ∧
-      lower * regime.terminalGap ≤
+      lower * witness.terminalGap ≤
         quittingStageCoalitionMass reward profile (stop n) packet.terminal *
           quittingRootCoordinateNashDefect reward tail.1 root who
   by_cases hfrequent : ∃ᶠ n in atTop, ∃ who, outsider n who
@@ -389,7 +389,7 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
     have hdefectNonneg : 0 ≤ quittingRootCoordinateNashDefect reward
         tail.1 root who :=
       quittingRootCoordinateNashDefect_nonneg reward tail.1 root who
-    have hweighted : lower * regime.terminalGap ≤
+    have hweighted : lower * witness.terminalGap ≤
         quittingLiveMass reward profile (stop (subseq rank)) *
           quittingRootCoordinateNashDefect reward tail.1 root who :=
       hfixed.2.2.trans
@@ -414,9 +414,9 @@ theorem negativeTargetAtomicDispatch_fixedActualSourceSubsequence
     obtain ⟨hmass, howner, halt⟩ := hrows (subseq rank)
     have hnone : ¬ ∃ who, outsider (subseq rank) who :=
       hstart (subseq rank) (Nat.le_add_right start rank)
-    have hrefusal : regime.terminalGap ≤
+    have hrefusal : witness.terminalGap ≤
           max 0 (-quittingAtomicBlockerBalance reward root packet.observer) ∧
-        lower * regime.terminalGap ≤
+        lower * witness.terminalGap ≤
           quittingStageCoalitionMass reward profile (stop (subseq rank))
             packet.terminal *
             max 0 (-quittingAtomicBlockerBalance reward root
@@ -439,8 +439,8 @@ observer-absent rectangle; the singleton and both observer-containing reward
 signs have named strategic consumers. -/
 theorem exists_prescribed_or_absent_or_staticStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         packet.observer ∉ packet.terminal.val ∨

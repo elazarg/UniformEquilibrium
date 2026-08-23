@@ -115,8 +115,8 @@ reset law satisfying the exact threshold alternative:
 Every minimum, singleton-tightness, root-Nash, and reward-bound gate is shown
 in the hypotheses.  The terminal law in the finite dispatch is literally the
 law in the positive-part split. -/
-theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_twoReservoir_sameLaw_resetDispatch
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source : QuittingTerminalSemanticPair ι) (owner : ι) {M theta : ℝ}
     (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
@@ -150,7 +150,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
                 0 < quittingTerminalOpponentIncidenceMass owner other mass ∧
                 QuittingFixedLawResetDispatch (reward := reward)
                   source cluster mass owner other returned)) := by
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
     hjoin | hpunishment
   · exact Or.inl hjoin
   · right
@@ -213,7 +213,7 @@ theorem QuittingCounterexampleRegime.exists_twoReservoir_sameLaw_resetDispatch
         exists_positive_opponentIncidenceMass owner mass hmass hfinitePositive
       obtain ⟨returned, hreturnedJoint, _hreturnedCarrier, hreturnedReset,
           hsourceLe, hreturnedLe, htransfer, htoggle, hdynamic⟩ :=
-        regime.exists_fixedLaw_resetFace_dispatch source cluster mass owner
+        witness.exists_fixedLaw_resetFace_dispatch source cluster mass owner
           other hminimum hpositive hjoint hreset hotherIncidence
       exact ⟨other, returned, hotherNe, hotherIncidence,
         ⟨hreturnedJoint, hreturnedReset, hsourceLe, hreturnedLe, htransfer,

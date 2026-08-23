@@ -21,7 +21,7 @@ Otherwise conditional collision vanishes, normalized singleton occupation
 has a convergent subsequence, the restart delivery converges to the tail
 boundary, and active owners are pinned to their singleton rewards.  The
 limit is then a fully complementary normalized singleton packet, contradicting
-the counterexample regime's strict packet defect.
+the terminal exploitability witness's strict packet defect.
 
 The sequential exclusion is converted to one uniform estimate: after one
 date, every positive-absorption window has endpoint distance at least a fixed
@@ -40,11 +40,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- A source-typed finite window of the optimized exact-D tail. -/
 def finiteRootWindow (start fuel : ℕ) :
@@ -274,7 +274,7 @@ theorem not_exists_sublinearAbsorptionReturn
     (habsorption : ∀ index, 0 < (window index).absorptionMass)
     (hdrift : Tendsto (fun index ↦ seam.normalizedEndpointDrift (window index))
       atTop (nhds 0)) : False := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let occupation : ℕ → Payoff ι := fun index owner ↦
     (window index).normalizedSingletonOccupation owner
   let occupationBox : Set (Payoff ι) :=
@@ -399,7 +399,7 @@ theorem not_exists_sublinearAbsorptionReturn
   let packet := quittingNormalizedSingletonSourcePacketOfData
     (limitOccupation, seam.limit.value) hpacketData
   obtain ⟨owner, _, hstrict⟩ :=
-    regime.exists_active_strictSingletonSurplus packet
+    witness.exists_active_strictSingletonSurplus packet
   change seam.limit.value owner <
     quittingSingletonMixture reward limitOccupation owner at hstrict
   linarith [hmixture owner]

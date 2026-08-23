@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Classification.SingletonPacketSupport
 # Counterexample consequences of singleton-packet support
 
 The generic support graph and strict-lasso record live in production. A
-counterexample regime supplies the strict entrance edge and places its
+terminal exploitability witness supplies the strict entrance edge and places its
 terminal margin in both the packet target and one supported singleton atom.
 -/
 
@@ -25,11 +25,11 @@ open Finset
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Strict conditional refusal contains one literal strict supported edge. -/
 theorem exists_strictSupportedPreferenceEdge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     ∃ owner other,
       0 < packet.mass owner ∧
@@ -41,9 +41,9 @@ theorem exists_strictSupportedPreferenceEdge
         quittingSingletonRefusalValue reward packet.mass owner owner ∧
       quittingSingletonRefusalValue reward packet.mass owner owner ≤
         reward (quittingSingletonTerminal other) owner := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨owner, hownerMass, hownerLt, htarget, hrefusal⟩ :=
-    regime.exists_active_strictSingletonRefusal packet
+    witness.exists_active_strictSingletonRefusal packet
   have howner : owner ∈ packet.support :=
     (packet.mem_support_iff owner).2 hownerMass
   obtain ⟨other, hother, hne, hreward⟩ :=
@@ -55,12 +55,12 @@ theorem exists_strictSupportedPreferenceEdge
 /-- Every counterexample packet has a strict supported entrance edge feeding
 a finite recurrent weak-preference support class. -/
 theorem nonempty_strictSupportedPreferenceLasso
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     Nonempty (QuittingStrictSupportedPreferenceLasso packet) := by
   obtain ⟨entrance, first, hentranceMass, hfirstMass, hne,
       htarget, hrefusal, hfirst⟩ :=
-    regime.exists_strictSupportedPreferenceEdge packet
+    witness.exists_strictSupportedPreferenceEdge packet
   have hentrance : entrance ∈ packet.support :=
     (packet.mem_support_iff entrance).2 hentranceMass
   have hfirstMem : first ∈ packet.support :=
@@ -88,24 +88,24 @@ theorem nonempty_strictSupportedPreferenceLasso
 /-- The terminal margin is visible in a coordinate of every forced packet's
 target. -/
 theorem exists_terminalGap_le_packetTarget
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
-    ∃ who, regime.terminalGap ≤ packet.target who := by
-  obtain ⟨who, hgap⟩ := regime.exists_terminalGap_le_soloReward
+    ∃ who, witness.terminalGap ≤ packet.target who := by
+  obtain ⟨who, hgap⟩ := witness.exists_terminalGap_le_soloReward
   exact ⟨who, hgap.trans (packet.solo_le_target who)⟩
 
 /-- A positive-mass singleton atom of every forced packet pays some player at
 least the counterexample's terminal margin. -/
 theorem exists_supportedSingleton_terminalGap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     ∃ who owner, 0 < packet.mass owner ∧
-      regime.terminalGap ≤
+      witness.terminalGap ≤
         reward (quittingSingletonTerminal owner) who := by
-  obtain ⟨who, hgap⟩ := regime.exists_terminalGap_le_packetTarget packet
+  obtain ⟨who, hgap⟩ := witness.exists_terminalGap_le_packetTarget packet
   have hweighted :
       ∑ owner ∈ packet.support,
-          packet.mass owner * regime.terminalGap ≤
+          packet.mass owner * witness.terminalGap ≤
         ∑ owner ∈ packet.support,
           packet.mass owner *
             reward (quittingSingletonTerminal owner) who := by
@@ -119,6 +119,6 @@ theorem exists_supportedSingleton_terminalGap
   refine ⟨who, owner, hmass, ?_⟩
   exact le_of_mul_le_mul_left hle hmass
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

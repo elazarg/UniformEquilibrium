@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAllContinuePlateau
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryNeverCoupling
 
@@ -99,13 +99,13 @@ theorem exists_frequently_other_of_coordinate_tendsto_zero_of_uniform_witness
 
 /-- The counterexample terminal gap is attained by some semantic-debt
 coordinate of every actual profile. -/
-theorem QuittingCounterexampleRegime.exists_terminalGap_le_terminalSemanticDebt
+theorem QuittingTerminalExploitabilityWitness.exists_terminalGap_le_terminalSemanticDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profile : (quittingGame reward).BehaviorProfile) :
-    ∃ player, regime.terminalGap ≤ quittingTerminalSemanticDebt
+    ∃ player, witness.terminalGap ≤ quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) player := by
-  obtain ⟨player, deviation, hgain⟩ := regime.terminalExploitability profile
+  obtain ⟨player, deviation, hgain⟩ := witness.terminalExploitability profile
   refine ⟨player, ?_⟩
   have hbest := quittingTerminalPayoff_update_le_continuationBestResponseValue
     reward profile player deviation
@@ -118,23 +118,23 @@ counterexample, if one player's debt tends to zero along actual profiles,
 then one fixed different player carries the full terminal gap along a strict
 subsequence.  This is a player-label transfer, not a return of semantic
 states or terminal laws. -/
-theorem QuittingCounterexampleRegime.exists_other_terminalGap_subsequence_of_semanticDebt_reset
+theorem QuittingTerminalExploitabilityWitness.exists_other_terminalGap_subsequence_of_semanticDebt_reset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (who : ι)
     (hreset : Tendsto (fun n => quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward (profiles n)) who)
       atTop (𝓝 0)) :
     ∃ (other : ι) (subseq : ℕ → ℕ),
       other ≠ who ∧ StrictMono subseq ∧
-      ∀ n, regime.terminalGap ≤ quittingTerminalSemanticDebt
+      ∀ n, witness.terminalGap ≤ quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward (profiles (subseq n))) other := by
   obtain ⟨other, hother, hfrequent⟩ :=
     exists_frequently_other_of_coordinate_tendsto_zero_of_uniform_witness
       (fun n player => quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward (profiles n)) player)
-      who regime.terminalGap regime.terminalGap_pos hreset
-      (fun n => regime.exists_terminalGap_le_terminalSemanticDebt
+      who witness.terminalGap witness.terminalGap_pos hreset
+      (fun n => witness.exists_terminalGap_le_terminalSemanticDebt
         reward (profiles n))
   obtain ⟨subseq, hsubseq, hdebt⟩ :=
     extraction_of_frequently_atTop hfrequent

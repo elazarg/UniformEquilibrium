@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomBudgetPathConsumer
 
 /-!
@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Circulation.KActiveMarkedAtomBudgetPathConsum
 
 The production compact-path compiler turns compatible finite prefixes with a divergent
 absorption budget into a uniform-equilibrium payoff. Consequently, a selected
-counterexample regime must exclude both the general fixed-activity prefix family and
+terminal exploitability witness must exclude both the general fixed-activity prefix family and
 the fixed one-active singleton-mark specialization.
 -/
 
@@ -27,12 +27,12 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-! ## Counterexample-facing exclusions -/
 
-/-- A counterexample regime cannot admit cumulative-clock `K`-active prefix
+/-- A terminal exploitability witness cannot admit cumulative-clock `K`-active prefix
 families of the form consumed above, for any fixed `K`. -/
-theorem QuittingCounterexampleRegime.not_KActiveAbsorptionBudgetPrefixes
+theorem QuittingTerminalExploitabilityWitness.not_KActiveAbsorptionBudgetPrefixes
     [Nonempty ι]
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (K : ℕ) (bound : ℝ)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     ¬(∀ epsilon, 0 < epsilon →
@@ -46,16 +46,16 @@ theorem QuittingCounterexampleRegime.not_KActiveAbsorptionBudgetPrefixes
             (fun point => quittingSimplexAbsorptionMass point.2)
             budget horizon).Nonempty) := by
   intro hprefix
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     (quittingGame_exists_uniformEquilibriumPayoff_of_KActiveAbsorptionBudgetPrefixes
       reward K bound hreward hprefix)
 
 /-- In particular, a counterexample cannot retain one fixed one-active
 singleton edge with a divergent cumulative clock on compatible prefixes at
 every accuracy. -/
-theorem QuittingCounterexampleRegime.not_oneActiveMarkedBudgetPrefixes
+theorem QuittingTerminalExploitabilityWitness.not_oneActiveMarkedBudgetPrefixes
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (bound : ℝ)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound) :
     ¬(∀ epsilon, 0 < epsilon →
@@ -70,7 +70,7 @@ theorem QuittingCounterexampleRegime.not_oneActiveMarkedBudgetPrefixes
               point.2 markedPlayer {clockOwner})
             budget horizon).Nonempty) := by
   intro hprefix
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     (quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPrefixes
       reward bound hreward hprefix)
 end GameTheory

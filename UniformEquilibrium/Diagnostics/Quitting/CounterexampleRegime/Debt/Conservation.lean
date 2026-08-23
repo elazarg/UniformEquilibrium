@@ -41,13 +41,13 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- The selected owner's limiting prescribed value retains the whole
 counterexample margin. -/
 theorem terminalGap_le_limitValue :
-    regime.terminalGap ≤ seam.limit.value seam.limit.owner :=
+    witness.terminalGap ≤ seam.limit.value seam.limit.owner :=
   seam.terminalGap_le_limitDebt.trans
     (seam.limit.debt_le_value_of_debt_pos seam.limit.owner
       seam.limit.ownerDebt_pos)
@@ -159,7 +159,7 @@ theorem exists_ownerClockStart_logBound :
               (start + offset)) ≤
         Real.log
           (quittingPositiveSingletonDebtCap reward seam.limit.owner /
-            regime.terminalGap) := by
+            witness.terminalGap) := by
   have heventually : ∀ᶠ time in atTop,
       0 < (quittingDynamicDebtTailRoots seam.tail time
         seam.limit.owner false).toReal :=
@@ -174,12 +174,12 @@ theorem exists_ownerClockStart_logBound :
     hstart (start + offset) (Nat.le_add_right start offset)
   have hdebtMono := monotone_quittingDynamicDebtTail_debt
     seam.tail seam.tail_mem seam.tail_edge seam.limit.owner
-  have hetaStart : regime.terminalGap ≤
+  have hetaStart : witness.terminalGap ≤
       (seam.tail start).2 seam.limit.owner :=
     seam.terminalGap_le_initialDebt.trans
       (hdebtMono (Nat.zero_le start))
   have hstartPos : 0 < (seam.tail start).2 seam.limit.owner :=
-    regime.terminalGap_pos.trans_le hetaStart
+    witness.terminalGap_pos.trans_le hetaStart
   have hendPos : 0 < (seam.tail (start + fuel)).2 seam.limit.owner :=
     hstartPos.trans_le (hdebtMono (Nat.le_add_right start fuel))
   have hendNonneg : 0 ≤ (seam.tail (start + fuel)).2 seam.limit.owner :=
@@ -191,9 +191,9 @@ theorem exists_ownerClockStart_logBound :
       (seam.tail (start + fuel)).2 seam.limit.owner /
           (seam.tail start).2 seam.limit.owner ≤
         quittingPositiveSingletonDebtCap reward seam.limit.owner /
-          regime.terminalGap :=
+          witness.terminalGap :=
     div_le_div₀ (le_max_left _ _) hendCap
-      regime.terminalGap_pos hetaStart
+      witness.terminalGap_pos hetaStart
   have hlog := sum_quittingOpponentClockCharge_le_log_debtRatio
     (reward := reward) seam.tail seam.tail_mem seam.tail_edge
       seam.limit.owner start fuel hcontinue hstartPos

@@ -55,7 +55,7 @@ terminal singleton debt proves the exact terminal boundary comparison.  The
 edge lands at a zero-payoff state carrying the supplied root; potential
 invariance transfers its reserved capacity to the selected terminal root. -/
 theorem terminal_debt_le_aggregateCapacityAccount_of_frozenRootLift
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) (support : Finset ι)
     (hsupport : IsQuittingRootInteriorOnSupport root support)
     (continuation : Payoff ι)
@@ -89,9 +89,9 @@ theorem terminal_debt_le_aggregateCapacityAccount_of_frozenRootLift
     exact (terminal_payoff_eq_zero path hpath).symm
   have hdecrement :=
     quittingPunishmentFloorAdmissiblePotential_predecessor_decrement
-      regime.prefixCharge_le edge
+      witness.prefixCharge_le edge
   have hsource :=
-    admissiblePotential_le_prefixChargeBound regime.prefixCharge_le sourceState
+    admissiblePotential_le_prefixChargeBound witness.prefixCharge_le sourceState
   have hcharge : edge.toBoxEdge.absorptionCharge =
       quittingRootAbsorptionMass root := by
     change quittingRootAbsorptionMass
@@ -117,7 +117,7 @@ theorem terminal_debt_le_aggregateCapacityAccount_of_frozenRootLift
 /-- The terminal comparison from a physical frozen-root lift closes the
 entire intrinsic carry telescope. -/
 theorem debt_zero_le_aggregateCapacityAccount_zero_of_frozenRootLift
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) (support : Finset ι)
     (hsupport : IsQuittingRootInteriorOnSupport root support)
     (continuation : Payoff ι)
@@ -130,15 +130,15 @@ theorem debt_zero_le_aggregateCapacityAccount_zero_of_frozenRootLift
     debt (reward := reward) path 0 ≤
       aggregateCapacityAccount path hpath hpunishment 0 := by
   apply debt_zero_le_aggregateCapacityAccount_zero_of_far
-    path hpath hpunishment regime.prefixCharge_le
+    path hpath hpunishment witness.prefixCharge_le
   exact terminal_debt_le_aggregateCapacityAccount_of_frozenRootLift
-    path hpath hpunishment regime root support hsupport continuation hlift
+    path hpath hpunishment witness root support hsupport continuation hlift
       hpays
 
 /-- A terminal capacity comparison propagates to every earlier point of the
 same intrinsic finite chronology. -/
 theorem debt_le_aggregateCapacityAccount_of_far_at
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hfar : debt (reward := reward) path cutoff ≤
       aggregateCapacityAccount path hpath hpunishment cutoff) :
     ∀ time, time ≤ cutoff →
@@ -151,13 +151,13 @@ theorem debt_le_aggregateCapacityAccount_of_far_at
     (fun liveTime hlive ih ↦ by
       have hdebt := debt_step path hpath liveTime hlive
       have haccount := source_add_aggregateCapacityAccount_succ_le
-        path hpath hpunishment regime.prefixCharge_le liveTime hlive
+        path hpath hpunishment witness.prefixCharge_le liveTime hlive
       have hsurvival : survival (reward := reward) path liveTime ≤ 1 :=
         quittingStationaryContinueMass_le_one _
       have haccountNext : 0 ≤
           aggregateCapacityAccount path hpath hpunishment (liveTime + 1) :=
         aggregateCapacityAccount_nonneg
-          path hpath hpunishment regime.prefixCharge_le (liveTime + 1)
+          path hpath hpunishment witness.prefixCharge_le (liveTime + 1)
       calc
         debt (reward := reward) path liveTime =
             source (reward := reward) path liveTime +
@@ -181,7 +181,7 @@ theorem debt_le_aggregateCapacityAccount_of_far_at
 /-- A physical frozen-root terminal lift dominates aggregate debt by the
 capacity account at every point, not only at the initial point. -/
 theorem debt_le_aggregateCapacityAccount_of_frozenRootLift_at
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) (support : Finset ι)
     (hsupport : IsQuittingRootInteriorOnSupport root support)
     (continuation : Payoff ι)
@@ -195,9 +195,9 @@ theorem debt_le_aggregateCapacityAccount_of_frozenRootLift_at
       debt (reward := reward) path time ≤
         aggregateCapacityAccount path hpath hpunishment time := by
   apply debt_le_aggregateCapacityAccount_of_far_at
-    path hpath hpunishment regime
+    path hpath hpunishment witness
   exact terminal_debt_le_aggregateCapacityAccount_of_frozenRootLift
-    path hpath hpunishment regime root support hsupport continuation hlift
+    path hpath hpunishment witness root support hsupport continuation hlift
       hpays
 
 /-- **Tight initial capacity forces immediate zero-source entry.**  Once a
@@ -211,7 +211,7 @@ This is the sharp extra comparison needed to turn boundary funding into a
 literal exposed-face edge.  The landed minimizer APIs provide the opposite
 inequality but do not currently prove this reverse inequality. -/
 theorem source_zero_or_succ_zero_of_frozenRootLift_and_initial_tight
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hcutoff : 0 < cutoff)
     (hterminal : 0 < debt (reward := reward) path cutoff)
     (root : ι → PMF Bool) (support : Finset ι)
@@ -228,7 +228,7 @@ theorem source_zero_or_succ_zero_of_frozenRootLift_and_initial_tight
     source (reward := reward) path 0 = 0 ∨
       (1 < cutoff ∧ source (reward := reward) path 1 = 0) := by
   have hdom := debt_le_aggregateCapacityAccount_of_frozenRootLift_at
-    path hpath hpunishment regime root support hsupport continuation hlift
+    path hpath hpunishment witness root support hsupport continuation hlift
       hpays
   have hdom0 := hdom 0 (Nat.zero_le cutoff)
   have heq0 : debt (reward := reward) path 0 =
@@ -237,7 +237,7 @@ theorem source_zero_or_succ_zero_of_frozenRootLift_and_initial_tight
   have hdom1 := hdom 1 hcutoff
   have hdebt0 := debt_step path hpath 0 hcutoff
   have haccount0 := source_add_aggregateCapacityAccount_succ_le
-    path hpath hpunishment regime.prefixCharge_le 0 hcutoff
+    path hpath hpunishment witness.prefixCharge_le 0 hcutoff
   have hcarry : aggregateCapacityAccount path hpath hpunishment 1 ≤
       survival (reward := reward) path 0 *
         debt (reward := reward) path 1 := by
@@ -284,8 +284,8 @@ every playerwise debt-source exposed face.  A counterexample seam witness is
 used only to certify that zero is the attained supporting value of the
 compact carrier. -/
 theorem all_debtSourceZeroFaces_of_source_eq_zero
-    {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (time : ℕ) (htime : time < cutoff)
     (hsource : source (reward := reward) path time = 0) :
     ∀ selected,
@@ -336,8 +336,8 @@ theorem all_debtSourceZeroFaces_of_source_eq_zero
 /-- Tight initial capacity upgrades a physical terminal lift to a literal
 all-player zero-source exposed face at the first or second finite edge. -/
 theorem all_debtSourceZeroFaces_zero_or_one_of_frozenRootLift_and_initial_tight
-    {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hcutoff : 0 < cutoff)
     (hterminal : 0 < debt (reward := reward) path cutoff)
     (root : ι → PMF Bool) (support : Finset ι)
@@ -368,7 +368,7 @@ theorem all_debtSourceZeroFaces_zero_or_one_of_frozenRootLift_and_initial_tight
           exposedFace (quittingDebtSourceZeroFaceCostate selected)
             (quittingDebtSourceOneStageObstructionCarrier reward)) := by
   rcases source_zero_or_succ_zero_of_frozenRootLift_and_initial_tight
-    path hpath hpunishment regime hcutoff hterminal root support hsupport
+    path hpath hpunishment witness hcutoff hterminal root support hsupport
       continuation hlift hpays htight with hzero | ⟨hcutoff1, hzero⟩
   · exact Or.inl
       (all_debtSourceZeroFaces_of_source_eq_zero
@@ -383,7 +383,7 @@ the intrinsic carry gate closes by a genuine one-edge predecessor, or finite
 Farkas multipliers certify infeasibility of the continuation system for that
 specific root. -/
 theorem debt_zero_le_aggregateCapacityAccount_zero_or_farkas_of_fundingRoot
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) (support : Finset ι)
     (hsupport : IsQuittingRootInteriorOnSupport root support)
     (tailRoot : QuittingRootSimplex ι)
@@ -414,7 +414,7 @@ theorem debt_zero_le_aggregateCapacityAccount_zero_or_farkas_of_fundingRoot
     ⟨continuation, hlift, hedge⟩ | hfarkas
   · left
     exact ⟨debt_zero_le_aggregateCapacityAccount_zero_of_frozenRootLift
-      path hpath hpunishment regime root support hsupport continuation hlift
+      path hpath hpunishment witness root support hsupport continuation hlift
         hpays, continuation, hlift, hedge⟩
   · exact Or.inr hfarkas
 
@@ -430,7 +430,7 @@ The saturated boundary where terminal debt equals the full scale is not
 covered: it would force hazard one, outside the strict-interior support
 decoder used by the affine alternative. -/
 theorem strict_terminalDebt_fundingEdge_or_farkas
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tailRoot : QuittingRootSimplex ι)
     (hpositive : 0 < debt (reward := reward) path cutoff)
     (hstrict : debt (reward := reward) path cutoff <
@@ -488,7 +488,7 @@ theorem strict_terminalDebt_fundingEdge_or_farkas
     change terminalDebt ≤ scale * quittingRootAbsorptionMass root
     rw [hfunds]
   rcases debt_zero_le_aggregateCapacityAccount_zero_or_farkas_of_fundingRoot
-      path hpath hpunishment regime root support hsupport tailRoot hpays with
+      path hpath hpunishment witness root support hsupport tailRoot hpays with
     ⟨hcarry, continuation, hlift, hedge⟩ | hfarkas
   · left
     refine ⟨hcarry, root, support, continuation, hsupport, ?_, hlift, hedge⟩
@@ -499,16 +499,16 @@ theorem strict_terminalDebt_fundingEdge_or_farkas
 
 end QuittingFiniteDynamicDebtAdmissibleChronology
 
-/-! ## Counterexample-regime exhaustion of the strict terminal branch -/
+/-! ## Terminal exploitability witness exhaustion of the strict terminal branch -/
 
 namespace QuittingAggregateCalibratedTerminalAnchor
 
-/-- In a counterexample regime the terminal aggregate debt is automatically
+/-- In a terminal exploitability witness the terminal aggregate debt is automatically
 strictly below the `card * rewardBound` funding scale.  The important sharp
 estimate is `terminal debt ≤ rewardBound`; the regime supplies at least four
 players, so the saturated branch cannot occur. -/
 theorem terminalAggregateDebt_lt_card_mul_rewardBound
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward) :
     (∑ who, quittingPositiveSingletonDebtCap reward who) <
       (Fintype.card ι : ℝ) * quittingRewardBound reward := by
@@ -520,20 +520,20 @@ theorem terminalAggregateDebt_lt_card_mul_rewardBound
   have hboundPos : 0 < quittingRewardBound reward :=
     hdebtPos.trans_le hdebtLe
   have hcard : (3 : ℝ) < Fintype.card ι := by
-    exact_mod_cast regime.three_lt_card
+    exact_mod_cast witness.three_lt_card
   nlinarith
 
-/-- **Counterexample-regime terminal boundary alternative.**  For every
+/-- **Terminal exploitability witness terminal-boundary alternative.**  For every
 calibrated positive-debt anchor in the nonpositive-floor lane, the canonical
 one-owner strict funding root is available automatically.  Hence the finite
 boundary is genuinely exhausted by a floor-admissible incoming edge and the
 carry comparison, unless explicit finite Farkas multipliers reject that
 specific game-facing continuation system.
 
-There is no saturated residual in a counterexample regime: the sum-form
+There is no saturated residual in a terminal exploitability witness: the sum-form
 reward bound and `card ≥ 4` force strictness. -/
 theorem boundaryCarry_fundingEdge_or_farkas
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0) :
     (QuittingFiniteDynamicDebtAdmissibleChronology.debt
@@ -562,14 +562,14 @@ theorem boundaryCarry_fundingEdge_or_farkas
           (quittingPunishmentValue reward) (quittingRewardBound reward)
           root support := by
   apply QuittingFiniteDynamicDebtAdmissibleChronology.strict_terminalDebt_fundingEdge_or_farkas
-    anchor.path anchor.path_mem hpunishment regime quittingAllContinueSimplexRoot
+    anchor.path anchor.path_mem hpunishment witness quittingAllContinueSimplexRoot
   · rw [QuittingFiniteDynamicDebtAdmissibleChronology.debt_cutoff_eq_sum_positiveSingletonDebtCap]
     exact anchor.terminalAggregateDebt_pos
   · rw [QuittingFiniteDynamicDebtAdmissibleChronology.debt_cutoff_eq_sum_positiveSingletonDebtCap]
-    exact anchor.terminalAggregateDebt_lt_card_mul_rewardBound regime
+    exact anchor.terminalAggregateDebt_lt_card_mul_rewardBound witness
 
 /-- **Unconditional finite boundary-exhaustion trichotomy.**  In the
-counterexample-regime nonpositive-floor lane, every calibrated anchor has
+nonpositive-floor lane under a terminal exploitability witness, every calibrated anchor has
 one of three game-facing outcomes:
 
 * the first or second exact finite edge lies in every debt-source zero face;
@@ -583,8 +583,8 @@ positive initial capacity slack.  Eliminating that slack requires the still
 missing reverse objective comparison; terminal boundary domination alone
 cannot do it. -/
 theorem zeroFace_zero_or_one_or_initialCapacitySlack_or_farkas
-    (regime : QuittingCounterexampleRegime reward)
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0) :
     anchor.IsAllDebtSourceZeroFace 0 ∨
@@ -602,7 +602,7 @@ theorem zeroFace_zero_or_one_or_initialCapacitySlack_or_farkas
         HasQuittingFrozenRootLiftFarkasCertificate (reward := reward) 0
           (quittingPunishmentValue reward) (quittingRewardBound reward)
           root support := by
-  rcases anchor.boundaryCarry_fundingEdge_or_farkas regime hpunishment with
+  rcases anchor.boundaryCarry_fundingEdge_or_farkas witness hpunishment with
     ⟨hcarry, root, support, continuation, hsupport, hfunds, hlift, _hedge⟩ |
       ⟨root, support, hsupport, hfunds, hfarkas⟩
   · by_cases htight :

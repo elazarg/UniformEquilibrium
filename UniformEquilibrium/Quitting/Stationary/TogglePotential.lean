@@ -16,7 +16,7 @@ exploitability invariants, and the analogous stationary-cap infimum.
 A natural-valued ordinal potential which increases on every profitable toggle
 has a maximizing coalition.  That coalition is a sure exit set and therefore
 produces a uniform-equilibrium payoff.  These constructions assume no
-counterexample regime.
+terminal exploitability witness.
 -/
 
 noncomputable section

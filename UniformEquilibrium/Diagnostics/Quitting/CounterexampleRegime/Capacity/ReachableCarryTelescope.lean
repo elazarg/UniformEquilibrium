@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Debt.Dynamic.ReachableCarryTelescope
 
 /-!
 # Counterexample-capacity instances of the finite carry telescope
 
 The production telescope assumes exactly a finite-prefix charge bound. These
-three adapters discharge that premise from a counterexample regime for the
+three adapters discharge that premise from a terminal exploitability witness for the
 canonical aggregate-calibrated terminal anchor.
 -/
 
@@ -32,7 +32,7 @@ cross-cutoff nesting is needed.  The terminal exact-D cap must still be paid
 by the global admissible remaining-capacity account at that same terminal
 state. -/
 theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_far
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     (hfar :
@@ -45,11 +45,11 @@ theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_far
       QuittingFiniteDynamicDebtAdmissibleChronology.aggregateCapacityAccount
         anchor.path anchor.path_mem hpunishment 0 :=
   QuittingFiniteDynamicDebtAdmissibleChronology.debt_zero_le_aggregateCapacityAccount_zero_of_far
-      anchor.path anchor.path_mem hpunishment regime.prefixCharge_le hfar
+      anchor.path anchor.path_mem hpunishment witness.prefixCharge_le hfar
 
 /-- Aggregate-calibrated zero-cap specialization. -/
 theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_terminalCap_eq_zero
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     (hterminalCap : ∀ who,
@@ -59,12 +59,12 @@ theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_terminalC
       QuittingFiniteDynamicDebtAdmissibleChronology.aggregateCapacityAccount
         anchor.path anchor.path_mem hpunishment 0 :=
   debt_zero_le_aggregateCapacityAccount_zero_of_terminalCap_eq_zero
-      anchor.path anchor.path_mem hpunishment regime.prefixCharge_le
+      anchor.path anchor.path_mem hpunishment witness.prefixCharge_le
         hterminalCap
 
 /-- Aggregate-calibrated incoming-path consumer. -/
 theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_incomingPath
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0)
     {sourceState : QuittingPunishmentFloorAdmissibleState reward}
@@ -82,7 +82,7 @@ theorem aggregateCalibratedAnchor_initialDebt_le_admissibleCapacity_of_incomingP
       QuittingFiniteDynamicDebtAdmissibleChronology.aggregateCapacityAccount
         anchor.path anchor.path_mem hpunishment 0 :=
   debt_zero_le_aggregateCapacityAccount_zero_of_incomingPath
-      anchor.path anchor.path_mem hpunishment regime.prefixCharge_le segment
+      anchor.path anchor.path_mem hpunishment witness.prefixCharge_le segment
         hpays
 
 end GameTheory

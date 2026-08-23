@@ -41,9 +41,9 @@ are the same condition.
 
 ## Main results
 
-* `isEmpty_counterexampleRegime_colliderSliverTwo`,
-  `isEmpty_counterexampleRegime_colliderSliverThree` — the two slabs carry no
-  counterexample regime
+* `isEmpty_terminalExploitabilityWitness_colliderSliverTwo`,
+  `isEmpty_terminalExploitabilityWitness_colliderSliverThree` — the two slabs carry no
+  terminal exploitability witness
 -/
 
 noncomputable section
@@ -57,14 +57,14 @@ variable {s low : ℝ} {m : ZMod 5 → ℝ}
 
 /-! ## The hyperplane `m 2 = 0` -/
 
-/-- **The slab `m 2 = 0` carries no counterexample regime.**  The step-two
+/-- **The slab `m 2 = 0` carries no terminal exploitability witness.**  The step-two
 constant-step cyclic profile is an exact equilibrium at the root in `(0, 1)` of
 `m 4 + m 1 q + m 3 q²`.  The neighbour margin `m 1` is unconstrained. -/
-theorem isEmpty_counterexampleRegime_colliderSliverTwo
+theorem isEmpty_terminalExploitabilityWitness_colliderSliverTwo
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ s)
     (hm2 : m 2 = 0) (hm4 : m 4 < 0) (hsum : 0 < m 1 + m 3 + m 4)
     (hfloor : low - s ≤ m 3) :
-    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
+    IsEmpty (QuittingTerminalExploitabilityWitness (colliderReward s low m)) := by
   obtain ⟨q, hq, hroot⟩ :=
     Math.exists_quadratic_root_mem_Ioo (a := m 4) (b := m 1) (c := m 3) hm4
       (by linarith)
@@ -79,7 +79,7 @@ theorem isEmpty_counterexampleRegime_colliderSliverTwo
   -- the anchor equation funds the deepest partial sum
   have htail : 0 < m 1 + q * m 3 := by
     nlinarith [hq0]
-  refine isEmpty_counterexampleRegime_constantStep (c' := 2)
+  refine isEmpty_terminalExploitabilityWitness_constantStep (c' := 2)
     (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0.le hq1
     hanchor ?_ ?_ ?_ ?_
   · rw [colliderJoin_of_ne s low (by decide)]
@@ -93,14 +93,14 @@ theorem isEmpty_counterexampleRegime_colliderSliverTwo
 
 /-! ## The hyperplane `m 3 = 0` -/
 
-/-- **The slab `m 3 = 0` carries no counterexample regime.**  The step-three
+/-- **The slab `m 3 = 0` carries no terminal exploitability witness.**  The step-three
 constant-step cyclic profile is an exact equilibrium at the root in `(0, 1)` of
 `m 1 + m 4 q + m 2 q²`.  The distance-four margin `m 4` is unconstrained. -/
-theorem isEmpty_counterexampleRegime_colliderSliverThree
+theorem isEmpty_terminalExploitabilityWitness_colliderSliverThree
     (hm0 : m 0 = 0) (hs : 0 ≤ s) (hlow : low ≤ s)
     (hm3 : m 3 = 0) (hm1 : m 1 < 0) (hsum : 0 < m 1 + m 2 + m 4)
     (hfloor : low - s ≤ m 2) :
-    IsEmpty (QuittingCounterexampleRegime (colliderReward s low m)) := by
+    IsEmpty (QuittingTerminalExploitabilityWitness (colliderReward s low m)) := by
   obtain ⟨q, hq, hroot⟩ :=
     Math.exists_quadratic_root_mem_Ioo (a := m 1) (b := m 4) (c := m 2) hm1
       (by linarith)
@@ -114,7 +114,7 @@ theorem isEmpty_counterexampleRegime_colliderSliverThree
     linear_combination q * hroot
   have htail : 0 < m 4 + q * m 2 := by
     nlinarith [hq0]
-  refine isEmpty_counterexampleRegime_constantStep (c' := 3)
+  refine isEmpty_terminalExploitabilityWitness_constantStep (c' := 3)
     (isCirculantPairTable_colliderReward s low m hm0) (by decide) hs hq0.le hq1
     hanchor ?_ ?_ ?_ ?_
   · rw [colliderJoin_of_ne s low (by decide)]

@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorInfiniteOrbitLi
 /-!
 # Value convergence along infinite exact punishment-floor orbits
 
-Inside a quitting counterexample regime, every arbitrary infinite exact
+Inside a quitting terminal exploitability witness, every arbitrary infinite exact
 punishment-floor Nash--Bellman orbit has summable absorption mass.  This
 module derives the resulting limit geometry of the orbit's Bellman
 annotations.
@@ -46,13 +46,13 @@ open Filter
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Every player's opponent-absorption hazard vanishes along every arbitrary
 infinite exact punishment-floor orbit, being squeezed by the joint
 absorption mass. -/
 theorem infiniteOrbit_opponentAbsorptionMass_tendsto_zero
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) (who : ι) :
     Tendsto (fun time =>
         quittingRootOpponentAbsorptionMass (orbit.roots time) who)
@@ -62,22 +62,22 @@ theorem infiniteOrbit_opponentAbsorptionMass_tendsto_zero
   · exact fun time =>
       quittingRootOpponentAbsorptionMass_le_absorptionMass
         (orbit.roots time) who
-  · exact regime.infiniteOrbit_absorptionMass_tendsto_zero orbit
+  · exact witness.infiniteOrbit_absorptionMass_tendsto_zero orbit
 
 /-- Coordinatewise absolute increments of the orbit annotations are
 summable, by comparison with the summable absorption masses. -/
 theorem infiniteOrbit_abs_value_succ_sub_summable
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) (who : ι) :
     Summable (fun time =>
       |orbit.value (time + 1) who - orbit.value time who|) :=
   Summable.of_nonneg_of_le (fun _ => abs_nonneg _)
     (fun time => orbit.abs_value_succ_sub_le_two_mul_absorptionMass time who)
-    ((regime.infiniteOrbit_absorptionMass_summable orbit).mul_left
+    ((witness.infiniteOrbit_absorptionMass_summable orbit).mul_left
       (2 * quittingRewardBound reward))
 
 /-- **All-orbits value limit.**  Along every arbitrary infinite exact
-punishment-floor orbit of a counterexample regime, the Bellman annotations
+punishment-floor orbit of a terminal exploitability witness, the Bellman annotations
 converge coordinatewise to a single payoff vector.  The limit lies in the
 canonical compact reward box, dominates the behavioral punishment floor, and
 dominates every player's own solo reward: the one-shot quit deviation
@@ -86,7 +86,7 @@ survives passage to the limit because opponent absorption vanishes.
 The annotations are prescribed Bellman values, not realized payoffs of any
 strategy profile; no realization claim is made about the limit. -/
 theorem infiniteOrbit_exists_value_limit
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
     ∃ limit : Payoff ι,
       (∀ who, Tendsto (fun time => orbit.value time who) atTop
@@ -101,7 +101,7 @@ theorem infiniteOrbit_exists_value_limit
     have hdist : Summable (fun time =>
         dist (orbit.value time who) (orbit.value (time + 1) who)) := by
       simpa [Real.dist_eq, abs_sub_comm] using
-        regime.infiniteOrbit_abs_value_succ_sub_summable orbit who
+        witness.infiniteOrbit_abs_value_succ_sub_summable orbit who
     exact cauchySeq_tendsto_of_complete (cauchySeq_of_summable_dist hdist)
   choose limit hlimit using hconverge
   refine ⟨limit, hlimit, ?_, ?_, ?_⟩
@@ -126,7 +126,7 @@ theorem infiniteOrbit_exists_value_limit
           quittingRootOpponentAbsorptionMass (orbit.roots time) who)
         atTop (nhds 0) := by
       simpa using
-        (regime.infiniteOrbit_opponentAbsorptionMass_tendsto_zero orbit
+        (witness.infiniteOrbit_opponentAbsorptionMass_tendsto_zero orbit
           who).const_mul (2 * quittingRewardBound reward)
     have hlower : Tendsto (fun time =>
         quittingSoloReward reward who who -
@@ -138,6 +138,6 @@ theorem infiniteOrbit_exists_value_limit
       (fun time =>
         orbit.soloReward_sub_opponentHazard_le_value_succ time who)
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

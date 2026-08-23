@@ -11,7 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransf
 # Counterexample cardinality in the debt-transfer separator
 
 The generic reset/incidence separator exposes three distinct player labels.
-In the counterexample regime the unconditional three-player theorem excludes
+In the terminal exploitability witness the unconditional three-player theorem excludes
 the equality case, so the unmatched branch lives only at four or more
 players.
 -/
@@ -26,13 +26,13 @@ open scoped Topology
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- In a genuine counterexample, the unmatched reset/incidence separator has
 ambient cardinality at least four.  The three-player output of the generic
 finite geometry is dispatched by unconditional three-player existence. -/
 theorem exists_matched_transfer_incidence_or_twoOpponent_separator_fourPlayers
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair iota) (who : iota)
     (mass : QuittingTerminalOutcome iota → Real)
     (hmass : mass ∈ stdSimplex Real (QuittingTerminalOutcome iota))
@@ -57,8 +57,8 @@ theorem exists_matched_transfer_incidence_or_twoOpponent_separator_fourPlayers
       haverage, hpositive, _hthree⟩
   · exact Or.inl hmatch
   · exact Or.inr ⟨receiver, quitter, hreceiver, hquitter, hdistinct,
-      haverage, hpositive, regime.three_lt_card⟩
+      haverage, hpositive, witness.three_lt_card⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

@@ -8,12 +8,12 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Capacity.Ter
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalFunding.OneOwnerFarkas
 
 /-!
-# Counterexample-regime terminal-funding Farkas adapter
+# Terminal exploitability witness terminal-funding Farkas adapter
 
 The production one-owner classification shows that a positive singleton debt
 cap forces the canonical strict one-owner zero-target root into the Farkas
 branch. This module applies that result to the aggregate-calibrated terminal
-anchor supplied by a counterexample regime.
+anchor supplied by a terminal exploitability witness.
 -/
 
 noncomputable section
@@ -32,7 +32,7 @@ namespace QuittingAggregateCalibratedTerminalAnchor
 hazard funds the aggregate terminal cap, but positive singleton debt forces
 its affine continuation problem into the Farkas branch. -/
 theorem exists_canonicalOwnerFundingFarkas
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward) :
     ∃ p : ℝ, ∃ hp0 : 0 < p, ∃ hp1 : p < 1,
       (Fintype.card ι : ℝ) * quittingRewardBound reward * p =
@@ -51,7 +51,7 @@ theorem exists_canonicalOwnerFundingFarkas
   have hdebtPos : 0 < terminalDebt := by
     exact anchor.terminalAggregateDebt_pos
   have hdebtLt : terminalDebt < scale := by
-    exact anchor.terminalAggregateDebt_lt_card_mul_rewardBound regime
+    exact anchor.terminalAggregateDebt_lt_card_mul_rewardBound witness
   have hscale : 0 < scale := hdebtPos.trans hdebtLt
   let p := terminalDebt / scale
   have hp0 : 0 < p := div_pos hdebtPos hscale

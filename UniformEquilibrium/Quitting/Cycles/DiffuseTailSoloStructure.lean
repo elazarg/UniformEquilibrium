@@ -670,7 +670,7 @@ theorem isEmpty_fencedSoloWindows_of_zeroFree
 positive margin, fenced solo windows are impossible in an exact diffuse tail:
 coexistence would force the gate entry to vanish, but the edge keeps it at
 most `-gap`.  So the face-enlargement reading of an obstruction is
-unavailable exactly where a counterexample regime supplies edges. -/
+unavailable exactly where a terminal exploitability witness supplies edges. -/
 theorem isEmpty_fencedSoloWindows_of_quittingSoloPreempts
     (roots : ℕ → ι → PMF Bool) (value : ℕ → Payoff ι) (boundary : Payoff ι)
     (hpolicy : ∀ time, value time =

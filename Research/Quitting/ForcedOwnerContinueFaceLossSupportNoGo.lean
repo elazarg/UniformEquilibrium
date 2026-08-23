@@ -25,7 +25,7 @@ cancels the entire face loss when returning to the actual source.
 Thus even full support supplies no legal source-matched gain.  A consumer of
 `quittingFiniteForcedOwnerContinueFaceLossOccupation` needs an additional
 signed source-transport premise; an action-support lower bound alone is not
-enough.  This is a local quitting regression, not a counterexample-regime
+enough.  This is a local quitting regression, not a terminal exploitability witness
 construction.
 -/
 

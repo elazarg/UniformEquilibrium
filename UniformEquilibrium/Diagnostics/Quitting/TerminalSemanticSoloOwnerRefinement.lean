@@ -139,8 +139,8 @@ latter branch, the selected solo row either closes at the owner's singleton
 vector, landing in the quantitative isolated-negative branch, or a second
 (possibly equal) outsider witnesses the exact affine failure of that closure.
 -/
-theorem QuittingCounterexampleRegime.minimumTerminalSemantic_soloOwner_refinement
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.minimumTerminalSemantic_soloOwner_refinement
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
@@ -163,7 +163,7 @@ theorem QuittingCounterexampleRegime.minimumTerminalSemantic_soloOwner_refinemen
         0 < (root owner true).toReal ∧
         quittingSoloReward reward owner owner = pair.1 owner ∧
         (∀ player, player ≠ owner → root player = PMF.pure false) ∧
-        ((quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+        ((quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
             quittingSoloReward reward owner owner <
               quittingPunishmentValue reward owner) ∨
           ∃ blocker, blocker ≠ owner ∧
@@ -207,9 +207,9 @@ theorem QuittingCounterexampleRegime.minimumTerminalSemantic_soloOwner_refinemen
           (quittingSoloStationaryRoot owner hazard) := by
         simpa only [hroot] using hsolo
       exact Or.inl
-        ⟨regime.soloReward_le_neg_terminalGap_of_soloEndpointNash
+        ⟨witness.soloReward_le_neg_terminalGap_of_soloEndpointNash
             owner hazard hhazardPositive hsolo',
-          regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+          witness.soloReward_lt_punishmentValue_of_soloEndpointNash
             owner hazard hhazardPositive hsolo'⟩
     · have hnotInactive : ¬ ∀ blocker, blocker ≠ owner →
           (hazard false).toReal *

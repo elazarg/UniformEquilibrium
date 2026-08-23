@@ -236,12 +236,12 @@ end QuittingChargeTangentPacket
 
 /-! ## Counterexample sign consequence -/
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- A charge packet at a positive minimum prescribed boundary is a single
 owner whose singleton exit strictly underfunds some distinct outsider. -/
 theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingChargeTangentPacket reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
@@ -260,7 +260,7 @@ theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
     packet.tangent_eq_zero_of_boundary_eq_minimumTerminalSemantic
       pair owner hpair hminimum hpositive hboundary howner
   obtain ⟨who, hwho⟩ | ⟨active, hactiveMass, hactiveTangent⟩ :=
-    regime.chargeTangentPacket_underfunded_or_active_funded packet
+    witness.chargeTangentPacket_underfunded_or_active_funded packet
   · have hwhoNe : who ≠ owner := by
       intro heq
       subst who
@@ -279,6 +279,6 @@ theorem chargeTangentPacket_minimumBoundary_underfunds_outsider
     · rw [hzero active hactiveOwner] at hactiveMass
       linarith
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

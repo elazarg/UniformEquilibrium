@@ -44,8 +44,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 prefix stacks ending at the atom-producing continuation profiles. -/
 structure QuittingStoppingLawAtomExactPrefixChronology
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   observer : ι
   charge : ℝ
@@ -83,8 +83,8 @@ namespace QuittingCounterexampleStoppingLawFrontier
 is the mover- and observer-preserving form of the chronology constructor. -/
 theorem nonempty_atomExactPrefixChronology_of_fixedAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ)
     (hobserver : observer ≠ mover.1) (hcharge : 0 < charge)
     (hatom : ∀ᶠ rank in atTop,
@@ -188,8 +188,8 @@ strategy.  It does not pass to an infinite-path limit, where the terminal
 atom could escape to infinity. -/
 theorem nonempty_atomExactPrefixChronology
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawAtomExactPrefixChronology frontier) := by
   obtain ⟨mover, observer, charge, hobserver, hcharge, hatom⟩ :=
     frontier.exists_fixedAtomAlternative
@@ -206,8 +206,8 @@ namespace QuittingStoppingLawAtomExactPrefixChronology
 opponent-deleted survival clock of every positive-debt player. -/
 theorem opponentSurvival_tendsto_one
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
     {who : ι} (hwho : who ∈ frontier.active) :
     Tendsto (fun rank =>
@@ -335,8 +335,8 @@ The only branch not covered is `frontier.active.card = 1`, where the unique
 debtor's own hazards are invisible to its opponent-deleted debt clock. -/
 theorem jointSurvival_tendsto_one_of_twoActive
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
     {first second : ι} (hfirst : first ∈ frontier.active)
     (hsecond : second ∈ frontier.active) (hne : first ≠ second) :
@@ -370,8 +370,8 @@ branch this says that only the unique active owner can preempt access to the
 terminal atom suffix. -/
 theorem ownSurvival_tendsto_one_of_active_ne
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier)
     {owner other : ι} (howner : owner ∈ frontier.active)
     (hne : other ≠ owner) :
@@ -396,8 +396,8 @@ survival to one and the literal atom suffix remains asymptotically reached.
 -/
 theorem singletonActive_or_jointSurvival_tendsto_one
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (chronology : QuittingStoppingLawAtomExactPrefixChronology frontier) :
     (∃ owner : ι,
       frontier.active = {owner} ∧

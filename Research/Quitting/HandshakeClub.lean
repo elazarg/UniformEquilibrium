@@ -286,24 +286,24 @@ namespace IsResidual
 
 variable {club : Club ι}
 
-/-- Every quitting counterexample regime produces a residual handshake club. -/
-theorem ofCounterexampleRegime
-    (regime : QuittingCounterexampleRegime club.severance) :
+/-- Every quitting terminal exploitability witness produces a residual handshake club. -/
+theorem ofTerminalExploitabilityWitness
+    (witness : QuittingTerminalExploitabilityWitness club.severance) :
     club.IsResidual where
   four_members := by
-    have hcard := regime.three_lt_card
+    have hcard := witness.three_lt_card
     omega
   live_handshake := by
-    obtain ⟨owner, howner⟩ := regime.exists_terminalGap_le_soloReward
-    exact ⟨owner, regime.terminalGap_pos.trans_le howner⟩
-  no_walkout_pact := regime.not_isQuittingSureExitSet
+    obtain ⟨owner, howner⟩ := witness.exists_terminalGap_le_soloReward
+    exact ⟨owner, witness.terminalGap_pos.trans_le howner⟩
+  no_walkout_pact := witness.not_isQuittingSureExitSet
   no_certified_rota := by
     intro hrota
-    exact regime.not_exists_uniformEquilibriumPayoff
+    exact witness.not_exists_uniformEquilibriumPayoff
       (club.exists_uniformEquilibriumPayoff_of_certifiedRota hrota)
   prospectus_feasible :=
-    regime.nonempty_normalizedSingletonSourcePacket
-  finite_clearing_capacity := regime.prefixChargeCapacity_ne_top
+    witness.nonempty_normalizedSingletonSourcePacket
+  finite_clearing_capacity := witness.prefixChargeCapacity_ne_top
 
 end IsResidual
 
@@ -318,9 +318,9 @@ theorem solve_residual_implies_solve_all [Nonempty ι]
       candidate.game.IsUniformEquilibriumPayoff none payoff := by
   intro candidate
   by_contra hno
-  let regime := quittingCounterexampleRegimeOfNoUniformPayoff
+  let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff
     candidate.severance hno
-  exact hno (solver candidate (.ofCounterexampleRegime regime))
+  exact hno (solver candidate (.ofTerminalExploitabilityWitness witness))
 
 /-- An arbitrary exact security-floor accounting orbit. -/
 abbrev AccountingOrbit :=
@@ -338,11 +338,11 @@ namespace GlacialRotation
 variable {club : Club ι}
 
 /-- Finite capacity makes every exact accounting orbit glacial. -/
-def ofCounterexampleRegime
-    (regime : QuittingCounterexampleRegime club.severance)
+def ofTerminalExploitabilityWitness
+    (witness : QuittingTerminalExploitabilityWitness club.severance)
     (orbit : club.AccountingOrbit) : club.GlacialRotation where
   orbit := orbit
-  intensity_summable := regime.infiniteOrbit_absorptionMass_summable orbit
+  intensity_summable := witness.infiniteOrbit_absorptionMass_summable orbit
 
 /-- Nonnegative-real presentation of the rotation's joint walk intensity. -/
 def intensityNNReal (rotation : club.GlacialRotation) (time : ℕ) : NNReal :=
@@ -363,11 +363,11 @@ theorem lateDissolutionUnionBound_tendsto_zero
     Tendsto rotation.lateDissolutionUnionBound atTop (nhds 0) := by
   exact NNReal.tendsto_sum_nat_add rotation.intensityNNReal
 
-/-- The counterexample regime attaches a limiting phantom account to every
+/-- The terminal exploitability witness attaches a limiting phantom account to every
 glacial rotation.  This limit is not identified with any prospectus target. -/
 theorem exists_orbitAttachedPhantomAccount
     (rotation : club.GlacialRotation)
-    (regime : QuittingCounterexampleRegime club.severance) :
+    (witness : QuittingTerminalExploitabilityWitness club.severance) :
     ∃ limit : Payoff ι,
       (∀ who, Tendsto (fun time => rotation.orbit.value time who) atTop
         (nhds (limit who))) ∧
@@ -375,7 +375,7 @@ theorem exists_orbitAttachedPhantomAccount
       (∀ who, quittingPunishmentValue club.severance who ≤ limit who) ∧
       club.IsBarePhantomAccount limit := by
   simpa only [IsBarePhantomAccount, noWalkPoint] using
-    regime.infiniteOrbit_exists_selfLoop_limit rotation.orbit
+    witness.infiniteOrbit_exists_selfLoop_limit rotation.orbit
 
 end GlacialRotation
 

@@ -166,8 +166,8 @@ theorem terminalSemantic_debtHomotopy_nontrivial_forces_strict_excess
 /-- A nontrivial endpoint of the debt homotopy is a unique solo debt gate.
 In a counterexample, that gate immediately has either a strict outsider
 joiner or a positive punishment moat. -/
-theorem QuittingCounterexampleRegime.minimumDebtHomotopy_endpoint_selection
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.minimumDebtHomotopy_endpoint_selection
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
@@ -202,7 +202,7 @@ theorem QuittingCounterexampleRegime.minimumDebtHomotopy_endpoint_selection
         with hcontinue | ⟨owner, hgate, hquit, hsolo⟩
   · exact Or.inl hcontinue
   · exact Or.inr ⟨owner, hgate, hquit, hsolo,
-      regime.strictJoiner_or_soloReward_lt_punishmentValue owner⟩
+      witness.strictJoiner_or_soloReward_lt_punishmentValue owner⟩
 
 /-! ## Honest closed-homotopy stalling regression -/
 

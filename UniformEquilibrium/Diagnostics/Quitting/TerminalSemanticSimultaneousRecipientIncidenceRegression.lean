@@ -17,7 +17,7 @@ about the behavioral best-response envelope.  It does not identify a terminal
 coalition in the prescribed law.  This file records both sides of that seam.
 
 First, an explicit incidence bridge consumes the joint recipient immediately:
-in a counterexample regime, its co-realized positive incidence yields a
+in a terminal exploitability witness, its co-realized positive incidence yields a
 positive-mass terminal atom with a strict membership toggle.  The other branch
 retains the already-localized positive-slope edge.
 
@@ -524,7 +524,7 @@ def HasQuittingFlatJointRecipientAtomicCertificate
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Exact consumer for the joint-recipient branch.**
 
@@ -533,7 +533,7 @@ the complete law of that same literal simultaneous target, then reset
 orientation localization reaches a named consumer on both branches:
 
 * the joint branch gives a positive-mass terminal atom with a strict static
-  toggle in the counterexample regime;
+  toggle in the terminal exploitability witness;
 * the interaction branch retains its literal positive-slope atom.
 
 The incidence bridge is the only additional premise.  The two-player
@@ -541,7 +541,7 @@ regression above proves that it cannot be inferred from flatness, the owner
 drop, the recipient rise, and the full reset passport. -/
 theorem activePassport_flatSimultaneous_atomicRecipient_or_localizedPositiveSlope
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profile : (quittingGame reward).BehaviorProfile)
     (replacement : ∀ who, (quittingGame reward).BehaviorStrategy who)
     (who : ι) (terminal : {S : Finset ι // S.Nonempty}) (cutoff : ℕ)
@@ -615,12 +615,12 @@ theorem activePassport_flatSimultaneous_atomicRecipient_or_localizedPositiveSlop
     have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward
       (quittingSimultaneousStoppingLawMixtureProfile reward profile replacement
         lambda hlambda0.le hlambda1)
-    exact regime.exists_supportedStrictToggle_of_incidence who recipient
+    exact witness.exists_supportedStrictToggle_of_incidence who recipient
       (quittingTerminalOutcomeMass reward
         (quittingSimultaneousStoppingLawMixtureProfile reward profile replacement
           lambda hlambda0.le hlambda1)) hsimplex hincidence
   · exact Or.inr hslope
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

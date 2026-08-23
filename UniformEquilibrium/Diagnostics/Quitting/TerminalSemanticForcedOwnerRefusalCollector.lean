@@ -391,8 +391,8 @@ the single fixed terminal owner.  Thus owner refusal is no longer a residual
 of the observer-absent wall. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteClock_strategicSplit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -400,7 +400,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     quittingStoppingLawObserverAbsentMassLower packet *
-          regime.terminalGap / 2 ≤
+          witness.terminalGap / 2 ≤
         ∑ time ∈ Finset.range stop,
           quittingStageCoalitionMass reward profile time packet.terminal *
             quittingForcedOwnerOutsiderDefect reward
@@ -409,7 +409,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
                 (PMF.pure true)) owner ∨
       ∃ deviation : (quittingGame reward).BehaviorStrategy owner,
         quittingStoppingLawObserverAbsentMassLower packet *
-              regime.terminalGap / 2 - δ ≤
+              witness.terminalGap / 2 - δ ≤
           quittingTerminalPayoff reward
               (Function.update profile owner deviation) owner -
             quittingTerminalPayoff reward profile owner := by
@@ -435,7 +435,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
   have hrowSum :
       (∑ time ∈ Finset.range stop,
           quittingStageCoalitionMass reward profile time packet.terminal) *
-          regime.terminalGap ≤ outsiderCharge + refusalCharge := by
+          witness.terminalGap ≤ outsiderCharge + refusalCharge := by
     rw [Finset.sum_mul]
     have hsum := Finset.sum_le_sum fun time htime => by
       have hrow := hrows n time (by
@@ -470,16 +470,16 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_finiteC
   have hclockN := hclock n
   rw [hstop] at hclockN
   have htotal : quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap ≤ outsiderCharge + refusalCharge := by
+      witness.terminalGap ≤ outsiderCharge + refusalCharge := by
     exact (hweightedLower n).trans (by
       rw [hclockN]
       exact hrowSum)
   by_cases hout : quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap / 2 ≤ outsiderCharge
+      witness.terminalGap / 2 ≤ outsiderCharge
   · exact Or.inl hout
   · right
     have hrefusal : quittingStoppingLawObserverAbsentMassLower packet *
-        regime.terminalGap / 2 ≤ refusalCharge := by
+        witness.terminalGap / 2 ≤ refusalCharge := by
       linarith
     obtain ⟨deviation, hdeviation⟩ :=
       exists_behaviorDeviation_gain_ge_sum_forcedRefusal_sub reward profile

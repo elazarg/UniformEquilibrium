@@ -40,8 +40,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 observer pure-time response. -/
 def quittingStoppingLawRectangleDoubleEndpointProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   Function.update (quittingStoppingLawRectangleTargetProfile packet n)
@@ -53,8 +53,8 @@ def quittingStoppingLawRectangleDoubleEndpointProfile
 strategy and the same observer response is installed. -/
 def quittingStoppingLawRectangleSourceResponseProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   Function.update (frontier.profiles (frontier.subseq (packet.rank n)))
@@ -67,8 +67,8 @@ cluster retains the limiting terminal law of the literal double endpoints.
 The returned point records the separate semantic reset-face minimization. -/
 structure QuittingStoppingLawRectangleResetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) where
   subseq : ℕ → ℕ
   subseq_strictMono : StrictMono subseq
@@ -125,8 +125,8 @@ rank.  This concerns the original double endpoints, not the semantic point
 `dispatch.returned`. -/
 theorem QuittingStoppingLawRectangleResetFaceDispatch.atom_bound
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier}
     (dispatch : QuittingStoppingLawRectangleResetFaceDispatch packet)
     (n : ℕ) :
@@ -147,8 +147,8 @@ theorem QuittingStoppingLawRectangleResetFaceDispatch.atom_bound
 or near-minimality assumption on the double endpoints is needed. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.nonempty_resetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     Nonempty (QuittingStoppingLawRectangleResetFaceDispatch packet) := by
   let endpoint : ℕ → QuittingTerminalSemanticLawPoint ι := fun n =>
@@ -206,8 +206,8 @@ every rectangle branch reaches the semantic reset-face return/separation
 consumer without an extra endpoint-return hypothesis. -/
 theorem exists_prescribedAtomSequence_or_rectangleResetFaceDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         Nonempty (QuittingStoppingLawRectangleResetFaceDispatch packet) := by

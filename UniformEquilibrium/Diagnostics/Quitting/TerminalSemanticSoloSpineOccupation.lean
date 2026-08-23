@@ -409,8 +409,8 @@ theorem isZeroSoloEndpointNash_of_terminalSemanticSoloSpine_survival_tendsto_zer
 
 /-- In a counterexample, complete owner absorption on a fixed-owner semantic
 spine can only land in the quantitative isolated-negative atomic branch. -/
-theorem QuittingCounterexampleRegime.atomic_restrictions_of_soloSemanticSpine_survival_zero
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.atomic_restrictions_of_soloSemanticSpine_survival_zero
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
@@ -424,7 +424,7 @@ theorem QuittingCounterexampleRegime.atomic_restrictions_of_soloSemanticSpine_su
     (hcontinue : 0 < (root 0 owner false).toReal)
     (hsurvival : Tendsto
       (quittingSoloSemanticSurvival root owner 0) atTop (nhds 0)) :
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
       quittingSoloReward reward owner owner <
         quittingPunishmentValue reward owner := by
   have hendpoint :=
@@ -434,11 +434,11 @@ theorem QuittingCounterexampleRegime.atomic_restrictions_of_soloSemanticSpine_su
       quittingSoloStationaryRoot owner (root 0 owner) :=
     eq_quittingSoloStationaryRoot_of_others_continue (hpure 0)
   constructor
-  · apply regime.soloReward_le_neg_terminalGap_of_soloEndpointNash
+  · apply witness.soloReward_le_neg_terminalGap_of_soloEndpointNash
       owner (root 0 owner) hquit
     rw [hroot] at hendpoint
     exact hendpoint
-  · apply regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+  · apply witness.soloReward_lt_punishmentValue_of_soloEndpointNash
       owner (root 0 owner) hquit
     rw [hroot] at hendpoint
     exact hendpoint
@@ -449,8 +449,8 @@ positive amount of owner-survival mass.  Moreover its owner-tight finite
 reward-moment slice contains a vector other than the owner's singleton reward.
 Both conclusions are finite/searchable except for the displayed survival
 lower bound. -/
-theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.nonAtomic_soloSemanticSpine_obstructions
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : ℕ → QuittingTerminalSemanticPair ι)
     (root : ℕ → ι → PMF Bool) (owner : ι)
     (hpair : ∀ time, pair time ∈ quittingTerminalSemanticCarrier reward)
@@ -466,7 +466,7 @@ theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
     (hquit : 0 < (root 0 owner true).toReal)
     (hcontinue : 0 < (root 0 owner false).toReal)
     (hnotAtomic : ¬
-      (quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+      (quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
         quittingSoloReward reward owner owner <
           quittingPunishmentValue reward owner)) :
     (∃ lower, 0 < lower ∧ ∀ fuel,
@@ -478,7 +478,7 @@ theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
       (quittingSoloSemanticSurvival root owner 0) atTop (nhds 0) := by
     intro htendsto
     exact hnotAtomic
-      (regime.atomic_restrictions_of_soloSemanticSpine_survival_zero
+      (witness.atomic_restrictions_of_soloSemanticSpine_survival_zero
         pair root owner hpair hprefix hnash hpure
           hquit hcontinue htendsto)
   have hnotEndpoint : ¬ IsεQuittingRootEndpointNash reward
@@ -494,9 +494,9 @@ theorem QuittingCounterexampleRegime.nonAtomic_soloSemanticSpine_obstructions
       exact hendpoint
     apply hnotAtomic
     exact
-      ⟨regime.soloReward_le_neg_terminalGap_of_soloEndpointNash
+      ⟨witness.soloReward_le_neg_terminalGap_of_soloEndpointNash
           owner (root 0 owner) hquit hendpointSolo,
-        regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+        witness.soloReward_lt_punishmentValue_of_soloEndpointNash
           owner (root 0 owner) hquit hendpointSolo⟩
   refine
     ⟨exists_pos_le_quittingSoloSemanticSurvival_of_not_tendsto_zero
@@ -708,13 +708,13 @@ def HasPositiveMinimumTerminalSemanticPlateau
 /-- A positive-rate atomic solo endpoint together with its quantitative
 isolated-negative and punishment obstructions. -/
 def HasAtomicIsolatedNegativeSoloRow
-    (regime : QuittingCounterexampleRegime reward) : Prop :=
+    (witness : QuittingTerminalExploitabilityWitness reward) : Prop :=
   ∃ (owner : ι) (hazard : PMF Bool),
     0 < (hazard true).toReal ∧
     IsεQuittingRootEndpointNash reward (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard) ∧
     HasIsolatedNegativeAbsorbingQuittingCycle reward ∧
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
     quittingSoloReward reward owner owner <
       quittingPunishmentValue reward owner
 
@@ -787,13 +787,13 @@ A pure-Quit first solo row is absorbed by branch 2: its arbitrary declared
 tail disappears from every endpoint comparison. -/
 theorem exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
-      HasAtomicIsolatedNegativeSoloRow regime ∨
+      HasAtomicIsolatedNegativeSoloRow witness ∨
       HasPositiveSurvivalNontrivialMomentSoloSemanticSpine reward := by
   rcases
       exists_positiveMinimumPlateau_or_fixedOwnerSoloSemanticSpine_of_no_uniformPayoff
-        reward regime.not_exists_uniformEquilibriumPayoff with
+        reward witness.not_exists_uniformEquilibriumPayoff with
     hplateau | ⟨pair, root, owner, debt, hdebt, hpair, hminimum,
       hprefix, hnash, hnoPlateau, hnoMinimumPlateau, hownerDebt, hotherDebt, hquit,
       hpure, hrootSolo, hopponentSurvival, htightNext, hblocker⟩
@@ -815,10 +815,10 @@ theorem exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
         exact hendpoint
       have hisolated :=
         exists_isolatedNegativeCycle_and_soloReward_le_neg_terminalGap
-          regime owner hazard (hquit 0) hendpointSolo
+          witness owner hazard (hquit 0) hendpointSolo
       exact ⟨owner, hazard, hquit 0, hendpointSolo, hisolated.1,
         hisolated.2,
-        regime.soloReward_lt_punishmentValue_of_soloEndpointNash
+        witness.soloReward_lt_punishmentValue_of_soloEndpointNash
           owner hazard (hquit 0) hendpointSolo⟩
     · right
       have hcontinue : 0 < (root 0 owner false).toReal := by
@@ -856,11 +856,11 @@ already contains either a positive minimum all-Continue plateau or a
 quantitative isolated-negative atomic solo row. -/
 theorem exists_semanticPlateau_or_atomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
-      HasAtomicIsolatedNegativeSoloRow regime := by
+      HasAtomicIsolatedNegativeSoloRow witness := by
   rcases exists_semanticPlateau_or_atomicSolo_or_positiveSurvivalSpine_of_noUE
-      regime with hplateau | hatomic | hspine
+      witness with hplateau | hatomic | hspine
   · exact Or.inl hplateau
   · exact Or.inr hatomic
   · rcases hspine with

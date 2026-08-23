@@ -16,7 +16,7 @@ The positive-punishment arm of the static singleton dispatcher is not a live
 residual.  Positive punishment makes the singleton reward individually
 rational.  If no outsider gains by joining the sure singleton exit, the
 instant-punishment compiler produces a uniform-equilibrium payoff; in a
-counterexample regime some outsider must therefore gain strictly, which
+terminal exploitability witness some outsider must therefore gain strictly, which
 supplies the existing atomic-toggle handoff.
 
 The same conclusion consumes the complete relabeled concentrated-singleton
@@ -38,13 +38,13 @@ dispatcher reduces exactly to atomic instability or player deletion.
 
 Full behavioral best-response semantics enter through
 `isUniformEquilibriumPayoff_soloReward_of_instantPunishment`. -/
-theorem QuittingCounterexampleRegime.singletonStaticStrategicDispatch_compress
+theorem QuittingTerminalExploitabilityWitness.singletonStaticStrategicDispatch_compress
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
-    (regime : QuittingCounterexampleRegime reward) (owner : iota)
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : iota)
     (hdispatch : HasQuittingSingletonStaticStrategicDispatch reward owner
-      regime.terminalGap) :
+      witness.terminalGap) :
     HasQuittingStaticAtomicToggleHandoff reward ∨
-      HasQuittingExactPlayerDeletionAtGap reward owner regime.terminalGap := by
+      HasQuittingExactPlayerDeletionAtGap reward owner witness.terminalGap := by
   classical
   rcases hdispatch with hatomic | hpunishment | hdeletion
   · exact Or.inl hatomic
@@ -63,13 +63,13 @@ theorem QuittingCounterexampleRegime.singletonStaticStrategicDispatch_compress
       intro hnoJoin
       have hUE := isUniformEquilibriumPayoff_soloReward_of_instantPunishment
         reward owner hIR hnoJoin
-      exact regime.not_exists_uniformEquilibriumPayoff
+      exact witness.not_exists_uniformEquilibriumPayoff
         ⟨quittingSoloReward reward owner, hUE⟩
     unfold IsQuittingInstantNoJoin at hnotNoJoin
     push Not at hnotNoJoin
     obtain ⟨joiner, hjoinerNe, hstrict⟩ := hnotNoJoin
     exact Or.inl
-      (regime.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
+      (witness.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
         owner joiner hjoinerNe hstrict)
   · exact Or.inr hdeletion
 
@@ -78,18 +78,18 @@ singleton orientation carries the ambient static dispatcher, so it too
 reduces to atomic instability or exact deletion.  The terminal membership
 and singleton-cardinality fields are provenance for the stopping-law leaf;
 the static compression itself does not need them. -/
-theorem QuittingCounterexampleRegime.stoppingLawSingletonStrategicOrientation_compress
+theorem QuittingTerminalExploitabilityWitness.stoppingLawSingletonStrategicOrientation_compress
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
-    (regime : QuittingCounterexampleRegime reward)
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (horientation :
       HasQuittingStoppingLawSingletonStrategicOrientation packet) :
     HasQuittingStaticAtomicToggleHandoff reward ∨
       HasQuittingExactPlayerDeletionAtGap reward packet.observer
-        regime.terminalGap := by
+        witness.terminalGap := by
   obtain ⟨_observerMem, _singleton, hstatic⟩ := horientation
-  exact regime.singletonStaticStrategicDispatch_compress
+  exact witness.singletonStaticStrategicDispatch_compress
     packet.observer hstatic
 
 /-- **Full concentrated-singleton compression.**  Every arm of the relabeled
@@ -97,9 +97,9 @@ concentrated singleton handoff is already either an exact player deletion or
 the same static atomic-toggle handoff.  In the tail-escape and
 fixed-owner-join-loss arms, the reset owner is the strict joiner of the
 singleton exit of `other`. -/
-theorem QuittingCounterexampleRegime.concentratedSingletonStrategicDispatch_compress
+theorem QuittingTerminalExploitabilityWitness.concentratedSingletonStrategicDispatch_compress
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : iota} {terminal : {S : Finset iota // S.Nonempty}}
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
@@ -107,15 +107,15 @@ theorem QuittingCounterexampleRegime.concentratedSingletonStrategicDispatch_comp
       reward profiles owner terminal cutoff scale)
     (other : iota)
     (hdispatch : HasQuittingConcentratedSingletonStrategicDispatch
-      regime packet other) :
+      witness packet other) :
     HasQuittingStaticAtomicToggleHandoff reward ∨
       HasQuittingExactPlayerDeletionAtGap reward other
-        regime.terminalGap := by
+        witness.terminalGap := by
   classical
   obtain ⟨_terminal, _endpoint, _static, hstrategic⟩ := hdispatch
   rcases hstrategic with hatomic | hpunishment | hdeletion | htail | hloss
   · exact Or.inl hatomic
-  · exact regime.singletonStaticStrategicDispatch_compress other
+  · exact witness.singletonStaticStrategicDispatch_compress other
       (Or.inr (Or.inl hpunishment))
   · exact Or.inr hdeletion
   · dsimp [HasQuittingConcentratedSingletonOwnerTailEscape] at htail
@@ -127,7 +127,7 @@ theorem QuittingCounterexampleRegime.concentratedSingletonStrategicDispatch_comp
       subst owner
       simp [quittingSingletonCollisionReward, quittingSoloReward] at hstrict
     exact Or.inl
-      (regime.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
+      (witness.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
         other owner hownerNe hstrict)
   · dsimp [HasQuittingConcentratedSingletonFixedOwnerJoinLoss] at hloss
     have hstrict : quittingSoloReward reward other owner <
@@ -138,7 +138,7 @@ theorem QuittingCounterexampleRegime.concentratedSingletonStrategicDispatch_comp
       subst owner
       simp [quittingSingletonCollisionReward, quittingSoloReward] at hstrict
     exact Or.inl
-      (regime.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
+      (witness.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
         other owner hownerNe hstrict)
 
 end GameTheory

@@ -18,7 +18,7 @@ provided every deleted player passes the block dispensability gate.  Here the
 survivor game is solved outright rather than assumed: at most three players
 carry the unconditional one-, two-, and three-player existence theorems, and
 the empty player type is excluded by
-`QuittingCounterexampleRegime.elim_isEmpty`.
+`QuittingTerminalExploitabilityWitness.elim_isEmpty`.
 
 The resulting producer
 `quittingGame_exists_uniformEquilibriumPayoff_of_blockDispensable_card_le_three`
@@ -55,10 +55,10 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three
   interval_cases hcase : Fintype.card κ
   · letI : IsEmpty κ := Fintype.card_eq_zero_iff.mp hcase
     by_contra hno
-    obtain ⟨regime⟩ :=
-      (not_exists_uniformEquilibriumPayoff_iff_nonempty_counterexampleRegime
+    obtain ⟨witness⟩ :=
+      (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
         reward).1 hno
-    exact QuittingCounterexampleRegime.elim_isEmpty regime
+    exact QuittingTerminalExploitabilityWitness.elim_isEmpty witness
   · letI : Unique κ := (Fintype.card_eq_one_iff_nonempty_unique.mp hcase).some
     exact quittingGame_exists_uniformEquilibriumPayoff_onePlayer reward
   · exact quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_two hcase reward

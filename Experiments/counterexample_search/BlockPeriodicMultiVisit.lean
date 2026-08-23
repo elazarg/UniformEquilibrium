@@ -200,10 +200,10 @@ theorem multiVisit_isUniformEquilibriumPayoff :
   isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
     multiVisit_isQuittingBlockCertificate
 
-/-- The table carries no counterexample regime. -/
-theorem multiVisit_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime multiVisitReward) :=
-  isEmpty_counterexampleRegime_of_isQuittingBlockCertificate
+/-- The table carries no terminal exploitability witness. -/
+theorem multiVisit_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness multiVisitReward) :=
+  isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate
     multiVisit_isQuittingBlockCertificate
 
 end BlockPeriodicMultiVisit

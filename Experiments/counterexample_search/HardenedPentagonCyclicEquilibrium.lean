@@ -38,15 +38,15 @@ cyclic-continuation compiler turns that finite certificate into an exact
 terminal Nash profile against *all* behavioral deviations, hence into a
 uniform-equilibrium payoff.
 
-Consequences recorded below: `H` carries no `QuittingCounterexampleRegime`,
+Consequences recorded below: `H` carries no `QuittingTerminalExploitabilityWitness`,
 and — through the anchored cyclic screen — its response cap never beats the
 on-path renewal value.  This is a checked statement about one table, not a
 general theorem about the pentagon geometry.
 
 The two exclusions are obtained from disjoint inputs.
-`hardened_isEmpty_counterexampleRegime` runs through the uniform-equilibrium
+`hardened_isEmpty_terminalExploitabilityWitness` runs through the uniform-equilibrium
 payoff and the terminal exploitability gap.
-`hardened_isEmpty_counterexampleRegime_via_screen` instead solves two finite
+`hardened_isEmpty_terminalExploitabilityWitness_via_screen` instead solves two finite
 systems on the same schedule with exact rational data: the twenty-five renewal
 equations of `isAnchoredCyclicRenewalSolution_responseSolution`, which pin the
 on-path value by uniqueness because survival around one pass is `(1/2) ^ 5`,
@@ -304,14 +304,14 @@ theorem hardened_isUniformEquilibriumPayoff :
     hardenedBlock_isQuittingCyclicContinuationBlock
     hardenedBlockCycle_isAdmissible
 
-/-- **The hardened completion is in no counterexample regime.**  A terminal
+/-- **The hardened completion is in no terminal exploitability witness.**  A terminal
 exploitability gap is incompatible with an existing uniform-equilibrium
 payoff. -/
-theorem hardened_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime hardenedReward) :=
-  ⟨fun regime ↦
+theorem hardened_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness hardenedReward) :=
+  ⟨fun witness ↦
     quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
-      hardenedReward regime.terminalGap_pos regime.terminalExploitability
+      hardenedReward witness.terminalGap_pos witness.terminalExploitability
       ⟨target, hardened_isUniformEquilibriumPayoff⟩⟩
 
 /-! ## Reading the certificate through the anchored cyclic screen -/
@@ -450,8 +450,8 @@ than through the exploitability-gap incompatibility, and computed rather than
 read off an equilibrium: the inputs are the twenty-five max equations, the
 twenty-five renewal equations, the spectator condition, and the arithmetic
 `(1/2) ^ 5 ≠ 1`. -/
-theorem hardened_isEmpty_counterexampleRegime_via_screen :
-    IsEmpty (QuittingCounterexampleRegime hardenedReward) :=
+theorem hardened_isEmpty_terminalExploitabilityWitness_via_screen :
+    IsEmpty (QuittingTerminalExploitabilityWitness hardenedReward) :=
   isEmpty_of_anchoredCyclicResponseSolution_le schedule hazard hazard_nonneg
     hazard_le_one responseSolution
     isAnchoredCyclicResponseSolution_responseSolution exists_spectatorHazard

@@ -37,11 +37,11 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-! ## The selected projective tail and its all-Continue limit -/
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (tailWitness : QuittingCounterexampleDynamicTailWitness regime)
+variable (tailWitness : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Each fixed-time projective exact-D tail point is a literal point of the
 terminal-semantic carrier.  The finite cutoff limit is taken with `time`
@@ -49,7 +49,7 @@ fixed. -/
 theorem dynamicDebtSemanticPair_tail_mem_carrier (time : ℕ) :
     quittingDynamicDebtSemanticPair (tailWitness.tail time) ∈
       quittingTerminalSemanticCarrier reward := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hpoint : Tendsto (fun family ↦
       quittingFiniteMinMaxDynamicDebtTail reward (tailWitness.subseq family) time)
       atTop (nhds (tailWitness.tail time)) := by
@@ -189,8 +189,8 @@ end QuittingCounterexampleDynamicTailWitness
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
-variable (frontier : QuittingCounterexampleStoppingLawFrontier regime)
-variable (tailWitness : QuittingCounterexampleDynamicTailWitness regime)
+variable (frontier : QuittingCounterexampleStoppingLawFrontier witness)
+variable (tailWitness : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- The independent frontier minimum is no larger than the total exact debt
 of any chronological projective-tail point.  This does not assert equality.

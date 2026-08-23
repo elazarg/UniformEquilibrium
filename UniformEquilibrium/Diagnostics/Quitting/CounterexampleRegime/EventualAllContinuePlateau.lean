@@ -49,13 +49,13 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- If the optimized tail is eventually all-Continue, it is eventually
 exactly its extracted positive-debt boundary state, not merely convergent to
 it coordinatewise. -/
 theorem tail_eq_limitDebtPoint_of_eventually_allContinue
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hplateau : ∃ threshold, ∀ time, threshold ≤ time →
       quittingDynamicDebtTailRoots seam.tail time =
         (quittingAllContinueRoot : ι → PMF Bool)) :
@@ -108,7 +108,7 @@ literal terminal payoff zero, while its prescribed annotation is exactly the
 positive-debt boundary value.  Thus the late semantic discrepancy is the
 whole boundary vector, not an asymptotic error term. -/
 theorem exists_exact_late_phantomSemantics_of_eventually_allContinue
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hplateau : ∃ threshold, ∀ time, threshold ≤ time →
       quittingDynamicDebtTailRoots seam.tail time =
         (quittingAllContinueRoot : ι → PMF Bool)) :
@@ -144,8 +144,8 @@ theorem exists_exact_late_phantomSemantics_of_eventually_allContinue
 /-- The selected positive-debt owner carries the counterexample gap through
 debt and solo reward into the phantom prescribed value. -/
 theorem terminalGap_le_limitDebt_le_soloReward_le_limitValue
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
-    regime.terminalGap ≤ seam.limit.debt seam.limit.owner ∧
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
+    witness.terminalGap ≤ seam.limit.debt seam.limit.owner ∧
       seam.limit.debt seam.limit.owner ≤
         quittingSoloReward reward seam.limit.owner seam.limit.owner ∧
       quittingSoloReward reward seam.limit.owner seam.limit.owner ≤
@@ -161,12 +161,12 @@ theorem terminalGap_le_limitDebt_le_soloReward_le_limitValue
 all inactive-player inequalities in a counterexample.  Otherwise the
 positive solo payoff would be a uniform-equilibrium payoff. -/
 theorem limitOwner_forall_quittingSoloJoiningObstruction
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     ∀ p : ℝ, 0 < p → p ≤ 1 →
       QuittingSoloJoiningObstruction reward seam.limit.owner p := by
   have hsolo : 0 <
       quittingSoloReward reward seam.limit.owner seam.limit.owner :=
-    regime.terminalGap_pos.trans_le
+    witness.terminalGap_pos.trans_le
       (seam.terminalGap_le_limitDebt_le_soloReward_le_limitValue.1.trans
         seam.terminalGap_le_limitDebt_le_soloReward_le_limitValue.2.1)
   rcases soloCertification_or_universalJoining reward seam.limit.owner with
@@ -178,7 +178,7 @@ theorem limitOwner_forall_quittingSoloJoiningObstruction
           rw [quittingHazardCoin_true_toReal,
             quittingHazardCoin_false_toReal]
           exact hinactive other hother)
-    exact (regime.not_exists_uniformEquilibriumPayoff
+    exact (witness.not_exists_uniformEquilibriumPayoff
       ⟨quittingSoloReward reward seam.limit.owner, huniform⟩).elim
   · exact hobstruction
 
@@ -186,7 +186,7 @@ theorem limitOwner_forall_quittingSoloJoiningObstruction
 whose mixture of preemption and collision beats waiting for the owner's solo
 exit. -/
 theorem limitOwner_forall_exists_strictJoiningOpponent
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     ∀ p : ℝ, 0 < p → p ≤ 1 →
       ∃ other, other ≠ seam.limit.owner ∧
         quittingSoloReward reward seam.limit.owner other <
@@ -200,7 +200,7 @@ endpoint difference at the corresponding solo row.  The blocker condition
 therefore certifies failure of singleton-support exact Nash, rather than an
 exact return row. -/
 theorem limitOwner_exists_positiveEndpointDifference_at_soloRate
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (p : ℝ) (hp0 : 0 < p) (hp1 : p ≤ 1) :
     ∃ other, other ≠ seam.limit.owner ∧
       0 < quittingRootEndpointDifference reward
@@ -218,7 +218,7 @@ theorem limitOwner_exists_positiveEndpointDifference_at_soloRate
 /-- Consequently no literal singleton-support row owned by the positive-debt
 player is exact endpoint Nash against the owner's singleton payoff vector. -/
 theorem limitOwner_soloRate_not_endpointNash
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (p : ℝ) (hp0 : 0 < p) (hp1 : p ≤ 1) :
     ¬ IsεQuittingRootEndpointNash reward
       (quittingSoloReward reward seam.limit.owner) 0
@@ -241,7 +241,7 @@ probability must also give positive quit probability to some distinct
 opponent.  The blocker classification thus forces multi-owner support, but
 does not choose the additional rate or establish Bellman return. -/
 theorem limitOwner_endpointNash_requires_second_quitter
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (root : ι → PMF Bool)
     (howner : 0 < (root seam.limit.owner true).toReal)
     (hnash : IsεQuittingRootEndpointNash reward
@@ -282,23 +282,23 @@ theorem limitOwner_endpointNash_requires_second_quitter
 /-- At the sure-solo endpoint, the counterexample gap forces a distinct
 opponent to gain the full gap by joining the positive-debt owner. -/
 theorem exists_limitOwner_collisionGain
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     ∃ other, other ≠ seam.limit.owner ∧
-      quittingSoloReward reward seam.limit.owner other + regime.terminalGap ≤
+      quittingSoloReward reward seam.limit.owner other + witness.terminalGap ≤
         quittingSingletonCollisionReward reward seam.limit.owner other := by
-  have hsolo : -regime.terminalGap <
+  have hsolo : -witness.terminalGap <
       quittingSoloReward reward seam.limit.owner seam.limit.owner := by
     have hgap :=
       seam.terminalGap_le_limitDebt_le_soloReward_le_limitValue.1.trans
         seam.terminalGap_le_limitDebt_le_soloReward_le_limitValue.2.1
-    linarith [regime.terminalGap_pos]
-  exact regime.exists_collision_gain hsolo
+    linarith [witness.terminalGap_pos]
+  exact witness.exists_collision_gain hsolo
 
 /-- The complete affine blocker classification for the positive-debt owner:
 either one opponent blocks every solo rate, or two distinct opponents cover
 the rate interval with overlapping initial and terminal blocking segments. -/
 theorem limitOwner_exists_universalJoiner_or_switchingPair
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     (∃ other, other ≠ seam.limit.owner ∧
         quittingSoloReward reward seam.limit.owner other ≤
             quittingSoloReward reward other other ∧

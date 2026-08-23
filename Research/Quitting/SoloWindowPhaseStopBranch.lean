@@ -166,7 +166,7 @@ theorem quittingSoloPreempts_of_phaseStop_gap
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-! ## Rotating the tail into the canonical windows -/
 
@@ -174,7 +174,7 @@ variable {regime : QuittingCounterexampleRegime reward}
 `window + time % (window + 1)`: it restarts the block of `window + 1` tail
 dates beginning at `window`. -/
 theorem canonicalPeriodicTailWindowFamily_roots_eq
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (window time : ℕ) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (window time : ℕ) :
     seam.canonicalPeriodicTailWindowFamily.roots window time =
       quittingDynamicDebtTailRoots seam.tail
         (window + time % (window + 1)) := by
@@ -186,7 +186,7 @@ theorem canonicalPeriodicTailWindowFamily_roots_eq
 
 /-- Tail-level soloness transfers to every canonical periodic window. -/
 theorem isQuittingSoloRoot_canonicalPeriodicTailWindowFamily
-    (seam : QuittingCounterexampleDynamicTailWitness regime) {owner : ι}
+    (seam : QuittingCounterexampleDynamicTailWitness witness) {owner : ι}
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     (window time : ℕ) :
@@ -204,13 +204,13 @@ stop: every other coordinate's refusal reproduces the window's delivery, and
 `owner`'s own refusal stops all absorption and pays zero, while the delivery
 to `owner` is nonnegative. -/
 theorem exists_phaseStopObstruction_of_tailSolo
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     (hnonneg : 0 ≤ quittingSoloReward reward owner owner) :
     ∃ other, Set.Infinite {window : ℕ |
       ∃ phase : Fin (window + 1),
-        regime.terminalGap / 2 <
+        witness.terminalGap / 2 <
           quittingPeriodicWindowPhaseStopValue reward
             (seam.canonicalPeriodicTailWindowFamily.roots window) other phase -
             seam.canonicalPeriodicTailWindowFamily.delivery window other} := by
@@ -227,7 +227,7 @@ theorem exists_phaseStopObstruction_of_tailSolo
     exact quittingRootSequenceTerminalValue_nonneg_of_soloRoots reward
       (seam.canonicalPeriodicTailWindowFamily.roots window) owner 0
       (hwindowSolo window) hnonneg
-  linarith [regime.terminalGap_pos]
+  linarith [witness.terminalGap_pos]
 
 /-- **T4(a), proved.**  On a seam whose tail roots are solo at an `owner` with
 nonnegative singleton reward, and whose canonical windows absorb almost
@@ -240,7 +240,7 @@ At a late window the owner's hazard is small, so the profitable stop of the
 obstructing coordinate is its solo exit rather than a collision, and that is a
 preemption edge. -/
 theorem quittingSoloWindowPhaseStopBranch_of_tailSolo
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     (hnonneg : 0 ≤ quittingSoloReward reward owner owner)
@@ -248,13 +248,13 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo
     (habsorb : ∀ window, quittingLiveMassLimit reward
       (quittingRootSequenceProfile reward
         (seam.canonicalPeriodicTailWindowFamily.roots window) 0) = 0) :
-    QuittingSoloWindowPhaseStopBranch seam owner (regime.terminalGap / 4) := by
+    QuittingSoloWindowPhaseStopBranch seam owner (witness.terminalGap / 4) := by
   obtain ⟨other, hinfinite⟩ :=
     seam.exists_phaseStopObstruction_of_tailSolo owner hsolo hnonneg
   have hwindowSolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner :=
     seam.isQuittingSoloRoot_canonicalPeriodicTailWindowFamily hsolo
-  have hgapPos := regime.terminalGap_pos
+  have hgapPos := witness.terminalGap_pos
   have hne : other ≠ owner := by
     intro heq
     subst other
@@ -278,13 +278,13 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo
     simpa using (seam.quitProbability_tendsto_zero owner).mul
       (tendsto_const_nhds (x := 2 * bound) (f := atTop (α := ℕ)))
   obtain ⟨threshold, hthreshold⟩ := eventually_atTop.1
-    ((tendsto_order.1 hvanish).2 (regime.terminalGap / 4) (by linarith))
+    ((tendsto_order.1 hvanish).2 (witness.terminalGap / 4) (by linarith))
   obtain ⟨window, hwindow, hlarge⟩ :=
     Set.Infinite.exists_gt hinfinite threshold
   obtain ⟨phase, hphase⟩ := hwindow
   refine ⟨other, ?_, hinfinite⟩
   have hsmall : (seam.canonicalPeriodicTailWindowFamily.roots window phase.val
-      owner true).toReal * (2 * bound) ≤ regime.terminalGap / 2 / 2 := by
+      owner true).toReal * (2 * bound) ≤ witness.terminalGap / 2 / 2 := by
     rw [seam.canonicalPeriodicTailWindowFamily_roots_eq window phase.val]
     have hdate : threshold ≤ window + phase.val % (window + 1) := by omega
     have hlate := hthreshold _ hdate
@@ -292,15 +292,15 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo
   have hpreempt := quittingSoloPreempts_of_phaseStop_gap reward
     (seam.canonicalPeriodicTailWindowFamily.roots window) hne
     (hwindowSolo window) (habsorb window) hreward
-    (by linarith : (0 : ℝ) < regime.terminalGap / 2) hsmall hphase
-  have hquarter : regime.terminalGap / 2 / 2 = regime.terminalGap / 4 := by ring
+    (by linarith : (0 : ℝ) < witness.terminalGap / 2) hsmall hphase
+  have hquarter : witness.terminalGap / 2 / 2 = witness.terminalGap / 4 := by ring
   rwa [hquarter] at hpreempt
 
 /-- The canonical window absorbs almost surely as soon as `owner` is active at
 one date of the block it restarts: the window is periodic, so a single
 absorbing date drives its survival to zero. -/
 theorem quittingLiveMassLimit_canonicalWindow_eq_zero
-    (seam : QuittingCounterexampleDynamicTailWitness regime) {owner : ι}
+    (seam : QuittingCounterexampleDynamicTailWitness witness) {owner : ι}
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     {window date : ℕ} (hdate : date < window + 1)
@@ -330,7 +330,7 @@ solo at an `owner` with nonnegative singleton reward, and whose `owner` is
 active at one date of every restarted block, realizes the phase-stop branch at
 a quarter of the terminal gap. -/
 theorem quittingSoloWindowPhaseStopBranch_of_tailSolo_of_blockActive
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     (hnonneg : 0 ≤ quittingSoloReward reward owner owner)
@@ -338,7 +338,7 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo_of_blockActive
     (hactive : ∀ window, ∃ date, date < window + 1 ∧
       0 < (quittingDynamicDebtTailRoots seam.tail (window + date) owner
         true).toReal) :
-    QuittingSoloWindowPhaseStopBranch seam owner (regime.terminalGap / 4) := by
+    QuittingSoloWindowPhaseStopBranch seam owner (witness.terminalGap / 4) := by
   refine seam.quittingSoloWindowPhaseStopBranch_of_tailSolo owner hsolo hnonneg
     hreward fun window => ?_
   obtain ⟨date, hdate, hdateActive⟩ := hactive window
@@ -348,14 +348,14 @@ theorem quittingSoloWindowPhaseStopBranch_of_tailSolo_of_blockActive
 /-- **T4(a) for a tail whose owner is active at every date.**  This is the
 shape a diffuse tail with vanishing but positive hazards presents. -/
 theorem quittingSoloWindowPhaseStopBranch_of_tailSolo_of_active
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ time,
       IsQuittingSoloRoot (quittingDynamicDebtTailRoots seam.tail time) owner)
     (hnonneg : 0 ≤ quittingSoloReward reward owner owner)
     {bound : ℝ} (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hactive : ∀ time,
       0 < (quittingDynamicDebtTailRoots seam.tail time owner true).toReal) :
-    QuittingSoloWindowPhaseStopBranch seam owner (regime.terminalGap / 4) :=
+    QuittingSoloWindowPhaseStopBranch seam owner (witness.terminalGap / 4) :=
   seam.quittingSoloWindowPhaseStopBranch_of_tailSolo_of_blockActive owner hsolo
     hnonneg hreward fun window => ⟨0, Nat.succ_pos window, hactive _⟩
 

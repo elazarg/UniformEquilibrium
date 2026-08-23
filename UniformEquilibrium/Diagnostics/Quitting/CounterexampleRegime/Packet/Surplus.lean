@@ -25,19 +25,19 @@ open Finset
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
-/-- **Strict packet surplus.**  The packet forced by a counterexample regime
+/-- **Strict packet surplus.**  The packet forced by a terminal exploitability witness
 has an active owner whose delivered singleton mixture strictly exceeds its
 pinned target.  Otherwise it is a complementary singleton mixture and the
 existing circulation compiler produces a uniform-equilibrium payoff. -/
 theorem exists_active_strictSingletonSurplus
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     ∃ owner, 0 < packet.mass owner ∧
       packet.target owner <
         quittingSingletonMixture reward packet.mass owner := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   by_contra hstrict
   push Not at hstrict
   have hactive : ∀ owner, 0 < packet.mass owner →
@@ -54,21 +54,21 @@ theorem exists_active_strictSingletonSurplus
       reward packet.mass packet.target packet.mass_nonneg packet.mass_sum
         packet.mix_ge_target hactive packet.solo_le_target
         packet.punishment_le_target
-  exact regime.not_exists_uniformEquilibriumPayoff ⟨payoff, hpayoff⟩
+  exact witness.not_exists_uniformEquilibriumPayoff ⟨payoff, hpayoff⟩
 
 /-- **Strict packet refusal.**  One positive-mass owner strictly prefers the
 singleton delivery conditioned on refusing its own prescribed atom to both
 the packet target and the unconditioned delivery.  The selected atom
 necessarily has mass strictly below one. -/
 theorem exists_active_strictSingletonRefusal
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     ∃ owner, 0 < packet.mass owner ∧ packet.mass owner < 1 ∧
       packet.target owner < quittingSingletonMixture reward packet.mass owner ∧
       quittingSingletonMixture reward packet.mass owner <
         quittingSingletonRefusalValue reward packet.mass owner owner := by
   obtain ⟨owner, howner, hsurplus⟩ :=
-    regime.exists_active_strictSingletonSurplus packet
+    witness.exists_active_strictSingletonSurplus packet
   have hmass : packet.mass owner < 1 := by
     apply lt_of_le_of_ne (packet.mass_le_one owner)
     intro heq
@@ -81,6 +81,6 @@ theorem exists_active_strictSingletonRefusal
   refine ⟨owner, howner, hmass, hsurplus, ?_⟩
   nlinarith
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

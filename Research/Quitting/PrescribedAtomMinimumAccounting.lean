@@ -133,8 +133,8 @@ the reset mover. -/
 theorem
     QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointExcursion_or_compensatingDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :
@@ -176,8 +176,8 @@ ordinary minimum-reference transfer.  Hence the global-minimum input has not
 created a second reset edge. -/
 theorem QuittingStoppingLawPrescribedAtomEndpointRiseSequence.endpointPassiveTransferAccount
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :
@@ -241,8 +241,8 @@ Otherwise the packet exposes only an unlabelled third-coordinate debt drop.
 Neither alternative retains a second reset or the prescribed atom. -/
 theorem endpointExcursion_or_knownMoverGain_or_unlabelledThirdDecrease
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     {packet : QuittingStoppingLawAtomEndpointRiseChronology frontier}
     (sequence : QuittingStoppingLawPrescribedAtomEndpointRiseSequence packet)
     (n : ℕ) :

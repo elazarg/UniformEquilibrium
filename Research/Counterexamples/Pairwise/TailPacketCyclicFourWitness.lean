@@ -11,7 +11,7 @@ universal quantifiers in the argument:
 * the rational nonstationary tail has exact telescoping survival and enough
   one-stage slack to deter a nonowner's pure Quit deviation.
 
-It does not claim counterexample-regime provenance or the global properties
+It does not claim provenance from a terminal exploitability witness or the global properties
 (A) and (B) of the companion tail-packet analysis.
 -/
 

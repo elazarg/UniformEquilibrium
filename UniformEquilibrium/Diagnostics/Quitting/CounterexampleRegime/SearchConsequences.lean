@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorInfiniteOrbit
 
 /-!
-# Search consequences of the quitting counterexample regime
+# Search consequences of the quitting terminal exploitability witness
 
 This module extracts local and finite rejection tests from the global
-counterexample regime.  They are intended for exact search code: a proposed
+terminal exploitability witness.  They are intended for exact search code: a proposed
 Nash--Bellman predecessor graph can be rejected without constructing a
 strategy once it exhibits a reachable positive-charge return.
 
@@ -45,7 +45,7 @@ open Math.ChargedPathBudget
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 private abbrev ReachableRelation :=
   quittingPunishmentFloorReachableChargedRelation reward
@@ -56,43 +56,43 @@ finitely often, with an explicit bound supplied by the common prefix budget.
 This avoids division and rounding: search code can compare the integer count
 after coercion directly with `prefixChargeBound / threshold`. -/
 theorem highChargeCount_mul_threshold_le_prefixChargeBound
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (threshold : ℝ)
     {source target : QuittingPunishmentFloorReachableState reward}
     (path : ReachableRelation.Path source target) :
     (path.highChargeCount threshold : ℝ) * threshold ≤
       quittingPunishmentFloorPrefixChargeBound reward := by
   exact (path.highChargeCount_mul_le_chargeSum threshold).trans
-    (regime.reachablePath_chargeSum_le_prefixChargeBound path)
+    (witness.reachablePath_chargeSum_le_prefixChargeBound path)
 
 /-- The same threshold-count restriction holds on the larger family of all
 exact punishment-floor finite-prefix certificates, including those whose
 initial value merely dominates the floor rather than equals its anchor. -/
 theorem highAbsorptionStageCount_mul_threshold_le_prefixChargeBound
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (cert : QuittingPunishmentFloorFinitePrefix reward)
     (threshold : ℝ) :
     (cert.highAbsorptionStageCount threshold : ℝ) * threshold ≤
       quittingPunishmentFloorPrefixChargeBound reward := by
   exact (cert.highAbsorptionStageCount_mul_le_charge threshold).trans
-    (regime.prefixCharge_le cert)
+    (witness.prefixCharge_le cert)
 
 /-- Every finite partial absorption sum along every exact punishment-floor
 orbit is bounded by the one common regime constant. -/
 theorem infiniteOrbit_partialAbsorption_le_prefixChargeBound
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (horizon : ℕ) :
     orbit.partialAbsorption horizon ≤
       quittingPunishmentFloorPrefixChargeBound reward := by
   rw [← orbit.toFinitePrefix_charge horizon]
-  exact regime.prefixCharge_le (orbit.toFinitePrefix horizon)
+  exact witness.prefixCharge_le (orbit.toFinitePrefix horizon)
 
 /-- Every arbitrary infinite exact punishment-floor orbit has summable total
 absorption mass.  This is an all-orbits statement, not a property only of the
 classically selected predecessor orbit. -/
 theorem infiniteOrbit_absorptionMass_summable
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
     Summable (fun time =>
       quittingRootAbsorptionMass (orbit.roots time)) := by
@@ -101,33 +101,33 @@ theorem infiniteOrbit_absorptionMass_summable
     (fun time => orbit.absorptionMass_nonneg time) ?_
   intro horizon
   simpa only [QuittingPunishmentFloorInfiniteOrbit.partialAbsorption] using
-    regime.infiniteOrbit_partialAbsorption_le_prefixChargeBound orbit horizon
+    witness.infiniteOrbit_partialAbsorption_le_prefixChargeBound orbit horizon
 
 /-- The total absorption mass of every arbitrary exact orbit is bounded by
 the same regime constant. -/
 theorem infiniteOrbit_tsum_absorptionMass_le_prefixChargeBound
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
     ∑' time, quittingRootAbsorptionMass (orbit.roots time) ≤
       quittingPunishmentFloorPrefixChargeBound reward := by
   apply Real.tsum_le_of_sum_range_le orbit.absorptionMass_nonneg
   intro horizon
   simpa only [QuittingPunishmentFloorInfiniteOrbit.partialAbsorption] using
-    regime.infiniteOrbit_partialAbsorption_le_prefixChargeBound orbit horizon
+    witness.infiniteOrbit_partialAbsorption_le_prefixChargeBound orbit horizon
 
 /-- Absorption mass tends to zero along every arbitrary exact
 punishment-floor orbit. -/
 theorem infiniteOrbit_absorptionMass_tendsto_zero
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
     Tendsto (fun time => quittingRootAbsorptionMass (orbit.roots time))
       atTop (nhds 0) :=
-  (regime.infiniteOrbit_absorptionMass_summable orbit).tendsto_atTop_zero
+  (witness.infiniteOrbit_absorptionMass_summable orbit).tendsto_atTop_zero
 
 /-- Every player's quit probability tends to zero along every arbitrary exact
 punishment-floor orbit. -/
 theorem infiniteOrbit_quitProbability_tendsto_zero
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (who : ι) :
     Tendsto (fun time => (orbit.roots time who true).toReal)
@@ -135,30 +135,30 @@ theorem infiniteOrbit_quitProbability_tendsto_zero
   apply squeeze_zero
   · exact fun time => orbit.quitProbability_nonneg time who
   · exact fun time => orbit.quitProbability_le_absorptionMass time who
-  · exact regime.infiniteOrbit_absorptionMass_tendsto_zero orbit
+  · exact witness.infiniteOrbit_absorptionMass_tendsto_zero orbit
 
 /-- Each individual player's quit probabilities are themselves summable
 along every arbitrary exact punishment-floor orbit. -/
 theorem infiniteOrbit_quitProbability_summable
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (who : ι) :
     Summable (fun time => (orbit.roots time who true).toReal) :=
   Summable.of_nonneg_of_le
     (fun time => orbit.quitProbability_nonneg time who)
     (fun time => orbit.quitProbability_le_absorptionMass time who)
-    (regime.infiniteOrbit_absorptionMass_summable orbit)
+    (witness.infiniteOrbit_absorptionMass_summable orbit)
 
 /-- Equivalently, every player's continuation probability tends to one: all
 arbitrary exact punishment-floor roots converge coordinatewise to the
 all-Continue root. -/
 theorem infiniteOrbit_continueProbability_tendsto_one
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (who : ι) :
     Tendsto (fun time => (orbit.roots time who false).toReal)
       atTop (nhds 1) := by
-  have hquit := regime.infiniteOrbit_quitProbability_tendsto_zero orbit who
+  have hquit := witness.infiniteOrbit_quitProbability_tendsto_zero orbit who
   have hidentity : (fun time => (orbit.roots time who false).toReal) =
       fun time => 1 - (orbit.roots time who true).toReal := by
     funext time
@@ -180,7 +180,7 @@ whereas identifying them with realized continuation payoffs is precisely the
 separate realization problem.  The exploiting player and deviation may vary
 with time. -/
 theorem eventually_smallAbsorption_and_terminalExploitability
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (ε : ℝ) (hε : 0 < ε) :
     ∀ᶠ time in atTop,
@@ -188,46 +188,46 @@ theorem eventually_smallAbsorption_and_terminalExploitability
         ∃ (who : ι) (dev : (quittingGame reward).BehaviorStrategy who),
           quittingTerminalPayoff reward
               (quittingRootSequenceProfile reward orbit.roots time) who +
-              regime.terminalGap ≤
+              witness.terminalGap ≤
             quittingTerminalPayoff reward
               (Function.update
                 (quittingRootSequenceProfile reward orbit.roots time)
                 who dev) who := by
   have hsmall : ∀ᶠ time in atTop,
       quittingRootAbsorptionMass (orbit.roots time) < ε :=
-    (regime.infiniteOrbit_absorptionMass_tendsto_zero orbit).eventually
+    (witness.infiniteOrbit_absorptionMass_tendsto_zero orbit).eventually
       (Iio_mem_nhds hε)
   filter_upwards [hsmall] with time htime
-  exact ⟨htime, regime.terminalExploitability
+  exact ⟨htime, witness.terminalExploitability
     (quittingRootSequenceProfile reward orbit.roots time)⟩
 
 /-- A positive-charge edge strictly decreases the canonical budget-to-go
 potential. -/
 theorem canonicalPotential_strict_decrease_of_positiveCharge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (edge : QuittingPunishmentFloorReachableEdge reward)
     (hpositive : 0 < edge.toBoxEdge.absorptionCharge) :
     quittingPunishmentFloorReachablePotential reward edge.current <
       quittingPunishmentFloorReachablePotential reward edge.tail := by
-  have hdecrement := regime.canonicalPotential_predecessor_decrement edge
+  have hdecrement := witness.canonicalPotential_predecessor_decrement edge
   linarith
 
 /-- Every edge admitting a return path has zero absorption charge.  Thus all
 edges internal to a directed strongly connected component are zero-charge. -/
 theorem absorptionCharge_eq_zero_of_returnPath
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (edge : QuittingPunishmentFloorReachableEdge reward)
     (returnPath : ReachableRelation.Path edge.current edge.tail) :
     edge.toBoxEdge.absorptionCharge = 0 := by
   let cycle : ReachableRelation.Path edge.tail edge.tail :=
     ChargedRelation.Path.cons edge returnPath
   have hcycle : cycle.chargeSum = 0 :=
-    regime.reachable_cycle_chargeSum_eq_zero cycle
+    witness.reachable_cycle_chargeSum_eq_zero cycle
   have hreturn := returnPath.chargeSum_nonneg
   change edge.toBoxEdge.absorptionCharge + returnPath.chargeSum = 0 at hcycle
   exact le_antisymm (by linarith)
     (QuittingPunishmentFloorBoxEdge.absorptionCharge_nonneg edge.toBoxEdge)
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

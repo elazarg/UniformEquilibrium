@@ -25,7 +25,7 @@ with positive probability.  Consequently there are exactly two branches:
 * zero local defect, in which case the Quit and Continue endpoint payoffs are
   exactly tied.
 
-The counterexample-regime capstone retains positive opponent incidence both
+The terminal exploitability witness capstone retains positive opponent incidence both
 before and after the dropout, as well as the existing negative punishment
 moat or strict overlapping-pair replacement.  It does not turn the tie branch
 into a strict cycle edge.  `TerminalSemanticPairDropoutSignRegression` shows
@@ -185,7 +185,7 @@ theorem exists_signed_firstFullMove_of_linearPenalty_exactResetFaceReturn
   exact ⟨before, move, after, beforeRoot, afterRoot, hsplit, rfl, rfl,
     hbeforeStrict, hfull, hbest, hafterUpdate, hgain, halternative⟩
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Floor-safe signed pair-dropout consumer.**
 
@@ -201,7 +201,7 @@ strict positive-mass overlapping-pair replacement.  The remaining residual
 is explicit: neither the minimum-debt floor nor endpoint provenance excludes
 the exact endpoint-tie branch. -/
 theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (minimum : QuittingTerminalSemanticPair ι)
     (root : ι → PMF Bool)
     (moves : List (QuittingFractionalEndpointMove ι))
@@ -261,7 +261,7 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
                   afterRoot move.who -
                 quittingRootSuccessorPayoff reward minimum.1
                   beforeRoot move.who = 0)) ∧
-        ((quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+        ((quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
             quittingSoloReward reward owner owner <
               quittingPunishmentValue reward owner) ∨
           ∃ outsider replacementRoot replacementCoalition,
@@ -274,10 +274,10 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
               replacementCoalition.card = 2 ∧
               quittingSoloReward reward owner outsider <
                 quittingSingletonCollisionReward reward owner outsider ∧
-              (-regime.terminalGap <
+              (-witness.terminalGap <
                     quittingSoloReward reward owner owner →
                 quittingSoloReward reward owner outsider +
-                    regime.terminalGap ≤
+                    witness.terminalGap ≤
                   quittingSingletonCollisionReward reward owner outsider) ∧
               0 < quittingRootCoalitionMass replacementRoot
                 replacementCoalition) := by
@@ -286,7 +286,7 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
       hbeforeCoalition, hafterCoalition, hfull, hmember, hcontinue,
       hbeforeCard, hafterErase, hsingleton, hbeforePair, hdropperNe,
       hafterUpdate, hbeforeMass, hafterMass, hconsumer⟩ :=
-    regime.exists_negativeMoat_or_pairReplacement_of_dropout
+    witness.exists_negativeMoat_or_pairReplacement_of_dropout
       minimum root moves terminal hminimumCarrier hminimum
         hcollision hmass hminimumDebt hfinalDefect
   have hbest : move.action =
@@ -382,6 +382,6 @@ theorem exists_signed_pairDropout_negativeMoat_or_pairReplacement
     hafterUpdate, hbeforeMass, hafterMass, hbeforeIncidence,
     hafterIncidence, hendpointSign, hgain, hsignAlternative, hconsumer⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

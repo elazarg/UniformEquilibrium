@@ -49,7 +49,7 @@ is the range of `stationaryBonus` on the open unit interval.
   equations the definitions solve
 * `isQuittingBlockCertificate_uniform` — the certificate at the forced bonus
 * `exists_uniformEquilibriumPayoff_colliderBonusReward_stationary` and
-  `isEmpty_counterexampleRegime_colliderBonusReward_stationary` — the closure
+  `isEmpty_terminalExploitabilityWitness_colliderBonusReward_stationary` — the closure
 -/
 
 noncomputable section
@@ -481,12 +481,12 @@ theorem exists_uniformEquilibriumPayoff_colliderBonusReward_stationary
   ⟨_, isUniformEquilibriumPayoff_of_isQuittingBlockCertificate
     (isQuittingBlockCertificate_uniform hm0 hs hu0 hu1)⟩
 
-/-- The same closure, as emptiness of the counterexample regime. -/
-theorem isEmpty_counterexampleRegime_colliderBonusReward_stationary
+/-- The same closure, as emptiness of the terminal exploitability witness. -/
+theorem isEmpty_terminalExploitabilityWitness_colliderBonusReward_stationary
     (hm0 : m 0 = 0) (hs : 0 ≤ s) {u : ℝ} (hu0 : 0 < u) (hu1 : u < 1) :
-    IsEmpty (QuittingCounterexampleRegime
+    IsEmpty (QuittingTerminalExploitabilityWitness
       (colliderBonusReward s low (stationaryBonus s low (∑ d, m d) u) m)) :=
-  isEmpty_counterexampleRegime_of_isQuittingBlockCertificate
+  isEmpty_terminalExploitabilityWitness_of_isQuittingBlockCertificate
     (isQuittingBlockCertificate_uniform hm0 hs hu0 hu1)
 
 end CirculantColliderBonus
