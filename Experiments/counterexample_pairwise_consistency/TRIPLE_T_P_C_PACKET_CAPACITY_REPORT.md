@@ -260,7 +260,7 @@ The full triple remains open at three named interfaces.
    not only the selected ray.  Equivalently, construct a bounded budget
    potential on the complete root correspondence, or find a positive-charge
    return and thereby contradict `C`.
-3. **Optimized provenance `M`.**  In the counterexample regime the exact-D
+3. **Optimized provenance `M`.**  In the terminal exploitability witness the exact-D
    tail comes from cutoff-wise optimized zero-boundary minimizers.  The
    hand-built tail (7) does not claim that origin.
 

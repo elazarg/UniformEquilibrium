@@ -21,7 +21,7 @@ packet regression disproves that implication.  Both players can be punished
 to a nonpositive value by explicit stationary opponent rows, while player
 one's positive-singleton terminal cap is exactly one.
 
-This finite regression does not instantiate a counterexample regime and does
+This finite regression does not instantiate a terminal exploitability witness and does
 not compute its global admissible charge capacity.  Its role is narrower: it
 shows that the automatic zero-cap closure of the terminal carry gate is a
 strict subclass of `punishmentValue ≤ 0`; a quantitative incoming-path or

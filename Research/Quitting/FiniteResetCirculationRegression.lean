@@ -16,8 +16,8 @@ its mover the full behavioral best-response value, kills that mover's debt,
 and transfers the same positive amount to the other player.  Total terminal
 semantic debt remains constant throughout the cycle.
 
-The example is deliberately fenced from the counterexample regime: no global
-minimum or counterexample-regime provenance is asserted for the four
+The example is deliberately fenced from the terminal exploitability witness: no global
+minimum or provenance from a terminal exploitability witness is asserted for the four
 vertices.  It shows that finiteness, exact profile recurrence,
 literal strategic signs, and constant-debt transport do not compile a reset
 cycle to an exact Nash--Bellman cycle.  A valid closure theorem must use the

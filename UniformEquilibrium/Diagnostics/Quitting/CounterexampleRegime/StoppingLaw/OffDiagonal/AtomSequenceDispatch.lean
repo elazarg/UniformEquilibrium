@@ -39,8 +39,8 @@ Unlike the older fixed-error decoder, its rectangle endpoint is an
 asymptotic best response for the observer. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtAtomAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧ 0 < charge ∧
       ∀ᶠ rank in atTop,
@@ -124,8 +124,8 @@ strict subsequence.  The terminal label is allowed to vary; this branch has
 not yet acquired a strategic sign. -/
 structure QuittingStoppingLawPrescribedAtomSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   observer : ι
   charge : ℝ
@@ -149,8 +149,8 @@ positive atom bound is uniform and the pure-time observer is an asymptotic
 best response at the target endpoint. -/
 structure QuittingStoppingLawVanishingDebtRectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   observer : ι
   charge : ℝ
@@ -191,8 +191,8 @@ structure QuittingStoppingLawVanishingDebtRectangleSequence
 /-- The terminal coordinate selected by a positive rectangle atom is nonzero. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     reward packet.terminal packet.observer ≠ 0 := by
   intro hzero
@@ -206,8 +206,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.reward_ne_zero
 strictly positive. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.rewardBound_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingRewardBound reward := by
   have hbound := abs_reward_le_quittingRewardBound reward packet.terminal
@@ -221,8 +221,8 @@ tangent column yields either prescribed atoms infinitely often or a fixed
 terminal pure-time rectangle sequence whose observer debt vanishes. -/
 theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       Nonempty (QuittingStoppingLawVanishingDebtRectangleSequence frontier) := by
   classical
@@ -401,8 +401,8 @@ end QuittingCounterexampleStoppingLawFrontier
 theorem.  They are deliberately stated on the fixed literal terminal label. -/
 def HasQuittingStoppingLawOpenRectangleOrientation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : Prop :=
   packet.observer ∉ packet.terminal.val ∨
     packet.terminal.val.card = 1 ∨
@@ -412,8 +412,8 @@ def HasQuittingStoppingLawOpenRectangleOrientation
 is precisely a positive-reward collision containing the observer. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.openOrientation_or_positiveTargetCollision
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     HasQuittingStoppingLawOpenRectangleOrientation packet ∨
       (packet.observer ∈ packet.terminal.val ∧
@@ -438,8 +438,8 @@ response.  In particular, a later prefix-stack construction can target this
 unchanged suffix profile. -/
 def quittingStoppingLawRectangleTargetProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) : (quittingGame reward).BehaviorProfile :=
   Function.update (frontier.profiles (frontier.subseq (packet.rank n)))
@@ -449,8 +449,8 @@ def quittingStoppingLawRectangleTargetProfile
 /-- The normalized target-mass scale supplied by a positive rectangle atom. -/
 def quittingStoppingLawPositiveTargetMassLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : ℝ :=
   (packet.charge / 4) /
     ((Fintype.card (QuittingTerminalOutcome ι) : ℝ) *
@@ -459,8 +459,8 @@ def quittingStoppingLawPositiveTargetMassLower
 /-- The positive target-mass scale is strictly positive. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetMassLower_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) :
     0 < quittingStoppingLawPositiveTargetMassLower packet := by
   unfold quittingStoppingLawPositiveTargetMassLower
@@ -471,8 +471,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetMassLowe
 target endpoint. The estimate does not use terminal cardinality. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLower
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hrewardPositive : 0 < reward packet.terminal packet.observer) (n : ℕ) :
     quittingStoppingLawPositiveTargetMassLower packet ≤
@@ -541,8 +541,8 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLow
 sequence. -/
 def HasQuittingStoppingLawPositiveCollisionMarkedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (lower : ℝ) : Prop :=
   ∃ (stop : ℕ → ℕ) (cluster : QuittingTerminalSemanticPair ι)
@@ -606,8 +606,8 @@ Together with the vanishing endpoint debt, this is exactly the existing
 marked-tail escape/other-defect alternative. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTargetCollision_markedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hobserver : packet.observer ∈ packet.terminal.val)
     (hcollision : 1 < packet.terminal.val.card)
@@ -643,8 +643,8 @@ collision orientation is consumed; precisely the three explicit rectangle
 orientations above and the prescribed-payoff atom sequence remain open. -/
 theorem exists_prescribedAtomSequence_or_openRectangleOrientation_or_markedTailDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         HasQuittingStoppingLawOpenRectangleOrientation packet ∨

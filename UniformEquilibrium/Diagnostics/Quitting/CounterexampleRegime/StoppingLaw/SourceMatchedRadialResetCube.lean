@@ -31,13 +31,13 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- Extend the active inner resets by the unchanged source strategies. -/
 def sourceMatchedRadialCubeTarget
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (who : ι) :
     (quittingGame reward).BehaviorStrategy who :=
   if hwho : who ∈ frontier.active then
@@ -47,13 +47,13 @@ def sourceMatchedRadialCubeTarget
 
 /-- Extend radial coefficients by zero on inactive players. -/
 def sourceMatchedRadialCubeScale
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (weight : {who // who ∈ frontier.active} → ℝ) (who : ι) : ℝ :=
   if hwho : who ∈ frontier.active then weight ⟨who, hwho⟩ else 0
 
 @[simp]
 theorem sourceMatchedRadialCubeTarget_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
     frontier.sourceMatchedRadialCubeTarget rank mover.1 =
       frontier.sourceMatchedInnerResetStrategy rank mover := by
@@ -61,7 +61,7 @@ theorem sourceMatchedRadialCubeTarget_active
 
 @[simp]
 theorem sourceMatchedRadialCubeScale_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (weight : {who // who ∈ frontier.active} → ℝ)
     (mover : {who // who ∈ frontier.active}) :
     frontier.sourceMatchedRadialCubeScale weight mover.1 = weight mover := by
@@ -70,7 +70,7 @@ theorem sourceMatchedRadialCubeScale_active
 /-- One variable-scale reset cube containing all radially scaled active
 frontier columns. -/
 def sourceMatchedRadialResetCubeData
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) :
@@ -91,7 +91,7 @@ def sourceMatchedRadialResetCubeData
 
 @[simp]
 theorem sourceMatchedRadialResetCubeData_profile_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) :
@@ -107,7 +107,7 @@ Every radial face is an actual behavioral profile in the semantic carrier,
 and the empty face is the frontier source. The exact carrier minimum and the
 source's `o(lambda)` excess therefore control all faces simultaneously. -/
 theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -135,26 +135,26 @@ theorem eventually_all_sourceMatchedRadialResetCubeData_normalizedTotalDebtChang
 /-- Forget the active-subtype labels of a face, obtaining the corresponding
 literal reset coordinates in the ambient player cube. -/
 def sourceMatchedRadialActiveFace
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (face : Finset {who // who ∈ frontier.active}) : Finset ι :=
   face.image Subtype.val
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     frontier.sourceMatchedRadialActiveFace ∅ = ∅ := by
   simp [sourceMatchedRadialActiveFace]
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     frontier.sourceMatchedRadialActiveFace {mover} = {mover.1} := by
   simp [sourceMatchedRadialActiveFace]
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_insert
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (face : Finset {who // who ∈ frontier.active})
     (mover : {who // who ∈ frontier.active}) :
     frontier.sourceMatchedRadialActiveFace (insert mover face) =
@@ -163,7 +163,7 @@ theorem sourceMatchedRadialActiveFace_insert
 
 @[simp]
 theorem sourceMatchedRadialActiveFace_univ
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     frontier.sourceMatchedRadialActiveFace Finset.univ = frontier.active := by
   ext who
   simp [sourceMatchedRadialActiveFace]
@@ -172,7 +172,7 @@ theorem sourceMatchedRadialActiveFace_univ
 strategy, the singleton vertex of the inner source-matched cube is exactly
 the corresponding inner reset. -/
 theorem sourceMatchedResetCubeData_rebase_profile_singleton_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (profile : (quittingGame reward).BehaviorProfile)
     (mover : {who // who ∈ frontier.active})
     (hsource : profile mover.1 =
@@ -195,7 +195,7 @@ theorem sourceMatchedResetCubeData_rebase_profile_singleton_eq
 /-- The two-coordinate vertex of the same rebased inner cube applies the two
 literal inner resets in either order. -/
 theorem sourceMatchedResetCubeData_rebase_profile_pair_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (profile : (quittingGame reward).BehaviorProfile)
     (first second : {who // who ∈ frontier.active})
     (hne : first.1 ≠ second.1)
@@ -233,7 +233,7 @@ theorem sourceMatchedResetCubeData_rebase_profile_pair_eq
 /-- One pure-time deviation evaluated on an actual active face of the radial
 source-matched cube. -/
 def sourceMatchedRadialFacePayoff
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -246,7 +246,7 @@ def sourceMatchedRadialFacePayoff
 
 /-- The behavioral best-response cap on one actual active radial face. -/
 def sourceMatchedRadialFaceCap
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -258,7 +258,7 @@ def sourceMatchedRadialFaceCap
 /-- Cap nonadditivity on the actual radial cube is either below the requested
 full-word budget or localized to one literal negative cap square. -/
 theorem sourceMatchedRadialFaceCapNonadditivity_le_or_hasNegativeSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -284,7 +284,7 @@ product of the outer radial weights times the corresponding square in the
 inner common-scale source-matched cube rebased at that deviation. The inner
 square therefore carries another factor `lambda²`. -/
 theorem sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -415,7 +415,7 @@ theorem sourceMatchedRadialFacePayoff_square_eq_weights_mul_innerSquare
 /-- Every opponent square of a radial pure-time payoff is uniformly
 `O(lambda²)`, independently of the face, quit time, and radial weights. -/
 theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -486,7 +486,7 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le_of_ne
 using the observer coordinate vanishes because the pure deviation overwrites
 that reset. -/
 theorem abs_sourceMatchedRadialFacePayoff_square_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -546,7 +546,7 @@ theorem abs_sourceMatchedRadialFacePayoff_square_le
 /-- The affine remainder of every fixed pure-time witness on every radial
 face is explicitly quadratic in the frontier reset scale. -/
 theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -568,7 +568,7 @@ theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le
 /-- A single coarse quadratic budget controls the affine remainder of every
 face and every pure-time witness in the finite active cube. -/
 theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le_uniform
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -608,7 +608,7 @@ theorem abs_sourceMatchedRadialFacePayoff_affineRemainder_le_uniform
 /-- The uniform quadratic affine-remainder budget is `o(lambda)` after
 normalization by the positive frontier scale. -/
 theorem sourceMatchedRadialFacePayoff_affineRemainderBudget_div_tendsto_zero
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (bound : ℝ) :
     Tendsto (fun rank ↦
       ((Fintype.card {who // who ∈ frontier.active} : ℝ) ^ 2 *
@@ -626,7 +626,7 @@ theorem sourceMatchedRadialFacePayoff_affineRemainderBudget_div_tendsto_zero
 /-- Equivalently, every face and pure-time witness eventually has affine
 remainder at most `epsilon * lambda`, uniformly over the finite cube. -/
 theorem eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -657,7 +657,7 @@ theorem eventually_all_sourceMatchedRadialFacePayoff_affineRemainder_le
 
 /-- Every actual radial face admits an `eta`-optimal pure-time witness. -/
 theorem exists_sourceMatchedRadialFaceWitness
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -702,7 +702,7 @@ alternative is a literal active-coordinate edge of this radial cube; the
 passport alternative controls the selected full-face witness on every active
 face. No chronology is asserted. -/
 theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -789,7 +789,7 @@ theorem exists_sourceMatchedRadial_commonPassport_or_edgeWitnessSwitch
 
 /-- Every active singleton vertex is exactly its literal radial reset. -/
 theorem sourceMatchedRadialResetCubeData_profile_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -827,7 +827,7 @@ theorem sourceMatchedRadialResetCubeData_profile_singleton
 /-- A frozen active cube edge divided by the positive frontier scale is
 exactly its normalized radial debt direction. -/
 theorem sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -860,7 +860,7 @@ theorem sourceMatchedRadialResetCubeData_debtEdge_div_eq_radialDirection
 /-- The normalized frozen active star is exactly the sum of the normalized
 radial debt directions. -/
 theorem sum_sourceMatchedRadialResetCubeData_debtEdge_div_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) (observer : ι) :
@@ -884,7 +884,7 @@ theorem sum_sourceMatchedRadialResetCubeData_debtEdge_div_eq
 /-- Listing every active player once turns the cubical frozen-edge sum into
 the active-subtype star. -/
 theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_eq_sum
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1)
@@ -903,7 +903,7 @@ theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_eq_sum
 /-- The normalized frozen edge sum along the active reset word is exactly the
 sum of normalized radial debt directions. -/
 theorem frozenEdgeSum_sourceMatchedRadialResetCubeData_debt_div_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (weight : {who // who ∈ frontier.active} → ℝ)
     (hweight0 : ∀ mover, 0 ≤ weight mover)
     (hweight1 : ∀ mover, weight mover ≤ 1) (observer : ι) :
@@ -928,7 +928,7 @@ There is one cube coordinate per active player.  The normalized frozen debt
 star converges coordinatewise to zero, while the normalized mover-diagonal
 charge converges to a strictly positive limit. -/
 theorem exists_boundedRadialSourceMatchedResetCube
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :

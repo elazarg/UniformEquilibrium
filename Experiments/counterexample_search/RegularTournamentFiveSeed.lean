@@ -26,7 +26,7 @@ every right-hand side.
 
 The seed also satisfies both assumptions of the quitting existence theorem of
 Solan and Vieille, *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2,
-so granting that theorem it carries no counterexample regime.  That exclusion
+so granting that theorem it carries no terminal exploitability witness.  That exclusion
 is conditional on the theorem and is not proved here.
 -/
 
@@ -222,11 +222,11 @@ theorem reward_cappedJointExit : QuittingCappedJointExit reward := by
     · split <;> norm_num
     · norm_num
 
-/-- The seed carries no counterexample regime.  The seed's preemption cycle
+/-- The seed carries no terminal exploitability witness.  The seed's preemption cycle
 and marked collision therefore cannot by themselves force one. -/
-theorem reward_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime reward) :=
-  isEmpty_quittingCounterexampleRegime_of_cappedJointExit
+theorem reward_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness reward) :=
+  isEmpty_quittingTerminalExploitabilityWitness_of_cappedJointExit
     reward_unitSoloExit reward_cappedJointExit
 
 end RegularTournamentFiveSeed

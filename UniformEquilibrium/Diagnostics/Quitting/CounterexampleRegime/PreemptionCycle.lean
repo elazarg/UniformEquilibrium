@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import MathUE.Topology.FiniteLabelSubsequence
 
 /-!
-# Strict preemption cycles in a quitting counterexample regime
+# Strict preemption cycles in a quitting terminal exploitability witness
 
 The stationary terminal-gap inequality first forces one full-gap solo
 preemption edge.  A two-rate stationary probe propagates every reached edge.
@@ -25,23 +25,23 @@ namespace GameTheory
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- At every positive owner-solo rate, a viable owner forces some distinct
 opponent's affine immediate-Quit endpoint to beat the owner's solo payoff by
 the full terminal gap. -/
 theorem exists_soloRate_joiningGain
-    (regime : QuittingCounterexampleRegime reward) {owner : player}
-    (howner : -regime.terminalGap <
+    (witness : QuittingTerminalExploitabilityWitness reward) {owner : player}
+    (howner : -witness.terminalGap <
       quittingSoloReward reward owner owner)
     {rate : ℝ} (hrate0 : 0 < rate) (hrate1 : rate ≤ 1) :
     ∃ other, other ≠ owner ∧
-      quittingSoloReward reward owner other + regime.terminalGap ≤
+      quittingSoloReward reward owner other + witness.terminalGap ≤
         (1 - rate) * quittingSoloReward reward other other +
           rate * quittingSingletonCollisionReward reward owner other := by
   let rateCoin := quittingHazardCoin rate hrate0.le hrate1
   let root := quittingSoloStationaryRoot owner rateCoin
-  obtain ⟨who, hgain⟩ := regime.exists_stationaryCap_gain root
+  obtain ⟨who, hgain⟩ := witness.exists_stationaryCap_gain root
   have hpositive : 0 < (rateCoin true).toReal := by
     simpa only [rateCoin, quittingHazardCoin_true_toReal] using hrate0
   have hactual : quittingTerminalPayoff reward
@@ -53,7 +53,7 @@ theorem exists_soloRate_joiningGain
   · subst who
     rw [hactual, quittingStationaryUnilateralCap_solo_owner] at hgain
     rcases le_max_iff.mp hgain with hself | hnever
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
     · linarith
   · refine ⟨who, hwho, ?_⟩
     rw [hactual,
@@ -65,35 +65,35 @@ theorem exists_soloRate_joiningGain
       quittingHazardCoin_true_toReal] at hgain
     rcases le_max_iff.mp hgain with hquit | hcontinue
     · exact hquit
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
 
 /-- Every viable solo owner has a strict full-gap preemptor.  The conclusion
 is the zero-rate endpoint of `exists_soloRate_joiningGain`; finiteness turns
 the limiting argument into one explicit minimum-slack contradiction. -/
 theorem exists_soloPreemptor
-    (regime : QuittingCounterexampleRegime reward) {owner : player}
-    (howner : -regime.terminalGap <
+    (witness : QuittingTerminalExploitabilityWitness reward) {owner : player}
+    (howner : -witness.terminalGap <
       quittingSoloReward reward owner owner) :
-    ∃ other, QuittingSoloPreempts reward regime.terminalGap owner other := by
+    ∃ other, QuittingSoloPreempts reward witness.terminalGap owner other := by
   by_contra hnot
   simp only [QuittingSoloPreempts, not_exists, not_and, not_le] at hnot
-  obtain ⟨witness, hwitnessNe, -⟩ :=
-    regime.exists_soloRate_joiningGain howner (rate := 1) one_pos le_rfl
-  have hwitnessMem : witness ∈ Finset.univ.erase owner :=
-    Finset.mem_erase.mpr ⟨hwitnessNe, Finset.mem_univ witness⟩
+  obtain ⟨playerWitness, hplayerWitnessNe, -⟩ :=
+    witness.exists_soloRate_joiningGain howner (rate := 1) one_pos le_rfl
+  have hplayerWitnessMem : playerWitness ∈ Finset.univ.erase owner :=
+    Finset.mem_erase.mpr ⟨hplayerWitnessNe, Finset.mem_univ playerWitness⟩
   have hopponents : (Finset.univ.erase owner).Nonempty :=
-    ⟨witness, hwitnessMem⟩
+    ⟨playerWitness, hplayerWitnessMem⟩
   obtain ⟨gapArg, hgapMem, hgapMin⟩ := Finset.exists_min_image
     (Finset.univ.erase owner)
     (fun other ↦ quittingSoloReward reward owner other +
-      regime.terminalGap - quittingSoloReward reward other other)
+      witness.terminalGap - quittingSoloReward reward other other)
     hopponents
   obtain ⟨spreadArg, _, hspreadMax⟩ := Finset.exists_max_image
     (Finset.univ.erase owner)
     (fun other ↦ |quittingSingletonCollisionReward reward owner other -
       quittingSoloReward reward other other|) hopponents
   set slack := quittingSoloReward reward owner gapArg +
-    regime.terminalGap - quittingSoloReward reward gapArg gapArg with hslack
+    witness.terminalGap - quittingSoloReward reward gapArg gapArg with hslack
   set spread := |quittingSingletonCollisionReward reward owner spreadArg -
     quittingSoloReward reward spreadArg spreadArg| with hspread
   have hgapArgNe : gapArg ≠ owner := (Finset.mem_erase.mp hgapMem).1
@@ -112,11 +112,11 @@ theorem exists_soloPreemptor
     rw [hrate]
     exact (div_le_one hdenom).mpr (by linarith)
   obtain ⟨other, hotherNe, hgain⟩ :=
-    regime.exists_soloRate_joiningGain howner hrate0 hrate1
+    witness.exists_soloRate_joiningGain howner hrate0 hrate1
   have hotherMem : other ∈ Finset.univ.erase owner :=
     Finset.mem_erase.mpr ⟨hotherNe, Finset.mem_univ other⟩
   have hslackMin : slack ≤ quittingSoloReward reward owner other +
-      regime.terminalGap - quittingSoloReward reward other other := by
+      witness.terminalGap - quittingSoloReward reward other other := by
     simpa only [hslack] using hgapMin other hotherMem
   have hspreadBound :
       quittingSingletonCollisionReward reward owner other -
@@ -142,11 +142,11 @@ The two-rate probe makes the supplied predecessor vanish one order faster than
 the current owner, while retaining enough provenance to rule out a spurious
 self-witness in the limit. -/
 theorem exists_soloPreemptor_of_soloPreempts
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {predecessor current : player}
-    (hedge : QuittingSoloPreempts reward regime.terminalGap
+    (hedge : QuittingSoloPreempts reward witness.terminalGap
       predecessor current) :
-    ∃ next, QuittingSoloPreempts reward regime.terminalGap current next := by
+    ∃ next, QuittingSoloPreempts reward witness.terminalGap current next := by
   let rate : ℕ → ℝ := fun n ↦ 1 / ((n : ℝ) + 1)
   have hrate0 : ∀ n, 0 < rate n := by
     intro n
@@ -168,14 +168,14 @@ theorem exists_soloPreemptor_of_soloPreempts
   have hwitness : ∀ n, ∃ who,
       quittingTerminalPayoff reward
           (quittingStationaryProfile reward (root n)) who +
-          regime.terminalGap ≤
+          witness.terminalGap ≤
         quittingStationaryUnilateralCap reward (root n) who := by
     intro n
-    exact regime.exists_stationaryCap_gain (root n)
+    exact witness.exists_stationaryCap_gain (root n)
   have hfrequent : ∃ᶠ n in Filter.atTop, ∃ who,
       quittingTerminalPayoff reward
           (quittingStationaryProfile reward (root n)) who +
-          regime.terminalGap ≤
+          witness.terminalGap ≤
         quittingStationaryUnilateralCap reward (root n) who :=
     Filter.Frequently.of_forall hwitness
   rw [Filter.frequently_exists] at hfrequent
@@ -188,44 +188,44 @@ theorem exists_soloPreemptor_of_soloPreempts
         hsubseq.tendsto_atTop
   have hcap :=
     (tendsto_quittingStationaryUnilateralCap_preemptionRoot
-      (reward := reward) hedge regime.terminalGap_pos.le
+      (reward := reward) hedge witness.terminalGap_pos.le
         rate hrate0 hrate1 hrate who).comp hsubseq.tendsto_atTop
-  have hlimit : quittingSoloReward reward current who + regime.terminalGap ≤
+  have hlimit : quittingSoloReward reward current who + witness.terminalGap ≤
       max (quittingSoloReward reward who who)
         (quittingSoloReward reward current who) := by
     apply le_of_tendsto_of_tendsto
-      (hpayoff.add_const regime.terminalGap) hcap
+      (hpayoff.add_const witness.terminalGap) hcap
     exact Filter.Eventually.of_forall hgain
   have hwho : who ≠ current := by
     intro heq
     subst who
     simp only [max_self] at hlimit
-    linarith [regime.terminalGap_pos]
+    linarith [witness.terminalGap_pos]
   refine ⟨who, hwho, ?_⟩
   rcases le_max_iff.mp hlimit with hquit | hcontinue
   · exact hquit
-  · linarith [regime.terminalGap_pos]
+  · linarith [witness.terminalGap_pos]
 
-/-- Every quitting counterexample regime forces a finite strict full-gap
+/-- Every quitting terminal exploitability witness forces a finite strict full-gap
 preemption cycle.  Finiteness is used only after the two-rate propagation
 theorem has made the preemption relation serial on its reached carrier. -/
 theorem nonempty_soloPreemptionCycle
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap) := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Nonempty (QuittingSoloPreemptionCycle reward witness.terminalGap) := by
   classical
   let Carrier := {current : player // ∃ predecessor,
-    QuittingSoloPreempts reward regime.terminalGap predecessor current}
-  obtain ⟨owner, howner⟩ := regime.exists_terminalGap_le_soloReward
-  have hownerViable : -regime.terminalGap <
+    QuittingSoloPreempts reward witness.terminalGap predecessor current}
+  obtain ⟨owner, howner⟩ := witness.exists_terminalGap_le_soloReward
+  have hownerViable : -witness.terminalGap <
       quittingSoloReward reward owner owner := by
-    linarith [regime.terminalGap_pos]
-  obtain ⟨first, hfirst⟩ := regime.exists_soloPreemptor hownerViable
+    linarith [witness.terminalGap_pos]
+  obtain ⟨first, hfirst⟩ := witness.exists_soloPreemptor hownerViable
   letI : Nonempty Carrier := ⟨⟨first, owner, hfirst⟩⟩
   let R : Carrier → Carrier → Prop := fun current next ↦
-    QuittingSoloPreempts reward regime.terminalGap current.1 next.1
+    QuittingSoloPreempts reward witness.terminalGap current.1 next.1
   have hserial : ∀ state : Carrier, ∃ next, R state next := by
     intro state
-    obtain ⟨next, hedge⟩ := regime.exists_soloPreemptor_of_soloPreempts
+    obtain ⟨next, hedge⟩ := witness.exists_soloPreemptor_of_soloPreempts
       (Classical.choose_spec state.2)
     exact ⟨⟨next, state.1, hedge⟩, hedge⟩
   obtain ⟨cycle⟩ :=
@@ -235,12 +235,12 @@ theorem nonempty_soloPreemptionCycle
 /-- Strongest current counterexample localization: the executable immediate
 singleton collision and the payoff-table preemption cycle hold together. -/
 theorem immediateSingletonCollision_and_soloPreemptionCycle
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingImmediateSingletonCollision reward regime.terminalGap) ∧
-      Nonempty (QuittingSoloPreemptionCycle reward regime.terminalGap) :=
-  ⟨regime.exists_immediateSingletonCollision,
-    regime.nonempty_soloPreemptionCycle⟩
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Nonempty (QuittingImmediateSingletonCollision reward witness.terminalGap) ∧
+      Nonempty (QuittingSoloPreemptionCycle reward witness.terminalGap) :=
+  ⟨witness.exists_immediateSingletonCollision,
+    witness.nonempty_soloPreemptionCycle⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

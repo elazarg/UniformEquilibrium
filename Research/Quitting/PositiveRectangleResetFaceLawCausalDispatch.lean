@@ -37,8 +37,8 @@ namespace QuittingStoppingLawVanishingDebtRectangleSequence
 /-- **Positive rectangle law-preserving reset-face limit.** -/
 theorem exists_positiveObserver_carrierResetFaceLawPoint
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (hpositive : 0 < reward packet.terminal packet.observer) :
@@ -113,8 +113,8 @@ stage coalition, but that coalition contains a fixed player distinct from
 the reset observer. -/
 theorem exists_positiveObserver_resetFaceConcentratedPacket_of_collision
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (hpositive : 0 < reward packet.terminal packet.observer)

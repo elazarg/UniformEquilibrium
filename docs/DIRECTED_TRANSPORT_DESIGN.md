@@ -268,7 +268,7 @@ conjunctions of affine inequalities the Farkas layer covers it: the
 row encoding of `MathUE/DirectedTransport/MaxAffine/Farkas.lean` never uses
 functionality.  The variant is nonetheless not written, and the reason has a
 proved core with an honest scope: on the one-real-coordinate-per-player
-vertex set, the constraints the counterexample regime forces on preemption
+vertex set, the constraints the terminal exploitability witness forces on preemption
 edges are floorless constant labels
 (`UniformEquilibrium/Quitting/Classification/PreemptionTransport.lean`), which compose without
 obstruction.  That rules out the scalar-per-player compression, not every

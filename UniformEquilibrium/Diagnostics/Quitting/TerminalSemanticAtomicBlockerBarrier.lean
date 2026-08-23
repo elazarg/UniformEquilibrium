@@ -301,16 +301,16 @@ theorem terminalExploitabilityGap_le_atomicBlockerBarrier
     dsimp only [profile] at hexploit hupper hprofile
     linarith
 
-/-- Counterexample-regime form of the every-row blocker barrier. -/
-theorem QuittingCounterexampleRegime.terminalGap_le_atomicBlockerBarrier
-    (regime : QuittingCounterexampleRegime reward)
+/-- Terminal exploitability witness form of the every-row blocker barrier. -/
+theorem QuittingTerminalExploitabilityWitness.terminalGap_le_atomicBlockerBarrier
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {root : ι → PMF Bool} {owner : ι}
     (howner : root owner = PMF.pure true) :
-    regime.terminalGap ≤
+    witness.terminalGap ≤
       max (quittingForcedOwnerOutsiderDefect reward root owner)
         (max 0 (-quittingAtomicBlockerBalance reward root owner)) :=
   terminalExploitabilityGap_le_atomicBlockerBarrier howner
-    regime.terminalGap_pos regime.terminalExploitability
+    witness.terminalGap_pos witness.terminalExploitability
 
 /-- If the blocker balance is positive, the barrier is paid entirely by a
 literal outsider endpoint deviation.  The witness can be chosen pure because

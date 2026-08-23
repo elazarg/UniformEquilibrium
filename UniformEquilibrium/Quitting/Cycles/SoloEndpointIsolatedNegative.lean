@@ -15,7 +15,7 @@ the owner's singleton payoff is negative, this block belongs to the isolated
 negative branch of the cyclic classification.
 
 This implication is intrinsic to the quitting game.  It assumes no
-counterexample regime or asymptotic limit.
+terminal exploitability witness or asymptotic limit.
 -/
 
 noncomputable section

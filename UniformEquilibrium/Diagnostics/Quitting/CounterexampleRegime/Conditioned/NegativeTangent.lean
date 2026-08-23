@@ -37,15 +37,15 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
-namespace CounterexampleRegimePeriodOneTangentReadout
+namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (readout : CounterexampleRegimePeriodOneTangentReadout seam)
+variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- Exact decomposition of a selected one-stage tangent through the honest
 conditioned far value. -/
@@ -228,7 +228,7 @@ theorem eventually_phaseGain_of_mass_pos_of_tangent_neg
   (readout.tendsto_phaseGain_of_mass_pos_of_tangent_neg
     seam player hmass hnegative).eventually_const_lt (neg_pos.mpr hnegative)
 
-end CounterexampleRegimePeriodOneTangentReadout
+end TerminalExploitabilityWitnessPeriodOneTangentReadout
 
 end QuittingCounterexampleDynamicTailWitness
 

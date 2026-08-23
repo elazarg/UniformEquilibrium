@@ -531,8 +531,8 @@ theorem hasPositiveMinimumTerminalSemanticDebt_iff_terminalSemanticPlateau
 
 /-- A provenance atomic minimum-semantic solo row cannot exist. -/
 theorem not_hasProvenanceAtomicMinimumSemanticSoloRow
-    (regime : QuittingCounterexampleRegime reward) :
-    ¬ HasProvenanceAtomicMinimumSemanticSoloRow regime := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    ¬ HasProvenanceAtomicMinimumSemanticSoloRow witness := by
   rintro ⟨current, tail, owner, hazard, anchor, _hcurrentCarrier,
     htailCarrier, _hcurrentMin, htailMin, _hprefix, _hnash,
     _hcurrentDebt, htailDebt, _hotherDebt, _hownerPin,
@@ -556,11 +556,11 @@ theorem not_hasProvenanceAtomicMinimumSemanticSoloRow
 plateau; the provenance atomic alternative is eliminated. -/
 theorem noUniformPayoff_implies_positiveMinimumSemanticPlateau
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward := by
   obtain ⟨pair, _root, hpair, _hnash, hminimum, hdebt, _hface⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff
-      reward regime.not_exists_uniformEquilibriumPayoff
+      reward witness.not_exists_uniformEquilibriumPayoff
   have hdebtNonneg : ∀ player,
       0 ≤ quittingTerminalSemanticDebt pair player :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier

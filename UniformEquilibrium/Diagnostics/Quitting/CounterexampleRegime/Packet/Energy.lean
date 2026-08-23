@@ -8,7 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Packet.Defec
 import UniformEquilibrium.Quitting.Classification.SingletonPacketEnergy
 
 /-!
-# Packet energy restrictions in a counterexample regime
+# Packet energy restrictions in a terminal exploitability witness
 
 The generic refusal-energy identities and defect comparison live in
 `Quitting.Classification.SingletonPacketEnergy`. This adapter rules out
@@ -28,17 +28,17 @@ open Finset
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
-/-- No normalized singleton packet of a counterexample regime has a full-mass
+/-- No normalized singleton packet of a terminal exploitability witness has a full-mass
 atom. A strict-surplus atom supplies positive mass away from every putative
 full atom. -/
 theorem normalizedSingletonPacket_mass_lt_one
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) (owner : ι) :
     packet.mass owner < 1 := by
   obtain ⟨selected, hselected, hselectedLt, -, -⟩ :=
-    regime.exists_active_strictSingletonRefusal packet
+    witness.exists_active_strictSingletonRefusal packet
   by_cases heq : owner = selected
   · simpa [heq] using hselectedLt
   · have hmem : owner ∈ (Finset.univ.erase selected : Finset ι) := by
@@ -54,32 +54,32 @@ theorem normalizedSingletonPacket_mass_lt_one
     rw [packet.mass_sum] at hsplit
     linarith
 
-/-- In a counterexample regime the aggregate weighted refusal identity is
+/-- In a terminal exploitability witness the aggregate weighted refusal identity is
 automatic: strict packet surplus rules out every full-mass denominator. -/
 theorem packetWeightedRefusal_eq_quadraticForm
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     quittingPacketWeightedRefusalSurplus packet =
       quittingSingletonPacketQuadraticEnergy reward packet.mass :=
   quittingPacketWeightedRefusal_eq_quadraticForm packet
-    (regime.normalizedSingletonPacket_mass_lt_one packet)
+    (witness.normalizedSingletonPacket_mass_lt_one packet)
 
 /-- **Positive reciprocal pair restriction.** Every normalized singleton
-packet of a counterexample regime contains two distinct positive-mass owners
+packet of a terminal exploitability witness contains two distinct positive-mass owners
 whose reciprocal solo effects have positive sum. -/
 theorem exists_supported_pair_pos_reciprocalSoloEffect
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingNormalizedSingletonSourcePacket reward) :
     ∃ who owner,
       0 < packet.mass who ∧ 0 < packet.mass owner ∧ who ≠ owner ∧
         0 < quittingSingletonSoloEffect reward who owner +
           quittingSingletonSoloEffect reward owner who := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact exists_supported_pair_pos_reciprocalSoloEffect_of_packetDefect_pos
     packet
-    (quittingNormalizedSingletonPacketDefect_pos regime
+    (quittingNormalizedSingletonPacketDefect_pos witness
       (packet.mass, packet.target) packet.data_mem)
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

@@ -893,12 +893,12 @@ theorem not_quittingTailCoactiveChargeFloor_of_summable
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- **(ii), routed to the seam.**  The seam's joint-absorption budget excludes
 a raw co-activity floor along its canonical tail roots. -/
 theorem not_coactiveChargeFloor
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (first second : ι) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (first second : ι) :
     ¬QuittingTailCoactiveChargeFloor
       (quittingDynamicDebtTailRoots seam.tail) first second :=
   not_quittingTailCoactiveChargeFloor_of_summable _ first second
@@ -907,7 +907,7 @@ theorem not_coactiveChargeFloor
 /-- The seam's joint-absorption budget also excludes a single-player raw charge
 floor along its canonical tail roots. -/
 theorem not_rawChargeFloor
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (who : ι) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι) :
     ¬QuittingTailRawChargeFloor
       (quittingDynamicDebtTailRoots seam.tail) who :=
   not_quittingTailRawChargeFloor_of_tendsto _ who

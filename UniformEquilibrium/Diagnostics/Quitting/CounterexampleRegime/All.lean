@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.ChargedPacketAmplification
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicRenewal
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.AnchoredCyclicScreen
@@ -110,11 +110,11 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
 import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.UniformPayoffBridge
 
 /-!
-# Counterexample-regime diagnostics inventory
+# Terminal exploitability witness diagnostics inventory
 
-Import-only inventory of the quantitative counterexample-regime pipeline.
+Import-only inventory of the quantitative terminal exploitability witness pipeline.
 Every extension in this subtree materially consumes a selected
-`QuittingCounterexampleRegime`, its frontier, or a provenance-preserving object
+`QuittingTerminalExploitabilityWitness`, its frontier, or a provenance-preserving object
 derived from it.  Reusable mathematical and game-semantic owners live outside
 this subtree.
 

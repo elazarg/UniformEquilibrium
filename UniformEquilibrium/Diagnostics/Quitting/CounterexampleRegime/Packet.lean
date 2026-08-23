@@ -4,15 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Classification.AnalyticWaist
 
 /-!
-# Every counterexample regime carries a normalized singleton source packet
+# Every terminal exploitability witness carries a normalized singleton source packet
 
 The analytic waist theorem states that a finite quitting game either has a
 uniform-equilibrium payoff or exports a normalized singleton source packet.
-A counterexample regime refutes the first branch outright, so the packet is
+A terminal exploitability witness refutes the first branch outright, so the packet is
 forced: any counterexample reward table comes equipped with simplex weights
 over its players and a target payoff vector satisfying the source
 inequality, the punishment and singleton floors, and diagonal
@@ -31,19 +31,19 @@ namespace GameTheory
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
-/-- **Forced analytic packet.**  A counterexample regime refutes the uniform
+/-- **Forced analytic packet.**  A terminal exploitability witness refutes the uniform
 branch of the analytic waist, so the reward table exports a normalized
 singleton source packet. -/
 theorem nonempty_normalizedSingletonSourcePacket
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     Nonempty (QuittingNormalizedSingletonSourcePacket reward) := by
   rcases quittingGame_uniformPayoff_or_normalizedSingletonSourcePacket
       reward with hpayoff | hpacket
-  · exact absurd hpayoff regime.not_exists_uniformEquilibriumPayoff
+  · exact absurd hpayoff witness.not_exists_uniformEquilibriumPayoff
   · exact hpacket
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

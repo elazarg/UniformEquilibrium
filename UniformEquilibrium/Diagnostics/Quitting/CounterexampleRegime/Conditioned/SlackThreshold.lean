@@ -26,15 +26,15 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
-namespace CounterexampleRegimePeriodOneTangentReadout
+namespace TerminalExploitabilityWitnessPeriodOneTangentReadout
 
-variable (readout : CounterexampleRegimePeriodOneTangentReadout seam)
+variable (readout : TerminalExploitabilityWitnessPeriodOneTangentReadout seam)
 
 /-- The selected root's honest period-one absorbing delivery converges to the
 phantom boundary plus the extracted tangent.  This statement deliberately
@@ -120,7 +120,7 @@ theorem neg_tangent_le_punishmentSlack_or_eventually_phaseGain_and_underfloor
     exact (readout.eventually_phaseGain_of_mass_pos_of_tangent_neg
       seam player hmass hnegative).and hunderfloor
 
-end CounterexampleRegimePeriodOneTangentReadout
+end TerminalExploitabilityWitnessPeriodOneTangentReadout
 
 end QuittingCounterexampleDynamicTailWitness
 

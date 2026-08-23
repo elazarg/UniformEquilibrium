@@ -188,8 +188,8 @@ theorem fixedCurvatureRatios_terminalGapBudget_iff
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {regime : QuittingCounterexampleRegime reward}
-  {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+  {witness : QuittingTerminalExploitabilityWitness reward}
+  {frontier : QuittingCounterexampleStoppingLawFrontier witness}
   {mover : {who // who ∈ frontier.active}}
 
 namespace FullResetEndpointCluster

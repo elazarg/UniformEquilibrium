@@ -4,7 +4,7 @@
 
 The local and selected-path conditions do not contradict one another.  The
 four meaningful triple investigations instead isolate two constructive seams
-that must be crossed on the data supplied by an actual counterexample regime.
+that must be crossed on the data supplied by an actual terminal exploitability witness.
 
 1. **Occupation/admissibility.**  Produce from the optimized tail a normalized
    singleton occupation which is simultaneously funded and above the actual

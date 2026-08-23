@@ -80,7 +80,7 @@ def HasQuittingConcentratedSingletonFixedOwnerJoinLoss
 singleton.  The singleton identity and vanishing positive owner-Quit
 advantage are retained as common packet provenance. -/
 def HasQuittingConcentratedSingletonStrategicDispatch
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : iota} {terminal : {S : Finset iota // S.Nonempty}}
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
@@ -97,19 +97,19 @@ def HasQuittingConcentratedSingletonStrategicDispatch
           (profiles (packet.subseq rank)) (packet.mark rank)) owner) 0)
       atTop (nhds 0) ∧
     HasQuittingSingletonStaticStrategicDispatch reward other
-      regime.terminalGap ∧
+      witness.terminalGap ∧
     (HasQuittingStaticAtomicToggleHandoff reward ∨
       0 < quittingPunishmentValue reward other ∨
-      HasQuittingExactPlayerDeletionAtGap reward other regime.terminalGap ∨
+      HasQuittingExactPlayerDeletionAtGap reward other witness.terminalGap ∨
       HasQuittingConcentratedSingletonOwnerTailEscape packet other ∨
       HasQuittingConcentratedSingletonFixedOwnerJoinLoss packet other)
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- A strict joiner of a singleton supplies the existing literal atomic
 toggle handoff, with the pure pair row as its unstable atom. -/
 theorem hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner joiner : iota) (hne : joiner ≠ owner)
     (hstrict : quittingSoloReward reward owner joiner <
       quittingSingletonCollisionReward reward owner joiner) :
@@ -128,7 +128,7 @@ theorem hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
       quittingSingletonCollisionReward, Finset.pair_comm] using hstrict
   exact ⟨joiner, quitters, hquitters, hjoiner, htoggle,
     exists_outsider_atomicDeviation_of_strict_ownerToggle reward
-      regime.terminalGap_pos regime.terminalExploitability joiner quitters
+      witness.terminalGap_pos witness.terminalExploitability joiner quitters
       hquitters hjoiner htoggle⟩
 
 /-- **Relabeled concentrated-singleton strategic dispatch.**
@@ -140,7 +140,7 @@ If the reset owner is the strict singleton joiner, the same concentrated rows
 instead yield a recurrent owner-tail escape or a fixed played owner-insertion
 loss. -/
 theorem concentratedSingletonStrategicDispatch
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : iota} {terminal : {S : Finset iota // S.Nonempty}}
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
@@ -152,16 +152,16 @@ theorem concentratedSingletonStrategicDispatch
     (hscale : ∀ n, 0 < scale n)
     (hscaleTendsto : Tendsto scale atTop (nhds 0)) :
     HasQuittingConcentratedSingletonStrategicDispatch
-      regime packet other := by
+      witness packet other := by
   obtain ⟨hterminal, hadvantage, hstrategic⟩ :=
-    regime.exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentratedSingleton
+    witness.exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentratedSingleton
       packet hcard other hotherNe hotherMem hscale hscaleTendsto
   refine ⟨hterminal, hadvantage,
-    regime.singletonStaticStrategicDispatch other, ?_⟩
+    witness.singletonStaticStrategicDispatch other, ?_⟩
   rcases hstrategic with hthird | howner | hmoat
   · obtain ⟨joiner, hjoinerNe, _hjoinerOwner, hstrict⟩ := hthird
     exact Or.inl
-      (regime.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
+      (witness.hasStaticAtomicToggleHandoff_of_strictSingletonJoiner
         other joiner hjoinerNe hstrict)
   · have hcancel := packet.frequent_ownerTailEscape_or_fixedJoinLoss
       other hotherNe hterminal hscale hscaleTendsto howner
@@ -184,13 +184,13 @@ theorem concentratedSingletonStrategicDispatch
         dsimp only [gap]
         linarith
       exact ⟨hgap, by simpa only [gap] using hloss⟩
-  · rcases regime.singletonStaticStrategicDispatch other with
+  · rcases witness.singletonStaticStrategicDispatch other with
       hatomic | hpunishment | hdeletion
     · exact Or.inl hatomic
     · exact Or.inr (Or.inl hpunishment)
     · exact Or.inr (Or.inr (Or.inl hdeletion))
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 /-- The exact non-singleton output of the concentrated minimum-fiber
 consumer, bundled so a regime wrapper can expose the singleton branch without
@@ -241,13 +241,13 @@ structure QuittingConcentratedCollisionMinimumResidual
                   (profiles (packet.subseq (subseq rank)))
                   (packet.mark (subseq rank))) other
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Concentrated packet capstone.**  A packet carrying a fixed opponent
 label is either a fully classified relabeled singleton, or it retains the
 existing collision minimum-fiber residual with the same literal rows. -/
 theorem concentratedPacket_singletonStrategic_or_collisionMinimumResidual
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (minimum : QuittingTerminalSemanticPair iota)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : iota} {terminal : {S : Finset iota // S.Nonempty}}
@@ -264,13 +264,13 @@ theorem concentratedPacket_singletonStrategic_or_collisionMinimumResidual
     (hscale : ∀ n, 0 < scale n)
     (hscaleTendsto : Tendsto scale atTop (nhds 0)) :
     HasQuittingConcentratedSingletonStrategicDispatch
-        regime packet other ∨
+        witness packet other ∨
       Nonempty (QuittingConcentratedCollisionMinimumResidual
         reward minimum owner terminal packet) := by
   rcases exists_concentrated_singleton_or_tailEscape_or_otherDefect
       (reward := reward) minimum packet hminimumCarrier hminimum
         hminimumPositive hscale hscaleTendsto with hsingleton | hcollision
-  · exact Or.inl (regime.concentratedSingletonStrategicDispatch
+  · exact Or.inl (witness.concentratedSingletonStrategicDispatch
       packet hsingleton other hotherNe hotherMem hscale hscaleTendsto)
   · right
     obtain ⟨cluster, subseq, hcluster, hsubseq, htail, howner,
@@ -293,7 +293,7 @@ cardinality assumption: it is either a strategically classified opponent
 singleton, or the existing collision minimum-fiber residual on the same
 literal packet. -/
 theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (point : QuittingTerminalSemanticLawPoint iota)
     (owner : iota)
     (terminal : {S : Finset iota // S.Nonempty})
@@ -319,7 +319,7 @@ theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
         Tendsto scale atTop (nhds 0) ∧
         fixedOther ≠ owner ∧ fixedOther ∈ exact.val ∧
         (HasQuittingConcentratedSingletonStrategicDispatch
-            regime packet fixedOther ∨
+            witness packet fixedOther ∨
           Nonempty (QuittingConcentratedCollisionMinimumResidual
             reward point.1 owner exact packet)) := by
   obtain ⟨profiles, cutoff, scale, fixedOther, exact, hprofiles,
@@ -334,12 +334,12 @@ theorem exists_resetFaceLaw_singletonStrategic_or_collisionMinimumResidual
     rintro _ ⟨profile, rfl⟩
     exact ⟨profile, rfl⟩
   have hdispatch :=
-    regime.concentratedPacket_singletonStrategic_or_collisionMinimumResidual
+    witness.concentratedPacket_singletonStrategic_or_collisionMinimumResidual
       point.1 packet fixedOther hfixedOther hfixedOtherMem
         hpointCarrier hminimum hminimumPositive hscale hscaleTendsto
   exact ⟨profiles, cutoff, scale, fixedOther, exact, packet, hprofiles,
     hscale, hscaleTendsto, hfixedOther, hfixedOtherMem, hdispatch⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

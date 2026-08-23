@@ -30,14 +30,14 @@ open Filter Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
 /-- Cofinal conditioned targets that satisfy every punishment floor and admit
 a positive-absorption exact endpoint-Nash reset root. -/
 def HasCofinalFloorAdmissiblePositiveAbsorptionReset
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (who : ι) (eta : ℝ) : Prop :=
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι) (eta : ℝ) : Prop :=
   ∀ start, ∃ time, ∃ root : QuittingRootSimplex ι,
     start ≤ time ∧
     quittingDynamicDebtTailRoots seam.tail time who = PMF.pure false ∧
@@ -59,7 +59,7 @@ def HasCofinalFloorAdmissiblePositiveAbsorptionReset
 /-- Cofinal endpoint-reset pressure accompanied by one fixed underfloor
 coordinate and its exact phantom-survival funding inequality. -/
 def HasCofinalFundedUnderfloorReset
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (who underfloor : ι) (eta : ℝ) : Prop :=
@@ -94,7 +94,7 @@ def HasCofinalFundedUnderfloorReset
 positive-absorption exact endpoint-Nash root.  The selected outsider and the
 singleton deficit are uniform across all requested starting dates. -/
 theorem exists_cofinal_fixedOutsider_positiveAbsorptionReset_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -135,7 +135,7 @@ Either cofinally many exact reset targets are simultaneously punishment-floor
 admissible, or one fixed underfloor coordinate recurs with an exact
 phantom-survival funding account. -/
 theorem exists_cofinal_floorAdmissible_positiveAbsorptionReset_or_fundedUnderfloor
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight

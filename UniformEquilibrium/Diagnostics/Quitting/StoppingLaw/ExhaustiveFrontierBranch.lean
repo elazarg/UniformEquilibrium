@@ -14,7 +14,7 @@ partition.  Positive slope is separated from the flat case; within the flat
 case, support entry is separated from its absence, and positive charged
 circulation from the residual separating-potential co-decrease.
 
-The partition is finite tangent data.  It assumes no counterexample regime,
+The partition is finite tangent data.  It assumes no terminal exploitability witness,
 selected frontier, or asymptotic chronology.
 -/
 

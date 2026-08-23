@@ -165,10 +165,10 @@ theorem flat_exists_uniformEquilibriumPayoff :
     (by rw [flatJoin, flatMargin_one]; norm_num)
     (by rw [flatJoin, flatMargin_one]; norm_num)
 
-/-- The table carries no counterexample regime. -/
-theorem flat_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime flatReward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+/-- The table carries no terminal exploitability witness. -/
+theorem flat_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness flatReward) :=
+  ⟨fun witness => witness.not_exists_uniformEquilibriumPayoff
     flat_exists_uniformEquilibriumPayoff⟩
 
 end FlatNeighbourPocketEquilibrium

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixAdmissiblePath
 import UniformEquilibrium.Quitting.Debt.Dynamic.ReachableCarryTelescope
 
@@ -39,20 +39,20 @@ private abbrev AdmissibleRelation
 /-- The charge of a finite exact prefix is already available from the
 budget-to-go at its literal source state. -/
 theorem finitePrefix_charge_le_admissiblePotential_source
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (cert : QuittingPunishmentFloorFinitePrefix reward) :
     cert.charge ≤ quittingPunishmentFloorAdmissiblePotential reward
       (quittingFinitePrefixAdmissibleState cert 0 (by omega)) := by
   rw [← chargeSum_quittingFinitePrefixAdmissiblePath_horizon cert]
   exact (AdmissibleRelation reward).chargeSum_le_value
     (quittingPunishmentFloorAdmissible_hasFiniteBudget_of_finitePrefixChargeBound
-      regime.prefixCharge_le)
+      witness.prefixCharge_le)
     (quittingFinitePrefixAdmissiblePath cert cert.horizon (by omega))
 
 /-- Every positive tolerance is beaten by an exact prefix whose charge is
 within that tolerance of the least prefix-charge bound. -/
 theorem exists_finitePrefix_charge_gt_prefixChargeBound_sub
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ cert : QuittingPunishmentFloorFinitePrefix reward,
       quittingPunishmentFloorPrefixChargeBound reward - ε < cert.charge := by
@@ -65,7 +65,7 @@ theorem exists_finitePrefix_charge_gt_prefixChargeBound_sub
       exact le_of_not_gt fun hgt ↦ hno ⟨cert, hgt⟩
     have hleast :=
       (punishmentFloorPrefixChargeCapacity_toReal_le_iff
-        regime.prefixChargeCapacity_ne_top htarget).2 hall
+        witness.prefixChargeCapacity_ne_top htarget).2 hall
     linarith
   · refine ⟨quittingPunishmentFloorForwardFinitePrefix reward 0, ?_⟩
     have hnegative : quittingPunishmentFloorPrefixChargeBound reward - ε < 0 :=
@@ -77,7 +77,7 @@ theorem exists_finitePrefix_charge_gt_prefixChargeBound_sub
 This is an existence statement about admissible states, not about calibrated
 zero-boundary minimizers at those same states. -/
 theorem exists_finitePrefix_source_remainingCapacity_lt
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ cert : QuittingPunishmentFloorFinitePrefix reward,
       0 ≤ quittingPunishmentFloorAdmissibleRemainingCapacity reward
@@ -85,38 +85,38 @@ theorem exists_finitePrefix_source_remainingCapacity_lt
       quittingPunishmentFloorAdmissibleRemainingCapacity reward
           (quittingFinitePrefixAdmissibleState cert 0 (by omega)) < ε := by
   obtain ⟨cert, hcharge⟩ :=
-    exists_finitePrefix_charge_gt_prefixChargeBound_sub regime hε
+    exists_finitePrefix_charge_gt_prefixChargeBound_sub witness hε
   refine ⟨cert, ?_, ?_⟩
   · unfold quittingPunishmentFloorAdmissibleRemainingCapacity
     exact sub_nonneg.mpr
       (QuittingFiniteDynamicDebtAdmissibleChronology.admissiblePotential_le_prefixChargeBound
-        regime.prefixCharge_le _)
+        witness.prefixCharge_le _)
   · unfold quittingPunishmentFloorAdmissibleRemainingCapacity
-    have hlower := finitePrefix_charge_le_admissiblePotential_source regime cert
+    have hlower := finitePrefix_charge_le_admissiblePotential_source witness cert
     linarith
 
 /-- Any literal incoming path must fit in the remaining capacity of its
 target.  This is the quantitative least-capacity obstruction to attaching a
 fixed positive-charge terminal funding path at a near-maximal state. -/
 theorem admissiblePath_chargeSum_le_target_remainingCapacity
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {source target : QuittingPunishmentFloorAdmissibleState reward}
     (path : (AdmissibleRelation reward).Path source target) :
     path.chargeSum ≤
       quittingPunishmentFloorAdmissibleRemainingCapacity reward target := by
   have hdrop :=
     (quittingPunishmentFloorAdmissiblePotential_isBoundedPotential
-      regime.prefixCharge_le).isPotential.chargeSum_le path
+      witness.prefixCharge_le).isPotential.chargeSum_le path
   have hsource :=
     QuittingFiniteDynamicDebtAdmissibleChronology.admissiblePotential_le_prefixChargeBound
-      regime.prefixCharge_le source
+      witness.prefixCharge_le source
   unfold quittingPunishmentFloorAdmissibleRemainingCapacity
   linarith
 
 /-- At every scale there is a literal exact-prefix source which cannot be the
 target of any admissible incoming path carrying that scale of charge. -/
 theorem exists_finitePrefix_source_forbids_incoming_charge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ cert : QuittingPunishmentFloorFinitePrefix reward,
       0 ≤ quittingPunishmentFloorAdmissibleRemainingCapacity reward
@@ -126,10 +126,10 @@ theorem exists_finitePrefix_source_forbids_incoming_charge
           (quittingFinitePrefixAdmissibleState cert 0 (by omega))),
         path.chargeSum < ε := by
   obtain ⟨cert, hnonneg, hsmall⟩ :=
-    exists_finitePrefix_source_remainingCapacity_lt regime hε
+    exists_finitePrefix_source_remainingCapacity_lt witness hε
   refine ⟨cert, hnonneg, ?_⟩
   intro source path
   exact lt_of_le_of_lt
-    (admissiblePath_chargeSum_le_target_remainingCapacity regime path) hsmall
+    (admissiblePath_chargeSum_le_target_remainingCapacity witness path) hsmall
 
 end GameTheory

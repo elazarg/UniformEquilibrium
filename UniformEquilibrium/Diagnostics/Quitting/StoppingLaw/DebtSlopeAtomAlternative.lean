@@ -11,7 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeAtom
 
 This module packages the literal prescribed-atom or pure-time-rectangle
 alternative produced by a positive stopping-law debt slope.  The proposition
-is independent of any counterexample regime, selected frontier, or
+is independent of any terminal exploitability witness, selected frontier, or
 asymptotic tangent family.
 -/
 

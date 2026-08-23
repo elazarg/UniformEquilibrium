@@ -748,10 +748,10 @@ theorem positive_uniform_value_implies_minimum_allContinue_plateau
   have hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
     (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mp hpositive
-  let regime : QuittingCounterexampleRegime reward :=
-    quittingCounterexampleRegimeOfNoUniformPayoff reward hno
+  let witness : QuittingTerminalExploitabilityWitness reward :=
+    quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
   exact noUniformPayoff_implies_positiveMinimumSemanticPlateau
-    regime
+    witness
 
 /-- Fewer than four players cannot have positive uniform audit value. -/
 theorem not_positive_uniform_value_of_card_lt_four
@@ -760,9 +760,9 @@ theorem not_positive_uniform_value_of_card_lt_four
   intro hpositive
   have hno :=
     (uniform_value_pos_iff_no_uniformEquilibriumPayoff reward).mp hpositive
-  let regime : QuittingCounterexampleRegime reward :=
-    quittingCounterexampleRegimeOfNoUniformPayoff reward hno
-  have hfour := regime.three_lt_card
+  let witness : QuittingTerminalExploitabilityWitness reward :=
+    quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
+  have hfour := witness.three_lt_card
   omega
 
 /-- Hence every game with fewer than four players has zero uniform audit
@@ -773,9 +773,9 @@ theorem uniform_value_eq_zero_of_card_lt_four
     value reward (Law.uniform : Law ι) = 0 := by
   rw [uniform_value_eq_zero_iff_exists_uniformEquilibriumPayoff]
   by_contra hno
-  let regime : QuittingCounterexampleRegime reward :=
-    quittingCounterexampleRegimeOfNoUniformPayoff reward hno
-  exact (not_lt_of_ge regime.three_lt_card) hcard
+  let witness : QuittingTerminalExploitabilityWitness reward :=
+    quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hno
+  exact (not_lt_of_ge witness.three_lt_card) hcard
 
 /-! ## Why the audited player cannot be fixed ex ante -/
 

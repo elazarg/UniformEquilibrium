@@ -12,7 +12,7 @@ import Mathlib.Data.Fintype.Card
 This module owns the complement subtype used when a quitting-game argument
 deletes one distinguished player, together with its exact elementary
 cardinality laws.  The construction is independent of a reward table,
-counterexample regime, or deletion semantics.
+terminal exploitability witness, or deletion semantics.
 -/
 
 namespace GameTheory

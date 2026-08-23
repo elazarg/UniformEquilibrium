@@ -83,10 +83,10 @@ theorem exists_positiveMass_terminal_of_opponentIncidence
   have hfilter := (Finset.mem_filter.mp hterminal).2
   exact ⟨terminal, hfilter.1, hfilter.2, hpositive⟩
 
-/-- In a counterexample regime the incidence atom itself has a strict static
+/-- In a terminal exploitability witness the incidence atom itself has a strict static
 membership-toggle blocker. -/
-theorem QuittingCounterexampleRegime.exists_supportedStrictToggle_of_incidence
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_supportedStrictToggle_of_incidence
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner other : ι) (mass : QuittingTerminalOutcome ι → ℝ)
     (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
     (hincidence : 0 <
@@ -104,7 +104,7 @@ theorem QuittingCounterexampleRegime.exists_supportedStrictToggle_of_incidence
     exists_positiveMass_terminal_of_opponentIncidence
       owner other mass hmass hincidence
   exact ⟨terminal, hother, hmassPositive,
-    regime.terminalCoalition_has_strictToggle terminal⟩
+    witness.terminalCoalition_has_strictToggle terminal⟩
 
 /-- **Fixed-law reset dispatch.**
 
@@ -113,8 +113,8 @@ incidence, and the opposite-face transfer.  Its incidence atom has a strict
 counterexample toggle.  Dynamically, either an absorbing, positive-survival
 cap--Nash prefix strictly lowers debt and retains positive incidence, or the
 cap correspondence contains the all-Continue fixed point. -/
-theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_fixedLaw_resetFace_dispatch
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
     (owner other : ι)
@@ -171,7 +171,7 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
   have hmassSimplex : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) :=
     terminalSemanticLawCarrier_mass_mem_stdSimplex
       (point := (returned, mass)) hjoint
-  have htoggle := regime.exists_supportedStrictToggle_of_incidence
+  have htoggle := witness.exists_supportedStrictToggle_of_incidence
     owner other mass hmassSimplex hincidence
   have hreturnedPositive : 0 < quittingTerminalSemanticDebtSum returned :=
     hsourcePositive.trans_le hsourceLe
@@ -217,8 +217,8 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_resetFace_dispatch
 /-- Aggregate surplus can be carried alongside the fixed-law dispatch at the
 minimum source.  The conclusion deliberately keeps the source outcome and the
 reset incidence atom separate: the current theory does not identify them. -/
-theorem QuittingCounterexampleRegime.exists_fixedLaw_dispatch_and_sourceAggregate
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_fixedLaw_dispatch_and_sourceAggregate
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
     (owner other : ι) (players : Finset ι)
@@ -257,10 +257,10 @@ theorem QuittingCounterexampleRegime.exists_fixedLaw_dispatch_and_sourceAggregat
                   (insert outsider terminal.val) outsider)) := by
   obtain ⟨returned, hjoint, _hcarrier, hresetReturned, hsourceLe,
       _hreturnedLe, _htransfer, _htoggle, _hdispatch⟩ :=
-    regime.exists_fixedLaw_resetFace_dispatch source target mass owner other
+    witness.exists_fixedLaw_resetFace_dispatch source target mass owner other
       hminimum hsourcePositive htarget hreset hincidence
   exact ⟨⟨returned, hjoint, hresetReturned, hsourceLe⟩,
-    regime.exists_neverBudget_or_blockedCoalition_exact
+    witness.exists_neverBudget_or_blockedCoalition_exact
       source players hsource hminimum hsourcePositive⟩
 
 /-! ## Sharp local regression for the cap-dominating branch -/

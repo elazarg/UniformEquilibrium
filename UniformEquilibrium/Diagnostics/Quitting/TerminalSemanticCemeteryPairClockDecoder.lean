@@ -112,9 +112,9 @@ obstructions.  Flatness and positive survival of one supplied profile do not
 strengthen the reward-table dispatcher without a further gate tying that
 profile to insertion or punishment inequalities. -/
 theorem
-    QuittingCounterexampleRegime.cemeteryPairClock_strategicDispatcher
+    QuittingTerminalExploitabilityWitness.cemeteryPairClock_strategicDispatcher
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (roots : ℕ → ι → PMF Bool) (replacement : ℕ → PMF Bool)
     (mover observer : ι) (κ : ℝ)
     (cemetery : QuittingCemeteryPairClockWitness
@@ -146,19 +146,19 @@ theorem
                     (insert mover quitters)) who) ∨
         (Nonempty (QuittingDeletedPlayer mover) ∧
           HasTerminalExploitabilityGap
-            (quittingDeletePlayerReward reward mover) regime.terminalGap ∧
+            (quittingDeletePlayerReward reward mover) witness.terminalGap ∧
           Fintype.card (QuittingDeletedPlayer mover) < Fintype.card ι)) := by
   refine ⟨cemetery.replacement_not_complete,
     cemetery.pairClock_not_complete, ?_⟩
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue mover with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue mover with
     hincoming | hsolo
   · exact Or.inr (Or.inl hincoming)
   · by_cases hchi : quittingPunishmentValue reward mover ≤ 0
     · have hdispatch := exists_strict_owner_toggle_or_exact_playerDeletion
-        reward mover regime.terminalGap_pos regime.terminalExploitability
+        reward mover witness.terminalGap_pos witness.terminalExploitability
           hsolo hchi
       have hatomic := strictToggle_or_playerDeletion_to_atomicHandoff
-        reward regime.terminalGap_pos regime.terminalExploitability mover
+        reward witness.terminalGap_pos witness.terminalExploitability mover
           hdispatch
       rcases hatomic with hatomic | hdelete
       · right

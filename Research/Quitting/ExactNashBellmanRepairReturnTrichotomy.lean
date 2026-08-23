@@ -540,17 +540,17 @@ theorem exists_exactAllContinueReturn_targetMatchedPacket_collisionFaceSign
       quittingRootEndpointDifference reward repair.value
           (quittingSoloStationaryRoot owner
             (quittingHazardCoin rate hrate0 hrate1)) receiver = gain / 2 := by
-  let regime := quittingCounterexampleRegimeOfNoUniformPayoff reward hnot
+  let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff reward hnot
   obtain ⟨repair, packet, hroot, htarget⟩ :=
     exists_exactAllContinueReturn_and_targetMatchedPacket_of_no_uniformPayoff
       reward hnot
   have hpacketSurplus := packet.weightedSurplus_pos_of_no_uniformPayoff hnot
-  obtain ⟨owner, hownerSolo⟩ := regime.exists_terminalGap_le_soloReward
-  have hownerViable : -regime.terminalGap <
+  obtain ⟨owner, hownerSolo⟩ := witness.exists_terminalGap_le_soloReward
+  have hownerViable : -witness.terminalGap <
       quittingSoloReward reward owner owner := by
-    linarith [regime.terminalGap_pos]
+    linarith [witness.terminalGap_pos]
   obtain ⟨receiver, hne, hinsertion⟩ :=
-    regime.exists_collision_gain hownerViable
+    witness.exists_collision_gain hownerViable
   let gain := quittingSingletonCollisionReward reward owner receiver -
     quittingSoloReward reward owner receiver
   let slack := repair.value receiver -
@@ -566,10 +566,10 @@ theorem exists_exactAllContinueReturn_targetMatchedPacket_collisionFaceSign
         reward repair.value).1 hnashAll receiver
     simpa [quittingSoloReward, quittingSingletonTerminal] using
       sub_nonneg.mpr hsingleton
-  have hgainLower : regime.terminalGap ≤ gain := by
+  have hgainLower : witness.terminalGap ≤ gain := by
     dsimp only [gain]
     linarith
-  have hgainPos : 0 < gain := regime.terminalGap_pos.trans_le hgainLower
+  have hgainPos : 0 < gain := witness.terminalGap_pos.trans_le hgainLower
   let rate := (slack + gain / 2) / (slack + gain)
   have hden : 0 < slack + gain :=
     add_pos_of_nonneg_of_pos hslackNonneg hgainPos

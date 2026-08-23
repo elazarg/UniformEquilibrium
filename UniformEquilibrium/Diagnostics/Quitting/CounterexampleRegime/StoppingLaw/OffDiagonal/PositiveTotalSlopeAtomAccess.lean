@@ -31,7 +31,7 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
@@ -39,7 +39,7 @@ namespace QuittingCounterexampleStoppingLawFrontier
 and a strong vanishing-debt atom chronology using that same mover and one
 fixed off-diagonal observer. -/
 structure PositiveTotalSlopeEndpointAtomPassport
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   totalSlope_pos : 0 < ∑ observer, frontier.tangent mover observer
   endpoint : PositiveTotalSlopeEndpointCluster frontier mover
@@ -67,7 +67,7 @@ structure PositiveTotalSlopeEndpointAtomPassport
 passport.  The atom-interface charge is `7/16` of the selected positive
 off-diagonal tangent entry. -/
 theorem nonempty_positiveTotalSlopeEndpointAtomPassport
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hpositive : ∃ mover,
       0 < ∑ observer, frontier.tangent mover observer) :
     Nonempty (PositiveTotalSlopeEndpointAtomPassport frontier) := by
@@ -112,7 +112,7 @@ ranks simultaneously retain the literal source-relative endpoint excursion,
 the mover's legal full-reset gain, the strong common-response atom, and its
 Continue-prefix access through the exact stack at that same rank. -/
 theorem eventually_sourceExcursion_gain_and_atomAccess
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (passport : frontier.PositiveTotalSlopeEndpointAtomPassport)
     (eta : ℝ) (heta : eta <
       ∑ observer, frontier.tangent passport.mover observer) :

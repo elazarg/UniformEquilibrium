@@ -8,12 +8,12 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.Toggles
 import UniformEquilibrium.Quitting.Boundary.Repair.CollisionCertificateRepair
 
 /-!
-# Collision-repair screens in a counterexample regime
+# Collision-repair screens in a terminal exploitability witness
 
 A collision-repair mechanism produces terminal approximate equilibria at
-every positive tolerance.  A counterexample regime excludes every terminal
+every positive tolerance.  A terminal exploitability witness excludes every terminal
 approximate equilibrium below its fixed exploitability gap.  Therefore no
-collision-repair mechanism works in a counterexample regime, at any legal
+collision-repair mechanism works in a terminal exploitability witness, at any legal
 rate and for any ordered pair of players.
 
 For distinct players, the exact repair characterization turns this exclusion
@@ -28,30 +28,30 @@ namespace GameTheory
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
-/-- No collision-repair mechanism works under a counterexample regime. -/
+/-- No collision-repair mechanism works under a terminal exploitability witness. -/
 theorem not_quittingCollisionRepairWorks
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (owner blocker : ι) (rate : ℝ) (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) :
     ¬ QuittingCollisionRepairWorks reward owner blocker rate hrate0 hrate1 := by
   intro hworks
-  have hhalf : 0 < regime.terminalGap / 2 := half_pos regime.terminalGap_pos
+  have hhalf : 0 < witness.terminalGap / 2 := half_pos witness.terminalGap_pos
   obtain ⟨profile, _hshape, hnash⟩ :=
-    hworks (regime.terminalGap / 2) hhalf
-  exact regime.not_isεAsymptoticNash_of_lt_terminalGap profile
-    (by linarith [regime.terminalGap_pos]) hnash
+    hworks (witness.terminalGap / 2) hhalf
+  exact witness.not_isεAsymptoticNash_of_lt_terminalGap profile
+    (by linarith [witness.terminalGap_pos]) hnash
 
 /-- For a distinct owner and blocker, at least one exact repair condition
 fails at every legal rate. -/
 theorem collisionRepair_condition_failure
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {owner blocker : ι} (hne : owner ≠ blocker)
     {rate : ℝ} (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) :
     ¬ QuittingCollisionOwnerOptimal reward owner blocker rate ∨
       ¬ QuittingCollisionSpectatorNoJoin reward owner blocker rate ∨
         ¬ QuittingCollisionBlockerBalance reward owner blocker rate := by
-  have hnot := regime.not_quittingCollisionRepairWorks
+  have hnot := witness.not_quittingCollisionRepairWorks
     owner blocker rate hrate0 hrate1
   rw [quittingCollisionRepairWorks_iff reward hne hrate0 hrate1] at hnot
   tauto
@@ -60,9 +60,9 @@ theorem collisionRepair_condition_failure
 balance is automatic and every legal repair rate fails through owner endpoint
 optimality or through a spectator's profitable join. -/
 theorem collisionRepair_owner_or_spectator_failure_of_punishmentValue_le_solo
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (certificate : QuittingImmediateSingletonCollision reward
-      regime.terminalGap)
+      witness.terminalGap)
     (hpunishment : quittingPunishmentValue reward certificate.collider ≤
       quittingSoloReward reward certificate.collider certificate.collider)
     {rate : ℝ} (hrate0 : 0 ≤ rate) (hrate1 : rate ≤ 1) :
@@ -70,12 +70,12 @@ theorem collisionRepair_owner_or_spectator_failure_of_punishmentValue_le_solo
         certificate.collider rate ∨
       ¬ QuittingCollisionSpectatorNoJoin reward certificate.owner
         certificate.collider rate := by
-  have hfailure := regime.collisionRepair_condition_failure
+  have hfailure := witness.collisionRepair_condition_failure
     (Ne.symm certificate.collider_ne_owner) hrate0 hrate1
   have hbalance := certificate.blockerBalance_of_punishmentValue_le_solo
-    regime.terminalGap_pos.le hpunishment hrate0 hrate1
+    witness.terminalGap_pos.le hpunishment hrate0 hrate1
   tauto
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

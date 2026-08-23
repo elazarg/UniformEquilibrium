@@ -31,7 +31,7 @@ certification arenas over the same mutual, with three possible exits:
   positive reciprocal-synergy pair and seeks a positive-exposure exact return.
 
 The central object is `ThreeGameDossier`.  It stores the canonical
-counterexample regime and the independent source and dynamic-tail witnesses
+terminal exploitability witness and the independent source and dynamic-tail witnesses
 which current
 production theorems force from it.  Two exact reductions are proved:
 
@@ -133,38 +133,38 @@ theorem allQuittingGames_iff_allMutuals :
 The source packet and dynamic tail are stored as independent consequences;
 no relation between them is asserted. -/
 structure ThreeGameDossier where
-  regime : QuittingCounterexampleRegime club.settlement
-  source : QuittingCounterexampleSourceWitness regime
-  dynamicTail : QuittingCounterexampleDynamicTailWitness regime
+  witness : QuittingTerminalExploitabilityWitness club.settlement
+  source : QuittingCounterexampleSourceWitness witness
+  dynamicTail : QuittingCounterexampleDynamicTailWitness witness
 
 namespace ThreeGameDossier
 
 variable {club : Mutual ι}
 
 /-- Attach the independently forced source and dynamic-tail witnesses to a
-counterexample regime. -/
-def ofCounterexampleRegime
-    (regime : QuittingCounterexampleRegime club.settlement) :
+terminal exploitability witness. -/
+def ofTerminalExploitabilityWitness
+    (witness : QuittingTerminalExploitabilityWitness club.settlement) :
   club.ThreeGameDossier where
-  regime := regime
-  source := Classical.choice regime.nonempty_sourceWitness
-  dynamicTail := Classical.choice regime.nonempty_dynamicTailWitness
+  witness := witness
+  source := Classical.choice witness.nonempty_sourceWitness
+  dynamicTail := Classical.choice witness.nonempty_dynamicTailWitness
 
 /-- A dossier itself refutes every uniform-equilibrium payoff. -/
 theorem not_hasUniformPayoff (dossier : club.ThreeGameDossier) :
     ¬ club.HasUniformPayoff :=
-  dossier.regime.not_exists_uniformEquilibriumPayoff
+  dossier.witness.not_exists_uniformEquilibriumPayoff
 
 /-- Every possible dossier has at least four members. -/
 theorem four_le_card (dossier : club.ThreeGameDossier) :
     4 ≤ Fintype.card ι := by
-  have hcard := dossier.regime.three_lt_card
+  have hcard := dossier.witness.three_lt_card
   omega
 
 /-- The dossier retains the canonical finite run-off exposure bound. -/
 theorem finite_runoffCapacity (dossier : club.ThreeGameDossier) :
     quittingPunishmentFloorPrefixChargeCapacity club.settlement ≠ ⊤ :=
-  dossier.regime.prefixChargeCapacity_ne_top
+  dossier.witness.prefixChargeCapacity_ne_top
 
 end ThreeGameDossier
 
@@ -177,9 +177,9 @@ theorem nonempty_threeGameDossier_iff_not_hasUniformPayoff
   · rintro ⟨dossier⟩
     exact dossier.not_hasUniformPayoff
   · intro hno
-    let regime := quittingCounterexampleRegimeOfNoUniformPayoff
+    let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff
       club.settlement hno
-    exact ⟨ThreeGameDossier.ofCounterexampleRegime regime⟩
+    exact ⟨ThreeGameDossier.ofTerminalExploitabilityWitness witness⟩
 
 /-! ## Arena one, exit A: accepted underwriting -/
 
@@ -242,8 +242,8 @@ theorem exists_uniform_underwritingRefusalMargin
               prospectus.mass owner + δ ≤
             quittingSingletonRefusalValue club.settlement
               prospectus.mass owner owner := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
-  exact dossier.regime.exists_pos_uniform_normalizedSingletonPacketRefusal
+  letI : Nonempty ι := dossier.witness.nonempty_players
+  exact dossier.witness.exists_pos_uniform_normalizedSingletonPacketRefusal
 
 /-- The packet's aggregate refusal surplus is its quadratic singleton energy.
 This identifies the underwriter's objections with reciprocal, rather than
@@ -253,8 +253,8 @@ theorem underwritingRefusal_eq_quadraticEnergy
     quittingPacketWeightedRefusalSurplus dossier.underwritingProspectus =
       quittingSingletonPacketQuadraticEnergy club.settlement
         dossier.underwritingProspectus.mass := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
-  exact dossier.regime.packetWeightedRefusal_eq_quadraticForm
+  letI : Nonempty ι := dossier.witness.nonempty_players
+  exact dossier.witness.packetWeightedRefusal_eq_quadraticForm
     dossier.underwritingProspectus
 
 /-- The concrete support seed now forced inside every dossier: two distinct
@@ -273,9 +273,9 @@ structure ReciprocalSupportPair (dossier : club.ThreeGameDossier) where
 theorem nonempty_reciprocalSupportPair
     (dossier : club.ThreeGameDossier) :
     Nonempty dossier.ReciprocalSupportPair := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
+  letI : Nonempty ι := dossier.witness.nonempty_players
   obtain ⟨first, second, hfirst, hsecond, hne, hreciprocal⟩ :=
-    dossier.regime.exists_supported_pair_pos_reciprocalSoloEffect
+    dossier.witness.exists_supported_pair_pos_reciprocalSoloEffect
       dossier.underwritingProspectus
   exact ⟨{
     first := first
@@ -290,7 +290,7 @@ win. -/
 theorem not_hasWinningUnderwriter
     (dossier : club.ThreeGameDossier) :
     ¬ club.HasWinningUnderwriter := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
+  letI : Nonempty ι := dossier.witness.nonempty_players
   rintro ⟨prospectus, haccepted⟩
   exact dossier.not_hasUniformPayoff
     (prospectus.exists_uniformPayoff_of_isAccepted haccepted)
@@ -359,7 +359,7 @@ theorem exists_uniformPayoff_of_isSuccessful
     (candidate : dossier.SupportReorganizationCandidate)
     (hsuccess : candidate.IsSuccessful) :
     club.HasUniformPayoff := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
+  letI : Nonempty ι := dossier.witness.nonempty_players
   exact candidate.returnedLedger.exists_uniformPayoff_of_isSuccessful hsuccess
 
 end SupportReorganizationCandidate
@@ -393,7 +393,7 @@ a counterexample dossier. -/
 theorem not_hasWinningReorganization
     (dossier : club.ThreeGameDossier) :
     ¬ club.HasWinningReorganization := by
-  letI : Nonempty ι := dossier.regime.nonempty_players
+  letI : Nonempty ι := dossier.witness.nonempty_players
   rintro ⟨candidate, hsuccess⟩
   exact dossier.not_hasUniformPayoff
     (candidate.exists_uniformPayoff_of_isSuccessful hsuccess)
@@ -553,7 +553,7 @@ member's exact periodic best-response gain is at most that tolerance. -/
 def Passes (audit : dossier.Audit) : Prop :=
   ∀ who,
     dossier.auditFamily.coordinateGap audit.window who ≤
-      dossier.regime.terminalGap / 2
+      dossier.witness.terminalGap / 2
 
 /-- Every audit in a hypothetical dossier is blocked by refusal or by filing
 at one concrete phase. -/
@@ -561,14 +561,14 @@ theorem not_passes (audit : dossier.Audit) : ¬ audit.Passes := by
   intro hpasses
   obtain ⟨who, hescape⟩ :=
     dossier.dynamicTail.canonicalPeriodicTailWindow_escape audit.window
-  have hgap : dossier.regime.terminalGap / 2 <
+  have hgap : dossier.witness.terminalGap / 2 <
       dossier.auditFamily.coordinateGap audit.window who := by
     unfold QuittingPeriodicWindowFamily.coordinateGap
     exact (lt_quittingPeriodicWindowBestResponseValue_sub_iff
       club.settlement (dossier.auditFamily.roots audit.window) who
         (dossier.auditFamily.periodIndex audit.window + 1)
         (dossier.auditFamily.delivery audit.window who)
-        (dossier.regime.terminalGap / 2)).2 hescape
+        (dossier.witness.terminalGap / 2)).2 hescape
   exact (not_lt_of_ge (hpasses who)) hgap
 
 end Audit
@@ -588,13 +588,13 @@ member uses one fixed kind of objection (refusal, or a phase stop). -/
 theorem audit_exists_infinite_fixedMember_fixedBranch
     (dossier : club.ThreeGameDossier) :
     (∃ who, Set.Infinite {window : ℕ |
-      dossier.regime.terminalGap / 2 <
+      dossier.witness.terminalGap / 2 <
         quittingPeriodicWindowRefusalValue club.settlement
           (dossier.auditFamily.roots window) who -
           dossier.auditFamily.delivery window who}) ∨
     (∃ who, Set.Infinite {window : ℕ |
       ∃ phase : Fin (window + 1),
-        dossier.regime.terminalGap / 2 <
+        dossier.witness.terminalGap / 2 <
           quittingPeriodicWindowPhaseStopValue club.settlement
             (dossier.auditFamily.roots window) who phase -
             dossier.auditFamily.delivery window who}) := by
@@ -698,10 +698,10 @@ theorem threeCertificateDispatch_iff_hasUniformPayoff [Nonempty ι] :
   constructor
   · intro hresolve
     by_contra hno
-    let regime := quittingCounterexampleRegimeOfNoUniformPayoff
+    let witness := quittingTerminalExploitabilityWitnessOfNoUniformPayoff
       club.settlement hno
     let dossier : club.ThreeGameDossier :=
-      ThreeGameDossier.ofCounterexampleRegime regime
+      ThreeGameDossier.ofTerminalExploitabilityWitness witness
     exact hno (dossier.exists_uniformPayoff_of_isResolved
       (hresolve dossier))
   · intro hpayoff dossier

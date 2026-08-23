@@ -4,15 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Stationary.MinMax
 
 /-!
-# Membership-toggle instability under a quitting counterexample regime
+# Membership-toggle instability under a quitting terminal exploitability witness
 
 Fix a finite quitting game with reward table `r`, extended by `r(∅) = 0` for
-nonabsorption, and a counterexample regime: a positive terminal gap by which
+nonabsorption, and a terminal exploitability witness: a positive terminal gap by which
 every behavioral profile admits a unilateral terminal improvement.  This
 module records the quantitative instability that the gap forces on the
 finitely many pure sure-exit profiles and on all stationary profiles.
@@ -41,7 +41,7 @@ exceeds its realized payoff by at least the gap.
 
 All statements are finite, table-level inequalities, intended as search-facing
 rejection tests: a candidate reward table on which any one of them fails
-cannot carry a counterexample regime.
+cannot carry a terminal exploitability witness.
 
 ## Reference and lineage
 
@@ -72,19 +72,19 @@ open QuittingSureSetOwnerRepair
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
-/-- **No profile is Nash below the gap.**  Under a counterexample regime, no
+/-- **No profile is Nash below the gap.**  Under a terminal exploitability witness, no
 behavioral profile whatsoever is a terminal `ε`-equilibrium for any tolerance
 `ε` smaller than the regime's terminal gap. -/
 theorem not_isεAsymptoticNash_of_lt_terminalGap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profile : (quittingGame reward).BehaviorProfile)
-    {ε : ℝ} (hε : ε < regime.terminalGap) :
+    {ε : ℝ} (hε : ε < witness.terminalGap) :
     ¬ (quittingGame reward).IsεAsymptoticNash
         (quittingTerminalPayoff reward) ε profile := by
   intro hnash
-  obtain ⟨who, dev, hgain⟩ := regime.terminalExploitability profile
+  obtain ⟨who, dev, hgain⟩ := witness.terminalExploitability profile
   have hupper := hnash who dev
   linarith
 
@@ -93,11 +93,11 @@ gains at least the terminal gap over `r(S)` by toggling its own membership
 in `S`: the better of joining and leaving beats the on-path reward by the
 gap. -/
 theorem exists_toggle_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    ∃ who, quittingSetReward reward S who + regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    ∃ who, quittingSetReward reward S who + witness.terminalGap ≤
       max (quittingSetReward reward (insert who S) who)
         (quittingSetReward reward (S.erase who) who) := by
-  obtain ⟨who, dev, hgain⟩ := regime.terminalExploitability
+  obtain ⟨who, dev, hgain⟩ := witness.terminalExploitability
     (quittingStationaryProfile reward (quittingPureSetRoot S))
   refine ⟨who, ?_⟩
   rw [quittingTerminalPayoff_pureSetRoot] at hgain
@@ -110,66 +110,66 @@ member gains at least the terminal gap by staying behind while the rest of
 exit.  The trivial toggle at each player is eliminated by positivity of the
 gap. -/
 theorem exists_leave_or_join_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
     (∃ member ∈ S,
-        quittingSetReward reward S member + regime.terminalGap ≤
+        quittingSetReward reward S member + witness.terminalGap ≤
           quittingSetReward reward (S.erase member) member) ∨
       ∃ outsider ∉ S,
-        quittingSetReward reward S outsider + regime.terminalGap ≤
+        quittingSetReward reward S outsider + witness.terminalGap ≤
           quittingSetReward reward (insert outsider S) outsider := by
-  obtain ⟨who, hwho⟩ := regime.exists_toggle_gain S
+  obtain ⟨who, hwho⟩ := witness.exists_toggle_gain S
   by_cases hmem : who ∈ S
   · refine Or.inl ⟨who, hmem, ?_⟩
     rw [Finset.insert_eq_self.mpr hmem] at hwho
     rcases le_max_iff.mp hwho with hstay | hleave
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
     · exact hleave
   · refine Or.inr ⟨who, hmem, ?_⟩
     rw [Finset.erase_eq_of_notMem hmem] at hwho
     rcases le_max_iff.mp hwho with hjoin | hstay
     · exact hjoin
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
 
-/-- **No sure exit set survives.**  Under a counterexample regime, no
+/-- **No sure exit set survives.**  Under a terminal exploitability witness, no
 coalition — empty, proper, or grand — passes the sure-exit-set test. -/
 theorem not_isQuittingSureExitSet
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
     ¬ IsQuittingSureExitSet reward S := by
   intro h
-  obtain ⟨who, hwho⟩ := regime.exists_toggle_gain S
+  obtain ⟨who, hwho⟩ := witness.exists_toggle_gain S
   have hmax := (isQuittingSureExitSet_iff_forall_max reward S).mp h who
-  linarith [regime.terminalGap_pos]
+  linarith [witness.terminalGap_pos]
 
 /-- **A profitable solo exit exists.**  Reading the toggle at the empty
 coalition: some player's solo reward is at least the terminal gap. -/
 theorem exists_terminalGap_le_soloReward
-    (regime : QuittingCounterexampleRegime reward) :
-    ∃ who, regime.terminalGap ≤ quittingSoloReward reward who who := by
-  obtain ⟨who, hwho⟩ := regime.exists_toggle_gain (∅ : Finset ι)
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    ∃ who, witness.terminalGap ≤ quittingSoloReward reward who who := by
+  obtain ⟨who, hwho⟩ := witness.exists_toggle_gain (∅ : Finset ι)
   rw [Finset.insert_empty, Finset.erase_empty, quittingSetReward_empty,
     zero_add, quittingSetReward_singleton_eq_soloReward] at hwho
   rcases le_max_iff.mp hwho with hgain | hzero
   · exact ⟨who, hgain⟩
-  · exact absurd hzero (not_le.mpr regime.terminalGap_pos)
+  · exact absurd hzero (not_le.mpr witness.terminalGap_pos)
 
 /-- **A collision gain at every viable singleton.**  If an owner's solo
 reward exceeds the negated terminal gap — in particular whenever it is
 nonnegative — then the owner's own toggles at `{owner}` are ruled out, and
 some distinct opponent gains at least the gap by joining the owner's exit. -/
 theorem exists_collision_gain
-    (regime : QuittingCounterexampleRegime reward) {owner : ι}
-    (howner : -regime.terminalGap < quittingSoloReward reward owner owner) :
+    (witness : QuittingTerminalExploitabilityWitness reward) {owner : ι}
+    (howner : -witness.terminalGap < quittingSoloReward reward owner owner) :
     ∃ other, other ≠ owner ∧
-      quittingSoloReward reward owner other + regime.terminalGap ≤
+      quittingSoloReward reward owner other + witness.terminalGap ≤
         quittingSingletonCollisionReward reward owner other := by
-  obtain ⟨who, hwho⟩ := regime.exists_toggle_gain ({owner} : Finset ι)
+  obtain ⟨who, hwho⟩ := witness.exists_toggle_gain ({owner} : Finset ι)
   by_cases hne : who = owner
   · exfalso
     rw [hne, Finset.insert_eq_self.mpr (Finset.mem_singleton_self owner),
       Finset.erase_singleton, quittingSetReward_empty,
       quittingSetReward_singleton_eq_soloReward] at hwho
     rcases le_max_iff.mp hwho with hstay | hleave
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
     · linarith
   · refine ⟨who, hne, ?_⟩
     rw [Finset.erase_eq_of_notMem
@@ -178,18 +178,18 @@ theorem exists_collision_gain
       quittingSetReward_singleton_eq_soloReward] at hwho
     rcases le_max_iff.mp hwho with hjoin | hstay
     · exact hjoin
-    · linarith [regime.terminalGap_pos]
+    · linarith [witness.terminalGap_pos]
 
 /-- Every singleton row has a complete refusal-or-collision alternative.  The
 owner either gains the terminal gap by continuing forever, or a distinct
 player gains it by joining the owner's singleton exit. -/
 theorem singleton_refusal_or_exists_collision_gain
-    (regime : QuittingCounterexampleRegime reward) (owner : ι) :
-    regime.terminalGap ≤ -quittingSoloReward reward owner owner ∨
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι) :
+    witness.terminalGap ≤ -quittingSoloReward reward owner owner ∨
       ∃ other, other ≠ owner ∧
-        quittingSoloReward reward owner other + regime.terminalGap ≤
+        quittingSoloReward reward owner other + witness.terminalGap ≤
           quittingSingletonCollisionReward reward owner other := by
-  rcases regime.exists_leave_or_join_gain ({owner} : Finset ι) with hleave | hjoin
+  rcases witness.exists_leave_or_join_gain ({owner} : Finset ι) with hleave | hjoin
   · obtain ⟨member, hmember, hgain⟩ := hleave
     obtain rfl : member = owner := Finset.mem_singleton.mp hmember
     left
@@ -208,28 +208,28 @@ theorem singleton_refusal_or_exists_collision_gain
 with a profitable solo exit, whose singleton coalition then produces a
 distinct colliding opponent. -/
 theorem one_lt_card
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     1 < Fintype.card ι := by
-  obtain ⟨owner, howner⟩ := regime.exists_terminalGap_le_soloReward
-  have howner' : -regime.terminalGap <
+  obtain ⟨owner, howner⟩ := witness.exists_terminalGap_le_soloReward
+  have howner' : -witness.terminalGap <
       quittingSoloReward reward owner owner := by
-    linarith [regime.terminalGap_pos]
-  obtain ⟨other, hne, -⟩ := regime.exists_collision_gain howner'
+    linarith [witness.terminalGap_pos]
+  obtain ⟨other, hne, -⟩ := witness.exists_collision_gain howner'
   exact Fintype.one_lt_card_iff.mpr ⟨other, owner, hne⟩
 
 /-- **The grand exit leaks.**  At the grand coalition there is no outsider,
 so some player gains at least the terminal gap by staying behind while all
 the others exit. -/
 theorem exists_grandExit_leave_gain
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ who, quittingSetReward reward (Finset.univ : Finset ι) who +
-        regime.terminalGap ≤
+        witness.terminalGap ≤
       quittingSetReward reward (Finset.univ.erase who) who := by
-  obtain ⟨who, hwho⟩ := regime.exists_toggle_gain (Finset.univ : Finset ι)
+  obtain ⟨who, hwho⟩ := witness.exists_toggle_gain (Finset.univ : Finset ι)
   refine ⟨who, ?_⟩
   rw [Finset.insert_eq_self.mpr (Finset.mem_univ who)] at hwho
   rcases le_max_iff.mp hwho with hstay | hleave
-  · linarith [regime.terminalGap_pos]
+  · linarith [witness.terminalGap_pos]
   · exact hleave
 
 /-- **Every stationary profile is cap-exploitable.**  At every stationary
@@ -237,15 +237,15 @@ root, some player's selected stationary cap exceeds that player's realized
 terminal payoff by at least the terminal gap.  This is the toggle instability
 extended from pure sure-exit roots to arbitrary stationary rows. -/
 theorem exists_stationaryCap_gain
-    (regime : QuittingCounterexampleRegime reward) (root : ι → PMF Bool) :
+    (witness : QuittingTerminalExploitabilityWitness reward) (root : ι → PMF Bool) :
     ∃ who, quittingTerminalPayoff reward
-        (quittingStationaryProfile reward root) who + regime.terminalGap ≤
+        (quittingStationaryProfile reward root) who + witness.terminalGap ≤
       quittingStationaryUnilateralCap reward root who := by
-  obtain ⟨who, dev, hgain⟩ := regime.terminalExploitability
+  obtain ⟨who, dev, hgain⟩ := witness.terminalExploitability
     (quittingStationaryProfile reward root)
   exact ⟨who, hgain.trans
     (quittingTerminalPayoff_update_stationary_le_cap reward root who dev)⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

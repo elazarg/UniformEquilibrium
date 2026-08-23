@@ -187,10 +187,10 @@ structure StrictCoalitionToggle
 /-- Counterexample instability turns every terminal coalition into a strict
 toggle object. -/
 theorem exists_strictCoalitionToggle
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (terminal : {S : Finset ι // S.Nonempty}) :
     Nonempty (StrictCoalitionToggle reward terminal) := by
-  rcases regime.terminalCoalition_has_strictToggle terminal with
+  rcases witness.terminalCoalition_has_strictToggle terminal with
     ⟨member, hmem, hgain⟩ | ⟨outsider, hout, hgain⟩
   · exact ⟨⟨member, Or.inl ⟨hmem, hgain⟩⟩⟩
   · exact ⟨⟨outsider, Or.inr ⟨hout, hgain⟩⟩⟩
@@ -221,7 +221,7 @@ coalition toggle.
 The fourth label is the toggle player; it may coincide with the owner or the
 receiver, and in the leave branch it may also coincide with the quitter. -/
 theorem exists_matched_transfer_incidence_or_separatedToggle
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair ι) (owner : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
     (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
@@ -255,7 +255,7 @@ theorem exists_matched_transfer_incidence_or_separatedToggle
       _root_.GameTheory.exists_positiveMass_terminal_of_opponentIncidence
         owner quitter mass hmass hincidencePos
     let toggle := Classical.choice
-      (exists_strictCoalitionToggle regime terminal)
+      (exists_strictCoalitionToggle witness terminal)
     have htransferPos := debtChange_pos_of_average_le
       source target owner receiver hdebt hreceiverNe haverage
     exact ⟨receiver, quitter, terminal, toggle, hreceiverNe, hquitterNe,
@@ -466,7 +466,7 @@ The separated branch strengthens the landed two-opponent separator by
 retaining an actual positive-mass terminal atom and its strict counterexample
 toggle. -/
 theorem exists_sameLawResetCluster_localFourRoleBranch
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {source : QuittingTerminalSemanticPair ι} {M : ℝ}
     (plateau : PositiveMinimumPlateau reward source M)
     (owner : ι) (howner : 0 < quittingTerminalSemanticDebt source owner) :
@@ -518,7 +518,7 @@ theorem exists_sameLawResetCluster_localFourRoleBranch
       _root_.GameTheory.exists_positiveMass_terminal_of_opponentIncidence
           owner quitter mass hmass hincidencePos
       let toggle := Classical.choice
-        (exists_strictCoalitionToggle regime terminal)
+        (exists_strictCoalitionToggle witness terminal)
       have htransferPos := debtChange_pos_of_average_le
         source cluster owner receiver howner hreceiverNe haverage
       let roles : SeparatedToggleRoles source owner law :=
@@ -541,7 +541,7 @@ theorem exists_sameLawResetCluster_localFourRoleBranch
 /-- Every positive minimum plateau contains a local obstruction supported on
 at most four distinguished player labels. -/
 theorem exists_localFourRoleObstruction_of_plateau
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {source : QuittingTerminalSemanticPair ι} {M : ℝ}
     (plateau : PositiveMinimumPlateau reward source M) :
     ∃ (owner : ι) (law : SameLawResetCluster reward source owner)
@@ -551,7 +551,7 @@ theorem exists_localFourRoleObstruction_of_plateau
   obtain ⟨owner, howner⟩ := plateau.exists_positiveDebtor
   obtain ⟨law, branch, hfour⟩ :=
     exists_sameLawResetCluster_localFourRoleBranch
-      regime plateau owner howner
+      witness plateau owner howner
   exact ⟨owner, law, branch, howner, hfour⟩
 
 /-! ## Global counterexample certificate -/
@@ -560,7 +560,7 @@ theorem exists_localFourRoleObstruction_of_plateau
 same-law local four-role dispatch.  All data still live in the original
 player type `ι`. -/
 structure CounterexampleLocalFourRoleCertificate
-    (regime : QuittingCounterexampleRegime reward) where
+    (witness : QuittingTerminalExploitabilityWitness reward) where
   M : ℝ
   source : QuittingTerminalSemanticPair ι
   plateau : PositiveMinimumPlateau reward source M
@@ -573,13 +573,13 @@ structure CounterexampleLocalFourRoleCertificate
 a same-law obstruction certificate whose selected role support has at most
 four players.  This theorem does not reduce the ambient game to those roles. -/
 theorem exists_counterexampleLocalFourRoleCertificate
-    (regime : QuittingCounterexampleRegime reward) :
-    ∃ certificate : CounterexampleLocalFourRoleCertificate regime,
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    ∃ certificate : CounterexampleLocalFourRoleCertificate witness,
       certificate.branch.roleSupport.card ≤ 4 := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨source, hsource, hminimum, ⟨owner, howner⟩,
       hnash, _hfixed⟩ :=
-    noUniformPayoff_implies_positiveMinimumSemanticPlateau regime
+    noUniformPayoff_implies_positiveMinimumSemanticPlateau witness
   let M : ℝ := quittingRewardBound reward + 1
   have hM : 0 < M := by
     dsimp [M]
@@ -605,8 +605,8 @@ theorem exists_counterexampleLocalFourRoleCertificate
       allContinue_nash := hnash }
   obtain ⟨law, branch, hfour⟩ :=
     exists_sameLawResetCluster_localFourRoleBranch
-      regime plateau owner howner
-  let certificate : CounterexampleLocalFourRoleCertificate regime :=
+      witness plateau owner howner
+  let certificate : CounterexampleLocalFourRoleCertificate witness :=
     { M := M
       source := source
       plateau := plateau
@@ -624,7 +624,7 @@ punishment moat carried by another realizing pure-time law.  This theorem is
 kept separate because a negative `Never` atom does not by itself prove that
 the selected debtor is a singleton gate. -/
 theorem debtGate_joiner_or_punishmentMoat_sameLaw
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {source : QuittingTerminalSemanticPair ι} {M theta : ℝ}
     (plateau : PositiveMinimumPlateau reward source M)
     (owner : ι)
@@ -663,7 +663,7 @@ theorem debtGate_joiner_or_punishmentMoat_sameLaw
                       (Function.update (profiles (subseq n)) owner
                         (quittingPureTimeBehaviorStrategy reward owner
                           (quitTime (subseq n)))) time terminal)) := by
-  exact regime.exists_joiner_or_punishmentMoat_sameLaw
+  exact witness.exists_joiner_or_punishmentMoat_sameLaw
     source owner plateau.bound_pos plateau.reward_bound plateau.source_mem
       plateau.minimum plateau.debt_pos plateau.allContinue_nash hgate
       htheta hthetaOne
@@ -681,19 +681,19 @@ support, and the strict toggle is not yet state-matched to the reset edge. -/
 def EveryLocalFourRoleDispatchIsConsumed : Prop :=
   ∀ {ι : Type} [Fintype ι] [DecidableEq ι]
       (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-      (regime : QuittingCounterexampleRegime reward)
-      (_certificate : CounterexampleLocalFourRoleCertificate regime),
+      (witness : QuittingTerminalExploitabilityWitness reward)
+      (_certificate : CounterexampleLocalFourRoleCertificate witness),
     False
 
 /-- If the missing state-matched consumer is proved, no finite quitting
-counterexample regime exists.  This implication is logical closure only; it
+terminal exploitability witness exists.  This implication is logical closure only; it
 does not turn the local certificate into a four-player table. -/
-theorem not_counterexampleRegime_of_everyLocalDispatchConsumed
+theorem not_terminalExploitabilityWitness_of_everyLocalDispatchConsumed
     (hconsume : EveryLocalFourRoleDispatchIsConsumed)
-    (regime : QuittingCounterexampleRegime reward) : False := by
+    (witness : QuittingTerminalExploitabilityWitness reward) : False := by
   obtain ⟨certificate, _hfour⟩ :=
-    exists_counterexampleLocalFourRoleCertificate regime
-  exact hconsume reward regime certificate
+    exists_counterexampleLocalFourRoleCertificate witness
+  exact hconsume reward witness certificate
 
 end FourRoleObstructionReduction
 end GameTheory

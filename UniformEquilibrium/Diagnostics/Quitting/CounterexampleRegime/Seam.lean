@@ -17,7 +17,7 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicWindowEvaluation
 This module records independent finite-source and optimized dynamic-tail
 consequences, together with the strategic evaluation of periodic restarts.
 
-Every counterexample regime supplies simultaneously:
+Every terminal exploitability witness supplies simultaneously:
 
 * a normalized singleton source packet with an active strict refusal defect;
 * a projective optimized exact-D tail converging to a positive-debt
@@ -43,7 +43,7 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-- The finite singleton-source consequence of terminal exploitability. -/
 structure QuittingCounterexampleSourceWitness
-    (regime : QuittingCounterexampleRegime reward) where
+    (witness : QuittingTerminalExploitabilityWitness reward) where
   packet : QuittingNormalizedSingletonSourcePacket reward
   packetOwner : ι
   packetOwnerMass_pos : 0 < packet.mass packetOwner
@@ -58,21 +58,21 @@ structure QuittingCounterexampleSourceWitness
 /-- The optimized exact dynamic-debt tail consequence of terminal
 exploitability. -/
 structure QuittingCounterexampleDynamicTailWitness
-    (regime : QuittingCounterexampleRegime reward) where
+    (witness : QuittingTerminalExploitabilityWitness reward) where
   tail : ℕ → QuittingDebtPoint ι
   subseq : ℕ → ℕ
   limit : QuittingPositiveDebtSelfLoopLimit reward
   subseq_strict : StrictMono subseq
   projective_limit :
-    letI : Nonempty ι := regime.nonempty_players
+    letI : Nonempty ι := witness.nonempty_players
     Tendsto
       ((fun cutoff ↦ quittingFiniteMinMaxDynamicDebtTail reward cutoff) ∘
         subseq) atTop (nhds tail)
   tail_mem : ∀ time, tail time ∈ quittingDebtBox reward
   tail_edge : ∀ time,
     IsQuittingDynamicDebtEdge reward (tail time) (tail (time + 1))
-  terminalGap_le_initialDebt : regime.terminalGap ≤ (tail 0).2 limit.owner
-  terminalGap_le_limitDebt : regime.terminalGap ≤ limit.debt limit.owner
+  terminalGap_le_initialDebt : witness.terminalGap ≤ (tail 0).2 limit.owner
+  terminalGap_le_limitDebt : witness.terminalGap ≤ limit.debt limit.owner
   value_tendsto : ∀ who,
     Tendsto (fun time ↦ (tail time).1.1 who) atTop
       (nhds (limit.value who))
@@ -93,21 +93,21 @@ structure QuittingCounterexampleDynamicTailWitness
   jointAbsorption_summable :
     Summable (quittingDynamicDebtTailAbsorptionCharge tail)
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Against every behavior profile, the exact best-response supremum can be
 restricted to deterministic quit times and `Never` while retaining the full
 counterexample gap. -/
 theorem exists_pureTimeCap_gap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (profile : (quittingGame reward).BehaviorProfile) :
     ∃ who,
-      quittingTerminalPayoff reward profile who + regime.terminalGap ≤
+      quittingTerminalPayoff reward profile who + witness.terminalGap ≤
         sSup (Set.range fun quitTime : Option ℕ ↦
           quittingTerminalPayoff reward
             (Function.update profile who
               (quittingPureTimeBehaviorStrategy reward who quitTime)) who) := by
-  obtain ⟨who, deviation, hgap⟩ := regime.terminalExploitability profile
+  obtain ⟨who, deviation, hgap⟩ := witness.terminalExploitability profile
   refine ⟨who, hgap.trans ?_⟩
   exact quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
     reward profile who deviation
@@ -117,13 +117,13 @@ exposed by the exact pure-time/`Never` cap at the regime's full terminal gap.
 No Bellman property of the supplied tail is needed for this strategic
 statement. -/
 theorem exists_cyclicWindow_pureTimeCap_gap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tail : ℕ → QuittingDebtPoint ι) (start length : ℕ)
     (phase : Fin (length + 1)) :
     ∃ who,
       quittingCyclicTerminalValue reward
           (quittingDynamicDebtTailWindowCycle tail start length) phase who +
-          regime.terminalGap ≤
+          witness.terminalGap ≤
         sSup (Set.range fun quitTime : Option ℕ ↦
           quittingTerminalPayoff reward
             (Function.update
@@ -131,7 +131,7 @@ theorem exists_cyclicWindow_pureTimeCap_gap
                 (quittingDynamicDebtTailWindowCycle tail start length) phase)
               who (quittingPureTimeBehaviorStrategy reward who quitTime)) who) := by
   simpa only [quittingTerminalPayoff_cyclicBehaviorProfile] using
-    regime.exists_pureTimeCap_gap
+    witness.exists_pureTimeCap_gap
       (quittingCyclicBehaviorProfile reward
         (quittingDynamicDebtTailWindowCycle tail start length) phase)
 
@@ -140,13 +140,13 @@ the exact finite periodic evaluator: refusal/`Never` or one stop in the first
 pass.  This is the finite, search-facing form of
 `exists_cyclicWindow_pureTimeCap_gap`. -/
 theorem exists_cyclicWindow_finiteEvaluation_gap
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tail : ℕ → QuittingDebtPoint ι) (start length : ℕ)
     (phase : Fin (length + 1)) :
     ∃ who,
       quittingCyclicTerminalValue reward
           (quittingDynamicDebtTailWindowCycle tail start length) phase who +
-          regime.terminalGap ≤
+          witness.terminalGap ≤
         quittingPeriodicWindowBestResponseValue reward
           (quittingCyclicRootSequence
             (quittingDynamicDebtTailWindowCycle tail start length) phase)
@@ -154,7 +154,7 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
   letI : NeZero (length + 1) := ⟨Nat.succ_ne_zero length⟩
   let cycle := quittingDynamicDebtTailWindowCycle tail start length
   let profile := quittingCyclicBehaviorProfile reward cycle phase
-  obtain ⟨who, deviation, hgap⟩ := regime.terminalExploitability profile
+  obtain ⟨who, deviation, hgap⟩ := witness.terminalExploitability profile
   refine ⟨who, ?_⟩
   have hperiodic : ∀ time,
       quittingProfileLiveRoot reward profile (time + (length + 1)) =
@@ -167,8 +167,8 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
     reward profile who (length + 1) hperiodic
   calc
     quittingCyclicTerminalValue reward cycle phase who +
-        regime.terminalGap =
-      quittingTerminalPayoff reward profile who + regime.terminalGap := by
+        witness.terminalGap =
+      quittingTerminalPayoff reward profile who + witness.terminalGap := by
         simp [profile]
     _ ≤ quittingTerminalPayoff reward
         (Function.update profile who deviation) who := hgap
@@ -181,14 +181,14 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
         (quittingCyclicRootSequence cycle phase) who (length + 1) := by
       simpa [profile] using heval
 
-/-- Every counterexample regime has a finite strict-refusal source packet. -/
+/-- Every terminal exploitability witness has a finite strict-refusal source packet. -/
 theorem nonempty_sourceWitness
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingCounterexampleSourceWitness regime) := by
-  letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨packet⟩ := regime.nonempty_normalizedSingletonSourcePacket
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Nonempty (QuittingCounterexampleSourceWitness witness) := by
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨packet⟩ := witness.nonempty_normalizedSingletonSourcePacket
   obtain ⟨packetOwner, hpacketPos, hpacketLtOne, htargetLt, hrefusal⟩ :=
-    regime.exists_active_strictSingletonRefusal packet
+    witness.exists_active_strictSingletonRefusal packet
   exact ⟨{
     packet := packet
     packetOwner := packetOwner
@@ -197,16 +197,16 @@ theorem nonempty_sourceWitness
     packetTarget_lt_delivery := htargetLt
     packetDelivery_lt_refusal := hrefusal }⟩
 
-/-- Every counterexample regime has an independently extracted positive-debt
+/-- Every terminal exploitability witness has an independently extracted positive-debt
 all-Continue dynamic tail limit, with its provenance and convergence data. -/
 theorem nonempty_dynamicTailWitness
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingCounterexampleDynamicTailWitness regime) := by
-  letI : Nonempty ι := regime.nonempty_players
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Nonempty (QuittingCounterexampleDynamicTailWitness witness) := by
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨tail, subseq, limit, hsubseq, hprojective, hbox, hedge,
       hinitialDebt, hlimitDebt, hvalue, hdebt, hquit, hcontinue,
       hownerClock, habsorption⟩ :=
-    regime.exists_terminalGapDynamicDebtTail_selfLoopLimit
+    witness.exists_terminalGapDynamicDebtTail_selfLoopLimit
   exact ⟨{
     tail := tail
     subseq := subseq
@@ -224,6 +224,6 @@ theorem nonempty_dynamicTailWitness
     ownerOpponentClock_summable := hownerClock
     jointAbsorption_summable := habsorption }⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

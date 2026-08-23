@@ -17,7 +17,7 @@ complementarity equation
 
 This module provides that closed coordinate model and its continuous maximum
 weighted-surplus defect.  Positivity properties that require a
-counterexample regime belong to the corresponding diagnostic adapter.
+terminal exploitability witness belong to the corresponding diagnostic adapter.
 -/
 
 noncomputable section

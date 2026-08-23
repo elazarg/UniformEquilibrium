@@ -253,5 +253,5 @@ The construction uses four players, so it respects the cardinal lower bound
 of a hypothetical counterexample.  It is not asserted to survive passive
 player extension: new singleton owners enlarge the universally quantified
 packet family and must be re-audited.  No terminal instability, tail
-occupation, cap-as-suffix realization, or counterexample-regime provenance is
+occupation, cap-as-suffix realization, or provenance from a terminal exploitability witness is
 claimed.

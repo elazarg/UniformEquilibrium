@@ -22,7 +22,7 @@ alone:
 The two-rate probe lets a current owner quit at rate `rate` and its supplied
 predecessor at rate `rate²`.  Exact payoff and unilateral-cap formulas identify
 the zero-rate limit while retaining the incoming preemption edge.  The module
-contains no counterexample-regime assumption; diagnostic producers supply the
+contains no terminal exploitability witness assumption; diagnostic producers supply the
 terminal gap and stationary exploitability inequality.
 -/
 

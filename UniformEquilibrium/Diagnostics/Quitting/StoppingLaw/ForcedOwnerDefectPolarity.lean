@@ -17,7 +17,7 @@ collected by one behavioral deviation, while Quit-directed occupation
 freezes one player/coalition atom.
 
 This module owns that finite-window accounting without assuming an
-observer-absent packet, counterexample regime, or asymptotic frontier.
+observer-absent packet, terminal exploitability witness, or asymptotic frontier.
 -/
 
 noncomputable section

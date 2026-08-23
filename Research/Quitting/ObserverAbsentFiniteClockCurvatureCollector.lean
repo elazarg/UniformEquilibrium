@@ -239,8 +239,8 @@ actual defect from square curvature, the only quantitative loss is the two
 halvings forced by the landed wall/refusal split and affine no-cancellation. -/
 theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -248,13 +248,13 @@ theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     quittingStoppingLawObserverAbsentMassLower packet *
-          regime.terminalGap / 4 ≤
+          witness.terminalGap / 4 ≤
         quittingFiniteClockActualDefectOccupation reward profile stop +
           quittingFiniteClockPositiveSquareCharge
             reward profile packet.terminal owner stop ∨
       ∃ deviation : (quittingGame reward).BehaviorStrategy owner,
         quittingStoppingLawObserverAbsentMassLower packet *
-              regime.terminalGap / 2 - δ ≤
+              witness.terminalGap / 2 - δ ≤
           quittingTerminalPayoff reward
               (Function.update profile owner deviation) owner -
             quittingTerminalPayoff reward profile owner := by
@@ -263,7 +263,7 @@ theorem observerAbsent_finiteClock_actualPlusSquare_or_deviation
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let wall := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   let outside := ∑ time ∈ Finset.range stop,
     quittingStageCoalitionMass reward profile time packet.terminal *
       quittingForcedOwnerOutsiderDefect reward
@@ -300,8 +300,8 @@ clock ending at its declared stopping time, one of three things happens:
 The first two constants arise by two honest binary splits. -/
 theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n stop : ℕ) (hstop : packet.quitTime n = some stop)
@@ -309,15 +309,15 @@ theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     quittingStoppingLawObserverAbsentMassLower packet *
-          regime.terminalGap / 8 ≤
+          witness.terminalGap / 8 ≤
         quittingFiniteClockActualDefectOccupation reward profile stop ∨
       quittingStoppingLawObserverAbsentMassLower packet *
-          regime.terminalGap / 8 ≤
+          witness.terminalGap / 8 ≤
         quittingFiniteClockPositiveSquareCharge
           reward profile packet.terminal owner stop ∨
       ∃ deviation : (quittingGame reward).BehaviorStrategy owner,
         quittingStoppingLawObserverAbsentMassLower packet *
-              regime.terminalGap / 2 - δ ≤
+              witness.terminalGap / 2 - δ ≤
           quittingTerminalPayoff reward
               (Function.update profile owner deviation) owner -
             quittingTerminalPayoff reward profile owner := by
@@ -326,7 +326,7 @@ theorem observerAbsent_finiteClock_actualDefect_or_square_or_deviation
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let wall := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   let outside := ∑ time ∈ Finset.range stop,
     quittingStageCoalitionMass reward profile time packet.terminal *
       quittingForcedOwnerOutsiderDefect reward

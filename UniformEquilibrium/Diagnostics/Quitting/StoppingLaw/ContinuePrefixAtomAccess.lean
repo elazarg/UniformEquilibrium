@@ -20,7 +20,7 @@ strategy.  The resulting terminal-law atoms are scaled exactly by the
 player-deleted prefix survival.
 
 This module owns the finite-word identities and the lifted terminal-atom
-alternative.  It assumes no counterexample regime or asymptotic chronology.
+alternative.  It assumes no terminal exploitability witness or asymptotic chronology.
 -/
 
 noncomputable section

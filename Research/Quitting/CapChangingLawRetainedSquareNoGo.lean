@@ -21,7 +21,7 @@ At zero excess the statement is sharper: every root in the word is literally
 all-Continue, the profile and complete terminal law are unchanged, and a
 retained atom remains a suffix atom rather than becoming current absorption.
 
-This is an architectural no-go, not a counterexample-regime closure.  It
+This is an architectural no-go, not a closure under a terminal exploitability witness.  It
 rules out the proposed ``off-budget charge'' output for every construction
 made only of exact cap--Nash prefixes after one cap-changing reset.  A useful
 square must therefore use its other edge: a source-matched signed reset gain,

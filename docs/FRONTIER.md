@@ -82,11 +82,10 @@ constraint.
 [`IsFullCoreDeadlockCompletion.globalDebtFloor_le_sharperBound`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockSharperBound.lean)
 constructs an actual carrier point of total semantic debt exactly
 `1227/96755` and therefore bounds every global debt floor by that value. The
-counterexample-regime
-consumer
+The terminal exploitability witness consumer
 [`HasTerminalExploitabilityGap.fullCoreDeadlock_le_sharperBound`](../UniformEquilibrium/Diagnostics/Quitting/FullCoreDeadlockDebtBound.lean)
 then bounds every terminal exploitability gap on this family by `1227/96755`,
-with the stored gap of a counterexample regime as a direct corollary. Neither
+with the stored gap of a terminal exploitability witness as a direct corollary. Neither
 the minimum debt nor the gap is proved to vanish, and no uniform-equilibrium
 payoff is produced.
 

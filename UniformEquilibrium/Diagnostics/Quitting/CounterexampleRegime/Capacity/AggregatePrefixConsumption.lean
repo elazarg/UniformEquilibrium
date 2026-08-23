@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregatePrefixConsumption
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TerminalExploitabilityRepair
 
 /-!
 # Aggregate prefix consumption of a terminal obstruction
 
-A counterexample regime's literal terminal gap floors the behavioral-tail
+A terminal exploitability witness's literal terminal gap floors the behavioral-tail
 repair value of the complete canonical aggregate-minimizing prefix.  The
 quantitative terminal-anchor machinery then charges the same gap to a marked
 packet at that cutoff.  This implication is unconditional and does not alter
@@ -36,25 +36,25 @@ open Math.Probability Math.PMFProduct
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 open QuittingAggregateCalibratedTerminalAnchor
 
 /-- The literal regime gap floors the all-tail repair value of the complete
 canonical aggregate exact-`D` minimizer at every positive cutoff. -/
 theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
-    (regime : QuittingCounterexampleRegime reward) (last : ℕ) :
-    letI : Nonempty ι := regime.nonempty_players
-    regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
+    letI : Nonempty ι := witness.nonempty_players
+    witness.terminalGap ≤
         QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue
         reward last := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let path :=
     quittingFiniteZeroBoundaryNashBellmanDynamicDebtMinimizer
       reward (last + 1)
   have hfloor := terminalExploitabilityGap_le_behavioralTailRepairValue
     reward (quittingFiniteNashBellmanPathRoots (last + 1) path)
-      (last + 1) (by omega) regime.terminalExploitability
+      (last + 1) (by omega) witness.terminalExploitability
   simpa [path,
     QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue,
     QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixHolonomy]
@@ -63,36 +63,36 @@ theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
 /-- The fixed-prefix repair floor gives a direct quantitative sandwich from
 the global terminal gap to the optimized aggregate exact-`D` objective. -/
 theorem terminalGap_le_repairValue_le_minAggregate
-    (regime : QuittingCounterexampleRegime reward) (last : ℕ) :
-    letI : Nonempty ι := regime.nonempty_players
-    regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
+    letI : Nonempty ι := witness.nonempty_players
+    witness.terminalGap ≤
         QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue
           reward last ∧
       QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue
           reward last ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
           reward (last + 1) := by
-  letI : Nonempty ι := regime.nonempty_players
-  exact ⟨regime.terminalGap_le_canonicalAggregateFullPrefixRepairValue last,
+  letI : Nonempty ι := witness.nonempty_players
+  exact ⟨witness.terminalGap_le_canonicalAggregateFullPrefixRepairValue last,
     canonicalAggregateFullPrefixRepairValue_le_minAggregate reward last⟩
 
 /-- At every cutoff the regime's literal terminal gap is carried by a marked
 packet of the canonical aggregate minimizer.  This is a calibrated packet
 charge, not yet an edge in the punishment-floor reachable relation. -/
 theorem exists_aggregateAnchor_terminalGap_le_packetCharge
-    (regime : QuittingCounterexampleRegime reward) (last : ℕ) :
-    letI : Nonempty ι := regime.nonempty_players
+    (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
+    letI : Nonempty ι := witness.nonempty_players
     ∃ anchor : QuittingAggregateCalibratedTerminalAnchor reward,
       anchor.last = last ∧
-        regime.terminalGap ≤
+        witness.terminalGap ≤
           2 * quittingRewardBound reward * (Fintype.card ι : ℝ) *
             (Fintype.card (ι → Bool) : ℝ) * anchor.packetMass := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   exact exists_packetCharge_of_pos_le_canonicalFullPrefixRepairValue
-      reward (quittingRewardBound reward) regime.terminalGap last
+      reward (quittingRewardBound reward) witness.terminalGap last
       (abs_reward_le_quittingRewardBound reward)
-      regime.terminalGap_pos
-      (regime.terminalGap_le_canonicalAggregateFullPrefixRepairValue last)
+      witness.terminalGap_pos
+      (witness.terminalGap_le_canonicalAggregateFullPrefixRepairValue last)
 
 /-- **Conditional elementary-cap consumption gate.**
 
@@ -109,14 +109,14 @@ predecessor produces coordinate losses bounded by the optimized-objective
 drop; it does not compare a changed tail's terminal exploitability with those
 losses or with the predecessor's absorption mass. -/
 theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (edge : QuittingPunishmentFloorReachableEdge reward)
     (htail : edge.tail.1.1 = anchor.path 0)
     (tail : ℕ → ι → PMF Bool) (cap : QuittingElementaryTailCap ι)
     (capCutoff : ℕ) (chargeScale : ℝ) (hchargeScale : 0 ≤ chargeScale)
     (hcomparison :
-      letI : Nonempty ι := regime.nonempty_players
+      letI : Nonempty ι := witness.nonempty_players
       quittingTerminalExploitability reward
           (quittingPhaseSwitchProfile reward anchor.roots
             (quittingElementaryTailRoots tail capCutoff cap)
@@ -126,15 +126,15 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
           quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 2) +
           chargeScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := regime.nonempty_players
-    regime.terminalGap / 2 ≤
+    letI : Nonempty ι := witness.nonempty_players
+    witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
           quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 2) ∨
-      regime.terminalGap / 2 ≤
+      witness.terminalGap / 2 ≤
         chargeScale * edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hedgeAnchor : IsQuittingNashBellmanEdge reward edge.current.1.1
       (anchor.path 0) := by
     rw [← htail]
@@ -159,11 +159,11 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
       chargeScale * edge.toBoxEdge.absorptionCharge :=
     mul_nonneg hchargeScale edge.toBoxEdge.absorptionCharge_nonneg
   have hgap := terminalExploitabilityGap_le_quittingTerminalExploitability
-    reward regime.terminalExploitability
+    reward witness.terminalExploitability
       (quittingPhaseSwitchProfile reward anchor.roots
         (quittingElementaryTailRoots tail capCutoff cap)
         (anchor.last + 1))
-  by_cases hdrop : regime.terminalGap / 2 ≤
+  by_cases hdrop : witness.terminalGap / 2 ≤
       quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
           reward (anchor.last + 1) -
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
@@ -181,27 +181,27 @@ No current theorem derives `hresidual` from absorption mass alone.  In
 particular, playerwise dynamic debt is transported by deleted-player survival,
 whereas the charged relation records joint absorption. -/
 theorem immediateNever_consumed_of_prependResidual_le_charge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (edge : QuittingPunishmentFloorReachableEdge reward)
     (htail : edge.tail.1.1 = anchor.path 0)
     (chargeScale : ℝ) (hchargeScale : 0 ≤ chargeScale)
     (hresidual :
-      letI : Nonempty ι := regime.nonempty_players
+      letI : Nonempty ι := witness.nonempty_players
       quittingFiniteNashBellmanPathAggregateDynamicDebt
           reward (anchor.last + 2)
           (quittingFiniteNashBellmanPathPrependPoint
             (anchor.last + 1) edge.current.1.1 anchor.path) ≤
         chargeScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := regime.nonempty_players
-    regime.terminalGap / 2 ≤
+    letI : Nonempty ι := witness.nonempty_players
+    witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
           quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 2) ∨
-      regime.terminalGap / 2 ≤
+      witness.terminalGap / 2 ≤
         chargeScale * edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hedgeAnchor : IsQuittingNashBellmanEdge reward edge.current.1.1
       (anchor.path 0) := by
     rw [← htail]
@@ -230,7 +230,7 @@ theorem immediateNever_consumed_of_prependResidual_le_charge
   have hcomparison :=
     immediateNever_terminalExploitability_le_drop_add_endpointBound
       anchor (chargeScale * edge.toBoxEdge.absorptionCharge) hendpoint
-  apply regime.elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
+  apply witness.elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
     anchor edge htail (fun _ => quittingAllContinueRoot) (.never) 0
       chargeScale hchargeScale
   have hroots :
@@ -250,40 +250,40 @@ theorem immediateNever_consumed_of_prependResidual_le_charge
 only extra premise beyond literal reachable attachment is a bound on the old
 debt that survives the new root's joint-Continue event. -/
 theorem immediateNever_consumed_of_carriedDebt_le_charge
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (anchor : QuittingAggregateCalibratedTerminalAnchor reward)
     (edge : QuittingPunishmentFloorReachableEdge reward)
     (htail : edge.tail.1.1 = anchor.path 0)
     (carriedScale : ℝ) (hcarriedScale : 0 ≤ carriedScale)
     (hcarried :
-      letI : Nonempty ι := regime.nonempty_players
+      letI : Nonempty ι := witness.nonempty_players
       quittingStationaryContinueMass
           (quittingRootOfSimplex edge.current.1.1.2) *
         quittingFiniteNashBellmanPathAggregateDynamicDebt
           reward (anchor.last + 1) anchor.path ≤
         carriedScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := regime.nonempty_players
-    regime.terminalGap / 2 ≤
+    letI : Nonempty ι := witness.nonempty_players
+    witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
           quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 2) ∨
-      regime.terminalGap / 2 ≤
+      witness.terminalGap / 2 ≤
         (carriedScale +
             (Fintype.card ι : ℝ) * quittingRewardBound reward) *
           edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hscale : 0 ≤ carriedScale +
       (Fintype.card ι : ℝ) * quittingRewardBound reward :=
     add_nonneg hcarriedScale
       (mul_nonneg (Nat.cast_nonneg _) (quittingRewardBound_nonneg reward))
-  apply regime.immediateNever_consumed_of_prependResidual_le_charge
+  apply witness.immediateNever_consumed_of_prependResidual_le_charge
     anchor edge htail
       (carriedScale +
         (Fintype.card ι : ℝ) * quittingRewardBound reward) hscale
   exact prependResidual_le_charge_of_carriedDebt_le_charge
     anchor edge htail carriedScale hcarried
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

@@ -224,44 +224,44 @@ namespace IsBoundedRolloverObstruction
 variable {market : Market ι}
 
 /-- Forget the economic names and recover the canonical quitting
-counterexample regime. -/
-def toCounterexampleRegime
+terminal exploitability witness. -/
+def toTerminalExploitabilityWitness
     (obstruction : market.IsBoundedRolloverObstruction) :
-    QuittingCounterexampleRegime market.settlement where
+    QuittingTerminalExploitabilityWitness market.settlement where
   terminalGap := obstruction.runGap
   terminalGap_pos := obstruction.runGap_pos
   terminalExploitability := obstruction.everySchedule_runVulnerable
 
-/-- Every quitting counterexample regime is a bounded rollover
+/-- Every quitting terminal exploitability witness is a bounded rollover
 obstruction. -/
-def ofCounterexampleRegime
-    (regime : QuittingCounterexampleRegime market.settlement) :
+def ofTerminalExploitabilityWitness
+    (witness : QuittingTerminalExploitabilityWitness market.settlement) :
     market.IsBoundedRolloverObstruction where
-  runGap := regime.terminalGap
-  runGap_pos := regime.terminalGap_pos
-  everySchedule_runVulnerable := regime.terminalExploitability
-  finiteClearingCapacity := regime.prefixChargeCapacity_ne_top
+  runGap := witness.terminalGap
+  runGap_pos := witness.terminalGap_pos
+  everySchedule_runVulnerable := witness.terminalExploitability
+  finiteClearingCapacity := witness.prefixChargeCapacity_ne_top
 
 /-- Every bounded rollover obstruction has no uniform-equilibrium payoff. -/
 theorem not_exists_uniformEquilibriumPayoff
     (obstruction : market.IsBoundedRolloverObstruction) :
     ¬ ∃ payoff : Payoff ι,
       market.behaviorGame.IsUniformEquilibriumPayoff none payoff :=
-  obstruction.toCounterexampleRegime.not_exists_uniformEquilibriumPayoff
+  obstruction.toTerminalExploitabilityWitness.not_exists_uniformEquilibriumPayoff
 
 /-- The analytic waist forces a fractionally viable sole-caller liquidation
 plan in every bounded rollover obstruction. -/
 theorem nonempty_fractionalLiquidationPacket
     (obstruction : market.IsBoundedRolloverObstruction) :
     Nonempty market.FractionalLiquidationPacket :=
-  obstruction.toCounterexampleRegime.nonempty_normalizedSingletonSourcePacket
+  obstruction.toTerminalExploitabilityWitness.nonempty_normalizedSingletonSourcePacket
 
 /-- No bounded rollover obstruction exists with fewer than four
 claimants. -/
 theorem four_le_card
     (obstruction : market.IsBoundedRolloverObstruction) :
     4 ≤ Fintype.card ι := by
-  have hcard := obstruction.toCounterexampleRegime.three_lt_card
+  have hcard := obstruction.toTerminalExploitabilityWitness.three_lt_card
   omega
 
 /-- Every exact clearing prefix is bounded by the canonical real capacity. -/
@@ -270,7 +270,7 @@ theorem prefix_intensity_le_capacity
     (chain : market.ClearingPrefix) :
     chain.totalLiquidationIntensity ≤
       quittingPunishmentFloorPrefixChargeBound market.settlement :=
-  obstruction.toCounterexampleRegime.prefixCharge_le chain
+  obstruction.toTerminalExploitabilityWitness.prefixCharge_le chain
 
 end IsBoundedRolloverObstruction
 
@@ -286,8 +286,8 @@ theorem nonempty_boundedRolloverObstruction_iff
   · rintro ⟨obstruction⟩
     exact obstruction.not_exists_uniformEquilibriumPayoff
   · intro hno
-    exact ⟨IsBoundedRolloverObstruction.ofCounterexampleRegime
-      (quittingCounterexampleRegimeOfNoUniformPayoff
+    exact ⟨IsBoundedRolloverObstruction.ofTerminalExploitabilityWitness
+      (quittingTerminalExploitabilityWitnessOfNoUniformPayoff
         market.settlement hno)⟩
 
 /-- An arbitrary infinite exact security-floor clearing orbit. -/
@@ -305,7 +305,7 @@ theorem orbit_liquidationIntensity_summable
     (orbit : market.ClearingOrbit) :
     Summable (fun time =>
       market.liquidationIntensity (orbit.roots time)) :=
-  obstruction.toCounterexampleRegime
+  obstruction.toTerminalExploitabilityWitness
     |>.infiniteOrbit_absorptionMass_summable orbit
 
 /-- **Quiet late restarts remain uniformly run-vulnerable.**  Along every
@@ -328,8 +328,8 @@ theorem eventually_quiet_and_restart_runVulnerable
               (Function.update (market.rowSchedule orbit.roots time)
                 who deviation) who := by
   simpa only [liquidationIntensity, terminalSettlement, rowSchedule,
-    toCounterexampleRegime] using
-    obstruction.toCounterexampleRegime
+    toTerminalExploitabilityWitness] using
+    obstruction.toTerminalExploitabilityWitness
       |>.eventually_smallAbsorption_and_terminalExploitability orbit ε hε
 
 /-- **Orbit-attached phantom quote.**  Every infinite exact clearing orbit
@@ -346,7 +346,7 @@ theorem orbit_exists_attachedPhantomLimit
         quittingPunishmentValue market.settlement who ≤ limit who) ∧
       market.IsNoCallPhantomQuote limit := by
   simpa only [IsNoCallPhantomQuote, IsExactClearingEdge, noCallPoint] using
-    obstruction.toCounterexampleRegime.infiniteOrbit_exists_selfLoop_limit
+    obstruction.toTerminalExploitabilityWitness.infiniteOrbit_exists_selfLoop_limit
       orbit
 
 end IsBoundedRolloverObstruction

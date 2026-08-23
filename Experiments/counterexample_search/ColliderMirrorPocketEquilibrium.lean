@@ -33,8 +33,8 @@ What fires is the step-four cycle at an anchor root beyond
 
 This is a checked statement about one table, not a general theorem about
 collider completions.  The general statements are
-`GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderDistantPocket`
-and `GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderReward`.
+`GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderDistantPocket`
+and `GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderReward`.
 -/
 
 noncomputable section
@@ -122,10 +122,10 @@ theorem mirror_exists_uniformEquilibriumPayoff :
     (by rw [mirrorMargin_one, mirrorMargin_two, mirrorMargin_three,
       mirrorMargin_four]; norm_num)
 
-/-- **The table is in no counterexample regime.** -/
-theorem mirror_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime mirrorReward) :=
-  isEmpty_counterexampleRegime_colliderDistantPocket
+/-- **The table is in no terminal exploitability witness.** -/
+theorem mirror_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness mirrorReward) :=
+  isEmpty_terminalExploitabilityWitness_colliderDistantPocket
     (s := 1) (low := -2) mirrorMargin_zero (by norm_num) (by norm_num)
     (by rw [mirrorMargin_one]; norm_num) (by rw [mirrorMargin_two]; norm_num)
     (by rw [mirrorMargin_three]; norm_num) (by rw [mirrorMargin_four]; norm_num)

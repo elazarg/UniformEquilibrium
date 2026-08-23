@@ -22,7 +22,7 @@ exact debt boundary, every positively weighted local dissipation in the
 window vanishes.  Conversely, one strict positively weighted dissipation
 forces the excessive account's boundary strictly below the debt boundary.
 
-The boundary premise is not derived from the counterexample regime.  In
+The boundary premise is not derived from the terminal exploitability witness.  In
 particular, the prescribed value and its dynamic-debt augmented cap do not
 have the same initial value: their difference is exactly the (positive, for
 the selected owner) dynamic debt.  Thus the results below retain the phantom
@@ -40,38 +40,38 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- Joint Continue mass, viewed as the one-step survival coefficient on the
 canonical counterexample tail. -/
 def killedDebtSurvival
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (time : ℕ) : ℝ :=
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) : ℝ :=
   quittingStationaryContinueMass
     (quittingDynamicDebtTailRoots seam.tail time)
 
 /-- The diagonal debt seam, viewed as the source in scalar killed
 accounting. -/
 def killedDebtSource
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (time : ℕ) : ℝ :=
   quittingDynamicDebtSeam (seam.tail time) who
 
 /-- One coordinate of exact dynamic debt, viewed as the reference potential
 in scalar killed accounting. -/
 def killedDebtReference
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (time : ℕ) : ℝ :=
   (seam.tail time).2 who
 
 theorem killedDebtSurvival_nonneg
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (time : ℕ) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (time : ℕ) :
     0 ≤ seam.killedDebtSurvival time :=
   quittingStationaryContinueMass_nonneg _
 
 /-- Exact dynamic-debt conservation is precisely the one-step killed
 reference recursion. -/
 theorem killedDebtReference_step
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (time : ℕ) :
     seam.killedDebtReference who time =
       seam.killedDebtSource who time +
@@ -87,7 +87,7 @@ theorem killedDebtReference_step
 every finite counterexample-tail window.  The terminal debt boundary is not
 dropped. -/
 theorem killedDebtReference_eq_killedTailAccount
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (start fuel : ℕ) :
     seam.killedDebtReference who start =
       killedTailAccount seam.killedDebtSurvival
@@ -102,7 +102,7 @@ the proposed account's boundary plus all of its killed dissipation.  Thus a
 boundary comparison in the opposite direction has no hidden slack: it can
 hold for an excessive account only when the whole dissipation sum vanishes. -/
 theorem debtBoundary_eq_dissipationSum_add_potentialBoundary
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (potential : ℕ → ℝ) (start fuel : ℕ)
     (hinitial : potential start = seam.killedDebtReference who start) :
     killedBoundaryRemainder seam.killedDebtSurvival
@@ -123,7 +123,7 @@ surviving boundary dominates the exact debt boundary, its total killed
 dissipation on the window is zero.  The displayed boundary comparison is the
 model-specific premise not supplied by counterexample-tail extraction. -/
 theorem killedDissipationSum_eq_zero_of_debtBoundary_le
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (potential : ℕ → ℝ)
     (hexcessive : IsKilledExcessive seam.killedDebtSurvival
       (seam.killedDebtSource who) potential)
@@ -148,7 +148,7 @@ exact debt boundary is equivalent to vanishing of the full killed
 dissipation sum.  This exposes why boundary domination cannot be obtained by
 mere reanchoring: it is already the desired no-dissipation conclusion. -/
 theorem debtBoundary_le_potentialBoundary_iff_dissipationSum_eq_zero
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (potential : ℕ → ℝ)
     (hexcessive : IsKilledExcessive seam.killedDebtSurvival
       (seam.killedDebtSource who) potential)
@@ -173,7 +173,7 @@ theorem debtBoundary_le_potentialBoundary_iff_dissipationSum_eq_zero
 /-- Under the same minimal boundary comparison, every local dissipation that
 is reached with positive prefix survival vanishes. -/
 theorem killedDissipation_eq_zero_of_debtBoundary_le
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (potential : ℕ → ℝ)
     (hexcessive : IsKilledExcessive seam.killedDebtSurvival
       (seam.killedDebtSource who) potential)
@@ -204,7 +204,7 @@ excessive account's surviving terminal boundary strictly below the exact debt
 boundary.  This is the useful alternative when boundary dominance cannot be
 proved. -/
 theorem potentialBoundary_lt_debtBoundary_of_strictDissipation
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (who : ι) (potential : ℕ → ℝ)
     (hexcessive : IsKilledExcessive seam.killedDebtSurvival
       (seam.killedDebtSource who) potential)

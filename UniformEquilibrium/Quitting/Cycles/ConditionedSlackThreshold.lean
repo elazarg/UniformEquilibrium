@@ -18,7 +18,7 @@ pointwise alternative and its uncovered-budget consequence.
 
 It also records that exact affine-shrink coefficient transport cannot return
 to the unshrunk scale at a finite date unless it started there. These are
-generic accounting results and use no counterexample regime.
+generic accounting results and use no terminal exploitability witness.
 -/
 
 noncomputable section

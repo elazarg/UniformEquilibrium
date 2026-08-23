@@ -33,7 +33,7 @@ open Filter Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
@@ -43,14 +43,14 @@ vanishing conditioned mesh, and a phantom boundary equal to every player's
 singleton payoff.  Both complete and deficient deleted clocks are consumed
 by the conditioned compiler. -/
 theorem not_all_limitValue_eq_singleton_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
       (quittingDynamicDebtTailRoots seam.tail)) atTop (nhds 0)) :
     ¬ ∀ who, seam.limit.value who = quittingSoloBaseline reward who := by
   intro htight
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   have hpolicy : ∀ time, value time =
@@ -90,14 +90,14 @@ theorem not_all_limitValue_eq_singleton_of_diffuse
     quittingGame_exists_uniformEquilibriumPayoff_of_conditionedDiffuseTail_punishmentIR
       reward roots value seam.limit.value hpolicy hnash hpositive
       heventualZero hconditionedBound htight hmesh hpunishment
-  exact regime.not_exists_uniformEquilibriumPayoff hexists
+  exact witness.not_exists_uniformEquilibriumPayoff hexists
 
 /-- In the diffuse positive-absorption branch, a counterexample therefore
 has a genuinely strict phantom plateau coordinate.  The reverse weak
 inequality is already forced by exact Nash at the limiting all-Continue
 self-loop. -/
 theorem exists_singleton_lt_limitValue_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -117,7 +117,7 @@ eventually prescribed literal `Never` on the optimized source tail.  Indeed,
 positive Quit hazards at arbitrarily late dates would pin the limiting
 annotation to the singleton payoff. -/
 theorem eventually_pureContinue_of_singleton_lt_limitValue
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (who : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι)
     (hstrict : quittingSoloBaseline reward who < seam.limit.value who) :
     ∀ᶠ time : ℕ in atTop,
       quittingDynamicDebtTailRoots seam.tail time who = PMF.pure false := by
@@ -156,7 +156,7 @@ theorem eventually_pureContinue_of_singleton_lt_limitValue
 /-- After one common finite cutoff, every player present in the physical
 quitter support lies on a singleton-tight boundary coordinate. -/
 theorem eventually_active_implies_limitValue_eq_singleton
-    (seam : QuittingCounterexampleDynamicTailWitness regime) :
+    (seam : QuittingCounterexampleDynamicTailWitness witness) :
     ∀ᶠ time : ℕ in atTop, ∀ who,
       quittingDynamicDebtTailRoots seam.tail time who ≠ PMF.pure false →
         seam.limit.value who = quittingSoloBaseline reward who := by
@@ -179,7 +179,7 @@ counterexample seam contains a strict plateau player who is eventually absent
 from the physical quitter support.  The remaining active source support is
 therefore a proper subset of the player set and is singleton-tight. -/
 theorem exists_strictPlateau_eventually_pureContinue_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -201,7 +201,7 @@ remaining strategic obstructions: a deficient deleted clock, or persistent
 one-stage support enlargement pressure. -/
 theorem
     exists_summable_conditionedOpponentWeight_or_not_tendsto_rescaledQuitDefect
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -214,7 +214,7 @@ theorem
           (quittingDynamicDebtTailRoots seam.tail)
           (fun time => (seam.tail time).1.1) seam.limit.value hpositive)
         atTop (nhds 0) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   by_cases hclock : ∃ who start, Summable (fun offset =>
@@ -332,7 +332,7 @@ theorem
           simpa only [suffixRoots,
             quittingTailConditionedOpponentWeight_suffix, Nat.add_assoc] using
               hsource)
-    exact regime.not_exists_uniformEquilibriumPayoff hexists
+    exact witness.not_exists_uniformEquilibriumPayoff hexists
 
 /-- **Unified proper-face obstruction.**  The deleted-clock alternative above
 is not an additional counterexample branch.  If such a clock is summable,
@@ -341,7 +341,7 @@ owner's singleton vector above every singleton floor; punishment completion
 then produces a uniform payoff.  Hence every positive diffuse counterexample
 has a genuinely persistent rescaled pure-Quit defect. -/
 theorem not_tendsto_rescaledQuitDefect_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -352,7 +352,7 @@ theorem not_tendsto_rescaledQuitDefect_of_diffuse
         (fun time => (seam.tail time).1.1) seam.limit.value hpositive)
       atTop (nhds 0) := by
   intro hdefect
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   have hclockOr :=
@@ -479,14 +479,14 @@ theorem not_tendsto_rescaledQuitDefect_of_diffuse
             simpa only [suffixRoots,
               quittingTailConditionedOpponentWeight_suffix] using hsummable)
           hpunishment
-    exact regime.not_exists_uniformEquilibriumPayoff hexists
+    exact witness.not_exists_uniformEquilibriumPayoff hexists
   · exact hnot hdefect
 
 /-- Search-facing quantitative form of the unified obstruction.  Some fixed
 positive amount of immediate-Quit pressure recurs arbitrarily late along the
 diffuse rescaled chronology. -/
 theorem exists_persistent_rescaledQuitDefect_of_diffuse
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight

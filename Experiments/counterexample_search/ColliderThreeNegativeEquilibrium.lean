@@ -33,7 +33,7 @@ the realized payoff rather than displaying it, since it depends on `q`.
 
 This is a checked statement about one table, not a general theorem about
 collider completions.  The general statement is
-`GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderThreeNegative`.
+`GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderThreeNegative`.
 -/
 
 noncomputable section
@@ -121,11 +121,11 @@ theorem threeNegative_exists_uniformEquilibriumPayoff :
     (by norm_num) threeNegativeMargin_neg_of_ne
     (fun d _ => colliderJoin_nonpos (by norm_num) d)
 
-/-- **The table is in no counterexample regime.**  A terminal exploitability
+/-- **The table is in no terminal exploitability witness.**  A terminal exploitability
 gap is incompatible with an existing uniform-equilibrium payoff. -/
-theorem threeNegative_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime threeNegativeReward) :=
-  isEmpty_counterexampleRegime_colliderThreeNegative threeNegativeMargin_zero
+theorem threeNegative_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness threeNegativeReward) :=
+  isEmpty_terminalExploitabilityWitness_colliderThreeNegative threeNegativeMargin_zero
     (by norm_num) (by norm_num)
     (by rw [sum_threeNegativeMargin]; norm_num) (g := 4) (by norm_num)
     threeNegativeMargin_neg_of_ne

@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDebtSelfLoopLimit
 /-!
 # The positive-debt self-loop limit of the counterexample tail
 
-The counterexample regime's optimized exact-debt tail converges
+The terminal exploitability witness's optimized exact-debt tail converges
 coordinatewise to a positive-debt all-Continue exact self-loop. The original
 projective subsequence, exact-edge certificates, terminal-gap margin, and
 summable absorption and opponent clocks are retained.
@@ -26,24 +26,24 @@ open Filter Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- The optimized tail converges coordinatewise in value and debt to a
 positive-debt all-Continue exact dynamic-debt self-loop. -/
 theorem exists_terminalGapDynamicDebtTail_selfLoopLimit
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ (tail : ℕ → QuittingDebtPoint ι) (subseq : ℕ → ℕ)
         (limit : QuittingPositiveDebtSelfLoopLimit reward),
       StrictMono subseq ∧
       Tendsto
         ((fun cutoff ↦ @quittingFiniteMinMaxDynamicDebtTail ι _ _
-            regime.nonempty_players reward cutoff) ∘ subseq)
+            witness.nonempty_players reward cutoff) ∘ subseq)
           atTop (nhds tail) ∧
       (∀ time, tail time ∈ quittingDebtBox reward) ∧
       (∀ time, IsQuittingDynamicDebtEdge reward
         (tail time) (tail (time + 1))) ∧
-      regime.terminalGap ≤ (tail 0).2 limit.owner ∧
-      regime.terminalGap ≤ limit.debt limit.owner ∧
+      witness.terminalGap ≤ (tail 0).2 limit.owner ∧
+      witness.terminalGap ≤ limit.debt limit.owner ∧
       (∀ who, Tendsto (fun time ↦ (tail time).1.1 who) atTop
         (nhds (limit.value who))) ∧
       (∀ who, Tendsto (fun time ↦ (tail time).2 who) atTop
@@ -57,10 +57,10 @@ theorem exists_terminalGapDynamicDebtTail_selfLoopLimit
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots tail) limit.owner) ∧
       Summable (quittingDynamicDebtTailAbsorptionCharge tail) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨tail, subseq, owner, hsubseq, hprojective, hbox, hedge,
       hownerDebt, hownerClock, habsorption⟩ :=
-    regime.exists_terminalGapDynamicDebtTail_summableAbsorption
+    witness.exists_terminalGapDynamicDebtTail_summableAbsorption
   have hvalueConverge : ∀ who : ι, ∃ coordinateLimit : ℝ,
       Tendsto (fun time ↦ (tail time).1.1 who) atTop
         (nhds coordinateLimit) := by
@@ -137,7 +137,7 @@ theorem exists_terminalGapDynamicDebtTail_selfLoopLimit
       QuittingDynamicDebtTail.monotone_debt tail
         (fun date ↦ (hbox date).2.1) hedge owner
         (Nat.zero_le time)
-  have hownerLimit : regime.terminalGap ≤ debtLimit owner :=
+  have hownerLimit : witness.terminalGap ≤ debtLimit owner :=
     hownerDebt.trans hownerZero_le_limit
   have hselfNash : IsQuittingNashBellmanEdge reward
       (valueLimit, quittingAllContinueSimplexRoot)
@@ -188,7 +188,7 @@ theorem exists_terminalGapDynamicDebtTail_selfLoopLimit
     value := valueLimit
     debt := debtLimit
     owner := owner
-    ownerDebt_pos := lt_of_lt_of_le regime.terminalGap_pos hownerLimit
+    ownerDebt_pos := lt_of_lt_of_le witness.terminalGap_pos hownerLimit
     state_mem := ⟨hvalueBox, hdebtBox⟩
     exactSelfLoop := hselfDynamic }
   have hquitConverge : ∀ who, Tendsto (fun time ↦
@@ -205,6 +205,6 @@ theorem exists_terminalGapDynamicDebtTail_selfLoopLimit
     hownerDebt, hownerLimit, hvalueLimit, hdebtLimit, hquitConverge,
     hcontinueConverge, hownerClock, habsorption⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

@@ -32,15 +32,15 @@ open QuittingSureSetOwnerRepair
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Every coalition has a player whose literal membership toggle realizes at
 least the counterexample margin. -/
 theorem exists_strictToggle_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    ∃ who, quittingSetReward reward S who + regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    ∃ who, quittingSetReward reward S who + witness.terminalGap ≤
       quittingSetReward reward (quittingToggleCoalition S who) who := by
-  rcases regime.exists_leave_or_join_gain S with
+  rcases witness.exists_leave_or_join_gain S with
     ⟨member, hmember, hgain⟩ | ⟨outsider, houtsider, hgain⟩
   · exact ⟨member, by
       rw [quittingToggleCoalition_of_mem hmember]
@@ -52,44 +52,44 @@ theorem exists_strictToggle_gain
 /-- A deterministic profitable toggle player, chosen only to expose the
 finite orbit. -/
 noncomputable def strictTogglePlayer
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) : ι :=
-  Classical.choose (regime.exists_strictToggle_gain S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) : ι :=
+  Classical.choose (witness.exists_strictToggle_gain S)
 
 /-- The coalition reached by the chosen strict membership toggle. -/
 noncomputable def strictToggleSuccessor
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (S : Finset ι) : Finset ι :=
-  quittingToggleCoalition S (regime.strictTogglePlayer S)
+  quittingToggleCoalition S (witness.strictTogglePlayer S)
 
 /-- The chosen edge realizes at least the uniform counterexample margin. -/
 theorem strictToggleSuccessor_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    quittingSetReward reward S (regime.strictTogglePlayer S) +
-        regime.terminalGap ≤
-      quittingSetReward reward (regime.strictToggleSuccessor S)
-        (regime.strictTogglePlayer S) := by
-  exact Classical.choose_spec (regime.exists_strictToggle_gain S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    quittingSetReward reward S (witness.strictTogglePlayer S) +
+        witness.terminalGap ≤
+      quittingSetReward reward (witness.strictToggleSuccessor S)
+        (witness.strictTogglePlayer S) := by
+  exact Classical.choose_spec (witness.exists_strictToggle_gain S)
 
 /-- Every chosen toggle edge is a strict payoff improvement. -/
 theorem strictToggleSuccessor_strictGain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    quittingSetReward reward S (regime.strictTogglePlayer S) <
-      quittingSetReward reward (regime.strictToggleSuccessor S)
-        (regime.strictTogglePlayer S) := by
-  linarith [regime.strictToggleSuccessor_gain S, regime.terminalGap_pos]
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    quittingSetReward reward S (witness.strictTogglePlayer S) <
+      quittingSetReward reward (witness.strictToggleSuccessor S)
+        (witness.strictTogglePlayer S) := by
+  linarith [witness.strictToggleSuccessor_gain S, witness.terminalGap_pos]
 
 /-- Every chosen edge changes exactly one coalition membership and hence is
 not a self-loop. -/
 theorem strictToggleSuccessor_ne
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    regime.strictToggleSuccessor S ≠ S := by
-  exact quittingToggleCoalition_ne S (regime.strictTogglePlayer S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    witness.strictToggleSuccessor S ≠ S := by
+  exact quittingToggleCoalition_ne S (witness.strictTogglePlayer S)
 
 /-- The first selected edge from Never is a singleton exit. -/
 theorem strictToggleSuccessor_empty_eq_singleton
-    (regime : QuittingCounterexampleRegime reward) :
-    regime.strictToggleSuccessor (∅ : Finset ι) =
-      {regime.strictTogglePlayer (∅ : Finset ι)} := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    witness.strictToggleSuccessor (∅ : Finset ι) =
+      {witness.strictTogglePlayer (∅ : Finset ι)} := by
   rw [strictToggleSuccessor,
     quittingToggleCoalition_of_notMem (by simp)]
   rfl
@@ -98,38 +98,38 @@ theorem strictToggleSuccessor_empty_eq_singleton
 exit: the two margin inequalities would contradict positivity.  It therefore
 adds a distinct player and enters a two-player collision coalition. -/
 theorem strictToggleSuccessor_singleton_is_pair
-    (regime : QuittingCounterexampleRegime reward) :
-    let owner := regime.strictTogglePlayer (∅ : Finset ι)
-    let singleton := regime.strictToggleSuccessor (∅ : Finset ι)
-    let other := regime.strictTogglePlayer singleton
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    let owner := witness.strictTogglePlayer (∅ : Finset ι)
+    let singleton := witness.strictToggleSuccessor (∅ : Finset ι)
+    let other := witness.strictTogglePlayer singleton
     other ≠ owner ∧
-      regime.strictToggleSuccessor singleton = {owner, other} := by
-  let owner := regime.strictTogglePlayer (∅ : Finset ι)
-  let singleton := regime.strictToggleSuccessor (∅ : Finset ι)
-  let other := regime.strictTogglePlayer singleton
+      witness.strictToggleSuccessor singleton = {owner, other} := by
+  let owner := witness.strictTogglePlayer (∅ : Finset ι)
+  let singleton := witness.strictToggleSuccessor (∅ : Finset ι)
+  let other := witness.strictTogglePlayer singleton
   change other ≠ owner ∧
-    regime.strictToggleSuccessor singleton = {owner, other}
+    witness.strictToggleSuccessor singleton = {owner, other}
   have hsingleton : singleton = {owner} := by
-    exact regime.strictToggleSuccessor_empty_eq_singleton
-  have hfirst := regime.strictToggleSuccessor_gain (∅ : Finset ι)
-  have hsecond := regime.strictToggleSuccessor_gain singleton
-  change quittingSetReward reward ∅ owner + regime.terminalGap ≤
+    exact witness.strictToggleSuccessor_empty_eq_singleton
+  have hfirst := witness.strictToggleSuccessor_gain (∅ : Finset ι)
+  have hsecond := witness.strictToggleSuccessor_gain singleton
+  change quittingSetReward reward ∅ owner + witness.terminalGap ≤
     quittingSetReward reward singleton owner at hfirst
-  change quittingSetReward reward singleton other + regime.terminalGap ≤
-    quittingSetReward reward (regime.strictToggleSuccessor singleton) other
+  change quittingSetReward reward singleton other + witness.terminalGap ≤
+    quittingSetReward reward (witness.strictToggleSuccessor singleton) other
       at hsecond
   have hotherNe : other ≠ owner := by
     intro heq
     have hotherMem : other ∈ singleton := by
       rw [hsingleton, heq]
       simp
-    have hback : regime.strictToggleSuccessor singleton = ∅ := by
+    have hback : witness.strictToggleSuccessor singleton = ∅ := by
       rw [strictToggleSuccessor,
         quittingToggleCoalition_of_mem hotherMem, hsingleton, heq]
       simp
     rw [heq, hback, quittingSetReward_empty] at hsecond
     rw [quittingSetReward_empty] at hfirst
-    linarith [regime.terminalGap_pos]
+    linarith [witness.terminalGap_pos]
   refine ⟨hotherNe, ?_⟩
   have hotherNotMem : other ∉ singleton := by
     rw [hsingleton]
@@ -146,31 +146,31 @@ closed nontrivial walk.  Every displayed edge changes one player's action and
 strictly improves that player's one-stage payoff by at least the same
 counterexample margin. -/
 theorem exists_strictToggleClosedOrbit_from
-    (regime : QuittingCounterexampleRegime reward) (seed : Finset ι) :
+    (witness : QuittingTerminalExploitabilityWitness reward) (seed : Finset ι) :
     ∃ start stop : ℕ, start < stop ∧
-      let successor := regime.strictToggleSuccessor
+      let successor := witness.strictToggleSuccessor
       (successor^[start]) seed = (successor^[stop]) seed ∧
       ∀ time,
         successor ((successor^[time]) seed) ≠ (successor^[time]) seed ∧
         quittingSetReward reward ((successor^[time]) seed)
-              (regime.strictTogglePlayer ((successor^[time]) seed)) +
-            regime.terminalGap ≤
+              (witness.strictTogglePlayer ((successor^[time]) seed)) +
+            witness.terminalGap ≤
           quittingSetReward reward (successor ((successor^[time]) seed))
-            (regime.strictTogglePlayer ((successor^[time]) seed)) := by
-  let successor := regime.strictToggleSuccessor
+            (witness.strictTogglePlayer ((successor^[time]) seed)) := by
+  let successor := witness.strictToggleSuccessor
   obtain ⟨first, second, hne, heq⟩ :=
     Finite.exists_ne_map_eq_of_infinite
       (fun time : ℕ => (successor^[time]) seed)
   have hedge : ∀ time,
       successor ((successor^[time]) seed) ≠ (successor^[time]) seed ∧
       quittingSetReward reward ((successor^[time]) seed)
-            (regime.strictTogglePlayer ((successor^[time]) seed)) +
-          regime.terminalGap ≤
+            (witness.strictTogglePlayer ((successor^[time]) seed)) +
+          witness.terminalGap ≤
         quittingSetReward reward (successor ((successor^[time]) seed))
-          (regime.strictTogglePlayer ((successor^[time]) seed)) := by
+          (witness.strictTogglePlayer ((successor^[time]) seed)) := by
     intro time
-    exact ⟨regime.strictToggleSuccessor_ne _,
-      regime.strictToggleSuccessor_gain _⟩
+    exact ⟨witness.strictToggleSuccessor_ne _,
+      witness.strictToggleSuccessor_gain _⟩
   rcases lt_or_gt_of_ne hne with hlt | hgt
   · exact ⟨first, second, hlt, heq, hedge⟩
   · exact ⟨second, first, hgt, heq.symm, hedge⟩
@@ -178,31 +178,31 @@ theorem exists_strictToggleClosedOrbit_from
 /-- Starting the strict orbit at Never exposes a solo edge followed by a
 collision edge before finite recurrence closes the static toggle walk. -/
 theorem exists_strictToggleClosedOrbit_from_empty_with_collision_entry
-    (regime : QuittingCounterexampleRegime reward) :
-    let owner := regime.strictTogglePlayer (∅ : Finset ι)
-    let singleton := regime.strictToggleSuccessor (∅ : Finset ι)
-    let other := regime.strictTogglePlayer singleton
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    let owner := witness.strictTogglePlayer (∅ : Finset ι)
+    let singleton := witness.strictToggleSuccessor (∅ : Finset ι)
+    let other := witness.strictTogglePlayer singleton
     singleton = {owner} ∧ other ≠ owner ∧
-      regime.strictToggleSuccessor singleton = {owner, other} ∧
+      witness.strictToggleSuccessor singleton = {owner, other} ∧
       ∃ start stop : ℕ, start < stop ∧
-        let successor := regime.strictToggleSuccessor
+        let successor := witness.strictToggleSuccessor
         (successor^[start]) (∅ : Finset ι) =
           (successor^[stop]) ∅ ∧
         ∀ time,
           successor ((successor^[time]) (∅ : Finset ι)) ≠
               (successor^[time]) ∅ ∧
           quittingSetReward reward ((successor^[time]) ∅)
-                (regime.strictTogglePlayer ((successor^[time]) ∅)) +
-              regime.terminalGap ≤
+                (witness.strictTogglePlayer ((successor^[time]) ∅)) +
+              witness.terminalGap ≤
             quittingSetReward reward
               (successor ((successor^[time]) ∅))
-              (regime.strictTogglePlayer ((successor^[time]) ∅)) := by
+              (witness.strictTogglePlayer ((successor^[time]) ∅)) := by
   dsimp only
-  refine ⟨regime.strictToggleSuccessor_empty_eq_singleton,
-    (regime.strictToggleSuccessor_singleton_is_pair).1,
-    (regime.strictToggleSuccessor_singleton_is_pair).2, ?_⟩
-  exact regime.exists_strictToggleClosedOrbit_from ∅
+  refine ⟨witness.strictToggleSuccessor_empty_eq_singleton,
+    (witness.strictToggleSuccessor_singleton_is_pair).1,
+    (witness.strictToggleSuccessor_singleton_is_pair).2, ?_⟩
+  exact witness.exists_strictToggleClosedOrbit_from ∅
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

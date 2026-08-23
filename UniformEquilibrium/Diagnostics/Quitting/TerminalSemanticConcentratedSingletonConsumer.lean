@@ -181,14 +181,14 @@ theorem QuittingReprojectionConcentratedPacket.ownerQuitAdvantage_posPart_tendst
   · exact hadvantageBound
   · exact hupper
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Concentrated opponent-singleton trichotomy.**  The singleton has either
 a strict third-player joiner, the reset owner is itself a strict joiner whose
 expected rowwise advantage is asymptotically canceled, or the singleton owner
 has a fixed punishment moat. -/
 theorem exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentratedSingleton
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : ι} {terminal : {S : Finset ι // S.Nonempty}}
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
@@ -225,7 +225,7 @@ theorem exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentrate
     simpa using hotherNe.symm
   refine ⟨hterminal, packet.ownerQuitAdvantage_posPart_tendsto_zero
     hownerNotMem hscale hscaleTendsto, ?_⟩
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue other with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue other with
     hjoin | hmoat
   · obtain ⟨joiner, hjoinerNe, hstrict⟩ := hjoin
     by_cases hjoinerOwner : joiner = owner
@@ -238,7 +238,7 @@ theorem exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentrate
 singleton, the cancellation branch is absent: a fixed third-player strict
 joiner or a fixed punishment moat remains. -/
 theorem exists_thirdJoiner_or_punishmentMoat_of_concentratedSingleton
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {profiles : ℕ → (quittingGame reward).BehaviorProfile}
     {owner : ι} {terminal : {S : Finset ι // S.Nonempty}}
     {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
@@ -257,13 +257,13 @@ theorem exists_thirdJoiner_or_punishmentMoat_of_concentratedSingleton
       quittingSoloReward reward other other <
         quittingPunishmentValue reward other := by
   obtain ⟨_hterminal, _hadvantage, hstrategic⟩ :=
-    regime.exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentratedSingleton
+    witness.exists_thirdJoiner_or_ownerCancellation_or_punishmentMoat_of_concentratedSingleton
       packet hcard other hotherNe hotherMem hscale hscaleTendsto
   rcases hstrategic with hthird | howner | hmoat
   · exact Or.inl hthird
   · exact False.elim (not_lt_of_ge hownerNoJoin howner)
   · exact Or.inr hmoat
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

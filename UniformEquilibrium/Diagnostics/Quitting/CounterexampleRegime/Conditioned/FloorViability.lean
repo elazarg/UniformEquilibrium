@@ -28,8 +28,8 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- The optimized tail value after removing the positive-survival phantom
 boundary and conditioning on eventual absorption. -/

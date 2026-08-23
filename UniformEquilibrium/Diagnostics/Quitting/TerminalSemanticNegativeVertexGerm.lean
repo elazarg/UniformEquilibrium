@@ -131,8 +131,8 @@ theorem strictJoiner_or_uniformPayoff_of_stationarySemanticGerm
 /-- Universal singleton-face restriction in a counterexample.  Either a
 strict joiner exposes support entry, or the exact punishment value is
 strictly above the owner's singleton payoff. -/
-theorem QuittingCounterexampleRegime.strictJoiner_or_soloReward_lt_punishmentValue
-    (regime : QuittingCounterexampleRegime reward) (owner : ι) :
+theorem QuittingTerminalExploitabilityWitness.strictJoiner_or_soloReward_lt_punishmentValue
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι) :
     (∃ other, other ≠ owner ∧
         quittingSoloReward reward owner other <
           quittingSingletonCollisionReward reward owner other) ∨
@@ -144,7 +144,7 @@ theorem QuittingCounterexampleRegime.strictJoiner_or_soloReward_lt_punishmentVal
     have hIR : IsQuittingInstantPunishmentIR reward owner := by
       unfold IsQuittingInstantPunishmentIR
       exact le_of_not_gt hnot
-    exact regime.not_exists_uniformEquilibriumPayoff
+    exact witness.not_exists_uniformEquilibriumPayoff
       ⟨quittingSoloReward reward owner,
         isUniformEquilibriumPayoff_soloReward_of_instantPunishment
           reward owner hIR hnoJoin⟩
@@ -156,15 +156,15 @@ theorem QuittingCounterexampleRegime.strictJoiner_or_soloReward_lt_punishmentVal
 /-- In the no-join branch of a counterexample, every stationary owner cap is
 separated strictly above the singleton payoff.  The gap is at least the fixed
 punishment moat. -/
-theorem QuittingCounterexampleRegime.soloReward_lt_stationaryCap_of_noJoin
-    (regime : QuittingCounterexampleRegime reward) (owner : ι)
+theorem QuittingTerminalExploitabilityWitness.soloReward_lt_stationaryCap_of_noJoin
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι)
     (hnoJoin : IsQuittingInstantNoJoin reward owner)
     (root : ι → PMF Bool) :
     quittingSoloReward reward owner owner <
       quittingStationaryUnilateralCap reward root owner := by
   have hgap : quittingSoloReward reward owner owner <
       quittingPunishmentValue reward owner := by
-    rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+    rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
       hjoin | hgap
     · obtain ⟨other, hne, hstrict⟩ := hjoin
       exact False.elim
@@ -177,8 +177,8 @@ theorem QuittingCounterexampleRegime.soloReward_lt_stationaryCap_of_noJoin
 /-- Hence a counterexample with no singleton joiner admits no stationary
 semantic germ whose honest owner payoff approaches its singleton payoff while
 the owner debt vanishes. -/
-theorem QuittingCounterexampleRegime.not_exists_stationarySemanticGerm_of_noJoin
-    (regime : QuittingCounterexampleRegime reward) (owner : ι)
+theorem QuittingTerminalExploitabilityWitness.not_exists_stationarySemanticGerm_of_noJoin
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι)
     (hnoJoin : IsQuittingInstantNoJoin reward owner) :
     ¬ ∃ roots : ℕ → ι → PMF Bool,
         Tendsto (fun n =>
@@ -194,7 +194,7 @@ theorem QuittingCounterexampleRegime.not_exists_stationarySemanticGerm_of_noJoin
   have hUE :=
     isUniformEquilibriumPayoff_soloReward_of_stationarySemanticGerm
       owner hnoJoin roots hpayoff hdebt
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     ⟨quittingSoloReward reward owner, hUE⟩
 
 /-! ## The actual negative-vertex alternative -/
@@ -228,8 +228,8 @@ alternative.
 The second branch is deliberately nonstationary.  The preceding germ theorem
 shows that it cannot be replaced by a stationary zero-debt singleton germ:
 such a replacement would compile to a uniform payoff. -/
-theorem QuittingCounterexampleRegime.exists_joiner_or_punishmentMoat_sameLaw
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_joiner_or_punishmentMoat_sameLaw
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι) {M theta : ℝ}
     (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
@@ -275,7 +275,7 @@ theorem QuittingCounterexampleRegime.exists_joiner_or_punishmentMoat_sameLaw
                       (Function.update (profiles (subseq n)) owner
                         (quittingPureTimeBehaviorStrategy reward owner
                           (quitTime (subseq n)))) time terminal)) := by
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
     hjoin | hpunishment
   · exact Or.inl hjoin
   · right

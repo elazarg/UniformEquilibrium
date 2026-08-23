@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.PunishmentFloorPrefixBridge
 # Counterexample consequences of the exact-debt prefix bridge
 
 The production bridge reverses any floor-anchorable exact-debt segment into
-an exact punishment-floor prefix. A counterexample regime then bounds the
+an exact punishment-floor prefix. A terminal exploitability witness then bounds the
 segment by its canonical prefix capacity. Cofinal floor-dominating endpoints
 therefore force summable absorption, leaving eventual floor violation as the
 only alternative.
@@ -26,12 +26,12 @@ open Filter Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Every floor-anchorable exact-debt segment inherits the regime's common
 prefix-charge bound. -/
 theorem dynamicDebtTail_sum_absorptionCharge_le_of_endpoint_floor
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tail : ℕ → QuittingDebtPoint ι)
     (hbox : ∀ time, tail time ∈ quittingDebtBox reward)
     (hedge : ∀ time,
@@ -46,14 +46,14 @@ theorem dynamicDebtTail_sum_absorptionCharge_le_of_endpoint_floor
     (fun time _ ↦ hbox time) (fun time _ ↦ hedge time) hfloor
   rw [← quittingDynamicDebtSegmentToPunishmentFloorPrefix_charge tail horizon
     (fun time _ ↦ hbox time) (fun time _ ↦ hedge time) hfloor]
-  exact regime.prefixCharge_le cert
+  exact witness.prefixCharge_le cert
 
 /-- **Tail/prefix bridge.**  If the positive exact-debt tail returns
 cofinally to the coordinatewise punishment-floor region, then its full joint
 absorption charge is summable.  Thus any nonsummable counterexample tail must
 eventually avoid that region at every date. -/
 theorem summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tail : ℕ → QuittingDebtPoint ι)
     (hbox : ∀ time, tail time ∈ quittingDebtBox reward)
     (hedge : ∀ time,
@@ -75,15 +75,15 @@ theorem summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
       · intro time _ _
         exact quittingDynamicDebtTailAbsorptionCharge_nonneg tail time
     _ ≤ quittingPunishmentFloorPrefixChargeBound reward :=
-      regime.dynamicDebtTail_sum_absorptionCharge_le_of_endpoint_floor
+      witness.dynamicDebtTail_sum_absorptionCharge_le_of_endpoint_floor
         tail hbox hedge horizon hfloor
 
-/-- Every boxed exact-debt tail in a counterexample regime satisfies a sharp
+/-- Every boxed exact-debt tail in a terminal exploitability witness satisfies a sharp
 carrier alternative: either its joint absorption is summable, or from some
 date onward every endpoint violates the punishment floor in at least one
 coordinate.  The violating player may depend on the date. -/
 theorem summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (tail : ℕ → QuittingDebtPoint ι)
     (hbox : ∀ time, tail time ∈ quittingDebtBox reward)
     (hedge : ∀ time,
@@ -95,7 +95,7 @@ theorem summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
   by_cases hcofinal :
       HasCofinalQuittingPunishmentFloorEndpoints reward tail
   · exact Or.inl
-      (regime.summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
+      (witness.summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
         tail hbox hedge hcofinal)
   · right
     unfold HasCofinalQuittingPunishmentFloorEndpoints at hcofinal
@@ -108,28 +108,28 @@ tail has a positive debt owner and either globally summable absorption, or
 an eventual coordinatewise failure of individual rationality at every
 date. -/
 theorem exists_positiveDynamicDebtTail_with_absorptionAlternative
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ (limit : ℕ → QuittingDebtPoint ι) (subseq : ℕ → ℕ) (who : ι),
       StrictMono subseq ∧
       Tendsto
         ((fun cutoff ↦ @quittingFiniteMinMaxDynamicDebtTail
-          ι _ _ regime.nonempty_players reward cutoff) ∘
+          ι _ _ witness.nonempty_players reward cutoff) ∘
           subseq) atTop (nhds limit) ∧
       (∀ time, limit time ∈ quittingDebtBox reward) ∧
       (∀ time, IsQuittingDynamicDebtEdge reward
         (limit time) (limit (time + 1))) ∧
-      regime.terminalGap ≤ (limit 0).2 who ∧
+      witness.terminalGap ≤ (limit 0).2 who ∧
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) ∧
       (Summable (quittingDynamicDebtTailAbsorptionCharge limit) ∨
         ∃ start, ∀ horizon, start ≤ horizon →
           ∃ player, (limit horizon).1.1 player <
             quittingPunishmentValue reward player) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge,
-      hdebt, hclock⟩ := regime.exists_terminalGapDynamicDebtTail
+      hdebt, hclock⟩ := witness.exists_terminalGapDynamicDebtTail
   have halternative :=
-    regime.summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
+    witness.summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
       limit hbox hedge
   exact ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock,
     halternative⟩
@@ -141,26 +141,26 @@ approximants.  The tail/prefix bridge then upgrades the owner's summable
 opponent clock to summability of the full joint absorption charge, while
 retaining the quantitative terminal-gap lower bound on initial debt. -/
 theorem exists_terminalGapDynamicDebtTail_with_summableAbsorption_of_nonpos
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hpunishment : ∀ who, quittingPunishmentValue reward who ≤ 0) :
     ∃ (limit : ℕ → QuittingDebtPoint ι) (subseq : ℕ → ℕ) (who : ι),
       StrictMono subseq ∧
       Tendsto
         ((fun cutoff ↦ @quittingFiniteMinMaxDynamicDebtTail
-          ι _ _ regime.nonempty_players reward cutoff) ∘
+          ι _ _ witness.nonempty_players reward cutoff) ∘
           subseq) atTop (nhds limit) ∧
       (∀ time, limit time ∈ quittingDebtBox reward) ∧
       (∀ time, IsQuittingDynamicDebtEdge reward
         (limit time) (limit (time + 1))) ∧
-      regime.terminalGap ≤ (limit 0).2 who ∧
+      witness.terminalGap ≤ (limit 0).2 who ∧
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) ∧
       (∀ time player, quittingPunishmentValue reward player ≤
         (limit time).1.1 player) ∧
       Summable (quittingDynamicDebtTailAbsorptionCharge limit) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge,
-      hdebt, hclock⟩ := regime.exists_terminalGapDynamicDebtTail
+      hdebt, hclock⟩ := witness.exists_terminalGapDynamicDebtTail
   have hfloor : ∀ time player, quittingPunishmentValue reward player ≤
       (limit time).1.1 player := by
     intro time player
@@ -171,11 +171,11 @@ theorem exists_terminalGapDynamicDebtTail_with_summableAbsorption_of_nonpos
     intro start
     exact ⟨start, le_rfl, hfloor start⟩
   have hsummable :=
-    regime.summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
+    witness.summable_dynamicDebtTailAbsorptionCharge_of_cofinal_floor
       limit hbox hedge hcofinal
   exact ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock,
     hfloor, hsummable⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

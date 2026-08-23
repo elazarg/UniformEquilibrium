@@ -35,7 +35,7 @@ open Filter Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
@@ -47,7 +47,7 @@ targets with a uniform singleton gap and a positive-absorption exact
 endpoint-Nash root.  Otherwise that outsider itself satisfies the opposite
 punishment/singleton inequality. -/
 theorem exists_fixedOutsider_punishment_ge_singleton_or_cofinal_floorClippedReset
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -176,13 +176,13 @@ toggle cannot be the same coordinate as a negative singleton.  This is a
 search-facing form of the scalar residual; it does not assert that the
 positive owner and negative outsider can be chronologically matched. -/
 theorem exists_positiveSolo_owner_and_scalar_diffuse_alternative
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
       (quittingDynamicDebtTailRoots seam.tail)) atTop (nhds 0)) :
     ∃ owner who : ι,
-      regime.terminalGap ≤ quittingSoloReward reward owner owner ∧
+      witness.terminalGap ≤ quittingSoloReward reward owner owner ∧
       ((who ≠ owner ∧ quittingSoloReward reward who who < 0) ∨
         quittingPunishmentValue reward who = quittingSoloReward reward who who ∨
         (∃ gap : ℝ, 0 < gap ∧ ∀ start, ∃ time,
@@ -233,7 +233,7 @@ theorem exists_positiveSolo_owner_and_scalar_diffuse_alternative
             gap / (gap + 2 * quittingRewardBound reward) ≤
               quittingRootAbsorptionMass (quittingRootOfSimplex root) ∧
             0 < quittingRootAbsorptionMass (quittingRootOfSimplex root))) := by
-  obtain ⟨owner, howner⟩ := regime.exists_terminalGap_le_soloReward
+  obtain ⟨owner, howner⟩ := witness.exists_terminalGap_le_soloReward
   obtain ⟨who, hscalar⟩ :=
     seam.exists_fixedOutsider_punishment_ge_singleton_or_cofinal_floorClippedReset
       hpositive hmesh
@@ -245,10 +245,10 @@ theorem exists_positiveSolo_owner_and_scalar_diffuse_alternative
       constructor
       · intro hsame
         subst who
-        have howner' : regime.terminalGap ≤
+        have howner' : witness.terminalGap ≤
             reward (quittingSingletonTerminal owner) owner := by
           simpa [quittingSoloReward, quittingSingletonTerminal] using howner
-        linarith [regime.terminalGap_pos, howner']
+        linarith [witness.terminalGap_pos, howner']
       · exact hnegative
     · exact Or.inr (Or.inl heq)
   · exact Or.inr (Or.inr hreset)

@@ -15,7 +15,7 @@ polarity.  When its terminal label is a singleton, the reusable game-facing
 strategic output is an atomic coalition-toggle handoff, positive punishment,
 or exact player deletion at the supplied exploitability gap.
 
-These static predicates assume no counterexample regime, selected frontier,
+These static predicates assume no terminal exploitability witness, selected frontier,
 or asymptotic rectangle packet.
 -/
 

@@ -31,7 +31,7 @@ short of `2`.  The realized payoff is `(1, 2, 2, 2, 2)`.
 This is a checked statement about one table, not a general theorem about
 collider completions.  The general statements are
 `GameTheory.CirculantTrichotomyClosure.exists_uniformEquilibriumPayoff_of_nonneg_margins`
-and `GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_or_distantPocket`.
+and `GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_or_distantPocket`.
 -/
 
 noncomputable section
@@ -103,11 +103,11 @@ theorem flat_isUniformEquilibriumPayoff :
   exact isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet _
     flat_isQuittingSureExitSet
 
-/-- **The table is in no counterexample regime.**  A terminal exploitability
+/-- **The table is in no terminal exploitability witness.**  A terminal exploitability
 gap is incompatible with an existing uniform-equilibrium payoff. -/
-theorem flat_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime flatReward) :=
-  ⟨fun regime => regime.not_exists_uniformEquilibriumPayoff
+theorem flat_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness flatReward) :=
+  ⟨fun witness => witness.not_exists_uniformEquilibriumPayoff
     ⟨flatPayoff, flat_isUniformEquilibriumPayoff⟩⟩
 
 /-- **No step of the table has negative margin**, so no constant-step cyclic

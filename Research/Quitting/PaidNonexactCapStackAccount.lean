@@ -30,7 +30,7 @@ number of players in common `epsilon` error.
 Every suffix below is the literal executable root-stack profile.  Hence the
 behavioral cap is recomputed from the actual suffix and the complete terminal
 law provenance is retained by construction.  This is an architectural no-go,
-not a counterexample-regime closure: paid nonexact prefixing moves the missing
+not a closure under a terminal exploitability witness: paid nonexact prefixing moves the missing
 source-matched gain into an explicit error account.
 -/
 

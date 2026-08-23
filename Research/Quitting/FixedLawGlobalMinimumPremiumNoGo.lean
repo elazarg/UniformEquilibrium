@@ -26,7 +26,7 @@ needed by the rectangle compiler.  Stopping-law convexity cannot repair this:
 it controls a chosen unilateral chord, but the two compact selectors do not
 provide such a chord or choose the coordinate carrying the premium.
 
-This is a local interface regression, not a counterexample regime.  In
+This is a local interface regression, not a terminal exploitability witness.  In
 particular it does not challenge the positive-global-minimum hypothesis; it
 shows exactly which extra provenance that hypothesis would still have to
 supply.

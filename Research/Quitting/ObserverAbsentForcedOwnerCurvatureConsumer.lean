@@ -35,8 +35,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- Pointwise consumer for one row of an observer-absent forced-owner wall. -/
 def HasObserverAbsentForcedOwnerCurvatureRow
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n time : ℕ) : Prop :=
   let owner := quittingStoppingLawObserverAbsentOwner packet
@@ -54,17 +54,17 @@ def HasObserverAbsentForcedOwnerCurvatureRow
         (Function.update root owner (PMF.pure false)) who (PMF.pure action)
       quitGain = quittingRootCoordinateNashDefect reward tail.1
           forcedRoot who ∧
-        regime.terminalGap ≤
+        witness.terminalGap ≤
           quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
-        (mass * regime.terminalGap / 2 ≤
+        (mass * witness.terminalGap / 2 ≤
             quittingLiveMass reward profile time *
               quittingRootCoordinateNashDefect reward tail.1 root who ∨
-          mass * regime.terminalGap / 2 ≤
+          mass * witness.terminalGap / 2 ≤
             mass * (root owner false).toReal *
               (quitGain - continueGain))) ∨
-    (regime.terminalGap ≤
+    (witness.terminalGap ≤
         max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
-      mass * regime.terminalGap ≤
+      mass * witness.terminalGap ≤
         mass * max 0
           (-quittingAtomicBlockerBalance reward forcedRoot owner)))
 
@@ -73,8 +73,8 @@ preemption clock is already an owner-refusal row, an actual Nash-defect row,
 or a positive same-witness rectangle row. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedOwnerCurvatureRows
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val) :
     ∀ n time,
@@ -106,7 +106,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_forcedO
             (quittingStoppingLawObserverAbsentCarrierProfile packet n)
             (time + 1))).1
         time (quittingStoppingLawObserverAbsentOwner packet) who hwho.symm
-        packet.terminal howner regime.terminalGap hweightedGap
+        packet.terminal howner witness.terminalGap hweightedGap
     exact ⟨who, action, hwho, hrealize, hgap, halt⟩
   · exact Or.inr hrefusal
 

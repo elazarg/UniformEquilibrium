@@ -14,7 +14,7 @@ singleton exit of some other supported owner to its pinned target. Choosing
 successors produces a finite directed support graph. A strict refusal edge
 can be joined to a recurrent weak-preference class as a supported lasso.
 
-These packet-local facts do not require a counterexample regime. They do not
+These packet-local facts do not require a terminal exploitability witness. They do not
 by themselves supply outsider inequalities or an equilibrium compiler.
 -/
 

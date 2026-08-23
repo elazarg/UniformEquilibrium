@@ -13,7 +13,7 @@ import UniformEquilibrium.Quitting.Stationary.TogglePotential
 The production toggle API packages the exact coalition toggle, its finite
 exploitability ceilings, the analogous stationary cap ceiling, and the
 ordinal-potential sufficient condition.  This module records only what a
-quitting counterexample regime forces against those generic objects.
+quitting terminal exploitability witness forces against those generic objects.
 
 It also chooses one improving toggle at every coalition and extracts a closed
 walk in the finite coalition cube.  That walk is a static recurrence witness,
@@ -30,15 +30,15 @@ open QuittingSureSetOwnerRepair
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- The terminal gap is realized by an exact membership toggle at every
 coalition. -/
 theorem exists_exactToggle_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    ∃ who, quittingSetReward reward S who + regime.terminalGap ≤
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    ∃ who, quittingSetReward reward S who + witness.terminalGap ≤
       quittingSetReward reward (quittingToggleCoalition S who) who := by
-  rcases regime.exists_leave_or_join_gain S with hleave | hjoin
+  rcases witness.exists_leave_or_join_gain S with hleave | hjoin
   · obtain ⟨who, hmem, hgain⟩ := hleave
     exact ⟨who, by simpa [quittingToggleCoalition_of_mem hmem] using hgain⟩
   · obtain ⟨who, hnot, hgain⟩ := hjoin
@@ -46,13 +46,13 @@ theorem exists_exactToggle_gain
 
 /-- Pointwise pure-toggle exploitability dominates the regime margin. -/
 theorem terminalGap_le_pureToggleExploitability
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    regime.terminalGap ≤ @quittingPureToggleExploitability ι _ _
-      regime.nonempty_players reward S := by
-  letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨who, hgain⟩ := regime.exists_exactToggle_gain S
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    witness.terminalGap ≤ @quittingPureToggleExploitability ι _ _
+      witness.nonempty_players reward S := by
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨who, hgain⟩ := witness.exists_exactToggle_gain S
   unfold quittingPureToggleExploitability quittingPureToggleGain
-  exact (by linarith : regime.terminalGap ≤
+  exact (by linarith : witness.terminalGap ≤
       quittingSetReward reward (quittingToggleCoalition S who) who -
         quittingSetReward reward S who) |>.trans
     (Finset.le_sup' (quittingPureToggleGain reward S)
@@ -62,39 +62,39 @@ theorem terminalGap_le_pureToggleExploitability
 is below the minimum, over all coalitions, of their best membership-toggle
 gain. -/
 theorem terminalGap_le_pureToggleCeiling
-    (regime : QuittingCounterexampleRegime reward) :
-    regime.terminalGap ≤ @quittingPureToggleCeiling ι _ _
-      regime.nonempty_players reward := by
-  letI : Nonempty ι := regime.nonempty_players
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    witness.terminalGap ≤ @quittingPureToggleCeiling ι _ _
+      witness.nonempty_players reward := by
+  letI : Nonempty ι := witness.nonempty_players
   unfold quittingPureToggleCeiling
   rw [Finset.le_inf'_iff]
-  exact fun S _ => regime.terminalGap_le_pureToggleExploitability S
+  exact fun S _ => witness.terminalGap_le_pureToggleExploitability S
 
 /-! ## A finite closed improvement orbit -/
 
 /-- A chosen player witnessing the exact toggle gain at a coalition. -/
 noncomputable def improvingTogglePlayer
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) : ι :=
-  Classical.choose (regime.exists_exactToggle_gain S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) : ι :=
+  Classical.choose (witness.exists_exactToggle_gain S)
 
 /-- The chosen outgoing neighbor in the coalition improvement graph. -/
 noncomputable def improvingToggleNext
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (S : Finset ι) : Finset ι :=
-  quittingToggleCoalition S (regime.improvingTogglePlayer S)
+  quittingToggleCoalition S (witness.improvingTogglePlayer S)
 
 theorem improvingToggleNext_gain
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    quittingSetReward reward S (regime.improvingTogglePlayer S) +
-        regime.terminalGap ≤
-      quittingSetReward reward (regime.improvingToggleNext S)
-        (regime.improvingTogglePlayer S) := by
-  exact Classical.choose_spec (regime.exists_exactToggle_gain S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    quittingSetReward reward S (witness.improvingTogglePlayer S) +
+        witness.terminalGap ≤
+      quittingSetReward reward (witness.improvingToggleNext S)
+        (witness.improvingTogglePlayer S) := by
+  exact Classical.choose_spec (witness.exists_exactToggle_gain S)
 
 theorem improvingToggleNext_ne
-    (regime : QuittingCounterexampleRegime reward) (S : Finset ι) :
-    regime.improvingToggleNext S ≠ S :=
-  quittingToggleCoalition_ne S (regime.improvingTogglePlayer S)
+    (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
+    witness.improvingToggleNext S ≠ S :=
+  quittingToggleCoalition_ne S (witness.improvingTogglePlayer S)
 
 /-- The chosen finite improvement graph has a closed directed walk whose
 length is a positive multiple of four.  Every edge carries a payoff gain of
@@ -102,33 +102,33 @@ at least the terminal margin, though the gaining player may change from edge
 to edge.  This is a finite recurrence witness, not a telescoping payoff
 contradiction. -/
 theorem exists_closedImprovementWalk_multiple_four
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ start stop : ℕ, start < stop ∧ 4 ∣ stop - start ∧
-      let next := regime.improvingToggleNext
+      let next := witness.improvingToggleNext
       (next^[start]) ∅ = (next^[stop]) ∅ ∧
       ∀ time,
         quittingSetReward reward ((next^[time]) ∅)
-              (regime.improvingTogglePlayer ((next^[time]) ∅)) +
-            regime.terminalGap ≤
+              (witness.improvingTogglePlayer ((next^[time]) ∅)) +
+            witness.terminalGap ≤
           quittingSetReward reward ((next^[time + 1]) ∅)
-            (regime.improvingTogglePlayer ((next^[time]) ∅)) := by
-  let next := regime.improvingToggleNext
+            (witness.improvingTogglePlayer ((next^[time]) ∅)) := by
+  let next := witness.improvingToggleNext
   obtain ⟨first, second, hne, heq⟩ :=
     Finite.exists_ne_map_eq_of_infinite
       (fun block : ℕ => (next^[4 * block]) (∅ : Finset ι))
   have hedge : ∀ time,
       quittingSetReward reward ((next^[time]) ∅)
-            (regime.improvingTogglePlayer ((next^[time]) ∅)) +
-          regime.terminalGap ≤
+            (witness.improvingTogglePlayer ((next^[time]) ∅)) +
+          witness.terminalGap ≤
         quittingSetReward reward ((next^[time + 1]) ∅)
-          (regime.improvingTogglePlayer ((next^[time]) ∅)) := by
+          (witness.improvingTogglePlayer ((next^[time]) ∅)) := by
     intro time
-    have hgain := regime.improvingToggleNext_gain ((next^[time]) ∅)
+    have hgain := witness.improvingToggleNext_gain ((next^[time]) ∅)
     change quittingSetReward reward ((next^[time]) ∅)
-            (regime.improvingTogglePlayer ((next^[time]) ∅)) +
-          regime.terminalGap ≤
+            (witness.improvingTogglePlayer ((next^[time]) ∅)) +
+          witness.terminalGap ≤
         quittingSetReward reward (next ((next^[time]) ∅))
-          (regime.improvingTogglePlayer ((next^[time]) ∅)) at hgain
+          (witness.improvingTogglePlayer ((next^[time]) ∅)) at hgain
     simpa only [Function.iterate_succ_apply'] using hgain
   rcases lt_or_gt_of_ne hne with hlt | hgt
   · refine ⟨4 * first, 4 * second, by omega, ?_, heq, hedge⟩
@@ -136,20 +136,20 @@ theorem exists_closedImprovementWalk_multiple_four
   · refine ⟨4 * second, 4 * first, by omega, ?_, heq.symm, hedge⟩
     exact ⟨first - second, by omega⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Pointwise stationary-cap exploitability dominates the regime margin. -/
 theorem terminalGap_le_stationaryCapExploitability
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (root : ι → PMF Bool) :
-    regime.terminalGap ≤ @quittingStationaryCapExploitability ι _ _
-      regime.nonempty_players reward root := by
-  letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨who, hgain⟩ := regime.exists_stationaryCap_gain root
+    witness.terminalGap ≤ @quittingStationaryCapExploitability ι _ _
+      witness.nonempty_players reward root := by
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨who, hgain⟩ := witness.exists_stationaryCap_gain root
   unfold quittingStationaryCapExploitability
-  exact (by linarith : regime.terminalGap ≤
+  exact (by linarith : witness.terminalGap ≤
       quittingStationaryUnilateralCap reward root who -
         quittingTerminalPayoff reward
           (quittingStationaryProfile reward root) who) |>.trans
@@ -162,10 +162,10 @@ theorem terminalGap_le_stationaryCapExploitability
 /-- **Stationary-cap infimum ceiling.**  The regime margin lies below the
 infimum of stationary selected-cap exploitability. -/
 theorem terminalGap_le_stationaryCapCeiling
-    (regime : QuittingCounterexampleRegime reward) :
-    regime.terminalGap ≤ @quittingStationaryCapCeiling ι _ _
-      regime.nonempty_players reward := by
-  letI : Nonempty ι := regime.nonempty_players
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    witness.terminalGap ≤ @quittingStationaryCapCeiling ι _ _
+      witness.nonempty_players reward := by
+  letI : Nonempty ι := witness.nonempty_players
   unfold quittingStationaryCapCeiling
   have hnonempty :
       (Set.range (quittingStationaryCapExploitability reward)).Nonempty :=
@@ -174,13 +174,13 @@ theorem terminalGap_le_stationaryCapCeiling
       ⟨quittingAllContinueRoot, rfl⟩⟩
   have hbounded :
       BddBelow (Set.range (quittingStationaryCapExploitability reward)) :=
-    ⟨regime.terminalGap, by
+    ⟨witness.terminalGap, by
       rintro _ ⟨root, rfl⟩
-      exact regime.terminalGap_le_stationaryCapExploitability root⟩
+      exact witness.terminalGap_le_stationaryCapExploitability root⟩
   rw [le_csInf_iff hbounded hnonempty]
   rintro _ ⟨root, rfl⟩
-  exact regime.terminalGap_le_stationaryCapExploitability root
+  exact witness.terminalGap_le_stationaryCapExploitability root
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

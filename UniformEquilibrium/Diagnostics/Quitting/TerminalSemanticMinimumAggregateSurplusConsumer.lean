@@ -226,8 +226,8 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_exactMinim
 /-- Every nonempty pure terminal coalition in a counterexample has a strict
 toggle blocker.  A member can profit by staying behind, or an outsider can
 profit by joining. -/
-theorem QuittingCounterexampleRegime.terminalCoalition_has_strictToggle
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.terminalCoalition_has_strictToggle
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (terminal : {S : Finset ι // S.Nonempty}) :
     (∃ member ∈ terminal.val,
         quittingSetReward reward terminal.val member <
@@ -250,7 +250,7 @@ theorem QuittingCounterexampleRegime.terminalCoalition_has_strictToggle
       exact le_of_not_gt fun hgt => hmember ⟨member, hmem, hgt⟩
     · intro outsider hout
       exact le_of_not_gt fun hgt => houtsider ⟨outsider, hout, hgt⟩
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     ⟨quittingSetReward reward terminal.val,
       isUniformEquilibriumPayoff_setReward_of_isQuittingSureExitSet
         reward hsure⟩
@@ -258,8 +258,8 @@ theorem QuittingCounterexampleRegime.terminalCoalition_has_strictToggle
 /-- Exact finite support alternative.  The moment witness is either Never,
 which forces the displayed singleton-budget inequality, or an absorbing
 coalition with the same aggregate surplus and a strict toggle blocker. -/
-theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_exact
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_neverBudget_or_blockedCoalition_exact
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -294,14 +294,14 @@ theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_exac
       simpa [quittingTerminalOutcomeReward] using houtcome
   | some terminal =>
       right
-      refine ⟨terminal, ?_, regime.terminalCoalition_has_strictToggle terminal⟩
+      refine ⟨terminal, ?_, witness.terminalCoalition_has_strictToggle terminal⟩
       simpa [quittingTerminalOutcomeReward] using houtcome
 
 /-- Support-retaining form of the finite counterexample alternative.  The
 Never or coalition witness has positive mass in one explicit reward-moment
 representation of the prescribed minimum value. -/
-theorem QuittingCounterexampleRegime.exists_supportedNever_or_supportedBlockedCoalition_exact
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_supportedNever_or_supportedBlockedCoalition_exact
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -346,12 +346,12 @@ theorem QuittingCounterexampleRegime.exists_supportedNever_or_supportedBlockedCo
       right
       exact ⟨terminal, hsupport, by
         simpa [quittingTerminalOutcomeReward] using houtcome,
-        regime.terminalCoalition_has_strictToggle terminal⟩
+        witness.terminalCoalition_has_strictToggle terminal⟩
 
 /-- If Never cannot pay the exact subset budget, the common witness is a
 genuine absorbing coalition and necessarily has a strict toggle blocker. -/
-theorem QuittingCounterexampleRegime.exists_blockedCoalition_exact_of_never_lt
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_blockedCoalition_exact_of_never_lt
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -378,7 +378,7 @@ theorem QuittingCounterexampleRegime.exists_blockedCoalition_exact_of_never_lt
             quittingSetReward reward terminal.val outsider <
               quittingSetReward reward
                 (insert outsider terminal.val) outsider) := by
-  rcases regime.exists_neverBudget_or_blockedCoalition_exact
+  rcases witness.exists_neverBudget_or_blockedCoalition_exact
       pair players hpair hminimum hpositive with
     hneverBudget | hterminal
   · exact (not_le_of_gt hnever hneverBudget).elim
@@ -479,8 +479,8 @@ theorem exists_terminalOutcome_outsiderSurplus_ge_card_mul_minimumDebt_of_tight
 /-- Counterexample form of the critical-owner certificate.  One common
 outsider-funding outcome is either Never or a locally unstable absorbing
 coalition. -/
-theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_of_tightOwner
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_neverBudget_or_blockedCoalition_of_tightOwner
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -515,15 +515,15 @@ theorem QuittingCounterexampleRegime.exists_neverBudget_or_blockedCoalition_of_t
       simpa [quittingTerminalOutcomeReward] using houtcome
   | some terminal =>
       right
-      refine ⟨terminal, ?_, regime.terminalCoalition_has_strictToggle terminal⟩
+      refine ⟨terminal, ?_, witness.terminalCoalition_has_strictToggle terminal⟩
       simpa [quittingTerminalOutcomeReward] using houtcome
 
 /-- In the first unresolved dimension and above, a tight critical owner
 leaves at least three units of minimum debt in one common outsider aggregate.
 The same outcome is either Never or an absorbing coalition with a strict
 toggle blocker. -/
-theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoalition_of_tightOwner
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.exists_threeDebt_neverBudget_or_blockedCoalition_of_tightOwner
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hcard : 4 ≤ Fintype.card ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
@@ -557,7 +557,7 @@ theorem QuittingCounterexampleRegime.exists_threeDebt_neverBudget_or_blockedCoal
       ((Finset.univ.erase owner).card : ℝ) *
         quittingTerminalSemanticDebtSum pair :=
     mul_le_mul_of_nonneg_right hcardReal hpositive.le
-  rcases regime.exists_neverBudget_or_blockedCoalition_of_tightOwner
+  rcases witness.exists_neverBudget_or_blockedCoalition_of_tightOwner
       pair owner hpair hminimum hpositive htight with
     hnever | ⟨terminal, hterminal, htoggle⟩
   · exact Or.inl (hthree.trans hnever)

@@ -9,12 +9,12 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStoppingLawVanish
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveFrontierBranch
 
 /-!
-# An exhaustive stopping-law frontier for a quitting counterexample regime
+# An exhaustive stopping-law frontier for a quitting terminal exploitability witness
 
 This module records one maintained implication from the conjecture-level
 counterexample package to the current finite stopping-law residual.
 
-Every counterexample regime has a positive minimum all-Continue semantic
+Every terminal exploitability witness has a positive minimum all-Continue semantic
 plateau.  A literal sequence realizing the semantic plateau can be shifted so that
 every limiting positive-debt coordinate is already positive.  Near-minimum
 excess and all limiting zero-debt coordinates then vanish on that one common
@@ -28,7 +28,7 @@ zero-debt support entry, positive charged circulation, or potential-guided
 active co-decrease.  The first branch has the existing positive-slope causal
 decoders.  The last three are exact residuals: this module does not claim a
 chronological integration, a Bellman return, or a converse from the frontier
-back to a counterexample regime.
+back to a terminal exploitability witness.
 
 The first missing implication is branch-specific.
 
@@ -64,7 +64,7 @@ the common limiting normalized-chord family on which the finite alternative
 is stated. -/
 structure QuittingCounterexampleStoppingLawFrontier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) where
+    (witness : QuittingTerminalExploitabilityWitness reward) where
   base : QuittingTerminalSemanticPair ι
   profiles : ℕ → (quittingGame reward).BehaviorProfile
   active : Finset ι
@@ -133,8 +133,8 @@ structure QuittingCounterexampleStoppingLawFrontier
 zero along the same common tangent subsequence. -/
 theorem QuittingCounterexampleStoppingLawFrontier.fullReset_moverDebt_tendsto_zero
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     Tendsto (fun rank ↦
       quittingTerminalSemanticDebt
@@ -155,8 +155,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.fullReset_moverDebt_tendsto_ze
 /-- Exact diagonal selection implies the half-debt bound. -/
 theorem QuittingCounterexampleStoppingLawFrontier.tangent_diagonal
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     frontier.tangent mover mover.1 ≤
       -quittingTerminalSemanticDebt frontier.base mover.1 / 2 := by
@@ -167,8 +167,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.tangent_diagonal
 /-- The tagged exhaustive branch forgets to the pipeline alternative. -/
 theorem QuittingCounterexampleStoppingLawFrontier.alternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     IsQuittingStoppingLawTangentPipelineAlternative
       frontier.base frontier.active frontier.tangent :=
   frontier.exhaustive_branch.toPipelineAlternative
@@ -177,8 +177,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.alternative
 terminal semantic-debt concept. -/
 theorem QuittingCounterexampleStoppingLawFrontier.hasPositiveMinimumTerminalSemanticDebt
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     HasPositiveMinimumTerminalSemanticDebt reward :=
   ⟨frontier.base, frontier.base_mem, frontier.base_minimum,
     frontier.base_positive⟩
@@ -187,8 +187,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.hasPositiveMinimumTerminalSema
 plateau interface. -/
 theorem QuittingCounterexampleStoppingLawFrontier.hasPositiveMinimumTerminalSemanticPlateau
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     HasPositiveMinimumTerminalSemanticPlateau reward := by
   have hnonneg : ∀ who,
       0 ≤ quittingTerminalSemanticDebt frontier.base who :=
@@ -214,7 +214,7 @@ pair.  The returned equality preserves the
 chosen base for subsequent minimum-fiber re-extraction. -/
 theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (base : QuittingTerminalSemanticPair ι)
     (hbase : base ∈ quittingTerminalSemanticCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
@@ -225,10 +225,10 @@ theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
       (quittingAllContinueRoot : ι → PMF Bool))
     (hprefix : quittingTerminalSemanticPrefix reward
       quittingAllContinueRoot base = base) :
-    ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+    ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
       frontier.base = base := by
   classical
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   have hbasePositive : 0 < quittingTerminalSemanticDebtSum base := by
     have hnonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt base who :=
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hbase
@@ -481,24 +481,24 @@ theorem exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
 /-- Proposition-packaged caller for the base-parameterized extractor. -/
 theorem exists_stoppingLaw_exhaustiveFrontier_of_plateau
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hplateau : HasPositiveMinimumTerminalSemanticPlateau reward) :
-    Nonempty (QuittingCounterexampleStoppingLawFrontier regime) := by
+    Nonempty (QuittingCounterexampleStoppingLawFrontier witness) := by
   obtain ⟨base, hbase, hminimum, hbaseDebt, hnash, hprefix⟩ := hplateau
   obtain ⟨frontier, _hfrontierBase⟩ :=
     exists_stoppingLaw_exhaustiveFrontier_of_positiveMinimumPair
-      regime base hbase hminimum hbaseDebt hnash hprefix
+      witness base hbase hminimum hbaseDebt hnash hprefix
   exact ⟨frontier⟩
 
-/-- Every quitting counterexample regime reaches the finite stopping-law
+/-- Every quitting terminal exploitability witness reaches the finite stopping-law
 frontier through its positive semantic plateau. -/
-theorem QuittingCounterexampleRegime.exists_stoppingLaw_exhaustiveFrontier
+theorem QuittingTerminalExploitabilityWitness.exists_stoppingLaw_exhaustiveFrontier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) :
-    Nonempty (QuittingCounterexampleStoppingLawFrontier regime) := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Nonempty (QuittingCounterexampleStoppingLawFrontier witness) := by
   classical
-  letI : Nonempty ι := regime.nonempty_players
-  exact exists_stoppingLaw_exhaustiveFrontier_of_plateau regime
-    (noUniformPayoff_implies_positiveMinimumSemanticPlateau regime)
+  letI : Nonempty ι := witness.nonempty_players
+  exact exists_stoppingLaw_exhaustiveFrontier_of_plateau witness
+    (noUniformPayoff_implies_positiveMinimumSemanticPlateau witness)
 
 end GameTheory

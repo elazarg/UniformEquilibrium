@@ -54,17 +54,17 @@ decimal expansion of it is used or needed here.
 
 * `candidateBonusCurve_eq` — the explicit rational form
 * `one_eighth_le_mul_candidateBonusCurve` — the algebraic lower bound
-* `isEmpty_counterexampleRegime_candidateReward_curve` — the closure at every
+* `isEmpty_terminalExploitabilityWitness_candidateReward_curve` — the closure at every
   forced bonus
 * `exists_eq_candidateBonusCurve_of_le` — the range is closed upwards
 * `isCoerciveOn_candidateBonusCurve` — the escape hypothesis
 * `isLeast_candidateBonusThreshold` — the minimum is attained and is the least
   value the curve takes
 * `candidateBonusRange_eq_Ici` — the range is exactly the closed ray
-* `isEmpty_counterexampleRegime_candidateReward_of_threshold_le` — the closure
+* `isEmpty_terminalExploitabilityWitness_candidateReward_of_threshold_le` — the closure
   above the threshold
 * `not_exists_eq_candidateBonusCurve_of_lt` — and nothing below it
-* `isEmpty_counterexampleRegime_candidateReward_outside_window` — the two-sided
+* `isEmpty_terminalExploitabilityWitness_candidateReward_outside_window` — the two-sided
   closure
 * `one_lt_candidateBonusThreshold` — the window contains the bonus `1`
 -/
@@ -85,12 +85,12 @@ def candidateBonusCurve (u : ℝ) : ℝ := stationaryBonus 1 (-2) (1 / 2) u
 /-- **The closure at every forced bonus.**  At each continuation rate in the
 open unit interval the candidate family is refuted at the bonus that rate
 forces. -/
-theorem isEmpty_counterexampleRegime_candidateReward_curve {u : ℝ}
+theorem isEmpty_terminalExploitabilityWitness_candidateReward_curve {u : ℝ}
     (hu0 : 0 < u) (hu1 : u < 1) :
-    IsEmpty (QuittingCounterexampleRegime (candidateReward (candidateBonusCurve u))) := by
+    IsEmpty (QuittingTerminalExploitabilityWitness (candidateReward (candidateBonusCurve u))) := by
   have hsum := sum_candidateMargin
   rw [candidateReward, candidateBonusCurve, ← hsum]
-  exact isEmpty_counterexampleRegime_colliderBonusReward_stationary candidateMargin_zero
+  exact isEmpty_terminalExploitabilityWitness_colliderBonusReward_stationary candidateMargin_zero
     zero_le_one hu0 hu1
 
 /-- The explicit rational form of the curve. -/
@@ -272,15 +272,15 @@ theorem candidateBonusRange_eq_Ici :
   Math.image_Ioo_eq_Ici_sInf (by norm_num) continuousOn_candidateBonusCurve
     isCoerciveOn_candidateBonusCurve
 
-theorem isEmpty_counterexampleRegime_candidateReward_of_threshold_le {bonus : ℝ}
+theorem isEmpty_terminalExploitabilityWitness_candidateReward_of_threshold_le {bonus : ℝ}
     (h : candidateBonusThreshold ≤ bonus) :
-    IsEmpty (QuittingCounterexampleRegime (candidateReward bonus)) := by
+    IsEmpty (QuittingTerminalExploitabilityWitness (candidateReward bonus)) := by
   have hmem : bonus ∈ candidateBonusRange := by
     rw [candidateBonusRange_eq_Ici]
     exact h
   obtain ⟨u, hu, heq⟩ := hmem
   rw [← heq]
-  exact isEmpty_counterexampleRegime_candidateReward_curve hu.1 hu.2
+  exact isEmpty_terminalExploitabilityWitness_candidateReward_curve hu.1 hu.2
 
 /-- Below the threshold the stationary all-quitter block is unavailable: no
 continuation rate forces such a bonus. -/
@@ -295,12 +295,12 @@ theorem not_exists_eq_candidateBonusCurve_of_lt {bonus : ℝ}
 outside the open interval between zero and the threshold: below by the
 step-four cycle of `Research/Quitting/CirculantColliderBonusFamily.lean`, above
 by the stationary all-quitter block. -/
-theorem isEmpty_counterexampleRegime_candidateReward_outside_window {bonus : ℝ}
+theorem isEmpty_terminalExploitabilityWitness_candidateReward_outside_window {bonus : ℝ}
     (h : bonus ≤ 0 ∨ candidateBonusThreshold ≤ bonus) :
-    IsEmpty (QuittingCounterexampleRegime (candidateReward bonus)) := by
+    IsEmpty (QuittingTerminalExploitabilityWitness (candidateReward bonus)) := by
   rcases h with h | h
-  · exact isEmpty_counterexampleRegime_candidateReward_of_nonpos h
-  · exact isEmpty_counterexampleRegime_candidateReward_of_threshold_le h
+  · exact isEmpty_terminalExploitabilityWitness_candidateReward_of_nonpos h
+  · exact isEmpty_terminalExploitabilityWitness_candidateReward_of_threshold_le h
 
 /-! ## The window is not empty -/
 

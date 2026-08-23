@@ -26,7 +26,7 @@ enlargement branch is free.**  `selected_support` bounds activity *above* by
 padding, and the finite-face induction carries content only at
 `face = Finset.univ.erase owner`.  Moreover a fully certified candidate with a
 schedule assembles on the Solan--Vieille boundary table from a single solo
-quitter and one strict preemption edge, with no counterexample regime, seam,
+quitter and one strict preemption edge, with no terminal exploitability witness, seam,
 minmax, or debt input, and with an unbounded phantom `boundary`.  Both facts
 are checked in `Research/Quitting/SourceMatchedSnellPurificationCollapse.lean`.
 Nothing below is changed by that module, and neither
@@ -136,8 +136,8 @@ def SourceMatchedSnellPurification : Prop :=
 /-! ## Checked assembly of the positive diffuse input -/
 
 theorem exists_sourceMatchedSnellCandidate_of_diffuse
-    {regime : QuittingCounterexampleRegime reward}
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight
@@ -145,7 +145,7 @@ theorem exists_sourceMatchedSnellCandidate_of_diffuse
     ∃ c : SourceMatchedSnellCandidate reward,
       Nonempty (SourceMatchedSnellSchedule c) ∧
         c.roots = quittingDynamicDebtTailRoots seam.tail := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   obtain ⟨owner, eta, heta, hdates⟩ :=
@@ -253,9 +253,9 @@ theorem exists_uniformPayoff_of_sourceMatchedSnellCandidate
 /-- Under the positive-diffuse hypotheses, a source-matched implementation for
 every certified candidate reaches a uniform-equilibrium payoff. -/
 theorem exists_uniformPayoff_of_sourceMatchedSnellPurification
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     (hinterface : SourceMatchedSnellPurification (reward := reward))
-    (seam : QuittingCounterexampleDynamicTailWitness regime)
+    (seam : QuittingCounterexampleDynamicTailWitness witness)
     (hpositive : ∀ time, 0 < quittingTailEventualAbsorption
       (quittingDynamicDebtTailRoots seam.tail) time)
     (hmesh : Tendsto (quittingTailConditionedAbsorptionWeight

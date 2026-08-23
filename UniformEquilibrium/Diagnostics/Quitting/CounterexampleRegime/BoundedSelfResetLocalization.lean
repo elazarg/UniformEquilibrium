@@ -41,54 +41,54 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- Canonical vanishing error used by the counterexample self-reset sequence. -/
 def quittingCounterexampleSelfResetAccuracy
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) (rank : ℕ) : ℝ :=
-  (regime.terminalGap / 2) * (1 / (rank + 1 : ℝ))
+    (witness : QuittingTerminalExploitabilityWitness reward) (rank : ℕ) : ℝ :=
+  (witness.terminalGap / 2) * (1 / (rank + 1 : ℝ))
 
 theorem quittingCounterexampleSelfResetAccuracy_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) (rank : ℕ) :
-    0 < quittingCounterexampleSelfResetAccuracy regime rank := by
+    (witness : QuittingTerminalExploitabilityWitness reward) (rank : ℕ) :
+    0 < quittingCounterexampleSelfResetAccuracy witness rank := by
   unfold quittingCounterexampleSelfResetAccuracy
-  exact mul_pos (half_pos regime.terminalGap_pos)
+  exact mul_pos (half_pos witness.terminalGap_pos)
     (one_div_pos.mpr (by positivity))
 
 theorem quittingCounterexampleSelfResetAccuracy_lt_terminalGap
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) (rank : ℕ) :
-    quittingCounterexampleSelfResetAccuracy regime rank < regime.terminalGap := by
+    (witness : QuittingTerminalExploitabilityWitness reward) (rank : ℕ) :
+    quittingCounterexampleSelfResetAccuracy witness rank < witness.terminalGap := by
   have hinv : (1 / (rank + 1 : ℝ)) ≤ 1 := by
     have hrank : (0 : ℝ) ≤ rank := by positivity
     simpa only [one_div_one] using
       one_div_le_one_div_of_le (by norm_num : (0 : ℝ) < 1)
         (by linarith : (1 : ℝ) ≤ rank + 1)
-  have hhalf : regime.terminalGap / 2 < regime.terminalGap := by
-    linarith [regime.terminalGap_pos]
+  have hhalf : witness.terminalGap / 2 < witness.terminalGap := by
+    linarith [witness.terminalGap_pos]
   calc
-    quittingCounterexampleSelfResetAccuracy regime rank ≤
-        regime.terminalGap / 2 := by
+    quittingCounterexampleSelfResetAccuracy witness rank ≤
+        witness.terminalGap / 2 := by
       unfold quittingCounterexampleSelfResetAccuracy
       simpa only [mul_one] using
-        mul_le_mul_of_nonneg_left hinv (half_pos regime.terminalGap_pos).le
-    _ < regime.terminalGap := hhalf
+        mul_le_mul_of_nonneg_left hinv (half_pos witness.terminalGap_pos).le
+    _ < witness.terminalGap := hhalf
 
 theorem tendsto_quittingCounterexampleSelfResetAccuracy_zero
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) :
-    Tendsto (quittingCounterexampleSelfResetAccuracy regime) atTop (nhds 0) := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    Tendsto (quittingCounterexampleSelfResetAccuracy witness) atTop (nhds 0) := by
   have hzero := tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)
   change Tendsto (fun rank : ℕ =>
-    (regime.terminalGap / 2) * (1 / (rank + 1 : ℝ))) atTop (nhds 0)
+    (witness.terminalGap / 2) * (1 / (rank + 1 : ℝ))) atTop (nhds 0)
   simpa only [one_div, mul_zero] using
-    hzero.const_mul (regime.terminalGap / 2)
+    hzero.const_mul (witness.terminalGap / 2)
 
 /-- The counterexample terminal gap is the generic uniform coordinate-debt
 floor required by bounded self-reset. -/
-theorem QuittingCounterexampleRegime.hasUniformTerminalDebtFloor
+theorem QuittingTerminalExploitabilityWitness.hasUniformTerminalDebtFloor
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) :
-    HasQuittingUniformTerminalDebtFloor reward regime.terminalGap := by
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    HasQuittingUniformTerminalDebtFloor reward witness.terminalGap := by
   intro profile
-  exact regime.exists_terminalGap_le_terminalSemanticDebt reward profile
+  exact witness.exists_terminalGap_le_terminalSemanticDebt reward profile
 
 /-- Optimal uniform mass floor obtained by pigeonholing among nonempty
 terminal coalitions after the final finite pure-time reset. -/
@@ -111,7 +111,7 @@ has the same final pure-time player and terminal coalition, and carries the
 sharp finite-simplex terminal mass floor. -/
 structure QuittingBoundedSelfResetTerminalSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (starts : ℕ → (quittingGame reward).BehaviorProfile) where
   subseq : ℕ → ℕ
   subseq_strictMono : StrictMono subseq
@@ -121,8 +121,8 @@ structure QuittingBoundedSelfResetTerminalSequence
   stop : ℕ → ℕ
   terminal : {S : Finset ι // S.Nonempty}
   chain : ∀ rank,
-    QuittingPureTimeSelfResetChain reward regime.terminalGap
-      (quittingCounterexampleSelfResetAccuracy regime (subseq rank))
+    QuittingPureTimeSelfResetChain reward witness.terminalGap
+      (quittingCounterexampleSelfResetAccuracy witness (subseq rank))
       (starts (subseq rank)) (length rank) (profile rank) observer (stop rank)
   length_le : ∀ rank, length rank ≤ Fintype.card ι + 1
   terminal_mass_lower : ∀ rank,
@@ -132,13 +132,13 @@ structure QuittingBoundedSelfResetTerminalSequence
 namespace QuittingBoundedSelfResetTerminalSequence
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 variable {starts : ℕ → (quittingGame reward).BehaviorProfile}
 
 /-- The final observer literally uses the displayed finite pure-time strategy
 at every endpoint. -/
 theorem observer_strategy
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank : ℕ) :
     sequence.profile rank sequence.observer =
       quittingPureTimeBehaviorStrategy reward sequence.observer
@@ -147,7 +147,7 @@ theorem observer_strategy
 
 /-- The final observer's initial semantic debt converges to zero. -/
 theorem observer_debt_tendsto_zero
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts) :
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts) :
     Tendsto (fun rank => quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward (sequence.profile rank))
         sequence.observer) atTop (nhds 0) := by
@@ -159,24 +159,24 @@ theorem observer_debt_tendsto_zero
   · apply Eventually.of_forall
     intro rank
     exact (sequence.chain rank).final_debt_le_error
-  · exact (tendsto_quittingCounterexampleSelfResetAccuracy_zero regime).comp
+  · exact (tendsto_quittingCounterexampleSelfResetAccuracy_zero witness).comp
       sequence.subseq_strictMono.tendsto_atTop
 
 /-- Every current suffix semantic pair remains above the counterexample's
 terminal gap in total debt. -/
 theorem terminalGap_le_suffix_debtSum
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank stage : ℕ) :
-    regime.terminalGap ≤ quittingTerminalSemanticDebtSum
+    witness.terminalGap ≤ quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward
         (quittingAllContinueProfileSpine reward (sequence.profile rank)
           stage)) := by
   let suffix := quittingAllContinueProfileSpine reward
     (sequence.profile rank) stage
   obtain ⟨who, hwho⟩ :=
-    regime.exists_terminalGap_le_terminalSemanticDebt reward suffix
+    witness.exists_terminalGap_le_terminalSemanticDebt reward suffix
   calc
-    regime.terminalGap ≤ quittingTerminalSemanticDebt
+    witness.terminalGap ≤ quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward suffix) who := hwho
     _ ≤ quittingTerminalSemanticDebtSum
         (quittingTerminalSemanticPair reward suffix) := by
@@ -190,25 +190,25 @@ end QuittingBoundedSelfResetTerminalSequence
 
 /-- Every sequence of starting profiles admits a fixed-label bounded
 self-reset terminal sequence. -/
-theorem QuittingCounterexampleRegime.exists_boundedSelfResetTerminalSequence
+theorem QuittingTerminalExploitabilityWitness.exists_boundedSelfResetTerminalSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (starts : ℕ → (quittingGame reward).BehaviorProfile) :
-    Nonempty (QuittingBoundedSelfResetTerminalSequence regime starts) := by
-  letI : Nonempty ι := regime.nonempty_players
+    Nonempty (QuittingBoundedSelfResetTerminalSequence witness starts) := by
+  letI : Nonempty ι := witness.nonempty_players
   have hexit : ∀ rank, ∃ (length : ℕ)
       (profile : (quittingGame reward).BehaviorProfile)
       (observer : ι) (stop : ℕ),
-      QuittingPureTimeSelfResetChain reward regime.terminalGap
-          (quittingCounterexampleSelfResetAccuracy regime rank)
+      QuittingPureTimeSelfResetChain reward witness.terminalGap
+          (quittingCounterexampleSelfResetAccuracy witness rank)
           (starts rank) length profile observer stop ∧
         length ≤ Fintype.card ι + 1 := by
     intro rank
     exact exists_bounded_quittingPureTimeSelfResetChain reward
-      regime.terminalGap (quittingCounterexampleSelfResetAccuracy regime rank)
-      regime.hasUniformTerminalDebtFloor
-      (quittingCounterexampleSelfResetAccuracy_pos regime rank)
-      (quittingCounterexampleSelfResetAccuracy_lt_terminalGap regime rank)
+      witness.terminalGap (quittingCounterexampleSelfResetAccuracy witness rank)
+      witness.hasUniformTerminalDebtFloor
+      (quittingCounterexampleSelfResetAccuracy_pos witness rank)
+      (quittingCounterexampleSelfResetAccuracy_lt_terminalGap witness rank)
       (starts rank)
   choose length profile observer stop chain hlength using hexit
   have hterminal : ∀ rank, ∃ terminal : {S : Finset ι // S.Nonempty},
@@ -262,16 +262,16 @@ It retains a further strict subsequence and the exact canonical legal gain
 floor. -/
 structure QuittingBoundedSelfResetTargetRowLocalization
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts) where
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts) where
   observer_mem : sequence.observer ∈ sequence.terminal.val
   other : ι
   other_ne : other ≠ sequence.observer
   gainSubseq : ℕ → ℕ
   gainSubseq_strictMono : StrictMono gainSubseq
   gain_lower : ∀ rank,
-    quittingBoundedSelfResetTerminalMassFloor ι * regime.terminalGap /
+    quittingBoundedSelfResetTerminalMassFloor ι * witness.terminalGap /
           (2 * ((Finset.univ.erase sequence.observer).card : ℝ)) ≤
       quittingTerminalPayoff reward
           (Function.update (sequence.profile (gainSubseq rank)) other
@@ -291,9 +291,9 @@ structure QuittingBoundedSelfResetTargetRowLocalization
 
 theorem QuittingBoundedSelfResetTerminalSequence.targetRowLocalization
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (hmem : sequence.observer ∈ sequence.terminal.val) :
     Nonempty (QuittingBoundedSelfResetTargetRowLocalization sequence) := by
   let reachFloor := quittingBoundedSelfResetTerminalMassFloor ι
@@ -325,8 +325,8 @@ theorem QuittingBoundedSelfResetTerminalSequence.targetRowLocalization
     rw [hprofile, quittingProfileLiveRoot_update_pureTime_self,
       quittingPureTimeHazard_some_self]
   obtain ⟨other, gainSubseq, hother, hgainSubseq, hgain⟩ :=
-    exists_fixed_other_reachedRowGain_subsequence reward regime.terminalGap
-      regime.terminalGap_pos sequence.profile sequence.stop sequence.observer
+    exists_fixed_other_reachedRowGain_subsequence reward witness.terminalGap
+      witness.terminalGap_pos sequence.profile sequence.stop sequence.observer
       reachFloor (fun rank => sequence.terminalGap_le_suffix_debtSum rank _)
       hreachFloor hreach hsure sequence.observer_debt_tendsto_zero
   exact ⟨{
@@ -344,16 +344,16 @@ theorem QuittingBoundedSelfResetTerminalSequence.targetRowLocalization
 endpoint. -/
 def quittingBoundedSelfResetObserverAbsentOwner
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts) : ι :=
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts) : ι :=
   sequence.terminal.property.choose
 
 theorem quittingBoundedSelfResetObserverAbsentOwner_mem
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts) :
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts) :
     quittingBoundedSelfResetObserverAbsentOwner sequence ∈
       sequence.terminal.val :=
   sequence.terminal.property.choose_spec
@@ -362,9 +362,9 @@ theorem quittingBoundedSelfResetObserverAbsentOwner_mem
 to Quit at an actual pre-observer-stop row. -/
 def quittingBoundedSelfResetForcedOwnerProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank time : ℕ) : (quittingGame reward).BehaviorProfile :=
   let owner := quittingBoundedSelfResetObserverAbsentOwner sequence
   Function.update (sequence.profile rank) owner
@@ -375,9 +375,9 @@ def quittingBoundedSelfResetForcedOwnerProfile
 self-reset endpoint. -/
 def quittingBoundedSelfResetRowBarrier
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank time : ℕ) : ℝ :=
   let owner := quittingBoundedSelfResetObserverAbsentOwner sequence
   let root := Function.update
@@ -390,9 +390,9 @@ def quittingBoundedSelfResetRowBarrier
 root. -/
 theorem quittingProfileLiveRoot_boundedSelfResetForcedOwnerProfile
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank time : ℕ) :
     quittingProfileLiveRoot reward
         (quittingBoundedSelfResetForcedOwnerProfile sequence rank time) time =
@@ -413,9 +413,9 @@ theorem quittingProfileLiveRoot_boundedSelfResetForcedOwnerProfile
 decrease that coalition's stage cylinder. -/
 theorem quittingBoundedSelfReset_stageMass_le_forcedOwnerCylinder
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (rank time : ℕ) :
     quittingStageCoalitionMass reward (sequence.profile rank) time
         sequence.terminal ≤
@@ -439,9 +439,9 @@ theorem quittingBoundedSelfReset_stageMass_le_forcedOwnerCylinder
 pure-time observer is absent from the selected terminal coalition. -/
 structure QuittingBoundedSelfResetObserverAbsentWall
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts) where
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts) where
   observer_not_mem : sequence.observer ∉ sequence.terminal.val
   owner_ne_observer :
     quittingBoundedSelfResetObserverAbsentOwner sequence ≠ sequence.observer
@@ -465,26 +465,26 @@ structure QuittingBoundedSelfResetObserverAbsentWall
       quittingProfileLiveRoot reward forcedProfile time = forcedRoot ∧
       mass ≤ quittingLiveMass reward (sequence.profile rank) time *
         quittingRootCoalitionMass forcedRoot sequence.terminal.val ∧
-      regime.terminalGap ≤
+      witness.terminalGap ≤
         quittingBoundedSelfResetRowBarrier sequence rank time ∧
-      mass * regime.terminalGap ≤
+      mass * witness.terminalGap ≤
         mass * quittingBoundedSelfResetRowBarrier sequence rank time ∧
       ((∃ who, who ≠ owner ∧
-          regime.terminalGap ≤
+          witness.terminalGap ≤
             quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
-          mass * regime.terminalGap ≤ mass *
+          mass * witness.terminalGap ≤ mass *
             quittingRootCoordinateNashDefect reward tail.1 forcedRoot who) ∨
-        (regime.terminalGap ≤
+        (witness.terminalGap ≤
             max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
-          mass * regime.terminalGap ≤
+          mass * witness.terminalGap ≤
             mass * max 0
               (-quittingAtomicBlockerBalance reward forcedRoot owner)))
 
 theorem QuittingBoundedSelfResetTerminalSequence.observerAbsentWall
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
+    {witness : QuittingTerminalExploitabilityWitness reward}
     {starts : ℕ → (quittingGame reward).BehaviorProfile}
-    (sequence : QuittingBoundedSelfResetTerminalSequence regime starts)
+    (sequence : QuittingBoundedSelfResetTerminalSequence witness starts)
     (habsent : sequence.observer ∉ sequence.terminal.val) :
     Nonempty (QuittingBoundedSelfResetObserverAbsentWall sequence) := by
   let owner := quittingBoundedSelfResetObserverAbsentOwner sequence
@@ -535,28 +535,28 @@ theorem QuittingBoundedSelfResetTerminalSequence.observerAbsentWall
           sequence rank time
     have hownerForced : forcedRoot owner = PMF.pure true := by
       simp [forcedRoot]
-    have hbarrier : regime.terminalGap ≤
+    have hbarrier : witness.terminalGap ≤
         quittingBoundedSelfResetRowBarrier sequence rank time := by
       simpa only [quittingBoundedSelfResetRowBarrier, forcedRoot, actualRoot,
-        owner] using regime.terminalGap_le_atomicBlockerBarrier hownerForced
+        owner] using witness.terminalGap_le_atomicBlockerBarrier hownerForced
     have hmassNonneg : 0 ≤ mass :=
       quittingStageCoalitionMass_nonneg reward (sequence.profile rank) time
         sequence.terminal
-    have hweightedBarrier : mass * regime.terminalGap ≤
+    have hweightedBarrier : mass * witness.terminalGap ≤
         mass * quittingBoundedSelfResetRowBarrier sequence rank time :=
       mul_le_mul_of_nonneg_left hbarrier hmassNonneg
     have halternative :
         (∃ who, who ≠ owner ∧
-            regime.terminalGap ≤
+            witness.terminalGap ≤
               quittingRootCoordinateNashDefect reward tail.1 forcedRoot who ∧
-            mass * regime.terminalGap ≤ mass *
+            mass * witness.terminalGap ≤ mass *
               quittingRootCoordinateNashDefect reward tail.1 forcedRoot who) ∨
-          (regime.terminalGap ≤
+          (witness.terminalGap ≤
               max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner) ∧
-            mass * regime.terminalGap ≤
+            mass * witness.terminalGap ≤
               mass * max 0
                 (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
-      have hraw : regime.terminalGap ≤
+      have hraw : witness.terminalGap ≤
           max (quittingForcedOwnerOutsiderDefect reward forcedRoot owner)
             (max 0 (-quittingAtomicBlockerBalance reward forcedRoot owner)) := by
         simpa only [quittingBoundedSelfResetRowBarrier, forcedRoot, actualRoot,
@@ -566,7 +566,7 @@ theorem QuittingBoundedSelfResetTerminalSequence.observerAbsentWall
         obtain ⟨who, hwho, hcoordinate⟩ :=
           exists_outsider_coordinateNashDefect_ge_of_forcedOwnerDefect_ge
             reward tail.1 forcedRoot owner hownerForced
-              regime.terminalGap_pos hdefect
+              witness.terminalGap_pos hdefect
         exact ⟨who, hwho, hcoordinate,
           mul_le_mul_of_nonneg_left hcoordinate hmassNonneg⟩
       · exact Or.inr ⟨hrefusal,

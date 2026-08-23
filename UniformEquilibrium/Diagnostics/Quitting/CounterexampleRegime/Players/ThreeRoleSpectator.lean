@@ -32,7 +32,7 @@ namespace GameTheory
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Four-player spectator obstruction.**  In a four-player counterexample,
 any player at the negative singleton/punishment gate has a strict profitable
@@ -40,7 +40,7 @@ insertion into some nonempty opponent coalition.  Thus the fourth label left
 outside a local debtor/receiver/quitter packet cannot be discarded as a
 universal-`Never` spectator at this gate. -/
 theorem exists_strict_owner_toggle_of_card_eq_four
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hcard : Fintype.card iota = 4) (owner : iota)
     (hsolo : reward (quittingSingletonTerminal owner) owner <
       quittingPunishmentValue reward owner)
@@ -52,17 +52,17 @@ theorem exists_strict_owner_toggle_of_card_eq_four
             ⟨insert owner quitters,
               Finset.insert_nonempty owner quitters⟩ owner := by
   rcases exists_strict_owner_toggle_or_exact_playerDeletion
-      reward owner regime.terminalGap_pos regime.terminalExploitability
+      reward owner witness.terminalGap_pos witness.terminalExploitability
         hsolo hchi with htoggle | ⟨_, hgap, _⟩
   · exact htoggle
   · let reducedReward := quittingDeletePlayerReward reward owner
     have hgap' : HasTerminalExploitabilityGap reducedReward
-        regime.terminalGap := hgap
+        witness.terminalGap := hgap
     have hno : ¬ ∃ payoff : Payoff (QuittingDeletedPlayer owner),
         (quittingGame reducedReward).IsUniformEquilibriumPayoff none payoff :=
       (not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap
         reducedReward).2
-          ⟨regime.terminalGap, regime.terminalGap_pos, hgap'⟩
+          ⟨witness.terminalGap, witness.terminalGap_pos, hgap'⟩
     exact False.elim (hno
       (quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three
         (card_quittingDeletedPlayer_eq_three_of_card_eq_four owner hcard)
@@ -72,7 +72,7 @@ theorem exists_strict_owner_toggle_of_card_eq_four
 by a positive punishment value, an incoming singleton collision toggle, or
 an outgoing nonempty-coalition toggle. -/
 theorem positivePunishment_or_incomingSingletonToggle_or_ownerToggle_of_card_eq_four
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hcard : Fintype.card iota = 4) (owner : iota) :
     0 < quittingPunishmentValue reward owner ∨
       (∃ other, other ≠ owner ∧
@@ -84,16 +84,16 @@ theorem positivePunishment_or_incomingSingletonToggle_or_ownerToggle_of_card_eq_
             reward
               ⟨insert owner quitters,
                 Finset.insert_nonempty owner quitters⟩ owner := by
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
     hincoming | hsolo
   · exact Or.inr (Or.inl hincoming)
   · by_cases hchi : quittingPunishmentValue reward owner ≤ 0
     · exact Or.inr (Or.inr
-        (regime.exists_strict_owner_toggle_of_card_eq_four
+        (witness.exists_strict_owner_toggle_of_card_eq_four
           hcard owner hsolo hchi))
     · exact Or.inl (lt_of_not_ge hchi)
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 namespace MinimalFinQuittingCounterexample
 
@@ -120,20 +120,20 @@ theorem exists_strict_owner_toggle_at_negative_gate
             ⟨insert owner quitters,
               Finset.insert_nonempty owner quitters⟩ owner := by
   rcases exists_strict_owner_toggle_or_exact_playerDeletion
-      minimal.reward owner minimal.regime.terminalGap_pos
-        minimal.regime.terminalExploitability hsolo hchi with
+      minimal.reward owner minimal.witness.terminalGap_pos
+        minimal.witness.terminalExploitability hsolo hchi with
     htoggle | ⟨hnonempty, hgap, hcard⟩
   · exact htoggle
   · letI : Nonempty (QuittingDeletedPlayer owner) := hnonempty
     let reducedReward := quittingDeletePlayerReward minimal.reward owner
     have hgap' : HasTerminalExploitabilityGap reducedReward
-        minimal.regime.terminalGap := hgap
+        minimal.witness.terminalGap := hgap
     have hno : ¬ ∃ payoff : Payoff (QuittingDeletedPlayer owner),
         (quittingGame reducedReward).IsUniformEquilibriumPayoff none payoff :=
       (not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap
         reducedReward).2
-          ⟨minimal.regime.terminalGap,
-            minimal.regime.terminalGap_pos, hgap'⟩
+          ⟨minimal.witness.terminalGap,
+            minimal.witness.terminalGap_pos, hgap'⟩
     have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
         minimal.playerCount := by
       simpa using hcard
@@ -165,7 +165,7 @@ theorem positivePunishment_or_incomingSingletonToggle_or_ownerToggle
             minimal.reward
               ⟨insert owner quitters,
                 Finset.insert_nonempty owner quitters⟩ owner := by
-  rcases minimal.regime.strictJoiner_or_soloReward_lt_punishmentValue owner
+  rcases minimal.witness.strictJoiner_or_soloReward_lt_punishmentValue owner
       with hincoming | hsolo
   · exact Or.inr (Or.inl hincoming)
   · by_cases hchi : quittingPunishmentValue minimal.reward owner ≤ 0

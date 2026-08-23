@@ -47,7 +47,7 @@ negative margins are one complementary pair of distances, and
 the neighbour distances and the distant ones; the open pocket of
 `UniformEquilibrium/Quitting/Classification/Circulant/PocketAnchoredNoGo.lean`
 is an instance of the first.  The census of the complementary pockets against
-`QuittingCounterexampleRegime` is recorded in
+`QuittingTerminalExploitabilityWitness` is recorded in
 `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/TrichotomyClosure.lean`.
 
 Underneath that delimitation is a single inequality, free of the margin sum and
@@ -528,11 +528,11 @@ negative margins.
 
 Absence of a firing step is absence of that one producer, not a resolution.
 The all-nonnegative pattern is resolved instead by the solo exit branch, in
-`isEmpty_counterexampleRegime_of_nonneg_margins`, at nonnegative solo self value
+`isEmpty_terminalExploitabilityWitness_of_nonneg_margins`, at nonnegative solo self value
 and nonpositive join margins; the complementary pockets are resolved only under
 a cap pair, in
-`isEmpty_counterexampleRegime_of_neighbourPocket` and
-`isEmpty_counterexampleRegime_of_distantPocket`. -/
+`isEmpty_terminalExploitabilityWitness_of_neighbourPocket` and
+`isEmpty_terminalExploitabilityWitness_of_distantPocket`. -/
 theorem not_exists_isFiringStep_iff_isComplementaryPocketMargin_or_nonneg
     (hm0 : m 0 = 0) (hsum : 0 < ∑ e, m e) :
     (¬ ∃ c : ZMod 5, IsFiringStep m c) ↔

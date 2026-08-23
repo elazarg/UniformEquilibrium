@@ -51,7 +51,7 @@ position of `low - s` against the two negative margins.
   two located anchor roots
 * `exists_uniformEquilibriumPayoff_colliderDistantPocket` — the pocket
 
-The census against `QuittingCounterexampleRegime`, and the closure of the
+The census against `QuittingTerminalExploitabilityWitness`, and the closure of the
 whole family, are read off in
 `UniformEquilibrium/Diagnostics/Quitting/CounterexampleRegime/Circulant/ColliderClosure.lean`.
 -/

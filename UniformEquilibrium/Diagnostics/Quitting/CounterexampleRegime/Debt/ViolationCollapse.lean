@@ -27,10 +27,10 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-! ## The regime's extracted tail has summable absorption -/
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Unconditional collapse of the carrier alternative.**  The projectively
-extracted optimized exact-debt tail of a counterexample regime has summable
+extracted optimized exact-debt tail of a terminal exploitability witness has summable
 joint absorption charge, unconditionally.
 
 The regime's carrier alternative offers either summable joint absorption or
@@ -40,25 +40,25 @@ the violation horn collapses onto the summable horn by the violation-collapse
 theorem.  In particular the extracted roots converge coordinatewise to
 all-Continue. -/
 theorem exists_terminalGapDynamicDebtTail_summableAbsorption
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ (limit : ℕ → QuittingDebtPoint ι) (subseq : ℕ → ℕ) (who : ι),
       StrictMono subseq ∧
       Tendsto
         ((fun cutoff ↦ @quittingFiniteMinMaxDynamicDebtTail
-          ι _ _ regime.nonempty_players reward cutoff) ∘
+          ι _ _ witness.nonempty_players reward cutoff) ∘
           subseq) atTop (nhds limit) ∧
       (∀ time, limit time ∈ quittingDebtBox reward) ∧
       (∀ time, IsQuittingDynamicDebtEdge reward
         (limit time) (limit (time + 1))) ∧
-      regime.terminalGap ≤ (limit 0).2 who ∧
+      witness.terminalGap ≤ (limit 0).2 who ∧
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) ∧
       Summable (quittingDynamicDebtTailAbsorptionCharge limit) := by
-  letI : Nonempty ι := regime.nonempty_players
+  letI : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock⟩ :=
-    regime.exists_terminalGapDynamicDebtTail
+    witness.exists_terminalGapDynamicDebtTail
   refine ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock, ?_⟩
-  rcases regime.summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
+  rcases witness.summable_dynamicDebtTailAbsorptionCharge_or_eventually_floorViolation
       limit hbox hedge with hsummable | hviolation
   · exact hsummable
   · obtain ⟨start, hstart⟩ := hviolation
@@ -66,8 +66,8 @@ theorem exists_terminalGapDynamicDebtTail_summableAbsorption
     exact
       summable_dynamicDebtTailAbsorptionCharge_of_floorViolation_of_positiveDebt
         limit hbox hedge ⟨start, player, hplayer⟩
-        ⟨0, who, lt_of_lt_of_le regime.terminalGap_pos hdebt⟩
+        ⟨0, who, lt_of_lt_of_le witness.terminalGap_pos hdebt⟩
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

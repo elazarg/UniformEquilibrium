@@ -25,11 +25,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Every canonical one-stage tail edge belongs to the exact enriched carrier
 and retains its actual diagonal dynamic-debt source. -/
@@ -78,7 +78,7 @@ end QuittingCounterexampleDynamicTailWitness
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 include seam in
 /-- The negative selected-source co-state exposes exactly the flows whose

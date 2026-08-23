@@ -574,7 +574,7 @@ theorem exists_punishmentSeparated_sharp_minimalSoloBoundary_of_soloRoot
 /-- The globally selected atomic semantic edge, strengthened by a sharp
 support boundary at its own minimum tail. -/
 def HasSharpBoundaryProvenanceAtomicMinimumSemanticSoloRow
-    (regime : QuittingCounterexampleRegime reward) : Prop :=
+    (witness : QuittingTerminalExploitabilityWitness reward) : Prop :=
   ∃ (current tail : QuittingTerminalSemanticPair ι)
       (owner : ι) (hazard : PMF Bool) (anchor : ι),
     current ∈ quittingTerminalSemanticCarrier reward ∧
@@ -602,7 +602,7 @@ def HasSharpBoundaryProvenanceAtomicMinimumSemanticSoloRow
       (quittingSoloReward reward owner) 0
       (quittingSoloStationaryRoot owner hazard) ∧
     HasIsolatedNegativeAbsorbingQuittingCycle reward ∧
-    quittingSoloReward reward owner owner ≤ -regime.terminalGap ∧
+    quittingSoloReward reward owner owner ≤ -witness.terminalGap ∧
     quittingSoloReward reward owner owner <
       quittingPunishmentValue reward owner ∧
     0 < quittingPunishmentValue reward owner -
@@ -620,11 +620,11 @@ atomic solo edge with a sharp finite support boundary.  This strengthens the
 pure-Quit branch as well as the interior branch. -/
 theorem exists_semanticPlateau_or_sharpBoundaryProvenanceAtomicSolo_of_noUE
     [Nonempty ι]
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     HasPositiveMinimumTerminalSemanticPlateau reward ∨
-      HasSharpBoundaryProvenanceAtomicMinimumSemanticSoloRow regime := by
+      HasSharpBoundaryProvenanceAtomicMinimumSemanticSoloRow witness := by
   rcases exists_semanticPlateau_or_provenanceAtomicSolo_of_noUE
-      regime with hplateau | hatomic
+      witness with hplateau | hatomic
   · exact Or.inl hplateau
   · right
     rcases hatomic with

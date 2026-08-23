@@ -22,7 +22,7 @@ minimality identify that cap exactly with the owner's behavioral punishment
 value.  The actual stationary solo profile instead has owner cap
 `max (solo reward) 0`; positive debt forces `solo < punishment ≤ 0`, so the two
 semantic limits agree exactly when the punishment value is zero.  In a
-counterexample regime, the whole singleton-tight positive-debt face enters
+terminal exploitability witness, the whole singleton-tight positive-debt face enters
 the established atomic-handoff or exact player-deletion alternatives.
 
 The stationary cap statements use the exact best-response theorem against
@@ -946,12 +946,12 @@ theorem stationarySolo_eq_singletonOwnerWashoutLimit_iff_punishmentValue_eq_zero
         simp [hpunish]
       · simp [hwho]
 
-/-- In a counterexample regime, a singleton-tight positive-debt minimum is
+/-- In a terminal exploitability witness, a singleton-tight positive-debt minimum is
 not a residual branch: it exposes either a strict atomic owner toggle with an
 outsider deviation, or the same exploitability gap on a nonempty strictly
 smaller player type. -/
-theorem QuittingCounterexampleRegime.singletonTight_atomicHandoff_or_playerDeletion
-    (regime : QuittingCounterexampleRegime reward)
+theorem QuittingTerminalExploitabilityWitness.singletonTight_atomicHandoff_or_playerDeletion
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     {rate : ℝ}
     (hface : QuittingSingletonTightMinimumFace reward pair owner)
@@ -975,7 +975,7 @@ theorem QuittingCounterexampleRegime.singletonTight_atomicHandoff_or_playerDelet
                   (insert owner quitters)) who) ∨
       (Nonempty (QuittingDeletedPlayer owner) ∧
         HasTerminalExploitabilityGap
-          (quittingDeletePlayerReward reward owner) regime.terminalGap ∧
+          (quittingDeletePlayerReward reward owner) witness.terminalGap ∧
         Fintype.card (QuittingDeletedPlayer owner) < Fintype.card ι) := by
   have hsign := singletonTight_soloReward_lt_punishmentValue_and_nonpos
     (reward := reward) pair owner hface hrate0 hrate1 hendpoint
@@ -983,10 +983,10 @@ theorem QuittingCounterexampleRegime.singletonTight_atomicHandoff_or_playerDelet
       quittingPunishmentValue reward owner := by
     simpa [quittingSoloReward, quittingSingletonTerminal] using hsign.1
   have hdispatch := exists_strict_owner_toggle_or_exact_playerDeletion
-    reward owner regime.terminalGap_pos regime.terminalExploitability
+    reward owner witness.terminalGap_pos witness.terminalExploitability
       hsolo hsign.2
   exact strictToggle_or_playerDeletion_to_atomicHandoff
-    reward regime.terminalGap_pos regime.terminalExploitability owner hdispatch
+    reward witness.terminalGap_pos witness.terminalExploitability owner hdispatch
 
 /-- Positive debt forces the owner's singleton reward below zero. -/
 theorem singletonTight_soloReward_neg

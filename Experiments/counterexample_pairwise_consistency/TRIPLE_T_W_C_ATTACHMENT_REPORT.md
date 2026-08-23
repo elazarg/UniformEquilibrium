@@ -50,7 +50,7 @@ The distinction between the following four outputs is load-bearing.
 
 `QuittingCounterexampleSeamWitness.projective_limit` says that the selected
 tail is a projective limit of the canonical cutoff-wise optimized zero-boundary
-exact-D tails.  `CounterexampleRegimeCapCarrier` uses precisely that field to
+exact-D tails.  `TerminalExploitabilityWitnessCapCarrier` uses precisely that field to
 prove that every augmented cap
 
 ```text
@@ -106,7 +106,7 @@ periodic phase obstruction.
 
 ### Canonical windows `W`
 
-`CounterexampleRegimePeriodicWindows` periodically repeats the actual product
+`TerminalExploitabilityWitnessPeriodicWindows` periodically repeats the actual product
 root word and evaluates the resulting behavioral profile.  It obtains a
 fixed player and either refusal or a concrete phase-stop branch on an infinite
 set.  The evaluator makes no assertion that the periodic phase continuation
@@ -167,7 +167,7 @@ Adding (5) and (6) yields `Q_n+G_n<=0`.  Hence:
 > **Exact-return exclusion.** Under finite global capacity, an exact selected
 > cap segment with `Q_n>0` admits no exact floor-admissible endpoint return.
 
-Equivalently, if `T x W` can produce `Gamma_n`, the full counterexample regime
+Equivalently, if `T x W` can produce `Gamma_n`, the full terminal exploitability witness
 is inconsistent immediately.  That production statement is exactly the
 unproved attachment seam.
 
@@ -403,7 +403,7 @@ It does **not** establish either load-bearing full clause:
 Neither clause may be inferred from the exact selected cap ray.  Passing all
 coalition-lock screens does not prove `G`, and a hand-built exact-D tail does
 not prove `M`.  The table is therefore a lock-clean interface candidate, not
-a counterexample regime and not a full triple witness.
+a terminal exploitability witness and not a full triple witness.
 
 For comparison, the simpler local cap table in
 [`TC_PHANTOM_CAPACITY_REPORT.md`](TC_PHANTOM_CAPACITY_REPORT.md) satisfies the
@@ -417,7 +417,7 @@ selected cap path.
 The remaining central triple problem is:
 
 > Starting from the **actual optimized/projective** exact-D tail of a full
-> counterexample regime, use a stabilized canonical-window obstruction and
+> terminal exploitability witness, use a stabilized canonical-window obstruction and
 > the complete global capacity geometry to produce either (a) a zero-seam
 > exact cap segment plus an exact endpoint return, or (b) a suffix co-realizing
 > the endpoint cap as payoff and deviation envelope, or (c) a new quantitative

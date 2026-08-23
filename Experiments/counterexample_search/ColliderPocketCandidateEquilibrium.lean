@@ -35,7 +35,7 @@ one.
 
 This is a checked statement about one table, not a general theorem about
 collider completions.  The general statement is
-`GameTheory.CirculantColliderCompletion.isEmpty_counterexampleRegime_colliderPocket`.
+`GameTheory.CirculantColliderCompletion.isEmpty_terminalExploitabilityWitness_colliderPocket`.
 -/
 
 noncomputable section
@@ -205,11 +205,11 @@ theorem candidate_isUniformEquilibriumPayoff {q : ℝ} (hq : q ∈ Set.Ioo (0 : 
       colliderJoin_of_ne 1 (-2) (by decide), candidateMargin_one]
     norm_num
 
-/-- **The table is in no counterexample regime.**  A terminal exploitability
+/-- **The table is in no terminal exploitability witness.**  A terminal exploitability
 gap is incompatible with an existing uniform-equilibrium payoff. -/
-theorem candidate_isEmpty_counterexampleRegime :
-    IsEmpty (QuittingCounterexampleRegime candidateReward) := by
-  refine isEmpty_counterexampleRegime_colliderPocket candidateMargin_zero
+theorem candidate_isEmpty_terminalExploitabilityWitness :
+    IsEmpty (QuittingTerminalExploitabilityWitness candidateReward) := by
+  refine isEmpty_terminalExploitabilityWitness_colliderPocket candidateMargin_zero
     (by norm_num) (by norm_num) (by norm_num) (by norm_num) (by norm_num)
     (by norm_num) ?_
   rw [candidateMargin_one]

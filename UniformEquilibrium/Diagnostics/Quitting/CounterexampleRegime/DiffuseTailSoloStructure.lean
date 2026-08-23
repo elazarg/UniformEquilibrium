@@ -58,13 +58,13 @@ namespace QuittingCounterexampleDynamicTailWitness
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- A persistently active player's seam boundary coordinate is its own
 singleton reward.  This is the seam-grade active-tightness input used by T2
 and T3, read off `eventually_active_implies_limitValue_eq_singleton`. -/
 theorem limitValue_eq_soloReward_of_persistentlyActive
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (who : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (who : ι)
     (hactive : QuittingTailPersistentlyActive
       (quittingDynamicDebtTailRoots seam.tail) who) :
     seam.limit.value who = quittingSoloReward reward who who := by
@@ -83,11 +83,11 @@ root is solo at `owner`, no other coordinate has a refusal obstruction: it
 already continues surely at every date of the window, so refusing to quit
 reproduces the window's own delivery. -/
 theorem not_refusalObstruction_of_soloWindow
-    (seam : QuittingCounterexampleDynamicTailWitness regime) {window : ℕ}
+    (seam : QuittingCounterexampleDynamicTailWitness witness) {window : ℕ}
     {owner who : ι} (hne : who ≠ owner)
     (hsolo : ∀ time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
-    ¬ regime.terminalGap / 2 <
+    ¬ witness.terminalGap / 2 <
         quittingPeriodicWindowRefusalValue reward
           (seam.canonicalPeriodicTailWindowFamily.roots window) who -
           seam.canonicalPeriodicTailWindowFamily.delivery window who := by
@@ -100,7 +100,7 @@ theorem not_refusalObstruction_of_soloWindow
       quittingRootSequenceTerminalValue reward
         (seam.canonicalPeriodicTailWindowFamily.roots window) who 0 := rfl
   rw [hrefusal, hdelivery, sub_self]
-  exact not_lt.2 (by linarith [regime.terminalGap_pos])
+  exact not_lt.2 (by linarith [witness.terminalGap_pos])
 
 /-- **T4(a), reduced to the owner's own refusal.**  On a seam whose canonical
 periodic windows are solo at `owner`, the stabilized obstruction of
@@ -108,17 +108,17 @@ periodic windows are solo at `owner`, the stabilized obstruction of
 some coordinate's phase stop: every other coordinate's refusal obstruction set
 is empty. -/
 theorem soloWindows_ownerRefusal_or_phaseStop
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
     Set.Infinite {window : ℕ |
-        regime.terminalGap / 2 <
+        witness.terminalGap / 2 <
           quittingPeriodicWindowRefusalValue reward
             (seam.canonicalPeriodicTailWindowFamily.roots window) owner -
             seam.canonicalPeriodicTailWindowFamily.delivery window owner} ∨
       (∃ other, Set.Infinite {window : ℕ |
         ∃ phase : Fin (window + 1),
-          regime.terminalGap / 2 <
+          witness.terminalGap / 2 <
             quittingPeriodicWindowPhaseStopValue reward
               (seam.canonicalPeriodicTailWindowFamily.roots window) other
               phase -
@@ -141,15 +141,15 @@ either an infinite family of windows whose delivery to `owner` falls below
 stops all absorption, so its refusal obstruction is exactly a negative
 delivery. -/
 theorem soloWindows_negativeOwnerDelivery_or_phaseStop
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner) :
     Set.Infinite {window : ℕ |
         seam.canonicalPeriodicTailWindowFamily.delivery window owner <
-          -(regime.terminalGap / 2)} ∨
+          -(witness.terminalGap / 2)} ∨
       (∃ other, Set.Infinite {window : ℕ |
         ∃ phase : Fin (window + 1),
-          regime.terminalGap / 2 <
+          witness.terminalGap / 2 <
             quittingPeriodicWindowPhaseStopValue reward
               (seam.canonicalPeriodicTailWindowFamily.roots window) other
               phase -
@@ -168,14 +168,14 @@ theorem soloWindows_negativeOwnerDelivery_or_phaseStop
 canonical windows are solo at `owner` and never deliver `owner` less than
 `-terminalGap / 2`, the stabilized obstruction is a phase stop. -/
 theorem exists_phaseStopObstruction_of_soloWindows
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (hsolo : ∀ window time, IsQuittingSoloRoot
       (seam.canonicalPeriodicTailWindowFamily.roots window time) owner)
-    (hdelivery : ∀ window, -(regime.terminalGap / 2) ≤
+    (hdelivery : ∀ window, -(witness.terminalGap / 2) ≤
       seam.canonicalPeriodicTailWindowFamily.delivery window owner) :
     ∃ other, Set.Infinite {window : ℕ |
       ∃ phase : Fin (window + 1),
-        regime.terminalGap / 2 <
+        witness.terminalGap / 2 <
           quittingPeriodicWindowPhaseStopValue reward
             (seam.canonicalPeriodicTailWindowFamily.roots window) other phase -
             seam.canonicalPeriodicTailWindowFamily.delivery window other} := by
@@ -195,12 +195,12 @@ The phase-stop conjunct alone is the conclusion of
 `exists_phaseStopObstruction_of_soloWindows`; what this proposition adds is
 the preemption edge at the obstructing coordinate. -/
 def QuittingSoloWindowPhaseStopBranch
-    (seam : QuittingCounterexampleDynamicTailWitness regime) (owner : ι)
+    (seam : QuittingCounterexampleDynamicTailWitness witness) (owner : ι)
     (margin : ℝ) : Prop :=
   ∃ other, QuittingSoloPreempts reward margin owner other ∧
     Set.Infinite {window : ℕ |
       ∃ phase : Fin (window + 1),
-        regime.terminalGap / 2 <
+        witness.terminalGap / 2 <
           quittingPeriodicWindowPhaseStopValue reward
             (seam.canonicalPeriodicTailWindowFamily.roots window) other phase -
             seam.canonicalPeriodicTailWindowFamily.delivery window other}

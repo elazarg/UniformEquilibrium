@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.OwnShiftCycleExactification
 
 /-!
-# Exact-cycle exclusion in the quitting counterexample regime
+# Exact-cycle exclusion in the quitting terminal exploitability witness
 
-The combined counterexample regime already contains a positive terminal
+The combined terminal exploitability witness already contains a positive terminal
 exploitability gap and therefore excludes uniform-equilibrium payoffs.  Reward
 closure upgrades this pointwise failure to an open reward-table neighborhood.
 Since every absorbing punishment-admissible exact cycle compiles to a uniform
@@ -26,7 +26,7 @@ certify exclusion from the full solved-cycle locus.
 noncomputable section
 
 namespace GameTheory
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 open StochasticGame
 
@@ -35,23 +35,23 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-- A counterexample table itself carries no solved exact quitting cycle. -/
 theorem not_hasSolvedExactQuittingCycle
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ¬ HasSolvedExactQuittingCycle reward := by
   intro hsolved
-  exact regime.not_exists_uniformEquilibriumPayoff
+  exact witness.not_exists_uniformEquilibriumPayoff
     hsolved.exists_uniformEquilibriumPayoff
 
 /-- **Robust solved-cycle exclusion.**  One positive-radius coordinatewise
-reward neighborhood of every counterexample regime is disjoint from all
+reward neighborhood of every terminal exploitability witness is disjoint from all
 absorbing punishment-admissible exact cycles of all finite periods. -/
 theorem exists_solvedExactCycleExclusionRadius
-    (regime : QuittingCounterexampleRegime reward) :
+    (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ η : ℝ, 0 < η ∧
       ∀ nearby : {S : Finset ι // S.Nonempty} → Payoff ι,
         (∀ S who, |nearby S who - reward S who| ≤ η) →
           ¬ HasSolvedExactQuittingCycle nearby :=
   exists_rewardNeighborhood_without_solvedExactQuittingCycle reward
-    regime.not_exists_uniformEquilibriumPayoff
+    witness.not_exists_uniformEquilibriumPayoff
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 end GameTheory

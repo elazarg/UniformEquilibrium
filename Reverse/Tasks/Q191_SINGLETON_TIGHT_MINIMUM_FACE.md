@@ -100,7 +100,7 @@ pair \((u,b)\) outside the carrier is not a counterexample.
 ## Answer
 
 The implementation gives an exact structural characterization and
-counterexample-regime closure. The finite-prefix claims, the carrier-wide cap
+closure under a terminal exploitability witness. The finite-prefix claims, the carrier-wide cap
 identification, and the stationary calculation against arbitrary behavioral
 deviations are proved in
 [`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean`](../../UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonTightMinimumFaceIteration.lean).
@@ -236,9 +236,9 @@ the formal development, and no literal positive-minimum example with
 yield a complete affirmative proof or a concrete refutation of the universal
 stationary-convergence claim.
 
-### Counterexample-regime closure
+### Closure under a terminal exploitability witness
 
-For `QuittingCounterexampleRegime reward`, the inequalities
+For `QuittingTerminalExploitabilityWitness reward`, the inequalities
 
 \[
 r_h(\{h\})<\chi_h,\qquad \chi_h\leq0
@@ -253,6 +253,6 @@ disjunction:
 2. the same positive terminal exploitability gap on a nonempty, strictly
    smaller deleted-player type.
 
-Hence this face is closed as a counterexample-regime frontier branch even
+Hence this face is closed as a frontier branch under a terminal exploitability witness even
 though the universal form of Step 4 is equivalent to the additional scalar
 assertion \(\chi_h=0\).

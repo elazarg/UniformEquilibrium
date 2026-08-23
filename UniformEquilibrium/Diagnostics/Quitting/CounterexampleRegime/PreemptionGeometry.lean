@@ -22,7 +22,7 @@ with `(tail length, cycle length)` equal to
 
 `(0,2), (0,3), (0,4), (1,2), (1,3), or (2,2)`.
 
-This is a necessary localization of a counterexample regime.  It does not say
+This is a necessary localization of a terminal exploitability witness.  It does not say
 that any of the seventeen table-level geometries is itself contradictory.
 -/
 
@@ -33,44 +33,44 @@ namespace GameTheory
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Four-player marked-geometry classification.**  On at most four players,
 one collision certificate can be chosen whose owner roots a simple strict
 preemption lasso and whose collider occupies one of the seventeen canonical
 positions relative to that lasso. -/
 theorem exists_collisionAnchoredPreemptionGeometry_of_card_le_four
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hcard : Fintype.card player ≤ 4) :
-    ∃ certificate : QuittingImmediateSingletonCollision reward regime.terminalGap,
+    ∃ certificate : QuittingImmediateSingletonCollision reward witness.terminalGap,
       Nonempty (Math.FiniteSerialRelation.MarkedRootedLasso
-        (QuittingSoloPreempts reward regime.terminalGap)
+        (QuittingSoloPreempts reward witness.terminalGap)
         certificate.owner certificate.collider) := by
-  obtain ⟨certificate⟩ := regime.exists_immediateSingletonCollision
-  have hviable : -regime.terminalGap <
+  obtain ⟨certificate⟩ := witness.exists_immediateSingletonCollision
+  have hviable : -witness.terminalGap <
       quittingSoloReward reward certificate.owner certificate.owner := by
-    linarith [regime.terminalGap_pos, certificate.owner_solo_floor]
-  have hroot : ∃ next, QuittingSoloPreempts reward regime.terminalGap
-      certificate.owner next := regime.exists_soloPreemptor hviable
+    linarith [witness.terminalGap_pos, certificate.owner_solo_floor]
+  have hroot : ∃ next, QuittingSoloPreempts reward witness.terminalGap
+      certificate.owner next := witness.exists_soloPreemptor hviable
   refine ⟨certificate,
     Math.FiniteSerialRelation.markedRootedLasso_of_card_le_four
-      (QuittingSoloPreempts reward regime.terminalGap) certificate.owner
+      (QuittingSoloPreempts reward witness.terminalGap) certificate.owner
       hcard ?_ hroot ?_ certificate.collider_ne_owner⟩
   · intro owner hedge
     exact hedge.1 rfl
   · intro predecessor current hedge
-    exact regime.exists_soloPreemptor_of_soloPreempts hedge
+    exact witness.exists_soloPreemptor_of_soloPreempts hedge
 
 /-- The exact four-player specialization of the marked classification. -/
 theorem exists_collisionAnchoredPreemptionGeometry_of_card_eq_four
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (hcard : Fintype.card player = 4) :
-    ∃ certificate : QuittingImmediateSingletonCollision reward regime.terminalGap,
+    ∃ certificate : QuittingImmediateSingletonCollision reward witness.terminalGap,
       Nonempty (Math.FiniteSerialRelation.MarkedRootedLasso
-        (QuittingSoloPreempts reward regime.terminalGap)
+        (QuittingSoloPreempts reward witness.terminalGap)
         certificate.owner certificate.collider) :=
-  regime.exists_collisionAnchoredPreemptionGeometry_of_card_le_four hcard.le
+  witness.exists_collisionAnchoredPreemptionGeometry_of_card_le_four hcard.le
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

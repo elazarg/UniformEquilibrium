@@ -170,8 +170,8 @@ theorem exists_prescribedPassport_or_pureTimePassport_with_debtBound
 column, with the same vanishing error schedule as the production decoder. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassportAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧ 0 < charge ∧
       ∀ᶠ rank in atTop,
@@ -254,8 +254,8 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedVanishingDebtPassp
 /-- Prescribed-law branch with one fixed high/low outcome passport. -/
 structure QuittingStoppingLawPrescribedPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   observer : ι
   charge : ℝ
@@ -278,8 +278,8 @@ structure QuittingStoppingLawPrescribedPassportSequence
 vanishing observer debt at its high-law endpoint. -/
 structure QuittingStoppingLawVanishingDebtPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) where
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) where
   mover : {who // who ∈ frontier.active}
   observer : ι
   charge : ℝ
@@ -324,8 +324,8 @@ namespace QuittingCounterexampleStoppingLawFrontier
 constant along a strict subsequence in either branch. -/
 theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedPassportSequence frontier) ∨
       Nonempty (QuittingStoppingLawVanishingDebtPassportSequence frontier) := by
   classical

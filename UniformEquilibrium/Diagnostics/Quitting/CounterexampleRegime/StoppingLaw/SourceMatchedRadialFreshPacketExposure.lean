@@ -27,14 +27,14 @@ open scoped BigOperators Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- The normalized owner debt drop is exactly the unscaled replacement's
 prescribed payoff gain. -/
 theorem actualGain_eq_endpointPayoffGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : Nat) (mover : {who // who ∈ frontier.active}) :
     frontier.actualGain rank mover =
       quittingTerminalPayoff reward
@@ -60,7 +60,7 @@ theorem actualGain_eq_endpointPayoffGain
 /-- Actual finite-rank owner gains converge to the positive diagonal charge
 of the limiting tangent column. -/
 theorem actualGain_tendsto
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     Tendsto (fun rank => frontier.actualGain rank mover) atTop
       (nhds (-frontier.tangent mover mover.1)) := by
@@ -69,7 +69,7 @@ theorem actualGain_tendsto
 
 /-- Every active tangent has a strictly positive limiting owner charge. -/
 theorem tangentOwnerCharge_pos
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     0 < -frontier.tangent mover mover.1 := by
   have hdebt : 0 < quittingTerminalSemanticDebt frontier.base mover.1 :=
@@ -80,7 +80,7 @@ theorem tangentOwnerCharge_pos
 /-- Exact balance with positive diagonal charge requires at least two
 positive radial coordinates. -/
 theorem exists_two_positive_boundedRadialCirculationWeights
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (weight : {who // who ∈ frontier.active} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hbalance : forall observer,
@@ -128,7 +128,7 @@ theorem exists_two_positive_boundedRadialCirculationWeights
 /-- The simultaneous fresh packet is the full active face of the radial reset
 cube at one source-matched rank. -/
 def sourceMatchedRadialFreshPacketProfile
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : Nat) (weight : {who // who ∈ frontier.active} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hweight1 : forall mover, weight mover <= 1) :
@@ -139,7 +139,7 @@ def sourceMatchedRadialFreshPacketProfile
 /-- An active marginal of the full fresh packet is its literal nested radial
 stopping-law reset. -/
 theorem sourceMatchedRadialFreshPacketProfile_apply
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : Nat) (weight : {who // who ∈ frontier.active} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hweight1 : forall mover, weight mover <= 1)
@@ -171,7 +171,7 @@ theorem sourceMatchedRadialFreshPacketProfile_apply
 /-- A positive lower bound on the finite-rank owner gain yields proportional
 ever-quit mass in that mover's fresh radial marginal. -/
 theorem sourceMatchedRadialFreshPacket_everQuitMass_ge
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : Nat) (weight : {who // who ∈ frontier.active} -> Real)
     (hweight0 : forall mover, 0 <= weight mover)
     (hweight1 : forall mover, weight mover <= 1)
@@ -277,7 +277,7 @@ with a fixed positive exposure coefficient.  Eventually, at each selected
 rank, a finite cutoff exposes both the joint clock and every deleted-player
 clock by at least that coefficient times the genuine frontier reset scale. -/
 theorem exists_boundedRadialFreshPacketExposure
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :
     ∃ weight : {who // who ∈ frontier.active} -> Real,

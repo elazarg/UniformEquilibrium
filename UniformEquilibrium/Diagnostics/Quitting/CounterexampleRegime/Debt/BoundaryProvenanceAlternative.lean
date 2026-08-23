@@ -48,11 +48,11 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleDynamicTailWitness
 
-variable (seam : QuittingCounterexampleDynamicTailWitness regime)
+variable (seam : QuittingCounterexampleDynamicTailWitness witness)
 
 /-- Raw chronological decrease of the capacity-derived debt account. -/
 def killedCapacityDebtAccountDrop (who : ι) (time : ℕ) : ℝ :=

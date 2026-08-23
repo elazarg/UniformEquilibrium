@@ -36,8 +36,8 @@ positive off-diagonal coordinate.  This uses only its negative diagonal and
 nonnegative total sum; none of the four tagged branch cases is needed. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_positiveOffDiagonal
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     {mover : ι} (hmover : mover ∈ frontier.active) :
     ∃ observer, observer ≠ mover ∧
       0 < frontier.tangent ⟨mover, hmover⟩ observer := by
@@ -68,8 +68,8 @@ feeds the existing prescribed-atom/pure-time-rectangle decoder with one
 fixed positive charge. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
       observer ≠ mover.1 ∧ 0 < charge ∧
       ∀ᶠ rank in atTop,
@@ -146,28 +146,28 @@ theorem QuittingCounterexampleStoppingLawFrontier.exists_fixedAtomAlternative
 /-- **One-debt-owner frontier collapse.**  If the active positive-debt support
 has cardinality at most one, charged circulation and potential co-decrease are
 impossible.  The original common-base tangent family is retained unchanged. -/
-/- A counterexample regime reaches a stopping-law frontier and therefore a
+/- A terminal exploitability witness reaches a stopping-law frontier and therefore a
 fixed positive off-diagonal literal atom alternative on that frontier. -/
-theorem QuittingCounterexampleRegime.exists_stoppingLaw_fixedAtomAlternative
+theorem QuittingTerminalExploitabilityWitness.exists_stoppingLaw_fixedAtomAlternative
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) :
-    ∃ frontier : QuittingCounterexampleStoppingLawFrontier regime,
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    ∃ frontier : QuittingCounterexampleStoppingLawFrontier witness,
       ∃ (mover : {who // who ∈ frontier.active}) (observer : ι) (charge : ℝ),
         observer ≠ mover.1 ∧ 0 < charge ∧
           ∀ᶠ rank in atTop,
             HasQuittingStoppingLawDebtSlopeAtomAlternative reward
               (frontier.profiles (frontier.subseq rank)) mover.1 observer
               (frontier.bestResponse mover (frontier.subseq rank)) charge := by
-  letI : Nonempty ι := regime.nonempty_players
-  obtain ⟨frontier⟩ := regime.exists_stoppingLaw_exhaustiveFrontier
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨frontier⟩ := witness.exists_stoppingLaw_exhaustiveFrontier
   obtain ⟨mover, observer, charge, hne, hcharge, heventually⟩ :=
     frontier.exists_fixedAtomAlternative
   exact ⟨frontier, mover, observer, charge, hne, hcharge, heventually⟩
 
 theorem QuittingCounterexampleStoppingLawFrontier.oneDebtOwner_dichotomy
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcard : frontier.active.card ≤ 1) :
     (∃ mover, 0 < ∑ observer, frontier.tangent mover observer) ∨
       ((∀ mover, ∑ observer, frontier.tangent mover observer = 0) ∧

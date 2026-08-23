@@ -41,13 +41,13 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 namespace QuittingCounterexampleStoppingLawFrontier
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-  {regime : QuittingCounterexampleRegime reward}
+  {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- Compact full-reset endpoint data for an arbitrary supplied active mover.
 Unlike `PositiveTotalSlopeEndpointCluster`, this structure has no positive
 total-slope or total-debt-separation field. -/
 structure FullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) where
   cluster : QuittingTerminalSemanticPair ι
   subseq : ℕ → ℕ
@@ -66,7 +66,7 @@ structure FullResetEndpointCluster
 /-- Every supplied mover has a compact full-reset endpoint cluster retaining
 coordinatewise tangent domination and exact own-coordinate change. -/
 theorem exists_fullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (mover : {who // who ∈ frontier.active}) :
     Nonempty (FullResetEndpointCluster frontier mover) := by
   let endpoint : ℕ → QuittingTerminalSemanticPair ι :=
@@ -151,7 +151,7 @@ theorem exists_fullResetEndpointCluster
 
 namespace FullResetEndpointCluster
 
-variable {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+variable {frontier : QuittingCounterexampleStoppingLawFrontier witness}
   {mover : {who // who ∈ frontier.active}}
 
 /-- On a flat minimum-fiber endpoint, every coordinatewise convexity
@@ -275,7 +275,7 @@ cluster.  If such a cluster lies on the minimum-total-debt fiber and its
 diagonal came from vanishing-regret extraction, then active support strictly
 deflates and the stored second debtor strictly decreases. -/
 theorem exists_potentialCoDecrease_fullResetEndpointCluster
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hpotential : HasQuittingStoppingLawFlatPotentialCoDecrease
       frontier.active frontier.tangent)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
@@ -322,7 +322,7 @@ at most two, its selected mover and same-column co-decreased debtor exhaust
 the active support; both tangent entries are negative and every inactive
 entry is zero, contradicting flatness. -/
 theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hpotential : HasQuittingStoppingLawFlatPotentialCoDecrease
       frontier.active frontier.tangent)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
@@ -392,7 +392,7 @@ theorem three_le_active_card_of_flatPotentialCoDecrease_of_noEntry
 force the normalized positive charged-circulation arm.  The potential arm is
 excluded by `three_le_active_card_of_flatPotentialCoDecrease_of_noEntry`. -/
 theorem has_flatChargedCirculation_of_active_card_le_two_of_flat_of_noEntry
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcard : frontier.active.card ≤ 2)
     (hflat : ∀ mover, ∑ observer, frontier.tangent mover observer = 0)
     (hnoEntry :

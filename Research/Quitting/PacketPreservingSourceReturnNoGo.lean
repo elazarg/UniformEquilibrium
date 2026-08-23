@@ -27,8 +27,8 @@ so none admits an exact Nash--Bellman embedding on its literal root--tail
 fiber. -/
 theorem positiveTargetReachedRowLocalization_no_packetPreservingExactSourceReturn
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
     {lower : ℝ}
@@ -107,8 +107,8 @@ form is included because it does not require a separate cardinality
 denominator in downstream arithmetic. -/
 theorem positiveTargetReachedRowLocalization_sameFiberRepairErrorFloor
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (frontierPacket : QuittingStoppingLawVanishingDebtRectangleSequence
       frontier)
     {lower : ℝ}

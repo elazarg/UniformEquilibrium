@@ -50,14 +50,14 @@ open Filter
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- Quantitative total variation: along every arbitrary infinite exact
 punishment-floor orbit, each value coordinate's total absolute increment
 is at most twice the reward bound times the regime's common
 prefix-charge budget. -/
 theorem infiniteOrbit_tsum_abs_value_succ_sub_le
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) (who : ι) :
     ∑' time, |orbit.value (time + 1) who - orbit.value time who| ≤
       2 * quittingRewardBound reward *
@@ -81,7 +81,7 @@ theorem infiniteOrbit_tsum_abs_value_succ_sub_le
     _ ≤ 2 * quittingRewardBound reward *
         quittingPunishmentFloorPrefixChargeBound reward :=
         mul_le_mul_of_nonneg_left
-          (regime.infiniteOrbit_partialAbsorption_le_prefixChargeBound
+          (witness.infiniteOrbit_partialAbsorption_le_prefixChargeBound
             orbit horizon) h2M
 
 /-- **All-Continue Nash--Bellman self-loop at the limit.**  Along every
@@ -97,7 +97,7 @@ The annotations are prescribed Bellman values, not realized payoffs of
 any strategy profile; no realization claim is made about the limit or
 its self-loop. -/
 theorem infiniteOrbit_exists_selfLoop_limit
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward) :
     ∃ limit : Payoff ι,
       (∀ who, Tendsto (fun time => orbit.value time who) atTop
@@ -108,7 +108,7 @@ theorem infiniteOrbit_exists_selfLoop_limit
         (limit, quittingAllContinueSimplexRoot)
         (limit, quittingAllContinueSimplexRoot) := by
   obtain ⟨limit, hlimit, hcarrier, hfloor, hsolo⟩ :=
-    regime.infiniteOrbit_exists_value_limit orbit
+    witness.infiniteOrbit_exists_value_limit orbit
   refine ⟨limit, hlimit, hcarrier, hfloor, ?_⟩
   constructor
   · change limit = quittingRootSuccessorPayoff reward limit
@@ -122,6 +122,6 @@ theorem infiniteOrbit_exists_selfLoop_limit
     exact quittingAllContinueRoot_isZeroNash_of_singleton_le reward limit
       hsolo
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

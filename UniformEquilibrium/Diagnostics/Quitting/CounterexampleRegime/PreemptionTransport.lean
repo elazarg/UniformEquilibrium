@@ -8,7 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime.PreemptionCy
 import UniformEquilibrium.Quitting.Classification.PreemptionTransport
 
 /-!
-# Static preemption-transport no-go in a counterexample regime
+# Static preemption-transport no-go in a terminal exploitability witness
 
 A table-justified charging pays at least the solo table's observer-switch cost.
 The payoff cells are therefore a potential for the augmented graph, so weak
@@ -29,8 +29,8 @@ variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
 /-- A charging of the observer-switch edges that the regime's solo table
 justifies. -/
 structure QuittingStaticObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) where
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (cycle : QuittingSoloPreemptionCycle reward witness.terminalGap) where
   /-- The weight charged to the observer switch out of each phase's head. -/
   cost : ℕ → ℝ
   /-- The regime's solo table pays the charge at every switch. -/
@@ -38,44 +38,44 @@ structure QuittingStaticObserverSwitchData
 
 namespace QuittingSoloPreemptionCycle
 
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 /-- Charging each observer switch by the exact loss in the solo table gives
 the least table-justified charging. -/
-def tightStaticObserverSwitchData (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    QuittingStaticObserverSwitchData regime cycle where
+def tightStaticObserverSwitchData (witness : QuittingTerminalExploitabilityWitness reward)
+    (cycle : QuittingSoloPreemptionCycle reward witness.terminalGap) :
+    QuittingStaticObserverSwitchData witness cycle where
   cost := cycle.observerSwitchCost
   observerSwitchCost_le _ := le_rfl
 
 instance nonempty_quittingStaticObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    Nonempty (QuittingStaticObserverSwitchData regime cycle) :=
-  ⟨tightStaticObserverSwitchData regime cycle⟩
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (cycle : QuittingSoloPreemptionCycle reward witness.terminalGap) :
+    Nonempty (QuittingStaticObserverSwitchData witness cycle) :=
+  ⟨tightStaticObserverSwitchData witness cycle⟩
 
 end QuittingSoloPreemptionCycle
 
 namespace QuittingStaticObserverSwitchData
 
-variable {regime : QuittingCounterexampleRegime reward}
-variable {cycle : QuittingSoloPreemptionCycle reward regime.terminalGap}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
+variable {cycle : QuittingSoloPreemptionCycle reward witness.terminalGap}
 
 /-- The charged data closes the joined system on the payoff cells. -/
-theorem isLaxSection (data : QuittingStaticObserverSwitchData regime cycle) :
+theorem isLaxSection (data : QuittingStaticObserverSwitchData witness cycle) :
     IsLaxSection cycle.augmentedCellGraph (cycle.augmentedCellLabel data.cost)
       (quittingPayoffCellValue reward) :=
   cycle.isLaxSection_augmentedCellLabel data.observerSwitchCost_le
 
 /-- One gap per forced edge, minus the charge of each observer switch. -/
-def augmentedCycleWeight (data : QuittingStaticObserverSwitchData regime cycle) : ℝ :=
-  (cycle.period : ℝ) * regime.terminalGap -
+def augmentedCycleWeight (data : QuittingStaticObserverSwitchData witness cycle) : ℝ :=
+  (cycle.period : ℝ) * witness.terminalGap -
     ∑ time ∈ Finset.range cycle.period, data.cost time
 
 /-- The augmented cycle weight is the weight of the corresponding closed
 walk. -/
 theorem augmentedCycleWeight_eq_walkWeight
-    (data : QuittingStaticObserverSwitchData regime cycle) :
+    (data : QuittingStaticObserverSwitchData witness cycle) :
     data.augmentedCycleWeight =
       Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
         cycle.augmentedCellWalk :=
@@ -84,14 +84,14 @@ theorem augmentedCycleWeight_eq_walkWeight
 /-- The payoff-cell potential makes every table-justified augmented cycle
 nonpositive. -/
 theorem augmentedCycleWeight_nonpos
-    (data : QuittingStaticObserverSwitchData regime cycle) :
+    (data : QuittingStaticObserverSwitchData witness cycle) :
     data.augmentedCycleWeight ≤ 0 := by
   rw [data.augmentedCycleWeight_eq_walkWeight]
   exact (cycle.isPotential_augmentedCellWeight data.observerSwitchCost_le).closedWalk_nonpos
     cycle.augmentedCellWalk
 
 /-- A positive table-justified augmented cycle is impossible. -/
-theorem elim (data : QuittingStaticObserverSwitchData regime cycle)
+theorem elim (data : QuittingStaticObserverSwitchData witness cycle)
     (hweight : 0 < data.augmentedCycleWeight) : False :=
   absurd data.augmentedCycleWeight_nonpos (not_le.2 hweight)
 
@@ -101,9 +101,9 @@ namespace QuittingSoloPreemptionCycle
 
 /-- No table-justified charging carries a positive augmented cycle. -/
 theorem isEmpty_positiveObserverSwitchData
-    (regime : QuittingCounterexampleRegime reward)
-    (cycle : QuittingSoloPreemptionCycle reward regime.terminalGap) :
-    ¬∃ data : QuittingStaticObserverSwitchData regime cycle,
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    (cycle : QuittingSoloPreemptionCycle reward witness.terminalGap) :
+    ¬∃ data : QuittingStaticObserverSwitchData witness cycle,
       0 < data.augmentedCycleWeight :=
   fun ⟨data, hweight⟩ ↦ data.elim hweight
 

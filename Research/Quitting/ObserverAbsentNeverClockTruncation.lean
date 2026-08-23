@@ -38,8 +38,8 @@ legal owner deviation collects one quarter up to the requested approximation
 loss. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverClock_strategicSplit
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (hnever : packet.quitTime n = none)
@@ -48,7 +48,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
     let owner := quittingStoppingLawObserverAbsentOwner packet
     ∃ cutoff : ℕ,
       quittingStoppingLawObserverAbsentMassLower packet *
-            regime.terminalGap / 4 ≤
+            witness.terminalGap / 4 ≤
           ∑ time ∈ Finset.range cutoff,
             quittingStageCoalitionMass reward profile time packet.terminal *
               quittingForcedOwnerOutsiderDefect reward
@@ -57,7 +57,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
                   (PMF.pure true)) owner ∨
         ∃ deviation : (quittingGame reward).BehaviorStrategy owner,
           quittingStoppingLawObserverAbsentMassLower packet *
-                regime.terminalGap / 4 - δ ≤
+                witness.terminalGap / 4 - δ ≤
             quittingTerminalPayoff reward
                 (Function.update profile owner deviation) owner -
               quittingTerminalPayoff reward profile owner := by
@@ -93,13 +93,13 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
   have hrowSum :
       (∑ time ∈ Finset.range cutoff,
           quittingStageCoalitionMass reward profile time
-            packet.terminal) * regime.terminalGap ≤
+            packet.terminal) * witness.terminalGap ≤
         outsiderCharge + refusalCharge := by
     rw [Finset.sum_mul]
     have hsum :
         (∑ time ∈ Finset.range cutoff,
             quittingStageCoalitionMass reward profile time packet.terminal *
-              regime.terminalGap) ≤
+              witness.terminalGap) ≤
           ∑ time ∈ Finset.range cutoff,
             quittingStageCoalitionMass reward profile time packet.terminal *
               (quittingForcedOwnerOutsiderDefect reward
@@ -143,24 +143,24 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_neverCl
       Finset.sum_add_distrib] using hsum
   have htotal :
       quittingStoppingLawObserverAbsentMassLower packet *
-          regime.terminalGap / 2 ≤ outsiderCharge + refusalCharge := by
+          witness.terminalGap / 2 ≤ outsiderCharge + refusalCharge := by
     calc
       quittingStoppingLawObserverAbsentMassLower packet *
-            regime.terminalGap / 2 =
+            witness.terminalGap / 2 =
           (quittingStoppingLawObserverAbsentMassLower packet / 2) *
-            regime.terminalGap := by ring
+            witness.terminalGap := by ring
       _ ≤ (∑ time ∈ Finset.range cutoff,
           quittingStageCoalitionMass reward profile time
-            packet.terminal) * regime.terminalGap :=
+            packet.terminal) * witness.terminalGap :=
         mul_le_mul_of_nonneg_right (le_of_lt hcutoff)
-          regime.terminalGap_pos.le
+          witness.terminalGap_pos.le
       _ ≤ outsiderCharge + refusalCharge := hrowSum
   by_cases hout : quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap / 4 ≤ outsiderCharge
+      witness.terminalGap / 4 ≤ outsiderCharge
   · exact Or.inl hout
   · right
     have hrefusal : quittingStoppingLawObserverAbsentMassLower packet *
-        regime.terminalGap / 4 ≤ refusalCharge := by
+        witness.terminalGap / 4 ≤ refusalCharge := by
       linarith
     obtain ⟨deviation, hdeviation⟩ :=
       exists_behaviorDeviation_gain_ge_sum_forcedRefusal_sub reward
@@ -177,8 +177,8 @@ clock.  The constants lose only the factor two used to capture a finite
 prefix of the terminal mass. -/
 theorem observerAbsent_neverClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (hnever : packet.quitTime n = none)
@@ -186,7 +186,7 @@ theorem observerAbsent_neverClock_certifiedEndpointFlip
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     let charge := quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap
+      witness.terminalGap
     (∃ deviation : (quittingGame reward).BehaviorStrategy owner,
       charge / 4 - δ ≤
         quittingTerminalPayoff reward
@@ -234,9 +234,9 @@ theorem observerAbsent_neverClock_certifiedEndpointFlip
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let charge := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   have hchargePos : 0 < charge := mul_pos
-    packet.observerAbsentMassLower_pos regime.terminalGap_pos
+    packet.observerAbsentMassLower_pos witness.terminalGap_pos
   obtain ⟨cutoff, hforced | hrefusal⟩ :=
     packet.observerAbsent_neverClock_strategicSplit habsent n hnever δ hδ
   · have hdispatch :=
@@ -290,15 +290,15 @@ certificate with the Never-clock constants; no residual alternative refers
 to the stopping time being infinite. -/
 theorem observerAbsent_anyClock_certifiedEndpointFlip
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (habsent : packet.observer ∉ packet.terminal.val)
     (n : ℕ) (δ : ℝ) (hδ : 0 < δ) :
     let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
     let owner := quittingStoppingLawObserverAbsentOwner packet
     let charge := quittingStoppingLawObserverAbsentMassLower packet *
-      regime.terminalGap
+      witness.terminalGap
     (∃ deviation : (quittingGame reward).BehaviorStrategy owner,
       charge / 4 - δ ≤
         quittingTerminalPayoff reward
@@ -346,9 +346,9 @@ theorem observerAbsent_anyClock_certifiedEndpointFlip
   let profile := quittingStoppingLawObserverAbsentCarrierProfile packet n
   let owner := quittingStoppingLawObserverAbsentOwner packet
   let charge := quittingStoppingLawObserverAbsentMassLower packet *
-    regime.terminalGap
+    witness.terminalGap
   have hchargePos : 0 < charge := mul_pos
-    packet.observerAbsentMassLower_pos regime.terminalGap_pos
+    packet.observerAbsentMassLower_pos witness.terminalGap_pos
   cases htime : packet.quitTime n with
   | none =>
       exact packet.observerAbsent_neverClock_certifiedEndpointFlip habsent n

@@ -3,7 +3,7 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TargetClosedPunishmentTailRepair
 
 /-!
@@ -16,7 +16,7 @@ finite choice does not make the tails compatible.
 
 The obstruction is already exact at the game level.  A positive terminal
 exploitability gap lower-bounds the behavioral-tail repair value after every
-positive finite prefix.  Consequently, inside a counterexample regime, the
+positive finite prefix.  Consequently, inside a terminal exploitability witness, the
 packet's period-one two-owner root admits arbitrarily accurate playerwise
 punishment tails while every single common behavioral suffix retains at least
 the regime's positive terminal gap.
@@ -41,12 +41,12 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 namespace QuittingChargeTangentPacket
 
-/-- In a counterexample regime, the exact two-owner seam exhibits the sharp
+/-- In a terminal exploitability witness, the exact two-owner seam exhibits the sharp
 gluing regression: arbitrarily accurate playerwise closed punishment tails
 exist, but its common-word repair value is bounded below by the positive
 terminal gap. -/
 theorem targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingChargeTangentPacket reward)
     (first second : ι) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     (∀ δ : ℝ, 0 < δ →
@@ -56,35 +56,35 @@ theorem targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
         (∀ player,
           quittingRootSequenceTerminalValue reward (tails player) player 0 <
             quittingPunishmentValue reward player + δ)) ∧
-      regime.terminalGap ≤
+      witness.terminalGap ≤
         @QuittingChargeTangentPacket.twoOwnerCommonWordRepairValue ι _ _
-          regime.nonempty_players reward packet first second t ht0 ht1 ∧
+          witness.nonempty_players reward packet first second t ht0 ht1 ∧
       0 < @QuittingChargeTangentPacket.twoOwnerCommonWordRepairValue ι _ _
-        regime.nonempty_players reward packet first second t ht0 ht1 := by
-  letI : Nonempty ι := regime.nonempty_players
+        witness.nonempty_players reward packet first second t ht0 ht1 := by
+  letI : Nonempty ι := witness.nonempty_players
   have hregression :=
     targetClosedApproxPunishmentTails_and_commonRepair_lowerBound
       (reward := reward)
       (packet.twoOwnerCommonWordPlan first second t ht0 ht1) 1 (by norm_num)
-      regime.terminalExploitability
-  have hlower : regime.terminalGap ≤
+      witness.terminalExploitability
+  have hlower : witness.terminalGap ≤
       packet.twoOwnerCommonWordRepairValue first second t ht0 ht1 := by
     simpa [twoOwnerCommonWordRepairValue] using hregression.2
-  exact ⟨hregression.1, hlower, regime.terminalGap_pos.trans_le hlower⟩
+  exact ⟨hregression.1, hlower, witness.terminalGap_pos.trans_le hlower⟩
 
 /-- Therefore the common-word zero-repair premise cannot be derived from the
 mere existence of arbitrarily accurate playerwise target-closed punishment
-tails inside a counterexample regime. -/
+tails inside a terminal exploitability witness. -/
 theorem not_twoOwnerCommonWordRepairValue_eq_zero
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     (packet : QuittingChargeTangentPacket reward)
     (first second : ι) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     @QuittingChargeTangentPacket.twoOwnerCommonWordRepairValue ι _ _
-      regime.nonempty_players reward packet first second t ht0 ht1 ≠ 0 := by
-  letI : Nonempty ι := regime.nonempty_players
+      witness.nonempty_players reward packet first second t ht0 ht1 ≠ 0 := by
+  letI : Nonempty ι := witness.nonempty_players
   exact ne_of_gt
     (targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
-      regime packet first second t ht0 ht1).2.2
+      witness packet first second t ht0 ht1).2.2
 
 end QuittingChargeTangentPacket
 

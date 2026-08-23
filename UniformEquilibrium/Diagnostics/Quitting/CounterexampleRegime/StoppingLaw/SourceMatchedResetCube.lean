@@ -30,14 +30,14 @@ open Filter
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- Extend the active frontier replacement family by the unchanged source
 strategy on inactive players. -/
 def sourceMatchedReplacement
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (who : ι) :
     (quittingGame reward).BehaviorStrategy who :=
   if hwho : who ∈ frontier.active then
@@ -47,7 +47,7 @@ def sourceMatchedReplacement
 
 @[simp]
 theorem sourceMatchedReplacement_active
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
     frontier.sourceMatchedReplacement rank mover.1 =
       frontier.bestResponse mover (frontier.subseq rank) := by
@@ -56,7 +56,7 @@ theorem sourceMatchedReplacement_active
 /-- The common-source, common-scale reset cube underlying one actual frontier
 index. -/
 def sourceMatchedResetCubeData
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) : QuittingStoppingLawResetCubeData reward where
   source := frontier.profiles (frontier.subseq rank)
   target := frontier.sourceMatchedReplacement rank
@@ -66,7 +66,7 @@ def sourceMatchedResetCubeData
 
 @[simp]
 theorem sourceMatchedResetCubeData_profile_empty
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) :
     (frontier.sourceMatchedResetCubeData rank).profile ∅ =
       frontier.profiles (frontier.subseq rank) := by
@@ -77,7 +77,7 @@ theorem sourceMatchedResetCubeData_profile_empty
 /-- Any reset cube inherits the exact carrier-minimum lower bound between its
 empty face and every other face. -/
 theorem resetCubeData_totalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (data : QuittingStoppingLawResetCubeData reward)
     (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
@@ -94,7 +94,7 @@ theorem resetCubeData_totalDebtChange_ge_neg_sourceExcess
 
 /-- Scale-normalized exact-minimum bound for an arbitrary reset cube. -/
 theorem resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (data : QuittingStoppingLawResetCubeData reward)
     (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
@@ -114,7 +114,7 @@ theorem resetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
 /-- Uniform asymptotic one-sided minimality for any sequence of reset cubes
 whose empty face is the selected frontier source. -/
 theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (data : ℕ → QuittingStoppingLawResetCubeData reward)
     (hsource : ∀ rank,
       (data rank).profile ∅ = frontier.profiles (frontier.subseq rank))
@@ -142,7 +142,7 @@ theorem eventually_all_resetCubeData_normalizedTotalDebtChange_gt_neg
 minimum-debt carrier point. Consequently, its total-debt change from the
 source is bounded below by the negative source excess. -/
 theorem sourceMatchedResetCubeData_totalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
@@ -159,7 +159,7 @@ theorem sourceMatchedResetCubeData_totalDebtChange_ge_neg_sourceExcess
 
 /-- Scale-normalized form of the exact minimum-debt face bound. -/
 theorem sourceMatchedResetCubeData_normalizedTotalDebtChange_ge_neg_sourceExcess
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (face : Finset ι) :
     -(quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward
@@ -183,7 +183,7 @@ carrier above the exact minimum. Hence, eventually, every face at once has
 normalized total-debt change greater than `-epsilon`. No variational
 selection or finiteness of the face family is needed. -/
 theorem eventually_all_sourceMatchedResetCubeData_normalizedTotalDebtChange_gt_neg
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     {epsilon : ℝ} (hepsilon : 0 < epsilon) :
     ∀ᶠ rank in atTop, ∀ face : Finset ι,
       -epsilon <
@@ -200,7 +200,7 @@ theorem eventually_all_sourceMatchedResetCubeData_normalizedTotalDebtChange_gt_n
 
 /-- The singleton vertex for an active mover is its literal frontier reset. -/
 theorem sourceMatchedResetCubeData_profile_singleton
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) :
     (frontier.sourceMatchedResetCubeData rank).profile {mover.1} =
       quittingStoppingLawResetProfile reward
@@ -222,7 +222,7 @@ theorem sourceMatchedResetCubeData_profile_singleton
 /-- Every actual normalized frontier column is exactly the corresponding
 frozen debt-cube edge divided by the common positive reset scale. -/
 theorem sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active})
     (observer : ι) :
     let data := frontier.sourceMatchedResetCubeData rank
@@ -253,7 +253,7 @@ theorem sourceMatchedResetCubeData_debtEdge_eq_scale_mul_actualDirection
 /-- A scalar-weighted source star in the reset cube is exactly the common
 reset scale times the corresponding weighted normalized-debt star. -/
 theorem sum_mul_sourceMatchedResetCubeData_debtEdge_eq
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (coefficient : {who // who ∈ frontier.active} → ℝ)
     (observer : ι) :
     let data := frontier.sourceMatchedResetCubeData rank
@@ -278,7 +278,7 @@ actual reset cube. Their aggregate debt displacement is bounded by the common
 reset scale times `O(1/N)`, while the normalized mover charge remains
 `1 - O(1/N)`. This still does not compose the star chronologically. -/
 theorem exists_sourceMatchedChatteringResetCubeStar
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :
     ∃ budget : ℝ, 0 ≤ budget ∧ ∀ N : ℕ, 0 < N →
@@ -324,7 +324,7 @@ one actual frontier rank.  Both reset directions are active source-matched
 best-response chords, and the returned edge retains which one of their movers
 changes.  The result is static cube geometry, not play chronology. -/
 theorem exists_sourceMatchedResetCubePureTimeWitnessSwitch_of_abs_debtCurvature
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (observer : ι) (base : Finset ι)
     (first second : {who // who ∈ frontier.active})
     (hfirst : first.1 ∉ base) (hsecond : second.1 ∉ base)

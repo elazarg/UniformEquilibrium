@@ -36,13 +36,13 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-variable {regime : QuittingCounterexampleRegime reward}
+variable {witness : QuittingTerminalExploitabilityWitness reward}
 
 namespace QuittingCounterexampleStoppingLawFrontier
 
 /-- The literal normalized debt chord at one selected common-source index. -/
 def actualDebtDirection
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active})
     (observer : ι) : ℝ :=
   quittingStoppingLawNormalizedDebtDirection reward
@@ -54,7 +54,7 @@ def actualDebtDirection
 
 /-- The actual mover charge of a normalized stopping-law chord. -/
 def actualGain
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (rank : ℕ) (mover : {who // who ∈ frontier.active}) : ℝ :=
   -frontier.actualDebtDirection rank mover mover.1
 
@@ -71,7 +71,7 @@ multiplicity for every active mover such that:
 
 This is a finite star packet, not a sequentially executable word. -/
 theorem exists_sourceMatchedChattering
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :
     ∃ budget : ℝ, 0 ≤ budget ∧ ∀ N : ℕ, 0 < N →
@@ -283,7 +283,7 @@ The prefix estimate is still frozen at the selected source. It is the exact
 input needed by a separate nonlinear reset-cube or reprojection argument; this
 theorem does not assert chronological executability by itself. -/
 theorem exists_sourceMatchedChatteringWithUniformPrefixes
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime)
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness)
     (hcirculation : HasQuittingStoppingLawFlatChargedCirculation
       frontier.active frontier.tangent) :
     ∃ mass : {who // who ∈ frontier.active} → ℝ,

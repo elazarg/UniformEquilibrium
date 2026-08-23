@@ -1409,7 +1409,7 @@ R_1=1,
 
 so the transport is correctly rejected as unpaid. If one unfolds the tail by one more row, the original literal error (1) reappears in (E), and the accounting becomes valid.
 
-This example has (D_*=0); it is not a counterexample under the global positive-gap hypothesis. Its role is to prove that the local opponent-changing transport identity necessarily contains a residual term. The assumption (D_*>0) does not alter identities (4)–(5); eliminating this mechanism in the hypothetical counterexample regime requires an additional global argument forcing (R\le S).
+This example has (D_*=0); it is not a counterexample under the global positive-gap hypothesis. Its role is to prove that the local opponent-changing transport identity necessarily contains a residual term. The assumption (D_*>0) does not alter identities (4)–(5); eliminating this mechanism in the hypothetical terminal exploitability witness requires an additional global argument forcing (R\le S).
 
 ## Conclusion
 

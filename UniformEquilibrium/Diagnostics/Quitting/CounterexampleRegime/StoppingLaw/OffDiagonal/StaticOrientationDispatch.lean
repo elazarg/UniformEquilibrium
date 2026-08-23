@@ -14,7 +14,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
 
 The singleton terminal orientation in the fixed-label rectangle frontier is
 not an additional analytic seam.  Its owner satisfies the universal
-counterexample-regime singleton restriction.  A strict incoming or outgoing
+singleton restriction under a terminal exploitability witness.  A strict incoming or outgoing
 coalition toggle feeds the existing unstable-atomic-row theorem; otherwise
 the owner has positive punishment value or can be deleted while preserving
 the exact terminal exploitability gap.
@@ -37,7 +37,7 @@ open Filter Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 
-namespace QuittingCounterexampleRegime
+namespace QuittingTerminalExploitabilityWitness
 
 /-- **Universal singleton static handoff.**  Every player in a counterexample
 regime supplies an unstable atomic toggle row, a positive punishment value,
@@ -49,11 +49,11 @@ standard singleton punishment moat gives either positive punishment or the
 existing toggle/deletion dispatcher. -/
 theorem singletonStaticStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward) (owner : ι) :
+    (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι) :
     HasQuittingSingletonStaticStrategicDispatch reward owner
-      regime.terminalGap := by
+      witness.terminalGap := by
   classical
-  rcases regime.strictJoiner_or_soloReward_lt_punishmentValue owner with
+  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
     hincoming | hsolo
   · left
     obtain ⟨joiner, hjoinerNe, hstrict⟩ := hincoming
@@ -70,33 +70,33 @@ theorem singletonStaticStrategicDispatch
         quittingSingletonCollisionReward, Finset.pair_comm] using hstrict
     exact ⟨joiner, quitters, hquitters, hjoiner, htoggle,
       exists_outsider_atomicDeviation_of_strict_ownerToggle reward
-        regime.terminalGap_pos regime.terminalExploitability joiner quitters
+        witness.terminalGap_pos witness.terminalExploitability joiner quitters
         hquitters hjoiner htoggle⟩
   · by_cases hchi : 0 < quittingPunishmentValue reward owner
     · exact Or.inr (Or.inl hchi)
     · have hchiLe : quittingPunishmentValue reward owner ≤ 0 :=
         le_of_not_gt hchi
       have hdispatch := exists_strict_owner_toggle_or_exact_playerDeletion
-        reward owner regime.terminalGap_pos regime.terminalExploitability
+        reward owner witness.terminalGap_pos witness.terminalExploitability
           (by simpa [quittingSoloReward, quittingSingletonTerminal] using hsolo)
           hchiLe
       rcases strictToggle_or_playerDeletion_to_atomicHandoff reward
-          regime.terminalGap_pos regime.terminalExploitability owner hdispatch
+          witness.terminalGap_pos witness.terminalExploitability owner hdispatch
         with hatomic | hdelete
       · obtain ⟨quitters, hquitters, howner, htoggle, hatomic⟩ := hatomic
         exact Or.inl
           ⟨owner, quitters, hquitters, howner, htoggle, hatomic⟩
       · exact Or.inr (Or.inr ⟨hdelete.1, hdelete.2.1⟩)
 
-end QuittingCounterexampleRegime
+end QuittingTerminalExploitabilityWitness
 
 /-! ## Prescribed-atom orientation -/
 
 /-- Every prescribed atom in the fixed-label sequence is positive. -/
 theorem QuittingStoppingLawPrescribedAtomSequence.atom_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawPrescribedAtomSequence frontier) (n : ℕ) :
     0 < quittingTerminalPayoffDifferenceAtom reward
       (frontier.profiles (frontier.subseq (packet.rank n)))
@@ -128,8 +128,8 @@ certificate: it still compares two mover deviations rather than either one
 against the prescribed baseline. -/
 theorem QuittingStoppingLawPrescribedAtomSequence.signedMassPolarity
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawPrescribedAtomSequence frontier) (n : ℕ) :
     (0 < reward packet.terminal packet.observer ∧
         quittingTerminalOutcomeMass reward
@@ -168,20 +168,20 @@ theorem QuittingStoppingLawPrescribedAtomSequence.signedMassPolarity
 owner has already been routed to a strategic consumer. -/
 def HasQuittingStoppingLawSingletonStrategicOrientation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : Prop :=
   packet.observer ∈ packet.terminal.val ∧
     packet.terminal.val.card = 1 ∧
     HasQuittingSingletonStaticStrategicDispatch reward packet.observer
-      regime.terminalGap
+      witness.terminalGap
 
 /-- The remaining non-marked collision orientation.  The reward is strictly,
 not merely weakly, negative. -/
 def HasQuittingStoppingLawNegativeTargetCollision
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier) : Prop :=
   packet.observer ∈ packet.terminal.val ∧
     1 < packet.terminal.val.card ∧
@@ -190,8 +190,8 @@ def HasQuittingStoppingLawNegativeTargetCollision
 /-- Every fixed rectangle atom in the packet is strictly positive. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.atom_pos
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) :
     0 < quittingTerminalPayoffDifferenceAtom reward
@@ -245,8 +245,8 @@ is necessarily strictly negative, and the target mover continuation strictly
 reduces the mass of that same terminal coalition. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeReward_massPolarity
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (n : ℕ) (hreward : reward packet.terminal packet.observer ≤ 0) :
     reward packet.terminal packet.observer < 0 ∧
@@ -320,8 +320,8 @@ unconsumed static cases are observer absence and a strictly negative
 observer-containing collision. -/
 theorem QuittingStoppingLawVanishingDebtRectangleSequence.refineOpenOrientation
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    {frontier : QuittingCounterexampleStoppingLawFrontier regime}
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    {frontier : QuittingCounterexampleStoppingLawFrontier witness}
     (packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier)
     (hopen : HasQuittingStoppingLawOpenRectangleOrientation packet) :
     packet.observer ∉ packet.terminal.val ∨
@@ -332,7 +332,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.refineOpenOrientation
   · by_cases hsingleton : packet.terminal.val.card = 1
     · exact Or.inr (Or.inl
         ⟨hobserver, hsingleton,
-          regime.singletonStaticStrategicDispatch packet.observer⟩)
+          witness.singletonStaticStrategicDispatch packet.observer⟩)
     · right
       right
       have hcardPos : 0 < packet.terminal.val.card :=
@@ -353,8 +353,8 @@ strictly negative collision, plus the named singleton strategic dispatch.
 The positive collision remains connected to the marked-tail consumer. -/
 theorem QuittingCounterexampleStoppingLawFrontier.exists_prescribed_or_staticRectangleDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {regime : QuittingCounterexampleRegime reward}
-    (frontier : QuittingCounterexampleStoppingLawFrontier regime) :
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (frontier : QuittingCounterexampleStoppingLawFrontier witness) :
     Nonempty (QuittingStoppingLawPrescribedAtomSequence frontier) ∨
       ∃ packet : QuittingStoppingLawVanishingDebtRectangleSequence frontier,
         packet.observer ∉ packet.terminal.val ∨

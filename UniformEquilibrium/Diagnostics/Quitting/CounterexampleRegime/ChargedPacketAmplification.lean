@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ChargedPacketAmplification
-import UniformEquilibrium.Diagnostics.Quitting.CounterexampleRegime
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 
 /-!
 # Source-matched packet producers versus canonical capacity
@@ -26,11 +26,11 @@ open Math.ChargedPathBudget.ChargedRelation
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-- A source-matched exact packet producer is incompatible with a finite
-counterexample-regime prefix capacity.  The producer may be state-dependent,
+prefix capacity under a terminal exploitability witness.  The producer may be state-dependent,
 but must provide a genuine exact reachable relation path at every packet. -/
-theorem QuittingCounterexampleRegime.false_of_uniform_reachable_packet_producer
+theorem QuittingTerminalExploitabilityWitness.false_of_uniform_reachable_packet_producer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (regime : QuittingCounterexampleRegime reward)
+    (witness : QuittingTerminalExploitabilityWitness reward)
     {h c : ℝ} (hh : 0 < h) (hc : 0 < c)
     (producer : ∀ state,
       (quittingPunishmentFloorReachableChargedRelation reward).Reaches
@@ -51,7 +51,7 @@ theorem QuittingCounterexampleRegime.false_of_uniform_reachable_packet_producer
       (path : R.Path source target),
       path.chargeSum ≤ quittingPunishmentFloorPrefixChargeBound reward := by
     intro source target path
-    exact regime.reachablePath_chargeSum_le_prefixChargeBound path
+    exact witness.reachablePath_chargeSum_le_prefixChargeBound path
   apply not_finite_path_capacity_of_uniform_tube_packet R Set.univ
     (fun _ => 0) start (omega := 0) (C := quittingPunishmentFloorPrefixChargeBound reward)
     (hstart := by simp) hh (by norm_num) hc
