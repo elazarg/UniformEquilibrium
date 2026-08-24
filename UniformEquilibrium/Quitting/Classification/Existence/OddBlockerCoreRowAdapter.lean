@@ -352,6 +352,52 @@ private theorem strictBlockerUpperFace_of_rows
     blocker_not_mem_background who blocker (hsubset hmem)
   simpa [weightOfReward] using hswitch background hwho hblocker
 
+/-! The following pairwise wrappers expose the finite-sum adapter independently
+of the literal three-cycle packaging.  They are used by longer finite odd
+cores, where the same owner/blocker calculation is unchanged. -/
+
+/-- Literal passive continuation rows give the polynomial passive face
+identity for one player. -/
+theorem excludedValue_eq_baseline_of_passive_rows
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {baseline : Payoff ι} (who : ι)
+    (hpassive : ∀ (S : {S : Finset ι // S.Nonempty}),
+      who ∉ S.1 → reward S who = baseline who)
+    (hazard : ι → ℝ) :
+    excludedValue (weightOfReward reward) hazard who =
+      (1 - continueMassExcl hazard who) * baseline who :=
+  excludedValue_eq_passiveBaseline who hpassive hazard
+
+/-- Strict blocker-absent rows give the lower polynomial face sign for one
+owner/blocker pair. -/
+theorem baseline_lt_sigmaValue_of_strictBlockerAbsentRows
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {baseline : Payoff ι} {who blocker : ι} (hne : blocker ≠ who)
+    (hswitch : ∀ background : Finset ι,
+      who ∉ background → blocker ∉ background →
+        baseline who <
+          reward ⟨insert who background, Finset.insert_nonempty _ _⟩ who)
+    (hazard : ι → ℝ) (hhazard0 : ∀ player, 0 ≤ hazard player)
+    (hhazard1 : ∀ player, hazard player ≤ 1)
+    (hface : hazard blocker = 0) :
+    baseline who < sigmaValue (weightOfReward reward) hazard who :=
+  strictBlockerLowerFace_of_rows hne hswitch hazard hhazard0 hhazard1 hface
+
+/-- Strict blocker-present rows give the upper polynomial face sign for one
+owner/blocker pair. -/
+theorem sigmaValue_lt_baseline_of_strictBlockerPresentRows
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {baseline : Payoff ι} {who blocker : ι} (hne : blocker ≠ who)
+    (hswitch : ∀ background : Finset ι,
+      who ∉ background → blocker ∉ background →
+        reward ⟨insert blocker (insert who background),
+          Finset.insert_nonempty _ _⟩ who < baseline who)
+    (hazard : ι → ℝ) (hhazard0 : ∀ player, 0 ≤ hazard player)
+    (hhazard1 : ∀ player, hazard player ≤ 1)
+    (hface : hazard blocker = 1) :
+    sigmaValue (weightOfReward reward) hazard who < baseline who :=
+  strictBlockerUpperFace_of_rows hne hswitch hazard hhazard0 hhazard1 hface
+
 /-- The literal finite row check supplies the polynomial stationary-face
 source consumed by the compact odd-core theorem. -/
 theorem IsLiteralStrictThreeBlockerCore.toStationaryFace

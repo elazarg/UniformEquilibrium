@@ -56,6 +56,15 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "quitting-reduced-support-rank-alternative",
+      "subject": "Reduced finite support-rank alternative",
+      "kind": "Conditional structural theorem",
+      "declaration": "reducedSupportRankAlternative_of_positiveMinimumDebt",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every supplied positive minimum of terminal semantic debt reaches positive total slope, zero-debt support entry, or an off-minimum actual replacement endpoint with an eventually paid first-disagreement row. Flat charged circulation is no longer an independent terminal branch: it gives strict positive-debt-support descent or the existing paid-row exit. The three remaining producer obligations are not solved."
+    },
+    {
       "id": "fin-four-full-support-residual",
       "subject": "Four-player quitting counterexample residual",
       "kind": "Unconditional alternative theorem",
@@ -90,6 +99,33 @@
       "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/TwoCycleLassoHardPairAlignment.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
       "scope": "Every supplied Fin 4 hard residual has collision-anchored marked preemption geometry such that each of the eight two-cycle constructors uses its literal cycle pair as the nonprojective card-two crossing, or the geometry is one of the nine length-three/four cases. This formalizes alignment bookkeeping; it eliminates no semantic case and supplies no strategy consumer."
+    },
+    {
+      "id": "fin-four-three-cycle-hard-principal-incidence",
+      "subject": "Three-cycle lasso and hard-principal incidence",
+      "kind": "Conditional structural theorem",
+      "declaration": "markedThreeCycleHardPrincipalIncidence_or_nonThree",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/ThreeCycleLassoHardPrincipalIncidence.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Each of the six marked length-three constructors enters a same-label external-helper, negative-determinant hard-cycle, or outsider-containing hard-principal alternative with exact owner/collider incidence. This is finite singleton-matrix structure, not a semantic consumer."
+    },
+    {
+      "id": "fin-four-four-cycle-hard-principal-alignment",
+      "subject": "Four-cycle lasso and hard-principal alignment",
+      "kind": "Conditional structural theorem",
+      "declaration": "markedFourCycleHardPrincipalAlignment_or_nonFour",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FourCycleHardPrincipalAlignment.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Each of the three rooted four-cycle constructors sends every selected hard pair or triple to a shorter strict preemption cycle or a literal unique-outside helper, retaining the collision-marker position. Together with the two- and three-cycle theorems this covers all seventeen marked constructors, but closes no semantic chamber."
+    },
+    {
+      "id": "fin-four-large-base-stationary-handoff",
+      "subject": "Large-base paid stationary semantic handoff",
+      "kind": "Conditional structural theorem",
+      "declaration": "exists_largeBasePaidStationaryHandoff",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/LargeBaseStationarySemanticHandoff.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "On four players, every supplied support-two paid-chain residual admits a reselected singleton-owner stationary source with debt concentrated at that owner. Repairing the owner transfers the terminal gap to a free player and yields a literal paid first-disagreement row; the floor-safe or identified free-floor-damage alternative remains to be connected to a payoff near-return."
     },
     {
       "id": "full-core-deadlock-debt-bound",
@@ -137,13 +173,13 @@
       "scope": "Fixed positive, negative, or absent pair influences, with positive sign product on every directed simple influence cycle, produce a literal sure-exit coalition and a uniform-equilibrium payoff against all unilateral behavioral deviations. Within the fixed-sign class, absence of every sure-exit coalition forces a negative simple influence cycle."
     },
     {
-      "id": "literal-strict-three-blocker-core",
-      "subject": "Literal strict three-blocker core with arbitrary outside-player payoffs",
+      "id": "literal-strict-finite-odd-blocker-core",
+      "subject": "Literal strict finite odd blocker cores with arbitrary outside-player payoffs",
       "kind": "Conditional family theorem",
-      "declaration": "isUniformEquilibriumPayoff_of_literalStrictThreeBlockerCore",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/OddBlockerCoreRowAdapter.lean",
+      "declaration": "isUniformEquilibriumPayoff_of_literalStrictFiniteOddBlockerCore",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean",
       "umbrella": "UniformEquilibrium.lean",
-      "scope": "Passive continuation values and uniform literal strict blocker signs on one three-player core yield an exact stationary all-behavior uniform-equilibrium payoff, with arbitrarily many outside players and unrestricted outside-player reward coordinates. This is the three-core case, not the arbitrary odd-cycle theorem."
+      "scope": "For every embedded odd cyclic core of any finite size at least three, passive core-continuation rows and uniform strict blocker switches yield an exact stationary all-behavior uniform-equilibrium payoff. Arbitrarily many outside players and every outside-player reward coordinate remain unrestricted."
     },
     {
       "id": "projective-qbar-uniform-payoff",
@@ -184,6 +220,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting proof search has four mechanically checkable open leaves. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow requires fixed-charge payoff near-return. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }
