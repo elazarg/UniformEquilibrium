@@ -8,7 +8,6 @@ import UniformEquilibrium.Diagnostics.Quitting.PaidFirstDisagreementPayoffNearRe
 import UniformEquilibrium.Diagnostics.Quitting.UniformExistenceBoundary
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.SuppliedCorrespondence
 import UniformEquilibrium.Quitting.Debt.Dynamic.NashBellmanChronologicalForcing
-import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 
 /-!
 # Fake proof that the active question bank is conjecture-closing
@@ -18,8 +17,6 @@ name starts with `fakeAnswer` is an assumed mathematical answer implemented
 with `sorry`.  The downstream theorems contain no additional gap: they apply
 the checked production consumers to show exactly which answers imply uniform
 existence and which answers instead provide a quitting-game counterexample.
-The formerly listed universal persistent-two-label answer is now proved false
-and is retained only through its valid per-spine conditional consumer.
 
 Nothing in this file is evidence for any `M`, `L`, `A`, or `C` seal.
 -/
@@ -62,60 +59,6 @@ theorem fake_conditionedPacketReprojection_proves_uniformExistence :
   intro ι _ _ _ reward
   exact exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsumer
     (fakeAnswer_conditionedPacketReprojection reward)
-
-/-! ## Persistent two-label hazards -/
-
-/-- Exact bounded Nash--Bellman data whose same literal roots carry two
-persistent marginal labels. -/
-structure PersistentTwoLabelNashBellmanAnswer
-    {ι : Type} [Fintype ι] [DecidableEq ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
-  value : ℕ → Payoff ι
-  roots : ℕ → ι → PMF Bool
-  value_bound : ∀ time who,
-    |value time who| ≤ quittingRewardBound reward
-  bellman : ∀ time,
-    value time = quittingRootSuccessorPayoff reward
-      (value (time + 1)) (roots time)
-  nash : ∀ time,
-    IsεQuittingRootNash reward (value (time + 1)) 0 (roots time)
-  persistent : HasTwoPersistentQuittingMarginals roots
-
-/-- The proposed universal two-label answer is false even after imposing the
-necessary two-player cardinality bound. -/
-theorem not_forall_persistentTwoLabelNashBellmanAnswer :
-    ¬ (∀ (ι : Type) [Fintype ι] [DecidableEq ι],
-      2 ≤ Fintype.card ι →
-      ∀ reward : {S : Finset ι // S.Nonempty} → Payoff ι,
-        Nonempty (PersistentTwoLabelNashBellmanAnswer reward)) := by
-  intro hall
-  apply not_exists_persistentTwoLabelExactNashBellmanSpine
-  obtain ⟨answer⟩ := hall Bool (by decide)
-    persistentTwoLabelCounterexampleReward
-  exact ⟨answer.value, answer.roots, answer.bellman, answer.nash,
-    answer.persistent⟩
-
-/-- Persistent labels on one supplied exact spine still provide every-
-accuracy chronological certificates and therefore a uniform-equilibrium
-payoff for that game. -/
-theorem PersistentTwoLabelNashBellmanAnswer.exists_uniformEquilibriumPayoff
-    {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (answer : PersistentTwoLabelNashBellmanAnswer reward) :
-    ∃ payoff : Payoff ι,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  obtain ⟨first, second, hne, _, _⟩ := answer.persistent
-  have hcard : 2 ≤ Fintype.card ι :=
-    Fintype.one_lt_card_iff.mpr ⟨first, second, hne⟩
-  obtain ⟨hopponent, hjoint⟩ :=
-    HasTwoPersistentQuittingMarginals.survival hcard answer.persistent
-  apply
-    quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-      reward
-  intro eta heta
-  exact nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine
-    reward answer.value answer.roots answer.value_bound answer.bellman
-      answer.nash hjoint hopponent eta heta
 
 /-! ## Paid admissible payoff near-return -/
 
