@@ -1,0 +1,44 @@
+name: Fix persistent two-label push-neg proof
+
+on:
+  push:
+    branches:
+      - codex/close-persistent-two-label-sorry
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/close-persistent-two-label-sorry
+          fetch-depth: 0
+
+      - name: Patch and commit
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path("Reverse/PersistentTwoLabelNashBellmanCounterexample.lean")
+          text = path.read_text()
+          old = '''      exact le_antisymm (le_of_not_gt (hnone time))
+        (quittingMarginalQuitHazard_nonneg roots true time)'''
+          new = '''      exact le_antisymm (hnone time)
+        (quittingMarginalQuitHazard_nonneg roots true time)'''
+          if old not in text:
+            raise SystemExit("push-neg proof fragment not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+          rm -f Reverse/PersistentTwoLabelCompileErrors.txt
+          rm -f .github/workflows/fix-persistent-two-label-push-neg.yml
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Fix persistent hazard zero-stream proof"
+          git push origin HEAD:codex/close-persistent-two-label-sorry
