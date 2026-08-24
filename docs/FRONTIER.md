@@ -292,12 +292,19 @@ liminf semantic debt descent or a strict-subsequence gate with one mixed solo
 debtor and a maximizing punishment-normal blocker. The source-native consumer
 `FinFourChargedSoloBlockerGate.pairPremium_or_every_exactRepayment` forces a
 fixed pair premium or fixed repayment in that blocker coordinate along every
-anchored exact floor orbit. This is a checked off-minimum obstruction, not the
-missing paid return: the pair premium has no source-matched collision mass and
-the repayment does not synchronize the other payoff coordinates.
+anchored exact floor orbit. The premium arm is now consumed by
+`FinFourChargedSoloBlockerGate.pairBaseHandoff_or_leaveJoinHandoff_or_everyExactRepayment`
+(`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/ChargedSoloBlockerClosureDispatch.lean`):
+it enters an actual pair-base or leave--join stationary source with a
+terminal-gap paid row. The other arm remains one-coordinate repayment, and
+the gate's literal exact root has zero semantic-debt drop. This is a checked
+off-minimum obstruction, not the missing all-coordinate paid return. The
+separate pair-base fixed-law reset does identify the returned face's
+prescribed payoff exactly with its stationary paid target, but it still
+supplies no endpoint-Nash punishment-floor edge or admissible return path.
 
-The next solo-wall reduction is checked up to one explicit stationary-source
-compiler. In
+The solo-wall reduction and its formerly missing stationary-source compiler
+are now checked. In
 `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourSoloWallDispatch.lean`,
 `exists_strictCarrierDebtDescent_of_opponentAbsorptionFloor` gives strict
 carrier-debt descent under a uniform opponent-absorption floor, while
@@ -307,11 +314,15 @@ compactify through `exists_uniformSoloSemanticSpine_of_finitePrefixes`, and
 `not_exists_outwardUniformSoloCarrierChain_of_normal` excludes the resulting
 infinite outward chain by punishment normality. At the wall,
 `pairPremium_pairJoin_or_leaveJoinStationaryTwoDebtorHandoff` returns the
-existing singleton-base handoff or a full-gap outsider pair-join. These steps
-have `M`, `L`, `A`, and obstruction `C`; the claimed pair-base stationary
-two-debtor handoff from the join is not proved. Its exact missing declaration
-is `nonempty_finFourPairBaseStationaryTwoDebtorHandoff`, so no actual source or
-payoff-return seal is assigned to that arm.
+existing singleton-base handoff or a full-gap outsider pair-join. The theorem
+`nonempty_finFourPairBaseStationaryTwoDebtorHandoff`
+(`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBaseStationaryTwoDebtorHandoff.lean`)
+now consumes the join into an actual stationary source with quantitative
+off-base absorption, a heavy strict-superset atom, both free coordinates
+solved against unrestricted deviations, base-localized debt, and a literal
+paid row. These reductions have `M`, `L`, `A`, and exact-dispatch `C`; the
+stationary point is freshly selected rather than chronologically reached, so
+there is still no payoff-return `C`.
 
 Seals use the independent `M`/`L`/`A`/`C` language of
 [`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
@@ -455,6 +466,35 @@ the live mathematical ledger.
   stated dispatches. Their shared label does not make the selected profiles,
   laws, observers, payoffs, or chronological rows coincide; that common-source
   alignment and the all-Continue reset wall remain open.
+
+  A different pair-base construction now co-realizes more data on one literal
+  stationary profile. `nonempty_finFourPairBaseStationaryDebtLocalization`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBaseStationaryDebtLocalization.lean`)
+  solves both players outside any prescribed two-player sure-Quit base and
+  localizes a terminal-gap debtor and paid row to the base. Choosing the base
+  disjoint from a prescribed reset owner gives
+  `QuittingTerminalExploitabilityWitness.exists_finFour_pairBasePaidResetDispatch`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetAlignment.lean`):
+  the same actual profile and law have zero owner debt, unit incidence from a
+  base opponent, and the base-localized paid row. This has `M`, `L`, `A`, and
+  fixed-law-dispatch `C`, but the paid debtor is not the reset owner. The
+  dynamic branch prefixes a separately selected returned semantic pair;
+  nevertheless `QuittingFixedLawResetDispatch.prescribed_eq_target` and
+  `QuittingTerminalExploitabilityWitness.exists_finFour_pairBasePaidResetDispatch_payoffAligned`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetPayoffAlignment.lean`)
+  prove that its prescribed payoff is exactly the payoff of the stationary
+  paid target, because both retain the same complete terminal law.
+  Moreover,
+  `QuittingFixedLawResetDispatch.allContinue_of_target_debt_le_source`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFixedLawMinimumTargetStall.lean`)
+  proves that a target no higher in total debt than the global-minimum source
+  forces the all-Continue stall. The exact remaining interface is
+  `QuittingFixedLawResetAdmissibleClosureSeam`: a positive
+  punishment-floor-admissible edge whose tail payoff is the returned payoff,
+  followed by an admissible path back to the target payoff. Its checked
+  consumer gives a uniform-equilibrium payoff. Neither cap-Nash at the
+  returned envelope nor exact payoff equality supplies that endpoint-Nash
+  edge, floor admissibility, or path.
 
   Separately,
   `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
