@@ -340,6 +340,15 @@ the live mathematical ledger.
   with the separately supplied necessity implication. Rational-polyhedral
   certificates remain generic soundness inputs, and no source certificate,
   strategy extraction, or chronological realization is provided.
+- **Repaired-stress certificate no-go:**
+  `not_exists_stressSimonStrictPotential` embeds the repaired four-player
+  stress circulation into the full production correspondence as a positive-
+  cost cycle at every positive tolerance. Consequently
+  `not_hasQuittingSimonFiniteCellLyapunovCertificate_stressWeight` excludes
+  every positive-coefficient finite-cell Lyapunov certificate for that table.
+  This eliminates one candidate for the negative Simon route; it is not an
+  obstruction for all quitting games and gives no equilibrium-nonexistence
+  conclusion.
 - **Sharper charge-tangent dispatch:** every extracted charge-tangent datum
   either already has the complementary singleton-mixture payoff, crosses the
   smaller solo/punishment boundary gap, or has positive tangent on an active
