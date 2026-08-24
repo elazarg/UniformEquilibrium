@@ -439,6 +439,7 @@ import UniformEquilibrium.Quitting.Debt.Marked.StrictTimeClosing
 import UniformEquilibrium.Quitting.Debt.Ledger.VanishingChargeRecurrenceNoGo
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
 import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
+import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 import UniformEquilibrium.Quitting.Paths.CapPumpChronologicalAdapter
 import UniformEquilibrium.Quitting.Paths.CapPumpChronologicalSharpBoundary
 import UniformEquilibrium.Quitting.Chronology.SummableExactTailTerminalGap
