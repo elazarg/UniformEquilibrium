@@ -160,9 +160,10 @@ theorem quittingJointSurvivalWeight_stationaryPrefixFamilyPlan
     _ = quittingStationaryContinueMass (family.root index) ^ time := by simp
 
 /-- A positive-live, divergent-horizon selected family has a structured
-two-ended limit.  Exact local endpoint Nash is obtained by dividing the
-global Nash error by the positive reach of each fixed depth. -/
-theorem exists_quittingPositiveLiveStationaryPrefixLimit
+two-ended limit whose recorded live mass is the selected source limit.  Exact
+local endpoint Nash is obtained by dividing the global Nash error by the
+positive reach of each fixed depth. -/
+theorem exists_quittingPositiveLiveStationaryPrefixLimit_with_liveMass_eq
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (family : QuittingDiffuseStationaryPrefixFamily reward)
     (subsequence : ℕ → ℕ) (punished : ι) (liveLimit : ℝ)
@@ -173,7 +174,8 @@ theorem exists_quittingPositiveLiveStationaryPrefixLimit
       (fun n => quittingStationaryContinueMass (family.root (subsequence n)))
       atTop (nhds liveLimit))
     (hhorizon : Tendsto (fun n => family.horizon (subsequence n)) atTop atTop) :
-    Nonempty (QuittingPositiveLiveStationaryPrefixLimit reward) := by
+    ∃ limit : QuittingPositiveLiveStationaryPrefixLimit reward,
+      limit.liveMass = liveLimit := by
   let data : ℕ → QuittingRootSimplex ι ×
       ((ℕ → Payoff ι) × QuittingTerminalSemanticPair ι) := fun n =>
     quittingStationaryPrefixFamilyRayData family (subsequence n)
@@ -364,7 +366,27 @@ theorem exists_quittingPositiveLiveStationaryPrefixLimit
     endpointNash := hendpoint
     punishmentTail_mem := hlimitMem.2.2
     punishmentCap := hpunishmentCap
-  }⟩
+  }, rfl⟩
+
+/-- Target-free projection of
+`exists_quittingPositiveLiveStationaryPrefixLimit_with_liveMass_eq`. -/
+theorem exists_quittingPositiveLiveStationaryPrefixLimit
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (family : QuittingDiffuseStationaryPrefixFamily reward)
+    (subsequence : ℕ → ℕ) (punished : ι) (liveLimit : ℝ)
+    (hsubsequence : StrictMono subsequence)
+    (hpunished : ∀ n, family.punished (subsequence n) = punished)
+    (hlivePositive : 0 < liveLimit)
+    (hlive : Tendsto
+      (fun n => quittingStationaryContinueMass (family.root (subsequence n)))
+      atTop (nhds liveLimit))
+    (hhorizon : Tendsto (fun n => family.horizon (subsequence n)) atTop atTop) :
+    Nonempty (QuittingPositiveLiveStationaryPrefixLimit reward) := by
+  obtain ⟨limit, _⟩ :=
+    exists_quittingPositiveLiveStationaryPrefixLimit_with_liveMass_eq
+      family subsequence punished liveLimit hsubsequence hpunished
+        hlivePositive hlive hhorizon
+  exact ⟨limit⟩
 
 /-! ## Decoding the limiting root -/
 

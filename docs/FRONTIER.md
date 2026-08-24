@@ -248,34 +248,24 @@ the live mathematical ledger.
   identification with a later frozen source and replacement. Alignment with
   the atom mover/observer labels also remains open. The separate
   artificial-candidate anchor remains Tier II.
-- **Four-player analytic dispatch:** on a packet with exactly two supported
-  owners, `exists_uniformEquilibriumPayoff_of_support_eq_pair_of_first_noHarm`
-  closes either aligned no-harm chamber. Under a counterexample witness,
-  `exists_crossedSpectators_of_finFour_support_eq_pair` proves that the two
-  remaining players have opposite strict singleton preferences between the
-  supported owners. Thus the crossed-spectator chamber is the exact unresolved
-  support-two case. In that chamber
-  `supportOwners_negative_or_crossedSpectators_preempt` forces, for each
-  supported owner, either a full terminal-gap negative-solo alternative or a
-  strict preemption edge from the oppositely aligned spectator. The checked
-  LCP screen also excludes three of the six possible two-player
-  nonprojective principal faces. The exact collision-rate layer now removes the
-  real parameter: strict owner differences force rate zero or one, while the
-  equality face is equivalent to the finite division-free sign/cross-product
-  test `finiteAffineIntervalFeasible_iff`. Under a terminal witness,
-  `generic_supportPair_collisionDefects` turns failed strict-sign repairs into
-  literal positive spectator join defects, and
-  `isQuittingSureExitSet_insert_or_oldLeave_or_otherJoin` either promotes such
-  a join to a sure-exit set or exposes a further strict toggle. These checked
-  finite faces are now collected symmetrically by
-  `nonempty_finFourCrossedSupportTwoFiniteResidual`. Positive lower- and
-  upper-endpoint spectator defects anchor a reachable simple selected-toggle
-  cycle through `exists_reachableStrictToggleSimpleCycle_of_lowerSpectatorDefect`
-  and its upper-defect analogue. The cycle is even and has length between four
-  and sixteen. It is only a static reward-table cycle: no checked theorem turns
-  it into a quitting chronology or an equilibrium certificate. A full `Fin 4`
-  singleton dispatch still needs that consumer and the support-three and
-  support-four packet cases.
+- **Four-player full-support residual:**
+  `uniformPayoff_or_quantitative_fullSupport_fullNormalCore_of_finFour`
+  gives an unconditional alternative for every reward table on `Fin 4`.
+  Either the game has a uniform-equilibrium payoff, or the same table has a
+  terminal exploitability witness, full recursive normal core, all-player
+  punishment normality, and a normalized singleton packet with support all
+  four players and an explicit positive coordinate floor. The construction
+  uses constrained stationary Nash roots, the unrestricted stationary
+  deviation cap, a terminal-gap hazard estimate, and a normalized
+  small-hazard limit. Packet supports one, two, and three are therefore not
+  live counterexample residuals. The checked barrier
+  `fullSupportPacket_standardQ_nonhomogeneous_but_not_cyclic` shows why the
+  remaining step is semantic: an actual packet can simultaneously have full
+  support, full normal core, internal crossed rows, a standard-`Q`
+  nonhomogeneous matrix, and no cyclic open-sign skeleton under any
+  relabeling. This barrier is not a counterexample game. The open task is to
+  use nonsingleton coalition rewards or actual Bellman/terminal-semantic data
+  to consume the full-support residual.
 - **Fused four-player counterexample restrictions:** positive packet support
   is punishment-normal, and
   `exists_normal_packetPair_not_mutuallyPreempting` selects two positive
