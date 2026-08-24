@@ -299,9 +299,14 @@ it enters an actual pair-base or leave--join stationary source with a
 terminal-gap paid row. The other arm remains one-coordinate repayment, and
 the gate's literal exact root has zero semantic-debt drop. This is a checked
 off-minimum obstruction, not the missing all-coordinate paid return. The
-separate pair-base fixed-law reset does identify the returned face's
-prescribed payoff exactly with its stationary paid target, but it still
-supplies no endpoint-Nash punishment-floor edge or admissible return path.
+separate pair-base fixed-law reset identifies the returned face's prescribed
+payoff exactly with its stationary paid target. The target now has an exact
+boundary: a forced-base punishment-floor violation, or an independently
+selected exact punishment-floor endpoint edge at that payoff. The former has
+a later-receiving paid-row repair; the latter is positive unless it is the
+literal all-Continue self-loop. In a counterexample every positive such edge
+must escape a fixed payoff neighborhood forever, so it cannot supply the
+missing admissible return.
 
 The solo-wall reduction and its formerly missing stationary-source compiler
 are now checked. In
@@ -488,13 +493,39 @@ the live mathematical ledger.
   `QuittingFixedLawResetDispatch.allContinue_of_target_debt_le_source`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFixedLawMinimumTargetStall.lean`)
   proves that a target no higher in total debt than the global-minimum source
-  forces the all-Continue stall. The exact remaining interface is
-  `QuittingFixedLawResetAdmissibleClosureSeam`: a positive
-  punishment-floor-admissible edge whose tail payoff is the returned payoff,
-  followed by an admissible path back to the target payoff. Its checked
-  consumer gives a uniform-equilibrium payoff. Neither cap-Nash at the
-  returned envelope nor exact payoff equality supplies that endpoint-Nash
-  edge, floor admissibility, or path.
+  forces the all-Continue stall.
+
+  `QuittingTerminalExploitabilityWitness.nonempty_finFour_pairBasePaidResetEndpointBoundary`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetEndpointEdge.lean`)
+  sharpens the remaining edge problem. Either a forced base coordinate lies
+  below punishment, or the aligned payoff is the tail of an exact
+  punishment-floor-admissible edge. In the first branch,
+  `FinFourPairBasePaidResetTarget.exists_other_and_laterPaidRow_and_floorRepair`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBaseFloorViolationRepair.lean`)
+  produces a source-matched `Quit now`-to-`Never` paid row and an actual
+  Always-Continue update which repairs that coordinate to zero debt while the
+  other base player still Quits surely. It does not preserve the other
+  coordinates' Nash or floor equations. In the second branch the edge has
+  positive absorption unless every singleton reward is below the aligned
+  payoff, in which case it is the literal all-Continue payoff self-loop.
+  `QuittingTerminalExploitabilityWitness.exists_payoffEscapeRadius_of_positiveAdmissibleEdge`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetEndpointOrbitEscape.lean`)
+  shows that, under the counterexample witness, every positive edge has a
+  fixed payoff radius which no state reachable after it can re-enter. Thus
+  approximate payoff recurrence is not merely unproved on this branch: it is
+  impossible.
+
+  The reset's own cap root remains distinct from that independently selected
+  endpoint edge. `capNash_isZeroNash_at_prescribed_iff_surcharge_eq_liveDebt`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetEndpointSeam.lean`)
+  identifies its exact conversion condition as coordinatewise equality of
+  option surcharge and survival-weighted debt. Positive survival and positive
+  returned debt rule out the simpler support-killing converter. A positive
+  literal defect gives an executable unilateral deviation, but loses the
+  fixed-law paid provenance and does not yield strict total-debt descent.
+  `QuittingFixedLawResetAdmissibleClosureSeam` remains the exact conditional
+  uniform-payoff interface, but its return-path field is incompatible with
+  the positive-edge escape theorem in a counterexample.
 
   Separately,
   `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
