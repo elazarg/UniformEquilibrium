@@ -40,6 +40,7 @@ import MathUE.DirectedTransport.MaxAffine.Sparse
 import MathUE.DirectedTransport.NormalForms
 import MathUE.DirectedTransport.PotentialRigidity
 import MathUE.DirectedTransport.SCC
+import MathUE.DirectedTransport.SimpleCycleBalance
 
 /-!
 # Directed transport theory
