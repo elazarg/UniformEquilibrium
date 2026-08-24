@@ -188,7 +188,7 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 
 The open producer arrows are:
 
-- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump now recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.
+- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: from the positive-minimum static atom data, either select one exact Nash--Bellman spine whose same roots preserve two fixed divergent marginal-hazard labels or return a solved-game certificate. A universal two-label selector is impossible, even for two players. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.
 - `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive charge threshold while making endpoint payoff vectors arbitrarily close. Every such family must leave the separated tight-face payoff neighborhood, activate a Quit owner outside that face, or contain a nonperturbative collision row; a source-matched collision path additionally pays a fixed positive terminal-semantic debt excursion above the minimum fiber.
 
 The DAG nodes have these mathematical meanings:
@@ -340,6 +340,15 @@ the live mathematical ledger.
   with the separately supplied necessity implication. Rational-polyhedral
   certificates remain generic soundness inputs, and no source certificate,
   strategy extraction, or chronological realization is provided.
+- **Repaired-stress certificate no-go:**
+  `not_exists_stressSimonStrictPotential` embeds the repaired four-player
+  stress circulation into the full production correspondence as a positive-
+  cost cycle at every positive tolerance. Consequently
+  `not_hasQuittingSimonFiniteCellLyapunovCertificate_stressWeight` excludes
+  every positive-coefficient finite-cell Lyapunov certificate for that table.
+  This eliminates one candidate for the negative Simon route; it is not an
+  obstruction for all quitting games and gives no equilibrium-nonexistence
+  conclusion.
 - **Sharper charge-tangent dispatch:** every extracted charge-tangent datum
   either already has the complementary singleton-mixture payoff, crosses the
   smaller solo/punishment boundary gap, or has positive tangent on an active
