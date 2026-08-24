@@ -1,0 +1,62 @@
+name: Revalidate persistent two-label refutation
+
+on:
+  push:
+    branches:
+      - codex/close-persistent-two-label-sorry
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/close-persistent-two-label-sorry
+          fetch-depth: 0
+          submodules: recursive
+      - uses: leanprover/lean-action@v1
+        with:
+          use-github-cache: true
+      - name: Compile changed modules
+        id: compile
+        continue-on-error: true
+        shell: bash
+        run: |
+          set +e
+          : > /tmp/compile.log
+          lake env lean Reverse/PersistentTwoLabelNashBellmanCounterexample.lean \
+            2>&1 | tee -a /tmp/compile.log
+          first=${PIPESTATUS[0]}
+          lake env lean Reverse/QuestionBankFakeProof.lean \
+            2>&1 | tee -a /tmp/compile.log
+          second=${PIPESTATUS[0]}
+          if [[ $first -eq 0 && $second -eq 0 ]]; then
+            echo "ok=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=false" >> "$GITHUB_OUTPUT"
+          fi
+          exit 0
+      - name: Record result
+        shell: bash
+        env:
+          COMPILE_OK: ${{ steps.compile.outputs.ok }}
+        run: |
+          if [[ "$COMPILE_OK" == "true" ]]; then
+            rm -f Reverse/.persistent-two-label-ci-trigger
+            rm -f Reverse/PersistentTwoLabelCompileErrors.txt
+            printf 'compiled\n' > Reverse/PersistentTwoLabelCompileStatus.txt
+          else
+            cp /tmp/compile.log Reverse/PersistentTwoLabelCompileErrors.txt
+            printf 'failed\n' > Reverse/PersistentTwoLabelCompileStatus.txt
+          fi
+          rm -f .github/workflows/validate-persistent-two-label-refutation-v2.yml
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Record persistent two-label revalidation"
+          git push origin HEAD:codex/close-persistent-two-label-sorry
