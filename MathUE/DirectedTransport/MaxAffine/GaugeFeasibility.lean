@@ -174,7 +174,7 @@ theorem criticalAffineGaugeResidualAtMost_iff_gaugeCriticalResidualAtMost
     rw [hid]
     exact hrow
 
-omit [DecidableEq V] in
+omit [Fintype V] [DecidableEq V] in
 /-- **Quantitative gauge-critical cycle-mean theorem.**  A normalized
 critical affine residual threshold is attainable exactly when every critical
 closed walk has mean shift at most that threshold. -/
@@ -192,7 +192,7 @@ theorem criticalAffineGaugeResidualAtMost_iff_closedWalk_mean_le
     (gaugeCriticalGraph (G := G) label gauge)
     (gaugeCriticalShift label gauge) level
 
-omit [DecidableEq V] in
+omit [Fintype V] [DecidableEq V] in
 /-- The quantitative gauge-critical criterion can be restricted to simple
 critical cycles. -/
 theorem criticalAffineGaugeResidualAtMost_iff_simpleCycle_mean_le
@@ -297,7 +297,7 @@ private theorem walkWeight_gaugeCriticalRelaxedShift
       field_simp [htarget]
       all_goals ring
 
-omit [DecidableEq V] in
+omit [Fintype V] [DecidableEq V] in
 /-- **Raw gauge-critical cycle formula.**  A raw affine residual threshold is
 attainable exactly when every critical cycle satisfies `T_C ≤ level * S_C`,
 where `T_C` is normalized total shift and `S_C` is reciprocal-gauge mass. -/
@@ -354,7 +354,7 @@ theorem gaugeCriticalCycleMass_pos
     obtain ⟨edge, _, rfl⟩ := List.mem_map.mp hvalue
     exact one_div_pos.mpr (hgauge (G.target edge.1))
 
-omit [DecidableEq V] in
+omit [Fintype V] [DecidableEq V] in
 /-- Quotient form `T_C / S_C` of the raw gauge-critical cycle theorem. -/
 theorem criticalAffineResidualAtMost_iff_cycleRatio_le
     (gauge : V → ℝ) (hgauge : ∀ vertex, 0 < gauge vertex)
@@ -535,7 +535,7 @@ theorem worstResidualAtMost_iff_cycleRatio_le_of_expansiveGauge
     gauge hgauge hfloor]
   exact criticalAffineResidualAtMost_iff_cycleRatio_le gauge hgauge.1 level
 
-omit [DecidableEq V] in
+omit [Fintype V] [DecidableEq V] in
 /-- Critical affine inequalities are equivalent to an additive potential on
 the rescaled critical graph. -/
 theorem exists_criticalAffinePotential_iff_gaugeCriticalCycles_nonpos

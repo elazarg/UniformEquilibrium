@@ -251,12 +251,14 @@ fibers coincide (Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47
 flat/equivariant sections, and `IsLaxSection` is a subsolution.
 
 Layer 1: `Math.MaxAffineTransport`.  Nearest named neighbours: min-max
-function networks (Gunawardena), topical maps (Gaubert–Gunawardena; the
-slope-1 sublattice is topical, general slopes are monotone but not additively
-homogeneous), timed event graphs of max-plus discrete-event theory (Baccelli,
-Cohen, Olsder, Quadrat, *Synchronization and Linearity*, Wiley 1992), and per
-vertex a one-player Bellman operator.  The general object appears to carry no
-established name.
+function networks (Gunawardena), topical maps (Gaubert–Gunawardena),
+sub-topical maps (Rubinov–Singer; nonnegative slope-at-most-one labels are
+monotone and additively subhomogeneous), timed event graphs of max-plus
+discrete-event theory (Baccelli, Cohen, Olsder, Quadrat, *Synchronization and
+Linearity*, Wiley 1992), and per vertex a one-player Bellman operator.  The
+typed quiver-wide synthesis with optional floors appears to carry no single
+established umbrella name; this is not a novelty claim for its classical
+component theories.
 
 ## The relation-labelled variant, resolved
 

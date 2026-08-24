@@ -83,6 +83,7 @@ import MathUE.DirectedTransport
 import MathUE.Probability.DiscountedBackwardRecursion
 import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
+import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
@@ -204,6 +205,7 @@ import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.FiniteCyclicVariation
+import MathUE.FiniteDirectedPeriod
 import MathUE.PolynomialSignCell
 import MathUE.Probability
 import MathUE.Probability.Adaptive
@@ -245,6 +247,7 @@ import MathUE.Probability.CyclicAbelCesaroModes
 import MathUE.Probability.DecisionVariationMaximalInequality
 import MathUE.Probability.DiffusePairCollisionBound
 import MathUE.Probability.DiscreteHazardMixture
+import MathUE.Probability.DiscreteHazardConditionalMixture
 import MathUE.Probability.DiscreteHazardStopping
 import MathUE.Probability.EntryReachableChargedClass
 import MathUE.Probability.EntryReachableChargedOccupation
@@ -255,7 +258,9 @@ import MathUE.Probability.FiniteControlledStoppingEnvelope
 import MathUE.Probability.FiniteControlledStoppingOptimalPolicy
 import MathUE.Probability.FiniteDiscountedFlow
 import MathUE.Probability.FiniteKernelRegeneration
+import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteLawRepair
+import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FinDistIntegral
 import MathUE.Probability.FinitePMF
 import MathUE.Probability.FiniteProductFlowKinematics
@@ -265,12 +270,18 @@ import MathUE.Probability.FiniteWeightVariation
 import MathUE.Probability.FrozenEndpointTransport
 import MathUE.Probability.FullSupportChargedClassRegeneration
 import MathUE.Probability.HarmonicClosedClass
+import MathUE.Probability.HarmonicGlobalCoupling
+import MathUE.Probability.HarmonicPeriodicCore
+import MathUE.Probability.HarmonicQuadraticVariation
+import MathUE.Probability.HarmonicRecurrentCoreBound
 import MathUE.Probability.HarmonicStateAccount
+import MathUE.Probability.HarmonicVisitEpoch
 import MathUE.Probability.HittingTimePotential
 import MathUE.Probability.IntegratedResponseLedger
 import MathUE.Probability.KakutaniProductDichotomy
 import MathUE.Probability.KilledTailPotential
 import MathUE.Probability.MarkovOccupation
+import MathUE.Probability.MarkovStateElimination
 import MathUE.Probability.MaximalCoupling
 import MathUE.Probability.MovingEndpointOccupationEvidence
 import MathUE.Probability.MovingKernelEpochPotentialAccount
@@ -289,6 +300,7 @@ import MathUE.Probability.ResetActivation
 import MathUE.Probability.ReversibleDirichletContraction
 import MathUE.Probability.ShadowSeparatorAccounting
 import MathUE.Probability.SignedStoppedComposition
+import MathUE.Probability.SquareRootCoalitionClock
 import MathUE.Probability.StationaryCommunicatingClass
 import MathUE.Probability.StationaryNonnegativeDrift
 import MathUE.Probability.StitchedMartingale
@@ -322,6 +334,7 @@ import MathUE.Simplex
 import MathUE.SimplexApproximation
 import MathUE.SparseVanishingSchedule
 import MathUE.SqrtRate
+import MathUE.SublinearCostSchedule
 import MathUE.SurvivalProduct
 import MathUE.SurvivalProductComparison
 import MathUE.SurvivalSegmentBalance

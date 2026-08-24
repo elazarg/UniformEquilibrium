@@ -175,6 +175,38 @@ theorem expect_tendsto_of_forall_tendsto {Ω : Type*} [Finite Ω]
   expect_tendsto_of_forall_toReal_tendsto f
     (fun ω => pmf_apply_toReal_tendsto_of_tendsto (h ω))
 
+/-! ### Punctured initial intervals -/
+
+/-- The mass of the interval strictly after zero and at most `t` vanishes as
+`t` decreases to zero.  The atom at zero, if any, is excluded.
+
+This is the measure-theoretic core of a continuous-time "act immediately
+after zero" argument: against finitely many stopping laws, a sufficiently
+early positive time encounters arbitrarily little stopping mass after time
+zero.  A discrete clock has no corresponding date strictly between zero and
+its first positive date. -/
+theorem tendsto_measure_Ioc_zero_nhdsGT
+    (μ : MeasureTheory.Measure ℝ) [MeasureTheory.IsFiniteMeasure μ] :
+    Tendsto (fun t : ℝ => μ (Set.Ioc 0 t)) (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) := by
+  have h := MeasureTheory.tendsto_measure_biInter_gt (μ := μ)
+    (s := fun t : ℝ => Set.Ioc 0 t) (a := 0)
+    (fun _ _ => measurableSet_Ioc.nullMeasurableSet)
+    (fun _ _ _ hij => Set.Ioc_subset_Ioc_right hij)
+    (by
+      exact (exists_gt (0 : ℝ)).imp fun r hr =>
+        ⟨hr, MeasureTheory.measure_ne_top μ (Set.Ioc 0 r)⟩)
+  have hinter : (⋂ r : ℝ, ⋂ (_ : r > 0), Set.Ioc 0 r) = ∅ := by
+    ext x
+    simp only [Set.mem_iInter, Set.mem_Ioc, Set.mem_empty_iff_false, iff_false]
+    intro hx
+    have hxpos : 0 < x := (hx 1 zero_lt_one).1
+    have hxle : x ≤ x / 2 := (hx (x / 2) (half_pos hxpos)).2
+    linarith
+  rw [hinter, MeasureTheory.measure_empty] at h
+  change Tendsto (fun t : ℝ => μ (Set.Ioc 0 t))
+    (nhdsWithin 0 (Set.Ioi 0)) (nhds 0) at h
+  exact h
+
 -- ============================================================================
 -- PMF utility lemmas
 -- ============================================================================

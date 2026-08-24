@@ -69,6 +69,22 @@ theorem pmfTV_symm {Ω : Type*} [Fintype Ω] (μ ν : PMF Ω) :
   intro ω _
   exact abs_sub_comm (μ ω).toReal (ν ω).toReal
 
+/-- On `Bool`, total variation is the absolute displacement of either one
+coordinate. -/
+theorem pmfTV_bool_eq_abs_apply_true (μ ν : PMF Bool) :
+    pmfTV μ ν = |(μ true).toReal - (ν true).toReal| := by
+  change pmfPositiveVariation μ ν = _
+  rw [pmfPositiveVariation_eq_half_sum_abs, Fintype.sum_bool]
+  have hμ := pmf_toReal_sum_one μ
+  have hν := pmf_toReal_sum_one ν
+  simp only [Fintype.sum_bool] at hμ hν
+  have hfalse :
+      (μ false).toReal - (ν false).toReal =
+        -((μ true).toReal - (ν true).toReal) := by
+    linarith
+  rw [hfalse, abs_neg]
+  ring
+
 @[simp] theorem pmfTV_eq_zero_iff {Ω : Type*} [Fintype Ω] (μ ν : PMF Ω) :
     pmfTV μ ν = 0 ↔ μ = ν := by
   constructor

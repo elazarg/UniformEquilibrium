@@ -43,7 +43,7 @@ def WorstDirectedResidualAtMost (G : EdgeGraph V E) (weight : E → ℝ)
 attainable exactly when every closed walk has mean at most that threshold.
 The multiplication form includes empty walks safely. -/
 theorem worstDirectedResidualAtMost_iff_closedWalk_le
-    [Fintype V] [Finite E] (G : EdgeGraph V E) (weight : E → ℝ)
+    [Finite E] (G : EdgeGraph V E) (weight : E → ℝ)
     (level : ℝ) :
     WorstDirectedResidualAtMost G weight level ↔
       ∀ (vertex : V) (cycle : G.Walk vertex vertex),

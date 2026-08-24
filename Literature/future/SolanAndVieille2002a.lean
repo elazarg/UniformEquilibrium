@@ -1,4 +1,3 @@
-import Literature.Catalog
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 
@@ -6,6 +5,8 @@ import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 # Literature audit
 
 Bibliography label: Solan & Vieille 2002a
+
+Citation: Published source: Solan & Vieille 2002a.
 
 The published four-player example was inspected. Its qualitative results and
 the disputed primary continuation probability in its printed numerical packet
@@ -57,46 +58,20 @@ def PeriodTwoEquilibriumClaim : Prop :=
 theorem periodTwoEquilibriumClaim : PeriodTwoEquilibriumClaim :=
   SolanVieilleBoundary.boundaryReward_exists_uniformEquilibriumPayoff
 
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "solan_and_vieille_2002a"
-  bibliographyLabel := "Solan & Vieille 2002a"
-  bibliographyLocator := "Published source: Solan & Vieille 2002a"
-  role := .nonzeroSumExistence
-  paperEvidence := .primaryInspected
-  auditStatus := .claimAuditInProgress
-  claims :=
-    [ { claimId := "period_two_equilibrium_exists"
-        paperLocator := "Section 3 and the period-two calculation"
-        summary :=
-          "The displayed table admits an equilibrium payoff built from a \
-period-two two-quitter profile."
-        status := .provedInLean
-          "Literature.SolanAndVieille2002a.PeriodTwoEquilibriumClaim"
-          "Literature.SolanAndVieille2002a.periodTwoEquilibriumClaim" },
-      { claimId := "no_stationary_equilibrium"
-        paperLocator := "Section 3.2"
-        summary := "The example has no stationary limiting-average equilibrium."
-        status := .paperOnly },
-      { claimId := "no_stationary_epsilon_equilibrium"
-        paperLocator := "Section 3.2"
-        summary := "The example has no stationary epsilon-equilibrium for small errors."
-        status := .paperOnly },
-      { claimId := "no_perturbed_epsilon_equilibrium"
-        paperLocator := "Section 3.3"
-        summary := "The example excludes the perturbed epsilon-equilibrium fallback."
-        status := .paperOnly },
-      { claimId := "no_solo_convex_hull_equilibrium_payoff"
-        paperLocator := "Section 3"
-        summary := "No equilibrium payoff lies in the convex hull of the solo payoffs."
-        status := .paperOnly },
-      { claimId := "printed_period_two_packet"
-        paperLocator := "Figure 2 and the period-two calculation"
-        summary :=
-          "The printed primary continuation probability is the exact selected parameter."
-        status := .refutedInLean
-          "Literature.SolanAndVieille2002a.PrintedPeriodTwoContinuationClaim"
-          "Literature.SolanAndVieille2002a.\
-not_printedPeriodTwoContinuationClaim" } ]
+/-!
+## Remaining source claims not yet stated in Lean
+
+- Section 3: no equilibrium payoff lies in the convex hull of the solo
+  payoffs.
+- Section 3.2: the example has no stationary limiting-average equilibrium and
+  no stationary epsilon-equilibrium for sufficiently small errors.
+- Section 3.3: the example excludes the perturbed epsilon-equilibrium
+  fallback.
+
+The period-two existence claim from Section 3 is stated and proved above. The
+printed primary continuation probability from Figure 2 and the period-two
+calculation is stated and refuted above; that refutation does not concern the
+existence claim.
+-/
 
 end Literature.SolanAndVieille2002a

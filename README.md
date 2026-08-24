@@ -63,9 +63,9 @@ nonclaims.
   Its reports are evidence, not proofs.
 - **Backward proof search:** [`Reverse/`](Reverse/) works from checked consumers
   toward precise remaining mathematical obligations.
-- **Literature coverage:** [`Literature/`](Literature/) provides paper-by-paper
-  audit records and catalog infrastructure; its umbrella is the coverage
-  inventory.
+- **Literature coverage:** [`Literature/`](Literature/) provides one plain Lean
+  audit file per paper. Root files have complete statement coverage; incomplete
+  papers remain explicitly under `Literature/future/`.
 
 The repository is organized for mathematical discovery, verification, and
 systematic audit, not as a stable downstream library. It makes no compatibility
@@ -96,7 +96,7 @@ and paper summaries do not become theorems by proximity.
 - `UniformEquilibrium/` contains the integrated game-semantic development.
 - `MathUE/` contains game-independent mathematics owned by this project.
 - `Theorems/` is a correction-friendly showcase delegating to canonical proofs.
-- `Literature/` contains paper-audit records and their catalog infrastructure.
+- `Literature/` contains plain paper-audit files and incomplete future stubs.
 - `Research/` contains compileable Lean not yet incorporated into the
   integrated development.
 - `Experiments/` contains reproducible counterexample and certificate searches.

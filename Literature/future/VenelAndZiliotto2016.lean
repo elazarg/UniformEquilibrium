@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Venel & Ziliotto 2016
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Venel & Ziliotto 2016.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.VenelAndZiliotto2016
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "venel_and_ziliotto_2016"
-  bibliographyLabel := "Venel & Ziliotto 2016"
-  bibliographyLocator := "Published source: Venel & Ziliotto 2016"
-  role := .zeroSumBoundary
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.VenelAndZiliotto2016

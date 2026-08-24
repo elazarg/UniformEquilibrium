@@ -72,6 +72,7 @@ import Research.Quitting.FixedLawGlobalMinimumPremiumNoGo
 import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import Research.Quitting.FourByFourQFiniteSupportReduction
 import Research.Quitting.FourPlayerBlockerCirculation
+import Research.Quitting.FourPlayerCounterexampleFusion
 import Research.Quitting.FourPlayerCyclicPlateauCandidate
 import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub

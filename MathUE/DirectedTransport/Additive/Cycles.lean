@@ -180,7 +180,7 @@ theorem forall_closedWalk_mean_le_iff_simpleCycle
 
 /-- The additive worst-residual threshold can be tested on simple cycles. -/
 theorem worstDirectedResidualAtMost_iff_simpleCycles_le
-    [Fintype V] [Finite E] (G : EdgeGraph V E) (weight : E → ℝ)
+    [Finite E] (G : EdgeGraph V E) (weight : E → ℝ)
     (level : ℝ) :
     WorstDirectedResidualAtMost G weight level ↔
       ∀ (base : V) (cycle : G.Walk base base),

@@ -1,5 +1,6 @@
 import Mathlib
 import MathUE.CompactFiniteChargedReturn
+import MathUE.Probability.FinitePathLawAdapter
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
 import
   UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
@@ -6731,9 +6732,198 @@ theorem markovSemantics_exists (P : MarkovChain) : Nonempty (MarkovSemantics P) 
     (MarkovPath.measurableSet_cylinder P k x)]
   simpa only [MarkovPath.ofRaw, preimage_setOf_eq] using P.rawLaw_cylinder k x hx
 
+/-- Finite coordinate restriction is measurable for the cylinder sigma
+algebra on Markov paths. -/
+private theorem MarkovPath.measurable_finitePathPrefix
+    (P : MarkovChain) (horizon : ℕ) :
+    Measurable
+      (Math.Probability.finitePathPrefix
+        (fun path : MarkovPath P => path.state) horizon) := by
+  cases horizon with
+  | zero =>
+      have hconstant :
+          Math.Probability.finitePathPrefix
+              (fun path : MarkovPath P => path.state) 0 =
+            fun _path => fun time => Fin.elim0 time := by
+        funext path time
+        exact Fin.elim0 time
+      rw [hconstant]
+      exact measurable_const
+  | succ horizon =>
+      apply measurable_to_countable'
+      intro history
+      have hevent :
+          Math.Probability.finitePathPrefix
+              (fun path : MarkovPath P => path.state) (horizon + 1) ⁻¹'
+              {history} =
+            {path | ∀ time : Fin (horizon + 1),
+              path.state time = history time} := by
+        ext path
+        change
+          (Math.Probability.finitePathPrefix
+              (fun candidate : MarkovPath P => candidate.state)
+              (horizon + 1) path = history) ↔ _
+        constructor
+        · intro hp time
+          exact congrFun hp time
+        · intro hp
+          funext time
+          exact hp time
+      rw [hevent]
+      exact MarkovPath.measurableSet_cylinder P horizon history
+
+/-- The cylinder specification gives the complete finite marginal of
+Simon's Markov path law, including prefixes with a wrong initial state. -/
+private theorem MarkovSemantics.finitePathCylinder
+    (P : MarkovChain) (S : MarkovSemantics P) :
+    ∀ horizon (history : Fin horizon → P.State),
+      S.law {path |
+          Math.Probability.finitePathPrefix
+            (fun p : MarkovPath P => p.state) horizon path = history} =
+        Math.Probability.adaptiveHistoryLaw
+          (Math.Probability.inhomogeneousMarkovStep
+            P.initial P.transition) horizon history := by
+  letI : IsProbabilityMeasure S.law := S.probability
+  intro horizon
+  cases horizon with
+  | zero =>
+      intro history
+      have hempty : history = fun time => Fin.elim0 time := Subsingleton.elim _ _
+      have hevent :
+          {path : MarkovPath P |
+            Math.Probability.finitePathPrefix
+              (fun candidate : MarkovPath P => candidate.state) 0 path = history} =
+            Set.univ := by
+        apply Set.eq_univ_of_forall
+        intro path
+        exact Subsingleton.elim _ _
+      rw [hevent, measure_univ]
+      rw [hempty]
+      simp [Math.Probability.adaptiveHistoryLaw]
+  | succ horizon =>
+      intro history
+      have hevent :
+          {path : MarkovPath P |
+            Math.Probability.finitePathPrefix
+              (fun candidate : MarkovPath P => candidate.state)
+              (horizon + 1) path = history} =
+            {path | ∀ time : Fin (horizon + 1),
+              path.state time = history time} := by
+        ext path
+        change
+          (Math.Probability.finitePathPrefix
+              (fun candidate : MarkovPath P => candidate.state)
+              (horizon + 1) path = history) ↔ _
+        constructor
+        · intro hp time
+          exact congrFun hp time
+        · intro hp
+          funext time
+          exact hp time
+      by_cases hstart : history 0 = P.initial
+      · rw [hevent, S.cylinder horizon history hstart]
+        exact
+          (Math.Probability.adaptiveHistoryLaw_inhomogeneousMarkovStep_apply_of_start
+            P.initial P.transition horizon history hstart).symm
+      · let initialHistory : Fin 1 → P.State := fun _ => P.initial
+        have hinitial :
+            S.law {path : MarkovPath P |
+              ∀ time : Fin 1, path.state time = initialHistory time} = 1 := by
+          simpa [initialHistory] using
+            S.cylinder 0 initialHistory (by simp [initialHistory])
+        have hinitialMeasurable :
+            MeasurableSet {path : MarkovPath P |
+              ∀ time : Fin 1, path.state time = initialHistory time} :=
+          MarkovPath.measurableSet_cylinder P 0 initialHistory
+        have hcomplement :
+            S.law ({path : MarkovPath P |
+              ∀ time : Fin 1, path.state time = initialHistory time}ᶜ) = 0 := by
+          rw [measure_compl hinitialMeasurable (by rw [hinitial]; simp)]
+          rw [measure_univ, hinitial]
+          simp
+        have hzero :
+            S.law {path |
+                Math.Probability.finitePathPrefix
+                  (fun p : MarkovPath P => p.state) (horizon + 1) path = history} = 0 := by
+          apply nonpos_iff_eq_zero.mp
+          calc
+            S.law {path |
+                Math.Probability.finitePathPrefix
+                  (fun p : MarkovPath P => p.state) (horizon + 1) path = history} ≤
+                S.law ({path : MarkovPath P |
+                  ∀ time : Fin 1, path.state time = initialHistory time}ᶜ) := by
+              apply measure_mono
+              intro path hpath
+              simp only [mem_compl_iff, mem_setOf_eq]
+              intro hinitialPath
+              apply hstart
+              have hzeroCoordinate := congrFun hpath 0
+              rw [Math.Probability.finitePathPrefix] at hzeroCoordinate
+              exact hzeroCoordinate.symm.trans (by
+                simpa [initialHistory] using hinitialPath 0)
+            _ = 0 := hcomplement
+        rw [hzero]
+        exact
+          (Math.Probability.adaptiveHistoryLaw_inhomogeneousMarkovStep_apply_of_ne_start
+            P.initial P.transition horizon history hstart).symm
+
+/-- Simon's cylinder-specified law has exactly the finite adaptive-history
+PMFs generated by the displayed time-dependent transition kernels. -/
+theorem MarkovSemantics.hasAdaptiveFiniteMarginals
+    (P : MarkovChain) (S : MarkovSemantics P) :
+    Math.Probability.HasAdaptiveFiniteMarginals S.law
+      (fun path : MarkovPath P => path.state)
+      (Math.Probability.inhomogeneousMarkovStep P.initial P.transition) :=
+  Math.Probability.hasAdaptiveFiniteMarginals_of_cylinder
+    S.law (fun path : MarkovPath P => path.state)
+    (Math.Probability.inhomogeneousMarkovStep P.initial P.transition)
+    (MarkovPath.measurable_finitePathPrefix P)
+    (S.finitePathCylinder P)
+
 /-- Time homogeneity means that the transition law is independent of the stage. -/
 def TimeHomogeneous (P : MarkovChain) : Prop :=
   ∃ transition : P.State → PMF P.State, ∀ i, P.transition i = transition
+
+/-- Under a displayed homogeneous kernel, Simon's path law has the exact
+finite marginals used by the production homogeneous-chain account. -/
+theorem MarkovSemantics.hasHomogeneousAdaptiveFiniteMarginals
+    (P : MarkovChain) (S : MarkovSemantics P)
+    (kernel : P.State → PMF P.State)
+    (homogeneous : ∀ time, P.transition time = kernel) :
+    Math.Probability.HasAdaptiveFiniteMarginals S.law
+      (fun path : MarkovPath P => path.state)
+      (Math.Probability.homogeneousMarkovStep P.initial kernel) := by
+  have hstep :
+      Math.Probability.inhomogeneousMarkovStep P.initial P.transition =
+        Math.Probability.homogeneousMarkovStep P.initial kernel := by
+    funext time history
+    cases time with
+    | zero => rfl
+    | succ time =>
+        simp [Math.Probability.inhomogeneousMarkovStep,
+          Math.Probability.homogeneousMarkovStep, homogeneous time]
+  rw [← hstep]
+  exact S.hasAdaptiveFiniteMarginals P
+
+/-- Finite path variation under Simon's semantics is exactly the
+`ENNReal.ofReal` image of the production finite-history expectation. -/
+theorem MarkovSemantics.finiteExpectedVariation_eq_production
+    (P : MarkovChain) (S : MarkovSemantics P)
+    (kernel : P.State → PMF P.State)
+    (homogeneous : ∀ time, P.transition time = kernel)
+    (horizon : ℕ) :
+    Math.Probability.finiteExpectedENNVariation S.law
+        (Math.Probability.spaceTimePathENNVariationScore
+          (fun path : MarkovPath P => path.state)
+          (fun state time => (P.value state time : ℝ))) horizon =
+      ENNReal.ofReal
+        (Math.Probability.finiteExpectedSpaceTimeMarkovVariation
+          P.initial kernel (fun state time => (P.value state time : ℝ))
+          horizon) :=
+  Math.Probability.finiteExpectedENNVariation_spaceTime_eq_ofReal
+    S.law (fun path : MarkovPath P => path.state) P.initial kernel
+    (fun state time => (P.value state time : ℝ))
+    (S.hasHomogeneousAdaptiveFiniteMarginals P kernel homogeneous) horizon
 
 /-- The pathwise total variation of the time-dependent harmonic value, possibly infinite. -/
 def MarkovVariation (P : MarkovChain) (p : MarkovPath P) : ℝ≥0∞ :=
@@ -6744,7 +6934,70 @@ def MarkovVariation (P : MarkovChain) (p : MarkovPath P) : ℝ≥0∞ :=
 def ExpectedMarkovVariation (P : MarkovChain) (S : MarkovSemantics P) : ℝ≥0∞ :=
   ∫⁻ p, MarkovVariation P p ∂S.law
 
-/-- Lemma 2.  A time-homogeneous finite Markov chain has expected variation at most `|X|`. -/
+/-- Simon's infinite expected variation is the generic infinite path-law
+variation for the same one-step score. -/
+theorem expectedMarkovVariation_eq_infiniteExpectedENNVariation
+    (P : MarkovChain) (S : MarkovSemantics P) :
+    ExpectedMarkovVariation P S =
+      Math.Probability.infiniteExpectedENNVariation S.law
+        (Math.Probability.spaceTimePathENNVariationScore
+          (fun path : MarkovPath P => path.state)
+          (fun state time => (P.value state time : ℝ))) := rfl
+
+/-- Once the finite production account is bounded at every horizon, the
+paper's infinite expected variation has the same bound. Thus no path-law or
+monotone-convergence obligation remains in Lemma 2. -/
+theorem MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound
+    (P : MarkovChain) (S : MarkovSemantics P)
+    (kernel : P.State → PMF P.State)
+    (homogeneous : ∀ time, P.transition time = kernel)
+    (finiteBound : ∀ horizon,
+      Math.Probability.finiteExpectedSpaceTimeMarkovVariation
+          P.initial kernel (fun state time => (P.value state time : ℝ))
+          horizon ≤ Fintype.card P.State) :
+    ExpectedMarkovVariation P S ≤ Fintype.card P.State := by
+  rw [expectedMarkovVariation_eq_infiniteExpectedENNVariation]
+  apply Math.Probability.infiniteExpectedENNVariation_spaceTime_le_of_finite
+    S.law (fun path : MarkovPath P => path.state) P.initial kernel
+    (fun state time => (P.value state time : ℝ))
+    (S.hasHomogeneousAdaptiveFiniteMarginals P kernel homogeneous)
+  intro horizon
+  calc
+    ENNReal.ofReal
+        (Math.Probability.finiteExpectedSpaceTimeMarkovVariation
+          P.initial kernel (fun state time => (P.value state time : ℝ)) horizon) ≤
+        ENNReal.ofReal (Fintype.card P.State : ℝ) :=
+      ENNReal.ofReal_le_ofReal (finiteBound horizon)
+    _ = Fintype.card P.State := by simp
+
+/-- The checked qualitative part of Lemma 2: time homogeneity implies that
+Simon's expected total variation is finite. The resulting bound depends on
+the transition kernel and is not the paper's sharp state-cardinality bound. -/
+theorem MarkovSemantics.expectedMarkovVariation_ne_top_of_timeHomogeneous
+    (P : MarkovChain) (S : MarkovSemantics P)
+    (homogeneous : TimeHomogeneous P) :
+    ExpectedMarkovVariation P S ≠ ⊤ := by
+  classical
+  obtain ⟨kernel, hkernel⟩ := homogeneous
+  rw [expectedMarkovVariation_eq_infiniteExpectedENNVariation]
+  apply
+    Math.Probability.infiniteExpectedENNVariation_spaceTime_ne_top_of_backwardHarmonic
+      S.law (fun path : MarkovPath P => path.state) P.initial kernel
+      (fun state time => (P.value state time : ℝ))
+      (S.hasHomogeneousAdaptiveFiniteMarginals P kernel hkernel)
+  constructor
+  · intro state time
+    exact (P.value state time).property
+  · intro state time
+    rw [Math.Probability.expect, ← hkernel time]
+    exact P.harmonic state time
+
+/-- Lemma 2.  A time-homogeneous finite Markov chain has expected variation
+at most `|X|`.
+
+The finite-cylinder/path-law identification is checked above. The remaining
+unproved input is the homogeneous renewal estimate that turns backward
+harmonicity into the aggregate return-visit account. -/
 theorem lemma2 (P : MarkovChain) (S : MarkovSemantics P)
     (h : TimeHomogeneous P) :
     ExpectedMarkovVariation P S ≤ Fintype.card P.State := by

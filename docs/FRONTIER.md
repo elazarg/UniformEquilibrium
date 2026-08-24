@@ -155,14 +155,23 @@ also a stronger branch-independent adapter: every extracted frontier already
 has fixed vanishing-debt atom access. In the support-entry arm the actual
 zero-debt recipient can be retained as the atom observer.
 
-Two concrete producer arrows remain explicit. Static vanishing-debt atom data
-must be serialized into chronological debt-shadowing certificates at every
-positive accuracy, or an eventually paid row must be re-entered as one
-one fixed positive charge threshold, while the source, target, path, and
-charged edge may vary with endpoint tolerance and endpoint payoff vectors
-become arbitrarily close. Fixed-edge payoff closure and exact return to the
-full tail state are stronger special cases. The chronological and
-payoff-near-return consumers themselves are proved in Lean.
+Two concrete routes remain explicit. On the atom route, one local theorem must
+produce actual reached-port packets with retained labels, exact source and
+successor anchors, and an operationally sublinear seam-plus-radius-loss
+modulus. A separate external source/payoff-to-candidate adapter must provide
+the small-debt compiler seed, unless it returns a solved-game disjunct.
+Budget-stable compatible iteration after those inputs is checked. The all-frontier
+chronological consumer is not the missing local theorem:
+`vanishingDebtAtomChronologicalConsumer_iff_exists_uniformEquilibriumPayoff`
+proves that it is exactly equivalent to uniform-payoff existence for each
+reward table. It is retained as the global integration contract.
+
+On the paid route, an eventually paid row must be re-entered with one fixed
+positive charge threshold, while the source, target, path, and charged edge
+may vary with endpoint tolerance and endpoint payoff vectors become
+arbitrarily close. Fixed-edge payoff closure and exact return to the full tail
+state are stronger special cases. The chronological and payoff-near-return
+consumers themselves are proved in Lean.
 
 Seals use the independent `M`/`L`/`A`/`C` language of
 [`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
@@ -181,14 +190,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine_capPumpOwner`](../UniformEquilibrium/Quitting/Paths/CapPumpChronologicalAdapter.lean) |
+| `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
 | `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveAdmissiblePayoffNearReturnFamily.exists_tightFace_escape`](../UniformEquilibrium/Diagnostics/Quitting/Chronology/TightFacePaidNearReturnRestriction.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
 | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns`](../UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean) |
 
 The open producer arrows are:
 
-- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: from the positive-minimum static atom data, either select one exact Nash--Bellman spine whose same roots preserve two fixed divergent marginal-hazard labels or return a solved-game certificate. A universal two-label selector is impossible, even for two players. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.
+- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
 - `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive charge threshold while making endpoint payoff vectors arbitrarily close. Every such family must leave the separated tight-face payoff neighborhood, activate a Quit owner outside that face, or contain a nonperturbative collision row; a source-matched collision path additionally pays a fixed positive terminal-semantic debt excursion above the minimum fiber.
 
 The DAG nodes have these mathematical meanings:
@@ -218,11 +227,104 @@ the live mathematical ledger.
 - **Positive construction:** produce one of the inputs accepted by an
   integrated compiler, or add a new compiler whose output reaches terminal
   approximate Nash existence.
-- **Simon viability route:** the conditional finite-horizon core
-  `finiteExpectedSpaceTimeMarkovVariation_le_card` bounds expected
-  space-time variation from a supplied statewise escape/Poisson certificate.
-  Simon Lemma 2 remains open because that escape/Poisson certificate and the
-  infinite adapter from return probabilities are not produced.  A positive
+- **Reached-source packet construction:**
+  `exists_frozenRadialLiteralFiniteProfilePackets` constructs the frozen-source
+  core of the conditioned packet problem on the flat charged-circulation
+  branch. It gives literal roots from the actual profile, exact semantic-prefix
+  provenance, two fixed active movers with a common hazard coefficient, and a
+  global bound. At the actual all-Continue successor,
+  `frozenRadialLiteralPacket_twoLabel_availableConditionedKernel` identifies
+  both retained live hazards with exact posterior mixtures and gives positive
+  two-sided availability when the prior weights are strict and both component
+  survivals are positive. `abs_frozenRadialReachedWeight_sub_le` gives the
+  sharp denominator-dependent posterior-loss estimate. Strict circulation
+  weights and the source-to-inner survival comparison now sharpen this to
+  `exists_frozenRadialStrictPackets_available_or_exploitablySourceKilled`:
+  every sufficiently late literal packet either has the positive-radius
+  conditioned kernel or one of its two original source marginals surely quits
+  before the cutoff while retaining a fixed positive deviation debt. This is
+  not restartability. The killed-source alternative still needs a strategic
+  dispatch or a different source, and the available alternative still needs
+  identification with a later frozen source and replacement. Alignment with
+  the atom mover/observer labels also remains open. The separate
+  artificial-candidate anchor remains Tier II.
+- **Four-player analytic dispatch:** on a packet with exactly two supported
+  owners, `exists_uniformEquilibriumPayoff_of_support_eq_pair_of_first_noHarm`
+  closes either aligned no-harm chamber. Under a counterexample witness,
+  `exists_crossedSpectators_of_finFour_support_eq_pair` proves that the two
+  remaining players have opposite strict singleton preferences between the
+  supported owners. Thus the crossed-spectator chamber is the exact unresolved
+  support-two case. In that chamber
+  `supportOwners_negative_or_crossedSpectators_preempt` forces, for each
+  supported owner, either a full terminal-gap negative-solo alternative or a
+  strict preemption edge from the oppositely aligned spectator. The checked
+  LCP screen also excludes three of the six possible two-player
+  nonprojective principal faces. The exact collision-rate layer now removes the
+  real parameter: strict owner differences force rate zero or one, while the
+  equality face is equivalent to the finite division-free sign/cross-product
+  test `finiteAffineIntervalFeasible_iff`. Under a terminal witness,
+  `generic_supportPair_collisionDefects` turns failed strict-sign repairs into
+  literal positive spectator join defects, and
+  `isQuittingSureExitSet_insert_or_oldLeave_or_otherJoin` either promotes such
+  a join to a sure-exit set or exposes a further strict toggle. These checked
+  finite faces are now collected symmetrically by
+  `nonempty_finFourCrossedSupportTwoFiniteResidual`. Positive lower- and
+  upper-endpoint spectator defects anchor a reachable simple selected-toggle
+  cycle through `exists_reachableStrictToggleSimpleCycle_of_lowerSpectatorDefect`
+  and its upper-defect analogue. The cycle is even and has length between four
+  and sixteen. It is only a static reward-table cycle: no checked theorem turns
+  it into a quitting chronology or an equilibrium certificate. A full `Fin 4`
+  singleton dispatch still needs that consumer and the support-three and
+  support-four packet cases.
+- **Fused four-player counterexample restrictions:** positive packet support
+  is punishment-normal, and
+  `exists_normal_packetPair_not_mutuallyPreempting` selects two positive
+  packet atoms with positive reciprocal normalized-matrix sum that cannot
+  strictly preempt one another in both directions at the terminal gap. Full
+  recursive normal core upgrades the principal returned-block obstruction to
+  `hasAmbientReturnedBlockRelativeErrorGap_of_fourPlayer_counterexample`, with
+  no off-core support restriction. A canonical positive-debt tail also has one
+  strict covector, summable absorption, and eventual positive suffix survival.
+  These restrictions are simultaneous, not contradictory: no checked adapter
+  turns that tail or packet into returned blocks with little-o Bellman and
+  endpoint error.
+- **Simon viability route:** `markovReturnPotential` constructs the canonical
+  target-stopped return potential, and
+  `exists_statewiseMarkovVariationBudget_of_returnBound` compiles the
+  supportwise nonreturn estimate into the statewise Poisson certificate used
+  by `finiteExpectedSpaceTimeMarkovVariation_le_card`. The checked
+  three-state regression `not_supportwise_returnBound` proves that bounded
+  backward harmonicity does not imply that pointwise estimate. The exact
+  source-state decomposition
+  `finiteExpectedSpaceTimeMarkovVariation_eq_sum_stateOwned`, the canonical
+  stopped-return visit charge bound
+  `finiteExpectedMarkovReturnVisitCharge_le_one`, and the aggregate compiler
+  `finiteExpectedSpaceTimeMarkovVariation_le_card_of_visitEpoch` expose the
+  exact per-state bookkeeping, but do not supply a valid universal
+  factorization.
+  The four-state regression
+  `ConditionalReturnBoundCounterexample.not_homogeneousBackwardHarmonicRenewalPrinciple`
+  proves that bounded backward harmonicity also does not imply the formerly
+  proposed one-visit averaged condition `HasConditionalMarkovReturnBound`.
+  The seven-state regression
+  `SevenStateVisitEpochCounterexample.not_homogeneousBackwardHarmonicVisitEpochPrinciple`
+  further refutes the aggregate per-owner visit-epoch principle: its owner
+  variation already exceeds one although every finite return-visit charge is
+  at most one. Thus `HasMarkovVisitEpochBound` remains a sufficient supplied
+  interface, not the honest universal renewal theorem. None of these examples
+  refutes Simon's global cardinality bound; the seven-state example only
+  exceeds the per-owner constant one. A proof of the global bound must use
+  genuinely coupled cross-state information rather than one independent
+  return account per state.
+  `infiniteExpectedENNVariation_le_of_finite` supplies the generic
+  finite-to-infinite monotone-convergence step.
+  The generic cylinder-law bridge is checked in
+  `MathUE/Probability/FinitePathLawAdapter.lean`:
+  `hasAdaptiveFiniteMarginals_of_cylinder` identifies finite marginals from
+  exact cylinder masses, and
+  `finiteExpectedENNVariation_spaceTime_eq_ofReal` identifies the finite path
+  integral with the finite-history PMF account. Simon Lemma 2 still needs the
+  global cross-state cardinality estimate. A positive
   restartable graph extension does produce one compatible path with a
   linearly diverging prefix budget and `QuestionOneConclusion`; the seven
   generic hypotheses do not currently imply that restartability or a
@@ -236,11 +338,38 @@ the live mathematical ledger.
   The deviation has payoff at least the clipped floor (whose definition
   contains the explicit slack); no attained best-response supremum is
   asserted.  The purified-row certificate feeds the first-crossing theorem
-  directly.  Coordinate closeness and the positive survival lower bound remain
-  conditional on supplied endpoint modulus,
-  normalized near-feasibility, no-sure-quitter, and corrected uniform-survival
-  predicates, with an explicit positive `ρ`.  No global conditioned prefix or
-  finite orbit is produced.
+  directly.  Separately,
+  `exists_rootSequence_reached_supportPurification_of_approximateEquilibriumExistence`
+  obtains support-optimal purified rows from an actual approximate-equilibrium
+  sequence with an explicit product-law modulus, and
+  `reached_supportPurifiedPrefix_compatible` in
+  `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/FinitePrefixCompatibility.lean`
+  recomputes any uniformly reached finite window into an exact Bellman prefix
+  with a linear seam bound.
+  `lowSurvivalPrefix_or_exists_bounded_supportBellmanSpine_of_approximateEquilibriumExistence`
+  in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/ReachedPrefixCompactification.lean`
+  compactifies the fixed-reach prefixes into one bounded support-Bellman spine,
+  or retains a literal low-survival approximate prefix.
+  `QuittingPayoffTable.approximateEquilibriumExistence_iff_zeroNever` gives the
+  exact arbitrary-Never behavioral normalization used by AGKRS, and
+  `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
+  applies this alternative with the canonical reward bound. If the compact
+  spine's joint survival vanishes after every restart,
+  `quittingWellSupportedAbsorbingSequenceAt_of_boundedSupportBellmanSpine_of_jointSurvival`
+  identifies its displayed values with actual suffix payoffs and produces the
+  pointwise well-supported branch. On the low-survival source,
+  [`QuittingLowSurvivalFirstCrossingSourceAt.repairedSurvivalWindow`](../UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/LowSurvivalSourceAdapter.lean)
+  now selects the canonical first crossing,
+  transfers reached Nash to its predecessor, purifies the actual row against
+  its actual tail, constructs the floor-clipped certificate from the shifted
+  source profile, and lands in the repaired survival window. A separately
+  supplied source-matched near-total row also compiles to the instant branch.
+  No Simon branch follows from low cumulative survival alone: the positive-
+  window arm still needs normalized near-feasibility, no-sure-quitter, and a
+  uniform survival constant, while the instant arm needs cofinal near-total
+  rows. The spine branch still needs the all-restart survival condition (or an
+  equivalent semantic boundary); compactification does not supply it. No
+  global perfect sequence or finite orbit is produced.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`
@@ -355,9 +484,18 @@ the live mathematical ledger.
   owner. A terminal-exploitability witness removes the first arm. The two
   remaining alternatives still require their respective chronological or
   admissible-return consumers.
-- **Chronological atom production:** serialize the fixed vanishing-debt atom
-  access into executable reached tails satisfying the checked shadowing
-  certificate at every positive accuracy.
+- **Reached-source atom reprojection:** construct one executable finite block
+  from one actual reached source while retaining the atom labels and controlling
+  prescribed, cap, and deleted-clock errors by one explicit modulus.
+- **Budget-stable packet iteration:**
+  `exists_chronologicalDebtShadowingCertificate_of_seed` recursively chooses
+  successive reached-source packets, keeps their availability radii positive,
+  and turns two divergent actual label clocks into all deleted-survival laws.
+  It requires a globally bounded actual-port packet system plus a separate
+  external small-debt candidate adapter or a solved-game disjunct. A
+  positive-minimum actual port cannot itself supply that seed. Producing these
+  two-tier inputs remains open; the all-frontier consumer beyond them is a
+  conjecture-equivalent reformulation.
 - **Paid-row payoff near-return:** fix one positive charge threshold, while
   allowing the source, target, path, and charged edge to vary with endpoint
   tolerance, and make endpoint payoff vectors arbitrarily close. Fixed-edge

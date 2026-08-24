@@ -23,14 +23,21 @@ coordinate and therefore an eventually available vanishing-debt atom
 alternative.  In the support-entry branch, the atom can use the actual
 zero-debt recipient from the entry witness.
 
-The remaining implications are producer statements.  One may turn static
-vanishing-debt atoms into chronological debt-shadowing certificates, or turn
-the paid row into a fixed positive charge threshold and, at every accuracy, a
-possibly varying admissible path containing an edge above that threshold whose
-endpoint payoff vectors are close.  Fixed-edge payoff closure and exact return
-to the full tail state are stronger special cases.  The checked consumers for
-those two concrete outputs already produce a uniform payoff.  Neither missing
-producer is asserted here.
+The remaining implications have different logical levels.  A local atom
+reprojection theorem would construct one executable source-matched block, and
+a separate iteration theorem would assemble compatible blocks into
+chronological debt-shadowing certificates.  By contrast, the all-frontier
+`VanishingDebtAtomChronologicalConsumer` below already requests those
+certificates at every accuracy.  For each reward table it is equivalent to
+uniform-payoff existence, so it is a conjecture-level capstone rather than a
+local producer interface.
+
+The paid-row route asks for a fixed positive charge threshold and, at every
+accuracy, a possibly varying admissible path containing an edge above that
+threshold whose endpoint payoff vectors are close.  Fixed-edge payoff closure
+and exact return to the full tail state are stronger special cases.  Neither
+the local atom reprojection, its iteration, nor the paid-row producer is
+asserted here.
 -/
 
 noncomputable section
@@ -126,8 +133,13 @@ theorem QuittingPositiveAdmissibleReturn.exists_uniformEquilibriumPayoff
   quittingGame_exists_uniformPayoff_of_positive_admissible_return
     result.edge result.returnPath result.charge_pos
 
-/-- The precise missing chronological producer for the universal static atom
-access above. -/
+/-- **Conjecture-level capstone interface.**  For every positive-minimum
+frontier and its automatically available static atom access, produce
+chronological debt-shadowing certificates at every positive accuracy.
+
+This proposition is not a local packet-reprojection theorem.  For an inhabited
+finite player type it is equivalent, reward table by reward table, to existence
+of a uniform-equilibrium payoff; see the equivalences below. -/
 def VanishingDebtAtomChronologicalConsumer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ (frontier : QuittingPositiveMinimumDebtTangentFamily reward),
@@ -215,6 +227,56 @@ theorem not_hasPositiveMinimumTerminalSemanticDebt_of_vanishingDebtAtomChronolog
   exact hno
     (exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsumer
       hconsumer)
+
+/-- The all-frontier chronological consumer is equivalent to emptiness of the
+positive-minimum tangent-family type.  The reverse implication is vacuous;
+the forward implication uses the checked uniform-payoff capstone. -/
+theorem vanishingDebtAtomChronologicalConsumer_iff_isEmpty_tangentFamily
+    [Nonempty ι] :
+    VanishingDebtAtomChronologicalConsumer reward ↔
+      IsEmpty (QuittingPositiveMinimumDebtTangentFamily reward) := by
+  constructor
+  · intro hconsumer
+    refine ⟨fun frontier ↦ ?_⟩
+    exact
+      (not_hasPositiveMinimumTerminalSemanticDebt_of_vanishingDebtAtomChronologicalConsumer
+        hconsumer) frontier.hasPositiveMinimumTerminalSemanticDebt
+  · rintro ⟨hempty⟩ frontier
+    exact (hempty frontier).elim
+
+/-- Emptiness of the positive-minimum tangent-family type is exactly
+uniform-equilibrium-payoff existence. -/
+theorem isEmpty_positiveMinimumDebtTangentFamily_iff_exists_uniformEquilibriumPayoff
+    [Nonempty ι] :
+    IsEmpty (QuittingPositiveMinimumDebtTangentFamily reward) ↔
+      ∃ payoff : Payoff ι,
+        (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  constructor
+  · rintro ⟨hempty⟩
+    by_contra hno
+    have hpositive :=
+      (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+        reward).1 hno
+    obtain ⟨frontier⟩ := nonempty_positiveMinimumDebtTangentFamily hpositive
+    exact hempty frontier
+  · intro hexists
+    refine ⟨fun frontier ↦ ?_⟩
+    have hno :=
+      (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+        reward).2 frontier.hasPositiveMinimumTerminalSemanticDebt
+    exact hno hexists
+
+/-- **Exact interface diagnosis.**  The all-frontier chronological consumer is
+equivalent, uniformly for each reward table, to existence of a
+uniform-equilibrium payoff.  It therefore reformulates the finite-quitting
+existence problem rather than isolating its local packet-reprojection step. -/
+theorem vanishingDebtAtomChronologicalConsumer_iff_exists_uniformEquilibriumPayoff
+    [Nonempty ι] :
+    VanishingDebtAtomChronologicalConsumer reward ↔
+      ∃ payoff : Payoff ι,
+        (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  rw [vanishingDebtAtomChronologicalConsumer_iff_isEmpty_tangentFamily,
+    isEmpty_positiveMinimumDebtTangentFamily_iff_exists_uniformEquilibriumPayoff]
 
 /-- **Generic four-exit conditional capstone.**  The first three finite-rank
 exits are consumed by chronological shadowing.  The paid-row consumer keeps

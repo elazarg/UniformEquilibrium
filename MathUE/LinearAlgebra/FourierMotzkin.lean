@@ -626,5 +626,59 @@ theorem theorem_of_alternative {I : Type*} [Fintype I] {n : ℕ}
     ¬ IsFeasible A b ↔ HasCertificate A b :=
   theorem_of_alternative_aux n A b
 
+/-- **Gordan's theorem.** Exactly one of the following holds: some `x` makes
+every row strictly positive, or some nonzero nonnegative `u` balances every
+column of `A`.
+
+This is the homogeneous strict-system specialization of
+`theorem_of_alternative`, obtained by giving every weak inequality right-hand
+side `1`. -/
+theorem gordan {I : Type*} [Fintype I] {n : ℕ} (A : I → Fin n → 𝕜) :
+    (∃ x : Fin n → 𝕜, ∀ i, 0 < rowEval A i x) ↔
+      ¬ ∃ u : I → 𝕜,
+        (∀ i, 0 ≤ u i) ∧
+        (∀ j, ∑ i, u i * A i j = 0) ∧
+        u ≠ 0 := by
+  classical
+  have halt := theorem_of_alternative A (fun _ : I => (1 : 𝕜))
+  constructor
+  · rintro ⟨x, hx⟩ ⟨u, hnonneg, hbalance, hne⟩
+    have hzero : ∑ i, u i * rowEval A i x = 0 := by
+      have hswap :
+          ∑ i, u i * rowEval A i x =
+            ∑ j, (∑ i, u i * A i j) * x j := by
+        simp only [rowEval, mul_sum]
+        rw [Finset.sum_comm]
+        refine Finset.sum_congr rfl fun j _ => ?_
+        rw [sum_mul]
+        refine Finset.sum_congr rfl fun i _ => ?_
+        ring
+      rw [hswap]
+      simp [hbalance]
+    have hpos : ∃ i, 0 < u i := by
+      by_contra hall
+      push Not at hall
+      apply hne
+      funext i
+      exact le_antisymm (hall i) (hnonneg i)
+    obtain ⟨i, hi⟩ := hpos
+    have hlt : 0 < ∑ i, u i * rowEval A i x := by
+      refine Finset.sum_pos' (fun i _ => mul_nonneg (hnonneg i) (hx i).le) ?_
+      exact ⟨i, Finset.mem_univ i, mul_pos hi (hx i)⟩
+    rw [hzero] at hlt
+    exact lt_irrefl 0 hlt
+  · intro hnocert
+    have hnofarkas : ¬ HasCertificate A (fun _ : I => (1 : 𝕜)) := by
+      rintro ⟨u, hnonneg, hbalance, hposmass⟩
+      refine hnocert ⟨u, hnonneg, hbalance, ?_⟩
+      intro hzero
+      rw [hzero] at hposmass
+      simp at hposmass
+    have hfeas : IsFeasible A (fun _ : I => (1 : 𝕜)) := by
+      by_contra hinfeasible
+      exact hnofarkas (halt.mp hinfeasible)
+    obtain ⟨x, hx⟩ := hfeas
+    exact ⟨x, fun i => lt_of_lt_of_le one_pos (hx i)⟩
+
 end LinearAlgebra
 end Math
