@@ -1,0 +1,112 @@
+name: Retry persistent two-label proof with local classical simplification
+
+on:
+  push:
+    branches:
+      - codex/close-persistent-two-label-sorry
+
+permissions:
+  contents: write
+
+jobs:
+  retry:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/close-persistent-two-label-sorry
+          fetch-depth: 0
+          submodules: recursive
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Recover candidate if needed and add local classical instances
+        shell: bash
+        run: |
+          helper=.github/workflows/rewrite-and-validate-persistent-two-label-v3.yml
+          proof=Reverse/PersistentTwoLabelNashBellmanCounterexample.lean
+          if [[ -f "$helper" ]]; then
+            awk '/^          cat > Reverse\/PersistentTwoLabelNashBellmanCounterexample.lean <<'\''LEAN'\''$/ {inside=1; next}
+                 /^          LEAN$/ {inside=0; exit}
+                 inside {sub(/^          /, ""); print}' "$helper" > "$proof"
+          fi
+          python - <<'PY'
+          from pathlib import Path
+
+          proof = Path("Reverse/PersistentTwoLabelNashBellmanCounterexample.lean")
+          text = proof.read_text()
+          signatures = [
+              "private theorem expect_update_true_pure",
+              "@[simp] theorem quittingRootQuitPayoff_persistentTwoLabelCounterexample",
+              "@[simp] theorem quittingRootContinuePayoff_persistentTwoLabelCounterexample",
+              "theorem not_exists_persistentTwoLabelExactNashBellmanSpine",
+          ]
+          for signature in signatures:
+              start = text.index(signature)
+              by_pos = text.index(":= by\n", start)
+              insert = by_pos + len(":= by\n")
+              if not text.startswith("  classical\n", insert):
+                  text = text[:insert] + "  classical\n" + text[insert:]
+          proof.write_text(text)
+
+          target = Path("Reverse/QuestionBankFakeProof.lean")
+          source = target.read_text()
+          source = source.replace(
+              "  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] [Nonempty ι]\n"
+              "      (_hcard : 2 ≤ Fintype.card ι)",
+              "  ∀ {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]\n"
+              "      (_hcard : 2 ≤ Fintype.card ι)",
+              1,
+          )
+          source = source.replace(
+              "hanswer Bool (by decide)\n    persistentTwoLabelCounterexampleReward",
+              "hanswer (ι := Bool) (by decide)\n    persistentTwoLabelCounterexampleReward",
+              1,
+          )
+          target.write_text(source)
+          PY
+
+      - name: Compile changed modules
+        shell: bash
+        run: |
+          set -euo pipefail
+          lake env lean Reverse/PersistentTwoLabelNashBellmanCounterexample.lean
+          lake env lean Reverse/QuestionBankFakeProof.lean
+
+      - name: Trust scan theorem module
+        shell: bash
+        run: |
+          ! grep -nE '\b(sorry|admit|axiom|native_decide|unsafe)\b' \
+            Reverse/PersistentTwoLabelNashBellmanCounterexample.lean
+
+      - name: Commit only the validated result
+        shell: bash
+        run: |
+          rm -f Reverse/.persistent-two-label-ci-trigger
+          rm -f Reverse/PersistentTwoLabelCompileStatus.txt
+          rm -f Reverse/PersistentTwoLabelCompileErrors.txt
+          rm -f Reverse/upload-probe.txt
+          rm -f Reverse/PersistentTwoLabelNashBellmanCounterexampleScratch.lean
+          rm -f .github/workflows/apply-persistent-two-label-refutation.yml
+          rm -f .github/workflows/validate-persistent-two-label-refutation.yml
+          rm -f .github/workflows/fix-persistent-two-label-push-neg.yml
+          rm -f .github/workflows/validate-persistent-two-label-refutation-v2.yml
+          rm -f .github/workflows/finalize-persistent-two-label-validation.yml
+          rm -f .github/workflows/normalize-and-validate-persistent-two-label.yml
+          rm -f .github/workflows/rewrite-and-validate-persistent-two-label-v3.yml
+          rm -f .github/workflows/retry-persistent-two-label-with-classical.yml
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Close persistent two-label fake answer by refutation"
+          git pull --rebase origin codex/close-persistent-two-label-sorry
+          git push origin HEAD:codex/close-persistent-two-label-sorry
