@@ -1,0 +1,34 @@
+Reverse/PersistentTwoLabelNashBellmanCounterexample.lean:7:0: error: unknown module prefix 'UniformEquilibrium'
+
+No directory 'UniformEquilibrium' or file 'UniformEquilibrium.olean' in the search path entries:
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/Cli/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/batteries/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/Qq/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/aesop/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/proofwidgets/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/importGraph/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/LeanSearchClient/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/plausible/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/mathlib/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/fixed-point-theorems/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/GameTheory/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/build/lib/lean
+/home/runner/.elan/toolchains/leanprover--lean4---v4.32.2/lib/lean
+/home/runner/.elan/toolchains/leanprover--lean4---v4.32.2/lib/lean
+Reverse/QuestionBankFakeProof.lean:7:0: error: unknown module prefix 'UniformEquilibrium'
+
+No directory 'UniformEquilibrium' or file 'UniformEquilibrium.olean' in the search path entries:
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/Cli/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/batteries/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/Qq/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/aesop/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/proofwidgets/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/importGraph/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/LeanSearchClient/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/plausible/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/mathlib/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/packages/fixed-point-theorems/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/GameTheory/.lake/build/lib/lean
+/home/runner/work/UniformEquilibrium/UniformEquilibrium/.lake/build/lib/lean
+/home/runner/.elan/toolchains/leanprover--lean4---v4.32.2/lib/lean
+/home/runner/.elan/toolchains/leanprover--lean4---v4.32.2/lib/lean
