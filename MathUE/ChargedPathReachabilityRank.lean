@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ChargedPathBudget
+import Mathlib.Data.Fintype.Card
 
 /-!
 # Finite reachability rank for failed charged returns
