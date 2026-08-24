@@ -117,6 +117,28 @@ has direct checked face signs and an exact stationary certificate, while
 showing that the coarse range hypotheses are not necessary.  This remains a
 conditional stationary class, not a producer for arbitrary quitting games.
 
+Two further stationary classes sharpen the incentive-gadget boundary.
+`quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
+(`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`)
+constructs a literal sure-exit coalition whenever every pair influence has one
+fixed positive, negative, or absent sign and every directed simple influence
+cycle has positive sign product. The construction switches polarities within
+strongly connected components and freezes the components in condensation
+order; no single global polarity is assumed. The converse
+`exists_negativeSimpleInfluenceCycle_of_no_sureExitSet` shows that a negative
+simple cycle is necessary for any fixed-sign table without a sure-exit
+escape. This is an unrestricted-behavior equilibrium theorem, but it says
+nothing about influences whose signs change with the coalition background.
+
+The smallest negative-cycle boundary also has a checked positive result.
+`isUniformEquilibriumPayoff_of_literalStrictThreeBlockerCore`
+(`UniformEquilibrium/Quitting/Classification/Existence/OddBlockerCoreRowAdapter.lean`)
+gives an exact stationary all-behavior uniform-equilibrium payoff for a
+literal strict three-player blocker core. Arbitrarily many outside players and
+all their reward coordinates are unrestricted; the hypotheses require passive
+continuation values for the core and uniform strict blocker signs on every
+background. The arbitrary odd-core extension remains unproved.
+
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with
 `O(1/N)` prefix control (`exists_frozenBalancedResetPacket` in
@@ -249,16 +271,33 @@ the live mathematical ledger.
   the atom mover/observer labels also remains open. The separate
   artificial-candidate anchor remains Tier II.
 - **Four-player full-support residual:**
-  `uniformPayoff_or_quantitative_fullSupport_fullNormalCore_of_finFour`
+  `uniformPayoff_or_nonempty_finFourQuantitativeFullSupportHardResidual`
   gives an unconditional alternative for every reward table on `Fin 4`.
   Either the game has a uniform-equilibrium payoff, or the same table has a
   terminal exploitability witness, full recursive normal core, all-player
   punishment normality, and a normalized singleton packet with support all
-  four players and an explicit positive coordinate floor. The construction
-  uses constrained stationary Nash roots, the unrestricted stationary
-  deviation cap, a terminal-gap hazard estimate, and a normalized
-  small-hazard limit. Packet supports one, two, and three are therefore not
-  live counterexample residuals. The checked barrier
+  four players and an explicit positive coordinate floor, together with
+  `ResidualHardClass`. Packet supports one, two, and three and the
+  projective-Q-bar matrix chamber are therefore not live counterexample
+  residuals. The remaining nonprojective proper principal has size two or
+  three. `FinFourQuantitativeFullSupportHardResidual.hardPrincipalDispatch`
+  puts it in a mutually harmful pair with outside positive helpers, a
+  three-principal with an external positive helper, or an internally cyclic
+  three-principal with nonpositive determinant.
+
+  The same-table theorem
+  `QuittingTerminalExploitabilityWitness.fullSupport_fullNormalCore_with_paidRefinedCycle_of_finFour`
+  supplies an actual reachable strict-toggle cycle; its large-base arm is a
+  disjoint two-plus-two partition and enters the pure-or-mixed paid normal
+  chain. Separately,
+  `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
+  proves that in each of the eight marked two-cycle preemption constructors,
+  the literal cycle pair is itself the hard card-two crossing; the other nine
+  constructors have length three or four. The toggle cycle and preemption
+  lasso are selected independently, and these structural refinements do not
+  eliminate a semantic chamber or produce a strategy.
+
+  The checked barrier
   `fullSupportPacket_standardQ_nonhomogeneous_but_not_cyclic` shows why the
   remaining step is semantic: an actual packet can simultaneously have full
   support, full normal core, internal crossed rows, a standard-`Q`

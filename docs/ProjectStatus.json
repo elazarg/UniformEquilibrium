@@ -59,10 +59,37 @@
       "id": "fin-four-full-support-residual",
       "subject": "Four-player quitting counterexample residual",
       "kind": "Unconditional alternative theorem",
-      "declaration": "uniformPayoff_or_quantitative_fullSupport_fullNormalCore_of_finFour",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/NormalTerminalGapConstrainedStationary.lean",
+      "declaration": "uniformPayoff_or_nonempty_finFourQuantitativeFullSupportHardResidual",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportProjectiveQBarResidual.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "Every Fin 4 reward table has a uniform-equilibrium payoff or, on the same table, a terminal exploitability witness, full recursive normal core, all-player punishment normality, and a normalized singleton packet with full support and an explicit positive coordinate floor. The residual is not solved."
+      "scope": "For every supplied finite coordinate bound, a Fin 4 reward table has a uniform-equilibrium payoff or, on the same table, a terminal exploitability witness, full recursive normal core, all-player punishment normality, a normalized singleton packet with full support and an explicit positive coordinate floor, and ResidualHardClass. Thus the projective-Q-bar chamber is solved; the hard residual is not."
+    },
+    {
+      "id": "fin-four-hard-principal-dispatch",
+      "subject": "Finite principal dispatch in the four-player hard residual",
+      "kind": "Conditional structural theorem",
+      "declaration": "hardPrincipalDispatch",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportHardPrincipalDispatch.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every supplied quantitative full-support hard residual has a size-two mutually harmful principal with outside positive helpers, or a size-three principal with an external positive helper or cyclic orientation and nonpositive determinant. This is singleton-matrix structure, not a semantic consumer."
+    },
+    {
+      "id": "fin-four-paid-toggle-refinement",
+      "subject": "Paid-chain refinement of the four-player strict-toggle residual",
+      "kind": "Conditional structural theorem",
+      "declaration": "fullSupport_fullNormalCore_with_paidRefinedCycle_of_finFour",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/StrictToggleLargeBasePaidChain.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "A bounded Fin 4 table with a terminal exploitability witness supplies, on the same table, full normal core, a quantitative full-support packet, and an actual reachable strict-toggle cycle. Its large-base branch is exactly a two-plus-two partition and enters the checked pure-or-mixed paid normal chain; the singleton-base and empty-base gaps remain."
+    },
+    {
+      "id": "fin-four-two-cycle-hard-pair-alignment",
+      "subject": "Two-cycle lasso and hard-principal alignment",
+      "kind": "Conditional structural theorem",
+      "declaration": "exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/TwoCycleLassoHardPairAlignment.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every supplied Fin 4 hard residual has collision-anchored marked preemption geometry such that each of the eight two-cycle constructors uses its literal cycle pair as the nonprojective card-two crossing, or the geometry is one of the nine length-three/four cases. This formalizes alignment bookkeeping; it eliminates no semantic case and supplies no strategy consumer."
     },
     {
       "id": "full-core-deadlock-debt-bound",
@@ -99,6 +126,24 @@
       "source": "UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "Strict lower and weak upper conditional reward-range comparisons yield a stationary behavioral terminal Nash and a uniform-equilibrium payoff; the hypotheses are a sufficient source-data condition, not a universal classification."
+    },
+    {
+      "id": "cycle-balanced-signed-influence",
+      "subject": "Cycle-balanced fixed-sign quitting influence tables",
+      "kind": "Unconditional family theorem",
+      "declaration": "quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence",
+      "source": "UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Fixed positive, negative, or absent pair influences, with positive sign product on every directed simple influence cycle, produce a literal sure-exit coalition and a uniform-equilibrium payoff against all unilateral behavioral deviations. Within the fixed-sign class, absence of every sure-exit coalition forces a negative simple influence cycle."
+    },
+    {
+      "id": "literal-strict-three-blocker-core",
+      "subject": "Literal strict three-blocker core with arbitrary outside-player payoffs",
+      "kind": "Conditional family theorem",
+      "declaration": "isUniformEquilibriumPayoff_of_literalStrictThreeBlockerCore",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/OddBlockerCoreRowAdapter.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Passive continuation values and uniform literal strict blocker signs on one three-player core yield an exact stationary all-behavior uniform-equilibrium payoff, with arbitrarily many outside players and unrestricted outside-player reward coordinates. This is the three-core case, not the arbitrary odd-cycle theorem."
     },
     {
       "id": "projective-qbar-uniform-payoff",
