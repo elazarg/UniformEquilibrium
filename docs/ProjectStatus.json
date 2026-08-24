@@ -125,7 +125,7 @@
       "declaration": "exists_largeBasePaidStationaryHandoff",
       "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/LargeBaseStationarySemanticHandoff.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "On four players, every supplied support-two paid-chain residual admits a reselected singleton-owner stationary source with debt concentrated at that owner. Repairing the owner transfers the terminal gap to a free player and yields a literal paid first-disagreement row; the floor-safe or identified free-floor-damage alternative remains to be connected to a payoff near-return."
+      "scope": "On four players, every supplied support-two paid-chain residual admits a reselected singleton-owner stationary source with debt concentrated at that owner. Repairing the owner transfers the terminal gap to a free player and yields a literal paid first-disagreement row. The endpoint dispatch now gives localized floor failure or a literal exact infinite floor orbit whose finite segments satisfy the collision budget. Charged payoff recurrence would yield a uniform payoff, so a terminal witness forces every fixed absorption threshold eventually to disappear; no payoff near-return is produced."
     },
     {
       "id": "fin-four-leave-join-stationary-handoff",
@@ -135,6 +135,24 @@
       "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/LeaveJoinStationaryTwoDebtorHandoff.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
       "scope": "In the Fin 4 hard residual, punishment normality first forces a full-terminal-gap collision at every singleton. The rooted-two owner-leave arm then either retains a full-gap enlarged-pair outsider join or constructs an actual stationary source with a quantitative pair/triple atom, two all-behavior solved punishment-floor-safe coordinates, debt on at most the other two labels, and a literal paid first-disagreement row. No checked consumer turns that source into a Bellman return, terminal approximate Nash profile, or uniform payoff."
+    },
+    {
+      "id": "fin-four-stationary-paid-carrier-linear-debt-moat",
+      "subject": "Stationary paid carrier linear debt moat",
+      "kind": "Conditional quantitative no-go theorem",
+      "declaration": "source_debt_or_absorption_le_four_mul_error_div",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/StationaryPaidCarrierLinearDebtMoat.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "The actual stationary two-debtor source composes with the complete Fin 4 minimum-fiber basin: either its semantic debt is uniformly above the global minimum or every approximate root at its literal prescribed payoff pays linearly for absorption. Exact roots in the low-debt arm are the all-Continue identity, and exact charged punishment-floor paths require the off-minimum arm. This is an obstruction consumer, not a charged-root or payoff-return producer."
+    },
+    {
+      "id": "fin-four-prescribed-owner-handoff-alignment",
+      "subject": "Prescribed-owner reset and stationary handoff alignment",
+      "kind": "Conditional structural theorem",
+      "declaration": "QuittingTerminalExploitabilityWitness.exists_finFour_prescribedOwner_resetDispatch",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourPrescribedOwnerResetAlignment.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "At a global minimum terminal-semantic carrier pair on Fin 4, any chosen positive debtor can be the owner of an actual complementary-pair stationary target with zero owner debt, unit opponent incidence, and the checked fixed-law reset dispatch. Independently, any preselected label can own an actual singleton-base stationary paid handoff with a uniform positive owner-floor gap. The common label does not identify the two profiles, terminal laws, returned observer, payoff vectors, or chronology; the all-Continue reset wall and paid-return connector remain open."
     },
     {
       "id": "fin-four-strict-minimum-plateau-isolation",
@@ -162,6 +180,33 @@
       "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
       "scope": "Every hypothetical no-uniform Fin 4 table has one bounded open neighborhood of its complete prescribed minimum-fiber projection and one positive constant charging root absorption linearly by literal total Nash defect at every scale. Along exact-successor paths ending near that fiber, a sufficiently small aggregate declared-error budget keeps every node local and bounds total absorption and path diameter; any first exit pays a fixed aggregate-error toll. The theorem produces no path and does not control a nonlocal incoming continuation or a nonvanishing aggregate-error budget."
+    },
+    {
+      "id": "fin-four-carrier-source-charge-debt-error-gate",
+      "subject": "Carrier-source fixed-charge debt-or-error gate",
+      "kind": "Conditional quantitative no-go theorem",
+      "declaration": "debt_or_error",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourCarrierSourceChargeDebtErrorGate.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "For every positive charge threshold in a hypothetical no-uniform Fin 4 table, a finite approximate successor path beginning at the prescribed payoff of an actual terminal-semantic carrier either starts a fixed debt distance above the global minimum or spends a fixed aggregate root-error budget. Exact charged punishment-floor paths therefore cannot start on the minimum fiber. The full-replacement paid profiles are eventually off-minimum, but no checked theorem identifies a near-return path source with those profiles or constructs a return."
+    },
+    {
+      "id": "fin-four-charged-blocker-repayment",
+      "subject": "Fin4 charged blocker gate and exact repayment",
+      "kind": "Conditional quantitative obstruction theorem",
+      "declaration": "pairPremium_or_every_exactRepayment",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/ChargedSoloBlockerGateRepayment.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every fixed-charge exact carrier-root family either has positive-liminf semantic debt descent or converges along a strict subsequence to one mixed solo debtor and a punishment-normal outsider attaining the maximal joining gap. The actual gate row extends to exact punishment-floor orbits on which a fixed pair premium or fixed repayment in the blocker coordinate is unavoidable. The synthetic blocker tail is not asserted to be a carrier point, no collision-mass producer follows from the premium, and the other payoff coordinates need not return."
+    },
+    {
+      "id": "fin-four-solo-wall-dispatch",
+      "subject": "Fin4 solo-wall debt descent and finite-spine exclusion",
+      "kind": "Conditional structural reduction",
+      "declaration": "not_exists_outwardUniformSoloCarrierChain_of_normal",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourSoloWallDispatch.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "From a unique-debtor exact solo gate, a uniform opponent-absorption floor gives strict carrier-debt descent; otherwise finite solo prefixes reach a first outsider wall. Arbitrarily long finite uniform-solo windows compactify to an infinite spine, and punishment normality excludes the corresponding infinite outward chain. A pair premium at the wall yields the checked singleton-base handoff or an outsider pair-join. The pair-base stationary two-debtor source promised from that join is not proved, so the full packet remains in revisit and no payoff return follows."
     },
     {
       "id": "full-core-deadlock-debt-bound",
@@ -233,7 +278,7 @@
       "declaration": "integerReward_exploitability_ge",
       "source": "UniformEquilibrium/Quitting/Paths/SixPlayerOnePairMassTargetLock.lean",
       "umbrella": "UniformEquilibrium.lean",
-      "scope": "A complete Fin 6 integer table forces terminal exploitability at least 31(1-a)/66 and hence the exact first-pair and leftover bounds; bounded outsider-coordinate completions retain robust estimates. Every such direct cross-penalty completion also has a pure exact target equilibrium and uniform payoff, so it cannot force the second pair. The checked second-pair upper bound still assumes a supplied clock inequality; no arbitrary-profile clock adapter is proved here."
+      "scope": "A complete Fin 6 integer table forces terminal exploitability at least 31(1-a)/66 and hence the exact first-pair and leftover bounds; bounded outsider-coordinate completions retain robust estimates. Every actual behavioral profile satisfies the sharp two-pair square-root clock inequality, so the second-pair upper bound is unconditional. Every direct cross-penalty completion nevertheless has a pure exact target equilibrium and uniform payoff, so no positive second-pair mass is forced."
     },
     {
       "id": "literal-strict-finite-odd-blocker-core",
@@ -243,6 +288,15 @@
       "source": "UniformEquilibrium/Quitting/Classification/Existence/FiniteOddIntervalBlockerCoreRowAdapter.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "For every embedded odd cyclic core of finite size at least three, the literal row-extrema sandwich L_i^+ < C_i^- <= C_i^+ < H_i^- yields an exact stationary all-behavior uniform-equilibrium payoff. Core continuation rewards may vary by terminal coalition inside their separated band; arbitrarily many outside players and every outside-player reward coordinate remain unrestricted. The constant-passive theorem remains a separately checked special case. Overlapping or weak bands and arbitrary negative influence cycles are not covered."
+    },
+    {
+      "id": "strategically-precompact-watchdog-boundary",
+      "subject": "Strategically precompact watchdog and proper-tail boundary",
+      "kind": "Conditional obstruction theorem",
+      "declaration": "exists_lateOrNeverMass_escape_of_not_properStrategicallyApproximable",
+      "source": "UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogProperBoundary.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Strategically totally bounded deviation families cannot force a fixed all-profile gain, and one arbitrary nonprecompact player range is still harmless, so a surviving selector needs two distinct identities with fixed late-finite mass. Conditional on failure of proper strategic approximation, a range has fixed late-or-Never escape; a strategically totally bounded such range contains a nonproper essential Never witness. The compact stopping-law barycenter is checked, but the proper-sentinel compact Nash theorem still lacks a joint weak-continuity lemma, so failure of proper approximation is not proved for every selector identity."
     },
     {
       "id": "projective-qbar-uniform-payoff",
