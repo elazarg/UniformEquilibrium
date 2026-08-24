@@ -6,10 +6,9 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.PaidFirstDisagreementPayoffNearReturn
 import UniformEquilibrium.Diagnostics.Quitting.UniformExistenceBoundary
-import UniformEquilibrium.Quitting.Classification.OnePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.SuppliedCorrespondence
 import UniformEquilibrium.Quitting.Debt.Dynamic.NashBellmanChronologicalForcing
-import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabel
+import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 
 /-!
 # Fake proof that the active question bank is conjecture-closing
@@ -19,6 +18,8 @@ name starts with `fakeAnswer` is an assumed mathematical answer implemented
 with `sorry`.  The downstream theorems contain no additional gap: they apply
 the checked production consumers to show exactly which answers imply uniform
 existence and which answers instead provide a quitting-game counterexample.
+The formerly listed universal persistent-two-label answer is now proved false
+and is retained only through its valid per-spine conditional consumer.
 
 Nothing in this file is evidence for any `M`, `L`, `A`, or `C` seal.
 -/
@@ -80,34 +81,41 @@ structure PersistentTwoLabelNashBellmanAnswer
     IsεQuittingRootNash reward (value (time + 1)) 0 (roots time)
   persistent : HasTwoPersistentQuittingMarginals roots
 
-/-- Fake positive answer to persistent two-label selection. -/
-theorem fakeAnswer_persistentTwoLabelHazards
-    {ι : Type} [Fintype ι] [DecidableEq ι]
-    (hcard : 2 ≤ Fintype.card ι)
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    Nonempty (PersistentTwoLabelNashBellmanAnswer reward) := by
-  sorry
+/-- The proposed universal two-label answer is false even after imposing the
+necessary two-player cardinality bound. -/
+theorem not_forall_persistentTwoLabelNashBellmanAnswer :
+    ¬ (∀ (ι : Type) [Fintype ι] [DecidableEq ι],
+      2 ≤ Fintype.card ι →
+      ∀ reward : {S : Finset ι // S.Nonempty} → Payoff ι,
+        Nonempty (PersistentTwoLabelNashBellmanAnswer reward)) := by
+  intro hall
+  apply not_exists_persistentTwoLabelExactNashBellmanSpine
+  obtain ⟨answer⟩ := hall Bool (by decide)
+    persistentTwoLabelCounterexampleReward
+  exact ⟨answer.value, answer.roots, answer.bellman, answer.nash,
+    answer.persistent⟩
 
-/-- Persistent labels on one exact spine provide every-accuracy chronological
-certificates and therefore independently close uniform existence. -/
-theorem fake_persistentTwoLabelHazards_proves_uniformExistence :
-    FiniteQuittingUniformExistence := by
-  intro ι _ _ _ reward
-  by_cases hcard : 2 ≤ Fintype.card ι
-  · obtain ⟨answer⟩ := fakeAnswer_persistentTwoLabelHazards hcard reward
-    obtain ⟨hopponent, hjoint⟩ :=
-      HasTwoPersistentQuittingMarginals.survival hcard answer.persistent
-    apply
-      quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-        reward
-    intro eta heta
-    exact nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine
-      reward answer.value answer.roots answer.value_bound answer.bellman
-        answer.nash hjoint hopponent eta heta
-  · have hpositive : 0 < Fintype.card ι := Fintype.card_pos
-    have hone : Fintype.card ι = 1 := by omega
-    letI : Unique ι := (Fintype.card_eq_one_iff_nonempty_unique.mp hone).some
-    exact quittingGame_exists_uniformEquilibriumPayoff_onePlayer reward
+/-- Persistent labels on one supplied exact spine still provide every-
+accuracy chronological certificates and therefore a uniform-equilibrium
+payoff for that game. -/
+theorem PersistentTwoLabelNashBellmanAnswer.exists_uniformEquilibriumPayoff
+    {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (answer : PersistentTwoLabelNashBellmanAnswer reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨first, second, hne, _, _⟩ := answer.persistent
+  have hcard : 2 ≤ Fintype.card ι :=
+    Fintype.one_lt_card_iff.mpr ⟨first, second, hne⟩
+  obtain ⟨hopponent, hjoint⟩ :=
+    HasTwoPersistentQuittingMarginals.survival hcard answer.persistent
+  apply
+    quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+      reward
+  intro eta heta
+  exact nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine
+    reward answer.value answer.roots answer.value_bound answer.bellman
+      answer.nash hjoint hopponent eta heta
 
 /-! ## Paid admissible payoff near-return -/
 
