@@ -146,18 +146,59 @@ cycle sufficient nor constrains rewards of coalitions with at least three
 quitters.
 
 The finite odd negative-cycle boundary also has a checked positive result.
-`isUniformEquilibriumPayoff_of_literalStrictFiniteOddBlockerCore`
-(`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean`)
+`isUniformEquilibriumPayoff_of_literalStrictFiniteOddIntervalBlockerCore`
+(`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddIntervalBlockerCoreRowAdapter.lean`)
 gives an exact stationary all-behavior uniform-equilibrium payoff for every
-embedded odd cyclic blocker core of finite size at least three. Arbitrarily
-many outside players and all their reward coordinates are unrestricted; the
-literal source assumes passive continuation values for the core and uniform
-strict blocker signs on every background. The literal family has `M`, `L`,
-`A`, and `C`: checked reward-table rows enter the stationary certificate,
-which enters the unrestricted-behavior uniform-payoff consumer. The reviewed
-literal row-extrema extension
-`L_i^+ < C_i^- <= C_i^+ < H_i^-` is not covered by that declaration; it
-remains an export target rather than part of the checked family.
+embedded odd cyclic blocker core of finite size at least three whose literal
+row extrema satisfy
+`L_i^+ < C_i^- <= C_i^+ < H_i^-`. Core continuation rewards may vary by
+absorbing coalition within their separated band. Arbitrarily many outside
+players and all their reward coordinates remain unrestricted. The literal
+family has `M`, `L`, `A`, and `C`: checked row extrema enter the stationary
+certificate, which enters the unrestricted-behavior uniform-payoff consumer.
+The constant-passive declarations in
+`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean`
+remain a separately checked special case. Neither theorem covers overlapping
+or weak bands, same-background signs without the global extrema sandwich, or
+arbitrary negative influence cycles.
+
+Participant-only rewards form another checked architecture-level no-go.
+`exists_stationary_uniformEquilibriumPayoff_of_participantOnly`
+(`UniformEquilibrium/Quitting/Classification/Existence/ParticipantOnlyStationary.lean`)
+constructs an exact stationary terminal Nash profile against unrestricted
+unilateral behavioral deviations for every finite table whose absent-player
+coordinates vanish, and supplies its uniform-equilibrium payoff. For an
+arbitrary table, `exists_stationary_isTwoPassiveMagnitudeAsymptoticNash` and
+`half_terminalExploitabilityGap_le_quittingPassiveMagnitude`
+(`UniformEquilibrium/Quitting/Classification/Existence/ParticipantOnlyPerturbation.lean`)
+give a stationary profile with terminal exploitability at most twice the
+empty-safe largest passive reward magnitude. Thus a fixed terminal gap
+`gamma` requires passive magnitude at least `gamma / 2`. The pointwise source
+predicate and participant projection are checked actual-table adapters. The
+results have `M`, `L`, `A`, and `C`; they do not give exact equilibrium
+existence for arbitrary non-participant-only tables.
+
+The six-player direct cross-penalty architecture now has a checked exact
+ledger and matching obstruction.
+`integerReward_exploitability_ge` and
+`integerReward_mass_and_leftover_of_exploitability_le`
+(`UniformEquilibrium/Quitting/Paths/SixPlayerOnePairMassTargetLock.lean`)
+show that its complete integer table forces
+`Expl >= 31 * (1-a) / 66 >= 31 * ell / 66` for every behavioral profile.
+The generic theorem
+`exactCoalitionMass_ge_of_targetCrossPenaltyCompletion` takes an explicit
+terminal `epsilon`-Nash premise, and the robust `[-1,1]` outsider completion
+retains the stated `17/8` mass bounds. Every such completion nevertheless has
+the pure first target as an exact all-behavior terminal Nash profile and a
+uniform-equilibrium payoff, so it cannot force the second pair. These ledger,
+completion, and target-lock results have `M`, `L`, `A`, and `C`. The separate
+`integerReward_secondPairMass_le_of_clock` has only conditional `L`: it still
+takes the square-root clock inequality as a supplied `hclock` premise. No
+checked adapter currently derives that premise from an arbitrary profile's
+live roots, so the three live-root/stage-amplitude/terminal-mass bridges remain
+an unreviewed formalization target in the conference notes, not an accepted
+export. Even after that adapter, positive second-pair production and a fixed
+exploitability gap remain open.
 
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with
@@ -327,6 +368,30 @@ the live mathematical ledger.
   one identified free-coordinate floor loss. It does not connect the original
   paid boundary face to the reselected source or repay the latter loss.
 
+  Punishment normality also forces literal nonsingleton data at every
+  singleton. The theorem
+  `FinFourQuantitativeFullSupportHardResidual.exists_terminalGap_collision_at_singleton`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PunishmentNormalAtomicCollisionHandoff.lean`)
+  selects a distinct outsider whose pair-collision gain is at least the same
+  terminal gap. In the rooted-two owner-leave arm,
+  `ownerLeaveCollisionChain_outsiderJoin_or_thirdLabelHandoff` either retains
+  a full-gap outsider join at the enlarged pair or follows the collider's
+  full-gap leave by a full-gap join from a genuinely third label. This
+  composition has `M`, `L`, `A`, and `C`; its checked consumer is the
+  third-label handoff, not an equilibrium construction.
+
+  The further adapter
+  `ownerLeaveCollisionChain_outsiderJoin_or_stationaryTwoDebtorHandoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/LeaveJoinStationaryTwoDebtorHandoff.lean`)
+  either keeps that enlarged-pair outsider join or constructs an actual
+  stationary source. Its leaver and joiner have zero unrestricted behavioral
+  debt and lie above punishment; the joiner hazard is at least
+  `gamma / (gamma + 2*M)`; one literal pair or triple atom has at least half
+  that mass; and positive debt lies on at most the spectator and fourth label,
+  with a terminal-gap debtor and literal paid first-disagreement row. This
+  source has `M`, `L`, and `A`, but not `C`: no checked return or uniform-payoff
+  consumer uses it.
+
   Separately,
   `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
   proves that in each of the eight marked two-cycle preemption constructors,
@@ -379,10 +444,25 @@ the live mathematical ledger.
   exact cyclic continuation is impossible; charged exact blocks obey the
   corresponding terminal-seam floor; and an exact infinite path converging
   to an interior tube point is constant from time zero. These conclusions are
-  tail-oriented. They neither exclude an incoming edge whose continuation is
-  nonlocally outside the tube nor control approximate roots whose incidence
-  tends to zero. No checked theorem produces the nonlocal incoming edge,
-  return, or approximate-root mechanism needed to close the conjecture.
+  tail-oriented and do not exclude an incoming edge whose continuation is
+  nonlocally outside the tube.
+
+  The approximate vanishing-incidence gap inside the tube is now quantified.
+  `exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean`)
+  supplies one bounded open neighborhood of the whole prescribed minimum-
+  fiber projection and one `c > 0` such that `c * absorption <= total defect`
+  for every local product root, at every scale. The successor consumer
+  `successorPath_mem_and_absorptionSum_le_of_linearDefect`
+  (`UniformEquilibrium/Quitting/Paths/StrictAllContinueBasinSuccessorPath.lean`)
+  bootstraps locality from a terminal point near the fiber: a sufficiently
+  small aggregate declared-error budget keeps every exact-successor path node
+  in the tube and bounds both total absorption and path diameter by that
+  budget. Its contrapositive charges a fixed aggregate-error toll for a first
+  exit. The Fin4 composition has `M`, `L`, `A`, and `C`, but it produces no
+  path and says nothing about a nonlocal incoming continuation or a
+  nonvanishing aggregate-error budget. No checked theorem produces the
+  nonlocal incoming edge or return needed to close the conjecture.
 
   The checked barrier
   `fullSupportPacket_standardQ_nonhomogeneous_but_not_cyclic` shows why the
