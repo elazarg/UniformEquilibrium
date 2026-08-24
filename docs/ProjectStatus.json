@@ -128,6 +128,15 @@
       "scope": "On four players, every supplied support-two paid-chain residual admits a reselected singleton-owner stationary source with debt concentrated at that owner. Repairing the owner transfers the terminal gap to a free player and yields a literal paid first-disagreement row; the floor-safe or identified free-floor-damage alternative remains to be connected to a payoff near-return."
     },
     {
+      "id": "fin-four-leave-join-stationary-handoff",
+      "subject": "Rooted-two atomic collision and stationary two-debtor handoff",
+      "kind": "Conditional structural theorem",
+      "declaration": "ownerLeaveCollisionChain_outsiderJoin_or_stationaryTwoDebtorHandoff",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/LeaveJoinStationaryTwoDebtorHandoff.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "In the Fin 4 hard residual, punishment normality first forces a full-terminal-gap collision at every singleton. The rooted-two owner-leave arm then either retains a full-gap enlarged-pair outsider join or constructs an actual stationary source with a quantitative pair/triple atom, two all-behavior solved punishment-floor-safe coordinates, debt on at most the other two labels, and a literal paid first-disagreement row. No checked consumer turns that source into a Bellman return, terminal approximate Nash profile, or uniform payoff."
+    },
+    {
       "id": "fin-four-strict-minimum-plateau-isolation",
       "subject": "Strict minimum-plateau isolation in a four-player counterexample",
       "kind": "Conditional counterexample reduction",
@@ -144,6 +153,15 @@
       "source": "UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRigidity.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "For any supplied payoff set on which all-Continue is the unique exact endpoint-Nash product root, every finite exact anchored Nash--Bellman path ending there is constant and has zero absorption. Checked corollaries exclude absorbing cyclic continuation, give a terminal-seam distance floor for charged blocks, and make every exact infinite path converging to an interior point constant from time zero. The theorem says nothing about approximate roots or an incoming edge whose continuation tail lies outside the basin."
+    },
+    {
+      "id": "strict-all-continue-linear-absorption-defect",
+      "subject": "Linear absorption defect in a strict all-Continue basin",
+      "kind": "Conditional quantitative no-go theorem",
+      "declaration": "exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every hypothetical no-uniform Fin 4 table has one bounded open neighborhood of its complete prescribed minimum-fiber projection and one positive constant charging root absorption linearly by literal total Nash defect at every scale. Along exact-successor paths ending near that fiber, a sufficiently small aggregate declared-error budget keeps every node local and bounds total absorption and path diameter; any first exit pays a fixed aggregate-error toll. The theorem produces no path and does not control a nonlocal incoming continuation or a nonvanishing aggregate-error budget."
     },
     {
       "id": "full-core-deadlock-debt-bound",
@@ -200,13 +218,31 @@
       "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture has a uniform-equilibrium payoff and cannot force positive designated pair masses; directed augmented cyclicity is necessary, not sufficient, for the incentive-gadget route."
     },
     {
-      "id": "literal-strict-finite-odd-blocker-core",
-      "subject": "Literal strict finite odd blocker cores with arbitrary outside-player payoffs",
-      "kind": "Conditional family theorem",
-      "declaration": "isUniformEquilibriumPayoff_of_literalStrictFiniteOddBlockerCore",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean",
+      "id": "participant-only-stationary-equilibrium",
+      "subject": "Participant-only quitting tables and passive-reward obstruction",
+      "kind": "Unconditional family theorem",
+      "declaration": "exists_stationary_uniformEquilibriumPayoff_of_participantOnly",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/ParticipantOnlyStationary.lean",
       "umbrella": "UniformEquilibrium.lean",
-      "scope": "For every embedded odd cyclic core of any finite size at least three, passive core-continuation rows and uniform strict blocker switches yield an exact stationary all-behavior uniform-equilibrium payoff. Arbitrarily many outside players and every outside-player reward coordinate remain unrestricted."
+      "scope": "Every finite quitting table whose absent-player reward coordinates vanish has an exact stationary terminal Nash profile against all unilateral behavioral deviations and a uniform-equilibrium payoff. For an arbitrary table, a stationary profile has terminal exploitability at most twice the empty-safe passive reward magnitude, so any universal terminal gap gamma requires passive magnitude at least gamma/2. This does not give exact equilibrium existence for arbitrary tables."
+    },
+    {
+      "id": "six-player-one-pair-mass-target-lock",
+      "subject": "Six-player one-pair mass ledger and direct target lock",
+      "kind": "Unconditional quantitative theorem",
+      "declaration": "integerReward_exploitability_ge",
+      "source": "UniformEquilibrium/Quitting/Paths/SixPlayerOnePairMassTargetLock.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "A complete Fin 6 integer table forces terminal exploitability at least 31(1-a)/66 and hence the exact first-pair and leftover bounds; bounded outsider-coordinate completions retain robust estimates. Every such direct cross-penalty completion also has a pure exact target equilibrium and uniform payoff, so it cannot force the second pair. The checked second-pair upper bound still assumes a supplied clock inequality; no arbitrary-profile clock adapter is proved here."
+    },
+    {
+      "id": "literal-strict-finite-odd-blocker-core",
+      "subject": "Literal strict finite odd interval-blocker cores with arbitrary outside-player payoffs",
+      "kind": "Conditional family theorem",
+      "declaration": "isUniformEquilibriumPayoff_of_literalStrictFiniteOddIntervalBlockerCore",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/FiniteOddIntervalBlockerCoreRowAdapter.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For every embedded odd cyclic core of finite size at least three, the literal row-extrema sandwich L_i^+ < C_i^- <= C_i^+ < H_i^- yields an exact stationary all-behavior uniform-equilibrium payoff. Core continuation rewards may vary by terminal coalition inside their separated band; arbitrarily many outside players and every outside-player reward coordinate remain unrestricted. The constant-passive theorem remains a separately checked special case. Overlapping or weak bands and arbitrary negative influence cycles are not covered."
     },
     {
       "id": "projective-qbar-uniform-payoff",
