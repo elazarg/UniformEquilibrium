@@ -92,6 +92,7 @@ import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit
 import MathUE.FinitePowerSumRoot
 import MathUE.FiniteSerialRelation
+import MathUE.FiniteWeightedSelection
 import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
@@ -199,6 +200,7 @@ import MathUE.PMFProduct.Independence
 import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
+import MathUE.PMFProduct.NormalizedSmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
@@ -249,6 +251,7 @@ import MathUE.Probability.DiffusePairCollisionBound
 import MathUE.Probability.DiscreteHazardMixture
 import MathUE.Probability.DiscreteHazardConditionalMixture
 import MathUE.Probability.DiscreteHazardStopping
+import MathUE.Probability.DurationMarkovRenewal
 import MathUE.Probability.EntryReachableChargedClass
 import MathUE.Probability.EntryReachableChargedOccupation
 import MathUE.Probability.EntryReachableDistinguishedCirculation
@@ -270,11 +273,14 @@ import MathUE.Probability.FiniteWeightVariation
 import MathUE.Probability.FrozenEndpointTransport
 import MathUE.Probability.FullSupportChargedClassRegeneration
 import MathUE.Probability.HarmonicClosedClass
+import MathUE.Probability.HarmonicClosedCoreUniqueness
 import MathUE.Probability.HarmonicGlobalCoupling
 import MathUE.Probability.HarmonicPeriodicCore
 import MathUE.Probability.HarmonicQuadraticVariation
 import MathUE.Probability.HarmonicRecurrentCoreBound
+import MathUE.Probability.HarmonicSingleTransientVariation
 import MathUE.Probability.HarmonicStateAccount
+import MathUE.Probability.HarmonicStaticTransientVariation
 import MathUE.Probability.HarmonicVisitEpoch
 import MathUE.Probability.HittingTimePotential
 import MathUE.Probability.IntegratedResponseLedger
@@ -282,6 +288,8 @@ import MathUE.Probability.KakutaniProductDichotomy
 import MathUE.Probability.KilledTailPotential
 import MathUE.Probability.MarkovOccupation
 import MathUE.Probability.MarkovStateElimination
+import MathUE.Probability.MarkovStateEliminationChronology
+import MathUE.Probability.PivotExcursionRenewal
 import MathUE.Probability.MaximalCoupling
 import MathUE.Probability.MovingEndpointOccupationEvidence
 import MathUE.Probability.MovingKernelEpochPotentialAccount

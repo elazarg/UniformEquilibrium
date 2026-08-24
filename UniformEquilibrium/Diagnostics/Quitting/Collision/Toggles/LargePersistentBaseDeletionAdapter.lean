@@ -126,19 +126,219 @@ theorem quittingRootEndpointDifference_eq_binaryDifference
   ring
 
 omit [Nonempty ι] in
-/-- If both pure actions are indifferent at a supplied product profile, that
-profile belongs to the complete induced Nash set. -/
-theorem mem_quittingPersistentBaseNashSet_of_free_endpointDifference_eq_zero
+/-- A player's endpoint difference is the literal product expectation of its
+four pure endpoint differences in two distinct opponent coordinates. -/
+theorem quittingRootEndpointDifference_eq_twoOpponentProduct
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool)
+    {who first second : ι}
+    (hwhoFirst : who ≠ first) (hwhoSecond : who ≠ second)
+    (hfirstSecond : first ≠ second) :
+    quittingRootEndpointDifference reward tail root who =
+      binaryProductExpectation (fun firstAction secondAction =>
+        quittingRootEndpointDifference reward tail
+          (Function.update
+            (Function.update root first (PMF.pure firstAction))
+            second (PMF.pure secondAction)) who)
+        (root first true).toReal (root second true).toReal := by
+  rw [quittingRootEndpointDifference_eq_opponentMix
+    reward tail root hwhoFirst]
+  rw [quittingRootEndpointDifference_eq_opponentMix reward tail
+    (Function.update root first (PMF.pure true)) hwhoSecond]
+  rw [quittingRootEndpointDifference_eq_opponentMix reward tail
+    (Function.update root first (PMF.pure false)) hwhoSecond]
+  simp only [Function.update_of_ne hfirstSecond.symm]
+  rw [Math.PMFProduct.pmfBool_false_toReal,
+    Math.PMFProduct.pmfBool_false_toReal]
+  simp only [binaryProductExpectation]
+  ring
+
+omit [Nonempty ι] in
+/-- A two-label induced Nash point satisfies the exact binary-difference
+complementarity system at its two ambient Quit rates. -/
+theorem isBinaryDifferenceNash_of_mem_quittingPersistentBaseNashSet_pair
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base free : Finset ι) (hbase : base.Nonempty)
     (hdisjoint : Disjoint base free)
     (point : mixedPolytope (quittingBinaryForm free).sig)
-    (hzero : ∀ who ∈ free,
+    (hpoint : point ∈ quittingPersistentBaseNashSet reward base free)
+    {first second : ι} (hfirst : first ∈ free) (hsecond : second ∈ free)
+    (hne : first ≠ second) :
+    let root := quittingPersistentBaseRoot base free point
+    let alpha : Bool → ℝ := fun action =>
       quittingRootEndpointDifference reward 0
-        (quittingPersistentBaseRoot base free point) who = 0) :
+        (Function.update root second (PMF.pure action)) first
+    let beta : Bool → ℝ := fun action =>
+      quittingRootEndpointDifference reward 0
+        (Function.update root first (PMF.pure action)) second
+    IsBinaryDifferenceNash alpha beta
+      (root first true).toReal (root second true).toReal := by
+  let root := quittingPersistentBaseRoot base free point
+  let alpha : Bool → ℝ := fun action =>
+    quittingRootEndpointDifference reward 0
+      (Function.update root second (PMF.pure action)) first
+  let beta : Bool → ℝ := fun action =>
+    quittingRootEndpointDifference reward 0
+      (Function.update root first (PMF.pure action)) second
+  have hfirstPayoffs := quittingPersistentBaseRoot_free_purePayoff_le
+    reward base free hbase hdisjoint point hpoint first hfirst
+  have hsecondPayoffs := quittingPersistentBaseRoot_free_purePayoff_le
+    reward base free hbase hdisjoint point hpoint second hsecond
+  have hfirstQuit := quittingRootQuitPayoff_sub_successorPayoff
+    reward 0 root first
+  have hfirstContinue := quittingRootContinuePayoff_sub_successorPayoff
+    reward 0 root first
+  have hsecondQuit := quittingRootQuitPayoff_sub_successorPayoff
+    reward 0 root second
+  have hsecondContinue := quittingRootContinuePayoff_sub_successorPayoff
+    reward 0 root second
+  have hfirstDifference := quittingRootEndpointDifference_eq_binaryDifference
+    reward 0 root hne
+  have hsecondDifference := quittingRootEndpointDifference_eq_binaryDifference
+    reward 0 root hne.symm
+  change quittingRootEndpointDifference reward 0 root first =
+      binaryFirstDifference alpha (root second true).toReal at hfirstDifference
+  change quittingRootEndpointDifference reward 0 root second =
+      binaryFirstDifference beta (root first true).toReal at hsecondDifference
+  have hfirstComplementarity :
+      (root first false).toReal *
+          binaryFirstDifference alpha (root second true).toReal ≤ 0 ∧
+        0 ≤ (root first true).toReal *
+          binaryFirstDifference alpha (root second true).toReal := by
+    rw [← hfirstDifference]
+    constructor <;> linarith
+  have hsecondComplementarity :
+      (root second false).toReal *
+          binarySecondDifference beta (root first true).toReal ≤ 0 ∧
+        0 ≤ (root second true).toReal *
+          binarySecondDifference beta (root first true).toReal := by
+    have hfirstForm :
+        (root second false).toReal *
+            binaryFirstDifference beta (root first true).toReal ≤ 0 ∧
+          0 ≤ (root second true).toReal *
+            binaryFirstDifference beta (root first true).toReal := by
+      rw [← hsecondDifference]
+      constructor <;> linarith
+    simpa [binarySecondDifference, binaryFirstDifference] using hfirstForm
+  have hfirstNonneg : 0 ≤ (root first true).toReal := ENNReal.toReal_nonneg
+  have hfirstLe : (root first true).toReal ≤ 1 := by
+    exact ENNReal.toReal_mono ENNReal.one_ne_top ((root first).coe_le_one true)
+  have hsecondNonneg : 0 ≤ (root second true).toReal := ENNReal.toReal_nonneg
+  have hsecondLe : (root second true).toReal ≤ 1 := by
+    exact ENNReal.toReal_mono ENNReal.one_ne_top ((root second).coe_le_one true)
+  refine ⟨⟨hfirstNonneg, hfirstLe⟩, ⟨hsecondNonneg, hsecondLe⟩, ?_,
+    hfirstComplementarity.2, ?_, hsecondComplementarity.2⟩
+  · rw [← Math.PMFProduct.pmfBool_false_toReal]
+    exact hfirstComplementarity.1
+  · rw [← Math.PMFProduct.pmfBool_false_toReal]
+    exact hsecondComplementarity.1
+
+omit [Nonempty ι] in
+/-- Embed two supplied Quit rates into the mixed polytope of a binary free
+face. The distinguished label receives `firstRate`; every other free label
+receives `secondRate`. -/
+def quittingBinaryPairMixedPoint
+    (free : Finset ι) (first : ι)
+    (firstRate secondRate : ℝ)
+    (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
+    (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1) :
+    mixedPolytope (quittingBinaryForm free).sig := by
+  let firstSimplex : stdSimplex ℝ Bool :=
+    Math.ProbabilityMassFunction.stdSimplexEquiv
+      (Math.ProbabilityMassFunction.bernoulliBool
+        firstRate hfirst0 hfirst1)
+  let secondSimplex : stdSimplex ℝ Bool :=
+    Math.ProbabilityMassFunction.stdSimplexEquiv
+      (Math.ProbabilityMassFunction.bernoulliBool
+        secondRate hsecond0 hsecond1)
+  refine ⟨fun who => if who.1 = first then firstSimplex else secondSimplex, ?_⟩
+  rw [mem_mixedPolytope]
+  intro who
+  split
+  · exact firstSimplex.property
+  · exact secondSimplex.property
+
+omit [Fintype ι] [Nonempty ι] in
+@[simp] theorem quittingBinaryPairMixedPoint_apply_first
+    (free : Finset ι) {first : ι} (hfirst : first ∈ free)
+    (firstRate secondRate : ℝ)
+    (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
+    (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1)
+    (action : Bool) :
+    (quittingBinaryPairMixedPoint free first firstRate secondRate
+        hfirst0 hfirst1 hsecond0 hsecond1).1 ⟨first, hfirst⟩ action =
+      (Math.ProbabilityMassFunction.stdSimplexEquiv
+        (Math.ProbabilityMassFunction.bernoulliBool
+          firstRate hfirst0 hfirst1) : stdSimplex ℝ Bool) action := by
+  simp [quittingBinaryPairMixedPoint]
+
+omit [Fintype ι] [Nonempty ι] in
+@[simp] theorem quittingBinaryPairMixedPoint_apply_other
+    (free : Finset ι) {first other : ι} (hother : other ∈ free)
+    (hne : other ≠ first)
+    (firstRate secondRate : ℝ)
+    (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
+    (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1)
+    (action : Bool) :
+    (quittingBinaryPairMixedPoint free first firstRate secondRate
+        hfirst0 hfirst1 hsecond0 hsecond1).1 ⟨other, hother⟩ action =
+      (Math.ProbabilityMassFunction.stdSimplexEquiv
+        (Math.ProbabilityMassFunction.bernoulliBool
+          secondRate hsecond0 hsecond1) : stdSimplex ℝ Bool) action := by
+  simp [quittingBinaryPairMixedPoint, hne]
+
+omit [Fintype ι] [Nonempty ι] in
+/-- The ambient persistent-base extension of the pair point has exactly the
+two supplied Quit rates at the distinguished free labels. -/
+theorem quittingPersistentBaseRoot_binaryPairMixedPoint_true_toReal
+    (base free : Finset ι) (hdisjoint : Disjoint base free)
+    {first second : ι} (hfirst : first ∈ free) (hsecond : second ∈ free)
+    (hne : first ≠ second)
+    (firstRate secondRate : ℝ)
+    (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
+    (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1) :
+    let point := quittingBinaryPairMixedPoint free first firstRate secondRate
+      hfirst0 hfirst1 hsecond0 hsecond1
+    ((quittingPersistentBaseRoot base free point first) true).toReal =
+        firstRate ∧
+      ((quittingPersistentBaseRoot base free point second) true).toReal =
+        secondRate := by
+  let point := quittingBinaryPairMixedPoint free first firstRate secondRate
+    hfirst0 hfirst1 hsecond0 hsecond1
+  change ((quittingPersistentBaseRoot base free point first) true).toReal =
+      firstRate ∧
+    ((quittingPersistentBaseRoot base free point second) true).toReal =
+      secondRate
+  rw [quittingPersistentBaseRoot_apply_of_mem_free
+      base free hdisjoint point hfirst,
+    quittingPersistentBaseRoot_apply_of_mem_free
+      base free hdisjoint point hsecond]
+  change (probs (quittingBinaryForm free).sig
+      (ofPolytope (quittingBinaryForm free).sig point.2) ⟨first, hfirst⟩ true =
+        firstRate) ∧
+    probs (quittingBinaryForm free).sig
+      (ofPolytope (quittingBinaryForm free).sig point.2) ⟨second, hsecond⟩ true =
+        secondRate
+  rw [probs_ofPolytope]
+  simp [point, hne.symm, Math.ProbabilityMassFunction.toVector]
+
+omit [Nonempty ι] in
+/-- Exact endpoint complementarity on every free coordinate reconstructs
+membership in the complete induced persistent-base Nash set. -/
+theorem mem_quittingPersistentBaseNashSet_of_free_endpointNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base free : Finset ι) (hbase : base.Nonempty)
+    (hdisjoint : Disjoint base free)
+    (point : mixedPolytope (quittingBinaryForm free).sig)
+    (hnash : ∀ who ∈ free,
+      let root := quittingPersistentBaseRoot base free point
+      (root who false).toReal *
+          quittingRootEndpointDifference reward 0 root who ≤ 0 ∧
+        0 ≤ (root who true).toReal *
+          quittingRootEndpointDifference reward 0 root who) :
     point ∈ quittingPersistentBaseNashSet reward base free := by
   let profile := ofPolytope (quittingBinaryForm free).sig point.2
-  have hnash : IsNash (quittingBinaryForm free).mixed
+  have hprofileNash : IsNash (quittingBinaryForm free).mixed
       (euPreference (quittingPersistentBaseUtility reward base free))
       profile := by
     rw [isNash_mixed_iff]
@@ -154,33 +354,125 @@ theorem mem_quittingPersistentBaseNashSet_of_free_endpointDifference_eq_zero
         (Function.update profile who (FinDist.pure action)) who
     have hupdate := quittingPersistentBaseRootOfProfile_update
       base free hdisjoint profile who (FinDist.pure action)
-    have hdiff : quittingRootEndpointDifference reward 0 root who.1 = 0 := by
-      rw [hroot]
-      exact hzero who.1 who.2
+    have hendpoint := hnash who.1 who.2
+    rw [← hroot] at hendpoint
     cases action
     · have hregret := quittingRootContinuePayoff_sub_successorPayoff
         reward 0 root who.1
-      rw [hdiff, mul_zero] at hregret
       simp at hupdate
       rw [hpure, hupdate, hcurrent]
       change quittingRootContinuePayoff reward 0 root who.1 ≤
         quittingRootSuccessorPayoff reward 0 root who.1
-      linarith
+      linarith [hendpoint.2]
     · have hregret := quittingRootQuitPayoff_sub_successorPayoff
         reward 0 root who.1
-      rw [hdiff, mul_zero] at hregret
       simp at hupdate
       rw [hpure, hupdate, hcurrent]
       change quittingRootQuitPayoff reward 0 root who.1 ≤
         quittingRootSuccessorPayoff reward 0 root who.1
-      linarith
+      linarith [hendpoint.1]
   change point.1 ∈ bestReplies (quittingBinaryForm free)
     (quittingPersistentBaseUtility reward base free) point.1
   have hpoly := (probs_mem_bestReplies_self_iff_isNash
     (F := quittingBinaryForm free)
-    (quittingPersistentBaseUtility reward base free) profile).mpr hnash
+    (quittingPersistentBaseUtility reward base free) profile).mpr hprofileNash
   simpa [profile, probs_ofPolytope (quittingBinaryForm free).sig point.2]
     using hpoly
+
+omit [Nonempty ι] in
+/-- Conversely, binary complementarity for the two displayed free labels
+constructs an actual point of the induced persistent-base Nash set. -/
+theorem binaryPairMixedPoint_mem_quittingPersistentBaseNashSet
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base free : Finset ι) (hbase : base.Nonempty)
+    (hdisjoint : Disjoint base free)
+    {first second : ι} (hfirst : first ∈ free) (hsecond : second ∈ free)
+    (hne : first ≠ second)
+    (hcover : ∀ who ∈ free, who = first ∨ who = second)
+    (firstRate secondRate : ℝ)
+    (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
+    (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1) :
+    let point := quittingBinaryPairMixedPoint free first firstRate secondRate
+      hfirst0 hfirst1 hsecond0 hsecond1
+    let root := quittingPersistentBaseRoot base free point
+    let alpha : Bool → ℝ := fun action =>
+      quittingRootEndpointDifference reward 0
+        (Function.update root second (PMF.pure action)) first
+    let beta : Bool → ℝ := fun action =>
+      quittingRootEndpointDifference reward 0
+        (Function.update root first (PMF.pure action)) second
+    IsBinaryDifferenceNash alpha beta firstRate secondRate →
+      point ∈ quittingPersistentBaseNashSet reward base free := by
+  let point := quittingBinaryPairMixedPoint free first firstRate secondRate
+    hfirst0 hfirst1 hsecond0 hsecond1
+  let root := quittingPersistentBaseRoot base free point
+  let alpha : Bool → ℝ := fun action =>
+    quittingRootEndpointDifference reward 0
+      (Function.update root second (PMF.pure action)) first
+  let beta : Bool → ℝ := fun action =>
+    quittingRootEndpointDifference reward 0
+      (Function.update root first (PMF.pure action)) second
+  change IsBinaryDifferenceNash alpha beta firstRate secondRate →
+    point ∈ quittingPersistentBaseNashSet reward base free
+  intro hnash
+  have hrates := quittingPersistentBaseRoot_binaryPairMixedPoint_true_toReal
+    base free hdisjoint hfirst hsecond hne firstRate secondRate
+      hfirst0 hfirst1 hsecond0 hsecond1
+  change (root first true).toReal = firstRate ∧
+    (root second true).toReal = secondRate at hrates
+  apply mem_quittingPersistentBaseNashSet_of_free_endpointNash
+    reward base free hbase hdisjoint point
+  intro who hwho
+  rcases hcover who hwho with hwhoFirst | hwhoSecond
+  · subst who
+    have hdiff := quittingRootEndpointDifference_eq_binaryDifference
+      reward 0 root hne
+    change quittingRootEndpointDifference reward 0 root first =
+      binaryFirstDifference alpha (root second true).toReal at hdiff
+    rw [hrates.2] at hdiff
+    change (root first false).toReal *
+          quittingRootEndpointDifference reward 0 root first ≤ 0 ∧
+      0 ≤ (root first true).toReal *
+        quittingRootEndpointDifference reward 0 root first
+    rw [hdiff, Math.PMFProduct.pmfBool_false_toReal, hrates.1]
+    exact ⟨hnash.2.2.1, hnash.2.2.2.1⟩
+  · subst who
+    have hdiff := quittingRootEndpointDifference_eq_binaryDifference
+      reward 0 root hne.symm
+    change quittingRootEndpointDifference reward 0 root second =
+      binaryFirstDifference beta (root first true).toReal at hdiff
+    rw [hrates.1] at hdiff
+    change (root second false).toReal *
+          quittingRootEndpointDifference reward 0 root second ≤ 0 ∧
+      0 ≤ (root second true).toReal *
+        quittingRootEndpointDifference reward 0 root second
+    rw [hdiff, Math.PMFProduct.pmfBool_false_toReal, hrates.2]
+    simpa [binarySecondDifference, binaryFirstDifference] using
+      And.intro hnash.2.2.2.2.1 hnash.2.2.2.2.2
+
+omit [Nonempty ι] in
+/-- If both pure actions are indifferent at a supplied product profile, that
+profile belongs to the complete induced Nash set. -/
+theorem mem_quittingPersistentBaseNashSet_of_free_endpointDifference_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (base free : Finset ι) (hbase : base.Nonempty)
+    (hdisjoint : Disjoint base free)
+    (point : mixedPolytope (quittingBinaryForm free).sig)
+    (hzero : ∀ who ∈ free,
+      quittingRootEndpointDifference reward 0
+        (quittingPersistentBaseRoot base free point) who = 0) :
+    point ∈ quittingPersistentBaseNashSet reward base free := by
+  apply mem_quittingPersistentBaseNashSet_of_free_endpointNash
+    reward base free hbase hdisjoint point
+  intro who hwho
+  change ((quittingPersistentBaseRoot base free point who) false).toReal *
+        quittingRootEndpointDifference reward 0
+          (quittingPersistentBaseRoot base free point) who ≤ 0 ∧
+    0 ≤ ((quittingPersistentBaseRoot base free point who) true).toReal *
+      quittingRootEndpointDifference reward 0
+        (quittingPersistentBaseRoot base free point) who
+  rw [hzero who hwho]
+  simp
 
 omit [Nonempty ι] in
 /-- **Mixed deletion semantic dispatch.** Deleting one member `outsider` of

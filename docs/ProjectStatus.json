@@ -56,6 +56,15 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "fin-four-full-support-residual",
+      "subject": "Four-player quitting counterexample residual",
+      "kind": "Unconditional alternative theorem",
+      "declaration": "uniformPayoff_or_quantitative_fullSupport_fullNormalCore_of_finFour",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/NormalTerminalGapConstrainedStationary.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every Fin 4 reward table has a uniform-equilibrium payoff or, on the same table, a terminal exploitability witness, full recursive normal core, all-player punishment normality, and a normalized singleton packet with full support and an explicit positive coordinate floor. The residual is not solved."
+    },
+    {
       "id": "full-core-deadlock-debt-bound",
       "subject": "Terminal exploitability gaps for four-player full-core deadlock completions",
       "kind": "Unconditional family theorem",
