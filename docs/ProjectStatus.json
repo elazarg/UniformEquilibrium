@@ -147,12 +147,12 @@
     },
     {
       "id": "fin-four-prescribed-owner-handoff-alignment",
-      "subject": "Pair-base paid/reset payoff alignment",
-      "kind": "Conditional structural theorem",
-      "declaration": "QuittingTerminalExploitabilityWitness.exists_finFour_pairBasePaidResetDispatch_payoffAligned",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetPayoffAlignment.lean",
+      "subject": "Pair-base paid/reset endpoint boundary",
+      "kind": "Conditional structural and no-return theorem",
+      "declaration": "QuittingTerminalExploitabilityWitness.nonempty_finFour_pairBasePaidResetEndpointBoundary",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetEndpointEdge.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "On Fin 4, any prescribed owner and disjoint two-player sure-Quit base yield one actual stationary target and law with zero owner debt, unit incidence from a base opponent, and a terminal-gap paid row whose debtor lies in that base. From a positive global-minimum source the target enters the fixed-law reset dispatch, whose returned pair has exactly the target profile's prescribed payoff because both retain the same complete terminal law. The paid debtor is not the reset owner, and cap-Nash at the returned envelope does not supply an endpoint-Nash punishment-floor edge or return path. A checked closure-seam interface isolates those remaining data and would imply a uniform payoff."
+      "scope": "On Fin 4, the actual pair-base paid/reset target either violates the punishment floor at one forced-Quit base coordinate or supplies an exact punishment-floor endpoint edge at its aligned prescribed payoff. The floor violation gives a source-matched Quit-now-to-Never paid row and a zero-debt unilateral repair of that coordinate, but preserves no other Nash or floor data. The endpoint edge has positive absorption unless singleton domination makes it the literal all-Continue self-loop. Under a terminal-exploitability witness every positive such edge has a fixed payoff neighborhood which no later reachable admissible state can re-enter, so the checked payoff-return consumer is unavailable. Separately, cap-Nash converts to prescribed-payoff Nash exactly when option surcharge equals survival-weighted debt; the positive-survival reset branch does not satisfy the simpler support-killing criterion. No uniform payoff follows."
     },
     {
       "id": "fin-four-strict-minimum-plateau-isolation",
