@@ -332,9 +332,11 @@ import MathUE.Probability.WeightedCollisionConcentration
 import MathUE.ProbabilityMassFunction
 import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CoordinateTest
+import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
+import MathUE.ProbabilityMassFunction.ProperStoppingApproximation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.ProbabilityMassFunction.TotalVariation
 import MathUE.ProjectiveBellmanPacket

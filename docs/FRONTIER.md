@@ -130,6 +130,21 @@ simple cycle is necessary for any fixed-sign table without a sure-exit
 escape. This is an unrestricted-behavior equilibrium theorem, but it says
 nothing about influences whose signs change with the coalition background.
 
+The separate augmented solo-preemption graph has an exact checked boundary.
+Its bottom vertex points to a player with positive own singleton reward, a
+player points to bottom when that reward is negative, and `i -> j` records
+that `j` strictly prefers its own singleton to `i`'s singleton row.
+`exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption`
+(`UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemption.lean`)
+proves that acyclicity gives either exact all-Continue play or a solo-owner
+stationary family with fixed singleton target and all-behavior exploitability
+at most `q * quittingSoloPairPremium`. In the latter family absorption is
+almost surely at the owner's singleton, so both designated incentive-gadget
+pair masses are zero at every positive rate. Thus a directed augmented cycle
+is necessary for that gadget architecture. The theorem neither makes such a
+cycle sufficient nor constrains rewards of coalitions with at least three
+quitters.
+
 The finite odd negative-cycle boundary also has a checked positive result.
 `isUniformEquilibriumPayoff_of_literalStrictFiniteOddBlockerCore`
 (`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean`)
@@ -333,6 +348,42 @@ the live mathematical ledger.
   large-base handoff likewise has `M`, `L`, and `A`: its stationary profiles
   and paid row are actual behavioral source objects. It has no `C` seal for
   the open payoff-near-return step.
+
+  There is now a second same-table semantic restriction on every hypothetical
+  `Fin 4` counterexample. First,
+  `exists_finFour_strictMinimumPlateau_openDebtHomotopyTube_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourStrictMinimumPlateauIsolation.lean`)
+  selects a globally minimum positive-debt terminal-semantic pair `(U,B)` with
+  `P_i <= s_i < U_i` for all four players. Its complete debt homotopy
+  `B - t(B-U)`, `0 <= t <= 1`, lies in one open payoff tube on which
+  all-Continue is the unique exact product root. For each fixed positive
+  opponent-incidence floor, `exists_open_totalNashDefect_moat_debtHomotopy`
+  also gives one open segment tube with a uniform positive Nash-defect moat.
+
+  The stronger capstone
+  `exists_finFour_minimumFiberIsolation_and_debtMoat_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberIsolation.lean`)
+  uniformizes this strict singleton gap and exact-root tube over the prescribed
+  projection of the entire compact global-minimum carrier fiber. It also gives
+  one `epsilon > 0` such that every carrier pair with debt below
+  `D_* + epsilon` has prescribed payoff in the tube. The consumer
+  `minimumFiber_debt_add_epsilon_le_of_carrierTail_exactRoot_absorption_pos`
+  proves the contrapositive: a positively absorbing exact root against a
+  carrier tail pays at least that fixed excess debt. The no-uniform Fin4
+  capstone has `M`, `L`, and `A`; this carrier-tail obstruction is a checked
+  `C`, not a uniform-payoff consumer.
+
+  The generic consumers in
+  `UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRigidity.lean`
+  have `M`, `L`, and `C`. An exact finite Nash--Bellman path whose terminal
+  tail is in such a tube is the constant zero-absorption path; an absorbing
+  exact cyclic continuation is impossible; charged exact blocks obey the
+  corresponding terminal-seam floor; and an exact infinite path converging
+  to an interior tube point is constant from time zero. These conclusions are
+  tail-oriented. They neither exclude an incoming edge whose continuation is
+  nonlocally outside the tube nor control approximate roots whose incidence
+  tends to zero. No checked theorem produces the nonlocal incoming edge,
+  return, or approximate-root mechanism needed to close the conjecture.
 
   The checked barrier
   `fullSupportPacket_standardQ_nonhomogeneous_but_not_cyclic` shows why the

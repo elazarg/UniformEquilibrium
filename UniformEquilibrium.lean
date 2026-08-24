@@ -31,6 +31,8 @@ import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 import UniformEquilibrium.Quitting.Classification.SoloExitPreferenceExistence
 import UniformEquilibrium.Quitting.Classification.Existence.All
 import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemption
+import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemptionRegression
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumUniformPayoffEquivalence
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
@@ -381,6 +383,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Bellman.Finite.Regression.NegativeSingletonChargeRegression
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
+import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
@@ -555,6 +558,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 import UniformEquilibrium.Quitting.Bellman.Finite.RelaxedHazardRowBridge
 import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
+import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Boundary.Analytic.BackwardStabilityConditionNumber
 import UniformEquilibrium.Quitting.Punishment.IsolatedPunishmentCeiling
 import UniformEquilibrium.Quitting.Punishment.Floor
@@ -575,6 +579,9 @@ import UniformEquilibrium.Quitting.Punishment.SharedPunishmentResults
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdog
+import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdogBoundary
+import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdogEscape
+import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdogException
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Stationary.MinMax
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
@@ -647,5 +654,6 @@ import UniformEquilibrium.Quitting.Classification.TerminalExploitabilitySoloExit
 import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityExactCycleExclusion
 import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
 import UniformEquilibrium.Quitting.Nash.FiniteHorizon.MarkedSureQuit
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
