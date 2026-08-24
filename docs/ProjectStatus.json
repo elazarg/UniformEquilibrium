@@ -128,6 +128,24 @@
       "scope": "On four players, every supplied support-two paid-chain residual admits a reselected singleton-owner stationary source with debt concentrated at that owner. Repairing the owner transfers the terminal gap to a free player and yields a literal paid first-disagreement row; the floor-safe or identified free-floor-damage alternative remains to be connected to a payoff near-return."
     },
     {
+      "id": "fin-four-strict-minimum-plateau-isolation",
+      "subject": "Strict minimum-plateau isolation in a four-player counterexample",
+      "kind": "Conditional counterexample reduction",
+      "declaration": "exists_finFour_minimumFiberIsolation_and_debtMoat_of_no_uniformPayoff",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberIsolation.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "If a reward table on literal Fin 4 has no uniform-equilibrium payoff, every pair in one compact global positive-minimum terminal-semantic debt fiber is punishment-normal and uniformly strictly above every own singleton reward. Their prescribed-payoff projection lies in one open tube on which all-Continue is the unique exact product root, and every carrier tail below one fixed excess-debt threshold enters that tube. Thus a positively absorbing exact carrier-tail root pays the threshold. This does not control approximate roots whose incidence tends to zero, construct a nonlocal incoming tail, or prove the four-player conjecture."
+    },
+    {
+      "id": "all-continue-basin-exact-path-rigidity",
+      "subject": "Exact Nash--Bellman paths ending in an all-Continue basin",
+      "kind": "Conditional no-go theorem",
+      "declaration": "quittingAnchoredPath_backward_rigidity_of_unique_allContinue",
+      "source": "UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRigidity.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For any supplied payoff set on which all-Continue is the unique exact endpoint-Nash product root, every finite exact anchored Nash--Bellman path ending there is constant and has zero absorption. Checked corollaries exclude absorbing cyclic continuation, give a terminal-seam distance floor for charged blocks, and make every exact infinite path converging to an interior point constant from time zero. The theorem says nothing about approximate roots or an incoming edge whose continuation tail lies outside the basin."
+    },
+    {
       "id": "full-core-deadlock-debt-bound",
       "subject": "Terminal exploitability gaps for four-player full-core deadlock completions",
       "kind": "Unconditional family theorem",
@@ -171,6 +189,15 @@
       "source": "UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "Fixed positive, negative, or absent pair influences, with positive sign product on every directed simple influence cycle, produce a literal sure-exit coalition and a uniform-equilibrium payoff against all unilateral behavioral deviations. Within the fixed-sign class, absence of every sure-exit coalition forces a negative simple influence cycle."
+    },
+    {
+      "id": "acyclic-augmented-solo-preemption",
+      "subject": "Acyclic augmented solo-preemption tables",
+      "kind": "Unconditional family theorem",
+      "declaration": "exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemption.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture has a uniform-equilibrium payoff and cannot force positive designated pair masses; directed augmented cyclicity is necessary, not sufficient, for the incentive-gadget route."
     },
     {
       "id": "literal-strict-finite-odd-blocker-core",
