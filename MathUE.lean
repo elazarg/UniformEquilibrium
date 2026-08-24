@@ -262,6 +262,7 @@ import MathUE.Probability.FiniteClosedCoreReach
 import MathUE.Probability.FiniteControlledStoppingEnvelope
 import MathUE.Probability.FiniteControlledStoppingOptimalPolicy
 import MathUE.Probability.FiniteDiscountedFlow
+import MathUE.Probability.FiniteIndependentMixture
 import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.FiniteKernelPeriodicMixing
 import MathUE.Probability.FiniteLawRepair
@@ -276,6 +277,8 @@ import MathUE.Probability.FrozenEndpointTransport
 import MathUE.Probability.FullSupportChargedClassRegeneration
 import MathUE.Probability.HarmonicClosedClass
 import MathUE.Probability.HarmonicClosedCoreUniqueness
+import MathUE.Probability.HarmonicFiniteCoupledPotentialLP
+import MathUE.Probability.HarmonicFunctionalTransientClassVariation
 import MathUE.Probability.HarmonicGlobalCoupling
 import MathUE.Probability.HarmonicPeriodicCore
 import MathUE.Probability.HarmonicQuadraticVariation
@@ -284,6 +287,7 @@ import MathUE.Probability.HarmonicRecurrentCoreBound
 import MathUE.Probability.HarmonicSingleTransientVariation
 import MathUE.Probability.HarmonicStateAccount
 import MathUE.Probability.HarmonicStaticTransientVariation
+import MathUE.Probability.HarmonicTwoStateBranchingSCC
 import MathUE.Probability.HarmonicVisitEpoch
 import MathUE.Probability.HittingTimePotential
 import MathUE.Probability.IntegratedResponseLedger
@@ -315,6 +319,7 @@ import MathUE.Probability.SquareRootCoalitionClock
 import MathUE.Probability.StationaryCommunicatingClass
 import MathUE.Probability.StationaryNonnegativeDrift
 import MathUE.Probability.StitchedMartingale
+import MathUE.Probability.StoppingLawReconstruction
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
 import MathUE.Probability.SurvivalAmplification

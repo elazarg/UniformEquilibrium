@@ -383,10 +383,17 @@ exact stationary equilibrium, so that half of the former boundary belongs
 to S.1.  The persistent late-suffix deviation is an exact checked defect,
 not itself an equilibrium branch or a refutation of Theorem 3.4.
 
-The second dependency remains separate.  Its actual stationary-prefix
-sources retain either positive joint reach of the punishment suffix or one
-exceptional player-deleted survival clock.  Neither attachment is presently
-proved in general. -/
+The second dependency remains separate.  Its positive-joint-reach source now
+has a sharper checked endpoint theorem: the actually reached punishment
+suffixes converge to a semantic-carrier point with zero deviation debt for
+every player, and the fixed punished player's prescribed payoff and
+best-response envelope both equal that player's behavioral min-max value.
+If this endpoint admits an exact one-stage Nash root with some sure quitter,
+actual profiles realizing the endpoint compile to S.2.  Thus the remaining
+positive-reach residual is the explicit finite-dimensional failure of every
+such sure-exit root, not merely positive reach itself.  The other source,
+with one exceptional player-deleted survival clock, still has no general
+classification attachment. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an

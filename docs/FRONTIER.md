@@ -130,14 +130,20 @@ simple cycle is necessary for any fixed-sign table without a sure-exit
 escape. This is an unrestricted-behavior equilibrium theorem, but it says
 nothing about influences whose signs change with the coalition background.
 
-The smallest negative-cycle boundary also has a checked positive result.
-`isUniformEquilibriumPayoff_of_literalStrictThreeBlockerCore`
-(`UniformEquilibrium/Quitting/Classification/Existence/OddBlockerCoreRowAdapter.lean`)
-gives an exact stationary all-behavior uniform-equilibrium payoff for a
-literal strict three-player blocker core. Arbitrarily many outside players and
-all their reward coordinates are unrestricted; the hypotheses require passive
-continuation values for the core and uniform strict blocker signs on every
-background. The arbitrary odd-core extension remains unproved.
+The finite odd negative-cycle boundary also has a checked positive result.
+`isUniformEquilibriumPayoff_of_literalStrictFiniteOddBlockerCore`
+(`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCoreRowAdapter.lean`)
+gives an exact stationary all-behavior uniform-equilibrium payoff for every
+embedded odd cyclic blocker core of finite size at least three. Arbitrarily
+many outside players and all their reward coordinates are unrestricted; the
+literal source assumes passive continuation values for the core and uniform
+strict blocker signs on every background. The underlying
+`isUniformEquilibriumPayoff_of_strictFiniteOddBlockerCore`
+(`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCore.lean`)
+also covers the reviewed separated-interval stationary-face formulation. The
+literal family has `M`, `L`, `A`, and `C`: checked reward-table rows enter the
+stationary certificate, which enters the unrestricted-behavior uniform-payoff
+consumer.
 
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with
@@ -167,15 +173,24 @@ opponent exposure. The static cube does not supply that chronology.
 The maintained ledger is now a dependency DAG, not a history of named search
 leaves. It begins at positive minimum terminal semantic debt, records the
 exact-diagonal stopping-law extraction and finite support-rank exit, and then
-shows both the four tagged exit arms and the checked consumers beyond the
+shows the three surviving tagged exit arms and the checked consumers beyond the
 remaining producer gaps.
 
 Finite support-rank termination leaves positive total slope, zero-debt support
-entry, flat charged circulation, or an eventually paid first-disagreement row.
-These are mathematically distinct tags, not an asserted equivalence. There is
-also a stronger branch-independent adapter: every extracted frontier already
-has fixed vanishing-debt atom access. In the support-entry arm the actual
-zero-debt recipient can be retained as the atom observer.
+entry, or an eventually paid first-disagreement row. Theorem
+`QuittingPositiveMinimumDebtTangentFamily.reducedSupportRankAlternative_of_positiveMinimumDebt`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean`)
+removes flat charged circulation as an independent terminal tag: in either
+flat no-entry branch, an arbitrary active mover's actual full-replacement
+endpoint either lies on the minimum fiber and strictly lowers the finite
+positive-debt-support rank, or lies off that fiber and carries the existing
+eventually paid row. The three surviving tags are mathematically distinct;
+none of their producer obligations is thereby solved. There is also a stronger
+branch-independent adapter: every extracted frontier already has fixed
+vanishing-debt atom access. In the support-entry arm the actual zero-debt
+recipient can be retained as the atom observer. The reduced termination has
+`M`, `L`, and `A`; the conditional three-consumer capstone has `M`, `L`, and
+`C`. Neither seal set asserts the missing producers.
 
 Two concrete routes remain explicit. On the atom route, one local theorem must
 produce actual reached-port packets with retained labels, exact source and
@@ -188,7 +203,8 @@ chronological consumer is not the missing local theorem:
 proves that it is exactly equivalent to uniform-payoff existence for each
 reward table. It is retained as the global integration contract.
 
-On the paid route, an eventually paid row must be re-entered with one fixed
+On the paid route, including the former flat-circulation arm after its finite
+support descent, an eventually paid row must be re-entered with one fixed
 positive charge threshold, while the source, target, path, and charged edge
 may vary with endpoint tolerance and endpoint payoff vectors become
 arbitrarily close. Fixed-edge payoff closure and exact return to the full tail
@@ -205,11 +221,10 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | From | Status | To | Seals | Checked declaration or open interface |
 | --- | --- | --- | --- | --- |
 | `POSITIVE-MINIMUM-DEBT` | `proved` | `EXACT-DIAGONAL-FRONTIER` | `M`, `L`, `A` | [`GameTheory.finiteSupportRankAlternative_of_hasPositiveMinimumTerminalSemanticDebt`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
-| `EXACT-DIAGONAL-FRONTIER` | `proved` | `FINITE-SUPPORT-RANK-EXIT` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `POSITIVE-TOTAL-SLOPE` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `ZERO-DEBT-SUPPORT-ENTRY` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `FLAT-CHARGED-CIRCULATION` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
-| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean) |
+| `EXACT-DIAGONAL-FRONTIER` | `proved` | `FINITE-SUPPORT-RANK-EXIT` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.reducedSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `POSITIVE-TOTAL-SLOPE` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `ZERO-DEBT-SUPPORT-ENTRY` | `M`, `L` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean) |
+| `FINITE-SUPPORT-RANK-EXIT` | `proved-branch` | `PAID-FIRST-DISAGREEMENT-ROW` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean) |
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
@@ -226,11 +241,10 @@ The DAG nodes have these mathematical meanings:
 
 - `POSITIVE-MINIMUM-DEBT`: The attainable terminal semantic carrier has strictly positive minimum total debt; for a nonempty finite player type this is equivalent to nonexistence of a uniform-equilibrium payoff.
 - `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one positive-minimum tangent family whose active mover diagonal is exactly minus base debt and whose full-replacement mover debt tends to zero.
-- `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases, or an explicit finite-support-rank alternative is reached.
+- `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates at positive total slope, zero-debt support entry, or an off-minimum actual replacement endpoint carrying an eventually paid row. Flat charged circulation is absorbed by strict support-rank descent or the paid-row arm.
 - `POSITIVE-TOTAL-SLOPE`: One active mover has strictly positive total tangent slope.
 - `ZERO-DEBT-SUPPORT-ENTRY`: A flat active tangent column has a positive coordinate at an actual zero-debt recipient.
-- `FLAT-CHARGED-CIRCULATION`: The flat tangent columns admit normalized positive charged balance.
-- `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.
+- `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence; this also consumes the former flat-circulation terminal arm after finite support descent.
 - `VANISHING-DEBT-ATOM-ACCESS`: Every extracted positive-minimum tangent family has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
 - `CHRONOLOGICAL-DEBT-SHADOWING`: Certificates at every positive accuracy compile to terminal approximate Nash profiles and one uniform-equilibrium payoff.
 - `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A fixed positive charge threshold, with source, target, path, and charged edge allowed to vary with endpoint tolerance, and endpoint payoff vectors converging arbitrarily closely, compiles to a uniform-equilibrium payoff.
@@ -289,13 +303,36 @@ the live mathematical ledger.
   `QuittingTerminalExploitabilityWitness.fullSupport_fullNormalCore_with_paidRefinedCycle_of_finFour`
   supplies an actual reachable strict-toggle cycle; its large-base arm is a
   disjoint two-plus-two partition and enters the pure-or-mixed paid normal
-  chain. Separately,
+  chain. The checked
+  `QuittingTerminalExploitabilityWitness.ReachableStrictToggleSimpleCycle.exists_largeBasePaidStationaryHandoff`
+  then reselects a singleton sure-Quit owner and an exact three-free-player
+  Nash point. At the resulting stationary source only the owner has positive
+  debt; replacing that owner by Always Continue repairs it, transfers the
+  terminal gap to a free player, and yields a literal paid
+  first-disagreement row. The output is either punishment-floor safe or has
+  one identified free-coordinate floor loss. It does not connect the original
+  paid boundary face to the reselected source or repay the latter loss.
+
+  Separately,
   `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
   proves that in each of the eight marked two-cycle preemption constructors,
-  the literal cycle pair is itself the hard card-two crossing; the other nine
-  constructors have length three or four. The toggle cycle and preemption
-  lasso are selected independently, and these structural refinements do not
-  eliminate a semantic chamber or produce a strategy.
+  the literal cycle pair is itself the hard card-two crossing.
+  `FinFourQuantitativeFullSupportHardResidual.markedThreeCycleHardPrincipalIncidence_or_nonThree`
+  sends each of the six length-three constructors to a same-label outside
+  helper, a negative-determinant hard triple, or a hard principal forced
+  through the unique outsider.
+  `FinFourQuantitativeFullSupportHardResidual.markedFourCycleHardPrincipalAlignment_or_nonFour`
+  sends each of the three rooted four-cycle constructors to a shorter strict
+  cycle or a literal unique-outside helper. Thus all seventeen marked
+  constructors have checked finite hard-principal incidence, with exact
+  owner/collider role data. The toggle cycle and preemption lasso remain
+  independently selected, and these structural refinements do not eliminate
+  a semantic chamber or produce a strategy.
+
+  The lasso-incidence theorems have `M`, `L`, and `A`, but not `C`. The
+  large-base handoff likewise has `M`, `L`, and `A`: its stationary profiles
+  and paid row are actual behavioral source objects. It has no `C` seal for
+  the open payoff-near-return step.
 
   The checked barrier
   `fullSupportPacket_standardQ_nonhomogeneous_but_not_cyclic` shows why the

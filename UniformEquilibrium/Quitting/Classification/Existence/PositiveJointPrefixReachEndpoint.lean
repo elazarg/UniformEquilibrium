@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.Existence.DiffuseStationaryPrefixSourceAttachments
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveAbsorptionStationarySplice
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 
 /-!
 # The reached punishment endpoint of a positive stationary prefix
@@ -265,6 +266,208 @@ theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.exists_realizers
         atTop (nhds endpoint.endpoint) :=
   exists_terminalProfile_sequence_tendsto_semanticPair reward
     endpoint.endpoint endpoint.endpoint_mem
+
+/-- Every semantic-carrier envelope coordinate is bounded below by the
+behavioral punishment value.  This is the closure extension of the defining
+min-max lower bound on literal profiles. -/
+theorem quittingPunishmentValue_le_terminalSemanticEnvelope_of_mem_carrier
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {pair : QuittingTerminalSemanticPair ι}
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) (who : ι) :
+    quittingPunishmentValue reward who ≤ pair.2 who := by
+  have hclosed : IsClosed {candidate : QuittingTerminalSemanticPair ι |
+      quittingPunishmentValue reward who ≤ candidate.2 who} :=
+    isClosed_le continuous_const
+      ((continuous_apply who).comp continuous_snd)
+  apply (closure_minimal ?_ hclosed) hpair
+  rintro candidate ⟨profile, rfl⟩
+  change quittingPunishmentValue reward who ≤
+    quittingContinuationBestResponseValue reward profile who
+  rw [quittingContinuationBestResponseValue_eq_bestReplyValue]
+  exact quittingPunishmentValue_le reward who profile
+
+/-- The reached endpoint has exactly zero best-response debt in every
+coordinate.  Nonpositivity comes from the reached suffixes' vanishing Nash
+error; nonnegativity is intrinsic to the literal semantic carrier. -/
+theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.debt_eq_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward)
+    (who : ι) :
+    quittingTerminalSemanticDebt endpoint.endpoint who = 0 := by
+  exact le_antisymm (endpoint.debt_nonpos who)
+    (quittingTerminalSemanticDebt_nonneg_of_mem_carrier
+      reward endpoint.endpoint_mem who)
+
+/-- Hence the reached punishment endpoint is diagonal: its prescribed payoff
+and all-behavior best-response envelope agree coordinatewise. -/
+theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.payoff_eq_envelope
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward)
+    (who : ι) :
+    endpoint.endpoint.1 who = endpoint.endpoint.2 who := by
+  have hzero := endpoint.debt_eq_zero who
+  unfold quittingTerminalSemanticDebt at hzero
+  linarith
+
+/-- The fixed punished coordinate does not merely satisfy an upper cap: the
+semantic endpoint's envelope attains that player's behavioral punishment
+value exactly. -/
+theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.envelope_eq_punishmentValue
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward) :
+    endpoint.endpoint.2 endpoint.punished =
+      quittingPunishmentValue reward endpoint.punished := by
+  exact le_antisymm endpoint.punishmentCap
+    (quittingPunishmentValue_le_terminalSemanticEnvelope_of_mem_carrier
+      reward endpoint.endpoint_mem endpoint.punished)
+
+/-- The prescribed coordinate of the reached endpoint therefore also equals
+the fixed player's behavioral punishment value. -/
+theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.payoff_eq_punishmentValue
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward) :
+    endpoint.endpoint.1 endpoint.punished =
+      quittingPunishmentValue reward endpoint.punished := by
+  rw [endpoint.payoff_eq_envelope endpoint.punished,
+    endpoint.envelope_eq_punishmentValue]
+
+/-- Finite-dimensional attachment condition for the reached endpoint: some
+player surely quits in an exact one-stage Nash prefix over the endpoint
+payoff.  Unlike the endpoint itself, the root is executable. -/
+def QuittingPositiveJointPrefixReachPunishmentEndpoint.HasSureExitNashPrefix
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward) :
+    Prop :=
+  ∃ (quitter : ι) (root : ι → PMF Bool),
+    root quitter = PMF.pure true ∧
+      IsεQuittingRootNash reward endpoint.endpoint.1 0 root
+
+/-- A sure-exit Nash prefix over the reached diagonal endpoint closes the
+positive-joint-reach source into branch `S.2`.  The proof does not execute a
+formal closure point: it approximates the endpoint by actual punishment
+profiles, prefixes the fixed root, and uses continuity of semantic debt to
+obtain executable terminal Nash profiles at every positive tolerance. -/
+theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.instantPunishment
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward)
+    (hprefix : endpoint.HasSureExitNashPrefix) :
+    QuittingInstantPunishmentεEquilibriumExistence reward := by
+  obtain ⟨quitter, root, hquit, hnash⟩ := hprefix
+  letI : Nonempty ι := ⟨quitter⟩
+  have hdiagonal : endpoint.endpoint =
+      (endpoint.endpoint.1, endpoint.endpoint.1) := by
+    apply Prod.ext
+    · rfl
+    · funext who
+      exact (endpoint.payoff_eq_envelope who).symm
+  have hprefixed : quittingTerminalSemanticPrefix reward root
+      endpoint.endpoint =
+        (quittingRootSuccessorPayoff reward endpoint.endpoint.1 root,
+          quittingRootSuccessorPayoff reward endpoint.endpoint.1 root) := by
+    rw [hdiagonal]
+    exact quittingTerminalSemanticPrefix_diagonal_eq_of_isZeroNash
+      reward endpoint.endpoint.1 root hnash
+  have hprefixedExploitability :
+      quittingTerminalSemanticExploitability
+        (quittingTerminalSemanticPrefix reward root endpoint.endpoint) = 0 := by
+    rw [hprefixed]
+    unfold quittingTerminalSemanticExploitability
+      QuittingBoundaryHolonomy.finitePlayerMax
+    simp [quittingTerminalSemanticDebt]
+  obtain ⟨tails, htails⟩ := endpoint.exists_realizers
+  have hspliceSemantic : Tendsto
+      (fun n ↦ quittingTerminalSemanticPair reward
+        (quittingRootThenContinuationProfile reward root (tails n)))
+      atTop
+      (nhds (quittingTerminalSemanticPrefix reward root endpoint.endpoint)) := by
+    have hprefixedTendsto :=
+      (continuous_quittingTerminalSemanticPrefix reward root).tendsto
+        endpoint.endpoint |>.comp htails
+    simpa [Function.comp_def,
+      quittingTerminalSemanticPair_rootThenContinuation] using
+      hprefixedTendsto
+  have hexploitability : Tendsto
+      (fun n ↦ quittingTerminalSemanticExploitability
+        (quittingTerminalSemanticPair reward
+          (quittingRootThenContinuationProfile reward root (tails n))))
+      atTop (nhds 0) := by
+    have hcontinuous :=
+      continuous_quittingTerminalSemanticExploitability.continuousAt.tendsto.comp
+        hspliceSemantic
+    rwa [hprefixedExploitability] at hcontinuous
+  apply quittingInstantPunishmentεEquilibriumExistence_of_sureQuitter
+  intro ε hε
+  obtain ⟨n, hn⟩ :=
+    (hexploitability.eventually (Iio_mem_nhds hε)).exists
+  refine ⟨quitter, root, tails n, hquit, ?_⟩
+  intro who deviation
+  have hbest := quittingTerminalPayoff_update_le_continuationBestResponseValue
+    reward (quittingRootThenContinuationProfile reward root (tails n))
+      who deviation
+  have hdebtLe : quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward
+        (quittingRootThenContinuationProfile reward root (tails n))) who ≤ ε := by
+    apply le_trans (le_max_right 0 _)
+    exact (QuittingBoundaryHolonomy.le_finitePlayerMax _ who).trans hn.le
+  change quittingContinuationBestResponseValue reward
+      (quittingRootThenContinuationProfile reward root (tails n)) who -
+      quittingTerminalPayoff reward
+        (quittingRootThenContinuationProfile reward root (tails n)) who ≤ ε
+    at hdebtLe
+  linarith
+
+/-- Exact unresolved positive-reach boundary after the executable sure-exit
+consumer is applied.  It retains the actual source and records that no
+zero-debt reached endpoint admits any exact sure-exit Nash prefix. -/
+structure QuittingPositiveJointPrefixReachNoSureExitResidual
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
+  source : QuittingPositiveJointPrefixReachSource reward
+  noSureExitNashPrefix :
+    ∀ endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward,
+      ¬endpoint.HasSureExitNashPrefix
+
+/-- A positive-joint-reach source either closes branch `S.2`, or every
+zero-debt endpoint at the exact punishment floor lies on the no-sure-exit
+one-stage Nash face. -/
+theorem QuittingPositiveJointPrefixReachSource.instantPunishment_or_noSureExitResidual
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (source : QuittingPositiveJointPrefixReachSource reward) :
+    QuittingInstantPunishmentεEquilibriumExistence reward ∨
+      Nonempty (QuittingPositiveJointPrefixReachNoSureExitResidual reward) := by
+  by_cases hprefix : ∃ endpoint :
+      QuittingPositiveJointPrefixReachPunishmentEndpoint reward,
+      endpoint.HasSureExitNashPrefix
+  · left
+    obtain ⟨endpoint, hendpoint⟩ := hprefix
+    exact endpoint.instantPunishment hendpoint
+  · right
+    refine ⟨⟨source, ?_⟩⟩
+    intro endpoint hendpoint
+    exact hprefix ⟨endpoint, hendpoint⟩
+
+/-- Source-faithful diffuse boundary after consuming the sure-exit endpoint
+subcase.  Positive joint reach is no longer a monolithic attachment: it
+either gives branch `S.2`, or retains an actual source all of whose diagonal
+punishment-floor endpoints fail the finite-dimensional sure-exit Nash test.
+The unique-exceptional-owner source remains unchanged. -/
+theorem stationary_or_instantPunishment_or_positiveJointNoSureExitResidual_or_uniqueOwner
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hgenerated : QuittingDiffuseStationarilyGeneratedApproximateEquilibria
+      reward) :
+    QuittingStationaryεEquilibriumExistence reward ∨
+      QuittingInstantPunishmentεEquilibriumExistence reward ∨
+        Nonempty (QuittingPositiveJointPrefixReachNoSureExitResidual reward) ∨
+          Nonempty (QuittingUniqueExceptionalOwnerSource reward) := by
+  rcases
+      stationary_or_positiveJointPrefixReachSource_or_uniqueExceptionalOwnerSource
+        hgenerated with hstationary | hpositive | hexceptional
+  · exact Or.inl hstationary
+  · obtain ⟨source⟩ := hpositive
+    rcases source.instantPunishment_or_noSureExitResidual with
+      hinstant | hresidual
+    · exact Or.inr (Or.inl hinstant)
+    · exact Or.inr (Or.inr (Or.inl hresidual))
+  · exact Or.inr (Or.inr (Or.inr hexceptional))
 
 /-- Exact source-level absorption law: the full prescribed terminal payoff is
 the payoff absorbed inside the repeated prefix plus the reached punishment

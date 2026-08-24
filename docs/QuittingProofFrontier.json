@@ -22,9 +22,9 @@
     {
       "id": "FINITE-SUPPORT-RANK-EXIT",
       "status": "proved",
-      "meaning": "Repeated minimum-fiber re-extraction terminates because positive-debt support cardinality strictly decreases, or an explicit finite-support-rank alternative is reached.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative",
+      "meaning": "Repeated minimum-fiber re-extraction terminates at positive total slope, zero-debt support entry, or an off-minimum actual replacement endpoint carrying an eventually paid row. Flat charged circulation is absorbed by strict support-rank descent or the paid-row arm.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.reducedSupportRankAlternative_of_positiveMinimumDebt",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -44,19 +44,11 @@
       "evidence_seals": ["M", "L"]
     },
     {
-      "id": "FLAT-CHARGED-CIRCULATION",
-      "status": "proved-alternative",
-      "meaning": "The flat tangent columns admit normalized positive charged balance.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExhaustiveTangentAlternative.lean",
-      "declaration": "GameTheory.HasQuittingStoppingLawFlatChargedCirculation",
-      "evidence_seals": ["M", "L"]
-    },
-    {
       "id": "PAID-FIRST-DISAGREEMENT-ROW",
       "status": "proved-alternative",
-      "meaning": "An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement",
+      "meaning": "An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence; this also consumes the former flat-circulation terminal arm after finite support descent.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster.HasOffMinimumPaidFirstDisagreement",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -108,9 +100,9 @@
       "status": "proved",
       "from": "EXACT-DIAGONAL-FRONTIER",
       "to": "FINITE-SUPPORT-RANK-EXIT",
-      "meaning": "Minimum-fiber potential descent strictly lowers finite active support until an exit is reached.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.finiteSupportRankAlternative",
+      "meaning": "Minimum-fiber re-extraction strictly lowers finite active support; in either flat no-entry branch, an arbitrary active replacement endpoint descends again or reaches the paid-row exit.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.reducedSupportRankAlternative",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -119,8 +111,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "POSITIVE-TOTAL-SLOPE",
       "meaning": "First tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
@@ -129,18 +121,8 @@
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "ZERO-DEBT-SUPPORT-ENTRY",
       "meaning": "Second tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
-      "evidence_seals": ["M", "L"]
-    },
-    {
-      "id": "FINITE-EXIT-TO-CIRCULATION",
-      "status": "proved-branch",
-      "from": "FINITE-SUPPORT-RANK-EXIT",
-      "to": "FLAT-CHARGED-CIRCULATION",
-      "meaning": "Third tagged exit arm.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative",
       "evidence_seals": ["M", "L"]
     },
     {
@@ -148,9 +130,9 @@
       "status": "proved-branch",
       "from": "FINITE-SUPPORT-RANK-EXIT",
       "to": "PAID-FIRST-DISAGREEMENT-ROW",
-      "meaning": "Fourth tagged exit arm after all minimum-fiber support deflations terminate.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/NormalizedCurvaturePaidRow.lean",
-      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawFiniteSupportRankAlternative",
+      "meaning": "Third tagged exit arm after all minimum-fiber support deflations terminate, including deflations triggered by flat charged circulation.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
+      "declaration": "GameTheory.QuittingPositiveMinimumDebtTangentFamily.HasQuittingStoppingLawReducedSupportRankAlternative",
       "evidence_seals": ["M", "L", "A"]
     },
     {
@@ -228,11 +210,11 @@
       "evidence_seals": ["M", "L", "C"]
     },
     {
-      "id": "FOUR-EXIT-CAPSTONE",
-      "meaning": "Chronological consumers for the first three finite-rank exits plus a varying-edge payoff-near-return producer with one fixed positive charge threshold for the paid-row exit yield a uniform-equilibrium payoff.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/PaidFirstDisagreementPayoffNearReturn.lean",
+      "id": "THREE-EXIT-CAPSTONE",
+      "meaning": "Chronological consumers for positive slope and support entry, together with any all-behavior paid-row consumer, yield a uniform-equilibrium payoff. No charged-circulation consumer is required.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean",
       "declarations": [
-        "GameTheory.exists_uniformEquilibriumPayoff_of_finiteSupportRankExitPayoffNearReturnConsumers"
+        "GameTheory.exists_uniformEquilibriumPayoff_of_reducedSupportRankExitConsumers"
       ],
       "evidence_seals": ["M", "L", "C"]
     }
