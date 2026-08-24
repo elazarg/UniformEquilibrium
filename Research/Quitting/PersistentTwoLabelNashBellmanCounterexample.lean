@@ -5,7 +5,6 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.HazardSummability
-import UniformEquilibrium.Quitting.Classification.TwoPlayer.PairRepair
 import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
 
 /-!
@@ -71,8 +70,7 @@ private theorem persistentTwoLabelCounterexample_quitPayoff
     quittingRootQuitPayoff persistentTwoLabelCounterexampleReward tail root true = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [StochasticGame.BigMatch.expect_pmfPi_bool]
-  simp [quittingRootPayoff, persistentTwoLabelCounterexampleReward,
-    QuittingTwoPlayerPairRepair.quittingQuitters_boolAction]
+  simp [quittingRootPayoff, persistentTwoLabelCounterexampleReward]
 
 private theorem persistentTwoLabelCounterexample_continuePayoff
     (tail : Payoff Bool) (root : Bool → PMF Bool) :
@@ -81,9 +79,7 @@ private theorem persistentTwoLabelCounterexample_continuePayoff
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
   rw [StochasticGame.BigMatch.expect_pmfPi_bool]
   simp [quittingRootPayoff, persistentTwoLabelCounterexampleReward,
-    QuittingTwoPlayerPairRepair.quittingQuitters_boolAction,
-    expect_eq_sum, Fintype.sum_bool]
-  ring
+    expect_eq_sum]
 
 private theorem persistentTwoLabelCounterexample_continuePayoff_ge_neg_one
     (tail : Payoff Bool) (root : Bool → PMF Bool)
@@ -92,6 +88,7 @@ private theorem persistentTwoLabelCounterexample_continuePayoff_ge_neg_one
       persistentTwoLabelCounterexampleReward tail root true := by
   rw [persistentTwoLabelCounterexample_continuePayoff]
   have hsum := quittingRoot_continueProbability_add_quitProbability root false
+  have hquit : 0 ≤ (root false true).toReal := ENNReal.toReal_nonneg
   have hcontinue : 0 ≤ (root false false).toReal := ENNReal.toReal_nonneg
   have hscaled :
       0 ≤ (root false false).toReal * (tail true + 1) :=
@@ -143,9 +140,19 @@ theorem not_nonempty_persistentTwoLabelNashBellmanAnswer_counterexample :
       (fun later => answer.value_bound later true)
       (rewardBound := 1)
       abs_persistentTwoLabelCounterexampleReward_le_one
-    simpa [quittingRootSequenceJointSurvival,
-      quittingRootSequenceAbsorptionCharge, quittingRootAbsorptionMass] using
-      hjoint time
+    have heq :
+        quittingRootSequenceJointSurvival answer.roots time =
+          Math.survivalProduct
+            (fun later => quittingStationaryContinueMass (answer.roots later))
+            time := by
+      funext length
+      unfold quittingRootSequenceJointSurvival
+      congr 1
+      funext later
+      unfold quittingRootSequenceAbsorptionCharge quittingRootAbsorptionMass
+      ring
+    rw [heq]
+    exact hjoint time
   have hvalueLower : ∀ time, -1 ≤ answer.value time true := by
     intro time
     rw [hsemantic time]
@@ -191,9 +198,17 @@ theorem not_nonempty_persistentTwoLabelNashBellmanAnswer_counterexample :
         (answer.roots time true false).toReal * continueValue at hmix
     have hsum := quittingRoot_continueProbability_add_quitProbability
       (answer.roots time) true
+    have hcontinueProbability :
+        (answer.roots time true false).toReal =
+          1 - (answer.roots time true true).toReal := by
+      linarith
+    rw [hcontinueProbability] at hmix
     have hscaled :
         0 ≤ (answer.roots time true true).toReal * (continueValue + 1) :=
       mul_nonneg hpositive.le (by linarith)
+    have hgap :
+        (answer.roots time true true).toReal * (continueValue + 1) ≤ 0 := by
+      nlinarith
     have hcontinueUpper : continueValue ≤ -1 := by
       nlinarith
     exact persistentTwoLabelCounterexample_forced_boundary
@@ -202,11 +217,14 @@ theorem not_nonempty_persistentTwoLabelNashBellmanAnswer_counterexample :
   have hexists : ∃ time,
       0 < (answer.roots time true true).toReal := by
     by_contra hnot
-    push_neg at hnot
+    have hnonpos : ∀ time,
+        (answer.roots time true true).toReal ≤ 0 := by
+      intro time
+      exact not_lt.mp (not_exists.mp hnot time)
     have hzero : hazard true = 0 := by
       funext time
       apply le_antisymm
-      · exact hnot time
+      · exact hnonpos time
       · exact quittingMarginalQuitHazard_nonneg answer.roots true time
     exact hboth.2 (by rw [hzero]; exact summable_zero)
   obtain ⟨start, hstart⟩ := hexists
@@ -224,7 +242,7 @@ theorem not_nonempty_persistentTwoLabelNashBellmanAnswer_counterexample :
       hazard false (offset + base) = 0 := by
     intro offset
     have hstep := (hboundaryStep (base + offset) (hvalueTail offset)).1
-    simpa [hazard, Nat.add_comm] using hstep
+    simpa [hazard, quittingMarginalQuitHazard, Nat.add_comm] using hstep
   have hsuffix : Summable (fun offset => hazard false (offset + base)) := by
     have hfun : (fun offset => hazard false (offset + base)) = 0 := by
       funext offset
