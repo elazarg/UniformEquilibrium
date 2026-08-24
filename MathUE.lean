@@ -332,6 +332,7 @@ import MathUE.Probability.WeightedClockRankReduction
 import MathUE.Probability.WeightedCollisionConcentration
 import MathUE.ProbabilityMassFunction
 import MathUE.ProbabilityMassFunction.Bool
+import MathUE.ProbabilityMassFunction.CompactStoppingLaw
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation

@@ -191,14 +191,34 @@ terminal `epsilon`-Nash premise, and the robust `[-1,1]` outsider completion
 retains the stated `17/8` mass bounds. Every such completion nevertheless has
 the pure first target as an exact all-behavior terminal Nash profile and a
 uniform-equilibrium payoff, so it cannot force the second pair. These ledger,
-completion, and target-lock results have `M`, `L`, `A`, and `C`. The separate
-`integerReward_secondPairMass_le_of_clock` has only conditional `L`: it still
-takes the square-root clock inequality as a supplied `hclock` premise. No
-checked adapter currently derives that premise from an arbitrary profile's
-live roots, so the three live-root/stage-amplitude/terminal-mass bridges remain
-an unreviewed formalization target in the conference notes, not an accepted
-export. Even after that adapter, positive second-pair production and a fixed
-exploitability gap remain open.
+completion, and target-lock results have `M`, `L`, `A`, and `C`.
+`sqrt_firstPairMass_add_sqrt_secondPairMass_le_one`
+(`UniformEquilibrium/Diagnostics/Quitting/SixPlayerArbitraryProfileClockAdapter.lean`)
+constructs the literal live-root clock, proves the two squared-amplitude
+identities, and identifies their sums with the actual terminal atoms. Thus
+`integerReward_secondPairMass_le` removes the former supplied `hclock`
+premise and has `M`, `L`, `A`, and its quantitative `C`. Positive second-pair
+production and a fixed exploitability gap remain open.
+
+The watchdog obstruction is also sharper, but stops at a precise topology
+lemma. Strategically totally bounded reply families cannot force a fixed
+profile-dependent gain, complete such families compile to a uniform payoff,
+and allowing one arbitrary nonprecompact player range does not change the
+conclusion. Thus every surviving selector has two distinct identities with
+fixed late-finite mass beyond every horizon. The new
+`exists_lateOrNeverMass_escape_of_not_properStrategicallyApproximable` and
+`exists_nonproper_essentialNeverWitness_of_totallyBounded`
+(`UniformEquilibrium/Quitting/Terminal/StrategicallyPrecompactWatchdogProperBoundary.lean`)
+show, conditionally on failure of proper strategic approximation, fixed
+late-or-Never escape and a nonproper essential Never witness in every
+strategically totally bounded range. The compact stopping-law space and its
+finite barycenters are checked in
+`MathUE/ProbabilityMassFunction/CompactStoppingLaw.lean`. The proper-sentinel
+compact-game theorem is not checked: it still needs joint weak continuity of
+terminal payoff when the sentinel ranges over the convex hull of finitely many
+proper laws and all other players range over the full compact law space.
+Accordingly, the metric consequences have `M` and `L`, with actual stopping-law
+adapters, but the selector-wide proper-sentinel consumer has no `C` seal.
 
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with
@@ -265,6 +285,33 @@ may vary with endpoint tolerance and endpoint payoff vectors become
 arbitrarily close. Fixed-edge payoff closure and exact return to the full tail
 state are stronger special cases. The chronological and payoff-near-return
 consumers themselves are proved in Lean.
+
+For a separate actual carrier-root family with one fixed absorption floor,
+`exists_macroscopicDebtDrop_or_chargedSoloBlockerGate` now proves positive
+liminf semantic debt descent or a strict-subsequence gate with one mixed solo
+debtor and a maximizing punishment-normal blocker. The source-native consumer
+`FinFourChargedSoloBlockerGate.pairPremium_or_every_exactRepayment` forces a
+fixed pair premium or fixed repayment in that blocker coordinate along every
+anchored exact floor orbit. This is a checked off-minimum obstruction, not the
+missing paid return: the pair premium has no source-matched collision mass and
+the repayment does not synchronize the other payoff coordinates.
+
+The next solo-wall reduction is checked up to one explicit stationary-source
+compiler. In
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourSoloWallDispatch.lean`,
+`exists_strictCarrierDebtDescent_of_opponentAbsorptionFloor` gives strict
+carrier-debt descent under a uniform opponent-absorption floor, while
+`exists_first_soloPrefix_outsiderWall` reaches a first outsider wall along
+literal semantic prefixes. Arbitrarily long finite uniform-solo windows
+compactify through `exists_uniformSoloSemanticSpine_of_finitePrefixes`, and
+`not_exists_outwardUniformSoloCarrierChain_of_normal` excludes the resulting
+infinite outward chain by punishment normality. At the wall,
+`pairPremium_pairJoin_or_leaveJoinStationaryTwoDebtorHandoff` returns the
+existing singleton-base handoff or a full-gap outsider pair-join. These steps
+have `M`, `L`, `A`, and obstruction `C`; the claimed pair-base stationary
+two-debtor handoff from the join is not proved. Its exact missing declaration
+is `nonempty_finFourPairBaseStationaryTwoDebtorHandoff`, so no actual source or
+payoff-return seal is assigned to that arm.
 
 Seals use the independent `M`/`L`/`A`/`C` language of
 [`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
@@ -392,6 +439,23 @@ the live mathematical ledger.
   source has `M`, `L`, and `A`, but not `C`: no checked return or uniform-payoff
   consumer uses it.
 
+  Owner-label selection itself is no longer an obstruction. At any global
+  minimum carrier pair, a chosen positive debtor can be used as the reset
+  owner in
+  `QuittingTerminalExploitabilityWitness.exists_finFour_prescribedOwner_resetDispatch`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourPrescribedOwnerResetAlignment.lean`).
+  The selected complementary-pair Nash row is an actual stationary
+  semantic-law target with zero debt in that owner and unit incidence in a
+  genuine opponent, and it enters the checked fixed-law reset dispatch. For
+  any independently preselected label,
+  `QuittingTerminalExploitabilityWitness.exists_prescribedOwner_stationaryHandoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/PrescribedOwnerStationaryHandoff.lean`)
+  supplies a uniform positive singleton-base floor gap and an actual paid
+  stationary handoff. These two adapters have `M`, `L`, `A`, and `C` for their
+  stated dispatches. Their shared label does not make the selected profiles,
+  laws, observers, payoffs, or chronological rows coincide; that common-source
+  alignment and the all-Continue reset wall remain open.
+
   Separately,
   `FinFourQuantitativeFullSupportHardResidual.exists_collisionGeometry_with_alignedTwoCycleHardPair_or_long`
   proves that in each of the eight marked two-cycle preemption constructors,
@@ -410,8 +474,12 @@ the live mathematical ledger.
 
   The lasso-incidence theorems have `M`, `L`, and `A`, but not `C`. The
   large-base handoff likewise has `M`, `L`, and `A`: its stationary profiles
-  and paid row are actual behavioral source objects. It has no `C` seal for
-  the open payoff-near-return step.
+  and paid row are actual behavioral source objects.
+  `LargeBasePaidStationaryHandoff.endpointAtom_floorFailure_or_exactOrbit`
+  now sends that source to localized floor failure or a literal exact infinite
+  floor orbit. Finite collision-budget and charged-recurrence consumers are
+  checked `C` under their displayed hypotheses, but the terminal witness
+  excludes persistent fixed charge and no payoff near-return is produced.
 
   There is now a second same-table semantic restriction on every hypothetical
   `Fin 4` counterexample. First,
@@ -566,6 +634,19 @@ the live mathematical ledger.
   rows. The spine branch still needs the all-restart survival condition (or an
   equivalent semantic boundary); compactification does not supply it. No
   global perfect sequence or finite orbit is produced.
+- **AGKRS Theorem 3.4 dependency boundary:** the corrected pointwise source
+  analysis now leaves exactly three literal residuals: an all-Continue source
+  phantom, a positive-absorption sharp attachment failure, or a persistent
+  positive-singleton suffix defect. In the diffuse generated branch, positive
+  joint reach gives the instant-punishment branch whenever a reached
+  punishment-floor endpoint has a sure-exit Nash prefix; otherwise the source
+  records that every such endpoint fails that test. A divergent unique-
+  exceptional-owner source with nonnegative owner singleton payoff gives the
+  stationary branch. The checked Literature capstone
+  `theorem3_4_of_refinedSourceClosures` composes the exclusion of exactly these
+  source residuals to the literal S.1/S.2/S.3 conclusion. Those exclusions and
+  the required exceptional-owner hypotheses remain open, so the unconditional
+  general `theorem3_4` is still the sole proof hole in the paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`

@@ -1,5 +1,8 @@
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
 import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.ExceptionalOwnerPrefixConcentration
+import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointPrefixReachEndpoint
+import UniformEquilibrium.Quitting.Classification.Existence.PositiveRhoLandingClassificationBoundary
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
@@ -345,6 +348,80 @@ theorem theorem3_4_of_correctedDependencies
   · exact Or.inr (Or.inr
       ((smallSequentialBranch_iff table).mpr hsequential))
 
+/-! **A source-level dependency refinement.**  The preceding capstone asks
+the diffuse fourth branch to return only S.1 or S.3.  The actual positive-reach
+source can instead close S.2: its reached punishment profiles converge to a
+zero-debt endpoint at the punished player's min-max value, and an exact
+sure-exit Nash row over that endpoint can be approximated by executable
+profiles.  Thus the following checked capstone uses three literal residual
+conditions:
+
+* none of the three refined residuals from the corrected pointwise extraction
+  occurs at a positive error;
+* no positive-joint-reach source remains for which every punishment endpoint
+  lacks a sure-exit Nash solution; and
+* every unique-exceptional-owner source has divergent prefix length and a
+  nonnegative singleton self-payoff for its owner.
+
+These are still hypotheses, not proofs of the cited extraction or
+compactification arguments.  Their value is that the positive-reach seam is
+allowed to land in its natural paper branch S.2 rather than being forced
+through the stronger two-way compactification dependency above. -/
+theorem theorem3_4_of_refinedSourceClosures
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (hpointwise : ∀ δ : ℝ, 0 < δ →
+      ¬QuittingCorrectedPointwiseRefinedSourceResidualAt
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward δ)
+    (hpositive :
+      ¬Nonempty (QuittingPositiveJointPrefixReachNoSureExitResidual
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward))
+    (hexceptional :
+      ∀ source : QuittingUniqueExceptionalOwnerSource
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward,
+        Tendsto
+            (fun n ↦ source.family.horizon (source.selected n)) atTop atTop ∧
+          0 ≤ quittingSoloReward
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward
+            source.owner source.owner) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  intro hexists
+  let table : QuittingPayoffTable ι := ⟨reward, never⟩
+  have htableExists : table.ApproximateEquilibriumExistence := hexists
+  have hextraction : table.HasCorrectedPointwiseFourWayExtraction :=
+    table.hasCorrectedPointwiseFourWayExtraction_of_noRefinedSourceResidual
+      hpointwise
+  have hfixed := fixedCorrectedQuittingBranch_of_pointwiseAlternative
+    (hextraction htableExists)
+  rcases hfixed with hstationary | hpunishment | hsequential | hdiffuse
+  · exact Or.inl ((smallStationaryBranch_iff table).mpr
+      (table.stationaryεEquilibriumExistence_iff.mpr hstationary))
+  · exact Or.inr (Or.inl ((smallPunishmentBranch_iff table).mpr
+      (table.instantPunishmentεEquilibriumExistence_iff.mpr hpunishment)))
+  · exact Or.inr (Or.inr ((smallSequentialBranch_iff table).mpr
+      (table.sequentiallyεPerfectAbsorbingExistence_iff.mpr
+        (quittingSequentiallyεPerfectAbsorbingExistence_of_wellSupported
+          hsequential))))
+  · rcases
+        stationary_or_positiveJointPrefixReachSource_or_uniqueExceptionalOwnerSource
+          hdiffuse with hstationary | hpositiveSource | hexceptionalSource
+    · exact Or.inl ((smallStationaryBranch_iff table).mpr
+        (table.stationaryεEquilibriumExistence_iff.mpr hstationary))
+    · obtain ⟨source⟩ := hpositiveSource
+      rcases source.instantPunishment_or_noSureExitResidual with
+        hpunishment | hresidual
+      · exact Or.inr (Or.inl ((smallPunishmentBranch_iff table).mpr
+          (table.instantPunishmentεEquilibriumExistence_iff.mpr hpunishment)))
+      · exact False.elim (hpositive hresidual)
+    · obtain ⟨source⟩ := hexceptionalSource
+      obtain ⟨hhorizon, hsolo⟩ := hexceptional source
+      have hstationary :=
+        source.stationaryεEquilibriumExistence_of_nonnegSolo hhorizon hsolo
+      exact Or.inl ((smallStationaryBranch_iff table).mpr
+        (table.stationaryεEquilibriumExistence_iff.mpr hstationary))
+
 /-- Theorem 3.4 is unconditional for a one-player quitting game: after
 subtracting the arbitrary payoff at never, nonpositive solo reward makes
 all-Continue stationary, while positive solo reward makes sure quitting
@@ -392,8 +469,12 @@ If this endpoint admits an exact one-stage Nash root with some sure quitter,
 actual profiles realizing the endpoint compile to S.2.  Thus the remaining
 positive-reach residual is the explicit finite-dimensional failure of every
 such sure-exit root, not merely positive reach itself.  The other source,
-with one exceptional player-deleted survival clock, still has no general
-classification attachment. -/
+with one exceptional player-deleted survival clock, is also partly decoded.
+When its repeated-prefix lengths diverge, absorption over the whole prefix
+concentrates on the exceptional owner's singleton outcome.  The source Nash
+inequality then produces S.1 whenever that owner's singleton self-payoff is
+nonnegative.  What remains on this arm is a negative singleton self-payoff,
+or a source for which divergent prefix length has not been obtained. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an
@@ -600,10 +681,12 @@ the full behavior-profile decoder have not been formalized in this module. -/
 /-! **Theorem 4.13 (paper statement).** If a quitting game does not
 possess an ε-equilibrium under which the game terminates with probability one
 in the first stage, then it admits ε-equilibria for every ε>0 iff it has a
-sequentially 0-perfect absorption path.  The full behavior-profile event
-“terminates in the first stage with probability one” has no accessor in the
-current interface, so this theorem is intentionally not declared with a
-proxy or missing hypothesis.
+sequentially 0-perfect absorption path.  The behavior-profile event now has
+the exact repository predicate `QuittingProfileAbsorbsSurelyAtFirstStage`.
+The theorem is nevertheless retained as a paper statement rather than a Lean
+declaration: its proof needs Proposition 4.6's full path-to-profile decoder
+and Proposition 4.12's closure theorem in the weak Stieltjes topology, neither
+of which is currently available.
 
 **Paper proof architecture.** In the forward direction, Theorem 3.4 selects a
 small-error branch and Proposition 4.12 passes a sequence of sequentially
