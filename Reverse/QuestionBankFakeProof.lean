@@ -43,22 +43,26 @@ def HasFiniteQuittingUniformExistenceCounterexample
     ¬∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff
 
-/-! ## Conditioned packet reprojection -/
+/-! ## Conditioned packet reprojection and compatible iteration -/
 
-/-- Fake positive answer at the exact checked consumer waist. -/
-theorem fakeAnswer_conditionedPacketReprojection
+/-- Fake answer to the composition of the two maintained packet questions.
+The local reached-source reprojection question and the abstract compatible-
+iteration question are deliberately distinct.  Only their universal
+composition inhabits this conjecture-level consumer. -/
+theorem fakeAnswer_conditionedPacketReprojection_and_compatibleIteration
     {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     VanishingDebtAtomChronologicalConsumer reward := by
   sorry
 
-/-- The conditioned-reprojection answer alone closes finite-quitting uniform
-existence through the universal vanishing-debt atom access. -/
-theorem fake_conditionedPacketReprojection_proves_uniformExistence :
+/-- Universal reached-source reprojection together with compatible iteration
+closes finite-quitting uniform existence.  Neither maintained local question
+alone is represented by the conjecture-level consumer above. -/
+theorem fake_packetReprojection_and_iteration_prove_uniformExistence :
     FiniteQuittingUniformExistence := by
   intro ι _ _ _ reward
   exact exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsumer
-    (fakeAnswer_conditionedPacketReprojection reward)
+    (fakeAnswer_conditionedPacketReprojection_and_compatibleIteration reward)
 
 /-! ## Paid admissible payoff near-return -/
 
