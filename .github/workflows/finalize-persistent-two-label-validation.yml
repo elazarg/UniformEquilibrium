@@ -1,0 +1,38 @@
+name: Finalize persistent two-label validation state
+
+on:
+  push:
+    branches:
+      - codex/close-persistent-two-label-sorry
+
+permissions:
+  contents: write
+
+jobs:
+  finalize:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/close-persistent-two-label-sorry
+          fetch-depth: 0
+      - name: Clean successful validation scaffolding
+        shell: bash
+        run: |
+          status="missing"
+          if [[ -f Reverse/PersistentTwoLabelCompileStatus.txt ]]; then
+            status="$(tr -d '\r\n' < Reverse/PersistentTwoLabelCompileStatus.txt)"
+          fi
+          if [[ "$status" == "compiled" ]]; then
+            rm -f Reverse/PersistentTwoLabelCompileStatus.txt
+            rm -f Reverse/PersistentTwoLabelCompileErrors.txt
+            rm -f Reverse/.persistent-two-label-ci-trigger
+          fi
+          rm -f .github/workflows/finalize-persistent-two-label-validation.yml
+          git diff --check
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Finalize persistent two-label validation state"
+          git push origin HEAD:codex/close-persistent-two-label-sorry
