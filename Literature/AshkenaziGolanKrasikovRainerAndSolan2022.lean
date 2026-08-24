@@ -5,6 +5,7 @@ import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
+import UniformEquilibrium.Quitting.Classification.OnePlayer.StationaryBranch
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 
 /-!
@@ -242,6 +243,19 @@ theorem smallSequentialBranch_of_positiveSolo_of_weakPreference
     QuittingPayoffTable.sequentiallyεPerfectAbsorbingExistence_of_positiveSolo_of_weakPreference
       table hsolo hweak
 
+/-- If every singleton self-reward is at most the payoff at never, the
+literal all-Continue stationary profile is an exact equilibrium. -/
+theorem smallStationaryBranch_of_zeroSolo
+    (table : QuittingPayoffTable ι)
+    (hzero : IsQuittingZeroSolo table.zeroNeverReward) :
+    SmallStationaryBranch table := by
+  rw [smallStationaryBranch_iff,
+    table.stationaryεEquilibriumExistence_iff]
+  intro error herror
+  exact ⟨quittingAllContinueRoot,
+    (isZeroAsymptoticNash_quittingAlwaysContinue_of_zeroSolo
+      table.zeroNeverReward hzero).mono herror.le⟩
+
 /-! **Theorem 3.4 (paper statement and proof architecture).** If ε-equilibria exist for
 every positive ε, then one fixed branch among S.1 (stationary), S.2 (a sure
 first-stage quitter with arbitrary-profile punishment at min-max), and S.3
@@ -264,9 +278,10 @@ induced by the actual tail beginning at `n+1`, and the resulting root sequence
 must absorb with probability one.
 
 The three predicates above preserve those quantifiers.  The checked proof
-below covers the empty-player case and a normalized positive-solo
-weak-preference regime.  The general fixed-disjunct extraction is the `sorry`;
-it is not supplied by the production existence interfaces. -/
+below covers the empty-player case, the normalized nonpositive-solo regime,
+and a normalized positive-solo weak-preference regime.  The general
+fixed-disjunct extraction is the `sorry`; it is not supplied by the production
+existence interfaces. -/
 theorem theorem3_4
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
     EpsilonEquilibriumExistence reward never →
@@ -286,14 +301,17 @@ theorem theorem3_4
       exact hempty.elim who
   | inr hnonempty =>
       letI := hnonempty
-      by_cases hnormalized :
-          (∀ who, 0 < quittingSoloReward table.zeroNeverReward who who) ∧
-            QuittingWeakSoloExitPreference table.zeroNeverReward
-      · right
-        right
-        exact smallSequentialBranch_of_positiveSolo_of_weakPreference
-          table hnormalized.1 hnormalized.2
-      · sorry
+      by_cases hzeroSolo : IsQuittingZeroSolo table.zeroNeverReward
+      · left
+        exact smallStationaryBranch_of_zeroSolo table hzeroSolo
+      · by_cases hnormalized :
+            (∀ who, 0 < quittingSoloReward table.zeroNeverReward who who) ∧
+              QuittingWeakSoloExitPreference table.zeroNeverReward
+        · right
+          right
+          exact smallSequentialBranch_of_positiveSolo_of_weakPreference
+            table hnormalized.1 hnormalized.2
+        · sorry
 
 /-! **Checked dependency capstone for Theorem 3.4.**  The two missing inputs
 are stated in production semantics as
@@ -326,6 +344,49 @@ theorem theorem3_4_of_correctedDependencies
       ((smallPunishmentBranch_iff table).mpr hpunishment))
   · exact Or.inr (Or.inr
       ((smallSequentialBranch_iff table).mpr hsequential))
+
+/-- Theorem 3.4 is unconditional for a one-player quitting game: after
+subtracting the arbitrary payoff at never, nonpositive solo reward makes
+all-Continue stationary, while positive solo reward makes sure quitting
+stationary. -/
+theorem theorem3_4_onePlayer
+    [Unique ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  intro _hequilibrium
+  left
+  rw [smallStationaryBranch_iff,
+    (⟨reward, never⟩ : QuittingPayoffTable ι).stationaryεEquilibriumExistence_iff]
+  exact quittingStationaryεEquilibriumExistence_onePlayer
+    (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward
+
+/-! **Current checked boundary inside the first dependency.**  The
+arbitrary-never extraction reaches the corrected four-way conclusion unless
+one of three source-derived phenomena survives.  In ordinary mathematical
+terms these are:
+
+* a nonzero continuation annotation over an all-Continue limiting row,
+  retained together with the actual reached suffixes which realize it;
+* a positive-absorption pair of consecutive limiting Bellman rows with
+  temporal nonrecurrence, or with an explicit negative punishment-value
+  coordinate obstructing automatic boundary admissibility; or
+* a positive-survival Bellman spine with a positive singleton self-reward
+  and a fixed unrestricted deviation gain on all sufficiently late
+  executable suffixes.
+
+The last description is sharper than a bare positive-survival boundary.
+When all singleton self-rewards are nonpositive, all-Continue is already an
+exact stationary equilibrium, so that half of the former boundary belongs
+to S.1.  The persistent late-suffix deviation is an exact checked defect,
+not itself an equilibrium branch or a refutation of Theorem 3.4.
+
+The second dependency remains separate.  Its actual stationary-prefix
+sources retain either positive joint reach of the punishment suffix or one
+exceptional player-deleted survival clock.  Neither attachment is presently
+proved in general. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an

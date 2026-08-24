@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.Existence.CorrectedPointwiseSourceBoundary
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.PositiveRhoSourceTerminalConsumer
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 
 /-!
 # Classification boundary of a positive-rho landing family
@@ -16,8 +17,13 @@ classes.  Compactifying the reached row gives a sharper classification
 split.  Zero limiting absorption is stationary exactly on the zero-solo
 side; otherwise it leaves the nonzero all-Continue phantom.  Positive
 limiting absorption is stationary when the temporal value recurs and the
-saturated-opponent boundary packet holds; otherwise it leaves the existing
-two-edge attachment residual.
+saturated-opponent boundary packet holds.  Exact rationality makes that
+boundary packet automatic when punishment values are nonnegative, so the
+positive-absorption residual is now temporal nonrecurrence or an explicit
+negative punishment coordinate.  The other source arm, a positive-survival
+support--Bellman spine, is stationary throughout the nonpositive-singleton
+regime.  Its only residual includes an actual positive singleton and a
+persistent unrestricted deviation gap on executable late suffixes.
 -/
 
 noncomputable section
@@ -132,11 +138,79 @@ theorem
       reward root limit.actualTail hcontinue hfixed hendpoint).mpr hboundary
   exact ⟨root, hnash.mono hδ⟩
 
+/-- At a recurrent compact landing row, nonnegative punishment values force
+the saturated-opponent boundary inequalities.  Endpoint Nash prices quitting
+now, while exact individual rationality prices never quitting. -/
+theorem
+    QuittingLowSurvivalPositiveRhoCompactLimit.boundary_of_recurrence_of_nonnegativePunishment
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {u : ℝ}
+    {landing : QuittingLowSurvivalPositiveRhoLandingFamily reward u}
+    (limit : QuittingLowSurvivalPositiveRhoCompactLimit landing)
+    (hrecurrence : limit.predecessorValue = limit.actualTail)
+    (hpunishment : ∀ who, 0 ≤ quittingPunishmentValue reward who) :
+    IsQuittingStationaryBoundaryAdmissible reward
+      (quittingRootOfSimplex limit.root) limit.actualTail := by
+  let root := quittingRootOfSimplex limit.root
+  have hfixed : limit.actualTail =
+      quittingRootSuccessorPayoff reward limit.actualTail root := by
+    rw [← limit.predecessorValue_bellman]
+    exact hrecurrence.symm
+  have hendpoint : IsεQuittingRootEndpointNash reward
+      limit.actualTail 0 root := by
+    rw [← limit.clippedTail_eq_actual]
+    exact limit.exactEndpointNash
+  have hpure :=
+    (isεQuittingRootEndpointNash_iff_purePayoff_le
+      reward limit.actualTail 0 root).mp hendpoint
+  intro who hmass
+  have hnonnegative : 0 ≤ limit.actualTail who := by
+    have hrational := limit.actualTail_rational who
+    change quittingPunishmentValue reward who - 0 ≤
+      limit.actualTail who at hrational
+    linarith [hpunishment who]
+  apply max_le hnonnegative
+  have hquit := (hpure who).1
+  have hopponents :=
+    opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
+      root who hmass
+  have hupdate : Function.update root who (PMF.pure true) =
+      Function.update (quittingAllContinueRoot : ι → PMF Bool)
+        who (PMF.pure true) := by
+    funext player
+    by_cases hplayer : player = who
+    · subst player
+      simp
+    · rw [Function.update_of_ne hplayer,
+        Function.update_of_ne hplayer, hopponents player hplayer]
+      rfl
+  have hquitEq : quittingRootQuitPayoff reward limit.actualTail root who =
+      reward (quittingSingletonTerminal who) who := by
+    unfold quittingRootQuitPayoff
+    rw [hupdate,
+      quittingRootExpectedPayoff_allContinue_update_true]
+  rw [hquitEq, ← congrFun hfixed who] at hquit
+  simpa using hquit
+
+/-- The positive-absorption attachment seam after using individual
+rationality at a recurrent row.  Failure is now either temporal
+nonrecurrence or an explicit negative punishment value; a bare stationary
+boundary failure is no longer retained. -/
+structure QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (u : ℝ) where
+  landing : QuittingLowSurvivalPositiveRhoLandingFamily reward u
+  base : QuittingLowSurvivalPositiveRhoCompactLimit landing
+  consecutive : QuittingLowSurvivalPositiveRhoConsecutiveLimit base
+  absorption_pos : 0 < quittingRootAbsorptionMass
+    (quittingRootOfSimplex base.root)
+  obstruction : base.predecessorValue ≠ base.actualTail ∨
+    ∃ who, quittingPunishmentValue reward who < 0
+
 /-- **Strict landing-to-classification reduction.**  A literal positive-rho
 landing family either yields the full AGKRS stationary branch, or leaves one
 of two already identified source-derived seams:
 the nonzero all-Continue phantom or the positive-absorption two-edge
-attachment residual. -/
+attachment residual, whose obstruction is now nonrecurrence or a negative
+punishment coordinate. -/
 theorem
     QuittingLowSurvivalPositiveRhoLandingFamily.stationaryExistence_or_sourcePhantom_or_attachment
     [Nonempty ι]
@@ -146,7 +220,8 @@ theorem
       Nonempty
         (QuittingLowSurvivalPositiveRhoAllContinueSourceResidual reward u) ∨
         Nonempty
-          (QuittingLowSurvivalPositiveAbsorptionAttachmentResidual reward u) := by
+          (QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
+            reward u) := by
   obtain ⟨base⟩ := exists_quittingLowSurvivalPositiveRhoCompactLimit landing
   obtain ⟨consecutive⟩ :=
     exists_quittingLowSurvivalPositiveRhoConsecutiveLimit base
@@ -179,7 +254,14 @@ theorem
           base := base
           consecutive := consecutive
           absorption_pos := habsorptionPos
-          obstruction := Or.inr hboundary }⟩)
+          obstruction := Or.inr (by
+            have hnotNonnegative : ¬∀ who,
+                0 ≤ quittingPunishmentValue reward who := by
+              intro hnonnegative
+              exact hboundary
+                (base.boundary_of_recurrence_of_nonnegativePunishment
+                  hrecurrence hnonnegative)
+            simpa only [not_forall, not_le] using hnotNonnegative) }⟩)
     · exact Or.inr (Or.inr ⟨{
         landing := landing
         base := base
@@ -198,7 +280,8 @@ theorem QuittingLowSurvivalPositiveRhoLandingFamily.stationaryAt_or_phantom_or_a
     QuittingStationaryεEquilibriumAt reward δ ∨
       Nonempty (QuittingLowSurvivalAllContinuePhantom reward) ∨
         Nonempty
-          (QuittingLowSurvivalPositiveAbsorptionAttachmentResidual reward u) := by
+          (QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
+            reward u) := by
   rcases landing.stationaryExistence_or_sourcePhantom_or_attachment with
     hstationary | hsourcePhantom | hattachment
   · exact Or.inl (hstationary δ hδ)
@@ -206,21 +289,58 @@ theorem QuittingLowSurvivalPositiveRhoLandingFamily.stationaryAt_or_phantom_or_a
     exact Or.inr (Or.inl sourcePhantom.nonempty_phantom)
   · exact Or.inr (Or.inr hattachment)
 
+/-- A positive-survival support--Bellman boundary with the actual persistent
+positive-singleton suffix defect retained. -/
+structure QuittingSupportBellmanPositiveSingletonDefectResidual
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ) where
+  boundary : QuittingSupportBellmanPositiveSurvivalBoundary reward δ
+  defect : boundary.PositiveSingletonSuffixDefect
+
+/-- A positive-survival support--Bellman boundary is stationary when every
+singleton self-reward is nonpositive.  Otherwise it retains an actual
+positive singleton and the resulting persistent unrestricted suffix-
+deviation defect. -/
+theorem QuittingSupportBellmanPositiveSurvivalBoundary.stationary_or_defect
+    [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {δ : ℝ}
+    (boundary : QuittingSupportBellmanPositiveSurvivalBoundary reward δ) :
+    QuittingStationaryεEquilibriumExistence reward ∨
+      Nonempty
+        (QuittingSupportBellmanPositiveSingletonDefectResidual reward δ) := by
+  by_cases hzero : IsQuittingZeroSolo reward
+  · left
+    intro error herror
+    exact quittingStationaryεEquilibriumAt_of_zeroSolo
+      reward hzero herror.le
+  · right
+    have hpositive : ∃ who,
+        0 < reward (quittingSingletonTerminal who) who := by
+      simpa only [IsQuittingZeroSolo, not_forall, not_le] using hzero
+    obtain ⟨who, hwho⟩ := hpositive
+    exact ⟨{
+      boundary := boundary
+      defect := boundary.positiveSingletonSuffixDefectOf who hwho }⟩
+
 /-- The refined residual after consuming the classifiable part of both
-positive-rho and positive-survival source arms. -/
+positive-rho and positive-survival source arms.  Its last arm now carries an
+actual unrestricted suffix-deviation gap, not merely a phantom Bellman
+annotation. -/
 def QuittingCorrectedPointwiseRefinedSourceResidualAt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (δ : ℝ) : Prop :=
   Nonempty
       (QuittingLowSurvivalPositiveRhoAllContinueSourceResidual reward (1 / 2)) ∨
     Nonempty
-      (QuittingLowSurvivalPositiveAbsorptionAttachmentResidual reward (1 / 2)) ∨
-      Nonempty (QuittingSupportBellmanPositiveSurvivalBoundary reward δ)
+      (QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
+        reward (1 / 2)) ∨
+      Nonempty
+        (QuittingSupportBellmanPositiveSingletonDefectResidual reward δ)
 
 namespace QuittingLCPClassification
 
 /-- Dependency A now reaches the corrected four-way alternative unless one
-of three explicit source-derived seams survives.  In particular, the raw
-positive-rho landing family is no longer a residual. -/
+of three explicit source-derived seams survives.  In particular, neither a
+raw positive-rho landing family nor a nonpositive-singleton support--Bellman
+boundary remains a residual. -/
 theorem
     QuittingPayoffTable.correctedPointwiseAlternative_or_refinedSourceResidualAt
     [Nonempty ι]
@@ -248,12 +368,16 @@ theorem
       · exact Or.inl (hstationary δ hδ)
       · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hsourcePhantom))))
       · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inl hattachment)))))
-    · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr hboundary)))))
+    · obtain ⟨boundary⟩ := hboundary
+      rcases boundary.stationary_or_defect with
+        hstationary | hdefect
+      · exact Or.inl (hstationary δ hδ)
+      · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr hdefect)))))
 
 /-- Excluding the three refined source residuals at every positive scale
 closes Dependency A.  The premise is strictly weaker than excluding every
-raw positive-rho landing family, because the stationary cases above have
-already been consumed. -/
+raw positive-rho landing family or positive-survival boundary, because the
+stationary cases above have already been consumed. -/
 theorem
     QuittingPayoffTable.hasCorrectedPointwiseFourWayExtraction_of_noRefinedSourceResidual
     (table : QuittingPayoffTable ι)
