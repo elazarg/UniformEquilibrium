@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.PaidFirstDisagreementPayoffNearReturn
 import UniformEquilibrium.Diagnostics.Quitting.UniformExistenceBoundary
+import UniformEquilibrium.Quitting.Classification.OnePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.SuppliedCorrespondence
 import UniformEquilibrium.Quitting.Debt.Dynamic.NashBellmanChronologicalForcing
 import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabel
@@ -81,7 +82,8 @@ structure PersistentTwoLabelNashBellmanAnswer
 
 /-- Fake positive answer to persistent two-label selection. -/
 theorem fakeAnswer_persistentTwoLabelHazards
-    {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (hcard : 2 ≤ Fintype.card ι)
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     Nonempty (PersistentTwoLabelNashBellmanAnswer reward) := by
   sorry
@@ -91,20 +93,21 @@ certificates and therefore independently close uniform existence. -/
 theorem fake_persistentTwoLabelHazards_proves_uniformExistence :
     FiniteQuittingUniformExistence := by
   intro ι _ _ _ reward
-  obtain ⟨answer⟩ := fakeAnswer_persistentTwoLabelHazards reward
-  have hpersistent := answer.persistent
-  obtain ⟨first, second, hne, _, _⟩ := hpersistent
-  have hcard : 2 ≤ Fintype.card ι :=
-    Fintype.one_lt_card_iff.mpr ⟨first, second, hne⟩
-  obtain ⟨hopponent, hjoint⟩ :=
-    HasTwoPersistentQuittingMarginals.survival hcard answer.persistent
-  apply
-    quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
-      reward
-  intro eta heta
-  exact nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine
-    reward answer.value answer.roots answer.value_bound answer.bellman
-      answer.nash hjoint hopponent eta heta
+  by_cases hcard : 2 ≤ Fintype.card ι
+  · obtain ⟨answer⟩ := fakeAnswer_persistentTwoLabelHazards hcard reward
+    obtain ⟨hopponent, hjoint⟩ :=
+      HasTwoPersistentQuittingMarginals.survival hcard answer.persistent
+    apply
+      quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors
+        reward
+    intro eta heta
+    exact nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine
+      reward answer.value answer.roots answer.value_bound answer.bellman
+        answer.nash hjoint hopponent eta heta
+  · have hpositive : 0 < Fintype.card ι := Fintype.card_pos
+    have hone : Fintype.card ι = 1 := by omega
+    letI : Unique ι := (Fintype.card_eq_one_iff_nonempty_unique.mp hone).some
+    exact quittingGame_exists_uniformEquilibriumPayoff_onePlayer reward
 
 /-! ## Paid admissible payoff near-return -/
 
