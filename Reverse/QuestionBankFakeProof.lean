@@ -13,11 +13,16 @@ import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabel
 /-!
 # Fake proof that the active question bank is conjecture-closing
 
-This file exists only on the `fake-proof` branch.  Every declaration whose
-name starts with `fakeAnswer` is an assumed mathematical answer implemented
-with `sorry`.  The downstream theorems contain no additional gap: they apply
-the checked production consumers to show exactly which answers imply uniform
-existence and which answers instead provide a quitting-game counterexample.
+This file exists only on the `fake-proof` branch.  Every remaining declaration
+whose name starts with `fakeAnswer` is an assumed mathematical answer
+implemented with `sorry`.  The downstream theorems contain no additional gap:
+they apply the checked production consumers to show exactly which answers imply
+uniform existence and which answers instead provide a quitting-game
+counterexample.
+
+The persistent-two-label section is different: it refutes the universal fake
+answer on subsingleton player types and retains the conjecture-closing consumer
+with the corrected universal answer exposed as an explicit hypothesis.
 
 Nothing in this file is evidence for any `M`, `L`, `A`, or `C` seal.
 -/
@@ -79,19 +84,42 @@ structure PersistentTwoLabelNashBellmanAnswer
     IsεQuittingRootNash reward (value (time + 1)) 0 (roots time)
   persistent : HasTwoPersistentQuittingMarginals roots
 
-/-- Fake positive answer to persistent two-label selection. -/
-theorem fakeAnswer_persistentTwoLabelHazards
-    {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+/-- The universal persistent-two-label selection statement represented by the
+former fake answer. -/
+def PersistentTwoLabelNashBellmanUniversalAnswer : Prop :=
+  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] [Nonempty ι]
+      (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    Nonempty (PersistentTwoLabelNashBellmanAnswer reward)
+
+/-- A subsingleton player type cannot carry two distinct persistent labels,
+independently of the Bellman and Nash fields. -/
+theorem not_nonempty_persistentTwoLabelNashBellmanAnswer_of_subsingleton
+    {ι : Type} [Fintype ι] [DecidableEq ι] [Subsingleton ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    Nonempty (PersistentTwoLabelNashBellmanAnswer reward) := by
-  sorry
+    ¬ Nonempty (PersistentTwoLabelNashBellmanAnswer reward) := by
+  rintro ⟨answer⟩
+  obtain ⟨first, second, hne, _, _⟩ := answer.persistent
+  exact hne (Subsingleton.elim first second)
+
+/-- The fake universal answer is false already for the one-player type. -/
+theorem not_persistentTwoLabelNashBellmanUniversalAnswer :
+    ¬ PersistentTwoLabelNashBellmanUniversalAnswer := by
+  intro hanswer
+  let reward : {S : Finset (Fin 1) // S.Nonempty} → Payoff (Fin 1) :=
+    fun _ _ => 0
+  exact
+    (not_nonempty_persistentTwoLabelNashBellmanAnswer_of_subsingleton reward)
+      (hanswer (Fin 1) reward)
 
 /-- Persistent labels on one exact spine provide every-accuracy chronological
-certificates and therefore independently close uniform existence. -/
-theorem fake_persistentTwoLabelHazards_proves_uniformExistence :
+certificates and therefore independently close uniform existence.  The
+universal selection premise is explicit because it is false on singleton
+player types. -/
+theorem persistentTwoLabelNashBellmanUniversalAnswer_proves_uniformExistence
+    (hanswer : PersistentTwoLabelNashBellmanUniversalAnswer) :
     FiniteQuittingUniformExistence := by
   intro ι _ _ _ reward
-  obtain ⟨answer⟩ := fakeAnswer_persistentTwoLabelHazards reward
+  obtain ⟨answer⟩ := hanswer ι reward
   have hpersistent := answer.persistent
   obtain ⟨first, second, hne, _, _⟩ := hpersistent
   have hcard : 2 ≤ Fintype.card ι :=
