@@ -152,13 +152,12 @@ gives an exact stationary all-behavior uniform-equilibrium payoff for every
 embedded odd cyclic blocker core of finite size at least three. Arbitrarily
 many outside players and all their reward coordinates are unrestricted; the
 literal source assumes passive continuation values for the core and uniform
-strict blocker signs on every background. The underlying
-`isUniformEquilibriumPayoff_of_strictFiniteOddBlockerCore`
-(`UniformEquilibrium/Quitting/Classification/Existence/FiniteOddBlockerCore.lean`)
-also covers the reviewed separated-interval stationary-face formulation. The
-literal family has `M`, `L`, `A`, and `C`: checked reward-table rows enter the
-stationary certificate, which enters the unrestricted-behavior uniform-payoff
-consumer.
+strict blocker signs on every background. The literal family has `M`, `L`,
+`A`, and `C`: checked reward-table rows enter the stationary certificate,
+which enters the unrestricted-behavior uniform-payoff consumer. The reviewed
+literal row-extrema extension
+`L_i^+ < C_i^- <= C_i^+ < H_i^-` is not covered by that declaration; it
+remains an export target rather than part of the checked family.
 
 The flat stopping-law charged-circulation branch now has a frozen actual-source
 reset-cube adapter.  Integer rounding gives a balanced finite packet with
