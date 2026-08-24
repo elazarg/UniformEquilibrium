@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Everett 1957
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Everett 1957.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.Everett1957
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "everett_1957"
-  bibliographyLabel := "Everett 1957"
-  bibliographyLocator := "Published source: Everett 1957"
-  role := .foundations
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.Everett1957

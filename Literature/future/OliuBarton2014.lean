@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Oliu-Barton 2014
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Oliu-Barton 2014.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.OliuBarton2014
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "oliu_barton_2014"
-  bibliographyLabel := "Oliu-Barton 2014"
-  bibliographyLocator := "Published source: Oliu-Barton 2014"
-  role := .zeroSumUniformValue
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.OliuBarton2014

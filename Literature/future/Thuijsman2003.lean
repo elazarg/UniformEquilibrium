@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Thuijsman 2003
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Thuijsman 2003.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.Thuijsman2003
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "thuijsman_2003"
-  bibliographyLabel := "Thuijsman 2003"
-  bibliographyLocator := "Published source: Thuijsman 2003"
-  role := .surveys
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.Thuijsman2003

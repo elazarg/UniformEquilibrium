@@ -264,6 +264,61 @@ theorem exists_short_closedWalk_realizing_residual_threshold
       simpa only [mul_comm] using hbound
 
 end AdditiveTransport
+
+namespace MaxPlusPotential
+
+/-- **Attained max-plus Perron root.**  For a real matrix on a nonempty finite
+index type, one closed walk of length at most the number of indices is the
+exact threshold for existence of subeigenvectors.  Thus the max cycle mean is
+attained by a short cycle. -/
+theorem exists_critical_cycle_subeigenvector_iff
+    {ι : Type*} [Fintype ι] [Nonempty ι] (A : ι → ι → ℝ) :
+    ∃ (vertex : ι) (best : (matrixGraph ι).Walk vertex vertex),
+      0 < best.length ∧ best.length ≤ Fintype.card ι ∧
+        ∀ lam : ℝ,
+          ((∃ v : ι → ℝ, IsSubeigenvector A lam v) ↔
+            walkWeight (matrixWeight A) best ≤ best.length * lam) := by
+  classical
+  obtain ⟨vertex⟩ := (inferInstance : Nonempty ι)
+  have hexists : ∃ (base : ι)
+      (cycle : (matrixGraph ι).Walk base base), 0 < cycle.length := by
+    refine ⟨vertex,
+      ((EdgeGraph.Walk.nil : (matrixGraph ι).Walk vertex vertex).concat
+        (vertex, vertex) (matrixGraph_source _)).castFinish
+          (matrixGraph_target _), ?_⟩
+    rw [EdgeGraph.Walk.length_castFinish, EdgeGraph.Walk.length_concat]
+    exact Nat.succ_pos _
+  obtain ⟨bestVertex, best, hpos, hcard, hmax⟩ :=
+    AdditiveTransport.exists_short_closedWalk_maximizing_mean
+      (matrixGraph ι) (matrixWeight A) hexists
+  have hbestLengthPos : (0 : ℝ) < best.length := by
+    exact_mod_cast hpos
+  refine ⟨bestVertex, best, hpos, hcard, fun lam ↦ ?_⟩
+  constructor
+  · intro hv
+    exact (exists_subeigenvector_iff_forall_closedWalk_le A lam).mp hv
+      bestVertex best
+  · intro hbest
+    refine (exists_subeigenvector_iff_forall_closedWalk_le A lam).mpr ?_
+    intro otherVertex cycle
+    rcases Nat.eq_zero_or_pos cycle.length with hzero | hcyclePos
+    · have hedgesLength := cycle.edges_length
+      rw [hzero] at hedgesLength
+      have hedges : cycle.edges = [] :=
+        List.length_eq_zero_iff.mp hedgesLength
+      simp [walkWeight, hedges, hzero]
+    · have hcycleLengthPos : (0 : ℝ) < cycle.length := by
+        exact_mod_cast hcyclePos
+      have hmean := hmax otherVertex cycle hcyclePos
+      have hbestMean :
+          walkWeight (matrixWeight A) best / best.length ≤ lam := by
+        rw [div_le_iff₀ hbestLengthPos]
+        linarith [hbest]
+      have hcycleMean := hmean.trans hbestMean
+      rw [div_le_iff₀ hcycleLengthPos] at hcycleMean
+      linarith [hcycleMean]
+
+end MaxPlusPotential
 end Math
 
 end

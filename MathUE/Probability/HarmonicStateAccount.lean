@@ -4,9 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.MeanErgodic
 import MathUE.Probability.MarkovOccupation
 import MathUE.Probability.DecisionVariationMaximalInequality
+import MathUE.Probability.FiniteKernelRegeneration
 import MathUE.Probability.RealizedAccountDeflation
+import MathUE.ProbabilityMassFunction.Bool
 
 /-!
 # Bounded accounts from harmonic state potentials
@@ -29,12 +32,13 @@ on a one-state path every state-potential account is constant, so it cannot
 realize the recurring charge `1`.
 
 The finite-horizon extension below is a conditional variation core for a
-finite homogeneous Markov chain.  A supplied statewise escape/Poisson
-potential certificate gives the sharp cardinality bound on expected
-space-time variation.  This is the finite accounting step relevant to
-Simon's Lemma 2; the escape/Poisson certificate itself and the infinite
-adapter from Simon's return argument are not produced here, so that lemma
-remains open.
+finite homogeneous Markov chain. It constructs canonical target-stopped
+return potentials and compiles return estimates into the sharp cardinality
+bound on expected space-time variation. Regressions show that neither the
+supportwise nor the averaged one-visit estimate follows from bounded backward
+harmonicity. The faithful remaining analytic input is therefore isolated at
+the aggregate visit-epoch level. The independent cylinder-to-finite-history
+adapter is supplied by `MathUE.Probability.FinitePathLawAdapter`.
 -/
 
 namespace Math.Probability
@@ -183,12 +187,15 @@ theorem statePotentialIncrement_finset_linearCombination
 
 /-! ## Conditional finite-horizon variation for a homogeneous Markov chain
 
-The definitions and centering identity below are unconditional.  The
-cardinality bound is conditional on
-`HasStatewiseMarkovVariationBudget`, which supplies the statewise escape
-majorant and its Poisson drift.  It is not a construction of that certificate
-from bounded harmonicity, nor an infinite-horizon or return-probability
-adapter for Simon's Lemma 2. -/
+The definitions and centering identity below are unconditional. The
+cardinality bound is conditional on `HasStatewiseMarkovVariationBudget`.
+Canonical target-stopped potentials discharge its Poisson fields once a
+supportwise return bound is supplied. The regressions below show that both
+the supportwise and averaged one-visit hypotheses are strictly stronger than
+bounded backward harmonicity. The averaged compiler remains a useful
+sufficient interface. The faithful open input is the later aggregate
+visit-epoch principle; the path-law marginal adapter is supplied separately
+by `MathUE.Probability.FinitePathLawAdapter`. -/
 
 /-- The history-dependent presentation of a time-homogeneous Markov kernel. -/
 def homogeneousMarkovStep
@@ -288,14 +295,117 @@ theorem finiteExpectedSpaceTimeMarkovVariation_mono
     (spaceTimeMarkovScore value)
     (Nat.add_le_add_right hle 1)
 
+/-! ### Canonical return potentials
+
+For one target state, stop the kernel when that state is reached and apply
+the finite-state mean-ergodic projection to its indicator. The resulting
+function is a canonical return potential: it is nonnegative, at most one,
+equals one at the target, and is harmonic for the original kernel away from
+the target.
+
+This construction supplies the Poisson side of Simon's renewal account.
+The supportwise compiler immediately below is sufficient but too strong;
+the later averaged compiler is another sufficient interface whose universal
+derivation is also refuted below. -/
+
+/-- The indicator of one target state. -/
+noncomputable def markovTargetIndicator
+    (target : Ω) (state : Ω) : ℝ := by
+  classical
+  exact if state = target then 1 else 0
+
+theorem markovTargetIndicator_nonneg
+    (target state : Ω) :
+    0 ≤ markovTargetIndicator target state := by
+  classical
+  by_cases hstate : state = target <;>
+    simp [markovTargetIndicator, hstate]
+
+theorem markovTargetIndicator_le_one
+    (target state : Ω) :
+    markovTargetIndicator target state ≤ 1 := by
+  classical
+  by_cases hstate : state = target <;>
+    simp [markovTargetIndicator, hstate]
+
+/-- The mean-ergodic target-hitting potential for the target-stopped
+kernel. -/
+noncomputable def markovReturnPotential
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target : Ω) (state : Ω) : ℝ :=
+  Math.MeanErgodic.ergodicProjection
+    (stoppedAt kernel target) (markovTargetIndicator target) state
+
+theorem markovReturnPotential_nonneg
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target state : Ω) :
+    0 ≤ markovReturnPotential kernel target state := by
+  exact Math.MeanErgodic.ergodicProjection_nonneg
+    (stoppedAt kernel target) (markovTargetIndicator target)
+    (markovTargetIndicator_nonneg target) state
+
+theorem markovReturnPotential_le_one
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target state : Ω) :
+    markovReturnPotential kernel target state ≤ 1 := by
+  exact Math.MeanErgodic.ergodicProjection_le_one
+    (stoppedAt kernel target) (markovTargetIndicator target)
+    (markovTargetIndicator_le_one target) state
+
+@[simp] theorem markovReturnPotential_target
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target : Ω) :
+    markovReturnPotential kernel target target = 1 := by
+  have hdecomp := Math.MeanErgodic.eq_ergodicProjection_add_poisson
+    (stoppedAt kernel target) (markovTargetIndicator target) target
+  simpa [markovReturnPotential, markovTargetIndicator] using hdecomp.symm
+
+/-- Away from its target, the return potential is harmonic for the original
+kernel. -/
+theorem markovReturnPotential_harmonic_of_ne
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target state : Ω)
+    (hne : state ≠ target) :
+    expect (kernel state) (markovReturnPotential kernel target) =
+      markovReturnPotential kernel target state := by
+  change expect (kernel state) (fun next =>
+      Math.MeanErgodic.ergodicProjection
+        (stoppedAt kernel target) (markovTargetIndicator target) next) = _
+  simpa [markovReturnPotential, stoppedAt, hne] using
+    (Math.MeanErgodic.ergodicProjection_harmonic
+      (stoppedAt kernel target) (markovTargetIndicator target) state)
+
+/-- Failure of the canonical return potential after one transition from
+the target. -/
+noncomputable def markovReturnEscape
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target : Ω) : ℝ :=
+  1 - expect (kernel target) (markovReturnPotential kernel target)
+
+theorem markovReturnEscape_nonneg
+    [Fintype Ω] (kernel : Ω → PMF Ω) (target : Ω) :
+    0 ≤ markovReturnEscape kernel target := by
+  rw [markovReturnEscape, sub_nonneg]
+  simpa using expect_mono (kernel target)
+    (markovReturnPotential kernel target) (fun _ => 1)
+    (markovReturnPotential_le_one kernel target)
+
+/-- The canonical return potential has exactly the Poisson drift needed by
+the statewise renewal account. -/
+theorem markovReturnPotential_drift
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner state : Ω) :
+    markovReturnPotential kernel owner state -
+        expect (kernel state) (markovReturnPotential kernel owner) =
+      if state = owner then markovReturnEscape kernel owner else 0 := by
+  by_cases hstate : state = owner
+  · subst state
+    simp [markovReturnEscape]
+  · rw [if_neg hstate]
+    linarith [markovReturnPotential_harmonic_of_ne
+      kernel owner state hstate]
+
 /-- A statewise certificate for the finite homogeneous-chain variation
 bound. `escape owner` dominates the conditional variation when the chain is
 at `owner`. The corresponding indicator charge is a nonnegative Poisson
 drift with at most one unit of initial potential.
 
-This interface deliberately asks for those two facts as data. In particular,
-it does not assert that bounded space-time harmonicity alone constructs the
-escape potentials used in Simon's informal return-probability argument. -/
+The raw interface records both facts as data. The compiler immediately below
+constructs the potentials canonically from a supportwise return estimate. -/
 structure HasStatewiseMarkovVariationBudget
     [Fintype Ω]
     (initial : Ω) (kernel : Ω → PMF Ω)
@@ -316,6 +426,903 @@ structure HasStatewiseMarkovVariationBudget
       expect (kernel state) (potential owner)
   potential_initial_le_one : ∀ owner,
     potential owner initial ≤ 1
+
+/-- A supportwise return estimate compiles the canonical target potentials
+into the statewise escape/Poisson certificate. This isolates the genuine
+harmonic-return inequality from the finite renewal accounting. -/
+theorem exists_statewiseMarkovVariationBudget_of_returnBound
+    [Fintype Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (returnBound : ∀ time owner successor,
+      successor ∈ (kernel owner).support →
+        |value successor (time + 1) - value owner time| ≤
+          1 - markovReturnPotential kernel owner successor) :
+    Nonempty (HasStatewiseMarkovVariationBudget initial kernel value) := by
+  refine ⟨{
+    escape := markovReturnEscape kernel
+    potential := markovReturnPotential kernel
+    localVariation_le_escape := ?_
+    potential_nonneg := ?_
+    escape_eq_drift_at_owner := ?_
+    zero_eq_drift_of_ne := ?_
+    potential_initial_le_one := ?_ }⟩
+  · intro time owner
+    calc
+      expect (kernel owner) (fun successor ↦
+          |value successor (time + 1) - value owner time|) ≤
+          expect (kernel owner) (fun successor ↦
+            1 - markovReturnPotential kernel owner successor) :=
+        Math.ProbabilityMassFunction.expect_mono_on_support
+          (kernel owner) _ _ (returnBound time owner)
+      _ = markovReturnEscape kernel owner := by
+        rw [markovReturnEscape, expect_sub, expect_const]
+  · exact markovReturnPotential_nonneg kernel
+  · intro owner
+    simp [markovReturnEscape]
+  · intro owner state hstate
+    linarith [markovReturnPotential_harmonic_of_ne
+      kernel owner state hstate]
+  · exact fun owner => markovReturnPotential_le_one kernel owner initial
+
+/-- Simon's renewal estimate has an averaged, rather than supportwise, form:
+the conditional mean absolute increment on leaving a state is paid by that
+state's canonical nonreturn probability.  Once this estimate is available,
+the target-stopped potentials supply the complete statewise Poisson
+certificate.
+
+Unlike `exists_statewiseMarkovVariationBudget_of_returnBound`, this compiler
+does not constrain each supported edge separately. -/
+theorem exists_statewiseMarkovVariationBudget_of_conditionalReturnBound
+    [Fintype Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (returnBound : ∀ time owner,
+      expect (kernel owner) (fun successor ↦
+        |value successor (time + 1) - value owner time|) ≤
+          markovReturnEscape kernel owner) :
+    Nonempty (HasStatewiseMarkovVariationBudget initial kernel value) := by
+  refine ⟨{
+    escape := markovReturnEscape kernel
+    potential := markovReturnPotential kernel
+    localVariation_le_escape := returnBound
+    potential_nonneg := ?_
+    escape_eq_drift_at_owner := ?_
+    zero_eq_drift_of_ne := ?_
+    potential_initial_le_one := ?_ }⟩
+  · exact markovReturnPotential_nonneg kernel
+  · intro owner
+    simp [markovReturnEscape]
+  · intro owner state hstate
+    linarith [markovReturnPotential_harmonic_of_ne
+      kernel owner state hstate]
+  · exact fun owner => markovReturnPotential_le_one kernel owner initial
+
+/-- A bounded backward-harmonic sequence for a homogeneous Markov kernel.
+This is the finite-history form of the analytic input in Simon's Lemma 2. -/
+def IsUnitIntervalBackwardMarkovHarmonic
+    [Finite Ω] (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) : Prop :=
+  (∀ state time, value state time ∈ Set.Icc (0 : ℝ) 1) ∧
+    ∀ state time,
+      value state time =
+        expect (kernel state) (fun successor ↦
+          value successor (time + 1))
+
+/-- A strong averaged renewal condition sufficient for the statewise
+compiler. It is weaker than the false supportwise return bound because only
+the conditional mean over all successors is constrained, but it still does
+not follow universally from bounded backward harmonicity. -/
+def HasConditionalMarkovReturnBound
+    [Fintype Ω] (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) : Prop :=
+  ∀ time owner,
+    expect (kernel owner) (fun successor ↦
+      |value successor (time + 1) - value owner time|) ≤
+        markovReturnEscape kernel owner
+
+/-- The universal assertion that bounded backward harmonicity implies the
+averaged one-visit return bound. The four-state regression below refutes this
+proposition; it is retained to state the exact limit of the sufficient
+conditional compiler. -/
+def HomogeneousBackwardHarmonicRenewalPrinciple
+    (Ω : Type*) [Fintype Ω] : Prop :=
+  ∀ (kernel : Ω → PMF Ω) (value : Ω → ℕ → ℝ),
+    IsUnitIntervalBackwardMarkovHarmonic kernel value →
+      HasConditionalMarkovReturnBound kernel value
+
+/-- The averaged one-visit conclusion does hold at states whose canonical
+nonreturn probability is one. This is a valid sufficient subcase despite the
+failure of the universal conditional principle. -/
+theorem hasConditionalMarkovReturnBound_of_escape_eq_one
+    [Fintype Ω]
+    (kernel : Ω → PMF Ω) (value : Ω → ℕ → ℝ)
+    (bounds : ∀ state time, value state time ∈ Set.Icc (0 : ℝ) 1)
+    (escape_eq_one : ∀ owner, markovReturnEscape kernel owner = 1) :
+    HasConditionalMarkovReturnBound kernel value := by
+  intro time owner
+  calc
+    expect (kernel owner) (fun successor ↦
+        |value successor (time + 1) - value owner time|) ≤
+        expect (kernel owner) (fun _ => (1 : ℝ)) := by
+      apply expect_mono
+      intro successor
+      rw [abs_le]
+      constructor <;>
+        linarith [
+          (bounds successor (time + 1)).1,
+          (bounds successor (time + 1)).2,
+          (bounds owner time).1,
+          (bounds owner time).2]
+    _ = 1 := expect_const _ _
+    _ = markovReturnEscape kernel owner := (escape_eq_one owner).symm
+
+/-- Deterministic homogeneous kernels satisfy the averaged renewal bound:
+backward harmonicity makes every realized one-step increment vanish. -/
+theorem hasConditionalMarkovReturnBound_of_pureKernel
+    [Fintype Ω]
+    (kernel : Ω → PMF Ω) (next : Ω → Ω)
+    (value : Ω → ℕ → ℝ)
+    (pure : ∀ state, kernel state = PMF.pure (next state))
+    (harmonic : ∀ state time,
+      value state time =
+        expect (kernel state) (fun successor ↦
+          value successor (time + 1))) :
+    HasConditionalMarkovReturnBound kernel value := by
+  intro time owner
+  have hvalue : value owner time = value (next owner) (time + 1) := by
+    simpa [pure owner] using harmonic owner time
+  rw [pure owner, expect_pure, ← hvalue, sub_self, abs_zero]
+  exact markovReturnEscape_nonneg kernel owner
+
+/-! ### The supportwise return bound is stronger than harmonicity
+
+The return-potential compiler above remains a useful sufficient interface,
+but its pointwise edge hypothesis is not Simon's bounded-harmonic lemma.  A
+self-loop can carry a nonzero time-phase increment even though the successor
+has already returned to the source. -/
+
+namespace HarmonicReturnBoundCounterexample
+
+abbrev State := Fin 3
+
+def source : State := 0
+
+def left : State := 1
+
+def right : State := 2
+
+/-- From the source, stay there or enter the deterministic two-cycle with
+equal probability. -/
+def sourceSuccessor (coin : Bool) : State :=
+  if coin then source else left
+
+/-- The source has a half self-loop and a half exit to `left`; the other two
+states form a deterministic two-cycle. -/
+def kernel : State → PMF State := fun state =>
+  if state = source then
+    (PMF.uniformOfFintype Bool).map sourceSuccessor
+  else if state = left then PMF.pure right
+  else PMF.pure left
+
+/-- The alternating temporal phase. -/
+def phase (time : ℕ) : ℝ := (-1 : ℝ) ^ time
+
+theorem phase_succ (time : ℕ) :
+    phase (time + 1) = -phase time := by
+  simp [phase, pow_succ]
+
+theorem abs_phase (time : ℕ) : |phase time| = 1 := by
+  simp [phase, abs_pow]
+
+/-- A bounded backward-harmonic value which alternates on the closed
+two-cycle and inherits a smaller alternating phase at the source. -/
+def value (state : State) (time : ℕ) : ℝ :=
+  if state = source then (1 / 2 : ℝ) + phase time / 6
+  else if state = left then (1 / 2 : ℝ) - phase time / 2
+  else (1 / 2 : ℝ) + phase time / 2
+
+theorem value_mem_Icc (state : State) (time : ℕ) :
+    value state time ∈ Set.Icc (0 : ℝ) 1 := by
+  have hphase : -1 ≤ phase time ∧ phase time ≤ 1 := by
+    rw [← abs_le]
+    simp [abs_phase]
+  fin_cases state
+  · change 0 ≤ (1 / 2 : ℝ) + phase time / 6 ∧
+      (1 / 2 : ℝ) + phase time / 6 ≤ 1
+    constructor <;> linarith
+  · change 0 ≤ (1 / 2 : ℝ) - phase time / 2 ∧
+      (1 / 2 : ℝ) - phase time / 2 ≤ 1
+    constructor <;> linarith
+  · change 0 ≤ (1 / 2 : ℝ) + phase time / 2 ∧
+      (1 / 2 : ℝ) + phase time / 2 ≤ 1
+    constructor <;> linarith
+
+theorem value_harmonic (state : State) (time : ℕ) :
+    value state time =
+      expect (kernel state) (fun successor => value successor (time + 1)) := by
+  fin_cases state
+  · change value source time =
+      expect (kernel source) (fun successor => value successor (time + 1))
+    rw [show kernel source =
+        (PMF.uniformOfFintype Bool).map sourceSuccessor by
+      simp [kernel]]
+    rw [expect_map,
+      Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
+    simp [sourceSuccessor, value, source, left, phase_succ]
+    ring
+  · change value left time =
+      expect (kernel left) (fun successor => value successor (time + 1))
+    simp [kernel, value, source, left, right, phase_succ]
+    ring
+  · change value right time =
+      expect (kernel right) (fun successor => value successor (time + 1))
+    simp [kernel, value, source, left, right, phase_succ]
+    ring
+
+theorem source_mem_kernel_support :
+    source ∈ (kernel source).support := by
+  simp [source, kernel, sourceSuccessor]
+
+theorem source_self_increment :
+    |value source 1 - value source 0| = (1 / 3 : ℝ) := by
+  norm_num [source, value, phase]
+
+/-- Bounded backward harmonicity does not imply the pointwise support-edge
+bound used by `exists_statewiseMarkovVariationBudget_of_returnBound`.  On
+the supported source self-loop the canonical return potential is one, while
+the temporal increment is `1/3`. -/
+theorem not_supportwise_returnBound :
+    ¬ ∀ time owner successor,
+      successor ∈ (kernel owner).support →
+        |value successor (time + 1) - value owner time| ≤
+          1 - markovReturnPotential kernel owner successor := by
+  intro returnBound
+  have hbound := returnBound 0 source source source_mem_kernel_support
+  rw [source_self_increment, markovReturnPotential_target] at hbound
+  norm_num at hbound
+
+end HarmonicReturnBoundCounterexample
+
+/-! ### The conditional return bound is also stronger than harmonicity
+
+Cancellation across successive visits is essential.  A source with a
+three-quarter self-loop can feed a deterministic three-cycle carrying a
+periodic backward-harmonic value.  Its conditional variation at one visit
+exceeds its nonreturn probability, even though all values lie in `[0,1]`.
+-/
+
+namespace ConditionalReturnBoundCounterexample
+
+abbrev State := Fin 4
+
+def source : State := 0
+
+def first : State := 1
+
+def second : State := 2
+
+def third : State := 3
+
+/-- Two fair coins produce the source with probability `3/4` and the first
+cycle state with probability `1/4`. -/
+def sourceSuccessor (coin₁ coin₂ : Bool) : State :=
+  if coin₁ && coin₂ then first else source
+
+def sourceLaw : PMF State :=
+  (PMF.uniformOfFintype Bool).bind fun coin₁ =>
+    (PMF.uniformOfFintype Bool).map (sourceSuccessor coin₁)
+
+/-- The source has a three-quarter self-loop and otherwise enters a closed
+deterministic three-cycle. -/
+def kernel : State → PMF State := fun state =>
+  if state = source then sourceLaw
+  else if state = first then PMF.pure second
+  else if state = second then PMF.pure third
+  else PMF.pure first
+
+def sourceValue (time : ℕ) : ℝ :=
+  if time % 3 = 0 then 16 / 37
+  else if time % 3 = 1 then 9 / 37
+  else 12 / 37
+
+def firstValue (time : ℕ) : ℝ :=
+  if time % 3 = 1 then 1 else 0
+
+def secondValue (time : ℕ) : ℝ :=
+  if time % 3 = 2 then 1 else 0
+
+def thirdValue (time : ℕ) : ℝ :=
+  if time % 3 = 0 then 1 else 0
+
+/-- The periodic bounded backward-harmonic value. -/
+def value (state : State) (time : ℕ) : ℝ :=
+  if state = source then sourceValue time
+  else if state = first then firstValue time
+  else if state = second then secondValue time
+  else thirdValue time
+
+private theorem mod_three_cases (time : ℕ) :
+    time % 3 = 0 ∨ time % 3 = 1 ∨ time % 3 = 2 := by
+  omega
+
+private theorem value_mem_Icc (state : State) (time : ℕ) :
+    value state time ∈ Set.Icc (0 : ℝ) 1 := by
+  rcases mod_three_cases time with htime | htime | htime
+  <;> fin_cases state
+  <;> simp [value, sourceValue, firstValue, secondValue, thirdValue,
+    source, first, second, htime]
+  <;> norm_num
+
+private theorem expect_sourceLaw (f : State → ℝ) :
+    expect sourceLaw f =
+      (3 / 4 : ℝ) * f source + (1 / 4 : ℝ) * f first := by
+  rw [sourceLaw, expect_bind]
+  simp_rw [expect_map]
+  simp [sourceSuccessor,
+    Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
+  ring
+
+private theorem value_harmonic (state : State) (time : ℕ) :
+    value state time =
+      expect (kernel state) (fun successor => value successor (time + 1)) := by
+  rcases mod_three_cases time with htime | htime | htime
+  · have hsucc : (time + 1) % 3 = 1 := by omega
+    fin_cases state
+    · change value source time =
+        expect (kernel source) (fun successor => value successor (time + 1))
+      rw [show kernel source = sourceLaw by simp [kernel]]
+      rw [expect_sourceLaw]
+      simp [value, sourceValue, firstValue,
+        source, first, htime, hsucc]
+      norm_num
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, third, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+  · have hsucc : (time + 1) % 3 = 2 := by omega
+    fin_cases state
+    · change value source time =
+        expect (kernel source) (fun successor => value successor (time + 1))
+      rw [show kernel source = sourceLaw by simp [kernel]]
+      rw [expect_sourceLaw]
+      simp [value, sourceValue, firstValue,
+        source, first, htime, hsucc]
+      norm_num
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, third, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+  · have hsucc : (time + 1) % 3 = 0 := by omega
+    fin_cases state
+    · change value source time =
+        expect (kernel source) (fun successor => value successor (time + 1))
+      rw [show kernel source = sourceLaw by simp [kernel]]
+      rw [expect_sourceLaw]
+      simp [value, sourceValue, firstValue,
+        source, first, htime, hsucc]
+      norm_num
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, third, htime, hsucc]
+    · simp [kernel, value, sourceValue, firstValue, secondValue, thirdValue,
+        source, first, second, htime, hsucc]
+
+theorem value_isUnitIntervalBackwardMarkovHarmonic :
+    IsUnitIntervalBackwardMarkovHarmonic kernel value :=
+  ⟨value_mem_Icc, value_harmonic⟩
+
+theorem source_conditionalVariation_zero :
+    expect (kernel source) (fun successor =>
+      |value successor 1 - value source 0|) = (21 / 74 : ℝ) := by
+  rw [show kernel source = sourceLaw by simp [kernel]]
+  rw [expect_sourceLaw]
+  norm_num [value, sourceValue, firstValue, source, first]
+
+private theorem returnPotential_first_eq_zero :
+    markovReturnPotential kernel source first = 0 := by
+  have hfirst := Math.MeanErgodic.eq_ergodicProjection_add_poisson
+    (stoppedAt kernel source) (markovTargetIndicator source) first
+  have hsecond := Math.MeanErgodic.eq_ergodicProjection_add_poisson
+    (stoppedAt kernel source) (markovTargetIndicator source) second
+  have hthird := Math.MeanErgodic.eq_ergodicProjection_add_poisson
+    (stoppedAt kernel source) (markovTargetIndicator source) third
+  have hcycle₁ := markovReturnPotential_harmonic_of_ne
+    kernel source first (by decide)
+  have hcycle₂ := markovReturnPotential_harmonic_of_ne
+    kernel source second (by decide)
+  simp [markovTargetIndicator, stoppedAt, kernel,
+    source, first, second, third] at hfirst hsecond hthird
+  have hpotential₁ : markovReturnPotential kernel source second =
+      markovReturnPotential kernel source first := by
+    simpa [kernel, source, first, second] using hcycle₁
+  have hpotential₂ : markovReturnPotential kernel source third =
+      markovReturnPotential kernel source second := by
+    simpa [kernel, source, first, second, third] using hcycle₂
+  change Math.MeanErgodic.ergodicProjection
+    (stoppedAt kernel source) (markovTargetIndicator source) first = 0
+  change Math.MeanErgodic.ergodicProjection
+      (stoppedAt kernel source) (markovTargetIndicator source) second =
+    Math.MeanErgodic.ergodicProjection
+      (stoppedAt kernel source) (markovTargetIndicator source) first at hpotential₁
+  change Math.MeanErgodic.ergodicProjection
+      (stoppedAt kernel source) (markovTargetIndicator source) third =
+    Math.MeanErgodic.ergodicProjection
+      (stoppedAt kernel source) (markovTargetIndicator source) second at hpotential₂
+  simp only [source, first, second, third] at hpotential₁ hpotential₂ ⊢
+  linarith
+
+theorem source_returnEscape :
+    markovReturnEscape kernel source = (1 / 4 : ℝ) := by
+  rw [markovReturnEscape]
+  rw [show kernel source = sourceLaw by simp [kernel]]
+  rw [expect_sourceLaw, markovReturnPotential_target,
+    returnPotential_first_eq_zero]
+  norm_num
+
+theorem not_hasConditionalMarkovReturnBound :
+    ¬ HasConditionalMarkovReturnBound kernel value := by
+  intro hbound
+  have hzero := hbound 0 source
+  rw [source_conditionalVariation_zero, source_returnEscape] at hzero
+  norm_num at hzero
+
+/-- The proposed universal conditional renewal principle is false already
+on four states. -/
+theorem not_homogeneousBackwardHarmonicRenewalPrinciple :
+    ¬ HomogeneousBackwardHarmonicRenewalPrinciple State := by
+  intro principle
+  exact not_hasConditionalMarkovReturnBound
+    (principle kernel value value_isUnitIntervalBackwardMarkovHarmonic)
+
+end ConditionalReturnBoundCounterexample
+
+/-! ### Aggregate visit-epoch interface
+
+The paper's renewal sentence concerns the total expected contribution owned
+by one state across all of its visits.  It is not a pointwise assertion about
+each outgoing edge.  The definitions below split finite expected variation
+by the source state of every transition and expose the exact aggregate
+return-visit comparison still needed from bounded harmonicity. -/
+
+/-- Conditional mean absolute variation at one round, charged only when the
+current state is `owner`.  Round zero installs the initial state and has no
+transition contribution. -/
+noncomputable def stateOwnedConditionalMarkovVariation
+    [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (value : Ω → ℕ → ℝ) (owner : Ω) :
+    ∀ n, (Fin n → Ω) → ℝ
+  | 0, _ => 0
+  | n + 1, history =>
+      if history (Fin.last n) = owner then
+        expect (kernel owner) (fun successor =>
+          |value successor (n + 1) - value owner n|)
+      else 0
+
+/-- Expected variation owned by one source state through the first
+`horizon` transitions. -/
+noncomputable def finiteExpectedStateOwnedMarkovVariation
+    [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (owner : Ω) (horizon : ℕ) : ℝ :=
+  ∑ round ∈ Finset.range (horizon + 1),
+    expect
+      (adaptiveHistoryLaw (homogeneousMarkovStep initial kernel) round)
+      (stateOwnedConditionalMarkovVariation kernel value owner round)
+
+theorem stateOwnedConditionalMarkovVariation_nonneg
+    [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (value : Ω → ℕ → ℝ)
+    (owner : Ω) (n : ℕ) (history : Fin n → Ω) :
+    0 ≤ stateOwnedConditionalMarkovVariation
+      kernel value owner n history := by
+  cases n with
+  | zero => simp [stateOwnedConditionalMarkovVariation]
+  | succ n =>
+      simp only [stateOwnedConditionalMarkovVariation]
+      split
+      · exact expect_nonneg _ _ fun _ => abs_nonneg _
+      · rfl
+
+theorem finiteExpectedStateOwnedMarkovVariation_nonneg
+    [Finite Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (owner : Ω) (horizon : ℕ) :
+    0 ≤ finiteExpectedStateOwnedMarkovVariation
+      initial kernel value owner horizon := by
+  apply Finset.sum_nonneg
+  intro round _
+  exact expect_nonneg _ _ fun history =>
+    stateOwnedConditionalMarkovVariation_nonneg
+      kernel value owner round history
+
+/-- At every round, conditional absolute variation is the sum of the
+contributions owned by the possible current states. -/
+theorem expect_abs_spaceTimeMarkovScore_eq_sum_stateOwned
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (n : ℕ) (history : Fin n → Ω) :
+    expect (homogeneousMarkovStep initial kernel n history)
+        (fun successor => |spaceTimeMarkovScore value n history successor|) =
+      ∑ owner,
+        stateOwnedConditionalMarkovVariation
+          kernel value owner n history := by
+  classical
+  cases n with
+  | zero => simp [stateOwnedConditionalMarkovVariation]
+  | succ n =>
+      let current := history (Fin.last n)
+      rw [Finset.sum_eq_single current]
+      · simp [stateOwnedConditionalMarkovVariation,
+          homogeneousMarkovStep, spaceTimeMarkovScore, current]
+      · intro owner _ howner
+        simp [stateOwnedConditionalMarkovVariation, current, howner.symm]
+      · simp
+
+/-- Finite expected space-time variation decomposes exactly into the sum of
+the expected contributions owned by the finitely many source states. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_eq_sum_stateOwned
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon =
+      ∑ owner,
+        finiteExpectedStateOwnedMarkovVariation
+          initial kernel value owner horizon := by
+  rw [finiteExpectedSpaceTimeMarkovVariation, expectedDecisionVariation]
+  unfold finiteExpectedStateOwnedMarkovVariation
+  rw [Finset.sum_comm]
+  apply Finset.sum_congr rfl
+  intro round _
+  rw [expect_sum_comm]
+  apply congrArg
+  funext history
+  exact expect_abs_spaceTimeMarkovScore_eq_sum_stateOwned
+    initial kernel value round history
+
+/-- The canonical nonreturn charge owned by one state. -/
+noncomputable def markovReturnVisitCharge
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner state : Ω) : ℝ :=
+  if state = owner then markovReturnEscape kernel owner else 0
+
+/-- Expected canonical nonreturn charge accumulated through the first
+`horizon` transitions.  This is `q_owner` times the expected number of visits
+to `owner`, expressed without division when `q_owner = 0`. -/
+noncomputable def finiteExpectedMarkovReturnVisitCharge
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (owner : Ω) (horizon : ℕ) : ℝ :=
+  expect
+    (adaptiveHistoryLaw (homogeneousMarkovStep initial kernel) (horizon + 1))
+    (markovHistoryStateChargeSum
+      (markovReturnVisitCharge kernel owner) horizon)
+
+/-- The predictable-score presentation of one state's canonical nonreturn
+charge.  The zeroth observation installs the initial state.  Every later
+observation charges the source of that transition, independently of its
+successor. -/
+noncomputable def stateOwnedMarkovReturnChargeScore
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner : Ω) :
+    ∀ n, (Fin n → Ω) → Ω → ℝ
+  | 0, _, _ => 0
+  | n + 1, history, _ =>
+      markovReturnVisitCharge kernel owner
+        (history (Fin.last n))
+
+@[simp] theorem stateOwnedMarkovReturnChargeScore_zero
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner : Ω)
+    (history : Fin 0 → Ω) (state : Ω) :
+    stateOwnedMarkovReturnChargeScore kernel owner 0 history state = 0 := rfl
+
+@[simp] theorem stateOwnedMarkovReturnChargeScore_succ
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner : Ω)
+    (n : ℕ) (history : Fin (n + 1) → Ω) (successor : Ω) :
+    stateOwnedMarkovReturnChargeScore
+        kernel owner (n + 1) history successor =
+      markovReturnVisitCharge kernel owner
+        (history (Fin.last n)) := rfl
+
+/-- The predictable sum of the return-charge score is exactly the
+state-charge sum on the same finite history. -/
+theorem predictableScoreSum_stateOwnedMarkovReturnChargeScore
+    [Fintype Ω] [DecidableEq Ω]
+    (kernel : Ω → PMF Ω) (owner : Ω)
+    (horizon : ℕ) (history : Fin (horizon + 1) → Ω) :
+    predictableScoreSum
+        (stateOwnedMarkovReturnChargeScore kernel owner)
+        (horizon + 1) history =
+      markovHistoryStateChargeSum
+        (markovReturnVisitCharge kernel owner) horizon history := by
+  induction horizon with
+  | zero => simp [predictableScoreSum]
+  | succ horizon ih =>
+      rw [← Fin.snoc_init_self history]
+      simp only [predictableScoreSum_snoc,
+        stateOwnedMarkovReturnChargeScore_succ,
+        markovHistoryStateChargeSum_snoc, ih]
+
+/-- The conditional mean of the return-charge score is just the charge at
+the current source state. -/
+theorem expect_stateOwnedMarkovReturnChargeScore
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω) (owner : Ω)
+    (n : ℕ) (history : Fin n → Ω) :
+    expect (homogeneousMarkovStep initial kernel n history)
+        (stateOwnedMarkovReturnChargeScore
+          kernel owner n history) =
+      match n with
+      | 0 => 0
+      | k + 1 =>
+          markovReturnVisitCharge kernel owner
+            (history (Fin.last k)) := by
+  cases n with
+  | zero => simp
+  | succ n =>
+      rw [homogeneousMarkovStep_succ]
+      change
+        expect (kernel (history (Fin.last n)))
+            (fun _ => markovReturnVisitCharge kernel owner
+              (history (Fin.last n))) = _
+      rw [expect_const]
+
+/-- The finite expected return-visit charge is the sum of its expected
+source-state contributions over the same transition rounds. -/
+theorem finiteExpectedMarkovReturnVisitCharge_eq_sum
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (owner : Ω) (horizon : ℕ) :
+    finiteExpectedMarkovReturnVisitCharge
+        initial kernel owner horizon =
+      ∑ round ∈ Finset.range (horizon + 1),
+        expect
+          (adaptiveHistoryLaw
+            (homogeneousMarkovStep initial kernel) round)
+          (fun history =>
+            match round with
+            | 0 => 0
+            | n + 1 =>
+                markovReturnVisitCharge kernel owner
+                  (history (Fin.last n))) := by
+  rw [finiteExpectedMarkovReturnVisitCharge]
+  have hscore :
+      (markovHistoryStateChargeSum
+        (markovReturnVisitCharge kernel owner) horizon) =
+        fun history =>
+          predictableScoreSum
+            (stateOwnedMarkovReturnChargeScore kernel owner)
+            (horizon + 1) history := by
+    funext history
+    exact (predictableScoreSum_stateOwnedMarkovReturnChargeScore
+      kernel owner horizon history).symm
+  rw [hscore]
+  rw [expect_predictableScoreSum_eq_sum_expect_conditionalMean]
+  apply Finset.sum_congr rfl
+  intro round _
+  apply congrArg
+  funext history
+  exact expect_stateOwnedMarkovReturnChargeScore
+    initial kernel owner round history
+
+/-- The averaged renewal inequality at one source state compiles to the
+aggregate visit-epoch comparison with the same finite horizon.  This is the
+precise finite-history accounting behind the paper's phrase that one state
+"pays its nonreturn probability at each visit". -/
+theorem finiteExpectedStateOwnedMarkovVariation_le_returnVisitCharge
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) (owner : Ω)
+    (returnBound : ∀ time,
+      expect (kernel owner) (fun successor ↦
+        |value successor (time + 1) - value owner time|) ≤
+          markovReturnEscape kernel owner)
+    (horizon : ℕ) :
+    finiteExpectedStateOwnedMarkovVariation
+        initial kernel value owner horizon ≤
+      finiteExpectedMarkovReturnVisitCharge
+        initial kernel owner horizon := by
+  rw [finiteExpectedStateOwnedMarkovVariation,
+    finiteExpectedMarkovReturnVisitCharge_eq_sum]
+  apply Finset.sum_le_sum
+  intro round _
+  apply expect_mono
+  intro history
+  cases round with
+  | zero => simp [stateOwnedConditionalMarkovVariation]
+  | succ time =>
+      by_cases howner : history (Fin.last time) = owner
+      · simpa [stateOwnedConditionalMarkovVariation,
+          markovReturnVisitCharge, howner] using returnBound time
+      · simp [stateOwnedConditionalMarkovVariation,
+          markovReturnVisitCharge, howner]
+
+/-- The averaged conditional return bound supplies the aggregate
+`visitEpoch` input with the unchanged prefix horizon. -/
+theorem visitEpoch_of_conditionalReturnBound
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (returnBound : HasConditionalMarkovReturnBound kernel value) :
+    ∀ (owner : Ω) (horizon : ℕ) (slack : ℝ), 0 < slack →
+      ∃ visitHorizon,
+        finiteExpectedStateOwnedMarkovVariation
+            initial kernel value owner horizon ≤
+          finiteExpectedMarkovReturnVisitCharge
+              initial kernel owner visitHorizon + slack := by
+  intro owner horizon slack hslack
+  refine ⟨horizon, ?_⟩
+  have hprefix :=
+    finiteExpectedStateOwnedMarkovVariation_le_returnVisitCharge
+      initial kernel value owner (fun time => returnBound time owner) horizon
+  exact hprefix.trans (le_add_of_nonneg_right hslack.le)
+
+/-- The aggregate renewal comparison at the level of complete visit epochs.
+Unlike a one-visit conditional bound, this interface permits cancellation
+across successive visits and may enlarge the charge horizon. -/
+def HasMarkovVisitEpochBound
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ) : Prop :=
+  ∀ (owner : Ω) (horizon : ℕ) (slack : ℝ), 0 < slack →
+    ∃ visitHorizon,
+      finiteExpectedStateOwnedMarkovVariation
+          initial kernel value owner horizon ≤
+        finiteExpectedMarkovReturnVisitCharge
+            initial kernel owner visitHorizon + slack
+
+/-- The faithful open renewal proposition for the homogeneous finite-chain
+argument: bounded backward harmonicity should imply the aggregate
+visit-epoch comparison. It makes no one-visit conditional claim. -/
+def HomogeneousBackwardHarmonicVisitEpochPrinciple
+    (Ω : Type*) [Fintype Ω] [DecidableEq Ω] : Prop :=
+  ∀ (initial : Ω) (kernel : Ω → PMF Ω) (value : Ω → ℕ → ℝ),
+    IsUnitIntervalBackwardMarkovHarmonic kernel value →
+      HasMarkovVisitEpochBound initial kernel value
+
+/-- The expected nonreturn charge of every finite visit prefix is at most
+one.  This is the rigorous Poisson form of `q_x` times expected visits being
+at most one. -/
+theorem finiteExpectedMarkovReturnVisitCharge_le_one
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (owner : Ω) (horizon : ℕ) :
+    finiteExpectedMarkovReturnVisitCharge
+      initial kernel owner horizon ≤ 1 := by
+  let potential := markovReturnPotential kernel owner
+  let charge := markovReturnVisitCharge kernel owner
+  have hcharge : ∀ state,
+      charge state =
+        potential state - expect (kernel state) potential := by
+    intro state
+    simpa [charge, potential, markovReturnVisitCharge] using
+      (markovReturnPotential_drift kernel owner state).symm
+  have hbound := expect_markovHistoryStateChargeSum_le
+    initial kernel
+    (fun _ history => kernel (history (Fin.last _)))
+    potential charge
+    (markovReturnPotential_nonneg kernel owner) hcharge horizon
+  have hcenter : ∀ n history,
+      expect (homogeneousMarkovStep initial kernel n history)
+        (adaptiveMarkovDiscrepancyScore kernel potential n history) = 0 := by
+    intro n history
+    cases n with
+    | zero => simp [homogeneousMarkovStep]
+    | succ n =>
+        simpa [homogeneousMarkovStep] using
+          (expect_adaptiveMarkovDiscrepancyScore_succ
+            initial kernel
+            (fun _ history => kernel (history (Fin.last _)))
+            potential n history)
+  have hzero := expect_predictableScoreSum_eq_zero
+    (homogeneousMarkovStep initial kernel)
+    (adaptiveMarkovDiscrepancyScore kernel potential)
+    hcenter (horizon + 1)
+  rw [expect_predictableScoreSum_eq_expect_conditionalMeanSum] at hzero
+  change
+    finiteExpectedMarkovReturnVisitCharge initial kernel owner horizon ≤
+      potential initial +
+        expect
+          (adaptiveHistoryLaw
+            (homogeneousMarkovStep initial kernel) (horizon + 1))
+          (predictableConditionalMeanSum
+            (homogeneousMarkovStep initial kernel)
+            (adaptiveMarkovDiscrepancyScore kernel potential)
+            (horizon + 1)) at hbound
+  rw [hzero, add_zero] at hbound
+  exact hbound.trans (markovReturnPotential_le_one kernel owner initial)
+
+/-- Aggregate visit-epoch comparison sufficient for Simon's finite
+cardinality bound.  A finite state-owned variation prefix may be amortized
+against a later finite prefix of the same state's nonreturn visit charge,
+with arbitrarily small slack.  This permits cancellation across successive
+visits and makes no false pointwise-edge assertion. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_le_card_of_visitEpoch
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (visitEpoch : ∀ (owner : Ω) (horizon : ℕ) (slack : ℝ), 0 < slack →
+      ∃ visitHorizon,
+        finiteExpectedStateOwnedMarkovVariation
+            initial kernel value owner horizon ≤
+          finiteExpectedMarkovReturnVisitCharge
+              initial kernel owner visitHorizon + slack)
+    (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon ≤ Fintype.card Ω := by
+  rw [finiteExpectedSpaceTimeMarkovVariation_eq_sum_stateOwned]
+  calc
+    (∑ owner,
+        finiteExpectedStateOwnedMarkovVariation
+          initial kernel value owner horizon) ≤
+        ∑ _owner : Ω, (1 : ℝ) := by
+      apply Finset.sum_le_sum
+      intro owner _
+      apply le_of_forall_pos_le_add
+      intro slack hslack
+      obtain ⟨visitHorizon, hvisit⟩ :=
+        visitEpoch owner horizon slack hslack
+      have hcharge :=
+        add_le_add_right
+          (finiteExpectedMarkovReturnVisitCharge_le_one
+            initial kernel owner visitHorizon) slack
+      exact hvisit.trans (by simpa [add_comm] using hcharge)
+    _ = Fintype.card Ω := by simp
+
+/-- The aggregate backward-harmonic visit-epoch principle compiles directly
+to Simon's finite homogeneous-chain cardinality bound. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_le_card_of_backwardHarmonicVisitEpoch
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (renewal : HomogeneousBackwardHarmonicVisitEpochPrinciple Ω)
+    (harmonic : IsUnitIntervalBackwardMarkovHarmonic kernel value)
+    (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon ≤ Fintype.card Ω := by
+  exact finiteExpectedSpaceTimeMarkovVariation_le_card_of_visitEpoch
+    initial kernel value (renewal initial kernel value harmonic) horizon
+
+/-- Hence an averaged conditional return bound supplies exactly the
+`visitEpoch` input of the aggregate cardinality theorem.  No slack or later
+horizon is needed. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_le_card_of_conditionalReturnBound
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (returnBound : HasConditionalMarkovReturnBound kernel value)
+    (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon ≤ Fintype.card Ω := by
+  refine finiteExpectedSpaceTimeMarkovVariation_le_card_of_visitEpoch
+    initial kernel value
+      (visitEpoch_of_conditionalReturnBound
+        initial kernel value returnBound) horizon
+
+/-- The false universal one-visit principle would also imply Simon's finite
+homogeneous-chain variation bound. This implication is retained only as a
+sufficient compiler; the four-state regression refutes its renewal
+hypothesis. Use the aggregate visit-epoch compiler above for the honest open
+boundary. -/
+theorem finiteExpectedSpaceTimeMarkovVariation_le_card_of_backwardHarmonic
+    [Fintype Ω] [DecidableEq Ω]
+    (initial : Ω) (kernel : Ω → PMF Ω)
+    (value : Ω → ℕ → ℝ)
+    (renewal : HomogeneousBackwardHarmonicRenewalPrinciple Ω)
+    (harmonic : IsUnitIntervalBackwardMarkovHarmonic kernel value)
+    (horizon : ℕ) :
+    finiteExpectedSpaceTimeMarkovVariation
+        initial kernel value horizon ≤ Fintype.card Ω := by
+  exact finiteExpectedSpaceTimeMarkovVariation_le_card_of_conditionalReturnBound
+    initial kernel value (renewal kernel value harmonic) horizon
 
 namespace HasStatewiseMarkovVariationBudget
 
@@ -388,10 +1395,9 @@ private theorem conditionalVariationSum_le_chargeSum
         (certificate.localVariation_le_escape horizon
           ((Fin.init history) (Fin.last horizon)))
 
-/-- A supplied statewise escape/occupation certificate gives Simon's sharp
-finite-state cardinality bound at every finite horizon.  Producing this
-escape/Poisson certificate from Simon's hypotheses, and passing from these
-finite bounds to his infinite return argument, remain open. -/
+/-- A statewise escape/occupation certificate gives Simon's sharp
+finite-state cardinality bound at every finite horizon. The canonical
+compiler above reduces its production to the supportwise return estimate. -/
 theorem finiteExpectedSpaceTimeMarkovVariation_le_card
     (certificate :
       HasStatewiseMarkovVariationBudget initial kernel value)
@@ -460,6 +1466,63 @@ theorem finiteExpectedSpaceTimeMarkovVariation_le_card
       (hoccupation.trans certificate.totalPotential_initial_le_card)
 
 end HasStatewiseMarkovVariationBudget
+
+/-! ## Finite-to-infinite variation
+
+The measure-theoretic step is independent of Markov structure. For any
+path law and any measurable sequence of nonnegative scores, a common bound
+on every finite prefix bounds the expected infinite sum. A semantic adapter
+only has to identify its finite path-prefix integrals with the corresponding
+finite-history expectations. -/
+
+/-- Expected `ℝ≥0∞` variation of the first `horizon` scores under an
+arbitrary law. -/
+noncomputable def finiteExpectedENNVariation
+    {Path : Type*} [MeasurableSpace Path]
+    (law : MeasureTheory.Measure Path) (score : ℕ → Path → ENNReal)
+    (horizon : ℕ) : ENNReal :=
+  ∫⁻ path, ∑ time ∈ Finset.range horizon, score time path ∂law
+
+/-- Expected infinite `ℝ≥0∞` variation under an arbitrary law. -/
+noncomputable def infiniteExpectedENNVariation
+    {Path : Type*} [MeasurableSpace Path]
+    (law : MeasureTheory.Measure Path)
+    (score : ℕ → Path → ENNReal) : ENNReal :=
+  ∫⁻ path, ∑' time, score time path ∂law
+
+/-- Expected infinite variation is exactly the supremum of the expected
+finite-prefix variations. -/
+theorem infiniteExpectedENNVariation_eq_iSup_finite
+    {Path : Type*} [MeasurableSpace Path]
+    (law : MeasureTheory.Measure Path) (score : ℕ → Path → ENNReal)
+    (measurable_score : ∀ time, AEMeasurable (score time) law) :
+    infiniteExpectedENNVariation law score =
+      ⨆ horizon, finiteExpectedENNVariation law score horizon := by
+  rw [infiniteExpectedENNVariation,
+    MeasureTheory.lintegral_tsum measurable_score,
+    ENNReal.tsum_eq_iSup_nat]
+  congr 1
+  funext horizon
+  rw [finiteExpectedENNVariation,
+    MeasureTheory.lintegral_finsetSum'
+      (Finset.range horizon)
+      (fun time _ => measurable_score time)]
+
+/-- Uniform bounds on all finite expected variations pass to the expected
+infinite variation. This is monotone convergence with no Markov or
+probability-law assumptions beyond measurability of the scores. -/
+theorem infiniteExpectedENNVariation_le_of_finite
+    {Path : Type*} [MeasurableSpace Path]
+    (law : MeasureTheory.Measure Path) (score : ℕ → Path → ENNReal)
+    (measurable_score : ∀ time, AEMeasurable (score time) law)
+    (bound : ENNReal)
+    (finite_le : ∀ horizon,
+      finiteExpectedENNVariation law score horizon ≤ bound) :
+    infiniteExpectedENNVariation law score ≤ bound := by
+  rw [infiniteExpectedENNVariation_eq_iSup_finite
+    law score measurable_score]
+  apply iSup_le
+  exact finite_le
 
 namespace HarmonicStateAccountCounterexample
 

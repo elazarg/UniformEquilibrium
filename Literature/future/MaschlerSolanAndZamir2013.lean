@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Maschler, Solan & Zamir 2013
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Maschler, Solan & Zamir 2013.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.MaschlerSolanAndZamir2013
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "maschler_solan_and_zamir_2013"
-  bibliographyLabel := "Maschler, Solan & Zamir 2013"
-  bibliographyLocator := "Published source: Maschler, Solan & Zamir 2013"
-  role := .surveys
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.MaschlerSolanAndZamir2013

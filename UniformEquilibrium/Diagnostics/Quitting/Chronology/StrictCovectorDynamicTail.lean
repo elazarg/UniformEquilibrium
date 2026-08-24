@@ -493,4 +493,56 @@ theorem uniformPayoff_or_exists_strictCovectorPositiveSurvival :
 
 end QuittingPositiveDebtDynamicTailWitness
 
+omit [Nonempty ι] in
+/-- Exact strict-covector and positive-survival restriction on one canonical
+positive-debt dynamic tail. -/
+def HasStrictCovectorPositiveSurvival
+    {witness : QuittingTerminalExploitabilityWitness reward}
+    (seam : QuittingPositiveDebtDynamicTailWitness witness) : Prop :=
+  ∃ covector : Payoff ι, ∃ margin : ℝ, ∃ cutoff : ℕ,
+    0 < margin ∧
+    (∑ who, covector who ^ 2) + margin ^ 2 = 1 ∧
+    (∀ start finish, cutoff ≤ start → start ≤ finish →
+      margin / 2 * (∑ time ∈ Finset.Ico start finish,
+        quittingRootAbsorptionMass
+          (quittingDynamicDebtTailRoots seam.tail time)) ≤
+      quittingCovectorPairing covector
+        ((seam.tail finish).1.1 - (seam.tail start).1.1)) ∧
+    Summable (fun time ↦ quittingRootAbsorptionMass
+      (quittingDynamicDebtTailRoots seam.tail time)) ∧
+    (∀ start, cutoff ≤ start →
+      margin / 2 * (∑' offset,
+        quittingRootAbsorptionMass
+          (quittingDynamicDebtTailRoots seam.tail (start + offset))) ≤
+      quittingCovectorPairing covector
+        (seam.limit.value - (seam.tail start).1.1)) ∧
+    Tendsto (fun start ↦ quittingJointSurvivalLimit
+      (quittingDynamicDebtTailRoots seam.tail) start) atTop (nhds 1) ∧
+    ∀ᶠ start in atTop, 0 < quittingJointSurvivalLimit
+      (quittingDynamicDebtTailRoots seam.tail) start
+
+namespace QuittingTerminalExploitabilityWitness
+
+omit [Nonempty ι] in
+/-- A terminal exploitability witness unconditionally supplies a canonical
+positive-debt tail with the common strict covector, summable absorption, and
+eventual positive suffix survival. -/
+theorem exists_strictCovectorPositiveSurvivalTail
+    (witness : QuittingTerminalExploitabilityWitness reward) :
+    ∃ seam : QuittingPositiveDebtDynamicTailWitness witness,
+      HasStrictCovectorPositiveSurvival seam := by
+  letI : Nonempty ι := witness.nonempty_players
+  obtain ⟨seam⟩ := witness.nonempty_positiveDebtDynamicTailWitness
+  refine ⟨seam, ?_⟩
+  rcases seam.uniformPayoff_or_exists_strictCovectorPositiveSurvival with
+    hpayoff | ⟨covector, margin, cutoff, hmargin, hunit, hfinite,
+      hinfinite, hsurvival, hsurvivalPositive⟩
+  · exact False.elim (witness.not_exists_uniformEquilibriumPayoff hpayoff)
+  · refine ⟨covector, margin, cutoff, hmargin, hunit, hfinite, ?_,
+      hinfinite, hsurvival, hsurvivalPositive⟩
+    change Summable (quittingDynamicDebtTailAbsorptionCharge seam.tail)
+    exact seam.jointAbsorption_summable
+
+end QuittingTerminalExploitabilityWitness
+
 end GameTheory

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.SurvivalProduct
+import MathUE.PMFProduct.TotalVariation
 import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
 import UniformEquilibrium.Quitting.Boundary.Repair.PunishmentFloorClip
 import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbingSequence
@@ -283,6 +284,84 @@ def IsQuittingRootEndpointStableWithin
           |quittingRootContinuePayoff reward tail candidate who -
             quittingRootContinuePayoff reward tail root who| ≤ e
 
+/-- Coordinatewise closeness of Boolean marginals controls the total
+variation of their product law by `card * d`. -/
+theorem pmfTV_pmfPi_bool_le_card_mul_of_quitProbability_close
+    (first second : ι → PMF Bool) {d : ℝ}
+    (hclose : ∀ who,
+      |(first who true).toReal - (second who true).toReal| ≤ d) :
+    Math.Probability.pmfTV (pmfPi first) (pmfPi second) ≤
+      (Fintype.card ι : ℝ) * d := by
+  classical
+  have hreplace := Math.PMFProduct.pmfTV_pmfPi_replaceOn_le_sum
+    first second Finset.univ
+  have hsum :
+      (∑ who : ι, Math.Probability.pmfTV (first who) (second who)) ≤
+        ∑ _who : ι, d := by
+    apply Finset.sum_le_sum
+    intro who _
+    rw [Math.Probability.pmfTV_bool_eq_abs_apply_true]
+    exact hclose who
+  calc
+    Math.Probability.pmfTV (pmfPi first) (pmfPi second) ≤
+        ∑ who : ι, Math.Probability.pmfTV (first who) (second who) := by
+      simpa using hreplace
+    _ ≤ ∑ _who : ι, d := hsum
+    _ = (Fintype.card ι : ℝ) * d := by
+      simp [nsmul_eq_mul]
+
+/-- Uniform reward and continuation bounds give an explicit endpoint
+stability modulus.  This discharges the compact-continuity input used by the
+local purification step: changing every Quit probability by at most `d`
+moves either pure endpoint by at most `2 M * card * d`. -/
+theorem isQuittingRootEndpointStableWithin_of_uniformBound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) {M d : ℝ}
+    (hM : 0 ≤ M)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (htail : ∀ player, |tail player| ≤ M) :
+    IsQuittingRootEndpointStableWithin reward tail root d
+      ((2 * M) * ((Fintype.card ι : ℝ) * d)) := by
+  intro candidate hclose who
+  have hd : 0 ≤ d :=
+    (abs_nonneg
+      ((candidate who true).toReal - (root who true).toReal)).trans
+      (hclose who).le
+  have hrootClose : ∀ action : Bool,
+      Math.Probability.pmfTV
+          (pmfPi (Function.update candidate who (PMF.pure action)))
+          (pmfPi (Function.update root who (PMF.pure action))) ≤
+        (Fintype.card ι : ℝ) * d := by
+    intro action
+    apply pmfTV_pmfPi_bool_le_card_mul_of_quitProbability_close
+    intro player
+    by_cases hplayer : player = who
+    · subst player
+      simp [hd]
+    · simp only [Function.update_of_ne hplayer]
+      exact (hclose player).le
+  have hobservable : ∀ action : ι → Bool,
+      |quittingRootPayoff reward tail action who| ≤ M := by
+    intro action
+    exact abs_quittingRootPayoff_le reward tail hreward htail action who
+  constructor
+  · unfold quittingRootQuitPayoff quittingRootExpectedPayoff
+    exact (Math.Probability.abs_expect_sub_le_two_mul_pmfTV
+      (pmfPi (Function.update candidate who (PMF.pure true)))
+      (pmfPi (Function.update root who (PMF.pure true)))
+      (fun action => quittingRootPayoff reward tail action who)
+      hobservable).trans
+        (mul_le_mul_of_nonneg_left (hrootClose true)
+          (mul_nonneg (by norm_num) hM))
+  · unfold quittingRootContinuePayoff quittingRootExpectedPayoff
+    exact (Math.Probability.abs_expect_sub_le_two_mul_pmfTV
+      (pmfPi (Function.update candidate who (PMF.pure false)))
+      (pmfPi (Function.update root who (PMF.pure false)))
+      (fun action => quittingRootPayoff reward tail action who)
+      hobservable).trans
+        (mul_le_mul_of_nonneg_left (hrootClose false)
+          (mul_nonneg (by norm_num) hM))
+
 /-- Raising a tail coordinate raises the corresponding pure Continue
 endpoint. -/
 theorem quittingRootContinuePayoff_mono_tail
@@ -541,6 +620,122 @@ theorem isQuittingRootSupportApproxNash_supportPurifiedRoot
     rw [abs_le] at hquitClose hcontinueClose
     dsimp only [purified] at hquitClose hcontinueClose
     linarith
+
+/-- A simultaneous support purification can be extracted directly from an
+actual global approximate equilibrium at every uniformly reached stage.
+
+The global Nash error is divided only by the probability `u` of reaching the
+stage.  Any action which is worse by more than `β` then has prescribed mass
+less than `α / (u * β)`, so the threshold purification moves each marginal by
+less than `d` when `α < u * β * d`.  The explicit product-law stability bound
+above turns that displacement into the displayed support error.
+
+The purified row is evaluated against the original root sequence's actual
+tail.  This theorem does not assert that the purified rows themselves form a
+compatible root sequence; that tail-compatibility step is the next
+mathematical obligation in the approximate-equilibrium-to-perfection route. -/
+theorem
+    isQuittingRootSupportApproxNash_supportPurifiedRoot_of_reachedNash
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (stage : ℕ)
+    {α u β d M η : ℝ}
+    (hα : 0 < α) (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d)
+    (hM : 0 ≤ M)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hnash : IsεQuittingRootSequenceNash reward α roots)
+    (hreached : u ≤ quittingJointSurvivalWeight roots 0 stage)
+    (hscale : α < u * β * d)
+    (herror : β + 4 * M * (Fintype.card ι : ℝ) * d ≤ η) :
+    IsQuittingRootSupportApproxNash reward
+      (quittingRootSequenceTailVector reward roots (stage + 1)) η
+      (quittingSupportPurifiedRoot reward
+        (quittingRootSequenceTailVector reward roots (stage + 1)) β
+        (roots stage)) := by
+  let survival := quittingJointSurvivalWeight roots 0 stage
+  have hsurvival : 0 < survival := hu.trans_le hreached
+  have hendpoint : IsεQuittingRootEndpointNash reward
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (α / survival) (roots stage) := by
+    exact isεQuittingRootEndpointNash_tailVector_of_isεQuittingRootSequenceNash
+      reward roots hnash stage hsurvival
+  have hpure :=
+    (isεQuittingRootEndpointNash_iff_purePayoff_le reward
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (α / survival) (roots stage)).mp hendpoint
+  have hlocalError : 0 < α / survival := div_pos hα hsurvival
+  have hratio : α / survival ≤ α / u := by
+    exact (div_le_div_iff₀ hsurvival hu).2
+      (mul_le_mul_of_nonneg_left hreached hα.le)
+  have hbadQuit : ∀ who,
+      IsQuittingRootBadQuitAt reward
+          (quittingRootSequenceTailVector reward roots (stage + 1)) β
+          (roots stage) who →
+        (roots stage who true).toReal * β < α / u := by
+    intro who hbad
+    exact (badQuit_quitProbability_mul_lt_of_endpointCaps reward
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (roots stage) hlocalError (fun _ => le_rfl) (fun player => (hpure player).2)
+      who hbad).trans_le hratio
+  have hbadContinue : ∀ who,
+      IsQuittingRootBadContinueAt reward
+          (quittingRootSequenceTailVector reward roots (stage + 1)) β
+          (roots stage) who →
+        (roots stage who false).toReal * β < α / u := by
+    intro who hbad
+    exact (badContinue_continueProbability_mul_lt_of_endpointCaps reward
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (quittingRootSequenceTailVector reward roots (stage + 1))
+      (roots stage) hlocalError (fun _ => le_rfl) (fun player => (hpure player).1)
+      who hbad).trans_le hratio
+  have hclose := supportPurifiedRoot_coordinate_close_of_mul_bound reward
+    (quittingRootSequenceTailVector reward roots (stage + 1)) (roots stage)
+    hu hβ hd hscale hbadQuit hbadContinue
+  have htail : ∀ player,
+      |quittingRootSequenceTailVector reward roots (stage + 1) player| ≤ M := by
+    intro player
+    exact abs_quittingRootSequenceTerminalValue_le reward roots player
+      (stage + 1) hM hreward
+  have hstable := isQuittingRootEndpointStableWithin_of_uniformBound reward
+    (quittingRootSequenceTailVector reward roots (stage + 1)) (roots stage)
+    (d := d) hM hreward htail
+  apply isQuittingRootSupportApproxNash_supportPurifiedRoot reward
+    (quittingRootSequenceTailVector reward roots (stage + 1)) (roots stage)
+    hβ.le _ hstable hclose
+  calc
+    β + 2 * ((2 * M) * ((Fintype.card ι : ℝ) * d)) =
+        β + 4 * M * (Fintype.card ι : ℝ) * d := by ring
+    _ ≤ η := herror
+
+/-- Approximate-equilibrium existence supplies one actual root sequence whose
+rows admit the preceding support purification at every stage reached with
+probability at least `u`.  The Nash accuracy is chosen strictly below the
+explicit deletion threshold, rather than hidden behind a supplied producer
+predicate. -/
+theorem
+    exists_rootSequence_reached_supportPurification_of_approximateEquilibriumExistence
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hequilibrium : QuittingApproximateEquilibriumExistence reward)
+    {u β d M η : ℝ}
+    (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d) (hM : 0 ≤ M)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (herror : β + 4 * M * (Fintype.card ι : ℝ) * d ≤ η) :
+    ∃ roots : ℕ → ι → PMF Bool,
+      IsεQuittingRootSequenceNash reward (u * β * d / 2) roots ∧
+        ∀ stage, u ≤ quittingJointSurvivalWeight roots 0 stage →
+          IsQuittingRootSupportApproxNash reward
+            (quittingRootSequenceTailVector reward roots (stage + 1)) η
+            (quittingSupportPurifiedRoot reward
+              (quittingRootSequenceTailVector reward roots (stage + 1)) β
+              (roots stage)) := by
+  have haccuracy : 0 < u * β * d / 2 := by positivity
+  obtain ⟨roots, hnash⟩ := hequilibrium (u * β * d / 2) haccuracy
+  refine ⟨roots, hnash, fun stage hreached => ?_⟩
+  apply isQuittingRootSupportApproxNash_supportPurifiedRoot_of_reachedNash
+    reward roots stage haccuracy hu hβ hd hM hreward hnash hreached
+  · have hfull : 0 < u * β * d := by positivity
+    linarith
+  · exact herror
 
 /-! ## Explicit compact-carrier inputs -/
 

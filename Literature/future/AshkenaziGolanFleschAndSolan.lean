@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Ashkenazi-Golan, Flesch & Solan
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Ashkenazi-Golan, Flesch & Solan.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.AshkenaziGolanFleschAndSolan
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "ashkenazi_golan_flesch_and_solan"
-  bibliographyLabel := "Ashkenazi-Golan, Flesch & Solan"
-  bibliographyLocator := "Published source: Ashkenazi-Golan, Flesch & Solan"
-  role := .recentNonzeroSum
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.AshkenaziGolanFleschAndSolan

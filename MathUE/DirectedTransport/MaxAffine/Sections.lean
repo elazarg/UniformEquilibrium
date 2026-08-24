@@ -214,7 +214,7 @@ carries the lift: a potential for the shifts, raised by a constant large
 enough for every floor, is a lax section.  Adjoining a
 vertex pinned to zero and an edge from it to the head of each floored edge is
 the same reduction performed on an enlarged graph. -/
-theorem exists_isLaxSection_iff_forall_cycle_shift_nonpos [Fintype V] [Finite E]
+theorem exists_isLaxSection_iff_forall_cycle_shift_nonpos [Finite E]
     {label : E → Label} (hslope : ∀ e : E, (label e).slope = 1) :
     (∃ φ : V → ℝ, IsLaxSection G label φ) ↔
       ∀ (base : V) (cycle : G.Walk base base),
@@ -257,7 +257,7 @@ coefficients.  Together with
 of the duality: the necessary condition of weak duality is sufficient.  The
 composite is the one that acts by transport,
 `Math.MaxAffineTransport.apply_compList_edges`. -/
-theorem exists_isLaxSection_iff_forall_cycle_exists_prefixed [Fintype V] [Finite E]
+theorem exists_isLaxSection_iff_forall_cycle_exists_prefixed [Finite E]
     {label : E → Label} (hslope : ∀ e : E, (label e).slope = 1) :
     (∃ φ : V → ℝ, IsLaxSection G label φ) ↔
       ∀ (base : V) (cycle : G.Walk base base),

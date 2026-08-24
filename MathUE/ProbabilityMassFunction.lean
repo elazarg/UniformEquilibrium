@@ -661,6 +661,23 @@ theorem expect_congr_on_support
       simpa [PMF.mem_support_iff] using ha0
     rw [hfg a haS]
 
+/-- Pointwise order on the support of a PMF is enough to compare
+expectations. Values away from the support are irrelevant. -/
+theorem expect_mono_on_support
+    {Ω : Type*} [Finite Ω] (μ : PMF Ω) (f g : Ω → ℝ)
+    (hfg : ∀ a, a ∈ μ.support → f a ≤ g a) :
+    Math.Probability.expect μ f ≤ Math.Probability.expect μ g := by
+  classical
+  letI : Fintype Ω := Fintype.ofFinite Ω
+  rw [Math.Probability.expect_eq_sum, Math.Probability.expect_eq_sum]
+  apply Finset.sum_le_sum
+  intro a _
+  by_cases ha : μ a = 0
+  · simp [ha]
+  · exact mul_le_mul_of_nonneg_left
+      (hfg a (by simpa [PMF.mem_support_iff] using ha))
+      ENNReal.toReal_nonneg
+
 theorem expect_congr_of_ne_zero
     {Ω : Type*} (μ : PMF Ω) (f g : Ω → ℝ)
     (hfg : ∀ a, μ a ≠ 0 → f a = g a) :

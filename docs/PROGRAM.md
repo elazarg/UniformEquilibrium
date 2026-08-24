@@ -56,6 +56,41 @@ No intermediate certificate is presumed universally complete merely because
 it is convenient to compose or formalize. Different classes may reach the
 semantic waist through different sound consumers.
 
+## Reduction, compiler, and reformulation
+
+The project distinguishes three logically different kinds of interface.
+
+- A **reduction** derives structured data from the original source
+  hypotheses, or from the assumption that the target theorem fails. Its
+  output remains present in the unresolved regime and is independently
+  checkable without assuming the desired conclusion.
+- A **compiler or consumer** turns supplied structured data into a later
+  object or the semantic conclusion. It records a valid implication, but it
+  earns no producer or coverage claim until an actual-data adapter supplies
+  its hypotheses.
+- A **reformulation** is equivalent to the target at the same quantifier
+  scope. This includes an interface whose quantified source type is empty
+  whenever the target holds and whose consumer proves the target whenever the
+  source is inhabited. Such an equivalence can be an excellent integration
+  contract, but proving it is not frontier progress by itself.
+
+For every proposed “missing producer,” record all known reverse implications.
+If Lean proves `Interface r ↔ Target r`, documentation must call the interface
+a conjecture-level capstone or reformulation. The mathematical work should
+then be split at the earliest concrete boundary: for example, one reached-
+source block estimate, followed by a separate compatibility and iteration
+theorem, followed by the global compiler. A failed construction refutes only
+the local statement it actually implements; it refutes an equivalent global
+interface only if it supplies a counterexample to the target itself.
+
+The practical audit is:
+
+1. state the forward consumer and every known converse;
+2. identify which hypotheses are produced from actual source data;
+3. check whether the interface is vacuous in the solved regime;
+4. separate finite or one-step output from all-errors or infinite iteration;
+5. award frontier progress only to the earliest newly proved nonvacuous arrow.
+
 ## Three levels of claim
 
 Every proposed architecture or certificate theorem is classified at three

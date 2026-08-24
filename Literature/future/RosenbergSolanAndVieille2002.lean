@@ -1,27 +1,19 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Rosenberg, Solan & Vieille 2002
+
+Citation: Published source: Rosenberg, Solan & Vieille 2002.
 
 The primary paper supplies the paper statement recorded below.
 -/
 
 namespace Literature.RosenbergSolanAndVieille2002
 
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "rosenberg_solan_and_vieille_2002"
-  bibliographyLabel := "Rosenberg, Solan & Vieille 2002"
-  bibliographyLocator := "Published source: Rosenberg, Solan & Vieille 2002"
-  role := .zeroSumBoundary
-  paperEvidence := .primaryInspected
-  auditStatus := .claimAuditInProgress
-  claims :=
-    [ { claimId := "pomdp_uniform_expected_average_value"
-        paperLocator := "Theorem 1"
-        summary := "Every finite POMDP has a uniform expected-average value."
-        status := .paperOnly } ]
+/-!
+## Source claim not yet stated in Lean
+
+Theorem 1 states that every finite POMDP has a uniform expected-average value.
+-/
 
 end Literature.RosenbergSolanAndVieille2002

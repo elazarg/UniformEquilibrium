@@ -60,8 +60,9 @@ that audit:
 
 These markers are provenance, not current internal status. The generated
 [`STATUS.md`](../STATUS.md) and exact Lean declarations outrank them. New
-paper-by-paper correspondence belongs in `Literature.PaperRecord` rather than
-another global prose ledger.
+paper-by-paper correspondence belongs in the corresponding plain Lean file
+under `Literature/`, with exact source locators beside the statements, rather
+than in another global prose ledger.
 
 ## Historical provenance
 

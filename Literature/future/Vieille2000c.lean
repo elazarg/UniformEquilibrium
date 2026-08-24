@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Vieille 2000c
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Vieille 2000c.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.Vieille2000c
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "vieille_2000c"
-  bibliographyLabel := "Vieille 2000c"
-  bibliographyLocator := "Published source: Vieille 2000c"
-  role := .nonzeroSumExistence
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.Vieille2000c

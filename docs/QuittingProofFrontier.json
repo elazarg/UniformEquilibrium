@@ -1,7 +1,7 @@
 {
   "schema_version": 3,
   "title": "Finite-quitting uniform-existence boundary",
-  "scope": "A proved dependency DAG from positive minimum terminal semantic debt to the remaining producer interfaces. It is not a chronology of proof-search attempts and does not classify arbitrary profiles.",
+  "scope": "A proved dependency DAG from positive minimum terminal semantic debt to the remaining concrete producer interfaces. The all-frontier chronological consumer is recorded separately as a conjecture-equivalent capstone, not as frontier progress. This is not a chronology of proof-search attempts and does not classify arbitrary profiles.",
   "nodes": [
     {
       "id": "POSITIVE-MINIMUM-DEBT",
@@ -178,9 +178,9 @@
       "status": "open-producer",
       "from": "VANISHING-DEBT-ATOM-ACCESS",
       "to": "CHRONOLOGICAL-DEBT-SHADOWING",
-      "meaning": "Missing: from the positive-minimum static atom data, either select one exact Nash--Bellman spine whose same roots preserve two fixed divergent marginal-hazard labels or return a solved-game certificate. A universal two-label selector is impossible, even for two players. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.",
-      "source": "UniformEquilibrium/Quitting/Paths/CapPumpChronologicalAdapter.lean",
-      "declaration": "GameTheory.nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine_capPumpOwner",
+      "meaning": "Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.",
+      "source": "UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean",
+      "declaration": "GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed",
       "evidence_seals": ["M", "L", "C"]
     },
     {
@@ -217,11 +217,13 @@
   "conditional_capstones": [
     {
       "id": "VANISHING-ATOM-CAPSTONE",
-      "meaning": "A chronological producer for the already universal vanishing-debt atom access alone yields a uniform-equilibrium payoff and rules out positive minimum semantic debt.",
+      "meaning": "The all-frontier chronological consumer is exactly equivalent, reward table by reward table, to emptiness of the positive-minimum tangent-family type and to uniform-equilibrium-payoff existence. It is a conjecture-level reformulation and integration contract, not the local packet producer represented by the open DAG arrow.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean",
       "declarations": [
         "GameTheory.exists_uniformEquilibriumPayoff_of_vanishingDebtAtomChronologicalConsumer",
-        "GameTheory.not_hasPositiveMinimumTerminalSemanticDebt_of_vanishingDebtAtomChronologicalConsumer"
+        "GameTheory.vanishingDebtAtomChronologicalConsumer_iff_isEmpty_tangentFamily",
+        "GameTheory.isEmpty_positiveMinimumDebtTangentFamily_iff_exists_uniformEquilibriumPayoff",
+        "GameTheory.vanishingDebtAtomChronologicalConsumer_iff_exists_uniformEquilibriumPayoff"
       ],
       "evidence_seals": ["M", "L", "C"]
     },

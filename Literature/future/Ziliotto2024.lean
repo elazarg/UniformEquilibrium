@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Ziliotto 2024
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Ziliotto 2024.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.Ziliotto2024
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "ziliotto_2024"
-  bibliographyLabel := "Ziliotto 2024"
-  bibliographyLocator := "Published source: Ziliotto 2024"
-  role := .zeroSumBoundary
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.Ziliotto2024

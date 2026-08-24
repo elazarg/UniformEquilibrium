@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Vrieze & Thuijsman 1989
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Vrieze & Thuijsman 1989.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.VriezeAndThuijsman1989
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "vrieze_and_thuijsman_1989"
-  bibliographyLabel := "Vrieze & Thuijsman 1989"
-  bibliographyLocator := "Published source: Vrieze & Thuijsman 1989"
-  role := .nonzeroSumExistence
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.VriezeAndThuijsman1989

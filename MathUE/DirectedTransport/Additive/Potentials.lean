@@ -14,19 +14,20 @@ import Mathlib.Tactic.Ring
 import MathUE.EdgeGraph
 
 /-!
-# Additive potentials on a finite real-weighted digraph
+# Additive potentials on a real-weighted digraph
 
-A finite directed multigraph is represented by `Math.EdgeGraph`, so parallel
+A directed multigraph is represented by `Math.EdgeGraph`, so parallel
 edges keep their identities, and its finite walks are endpoint-indexed typed
 walks.  Here every edge additionally carries a real weight, and the weight of a
 walk is the sum of the weights of its edges.
 
 A **potential** is a real function on vertices satisfying the edge increment
 inequality `φ (source e) + weight e ≤ φ (target e)`.  The central result is the
-duality between potentials and closed walks: a potential exists exactly when no
-closed walk has strictly positive weight.  Its quantitative form measures, for an
-arbitrary candidate function, how badly some edge of a positive closed walk must
-fail the inequality.
+duality between potentials and closed walks: with finitely many edges, a
+potential exists exactly when no closed walk has strictly positive weight.  No
+finiteness of the vertex type is needed.  Its quantitative form measures, for
+an arbitrary candidate function, how badly some edge of a positive closed walk
+must fail the inequality.
 
 ## Main definitions
 
@@ -41,7 +42,7 @@ fail the inequality.
 ## Main results
 
 - `Math.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos` — the
-  duality, for finitely many vertices and edges
+  duality, for finitely many edges and an arbitrary vertex type
 - `Math.MaxPlusPotential.exists_edge_defect_ge` — a closed walk of weight at
   least `γ` forces some edge to fail the inequality by at least `γ` divided by
   the length of that walk, for every candidate function
@@ -73,13 +74,14 @@ equivalent to mean payoff games* (Internat. J. Algebra Comput. 22 (2012)).
 ## Scope
 
 This file develops the potential (subeigenvector) side of max-plus spectral
-theory only.  Not developed here: existence of genuine eigenvectors, the
-Collatz--Wielandt characterization of the max cycle mean as an attained
-maximum over cycles, the critical graph, and the Kleene-star (all-pairs
-longest-walk) operator, of which `maxIncomingWeight` is one row.  The natural
-common setting for those is the fixed-point theory of topical maps: Gaubert
-and Gunawardena, *The Perron--Frobenius theorem for homogeneous, monotone
-functions* (Trans. Amer. Math. Soc. 356 (2004)).
+theory.  `Math.MaxPlusPotential.exists_critical_cycle_subeigenvector_iff` in
+`MathUE.DirectedTransport.Additive.ShortCycles` identifies and attains the
+subeigenvalue threshold.  Not developed here: existence of genuine
+eigenvectors, the critical graph, and the Kleene-star (all-pairs longest-walk)
+operator, of which `maxIncomingWeight` is one row.  The natural common setting
+for those is the fixed-point theory of topical maps: Gaubert and Gunawardena,
+*The Perron--Frobenius theorem for homogeneous, monotone functions* (Trans.
+Amer. Math. Soc. 356 (2004)).
 -/
 
 noncomputable section
@@ -254,6 +256,39 @@ theorem exists_closedSubwalk_of_not_nodup {start finish : V}
         refine ⟨vertex, before, cycle, after.concat edge legal, hlen, ?_⟩
         simp only [EdgeGraph.Walk.edges_concat, hedges, List.append_assoc]
 
+/-- An edge used by a walk has its target among the walk's visited vertices. -/
+theorem mem_visited_of_mem_edges {start finish : V}
+    (walk : G.Walk start finish) {edge : E} (hmem : edge ∈ walk.edges) :
+    G.target edge ∈ visited walk := by
+  induction walk with
+  | nil => simp [EdgeGraph.Walk.edges_nil] at hmem
+  | concat walkSoFar finalEdge legal ih =>
+      rw [EdgeGraph.Walk.edges_concat, List.mem_append,
+        List.mem_singleton] at hmem
+      rw [visited_concat]
+      rcases hmem with hmem | rfl
+      · exact List.mem_append_left _ (ih hmem)
+      · exact List.mem_append_right _ (List.mem_singleton_self _)
+
+/-- A walk visiting pairwise distinct vertices traverses pairwise distinct
+edges: a repeated edge would revisit its target vertex. -/
+theorem edges_nodup_of_visited_nodup {start finish : V}
+    (walk : G.Walk start finish) (hnd : (visited walk).Nodup) :
+    walk.edges.Nodup := by
+  induction walk with
+  | nil => simp
+  | concat walkSoFar edge legal ih =>
+      rw [visited_concat, List.nodup_append] at hnd
+      obtain ⟨hvisited, -, hdisjoint⟩ := hnd
+      rw [EdgeGraph.Walk.edges_concat, List.nodup_append]
+      refine ⟨ih hvisited, List.nodup_singleton _, ?_⟩
+      intro a ha b hb
+      rw [List.mem_singleton] at hb
+      subst hb
+      rintro rfl
+      exact hdisjoint (G.target a) (mem_visited_of_mem_edges walkSoFar ha)
+        (G.target a) (List.mem_singleton_self _) rfl
+
 /-! ### The duality -/
 
 /-- Weights of the finite walks arriving at a vertex. -/
@@ -309,7 +344,7 @@ theorem exists_nodup_visited_walkWeight_le {weight : E → ℝ}
 
 section Finite
 
-variable [Fintype V] [Finite E]
+variable [Finite E]
 
 /-- Under the no-positive-cycle hypothesis the weights of all walks are bounded
 above by one explicit constant. -/
@@ -317,16 +352,16 @@ theorem exists_bound_walkWeight (weight : E → ℝ)
     (hcyc : ∀ (vertex : V) (cycle : G.Walk vertex vertex), walkWeight weight cycle ≤ 0) :
     ∃ bound : ℝ, ∀ (start finish : V) (walk : G.Walk start finish),
       walkWeight weight walk ≤ bound := by
+  cases nonempty_fintype E
   obtain ⟨cap, hcap⟩ := Finite.exists_le weight
-  refine ⟨Fintype.card V * max cap 0, ?_⟩
+  refine ⟨Fintype.card E * max cap 0, ?_⟩
   intro start finish walk
   obtain ⟨pruned, hnd, hle⟩ :=
     exists_nodup_visited_walkWeight_le hcyc walk.length walk le_rfl
   refine hle.trans ?_
-  have hlen : pruned.length ≤ Fintype.card V := by
-    have hcard := hnd.length_le_card
-    rw [length_visited] at hcard
-    omega
+  have hlen : pruned.length ≤ Fintype.card E := by
+    have hcard := (edges_nodup_of_visited_nodup pruned hnd).length_le_card
+    rwa [EdgeGraph.Walk.edges_length] at hcard
   have hsum : walkWeight weight pruned ≤ pruned.length * max cap 0 := by
     have hbound : ∀ x ∈ pruned.edges.map weight, x ≤ max cap 0 := by
       intro x hx
@@ -363,10 +398,10 @@ theorem maxIncomingWeight_isPotential {weight : E → ℝ}
   simp only [maxIncomingWeight]
   linarith
 
-/-- **Tropical Farkas duality.**  Over finitely many vertices and edges a
-potential exists exactly when no closed walk has strictly positive weight.  The
-witness in the forward direction is `maxIncomingWeight`.  This is the
-Bellman--Ford criterion, and the mean-payoff feasibility criterion. -/
+/-- **Tropical Farkas duality.**  Over finitely many edges a potential exists
+exactly when no closed walk has strictly positive weight; the vertex type is
+arbitrary.  The witness in the forward direction is `maxIncomingWeight`.  This
+is the Bellman--Ford criterion, and the mean-payoff feasibility criterion. -/
 theorem exists_isPotential_iff_forall_closedWalk_nonpos (weight : E → ℝ) :
     (∃ φ : V → ℝ, IsPotential G weight φ) ↔
       ∀ (vertex : V) (cycle : G.Walk vertex vertex), walkWeight weight cycle ≤ 0 :=
@@ -409,6 +444,73 @@ theorem not_exists_isPotential_of_pos_closedWalk {weight : E → ℝ} {vertex : 
     ¬ ∃ φ : V → ℝ, IsPotential G weight φ := by
   rintro ⟨φ, hφ⟩
   exact absurd (hφ.closedWalk_nonpos cycle) (not_le.mpr hpos)
+
+/-! ### Sharpness of finite-edge duality -/
+
+namespace InfiniteEdgeCounterexample
+
+/-- Two vertices with one edge from `false` to `true` for each natural
+number. -/
+def graph : EdgeGraph Bool ℕ where
+  source := fun _ ↦ false
+  target := fun _ ↦ true
+
+/-- Every nonempty walk in the counterexample goes from `false` to `true`. -/
+theorem walk_endpoints : ∀ {start finish : Bool}
+    (walk : graph.Walk start finish),
+    0 < walk.length → start = false ∧ finish = true
+  | _, _, .nil => by simp
+  | _, _, .concat .nil edge legal => fun _ ↦ ⟨legal.symm, rfl⟩
+  | _, _, .concat (.concat inner priorEdge priorLegal) edge legal => fun _ ↦ by
+      obtain ⟨hstart, -⟩ :=
+        walk_endpoints (inner.concat priorEdge priorLegal) (by simp)
+      exact ⟨hstart, rfl⟩
+termination_by start finish walk => walk.length
+decreasing_by
+  show inner.length + 1 < inner.length + 1 + 1
+  omega
+
+/-- Every closed walk in the counterexample is empty. -/
+theorem closed_length {vertex : Bool} (cycle : graph.Walk vertex vertex) :
+    cycle.length = 0 := by
+  by_contra hne
+  obtain ⟨hstart, hfinish⟩ :=
+    walk_endpoints cycle (Nat.pos_of_ne_zero hne)
+  rw [hstart] at hfinish
+  exact Bool.noConfusion hfinish
+
+/-- The no-positive-closed-walk condition holds vacuously. -/
+theorem closedWalk_nonpos : ∀ (vertex : Bool)
+    (cycle : graph.Walk vertex vertex),
+    walkWeight (fun n : ℕ ↦ (n : ℝ)) cycle ≤ 0 := by
+  intro vertex cycle
+  have hlength := closed_length cycle
+  have hedgesLength := cycle.edges_length
+  rw [hlength] at hedgesLength
+  rw [walkWeight, List.length_eq_zero_iff.mp hedgesLength]
+  simp
+
+/-- The unbounded parallel-edge weights admit no real potential. -/
+theorem not_exists_isPotential :
+    ¬ ∃ φ : Bool → ℝ,
+      IsPotential graph (fun n : ℕ ↦ (n : ℝ)) φ := by
+  rintro ⟨φ, hφ⟩
+  obtain ⟨n, hn⟩ := exists_nat_gt (φ true - φ false)
+  have hedge := hφ n
+  change φ false + (n : ℝ) ≤ φ true at hedge
+  linarith
+
+/-- **Finite edges are necessary.**  Without that hypothesis, the tropical
+Farkas equivalence fails even on two vertices. -/
+theorem finiteEdge_hypothesis_necessary :
+    ¬ ((∃ φ : Bool → ℝ,
+        IsPotential graph (fun n : ℕ ↦ (n : ℝ)) φ) ↔
+      ∀ (vertex : Bool) (cycle : graph.Walk vertex vertex),
+        walkWeight (fun n : ℕ ↦ (n : ℝ)) cycle ≤ 0) := by
+  intro hiff
+  exact not_exists_isPotential (hiff.mpr closedWalk_nonpos)
+
+end InfiniteEdgeCounterexample
 
 /-! ### The max-plus matrix reading -/
 
@@ -461,7 +563,7 @@ exactly when every closed walk has weight at most `lam` times its length, that
 is, when every cycle of the matrix has mean weight at most `lam`.  The set of
 admissible values of `lam` is thereby identified, so its infimum is the max cycle
 mean of `A`. -/
-theorem exists_subeigenvector_iff_forall_closedWalk_le [Fintype ι]
+theorem exists_subeigenvector_iff_forall_closedWalk_le [Finite ι]
     (A : ι → ι → ℝ) (lam : ℝ) :
     (∃ v : ι → ℝ, IsSubeigenvector A lam v) ↔
       ∀ (i : ι) (cycle : (matrixGraph ι).Walk i i),
@@ -477,6 +579,7 @@ theorem exists_subeigenvector_iff_forall_closedWalk_le [Fintype ι]
     rw [hshift i cycle] at this
     linarith
   · intro hmean
+    have : Finite (ι × ι) := inferInstance
     obtain ⟨v, hv⟩ :=
       (exists_isPotential_iff_forall_closedWalk_nonpos
         (G := matrixGraph ι) (fun e => matrixWeight A e - lam)).2

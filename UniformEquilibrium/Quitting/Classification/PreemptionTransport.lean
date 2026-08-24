@@ -263,7 +263,7 @@ theorem edges_eq_nil_of_closedWalk (cycle : QuittingSoloPreemptionCycle reward g
   exact cycle.target_ne_source_forcedCellGraph _ _
     ((walk.target_getLast hne).trans (walk.source_head hne).symm)
 
-omit [DecidableEq player] in
+omit [Fintype player] [DecidableEq player] in
 /-- **The forced payoff-cell system is feasible, structurally.**  Its graph has
 no closed walk carrying any weight at all, by `edges_eq_nil_of_closedWalk`, so
 the tropical duality of

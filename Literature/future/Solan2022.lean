@@ -1,24 +1,14 @@
-import Literature.Catalog
-
 /-!
 # Literature audit
 
 Bibliography label: Solan 2022
 
-This record contains bibliographic coverage and no paper-claim
-correspondence.
+Citation: Published source: Solan 2022.
+
+Not yet formalized: no definitions or theorem statements from this paper
+are stated here yet.
 -/
 
 namespace Literature.Solan2022
-
-/-- Paper-level coverage record. -/
-def record : Literature.PaperRecord where
-  paperId := "solan_2022"
-  bibliographyLabel := "Solan 2022"
-  bibliographyLocator := "Published source: Solan 2022"
-  role := .surveys
-  paperEvidence := .bibliographic
-  auditStatus := .catalogued
-  claims := []
 
 end Literature.Solan2022

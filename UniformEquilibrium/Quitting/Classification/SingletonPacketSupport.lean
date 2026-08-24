@@ -5,6 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.SingletonPacketRefusal
+import UniformEquilibrium.Quitting.Classification.AbnormalPlayers
+import UniformEquilibrium.Quitting.Classification.Existence.NoHarmSingletonGenerated
 
 /-!
 # Support graph of a normalized singleton packet
@@ -14,8 +16,11 @@ singleton exit of some other supported owner to its pinned target. Choosing
 successors produces a finite directed support graph. A strict refusal edge
 can be joined to a recurrent weak-preference class as a supported lasso.
 
-These packet-local facts do not require a terminal exploitability witness. They do not
-by themselves supply outsider inequalities or an equilibrium compiler.
+These packet-local facts do not require a terminal exploitability witness.  On an
+exact two-owner support, an owner which is pointwise safe for every outsider is
+also safe for the other supported owner.  The existing no-harm singleton
+compiler then solves the game.  Thus the only unresolved two-support chamber
+has different outsiders harmed by the two supported singleton rows.
 -/
 
 noncomputable section
@@ -65,6 +70,20 @@ theorem support_nonempty
   rw [Finset.not_nonempty_iff_eq_empty.mp hempty] at hsum
   simp at hsum
 
+/-- Every positive atom of a normalized singleton source packet is
+punishment-normal.  This connects packet support to the normal principal
+matrix used by the projective LCP gate. -/
+theorem isQuittingNormalPlayer_of_mass_pos
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    (owner : ι) (howner : 0 < packet.mass owner) :
+    IsQuittingNormalPlayer reward owner := by
+  unfold IsQuittingNormalPlayer quittingSoloSelfPayoff
+  calc
+    quittingPunishmentValue reward owner ≤ packet.target owner :=
+      packet.punishment_le_target owner
+    _ = reward (quittingSingletonTerminal owner) owner :=
+      packet.positive_mass_pins_target owner howner
+
 /-- Restricting a weighted singleton row to the positive support changes
 nothing. -/
 theorem sum_support_mul_singletonReward
@@ -76,6 +95,211 @@ theorem sum_support_mul_singletonReward
   apply Finset.sum_subset (Finset.subset_univ packet.support)
   intro owner _ howner
   rw [packet.mass_eq_zero_of_notMem_support howner, zero_mul]
+
+/-! ## Exact two-atom formulas -/
+
+/-- If the packet support is exactly two distinct owners, both owner masses
+are strictly positive. -/
+theorem mass_pos_of_support_eq_pair
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι}
+    (hsupport : packet.support = {first, second}) :
+    0 < packet.mass first ∧ 0 < packet.mass second := by
+  constructor
+  · rw [← packet.mem_support_iff, hsupport]
+    simp
+  · rw [← packet.mem_support_iff, hsupport]
+    simp
+
+/-- The two positive owner masses exhaust the normalized packet mass. -/
+theorem mass_add_eq_one_of_support_eq_pair
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι} (hne : first ≠ second)
+    (hsupport : packet.support = {first, second}) :
+    packet.mass first + packet.mass second = 1 := by
+  have hsum := packet.sum_support_mass
+  rw [hsupport] at hsum
+  simpa [hne] using hsum
+
+/-- On a two-owner support, every singleton delivery is the literal
+two-atom mixture. -/
+theorem singletonMixture_eq_of_support_eq_pair
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι} (hne : first ≠ second)
+    (hsupport : packet.support = {first, second}) (who : ι) :
+    quittingSingletonMixture reward packet.mass who =
+      packet.mass first * reward (quittingSingletonTerminal first) who +
+        packet.mass second * reward (quittingSingletonTerminal second) who := by
+  rw [← packet.sum_support_mul_singletonReward who, hsupport]
+  simp [hne]
+
+/-- Each supported owner weakly prefers the other supported owner's
+singleton exit to its own pinned singleton payoff. -/
+theorem soloReward_le_other_of_support_eq_pair
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι} (hne : first ≠ second)
+    (hsupport : packet.support = {first, second}) :
+    reward (quittingSingletonTerminal first) first ≤
+        reward (quittingSingletonTerminal second) first ∧
+      reward (quittingSingletonTerminal second) second ≤
+        reward (quittingSingletonTerminal first) second := by
+  obtain ⟨hfirst, hsecond⟩ := packet.mass_pos_of_support_eq_pair hsupport
+  have hsum := packet.mass_add_eq_one_of_support_eq_pair hne hsupport
+  have hmixFirst := packet.mix_ge_target first
+  have hmixSecond := packet.mix_ge_target second
+  rw [packet.positive_mass_pins_target first hfirst,
+    packet.singletonMixture_eq_of_support_eq_pair hne hsupport first] at hmixFirst
+  rw [packet.positive_mass_pins_target second hsecond,
+    packet.singletonMixture_eq_of_support_eq_pair hne hsupport second] at hmixSecond
+  constructor
+  · have hfactor : 0 ≤ packet.mass second *
+        (reward (quittingSingletonTerminal second) first -
+          reward (quittingSingletonTerminal first) first) := by
+      have heq : packet.mass second *
+            (reward (quittingSingletonTerminal second) first -
+              reward (quittingSingletonTerminal first) first) =
+          (packet.mass first * reward (quittingSingletonTerminal first) first +
+              packet.mass second * reward (quittingSingletonTerminal second) first) -
+            reward (quittingSingletonTerminal first) first := by
+        calc
+          packet.mass second *
+                (reward (quittingSingletonTerminal second) first -
+                  reward (quittingSingletonTerminal first) first) =
+              (packet.mass first * reward (quittingSingletonTerminal first) first +
+                  packet.mass second *
+                    reward (quittingSingletonTerminal second) first) -
+                (packet.mass first + packet.mass second) *
+                  reward (quittingSingletonTerminal first) first := by ring
+          _ = _ := by rw [hsum, one_mul]
+      rw [heq]
+      exact sub_nonneg.mpr hmixFirst
+    by_contra hnot
+    have hnegative := mul_neg_of_pos_of_neg hsecond (sub_neg.mpr (lt_of_not_ge hnot))
+    exact (not_lt_of_ge hfactor) hnegative
+  · have hfactor : 0 ≤ packet.mass first *
+        (reward (quittingSingletonTerminal first) second -
+          reward (quittingSingletonTerminal second) second) := by
+      have heq : packet.mass first *
+            (reward (quittingSingletonTerminal first) second -
+              reward (quittingSingletonTerminal second) second) =
+          (packet.mass first * reward (quittingSingletonTerminal first) second +
+              packet.mass second * reward (quittingSingletonTerminal second) second) -
+            reward (quittingSingletonTerminal second) second := by
+        calc
+          packet.mass first *
+                (reward (quittingSingletonTerminal first) second -
+                  reward (quittingSingletonTerminal second) second) =
+              (packet.mass first * reward (quittingSingletonTerminal first) second +
+                  packet.mass second *
+                    reward (quittingSingletonTerminal second) second) -
+                (packet.mass first + packet.mass second) *
+                  reward (quittingSingletonTerminal second) second := by ring
+          _ = _ := by rw [hsum, one_mul]
+      rw [heq]
+      exact sub_nonneg.mpr hmixSecond
+    by_contra hnot
+    have hnegative := mul_neg_of_pos_of_neg hfirst (sub_neg.mpr (lt_of_not_ge hnot))
+    exact (not_lt_of_ge hfactor) hnegative
+
+/-- If one atom of a two-owner packet pays an outsider strictly below that
+outsider's own singleton payoff, the other atom pays the outsider strictly
+above it. This is the exact pointwise information available from the packet's
+averaged outsider inequality. -/
+theorem soloReward_lt_other_of_support_eq_pair_of_lt_solo
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι} (hne : first ≠ second)
+    (hsupport : packet.support = {first, second}) (who : ι)
+    (hfirst : reward (quittingSingletonTerminal first) who <
+      reward (quittingSingletonTerminal who) who) :
+    reward (quittingSingletonTerminal who) who <
+      reward (quittingSingletonTerminal second) who := by
+  obtain ⟨hfirstMass, hsecondMass⟩ :=
+    packet.mass_pos_of_support_eq_pair hsupport
+  have hsum := packet.mass_add_eq_one_of_support_eq_pair hne hsupport
+  have hsoloMix : reward (quittingSingletonTerminal who) who ≤
+      quittingSingletonMixture reward packet.mass who :=
+    (packet.solo_le_target who).trans (packet.mix_ge_target who)
+  rw [packet.singletonMixture_eq_of_support_eq_pair hne hsupport who] at hsoloMix
+  have hnonneg : 0 ≤
+      packet.mass first * reward (quittingSingletonTerminal first) who +
+          packet.mass second * reward (quittingSingletonTerminal second) who -
+        reward (quittingSingletonTerminal who) who :=
+    sub_nonneg.mpr hsoloMix
+  have hdecompose :
+      packet.mass first * reward (quittingSingletonTerminal first) who +
+            packet.mass second * reward (quittingSingletonTerminal second) who -
+          reward (quittingSingletonTerminal who) who =
+        packet.mass first *
+            (reward (quittingSingletonTerminal first) who -
+              reward (quittingSingletonTerminal who) who) +
+          packet.mass second *
+            (reward (quittingSingletonTerminal second) who -
+              reward (quittingSingletonTerminal who) who) := by
+    calc
+      _ = packet.mass first * reward (quittingSingletonTerminal first) who +
+            packet.mass second * reward (quittingSingletonTerminal second) who -
+          (packet.mass first + packet.mass second) *
+            reward (quittingSingletonTerminal who) who := by rw [hsum, one_mul]
+      _ = _ := by ring
+  rw [hdecompose] at hnonneg
+  by_contra hnot
+  have hsecond : reward (quittingSingletonTerminal second) who ≤
+      reward (quittingSingletonTerminal who) who := le_of_not_gt hnot
+  have hfirstTerm : packet.mass first *
+      (reward (quittingSingletonTerminal first) who -
+        reward (quittingSingletonTerminal who) who) < 0 :=
+    mul_neg_of_pos_of_neg hfirstMass (sub_neg.mpr hfirst)
+  have hsecondTerm : packet.mass second *
+      (reward (quittingSingletonTerminal second) who -
+        reward (quittingSingletonTerminal who) who) ≤ 0 :=
+    mul_nonpos_of_nonneg_of_nonpos hsecondMass.le (sub_nonpos.mpr hsecond)
+  linarith
+
+/-- **Aligned two-support dispatch.** If one supported owner's singleton row
+weakly dominates every outsider's own singleton payoff, packet feasibility
+supplies the remaining supported-owner inequality and packet normality supplies
+the owner's punishment floor. The checked no-harm singleton compiler therefore
+produces an ordinary uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_support_eq_pair_of_first_noHarm
+    (packet : QuittingNormalizedSingletonSourcePacket reward)
+    {first second : ι} (hne : first ≠ second)
+    (hsupport : packet.support = {first, second})
+    (houtside : ∀ who, who ∉ packet.support →
+      reward (quittingSingletonTerminal who) who ≤
+        reward (quittingSingletonTerminal first) who) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨hfirstMass, -⟩ := packet.mass_pos_of_support_eq_pair hsupport
+  have hcross := (packet.soloReward_le_other_of_support_eq_pair hne hsupport).2
+  have hnoHarm : ∀ who, who ≠ first →
+      quittingSoloReward reward who who ≤
+        quittingSoloReward reward first who := by
+    intro who hwho
+    by_cases hsecond : who = second
+    · subst who
+      change reward (quittingSingletonTerminal second) second ≤
+        reward (quittingSingletonTerminal first) second
+      exact hcross
+    · apply houtside who
+      rw [hsupport]
+      simp [hwho, hsecond]
+  have hnormal : quittingPunishmentValue reward first ≤
+      quittingSoloReward reward first first := by
+    change quittingPunishmentValue reward first ≤
+      reward (quittingSingletonTerminal first) first
+    calc
+      quittingPunishmentValue reward first ≤ packet.target first :=
+        packet.punishment_le_target first
+      _ = reward (quittingSingletonTerminal first) first :=
+        packet.positive_mass_pins_target first hfirstMass
+  have hgenerated :=
+    quittingStationarilyGeneratedApproximateEquilibria_of_normal_noHarmSingleton
+      reward first hnoHarm hnormal
+  exact
+    quittingGame_exists_uniformEquilibriumPayoff_of_approximateEquilibriumExistence
+      reward
+      (quittingApproximateEquilibriumExistence_of_stationarilyGenerated
+        hgenerated)
 
 /-- Every supported row of a nonsingleton packet has a distinct supported
 successor whose singleton outcome weakly beats that row's pinned target. -/

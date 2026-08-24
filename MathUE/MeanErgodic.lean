@@ -558,6 +558,76 @@ theorem eq_ergodicProjection_add_poisson [Fintype S]
         ergodicPoissonPotential κ observable state) :=
   (exists_harmonic_add_poisson κ observable).choose_spec.choose_spec.2.1 state
 
+omit [Finite S] in
+/-- The selected finite-state ergodic projection is the limit of the
+Cesàro averages of the Markov-operator orbit. -/
+theorem tendsto_cesaro_ergodicProjection [Fintype S]
+    (κ : S → PMF S) (observable : S → ℝ) :
+    Tendsto (fun T : ℕ =>
+      (T : ℝ)⁻¹ • ∑ t ∈ Finset.range T,
+        ((markovOperator κ) ^ t) observable) atTop
+      (nhds (ergodicProjection κ observable)) :=
+  (exists_harmonic_add_poisson κ observable).choose_spec.choose_spec.2.2
+
+omit [Finite S] in
+/-- The finite-state ergodic projection preserves pointwise
+nonnegativity. -/
+theorem ergodicProjection_nonneg [Fintype S]
+    (κ : S → PMF S) (observable : S → ℝ)
+    (hobservable : ∀ state, 0 ≤ observable state) (state : S) :
+    0 ≤ ergodicProjection κ observable state := by
+  have hlimit := ((continuous_apply state).tendsto
+      (ergodicProjection κ observable)).comp
+    (tendsto_cesaro_ergodicProjection κ observable)
+  apply ge_of_tendsto hlimit
+  exact Filter.Eventually.of_forall fun T => by
+    simp only [Function.comp_apply, Pi.smul_apply,
+      Finset.sum_apply, smul_eq_mul]
+    change 0 ≤ (T : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range T,
+        (((markovOperator κ) ^ time) observable) state
+    apply mul_nonneg (inv_nonneg.mpr (Nat.cast_nonneg T))
+    apply Finset.sum_nonneg
+    intro time _
+    rw [markovOperator_pow_apply]
+    exact expect_nonneg _ observable hobservable
+
+omit [Finite S] in
+/-- If an observable is pointwise at most one, then so is its finite-state
+ergodic projection. -/
+theorem ergodicProjection_le_one [Fintype S]
+    (κ : S → PMF S) (observable : S → ℝ)
+    (hobservable : ∀ state, observable state ≤ 1) (state : S) :
+    ergodicProjection κ observable state ≤ 1 := by
+  have hlimit := ((continuous_apply state).tendsto
+      (ergodicProjection κ observable)).comp
+    (tendsto_cesaro_ergodicProjection κ observable)
+  apply le_of_tendsto hlimit
+  filter_upwards [eventually_ge_atTop (1 : ℕ)] with T hT
+  have hsum :
+      (∑ time ∈ Finset.range T,
+        (((markovOperator κ) ^ time) observable) state) ≤
+        ∑ _time ∈ Finset.range T, (1 : ℝ) := by
+    apply Finset.sum_le_sum
+    intro time _
+    rw [markovOperator_pow_apply]
+    exact (expect_mono
+      (Math.PMFIter.iter κ time state) observable (fun _ => 1)
+      hobservable).trans_eq (expect_const _ 1)
+  simp only [Function.comp_apply, Pi.smul_apply,
+    Finset.sum_apply, smul_eq_mul]
+  change (T : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range T,
+        (((markovOperator κ) ^ time) observable) state ≤ 1
+  calc
+    (T : ℝ)⁻¹ *
+          ∑ time ∈ Finset.range T,
+            (((markovOperator κ) ^ time) observable) state ≤
+        (T : ℝ)⁻¹ * ∑ _time ∈ Finset.range T, (1 : ℝ) :=
+      mul_le_mul_of_nonneg_left hsum (inv_nonneg.mpr (Nat.cast_nonneg T))
+    _ = 1 := by
+      simp [Nat.ne_of_gt hT]
+
 /-- **Mean ergodic theorem for finite Markov chains**: Cesàro averages of
 expected values along the iterated kernel converge. -/
 theorem tendsto_cesaro_expect_iter (κ : S → PMF S) (w : S → ℝ) (s₀ : S) :
