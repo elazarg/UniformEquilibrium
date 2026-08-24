@@ -147,12 +147,12 @@
     },
     {
       "id": "fin-four-prescribed-owner-handoff-alignment",
-      "subject": "Prescribed-owner reset and stationary handoff alignment",
+      "subject": "Pair-base paid/reset payoff alignment",
       "kind": "Conditional structural theorem",
-      "declaration": "QuittingTerminalExploitabilityWitness.exists_finFour_prescribedOwner_resetDispatch",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourPrescribedOwnerResetAlignment.lean",
+      "declaration": "QuittingTerminalExploitabilityWitness.exists_finFour_pairBasePaidResetDispatch_payoffAligned",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetPayoffAlignment.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "At a global minimum terminal-semantic carrier pair on Fin 4, any chosen positive debtor can be the owner of an actual complementary-pair stationary target with zero owner debt, unit opponent incidence, and the checked fixed-law reset dispatch. Independently, any preselected label can own an actual singleton-base stationary paid handoff with a uniform positive owner-floor gap. The common label does not identify the two profiles, terminal laws, returned observer, payoff vectors, or chronology; the all-Continue reset wall and paid-return connector remain open."
+      "scope": "On Fin 4, any prescribed owner and disjoint two-player sure-Quit base yield one actual stationary target and law with zero owner debt, unit incidence from a base opponent, and a terminal-gap paid row whose debtor lies in that base. From a positive global-minimum source the target enters the fixed-law reset dispatch, whose returned pair has exactly the target profile's prescribed payoff because both retain the same complete terminal law. The paid debtor is not the reset owner, and cap-Nash at the returned envelope does not supply an endpoint-Nash punishment-floor edge or return path. A checked closure-seam interface isolates those remaining data and would imply a uniform payoff."
     },
     {
       "id": "fin-four-strict-minimum-plateau-isolation",
@@ -192,21 +192,21 @@
     },
     {
       "id": "fin-four-charged-blocker-repayment",
-      "subject": "Fin4 charged blocker gate and exact repayment",
+      "subject": "Fin4 charged blocker closure boundary",
       "kind": "Conditional quantitative obstruction theorem",
-      "declaration": "pairPremium_or_every_exactRepayment",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/ChargedSoloBlockerGateRepayment.lean",
+      "declaration": "stationaryHandoff_or_exactRepayment_and_paidResetBoundary",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/ChargedSoloBlockerClosureDispatch.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "Every fixed-charge exact carrier-root family either has positive-liminf semantic debt descent or converges along a strict subsequence to one mixed solo debtor and a punishment-normal outsider attaining the maximal joining gap. The actual gate row extends to exact punishment-floor orbits on which a fixed pair premium or fixed repayment in the blocker coordinate is unavoidable. The synthetic blocker tail is not asserted to be a carrier point, no collision-mass producer follows from the premium, and the other payoff coordinates need not return."
+      "scope": "At every positive charged solo-blocker gate, the pair-premium arm now enters an actual pair-base or leave-join stationary two-debtor source with a terminal-gap paid row; otherwise every anchored exact floor orbit repays a fixed amount in the blocker coordinate. Independently, an actual pair-base profile co-realizes a paid row and fixed-law reset target from the global minimum. The gate's literal exact root has zero semantic-debt drop, the paid debtor and reset owner differ, and the dispatch prefixes a separate returned pair without constructing an endpoint-Nash punishment-floor edge or return path, so no uniform payoff follows."
     },
     {
       "id": "fin-four-solo-wall-dispatch",
-      "subject": "Fin4 solo-wall debt descent and finite-spine exclusion",
+      "subject": "Fin4 solo-wall dispatch and pair-base handoff",
       "kind": "Conditional structural reduction",
       "declaration": "not_exists_outwardUniformSoloCarrierChain_of_normal",
       "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourSoloWallDispatch.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "From a unique-debtor exact solo gate, a uniform opponent-absorption floor gives strict carrier-debt descent; otherwise finite solo prefixes reach a first outsider wall. Arbitrarily long finite uniform-solo windows compactify to an infinite spine, and punishment normality excludes the corresponding infinite outward chain. A pair premium at the wall yields the checked singleton-base handoff or an outsider pair-join. The pair-base stationary two-debtor source promised from that join is not proved, so the full packet remains in revisit and no payoff return follows."
+      "scope": "From a unique-debtor exact solo gate, a uniform opponent-absorption floor gives strict carrier-debt descent; otherwise finite solo prefixes reach a first outsider wall, while compactification and punishment normality exclude indefinite uniformly interior solo continuation. A pair premium at the wall now yields an actual singleton-base, leave-join, or pair-base stationary source. The pair-base source has quantitative off-base absorption, a heavy strict-superset atom, both free coordinates solved against unrestricted deviations, base-localized debt, and a literal paid row. It is freshly reselected rather than chronologically reached, and no payoff return follows."
     },
     {
       "id": "full-core-deadlock-debt-bound",
