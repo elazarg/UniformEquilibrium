@@ -1,0 +1,112 @@
+name: Apply persistent two-label refutation
+
+on:
+  push:
+    branches:
+      - codex/close-persistent-two-label-sorry
+
+permissions:
+  contents: write
+
+jobs:
+  apply:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/close-persistent-two-label-sorry
+          fetch-depth: 0
+
+      - name: Apply source patch
+        shell: bash
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          branch_file = Path("Reverse/PersistentTwoLabelNashBellmanCounterexampleScratch.lean")
+          final_file = Path("Reverse/PersistentTwoLabelNashBellmanCounterexample.lean")
+          source = branch_file.read_text()
+          source = source.replace(
+              "This scratch module develops the explicit two-player counterexample used to\n"
+              "refute universal persistent-two-label selection.",
+              "This module gives an explicit two-player counterexample to universal\n"
+              "persistent-two-label selection.",
+          )
+          final_file.write_text(source)
+          branch_file.unlink()
+
+          target = Path("Reverse/QuestionBankFakeProof.lean")
+          text = target.read_text()
+          import_anchor = (
+              "import UniformEquilibrium.Quitting.Paths."
+              "PersistentDeletedClockTwoLabel\n"
+          )
+          extra_import = (
+              "import Reverse.PersistentTwoLabelNashBellmanCounterexample\n"
+          )
+          if extra_import not in text:
+              text = text.replace(import_anchor, import_anchor + extra_import, 1)
+
+          start_marker = (
+              "/-- Fake answer to the persistent-two-label exact spine question. -/"
+          )
+          end_marker = (
+              "/-- Fake-answer consumer for persistent two-label hazards. -/"
+          )
+          start = text.index(start_marker)
+          end = text.index(end_marker, start)
+          replacement = r'''/-- The universal persistent-two-label selection claim packaged as one
+proposition. -/
+def PersistentTwoLabelNashBellmanUniversalAnswer : Prop :=
+  ∀ (ι : Type) [Fintype ι] [DecidableEq ι] [Nonempty ι]
+      (_hcard : 2 ≤ Fintype.card ι)
+      (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+    Nonempty (PersistentTwoLabelNashBellmanAnswer reward)
+
+/-- The universal persistent-two-label answer is false already for two
+players. -/
+theorem not_persistentTwoLabelNashBellmanUniversalAnswer :
+    ¬ PersistentTwoLabelNashBellmanUniversalAnswer := by
+  intro hanswer
+  obtain ⟨answer⟩ := hanswer Bool (by decide)
+    persistentTwoLabelCounterexampleReward
+  exact not_exists_persistentTwoLabelExactNashBellmanSpine
+    ⟨answer.value, answer.roots, answer.bellman, answer.nash,
+      answer.persistent⟩
+
+'''
+          text = text[:start] + replacement + text[end:]
+
+          old_signature = '''theorem fake_persistentTwoLabelHazards_proves_uniformExistence :
+    FiniteQuittingUniformExistence := by'''
+          new_signature = '''theorem persistentTwoLabelNashBellmanUniversalAnswer_proves_uniformExistence
+    (hanswer : PersistentTwoLabelNashBellmanUniversalAnswer) :
+    FiniteQuittingUniformExistence := by'''
+          if old_signature not in text:
+              raise SystemExit("persistent consumer signature not found")
+          text = text.replace(old_signature, new_signature, 1)
+          text = text.replace(
+              "fakeAnswer_persistentTwoLabelHazards",
+              "hanswer",
+          )
+          text = text.replace(
+              "/-- Fake-answer consumer for persistent two-label hazards. -/",
+              "/-- Conditional consumer for the refuted universal persistent-label premise. -/",
+              1,
+          )
+          target.write_text(text)
+          PY
+
+          rm -f Reverse/upload-probe.txt
+          rm -f .github/workflows/apply-persistent-two-label-refutation.yml
+          git diff --check
+
+      - name: Commit source patch
+        shell: bash
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "Refute universal persistent two-label answer"
+          git push origin HEAD:codex/close-persistent-two-label-sorry
