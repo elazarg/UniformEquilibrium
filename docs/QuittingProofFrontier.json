@@ -178,7 +178,7 @@
       "status": "open-producer",
       "from": "VANISHING-DEBT-ATOM-ACCESS",
       "to": "CHRONOLOGICAL-DEBT-SHADOWING",
-      "meaning": "Missing: select one exact Nash--Bellman spine from the static atom data whose same roots preserve two fixed divergent marginal-hazard labels. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump now recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.",
+      "meaning": "Missing: from the positive-minimum static atom data, either select one exact Nash--Bellman spine whose same roots preserve two fixed divergent marginal-hazard labels or return a solved-game certificate. A universal two-label selector is impossible, even for two players. Exact-spine discrepancy, forcing, and initial debt are identically zero. A bounded cap pump recovers the second label from divergent favorable drops plus summable reverse rises, or from unbounded known-mover-subtracted excess; source production of either pump condition remains open.",
       "source": "UniformEquilibrium/Quitting/Paths/CapPumpChronologicalAdapter.lean",
       "declaration": "GameTheory.nonempty_quittingChronologicalDebtShadowingCertificate_of_exactSpine_capPumpOwner",
       "evidence_seals": ["M", "L", "C"]
