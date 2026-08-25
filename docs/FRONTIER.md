@@ -819,7 +819,24 @@ the live mathematical ledger.
   defect.  Passing to the corrected pointwise residual forgets the endpoint,
   no-sure-exit proof, and summable orbit, and returns a raw residual rather
   than a prioritized one.  This is a shared obstruction, not a consumer or a
-  closure.  The generic
+  closure.
+
+  The parallel provenance-retaining theorem
+  `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_endpointBallisticBoundary`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean`)
+  gives a sharper boundary on the literal endpoint orbit.  Failure of S.3
+  supplies one scale `e > 0` such that every finite segment of cumulative
+  absorption charge `C > 0` moves some payoff coordinate by more than
+  `e * C / (1 + C)`.  Thus a summable port of positive total charge which
+  returns to its initial endpoint gives literal well-supported S.3.  Under
+  S.3 failure, the only surviving alternatives are a zero-charge constant
+  all-Continue orbit or a positive port whose limit is displaced by at least
+  `e * A / (1 + A)` and carries one fixed signed terminal coalition.  The
+  coalition-mass denominator uses the canonical `quittingRewardBound`, which
+  bounds both rewards and orbit annotations.  The actual endpoint,
+  no-sure-exit proof, and summable port remain present in both alternatives.
+  Neither alternative has a consumer, and real displacement is not a
+  well-founded rank.  The generic
   `isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier` would
   give a uniform payoff from diagonal terminal-semantic carrier membership,
   but the port limit is not shown to have that membership.
@@ -829,9 +846,11 @@ the live mathematical ledger.
   consumers for exactly the prioritized corrected-pointwise residual and
   the summable-port residual into the literal S.1/S.2/S.3 conclusion.  A
   consumer of the common phantom would discharge the latter, but none is
-  known.  Neither remaining universal consumer, and no counterexample, is known; the
-  unconditional general `theorem3_4` remains the sole proof hole in the
-  paper-facing file.
+  known.  The ballistic theorem closes only its returned positive-charge
+  subarm and quantitatively classifies the rest; it does not supply either
+  missing universal consumer.  Neither remaining universal consumer, and no
+  counterexample, is known; the unconditional general `theorem3_4` remains
+  the sole proof hole in the paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`
