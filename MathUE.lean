@@ -203,6 +203,7 @@ import MathUE.PMFProduct.Independence
 import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
+import MathUE.PMFProduct.SumFubini
 import MathUE.PMFProduct.NormalizedSmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update

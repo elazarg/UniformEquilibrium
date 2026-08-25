@@ -249,6 +249,7 @@ import MathUE.PMFProduct.NormalizedSmallHazardExpectation
 import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
+import MathUE.PMFProduct.SumFubini
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
@@ -1716,6 +1717,9 @@ import UniformEquilibrium.Quitting.Stationary.SnellCap
 import UniformEquilibrium.Quitting.Stationary.TogglePotential
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
+import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical
+import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCorollaries
 import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdog
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdogBoundary
