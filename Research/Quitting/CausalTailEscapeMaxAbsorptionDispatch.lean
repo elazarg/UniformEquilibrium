@@ -11,6 +11,7 @@ import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactP
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLawCarrierCausalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeRectangleDisintegration
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicSupportBoundary
+import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefix
 import UniformEquilibrium.Quitting.RewardBound
 
@@ -909,33 +910,6 @@ theorem exists_offMinimum_retainedLaw_allContinue_or_supportEntry
 
 /-! ## Exact punishment-prefix realization of the changed-cap chronology -/
 
-/-- Exact Nash against the envelope coordinate makes the new envelope itself
-an exact Bellman successor of the old envelope.  This is stronger than the
-usual debt-scaling identity: the cap chronology, unlike the prescribed-payoff
-chronology, is already an exact Nash--Bellman chronology. -/
-theorem quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    (pair : QuittingTerminalSemanticPair iota)
-    (root : iota → PMF Bool)
-    (hnash : IsεQuittingRootNash reward pair.2 0 root) :
-    (quittingTerminalSemanticPrefix reward root pair).2 =
-      quittingRootSuccessorPayoff reward pair.2 root := by
-  funext who
-  have hquit : quittingRootQuitPayoff reward pair.1 root who =
-      quittingRootQuitPayoff reward pair.2 root who :=
-    quittingRootQuitPayoff_continuation_invariant
-      reward pair.1 pair.2 root who
-  have hcontinue :
-      quittingRootContinuePayoff reward
-          (Function.update pair.1 who (pair.2 who)) root who =
-        quittingRootContinuePayoff reward pair.2 root who := by
-    apply quittingRootExpectedPayoff_continuation_congr
-    simp
-  unfold quittingTerminalSemanticPrefix
-  dsimp only
-  rw [quittingRootSuccessorPayoff_eq_max_of_isZeroNash
-    reward pair.2 root who hnash, hquit, hcontinue]
-
 /-- The recursively recomputed maximal-cap roots, read in their natural
 outward order, form an exact punishment-floor prefix on the *behavioral cap*
 states.  Thus their absorption sum is not merely an analytic charge: it is
@@ -979,7 +953,7 @@ noncomputable def quittingMaximalCapPrefixPunishmentFloorPrefix
         (quittingMaximalCapPrefixProfile reward terminal time)]
     exact
       quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash
-        reward
+        (reward := reward)
         (quittingTerminalSemanticPair reward
           (quittingMaximalCapPrefixProfile reward terminal time))
         (quittingMaximalCapPrefixRoot reward

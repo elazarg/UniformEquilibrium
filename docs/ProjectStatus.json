@@ -66,12 +66,12 @@
     },
     {
       "id": "paid-row-exact-port-alternative",
-      "subject": "Literal paid-row exact-port alternative",
-      "kind": "Conditional actual-source alternative",
-      "declaration": "QuittingPaidRowFloorSafeSource.exists_markedExactOrbit_alternative_of_witness",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidRowExactPortAlternative.lean",
+      "subject": "Actual-source paid cap-lifted summable port",
+      "kind": "Conditional actual-source theorem",
+      "declaration": "nonempty_capLiftedSummablePort_of_tangentFamily",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapLiftedSummablePort.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "An attained paid first-disagreement profile whose prescribed payoff explicitly dominates every behavioral punishment value generates one literal root-prefixed exact floor orbit retaining that profile as a suffix. Nonsummable charge closes through cumulative payoff recurrence. Summable charge converges in full terminal semantics to an all-Continue fixed port; under a terminal exploitability witness the unchanged paid suffix has positive limiting reach. The paid source's floor inequality and a restart from the summable port remain unproved."
+      "scope": "At positive global minimum terminal-semantic debt, every attained positive paid first-disagreement source generates exact cap-Nash prefixes without a prescribed-payoff floor hypothesis. Their absorption is summable with an exact debt budget and a uniform debt-ratio lower bound on reaching the unchanged paid suffix. Every finite prefix carries the correspondingly shifted paid row with uniform positive gain, while both cap and actual terminal semantics converge to all-Continue ports. No restart, cumulative-charge near-return, or uniform-payoff consumer is supplied."
     },
     {
       "id": "quitting-reduced-support-rank-alternative",
@@ -355,6 +355,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow requires cumulative-charge payoff near-return or a source-matched use of the fixed signed label at the summable all-Continue port. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow now requires only cumulative-charge payoff near-return or a source-matched restart/debt descent consuming the actual-source cap-lifted summable all-Continue port. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }
