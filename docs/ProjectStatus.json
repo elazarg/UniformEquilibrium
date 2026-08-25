@@ -372,12 +372,12 @@
     },
     {
       "id": "agkrs-positive-joint-sequential-reduction",
-      "subject": "AGKRS positive-joint endpoint and phantom reduction",
+      "subject": "AGKRS positive-joint endpoint, phantom, and ballistic reductions",
       "kind": "Unconditional source reductions and conditional Literature capstone",
-      "declaration": "wellSupported_or_stationary_or_allContinuePhantom",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortPhantomReduction.lean",
+      "declaration": "wellSupported_or_endpointBallisticBoundary",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every reached positive-joint punishment endpoint has a canonical exact semantic-prefix orbit. Nonsummable absorption yields well-supported S.3; a summable port yields S.1 or the common nonzero all-Continue phantom, equivalently the existing positive-singleton defect at each tolerance. Forgetting to the corrected pointwise residual discards endpoint, no-sure-exit, and orbit provenance and returns a raw residual, not a prioritized one, so no branch consumer or closure follows. The generic diagonal-carrier theorem gives a uniform payoff if (v,v) belongs to the terminal-semantic carrier, but such membership is not proved for the port limit. The Literature capstone still leaves the prioritized and summable-port consumers; unconditional theorem3_4 remains open."
+      "scope": "Every reached positive-joint punishment endpoint has a canonical exact semantic-prefix orbit. Nonsummable absorption yields well-supported S.3; a summable port yields S.1 or the common nonzero all-Continue phantom, equivalently the existing positive-singleton defect at each tolerance. The provenance-retaining ballistic dispatch additionally closes every positive-charge port returning to its endpoint through literal S.3; under S.3 failure it leaves exactly a zero-charge constant all-Continue orbit or a quantitatively displaced port with one fixed signed terminal coalition and the canonical reward-bound mass scale. Neither surviving arm is consumed, and real displacement is not a well-founded rank. Forgetting to the corrected pointwise residual discards endpoint, no-sure-exit, and orbit provenance and returns a raw residual, not a prioritized one. The Literature capstone still leaves the prioritized and summable-port consumers; unconditional theorem3_4 remains open."
     },
     {
       "id": "simon-normalized-motion-prefix-producer",
