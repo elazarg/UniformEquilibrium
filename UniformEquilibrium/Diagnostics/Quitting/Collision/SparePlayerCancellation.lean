@@ -52,6 +52,7 @@ def quittingTerminalSemanticDebtSupportAbove
   Finset.univ.filter fun who =>
     ε < quittingTerminalSemanticDebt pair who
 
+omit [DecidableEq ι] in
 @[simp] theorem mem_quittingTerminalSemanticDebtSupportAbove
     (pair : QuittingTerminalSemanticPair ι) (ε : ℝ) (who : ι) :
     who ∈ quittingTerminalSemanticDebtSupportAbove pair ε ↔
@@ -148,10 +149,15 @@ theorem quittingSpareCapExposure_self_eq_zero
     (replacement : (quittingGame reward).BehaviorStrategy spare) :
     quittingSpareCapExposure reward source spare replacement spare = 0 := by
   unfold quittingSpareCapExposure quittingSpareReplacementProfile
-  unfold quittingContinuationBestResponseValue
-  congr 2
-  funext deviation
-  rw [Function.update_idem]
+  have hcap :
+      quittingContinuationBestResponseValue reward
+          (Function.update source spare replacement) spare =
+        quittingContinuationBestResponseValue reward source spare := by
+    unfold quittingContinuationBestResponseValue
+    congr 2
+    funext deviation
+    rw [Function.update_idem]
+  exact sub_eq_zero.mpr hcap
 
 /-- An all-behavior collision-cap certificate bounds the actual change of the
 unrestricted best-response envelope. -/
