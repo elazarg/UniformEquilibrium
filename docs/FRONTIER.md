@@ -292,22 +292,38 @@ proves that it is exactly equivalent to uniform-payoff existence for each
 reward table. It is retained as the global integration contract.
 
 On the paid route, including the former flat-circulation arm after its finite
-support descent, the former prescribed-payoff floor obstruction is removed.
-At positive minimum debt, every attained paid source has an actual-source
-cap-lifted exact orbit: its absorption is summable with a quantitative debt
-budget, the unchanged paid suffix has a uniform debt-ratio reach floor, every
-finite literal prefix carries a shifted paid row with fixed positive gain,
-and the full terminal semantics converge to an all-Continue carrier port. A
-nonzero displacement also retains one fixed signed terminal coalition with a
-quantitative cumulative mass budget. The exact analytic boundary is now
-checked by `QuittingPaidCapLiftedSource.exactTrichotomy`
-(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortExactTrichotomy.lean`).
-Positive total absorption with zero cap displacement gives cumulative
-admissible payoff near-returns and a uniform payoff. Positive displacement
-pays the sharp `D_* rho / (2M)` total-debt decrease. Zero absorption makes
-every literal root all Continue and preserves the semantic pair and full paid
-row without loss. The remaining downstream step is regeneration from the
-real-valued descent or a consumer for the inert marked stall.
+support descent, both the source-floor and arbitrary-profile paid-row gaps are
+removed. `HasTerminalExploitabilityGap.exists_paidFirstDisagreementRow_at`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfileTerminalGapPaidCap.lean`)
+extracts the full weak terminal gap at every literal behavioral profile from
+one support atom of the profitable stopping law and one of the prescribed
+law. The same file constructs an actual paid cap port and exposes its exact,
+pairwise-disjoint trichotomy. Positive total absorption with zero cap
+displacement gives cumulative admissible payoff near-returns and a uniform
+payoff; under a terminal gap that charged branch is impossible. The surviving
+branches are quantitative debt descent and a lossless literal inert stall.
+
+The boundary is now quantitatively tied to excess source debt. Theorems
+`QuittingPaidCapLiftedSource.minimum_mul_totalAbsorption_le_excess` and
+`minimum_mul_capDisplacement_le_twoRewardBound_mul_excess`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapMinimumFiberContraction.lean`)
+give
+
+```text
+D_* A   <= D_source - D_*
+D_* rho <= 2 R (D_source - D_*).
+```
+
+Thus every paid cap port whose actual source lies exactly on the global
+minimum-debt fiber is unconditionally inert; no terminal-gap hypothesis is
+needed for that last implication. Finally,
+`HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean`)
+uses carrier density to produce actual full-gap ports with source debt tending
+to `D_*`, total absorption tending to zero, and cap displacement tending to
+zero. It does not realize the carrier minimum by a profile. The remaining
+downstream step is exactly to consume or regenerate the quantitative descent,
+or to consume the literal inert stall.
 
 On `Fin 4`, the source construction is now unconditional from the negative
 semantic endpoint. For every terminal exploitability witness and every
@@ -395,14 +411,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
-| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.QuittingPaidCapLiftedSource.exactTrichotomy`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortExactTrichotomy.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
 | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cumulativePayoffNearReturns`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
 
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: The actual paid cap port now has an exact trichotomy. Positive total absorption with zero cap displacement already yields cumulative payoff near-return and a uniform payoff. Positive displacement pays the sharp D_* rho / (2M) semantic-debt drop. Zero absorption is a literal lossless all-Continue paid stall. Missing downstream: regenerate an actual strictly smaller paid/reset source from the real-valued descent, or consume the inert marked stall. On Fin 4 the source and its owner repair give two ports, leaving one of two descents or double inertness.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert, while carrier density produces actual ports with debt tending to D_* and both A and rho tending to zero. Missing downstream: consume or regenerate quantitative descent, or consume the literal inert stall.
 
 The DAG nodes have these mathematical meanings:
 

@@ -333,6 +333,7 @@ import MathUE.Probability.TriangularLedger
 import MathUE.Probability.WeightedClockRankReduction
 import MathUE.Probability.WeightedCollisionConcentration
 import MathUE.ProbabilityMassFunction
+import MathUE.ProbabilityMassFunction.BoundedSupportAverage
 import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CompactStoppingLaw
 import MathUE.ProbabilityMassFunction.CoordinateTest
