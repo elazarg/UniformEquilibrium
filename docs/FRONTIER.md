@@ -279,12 +279,18 @@ proves that it is exactly equivalent to uniform-payoff existence for each
 reward table. It is retained as the global integration contract.
 
 On the paid route, including the former flat-circulation arm after its finite
-support descent, an eventually paid row must be re-entered with one fixed
-positive charge threshold, while the source, target, path, and charged edge
-may vary with endpoint tolerance and endpoint payoff vectors become
-arbitrarily close. Fixed-edge payoff closure and exact return to the full tail
-state are stronger special cases. The chronological and payoff-near-return
-consumers themselves are proved in Lean.
+support descent, an eventually paid row must be re-entered along exact paths
+whose total absorption charge has one fixed positive lower bound while their
+endpoint payoff vectors become arbitrarily close. Every individual edge may
+have vanishing charge. A fixed charged edge, fixed-edge payoff closure, and
+exact return to the full tail state are stronger special cases. The
+chronological and cumulative payoff-near-return consumers are proved in Lean.
+Every infinite exact floor orbit either closes through nonsummable cumulative
+charge or converges to an exact floor-safe all-Continue self-loop. A nonzero
+summable displacement retains one fixed signed terminal coalition with a
+quantitative cumulative mass budget. The missing paid adapter must now supply
+the divergent orbit or spend this labelled summable-port budget in a restart
+or debt descent.
 
 For a separate actual carrier-root family with one fixed absorption floor,
 `exists_macroscopicDebtDrop_or_chargedSoloBlockerGate` now proves positive
@@ -346,14 +352,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
-| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveAdmissiblePayoffNearReturnFamily.exists_tightFace_escape`](../UniformEquilibrium/Diagnostics/Quitting/Chronology/TightFacePaidNearReturnRestriction.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `C` | [`GameTheory.QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
-| `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNearReturns`](../UniformEquilibrium/Quitting/Projective/PunishmentFloorNearReturn.lean) |
+| `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cumulativePayoffNearReturns`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
 
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive charge threshold while making endpoint payoff vectors arbitrarily close. Every such family must leave the separated tight-face payoff neighborhood, activate a Quit owner outside that face, or contain a nonperturbative collision row; a source-matched collision path additionally pays a fixed positive terminal-semantic debt excursion above the minimum fiber.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive lower bound on total path charge while making endpoint payoff vectors arbitrarily close, or source-match the paid row to a summable exact orbit restart that spends the checked fixed signed terminal-label budget or decreases debt. The former fixed-edge target is a sufficient special case and retains its checked tight-face restrictions.
 
 The DAG nodes have these mathematical meanings:
 
@@ -365,7 +371,7 @@ The DAG nodes have these mathematical meanings:
 - `PAID-FIRST-DISAGREEMENT-ROW`: An off-minimum full-replacement cluster carries a fixed-gain exact paid first-disagreement row eventually along one retained subsequence; this also consumes the former flat-circulation terminal arm after finite support descent.
 - `VANISHING-DEBT-ATOM-ACCESS`: Every extracted positive-minimum tangent family has a fixed positive off-diagonal observer and an eventually available atom alternative whose endpoint observer debt tends to zero. In the support-entry branch the actual zero-debt recipient can be retained.
 - `CHRONOLOGICAL-DEBT-SHADOWING`: Certificates at every positive accuracy compile to terminal approximate Nash profiles and one uniform-equilibrium payoff.
-- `POSITIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A fixed positive charge threshold, with source, target, path, and charged edge allowed to vary with endpoint tolerance, and endpoint payoff vectors converging arbitrarily closely, compiles to a uniform-equilibrium payoff.
+- `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A fixed positive lower bound on total path charge, with source, target, path, and every individual edge allowed to vary with endpoint tolerance, and endpoint payoff vectors converging arbitrarily closely, compiles to a uniform-equilibrium payoff.
 - `UNIFORM-EQUILIBRIUM-PAYOFF`: Existence of one fixed payoff target satisfying the uniform finite-horizon equilibrium contract.
 
 <!-- END GENERATED OPEN LEAVES -->
@@ -548,9 +554,12 @@ the live mathematical ledger.
   and paid row are actual behavioral source objects.
   `LargeBasePaidStationaryHandoff.endpointAtom_floorFailure_or_exactOrbit`
   now sends that source to localized floor failure or a literal exact infinite
-  floor orbit. Finite collision-budget and charged-recurrence consumers are
-  checked `C` under their displayed hypotheses, but the terminal witness
-  excludes persistent fixed charge and no payoff near-return is produced.
+  floor orbit. Nonsummable cumulative orbit charge now has a checked
+  uniform-payoff consumer. In the summable arm the annotations converge to a
+  floor-safe all-Continue self-loop, with a fixed signed terminal label when
+  the displacement is nonzero. The terminal witness therefore leaves only
+  that labelled summable port, localized floor failure, or trivial
+  displacement; no paid-source restart or payoff near-return is produced.
 
   There is now a second same-table semantic restriction on every hypothetical
   `Fin 4` counterexample. First,
@@ -844,10 +853,11 @@ the live mathematical ledger.
   positive-minimum actual port cannot itself supply that seed. Producing these
   two-tier inputs remains open; the all-frontier consumer beyond them is a
   conjecture-equivalent reformulation.
-- **Paid-row payoff near-return:** fix one positive charge threshold, while
-  allowing the source, target, path, and charged edge to vary with endpoint
-  tolerance, and make endpoint payoff vectors arbitrarily close. Fixed-edge
-  payoff closure and exact return are stronger special cases.
+- **Paid-row payoff near-return:** fix one positive lower bound on total path
+  charge while allowing the source, target, path, and every edge to vary with
+  endpoint tolerance, and make endpoint payoff vectors arbitrarily close; or
+  source-match a restart/debt descent at the labelled summable all-Continue
+  port. Fixed-edge payoff closure and exact return are stronger special cases.
 - **Global barrier:** find a forward-invariant coupled semantic barrier with a
   positive debt floor, then consume it through the terminal-gap theorem.
 - **Vanishing discount:** decode analytic Bellman data into a strategically
