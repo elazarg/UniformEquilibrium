@@ -795,14 +795,23 @@ the live mathematical ledger.
   `stationary_or_instant_or_wellSupported_or_noSureExit_or_negativeOwner` to
   S.1, S.2, well-supported S.3, an exact positive-reach endpoint with no
   sure-exit Nash prefix, or a divergent exceptional owner with negative
-  singleton self-payoff.  Bounded exceptional horizons already give S.2.  In
-  the negative-owner case, failure of S.2 forces either punishment value above
-  the owner's singleton payoff or a profitable outsider joining that singleton
-  exit.  The checked Literature theorem
-  `theorem3_4_of_prioritizedSourceClosures` composes consumers for the three
-  remaining source classes to the literal S.1/S.2/S.3 conclusion.  No such
-  universal consumers, and no counterexample, are known; the unconditional
-  general `theorem3_4` remains the sole proof hole in the paper-facing file.
+  singleton self-payoff. Bounded exceptional horizons already give S.2, and
+  `QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported`
+  now consumes every divergent exceptional-owner source without using the
+  negative-solo field. After a fixed-label selection, a zero one-row live-mass
+  limit gives S.2 and an interior limit gives S.3. At unit live mass, immediate
+  Quit values converge to the players' own singleton rewards while the actual
+  source values converge to the exceptional owner's singleton vector. The
+  resulting singleton floor compiles, through a vanishing positive solo
+  hazard, to an actual-tail well-supported absorbing sequence. This S.3
+  witness need not be terminal Nash when the owner's singleton payoff is
+  negative. The checked Literature theorem
+  `theorem3_4_of_prioritizedAndPositiveSourceClosures` therefore composes
+  consumers for exactly the prioritized pointwise and positive-joint
+  no-sure-exit source classes into the literal S.1/S.2/S.3 conclusion. Neither
+  remaining universal consumer, and no counterexample, is known; the
+  unconditional general `theorem3_4` remains the sole proof hole in the
+  paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`

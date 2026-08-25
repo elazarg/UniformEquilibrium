@@ -362,6 +362,15 @@
       "scope": "Every arbitrary finite or infinite deterministic calendar with at most one positive quitting hazard per date has literal all-behavior terminal exploitability E satisfying 1 <= 14 E^2 + 67 E and hence E > 1/68. This rules out that strategy architecture on one residual-hard table; the same game has a checked two-owner uniform equilibrium."
     },
     {
+      "id": "agkrs-divergent-exceptional-owner-dispatch",
+      "subject": "AGKRS divergent exceptional-owner source closure",
+      "kind": "Unconditional source consumer",
+      "declaration": "QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
+      "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
+      "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. The checked Literature capstone theorem3_4_of_prioritizedAndPositiveSourceClosures leaves exactly the prioritized pointwise and positive-joint/no-sure-exit consumers; unconditional theorem3_4 remains open."
+    },
+    {
       "id": "simon-normalized-motion-prefix-producer",
       "subject": "Simon normalized-motion stationary-prefix producer",
       "kind": "Unconditional alternative theorem",

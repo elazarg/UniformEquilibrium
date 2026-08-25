@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
 import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.DivergentExceptionalOwnerS3Dispatch
 import UniformEquilibrium.Quitting.Classification.Existence.ExceptionalOwnerPrefixConcentration
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointPrefixReachEndpoint
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveRhoLandingClassificationBoundary
@@ -488,12 +489,13 @@ theorem refinedSourceExclusion_not_necessary :
       GameTheory.StationaryPrefixEndpointDecouplingRegression.reward,
     GameTheory.RefinedSourceResidualRegression.not_forall_positive_no_refinedSourceResidual⟩
 
-/-! **Priority-safe dependency capstone for Theorem 3.4.**  Once existing
-classified branches are selected first, exactly three source obligations
-remain.  A prioritized corrected-pointwise residual must be consumed; a
-positive-joint-reach endpoint with no sure-exit root must be consumed; and a
-divergent unique-exceptional-owner source with negative singleton self-payoff
-must be consumed.  Horizon divergence is no longer assumed: bounded selected
+/-! **Intermediate priority-safe dependency capstone for Theorem 3.4.**  Once
+existing classified branches are selected first, the corrected reduction
+separates three source obligations.  A prioritized corrected-pointwise
+residual must be consumed; a positive-joint-reach endpoint with no sure-exit
+root must be consumed; and a divergent unique-exceptional-owner source with
+negative singleton self-payoff must be consumed.  The last consumer is
+discharged below.  Horizon divergence is no longer assumed: bounded selected
 horizons force S.2 by
 `QuittingUniqueExceptionalOwnerSource.instantPunishment_or_horizon_tendsto_atTop`.
 
@@ -570,6 +572,47 @@ theorem theorem3_4_of_prioritizedSourceClosures
       hresidual 1 (by norm_num)
     exact hfinish (hprioritized delta hdelta hsource)
 
+/-! The divergent exceptional-owner consumer above is now discharged.  A
+compact limit of the source's one-row live masses has three cases: a zero
+limit gives S.2, an interior limit gives S.3, and a unit limit forces the
+singleton floor that compiles directly to S.3.  The strict negative-solo field
+is not needed. -/
+
+/-- Priority-safe capstone after eliminating the divergent exceptional-owner
+source.  The prioritized corrected-pointwise and positive-joint no-sure-exit
+consumers are the only remaining hypotheses; this theorem does not claim
+either consumer unconditionally. -/
+theorem theorem3_4_of_prioritizedAndPositiveSourceClosures
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (hprioritized : ∀ delta : ℝ, 0 < delta →
+      QuittingPrioritizedRefinedSourceResidualAt
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward delta →
+        QuittingStationaryεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingInstantPunishmentεEquilibriumExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+            QuittingWellSupportedAbsorbingSequenceExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward)
+    (hpositive : ∀ _residual : QuittingPositiveJointPrefixReachNoSureExitResidual
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward,
+      QuittingStationaryεEquilibriumExistence
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+        QuittingInstantPunishmentεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingWellSupportedAbsorbingSequenceExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  apply theorem3_4_of_prioritizedSourceClosures reward never
+    hprioritized hpositive
+  intro residual
+  rcases residual.instantPunishment_or_wellSupported with
+    hinstant | hwellSupported
+  · exact Or.inr (Or.inl hinstant)
+  · exact Or.inr (Or.inr hwellSupported)
+
 /-- Theorem 3.4 is unconditional for a one-player quitting game: after
 subtracting the arbitrary payoff at never, nonpositive solo reward makes
 all-Continue stationary, while positive solo reward makes sure quitting
@@ -642,22 +685,23 @@ bounded selected horizons becomes an actual positive-joint-reach source;
 bounded horizons in the exceptional-owner regime directly give S.2.  Thus
 horizon divergence is no longer a separate assumption.
 
-The positive-joint source has a sharper checked endpoint theorem: the actually reached punishment
-suffixes converge to a semantic-carrier point with zero deviation debt for
-every player, and the fixed punished player's prescribed payoff and
-best-response envelope both equal that player's behavioral min-max value.
+The positive-joint source has a sharper checked endpoint theorem: the actually
+reached punishment suffixes converge to a semantic-carrier point with zero
+deviation debt for every player, and the fixed punished player's prescribed
+payoff and best-response envelope both equal that player's behavioral min-max
+value.
 If this endpoint admits an exact one-stage Nash root with some sure quitter,
 actual profiles realizing the endpoint compile to S.2.  Thus the remaining
 positive-reach residual is the explicit finite-dimensional failure of every
-such sure-exit root, not merely positive reach itself.  The other source,
-with one exceptional player-deleted survival clock, is also partly decoded.
-When its repeated-prefix lengths diverge, absorption over the whole prefix
-concentrates on the exceptional owner's singleton outcome.  The source Nash
-inequality then produces S.1 whenever that owner's singleton self-payoff is
-nonnegative.  For a remaining negative owner, the sure-owner instant
-construction gives S.2 unless the punishment value lies strictly above the
-solo self-payoff or an outsider strictly gains by joining the singleton exit.
-Neither inequality is controlled by the current source fields. -/
+such sure-exit root, not merely positive reach itself.
+
+The source with one exceptional player-deleted survival clock is fully
+consumed.  Bounded selected horizons give S.2.  For divergent horizons, a
+zero one-row live-mass limit gives S.2, an interior limit gives S.3, and a unit
+limit forces every own singleton payoff below the exceptional owner's
+singleton vector, which a vanishing positive solo hazard compiles to S.3.
+Consequently only the prioritized corrected-pointwise residual and the
+positive-joint no-sure-exit endpoint remain open. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an
