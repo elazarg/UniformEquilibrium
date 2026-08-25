@@ -303,6 +303,18 @@ quantitative cumulative mass budget. The remaining downstream step is the
 restart or debt/support descent spending this paid or signed summable-port
 budget; no such consumer is checked.
 
+On `Fin 4`, the source construction is now unconditional from the negative
+semantic endpoint. For every terminal exploitability witness and every
+prescribed reset owner with a disjoint two-player base,
+[`QuittingTerminalExploitabilityWitness.nonempty_finFourSameSourcePaidResetCapPort`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourSameSourcePaidResetCapPort.lean)
+selects one positive global-minimum carrier point and one actual stationary
+profile and law which simultaneously carry the base-localized full-gap paid
+row, the fixed-law reset target, and the unchanged suffix of the cap-lifted
+summable port. Thus hard-principal and marked-lasso alignment are unnecessary
+for producing this marked port. The fixed-law dispatch's returned pair is
+retained but is not the cap suffix or port limit; no prescribed-payoff exact
+path, restart, debt descent, or uniform payoff follows.
+
 For a separate actual carrier-root family with one fixed absorption floor,
 `exists_macroscopicDebtDrop_or_chargedSoloBlockerGate` now proves positive
 liminf semantic debt descent or a strict-subsequence gate with one mixed solo
@@ -506,6 +518,15 @@ the live mathematical ledger.
   (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetPayoffAlignment.lean`)
   prove that its prescribed payoff is exactly the payoff of the stationary
   paid target, because both retain the same complete terminal law.
+  Applying the generic cap lift directly to that same stationary target is
+  now packaged by
+  `QuittingTerminalExploitabilityWitness.nonempty_finFourSameSourcePaidResetCapPort`
+  (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourSameSourcePaidResetCapPort.lean`).
+  It retains the positive carrier minimum, the reset dispatch and returned
+  pair, the actual paid/reset profile and law, the full-gap paid observer in
+  the forced base, and the complete summable marked port. The cap chronology
+  deliberately bypasses the separately returned pair, so this closes source
+  construction and alignment but not the all-Continue-port discharge.
   Moreover,
   `QuittingFixedLawResetDispatch.allContinue_of_target_debt_le_source`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFixedLawMinimumTargetStall.lean`)
