@@ -353,6 +353,15 @@
       "scope": "Every arbitrary finite or infinite deterministic calendar with at most one positive quitting hazard per date has literal all-behavior terminal exploitability E satisfying 1 <= 14 E^2 + 67 E and hence E > 1/68. This rules out that strategy architecture on one residual-hard table; the same game has a checked two-owner uniform equilibrium."
     },
     {
+      "id": "simon-normalized-motion-prefix-producer",
+      "subject": "Simon normalized-motion stationary-prefix producer",
+      "kind": "Unconditional alternative theorem",
+      "declaration": "instant_or_stationarilyGenerated_or_normalizedMotionLowerBound",
+      "source": "UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For every nonempty finite quitting game: instant punishment, stationarily generated approximate equilibria, or one fixed positive normalized-motion lower bound on every rational support-local row. Arbitrarily small actual positive-absorption normalized-motion rows produce the stationarily generated branch against arbitrary behavioral deviations. The lower-bound arm asserts no row feasibility, and the theorem does not prove the positive-solo clause, a common compact-carrier scale, Simon Lemma 2, or a finite orbit."
+    },
+    {
       "id": "supplied-simon-finite-orbit-obstruction",
       "subject": "Supplied finite-orbit obstruction in quitting-game semantics",
       "kind": "Conditional obstruction",

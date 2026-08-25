@@ -764,8 +764,13 @@ the live mathematical ledger.
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`
   rounds a sufficiently small Continue coordinate to a sure Quit and produces
-  the instant-punishment branch.  The normalized-motion producer, the common
-  positive survival constant, and Simon Lemma 2 remain open.
+  the instant-punishment branch. The normalized-motion producer is now checked
+  in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean`:
+  actual arbitrarily small rational support-local rows with positive absorption
+  and strict normalized motion produce the stationary-prefix branch against
+  arbitrary behavioral deviations. Its fixed-scale contrapositive asserts no
+  feasibility. The positive-solo clause, the common compact-carrier scale, and
+  Simon Lemma 2 remain open.
 - **Simon positive-absorption splice:**
   `quittingStationarilyGeneratedApproximateEquilibria_of_positiveAbsorptionStationary`
   in `UniformEquilibrium/Quitting/Classification/Existence/PositiveAbsorptionStationarySplice.lean`
