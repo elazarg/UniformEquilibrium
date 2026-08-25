@@ -8,15 +8,17 @@ import UniformEquilibrium.Quitting.Cycles.WeightedRowMotionSeparation
 import Mathlib.Analysis.SpecificLimits.Basic
 
 /-!
-# The scaled cyclic weight has neither stationary nor instant approximate equilibria
+# No fixed scaled-cyclic plan works at every tolerance
 
-This file completes a counterexample package that exhibits a weight (the
-FTV cyclic table scaled by `1/3`, `scaledCyclicWeight`) for which the
-granted constant of (K1) fails on the
-**weighted** correspondence, at a continuation vector claimed to satisfy
-(K1)'s hypothesis package: "neither stationary nor instant approximate
-equilibria". This file proves that hypothesis holds for `scaledCyclicWeight`,
-completing the counterexample end to end.
+This file studies the FTV cyclic table scaled by `1/3`,
+`scaledCyclicWeight`.  It rules out any one fixed constant plan, or any one
+fixed stage-0-sure-quitter plan, that is a global equilibrium at every
+positive tolerance.
+
+This fixed-plan quantifier must not be confused with nonexistence of a
+stationary approximate-equilibrium family, where the stationary row may
+depend on the tolerance.  No uniform positive gap, and hence no such
+moving-row nonexistence theorem, is proved here.
 
 ## The real encoding, and why it is the honest one
 
@@ -53,11 +55,11 @@ adapted to `scaledCyclicWeight`'s own constants.
   shapes both notions use, and the self-consistent stationary payoff.
 * `hasSum_eventuallyConstantPlan`: the summability and closed-form payoff of
   the eventually-constant shape.
-* `no_stationary_approxEquilibrium`: no constant row is a global equilibrium
-  at every tolerance.
-* `no_instant_approxEquilibrium`: no stage-0-sure-quitter configuration is a
-  global equilibrium at every tolerance.
-* `scaledCyclicWeight_neither_stationary_nor_instant`: the package lemma.
+* `no_stationary_approxEquilibrium`: no fixed constant row is a global
+  equilibrium at every tolerance.
+* `no_instant_approxEquilibrium`: no fixed stage-0-sure-quitter configuration
+  is a global equilibrium at every tolerance.
+* `scaledCyclicWeight_neither_stationary_nor_instant`: the fixed-plan package.
 -/
 
 noncomputable section
@@ -96,8 +98,9 @@ def IsGlobalEpsilonEquilibrium (p : CyclicPlan) (ε : ℝ) : Prop :=
   ∀ j : CyclicIndex, ∀ β : ℕ → ℝ, (∀ t, 0 ≤ β t ∧ β t ≤ 1) →
     planPayoff (deviatePlan p j β) j ≤ planPayoff p j + ε
 
-/-- A plan is a global equilibrium at every positive tolerance: the
-`for every ε` quantifier defining both approximate-equilibrium notions. -/
+/-- One fixed plan is a global equilibrium at every positive tolerance.
+This is an exactness predicate for the supplied plan, not the moving-plan
+quantifier `∀ ε > 0, ∃ p, IsGlobalEpsilonEquilibrium p ε`. -/
 def IsGlobalApproxEquilibrium (p : CyclicPlan) : Prop :=
   ∀ ε > 0, IsGlobalEpsilonEquilibrium p ε
 
@@ -560,9 +563,9 @@ theorem pkg_of_isGlobalApproxEquilibrium {x : CyclicIndex → ℝ}
   · have hb := excludedValue_le_of_isGlobalApproxEquilibrium hx0 hx1 hp 2
     rwa [excludedValue_scaledCyclicWeight, continueMassExcl_cyclicIndex, e2p, e2s] at hb
 
-/-- **No stationary approximate family.** No constant row `x \in [0,1]^3` is
-a global equilibrium of `scaledCyclicWeight` at every positive tolerance:
-the "neither stationary" half of (K1)'s hypothesis package. -/
+/-- **No fixed stationary plan works at every tolerance.** No constant row
+`x \in [0,1]^3` is a global equilibrium of `scaledCyclicWeight` at every
+positive tolerance.  The row is fixed before the tolerance is chosen. -/
 theorem no_stationary_approxEquilibrium {x : CyclicIndex → ℝ}
     (hx0 : ∀ j, 0 ≤ x j) (hx1 : ∀ j, x j ≤ 1) :
     ¬ IsGlobalApproxEquilibrium (constantPlan x) := by
@@ -698,16 +701,10 @@ theorem no_instant_approxEquilibrium (quitter : CyclicIndex) (row0 π : CyclicIn
 
 /-! ## The package lemma -/
 
-/-- **The scaled cyclic weight satisfies (K1)'s hypothesis package.** It has
-neither stationary nor instant approximate equilibria, in the sense of
-`IsGlobalApproxEquilibrium`: no constant row, and no stage-0-sure-quitter
-configuration with an arbitrary feasible punishment, is a global equilibrium
-at every positive tolerance. Combined with `no_motion_price_scaledCyclicWeight`
-of `WeightedRowMotionSeparation.lean` — no positive `ρ` prices motion by quit
-mass on the weighted correspondence at this same weight — this completes the
-the counterexample end to end: (K1)
-is granted exactly for weights meeting this package, `scaledCyclicWeight`
-meets it, and yet no such `ρ` exists. -/
+/-- **Fixed-plan exclusion package.** No fixed constant row, and no fixed
+stage-0-sure-quitter configuration with an arbitrary feasible punishment, is
+a global equilibrium at every positive tolerance.  This does not exclude a
+family whose row or punishment varies with the tolerance. -/
 theorem scaledCyclicWeight_neither_stationary_nor_instant :
     (∀ x : CyclicIndex → ℝ, (∀ j, 0 ≤ x j) → (∀ j, x j ≤ 1) →
         ¬ IsGlobalApproxEquilibrium (constantPlan x)) ∧

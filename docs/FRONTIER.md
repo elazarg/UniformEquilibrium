@@ -767,19 +767,26 @@ the live mathematical ledger.
   rows. The spine branch still needs the all-restart survival condition (or an
   equivalent semantic boundary); compactification does not supply it. No
   global perfect sequence or finite orbit is produced.
-- **AGKRS Theorem 3.4 dependency boundary:** the corrected pointwise source
-  analysis now leaves exactly three literal residuals: an all-Continue source
-  phantom, a positive-absorption sharp attachment failure, or a persistent
-  positive-singleton suffix defect. In the diffuse generated branch, positive
-  joint reach gives the instant-punishment branch whenever a reached
-  punishment-floor endpoint has a sure-exit Nash prefix; otherwise the source
-  records that every such endpoint fails that test. A divergent unique-
-  exceptional-owner source with nonnegative owner singleton payoff gives the
-  stationary branch. The checked Literature capstone
-  `theorem3_4_of_refinedSourceClosures` composes the exclusion of exactly these
-  source residuals to the literal S.1/S.2/S.3 conclusion. Those exclusions and
-  the required exceptional-owner hypotheses remain open, so the unconditional
-  general `theorem3_4` is still the sole proof hole in the paper-facing file.
+- **AGKRS Theorem 3.4 dependency boundary:** a raw refined source residual can
+  coexist with exact S.1, as checked by
+  `RefinedSourceResidualRegression.stationaryExistence_and_refinedSourceResidualAt`.
+  The proof must therefore prioritize classified branches rather than exclude
+  every residual.  The priority-safe theorem
+  `QuittingPayoffTable.fixedCorrectedBranches_or_cofinally_prioritizedResidual`
+  gives a fixed corrected branch, or cofinally many scales where a refined
+  source residual remains and all four pointwise branches fail.  The diffuse
+  generated branch is now reduced by
+  `stationary_or_instant_or_wellSupported_or_noSureExit_or_negativeOwner` to
+  S.1, S.2, well-supported S.3, an exact positive-reach endpoint with no
+  sure-exit Nash prefix, or a divergent exceptional owner with negative
+  singleton self-payoff.  Bounded exceptional horizons already give S.2.  In
+  the negative-owner case, failure of S.2 forces either punishment value above
+  the owner's singleton payoff or a profitable outsider joining that singleton
+  exit.  The checked Literature theorem
+  `theorem3_4_of_prioritizedSourceClosures` composes consumers for the three
+  remaining source classes to the literal S.1/S.2/S.3 conclusion.  No such
+  universal consumers, and no counterexample, are known; the unconditional
+  general `theorem3_4` remains the sole proof hole in the paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`

@@ -475,14 +475,17 @@ from the rendered images to avoid propagating that corruption.
 > in the payoffs.
 
 **The "special class" is escape games (§5, Theorem 4 below) — not Theorem 3.**
-Theorem 3 lives in §4.4 ("Equivalences"), proved for **arbitrary** quitting
-games from the machinery of §4.1–4.3, before §5's topological "spanning
-property" is introduced at all. This resolves, in the direction favorable to
-AGKRS, the question this wing record previously carried as unverified
-inference ("Theorem 3 is plausibly the general principle rather than the
-escape-game theorem itself"): **confirmed.** AGKRS's citation of "Theorem 3"
-to source a fully general S.1/S.2/S.3 characterization is not reaching past a
-narrower escape-game hypothesis than they use it for.
+Theorem 3 lives in §4.4 ("Equivalences") and is stated for arbitrary quitting
+games, before §5's topological "spanning property" is introduced.  Thus the
+citation does not accidentally invoke only the later escape-game class.
+However, Simon's 2012 correction is mathematically decisive: the proof of the
+relevant 2007 lemma requires nonexistence of *stationarily generated*
+approximate equilibria, not merely nonexistence of stationary approximate
+equilibria.  Consequently the citation leaves a fourth generated regime and
+does not, by itself, prove AGKRS's displayed S.1/S.2/S.3 trichotomy.  The
+checked paper-facing account is
+`Literature/AshkenaziGolanKrasikovRainerAndSolan2022.lean`; the corrected source
+semantics are recorded in `Literature/Simon2012.lean`.
 
 ### The model Theorem 3 presupposes (§4.1, p. 14)
 

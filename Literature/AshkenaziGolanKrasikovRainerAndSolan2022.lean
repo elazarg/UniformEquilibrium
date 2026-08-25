@@ -3,6 +3,9 @@ import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Depend
 import UniformEquilibrium.Quitting.Classification.Existence.ExceptionalOwnerPrefixConcentration
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointPrefixReachEndpoint
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveRhoLandingClassificationBoundary
+import UniformEquilibrium.Quitting.Classification.Existence.PrioritizedRefinedSourceBoundary
+import UniformEquilibrium.Quitting.Classification.Existence.RefinedSourceResidualRegression
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedNegativeOwnerBoundary
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRootSequence
 import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
@@ -466,6 +469,107 @@ theorem theorem3_4_of_refinedSourceClosures
       exact Or.inl ((smallStationaryBranch_iff table).mpr
         (table.stationaryεEquilibriumExistence_iff.mpr hstationary))
 
+/-! The preceding source capstone is sufficient but its pointwise exclusion
+premise is not a necessary property of games satisfying Theorem 3.4.  The
+unit one-player game has the exact stationary branch and simultaneously has
+a positive-singleton refined source residual at every positive tolerance.
+The corrected dependency must therefore give classified branches priority
+and retain only residuals occurring where all four pointwise outputs fail. -/
+
+/-- Literal failure of unconditional refined-residual exclusion in a game
+already belonging to S.1.  This refutes that proof route, not Theorem 3.4. -/
+theorem refinedSourceExclusion_not_necessary :
+    QuittingStationaryεEquilibriumExistence
+        GameTheory.StationaryPrefixEndpointDecouplingRegression.reward ∧
+      ¬(∀ delta : ℝ, 0 < delta →
+        ¬QuittingCorrectedPointwiseRefinedSourceResidualAt
+          GameTheory.StationaryPrefixEndpointDecouplingRegression.reward delta) := by
+  exact ⟨quittingStationaryεEquilibriumExistence_onePlayer
+      GameTheory.StationaryPrefixEndpointDecouplingRegression.reward,
+    GameTheory.RefinedSourceResidualRegression.not_forall_positive_no_refinedSourceResidual⟩
+
+/-! **Priority-safe dependency capstone for Theorem 3.4.**  Once existing
+classified branches are selected first, exactly three source obligations
+remain.  A prioritized corrected-pointwise residual must be consumed; a
+positive-joint-reach endpoint with no sure-exit root must be consumed; and a
+divergent unique-exceptional-owner source with negative singleton self-payoff
+must be consumed.  Horizon divergence is no longer assumed: bounded selected
+horizons force S.2 by
+`QuittingUniqueExceptionalOwnerSource.instantPunishment_or_horizon_tendsto_atTop`.
+
+Each consumer below is allowed to land in any of the three table branches.
+They are hypotheses, not hidden reformulations of the conclusion: their
+domains retain the literal source certificate that remains after the checked
+priority reductions. -/
+theorem theorem3_4_of_prioritizedSourceClosures
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (hprioritized : ∀ delta : ℝ, 0 < delta →
+      QuittingPrioritizedRefinedSourceResidualAt
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward delta →
+        QuittingStationaryεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingInstantPunishmentεEquilibriumExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+            QuittingWellSupportedAbsorbingSequenceExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward)
+    (hpositive : ∀ _residual : QuittingPositiveJointPrefixReachNoSureExitResidual
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward,
+      QuittingStationaryεEquilibriumExistence
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+        QuittingInstantPunishmentεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingWellSupportedAbsorbingSequenceExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward)
+    (hnegative : ∀ _residual : QuittingDivergentNegativeExceptionalOwnerResidual
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward,
+        QuittingStationaryεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingInstantPunishmentεEquilibriumExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+            QuittingWellSupportedAbsorbingSequenceExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  intro hexists
+  let table : QuittingPayoffTable ι := ⟨reward, never⟩
+  have hfinish :
+      QuittingStationaryεEquilibriumExistence table.zeroNeverReward ∨
+        QuittingInstantPunishmentεEquilibriumExistence table.zeroNeverReward ∨
+          QuittingWellSupportedAbsorbingSequenceExistence table.zeroNeverReward →
+        SmallStationaryBranch table ∨ SmallPunishmentBranch table ∨
+          SmallSequentialBranch table := by
+    rintro (hstationary | hinstant | hsequential)
+    · exact Or.inl ((smallStationaryBranch_iff table).mpr
+        (table.stationaryεEquilibriumExistence_iff.mpr hstationary))
+    · exact Or.inr (Or.inl ((smallPunishmentBranch_iff table).mpr
+        (table.instantPunishmentεEquilibriumExistence_iff.mpr hinstant)))
+    · exact Or.inr (Or.inr ((smallSequentialBranch_iff table).mpr
+        (table.sequentiallyεPerfectAbsorbingExistence_iff.mpr
+          (quittingSequentiallyεPerfectAbsorbingExistence_of_wellSupported
+            hsequential))))
+  have htableExists : table.ApproximateEquilibriumExistence := hexists
+  rcases table.fixedCorrectedBranches_or_cofinally_prioritizedResidual
+      htableExists with
+    hstationary | hinstant | hsequential | hdiffuse | hresidual
+  · exact hfinish (Or.inl hstationary)
+  · exact hfinish (Or.inr (Or.inl hinstant))
+  · exact hfinish (Or.inr (Or.inr hsequential))
+  · rcases stationary_or_instant_or_wellSupported_or_noSureExit_or_negativeOwner
+        hdiffuse with
+      hstationary | hinstant | hsequential | hnoSureExit | hnegativeOwner
+    · exact hfinish (Or.inl hstationary)
+    · exact hfinish (Or.inr (Or.inl hinstant))
+    · exact hfinish (Or.inr (Or.inr hsequential))
+    · obtain ⟨residual⟩ := hnoSureExit
+      exact hfinish (hpositive residual)
+    · obtain ⟨residual⟩ := hnegativeOwner
+      exact hfinish (hnegative residual)
+  · obtain ⟨delta, hdelta, _hdeltaOne, hsource⟩ :=
+      hresidual 1 (by norm_num)
+    exact hfinish (hprioritized delta hdelta hsource)
+
 /-- Theorem 3.4 is unconditional for a one-player quitting game: after
 subtracting the arbitrary payoff at never, nonpositive solo reward makes
 all-Continue stationary, while positive solo reward makes sure quitting
@@ -533,8 +637,12 @@ exact stationary equilibrium, so that half of the former boundary belongs
 to S.1.  The persistent late-suffix deviation is an exact checked defect,
 not itself an equilibrium branch or a refutation of Theorem 3.4.
 
-The second dependency remains separate.  Its positive-joint-reach source now
-has a sharper checked endpoint theorem: the actually reached punishment
+The second dependency is also priority-reduced.  A positive-live source with
+bounded selected horizons becomes an actual positive-joint-reach source;
+bounded horizons in the exceptional-owner regime directly give S.2.  Thus
+horizon divergence is no longer a separate assumption.
+
+The positive-joint source has a sharper checked endpoint theorem: the actually reached punishment
 suffixes converge to a semantic-carrier point with zero deviation debt for
 every player, and the fixed punished player's prescribed payoff and
 best-response envelope both equal that player's behavioral min-max value.
@@ -546,8 +654,10 @@ with one exceptional player-deleted survival clock, is also partly decoded.
 When its repeated-prefix lengths diverge, absorption over the whole prefix
 concentrates on the exceptional owner's singleton outcome.  The source Nash
 inequality then produces S.1 whenever that owner's singleton self-payoff is
-nonnegative.  What remains on this arm is a negative singleton self-payoff,
-or a source for which divergent prefix length has not been obtained. -/
+nonnegative.  For a remaining negative owner, the sure-owner instant
+construction gives S.2 unless the punishment value lies strictly above the
+solo self-payoff or an outsider strictly gains by joining the singleton exit.
+Neither inequality is controlled by the current source fields. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an

@@ -95,8 +95,9 @@ claim about all possible proofs.
   Symmetric trembles are weighted-near-Nash at every small tolerance while
   their value motion per quit mass vanishes
   (`WeightedRowMotionSeparation.no_motion_price_scaledCyclicWeight`); the
-  same weight has neither stationary nor instant approximate equilibrium
-  families (`ScaledCyclicWeightNoApproximateEquilibria`). Consequently the
+  same weight admits no one fixed stationary or instant plan that works at
+  every positive tolerance (`ScaledCyclicWeightNoApproximateEquilibria`).
+  This does not rule out plans varying with the tolerance. Consequently the
   support-perfect/weighted distinction is load-bearing everywhere.
 - **What the weighted notion does support**: the continue mass of a
   weighted-near row at a rational vector is bounded below
