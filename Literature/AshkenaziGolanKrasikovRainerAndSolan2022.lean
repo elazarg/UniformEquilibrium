@@ -2,6 +2,7 @@ import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
 import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
 import UniformEquilibrium.Quitting.Classification.Existence.DivergentExceptionalOwnerS3Dispatch
 import UniformEquilibrium.Quitting.Classification.Existence.ExceptionalOwnerPrefixConcentration
+import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointEndpointSequentialReduction
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointPrefixReachEndpoint
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveRhoLandingClassificationBoundary
 import UniformEquilibrium.Quitting.Classification.Existence.PrioritizedRefinedSourceBoundary
@@ -613,6 +614,53 @@ theorem theorem3_4_of_prioritizedAndPositiveSourceClosures
   · exact Or.inr (Or.inl hinstant)
   · exact Or.inr (Or.inr hwellSupported)
 
+/-! The positive-joint consumer also contracts.  Its reached zero-debt
+endpoint starts a canonical exact semantic-prefix orbit.  Nonsummable
+absorption on that orbit gives S.3 through returned single-seam lassos.
+Consequently the only surviving positive-joint case has both the original
+no-sure-exit property and a summable exact-prefix all-Continue port. -/
+
+/-- Priority-safe capstone with the positive-joint consumer narrowed to its
+summable exact-prefix port.  The prioritized source and this summable port are
+still hypotheses; neither is claimed to close unconditionally. -/
+theorem theorem3_4_of_prioritizedAndSummablePortClosures
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (hprioritized : ∀ delta : ℝ, 0 < delta →
+      QuittingPrioritizedRefinedSourceResidualAt
+          (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward delta →
+        QuittingStationaryεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingInstantPunishmentεEquilibriumExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+            QuittingWellSupportedAbsorbingSequenceExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward)
+    (hport : ∀
+      (_residual : QuittingPositiveJointPrefixReachNoSureExitResidual
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward)
+      (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint
+        (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward),
+      ¬endpoint.HasSureExitNashPrefix →
+      Nonempty
+          (QuittingPunishmentFloorInfiniteOrbit.SummableChargeAllContinuePort
+            endpoint.exactPrefixOrbit) →
+        QuittingStationaryεEquilibriumExistence
+            (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+          QuittingInstantPunishmentεEquilibriumExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward ∨
+            QuittingWellSupportedAbsorbingSequenceExistence
+              (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  apply theorem3_4_of_prioritizedAndPositiveSourceClosures reward never
+    hprioritized
+  intro residual
+  rcases residual.wellSupported_or_summableExactPrefixPort with
+    hwellSupported | ⟨endpoint, hnoSureExit, hportExists⟩
+  · exact Or.inr (Or.inr hwellSupported)
+  · exact hport residual endpoint hnoSureExit hportExists
+
 /-- Theorem 3.4 is unconditional for a one-player quitting game: after
 subtracting the arbitrary payoff at never, nonpositive solo reward makes
 all-Continue stationary, while positive solo reward makes sure quitting
@@ -700,8 +748,11 @@ consumed.  Bounded selected horizons give S.2.  For divergent horizons, a
 zero one-row live-mass limit gives S.2, an interior limit gives S.3, and a unit
 limit forces every own singleton payoff below the exceptional owner's
 singleton vector, which a vanishing positive solo hazard compiles to S.3.
-Consequently only the prioritized corrected-pointwise residual and the
-positive-joint no-sure-exit endpoint remain open. -/
+The positive-joint endpoint starts a canonical exact semantic-prefix orbit.
+If its absorption charge is nonsummable, returned single-seam lassos give
+S.3.  Hence only the prioritized corrected-pointwise residual and the
+positive-joint endpoint's no-sure-exit summable all-Continue port remain
+open. -/
 
 /-! **Theorem 3.5 (refuted printed claim).** For sufficiently small ε, every
 absorbing profile at which all players are sequentially ε-perfect is an

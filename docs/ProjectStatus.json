@@ -368,7 +368,16 @@
       "declaration": "QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. The checked Literature capstone theorem3_4_of_prioritizedAndPositiveSourceClosures leaves exactly the prioritized pointwise and positive-joint/no-sure-exit consumers; unconditional theorem3_4 remains open."
+      "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. The sharper Literature capstone is recorded separately; unconditional theorem3_4 remains open."
+    },
+    {
+      "id": "agkrs-positive-joint-sequential-reduction",
+      "subject": "AGKRS positive-joint endpoint and phantom reduction",
+      "kind": "Unconditional source reductions and conditional Literature capstone",
+      "declaration": "wellSupported_or_stationary_or_allContinuePhantom",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortPhantomReduction.lean",
+      "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
+      "scope": "Every reached positive-joint punishment endpoint has a canonical exact semantic-prefix orbit. Nonsummable absorption yields well-supported S.3; a summable port yields S.1 or the common nonzero all-Continue phantom, equivalently the existing positive-singleton defect at each tolerance. Forgetting to the corrected pointwise residual discards endpoint, no-sure-exit, and orbit provenance and returns a raw residual, not a prioritized one, so no branch consumer or closure follows. The generic diagonal-carrier theorem gives a uniform payoff if (v,v) belongs to the terminal-semantic carrier, but such membership is not proved for the port limit. The Literature capstone still leaves the prioritized and summable-port consumers; unconditional theorem3_4 remains open."
     },
     {
       "id": "simon-normalized-motion-prefix-producer",
