@@ -402,6 +402,7 @@ import MathUE.SimplexApproximation
 import MathUE.SparseVanishingSchedule
 import MathUE.SqrtRate
 import MathUE.SublinearCostSchedule
+import MathUE.SummableChargeSurvival
 import MathUE.SurvivalProduct
 import MathUE.SurvivalProductComparison
 import MathUE.SurvivalSegmentBalance
@@ -706,6 +707,7 @@ import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.FlatCirculat
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.MinimumFiberSupportDrop
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.NormalizedCurvaturePaidRow
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.NormalizedCurvatureStrategicDispatch
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.PaidRowExactPortAlternative
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.PositiveTotalSlopeAtomAccess
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.PositiveTotalSlopeFullReplacement
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.RectangleResetFaceMinimizer

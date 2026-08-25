@@ -170,10 +170,10 @@
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "Missing: fix one positive lower bound on total path charge while making endpoint payoff vectors arbitrarily close, or source-match the paid row to a summable exact orbit restart that spends the checked fixed signed terminal-label budget or decreases debt. The former fixed-edge target is a sufficient special case and retains its checked tight-face restrictions.",
-      "source": "UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean",
-      "declaration": "GameTheory.QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily",
-      "evidence_seals": ["M", "L", "C"]
+      "meaning": "Missing upstream: prove that the actual paid profile's prescribed payoff dominates the behavioral punishment floor, replace it by a source-matched floor-safe paid profile, or descend when this fails. Once floor-safe, one literal marked exact orbit is checked: nonsummable charge closes by cumulative payoff recurrence, while summable charge reaches an all-Continue semantic port with positive paid-suffix reach under the terminal witness. Missing downstream only in that summable arm: restart while spending its fixed signed terminal-label budget or decrease debt.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidRowExactPortAlternative.lean",
+      "declaration": "GameTheory.QuittingPaidRowFloorSafeSource.exists_markedExactOrbit_alternative_of_witness",
+      "evidence_seals": ["M", "L", "A", "C"]
     },
     {
       "id": "CHRONOLOGICAL-SHADOWING-TO-UNIFORM-PAYOFF",
