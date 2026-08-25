@@ -56,6 +56,15 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "quitting-passive-player-padding",
+      "subject": "Upward transport of quitting-game terminal exploitability",
+      "kind": "Unconditional quantitative transport theorem",
+      "declaration": "HasTerminalExploitabilityGap.passivePlayerPadding_canonical",
+      "source": "UniformEquilibrium/Quitting/Terminal/PassivePlayerPaddingCanonical.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Adding any nonempty finite passive player block preserves an all-behavior terminal exploitability gap with the exact factor penalty / (penalty + card J * canonicalWidth); the checked canonical corollary propagates nonexistence to the padded Sum player type."
+    },
+    {
       "id": "cumulative-charge-near-return",
       "subject": "Cumulative-charge payoff near-returns and infinite exact floor orbits",
       "kind": "Conditional consumer and analytic dichotomy",

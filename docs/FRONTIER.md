@@ -55,6 +55,19 @@ fixed positive terminal gain against every behavioral profile
              no uniform-equilibrium payoff
 ```
 
+The negative endpoint is upward closed under finite passive-player padding.
+[`HasTerminalExploitabilityGap.passivePlayerPadding_canonical`](../UniformEquilibrium/Quitting/Terminal/PassivePlayerPaddingCanonical.lean)
+adds any nonempty finite player block and retains the exact fraction
+`penalty / (penalty + card J * canonicalWidth)` of a supplied terminal gap.
+The proof projects every actual padded behavioral profile to the old game,
+lifts an arbitrary old behavioral deviation, and balances its possible loss
+against the aggregate Never gains of the new players. The canonical
+nonexistence corollary
+[`not_exists_uniformEquilibriumPayoff_passivePlayerPadding_canonical`](../UniformEquilibrium/Quitting/Terminal/PassivePlayerPaddingCorollaries.lean)
+therefore sends any quitting-game counterexample on `I` to one on `I ⊕ J`.
+This is a counterexample transport theorem, not a construction of a
+counterexample or a reduction from higher to lower player cardinality.
+
 ## Established construction boundary
 
 The integrated corpus contains several sound ways to reach the positive
