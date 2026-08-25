@@ -146,6 +146,27 @@ def SequentiallyEpsilonPerfect
   ∀ time : ℕ, EpsilonPerfectRow reward
     (sequentialContinuationPayoff reward never roots time) (roots time) ε
 
+/-- The explicit continuation payoff in Definition 3.2 is exactly the
+arbitrary-never table continuation used by branch S.3. -/
+theorem sequentialContinuationPayoff_eq_tableTailVector
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (time : ℕ) :
+    sequentialContinuationPayoff reward never roots time =
+      (⟨reward, never⟩ : QuittingPayoffTable ι).rootSequenceTailVector
+        roots (time + 1) :=
+  rfl
+
+/-- Consequently, the paper-facing sequential-perfectness predicate and the
+row predicate in the table branch have identical quantifiers and values. -/
+theorem sequentiallyEpsilonPerfect_iff_tableRows
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (ε : ℝ) :
+    SequentiallyEpsilonPerfect reward never roots ε ↔
+      ∀ time : ℕ, QuittingRowεPerfect reward
+        ((⟨reward, never⟩ : QuittingPayoffTable ι).rootSequenceTailVector
+          roots (time + 1)) (roots time) ε :=
+  Iff.rfl
+
 /-! **Remark 3.3 (paper).** In the one-shot continuation game at stage `n`,
 the payoff from the prescribed row is the conditional payoff `γ_n`.  Quitting
 now gives `r(Qᶦ,x_n⁻ᶦ)`, while continuing gives the mixture of absorption by
@@ -158,6 +179,15 @@ def EpsilonEquilibriumExistence
   ∀ ε : ℝ, 0 < ε → ∃ profile : (quittingGame reward).BehaviorProfile,
     (quittingGame reward).IsεAsymptoticNash
       (QuittingPayoffTable.terminalPayoff ⟨reward, never⟩) ε profile
+
+/-- The paper-facing existence premise is definitionally the arbitrary-never
+table premise used by the checked classification results.  No normalization
+or restriction to root-sequence profiles is hidden in this identification. -/
+theorem epsilonEquilibriumExistence_iff_table
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
+    EpsilonEquilibriumExistence reward never ↔
+      (⟨reward, never⟩ : QuittingPayoffTable ι).ApproximateEquilibriumExistence :=
+  Iff.rfl
 
 /-! The three fixed-branch predicates below use the arbitrary-never payoff
 table interfaces already present in `TableExistenceBranches`.  Each branch has
@@ -232,6 +262,20 @@ theorem smallSequentialBranch_iff (table : QuittingPayoffTable ι) :
         (hperfect time).mono (by linarith)⟩
   · intro hbranch
     exact ⟨1, by norm_num, fun ε hε _ => hbranch ε hε⟩
+
+/-- The literal three disjuncts in the paper statement are exactly the three
+arbitrary-never table branches used by the dependency capstones.  In
+particular, the conditional results below neither weaken S.2 nor replace
+S.3's actual absorbing profile by a Bellman annotation. -/
+theorem smallBranchAlternative_iff_tableBranches
+    (table : QuittingPayoffTable ι) :
+    (SmallStationaryBranch table ∨ SmallPunishmentBranch table ∨
+        SmallSequentialBranch table) ↔
+      (table.StationaryεEquilibriumExistence ∨
+        table.InstantPunishmentεEquilibriumExistence ∨
+          table.SequentiallyεPerfectAbsorbingExistence) := by
+  rw [smallStationaryBranch_iff, smallPunishmentBranch_iff,
+    smallSequentialBranch_iff]
 
 /-- The positive-solo weak-preference regime lands in the paper's literal
 S.3 branch after playerwise scaling relative to the never payoff. -/
@@ -439,6 +483,35 @@ theorem theorem3_4_onePlayer
     (⟨reward, never⟩ : QuittingPayoffTable ι).stationaryεEquilibriumExistence_iff]
   exact quittingStationaryεEquilibriumExistence_onePlayer
     (⟨reward, never⟩ : QuittingPayoffTable ι).zeroNeverReward
+
+/-- Combining the empty and one-player arguments gives the unconditional
+paper conclusion for every finite player type of cardinality at most one.
+The equilibrium-existence premise is retained to match Theorem 3.4, although
+the stationary conclusion in these cases does not need it. -/
+theorem theorem3_4_subsingleton
+    [Subsingleton ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
+    EpsilonEquilibriumExistence reward never →
+      SmallStationaryBranch ⟨reward, never⟩ ∨
+        SmallPunishmentBranch ⟨reward, never⟩ ∨
+          SmallSequentialBranch ⟨reward, never⟩ := by
+  intro hexists
+  cases isEmpty_or_nonempty ι with
+  | inl hempty =>
+      left
+      let table : QuittingPayoffTable ι := ⟨reward, never⟩
+      rw [smallStationaryBranch_iff,
+        table.stationaryεEquilibriumExistence_iff]
+      intro ε _hε
+      refine ⟨fun who => hempty.elim who, ?_⟩
+      intro who
+      exact hempty.elim who
+  | inr hnonempty =>
+      let default : ι := Classical.choice hnonempty
+      letI : Unique ι :=
+        { default := default
+          uniq := fun _ => Subsingleton.elim _ default }
+      exact theorem3_4_onePlayer reward never hexists
 
 /-! **Current checked boundary inside the first dependency.**  The
 arbitrary-never extraction reaches the corrected four-way conclusion unless
@@ -758,8 +831,15 @@ conclusion from the displayed principal-`Q` hypothesis.  Its proof invokes
 uses a support-indexed control correspondence.  The printed correspondence in
 the paper does not have the closed-graph property asserted in its Step 2, so
 the checked proof is not a formalization of that defective intermediate
-claim.  In particular, the paper is not being credited with the corrected
-support-indexed correspondence. -/
+claim.  Concretely, the printed control set at a boundary point `q` imposes
+an inward inequality only on the zero coordinates of `q`.  There is a
+two-player zero-diagonal projective-`Q` matrix for which, along
+`qⁿ=(0,1/(n+1))`, a fixed control direction `(0,-1)` is admissible: only
+its first coordinate is tested.  At the limit `q=(0,0)`, both coordinates
+are tested and the same direction is rejected.  This is exactly the missing
+closed-graph implication, not a defect in the theorem's principal-`Q`
+hypothesis.  In particular, the paper is not being credited with the
+corrected support-indexed correspondence. -/
 theorem theorem5_2
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
