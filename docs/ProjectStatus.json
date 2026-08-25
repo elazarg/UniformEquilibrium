@@ -75,12 +75,12 @@
     },
     {
       "id": "paid-row-exact-port-alternative",
-      "subject": "Actual-source paid cap-lifted summable port",
-      "kind": "Conditional actual-source theorem",
-      "declaration": "nonempty_capLiftedSummablePort_of_tangentFamily",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapLiftedSummablePort.lean",
+      "subject": "Paid cap-port exact trichotomy",
+      "kind": "Conditional exact trichotomy with a branchwise consumer",
+      "declaration": "exactTrichotomy",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortExactTrichotomy.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "At positive global minimum terminal-semantic debt, every attained positive paid first-disagreement source generates exact cap-Nash prefixes without a prescribed-payoff floor hypothesis. Their absorption is summable with an exact debt budget and a uniform debt-ratio lower bound on reaching the unchanged paid suffix. Every finite prefix carries the correspondingly shifted paid row with uniform positive gain, while both cap and actual terminal semantics converge to all-Continue ports. No restart, cumulative-charge near-return, or uniform-payoff consumer is supplied."
+      "scope": "Every supplied actual paid cap-lifted summable port lies in exactly one of three pairwise-disjoint branches. Positive total absorption with zero cap displacement produces cumulative admissible payoff near-returns and a uniform-equilibrium payoff. Positive displacement gives the exact D_* rho / (2M) semantic-debt drop. Zero absorption makes every literal cap root all Continue and preserves the whole semantic pair and full paid row without loss. The descent has no regenerated source or well-founded consumer, and the inert branch remains open."
     },
     {
       "id": "fin-four-same-source-paid-reset-cap-port",
@@ -90,6 +90,15 @@
       "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourSameSourcePaidResetCapPort.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
       "scope": "Every Fin 4 terminal exploitability witness and every prescribed reset owner with a disjoint two-player base supply one actual stationary profile and law which simultaneously carry the full-gap paid row, fixed-law reset target, and unchanged suffix of a cap-lifted summable port. The positive carrier minimum and separate reset-returned pair are retained. The cap lift bypasses that returned pair and supplies no prescribed-payoff path, restart, debt descent, or uniform payoff."
+    },
+    {
+      "id": "fin-four-singleton-base-double-cap-port",
+      "subject": "Fin4 singleton-base same-law reset and double paid cap port",
+      "kind": "Unconditional actual-source reduction theorem",
+      "declaration": "FinFourQuantitativeFullSupportHardResidual.nonempty_paidCapDoublePort",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/SingletonBaseResetRepairPaidCapDoublePort.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every bounded Fin 4 quantitative hard residual and prescribed singleton owner produce one actual singleton-base stationary source with three solved free coordinates, a unique full-gap paid debtor, a quantitative strict-superset atom, and a same-law fixed reset dispatch. Its literal owner repair carries a second paid row at a distinct observer. Cap-lifting both profiles from the same positive minimum leaves quantitative debt descent on one profile or literal inert stalls on both; no descent regeneration or identification of the two inert laws is supplied."
     },
     {
       "id": "quitting-reduced-support-rank-alternative",
