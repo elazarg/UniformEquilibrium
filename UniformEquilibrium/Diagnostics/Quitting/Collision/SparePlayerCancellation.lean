@@ -112,8 +112,10 @@ theorem quittingSpareCapExposure_self_eq_zero
     (replacement : (quittingGame reward).BehaviorStrategy spare) :
     quittingSpareCapExposure reward source spare replacement spare = 0 := by
   unfold quittingSpareCapExposure quittingSpareReplacementProfile
-  rw [quittingContinuationBestResponseValue_update_self]
-  ring
+  unfold quittingContinuationBestResponseValue
+  congr 2
+  funext deviation
+  rw [Function.update_idem]
 
 /-- Exact aggregate bookkeeping for the same-profile intervention. -/
 theorem quittingTerminalSemanticDebtSum_spareReplacement_sub_eq
@@ -214,14 +216,10 @@ theorem spareReplacement_terminalNash_or_debtDecrease_or_rankDrop
           who ≤ ε := by
     by_cases hwhoSpare : who = spare
     · subst who
-      change quittingContinuationBestResponseValue reward
-            (quittingSpareReplacementProfile reward source spare replacement)
-            spare -
-          quittingTerminalPayoff reward
-            (quittingSpareReplacementProfile reward source spare replacement)
-            spare ≤ ε
-      unfold quittingSpareReplacementProfile
-      rw [quittingContinuationBestResponseValue_update_self]
+      rw [quittingTerminalSemanticDebt_spareReplacement_eq,
+        quittingSpareCapExposure_self_eq_zero]
+      unfold quittingSparePayoffGain
+      unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
       linarith
     · rw [quittingTerminalSemanticDebt_spareReplacement_eq]
       linarith [hcollision who hwhoSpare hwhoResidual]
