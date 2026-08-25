@@ -66,6 +66,29 @@ theorem quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
       reward pair.2 root who hnash,
     quittingRootSuccessorPayoff_sub_eq_continueMass_mul]
 
+/-- Exact Nash against the envelope makes the prefixed envelope the exact
+Bellman successor of the original envelope. -/
+theorem quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash
+    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
+    (hnash : IsεQuittingRootNash reward pair.2 0 root) :
+    (quittingTerminalSemanticPrefix reward root pair).2 =
+      quittingRootSuccessorPayoff reward pair.2 root := by
+  funext who
+  have hquit : quittingRootQuitPayoff reward pair.1 root who =
+      quittingRootQuitPayoff reward pair.2 root who :=
+    quittingRootQuitPayoff_continuation_invariant
+      reward pair.1 pair.2 root who
+  have hcontinue :
+      quittingRootContinuePayoff reward
+          (Function.update pair.1 who (pair.2 who)) root who =
+        quittingRootContinuePayoff reward pair.2 root who := by
+    apply quittingRootExpectedPayoff_continuation_congr
+    simp
+  unfold quittingTerminalSemanticPrefix
+  dsimp only
+  rw [quittingRootSuccessorPayoff_eq_max_of_isZeroNash
+    reward pair.2 root who hnash, hquit, hcontinue]
+
 /-- Literal specialization of exact cap--Nash debt scaling.  The root is
 selected against the continuation's coordinatewise unilateral cap, while the
 profile actually executed after all Continue remains the common continuation.

@@ -170,10 +170,10 @@
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "Missing upstream: prove that the actual paid profile's prescribed payoff dominates the behavioral punishment floor, replace it by a source-matched floor-safe paid profile, or descend when this fails. Once floor-safe, one literal marked exact orbit is checked: nonsummable charge closes by cumulative payoff recurrence, while summable charge reaches an all-Continue semantic port with positive paid-suffix reach under the terminal witness. Missing downstream only in that summable arm: restart while spending its fixed signed terminal-label budget or decrease debt.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidRowExactPortAlternative.lean",
-      "declaration": "GameTheory.QuittingPaidRowFloorSafeSource.exists_markedExactOrbit_alternative_of_witness",
-      "evidence_seals": ["M", "L", "A", "C"]
+      "meaning": "The former prescribed-payoff floor obstruction is removed. From the actual attained paid source at positive minimum debt, exact cap-Nash prefixes have summable absorption, uniform paid-suffix reach, shifted paid rows with fixed positive gain, and a full terminal-semantic all-Continue limit port. Missing downstream: restart while spending that paid or signed terminal budget, produce cumulative-charge payoff near-return, or strictly decrease debt/support complexity.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapLiftedSummablePort.lean",
+      "declaration": "nonempty_capLiftedSummablePort_of_tangentFamily",
+      "evidence_seals": ["M", "L", "A"]
     },
     {
       "id": "CHRONOLOGICAL-SHADOWING-TO-UNIFORM-PAYOFF",
