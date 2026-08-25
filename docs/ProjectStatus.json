@@ -75,12 +75,12 @@
     },
     {
       "id": "paid-row-exact-port-alternative",
-      "subject": "Paid cap-port exact trichotomy",
-      "kind": "Conditional exact trichotomy with a branchwise consumer",
-      "declaration": "exactTrichotomy",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortExactTrichotomy.lean",
+      "subject": "Actual-profile paid cap ports and minimum-fiber contraction",
+      "kind": "Conditional actual-source construction and exact boundary",
+      "declaration": "HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "Every supplied actual paid cap-lifted summable port lies in exactly one of three pairwise-disjoint branches. Positive total absorption with zero cap displacement produces cumulative admissible payoff near-returns and a uniform-equilibrium payoff. Positive displacement gives the exact D_* rho / (2M) semantic-debt drop. Zero absorption makes every literal cap root all Continue and preserves the whole semantic pair and full paid row without loss. The descent has no regenerated source or well-founded consumer, and the inert branch remains open."
+      "scope": "Under a positive terminal exploitability gap and positive global minimum debt, every literal behavioral profile supplies a full-gap paid cap port and its exhaustive, pairwise-disjoint exact trichotomy. Complete absorption and cap displacement satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*); every exact-minimum source is unconditionally a literal inert stall. Carrier density gives actual full-gap ports with source debt tending to D_* and both A and rho tending to zero. No minimum profile, regenerated descent source, well-founded rank, or inert-stall consumer is supplied."
     },
     {
       "id": "fin-four-same-source-paid-reset-cap-port",
@@ -391,6 +391,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow now requires only cumulative-charge payoff near-return or a source-matched restart/debt descent consuming the actual-source cap-lifted summable all-Continue port. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter. The paid arrow has a full-gap cap port at every literal profile, quantitative excess-debt contraction, and actual ports approaching the inert minimum-fiber boundary; it still needs a consumer or regeneration theorem for quantitative descent, or a consumer for the literal inert stall. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }

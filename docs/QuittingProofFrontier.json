@@ -170,9 +170,9 @@
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "The actual paid cap port now has an exact trichotomy. Positive total absorption with zero cap displacement already yields cumulative payoff near-return and a uniform payoff. Positive displacement pays the sharp D_* rho / (2M) semantic-debt drop. Zero absorption is a literal lossless all-Continue paid stall. Missing downstream: regenerate an actual strictly smaller paid/reset source from the real-valued descent, or consume the inert marked stall. On Fin 4 the source and its owner repair give two ports, leaving one of two descents or double inertness.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortExactTrichotomy.lean",
-      "declaration": "GameTheory.QuittingPaidCapLiftedSource.exactTrichotomy",
+      "meaning": "A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert, while carrier density produces actual ports with debt tending to D_* and both A and rho tending to zero. Missing downstream: consume or regenerate quantitative descent, or consume the literal inert stall.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean",
+      "declaration": "GameTheory.HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation",
       "evidence_seals": ["M", "L", "A"]
     },
     {
