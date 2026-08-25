@@ -279,18 +279,18 @@ proves that it is exactly equivalent to uniform-payoff existence for each
 reward table. It is retained as the global integration contract.
 
 On the paid route, including the former flat-circulation arm after its finite
-support descent, an eventually paid row must be re-entered along exact paths
-whose total absorption charge has one fixed positive lower bound while their
-endpoint payoff vectors become arbitrarily close. Every individual edge may
-have vanishing charge. A fixed charged edge, fixed-edge payoff closure, and
-exact return to the full tail state are stronger special cases. The
-chronological and cumulative payoff-near-return consumers are proved in Lean.
-Every infinite exact floor orbit either closes through nonsummable cumulative
-charge or converges to an exact floor-safe all-Continue self-loop. A nonzero
-summable displacement retains one fixed signed terminal coalition with a
-quantitative cumulative mass budget. The missing paid adapter must now supply
-the divergent orbit or spend this labelled summable-port budget in a restart
-or debt descent.
+support descent, the exact-port step is now source-matched conditionally. An
+attained paid profile whose prescribed payoff dominates the behavioral
+punishment floor generates one literal marked exact orbit retaining the paid
+profile as a suffix. Nonsummable charge supplies cumulative payoff near-
+returns and closes through the checked all-behavior consumer. Summable charge
+converges in full terminal semantics to an exact all-Continue fixed port;
+under the terminal witness the unchanged paid suffix has positive limiting
+reach. A nonzero displacement also retains one fixed signed terminal
+coalition with a quantitative cumulative mass budget. The remaining upstream
+step is to prove the paid source payoff floor-safe, replace it source-
+faithfully, or descend when the floor fails. The remaining downstream step is
+only the restart or debt descent spending the labelled summable-port budget.
 
 For a separate actual carrier-root family with one fixed absorption floor,
 `exists_macroscopicDebtDrop_or_chargedSoloBlockerGate` now proves positive
@@ -352,14 +352,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
-| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `C` | [`GameTheory.QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A`, `C` | [`GameTheory.QuittingPaidRowFloorSafeSource.exists_markedExactOrbit_alternative_of_witness`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidRowExactPortAlternative.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
 | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cumulativePayoffNearReturns`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
 
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing: fix one positive lower bound on total path charge while making endpoint payoff vectors arbitrarily close, or source-match the paid row to a summable exact orbit restart that spends the checked fixed signed terminal-label budget or decreases debt. The former fixed-edge target is a sufficient special case and retains its checked tight-face restrictions.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: Missing upstream: prove that the actual paid profile's prescribed payoff dominates the behavioral punishment floor, replace it by a source-matched floor-safe paid profile, or descend when this fails. Once floor-safe, one literal marked exact orbit is checked: nonsummable charge closes by cumulative payoff recurrence, while summable charge reaches an all-Continue semantic port with positive paid-suffix reach under the terminal witness. Missing downstream only in that summable arm: restart while spending its fixed signed terminal-label budget or decrease debt.
 
 The DAG nodes have these mathematical meanings:
 
@@ -553,13 +553,14 @@ the live mathematical ledger.
   large-base handoff likewise has `M`, `L`, and `A`: its stationary profiles
   and paid row are actual behavioral source objects.
   `LargeBasePaidStationaryHandoff.endpointAtom_floorFailure_or_exactOrbit`
-  now sends that source to localized floor failure or a literal exact infinite
-  floor orbit. Nonsummable cumulative orbit charge now has a checked
-  uniform-payoff consumer. In the summable arm the annotations converge to a
-  floor-safe all-Continue self-loop, with a fixed signed terminal label when
-  the displacement is nonzero. The terminal witness therefore leaves only
-  that labelled summable port, localized floor failure, or trivial
-  displacement; no paid-source restart or payoff near-return is produced.
+  sends that source to localized floor failure or a literal exact infinite
+  floor orbit. More generally, every attained floor-safe paid profile now has
+  a literal marked orbit retaining its paid suffix. Nonsummable cumulative
+  charge has a checked uniform-payoff consumer. In the summable arm the full
+  terminal semantics converge to an all-Continue fixed port, the paid suffix
+  has positive limiting reach under the witness, and nonzero displacement
+  retains a fixed signed terminal label. No checked theorem proves the source
+  floor hypothesis generally or restarts from that labelled port.
 
   There is now a second same-table semantic restriction on every hypothetical
   `Fin 4` counterexample. First,
