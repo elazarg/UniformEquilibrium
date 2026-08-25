@@ -805,11 +805,31 @@ the live mathematical ledger.
   resulting singleton floor compiles, through a vanishing positive solo
   hazard, to an actual-tail well-supported absorbing sequence. This S.3
   witness need not be terminal Nash when the owner's singleton payoff is
-  negative. The checked Literature theorem
-  `theorem3_4_of_prioritizedAndPositiveSourceClosures` therefore composes
-  consumers for exactly the prioritized pointwise and positive-joint
-  no-sure-exit source classes into the literal S.1/S.2/S.3 conclusion. Neither
-  remaining universal consumer, and no counterexample, is known; the
+  negative.  The positive-joint endpoint is now narrowed further by
+  `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_summableExactPrefixPort`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointEndpointSequentialReduction.lean`).
+  Every reached endpoint starts a canonical exact semantic-prefix orbit.
+  Nonsummable absorption gives well-supported S.3 through compact
+  single-seam lassos; the only surviving arm is an actual endpoint with no
+  sure-exit Nash prefix and a summable exact-prefix all-Continue port.
+  `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_stationary_or_allContinuePhantom`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortPhantomReduction.lean`)
+  contracts that arm again to S.1 or the common nonzero all-Continue phantom;
+  at each tolerance the same obstruction is the existing positive-singleton
+  defect.  Passing to the corrected pointwise residual forgets the endpoint,
+  no-sure-exit proof, and summable orbit, and returns a raw residual rather
+  than a prioritized one.  This is a shared obstruction, not a consumer or a
+  closure.  The generic
+  `isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier` would
+  give a uniform payoff from diagonal terminal-semantic carrier membership,
+  but the port limit is not shown to have that membership.
+
+  The checked Literature theorem
+  `theorem3_4_of_prioritizedAndSummablePortClosures` therefore composes
+  consumers for exactly the prioritized corrected-pointwise residual and
+  the summable-port residual into the literal S.1/S.2/S.3 conclusion.  A
+  consumer of the common phantom would discharge the latter, but none is
+  known.  Neither remaining universal consumer, and no counterexample, is known; the
   unconditional general `theorem3_4` remains the sole proof hole in the
   paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
