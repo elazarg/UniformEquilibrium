@@ -33,7 +33,8 @@ theorem exists_terminalSemanticLawCarrier_lift
     continuous_fst.tendsto cluster |>.comp hlimit
   have hpairFst : Tendsto (fun n => (points (subseq n)).1)
       atTop (nhds pair) := by
-    simpa only [points] using hprofiles.comp hsubseq.tendsto_atTop
+    simpa only [points, Function.comp_apply] using
+      hprofiles.comp hsubseq.tendsto_atTop
   have hfst : cluster.1 = pair :=
     tendsto_nhds_unique hclusterFst hpairFst
   refine ⟨cluster.2, ?_⟩
