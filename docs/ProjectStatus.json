@@ -56,6 +56,15 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "cumulative-charge-near-return",
+      "subject": "Cumulative-charge payoff near-returns and infinite exact floor orbits",
+      "kind": "Conditional consumer and analytic dichotomy",
+      "declaration": "uniformPayoff_or_summableChargeAllContinuePort",
+      "source": "UniformEquilibrium/Quitting/Bellman/Finite/PunishmentFloorInfiniteOrbitChargeDichotomy.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "A fixed lower bound on total exact-path absorption charge, together with arbitrarily close endpoint payoff vectors, yields a uniform-equilibrium payoff without a fixed charged edge. Every infinite exact punishment-floor orbit either closes through nonsummable cumulative charge or converges to a floor-safe all-Continue self-loop. A nonzero summable displacement retains one fixed signed terminal coalition with the sharp finite-label share; no paid-source restart is supplied."
+    },
+    {
       "id": "quitting-reduced-support-rank-alternative",
       "subject": "Reduced finite support-rank alternative",
       "kind": "Conditional structural theorem",
@@ -337,6 +346,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow requires fixed-charge payoff near-return. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter, while the paid arrow requires cumulative-charge payoff near-return or a source-matched use of the fixed signed label at the summable all-Continue port. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }
