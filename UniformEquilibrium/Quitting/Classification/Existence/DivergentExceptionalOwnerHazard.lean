@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.DiffuseStationaryPrefixSourceAttachments
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedWitnessRegimes
 
 /-!
 # One-row hazards of a divergent exceptional-owner source
@@ -154,6 +155,78 @@ theorem QuittingUniqueExceptionalOwnerSource.ownerPrefixSurvival_eq_pow
         (source.family.horizon (source.selected n) + 1) := by
   unfold QuittingUniqueExceptionalOwnerSource.ownerPrefixSurvival
   simp only [Finset.prod_const, Finset.card_range]
+
+/-- A unique-exceptional-owner source has only two possible horizon regimes.
+If its selected horizons do not tend to infinity, a fixed-horizon strict
+subsequence has vanishing one-row live mass and therefore compiles to the
+instant-punishment branch.  Thus after `S.2` is excluded, horizon divergence
+is forced by the source data rather than being an additional hypothesis. -/
+theorem
+    QuittingUniqueExceptionalOwnerSource.instantPunishment_or_horizon_tendsto_atTop
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (source : QuittingUniqueExceptionalOwnerSource reward) :
+    QuittingInstantPunishmentεEquilibriumExistence reward ∨
+      Tendsto (fun n ↦ source.family.horizon (source.selected n))
+        atTop atTop := by
+  by_cases hhorizon : Tendsto
+      (fun n ↦ source.family.horizon (source.selected n)) atTop atTop
+  · exact Or.inr hhorizon
+  · left
+    have hbounded : ∃ bound : ℕ, ∃ᶠ n in atTop,
+        source.family.horizon (source.selected n) < bound := by
+      rw [tendsto_atTop] at hhorizon
+      push Not at hhorizon
+      exact hhorizon
+    obtain ⟨bound, hbounded⟩ := hbounded
+    obtain ⟨first, hfirst, hfirstBound⟩ :=
+      extraction_of_frequently_atTop hbounded
+    let label : ℕ → Fin bound := fun n ↦
+      ⟨source.family.horizon (source.selected (first n)), hfirstBound n⟩
+    obtain ⟨fixed, second, hsecond, hfixed⟩ :=
+      exists_fixedPlayer_strictMono_subsequence label
+    let chosen : ℕ → ℕ := source.selected ∘ first ∘ second
+    have hchosen : StrictMono chosen :=
+      source.selected_strictMono.comp (hfirst.comp hsecond)
+    have hhorizonFixed : ∀ n,
+        source.family.horizon (chosen n) = fixed.val := by
+      intro n
+      exact Fin.ext_iff.mp (hfixed n)
+    have hjoint : Tendsto
+        (fun n ↦ source.family.prefixJointSurvival (chosen n))
+        atTop (nhds 0) := by
+      exact source.joint_tendsto_zero.comp
+        (hfirst.comp hsecond).tendsto_atTop
+    have hlive : Tendsto
+        (fun n ↦ quittingStationaryContinueMass
+          (source.family.root (chosen n))) atTop (nhds 0) := by
+      rw [Metric.tendsto_atTop]
+      intro ε hε
+      have hthreshold : 0 < ε ^ (fixed.val + 1) := pow_pos hε _
+      have hsmall : ∀ᶠ n in atTop,
+          source.family.prefixJointSurvival (chosen n) <
+            ε ^ (fixed.val + 1) :=
+        (tendsto_order.1 hjoint).2 _ hthreshold
+      obtain ⟨threshold, hsmall⟩ := eventually_atTop.1 hsmall
+      refine ⟨threshold, fun n hnThreshold ↦ ?_⟩
+      have hn := hsmall n hnThreshold
+      have hliveNonneg : 0 ≤ quittingStationaryContinueMass
+          (source.family.root (chosen n)) :=
+        quittingStationaryContinueMass_nonneg _
+      have hpow : quittingStationaryContinueMass
+            (source.family.root (chosen n)) ^ (fixed.val + 1) =
+          source.family.prefixJointSurvival (chosen n) := by
+        unfold QuittingDiffuseStationaryPrefixFamily.prefixJointSurvival
+        rw [quittingJointSurvivalWeight_eq_prod, hhorizonFixed n]
+        simp
+      rw [Real.dist_eq, sub_zero, abs_of_nonneg hliveNonneg]
+      by_contra hnot
+      have hεle : ε ≤ quittingStationaryContinueMass
+          (source.family.root (chosen n)) := le_of_not_gt hnot
+      have := pow_le_pow_left₀ hε.le hεle (fixed.val + 1)
+      rw [hpow] at this
+      linarith
+    exact quittingInstantPunishment_of_stationaryPrefix_liveMass_tendsto_zero
+      source.family chosen hchosen hlive
 
 /-- Along a divergent-horizon exceptional source, every opponent of the
 exceptional owner Continues with probability tending to one in the selected
