@@ -31,60 +31,6 @@ open Filter StochasticGame
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
-/-- A diagonal point of the literal terminal semantic carrier is an actual
-uniform-equilibrium payoff target.  Carrier membership supplies executable
-profiles; convergence of both semantic coordinates makes their terminal
-Nash errors and prescribed-payoff errors vanish together. -/
-theorem isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier
-    [Nonempty iota]
-    {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
-    (target : Payoff iota)
-    (hmem : (target, target) ∈ quittingTerminalSemanticCarrier reward) :
-    (quittingGame reward).IsUniformEquilibriumPayoff none target := by
-  obtain ⟨profiles, hprofiles⟩ :=
-    exists_terminalProfile_sequence_tendsto_semanticPair
-      reward (target, target) hmem
-  let error : ℕ → ℝ := fun n ↦ quittingTerminalSemanticExploitability
-    (quittingTerminalSemanticPair reward (profiles n))
-  have hzero : quittingTerminalSemanticExploitability
-      (target, target) = 0 := by
-    unfold quittingTerminalSemanticExploitability
-      QuittingBoundaryHolonomy.finitePlayerMax
-      quittingTerminalSemanticDebt
-    simp
-  have herror : Tendsto error atTop (nhds 0) := by
-    have hcontinuous :=
-      continuous_quittingTerminalSemanticExploitability.continuousAt.tendsto.comp
-        hprofiles
-    rw [hzero] at hcontinuous
-    exact hcontinuous
-  have hnash : ∀ n,
-      (quittingGame reward).IsεAsymptoticNash
-        (quittingTerminalPayoff reward) (error n) (profiles n) := by
-    intro n who deviation
-    have hgain := quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
-      reward (profiles n) who deviation
-    have hdebt : quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward (profiles n)) who ≤ error n := by
-      dsimp only [error]
-      unfold quittingTerminalSemanticExploitability
-      exact (le_max_right 0 _).trans
-        (QuittingBoundaryHolonomy.le_finitePlayerMax
-          (fun player ↦ max 0 (quittingTerminalSemanticDebt
-            (quittingTerminalSemanticPair reward (profiles n)) player)) who)
-    linarith
-  have htarget : Tendsto
-      (fun n ↦ quittingTerminalPayoff reward (profiles n)) atTop
-      (nhds target) := by
-    apply tendsto_pi_nhds.2
-    intro who
-    have hcoordinate :=
-      (((continuous_apply who).comp continuous_fst).tendsto
-        (target, target)).comp hprofiles
-    exact hcoordinate
-  exact quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
-    reward target error profiles herror (Frequently.of_forall hnash) htarget
-
 namespace QuittingPunishmentFloorInfiniteOrbit.SummableChargeAllContinuePort
 
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}

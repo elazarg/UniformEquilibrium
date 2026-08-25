@@ -143,6 +143,21 @@ simple cycle is necessary for any fixed-sign table without a sure-exit
 escape. This is an unrestricted-behavior equilibrium theorem, but it says
 nothing about influences whose signs change with the coalition background.
 
+The affine chamber is wider in a different direction.
+`quittingGame_exists_uniformPayoff_of_componentwiseWeightedPotential`
+(`UniformEquilibrium/Quitting/Stationary/ComponentwiseWeightedPotential.lean`)
+assumes that each player's own-membership gain is affine in the background
+coalition and that its coefficient matrix has positive symmetrizing weights
+inside every directed SCC. A block weighted potential, solved in condensation
+order, constructs a literal sure-exit coalition; the resulting pure stationary
+profile is exact terminal Nash against unrestricted behavioral deviations.
+Cross-component influences and passive reward coordinates are unrestricted.
+The checked quadratic adapter covers equal active pair coefficients and the
+sign-frustrated all-negative reciprocal triangle, which lies outside the
+positive-cycle chamber above. The result has `M`, `L`, `A`, and `C`, but it
+does not produce symmetrizability for an arbitrary hard residual or
+characterize all quadratic games.
+
 The separate augmented solo-preemption graph has an exact checked boundary.
 Its bottom vertex points to a player with positive own singleton reward, a
 player points to bottom when that reward is negative, and `i -> j` records
@@ -325,6 +340,28 @@ zero. It does not realize the carrier minimum by a profile. The remaining
 downstream step is exactly to consume or regenerate the quantitative descent,
 or to consume the literal inert stall.
 
+Changing the paid-row or port selector cannot restore a uniform real descent
+step. At every positive debt-drop, absorption, and displacement tolerance,
+`HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean`)
+selects one near-minimum literal behavioral profile at which every compatible
+full-gap paid-cap source/port satisfies all three smallness bounds. Its
+corollary `not_uniformPositivePaidCapDebtDropSelection` rules out any selector
+which maintains one fixed positive total-debt drop over all profiles. The
+remaining regeneration must therefore be profile-dependent and nonuniform,
+use a genuinely well-founded obstruction, or consume the inert stall; no such
+consumer is supplied here.
+
+Pointwise positive debt does not repair this attainment gap.  The checked
+two-player theorem `attainable_inter_debt_ge_one_not_closed`
+(`UniformEquilibrium/Diagnostics/Quitting/PositiveDebtTerminalSemanticNonattainment.lean`)
+has literal semantic pairs of debt `1 + 1 / (n + 1)` converging to an
+unattained carrier point of debt one.  Its global minimum debt is zero,
+witnessed by all-Continue play.  Thus this is a sharp topological fence
+against decoding a positive-debt carrier point from debt positivity alone,
+not a counterexample and not an obstruction to an attainment theorem that
+genuinely uses `D = D_* > 0` or retained chronology.
+
 On `Fin 4`, the source construction is now unconditional from the negative
 semantic endpoint. For every terminal exploitability witness and every
 prescribed reset owner with a disjoint two-player base,
@@ -411,14 +448,14 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 | `EXACT-DIAGONAL-FRONTIER` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.nonempty_vanishingDebtAtomAccess`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `ZERO-DEBT-SUPPORT-ENTRY` | `proved` | `VANISHING-DEBT-ATOM-ACCESS` | `M`, `L`, `A` | [`GameTheory.QuittingPositiveMinimumDebtTangentFamily.exists_vanishingDebtAtomAccess_of_supportEntry`](../UniformEquilibrium/Diagnostics/Quitting/UniformExistenceBoundary.lean) |
 | `VANISHING-DEBT-ATOM-ACCESS` | `open-producer` | `CHRONOLOGICAL-DEBT-SHADOWING` | `M`, `L`, `C` | [`GameTheory.QuittingBudgetStablePacketSystem.exists_chronologicalDebtShadowingCertificate_of_seed`](../UniformEquilibrium/Quitting/Debt/Dynamic/BudgetStableCompatiblePacketIteration.lean) |
-| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean) |
+| `PAID-FIRST-DISAGREEMENT-ROW` | `open-producer` | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `M`, `L`, `A` | [`GameTheory.HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small`](../UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean) |
 | `CHRONOLOGICAL-DEBT-SHADOWING` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_chronologicalDebtShadowing_all_errors`](../UniformEquilibrium/Quitting/Debt/Dynamic/ChronologicalDebtShadowing.lean) |
 | `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN` | `proved-consumer` | `UNIFORM-EQUILIBRIUM-PAYOFF` | `M`, `L`, `C` | [`GameTheory.quittingGame_exists_uniformEquilibriumPayoff_of_cumulativePayoffNearReturns`](../UniformEquilibrium/Quitting/Projective/CumulativeChargeNearReturn.lean) |
 
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert, while carrier density produces actual ports with debt tending to D_* and both A and rho tending to zero. Missing downstream: consume or regenerate quantitative descent, or consume the literal inert stall.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Missing downstream: profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.
 
 The DAG nodes have these mathematical meanings:
 
@@ -805,7 +842,23 @@ the live mathematical ledger.
   resulting singleton floor compiles, through a vanishing positive solo
   hazard, to an actual-tail well-supported absorbing sequence. This S.3
   witness need not be terminal Nash when the owner's singleton payoff is
-  negative.  The positive-joint endpoint is now narrowed further by
+  negative.
+
+  The prioritized positive-absorption attachment is no longer an independent
+  source obligation.  At every positive prioritized scale,
+  `QuittingPrioritizedRefinedSourceResidualAt.sourcePhantom_or_positiveSingletonDefect`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PrioritizedAttachmentSingletonDefect.lean`)
+  gives the exact normal form: the source-faithful all-Continue positive-rho
+  residual or the positive-singleton defect.  A uniformly reached finite
+  sure-exit row is exact root Nash after lifting its successor to the
+  punishment floor and therefore contradicts the instant-punishment priority;
+  the infinite attachment output contracts through the support--Bellman
+  boundary.  The reward table, tolerance, and all four priority negations are
+  retained.  This reduction has `M`, `L`, `A`, and attachment-arm `C`, but
+  neither surviving normal-form arm has a branch consumer.  In particular it
+  does not prove S.1, S.2, S.3, or Theorem 3.4.
+
+  The positive-joint endpoint is now narrowed further by
   `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_summableExactPrefixPort`
   (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointEndpointSequentialReduction.lean`).
   Every reached endpoint starts a canonical exact semantic-prefix orbit.
@@ -836,21 +889,48 @@ the live mathematical ledger.
   bounds both rewards and orbit annotations.  The actual endpoint,
   no-sure-exit proof, and summable port remain present in both alternatives.
   Neither alternative has a consumer, and real displacement is not a
-  well-founded rank.  The generic
-  `isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier` would
-  give a uniform payoff from diagonal terminal-semantic carrier membership,
-  but the port limit is not shown to have that membership.
+  well-founded rank.
+
+  The terminal-semantic status of this endpoint and port is nevertheless
+  exact.  `QuittingPositiveJointPrefixReachPunishmentEndpoint.`
+  `isUniformEquilibriumPayoff`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointEndpointUniformPayoff.lean`)
+  identifies the reached endpoint's prescribed coordinate as a specific
+  uniform-equilibrium payoff because the endpoint is already diagonal in the
+  literal terminal-semantic carrier.  Every exact semantic-prefix pair stays
+  diagonal and in that carrier, and
+  `SummableChargeAllContinuePort.limit_mem_diagonal_of_endpoint` together with
+  `limit_isUniformEquilibriumPayoff_of_endpoint`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointExactPrefixOrbitDiagonal.lean`)
+  gives the same conclusions for the port limit.  Closure membership does not
+  assert realization by one profile.  More generally,
+  `isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier`
+  (`UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean`)
+  is the exact fixed-target equivalence.  Its existential form identifies
+  target-free approximate-equilibrium existence with diagonal-carrier
+  nonemptiness, and the table adapter gives the same characterization of the
+  normalized arbitrary-Never AGKRS premise.  These are semantic
+  reformulations, not an existence proof for an arbitrary table.
+
+  More importantly here, a specific
+  uniform-payoff target is not an S.1/S.2/S.3 classification.  This supplies
+  no classification consumer and no new unconditional advance on the
+  finite-quitting conjecture: the positive-joint source already carries an
+  approximate-equilibrium family with a checked target-free uniform-payoff
+  consumer.
 
   The checked Literature theorem
   `theorem3_4_of_prioritizedAndSummablePortClosures` therefore composes
   consumers for exactly the prioritized corrected-pointwise residual and
   the summable-port residual into the literal S.1/S.2/S.3 conclusion.  A
   consumer of the common phantom would discharge the latter, but none is
-  known.  The ballistic theorem closes only its returned positive-charge
-  subarm and quantitatively classifies the rest; it does not supply either
-  missing universal consumer.  Neither remaining universal consumer, and no
-  counterexample, is known; the unconditional general `theorem3_4` remains
-  the sole proof hole in the paper-facing file.
+  known.  On the prioritized side, the exact surviving obligations are now
+  the source-faithful all-Continue residual and the positive-singleton defect.
+  The ballistic theorem closes only its returned positive-charge subarm and
+  quantitatively classifies the rest; the diagonal-payoff theorems do not
+  supply a classification branch.  No complete universal consumer and no
+  counterexample is known; the unconditional general `theorem3_4` remains the
+  sole proof hole in the paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`

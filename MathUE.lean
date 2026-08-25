@@ -86,6 +86,7 @@ import MathUE.SummableChargeSurvival
 import MathUE.EdgeGraph
 import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteBinaryBlockEquilibrium
+import MathUE.FiniteBinaryWeightedPotential
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity

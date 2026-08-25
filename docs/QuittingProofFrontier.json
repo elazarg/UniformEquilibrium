@@ -170,9 +170,9 @@
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert, while carrier density produces actual ports with debt tending to D_* and both A and rho tending to zero. Missing downstream: consume or regenerate quantitative descent, or consume the literal inert stall.",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean",
-      "declaration": "GameTheory.HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation",
+      "meaning": "A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Missing downstream: profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean",
+      "declaration": "GameTheory.HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small",
       "evidence_seals": ["M", "L", "A"]
     },
     {
