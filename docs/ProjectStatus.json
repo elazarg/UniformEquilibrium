@@ -75,12 +75,12 @@
     },
     {
       "id": "paid-row-exact-port-alternative",
-      "subject": "Actual-profile paid cap ports and minimum-fiber contraction",
+      "subject": "Actual-profile paid cap ports and uniform-step obstruction",
       "kind": "Conditional actual-source construction and exact boundary",
-      "declaration": "HasTerminalExploitabilityGap.nonempty_actualProfilePaidCapMinimumApproximation",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapMinimumApproximation.lean",
+      "declaration": "HasTerminalExploitabilityGap.not_uniformPositivePaidCapDebtDropSelection",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "Under a positive terminal exploitability gap and positive global minimum debt, every literal behavioral profile supplies a full-gap paid cap port and its exhaustive, pairwise-disjoint exact trichotomy. Complete absorption and cap displacement satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*); every exact-minimum source is unconditionally a literal inert stall. Carrier density gives actual full-gap ports with source debt tending to D_* and both A and rho tending to zero. No minimum profile, regenerated descent source, well-founded rank, or inert-stall consumer is supplied."
+      "scope": "Under a positive terminal exploitability gap and positive global minimum debt, every literal behavioral profile supplies a full-gap paid cap port and its exhaustive, pairwise-disjoint exact trichotomy. Complete absorption and cap displacement satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*); every exact-minimum source is unconditionally a literal inert stall. At every positive triple of tolerances, one near-minimum literal profile makes every compatible full-gap paid-cap source/port simultaneously have small debt drop, absorption, and displacement. Hence no selector over all profiles can retain one fixed positive real debt drop. No minimum profile, well-founded or nonuniform regeneration, or inert-stall consumer is supplied."
     },
     {
       "id": "fin-four-same-source-paid-reset-cap-port",
@@ -299,6 +299,15 @@
       "scope": "Fixed positive, negative, or absent pair influences, with positive sign product on every directed simple influence cycle, produce a literal sure-exit coalition and a uniform-equilibrium payoff against all unilateral behavioral deviations. Within the fixed-sign class, absence of every sure-exit coalition forces a negative simple influence cycle."
     },
     {
+      "id": "componentwise-weighted-potential-quitting",
+      "subject": "Componentwise weighted-potential affine and quadratic quitting tables",
+      "kind": "Unconditional family theorem",
+      "declaration": "quittingGame_exists_uniformPayoff_of_componentwiseWeightedPotential",
+      "source": "UniformEquilibrium/Quitting/Stationary/ComponentwiseWeightedPotential.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Affine own-membership gains that are positively symmetrizable inside every SCC of their directed influence graph produce a literal sure-exit coalition, a pure stationary exact terminal Nash profile against every unilateral behavioral deviation, and a uniform-equilibrium payoff. Cross-component influences and passive reward coordinates are unrestricted. The quadratic adapter includes equal active pair coefficients and sign-frustrated reciprocal negative cycles. This sufficient solved chamber neither characterizes all quadratic tables nor supplies its hypothesis for an arbitrary hard residual."
+    },
+    {
       "id": "acyclic-augmented-solo-preemption",
       "subject": "Acyclic augmented solo-preemption tables",
       "kind": "Unconditional family theorem",
@@ -371,13 +380,40 @@
       "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. The sharper Literature capstone is recorded separately; unconditional theorem3_4 remains open."
     },
     {
+      "id": "positive-debt-terminal-semantic-nonattainment",
+      "subject": "Positive-debt attained terminal-semantic image is not closed",
+      "kind": "Unconditional topological obstruction",
+      "declaration": "attainable_inter_debt_ge_one_not_closed",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/PositiveDebtTerminalSemanticNonattainment.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "A rational two-player table has actual semantic pairs of debt 1 + 1/(n+1) converging to an unattained carrier point of debt 1; the full clock-payoff face is the open interval of positive atom caps, and every one-player attained semantic image is closed. The example quantifies over arbitrary behavioral profiles, but its global minimum debt is 0. It rules out attainment from pointwise positive debt alone and does not address the globally minimal D = D_* > 0 fiber or advance the quitting conjecture."
+    },
+    {
+      "id": "uniform-payoff-terminal-semantic-diagonal",
+      "subject": "Uniform payoffs as diagonal terminal-semantic carrier points",
+      "kind": "Unconditional semantic equivalence",
+      "declaration": "isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean",
+      "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
+      "scope": "For every inhabited finite player type and fixed payoff target, the target is a uniform-equilibrium payoff exactly when its diagonal pair belongs to the closure of executable terminal payoff/unrestricted-best-response pairs. Existentially, target-free approximate-equilibrium existence is exactly diagonal-carrier nonemptiness; the normalized arbitrary-Never AGKRS premise has the same characterization. Carrier membership need not be attained by one profile. This is a semantic equivalence, not a stationary, instant-punishment, or sequentially-perfect classification, and it reformulates rather than proves the unconditional quitting conjecture."
+    },
+    {
+      "id": "agkrs-prioritized-attachment-normal-form",
+      "subject": "AGKRS prioritized attachment reduction and exact residual normal form",
+      "kind": "Unconditional source reduction",
+      "declaration": "sourcePhantom_or_positiveSingletonDefect",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/PrioritizedAttachmentSingletonDefect.lean",
+      "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
+      "scope": "At every positive prioritized scale, the positive-absorption attachment arm is consumed: a finite sure-exit row contradicts the instant-punishment priority after a checked punishment-floor lift, while an infinite reached-row spine contracts through the support--Bellman boundary. The exact surviving normal form is the source-faithful all-Continue positive-rho residual or the positive-singleton defect, on the same table and scale with all four priority negations retained. Neither survivor has an S.1/S.2/S.3 consumer; this does not close AGKRS Theorem 3.4 or advance the unconditional finite-quitting conjecture."
+    },
+    {
       "id": "agkrs-positive-joint-sequential-reduction",
-      "subject": "AGKRS positive-joint endpoint, phantom, and ballistic reductions",
-      "kind": "Unconditional source reductions and conditional Literature capstone",
+      "subject": "AGKRS positive-joint endpoint, diagonal carrier, and ballistic reductions",
+      "kind": "Unconditional source reductions and payoff identification; conditional Literature capstone",
       "declaration": "wellSupported_or_endpointBallisticBoundary",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every reached positive-joint punishment endpoint has a canonical exact semantic-prefix orbit. Nonsummable absorption yields well-supported S.3; a summable port yields S.1 or the common nonzero all-Continue phantom, equivalently the existing positive-singleton defect at each tolerance. The provenance-retaining ballistic dispatch additionally closes every positive-charge port returning to its endpoint through literal S.3; under S.3 failure it leaves exactly a zero-charge constant all-Continue orbit or a quantitatively displaced port with one fixed signed terminal coalition and the canonical reward-bound mass scale. Neither surviving arm is consumed, and real displacement is not a well-founded rank. Forgetting to the corrected pointwise residual discards endpoint, no-sure-exit, and orbit provenance and returns a raw residual, not a prioritized one. The Literature capstone still leaves the prioritized and summable-port consumers; unconditional theorem3_4 remains open."
+      "scope": "Every reached positive-joint punishment endpoint is diagonal in the literal terminal-semantic carrier, so its prescribed coordinate is a specific uniform-equilibrium payoff. Every pair on its canonical exact semantic-prefix orbit is likewise diagonal, and every supplied summable-port limit is a diagonal carrier point and specific uniform-equilibrium payoff target. This does not place either target in S.1, S.2, or S.3 and gives no new unconditional quitting-conjecture advance. Nonsummable absorption yields well-supported S.3; a summable port otherwise yields S.1 or the common all-Continue phantom/positive-singleton defect. The provenance-retaining ballistic dispatch closes positive charge plus endpoint return through S.3; under S.3 failure it leaves zero-charge rigidity or a displaced signed port. Neither survivor has a classification consumer. The Literature capstone and unconditional theorem3_4 remain open."
     },
     {
       "id": "simon-normalized-motion-prefix-producer",

@@ -651,6 +651,7 @@ import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Stationary.TogglePotential
+import UniformEquilibrium.Quitting.Stationary.ComponentwiseWeightedPotential
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceBlock
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalance
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalanceRegression
