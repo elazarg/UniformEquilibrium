@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import UniformEquilibrium.Quitting.Classification.Existence.PrioritizedAttachmentSingletonDefect
+import UniformEquilibrium.Quitting.Classification.PreemptionTransport
 import UniformEquilibrium.Quitting.Cycles.ConditionedDeletedClockMonopoly
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 
@@ -133,6 +134,183 @@ theorem strictly_preempts
   simpa [sequence.owner_eq 0, sequence.other_eq 0] using
     (sequence.seed 0).strictly_preempts
 
+/-- The fixed seed edge's exact strict margin. -/
+def preemptionGap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward) : ℝ :=
+  quittingSoloReward reward sequence.other sequence.other -
+    quittingSoloReward reward sequence.owner sequence.other
+
+/-- The source-matched fixed edge has a positive exact margin. -/
+theorem preemptionGap_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward) :
+    0 < sequence.preemptionGap := by
+  unfold preemptionGap
+  exact sub_pos.mpr sequence.strictly_preempts
+
+/-- The strict seed edge, written at its exact positive gap. -/
+theorem soloPreempts_preemptionGap
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward) :
+    QuittingSoloPreempts reward sequence.preemptionGap
+      sequence.owner sequence.other := by
+  refine ⟨sequence.other_ne_owner, ?_⟩
+  unfold preemptionGap
+  linarith
+
+/-- The retained source-matched edge has its full preemption gap as an
+asymptotic lower bound on the inactive preemptor's endpoint defect along every
+vanishing-hazard solo-root family whose continuation returns to the source
+cross payoff. -/
+theorem eventually_threshold_lt_endpointDifference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward)
+    {threshold : ℝ} (hthreshold : threshold < sequence.preemptionGap)
+    (hazard : ℕ → PMF Bool) (tail : ℕ → Payoff ι)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (htail : Tendsto (fun n ↦ tail n sequence.other) atTop
+      (nhds (quittingSoloReward reward sequence.owner sequence.other))) :
+    ∀ᶠ n in atTop, threshold <
+      quittingRootEndpointDifference reward (tail n)
+        (quittingSoloStationaryRoot sequence.owner (hazard n))
+        sequence.other :=
+  QuittingSoloPreempts.eventually_threshold_lt_endpointDifference
+    sequence.soloPreempts_preemptionGap hthreshold hazard tail hhazard htail
+
+/-- The fixed source edge rules out a cofinal solo-root lasso whenever the
+owner's hazard vanishes and the preemptor's displayed continuation converges
+to its payoff at the owner's solo row.  The preemptor's inactive Continue
+defect then stays bounded away from zero while the retained scale vanishes.
+
+This theorem does not rule out a signed lasso with multi-player roots or with
+phase-dependent continuation values obtained from the retained source.  Those
+are exactly the semantic fields still absent from the table-level edge. -/
+theorem eventually_not_supportApproxNash_soloRoot_of_tendsto
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward)
+    (hazard : ℕ → PMF Bool) (tail : ℕ → Payoff ι)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (htail : Tendsto (fun n ↦ tail n sequence.other) atTop
+      (nhds (quittingSoloReward reward sequence.owner sequence.other))) :
+    ∀ᶠ n in atTop,
+      ¬IsQuittingRootSupportApproxNash reward (tail n) (sequence.delta n)
+        (quittingSoloStationaryRoot sequence.owner (hazard n)) :=
+  QuittingSoloPreempts.eventually_not_supportApproxNash_soloRoot
+    sequence.soloPreempts_preemptionGap sequence.preemptionGap_pos
+      hazard tail sequence.delta hhazard htail sequence.delta_tendsto_zero
+
+/-- In particular, the naive construction using the owner's solo payoff
+vector as every continuation eventually fails support-Nash. -/
+theorem eventually_not_supportApproxNash_soloTail_of_hazard_tendsto_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward)
+    (hazard : ℕ → PMF Bool)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0)) :
+    ∀ᶠ n in atTop,
+      ¬IsQuittingRootSupportApproxNash reward
+        (quittingSoloReward reward sequence.owner) (sequence.delta n)
+        (quittingSoloStationaryRoot sequence.owner (hazard n)) := by
+  apply sequence.eventually_not_supportApproxNash_soloRoot_of_tendsto
+    hazard (fun _ ↦ quittingSoloReward reward sequence.owner) hhazard
+  exact tendsto_const_nhds
+
+/-- A period-one signed lasso whose only active root is the fixed seed owner
+must pay the preemption gap either through the owner's hazard charge or twice
+through the lasso error.  Support forces the phase value away from the owner's
+solo row, while signed correction forces it back toward that row.
+
+This excludes the period-one solo-root architecture at vanishing hazard and
+error.  It does not constrain longer lassos or roots with several active
+players. -/
+theorem preemptionGap_le_hazardCharge_add_two_mul_error_of_periodOneSoloLasso
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward)
+    {error : ℝ} (hazard : PMF Bool)
+    (lasso : QuittingFiniteSignedProjectiveLasso reward 1 error)
+    (hcycle : lasso.cycle 0 =
+      quittingSoloStationaryRoot sequence.owner hazard)
+    (hhazard : 0 < (hazard true).toReal) :
+    sequence.preemptionGap ≤
+      (hazard true).toReal *
+          (sequence.preemptionGap + 2 * quittingRewardBound reward) +
+        2 * error := by
+  let target := quittingSoloReward reward sequence.owner
+  have hcycleAll : lasso.cycle = fun _ ↦
+      quittingSoloStationaryRoot sequence.owner hazard := by
+    funext phase
+    have hphase : phase = 0 := Subsingleton.elim _ _
+    subst phase
+    exact hcycle
+  have habsorb : (∏ phase : Fin 1,
+      quittingStationaryContinueMass (lasso.cycle phase)) < 1 := by
+    rw [Fin.prod_univ_one, hcycle]
+    exact quittingStationaryContinueMass_soloStationaryRoot_lt_one
+      sequence.owner hazard hhazard
+  have hpolicy : ∀ phase : Fin 1,
+      (fun _ : Fin 1 ↦ target) phase =
+        quittingRootSuccessorPayoff reward
+          ((fun _ : Fin 1 ↦ target) (finRotate 1 phase))
+          (lasso.cycle phase) := by
+    intro phase
+    rw [hcycleAll]
+    exact (quittingRootSuccessorPayoff_soloStationaryRoot_self
+      reward sequence.owner hazard).symm
+  have hexact : lasso.exactValue 0 = target := by
+    have hvalue := eq_quittingCyclicTerminalValue_of_rootSuccessorPayoff_of_absorbing
+      reward lasso.cycle (fun _ : Fin 1 ↦ target) hpolicy habsorb
+    exact congrFun hvalue 0 |>.symm
+  have hsupport : IsQuittingRootSupportApproxNash reward
+      (lasso.value 0) error
+      (quittingSoloStationaryRoot sequence.owner hazard) := by
+    have hphase : finRotate 1 (0 : Fin 1) = 0 := Subsingleton.elim _ _
+    simpa only [hphase, hcycle] using lasso.support 0
+  have hdisplacement :=
+    QuittingSoloPreempts.gap_sub_hazardCharge_sub_error_le_tailMismatch
+      sequence.soloPreempts_preemptionGap hazard (lasso.value 0) hsupport
+  have hclose := lasso.abs_value_sub_exactValue_le 0 sequence.other
+  rw [hexact] at hclose
+  dsimp only [target] at hclose
+  linarith
+
+/-- Consequently no cofinal family of period-one signed lassos can use only
+the fixed seed owner's vanishing solo hazard at the retained half-scale.  A
+successful signed bridge must change the phase architecture, not merely tune
+this hazard more slowly. -/
+theorem false_of_periodOneSoloLassos_of_hazard_tendsto_zero
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (sequence : QuittingCofinalPrioritizedPreemptionSeedSequence reward)
+    (hazard : ℕ → PMF Bool)
+    (hhazardPos : ∀ n, 0 < (hazard n true).toReal)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (lasso : ∀ n, QuittingFiniteSignedProjectiveLasso reward 1
+      (sequence.delta n / 2))
+    (hcycle : ∀ n, (lasso n).cycle 0 =
+      quittingSoloStationaryRoot sequence.owner (hazard n)) : False := by
+  let chargeScale := sequence.preemptionGap +
+    2 * quittingRewardBound reward
+  have hcharge : Tendsto
+      (fun n ↦ (hazard n true).toReal * chargeScale) atTop (nhds 0) := by
+    simpa only [zero_mul] using hhazard.mul_const chargeScale
+  have htotal : Tendsto
+      (fun n ↦ (hazard n true).toReal * chargeScale + sequence.delta n)
+      atTop (nhds 0) := by
+    simpa only [zero_add] using hcharge.add sequence.delta_tendsto_zero
+  have hsmall : ∀ᶠ n in atTop,
+      (hazard n true).toReal * chargeScale + sequence.delta n <
+        sequence.preemptionGap :=
+    (tendsto_order.1 htotal).2 sequence.preemptionGap
+      sequence.preemptionGap_pos
+  obtain ⟨n, hn⟩ := hsmall.exists
+  have hbound :=
+    sequence.preemptionGap_le_hazardCharge_add_two_mul_error_of_periodOneSoloLasso
+      (hazard n) (lasso n) (hcycle n) (hhazardPos n)
+  have hhalf : 2 * (sequence.delta n / 2) = sequence.delta n := by
+    ring
+  rw [hhalf] at hbound
+  dsimp only [chargeScale] at hn
+  linarith
+
 /-- The provenance at every extracted scale retains failure of the
 well-supported pointwise branch. -/
 theorem seed_not_wellSupported
@@ -146,7 +324,7 @@ theorem seed_not_wellSupported
 
 end QuittingCofinalPrioritizedPreemptionSeedSequence
 
-/-- Cofinal prioritized residuals admit a sequence of source-matched strict
+/-- Cofinal prioritized residuals yield a sequence of source-matched strict
 preemption seeds whose scale tends to zero and whose ordered owner/preemptor
 pair is fixed.  Finiteness is used only to extract an infinite fiber of the
 ordered-pair label. -/
