@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
+import MathUE.ProbabilityMassFunction.Coupling
 import Research.Quitting.EscapeAwareQuantileClockHierarchy
 import Mathlib.Algebra.MvPolynomial.Eval
 
@@ -450,19 +451,6 @@ theorem pmfPi_quittingPureDeviation_eq_map
       congr 1
       funext choices who
       simp [coordinateMap, replaceStoppingTimeCoordinate, Function.update]
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem expect_eq_of_eq_on_support {Sample : Type*}
-    (law : PMF Sample) (first second : Sample → ℝ)
-    (heq : ∀ sample, law sample ≠ 0 → first sample = second sample) :
-    Math.Probability.expect law first =
-      Math.Probability.expect law second := by
-  unfold Math.Probability.expect
-  apply tsum_congr
-  intro sample
-  by_cases hsample : law sample = 0
-  · simp [hsample]
-  · rw [heq sample hsample]
 
 theorem quittingTerminalPayoff_update_some_eq_clockBound_of_supported
     (reward : {T : Finset ι // T.Nonempty} → Payoff ι)

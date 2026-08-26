@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Topology.MetricSpace.HausdorffDistance
 import Mathlib.Topology.MetricSpace.ProperSpace
+import Mathlib.Topology.Sequences
 
 /-!
 # Quantitative nested outer approximation
@@ -302,5 +303,57 @@ theorem quantitative_bracket
 end Objective
 
 end NestedOuterApproximation
+
+/-- A continuous real score has the same lower bounds on a set and on any
+containing set equal to its closure. -/
+theorem lowerBounds_image_eq_of_subset_closure_eq
+    {Point : Type*} [PseudoMetricSpace Point]
+    {approximants carrier : Set Point}
+    (hsubset : approximants ⊆ carrier)
+    (hclosure : closure approximants = carrier)
+    (score : Point → ℝ) (hscore : Continuous score) :
+    lowerBounds (score '' approximants) = lowerBounds (score '' carrier) := by
+  apply Set.Subset.antisymm
+  · intro bound hbound value hvalue
+    obtain ⟨point, hpoint, rfl⟩ := hvalue
+    rw [← hclosure] at hpoint
+    obtain ⟨sequence, hsequence, htendsto⟩ :=
+      mem_closure_iff_seq_limit.mp hpoint
+    apply ge_of_tendsto
+      (hscore.continuousAt.tendsto.comp htendsto)
+    exact Eventually.of_forall fun level => hbound
+      ⟨sequence level, hsequence level, rfl⟩
+  · intro bound hbound value hvalue
+    obtain ⟨point, hpoint, rfl⟩ := hvalue
+    exact hbound ⟨point, hsubset hpoint, rfl⟩
+
+/-- A continuous real score has the same infimum on a nonempty set and on a
+containing set equal to its closure. -/
+theorem sInf_image_eq_of_subset_closure_eq
+    {Point : Type*} [PseudoMetricSpace Point]
+    {approximants carrier : Set Point}
+    (happroximants : approximants.Nonempty)
+    (hsubset : approximants ⊆ carrier)
+    (hclosure : closure approximants = carrier)
+    (score : Point → ℝ) (hscore : Continuous score)
+    (hbounded : BddBelow (score '' carrier)) :
+    sInf (score '' approximants) = sInf (score '' carrier) := by
+  have hboundedApproximants : BddBelow (score '' approximants) :=
+    hbounded.mono (Set.image_mono hsubset)
+  have hbounds := lowerBounds_image_eq_of_subset_closure_eq
+    hsubset hclosure score hscore
+  have hglbApproximants := isGLB_csInf
+    (happroximants.image score) hboundedApproximants
+  have hglbCarrier := isGLB_csInf
+    ((happroximants.mono hsubset).image score) hbounded
+  apply hglbApproximants.unique
+  constructor
+  · rw [hbounds]
+    exact hglbCarrier.1
+  · intro bound hbound
+    apply hglbCarrier.2
+    rw [← hbounds]
+    exact hbound
+
 end Topology
 end Math

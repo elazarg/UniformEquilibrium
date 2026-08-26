@@ -38,6 +38,7 @@ import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
 import Research.Quitting.BlockPair.K11
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
+import Research.Quitting.CausalTailEscapeMaxAbsorptionCore
 import Research.Quitting.CausalTailEscapeMaxAbsorptionDispatch
 import Research.Quitting.CausalTailEscapeReturnGate
 import Research.Quitting.CertifiedForcedOwnerBackgroundHost
@@ -65,8 +66,8 @@ import Research.Quitting.DiffuseApproximateDeletion
 import Research.Quitting.DissipativePeriodizationCompleteness
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
 import Research.Quitting.EnrichedSeamCompression
-import Research.Quitting.EscapeAwareQuantileClockCollision
 import Research.Quitting.EscapeAwareQuantileClockHierarchy
+import Research.Quitting.EscapeAwareQuantileClockMidpoint
 import Research.Quitting.EscapeAwareQuantileClockPolynomialLower
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
@@ -91,6 +92,8 @@ import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
 import Research.Quitting.MinimumFiberResetSquareCompatibility
 import Research.Quitting.MinimumFiberResetSquareSourceMatchNoGo
+import Research.Quitting.MinimumLawCausalSuffixInertStack
+import Research.Quitting.MinimumLawCausalSuffixPureNeverLimit
 import Research.Quitting.NearMinimumActualDeviationRectangle
 import Research.Quitting.NearMinimumRecenteredStrategicSign
 import Research.Quitting.NegativeRectangleResetFaceCompensation

@@ -120,12 +120,6 @@ theorem mixedEU_eq_prefix_at_dummy
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu mixed dummy =
       (quittingTwoDateTimingGame prefixReward).mixedExtension.eu mixed dummy := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
-  letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -144,12 +138,6 @@ theorem activeProfile_mixedEU_eq_prefix
         (activeProfile row column) who =
       (quittingTwoDateTimingGame prefixReward).mixedExtension.eu
         (activeProfile row column) who := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
-  letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -287,9 +275,6 @@ theorem nonUniqueNash_deviation_value
       | 1 => -1
       | 2 => if action = now then -1 else 0
       | 3 => if action = now then -1 else 0 := by
-  letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
   rw [(quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
   simp_rw [← actionTime_two]
@@ -334,9 +319,6 @@ theorem nonUniqueNash_payoff (who : Player) :
 theorem nonUniqueNashProfile_isNash :
     (quittingTwoDateTimingGame prefixReward).mixedExtension.IsNash
       nonUniqueNashProfile := by
-  letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
   apply ((quittingTwoDateTimingGame prefixReward).isNash_iff_gains_nonpos
     nonUniqueNashProfile).mpr
   intro who action
@@ -386,13 +368,7 @@ private theorem canonical_pureDeviation_mixedEU_eq_prefix
         _ = _ := (congrArg (fun profile : Player → PMF Action =>
             (quittingTwoDateTimingGame prefixReward).mixedExtension.eu profile 1)
           hupdate).symm
-    · letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-        unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-        infer_instance
-      letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-        unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-        infer_instance
-      rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
+    · rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
         (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
       simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
       simp_rw [← actionTime_two]
@@ -409,12 +385,6 @@ private theorem canonical_pureDeviation_mixedEU_eq_prefix
 theorem canonicalProfile_isNash :
     (quittingTwoDateTimingGame prefixReward).mixedExtension.IsNash
       equilibriumProfile := by
-  letI : Finite (quittingTwoDateTimingGame prefixReward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
   apply ((quittingTwoDateTimingGame prefixReward).isNash_iff_gains_nonpos
     equilibriumProfile).mpr
   intro who action
