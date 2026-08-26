@@ -137,6 +137,15 @@
       "scope": "For every supplied finite coordinate bound, a Fin 4 reward table has a uniform-equilibrium payoff or, on the same table, a terminal exploitability witness, full recursive normal core, all-player punishment normality, a normalized singleton packet with full support and an explicit positive coordinate floor, and ResidualHardClass. Thus the projective-Q-bar chamber is solved; the hard residual is not."
     },
     {
+      "id": "fin-four-robust-join-background-reversal",
+      "subject": "Fin4 robust-join table class and strict background reversal",
+      "kind": "Unconditional existence theorem and counterexample restriction",
+      "declaration": "finFour_exists_uniformPayoff_of_noStrictBackgroundReversal",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/RobustJoinStrictBackgroundReversal.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every Fin 4 table in which each strictly favorable singleton join remains weakly favorable on every disjoint background has a uniform-equilibrium payoff. Consequently every hypothetical Fin 4 counterexample has a positive singleton join which reverses strictly on a nonempty background. More generally, any supplied positive selected cycle on an arbitrary finite player type has such a strict reversal under nonexistence. This removes a finite reward-table chamber; it does not solve the remaining hard residual."
+    },
+    {
       "id": "fin-four-hard-principal-dispatch",
       "subject": "Finite principal dispatch in the four-player hard residual",
       "kind": "Conditional structural theorem",
