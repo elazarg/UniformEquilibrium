@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import MathUE.Topology.NestedOuterApproximation
 import MathUE.Probability.QuantileClock
-import Research.Quitting.EscapeAwareQuantileClockCollision
+import MathUE.Probability.QuantileClockCollision
+import MathUE.ProbabilityMassFunction.Coupling
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedSemanticCarrier
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
@@ -754,7 +755,7 @@ def quittingQuantileClockRawJointQuotient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (level : ℕ)
     (choices : ι → Option ℕ) : ι → Option ℕ :=
-  fun who => Math.Probability.finiteClockQuotient
+  fun who => Math.Probability.finiteClockRawQuotient
     (quittingQuantileClockMarks reward profile level) (choices who)
 
 /-- Removing unattained raw cells preserves every deterministic terminal
@@ -763,8 +764,8 @@ at marked dates are retained exactly, and the all-Never branch stays zero. -/
 theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_activeQuotient_of_no_rawCollision
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (marks : Finset ℕ) (choices : ι → Option ℕ) (observer : ι)
-    (hnoCollision : ¬hasEvenSomeCollision (fun who =>
-      Math.Probability.finiteClockQuotient marks (choices who))) :
+    (hnoCollision : ¬hasRawEvenSomeCollision (fun who =>
+      Math.Probability.finiteClockRawQuotient marks (choices who))) :
     quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) observer =
       quittingTerminalPayoff reward
@@ -810,7 +811,7 @@ theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_activeQuotient_of_no_r
               rfl
             · exfalso
               have heven :=
-                (Math.Probability.finiteClockCellIndex_eq_implies_eq_or_even
+                (Math.Probability.finiteClockRawCellIndex_eq_implies_eq_or_even
                   marks hraw).resolve_left heqTime
               obtain ⟨anchor, hanchorMem⟩ := hsourceFirst
               have hanchor : choices anchor = some first := by
@@ -823,11 +824,11 @@ theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_activeQuotient_of_no_r
                 exact (heqTime rfl).elim
               apply hnoCollision
               refine ⟨who, anchor, hne,
-                Math.Probability.finiteClockCellIndex marks time,
+                Math.Probability.finiteClockRawCellIndex marks time,
                 heven, ?_, ?_⟩
-              · simp [hchoice, Math.Probability.finiteClockQuotient]
+              · simp [hchoice, Math.Probability.finiteClockRawQuotient]
               · rw [hraw]
-                simp [hanchor, Math.Probability.finiteClockQuotient]
+                simp [hanchor, Math.Probability.finiteClockRawQuotient]
       · intro hsource
         simp [target, targetFirst, hsource]
     have htargetFirst : (Finset.univ.filter fun who =>
@@ -1003,8 +1004,8 @@ theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_paddedActiveTarget_of_
         Math.Probability.finiteClockActiveCellCount marks - 1)
     (htarget : Math.Probability.finiteClockActiveCellCount marks ≤ targetTime)
     (hsourceWho : choices who = some sourceTime)
-    (hnoCollision : ¬hasEvenSomeCollision (fun player =>
-      Math.Probability.finiteClockQuotient marks (choices player))) :
+    (hnoCollision : ¬hasRawEvenSomeCollision (fun player =>
+      Math.Probability.finiteClockRawQuotient marks (choices player))) :
     quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) observer =
       quittingTerminalPayoff reward
@@ -1046,14 +1047,14 @@ theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_paddedActiveTarget_of_
             (Math.Probability.finiteClockActiveCellIndex_eq_iff
               marks time sourceTime).mp hactiveEq
           have heven :=
-            Math.Probability.finiteClockCellIndex_even_of_activeCellIndex_eq_last
+            Math.Probability.finiteClockRawCellIndex_even_of_activeCellIndex_eq_last
               marks hsourceLast
           apply hnoCollision
           refine ⟨player, who, hplayer,
-            Math.Probability.finiteClockCellIndex marks sourceTime,
+            Math.Probability.finiteClockRawCellIndex marks sourceTime,
             heven, ?_, ?_⟩
-          · simp [hchoice, Math.Probability.finiteClockQuotient, hrawEq]
-          · simp [hsourceWho, Math.Probability.finiteClockQuotient]
+          · simp [hchoice, Math.Probability.finiteClockRawQuotient, hrawEq]
+          · simp [hsourceWho, Math.Probability.finiteClockRawQuotient]
         dsimp [cell, last] at hcellCount hneLast ⊢
         omega
   calc
@@ -1138,8 +1139,8 @@ theorem quittingTerminalPayoff_pureStoppingTimeProfile_eq_reverseActiveCoupling_
         Math.Probability.finiteClockActiveCellIndex marks sourceTime =
           Math.Probability.finiteClockActiveCellCount marks - 1 ∧
         Math.Probability.finiteClockActiveCellCount marks ≤ targetTime)
-    (hnoCollision : ¬hasEvenSomeCollision (fun player =>
-      Math.Probability.finiteClockQuotient marks (choices player))) :
+    (hnoCollision : ¬hasRawEvenSomeCollision (fun player =>
+      Math.Probability.finiteClockRawQuotient marks (choices player))) :
     quittingTerminalPayoff reward
         (quittingPureStoppingTimeProfile reward choices) observer =
       quittingTerminalPayoff reward
@@ -1281,47 +1282,6 @@ theorem quittingQuantileClockCompressed_semanticPair_mem_reachable
     fun who => quittingQuantileClockCompressedLaws_isFiniteClock
       reward profile level who, rfl⟩
 
-omit [Fintype ι] [DecidableEq ι] in
-/-- Coupled bounded observables differ in expectation by at most twice their
-common absolute bound times the probability of the bad event. -/
-theorem abs_expect_sub_expect_map_le_of_eq_off_event
-    {Source Target : Type*} (law : PMF Source) (quotient : Source → Target)
-    (sourceValue : Source → ℝ) (targetValue : Target → ℝ)
-    (event : Set Source) {bound : ℝ}
-    (hsource : ∀ sample, |sourceValue sample| ≤ bound)
-    (htarget : ∀ sample, |targetValue sample| ≤ bound)
-    (heq : ∀ sample, sample ∉ event →
-      sourceValue sample = targetValue (quotient sample)) :
-    |Math.Probability.expect law sourceValue -
-        Math.Probability.expect (law.map quotient) targetValue| ≤
-      2 * bound *
-        (Math.ProbabilityMassFunction.pmfMass law
-          fun sample => sample ∈ event).toReal := by
-  have hmap : Math.Probability.expect (law.map quotient) targetValue =
-      Math.Probability.expect law
-        (fun sample => targetValue (quotient sample)) := by
-    simpa [Math.ProbabilityMassFunction.pushforward] using
-      Math.ProbabilityMassFunction.expect_pushforward_of_bounded
-        law quotient targetValue htarget
-  rw [hmap]
-  apply Math.ProbabilityMassFunction.abs_expect_sub_le_mul_pmfMass
-    law sourceValue (fun sample => targetValue (quotient sample)) event
-    (bound := 2 * bound) (observableBound := bound)
-    hsource (fun sample => htarget (quotient sample))
-  intro sample
-  by_cases hevent : sample ∈ event
-  · rw [Set.indicator_of_mem hevent]
-    simp only [mul_one]
-    calc
-      |sourceValue sample - targetValue (quotient sample)| ≤
-          |sourceValue sample| + |targetValue (quotient sample)| :=
-        abs_sub _ _
-      _ ≤ bound + bound := add_le_add (hsource sample)
-        (htarget (quotient sample))
-      _ = 2 * bound := by ring
-  · rw [Set.indicator_of_notMem hevent, mul_zero, heq sample hevent,
-      sub_self, abs_zero]
-
 /-- The prescribed-payoff part of quantile compression follows from an
 explicit bad-event coupling and the sharp pair-collision budget. -/
 theorem abs_quittingTerminalPayoff_sub_compressed_le_of_collisionEvent
@@ -1391,7 +1351,7 @@ theorem abs_quittingTerminalPayoff_sub_quantileClockCompressed_le_of_bound
           (quittingQuantileClockCompressedProfile reward profile level)
           observer| ≤ bound * quantileClockRadius ι level := by
   let event : Set (ι → Option ℕ) := {choices |
-    hasEvenSomeCollision
+    hasRawEvenSomeCollision
       (quittingQuantileClockRawJointQuotient
         reward profile level choices)}
   rw [show bound * quantileClockRadius ι level =
@@ -1406,12 +1366,12 @@ theorem abs_quittingTerminalPayoff_sub_quantileClockCompressed_le_of_bound
         reward (quittingQuantileClockMarks reward profile level)
         choices observer hchoices
   · have hmass :=
-      Math.Probability.pmfMass_commonQuantileQuotient_hasEvenSomeCollision_toReal_le
+      Math.Probability.pmfMass_commonQuantileRawQuotient_hasRawEvenSomeCollision_toReal_le
         (quittingQuantileClockSourceLaws reward profile) hlevel
     change (Math.ProbabilityMassFunction.pmfMass
       (pmfPi (quittingQuantileClockSourceLaws reward profile))
-      (fun choices => hasEvenSomeCollision (fun who =>
-        Math.Probability.finiteClockQuotient
+      (fun choices => hasRawEvenSomeCollision (fun who =>
+        Math.Probability.finiteClockRawQuotient
           (Math.Probability.commonStoppingLawQuantileMarks
             (quittingQuantileClockSourceLaws reward profile) level)
           (choices who)))).toReal ≤ quantileClockCollisionBudget ι level
@@ -1440,8 +1400,8 @@ theorem pmfMass_quittingQuantileClock_update_pure_collision_toReal_le
     (Math.ProbabilityMassFunction.pmfMass
       (pmfPi (quittingPureDeviationStoppingLaws
         (quittingQuantileClockSourceLaws reward profile) who choice))
-      (fun choices => hasEvenSomeCollision (fun player =>
-        Math.Probability.finiteClockQuotient
+      (fun choices => hasRawEvenSomeCollision (fun player =>
+        Math.Probability.finiteClockRawQuotient
           (quittingQuantileClockMarks reward profile level)
           (choices player)))).toReal ≤
       quantileClockCollisionBudget ι level := by
@@ -1449,7 +1409,7 @@ theorem pmfMass_quittingQuantileClock_update_pure_collision_toReal_le
   let marks := quittingQuantileClockMarks reward profile level
   let sourceModified := quittingPureDeviationStoppingLaws laws who choice
   have hmass :=
-    Math.Probability.pmfMass_commonQuantileQuotient_update_pure_collision_toReal_le
+    Math.Probability.pmfMass_commonQuantileRawQuotient_update_pure_collision_toReal_le
       laws hlevel who choice
   have hmodifiedClassical : sourceModified =
       @Function.update ι (fun _ => PMF (Option ℕ))
@@ -1463,8 +1423,8 @@ theorem pmfMass_quittingQuantileClock_update_pure_collision_toReal_le
         Function.update]
   have hmassBase : (Math.ProbabilityMassFunction.pmfMass
       (pmfPi sourceModified)
-      (fun choices => hasEvenSomeCollision (fun player =>
-        Math.Probability.finiteClockQuotient marks
+      (fun choices => hasRawEvenSomeCollision (fun player =>
+        Math.Probability.finiteClockRawQuotient marks
           (choices player)))).toReal ≤
       ((Fintype.card ι).choose 2 : ℝ) / (level : ℝ) := by
     rw [hmodifiedClassical]
@@ -1472,8 +1432,8 @@ theorem pmfMass_quittingQuantileClock_update_pure_collision_toReal_le
   rw [Math.Probability.natCast_choose_two_eq_mul_sub_div_two] at hmassBase
   change (Math.ProbabilityMassFunction.pmfMass
       (pmfPi sourceModified)
-      (fun choices => hasEvenSomeCollision (fun player =>
-        Math.Probability.finiteClockQuotient marks
+      (fun choices => hasRawEvenSomeCollision (fun player =>
+        Math.Probability.finiteClockRawQuotient marks
           (choices player)))).toReal ≤ _
   calc
     _ ≤ (((Fintype.card ι * (Fintype.card ι - 1) : ℕ) : ℝ) / 2) /
@@ -1511,8 +1471,8 @@ theorem abs_quittingTerminalPayoff_update_pureTime_sub_compressed_mapped_le_of_b
     (quittingQuantileClockCompressedLaws reward profile level)
     who targetChoice
   let event : Set (ι → Option ℕ) := {choices |
-    hasEvenSomeCollision (fun player =>
-      Math.Probability.finiteClockQuotient marks (choices player))}
+    hasRawEvenSomeCollision (fun player =>
+      Math.Probability.finiteClockRawQuotient marks (choices player))}
   rw [quittingTerminalPayoff_update_pureTime_eq_stoppingLawProfile]
   change |quittingTerminalPayoff reward
           (Function.update (quittingStoppingLawProfile reward laws) who
@@ -1548,7 +1508,7 @@ theorem abs_quittingTerminalPayoff_update_pureTime_sub_compressed_mapped_le_of_b
       quittingTerminalPayoff_pureStoppingTimeProfile_eq_activeQuotient_of_no_rawCollision
         reward marks choices who hchoices)
   have hmass :=
-    Math.Probability.pmfMass_commonQuantileQuotient_update_pure_collision_toReal_le
+    Math.Probability.pmfMass_commonQuantileRawQuotient_update_pure_collision_toReal_le
       laws hlevel who choice
   have hmass' : (Math.ProbabilityMassFunction.pmfMass
       (pmfPi sourceModified)
@@ -1641,8 +1601,8 @@ theorem exists_abs_quittingTerminalPayoff_compressed_pureTime_sub_update_le_of_b
     quittingQuantileClockReverseCoordinate
       marks who source target player (choices player)
   let event : Set (ι → Option ℕ) := {choices |
-    hasEvenSomeCollision (fun player =>
-      Math.Probability.finiteClockQuotient marks (choices player))}
+    hasRawEvenSomeCollision (fun player =>
+      Math.Probability.finiteClockRawQuotient marks (choices player))}
   have hsourceCanonical :=
     quittingTerminalPayoff_update_pureTime_eq_stoppingLawProfile
       reward profile who source
@@ -2151,59 +2111,6 @@ theorem closure_quittingCofinalFiniteClockSemanticPairs_eq_carrier
     refine ⟨approximants, ?_, htendsto⟩
     intro level
     exact Set.mem_iUnion.mpr ⟨level, hlevels level⟩
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A continuous real score has the same lower bounds on a set and on any
-containing set equal to its closure. -/
-theorem lowerBounds_image_eq_of_subset_closure_eq
-    {Point : Type*} [PseudoMetricSpace Point]
-    {approximants carrier : Set Point}
-    (hsubset : approximants ⊆ carrier)
-    (hclosure : closure approximants = carrier)
-    (score : Point → ℝ) (hscore : Continuous score) :
-    lowerBounds (score '' approximants) = lowerBounds (score '' carrier) := by
-  apply Set.Subset.antisymm
-  · intro bound hbound value hvalue
-    obtain ⟨point, hpoint, rfl⟩ := hvalue
-    rw [← hclosure] at hpoint
-    obtain ⟨sequence, hsequence, htendsto⟩ :=
-      mem_closure_iff_seq_limit.mp hpoint
-    apply ge_of_tendsto
-      (hscore.continuousAt.tendsto.comp htendsto)
-    exact Eventually.of_forall fun level => hbound
-      ⟨sequence level, hsequence level, rfl⟩
-  · intro bound hbound value hvalue
-    obtain ⟨point, hpoint, rfl⟩ := hvalue
-    exact hbound ⟨point, hsubset hpoint, rfl⟩
-
-omit [Fintype ι] [DecidableEq ι] in
-/-- A continuous real score has the same infimum on a nonempty set and on a
-containing set equal to its closure. -/
-theorem sInf_image_eq_of_subset_closure_eq
-    {Point : Type*} [PseudoMetricSpace Point]
-    {approximants carrier : Set Point}
-    (happroximants : approximants.Nonempty)
-    (hsubset : approximants ⊆ carrier)
-    (hclosure : closure approximants = carrier)
-    (score : Point → ℝ) (hscore : Continuous score)
-    (hbounded : BddBelow (score '' carrier)) :
-    sInf (score '' approximants) = sInf (score '' carrier) := by
-  have hboundedApproximants : BddBelow (score '' approximants) :=
-    hbounded.mono (Set.image_mono hsubset)
-  have hbounds := lowerBounds_image_eq_of_subset_closure_eq
-    hsubset hclosure score hscore
-  have hglbApproximants := isGLB_csInf
-    (happroximants.image score) hboundedApproximants
-  have hglbCarrier := isGLB_csInf
-    ((happroximants.mono hsubset).image score) hbounded
-  apply hglbApproximants.unique
-  constructor
-  · rw [hbounds]
-    exact hglbCarrier.1
-  · intro bound hbound
-    apply hglbCarrier.2
-    rw [← hbounds]
-    exact hbound
 
 /-- Every continuous real score has the same infimum on the literal cofinal
 finite-clock union and on the full compact semantic carrier. -/

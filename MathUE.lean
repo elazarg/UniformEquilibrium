@@ -316,6 +316,7 @@ import MathUE.Probability.PositiveChargedCirculationClass
 import MathUE.Probability.PotentialDominatedTransitionCost
 import MathUE.Probability.PredictableCoreShadow
 import MathUE.Probability.QuantileClock
+import MathUE.Probability.QuantileClockCollision
 import MathUE.Probability.QuotientShadowLift
 import MathUE.Probability.ReachableClosedClass
 import MathUE.Probability.RealizedAccountDeflation
@@ -341,6 +342,7 @@ import MathUE.ProbabilityMassFunction
 import MathUE.ProbabilityMassFunction.BoundedSupportAverage
 import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CompactStoppingLaw
+import MathUE.ProbabilityMassFunction.Coupling
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates

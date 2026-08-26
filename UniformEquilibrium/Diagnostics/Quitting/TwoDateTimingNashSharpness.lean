@@ -339,7 +339,7 @@ theorem row_now_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 0 (PMF.pure now)) 0 =
       1 - 2 * mass column now := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -370,7 +370,7 @@ theorem row_next_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 0 (PMF.pure next)) 0 =
       1 - 2 * mass column next := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -401,7 +401,7 @@ theorem row_never_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 0 (PMF.pure never)) 0 =
       1 - mass column never := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -483,7 +483,7 @@ theorem active_row_payoff_eq (row column : PMF Action) :
         mass row next * (1 - 2 * mass column next) +
           mass row never * (1 - mass column never) := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -509,7 +509,7 @@ theorem mixedPayoff_one_eq_neg_zero (mixed : Player → PMF Action) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu mixed 1 =
       -(quittingTwoDateTimingGame reward).mixedExtension.eu mixed 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -522,7 +522,7 @@ theorem column_now_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 1 (PMF.pure now)) 1 =
       2 * mass row now - 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -555,7 +555,7 @@ theorem column_next_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 1 (PMF.pure next)) 1 =
       2 * mass row next - 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -588,7 +588,7 @@ theorem column_never_value (row column : PMF Action) :
         (Function.update (activeProfile row column) 1 (PMF.pure never)) 1 =
       mass row never - 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -864,7 +864,7 @@ private theorem equilibrium_dummy_two_now_deviation :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update equilibriumProfile 2 (PMF.pure now)) 2 = -1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -886,7 +886,7 @@ private theorem equilibrium_dummy_two_never_deviation :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update equilibriumProfile 2 (PMF.pure never)) 2 = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -909,7 +909,7 @@ private theorem equilibrium_dummy_two_next_deviation :
         (Function.update equilibriumProfile 2 (PMF.pure next)) 2 =
       -9 / 16 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1028,7 +1028,7 @@ private theorem equilibrium_dummy_three_now_deviation :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update equilibriumProfile 3 (PMF.pure now)) 3 = -1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1049,7 +1049,7 @@ private theorem equilibrium_dummy_three_never_deviation :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update equilibriumProfile 3 (PMF.pure never)) 3 = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1071,7 +1071,7 @@ private theorem equilibrium_dummy_three_next_deviation :
         (Function.update equilibriumProfile 3 (PMF.pure next)) 3 =
       -9 / 16 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1139,7 +1139,7 @@ theorem equilibriumProfile_isNash :
     (quittingTwoDateTimingGame reward).mixedExtension.IsNash
       equilibriumProfile := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   apply ((quittingTwoDateTimingGame reward).isNash_iff_gains_nonpos
     equilibriumProfile).mpr
@@ -1206,7 +1206,7 @@ theorem dummy_now_payoff (mixed : Player → PMF Action)
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed dummy (PMF.pure now)) dummy = -1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1237,7 +1237,7 @@ theorem dummy_never_payoff (mixed : Player → PMF Action)
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed dummy (PMF.pure never)) dummy = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1293,11 +1293,11 @@ theorem dummy_now_mass_eq_zero (mixed : Player → PMF Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     mixed dummy now = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ who, Finite ((quittingTwoDateTimingGame reward).Strategy who) :=
     fun _ => by
-      unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+      unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
       infer_instance
   by_contra hmass
   have hsupport := mixedGain_eq_zero_of_mem_support
@@ -1384,7 +1384,7 @@ theorem column_deviation_value_of_row_pure_now
         (Function.update mixed 1 (PMF.pure action)) 1 =
       if action = now then 1 else -1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1450,7 +1450,7 @@ theorem row_deviation_value_of_column_pure_now
         (Function.update mixed 0 (PMF.pure action)) 0 =
       if action = now then -1 else 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1483,11 +1483,11 @@ theorem mixed_payoff_le_one (mixed : Player → PMF Action)
     (who : Player) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu mixed who ≤ 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1502,11 +1502,11 @@ theorem column_eq_pure_now_of_row_pure_now
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
     (hrow : mixed 0 = PMF.pure now) : mixed 1 = PMF.pure now := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   have hgainNow := ((quittingTwoDateTimingGame reward).isNash_iff_gains_nonpos
     mixed).mp hnash 1 now
@@ -1610,7 +1610,7 @@ theorem column_now_value_of_row_now_mass_zero
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 1 (PMF.pure now)) 1 = -1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1639,11 +1639,11 @@ theorem row_now_mass_eq_zero_of_column_pure_now
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
     (hcolumn : mixed 1 = PMF.pure now) : mixed 0 now = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   have hgainNext := ((quittingTwoDateTimingGame reward).isNash_iff_gains_nonpos
     mixed).mp hnash 0 next
@@ -1860,7 +1860,7 @@ theorem column_next_value_of_no_current_mass
         (Function.update mixed 1 (PMF.pure next)) 1 =
       2 * mass (mixed 0) next - 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -1916,7 +1916,7 @@ theorem column_never_value_of_no_current_mass
         (Function.update mixed 1 (PMF.pure never)) 1 =
       mass (mixed 0) never - 1 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -2059,7 +2059,7 @@ theorem dummy_two_next_payoff
         (Function.update mixed 2 (PMF.pure next)) 2 =
       -(1 - mass (mixed 0) now) * (1 - mass (mixed 1) now) := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -2180,7 +2180,7 @@ theorem dummy_three_next_payoff
         (Function.update mixed 3 (PMF.pure next)) 3 =
       -(1 - mass (mixed 0) now) * (1 - mass (mixed 1) now) := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
@@ -2268,11 +2268,11 @@ theorem dummy_two_next_mass_eq_zero
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed) :
     mixed 2 next = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   have hother := dummy_now_mass_eq_zero mixed hnash 3 (by decide) (by decide)
   have hrowLt := mass_lt_one_of_ne_pure (mixed 0) now
@@ -2301,11 +2301,11 @@ theorem dummy_three_next_mass_eq_zero
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed) :
     mixed 3 next = 0 := by
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   letI : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   have hother := dummy_now_mass_eq_zero mixed hnash 2 (by decide) (by decide)
   have hrowLt := mass_lt_one_of_ne_pure (mixed 0) now
@@ -2477,43 +2477,10 @@ theorem equilibriumProfile_isUniqueNash :
     simp only [equilibriumProfile, activeProfile] <;>
     assumption
 
-private theorem terminalPayoff_twoDateTimingProfile_eq_mixedEU
-    (mixed : Player → PMF Action) (who : Player) :
-    quittingTerminalPayoff reward
-        (quittingTwoDateTimingProfile reward mixed) who =
-      (quittingTwoDateTimingGame reward).mixedExtension.eu mixed who := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
-  rw [quittingTwoDateTimingProfile,
-    quittingTerminalPayoff_compactStoppingLawProfile_eq_expect,
-    (quittingTwoDateTimingGame reward).mixedExtension_eu]
-  simp only [quittingTwoDateTimingLaw,
-    Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
-    quittingTwoDateTimingGame,
-    KernelGame.eu_ofPureEU]
-  calc
-    Math.Probability.expect
-          (Math.PMFProduct.pmfPi fun player =>
-            (mixed player).map quittingTwoDateTimingActionTime)
-          (fun choices => quittingTerminalPayoff reward
-            (quittingPureStoppingTimeProfile reward choices) who) =
-        Math.Probability.expect
-          ((Math.PMFProduct.pmfPi mixed).map fun choices player =>
-            quittingTwoDateTimingActionTime (choices player))
-          (fun choices => quittingTerminalPayoff reward
-            (quittingPureStoppingTimeProfile reward choices) who) := by
-      congr 1
-      exact (Math.PMFProduct.pmfPi_push_coordwise mixed
-        (fun _ => quittingTwoDateTimingActionTime)).symm
-    _ = _ := by
-      rw [Math.Probability.expect_map]
-      rfl
-
 theorem equilibriumProfile_terminalPayoff_zero :
     quittingTerminalPayoff reward
         (quittingTwoDateTimingProfile reward equilibriumProfile) 0 = 1 / 2 := by
-  rw [terminalPayoff_twoDateTimingProfile_eq_mixedEU]
+  rw [quittingTerminalPayoff_twoDateTimingProfile_eq_mixedEU]
   exact equilibrium_row_payoff
 
 def late : Option (Fin 3) := some ⟨2, by omega⟩
@@ -2592,7 +2559,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
     rw [htime, PMF.map_const]
   · have hplayer : (⟨1, by omega⟩ : Player) ≠ 0 := by decide
     rw [quittingPureDeviationCompactLaws, if_neg hplayer,
-      quittingTwoDateTimingLaw,
+      quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨1, by omega⟩ : Player) =
         quittingTwoDateTimingActionTime := by
@@ -2601,7 +2568,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
     rw [htime]
   · have hplayer : (⟨2, by omega⟩ : Player) ≠ 0 := by decide
     rw [quittingPureDeviationCompactLaws, if_neg hplayer,
-      quittingTwoDateTimingLaw,
+      quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨2, by omega⟩ : Player) =
         quittingTwoDateTimingActionTime := by
@@ -2610,7 +2577,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
     rw [htime]
   · have hplayer : (⟨3, by omega⟩ : Player) ≠ 0 := by decide
     rw [quittingPureDeviationCompactLaws, if_neg hplayer,
-      quittingTwoDateTimingLaw,
+      quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨3, by omega⟩ : Player) =
         quittingTwoDateTimingActionTime := by
@@ -2623,7 +2590,7 @@ theorem equilibriumProfile_quit_two_payoff_zero :
         (Function.update
           (quittingTwoDateTimingProfile reward equilibriumProfile) 0
           (quittingPureTimeBehaviorStrategy reward 0 (WithTop.some 2))) 0 = 1 := by
-  rw [quittingTwoDateTimingProfile,
+  rw [quittingTwoDateTimingProfile, quittingFiniteDeadlineTimingProfile,
     quittingTerminalPayoff_update_compactStoppingLawProfile_pureTime_eq_expect,
     pureDeviationLaws_eq_map_lateCoordinateTime]
   change Math.Probability.expect

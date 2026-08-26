@@ -4,8 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.OneDateNeverNashDebtHierarchy
+import Research.Quitting.EscapeAwareQuantileClockMidpoint
 import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingNashDebt
+import UniformEquilibrium.Diagnostics.Quitting.TwoDateTimingNashDebt
 
 /-!
 # Finite-deadline timing Nash debt in the escape-aware hierarchy
@@ -29,7 +30,7 @@ open Math.Probability Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-private theorem semanticPair_finiteDeadlineTimingProfile_mem_reachable
+theorem quittingTerminalSemanticPair_finiteDeadlineTimingProfile_mem_reachable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (deadline : ℕ)
     (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
@@ -51,148 +52,6 @@ private theorem semanticPair_finiteDeadlineTimingProfile_mem_reachable
             (mixed who) (Nat.le_of_not_gt htime)
   · rfl
 
-private theorem semanticPair_twoDateTimingProfile_mem_reachable
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (mixed : ι → PMF QuittingTwoDateTimingAction) :
-    quittingTerminalSemanticPair reward
-        (quittingTwoDateTimingProfile reward mixed) ∈
-      quittingFiniteClockSemanticReachable reward 2 := by
-  let laws : ι → PMF (Option ℕ) := fun who =>
-    (quittingTwoDateTimingLaw (mixed who)).toPMF
-  refine ⟨laws, ?_, ?_⟩
-  · intro who choice hchoice
-    cases choice with
-    | none => exact Or.inl rfl
-    | some time =>
-        by_cases htime : time < 2
-        · exact Or.inr ⟨time, htime, rfl⟩
-        · exfalso
-          apply hchoice
-          exact quittingTwoDateTimingLaw_some_eq_zero_of_two_le
-            (mixed who) (Nat.le_of_not_gt htime)
-  · rfl
-
-/-- Any actual finite-clock profile gives a data-sensitive zero hierarchy
-certificate whenever its diagonal midpoint fits in the final radius. -/
-theorem escapeAwareQuantileClockLower_eq_zero_of_reachableProfile_debt_radius
-    [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hcompression : HasEscapeAwareQuantileClockCompression reward)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (clockBound : ℕ)
-    (hreachable : quittingTerminalSemanticPair reward profile ∈
-      quittingFiniteClockSemanticReachable reward clockBound)
-    (hsupport : ∀ level, 0 < level →
-      clockBound ≤ quantileClockSupport ι level)
-    {horizon : ℕ}
-    (hradius : ∀ who,
-      quittingTerminalDeviationDebt reward profile who / 2 ≤
-        quantileClockRadius ι horizon) :
-    escapeAwareQuantileClockLower reward hcompression horizon = 0 := by
-  let pair := quittingTerminalSemanticPair reward profile
-  let midpoint := semanticPairDiagonalMidpoint pair
-  have hmidWithin : semanticPairWithin (quantileClockRadius ι horizon)
-      midpoint pair := by
-    apply semanticPairWithin_diagonalMidpoint
-    intro who
-    change 0 ≤ quittingTerminalDeviationDebt reward profile who ∧
-      quittingTerminalDeviationDebt reward profile who / 2 ≤
-        quantileClockRadius ι horizon
-    exact ⟨quittingTerminalDeviationDebt_nonneg reward profile who,
-      hradius who⟩
-  have hmid : midpoint ∈
-      (escapeAwareQuantileClockSystem reward hcompression).nestedOuter horizon := by
-    intro level hlevel hlevelHorizon
-    change Metric.infDist midpoint
-        (quittingFiniteClockSemanticCenter reward
-          (quantileClockSupport ι level)) ≤ quantileClockRadius ι level
-    have hpairCenter : pair ∈ quittingFiniteClockSemanticCenter reward
-        (quantileClockSupport ι level) := by
-      exact quittingFiniteClockSemanticReachable_mono reward
-        (hsupport level hlevel) hreachable
-    calc
-      Metric.infDist midpoint
-          (quittingFiniteClockSemanticCenter reward
-            (quantileClockSupport ι level)) ≤ dist midpoint pair :=
-        Metric.infDist_le_dist_of_mem hpairCenter
-      _ ≤ quantileClockRadius ι horizon := dist_le_of_semanticPairWithin
-        (quantileClockRadius_nonneg ι horizon) hmidWithin
-      _ ≤ quantileClockRadius ι level :=
-        quantileClockRadius_anti_of_pos hlevel hlevelHorizon
-  apply le_antisymm
-  · unfold escapeAwareQuantileClockLower
-    apply csInf_le
-    · refine ⟨0, ?_⟩
-      rintro value ⟨candidate, -, rfl⟩
-      exact quittingTerminalSemanticExploitability_nonneg candidate
-    · refine ⟨midpoint, hmid, ?_⟩
-      exact semanticExploitability_diagonalMidpoint_eq_zero pair
-  · exact escapeAwareQuantileClockLower_nonneg reward hcompression horizon
-
-/-- Scaled-bound counterpart of the actual-profile midpoint certificate. -/
-theorem escapeAwareQuantileClockLowerAtBound_eq_zero_of_reachableProfile_debt_radius
-    [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (bound : ℝ) (hbound : 0 ≤ bound)
-    (hcompression : HasEscapeAwareQuantileClockCompressionAtBound reward bound)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (clockBound : ℕ)
-    (hreachable : quittingTerminalSemanticPair reward profile ∈
-      quittingFiniteClockSemanticReachable reward clockBound)
-    (hsupport : ∀ level, 0 < level →
-      clockBound ≤ quantileClockSupport ι level)
-    {horizon : ℕ}
-    (hradius : ∀ who,
-      quittingTerminalDeviationDebt reward profile who / 2 ≤
-        quantileClockScaledRadius ι bound horizon) :
-    escapeAwareQuantileClockLowerAtBound reward bound hbound hcompression
-        horizon = 0 := by
-  let pair := quittingTerminalSemanticPair reward profile
-  let midpoint := semanticPairDiagonalMidpoint pair
-  have hmidWithin : semanticPairWithin
-      (quantileClockScaledRadius ι bound horizon) midpoint pair := by
-    apply semanticPairWithin_diagonalMidpoint
-    intro who
-    change 0 ≤ quittingTerminalDeviationDebt reward profile who ∧
-      quittingTerminalDeviationDebt reward profile who / 2 ≤
-        quantileClockScaledRadius ι bound horizon
-    exact ⟨quittingTerminalDeviationDebt_nonneg reward profile who,
-      hradius who⟩
-  have hmid : midpoint ∈
-      (escapeAwareQuantileClockSystemAtBound
-        reward bound hbound hcompression).nestedOuter horizon := by
-    intro level hlevel hlevelHorizon
-    change Metric.infDist midpoint
-        (quittingFiniteClockSemanticCenter reward
-          (quantileClockSupport ι level)) ≤
-            quantileClockScaledRadius ι bound level
-    have hpairCenter : pair ∈ quittingFiniteClockSemanticCenter reward
-        (quantileClockSupport ι level) := by
-      exact quittingFiniteClockSemanticReachable_mono reward
-        (hsupport level hlevel) hreachable
-    calc
-      Metric.infDist midpoint
-          (quittingFiniteClockSemanticCenter reward
-            (quantileClockSupport ι level)) ≤ dist midpoint pair :=
-        Metric.infDist_le_dist_of_mem hpairCenter
-      _ ≤ quantileClockScaledRadius ι bound horizon :=
-        dist_le_of_semanticPairWithin
-          (quantileClockScaledRadius_nonneg ι hbound horizon) hmidWithin
-      _ ≤ quantileClockScaledRadius ι bound level := by
-        unfold quantileClockScaledRadius
-        exact mul_le_mul_of_nonneg_left
-          (quantileClockRadius_anti_of_pos hlevel hlevelHorizon) hbound
-  apply le_antisymm
-  · unfold escapeAwareQuantileClockLowerAtBound
-    apply csInf_le
-    · refine ⟨0, ?_⟩
-      rintro value ⟨candidate, -, rfl⟩
-      exact quittingTerminalSemanticExploitability_nonneg candidate
-    · refine ⟨midpoint, hmid, ?_⟩
-      exact semanticExploitability_diagonalMidpoint_eq_zero pair
-  · exact escapeAwareQuantileClockLowerAtBound_nonneg
-      reward bound hbound hcompression horizon
-
 /-- A finite timing profile gives a data-sensitive zero hierarchy
 certificate whenever its diagonal midpoint fits in the final radius. -/
 theorem escapeAwareQuantileClockLower_eq_zero_of_finiteDeadlineTiming_debt_radius
@@ -212,7 +71,7 @@ theorem escapeAwareQuantileClockLower_eq_zero_of_finiteDeadlineTiming_debt_radiu
   apply escapeAwareQuantileClockLower_eq_zero_of_reachableProfile_debt_radius
     reward hcompression
       (quittingFiniteDeadlineTimingProfile reward deadline mixed) deadline
-  · exact semanticPair_finiteDeadlineTimingProfile_mem_reachable
+  · exact quittingTerminalSemanticPair_finiteDeadlineTimingProfile_mem_reachable
       reward deadline mixed
   · exact hsupport
   · exact hradius
@@ -255,7 +114,9 @@ theorem escapeAwareQuantileClockLower_eq_zero_of_twoDate_radius
     exists_twoDateTimingNash_terminalDebt_le_half reward hbound hreward
   apply escapeAwareQuantileClockLower_eq_zero_of_reachableProfile_debt_radius
     reward hcompression (quittingTwoDateTimingProfile reward mixed) 2
-  · exact semanticPair_twoDateTimingProfile_mem_reachable reward mixed
+  · exact
+      quittingTerminalSemanticPair_finiteDeadlineTimingProfile_mem_reachable
+        reward 2 mixed
   · exact hsupport
   · intro who
     have hwho := (hdebt who).2
@@ -316,7 +177,7 @@ theorem
       reward (quittingRewardBound reward) (quittingRewardBound_nonneg reward)
       (hasEscapeAwareQuantileClockCompressionAtRewardBound reward)
       (quittingFiniteDeadlineTimingProfile reward 3 mixed) 3
-  · exact semanticPair_finiteDeadlineTimingProfile_mem_reachable
+  · exact quittingTerminalSemanticPair_finiteDeadlineTimingProfile_mem_reachable
       reward 3 mixed
   · intro level hlevel
     simp only [quantileClockSupport, Fintype.card_fin]

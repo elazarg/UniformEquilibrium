@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFinFourStrictMinimumPlateauIsolation
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumLawFiniteAtom
 
 /-!
 # Uniform isolation of the four-player minimum semantic fiber
@@ -81,118 +82,6 @@ theorem quittingTerminalSemanticMinimumSingletonGap_le
     quittingTerminalSemanticMinimumSingletonGap reward pair ≤
       pair.1 who - reward (quittingSingletonTerminal who) who := by
   exact Finset.inf'_le _ (Finset.mem_univ who)
-
-/-- Same-table punishment normality excludes a singleton-tight coordinate at
-every positive global minimum, not only at one selected plateau point. -/
-theorem minimumTerminalSemantic_strictSingleton_of_punishmentNormal
-    {ι : Type} [Fintype ι] [DecidableEq ι]
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    (pair : QuittingTerminalSemanticPair ι)
-    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
-    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebtSum pair ≤
-        quittingTerminalSemanticDebtSum candidate)
-    (hpositive : 0 < quittingTerminalSemanticDebtSum pair)
-    (hnormal : ∀ who, quittingPunishmentValue reward who ≤
-      reward (quittingSingletonTerminal who) who) :
-    ∀ who, reward (quittingSingletonTerminal who) who < pair.1 who := by
-  have hdebtNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
-    quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
-  intro who
-  letI : Nonempty ι := ⟨who⟩
-  have hdebtLe : quittingTerminalSemanticDebt pair who ≤
-      quittingTerminalSemanticDebtSum pair := by
-    unfold quittingTerminalSemanticDebtSum
-    exact Finset.single_le_sum
-      (fun player _ => hdebtNonneg player) (Finset.mem_univ who)
-  have hmargin := minimumTerminalSemantic_singletonMargin
-    (reward := reward) pair hpair hminimum hpositive who
-  have hsingletonLe :
-      reward (quittingSingletonTerminal who) who ≤ pair.1 who := by
-    unfold quittingTerminalSemanticDebt at hdebtLe
-    linarith
-  refine lt_of_le_of_ne hsingletonLe ?_
-  intro heq
-  have htight : pair.1 who =
-      reward (quittingSingletonTerminal who) who := heq.symm
-  have hownerDebt :=
-    minimumTerminalSemantic_debt_eq_sum_of_singleton_tight
-      (reward := reward) pair who hpair hminimum hpositive htight
-  have houtside : ∀ other, other ≠ who →
-      quittingTerminalSemanticDebt pair other = 0 := by
-    intro other hother
-    have hsumErase : ∑ player ∈ (Finset.univ.erase who),
-        quittingTerminalSemanticDebt pair player = 0 := by
-      have hsplit := Finset.sum_erase_add (Finset.univ : Finset ι)
-        (fun player : ι => quittingTerminalSemanticDebt pair player)
-        (Finset.mem_univ who)
-      change (∑ player ∈ Finset.univ.erase who,
-            quittingTerminalSemanticDebt pair player) +
-          quittingTerminalSemanticDebt pair who =
-        ∑ player ∈ (Finset.univ : Finset ι),
-          quittingTerminalSemanticDebt pair player at hsplit
-      rw [show (∑ player ∈ (Finset.univ : Finset ι),
-          quittingTerminalSemanticDebt pair player) =
-        quittingTerminalSemanticDebtSum pair by rfl, hownerDebt] at hsplit
-      linarith
-    have hotherLe : quittingTerminalSemanticDebt pair other ≤
-        ∑ player ∈ (Finset.univ.erase who),
-          quittingTerminalSemanticDebt pair player := by
-      exact Finset.single_le_sum
-        (fun player _ => hdebtNonneg player)
-        (Finset.mem_erase.mpr ⟨hother, Finset.mem_univ other⟩)
-    rw [hsumErase] at hotherLe
-    exact le_antisymm hotherLe (hdebtNonneg other)
-  have hface : QuittingSingletonTightMinimumFace reward pair who := {
-    mem_carrier := hpair
-    minimum := hminimum
-    debt_pos := hpositive
-    owner_tight := by
-      simpa [quittingSoloReward, quittingSingletonTerminal] using htight
-    outsider_debt := houtside }
-  let gain := quittingSingletonCollisionGainMax reward who
-  have hgain : 0 ≤ gain := by
-    dsimp only [gain, quittingSingletonCollisionGainMax]
-    exact le_trans (by simp)
-      (QuittingBoundaryHolonomy.le_finitePlayerMax
-        (fun other : ι => if other = who then 0 else
-          max 0 (quittingSingletonCollisionReward reward who other -
-            quittingSoloReward reward who other)) who)
-  have hdenom : 0 < quittingTerminalSemanticDebtSum pair + gain := by
-    linarith
-  let ratio := quittingTerminalSemanticDebtSum pair /
-    (quittingTerminalSemanticDebtSum pair + gain)
-  have hratioPos : 0 < ratio := div_pos hpositive hdenom
-  have hratioOne : ratio ≤ 1 := (div_le_one hdenom).2 (by linarith)
-  let rate := ratio / 2
-  have hratePos : 0 < rate := by
-    dsimp only [rate]
-    linarith
-  have hrateOne : rate ≤ 1 := by
-    dsimp only [rate]
-    linarith
-  have hrateBound : rate ≤ quittingTerminalSemanticDebtSum pair /
-      (quittingTerminalSemanticDebtSum pair +
-        quittingSingletonCollisionGainMax reward who) := by
-    change rate ≤ ratio
-    dsimp only [rate]
-    linarith
-  have hcontrolled : QuittingSoloRateControlled reward who pair rate :=
-    quittingSoloRateControlled_of_q_le_debt_div_debt_add_gainMax
-      pair who hpositive hratePos hrateOne hrateBound
-  have hendpoint : ∀ other, other ≠ who →
-      (1 - rate) * quittingSoloReward reward other other +
-          rate * quittingSingletonCollisionReward reward who other ≤
-        quittingSoloReward reward who other := by
-    intro other hother
-    exact quittingControlledSolo_outsiderEndpoint_le_solo
-      pair who other hface hcontrolled hother
-  have hsign := singletonTight_soloReward_lt_punishmentValue_and_nonpos
-    pair who hface hratePos hrateOne hendpoint
-  have hnormalWho := hnormal who
-  change quittingPunishmentValue reward who ≤
-    quittingSoloReward reward who who at hnormalWho
-  exact (not_lt_of_ge hnormalWho hsign.1).elim
 
 /-- Strict singleton separation is uniform on the compact minimum-debt
 fiber. -/

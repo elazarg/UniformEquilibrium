@@ -4,6 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineNashDebtBounds
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingGame
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFiniteDeadlineNashEscalation
 import UniformEquilibrium.Quitting.Boundary.Exceptional.BellmanTail
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
@@ -104,107 +106,6 @@ private theorem twoDate_scalar_bound
   nlinarith [mul_pos (sub_pos.mpr hgt) hsolo0,
     mul_pos (sub_pos.mpr hgt) hboundPos,
     mul_nonneg hzeroMass hboundPos.le]
-
-theorem quittingFixedOpponentsContinueReward_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (time : ℕ)
-    {bound : ℝ} (hbound : 0 ≤ bound)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    quittingFixedOpponentsContinueReward reward roots who time ≤
-      bound * (1 - quittingFixedOpponentsContinueMass roots who time) := by
-  exact (le_abs_self _).trans
-    (abs_quittingFixedOpponentsContinueReward_le_hazard
-      reward roots who time bound hbound (fun terminal => hreward terminal who))
-
-theorem quittingFixedOpponentsContinue_add_solo_sub_quit_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (time : ℕ)
-    {bound : ℝ} (hbound : 0 ≤ bound)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    quittingFixedOpponentsContinueReward reward roots who time +
-          quittingFixedOpponentsContinueMass roots who time *
-            reward (quittingSingletonTerminal who) who -
-        quittingFixedOpponentsQuitValue reward roots who time ≤
-      2 * bound *
-        (1 - quittingFixedOpponentsContinueMass roots who time) := by
-  have hcontinue := quittingFixedOpponentsContinueReward_le
-    reward roots who time hbound hreward
-  have hquit := neg_le_of_abs_le
-    (abs_quittingFixedOpponentsQuitValue_sub_continueMass_mul_solo_le
-      reward roots who time bound hbound (fun terminal => hreward terminal who))
-  linarith
-
-theorem QuittingFiniteDeadlineNashProfile.bestResponseValue_le_max_late
-    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {profile : (quittingGame reward).BehaviorProfile} {deadline : ℕ}
-    (certificate : QuittingFiniteDeadlineNashProfile reward profile deadline)
-    (who : ι)
-    (hsolo : 0 ≤ reward (quittingSingletonTerminal who) who) :
-    quittingContinuationBestResponseValue reward profile who ≤
-      max (quittingTerminalPayoff reward profile who)
-        (quittingTerminalPayoff reward
-            (Function.update profile who
-              (quittingPureTimeBehaviorStrategy reward who none)) who +
-          quittingFiniteDeadlineOpponentSurvival reward profile deadline who *
-            reward (quittingSingletonTerminal who) who) := by
-  rw [quittingContinuationBestResponseValue]
-  let values : Set ℝ := Set.range fun deviation :
-      (quittingGame reward).BehaviorStrategy who =>
-    quittingTerminalPayoff reward (Function.update profile who deviation) who
-  have hvalues : values.Nonempty :=
-    ⟨quittingTerminalPayoff reward
-        (Function.update profile who (profile who)) who,
-      ⟨profile who, rfl⟩⟩
-  apply csSup_le hvalues
-  rintro _ ⟨deviation, rfl⟩
-  calc
-    quittingTerminalPayoff reward (Function.update profile who deviation) who ≤
-        sSup (Set.range fun quitTime : Option ℕ =>
-          quittingTerminalPayoff reward
-            (Function.update profile who
-              (quittingPureTimeBehaviorStrategy reward who quitTime)) who) :=
-      quittingTerminalPayoff_update_le_sSup_pureTimeBehaviorStrategy
-        reward profile who deviation
-    _ ≤ max (quittingTerminalPayoff reward profile who)
-          (quittingTerminalPayoff reward
-              (Function.update profile who
-                (quittingPureTimeBehaviorStrategy reward who none)) who +
-            quittingFiniteDeadlineOpponentSurvival reward profile deadline who *
-              reward (quittingSingletonTerminal who) who) := by
-      apply csSup_le
-      · exact ⟨_, ⟨none, rfl⟩⟩
-      · rintro _ ⟨quitTime, rfl⟩
-        cases quitTime with
-        | none =>
-            calc
-              _ ≤ quittingTerminalPayoff reward
-                    (Function.update profile who
-                      (quittingPureTimeBehaviorStrategy reward who
-                        (none : Option ℕ))) who +
-                  quittingFiniteDeadlineOpponentSurvival
-                    reward profile deadline who *
-                      reward (quittingSingletonTerminal who) who := by
-                apply le_add_of_nonneg_right
-                exact mul_nonneg
-                  (quittingFiniteDeadlineOpponentSurvival_nonneg
-                    reward profile deadline who) hsolo
-              _ ≤ _ := le_max_right _ _
-        | some time =>
-            by_cases htime : time < deadline
-            · exact (certificate.pureTime_le who (some time)
-                (Or.inr ⟨time, htime, rfl⟩)).trans (le_max_left _ _)
-            · let roots := quittingProfileLiveRoot reward profile
-              have hlate :=
-                quittingRootSequencePureTimeTerminalValue_late_le_none_add_charge
-                  reward roots who deadline time (Nat.le_of_not_gt htime)
-                  certificate.allContinue_from
-              rw [← quittingTerminalPayoff_update_pureTimeBehaviorStrategy
-                    reward profile who (some time),
-                ← quittingTerminalPayoff_update_pureTimeBehaviorStrategy
-                    reward profile who none] at hlate
-              dsimp only [quittingFiniteDeadlineOpponentSurvival] at hlate ⊢
-              rw [max_eq_right hsolo] at hlate
-              exact hlate.trans (le_max_right _ _)
 
 private theorem twoDate_neverValue_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -508,146 +409,78 @@ theorem quittingTerminalDeviationDebt_twoDateRootProfile_le_half
 
 /-- Planned action in the hard-tail timing game: date zero, date one, or
 Never. -/
-abbrev QuittingTwoDateTimingAction := Option (Fin 2)
+abbrev QuittingTwoDateTimingAction := QuittingFiniteDeadlineTimingAction 2
 
 /-- Read a finite timing-game action as a complete stopping time. -/
-def quittingTwoDateTimingActionTime :
-    QuittingTwoDateTimingAction → Math.Probability.CompactStoppingTime
-  | none => (⊤ : WithTop ℕ)
-  | some time => WithTop.some time.val
+abbrev quittingTwoDateTimingActionTime :
+    QuittingTwoDateTimingAction → Math.Probability.CompactStoppingTime :=
+  quittingFiniteDeadlineTimingActionTime
 
 /-- The finite strategic-form timing game whose actions are `0`, `1`, and
 Never and whose pure payoffs are the literal deterministic stopping profile
 payoffs. -/
 abbrev quittingTwoDateTimingGame
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : KernelGame ι :=
-  KernelGame.ofPureEU (fun _ => QuittingTwoDateTimingAction)
-    (fun choices who => quittingTerminalPayoff reward
-      (quittingPureStoppingTimeProfile reward fun player =>
-        quittingTwoDateTimingActionTime (choices player)) who)
+  quittingFiniteDeadlineTimingGame reward 2
 
 /-- Complete stopping law obtained by mapping a mixed timing action to its
 literal date or Never. -/
-def quittingTwoDateTimingLaw
+abbrev quittingTwoDateTimingLaw
     (mixed : PMF QuittingTwoDateTimingAction) :
     Math.Probability.CompactStoppingLaw :=
-  Math.Probability.CompactStoppingLaw.ofPMF
-    (mixed.map quittingTwoDateTimingActionTime)
+  quittingFiniteDeadlineTimingLaw mixed
 
 /-- Literal behavioral-hazard realization of independent mixed planned-time
 laws. -/
-def quittingTwoDateTimingProfile
+abbrev quittingTwoDateTimingProfile
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mixed : ι → PMF QuittingTwoDateTimingAction) :
     (quittingGame reward).BehaviorProfile :=
-  quittingCompactStoppingLawProfile reward fun who =>
-    quittingTwoDateTimingLaw (mixed who)
+  quittingFiniteDeadlineTimingProfile reward 2 mixed
 
-private theorem quittingTerminalPayoff_twoDateTimingProfile_eq_mixedEU
+/-- The behavioral realization of a two-date timing law has the timing
+game's mixed expected payoff. -/
+theorem quittingTerminalPayoff_twoDateTimingProfile_eq_mixedEU
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mixed : ι → PMF QuittingTwoDateTimingAction) (who : ι) :
     quittingTerminalPayoff reward
         (quittingTwoDateTimingProfile reward mixed) who =
-      (quittingTwoDateTimingGame reward).mixedExtension.eu mixed who := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
-    infer_instance
-  rw [quittingTwoDateTimingProfile,
-    quittingTerminalPayoff_compactStoppingLawProfile_eq_expect,
-    (quittingTwoDateTimingGame reward).mixedExtension_eu]
-  simp only [quittingTwoDateTimingLaw,
-    Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
-    quittingTwoDateTimingGame,
-    KernelGame.eu_ofPureEU]
-  calc
-    Math.Probability.expect
-          (Math.PMFProduct.pmfPi fun player =>
-            (mixed player).map quittingTwoDateTimingActionTime)
-          (fun choices => quittingTerminalPayoff reward
-            (quittingPureStoppingTimeProfile reward choices) who) =
-        Math.Probability.expect
-          ((Math.PMFProduct.pmfPi mixed).map fun choices player =>
-            quittingTwoDateTimingActionTime (choices player))
-          (fun choices => quittingTerminalPayoff reward
-            (quittingPureStoppingTimeProfile reward choices) who) := by
-      congr 1
-      exact (Math.PMFProduct.pmfPi_push_coordwise mixed
-        (fun _ => quittingTwoDateTimingActionTime)).symm
-    _ = _ := by
-      rw [Math.Probability.expect_map]
-      rfl
+      (quittingTwoDateTimingGame reward).mixedExtension.eu mixed who :=
+  quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
+    reward 2 mixed who
 
-private theorem quittingTwoDateTimingProfile_update_pureTime_eq_mixedEU
+/-- A pure two-date timing deviation has the same payoff in the behavioral
+realization and in the timing game's mixed extension. -/
+theorem quittingTwoDateTimingProfile_update_pureTime_eq_mixedEU
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (mixed : ι → PMF QuittingTwoDateTimingAction) (who : ι)
-    (action : QuittingTwoDateTimingAction) :
+    (mixed : ι → PMF QuittingTwoDateTimingAction)
+    (who : ι) (action : QuittingTwoDateTimingAction) :
     quittingTerminalPayoff reward
-        (Function.update (quittingTwoDateTimingProfile reward mixed) who
+        (Function.update
+          (quittingTwoDateTimingProfile reward mixed) who
           (quittingPureTimeBehaviorStrategy reward who
             (quittingTwoDateTimingActionTime action))) who =
       (quittingTwoDateTimingGame reward).mixedExtension.eu
-        (Function.update mixed who (PMF.pure action)) who := by
-  rw [quittingTwoDateTimingProfile,
-    quittingTerminalPayoff_update_compactStoppingLawProfile_pureTime_eq_expect,
-    ← quittingTerminalPayoff_twoDateTimingProfile_eq_mixedEU,
-    quittingTwoDateTimingProfile,
-    quittingTerminalPayoff_compactStoppingLawProfile_eq_expect]
-  congr 1
-  apply congrArg Math.PMFProduct.pmfPi
-  funext player
-  by_cases hplayer : player = who
-  · subst player
-    rw [quittingPureDeviationCompactLaws, if_pos rfl,
-      Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
-      Function.update_self, quittingTwoDateTimingLaw,
-      Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
-    exact (PMF.pure_map quittingTwoDateTimingActionTime action).symm
-  · rw [quittingPureDeviationCompactLaws, if_neg hplayer,
-      quittingTwoDateTimingLaw,
-      Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
-      Function.update_of_ne hplayer, quittingTwoDateTimingLaw,
-      Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
+        (Function.update mixed who (PMF.pure action)) who :=
+  quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU
+    reward 2 mixed who action
 
 theorem quittingTwoDateTimingLaw_some_eq_zero_of_two_le
     (mixed : PMF QuittingTwoDateTimingAction) {time : ℕ}
     (htime : 2 ≤ time) :
-    (quittingTwoDateTimingLaw mixed).toPMF (WithTop.some time) = 0 := by
-  rw [quittingTwoDateTimingLaw,
-    Math.Probability.CompactStoppingLaw.toPMF_ofPMF, PMF.map_apply]
-  rw [ENNReal.tsum_eq_zero]
-  intro action
-  split
-  · next heq =>
-      cases action with
-      | none => simp [quittingTwoDateTimingActionTime] at heq
-      | some finiteTime =>
-          have hval : time = finiteTime.val := by
-            exact Option.some.inj heq
-          have hfiniteTime := finiteTime.isLt
-          omega
-  · rfl
+    (quittingTwoDateTimingLaw mixed).toPMF (WithTop.some time) = 0 :=
+  quittingFiniteDeadlineTimingLaw_some_eq_zero_of_le mixed htime
 
 omit [DecidableEq ι] in
-private theorem quittingTwoDateTimingProfile_liveRoot_eq_allContinue_of_two_le
+theorem quittingTwoDateTimingProfile_liveRoot_eq_allContinue_of_two_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mixed : ι → PMF QuittingTwoDateTimingAction)
     {time : ℕ} (htime : 2 ≤ time) :
     quittingProfileLiveRoot reward
         (quittingTwoDateTimingProfile reward mixed) time =
-      quittingAllContinueRoot := by
-  funext who
-  have hfinite : Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
-      (quittingTwoDateTimingLaw (mixed who)).toPMF time = 0 := by
-    unfold Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
-    change ((quittingTwoDateTimingLaw (mixed who)).toPMF
-      (WithTop.some time)).toReal = 0
-    rw [quittingTwoDateTimingLaw_some_eq_zero_of_two_le (mixed who) htime]
-    rfl
-  change (Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
-    (quittingTwoDateTimingLaw (mixed who)).toPMF).toBoolean time = PMF.pure false
-  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
-  simp [Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
-    Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard, hfinite]
+      quittingAllContinueRoot :=
+  quittingFiniteDeadlineTimingProfile_liveRoot_eq_allContinue_of_le
+    reward 2 mixed htime
 
 omit [DecidableEq ι] in
 private theorem quittingTwoDateTimingProfile_eq_twoDateRootProfile
@@ -682,33 +515,8 @@ theorem quittingTwoDateTimingProfile_isFiniteDeadline
     (mixed : ι → PMF QuittingTwoDateTimingAction)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed) :
     QuittingFiniteDeadlineNashProfile reward
-      (quittingTwoDateTimingProfile reward mixed) 2 := by
-  constructor
-  · intro time htime
-    exact quittingTwoDateTimingProfile_liveRoot_eq_allContinue_of_two_le
-      reward mixed htime
-  · intro who quitTime htime
-    have hprescribed :=
-      quittingTerminalPayoff_twoDateTimingProfile_eq_mixedEU reward mixed who
-    rcases htime with hnever | ⟨time, htime, rfl⟩
-    · subst quitTime
-      have hnashNever := hnash who (PMF.pure none)
-      rw [← hprescribed,
-        ← quittingTwoDateTimingProfile_update_pureTime_eq_mixedEU
-          reward mixed who none] at hnashNever
-      exact hnashNever
-    · have htimeCases : time = 0 ∨ time = 1 := by omega
-      rcases htimeCases with rfl | rfl
-      · have hnashZero := hnash who (PMF.pure (some ⟨0, by omega⟩))
-        rw [← hprescribed,
-          ← quittingTwoDateTimingProfile_update_pureTime_eq_mixedEU
-            reward mixed who (some ⟨0, by omega⟩)] at hnashZero
-        exact hnashZero
-      · have hnashOne := hnash who (PMF.pure (some ⟨1, by omega⟩))
-        rw [← hprescribed,
-          ← quittingTwoDateTimingProfile_update_pureTime_eq_mixedEU
-            reward mixed who (some ⟨1, by omega⟩)] at hnashOne
-        exact hnashOne
+      (quittingTwoDateTimingProfile reward mixed) 2 :=
+  quittingFiniteDeadlineTimingProfile_isFiniteDeadline reward 2 mixed hnash
 
 /-- A mixed timing Nash realization retains the exact phase-mass certificate
 for the two live roots selected by its stopping laws. -/
@@ -797,15 +605,18 @@ theorem exists_twoDateTimingNash_terminalDebt_le_half
   letI : ∀ player,
       Finite ((quittingTwoDateTimingGame reward).Strategy player) := by
     intro player
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
+      KernelGame.ofPureEU
     infer_instance
   letI : ∀ player,
       Nonempty ((quittingTwoDateTimingGame reward).Strategy player) := by
     intro player
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
+      KernelGame.ofPureEU
     infer_instance
   letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
-    unfold quittingTwoDateTimingGame KernelGame.ofPureEU
+    unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
+      KernelGame.ofPureEU
     infer_instance
   obtain ⟨mixed, hnash⟩ :=
     (quittingTwoDateTimingGame reward).mixed_nash_exists

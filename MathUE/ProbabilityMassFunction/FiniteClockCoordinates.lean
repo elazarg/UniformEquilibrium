@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.ProbabilityMassFunction.Coupling
 import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
@@ -72,24 +73,6 @@ def stoppingTimeToFiniteClockAtom (clockBound : ℕ) :
         (stoppingTimeToFiniteClockAtom clockBound (some time)) =
       some time := by
   simp [htime]
-
-/-- Mapping a PMF by a function that fixes every positive-mass atom leaves it
-unchanged. -/
-theorem PMF.map_eq_self_of_eq_on_support {α : Type*}
-    (law : PMF α) (mapChoice : α → α)
-    (hfix : ∀ choice, law choice ≠ 0 → mapChoice choice = choice) :
-    law.map mapChoice = law := by
-  classical
-  apply PMF.ext
-  intro choice
-  rw [PMF.map_apply, tsum_eq_single choice]
-  · by_cases hchoice : law choice = 0
-    · simp [hchoice]
-    · simp [hfix choice hchoice]
-  · intro other hother
-    by_cases hmass : law other = 0
-    · simp [hmass]
-    · simp [hfix other hmass, hother.symm]
 
 /-- Push a stopping law into its finite coordinate space. -/
 def finiteClockEncodeLaw (clockBound : ℕ) (law : PMF (Option ℕ)) :

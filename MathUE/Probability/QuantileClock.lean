@@ -10,9 +10,10 @@ import MathUE.ProbabilityMassFunction
 # Finite common quantile clocks
 
 This file records the combinatorial part of the common quantile-clock
-compression.  A finite set of marked dates induces an ordered quotient of
-`Nat`: marked dates remain singleton cells and each gap becomes one clock
-date.  The quotient retains `none` as a literal Never atom.
+compression. A finite set of marked dates induces raw parity tags for marked
+singletons and gaps, then a consecutive active quotient that removes every
+unattained raw cell. Both quotients retain `none` as a literal Never atom;
+only the active quotient is a canonical finite target clock.
 
 The file also proves that every unmarked gap has mass at most the reciprocal
 of the quantile level, including the unbounded terminal gap.  It does not
@@ -181,15 +182,15 @@ theorem card_commonStoppingLawQuantileMarks_le {ι : Type*}
         card_stoppingLawQuantileMarks_le (laws who) level
     _ = Fintype.card ι * level := by simp
 
-/-- Ordered finite-cell index.  Each gap has an even index and each marked
-singleton has the following odd index. -/
-def finiteClockCellIndex (marks : Finset ℕ) (time : ℕ) : ℕ :=
+/-- Raw ordered finite-cell tag. Each gap has an even tag and each marked
+singleton has the following odd tag. Raw tags can have unattained holes. -/
+def finiteClockRawCellIndex (marks : Finset ℕ) (time : ℕ) : ℕ :=
   2 * (marks.filter fun mark => mark < time).card +
     if time ∈ marks then 1 else 0
 
-theorem finiteClockCellIndex_lt (marks : Finset ℕ) (time : ℕ) :
-    finiteClockCellIndex marks time < 2 * marks.card + 1 := by
-  unfold finiteClockCellIndex
+theorem finiteClockRawCellIndex_lt (marks : Finset ℕ) (time : ℕ) :
+    finiteClockRawCellIndex marks time < 2 * marks.card + 1 := by
+  unfold finiteClockRawCellIndex
   split_ifs with hmem
   · have hcard : (marks.filter fun mark => mark < time).card < marks.card :=
       Finset.card_lt_card (Finset.filter_ssubset.2 ⟨time, hmem, lt_irrefl time⟩)
@@ -200,18 +201,18 @@ theorem finiteClockCellIndex_lt (marks : Finset ℕ) (time : ℕ) :
     have hmul := Nat.mul_le_mul_left 2 hcard
     omega
 
-/-- Escape-aware quotient map: every finite date goes to its ordered finite
-cell and Never stays Never. -/
-def finiteClockQuotient (marks : Finset ℕ) : Option ℕ → Option ℕ
+/-- Raw parity-tag quotient used for collision bookkeeping. It is not a
+canonical target clock because unattained raw cells can leave holes. -/
+def finiteClockRawQuotient (marks : Finset ℕ) : Option ℕ → Option ℕ
   | none => none
-  | some time => some (finiteClockCellIndex marks time)
+  | some time => some (finiteClockRawCellIndex marks time)
 
-@[simp] theorem finiteClockQuotient_none (marks : Finset ℕ) :
-    finiteClockQuotient marks none = none := rfl
+@[simp] theorem finiteClockRawQuotient_none (marks : Finset ℕ) :
+    finiteClockRawQuotient marks none = none := rfl
 
-@[simp] theorem finiteClockQuotient_some (marks : Finset ℕ) (time : ℕ) :
-    finiteClockQuotient marks (some time) =
-      some (finiteClockCellIndex marks time) := rfl
+@[simp] theorem finiteClockRawQuotient_some (marks : Finset ℕ) (time : ℕ) :
+    finiteClockRawQuotient marks (some time) =
+      some (finiteClockRawCellIndex marks time) := rfl
 
 /-! ## Consecutive indexing of the nonempty cells -/
 
@@ -221,14 +222,14 @@ marks, are omitted. -/
 noncomputable def finiteClockActiveCells (marks : Finset ℕ) : Finset ℕ := by
   classical
   exact (Finset.range (2 * marks.card + 1)).filter fun cell =>
-    ∃ time, finiteClockCellIndex marks time = cell
+    ∃ time, finiteClockRawCellIndex marks time = cell
 
-theorem finiteClockCellIndex_mem_activeCells
+theorem finiteClockRawCellIndex_mem_activeCells
     (marks : Finset ℕ) (time : ℕ) :
-    finiteClockCellIndex marks time ∈ finiteClockActiveCells marks := by
+    finiteClockRawCellIndex marks time ∈ finiteClockActiveCells marks := by
   classical
   simp only [finiteClockActiveCells, Finset.mem_filter, Finset.mem_range]
-  exact ⟨finiteClockCellIndex_lt marks time, ⟨time, rfl⟩⟩
+  exact ⟨finiteClockRawCellIndex_lt marks time, ⟨time, rfl⟩⟩
 
 /-- Number of genuinely nonempty finite clock cells. -/
 def finiteClockActiveCellCount (marks : Finset ℕ) : ℕ :=
@@ -241,14 +242,14 @@ theorem finiteClockActiveCellCount_le (marks : Finset ℕ) :
   exact (Finset.card_filter_le _ _).trans_eq (Finset.card_range _)
 
 /-- Consecutive rank of the genuinely nonempty raw cell containing `time`.
-Unlike `finiteClockCellIndex`, this leaves no artificial dates between
+Unlike `finiteClockRawCellIndex`, this leaves no artificial dates between
 consecutive active cells. -/
 noncomputable def finiteClockActiveCellIndex
     (marks : Finset ℕ) (time : ℕ) : ℕ := by
   classical
   exact (((finiteClockActiveCells marks).orderIsoOfFin rfl).symm
-    ⟨finiteClockCellIndex marks time,
-      finiteClockCellIndex_mem_activeCells marks time⟩).val
+    ⟨finiteClockRawCellIndex marks time,
+      finiteClockRawCellIndex_mem_activeCells marks time⟩).val
 
 theorem finiteClockActiveCellIndex_lt_count
     (marks : Finset ℕ) (time : ℕ) :
@@ -256,8 +257,8 @@ theorem finiteClockActiveCellIndex_lt_count
       finiteClockActiveCellCount marks := by
   classical
   exact (((finiteClockActiveCells marks).orderIsoOfFin rfl).symm
-    ⟨finiteClockCellIndex marks time,
-      finiteClockCellIndex_mem_activeCells marks time⟩).isLt
+    ⟨finiteClockRawCellIndex marks time,
+      finiteClockRawCellIndex_mem_activeCells marks time⟩).isLt
 
 theorem finiteClockActiveCellCount_pos (marks : Finset ℕ) :
     0 < finiteClockActiveCellCount marks :=
@@ -273,38 +274,38 @@ theorem finiteClockActiveCellIndex_eq_iff
     (marks : Finset ℕ) (first second : ℕ) :
     finiteClockActiveCellIndex marks first =
         finiteClockActiveCellIndex marks second ↔
-      finiteClockCellIndex marks first =
-        finiteClockCellIndex marks second := by
+      finiteClockRawCellIndex marks first =
+        finiteClockRawCellIndex marks second := by
   classical
   unfold finiteClockActiveCellIndex
   constructor
   · intro heq
     have hfin :
         ((finiteClockActiveCells marks).orderIsoOfFin rfl).symm
-            ⟨finiteClockCellIndex marks first,
-              finiteClockCellIndex_mem_activeCells marks first⟩ =
+            ⟨finiteClockRawCellIndex marks first,
+              finiteClockRawCellIndex_mem_activeCells marks first⟩ =
           ((finiteClockActiveCells marks).orderIsoOfFin rfl).symm
-            ⟨finiteClockCellIndex marks second,
-              finiteClockCellIndex_mem_activeCells marks second⟩ :=
+            ⟨finiteClockRawCellIndex marks second,
+              finiteClockRawCellIndex_mem_activeCells marks second⟩ :=
       Fin.ext heq
     have hsubtype := congrArg
       ((finiteClockActiveCells marks).orderIsoOfFin rfl) hfin
     simpa using congrArg Subtype.val hsubtype
   · intro heq
     have hsubtype :
-        (⟨finiteClockCellIndex marks first,
-            finiteClockCellIndex_mem_activeCells marks first⟩ :
+        (⟨finiteClockRawCellIndex marks first,
+            finiteClockRawCellIndex_mem_activeCells marks first⟩ :
               finiteClockActiveCells marks) =
-          ⟨finiteClockCellIndex marks second,
-            finiteClockCellIndex_mem_activeCells marks second⟩ :=
+          ⟨finiteClockRawCellIndex marks second,
+            finiteClockRawCellIndex_mem_activeCells marks second⟩ :=
       Subtype.ext heq
     exact congrArg Fin.val (congrArg
       ((finiteClockActiveCells marks).orderIsoOfFin rfl).symm hsubtype)
 
-theorem finiteClockActiveCellIndex_lt_of_cellIndex_lt
+theorem finiteClockActiveCellIndex_lt_of_rawCellIndex_lt
     (marks : Finset ℕ) {first second : ℕ}
-    (hlt : finiteClockCellIndex marks first <
-      finiteClockCellIndex marks second) :
+    (hlt : finiteClockRawCellIndex marks first <
+      finiteClockRawCellIndex marks second) :
     finiteClockActiveCellIndex marks first <
       finiteClockActiveCellIndex marks second := by
   classical
@@ -325,8 +326,8 @@ theorem exists_finiteClockActiveCellIndex_eq
     (Finset.mem_filter.mp tagged.property).2
   refine ⟨time, ?_⟩
   unfold finiteClockActiveCellIndex
-  have htag : (⟨finiteClockCellIndex marks time,
-      finiteClockCellIndex_mem_activeCells marks time⟩ :
+  have htag : (⟨finiteClockRawCellIndex marks time,
+      finiteClockRawCellIndex_mem_activeCells marks time⟩ :
         finiteClockActiveCells marks) = tagged := by
     exact Subtype.ext htime
   rw [htag]
@@ -397,43 +398,44 @@ theorem finiteClockActiveCompressedLaw_support_commonQuantile
       have hmul := Nat.mul_le_mul_left 2 hcard
       simpa only [Nat.mul_assoc] using Nat.add_le_add_right hmul 1), rfl⟩
 
-/-- Push a complete stopping law through an ordered finite-cell quotient. -/
-def finiteClockCompressedLaw (law : PMF (Option ℕ))
+/-- Push a complete stopping law through the raw parity-tag quotient. This is
+used for collision bookkeeping, not as the canonical finite target law. -/
+def finiteClockRawCompressedLaw (law : PMF (Option ℕ))
     (marks : Finset ℕ) : PMF (Option ℕ) :=
-  law.map (finiteClockQuotient marks)
+  law.map (finiteClockRawQuotient marks)
 
-@[simp] theorem finiteClockCompressedLaw_none
+@[simp] theorem finiteClockRawCompressedLaw_none
     (law : PMF (Option ℕ)) (marks : Finset ℕ) :
-    finiteClockCompressedLaw law marks none = law none := by
-  rw [finiteClockCompressedLaw, PMF.map_apply, tsum_eq_single none]
+    finiteClockRawCompressedLaw law marks none = law none := by
+  rw [finiteClockRawCompressedLaw, PMF.map_apply, tsum_eq_single none]
   · simp
   · intro choice hchoice
     cases choice with
     | none => exact (hchoice rfl).elim
     | some time => simp
 
-theorem finiteClockCompressedLaw_support
+theorem finiteClockRawCompressedLaw_support
     (law : PMF (Option ℕ)) (marks : Finset ℕ)
     {choice : Option ℕ}
-    (hchoice : finiteClockCompressedLaw law marks choice ≠ 0) :
+    (hchoice : finiteClockRawCompressedLaw law marks choice ≠ 0) :
     choice = none ∨ ∃ time < 2 * marks.card + 1, choice = some time := by
-  have hmem : choice ∈ (finiteClockCompressedLaw law marks).support := hchoice
-  rw [finiteClockCompressedLaw, PMF.mem_support_map_iff] at hmem
+  have hmem : choice ∈ (finiteClockRawCompressedLaw law marks).support := hchoice
+  rw [finiteClockRawCompressedLaw, PMF.mem_support_map_iff] at hmem
   obtain ⟨source, -, rfl⟩ := hmem
   cases source with
   | none => exact Or.inl rfl
   | some time =>
-      exact Or.inr ⟨finiteClockCellIndex marks time,
-        finiteClockCellIndex_lt marks time, rfl⟩
+      exact Or.inr ⟨finiteClockRawCellIndex marks time,
+        finiteClockRawCellIndex_lt marks time, rfl⟩
 
-theorem finiteClockCompressedLaw_support_commonQuantile {ι : Type*}
+theorem finiteClockRawCompressedLaw_support_commonQuantile {ι : Type*}
     [Fintype ι] (laws : ι → PMF (Option ℕ)) (level : ℕ)
     (who : ι) {choice : Option ℕ}
-    (hchoice : finiteClockCompressedLaw (laws who)
+    (hchoice : finiteClockRawCompressedLaw (laws who)
         (commonStoppingLawQuantileMarks laws level) choice ≠ 0) :
     choice = none ∨ ∃ time < 2 * Fintype.card ι * level + 1,
       choice = some time := by
-  rcases finiteClockCompressedLaw_support (laws who)
+  rcases finiteClockRawCompressedLaw_support (laws who)
       (commonStoppingLawQuantileMarks laws level) hchoice with
     hnever | ⟨time, htime, rfl⟩
   · exact Or.inl hnever
@@ -444,10 +446,10 @@ theorem finiteClockCompressedLaw_support_commonQuantile {ι : Type*}
 
 /-! ## Whole-cell mass estimate -/
 
-theorem finiteClockCellIndex_mono (marks : Finset ℕ) :
-    Monotone (finiteClockCellIndex marks) := by
+theorem finiteClockRawCellIndex_mono (marks : Finset ℕ) :
+    Monotone (finiteClockRawCellIndex marks) := by
   intro first second hle
-  unfold finiteClockCellIndex
+  unfold finiteClockRawCellIndex
   by_cases hfirst : first ∈ marks
   · have hsub : marks.filter (fun mark => mark < first) ⊆
         marks.filter (fun mark => mark < second) := by
@@ -487,13 +489,13 @@ theorem finiteClockActiveCellIndex_mono (marks : Finset ℕ) :
   intro first second hle
   unfold finiteClockActiveCellIndex
   apply ((finiteClockActiveCells marks).orderIsoOfFin rfl).symm.monotone
-  exact finiteClockCellIndex_mono marks hle
+  exact finiteClockRawCellIndex_mono marks hle
 
-theorem finiteClockCellIndex_lt_of_lt_of_mem_left
+theorem finiteClockRawCellIndex_lt_of_lt_of_mem_left
     (marks : Finset ℕ) {first second : ℕ} (hlt : first < second)
     (hfirst : first ∈ marks) :
-    finiteClockCellIndex marks first < finiteClockCellIndex marks second := by
-  unfold finiteClockCellIndex
+    finiteClockRawCellIndex marks first < finiteClockRawCellIndex marks second := by
+  unfold finiteClockRawCellIndex
   rw [if_pos hfirst]
   have hsub : marks.filter (fun mark => mark < first) ⊆
       marks.filter (fun mark => mark < second) := by
@@ -515,23 +517,23 @@ theorem finiteClockCellIndex_lt_of_lt_of_mem_left
 
 /-- A representative of the last genuine active cell lies in the unbounded
 terminal gap, hence has an even raw tag. -/
-theorem finiteClockCellIndex_even_of_activeCellIndex_eq_last
+theorem finiteClockRawCellIndex_even_of_activeCellIndex_eq_last
     (marks : Finset ℕ) {time : ℕ}
     (hindex : finiteClockActiveCellIndex marks time =
       finiteClockActiveCellCount marks - 1) :
-    Even (finiteClockCellIndex marks time) := by
+    Even (finiteClockRawCellIndex marks time) := by
   by_contra hnotEven
   have hmem : time ∈ marks := by
     by_contra hnotMem
     apply hnotEven
-    unfold finiteClockCellIndex
+    unfold finiteClockRawCellIndex
     rw [if_neg hnotMem]
     exact even_two_mul _
-  have hrawLt : finiteClockCellIndex marks time <
-      finiteClockCellIndex marks (time + 1) :=
-    finiteClockCellIndex_lt_of_lt_of_mem_left marks
+  have hrawLt : finiteClockRawCellIndex marks time <
+      finiteClockRawCellIndex marks (time + 1) :=
+    finiteClockRawCellIndex_lt_of_lt_of_mem_left marks
       (Nat.lt_succ_self time) hmem
-  have hactiveLt := finiteClockActiveCellIndex_lt_of_cellIndex_lt
+  have hactiveLt := finiteClockActiveCellIndex_lt_of_rawCellIndex_lt
     marks hrawLt
   have hlater := finiteClockActiveCellIndex_lt_count marks (time + 1)
   rw [hindex] at hactiveLt
@@ -540,11 +542,11 @@ theorem finiteClockCellIndex_even_of_activeCellIndex_eq_last
 
 /-- Equal raw cell tags either come from the same natural date or from one
 common unmarked gap. -/
-theorem finiteClockCellIndex_eq_implies_eq_or_even
+theorem finiteClockRawCellIndex_eq_implies_eq_or_even
     (marks : Finset ℕ) {first second : ℕ}
-    (heq : finiteClockCellIndex marks first =
-      finiteClockCellIndex marks second) :
-    first = second ∨ Even (finiteClockCellIndex marks first) := by
+    (heq : finiteClockRawCellIndex marks first =
+      finiteClockRawCellIndex marks second) :
+    first = second ∨ Even (finiteClockRawCellIndex marks first) := by
   by_cases hfirst : first = second
   · exact Or.inl hfirst
   · right
@@ -552,34 +554,34 @@ theorem finiteClockCellIndex_eq_implies_eq_or_even
       intro hmem
       rcases lt_or_gt_of_ne hfirst with hlt | hgt
       · exact (ne_of_lt
-          (finiteClockCellIndex_lt_of_lt_of_mem_left marks hlt hmem)) heq
+          (finiteClockRawCellIndex_lt_of_lt_of_mem_left marks hlt hmem)) heq
       · have hsecond : second ∈ marks := by
           by_contra hsecond
-          unfold finiteClockCellIndex at heq
+          unfold finiteClockRawCellIndex at heq
           rw [if_pos hmem, if_neg hsecond] at heq
           omega
-        have hlt := finiteClockCellIndex_lt_of_lt_of_mem_left
+        have hlt := finiteClockRawCellIndex_lt_of_lt_of_mem_left
           marks hgt hsecond
         exact (ne_of_gt hlt) heq
-    unfold finiteClockCellIndex
+    unfold finiteClockRawCellIndex
     rw [if_neg hnotMem]
     exact even_two_mul _
 
-theorem finiteClockCellIndex_eq_of_between {marks : Finset ℕ}
+theorem finiteClockRawCellIndex_eq_of_between {marks : Finset ℕ}
     {first middle last cell : ℕ}
-    (hfirst : finiteClockCellIndex marks first = cell)
-    (hlast : finiteClockCellIndex marks last = cell)
+    (hfirst : finiteClockRawCellIndex marks first = cell)
+    (hlast : finiteClockRawCellIndex marks last = cell)
     (hfm : first ≤ middle) (hml : middle ≤ last) :
-    finiteClockCellIndex marks middle = cell := by
-  have hmono := finiteClockCellIndex_mono marks
+    finiteClockRawCellIndex marks middle = cell := by
+  have hmono := finiteClockRawCellIndex_mono marks
   exact le_antisymm ((hmono hml).trans_eq hlast)
     (hfirst ▸ hmono hfm)
 
-theorem finiteClockCellIndex_not_mem_of_even {marks : Finset ℕ}
-    {time cell : ℕ} (hindex : finiteClockCellIndex marks time = cell)
+theorem finiteClockRawCellIndex_not_mem_of_even {marks : Finset ℕ}
+    {time cell : ℕ} (hindex : finiteClockRawCellIndex marks time = cell)
     (heven : Even cell) : time ∉ marks := by
   intro hmem
-  unfold finiteClockCellIndex at hindex
+  unfold finiteClockRawCellIndex at hindex
   rw [if_pos hmem] at hindex
   rcases heven with ⟨k, hk⟩
   omega
@@ -651,24 +653,26 @@ theorem stoppingLawCumulativeFiniteMass_eq_sum (law : PMF (Option ℕ))
     simp only [Finset.mem_range, Nat.lt_succ_iff] at htime
     simp [Nat.not_le.mp htime]
 
-/-- Total finite stopping mass in one quotient cell. -/
-def stoppingLawFiniteClockCellMass (law : PMF (Option ℕ))
+/-- Total finite stopping mass in one raw quotient cell. -/
+def stoppingLawFiniteClockRawCellMass (law : PMF (Option ℕ))
     (marks : Finset ℕ) (cell : ℕ) : ℝ :=
   (∑' time : ℕ,
-    if finiteClockCellIndex marks time = cell then law (some time) else 0).toReal
+    if finiteClockRawCellIndex marks time = cell then
+      law (some time)
+    else 0).toReal
 
 open Classical in
 /-- Every even common-quantile cell has total finite mass at most
 `1 / level`.  The total is a `tsum`, so this includes the unbounded terminal
 gap and thresholds approached without being attained. -/
-theorem stoppingLawFiniteClockCellMass_le_one_div
+theorem stoppingLawFiniteClockRawCellMass_le_one_div
     (law : PMF (Option ℕ)) {marks : Finset ℕ} {level : ℕ}
     (hlevel : 0 < level)
     (hmarks : stoppingLawQuantileMarks law level ⊆ marks)
     (cell : ℕ) (heven : Even cell) :
-    stoppingLawFiniteClockCellMass law marks cell ≤ 1 / (level : ℝ) := by
+    stoppingLawFiniteClockRawCellMass law marks cell ≤ 1 / (level : ℝ) := by
   let mass : ENNReal := ∑' time : ℕ,
-    if finiteClockCellIndex marks time = cell then law (some time) else 0
+    if finiteClockRawCellIndex marks time = cell then law (some time) else 0
   let quantum : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
   have hquantumNonneg : 0 ≤ (1 / (level : ℝ)) := by positivity
   have hmassTop : mass ≠ ⊤ := by
@@ -691,11 +695,11 @@ theorem stoppingLawFiniteClockCellMass_le_one_div
     obtain ⟨sample, hsample⟩ :=
       exists_finset_sum_gt_of_lt_tsum
         (fun time : ℕ =>
-          if finiteClockCellIndex marks time = cell then
+          if finiteClockRawCellIndex marks time = cell then
             law (some time)
           else 0) hstrict
     let active := sample.filter fun time =>
-      finiteClockCellIndex marks time = cell
+      finiteClockRawCellIndex marks time = cell
     have hactiveSum : quantum < ∑ time ∈ active, law (some time) := by
       simpa only [active, Finset.sum_filter] using hsample
     have hactive : active.Nonempty := by
@@ -707,9 +711,9 @@ theorem stoppingLawFiniteClockCellMass_le_one_div
     let last := active.max' hactive
     have hfirstMem : first ∈ active := Finset.min'_mem active hactive
     have hlastMem : last ∈ active := Finset.max'_mem active hactive
-    have hfirstCell : finiteClockCellIndex marks first = cell :=
+    have hfirstCell : finiteClockRawCellIndex marks first = cell :=
       (Finset.mem_filter.mp hfirstMem).2
-    have hlastCell : finiteClockCellIndex marks last = cell :=
+    have hlastCell : finiteClockRawCellIndex marks last = cell :=
       (Finset.mem_filter.mp hlastMem).2
     have hfirstLeLast : first ≤ last :=
       Finset.min'_le active last hlastMem
@@ -788,8 +792,8 @@ theorem stoppingLawFiniteClockCellMass_le_one_div
           simp only [hpredSucc, lower, weight]
         exact hmono.trans_eq hpred
       linarith
-    have hcutoffCell : finiteClockCellIndex marks cutoff = cell :=
-      finiteClockCellIndex_eq_of_between hfirstCell hlastCell
+    have hcutoffCell : finiteClockRawCellIndex marks cutoff = cell :=
+      finiteClockRawCellIndex_eq_of_between hfirstCell hlastCell
         hfirstLeCutoff hcutoffLeLast
     have hownMark : cutoff ∈ stoppingLawQuantileMarks law level := by
       unfold stoppingLawQuantileMarks
@@ -797,36 +801,36 @@ theorem stoppingLawFiniteClockCellMass_le_one_div
       refine ⟨index, Finset.mem_univ index, ?_⟩
       simp only [threshold, hcrossEq, Finset.mem_singleton]
     have hcommonMark : cutoff ∈ marks := hmarks hownMark
-    exact (finiteClockCellIndex_not_mem_of_even hcutoffCell heven) hcommonMark
-  unfold stoppingLawFiniteClockCellMass
+    exact (finiteClockRawCellIndex_not_mem_of_even hcutoffCell heven) hcommonMark
+  unfold stoppingLawFiniteClockRawCellMass
   change mass.toReal ≤ _
   rw [← ENNReal.toReal_ofReal hquantumNonneg]
   exact (ENNReal.toReal_le_toReal hmassTop hquantumTop).2 htarget
 
 open Classical in
-theorem finiteClockCompressedLaw_some_toReal_eq_cellMass
+theorem finiteClockRawCompressedLaw_some_toReal_eq_rawCellMass
     (law : PMF (Option ℕ)) (marks : Finset ℕ) (cell : ℕ) :
-    (finiteClockCompressedLaw law marks (some cell)).toReal =
-      stoppingLawFiniteClockCellMass law marks cell := by
-  unfold finiteClockCompressedLaw
+    (finiteClockRawCompressedLaw law marks (some cell)).toReal =
+      stoppingLawFiniteClockRawCellMass law marks cell := by
+  unfold finiteClockRawCompressedLaw
   change (ProbabilityMassFunction.pushforward law
-    (finiteClockQuotient marks) (some cell)).toReal = _
+    (finiteClockRawQuotient marks) (some cell)).toReal = _
   rw [ProbabilityMassFunction.pushforward_apply_eq_pmfMass]
   rw [show ProbabilityMassFunction.pmfMass (μ := law)
-      (fun choice => finiteClockQuotient marks choice = some cell) =
+      (fun choice => finiteClockRawQuotient marks choice = some cell) =
       ProbabilityMassFunction.pmfMass (μ := law)
         (fun choice => ∃ time,
-          choice = some time ∧ finiteClockCellIndex marks time = cell) by
+          choice = some time ∧ finiteClockRawCellIndex marks time = cell) by
     congr 1
     funext choice
     apply propext
     cases choice <;> simp]
   rw [pmfMass_some_pred_eq_tsum]
-  unfold stoppingLawFiniteClockCellMass
+  unfold stoppingLawFiniteClockRawCellMass
   congr 1
   apply tsum_congr
   intro time
-  by_cases hcell : finiteClockCellIndex marks time = cell <;>
+  by_cases hcell : finiteClockRawCellIndex marks time = cell <;>
     simp [hcell]
 
 theorem stoppingLawQuantileMarks_subset_common {ι : Type*} [Fintype ι]
@@ -839,17 +843,17 @@ theorem stoppingLawQuantileMarks_subset_common {ι : Type*} [Fintype ι]
   exact ⟨who, Finset.mem_univ who, htime⟩
 
 open Classical in
-/-- A compressed marginal assigns at most `1 / level` to every even common
-gap cell. -/
-theorem finiteClockCompressedLaw_common_even_cell_toReal_le_one_div
+/-- A raw-compressed marginal assigns at most `1 / level` to every even
+common-gap tag. -/
+theorem finiteClockRawCompressedLaw_common_even_cell_toReal_le_one_div
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) (who : ι)
     (cell : ℕ) (heven : Even cell) :
-    (finiteClockCompressedLaw (laws who)
+    (finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level) (some cell)).toReal ≤
         1 / (level : ℝ) := by
-  rw [finiteClockCompressedLaw_some_toReal_eq_cellMass]
-  exact stoppingLawFiniteClockCellMass_le_one_div (laws who) hlevel
+  rw [finiteClockRawCompressedLaw_some_toReal_eq_rawCellMass]
+  exact stoppingLawFiniteClockRawCellMass_le_one_div (laws who) hlevel
     (stoppingLawQuantileMarks_subset_common laws level who) cell heven
 
 end Probability

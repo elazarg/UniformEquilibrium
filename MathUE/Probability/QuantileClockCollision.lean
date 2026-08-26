@@ -8,6 +8,15 @@ import MathUE.Probability.QuantileClock
 import Mathlib.Data.Nat.Choose.Cast
 import MathUE.PMFProduct.Conditioning
 
+/-!
+# Raw common-quantile collision bounds
+
+This file proves game-independent collision estimates for independent stopping
+laws. The parity-valued quotient is deliberately named `Raw`: it is collision
+bookkeeping and is not the canonical active target clock. Common marks are
+computed from the original laws and remain fixed under a pure replacement.
+-/
+
 noncomputable section
 
 namespace Math.PMFProduct
@@ -84,20 +93,20 @@ private theorem pmfMass_eq_apply {α : Type*} (law : PMF α) (value : α) :
   rw [show {choice | choice = value} = ({value} : Set α) by ext; simp]
   exact PMF.toOuterMeasure_apply_singleton law value
 
-/-- Mass of a same-even-finite-cell collision for one ordered player pair. -/
-def pairEvenSomeCollisionMass {ι : Type*} [Fintype ι]
+/-- Mass of a same-even-raw-cell collision for one ordered player pair. -/
+def pairRawEvenSomeCollisionMass {ι : Type*} [Fintype ι]
     (laws : ι → PMF (Option ℕ)) (first second : ι) : ENNReal :=
   pmfMass (pmfPi laws) fun choices =>
     ∃ cell, Even cell ∧
       choices first = some cell ∧ choices second = some cell
 
 /-- Same-cell collision mass is symmetric in the two coordinates. -/
-theorem pairEvenSomeCollisionMass_comm
+theorem pairRawEvenSomeCollisionMass_comm
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     (first second : ι) :
-    pairEvenSomeCollisionMass laws first second =
-      pairEvenSomeCollisionMass laws second first := by
-  unfold pairEvenSomeCollisionMass
+    pairRawEvenSomeCollisionMass laws first second =
+      pairRawEvenSomeCollisionMass laws second first := by
+  unfold pairRawEvenSomeCollisionMass
   congr 1
   funext choices
   apply propext
@@ -108,12 +117,12 @@ theorem pairEvenSomeCollisionMass_comm
     exact ⟨cell, heven, hfirst, hsecond⟩
 
 open Classical in
-theorem pairEvenSomeCollisionMass_le
+theorem pairRawEvenSomeCollisionMass_le
     {ι : Type*} [Fintype ι]
     (laws : ι → PMF (Option ℕ)) {first second : ι}
     (hne : first ≠ second) {bound : ENNReal}
     (hfirst : ∀ cell, Even cell → laws first (some cell) ≤ bound) :
-    pairEvenSomeCollisionMass laws first second ≤ bound := by
+    pairRawEvenSomeCollisionMass laws first second ≤ bound := by
   let joint := pmfPi laws
   let cellEvent : ℕ → Set (ι → Option ℕ) := fun cell =>
     {choices | Even cell ∧
@@ -189,7 +198,7 @@ theorem pairEvenSomeCollisionMass_le
             ENNReal.summable ENNReal.summable
         simpa only [PMF.tsum_coe] using hsomeLe
       _ = bound := mul_one bound
-  unfold pairEvenSomeCollisionMass
+  unfold pairRawEvenSomeCollisionMass
   rw [pmfMass_eq_toOuterMeasure, hunion]
   refine houter.trans ?_
   rw [show (∑' cell, joint.toOuterMeasure (cellEvent cell)) =
@@ -206,33 +215,34 @@ namespace Math.Probability
 
 open Math.PMFProduct Math.ProbabilityMassFunction
 
-/-- Pairwise collision in a common even quantile cell has probability at most
-one grid quantum. -/
-theorem pairEvenSomeCollisionMass_commonQuantile_toReal_le_one_div
+/-- Pairwise collision in a common even raw quantile cell has probability at
+most one grid quantum. -/
+theorem pairRawEvenSomeCollisionMass_commonQuantile_toReal_le_one_div
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) {first second : ι}
     (hne : first ≠ second) :
-    (pairEvenSomeCollisionMass
-      (fun who => finiteClockCompressedLaw (laws who)
+    (pairRawEvenSomeCollisionMass
+      (fun who => finiteClockRawCompressedLaw (laws who)
         (commonStoppingLawQuantileMarks laws level))
       first second).toReal ≤ 1 / (level : ℝ) := by
   let compressed : ι → PMF (Option ℕ) := fun who =>
-    finiteClockCompressedLaw (laws who)
+    finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level)
   let bound : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
   have hboundNonneg : 0 ≤ 1 / (level : ℝ) := by positivity
   have hfirst : ∀ cell, Even cell →
       compressed first (some cell) ≤ bound := by
     intro cell heven
-    have hreal := finiteClockCompressedLaw_common_even_cell_toReal_le_one_div
+    have hreal := finiteClockRawCompressedLaw_common_even_cell_toReal_le_one_div
       laws hlevel first cell heven
     apply (ENNReal.toReal_le_toReal
       (PMF.apply_ne_top (compressed first) (some cell))
       ENNReal.ofReal_ne_top).mp
     simpa only [bound, ENNReal.toReal_ofReal hboundNonneg] using hreal
-  have hmass := pairEvenSomeCollisionMass_le compressed hne hfirst
-  have hmassTop : pairEvenSomeCollisionMass compressed first second ≠ ⊤ := by
-    unfold pairEvenSomeCollisionMass
+  have hmass := pairRawEvenSomeCollisionMass_le compressed hne hfirst
+  have hmassTop :
+      pairRawEvenSomeCollisionMass compressed first second ≠ ⊤ := by
+    unfold pairRawEvenSomeCollisionMass
     exact pmfMass_ne_top _ _
   have hreal := (ENNReal.toReal_le_toReal hmassTop ENNReal.ofReal_ne_top).2 hmass
   simpa only [compressed, bound, ENNReal.toReal_ofReal hboundNonneg] using hreal
@@ -244,18 +254,18 @@ namespace Math.Probability
 open Math.PMFProduct Math.ProbabilityMassFunction
 
 open Classical in
-private theorem pairEvenSomeCollisionMass_commonQuantile_update_pure_le
+private theorem pairRawEvenSomeCollisionMass_commonQuantile_update_pure_le
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) (deviator : ι)
     (choice : Option ℕ) {first second : ι} (hne : first ≠ second) :
-    pairEvenSomeCollisionMass
+    pairRawEvenSomeCollisionMass
       (Function.update
-        (fun who => finiteClockCompressedLaw (laws who)
+        (fun who => finiteClockRawCompressedLaw (laws who)
           (commonStoppingLawQuantileMarks laws level))
         deviator (PMF.pure choice)) first second ≤
       ENNReal.ofReal (1 / (level : ℝ)) := by
   let compressed : ι → PMF (Option ℕ) := fun who =>
-    finiteClockCompressedLaw (laws who)
+    finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level)
   let modified := Function.update compressed deviator (PMF.pure choice)
   let bound : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
@@ -264,7 +274,7 @@ private theorem pairEvenSomeCollisionMass_commonQuantile_update_pure_le
       ∀ cell, Even cell → modified who (some cell) ≤ bound := by
     intro cell heven
     have hreal :=
-      finiteClockCompressedLaw_common_even_cell_toReal_le_one_div
+      finiteClockRawCompressedLaw_common_even_cell_toReal_le_one_div
         laws hlevel who cell heven
     have hmodified : modified who = compressed who := by
       simp [modified, hwho]
@@ -273,13 +283,13 @@ private theorem pairEvenSomeCollisionMass_commonQuantile_update_pure_le
       (PMF.apply_ne_top (compressed who) (some cell))
       ENNReal.ofReal_ne_top).mp
     simpa only [bound, ENNReal.toReal_ofReal hboundNonneg] using hreal
-  change pairEvenSomeCollisionMass modified first second ≤ bound
+  change pairRawEvenSomeCollisionMass modified first second ≤ bound
   by_cases hfirst : first = deviator
   · subst first
-    rw [pairEvenSomeCollisionMass_comm]
-    exact pairEvenSomeCollisionMass_le modified hne.symm
+    rw [pairRawEvenSomeCollisionMass_comm]
+    exact pairRawEvenSomeCollisionMass_le modified hne.symm
       (hopponent second hne.symm)
-  · exact pairEvenSomeCollisionMass_le modified hne
+  · exact pairRawEvenSomeCollisionMass_le modified hne
       (hopponent first hfirst)
 
 end Math.Probability
@@ -288,30 +298,30 @@ namespace Math.PMFProduct
 
 open Set Math.Probability Math.ProbabilityMassFunction
 
-/-- An even-cell collision among some unordered pair of coordinates. -/
-def hasEvenSomeCollision {ι : Type*} [Fintype ι]
+/-- An even-raw-cell collision among some unordered pair of coordinates. -/
+def hasRawEvenSomeCollision {ι : Type*} [Fintype ι]
     (choices : ι → Option ℕ) : Prop :=
   ∃ first second, first ≠ second ∧ ∃ cell, Even cell ∧
     choices first = some cell ∧ choices second = some cell
 
 /-- Product mass of the event that some two distinct coordinates occupy the
-same even finite cell. -/
-def evenSomeCollisionMass {ι : Type*} [Fintype ι]
+same even raw cell. -/
+def rawEvenSomeCollisionMass {ι : Type*} [Fintype ι]
     (laws : ι → PMF (Option ℕ)) : ENNReal :=
-  pmfMass (pmfPi laws) hasEvenSomeCollision
+  pmfMass (pmfPi laws) hasRawEvenSomeCollision
 
 open Classical in
-theorem evenSomeCollisionMass_le_choose_mul
+theorem rawEvenSomeCollisionMass_le_choose_mul
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {bound : ENNReal}
     (hpair : ∀ first second, first ≠ second →
-      pairEvenSomeCollisionMass laws first second ≤ bound) :
-    evenSomeCollisionMass laws ≤ (Fintype.card ι).choose 2 * bound := by
+      pairRawEvenSomeCollisionMass laws first second ≤ bound) :
+    rawEvenSomeCollisionMass laws ≤ (Fintype.card ι).choose 2 * bound := by
   let pairs := Finset.powersetCard 2 (Finset.univ : Finset ι)
   let pairEvent : Finset ι → Set (ι → Option ℕ) := fun pair =>
     {choices | ∃ cell, Even cell ∧
       ∀ who ∈ pair, choices who = some cell}
-  have hunion : {choices | hasEvenSomeCollision choices} =
+  have hunion : {choices | hasRawEvenSomeCollision choices} =
       ⋃ pair ∈ pairs, pairEvent pair := by
     ext choices
     simp only [Set.mem_setOf_eq, Set.mem_iUnion]
@@ -342,8 +352,8 @@ theorem evenSomeCollisionMass_le_choose_mul
     rw [← pmfMass_eq_toOuterMeasure]
     have heq : pmfMass (pmfPi laws)
         (fun choices => choices ∈ pairEvent {first, second}) =
-        pairEvenSomeCollisionMass laws first second := by
-      unfold pairEvenSomeCollisionMass
+        pairRawEvenSomeCollisionMass laws first second := by
+      unfold pairRawEvenSomeCollisionMass
       congr 1
       funext choices
       apply propext
@@ -363,7 +373,7 @@ theorem evenSomeCollisionMass_le_choose_mul
       (fun choices => choices ∈ pairEvent {first, second}) ≤ bound
     rw [heq]
     exact hpair first second hne
-  unfold evenSomeCollisionMass
+  unfold rawEvenSomeCollisionMass
   rw [pmfMass_eq_toOuterMeasure, hunion]
   calc
     (pmfPi laws).toOuterMeasure (⋃ pair ∈ pairs, pairEvent pair) ≤
@@ -381,49 +391,50 @@ namespace Math.Probability
 
 open Math.PMFProduct Math.ProbabilityMassFunction
 
-private theorem pairEvenSomeCollisionMass_commonQuantile_le_ofReal
+private theorem pairRawEvenSomeCollisionMass_commonQuantile_le_ofReal
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) {first second : ι}
     (hne : first ≠ second) :
-    pairEvenSomeCollisionMass
-      (fun who => finiteClockCompressedLaw (laws who)
+    pairRawEvenSomeCollisionMass
+      (fun who => finiteClockRawCompressedLaw (laws who)
         (commonStoppingLawQuantileMarks laws level))
       first second ≤ ENNReal.ofReal (1 / (level : ℝ)) := by
   let compressed : ι → PMF (Option ℕ) := fun who =>
-    finiteClockCompressedLaw (laws who)
+    finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level)
   let bound : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
   have hboundNonneg : 0 ≤ 1 / (level : ℝ) := by positivity
   have hfirst : ∀ cell, Even cell →
       compressed first (some cell) ≤ bound := by
     intro cell heven
-    have hreal := finiteClockCompressedLaw_common_even_cell_toReal_le_one_div
+    have hreal := finiteClockRawCompressedLaw_common_even_cell_toReal_le_one_div
       laws hlevel first cell heven
     apply (ENNReal.toReal_le_toReal
       (PMF.apply_ne_top (compressed first) (some cell))
       ENNReal.ofReal_ne_top).mp
     simpa only [bound, ENNReal.toReal_ofReal hboundNonneg] using hreal
-  exact pairEvenSomeCollisionMass_le compressed hne hfirst
+  exact pairRawEvenSomeCollisionMass_le compressed hne hfirst
 
-/-- The probability that any player pair collides in a common even quantile
-cell is bounded by the number of unordered pairs times one grid quantum. -/
-theorem evenSomeCollisionMass_commonQuantile_toReal_le_choose_div
+/-- The probability that any player pair collides in a common even raw
+quantile cell is bounded by the number of unordered pairs times one grid
+quantum. -/
+theorem rawEvenSomeCollisionMass_commonQuantile_toReal_le_choose_div
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) :
-    (evenSomeCollisionMass
-      (fun who => finiteClockCompressedLaw (laws who)
+    (rawEvenSomeCollisionMass
+      (fun who => finiteClockRawCompressedLaw (laws who)
         (commonStoppingLawQuantileMarks laws level))).toReal ≤
       ((Fintype.card ι).choose 2 : ℝ) / (level : ℝ) := by
   let compressed : ι → PMF (Option ℕ) := fun who =>
-    finiteClockCompressedLaw (laws who)
+    finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level)
   let bound : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
-  have hmass := evenSomeCollisionMass_le_choose_mul compressed
+  have hmass := rawEvenSomeCollisionMass_le_choose_mul compressed
     (bound := bound) fun first second hne =>
-      pairEvenSomeCollisionMass_commonQuantile_le_ofReal
+      pairRawEvenSomeCollisionMass_commonQuantile_le_ofReal
         laws hlevel hne
-  have hmassTop : evenSomeCollisionMass compressed ≠ ⊤ := by
-    unfold evenSomeCollisionMass
+  have hmassTop : rawEvenSomeCollisionMass compressed ≠ ⊤ := by
+    unfold rawEvenSomeCollisionMass
     exact pmfMass_ne_top _ _
   have hrightTop : ((Fintype.card ι).choose 2 : ENNReal) * bound ≠ ⊤ :=
     ENNReal.mul_ne_top ENNReal.coe_ne_top ENNReal.ofReal_ne_top
@@ -453,15 +464,15 @@ namespace Math.Probability
 open Math.PMFProduct
 
 /-- Expanded finite-player form of the global collision budget. -/
-theorem evenSomeCollisionMass_commonQuantile_toReal_le_pair_budget
+theorem rawEvenSomeCollisionMass_commonQuantile_toReal_le_pair_budget
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) :
-    (evenSomeCollisionMass
-      (fun who => finiteClockCompressedLaw (laws who)
+    (rawEvenSomeCollisionMass
+      (fun who => finiteClockRawCompressedLaw (laws who)
         (commonStoppingLawQuantileMarks laws level))).toReal ≤
       ((Fintype.card ι * (Fintype.card ι - 1) : ℕ) : ℝ) /
         (2 * (level : ℝ)) := by
-  have h := evenSomeCollisionMass_commonQuantile_toReal_le_choose_div
+  have h := rawEvenSomeCollisionMass_commonQuantile_toReal_le_choose_div
     laws hlevel
   rw [natCast_choose_two_eq_mul_sub_div_two] at h
   calc
@@ -477,16 +488,16 @@ namespace Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 open Classical in
-theorem pmfMass_hasEvenSomeCollision_coordwiseQuotient
+theorem pmfMass_hasRawEvenSomeCollision_coordwiseRawQuotient
     {ι : Type*} [Fintype ι] {α : ι → Type*}
     (laws : ∀ who, PMF (α who))
     (quotient : ∀ who, α who → Option ℕ) :
     pmfMass (pmfPi laws) (fun choices =>
-      hasEvenSomeCollision (fun who => quotient who (choices who))) =
-    evenSomeCollisionMass
+      hasRawEvenSomeCollision (fun who => quotient who (choices who))) =
+    rawEvenSomeCollisionMass
       (fun who => pushforward (laws who) (quotient who)) := by
   rw [← pmfMass_pushforward (pmfPi laws)
-    (fun choices who => quotient who (choices who)) hasEvenSomeCollision]
+    (fun choices who => quotient who (choices who)) hasRawEvenSomeCollision]
   rw [pmfPi_push_coordwise]
   rfl
 
@@ -497,16 +508,17 @@ namespace Math.Probability
 open Math.PMFProduct Math.ProbabilityMassFunction
 
 /-- Source-product form of the common-quantile collision bound. -/
-theorem pmfMass_commonQuantileQuotient_hasEvenSomeCollision_toReal_le
+theorem pmfMass_commonQuantileRawQuotient_hasRawEvenSomeCollision_toReal_le
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) :
     (pmfMass (pmfPi laws) (fun choices =>
-      hasEvenSomeCollision (fun who => finiteClockQuotient
+      hasRawEvenSomeCollision (fun who => finiteClockRawQuotient
         (commonStoppingLawQuantileMarks laws level) (choices who)))).toReal ≤
       ((Fintype.card ι * (Fintype.card ι - 1) : ℕ) : ℝ) /
         (2 * (level : ℝ)) := by
-  rw [pmfMass_hasEvenSomeCollision_coordwiseQuotient]
-  exact evenSomeCollisionMass_commonQuantile_toReal_le_pair_budget laws hlevel
+  rw [pmfMass_hasRawEvenSomeCollision_coordwiseRawQuotient]
+  exact rawEvenSomeCollisionMass_commonQuantile_toReal_le_pair_budget
+    laws hlevel
 
 end Math.Probability
 
@@ -518,27 +530,27 @@ open Classical in
 /-- Replacing one compressed coordinate by any deterministic stopping choice
 does not increase the common-quantile pair-union budget. Every unordered pair
 can be oriented toward an unchanged coordinate. -/
-theorem evenSomeCollisionMass_commonQuantile_update_pure_toReal_le_choose_div
+theorem rawEvenSomeCollisionMass_commonQuantile_update_pure_toReal_le_choose_div
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) (deviator : ι)
     (choice : Option ℕ) :
-    (evenSomeCollisionMass
+    (rawEvenSomeCollisionMass
       (Function.update
-        (fun who => finiteClockCompressedLaw (laws who)
+        (fun who => finiteClockRawCompressedLaw (laws who)
           (commonStoppingLawQuantileMarks laws level))
         deviator (PMF.pure choice))).toReal ≤
       ((Fintype.card ι).choose 2 : ℝ) / (level : ℝ) := by
   let compressed : ι → PMF (Option ℕ) := fun who =>
-    finiteClockCompressedLaw (laws who)
+    finiteClockRawCompressedLaw (laws who)
       (commonStoppingLawQuantileMarks laws level)
   let modified := Function.update compressed deviator (PMF.pure choice)
   let bound : ENNReal := ENNReal.ofReal (1 / (level : ℝ))
-  have hmass := evenSomeCollisionMass_le_choose_mul modified
+  have hmass := rawEvenSomeCollisionMass_le_choose_mul modified
     (bound := bound) fun first second hne =>
-      pairEvenSomeCollisionMass_commonQuantile_update_pure_le
+      pairRawEvenSomeCollisionMass_commonQuantile_update_pure_le
         laws hlevel deviator choice hne
-  have hmassTop : evenSomeCollisionMass modified ≠ ⊤ := by
-    unfold evenSomeCollisionMass
+  have hmassTop : rawEvenSomeCollisionMass modified ≠ ⊤ := by
+    unfold rawEvenSomeCollisionMass
     exact pmfMass_ne_top _ _
   have hrightTop : ((Fintype.card ι).choose 2 : ENNReal) * bound ≠ ⊤ :=
     ENNReal.mul_ne_top ENNReal.coe_ne_top ENNReal.ofReal_ne_top
@@ -553,35 +565,35 @@ open Classical in
 /-- Source-product form of the fixed-deviator collision budget. The common
 marks remain those of the original laws, while one source law is replaced by
 an arbitrary deterministic stopping choice. -/
-theorem pmfMass_commonQuantileQuotient_update_pure_collision_toReal_le
+theorem pmfMass_commonQuantileRawQuotient_update_pure_collision_toReal_le
     {ι : Type*} [Fintype ι] (laws : ι → PMF (Option ℕ))
     {level : ℕ} (hlevel : 0 < level) (deviator : ι)
     (choice : Option ℕ) :
     (pmfMass
       (pmfPi (Function.update laws deviator (PMF.pure choice)))
-      (fun choices => hasEvenSomeCollision (fun who =>
-        finiteClockQuotient
+      (fun choices => hasRawEvenSomeCollision (fun who =>
+        finiteClockRawQuotient
           (commonStoppingLawQuantileMarks laws level)
           (choices who)))).toReal ≤
       ((Fintype.card ι).choose 2 : ℝ) / (level : ℝ) := by
   let marks := commonStoppingLawQuantileMarks laws level
-  rw [pmfMass_hasEvenSomeCollision_coordwiseQuotient]
+  rw [pmfMass_hasRawEvenSomeCollision_coordwiseRawQuotient]
   have hpush :
       (fun who => pushforward
         ((Function.update laws deviator (PMF.pure choice)) who)
-        (finiteClockQuotient marks)) =
+        (finiteClockRawQuotient marks)) =
       Function.update
-        (fun who => finiteClockCompressedLaw (laws who) marks)
-        deviator (PMF.pure (finiteClockQuotient marks choice)) := by
+        (fun who => finiteClockRawCompressedLaw (laws who) marks)
+        deviator (PMF.pure (finiteClockRawQuotient marks choice)) := by
     funext who
     by_cases hwho : who = deviator
     · subst who
-      simp [finiteClockCompressedLaw, pushforward_pure]
+      simp [finiteClockRawCompressedLaw, pushforward_pure]
     · rw [Function.update_of_ne hwho, Function.update_of_ne hwho]
       rfl
   rw [hpush]
   exact
-    evenSomeCollisionMass_commonQuantile_update_pure_toReal_le_choose_div
-      laws hlevel deviator (finiteClockQuotient marks choice)
+    rawEvenSomeCollisionMass_commonQuantile_update_pure_toReal_le_choose_div
+      laws hlevel deviator (finiteClockRawQuotient marks choice)
 
 end Math.Probability
