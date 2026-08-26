@@ -1,9 +1,11 @@
 import Mathlib
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Probability.FinitePathLawAdapter
+import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Core.Probability.InfinitePlayMeasure
 import
   UniformEquilibrium.ProofView.Concepts.Stochastic.Transform.ActionLegality.DependentActionPadding
+import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 
 /-!
 # Robert Samuel Simon, *The structure of non-zero-sum stochastic games* (2007)
@@ -11884,6 +11886,796 @@ theorem lemma5_corrected_2012 (G : QuittingGame)
           ρ * QuitProbability G p ≤ ‖r - y‖ ∧ QuitProbability G p ≤ 1 - ρ := by
   sorry
 
+/-- The compact-carrier conclusion of the corrected Lemma 5 at one scale. -/
+def CorrectedUniformMotionAt (G : QuittingGame) (ρ : ℝ) : Prop :=
+  0 < ρ ∧ ρ < 1 ∧ ∀ r, NearFeasible G 1 r →
+    IsRational G ρ r → ∀ p, p ∈ EpsilonRow G ρ r →
+      let y := QuittingOneStagePayoff G r p
+      ρ * QuitProbability G p ≤ ‖r - y‖ ∧
+        QuitProbability G p ≤ 1 - ρ
+
+/-- The canonical production `Bool` root associated with a paper quitting
+row. `true` is Quit and `false` is Continue. -/
+abbrev productionRootOfQuitRow (G : QuittingGame)
+    (row : QuitRow G) : G.Player → PMF Bool :=
+  GameTheory.quittingRootOfHazardRow row
+
+@[simp] theorem productionRootOfQuitRow_true_toReal
+    (G : QuittingGame) (row : QuitRow G) (who : G.Player) :
+    (productionRootOfQuitRow G row who true).toReal = (row who : ℝ) := by
+  exact GameTheory.quittingRootOfHazardRow_true_toReal row who
+
+@[simp] theorem productionRootOfQuitRow_false_toReal
+    (G : QuittingGame) (row : QuitRow G) (who : G.Player) :
+    (productionRootOfQuitRow G row who false).toReal =
+      1 - (row who : ℝ) := by
+  exact GameTheory.quittingRootOfHazardRow_false_toReal row who
+
+/-- Read a production product root back as a paper quitting row. -/
+noncomputable def quitRowOfProductionRoot (G : QuittingGame)
+    (root : G.Player → PMF Bool) : QuitRow G :=
+  fun who ↦ ⟨(root who true).toReal, ENNReal.toReal_nonneg,
+    ENNReal.toReal_mono ENNReal.one_ne_top ((root who).coe_le_one true)⟩
+
+/-- The canonical paper/production root conversion is a round trip. -/
+theorem productionRootOfQuitRow_quitRowOfProductionRoot
+    (G : QuittingGame) (root : G.Player → PMF Bool) :
+    productionRootOfQuitRow G (quitRowOfProductionRoot G root) = root := by
+  exact GameTheory.rootOfHazard_hazardOfRoot root
+
+/-- Reading back the canonical production encoding returns the paper row. -/
+@[simp] theorem quitRowOfProductionRoot_productionRootOfQuitRow
+    (G : QuittingGame) (row : QuitRow G) :
+    quitRowOfProductionRoot G (productionRootOfQuitRow G row) = row := by
+  funext who
+  apply Subtype.ext
+  exact productionRootOfQuitRow_true_toReal G row who
+
+/-- Encode a paper quitting profile as its time-indexed production roots. -/
+abbrev productionRootsOfQuitProfile (G : QuittingGame)
+    (profile : QuitProfile G) : ℕ → G.Player → PMF Bool :=
+  fun time ↦ productionRootOfQuitRow G (profile time)
+
+/-- Read a time-indexed production root sequence as a paper quitting profile. -/
+noncomputable abbrev quitProfileOfProductionRoots (G : QuittingGame)
+    (roots : ℕ → G.Player → PMF Bool) : QuitProfile G :=
+  fun time ↦ quitRowOfProductionRoot G (roots time)
+
+@[simp] theorem productionRootsOfQuitProfile_quitProfileOfProductionRoots
+    (G : QuittingGame) (roots : ℕ → G.Player → PMF Bool) :
+    productionRootsOfQuitProfile G (quitProfileOfProductionRoots G roots) =
+      roots := by
+  funext time
+  exact productionRootOfQuitRow_quitRowOfProductionRoot G (roots time)
+
+@[simp] theorem quitProfileOfProductionRoots_productionRootsOfQuitProfile
+    (G : QuittingGame) (profile : QuitProfile G) :
+    quitProfileOfProductionRoots G (productionRootsOfQuitProfile G profile) =
+      profile := by
+  funext time
+  exact quitRowOfProductionRoot_productionRootOfQuitRow G (profile time)
+
+/-- The canonical root encoding preserves every finite live-prefix survival
+probability. -/
+private theorem productionRootOfQuitRow_jointSurvivalWeight
+    (G : QuittingGame) (profile : QuitProfile G) (start fuel : ℕ) :
+    GameTheory.quittingJointSurvivalWeight
+        (fun time ↦ productionRootOfQuitRow G (profile time)) start fuel =
+      tailSurvival G profile start fuel := by
+  rw [GameTheory.quittingJointSurvivalWeight_eq_prod]
+  unfold GameTheory.quittingStationaryContinueMass tailSurvival
+  apply Finset.prod_congr rfl
+  intro time _htime
+  rw [Math.PMFProduct.pmfPi_apply, ENNReal.toReal_prod]
+  change (∏ who,
+      (productionRootOfQuitRow G (profile (start + time)) who false).toReal) =
+    1 - QuitProbability G (profile (start + time))
+  simp_rw [productionRootOfQuitRow_false_toReal]
+  unfold QuitProbability
+  ring
+
+/-- Paper coalition probabilities are the production Bernoulli coalition
+masses of the canonical root. -/
+theorem coalitionProbability_eq_quittingHazardCoalitionProbability
+    (G : QuittingGame) [DecidableEq G.Player]
+    (row : QuitRow G) (coalition : Finset G.Player) :
+    CoalitionProbability G row coalition =
+      GameTheory.quittingHazardCoalitionProbability row coalition := by
+  classical
+  unfold CoalitionProbability
+    GameTheory.quittingHazardCoalitionProbability
+    Math.PMFProduct.coalitionMass
+  congr 2
+  ext who
+  simp [Finset.mem_compl]
+
+/-- The production absorbing contribution of a canonical root is the paper's
+one-stage terminal-reward contribution. -/
+private theorem productionRootOfQuitRow_absorbingContribution
+    (G : QuittingGame) [DecidableEq G.Player]
+    (row : QuitRow G) (who : G.Player) :
+    GameTheory.quittingRootAbsorbingContribution G.reward
+        (productionRootOfQuitRow G row) who =
+      quittingRewardPart G row who := by
+  change GameTheory.quittingHazardOneStagePayoff G.reward 0 row who =
+    quittingRewardPart G row who
+  rw [GameTheory.quittingHazardOneStagePayoff_eq_expanded]
+  simp only [Pi.zero_apply, mul_zero, zero_add, quittingRewardPart]
+  apply Finset.sum_congr rfl
+  intro coalition _hcoalition
+  split_ifs with hnonempty
+  · rw [← coalitionProbability_eq_quittingHazardCoalitionProbability]
+  · rfl
+
+/-- The paper tail payoff is exactly the production terminal payoff of its
+canonical root sequence. -/
+theorem quitTailPayoff_eq_quittingHazardTailPayoff
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : QuitProfile G) (start : ℕ) :
+    QuitTailPayoff G profile start =
+      GameTheory.quittingHazardTailPayoff G.reward profile start := by
+  funext who
+  rw [GameTheory.quittingHazardTailPayoff_eq_tsum]
+  unfold QuitTailPayoff
+  apply tsum_congr
+  intro offset
+  change _ = GameTheory.quittingJointSurvivalWeight
+      (fun time ↦ productionRootOfQuitRow G (profile time)) start offset *
+        GameTheory.quittingRootAbsorbingContribution G.reward
+          (productionRootOfQuitRow G (profile (start + offset))) who
+  rw [productionRootOfQuitRow_jointSurvivalWeight]
+  rw [productionRootOfQuitRow_absorbingContribution]
+  rfl
+
+/-- Paper total payoff is the production terminal payoff of the canonical
+root sequence. -/
+theorem quitPayoff_eq_quittingHazardTailPayoff
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : QuitProfile G) :
+    QuitPayoff G profile =
+      GameTheory.quittingHazardTailPayoff G.reward profile 0 := by
+  exact quitTailPayoff_eq_quittingHazardTailPayoff G profile 0
+
+/-- Reading production roots as paper hazards preserves their terminal payoff. -/
+theorem quitPayoff_quitProfileOfProductionRoots
+    (G : QuittingGame) [DecidableEq G.Player]
+    (roots : ℕ → G.Player → PMF Bool) (who : G.Player) :
+    QuitPayoff G (quitProfileOfProductionRoots G roots) who =
+      GameTheory.quittingRootSequenceTerminalValue G.reward roots who 0 := by
+  have h := congrFun (quitPayoff_eq_quittingHazardTailPayoff G
+    (quitProfileOfProductionRoots G roots)) who
+  have hroots : GameTheory.quittingRootsOfHazardProfile
+      (quitProfileOfProductionRoots G roots) = roots :=
+    productionRootsOfQuitProfile_quitProfileOfProductionRoots G roots
+  rw [GameTheory.quittingHazardTailPayoff, hroots] at h
+  exact h
+
+/-- Reading the live roots of a production behavior profile gives its exact
+paper terminal payoff. -/
+theorem quitPayoff_quitProfileOfProductionLiveRoots
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : (GameTheory.quittingGame G.reward).BehaviorProfile)
+    (who : G.Player) :
+    QuitPayoff G
+        (quitProfileOfProductionRoots G
+          (GameTheory.quittingProfileLiveRoot G.reward profile)) who =
+      GameTheory.quittingTerminalPayoff G.reward profile who := by
+  rw [quitPayoff_quitProfileOfProductionRoots]
+  exact (GameTheory.quittingTerminalPayoff_eq_rootSequence_profileLiveRoot
+    G.reward profile who).symm
+
+/-- Encoding a unilateral paper deviation is the production root-sequence
+update by the corresponding Bernoulli hazard. -/
+theorem productionRootsOfQuitProfile_replace
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : QuitProfile G) (who : G.Player)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    productionRootsOfQuitProfile G (profile.replace G who deviation) =
+      GameTheory.quittingRootSequenceUpdate
+        (productionRootsOfQuitProfile G profile) who
+        (fun time ↦ productionRootOfQuitRow G
+          ((profile.replace G who deviation) time) who) := by
+  funext time player
+  by_cases hplayer : player = who
+  · subst player
+    simp [GameTheory.quittingRootSequenceUpdate]
+  · rw [GameTheory.quittingRootSequenceUpdate,
+      Function.update_of_ne hplayer]
+    exact GameTheory.quittingRootOfHazardRow_apply_congr (by
+      simp [QuitProfile.replace, hplayer])
+
+/-- A paper unilateral deviation has exactly the production hazard-response
+payoff against the encoded roots. -/
+theorem quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : QuitProfile G) (who : G.Player)
+    (deviation : ℕ → Set.Icc (0 : ℝ) 1) :
+    QuitPayoff G (profile.replace G who deviation) who =
+      GameTheory.quittingRootSequenceHazardTerminalValue G.reward
+        (productionRootsOfQuitProfile G profile) who
+        (fun time ↦ productionRootOfQuitRow G
+          ((profile.replace G who deviation) time) who) 0 := by
+  unfold GameTheory.quittingRootSequenceHazardTerminalValue
+  rw [← productionRootsOfQuitProfile_replace]
+  simpa only [quitProfileOfProductionRoots_productionRootsOfQuitProfile]
+    using quitPayoff_quitProfileOfProductionRoots G
+      (productionRootsOfQuitProfile G
+        (profile.replace G who deviation)) who
+
+/-- The paper best-reply supremum equals the production behavioral best-reply
+value of the encoded history-independent profile. -/
+theorem ciSup_quitPayoff_replace_eq_quittingBestReplyValue
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : QuitProfile G) (who : G.Player) :
+    (⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+        QuitPayoff G (profile.replace G who deviation) who) =
+      GameTheory.quittingBestReplyValue G.reward
+        (GameTheory.quittingRootSequenceProfile G.reward
+          (productionRootsOfQuitProfile G profile) 0) who := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoff (p : QuitProfile G) : |QuitPayoff G p who| ≤ M :=
+    abs_quitPayoff_le G p who hM0 (fun A ↦ le_of_lt (hM.2.2 A who))
+  have hpaperAbove : BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 ↦
+        QuitPayoff G (profile.replace G who deviation) who) := by
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff _)
+  letI : Nonempty
+      ((GameTheory.quittingGame G.reward).BehaviorStrategy who) :=
+    ⟨fun _time _history ↦ PMF.pure false⟩
+  apply le_antisymm
+  · apply ciSup_le
+    intro deviation
+    let hazard : ℕ → PMF Bool := fun time ↦
+      productionRootOfQuitRow G
+        ((profile.replace G who deviation) time) who
+    let behaviorDeviation :
+        (GameTheory.quittingGame G.reward).BehaviorStrategy who :=
+      fun time _history ↦ hazard time
+    rw [quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue]
+    have hterminal : GameTheory.quittingTerminalPayoff G.reward
+        (Function.update
+          (GameTheory.quittingRootSequenceProfile G.reward
+            (productionRootsOfQuitProfile G profile) 0)
+          who behaviorDeviation) who =
+          GameTheory.quittingRootSequenceHazardTerminalValue G.reward
+          (productionRootsOfQuitProfile G profile) who hazard 0 := by
+      rw [GameTheory.quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+        GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+      rfl
+    rw [← hterminal]
+    exact GameTheory.le_quittingBestReplyValue G.reward _ who
+      behaviorDeviation
+  · unfold GameTheory.quittingBestReplyValue
+    apply ciSup_le
+    intro behaviorDeviation
+    let hazard := GameTheory.quittingBehaviorLiveHazard G.reward
+      behaviorDeviation
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun time ↦
+      (quitRowOfProductionRoot G (fun _ ↦ hazard time)) who
+    have hencoded : (fun time ↦ productionRootOfQuitRow G
+        ((profile.replace G who deviation) time) who) = hazard := by
+      funext time
+      calc
+        productionRootOfQuitRow G
+            ((profile.replace G who deviation) time) who =
+            productionRootOfQuitRow G
+              (quitRowOfProductionRoot G (fun _ ↦ hazard time)) who := by
+          apply GameTheory.quittingRootOfHazardRow_apply_congr
+          simp [QuitProfile.replace, deviation]
+        _ = hazard time := congrFun
+          (productionRootOfQuitRow_quitRowOfProductionRoot G
+            (fun _ ↦ hazard time)) who
+    rw [GameTheory.quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+      GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+    change GameTheory.quittingRootSequenceHazardTerminalValue G.reward
+      (productionRootsOfQuitProfile G profile) who hazard 0 ≤ _
+    rw [← hencoded,
+      ← quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue]
+    exact le_ciSup hpaperAbove deviation
+
+/-- Replacing an arbitrary behavior profile by the history-independent profile
+of its live roots does not change any best-reply value. -/
+theorem quittingBestReplyValue_eq_liveRootProfile
+    (G : QuittingGame) [DecidableEq G.Player]
+    (profile : (GameTheory.quittingGame G.reward).BehaviorProfile)
+    (who : G.Player) :
+    GameTheory.quittingBestReplyValue G.reward profile who =
+      GameTheory.quittingBestReplyValue G.reward
+        (GameTheory.quittingRootSequenceProfile G.reward
+          (GameTheory.quittingProfileLiveRoot G.reward profile) 0) who := by
+  unfold GameTheory.quittingBestReplyValue
+  congr 1
+  funext deviation
+  rw [GameTheory.quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+    GameTheory.quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+    GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+
+/-- The paper's quitting min-max is exactly the production behavioral
+punishment value. -/
+theorem minMaxQuit_eq_quittingPunishmentValue
+    (G : QuittingGame) [DecidableEq G.Player] (who : G.Player) :
+    MinMaxQuit G who =
+      GameTheory.quittingPunishmentValue G.reward who := by
+  classical
+  let paperBest : QuitProfile G → ℝ := fun profile ↦
+    ⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+      QuitPayoff G (profile.replace G who deviation) who
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hM0 : 0 ≤ M := le_trans (by norm_num) hM.1
+  have hpayoff (profile : QuitProfile G) : |QuitPayoff G profile who| ≤ M :=
+    abs_quitPayoff_le G profile who hM0
+      (fun A ↦ le_of_lt (hM.2.2 A who))
+  have hinnerAbove (profile : QuitProfile G) : BddAbove (range fun deviation :
+      ℕ → Set.Icc (0 : ℝ) 1 ↦
+        QuitPayoff G (profile.replace G who deviation) who) := by
+    refine ⟨M, ?_⟩
+    rintro _ ⟨deviation, rfl⟩
+    exact (le_abs_self _).trans (hpayoff _)
+  have hlower (profile : QuitProfile G) : -M ≤ paperBest profile := by
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun time ↦
+      profile time who
+    have hself : profile.replace G who deviation = profile := by
+      funext time player
+      by_cases hplayer : player = who
+      · subst player
+        simp [QuitProfile.replace, deviation]
+      · simp [QuitProfile.replace, deviation, hplayer]
+    calc
+      -M ≤ QuitPayoff G profile who := neg_le_of_abs_le (hpayoff profile)
+      _ = QuitPayoff G (profile.replace G who deviation) who := by rw [hself]
+      _ ≤ paperBest profile := le_ciSup (hinnerAbove profile) deviation
+  have hpaperBelow : BddBelow (range paperBest) := by
+    exact ⟨-M, by rintro _ ⟨profile, rfl⟩; exact hlower profile⟩
+  letI : Nonempty (GameTheory.quittingGame G.reward).BehaviorProfile :=
+    ⟨GameTheory.quittingAlwaysContinueProfile G.reward⟩
+  change (⨅ profile : QuitProfile G, paperBest profile) = _
+  apply le_antisymm
+  · apply le_ciInf
+    intro productionProfile
+    let roots := GameTheory.quittingProfileLiveRoot G.reward productionProfile
+    let paperProfile := quitProfileOfProductionRoots G roots
+    calc
+      (⨅ profile : QuitProfile G, paperBest profile) ≤
+          paperBest paperProfile := ciInf_le hpaperBelow paperProfile
+      _ = GameTheory.quittingBestReplyValue G.reward
+          (GameTheory.quittingRootSequenceProfile G.reward roots 0) who := by
+        rw [show paperBest paperProfile =
+            (⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+              QuitPayoff G
+                (paperProfile.replace G who deviation) who) from rfl]
+        rw [ciSup_quitPayoff_replace_eq_quittingBestReplyValue]
+        congr 2
+        exact productionRootsOfQuitProfile_quitProfileOfProductionRoots
+          G roots
+      _ = GameTheory.quittingBestReplyValue G.reward productionProfile who :=
+        (quittingBestReplyValue_eq_liveRootProfile
+          G productionProfile who).symm
+  · apply le_ciInf
+    intro paperProfile
+    calc
+      GameTheory.quittingPunishmentValue G.reward who ≤
+          GameTheory.quittingBestReplyValue G.reward
+            (GameTheory.quittingRootSequenceProfile G.reward
+              (productionRootsOfQuitProfile G paperProfile) 0) who :=
+        GameTheory.quittingPunishmentValue_le G.reward who _
+      _ = paperBest paperProfile :=
+        (ciSup_quitPayoff_replace_eq_quittingBestReplyValue
+          G paperProfile who).symm
+
+/-- The root-sequence Nash predicate and the paper Nash predicate agree under
+the canonical root/row encoding. -/
+theorem isQuitEpsilonEquilibrium_of_isεQuittingRootSequenceNash
+    (G : QuittingGame) [DecidableEq G.Player] {α : ℝ}
+    {roots : ℕ → G.Player → PMF Bool}
+    (hequilibrium : GameTheory.IsεQuittingRootSequenceNash G.reward α roots) :
+    IsQuitEpsilonEquilibrium G α
+      (quitProfileOfProductionRoots G roots) := by
+  intro who deviation
+  let paperProfile := quitProfileOfProductionRoots G roots
+  let hazard : ℕ → PMF Bool := fun time ↦
+    productionRootOfQuitRow G
+      ((paperProfile.replace G who deviation) time) who
+  have hroots : productionRootsOfQuitProfile G paperProfile = roots :=
+    productionRootsOfQuitProfile_quitProfileOfProductionRoots G roots
+  have hnash := hequilibrium who hazard
+  change GameTheory.quittingRootSequenceTerminalValue G.reward
+      (GameTheory.quittingRootSequenceUpdate roots who hazard) who 0 ≤
+    GameTheory.quittingRootSequenceTerminalValue G.reward roots who 0 + α at hnash
+  rw [← hroots, ← productionRootsOfQuitProfile_replace] at hnash
+  calc
+    QuitPayoff G (paperProfile.replace G who deviation) who =
+        GameTheory.quittingRootSequenceTerminalValue G.reward
+          (productionRootsOfQuitProfile G
+            (paperProfile.replace G who deviation)) who 0 := by
+      simpa only [quitProfileOfProductionRoots_productionRootsOfQuitProfile]
+        using quitPayoff_quitProfileOfProductionRoots G
+          (productionRootsOfQuitProfile G
+            (paperProfile.replace G who deviation)) who
+    _ ≤ GameTheory.quittingRootSequenceTerminalValue G.reward
+          (productionRootsOfQuitProfile G paperProfile) who 0 + α := hnash
+    _ = QuitPayoff G paperProfile who + α := by
+      congr 1
+      symm
+      simpa only [quitProfileOfProductionRoots_productionRootsOfQuitProfile]
+        using quitPayoff_quitProfileOfProductionRoots G
+          (productionRootsOfQuitProfile G paperProfile) who
+
+/-- Every paper equilibrium gives the unrestricted production root-sequence
+Nash cap at the same error. An arbitrary production `Bool` hazard is read
+back as its real Quit probability and then round-tripped exactly. -/
+theorem isεQuittingRootSequenceNash_of_isQuitEpsilonEquilibrium
+    (G : QuittingGame) [DecidableEq G.Player] {α : ℝ}
+    {profile : QuitProfile G}
+    (hequilibrium : IsQuitEpsilonEquilibrium G α profile) :
+    GameTheory.IsεQuittingRootSequenceNash G.reward α
+      (fun time ↦ productionRootOfQuitRow G (profile time)) := by
+  intro who hazard
+  let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun time ↦
+    ⟨(hazard time true).toReal, ENNReal.toReal_nonneg,
+      ENNReal.toReal_mono ENNReal.one_ne_top
+        ((hazard time).coe_le_one true)⟩
+  have hrow (time : ℕ) :
+      (profile.replace G who deviation) time =
+        quitRowOfProductionRoot G
+          (Function.update (productionRootOfQuitRow G (profile time))
+            who (hazard time)) := by
+    funext player
+    apply Subtype.ext
+    by_cases hplayer : player = who
+    · subst player
+      simp [QuitProfile.replace, deviation, quitRowOfProductionRoot]
+    · simp [QuitProfile.replace, deviation, quitRowOfProductionRoot,
+        hplayer]
+  have hroots :
+      (fun time ↦ productionRootOfQuitRow G
+        ((profile.replace G who deviation) time)) =
+      GameTheory.quittingRootSequenceUpdate
+        (fun time ↦ productionRootOfQuitRow G (profile time))
+        who hazard := by
+    funext time
+    rw [hrow]
+    exact productionRootOfQuitRow_quitRowOfProductionRoot G _
+  have hpaper := hequilibrium who deviation
+  rw [quitPayoff_eq_quittingHazardTailPayoff,
+    quitPayoff_eq_quittingHazardTailPayoff] at hpaper
+  change GameTheory.quittingRootSequenceTerminalValue G.reward
+      (fun time ↦ productionRootOfQuitRow G
+        ((profile.replace G who deviation) time)) who 0 ≤
+    GameTheory.quittingRootSequenceTerminalValue G.reward
+      (fun time ↦ productionRootOfQuitRow G (profile time)) who 0 + α at hpaper
+  rw [hroots] at hpaper
+  exact hpaper
+
+/-- Paper and production punishment predicates agree under the canonical
+profile encoding. -/
+theorem isPunishmentWithin_iff_isQuittingRootSequencePunishmentWithin
+    (G : QuittingGame) [DecidableEq G.Player] (who : G.Player) (δ : ℝ)
+    (punishment : QuitProfile G) :
+    IsPunishmentWithin G who δ punishment ↔
+      GameTheory.IsQuittingRootSequencePunishmentWithin G.reward who δ
+        (productionRootsOfQuitProfile G punishment) := by
+  constructor
+  · intro hpaper hazard
+    let deviation : ℕ → Set.Icc (0 : ℝ) 1 := fun time ↦
+      (quitRowOfProductionRoot G (fun _ ↦ hazard time)) who
+    have hencoded : (fun time ↦ productionRootOfQuitRow G
+        ((punishment.replace G who deviation) time) who) = hazard := by
+      funext time
+      calc
+        productionRootOfQuitRow G
+            ((punishment.replace G who deviation) time) who =
+            productionRootOfQuitRow G
+              (quitRowOfProductionRoot G (fun _ ↦ hazard time)) who := by
+          apply GameTheory.quittingRootOfHazardRow_apply_congr
+          simp [QuitProfile.replace, deviation]
+        _ = hazard time := congrFun
+          (productionRootOfQuitRow_quitRowOfProductionRoot G
+            (fun _ ↦ hazard time)) who
+    rw [← hencoded,
+      ← quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue,
+      ← minMaxQuit_eq_quittingPunishmentValue]
+    exact hpaper deviation
+  · intro hproduction deviation
+    rw [quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue,
+      minMaxQuit_eq_quittingPunishmentValue]
+    exact hproduction _
+
+/-- Encoding a paper stationary-prefix profile gives the production
+stationary-prefix root sequence. -/
+theorem productionRootsOfQuitProfile_stationaryPrefixThenPunish
+    (G : QuittingGame) [DecidableEq G.Player] (row : QuitRow G)
+    (horizon : ℕ) (punishment : QuitProfile G) :
+    productionRootsOfQuitProfile G
+        (StationaryPrefixThenPunish G row horizon punishment) =
+      GameTheory.quittingStationaryPrefixThenRoots
+        (productionRootOfQuitRow G row) horizon
+        (productionRootsOfQuitProfile G punishment) := by
+  funext time
+  by_cases htime : time ≤ horizon
+  · change productionRootOfQuitRow G
+        (if time ≤ horizon then row
+          else punishment (time - (horizon + 1))) =
+        (if time ≤ horizon then productionRootOfQuitRow G row
+          else productionRootsOfQuitProfile G punishment
+            (time - (horizon + 1)))
+    simp only [if_pos htime]
+  · change productionRootOfQuitRow G
+        (if time ≤ horizon then row
+          else punishment (time - (horizon + 1))) =
+        (if time ≤ horizon then productionRootOfQuitRow G row
+          else productionRootsOfQuitProfile G punishment
+            (time - (horizon + 1)))
+    simp only [if_neg htime]
+
+/-- Reading a production stationary-prefix root sequence gives the paper
+stationary-prefix profile. -/
+theorem quitProfileOfProductionRoots_stationaryPrefixThenRoots
+    (G : QuittingGame) [DecidableEq G.Player]
+    (root : G.Player → PMF Bool) (horizon : ℕ)
+    (punishment : ℕ → G.Player → PMF Bool) :
+    quitProfileOfProductionRoots G
+        (GameTheory.quittingStationaryPrefixThenRoots
+          root horizon punishment) =
+      StationaryPrefixThenPunish G (quitRowOfProductionRoot G root) horizon
+        (quitProfileOfProductionRoots G punishment) := by
+  funext time
+  by_cases htime : time ≤ horizon
+  · change quitRowOfProductionRoot G
+        (if time ≤ horizon then root
+          else punishment (time - (horizon + 1))) =
+        (if time ≤ horizon then quitRowOfProductionRoot G root
+          else quitProfileOfProductionRoots G punishment
+            (time - (horizon + 1)))
+    simp only [if_pos htime]
+  · change quitRowOfProductionRoot G
+        (if time ≤ horizon then root
+          else punishment (time - (horizon + 1))) =
+        (if time ≤ horizon then quitRowOfProductionRoot G root
+          else quitProfileOfProductionRoots G punishment
+            (time - (horizon + 1)))
+    simp only [if_neg htime]
+
+/-- The corrected stationarily-generated branch is identical in the paper
+and production quitting-game semantics. -/
+theorem hasStationarilyGeneratedApproximateEquilibria_iff_production
+    (G : QuittingGame) [DecidableEq G.Player] :
+    HasStationarilyGeneratedApproximateEquilibria G ↔
+      GameTheory.QuittingStationarilyGeneratedApproximateEquilibria
+        G.reward := by
+  constructor
+  · intro hpaper δ hδ ε hε
+    obtain ⟨row, horizon, who, punishment, hhorizon, hpunishment,
+      hequilibrium⟩ := hpaper δ hδ ε hε
+    refine ⟨productionRootOfQuitRow G row, horizon, who,
+      productionRootsOfQuitProfile G punishment, hhorizon, ?_, ?_⟩
+    · exact
+        (isPunishmentWithin_iff_isQuittingRootSequencePunishmentWithin
+          G who δ punishment).mp hpunishment
+    · have hrootNash :=
+        isεQuittingRootSequenceNash_of_isQuitEpsilonEquilibrium
+          G hequilibrium
+      rw [← productionRootsOfQuitProfile_stationaryPrefixThenPunish]
+      exact hrootNash
+  · intro hproduction δ hδ ε hε
+    obtain ⟨root, horizon, who, punishment, hhorizon, hpunishment,
+      hequilibrium⟩ := hproduction δ hδ ε hε
+    refine ⟨quitRowOfProductionRoot G root, horizon, who,
+      quitProfileOfProductionRoots G punishment, hhorizon, ?_, ?_⟩
+    · apply
+        (isPunishmentWithin_iff_isQuittingRootSequencePunishmentWithin
+          G who δ (quitProfileOfProductionRoots G punishment)).mpr
+      simpa only [
+        productionRootsOfQuitProfile_quitProfileOfProductionRoots]
+        using hpunishment
+    · have hpaperNash :=
+        isQuitEpsilonEquilibrium_of_isεQuittingRootSequenceNash
+          G hequilibrium
+      simpa only [
+        quitProfileOfProductionRoots_stationaryPrefixThenRoots] using
+          hpaperNash
+
+/-- Encoding the paper's one-stage instant profile gives the production
+root/continuation splice. -/
+theorem quittingRootSequenceProfile_instantProfile
+    (G : QuittingGame) [DecidableEq G.Player] (row : QuitRow G)
+    (punishment : QuitProfile G) :
+    GameTheory.quittingRootSequenceProfile G.reward
+        (productionRootsOfQuitProfile G
+          (InstantProfile G row punishment)) 0 =
+      GameTheory.quittingRootThenContinuationProfile G.reward
+        (productionRootOfQuitRow G row)
+        (GameTheory.quittingRootSequenceProfile G.reward
+          (productionRootsOfQuitProfile G punishment) 0) := by
+  funext player time history
+  cases time <;> rfl
+
+/-- Reading the live roots of a production root/continuation splice gives the
+paper's instant profile. -/
+theorem quitProfileOfProductionLiveRoots_rootThenContinuation
+    (G : QuittingGame) [DecidableEq G.Player]
+    (root : G.Player → PMF Bool)
+    (continuation : (GameTheory.quittingGame G.reward).BehaviorProfile) :
+    quitProfileOfProductionRoots G
+        (GameTheory.quittingProfileLiveRoot G.reward
+          (GameTheory.quittingRootThenContinuationProfile G.reward root
+            continuation)) =
+      InstantProfile G (quitRowOfProductionRoot G root)
+        (quitProfileOfProductionRoots G
+          (GameTheory.quittingProfileLiveRoot G.reward continuation)) := by
+  funext time
+  cases time with
+  | zero => rfl
+  | succ time =>
+      change quitRowOfProductionRoot G
+          (GameTheory.quittingProfileLiveRoot G.reward
+            (GameTheory.quittingRootThenContinuationProfile G.reward root
+              continuation) (time + 1)) =
+        quitRowOfProductionRoot G
+          (GameTheory.quittingProfileLiveRoot G.reward continuation time)
+      apply congrArg (quitRowOfProductionRoot G)
+      funext player
+      rfl
+
+/-- The instant branch is identical in the paper and production quitting-game
+semantics; the paper's displayed `2ε` is absorbed by reparameterizing the
+all-positive-accuracy statement. -/
+theorem hasInstantApproximateEquilibria_iff_production
+    (G : QuittingGame) [DecidableEq G.Player] :
+    HasInstantApproximateEquilibria G ↔
+      GameTheory.QuittingInstantPunishmentεEquilibriumExistence G.reward := by
+  rw [GameTheory.quittingInstantPunishmentεEquilibriumExistence_iff_profilePunishment]
+  constructor
+  · intro hpaper accuracy haccuracy
+    have hhalf : 0 < accuracy / 2 := half_pos haccuracy
+    obtain ⟨row, who, punishment, hsure, hpunishment, hequilibrium⟩ :=
+      hpaper (accuracy / 2) hhalf
+    let root := productionRootOfQuitRow G row
+    let productionPunishment :=
+      GameTheory.quittingRootSequenceProfile G.reward
+        (productionRootsOfQuitProfile G punishment) 0
+    refine ⟨who, root, productionPunishment, ?_, ?_, ?_⟩
+    · exact Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one
+        (root who) (by simpa only [root,
+          productionRootOfQuitRow_true_toReal] using hsure)
+    · rw [show GameTheory.quittingBestReplyValue G.reward
+          productionPunishment who =
+          (⨆ deviation : ℕ → Set.Icc (0 : ℝ) 1,
+            QuitPayoff G
+              (punishment.replace G who deviation) who) by
+        exact (ciSup_quitPayoff_replace_eq_quittingBestReplyValue
+          G punishment who).symm]
+      rw [← minMaxQuit_eq_quittingPunishmentValue]
+      exact (ciSup_le hpunishment).trans (by linarith)
+    · have hpaperAtAccuracy : IsQuitEpsilonEquilibrium G accuracy
+          (InstantProfile G row punishment) := by
+        convert hequilibrium using 1
+        ring
+      have hrootNash :=
+        isεQuittingRootSequenceNash_of_isQuitEpsilonEquilibrium
+          G hpaperAtAccuracy
+      have hbehavior :=
+        (GameTheory.isεQuittingRootSequenceNash_iff_isεAsymptoticNash
+          G.reward accuracy
+          (productionRootsOfQuitProfile G
+            (InstantProfile G row punishment))).mp hrootNash
+      simpa only [root, productionPunishment,
+        quittingRootSequenceProfile_instantProfile] using hbehavior
+  · intro hproduction accuracy haccuracy
+    obtain ⟨who, root, productionPunishment, hsure, hpunishment,
+      hequilibrium⟩ := hproduction accuracy haccuracy
+    let row := quitRowOfProductionRoot G root
+    let punishment := quitProfileOfProductionRoots G
+      (GameTheory.quittingProfileLiveRoot G.reward productionPunishment)
+    refine ⟨row, who, punishment, ?_, ?_, ?_⟩
+    · have hsureReal := congrArg
+        (fun marginal : PMF Bool ↦ (marginal true).toReal) hsure
+      simpa [row, quitRowOfProductionRoot] using hsureReal
+    · intro deviation
+      let hazard : ℕ → PMF Bool := fun time ↦
+        productionRootOfQuitRow G
+          ((punishment.replace G who deviation) time) who
+      let behaviorDeviation :
+          (GameTheory.quittingGame G.reward).BehaviorStrategy who :=
+        fun time _history ↦ hazard time
+      calc
+        QuitPayoff G (punishment.replace G who deviation) who =
+            GameTheory.quittingRootSequenceHazardTerminalValue G.reward
+              (GameTheory.quittingProfileLiveRoot G.reward
+                productionPunishment) who hazard 0 := by
+          simpa only [punishment,
+            productionRootsOfQuitProfile_quitProfileOfProductionRoots]
+            using
+              quitPayoff_replace_eq_quittingRootSequenceHazardTerminalValue
+                G punishment who deviation
+        _ = GameTheory.quittingTerminalPayoff G.reward
+            (Function.update
+              (GameTheory.quittingRootSequenceProfile G.reward
+                (GameTheory.quittingProfileLiveRoot G.reward
+                  productionPunishment) 0)
+              who behaviorDeviation) who := by
+          rw [GameTheory.quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
+            GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+          rfl
+        _ ≤ GameTheory.quittingBestReplyValue G.reward
+            (GameTheory.quittingRootSequenceProfile G.reward
+              (GameTheory.quittingProfileLiveRoot G.reward
+                productionPunishment) 0) who :=
+          GameTheory.le_quittingBestReplyValue G.reward _ who
+            behaviorDeviation
+        _ = GameTheory.quittingBestReplyValue G.reward
+            productionPunishment who :=
+          (quittingBestReplyValue_eq_liveRootProfile
+            G productionPunishment who).symm
+        _ ≤ GameTheory.quittingPunishmentValue G.reward who + accuracy :=
+          hpunishment
+        _ = MinMaxQuit G who + accuracy := by
+          rw [minMaxQuit_eq_quittingPunishmentValue]
+    · have hrootNash :=
+        GameTheory.isεQuittingRootSequenceNash_profileLiveRoot_of_isεAsymptoticNash
+          G.reward
+          (GameTheory.quittingRootThenContinuationProfile G.reward root
+            productionPunishment) hequilibrium
+      have hpaperAtAccuracy :=
+        isQuitEpsilonEquilibrium_of_isεQuittingRootSequenceNash
+          G hrootNash
+      have hpaperInstant : IsQuitEpsilonEquilibrium G accuracy
+          (InstantProfile G row punishment) := by
+        simpa only [row, punishment,
+          quitProfileOfProductionLiveRoots_rootThenContinuation] using
+            hpaperAtAccuracy
+      intro player deviation
+      have hbound := hpaperInstant player deviation
+      change QuitPayoff G
+          ((InstantProfile G row punishment).replace G player deviation)
+            player ≤
+        QuitPayoff G (InstantProfile G row punishment) player +
+          2 * accuracy
+      linarith
+
+/-- The exact semantic identifications needed to import production
+quitting-game results into the paper's model. -/
+def PaperProductionQuittingSemanticAdapter (G : QuittingGame) : Prop := by
+  classical
+  exact
+    (∀ who,
+      MinMaxQuit G who =
+        GameTheory.quittingPunishmentValue G.reward who) ∧
+    (HasStationarilyGeneratedApproximateEquilibria G ↔
+      GameTheory.QuittingStationarilyGeneratedApproximateEquilibria
+        G.reward) ∧
+    (HasInstantApproximateEquilibria G ↔
+      GameTheory.QuittingInstantPunishmentεEquilibriumExistence G.reward)
+
+/-- The paper and production quitting-game semantics agree on the min-max,
+corrected stationarily-generated, and instant branches. -/
+theorem paperProductionQuittingSemanticAdapter (G : QuittingGame) :
+    PaperProductionQuittingSemanticAdapter G := by
+  classical
+  exact ⟨minMaxQuit_eq_quittingPunishmentValue G,
+    hasStationarilyGeneratedApproximateEquilibria_iff_production G,
+    hasInstantApproximateEquilibria_iff_production G⟩
+
+/-- The remaining first-crossing source obligation in the corrected
+equilibrium-to-cyclic direction.
+
+For every smaller scale and every requested charge, it produces the bounded
+paper-level approximate `F`-path consumed by the checked return and
+periodization compiler. The production low-survival repair supplies only one
+repaired crossing row. Passing from that row to this arbitrarily charged
+path is the missing global prefix extraction. -/
+def HasCorrectedFirstCrossingPathExtraction (G : QuittingGame) : Prop :=
+  ∀ ρ, CorrectedUniformMotionAt G ρ →
+    ∀ η M B : ℝ, 0 < η → η ≤ ρ → 0 < M → 0 < B →
+      (∀ A n, |G.reward A n| ≤ M) →
+      HasQuitApproximateEquilibria G →
+        ∃ z : ApproximateFRowPath G η,
+          ‖z.point 0‖ ≤ M ∧ z.totalError ≤ η / 4 ∧
+            B ≤ z.exactVariation
+
 /-!
 Simon (2012, p. 185) explicitly says that the 2007 statement wrote "stationary
 approximate equilibria" although its proof uses the stronger stationarily generated
@@ -15236,6 +16028,44 @@ private theorem exists_cyclicOrbit_of_large_approximatePath
     rw [hcycleEq]
     exact hrationalCycle i
 
+/-- The corrected first-crossing path extractor closes the only
+equilibrium-specific input of the cyclic compiler. -/
+theorem hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction
+    (G : QuittingGame) (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hextraction : HasCorrectedFirstCrossingPathExtraction G)
+    {ρ : ℝ} (hmotion : CorrectedUniformMotionAt G ρ) :
+    HasQuitApproximateEquilibria G → CyclicOrbitCondition G := by
+  intro hequilibrium ε hε
+  obtain ⟨σ, hσ, hnoSureσ⟩ :=
+    exists_scale_without_sure_quitter_of_not_instant G hinstant
+  let η := min (ε / 5) (min σ ρ)
+  have hη : 0 < η := by
+    exact lt_min (div_pos hε (by norm_num)) (lt_min hσ hmotion.1)
+  have hηε : 4 * η ≤ ε := by
+    have hle : η ≤ ε / 5 := min_le_left _ _
+    linarith
+  have hησ : η ≤ σ :=
+    (min_le_right _ _).trans (min_le_left _ _)
+  have hηρ : η ≤ ρ :=
+    (min_le_right _ _).trans (min_le_right _ _)
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hreward : ∀ A n, |G.reward A n| ≤ M :=
+    fun A n ↦ le_of_lt (hM.2.2 A n)
+  have hnoSure : ∀ r p n, IsRational G η r →
+      p ∈ EpsilonRow G η r → (p n : ℝ) ≠ 1 := by
+    intro r p n hrational hrow
+    exact hnoSureσ r p n
+      (IsRational.mono G hησ hrational)
+      (EpsilonRow.mono G hησ r hrow)
+  obtain ⟨B, hB, hcompile⟩ :=
+    exists_cyclicOrbit_of_large_approximatePath
+      G hη hMpos hηε hreward hnoSure
+  obtain ⟨z, hzstart, hzerror, hzvariation⟩ :=
+    hextraction ρ hmotion η M B hη hηρ hMpos hB
+      hreward hequilibrium
+  exact hcompile z hzstart hzerror hzvariation
+
 /-- A sufficiently long finite near-feasible orbit contains a returned block whose reverse
 periodization gives the cyclic orbit in Theorem 3(ii). -/
 theorem FiniteNearOrbitCondition.toCyclicOrbitCondition
@@ -18321,7 +19151,6 @@ The following choices repair defects in the printed paper rather than change its
 * Lemma 8's second endpoint is `(y,pʸ)`, as its membership clause and proof require, rather
   than the printed repeated first coordinate `(x,pʸ)`.
 -/
-
 
 end
 end Literature.Simon2007
