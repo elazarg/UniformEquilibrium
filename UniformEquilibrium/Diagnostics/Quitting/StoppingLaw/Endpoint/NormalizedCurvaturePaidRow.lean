@@ -482,10 +482,9 @@ theorem FullReplacementCluster.hasPositiveMinimumTerminalSemanticPlateau_of_mini
   exact ⟨endpoint.cluster, endpoint.cluster_mem, hminimum, hcoordinate,
     hnash, hprefix⟩
 
-/-- Re-extraction at a flat no-entry minimum-fiber endpoint strictly lowers
-the active-support cardinal rank.  This is the reusable adapter needed for
-well-founded iteration; it asserts no relation between the old and new
-tangent families beyond their semantic base. -/
+/-- Re-extraction at a flat no-entry minimum-fiber endpoint retains the exact
+strict positive-debt-support inclusion, and hence lowers its cardinal rank.
+No relation between the old and new tangent arrays is asserted. -/
 theorem exists_reextractedFrontier_of_minimumFiberEndpoint
     (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
     {mover : {who // who ∈ frontier.positiveDebtSupport}}
@@ -494,10 +493,12 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
       frontier.base frontier.positiveDebtSupport frontier.tangent)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
-      quittingTerminalSemanticDebtSum frontier.base) :
+    quittingTerminalSemanticDebtSum frontier.base) :
     ∃ next : QuittingPositiveMinimumDebtTangentFamily reward,
       next.base = endpoint.cluster ∧
-      next.positiveDebtSupport.card < frontier.positiveDebtSupport.card := by
+        next.positiveDebtSupport ⊂ frontier.positiveDebtSupport ∧
+          next.positiveDebtSupport.card <
+            frontier.positiveDebtSupport.card := by
   have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum endpoint.cluster ≤
         quittingTerminalSemanticDebtSum candidate := by
@@ -515,10 +516,12 @@ theorem exists_reextractedFrontier_of_minimumFiberEndpoint
     ext who
     rw [next.positiveDebtSupport_iff]
     simp only [Finset.mem_filter, Finset.mem_univ, true_and, hbase]
-  refine ⟨next, hbase, ?_⟩
-  rw [hactive]
-  exact endpoint.positiveDebtSupport_card_lt_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
-    (hflat mover) hnoEntry hminimumFiber
+  have hsubset : next.positiveDebtSupport ⊂
+      frontier.positiveDebtSupport := by
+    rw [hactive]
+    exact endpoint.positiveDebtSupport_ssubset_of_exactDiagonal_of_flat_of_noEntry_of_minimumFiber
+      (hflat mover) hnoEntry hminimumFiber
+  exact ⟨next, hbase, hsubset, Finset.card_lt_card hsubset⟩
 
 /-- A frontier has exited the potential-co-decrease recursion when it reaches
 positive total slope, flat support entry, flat charged circulation, or an
@@ -575,7 +578,7 @@ theorem finiteSupportRankAlternative
           potentialCoDecrease_minimumFiberDeflation_or_paidFirstDisagreement
             frontier hflat hnoEntry hcoDecrease
         · obtain ⟨hminimumFiber, _hsupport, _hcard, _hotherDebt⟩ := hminimum
-          obtain ⟨next, _hnextBase, hnextCard⟩ :=
+          obtain ⟨next, _hnextBase, _hnextSubset, hnextCard⟩ :=
             exists_reextractedFrontier_of_minimumFiberEndpoint
               frontier endpoint hflat hnoEntry hminimumFiber
           apply ih next.positiveDebtSupport.card

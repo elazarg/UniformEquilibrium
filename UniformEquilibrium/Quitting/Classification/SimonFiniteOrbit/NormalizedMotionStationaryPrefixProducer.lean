@@ -361,7 +361,7 @@ theorem quittingStationaryNeverValue_sub_lt_of_localGap
     (hbalance : continueReward + continueMass * fixed - fixed =
       -quitProbability * gap)
     (hquit0 : 0 ≤ quitProbability)
-    (_hmass0 : 0 ≤ continueMass) (hmass1 : continueMass < 1)
+    (hmass1 : continueMass < 1)
     (hdominated : quitProbability ≤ 1 - continueMass)
     (hgapLower : 0 < quitProbability → -gap < error)
     (herror : 0 < error) :

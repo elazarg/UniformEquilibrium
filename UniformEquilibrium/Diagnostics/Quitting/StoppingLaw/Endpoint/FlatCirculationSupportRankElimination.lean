@@ -40,15 +40,16 @@ variable {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
   {mover : {who // who ∈ frontier.positiveDebtSupport}}
 
 /-- The minimum-fiber arm for a literal full-replacement cluster: the cluster
-can be used as the base of a fresh tangent family with strictly smaller
-positive-debt-support cardinality. -/
+can be used as the base of a fresh tangent family whose positive-debt support
+is a strict subset of the old support, hence has smaller cardinality. -/
 def HasMinimumFiberSupportRankDescent
     (endpoint : FullReplacementCluster frontier mover) : Prop :=
   quittingTerminalSemanticDebtSum endpoint.cluster =
-      quittingTerminalSemanticDebtSum frontier.base ∧
+    quittingTerminalSemanticDebtSum frontier.base ∧
     ∃ next : QuittingPositiveMinimumDebtTangentFamily reward,
       next.base = endpoint.cluster ∧
-        next.positiveDebtSupport.card < frontier.positiveDebtSupport.card
+        next.positiveDebtSupport ⊂ frontier.positiveDebtSupport ∧
+          next.positiveDebtSupport.card < frontier.positiveDebtSupport.card
 
 /-- The off-minimum arm for a literal full-replacement cluster: the actual
 source/reset subsequence eventually carries a fixed positive-gain paid row for
@@ -134,7 +135,8 @@ theorem reducedSupportRankAlternative
             hflat hnoEntry
         rw [xor_def] at hdichotomy
         rcases hdichotomy with hminimum | hpaid
-        · obtain ⟨⟨_hminimumFiber, next, _hnextBase, hnextCard⟩,
+        · obtain ⟨⟨_hminimumFiber, next, _hnextBase, _hnextSubset,
+              hnextCard⟩,
               _hnotPaid⟩ := hminimum
           apply ih next.positiveDebtSupport.card
           · exact hnextCard.trans_eq hrank

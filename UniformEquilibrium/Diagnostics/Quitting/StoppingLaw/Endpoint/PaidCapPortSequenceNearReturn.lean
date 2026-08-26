@@ -37,17 +37,19 @@ namespace QuittingPaidCapLiftedSource
 private theorem varyingSourceNearReturnFamily
     (source : ℕ → QuittingPaidCapLiftedSource reward)
     (port : ∀ index, (source index).SummablePort)
-    (chargeFloor : ℝ) (hchargeFloor : 0 < chargeFloor)
+    (absorptionFloor retainedCharge : ℝ)
+    (hretainedCharge : 0 < retainedCharge)
+    (hretainedBelow : retainedCharge < absorptionFloor)
     (habsorption : ∀ᶠ index in atTop,
-      chargeFloor ≤ (source index).totalAbsorption)
+      absorptionFloor ≤ (source index).totalAbsorption)
     (hdisplacement : Tendsto
       (fun index => (source index).capDisplacement (port index))
       atTop (nhds 0)) :
     Nonempty
       (QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily reward) := by
   refine ⟨{
-    chargeFloor := chargeFloor / 2
-    chargeFloor_pos := half_pos hchargeFloor
+    chargeFloor := retainedCharge
+    chargeFloor_pos := hretainedCharge
     nearReturn := ?_ }⟩
   intro endpointError hendpointError
   have hsmallDisplacement : ∀ᶠ index in atTop,
@@ -59,9 +61,9 @@ private theorem varyingSourceNearReturnFamily
     quittingCapLiftedPunishmentFloorOrbit reward (source index).profile
   let absorption : ℕ → ℝ := fun time =>
     quittingRootAbsorptionMass (orbit.roots time)
-  have hhalfBelowTotal :
-      chargeFloor / 2 < (source index).totalAbsorption :=
-    (half_lt_self hchargeFloor).trans_le habsorptionIndex
+  have hretainedBelowTotal :
+      retainedCharge < (source index).totalAbsorption :=
+    hretainedBelow.trans_le habsorptionIndex
   have hsum : Tendsto (fun horizon =>
       ∑ time ∈ Finset.range horizon, absorption time) atTop
       (nhds (source index).totalAbsorption) := by
@@ -69,9 +71,9 @@ private theorem varyingSourceNearReturnFamily
       quittingCapLiftedPunishmentFloorOrbit] using
       (source index).absorption_summable.hasSum.tendsto_sum_nat
   have hchargeEventually : ∀ᶠ horizon in atTop,
-      chargeFloor / 2 <
+      retainedCharge <
         ∑ time ∈ Finset.range horizon, absorption time :=
-    hsum.eventually (Ioi_mem_nhds hhalfBelowTotal)
+    hsum.eventually (Ioi_mem_nhds hretainedBelowTotal)
   have hvalue : Tendsto orbit.value atTop
       (nhds (port index).semanticPort.capPort.limit) := by
     apply tendsto_pi_nhds.2
@@ -114,7 +116,7 @@ private theorem varyingSourceNearReturnFamily
   refine ⟨start, finish, path, ?_, ?_⟩
   · dsimp only [path]
     rw [chargeSum_quittingFinitePrefixAdmissiblePath]
-    change chargeFloor / 2 ≤
+    change retainedCharge ≤
       ∑ time ∈ Finset.range horizon, absorption time
     exact hcharge.le
   · intro who
@@ -123,6 +125,24 @@ private theorem varyingSourceNearReturnFamily
     rw [dist_pi_le_iff hendpointError.le] at hreturnLe
     change |orbit.value 0 who - orbit.value horizon who| ≤ endpointError
     simpa [Real.dist_eq, abs_sub_comm] using hreturnLe who
+
+/-- A varying sequence retains any prescribed positive cumulative charge
+strictly below its eventual absorption floor. -/
+theorem nonempty_cumulativeNearReturnFamily_of_retainedCharge
+    (source : ℕ → QuittingPaidCapLiftedSource reward)
+    (port : ∀ index, (source index).SummablePort)
+    (absorptionFloor retainedCharge : ℝ)
+    (hretainedCharge : 0 < retainedCharge)
+    (hretainedBelow : retainedCharge < absorptionFloor)
+    (habsorption : ∀ᶠ index in atTop,
+      absorptionFloor ≤ (source index).totalAbsorption)
+    (hdisplacement : Tendsto
+      (fun index => (source index).capDisplacement (port index))
+      atTop (nhds 0)) :
+    Nonempty
+      (QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily reward) :=
+  varyingSourceNearReturnFamily source port absorptionFloor retainedCharge
+    hretainedCharge hretainedBelow habsorption hdisplacement
 
 /-- A sequence of actual paid cap sources yields cumulative admissible payoff
 near-returns when its complete absorption is eventually bounded below and its
@@ -140,8 +160,30 @@ nonempty_cumulativeNearReturnFamily_of_eventually_totalAbsorption_ge_of_capDispl
       atTop (nhds 0)) :
     Nonempty
       (QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily reward) :=
-  varyingSourceNearReturnFamily source port chargeFloor hchargeFloor
-    habsorption hdisplacement
+  varyingSourceNearReturnFamily source port chargeFloor (chargeFloor / 2)
+    (half_pos hchargeFloor) (half_lt_self hchargeFloor) habsorption
+      hdisplacement
+
+/-- Direct uniform-payoff consumer retaining an arbitrary positive charge
+strictly below the eventual absorption floor. -/
+theorem exists_uniformEquilibriumPayoff_of_retainedCharge
+    (source : ℕ → QuittingPaidCapLiftedSource reward)
+    (port : ∀ index, (source index).SummablePort)
+    (absorptionFloor retainedCharge : ℝ)
+    (hretainedCharge : 0 < retainedCharge)
+    (hretainedBelow : retainedCharge < absorptionFloor)
+    (habsorption : ∀ᶠ index in atTop,
+      absorptionFloor ≤ (source index).totalAbsorption)
+    (hdisplacement : Tendsto
+      (fun index => (source index).capDisplacement (port index))
+      atTop (nhds 0)) :
+    ∃ payoff : Payoff iota,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨family⟩ :=
+    nonempty_cumulativeNearReturnFamily_of_retainedCharge
+      source port absorptionFloor retainedCharge hretainedCharge
+        hretainedBelow habsorption hdisplacement
+  exact family.exists_uniformEquilibriumPayoff
 
 /-- Direct downstream form of the varying-source consumer. -/
 theorem

@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.FiniteSerialRelation
 import MathUE.Finset.InsertExtremum
+import UniformEquilibrium.Quitting.Classification.ExistenceBranches
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
@@ -346,6 +347,66 @@ theorem isεAsymptoticNash_soloStationary_exact_of_strictSink
         reward hne
     have hgapBound := hstrict other hne
     nlinarith [_hgap]
+
+/-- The acyclic augmented solo-preemption construction has stationary
+strength: at every positive tolerance it supplies a stationary terminal
+approximate equilibrium.  This retains the strategy provenance erased by the
+uniform-payoff projection below. -/
+theorem quittingStationaryεEquilibriumExistence_of_acyclic_augmentedSoloPreemption
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hacyclic : IsQuittingAugmentedSoloPreemptionAcyclic reward) :
+    QuittingStationaryεEquilibriumExistence reward := by
+  rcases isQuittingZeroSolo_or_exists_nonnegative_noHarmSingleton_of_acyclic
+      reward hacyclic with hzero | ⟨owner, howner, hnoHarm⟩
+  · intro ε hε
+    refine ⟨quittingAllContinueRoot, ?_⟩
+    change (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) ε
+        (quittingAlwaysContinueProfile reward)
+    exact (isZeroAsymptoticNash_quittingAlwaysContinue_of_zeroSolo
+      reward hzero).mono hε.le
+  · intro ε hε
+    let premium := quittingSoloPairPremium reward owner
+    let q := min (1 / 2 : ℝ) (ε / (2 * (premium + 1)))
+    have hpremium : 0 ≤ premium :=
+      quittingSoloPairPremium_nonneg reward owner
+    have hdenominator : 0 < 2 * (premium + 1) := by positivity
+    have hq0 : 0 < q := by
+      dsimp only [q]
+      exact lt_min (by norm_num) (div_pos hε hdenominator)
+    have hq1 : q ≤ 1 :=
+      (min_le_left _ _).trans (by norm_num)
+    have hqSmall : q ≤ ε / (2 * (premium + 1)) := min_le_right _ _
+    have hscaled : q * (premium + 1) ≤ ε / 2 := by
+      calc
+        q * (premium + 1) ≤
+            (ε / (2 * (premium + 1))) * (premium + 1) := by
+          gcongr
+        _ = ε / 2 := by field_simp
+    have herror : q * premium ≤ ε := by
+      calc
+        q * premium ≤ q * (premium + 1) := by
+          exact mul_le_mul_of_nonneg_left (by linarith) hq0.le
+        _ ≤ ε / 2 := hscaled
+        _ ≤ ε := by linarith
+    let hazard := quittingHazardCoin q hq0.le hq1
+    let root := quittingSoloStationaryRoot owner hazard
+    refine ⟨root, ?_⟩
+    exact (isεAsymptoticNash_soloStationary_le_pairPremium
+      reward owner hq0 hq1 howner hnoHarm).mono herror
+
+/-- Consequently failure of branch `S.1` forces a directed periodic cycle in
+the augmented solo-preemption graph. -/
+theorem nonempty_augmentedSoloPreemptionCycle_of_not_stationaryExistence
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hstationary : ¬QuittingStationaryεEquilibriumExistence reward) :
+    Nonempty (QuittingAugmentedSoloPreemptionCycle reward) := by
+  by_contra hcycle
+  exact hstationary
+    (quittingStationaryεEquilibriumExistence_of_acyclic_augmentedSoloPreemption
+      reward hcycle)
 
 /-- The augmented acyclic class always has a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption

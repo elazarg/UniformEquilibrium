@@ -340,4 +340,107 @@ theorem exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
   filter_upwards [hmark, hshifted] with n hn hshift
   exact ⟨hn.1, hn.2.1, hn.2.2, hshift⟩
 
+/-! ## Minimum-law atom dispatch -/
+
+/-- A positive finite atom of a minimum joint law, together with the deep
+source-matched cap--Nash chronologies which retain that atom in their literal
+suffix. The retained stage belongs to the suffix profile; it is not asserted
+to be one of the cap--Nash prefix rows. -/
+structure QuittingMinimumLawCausalSuffixAtom
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (point : QuittingTerminalSemanticLawPoint ι) where
+  terminal : {S : Finset ι // S.Nonempty}
+  terminalMass_pos : 0 < point.2 (some terminal)
+  chronology :
+    ∃ profiles : ℕ → (quittingGame reward).BehaviorProfile,
+      ∃ cutoff mark : ℕ → ℕ,
+      ∃ roots : ℕ → List (ι → PMF Bool),
+        Tendsto (fun n ↦
+          (quittingTerminalSemanticPair reward (profiles n),
+            quittingTerminalOutcomeMass reward (profiles n)))
+          atTop (nhds point) ∧
+        (∀ n, (roots n).length = n + 1) ∧
+        (∀ n, IsQuittingCapNashRootStack reward (roots n) (profiles n)) ∧
+        Tendsto (fun n ↦ quittingTerminalDebtSum reward
+          (quittingLiteralRootStackProfile reward (roots n) (profiles n)))
+          atTop (nhds (quittingTerminalDebtSumInf reward)) ∧
+        ∀ᶠ n in atTop,
+          point.2 (some terminal) / 2 <
+              ∑ time ∈ Finset.range (cutoff n),
+                quittingStageCoalitionMass reward (profiles n) time terminal ∧
+            mark n < cutoff n ∧
+            0 < quittingStageCoalitionMass reward
+              (profiles n) (mark n) terminal ∧
+            0 < quittingStageCoalitionMass reward
+              (quittingLiteralRootStackProfile reward (roots n) (profiles n))
+              (n + 1 + mark n) terminal
+
+/-- A positive literal debt infimum admits a joint-law minimizer with an
+exhaustive probability-law dispatch. Either its Never coordinate is positive,
+or a positive finite terminal atom is retained by arbitrarily deep
+source-matched cap--Nash chronologies.
+
+The first arm is genuine: simplex normalization alone cannot force a finite
+atom when the limiting law may put all its mass on Never. -/
+structure QuittingMinimumLawNeverOrCausalAtomDispatch
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
+  point : QuittingTerminalSemanticLawPoint ι
+  point_mem : point ∈ quittingTerminalSemanticLawCarrier reward
+  semantic_mem : point.1 ∈ quittingTerminalSemanticCarrier reward
+  minimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+    quittingTerminalSemanticDebtSum point.1 ≤
+      quittingTerminalSemanticDebtSum candidate
+  debt_eq_inf : quittingTerminalSemanticDebtSum point.1 =
+    quittingTerminalDebtSumInf reward
+  inf_pos : 0 < quittingTerminalDebtSumInf reward
+  neverMass_pos_or_causalSuffixAtom :
+    0 < point.2 none ∨
+      Nonempty (QuittingMinimumLawCausalSuffixAtom reward point)
+
+/-- The minimum-law Never-versus-finite-atom dispatch at positive literal
+debt infimum. -/
+theorem nonempty_minimumLawNeverOrCausalAtomDispatch_of_debtSumInf_pos
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hinf : 0 < quittingTerminalDebtSumInf reward) :
+    Nonempty (QuittingMinimumLawNeverOrCausalAtomDispatch reward) := by
+  obtain ⟨point, hpoint, hsemantic, hminimum, hdebt⟩ :=
+    exists_minimum_terminalSemanticLawCarrier_of_debtSumInf_pos reward hinf
+  have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  refine ⟨⟨point, hpoint, hsemantic, hminimum, hdebt, hinf, ?_⟩⟩
+  by_cases hnever : 0 < point.2 none
+  · exact Or.inl hnever
+  · right
+    have hnone : point.2 none = 0 :=
+      le_antisymm (not_lt.mp hnever) (hsimplex.1 none)
+    have hfiniteSum : ∑ terminal : {S : Finset ι // S.Nonempty},
+        point.2 (some terminal) = 1 := by
+      have hsum := hsimplex.2
+      rw [Fintype.sum_option, hnone, zero_add] at hsum
+      exact hsum
+    have hfiniteSumPos : 0 <
+        ∑ terminal : {S : Finset ι // S.Nonempty}, point.2 (some terminal) := by
+      rw [hfiniteSum]
+      norm_num
+    have hnonneg : ∀ terminal : {S : Finset ι // S.Nonempty},
+        terminal ∈ Finset.univ → 0 ≤ point.2 (some terminal) := by
+      intro terminal _
+      exact hsimplex.1 (some terminal)
+    obtain ⟨terminal, _hterminal, hterminalPos⟩ :=
+      (Finset.sum_pos_iff_of_nonneg hnonneg).mp hfiniteSumPos
+    refine ⟨⟨terminal, hterminalPos, ?_⟩⟩
+    exact exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
+      reward point terminal hpoint hterminalPos hinf hdebt
+
+/-- Failure of uniform-payoff existence has the same minimum-law dispatch. -/
+theorem nonempty_minimumLawNeverOrCausalAtomDispatch_of_not_uniformPayoff
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    Nonempty (QuittingMinimumLawNeverOrCausalAtomDispatch reward) := by
+  apply nonempty_minimumLawNeverOrCausalAtomDispatch_of_debtSumInf_pos reward
+  exact
+    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr
+      hno
+
 end GameTheory

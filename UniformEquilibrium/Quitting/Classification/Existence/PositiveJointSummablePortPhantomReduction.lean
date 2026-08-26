@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointEndpointSequentialReduction
+import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointExactPrefixOrbitDiagonal
 import UniformEquilibrium.Quitting.Classification.Existence.PositiveRhoLandingClassificationBoundary
 
 /-!
@@ -30,6 +31,20 @@ namespace GameTheory
 open Filter StochasticGame
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
+
+/-- The all-Continue phantom produced by the positive-joint endpoint route,
+with its actual source residual, reached endpoint, no-sure-exit proof,
+summable port, exact value identity, and uniform-payoff certificate retained. -/
+structure QuittingPositiveJointUniformAllContinuePhantom
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota) where
+  residual : QuittingPositiveJointPrefixReachNoSureExitResidual reward
+  endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward
+  noSureExit : ¬endpoint.HasSureExitNashPrefix
+  port : endpoint.exactPrefixOrbit.SummableChargeAllContinuePort
+  phantom : QuittingLowSurvivalAllContinuePhantom reward
+  phantom_value_eq : phantom.value = port.limit
+  uniformEquilibriumPayoff :
+    (quittingGame reward).IsUniformEquilibriumPayoff none phantom.value
 
 namespace QuittingPunishmentFloorInfiniteOrbit.SummableChargeAllContinuePort
 
@@ -87,8 +102,48 @@ theorem stationaryExistence_or_positiveSingletonDefectResidual
   obtain ⟨boundary⟩ := port.nonempty_positiveSurvivalBoundary hdelta
   exact boundary.stationary_or_defect
 
-/-- More directly, failure of the zero-solo stationary branch turns the
-summable port limit into the existing nonzero all-Continue phantom. -/
+/-- Failure of the zero-solo stationary branch turns a canonical endpoint
+port into a nonzero all-Continue phantom whose value is exactly the port limit
+and is therefore a uniform-equilibrium payoff. -/
+theorem stationaryExistence_or_uniformAllContinuePhantom_of_endpoint
+    [Nonempty iota]
+    (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward)
+    (port : endpoint.exactPrefixOrbit.SummableChargeAllContinuePort) :
+    QuittingStationaryεEquilibriumExistence reward ∨
+      ∃ phantom : QuittingLowSurvivalAllContinuePhantom reward,
+        phantom.value = port.limit ∧
+          (quittingGame reward).IsUniformEquilibriumPayoff none
+            phantom.value := by
+  by_cases hzero : IsQuittingZeroSolo reward
+  · exact Or.inl fun delta hdelta ↦
+      quittingStationaryεEquilibriumAt_of_zeroSolo reward hzero hdelta.le
+  · right
+    have hlimitNe : port.limit ≠ 0 := by
+      intro hlimit
+      apply hzero
+      intro who
+      have hsolo := port.singleton_le who
+      rw [hlimit] at hsolo
+      simpa using hsolo
+    let phantom : QuittingLowSurvivalAllContinuePhantom reward := {
+      value := port.limit
+      value_ne_zero := hlimitNe
+      notZeroSolo := hzero
+      value_mem := port.limit_mem
+      rational := by
+        intro who
+        simpa using port.punishment_le who
+      support := by
+        exact isQuittingRootSupportApproxNash_zero_of_isZeroNash
+          reward port.limit quittingAllContinueRoot
+          (quittingAllContinueRoot_isZeroNash_of_singleton_le
+            reward port.limit port.singleton_le) }
+    refine ⟨phantom, rfl, ?_⟩
+    simpa only [phantom] using
+      port.limit_isUniformEquilibriumPayoff_of_endpoint endpoint
+
+/-- Forgetting the positive-joint endpoint and uniform-target provenance
+recovers the former generic phantom alternative. -/
 theorem stationaryExistence_or_allContinuePhantom
     [Nonempty iota]
     (port : orbit.SummableChargeAllContinuePort) :
@@ -122,6 +177,32 @@ theorem stationaryExistence_or_allContinuePhantom
 end QuittingPunishmentFloorInfiniteOrbit.SummableChargeAllContinuePort
 
 namespace QuittingPositiveJointPrefixReachNoSureExitResidual
+
+/-- The source-faithful positive-joint reduction: the phantom arm retains
+the reached endpoint, its no-sure-exit proof, the exact summable port, the
+identity of the phantom value with the port limit, and the checked uniform
+payoff certificate at that value. -/
+theorem wellSupported_or_stationary_or_uniformAllContinuePhantom
+    {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
+    (residual : QuittingPositiveJointPrefixReachNoSureExitResidual reward) :
+    QuittingWellSupportedAbsorbingSequenceExistence reward ∨
+      QuittingStationaryεEquilibriumExistence reward ∨
+        Nonempty (QuittingPositiveJointUniformAllContinuePhantom reward) := by
+  rcases residual.wellSupported_or_summableExactPrefixPort with
+    hwellSupported | ⟨endpoint, hnoSureExit, ⟨port⟩⟩
+  · exact Or.inl hwellSupported
+  · letI : Nonempty iota := ⟨endpoint.punished⟩
+    rcases port.stationaryExistence_or_uniformAllContinuePhantom_of_endpoint
+        endpoint with hstationary | ⟨phantom, hvalue, huniform⟩
+    · exact Or.inr (Or.inl hstationary)
+    · exact Or.inr (Or.inr ⟨{
+        residual := residual
+        endpoint := endpoint
+        noSureExit := hnoSureExit
+        port := port
+        phantom := phantom
+        phantom_value_eq := hvalue
+        uniformEquilibriumPayoff := huniform }⟩)
 
 /-- The positive-joint endpoint seam reduces to S.3, S.1, or the canonical
 nonzero all-Continue phantom.  This is the finite-dimensional obstruction

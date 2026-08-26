@@ -228,6 +228,25 @@ identities, and identifies their sums with the actual terminal atoms. Thus
 premise and has `M`, `L`, `A`, and its quantitative `C`. Positive second-pair
 production and a fixed exploitability gap remain open.
 
+The arbitrary-completion obstruction now needs only one protected coordinate.
+`exists_exactTerminalNash_and_uniformPayoff_of_singleAnchorMembership`
+(`UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionEscape.lean`)
+selects a mixed Nash point for every complementary player while one anchor
+Quits surely. Literal membership reward at that anchor makes its exact
+stopping-cap screen automatic, and all other reward coordinates are
+unrestricted. The resulting stationary profile is exact terminal Nash
+against every behavioral deviation and has a uniform-equilibrium payoff. In
+the Fin6 specialization,
+`exists_targetA_singleAnchor_exactTerminalNash_uniformPayoff_and_secondPairMass_zero`
+retains either one coordinate of the first target pair, permits arbitrary
+changes to the other five coordinates, and still gives exact zero mass to the
+disjoint second pair. Thus a viable two-target gadget must alter both
+first-pair coordinates. The separate
+`exists_exactTerminalNash_and_uniformPayoff_of_complementLeaveSafe` theorem
+continues to cover general pointwise leave-safe bases of cardinality at least
+two. These results have `M`, `L`, `A`, and `C`; failure of either singleton
+dominance inequality is not itself a counterexample.
+
 The watchdog obstruction is also sharper, but stops at a precise topology
 lemma. Strategically totally bounded reply families cannot force a fixed
 profile-dependent gain, complete such families compile to a uniform payoff,
@@ -285,8 +304,9 @@ entry, or an eventually paid first-disagreement row. Theorem
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FlatCirculationSupportRankElimination.lean`)
 removes flat charged circulation as an independent terminal tag: in either
 flat no-entry branch, an arbitrary active mover's actual full-replacement
-endpoint either lies on the minimum fiber and strictly lowers the finite
-positive-debt-support rank, or lies off that fiber and carries the existing
+endpoint either lies on the minimum fiber and retains a literal strict subset
+of the preceding positive-debt support (hence lowers its finite rank), or lies
+off that fiber and carries the existing
 eventually paid row. The three surviving tags are mathematically distinct;
 none of their producer obligations is thereby solved. There is also a stronger
 branch-independent adapter: every extracted frontier already has fixed
@@ -342,10 +362,11 @@ or to consume the literal inert stall.
 
 Changing the paid-row or port selector cannot restore a uniform real descent
 step. At every positive debt-drop, absorption, and displacement tolerance,
-`HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small`
+`HasTerminalExploitabilityGap.exists_profileSequence_eventually_all_paidCapPorts_small`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean`)
-selects one near-minimum literal behavioral profile at which every compatible
-full-gap paid-cap source/port satisfies all three smallness bounds. Its
+retains one actual sequence realizing the minimum and proves that eventually
+every profile on it makes every compatible full-gap paid-cap source/port
+satisfy all three smallness bounds. Its one-profile consequence and
 corollary `not_uniformPositivePaidCapDebtDropSelection` rules out any selector
 which maintains one fixed positive total-debt drop over all profiles. The
 remaining regeneration must therefore be profile-dependent and nonuniform,
@@ -360,8 +381,10 @@ constant while its cap displacement tends to zero, then
 `exists_uniformEquilibriumPayoff_of_eventually_totalAbsorption_ge_of_capDisplacement_tendsto_zero`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortSequenceNearReturn.lean`)
 selects one source-matched finite prefix at each tolerance and produces a
-uniform-equilibrium payoff.  It uses half the supplied absorption floor and
-never recombines laws, profiles, or endpoints across indices.  No current
+uniform-equilibrium payoff. The generalized theorem retains every prescribed
+positive cumulative charge strictly below the supplied absorption floor; the
+former half-floor statement is a convenience specialization. It never
+recombines laws, profiles, or endpoints across indices. No current
 producer supplies the positive absorption floor; the near-minimum sequence
 above instead has absorption tending to zero.
 
@@ -411,8 +434,19 @@ obstruction.  The joint-carrier lift
 `exists_minimum_terminalSemanticLawCarrier_of_not_uniformPayoff`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticResetIncidenceReturn.lean`)
 retains a complete terminal law at such a minimizer.  It is existential and
-nonunique: no actual profile attains the minimum, and no positive finite atom,
-incidence coordinate, chronology, tightness, or reset return is selected.
+nonunique: no actual profile attains the minimum.  Generically the law has a
+positive-Never or positive-finite-atom dispatch.  In the Fin4 hard residual,
+`exists_finFourHardResidual_minimumLaw_causalSuffixAtom`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumLawFiniteAtom.lean`)
+removes the pure-Never obstruction.  If a minimum law were concentrated at
+Never, its reward moment would make the prescribed payoff zero and
+punishment-normal minimum separation would make every singleton reward
+negative; literal all-Continue would then be exact all-behavior Nash with
+zero uniform payoff, contradicting the hard witness.  Hence every such
+minimum law has a positive finite atom, and a residual-only adapter feeds it
+into arbitrarily deep source-matched cap--Nash chronologies which retain it
+in their literal suffix.  The atom is not thereby a prefix-root atom,
+Bellman edge, paid row, reset, cumulative charge, or final consumer.
 
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
@@ -530,7 +564,7 @@ The open producer arrows are:
 
 The DAG nodes have these mathematical meanings:
 
-- `POSITIVE-MINIMUM-DEBT`: The literal behavioral-profile debt infimum equals the minimum on the compact terminal-semantic carrier. For a nonempty finite player type, its positivity is equivalent to nonexistence of a uniform-equilibrium payoff; a nonunique complete terminal-law carrier lift of a minimizer is checked.
+- `POSITIVE-MINIMUM-DEBT`: The literal behavioral-profile debt infimum equals the minimum on the compact terminal-semantic carrier. For a nonempty finite player type, its positivity is equivalent to nonexistence of a uniform-equilibrium payoff; a nonunique complete terminal-law carrier lift of a minimizer is checked. In a Fin4 hard residual every minimum joint law has a positive finite coordinate and a source-matched causal suffix-atom chronology, but no strategic consumer of that suffix atom is known.
 - `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one positive-minimum tangent family whose active mover diagonal is exactly minus base debt and whose full-replacement mover debt tends to zero.
 - `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates at positive total slope, zero-debt support entry, or an off-minimum actual replacement endpoint carrying an eventually paid row. Flat charged circulation is absorbed by strict support-rank descent or the paid-row arm.
 - `POSITIVE-TOTAL-SLOPE`: One active mover has strictly positive total tangent slope.
@@ -916,12 +950,15 @@ the live mathematical ledger.
   negative.
 
   Composing the two residual consumers exposes the cleaner checked capstone
-  `quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_allContinuePhantom`
+  `quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom`
   (`UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean`):
   every diffuse stationarily generated source yields S.1, S.2, well-supported
-  S.3, or a nonempty low-survival all-Continue phantom.  This removes the
-  negative-owner and positive-joint no-sure-exit labels from the final
-  statement, but does not execute or classify the surviving phantom.
+  S.3, or a source-matched uniform all-Continue phantom. The last package
+  retains a strict source subsequence, literal punishment suffixes, fixed
+  punished label, their semantic limit endpoint, its no-sure-exit proof,
+  summable exact-prefix port, phantom, exact value equality, and uniform-payoff
+  certificate. This still does not classify the surviving target as S.1,
+  S.2, or S.3.
 
   The prioritized positive-absorption attachment is no longer an independent
   source obligation.  At every positive prioritized scale,
@@ -934,8 +971,27 @@ the live mathematical ledger.
   the infinite attachment output contracts through the support--Bellman
   boundary.  The reward table, tolerance, and all four priority negations are
   retained.  This reduction has `M`, `L`, `A`, and attachment-arm `C`, but
-  neither surviving normal-form arm has a branch consumer.  In particular it
-  does not prove S.1, S.2, S.3, or Theorem 3.4.
+  neither surviving normal-form arm has a branch consumer. The explicit
+  `AllContinueSourceAt` and `PositiveSingletonDefectAt` packages show why the
+  final consumer must be eliminative: all three fixed AGKRS branches directly
+  contradict their retained same-scale priority negations. Cofinal residuals
+  yield either one positive-scale all-Continue source or singleton defects
+  cofinally toward zero. Every such residual in fact forces a positive-period
+  directed cycle in the finite augmented solo-preemption graph. Turning that
+  concrete cyclic architecture into S.3, or eliminating it, is still open.
+
+  The cofinal source provenance has also been retained.
+  `nonempty_cofinalPrioritizedPreemptionSeedSequence_of_cofinallyPrioritized`
+  (`UniformEquilibrium/Quitting/Classification/Existence/PrioritizedPreemptionSeedBoundary.lean`)
+  fixes one positive
+  owner/preemptor edge along scales tending to zero and stores the actual
+  all-Continue source or singleton defect at every scale. The exact sufficient
+  semantic enhancement is `QuittingCofinalPrioritizedSignedLassoBridge`:
+  phase roots and values, rotation-uniform signed seams, support rationality,
+  and an absorbing phase. Its checked consumer yields S.3 and contradicts
+  priority. No theorem produces those phase fields from the static edge, so
+  this is the precise remaining prioritized compiler rather than an
+  unconditional branch theorem.
 
   The positive-joint endpoint is now narrowed further by
   `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_summableExactPrefixPort`
@@ -944,14 +1000,17 @@ the live mathematical ledger.
   Nonsummable absorption gives well-supported S.3 through compact
   single-seam lassos; the only surviving arm is an actual endpoint with no
   sure-exit Nash prefix and a summable exact-prefix all-Continue port.
-  `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_stationary_or_allContinuePhantom`
+  `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_stationary_or_uniformAllContinuePhantom`
   (`UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortPhantomReduction.lean`)
-  contracts that arm again to S.1 or the common nonzero all-Continue phantom;
-  at each tolerance the same obstruction is the existing positive-singleton
-  defect.  Passing to the corrected pointwise residual forgets the endpoint,
-  no-sure-exit proof, and summable orbit, and returns a raw residual rather
-  than a prioritized one.  This is a shared obstruction, not a consumer or a
-  closure.
+  contracts that arm again to S.1 or a data-bearing phantom retaining the
+  originating residual, reached endpoint, no-sure-exit proof, summable port,
+  exact value identity, and uniform-payoff certificate. At each tolerance the
+  same obstruction is the existing positive-singleton defect. The stronger
+  `wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom`
+  additionally retains the strict producing subsequence and its actual
+  punishment-suffix profiles. The older raw corrected-pointwise projection
+  still forgets those fields. This is a classified semantic obstruction, not
+  yet an S.1/S.2/S.3 consumer.
 
   The parallel provenance-retaining theorem
   `QuittingPositiveJointPrefixReachNoSureExitResidual.wellSupported_or_endpointBallisticBoundary`
@@ -1001,10 +1060,11 @@ the live mathematical ledger.
   The checked Literature theorem
   `theorem3_4_of_prioritizedAndSummablePortClosures` therefore composes
   consumers for exactly the prioritized corrected-pointwise residual and
-  the summable-port residual into the literal S.1/S.2/S.3 conclusion.  A
-  consumer of the common phantom would discharge the latter, but none is
-  known.  On the prioritized side, the exact surviving obligations are now
-  the source-faithful all-Continue residual and the positive-singleton defect.
+  the summable-port residual into the literal S.1/S.2/S.3 conclusion. A
+  branch-classification consumer for the retained uniform phantom would
+  discharge the latter, but none is known. On the prioritized side, the exact
+  surviving obligation is to construct the signed-lasso bridge from the
+  cofinal source-matched preemption seed, or otherwise eliminate that seed.
   The ballistic theorem closes only its returned positive-charge subarm and
   quantitatively classifies the rest; the diagonal-payoff theorems do not
   supply a classification branch.  No complete universal consumer and no

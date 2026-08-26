@@ -32,11 +32,12 @@ variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
 variable {gain : ℝ}
 
-/-- At any prescribed positive scales, one literal full-gap source near the
-global minimum makes all of its paid cap ports small simultaneously.  The
-universal quantifier over `actual` is the key point: selecting a different
-paid row or summable port cannot restore a fixed positive descent step. -/
-theorem HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small
+/-- Along one actual sequence realizing the global minimum, eventually every
+profile makes every compatible full-gap paid-cap source and port small at the
+three prescribed positive scales.  The same realizing sequence is retained
+in the conclusion. -/
+theorem
+    HasTerminalExploitabilityGap.exists_profileSequence_eventually_all_paidCapPorts_small
     (exploit : HasTerminalExploitabilityGap reward gain)
     (hgain : 0 < gain)
     (minimum : QuittingTerminalSemanticPair iota)
@@ -50,18 +51,21 @@ theorem HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small
     (hdebtError : 0 < debtError)
     (habsorptionError : 0 < absorptionError)
     (hdisplacementError : 0 < displacementError) :
-    ∃ profile : (quittingGame reward).BehaviorProfile,
-      Nonempty (QuittingActualProfileTerminalGapPaidCapPort
-        reward minimum profile gain) ∧
-      ∀ actual : QuittingActualProfileTerminalGapPaidCapPort
-          reward minimum profile gain,
-        actual.source.initialDebt -
-              quittingTerminalSemanticDebtSum actual.port.semanticPort.limit <
-            debtError ∧
-          actual.source.totalAbsorption < absorptionError ∧
-          actual.source.capDisplacement actual.port < displacementError ∧
-          (actual.source.QuantitativeDebtDescent actual.port ∨
-            actual.source.InertStall actual.port) := by
+    ∃ profiles : ℕ → (quittingGame reward).BehaviorProfile,
+      Tendsto (fun n ↦ quittingTerminalSemanticPair reward (profiles n))
+        atTop (nhds minimum) ∧
+      ∀ᶠ n in atTop,
+        Nonempty (QuittingActualProfileTerminalGapPaidCapPort
+          reward minimum (profiles n) gain) ∧
+        ∀ actual : QuittingActualProfileTerminalGapPaidCapPort
+            reward minimum (profiles n) gain,
+          actual.source.initialDebt -
+                quittingTerminalSemanticDebtSum actual.port.semanticPort.limit <
+              debtError ∧
+            actual.source.totalAbsorption < absorptionError ∧
+            actual.source.capDisplacement actual.port < displacementError ∧
+            (actual.source.QuantitativeDebtDescent actual.port ∨
+              actual.source.InertStall actual.port) := by
   let rewardScale : ℝ := 2 * quittingRewardBound reward + 1
   have hrewardScale : 0 < rewardScale := by
     have hrewardBound := quittingRewardBound_nonneg reward
@@ -93,13 +97,14 @@ theorem HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small
         quittingTerminalSemanticDebtSum minimum + sourceError :=
     hdebtTendsto.eventually
       (Iio_mem_nhds (lt_add_of_pos_right _ hsourceError))
-  obtain ⟨n, hnear⟩ := hnearEventually.exists
+  refine ⟨profiles, hprofiles, ?_⟩
+  filter_upwards [hnearEventually] with n hnear
   let profile := profiles n
   have hactual : Nonempty (QuittingActualProfileTerminalGapPaidCapPort
       reward minimum profile gain) :=
     exploit.nonempty_actualProfilePaidCapPort hgain minimum minimum_le
       minimum_pos profile
-  refine ⟨profile, hactual, ?_⟩
+  refine ⟨hactual, ?_⟩
   intro actual
   have hinitial : actual.source.initialDebt =
       quittingTerminalSemanticDebtSum
@@ -156,6 +161,44 @@ theorem HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small
     hcapBound.trans_lt (hscaleBound.trans_lt hscaledMotion)
   exact ⟨hdrop, habsorption, hdisplacement,
     actual.quantitativeDebtDescent_or_inertStall hgain exploit⟩
+
+/-- At any prescribed positive scales, one literal full-gap source near the
+global minimum makes all compatible paid-cap sources and ports small
+simultaneously.  This is the one-profile consequence of the eventual
+realizing-sequence theorem. -/
+theorem HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small
+    (exploit : HasTerminalExploitabilityGap reward gain)
+    (hgain : 0 < gain)
+    (minimum : QuittingTerminalSemanticPair iota)
+    (minimum_mem : minimum ∈ quittingTerminalSemanticCarrier reward)
+    (minimum_le : ∀ candidate,
+      candidate ∈ quittingTerminalSemanticCarrier reward →
+        quittingTerminalSemanticDebtSum minimum ≤
+          quittingTerminalSemanticDebtSum candidate)
+    (minimum_pos : 0 < quittingTerminalSemanticDebtSum minimum)
+    (debtError absorptionError displacementError : ℝ)
+    (hdebtError : 0 < debtError)
+    (habsorptionError : 0 < absorptionError)
+    (hdisplacementError : 0 < displacementError) :
+    ∃ profile : (quittingGame reward).BehaviorProfile,
+      Nonempty (QuittingActualProfileTerminalGapPaidCapPort
+        reward minimum profile gain) ∧
+      ∀ actual : QuittingActualProfileTerminalGapPaidCapPort
+          reward minimum profile gain,
+        actual.source.initialDebt -
+              quittingTerminalSemanticDebtSum actual.port.semanticPort.limit <
+            debtError ∧
+          actual.source.totalAbsorption < absorptionError ∧
+          actual.source.capDisplacement actual.port < displacementError ∧
+          (actual.source.QuantitativeDebtDescent actual.port ∨
+            actual.source.InertStall actual.port) := by
+  obtain ⟨profiles, _hprofiles, hall⟩ :=
+    exploit.exists_profileSequence_eventually_all_paidCapPorts_small
+      hgain minimum minimum_mem minimum_le minimum_pos debtError
+        absorptionError displacementError hdebtError habsorptionError
+          hdisplacementError
+  obtain ⟨n, hn⟩ := hall.exists
+  exact ⟨profiles n, hn⟩
 
 /-- No rule can assign every literal source a paid cap port with one fixed
 positive total-debt drop.  This rules out uniform real-valued descent as the

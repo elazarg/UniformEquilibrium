@@ -94,6 +94,40 @@ theorem opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
   exact quittingProbability_eq_zero_of_fixedOpponentsContinueMass_eq_one
     root who other hne hmass
 
+/-- If all opponents continue surely, quitting now yields the singleton
+terminal reward. -/
+theorem quittingStationaryFixedOpponentsQuitValue_eq_singleton_of_mass_eq_one
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (who : ι)
+    (hmass : quittingStationaryFixedOpponentsContinueMass root who = 1) :
+    quittingStationaryFixedOpponentsQuitValue reward root who =
+      reward (quittingSingletonTerminal who) who := by
+  have hopponents :=
+    opponents_pure_continue_of_fixedOpponentsContinueMass_eq_one
+      root who hmass
+  let action : ι → Bool := fun player => decide (player = who)
+  have hroot : Function.update root who (PMF.pure true) =
+      fun player => PMF.pure (action player) := by
+    funext player
+    by_cases hp : player = who
+    · subst player
+      simp [action]
+    · rw [Function.update_of_ne hp, hopponents player hp]
+      simp [action, hp]
+  have hquitters : quittingQuitters action = ({who} : Finset ι) := by
+    ext player
+    simp [quittingQuitters, action]
+  change quittingRootAbsorbingContribution reward
+      (Function.update root who (PMF.pure true)) who = _
+  rw [hroot]
+  unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
+  rw [pmfPi_pure, expect_pure]
+  rw [show quittingRootPayoff reward (0 : Payoff ι) action who =
+      reward ⟨{who}, Finset.singleton_nonempty who⟩ who by
+    simp [quittingRootPayoff, hquitters]]
+  apply congrArg (fun terminal => reward terminal who)
+  exact Subtype.ext (by rfl)
+
 /-- On the saturated face, replacing one player's stationary strategy by an
 arbitrary deviation gives the same profile as replacing that player in the
 all-Continue profile. -/
