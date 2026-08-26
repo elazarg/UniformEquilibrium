@@ -6,10 +6,10 @@
     {
       "id": "POSITIVE-MINIMUM-DEBT",
       "status": "proved",
-      "meaning": "The attainable terminal semantic carrier has strictly positive minimum total debt; for a nonempty finite player type this is equivalent to nonexistence of a uniform-equilibrium payoff.",
-      "source": "UniformEquilibrium/Quitting/Terminal/PositiveMinimumSemanticDebt.lean",
-      "declaration": "GameTheory.not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt",
-      "evidence_seals": ["M", "L"]
+      "meaning": "The literal behavioral-profile debt infimum equals the minimum on the compact terminal-semantic carrier. For a nonempty finite player type, its positivity is equivalent to nonexistence of a uniform-equilibrium payoff; a nonunique complete terminal-law carrier lift of a minimizer is checked.",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean",
+      "declaration": "GameTheory.quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff",
+      "evidence_seals": ["M", "L", "A", "C"]
     },
     {
       "id": "EXACT-DIAGONAL-FRONTIER",
@@ -170,7 +170,7 @@
       "status": "open-producer",
       "from": "PAID-FIRST-DISAGREEMENT-ROW",
       "to": "CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN",
-      "meaning": "A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Missing downstream: profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.",
+      "meaning": "A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Opponent-tight compact-law limits, and in particular limits with two proper clocks, realize the full semantic point. A fixed nonattained minimum subsequence is therefore all-nonproper or has one proper owner with a negative-singleton Never-cap jump. Missing downstream: consumption of those law-limit residuals, profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.",
       "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean",
       "declaration": "GameTheory.HasTerminalExploitabilityGap.exists_profile_all_paidCapPorts_small",
       "evidence_seals": ["M", "L", "A"]

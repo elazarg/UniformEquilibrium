@@ -352,6 +352,19 @@ remaining regeneration must therefore be profile-dependent and nonuniform,
 use a genuinely well-founded obstruction, or consume the inert stall; no such
 consumer is supplied here.
 
+The varying-source direction is now a checked consumer rather than a prose
+possibility.  If a supplied sequence of actual paid cap sources and summable
+ports has total absorption eventually bounded below by one fixed positive
+constant while its cap displacement tends to zero, then
+`QuittingPaidCapLiftedSource.`
+`exists_uniformEquilibriumPayoff_of_eventually_totalAbsorption_ge_of_capDisplacement_tendsto_zero`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/PaidCapPortSequenceNearReturn.lean`)
+selects one source-matched finite prefix at each tolerance and produces a
+uniform-equilibrium payoff.  It uses half the supplied absorption floor and
+never recombines laws, profiles, or endpoints across indices.  No current
+producer supplies the positive absorption floor; the near-minimum sequence
+above instead has absorption tending to zero.
+
 Pointwise positive debt does not repair this attainment gap.  The checked
 two-player theorem `attainable_inter_debt_ge_one_not_closed`
 (`UniformEquilibrium/Diagnostics/Quitting/PositiveDebtTerminalSemanticNonattainment.lean`)
@@ -361,6 +374,64 @@ witnessed by all-Continue play.  Thus this is a sharp topological fence
 against decoding a positive-debt carrier point from debt positivity alone,
 not a counterexample and not an obstruction to an attainment theorem that
 genuinely uses `D = D_* > 0` or retained chronology.
+
+Compact stopping-law limits now give an exact classification of that
+attainment seam. `quittingTerminalSemanticPair_eq_of_opponentTight_lawLimit`
+(`UniformEquilibrium/Quitting/Terminal/OpponentTightTerminalSemanticRealization.lean`)
+realizes the complete semantic point, including unrestricted behavioral caps,
+under opponent tightness; two proper limiting clocks already imply that
+condition. Along a fixed selected nonattained minimum sequence at most one
+clock is proper. If exactly one is proper, its owner has an exact Never cap, a
+negative singleton reward, and a strict cap jump bounded by the product of the
+opponents' Never masses. Hence nonnegative singleton rewards leave only the
+all-nonproper arm. The theorem neither identifies approximating Never atoms
+nor consumes the all-nonproper or mixed-sign unique-proper residual, so it
+narrows rather than closes the paid and Fin4 fronts.
+
+The source telescope for this classification is also explicit.
+`nonempty_terminalSemanticSelectedLawLimit_of_mem_carrier` retains, for every
+terminal-semantic carrier point, actual realizing profiles, one strict
+subsequence, semantic convergence along precisely that subsequence, and all
+coordinate compact-law limits.  Carrier-level corollaries feed nonattainment
+directly into the common late-opponent-tail witness, and feed global
+minimality plus nonnegative singleton rewards into one selected all-nonproper
+law limit.  These are genuine source adapters, not attainment: no selected
+profile equals the carrier point and no approximating Never atom is asserted
+to converge.
+
+The scalar and compact minimum notions are now identified exactly.
+`quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`)
+proves that the infimum of literal behavioral-profile debt equals the debt of
+every global minimizer on the terminal-semantic carrier.  For nonempty finite
+player types,
+`quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff`
+makes positivity of that literal infimum exactly the no-uniform-payoff
+obstruction.  The joint-carrier lift
+`exists_minimum_terminalSemanticLawCarrier_of_not_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticResetIncidenceReturn.lean`)
+retains a complete terminal law at such a minimizer.  It is existential and
+nonunique: no actual profile attains the minimum, and no positive finite atom,
+incidence coordinate, chronology, tightness, or reset return is selected.
+
+An independent finite-cycle route now has a sharp consumer and sharp producer
+barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
+(`UniformEquilibrium/Quitting/Cycles/CyclicGreenDebt.lean`) bounds attachment
+by `K * delta / rhoMax` and every unrestricted behavioral debt coordinate by
+`(K / rho_i) * (epsilon + K * delta / rhoMax)` whenever a supplied finite
+product-root word has one positive nonempty opponent-only coalition atom for
+each player.  Marked phases may repeat and need not be quiet.  The generic
+MathUE classifiers say that atom-cover failure is exactly a common
+intersection and that exact scalar phase/seam failure has only three minimal
+forms: one impossible phase, two crossed phases, or one phase crossing the
+closing seam.  The rational Fin5 regression
+`not_exists_phaseSeamSystem_of_lt`
+(`UniformEquilibrium/Diagnostics/Quitting/Regression/FinFiveFullFaceSourcePhaseSeam.lean`)
+shows that five actual deleted-game exact terminal Nash sources, positive
+omitted-player gaps, literal quiet lifts, and mass-`1/2` opponent atoms still
+permit a sharp `31/32` phase--seam obstruction.  Its ambient all-Quit profile
+has `D_* = 0`; whether positive global minimum debt forces alignment remains
+the exact branch-facing question.
 
 On `Fin 4`, the source construction is now unconditional from the negative
 semantic endpoint. For every terminal exploitability witness and every
@@ -455,11 +526,11 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 The open producer arrows are:
 
 - `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
-- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Missing downstream: profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.
+- `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Opponent-tight compact-law limits, and in particular limits with two proper clocks, realize the full semantic point. A fixed nonattained minimum subsequence is therefore all-nonproper or has one proper owner with a negative-singleton Never-cap jump. Missing downstream: consumption of those law-limit residuals, profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.
 
 The DAG nodes have these mathematical meanings:
 
-- `POSITIVE-MINIMUM-DEBT`: The attainable terminal semantic carrier has strictly positive minimum total debt; for a nonempty finite player type this is equivalent to nonexistence of a uniform-equilibrium payoff.
+- `POSITIVE-MINIMUM-DEBT`: The literal behavioral-profile debt infimum equals the minimum on the compact terminal-semantic carrier. For a nonempty finite player type, its positivity is equivalent to nonexistence of a uniform-equilibrium payoff; a nonunique complete terminal-law carrier lift of a minimizer is checked.
 - `EXACT-DIAGONAL-FRONTIER`: A positive minimum supplies one positive-minimum tangent family whose active mover diagonal is exactly minus base debt and whose full-replacement mover debt tends to zero.
 - `FINITE-SUPPORT-RANK-EXIT`: Repeated minimum-fiber re-extraction terminates at positive total slope, zero-debt support entry, or an off-minimum actual replacement endpoint carrying an eventually paid row. Flat charged circulation is absorbed by strict support-rank descent or the paid-row arm.
 - `POSITIVE-TOTAL-SLOPE`: One active mover has strictly positive total tangent slope.
@@ -843,6 +914,14 @@ the live mathematical ledger.
   hazard, to an actual-tail well-supported absorbing sequence. This S.3
   witness need not be terminal Nash when the owner's singleton payoff is
   negative.
+
+  Composing the two residual consumers exposes the cleaner checked capstone
+  `quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_allContinuePhantom`
+  (`UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean`):
+  every diffuse stationarily generated source yields S.1, S.2, well-supported
+  S.3, or a nonempty low-survival all-Continue phantom.  This removes the
+  negative-owner and positive-joint no-sure-exit labels from the final
+  statement, but does not execute or classify the surviving phantom.
 
   The prioritized positive-absorption attachment is no longer an independent
   source obligation.  At every positive prioritized scale,

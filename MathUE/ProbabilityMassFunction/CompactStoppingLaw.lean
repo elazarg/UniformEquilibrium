@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.MeasureTheory.Measure.FiniteMeasurePi
 import Mathlib.MeasureTheory.Measure.Prokhorov
 import Mathlib.Topology.EMetricSpace.Weak
+import MathUE.ProbabilityMassFunction
 import MathUE.Probability.StoppingLawReconstruction
 
 /-!
@@ -30,7 +31,7 @@ open scoped BigOperators ENNReal NNReal Topology
 namespace Math
 namespace Probability
 
-open MeasureTheory Set
+open Filter MeasureTheory Set
 
 /-- The compact one-point stopping-time space.  Finite times are coerced from
 `Nat`; `top` is Never.  Definitionally this is the same underlying type as
@@ -175,6 +176,20 @@ theorem CompactStoppingLaw.toPMF_apply_toReal
   unfold CompactStoppingLaw.toPMF CompactStoppingLaw.realMass
   rw [MeasureTheory.Measure.toPMF_apply]
 
+/-- Event mass agrees across the compact-measure and discrete-PMF views. -/
+theorem CompactStoppingLaw.realMass_eq_pmfMass_toReal
+    (law : CompactStoppingLaw) {event : Set CompactStoppingTime}
+    (hevent : MeasurableSet event) :
+    law.realMass event =
+      (_root_.Math.ProbabilityMassFunction.pmfMass
+        (law.toPMF) fun choice => choice ∈ event).toReal := by
+  unfold CompactStoppingLaw.realMass CompactStoppingLaw.toPMF
+  rw [_root_.Math.ProbabilityMassFunction.pmfMass_eq_toOuterMeasure]
+  change (law.toMeasure event).toReal =
+    ((law.toMeasure.toPMF).toOuterMeasure event).toReal
+  rw [← PMF.toMeasure_apply_eq_toOuterMeasure_apply _ hevent]
+  rw [MeasureTheory.Measure.toPMF_toMeasure]
+
 /-- Barycentring compact laws is exactly barycentring their discrete laws. -/
 theorem CompactStoppingLaw.toPMF_barycenter_apply_toReal (n : Nat)
     (weights : stdSimplex Real (Fin (n + 1)))
@@ -186,6 +201,124 @@ theorem CompactStoppingLaw.toPMF_barycenter_apply_toReal (n : Nat)
   have hevent : MeasurableSet event := MeasurableSet.singleton choice
   have hmass := CompactStoppingLaw.realMass_barycenter n weights points event hevent
   simpa [event, CompactStoppingLaw.toPMF_apply_toReal] using hmass
+
+/-! ## Clopen finite and tail coordinates -/
+
+/-- A finite stopping date is a clopen point of the one-point compactification. -/
+theorem compactStoppingTime_finiteSingleton_isClopen (time : Nat) :
+    IsClopen ({(time : CompactStoppingTime)} : Set CompactStoppingTime) := by
+  constructor
+  · exact isClosed_singleton
+  · rw [← Set.image_singleton]
+    exact WithTop.isOpenEmbedding_coe.isOpenMap {time} (isOpen_discrete {time})
+
+/-- The late-or-Never tail after `horizon` is the corresponding closed upper
+interval. -/
+theorem compactStoppingTime_tail_eq_Ici (horizon : Nat) :
+    {choice : CompactStoppingTime |
+        WithTop.some horizon < choice} =
+      Set.Ici (WithTop.some (horizon + 1)) := by
+  ext choice
+  simp only [Set.mem_setOf_eq, Set.mem_Ici]
+  induction choice using WithTop.recTopCoe with
+  | top => simp
+  | coe time =>
+      simp only [WithTop.coe_lt_coe, WithTop.coe_le_coe]
+      omega
+
+/-- Every fixed late-or-Never tail is clopen. -/
+theorem compactStoppingTime_tail_isClopen (horizon : Nat) :
+    IsClopen {choice : CompactStoppingTime |
+      WithTop.some horizon < choice} := by
+  constructor
+  · rw [compactStoppingTime_tail_eq_Ici]
+    exact isClosed_Ici
+  · exact isOpen_Ioi
+
+/-- Weak convergence of compact stopping laws passes the real mass of any
+clopen event. -/
+theorem ProbabilityMeasure.tendsto_measure_toReal_of_isClopen
+    {Omega : Type*} [TopologicalSpace Omega] [MeasurableSpace Omega]
+    [BorelSpace Omega] {lawSeq : Nat → ProbabilityMeasure Omega}
+    {law : ProbabilityMeasure Omega}
+    (hlaw : Tendsto lawSeq atTop (nhds law))
+    {event : Set Omega} (hevent : IsClopen event) :
+    Tendsto (fun n => ((lawSeq n : Measure Omega) event).toReal) atTop
+      (nhds (((law : ProbabilityMeasure Omega) : Measure Omega) event).toReal) := by
+  let observable : BoundedContinuousFunction Omega Real :=
+    BoundedContinuousFunction.indicator event hevent
+  have hintegral :=
+    (ProbabilityMeasure.continuous_integral_boundedContinuousFunction
+      observable).continuousAt.tendsto.comp hlaw
+  have hobservable (mu : ProbabilityMeasure Omega) :
+      (∫ x, observable x ∂(mu : Measure Omega)) =
+        (mu : Measure Omega).real event := by
+    simp [observable, BoundedContinuousFunction.indicator_apply,
+      integral_indicator_one hevent.2.measurableSet]
+  change Tendsto (fun n => (lawSeq n : Measure Omega).real event) atTop
+    (nhds ((law : Measure Omega).real event))
+  simpa only [Function.comp_def, hobservable] using hintegral
+
+/-- Weak convergence of compact stopping laws passes the real mass of any
+clopen event. -/
+theorem CompactStoppingLaw.tendsto_realMass_of_isClopen
+    {lawSeq : Nat -> CompactStoppingLaw} {law : CompactStoppingLaw}
+    (hlaw : Tendsto lawSeq atTop (nhds law))
+    {event : Set CompactStoppingTime} (hevent : IsClopen event) :
+    Tendsto (fun n => (lawSeq n).realMass event) atTop
+      (nhds (law.realMass event)) := by
+  let observable : BoundedContinuousFunction CompactStoppingTime Real :=
+    BoundedContinuousFunction.indicator event hevent
+  have hintegral :=
+    (ProbabilityMeasure.continuous_integral_boundedContinuousFunction
+      observable).continuousAt.tendsto.comp hlaw
+  have hreal (mu : CompactStoppingLaw) :
+      mu.realMass event = (mu event : Real) := by
+    simpa [CompactStoppingLaw.realMass, Measure.real] using
+      ProbabilityMeasure.measureReal_eq_coe_coeFn mu event
+  simp_rw [hreal]
+  change Tendsto (fun n => ((lawSeq n) event : Real)) atTop
+    (nhds ((law event : NNReal) : Real))
+  have hmass : Tendsto
+      ((fun mu : CompactStoppingLaw => (mu event : Real)) ∘ lawSeq)
+      atTop (nhds ((law event : NNReal) : Real)) := by
+    simpa [observable, BoundedContinuousFunction.indicator_apply,
+      integral_indicator_one hevent.2.measurableSet] using hintegral
+  exact hmass
+
+/-- Late-or-Never tail masses converge to the Never atom.  This is continuity
+from above, not weak convergence of a varying event. -/
+theorem CompactStoppingLaw.tendsto_tail_realMass_top
+    (law : CompactStoppingLaw) :
+    Tendsto (fun horizon => law.realMass
+        {choice | WithTop.some horizon < choice}) atTop
+      (nhds (law.realMass {⊤})) := by
+  let tail := fun horizon : Nat =>
+    {choice : CompactStoppingTime | WithTop.some horizon < choice}
+  have hanti : Antitone tail := by
+    intro first second hle choice hchoice
+    exact lt_of_le_of_lt (WithTop.coe_le_coe.mpr hle) hchoice
+  have hinter : ⋂ horizon, tail horizon = ({⊤} : Set CompactStoppingTime) := by
+    ext choice
+    constructor
+    · intro hchoice
+      have hall : ∀ horizon, WithTop.some horizon < choice := by
+        intro horizon
+        exact Set.mem_iInter.mp hchoice horizon
+      induction choice using WithTop.recTopCoe with
+      | top => rfl
+      | coe time => exact (lt_irrefl (WithTop.some time) (hall time)).elim
+    · intro hchoice
+      have : choice = ⊤ := Set.mem_singleton_iff.mp hchoice
+      subst choice
+      exact Set.mem_iInter.mpr fun horizon => by simp [tail]
+  have hmeasure := MeasureTheory.tendsto_measure_iInter_atTop
+    (μ := law.toMeasure) (s := tail)
+    (fun horizon =>
+      (compactStoppingTime_tail_isClopen horizon).1.measurableSet.nullMeasurableSet)
+    hanti ⟨0, measure_ne_top _ _⟩
+  rw [hinter] at hmeasure
+  exact (ENNReal.continuousAt_toReal (measure_ne_top _ _)).tendsto.comp hmeasure
 
 end Probability
 end Math

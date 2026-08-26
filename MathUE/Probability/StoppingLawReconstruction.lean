@@ -163,6 +163,38 @@ theorem toScalarHazard_neverMass (law : PMF (Option ℕ)) :
   rw [heq] at hhazard
   exact tendsto_nhds_unique hhazard (tendsto_survival_none law)
 
+/-- A reconstructed hazard from a law with positive Never mass has its
+conditional stop probability tend to zero. -/
+theorem toScalarHazard_stop_tendsto_zero_of_none_pos
+    (law : PMF (Option ℕ)) (hnone : 0 < (law none).toReal) :
+    Tendsto (fun time => (toScalarHazard law).stop time) atTop (nhds 0) := by
+  have hfinite : Tendsto (finiteMass law) atTop (nhds 0) := by
+    have hsummable : Summable (finiteMass law) := by
+      change Summable (fun time : ℕ => (law (some time)).toReal)
+      exact (pmf_toReal_summable law).comp_injective (Option.some_injective ℕ)
+    exact hsummable.tendsto_atTop_zero
+  have hstop (time : ℕ) :
+      (toScalarHazard law).stop time = finiteMass law time / survival law time := by
+    have hneverLe : (law none).toReal ≤ survival law time := by
+      have hle := ScalarHazard.neverMass_le_survival (toScalarHazard law) time
+      simpa [toScalarHazard_neverMass, toScalarHazard_survival] using hle
+    have hsurvival : survival law time ≠ 0 := ne_of_gt (hnone.trans_le hneverLe)
+    simp [toScalarHazard, hsurvival]
+  have hdiv := hfinite.div (tendsto_survival_none law) (ne_of_gt hnone)
+  have hdiv' : Tendsto (finiteMass law / survival law) atTop (nhds 0) := by
+    simpa only [zero_div] using hdiv
+  apply hdiv'.congr'
+  exact Filter.Eventually.of_forall fun time => (hstop time).symm
+
+/-- Booleanizing the reconstructed hazard preserves the preceding vanishing
+stop-probability conclusion. -/
+theorem toScalarHazard_toBoolean_quit_tendsto_zero_of_none_pos
+    (law : PMF (Option ℕ)) (hnone : 0 < (law none).toReal) :
+    Tendsto (fun time => ((toScalarHazard law).toBoolean time true).toReal)
+      atTop (nhds 0) := by
+  simpa [ScalarHazard.toBoolean] using
+    toScalarHazard_stop_tendsto_zero_of_none_pos law hnone
+
 /-- Reconstruction is exact at the level of the complete stopping law. -/
 @[simp] theorem stoppingLaw_toScalarHazard (law : PMF (Option ℕ)) :
     (toScalarHazard law).stoppingLaw = law := by
