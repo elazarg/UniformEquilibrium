@@ -89,34 +89,31 @@ theorem minimumTerminalSemanticLaw_pureNever_strictSingleton_exactNash_zeroUnifo
     exact quittingTerminalPayoff_quittingAlwaysContinue reward who
   simpa only [hpayoff] using huniform
 
-/-- Every globally minimizing joint law in the four-player hard residual has a positive finite
-coalition coordinate.  Positivity of the minimum is derived from the residual witness. -/
-theorem exists_positive_finiteLawAtom_of_finFourHardResidual_minimum
-    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (bound : ℝ)
-    (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
-    (point : QuittingTerminalSemanticLawPoint (Fin 4))
+/-- In any finite punishment-normal quitting game without a uniform-equilibrium payoff, every
+globally minimizing joint terminal law gives positive mass to a finite terminal coalition. -/
+theorem exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniformPayoff
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
+    (hnormal : ∀ who, quittingPunishmentValue reward who ≤
+      reward (quittingSingletonTerminal who) who)
+    (point : QuittingTerminalSemanticLawPoint ι)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
     (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
       quittingTerminalSemanticDebtSum point.1 ≤
         quittingTerminalSemanticDebtSum candidate) :
-    ∃ terminal : {S : Finset (Fin 4) // S.Nonempty},
+    ∃ terminal : {S : Finset ι // S.Nonempty},
       0 < point.2 (some terminal) := by
   have hcarrier := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
   have hinf : 0 < quittingTerminalDebtSumInf reward :=
-    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr
-      residual.witness.not_exists_uniformEquilibriumPayoff
+    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr hno
   have hminimumValue :=
     quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
       point.1 hcarrier hminimum
   have hpositive : 0 < quittingTerminalSemanticDebtSum point.1 := by
     rw [← hminimumValue]
     exact hinf
-  have hnormal : ∀ who, quittingPunishmentValue reward who ≤
-      reward (quittingSingletonTerminal who) who := by
-    intro who
-    simpa [IsQuittingNormalPlayer, quittingSoloSelfPayoff,
-      quittingSingletonTerminal] using residual.all_punishmentNormal who
   by_contra hnone
   push Not at hnone
   have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
@@ -131,7 +128,62 @@ theorem exists_positive_finiteLawAtom_of_finFourHardResidual_minimum
   obtain ⟨_, _, _, huniform⟩ :=
     minimumTerminalSemanticLaw_pureNever_strictSingleton_exactNash_zeroUniform
       reward point hpoint hminimum hpositive hnormal hpureNever
-  exact residual.witness.not_exists_uniformEquilibriumPayoff ⟨0, huniform⟩
+  exact hno ⟨0, huniform⟩
+
+/-- The positive finite atom at a supplied punishment-normal minimum joint law has the checked
+same-point causal realization behind arbitrarily deep exact cap--Nash prefixes. -/
+theorem nonempty_minimumLawCausalSuffixAtom_of_punishmentNormal_of_not_uniformPayoff
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
+    (hnormal : ∀ who, quittingPunishmentValue reward who ≤
+      reward (quittingSingletonTerminal who) who)
+    (point : QuittingTerminalSemanticLawPoint ι)
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum point.1 ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    Nonempty (QuittingMinimumLawCausalSuffixAtom reward point) := by
+  obtain ⟨terminal, hmass⟩ :=
+    exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniformPayoff
+      reward hno hnormal point hpoint hminimum
+  have hinf : 0 < quittingTerminalDebtSumInf reward :=
+    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr hno
+  have hcarrier := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
+  have hminimumValue : quittingTerminalSemanticDebtSum point.1 =
+      quittingTerminalDebtSumInf reward :=
+    (quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+      point.1 hcarrier hminimum).symm
+  refine ⟨{
+    terminal := terminal
+    terminalMass_pos := hmass
+    chronology := ?_ }⟩
+  exact exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
+    reward point terminal hpoint hmass hinf hminimumValue
+
+/-- Every globally minimizing joint law in the four-player hard residual has a positive finite
+coalition coordinate.  Positivity of the minimum is derived from the residual witness. -/
+theorem exists_positive_finiteLawAtom_of_finFourHardResidual_minimum
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (bound : ℝ)
+    (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
+    (point : QuittingTerminalSemanticLawPoint (Fin 4))
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum point.1 ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    ∃ terminal : {S : Finset (Fin 4) // S.Nonempty},
+      0 < point.2 (some terminal) := by
+  have hnormal : ∀ who, quittingPunishmentValue reward who ≤
+      reward (quittingSingletonTerminal who) who := by
+    intro who
+    simpa [IsQuittingNormalPlayer, quittingSoloSelfPayoff,
+      quittingSingletonTerminal] using residual.all_punishmentNormal who
+  exact
+    exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniformPayoff
+      reward residual.witness.not_exists_uniformEquilibriumPayoff hnormal
+      point hpoint hminimum
 
 /-! ## Same-point causalization -/
 
@@ -147,23 +199,15 @@ theorem finFourHardResidual_minimumLaw_causalSuffixAtom
       quittingTerminalSemanticDebtSum point.1 ≤
         quittingTerminalSemanticDebtSum candidate) :
     Nonempty (QuittingMinimumLawCausalSuffixAtom reward point) := by
-  obtain ⟨terminal, hmass⟩ :=
-    exists_positive_finiteLawAtom_of_finFourHardResidual_minimum
-      reward bound residual point hpoint hminimum
-  have hinf : 0 < quittingTerminalDebtSumInf reward :=
-    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr
-      residual.witness.not_exists_uniformEquilibriumPayoff
-  have hcarrier := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
-  have hminimumValue : quittingTerminalSemanticDebtSum point.1 =
-      quittingTerminalDebtSumInf reward :=
-    (quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
-      point.1 hcarrier hminimum).symm
-  refine ⟨{
-    terminal := terminal
-    terminalMass_pos := hmass
-    chronology := ?_ }⟩
-  exact exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
-    reward point terminal hpoint hmass hinf hminimumValue
+  have hnormal : ∀ who, quittingPunishmentValue reward who ≤
+      reward (quittingSingletonTerminal who) who := by
+    intro who
+    simpa [IsQuittingNormalPlayer, quittingSoloSelfPayoff,
+      quittingSingletonTerminal] using residual.all_punishmentNormal who
+  exact
+    nonempty_minimumLawCausalSuffixAtom_of_punishmentNormal_of_not_uniformPayoff
+      reward residual.witness.not_exists_uniformEquilibriumPayoff hnormal
+      point hpoint hminimum
 
 /-- A four-player hard residual alone selects a globally minimizing joint-law point, proves its
 positive finite atom, and causalizes that atom while preserving the selected point and minimum

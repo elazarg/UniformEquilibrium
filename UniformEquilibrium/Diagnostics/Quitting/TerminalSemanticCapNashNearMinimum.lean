@@ -40,7 +40,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -583,5 +583,80 @@ theorem nearMinimumTerminalSemantic_capNash_eq_allContinue
   have hscaledOdds := mul_le_mul_of_nonneg_left hodds htwoMNonneg
   dsimp [eta] at hetaOdds
   linarith
+
+/-- A positive global semantic debt floor has a fixed quantitative
+neighborhood in which every exact root against the displayed behavioral cap
+is all-Continue.
+
+The radius is selected directly from the explicit cap-freezing inequality:
+set `q = reference / 2` and choose one positive reciprocal error small enough
+that both rational loss terms sum to less than `q`.  No compactness or
+punishment-normality hypothesis is used. -/
+theorem exists_pos_nearMinimum_capNash_eq_allContinue_radius
+    (reference : ℝ) (hreference : 0 < reference)
+    (hfloor : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      reference ≤ quittingTerminalSemanticDebtSum candidate) :
+    ∃ epsilon : ℝ, 0 < epsilon ∧
+      ∀ pair ∈ quittingTerminalSemanticCarrier reward,
+        quittingTerminalSemanticDebtSum pair ≤ reference + epsilon →
+          ∀ root : ι → PMF Bool,
+            IsεQuittingRootNash reward pair.2 0 root →
+              root = (quittingAllContinueRoot : ι → PMF Bool) := by
+  let q := reference / 2
+  let error : ℕ → ℝ := fun n ↦ 1 / ((n : ℝ) + 1)
+  have herrorTendsto : Tendsto error atTop (nhds 0) := by
+    simpa only [error] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
+  have hreferenceSub : Tendsto (fun n ↦ reference - error n)
+      atTop (nhds reference) := by
+    simpa only [sub_zero] using tendsto_const_nhds.sub herrorTendsto
+  have hqSub : Tendsto (fun n ↦ reference - q - error n)
+      atTop (nhds (reference - q)) := by
+    simpa only [sub_zero] using
+      (tendsto_const_nhds.sub herrorTendsto :
+        Tendsto (fun n ↦ reference - q - error n) atTop
+          (nhds (reference - q - 0)))
+  have hfirstRatio : Tendsto
+      (fun n ↦ error n / (reference - error n)) atTop (nhds 0) := by
+    convert herrorTendsto.div hreferenceSub (ne_of_gt hreference) using 1 <;>
+      try rfl
+    simp
+  have hqPos : 0 < reference - q := by
+    dsimp only [q]
+    linarith
+  have hsecondRatio : Tendsto
+      (fun n ↦ error n / (reference - q - error n)) atTop (nhds 0) := by
+    convert herrorTendsto.div hqSub (ne_of_gt hqPos) using 1 <;>
+      try rfl
+    simp
+  let M := quittingRewardBound reward
+  have hcost : Tendsto
+      (fun n ↦ 2 * M * (error n / (reference - error n)) +
+        2 * M * (error n / (reference - q - error n)))
+      atTop (nhds 0) := by
+    simpa only [mul_zero, zero_add] using
+      (hfirstRatio.const_mul (2 * M)).add
+        (hsecondRatio.const_mul (2 * M))
+  have herrorSmall : ∀ᶠ n in atTop, error n < reference - q :=
+    (tendsto_order.1 herrorTendsto).2 (reference - q) hqPos
+  have hcostSmall : ∀ᶠ n in atTop,
+      2 * M * (error n / (reference - error n)) +
+          2 * M * (error n / (reference - q - error n)) < q := by
+    apply (tendsto_order.1 hcost).2 q
+    dsimp only [q]
+    linarith
+  obtain ⟨n, hnError, hnCost⟩ := (herrorSmall.and hcostSmall).exists
+  have hnPos : 0 < error n := by
+    dsimp only [error]
+    positivity
+  refine ⟨error n, hnPos, ?_⟩
+  intro pair hpair hnear root hnash
+  have hqValuePos : 0 < q := by
+    dsimp only [q]
+    linarith
+  exact nearMinimumTerminalSemantic_capNash_eq_allContinue
+    pair root reference (error n) q
+      (abs_reward_le_quittingRewardBound reward) hpair hfloor hnear hnPos.le
+        hqValuePos.le hnError (by linarith) hnash
 
 end GameTheory
