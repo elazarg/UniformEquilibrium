@@ -84,12 +84,14 @@ import MathUE.Probability.DiscountedBackwardRecursion
 import MathUE.DivergentChargeRecurrence
 import MathUE.SummableChargeSurvival
 import MathUE.EdgeGraph
+import MathUE.FiniteAffineIntervalClassification
 import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteBinaryBlockEquilibrium
 import MathUE.FiniteBinaryWeightedPotential
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
+import MathUE.FiniteSetCoverClassification
 import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
 import MathUE.FinitePivotOrbit

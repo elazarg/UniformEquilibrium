@@ -549,6 +549,57 @@ theorem exists_positiveMinimumDebtTangentFamily_of_pair
     tangent_inactive_nonneg := htangentInactive
   }, rfl⟩
 
+namespace QuittingPositiveMinimumDebtTangentFamily
+
+/-- Re-extract a tangent family at any point on the same positive minimum
+fiber whose positive-debt support stays inside the old support and loses at
+least one old coordinate.  No relation between the two tangent arrays is
+asserted. -/
+theorem exists_reextracted_of_minimumFiber_of_supportSubset_of_vanished
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (point : QuittingTerminalSemanticPair ι)
+    (hpoint : point ∈ quittingTerminalSemanticCarrier reward)
+    (hminimumFiber : quittingTerminalSemanticDebtSum point =
+      quittingTerminalSemanticDebtSum frontier.base)
+    (hsupportSubset : ∀ who,
+      0 < quittingTerminalSemanticDebt point who →
+        who ∈ frontier.positiveDebtSupport)
+    (hvanished : ∃ who ∈ frontier.positiveDebtSupport,
+      quittingTerminalSemanticDebt point who = 0) :
+    ∃ next : QuittingPositiveMinimumDebtTangentFamily reward,
+      next.base = point ∧
+        next.positiveDebtSupport ⊂ frontier.positiveDebtSupport := by
+  have hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum point ≤
+        quittingTerminalSemanticDebtSum candidate := by
+    intro candidate hcandidate
+    rw [hminimumFiber]
+    exact frontier.base_minimum candidate hcandidate
+  have hpositive : 0 < quittingTerminalSemanticDebtSum point := by
+    rw [hminimumFiber]
+    exact frontier.base_positive
+  obtain ⟨next, hnextBase⟩ :=
+    exists_positiveMinimumDebtTangentFamily_of_pair point hpoint hminimum
+      hpositive
+  refine ⟨next, hnextBase, Finset.ssubset_iff_subset_ne.mpr ?_⟩
+  constructor
+  · intro who hwho
+    have hpositiveWho : 0 < quittingTerminalSemanticDebt point who := by
+      have hnextPositive := (next.positiveDebtSupport_iff who).1 hwho
+      simpa only [hnextBase] using hnextPositive
+    exact hsupportSubset who hpositiveWho
+  · intro heq
+    obtain ⟨who, hwho, hzero⟩ := hvanished
+    have hnextWho : who ∈ next.positiveDebtSupport := by
+      rw [heq]
+      exact hwho
+    have hpositiveWho := (next.positiveDebtSupport_iff who).1 hnextWho
+    rw [hnextBase, hzero] at hpositiveWho
+    exact (lt_irrefl 0) hpositiveWho
+
+end QuittingPositiveMinimumDebtTangentFamily
+
 /-- Every positive minimum terminal-semantic debt datum supplies a tangent
 family, without any terminal exploitability witness. -/
 theorem nonempty_positiveMinimumDebtTangentFamily

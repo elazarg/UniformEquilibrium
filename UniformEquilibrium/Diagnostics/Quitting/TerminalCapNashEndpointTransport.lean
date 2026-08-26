@@ -10,6 +10,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 import UniformEquilibrium.Quitting.Root.NashExistence
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
 
 /-!
@@ -32,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct StochasticGame
+open Filter Math.Probability Math.PMFProduct StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -133,6 +134,15 @@ theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capN
 
 /-! ## The actual-profile total-debt infimum -/
 
+/-- Literal total deviation debt is exactly total debt of the associated
+finite-dimensional terminal-semantic pair. -/
+theorem quittingTerminalDebtSum_eq_terminalSemanticDebtSum
+    (profile : (quittingGame reward).BehaviorProfile) :
+    quittingTerminalDebtSum reward profile =
+      quittingTerminalSemanticDebtSum
+        (quittingTerminalSemanticPair reward profile) := by
+  rfl
+
 /-- Infimum of total literal debt over executable behavior profiles. -/
 def quittingTerminalDebtSumInf
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : ℝ :=
@@ -153,6 +163,71 @@ theorem quittingTerminalDebtSumInf_le
       quittingTerminalDebtSum reward profile := by
   exact csInf_le (bddBelow_range_quittingTerminalDebtSum
     (reward := reward)) ⟨profile, rfl⟩
+
+/-- The literal-profile debt infimum equals the value of every global
+minimum on the compact terminal-semantic carrier.  Passing to the closure
+neither lowers nor raises the infimum of this continuous debt functional. -/
+theorem quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+    (pair : QuittingTerminalSemanticPair ι)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum pair ≤
+        quittingTerminalSemanticDebtSum candidate) :
+    quittingTerminalDebtSumInf reward =
+      quittingTerminalSemanticDebtSum pair := by
+  apply le_antisymm
+  · obtain ⟨profiles, hprofiles⟩ :=
+      exists_terminalProfile_sequence_tendsto_semanticPair reward pair hpair
+    have hdebt : Tendsto (fun n => quittingTerminalSemanticDebtSum
+        (quittingTerminalSemanticPair reward (profiles n))) atTop
+        (nhds (quittingTerminalSemanticDebtSum pair)) :=
+      continuous_quittingTerminalSemanticDebtSum.continuousAt.tendsto.comp
+        hprofiles
+    apply ge_of_tendsto hdebt
+    apply Filter.Eventually.of_forall
+    intro n
+    rw [← quittingTerminalDebtSum_eq_terminalSemanticDebtSum]
+    exact quittingTerminalDebtSumInf_le (reward := reward) (profiles n)
+  · unfold quittingTerminalDebtSumInf
+    have hrange : (Set.range (quittingTerminalDebtSum reward)).Nonempty :=
+      ⟨quittingTerminalDebtSum reward
+          (quittingAlwaysContinueProfile reward),
+        quittingAlwaysContinueProfile reward, rfl⟩
+    apply (le_csInf_iff
+      (bddBelow_range_quittingTerminalDebtSum (reward := reward))
+      hrange).2
+    rintro total ⟨profile, rfl⟩
+    rw [quittingTerminalDebtSum_eq_terminalSemanticDebtSum]
+    exact hminimum _ (subset_closure ⟨profile, rfl⟩)
+
+/-- Positivity of the literal total-debt infimum is exactly the compact
+positive-minimum terminal-semantic obstruction. -/
+theorem quittingTerminalDebtSumInf_pos_iff_hasPositiveMinimumTerminalSemanticDebt :
+    0 < quittingTerminalDebtSumInf reward ↔
+      HasPositiveMinimumTerminalSemanticDebt reward := by
+  constructor
+  · intro hinf
+    obtain ⟨pair, hpair, hminimum⟩ :=
+      exists_minimum_quittingTerminalSemanticDebtSum reward
+    have heq :=
+      quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+        pair hpair hminimum
+    exact ⟨pair, hpair, hminimum, heq ▸ hinf⟩
+  · rintro ⟨pair, hpair, hminimum, hpositive⟩
+    rw [quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+      pair hpair hminimum]
+    exact hpositive
+
+/-- For an inhabited finite player type, positive literal total-debt infimum
+is equivalently failure of uniform-equilibrium-payoff existence. -/
+theorem quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff
+    [Nonempty ι] :
+    0 < quittingTerminalDebtSumInf reward ↔
+      ¬∃ payoff : Payoff ι,
+        (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
+  quittingTerminalDebtSumInf_pos_iff_hasPositiveMinimumTerminalSemanticDebt.trans
+    (not_exists_uniformEquilibriumPayoff_iff_hasPositiveMinimumTerminalSemanticDebt
+      reward).symm
 
 /-- Exact cap--Nash scaling and the literal infimum force positive joint
 Continue mass whenever the infimum is positive. -/

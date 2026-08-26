@@ -87,6 +87,90 @@ theorem quittingTerminalSemanticLawPoint_mem_carrier
   apply subset_closure
   exact ⟨profile, rfl⟩
 
+/-- Every ordinary terminal-semantic carrier point has at least one complete
+terminal-law lift in the joint carrier.  The lift retains one subsequential
+law of a realizing profile sequence; it does not select that law uniquely. -/
+theorem exists_terminalSemanticLawCarrier_lift
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pair : QuittingTerminalSemanticPair ι)
+    (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
+    ∃ mass : QuittingTerminalOutcome ι → ℝ,
+      (pair, mass) ∈ quittingTerminalSemanticLawCarrier reward := by
+  obtain ⟨profiles, hprofiles⟩ :=
+    exists_terminalProfile_sequence_tendsto_semanticPair reward pair hpair
+  let points : ℕ → QuittingTerminalSemanticLawPoint ι := fun n =>
+    (quittingTerminalSemanticPair reward (profiles n),
+      quittingTerminalOutcomeMass reward (profiles n))
+  have hpoints : ∀ n,
+      points n ∈ quittingTerminalSemanticLawCarrier reward := by
+    intro n
+    exact quittingTerminalSemanticLawPoint_mem_carrier reward (profiles n)
+  obtain ⟨cluster, hcluster, subseq, hsubseq, hlimit⟩ :=
+    (quittingTerminalSemanticLawCarrier_isCompact reward).tendsto_subseq
+      hpoints
+  have hclusterFst : Tendsto (fun n => (points (subseq n)).1)
+      atTop (nhds cluster.1) :=
+    continuous_fst.tendsto cluster |>.comp hlimit
+  have hpairSubseq := hprofiles.comp hsubseq.tendsto_atTop
+  change Tendsto
+    (fun n => quittingTerminalSemanticPair reward (profiles (subseq n)))
+    atTop (nhds pair) at hpairSubseq
+  have hpairFst : Tendsto (fun n => (points (subseq n)).1)
+      atTop (nhds pair) := by
+    simpa only [points] using hpairSubseq
+  have hfst : cluster.1 = pair :=
+    tendsto_nhds_unique hclusterFst hpairFst
+  refine ⟨cluster.2, ?_⟩
+  have hclusterEq : cluster = (pair, cluster.2) :=
+    Prod.ext hfst rfl
+  rw [← hclusterEq]
+  exact hcluster
+
+/-- Positive literal total-debt infimum has a joint semantic/law carrier
+minimizer whose semantic debt is exactly that infimum.  The law coordinate
+is one subsequential lift and is not uniquely selected. -/
+theorem exists_minimum_terminalSemanticLawCarrier_of_debtSumInf_pos
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hinf : 0 < quittingTerminalDebtSumInf reward) :
+    ∃ point : QuittingTerminalSemanticLawPoint ι,
+      point ∈ quittingTerminalSemanticLawCarrier reward ∧
+        point.1 ∈ quittingTerminalSemanticCarrier reward ∧
+        (∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+          quittingTerminalSemanticDebtSum point.1 ≤
+            quittingTerminalSemanticDebtSum candidate) ∧
+        quittingTerminalSemanticDebtSum point.1 =
+          quittingTerminalDebtSumInf reward := by
+  have hpositive :=
+    quittingTerminalDebtSumInf_pos_iff_hasPositiveMinimumTerminalSemanticDebt.mp
+      hinf
+  obtain ⟨pair, hpair, hminimum, _hpairPositive⟩ := hpositive
+  obtain ⟨mass, hlift⟩ :=
+    exists_terminalSemanticLawCarrier_lift reward pair hpair
+  refine ⟨(pair, mass), hlift, hpair, hminimum, ?_⟩
+  exact
+    (quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum
+      pair hpair hminimum).symm
+
+/-- Failure of uniform-equilibrium-payoff existence therefore has a joint
+semantic/law carrier minimizer at the positive literal debt infimum. -/
+theorem exists_minimum_terminalSemanticLawCarrier_of_not_uniformPayoff
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hno : ¬∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
+    ∃ point : QuittingTerminalSemanticLawPoint ι,
+      point ∈ quittingTerminalSemanticLawCarrier reward ∧
+        point.1 ∈ quittingTerminalSemanticCarrier reward ∧
+        (∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+          quittingTerminalSemanticDebtSum point.1 ≤
+            quittingTerminalSemanticDebtSum candidate) ∧
+        quittingTerminalSemanticDebtSum point.1 =
+          quittingTerminalDebtSumInf reward := by
+  apply exists_minimum_terminalSemanticLawCarrier_of_debtSumInf_pos reward
+  exact
+    quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff.mpr
+      hno
+
 /-- A joint carrier point retains the exact reward moment of its displayed
 law.  This is the key coupling that is lost in the semantic projection. -/
 theorem terminalSemanticLawCarrier_rewardMoment

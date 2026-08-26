@@ -1472,6 +1472,75 @@ theorem expect_mono_of_pointwise_bounded
     (Math.Probability.expect_summable_of_bounded d f hf)
     (Math.Probability.expect_summable_of_bounded d g hg)
 
+/-- If two bounded observables differ only on an event, their expectations
+differ by at most the pointwise bound times that event's mass. -/
+theorem abs_expect_sub_le_mul_pmfMass
+    {Omega : Type*} (law : PMF Omega) (left right : Omega → Real)
+    (event : Set Omega) {bound observableBound : Real}
+    (hleft : ∀ sample, |left sample| ≤ observableBound)
+    (hright : ∀ sample, |right sample| ≤ observableBound)
+    (hlocal : ∀ sample,
+      |left sample - right sample| ≤
+        bound * event.indicator (fun _ => 1) sample) :
+    |Math.Probability.expect law left - Math.Probability.expect law right| ≤
+      bound * (pmfMass law fun sample => sample ∈ event).toReal := by
+  classical
+  let mask : Omega → ENNReal := pmfMask (μ := law) fun sample => sample ∈ event
+  have hleftSum := Math.Probability.expect_summable_of_bounded law left hleft
+  have hrightSum := Math.Probability.expect_summable_of_bounded law right hright
+  have hdiffSum : Summable
+      (fun sample => (law sample).toReal * (left sample - right sample)) := by
+    exact (hleftSum.sub hrightSum).congr fun sample => by ring
+  have hmaskTop : (∑' sample, mask sample) ≠ ⊤ :=
+    pmfMass_ne_top law fun sample => sample ∈ event
+  have hmaskSum : Summable (fun sample => (mask sample).toReal) :=
+    ENNReal.summable_toReal hmaskTop
+  have hdomSum : Summable (fun sample => bound * (mask sample).toReal) :=
+    hmaskSum.mul_left bound
+  have hpointwise : ∀ sample,
+      |(law sample).toReal * (left sample - right sample)| ≤
+        bound * (mask sample).toReal := by
+    intro sample
+    rw [abs_mul, abs_of_nonneg ENNReal.toReal_nonneg]
+    calc
+      (law sample).toReal * |left sample - right sample| ≤
+          (law sample).toReal *
+            (bound * event.indicator (fun _ => 1) sample) :=
+        mul_le_mul_of_nonneg_left (hlocal sample) ENNReal.toReal_nonneg
+      _ = bound * (mask sample).toReal := by
+        by_cases hevent : sample ∈ event
+        · simp [mask, pmfMask, Set.indicator, hevent, mul_comm]
+        · simp [mask, pmfMask, Set.indicator, hevent]
+  have hmass : ∑' sample, (mask sample).toReal =
+      (pmfMass law fun sample => sample ∈ event).toReal := by
+    rw [pmfMass, ENNReal.tsum_toReal_eq]
+    intro sample
+    by_cases hevent : sample ∈ event
+    · simpa [mask, pmfMask, hevent] using PMF.apply_ne_top law sample
+    · simp [pmfMask, hevent]
+  have habsDiffSum : Summable
+      (fun sample => |(law sample).toReal * (left sample - right sample)|) :=
+    hdiffSum.abs
+  have hnormDiffSum : Summable
+      (fun sample => ‖(law sample).toReal * (left sample - right sample)‖) := by
+    simpa [Real.norm_eq_abs] using habsDiffSum
+  calc
+    |Math.Probability.expect law left - Math.Probability.expect law right| =
+        |∑' sample, (law sample).toReal *
+          (left sample - right sample)| := by
+      change |(∑' sample, (law sample).toReal * left sample) -
+        (∑' sample, (law sample).toReal * right sample)| = _
+      rw [← hleftSum.tsum_sub hrightSum]
+      apply congrArg abs
+      exact tsum_congr fun sample => by ring
+    _ ≤ ∑' sample,
+        |(law sample).toReal * (left sample - right sample)| := by
+      simpa [Real.norm_eq_abs] using norm_tsum_le_tsum_norm hnormDiffSum
+    _ ≤ ∑' sample, bound * (mask sample).toReal :=
+      Summable.tsum_le_tsum hpointwise habsDiffSum hdomSum
+    _ = bound * (pmfMass law fun sample => sample ∈ event).toReal := by
+      rw [tsum_mul_left, hmass]
+
 -- The double-series domination and `tsum_comm'` elaboration is inference-heavy.
 /-- Exchange expectation and a geometrically weighted sum under a uniform
 bound. -/

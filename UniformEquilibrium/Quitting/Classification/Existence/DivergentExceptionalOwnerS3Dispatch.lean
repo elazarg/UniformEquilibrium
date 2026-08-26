@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Holonomy.TwoOwnerCommonWordRealization
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedNegativeOwnerBoundary
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedPositiveLiveLimit
+import UniformEquilibrium.Quitting.Classification.Existence.PositiveJointSummablePortPhantomReduction
 import UniformEquilibrium.Quitting.Cycles.ConditionedDiffuseStrategicRescaling
 import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
@@ -333,5 +334,36 @@ theorem
     QuittingInstantPunishmentεEquilibriumExistence reward ∨
       QuittingWellSupportedAbsorbingSequenceExistence reward :=
   residual.source.instantPunishment_or_wellSupported residual.horizon_tendsto
+
+/-- Every diffuse stationarily generated source reaches one of the three
+classified branches or the canonical nonzero all-Continue phantom.  The two
+producer residuals are consumed by their source-faithful dispatch theorems. -/
+theorem
+    quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_allContinuePhantom
+    {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
+    (hgenerated : QuittingDiffuseStationarilyGeneratedApproximateEquilibria
+      reward) :
+    QuittingStationaryεEquilibriumExistence reward ∨
+      QuittingInstantPunishmentεEquilibriumExistence reward ∨
+        QuittingWellSupportedAbsorbingSequenceExistence reward ∨
+          Nonempty (QuittingLowSurvivalAllContinuePhantom reward) := by
+  rcases
+      stationary_or_instant_or_wellSupported_or_noSureExit_or_negativeOwner
+        hgenerated with
+    hstationary | hinstant | hwellSupported | hpositive | hnegative
+  · exact Or.inl hstationary
+  · exact Or.inr (Or.inl hinstant)
+  · exact Or.inr (Or.inr (Or.inl hwellSupported))
+  · obtain ⟨residual⟩ := hpositive
+    rcases residual.wellSupported_or_stationary_or_allContinuePhantom with
+      hwellSupported | hstationary | hphantom
+    · exact Or.inr (Or.inr (Or.inl hwellSupported))
+    · exact Or.inl hstationary
+    · exact Or.inr (Or.inr (Or.inr hphantom))
+  · obtain ⟨residual⟩ := hnegative
+    rcases residual.instantPunishment_or_wellSupported with
+      hinstant | hwellSupported
+    · exact Or.inr (Or.inl hinstant)
+    · exact Or.inr (Or.inr (Or.inl hwellSupported))
 
 end GameTheory
