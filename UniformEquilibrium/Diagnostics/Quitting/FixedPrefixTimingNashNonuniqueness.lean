@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TwoDateTimingNashSharpness
+import UniformEquilibrium.Diagnostics.Quitting.TwoDateTimingNashSharpnessCore
 import UniformEquilibrium.Diagnostics.Quitting.FixedPrefixArbitraryTailBarrier
 
 /-!
@@ -55,65 +55,65 @@ theorem sharpReward_eq_prefixReward_at_dummy
 theorem purePayoff_eq_prefix_of_dummy
     (dates : ℕ) (choices : Player → Option (Fin dates))
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
-    purePayoff reward dates choices dummy =
-      purePayoff prefixReward dates choices dummy := by
+    timingPurePayoff reward dates choices dummy =
+      timingPurePayoff prefixReward dates choices dummy := by
   induction dates with
   | zero =>
-      rw [purePayoff_zero reward, purePayoff_zero prefixReward]
+      rw [timingPurePayoff_zero reward, timingPurePayoff_zero prefixReward]
   | succ dates ih =>
       by_cases hcurrent : (quittingQuitters fun player =>
-          actionCurrent (choices player)).Nonempty
-      · rw [purePayoff_succ_of_current_nonempty reward dates choices dummy
+          timingActionCurrent (choices player)).Nonempty
+      · rw [timingPurePayoff_succ_of_current_nonempty reward dates choices dummy
             hcurrent,
-          purePayoff_succ_of_current_nonempty prefixReward dates choices dummy
+          timingPurePayoff_succ_of_current_nonempty prefixReward dates choices dummy
             hcurrent]
         exact sharpReward_eq_prefixReward_at_dummy _ dummy hzero hone
-      · rw [purePayoff_succ_of_current_empty reward dates choices dummy
+      · rw [timingPurePayoff_succ_of_current_empty reward dates choices dummy
             hcurrent,
-          purePayoff_succ_of_current_empty prefixReward dates choices dummy
+          timingPurePayoff_succ_of_current_empty prefixReward dates choices dummy
             hcurrent]
-        exact ih (choicesTail choices)
+        exact ih (timingChoicesTail choices)
 
 private theorem active_mem_quittingQuitters_of_dummies_never
     {dates : ℕ} (choices : Player → Option (Fin (dates + 1)))
     (htwo : choices 2 = none) (hthree : choices 3 = none)
     (hcurrent : (quittingQuitters fun player =>
-      actionCurrent (choices player)).Nonempty) :
-    0 ∈ quittingQuitters (fun player => actionCurrent (choices player)) ∨
-      1 ∈ quittingQuitters (fun player => actionCurrent (choices player)) := by
+      timingActionCurrent (choices player)).Nonempty) :
+    0 ∈ quittingQuitters (fun player => timingActionCurrent (choices player)) ∨
+      1 ∈ quittingQuitters (fun player => timingActionCurrent (choices player)) := by
   obtain ⟨who, hwho⟩ := hcurrent
   fin_cases who
   · exact Or.inl hwho
   · exact Or.inr hwho
-  · simp [quittingQuitters, htwo, actionCurrent] at hwho
-  · simp [quittingQuitters, hthree, actionCurrent] at hwho
+  · simp [quittingQuitters, htwo, timingActionCurrent] at hwho
+  · simp [quittingQuitters, hthree, timingActionCurrent] at hwho
 
 theorem purePayoff_eq_prefix_of_dummies_never
     (dates : ℕ) (choices : Player → Option (Fin dates))
     (htwo : choices 2 = none) (hthree : choices 3 = none)
     (who : Player) :
-    purePayoff reward dates choices who =
-      purePayoff prefixReward dates choices who := by
+    timingPurePayoff reward dates choices who =
+      timingPurePayoff prefixReward dates choices who := by
   induction dates with
   | zero =>
-      rw [purePayoff_zero reward, purePayoff_zero prefixReward]
+      rw [timingPurePayoff_zero reward, timingPurePayoff_zero prefixReward]
   | succ dates ih =>
       by_cases hcurrent : (quittingQuitters fun player =>
-          actionCurrent (choices player)).Nonempty
-      · rw [purePayoff_succ_of_current_nonempty reward dates choices who
+          timingActionCurrent (choices player)).Nonempty
+      · rw [timingPurePayoff_succ_of_current_nonempty reward dates choices who
             hcurrent,
-          purePayoff_succ_of_current_nonempty prefixReward dates choices who
+          timingPurePayoff_succ_of_current_nonempty prefixReward dates choices who
             hcurrent]
         exact congrFun (sharpReward_eq_prefixReward_of_active_mem _
           (active_mem_quittingQuitters_of_dummies_never choices htwo hthree
             hcurrent)) who
-      · rw [purePayoff_succ_of_current_empty reward dates choices who
+      · rw [timingPurePayoff_succ_of_current_empty reward dates choices who
             hcurrent,
-          purePayoff_succ_of_current_empty prefixReward dates choices who
+          timingPurePayoff_succ_of_current_empty prefixReward dates choices who
             hcurrent]
         apply ih
-        · simp [choicesTail, htwo, actionTail]
-        · simp [choicesTail, hthree, actionTail]
+        · simp [timingChoicesTail, htwo, timingActionTail]
+        · simp [timingChoicesTail, hthree, timingActionTail]
 
 theorem mixedEU_eq_prefix_at_dummy
     (mixed : Player → PMF Action)
@@ -123,11 +123,10 @@ theorem mixedEU_eq_prefix_at_dummy
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  simp_rw [← actionTime_two]
   change Math.Probability.expect (pmfPi mixed)
-      (fun choices => purePayoff reward 2 choices dummy) =
+      (fun choices => timingPurePayoff reward 2 choices dummy) =
     Math.Probability.expect (pmfPi mixed)
-      (fun choices => purePayoff prefixReward 2 choices dummy)
+      (fun choices => timingPurePayoff prefixReward 2 choices dummy)
   congr 1
   funext choices
   exact purePayoff_eq_prefix_of_dummy 2 choices dummy hzero hone
@@ -141,11 +140,10 @@ theorem activeProfile_mixedEU_eq_prefix
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
     (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  simp_rw [← actionTime_two]
   change Math.Probability.expect (pmfPi (activeProfile row column))
-      (fun choices => purePayoff reward 2 choices who) =
+      (fun choices => timingPurePayoff reward 2 choices who) =
     Math.Probability.expect (pmfPi (activeProfile row column))
-      (fun choices => purePayoff prefixReward 2 choices who)
+      (fun choices => timingPurePayoff prefixReward 2 choices who)
   rw [expect_pmfPi_fin4, expect_pmfPi_fin4]
   simp only [activeProfile, Math.Probability.expect_pure, Fin.isValue]
   congr 1
@@ -186,18 +184,9 @@ private theorem update_nonUniqueNashChoices_three (action : Action) :
   funext who
   fin_cases who <;> simp [nonUniqueNashChoices]
 
-private theorem actionCurrent_eq_true_iff (action : Action) :
-    actionCurrent action = true ↔ action = now := by
-  cases action with
-  | none => simp [actionCurrent, now]
-  | some time =>
-      fin_cases time
-      · simp [actionCurrent, now]
-      · decide
-
 private theorem purePayoff_prefix_of_column_now
     (rowAction dummyTwo dummyThree : Action) (who : Player) :
-    purePayoff prefixReward 2
+    timingPurePayoff prefixReward 2
         ![rowAction, now, dummyTwo, dummyThree] who =
       if who = 0 then
         if rowAction = now then -1 else 1
@@ -206,21 +195,21 @@ private theorem purePayoff_prefix_of_column_now
       else if who = 2 then
         if dummyTwo = now then -1 else 0
       else if dummyThree = now then -1 else 0 := by
-  rw [purePayoff_succ_of_current_nonempty]
+  rw [timingPurePayoff_succ_of_current_nonempty]
   · fin_cases who <;>
       simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-        quittingQuitters, actionCurrent_eq_true_iff, now]
-  · exact ⟨1, by simp [quittingQuitters, actionCurrent, now]⟩
+        quittingQuitters, timingActionCurrent_eq_true_iff, now]
+  · exact ⟨1, by simp [quittingQuitters, timingActionCurrent, now]⟩
 
 private theorem purePayoff_prefix_column_deviation
     (action : Action) :
-    purePayoff prefixReward 2 ![never, action, next, never] 1 = -1 := by
+    timingPurePayoff prefixReward 2 ![never, action, next, never] 1 = -1 := by
   cases action with
   | none =>
-      rw [purePayoff_succ_of_current_empty]
-      · rw [purePayoff_succ_of_current_nonempty]
+      rw [timingPurePayoff_succ_of_current_empty]
+      · rw [timingPurePayoff_succ_of_current_nonempty]
         · simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-            quittingQuitters, choicesTail, actionTail, actionCurrent,
+            quittingQuitters, timingChoicesTail, timingActionTail, timingActionCurrent,
             never, next]
         · exact ⟨2, by decide⟩
       · decide
@@ -228,17 +217,17 @@ private theorem purePayoff_prefix_column_deviation
       fin_cases time
       · simpa [never, now, next] using
           purePayoff_prefix_of_column_now never next never 1
-      · rw [purePayoff_succ_of_current_empty]
-        · rw [purePayoff_succ_of_current_nonempty]
+      · rw [timingPurePayoff_succ_of_current_empty]
+        · rw [timingPurePayoff_succ_of_current_nonempty]
           · simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-              quittingQuitters, choicesTail, actionTail, actionCurrent,
+              quittingQuitters, timingChoicesTail, timingActionTail, timingActionCurrent,
               never, next]
           · exact ⟨1, by decide⟩
         · decide
 
 theorem pure_nonUniqueNash_deviation_value
     (who : Player) (action : Action) :
-    purePayoff prefixReward 2
+    timingPurePayoff prefixReward 2
         (Function.update nonUniqueNashChoices who action) who =
       match who with
       | 0 => if action = now then -1 else 1
@@ -246,21 +235,21 @@ theorem pure_nonUniqueNash_deviation_value
       | 2 => if action = now then -1 else 0
       | 3 => if action = now then -1 else 0 := by
   fin_cases who
-  · change purePayoff prefixReward 2
+  · change timingPurePayoff prefixReward 2
         (Function.update nonUniqueNashChoices 0 action) 0 =
       (if action = now then -1 else 1)
     rw [update_nonUniqueNashChoices_zero]
     simpa using purePayoff_prefix_of_column_now action next never 0
-  · change purePayoff prefixReward 2
+  · change timingPurePayoff prefixReward 2
         (Function.update nonUniqueNashChoices 1 action) 1 = -1
     rw [update_nonUniqueNashChoices_one]
     exact purePayoff_prefix_column_deviation action
-  · change purePayoff prefixReward 2
+  · change timingPurePayoff prefixReward 2
         (Function.update nonUniqueNashChoices 2 action) 2 =
       (if action = now then -1 else 0)
     rw [update_nonUniqueNashChoices_two]
     simpa using purePayoff_prefix_of_column_now never action never 2
-  · change purePayoff prefixReward 2
+  · change timingPurePayoff prefixReward 2
         (Function.update nonUniqueNashChoices 3 action) 3 =
       (if action = now then -1 else 0)
     rw [update_nonUniqueNashChoices_three]
@@ -277,10 +266,9 @@ theorem nonUniqueNash_deviation_value
       | 3 => if action = now then -1 else 0 := by
   rw [(quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
   simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-  simp_rw [← actionTime_two]
   change Math.Probability.expect
       (pmfPi (Function.update nonUniqueNashProfile who (PMF.pure action)))
-      (fun choices => purePayoff prefixReward 2 choices who) = _
+      (fun choices => timingPurePayoff prefixReward 2 choices who) = _
   have hprofile : Function.update nonUniqueNashProfile who (PMF.pure action) =
       (fun player => PMF.pure
         (Function.update nonUniqueNashChoices who action player)) := by
@@ -371,13 +359,12 @@ private theorem canonical_pureDeviation_mixedEU_eq_prefix
     · rw [(quittingTwoDateTimingGame reward).mixedExtension_eu,
         (quittingTwoDateTimingGame prefixReward).mixedExtension_eu]
       simp only [quittingTwoDateTimingGame, KernelGame.eu_ofPureEU]
-      simp_rw [← actionTime_two]
       change Math.Probability.expect
           (pmfPi (Function.update equilibriumProfile who (PMF.pure action)))
-          (fun choices => purePayoff reward 2 choices who) =
+          (fun choices => timingPurePayoff reward 2 choices who) =
         Math.Probability.expect
           (pmfPi (Function.update equilibriumProfile who (PMF.pure action)))
-          (fun choices => purePayoff prefixReward 2 choices who)
+          (fun choices => timingPurePayoff prefixReward 2 choices who)
       congr 1
       funext choices
       exact purePayoff_eq_prefix_of_dummy 2 choices who hzero hone

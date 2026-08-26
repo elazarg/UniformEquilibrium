@@ -3,6 +3,7 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 -/
 
+import UniformEquilibrium.Diagnostics.FiniteMixedNashSupport
 import UniformEquilibrium.Diagnostics.Uniform.Consequences
 import UniformEquilibrium.Diagnostics.Uniform.PaddedDuplicateLotterySeparation
 import UniformEquilibrium.Diagnostics.Uniform.HiddenFiberSpanCounterexample

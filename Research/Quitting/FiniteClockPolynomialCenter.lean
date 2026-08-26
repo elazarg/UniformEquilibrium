@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.Coupling
-import Research.Quitting.EscapeAwareQuantileClockHierarchy
+import Research.Quitting.EscapeAwareQuantileClockTransport
 import Mathlib.Algebra.MvPolynomial.Eval
 
 /-!
