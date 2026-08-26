@@ -144,14 +144,14 @@ theorem nonempty_ballisticCertificate_of_not_wellSupported
     ring
   exact hbad roots hcomplete (by rwa [htwice] at hsupport)
 
-/-- A positive-charge summable port which returns to its initial annotation
-produces single-seam lassos at every accuracy and hence literal branch
-`S.3`. -/
-theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_return
+/-- A returning summable port produces literal branch `S.3` while retaining
+any prescribed positive charge floor strictly below its total absorption. -/
+theorem SummableChargeAllContinuePort.wellSupported_of_chargeFloor_lt_totalAbsorption_of_return
     [Nonempty iota]
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (port : orbit.SummableChargeAllContinuePort)
-    (hpositive : 0 < ∑' time,
+    (chargeFloor : ℝ) (hchargeFloor : 0 < chargeFloor)
+    (hchargeBelow : chargeFloor < ∑' time,
       quittingRootAbsorptionMass (orbit.roots time))
     (hreturn : port.limit = orbit.value 0) :
     QuittingWellSupportedAbsorbingSequenceExistence reward := by
@@ -160,9 +160,9 @@ theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_re
       reward
   intro error herror
   let total := ∑' time, quittingRootAbsorptionMass (orbit.roots time)
-  let chargeFloor := total / 2
-  have hchargeFloor : 0 < chargeFloor := by
-    dsimp only [chargeFloor, total]
+  let chargeSlack := total - chargeFloor
+  have hchargeSlack : 0 < chargeSlack := by
+    dsimp only [chargeSlack, total]
     linarith
   have hchargeTendsto : Tendsto orbit.partialAbsorption atTop (nhds total) := by
     change Tendsto (fun horizon ↦ ∑ time ∈ Finset.range horizon,
@@ -173,7 +173,7 @@ theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_re
   have htarget : 0 < error * (chargeFloor / (1 + chargeFloor)) := by
     positivity
   obtain ⟨chargeStart, hchargeStart⟩ :=
-    Metric.tendsto_atTop.1 hchargeTendsto chargeFloor hchargeFloor
+    Metric.tendsto_atTop.1 hchargeTendsto chargeSlack hchargeSlack
   obtain ⟨valueStart, hvalueStart⟩ :=
     Metric.tendsto_atTop.1 hvalueTendsto _ htarget
   let horizon := max chargeStart valueStart
@@ -181,8 +181,8 @@ theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_re
     have hcloseTotal := hchargeStart horizon (le_max_left _ _)
     rw [Real.dist_eq] at hcloseTotal
     rw [abs_lt] at hcloseTotal
-    have hhalf : chargeFloor + chargeFloor = total := by
-      dsimp only [chargeFloor]
+    have hslack : total - chargeSlack = chargeFloor := by
+      dsimp only [chargeSlack]
       ring
     linarith
   have hclose : ∀ who,
@@ -203,6 +203,21 @@ theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_re
         (error * (chargeFloor / (1 + chargeFloor))) error
         hchargeFloor (by simpa using hcharge) (mul_nonneg herror.le (by positivity))
         le_rfl hclose
+
+/-- The convenient half-charge specialization of the arbitrary retained-floor
+well-supported compiler. -/
+theorem SummableChargeAllContinuePort.wellSupported_of_totalAbsorption_pos_of_return
+    [Nonempty iota]
+    (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
+    (port : orbit.SummableChargeAllContinuePort)
+    (hpositive : 0 < ∑' time,
+      quittingRootAbsorptionMass (orbit.roots time))
+    (hreturn : port.limit = orbit.value 0) :
+    QuittingWellSupportedAbsorbingSequenceExistence reward := by
+  let total := ∑' time, quittingRootAbsorptionMass (orbit.roots time)
+  exact port.wellSupported_of_chargeFloor_lt_totalAbsorption_of_return
+    orbit (total / 2) (by dsimp only [total]; linarith)
+      (by dsimp only [total]; linarith) hreturn
 
 /-- The limiting displacement of a summable port obeys the same ballistic
 lower bound as every finite initial segment. -/

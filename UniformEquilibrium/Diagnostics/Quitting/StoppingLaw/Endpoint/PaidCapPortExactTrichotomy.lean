@@ -537,11 +537,13 @@ theorem inertStall_of_totalAbsorption_eq_zero
     exact source.pureTimePayoff_sub_shift_eq_of_totalAbsorption_eq_zero
       hzero horizon source.row.receivingWitness source.row.sourceWitness
 
-/-- Positive complete charge and exact return of the limiting cap produce
-literal finite-prefix cumulative-charge payoff near-returns. -/
-theorem nonempty_cumulativeNearReturnFamily_of_totalAbsorption_pos_of_capDisplacement_zero
+/-- Every positive charge floor strictly below complete absorption, together
+with exact return of the limiting cap, produces literal finite-prefix
+cumulative-charge payoff near-returns retaining that floor. -/
+theorem nonempty_cumulativeNearReturnFamily_of_chargeFloor
     (port : source.SummablePort)
-    (habsorption : 0 < source.totalAbsorption)
+    (chargeFloor : ℝ) (hchargeFloor : 0 < chargeFloor)
+    (hchargeBelow : chargeFloor < source.totalAbsorption)
     (hdisplacement : source.capDisplacement port = 0) :
     Nonempty (QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily
       reward) := by
@@ -570,14 +572,14 @@ theorem nonempty_cumulativeNearReturnFamily_of_totalAbsorption_pos_of_capDisplac
       quittingCapLiftedPunishmentFloorOrbit] using
       source.absorption_summable.hasSum.tendsto_sum_nat
   refine ⟨{
-    chargeFloor := source.totalAbsorption / 2
-    chargeFloor_pos := half_pos habsorption
+    chargeFloor := chargeFloor
+    chargeFloor_pos := hchargeFloor
     nearReturn := ?_ }⟩
   intro endpointError hendpointError
   have hchargeEventually : ∀ᶠ horizon in atTop,
-      source.totalAbsorption / 2 <
+      chargeFloor <
         ∑ time ∈ Finset.range horizon, absorption time :=
-    hsum.eventually (Ioi_mem_nhds (half_lt_self habsorption))
+    hsum.eventually (Ioi_mem_nhds hchargeBelow)
   have hcloseEventually : ∀ᶠ horizon in atTop,
       dist (orbit.value horizon) (orbit.value 0) < endpointError :=
     hvalue.eventually (Metric.ball_mem_nhds _ hendpointError)
@@ -594,7 +596,7 @@ theorem nonempty_cumulativeNearReturnFamily_of_totalAbsorption_pos_of_capDisplac
   refine ⟨start, finish, path, ?_, ?_⟩
   · dsimp only [path]
     rw [chargeSum_quittingFinitePrefixAdmissiblePath]
-    change source.totalAbsorption / 2 ≤
+    change chargeFloor ≤
       ∑ time ∈ Finset.range horizon, absorption time
     exact hcharge.le
   · intro who
@@ -603,6 +605,18 @@ theorem nonempty_cumulativeNearReturnFamily_of_totalAbsorption_pos_of_capDisplac
     rw [dist_pi_le_iff hendpointError.le] at hcloseLe
     change |orbit.value 0 who - orbit.value horizon who| ≤ endpointError
     simpa [Real.dist_eq, abs_sub_comm] using hcloseLe who
+
+/-- The convenient half-charge specialization of the arbitrary retained-floor
+near-return theorem. -/
+theorem nonempty_cumulativeNearReturnFamily_of_totalAbsorption_pos_of_capDisplacement_zero
+    (port : source.SummablePort)
+    (habsorption : 0 < source.totalAbsorption)
+    (hdisplacement : source.capDisplacement port = 0) :
+    Nonempty (QuittingPositiveCumulativeAdmissiblePayoffNearReturnFamily
+      reward) :=
+  source.nonempty_cumulativeNearReturnFamily_of_chargeFloor
+    port (source.totalAbsorption / 2) (half_pos habsorption)
+      (half_lt_self habsorption) hdisplacement
 
 /-- Charged near-return branch with its checked downstream uniform-payoff
 consumer already discharged. -/

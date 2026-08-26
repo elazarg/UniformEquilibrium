@@ -4,6 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemption
+import UniformEquilibrium.Quitting.Classification.Existence.NoHarmSingletonGenerated
 import UniformEquilibrium.Quitting.Classification.Existence.PrioritizedRefinedSourceBoundary
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.CompactQuantitativeAlternatives
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.CompactSpineSurvivalBoundary
@@ -226,6 +228,168 @@ theorem
 
 namespace QuittingPrioritizedRefinedSourceResidualAt
 
+/-- A prioritized source witness whose corrected residual is explicitly in
+the source-faithful all-Continue arm.  The package retains the same-scale
+failure of every corrected pointwise branch. -/
+structure AllContinueSourceAt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (delta : ℝ) : Prop where
+  source : Nonempty
+    (QuittingLowSurvivalPositiveRhoAllContinueSourceResidual
+      reward (1 / 2))
+  not_stationary : ¬QuittingStationaryεEquilibriumAt reward delta
+  not_instant : ¬QuittingInstantPunishmentεEquilibriumAt reward delta
+  not_wellSupported : ¬QuittingWellSupportedAbsorbingSequenceAt reward delta
+  not_generated :
+    ¬QuittingStationarilyGeneratedApproximateEquilibriaAt reward delta
+
+/-- Forgetting which corrected residual arm was selected recovers the ambient
+prioritized source type. -/
+theorem AllContinueSourceAt.toPrioritizedResidual
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (source : AllContinueSourceAt reward delta) :
+    QuittingPrioritizedRefinedSourceResidualAt reward delta := {
+  residual := Or.inl source.source
+  not_stationary := source.not_stationary
+  not_instant := source.not_instant
+  not_wellSupported := source.not_wellSupported
+  not_generated := source.not_generated }
+
+/-- A prioritized source witness whose corrected residual is explicitly in
+the positive-singleton-defect arm.  Unlike the ambient prioritized residual
+type, this package does not erase which arm was selected. -/
+structure PositiveSingletonDefectAt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (delta : ℝ) : Prop where
+  defect : Nonempty
+    (QuittingSupportBellmanPositiveSingletonDefectResidual reward delta)
+  not_stationary : ¬QuittingStationaryεEquilibriumAt reward delta
+  not_instant : ¬QuittingInstantPunishmentεEquilibriumAt reward delta
+  not_wellSupported : ¬QuittingWellSupportedAbsorbingSequenceAt reward delta
+  not_generated :
+    ¬QuittingStationarilyGeneratedApproximateEquilibriaAt reward delta
+
+/-- Forgetting which corrected residual arm was selected recovers the ambient
+prioritized source type. -/
+theorem PositiveSingletonDefectAt.toPrioritizedResidual
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (defect : PositiveSingletonDefectAt reward delta) :
+    QuittingPrioritizedRefinedSourceResidualAt reward delta := {
+  residual := Or.inr (Or.inr defect.defect)
+  not_stationary := defect.not_stationary
+  not_instant := defect.not_instant
+  not_wellSupported := defect.not_wellSupported
+  not_generated := defect.not_generated }
+
+/-- Any fixed stationary branch contradicts either prioritized normal-form
+arm at its retained positive scale. -/
+theorem false_of_stationaryExistence
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta)
+    (hstationary : QuittingStationaryεEquilibriumExistence reward) : False :=
+  residual.not_stationary (hstationary delta hdelta)
+
+/-- Any fixed instant-punishment branch contradicts either prioritized
+normal-form arm at its retained positive scale. -/
+theorem false_of_instantExistence
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta)
+    (hinstant : QuittingInstantPunishmentεEquilibriumExistence reward) : False :=
+  residual.not_instant (hinstant delta hdelta)
+
+/-- Any fixed well-supported absorbing branch contradicts either prioritized
+normal-form arm at its retained positive scale. -/
+theorem false_of_wellSupportedExistence
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta)
+    (hwellSupported :
+      QuittingWellSupportedAbsorbingSequenceExistence reward) : False :=
+  residual.not_wellSupported (hwellSupported delta hdelta)
+
+/-- A prioritized residual is incompatible with every literal fixed AGKRS
+branch.  Therefore a branch consumer for either surviving normal-form arm
+must eliminate that arm; it cannot consistently retain the source and merely
+append a branch witness. -/
+theorem not_stationary_or_instant_or_wellSupportedExistence
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta) :
+    ¬(QuittingStationaryεEquilibriumExistence reward ∨
+      QuittingInstantPunishmentεEquilibriumExistence reward ∨
+        QuittingWellSupportedAbsorbingSequenceExistence reward) := by
+  rintro (hstationary | hinstant | hwellSupported)
+  · exact residual.false_of_stationaryExistence hdelta hstationary
+  · exact residual.false_of_instantExistence hdelta hinstant
+  · exact residual.false_of_wellSupportedExistence hdelta hwellSupported
+
+/-- At a prioritized scale, every positive-singleton owner is strictly
+preempted by another player's solo row.  Positivity makes the owner
+punishment-normal by testing the all-Continue stationary row.  If its own
+singleton row weakly protected every outsider, it would generate Simon's
+stationary-prefix branch and contradict the retained fourth priority
+negation. -/
+theorem exists_strict_solo_preemptor_of_singleton_pos
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta) (owner : ι)
+    (hsolo : 0 < quittingSoloReward reward owner owner) :
+    ∃ other, other ≠ owner ∧
+      quittingSoloReward reward owner other <
+        quittingSoloReward reward other other := by
+  by_contra hpreemptor
+  have hnoHarm : ∀ other, other ≠ owner →
+      quittingSoloReward reward other other ≤
+        quittingSoloReward reward owner other := by
+    intro other hother
+    exact le_of_not_gt fun hstrict ↦
+      hpreemptor ⟨other, hother, hstrict⟩
+  have hcap := quittingPunishmentValue_le_stationaryUnilateralCap
+    reward owner (quittingSoloStationaryRoot owner (PMF.pure false))
+  rw [quittingStationaryUnilateralCap_solo_owner,
+    max_eq_left hsolo.le] at hcap
+  have hgenerated :=
+    quittingStationarilyGeneratedApproximateEquilibria_of_normal_noHarmSingleton
+      reward owner hnoHarm hcap
+  exact residual.not_generated (hgenerated delta hdelta)
+
+/-- The prioritized all-Continue source arm retains an actual positive
+singleton owner, and that owner is either punishment-abnormal or is strictly
+preempted by another player's solo row. -/
+theorem AllContinueSourceAt.exists_positiveSingleton_strictlyPreempted
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (source : AllContinueSourceAt reward delta) (hdelta : 0 < delta) :
+    ∃ owner, 0 < quittingSoloReward reward owner owner ∧
+      ∃ other, other ≠ owner ∧
+        quittingSoloReward reward owner other <
+          quittingSoloReward reward other other := by
+  have hpositive : ∃ owner,
+      0 < quittingSoloReward reward owner owner := by
+    simpa [IsQuittingZeroSolo, quittingSoloReward,
+      quittingSingletonTerminal, not_forall, not_le] using
+      source.source.some.notZeroSolo
+  obtain ⟨owner, howner⟩ := hpositive
+  exact ⟨owner, howner,
+    source.toPrioritizedResidual
+      |>.exists_strict_solo_preemptor_of_singleton_pos
+        hdelta owner howner⟩
+
+/-- The selected positive singleton in the defect arm obeys the same exact
+punishment-abnormal-or-preempted alternative. -/
+theorem
+    PositiveSingletonDefectAt.exists_selectedSingleton_strictlyPreempted
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (defect : PositiveSingletonDefectAt reward delta) (hdelta : 0 < delta) :
+    ∃ other, other ≠ defect.defect.some.defect.who ∧
+      quittingSoloReward reward defect.defect.some.defect.who other <
+        quittingSoloReward reward other other :=
+  defect.toPrioritizedResidual
+    |>.exists_strict_solo_preemptor_of_singleton_pos
+      hdelta defect.defect.some.defect.who
+        defect.defect.some.defect.singleton_pos
+
 /-- The complete prioritized positive-absorption attachment reduction.  A
 finite sure-exit output contradicts the same-scale instant-punishment
 priority after lifting its reached successor value to the punishment floor.
@@ -272,9 +436,9 @@ theorem positiveAbsorptionAttachment_to_positiveSingletonDefect
     exact spine.nonempty_positiveSingletonDefect_of_priorities hdelta
       residual.not_stationary residual.not_wellSupported
 
-/-- The same-scale prioritized witness with its corrected residual placed
-literally in the positive-singleton-defect arm.  All four priority
-negations are copied from the source witness. -/
+/-- The same-scale prioritized witness with the selected positive-singleton
+defect exposed rather than hidden inside the ambient residual disjunction.
+All four priority negations are copied from the source witness. -/
 theorem prioritizedPositiveSingletonDefect_of_attachment
     [Nonempty ι]
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
@@ -283,20 +447,48 @@ theorem prioritizedPositiveSingletonDefect_of_attachment
     (attachment :
       QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
         reward (1 / 2)) :
-    QuittingPrioritizedRefinedSourceResidualAt reward delta := by
+    PositiveSingletonDefectAt reward delta := by
   have hdefect :=
     residual.positiveAbsorptionAttachment_to_positiveSingletonDefect
       hdelta attachment
   exact {
-    residual := Or.inr (Or.inr hdefect)
+    defect := hdefect
     not_stationary := residual.not_stationary
     not_instant := residual.not_instant
     not_wellSupported := residual.not_wellSupported
     not_generated := residual.not_generated }
 
 /-- After prioritization, the corrected source residual has only the source-
-faithful all-Continue arm or the positive-singleton-defect arm.  This is a
-normal-form reduction, not a consumer for either surviving arm. -/
+faithful all-Continue arm or the positive-singleton-defect arm.  Both outputs
+retain all four same-scale priority negations. -/
+theorem allContinueSourceAt_or_positiveSingletonDefectAt
+    [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta) :
+    AllContinueSourceAt reward delta ∨
+      PositiveSingletonDefectAt reward delta := by
+  rcases residual.residual with hphantom | hattachment | hdefect
+  · exact Or.inl {
+      source := hphantom
+      not_stationary := residual.not_stationary
+      not_instant := residual.not_instant
+      not_wellSupported := residual.not_wellSupported
+      not_generated := residual.not_generated }
+  · obtain ⟨attachment⟩ := hattachment
+    exact Or.inr
+      (residual.prioritizedPositiveSingletonDefect_of_attachment
+        hdelta attachment)
+  · exact Or.inr {
+      defect := hdefect
+      not_stationary := residual.not_stationary
+      not_instant := residual.not_instant
+      not_wellSupported := residual.not_wellSupported
+      not_generated := residual.not_generated }
+
+/-- Compatibility projection of
+`allContinueSourceAt_or_positiveSingletonDefectAt` for callers which do not
+need the retained priority provenance. -/
 theorem sourcePhantom_or_positiveSingletonDefect
     [Nonempty ι]
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
@@ -307,13 +499,136 @@ theorem sourcePhantom_or_positiveSingletonDefect
           reward (1 / 2)) ∨
       Nonempty
         (QuittingSupportBellmanPositiveSingletonDefectResidual reward delta) := by
-  rcases residual.residual with hphantom | hattachment | hdefect
-  · exact Or.inl hphantom
-  · obtain ⟨attachment⟩ := hattachment
-    exact Or.inr
-      (residual.positiveAbsorptionAttachment_to_positiveSingletonDefect
-        hdelta attachment)
-  · exact Or.inr hdefect
+  rcases residual.allContinueSourceAt_or_positiveSingletonDefectAt hdelta with
+    hsource | hdefect
+  · exact Or.inl hsource.source
+  · exact Or.inr hdefect.defect
+
+/-- Every positive-scale prioritized residual forces a directed cycle in the
+finite augmented solo-preemption graph.  Bottom points to a positive
+singleton selected by either normal-form arm.  A negative singleton points
+back to bottom, a positive singleton is strictly preempted, and a zero
+singleton with no strict preemptor would be a normal no-harm owner and hence
+would generate the excluded stationary-prefix branch. -/
+theorem nonempty_augmentedSoloPreemptionCycle
+    [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {delta : ℝ}
+    (residual : QuittingPrioritizedRefinedSourceResidualAt reward delta)
+    (hdelta : 0 < delta) :
+    Nonempty (QuittingAugmentedSoloPreemptionCycle reward) := by
+  have hpositive : ∃ owner,
+      0 < quittingSoloReward reward owner owner := by
+    rcases residual.allContinueSourceAt_or_positiveSingletonDefectAt hdelta with
+      hsource | hdefect
+    · obtain ⟨owner, howner, _other, _hne, _hstrict⟩ :=
+        hsource.exists_positiveSingleton_strictlyPreempted hdelta
+      exact ⟨owner, howner⟩
+    · exact ⟨hdefect.defect.some.defect.who,
+        hdefect.defect.some.defect.singleton_pos⟩
+  apply Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial
+  intro source
+  cases source with
+  | none =>
+      obtain ⟨owner, howner⟩ := hpositive
+      exact ⟨some owner, by
+        simpa only [QuittingAugmentedSoloPreemptionEdge] using howner⟩
+  | some owner =>
+      by_cases hnegative : quittingSoloReward reward owner owner < 0
+      · exact ⟨none, by
+          simpa only [QuittingAugmentedSoloPreemptionEdge] using hnegative⟩
+      · by_cases hpositiveOwner :
+            0 < quittingSoloReward reward owner owner
+        · obtain ⟨other, hother, hstrict⟩ :=
+            residual.exists_strict_solo_preemptor_of_singleton_pos
+              hdelta owner hpositiveOwner
+          exact ⟨some other, by
+            simpa only [QuittingAugmentedSoloPreemptionEdge] using
+              And.intro hother hstrict⟩
+        · have hzero : quittingSoloReward reward owner owner = 0 := by
+            exact le_antisymm (le_of_not_gt hpositiveOwner)
+              (le_of_not_gt hnegative)
+          by_cases hpreemptor : ∃ other, other ≠ owner ∧
+              quittingSoloReward reward owner other <
+                quittingSoloReward reward other other
+          · obtain ⟨other, hother, hstrict⟩ := hpreemptor
+            exact ⟨some other, by
+              simpa only [QuittingAugmentedSoloPreemptionEdge] using
+                And.intro hother hstrict⟩
+          · have hnoHarm : ∀ other, other ≠ owner →
+                quittingSoloReward reward other other ≤
+                  quittingSoloReward reward owner other := by
+              intro other hother
+              exact le_of_not_gt fun hstrict ↦
+                hpreemptor ⟨other, hother, hstrict⟩
+            have hcap := quittingPunishmentValue_le_stationaryUnilateralCap
+              reward owner
+                (quittingSoloStationaryRoot owner (PMF.pure false))
+            rw [quittingStationaryUnilateralCap_solo_owner, hzero,
+              max_self] at hcap
+            have hnormal : quittingPunishmentValue reward owner ≤
+                quittingSoloReward reward owner owner :=
+              hcap.trans_eq hzero.symm
+            have hgenerated :=
+              quittingStationarilyGeneratedApproximateEquilibria_of_normal_noHarmSingleton
+                reward owner hnoHarm hnormal
+            exact False.elim
+              (residual.not_generated (hgenerated delta hdelta))
+
+/-- Cofinal prioritized residuals have one exact global normal form.  Either
+some positive scale retains a prioritized source-faithful all-Continue arm,
+or positive-singleton defects occur cofinally toward zero with their scale
+and all four priority negations retained. -/
+theorem exists_allContinueSourceAt_or_cofinally_positiveSingletonDefectAt
+    [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcofinal : ∀ target : ℝ, 0 < target →
+      ∃ delta : ℝ, 0 < delta ∧ delta ≤ target ∧
+        QuittingPrioritizedRefinedSourceResidualAt reward delta) :
+    (∃ delta : ℝ, 0 < delta ∧ AllContinueSourceAt reward delta) ∨
+      ∀ target : ℝ, 0 < target →
+        ∃ delta : ℝ, 0 < delta ∧ delta ≤ target ∧
+          PositiveSingletonDefectAt reward delta := by
+  classical
+  by_cases hsource : ∃ delta : ℝ,
+      0 < delta ∧ AllContinueSourceAt reward delta
+  · exact Or.inl hsource
+  · right
+    intro target htarget
+    obtain ⟨delta, hdelta, hdeltaTarget, residual⟩ :=
+      hcofinal target htarget
+    rcases residual.allContinueSourceAt_or_positiveSingletonDefectAt hdelta with
+      hsourceAt | hdefect
+    · exact False.elim (hsource ⟨delta, hdelta, hsourceAt⟩)
+    · exact ⟨delta, hdelta, hdeltaTarget, hdefect⟩
+
+/-- A cofinal prioritized residual family is incompatible with every fixed
+AGKRS branch.  The residual side of the corrected extraction must therefore
+be eliminated, not decorated with a branch witness. -/
+theorem cofinallyPrioritized_not_stationary_or_instant_or_wellSupported
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcofinal : ∀ target : ℝ, 0 < target →
+      ∃ delta : ℝ, 0 < delta ∧ delta ≤ target ∧
+        QuittingPrioritizedRefinedSourceResidualAt reward delta) :
+    ¬(QuittingStationaryεEquilibriumExistence reward ∨
+      QuittingInstantPunishmentεEquilibriumExistence reward ∨
+        QuittingWellSupportedAbsorbingSequenceExistence reward) := by
+  obtain ⟨delta, hdelta, _hdeltaOne, residual⟩ :=
+    hcofinal 1 (by norm_num)
+  exact residual.not_stationary_or_instant_or_wellSupportedExistence hdelta
+
+/-- Cofinal prioritized residuals need no scale-indexed downstream consumer:
+one selected positive scale already produces the table's augmented solo-
+preemption cycle. -/
+theorem nonempty_augmentedSoloPreemptionCycle_of_cofinallyPrioritized
+    [Nonempty ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcofinal : ∀ target : ℝ, 0 < target →
+      ∃ delta : ℝ, 0 < delta ∧ delta ≤ target ∧
+        QuittingPrioritizedRefinedSourceResidualAt reward delta) :
+    Nonempty (QuittingAugmentedSoloPreemptionCycle reward) := by
+  obtain ⟨delta, hdelta, _hdeltaOne, residual⟩ :=
+    hcofinal 1 (by norm_num)
+  exact residual.nonempty_augmentedSoloPreemptionCycle hdelta
 
 end QuittingPrioritizedRefinedSourceResidualAt
 end GameTheory

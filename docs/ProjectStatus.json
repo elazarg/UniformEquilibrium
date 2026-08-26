@@ -80,7 +80,7 @@
       "declaration": "HasTerminalExploitabilityGap.not_uniformPositivePaidCapDebtDropSelection",
       "source": "UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualProfilePaidCapUniformStepObstruction.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "Under a positive terminal exploitability gap and positive global minimum debt, every literal behavioral profile supplies a full-gap paid cap port and its exhaustive, pairwise-disjoint exact trichotomy. Complete absorption and cap displacement satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*); every exact-minimum source is unconditionally a literal inert stall. At every positive triple of tolerances, one near-minimum literal profile makes every compatible full-gap paid-cap source/port simultaneously have small debt drop, absorption, and displacement. Hence no selector over all profiles can retain one fixed positive real debt drop. Conversely, any supplied varying-source sequence with a fixed eventual positive absorption floor and cap displacement tending to zero gives source-matched cumulative near-returns and a uniform-equilibrium payoff. No theorem supplies that positive floor, a minimum profile, well-founded or nonuniform regeneration, or an inert-stall consumer."
+      "scope": "Under a positive terminal exploitability gap and positive global minimum debt, every literal behavioral profile supplies a full-gap paid cap port and its exhaustive, pairwise-disjoint exact trichotomy. Complete absorption and cap displacement satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*); every exact-minimum source is unconditionally a literal inert stall. Along one actual sequence realizing the minimum, eventually every profile makes every compatible full-gap paid-cap source/port simultaneously small in debt drop, absorption, and displacement. Hence no selector over all profiles can retain one fixed positive real debt drop. Conversely, any supplied varying-source sequence with a fixed eventual positive absorption floor and cap displacement tending to zero gives source-matched cumulative near-returns at every prescribed positive charge strictly below that floor, and a uniform-equilibrium payoff. No theorem supplies that positive floor, a minimum profile, well-founded or nonuniform regeneration, or an inert-stall consumer."
     },
     {
       "id": "fin-four-same-source-paid-reset-cap-port",
@@ -314,7 +314,7 @@
       "declaration": "exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemption.lean",
       "umbrella": "UniformEquilibrium.lean",
-      "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture has a uniform-equilibrium payoff and cannot force positive designated pair masses; directed augmented cyclicity is necessary, not sufficient, for the incentive-gadget route."
+      "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture satisfies AGKRS S.1, has a uniform-equilibrium payoff, and cannot force positive designated pair masses. Failure of S.1 forces a directed augmented cycle; cyclicity is necessary, not sufficient, for either the branch-classification or incentive-gadget route."
     },
     {
       "id": "participant-only-stationary-equilibrium",
@@ -333,6 +333,15 @@
       "source": "UniformEquilibrium/Quitting/Paths/SixPlayerOnePairMassTargetLock.lean",
       "umbrella": "UniformEquilibrium.lean",
       "scope": "A complete Fin 6 integer table forces terminal exploitability at least 31(1-a)/66 and hence the exact first-pair and leftover bounds; bounded outsider-coordinate completions retain robust estimates. Every actual behavioral profile satisfies the sharp two-pair square-root clock inequality, so the second-pair upper bound is unconditional. Every direct cross-penalty completion nevertheless has a pure exact target equilibrium and uniform payoff, so no positive second-pair mass is forced."
+    },
+    {
+      "id": "single-anchor-arbitrary-completion-escape",
+      "subject": "Single-anchor and persistent-base arbitrary-completion escapes",
+      "kind": "Unconditional family theorem and gadget obstruction",
+      "declaration": "exists_targetA_singleAnchor_exactTerminalNash_uniformPayoff_and_secondPairMass_zero",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/Collision/Toggles/SingleAnchorArbitraryCompletionSixPlayer.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "One sure-Quit anchor and one mixed Nash point of the complementary finite Boolean game give an exact stationary terminal Nash profile against every behavioral unilateral deviation whenever the anchor's unconditional Quit value is nonnegative and dominates every nonempty anchor-excluding row. Literal membership at that single coordinate makes the screen automatic while all other reward coordinates remain arbitrary. In the Fin 6 two-target specialization, retaining either one coordinate of target A while changing the other five arbitrarily still yields a uniform payoff with exact target-B terminal mass zero. The separate persistent-base theorem retains its broader pointwise leave-safe result for bases of cardinality at least two. Thus a viable two-target gadget must alter both first-pair coordinates; failure of the dominance screen is not by itself a counterexample."
     },
     {
       "id": "literal-strict-finite-odd-blocker-core",
@@ -363,12 +372,12 @@
     },
     {
       "id": "literal-infimum-compact-minimum-equivalence",
-      "subject": "Literal terminal-debt infimum and compact semantic minimum",
-      "kind": "Exact semantic identification and source lift",
-      "declaration": "quittingTerminalDebtSumInf_pos_iff_not_exists_uniformEquilibriumPayoff",
-      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean",
+      "subject": "Literal terminal-debt minimum and Fin4 causal finite atom",
+      "kind": "Exact semantic identification and source-facing Fin4 contraction",
+      "declaration": "exists_finFourHardResidual_minimumLaw_causalSuffixAtom",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumLawFiniteAtom.lean",
       "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
-      "scope": "The infimum of literal behavioral-profile terminal debt is exactly the debt of every global minimum on the compact terminal-semantic carrier. For a nonempty finite player type, positivity of this literal infimum is equivalent both to the positive-minimum semantic obstruction and to nonexistence of a uniform-equilibrium payoff. Every semantic carrier point has a nonunique joint terminal-law carrier lift, so the positive minimum can be retained with a complete law and exact infimum value. No actual profile is claimed to attain the infimum, and the law lift supplies no positive atom, incidence coordinate, chronology, tightness, or reset return."
+      "scope": "The infimum of literal behavioral-profile terminal debt is exactly the debt of every global minimum on the compact terminal-semantic carrier, and for a nonempty finite player type its positivity is equivalent to nonexistence of a uniform-equilibrium payoff. Generically, one nonunique minimum joint law has a positive-Never or positive-finite-atom dispatch. In a Fin 4 hard residual, every minimum joint law has a positive finite coordinate: pure Never would force negative singleton rewards, making literal all-Continue an exact all-behavior Nash profile with zero uniform payoff. A residual-only producer selects such a point and feeds its atom into arbitrarily deep source-matched cap-Nash chronologies which retain it in the literal suffix. The carrier law need not be realized by one profile, and the suffix atom is not a prefix-root atom, Bellman edge, paid row, reset, or final consumer."
     },
     {
       "id": "cyclic-green-debt-opponent-atom-cover",
@@ -392,10 +401,10 @@
       "id": "agkrs-diffuse-generated-four-way-capstone",
       "subject": "Diffuse stationarily generated source four-way reduction",
       "kind": "Unconditional source reduction",
-      "declaration": "quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_allContinuePhantom",
+      "declaration": "quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a nonempty low-survival all-Continue phantom. The negative exceptional-owner and positive-joint no-sure-exit residuals are consumed by existing S.2/S.3 and S.1/S.3/phantom dispatches. The all-Continue phantom remains nonexecuted and is not asserted terminal Nash or a uniform-equilibrium payoff, so this is not the full AGKRS trichotomy."
+      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target is still not classified as S.1, S.2, or S.3, so the unconditional AGKRS trichotomy remains open."
     },
     {
       "id": "projective-qbar-uniform-payoff",
@@ -446,10 +455,10 @@
       "id": "agkrs-prioritized-attachment-normal-form",
       "subject": "AGKRS prioritized attachment reduction and exact residual normal form",
       "kind": "Unconditional source reduction",
-      "declaration": "sourcePhantom_or_positiveSingletonDefect",
+      "declaration": "nonempty_augmentedSoloPreemptionCycle",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PrioritizedAttachmentSingletonDefect.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "At every positive prioritized scale, the positive-absorption attachment arm is consumed: a finite sure-exit row contradicts the instant-punishment priority after a checked punishment-floor lift, while an infinite reached-row spine contracts through the support--Bellman boundary. The exact surviving normal form is the source-faithful all-Continue positive-rho residual or the positive-singleton defect, on the same table and scale with all four priority negations retained. Neither survivor has an S.1/S.2/S.3 consumer; this does not close AGKRS Theorem 3.4 or advance the unconditional finite-quitting conjecture."
+      "scope": "At every positive prioritized scale, the positive-absorption attachment arm is consumed, leaving an explicit `AllContinueSourceAt` or `PositiveSingletonDefectAt`, each retaining the table, scale, and all four priority negations. Cofinal residuals therefore yield one positive-scale all-Continue source or positive-singleton defects cofinally toward zero. Every surviving residual forces a positive-period directed cycle in the finite augmented solo-preemption graph. Because the retained priorities themselves contradict any fixed S.1/S.2/S.3 branch, closure requires turning this concrete cyclic architecture into S.3 or eliminating it; decorating one fixed residual with a branch witness is inconsistent. That cyclic consumer remains open."
     },
     {
       "id": "agkrs-positive-joint-sequential-reduction",
@@ -458,7 +467,7 @@
       "declaration": "wellSupported_or_endpointBallisticBoundary",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every reached positive-joint punishment endpoint is diagonal in the literal terminal-semantic carrier, so its prescribed coordinate is a specific uniform-equilibrium payoff. Every pair on its canonical exact semantic-prefix orbit is likewise diagonal, and every supplied summable-port limit is a diagonal carrier point and specific uniform-equilibrium payoff target. This does not place either target in S.1, S.2, or S.3 and gives no new unconditional quitting-conjecture advance. Nonsummable absorption yields well-supported S.3; a summable port otherwise yields S.1 or the common all-Continue phantom/positive-singleton defect. The provenance-retaining ballistic dispatch closes positive charge plus endpoint return through S.3; under S.3 failure it leaves zero-charge rigidity or a displaced signed port. Neither survivor has a classification consumer. The Literature capstone and unconditional theorem3_4 remain open."
+      "scope": "Every reached positive-joint punishment endpoint is diagonal in the literal terminal-semantic carrier, so its prescribed coordinate is a specific uniform-equilibrium payoff. Every pair on its canonical exact semantic-prefix orbit and every supplied summable-port limit has the same exact interpretation. Nonsummable absorption yields well-supported S.3; otherwise `wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom` retains one strict source subsequence, literal punishment suffixes, fixed punished label, convergence to the endpoint, no-sure-exit proof, summable port, all-Continue phantom, exact value equality, and uniform-payoff certificate. Positive total charge with return closes through S.3; under S.3 failure zero-charge rigidity or a displaced signed port remains. A uniform target is not an S.1/S.2/S.3 classification, so the Literature capstone and unconditional theorem3_4 remain open."
     },
     {
       "id": "simon-normalized-motion-prefix-producer",

@@ -183,7 +183,7 @@ theorem exists_close_payoff_pair_of_not_summable_absorption
     (hdiverges : ¬Summable (fun time =>
       quittingRootAbsorptionMass (marked.orbit.roots time)))
     {chargeTarget payoffError : Real}
-    (_hchargeTarget : 0 < chargeTarget) (hpayoffError : 0 < payoffError) :
+    (hpayoffError : 0 < payoffError) :
     exists first second : Nat,
       first < second ∧
       chargeTarget <=

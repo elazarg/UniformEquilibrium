@@ -26,8 +26,9 @@ open scoped Topology
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
 /-- A fixed prefix horizon and a uniform positive one-row live floor produce
-an actual source whose punishment suffix retains positive limiting reach. -/
-theorem nonempty_positiveJointPrefixReachSource_of_fixedHorizon_liveFloor
+an actual source whose limiting joint reach retains the exact power lower
+bound from the input data. -/
+theorem exists_positiveJointPrefixReachSource_with_lowerBound_of_fixedHorizon_liveFloor
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
     (family : QuittingDiffuseStationaryPrefixFamily reward)
     (subsequence : ℕ → ℕ) (horizon : ℕ) (liveFloor : ℝ)
@@ -36,7 +37,8 @@ theorem nonempty_positiveJointPrefixReachSource_of_fixedHorizon_liveFloor
     (hliveFloor : 0 < liveFloor)
     (hlive : ∀ n, liveFloor ≤
       quittingStationaryContinueMass (family.root (subsequence n))) :
-    Nonempty (QuittingPositiveJointPrefixReachSource reward) := by
+    ∃ source : QuittingPositiveJointPrefixReachSource reward,
+      liveFloor ^ (horizon + 1) ≤ source.jointLimit := by
   have hjointMem : ∀ n,
       family.prefixJointSurvival (subsequence n) ∈ Set.Icc (0 : ℝ) 1 := by
     intro n
@@ -65,7 +67,25 @@ theorem nonempty_positiveJointPrefixReachSource_of_fixedHorizon_liveFloor
   have hjointPositive : 0 < jointLimit :=
     (pow_pos hliveFloor (horizon + 1)).trans_le hjointLower
   exact ⟨⟨family, chosen, jointLimit, hchosen, hjointPositive,
-    hjointChosen⟩⟩
+    hjointChosen⟩, hjointLower⟩
+
+/-- The source-only specialization of the quantitative fixed-horizon
+extraction. -/
+theorem nonempty_positiveJointPrefixReachSource_of_fixedHorizon_liveFloor
+    {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
+    (family : QuittingDiffuseStationaryPrefixFamily reward)
+    (subsequence : ℕ → ℕ) (horizon : ℕ) (liveFloor : ℝ)
+    (hsubsequence : StrictMono subsequence)
+    (hhorizon : ∀ n, family.horizon (subsequence n) = horizon)
+    (hliveFloor : 0 < liveFloor)
+    (hlive : ∀ n, liveFloor ≤
+      quittingStationaryContinueMass (family.root (subsequence n))) :
+    Nonempty (QuittingPositiveJointPrefixReachSource reward) := by
+  obtain ⟨source, _hlower⟩ :=
+    exists_positiveJointPrefixReachSource_with_lowerBound_of_fixedHorizon_liveFloor
+      family subsequence horizon liveFloor hsubsequence hhorizon hliveFloor
+        hlive
+  exact ⟨source⟩
 
 /-- Consequently the fixed-horizon positive-live regime either yields the
 instant-punishment branch S.2 or reaches the already isolated no-sure-exit
