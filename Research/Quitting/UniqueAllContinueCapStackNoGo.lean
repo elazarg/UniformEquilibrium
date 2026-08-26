@@ -166,6 +166,99 @@ theorem exists_absorptionNashDefect_moat_of_unique_allContinue
     intro ε root _hnash _hsmall
     exact lt_of_not_ge fun hrootHigh => hhighNonempty ⟨root, hrootHigh⟩
 
+/-- **Robust total-absorption moat.**  The fixed-cap moat persists on an open
+neighborhood of the cap.  Thus a nearby approximate root cannot retain a
+fixed positive absorption scale while its total Nash defect tends to zero.
+
+The threshold is fixed before the neighborhood is chosen.  No uniform moat as
+the absorption threshold tends to zero is asserted. -/
+theorem exists_eventually_absorptionNashDefect_moat_of_unique_allContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) (eta : ℝ) (heta : 0 < eta)
+    (hunique : ∀ root : ι → PMF Bool,
+      IsεQuittingRootNash reward cap 0 root →
+        root = (quittingAllContinueRoot : ι → PMF Bool)) :
+    ∃ moat : ℝ, 0 < moat ∧
+      ∀ᶠ nearbyCap in nhds cap,
+        ∀ root : QuittingRootSimplex ι,
+          eta ≤ quittingSimplexAbsorptionMass root →
+          moat ≤ quittingRootTotalNashDefect reward nearbyCap
+            (quittingRootOfSimplex root) := by
+  let highAbsorption : Set (QuittingRootSimplex ι) :=
+    {root | eta ≤ quittingSimplexAbsorptionMass root}
+  have hhighClosed : IsClosed highAbsorption :=
+    isClosed_Ici.preimage continuous_quittingSimplexAbsorptionMass
+  have hhighCompact : IsCompact highAbsorption := hhighClosed.isCompact
+  by_cases hhighNonempty : highAbsorption.Nonempty
+  · have hdefectContinuous : Continuous (fun root : QuittingRootSimplex ι ↦
+        quittingRootTotalNashDefect reward cap
+          (quittingRootOfSimplex root)) := by
+      change Continuous
+        ((fun point : Payoff ι × QuittingRootSimplex ι ↦
+            quittingRootTotalNashDefect reward point.1
+              (quittingRootOfSimplex point.2)) ∘
+          fun root : QuittingRootSimplex ι ↦ (cap, root))
+      exact (continuous_quittingRootTotalNashDefect_simplex reward).comp
+        (continuous_const.prodMk continuous_id)
+    obtain ⟨selected, hselectedHigh, hselectedMin⟩ :=
+      hhighCompact.exists_isMinOn hhighNonempty
+        hdefectContinuous.continuousOn
+    have hselectedNonneg : 0 ≤ quittingRootTotalNashDefect reward cap
+        (quittingRootOfSimplex selected) :=
+      quittingRootTotalNashDefect_nonneg reward cap
+        (quittingRootOfSimplex selected)
+    have hselectedPositive : 0 < quittingRootTotalNashDefect reward cap
+        (quittingRootOfSimplex selected) := by
+      apply lt_of_le_of_ne hselectedNonneg
+      intro hzero
+      have hnash : IsεQuittingRootNash reward cap 0
+          (quittingRootOfSimplex selected) :=
+        (isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
+          reward cap (quittingRootOfSimplex selected)).2 hzero.symm
+      have hroot := hunique (quittingRootOfSimplex selected) hnash
+      have habsorptionZero : quittingSimplexAbsorptionMass selected = 0 := by
+        rw [quittingSimplexAbsorptionMass_eq_rootAbsorptionMass, hroot]
+        exact quittingRootAbsorptionMass_allContinueRoot
+      change eta ≤ quittingSimplexAbsorptionMass selected at hselectedHigh
+      rw [habsorptionZero] at hselectedHigh
+      linarith
+    let moat := quittingRootTotalNashDefect reward cap
+      (quittingRootOfSimplex selected) / 2
+    let bad : Set (Payoff ι × QuittingRootSimplex ι) :=
+      {point | eta ≤ quittingSimplexAbsorptionMass point.2 ∧
+        quittingRootTotalNashDefect reward point.1
+            (quittingRootOfSimplex point.2) ≤ moat}
+    have hbadClosed : IsClosed bad := by
+      exact (isClosed_le continuous_const
+        (continuous_quittingSimplexAbsorptionMass.comp continuous_snd)).inter
+        (isClosed_le (continuous_quittingRootTotalNashDefect_simplex reward)
+          continuous_const)
+    have hprojectionClosed : IsClosed (Prod.fst '' bad) :=
+      isClosedMap_fst_of_compactSpace bad hbadClosed
+    have hcapNotBad : cap ∉ Prod.fst '' bad := by
+      rintro ⟨⟨_nearbyCap, root⟩, hrootBad, rfl⟩
+      have hlower := hselectedMin hrootBad.1
+      change quittingRootTotalNashDefect reward _nearbyCap
+          (quittingRootOfSimplex selected) ≤
+        quittingRootTotalNashDefect reward _nearbyCap
+          (quittingRootOfSimplex root) at hlower
+      have hupper : quittingRootTotalNashDefect reward _nearbyCap
+          (quittingRootOfSimplex root) ≤
+            quittingRootTotalNashDefect reward _nearbyCap
+              (quittingRootOfSimplex selected) / 2 := by
+        simpa only [moat] using hrootBad.2
+      linarith
+    refine ⟨moat, by dsimp only [moat]; linarith, ?_⟩
+    filter_upwards [hprojectionClosed.isOpen_compl.mem_nhds hcapNotBad] with
+        nearbyCap hnear root hrootAbsorption
+    apply le_of_not_gt
+    intro hdefectSmall
+    exact hnear ⟨(nearbyCap, root),
+      ⟨hrootAbsorption, hdefectSmall.le⟩, rfl⟩
+  · refine ⟨1, by norm_num, Filter.Eventually.of_forall ?_⟩
+    intro nearbyCap root hroot
+    exact False.elim (hhighNonempty ⟨root, hroot⟩)
+
 /-- **Positive-minimum plateau no-go.**  The strongest reset-face selector
 does not merely exhibit one zero-charge root.  It produces a positive-law
 point at which *every* exact cap/state operation is the identity on the full
