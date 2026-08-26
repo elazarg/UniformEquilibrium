@@ -7,7 +7,9 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import MathUE.ProbabilityMassFunction.Simplex
+import MathUE.Topology.CompactRobustMoat
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
+import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
 import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 
@@ -157,9 +159,60 @@ theorem exists_totalNashDefect_moat_of_unique_allContinue
     intro root hroot
     exact False.elim (hhighNonempty ⟨root, hroot⟩)
 
-/-- **Robust Nash-defect moat.**  The fixed-cap moat persists on an open
-neighborhood of the cap.  The proof uses closed projection along the compact
-root simplex; it supplies no linear modulus or explicit radius. -/
+/-! ## Robust compact-fiber moats -/
+
+/-- Any continuous root statistic that vanishes at all-Continue inherits a
+robust positive Nash-defect moat above each positive statistic threshold when
+all-Continue is the unique exact root. This is the game-specific adapter to
+the generic compact-fiber robust-moat theorem. -/
+theorem exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuous_measure
+    (cap : Payoff ι) (measure : QuittingRootSimplex ι → ℝ)
+    (hmeasure : Continuous measure)
+    (hzero : ∀ root : QuittingRootSimplex ι,
+      quittingRootOfSimplex root =
+          (quittingAllContinueRoot : ι → PMF Bool) →
+        measure root = 0)
+    (eta : ℝ) (heta : 0 < eta)
+    (hunique : ∀ root : ι → PMF Bool,
+      IsεQuittingRootNash reward cap 0 root →
+        root = (quittingAllContinueRoot : ι → PMF Bool)) :
+    ∃ moat : ℝ, 0 < moat ∧
+      ∀ᶠ nearbyCap in 𝓝 cap,
+        ∀ root : QuittingRootSimplex ι,
+          eta ≤ measure root →
+            moat ≤ quittingRootTotalNashDefect reward nearbyCap
+              (quittingRootOfSimplex root) := by
+  let high : Set (QuittingRootSimplex ι) := {root | eta ≤ measure root}
+  have hhighClosed : IsClosed high :=
+    isClosed_Ici.preimage hmeasure
+  have hpositive : ∀ root ∈ high,
+      0 < quittingRootTotalNashDefect reward cap
+        (quittingRootOfSimplex root) := by
+    intro root hrootHigh
+    have hnonneg : 0 ≤ quittingRootTotalNashDefect reward cap
+        (quittingRootOfSimplex root) :=
+      quittingRootTotalNashDefect_nonneg reward cap
+        (quittingRootOfSimplex root)
+    apply lt_of_le_of_ne hnonneg
+    intro hdefectZero
+    have hnash : IsεQuittingRootNash reward cap 0
+        (quittingRootOfSimplex root) :=
+      (isZeroQuittingRootNash_iff_totalNashDefect_eq_zero
+        reward cap (quittingRootOfSimplex root)).2 hdefectZero.symm
+    have hroot := hunique (quittingRootOfSimplex root) hnash
+    have hmeasureZero := hzero root hroot
+    change eta ≤ measure root at hrootHigh
+    rw [hmeasureZero] at hrootHigh
+    linarith
+  simpa only [high, Set.mem_setOf_eq] using
+    (Math.Topology.exists_eventually_uniform_pos_on_closed_of_compactSpace
+      (fun nearbyCap root => quittingRootTotalNashDefect reward nearbyCap
+        (quittingRootOfSimplex root))
+      (continuous_quittingRootTotalNashDefect_simplex reward)
+      high hhighClosed cap hpositive)
+
+/-- The total-opponent-incidence specialization of the generic root-statistic
+moat. -/
 theorem exists_eventually_totalNashDefect_moat_of_unique_allContinue
     (cap : Payoff ι) (owner : ι) (eta : ℝ)
     (heta : 0 < eta)
@@ -173,36 +226,114 @@ theorem exists_eventually_totalNashDefect_moat_of_unique_allContinue
             (quittingRootOfSimplex root) →
           moat ≤ quittingRootTotalNashDefect reward nearbyCap
             (quittingRootOfSimplex root) := by
-  obtain ⟨fixedMoat, hfixedMoat, hfixed⟩ :=
-    exists_totalNashDefect_moat_of_unique_allContinue
-      (reward := reward) cap owner eta heta hunique
-  let moat := fixedMoat / 2
-  let bad : Set (Payoff ι × QuittingRootSimplex ι) :=
-    {point | eta ≤ quittingRootTotalOpponentIncidenceMass owner
-          (quittingRootOfSimplex point.2) ∧
-      quittingRootTotalNashDefect reward point.1
-          (quittingRootOfSimplex point.2) ≤ moat}
-  have hbadClosed : IsClosed bad := by
-    exact (isClosed_le continuous_const
-      ((continuous_quittingRootTotalOpponentIncidenceMass_simplex owner).comp
-        continuous_snd)).inter
-      (isClosed_le (continuous_quittingRootTotalNashDefect_simplex reward)
-        continuous_const)
-  have hprojectionClosed : IsClosed (Prod.fst '' bad) :=
-    isClosedMap_fst_of_compactSpace bad hbadClosed
-  have hcapNotBad : cap ∉ Prod.fst '' bad := by
-    rintro ⟨⟨_nearbyCap, root⟩, hrootBad, rfl⟩
-    have hlower := hfixed root hrootBad.1
-    have hupper : quittingRootTotalNashDefect reward _nearbyCap
-        (quittingRootOfSimplex root) ≤ fixedMoat / 2 := by
-      simpa only [moat] using hrootBad.2
-    linarith
-  refine ⟨moat, by dsimp only [moat]; linarith, ?_⟩
-  filter_upwards [hprojectionClosed.isOpen_compl.mem_nhds hcapNotBad] with
-      nearbyCap hnear root hrootIncidence
-  apply le_of_not_gt
-  intro hdefectSmall
-  exact hnear ⟨(nearbyCap, root), ⟨hrootIncidence, hdefectSmall.le⟩, rfl⟩
+  refine
+    exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuous_measure
+      (reward := reward) cap
+      (fun root => quittingRootTotalOpponentIncidenceMass owner
+        (quittingRootOfSimplex root))
+      (continuous_quittingRootTotalOpponentIncidenceMass_simplex owner)
+      ?_ eta heta hunique
+  intro root hroot
+  rw [hroot]
+  exact quittingRootTotalOpponentIncidenceMass_allContinueRoot owner
+
+/-- The robust total-absorption moat at a unique all-Continue cap. -/
+theorem exists_eventually_absorptionNashDefect_moat_of_unique_allContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) (eta : ℝ) (heta : 0 < eta)
+    (hunique : ∀ root : ι → PMF Bool,
+      IsεQuittingRootNash reward cap 0 root →
+        root = (quittingAllContinueRoot : ι → PMF Bool)) :
+    ∃ moat : ℝ, 0 < moat ∧
+      ∀ᶠ nearbyCap in 𝓝 cap,
+        ∀ root : QuittingRootSimplex ι,
+          eta ≤ quittingSimplexAbsorptionMass root →
+          moat ≤ quittingRootTotalNashDefect reward nearbyCap
+            (quittingRootOfSimplex root) := by
+  refine
+    exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuous_measure
+      (reward := reward) cap quittingSimplexAbsorptionMass
+      continuous_quittingSimplexAbsorptionMass ?_ eta heta hunique
+  intro root hroot
+  rw [quittingSimplexAbsorptionMass_eq_rootAbsorptionMass, hroot]
+  exact quittingRootAbsorptionMass_allContinueRoot
+
+/-- A fixed-cap approximate Nash root whose total absorption exceeds a positive
+threshold pays one positive total-defect moat. -/
+theorem exists_absorptionNashDefect_moat_of_unique_allContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) (eta : ℝ) (heta : 0 < eta)
+    (hunique : ∀ root : ι → PMF Bool,
+      IsεQuittingRootNash reward cap 0 root →
+        root = (quittingAllContinueRoot : ι → PMF Bool)) :
+    ∃ moat : ℝ, 0 < moat ∧
+      ∀ ε root,
+        IsεQuittingRootNash reward cap ε
+            (quittingRootOfSimplex root) →
+        Fintype.card ι * ε < moat →
+        quittingSimplexAbsorptionMass root < eta := by
+  obtain ⟨moat, hmoat, hnear⟩ :=
+    exists_eventually_absorptionNashDefect_moat_of_unique_allContinue
+      reward cap eta heta hunique
+  have hfixed := hnear.self_of_nhds
+  refine ⟨moat, hmoat, ?_⟩
+  intro ε root hnash hsmall
+  by_contra hnot
+  have hhigh : eta ≤ quittingSimplexAbsorptionMass root :=
+    le_of_not_gt hnot
+  have hlower := hfixed root hhigh
+  have hupper :=
+    quittingRootTotalNashDefect_le_card_mul_of_isεQuittingRootNash
+      reward cap (quittingRootOfSimplex root) ε hnash
+  linarith
+
+/-- Opponent absorption is continuous in simplex coordinates. -/
+theorem continuous_quittingRootOpponentAbsorptionMass_simplex
+    (owner : ι) :
+    Continuous (fun root : QuittingRootSimplex ι =>
+      quittingRootOpponentAbsorptionMass (quittingRootOfSimplex root) owner) := by
+  simp_rw [quittingRootOpponentAbsorptionMass_eq_one_sub_prod,
+    quittingRootOfSimplex_apply_toReal]
+  exact continuous_const.sub
+    (continuous_finsetProd _ fun other _ =>
+      continuous_const.sub
+        ((continuous_apply true).comp
+          (continuous_subtype_val.comp (continuous_apply other))))
+
+/-- The robust Nash-defect moat specialized to one owner's ordinary opponent
+absorption hazard. -/
+theorem exists_eventually_totalNashDefect_moat_of_unique_allContinue_opponentAbsorption
+    (cap : Payoff ι) (owner : ι) (eta : ℝ)
+    (heta : 0 < eta)
+    (hunique : ∀ root : ι → PMF Bool,
+      IsεQuittingRootNash reward cap 0 root →
+        root = (quittingAllContinueRoot : ι → PMF Bool)) :
+    ∃ moat : ℝ, 0 < moat ∧
+      ∀ᶠ nearbyCap in 𝓝 cap,
+        ∀ root : QuittingRootSimplex ι,
+          eta ≤ quittingRootOpponentAbsorptionMass
+              (quittingRootOfSimplex root) owner →
+            moat ≤ quittingRootTotalNashDefect reward nearbyCap
+              (quittingRootOfSimplex root) := by
+  refine
+    exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuous_measure
+      (reward := reward) cap
+      (fun root => quittingRootOpponentAbsorptionMass
+        (quittingRootOfSimplex root) owner)
+      (continuous_quittingRootOpponentAbsorptionMass_simplex owner)
+      ?_ eta heta hunique
+  intro root hroot
+  rw [hroot]
+  unfold quittingRootOpponentAbsorptionMass
+  rw [show Function.update
+      (quittingAllContinueRoot : ι → PMF Bool) owner (PMF.pure false) =
+        quittingAllContinueRoot by
+    funext player
+    by_cases hplayer : player = owner
+    · subst player
+      simp [quittingAllContinueRoot]
+    · simp [Function.update_of_ne hplayer, quittingAllContinueRoot]]
+  exact quittingRootAbsorptionMass_allContinueRoot
 
 /-- The canonical reset-face plateau carries a robust Nash-defect moat at
 every positive total-opponent-incidence scale. -/

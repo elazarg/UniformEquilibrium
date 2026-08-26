@@ -375,6 +375,7 @@ import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
+import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteLabelLiminfExtraction

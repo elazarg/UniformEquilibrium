@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FiniteClockPolynomialCertificate
+import Research.Quitting.EscapeAwareQuantileClockHierarchy
 
 /-!
 # Polynomial lower queries for the escape-aware quantile-clock hierarchy
