@@ -119,7 +119,7 @@ them is stated.
 
 noncomputable section
 
-open Math Math.MaxAffineTransport
+open Filter Math Math.MaxAffineTransport
 
 namespace GameTheory
 
@@ -154,6 +154,280 @@ omit [Fintype player] [DecidableEq player] in
 @[simp] theorem quittingPayoffCellValue_diagonal
     (reward : {S : Finset player // S.Nonempty} → Payoff player) (who : player) :
     quittingPayoffCellValue reward (who, who) = quittingSoloDiagonalCandidate reward who := rfl
+
+namespace QuittingSoloPreempts
+
+/-! ## The vanishing-hazard solo-tail no-go
+
+A tempting chronology turns a preemption edge `owner → other` into a solo
+row for `owner`, lets the owner's hazard vanish, and declares the owner's solo
+payoff vector to be the continuation.  The edge points in exactly the wrong
+strategic direction for this construction: while `other` is prescribed to
+Continue, its Quit endpoint converges to its strictly better own solo row.
+-/
+
+/-- Exact data-sensitive endpoint lower bound along a solo preemption edge.
+The owner collision row contributes with its literal signed premium, and the
+continuation mismatch is charged only on the owner's Continue branch. -/
+theorem one_sub_hazard_mul_gap_add_collisionPremium_sub_mismatch_le_endpointDifference
+    {owner other : player} {gap : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool) (tail : Payoff player) :
+    (1 - (hazard true).toReal) * gap +
+          (hazard true).toReal *
+            (quittingSingletonCollisionReward reward owner other -
+              quittingSoloReward reward owner other) -
+          (1 - (hazard true).toReal) *
+            |tail other - quittingSoloReward reward owner other| ≤
+      quittingRootEndpointDifference reward
+        tail (quittingSoloStationaryRoot owner hazard) other := by
+  let p := (hazard true).toReal
+  have hp1 : p ≤ 1 := by
+    exact ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one hazard true)
+  have hfalse : (hazard false).toReal = 1 - p := by
+    have hmass := quittingSoloHazardMass_add hazard
+    dsimp only [p]
+    linarith
+  have hdiagonal : quittingSoloReward reward owner other + gap ≤
+      quittingSoloReward reward other other := hedge.2
+  have hdiagonalScaled :
+      (1 - p) * (quittingSoloReward reward owner other + gap) ≤
+        (1 - p) * quittingSoloReward reward other other :=
+    mul_le_mul_of_nonneg_left hdiagonal (sub_nonneg.mpr hp1)
+  have hmismatch :
+      -|tail other - quittingSoloReward reward owner other| ≤
+        quittingSoloReward reward owner other - tail other := by
+    simpa only [abs_sub_comm] using
+      neg_abs_le (quittingSoloReward reward owner other - tail other)
+  have hmismatchScaled := mul_le_mul_of_nonneg_left hmismatch
+    (sub_nonneg.mpr hp1)
+  rw [quittingRootEndpointDifference,
+    quittingRootQuitPayoff_soloStationaryRoot_other reward hedge.1,
+    quittingRootContinuePayoff_soloStationaryRoot_other reward hedge.1,
+    hfalse]
+  dsimp only [p] at hdiagonalScaled hmismatchScaled ⊢
+  linarith
+
+/-- A solo preemption edge gives a quantitative lower bound on the inactive
+preemptor's endpoint defect at the preempted owner's solo row.  Besides the
+owner's hazard charge, the bound pays only the displayed continuation's
+distance from the owner's solo payoff in the preemptor's coordinate. -/
+theorem gap_sub_hazardCharge_sub_tailMismatch_le_endpointDifference
+    {owner other : player} {gap : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool) (tail : Payoff player) :
+    gap - (hazard true).toReal *
+          (gap + 2 * quittingRewardBound reward) -
+        |tail other - quittingSoloReward reward owner other| ≤
+      quittingRootEndpointDifference reward
+        tail (quittingSoloStationaryRoot owner hazard) other := by
+  let p := (hazard true).toReal
+  have hp0 : 0 ≤ p := ENNReal.toReal_nonneg
+  have hp1 : p ≤ 1 := by
+    exact ENNReal.toReal_mono ENNReal.one_ne_top
+      (PMF.coe_le_one hazard true)
+  have hcollision :
+      |quittingSingletonCollisionReward reward owner other| ≤
+        quittingRewardBound reward := by
+    exact abs_reward_le_quittingRewardBound reward _ other
+  have hcross : |quittingSoloReward reward owner other| ≤
+      quittingRewardBound reward := by
+    exact abs_reward_le_quittingRewardBound reward _ other
+  have hcollisionGap :
+      -(2 * quittingRewardBound reward) ≤
+        quittingSingletonCollisionReward reward owner other -
+          quittingSoloReward reward owner other := by
+    linarith [abs_le.mp hcollision |>.1, abs_le.mp hcross |>.2]
+  have hcollisionScaled :
+      p * (-(2 * quittingRewardBound reward)) ≤
+        p * (quittingSingletonCollisionReward reward owner other -
+          quittingSoloReward reward owner other) :=
+    mul_le_mul_of_nonneg_left hcollisionGap hp0
+  have hmismatchScaled :
+      -|tail other - quittingSoloReward reward owner other| ≤
+        -(1 - p) *
+          |tail other - quittingSoloReward reward owner other| := by
+    nlinarith [abs_nonneg
+      (tail other - quittingSoloReward reward owner other)]
+  have hexact :=
+    one_sub_hazard_mul_gap_add_collisionPremium_sub_mismatch_le_endpointDifference
+      hedge hazard tail
+  dsimp only [p] at hcollisionScaled hmismatchScaled ⊢
+  linarith
+
+/-- Specializing the continuation to the owner's solo payoff vector removes
+the mismatch charge. -/
+theorem gap_sub_hazardCharge_le_endpointDifference
+    {owner other : player} {gap : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool) :
+    gap - (hazard true).toReal *
+        (gap + 2 * quittingRewardBound reward) ≤
+      quittingRootEndpointDifference reward
+        (quittingSoloReward reward owner)
+        (quittingSoloStationaryRoot owner hazard) other := by
+  simpa using
+    gap_sub_hazardCharge_sub_tailMismatch_le_endpointDifference
+      hedge hazard (quittingSoloReward reward owner)
+
+/-- Any support-Nash solo root on a preempted owner must pay the surviving
+preemption defect by moving the preemptor's continuation coordinate away from
+its payoff at the owner's solo row.  Thus a successful semantic construction
+needs an actual phase-dependent tail displacement; the static edge cannot
+supply it. -/
+theorem gap_sub_hazardCharge_sub_error_le_tailMismatch
+    {owner other : player} {gap error : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool) (tail : Payoff player)
+    (hsupport : IsQuittingRootSupportApproxNash reward tail error
+      (quittingSoloStationaryRoot owner hazard)) :
+    gap - (hazard true).toReal *
+          (gap + 2 * quittingRewardBound reward) - error ≤
+      |tail other - quittingSoloReward reward owner other| := by
+  have hcontinue : 0 <
+      (quittingSoloStationaryRoot owner hazard other false).toReal := by
+    rw [quittingSoloStationaryRoot_apply_other hedge.1]
+    simp
+  have hupper := (hsupport other).2 hcontinue
+  have hlower :=
+    gap_sub_hazardCharge_sub_tailMismatch_le_endpointDifference
+      hedge hazard tail
+  linarith
+
+/-- If the displayed support error is smaller than the edge's surviving
+defect after paying the hazard and continuation-mismatch charges, the owner's
+solo row cannot be support-Nash. -/
+theorem not_supportApproxNash_soloRoot_of_lt
+    {owner other : player} {gap error : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool) (tail : Payoff player)
+    (herror : error < gap - (hazard true).toReal *
+        (gap + 2 * quittingRewardBound reward) -
+          |tail other - quittingSoloReward reward owner other|) :
+    ¬IsQuittingRootSupportApproxNash reward tail error
+      (quittingSoloStationaryRoot owner hazard) := by
+  intro hsupport
+  have hmismatch := gap_sub_hazardCharge_sub_error_le_tailMismatch
+    hedge hazard tail hsupport
+  linarith
+
+/-- If the displayed support error is smaller than the edge's surviving
+defect, the preempted owner's solo row with its own solo payoff continuation
+cannot be support-Nash.  This refutes that direct row construction only; it
+does not restrict roots with several active players or phase-dependent
+semantic continuation values. -/
+theorem not_supportApproxNash_soloTail_of_lt
+    {owner other : player} {gap error : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hazard : PMF Bool)
+    (herror : error < gap - (hazard true).toReal *
+      (gap + 2 * quittingRewardBound reward)) :
+    ¬IsQuittingRootSupportApproxNash reward
+      (quittingSoloReward reward owner) error
+      (quittingSoloStationaryRoot owner hazard) := by
+  apply not_supportApproxNash_soloRoot_of_lt hedge hazard
+    (quittingSoloReward reward owner)
+  simpa using herror
+
+/-- Along a vanishing owner hazard and a continuation converging to the
+owner's cross payoff, the inactive preemptor's endpoint defect is eventually
+larger than every fixed threshold below the full preemption gap.  This is the
+quantitative liminf statement behind the asymptotic solo-root no-go. -/
+theorem eventually_threshold_lt_endpointDifference
+    {owner other : player} {gap threshold : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hthreshold : threshold < gap) (hazard : ℕ → PMF Bool)
+    (tail : ℕ → Payoff player)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (htail : Tendsto (fun n ↦ tail n other) atTop
+      (nhds (quittingSoloReward reward owner other))) :
+    ∀ᶠ n in atTop, threshold <
+      quittingRootEndpointDifference reward (tail n)
+        (quittingSoloStationaryRoot owner (hazard n)) other := by
+  let cross := quittingSoloReward reward owner other
+  let collision := quittingSingletonCollisionReward reward owner other
+  let lower : ℕ → ℝ := fun n =>
+    (1 - (hazard n true).toReal) * gap +
+      (hazard n true).toReal * (collision - cross) -
+      (1 - (hazard n true).toReal) * |tail n other - cross|
+  have hcontinue : Tendsto (fun n ↦ 1 - (hazard n true).toReal)
+      atTop (nhds 1) := by
+    simpa only [sub_zero] using tendsto_const_nhds.sub hhazard
+  have hmismatch : Tendsto (fun n ↦ |tail n other - cross|)
+      atTop (nhds 0) := by
+    simpa only [cross, sub_self, abs_zero] using
+      (htail.sub_const cross).abs
+  have hlower : Tendsto lower atTop (nhds gap) := by
+    have hfirst := hcontinue.mul_const gap
+    have hcollision := hhazard.mul_const (collision - cross)
+    have hlast := hcontinue.mul hmismatch
+    simpa only [lower, one_mul, zero_mul, add_zero, sub_zero] using
+      (hfirst.add hcollision).sub hlast
+  have heventually : ∀ᶠ n in atTop, threshold < lower n :=
+    (tendsto_order.1 hlower).1 threshold hthreshold
+  filter_upwards [heventually] with n hn
+  exact hn.trans_le
+    (one_sub_hazard_mul_gap_add_collisionPremium_sub_mismatch_le_endpointDifference
+      hedge (hazard n) (tail n))
+
+/-- Along vanishing owner hazards and errors, any continuation whose
+preemptor coordinate converges to the owner's solo payoff eventually makes
+the owner's solo root fail support-Nash. -/
+theorem eventually_not_supportApproxNash_soloRoot
+    {owner other : player} {gap : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hgap : 0 < gap) (hazard : ℕ → PMF Bool)
+    (tail : ℕ → Payoff player) (error : ℕ → ℝ)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (htail : Tendsto (fun n ↦ tail n other) atTop
+      (nhds (quittingSoloReward reward owner other)))
+    (herror : Tendsto error atTop (nhds 0)) :
+    ∀ᶠ n in atTop,
+      ¬IsQuittingRootSupportApproxNash reward (tail n) (error n)
+        (quittingSoloStationaryRoot owner (hazard n)) := by
+  let chargeScale := gap + 2 * quittingRewardBound reward
+  have hcharge : Tendsto
+      (fun n ↦ (hazard n true).toReal * chargeScale) atTop (nhds 0) := by
+    simpa only [zero_mul] using hhazard.mul_const chargeScale
+  have hmismatch : Tendsto
+      (fun n ↦ |tail n other - quittingSoloReward reward owner other|)
+      atTop (nhds 0) := by
+    simpa only [sub_self, abs_zero] using
+      (htail.sub_const (quittingSoloReward reward owner other)).abs
+  have htotal : Tendsto
+      (fun n ↦ (hazard n true).toReal * chargeScale + error n +
+        |tail n other - quittingSoloReward reward owner other|)
+      atTop (nhds 0) := by
+    simpa only [zero_add] using (hcharge.add herror).add hmismatch
+  have hsmall : ∀ᶠ n in atTop,
+      (hazard n true).toReal * chargeScale + error n +
+        |tail n other - quittingSoloReward reward owner other| < gap :=
+    (tendsto_order.1 htotal).2 gap hgap
+  filter_upwards [hsmall] with n hn
+  apply not_supportApproxNash_soloRoot_of_lt hedge (hazard n) (tail n)
+  dsimp only [chargeScale] at hn ⊢
+  linarith
+
+/-- In particular, the direct solo-tail rows of a positive-gap preemption
+edge eventually fail support-Nash when the owner hazard and error vanish.
+This is the asymptotic form used to screen a proposed cofinal solo-row lasso. -/
+theorem eventually_not_supportApproxNash_soloTail
+    {owner other : player} {gap : ℝ}
+    (hedge : QuittingSoloPreempts reward gap owner other)
+    (hgap : 0 < gap) (hazard : ℕ → PMF Bool) (error : ℕ → ℝ)
+    (hhazard : Tendsto (fun n ↦ (hazard n true).toReal) atTop (nhds 0))
+    (herror : Tendsto error atTop (nhds 0)) :
+    ∀ᶠ n in atTop,
+      ¬IsQuittingRootSupportApproxNash reward
+        (quittingSoloReward reward owner) (error n)
+        (quittingSoloStationaryRoot owner (hazard n)) := by
+  apply eventually_not_supportApproxNash_soloRoot hedge hgap hazard
+    (fun _ ↦ quittingSoloReward reward owner) error hhazard
+  · exact tendsto_const_nhds
+  · exact herror
+
+end QuittingSoloPreempts
 
 namespace QuittingSoloPreemptionCycle
 
