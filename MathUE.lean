@@ -216,6 +216,7 @@ import MathUE.Periodicity
 import MathUE.FiniteCyclicVariation
 import MathUE.FiniteDirectedPeriod
 import MathUE.PolynomialSignCell
+import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Probability
 import MathUE.Probability.Adaptive
 import MathUE.Probability.AdaptiveOccupationFlow
@@ -314,6 +315,7 @@ import MathUE.Probability.PhaseOccupationDuality
 import MathUE.Probability.PositiveChargedCirculationClass
 import MathUE.Probability.PotentialDominatedTransitionCost
 import MathUE.Probability.PredictableCoreShadow
+import MathUE.Probability.QuantileClock
 import MathUE.Probability.QuotientShadowLift
 import MathUE.Probability.ReachableClosedClass
 import MathUE.Probability.RealizedAccountDeflation
@@ -341,6 +343,7 @@ import MathUE.ProbabilityMassFunction.Bool
 import MathUE.ProbabilityMassFunction.CompactStoppingLaw
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.DiscreteTightness
+import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
@@ -378,6 +381,7 @@ import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
+import MathUE.Topology.NestedOuterApproximation
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube

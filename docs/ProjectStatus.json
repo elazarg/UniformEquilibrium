@@ -56,6 +56,24 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "finite-deadline-timing-nash-debt",
+      "subject": "Finite-deadline timing Nash terminal debt",
+      "kind": "Unconditional quantitative producer",
+      "declaration": "exists_threeDateTimingNash_terminalDebt_le_exactMaximum",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineTimingNashDebt.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "Every bounded finite quitting table has a literal three-date timing Nash profile whose full behavioral terminal debt is at most (20 - 8 sqrt 6) times the reward bound; the normalized Fin4 hierarchy consequence reaches level 59 in Research."
+    },
+    {
+      "id": "fin-four-hard-deadline-timing-nash-barrier",
+      "subject": "Fin4 hard-deadline exact timing-Nash architecture",
+      "kind": "Unconditional exact boundary theorem",
+      "declaration": "tendsto_finiteDeadlineTimingNashWorstExploitability_succ_quarter",
+      "source": "UniformEquilibrium/Diagnostics/Quitting/FinFourHardDeadlineTimingNashWorstCase.lean",
+      "umbrella": "UniformEquilibrium/Diagnostics/Quitting/All.lean",
+      "scope": "The normalized Fin4 worst-table, worst-exact-equilibrium hard-deadline exploitability tends to 1/4. One checked table has a unique exact Nash law at every deadline and debt above 1/4, while non-Nash finite-clock profiles on that table have debt tending to zero; this is an architecture no-go, not a positive all-profile gap."
+    },
+    {
       "id": "quitting-passive-player-padding",
       "subject": "Upward transport of quitting-game terminal exploitability",
       "kind": "Unconditional quantitative transport theorem",
