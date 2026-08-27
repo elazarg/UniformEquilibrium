@@ -244,12 +244,54 @@ open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
-/-- A canonical maximal-absorption exact cap root at one literal profile. -/
+/-- A canonical maximal-absorption exact root indexed only by its continuation
+cap.  Keeping this selector cap-indexed makes its extensionality literal. -/
+noncomputable def quittingMaximalAbsorptionCapRoot
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (cap : Payoff iota) : iota → PMF Bool :=
+  Classical.choose (exists_maximalAbsorption_isZeroQuittingRootNash reward
+    cap)
+
+theorem quittingMaximalAbsorptionCapRoot_exactNash
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (cap : Payoff iota) :
+    IsεQuittingRootNash reward cap 0
+      (quittingMaximalAbsorptionCapRoot reward cap) :=
+  (Classical.choose_spec
+    (exists_maximalAbsorption_isZeroQuittingRootNash reward cap)).1
+
+theorem quittingMaximalAbsorptionCapRoot_maximal
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    (cap : Payoff iota) (other : iota → PMF Bool)
+    (hother : IsεQuittingRootNash reward cap 0 other) :
+    quittingRootAbsorptionMass other ≤
+      quittingRootAbsorptionMass
+        (quittingMaximalAbsorptionCapRoot reward cap) :=
+  (Classical.choose_spec
+    (exists_maximalAbsorption_isZeroQuittingRootNash reward cap)).2 other hother
+
+theorem quittingMaximalAbsorptionCapRoot_eq_of_cap_eq
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    {cap cap' : Payoff iota} (hcap : cap = cap') :
+    quittingMaximalAbsorptionCapRoot reward cap =
+      quittingMaximalAbsorptionCapRoot reward cap' := by
+  rw [hcap]
+
+/-- Backwards-compatible profile-indexed view of the cap-indexed selector. -/
 noncomputable def quittingMaximalCapPrefixRoot
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (profile : (quittingGame reward).BehaviorProfile) : iota → PMF Bool :=
-  Classical.choose (exists_maximalAbsorption_isZeroQuittingRootNash reward
-    (quittingTerminalSemanticPair reward profile).2)
+  quittingMaximalAbsorptionCapRoot reward
+    (quittingTerminalSemanticPair reward profile).2
+
+theorem quittingMaximalCapPrefixRoot_eq_of_semanticCap_eq
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
+    {first second : (quittingGame reward).BehaviorProfile}
+    (hcap : (quittingTerminalSemanticPair reward first).2 =
+      (quittingTerminalSemanticPair reward second).2) :
+    quittingMaximalCapPrefixRoot reward first =
+      quittingMaximalCapPrefixRoot reward second :=
+  quittingMaximalAbsorptionCapRoot_eq_of_cap_eq reward hcap
 
 theorem quittingMaximalCapPrefixRoot_exactNash
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
@@ -257,9 +299,7 @@ theorem quittingMaximalCapPrefixRoot_exactNash
     IsεQuittingRootNash reward
       (quittingTerminalSemanticPair reward profile).2 0
         (quittingMaximalCapPrefixRoot reward profile) :=
-  (Classical.choose_spec
-    (exists_maximalAbsorption_isZeroQuittingRootNash reward
-      (quittingTerminalSemanticPair reward profile).2)).1
+  quittingMaximalAbsorptionCapRoot_exactNash reward _
 
 theorem quittingMaximalCapPrefixRoot_maximal
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
@@ -270,9 +310,7 @@ theorem quittingMaximalCapPrefixRoot_maximal
     quittingRootAbsorptionMass other ≤
       quittingRootAbsorptionMass
         (quittingMaximalCapPrefixRoot reward profile) :=
-  (Classical.choose_spec
-    (exists_maximalAbsorption_isZeroQuittingRootNash reward
-      (quittingTerminalSemanticPair reward profile).2)).2 other hother
+  quittingMaximalAbsorptionCapRoot_maximal reward _ other hother
 
 /-- Prefix outward recursively, recomputing a maximal-absorption exact root
 against the cap of the newly reached literal state at every step. -/

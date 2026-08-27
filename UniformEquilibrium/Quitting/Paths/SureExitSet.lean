@@ -148,6 +148,114 @@ theorem quittingTerminalPayoff_pureSetRoot
     rw [quittingStationaryProfile_pureSetRoot_empty,
       quittingTerminalPayoff_quittingAlwaysContinue, quittingSetReward_empty]
 
+/-- Prepending a nonempty pure coalition root pays exactly that coalition's
+reward, independently of the actual continuation profile. -/
+theorem quittingTerminalPayoff_pureSetRootThenContinuation_eq_setReward
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (S : Finset ι) (hS : S.Nonempty)
+    (continuation : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff reward
+        (quittingRootThenContinuationProfile reward
+          (quittingPureSetRoot S) continuation) who =
+      quittingSetReward reward S who := by
+  rw [quittingTerminalPayoff_rootThenContinuation_eq,
+    quittingRootExpectedPayoff_eq_absorbingContribution_add,
+    quittingRootAbsorbingContribution_pureSetRoot,
+    stationaryContinueMass_pureSetRoot_of_nonempty hS]
+  ring
+
+/-- Pure Quit at a pure-set root is the static join endpoint, for every
+declared continuation payoff. -/
+theorem quittingRootQuitPayoff_pureSetRoot_eq_insert
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (tail : Payoff ι) (S : Finset ι) (who : ι) :
+    quittingRootQuitPayoff reward tail (quittingPureSetRoot S) who =
+      quittingSetReward reward (insert who S) who := by
+  rw [quittingRootQuitPayoff,
+    quittingRootExpectedPayoff_eq_absorbingContribution_add,
+    update_quittingPureSetRoot_true,
+    quittingRootAbsorbingContribution_pureSetRoot,
+    stationaryContinueMass_pureSetRoot_of_nonempty
+      (Finset.insert_nonempty who S)]
+  ring
+
+/-- Leaving a coalition that still contains a quitter is exactly the static
+leave endpoint; no continuation value is exposed. -/
+theorem quittingRootContinuePayoff_pureSetRoot_eq_erase_of_nonempty
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (tail : Payoff ι) (S : Finset ι) (who : ι)
+    (herase : (S.erase who).Nonempty) :
+    quittingRootContinuePayoff reward tail (quittingPureSetRoot S) who =
+      quittingSetReward reward (S.erase who) who := by
+  rw [quittingRootContinuePayoff,
+    quittingRootExpectedPayoff_eq_absorbingContribution_add,
+    update_quittingPureSetRoot_false,
+    quittingRootAbsorbingContribution_pureSetRoot,
+    stationaryContinueMass_pureSetRoot_of_nonempty herase]
+  ring
+
+/-- At a singleton vertex, leaving does not pay the static empty-coalition
+value: it exposes the declared continuation coordinate exactly. -/
+theorem quittingRootContinuePayoff_pureSingleton_eq_tail
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (tail : Payoff ι) (owner : ι) :
+    quittingRootContinuePayoff reward tail
+        (quittingPureSetRoot ({owner} : Finset ι)) owner = tail owner := by
+  rw [quittingRootContinuePayoff,
+    quittingRootExpectedPayoff_eq_absorbingContribution_add,
+    update_quittingPureSetRoot_false]
+  rw [show ({owner} : Finset ι).erase owner = ∅ by simp]
+  rw [quittingRootAbsorbingContribution_pureSetRoot,
+    quittingStationaryContinueMass_pureSetRoot_empty,
+    quittingSetReward_empty]
+  ring
+
+/-- The full all-Continue continuation after one pure-coalition root is the
+declared tail profile, not merely an equality of terminal payoffs. -/
+theorem quittingProfileAllContinueContinuation_pureSetRootThenContinuation
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (S : Finset ι)
+    (continuation : (quittingGame reward).BehaviorProfile) :
+    quittingProfileAllContinueContinuation reward
+        (quittingRootThenContinuationProfile reward
+          (quittingPureSetRoot S) continuation) = continuation := by
+  simpa only [quittingProfileAllContinueContinuation] using
+    shiftProfile_quittingRootThenContinuationProfile reward
+      (quittingPureSetRoot S) continuation quittingAllContinueAction
+
+/-- If at least two players quit at the pure root, its whole terminal semantic
+pair is independent of the counterfactual behavioral tail.  Every player's
+Continue endpoint still contains a sure quitter. -/
+theorem quittingTerminalSemanticPair_pureSetRootThenContinuation_eq_of_two_le_card
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (S : Finset ι) (hcard : 2 ≤ S.card)
+    (continuation : (quittingGame reward).BehaviorProfile) :
+    quittingTerminalSemanticPair reward
+        (quittingRootThenContinuationProfile reward
+          (quittingPureSetRoot S) continuation) =
+      (quittingSetReward reward S,
+        fun who ↦ max (quittingSetReward reward (insert who S) who)
+          (quittingSetReward reward (S.erase who) who)) := by
+  apply Prod.ext
+  · funext who
+    exact quittingTerminalPayoff_pureSetRootThenContinuation_eq_setReward
+      S (Finset.card_pos.mp (by omega)) continuation who
+  · funext who
+    change quittingContinuationBestResponseValue reward
+        (quittingRootThenContinuationProfile reward
+          (quittingPureSetRoot S) continuation) who = _
+    rw [quittingContinuationBestResponseValue_rootThenContinuation_eq_max,
+      quittingRootQuitPayoff_pureSetRoot_eq_insert]
+    apply congrArg (max (quittingSetReward reward (insert who S) who))
+    apply quittingRootContinuePayoff_pureSetRoot_eq_erase_of_nonempty
+    rw [Finset.nonempty_iff_ne_empty]
+    by_cases hwho : who ∈ S
+    · exact Finset.nonempty_iff_ne_empty.mp (Finset.card_pos.mp (by
+        rw [Finset.card_erase_of_mem hwho]
+        omega))
+    · simpa [Finset.erase_eq_of_notMem hwho] using
+        (Finset.nonempty_iff_ne_empty.mp (Finset.card_pos.mp (by omega)))
+
 omit [Fintype ι] [DecidableEq ι] in
 /-- A singleton's extended set reward is its solo reward, at every payoff
 coordinate. -/
