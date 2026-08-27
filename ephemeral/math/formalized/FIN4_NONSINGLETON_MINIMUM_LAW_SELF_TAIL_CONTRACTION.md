@@ -447,7 +447,7 @@ atlas contraction is reachable through the Research reader umbrella.
    `uniformPayoff_or_exists_finFourMinimumAtomContractedConsumerResult_withResidualProvenance`
    retain the exact bounded-data source and residual while forgetting only the
    route tag.
-6. `Research/Quitting/FinFourProducerAtlas/MonodromyImpossible.lean` supplies
+6. `Research/Quitting/SameStageEndpointMonodromyImpossible.lean` supplies
    `not_nonempty_finFourSameStageEndpointClosedSegment`, which removes the raw
    dispatch's only nonsingleton output.  The strong packet and its unchanged
    final split are supplied by

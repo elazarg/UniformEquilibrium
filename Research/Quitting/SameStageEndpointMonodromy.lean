@@ -81,6 +81,32 @@ def quittingTerminalOfNonsingletonCoalition
     {S : Finset ι // S.Nonempty} :=
   ⟨coalition.1, coalition.nonempty⟩
 
+omit [Fintype ι] in
+/-- A one-coordinate route from a nonsingleton coalition can be a singleton
+only by making one member Continue from a two-player source. -/
+theorem quittingPureEndpointRoutedCoalition_card_eq_one_of_nonsingleton
+    (source : QuittingNonsingletonCoalition ι) (who : ι) (action : Bool)
+    (hcard :
+      (quittingPureEndpointRoutedCoalition source.1 who action).card = 1) :
+    action = false ∧ source.1.card = 2 := by
+  cases haction : action with
+  | false =>
+      refine ⟨rfl, ?_⟩
+      have hcardErase : (source.1.erase who).card = 1 := by
+        simpa [haction] using hcard
+      by_cases hmem : who ∈ source.1
+      · rw [Finset.card_erase_of_mem hmem] at hcardErase
+        omega
+      · rw [Finset.erase_eq_of_notMem hmem] at hcardErase
+        have hnonsingleton := source.2
+        omega
+  | true =>
+      have hcardInsert : (insert who source.1).card = 1 := by
+        simpa [haction] using hcard
+      have hle := Finset.card_le_card (Finset.subset_insert who source.1)
+      have hnonsingleton := source.2
+      omega
+
 theorem quittingRootCoalitionMass_pureCoalitionAction_eq_one
     (coalition : Finset ι) :
     quittingRootCoalitionMass
@@ -112,6 +138,47 @@ theorem quittingLiteralOneDateOverride_idem
     simp [quittingLiteralOneDateOverride]
   · simp [quittingLiteralOneDateOverride, htime]
 
+theorem quittingLiteralPureRootProfile_update_eq_routed
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) (coalition : Finset ι)
+    (who : ι) (action : Bool)
+    (target : Finset ι)
+    (htarget : target =
+      quittingPureEndpointRoutedCoalition coalition who action) :
+    Function.update
+        (quittingLiteralPureRootProfile reward profile stage
+          (quittingCoalitionAction coalition))
+        who
+        (quittingLiteralOneDateOverride
+          ((quittingLiteralPureRootProfile reward profile stage
+            (quittingCoalitionAction coalition)) who)
+          stage action) =
+      quittingLiteralPureRootProfile reward profile stage
+        (quittingCoalitionAction target) := by
+  funext player time history
+  by_cases hplayer : player = who
+  · subst player
+    have hroot : quittingCoalitionAction target who = action := by
+      rw [htarget]
+      rw [quittingCoalitionAction_routed]
+      simp
+    by_cases htime : time = stage
+    · subst time
+      simp [quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
+        hroot]
+    · simp [quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
+        htime]
+  · have hroot : quittingCoalitionAction target player =
+        quittingCoalitionAction coalition player := by
+      rw [htarget]
+      rw [quittingCoalitionAction_routed]
+      simp [hplayer]
+    simp [quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
+      hplayer, hroot]
+
+/-- Updating one coordinate of a literal pure coalition root gives the
+literal pure profile of its routed nonsingleton coalition. -/
 theorem quittingLiteralPureRootCoalitionProfile_update_eq_routed
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
@@ -126,34 +193,10 @@ theorem quittingLiteralPureRootCoalitionProfile_update_eq_routed
           ((quittingLiteralPureRootCoalitionProfile reward profile stage coalition) who)
           stage action) =
       quittingLiteralPureRootCoalitionProfile reward profile stage target := by
-  funext player time history
-  by_cases hplayer : player = who
-  · subst player
-    have hroot : quittingCoalitionAction target.1 who = action := by
-      rw [htarget]
-      change quittingCoalitionAction
-        (quittingPureEndpointRoutedCoalition coalition.1 who action) who = action
-      rw [quittingCoalitionAction_routed]
-      simp
-    by_cases htime : time = stage
-    · subst time
-      simp [quittingLiteralPureRootCoalitionProfile,
-        quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
-        quittingPureRootOfCoalition, hroot]
-    · simp [quittingLiteralPureRootCoalitionProfile,
-        quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
-        quittingPureRootOfCoalition, htime]
-  · have hroot : quittingCoalitionAction target.1 player =
-        quittingCoalitionAction coalition.1 player := by
-      rw [htarget]
-      change quittingCoalitionAction
-        (quittingPureEndpointRoutedCoalition coalition.1 who action) player =
-        quittingCoalitionAction coalition.1 player
-      rw [quittingCoalitionAction_routed]
-      simp [hplayer]
-    simp [quittingLiteralPureRootCoalitionProfile,
-      quittingLiteralPureRootProfile, quittingLiteralOneDateOverride,
-      quittingPureRootOfCoalition, hplayer, hroot]
+  simpa only [quittingLiteralPureRootCoalitionProfile,
+    quittingPureRootOfCoalition, quittingNonsingletonCoalitionRouted] using
+      quittingLiteralPureRootProfile_update_eq_routed reward profile stage
+        coalition.1 who action target.1 htarget
 
 omit [DecidableEq ι] in
 @[simp] theorem quittingLiteralOneDateOverride_self
@@ -691,6 +734,24 @@ theorem quittingTerminalSemanticPair_spine_literalPureRoot_tail_eq
   exact quittingTerminalSemanticPair_eq_of_liveRoot_eq reward _ _
     (quittingProfileLiveRoot_spine_literalPureRoot_tail_eq reward profile stage root)
 
+omit [DecidableEq ι] in
+/-- Replacing only the selected date's root preserves the probability of
+reaching that date. -/
+theorem quittingLiveMass_literalPureRootProfile_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) (root : ι → Bool) :
+    quittingLiveMass reward
+        (quittingLiteralPureRootProfile reward profile stage root) stage =
+      quittingLiveMass reward profile stage := by
+  rw [quittingLiveMass_eq_jointSurvivalWeight_profileLiveRoot,
+    quittingLiveMass_eq_jointSurvivalWeight_profileLiveRoot]
+  apply quittingJointSurvivalWeight_congr
+  intro time htime
+  simpa only [Nat.zero_add] using
+    (quittingProfileLiveRoot_literalPureRootProfile_of_ne
+      reward profile stage time root (Nat.ne_of_lt htime))
+
 theorem quittingStageCoalitionMass_literalPureRootCoalitionProfile_eq_liveMass
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
@@ -702,15 +763,8 @@ theorem quittingStageCoalitionMass_literalPureRootCoalitionProfile_eq_liveMass
   rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass]
   have hlive : quittingLiveMass reward
         (quittingLiteralPureRootCoalitionProfile reward profile stage source) stage =
-      quittingLiveMass reward profile stage := by
-    rw [quittingLiveMass_eq_jointSurvivalWeight_profileLiveRoot,
-      quittingLiveMass_eq_jointSurvivalWeight_profileLiveRoot]
-    apply quittingJointSurvivalWeight_congr
-    intro time htime
-    dsimp [quittingLiteralPureRootCoalitionProfile]
-    simpa only [Nat.zero_add] using
-      (quittingProfileLiveRoot_literalPureRootProfile_of_ne reward profile stage time
-        (quittingPureRootOfCoalition source.1) (Nat.ne_of_lt htime))
+      quittingLiveMass reward profile stage :=
+    quittingLiveMass_literalPureRootProfile_eq reward profile stage _
   rw [hlive]
   have hroot : quittingProfileLiveRoot reward
         (quittingLiteralPureRootCoalitionProfile reward profile stage source) stage =
@@ -991,6 +1045,33 @@ def QuittingSameStageSingletonRoute
           (quittingLiteralPureRootCoalitionProfile reward profile stage source)
           who stage action) stage singleton
 
+/-- A two-player same-stage vertex already has a mass-preserving route to a
+singleton, independently of minimum or gain data. -/
+theorem quittingSameStageSingletonRoute_of_card_eq_two
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (stage : ℕ)
+    (source : QuittingNonsingletonCoalition ι)
+    (hcard : source.1.card = 2) :
+    QuittingSameStageSingletonRoute reward profile stage source := by
+  have hcard_pos : 0 < source.1.card := by rw [hcard]; omega
+  have hnonempty : source.1.Nonempty := Finset.card_pos.mp hcard_pos
+  obtain ⟨who, hwho⟩ := hnonempty
+  let routed := quittingPureEndpointRoutedCoalition source.1 who false
+  have hrouted : routed.Nonempty :=
+    quittingPureEndpointRoutedCoalition_nonempty_of_one_lt_card
+      source.1 who false source.2
+  let singleton : {S : Finset ι // S.Nonempty} := ⟨routed, hrouted⟩
+  refine ⟨who, false, singleton, ?_, rfl, ?_⟩
+  · dsimp only [singleton, routed]
+    rw [quittingPureEndpointRoutedCoalition_false,
+      Finset.card_erase_of_mem hwho, hcard]
+  · rw [quittingStageCoalitionMass_literalOneDateProfile_eq_canonical]
+    obtain ⟨hrouted', hmass⟩ := quittingStageCoalitionMass_le_stagePureEndpointRouted
+      reward
+      (quittingLiteralPureRootCoalitionProfile reward profile stage source)
+      who stage (quittingTerminalOfNonsingletonCoalition source) false source.2
+    simpa only [singleton, routed, quittingTerminalOfNonsingletonCoalition] using hmass
+
 def QuittingSameStageEndpointDispatch
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
@@ -1214,6 +1295,75 @@ theorem QuittingSameStageEndpointEdge.target_eq_singlePlayer_toggle
     apply Subtype.ext
     rw [edge.target_eq_routed]
     exact hsame.2.2.symm
+
+/-- A strict same-stage endpoint edge changes exactly the mover's Boolean
+coalition membership. -/
+theorem QuittingSameStageEndpointEdge.target_eq_toggle
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {profile : (quittingGame reward).BehaviorProfile}
+    {stage : ℕ} {minimum : QuittingTerminalSemanticPair ι} {lambda : ℝ}
+    {source target : QuittingNonsingletonCoalition ι}
+    (edge : QuittingSameStageEndpointEdge reward profile stage minimum lambda
+      source target) :
+    target.1 = quittingToggleCoalition source.1 edge.who := by
+  rcases edge.target_eq_singlePlayer_toggle with hdrop | hjoin
+  · rw [quittingToggleCoalition_of_mem hdrop.2.2]
+    exact hdrop.1.symm
+  · rw [quittingToggleCoalition_of_notMem hjoin.2.2]
+    exact hjoin.1.symm
+
+omit [Fintype ι] in
+private theorem eq_of_toggle_toggle_eq_sameStage
+    (coalition : Finset ι) (first second : ι)
+    (hreturn : quittingToggleCoalition
+      (quittingToggleCoalition coalition first) second = coalition) :
+    second = first := by
+  by_contra hne
+  have hmembership := congrArg (fun target => first ∈ target) hreturn
+  by_cases hfirst : first ∈ coalition
+  · by_cases hsecond : second ∈ coalition
+    · simp [quittingToggleCoalition, hfirst, hsecond, hne] at hmembership
+    · simp [quittingToggleCoalition, hfirst, hsecond, hne] at hmembership
+      exact hne hmembership.symm
+  · by_cases hsecond : second ∈ coalition
+    · simp [quittingToggleCoalition, hfirst, hsecond, hne] at hmembership
+      exact hne hmembership.symm
+    · simp [quittingToggleCoalition, hfirst, hsecond, hne] at hmembership
+
+/-- Exact positive mover-debt subtraction forbids an immediate reverse
+same-stage endpoint edge. -/
+theorem QuittingSameStageEndpointEdge.not_reverse
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {profile : (quittingGame reward).BehaviorProfile}
+    {stage : ℕ} {minimum : QuittingTerminalSemanticPair ι} {lambda : ℝ}
+    {source target : QuittingNonsingletonCoalition ι}
+    (first : QuittingSameStageEndpointEdge reward profile stage minimum lambda
+      source target)
+    (second : QuittingSameStageEndpointEdge reward profile stage minimum lambda
+      target source) : False := by
+  have hreturn : quittingToggleCoalition
+        (quittingToggleCoalition source.1 first.who) second.who = source.1 := by
+    rw [← first.target_eq_toggle, ← second.target_eq_toggle]
+  have hwho : second.who = first.who :=
+    eq_of_toggle_toggle_eq_sameStage source.1 first.who second.who hreturn
+  let sourceDebt := quittingTerminalSemanticDebt
+    (quittingTerminalSemanticPair reward
+      (quittingLiteralPureRootCoalitionProfile reward profile stage source)) first.who
+  let targetDebt := quittingTerminalSemanticDebt
+    (quittingTerminalSemanticPair reward
+      (quittingLiteralPureRootCoalitionProfile reward profile stage target)) first.who
+  have hfirstDebt : targetDebt = sourceDebt -
+      quittingSameStageCoalitionGain reward profile stage source
+        first.who first.action := by
+    simpa [sourceDebt, targetDebt] using first.mover_debt
+  have hsecondDebt : sourceDebt = targetDebt -
+      quittingSameStageCoalitionGain reward profile stage target
+        first.who second.action := by
+    simpa [sourceDebt, targetDebt, hwho] using second.mover_debt
+  have hsecondGain : 0 < quittingSameStageCoalitionGain reward profile stage
+      target first.who second.action := by
+    simpa [hwho] using second.gain_pos
+  linarith [first.gain_pos, hsecondGain]
 
 theorem dispatchedClosedSegment_period_ne_one
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
