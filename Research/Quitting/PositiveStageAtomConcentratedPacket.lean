@@ -277,6 +277,61 @@ theorem targetStageMass_pos
       adapter.routedTerminal :=
   adapter.resolution_pos.trans_le adapter.resolution_le_targetStageMass
 
+/-- The actual payoff gain made by the packet owner's literal best-endpoint
+update.  This is a complete behavioral-profile payoff difference, not only a
+one-row or stationary comparison. -/
+def sourceToTargetGain
+    (adapter : QuittingStageAtomConcentratedPacketAdapter reward sourceProfile
+      sourceTerminal owner stage resolution) : ℝ :=
+  quittingTerminalPayoff reward adapter.targetProfile owner -
+    quittingTerminalPayoff reward sourceProfile owner
+
+/-- The literal source-to-target gain is exactly reached live mass times the
+owner's coordinate Nash defect at the actual source row and shifted tail. -/
+theorem sourceToTargetGain_eq_liveMass_mul_defect
+    (adapter : QuittingStageAtomConcentratedPacketAdapter reward sourceProfile
+      sourceTerminal owner stage resolution) :
+    adapter.sourceToTargetGain =
+      quittingLiveMass reward sourceProfile stage *
+        quittingRootCoordinateNashDefect reward adapter.sourceTail.1
+          adapter.sourceRoot owner := by
+  simpa only [sourceToTargetGain, targetProfile, action, sourceTail, sourceRoot]
+    using quittingTerminalPayoff_literalOneDateProfile_bestEndpoint_gain_eq
+      reward sourceProfile owner stage
+
+/-- Monotone lower-bound form of the exact gain identity.  The candidate
+defect floor is required to be nonnegative; the actual live mass is
+nonnegative by construction. -/
+theorem sourceToTargetGain_lowerBound
+    (adapter : QuittingStageAtomConcentratedPacketAdapter reward sourceProfile
+      sourceTerminal owner stage resolution)
+    (liveLower defectLower : ℝ)
+    (hlive : liveLower ≤ quittingLiveMass reward sourceProfile stage)
+    (hdefectNonneg : 0 ≤ defectLower)
+    (hdefect : defectLower ≤
+      quittingRootCoordinateNashDefect reward adapter.sourceTail.1
+        adapter.sourceRoot owner) :
+    liveLower * defectLower ≤ adapter.sourceToTargetGain := by
+  rw [adapter.sourceToTargetGain_eq_liveMass_mul_defect]
+  exact mul_le_mul hlive hdefect hdefectNonneg
+    (quittingLiveMass_nonneg reward sourceProfile stage)
+
+/-- Updating only the packet owner's strategy leaves that owner's unrestricted
+cap fixed, so the actual payoff gain is subtracted exactly from its terminal
+semantic debt. -/
+theorem targetOwnerDebt_eq_sourceOwnerDebt_sub_gain
+    (adapter : QuittingStageAtomConcentratedPacketAdapter reward sourceProfile
+      sourceTerminal owner stage resolution) :
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward adapter.targetProfile) owner =
+      quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward sourceProfile) owner -
+        adapter.sourceToTargetGain := by
+  simpa only [targetProfile, action, sourceTail, sourceRoot,
+    sourceToTargetGain] using
+      quittingTerminalSemanticDebt_literalOneDateProfile_bestEndpoint_eq_sub_gain
+        reward sourceProfile owner stage
+
 /-- The packet owner's marked local coordinate defect is exactly zero against
 the unchanged actual post-date tail. -/
 theorem ownerMarkedDefect_eq_zero

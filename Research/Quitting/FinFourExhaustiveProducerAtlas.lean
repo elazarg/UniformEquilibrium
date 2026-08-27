@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.LiteralNoGo
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
@@ -17,6 +18,8 @@ The atlas has six source-distinct tagged leaves, a four-node semantic
 normalization, and an additive owner-clock compression to three directed
 obligations.  The weak concentrated-singleton node now has a source-attached
 strong packet and an exact strategic-versus-collision-minimum contraction.
+Every weak singleton core also has a direct one-row forced-pair endpoint with
+a positive paid move on another coordinate; no return family is inferred.
 Pure collision screening sends every nonsingleton minimum atom into the same
 consumer without a tail split or near-minimum selected row.
 The same-stage monodromy leaf is impossible, so the exact coverage residual
