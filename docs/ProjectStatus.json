@@ -524,6 +524,24 @@
       "scope": "The production-semantic individually rational, near-feasible finite-orbit carrier is equivalent to the corresponding arbitrarily-large finite-variation condition. HasQuittingSimonFiniteCellLyapunovCertificate and its direct obstruction adapter consume supplied exact finite-cell data; the combined terminal-gap capstone additionally assumes SuppliedQuittingSimonFiniteOrbitNecessity, exclusion of stationarily generated approximate equilibria, exclusion of instant punishment, and one positive Lyapunov scale. The necessity implication, certificate, and chronological strategy remain unproved."
     },
     {
+      "id": "finite-cycle-weighted-aggregation",
+      "subject": "Finite cyclic weighted aggregation",
+      "kind": "Unconditional quantitative theorem",
+      "declaration": "exists_player_base_ge_eta_div_two_card",
+      "source": "MathUE/FiniteCycleAggregate.lean",
+      "umbrella": "MathUE.lean",
+      "scope": "For finite nonempty player and phase types, nonnegative survival coefficients, a strict joint contraction, and the stated cyclic one-step inequalities imply that some player has base value at least eta divided by twice the player cardinality. The theorem is game-independent aggregation infrastructure and consumes its coefficient, contraction, and recurrence hypotheses."
+    },
+    {
+      "id": "normalized-hazard-seam-compactness",
+      "subject": "Finite normalized-hazard seam compactness",
+      "kind": "Unconditional compactness theorem",
+      "declaration": "exists_normalizedHazard_subsequence_kernel",
+      "source": "MathUE/LocalPeriodicAnchor.lean",
+      "umbrella": "MathUE.lean",
+      "scope": "For a fixed finite player type, nonnegative positive periodic hazards, vanishing normalized signed seams, and a vanishing normalized matrix residual, a subsequence of normalized cumulative hazards converges to a nonnegative simplex kernel. The result is game-independent compactness; it does not produce periodic blocks or game-semantic hypotheses."
+    },
+    {
       "id": "sorin-uniform-payoff-segment",
       "subject": "Sorin's absorbing-game uniform-payoff segment",
       "kind": "Unconditional theorem",
