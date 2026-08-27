@@ -512,6 +512,24 @@ monodromy, or complementary-pair monodromy.  The same file's
 `FinFourMonodromyProducer.edge_stageMass_noLoss` expose the terminal
 singleton's mass floor with preserved post-date semantics, the exact
 `mu^2 D_*/64` gain floor, exact mover-debt decrease, and no-loss routing.
+The stronger theorem
+`sameStageEndpointTrace_false_of_visitedSupport_card_le_four`
+(`Research/Quitting/FinFourProducerAtlas/MonodromyImpossible.lean`) proves that
+no such same-stage dispatched trace exists whenever the literal union of its
+visited coalitions has cardinality at most four, even if the ambient finite
+player type is larger.  The Fin4 adapters
+`not_nonempty_finFourMonodromyProducer`,
+`not_nonempty_finFourCommonHostMonodromyProducer`, and
+`not_nonempty_finFourComplementaryPairMonodromyProducer` therefore eliminate
+both monodromy tags using the producer's stored trace alone.  The source- and
+witness-preserving eliminator `FinFourProducerResidual.withoutMonodromy` and
+the global bounded-data theorem
+`uniformPayoff_or_nonempty_finFourProducerResidualWithoutMonodromy` contract
+the atlas residual to minimum singleton, purified singleton, terminal
+singleton, or quantitative tail escape.  This no-go has `M`, `L`, `A`, and
+`C` for literal branch deletion.  It does not consume any surviving tag,
+prove a uniform-equilibrium payoff, or complete the atlas; the five-player
+sharpness construction stated in the source packet is not checked in Lean.
 The semantic adapter
 `FinFourProducerResidual.nonempty_directedNode`
 (`Research/Quitting/FinFourProducerAtlas/SemanticConnections.lean`) preserves
@@ -618,15 +636,16 @@ Finally,
 `FinFourMonodromyProducer.every_edge_no_literalExactification`
 (`Research/Quitting/FinFourProducerAtlas/LiteralNoGo.lean`) excludes only an
 exact Nash--Bellman embedding which preserves the displayed root and shifted
-tail payoff.  The six-leaf atlas, its four-node view, and the clock-compressed
-three-node view have `M`, `L`, and `A`; the strong concentrated-singleton route
-additionally has `C` for the exact contraction above, not for a completion
-theorem.  The atlas constructors remain data alternatives rather than a
-uniqueness or table-level pairwise-exclusivity theorem.  The strong target is
-not asserted full-root Nash or near-minimal, and the retained exact cap-root
-stack remains a certificate for the unmodified source suffix.  No return,
-regeneration, recursive descent, backward compiler, chronology return,
-completion closure, or downstream uniform-payoff consumer is supplied.
+tail payoff.  For an actual Fin4 monodromy producer this older projection is
+vacuous because the producer itself is now impossible.  The original six-leaf
+atlas, its four-node view, and the clock-compressed three-node view have `M`,
+`L`, and `A`; monodromy deletion and the strong concentrated-singleton
+contraction each have their separately stated `C`, not a completion theorem.
+The strong target is not asserted full-root Nash or near-minimal, and the
+retained exact cap-root stack remains a certificate for the unmodified source
+suffix.  No return, regeneration, recursive descent, backward compiler,
+chronology return, completion closure, or downstream uniform-payoff consumer
+is supplied.
 
 As a separate Research side result, the Fin4 deletion producer
 `finFourDeletionNearCap_collisionDispatch_distinct_with_bounds`
