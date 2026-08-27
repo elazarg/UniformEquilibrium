@@ -74,6 +74,7 @@ import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
 import Research.Quitting.FinFourExhaustiveProducerAtlas
 import Research.Quitting.FinFourProducerAtlas.ActualLowTail
+import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCommonPrefixScreening
 import Research.Quitting.FinFourProducerAtlas.SelfTailContraction
 import Research.Quitting.FinFourSameStageEndpointMonodromy
 import Research.Quitting.FiniteClockPolynomialCenter
