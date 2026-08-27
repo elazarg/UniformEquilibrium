@@ -512,15 +512,39 @@ monodromy, or complementary-pair monodromy.  The same file's
 `FinFourMonodromyProducer.edge_stageMass_noLoss` expose the terminal
 singleton's mass floor with preserved post-date semantics, the exact
 `mu^2 D_*/64` gain floor, exact mover-debt decrease, and no-loss routing.
+The semantic adapter
+`FinFourProducerResidual.nonempty_directedNode`
+(`Research/Quitting/FinFourProducerAtlas/SemanticConnections.lean`) preserves
+the origin tag of either reached-singleton route and normalizes the six leaves
+to four data-carrying nodes: minimum-law singleton, concentrated reached
+singleton, quantitative tail escape, or monodromy with exact retained
+geometry.  `FinFourAtlasConcentratedSingletonEndpoint.postDateTail_eq` derives
+the common semantic tail from literal post-date live-root equality, and
+`not_commonHost_and_complementaryPair_sameTrace` proves that common-host and
+complementary-pair geometry cannot coexist on one fixed trace.  It does not
+exclude different traces with different geometries on the same source or
+reward table.  Composing this adapter with the six-leaf coverage gives
+`uniformPayoff_or_nonempty_finFourAtlasDirectedNode`
+(`Research/Quitting/FinFourProducerAtlas/SemanticCoverage.lean`) for arbitrary
+bounded Fin4 reward data.
+
+The same semantic-coverage module also provides
+`FinFourComplementaryPairMonodromyProducer.nonempty_prescribedPairPaidCapSemanticDispatch_reselectingSource`.
+It keeps the same reward table, the terminal-exploitability witness stored in
+the same hard residual, and one displayed complementary pair as a prescribed
+base label.  It reselects the semantic minimum, stationary profile, paid row,
+and cap chronology and does not use the monodromy orbit or edge data.  Thus it
+is a same-label producer bridge, not a consumer of the monodromy dynamics.
 Finally,
 `FinFourMonodromyProducer.every_edge_no_literalExactification`
 (`Research/Quitting/FinFourProducerAtlas/LiteralNoGo.lean`) excludes only an
 exact Nash--Bellman embedding which preserves the displayed root and shifted
-tail payoff.  The atlas has `M`, `L`, and `A`, but no `C`: its constructors are
-provenance-distinct tags rather than a uniqueness or pairwise-exclusivity
-theorem, `FinFourProducerResidual.completionContract` only names four open
-obligations, and there is no recursive descent, rank, backward compiler,
-regeneration, chronology return, or downstream uniform-payoff consumer.
+tail payoff.  The six-leaf atlas and its four-node normalization have `M`, `L`,
+and `A`, but no `C`: their constructors are data alternatives rather than a
+uniqueness or table-level pairwise-exclusivity theorem,
+`FinFourProducerResidual.completionContract` only names four open obligations,
+and there is no recursive descent, rank, backward compiler, regeneration,
+chronology return, completion closure, or downstream uniform-payoff consumer.
 
 As a separate Research side result, the Fin4 deletion producer
 `finFourDeletionNearCap_collisionDispatch_distinct_with_bounds`
@@ -748,7 +772,20 @@ the live mathematical ledger.
   laws, observers, payoffs, or chronological rows coincide; that common-source
   alignment and the all-Continue reset wall remain open.
 
-  A different pair-base construction now co-realizes more data on one literal
+  Separately, `nonempty_finFourPairBasePaidCapSemanticDispatch`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidCapSemanticDispatch.lean`)
+  takes any prescribed two-player base and a terminal-exploitability witness
+  to a stationary paid source on exactly that base, a positive global semantic
+  minimum, and the summable cap port lifted from the same literal paid row.
+  Its hard-residual adapter preserves the reward table and pair label, and
+  `uniformPayoff_or_exists_pairBasePaidCapSemanticDispatch` removes even the
+  hard-residual and reward-bound inputs.  The semantic minimum, stationary
+  profile, paid row, and cap chronology are freshly selected.  Thus this is a
+  prescribed-label producer, not an atlas source/trace adapter or monodromy
+  consumer, and it supplies no restart, cumulative-charge near-return, or
+  uniform-payoff consumer for the port.
+
+  A different pair-base construction co-realizes more data on one literal
   stationary profile. `nonempty_finFourPairBaseStationaryDebtLocalization`
   (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBaseStationaryDebtLocalization.lean`)
   solves both players outside any prescribed two-player sure-Quit base and
