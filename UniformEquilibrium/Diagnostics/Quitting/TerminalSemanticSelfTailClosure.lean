@@ -82,6 +82,21 @@ theorem quittingStageCoalitionMass_selfTailClosure
   exact quittingProfileLiveRoot_selfTailClosure_eq_of_le
     reward profile stage time htime
 
+/-- Restarting an arbitrary behavioral tail after a copied live-root prefix
+preserves every unconditional coalition atom at the final copied date. -/
+theorem quittingStageCoalitionMass_crossTailClosure
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) (terminal : {S : Finset ι // S.Nonempty}) :
+    quittingStageCoalitionMass reward
+        (quittingCrossTailClosure reward prefixProfile tailProfile stage)
+        stage terminal =
+      quittingStageCoalitionMass reward prefixProfile stage terminal := by
+  apply quittingStageCoalitionMass_eq_of_liveRoot_eq_of_le
+  intro time htime
+  exact quittingProfileLiveRoot_crossTailClosure_eq_of_le
+    reward prefixProfile tailProfile stage time htime
+
 /-- The post-date terminal-semantic pair of a self-tail closure is exactly the
 pair of the original complete profile. -/
 theorem quittingTerminalSemanticPair_spine_selfTailClosure
@@ -92,6 +107,19 @@ theorem quittingTerminalSemanticPair_spine_selfTailClosure
           (quittingSelfTailClosure reward profile stage) (stage + 1)) =
       quittingTerminalSemanticPair reward profile := by
   rw [quittingAllContinueProfileSpine_selfTailClosure]
+
+/-- The post-date terminal-semantic pair of a cross-tail closure is exactly
+the pair of the independently restarted tail profile. -/
+theorem quittingTerminalSemanticPair_spine_crossTailClosure
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) :
+    quittingTerminalSemanticPair reward
+        (quittingAllContinueProfileSpine reward
+          (quittingCrossTailClosure reward prefixProfile tailProfile stage)
+          (stage + 1)) =
+      quittingTerminalSemanticPair reward tailProfile := by
+  rw [quittingAllContinueProfileSpine_crossTailClosure]
 
 /-- The post-date spine debt excess of a self-tail closure is exactly the
 original profile's literal total debt minus the displayed reference level. -/
@@ -104,6 +132,20 @@ theorem quittingSpineDebtExcess_selfTailClosure
       quittingTerminalDebtSum reward profile - reference := by
   unfold quittingSpineDebtExcess
   rw [quittingAllContinueProfileSpine_selfTailClosure]
+  rfl
+
+/-- The post-date spine debt excess of a cross-tail closure is exactly the
+restarted tail profile's total debt minus the displayed reference level. -/
+theorem quittingSpineDebtExcess_crossTailClosure
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) (reference : ℝ) :
+    quittingSpineDebtExcess reward
+        (quittingCrossTailClosure reward prefixProfile tailProfile stage)
+        reference (stage + 1) =
+      quittingTerminalDebtSum reward tailProfile - reference := by
+  unfold quittingSpineDebtExcess
+  rw [quittingAllContinueProfileSpine_crossTailClosure]
   rfl
 
 end GameTheory
