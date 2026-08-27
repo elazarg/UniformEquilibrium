@@ -778,6 +778,29 @@ after a horizontal endpoint change nor gives support descent, source
 regeneration, recursive return, terminal approximation, a uniform-equilibrium
 payoff, or a counterexample.
 
+The strict arm now has a further actual source split in
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.eventualAllContinue_or_nonempty_strictRayForwardExactCapTail`
+(`Research/Quitting/FinFourProducerAtlas/StrictRayTailNormalizedCapFlow.lean`).
+A zero selected maximal root is literally all Continue, fixes the autonomous
+semantic orbit from that date onward, and is the unique exact root at the
+fixed cap.  Otherwise the selected roots form an actual positive-hazard
+`QuittingForwardExactCapTail` (`Research/Quitting/ForwardExactCapTailFlow.lean`)
+with the same packet source and ray.  Its limiting cap, singleton lower bound,
+summable total hazard, exact `QuittingForwardExactCapTail.tailAverage_renewal`,
+and eventual binding-support theorem
+`QuittingForwardExactCapTail.eventually_currentHazard_supported_binding` are
+source-derived.  This layer has `M`, `L`, and `A`, but no `C`.
+
+The nested `FinFourStrictRayForwardExactCapTail.Analysis` is intentionally a
+conditional extension: it accepts, rather than derives, a
+`QuittingTailNormalizedCapFlow`.  The resulting collision nonpositivity,
+complementarity, and diffuse-solo identities have `M` and `L` only.  There is
+no checked producer for the needed first-order product-error estimates or the
+tail-normalized certificate, and no finite-clock cap attainment,
+cardinal-three, return, rank decrease, strict-ray contradiction, or
+uniform-equilibrium consumer.  These remain partial Research interfaces, not
+a completed strict-tail packet.
+
 The canonical pair's literal paid endpoint now also has a checked one-time
 support-rank handoff.  The generic theorem
 `exists_minimumEndpointSupportRankHandoff_or_debtAscent`
