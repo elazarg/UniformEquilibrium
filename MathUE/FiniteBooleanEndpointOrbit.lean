@@ -189,7 +189,13 @@ theorem exists_minimalClosedSegment (orbit : ℕ → State) :
       exact hoffsets
   }⟩
 
-/-- A total orbit with a certified edge only at its nonterminal positions. -/
+/-- A bounded orbit stopped at its first terminal vertex.
+
+The edge relation is part of the data: every step strictly before
+`terminal_time` is certified.  No edge is asserted from the terminal vertex.
+The explicit first-terminal field lets game-facing consumers recover the
+whole finite dispatched path without reconstructing the choice function used
+by the existence theorem. -/
 structure DispatchedOrbit (terminal : State → Prop)
     (edge : State → State → Prop) (start : State) where
   /-- The orbit chosen from the local dispatch rule. -/
@@ -198,7 +204,31 @@ structure DispatchedOrbit (terminal : State → Prop)
   orbit_zero : orbit 0 = start
   /-- A terminal vertex occurs in the bounded prefix. -/
   terminal_time : Fin (Fintype.card State + 1)
+  /-- No earlier vertex is terminal. -/
+  not_terminal_before : ∀ time : ℕ, time < terminal_time →
+    ¬terminal (orbit time)
+  /-- Every step before the first terminal vertex is a dispatched edge. -/
+  edge_before : ∀ time : ℕ, time < terminal_time →
+    edge (orbit time) (orbit (time + 1))
   terminal_at : terminal (orbit terminal_time)
+
+namespace DispatchedOrbit
+
+/-- Forget some edge data while retaining the identical stopped orbit. -/
+def mapEdge
+    {terminal : State → Prop} {edge edge' : State → State → Prop}
+    {start : State} (trace : DispatchedOrbit terminal edge start)
+    (map : ∀ source target, edge source target → edge' source target) :
+    DispatchedOrbit terminal edge' start where
+  orbit := trace.orbit
+  orbit_zero := trace.orbit_zero
+  terminal_time := trace.terminal_time
+  not_terminal_before := trace.not_terminal_before
+  edge_before := fun time htime =>
+    map _ _ (trace.edge_before time htime)
+  terminal_at := trace.terminal_at
+
+end DispatchedOrbit
 
 /-- A closed segment of an orbit whose in-period steps are dispatched edges. -/
 structure DispatchedClosedSegment (terminal : State → Prop)
@@ -216,6 +246,22 @@ structure DispatchedClosedSegment (terminal : State → Prop)
   offset_edge : ∀ offset : Fin segment.segment.period,
     edge (orbit (segment.segment.start + offset))
       (orbit (segment.segment.start + offset + 1))
+
+namespace DispatchedClosedSegment
+
+/-- Forget some edge data while retaining the identical closed segment. -/
+def mapEdge
+    {terminal : State → Prop} {edge edge' : State → State → Prop}
+    {start : State} (trace : DispatchedClosedSegment terminal edge start)
+    (map : ∀ source target, edge source target → edge' source target) :
+    DispatchedClosedSegment terminal edge' start where
+  orbit := trace.orbit
+  segment := trace.segment
+  orbit_zero := trace.orbit_zero
+  offset_not_terminal := trace.offset_not_terminal
+  offset_edge := fun offset => map _ _ (trace.offset_edge offset)
+
+end DispatchedClosedSegment
 
 /-- Local dispatch gives either a bounded terminal occurrence or a bounded
 simple closed segment.  No edge is asserted after a terminal vertex. -/
@@ -244,12 +290,37 @@ theorem exists_dispatchedOrbit_terminal_or_closedSegment
   by_cases hterminal : ∃ time : Fin (Fintype.card State + 1),
       terminal (orbit time)
   · left
-    obtain ⟨time, htime⟩ := hterminal
+    have hterminalNat : ∃ time : ℕ,
+        time < Fintype.card State + 1 ∧ terminal (orbit time) := by
+      obtain ⟨time, htime⟩ := hterminal
+      exact ⟨time, time.isLt, htime⟩
+    let firstTerminal : ℕ := Nat.find hterminalNat
+    have hfirstTerminal := Nat.find_spec hterminalNat
+    have hfirstTerminal_lt : firstTerminal < Fintype.card State + 1 :=
+      hfirstTerminal.1
+    let time : Fin (Fintype.card State + 1) :=
+      ⟨firstTerminal, hfirstTerminal_lt⟩
+    have hnotTerminalBefore : ∀ candidate : ℕ, candidate < firstTerminal →
+        ¬terminal (orbit candidate) := by
+      intro candidate hcandidate hbad
+      have hcandidateBound : candidate < Fintype.card State + 1 :=
+        hcandidate.trans hfirstTerminal_lt
+      have hminimal := Nat.find_min' hterminalNat
+        (show candidate < Fintype.card State + 1 ∧ terminal (orbit candidate) from
+          ⟨hcandidateBound, hbad⟩)
+      omega
     exact ⟨{
       orbit := orbit
       orbit_zero := horbit_zero
       terminal_time := time
-      terminal_at := htime
+      not_terminal_before := by
+        intro candidate hcandidate
+        exact hnotTerminalBefore candidate hcandidate
+      edge_before := by
+        intro candidate hcandidate
+        rw [horbit_succ]
+        exact hsuccessor _ (hnotTerminalBefore candidate hcandidate)
+      terminal_at := hfirstTerminal.2
     }⟩
   · right
     have hno_terminal : ∀ time : Fin (Fintype.card State + 1),
@@ -306,6 +377,110 @@ theorem NonsingletonCoalition.nonempty
     intro hempty
     have hcard := coalition.property
     simp [hempty] at hcard)
+
+namespace DispatchedOrbit
+
+/-- A stopped nonsingleton-coalition orbit inside at most four effective
+players reaches its terminal predicate within three dispatched steps.
+
+This statement is purely combinatorial.  Nonterminal coalitions have size at
+least three, each edge changes coalition cardinality by one, and immediate
+edge reversal is forbidden.  Thus sizes alternate between three and four.
+Among four effective players, four consecutive nonterminal vertices would
+force the two size-four vertices at distance two to coincide, producing an
+immediate reverse. -/
+theorem terminal_time_le_three_of_effectiveSupport_card_le_four
+    {Player : Type*} [Fintype Player] [DecidableEq Player]
+    {terminal : NonsingletonCoalition Player → Prop}
+    {edge : NonsingletonCoalition Player →
+      NonsingletonCoalition Player → Prop}
+    {start : NonsingletonCoalition Player}
+    (trace : DispatchedOrbit terminal edge start)
+    (support : Finset Player)
+    (hcontained : ∀ time : ℕ, time ≤ trace.terminal_time →
+      (trace.orbit time).1 ⊆ support)
+    (hcardTwoTerminal : ∀ state : NonsingletonCoalition Player,
+      state.1.card = 2 → terminal state)
+    (hedgeCard : ∀ {source target}, edge source target →
+      target.1.card + 1 = source.1.card ∨
+        source.1.card + 1 = target.1.card)
+    (hnoReverse : ∀ {source target}, edge source target →
+      edge target source → False)
+    (hsupport : support.card ≤ 4) :
+    trace.terminal_time.val ≤ 3 := by
+  by_contra hnot
+  have hthree : 3 < trace.terminal_time.val := by omega
+  have hbefore : ∀ time : ℕ, time ≤ 3 →
+      ¬terminal (trace.orbit time) := by
+    intro time htime
+    exact trace.not_terminal_before time (by omega)
+  have hcardBounds : ∀ time : ℕ, time ≤ 3 →
+      3 ≤ (trace.orbit time).1.card ∧
+        (trace.orbit time).1.card ≤ 4 := by
+    intro time htime
+    have hnonsingleton := (trace.orbit time).2
+    have hneTwo : (trace.orbit time).1.card ≠ 2 := by
+      intro hcard
+      exact hbefore time htime (hcardTwoTerminal _ hcard)
+    have hsubset := hcontained time (by omega)
+    exact ⟨by omega, (Finset.card_le_card hsubset).trans hsupport⟩
+  have hedge : ∀ time : ℕ, time ≤ 2 →
+      edge (trace.orbit time) (trace.orbit (time + 1)) := by
+    intro time htime
+    exact trace.edge_before time (by omega)
+  have hstep : ∀ time : ℕ, time ≤ 2 →
+      ((trace.orbit time).1.card = 3 ∧
+          (trace.orbit (time + 1)).1.card = 4) ∨
+        ((trace.orbit time).1.card = 4 ∧
+          (trace.orbit (time + 1)).1.card = 3) := by
+    intro time htime
+    have hsource := hcardBounds time (by omega)
+    have htarget := hcardBounds (time + 1) (by omega)
+    rcases hedgeCard (hedge time htime) with hdrop | hjoin
+    · exact Or.inr ⟨by omega, by omega⟩
+    · exact Or.inl ⟨by omega, by omega⟩
+  by_cases hzero : (trace.orbit 0).1.card = 4
+  · have hone : (trace.orbit 1).1.card = 3 :=
+      ((hstep 0 (by omega)).resolve_left (fun h => by omega)).2
+    have htwo : (trace.orbit 2).1.card = 4 :=
+      ((hstep 1 (by omega)).resolve_right (fun h => by omega)).2
+    have hzeroSupport : (trace.orbit 0).1 = support := by
+      apply Finset.eq_of_subset_of_card_le (hcontained 0 (by omega))
+      omega
+    have htwoSupport : (trace.orbit 2).1 = support := by
+      apply Finset.eq_of_subset_of_card_le (hcontained 2 (by omega))
+      omega
+    have horbit : trace.orbit 2 = trace.orbit 0 := by
+      apply Subtype.ext
+      rw [hzeroSupport, htwoSupport]
+    have hforward := hedge 0 (by omega)
+    have hbackward := hedge 1 (by omega)
+    rw [horbit] at hbackward
+    exact hnoReverse hforward hbackward
+  · have hzeroThree : (trace.orbit 0).1.card = 3 := by
+      rcases hcardBounds 0 (by omega) with ⟨hlower, hupper⟩
+      omega
+    have hone : (trace.orbit 1).1.card = 4 :=
+      ((hstep 0 (by omega)).resolve_right (fun h => by omega)).2
+    have htwo : (trace.orbit 2).1.card = 3 :=
+      ((hstep 1 (by omega)).resolve_left (fun h => by omega)).2
+    have hthreeCard : (trace.orbit 3).1.card = 4 :=
+      ((hstep 2 (by omega)).resolve_right (fun h => by omega)).2
+    have honeSupport : (trace.orbit 1).1 = support := by
+      apply Finset.eq_of_subset_of_card_le (hcontained 1 (by omega))
+      omega
+    have hthreeSupport : (trace.orbit 3).1 = support := by
+      apply Finset.eq_of_subset_of_card_le (hcontained 3 (by omega))
+      omega
+    have horbit : trace.orbit 3 = trace.orbit 1 := by
+      apply Subtype.ext
+      rw [honeSupport, hthreeSupport]
+    have hforward := hedge 1 (by omega)
+    have hbackward := hedge 2 (by omega)
+    rw [horbit] at hbackward
+    exact hnoReverse hforward hbackward
+
+end DispatchedOrbit
 
 private def subtypeEquivOfIff {α : Type*} {p q : α → Prop}
     (h : ∀ value, p value ↔ q value) : {value // p value} ≃ {value // q value} :=

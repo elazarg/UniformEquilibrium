@@ -514,7 +514,7 @@ singleton's mass floor with preserved post-date semantics, the exact
 `mu^2 D_*/64` gain floor, exact mover-debt decrease, and no-loss routing.
 The stronger theorem
 `sameStageEndpointTrace_false_of_visitedSupport_card_le_four`
-(`Research/Quitting/FinFourProducerAtlas/MonodromyImpossible.lean`) proves that
+(`Research/Quitting/SameStageEndpointMonodromyImpossible.lean`) proves that
 no such same-stage dispatched trace exists whenever the literal union of its
 visited coalitions has cardinality at most four, even if the ambient finite
 player type is larger.  The Fin4 adapters
@@ -649,8 +649,39 @@ retains the unchanged source, minimum, terminal, and packet residual in Quit
 mode.  The action-indexed result is a selector, not a claim that the collision
 residual is absent in Continue mode.  Neither selected arm is consumed here.
 
-The nonsingleton minimum-atom route now reaches that same consumer without
-using quantitative tail escape as a terminal leaf.
+The minimal nonsingleton minimum-atom route now reaches that same consumer
+without a tail split or a near-minimum selected row.
+`quittingTerminalSemanticDebtSum_pureNonsingletonRow_eq_totalDefect`
+(`Research/Quitting/PureNonsingletonCollisionScreening.lean`) proves that an
+actual pure nonsingleton row screens its continuation from every player's
+unrestricted behavioral cap, so its total semantic debt is exactly the sum of
+the marked root-coordinate defects.  The Fin4 endpoint
+`quittingFinFourPositiveMassNonsingleton_nonempty_screenedEndpoint`
+(`Research/Quitting/FinFourPureNonsingletonCollisionScreening.lean`) retains
+one first-terminal orbit of at most three strict best-endpoint edges, each with
+the exact `L * D_* / 4` reached-live-mass floor, exact mover-debt subtraction,
+and no-loss marked mass.  Its terminal state is a pair; one final Continue
+route gives a literal singleton whose stage mass is exactly `L`, while
+`targetProfile_eq_of_time_ne` preserves the complete behavioral profile at
+every other date.  The initial simultaneous pure overwrite and that final
+pair-to-singleton route are not asserted profitable or cap--Nash.
+
+For the retained nonsingleton atom,
+`FinFourPureNonsingletonStrongConcentratedPacket.canonical_edge_gain_floor`
+and
+`FinFourMinimumAtomProducer.nonempty_strongConcentratedPacketConsumption_of_nonsingleton`
+(`Research/Quitting/FinFourProducerAtlas/PureNonsingletonCollisionScreening.lean`)
+keep one actual `SelectedRows` family and rank, state the literal
+`mu^2 * D_* / 32` edge floor, and reach the existing source-attached strong
+packet and its exact consumer.  No minimum point, atom, selected row, endpoint,
+or packet is supplied or reselected.  This gives `M`, `L`, `A`, and `C` through
+the unchanged strategic-versus-collision-minimum consumer; it does not consume
+the collision-minimum residual, control cross-coordinate cap leakage, or
+produce total-debt descent, return, regeneration, a terminal approximant, or a
+uniform-equilibrium payoff.
+
+The earlier self-tail route retains stronger continuation provenance and is
+not withdrawn.
 `QuittingNonsingletonMinimumLawTransfer.SelectedRows.eventually_finFourSelectedSelfTailPassport`
 and its cutoff form
 `QuittingNonsingletonMinimumLawTransfer.SelectedRows.exists_cutoff_finFourSelectedSelfTailPassport`
