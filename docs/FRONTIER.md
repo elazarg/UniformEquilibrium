@@ -778,6 +778,42 @@ after a horizontal endpoint change nor gives support descent, source
 regeneration, recursive return, terminal approximation, a uniform-equilibrium
 payoff, or a counterexample.
 
+The canonical pair's literal paid endpoint now also has a checked one-time
+support-rank handoff.  The generic theorem
+`exists_minimumEndpointSupportRankHandoff_or_debtAscent`
+(`Research/Quitting/StoppingLawMinimumEndpointSupportRankHandoff.lean`)
+jointly compactifies the source, endpoint, and their literal half stopping-law
+mixture.  At a minimum endpoint the half cluster has coordinate debt equal to
+the source/endpoint average and positive-debt support equal to their union.
+The payer has positive source debt and zero endpoint debt, so the endpoint
+support is a strict subset of the new half parent; the existing tangent-family
+extractor and minimum-fibre re-extractor consume this as a fresh one-time
+support-rank handoff.  If the endpoint is not minimal, the same theorem keeps
+the strict endpoint-debt ascent instead.
+
+The actual source adapter
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_canonicalPairMinimumEndpointSupportRankHandoff_or_debtAscent_or_rayStall`
+(`Research/Quitting/FinFourProducerAtlas/CanonicalPairMinimumEndpointSupportRankHandoff.lean`)
+retains the incoming forced-pair source and scalar-ray return or stall.
+`rayProfile_payerDebt_eq_rayPaidGain` identifies the copied endpoint gain with
+the source payer's whole unrestricted debt, while
+`rayPaidTargetProfile_payerDebt_eq_zero` kills that debt at the literal
+endpoint.  `exists_canonicalPairEndpointConcentratedPacket_refining` freezes
+the finite action/routed label on a refinement of the generic joint-cluster
+subsequence, not an unrelated extraction.  The stored composition equality
+and endpoint/source convergence accessors retain the same joint clusters;
+`CanonicalPairMinimumEndpointSupportRankHandoff.endpointPacket_half_tendsto`
+retains the same half cluster, and the named total-debt limits retain either
+`D_*` or the strict endpoint value.
+
+The minimum-endpoint handoff has `M`, `L`, `A`, and `C` through the checked
+generic tangent-family re-extractor.  The off-minimum endpoint and inherited
+strict ray stall have `M`, `L`, and `A` but no `C`.  The strict comparison is
+from the fresh half parent to the endpoint, not from the old source support.
+No old-prefix exactness after the endpoint update, renewable canonical-pair
+rank descent, off-minimum or stall consumer, terminal approximation,
+uniform-equilibrium payoff, or counterexample follows.
+
 There is also an exact screen on one proposed way of changing that unchanged
 canonical ray.  `quittingTerminalSemanticPair_literalRootStack_pureSet_screen`
 (`UniformEquilibrium/Quitting/Paths/PureNonsingletonCommonPrefixScreening.lean`)
