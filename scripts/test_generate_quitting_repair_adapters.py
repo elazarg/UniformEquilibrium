@@ -21,8 +21,9 @@ class QuittingRepairAdapterTests(unittest.TestCase):
     def test_source_and_adapter_are_the_promoted_pair(self) -> None:
         self.assertTrue(adapters.TABLE.is_file())
         self.assertTrue(adapters.ADAPTER.is_file())
+        self.assertEqual(adapters.TABLE.name, "cutoff_one_mixed.json")
         self.assertIn(
-            "cutoff_one_mixed.json",
+            adapters.ACTUAL_CUTOFF_FINGERPRINT,
             adapters.render_block(adapters.load_promoted_game()),
         )
 
