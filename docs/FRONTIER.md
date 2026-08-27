@@ -528,6 +528,46 @@ reward table.  Composing this adapter with the six-leaf coverage gives
 (`Research/Quitting/FinFourProducerAtlas/SemanticCoverage.lean`) for arbitrary
 bounded Fin4 reward data.
 
+The generic anchored theorem
+`exists_quittingAnchoredSingletonClockCompression`
+(`Research/Quitting/AnchoredSingletonClockCompression.lean`) removes owner-clock
+diffusion without changing the reward table or selecting a semantic point.  A
+positive singleton tail after an arbitrary anchor supplies its least supported
+owner date and a literal target which changes only that owner, at that date, to
+sure Quit.  The target singleton stage mass is exactly the fixed prefix and
+opponent exposure by
+`quittingStageCoalitionMass_anchoredSingletonQuitProfile_eq_exposure` and is at
+least the entire source singleton tail by
+`quittingAnchoredSingletonTailMass_le_exposure`.  The stronger normalized
+`m / A` lower bound is retained as well.  The exact identities
+`quittingAnchoredSingletonQuitProfile_liveRoot_tail_eq` and
+`quittingAnchoredSingletonQuitProfile_owner_cap_eq` copy the complete
+post-selected-date live-root tail and preserve the owner's unrestricted
+behavioral best-response cap.
+
+For one minimum-law singleton source,
+`FinFourMinimumAtomProducer.exists_commonChronology_cofinal_ownerCompressedSingleton`
+(`Research/Quitting/FinFourProducerAtlas/MinimumSingletonClockCompression.lean`)
+unpacks one causal profile/root chronology before the resolution quantifier.
+For every `0 < lambda < mu` and every requested depth, that same chronology
+then supplies a literal owner-compressed endpoint beyond the depth.
+`FinFourMinimumAtomProducer.nonempty_ownerCompressedSingletonProducer`
+specializes the construction to the atlas scale `mu^2 / 8` while retaining the
+full cofinal family.  The additive semantic adapter
+`FinFourProducerResidual.nonempty_clockCompressedDirectedNode` stores this
+producer together with one depth-zero endpoint, keeps the two old
+reached-singleton routes behind their unchanged strong endpoint, and maps the
+six residual constructors to three data alternatives: weak concentrated
+singleton, quantitative tail escape, or monodromy.  The shared interface
+`FinFourAtlasWeakConcentratedSingletonCore.resolution_le_stageMass` exposes the
+canonical mass floor, and
+`FinFourAtlasWeakConcentratedSingletonCore.postDateTail_eq` exposes the common
+semantic tail.  Composing the adapter with the bounded-data producer gives
+`uniformPayoff_or_nonempty_finFourAtlasClockCompressedDirectedNode`
+(`Research/Quitting/FinFourProducerAtlas/SemanticCoverage.lean`).  This is a
+one-way producer normalization, not an equivalence or a consumer of the three
+nodes.
+
 The same semantic-coverage module also provides
 `FinFourComplementaryPairMonodromyProducer.nonempty_prescribedPairPaidCapSemanticDispatch_reselectingSource`.
 It keeps the same reward table, the terminal-exploitability witness stored in
@@ -539,12 +579,14 @@ Finally,
 `FinFourMonodromyProducer.every_edge_no_literalExactification`
 (`Research/Quitting/FinFourProducerAtlas/LiteralNoGo.lean`) excludes only an
 exact Nash--Bellman embedding which preserves the displayed root and shifted
-tail payoff.  The six-leaf atlas and its four-node normalization have `M`, `L`,
-and `A`, but no `C`: their constructors are data alternatives rather than a
-uniqueness or table-level pairwise-exclusivity theorem,
-`FinFourProducerResidual.completionContract` only names four open obligations,
-and there is no recursive descent, rank, backward compiler, regeneration,
-chronology return, completion closure, or downstream uniform-payoff consumer.
+tail payoff.  The six-leaf atlas, its four-node view, and the clock-compressed
+three-node view have `M`, `L`, and `A`, but no `C`: their constructors are data
+alternatives rather than a uniqueness or table-level pairwise-exclusivity
+theorem.  The compressed target is not asserted cap--Nash, near-minimal, or
+reprojected to the terminal-semantic carrier.  The retained exact cap-root
+stack remains a certificate for the unmodified source suffix.  No return,
+regeneration, recursive descent, backward compiler, chronology return,
+completion closure, or downstream uniform-payoff consumer is supplied.
 
 As a separate Research side result, the Fin4 deletion producer
 `finFourDeletionNearCap_collisionDispatch_distinct_with_bounds`

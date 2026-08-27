@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.FinFourProducerAtlas.Leaves
+import Research.Quitting.FinFourProducerAtlas.MinimumSingletonClockCompression
 
 /-!
 # Semantic connections between the source-distinct Fin4 atlas leaves
@@ -12,8 +13,11 @@ import Research.Quitting.FinFourProducerAtlas.Leaves
 The two reached-singleton leaves expose one common literal endpoint while an
 origin tag retains their distinct purification-path and terminal-orbit data.
 Likewise, the two monodromy leaves share all dynamic data and differ only in
-their exact cycle geometry.  These adapters normalize leaf data; they do not
-discharge a residual or produce a uniform-equilibrium payoff.
+their exact cycle geometry.  Additively, owner-clock compression places the
+minimum-singleton leaf and the existing reached endpoints behind a weaker
+common core, reducing the directed residual classes from four to three.
+These adapters normalize producer data; they do not discharge a residual or
+produce a uniform-equilibrium payoff.
 -/
 
 noncomputable section
@@ -351,6 +355,175 @@ theorem FinFourProducerResidual.nonempty_directedNode
   | terminalSingleton source producer =>
       obtain ⟨endpoint⟩ := producer.nonempty_concentratedEndpoint
       exact ⟨.concentratedSingleton source endpoint⟩
+  | tailEscape source producer =>
+      exact ⟨.tailEscape source producer⟩
+  | commonHostMonodromy source producer =>
+      exact ⟨.monodromy source producer.toAtlasMonodromyNode⟩
+  | complementaryPairMonodromy source producer =>
+      exact ⟨.monodromy source producer.toAtlasMonodromyNode⟩
+
+/-! ## Three clock-compressed residual obligations -/
+
+/-- Provenance for the weak concentrated-singleton core.  The reached case
+retains the existing stronger low-row endpoint unchanged.  The owner-clock
+case retains both the cofinal compression producer and one literal depth-zero
+endpoint selected from it. -/
+inductive FinFourAtlasWeakConcentratedSingletonOrigin
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ} (source : FinFourMinimumAtomProducer reward bound) : Type
+  | reached (endpoint : FinFourAtlasConcentratedSingletonEndpoint source)
+  | ownerClock
+      (producer : FinFourOwnerCompressedSingletonProducer source)
+      (baseEndpoint : FinFourOwnerCompressedSingletonEndpoint source
+        producer.chronology producer.owner
+        source.minimumSingletonClockResolution 0)
+
+/-- The common literal data exposed by both concentrated-singleton routes.
+The origin retains stronger route-specific data, but this core makes no
+target-side Nash, reprojection, return, regeneration, or consumer claim. -/
+structure FinFourAtlasWeakConcentratedSingletonCore
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ} (source : FinFourMinimumAtomProducer reward bound) where
+  origin : FinFourAtlasWeakConcentratedSingletonOrigin source
+
+namespace FinFourAtlasWeakConcentratedSingletonCore
+
+variable
+  {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+  {bound : ℝ} {source : FinFourMinimumAtomProducer reward bound}
+
+/-- The actual source-side profile from which the one-date target is read. -/
+def referenceProfile (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    (quittingGame reward).BehaviorProfile :=
+  match core.origin with
+  | .reached endpoint => endpoint.low.profile
+  | .ownerClock _ endpoint => endpoint.referenceProfile
+
+/-- The actual concentrated-singleton target profile. -/
+def targetProfile (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    (quittingGame reward).BehaviorProfile :=
+  match core.origin with
+  | .reached endpoint => endpoint.profile
+  | .ownerClock _ endpoint => endpoint.targetProfile
+
+/-- The literal date carrying the concentrated singleton. -/
+def stage (core : FinFourAtlasWeakConcentratedSingletonCore source) : ℕ :=
+  match core.origin with
+  | .reached endpoint => endpoint.stage
+  | .ownerClock _ endpoint => endpoint.stage
+
+/-- The literal singleton terminal at the concentrated date. -/
+def singleton (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    {S : Finset (Fin 4) // S.Nonempty} :=
+  match core.origin with
+  | .reached endpoint => endpoint.terminal
+  | .ownerClock _ _ => source.atom.terminal
+
+/-- The scale shared by low-row concentration and owner-clock compression. -/
+def resolution (_core : FinFourAtlasWeakConcentratedSingletonCore source) : ℝ :=
+  source.minimumSingletonClockResolution
+
+/-- Both routes retain an actual singleton, not merely a law coordinate. -/
+theorem singleton_card (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    core.singleton.val.card = 1 := by
+  rcases core with ⟨origin⟩
+  cases origin with
+  | reached endpoint => exact endpoint.terminal_card
+  | ownerClock producer _ => exact producer.terminal_card
+
+/-- Both routes carry the canonical `mu^2 / 8` stage-mass floor.  The
+owner-clock route actually proves the strict version and is weakened only at
+this common interface. -/
+theorem resolution_le_stageMass
+    (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    core.resolution ≤ quittingStageCoalitionMass reward core.targetProfile
+      core.stage core.singleton := by
+  rcases core with ⟨origin⟩
+  cases origin with
+  | reached endpoint =>
+      simpa [resolution, targetProfile, stage, singleton,
+        FinFourLowTailRow.lambda,
+        FinFourMinimumAtomProducer.minimumSingletonClockResolution] using
+        endpoint.stageMass_floor
+  | ownerClock _ endpoint =>
+      simpa [resolution, targetProfile, stage, singleton] using
+        endpoint.target_stageMass_gt.le
+
+/-- Both target profiles retain the complete literal live-root tail of their
+own reference profile strictly after the selected date. -/
+theorem postDate_liveRoot_eq
+    (core : FinFourAtlasWeakConcentratedSingletonCore source) (offset : ℕ) :
+    quittingProfileLiveRoot reward core.targetProfile
+        (core.stage + 1 + offset) =
+      quittingProfileLiveRoot reward core.referenceProfile
+        (core.stage + 1 + offset) := by
+  rcases core with ⟨origin⟩
+  cases origin with
+  | reached endpoint =>
+      simpa [targetProfile, referenceProfile, stage] using
+        endpoint.postDate_liveRoot_eq offset
+  | ownerClock _ endpoint =>
+      simpa [targetProfile, referenceProfile, stage] using
+        endpoint.targetProfile_postDate_liveRoot_eq offset
+
+/-- Semantic tail equality derived from the common literal tail equality. -/
+theorem postDateTail_eq
+    (core : FinFourAtlasWeakConcentratedSingletonCore source) :
+    quittingTerminalSemanticPair reward
+        (quittingAllContinueProfileSpine reward core.targetProfile
+          (core.stage + 1)) =
+      quittingTerminalSemanticPair reward
+        (quittingAllContinueProfileSpine reward core.referenceProfile
+          (core.stage + 1)) := by
+  apply quittingTerminalSemanticPair_eq_of_liveRoot_eq
+  funext offset player
+  change (quittingAllContinueProfileSpine reward core.targetProfile
+      (core.stage + 1)) player offset (quittingLiveHist reward offset) =
+    (quittingAllContinueProfileSpine reward core.referenceProfile
+      (core.stage + 1)) player offset (quittingLiveHist reward offset)
+  rw [quittingAllContinueProfileSpine_apply_liveHist,
+    quittingAllContinueProfileSpine_apply_liveHist]
+  exact congrFun (core.postDate_liveRoot_eq offset) player
+
+end FinFourAtlasWeakConcentratedSingletonCore
+
+/-- The three remaining directed obligations after compressing a diffuse
+minimum-law singleton into the common weak concentrated-singleton core.  No
+constructor is a completion theorem. -/
+inductive FinFourAtlasClockCompressedDirectedNode
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (bound : ℝ) : Type
+  | concentratedSingleton
+      (source : FinFourMinimumAtomProducer reward bound)
+      (core : FinFourAtlasWeakConcentratedSingletonCore source)
+  | tailEscape
+      (source : FinFourMinimumAtomProducer reward bound)
+      (producer : TailEscapeSubsequence reward source.point source.atom)
+  | monodromy
+      (source : FinFourMinimumAtomProducer reward bound)
+      (node : FinFourAtlasMonodromyNode source)
+
+/-- Normalize every six-leaf residual to one of the three clock-compressed
+obligations.  The minimum-singleton branch retains the full cofinal producer
+and one selected depth-zero endpoint; it does not regenerate semantic source
+data or invoke a concentrated-singleton consumer. -/
+theorem FinFourProducerResidual.nonempty_clockCompressedDirectedNode
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ} (residual : FinFourProducerResidual reward bound) :
+    Nonempty (FinFourAtlasClockCompressedDirectedNode reward bound) := by
+  cases residual with
+  | minimumSingleton source terminalCard =>
+      obtain ⟨producer⟩ :=
+        source.nonempty_ownerCompressedSingletonProducer terminalCard
+      obtain ⟨baseEndpoint⟩ := producer.nonempty_baseEndpoint
+      exact ⟨.concentratedSingleton source
+        ⟨.ownerClock producer baseEndpoint⟩⟩
+  | purifiedSingleton source producer =>
+      exact ⟨.concentratedSingleton source
+        ⟨.reached producer.toConcentratedEndpoint⟩⟩
+  | terminalSingleton source producer =>
+      obtain ⟨endpoint⟩ := producer.nonempty_concentratedEndpoint
+      exact ⟨.concentratedSingleton source ⟨.reached endpoint⟩⟩
   | tailEscape source producer =>
       exact ⟨.tailEscape source producer⟩
   | commonHostMonodromy source producer =>
