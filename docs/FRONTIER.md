@@ -682,7 +682,8 @@ return, regeneration, recursive descent, completion, or uniform-payoff
 consumer; its whole pair source is not asserted minimum, near-minimal, or
 cap--Nash.
 
-A source-independent normalized-passport layer is also integrated in Research.
+A normalized-passport layer and its actual Fin4 source adapter are integrated
+in Research.
 `QuittingMarkedPairDecoratedFamily.rawDecoration_markedMass_eq`,
 `QuittingMarkedPairDecoratedFamily.rawDecoration_actualGain_eq`, and
 `QuittingMarkedPairDecoratedFamily.descendant_postMarkSpine_eq`
@@ -696,19 +697,35 @@ passport yields a slice minimizer whose debt either returns to the displayed
 global minimum, or is strictly larger and admits exactly the all-Continue root
 as an exact cap--Nash root.
 
-In the equality arm,
+In the generic equality arm,
 `exists_minimumReturnActualizer_and_threeRoleLimitChord`
 (`Research/Quitting/NormalizedPassportMinimumReturn.lean`) selects actual rows
 with fixed positive marked-mass and payoff-gain floors, zero marked-owner
 defect, whole- and tail-debt convergence, a concentrated packet, and the
-existing three-role limit-chord consumer.  Thus this generic layer has `M`,
-`L`, and conditional `C`, but no `A`: there is no Fin4 or minimum-atom adapter
-constructing its decorated family or convergent passport.  Its minimizer lies
-in an enlarged arbitrary-prefix closure, not necessarily in the original
-cluster or at a behaviorally attained point.  The family hypotheses also do
-not certify a pure pair, one-date unilateral same-opponent provenance, gain as
-mass times defect, or exact own-debt subtraction.  The strict arm remains
-unconsumed, and no regeneration or uniform-payoff conclusion follows.
+existing three-role limit-chord consumer.
+
+The Fin4 adapter
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_normalizedReturnSelection`
+(`Research/Quitting/FinFourProducerAtlas/NormalizedReturn.lean`) constructs the
+decorated family from the actual forced-pair rows and derives its compact
+subsequence and convergent passport rather than accepting either as supplied
+data.  It retains the exact packet and source ranks, finite prefix-root words,
+source and target profiles, marked dates, fixed pair and labels, positive mass
+and gain floors, zero marked-owner defect, full post-date reference spines,
+and whole- and tail-debt limits.
+`FinFourMinimumAtomProducer.exists_normalizedReturnSource_for_all_resolutions`
+fixes one minimum-atom source chronology and one outsider before every later
+`0 < lambda < mu`; the packet, compact subsequence, minimizer, and outcome may
+depend on `lambda`.
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_normalizedReturnThreeRole_or_strictInert`
+therefore has `M`, `L`, and `A` in both arms.  Its equality arm has `C` through
+the actualizer and `ConcentratedCollisionFourRole.ThreeRoleLimitChord`; its
+strict enlarged-slice inert arm has no checked downstream consumer.  The
+minimizer need not belong to the original cluster or be behaviorally attained,
+the actualizer's retained origin ranks need not be cofinal, and its finite root
+word is not claimed canonical.  No canonical return ray, source regeneration,
+recursive descent, strict-inert consumer, or uniform-equilibrium conclusion
+follows.
 
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
