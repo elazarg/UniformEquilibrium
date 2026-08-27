@@ -652,6 +652,7 @@ import UniformEquilibrium.Quitting.Punishment.ApproximateCompletedCycle
 import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSelfTailClosure
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Stationary.TogglePotential
 import UniformEquilibrium.Quitting.Stationary.ComponentwiseWeightedPotential

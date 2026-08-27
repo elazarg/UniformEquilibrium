@@ -64,16 +64,17 @@ theorem tailThreshold_pos
     (by norm_num)
 
 /-- A supplied hard residual produces one common minimum point and causal
-finite atom without reselecting the reward table or residual packet. -/
-theorem nonempty_of_hardResidual
+finite atom while retaining literal equality to that residual. -/
+theorem exists_residual_eq_of_hardResidual
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (bound : ℝ)
     (residual : FinFourQuantitativeFullSupportHardResidual reward bound) :
-    Nonempty (FinFourMinimumAtomProducer reward bound) := by
+    ∃ source : FinFourMinimumAtomProducer reward bound,
+      source.residual = residual := by
   obtain ⟨point, hpoint, hsemantic, hminimum, hinf, hdebt, ⟨atom⟩⟩ :=
     exists_finFourHardResidual_minimumLaw_causalSuffixAtom
       reward bound residual
-  exact ⟨{
+  refine ⟨{
     residual := residual
     point := point
     point_mem := hpoint
@@ -82,7 +83,17 @@ theorem nonempty_of_hardResidual
     inf_pos := hinf
     debt_eq_inf := hdebt
     atom := atom
-  }⟩
+  }, rfl⟩
+
+/-- Forgetful nonempty form of `exists_residual_eq_of_hardResidual`. -/
+theorem nonempty_of_hardResidual
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (bound : ℝ)
+    (residual : FinFourQuantitativeFullSupportHardResidual reward bound) :
+    Nonempty (FinFourMinimumAtomProducer reward bound) := by
+  obtain ⟨source, _⟩ :=
+    exists_residual_eq_of_hardResidual reward bound residual
+  exact ⟨source⟩
 
 end FinFourMinimumAtomProducer
 
