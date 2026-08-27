@@ -48,6 +48,34 @@ def quittingRootBestEndpointAction
   if quittingRootQuitPayoff reward tail root who ≤
       quittingRootContinuePayoff reward tail root who then false else true
 
+/-- Replacing one marginal by its selected best endpoint makes that
+coordinate's local Nash defect exactly zero.  The endpoint comparison depends
+only on the opponents' marginals, so it is unchanged by the replacement. -/
+theorem quittingRootCoordinateNashDefect_update_bestEndpoint_eq_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) :
+    quittingRootCoordinateNashDefect reward tail
+        (Function.update root who
+          (PMF.pure (quittingRootBestEndpointAction reward tail root who))) who = 0 := by
+  have hendpoint (marginal : PMF Bool) :
+      quittingRootEndpointDifference reward tail
+          (Function.update root who marginal) who =
+        quittingRootEndpointDifference reward tail root who := by
+    unfold quittingRootEndpointDifference quittingRootQuitPayoff
+      quittingRootContinuePayoff
+    rw [Function.update_idem, Function.update_idem]
+  rw [quittingRootCoordinateNashDefect_eq_actionProbability_mul_posPart]
+  unfold quittingRootBestEndpointAction
+  split_ifs with hle
+  · have hdiff : quittingRootEndpointDifference reward tail root who ≤ 0 := by
+      unfold quittingRootEndpointDifference
+      linarith
+    simp [hendpoint, hdiff]
+  · have hdiff : 0 ≤ quittingRootEndpointDifference reward tail root who := by
+      unfold quittingRootEndpointDifference
+      linarith
+    simp [hendpoint, hdiff]
+
 /-- Playing the selected pure endpoint gains exactly the coordinate Nash
 defect over the prescribed root mixture. -/
 theorem quittingRootSuccessorPayoff_bestEndpoint_sub_eq_coordinateNashDefect
