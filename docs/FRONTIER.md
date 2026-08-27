@@ -625,6 +625,58 @@ arbitrary-resolution theorem
 provides the same split at every admissible `lambda` and depth on that one
 chronology.
 
+The nonsingleton minimum-atom route now reaches that same consumer without
+using quantitative tail escape as a terminal leaf.
+`QuittingNonsingletonMinimumLawTransfer.SelectedRows.eventually_finFourSelectedSelfTailPassport`
+and its cutoff form
+`QuittingNonsingletonMinimumLawTransfer.SelectedRows.exists_cutoff_finFourSelectedSelfTailPassport`
+(`Research/Quitting/FinFourProducerAtlas/SelfTailContraction.lean`) intersect,
+on one fixed selected-row family, the strict `mu^2 / 8` marked-mass floor and
+the required debt closeness to the same minimum.  The selected literal
+profile is restarted after a finite copy of its actual live roots.
+`quittingAllContinueProfileSpine_selfTailClosure`
+(`UniformEquilibrium/Quitting/Root/SelfTailClosure.lean`) is equality of the
+complete post-date `BehaviorProfile`, not merely equality of its live roots or
+terminal semantics.  The row-level declarations
+`FinFourSelfTailLowRow.stageMass_eq_selectedStageMass`,
+`FinFourSelfTailLowRow.lambda_lt_stageMass`, and
+`FinFourSelfTailLowRow.fullSpine_eq_selectedProfile` retain the exact marked
+atom, its strict floor, and that full continuation.
+
+The minimal raw passport `FinFourActualLowTailRow` and dispatch theorem
+`FinFourActualLowTailRow.nonempty_singletonEndpoint_or_closedSegment`
+(`Research/Quitting/FinFourProducerAtlas/ActualLowTail.lean`) use no
+`SelectedRows` or copied cap--Nash assertion.  The dependent
+`FinFourActualLowTailSingletonOrigin` tag distinguishes a partial-purification
+singleton from a terminal-orbit singleton and retains the actual path,
+route-source profile and coalition, mover, action, routed-coalition equality,
+and no-loss mass comparison.  Its common endpoint field
+`FinFourActualLowTailSingletonEndpoint.postDateSpine_eq` preserves the full
+post-date behavioral profile in either mechanism.  The only other raw output
+is the original dispatched closed trace, which the Fin4 monodromy no-go
+eliminates.
+
+Consequently
+`FinFourMinimumAtomProducer.nonempty_nonsingletonSelfTailConsumption` and the
+cardinality-exhaustive
+`FinFourMinimumAtomProducer.nonempty_contractedConsumer`
+(`Research/Quitting/FinFourProducerAtlas/SelfTailContraction.lean`) send every
+minimum-atom source to one common source-attached strong-packet consumer.
+`FinFourMinimumAtomProducer.exists_residual_eq_of_hardResidual`
+(`Research/Quitting/FinFourProducerAtlas/Source.lean`),
+`exists_finFourMinimumAtomContractedConsumer_of_hardResidual`, and
+`uniformPayoff_or_exists_finFourMinimumAtomContractedConsumer_withResidualProvenance`
+retain literal equality between the constructed source's hard residual and
+the supplied or bounded-data residual.  The route-tagged consumer retains its
+construction origin.  Its forgetful projection
+`FinFourMinimumAtomProducer.contractedConsumerResult` retains an actual strong
+packet whose exact result is the existing strategic dispatch plus
+atomic-toggle or exact-deletion handoff, or the unchanged source-attached
+collision-minimum residual.  Thus quantitative tail escape is eliminated as
+a terminal atlas leaf.  This contraction has `M`, `L`, `A`, and `C`, but it
+does not resolve the collision-minimum arm or produce return, regeneration,
+recursive descent, completion closure, or a new uniform-equilibrium payoff.
+
 The same semantic-coverage module also provides
 `FinFourComplementaryPairMonodromyProducer.nonempty_prescribedPairPaidCapSemanticDispatch_reselectingSource`.
 It keeps the same reward table, the terminal-exploitability witness stored in
@@ -638,9 +690,11 @@ Finally,
 exact Nash--Bellman embedding which preserves the displayed root and shifted
 tail payoff.  For an actual Fin4 monodromy producer this older projection is
 vacuous because the producer itself is now impossible.  The original six-leaf
-atlas, its four-node view, and the clock-compressed three-node view have `M`,
-`L`, and `A`; monodromy deletion and the strong concentrated-singleton
-contraction each have their separately stated `C`, not a completion theorem.
+atlas, its four-node view, and the clock-compressed three-node view remain
+useful provenance interfaces, but the strongest source-level contraction no
+longer treats quantitative tail escape or monodromy as terminal leaves.
+Monodromy deletion and the common strong-packet contraction have `M`, `L`,
+`A`, and `C`; the open collision-minimum result is not a completion theorem.
 The strong target is not asserted full-root Nash or near-minimal, and the
 retained exact cap-root stack remains a certificate for the unmodified source
 suffix.  No return, regeneration, recursive descent, backward compiler,
