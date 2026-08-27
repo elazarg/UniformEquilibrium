@@ -778,6 +778,35 @@ after a horizontal endpoint change nor gives support descent, source
 regeneration, recursive return, terminal approximation, a uniform-equilibrium
 payoff, or a counterexample.
 
+There is also an exact screen on one proposed way of changing that unchanged
+canonical ray.  `quittingTerminalSemanticPair_literalRootStack_pureSet_screen`
+(`UniformEquilibrium/Quitting/Paths/PureNonsingletonCommonPrefixScreening.lean`)
+shows that two arbitrary behavioral tails behind the same pure coalition of
+cardinality at least two and the same finite literal root word have identical
+prescribed payoff and unrestricted behavioral cap.  The named coordinate and
+total-debt corollaries give equality and literal zero change, without any
+stationarity, finite-support, or cap-attainment hypothesis.
+
+The actual Fin4 adapter in
+`Research/Quitting/FinFourProducerAtlas/PureNonsingletonCommonPrefixScreening.lean`
+retains one fixed maximal-prefix packet, its `raySource`, index and word, pure
+pair, selected reference tail, and scalar debt limit.
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.rayTailReplacementProfile_semantic_eq_orbit`
+identifies every post-pair tail replacement with the actual indexed semantic
+orbit, while `rayTailReplacementProfile_wholeDebt_tendsto_rayLimit` preserves
+the scalar limit even for a varying family of replacement tails.  Before the
+outer word, `rayTailReplacementBaseProfile_outcomeMass_eq_pointMass` gives the
+Dirac law at the pair; after the word,
+`rayTailReplacementProfile_outcomeMass_eq_actual` gives the actual full
+terminal-outcome law, which need not itself be Dirac because the outer roots
+may absorb.  The coordinate, total-debt, and prescribed-payoff no-go theorems
+therefore have `M`, `L`, and `A`, with `C` only as a negative consumer ruling
+out tail-only repair behind this unchanged word and pure pair.  They do not
+eliminate the strict ray, compare independently selected words, screen a
+changed marked root or a non-pure row, cross a pre-mark seam, or produce
+chronology return, source regeneration, recursive descent, terminal
+approximation, or a uniform-equilibrium payoff.
+
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/UniversalStaticAtomicToggleHandoff.lean`)

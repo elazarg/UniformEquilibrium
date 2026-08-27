@@ -1671,6 +1671,7 @@ import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
 import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
 import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
+import UniformEquilibrium.Quitting.Paths.PureNonsingletonCommonPrefixScreening
 import UniformEquilibrium.Quitting.Paths.SixPlayerOnePairMassTargetLock
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
 import UniformEquilibrium.Quitting.Paths.StoppingLawMixture
