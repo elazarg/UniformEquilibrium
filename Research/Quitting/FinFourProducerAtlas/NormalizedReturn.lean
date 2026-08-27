@@ -5,7 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
-import Research.Quitting.NormalizedPassportMinimumReturn
+import Research.Quitting.FinFourProducerAtlas.ThreeRoleRegeneration
 
 /-!
 # Normalized return from the actual Fin4 forced-pair source
@@ -17,10 +17,11 @@ This file compactifies those full decorations and derives the generic
 normalized passport rather than accepting it as supplied data.
 
 The resulting enlarged-slice minimizer either returns to the displayed
-minimum and reaches the existing three-role limit chord, or remains strictly
-off minimum with only all Continue as an exact cap--Nash root.  The latter is
-an inert residual, not a consumer.  No canonical maximal-ray, support-rank,
-return chronology, or regeneration claim is made here.
+minimum and reaches an actual endpoint-law limit, or remains strictly off
+minimum with only all Continue as an exact cap--Nash root.  The endpoint law
+then gives strict target-debt ascent or exact same-law minimum-source
+regeneration.  No canonical maximal-ray, rank decrease, chronological return,
+or recursive completion claim is made here.
 -/
 
 noncomputable section
@@ -509,8 +510,8 @@ end FinFourOwnerCompressedMinimumReturnForcedPairPacket
 
 /-- The actual normalized-return result attached to one fixed source packet.
 The equality arm contains an actual raw-prefix actualizer and the checked
-three-role chord.  The strict arm contains only the enlarged-slice inert
-point and its exact cap--Nash correspondence. -/
+endpoint-law regeneration-or-ascent result.  The strict arm contains only the
+enlarged-slice inert point and its exact cap--Nash correspondence. -/
 structure FinFourNormalizedReturnThreeRoleOrStrictInert
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda) where
@@ -528,11 +529,9 @@ structure FinFourNormalizedReturnThreeRoleOrStrictInert
     (∃ actualizer : QuittingMarkedPairMinimumReturnActualizer
         selection.family source.point.1 selection.massDensity
           selection.gainDensity point,
-      ∃ mover recipient,
-        point.wholeDebt = quittingTerminalSemanticDebtSum source.point.1 ∧
-          Nonempty (ConcentratedCollisionFourRole.ThreeRoleLimitChord reward
-            source.point.1 selection.family.markedOwner mover recipient
-              actualizer.resolution)) ∨
+      point.wholeDebt = quittingTerminalSemanticDebtSum source.point.1 ∧
+        Nonempty (FinFourThreeRoleRegenerationOrAscent source
+          actualizer.packet)) ∨
     (quittingTerminalSemanticDebtSum source.point.1 < point.wholeDebt ∧
       ∀ root : Fin 4 → PMF Bool,
         IsεQuittingRootNash reward point.whole.1.2 0 root ↔
@@ -578,13 +577,39 @@ theorem other_mem_terminal
     FinFourOwnerCompressedMinimumReturnForcedPairPacket.normalizedDecoratedFamily,
     FinFourOwnerCompressedMinimumReturnForcedPairPacket.movingTerminal]
 
+/-- Forgetting the endpoint law and regenerated source recovers the previous
+public equality-arm chord versus strict-inert surface. -/
+theorem threeRole_or_strictInert
+    (capstone : FinFourNormalizedReturnThreeRoleOrStrictInert packet) :
+    (∃ actualizer : QuittingMarkedPairMinimumReturnActualizer
+        capstone.selection.family source.point.1
+          capstone.selection.massDensity capstone.selection.gainDensity
+            capstone.point,
+      ∃ mover recipient,
+        capstone.point.wholeDebt =
+            quittingTerminalSemanticDebtSum source.point.1 ∧
+          Nonempty (ConcentratedCollisionFourRole.ThreeRoleLimitChord reward
+            source.point.1 capstone.selection.family.markedOwner mover
+              recipient actualizer.resolution)) ∨
+    (quittingTerminalSemanticDebtSum source.point.1 <
+        capstone.point.wholeDebt ∧
+      ∀ root : Fin 4 → PMF Bool,
+        IsεQuittingRootNash reward capstone.point.whole.1.2 0 root ↔
+          root = (quittingAllContinueRoot : Fin 4 → PMF Bool)) := by
+  rcases capstone.outcome with hequality | hinert
+  · left
+    obtain ⟨actualizer, hreturn, ⟨result⟩⟩ := hequality
+    exact ⟨actualizer, result.mover, result.recipient, hreturn,
+      ⟨result.toThreeRoleLimitChord⟩⟩
+  · exact Or.inr hinert
+
 end FinFourNormalizedReturnThreeRoleOrStrictInert
 
 namespace FinFourOwnerCompressedMinimumReturnForcedPairPacket
 
 /-- Actual Fin4 source adapter and consumer.  It derives a full convergent
-passport from one fixed forced-pair packet and returns either a minimum-return
-three-role chord or the strict enlarged-slice inert point. -/
+passport from one fixed forced-pair packet and returns either endpoint-law
+regeneration/ascent or the strict enlarged-slice inert point. -/
 theorem nonempty_normalizedReturnThreeRole_or_strictInert
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda) :
@@ -606,16 +631,18 @@ theorem nonempty_normalizedReturnThreeRole_or_strictInert
   }⟩
   rcases hbranch with hreturn | hinert
   · left
-    obtain ⟨actualizer, mover, recipient, hchord⟩ :=
-      exists_minimumReturnActualizer_and_threeRoleLimitChord
-        selection.family source.point.1 selection.massDensity
-          selection.gainDensity point selection.massDensity_pos
-            selection.gainDensity_pos source.semantic_mem source.minimum
-              source.minimumDebt_pos hpoint hreturn (by
-                rw [show selection.family.terminal = packet.movingTerminal
-                  from rfl, packet.movingTerminal_card]
-                norm_num)
-    exact ⟨actualizer, mover, recipient, hreturn, hchord⟩
+    obtain ⟨actualizer⟩ := nonempty_quittingMarkedPairMinimumReturnActualizer
+      selection.family source.point.1 selection.massDensity
+        selection.gainDensity point selection.massDensity_pos
+          selection.gainDensity_pos source.minimumDebt_pos hpoint hreturn
+    obtain ⟨mover, recipient, ⟨endpoint⟩⟩ :=
+      actualizer.nonempty_threeRoleEndpointLaw_of_minimumReturn
+        source.semantic_mem source.minimum source.minimumDebt_pos (by
+          rw [show selection.family.terminal = packet.movingTerminal from rfl,
+            packet.movingTerminal_card]
+          norm_num) hreturn hpoint.2.1
+    exact ⟨actualizer, hreturn,
+      endpoint.nonempty_finFourRegenerationOrAscent⟩
   · exact Or.inr hinert
 
 end FinFourOwnerCompressedMinimumReturnForcedPairPacket
@@ -648,6 +675,31 @@ theorem nonempty_normalizedReturnThreeRole_or_strictInert
   exact ⟨{ packet := packet, normalized := normalized }⟩
 
 end FinFourOwnerCompressedMinimumReturnForcedPairSource
+
+namespace FinFourNormalizedReturnSourceCapstone
+
+/-- Source-level strongest outcome.  The equality arm stores an actual
+endpoint law and its strict-ascent-or-same-law-regeneration result; the other
+arm is the unconsumed strict normalized inert point. -/
+theorem regenerationOrAscent_or_strictInert
+    (capstone : FinFourNormalizedReturnSourceCapstone returnSource lambda) :
+    (∃ actualizer : QuittingMarkedPairMinimumReturnActualizer
+        capstone.normalized.selection.family source.point.1
+          capstone.normalized.selection.massDensity
+            capstone.normalized.selection.gainDensity
+              capstone.normalized.point,
+      capstone.normalized.point.wholeDebt =
+          quittingTerminalSemanticDebtSum source.point.1 ∧
+        Nonempty (FinFourThreeRoleRegenerationOrAscent source
+          actualizer.packet)) ∨
+    (quittingTerminalSemanticDebtSum source.point.1 <
+        capstone.normalized.point.wholeDebt ∧
+      ∀ root : Fin 4 → PMF Bool,
+        IsεQuittingRootNash reward capstone.normalized.point.whole.1.2 0 root ↔
+          root = (quittingAllContinueRoot : Fin 4 → PMF Bool)) :=
+  capstone.normalized.outcome
+
+end FinFourNormalizedReturnSourceCapstone
 
 namespace FinFourMinimumAtomProducer
 
