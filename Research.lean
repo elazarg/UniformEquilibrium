@@ -72,6 +72,7 @@ import Research.Quitting.EscapeAwareQuantileClockPolynomialLower
 import Research.Quitting.EscapeAwareQuantileClockTransport
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
+import Research.Quitting.FinFourExhaustiveProducerAtlas
 import Research.Quitting.FinFourSameStageEndpointMonodromy
 import Research.Quitting.FiniteClockPolynomialCenter
 import Research.Quitting.FiniteClockPolynomialCertificate
