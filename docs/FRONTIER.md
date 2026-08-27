@@ -814,6 +814,38 @@ No old-prefix exactness after the endpoint update, renewable canonical-pair
 rank descent, off-minimum or stall consumer, terminal approximation,
 uniform-equilibrium payoff, or counterexample follows.
 
+The strict endpoint alternative is now normalized without losing that joint
+cluster.  In
+`Research/Quitting/FinFourProducerAtlas/StrictEndpointNormalizedReturn.lean`,
+`CanonicalPairMinimumEndpointDebtAscent.endpointRows` uses the concentrated
+endpoint packet's already aligned action, routed terminal, and subsequence
+directly.  `FinFourCanonicalPaidEndpointRows.exists_origin_refining` selects
+only a further strict subsequence.  The constructor
+`CanonicalPairMinimumEndpointDebtAscent.nonempty_strictEndpointOrigin` uses
+`FinFourCanonicalPaidEndpointOrigin.wholeSemantic_tendsto` and uniqueness of
+limits to prove that the decorated whole limit is exactly the generic
+debt-ascent endpoint cluster.  Thus the positive strict gap is source data,
+not a comparison between unrelated existential cluster points.
+
+`CanonicalPairMinimumEndpointDebtAscent.nonempty_strictNormalizedReturnOrInert`
+then applies the checked normalized-passport minimizer to this coherent
+origin.  If its normalized minimum returns to `D_*`, the actualizer supplies
+the maintained source-attached strategic-singleton or collision-minimum
+residual; in the nonsingleton routed case the stronger three-role endpoint-law
+classifier remains available.  If the minimum stays strict, the same
+normalized point retains all Continue as its unique exact cap--Nash root.
+The headline theorem
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_canonicalPairSupportHandoff_or_strictNormalized_or_rayStall`
+is now the literal three-way source interface: minimum-endpoint support
+handoff, coherent strict normalized result, or unchanged scalar-ray stall.
+
+This strict-endpoint reduction has `M`, `L`, and `A`.  Only the normalized
+equality arm has `C`, and only to the existing strategic/collision residual;
+the normalized inert point and ray stall have no `C`.  No copied sibling is
+claimed cap--Nash, and there is no renewable support descent, terminal
+approximation, global completion, uniform-equilibrium payoff, or
+counterexample.
+
 There is also an exact screen on one proposed way of changing that unchanged
 canonical ray.  `quittingTerminalSemanticPair_literalRootStack_pureSet_screen`
 (`UniformEquilibrium/Quitting/Paths/PureNonsingletonCommonPrefixScreening.lean`)
