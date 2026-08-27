@@ -324,6 +324,24 @@ consumer
 result in the actual finite-clock hierarchy through normalized Fin4 level
 `59`; it proves no positive value at level `60`.
 
+The local periodic-anchor route has two separate Research interfaces.
+`localPeriodicAnchor_theoremA`
+(`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) consumes the
+explicit minimum-tube, hazard, and positive-absorption hypotheses for one
+supplied cyclic root family and returns an unrestricted behavioral
+exploitability gap of `eta / (2 * card(I))`; it is a conditional obstruction,
+not a producer of cyclic roots from an arbitrary game.  The generic
+finite-cycle estimate `exists_player_base_ge_eta_div_two_card`
+(`MathUE/FiniteCycleAggregate.lean`) is game-independent aggregation
+infrastructure.  The packet-facing Fin4 theorem
+`finFourPeriodicAnchor_false_of_packet_family`
+(`Research/Quitting/FinFourPeriodicAnchorResidualAdapter.lean`) consumes a
+fixed reward and matrix together with returned product blocks, individual
+hazard mesh, eventual uniform value/anchor bounds, positive hazards, and
+vector-norm signed-seam convergence; it derives the additive linearization,
+extracts a normalized kernel, and contradicts the Fin4 hard residual.  It
+does not construct the blocks or those packet hypotheses from arbitrary games.
+
 The Research same-stage endpoint adapter is a separate conditional route.
 `dispatchedClosedSegment_offset_edge_certificate`,
 `dispatchedClosedSegment_offset_edge_full_certificate`, and

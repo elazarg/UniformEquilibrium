@@ -79,6 +79,7 @@ import Research.Quitting.FiniteClockTerminalSemantics
 import Research.Quitting.FiniteDeadlineTimingNashDebtHierarchy
 import Research.Quitting.FiniteDebtMonotonicity
 import Research.Quitting.FiniteResetCirculationRegression
+import Research.Quitting.FinFourPeriodicAnchorResidualAdapter
 import Research.Quitting.FixedLawGlobalMinimumPremiumNoGo
 import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import Research.Quitting.FourByFourQFiniteSupportReduction
@@ -91,6 +92,7 @@ import Research.Quitting.HazardSummability
 import Research.Quitting.HolonomyEquivalenceCompression
 import Research.Quitting.HarmonicReservoirConsumer
 import Research.Quitting.LiveRootExploitabilityFactorization
+import Research.Quitting.LocalPeriodicAnchorObstructions
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
 import Research.Quitting.MinimumFiberResetSquareCompatibility

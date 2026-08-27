@@ -217,7 +217,9 @@ import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.FiniteCyclicVariation
+import MathUE.FiniteCycleAggregate
 import MathUE.FiniteDirectedPeriod
+import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Probability

@@ -135,6 +135,7 @@ import MathUE.FiniteBinaryBlockEquilibrium
 import MathUE.FiniteBinaryWeightedPotential
 import MathUE.FiniteBooleanEndpointOrbit
 import MathUE.FiniteChargedReturn
+import MathUE.FiniteCycleAggregate
 import MathUE.FiniteCyclicVariation
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteDirectedPeriod
@@ -217,6 +218,7 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.List
+import MathUE.LocalPeriodicAnchor
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
 import MathUE.MeasurableSelection

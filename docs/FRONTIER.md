@@ -1183,6 +1183,21 @@ the live mathematical ledger.
   ambient blocks whose hazards vanish off the recursive normal core. This is a
   reduction on supplied local blocks, not a block producer, chronology, or
   unrestricted-behavior equilibrium consumer.
+- **Local periodic-anchor route:**
+  `localPeriodicAnchor_theoremA`
+  (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) turns supplied
+  cyclic roots satisfying the numerical minimum-tube, hazard, and positive-
+  absorption hypotheses into an unrestricted behavioral gap of
+  `eta / (2 * card(I))`. The generic finite-cycle aggregation used there is
+  `exists_player_base_ge_eta_div_two_card`
+  (`MathUE/FiniteCycleAggregate.lean`). The Fin4 packet-facing adapter
+  `finFourPeriodicAnchor_false_of_packet_family`
+  (`Research/Quitting/FinFourPeriodicAnchorResidualAdapter.lean`) consumes a
+  fixed reward/matrix and returned-block family with individual mesh bounds,
+  eventual value/anchor tubes, positive hazards, and vector-norm signed-seam
+  convergence; it derives the additive normalized linearization and obtains a
+  contradiction with the hard residual. Neither theorem produces cyclic
+  roots, returned blocks, or packet hypotheses from an arbitrary game.
 - **Strict-covector positive-survival cost:**
   `QuittingConvergentDiffuseExactFloorTail.uniformPayoff_or_exists_strictCovectorPositiveSurvival`
   gives one common normalized covector on every late finite and infinite
