@@ -698,11 +698,13 @@ global minimum, or is strictly larger and admits exactly the all-Continue root
 as an exact cap--Nash root.
 
 In the generic equality arm,
-`exists_minimumReturnActualizer_and_threeRoleLimitChord`
-(`Research/Quitting/NormalizedPassportMinimumReturn.lean`) selects actual rows
-with fixed positive marked-mass and payoff-gain floors, zero marked-owner
-defect, whole- and tail-debt convergence, a concentrated packet, and the
-existing three-role limit-chord consumer.
+`QuittingMarkedPairMinimumReturnActualizer.nonempty_threeRoleEndpointLaw_of_minimumReturn`
+(`Research/Quitting/ConcentratedCollisionThreeRoleEndpointLaw.lean`) selects
+actual rows, freezes one mover, recipient, and Boolean endpoint action, and
+compactifies the source semantic pairs together with the endpoint semantic
+pairs and complete terminal laws.  The retained routed atom has limiting mass
+at least the packet resolution.  The endpoint object projects losslessly to
+the older `ConcentratedCollisionFourRole.ThreeRoleLimitChord` surface.
 
 The Fin4 adapter
 `FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_normalizedReturnSelection`
@@ -718,14 +720,22 @@ fixes one minimum-atom source chronology and one outsider before every later
 `0 < lambda < mu`; the packet, compact subsequence, minimizer, and outcome may
 depend on `lambda`.
 `FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_normalizedReturnThreeRole_or_strictInert`
-therefore has `M`, `L`, and `A` in both arms.  Its equality arm has `C` through
-the actualizer and `ConcentratedCollisionFourRole.ThreeRoleLimitChord`; its
-strict enlarged-slice inert arm has no checked downstream consumer.  The
-minimizer need not belong to the original cluster or be behaviorally attained,
-the actualizer's retained origin ranks need not be cofinal, and its finite root
-word is not claimed canonical.  No canonical return ray, source regeneration,
-recursive descent, strict-inert consumer, or uniform-equilibrium conclusion
-follows.
+therefore has `M`, `L`, and `A` in both arms.  In the equality arm,
+`ConcentratedCollisionThreeRoleEndpointLaw.finFour_mover_drop` and
+`ConcentratedCollisionThreeRoleEndpointLaw.finFour_recipient_rise` give the
+literal `rho^2 * D_* / 8` mover decrease and `rho^2 * D_* / 64` recipient
+increase.  `ConcentratedCollisionThreeRoleEndpointLaw.nonempty_finFourRegenerationOrAscent`
+then gives strict endpoint-debt ascent or `C` through exact source regeneration
+at the endpoint's own joint semantic/law point.  The regenerated
+`FinFourMinimumAtomProducer` retains the incoming hard residual, exact endpoint
+point, routed terminal, and terminal-law mass floor.  The strict enlarged-slice
+inert arm has no checked downstream consumer.  The minimizer need not belong
+to the original cluster or be behaviorally attained, the actualizer's retained
+origin ranks need not be cofinal, and its finite root word is not claimed
+canonical.  No canonical return ray, chronology return, rank decrease,
+recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
+follows; an arbitrary public chord without the actual endpoint law cannot be
+regenerated.
 
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
