@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.Bool
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtCapCarrier
 import UniformEquilibrium.Quitting.Debt.Dynamic.DynamicDebtCapBridge
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
@@ -47,16 +48,6 @@ def reward (quitters : {S : Finset Bool // S.Nonempty}) : Payoff Bool :=
       if true ∈ quitters.1 then -2
       else if who then 3 else 1
     else if who then 1 else 3
-
-/-- Boolean expectation expansion used throughout the two-player table. -/
-theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
-    (f : (Bool → Bool) → ℝ) :
-    expect (pmfPi selectedRoot) f =
-      expect (selectedRoot false) (fun first =>
-        expect (selectedRoot true) (fun second =>
-          f (fun who => if who then second else first))) :=
-  QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool
-    selectedRoot f
 
 /-- A quit coin with probability `1/6`. -/
 def sixthCoin : PMF Bool :=
@@ -112,7 +103,7 @@ theorem quitPayoff_zero (who : Bool) :
     quittingRootQuitPayoff reward (0 : Payoff Bool) root who = 1 / 2 := by
   cases who <;>
     unfold quittingRootQuitPayoff quittingRootExpectedPayoff <;>
-    rw [expect_pmfPi_bool] <;>
+    rw [Math.PMFProduct.expect_pmfPi_bool] <;>
     simp only [expect_eq_sum, Fintype.sum_bool] <;>
     norm_num [root, sixthCoin, quittingHazardCoin, PMF.ofFintype_apply,
       quittingRootPayoff, reward,
@@ -122,7 +113,7 @@ theorem continuePayoff_zero (who : Bool) :
     quittingRootContinuePayoff reward (0 : Payoff Bool) root who = 1 / 2 := by
   cases who <;>
     unfold quittingRootContinuePayoff quittingRootExpectedPayoff <;>
-    rw [expect_pmfPi_bool] <;>
+    rw [Math.PMFProduct.expect_pmfPi_bool] <;>
     simp only [expect_eq_sum, Fintype.sum_bool] <;>
     norm_num [root, sixthCoin, quittingHazardCoin, PMF.ofFintype_apply,
       quittingRootPayoff, reward,
@@ -197,7 +188,7 @@ theorem stationaryQuitValue (arbitraryRoot : Bool → PMF Bool) (who : Bool) :
     unfold quittingStationaryFixedOpponentsQuitValue
       quittingFixedOpponentsQuitValue
       quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
-    rw [expect_pmfPi_bool] <;>
+    rw [Math.PMFProduct.expect_pmfPi_bool] <;>
     simp only [expect_eq_sum, Fintype.sum_bool] <;>
     have hsum := pmf_toReal_sum_one (arbitraryRoot true) <;>
     have hsum' := pmf_toReal_sum_one (arbitraryRoot false) <;>
@@ -213,7 +204,7 @@ theorem stationaryContinueReward (arbitraryRoot : Bool → PMF Bool)
     unfold quittingStationaryFixedOpponentsContinueReward
       quittingFixedOpponentsContinueReward
       quittingRootAbsorbingContribution quittingRootExpectedPayoff <;>
-    rw [expect_pmfPi_bool] <;>
+    rw [Math.PMFProduct.expect_pmfPi_bool] <;>
     simp only [expect_eq_sum, Fintype.sum_bool] <;>
     simp [quittingRootPayoff, reward] <;>
     ring
@@ -274,7 +265,8 @@ theorem endpointDifference_augmentedCap
   cases who <;>
     unfold quittingRootQuitPayoff quittingRootContinuePayoff
       quittingRootExpectedPayoff <;>
-    rw [expect_pmfPi_bool, expect_pmfPi_bool] <;>
+    rw [Math.PMFProduct.expect_pmfPi_bool,
+      Math.PMFProduct.expect_pmfPi_bool] <;>
     simp only [expect_eq_sum, Fintype.sum_bool] <;>
     have hsum := pmf_toReal_sum_one (arbitraryRoot true) <;>
     have hsum' := pmf_toReal_sum_one (arbitraryRoot false) <;>
@@ -323,7 +315,7 @@ theorem terminalRoot_successor :
       terminalValue := by
   funext who
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp [expect_pure, terminalRoot, terminalValue, quittingRootPayoff, reward,
     QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
 
@@ -333,12 +325,14 @@ theorem terminalRoot_isEndpointNash :
   cases who
   · unfold quittingRootEndpointDifference quittingRootQuitPayoff
       quittingRootContinuePayoff quittingRootExpectedPayoff
-    rw [expect_pmfPi_bool, expect_pmfPi_bool]
+    rw [Math.PMFProduct.expect_pmfPi_bool,
+      Math.PMFProduct.expect_pmfPi_bool]
     simp [expect_pure, terminalRoot, terminalValue, quittingRootPayoff, reward,
       QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
   · unfold quittingRootEndpointDifference quittingRootQuitPayoff
       quittingRootContinuePayoff quittingRootExpectedPayoff
-    rw [expect_pmfPi_bool, expect_pmfPi_bool]
+    rw [Math.PMFProduct.expect_pmfPi_bool,
+      Math.PMFProduct.expect_pmfPi_bool]
     simp [expect_pure, terminalRoot, terminalValue, quittingRootPayoff, reward,
       QuittingExactDynamicDebtVanishingCounterexample.quittingQuitters_boolAction]
     norm_num

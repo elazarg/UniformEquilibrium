@@ -220,9 +220,8 @@ theorem abs_stageEUAt_le
         |G.stagePayoff state action who| ≤ payoffBound)
     {stage : ℕ} (history : G.Hist stage) (who : ι) :
     |G.stageEUAt profile history who| ≤ payoffBound := by
-  unfold stageEUAt
-  exact abs_expect_le_of_abs_le _ _
-    (fun action => hpayoff history.2 action who)
+  exact abs_stageEUAt_le_of_abs_stagePayoff_le
+    profile hpayoff history who
 
 /-- Every active selection-stage charge is bounded by the payoff bound plus
 the terminal-target bound. -/

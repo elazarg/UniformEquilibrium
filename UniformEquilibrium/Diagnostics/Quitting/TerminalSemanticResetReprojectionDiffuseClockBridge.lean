@@ -195,13 +195,8 @@ theorem sum_quittingStageCoalitionMass_add_le_liveMass
 omit [DecidableEq ι] in
 theorem quittingRoot_quitProbability_le_absorptionMass'
     (root : ι → PMF Bool) (who : ι) :
-    (root who true).toReal ≤ quittingRootAbsorptionMass root := by
-  have hcontinue :=
-    quittingStationaryContinueMass_le_ownContinueProbability root who
-  have hprobability :=
-    quittingRoot_continueProbability_add_quitProbability root who
-  unfold quittingRootAbsorptionMass
-  linarith
+    (root who true).toReal ≤ quittingRootAbsorptionMass root :=
+  quittingQuitProbability_le_absorptionMass root who
 
 omit [DecidableEq ι] in
 /-- Total absorption in a finite suffix is at most the mass live at its

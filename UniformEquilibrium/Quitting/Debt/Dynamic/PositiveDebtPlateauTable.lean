@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtChains
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanMinimizer
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactDynamicDebtVanishingCounterexample
@@ -127,17 +128,6 @@ def terminalSimplexRoot : QuittingRootSimplex Bool :=
 def terminalCurrent : QuittingNashBellmanPoint Bool :=
   (terminalValue, terminalSimplexRoot)
 
-/-- Expand a Boolean product expectation into nested single-player
-expectations, reusing the repo's general two-player unfolding. -/
-theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
-    (f : (Bool → Bool) → ℝ) :
-    expect (pmfPi selectedRoot) f =
-      expect (selectedRoot false) (fun first ↦
-        expect (selectedRoot true) (fun second ↦
-          f (fun who ↦ if who then second else first))) :=
-  QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool
-    selectedRoot f
-
 /-- `terminalRoot` unfolds to the uniform coin at every player. -/
 @[simp] theorem terminalRoot_apply (who : Bool) :
     terminalRoot who = PMF.uniformOfFintype Bool := rfl
@@ -152,7 +142,7 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
 theorem quitPayoff_terminalRoot_false :
     quittingRootQuitPayoff reward (0 : Payoff Bool) terminalRoot false = 1 / 2 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
   norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
     quittingSingletonTerminal]
@@ -161,7 +151,7 @@ theorem quitPayoff_terminalRoot_false :
 theorem continuePayoff_terminalRoot_false :
     quittingRootContinuePayoff reward (0 : Payoff Bool) terminalRoot false = 1 / 2 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
   norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
     quittingSingletonTerminal]
@@ -170,7 +160,7 @@ theorem continuePayoff_terminalRoot_false :
 theorem quitPayoff_terminalRoot_true :
     quittingRootQuitPayoff reward (0 : Payoff Bool) terminalRoot true = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
   norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
     quittingSingletonTerminal]
@@ -179,7 +169,7 @@ theorem quitPayoff_terminalRoot_true :
 theorem continuePayoff_terminalRoot_true :
     quittingRootContinuePayoff reward (0 : Payoff Bool) terminalRoot true = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp only [expect_eq_sum, Fintype.sum_bool]
   norm_num [quittingRootPayoff, reward, terminalRoot, PMF.uniformOfFintype_apply,
     quittingSingletonTerminal]
@@ -237,7 +227,7 @@ reward, independent of the continuation value. -/
     quittingRootQuitPayoff reward tail quittingAllContinueRoot who =
       reward (quittingSingletonTerminal who) who := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [quittingAllContinueRoot, quittingRootPayoff, reward,
       quittingSingletonTerminal]
@@ -248,7 +238,7 @@ continuation value. -/
     quittingRootContinuePayoff reward tail quittingAllContinueRoot who =
       tail who := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;> simp [quittingAllContinueRoot, quittingRootPayoff]
 
 /-- Every all-Continue row carries zero absorption mass: opponent-only
@@ -648,7 +638,7 @@ theorem false_quitPayoff (tail : Payoff Bool) (root : Bool → PMF Bool) :
     quittingRootQuitPayoff reward tail root false =
       1 / 4 + (root true true).toReal / 2 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   have hsum := quittingRoot_continueProbability_add_quitProbability root true
   have hc : (root true false).toReal = 1 - (root true true).toReal := by linarith
   simp only [expect_eq_sum, Fintype.sum_bool]
@@ -661,7 +651,7 @@ theorem false_continuePayoff (tail : Payoff Bool) (root : Bool → PMF Bool) :
     quittingRootContinuePayoff reward tail root false =
       (1 - (root true true).toReal) * tail false + (root true true).toReal := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   have hsum := quittingRoot_continueProbability_add_quitProbability root true
   have hc : (root true false).toReal = 1 - (root true true).toReal := by linarith
   simp only [expect_eq_sum, Fintype.sum_bool]
@@ -674,7 +664,7 @@ theorem true_quitPayoff (tail : Payoff Bool) (root : Bool → PMF Bool) :
     quittingRootQuitPayoff reward tail root true =
       (root false true).toReal / 2 - 1 / 4 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   have hsum := quittingRoot_continueProbability_add_quitProbability root false
   have hc : (root false false).toReal = 1 - (root false true).toReal := by linarith
   simp only [expect_eq_sum, Fintype.sum_bool]
@@ -687,7 +677,7 @@ theorem true_continuePayoff (tail : Payoff Bool) (root : Bool → PMF Bool) :
     quittingRootContinuePayoff reward tail root true =
       (1 - (root false true).toReal) * tail true := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   have hsum := quittingRoot_continueProbability_add_quitProbability root false
   have hc : (root false false).toReal = 1 - (root false true).toReal := by linarith
   simp only [expect_eq_sum, Fintype.sum_bool]

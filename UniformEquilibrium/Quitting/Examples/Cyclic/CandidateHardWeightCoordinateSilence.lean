@@ -390,9 +390,8 @@ theorem fixedOpponentsContinueMass_true (x : ℕ → Bool → PMF Bool) (t : ℕ
 /-- Coordinate `1`'s fixed-opponents continue mass at `t` is opponent `2`'s
 continue probability at `t`. -/
 theorem fixedOpponentsContinueMass_false (x : ℕ → Bool → PMF Bool) (t : ℕ) :
-    quittingFixedOpponentsContinueMass x false t = (x t true false).toReal := by
-  unfold quittingFixedOpponentsContinueMass
-  exact continueMass_false (x t)
+    quittingFixedOpponentsContinueMass x false t = (x t true false).toReal :=
+  quittingFixedOpponentsContinueMass_bool_false x t
 
 /-! ## Deliverable 1 -/
 

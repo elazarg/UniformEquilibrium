@@ -45,6 +45,18 @@ theorem quittingStationaryContinueMass_eq_prod_continueProbability
   rfl
 
 omit [DecidableEq ι] in
+/-- A product row in which some player quits surely has zero all-Continue
+mass. -/
+theorem quittingStationaryContinueMass_of_sureQuitter
+    {root : ι → PMF Bool} {quitter : ι}
+    (hquit : root quitter = PMF.pure true) :
+    quittingStationaryContinueMass root = 0 := by
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+  refine Finset.prod_eq_zero (Finset.mem_univ quitter) ?_
+  rw [hquit]
+  simp
+
+omit [DecidableEq ι] in
 /-- A product root with all-continue mass one has every marginal pure
 Continue. -/
 theorem eq_pure_false_of_quittingStationaryContinueMass_eq_one
@@ -192,6 +204,20 @@ theorem quittingRootAbsorptionMass_nonneg
     (root : ι → PMF Bool) :
     0 ≤ quittingRootAbsorptionMass root := by
   exact sub_nonneg.mpr (quittingStationaryContinueMass_le_one root)
+
+omit [DecidableEq ι] in
+/-- Every marginal Quit probability is bounded by joint absorption. -/
+theorem quittingQuitProbability_le_absorptionMass
+    (root : ι → PMF Bool) (who : ι) :
+    (root who true).toReal ≤ quittingRootAbsorptionMass root := by
+  have hcontinue :=
+    quittingStationaryContinueMass_le_ownContinueProbability root who
+  have hsum :
+      (root who false).toReal + (root who true).toReal = 1 := by
+    simpa [Fintype.sum_bool, add_comm] using
+      (pmf_toReal_sum_one (root who))
+  unfold quittingRootAbsorptionMass
+  linarith
 
 /-- One-stage absorption probability after forcing `who` to Continue.  This
 is the opponent-absorption hazard faced by `who`. -/

@@ -687,10 +687,7 @@ theorem continueMass_eq_zero_of_sureQuitter
     {root : ι → PMF Bool} {quitter : ι}
     (hquit : root quitter = PMF.pure true) :
     quittingStationaryContinueMass root = 0 := by
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
-  refine Finset.prod_eq_zero (Finset.mem_univ quitter) ?_
-  rw [hquit]
-  simp
+  exact quittingStationaryContinueMass_of_sureQuitter hquit
 
 /-- Updating one coordinate of the second gate cannot remove both distinct sure quitters. -/
 theorem secondRoot_update_continueMass_eq_zero

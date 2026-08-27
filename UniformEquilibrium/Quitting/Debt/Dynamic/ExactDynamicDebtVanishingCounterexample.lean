@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.Bool
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebtPositiveLimit
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
@@ -80,16 +81,14 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
       expect (selectedRoot false) (fun first ↦
         expect (selectedRoot true) (fun second ↦
           f (fun who ↦ if who then second else first))) :=
-  StochasticGame.BigMatch.expect_pmfPi_bool selectedRoot f
+  Math.PMFProduct.expect_pmfPi_bool selectedRoot f
 
 /-- Explicit quitter set for a two-coordinate Boolean action. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =
       (if first = true then {false} else ∅) ∪
-        (if second = true then {true} else ∅) := by
-  ext who
-  cases who <;> cases first <;> cases second <;>
-    simp [quittingQuitters]
+        (if second = true then {true} else ∅) :=
+  GameTheory.quittingQuitters_boolAction first second
 
 @[simp] theorem quittingQuitters_const_true :
     quittingQuitters (fun _ : Bool ↦ true) = {false, true} := by
@@ -531,10 +530,8 @@ player two's Continue probability. -/
 theorem fixedOpponentsContinueMass_false
     (roots : ℕ → Bool → PMF Bool) (time : ℕ) :
     quittingFixedOpponentsContinueMass roots false time =
-      (roots time true false).toReal := by
-  unfold quittingFixedOpponentsContinueMass
-    quittingStationaryContinueMass
-  simp [pmfPi_apply, quittingAllContinueAction]
+      (roots time true false).toReal :=
+  quittingFixedOpponentsContinueMass_bool_false roots time
 
 /-- Symmetrically, player two's fixed-opponent Continue mass is player one's
 Continue probability. -/

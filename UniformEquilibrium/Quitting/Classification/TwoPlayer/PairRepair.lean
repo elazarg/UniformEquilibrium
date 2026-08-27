@@ -42,10 +42,8 @@ namespace QuittingTwoPlayerPairRepair
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =
       (if first = true then {false} else ∅) ∪
-        (if second = true then {true} else ∅) := by
-  ext who
-  cases who <;> cases first <;> cases second <;>
-    simp [quittingQuitters]
+        (if second = true then {true} else ∅) :=
+  GameTheory.quittingQuitters_boolAction first second
 
 /-- Player two quits surely, while player one quits with hazard `p`. -/
 def pairRoot (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
@@ -75,10 +73,8 @@ def pairRoot (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) :
 @[simp] theorem expect_quittingHazardCoin
     (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (f : Bool → ℝ) :
     expect (quittingHazardCoin p hp0 hp1) f =
-      (1 - p) * f false + p * f true := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  simp
-  ring
+      (1 - p) * f false + p * f true :=
+  GameTheory.expect_quittingHazardCoin p hp0 hp1 f
 
 /-! ## Endpoint and prescribed-payoff formulas -/
 

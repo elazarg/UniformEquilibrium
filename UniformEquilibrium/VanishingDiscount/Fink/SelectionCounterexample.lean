@@ -3,6 +3,7 @@ Copyright (c) 2026 GameTheory contributors. All rights reserved.
 Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.VanishingDiscount.Fink.TangentCounterexample
 
 /-!
@@ -385,13 +386,6 @@ open Math.ProbabilityMassFunction
 
 /-! ## Semantic uniqueness of the live Bellman equilibrium -/
 
-lemma pmfBool_false_toReal (μ : PMF Bool) :
-    (μ false).toReal = 1 - (μ true).toReal := by
-  have h := expect_const μ (1 : ℝ)
-  rw [expect_eq_sum, Fintype.sum_bool] at h
-  norm_num at h ⊢
-  linarith
-
 lemma pmfBool_toReal_nonneg (μ : PMF Bool) (d : Bool) :
     0 ≤ (μ d).toReal := ENNReal.toReal_nonneg
 
@@ -443,7 +437,7 @@ lemma discountedAuxEU_eq_bool_mix
     _ = _ := by
       unfold StochasticGame.discountedAuxEU
       rw [pmfPi_update_bind, expect_bind, expect_eq_sum, Fintype.sum_bool]
-      rw [pmfBool_false_toReal]
+      rw [Math.PMFProduct.pmfBool_false_toReal]
       exact add_comm _ _
 
 /-- Player 1's two live pure auxiliary payoffs in semantic coordinates. -/
@@ -473,7 +467,7 @@ lemma playerOne_live_pure_values
   simp only [hHigh, hLow, Bool.false_eq_true, ↓reduceIte, Bool.and_true, mul_neg, mul_one,
     neg_sub, decide_true, Bool.and_self, Bool.and_false, Bool.not_false, Bool.or_self,
     Bool.not_true, Bool.or_true, Bool.or_false]
-  simp_rw [pmfBool_false_toReal]
+  simp_rw [Math.PMFProduct.pmfBool_false_toReal]
   constructor <;> ring
 
 lemma playerTwo_live_pure_values
@@ -501,7 +495,7 @@ lemma playerTwo_live_pure_values
   simp only [hHigh, hLow, ↓reduceIte, decide_false, Bool.not_false, Bool.and_self, decide_true,
     Bool.not_true, Bool.and_true, Bool.true_eq_false, mul_neg, mul_one, neg_sub,
     Bool.false_eq_true, Bool.and_false, Bool.or_true, Bool.or_self, Bool.or_false]
-  simp_rw [pmfBool_false_toReal]
+  simp_rw [Math.PMFProduct.pmfBool_false_toReal]
   constructor <;> ring
 
 /-- Every discounted stationary Bellman equilibrium on the selection-resistant

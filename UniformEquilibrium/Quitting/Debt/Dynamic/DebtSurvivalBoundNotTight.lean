@@ -191,9 +191,8 @@ theorem roots_true (time : ℕ) : roots time true = PMF.pure false := by
 /-- Fixed-opponent Continue mass, generic in the underlying root family. -/
 theorem fixedOpponentsContinueMass_eq (rootsFamily : ℕ → Bool → PMF Bool) (time : ℕ) :
     quittingFixedOpponentsContinueMass rootsFamily false time =
-      (rootsFamily time true false).toReal := by
-  unfold quittingFixedOpponentsContinueMass quittingStationaryContinueMass
-  simp [pmfPi_apply, quittingAllContinueAction]
+      (rootsFamily time true false).toReal :=
+  quittingFixedOpponentsContinueMass_bool_false rootsFamily time
 
 /-- The opponent's certain-continue behavior makes the fixed-opponent
 Continue mass exactly `1` at every stage.  Consequently the opponent

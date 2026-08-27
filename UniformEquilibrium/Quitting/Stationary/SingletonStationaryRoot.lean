@@ -183,6 +183,15 @@ def quittingHazardCoin (h : ℝ) (hh0 : 0 ≤ h) (hh1 : h ≤ 1) : PMF Bool :=
   simp [quittingHazardCoin, PMF.ofFintype_apply,
     ENNReal.toReal_ofReal (sub_nonneg.mpr hh1)]
 
+/-- Expectation under a Boolean hazard coin. -/
+theorem expect_quittingHazardCoin
+    (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (f : Bool → ℝ) :
+    expect (quittingHazardCoin p hp0 hp1) f =
+      (1 - p) * f false + p * f true := by
+  rw [expect_eq_sum, Fintype.sum_bool]
+  simp
+  ring
+
 /-- The rpow subdivision hazard is strictly below one whenever its coarse
 hazard is strictly below one. -/
 theorem quittingMeshHazard_lt_one {p : ℝ} (hp1 : p < 1) (m : ℕ) :

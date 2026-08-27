@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
+import MathUE.PMFProduct.Bool
 import MathUE.ProbabilityMassFunction.Bool
 
 /-!
@@ -53,23 +54,12 @@ def root : Bool → PMF Bool := fun who =>
 weight in the common telescope language. -/
 def roots : ℕ → Bool → PMF Bool := fun _ => root
 
-/-- Fubini expansion of a two-player Boolean product law. -/
-theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
-    (f : (Bool → Bool) → ℝ) :
-    expect (pmfPi selectedRoot) f =
-      expect (selectedRoot false) (fun first ↦
-        expect (selectedRoot true) (fun second ↦
-          f (fun who ↦ if who then second else first))) :=
-  StochasticGame.BigMatch.expect_pmfPi_bool selectedRoot f
-
 /-- Explicit quitter set for a two-coordinate Boolean action. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =
       (if first = true then {false} else ∅) ∪
-        (if second = true then {true} else ∅) := by
-  ext who
-  cases who <;> cases first <;> cases second <;>
-    simp [quittingQuitters]
+        (if second = true then {true} else ∅) :=
+  GameTheory.quittingQuitters_boolAction first second
 
 @[simp] theorem reward_false_singleton :
     reward (quittingSingletonTerminal false) false = -1 := by
@@ -87,14 +77,14 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
 @[simp] theorem false_quitPayoff :
     quittingRootQuitPayoff reward tail root false = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp [root, quittingRootPayoff, reward,
     Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
 
 @[simp] theorem false_continuePayoff :
     quittingRootContinuePayoff reward tail root false = -(1 / 2 : ℝ) := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp [root, tail, quittingRootPayoff, reward,
     Math.ProbabilityMassFunction.expect_uniformOfFintype_bool]
   norm_num
@@ -102,13 +92,13 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
 @[simp] theorem true_quitPayoff :
     quittingRootQuitPayoff reward tail root true = 0 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp [root, quittingRootPayoff, reward]
 
 @[simp] theorem true_continuePayoff :
     quittingRootContinuePayoff reward tail root true = 0 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   simp [root, quittingRootPayoff, reward]
 
 /-- The prescribed root payoff is zero for both players. -/
