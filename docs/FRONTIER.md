@@ -565,8 +565,47 @@ canonical mass floor, and
 semantic tail.  Composing the adapter with the bounded-data producer gives
 `uniformPayoff_or_nonempty_finFourAtlasClockCompressedDirectedNode`
 (`Research/Quitting/FinFourProducerAtlas/SemanticCoverage.lean`).  This is a
-one-way producer normalization, not an equivalence or a consumer of the three
-nodes.
+one-way producer normalization, not an equivalence; the two non-singleton
+nodes still have no consumer here.
+
+The source-attached strengthening
+`FinFourAtlasWeakConcentratedSingletonCore.nonempty_strongConcentratedPacket`
+(`Research/Quitting/FinFourProducerAtlas/StrongConcentratedPacket.lean`) takes
+the exact weak core at the same `mu^2 / 8` resolution, extracts its singleton
+owner `j`, chooses a distinct packet owner `o`, and applies the literal
+best-endpoint update.  The original `j` remains in the routed terminal, while
+`FinFourAtlasWeakStrongConcentratedPacket.routedTerminal_mode_and_card` records
+the honest mode split: Continue leaves the singleton `{j}`, whereas Quit gives
+the pair `{o, j}`.  The generic adapter's
+`QuittingStageAtomConcentratedPacketAdapter.sourceStageMass_le_targetStageMass`,
+`QuittingStageAtomConcentratedPacketAdapter.ownerMarkedDefect_eq_zero`, and
+`QuittingStageAtomConcentratedPacketAdapter.targetTail_eq_sourceTail`
+(`Research/Quitting/PositiveStageAtomConcentratedPacket.lean`) give no-loss
+stage mass, exactly zero marked owner defect, and the unchanged semantic tail;
+the owner's unrestricted cap is also preserved.  This is a constant-profile
+reprojection packet, not a claim that its full target root is Nash or
+near-minimal.
+
+For the diffuse minimum-singleton origin,
+`FinFourOwnerCompressedSingletonProducer.nonempty_strongConcentratedPacket`
+(`Research/Quitting/FinFourProducerAtlas/StrongConcentratedPacket.lean`) uses
+the producer's already fixed chronology: for every `0 < lambda < mu` and every
+depth it retains an endpoint beyond that depth and constructs the packet at
+exactly `lambda`, without reselecting the chronology.  At the canonical scale,
+`FinFourAtlasWeakConcentratedSingletonCore.nonempty_strongConcentratedPacketConsumption`
+and
+`FinFourAtlasWeakStrongConcentratedPacketConsumption.strategic_or_collisionMinimumResidual`
+(`Research/Quitting/FinFourProducerAtlas/StrongConcentratedPacketConsumer.lean`)
+give the exact downstream contraction.  One arm carries the concentrated
+strategic dispatch together with either a static atomic-toggle handoff or
+exact player deletion; the other retains the same literal packet as a
+collision-minimum residual.  Thus the diffuse minimum-singleton obligation is
+closed as a separate atlas leaf, but the resulting strong
+concentrated-singleton obligation is only contracted, not completed.  The
+arbitrary-resolution theorem
+`FinFourOwnerCompressedSingletonProducer.nonempty_strongConcentratedPacketConsumption`
+provides the same split at every admissible `lambda` and depth on that one
+chronology.
 
 The same semantic-coverage module also provides
 `FinFourComplementaryPairMonodromyProducer.nonempty_prescribedPairPaidCapSemanticDispatch_reselectingSource`.
@@ -580,10 +619,11 @@ Finally,
 (`Research/Quitting/FinFourProducerAtlas/LiteralNoGo.lean`) excludes only an
 exact Nash--Bellman embedding which preserves the displayed root and shifted
 tail payoff.  The six-leaf atlas, its four-node view, and the clock-compressed
-three-node view have `M`, `L`, and `A`, but no `C`: their constructors are data
-alternatives rather than a uniqueness or table-level pairwise-exclusivity
-theorem.  The compressed target is not asserted cap--Nash, near-minimal, or
-reprojected to the terminal-semantic carrier.  The retained exact cap-root
+three-node view have `M`, `L`, and `A`; the strong concentrated-singleton route
+additionally has `C` for the exact contraction above, not for a completion
+theorem.  The atlas constructors remain data alternatives rather than a
+uniqueness or table-level pairwise-exclusivity theorem.  The strong target is
+not asserted full-root Nash or near-minimal, and the retained exact cap-root
 stack remains a certificate for the unmodified source suffix.  No return,
 regeneration, recursive descent, backward compiler, chronology return,
 completion closure, or downstream uniform-payoff consumer is supplied.
