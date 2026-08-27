@@ -72,6 +72,7 @@ import Research.Quitting.EscapeAwareQuantileClockPolynomialLower
 import Research.Quitting.EscapeAwareQuantileClockTransport
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
+import Research.Quitting.FinFourSameStageEndpointMonodromy
 import Research.Quitting.FiniteClockPolynomialCenter
 import Research.Quitting.FiniteClockPolynomialCertificate
 import Research.Quitting.FiniteClockTerminalSemantics
@@ -136,6 +137,8 @@ import Research.Quitting.SoloWindowPhaseStopBranch
 import Research.Quitting.SoloQuantitativePassport
 import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
+import Research.Quitting.SameStageEndpointMonodromy
+import Research.Quitting.SameStageEndpointPurification
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport

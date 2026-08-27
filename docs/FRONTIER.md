@@ -467,6 +467,33 @@ permit a sharp `31/32` phase--seam obstruction.  Its ambient all-Quit profile
 has `D_* = 0`; whether positive global minimum debt forces alignment remains
 the exact branch-facing question.
 
+The Research same-stage endpoint route now has a checked Fin4 structural
+adapter, but not a closure theorem.  The literal closed-segment declarations
+`dispatchedClosedSegment_offset_edge_certificate`,
+`dispatchedClosedSegment_offset_edge_full_certificate`, and
+`dispatchedClosedSegment_offset_literal_profile_update`
+(`Research/Quitting/SameStageEndpointMonodromy.lean`) retain a positive edge,
+its full routed-target data and literal one-date profile update at each offset.
+The edge certificate includes the exact best-action field
+`QuittingSameStageEndpointEdge.action_eq_best`;
+`dispatchedClosedSegment_player_circulation` gives the exact player
+circulation sum over the period.
+`finFourTraceCodeSupport_card_eq_period`,
+`finFourTrace_stageMass_ge_liveMass`,
+`finFourTrace_offset_gain_certificate`, and
+`finFourTrace_common_or_complementary_exact`
+(`Research/Quitting/FinFourSameStageEndpointMonodromy.lean`) transfer this
+literal trace to the ordered Fin4 code, give an all-offset live-mass floor and
+a best-action gain of at least `lambda * debt / 8`, and make the
+complementary-pair alternative an exact complement equality.  Together with
+`finFourTrace_period_le_eight_and_geometry`, they give the support, period,
+and common-player/complementary-pair conclusions.  The composition
+`quittingPartialPurification_then_finFourSameStage_dispatch` remains
+conditional on its carrier/minimum, positive mass, and low-tail hypotheses and
+returns either a singleton route or a finite dispatched cycle.  It supplies no
+uniform-equilibrium consumer, chronology return, or producer for those
+hypotheses.
+
 On `Fin 4`, the source construction is now unconditional from the negative
 semantic endpoint. For every terminal exploitability witness and every
 prescribed reset owner with a disjoint two-player base,

@@ -127,10 +127,13 @@ import MathUE.DirectedTransport.SCC
 import MathUE.DirectedTransport.SimpleCycleBalance
 import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
+import MathUE.FinFourCoalitionCycle
+import MathUE.FinFourOrderedCoalitionCycle
 import MathUE.FiniteAffineIntervalClassification
 import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteBinaryBlockEquilibrium
 import MathUE.FiniteBinaryWeightedPotential
+import MathUE.FiniteBooleanEndpointOrbit
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteCyclicVariation
 import MathUE.FiniteDeflationIteration

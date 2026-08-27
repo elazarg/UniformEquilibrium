@@ -88,6 +88,7 @@ import MathUE.FiniteAffineIntervalClassification
 import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteBinaryBlockEquilibrium
 import MathUE.FiniteBinaryWeightedPotential
+import MathUE.FiniteBooleanEndpointOrbit
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
@@ -99,6 +100,8 @@ import MathUE.FinitePowerSumRoot
 import MathUE.FiniteSerialRelation
 import MathUE.FiniteSerialRelation.MarkedTwoCycle
 import MathUE.FiniteWeightedSelection
+import MathUE.FinFourCoalitionCycle
+import MathUE.FinFourOrderedCoalitionCycle
 import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
