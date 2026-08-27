@@ -35,6 +35,21 @@ open Math Math.Probability Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
+/-- A uniform bound on pure stage payoffs controls every behaviorally mixed
+stage payoff.  This is the shared pointwise bound used by the public-certificate
+compilers. -/
+theorem abs_stageEUAt_le_of_abs_stagePayoff_le
+    [Fintype ι]
+    (profile : G.BehaviorProfile) {payoffBound : ℝ}
+    (hpayoff :
+      ∀ state action who,
+        |G.stagePayoff state action who| ≤ payoffBound)
+    {stage : ℕ} (history : G.Hist stage) (who : ι) :
+    |G.stageEUAt profile history who| ≤ payoffBound := by
+  unfold stageEUAt
+  exact abs_expect_le_of_abs_le _ _
+    (fun action => hpayoff history.2 action who)
+
 /-- A finite public selection region.  Before a terminal state is reached,
 the public kernel is independent of every joint action and strictly lowers
 the natural-valued rank on its support.

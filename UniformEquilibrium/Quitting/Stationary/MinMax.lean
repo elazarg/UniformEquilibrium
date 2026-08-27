@@ -491,11 +491,7 @@ theorem quittingOpponentSurvivalWeight_shift
     quittingOpponentSurvivalWeight roots who start (fuel + 1) =
       quittingFixedOpponentsContinueMass roots who start *
         quittingOpponentSurvivalWeight roots who (start + 1) fuel := by
-  unfold quittingOpponentSurvivalWeight
-  rw [Finset.prod_range_succ', Nat.add_zero, mul_comm]
-  congr 1
-  refine Finset.prod_congr rfl fun offset _ => ?_
-  rw [show start + (offset + 1) = start + 1 + offset from by omega]
+  exact quittingOpponentSurvivalWeight_succ_left roots who start fuel
 
 /-- Peeling the first live stage off a ledger. -/
 theorem quittingLiveLedgerAccum_shift

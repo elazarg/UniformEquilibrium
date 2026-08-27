@@ -46,17 +46,8 @@ omit [DecidableEq ι] in
 /-- Every marginal quit probability is bounded by joint absorption. -/
 theorem quittingRoot_quitProbability_le_absorptionMass
     (root : ι → PMF Bool) (who : ι) :
-    (root who true).toReal ≤ quittingRootAbsorptionMass root := by
-  have hcontinue : quittingStationaryContinueMass root ≤
-      (root who false).toReal := by
-    classical
-    rw [quittingStationaryContinueMass_eq_deletedContinueMass_mul_own
-      root who]
-    exact mul_le_of_le_one_left ENNReal.toReal_nonneg
-      (quittingRootDeletedContinueMass_le_one root who)
-  have hsum := quittingRoot_continueProbability_add_quitProbability root who
-  unfold quittingRootAbsorptionMass
-  linarith
+    (root who true).toReal ≤ quittingRootAbsorptionMass root :=
+  quittingQuitProbability_le_absorptionMass root who
 
 /-- Marginal quit rate after division by remaining eventual absorption. -/
 def quittingTailDiffuseRescaledHazard

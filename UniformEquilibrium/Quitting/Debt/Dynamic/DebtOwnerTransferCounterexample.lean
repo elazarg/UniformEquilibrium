@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.PMFProduct.Bool
 import UniformEquilibrium.Quitting.Debt.Dynamic.PositiveDynamicDebtProvenance
 import UniformEquilibrium.Quitting.Debt.Dynamic.ExactDynamicDebtVanishingCounterexample
 
@@ -70,8 +71,7 @@ theorem expect_pmfPi_bool (selectedRoot : Bool → PMF Bool)
       expect (selectedRoot false) (fun first ↦
         expect (selectedRoot true) (fun second ↦
           f (fun who ↦ if who then second else first))) :=
-  QuittingExactDynamicDebtVanishingCounterexample.expect_pmfPi_bool
-    selectedRoot f
+  Math.PMFProduct.expect_pmfPi_bool selectedRoot f
 
 @[simp] theorem root_apply (who : Bool) :
     root who = PMF.uniformOfFintype Bool := rfl

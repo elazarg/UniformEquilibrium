@@ -404,9 +404,7 @@ theorem quittingOpponentSurvivalWeight_succ_front
     quittingOpponentSurvivalWeight roots who start (fuel + 1) =
       quittingFixedOpponentsContinueMass roots who start *
         quittingOpponentSurvivalWeight roots who (start + 1) fuel := by
-  rw [← quittingFiniteContinueWeight_fixedOpponents_eq_survivalWeight,
-    ← quittingFiniteContinueWeight_fixedOpponents_eq_survivalWeight]
-  rfl
+  exact quittingOpponentSurvivalWeight_succ_left roots who start fuel
 
 /-- The prescribed intercept is the actual zero-boundary policy value. -/
 theorem quittingFiniteBoundaryHolonomy_prescribed_intercept

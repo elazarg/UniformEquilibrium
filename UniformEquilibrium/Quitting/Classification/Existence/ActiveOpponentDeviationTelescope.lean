@@ -97,12 +97,8 @@ omit [DecidableEq ι] in
 /-- One player's quit probability is dominated by the joint absorption
 mass. -/
 theorem quitProbability_le_absorptionMass (root : ι → PMF Bool) (who : ι) :
-    (root who true).toReal ≤ quittingRootAbsorptionMass root := by
-  have hcontinue :=
-    quittingStationaryContinueMass_le_ownContinueProbability root who
-  have hsum := quittingRoot_continueProbability_add_quitProbability root who
-  unfold quittingRootAbsorptionMass
-  linarith
+    (root who true).toReal ≤ quittingRootAbsorptionMass root :=
+  quittingQuitProbability_le_absorptionMass root who
 
 /-- One player's quit weight times its opponents' continue mass is exactly
 the joint absorption minus the opponent absorption. -/

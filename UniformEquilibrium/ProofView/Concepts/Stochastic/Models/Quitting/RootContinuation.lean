@@ -30,6 +30,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 def quittingQuitters (action : ι → Bool) : Finset ι :=
   {who | action who = true}
 
+/-- Explicit quitter set for a two-coordinate Boolean action. -/
+theorem quittingQuitters_boolAction (first second : Bool) :
+    quittingQuitters (fun who : Bool ↦ if who then second else first) =
+      (if first = true then {false} else ∅) ∪
+        (if second = true then {true} else ∅) := by
+  ext who
+  cases who <;> cases first <;> cases second <;>
+    simp [quittingQuitters]
+
 omit [DecidableEq ι] in
 @[simp] theorem quittingGame_transition_none
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

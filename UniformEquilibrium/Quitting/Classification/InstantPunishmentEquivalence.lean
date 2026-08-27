@@ -87,16 +87,6 @@ theorem quittingStationaryContinueMass_update_of_sureQuitter
   simp
 
 omit [DecidableEq ι] in
-/-- A row in which some player quits surely absorbs surely. -/
-theorem quittingStationaryContinueMass_of_sureQuitter
-    {root : ι → PMF Bool} {quitter : ι} (hquit : root quitter = PMF.pure true) :
-    quittingStationaryContinueMass root = 0 := by
-  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
-  refine Finset.prod_eq_zero (Finset.mem_univ quitter) ?_
-  rw [hquit]
-  simp
-
-omit [DecidableEq ι] in
 /-- The first live row of a spliced profile is its declared root. -/
 @[simp] theorem quittingProfileLiveRoot_rootThenContinuation_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

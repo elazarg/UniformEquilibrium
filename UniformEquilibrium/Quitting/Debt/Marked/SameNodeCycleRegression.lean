@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Examples.BigMatch.Basic
 import UniformEquilibrium.Quitting.Debt.Marked.FenceIteration
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import MathUE.PMFProduct.Bool
 import MathUE.ProbabilityMassFunction.Bool
 
 /-!
@@ -58,25 +59,14 @@ def secondValue : Payoff Bool := fun _ => -1
 /-- Terminal continuation beyond the surely absorbing root. -/
 def terminalValue : Payoff Bool := fun _ => 0
 
-/-- Fubini expansion of a two-player Boolean product law. -/
-theorem expect_pmfPi_bool (root : Bool → PMF Bool)
-    (f : (Bool → Bool) → ℝ) :
-    expect (pmfPi root) f =
-      expect (root false) (fun first ↦
-        expect (root true) (fun second ↦
-          f (fun who ↦ if who then second else first))) :=
-  StochasticGame.BigMatch.expect_pmfPi_bool root f
-
 /-- Explicit quitter set for a two-coordinate Boolean action.  Keeping this
 small normal form available makes the endpoint calculations below robust to
 the representation of `Finset.univ` chosen by simplification. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool ↦ if who then second else first) =
       (if first = true then {false} else ∅) ∪
-        (if second = true then {true} else ∅) := by
-  ext who
-  cases who <;> cases first <;> cases second <;>
-    simp [quittingQuitters]
+        (if second = true then {true} else ∅) :=
+  GameTheory.quittingQuitters_boolAction first second
 
 @[simp] theorem halfRoot_true_toReal (who : Bool) :
     (halfRoot who true).toReal = 1 / 2 := by
@@ -99,7 +89,7 @@ joint-quit outcomes have equal weight. -/
 @[simp] theorem halfRoot_quitPayoff (who : Bool) :
     quittingRootQuitPayoff reward secondValue halfRoot who = -2 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [halfRoot, secondValue, quittingRootPayoff,
       reward, Math.ProbabilityMassFunction.expect_uniformOfFintype_bool] <;>
@@ -110,7 +100,7 @@ outcome and the all-continue successor have equal weight. -/
 @[simp] theorem halfRoot_continuePayoff (who : Bool) :
     quittingRootContinuePayoff reward secondValue halfRoot who = -2 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [halfRoot, secondValue, quittingRootPayoff,
       reward, Math.ProbabilityMassFunction.expect_uniformOfFintype_bool] <;>
@@ -136,7 +126,7 @@ reward `-1`. -/
 @[simp] theorem sureRoot_quitPayoff (who : Bool) :
     quittingRootQuitPayoff reward terminalValue sureRoot who = -1 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [sureRoot, terminalValue, quittingRootPayoff,
       reward]
@@ -146,7 +136,7 @@ singleton reward `-3`. -/
 @[simp] theorem sureRoot_continuePayoff (who : Bool) :
     quittingRootContinuePayoff reward terminalValue sureRoot who = -3 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [sureRoot, terminalValue, quittingRootPayoff,
       reward]
@@ -208,7 +198,7 @@ theorem selectedEdge_diracMarginals_ne :
     quittingRootQuitPayoff reward firstValue quittingAllContinueRoot who =
       -3 := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [quittingAllContinueRoot, firstValue, quittingRootPayoff, reward]
 
@@ -217,7 +207,7 @@ theorem selectedEdge_diracMarginals_ne :
     quittingRootContinuePayoff reward firstValue quittingAllContinueRoot who =
       -2 := by
   unfold quittingRootContinuePayoff quittingRootExpectedPayoff
-  rw [expect_pmfPi_bool]
+  rw [Math.PMFProduct.expect_pmfPi_bool]
   cases who <;>
     simp [quittingAllContinueRoot, firstValue, quittingRootPayoff, reward]
 

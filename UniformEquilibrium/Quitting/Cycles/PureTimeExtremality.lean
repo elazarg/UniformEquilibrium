@@ -254,6 +254,16 @@ def quittingFixedOpponentsContinueMass
   quittingStationaryContinueMass
     (Function.update (roots time) who (PMF.pure false))
 
+/-- With two Boolean-indexed players, player `false`'s fixed-opponent
+Continue mass is player `true`'s Continue probability. -/
+theorem quittingFixedOpponentsContinueMass_bool_false
+    (roots : ℕ → Bool → PMF Bool) (time : ℕ) :
+    quittingFixedOpponentsContinueMass roots false time =
+      (roots time true false).toReal := by
+  unfold quittingFixedOpponentsContinueMass
+    quittingStationaryContinueMass
+  simp [pmfPi_apply, quittingAllContinueAction]
+
 /-- The actual finite zero-boundary terminal payoff, computed by composing
 the existing one-root quitting payoff along the live path. -/
 def quittingFiniteRootPayoff

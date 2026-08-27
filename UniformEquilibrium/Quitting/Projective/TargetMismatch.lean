@@ -74,10 +74,8 @@ def reward (S : Terminal) : Payoff Player :=
 /-- Explicit quitter set for a two-coordinate Boolean action. -/
 @[simp] theorem quittingQuitters_boolAction (first second : Bool) :
     quittingQuitters (fun who : Bool => if who then second else first) =
-      (if first then {false} else ∅) ∪ (if second then {true} else ∅) := by
-  ext who
-  cases who <;> cases first <;> cases second <;>
-    simp [quittingQuitters]
+      (if first then {false} else ∅) ∪ (if second then {true} else ∅) :=
+  GameTheory.quittingQuitters_boolAction first second
 
 @[simp] theorem quittingQuitters_id :
     quittingQuitters (fun who : Bool => who) = {true} := by
@@ -132,10 +130,8 @@ private theorem expect_pmfPi_bool
 @[simp] theorem expect_hazardCoin
     (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (f : Bool → ℝ) :
     expect (quittingHazardCoin p hp0 hp1) f =
-      (1 - p) * f false + p * f true := by
-  rw [expect_eq_sum, Fintype.sum_bool]
-  simp
-  ring
+      (1 - p) * f false + p * f true :=
+  GameTheory.expect_quittingHazardCoin p hp0 hp1 f
 
 private theorem pureDeviationAuxEU_eq
     (t : ℝ) (ht0 : 0 ≤ t) (hthalf : t ≤ 1 / 2)

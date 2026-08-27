@@ -40,14 +40,7 @@ theorem exists_strictToggle_gain
     (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
     ∃ who, quittingSetReward reward S who + witness.terminalGap ≤
       quittingSetReward reward (quittingToggleCoalition S who) who := by
-  rcases witness.exists_leave_or_join_gain S with
-    ⟨member, hmember, hgain⟩ | ⟨outsider, houtsider, hgain⟩
-  · exact ⟨member, by
-      rw [quittingToggleCoalition_of_mem hmember]
-      exact hgain⟩
-  · exact ⟨outsider, by
-      rw [quittingToggleCoalition_of_notMem houtsider]
-      exact hgain⟩
+  exact witness.exists_exactToggle_gain S
 
 /-- A deterministic profitable toggle player, chosen only to expose the
 finite orbit. -/

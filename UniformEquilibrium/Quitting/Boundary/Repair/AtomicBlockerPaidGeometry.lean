@@ -116,13 +116,7 @@ theorem quittingStationaryContinueMass_eq_zero_of_owner_eq_pure
     {root : ι → PMF Bool} {owner : ι}
     (howner : root owner = PMF.pure true) :
     quittingStationaryContinueMass root = 0 := by
-  unfold quittingStationaryContinueMass
-  have hzero :=
-    (quittingRootHasSureQuitter_iff_allContinue_mass_zero root).mp
-      ⟨owner, howner⟩
-  rw [show (quittingAllContinueAction : ι → Bool) =
-      (fun _ => false) by rfl, hzero]
-  simp
+  exact quittingStationaryContinueMass_of_sureQuitter howner
 
 /-- Even after an outsider is forced to Continue, the sure owner kills the
 continuation mass. -/

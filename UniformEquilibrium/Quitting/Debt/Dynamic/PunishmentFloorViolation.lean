@@ -514,12 +514,8 @@ omit [DecidableEq ι] in
 mass. -/
 theorem quitProbability_le_quittingRootAbsorptionMass
     (root : ι → PMF Bool) (who : ι) :
-    (root who true).toReal ≤ quittingRootAbsorptionMass root := by
-  have hcontinue :=
-    quittingStationaryContinueMass_le_ownContinueProbability root who
-  have hsum := quittingRoot_continueProbability_add_quitProbability root who
-  unfold quittingRootAbsorptionMass
-  linarith
+    (root who true).toReal ≤ quittingRootAbsorptionMass root :=
+  quittingQuitProbability_le_absorptionMass root who
 
 /-- A nonnegative series which is not summable has arbitrarily late strictly
 positive terms. -/
