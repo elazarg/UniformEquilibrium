@@ -629,6 +629,24 @@ arbitrary-resolution theorem
 provides the same split at every admissible `lambda` and depth on that one
 chronology.
 
+A separate fixed-resolution one-row route keeps the same weak core but does
+not invoke that consumer.
+`FinFourAtlasWeakConcentratedSingletonCore.nonempty_forcedPairPacket`
+(`Research/Quitting/FinFourProducerAtlas/ForcedPair.lean`) selects a
+table-level full-gap outsider whose best endpoint is Quit, so the literal
+singleton becomes a pair carrying the complete reached live mass.  The
+forced owner has zero defect at that pair; screening the other three Fin4
+coordinates selects a payer with defect at least `D_* / 3`.
+`FinFourWeakCoreForcedPairPacket.resolution_mul_terminalGap_le_forcedOwnerGain`
+gives the first actual gain floor and
+`FinFourWeakCoreForcedPairPacket.canonical_payerGain_floor` gives the paid
+endpoint floor `mu^2 * D_* / 24` at the fixed `mu^2 / 8` resolution.  The
+named own-debt, full-mass, off-date-profile, and semantic-tail accessors retain
+the exact source provenance.  This direct endpoint has `M`, `L`, and `A`, but
+no `C`: no theorem here produces a near-minimum target, controls the other
+coordinates' caps, or supplies the still-missing cofinal minimum-tail family,
+return, regeneration, recursive descent, completion, or uniform payoff.
+
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/UniversalStaticAtomicToggleHandoff.lean`)
