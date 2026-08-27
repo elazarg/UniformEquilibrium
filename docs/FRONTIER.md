@@ -642,10 +642,45 @@ gives the first actual gain floor and
 `FinFourWeakCoreForcedPairPacket.canonical_payerGain_floor` gives the paid
 endpoint floor `mu^2 * D_* / 24` at the fixed `mu^2 / 8` resolution.  The
 named own-debt, full-mass, off-date-profile, and semantic-tail accessors retain
-the exact source provenance.  This direct endpoint has `M`, `L`, and `A`, but
-no `C`: no theorem here produces a near-minimum target, controls the other
-coordinates' caps, or supplies the still-missing cofinal minimum-tail family,
-return, regeneration, recursive descent, completion, or uniform payoff.
+the exact source provenance.  This direct endpoint has `M`, `L`, and `A`; its
+separate consumer below supplies `C` only for a collision/minimum-tail
+contraction.  It does not make the whole pair target near-minimal or control
+the other coordinates' caps.
+
+The one-shot Part A theorem
+`FinFourAtlasWeakConcentratedSingletonCore.nonempty_forcedPairResidualCapstone`
+(`Research/Quitting/FinFourProducerAtlas/ForcedPairMinimumTailConsumer.lean`)
+retains the supplied weak core, selected packet, exact collision residual, and
+the residual cluster's equality to the core's actual post-date semantic tail.
+Its typed `FinFourWeakCoreForcedPairPacket.TailOutcome` is either strict tail
+escape or minimum-tail with payer defect at least `lambda * D_* / 6` and gain
+at least `lambda^2 * D_* / 6`.  The underlying packet declarations retain the
+stronger `D_* / 3`, `lambda * D_* / 3`, `lambda * gamma`, and canonical
+`mu^2 * D_* / 24` bounds, exact own-debt subtraction, and no-loss marked mass.
+An arbitrary weak core may still take the strict tail-escape arm.
+
+Part B fixes the source choices before the resolution quantifier.
+`FinFourMinimumAtomProducer.nonempty_minimumReturnForcedPairFamilyCapstone`
+(`Research/Quitting/FinFourProducerAtlas/MinimumReturnForcedPair.lean`) returns
+one `FinFourOwnerCompressedMinimumReturnForcedPairFamilyCapstone`, containing
+one chronology and one table-selected outsider before every later
+`0 < lambda < mu`.  At each resolution its `ResolutionCapstone` retains a
+single moving reprojection packet, an actual collision-minimum residual whose
+cluster debt is exactly `D_*`, and one payer fixed across the cofinal strict
+subsequence with defect at least `D_* / 3` and gain at least
+`lambda * D_* / 3` at every index.  The granular declarations also state the
+weaker `lambda * D_* / 6` and `lambda^2 * D_* / 6` packet crosswalk bounds.
+`quittingAllContinueProfileSpine_crossTailClosure`
+(`UniformEquilibrium/Quitting/Root/SelfTailClosure.lean`) and
+`quittingSpineDebtExcess_crossTailClosure`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSelfTailClosure.lean`)
+give the literal full post-date spine and exact debt-excess identity used to
+eliminate the off-minimum residual arm.  These results have `M`, `L`, `A`, and
+`C` for the checked forced-pair collision/minimum-tail contraction.  The
+surviving minimum-tail collision residual has no cross-coordinate cap control,
+return, regeneration, recursive descent, completion, or uniform-payoff
+consumer; its whole pair source is not asserted minimum, near-minimal, or
+cap--Nash.
 
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`

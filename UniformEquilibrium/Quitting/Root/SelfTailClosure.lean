@@ -42,6 +42,28 @@ theorem quittingAllContinueProfileSpine_succ_eq
       simpa only [quittingAllContinueProfileSpine] using
         congrArg (quittingProfileAllContinueContinuation reward) ih
 
+/-- Two profiles that agree at every date from `start` onward have literally
+equal all-Continue spines from `start`.  The histories in the agreement
+hypothesis are arbitrary, so this retains complete off-live behavior too. -/
+theorem quittingAllContinueProfileSpine_eq_of_eq_from
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (first second : (quittingGame reward).BehaviorProfile) (start : ℕ)
+    (heq : ∀ who time history, start ≤ time →
+      first who time history = second who time history) :
+    quittingAllContinueProfileSpine reward first start =
+      quittingAllContinueProfileSpine reward second start := by
+  induction start generalizing first second with
+  | zero =>
+      funext who time history
+      exact heq who time history (Nat.zero_le time)
+  | succ start ih =>
+      rw [quittingAllContinueProfileSpine_succ_eq,
+        quittingAllContinueProfileSpine_succ_eq]
+      apply ih
+      intro who time history htime
+      unfold quittingProfileAllContinueContinuation StochasticGame.shiftProfile
+      exact heq who (time + 1) _ (by omega)
+
 /-- The all-Continue continuation of a nonempty literal root stack drops its
 first root and retains the same terminal profile. -/
 theorem quittingProfileAllContinueContinuation_literalRootStackProfile_cons
@@ -138,6 +160,17 @@ def quittingSelfTailClosure
   quittingLiteralRootStackProfile reward
     (quittingSelfTailRootStack reward profile stage) profile
 
+/-- Copy the actual live roots of `prefixProfile` through `stage`, then restart
+an independently supplied complete behavioral profile.  This is the
+two-profile version of `quittingSelfTailClosure`; it deliberately makes no
+semantic or equilibrium comparison between the two profiles. -/
+def quittingCrossTailClosure
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) : (quittingGame reward).BehaviorProfile :=
+  quittingLiteralRootStackProfile reward
+    (quittingSelfTailRootStack reward prefixProfile stage) tailProfile
+
 /-- The copied self-tail root word contains exactly the displayed prefix. -/
 @[simp]
 theorem quittingSelfTailRootStack_length
@@ -164,6 +197,25 @@ theorem quittingProfileLiveRoot_selfTailClosure_eq_of_le
       reward (quittingSelfTailRootStack reward profile stage) profile time hinside]
   simp only [quittingSelfTailRootStack, List.getElem_ofFn]
 
+/-- A cross-tail closure has exactly the prefix profile's live root at every
+copied date, independently of the restarted tail profile. -/
+theorem quittingProfileLiveRoot_crossTailClosure_eq_of_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage time : ℕ) (htime : time ≤ stage) :
+    quittingProfileLiveRoot reward
+        (quittingCrossTailClosure reward prefixProfile tailProfile stage) time =
+      quittingProfileLiveRoot reward prefixProfile time := by
+  have hinside : time <
+      (quittingSelfTailRootStack reward prefixProfile stage).length := by
+    rw [quittingSelfTailRootStack_length]
+    omega
+  rw [quittingCrossTailClosure,
+    quittingProfileLiveRoot_literalRootStackProfile_eq_getElem
+      reward (quittingSelfTailRootStack reward prefixProfile stage)
+        tailProfile time hinside]
+  simp only [quittingSelfTailRootStack, List.getElem_ofFn]
+
 /-- The complete all-Continue continuation after the copied marked row is
 literally the original behavioral profile, not merely a semantic equivalent. -/
 theorem quittingAllContinueProfileSpine_selfTailClosure
@@ -178,5 +230,22 @@ theorem quittingAllContinueProfileSpine_selfTailClosure
   rw [quittingSelfTailClosure, ← hlength]
   exact quittingAllContinueProfileSpine_literalRootStackProfile_length reward
     (quittingSelfTailRootStack reward profile stage) profile
+
+/-- After the copied marked row, a cross-tail closure is literally the
+declared second behavioral profile. -/
+theorem quittingAllContinueProfileSpine_crossTailClosure
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (prefixProfile tailProfile : (quittingGame reward).BehaviorProfile)
+    (stage : ℕ) :
+    quittingAllContinueProfileSpine reward
+        (quittingCrossTailClosure reward prefixProfile tailProfile stage)
+        (stage + 1) =
+      tailProfile := by
+  have hlength :
+      (quittingSelfTailRootStack reward prefixProfile stage).length = stage + 1 :=
+    quittingSelfTailRootStack_length reward prefixProfile stage
+  rw [quittingCrossTailClosure, ← hlength]
+  exact quittingAllContinueProfileSpine_literalRootStackProfile_length reward
+    (quittingSelfTailRootStack reward prefixProfile stage) tailProfile
 
 end GameTheory
