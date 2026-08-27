@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.AtomRectangleSequenceAlternative
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.StaticStrategicOrientation
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.UniversalStaticAtomicToggleHandoff
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNegativeVertexGerm
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlayerDeletion
 
@@ -39,54 +39,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 namespace QuittingTerminalExploitabilityWitness
 
-/-- **Universal singleton static handoff.**  Every player in a counterexample
-regime supplies an unstable atomic toggle row, a positive punishment value,
-or an exact smaller-player counterexample with the same exploitability gap.
-
-For an incoming singleton joiner, the atomic row is the pure pair consisting
-of the singleton owner and the joiner.  For the no-incoming-join branch, the
-standard singleton punishment moat gives either positive punishment or the
-existing toggle/deletion dispatcher. -/
+/-- **Universal singleton static handoff.**  The table-level atomic handoff
+already supplied by the witness gives the singleton dispatcher for every
+owner.  No owner-specific packet data is used. -/
 theorem singletonStaticStrategicDispatch
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (witness : QuittingTerminalExploitabilityWitness reward) (owner : ι) :
     HasQuittingSingletonStaticStrategicDispatch reward owner
-      witness.terminalGap := by
-  classical
-  rcases witness.strictJoiner_or_soloReward_lt_punishmentValue owner with
-    hincoming | hsolo
-  · left
-    obtain ⟨joiner, hjoinerNe, hstrict⟩ := hincoming
-    let quitters : Finset ι := {owner}
-    have hquitters : quitters.Nonempty := by
-      simp [quitters]
-    have hjoiner : joiner ∉ quitters := by
-      simp [quitters, hjoinerNe]
-    have htoggle : reward ⟨quitters, hquitters⟩ joiner <
-        reward
-          ⟨insert joiner quitters,
-            Finset.insert_nonempty joiner quitters⟩ joiner := by
-      simpa [quitters, quittingSoloReward,
-        quittingSingletonCollisionReward, Finset.pair_comm] using hstrict
-    exact ⟨joiner, quitters, hquitters, hjoiner, htoggle,
-      exists_outsider_atomicDeviation_of_strict_ownerToggle reward
-        witness.terminalGap_pos witness.terminalExploitability joiner quitters
-        hquitters hjoiner htoggle⟩
-  · by_cases hchi : 0 < quittingPunishmentValue reward owner
-    · exact Or.inr (Or.inl hchi)
-    · have hchiLe : quittingPunishmentValue reward owner ≤ 0 :=
-        le_of_not_gt hchi
-      have hdispatch := exists_strict_owner_toggle_or_exact_playerDeletion
-        reward owner witness.terminalGap_pos witness.terminalExploitability
-          (by simpa [quittingSoloReward, quittingSingletonTerminal] using hsolo)
-          hchiLe
-      rcases strictToggle_or_playerDeletion_to_atomicHandoff reward
-          witness.terminalGap_pos witness.terminalExploitability owner hdispatch
-        with hatomic | hdelete
-      · obtain ⟨quitters, hquitters, howner, htoggle, hatomic⟩ := hatomic
-        exact Or.inl
-          ⟨owner, quitters, hquitters, howner, htoggle, hatomic⟩
-      · exact Or.inr (Or.inr ⟨hdelete.1, hdelete.2.1⟩)
+      witness.terminalGap :=
+  Or.inl witness.hasStaticAtomicToggleHandoff
 
 end QuittingTerminalExploitabilityWitness
 

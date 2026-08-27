@@ -66,36 +66,13 @@ theorem hasQuittingStoppingLawSingletonStrategicOrientation_iff_terminal_eq
 namespace MinimalFinQuittingCounterexample
 
 /-- **Common-object correction.**  The static atomic handoff is not specific
-to the singleton stopping-law leaf.  The compression theorem supplies it or
-exact player deletion for every owner of every terminal exploitability witness, and
-cardinal minimality rules out the deletion disjunct.  Hence all five formal
-stopping-law leaves share this same game-wide object. -/
+to the singleton stopping-law leaf.  Every terminal exploitability witness
+already supplies the same game-wide object, before choosing an owner or any
+stopping-law packet. -/
 theorem hasStaticAtomicToggleHandoff
     (minimal : MinimalFinQuittingCounterexample) :
     HasQuittingStaticAtomicToggleHandoff minimal.reward := by
-  have hcount : 0 < minimal.playerCount := by
-    exact lt_of_lt_of_le (by norm_num) minimal.four_le_playerCount
-  let owner : Fin minimal.playerCount :=
-    ⟨0, hcount⟩
-  rcases minimal.witness.singletonStaticStrategicDispatch_compress owner
-      (minimal.witness.singletonStaticStrategicDispatch owner) with
-    hatomic | hdelete
-  · exact hatomic
-  · obtain ⟨hnonempty, hgap⟩ := hdelete
-    letI : Nonempty (QuittingDeletedPlayer owner) := hnonempty
-    let reducedReward := quittingDeletePlayerReward minimal.reward owner
-    have hno : ¬ ∃ payoff : Payoff (QuittingDeletedPlayer owner),
-        (quittingGame reducedReward).IsUniformEquilibriumPayoff none payoff :=
-      (not_exists_uniformEquilibriumPayoff_iff_exists_terminalExploitabilityGap
-        reducedReward).2
-          ⟨minimal.witness.terminalGap,
-            minimal.witness.terminalGap_pos, hgap⟩
-    have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
-        minimal.playerCount := by
-      simpa using card_quittingDeletedPlayer_lt owner
-    exact False.elim
-      (hno (minimal.exists_uniformEquilibriumPayoff_of_card_lt
-        hcard' reducedReward))
+  exact minimal.witness.hasStaticAtomicToggleHandoff
 
 end MinimalFinQuittingCounterexample
 
