@@ -490,9 +490,37 @@ complementary-pair alternative an exact complement equality.  Together with
 and common-player/complementary-pair conclusions.  The composition
 `quittingPartialPurification_then_finFourSameStage_dispatch` remains
 conditional on its carrier/minimum, positive mass, and low-tail hypotheses and
-returns either a singleton route or a finite dispatched cycle.  It supplies no
-uniform-equilibrium consumer, chronology return, or producer for those
-hypotheses.
+returns either a singleton route or a finite dispatched cycle.
+
+The Research-only capstone
+`uniformPayoff_or_nonempty_finFourProducerResidual`
+(`Research/Quitting/FinFourProducerAtlas/Coverage.lean`) now reaches those
+hypotheses from arbitrary bounded Fin4 data.  It returns a uniform-equilibrium
+payoff or one tagged residual carrying the same selected hard residual,
+minimum joint-law point, causal finite atom, and source chronology.  The
+nonsingleton source theorem
+`FinFourMinimumAtomProducer.nonempty_tailEscape_or_lowTailRow`
+(`Research/Quitting/FinFourProducerAtlas/Source.lean`) performs the inclusive
+high-tail/strict low-tail split on one selected-row family, and
+`FinFourLowTailRow.nonempty_leaf`
+(`Research/Quitting/FinFourProducerAtlas/Leaves.lean`) sends the low row to a
+bounded-purification singleton, terminal-orbit singleton, common-host
+monodromy, or complementary-pair monodromy.  The same file's
+`FinFourTerminalSingletonProducer.exists_singleton_with_stageMass_floor_and_postDateTail_eq`,
+`FinFourMonodromyProducer.edge_gain_floor_mu_square_div_sixty_four`,
+`FinFourMonodromyProducer.edge_mover_debt`, and
+`FinFourMonodromyProducer.edge_stageMass_noLoss` expose the terminal
+singleton's mass floor with preserved post-date semantics, the exact
+`mu^2 D_*/64` gain floor, exact mover-debt decrease, and no-loss routing.
+Finally,
+`FinFourMonodromyProducer.every_edge_no_literalExactification`
+(`Research/Quitting/FinFourProducerAtlas/LiteralNoGo.lean`) excludes only an
+exact Nash--Bellman embedding which preserves the displayed root and shifted
+tail payoff.  The atlas has `M`, `L`, and `A`, but no `C`: its constructors are
+provenance-distinct tags rather than a uniqueness or pairwise-exclusivity
+theorem, `FinFourProducerResidual.completionContract` only names four open
+obligations, and there is no recursive descent, rank, backward compiler,
+regeneration, chronology return, or downstream uniform-payoff consumer.
 
 As a separate Research side result, the Fin4 deletion producer
 `finFourDeletionNearCap_collisionDispatch_distinct_with_bounds`
