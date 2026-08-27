@@ -494,6 +494,20 @@ returns either a singleton route or a finite dispatched cycle.  It supplies no
 uniform-equilibrium consumer, chronology return, or producer for those
 hypotheses.
 
+As a separate Research side result, the Fin4 deletion producer
+`finFourDeletionNearCap_collisionDispatch_distinct_with_bounds`
+(`Research/Quitting/FinFourDeletionCollisionExpansion.lean`) constructs, from a
+terminal exploitability gap and the small-solo-premium inequality, a literal
+quiet lift, finite near-cap update, paid nonsingleton atom, and either a tail
+bound or an endpoint mover distinct from the deleted player.  The checked
+`finFourDeletionNearCap_tailFormula_six` gives the explicit `1/14` tail scale;
+the endpoint branch has the exact `1/56` gain, mover-debt subtraction, and
+no-loss routed mass.  `Math.FinitePaidCollision.endpoint_scale_of_paid_collision`
+(`MathUE/FinitePaidCollision.lean`) supplies the seven-term algebra.  This is
+Research evidence, not a new DAG
+consumer: it claims no recipient-debt increase, chronology, return, or
+uniform-equilibrium payoff.
+
 On `Fin 4`, the source construction is now unconditional from the negative
 semantic endpoint. For every terminal exploitability witness and every
 prescribed reset owner with a disjoint two-player base,
