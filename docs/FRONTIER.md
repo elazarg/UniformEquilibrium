@@ -615,15 +615,39 @@ and
 `FinFourAtlasWeakStrongConcentratedPacketConsumption.strategic_or_collisionMinimumResidual`
 (`Research/Quitting/FinFourProducerAtlas/StrongConcentratedPacketConsumer.lean`)
 give the exact downstream contraction.  One arm carries the concentrated
-strategic dispatch together with either a static atomic-toggle handoff or
-exact player deletion; the other retains the same literal packet as a
-collision-minimum residual.  Thus the diffuse minimum-singleton obligation is
-closed as a separate atlas leaf, but the resulting strong
+strategic dispatch and the established atomic-toggle-or-deletion interface;
+the other retains the same literal packet as a collision-minimum residual.
+On Fin4,
+`not_hasQuittingExactPlayerDeletionAtGap_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ExactPlayerDeletionSmallSurvivorNoGo.lean`)
+also rules out the deletion certificate at the witness's positive gap.  Thus
+the diffuse minimum-singleton obligation is closed as a separate atlas leaf,
+but the resulting strong
 concentrated-singleton obligation is only contracted, not completed.  The
 arbitrary-resolution theorem
 `FinFourOwnerCompressedSingletonProducer.nonempty_strongConcentratedPacketConsumption`
 provides the same split at every admissible `lambda` and depth on that one
 chronology.
+
+The static part is now factored at its actual abstraction boundary:
+`QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/UniversalStaticAtomicToggleHandoff.lean`)
+constructs a table-level atomic toggle before any profile, date, minimum, or
+packet is selected.  The packet-level statement
+`hasQuittingConcentratedSingletonStrategicDispatch_iff_terminal_eq`
+(`Research/Quitting/ConcentratedSingleton/StrategicDispatch.lean`) then says,
+under the same distinct-owner and positive vanishing-scale hypotheses, that
+concentrated strategic dispatch is exactly the singleton terminal label.  For
+the strong Fin4 packet,
+`FinFourSingletonStageStrongConcentratedPacket.hasStrategicDispatch_iff_action_eq_false`
+and
+`FinFourSingletonStageStrongConcentratedPacket.strategicArm_iff_action_eq_false`
+identify that label and the complete named strategic arm with Continue mode,
+while
+`FinFourSingletonStageStrongConcentratedPacket.collisionMinimumResidual_of_action_eq_true`
+retains the unchanged source, minimum, terminal, and packet residual in Quit
+mode.  The action-indexed result is a selector, not a claim that the collision
+residual is absent in Continue mode.  Neither selected arm is consumed here.
 
 The nonsingleton minimum-atom route now reaches that same consumer without
 using quantitative tail escape as a terminal leaf.
@@ -672,8 +696,12 @@ construction origin.  Its forgetful projection
 `FinFourMinimumAtomProducer.contractedConsumerResult` retains an actual strong
 packet whose exact result is the existing strategic dispatch plus
 atomic-toggle or exact-deletion handoff, or the unchanged source-attached
-collision-minimum residual.  Thus quantitative tail escape is eliminated as
-a terminal atlas leaf.  This contraction has `M`, `L`, `A`, and `C`, but it
+collision-minimum residual.  Its action normal form identifies the strategic
+arm with Continue and forces that same collision residual in Quit mode, but
+does not prove collision absence in Continue mode.  Exact positive-gap player
+deletion is independently impossible on Fin4, and the atomic handoff is
+already table-level.  Thus quantitative tail escape is eliminated as a
+terminal atlas leaf.  This contraction has `M`, `L`, `A`, and `C`, but it
 does not resolve the collision-minimum arm or produce return, regeneration,
 recursive descent, completion closure, or a new uniform-equilibrium payoff.
 

@@ -169,6 +169,34 @@ theorem concentratedSingletonStrategicDispatch
 
 end QuittingTerminalExploitabilityWitness
 
+/-- Under the distinct-owner and positive vanishing-scale hypotheses already
+used by the concentrated constructor, strategic dispatch is equivalent to
+the literal singleton label.  The reverse implication still consumes the
+same packet and all three supplied hypotheses. -/
+theorem hasQuittingConcentratedSingletonStrategicDispatch_iff_terminal_eq
+    (witness : QuittingTerminalExploitabilityWitness reward)
+    {profiles : ℕ → (quittingGame reward).BehaviorProfile}
+    {owner : iota} {terminal : {S : Finset iota // S.Nonempty}}
+    {cutoff : ℕ → ℕ} {scale : ℕ → ℝ}
+    (packet : QuittingReprojectionConcentratedPacket
+      reward profiles owner terminal cutoff scale)
+    (other : iota) (hotherNe : other ≠ owner)
+    (hscale : ∀ n, 0 < scale n)
+    (hscaleTendsto : Tendsto scale atTop (nhds 0)) :
+    HasQuittingConcentratedSingletonStrategicDispatch witness packet other ↔
+      terminal.val = {other} := by
+  constructor
+  · exact fun dispatch => dispatch.1
+  · intro hterminal
+    apply witness.concentratedSingletonStrategicDispatch packet
+    · rw [hterminal]
+      simp
+    · exact hotherNe
+    · rw [hterminal]
+      simp
+    · exact hscale
+    · exact hscaleTendsto
+
 /-- The exact non-singleton output of the concentrated minimum-fiber
 consumer, bundled so a regime wrapper can expose the singleton branch without
 duplicating its collision data. -/

@@ -15,9 +15,11 @@ packet owner, retained singleton member, and vanishing scale required by the
 existing concentrated minimum-fiber consumer.  This file composes those
 interfaces without changing the atlas source or the literal adapter.
 
-The strategic arm additionally uses the existing static compression theorem.
-The collision-minimum arm is retained verbatim on the same packet; no return,
-recurrence, uniform-payoff, or atlas-regeneration conclusion is asserted.
+The table-level atomic handoff is already universal under the retained
+terminal witness.  Consequently the strategic arm is exactly Continue mode,
+while Quit mode forces the collision-minimum residual on the same packet.
+This action normal form does not consume either mode or assert that a
+collision residual is absent in Continue mode.
 -/
 
 noncomputable section
@@ -26,10 +28,24 @@ namespace GameTheory
 
 /-! ## The exact consumer output on one produced payload -/
 
+/-- The named left arm of the strong-packet consumer.  Its atomic handoff is
+table-level data; the concentrated dispatch retains the actual packet. -/
+def FinFourStrongConcentratedPacketStrategicArm
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ} (source : FinFourMinimumAtomProducer reward bound)
+    {sourceProfile : (quittingGame reward).BehaviorProfile}
+    {sourceTerminal : {S : Finset (Fin 4) // S.Nonempty}}
+    {stage : ℕ} {resolution : ℝ}
+    (strong : FinFourSingletonStageStrongConcentratedPacket reward
+      sourceProfile sourceTerminal stage resolution) : Prop :=
+  HasQuittingConcentratedSingletonStrategicDispatch source.residual.witness
+      strong.adapter.packet strong.singletonOwner ∧
+    (HasQuittingStaticAtomicToggleHandoff reward ∨
+      HasQuittingExactPlayerDeletionAtGap reward strong.singletonOwner
+        source.residual.witness.terminalGap)
+
 /-- The exact output of applying the retained minimum source to one strong
-singleton-stage packet.  The strategic branch keeps its rich packet-level
-dispatch and records the existing compression to an atomic-toggle handoff or
-exact player deletion.  The collision branch remains an unresolved residual
+singleton-stage packet.  The collision branch remains an unresolved residual
 on the same literal packet. -/
 def FinFourStrongConcentratedPacketConsumerResult
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
@@ -39,11 +55,7 @@ def FinFourStrongConcentratedPacketConsumerResult
     {stage : ℕ} {resolution : ℝ}
     (strong : FinFourSingletonStageStrongConcentratedPacket reward
       sourceProfile sourceTerminal stage resolution) : Prop :=
-  (HasQuittingConcentratedSingletonStrategicDispatch source.residual.witness
-        strong.adapter.packet strong.singletonOwner ∧
-      (HasQuittingStaticAtomicToggleHandoff reward ∨
-        HasQuittingExactPlayerDeletionAtGap reward strong.singletonOwner
-          source.residual.witness.terminalGap)) ∨
+  FinFourStrongConcentratedPacketStrategicArm source strong ∨
     Nonempty (QuittingConcentratedCollisionMinimumResidual reward
       source.point.1 strong.packetOwner strong.adapter.routedTerminal
         strong.adapter.packet)
@@ -74,9 +86,83 @@ theorem consumerResult
   rcases hdispatch with hstrategic | hcollision
   · left
     exact ⟨hstrategic,
-      source.residual.witness.concentratedSingletonStrategicDispatch_compress
-        strong.adapter.packet strong.singletonOwner hstrategic⟩
+      Or.inl source.residual.witness.hasStaticAtomicToggleHandoff⟩
   · exact Or.inr hcollision
+
+/-- For a strong Fin4 packet, the concentrated strategic dispatch is exactly
+the Continue routing mode. -/
+theorem hasStrategicDispatch_iff_action_eq_false
+    (strong : FinFourSingletonStageStrongConcentratedPacket reward
+      sourceProfile sourceTerminal stage resolution) :
+    HasQuittingConcentratedSingletonStrategicDispatch source.residual.witness
+        strong.adapter.packet strong.singletonOwner ↔
+      strong.adapter.action = false := by
+  rw [hasQuittingConcentratedSingletonStrategicDispatch_iff_terminal_eq
+    source.residual.witness strong.adapter.packet strong.singletonOwner
+      strong.packetOwner_ne_singletonOwner.symm strong.scale_pos
+      strong.scale_tendsto_zero]
+  constructor
+  · intro hterminal
+    rcases strong.routedTerminal_mode_and_card with hcontinue | hquit
+    · exact hcontinue.1
+    · have hcard : strong.adapter.routedTerminal.val.card = 1 := by
+        rw [hterminal]
+        simp
+      omega
+  · intro haction
+    rcases strong.routedTerminal_mode_and_card with hcontinue | hquit
+    · exact hcontinue.2.1
+    · simp [haction] at hquit
+
+/-- The complete named strategic arm is exactly Continue mode.  Its static
+handoff conjunct is discharged by the source witness before the packet is
+selected. -/
+theorem strategicArm_iff_action_eq_false
+    (strong : FinFourSingletonStageStrongConcentratedPacket reward
+      sourceProfile sourceTerminal stage resolution) :
+    FinFourStrongConcentratedPacketStrategicArm source strong ↔
+      strong.adapter.action = false := by
+  constructor
+  · intro hstrategic
+    exact strong.hasStrategicDispatch_iff_action_eq_false.mp hstrategic.1
+  · intro haction
+    exact ⟨strong.hasStrategicDispatch_iff_action_eq_false.mpr haction,
+      Or.inl source.residual.witness.hasStaticAtomicToggleHandoff⟩
+
+/-- Quit mode rules out the strategic arm and therefore forces the existing
+collision-minimum residual on the same source, minimum, owner, terminal, and
+packet. -/
+theorem collisionMinimumResidual_of_action_eq_true
+    (strong : FinFourSingletonStageStrongConcentratedPacket reward
+      sourceProfile sourceTerminal stage resolution)
+    (haction : strong.adapter.action = true) :
+    Nonempty (QuittingConcentratedCollisionMinimumResidual reward
+      source.point.1 strong.packetOwner strong.adapter.routedTerminal
+        strong.adapter.packet) := by
+  rcases strong.consumerResult (source := source) with hstrategic | hcollision
+  · have hfalse := strong.strategicArm_iff_action_eq_false.mp hstrategic
+    simp [haction] at hfalse
+  · exact hcollision
+
+/-- Select the checked consumer output by the adapter's exact Boolean mode.
+The alternatives are action-exclusive, but no absence of a collision residual
+in Continue mode is asserted. -/
+theorem actionIndexedConsumerResult
+    (strong : FinFourSingletonStageStrongConcentratedPacket reward
+      sourceProfile sourceTerminal stage resolution) :
+    (strong.adapter.action = false ∧
+        FinFourStrongConcentratedPacketStrategicArm source strong) ∨
+      (strong.adapter.action = true ∧
+        Nonempty (QuittingConcentratedCollisionMinimumResidual reward
+          source.point.1 strong.packetOwner strong.adapter.routedTerminal
+            strong.adapter.packet)) := by
+  by_cases haction : strong.adapter.action = false
+  · exact Or.inl ⟨haction,
+      strong.strategicArm_iff_action_eq_false.mpr haction⟩
+  · have htrue : strong.adapter.action = true := by
+      cases hmode : strong.adapter.action <;> simp_all
+    exact Or.inr ⟨htrue,
+      strong.collisionMinimumResidual_of_action_eq_true htrue⟩
 
 end FinFourSingletonStageStrongConcentratedPacket
 
