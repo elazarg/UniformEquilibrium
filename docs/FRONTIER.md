@@ -682,6 +682,34 @@ return, regeneration, recursive descent, completion, or uniform-payoff
 consumer; its whole pair source is not asserted minimum, near-minimal, or
 cap--Nash.
 
+A source-independent normalized-passport layer is also integrated in Research.
+`QuittingMarkedPairDecoratedFamily.rawDecoration_markedMass_eq`,
+`QuittingMarkedPairDecoratedFamily.rawDecoration_actualGain_eq`, and
+`QuittingMarkedPairDecoratedFamily.descendant_postMarkSpine_eq`
+(`Research/Quitting/NormalizedPassportPrefixOrbit.lean`) retain exact
+arbitrary-prefix mass and gain scaling and the full post-mark spine for a
+supplied decorated family of actual rows.  Compactness of its arbitrary-prefix
+closure and normalized slice then gives
+`QuittingMarkedPairDecoratedFamily.exists_minimum_normalizedPassportSlice_eq_or_strict_inert`
+(`Research/Quitting/NormalizedPassportMinimizer.lean`): a supplied convergent
+passport yields a slice minimizer whose debt either returns to the displayed
+global minimum, or is strictly larger and admits exactly the all-Continue root
+as an exact cap--Nash root.
+
+In the equality arm,
+`exists_minimumReturnActualizer_and_threeRoleLimitChord`
+(`Research/Quitting/NormalizedPassportMinimumReturn.lean`) selects actual rows
+with fixed positive marked-mass and payoff-gain floors, zero marked-owner
+defect, whole- and tail-debt convergence, a concentrated packet, and the
+existing three-role limit-chord consumer.  Thus this generic layer has `M`,
+`L`, and conditional `C`, but no `A`: there is no Fin4 or minimum-atom adapter
+constructing its decorated family or convergent passport.  Its minimizer lies
+in an enlarged arbitrary-prefix closure, not necessarily in the original
+cluster or at a behaviorally attained point.  The family hypotheses also do
+not certify a pure pair, one-date unilateral same-opponent provenance, gain as
+mass times defect, or exact own-debt subtraction.  The strict arm remains
+unconsumed, and no regeneration or uniform-payoff conclusion follows.
+
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/UniversalStaticAtomicToggleHandoff.lean`)

@@ -108,6 +108,7 @@ import Research.Quitting.NonsingletonMinimumLawLinearTransfer
 import Research.Quitting.NearMinimumActualDeviationRectangle
 import Research.Quitting.NearMinimumRecenteredStrategicSign
 import Research.Quitting.NegativeRectangleResetFaceCompensation
+import Research.Quitting.NormalizedPassportMinimumReturn
 import Research.Quitting.ORRankReduction
 import Research.Quitting.ORStationarizationDichotomy
 import Research.Quitting.ObserverAbsentFiniteClockCurvatureCollector
