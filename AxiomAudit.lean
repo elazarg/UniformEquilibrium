@@ -142,6 +142,7 @@ import MathUE.FiniteDirectedPeriod
 import MathUE.FiniteEmpiricalConvexity
 import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
+import MathUE.FinitePaidCollision
 import MathUE.FinitePivotOrbit
 import MathUE.FinitePowerSumRoot
 import MathUE.FiniteSerialRelation

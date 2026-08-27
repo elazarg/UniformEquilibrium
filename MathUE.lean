@@ -92,6 +92,7 @@ import MathUE.FiniteBooleanEndpointOrbit
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
+import MathUE.FinitePaidCollision
 import MathUE.FiniteSetCoverClassification
 import MathUE.FiniteLinearChargedCapacity
 import MathUE.FiniteLinearCompatibility
