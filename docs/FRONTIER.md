@@ -737,6 +737,47 @@ recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
 follows; an arbitrary public chord without the actual endpoint law cannot be
 regenerated.
 
+A separate canonical maximal-prefix ray now consumes the same cofinal
+forced-pair source.  The cap-indexed selector `quittingMaximalAbsorptionCapRoot`
+and the autonomous orbit in
+`Research/Quitting/MaximalCapSemanticPrefixOrbit.lean` make the selected root
+word depend only on the current terminal-semantic cap.  The pure-pair base is
+fully independent of its counterfactual tail:
+`quittingTerminalSemanticPair_pureSetRootThenContinuation_eq_of_two_le_card`
+(`UniformEquilibrium/Quitting/Paths/SureExitSet.lean`) gives the exact semantic
+pair, and
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.rayBaseOutcomeLaw_eq_pure`
+(`Research/Quitting/FinFourProducerAtlas/MaximalPrefixRayDichotomy.lean`) gives
+the complete terminal law as the point mass at the fixed pair.  Every debt
+coordinate, normalized positive-debt support, shifted marked mass, and copied
+outer-word payer gain is transported by the same positive survival factor.
+
+The scalar strict-arm account is exact.
+`QuittingMaximalCapSemanticPrefixRayStall.weightedAbsorption_hasSum`,
+`QuittingMaximalCapSemanticPrefixRayStall.absorption_tsum_le_exact_debtDrop`,
+`QuittingMaximalCapSemanticPrefixRayStall.absorptionTailSum_tendsto_zero`, and
+`QuittingMaximalCapSemanticPrefixRayStall.absorptionTailSup_tendsto_zero`
+(`Research/Quitting/MaximalCapSemanticPrefixReturn.lean`) give the weighted
+debt telescope, the unweighted absorption budget, and vanishing future charge
+for that unchanged canonical ray.  For every strictly increasing convergent
+joint semantic/law subsequence,
+`quittingMaximalCapSemanticPrefixLawPoint_cluster_facts` proves at the same
+cluster that debt equals the ray limit `L`, the pair-law mass is at least
+`L / D_0`, all Continue is exact cap--Nash, and either it is the unique exact
+root or another exact root has positive absorption.
+
+The actual Fin4 capstone
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_maximalPrefixRayMinimumReturn_or_stall`
+(`Research/Quitting/FinFourProducerAtlas/MaximalPrefixRayDichotomy.lean`) has
+`M`, `L`, and `A` in both arms.  If `L = D_*`, it constructs the moving
+reprojection packet at resolution `D_* / D_0` and has `C` through the existing
+eventual transfer and fixed-role limit-chord consumers.  If `L > D_*`, it
+stores the exact quantitative stall and the same sharp retained-law object,
+but has no completion `C`.  This strict branch neither recomputes the ray
+after a horizontal endpoint change nor gives support descent, source
+regeneration, recursive return, terminal approximation, a uniform-equilibrium
+payoff, or a counterexample.
+
 The static part is now factored at its actual abstraction boundary:
 `QuittingTerminalExploitabilityWitness.hasStaticAtomicToggleHandoff`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/UniversalStaticAtomicToggleHandoff.lean`)

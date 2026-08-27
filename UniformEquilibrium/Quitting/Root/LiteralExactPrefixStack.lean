@@ -59,6 +59,21 @@ theorem quittingLiteralRootStackProfile_cons
       quittingRootThenContinuationProfile reward root
         (quittingLiteralRootStackProfile reward roots terminal) := rfl
 
+omit [DecidableEq ι] in
+/-- Concatenating explicit root words is literal profile composition. -/
+theorem quittingLiteralRootStackProfile_append
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (first second : List (ι → PMF Bool))
+    (terminal : (quittingGame reward).BehaviorProfile) :
+    quittingLiteralRootStackProfile reward (first ++ second) terminal =
+      quittingLiteralRootStackProfile reward first
+        (quittingLiteralRootStackProfile reward second terminal) := by
+  induction first with
+  | nil => rfl
+  | cons root roots ih =>
+      rw [List.cons_append, quittingLiteralRootStackProfile_cons,
+        quittingLiteralRootStackProfile_cons, ih]
+
 /-- Every root in the word is exact endpoint Nash against the literal payoff
 of the remaining executable suffix. -/
 def IsQuittingLiteralExactRootStack

@@ -136,6 +136,15 @@ theorem quittingCapNashStackContinueProduct_cons
 
 omit [DecidableEq ι] in
 @[simp]
+theorem quittingCapNashStackContinueProduct_append
+    (first second : List (ι → PMF Bool)) :
+    quittingCapNashStackContinueProduct (first ++ second) =
+      quittingCapNashStackContinueProduct first *
+        quittingCapNashStackContinueProduct second := by
+  simp [quittingCapNashStackContinueProduct]
+
+omit [DecidableEq ι] in
+@[simp]
 theorem quittingCapNashStackAbsorptionSum_nil :
     quittingCapNashStackAbsorptionSum ([] : List (ι → PMF Bool)) = 0 := rfl
 
@@ -205,6 +214,39 @@ theorem one_sub_capNashStackContinueProduct_le_absorptionSum
         quittingCapNashStackAbsorptionSum_cons]
       unfold quittingRootAbsorptionMass
       nlinarith
+
+omit [DecidableEq ι] in
+/-- Prepending one common explicit root word scales the prescribed-payoff
+difference between two executable tails by the word's joint survival.  No
+Nash property of the word is needed. -/
+theorem quittingTerminalPayoff_literalRootStack_sub_eq_continueProduct_mul
+    (roots : List (ι → PMF Bool))
+    (first second : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff reward
+          (quittingLiteralRootStackProfile reward roots first) who -
+        quittingTerminalPayoff reward
+          (quittingLiteralRootStackProfile reward roots second) who =
+      quittingCapNashStackContinueProduct roots *
+        (quittingTerminalPayoff reward first who -
+          quittingTerminalPayoff reward second who) := by
+  induction roots with
+  | nil => simp
+  | cons root roots ih =>
+      rw [quittingLiteralRootStackProfile_cons,
+        quittingLiteralRootStackProfile_cons,
+        quittingTerminalPayoff_rootThenContinuation_eq,
+        quittingTerminalPayoff_rootThenContinuation_eq]
+      change quittingRootSuccessorPayoff reward
+            (fun player => quittingTerminalPayoff reward
+              (quittingLiteralRootStackProfile reward roots first) player)
+            root who -
+          quittingRootSuccessorPayoff reward
+            (fun player => quittingTerminalPayoff reward
+              (quittingLiteralRootStackProfile reward roots second) player)
+            root who = _
+      rw [quittingRootSuccessorPayoff_sub_eq_continueMass_mul, ih,
+        quittingCapNashStackContinueProduct_cons]
+      ring
 
 omit [DecidableEq ι] in
 /-- A finite root word moves its prescribed terminal payoff by at most the

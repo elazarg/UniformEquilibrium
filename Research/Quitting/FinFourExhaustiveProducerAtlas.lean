@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.ForcedPairMinimumTailConsumer
 import Research.Quitting.FinFourProducerAtlas.LiteralNoGo
+import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
 import Research.Quitting.FinFourProducerAtlas.NormalizedReturn
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
@@ -30,12 +31,16 @@ The resulting actual forced-pair family has a derived normalized passport:
 its enlarged-slice minimum either returns to the global minimum and reaches
 the three-role chord, or is a strict inert point with only all Continue as an
 exact cap--Nash root.
+The same family also has one canonical maximal-prefix semantic ray.  Its
+scalar limit either returns the whole source to the minimum and reaches the
+three-role consumer, or leaves a strict ray stall with invariant normalized
+debt and support, vanishing future canonical charge, and a sharp retained-law
+limit alternative.
 Pure collision screening sends every nonsingleton minimum atom into the same
 consumer without a tail split or near-minimum selected row.
 The same-stage monodromy leaf is impossible, so the exact coverage residual
 contracts to four nonmonodromy tags.  The other coverage theorems and the
 narrowly scoped local-exactification no-go are split into modules under
-`Research.Quitting.FinFourProducerAtlas`.  No canonical return ray, source
-regeneration, recursive descent, strict-inert consumer, or uniform-payoff
-completion is asserted here.
+`Research.Quitting.FinFourProducerAtlas`.  No recursive descent, strict-stall
+consumer, or uniform-payoff completion is asserted here.
 -/

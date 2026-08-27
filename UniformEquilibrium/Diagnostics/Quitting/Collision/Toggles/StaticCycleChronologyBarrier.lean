@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.ReachableSimpleCycle
-import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
+import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 
 /-!
@@ -56,64 +56,6 @@ theorem quittingJointSurvivalWeight_naiveStaticCoalitions_eq_zero
   apply Finset.prod_eq_zero (by simp : 0 ∈ Finset.range (fuel + 1))
   rw [show 0 + 0 = 0 by omega]
   exact stationaryContinueMass_pureSetRoot_of_nonempty hfirst
-
-/-- Prepending a nonempty pure coalition root pays exactly that coalition's
-reward, independently of the actual continuation profile. -/
-theorem quittingTerminalPayoff_pureSetRootThenContinuation_eq_setReward
-    (S : Finset iota) (hS : S.Nonempty)
-    (continuation : (quittingGame reward).BehaviorProfile) (who : iota) :
-    quittingTerminalPayoff reward
-        (quittingRootThenContinuationProfile reward
-          (quittingPureSetRoot S) continuation) who =
-      quittingSetReward reward S who := by
-  rw [quittingTerminalPayoff_rootThenContinuation_eq,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingRootAbsorbingContribution_pureSetRoot,
-    stationaryContinueMass_pureSetRoot_of_nonempty hS]
-  ring
-
-/-- Pure Quit at a pure-set root is the static join endpoint, for every
-declared continuation payoff. -/
-theorem quittingRootQuitPayoff_pureSetRoot_eq_insert
-    (tail : Payoff iota) (S : Finset iota) (who : iota) :
-    quittingRootQuitPayoff reward tail (quittingPureSetRoot S) who =
-      quittingSetReward reward (insert who S) who := by
-  rw [quittingRootQuitPayoff,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    update_quittingPureSetRoot_true,
-    quittingRootAbsorbingContribution_pureSetRoot,
-    stationaryContinueMass_pureSetRoot_of_nonempty
-      (Finset.insert_nonempty who S)]
-  ring
-
-/-- Leaving a coalition that still contains a quitter is exactly the static
-leave endpoint; no continuation value is exposed. -/
-theorem quittingRootContinuePayoff_pureSetRoot_eq_erase_of_nonempty
-    (tail : Payoff iota) (S : Finset iota) (who : iota)
-    (herase : (S.erase who).Nonempty) :
-    quittingRootContinuePayoff reward tail (quittingPureSetRoot S) who =
-      quittingSetReward reward (S.erase who) who := by
-  rw [quittingRootContinuePayoff,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    update_quittingPureSetRoot_false,
-    quittingRootAbsorbingContribution_pureSetRoot,
-    stationaryContinueMass_pureSetRoot_of_nonempty herase]
-  ring
-
-/-- At a singleton vertex, leaving does not pay the static empty-coalition
-value: it exposes the declared continuation coordinate exactly. -/
-theorem quittingRootContinuePayoff_pureSingleton_eq_tail
-    (tail : Payoff iota) (owner : iota) :
-    quittingRootContinuePayoff reward tail
-        (quittingPureSetRoot ({owner} : Finset iota)) owner = tail owner := by
-  rw [quittingRootContinuePayoff,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    update_quittingPureSetRoot_false]
-  rw [show ({owner} : Finset iota).erase owner = ∅ by simp]
-  rw [quittingRootAbsorbingContribution_pureSetRoot,
-    quittingStationaryContinueMass_pureSetRoot_empty,
-    quittingSetReward_empty]
-  ring
 
 /-- Exact source-matching boundary at a singleton: the static leave value and
 the executable Continue endpoint agree iff the actual tail coordinate is
