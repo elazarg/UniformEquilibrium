@@ -324,6 +324,32 @@ consumer
 result in the actual finite-clock hierarchy through normalized Fin4 level
 `59`; it proves no positive value at level `60`.
 
+The Research same-stage endpoint adapter is a separate conditional route.
+`dispatchedClosedSegment_offset_edge_certificate`,
+`dispatchedClosedSegment_offset_edge_full_certificate`, and
+`dispatchedClosedSegment_offset_literal_profile_update`
+(`Research/Quitting/SameStageEndpointMonodromy.lean`) retain, at every offset,
+the positive endpoint edge, its full routed-target certificate, and the
+literal one-date profile update.  The edge certificate includes the exact
+best-action field `QuittingSameStageEndpointEdge.action_eq_best`;
+`dispatchedClosedSegment_player_circulation` gives the exact player debt sum
+over the period.
+`finFourTraceCodeSupport_card_eq_period`,
+`finFourTrace_stageMass_ge_liveMass`,
+`finFourTrace_offset_gain_certificate`, and
+`finFourTrace_common_or_complementary_exact`
+(`Research/Quitting/FinFourSameStageEndpointMonodromy.lean`) transfer support
+cardinality and an all-offset live-mass floor to the Fin4 trace, give an
+action-certified gain of at least `lambda * debt / 8` at every offset, and
+make the complementary-pair conclusion an exact Fin4 complement equality.
+`finFourTrace_period_le_eight_and_geometry` gives the ordered-cycle bound and
+common-player/complementary-pair alternative.  The final composition
+`quittingPartialPurification_then_finFourSameStage_dispatch` is conditional on
+the displayed carrier, minimum-debt, mass, and low-tail hypotheses: it yields a
+singleton route or a finite dispatch with this geometry.  It is Research-only;
+it constructs no uniform-equilibrium payoff, chronology return, or downstream
+UE consumer.
+
 The exact boundary regressions are deliberately distinct.  The sharp two-date
 table, canonical Nash law, law uniqueness, and exact terminal debt are owned
 respectively by

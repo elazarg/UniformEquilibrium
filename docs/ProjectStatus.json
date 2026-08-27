@@ -74,6 +74,15 @@
       "scope": "The normalized Fin4 worst-table, worst-exact-equilibrium hard-deadline exploitability tends to 1/4. One checked table has a unique exact Nash law at every deadline and debt above 1/4, while non-Nash finite-clock profiles on that table have debt tending to zero; this is an architecture no-go, not a positive all-profile gap."
     },
     {
+      "id": "fin-four-ordered-cycle-geometry",
+      "subject": "Fin4 ordered one-coordinate cycle geometry",
+      "kind": "Unconditional structural theorem",
+      "declaration": "orderedBooleanCycle_card_le_eight_and_geometry",
+      "source": "MathUE/FinFourOrderedCoalitionCycle.lean",
+      "umbrella": "MathUE.lean",
+      "scope": "Every supplied injective cyclic word on the eleven nonsingleton Fin4 coalitions, with positive period and one-coordinate adjacency, has period at most eight and either a common player or complementary pair vertices. Period two is admitted as a cyclic word traversing one undirected edge twice; this is game-independent geometry, not a uniform-payoff consumer."
+    },
+    {
       "id": "quitting-passive-player-padding",
       "subject": "Upward transport of quitting-game terminal exploitability",
       "kind": "Unconditional quantitative transport theorem",
