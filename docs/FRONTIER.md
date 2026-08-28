@@ -791,15 +791,24 @@ and eventual binding-support theorem
 `QuittingForwardExactCapTail.eventually_currentHazard_supported_binding` are
 source-derived.  This layer has `M`, `L`, and `A`, but no `C`.
 
-The nested `FinFourStrictRayForwardExactCapTail.Analysis` is intentionally a
-conditional extension: it accepts, rather than derives, a
-`QuittingTailNormalizedCapFlow`.  The resulting collision nonpositivity,
-complementarity, and diffuse-solo identities have `M` and `L` only.  There is
-no checked producer for the needed first-order product-error estimates or the
-tail-normalized certificate, and no finite-clock cap attainment,
-cardinal-three, return, rank decrease, strict-ray contradiction, or
-uniform-equilibrium consumer.  These remain partial Research interfaces, not
-a completed strict-tail packet.
+`QuittingForwardExactCapTail.tailNormalizedCapFlow`
+(`Research/Quitting/ForwardExactCapTailFirstOrder.lean`) now derives the
+normalized certificate from the actual ray.  The one-step estimates in
+`abs_quittingRootSuccessorPayoff_sub_tail_sub_normalizedSoloFlow_sub_baseline_le`
+and
+`abs_quittingRootEndpointDifference_sub_solo_sub_tail_sub_collisionFlow_le`
+(`UniformEquilibrium/Quitting/Root/FirstOrderProductFlow.lean`) have exact
+remainders `2 M epsilon^2` and
+`epsilon |cap_i - singleton_i| + 4 M epsilon^2`.  The generic weighted-tail
+average and forward-difference telescope are in
+`MathUE/Analysis/SummableTailAverage.lean`.
+`FinFourStrictRayForwardExactCapTail.analysis` supplies the nested `Analysis`
+without an extra error hypothesis, so collision nonpositivity,
+complementarity, and diffuse-solo identities now have `M`, `L`, and `A` on
+the same source ray.  They still have no `C`: there is no finite-clock cap
+attainment, limiting positive-root/cardinality-face consumer, return, rank
+decrease, strict-ray contradiction, or uniform-equilibrium conclusion.  This
+is not a completed strict-tail packet.
 
 The canonical pair's literal paid endpoint now also has a checked one-time
 support-rank handoff.  The generic theorem
