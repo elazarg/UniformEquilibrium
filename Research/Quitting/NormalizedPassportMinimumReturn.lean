@@ -55,9 +55,11 @@ structure QuittingMarkedPairMinimumReturnActualizer
   actualGain_floor : ∀ rank, gainFloor ≤
     (family.rawDecoration (originRank rank) (originRoots rank)).actualGain
 
-/-- A minimum-return point in a positive normalized slice produces actual raw
-descendants with the canonical half-density mass and gain floors. -/
-theorem nonempty_quittingMarkedPairMinimumReturnActualizer
+/-- A positive normalized-slice point whose whole debt dominates the reference
+debt produces actual raw descendants with half of the reference-based density
+floors.  The equality-arm constructor below is the minimum-return
+specialization. -/
+theorem nonempty_quittingMarkedPairMinimumReturnActualizer_of_debt_le
     (family : QuittingMarkedPairDecoratedFamily reward)
     (minimum : QuittingTerminalSemanticPair ι)
     (massDensity gainDensity : ℝ)
@@ -66,8 +68,7 @@ theorem nonempty_quittingMarkedPairMinimumReturnActualizer
     (hminimum_pos : 0 < quittingTerminalSemanticDebtSum minimum)
     (hpoint : point ∈
       family.normalizedPassportSlice minimum massDensity gainDensity)
-    (hreturn : point.wholeDebt =
-      quittingTerminalSemanticDebtSum minimum) :
+    (hlower : quittingTerminalSemanticDebtSum minimum ≤ point.wholeDebt) :
     Nonempty (QuittingMarkedPairMinimumReturnActualizer
       family minimum massDensity gainDensity point) := by
   have hcarrier := hpoint.1
@@ -85,16 +86,14 @@ theorem nonempty_quittingMarkedPairMinimumReturnActualizer
     exact div_pos (mul_pos hgainDensity hminimum_pos) (by norm_num)
   have hresolutionLt : resolution < point.markedMass := by
     have hlower : massDensity * quittingTerminalSemanticDebtSum minimum ≤
-        point.markedMass := by
-      rw [← hreturn]
-      exact hpoint.2.2.1
+        point.markedMass :=
+      (mul_le_mul_of_nonneg_left hlower hmassDensity.le).trans hpoint.2.2.1
     dsimp only [resolution]
     nlinarith [mul_pos hmassDensity hminimum_pos]
   have hgainFloorLt : gainFloor < point.actualGain := by
     have hlower : gainDensity * quittingTerminalSemanticDebtSum minimum ≤
-        point.actualGain := by
-      rw [← hreturn]
-      exact hpoint.2.2.2
+        point.actualGain :=
+      (mul_le_mul_of_nonneg_left hlower hgainDensity.le).trans hpoint.2.2.2
     dsimp only [gainFloor]
     nlinarith [mul_pos hgainDensity hminimum_pos]
   have hmassTendsto : Tendsto (fun rank => (rows rank).markedMass) atTop
@@ -137,6 +136,25 @@ theorem nonempty_quittingMarkedPairMinimumReturnActualizer
   · intro rank
     have hrow := hstart (rank + start) (by omega)
     simpa only [shiftedRank, shiftedRoots, horigin] using hrow.2.le
+
+/-- A minimum-return point in a positive normalized slice produces actual raw
+descendants with the canonical half-density mass and gain floors. -/
+theorem nonempty_quittingMarkedPairMinimumReturnActualizer
+    (family : QuittingMarkedPairDecoratedFamily reward)
+    (minimum : QuittingTerminalSemanticPair ι)
+    (massDensity gainDensity : ℝ)
+    (point : QuittingMarkedPairDecoration ι)
+    (hmassDensity : 0 < massDensity) (hgainDensity : 0 < gainDensity)
+    (hminimum_pos : 0 < quittingTerminalSemanticDebtSum minimum)
+    (hpoint : point ∈
+      family.normalizedPassportSlice minimum massDensity gainDensity)
+    (hreturn : point.wholeDebt =
+      quittingTerminalSemanticDebtSum minimum) :
+    Nonempty (QuittingMarkedPairMinimumReturnActualizer
+      family minimum massDensity gainDensity point) :=
+  nonempty_quittingMarkedPairMinimumReturnActualizer_of_debt_le
+    family minimum massDensity gainDensity point hmassDensity hgainDensity
+      hminimum_pos hpoint hreturn.ge
 
 namespace QuittingMarkedPairMinimumReturnActualizer
 
