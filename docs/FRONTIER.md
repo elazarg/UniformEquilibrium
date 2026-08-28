@@ -184,7 +184,12 @@ rational-box face signs and a supplied `zero_to_numerator` bridge into an
 interior numerator zero and a full exact stationary behavioral certificate.
 `Math.Interval.RationalPolynomial.abs_evalReal_le_coefficientL1`
 (`MathUE/Interval/RationalPolynomialL1.lean`) gives the generic exact unit-box
-bound used by the centered variant, and
+bound used by the centered variant.  In the same file,
+`Math.Interval.RationalPolynomial.boundedCoefficientL1_eq_coefficientL1`
+proves that dense coefficient reflection over any explicit syntactic exponent
+box computes that canonical coefficient norm exactly.  The theorem is a
+generic finite checker; it does not inhabit a table-specific certificate.
+Finally,
 `QuittingCenteredStationaryFaceCertificate.exists_uniformEquilibriumPayoff`
 (`Research/Quitting/StationaryCenteredFaceCertificate.lean`) is its supplied-
 certificate stationary consumer.  These generic interfaces have checked
