@@ -26,37 +26,6 @@ noncomputable section
 
 variable {variableCount : ℕ}
 
-@[simp] theorem evalReal_constant
-    (point : Fin variableCount → ℝ) (value : ℚ) :
-    evalReal point (.constant value) = value := rfl
-
-@[simp] theorem evalReal_var
-    (point : Fin variableCount → ℝ) (coordinate : Fin variableCount) :
-    evalReal point (.var coordinate) = point coordinate := rfl
-
-@[simp] theorem evalReal_add
-    (point : Fin variableCount → ℝ)
-    (first second : RationalPolynomial variableCount) :
-    evalReal point (first + second) =
-      evalReal point first + evalReal point second := rfl
-
-@[simp] theorem evalReal_neg
-    (point : Fin variableCount → ℝ)
-    (expression : RationalPolynomial variableCount) :
-    evalReal point (-expression) = -evalReal point expression := rfl
-
-@[simp] theorem evalReal_sub
-    (point : Fin variableCount → ℝ)
-    (first second : RationalPolynomial variableCount) :
-    evalReal point (first - second) =
-      evalReal point first - evalReal point second := rfl
-
-@[simp] theorem evalReal_mul
-    (point : Fin variableCount → ℝ)
-    (first second : RationalPolynomial variableCount) :
-    evalReal point (first * second) =
-      evalReal point first * evalReal point second := rfl
-
 /-- Canonical multivariate-polynomial normalization of the reflected syntax. -/
 def toMvPolynomial :
     RationalPolynomial variableCount → MvPolynomial (Fin variableCount) ℚ

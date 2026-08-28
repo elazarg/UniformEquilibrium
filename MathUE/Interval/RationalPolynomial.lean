@@ -58,6 +58,39 @@ def evalReal (point : Fin variableCount → ℝ) :
   | .neg expression => -evalReal point expression
   | .mul first second => evalReal point first * evalReal point second
 
+/-! ### Real evaluation of the notation-level operations -/
+
+@[simp] theorem evalReal_constant
+    (point : Fin variableCount → ℝ) (value : ℚ) :
+    evalReal point (.constant value) = value := rfl
+
+@[simp] theorem evalReal_var
+    (point : Fin variableCount → ℝ) (coordinate : Fin variableCount) :
+    evalReal point (.var coordinate) = point coordinate := rfl
+
+@[simp] theorem evalReal_add
+    (point : Fin variableCount → ℝ)
+    (first second : RationalPolynomial variableCount) :
+    evalReal point (first + second) =
+      evalReal point first + evalReal point second := rfl
+
+@[simp] theorem evalReal_neg
+    (point : Fin variableCount → ℝ)
+    (expression : RationalPolynomial variableCount) :
+    evalReal point (-expression) = -evalReal point expression := rfl
+
+@[simp] theorem evalReal_sub
+    (point : Fin variableCount → ℝ)
+    (first second : RationalPolynomial variableCount) :
+    evalReal point (first - second) =
+      evalReal point first - evalReal point second := rfl
+
+@[simp] theorem evalReal_mul
+    (point : Fin variableCount → ℝ)
+    (first second : RationalPolynomial variableCount) :
+    evalReal point (first * second) =
+      evalReal point first * evalReal point second := rfl
+
 /-- Formal partial derivative of a factored expression.  The certificate
 checker does not materialize this tree; it is the semantic specification of
 the derivative component computed by `evalDualInterval`. -/

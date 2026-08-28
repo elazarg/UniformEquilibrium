@@ -7,7 +7,6 @@ Authors: UniformEquilibrium contributors.
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
 import Research.Quitting.StationaryCenteredFaceCertificate
 import MathUE.Interval.PolynomialLipschitz
-import MathUE.Interval.RationalPolynomialL1
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
