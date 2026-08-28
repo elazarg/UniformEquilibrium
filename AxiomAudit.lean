@@ -179,6 +179,7 @@ import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalInterval
 import MathUE.Interval.RationalPolynomial
+import MathUE.Interval.RationalPolynomialL1
 import MathUE.Interval.ScalarDyadicPolynomial
 import MathUE.InverseCoordinateRecurrence
 import MathUE.InvisibleNeutralActionDrift

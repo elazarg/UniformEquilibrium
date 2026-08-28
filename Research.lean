@@ -77,6 +77,7 @@ import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
 import Research.Quitting.FinFourConstrainedRootNormalWorkRegression
 import Research.Quitting.FinFourExhaustiveProducerAtlas
+import Research.Quitting.FinFourHopfConcreteChambers
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
 import Research.Quitting.FinFourProducerAtlas.ActualLowTail
 import Research.Quitting.FinFourProducerAtlas.NormalizedInertVanishingDensityBoundary
