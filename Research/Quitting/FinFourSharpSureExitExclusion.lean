@@ -17,10 +17,11 @@ that this is exactly when the pure profile "precisely `S` quits surely" is an
 exact terminal Nash equilibrium against all behavior deviations.
 
 For the reward table
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel` the test
-fails at every one of the sixteen subsets of `Fin 4`, the empty coalition and
-the grand coalition included: each coalition carries one player whose single
-membership toggle strictly raises that player's own payoff.
+`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel` at a
+positive singleton level, the test fails at every one of the sixteen subsets of
+`Fin 4`, the empty coalition and the grand coalition included: each coalition
+carries one player whose single membership toggle strictly raises that
+player's own payoff.
 
 Fifteen of the sixteen witnessing gains are rational constants, independent of
 both parameters; the sixteenth, at the empty coalition, is `singletonLevel`

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Interval.DyadicPolynomial
+import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Analysis.Calculus.MeanValue
 import Mathlib.Analysis.Normed.Operator.Basic
 import Mathlib.LinearAlgebra.Pi
@@ -21,6 +22,12 @@ The calculus layer is independent of interval arithmetic: it first proves the
 corresponding row-sum estimate for continuous linear maps and then applies the
 mean-value inequality on convex sets.  The final theorems discharge those
 hypotheses using the existing soundness theorem for `evalDualDyadic`.
+
+The same derivative envelopes also bound one reflected polynomial away from a
+base point of the box.  Combining that centered estimate with the value
+enclosure at the base point gives a whole-box magnitude bound whose right-hand
+side is a single integer at the common dyadic scale, so a factored expression
+is bounded without normalizing it into monomials.
 -/
 
 namespace Math
@@ -429,6 +436,188 @@ theorem lipschitzOnWith_evalRealVector_closedBall_of_evalDualDyadic_absRowSum
     expressions box contraction hrow).mono
       (closedBall_subset_dyadicBoxSet_of_endpoints_mem
         box center radius hendpoints)
+
+/-! ## Centered mean-value bounds for a single reflected polynomial -/
+
+/-- Row-sum form of the Lipschitz certificate for one reflected polynomial.
+The single expression is presented as a one-row system, so the estimate is the
+scalar case of the vector certificate. -/
+theorem lipschitzOnWith_evalReal_of_evalDualDyadic_absRowSum
+    (expression : RationalPolynomial variableCount)
+    (box : Fin variableCount → DyadicInterval precision)
+    (contraction : ℝ≥0)
+    (hrow : ∑ input,
+        dyadicAbsBound
+          ((evalDualDyadic box expression).derivative input) ≤
+      (contraction : ℝ)) :
+    LipschitzOnWith contraction (fun point ↦ evalReal point expression)
+      (dyadicBoxSet box) := by
+  have hrow' : LipschitzOnWith contraction
+      (fun point (_ : Fin 1) ↦ evalReal point expression)
+      (dyadicBoxSet box) := by
+    refine lipschitzOnWith_pi_of_hasFDerivAt_entrywise_rowSum
+      (function := fun point (_ : Fin 1) ↦ evalReal point expression)
+      (derivative := fun point ↦
+        ContinuousLinearMap.pi fun _ : Fin 1 ↦ differential point expression)
+      (bound := fun _ input ↦
+        dyadicAbsBound ((evalDualDyadic box expression).derivative input))
+      (constant := contraction) (convex_dyadicBoxSet box) ?_
+      (fun _ ↦ hrow) ?_
+    · intro point _
+      exact hasFDerivAt_pi.mpr fun _ ↦ hasFDerivAt_evalReal expression point
+    · intro point hpoint _ input
+      change ‖differential point expression (piBasisVector input)‖ ≤
+        dyadicAbsBound ((evalDualDyadic box expression).derivative input)
+      rw [differential_piBasisVector, Real.norm_eq_abs]
+      exact abs_le_of_dyadicContains_of_endpoints_le _ _ _
+        ((evalDualDyadic_sound expression box point hpoint).2 input)
+        (le_max_left _ _) (le_max_right _ _)
+  intro first hfirst second hsecond
+  exact le_trans
+    (edist_le_pi_edist (fun _ : Fin 1 ↦ evalReal first expression)
+      (fun _ : Fin 1 ↦ evalReal second expression) 0)
+    (hrow' hfirst hsecond)
+
+/-- Absolute endpoint envelopes are nonnegative. -/
+theorem dyadicAbsBound_nonneg (interval : DyadicInterval precision) :
+    0 ≤ dyadicAbsBound interval :=
+  (abs_nonneg _).trans (le_max_left _ _)
+
+/-- Centered mean-value estimate on a dyadic box.  Two points of the box whose
+coordinates differ by at most one give values of a reflected polynomial that
+differ by at most the row sum of the absolute gradient envelopes returned by
+dyadic automatic differentiation. -/
+theorem abs_evalReal_sub_evalReal_le_absRowSum
+    (expression : RationalPolynomial variableCount)
+    (box : Fin variableCount → DyadicInterval precision)
+    (center point : Fin variableCount → ℝ)
+    (hcenter : center ∈ dyadicBoxSet box)
+    (hpoint : point ∈ dyadicBoxSet box)
+    (hradius : ∀ coordinate,
+      |point coordinate - center coordinate| ≤ 1) :
+    |evalReal point expression - evalReal center expression| ≤
+      ∑ input,
+        dyadicAbsBound
+          ((evalDualDyadic box expression).derivative input) := by
+  have hnonneg : 0 ≤ ∑ input,
+      dyadicAbsBound
+        ((evalDualDyadic box expression).derivative input) :=
+    Finset.sum_nonneg fun input _ ↦ dyadicAbsBound_nonneg _
+  have hlipschitz := lipschitzOnWith_evalReal_of_evalDualDyadic_absRowSum
+    expression box ⟨_, hnonneg⟩ le_rfl
+  have hdistance := hlipschitz.dist_le_mul point hpoint center hcenter
+  have hradiusDistance : dist point center ≤ 1 := by
+    rw [dist_pi_le_iff zero_le_one]
+    intro coordinate
+    rw [Real.dist_eq]
+    exact hradius coordinate
+  calc |evalReal point expression - evalReal center expression|
+      = dist (evalReal point expression) (evalReal center expression) :=
+        (Real.dist_eq _ _).symm
+    _ ≤ (∑ input,
+          dyadicAbsBound
+            ((evalDualDyadic box expression).derivative input)) *
+        dist point center := hdistance
+    _ ≤ (∑ input,
+          dyadicAbsBound
+            ((evalDualDyadic box expression).derivative input)) * 1 :=
+        mul_le_mul_of_nonneg_left hradiusDistance hnonneg
+    _ = ∑ input,
+          dyadicAbsBound
+            ((evalDualDyadic box expression).derivative input) := mul_one _
+
+/-- Whole-box magnitude bound for one reflected polynomial: the value envelope
+at a base point plus the gradient row sum over the box. -/
+theorem abs_evalReal_le_dyadicValue_add_absRowSum
+    (expression : RationalPolynomial variableCount)
+    (centerBox box : Fin variableCount → DyadicInterval precision)
+    (center point : Fin variableCount → ℝ)
+    (hcenterBox : ∀ coordinate,
+      (centerBox coordinate).Contains (center coordinate))
+    (hcenter : center ∈ dyadicBoxSet box)
+    (hpoint : point ∈ dyadicBoxSet box)
+    (hradius : ∀ coordinate,
+      |point coordinate - center coordinate| ≤ 1) :
+    |evalReal point expression| ≤
+      dyadicAbsBound (evalDualDyadic centerBox expression).value +
+        ∑ input,
+          dyadicAbsBound
+            ((evalDualDyadic box expression).derivative input) := by
+  have hcentered : |evalReal center expression| ≤
+      dyadicAbsBound (evalDualDyadic centerBox expression).value :=
+    abs_le_of_dyadicContains_of_endpoints_le _ _ _
+      (evalDualDyadic_sound expression centerBox center hcenterBox).1
+      (le_max_left _ _) (le_max_right _ _)
+  have htriangle := abs_sub_abs_le_abs_sub
+    (evalReal point expression) (evalReal center expression)
+  have hdeviation := abs_evalReal_sub_evalReal_le_absRowSum
+    expression box center point hcenter hpoint hradius
+  linarith
+
+/-- Integer numerator of an absolute endpoint envelope at the common scale. -/
+def dyadicAbsNumerator (interval : DyadicInterval precision) : ℤ :=
+  max |interval.lower| |interval.upper|
+
+theorem dyadicAbsBound_eq_dyadicAbsNumerator_div_scale
+    (interval : DyadicInterval precision) :
+    dyadicAbsBound interval =
+      (dyadicAbsNumerator interval : ℝ) /
+        ((DyadicInterval.scale precision : ℤ) : ℝ) := by
+  have hscale : (0 : ℝ) < ((DyadicInterval.scale precision : ℤ) : ℝ) := by
+    exact_mod_cast DyadicInterval.scale_pos precision
+  unfold dyadicAbsBound dyadicAbsNumerator DyadicInterval.toRationalInterval
+  push_cast
+  rw [abs_div, abs_div, abs_of_pos hscale,
+    max_div_div_right hscale.le]
+
+/-- Integer numerator of the centered mean-value bound at the common scale.
+It adds the value envelope at the base box to the gradient row sum on the
+enclosing box, so it is computed by two passes of dyadic automatic
+differentiation over the reflected syntax tree. -/
+def centeredMeanValueNumerator
+    (centerBox box : Fin variableCount → DyadicInterval precision)
+    (expression : RationalPolynomial variableCount) : ℤ :=
+  dyadicAbsNumerator (evalDualDyadic centerBox expression).value +
+    ∑ input,
+      dyadicAbsNumerator
+        ((evalDualDyadic box expression).derivative input)
+
+/-- A single scaled integer comparison bounds a reflected polynomial on the
+whole box.  The comparison is exact arithmetic on the two dyadic evaluation
+passes, so no monomial normalization of the factored syntax is required. -/
+theorem abs_evalReal_le_of_centeredMeanValueNumerator_le
+    (expression : RationalPolynomial variableCount)
+    (centerBox box : Fin variableCount → DyadicInterval precision)
+    (center point : Fin variableCount → ℝ)
+    (hcenterBox : ∀ coordinate,
+      (centerBox coordinate).Contains (center coordinate))
+    (hcenter : center ∈ dyadicBoxSet box)
+    (hpoint : point ∈ dyadicBoxSet box)
+    (hradius : ∀ coordinate,
+      |point coordinate - center coordinate| ≤ 1)
+    (bound : ℚ)
+    (hbound :
+      (centeredMeanValueNumerator centerBox box expression : ℚ) ≤
+        bound * ((DyadicInterval.scale precision : ℤ) : ℚ)) :
+    |evalReal point expression| ≤ (bound : ℝ) := by
+  have hscale : (0 : ℝ) < ((DyadicInterval.scale precision : ℤ) : ℝ) := by
+    exact_mod_cast DyadicInterval.scale_pos precision
+  refine (abs_evalReal_le_dyadicValue_add_absRowSum expression centerBox box
+    center point hcenterBox hcenter hpoint hradius).trans ?_
+  have hsum :
+      dyadicAbsBound (evalDualDyadic centerBox expression).value +
+          ∑ input,
+            dyadicAbsBound
+              ((evalDualDyadic box expression).derivative input) =
+        (centeredMeanValueNumerator centerBox box expression : ℝ) /
+          ((DyadicInterval.scale precision : ℤ) : ℝ) := by
+    rw [centeredMeanValueNumerator, Int.cast_add, add_div,
+      dyadicAbsBound_eq_dyadicAbsNumerator_div_scale, Int.cast_sum,
+      Finset.sum_div]
+    exact congrArg _ (Finset.sum_congr rfl fun input _ ↦
+      dyadicAbsBound_eq_dyadicAbsNumerator_div_scale _)
+  rw [hsum, div_le_iff₀ hscale]
+  exact_mod_cast hbound
 
 end Interval.RationalPolynomial
 

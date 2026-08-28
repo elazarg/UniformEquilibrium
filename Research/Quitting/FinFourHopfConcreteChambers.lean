@@ -6,23 +6,26 @@ Authors: UniformEquilibrium contributors.
 
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
 import Research.Quitting.StationaryCenteredFaceCertificate
+import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalPolynomialL1
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 
 /-!
-# Concrete Fin4 HOPF safe chambers and the sharp stationary certificate seam
+# Concrete Fin4 HOPF safe chambers and the sharp stationary certificate
 
 The two previously checked zero-minimum HOPF completions already have a
 literal pure-singleton chamber.  Thin aliases below make that existing actual
 table adapter visible from the HOPF completion namespace without duplicating
 its proofs.
 
-The second half records the distinct sharp completion table from the HOPF
-stationary-closure packet.  Its exact table algebra and preconditioner
-determinant are checked here.  A small finite certificate interface isolates
-the four remaining coefficient-normalization computations needed for the
-whole-box diagonal estimate and the eight strict face inequalities.
+The second half records a distinct sharp owner-risky completion of the same
+four-player table.  Its exact table algebra and preconditioner determinant are
+checked here.  The whole-box diagonal estimate and the eight strict face
+inequalities are then obtained from a centered mean-value bound: on the
+normalized unit box, dyadic automatic differentiation of the reflected error
+polynomials supplies both the value envelope at the center and the gradient
+row sums that control every displacement from it.
 -/
 
 noncomputable section
@@ -119,27 +122,25 @@ def rationalSharpReward :
     {S : Finset Player // S.Nonempty} → Payoff Player :=
   sharpReward (1 / 74) 1
 
-/-! ## Exact rational stationary verification interface -/
+/-! ## The certified rational hazard box -/
 
+/-- Center of the certified rational hazard box. -/
 def sharpCenter : Player → ℚ :=
   fun who ↦
-    if who = 0 then 363 / 2000
-    else if who = 1 then 4359 / 20000
-    else if who = 2 then 5549 / 50000
-    else 583 / 1250
+    if who = 0 then 1815 / 10000
+    else if who = 1 then 2179 / 10000
+    else if who = 2 then 1110 / 10000
+    else 4664 / 10000
 
-def sharpHalfWidth : Player → ℚ :=
-  fun who ↦
-    if who = 0 then 3 / 2000
-    else if who = 1 then 7 / 4000
-    else if who = 2 then 3 / 2000
-    else 13 / 5000
+/-- Common half-width of the certified rational hazard box. -/
+def sharpHalfWidth : Player → ℚ := fun _ ↦ 1 / 400
 
-def sharpFaceMargin : Player → ℚ := fun _ ↦ 1 / 1000
+/-- Strict face margin retained inside the half-width. -/
+def sharpFaceMargin : Player → ℚ := fun _ ↦ 1 / 4000
 
 theorem sharpHalfWidth_pos (who : Player) :
     0 < (sharpHalfWidth who : ℝ) := by
-  fin_cases who <;> simp +decide [sharpHalfWidth]
+  norm_num [sharpHalfWidth]
 
 def sharpPreconditionerRat : Player → Player → ℚ :=
   fun row column ↦
@@ -396,46 +397,39 @@ def sharpNormalizedDiagonalErrorPolynomial
       sharpPolynomialVariable (sharpHazardCoordinate who) -
     sharpNormalizedPreconditionedFacePolynomial who
 
-/-- Exact outputs of the normalized coefficient checker, one per row. -/
-def sharpNormalizedDiagonalErrorL1 : Player → ℚ :=
-  fun who ↦
-    if who = 0 then
-      388535919908227563299959373 /
-        1156250000000000000000000000000
-    else if who = 1 then
-      443618482451553829438278031 /
-        1156250000000000000000000000000
-    else if who = 2 then
-      429079067278109693609510619 /
-        2312500000000000000000000000000
-    else
-      1372475058823182696976643921 /
-        2312500000000000000000000000000
+/-! ## Dyadic evaluation boxes for the normalized coordinates -/
 
-/-- The finite exact-computation seam for the sharp table.  This interface has
-only four instances, one for each `Fin 4` row; it does not store any analytic
-or equilibrium conclusion. -/
-structure RationalSharpStationaryVerification : Prop where
-  coefficientL1_eq : ∀ who : Player,
-    Math.Interval.RationalPolynomial.coefficientL1
-        (sharpNormalizedDiagonalErrorPolynomial who) =
-      sharpNormalizedDiagonalErrorL1 who
+/-- Common dyadic precision of the normalized interval computations. -/
+def sharpPrecision : ℕ := 40
 
-/-- Exact coefficient-L1 bounds for all four normalized error polynomials,
-conditional only on the supplied finite normalization equalities.  These four
-rational inequalities then imply the eight strict face inequalities. -/
-theorem sharpNormalizedDiagonalError_coefficientL1_lt_faceBudget
-    (verification : RationalSharpStationaryVerification)
-    (who : Player) :
-    Math.Interval.RationalPolynomial.coefficientL1
-        (sharpNormalizedDiagonalErrorPolynomial who) <
-      sharpHalfWidth who - sharpFaceMargin who := by
-  rw [verification.coefficientL1_eq]
-  fin_cases who <;>
-    simp +decide [sharpNormalizedDiagonalErrorL1, sharpHalfWidth,
-      sharpFaceMargin] <;> norm_num
+/-- The normalized coordinates all range over `[-1,1]`, which is exact at
+every dyadic precision. -/
+def sharpUnitBox : SharpNormalizedCoordinate →
+    Math.Interval.DyadicInterval sharpPrecision :=
+  fun _ ↦ ⟨-(2 ^ sharpPrecision), 2 ^ sharpPrecision⟩
 
-/-! ## Exact B13 semantic bridge -/
+/-- The degenerate box at the origin of the normalized coordinates, that is at
+the box center and at the parameter value `1/74`. -/
+def sharpCenterBox : SharpNormalizedCoordinate →
+    Math.Interval.DyadicInterval sharpPrecision :=
+  fun _ ↦ ⟨0, 0⟩
+
+theorem sharpCenterBox_contains_zero (coordinate : SharpNormalizedCoordinate) :
+    (sharpCenterBox coordinate).Contains (0 : ℝ) := by
+  constructor <;>
+    norm_num [sharpCenterBox, Math.Interval.DyadicInterval.toRationalInterval]
+
+theorem sharpUnitBox_contains_of_abs_le_one
+    {value : ℝ} (hvalue : |value| ≤ 1)
+    (coordinate : SharpNormalizedCoordinate) :
+    (sharpUnitBox coordinate).Contains value := by
+  rw [abs_le] at hvalue
+  constructor <;>
+    norm_num [sharpUnitBox, Math.Interval.DyadicInterval.toRationalInterval,
+      Math.Interval.DyadicInterval.scale, sharpPrecision] <;>
+    linarith [hvalue.1, hvalue.2]
+
+/-! ## Exact semantic bridge to the face numerators -/
 
 /-- The four real polynomials displayed in B13. -/
 def sharpFaceFormula (R : ℝ) (hazard : Player → ℝ)
@@ -719,10 +713,40 @@ theorem abs_sharpNormalizedPoint_le_one
     rw [sharpNormalizedPoint_parameter, abs_le]
     constructor <;> norm_num at hR ⊢ <;> linarith
 
+/-- Centered mean-value bound on the normalized unit box for each of the four
+reflected diagonal-error polynomials.  The center envelope and the four
+gradient row sums are exact dyadic interval computations. -/
+theorem abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le
+    (point : SharpNormalizedCoordinate → ℝ)
+    (hpoint : ∀ coordinate, |point coordinate| ≤ 1)
+    (who : Player) :
+    |Math.Interval.RationalPolynomial.evalReal point
+        (sharpNormalizedDiagonalErrorPolynomial who)| ≤
+      (sharpHalfWidth who : ℝ) - sharpFaceMargin who := by
+  have hcast : ((sharpHalfWidth who - sharpFaceMargin who : ℚ) : ℝ) =
+      (sharpHalfWidth who : ℝ) - sharpFaceMargin who := by
+    push_cast
+    ring
+  rw [← hcast]
+  refine
+    Math.Interval.RationalPolynomial.abs_evalReal_le_of_centeredMeanValueNumerator_le
+      (sharpNormalizedDiagonalErrorPolynomial who) sharpCenterBox sharpUnitBox
+      (fun _ ↦ 0) point sharpCenterBox_contains_zero ?_ ?_ ?_ _ ?_
+  · exact fun coordinate ↦
+      sharpUnitBox_contains_of_abs_le_one (by norm_num) coordinate
+  · exact fun coordinate ↦
+      sharpUnitBox_contains_of_abs_le_one (hpoint coordinate) coordinate
+  · intro coordinate
+    simpa using hpoint coordinate
+  · fin_cases who
+    · decide +kernel
+    · decide +kernel
+    · decide +kernel
+    · decide +kernel
+
 /-- Exact whole-box diagonal error bound, uniform in the full parameter range
 `0 ≤ R ≤ 1/37` and independent of the positive singleton level. -/
 theorem sharp_diagonal_error
-    (verification : RationalSharpStationaryVerification)
     (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
     (hazard : Player → ℝ)
     (hhazard : hazard ∈
@@ -737,19 +761,13 @@ theorem sharp_diagonal_error
       (sharpHalfWidth who : ℝ) - sharpFaceMargin who := by
   rw [← evalReal_sharpNormalizedDiagonalErrorPolynomial
     hazard R singletonLevel who]
-  exact
-    (Math.Interval.RationalPolynomial.abs_evalReal_le_coefficientL1
-      (sharpNormalizedPoint hazard R)
-      (abs_sharpNormalizedPoint_le_one hazard hhazard R hR)
-      (sharpNormalizedDiagonalErrorPolynomial who)).trans
-      (by exact_mod_cast
-        (sharpNormalizedDiagonalError_coefficientL1_lt_faceBudget
-          verification who).le)
+  exact abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le
+    (sharpNormalizedPoint hazard R)
+    (abs_sharpNormalizedPoint_le_one hazard hhazard R hR) who
 
 /-- Literal lower-face margin, one statement uniformly covering all four
 coordinates and all certified parameters. -/
 theorem sharp_lower_face_margin
-    (verification : RationalSharpStationaryVerification)
     (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
     (hazard : Player → ℝ)
     (hhazard : hazard ∈
@@ -764,7 +782,7 @@ theorem sharp_lower_face_margin
         (quittingCenteredRationalBoxLower sharpCenter sharpHalfWidth) who) :
     (sharpFaceMargin who : ℝ) ≤
       sharpOrientedField R singletonLevel hazard who := by
-  have herror := sharp_diagonal_error verification
+  have herror := sharp_diagonal_error
     R singletonLevel hR hazard hhazard who
   have hlower := (abs_le.mp herror).1
   change hazard who =
@@ -780,7 +798,6 @@ theorem sharp_lower_face_margin
 /-- Literal upper-face margin, one statement uniformly covering all four
 coordinates and all certified parameters. -/
 theorem sharp_upper_face_margin
-    (verification : RationalSharpStationaryVerification)
     (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
     (hazard : Player → ℝ)
     (hhazard : hazard ∈
@@ -795,7 +812,7 @@ theorem sharp_upper_face_margin
         (quittingCenteredRationalBoxUpper sharpCenter sharpHalfWidth) who) :
     sharpOrientedField R singletonLevel hazard who ≤
       -(sharpFaceMargin who : ℝ) := by
-  have herror := sharp_diagonal_error verification
+  have herror := sharp_diagonal_error
     R singletonLevel hR hazard hhazard who
   have hupper := (abs_le.mp herror).2
   change hazard who =
@@ -808,12 +825,11 @@ theorem sharp_upper_face_margin
   rw [hface] at hupper
   linarith
 
-/-- A supplied four-row coefficient verification and the checked determinant
-compile to the generic centered stationary certificate for every parameter in
-the advertised closed range.  The singleton level is unrestricted because it
-cancels from all four face numerators. -/
+/-- The four checked mean-value bounds and the checked preconditioner
+determinant compile to the generic centered stationary certificate for every
+parameter in the advertised closed range.  The singleton level is unrestricted
+because it cancels from all four face numerators. -/
 def sharpCenteredCertificate
-    (verification : RationalSharpStationaryVerification)
     (R singletonLevel : ℝ)
     (hR : R ∈ Icc 0 (1 / 37)) :
     QuittingCenteredStationaryFaceCertificate
@@ -832,7 +848,7 @@ def sharpCenteredCertificate
       norm_num
   halfWidth_pos := by
     intro who
-    fin_cases who <;> simp +decide [sharpHalfWidth]
+    norm_num [sharpHalfWidth]
   margin_pos := by
     intro who
     norm_num [sharpFaceMargin]
@@ -846,8 +862,7 @@ def sharpCenteredCertificate
           (weightOfReward (sharpReward R singletonLevel)) column)).neg
   diagonal_error := by
     intro hazard hhazard who
-    exact sharp_diagonal_error verification
-      R singletonLevel hR hazard hhazard who
+    exact sharp_diagonal_error R singletonLevel hR hazard hhazard who
   zero_to_numerator := by
     intro hazard _ hzero
     have hpreconditioned : applySharpPreconditioner
@@ -864,36 +879,31 @@ def sharpCenteredCertificate
     intro who
     exact congrFun hnumerator who
 
-/-- Conditional stationary all-behavior consumer for every sharp table
-parameter in the certified range.  Its sole supplied datum is the finite
-four-row coefficient verification. -/
+/-- Stationary all-behavior consumer for every sharp table parameter in the
+certified range. -/
 theorem sharpReward_exists_uniformEquilibriumPayoff
-    (verification : RationalSharpStationaryVerification)
     (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37)) :
     ∃ payoff : Payoff Player,
       (quittingGame (sharpReward R singletonLevel)).IsUniformEquilibriumPayoff
         none payoff := by
   exact QuittingCenteredStationaryFaceCertificate.exists_uniformEquilibriumPayoff
-    (sharpCenteredCertificate verification R singletonLevel hR)
+    (sharpCenteredCertificate R singletonLevel hR)
 
-/-- Conditional fixed rational specialization of the sharp table. -/
+/-- Fixed rational specialization of the sharp table. -/
 theorem rationalSharpReward_exists_uniformEquilibriumPayoff :
-    RationalSharpStationaryVerification →
     ∃ payoff : Payoff Player,
       (quittingGame rationalSharpReward).IsUniformEquilibriumPayoff none payoff := by
-  intro verification
-  apply sharpReward_exists_uniformEquilibriumPayoff verification (1 / 74) 1
+  apply sharpReward_exists_uniformEquilibriumPayoff (1 / 74) 1
   norm_num
 
 /-!
-The conditional compiler above becomes an actual stationary source for the
-B2--B10 family once the four displayed coefficient equalities are supplied.
-It does not identify `sharpReward fullBindingInitialCap singletonLevel` with
-the older `fullBindingReward`: those tables differ on passive active-player
-entries.  Consequently the committed maximal-ray regression is not silently
-transported to the sharp table here.  Persistence under arbitrary nearby
-reward-table perturbations is likewise a separate compact-uniformity theorem,
-not a consequence of parameter-uniformity inside this two-parameter family.
+The compiler above does not identify
+`sharpReward fullBindingInitialCap singletonLevel` with the older
+`fullBindingReward`: those tables differ on passive active-player entries.
+Consequently the committed maximal-ray regression is not silently transported
+to the sharp table here.  Persistence under arbitrary nearby reward-table
+perturbations is likewise a separate compact-uniformity theorem, not a
+consequence of parameter-uniformity inside this two-parameter family.
 -/
 
 end FinFourHopfConcreteChambers
