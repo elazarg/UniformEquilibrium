@@ -145,6 +145,7 @@ import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveJointSourceForwardTailDecoupling
 import Research.Quitting.PositiveRectangleResetFaceLawCausalDispatch
 import Research.Quitting.PrefixTruncationExploitability
+import Research.Quitting.ProjectiveTimingInverseLimit
 import Research.Quitting.PrescribedAtomMinimumAccounting
 import Research.Quitting.PureTimeRectangleLegalGainAndStateMatchNoGo
 import Research.Quitting.PureTimeRectangleSequenceNormalForm

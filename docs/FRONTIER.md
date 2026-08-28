@@ -208,39 +208,48 @@ the corresponding compact alternative: a uniform payoff or one positive
 (`Research/Quitting/StationaryFaceBoxClosure.lean`) turn supplied strict
 rational-box face signs and a supplied `zero_to_numerator` bridge into an
 interior numerator zero and a full exact stationary behavioral certificate.
-`Math.Interval.RationalPolynomial.abs_evalReal_le_coefficientL1`
-(`MathUE/Interval/RationalPolynomialL1.lean`) gives one generic exact unit-box
-bound, through monomial normalization.  In the same file,
-`Math.Interval.RationalPolynomial.boundedCoefficientL1_eq_coefficientL1`
-proves that dense coefficient reflection over any explicit syntactic exponent
-box computes that canonical coefficient norm exactly.
 `Math.Interval.RationalPolynomial.abs_evalReal_le_of_centeredMeanValueNumerator_le`
-(`MathUE/Interval/PolynomialLipschitz.lean`) gives the complementary bound
+(`MathUE/Interval/PolynomialLipschitz.lean`) gives the generic whole-box bound
 that keeps the factored syntax: two passes of dyadic automatic
 differentiation, one for the value envelope at a base point and one for the
 gradient row sum on the box, combine into a single scaled integer comparison.
-Both theorems are generic finite checkers; neither inhabits a table-specific
+It is a generic finite checker and does not itself inhabit a table-specific
 certificate.  Finally,
 `QuittingCenteredStationaryFaceCertificate.exists_uniformEquilibriumPayoff`
 (`Research/Quitting/StationaryCenteredFaceCertificate.lean`) is its supplied-
 certificate stationary consumer.  These generic interfaces have checked
-`M/L/C` status.
+`M/L/C` status, the centered bound through the sharp table's
+`abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le`.
 
-The sharp HOPF table is represented exactly and its stationary source is
-unconditional.  `sharpReward`, `sharpPreconditionerMatrix_det`,
-`applySharpPreconditioner_injective`, and
+`Math.Interval.RationalPolynomial.abs_evalReal_le_coefficientL1`
+(`MathUE/Interval/RationalPolynomialL1.lean`) is a second generic exact
+unit-box bound, taken through monomial normalization; in the same file
+`Math.Interval.RationalPolynomial.boundedCoefficientL1_eq_coefficientL1`
+proves that dense coefficient reflection over any explicit syntactic exponent
+box computes that canonical coefficient norm exactly.  Both are checked
+general checkers, and neither inhabits a table-specific certificate.  No
+declaration outside that module consumes either, so they have `M/L` and
+no `C`.
+
+The sharp HOPF table is represented exactly, and its stationary payoff is
+unconditional on the certified parameter range.  `sharpReward`,
+`sharpPreconditionerMatrix_det`, `applySharpPreconditioner_injective`, and
 `quittingFaceNumerator_sharpReward_eq_formula`
 (`Research/Quitting/FinFourHopfConcreteChambers.lean`) retain the owner-risky
 reward family, the exact nonzero preconditioner, and the four division-free
 face polynomials; the normalized evaluation and singleton-level cancellation
-theorems are also checked.  The four whole-box diagonal-error bounds are now
-discharged by `abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le`, a
-centered mean-value estimate whose only arithmetic inputs are exact dyadic
-interval computations on the normalized unit box.  Consequently
-`sharpCenteredCertificate`, `sharpReward_exists_uniformEquilibriumPayoff`, and
-`rationalSharpReward_exists_uniformEquilibriumPayoff` carry no supplied
-arithmetic hypothesis: the sharp table has `M/L` with a checked unconditional
-downstream consumer `C`, and still no `A`.  The thin
+theorems are also checked.
+`abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le` discharges the four
+whole-box diagonal-error bounds by that generic centered mean-value bound,
+whose only arithmetic inputs are exact dyadic interval computations on the
+normalized unit box.  So `sharpCenteredCertificate`,
+`sharpReward_exists_uniformEquilibriumPayoff`, and
+`rationalSharpReward_exists_uniformEquilibriumPayoff` take no supplied
+arithmetic hypothesis: the stationary uniform-equilibrium payoff holds for
+every `0 <= R <= 1/37`, at an arbitrary real singleton level, which cancels
+from all four face numerators.  The sharp table thus has `M/L`, with
+`sharpReward_exists_uniformEquilibriumPayoff` supplying `C` for its own
+stationary payoff on that closed range, and no actual `A`.  The thin
 `rationalSingletonTwoChamber` and
 `fullBindingSingletonTwoChamber` aliases retain actual safe chambers for two
 different previously checked zero-minimum tables.  No theorem identifies
