@@ -13,10 +13,10 @@ import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 /-!
 # Concrete Fin4 HOPF safe chambers and the sharp stationary certificate
 
-The two previously checked zero-minimum HOPF completions already have a
-literal pure-singleton chamber.  Thin aliases below make that existing actual
-table adapter visible from the HOPF completion namespace without duplicating
-its proofs.
+The two zero-minimum HOPF completions of
+`Research/Quitting/FinFourMaximalRayZeroMinimumRegressions.lean` already have
+a literal pure-singleton chamber.  Thin aliases here make those chambers
+visible from the HOPF completion namespace without duplicating their proofs.
 
 The second half records a distinct sharp owner-risky completion of the same
 four-player table.  Its exact table algebra and preconditioner determinant are
@@ -40,15 +40,15 @@ abbrev Player := Fin 4
 
 open FinFourMaximalRayZeroMinimumRegressions
 
-/-! ## Actual safe completions of the active HOPF table -/
+/-! ## Safe completions of the active HOPF table -/
 
-/-- Thin HOPF-facing alias for the existing rational safe solo chamber. -/
+/-- Thin HOPF-facing alias for the rational safe solo chamber. -/
 theorem rationalSingletonTwoChamber :
     QuittingPureSingletonChamber (rationalReward rationalScale) 2 :=
   rationalPureSingletonChamber
 
-/-- Thin HOPF-facing alias for the existing full-binding safe solo chamber.
-This is not the distinct sharp completion defined below. -/
+/-- Thin HOPF-facing alias for the full-binding safe solo chamber.  This is
+the full-binding table, not the sharp owner-risky one. -/
 theorem fullBindingSingletonTwoChamber (R : ℝ) :
     QuittingPureSingletonChamber (fullBindingReward R rationalScale) 2 :=
   fullBindingPureSingletonChamber R
@@ -745,7 +745,7 @@ theorem abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le
     · decide +kernel
 
 /-- Exact whole-box diagonal error bound, uniform in the full parameter range
-`0 ≤ R ≤ 1/37` and independent of the positive singleton level. -/
+`0 ≤ R ≤ 1/37` and independent of the singleton level. -/
 theorem sharp_diagonal_error
     (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
     (hazard : Player → ℝ)
@@ -825,10 +825,10 @@ theorem sharp_upper_face_margin
   rw [hface] at hupper
   linarith
 
-/-- The four checked mean-value bounds and the checked preconditioner
-determinant compile to the generic centered stationary certificate for every
-parameter in the advertised closed range.  The singleton level is unrestricted
-because it cancels from all four face numerators. -/
+/-- The four mean-value bounds and the preconditioner determinant compile to
+the generic centered stationary certificate for every parameter in the closed
+range `0 ≤ R ≤ 1/37`.  The singleton level is unrestricted because it cancels
+from all four face numerators. -/
 def sharpCenteredCertificate
     (R singletonLevel : ℝ)
     (hR : R ∈ Icc 0 (1 / 37)) :
@@ -900,8 +900,8 @@ theorem rationalSharpReward_exists_uniformEquilibriumPayoff :
 The compiler above does not identify
 `sharpReward fullBindingInitialCap singletonLevel` with the older
 `fullBindingReward`: those tables differ on passive active-player entries.
-Consequently the committed maximal-ray regression is not silently transported
-to the sharp table here.  Persistence under arbitrary nearby reward-table
+Consequently the maximal-ray regression is not silently transported to the
+sharp table here.  Persistence under arbitrary nearby reward-table
 perturbations is likewise a separate compact-uniformity theorem, not a
 consequence of parameter-uniformity inside this two-parameter family.
 -/

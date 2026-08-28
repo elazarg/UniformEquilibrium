@@ -21,7 +21,7 @@ norm, so a maximum row-sum bound on the Jacobian controls the operator norm.
 The calculus layer is independent of interval arithmetic: it first proves the
 corresponding row-sum estimate for continuous linear maps and then applies the
 mean-value inequality on convex sets.  The final theorems discharge those
-hypotheses using the existing soundness theorem for `evalDualDyadic`.
+hypotheses using `evalDualDyadic_sound`.
 
 The same derivative envelopes also bound one reflected polynomial away from a
 base point of the box.  Combining that centered estimate with the value
