@@ -4,26 +4,34 @@ Author: `CODEX_ROOT`
 
 Independent review: [timing-identity audit](../feedback/CODEX_ROOT__NEAR_MINIMUM_RETAINED_TAIL_TIMING_NASH_IDENTITY_NOGO__BY_TIMING_IDENTITY_REVIEW.md)
 
-The generic rigidity core is checked in Lean, with stronger constants than
-the cardinality-averaged presentation below.
+The generic rigidity and retained-tail normal-form recursion are checked in
+Lean, with stronger constants than the cardinality-averaged presentation
+below.
 `nonidentity_exactRoot_uniformOpponentAbsorption_ge` gives every coordinate
 the same opponent-absorption floor `kappa / (kappa + 2 * M)`.
 `nearMinimum_rootNashAgainstPayoff_eq_allContinue` uses the explicit threshold
 `excess < kappa * D_* / (2 * M)`, and
 `nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates the
 identity backward through any supplied `IsQuittingLiteralExactRootStack`.
-These declarations are in
-`Research/Quitting/NearMinimumRetainedTailTimingNashIdentity.lean` and have
-`M` and `L`, but no Fin4 `A` or `C`.
+`quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff`,
+`retainedTimingLawTail_isNash_of_isNash_of_positiveContinue`, and
+`retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash` supply the literal
+mixed-payoff identity and credible conditional recursion.  Therefore
+`nearMinimum_retainedTailFiniteTimingNash_eq_pureNeverProfile` proves the
+generic mixed-law identity conclusion directly, without a supplied root
+stack.  These declarations are in
+`Research/Quitting/NearMinimumRetainedTailTimingNashIdentity.lean` and
+`Research/Quitting/RetainedTailFiniteTimingRecursion.lean` and have `M` and
+`L`.
 
-The packet is not fully formalized as written.  No checked theorem identifies
-the mixed payoff of the retained-tail finite timing game with its behavioral
-graft, transfers mixed Nash optimality to every positive-Never conditional
-suffix and current root, or constructs the exact credible root stack consumed
-by the checked rigidity theorem.  Consequently the mixed-law identity theorem
-and the Fin4 minimum-source/punishment/return-floor composition remain open.
-Revisit this packet when that source compiler is checked; the generic root and
-supplied-stack core needs no repair.
+The packet is not fully formalized as written because its Fin4 adapter remains
+absent.  No checked theorem selects the sufficiently late actual minimum-source
+tail and uniform singleton gap, constructs all coordinate punishments, turns
+an arbitrary mixed Nash law into the retained-tail return-floor certificate,
+or derives positive joint `Never` mass and the eventual source-level identity
+conclusion.  Thus there is no Fin4 `A` or `C`.  Revisit this packet when that
+source/punishment/return-floor composition is checked; the generic Sections
+1--2 need no repair.
 
 ## Question
 
@@ -395,10 +403,11 @@ The proof is designed to use:
 - the arbitrary-root coordinate bound of the form
   `d_i(prefix) <= rootDefect_i + opponentContinue_i * d_i(tail)`;
 - the root-Nash specialization in which `rootDefect_i=0`;
-- `timingLawTail_isNash_of_isNash_of_positiveContinue` and
-  `timingLaw_eq_of_current_tail_eq` in
-  `UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineTimingRecursion.lean`
-  as zero-tail analogues of the retained-tail recursion proved in Section 2;
+- `quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff`,
+  `retainedTimingLawTail_isNash_of_isNash_of_positiveContinue`, and
+  `retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash` in
+  `Research/Quitting/RetainedTailFiniteTimingRecursion.lean` for the exact
+  retained-tail mixed-payoff and credible-suffix recursion;
 - `terminalGap_retainedTailFiniteTimingNash_jointReturn_ge` in
   `UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingReturnFloor.lean`;
 - the hard residual's uniform minimum-fiber singleton separation and
@@ -417,24 +426,18 @@ The checked declarations are:
 nonidentity_exactRoot_uniformOpponentAbsorption_ge
 nearMinimum_rootNashAgainstPayoff_eq_allContinue
 nearMinimum_literalExactRootStack_eq_replicate_allContinue
+quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff
+retainedTimingLawTail_isNash_of_isNash_of_positiveContinue
+retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash
+retainedTailFiniteTimingNash_eq_pureNever_of_root_rigidity
+nearMinimum_retainedTailFiniteTimingNash_eq_pureNeverProfile
 ```
 
-The remaining handoff is the retained-tail mixed-law compiler:
-
-```text
-isRetainedTailTimingNash_tail_of_positiveNever
-isRetainedTailTimingNash_currentRoot_of_positiveNever
-nearMinimum_retainedTailFiniteTimingNash_eq_allInfinity
-FinFourMinimumAtomProducer.
-  retainedTailFiniteTimingNash_eq_allInfinity_eventually
-```
-
-The first two missing declarations must be proved from the mixed-payoff/graft
-identity rather than by rewriting the continuation payoff to zero.  The
-finite identity theorem should accept positive joint return as a hypothesis;
-the Fin4 adapter should construct the mixed-law hazard word and punishment
-profiles and obtain that hypothesis from the checked terminal-gap return
-floor.
+The remaining handoff is only the Fin4 adapter.  It should select one
+sufficiently late actual minimum-source tail, construct the coordinate
+punishments, relate a finite-game mixed Nash law to the retained-tail
+return-floor certificate, obtain positive joint `Never` mass, and invoke the
+checked generic compiler.
 
 ## Exact limitation
 
@@ -464,20 +467,17 @@ The output is a negative architecture consumer: every such timing law is proved 
 
 ## Lean handoff summary
 
-The unchecked composition isolates the following additions:
+The unchecked Fin4 composition isolates the following addition:
 
 ```text
-isRetainedTailTimingNash_tail_of_positiveNever
-
-isRetainedTailTimingNash_currentRoot_of_positiveNever
-
-nearMinimum_retainedTailFiniteTimingNash_eq_allInfinity
-
 FinFourMinimumAtomProducer.
   retainedTailFiniteTimingNash_eq_allInfinity_eventually
 ```
 
-The retained-tail recursion must be proved from the mixed-payoff/graft identity; the existing timing-law tail-Nash theorem is only its zero-continuation analogue. The Fin4 adapter must explicitly construct the punishment profiles and identify hazard-word joint survival with the product of mixed-law Never masses.
+The Fin4 adapter must explicitly choose the near-minimum source tail, construct
+the punishment profiles, prove the retained-tail finite timing comparisons,
+and identify hazard-word joint survival with the product of mixed-law `Never`
+masses before invoking the checked generic pure-`Never` theorem.
 
 ## Scope and nonclaims
 
@@ -485,4 +485,5 @@ The retained-tail recursion must be proved from the mixed-payoff/graft identity;
 - It does not exclude constrained, approximate, correlated, or deliberately non-Nash finite controllers.
 - It does not turn cumulative suffix-cap charge into prescribed-payoff charge.
 - It does not consume observer rotation or cross-coordinate cap leakage.
-- The Fin4 adapter and retained-tail recursion are reviewed ordinary mathematics, not yet Lean-checked declarations.
+- The retained-tail recursion is checked; the Fin4 adapter remains reviewed
+  ordinary mathematics, not a Lean-checked declaration.

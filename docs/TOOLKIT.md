@@ -367,12 +367,21 @@ player-cardinality loss.  If the actual tail excess is below
 `nearMinimum_rootNashAgainstPayoff_eq_allContinue` forces any exact endpoint
 Nash root against its prescribed payoff to be all Continue.
 `nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates this
-backward through a supplied `IsQuittingLiteralExactRootStack`.  These generic
-no-go declarations have `M` and `L` only.  No theorem converts an arbitrary
-mixed Nash law of the retained-tail finite timing game into that exact
-credible-suffix stack, derives the separated tail and punishments from the
-Fin4 source, proves the mixed-law identity theorem, selects a nonidentity
-block, closes the prescribed-payoff/cap seam, or supplies `A` or `C`.
+backward through a supplied `IsQuittingLiteralExactRootStack`.  The missing
+normal-form recursion is now checked in
+`Research/Quitting/RetainedTailFiniteTimingRecursion.lean`:
+`quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff` retains the
+literal behavioral tail, `retainedTimingLawTail_isNash_of_isNash_of_positiveContinue`
+and `retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash` give the credible
+conditional suffix and current root, and
+`nearMinimum_retainedTailFiniteTimingNash_eq_pureNeverProfile` makes every
+positive-`Never` near-minimum mixed Nash law literally pure `Never`.  This
+generic no-go has `M` and `L`.  No theorem derives the separated actual tail
+and coordinate punishments from the Fin4 source, converts every selected mixed
+Nash law into the retained-tail return-floor certificate, obtains positive
+joint `Never` mass, or packages the eventual Fin4 identity no-go.  Thus there
+is still no Fin4 `A` or `C`, prescribed-payoff/cap closure, or uniform-equilibrium
+conclusion.
 
 The local periodic-anchor route has two separate Research interfaces.
 `localPeriodicAnchor_theoremA`

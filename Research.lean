@@ -139,6 +139,7 @@ import Research.Quitting.PureTimeRectangleSequenceNormalForm
 import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import Research.Quitting.QuantileNashificationAlternative
 import Research.Quitting.QuantileVertexEndpointControl
+import Research.Quitting.RetainedTailFiniteTimingRecursion
 import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonClockDefectOverlap
