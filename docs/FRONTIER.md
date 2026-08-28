@@ -895,6 +895,20 @@ literal base factor floor.  Therefore `newWord_fullyScreened` and
 full-screening certificate to eventual uniform low deleted survival of the
 new words.
 
+The full source-level split is now literal.
+`FinFourActualZenoDeletedSurvivalSource.nonempty_positiveHost_or_fullyScreened`
+(`Research/Quitting/FinFourProducerAtlas/ActualZenoHostCompression.lean`)
+either selects one fixed host and positive deleted-survival floor on a strict
+subsequence, with every other deleted clock tending to zero, or returns full
+screening.  In the positive branch,
+`FinFourActualZenoPositiveHost.nonempty_fixedEndpoint` freezes the best Boolean
+endpoint and routed terminal.  The accessors
+`FinFourActualZenoPositiveHost.FixedEndpoint.eta_le_markedMass`,
+`markedHostDefect_eq_zero`, `profile_opponent_eq`, and
+`postMarkSpine_eq_reference` retain the full host floor, exact zero marked-host
+root defect, unchanged nonhost behaviors, and complete postmark behavioral
+tail.  The original Zeno, packet, and source ranks remain explicit.
+
 `FinFourActualZenoDeletedSurvivalSource.nonempty_fullyScreenedClearingFamily`
 (`Research/Quitting/FinFourProducerAtlas/FullyScreenedFiniteClockClearing.lean`)
 then clears every retained actual new word after one strict finite shift.  At
@@ -910,14 +924,19 @@ strategic-singleton-or-collision-minimum compiler.
 ordered paid labels, exit kind, packet labels, and original premark labels on
 one strict refinement while leaving dates and profiles free to vary.
 
-The supplied fully screened branch has `M`, `L`, `A`, and `C` through that
-contraction, but both consumer outputs remain open.  The unconditional
-zero-boundary statement
-`nonempty_actualZeno_notFullyScreened_or_clearingFamily` has only `M`, `L`,
-and `A`: its left arm says only that full screening fails.  It does not
-produce the positive-host alternative claimed by the separate actual-Zeno
-dichotomy packet.  There is no target-side near-minimality, control of the
-other whole-profile caps, return, regeneration, recursive descent, terminal
+The zero-boundary capstone
+`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_clearingFamily`
+constructs the actual Zeno source and returns exactly the fixed endpoint or
+clearing family.  This contraction has `M`, `L`, and `A` in both arms.  Only
+the fully screened branch has `C`, through the strategic-singleton-or-
+collision-minimum contraction, and both consumer outputs remain open.  The
+positive-host endpoint has no checked downstream consumer and is not asserted
+whole-profile near-minimal or cap controlled in the other coordinates.
+
+No checked theorem here proves source-indexed all-behavior payoff/cap/law
+coalescence for the original screened siblings or formalizes the explicit
+`H_i = n^-3` zero-minimum boundary regression.  There is no return,
+regeneration, renewable compression, recursive descent, terminal
 approximation, or uniform-equilibrium conclusion.
 
 A separate canonical maximal-prefix ray now consumes the same cofinal
