@@ -1037,6 +1037,43 @@ and eventual binding-support theorem
 `QuittingForwardExactCapTail.eventually_currentHazard_supported_binding` are
 source-derived.  This layer has `M`, `L`, and `A`, but no `C`.
 
+The all-Continue arm now has a literal finite-clock normal form in
+`Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean`.
+[`FinFourMaximalRayEventualAllContinue.fixedProfile_semantic_eq`](../Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean)
+retains one actual profile realizing the fixed semantic state, and
+[`FinFourMaximalRayEventualAllContinue.exists_fixedProfile_capAttainer`](../Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean)
+attains every unrestricted behavioral cap at Never or at one finite pure
+quitting date.  The generic opponent-barrier theorem gives the stronger
+attainment statement at every displayed ray row.
+[`FinFourMaximalRayEventualAllContinue.fixedProfile_debt_eq_rayLimit`](../Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean)
+identifies the fixed debt with `L`, while
+[`FinFourMaximalRayEventualAllContinue.fixedProfile_endpoint_debt_eq_sub_add_spectatorLeakage`](../Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean)
+localizes the paid endpoint obstruction in the signed spectator leakage.
+Global minimum gives the exact lower bound in
+[`FinFourMaximalRayEventualAllContinue.rayPaidGain_sub_fixedExcess_le_spectatorLeakage`](../Research/Quitting/FinFourProducerAtlas/EventualAllContinueStallNormalForm.lean),
+not the upper bound needed for descent.  The endpoint returns to the minimum
+fibre only under that separately supplied upper threshold.  This normal form
+has `M`, `L`, and `A`, but no `C`; it supplies no leakage orientation,
+chronological return, source regeneration, or contradiction.  The packet's
+specific rational local-stall regression is checked separately in
+`Research/Quitting/FinFourEventualAllContinueLocalRegression.lean`.
+[`FinFourEventualAllContinueLocalRegression.pair_semantic_eq`](../Research/Quitting/FinFourEventualAllContinueLocalRegression.lean)
+gives exactly `U = (1,4,1,2)` and `B = (3,4,2,2)` with the unrestricted
+behavioral cap.  The same table has the paired normalized singleton matrix,
+full normal core, `ResidualHardClass`, punishment normality, uniform
+full-support singleton mass `1/4`, zero-debt owner `1`, and unit-gain payer
+`2`.  The declarations
+[`FinFourEventualAllContinueLocalRegression.exactRoot_eq_allContinue`](../Research/Quitting/FinFourEventualAllContinueLocalRegression.lean)
+and
+[`FinFourEventualAllContinueLocalRegression.maximalPrefixOrbit_pairSemantic_eq`](../Research/Quitting/FinFourEventualAllContinueLocalRegression.lean)
+prove the unique exact cap root and immediate constant semantic orbit.
+[`FinFourEventualAllContinueLocalRegression.neverPair_globalMinimum`](../Research/Quitting/FinFourEventualAllContinueLocalRegression.lean)
+and
+[`FinFourEventualAllContinueLocalRegression.neverUniformEquilibriumPayoff`](../Research/Quitting/FinFourEventualAllContinueLocalRegression.lean)
+prove that its all-Never profile has global debt minimum zero and is an exact
+uniform equilibrium.  Thus this regression has `M`, `L`, `A`, and `C` for its
+own explicit table, but cannot supply positive-minimum strict-ray provenance.
+
 `QuittingForwardExactCapTail.tailNormalizedCapFlow`
 (`Research/Quitting/ForwardExactCapTailFirstOrder.lean`) now derives the
 normalized certificate from the actual ray.  The one-step estimates in
@@ -1051,8 +1088,8 @@ average and forward-difference telescope are in
 `FinFourStrictRayForwardExactCapTail.analysis` supplies the nested `Analysis`
 without an extra error hypothesis, so collision nonpositivity,
 complementarity, and diffuse-solo identities now have `M`, `L`, and `A` on
-the same source ray.  They still have no `C`: there is no finite-clock cap
-attainment, limiting positive-root/cardinality-face consumer, return, rank
+the same source ray.  They still have no `C`: there is no limiting
+positive-root/cardinality-face consumer, return, rank
 decrease, strict-ray contradiction, or uniform-equilibrium conclusion.  This
 is not a completed strict-tail packet.
 

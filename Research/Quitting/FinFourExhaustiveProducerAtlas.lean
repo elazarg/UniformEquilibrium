@@ -4,7 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import Research.Quitting.FinFourEventualAllContinueLocalRegression
 import Research.Quitting.FinFourProducerAtlas.CanonicalPairMinimumEndpointSupportRankHandoff
+import Research.Quitting.FinFourProducerAtlas.EventualAllContinueStallNormalForm
 import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.ForcedPairMinimumTailConsumer
 import Research.Quitting.FinFourProducerAtlas.ActualZenoHostCompression
@@ -72,6 +74,16 @@ has a limiting cap, an exact renewal law, and eventually uses only binding
 singleton coordinates.  Exact finite-product estimates and the weighted-tail
 telescope now construct its first-order normalized cap-flow certificate.  No
 terminal consumer is asserted.
+In the zero-root arm, the fixed semantic state has one literal finite-clock
+profile, every unrestricted behavioral cap is attained by Never or a finite
+pure quitting date, and the paid endpoint satisfies the exact signed spectator
+leakage ledger.  Minimum debt gives only the lower bound opposite to the one
+needed for descent; no upper bound or return is produced.
+The packet's distinct rational local regression realizes the advertised
+singleton matrix, forced pair, unique all-Continue cap root, and immediate
+constant semantic orbit.  Its all-Never profile is an exact uniform
+equilibrium with global debt minimum zero, so it is not a positive-minimum
+strict-ray source.
 On a supplied full binding face, one joint compact cluster of that same flow
 is either positive-renewal or has nonempty current-hazard support of cardinality
 at most three.  This reduction neither supplies full binding nor consumes its
