@@ -794,6 +794,39 @@ recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
 follows; an arbitrary public chord without the actual endpoint law cannot be
 regenerated.
 
+The minimum-target branch now also has a source-faithful regeneration surface.
+`nonempty_sourceFaithfulMinimumCausalization`
+(`Research/Quitting/SourceFaithfulMinimumLawCausalization.lean`) keeps one
+supplied joint semantic/law realizing family and its literal marked dates,
+selecting only finite exact cap--Nash root words and finite cutoffs.  Its
+prefix debt returns to the positive global minimum, joint survival tends to
+one, the shifted atom identity is exact, and the shifted marked mass is
+eventually at least half the supplied floor.  For arbitrary complete
+behavioral responses,
+`quittingTerminalPayoff_shiftedBehavioralResponse_sub_eq` gives the exact
+two-counterfactual payoff contrast multiplied by player-deleted survival;
+`FinFourSourceFaithfulMinimumTargetRegeneration.responseMenu_lowerBound_transport`
+retains every supplied rankwise menu lower bound with that same multiplier;
+`QuittingSourceFaithfulMinimumCausalization.opponentSurvival_tendsto_one`
+shows that multiplier tends to one.
+
+At a same-minimum Fin4 three-role endpoint,
+`ConcentratedCollisionThreeRoleEndpointLaw.nonempty_sourceFaithful_finFourMinimumTargetRegeneration`
+(`Research/Quitting/FinFourProducerAtlas/SourceFaithfulThreeRoleRegeneration.lean`)
+uses the nonsingleton routed-mass chain to retain the literal endpoint target
+profiles and incoming marks.  The resulting public chronology and
+`FinFourSourceFaithfulMinimumTargetRegeneration.next_residual_eq`,
+`next_point_eq`, `next_terminal_eq`, `chronology_profile_eq`, and
+`chronology_mark_eq` make the provenance literal; `toMinimumTargetRegeneration`
+forgets to the older endpoint-law regeneration.  For a singleton incoming
+mark, `nonempty_sourceFaithful_reselectedMarkRegeneration` instead keeps every
+target profile, the source residual, point, and routed terminal while selecting
+new positive finite-window dates; it does not retain the incoming dates or a
+uniform per-stage floor.  This source-faithful route has `M`, `L`, and `A`, but
+no `C`: no common observer is selected, no paid cycle is oriented, and no
+spectator-leakage, renewal, terminal-approximation, or uniform-equilibrium
+consumer is proved.
+
 A separate conditional response-chord compiler starts from a supplied
 `FinFourMinimumResponseRectanglePacket`.  In
 `Research/Quitting/MinimumResponseChordLaw.lean`,
