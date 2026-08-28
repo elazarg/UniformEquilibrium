@@ -914,6 +914,24 @@ full-binding `...PureSingleton_uniformEquilibriumPayoff` declarations.  Thus
 the constructions are boundary examples, not counterexamples or consumers of
 the positive-minimum strict-ray branches.
 
+A separate generic timing-Nash screen is now integrated in
+`UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingNash.lean`
+and
+`UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingReturnFloor.lean`.
+For any supplied finite literal root stack satisfying the exact finite-stop
+and pass-through timing Nash comparisons over one retained behavioral tail,
+`IsQuittingRetainedTailFiniteTimingNash.debt_le_deletedReturn_mul_tailDebt`
+transports unrestricted terminal debt by the player-deleted return.
+`terminalGap_retainedTailFiniteTimingNash_jointReturn_ge` then combines one
+gap-selected host, supplied coordinatewise punishments, and the exact product
+inequality to force joint return at least
+`gamma^2 / (2 * R * (gamma + 2 * R))`.  This rules out a screened block only
+under those supplied hypotheses and has `M/L` status.  There is no Fin4
+adapter from the actual screened source to the timing certificate or uniform
+punishment separation, and no downstream `A/C`: the identity all-Continue
+block already satisfies a positive return floor, while payoff return, cap
+Nash, recurrence, and nonidentity selection remain open.
+
 The conditional cardinality contract is checked in
 `Research/Topology/ModTwoBoxComplementarityParity.lean`,
 `Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, and
