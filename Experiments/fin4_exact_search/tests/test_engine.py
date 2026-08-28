@@ -1,4 +1,6 @@
+from contextlib import redirect_stdout
 from fractions import Fraction
+import io
 from pathlib import Path
 from random import Random
 import tempfile
@@ -21,6 +23,7 @@ from fin4_exact_search.engine import (
     terminal_semantics,
     write_json_atomic,
 )
+from fin4_exact_search.cli import main as cli_main
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -145,6 +148,78 @@ class ExactEngineTests(unittest.TestCase):
         assert result is not None
         self.assertEqual(result.kind, "profile")
         result.certificate.verify()
+
+    def test_coarse_to_fine_campaign_and_completed_resume(self) -> None:
+        with tempfile.TemporaryDirectory() as directory:
+            work_dir = Path(directory) / "campaign"
+            output = io.StringIO()
+            with redirect_stdout(output):
+                status = cli_main(
+                    [
+                        "campaign",
+                        "--table",
+                        str(ROOT / "examples" / "zero_table.json"),
+                        "--start-epsilon",
+                        "100",
+                        "--work-dir",
+                        str(work_dir),
+                        "--stop-after-scales",
+                        "3",
+                        "--max-steps",
+                        "1",
+                        "--checkpoint-every",
+                        "1",
+                        "--report-every",
+                        "1",
+                    ]
+                )
+            self.assertEqual(status, 2)
+            paused = read_json(work_dir / "campaign.checkpoint.json.gz")
+            self.assertEqual(paused["status"], "running")
+            with redirect_stdout(io.StringIO()):
+                status = cli_main(
+                    [
+                        "campaign",
+                        "--table",
+                        str(ROOT / "examples" / "zero_table.json"),
+                        "--start-epsilon",
+                        "100",
+                        "--work-dir",
+                        str(work_dir),
+                        "--stop-after-scales",
+                        "3",
+                        "--max-steps",
+                        "20",
+                        "--checkpoint-every",
+                        "1",
+                        "--report-every",
+                        "1",
+                        "--resume",
+                    ]
+                )
+            self.assertEqual(status, 0)
+            checkpoint = read_json(work_dir / "campaign.checkpoint.json.gz")
+            self.assertEqual(checkpoint["status"], "requested-scales-complete")
+            self.assertEqual(
+                [item["epsilon"] for item in checkpoint["completed"]],
+                ["100", "50", "25"],
+            )
+            with redirect_stdout(io.StringIO()):
+                resumed = cli_main(
+                    [
+                        "campaign",
+                        "--table",
+                        str(ROOT / "examples" / "zero_table.json"),
+                        "--start-epsilon",
+                        "100",
+                        "--work-dir",
+                        str(work_dir),
+                        "--stop-after-scales",
+                        "3",
+                        "--resume",
+                    ]
+                )
+            self.assertEqual(resumed, 0)
 
     def test_checkpoint_file_roundtrip(self) -> None:
         search = ScaleSearch(RewardTable.zero(), Fraction(100))

@@ -16,6 +16,7 @@ from .engine import (
     LowerTreeCertificate,
     ProfileCertificate,
     Q,
+    RewardTable,
     ScaleContract,
     ScaleSearch,
     UpperSearch,
@@ -36,6 +37,7 @@ from .engine import (
 
 REGION_CHECKPOINT_KIND = "fin4-exact-region-checkpoint-v1"
 BATCH_KIND = "fin4-exact-search-batch-v1"
+CAMPAIGN_CHECKPOINT_KIND = "fin4-exact-dyadic-campaign-v1"
 
 
 def _write_certificate(path: Path, certificate: Any) -> None:
@@ -94,6 +96,369 @@ def command_search(args: argparse.Namespace) -> int:
     _write_certificate(output, result.certificate)
     print(f"resolved={result.kind} total_steps={search.steps}")
     return 0
+
+
+def _campaign_progress(
+    search: ScaleSearch,
+    scale_index: int,
+    elapsed: float,
+    label: str = "progress",
+) -> None:
+    upper_clock = search.upper.pair_offset + 1
+    print(
+        f"{label} scale={scale_index} epsilon={qjson(search.contract.epsilon)} "
+        f"level={search.contract.level} steps={search.steps} "
+        f"lower_nodes={len(search.lower.nodes)} "
+        f"lower_pending={len(search.lower.stack)} "
+        f"upper_diagonal={search.upper.diagonal} upper_clock={upper_clock} "
+        f"upper_rank={search.upper.profile_rank} elapsed_s={elapsed:.1f}",
+        flush=True,
+    )
+
+
+def _campaign_build_notice(epsilon: Any, scale_index: int, label: str) -> None:
+    contract = ScaleContract.create(epsilon)
+    print(
+        f"{label} scale={scale_index} epsilon={qjson(contract.epsilon)} "
+        f"level={contract.level} lower_target={qjson(contract.lower_gamma)} "
+        f"upper_target={qjson(contract.upper_target)}",
+        flush=True,
+    )
+
+
+def _campaign_payload(
+    reward: RewardTable,
+    start_epsilon: Any,
+    refinement: Any,
+    scale_index: int,
+    completed: Sequence[Mapping[str, Any]],
+    status: str,
+    search: Optional[ScaleSearch],
+    result: Optional[Mapping[str, Any]] = None,
+) -> dict[str, Any]:
+    return {
+        "kind": CAMPAIGN_CHECKPOINT_KIND,
+        "reward": reward.to_json(),
+        "table_sha256": reward.digest,
+        "start_epsilon": qjson(start_epsilon),
+        "refinement": qjson(refinement),
+        "scale_index": scale_index,
+        "completed": list(completed),
+        "status": status,
+        "scale_search": None if search is None else search.to_checkpoint_json(),
+        "result": None if result is None else dict(result),
+    }
+
+
+def _verify_campaign_history(
+    work_dir: Path,
+    reward: RewardTable,
+    start_epsilon: Any,
+    refinement: Any,
+    completed: Sequence[Mapping[str, Any]],
+) -> None:
+    for expected_index, item in enumerate(completed):
+        if int(item["scale_index"]) != expected_index:
+            raise ValueError("campaign profile history has a noncanonical scale index")
+        expected_epsilon = start_epsilon / refinement**expected_index
+        if Q(item["epsilon"]) != expected_epsilon:
+            raise ValueError("campaign profile history has the wrong epsilon")
+        path = work_dir / str(item["certificate"])
+        certificate = ProfileCertificate.from_json(read_json(path))
+        certificate.verify()
+        if certificate.reward != reward:
+            raise ValueError("campaign profile certificate has the wrong table")
+        if certificate.epsilon != 3 * expected_epsilon / 4:
+            raise ValueError("campaign profile certificate has the wrong target")
+        if certificate_digest(certificate) != item["payload_sha256"]:
+            raise ValueError("campaign profile certificate digest mismatch")
+
+
+def _verify_campaign_terminal_result(
+    work_dir: Path,
+    reward: RewardTable,
+    start_epsilon: Any,
+    refinement: Any,
+    scale_index: int,
+    status: str,
+    result: Any,
+) -> None:
+    if status == "requested-scales-complete":
+        if result is not None:
+            raise ValueError("profile-only campaign has an unexpected final result")
+        return
+    if status != "positive-gap":
+        raise ValueError(f"unknown campaign status {status!r}")
+    if not isinstance(result, Mapping) or result.get("kind") != "positive-gap":
+        raise ValueError("positive-gap campaign has no result record")
+    expected_epsilon = start_epsilon / refinement**scale_index
+    if Q(result["epsilon"]) != expected_epsilon:
+        raise ValueError("campaign lower result has the wrong epsilon")
+    path = work_dir / str(result["certificate"])
+    certificate = LowerTreeCertificate.from_json(read_json(path))
+    certificate.verify()
+    contract = ScaleContract.create(expected_epsilon)
+    if (
+        not certificate.is_global
+        or certificate.reward != reward
+        or certificate.level != contract.level
+        or certificate.gamma != contract.lower_gamma
+    ):
+        raise ValueError("campaign lower certificate does not match its scale")
+    if certificate_digest(certificate) != result["payload_sha256"]:
+        raise ValueError("campaign lower certificate digest mismatch")
+    if Q(result["eta_lower_bound"]) != contract.lower_gamma:
+        raise ValueError("campaign lower-bound summary mismatch")
+    if Q(result["deviation_threshold"]) != contract.lower_gamma / 2:
+        raise ValueError("campaign deviation-threshold summary mismatch")
+
+
+def command_campaign(args: argparse.Namespace) -> int:
+    """Run a resumable coarse-to-fine sequence of exact scale searches."""
+    if args.checkpoint_every <= 0:
+        raise ValueError("--checkpoint-every must be positive")
+    if args.report_every <= 0:
+        raise ValueError("--report-every must be positive")
+    if args.report_seconds <= 0:
+        raise ValueError("--report-seconds must be positive")
+    if args.stop_after_scales is not None and args.stop_after_scales <= 0:
+        raise ValueError("--stop-after-scales must be positive")
+
+    reward = load_reward_table(args.table)
+    start_epsilon = Q(args.start_epsilon)
+    refinement = Q(args.refinement)
+    if start_epsilon <= 0:
+        raise ValueError("--start-epsilon must be positive")
+    if refinement <= 1:
+        raise ValueError("--refinement must be greater than one")
+
+    work_dir = args.work_dir.resolve()
+    work_dir.mkdir(parents=True, exist_ok=True)
+    checkpoint = work_dir / "campaign.checkpoint.json.gz"
+    summary = work_dir / "campaign.summary.json"
+
+    if args.resume:
+        if not checkpoint.exists():
+            raise ValueError("--resume needs campaign.checkpoint.json.gz")
+        data = read_json(checkpoint)
+        if data.get("kind") != CAMPAIGN_CHECKPOINT_KIND:
+            raise ValueError("wrong campaign checkpoint kind")
+        if data.get("table_sha256") != reward.digest:
+            raise ValueError("campaign checkpoint and supplied table disagree")
+        if RewardTable.from_json(data["reward"]) != reward:
+            raise ValueError("campaign checkpoint contains a different table")
+        if Q(data["start_epsilon"]) != start_epsilon:
+            raise ValueError("campaign checkpoint and --start-epsilon disagree")
+        if Q(data["refinement"]) != refinement:
+            raise ValueError("campaign checkpoint and --refinement disagree")
+        completed = list(data.get("completed", []))
+        scale_index = int(data["scale_index"])
+        if scale_index != len(completed):
+            raise ValueError("campaign checkpoint history length mismatch")
+        _verify_campaign_history(
+            work_dir, reward, start_epsilon, refinement, completed
+        )
+        status = str(data.get("status", "running"))
+        if status != "running":
+            _verify_campaign_terminal_result(
+                work_dir,
+                reward,
+                start_epsilon,
+                refinement,
+                scale_index,
+                status,
+                data.get("result"),
+            )
+            print(
+                f"campaign already complete status={status} "
+                f"scales={len(completed)} summary={summary}"
+            )
+            return 0
+        if data.get("scale_search") is None:
+            raise ValueError("running campaign has no per-scale checkpoint")
+        expected_epsilon = start_epsilon / refinement**scale_index
+        _campaign_build_notice(expected_epsilon, scale_index, "loading-scale")
+        search = ScaleSearch.from_checkpoint_json(data["scale_search"])
+        if search.reward != reward or search.contract.epsilon != expected_epsilon:
+            raise ValueError("campaign per-scale checkpoint mismatch")
+    else:
+        if checkpoint.exists() or summary.exists():
+            raise ValueError("campaign state already exists; use --resume")
+        if any(work_dir.glob("scale-*-profile.certificate.json.gz")):
+            raise ValueError("campaign work directory contains profile certificates")
+        completed = []
+        scale_index = 0
+        _campaign_build_notice(start_epsilon, scale_index, "building-scale")
+        search = ScaleSearch(reward, start_epsilon)
+
+    started = time.monotonic()
+    last_report = started
+    local_steps = 0
+    _campaign_progress(search, scale_index, 0, label="scale-start")
+
+    try:
+        while True:
+            elapsed = time.monotonic() - started
+            if args.max_steps is not None and local_steps >= args.max_steps:
+                break
+            if args.max_seconds is not None and elapsed >= args.max_seconds:
+                break
+
+            result = search.step()
+            local_steps += 1
+            now = time.monotonic()
+            if local_steps % args.checkpoint_every == 0:
+                write_json_atomic(
+                    checkpoint,
+                    _campaign_payload(
+                        reward,
+                        start_epsilon,
+                        refinement,
+                        scale_index,
+                        completed,
+                        "running",
+                        search,
+                    ),
+                )
+            if (
+                local_steps % args.report_every == 0
+                or now - last_report >= args.report_seconds
+            ):
+                _campaign_progress(search, scale_index, now - started)
+                last_report = now
+
+            if result is None:
+                continue
+
+            epsilon = search.contract.epsilon
+            if result.kind == "lower":
+                assert isinstance(result.certificate, LowerTreeCertificate)
+                output = work_dir / f"scale-{scale_index:04d}-lower.certificate.json.gz"
+                _write_certificate(output, result.certificate)
+                result_record = {
+                    "kind": "positive-gap",
+                    "scale_index": scale_index,
+                    "epsilon": qjson(epsilon),
+                    "eta_lower_bound": qjson(search.contract.lower_gamma),
+                    "deviation_threshold": qjson(search.contract.lower_gamma / 2),
+                    "certificate": output.name,
+                    "payload_sha256": certificate_digest(result.certificate),
+                }
+                payload = _campaign_payload(
+                    reward,
+                    start_epsilon,
+                    refinement,
+                    scale_index,
+                    completed,
+                    "positive-gap",
+                    None,
+                    result_record,
+                )
+                write_json_atomic(checkpoint, payload)
+                write_json_atomic(summary, payload)
+                print(
+                    "positive-gap-certified "
+                    f"scale={scale_index} eta_lower_bound="
+                    f"{qjson(search.contract.lower_gamma)} "
+                    f"deviation_threshold={qjson(search.contract.lower_gamma / 2)} "
+                    f"certificate={output}",
+                    flush=True,
+                )
+                return 0
+
+            output = work_dir / f"scale-{scale_index:04d}-profile.certificate.json.gz"
+            _write_certificate(output, result.certificate)
+            assert isinstance(result.certificate, ProfileCertificate)
+            completed.append(
+                {
+                    "scale_index": scale_index,
+                    "epsilon": qjson(epsilon),
+                    "exploitability": qjson(result.certificate.exploitability),
+                    "target": qjson(search.contract.upper_target),
+                    "certificate": output.name,
+                    "payload_sha256": certificate_digest(result.certificate),
+                }
+            )
+            print(
+                f"profile-certified scale={scale_index} epsilon={qjson(epsilon)} "
+                f"exploitability={qjson(result.certificate.exploitability)} "
+                f"target={qjson(search.contract.upper_target)} certificate={output}",
+                flush=True,
+            )
+            scale_index += 1
+            if (
+                args.stop_after_scales is not None
+                and scale_index >= args.stop_after_scales
+            ):
+                payload = _campaign_payload(
+                    reward,
+                    start_epsilon,
+                    refinement,
+                    scale_index,
+                    completed,
+                    "requested-scales-complete",
+                    None,
+                )
+                write_json_atomic(checkpoint, payload)
+                write_json_atomic(summary, payload)
+                print(
+                    f"campaign-target-reached scales={scale_index}; "
+                    "profile sequence certified, but no zero-gap conclusion",
+                    flush=True,
+                )
+                return 0
+
+            next_epsilon = start_epsilon / refinement**scale_index
+            _campaign_build_notice(next_epsilon, scale_index, "building-scale")
+            search = ScaleSearch(reward, next_epsilon)
+            write_json_atomic(
+                checkpoint,
+                _campaign_payload(
+                    reward,
+                    start_epsilon,
+                    refinement,
+                    scale_index,
+                    completed,
+                    "running",
+                    search,
+                ),
+            )
+            _campaign_progress(
+                search, scale_index, time.monotonic() - started, label="scale-start"
+            )
+    except KeyboardInterrupt:
+        write_json_atomic(
+            checkpoint,
+            _campaign_payload(
+                reward,
+                start_epsilon,
+                refinement,
+                scale_index,
+                completed,
+                "running",
+                search,
+            ),
+        )
+        print(f"campaign interrupted; checkpoint={checkpoint}", flush=True)
+        return 130
+
+    write_json_atomic(
+        checkpoint,
+        _campaign_payload(
+            reward,
+            start_epsilon,
+            refinement,
+            scale_index,
+            completed,
+            "running",
+            search,
+        ),
+    )
+    _campaign_progress(
+        search, scale_index, time.monotonic() - started, label="paused"
+    )
+    print(f"no mathematical conclusion; resume checkpoint={checkpoint}", flush=True)
+    return 2
 
 
 def command_region(args: argparse.Namespace) -> int:
@@ -382,6 +747,25 @@ def build_parser() -> argparse.ArgumentParser:
     search.add_argument("--max-seconds", type=float)
     search.add_argument("--checkpoint-every", type=int, default=100)
 
+    campaign = sub.add_parser(
+        "campaign", help="run a resumable coarse-to-fine exact search campaign"
+    )
+    campaign.add_argument("--table", required=True, type=Path)
+    campaign.add_argument("--start-epsilon", required=True)
+    campaign.add_argument("--refinement", default="2")
+    campaign.add_argument("--work-dir", required=True, type=Path)
+    campaign.add_argument("--resume", action="store_true")
+    campaign.add_argument("--max-steps", type=int)
+    campaign.add_argument("--max-seconds", type=float)
+    campaign.add_argument("--checkpoint-every", type=int, default=1000)
+    campaign.add_argument("--report-every", type=int, default=10000)
+    campaign.add_argument("--report-seconds", type=float, default=60)
+    campaign.add_argument(
+        "--stop-after-scales",
+        type=int,
+        help="engineering stop after this many certified profile scales",
+    )
+
     region = sub.add_parser("region", help="canonicalize a remote work region")
     region.add_argument("--table", required=True, type=Path)
     region.add_argument("--epsilon", required=True)
@@ -448,6 +832,8 @@ def main(argv: Optional[Sequence[str]] = None) -> int:
         return 0
     if args.command == "search":
         return command_search(args)
+    if args.command == "campaign":
+        return command_campaign(args)
     if args.command == "region":
         return command_region(args)
     if args.command == "partition-lower":
