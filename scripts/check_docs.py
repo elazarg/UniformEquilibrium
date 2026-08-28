@@ -111,6 +111,7 @@ PRUNED_DIRECTORIES = {
     ".pytest_cache",
     "ephemeral",
     "literature",
+    "overleaf",
 }
 
 

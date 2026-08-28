@@ -123,9 +123,11 @@ class TimelessDocumentTests(unittest.TestCase):
         self.assertFalse(living & evidence)
         self.assertEqual(documents, living | evidence)
 
-    def test_private_literature_is_not_project_documentation(self) -> None:
-        self.assertIn("literature", DOCS_PRUNED_DIRECTORIES)
-        self.assertIn("literature", NAME_PRUNED_DIRECTORIES)
+    def test_private_sources_are_not_project_documentation(self) -> None:
+        for source in ("literature", "overleaf"):
+            with self.subTest(source=source):
+                self.assertIn(source, DOCS_PRUNED_DIRECTORIES)
+                self.assertIn(source, NAME_PRUNED_DIRECTORIES)
 
     def test_transition_record_is_history_not_living(self) -> None:
         transition = ROOT / "TRANSITION.md"

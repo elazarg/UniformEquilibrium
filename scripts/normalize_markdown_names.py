@@ -19,6 +19,7 @@ PRUNED_DIRECTORIES = {
     ".pytest_cache",
     "ephemeral",
     "literature",
+    "overleaf",
 }
 TEXT_SUFFIXES = {
     ".json",
