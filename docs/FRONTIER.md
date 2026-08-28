@@ -956,7 +956,9 @@ proves no return, contradiction, or uniform-equilibrium conclusion.
 The generic Sperner approximation and local-count seam is checked in
 `Research/Topology/BoxComplementarityCubicalSperner.lean`,
 `Research/Topology/BoxComplementaritySpernerApproximation.lean`, and
-`Research/Topology/BoxComplementaritySpernerLocalCount.lean`.
+`Research/Topology/BoxComplementaritySpernerLocalCount.lean`; the concrete
+same-grid prism layer is in
+`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`.
 `boxComplementarity_completeSimplex_card_odd` specializes the pinned strong
 cubical Sperner theorem to the reduced box-complementarity labeling at every
 positive resolution.  The selected anchor and coordinate-label vertices lie
@@ -973,13 +975,20 @@ local count and proves its global value is one, while
 finite-mesh excision.  For every isolating open set,
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_parity_zero`
 constructs a positive compact closed frontier collar whose local count is zero
-at every sufficiently fine mesh.  Finally,
-`relativeCubicalPrism_boundaryParity_eq` proves the finite bipartite
-double-count identity after concrete prism cells, faces, and incidences have
-been exhibited.  This intermediate seam has `M` and `L` only.  It does not
-construct that cross-resolution subdivision prism, prove eventual local-parity
-stability, supply a regularity bridge or the open parity specification, build a
-Fin4 finite-cap certificate, or provide `A` or `C`.
+at every sufficiently fine mesh.  The new concrete layer constructs the
+ordered-Kuhn cells, externally complete faces, and actual incidence relation.
+`KuhnPrismSpatialBoundaryLabeling.leftEndParity_eq_rightEndParity` proves
+lateral cancellation and equality of the two end parities, while
+`boxComplementarityDiscretePrism_endpointParity_eq` identifies those ends
+with the pinned complete-simplex counts of the first and last problems in one
+same-resolution family.  The elementary theorem
+`kuhnStarSubdivision_completeFacetParity_eq` proves that starring one labeled
+simplex preserves its complete-facet count modulo two.  This intermediate seam
+has `M` and `L` only.  It does not construct a geometric finite stellar chain
+between distinct pinned Kuhn resolutions, transport local anchors or a cleared
+collar through such a chain, prove eventual local-parity stability, supply a
+regularity bridge or the open parity specification, build a Fin4 finite-cap
+certificate, or provide `A` or `C`.
 
 The canonical pair's literal paid endpoint now also has a checked one-time
 support-rank handoff.  The generic theorem
