@@ -20,6 +20,11 @@ python3 Experiments/fin4_exact_search/run.py search \
   --epsilon 100 --max-steps 4 \
   --checkpoint /tmp/fin4-zero.checkpoint.json.gz \
   --output /tmp/fin4-zero.certificate.json.gz
+
+python3 Experiments/fin4_exact_search/run.py campaign \
+  --table Experiments/fin4_exact_search/examples/zero_table.json \
+  --start-epsilon 100 --work-dir /tmp/fin4-zero-campaign \
+  --stop-after-scales 3
 ```
 
 The large demonstration accuracy intentionally uses the smallest hierarchy
@@ -171,6 +176,63 @@ Writes are atomic through a sibling temporary file.
 Exit status `0` means a certificate was written and exactly verified. Status
 `2` means the allotted work ended with no conclusion. A finite remote region
 that was completely exhausted without a certificate uses status `3`.
+
+## Automated coarse-to-fine campaign
+
+The `campaign` command automates the iterative process suggested by `scale`.
+At scale `k` it uses
+
+```text
+epsilon_k = start_epsilon / refinement^k
+```
+
+and fairly advances the exact lower and upper searches. A verified lower
+certificate stops the campaign with a positive lower bound on `eta(r)`. A
+verified profile certificate is saved and the campaign advances to the next,
+finer scale. By default `refinement` is `2`.
+
+Start a long run with a time budget:
+
+```bash
+python3 Experiments/fin4_exact_search/run.py campaign \
+  --table TABLE.json --start-epsilon 1 \
+  --work-dir results/TABLE_CAMPAIGN \
+  --max-seconds 86400
+```
+
+Resume the exact state later:
+
+```bash
+python3 Experiments/fin4_exact_search/run.py campaign \
+  --table TABLE.json --start-epsilon 1 \
+  --work-dir results/TABLE_CAMPAIGN --resume \
+  --max-seconds 86400
+```
+
+The work directory contains one deterministic compressed campaign checkpoint,
+every verified per-scale certificate, and a final summary when the campaign
+reaches a terminal status. Completed profile certificates are reverified on
+resume. Moving the complete directory to another machine preserves all
+relative certificate references.
+
+Long runs print one concise line at scale changes and periodically thereafter:
+
+```text
+progress scale=2 epsilon=1/4 level=385 steps=20000 lower_nodes=... lower_pending=... upper_diagonal=... upper_clock=... upper_rank=... elapsed_s=...
+```
+
+The defaults report every 10,000 steps or 60 seconds, whichever comes first,
+and checkpoint every 1,000 steps. Use `--report-every`, `--report-seconds`, and
+`--checkpoint-every` to change those frequencies. `Ctrl-C` writes a final
+checkpoint before exiting. Resource limits pause with exit status `2` and the
+explicit message `no mathematical conclusion`.
+
+For finite smoke tests or resource planning, `--stop-after-scales N` stops
+after `N` verified profile scales. This is only an engineering target: even a
+long finite sequence of improving profile certificates is not a zero-gap or
+uniform-equilibrium proof. If `eta(r)=0`, the unrestricted campaign is expected
+to keep producing finer profiles forever; if `eta(r)>0`, it is expected
+eventually to stop on a verified global lower certificate.
 
 ## Exact implementation improvements
 
