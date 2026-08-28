@@ -579,15 +579,27 @@ def LogarithmicPathNeverCertificate.of_all_tendsto_deletedSurvival_zero
     exact ht
   neverValue_le := fun _ => le_rfl
 
+private theorem ContinuousZeroPerfectSingletonPath.index_nonempty
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (witness : ContinuousZeroPerfectSingletonPath reward) :
+    Nonempty ι := by
+  by_contra hempty
+  letI : IsEmpty ι := not_nonempty_iff.mp hempty
+  have htotal := witness.total 1
+  simp at htotal
+
 /-- Every positive mesh of a singleton path, together with only the separate
 Never/transversality datum, supplies the complete decoder certificate. -/
 def ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (witness : ContinuousZeroPerfectSingletonPath reward)
     (never : LogarithmicPathNeverCertificate reward witness)
-    (M h : ℝ) (hM : 0 ≤ M) (hh : 0 < h)
+    (M h : ℝ) (hh : 0 < h)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    LogarithmicRateSnellCertificate reward M h where
+    LogarithmicRateSnellCertificate reward M h := by
+  letI : Nonempty ι := witness.index_nonempty
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
+  exact {
   h_pos := hh
   M_nonneg := hM
   reward_bound := hreward
@@ -629,15 +641,16 @@ def ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate
     intro who
     simpa only [logarithmicBlockStart, Nat.cast_zero, zero_mul] using
       never.neverValue_le who
+  }
 
 @[simp] theorem ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate_value
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (witness : ContinuousZeroPerfectSingletonPath reward)
     (never : LogarithmicPathNeverCertificate reward witness)
-    (M h : ℝ) (hM : 0 ≤ M) (hh : 0 < h)
+    (M h : ℝ) (hh : 0 < h)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (time : ℕ) (who : ι) :
-    (witness.logarithmicRateSnellCertificate reward never M h hM hh hreward).value
+    (witness.logarithmicRateSnellCertificate reward never M h hh hreward).value
         time who =
       witness.logPayoff reward (logarithmicBlockStart h time) who :=
   rfl
@@ -646,9 +659,9 @@ def ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (witness : ContinuousZeroPerfectSingletonPath reward)
     (never : LogarithmicPathNeverCertificate reward witness)
-    (M h : ℝ) (hM : 0 ≤ M) (hh : 0 < h)
+    (M h : ℝ) (hh : 0 < h)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
-    (witness.logarithmicRateSnellCertificate reward never M h hM hh hreward).value
+    (witness.logarithmicRateSnellCertificate reward never M h hh hreward).value
         0 = witness.logPayoff reward 0 := by
   funext who
   simp only [ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate_value,
@@ -659,10 +672,13 @@ theorem ContinuousZeroPerfectSingletonPath.logarithmicRateSnellFamilyCertificate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (witness : ContinuousZeroPerfectSingletonPath reward)
     (never : LogarithmicPathNeverCertificate reward witness)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     LogarithmicRateSnellFamilyCertificate reward
-      (witness.logPayoff reward 0) M where
+      (witness.logPayoff reward 0) M := by
+  letI : Nonempty ι := witness.index_nonempty
+  have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
+  exact {
   cofinal := by
     intro error herror
     let C := M * (4 + Real.exp 1) + 1
@@ -676,7 +692,7 @@ theorem ContinuousZeroPerfectSingletonPath.logarithmicRateSnellFamilyCertificate
       dsimp only [h]
       exact lt_min one_pos (div_pos herror (mul_pos (by norm_num) hC))
     let data := witness.logarithmicRateSnellCertificate
-      reward never M h hM hh hreward
+      reward never M h hh hreward
     refine ⟨h, data, ?_, ?_⟩
     · have hh1 : h ≤ 1 := min_le_left _ _
       have hexp : Real.exp h ≤ Real.exp 1 := Real.exp_le_exp.mpr hh1
@@ -696,7 +712,8 @@ theorem ContinuousZeroPerfectSingletonPath.logarithmicRateSnellFamilyCertificate
       have hstrict : h * C < error := by nlinarith [mul_pos hh hC]
       exact hlinear.trans_lt (hscaled.trans_lt hstrict)
     · exact witness.logarithmicRateSnellCertificate_value_zero
-        reward never M h hM hh hreward
+        reward never M h hh hreward
+  }
 
 /-- On an ambient punishment-normal embedding, the sampled target is exactly
 the fixed strategic path target. -/
@@ -713,7 +730,6 @@ theorem ContinuousZeroPerfectSingletonPath.ambientLogarithmicRateSnellFamilyCert
     obtain ⟨h, data, hsmall, htarget⟩ :=
       (witness.ambientSingletonWitness.logarithmicRateSnellFamilyCertificate
         reward never (quittingRewardBound reward)
-        (quittingRewardBound_nonneg reward)
         (fun terminal player =>
           abs_reward_le_quittingRewardBound reward terminal player)).cofinal
           error herror

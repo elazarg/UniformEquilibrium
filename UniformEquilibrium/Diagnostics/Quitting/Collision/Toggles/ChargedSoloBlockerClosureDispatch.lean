@@ -156,7 +156,6 @@ theorem pairJoin_or_stationaryTwoDebtorHandoff_or_everyExactRepayment
       congr 1
     rcases pairPremium_pairJoin_or_leaveJoinStationaryTwoDebtorHandoff
         witness (finFourOffMinimumRewardBound reward)
-          (finFourOffMinimumRewardBound_pos reward).le
           (abs_reward_le_finFourOffMinimumRewardBound reward)
           owner blocker gate.owner_ne_blocker hnormal hpremiumSet with
       hjoin | hhandoff
@@ -213,7 +212,6 @@ theorem pairBaseHandoff_or_leaveJoinHandoff_or_everyExactRepayment
     refine ⟨joiner, fourth, ?_⟩
     exact nonempty_finFourPairBaseStationaryTwoDebtorHandoff
       witness (finFourOffMinimumRewardBound reward)
-        (finFourOffMinimumRewardBound_pos reward).le
         (abs_reward_le_finFourOffMinimumRewardBound reward)
         owner blocker joiner fourth gate.owner_ne_blocker
           hjoinerNe.1.symm hfourthNe.1.symm hjoinerNe.2.symm

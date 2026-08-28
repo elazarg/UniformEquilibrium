@@ -174,7 +174,7 @@ atom, two solved free coordinates, base-supported debt, and a paid row. -/
 theorem nonempty_finFourPairBaseStationaryTwoDebtorHandoff
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     (witness : QuittingTerminalExploitabilityWitness reward)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hbound : ∀ terminal who, |reward terminal who| ≤ M)
     (baseFirst baseSecond joiner fourth : Fin 4)
     (hbase : baseFirst ≠ baseSecond)
@@ -188,6 +188,7 @@ theorem nonempty_finFourPairBaseStationaryTwoDebtorHandoff
       quittingSetReward reward {baseFirst, baseSecond, joiner} joiner) :
     Nonempty (FinFourPairBaseStationaryTwoDebtorHandoff reward witness M
       baseFirst baseSecond joiner fourth) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward baseFirst hbound
   let base : Finset (Fin 4) := {baseFirst, baseSecond}
   let free := finFourPairBaseFree joiner fourth
   have hbaseNonempty : base.Nonempty := by simp [base]

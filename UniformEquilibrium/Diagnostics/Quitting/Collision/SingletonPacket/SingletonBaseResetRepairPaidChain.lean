@@ -154,13 +154,12 @@ theorem FinFourQuantitativeFullSupportHardResidual.nonempty_resetRepairPaidChain
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {bound : ℝ}
     (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
-    (hbound_nonneg : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (owner : Fin 4) :
     Nonempty (FinFourSingletonBaseResetRepairPaidChain reward bound residual
       owner) := by
   obtain ⟨producer⟩ := residual.nonempty_singletonBaseSameLawResetProducer
-    hbound_nonneg hreward owner
+    hreward owner
   exact producer.nonempty_resetRepairPaidChain
 
 end GameTheory

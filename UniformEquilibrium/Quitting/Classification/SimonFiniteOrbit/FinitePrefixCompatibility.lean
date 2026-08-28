@@ -88,7 +88,7 @@ and the displayed tail are bounded by `M`. -/
 theorem abs_quittingRootSuccessorPayoff_sub_of_quitProbability_close
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (first second : ι → PMF Bool) (who : ι)
-    {M d : ℝ} (hM : 0 ≤ M)
+    {M d : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M)
     (hclose : ∀ player,
@@ -96,6 +96,9 @@ theorem abs_quittingRootSuccessorPayoff_sub_of_quitProbability_close
     |quittingRootSuccessorPayoff reward tail first who -
         quittingRootSuccessorPayoff reward tail second who| ≤
       (2 * M) * ((Fintype.card ι : ℝ) * d) := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
+      (hreward (quittingSingletonTerminal who) who)
   have hlaw := pmfTV_pmfPi_bool_le_card_mul_of_quitProbability_close
     first second hclose
   have hobservable : ∀ action : ι → Bool,
@@ -114,7 +117,7 @@ actual tail at the end of the window. -/
 theorem abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots candidate : ℕ → ι → PMF Bool)
-    (start steps : ℕ) {M d : ℝ} (hM : 0 ≤ M) (hd : 0 ≤ d)
+    (start steps : ℕ) {M d : ℝ} (hd : 0 ≤ d)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hclose : ∀ offset, offset < steps → ∀ player,
       |(candidate (start + offset) player true).toReal -
@@ -151,7 +154,16 @@ theorem abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
           ih (start + 1) hshiftClose player
       have hcharge : 0 ≤ charge := by
         dsimp only [charge]
-        positivity
+        by_cases hcard : Fintype.card ι = 0
+        · simp [hcard]
+        · letI : Nonempty ι :=
+            Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
+          let player : ι := Classical.choice inferInstance
+          have hM : 0 ≤ M :=
+            (abs_nonneg
+              (reward (quittingSingletonTerminal player) player)).trans
+              (hreward (quittingSingletonTerminal player) player)
+          positivity
       have htailStep :
           |quittingRootSuccessorPayoff reward candidateTail (candidate start) who -
               quittingRootSuccessorPayoff reward sourceTail (candidate start) who| ≤
@@ -161,6 +173,10 @@ theorem abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
           (mul_nonneg hcharge (Nat.cast_nonneg steps)) (htailClose who)
       have hsourceBound : ∀ player, |sourceTail player| ≤ M := by
         intro player
+        have hM : 0 ≤ M :=
+          (abs_nonneg
+            (reward (quittingSingletonTerminal player) player)).trans
+            (hreward (quittingSingletonTerminal player) player)
         exact abs_quittingRootSequenceTerminalValue_le reward roots player
           (start + 1) hM hreward
       have hrootStep :
@@ -168,7 +184,7 @@ theorem abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
               quittingRootSuccessorPayoff reward sourceTail (roots start) who| ≤
             charge := by
         apply abs_quittingRootSuccessorPayoff_sub_of_quitProbability_close
-          reward sourceTail (candidate start) (roots start) who hM hreward
+          reward sourceTail (candidate start) (roots start) who hreward
           hsourceBound
         simpa using hclose 0 (by omega)
       rw [quittingRootSequenceBackwardPayoff_succ]
@@ -256,7 +272,6 @@ theorem reached_supportPurifiedPrefix_compatible
     (roots : ℕ → ι → PMF Bool) (start fuel : ℕ)
     {α u β d M η : ℝ}
     (hα : 0 < α) (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootSequenceNash reward α roots)
     (hreached : ∀ offset, offset < fuel →
@@ -312,7 +327,7 @@ theorem reached_supportPurifiedPrefix_compatible
           (start + offset)) := by
     intro offset hoffset
     exact isQuittingRootSupportApproxNash_supportPurifiedRoot_of_reachedNash
-      reward roots (start + offset) hα hu hβ hd hM hreward hnash
+      reward roots (start + offset) hα hu hβ hd hreward hnash
       (hreached offset hoffset) hscale herror
   have htailClose : ∀ offset, offset ≤ fuel → ∀ who,
       |quittingReachedSupportPurifiedPrefixValue reward roots β start fuel offset
@@ -324,7 +339,7 @@ theorem reached_supportPurifiedPrefix_compatible
     unfold quittingReachedSupportPurifiedPrefixValue
     have hbackward := abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
       reward roots (quittingReachedSupportPurifiedRoots reward roots β)
-      (start + offset) (fuel - offset) hM hd.le hreward
+      (start + offset) (fuel - offset) hd.le hreward
     have hwindowClose : ∀ later, later < fuel - offset → ∀ player,
         |(quittingReachedSupportPurifiedRoots reward roots β
               (start + offset + later) player true).toReal -

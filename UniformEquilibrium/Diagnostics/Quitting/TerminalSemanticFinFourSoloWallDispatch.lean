@@ -612,7 +612,7 @@ already checked leave--join stationary two-debtor handoff. -/
 theorem pairPremium_pairJoin_or_leaveJoinStationaryTwoDebtorHandoff
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     (witness : QuittingTerminalExploitabilityWitness reward)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hbound : ∀ terminal who, |reward terminal who| ≤ M)
     (owner blocker : Fin 4) (hne : owner ≠ blocker)
     (hnormal : IsQuittingNormalPlayer reward blocker)
@@ -671,7 +671,7 @@ theorem pairPremium_pairJoin_or_leaveJoinStationaryTwoDebtorHandoff
     right
     refine ⟨joiner, fourth, ?_⟩
     apply nonempty_finFourLeaveJoinStationaryTwoDebtorHandoff
-      witness M hM hbound owner blocker joiner fourth
+      witness M hbound owner blocker joiner fourth
     · exact hne
     · exact hjoinerOwner.symm
     · exact hfourthNe.1.symm

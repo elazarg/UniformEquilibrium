@@ -150,7 +150,7 @@ theorem QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpi
       table.zeroNeverReward
       ((table.approximateEquilibriumExistence_iff_zeroNever).1 hequilibrium)
       (quittingRewardBound table.zeroNeverReward) δ u
-      (quittingRewardBound_nonneg table.zeroNeverReward) hδ hu
+      hδ hu
   exact abs_reward_le_quittingRewardBound table.zeroNeverReward
 
 end QuittingLCPClassification

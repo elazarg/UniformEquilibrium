@@ -53,13 +53,11 @@ theorem quittingRootAbsorptionMass_le_one
   unfold quittingRootAbsorptionMass
   linarith [quittingStationaryContinueMass_nonneg root]
 
-omit [Nonempty ι] in
-/-- Low absorption in a strict singleton basin pays a linear Nash defect.
-This is the explicit small-scale half of the compactness argument. -/
-theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
+-- The nonempty-player proof underlying the public empty-safe theorem below.
+private theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption_of_nonempty
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) {M delta : ℝ}
-    (hM : 0 ≤ M) (hdelta : 0 < delta)
+    (hdelta : 0 < delta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hgap : ∀ who, delta / 2 ≤ tail who -
       reward (quittingSingletonTerminal who) who)
@@ -67,6 +65,8 @@ theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
       delta / (2 * (delta + 4 * M))) :
     delta / 4 * quittingRootAbsorptionMass root ≤
       quittingRootTotalNashDefect reward tail root := by
+  have hM : 0 ≤ M :=
+    quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   have hthresholdNonneg : 0 ≤ delta / (2 * (delta + 4 * M)) := by
     positivity
   have hcoordinate : ∀ who,
@@ -141,14 +141,36 @@ theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
       (by positivity : 0 ≤ delta / 4)).trans hsum
 
 omit [Nonempty ι] in
+/-- Low absorption in a strict singleton basin pays a linear Nash defect.
+This is the explicit small-scale half of the compactness argument. -/
+theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) {M delta : ℝ}
+    (hdelta : 0 < delta)
+    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hgap : ∀ who, delta / 2 ≤ tail who -
+      reward (quittingSingletonTerminal who) who)
+    (hsmall : quittingRootAbsorptionMass root ≤
+      delta / (2 * (delta + 4 * M))) :
+    delta / 4 * quittingRootAbsorptionMass root ≤
+      quittingRootTotalNashDefect reward tail root := by
+  rcases isEmpty_or_nonempty ι with hempty | hnonempty
+  · letI := hempty
+    simp [quittingRootAbsorptionMass, quittingStationaryContinueMass,
+      quittingRootTotalNashDefect]
+  · letI := hnonempty
+    exact
+      quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption_of_nonempty
+        reward tail root hdelta hreward hgap hsmall
+
+omit [Nonempty ι] in
 /-- A compact strict all-Continue basin has one open neighborhood and one
 positive linear absorption-to-defect modulus valid at every root scale. -/
 theorem exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (K : Set (Payoff ι)) {M delta : ℝ}
+    (K : Set (Payoff ι)) {delta : ℝ}
     (hKcompact : IsCompact K) (hKnonempty : K.Nonempty)
-    (hM : 0 ≤ M) (hdelta : 0 < delta)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hdelta : 0 < delta)
     (hgap : ∀ tail ∈ K, ∀ who,
       delta ≤ tail who - reward (quittingSingletonTerminal who) who)
     (hunique : ∀ tail ∈ K, ∀ root : ι → PMF Bool,
@@ -159,6 +181,10 @@ theorem exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
       ∀ tail ∈ N, ∀ root : ι → PMF Bool,
         c * quittingRootAbsorptionMass root ≤
           quittingRootTotalNashDefect reward tail root := by
+  let M := quittingRewardBound reward
+  have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+  have hreward : ∀ S player, |reward S player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
   let threshold := delta / (2 * (delta + 4 * M))
   have hthresholdPos : 0 < threshold := by
     dsimp only [threshold]
@@ -250,7 +276,7 @@ theorem exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
       by_cases hsmall : quittingRootAbsorptionMass root ≤ threshold
       · have hlow :=
           quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
-            reward tail root hM hdelta hreward
+            reward tail root hdelta hreward
               (fun who => le_of_lt (htail.1 who)) (by
                 simpa only [threshold] using hsmall)
         exact (mul_le_mul_of_nonneg_right (min_le_left _ _)
@@ -298,7 +324,7 @@ theorem exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
         rw [hsimplexRoot]
         exact hhigh.le⟩
     exact quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
-      reward tail root hM hdelta hreward
+      reward tail root hdelta hreward
         (fun who => le_of_lt (htail who)) (by
           simpa only [threshold] using hsmall)
 
@@ -308,10 +334,9 @@ compact source set.  One positive constant then bounds both the reward table
 and every tail coordinate in the basin. -/
 theorem exists_bounded_open_linearAbsorptionDefect_of_compact_strictAllContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (K : Set (Payoff ι)) {M delta : ℝ}
+    (K : Set (Payoff ι)) {delta : ℝ}
     (hKcompact : IsCompact K) (hKnonempty : K.Nonempty)
-    (hM : 0 ≤ M) (hdelta : 0 < delta)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hdelta : 0 < delta)
     (hgap : ∀ tail ∈ K, ∀ who,
       delta ≤ tail who - reward (quittingSingletonTerminal who) who)
     (hunique : ∀ tail ∈ K, ∀ root : ι → PMF Bool,
@@ -326,9 +351,12 @@ theorem exists_bounded_open_linearAbsorptionDefect_of_compact_strictAllContinue
       ∀ tail ∈ N, ∀ root : ι → PMF Bool,
         c * quittingRootAbsorptionMass root ≤
           quittingRootTotalNashDefect reward tail root := by
+  let M := quittingRewardBound reward
+  have hreward : ∀ S player, |reward S player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
   obtain ⟨ambient, c, hambientOpen, hKambient, hc, hlinear⟩ :=
     exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
-      reward K hKcompact hKnonempty hM hdelta hreward hgap hunique
+      reward K hKcompact hKnonempty hdelta hgap hunique
   obtain ⟨rho, hrho, hthickAmbient⟩ :=
     hKcompact.exists_thickening_subset_open hambientOpen hKambient
   let N := Metric.thickening rho K

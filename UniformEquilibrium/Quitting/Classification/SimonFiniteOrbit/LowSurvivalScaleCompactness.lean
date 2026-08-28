@@ -173,7 +173,7 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.floorClippedPurifiedCore
     exact abs_lowSurvival_clippedTail_le_rewardBound
       reward source.continuation hη.le who
   have hstable := isQuittingRootEndpointStableWithin_of_uniformBound
-    reward clipped original (d := d) (quittingRewardBound_nonneg reward)
+    reward clipped original (d := d)
       (abs_reward_le_quittingRewardBound reward) htailBound
   have hsupport : IsQuittingRootSupportApproxNash reward clipped η purified := by
     apply isQuittingRootSupportApproxNash_supportPurifiedRoot
@@ -506,8 +506,7 @@ theorem instantPunishmentExistence_of_purifiedMass_tendsto_zero
     (hmass : Tendsto family.purifiedMass atTop (nhds 0)) :
     QuittingInstantPunishmentεEquilibriumExistence reward := by
   exact quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows
-    reward (quittingRewardBound_nonneg reward)
-      (abs_reward_le_quittingRewardBound reward)
+    reward (abs_reward_le_quittingRewardBound reward)
       (family.hasNearTotalSupportRows_of_purifiedMass_tendsto_zero hmass)
 
 /-- Cofinal rows above one positive purified-mass floor yield cofinally many

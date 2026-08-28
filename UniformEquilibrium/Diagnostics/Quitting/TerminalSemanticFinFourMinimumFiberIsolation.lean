@@ -188,8 +188,7 @@ theorem exists_open_exactAllContinueTube_minimumFiber
         pair hpair.1 hpairMinimum hpairPositive hstrict root hnash
     have hnear :=
       eventually_exactRoot_eq_allContinue_of_unique_of_singletonGap
-        reward pair.1 (quittingRewardBound_nonneg reward) hdelta
-          (abs_reward_le_quittingRewardBound reward) (hgap pair hpair) hunique
+        reward pair.1 hdelta (hgap pair hpair) hunique
     exact mem_interior_iff_mem_nhds.mpr hnear
   · intro tail htail
     have hmem : tail ∈ exactAllContinue := interior_subset htail

@@ -246,7 +246,7 @@ theorem gap_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_pos
     {ι : Type} [Fintype ι] [DecidableEq ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M gap : ℝ} (hM : 0 ≤ M) (hgap : 0 < gap)
+    {M gap : ℝ} (hgap : 0 < gap)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (htail : gap ≤ tail who -
       reward (quittingSingletonTerminal who) who)
@@ -254,6 +254,8 @@ theorem gap_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_pos
     (hquit : 0 < (root who true).toReal) :
     gap / (gap + 2 * M) ≤
       quittingRootOpponentAbsorptionMass root who := by
+  have hM : 0 ≤ M :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let opponentMass := quittingRootOpponentAbsorptionMass root who
   have hmassNonneg : 0 ≤ opponentMass := by
     unfold opponentMass quittingRootOpponentAbsorptionMass
@@ -301,7 +303,7 @@ theorem delta_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_po
     {ι : Type} [Fintype ι] [DecidableEq ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M delta : ℝ} (hM : 0 ≤ M) (hdelta : 0 < delta)
+    {M delta : ℝ} (hdelta : 0 < delta)
     (hreward : ∀ S player, |reward S player| ≤ M)
     (htail : delta / 2 ≤ tail who -
       reward (quittingSingletonTerminal who) who)
@@ -309,9 +311,11 @@ theorem delta_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_po
     (hquit : 0 < (root who true).toReal) :
     delta / (delta + 4 * M) ≤
       quittingRootOpponentAbsorptionMass root who := by
+  have hM : 0 ≤ M :=
+    quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hlower :=
     gap_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_pos
-      reward tail root who hM (by linarith : 0 < delta / 2) hreward
+      reward tail root who (by linarith : 0 < delta / 2) hreward
         htail hnash hquit
   have hleft : delta / (delta + 4 * M) =
       (delta / 2) / (delta / 2 + 2 * M) := by
@@ -349,9 +353,7 @@ absorption estimate with the robust Nash-defect moat. -/
 theorem eventually_exactRoot_eq_allContinue_of_unique_of_singletonGap
     {ι : Type} [Fintype ι] [DecidableEq ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (cap : Payoff ι) {M delta : ℝ}
-    (hM : 0 ≤ M) (hdelta : 0 < delta)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    (cap : Payoff ι) {delta : ℝ} (hdelta : 0 < delta)
     (hgap : ∀ who, delta ≤ cap who -
       reward (quittingSingletonTerminal who) who)
     (hunique : ∀ root : ι → PMF Bool,
@@ -363,6 +365,10 @@ theorem eventually_exactRoot_eq_allContinue_of_unique_of_singletonGap
         ∀ root : ι → PMF Bool,
           IsεQuittingRootNash reward nearbyTail 0 root →
             root = (quittingAllContinueRoot : ι → PMF Bool) := by
+  let M := quittingRewardBound reward
+  have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+  have hreward : ∀ S player, |reward S player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
   let eta := delta / (delta + 4 * M)
   have heta : 0 < eta := by
     dsimp only [eta]
@@ -406,7 +412,7 @@ theorem eventually_exactRoot_eq_allContinue_of_unique_of_singletonGap
     have hopponent : eta ≤
         quittingRootOpponentAbsorptionMass root owner := by
       apply delta_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_pos
-        reward nearbyTail root owner hM hdelta hreward
+        reward nearbyTail root owner hdelta hreward
           (le_of_lt (hnearGap owner)) hnash hquit
     let simplexRoot : QuittingRootSimplex ι :=
       fun player => stdSimplexEquiv (root player)
@@ -496,8 +502,7 @@ theorem exists_open_exactAllContinueTube_debtHomotopy
       quittingTerminalSemanticDebtSum pair ≤
         quittingTerminalSemanticDebtSum candidate)
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair)
-    {M delta : ℝ} (hM : 0 ≤ M) (hdelta : 0 < delta)
-    (hreward : ∀ S player, |reward S player| ≤ M)
+    {delta : ℝ} (hdelta : 0 < delta)
     (hgap : ∀ who, delta ≤ pair.1 who -
       reward (quittingSingletonTerminal who) who) :
     ∃ tube : Set (Payoff ι),
@@ -529,8 +534,7 @@ theorem exists_open_exactAllContinueTube_debtHomotopy
           (fun who => by linarith [hdelta, hgap who]) ht.1 ht.2 root hnash
     have hnear :=
       eventually_exactRoot_eq_allContinue_of_unique_of_singletonGap
-        reward (quittingTerminalSemanticDebtHomotopy pair t) hM hdelta
-          hreward
+        reward (quittingTerminalSemanticDebtHomotopy pair t) hdelta
           (singletonGap_le_quittingTerminalSemanticDebtHomotopy
             pair hpair hgap ht.2) hunique
     apply mem_interior_iff_mem_nhds.mpr
@@ -761,9 +765,7 @@ theorem exists_finFour_strictMinimumPlateau_openDebtHomotopyTube_of_no_uniformPa
       (Finset.mem_image.mpr ⟨who, Finset.mem_univ who, rfl⟩)
   obtain ⟨tube, htubeOpen, hsegment, htube⟩ :=
     exists_open_exactAllContinueTube_debtHomotopy
-      pair hpair hminimum hpositive
-        (quittingRewardBound_nonneg reward) hdelta
-        (abs_reward_le_quittingRewardBound reward) hgap
+      pair hpair hminimum hpositive hdelta hgap
   exact ⟨pair, delta, tube, hpair, hminimum, hpositive, hfixed, hdelta,
     fun who => ⟨(hseparated who).1, hgap who⟩,
     htubeOpen, hsegment, htube⟩

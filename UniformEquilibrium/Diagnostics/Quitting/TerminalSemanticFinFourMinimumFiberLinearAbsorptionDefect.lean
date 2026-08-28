@@ -85,8 +85,7 @@ theorem exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff
   obtain ⟨N, c, C, rho, hNopen, hKN, hNbounded, hc, hC, hrho,
       hrewardC, htailC, hthick, hlinear⟩ :=
     exists_bounded_open_linearAbsorptionDefect_of_compact_strictAllContinue
-      reward K hKcompact hKnonempty (quittingRewardBound_nonneg reward)
-        hdelta (abs_reward_le_quittingRewardBound reward) hKgap hKunique
+      reward K hKcompact hKnonempty hdelta hKgap hKunique
   refine ⟨base, K, N, c, C, rho, hbase, hminimum, hpositive, rfl,
     hKcompact, hKnonempty, hNopen, hKN, hNbounded, hc, hC, hrho,
     hrewardC, htailC, hthick, hlinear, ?_⟩

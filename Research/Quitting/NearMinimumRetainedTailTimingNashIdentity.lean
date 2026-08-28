@@ -109,7 +109,7 @@ player's singleton reward. -/
 theorem quittingRootOpponentAbsorptionMass_ge_gapRatio_of_quit_pos
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M kappa : ℝ} (hM : 0 < M) (hkappa : 0 < kappa)
+    {M kappa : ℝ} (hkappa : 0 < kappa)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsingleton : reward (quittingSingletonTerminal who) who + kappa ≤
       tail who)
@@ -118,7 +118,7 @@ theorem quittingRootOpponentAbsorptionMass_ge_gapRatio_of_quit_pos
     kappa / (kappa + 2 * M) ≤
       quittingRootOpponentAbsorptionMass root who := by
   apply gap_div_le_quittingRootOpponentAbsorptionMass_of_isZeroNash_of_quit_pos
-    reward tail root who hM.le hkappa hreward
+    reward tail root who hkappa hreward
   · linarith
   · exact (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
       reward tail root).mp hnash
@@ -130,7 +130,7 @@ to Continue, so no cardinality averaging is necessary. -/
 theorem nonidentity_exactRoot_uniformOpponentAbsorption_ge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool)
-    {M kappa : ℝ} (hM : 0 < M) (hkappa : 0 < kappa)
+    {M kappa : ℝ} (hkappa : 0 < kappa)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsingleton : ∀ who,
       reward (quittingSingletonTerminal who) who + kappa ≤ tail who)
@@ -152,12 +152,12 @@ theorem nonidentity_exactRoot_uniformOpponentAbsorption_ge
   obtain ⟨participant, hparticipant⟩ := hparticipant
   have hparticipantFloor :=
     quittingRootOpponentAbsorptionMass_ge_gapRatio_of_quit_pos
-      reward tail root participant hM hkappa hreward
+      reward tail root participant hkappa hreward
         (hsingleton participant) hnash hparticipant
   intro who
   by_cases hquit : 0 < (root who true).toReal
   · exact quittingRootOpponentAbsorptionMass_ge_gapRatio_of_quit_pos
-      reward tail root who hM hkappa hreward (hsingleton who) hnash hquit
+      reward tail root who hkappa hreward (hsingleton who) hnash hquit
   · have hzero : (root who true).toReal = 0 := by
       exact le_antisymm (le_of_not_gt hquit) ENNReal.toReal_nonneg
     have hpure : root who = PMF.pure false :=
@@ -204,7 +204,7 @@ theorem nearMinimum_rootNashAgainstPayoff_eq_allContinue_of_contraction
   have habsorption :=
     nonidentity_exactRoot_uniformOpponentAbsorption_ge
       reward (fun who => quittingTerminalPayoff reward tail who) root
-        hM hkappa hreward hsingleton hnash hnonidentity
+        hkappa hreward hsingleton hnash hnonidentity
   have hsurvival : ∀ who, quittingRootOpponentContinueMass root who ≤
       1 - kappa / (kappa + 2 * M) := by
     intro who
