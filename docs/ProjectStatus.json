@@ -56,6 +56,15 @@
       "scope": "A counterexample must quantify over every behavioral profile."
     },
     {
+      "id": "fin-four-exact-scale-counterexample-semidecision",
+      "subject": "Exact Fin4 scale resolution and counterexample semidecision",
+      "kind": "Executable resolution and r.e. equivalence",
+      "declaration": "exists_finFourCounterexampleStep_iff_exists_real_infimum_pos",
+      "source": "Research/Quitting/FinFourCounterexampleSemidecision.lean",
+      "umbrella": "Research.lean",
+      "scope": "A total computable stage search emits only independently checked positive-gap certificates, and emits one iff some real Fin4 reward has positive unrestricted terminal-exploitability infimum. For each normalized rational table, the exact scale resolver terminates at every positive rational scale; zero infimum yields actual profiles at every error and one fixed uniform-equilibrium payoff, while positive infimum forces a finite lower event. This is a global existential semidecision, not a decision procedure for a supplied real table; nontermination has no conclusion."
+    },
+    {
       "id": "finite-deadline-timing-nash-debt",
       "subject": "Finite-deadline timing Nash terminal debt",
       "kind": "Unconditional quantitative producer",
@@ -553,6 +562,6 @@
   ],
   "quitting_frontier": {
     "ledger": "docs/QuittingProofFrontier.json",
-    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter. The paid arrow has a full-gap cap port at every literal profile, quantitative excess-debt contraction, and actual ports approaching the inert minimum-fiber boundary; it still needs a consumer or regeneration theorem for quantitative descent, or a consumer for the literal inert stall. The general and all-quitting conjectures remain open independently of any one certificate grammar."
+    "summary": "The quitting dependency DAG has two open producer arrows: the chronological arrow requires both an actual reached-port packet kernel and an external low-debt candidate adapter. The paid arrow has a full-gap cap port at every literal profile, quantitative excess-debt contraction, and actual ports approaching the inert minimum-fiber boundary; it still needs a consumer or regeneration theorem for quantitative descent, or a consumer for the literal inert stall. Separately, exact Fin4 scale search makes existence of a positive-gap reward recursively enumerable, but produces no positive instance and gives no conclusion on nontermination. The general and all-quitting conjectures remain open independently of any one certificate grammar."
   }
 }

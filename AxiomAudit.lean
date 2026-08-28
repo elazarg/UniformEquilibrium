@@ -178,6 +178,9 @@ import MathUE.Interval.DyadicPolynomial
 import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalInterval
+import MathUE.Interval.RationalLowerBoxSearch
+import MathUE.Interval.RationalLowerBoxTree
+import MathUE.Interval.RationalMaxExpression
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.RationalPolynomialL1
 import MathUE.Interval.ScalarDyadicPolynomial
@@ -430,6 +433,7 @@ import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
+import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactOrbitOccupation
@@ -448,6 +452,7 @@ import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
+import MathUE.Topology.SingleOuterApproximation
 import MathUE.Topology.SourceOmegaChain
 import MathUE.Topology.TailSupConvergence
 import MathUE.Topology.ThreeFourFifthsRotation
@@ -1841,6 +1846,7 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityUniformPayoff
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Terminal.ToUniformDeviationApproximation
 import UniformEquilibrium.SpecialCases.SingleController.Basic

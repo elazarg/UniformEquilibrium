@@ -68,6 +68,32 @@ therefore sends any quitting-game counterexample on `I` to one on `I ⊕ J`.
 This is a counterexample transport theorem, not a construction of a
 counterexample or a reduction from higher to lower player cardinality.
 
+The Fin4 terminal problem also has an exact executable scale fork, orthogonal
+to the chronological proof-search DAG.
+[`finFourExactScaleStep`](../Research/Quitting/FinFourExactScaleResolution.lean)
+is a total proof-free upper-first stage function, and
+[`exists_finFourExactScaleStep`](../Research/Quitting/FinFourExactScaleResolution.lean)
+proves that some finite stage emits at every positive rational scale of every
+normalized rational table. Upper output is an actual finite-clock product
+profile with unrestricted exploitability below `3 * epsilon / 4`; lower output
+proves `epsilon / 4` below the global infimum and reaches the checked terminal-
+gap/no-uniform-payoff consumer at `epsilon / 8`.
+
+The semantic boundary is literal in both directions.
+[`finFourExactScale_infimum_zero_or_lower_event`](../Research/Quitting/FinFourExactScaleResolution.lean)
+states that zero infimum yields profiles at every positive real error and one
+fixed uniform-equilibrium payoff, whereas positive infimum forces a finite
+lower event. The profile may vary with the error; the selected payoff does
+not. At the global level,
+[`exists_finFourCounterexampleStep_iff_exists_real_infimum_pos`](../Research/Quitting/FinFourCounterexampleSemidecision.lean)
+uses positive scaling, 2-Lipschitz reward robustness, normalized rational
+approximation, and fair dovetailing to show that existence of a real Fin4
+positive-gap table is recursively enumerable. These declarations give
+`M/L/A/C` for the exact search route. They produce no positive-gap table, do
+not decide a supplied real table, and give no conclusion from nontermination;
+therefore they neither solve the Fin4 conjecture nor close either structural
+atlas arrow.
+
 ## Established construction boundary
 
 The integrated corpus contains several sound ways to reach the positive

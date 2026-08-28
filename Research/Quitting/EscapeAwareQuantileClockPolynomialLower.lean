@@ -497,6 +497,45 @@ theorem quantileClockOuterPointPair_mem_outer
   rw [← hindex]
   exact (Metric.infDist_le_dist_of_mem hcenter).trans hdist
 
+theorem exists_quantileClockCenterAssignment_of_mem_outerNeighborhood
+    [Nonempty ι]
+    (reward : {T : Finset ι // T.Nonempty} → ι → ℚ)
+    (hcompression : HasEscapeAwareQuantileClockCompression
+      (fun terminal player => (reward terminal player : ℝ)))
+    {level : ℕ} {pair : QuittingTerminalSemanticPair ι}
+    (hpair : pair ∈
+      (escapeAwareQuantileClockSystem
+        (fun terminal player => (reward terminal player : ℝ))
+        hcompression).outerNeighborhood level) :
+    ∃ centerAssign : FiniteClockCenterVar ι
+        (quantileClockSupport ι level) → ℝ,
+      SatisfiesFiniteClockCenterPolynomials
+        (Rat.castHom ℝ) reward
+        (quantileClockSupport ι level) centerAssign ∧
+      semanticPairWithin (quantileClockRadius ι level) pair
+        (finiteClockCenterPair
+          (quantileClockSupport ι level) centerAssign) := by
+  obtain ⟨centerPair, hcenterPair, hnearest⟩ :=
+    (quittingFiniteClockSemanticCenter_isCompact
+      (fun terminal player => (reward terminal player : ℝ))
+      (quantileClockSupport ι level)).exists_infDist_eq_dist
+        (quittingFiniteClockSemanticCenter_nonempty
+          (fun terminal player => (reward terminal player : ℝ))
+          (quantileClockSupport ι level)) pair
+  have hdist : dist pair centerPair ≤ quantileClockRadius ι level := by
+    rw [← hnearest]
+    exact hpair
+  have himage : centerPair ∈ finiteClockPolynomialSemanticImage
+      (Rat.castHom ℝ) reward (quantileClockSupport ι level) := by
+    rw [rationalFiniteClockPolynomialSemanticImage_eq_reachable]
+    exact hcenterPair
+  rcases himage with ⟨centerAssign, hcenterSolution, hcenterEq⟩
+  refine ⟨centerAssign, hcenterSolution, ?_⟩
+  rw [← hcenterEq]
+  have hwithin := semanticPairWithin_dist pair centerPair
+  exact ⟨fun player => (hwithin.1 player).trans hdist,
+    fun player => (hwithin.2 player).trans hdist⟩
+
 theorem exists_quantileClockCenterAssignment_of_mem_outer
     [Nonempty ι]
     (reward : {T : Finset ι // T.Nonempty} → ι → ℚ)
@@ -515,32 +554,9 @@ theorem exists_quantileClockCenterAssignment_of_mem_outer
       semanticPairWithin (quantileClockRadius ι (level.1 + 1)) pair
         (finiteClockCenterPair
           (quantileClockSupport ι (level.1 + 1)) centerAssign) := by
-  let actualLevel := level.1 + 1
-  let center := quittingFiniteClockSemanticCenter
-    (fun terminal player => (reward terminal player : ℝ))
-    (quantileClockSupport ι actualLevel)
-  have houter := hpair actualLevel (by omega)
-    (show actualLevel ≤ horizon by dsimp [actualLevel]; omega)
-  obtain ⟨centerPair, hcenterPair, hnearest⟩ :=
-    (quittingFiniteClockSemanticCenter_isCompact
-      (fun terminal player => (reward terminal player : ℝ))
-      (quantileClockSupport ι actualLevel)).exists_infDist_eq_dist
-        (quittingFiniteClockSemanticCenter_nonempty
-          (fun terminal player => (reward terminal player : ℝ))
-          (quantileClockSupport ι actualLevel)) pair
-  have hdist : dist pair centerPair ≤ quantileClockRadius ι actualLevel := by
-    rw [← hnearest]
-    exact houter
-  have himage : centerPair ∈ finiteClockPolynomialSemanticImage
-      (Rat.castHom ℝ) reward (quantileClockSupport ι actualLevel) := by
-    rw [rationalFiniteClockPolynomialSemanticImage_eq_reachable]
-    exact hcenterPair
-  rcases himage with ⟨centerAssign, hcenterSolution, hcenterEq⟩
-  refine ⟨centerAssign, hcenterSolution, ?_⟩
-  rw [← hcenterEq]
-  have hwithin := semanticPairWithin_dist pair centerPair
-  exact ⟨fun player => (hwithin.1 player).trans hdist,
-    fun player => (hwithin.2 player).trans hdist⟩
+  apply exists_quantileClockCenterAssignment_of_mem_outerNeighborhood
+    reward hcompression
+  exact hpair (level.1 + 1) (by omega) (by omega)
 
 omit [DecidableEq ι] in
 theorem eval₂_quantileClockOuterNeighborhoodPoly_semanticAssignment_nonneg

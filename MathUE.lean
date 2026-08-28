@@ -132,6 +132,7 @@ import MathUE.Interval.DyadicPolynomial
 import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalInterval
+import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.RationalPolynomialL1
 import MathUE.Interval.ScalarDyadicPolynomial
@@ -384,6 +385,7 @@ import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactOrbitOccupation
 import MathUE.Topology.CompactBudgetedPrefixRelation
+import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
 import MathUE.Topology.CompactRobustMoat
@@ -401,6 +403,7 @@ import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
+import MathUE.Topology.SingleOuterApproximation
 import MathUE.Topology.SourceOmegaChain
 import MathUE.Topology.TailSupConvergence
 import MathUE.Topology.ThreeFourFifthsRotation
