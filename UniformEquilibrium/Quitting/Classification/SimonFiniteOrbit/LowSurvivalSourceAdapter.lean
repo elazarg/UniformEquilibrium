@@ -168,7 +168,6 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.supportPurified
       reward u accuracy horizon)
     {β d M η : ℝ}
     (haccuracy : 0 < accuracy) (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hscale : accuracy < u * β * d)
     (herror : β + 4 * M * (Fintype.card ι : ℝ) * d ≤ η) :
@@ -181,7 +180,7 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.supportPurified
         β (source.roots (source.crossingStage - 1))) := by
   simpa only [Nat.sub_add_cancel source.crossingStage_pos] using
     (isQuittingRootSupportApproxNash_supportPurifiedRoot_of_reachedNash
-      reward source.roots (source.crossingStage - 1) haccuracy hu hβ hd hM
+      reward source.roots (source.crossingStage - 1) haccuracy hu hβ hd
         hreward source.sourceNash source.before.le hscale herror)
 
 /-- The actual source profile restarted at the predecessor of the first
@@ -406,7 +405,6 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.exists_punishedProfile_of_nearT
     (hmass : quittingStationaryContinueMass purified <
       rate ^ Fintype.card ι)
     (hη : 0 ≤ η)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M)
     (hδ : 0 < δ) :
@@ -418,6 +416,10 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.exists_punishedProfile_of_nearT
           (quittingTerminalPayoff reward)
           (2 * (η + 4 * M * rate) + δ)
           (quittingOneStagePunishedProfile reward rounded punishRow) := by
+  let player : ι := Classical.choice inferInstance
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal player) player)).trans
+      (hreward (quittingSingletonTerminal player) player)
   obtain ⟨quitter, hcontinue⟩ :=
     exists_continueProbability_lt_of_continueMass_lt_pow_card
       purified hrate.le hmass
@@ -425,7 +427,7 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.exists_punishedProfile_of_nearT
   have hsupport : IsQuittingRootSupportApproxNash reward tail
       (η + 4 * M * rate) rounded := by
     exact supportApproxNash_sureQuitRound reward tail purified quitter
-      hrate.le hrateOne hcontinue hM hreward htail certificate.support
+      hrate.le hrateOne hcontinue hreward htail certificate.support
   have hrational : QuittingSimonRationalPayoffAt reward
       (η + 4 * M * rate) tail := by
     have hcost : 0 ≤ 4 * M * rate := by positivity

@@ -91,7 +91,6 @@ theorem abs_endpoint_sureQuitRound_sub_le
     (tail : Payoff ι) (root : ι → PMF Bool) {quitter who : ι}
     (hne : who ≠ quitter) (action : Bool) {rate M : ℝ}
     (hrate : (root quitter false).toReal ≤ rate)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M) :
     |quittingRootExpectedPayoff reward tail
@@ -100,6 +99,9 @@ theorem abs_endpoint_sureQuitRound_sub_le
       quittingRootExpectedPayoff reward tail
         (Function.update root who (PMF.pure action)) who| ≤
       rate * (2 * M) := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
+      (hreward (quittingSingletonTerminal who) who)
   have hcomm :
       Function.update (quittingSureQuitRound root quitter) who
           (PMF.pure action) =
@@ -124,7 +126,6 @@ theorem abs_endpointDifference_sureQuitRound_sub_le
     (tail : Payoff ι) (root : ι → PMF Bool) {quitter who : ι}
     (hne : who ≠ quitter) {rate M : ℝ}
     (hrate : (root quitter false).toReal ≤ rate)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M) :
     |quittingRootEndpointDifference reward tail
@@ -132,9 +133,9 @@ theorem abs_endpointDifference_sureQuitRound_sub_le
       quittingRootEndpointDifference reward tail root who| ≤
       4 * M * rate := by
   have hquit := abs_endpoint_sureQuitRound_sub_le reward tail root hne true
-    hrate hM hreward htail
+    hrate hreward htail
   have hcontinue := abs_endpoint_sureQuitRound_sub_le reward tail root hne false
-    hrate hM hreward htail
+    hrate hreward htail
   unfold quittingRootEndpointDifference quittingRootQuitPayoff
     quittingRootContinuePayoff
   calc
@@ -181,12 +182,14 @@ theorem supportApproxNash_sureQuitRound
     (tail : Payoff ι) (root : ι → PMF Bool) (quitter : ι)
     {γ rate M : ℝ} (hrate0 : 0 ≤ rate) (hrate1 : rate < 1)
     (hcontinue : (root quitter false).toReal < rate)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M)
     (hsupport : IsQuittingRootSupportApproxNash reward tail γ root) :
     IsQuittingRootSupportApproxNash reward tail (γ + 4 * M * rate)
       (quittingSureQuitRound root quitter) := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal quitter) quitter)).trans
+      (hreward (quittingSingletonTerminal quitter) quitter)
   intro who
   by_cases hwho : who = quitter
   · subst who
@@ -210,7 +213,7 @@ theorem supportApproxNash_sureQuitRound
       simp at hfalse
   · have hrootWho := quittingSureQuitRound_other root hwho
     have hmove := abs_endpointDifference_sureQuitRound_sub_le
-      reward tail root hwho hcontinue.le hM hreward htail
+      reward tail root hwho hcontinue.le hreward htail
     rw [abs_le] at hmove
     constructor
     · intro hpositive
@@ -318,10 +321,14 @@ rounding modulus `γ + 4 * M * rate`, with the witness selected below
 theorem quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {M : ℝ} (hM : 0 ≤ M)
+    {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hrows : HasArbitrarilySmallQuittingNearTotalSupportRows reward M) :
     QuittingInstantPunishmentεEquilibriumExistence reward := by
+  let who : ι := Classical.choice inferInstance
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
+      (hreward (quittingSingletonTerminal who) who)
   intro ε hε
   let rate := min (1 / 2 : ℝ) (ε / (64 * (M + 1)))
   have hMone : 0 < M + 1 := by linarith
@@ -357,7 +364,7 @@ theorem quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows
   have hsupportRounded :
       IsQuittingRootSupportApproxNash reward tail η rounded := by
     exact supportApproxNash_sureQuitRound reward tail root quitter
-      hrate.le hrateOne hquitterRate hM hreward htail hsupport
+      hrate.le hrateOne hquitterRate hreward htail hsupport
   have hrationalRounded : QuittingSimonRationalPayoffAt reward η tail := by
     intro who
     have hwho := hrational who

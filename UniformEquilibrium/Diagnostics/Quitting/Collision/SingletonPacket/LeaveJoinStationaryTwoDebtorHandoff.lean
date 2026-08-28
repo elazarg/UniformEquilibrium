@@ -168,7 +168,7 @@ stationary handoff with two solved coordinates and at most two debtors. -/
 theorem nonempty_finFourLeaveJoinStationaryTwoDebtorHandoff
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     (witness : QuittingTerminalExploitabilityWitness reward)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hbound : ∀ terminal who, |reward terminal who| ≤ M)
     (leaver spectator joiner fourth : Fin 4)
     (hleaverSpectator : leaver ≠ spectator)
@@ -185,6 +185,7 @@ theorem nonempty_finFourLeaveJoinStationaryTwoDebtorHandoff
       quittingSetReward reward {spectator, joiner} joiner) :
     Nonempty (FinFourLeaveJoinStationaryTwoDebtorHandoff reward witness M
       leaver spectator joiner fourth) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward leaver hbound
   let free := finFourLeaveJoinFree leaver joiner
   have hdisjoint : Disjoint ({spectator} : Finset (Fin 4)) free := by
     simp [free, finFourLeaveJoinFree, hleaverSpectator.symm,
@@ -638,7 +639,7 @@ theorem ownerLeaveCollisionChain_outsiderJoin_or_stationaryTwoDebtorHandoff
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {bound : ℝ}
     (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
-    (M : ℝ) (hM : 0 ≤ M)
+    (M : ℝ)
     (hbound : ∀ terminal who, |reward terminal who| ≤ M)
     (certificate : QuittingImmediateSingletonCollision reward
       residual.witness.terminalGap)
@@ -679,7 +680,7 @@ theorem ownerLeaveCollisionChain_outsiderJoin_or_stationaryTwoDebtorHandoff
     rw [Finset.pair_comm chain.spectator certificate.collider] at hleave'
     refine ⟨joiner, fourth, hjoiner, hfourth, ?_⟩
     exact nonempty_finFourLeaveJoinStationaryTwoDebtorHandoff
-      residual.witness M hM hbound certificate.collider chain.spectator
+      residual.witness M hbound certificate.collider chain.spectator
         joiner fourth chain.spectator_ne_collider.symm hjoinerNe.2.symm
           hfourthNe.1.symm hjoinerNe.1.symm hfourthNe.2.1.symm
             hfourthNe.2.2.symm hleave' hjoin

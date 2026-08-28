@@ -106,12 +106,13 @@ most `2M` times its coalition mass. -/
 theorem signedTerminalContribution_le_two_mul_mass
     (orbit : QuittingPunishmentFloorInfiniteOrbit reward)
     (who : iota) (sign : ℝ) (time : ℕ) (terminal : Finset iota)
-    (hnonempty : terminal.Nonempty) {M : ℝ} (hM : 0 ≤ M)
+    (hnonempty : terminal.Nonempty) {M : ℝ}
     (hsign : sign = 1 ∨ sign = -1)
     (hreward : ∀ outcome player, |reward outcome player| ≤ M)
     (hvalue : |orbit.value time who| ≤ M) :
     orbit.signedTerminalContribution who sign time terminal ≤
       2 * M * quittingRootCoalitionMass (orbit.roots time) terminal := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   have hprojective :
       quittingProjectiveCoalitionReward reward terminal who =
         reward ⟨terminal, hnonempty⟩ who := by
@@ -261,7 +262,7 @@ theorem nonempty_summableChargeSignedTerminalPort_of_displacement
       (fun time => orbit.signedTerminalContribution_nonneg
         who sign time terminal)
       (fun time => orbit.signedTerminalContribution_le_two_mul_mass
-        who sign time terminal hnonempty hM.le hsign hreward
+        who sign time terminal hnonempty hsign hreward
           (hvalue time who))
       ((hmassSummable terminal hterminal).mul_left (2 * M))
   let totalContribution : ℕ → ℝ := fun time =>
@@ -337,7 +338,7 @@ theorem nonempty_summableChargeSignedTerminalPort_of_displacement
             quittingRootCoalitionMass (orbit.roots time) terminal :=
         (hcontributionSummable terminal hterminal).tsum_le_tsum
           (fun time => orbit.signedTerminalContribution_le_two_mul_mass
-            who sign time terminal hnonempty hM.le hsign hreward
+            who sign time terminal hnonempty hsign hreward
               (hvalue time who))
           ((hmassSummable terminal hterminal).mul_left (2 * M))
       _ = 2 * M * ∑' time,

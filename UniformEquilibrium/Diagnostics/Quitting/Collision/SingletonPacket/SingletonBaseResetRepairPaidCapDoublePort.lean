@@ -207,13 +207,12 @@ theorem FinFourQuantitativeFullSupportHardResidual.nonempty_paidCapDoublePort
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {bound : ℝ}
     (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
-    (hbound_nonneg : 0 ≤ bound)
     (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (owner : Fin 4) :
     Nonempty (FinFourSingletonBaseResetRepairPaidCapDoublePort reward bound
       residual owner) := by
   obtain ⟨producer⟩ := residual.nonempty_singletonBaseSameLawResetProducer
-    hbound_nonneg hreward owner
+    hreward owner
   exact producer.nonempty_paidCapDoublePort
 
 end GameTheory

@@ -142,7 +142,7 @@ theorem
     (hequilibrium : QuittingApproximateEquilibriumExistence reward)
     (horizon : ℕ) {u threshold displacement M localError δ : ℝ}
     (hu : 0 < u) (hthreshold : 0 < threshold)
-    (hdisplacement : 0 < displacement) (hM : 0 ≤ M)
+    (hdisplacement : 0 < displacement)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hlocal : threshold +
       4 * M * (Fintype.card ι : ℝ) * displacement ≤ localError)
@@ -165,7 +165,7 @@ theorem
     obtain ⟨horiginalSupport, hbellman, hcutoff, _hcontinuationClose,
         hseam, hownTailSupport⟩ :=
       reached_supportPurifiedPrefix_compatible reward sourceRoots 0 horizon
-        haccuracy hu hthreshold hdisplacement hM hreward hsourceNash
+        haccuracy hu hthreshold hdisplacement hreward hsourceNash
         (by simpa using hreached) hscale hlocal
     refine Or.inr ⟨
       { accuracy := accuracy
@@ -191,6 +191,10 @@ theorem
           |quittingRootSequenceTailVector reward sourceRoots horizon player| ≤
             M := by
         intro player
+        have hM : 0 ≤ M :=
+          (abs_nonneg
+            (reward (quittingSingletonTerminal player) player)).trans
+            (hreward (quittingSingletonTerminal player) player)
         exact abs_quittingRootSequenceTerminalValue_le reward sourceRoots player
           horizon hM hreward
       simpa only [zero_add] using
@@ -204,7 +208,16 @@ theorem
         exact_mod_cast Nat.sub_le horizon (offset + 1)
       have hcoefficient :
           0 ≤ (2 * M) * ((Fintype.card ι : ℝ) * displacement) := by
-        positivity
+        by_cases hcard : Fintype.card ι = 0
+        · simp [hcard]
+        · letI : Nonempty ι :=
+            Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
+          let player : ι := Classical.choice inferInstance
+          have hM : 0 ≤ M :=
+            (abs_nonneg
+              (reward (quittingSingletonTerminal player) player)).trans
+              (hreward (quittingSingletonTerminal player) player)
+          positivity
       have hscaled := mul_le_mul_of_nonneg_left hremaining hcoefficient
       have hle : localError +
           (2 * M) * ((Fintype.card ι : ℝ) * displacement) *
@@ -306,7 +319,7 @@ theorem
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hequilibrium : QuittingApproximateEquilibriumExistence reward)
     (M δ u : ℝ) (threshold displacement localError : ℕ → ℝ)
-    (hu : 0 < u) (hM : 0 ≤ M)
+    (hu : 0 < u)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hthreshold : ∀ horizon, 0 < threshold horizon)
     (hdisplacement : ∀ horizon, 0 < displacement horizon)
@@ -333,7 +346,7 @@ theorem
   rcases
       lowSurvival_or_sourceMatchedSupportPrefix_of_approximateEquilibriumExistence
         reward hequilibrium horizon hu (hthreshold horizon)
-        (hdisplacement horizon) hM hreward (hlocal horizon) (htotal horizon) with
+        (hdisplacement horizon) hreward (hlocal horizon) (htotal horizon) with
     hlow | hprefix
   · exact False.elim (hfixedReach horizon hlow)
   · exact hprefix
@@ -362,7 +375,8 @@ omit [DecidableEq ι] in
 /-- The canonical horizon-dependent scales are positive and satisfy both the
 local product-law error budget and the full backward-seam budget. -/
 theorem quittingSimonReachedPrefixScale_spec
-    {M δ : ℝ} (hM : 0 ≤ M) (hδ : 0 < δ) (horizon : ℕ) :
+    {M δ : ℝ} (hMcard : 0 ≤ M * (Fintype.card ι : ℝ))
+    (hδ : 0 < δ) (horizon : ℕ) :
     0 < quittingSimonReachedPrefixThreshold δ ∧
       0 < quittingSimonReachedPrefixDisplacement (ι := ι) M δ horizon ∧
       quittingSimonReachedPrefixThreshold δ +
@@ -379,23 +393,24 @@ theorem quittingSimonReachedPrefixScale_spec
     16 * (1 + 4 * M * card + 2 * M * card * time)
   have hcard : 0 ≤ card := by positivity
   have htime : 0 ≤ time := by positivity
+  have hMcard' : 0 ≤ M * card := by simpa [card] using hMcard
   have hdenominator : 0 < denominator := by
     dsimp only [denominator]
-    positivity
+    nlinarith [hMcard', mul_nonneg hMcard' htime]
   have hlocalCharge :
       4 * M * card * (δ / denominator) ≤ δ / 4 := by
     rw [show 4 * M * card * (δ / denominator) =
       (4 * M * card * δ) / denominator by ring]
     rw [div_le_iff₀ hdenominator]
     dsimp only [denominator]
-    nlinarith [mul_nonneg hM hcard, mul_nonneg (mul_nonneg hM hcard) htime]
+    nlinarith [hMcard', mul_nonneg hMcard' htime]
   have hseamCharge :
       (2 * M) * (card * (δ / denominator)) * time ≤ δ / 2 := by
     rw [show (2 * M) * (card * (δ / denominator)) * time =
       (2 * M * card * δ * time) / denominator by ring]
     rw [div_le_iff₀ hdenominator]
     dsimp only [denominator]
-    nlinarith [mul_nonneg hM hcard, mul_nonneg (mul_nonneg hM hcard) htime]
+    nlinarith [hMcard', mul_nonneg hMcard' htime]
   refine ⟨?_, ?_, ?_, ?_⟩
   · unfold quittingSimonReachedPrefixThreshold
     positivity
@@ -423,7 +438,7 @@ theorem
     exists_bounded_supportBellmanSpine_of_approximateEquilibriumExistence_of_canonicalFixedReach
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hequilibrium : QuittingApproximateEquilibriumExistence reward)
-    (M δ u : ℝ) (hM : 0 ≤ M) (hδ : 0 < δ) (hu : 0 < u)
+    (M δ u : ℝ) (hδ : 0 < δ) (hu : 0 < u)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hfixedReach : ∀ horizon,
       ¬QuittingLowSurvivalApproximatePrefixAt reward u
@@ -436,21 +451,32 @@ theorem
         (value (time + 1)) (roots time)) ∧
       ∀ time, IsQuittingRootSupportApproxNash reward
         (value (time + 1)) δ (roots time) := by
+  have hMcard : 0 ≤ M * (Fintype.card ι : ℝ) := by
+    by_cases hcard : Fintype.card ι = 0
+    · simp [hcard]
+    · letI : Nonempty ι :=
+          Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
+      let player : ι := Classical.choice inferInstance
+      have hM : 0 ≤ M :=
+        (abs_nonneg
+          (reward (quittingSingletonTerminal player) player)).trans
+          (hreward (quittingSingletonTerminal player) player)
+      exact mul_nonneg hM (Nat.cast_nonneg _)
   apply
     exists_bounded_supportBellmanSpine_of_approximateEquilibriumExistence_of_fixedReach
       reward hequilibrium M δ u
       (fun _ => quittingSimonReachedPrefixThreshold δ)
       (quittingSimonReachedPrefixDisplacement (ι := ι) M δ)
       (fun _ => quittingSimonReachedPrefixLocalError δ)
-      hu hM hreward
+      hu hreward
   · intro horizon
-    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hM hδ horizon).1
+    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hMcard hδ horizon).1
   · intro horizon
-    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hM hδ horizon).2.1
+    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hMcard hδ horizon).2.1
   · intro horizon
-    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hM hδ horizon).2.2.1
+    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hMcard hδ horizon).2.2.1
   · intro horizon
-    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hM hδ horizon).2.2.2
+    exact (quittingSimonReachedPrefixScale_spec (ι := ι) hMcard hδ horizon).2.2.2
   · exact hfixedReach
 
 /-- **Unconditional compactification boundary.** Approximate-equilibrium
@@ -465,7 +491,7 @@ theorem
     lowSurvivalPrefix_or_exists_bounded_supportBellmanSpine_of_approximateEquilibriumExistence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hequilibrium : QuittingApproximateEquilibriumExistence reward)
-    (M δ u : ℝ) (hM : 0 ≤ M) (hδ : 0 < δ) (hu : 0 < u)
+    (M δ u : ℝ) (hδ : 0 < δ) (hu : 0 < u)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     (∃ horizon,
       QuittingLowSurvivalApproximatePrefixAt reward u
@@ -485,7 +511,7 @@ theorem
         horizon
   · exact Or.inr
       (exists_bounded_supportBellmanSpine_of_approximateEquilibriumExistence_of_canonicalFixedReach
-        reward hequilibrium M δ u hM hδ hu hreward hfixedReach)
+        reward hequilibrium M δ u hδ hu hreward hfixedReach)
   · push Not at hfixedReach
     exact Or.inl hfixedReach
 

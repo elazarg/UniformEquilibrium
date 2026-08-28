@@ -252,11 +252,11 @@ theorem FinFourQuantitativeFullSupportHardResidual.nonempty_singletonBaseSameLaw
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {M : ℝ}
     (residual : FinFourQuantitativeFullSupportHardResidual reward M)
-    (hM : 0 ≤ M)
     (hbound : ∀ terminal who, |reward terminal who| ≤ M)
     (owner : Fin 4) :
     Nonempty (FinFourSingletonBaseSameLawResetProducer reward M residual
       owner) := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hbound
   obtain ⟨resetOwner, hresetNe, hcollision⟩ :=
     residual.exists_terminalGap_collision_at_singleton owner
   have hgapBound : residual.witness.terminalGap ≤ 2 * M :=

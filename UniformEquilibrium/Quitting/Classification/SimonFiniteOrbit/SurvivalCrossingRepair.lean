@@ -317,12 +317,14 @@ moves either pure endpoint by at most `2 M * card * d`. -/
 theorem isQuittingRootEndpointStableWithin_of_uniformBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (root : ι → PMF Bool) {M d : ℝ}
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (htail : ∀ player, |tail player| ≤ M) :
     IsQuittingRootEndpointStableWithin reward tail root d
       ((2 * M) * ((Fintype.card ι : ℝ) * d)) := by
   intro candidate hclose who
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
+      (hreward (quittingSingletonTerminal who) who)
   have hd : 0 ≤ d :=
     (abs_nonneg
       ((candidate who true).toReal - (root who true).toReal)).trans
@@ -640,7 +642,6 @@ theorem
     (roots : ℕ → ι → PMF Bool) (stage : ℕ)
     {α u β d M η : ℝ}
     (hα : 0 < α) (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d)
-    (hM : 0 ≤ M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnash : IsεQuittingRootSequenceNash reward α roots)
     (hreached : u ≤ quittingJointSurvivalWeight roots 0 stage)
@@ -694,11 +695,14 @@ theorem
   have htail : ∀ player,
       |quittingRootSequenceTailVector reward roots (stage + 1) player| ≤ M := by
     intro player
+    have hM : 0 ≤ M :=
+      (abs_nonneg (reward (quittingSingletonTerminal player) player)).trans
+        (hreward (quittingSingletonTerminal player) player)
     exact abs_quittingRootSequenceTerminalValue_le reward roots player
       (stage + 1) hM hreward
   have hstable := isQuittingRootEndpointStableWithin_of_uniformBound reward
     (quittingRootSequenceTailVector reward roots (stage + 1)) (roots stage)
-    (d := d) hM hreward htail
+    (d := d) hreward htail
   apply isQuittingRootSupportApproxNash_supportPurifiedRoot reward
     (quittingRootSequenceTailVector reward roots (stage + 1)) (roots stage)
     hβ.le _ hstable hclose
@@ -717,7 +721,7 @@ theorem
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hequilibrium : QuittingApproximateEquilibriumExistence reward)
     {u β d M η : ℝ}
-    (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d) (hM : 0 ≤ M)
+    (hu : 0 < u) (hβ : 0 < β) (hd : 0 < d)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (herror : β + 4 * M * (Fintype.card ι : ℝ) * d ≤ η) :
     ∃ roots : ℕ → ι → PMF Bool,
@@ -732,7 +736,7 @@ theorem
   obtain ⟨roots, hnash⟩ := hequilibrium (u * β * d / 2) haccuracy
   refine ⟨roots, hnash, fun stage hreached => ?_⟩
   apply isQuittingRootSupportApproxNash_supportPurifiedRoot_of_reachedNash
-    reward roots stage haccuracy hu hβ hd hM hreward hnash hreached
+    reward roots stage haccuracy hu hβ hd hreward hnash hreached
   · have hfull : 0 < u * β * d := by positivity
     linarith
   · exact herror
