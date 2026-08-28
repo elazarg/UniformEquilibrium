@@ -810,6 +810,27 @@ attainment, limiting positive-root/cardinality-face consumer, return, rank
 decrease, strict-ray contradiction, or uniform-equilibrium conclusion.  This
 is not a completed strict-tail packet.
 
+The conditional cardinality contract is checked in
+`Research/Topology/ModTwoBoxComplementarityParity.lean`,
+`Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, and
+`Research/Quitting/FinFourProducerAtlas/StrictRayBindingCardinality.lean`.
+`ModTwoBoxComplementarityParitySpec` states global oddness, excision,
+common-isolating homotopy invariance, and finite-regular parity without
+asserting an implementation.  `QuittingEndpointNashBoxBridge` identifies
+cube complementarity with exact root Nash at one fixed cap.  In the Fin4
+contract, `FinFourBindingPairFiniteCapParityWitness` selects an actual late
+finite ray cap, localizes every solution into one isolating neighborhood, and
+uses `FinFourBindingPairLocalParityZero.direct` or `.perturbed` to compute
+zero local parity.  Conditional on those supplied objects,
+`positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three`
+returns, for the same strict flow, a positive-absorption exact root at the
+limiting cap, full binding, or binding cardinality three.  This contract has
+`M` and `L`, but no `A` or `C`: neither the generic parity implementation nor
+the finite-cap localization/perturbation certificate is constructed, and no
+remaining arm has a checked downstream consumer.  In particular it does not
+eliminate the positive-root, cardinal-three, or full-binding branches and
+proves no return, contradiction, or uniform-equilibrium conclusion.
+
 The canonical pair's literal paid endpoint now also has a checked one-time
 support-rank handoff.  The generic theorem
 `exists_minimumEndpointSupportRankHandoff_or_debtAscent`
