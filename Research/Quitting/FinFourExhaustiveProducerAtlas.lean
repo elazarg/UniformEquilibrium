@@ -16,6 +16,7 @@ import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
 import Research.Quitting.FinFourProducerAtlas.MinimumResponseChordActualDecoder
 import Research.Quitting.FinFourProducerAtlas.NormalizedReturn
+import Research.Quitting.FinFourProducerAtlas.SourceFaithfulThreeRoleRegeneration
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
 import Research.Quitting.FinFourProducerAtlas.SemanticCoverage
@@ -50,6 +51,12 @@ ascent, or a compiled proper response chord with a strict one-time support
 drop.  This decoder starts from the normalized-return endpoint rather than a
 paid spectator cycle and supplies no renewable chronology or downstream
 consumer.
+At a same-minimum three-role endpoint, source-faithful causalization now keeps
+the literal target profiles.  Nonsingleton incoming marks and their uniform
+mass floor are kept literally; in the singleton fallback only positive dates
+are reselected.  Arbitrary complete behavioral response contrasts transport
+exactly behind the finite cap--Nash words, but no common observer or paid-cycle
+consumer is selected.
 At a zero-density boundary, literal raw rows from that same selection retain
 the arbitrary prefix separately from the immutable source chronology.  Their
 combined deleted clocks now split exhaustively: a positive host produces a
