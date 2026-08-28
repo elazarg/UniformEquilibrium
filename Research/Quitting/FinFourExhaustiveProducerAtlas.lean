@@ -15,6 +15,7 @@ import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
 import Research.Quitting.FinFourProducerAtlas.SemanticCoverage
 import Research.Quitting.FinFourProducerAtlas.StrictEndpointNormalizedReturn
+import Research.Quitting.FinFourProducerAtlas.StrictRayBindingCardinality
 import Research.Quitting.FinFourProducerAtlas.StrictRayTailNormalizedCapFlow
 import Research.Quitting.FinFourProducerAtlas.StrongConcentratedPacketConsumer
 
@@ -45,6 +46,10 @@ has a limiting cap, an exact renewal law, and eventually uses only binding
 singleton coordinates.  Exact finite-product estimates and the weighted-tail
 telescope now construct its first-order normalized cap-flow certificate.  No
 terminal consumer is asserted.
+The separate binding-cardinality contract gives the same-ray
+positive-limit-root, full-binding, or cardinal-three conclusion only from a
+supplied mod-two parity implementation and a late finite-cap local
+certificate.  Neither supplied object has a producer here.
 In the minimum-return arm, the literal paid endpoint either stays on the
 minimum fibre and makes a one-time support-rank handoff through its actual
 half-mixture, or converges to a strictly off-minimum endpoint.  The stored
