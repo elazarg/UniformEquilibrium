@@ -21,6 +21,8 @@ import Research.Quitting.FinFourProducerAtlas.StrictRayBindingCardinality
 import Research.Quitting.FinFourProducerAtlas.StrictRayFullBindingDiffuseReduction
 import Research.Quitting.FinFourProducerAtlas.StrictRayTailNormalizedCapFlow
 import Research.Quitting.FinFourProducerAtlas.StrongConcentratedPacketConsumer
+import Research.Quitting.FiniteWordWeightedCapDefectLedger
+import Research.Quitting.NormalizedPassportCarrierActualizer
 
 /-!
 # Exhaustive source-preserving producer atlas on four players
@@ -45,6 +47,11 @@ source-attached concentrated packets after at most four paid clears and feeds
 the existing strategic-singleton-or-collision-minimum consumer.  The
 non-full-screened alternative is not identified with a positive host, and
 both consumer outputs remain open.
+More generally, every positive-density carrier point above the reference debt
+has actual raw descendants with fixed reference-based mass and gain floors.
+An exact finite-word telescope also localizes positive aggregate cap defect to
+one reached product-root row.  That coordinate defect is not a prescribed
+action, paid edge, or executable return consumer.
 The same family also has one canonical maximal-prefix semantic ray.  Its
 scalar limit either returns the whole source to the minimum and reaches the
 three-role consumer, or leaves a strict ray stall with invariant normalized

@@ -833,6 +833,35 @@ floor.  No Fin4 theorem supplies that floor or a source-faithful regenerated
 source.  The barrier gives no base-cluster return, chronology return, terminal
 approximation, recursive closure, or uniform-equilibrium payoff.
 
+Off-minimum carrier points are now actualized without pretending that they
+return to the minimum fibre.
+`nonempty_quittingMarkedPairCarrierActualizer`
+(`Research/Quitting/NormalizedPassportCarrierActualizer.lean`) takes a
+positive normalized carrier point whose whole debt is at least the positive
+reference debt and selects literal raw descendants with fixed mass and actual
+gain floors equal to half the corresponding reference-based density floors.
+`QuittingMarkedPairCarrierActualizer.toDecoratedFamily` reassembles those rows
+as an executable decorated family, and
+`toDecoratedFamily_baseDecoration_tendsto` retains convergence of the complete
+raw decoration.  This has `M`, `L`, and `A` relative to the supplied decorated
+family and carrier point, but no `C`.  The origin ranks are not proved fixed or
+cofinal, and the incoming absolute resolution need not survive.
+
+For any literal finite product-root word,
+`quittingTerminalSemanticDebtSum_literalRootStack_eq_weightedLedger_add`
+(`Research/Quitting/FiniteWordWeightedCapDefectLedger.lean`) is the exact
+chronological telescope: whole debt is the survival-transported suffix debt
+plus the prefix-survival-weighted sum of complete-suffix product-root Nash
+defects.  `half_minimum_le_weightedLedger_of_prefixSurvival_le` gives the
+half-minimum aggregate lower bound from bounded suffix debt and sufficiently
+small joint prefix survival, while
+`nonempty_reachedPositiveCapDefect_of_prefixSurvival_le` selects an actually
+reached row and `exists_positiveCoordinateNashDefect` selects a positive
+coordinate there.  These ledger declarations have `M` and `L`, but no
+source-facing screening adapter or downstream `A` or `C`.  The selected
+coordinate is not a prescribed action, paid edge, executable chronology, or
+return consumer; the charge may diffuse over arbitrarily many rows.
+
 The zero-mass boundary now has an actual raw-row interface.
 `FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZenoDeletedSurvivalSource`
 (`Research/Quitting/FinFourProducerAtlas/ActualZenoDeletedSurvivalSource.lean`)
