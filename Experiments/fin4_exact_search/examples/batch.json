@@ -1,0 +1,11 @@
+{
+  "schema": "fin4-exact-search-batch-v1",
+  "jobs": [
+    {
+      "id": "zero-smoke",
+      "table": "zero_table.json",
+      "epsilon": "100",
+      "max_steps": 4
+    }
+  ]
+}
