@@ -1105,11 +1105,25 @@ transports unrestricted terminal debt by the player-deleted return.
 gap-selected host, supplied coordinatewise punishments, and the exact product
 inequality to force joint return at least
 `gamma^2 / (2 * R * (gamma + 2 * R))`.  This rules out a screened block only
-under those supplied hypotheses and has `M/L` status.  There is no Fin4
-adapter from the actual screened source to the timing certificate or uniform
-punishment separation, and no downstream `A/C`: the identity all-Continue
-block already satisfies a positive return floor, while payoff return, cap
-Nash, recurrence, and nonidentity selection remain open.
+under those supplied hypotheses.
+
+The generic near-minimum rigidity theorem is now sharper.  In
+`Research/Quitting/NearMinimumRetainedTailTimingNashIdentity.lean`,
+`nonidentity_exactRoot_uniformOpponentAbsorption_ge` gives every coordinate
+the same opponent-absorption floor `kappa / (kappa + 2 * M)`, with no
+cardinality averaging.  Under positive global minimum and actual tail excess
+strictly below `kappa * D_* / (2 * M)`,
+`nearMinimum_rootNashAgainstPayoff_eq_allContinue` forces every exact endpoint
+Nash root against the tail's prescribed payoff to be all Continue.
+`nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates this
+identity backward through a supplied exact credible-suffix root stack.  These
+results have `M/L` status.  There is still no theorem converting an arbitrary
+mixed retained-tail timing Nash law into that exact stack, and no Fin4 adapter
+from the actual minimum source to the separated tail, punishments, mixed law,
+and positive-return compiler.  Hence there is no `A/C`: the all-Continue block
+already satisfies a positive return floor, while the advertised mixed-law
+identity, payoff return, cap Nash, recurrence, and nonidentity selection remain
+open.
 
 The conditional cardinality contract is checked in
 `Research/Topology/ModTwoBoxComplementarityParity.lean`,
