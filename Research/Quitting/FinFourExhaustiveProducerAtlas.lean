@@ -18,6 +18,7 @@ import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
 import Research.Quitting.FinFourProducerAtlas.MinimumResponseChordActualDecoder
 import Research.Quitting.FinFourProducerAtlas.NormalizedReturn
+import Research.Quitting.FinFourProducerAtlas.PaidNonsingletonCycle
 import Research.Quitting.FinFourProducerAtlas.SourceFaithfulThreeRoleRegeneration
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
@@ -43,6 +44,12 @@ with an exact tail-escape-versus-minimum-tail paid dichotomy.  For singleton
 minimum atoms, one chronology and table outsider fixed before every resolution
 produce a cofinal moving packet whose collision residual is minimum-tail and
 has one fixed paid label.
+That actual forced-pair family also has one deterministic maximum-toggle
+orbit.  It either reaches a paid singleton or closes on a `4`, `6`, or `8`
+nonsingleton sibling cycle.  A closed cycle fixes one spectator on a strict
+source subsequence, feeds its positive debt recharge to the stopping-law atom
+decoder, and compactifies to a strict off-minimum endpoint or a fresh
+same-law minimum source.  The sibling edge is not a chronological return.
 The resulting actual forced-pair family has a derived normalized passport:
 its enlarged-slice minimum either returns to the global minimum and reaches
 the three-role chord, or is a strict inert point with only all Continue as an
