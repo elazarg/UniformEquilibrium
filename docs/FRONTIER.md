@@ -1160,6 +1160,45 @@ support are not produced, and neither the ballistic nor omitted-player branch
 has a checked return, rank decrease, contradiction, or uniform-equilibrium
 consumer.
 
+The uniformly ballistic branch now has an exact source-compatible omega
+chain.  `Math.Topology.nonempty_sourceOmegaChain` and
+`Math.Topology.SourceOmegaChain.sourceFiniteWindow_tendsto`
+(`MathUE/Topology/SourceOmegaChain.lean`) extract one bi-infinite compact path
+using a common strict center subsequence and retain convergence of complete
+consecutive finite source windows.  In
+`Research/Quitting/FinFourProducerAtlas/BallisticNormalizedOmegaChain.lean`,
+`nonempty_ballisticNormalizedOmegaChain_of_fullBinding_of_eventually_all_currentHazard_pos`
+applies that extraction to the same actual strict Fin4 ray.  The resulting
+`source_current_tendsto`, `source_tail_tendsto`, `source_ratio_tendsto`,
+`renewal`, `work_nonpos`, and `current_work_eq_zero` declarations retain
+strict actual dates and the exact renewal, collision-feasibility, and
+complementarity identities at every integer node.
+
+The nonnegative half of this chain also has a balanced occupation law.
+`FinFourBallisticNormalizedOmegaChain.nonempty_normalizedOccupation`
+(`Research/Quitting/FinFourProducerAtlas/BallisticNormalizedOccupation.lean`)
+constructs an empirical edge limit; its `marginals_eq` and
+`support_subset_ballisticEdgeGraph` give equal state marginals and support on
+the exact closed normalized relation.  This chain and occupation have `M`,
+`L`, and `A` under the explicit full-binding and eventual finite-support
+hypotheses, but no `C`: they contain no absolute product root, payoff vector,
+stationary realization, periodic Bellman seam, terminal approximation, or
+uniform-equilibrium conclusion.
+
+This lack of a consumer is substantive rather than merely topological.
+`BallisticNormalizedSelectedChainRegression.stateAt_edge`,
+`stateAt_current_ge_one_eighth`, and `stateAt_not_periodic`
+(`Research/Quitting/BallisticNormalizedSelectedChainRegression.lean`) give a
+rational-matrix normalized orbit with renewal ratio `1 / 2`, every current
+coordinate at least `1 / 8`, and no positive period at any starting index.
+`fixedState_edge` simultaneously exhibits a stationary fixed point elsewhere
+in the same relation, while `soloMatrix_normalCore_eq_univ`,
+`soloMatrix_noHomogeneous`, `soloMatrix_standardQ`, and
+`soloMatrix_not_projectiveQBar` retain the full paired-singleton hard class.
+The regression has `M` and `L` only: it refutes periodicity of the selected
+normalized chain, not existence of another periodic normalized state, and it
+is not an actual quitting ray or a positive-minimum source.
+
 The corresponding source-free branch exclusions are false at zero global
 minimum debt.  `rationalCardThree` and `fullBindingBallistic`
 (`Research/Quitting/FinFourMaximalRayZeroMinimumRegressions.lean`) are two
