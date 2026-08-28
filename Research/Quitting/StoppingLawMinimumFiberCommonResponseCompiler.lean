@@ -4,450 +4,365 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.StoppingLawMixtureWitnessStrata
-import
-  UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.MinimumFiberSupportDrop
-import
-  UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMinimumFiberAffine
+import Research.Quitting.StoppingLawMinimumEndpointSupportRankHandoff
+import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.MinimumFiberSupportDrop
 
 /-!
-# Common cap responses across a minimum-fibre full replacement
+# Common pure-time responses across a near-minimum stopping-law seam
 
-A literal full replacement can change every non-mover's behavioral cap, so
-source-faithful causalization alone does not transport responses across that
-horizontal seam.  On a minimum-fibre full-replacement cluster, however, the
-convexity defect of the half stopping-law mixture tends to zero.
-
-Choose an approximate best response at the half profile.  Fixed-response
-payoffs are affine in the mover's stopping law, while the two endpoint regrets
-are nonnegative.  Their average is therefore bounded by the half-profile
-optimization error plus the vanishing convexity defect.  The same actual
-behavioral response is consequently asymptotically optimal at both endpoints.
-
-This is a cap/response compiler across the parent-to-full-replacement seam.  It
-does not bound the gain distortion of every supplied response and does not
-identify the endpoint caps with the source caps.
+Two profiles which differ only in one player's complete stopping law need not
+have the same caps for the other players.  Nevertheless, when both endpoint
+total debts are close to the global minimum, every nonmover has one pure-time
+response which is simultaneously close to optimal at both endpoints.
 -/
 
 noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
-open scoped Topology
+open Filter
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-namespace QuittingPositiveMinimumDebtTangentFamily
+/-- Regret of one deterministic pure-time response against a behavioral
+profile.  `none` is the Never response. -/
+def quittingPureTimeResponseRegret
+    (profile : (quittingGame reward).BehaviorProfile)
+    (observer : ι) (choice : Option ℕ) : ℝ :=
+  quittingContinuationBestResponseValue reward profile observer -
+    quittingTerminalPayoff reward
+      (Function.update profile observer
+        (quittingPureTimeBehaviorStrategy reward observer choice)) observer
 
-/-- The literal half stopping-law profile between a tangent source and its
-full replacement endpoint. -/
-def fullReplacementHalfProfile
-    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
-    (mover : {who // who ∈ frontier.positiveDebtSupport})
-    (rank : ℕ) : (quittingGame reward).BehaviorProfile :=
-  quittingStoppingLawResetProfile reward (frontier.source rank) mover.1
-    (frontier.replacement mover rank) (1 / 2 : ℝ) (by norm_num) (by norm_num)
+theorem quittingPureTimeResponseRegret_nonneg
+    (profile : (quittingGame reward).BehaviorProfile)
+    (observer : ι) (choice : Option ℕ) :
+    0 ≤ quittingPureTimeResponseRegret
+      (reward := reward) profile observer choice := by
+  unfold quittingPureTimeResponseRegret
+  exact sub_nonneg.mpr
+    (quittingTerminalPayoff_update_le_continuationBestResponseValue
+      reward profile observer
+        (quittingPureTimeBehaviorStrategy reward observer choice))
 
-/-- Convexity defect of one observer's behavioral cap at the literal half
-profile. -/
-def fullReplacementHalfCapChordGap
-    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
-    (mover : {who // who ∈ frontier.positiveDebtSupport})
-    (observer : ι) (rank : ℕ) : ℝ :=
-  (quittingContinuationBestResponseValue reward (frontier.source rank) observer +
-      quittingContinuationBestResponseValue reward
-        (frontier.fullReplacementProfile mover rank) observer) / 2 -
-    quittingContinuationBestResponseValue reward
-      (frontier.fullReplacementHalfProfile mover rank) observer
+/-- Excess of the average endpoint debt above a fixed global minimum. -/
+def quittingStoppingLawSeamExcess
+    (minimum : QuittingTerminalSemanticPair ι)
+    (source target : (quittingGame reward).BehaviorProfile) : ℝ :=
+  (quittingTerminalSemanticDebtSum
+      (quittingTerminalSemanticPair reward source) +
+    quittingTerminalSemanticDebtSum
+      (quittingTerminalSemanticPair reward target)) / 2 -
+    quittingTerminalSemanticDebtSum minimum
 
-/-- Behavioral-cap convexity makes the half-profile chord gap nonnegative. -/
-theorem fullReplacementHalfCapChordGap_nonneg
-    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
-    (mover : {who // who ∈ frontier.positiveDebtSupport})
-    (observer : ι) (rank : ℕ) :
-    0 ≤ frontier.fullReplacementHalfCapChordGap mover observer rank := by
-  have hconvex := quittingContinuationBestResponseValue_stoppingLawMixture_le
-    reward (frontier.source rank) mover.1 observer
-      (frontier.source rank mover.1) (frontier.replacement mover rank)
-      (1 / 2 : ℝ) (by norm_num) (by norm_num)
-  rw [Function.update_eq_self] at hconvex
-  dsimp only [fullReplacementHalfCapChordGap, fullReplacementHalfProfile,
-    quittingStoppingLawResetProfile, fullReplacementProfile]
-  nlinarith
-
-/-- Payoff affinity identifies the cap chord gap with the semantic-debt chord
-gap. -/
-theorem fullReplacementHalfCapChordGap_eq_debtChordGap
-    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
-    (mover : {who // who ∈ frontier.positiveDebtSupport})
-    (observer : ι) (rank : ℕ) :
-    frontier.fullReplacementHalfCapChordGap mover observer rank =
-      (quittingTerminalSemanticDebt (frontier.sourcePair rank) observer +
-          quittingTerminalSemanticDebt
-            (frontier.fullReplacementPair mover rank) observer) / 2 -
+/-- One common pure-time response is quantitatively close to optimal at both
+sides of a one-player stopping-law seam. -/
+theorem exists_commonPureTimeResponse_of_nearMinimumSeam
+    (minimum : QuittingTerminalSemanticPair ι)
+    (source target : (quittingGame reward).BehaviorProfile)
+    (mover observer : ι) (hne : observer ≠ mover)
+    (hopponents : ∀ other, other ≠ mover → target other = source other)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∃ choice : Option ℕ,
+      quittingPureTimeResponseRegret
+          (reward := reward) source observer choice ≤
+        2 * (quittingStoppingLawSeamExcess
+          (reward := reward) minimum source target + epsilon) ∧
+      quittingPureTimeResponseRegret
+          (reward := reward) target observer choice ≤
+        2 * (quittingStoppingLawSeamExcess
+          (reward := reward) minimum source target + epsilon) := by
+  let half := quittingHalfStoppingLawProfile reward source target mover
+  obtain ⟨choice, hchoice⟩ :=
+    exists_quittingPureTime_terminalPayoff_ge_bestResponse_sub
+      reward half observer epsilon hepsilon
+  let deviation :=
+    quittingPureTimeBehaviorStrategy reward observer choice
+  let gap : ι → ℝ := fun who =>
+    (quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward source) who +
         quittingTerminalSemanticDebt
-          (quittingTerminalSemanticPair reward
-            (frontier.fullReplacementHalfProfile mover rank)) observer := by
-  have hpayoff := quittingTerminalPayoff_stoppingLawMixture_eq
-    reward (frontier.source rank) mover.1 observer
-      (frontier.source rank mover.1) (frontier.replacement mover rank)
-      (1 / 2 : ℝ) (by norm_num) (by norm_num)
-  rw [Function.update_eq_self] at hpayoff
-  dsimp only [fullReplacementHalfCapChordGap, fullReplacementHalfProfile,
-    quittingStoppingLawResetProfile, sourcePair, fullReplacementPair,
-    fullReplacementProfile, quittingTerminalSemanticDebt,
-    quittingTerminalSemanticPair]
-  nlinarith
-
-/-- At every literal tangent rank, the cap chord gap is bounded by the average
-of the source and endpoint excesses above the exact minimum. -/
-theorem fullReplacementHalfCapChordGap_le_averageExcess
-    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
-    (mover : {who // who ∈ frontier.positiveDebtSupport})
-    (observer : ι) (rank : ℕ) :
-    frontier.fullReplacementHalfCapChordGap mover observer rank ≤
-      ((quittingTerminalSemanticDebtSum (frontier.sourcePair rank) -
-            quittingTerminalSemanticDebtSum frontier.base) +
-          (quittingTerminalSemanticDebtSum
-              (frontier.fullReplacementPair mover rank) -
-            quittingTerminalSemanticDebtSum frontier.base)) / 2 := by
-  let epsilon := quittingTerminalSemanticDebtSum (frontier.sourcePair rank) -
-    quittingTerminalSemanticDebtSum frontier.base
-  have hnear : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-      quittingTerminalSemanticDebtSum (frontier.sourcePair rank) ≤
-        quittingTerminalSemanticDebtSum candidate + epsilon := by
-    intro candidate hcandidate
-    have hminimum := frontier.base_minimum candidate hcandidate
-    dsimp only [epsilon]
+          (quittingTerminalSemanticPair reward target) who) / 2 -
+      quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward half) who
+  have hgapNonneg : ∀ who, 0 ≤ gap who := by
+    intro who
+    dsimp only [gap, half]
+    exact sub_nonneg.mpr
+      (quittingTerminalSemanticDebt_halfStoppingLawProfile_le
+        reward source target mover who hopponents)
+  have hgapSum :
+      (∑ who, gap who) =
+        (quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward source) +
+          quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward target)) / 2 -
+          quittingTerminalSemanticDebtSum
+            (quittingTerminalSemanticPair reward half) := by
+    dsimp only [gap]
+    unfold quittingTerminalSemanticDebtSum
+    rw [Finset.sum_sub_distrib, ← Finset.sum_div,
+      Finset.sum_add_distrib]
+  have hhalfMinimum :
+      quittingTerminalSemanticDebtSum minimum ≤
+        quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward half) :=
+    hminimum _ (quittingTerminalSemanticPair_mem_carrier reward half)
+  have hgapObserver : gap observer ≤
+      quittingStoppingLawSeamExcess
+        (reward := reward) minimum source target := by
+    have hsingle : gap observer ≤ ∑ who, gap who :=
+      Finset.single_le_sum
+        (fun who _ => hgapNonneg who) (Finset.mem_univ observer)
+    rw [hgapSum] at hsingle
+    unfold quittingStoppingLawSeamExcess
     linarith
-  have hdebt :=
-    quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum
-      reward (frontier.source rank) mover.1 observer
-        (frontier.source rank mover.1) (frontier.replacement mover rank)
-        (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear
-  have hbound :
-      (quittingTerminalSemanticDebt (frontier.sourcePair rank) observer +
-            quittingTerminalSemanticDebt
-              (frontier.fullReplacementPair mover rank) observer) / 2 -
-          quittingTerminalSemanticDebt
-            (quittingTerminalSemanticPair reward
-              (frontier.fullReplacementHalfProfile mover rank)) observer ≤
-        epsilon +
-          (quittingTerminalSemanticDebtSum
-              (frontier.fullReplacementPair mover rank) -
-            quittingTerminalSemanticDebtSum (frontier.sourcePair rank)) / 2 := by
-    dsimp only at hdebt
-    rw [Function.update_eq_self] at hdebt
-    dsimp only [sourcePair, fullReplacementPair, fullReplacementProfile,
-      fullReplacementHalfProfile, quittingStoppingLawResetProfile] at hdebt
-    nlinarith [hdebt.2]
-  rw [frontier.fullReplacementHalfCapChordGap_eq_debtChordGap mover observer rank]
-  dsimp only [epsilon] at hbound
-  linarith
+  have htarget : Function.update source mover (target mover) = target :=
+    update_source_with_target_mover_eq_target
+      reward source target mover hopponents
+  have hprescribedRaw := quittingTerminalPayoff_stoppingLawMixture_eq
+    reward source mover observer (source mover) (target mover)
+      (1 / 2 : ℝ) (by norm_num) (by norm_num)
+  have hprescribed :
+      quittingTerminalPayoff reward half observer =
+        (quittingTerminalPayoff reward source observer +
+          quittingTerminalPayoff reward target observer) / 2 := by
+    rw [Function.update_eq_self, htarget] at hprescribedRaw
+    dsimp only [half, quittingHalfStoppingLawProfile]
+    linarith
+  have hresponseRaw := quittingTerminalPayoff_stoppingLawMixture_eq
+    reward (Function.update source observer deviation) mover observer
+      (source mover) (target mover) (1 / 2 : ℝ)
+        (by norm_num) (by norm_num)
+  have hsourceCommute :
+      Function.update (Function.update source observer deviation)
+          mover (source mover) =
+        Function.update source observer deviation := by
+    rw [Function.update_comm hne deviation (source mover) source,
+      Function.update_eq_self]
+  have htargetCommute :
+      Function.update (Function.update source observer deviation)
+          mover (target mover) =
+        Function.update target observer deviation := by
+    rw [Function.update_comm hne deviation (target mover) source,
+      htarget]
+  have hhalfCommute :
+      Function.update (Function.update source observer deviation) mover
+          (quittingStoppingLawMixtureBehaviorStrategy reward mover
+            (source mover) (target mover) (1 / 2 : ℝ)
+              (by norm_num) (by norm_num)) =
+        Function.update half observer deviation := by
+    rw [Function.update_comm hne deviation _ source]
+    rfl
+  have hresponse :
+      quittingTerminalPayoff reward
+          (Function.update half observer deviation) observer =
+        (quittingTerminalPayoff reward
+            (Function.update source observer deviation) observer +
+          quittingTerminalPayoff reward
+            (Function.update target observer deviation) observer) / 2 := by
+    rw [hhalfCommute, hsourceCommute, htargetCommute] at hresponseRaw
+    linarith
+  have hcapGap :
+      (quittingContinuationBestResponseValue reward source observer +
+          quittingContinuationBestResponseValue reward target observer) / 2 -
+        quittingContinuationBestResponseValue reward half observer =
+      gap observer := by
+    dsimp only [gap, quittingTerminalSemanticDebt,
+      quittingTerminalSemanticPair]
+    linarith
+  have hhalfRegret :
+      quittingPureTimeResponseRegret
+          (reward := reward) half observer choice ≤ epsilon := by
+    unfold quittingPureTimeResponseRegret
+    dsimp only [deviation] at hchoice
+    linarith
+  have haverage :
+      (quittingPureTimeResponseRegret
+            (reward := reward) source observer choice +
+        quittingPureTimeResponseRegret
+            (reward := reward) target observer choice) / 2 =
+      gap observer +
+        quittingPureTimeResponseRegret
+          (reward := reward) half observer choice := by
+    unfold quittingPureTimeResponseRegret
+    dsimp only [deviation] at hresponse
+    linarith
+  have haverageLe :
+      (quittingPureTimeResponseRegret
+            (reward := reward) source observer choice +
+        quittingPureTimeResponseRegret
+            (reward := reward) target observer choice) / 2 ≤
+      quittingStoppingLawSeamExcess
+          (reward := reward) minimum source target + epsilon := by
+    rw [haverage]
+    exact add_le_add hgapObserver hhalfRegret
+  have hsourceNonneg := quittingPureTimeResponseRegret_nonneg
+    (reward := reward) target observer choice
+  have htargetNonneg := quittingPureTimeResponseRegret_nonneg
+    (reward := reward) source observer choice
+  refine ⟨choice, ?_, ?_⟩ <;> linarith
 
-namespace FullReplacementCluster
+/-- One pure-time response sequence which is asymptotically optimal on
+both sides of a one-player stopping-law replacement seam. -/
+structure QuittingStoppingLawCommonPureTimeCompiler
+    (source target : ℕ → (quittingGame reward).BehaviorProfile)
+    (observer : ι) where
+  choice : ℕ → Option ℕ
+  source_regret_tendsto_zero : Tendsto (fun rank =>
+    quittingPureTimeResponseRegret
+      (reward := reward) (source rank) observer (choice rank)) atTop (nhds 0)
+  target_regret_tendsto_zero : Tendsto (fun rank =>
+    quittingPureTimeResponseRegret
+      (reward := reward) (target rank) observer (choice rank)) atTop (nhds 0)
 
-variable {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
-  {mover : {who // who ∈ frontier.positiveDebtSupport}}
+/-- If both sides of a sequence approach the same global minimum total debt,
+there are pure-time responses simultaneously asymptotically optimal at both
+endpoints. -/
+theorem nonempty_stoppingLawCommonPureTimeCompiler_of_minimumFiber
+    (minimum : QuittingTerminalSemanticPair ι)
+    (source target : ℕ → (quittingGame reward).BehaviorProfile)
+    (mover observer : ι) (hne : observer ≠ mover)
+    (hopponents : ∀ rank other, other ≠ mover →
+      target rank other = source rank other)
+    (hminimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+      quittingTerminalSemanticDebtSum minimum ≤
+        quittingTerminalSemanticDebtSum candidate)
+    (hsource : Tendsto (fun rank => quittingTerminalSemanticDebtSum
+      (quittingTerminalSemanticPair reward (source rank))) atTop
+        (nhds (quittingTerminalSemanticDebtSum minimum)))
+    (htarget : Tendsto (fun rank => quittingTerminalSemanticDebtSum
+      (quittingTerminalSemanticPair reward (target rank))) atTop
+        (nhds (quittingTerminalSemanticDebtSum minimum))) :
+    Nonempty (QuittingStoppingLawCommonPureTimeCompiler
+      source target observer) := by
+  let epsilon : ℕ → ℝ := fun rank => 1 / ((rank : ℝ) + 1)
+  have hepsilon : ∀ rank, 0 < epsilon rank := by
+    intro rank
+    dsimp only [epsilon]
+    positivity
+  have hepsilonZero : Tendsto epsilon atTop (nhds 0) :=
+    tendsto_one_div_add_atTop_nhds_zero_nat
+  have hexists : ∀ rank, ∃ choice : Option ℕ,
+      quittingPureTimeResponseRegret
+          (reward := reward) (source rank) observer choice ≤
+        2 * (quittingStoppingLawSeamExcess
+          (reward := reward) minimum (source rank) (target rank) +
+            epsilon rank) ∧
+      quittingPureTimeResponseRegret
+          (reward := reward) (target rank) observer choice ≤
+        2 * (quittingStoppingLawSeamExcess
+          (reward := reward) minimum (source rank) (target rank) +
+            epsilon rank) := by
+    intro rank
+    exact exists_commonPureTimeResponse_of_nearMinimumSeam
+      minimum (source rank) (target rank) mover observer hne
+        (hopponents rank) hminimum (epsilon rank) (hepsilon rank)
+  choose choice hchoice using hexists
+  let bound : ℕ → ℝ := fun rank =>
+    2 * (quittingStoppingLawSeamExcess
+      (reward := reward) minimum (source rank) (target rank) +
+        epsilon rank)
+  have haverage : Tendsto (fun rank =>
+      (quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (source rank)) +
+        quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward (target rank))) / 2)
+      atTop (nhds (quittingTerminalSemanticDebtSum minimum)) := by
+    convert (hsource.add htarget).div_const 2 using 1 <;> ring
+  have hexcess : Tendsto (fun rank =>
+      quittingStoppingLawSeamExcess
+        (reward := reward) minimum (source rank) (target rank))
+      atTop (nhds 0) := by
+    simpa only [quittingStoppingLawSeamExcess, sub_self] using
+      haverage.sub_const (quittingTerminalSemanticDebtSum minimum)
+  have hbound : Tendsto bound atTop (nhds 0) := by
+    dsimp only [bound]
+    convert (hexcess.add hepsilonZero).const_mul 2 using 1 <;> ring
+  refine ⟨{ choice := choice
+    source_regret_tendsto_zero := ?_
+    target_regret_tendsto_zero := ?_ }⟩
+  · apply squeeze_zero'
+    · exact Eventually.of_forall fun rank =>
+        quittingPureTimeResponseRegret_nonneg
+          (reward := reward) (source rank) observer (choice rank)
+    · exact Eventually.of_forall fun rank => (hchoice rank).1
+    · exact hbound
+  · apply squeeze_zero'
+    · exact Eventually.of_forall fun rank =>
+        quittingPureTimeResponseRegret_nonneg
+          (reward := reward) (target rank) observer (choice rank)
+    · exact Eventually.of_forall fun rank => (hchoice rank).2
+    · exact hbound
 
-/-- On a same-minimum full-replacement cluster, every observer's half-profile
-cap chord gap tends to zero along the cluster's literal subsequence. -/
-theorem fullReplacementHalfCapChordGap_tendsto_zero
+namespace QuittingStoppingLawCommonPureTimeCompiler
+
+/-- The same common response sequence asymptotically computes the cap change. -/
+theorem capDifference_sub_responseDifference_tendsto_zero
+    {source target : ℕ → (quittingGame reward).BehaviorProfile}
+    {observer : ι}
+    (compiler : QuittingStoppingLawCommonPureTimeCompiler
+      source target observer) :
+    Tendsto (fun rank =>
+      (quittingContinuationBestResponseValue reward (target rank) observer -
+          quittingContinuationBestResponseValue reward (source rank) observer) -
+        (quittingTerminalPayoff reward
+            (Function.update (target rank) observer
+              (quittingPureTimeBehaviorStrategy reward observer
+                (compiler.choice rank))) observer -
+          quittingTerminalPayoff reward
+            (Function.update (source rank) observer
+              (quittingPureTimeBehaviorStrategy reward observer
+                (compiler.choice rank))) observer)) atTop (nhds 0) := by
+  have hdifference := compiler.target_regret_tendsto_zero.sub
+    compiler.source_regret_tendsto_zero
+  convert hdifference using 1
+  · funext rank
+    unfold quittingPureTimeResponseRegret
+    ring
+  · ring
+
+end QuittingStoppingLawCommonPureTimeCompiler
+
+namespace QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
+
+/-- Every nonmover has a common asymptotic best-response sequence across a
+minimum-fibre full-replacement seam. -/
+theorem nonempty_commonPureTimeResponseCompiler
+    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
+    {mover : {who // who ∈ frontier.positiveDebtSupport}}
     (endpoint : FullReplacementCluster frontier mover)
     (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
       quittingTerminalSemanticDebtSum frontier.base)
-    (observer : ι) :
-    Tendsto (fun rank ↦ frontier.fullReplacementHalfCapChordGap mover observer
-      (endpoint.subseq rank)) atTop (nhds 0) := by
-  have hsourcePair : Tendsto
-      (fun rank ↦ frontier.sourcePair (endpoint.subseq rank)) atTop
-      (nhds frontier.base) := by
-    simpa only [sourcePair] using
-      frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
-  have hsourceDebt : Tendsto (fun rank ↦
-      quittingTerminalSemanticDebtSum
-        (frontier.sourcePair (endpoint.subseq rank))) atTop
-      (nhds (quittingTerminalSemanticDebtSum frontier.base)) :=
-    continuous_quittingTerminalSemanticDebtSum.continuousAt.tendsto.comp
-      hsourcePair
-  have htargetDebt : Tendsto (fun rank ↦
-      quittingTerminalSemanticDebtSum
-        (frontier.fullReplacementPair mover (endpoint.subseq rank))) atTop
-      (nhds (quittingTerminalSemanticDebtSum frontier.base)) := by
-    have h :=
+    (observer : ι) (hobserver : observer ≠ mover.1) :
+    Nonempty (QuittingStoppingLawCommonPureTimeCompiler
+      (fun rank => frontier.source (endpoint.subseq rank))
+      (fun rank => frontier.fullReplacementProfile mover
+        (endpoint.subseq rank)) observer) := by
+  apply nonempty_stoppingLawCommonPureTimeCompiler_of_minimumFiber
+    (reward := reward) frontier.base
+    (fun rank => frontier.source (endpoint.subseq rank))
+    (fun rank => frontier.fullReplacementProfile mover
+      (endpoint.subseq rank)) mover.1 observer hobserver
+  · intro rank other hother
+    simp only [QuittingPositiveMinimumDebtTangentFamily.fullReplacementProfile]
+    rw [Function.update_of_ne hother]
+  · exact frontier.base_minimum
+  · have hpair := frontier.source_tendsto.comp
+      endpoint.subseq_strictMono.tendsto_atTop
+    exact continuous_quittingTerminalSemanticDebtSum.continuousAt.tendsto.comp
+      hpair
+  · have hsum :=
       continuous_quittingTerminalSemanticDebtSum.continuousAt.tendsto.comp
         endpoint.fullReplacement_tendsto
-    rw [hminimumFiber] at h
-    exact h
-  have hsourceExcess : Tendsto (fun rank ↦
-      quittingTerminalSemanticDebtSum
-          (frontier.sourcePair (endpoint.subseq rank)) -
-        quittingTerminalSemanticDebtSum frontier.base) atTop (nhds 0) := by
-    simpa using hsourceDebt.sub_const
-      (quittingTerminalSemanticDebtSum frontier.base)
-  have htargetExcess : Tendsto (fun rank ↦
-      quittingTerminalSemanticDebtSum
-          (frontier.fullReplacementPair mover (endpoint.subseq rank)) -
-        quittingTerminalSemanticDebtSum frontier.base) atTop (nhds 0) := by
-    simpa using htargetDebt.sub_const
-      (quittingTerminalSemanticDebtSum frontier.base)
-  have haverage : Tendsto (fun rank ↦
-      ((quittingTerminalSemanticDebtSum
-              (frontier.sourcePair (endpoint.subseq rank)) -
-            quittingTerminalSemanticDebtSum frontier.base) +
-          (quittingTerminalSemanticDebtSum
-              (frontier.fullReplacementPair mover (endpoint.subseq rank)) -
-            quittingTerminalSemanticDebtSum frontier.base)) / 2) atTop
-      (nhds 0) := by
-    simpa using (hsourceExcess.add htargetExcess).div_const 2
-  apply squeeze_zero'
-  · exact Eventually.of_forall fun rank ↦
-      frontier.fullReplacementHalfCapChordGap_nonneg mover observer
-        (endpoint.subseq rank)
-  · exact Eventually.of_forall fun rank ↦
-      frontier.fullReplacementHalfCapChordGap_le_averageExcess mover observer
-        (endpoint.subseq rank)
-  · exact haverage
+    rw [hminimumFiber] at hsum
+    exact hsum
 
-/-- Positive tolerance used to select an actual best response at each half
-profile. -/
-def commonResponseTolerance (_endpoint : FullReplacementCluster frontier mover)
-    (rank : ℕ) : ℝ :=
-  1 / ((rank : ℝ) + 1)
-
-theorem commonResponseTolerance_pos
-    (endpoint : FullReplacementCluster frontier mover) (rank : ℕ) :
-    0 < endpoint.commonResponseTolerance rank := by
-  simp only [commonResponseTolerance]
-  positivity
-
-theorem commonResponseTolerance_tendsto_zero
-    (endpoint : FullReplacementCluster frontier mover) :
-    Tendsto endpoint.commonResponseTolerance atTop (nhds 0) :=
-  tendsto_one_div_add_atTop_nhds_zero_nat
-
-/-- An actual behavioral response chosen near-optimally at the half profile. -/
-noncomputable def commonResponse
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) :
-    (quittingGame reward).BehaviorStrategy observer.1 :=
-  Classical.choose (exists_quittingContinuation_deviation_ge_sub reward
-    (frontier.fullReplacementHalfProfile mover (endpoint.subseq rank))
-    observer.1 (endpoint.commonResponseTolerance_pos rank))
-
-theorem commonResponse_half_approx
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) :
-    quittingContinuationBestResponseValue reward
-          (frontier.fullReplacementHalfProfile mover (endpoint.subseq rank))
-          observer.1 - endpoint.commonResponseTolerance rank ≤
-      quittingTerminalPayoff reward
-        (Function.update
-          (frontier.fullReplacementHalfProfile mover (endpoint.subseq rank))
-          observer.1 (endpoint.commonResponse observer rank)) observer.1 :=
-  Classical.choose_spec (exists_quittingContinuation_deviation_ge_sub reward
-    (frontier.fullReplacementHalfProfile mover (endpoint.subseq rank))
-    observer.1 (endpoint.commonResponseTolerance_pos rank))
-
-/-- A fixed non-mover response has exactly affine payoff across the source,
-half, and full-replacement profiles. -/
-theorem updatedHalfPayoff_eq_average
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ)
-    (deviation : (quittingGame reward).BehaviorStrategy observer.1) :
-    quittingTerminalPayoff reward
-        (Function.update
-          (frontier.fullReplacementHalfProfile mover (endpoint.subseq rank))
-          observer.1 deviation) observer.1 =
-      (quittingTerminalPayoff reward
-            (Function.update (frontier.source (endpoint.subseq rank))
-              observer.1 deviation) observer.1 +
-          quittingTerminalPayoff reward
-            (Function.update
-              (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-              observer.1 deviation) observer.1) / 2 := by
-  let index := endpoint.subseq rank
-  let mixed := quittingStoppingLawMixtureBehaviorStrategy reward mover.1
-    (frontier.source index mover.1) (frontier.replacement mover index)
-      (1 / 2 : ℝ) (by norm_num) (by norm_num)
-  have haffine := quittingTerminalPayoff_stoppingLawMixture_eq
-    reward (Function.update (frontier.source index) observer.1 deviation)
-      mover.1 observer.1 (frontier.source index mover.1)
-      (frontier.replacement mover index) (1 / 2 : ℝ)
-      (by norm_num) (by norm_num)
-  have hcommuteSource :
-      Function.update
-          (Function.update (frontier.source index) observer.1 deviation)
-          mover.1 (frontier.source index mover.1) =
-        Function.update
-          (Function.update (frontier.source index) mover.1
-            (frontier.source index mover.1)) observer.1 deviation :=
-    Function.update_comm observer.2 deviation
-      (frontier.source index mover.1) (frontier.source index)
-  have hcommuteTarget :
-      Function.update
-          (Function.update (frontier.source index) observer.1 deviation)
-          mover.1 (frontier.replacement mover index) =
-        Function.update
-          (Function.update (frontier.source index) mover.1
-            (frontier.replacement mover index)) observer.1 deviation :=
-    Function.update_comm observer.2 deviation
-      (frontier.replacement mover index) (frontier.source index)
-  have hcommuteMixed :
-      Function.update
-          (Function.update (frontier.source index) observer.1 deviation)
-          mover.1 mixed =
-        Function.update
-          (Function.update (frontier.source index) mover.1 mixed)
-            observer.1 deviation :=
-    Function.update_comm observer.2 deviation mixed (frontier.source index)
-  dsimp only [mixed] at hcommuteMixed
-  rw [hcommuteSource, hcommuteTarget, hcommuteMixed] at haffine
-  rw [Function.update_eq_self] at haffine
-  dsimp only [index, fullReplacementHalfProfile,
-    quittingStoppingLawResetProfile, fullReplacementProfile]
-  nlinarith
-
-/-- Endpoint regret bound for the common half-profile response. -/
-def commonResponseError
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) : ℝ :=
-  2 * (frontier.fullReplacementHalfCapChordGap mover observer.1
-    (endpoint.subseq rank) + endpoint.commonResponseTolerance rank)
-
-theorem commonResponseError_nonneg
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) :
-    0 ≤ endpoint.commonResponseError observer rank := by
-  dsimp only [commonResponseError]
-  have hgap := frontier.fullReplacementHalfCapChordGap_nonneg mover observer.1
-    (endpoint.subseq rank)
-  have htolerance := (endpoint.commonResponseTolerance_pos rank).le
-  nlinarith
-
-/-- The common-response error vanishes on a minimum-fibre endpoint. -/
-theorem commonResponseError_tendsto_zero
-    (endpoint : FullReplacementCluster frontier mover)
-    (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
-      quittingTerminalSemanticDebtSum frontier.base)
-    (observer : {who // who ≠ mover.1}) :
-    Tendsto (endpoint.commonResponseError observer) atTop (nhds 0) := by
-  have hsum :=
-    (endpoint.fullReplacementHalfCapChordGap_tendsto_zero hminimumFiber
-      observer.1).add endpoint.commonResponseTolerance_tendsto_zero
-  simpa only [commonResponseError] using hsum.const_mul 2
-
-/-- The selected common response is asymptotically optimal at the source
-endpoint. -/
-theorem sourceCap_le_commonResponsePayoff_add_error
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) :
-    quittingContinuationBestResponseValue reward
-        (frontier.source (endpoint.subseq rank)) observer.1 ≤
-      quittingTerminalPayoff reward
-          (Function.update (frontier.source (endpoint.subseq rank)) observer.1
-            (endpoint.commonResponse observer rank)) observer.1 +
-        endpoint.commonResponseError observer rank := by
-  have hhalf := endpoint.commonResponse_half_approx observer rank
-  have haffine := endpoint.updatedHalfPayoff_eq_average observer rank
-    (endpoint.commonResponse observer rank)
-  have hsource := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward (frontier.source (endpoint.subseq rank)) observer.1
-      (endpoint.commonResponse observer rank)
-  have htarget := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-      observer.1 (endpoint.commonResponse observer rank)
-  dsimp only [commonResponseError, commonResponseTolerance,
-    fullReplacementHalfCapChordGap] at hhalf haffine hsource htarget ⊢
-  nlinarith
-
-/-- The very same response is asymptotically optimal at the literal full
-replacement endpoint. -/
-theorem endpointCap_le_commonResponsePayoff_add_error
-    (endpoint : FullReplacementCluster frontier mover)
-    (observer : {who // who ≠ mover.1}) (rank : ℕ) :
-    quittingContinuationBestResponseValue reward
-        (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-        observer.1 ≤
-      quittingTerminalPayoff reward
-          (Function.update
-            (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-            observer.1 (endpoint.commonResponse observer rank)) observer.1 +
-        endpoint.commonResponseError observer rank := by
-  have hhalf := endpoint.commonResponse_half_approx observer rank
-  have haffine := endpoint.updatedHalfPayoff_eq_average observer rank
-    (endpoint.commonResponse observer rank)
-  have hsource := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward (frontier.source (endpoint.subseq rank)) observer.1
-      (endpoint.commonResponse observer rank)
-  have htarget := quittingTerminalPayoff_update_le_continuationBestResponseValue
-    reward (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-      observer.1 (endpoint.commonResponse observer rank)
-  dsimp only [commonResponseError, commonResponseTolerance,
-    fullReplacementHalfCapChordGap] at hhalf haffine hsource htarget ⊢
-  nlinarith
-
-/-- The mover's cap is unchanged exactly across its own full replacement. -/
-theorem moverCap_eq_sourceCap
-    (endpoint : FullReplacementCluster frontier mover) (rank : ℕ) :
-    quittingContinuationBestResponseValue reward
-        (frontier.fullReplacementProfile mover (endpoint.subseq rank)) mover.1 =
-      quittingContinuationBestResponseValue reward
-        (frontier.source (endpoint.subseq rank)) mover.1 := by
-  unfold fullReplacementProfile
-  exact quittingContinuationBestResponseValue_update_self _ _ _ _
-
-/-- A common asymptotic cap chart across one minimum-fibre horizontal seam.
-For every non-mover, one actual response is simultaneously near-optimal at the
-parent source and child endpoint; the mover's cap is invariant exactly. -/
-structure MinimumFiberCommonResponseCompiler
-    (endpoint : FullReplacementCluster frontier mover)
-    (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
-      quittingTerminalSemanticDebtSum frontier.base) where
-  response : ∀ observer : {who // who ≠ mover.1}, ℕ →
-    (quittingGame reward).BehaviorStrategy observer.1
-  error : {who // who ≠ mover.1} → ℕ → ℝ
-  error_nonneg : ∀ observer rank, 0 ≤ error observer rank
-  error_tendsto_zero : ∀ observer,
-    Tendsto (error observer) atTop (nhds 0)
-  source_cap_le : ∀ observer rank,
-    quittingContinuationBestResponseValue reward
-        (frontier.source (endpoint.subseq rank)) observer.1 ≤
-      quittingTerminalPayoff reward
-          (Function.update (frontier.source (endpoint.subseq rank)) observer.1
-            (response observer rank)) observer.1 + error observer rank
-  endpoint_cap_le : ∀ observer rank,
-    quittingContinuationBestResponseValue reward
-        (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-        observer.1 ≤
-      quittingTerminalPayoff reward
-          (Function.update
-            (frontier.fullReplacementProfile mover (endpoint.subseq rank))
-            observer.1 (response observer rank)) observer.1 + error observer rank
-  mover_cap_eq : ∀ rank,
-    quittingContinuationBestResponseValue reward
-        (frontier.fullReplacementProfile mover (endpoint.subseq rank)) mover.1 =
-      quittingContinuationBestResponseValue reward
-        (frontier.source (endpoint.subseq rank)) mover.1
-
-/-- Every minimum-fibre full-replacement cluster carries the common response
-compiler. -/
-noncomputable def minimumFiberCommonResponseCompiler
-    (endpoint : FullReplacementCluster frontier mover)
-    (hminimumFiber : quittingTerminalSemanticDebtSum endpoint.cluster =
-      quittingTerminalSemanticDebtSum frontier.base) :
-    MinimumFiberCommonResponseCompiler endpoint hminimumFiber where
-  response := endpoint.commonResponse
-  error := endpoint.commonResponseError
-  error_nonneg := endpoint.commonResponseError_nonneg
-  error_tendsto_zero := endpoint.commonResponseError_tendsto_zero hminimumFiber
-  source_cap_le := endpoint.sourceCap_le_commonResponsePayoff_add_error
-  endpoint_cap_le := endpoint.endpointCap_le_commonResponsePayoff_add_error
-  mover_cap_eq := endpoint.moverCap_eq_sourceCap
-
-end FullReplacementCluster
-end QuittingPositiveMinimumDebtTangentFamily
+end QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
 
 end GameTheory
