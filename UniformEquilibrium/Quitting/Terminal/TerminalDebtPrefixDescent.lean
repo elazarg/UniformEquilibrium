@@ -102,6 +102,21 @@ theorem hasTerminalExploitabilityGap_of_lt_quittingTerminalExploitabilityInf
   dsimp only [error] at hdeviation
   linarith
 
+/-- A positive global terminal-exploitability infimum directly refutes the
+existence of a uniform-equilibrium payoff. -/
+theorem quittingGame_not_exists_uniformEquilibriumPayoff_of_quittingTerminalExploitabilityInf_pos
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hpositive : 0 < quittingTerminalExploitabilityInf reward) :
+    ¬ ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  let gap := quittingTerminalExploitabilityInf reward / 2
+  apply quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
+    reward (show 0 < gap by dsimp only [gap]; linarith)
+  apply hasTerminalExploitabilityGap_of_lt_quittingTerminalExploitabilityInf
+  dsimp only [gap]
+  linarith
+
 /-- A uniform literal terminal exploitability gap lower-bounds the global
 exploitability infimum. -/
 theorem terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
