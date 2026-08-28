@@ -365,6 +365,7 @@ import UniformEquilibrium.Quitting.Paths.LiveMassRecurrence
 import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Quitting.Stationary.Payoff
 import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter
+import UniformEquilibrium.Quitting.Root.FirstOrderProductFlow
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicPatience
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen

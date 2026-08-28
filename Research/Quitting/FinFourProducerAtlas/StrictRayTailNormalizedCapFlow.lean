@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Quitting.ForwardExactCapTailFlow
+import Research.Quitting.ForwardExactCapTailFirstOrder
 import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import UniformEquilibrium.Quitting.Classification.LCP.Normalization
 
@@ -19,8 +19,8 @@ root has positive total marginal hazard and the strict ray gives an actual
 
 The packet's first-order solo/collision expansions are kept in the separate
 `QuittingTailNormalizedCapFlow` certificate.  They are not consequences of
-summability alone, and this module does not pretend that the current API has
-already supplied them.
+summability alone; the imported exact product estimates and weighted-tail
+compiler now construct them from every actual positive-hazard ray.
 -/
 
 noncomputable section
@@ -119,6 +119,26 @@ structure Analysis (flow : FinFourStrictRayForwardExactCapTail packet) where
     if h : who = owner then 0 else
       reward ⟨{who, owner}, by simp⟩ who -
         reward (quittingSingletonTerminal owner) who
+
+/-- The exact finite-product estimates and weighted-tail telescope provide
+the analytic extension for every actual strict-ray right branch. -/
+noncomputable def analysis
+    (flow : FinFourStrictRayForwardExactCapTail packet) : Analysis packet flow where
+  normalized := flow.forward.tailNormalizedCapFlow
+  soloMatrix_eq := rfl
+  collisionMatrix_eq := by
+    funext who owner
+    change quittingCollisionMatrix reward who owner = _
+    by_cases h : who = owner
+    · simp [quittingCollisionMatrix, h]
+    · simp [quittingCollisionMatrix, quittingPairTerminal, h]
+
+/-- Nonempty form of `analysis`, suitable for the source-level ray
+dichotomy.  No first-order certificate is supplied as an extra hypothesis. -/
+theorem nonempty_analysis
+    (flow : FinFourStrictRayForwardExactCapTail packet) :
+    Nonempty (Analysis packet flow) :=
+  ⟨analysis packet flow⟩
 
 end FinFourStrictRayForwardExactCapTail
 

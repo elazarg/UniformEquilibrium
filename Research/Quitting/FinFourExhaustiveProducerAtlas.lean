@@ -42,8 +42,9 @@ limit alternative.
 On that strict ray, a zero selected maximal root fixes the semantic orbit and
 is the unique exact root at its cap.  Otherwise the actual positive-hazard ray
 has a limiting cap, an exact renewal law, and eventually uses only binding
-singleton coordinates.  The additional first-order normalized cap-flow
-certificate is conditional: no producer or terminal consumer is asserted.
+singleton coordinates.  Exact finite-product estimates and the weighted-tail
+telescope now construct its first-order normalized cap-flow certificate.  No
+terminal consumer is asserted.
 In the minimum-return arm, the literal paid endpoint either stays on the
 minimum fibre and makes a one-time support-rank handoff through its actual
 half-mixture, or converges to a strictly off-minimum endpoint.  The stored

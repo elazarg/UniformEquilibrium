@@ -2,6 +2,7 @@ import MathUE.AbelCesaro
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection
+import MathUE.Analysis.SummableTailAverage
 import MathUE.AnalyticConeDichotomy
 import MathUE.AnalyticConeLift
 import MathUE.AnalyticCoordinateCurve
