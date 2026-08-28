@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.FinFourProducerAtlas.CanonicalPairMinimumEndpointSupportRankHandoff
 import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.ForcedPairMinimumTailConsumer
-import Research.Quitting.FinFourProducerAtlas.FullyScreenedFiniteClockClearing
+import Research.Quitting.FinFourProducerAtlas.ActualZenoHostCompression
 import Research.Quitting.FinFourProducerAtlas.LiteralNoGo
 import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
@@ -47,12 +47,13 @@ drop.  This decoder starts from the normalized-return endpoint rather than a
 paid spectator cycle and supplies no renewable chronology or downstream
 consumer.
 At a zero-density boundary, literal raw rows from that same selection retain
-the arbitrary prefix separately from the immutable source chronology.  If
-their combined deleted clocks are fully screened, finite clock clearing gives
-source-attached concentrated packets after at most four paid clears and feeds
-the existing strategic-singleton-or-collision-minimum consumer.  The
-non-full-screened alternative is not identified with a positive host, and
-both consumer outputs remain open.
+the arbitrary prefix separately from the immutable source chronology.  Their
+combined deleted clocks now split exhaustively: a positive host produces a
+fixed literal endpoint with a positive marked-mass floor and zero local host
+defect, while full screening gives source-attached concentrated packets after
+at most four paid clears and feeds the existing strategic-singleton-or-
+collision-minimum consumer.  Only the screened branch has that consumer, and
+both of its outputs remain open.
 More generally, every positive-density carrier point above the reference debt
 has actual raw descendants with fixed reference-based mass and gain floors.
 An exact finite-word telescope also localizes positive aggregate cap defect to
