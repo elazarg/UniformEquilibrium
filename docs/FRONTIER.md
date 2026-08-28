@@ -130,6 +130,25 @@ has direct checked face signs and an exact stationary certificate, while
 showing that the coarse range hypotheses are not necessary.  This remains a
 conditional stationary class, not a producer for arbitrary quitting games.
 
+Two Research interfaces sharpen the supplied-data boundary without yet
+formalizing the proposed HOPF table.  `QuittingPureSingletonChamber` and
+`QuittingPurePairChamber`
+(`Research/Quitting/HopfCompletionSafeChambers.lean`) compile literal
+sure-exit signs to exact terminal Nash profiles against arbitrary behavioral
+deviations and fixed uniform-equilibrium payoffs.
+`QuittingInducedOwnerChamber.uniformEquilibriumPayoff` delegates an actual
+induced Nash point plus supplied owner-floor and outsider signs to the
+singleton-base all-behavior compiler; it does not prove the stronger exact
+all-Never-tail specialization.  `QuittingRationalStationaryFaceBox` and
+`QuittingRationalStationaryFaceBox.nonempty_stationaryCertificate`
+(`Research/Quitting/StationaryFaceBoxClosure.lean`) turn supplied strict
+rational-box face signs and a supplied `zero_to_numerator` bridge into an
+interior numerator zero and a full exact stationary behavioral certificate.
+Thus these interfaces have checked `M/L/C` status, but no `A` seal for the
+advertised HOPF `Fin 4` table: its exact reward definition, rational matrix
+enclosures, zero-transport instance, open-neighborhood result, and maximal-ray
+connection are not present.
+
 Two further stationary classes sharpen the incentive-gadget boundary.
 `quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
 (`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`)
