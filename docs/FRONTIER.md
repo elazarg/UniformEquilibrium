@@ -804,13 +804,45 @@ self-shift trajectories.  `FinFourCompletionMode.reachable_iff_explicit`,
 singleton SCCs and its two terminal structural components from the
 reflexive--transitive closure of the exact edge table.
 
-This reduction has `M`, `L`, and `A`.  Its `C` is only the structural
-frame-to-pair, priority-dispatch, and self-shift composition: the open
-`FinFourUniformEscapeCapstone` and `FinFourMinimumReturnCapstone` propositions
-have no terminal semantic consumer.  The self-shifts are recurrence, not
-descent; no forced-pair target is asserted minimum, near-minimum, or full-root
-Nash; and no cross-coordinate cap bound, terminal approximation, recursive
-source regeneration, or uniform-equilibrium completion is proved.
+The two modes now have checked branch consumers in
+`Research/Quitting/FinFourProducerAtlas/SourcePreservingCompletionConsumers.lean`.
+For every retained escape row,
+`FinFourUniformEscapePacket.exists_maximalCapNash_halfFloorDispatch` chooses a
+maximal-absorption exact root against that same literal tail.  It has positive
+joint Continue mass and gives either a half-floor return-selection certificate
+or universal same-tail undercharge, with the remaining all-Continue/blocker
+alternative.  `semanticPair_continuationProfile_eq_tail`,
+`continuationProfile_outcomeLaw_eq_reference`, and
+`returnedProfile_debt_le_minimum_add_halfFloor` expose the actual continuation
+profile, its complete law provenance, and the near-minimum debt of a selected
+returned profile.  No reset coordinate is supplied, so this is not the later
+reset-excursion compiler.
+
+For minimum return, the source-independent
+`QuittingMarkedPairMinimumTailSource.nonempty_normalizedThreeRole_or_strictInert`
+(`Research/Quitting/FixedPairMinimumTailNormalizedReturn.lean`) derives its own
+compact subsequence, full-decoration limit, normalized passport, minimizer,
+and actualizer from uniform positive mass/gain floors and tail-debt convergence.
+`FinFourMinimumReturnPacket.forcedPairTail_eq_tail` identifies its forced-pair
+tail with the same collision tail term by term, while the normalized-family
+and actualizer spine accessors retain the literal profiles, dates, root words,
+and post-date reference law.  The Fin4 wrapper
+`FinFourMinimumReturnPacket.nonempty_normalizedThreeRole_or_strictInert` then
+returns actual three-role endpoint-law regeneration/ascent or the strict
+normalized inert point.  Equality-arm regeneration preserves the underlying
+quantitative hard residual and exact new endpoint law; it does not reproduce
+the outer entrance or chronology, and the compact target law need not be the
+original source law.
+
+`uniformPayoff_or_sourcePreservingConsumedOutcome` keeps the exact outer
+residual as a dependent index while composing both branches.  The completed
+atlas reduction therefore has `M`, `L`, `A`, and branch-local `C`, but still no
+terminal `C`: `FinFourUniformEscapeCapstone` and
+`FinFourMinimumReturnCapstone` remain open.  The self-shifts are recurrence,
+not descent; no forced-pair target is asserted minimum, near-minimum, or
+full-root Nash; and no cross-coordinate cap bound, reset transfer, terminal
+approximation, recursive entrance regeneration, or uniform-equilibrium
+completion is proved.
 
 The same actual cofinal forced-pair family now has an independent finite-cycle
 contraction.  `exists_finFourMaximumToggle_terminalOrbit_or_closedSegment`

@@ -21,6 +21,7 @@ import Research.Quitting.FinFourProducerAtlas.NormalizedReturn
 import Research.Quitting.FinFourProducerAtlas.PaidNonsingletonCycle
 import Research.Quitting.FinFourProducerAtlas.SourceFaithfulThreeRoleRegeneration
 import Research.Quitting.FinFourProducerAtlas.SourcePreservingCompletionAtlas
+import Research.Quitting.FinFourProducerAtlas.SourcePreservingCompletionConsumers
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
 import Research.Quitting.FinFourProducerAtlas.SemanticCoverage
@@ -142,7 +143,10 @@ The four surviving entrance tags also feed a source-preserving completion
 atlas.  One fixed entrance chronology produces cofinal singleton frames; a
 common compiler attaches exact forced pairs and collision tails; and a finite
 label extraction classifies the literal tail debts into uniform escape or
-minimum return.  The two modes have exact self-shifts and are the terminal
-components of the declared structural graph.  Neither mode has a terminal
-uniform-payoff consumer.
+minimum return.  Uniform escape now feeds the maximal exact-root same-tail
+return-selection/undercharge dispatch at every retained row.  Minimum return
+feeds a source-independent normalized-passport compiler and reaches an actual
+three-role regeneration/ascent result or the strict inert obstruction.  Both
+routes retain the exact entrance residual and full behavioral tail.  Neither
+route is a terminal uniform-payoff consumer.
 -/
