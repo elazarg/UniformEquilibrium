@@ -180,7 +180,6 @@ theorem exists_commonPureTimeResponse_of_nearMinimumSeam
       quittingPureTimeResponseRegret
           (reward := reward) half observer choice ≤ epsilon := by
     unfold quittingPureTimeResponseRegret
-    dsimp only [deviation] at hchoice
     linarith
   have haverage :
       (quittingPureTimeResponseRegret
@@ -274,7 +273,7 @@ theorem nonempty_stoppingLawCommonPureTimeCompiler_of_minimumFiber
         quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward (target rank))) / 2)
       atTop (nhds (quittingTerminalSemanticDebtSum minimum)) := by
-    convert (hsource.add htarget).div_const 2 using 1 <;> ring
+    convert (hsource.add htarget).div_const 2 using 1 <;> ring_nf
   have hexcess : Tendsto (fun rank =>
       quittingStoppingLawSeamExcess
         (reward := reward) minimum (source rank) (target rank))
@@ -283,9 +282,9 @@ theorem nonempty_stoppingLawCommonPureTimeCompiler_of_minimumFiber
       haverage.sub_const (quittingTerminalSemanticDebtSum minimum)
   have hbound : Tendsto bound atTop (nhds 0) := by
     dsimp only [bound]
-    convert (hexcess.add hepsilonZero).const_mul 2 using 1 <;> ring
-  refine ⟨{ choice := choice
-    source_regret_tendsto_zero := ?_
+    convert (hexcess.add hepsilonZero).const_mul 2 using 1 <;> ring_nf
+  refine ⟨{ choice := choice,
+    source_regret_tendsto_zero := ?_,
     target_regret_tendsto_zero := ?_ }⟩
   · apply squeeze_zero'
     · exact Eventually.of_forall fun rank =>
@@ -324,8 +323,8 @@ theorem capDifference_sub_responseDifference_tendsto_zero
   convert hdifference using 1
   · funext rank
     unfold quittingPureTimeResponseRegret
-    ring
-  · ring
+    ring_nf
+  · ring_nf
 
 end QuittingStoppingLawCommonPureTimeCompiler
 
