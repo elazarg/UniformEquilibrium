@@ -10,9 +10,9 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 /-!
 # Forced pair defects of the sharp table, and the screen forced by zero solos
 
-Two independent facts about
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel` and its
-relation to the zero-minimum regression structure.
+Two independent groups of results: one about the zero-minimum regression
+structure at an arbitrary reward table, one about
+`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.
 
 The first is a screen exclusion driven by a single field.  Every
 `GameTheory.FinFourMaximalRayZeroMinimumRegressions.Regression` carries
@@ -44,25 +44,17 @@ noncomputable section
 
 namespace GameTheory
 
-namespace FinFourHopfConcreteChambers
-
-open QuittingSureSetOwnerRepair
-
-open FinFourMaximalRayZeroMinimumRegressions
-  (Regression LocalForcedPairFragment rationalReward rationalScale
-    rationalLocalForcedPairFragment fullBindingReward
-    fullBindingLocalForcedPairFragment)
-
 /-! ## The zero-solo field and the screen it forces -/
+
+namespace FinFourMaximalRayZeroMinimumRegressions
 
 /-- **The zero-solo field forces a pure coalition screen.**  A vanishing solo
 reward at every player is exactly the empty coalition's sure-exit test, so a
-table admitting
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.Regression` always has the
-all-continue profile as an exact terminal Nash profile.
+table admitting `Regression` always has the all-continue profile as an exact
+terminal Nash profile.
 
-Only the `zero_solo` field is read.  Nothing here concerns the exact-cap ray
-the structure also stores. -/
+Only the `Regression.zero_solo` field is read.  Nothing here concerns the
+exact-cap ray the structure also stores. -/
 theorem isQuittingSureExitSet_empty_of_regression
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (regression : Regression reward) :
@@ -73,10 +65,9 @@ theorem isQuittingSureExitSet_empty_of_regression
     reward (quittingSingletonTerminal who) who from rfl, regression.zero_solo who]
 
 /-- **Screen freeness excludes the fencing structure.**  No table whose every
-coalition is refuted as a sure exit set admits
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.Regression`.
+coalition is refuted as a sure exit set admits `Regression`.
 
-The obstruction is that structure's vanishing-solo field.  A
+The obstruction is that structure's `Regression.zero_solo` field.  A
 `GameTheory.QuittingForwardExactCapTail` for the same table carries no such
 field and is not excluded. -/
 theorem not_forall_not_isQuittingSureExitSet_of_regression
@@ -85,6 +76,19 @@ theorem not_forall_not_isQuittingSureExitSet_of_regression
     ¬ ∀ S : Finset Player, ¬ IsQuittingSureExitSet reward S :=
   fun hscreenFree ↦
     hscreenFree ∅ (isQuittingSureExitSet_empty_of_regression regression)
+
+end FinFourMaximalRayZeroMinimumRegressions
+
+/-! ## The sharp table against that field, and its forced pure pair -/
+
+namespace FinFourHopfConcreteChambers
+
+open QuittingSureSetOwnerRepair
+
+open FinFourMaximalRayZeroMinimumRegressions
+  (Regression LocalForcedPairFragment rationalReward rationalScale
+    rationalLocalForcedPairFragment fullBindingReward
+    fullBindingLocalForcedPairFragment)
 
 /-- **The zero-solo field pins the sharp table's singleton level.**  Player
 three's solo exit pays that level, and
