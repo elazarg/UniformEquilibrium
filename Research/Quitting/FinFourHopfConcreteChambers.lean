@@ -98,9 +98,9 @@ def sharpSpectatorPassive (R singletonLevel : ℝ)
   singletonLevel + R * indicator (0 ∈ active) -
     (R + 1) * indicator (1 ∈ active)
 
-/-- The complete sharp HOPF reward table from the stationary-closure packet.
-The special singleton clause is essential: the spectator membership formula
-is used only on a nonempty active background. -/
+/-- The complete sharp owner-risky reward table.  The special singleton clause
+is essential: the spectator membership formula is used only on a nonempty
+active background. -/
 def sharpReward (R singletonLevel : ℝ)
     (terminal : {S : Finset Player // S.Nonempty}) : Payoff Player :=
   fun who ↦
@@ -171,7 +171,7 @@ def sharpPreconditioner : Player → Player → ℝ :=
 def sharpPreconditionerMatrix : Matrix Player Player ℚ :=
   sharpPreconditionerRat
 
-/-- Literal exact determinant B16 of the displayed preconditioner. -/
+/-- Literal exact determinant of the displayed preconditioner. -/
 theorem sharpPreconditionerMatrix_det :
     sharpPreconditionerMatrix.det =
       443076546006639 / 156250000000000 := by
@@ -335,9 +335,10 @@ def sharpNormalizedParameterPolynomial : SharpPolynomial :=
 
 private def sharpOne : SharpPolynomial := sharpPolynomialConstant 1
 
-/-- The four B13 face-numerator polynomials after the normalized substitutions.
-The player-three term is factored as `R*(x0-x1)-x1`; this algebraically equal
-form prevents a dependency loss in exact interval and coefficient checks. -/
+/-- The four face-numerator polynomials of `sharpFaceFormula` after the
+normalized substitutions.  The player-three term is factored as
+`R*(x0-x1)-x1`; this algebraically equal form prevents a dependency loss in
+exact interval and coefficient checks. -/
 def sharpNormalizedFacePolynomial (who : Player) : SharpPolynomial :=
   let x0 := sharpNormalizedHazardPolynomial 0
   let x1 := sharpNormalizedHazardPolynomial 1
@@ -431,7 +432,7 @@ theorem sharpUnitBox_contains_of_abs_le_one
 
 /-! ## Exact semantic bridge to the face numerators -/
 
-/-- The four real polynomials displayed in B13. -/
+/-- The four division-free face-numerator polynomials of the sharp table. -/
 def sharpFaceFormula (R : ℝ) (hazard : Player → ℝ)
     (who : Player) : ℝ :=
   let x0 := hazard 0
@@ -452,8 +453,8 @@ def sharpFaceFormula (R : ℝ) (hazard : Player → ℝ)
     (1 - s3) * (-x0 - x1 + x2) -
       s3 * (R * (x0 - x1) - x1)] who
 
-/-- Direct table expansion: the division-free face numerator of B2--B10 is
-exactly B13.  In particular the singleton level cancels. -/
+/-- Direct table expansion: the division-free face numerator of `sharpReward`
+is exactly `sharpFaceFormula`.  In particular the singleton level cancels. -/
 theorem quittingFaceNumerator_sharpReward_eq_formula
     (R singletonLevel : ℝ) (hazard : Player → ℝ) (who : Player) :
     quittingFaceNumerator (weightOfReward (sharpReward R singletonLevel))
