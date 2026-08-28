@@ -178,10 +178,13 @@ For a Lean change, use the narrowest relevant checks while iterating:
 - `python scripts/check_docs.py` checks generated status, source references,
   frontier evidence paths, and local documentation links.
 
-`AxiomAudit.lean` is a default Lake target. It imports every project-owned Lean
-module, including modules outside the main umbrellas, and audits every
-project-owned declaration transitively. Only `propext`, `Quot.sound`, and
-`Classical.choice` are permitted axioms.
+`AxiomAudit.lean` is a default Lake target. It imports every `UniformEquilibrium`
+and `MathUE` module and audits their declarations transitively. Only `propext`,
+`Quot.sound`, and `Classical.choice` are permitted axioms. `Research`,
+`Theorems`, `Experiments`, and `Literature` modules are outside its scope, so a
+declaration in those lanes carries no audit record and must not be quoted as
+formalized on the strength of one; check such a declaration with
+`#print axioms` when its axiom use matters.
 
 Run the trust scan whenever Lean changes and regenerate the axiom audit whenever
 the module inventory changes. Run a full `lake build` only when the task or risk
