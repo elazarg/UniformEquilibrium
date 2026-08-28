@@ -357,11 +357,22 @@ replacing its retained tail by one supplied host punishment.  Given a positive
 terminal gap, reward bound `R > 0`, and coordinatewise punishment separation,
 `terminalGap_retainedTailFiniteTimingNash_jointReturn_ge` gives the exact joint
 return floor `gamma^2 / (2 * R * (gamma + 2 * R))`; the named positivity
-corollary proves that floor is strict.  This generic no-go has `M` and `L`
-only.  No theorem constructs the timing certificate from a mixed finite game,
-derives the separated tail and punishments from the Fin4 source, selects a
-nonidentity block, closes the prescribed-payoff/cap seam, or supplies `A` or
-`C`.
+corollary proves that floor is strict.  A stronger complementary rigidity
+layer is checked in
+`Research/Quitting/NearMinimumRetainedTailTimingNashIdentity.lean`.
+`nonidentity_exactRoot_uniformOpponentAbsorption_ge` gives every coordinate
+the same opponent-absorption floor `kappa / (kappa + 2 * M)`, without a
+player-cardinality loss.  If the actual tail excess is below
+`kappa * D_* / (2 * M)`,
+`nearMinimum_rootNashAgainstPayoff_eq_allContinue` forces any exact endpoint
+Nash root against its prescribed payoff to be all Continue.
+`nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates this
+backward through a supplied `IsQuittingLiteralExactRootStack`.  These generic
+no-go declarations have `M` and `L` only.  No theorem converts an arbitrary
+mixed Nash law of the retained-tail finite timing game into that exact
+credible-suffix stack, derives the separated tail and punishments from the
+Fin4 source, proves the mixed-law identity theorem, selects a nonidentity
+block, closes the prescribed-payoff/cap seam, or supplies `A` or `C`.
 
 The local periodic-anchor route has two separate Research interfaces.
 `localPeriodicAnchor_theoremA`
