@@ -15,7 +15,6 @@ same ``run`` and ``to_checkpoint_json`` operations.
 
 from __future__ import annotations
 
-import argparse
 from dataclasses import dataclass
 from decimal import Decimal
 from fractions import Fraction
@@ -802,66 +801,3 @@ class CandidateCampaign:
         if checkpoint is not None:
             self.save(checkpoint)
         return self.terminal_lower
-
-
-def build_parser() -> argparse.ArgumentParser:
-    parser = argparse.ArgumentParser(prog="fin4-candidate-campaign")
-    parser.add_argument("--state-dir", type=Path, required=True)
-    parser.add_argument("--checkpoint", type=Path, required=True)
-    parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--denominator", type=int, default=10_000)
-    parser.add_argument("--start-epsilon", default="4")
-    parser.add_argument("--refinement", default="2")
-    parser.add_argument(
-        "--alpha", default=qjson(DEFAULT_ALPHA),
-        help="fraction of epsilon certified by a direct lower result",
-    )
-    parser.add_argument(
-        "--scale-limit", type=int,
-        help="engineering-only finite scale limit; default is unbounded",
-    )
-    parser.add_argument("--shard-count", type=int, default=1)
-    parser.add_argument("--shard-index", type=int, default=0)
-    parser.add_argument("--quantum-steps", type=int, default=1000)
-    parser.add_argument("--max-quanta", type=int)
-    parser.add_argument("--max-seconds", type=float)
-    parser.add_argument("--report-every", type=int, default=1)
-    parser.add_argument("--describe", action="store_true")
-    return parser
-
-
-def main(argv: Optional[Sequence[str]] = None) -> int:
-    args = build_parser().parse_args(argv)
-    if args.resume:
-        if not args.checkpoint.exists():
-            raise ValueError("--resume needs an existing checkpoint")
-        campaign = CandidateCampaign.load(args.checkpoint, args.state_dir)
-    else:
-        candidates = load_tracked_candidates(denominator=args.denominator)
-        descriptor = CampaignDescriptor.create(
-            candidates,
-            args.denominator,
-            Q(args.start_epsilon),
-            Q(args.refinement),
-            Q(args.alpha),
-            args.scale_limit,
-            args.shard_count,
-            args.shard_index,
-        )
-        campaign = CandidateCampaign(candidates, descriptor, args.state_dir)
-    if args.describe:
-        print(json.dumps(campaign.descriptor.to_json(), sort_keys=True, indent=2))
-        return 0
-    result = campaign.run(
-        args.quantum_steps,
-        args.max_quanta,
-        args.max_seconds,
-        args.checkpoint,
-        args.report_every,
-    )
-    print(json.dumps(campaign.progress(), sort_keys=True, indent=2))
-    return 0 if result is not None else 2
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())

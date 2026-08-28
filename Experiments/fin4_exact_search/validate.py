@@ -31,14 +31,12 @@ def run() -> int:
         temporary = Path(directory)
         certificate = temporary / "certificate.json.gz"
         checkpoint = temporary / "checkpoint.json.gz"
-        region = temporary / "full.region.json"
-        region_checkpoint = temporary / "full.region.state.json.gz"
-        region_certificate = temporary / "full.region.certificate.json.gz"
         discovery = temporary / "discovery"
         table = ROOT / "examples" / "zero_table.json"
         output = io.StringIO()
         with redirect_stdout(output):
-            search_status = main(
+            scale_status = main(["scale", "100"])
+            first_search_status = main(
                 [
                     "search",
                     "--table",
@@ -46,59 +44,30 @@ def run() -> int:
                     "--epsilon",
                     "100",
                     "--max-steps",
-                    "4",
+                    "1",
                     "--checkpoint",
                     str(checkpoint),
                     "--output",
                     str(certificate),
                 ]
             )
-            verify_status = main(["verify", str(certificate)])
-            region_status = main(
+            second_search_status = main(
                 [
-                    "region",
+                    "search",
                     "--table",
                     str(table),
                     "--epsilon",
                     "100",
-                    "--kind",
-                    "full",
-                    "--output",
-                    str(region),
-                ]
-            )
-            first_scan_status = main(
-                [
-                    "scan-region",
-                    "--table",
-                    str(table),
-                    "--region",
-                    str(region),
                     "--checkpoint",
-                    str(region_checkpoint),
-                    "--max-steps",
-                    "1",
-                    "--output",
-                    str(region_certificate),
-                ]
-            )
-            second_scan_status = main(
-                [
-                    "scan-region",
-                    "--table",
-                    str(table),
-                    "--region",
-                    str(region),
-                    "--checkpoint",
-                    str(region_checkpoint),
+                    str(checkpoint),
                     "--resume",
                     "--max-steps",
                     "2",
                     "--output",
-                    str(region_certificate),
+                    str(certificate),
                 ]
             )
-            region_verify_status = main(["verify", str(region_certificate)])
+            verify_status = main(["verify", str(certificate)])
             first_discovery_status = main(
                 [
                     "discover",
@@ -126,12 +95,10 @@ def run() -> int:
                 ]
             )
         if (
-            search_status != 0
+            scale_status != 0
+            or first_search_status != 2
+            or second_search_status != 0
             or verify_status != 0
-            or region_status != 0
-            or first_scan_status != 2
-            or second_scan_status != 0
-            or region_verify_status != 0
             or first_discovery_status != 2
             or second_discovery_status != 2
         ):

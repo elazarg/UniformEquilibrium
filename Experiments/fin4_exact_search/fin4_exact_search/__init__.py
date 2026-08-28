@@ -1,13 +1,8 @@
 """Self-contained exact Fin4 search experiment."""
 
 from .engine import (
-    LowerTreeCertificate,
     ProfileCertificate,
     RewardTable,
-    ScaleContract,
-    ScaleSearch,
-    WorkRegion,
-    build_outer_problem,
     terminal_semantics,
 )
 from .direct_oracle import (
@@ -19,13 +14,8 @@ from .direct_oracle import (
 )
 
 __all__ = [
-    "LowerTreeCertificate",
     "ProfileCertificate",
     "RewardTable",
-    "ScaleContract",
-    "ScaleSearch",
-    "WorkRegion",
-    "build_outer_problem",
     "terminal_semantics",
     "ConfigurableDirectScaleContract",
     "DirectHazardLowerTreeCertificate",
