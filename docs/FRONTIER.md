@@ -763,6 +763,35 @@ recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
 follows; an arbitrary public chord without the actual endpoint law cannot be
 regenerated.
 
+A separate conditional response-chord compiler starts from a supplied
+`FinFourMinimumResponseRectanglePacket`.  In
+`Research/Quitting/MinimumResponseChordLaw.lean`,
+`responseAtom_pos_imp_pureTime_ge_mark` uses one positive complete-law
+rectangle atom to exclude every finite response before the marked row, and
+`quittingStageCoalitionMass_le_update_pureTime_routed` proves literal no-loss
+routing for the resulting late-or-Never response.  The Fin4 theorem
+`FinFourMinimumResponseRectanglePacket.nonempty_minimumResponseRectangle`
+(`Research/Quitting/FinFourProducerAtlas/MinimumResponseChordRegeneration.lean`)
+freezes the Boolean response mode on a strict refinement of the packet's same
+joint-law subsequence.  The routed floor is then derived by
+`FinFourMinimumResponseRectangle.routedStageMass_floor`, not supplied as a
+post-route certificate.
+
+For every proper parameter,
+`FinFourMinimumResponseRectangle.nonempty_minimumResponseChord` constructs one
+further actual compact chord.  The exact law and coordinate debts are affine,
+the routed law atom has mass at least `theta * lambda`, the mover edge keeps
+the floor `g / 2` for
+`theta <= g / (2 * (g + 2 * R))`, and the response-square charge is exactly
+scaled by `1 - theta`.  Both the response endpoint and chord point are
+causalized into `FinFourMinimumAtomProducer` objects with the incoming hard
+residual and their own displayed law.  These results have `M` and `L` only:
+no checked declaration constructs the pre-route packet from the actual
+stopping-law endpoint-rise branch, so there is no `A`; no oriented return,
+renewable rank, terminal approximation, or other downstream `C` is known.
+The compact law points need not be attained, and the regenerated chronologies
+do not contain the old response rectangle.
+
 The same actual forced-pair provenance collapses the normalized passport to
 one density.  In
 `Research/Quitting/FinFourProducerAtlas/NormalizedInertSingleDensityToll.lean`,
