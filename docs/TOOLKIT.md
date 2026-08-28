@@ -341,6 +341,24 @@ consumer
 result in the actual finite-clock hierarchy through normalized Fin4 level
 `59`; it proves no positive value at level `60`.
 
+The retained-tail variant is checked in
+`UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingNash.lean`
+and
+`UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingReturnFloor.lean`.
+`IsQuittingRetainedTailFiniteTimingNash.debt_le_deletedReturn_mul_tailDebt`
+upgrades supplied finite-stop and pass-through timing inequalities to the
+full behavioral deviation cap with the exact player-deleted survival factor.
+`hostPunishmentDebt_le` and `punishmentDebt_le` control a literal graft after
+replacing its retained tail by one supplied host punishment.  Given a positive
+terminal gap, reward bound `R > 0`, and coordinatewise punishment separation,
+`terminalGap_retainedTailFiniteTimingNash_jointReturn_ge` gives the exact joint
+return floor `gamma^2 / (2 * R * (gamma + 2 * R))`; the named positivity
+corollary proves that floor is strict.  This generic no-go has `M` and `L`
+only.  No theorem constructs the timing certificate from a mixed finite game,
+derives the separated tail and punishments from the Fin4 source, selects a
+nonidentity block, closes the prescribed-payoff/cap seam, or supplies `A` or
+`C`.
+
 The local periodic-anchor route has two separate Research interfaces.
 `localPeriodicAnchor_theoremA`
 (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) consumes the
