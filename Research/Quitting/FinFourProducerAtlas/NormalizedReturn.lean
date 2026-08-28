@@ -6,6 +6,7 @@ Authors: GameTheory contributors.
 
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
 import Research.Quitting.FinFourProducerAtlas.ThreeRoleRegeneration
+import Research.Quitting.FixedPairMinimumTailNormalizedReturn
 
 /-!
 # Normalized return from the actual Fin4 forced-pair source
@@ -81,6 +82,42 @@ def normalizedDecoratedFamily
     simpa only [movingProfiles, movingMark,
       QuittingStageAtomConcentratedPacketAdapter.targetTail] using
         packet.forcedOwnerDefect_eq_zero index
+
+/-- The owner-clock packet viewed through the source-independent fixed-pair
+minimum-tail interface.  All quantitative floors remain literal packet
+facts. -/
+def minimumTailSource
+    (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
+      returnSource lambda) :
+    QuittingMarkedPairMinimumTailSource packet.normalizedDecoratedFamily
+      source.point.1 where
+  minimum_mem := source.semantic_mem
+  minimum_global := source.minimum
+  minimum_pos := source.minimumDebt_pos
+  markedMassFloor := lambda
+  markedMassFloor_pos := packet.lambda_pos
+  markedMass_floor := by
+    intro rank
+    change lambda ≤ quittingStageCoalitionMass reward
+      (packet.movingProfiles rank) (packet.movingMark rank)
+        packet.movingTerminal
+    rw [show packet.movingTerminal =
+        (packet.base.forcedAdapter
+          (packet.subsequence rank)).routedTerminal by
+      exact (packet.forcedTerminal_eq_movingTerminal rank).symm]
+    simpa only [movingProfiles, movingMark] using
+      (packet.lambda_lt_forcedPairStageMass rank).le
+  actualGainFloor := lambda * source.residual.witness.terminalGap
+  actualGainFloor_pos :=
+    mul_pos packet.lambda_pos source.residual.witness.terminalGap_pos
+  actualGain_floor := packet.lambda_mul_terminalGap_le_forcedOwnerGain
+  tailDebt_tendsto := by
+    simpa only [normalizedDecoratedFamily, QuittingMarkedPairDecoratedFamily.baseDecoration,
+      QuittingMarkedPairDecoration.tailDebt,
+      QuittingMarkedPairDecoration.tail,
+      FinFourOwnerCompressedMinimumReturnForcedPairPacket.movingPacket,
+      id_eq] using
+        packet.movingTailDebt_tendsto_minimum
 
 end FinFourOwnerCompressedMinimumReturnForcedPairPacket
 
@@ -490,20 +527,13 @@ theorem nonempty_normalizedReturnSelection
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda) :
     Nonempty (FinFourNormalizedReturnSelection packet) := by
-  let family := packet.normalizedDecoratedFamily
-  have hmem : ∀ rank, family.baseDecoration rank ∈
-      family.prefixOrbitAmbient := by
-    intro rank
-    simpa only [QuittingMarkedPairDecoratedFamily.rawDecoration_nil] using
-      family.rawDecoration_mem_ambient rank []
-  obtain ⟨limit, hlimit, subsequence, hsubsequence, htendsto⟩ :=
-    family.prefixOrbitAmbient_isCompact.tendsto_subseq hmem
+  obtain ⟨selection⟩ := packet.minimumTailSource.nonempty_selection
   exact ⟨{
-    subsequence := subsequence
-    subsequence_strictMono := hsubsequence
-    limit := limit
-    limit_mem_ambient := hlimit
-    decorations_tendsto := htendsto
+    subsequence := selection.subsequence
+    subsequence_strictMono := selection.subsequence_strictMono
+    limit := selection.limit
+    limit_mem_ambient := selection.limit_mem_ambient
+    decorations_tendsto := selection.decorations_tendsto
   }⟩
 
 end FinFourOwnerCompressedMinimumReturnForcedPairPacket
@@ -614,34 +644,30 @@ theorem nonempty_normalizedReturnThreeRole_or_strictInert
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda) :
     Nonempty (FinFourNormalizedReturnThreeRoleOrStrictInert packet) := by
-  obtain ⟨selection⟩ := packet.nonempty_normalizedReturnSelection
-  obtain ⟨point, hpoint, hminimal, hlower, hbranch⟩ :=
-    selection.family.exists_minimum_normalizedPassportSlice_eq_or_strict_inert
-      source.point.1 source.minimum source.minimumDebt_pos selection.passport
-        selection.massDensity selection.gainDensity
-          selection.massDensity_mul_wholeDebt_lt
-          selection.gainDensity_mul_wholeDebt_lt
+  obtain ⟨generic⟩ :=
+    packet.minimumTailSource.nonempty_normalizedThreeRole_or_strictInert (by
+      change 1 < packet.movingTerminal.val.card
+      rw [packet.movingTerminal_card]
+      norm_num)
+  let selection : FinFourNormalizedReturnSelection packet := {
+    subsequence := generic.selection.subsequence
+    subsequence_strictMono := generic.selection.subsequence_strictMono
+    limit := generic.selection.limit
+    limit_mem_ambient := generic.selection.limit_mem_ambient
+    decorations_tendsto := generic.selection.decorations_tendsto
+  }
   refine ⟨{
     selection := selection
-    point := point
-    point_mem := hpoint
-    point_minimal := hminimal
-    minimum_le_point := hlower
+    point := generic.point
+    point_mem := generic.point_mem
+    point_minimal := generic.point_minimal
+    minimum_le_point := generic.minimum_le_point
     outcome := ?_
   }⟩
-  rcases hbranch with hreturn | hinert
+  rcases generic.outcome with hreturn | hinert
   · left
-    obtain ⟨actualizer⟩ := nonempty_quittingMarkedPairMinimumReturnActualizer
-      selection.family source.point.1 selection.massDensity
-        selection.gainDensity point selection.massDensity_pos
-          selection.gainDensity_pos source.minimumDebt_pos hpoint hreturn
-    obtain ⟨mover, recipient, ⟨endpoint⟩⟩ :=
-      actualizer.nonempty_threeRoleEndpointLaw_of_minimumReturn
-        source.semantic_mem source.minimum source.minimumDebt_pos (by
-          rw [show selection.family.terminal = packet.movingTerminal from rfl,
-            packet.movingTerminal_card]
-          norm_num) hreturn hpoint.2.1
-    exact ⟨actualizer, hreturn,
+    obtain ⟨actualizer, heq, mover, recipient, ⟨endpoint⟩⟩ := hreturn
+    exact ⟨actualizer, heq,
       endpoint.nonempty_finFourRegenerationOrAscent⟩
   · exact Or.inr hinert
 
