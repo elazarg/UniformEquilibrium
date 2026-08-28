@@ -8,27 +8,28 @@ Independent reviews:
 - [CODEX_ROOT](../feedback/CODEX_AMPERE__ACTUAL_ZENO_DELETED_SURVIVAL_PASSPORT__BY_CODEX_ROOT.md)
 
 The actual source-level host-or-screening contraction is checked in Lean.
-`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_clearingFamily`
+`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_coalescingClearingFamily`
 in
-`Research/Quitting/FinFourProducerAtlas/ActualZenoHostCompression.lean`
+`Research/Quitting/FinFourProducerAtlas/ActualZenoFullyScreenedSiblingCoalescence.lean`
 constructs one literal Zeno source from the zero-mass normalized boundary.
 It returns either a fixed positive-host endpoint sequence, with the original
 packet/source ranks, positive marked-mass floor, zero marked-host root defect,
 unchanged nonhost behaviors, and complete postmark spine, or the existing
-fully screened finite-clearing family.  The latter has the checked
-strategic-singleton-or-collision-minimum consumer.
+fully screened finite-clearing family together with the full-screening proof
+for that same source.  The latter proof gives coordinatewise convergence of
+the original siblings' complete prescribed payoffs, unrestricted behavioral
+caps, and terminal laws, and the clearing family has the checked strategic-
+singleton-or-collision-minimum consumer.
 
-The packet is not fully formalized as written.  No checked declaration proves
-the advertised source-indexed coalescence of complete prescribed payoffs,
-unrestricted behavioral caps, and terminal laws for the original screened
-siblings.  The explicit reward-table regression with `H_i = n^-3`, positive
-marked tail debt, unique all-Continue limiting cap root, and global minimum
-zero is also not formalized.  The integrated contraction therefore has `M`,
-`L`, and `A` in both arms, with `C` only on the fully screened clearing arm;
-the positive-host endpoint is not whole-profile near-minimal and has no
-consumer.  Revisit this packet when the sibling-coalescence surface and
-boundary regression are checked, or when the positive-host endpoint gains a
-genuine downstream consumer.
+The packet is not fully formalized as written only because the explicit
+reward-table regression with `H_i = n^-3`, positive marked tail debt, unique
+all-Continue limiting cap root, and global minimum zero is not formalized.
+The integrated contraction has `M`, `L`, and `A` in both arms, with `C` only
+on the fully screened clearing arm; the positive-host endpoint is not
+whole-profile near-minimal, cross-cap coherent, or cap controlled in its other
+coordinates, and has no consumer.  Revisit this packet when the boundary
+regression is checked or the positive-host endpoint gains a genuine downstream
+consumer.
 
 ## Exact statement
 
@@ -128,7 +129,9 @@ in:
 - Research/Quitting/NormalizedPassportMinimizer.lean;
 - Research/Quitting/NormalizedPassportMinimumReturn.lean;
 - Research/Quitting/FinFourProducerAtlas/NormalizedReturn.lean; and
-- Research/Quitting/FinFourProducerAtlas/MinimumReturnForcedPair.lean.
+- Research/Quitting/FinFourProducerAtlas/MinimumReturnForcedPair.lean;
+- Research/Quitting/FinFourProducerAtlas/ActualZenoHostCompression.lean; and
+- Research/Quitting/FinFourProducerAtlas/ActualZenoFullyScreenedSiblingCoalescence.lean.
 
 The common-prefix cap mechanism is related to
 UniformEquilibrium/Quitting/Paths/PersistentDeletedClockTwoLabel.lean and
@@ -394,24 +397,23 @@ The theorem deliberately does not claim that host compression preserves
 whole-profile near-minimality or prevents cap leakage in the other three
 coordinates.
 
-## Lean handoff
+## Lean status
 
-Suggested declarations are:
+The checked split and host producer are
+`FinFourActualZenoDeletedSurvivalSource.nonempty_positiveHost_or_fullyScreened`
+and `FinFourActualZenoPositiveHost.nonempty_fixedEndpoint` in
+`Research/Quitting/FinFourProducerAtlas/ActualZenoHostCompression.lean`.
+The exact screened common-prefix bounds are
+`abs_sibling_terminalPayoff_sub_le`,
+`abs_sibling_bestResponseValue_sub_le`, and
+`abs_sibling_terminalOutcomeMass_sub_le`.  The one-shot source capstone is
+`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_coalescingClearingFamily`.
+It retains the full-screening proof and clearing family together, so
+`FinFourActualZenoDeletedSurvivalSource.FullyScreenedCoalescingClearingFamily.semanticLaw_coalescence`
+uses the same actual source and no supplied replacement family.
 
-    quittingPlayerWordSurvival
-    quittingDeletedWordSurvival
-    deletedWordSurvival_mul_deletedWordSurvival_le_joint
-    vanishingJoint_deletedSurvival_subseq_screened_or_uniqueHost
-    hostCompression_concentratedEndpoint
-    fullyScreened_comparison_semanticLawDist_tendsto_zero
-
-The host theorem should return the actual modified profile, fixed marked
-coalition after finite-label extraction, mass floor, zero local defect,
-postmark-spine equality, and originating raw decoration. It must not include
-whole-profile near-minimality as a field.
-
-The regression should be encoded separately from the positive-minimum source
-adapter.
+The regression should still be encoded separately from the positive-minimum
+source adapter.
 
 ## Scope and nonclaims
 

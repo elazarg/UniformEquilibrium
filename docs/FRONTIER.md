@@ -924,20 +924,33 @@ strategic-singleton-or-collision-minimum compiler.
 ordered paid labels, exit kind, packet labels, and original premark labels on
 one strict refinement while leaving dates and profiles free to vary.
 
-The zero-boundary capstone
-`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_clearingFamily`
-constructs the actual Zeno source and returns exactly the fixed endpoint or
-clearing family.  This contraction has `M`, `L`, and `A` in both arms.  Only
-the fully screened branch has `C`, through the strategic-singleton-or-
-collision-minimum contraction, and both consumer outputs remain open.  The
-positive-host endpoint has no checked downstream consumer and is not asserted
-whole-profile near-minimal or cap controlled in the other coordinates.
+The original screened siblings now also retain their complete source-indexed
+semantic comparison.  In
+`Research/Quitting/FinFourProducerAtlas/ActualZenoFullyScreenedSiblingCoalescence.lean`,
+`abs_sibling_terminalPayoff_sub_le` bounds prescribed-payoff differences by
+twice the reward bound times the common-word joint survival,
+`abs_sibling_bestResponseValue_sub_le` bounds unrestricted behavioral-cap
+differences by twice the reward bound times the corresponding deleted clock,
+and `abs_sibling_terminalOutcomeMass_sub_le` bounds every complete outcome-law
+coordinate, including `Never`, by the joint survival.  Full screening sends
+all three bounds to zero.  The branch-local package
+`FinFourActualZenoDeletedSurvivalSource.FullyScreenedCoalescingClearingFamily.semanticLaw_coalescence`
+keeps that screening proof and the finite-clearing family on the same actual
+Zeno source.
 
-No checked theorem here proves source-indexed all-behavior payoff/cap/law
-coalescence for the original screened siblings or formalizes the explicit
-`H_i = n^-3` zero-minimum boundary regression.  There is no return,
-regeneration, renewable compression, recursive descent, terminal
-approximation, or uniform-equilibrium conclusion.
+The zero-boundary capstone
+`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZeno_fixedEndpoint_or_coalescingClearingFamily`
+constructs the actual Zeno source and returns exactly the fixed endpoint or
+the same-source screened coalescence-and-clearing package.  This contraction
+has `M`, `L`, and `A` in both arms.  Only the fully screened clearing branch
+has `C`, through the strategic-singleton-or-collision-minimum contraction,
+and both consumer outputs remain open.  The positive-host endpoint has no
+checked downstream consumer and is not asserted whole-profile near-minimal,
+cross-cap coherent, or cap controlled in the other coordinates.
+
+The explicit `H_i = n^-3` zero-minimum boundary regression remains unchecked.
+There is no return, regeneration, renewable compression, recursive descent,
+terminal approximation, or uniform-equilibrium conclusion.
 
 A separate canonical maximal-prefix ray now consumes the same cofinal
 forced-pair source.  The cap-indexed selector `quittingMaximalAbsorptionCapRoot`
