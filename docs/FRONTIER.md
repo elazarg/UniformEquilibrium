@@ -138,16 +138,23 @@ sure-exit signs to exact terminal Nash profiles against arbitrary behavioral
 deviations and fixed uniform-equilibrium payoffs.
 `QuittingInducedOwnerChamber.uniformEquilibriumPayoff` delegates an actual
 induced Nash point plus supplied owner-floor and outsider signs to the
-singleton-base all-behavior compiler; it does not prove the stronger exact
-all-Never-tail specialization.  `QuittingRationalStationaryFaceBox` and
+singleton-base all-behavior compiler.  The sharper
+`QuittingInducedOwnerNeverChamber.terminalNash` retains the actual induced
+point and turns supplied owner `Quit >= Continue`, nonpositive solo, and
+outsider no-join signs into the literal one-date-then-Never exact behavioral
+Nash profile.  The theorem
+`exists_uniformPayoff_or_inducedOwnerNever_continue_sub_quit_pos_gap` gives
+the corresponding compact alternative: a uniform payoff or one positive
+`Continue - Quit` margin on the whole induced Nash carrier.
+`QuittingRationalStationaryFaceBox` and
 `QuittingRationalStationaryFaceBox.nonempty_stationaryCertificate`
 (`Research/Quitting/StationaryFaceBoxClosure.lean`) turn supplied strict
 rational-box face signs and a supplied `zero_to_numerator` bridge into an
 interior numerator zero and a full exact stationary behavioral certificate.
 Thus these interfaces have checked `M/L/C` status, but no `A` seal for the
 advertised HOPF `Fin 4` table: its exact reward definition, rational matrix
-enclosures, zero-transport instance, open-neighborhood result, and maximal-ray
-connection are not present.
+enclosures, zero-transport and induced-sign instances, open-neighborhood
+result, and maximal-ray connection are not present.
 
 Two further stationary classes sharpen the incentive-gadget boundary.
 `quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
