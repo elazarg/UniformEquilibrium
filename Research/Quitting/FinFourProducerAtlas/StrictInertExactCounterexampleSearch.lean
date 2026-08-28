@@ -41,6 +41,117 @@ theorem terminalExploitabilityInf_pos
 
 end FinFourMinimumAtomProducer
 
+/-- Finite rational counterexample output forced by one actual strict
+inert machine on an arbitrary real Fin4 table.
+
+The emitted rational table need not be the source table.  The strict witness is
+retained to record the semantic cause of termination; reward robustness and
+rational density supply a normalized rational counterexample somewhere in the
+fair enumeration. -/
+structure FinFourStrictInertRationalCounterexampleConsequence
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ}
+    {source : FinFourMinimumAtomProducer reward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
+    {lambda : ℝ}
+    {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
+      returnSource lambda} where
+  strict : FinFourNormalizedStrictInertSingleDensityToll packet
+  index : ℕ
+  certificate : FinFourCounterexampleCertificate
+  emitted : finFourCounterexampleStep index = some certificate
+
+namespace FinFourStrictInertRationalCounterexampleConsequence
+
+variable
+  {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+  {bound : ℝ}
+  {source : FinFourMinimumAtomProducer reward bound}
+  {returnSource :
+    FinFourOwnerCompressedMinimumReturnForcedPairSource source}
+  {lambda : ℝ}
+  {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
+    returnSource lambda}
+
+/-- The exact rational table returned by the global semidecision. -/
+def rewardCode
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) : RationalFinFourRewardCode :=
+  output.certificate.reward
+
+/-- The explicit rational terminal-gap margin returned with the certificate. -/
+def gamma
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) : ℚ :=
+  output.certificate.epsilon / 8
+
+/-- The generated finite payload passes the independent exact verifier. -/
+theorem verifies
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) :
+    output.certificate.verifies = true :=
+  finFourCounterexampleStep_verifies output.index output.certificate
+    output.emitted
+
+/-- The generated rational margin is positive. -/
+theorem gamma_pos
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) :
+    0 < output.gamma := by
+  exact div_pos
+    (finFourCounterexampleDyadicScale_pos output.certificate.scaleIndex)
+    (by norm_num)
+
+/-- The generated rational table has a true all-behavior terminal gap. -/
+theorem terminalExploitability
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) :
+    HasTerminalExploitabilityGap output.rewardCode.realReward
+      (output.gamma : ℝ) := by
+  simpa only [rewardCode, gamma, Rat.cast_div, Rat.cast_ofNat] using
+    finFourCounterexampleStep_terminalGap output.index output.certificate
+      output.emitted
+
+/-- The generated rational table has no uniform-equilibrium payoff. -/
+theorem not_exists_uniformEquilibriumPayoff
+    (output : FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) :
+    ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame output.rewardCode.realReward).IsUniformEquilibriumPayoff
+        none payoff := by
+  simpa only [rewardCode] using
+    finFourCounterexampleStep_no_uniformEquilibriumPayoff output.index
+      output.certificate output.emitted
+
+end FinFourStrictInertRationalCounterexampleConsequence
+
+/-- Complete termination theorem for the rigid chamber: existence of one
+source-attached strict inert machine on any real Fin4 table forces the total
+natural-numbered exact search to emit a finite rational positive-gap
+certificate at some stage. -/
+theorem nonempty_finFourStrictInertRationalCounterexampleConsequence
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {bound : ℝ}
+    {source : FinFourMinimumAtomProducer reward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
+    {lambda : ℝ}
+    {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
+      returnSource lambda}
+    (strict : FinFourNormalizedStrictInertSingleDensityToll packet) :
+    Nonempty (FinFourStrictInertRationalCounterexampleConsequence
+      (packet := packet)) := by
+  obtain ⟨index, certificate, emitted⟩ :=
+    exists_finFourCounterexampleStep_of_real_infimum_pos reward
+      source.terminalExploitabilityInf_pos
+  exact ⟨{
+    strict := strict
+    index := index
+    certificate := certificate
+    emitted := emitted
+  }⟩
+
 /-- Source-preserving output of the exact counterexample search for one
 normalized rational strict inert machine.
 
@@ -51,6 +162,8 @@ structure FinFourRationalStrictInertCounterexampleOutput
     (rewardCode : RationalFinFourRewardCode)
     {bound : ℝ}
     {source : FinFourMinimumAtomProducer rewardCode.realReward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
     {lambda : ℝ}
     {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda} where
@@ -66,6 +179,8 @@ variable
   {rewardCode : RationalFinFourRewardCode}
   {bound : ℝ}
   {source : FinFourMinimumAtomProducer rewardCode.realReward bound}
+  {returnSource :
+    FinFourOwnerCompressedMinimumReturnForcedPairSource source}
   {lambda : ℝ}
   {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
     returnSource lambda}
@@ -130,6 +245,8 @@ theorem nonempty_finFourRationalStrictInertCounterexampleOutput
     (hnormalized : rewardCode.normalized = true)
     {bound : ℝ}
     {source : FinFourMinimumAtomProducer rewardCode.realReward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
     {lambda : ℝ}
     {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda}
@@ -153,6 +270,8 @@ theorem isEmpty_finFourNormalizedStrictInert_of_debtInf_eq_zero
     (rewardCode : RationalFinFourRewardCode)
     {bound : ℝ}
     {source : FinFourMinimumAtomProducer rewardCode.realReward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
     {lambda : ℝ}
     {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda}
@@ -160,8 +279,9 @@ theorem isEmpty_finFourNormalizedStrictInert_of_debtInf_eq_zero
     IsEmpty (FinFourNormalizedStrictInertSingleDensityToll packet) := by
   constructor
   intro _
-  rw [hzero] at source.inf_pos
-  exact lt_irrefl 0 source.inf_pos
+  have hpositive := source.inf_pos
+  rw [hzero] at hpositive
+  exact (lt_irrefl 0) hpositive
 
 /-- Mandatory coexistence regression: even a locally valid strict inert packet
 cannot be source-attached on a table having a uniform-equilibrium payoff
@@ -170,6 +290,8 @@ theorem isEmpty_finFourNormalizedStrictInert_of_uniformPayoff
     (rewardCode : RationalFinFourRewardCode)
     {bound : ℝ}
     {source : FinFourMinimumAtomProducer rewardCode.realReward bound}
+    {returnSource :
+      FinFourOwnerCompressedMinimumReturnForcedPairSource source}
     {lambda : ℝ}
     {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
       returnSource lambda}
