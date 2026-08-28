@@ -1116,14 +1116,25 @@ strictly below `kappa * D_* / (2 * M)`,
 `nearMinimum_rootNashAgainstPayoff_eq_allContinue` forces every exact endpoint
 Nash root against the tail's prescribed payoff to be all Continue.
 `nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates this
-identity backward through a supplied exact credible-suffix root stack.  These
-results have `M/L` status.  There is still no theorem converting an arbitrary
-mixed retained-tail timing Nash law into that exact stack, and no Fin4 adapter
-from the actual minimum source to the separated tail, punishments, mixed law,
-and positive-return compiler.  Hence there is no `A/C`: the all-Continue block
-already satisfies a positive return floor, while the advertised mixed-law
-identity, payoff return, cap Nash, recurrence, and nonidentity selection remain
-open.
+identity backward through a supplied exact credible-suffix root stack.
+
+The actual mixed-law recursion is checked in
+`Research/Quitting/RetainedTailFiniteTimingRecursion.lean`.
+`quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff` keeps the fixed
+behavioral tail literal in the finite normal form.
+`retainedTimingLawTail_isNash_of_isNash_of_positiveContinue` transfers Nash
+optimality to every conditioned suffix, while
+`retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash` exposes the exact
+current endpoint root.  Consequently
+`nearMinimum_retainedTailFiniteTimingNash_eq_pureNeverProfile` proves that any
+near-minimum mixed Nash law with positive `Never` mass in every marginal is
+literally pure `Never`.  This complete generic identity compiler has `M/L`
+status.  There is still no Fin4 adapter from the actual minimum source to a
+separated tail and coordinate punishments, no theorem turning every selected
+mixed Nash law into the retained-tail return-floor certificate and positive
+joint `Never` mass, and no eventual source-level identity theorem.  Hence
+there is no Fin4 `A/C`; payoff return, cap Nash, recurrence, and uniform
+equilibrium remain open.
 
 The conditional cardinality contract is checked in
 `Research/Topology/ModTwoBoxComplementarityParity.lean`,
