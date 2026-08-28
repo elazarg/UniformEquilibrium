@@ -831,6 +831,23 @@ remaining arm has a checked downstream consumer.  In particular it does not
 eliminate the positive-root, cardinal-three, or full-binding branches and
 proves no return, contradiction, or uniform-equilibrium conclusion.
 
+The generic Sperner approximation seam is checked in
+`Research/Topology/BoxComplementarityCubicalSperner.lean` and
+`Research/Topology/BoxComplementaritySpernerApproximation.lean`.
+`boxComplementarity_completeSimplex_card_odd` specializes the pinned strong
+cubical Sperner theorem to the reduced box-complementarity labeling at every
+positive resolution.  The selected anchor and coordinate-label vertices lie
+within one mesh width, and
+`BoxComplementarityProblem.isSolution_of_completeSimplexAnchorPoint_tendsto`
+turns every convergent vanishing-mesh anchor sequence into an exact solution,
+including in dimension zero.  The compact form
+`BoxComplementarityProblem.eventually_no_completeSimplexVertexIn_of_compact`
+uniformly excludes all vertices of every sufficiently fine complete simplex
+from a compact set disjoint from the solution set.  This seam has `M` and `L`
+only.  It does not implement local parity, parity stability under refinement,
+regularity, excision, the open parity specification, a Fin4 finite-cap
+certificate, `A`, or `C`.
+
 The canonical pair's literal paid endpoint now also has a checked one-time
 support-rank handoff.  The generic theorem
 `exists_minimumEndpointSupportRankHandoff_or_debtAscent`
