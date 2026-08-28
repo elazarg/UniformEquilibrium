@@ -1178,10 +1178,20 @@ average and forward-difference telescope are in
 `FinFourStrictRayForwardExactCapTail.analysis` supplies the nested `Analysis`
 without an extra error hypothesis, so collision nonpositivity,
 complementarity, and diffuse-solo identities now have `M`, `L`, and `A` on
-the same source ray.  They still have no `C`: there is no limiting
-positive-root/cardinality-face consumer, return, rank
-decrease, strict-ray contradiction, or uniform-equilibrium conclusion.  This
-is not a completed strict-tail packet.
+the same source ray.  The normalized analysis itself has no terminal `C`, but
+the positive limiting-root branch now has a checked return consumer in
+`Research/Quitting/FinFourProducerAtlas/StrictRayPositiveRootReturn.lean`.
+`FinFourStrictRayCapLimitJointLaw.nonempty` selects a joint-law cluster from
+the same executable ray and proves its cap equals the stored `capLimit`.
+`FinFourStrictRayPositiveRootReturn.returnedDebt_eq_limit_sub_charge` gives
+the exact debt `L - L * absorption`, with the returned actual carrier point in
+`[D_*, L)`.  The theorem
+`FinFourStrictRayPositiveRootReturn.nonempty_minimumLawHandoff_or_offMinimumDescent`
+either regenerates a fresh `FinFourMinimumAtomProducer` at that exact point
+with the same hard residual or retains a strict off-minimum point below `L`.
+This is branch-local `C`; the strict descent has no quantitative or renewable
+consumer, and no strict-ray contradiction or uniform-equilibrium conclusion
+follows.
 
 The supplied full-binding case has a further actual compact reduction in
 `Research/Quitting/FinFourProducerAtlas/StrictRayFullBindingDiffuseReduction.lean`.
@@ -1365,12 +1375,15 @@ uses `FinFourBindingPairLocalParityZero.direct` or `.perturbed` to compute
 zero local parity.  Conditional on those supplied objects,
 `positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three`
 returns, for the same strict flow, a positive-absorption exact root at the
-limiting cap, full binding, or binding cardinality three.  This contract has
-`M` and `L`, but no `A` or `C`: neither the generic parity implementation nor
-the finite-cap localization/perturbation certificate is constructed, and no
-remaining arm has a checked downstream consumer.  In particular it does not
-eliminate the positive-root, cardinal-three, or full-binding branches and
-proves no return, contradiction, or uniform-equilibrium conclusion.
+limiting cap, full binding, or binding cardinality three.  Neither the generic
+parity implementation nor the finite-cap localization/perturbation certificate
+is constructed, so this contract has no `A`.  Conditional on the supplied
+objects,
+`minimumLawHandoff_or_offMinimumDescent_or_ballistic_or_omitted_or_cardThree`
+adds `C` for the positive-root arm through exact minimum-source regeneration
+or strict off-minimum descent.  It leaves the descent, cardinal-three,
+ballistic, and omitted-player outputs open and proves no contradiction or
+uniform-equilibrium conclusion.
 
 The generic Sperner approximation and local-count seam is checked in
 `Research/Topology/BoxComplementarityCubicalSperner.lean`,
