@@ -833,6 +833,47 @@ floor.  No Fin4 theorem supplies that floor or a source-faithful regenerated
 source.  The barrier gives no base-cluster return, chronology return, terminal
 approximation, recursive closure, or uniform-equilibrium payoff.
 
+The zero-mass boundary now has an actual raw-row interface.
+`FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZenoDeletedSurvivalSource`
+(`Research/Quitting/FinFourProducerAtlas/ActualZenoDeletedSurvivalSource.lean`)
+selects literal arbitrary-prefix descendants from the same normalized-return
+family.  It retains packet and source ranks, both source and target siblings,
+the fixed pair and marked owner, the complete postmark reference spine, whole
+and tail convergence, and marked mass tending to zero.  The generic identity
+`quittingCombinedPremarkWord_opponentSurvival_eq`
+(`Research/Quitting/CombinedDeletedSurvivalWord.lean`) factors each combined
+deleted clock into the arbitrary new word and immutable base chronology.
+`FinFourActualZenoDeletedSurvivalSource.rho_lt_baseOpponentSurvival` gives the
+literal base factor floor.  Therefore `newWord_fullyScreened` and
+`eventually_newWord_opponentSurvival_lt` transfer a supplied combined
+full-screening certificate to eventual uniform low deleted survival of the
+new words.
+
+`FinFourActualZenoDeletedSurvivalSource.nonempty_fullyScreenedClearingFamily`
+(`Research/Quitting/FinFourProducerAtlas/FullyScreenedFiniteClockClearing.lean`)
+then clears every retained actual new word after one strict finite shift.  At
+most four iterative edges are paid, each by at least `gamma / 2`; the exact
+mover-debt subtraction and marked-mass/historical-gain scaling are retained in
+the typed paid ledger.  A host leaf reuses the old forced pair.  A nonsingleton
+premark leaf keeps its literal profitable profile, mover, and coalition; only
+a singleton leaf uses the outsider endpoint-routing adapter.  Every leaf has
+resolution `rho * gamma / (128 * R)`, a distinct terminal member, and a
+literal `FullyScreenedClearingPacketResult.consumerResult` in the existing
+strategic-singleton-or-collision-minimum compiler.
+`FullyScreenedClearingFamily.nonempty_fixedMechanismSubsequence` fixes the
+ordered paid labels, exit kind, packet labels, and original premark labels on
+one strict refinement while leaving dates and profiles free to vary.
+
+The supplied fully screened branch has `M`, `L`, `A`, and `C` through that
+contraction, but both consumer outputs remain open.  The unconditional
+zero-boundary statement
+`nonempty_actualZeno_notFullyScreened_or_clearingFamily` has only `M`, `L`,
+and `A`: its left arm says only that full screening fails.  It does not
+produce the positive-host alternative claimed by the separate actual-Zeno
+dichotomy packet.  There is no target-side near-minimality, control of the
+other whole-profile caps, return, regeneration, recursive descent, terminal
+approximation, or uniform-equilibrium conclusion.
+
 A separate canonical maximal-prefix ray now consumes the same cofinal
 forced-pair source.  The cap-indexed selector `quittingMaximalAbsorptionCapRoot`
 and the autonomous orbit in
