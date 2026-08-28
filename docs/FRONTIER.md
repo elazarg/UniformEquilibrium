@@ -756,6 +756,47 @@ recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
 follows; an arbitrary public chord without the actual endpoint law cannot be
 regenerated.
 
+The same actual forced-pair provenance collapses the normalized passport to
+one density.  In
+`Research/Quitting/FinFourProducerAtlas/NormalizedInertSingleDensityToll.lean`,
+`FinFourNormalizedReturnSelection.carrier_actualGain_eq_gap_mul_markedMass`
+proves on the complete closed prefix carrier that actual gain is the fixed
+positive pair gap times marked mass.  The generic declarations
+`QuittingSingleDensityPassportMinimizer.prefixMap_mem_slice_iff`,
+`QuittingSingleDensityPassportMinimizer.rootDefect_ge_min_tent`, and
+`QuittingSingleDensityPassportMinimizer.saturation_ratio`
+(`Research/Quitting/NormalizedPassportSingleDensityToll.lean`) give the exact
+one-density prefix-feasibility criterion, the arbitrary-root tent bound, and
+the saturated mass/gain/debt ratios.
+
+The density-to-zero construction in
+`Research/Quitting/NormalizedPassportVanishingDensityBoundary.lean` selects
+all slice minimizers, one compact subsequence, and one limit internally.
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_normalizedInertVanishingDensityBoundary`
+(`Research/Quitting/FinFourProducerAtlas/NormalizedInertVanishingDensityBoundary.lean`)
+attaches that construction to the actual Fin4 packet.
+`FinFourNormalizedInertVanishingDensityBoundary.outcome` then returns one of
+the displayed arms: minimum debt with an internally constructed
+positive-density actualizer, zero limiting marked mass and gain, or one fixed
+limit satisfying
+`D(limit) * Abs(root) <= rootDefect` for every product root.  The limit is
+chosen before the root quantifier.  Deterministic Continue trembles make every
+finite approximating root have positive joint Continue mass and extend the
+same limit-debt coefficient to full-absorption roots by continuity.
+
+This boundary has `M`, `L`, and `A`.  Its positive minimum-return arm has `C`
+through the existing actualizer and endpoint-law consumer; the zero-passport
+and fixed-cap barrier arms have no `C`.  The scalar construction in
+`Research/Quitting/NormalizedPassportZenoBoundary.lean` realizes the prefix
+and composed-defect ledgers, unique zero-absorption root, and saturated
+half-density step at every finite rank while remaining strictly above its
+named tail debt.  It is not a quitting game.  The conditional theorem
+`Math.RenewableNormalizedPassportDensity.rank_lt_of_density_le_half` gives a
+strict natural-rank decrease only from a supplied renewable absolute density
+floor.  No Fin4 theorem supplies that floor or a source-faithful regenerated
+source.  The barrier gives no base-cluster return, chronology return, terminal
+approximation, recursive closure, or uniform-equilibrium payoff.
+
 A separate canonical maximal-prefix ray now consumes the same cofinal
 forced-pair source.  The cap-indexed selector `quittingMaximalAbsorptionCapRoot`
 and the autonomous orbit in

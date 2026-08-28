@@ -75,6 +75,7 @@ import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
 import Research.Quitting.FinFourExhaustiveProducerAtlas
 import Research.Quitting.FinFourProducerAtlas.ActualLowTail
+import Research.Quitting.FinFourProducerAtlas.NormalizedInertVanishingDensityBoundary
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCommonPrefixScreening
 import Research.Quitting.FinFourProducerAtlas.SelfTailContraction
 import Research.Quitting.FinFourSameStageEndpointMonodromy
@@ -112,6 +113,7 @@ import Research.Quitting.NearMinimumActualDeviationRectangle
 import Research.Quitting.NearMinimumRecenteredStrategicSign
 import Research.Quitting.NegativeRectangleResetFaceCompensation
 import Research.Quitting.NormalizedPassportMinimumReturn
+import Research.Quitting.NormalizedPassportZenoBoundary
 import Research.Quitting.ORRankReduction
 import Research.Quitting.ORStationarizationDichotomy
 import Research.Quitting.ObserverAbsentFiniteClockCurvatureCollector
