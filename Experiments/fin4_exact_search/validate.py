@@ -34,6 +34,7 @@ def run() -> int:
         region = temporary / "full.region.json"
         region_checkpoint = temporary / "full.region.state.json.gz"
         region_certificate = temporary / "full.region.certificate.json.gz"
+        discovery = temporary / "discovery"
         table = ROOT / "examples" / "zero_table.json"
         output = io.StringIO()
         with redirect_stdout(output):
@@ -98,6 +99,32 @@ def run() -> int:
                 ]
             )
             region_verify_status = main(["verify", str(region_certificate)])
+            first_discovery_status = main(
+                [
+                    "discover",
+                    "--work-dir",
+                    str(discovery),
+                    "--start-epsilon",
+                    "100",
+                    "--quantum-steps",
+                    "2",
+                    "--max-quanta",
+                    "1",
+                ]
+            )
+            second_discovery_status = main(
+                [
+                    "discover",
+                    "--work-dir",
+                    str(discovery),
+                    "--start-epsilon",
+                    "100",
+                    "--quantum-steps",
+                    "2",
+                    "--max-quanta",
+                    "1",
+                ]
+            )
         if (
             search_status != 0
             or verify_status != 0
@@ -105,6 +132,8 @@ def run() -> int:
             or first_scan_status != 2
             or second_scan_status != 0
             or region_verify_status != 0
+            or first_discovery_status != 2
+            or second_discovery_status != 2
         ):
             print(output.getvalue(), file=sys.stderr)
             return 1
