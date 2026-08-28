@@ -27,6 +27,7 @@ import Research.Quitting.FinFourProducerAtlas.StrictEndpointNormalizedReturn
 import Research.Quitting.FinFourProducerAtlas.StrictRayBindingCardinality
 import Research.Quitting.FinFourProducerAtlas.StrictRayFullBindingDiffuseReduction
 import Research.Quitting.FinFourProducerAtlas.FullBindingPointwiseSupportBallistic
+import Research.Quitting.FinFourProducerAtlas.StrictRayPositiveRootReturn
 import Research.Quitting.FinFourProducerAtlas.StrictRayTailNormalizedCapFlow
 import Research.Quitting.FinFourProducerAtlas.StrongConcentratedPacketConsumer
 import Research.Quitting.FiniteWordWeightedCapDefectLedger
@@ -88,8 +89,11 @@ On that strict ray, a zero selected maximal root fixes the semantic orbit and
 is the unique exact root at its cap.  Otherwise the actual positive-hazard ray
 has a limiting cap, an exact renewal law, and eventually uses only binding
 singleton coordinates.  Exact finite-product estimates and the weighted-tail
-telescope now construct its first-order normalized cap-flow certificate.  No
-terminal consumer is asserted.
+telescope now construct its first-order normalized cap-flow certificate.  A
+positive exact root at the limiting cap now prefixes a compact joint-law
+cluster from that same ray: equality with the global minimum regenerates a
+same-residual minimum source, while strict inequality retains an off-minimum
+debt point below the ray limit.  The latter has no recursive consumer.
 In the zero-root arm, the fixed semantic state has one literal finite-clock
 profile, every unrestricted behavioral cap is attained by Never or a finite
 pure quitting date, and the paid endpoint satisfies the exact signed spectator
@@ -114,7 +118,9 @@ exhibiting a fixed point elsewhere in its relation; it is not an actual ray.
 The separate binding-cardinality contract gives the same-ray
 positive-limit-root, full-binding, or cardinal-three conclusion only from a
 supplied mod-two parity implementation and a late finite-cap local
-certificate.  Neither supplied object has a producer here.
+certificate.  Neither supplied object has a producer here.  Conditional on
+them, the positive-root branch has the preceding return consumer; the
+cardinal-three, ballistic, and omitted-player outputs remain open.
 In the minimum-return arm, the literal paid endpoint either stays on the
 minimum fibre and makes a one-time support-rank handoff through its actual
 half-mixture, or converges to a strictly off-minimum endpoint.  The stored
