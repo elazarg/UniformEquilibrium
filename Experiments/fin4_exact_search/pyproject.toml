@@ -1,0 +1,16 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "uniform-equilibrium-fin4-exact-search"
+version = "0.1.0"
+description = "Exact resumable Fin4 quitting-game scale search experiment"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+fin4-exact-search = "fin4_exact_search.cli:entrypoint"
+
+[tool.setuptools]
+packages = ["fin4_exact_search"]
