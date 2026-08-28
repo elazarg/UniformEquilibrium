@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
-import Research.Quitting.FinFourIndependentCertificateSoundness
+import Research.Quitting.FinFourFixedTableCounterexampleSearch
 import Research.Quitting.FinFourProducerAtlas.NormalizedInertSingleDensityToll
 
 /-!
@@ -153,9 +153,9 @@ theorem nonempty_finFourStrictInertRationalCounterexampleConsequence
 /-- Source-preserving output of the exact counterexample search for one
 normalized rational strict inert machine.
 
-`certificate` is the finite proof-free object.  `strict` retains the complete
-minimum source, causal atom, normalized passport, exact-root uniqueness, and
-tent-toll branch on the same rational table. -/
+This is a genuinely fixed-table search: the reward table is an index of the
+certificate type and an argument of the executable stage function.  The
+proof-free payload therefore cannot silently certify a different table. -/
 structure FinFourRationalStrictInertCounterexampleOutput
     (rewardCode : RationalFinFourRewardCode)
     {bound : ℝ}
@@ -167,9 +167,9 @@ structure FinFourRationalStrictInertCounterexampleOutput
       returnSource lambda} where
   strict : FinFourNormalizedStrictInertSingleDensityToll packet
   index : ℕ
-  certificate : FinFourCounterexampleCertificate
-  emitted : finFourCounterexampleStep index = some certificate
-  reward_eq : certificate.reward = rewardCode
+  certificate : FinFourFixedTableCounterexampleCertificate rewardCode
+  emitted : finFourFixedTableCounterexampleStep rewardCode index =
+    some certificate
 
 namespace FinFourRationalStrictInertCounterexampleOutput
 
@@ -183,28 +183,26 @@ variable
   {packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
     returnSource lambda}
 
-/-- The rational terminal gap carried by the finite lower certificate. -/
+/-- The rational terminal gap carried by the fixed-table lower certificate. -/
 def gamma
     (output : FinFourRationalStrictInertCounterexampleOutput rewardCode
       (packet := packet)) : ℚ :=
-  output.certificate.epsilon / 8
+  output.certificate.gamma
 
 /-- The derived rational certificate margin is strictly positive. -/
 theorem gamma_pos
     (output : FinFourRationalStrictInertCounterexampleOutput rewardCode
       (packet := packet)) :
-    0 < output.gamma := by
-  exact div_pos
-    (finFourCounterexampleDyadicScale_pos output.certificate.scaleIndex)
-    (by norm_num)
+    0 < output.gamma :=
+  output.certificate.gamma_pos
 
 /-- The generated payload passes the independent exact Boolean verifier. -/
 theorem verifies
     (output : FinFourRationalStrictInertCounterexampleOutput rewardCode
       (packet := packet)) :
     output.certificate.verifies = true :=
-  finFourCounterexampleStep_verifies output.index output.certificate
-    output.emitted
+  finFourFixedTableCounterexampleStep_verifies rewardCode output.index
+    output.certificate output.emitted
 
 /-- The finite certificate proves a terminal improvement of the rational
 margin against every behavioral profile of the same reward table. -/
@@ -213,9 +211,8 @@ theorem terminalExploitability
       (packet := packet)) :
     HasTerminalExploitabilityGap rewardCode.realReward
       (output.gamma : ℝ) := by
-  have hgap := output.certificate.verifies_terminalGap output.verifies
-  rw [output.reward_eq] at hgap
-  simpa only [gamma, Rat.cast_div, Rat.cast_ofNat] using hgap
+  simpa only [gamma] using
+    output.certificate.verifies_terminalGap output.verifies
 
 /-- The emitted finite object rules out a uniform-equilibrium payoff on the
 same rational table; no stationary or bounded-horizon restriction remains. -/
@@ -224,19 +221,15 @@ theorem not_exists_uniformEquilibriumPayoff
       (packet := packet)) :
     ¬ ∃ payoff : Payoff (Fin 4),
       (quittingGame rewardCode.realReward).IsUniformEquilibriumPayoff
-        none payoff := by
-  have hno :=
-    output.certificate.verifies_no_uniformEquilibriumPayoff output.verifies
-  rw [output.reward_eq] at hno
-  exact hno
+        none payoff :=
+  output.certificate.verifies_no_uniformEquilibriumPayoff output.verifies
 
 end FinFourRationalStrictInertCounterexampleOutput
 
-/-- Exact source-preserving specialization of the global Fin4 semidecision.
-Every normalized rational table carrying the actual strict inert input emits a
-finite independently checkable positive-gap certificate at some natural stage.
-The strict input is retained verbatim in the output rather than reconstructed
-from local table inequalities. -/
+/-- Exact fixed-table specialization of the Fin4 scale hierarchy.  Every
+normalized rational table carrying the actual strict inert input is found at a
+finite natural stage, and the returned certificate is tied by type to that
+same table. -/
 theorem nonempty_finFourRationalStrictInertCounterexampleOutput
     (rewardCode : RationalFinFourRewardCode)
     (hnormalized : rewardCode.normalized = true)
@@ -250,15 +243,14 @@ theorem nonempty_finFourRationalStrictInertCounterexampleOutput
     (strict : FinFourNormalizedStrictInertSingleDensityToll packet) :
     Nonempty (FinFourRationalStrictInertCounterexampleOutput rewardCode
       (packet := packet)) := by
-  obtain ⟨index, certificate, emitted, reward_eq⟩ :=
-    exists_finFourCounterexampleStep_of_rational_infimum_pos rewardCode
+  obtain ⟨index, certificate, emitted⟩ :=
+    exists_finFourFixedTableCounterexampleStep_of_infimum_pos rewardCode
       hnormalized source.terminalExploitabilityInf_pos
   exact ⟨{
     strict := strict
     index := index
     certificate := certificate
     emitted := emitted
-    reward_eq := reward_eq
   }⟩
 
 /-- Mandatory zero-minimum regression: a source-attached strict inert input
