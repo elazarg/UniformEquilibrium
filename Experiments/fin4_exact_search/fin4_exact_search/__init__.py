@@ -10,6 +10,13 @@ from .engine import (
     build_outer_problem,
     terminal_semantics,
 )
+from .direct_oracle import (
+    ConfigurableDirectScaleContract,
+    DirectHazardLowerTreeCertificate,
+    DirectScaleSearch,
+    RobustGapCertificate,
+    build_direct_hazard_problem,
+)
 
 __all__ = [
     "LowerTreeCertificate",
@@ -20,4 +27,9 @@ __all__ = [
     "WorkRegion",
     "build_outer_problem",
     "terminal_semantics",
+    "ConfigurableDirectScaleContract",
+    "DirectHazardLowerTreeCertificate",
+    "DirectScaleSearch",
+    "RobustGapCertificate",
+    "build_direct_hazard_problem",
 ]
