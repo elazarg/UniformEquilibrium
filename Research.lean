@@ -95,6 +95,7 @@ import Research.Quitting.FiniteDeadlineCompatibleNashChains
 import Research.Quitting.CensoredFiniteClockOperationalEffect
 import Research.Quitting.FiniteDeadlineProjectiveCompatibility
 import Research.Quitting.FiniteDeadlineTimingNashDebtHierarchy
+import Research.Quitting.FiniteDeadlineVanishingAdjacentDistance
 import Research.Quitting.FiniteDebtMonotonicity
 import Research.Quitting.FiniteResetCirculationRegression
 import Research.Quitting.FinFourDeletionCollisionExpansion
@@ -116,6 +117,7 @@ import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.LocalPeriodicAnchorObstructions
 import Research.Quitting.MinimumCertifiedForcedOwnerOrientation
 import Research.Quitting.MinimumExactNashOneActive
+import Research.Quitting.MinimumFiberDebtTransfer
 import Research.Quitting.MinimumFiberResetSquareCompatibility
 import Research.Quitting.MinimumFiberResetSquareSourceMatchNoGo
 import Research.Quitting.MinimumLawCausalSuffixInertStack
