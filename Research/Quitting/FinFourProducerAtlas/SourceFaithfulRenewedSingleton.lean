@@ -13,7 +13,7 @@ import Research.Quitting.SourceFaithfulRetainedResolution
 
 A source-faithful minimum causalization whose retained terminal is
 nonsingleton may be screened after its exact cap--Nash word.  Every requested
-positive resolution strictly below the causalization's incoming marked-mass
+positive resolution weakly below the causalization's incoming marked-mass
 floor is eventually present at the shifted marked date.  Fin4 pure
 nonsingleton screening then reaches a literal singleton through at most three
 strict paid edges and one final no-loss pair-to-singleton route.
@@ -80,7 +80,7 @@ structure FinFourSourceFaithfulRenewedSingletonPacket
     (terminalNonsingleton : 1 < terminal.val.card)
     (resolution : ℝ) where
   resolution_pos : 0 < resolution
-  resolution_lt_parent : resolution < lambda
+  resolution_le_parent : resolution ≤ lambda
   cutoff : ℕ
   endpoint : ∀ rank,
     FinFourPureNonsingletonScreenedEndpoint reward point.1
@@ -144,7 +144,8 @@ theorem sourceDebt_tendsto_minimum
     Tendsto (fun rank ↦ quittingTerminalDebtSum reward
       (sourceProfile causal packet.cutoff rank)) atTop
       (nhds (quittingTerminalDebtSumInf reward)) := by
-  exact causal.prefix_debt_tendsto.comp packet.sourceRank_tendsto_atTop
+  simpa only [sourceProfile, Function.comp_def] using
+    causal.prefix_debt_tendsto.comp packet.sourceRank_tendsto_atTop
 
 /-- Pure screening uses at most three strict profitable edges at every
 retained rank. -/
@@ -187,27 +188,6 @@ theorem endpoint_postDateSpine_eq_source
   exact (packet.endpoint rank).targetProfile_eq_of_time_ne who time history
     (by omega)
 
-/-- After the shifted marked row, the complete singleton-target spine is the
-original supplied suffix spine after its original marked row. -/
-theorem endpoint_postDateSpine_eq_suffix
-    (packet : FinFourSourceFaithfulRenewedSingletonPacket
-      causal terminalNonsingleton resolution) (rank : ℕ) :
-    quittingAllContinueProfileSpine reward
-        (packet.endpoint rank).targetProfile
-        (sourceMark causal packet.cutoff rank + 1) =
-      quittingAllContinueProfileSpine reward
-        (profiles (sourceRank packet.cutoff rank))
-        (mark (sourceRank packet.cutoff rank) + 1) := by
-  rw [packet.endpoint_postDateSpine_eq_source rank]
-  have hlength := packet.sourceRoots_length rank
-  unfold sourceProfile sourceMark
-  rw [show sourceRank packet.cutoff rank + 1 +
-        mark (sourceRank packet.cutoff rank) + 1 =
-      (causal.roots (sourceRank packet.cutoff rank)).length +
-        (mark (sourceRank packet.cutoff rank) + 1) by omega]
-  rw [quittingAllContinueProfileSpine_add,
-    quittingAllContinueProfileSpine_literalRootStackProfile_length]
-
 /-- Every renewed singleton endpoint produces the generic strong packet at
 exactly the same requested resolution. -/
 theorem nonempty_strongConcentratedPacket
@@ -226,7 +206,7 @@ theorem nonempty_strongConcentratedPacket
 
 end FinFourSourceFaithfulRenewedSingletonPacket
 
-/-- Every positive resolution strictly below the incoming source-faithful
+/-- Every positive resolution weakly below the incoming source-faithful
 marked-mass floor produces a cofinal renewed singleton packet. -/
 theorem nonempty_finFourSourceFaithfulRenewedSingletonPacket
     {point : QuittingTerminalSemanticLawPoint (Fin 4)}
@@ -237,14 +217,14 @@ theorem nonempty_finFourSourceFaithfulRenewedSingletonPacket
       point terminal profiles mark lambda)
     (terminalNonsingleton : 1 < terminal.val.card)
     (hresolutionPos : 0 < resolution)
-    (hresolutionLt : resolution < lambda) :
+    (hresolutionLe : resolution ≤ lambda) :
     Nonempty (FinFourSourceFaithfulRenewedSingletonPacket
       causal terminalNonsingleton resolution) := by
   have hminimumPos : 0 < quittingTerminalSemanticDebtSum point.1 := by
     rw [causal.debt_eq_inf]
     exact causal.inf_pos
   have heventually :=
-    causal.eventually_requestedResolution_le_shiftedMarkMass hresolutionLt
+    causal.eventually_requestedResolution_le_shiftedMarkMass hresolutionLe
   rw [eventually_atTop] at heventually
   obtain ⟨cutoff, hcutoff⟩ := heventually
   let endpoint : ∀ rank,
@@ -273,7 +253,7 @@ theorem nonempty_finFourSourceFaithfulRenewedSingletonPacket
               hcutoff (cutoff + rank) (by omega)))
   exact ⟨{
     resolution_pos := hresolutionPos
-    resolution_lt_parent := hresolutionLt
+    resolution_le_parent := hresolutionLe
     cutoff := cutoff
     endpoint := endpoint
   }⟩
