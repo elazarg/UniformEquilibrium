@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
-import Research.Quitting.FinFourCounterexampleSemidecision
+import Research.Quitting.FinFourIndependentCertificateSoundness
 import Research.Quitting.FinFourProducerAtlas.NormalizedInertSingleDensityToll
 
 /-!
@@ -110,8 +110,7 @@ theorem terminalExploitability
     HasTerminalExploitabilityGap output.rewardCode.realReward
       (output.gamma : ℝ) := by
   simpa only [rewardCode, gamma, Rat.cast_div, Rat.cast_ofNat] using
-    finFourCounterexampleStep_terminalGap output.index output.certificate
-      output.emitted
+    output.certificate.verifies_terminalGap output.verifies
 
 /-- The generated rational table has no uniform-equilibrium payoff. -/
 theorem not_exists_uniformEquilibriumPayoff
@@ -121,8 +120,7 @@ theorem not_exists_uniformEquilibriumPayoff
       (quittingGame output.rewardCode.realReward).IsUniformEquilibriumPayoff
         none payoff := by
   simpa only [rewardCode] using
-    finFourCounterexampleStep_no_uniformEquilibriumPayoff output.index
-      output.certificate output.emitted
+    output.certificate.verifies_no_uniformEquilibriumPayoff output.verifies
 
 end FinFourStrictInertRationalCounterexampleConsequence
 
@@ -215,8 +213,7 @@ theorem terminalExploitability
       (packet := packet)) :
     HasTerminalExploitabilityGap rewardCode.realReward
       (output.gamma : ℝ) := by
-  have hgap := finFourCounterexampleStep_terminalGap output.index
-    output.certificate output.emitted
+  have hgap := output.certificate.verifies_terminalGap output.verifies
   rw [output.reward_eq] at hgap
   simpa only [gamma, Rat.cast_div, Rat.cast_ofNat] using hgap
 
@@ -228,8 +225,8 @@ theorem not_exists_uniformEquilibriumPayoff
     ¬ ∃ payoff : Payoff (Fin 4),
       (quittingGame rewardCode.realReward).IsUniformEquilibriumPayoff
         none payoff := by
-  have hno := finFourCounterexampleStep_no_uniformEquilibriumPayoff
-    output.index output.certificate output.emitted
+  have hno :=
+    output.certificate.verifies_no_uniformEquilibriumPayoff output.verifies
   rw [output.reward_eq] at hno
   exact hno
 
