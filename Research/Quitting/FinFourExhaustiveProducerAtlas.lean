@@ -11,7 +11,7 @@ import Research.Quitting.FinFourProducerAtlas.FullyScreenedFiniteClockClearing
 import Research.Quitting.FinFourProducerAtlas.LiteralNoGo
 import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
-import Research.Quitting.FinFourProducerAtlas.MinimumResponseChordRegeneration
+import Research.Quitting.FinFourProducerAtlas.MinimumResponseChordActualDecoder
 import Research.Quitting.FinFourProducerAtlas.NormalizedReturn
 import Research.Quitting.FinFourProducerAtlas.MonodromyImpossible
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCollisionScreening
@@ -40,6 +40,12 @@ The resulting actual forced-pair family has a derived normalized passport:
 its enlarged-slice minimum either returns to the global minimum and reaches
 the three-role chord, or is a strict inert point with only all Continue as an
 exact cap--Nash root.
+The equality endpoint now has an exhaustive actual minimum-response decoder:
+it returns endpoint ascent, a routed singleton, a prescribed atom, response
+ascent, or a compiled proper response chord with a strict one-time support
+drop.  This decoder starts from the normalized-return endpoint rather than a
+paid spectator cycle and supplies no renewable chronology or downstream
+consumer.
 At a zero-density boundary, literal raw rows from that same selection retain
 the arbitrary prefix separately from the immutable source chronology.  If
 their combined deleted clocks are fully screened, finite clock clearing gives
