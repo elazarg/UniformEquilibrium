@@ -893,6 +893,27 @@ This has `M`, `L`, and `A` relative to the actual source-retaining flow, but no
 return or rank drop, contradict the strict ray, or produce a uniform-equilibrium
 payoff.
 
+The corresponding source-free branch exclusions are false at zero global
+minimum debt.  `rationalCardThree` and `fullBindingBallistic`
+(`Research/Quitting/FinFourMaximalRayZeroMinimumRegressions.lean`) are two
+fully constructed Fin4 tables with actual canonical maximal-prefix rays.  In
+the first, the limiting binding set has cardinality three.  In the second,
+all four coordinates bind, every current root is supported on the same three
+players, and the exact renewal ratio tends to `1 / 2`.  The literal
+`LocalForcedPairFragment` is attached to the ray by
+`Regression.pair_zero_eq_fragment`; its named accessors retain full mass, the
+complete post-date behavioral spine, zero marked debt, and a distinct positive
+payer debt.  The selected roots tend to all Continue, whereas the stored
+positive root is only an exact root at the same limiting cap, not their limit.
+These concrete regressions have `M`, `L`, and `A`, and a checked no-go `C`:
+`Regression.neverPair_globalMinimum` gives global debt zero and
+`Regression.not_nonempty_minimumAtomProducer` excludes every positive-minimum
+source for the same table.  They also have genuine all-behavior equilibrium
+consumers: `Regression.neverUniformEquilibriumPayoff` and the rational and
+full-binding `...PureSingleton_uniformEquilibriumPayoff` declarations.  Thus
+the constructions are boundary examples, not counterexamples or consumers of
+the positive-minimum strict-ray branches.
+
 The conditional cardinality contract is checked in
 `Research/Topology/ModTwoBoxComplementarityParity.lean`,
 `Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, and
