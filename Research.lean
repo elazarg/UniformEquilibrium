@@ -54,6 +54,8 @@ import Research.Quitting.ConcentratedSingleton.Cancellation
 import Research.Quitting.ConcentratedSingleton.Compression
 import Research.Quitting.ConcentratedSingleton.Consumer
 import Research.Quitting.ConcentratedSingleton.StrategicDispatch
+import Research.Quitting.ConstrainedRootExistence
+import Research.Quitting.ConstrainedRootNormalWork
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
@@ -73,6 +75,7 @@ import Research.Quitting.EscapeAwareQuantileClockPolynomialLower
 import Research.Quitting.EscapeAwareQuantileClockTransport
 import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
+import Research.Quitting.FinFourConstrainedRootNormalWorkRegression
 import Research.Quitting.FinFourExhaustiveProducerAtlas
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
 import Research.Quitting.FinFourProducerAtlas.ActualLowTail

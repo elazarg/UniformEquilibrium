@@ -90,6 +90,37 @@ counterexample to one certificate language closes that route; it does not prove
 nonexistence of equilibrium unless it reaches the all-behavior terminal-gap
 interface.
 
+The constrained-root normal-work ledger is one such exact Research boundary.
+[`constrainedRoot_terminalDebt_eq_normalWork_add_inherited_sub_shield`](../Research/Quitting/ConstrainedRootNormalWork.lean)
+and
+[`constrainedRoot_totalNormalWork_eq_excessChange_add_killed_add_shield`](../Research/Quitting/ConstrainedRootNormalWork.lean)
+decompose the full behavioral semantic debt after prefixing a lower-bounded
+one-row root.  The near-minimum estimate
+[`nearMinimum_totalNormalWork_ge_kappa_mul_minimum_sub_excess`](../Research/Quitting/ConstrainedRootNormalWork.lean)
+uses the exact finite min--max floor, and
+[`lowerFaceRemoval_otherDebtChange_sum_eq`](../Research/Quitting/ConstrainedRootNormalWork.lean)
+shows that deleting binding mover work produces only an aggregate signed
+repayment account.  A positive new coordinate is obtained by
+[`lowerFaceRemoval_exists_supportEntry_of_uniqueDebtor`](../Research/Quitting/ConstrainedRootNormalWork.lean)
+only under its explicit unique-source-debtor and work-above-excess hypotheses.
+The finite backward-row and arbitrary own-strategy cut identities are literal
+telescopes, not chronological charge or an oriented flow.
+
+[`exists_quittingLowerBoundConstrainedRoot`](../Research/Quitting/ConstrainedRootExistence.lean)
+constructs the compact constrained root against an arbitrary prescribed
+continuation, and
+[`exists_actual_quittingLowerBoundConstrainedPrefix`](../Research/Quitting/ConstrainedRootExistence.lean)
+attaches it to a supplied actual behavioral tail.  This gives `M` and `L`,
+with `A` only relative to that supplied tail; it is not a positive-minimum
+atlas producer and has no `C`.  The same-table boundary theorem
+[`FinFourConstrainedRootNormalWorkRegression.finite_boundaryRegression`](../Research/Quitting/FinFourConstrainedRootNormalWorkRegression.lean)
+uses unrestricted behavioral caps: unit debt circulates around four unilateral
+updates, while a stationary mixed profile proves that the global carrier
+minimum is zero.  It therefore blocks a local rank based only on work, labels,
+or debt support, but supplies no positive-minimum counterexample, repayment
+orientation or cancellation, renewable consumer, terminal approximation, or
+uniform-equilibrium conclusion.
+
 The full-core deadlock completion family has a sharper integrated carrier
 constraint.
 [`IsFullCoreDeadlockCompletion.globalDebtFloor_le_sharperBound`](../UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockSharperBound.lean)

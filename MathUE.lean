@@ -28,6 +28,7 @@ import MathUE.ChargedPathSelectionCounterexamples
 import MathUE.CoerciveIntervalMinimum
 import MathUE.CofiniteIdeal
 import MathUE.CompactFiniteChargedReturn
+import MathUE.ConstrainedAffineNormalWork
 import MathUE.ContinuationLatticeGluing
 import MathUE.CoordinatewisePuiseuxCurve
 import MathUE.Coupling
