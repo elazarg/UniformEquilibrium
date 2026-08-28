@@ -97,6 +97,7 @@ import Research.Quitting.FullCoreDuplicatedCyclicLasso
 import Research.Quitting.HandshakeClub
 import Research.Quitting.HazardSummability
 import Research.Quitting.HolonomyEquivalenceCompression
+import Research.Quitting.HopfCompletionSafeChambers
 import Research.Quitting.HarmonicReservoirConsumer
 import Research.Quitting.LiveRootExploitabilityFactorization
 import Research.Quitting.LocalPeriodicAnchorObstructions
@@ -149,6 +150,7 @@ import Research.Quitting.SourceMatchedSnellPurification
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
 import Research.Quitting.SameStageEndpointMonodromy
 import Research.Quitting.SameStageEndpointPurification
+import Research.Quitting.StationaryFaceBoxClosure
 import Research.Quitting.StochasticButtonCompression
 import Research.Quitting.StochasticButtonUnilateralCompression
 import Research.Quitting.StoppingLawMixtureFiniteWitnessPassport
