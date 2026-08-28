@@ -785,12 +785,29 @@ the floor `g / 2` for
 `theta <= g / (2 * (g + 2 * R))`, and the response-square charge is exactly
 scaled by `1 - theta`.  Both the response endpoint and chord point are
 causalized into `FinFourMinimumAtomProducer` objects with the incoming hard
-residual and their own displayed law.  These results have `M` and `L` only:
-no checked declaration constructs the pre-route packet from the actual
-stopping-law endpoint-rise branch, so there is no `A`; no oriented return,
-renewable rank, terminal approximation, or other downstream `C` is known.
-The compact law points need not be attained, and the regenerated chronologies
-do not contain the old response rectangle.
+residual and their own displayed law.  This supplied-packet compiler has `M`
+and `L` only.
+
+The actual decoder
+`FinFourNormalizedReturnSourceCapstone.nonempty_minimumResponseActualSourceOutcome`
+(`Research/Quitting/FinFourProducerAtlas/MinimumResponseChordActualDecoder.lean`)
+now supplies `A` from the normalized-return source capstone.  Its equality arm
+keeps the actualizer and exact minimum identity, and exhaustively returns
+endpoint debt ascent, a routed singleton, a prescribed atom, strict response
+ascent, or a compiled minimum rectangle.  In the last arm,
+`FinFourMinimumResponseCompiledRectangle.nonempty_chord_with_responseSupportDrop`
+constructs every proper chord and proves that its positive-debt support
+strictly contains the response support.  The canonical source records the
+literal scales `rho^2 * D_* / 8` for mover gain, `rho^2 * D_* / 64` for
+endpoint observer debt, `rho^2 * D_* / 128` for decoder charge, and
+`7 * rho^2 * D_* / 1024` for the compiled response rectangle.
+
+This actual route starts from the normalized-return equality endpoint; it is
+not the advertised paid spectator-cycle decoder.  Compact law points need not
+be attained, regenerated chronologies are not asserted to contain the old
+response rectangle, and the strict support drop is one-time rather than a
+renewable source rank.  No branch here has a checked chronology return,
+terminal approximation, recursive consumer, or other `C`.
 
 The same actual forced-pair provenance collapses the normalized passport to
 one density.  In
