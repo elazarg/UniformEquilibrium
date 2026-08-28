@@ -41,82 +41,92 @@ jobs:
               "Research/Quitting/StoppingLawMinimumFiberCommonResponseCompiler.lean"
           )
           text = path.read_text()
-          old = '''  have hdebt :=
-            quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum
-              reward (frontier.source rank) mover.1 observer
-                (frontier.source rank mover.1) (frontier.replacement mover rank)
-                (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear
-          '''
-          new = '''  have hnear' : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-              quittingTerminalSemanticDebtSum
-                  (quittingTerminalSemanticPair reward
-                    (Function.update (frontier.source rank) mover.1
-                      (frontier.source rank mover.1))) ≤
-                quittingTerminalSemanticDebtSum candidate + epsilon := by
-            simpa only [Function.update_eq_self, sourcePair] using hnear
-          have hdebt :=
-            quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum
-              reward (frontier.source rank) mover.1 observer
-                (frontier.source rank mover.1) (frontier.replacement mover rank)
-                (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear'
-          '''
-          if old not in text:
-              raise SystemExit("near-minimum application block not found")
-          text = text.replace(old, new, 1)
 
-          old = '''    dsimp only at hdebt
-              rw [Function.update_eq_self] at hdebt
-              dsimp only [sourcePair, fullReplacementPair, fullReplacementProfile,
-                fullReplacementHalfProfile, quittingStoppingLawResetProfile] at hdebt
-              nlinarith [hdebt.2]
-          '''
-          new = '''    have hdebtUpper := hdebt.2
-              rw [Function.update_eq_self] at hdebtUpper
-              simp only [sourcePair, fullReplacementPair, fullReplacementProfile,
-                fullReplacementHalfProfile, quittingStoppingLawResetProfile] at hdebtUpper
-              nlinarith [hdebtUpper]
-          '''
-          if old not in text:
-              raise SystemExit("chord-gap normalization block not found")
-          text = text.replace(old, new, 1)
+          start = text.index(
+              "  have hdebt :=\n"
+              "    quittingTerminalSemanticDebt_stoppingLawMixture_"
+              "chordGap_le_nearMinimum\n"
+          )
+          end = text.index("  have hbound :", start)
+          new = (
+              "  have hnear' : ∀ candidate ∈ "
+              "quittingTerminalSemanticCarrier reward,\n"
+              "      quittingTerminalSemanticDebtSum\n"
+              "          (quittingTerminalSemanticPair reward\n"
+              "            (Function.update (frontier.source rank) mover.1\n"
+              "              (frontier.source rank mover.1))) ≤\n"
+              "        quittingTerminalSemanticDebtSum candidate + epsilon := by\n"
+              "    simpa only [Function.update_eq_self, sourcePair] using hnear\n"
+              "  have hdebt :=\n"
+              "    quittingTerminalSemanticDebt_stoppingLawMixture_"
+              "chordGap_le_nearMinimum\n"
+              "      reward (frontier.source rank) mover.1 observer\n"
+              "        (frontier.source rank mover.1) "
+              "(frontier.replacement mover rank)\n"
+              "        (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear'\n"
+          )
+          text = text[:start] + new + text[end:]
 
-          old = '''    simpa only [sourcePair] using
-              frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
-          '''
-          new = '''    simpa only [Function.comp_def, sourcePair] using
-              frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
-          '''
+          start = text.index("    dsimp only at hdebt\n")
+          end = text.index(
+              "  rw [frontier.fullReplacementHalfCapChordGap_eq_debtChordGap",
+              start,
+          )
+          new = (
+              "    have hdebtUpper := hdebt.2\n"
+              "    rw [Function.update_eq_self] at hdebtUpper\n"
+              "    simp only [sourcePair, fullReplacementPair, "
+              "fullReplacementProfile,\n"
+              "      fullReplacementHalfProfile, "
+              "quittingStoppingLawResetProfile] at hdebtUpper\n"
+              "    nlinarith [hdebtUpper]\n"
+          )
+          text = text[:start] + new + text[end:]
+
+          old = (
+              "    simpa only [sourcePair] using\n"
+              "      frontier.source_tendsto.comp "
+              "endpoint.subseq_strictMono.tendsto_atTop\n"
+          )
+          new = (
+              "    simpa only [Function.comp_def, sourcePair] using\n"
+              "      frontier.source_tendsto.comp "
+              "endpoint.subseq_strictMono.tendsto_atTop\n"
+          )
           if old not in text:
               raise SystemExit("source tendsto block not found")
           text = text.replace(old, new, 1)
 
-          old = '''  simpa only [commonResponseError] using hsum.const_mul 2
-          '''
-          new = '''  change Tendsto (fun rank ↦ 2 *
-            (frontier.fullReplacementHalfCapChordGap mover observer.1
-              (endpoint.subseq rank) + endpoint.commonResponseTolerance rank))
-            atTop (nhds 0)
-          convert hsum.const_mul 2 using 1 <;> ring
-          '''
+          old = "  simpa only [commonResponseError] using hsum.const_mul 2\n"
+          new = (
+              "  change Tendsto (fun rank ↦ 2 *\n"
+              "    (frontier.fullReplacementHalfCapChordGap mover observer.1\n"
+              "      (endpoint.subseq rank) + "
+              "endpoint.commonResponseTolerance rank))\n"
+              "    atTop (nhds 0)\n"
+              "  convert hsum.const_mul 2 using 1 <;> ring\n"
+          )
           if old not in text:
               raise SystemExit("common-response limit block not found")
-          text = text.replace(old, new, 1)
-          path.write_text(text)
+          path.write_text(text.replace(old, new, 1))
 
           path = Path(
               "Research/Quitting/FinFourProducerAtlas/"
               "CanonicalPairEndpointSourceRegeneration.lean"
           )
           text = path.read_text()
-          old = '''    simpa only [renewalEndpointLawPoint, renewalEndpointProfile] using
-              handoff.endpointPacket_endpoint_tendsto.comp
-                hsubsequence.tendsto_atTop
-          '''
-          new = '''    simpa only [Function.comp_def, renewalEndpointLawPoint,
-              renewalEndpointProfile] using
-              handoff.endpointPacket_endpoint_tendsto.comp
-                hsubsequence.tendsto_atTop
-          '''
+          old = (
+              "    simpa only [renewalEndpointLawPoint, "
+              "renewalEndpointProfile] using\n"
+              "      handoff.endpointPacket_endpoint_tendsto.comp\n"
+              "        hsubsequence.tendsto_atTop\n"
+          )
+          new = (
+              "    simpa only [Function.comp_def, renewalEndpointLawPoint,\n"
+              "      renewalEndpointProfile] using\n"
+              "      handoff.endpointPacket_endpoint_tendsto.comp\n"
+              "        hsubsequence.tendsto_atTop\n"
+          )
           if old not in text:
               raise SystemExit("endpoint tendsto block not found")
           path.write_text(text.replace(old, new, 1))
