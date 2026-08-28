@@ -20,10 +20,11 @@ Research must not import this directory.
   campaign.
 - `counterexample_search/` contains the focused falsifier programs.
 - `fin4_exact_search/` contains the self-contained exact, resumable
-  per-accuracy Fin4 lower-certificate/profile search, flat certificate checker,
-  deterministic remote work regions, and batch runner; validate it with
-  `python3 Experiments/fin4_exact_search/validate.py` and launch it with
-  `python3 Experiments/fin4_exact_search/run.py`.
+  per-accuracy Fin4 lower-certificate/profile search, its equality-free direct
+  hazard oracle, a no-input tracked-candidate campaign, flat certificate
+  checkers, deterministic remote work regions, and batch runner; validate it
+  with `python3 Experiments/fin4_exact_search/validate.py` and launch the long
+  search with `python3 Experiments/fin4_exact_search/run.py discover`.
 - `joint_reset_law/` contains an exact-rational regression of the integrated
   joint-reset semiconjugacy.
 - `Probes/` contains standalone bounded probes that are not in the Base suite.
