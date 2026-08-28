@@ -1,0 +1,75 @@
+name: Focused Fin4 response recipient atom
+
+on:
+  push:
+    branches:
+      - gpt/fin4-minimum-response-recipient-atom
+    paths:
+      - "Research/Quitting/FinFourProducerAtlas/MinimumResponseRecipientAtom.lean"
+      - ".github/workflows/focused-fin4-response-recipient-atom.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  focused:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: recursive
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Register research module in working tree
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path("Research.lean")
+          text = path.read_text()
+          anchor = (
+              "import Research.Quitting.FinFourProducerAtlas."
+              "MinimumResponseChordActualDecoder\n"
+          )
+          new_import = (
+              "import Research.Quitting.FinFourProducerAtlas."
+              "MinimumResponseRecipientAtom\n"
+          )
+          if new_import not in text:
+              if anchor not in text:
+                  raise SystemExit("Research umbrella anchor not found")
+              text = text.replace(anchor, anchor + new_import, 1)
+              path.write_text(text)
+          PY
+
+      - name: Generate audit and check focused module
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/generate_axiom_audit.py
+          python3 scripts/check_import_graph.py
+          lake env lean \
+            Research/Quitting/FinFourProducerAtlas/MinimumResponseRecipientAtom.lean
+          python3 scripts/check_trust.py
+
+      - name: Upload generated integration files
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: focused-generated-files
+          path: |
+            Research.lean
+            AxiomAudit.lean
+          if-no-files-found: error
