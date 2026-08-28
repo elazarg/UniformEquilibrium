@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import Research.Quitting.FinFourProducerAtlas.CanonicalPairMinimumEndpointSupportRankHandoff
 import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.ForcedPairMinimumTailConsumer
+import Research.Quitting.FinFourProducerAtlas.FullyScreenedFiniteClockClearing
 import Research.Quitting.FinFourProducerAtlas.LiteralNoGo
 import Research.Quitting.FinFourProducerAtlas.MaximalPrefixRayDichotomy
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
@@ -37,6 +38,13 @@ The resulting actual forced-pair family has a derived normalized passport:
 its enlarged-slice minimum either returns to the global minimum and reaches
 the three-role chord, or is a strict inert point with only all Continue as an
 exact cap--Nash root.
+At a zero-density boundary, literal raw rows from that same selection retain
+the arbitrary prefix separately from the immutable source chronology.  If
+their combined deleted clocks are fully screened, finite clock clearing gives
+source-attached concentrated packets after at most four paid clears and feeds
+the existing strategic-singleton-or-collision-minimum consumer.  The
+non-full-screened alternative is not identified with a positive host, and
+both consumer outputs remain open.
 The same family also has one canonical maximal-prefix semantic ray.  Its
 scalar limit either returns the whole source to the minimum and reaches the
 three-role consumer, or leaves a strict ray stall with invariant normalized
