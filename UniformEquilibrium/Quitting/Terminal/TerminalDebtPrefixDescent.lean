@@ -67,6 +67,41 @@ theorem quittingTerminalExploitabilityInf_le [Nonempty ι]
   exact csInf_le (bddBelow_range_quittingTerminalExploitability reward)
     ⟨profile, rfl⟩
 
+/-- Every strict lower bound on the global exploitability infimum is attained
+profilewise by a literal behavioral deviation.  Strictness is necessary:
+the best-response coordinate is a supremum and need not be attained at its
+exact value. -/
+theorem hasTerminalExploitabilityGap_of_lt_quittingTerminalExploitabilityInf
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {gap : ℝ} (hgap : gap < quittingTerminalExploitabilityInf reward) :
+    HasTerminalExploitabilityGap reward gap := by
+  intro profile
+  have hprofile : gap < quittingTerminalExploitability reward profile :=
+    hgap.trans_le (quittingTerminalExploitabilityInf_le reward profile)
+  unfold quittingTerminalExploitability at hprofile
+  obtain ⟨who, -, hwho⟩ := Finset.exists_mem_eq_sup'
+    Finset.univ_nonempty fun who : ι =>
+      max 0 (quittingContinuationBestResponseValue reward profile who -
+        quittingTerminalPayoff reward profile who)
+  unfold QuittingBoundaryHolonomy.finitePlayerMax at hprofile
+  rw [hwho] at hprofile
+  have hdebt : 0 ≤ quittingContinuationBestResponseValue reward profile who -
+      quittingTerminalPayoff reward profile who :=
+    quittingTerminalDeviationDebt_nonneg reward profile who
+  rw [max_eq_right hdebt] at hprofile
+  let error :=
+    quittingContinuationBestResponseValue reward profile who -
+      quittingTerminalPayoff reward profile who - gap
+  have herror : 0 < error := by
+    dsimp only [error]
+    linarith
+  obtain ⟨deviation, hdeviation⟩ :=
+    exists_quittingContinuation_deviation_ge_sub reward profile who herror
+  refine ⟨who, deviation, ?_⟩
+  dsimp only [error] at hdeviation
+  linarith
+
 /-- A uniform literal terminal exploitability gap lower-bounds the global
 exploitability infimum. -/
 theorem terminalExploitabilityGap_le_quittingTerminalExploitabilityInf
