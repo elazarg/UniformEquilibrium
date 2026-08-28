@@ -1041,6 +1041,24 @@ This has `M`, `L`, and `A` relative to the actual source-retaining flow, but no
 return or rank drop, contradict the strict ray, or produce a uniform-equilibrium
 payoff.
 
+Exact finite support now sharpens that compact reduction.  In
+`Research/Quitting/FinFourProducerAtlas/FullBindingPointwiseSupportBallistic.lean`,
+`compactCluster_ratioLimit_pos_of_eventually_all_currentHazard_pos` is
+universal over every compact cluster of the same actual strict ray.  Under
+full binding, eventual positivity of all four finite current coordinates
+along that cluster forces its renewal-ratio limit to be positive, even when
+the limiting current direction has zero coordinates.  The source theorem
+`eventually_renewalRatio_ge_pos_of_fullBinding_of_eventually_all_currentHazard_pos`
+upgrades eventual finite full support to one `eta > 0` that eventually bounds
+the actual renewal ratios below.  The exhaustive
+`eventually_renewalRatio_ge_pos_or_exists_frequently_currentHazard_eq_zero`
+returns uniformly ballistic renewal or one fixed player whose current hazard
+is zero infinitely often.  These results have `M`, `L`, and `A` relative to
+the actual source-retaining flow, but no `C`.  Full binding and eventual full
+support are not produced, and neither the ballistic nor omitted-player branch
+has a checked return, rank decrease, contradiction, or uniform-equilibrium
+consumer.
+
 The corresponding source-free branch exclusions are false at zero global
 minimum debt.  `rationalCardThree` and `fullBindingBallistic`
 (`Research/Quitting/FinFourMaximalRayZeroMinimumRegressions.lean`) are two
