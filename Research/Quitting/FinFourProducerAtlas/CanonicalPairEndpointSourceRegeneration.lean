@@ -105,7 +105,8 @@ theorem nonempty_endpointJointLimit
       (fun rank ↦ (handoff.renewalEndpointLawPoint
         (subsequence rank)).1) atTop
       (nhds handoff.supportHandoff.endpointCluster) := by
-    simpa only [renewalEndpointLawPoint, renewalEndpointProfile] using
+    simpa only [renewalEndpointLawPoint, renewalEndpointProfile,
+      Function.comp_apply] using
       handoff.endpointPacket_endpoint_tendsto.comp
         hsubsequence.tendsto_atTop
   have hsemantic : point.1 = handoff.supportHandoff.endpointCluster :=
