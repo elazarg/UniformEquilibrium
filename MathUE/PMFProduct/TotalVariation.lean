@@ -121,6 +121,96 @@ theorem pmfTV_pmfPi_replaceOn_le_sum
           rw [Finset.sum_insert hcoordinate]
           ring
 
+/-- The total variation between two finite independent products is at most
+the sum of their marginal total variations. -/
+theorem pmfTV_pmfPi_le_sum
+    {A : ι → Type*} [∀ index, Fintype (A index)]
+    (first second : ∀ index, PMF (A index)) :
+    Probability.pmfTV (pmfPi first) (pmfPi second) ≤
+      ∑ index, Probability.pmfTV (first index) (second index) := by
+  simpa using pmfTV_pmfPi_replaceOn_le_sum first second Finset.univ
+
+/-- A bounded observable of a finite independent product is Lipschitz in the
+sum of the marginal total variations. -/
+theorem abs_expect_pmfPi_sub_le_two_mul_sum_pmfTV
+    {A : ι → Type*} [∀ index, Fintype (A index)]
+    (first second : ∀ index, PMF (A index))
+    (observable : (∀ index, A index) → ℝ) {bound : ℝ}
+    (hbound : 0 ≤ bound)
+    (hobservable : ∀ sample, |observable sample| ≤ bound) :
+    |Probability.expect (pmfPi first) observable -
+        Probability.expect (pmfPi second) observable| ≤
+      2 * bound *
+        ∑ index, Probability.pmfTV (first index) (second index) := by
+  calc
+    |Probability.expect (pmfPi first) observable -
+        Probability.expect (pmfPi second) observable| ≤
+        2 * bound * Probability.pmfTV (pmfPi first) (pmfPi second) :=
+      Probability.abs_expect_sub_le_two_mul_pmfTV _ _ observable hobservable
+    _ ≤ 2 * bound *
+          ∑ index, Probability.pmfTV (first index) (second index) :=
+      mul_le_mul_of_nonneg_left (pmfTV_pmfPi_le_sum first second)
+        (mul_nonneg (by norm_num) hbound)
+
+omit [DecidableEq ι] in
+/-- If every marginal has the same law after its operational observation,
+then the observed independent product laws are exactly equal. -/
+theorem pmfPi_map_coordwise_eq_of_maps_eq
+    {A C B : ι → Type*}
+    (first : ∀ index, PMF (A index))
+    (second : ∀ index, PMF (C index))
+    (observeFirst : ∀ index, A index → B index)
+    (observeSecond : ∀ index, C index → B index)
+    (hmarginal : ∀ index,
+      (first index).map (observeFirst index) =
+        (second index).map (observeSecond index)) :
+    (pmfPi first).map (fun sample index => observeFirst index (sample index)) =
+      (pmfPi second).map
+        (fun sample index => observeSecond index (sample index)) := by
+  change ProbabilityMassFunction.pushforward (pmfPi first)
+      (fun sample index => observeFirst index (sample index)) =
+    ProbabilityMassFunction.pushforward (pmfPi second)
+      (fun sample index => observeSecond index (sample index))
+  rw [pmfPi_push_coordwise, pmfPi_push_coordwise]
+  congr 1
+  funext index
+  exact hmarginal index
+
+omit [DecidableEq ι] in
+/-- An observable depending only on coordinatewise operational images has
+exactly the same expectation under marginally operationally equal product
+laws.  This is the source-independent null-direction theorem. -/
+theorem expect_pmfPi_coordwise_eq_of_maps_eq
+    {A C B : ι → Type*}
+    (first : ∀ index, PMF (A index))
+    (second : ∀ index, PMF (C index))
+    (observeFirst : ∀ index, A index → B index)
+    (observeSecond : ∀ index, C index → B index)
+    (observable : (∀ index, B index) → ℝ)
+    (hmarginal : ∀ index,
+      (first index).map (observeFirst index) =
+        (second index).map (observeSecond index)) :
+    Probability.expect (pmfPi first)
+        (fun sample => observable fun index => observeFirst index (sample index)) =
+      Probability.expect (pmfPi second)
+        (fun sample => observable fun index =>
+          observeSecond index (sample index)) := by
+  calc
+    Probability.expect (pmfPi first)
+        (fun sample => observable fun index => observeFirst index (sample index)) =
+        Probability.expect
+          ((pmfPi first).map
+            (fun sample index => observeFirst index (sample index))) observable :=
+      (Probability.expect_map _ _ _).symm
+    _ = Probability.expect
+          ((pmfPi second).map
+            (fun sample index => observeSecond index (sample index))) observable := by
+      rw [pmfPi_map_coordwise_eq_of_maps_eq first second
+        observeFirst observeSecond hmarginal]
+    _ = Probability.expect (pmfPi second)
+        (fun sample => observable fun index =>
+          observeSecond index (sample index)) := Probability.expect_map _ _ _
+
 /-- Changing one marginal changes the expectation of a bounded observable by
 at most twice its bound times the marginal total-variation distance. -/
 theorem abs_expect_pmfPi_update_sub_le_two_mul_pmfTV

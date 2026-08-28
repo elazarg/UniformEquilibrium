@@ -1049,6 +1049,37 @@ full-binding `...PureSingleton_uniformEquilibriumPayoff` declarations.  Thus
 the constructions are boundary examples, not counterexamples or consumers of
 the positive-minimum strict-ray branches.
 
+An independent adjacent-deadline layer now isolates the exact finite-game
+projective boundary.  The generic declarations
+`Math.PMFProduct.pmfTV_pmfPi_le_sum`,
+`abs_expect_pmfPi_sub_le_two_mul_sum_pmfTV`,
+`pmfPi_map_coordwise_eq_of_maps_eq`, and
+`expect_pmfPi_coordwise_eq_of_maps_eq`
+(`MathUE/PMFProduct/TotalVariation.lean`) control finite independent products
+and identify equality after coordinatewise operational observation.
+
+In `Research/Quitting/FiniteDeadlineAdjacentTotalVariation.lean`,
+`QuittingFiniteDeadlineNashProfile.semanticDebt_eq_boundaryGain_pospart`
+identifies the unrestricted behavioral debt of a finite-deadline Nash profile
+with the positive part of its first excluded pure-time gain.  Literal timing
+law inclusion preserves the realized behavioral profile and every old-action
+gain, and `quittingFiniteDeadlineTiming_isNash_of_include_isNash` gives the
+sound one-way projective implication.  For arbitrary consecutive exact timing
+Nash laws,
+`quittingFiniteDeadlineTimingProfile_semanticDebt_le_adjacentTV` proves
+`d_i <= 4 R * sum_j TV`; the supplied-coordinate converse is
+`quittingFiniteDeadlineAdjacentTV_ge_div_of_semanticDebt_ge`.
+Operationally equal stopping-time marginals have exactly equal payoffs and
+common-action gains, while a gain change only yields some changed observed
+marginal through `exists_actionTime_map_ne_of_mixedGain_ne`.
+
+This adjacent layer has `M` and `L`, but no positive-minimum source `A` or
+downstream `C`.  It does not construct a cofinal compatible Nash family or
+turn vanishing adjacent distance into a uniform payoff.  It also does not
+formalize the finite-versus-Never censor decomposition, `d_eff`, universal
+graft nullity, paid edge/rectangle localization, minimum-tail reprojection,
+or any advertised quantitative dispatch constant.
+
 A separate generic timing-Nash screen is now integrated in
 `UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingNash.lean`
 and
