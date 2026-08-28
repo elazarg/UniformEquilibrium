@@ -161,8 +161,8 @@ has direct checked face signs and an exact stationary certificate, while
 showing that the coarse range hypotheses are not necessary.  This remains a
 conditional stationary class, not a producer for arbitrary quitting games.
 
-Two Research interfaces sharpen the supplied-data boundary without yet
-formalizing the proposed HOPF table.  `QuittingPureSingletonChamber` and
+Research interfaces sharpen the supplied-data HOPF boundary.
+`QuittingPureSingletonChamber` and
 `QuittingPurePairChamber`
 (`Research/Quitting/HopfCompletionSafeChambers.lean`) compile literal
 sure-exit signs to exact terminal Nash profiles against arbitrary behavioral
@@ -182,10 +182,31 @@ the corresponding compact alternative: a uniform payoff or one positive
 (`Research/Quitting/StationaryFaceBoxClosure.lean`) turn supplied strict
 rational-box face signs and a supplied `zero_to_numerator` bridge into an
 interior numerator zero and a full exact stationary behavioral certificate.
-Thus these interfaces have checked `M/L/C` status, but no `A` seal for the
-advertised HOPF `Fin 4` table: its exact reward definition, rational matrix
-enclosures, zero-transport and induced-sign instances, open-neighborhood
-result, and maximal-ray connection are not present.
+`Math.Interval.RationalPolynomial.abs_evalReal_le_coefficientL1`
+(`MathUE/Interval/RationalPolynomialL1.lean`) gives the generic exact unit-box
+bound used by the centered variant, and
+`QuittingCenteredStationaryFaceCertificate.exists_uniformEquilibriumPayoff`
+(`Research/Quitting/StationaryCenteredFaceCertificate.lean`) is its supplied-
+certificate stationary consumer.  These generic interfaces have checked
+`M/L/C` status.
+
+The sharp HOPF table is now represented exactly but remains conditional.
+`sharpReward`, `sharpPreconditionerMatrix_det`,
+`applySharpPreconditioner_injective`, and
+`quittingFaceNumerator_sharpReward_eq_formula`
+(`Research/Quitting/FinFourHopfConcreteChambers.lean`) retain the B2--B10
+reward family, the exact nonzero preconditioner, and the four B13 face
+polynomials; the normalized evaluation and singleton-level cancellation
+theorems are also checked.  `RationalSharpStationaryVerification` still
+supplies the four concrete coefficient-L1 equalities.  Consequently
+`sharpCenteredCertificate` and
+`sharpReward_exists_uniformEquilibriumPayoff` are checked only under that
+finite verification hypothesis: the sharp table has `M/L`, but no `A` or
+unconditional `C`.  The thin `rationalSingletonTwoChamber` and
+`fullBindingSingletonTwoChamber` aliases retain actual safe chambers for two
+different previously checked zero-minimum tables.  No theorem identifies
+either table with `sharpReward`, transports the maximal ray to the sharp
+family, or proves the advertised open reward neighborhood.
 
 Two further stationary classes sharpen the incentive-gadget boundary.
 `quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
