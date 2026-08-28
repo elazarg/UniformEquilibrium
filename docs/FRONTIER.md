@@ -810,6 +810,22 @@ attainment, limiting positive-root/cardinality-face consumer, return, rank
 decrease, strict-ray contradiction, or uniform-equilibrium conclusion.  This
 is not a completed strict-tail packet.
 
+The supplied full-binding case has a further actual compact reduction in
+`Research/Quitting/FinFourProducerAtlas/StrictRayFullBindingDiffuseReduction.lean`.
+`QuittingForwardExactCapTail.nonempty_compactHazardCluster` jointly extracts
+the current marginal-hazard direction, remaining-tail hazard barycenter, and
+renewal ratio along one strict subsequence of the same forward ray.
+`FinFourMinimumAtomProducer.not_hasHomogeneous_fullNormalizedSoloMatrix`
+transports the hard residual through the literal full-core reindexing.  Hence,
+under the explicit hypothesis `flow.forward.bindingFinset = Finset.univ`,
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_compactCluster_ratioLimit_pos_or_currentSupport_card_le_three`
+returns one same-flow cluster whose renewal-ratio limit is positive or whose
+current-limit positive support is nonempty and has cardinality at most three.
+This has `M`, `L`, and `A` relative to the actual source-retaining flow, but no
+`C`.  It does not derive full binding, consume either surviving branch, give a
+return or rank drop, contradict the strict ray, or produce a uniform-equilibrium
+payoff.
+
 The conditional cardinality contract is checked in
 `Research/Topology/ModTwoBoxComplementarityParity.lean`,
 `Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, and
