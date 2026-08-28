@@ -765,6 +765,53 @@ return, regeneration, recursive descent, completion, or uniform-payoff
 consumer; its whole pair source is not asserted minimum, near-minimal, or
 cap--Nash.
 
+The source-preserving completion atlas now packages this boundary without
+discarding which monodromy-free entrance produced it.
+`FinFourProducerResidualWithoutMonodromy.exists_cofinalSingletonPacket`
+(`Research/Quitting/FinFourProducerAtlas/SourcePreservingSingletonFrames.lean`)
+returns the exact residual projection together with one entrance-indexed
+cofinal stream.  Its ranks are strictly increasing and tend to infinity, the
+retained suffix semantic/outcome laws converge to the one fixed source point,
+the literal prefixed debts converge to `D_*`, and every singleton target keeps
+the complete post-date behavioral spine.  The selected-row constructors use
+exactly their stored rows; the minimum-singleton constructor fixes one
+owner-clock chronology before the whole stream.
+
+`FinFourSourcePreservingSingletonFrame.nonempty_forcedPairResidualCapstone`
+(`Research/Quitting/FinFourProducerAtlas/SourcePreservingForcedPair.lean`)
+then attaches to every literal frame a full-gap forced pair, a paid endpoint,
+and its actual collision-minimum residual.  The forced owner has zero marked
+defect, the payer has defect at least `D_* / 3`,
+`FinFourSourcePreservingForcedPairPacket.canonical_payerGain_floor` gives the
+exact `mu^2 * D_* / 24` floor, and
+`collisionCluster_eq_framePostDateTail` identifies the compact residual
+cluster with that same frame's actual continuation tail.  The full post-date
+spine and terminal outcome law are literal equalities, not compact
+substitutions.
+
+Finally,
+`uniformPayoff_or_sourcePreservingCompletionOutcome`
+(`Research/Quitting/FinFourProducerAtlas/SourcePreservingCompletionAtlas.lean`)
+maps arbitrary bounded Fin4 rewards to a uniform payoff or one exact-residual
+outcome: a source-attached uniform tail escape or a source-attached minimum
+return.  A simultaneous finite-label subsequence fixes the singleton owner,
+forced owner, payer, and payer action.  `FinFourUniformEscapePacket.tailDebt_floor`
+and `FinFourMinimumReturnPacket.tailDebt_tendsto_minimum` state the two literal
+tail-debt alternatives.  Repeated `drop` gives checked source-coherent
+self-shift trajectories.  `FinFourCompletionMode.reachable_iff_explicit`,
+`FinFourCompletionMode.sameComponent_iff_eq`, and
+`FinFourCompletionMode.isTerminal_iff` calculate the declared graph's three
+singleton SCCs and its two terminal structural components from the
+reflexive--transitive closure of the exact edge table.
+
+This reduction has `M`, `L`, and `A`.  Its `C` is only the structural
+frame-to-pair, priority-dispatch, and self-shift composition: the open
+`FinFourUniformEscapeCapstone` and `FinFourMinimumReturnCapstone` propositions
+have no terminal semantic consumer.  The self-shifts are recurrence, not
+descent; no forced-pair target is asserted minimum, near-minimum, or full-root
+Nash; and no cross-coordinate cap bound, terminal approximation, recursive
+source regeneration, or uniform-equilibrium completion is proved.
+
 The same actual cofinal forced-pair family now has an independent finite-cycle
 contraction.  `exists_finFourMaximumToggle_terminalOrbit_or_closedSegment`
 (`Research/Quitting/PaidNonsingletonToggleCycle.lean`) iterates one
