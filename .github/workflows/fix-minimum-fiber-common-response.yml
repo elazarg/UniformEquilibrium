@@ -1,0 +1,146 @@
+name: Fix minimum-fiber common response
+
+on:
+  push:
+    branches:
+      - gpt/fix-minimum-fiber-common-response
+    paths:
+      - ".github/workflows/fix-minimum-fiber-common-response.yml"
+
+permissions:
+  contents: write
+
+jobs:
+  patch-and-check:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: gpt/fix-minimum-fiber-common-response
+          fetch-depth: 0
+          submodules: recursive
+
+      - uses: leanprover/lean-action@v1
+        with:
+          auto-config: false
+          build: false
+          test: false
+          use-mathlib-cache: true
+          use-github-cache: true
+
+      - name: Apply exact elaboration fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+
+          path = Path(
+              "Research/Quitting/StoppingLawMinimumFiberCommonResponseCompiler.lean"
+          )
+          text = path.read_text()
+          old = '''  have hdebt :=
+            quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum
+              reward (frontier.source rank) mover.1 observer
+                (frontier.source rank mover.1) (frontier.replacement mover rank)
+                (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear
+          '''
+          new = '''  have hnear' : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
+              quittingTerminalSemanticDebtSum
+                  (quittingTerminalSemanticPair reward
+                    (Function.update (frontier.source rank) mover.1
+                      (frontier.source rank mover.1))) ≤
+                quittingTerminalSemanticDebtSum candidate + epsilon := by
+            simpa only [Function.update_eq_self, sourcePair] using hnear
+          have hdebt :=
+            quittingTerminalSemanticDebt_stoppingLawMixture_chordGap_le_nearMinimum
+              reward (frontier.source rank) mover.1 observer
+                (frontier.source rank mover.1) (frontier.replacement mover rank)
+                (1 / 2 : ℝ) epsilon (by norm_num) (by norm_num) hnear'
+          '''
+          if old not in text:
+              raise SystemExit("near-minimum application block not found")
+          text = text.replace(old, new, 1)
+
+          old = '''    dsimp only at hdebt
+              rw [Function.update_eq_self] at hdebt
+              dsimp only [sourcePair, fullReplacementPair, fullReplacementProfile,
+                fullReplacementHalfProfile, quittingStoppingLawResetProfile] at hdebt
+              nlinarith [hdebt.2]
+          '''
+          new = '''    have hdebtUpper := hdebt.2
+              rw [Function.update_eq_self] at hdebtUpper
+              simp only [sourcePair, fullReplacementPair, fullReplacementProfile,
+                fullReplacementHalfProfile, quittingStoppingLawResetProfile] at hdebtUpper
+              nlinarith [hdebtUpper]
+          '''
+          if old not in text:
+              raise SystemExit("chord-gap normalization block not found")
+          text = text.replace(old, new, 1)
+
+          old = '''    simpa only [sourcePair] using
+              frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
+          '''
+          new = '''    simpa only [Function.comp_def, sourcePair] using
+              frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
+          '''
+          if old not in text:
+              raise SystemExit("source tendsto block not found")
+          text = text.replace(old, new, 1)
+
+          old = '''  simpa only [commonResponseError] using hsum.const_mul 2
+          '''
+          new = '''  change Tendsto (fun rank ↦ 2 *
+            (frontier.fullReplacementHalfCapChordGap mover observer.1
+              (endpoint.subseq rank) + endpoint.commonResponseTolerance rank))
+            atTop (nhds 0)
+          convert hsum.const_mul 2 using 1 <;> ring
+          '''
+          if old not in text:
+              raise SystemExit("common-response limit block not found")
+          text = text.replace(old, new, 1)
+          path.write_text(text)
+
+          path = Path(
+              "Research/Quitting/FinFourProducerAtlas/"
+              "CanonicalPairEndpointSourceRegeneration.lean"
+          )
+          text = path.read_text()
+          old = '''    simpa only [renewalEndpointLawPoint, renewalEndpointProfile] using
+              handoff.endpointPacket_endpoint_tendsto.comp
+                hsubsequence.tendsto_atTop
+          '''
+          new = '''    simpa only [Function.comp_def, renewalEndpointLawPoint,
+              renewalEndpointProfile] using
+              handoff.endpointPacket_endpoint_tendsto.comp
+                hsubsequence.tendsto_atTop
+          '''
+          if old not in text:
+              raise SystemExit("endpoint tendsto block not found")
+          path.write_text(text.replace(old, new, 1))
+          PY
+
+      - name: Check focused Lean files
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 scripts/check_trust.py
+          lake env lean \
+            Research/Quitting/StoppingLawMinimumFiberCommonResponseCompiler.lean
+          lake env lean \
+            Research/Quitting/FinFourProducerAtlas/CanonicalPairEndpointSourceRegeneration.lean
+
+      - name: Commit checked fixes
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email \
+            "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -- \
+            Research/Quitting/StoppingLawMinimumFiberCommonResponseCompiler.lean \
+            Research/Quitting/FinFourProducerAtlas/CanonicalPairEndpointSourceRegeneration.lean
+          git commit -m "Fix common-response compiler elaboration"
+          git push origin HEAD:gpt/fix-minimum-fiber-common-response
