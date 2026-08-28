@@ -86,6 +86,7 @@ import Research.Quitting.FinFourProducerAtlas.NormalizedInertVanishingDensityBou
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCommonPrefixScreening
 import Research.Quitting.FinFourProducerAtlas.SelfTailContraction
 import Research.Quitting.FinFourSameStageEndpointMonodromy
+import Research.Quitting.FinFourSharpSureExitExclusion
 import Research.Quitting.FiniteClockPolynomialCenter
 import Research.Quitting.FiniteClockPolynomialCertificate
 import Research.Quitting.FiniteClockTerminalSemantics
