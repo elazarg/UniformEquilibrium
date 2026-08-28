@@ -1311,12 +1311,36 @@ Operationally equal stopping-time marginals have exactly equal payoffs and
 common-action gains, while a gain change only yields some changed observed
 marginal through `exists_actionTime_map_ne_of_mixedGain_ne`.
 
-This adjacent layer has `M` and `L`, but no positive-minimum source `A` or
-downstream `C`.  It does not construct a cofinal compatible Nash family or
-turn vanishing adjacent distance into a uniform payoff.  It also does not
-formalize the finite-versus-Never censor decomposition, `d_eff`, universal
-graft nullity, paid edge/rectangle localization, minimum-tail reprojection,
-or any advertised quantitative dispatch constant.
+The censor and compatibility layers now sharpen this boundary.  In
+`Research/Quitting/CensoredFiniteClockOperationalEffect.lean`, censoring is a
+literal retraction and is nonexpansive in total variation;
+`pmfTV_quittingFiniteDeadline_include_censor_eq_boundary` identifies its exact
+erased boundary mass, and
+`quittingFiniteDeadlineAdjacentTV_le_censorBudget` separates boundary
+participation from old-clock reshuffling.  The generic
+`finiteClockOperationalEffectDistance` is a pseudometric on `Never`, hard
+payoff, and hard pure-action-gain observables.
+`finiteClockOperationalEffectDistance_zero_graftSemantic_eq` proves that zero
+distance between literal root words preserves the complete terminal semantic
+pair behind every common behavioral tail.  This is checked `M/L`, but no
+theorem identifies the separate mixed-law gauge with that root-word gauge or
+constructs the packet's explicit null regression, positive-minimum paid edge,
+or quantitative participant dispatch.
+
+`QuittingFiniteDeadlineCompatibleNashFamily`
+(`Research/Quitting/FiniteDeadlineProjectiveCompatibility.lean`) retains one
+exact Nash law at every finite deadline and literal successor censoring.
+`neverMass_succ_add_boundaryMass`, `boundaryMass_tendsto_zero`, and
+`adjacentTV_eq_sum_boundaryMass` give the exact Never telescope and vanishing
+adjacent distance.  More generally,
+`exists_uniformEquilibriumPayoff_of_arbitrarilySmallAdjacentNashTV` turns
+arbitrarily close actual consecutive Nash pairs directly into a uniform-
+equilibrium payoff, and
+`QuittingFiniteDeadlineCompatibleNashFamily.exists_uniformEquilibriumPayoff`
+is the compatible-family specialization.  These theorems have `M/L/C`, but
+no `A`: no compatible-family or semialgebraic minimizer producer is checked.
+They do not construct the packet's inverse-limit exact terminal Nash law,
+positive-minimum reprojection, paid edge/rectangle, or dispatch constants.
 
 A separate generic timing-Nash screen is now integrated in
 `UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingNash.lean`

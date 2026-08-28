@@ -88,6 +88,8 @@ import Research.Quitting.FiniteClockPolynomialCenter
 import Research.Quitting.FiniteClockPolynomialCertificate
 import Research.Quitting.FiniteClockTerminalSemantics
 import Research.Quitting.FiniteDeadlineAdjacentTotalVariation
+import Research.Quitting.CensoredFiniteClockOperationalEffect
+import Research.Quitting.FiniteDeadlineProjectiveCompatibility
 import Research.Quitting.FiniteDeadlineTimingNashDebtHierarchy
 import Research.Quitting.FiniteDebtMonotonicity
 import Research.Quitting.FiniteResetCirculationRegression
