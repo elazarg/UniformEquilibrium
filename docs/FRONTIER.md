@@ -760,6 +760,37 @@ return, regeneration, recursive descent, completion, or uniform-payoff
 consumer; its whole pair source is not asserted minimum, near-minimal, or
 cap--Nash.
 
+The same actual cofinal forced-pair family now has an independent finite-cycle
+contraction.  `exists_finFourMaximumToggle_terminalOrbit_or_closedSegment`
+(`Research/Quitting/PaidNonsingletonToggleCycle.lean`) iterates one
+deterministic table-level maximum positive toggle from the fixed pair.  It
+either reaches a singleton or closes on a simple nonsingleton cycle.
+`FinFourMaximumToggleClosedSegment.period_eq_four_or_six_or_eight` gives the
+exact Fin4 periods, while `gainAt_floor` and `moverDebt_succ_eq_sub_gain` give
+the actual `lambda * D_* / 4` paid floor and exact mover-debt subtraction at
+every realized same-date sibling edge.  The reusable complete-profile ledger
+`FinFourLiteralSiblingCycle.exists_spectator_debtRise` then produces the sharp
+Fin4 divisor `3` without assigning a chronology to those edges.
+
+The actual source adapter `nonempty_forcedPairPaidNonsingletonCycle`
+(`Research/Quitting/FinFourProducerAtlas/PaidNonsingletonCycle.lean`) freezes
+one cycle edge and one distinct observer along a strict subsequence of the
+original forced-pair source indices.  It retains the literal source and target
+profiles, original marks, common post-date reference spine, paid edge, and
+observer debt increase `lambda * D_* / 12`.
+`FinFourForcedPairPaidNonsingletonCycle.atomAlternative` applies the checked
+stopping-law decoder with fixed charge `7 * lambda * D_* / 96` and a positive
+error tending to zero.  The compact endpoint keeps the actual joint
+semantic/law limits and routed-law mass at least `lambda`.
+`nonempty_paidNonsingletonCycleOutcome` is exhaustive: a paid singleton, a
+strict off-minimum endpoint, or a fresh `FinFourMinimumAtomProducer` at that
+same endpoint law with the incoming hard residual unchanged.  This route has
+`M`, `L`, and `A`; `C` is present only for the stopping-law atom dispatch and
+the equality-arm minimum-source regeneration.  A horizontal sibling edge is
+not a transition in one play, and the regenerated chronology need not contain
+it.  No strict off-minimum return, renewable rank descent, terminal
+approximation, atlas completion, or uniform-equilibrium conclusion is proved.
+
 A normalized-passport layer and its actual Fin4 source adapter are integrated
 in Research.
 `QuittingMarkedPairDecoratedFamily.rawDecoration_markedMass_eq`,
