@@ -256,6 +256,32 @@ different previously checked zero-minimum tables.  No theorem identifies
 either table with `sharpReward`, transports the maximal ray to the sharp
 family, or proves the advertised open reward neighborhood.
 
+Two checked facts separate the sharp completion from those two and bound how
+it can be fenced.  `forcedPairDebt_sharpLocalForcedPairFragment`
+(`Research/Quitting/FinFourSharpPairDefectZeroMinimumExclusion.lean`) computes
+the forced pair-defect vector at the pure pair `{0, 3}` as `(0, 1, 1/100, 1)`,
+against `(0, 1/100, 1/100, 1)` for both older completions by
+`forcedPairDebt_rationalLocalForcedPairFragment` and
+`forcedPairDebt_fullBindingLocalForcedPairFragment`.  The marked owner is
+slack and the two players outside the pair gain strictly in all three, but
+`forcedPairDebt_sharp_zero_and_distinct_pos` and
+`forcedPairDebt_older_completions_not_distinct` make those two gains distinct
+only for the sharp table.
+
+`isQuittingSureExitSet_empty_of_regression` shows that a table admitting
+`FinFourMaximalRayZeroMinimumRegressions.Regression` has the empty coalition
+as a sure exit set, through that structure's vanishing-solo field alone.  The
+sharp solo vector is `(0, 0, 0, singletonLevel)`, and
+`isQuittingSureExitSet_sharpReward_iff`
+(`Research/Quitting/FinFourSharpSureExitExclusion.lean`) makes the empty
+coalition the table's only possible sure exit set and only at a nonpositive
+level, so `not_nonempty_regression_sharpReward` excludes that structure at
+every positive singleton level.  This bounds the fencing structure, not the
+exact-cap ray it stores: `QuittingForwardExactCapTail` constrains singleton
+rewards only by `singleton_le_capLimit` against the limiting cap and demands
+no vanishing anywhere, so nothing here bears on whether the sharp table
+carries a maximal-cap ray.
+
 Two further stationary classes sharpen the incentive-gadget boundary.
 `quittingGame_exists_uniformPayoff_of_cycleBalancedSignConsistentInfluence`
 (`UniformEquilibrium/Quitting/Stationary/SignedInfluenceCycleBalance.lean`)
@@ -1459,9 +1485,28 @@ adjacent distance.  More generally,
 arbitrarily close actual consecutive Nash pairs directly into a uniform-
 equilibrium payoff, and
 `QuittingFiniteDeadlineCompatibleNashFamily.exists_uniformEquilibriumPayoff`
-is the compatible-family specialization.  These theorems have `M/L/C`, but
-no `A`: no compatible-family or semialgebraic minimizer producer is checked.
-They do not construct the packet's inverse-limit exact terminal Nash law,
+is the compatible-family specialization.
+
+That specialization is sharpened from existence of some payoff to an
+identified profile.
+`QuittingFiniteDeadlineCompatibleNashFamily.isZeroAsymptoticNash_limitProfile`
+(`Research/Quitting/ProjectiveTimingInverseLimit.lean`) determines one
+stopping law on the compactified times for each player whose deadline
+truncations are exactly the supplied marginals, and proves the independent
+product of those laws an exact terminal Nash profile against every unilateral
+behavioral deviation, at error `0`.
+`QuittingFiniteDeadlineCompatibleNashFamily.isUniformEquilibriumPayoff_limitProfile`
+reads off its prescribed payoff.
+`quittingGame_isUniformEquilibriumPayoff_of_adjacentTV_tendsto`
+(`Research/Quitting/FiniteDeadlineVanishingAdjacentDistance.lean`) is the
+matching consumer over an arbitrary index filter: consecutive deadline Nash
+pairs whose adjacent distance tends to zero, with realized prescribed payoffs
+tending to one target, make that target uniform.  Cofinality of the selected
+deadlines is not required, because the estimate consumes the vanishing
+terminal debt, not growth of the deadline.
+
+These theorems have `M/L/C`, but no `A`: no compatible-family or
+semialgebraic minimizer producer is checked.  They do not construct the
 positive-minimum reprojection, paid edge/rectangle, or dispatch constants.
 
 A separate generic timing-Nash screen is now integrated in
@@ -1603,6 +1648,26 @@ from the fresh half parent to the endpoint, not from the old source support.
 No old-prefix exactness after the endpoint update, renewable canonical-pair
 rank descent, off-minimum or stall consumer, terminal approximation,
 uniform-equilibrium payoff, or counterexample follows.
+
+That fibre also carries an exact debt ledger whose consequence is negative.
+At a full-replacement endpoint cluster on the minimum total-debt fibre the
+active mover's debt is zero at the cluster and positive at the base while
+total debt is preserved, so
+`QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster.minimumFiber_debtTransfer`
+(`Research/Quitting/MinimumFiberDebtTransfer.lean`) makes the aggregate debt
+change over the other players exactly the mover's base debt, and
+`exists_nonmover_debtChange_moverDebt_div_card_le` selects one nonmover
+absorbing at least a `Fintype.card ι - 1`-th part of it.  Hence
+`not_forall_debt_le_base`: coordinatewise debt nonincrease across such a seam
+is impossible.  `moverDebt_le_sum_positivePart_nonmover_debtChange` bounds the
+total positive part of that change below by the mover's base debt, so the
+transfer is not uniformly small either, and any backward compiler through this
+seam has to carry, cancel, or pay it.  The account uses neither flatness of the
+tangent column nor absence of entry into the inactive debt support.  Debt is
+the gap between the best-response envelope and the prescribed payoff, so a
+lower bound on debt change bounds no envelope coordinate on its own: nothing
+here asserts that the raw envelope vectors at the base and at the cluster are
+close, since the prescribed payoff may move together with the envelope.
 
 The strict endpoint alternative is now normalized without losing that joint
 cluster.  In
