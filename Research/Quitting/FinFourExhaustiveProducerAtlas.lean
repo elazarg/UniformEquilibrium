@@ -4,8 +4,10 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import Research.Quitting.BallisticNormalizedSelectedChainRegression
 import Research.Quitting.FinFourEventualAllContinueLocalRegression
 import Research.Quitting.FinFourProducerAtlas.CanonicalPairMinimumEndpointSupportRankHandoff
+import Research.Quitting.FinFourProducerAtlas.BallisticNormalizedOccupation
 import Research.Quitting.FinFourProducerAtlas.EventualAllContinueStallNormalForm
 import Research.Quitting.FinFourProducerAtlas.ForcedPair
 import Research.Quitting.FinFourProducerAtlas.ForcedPairMinimumTailConsumer
@@ -95,6 +97,13 @@ On a supplied full binding face, one joint compact cluster of that same flow
 is either positive-renewal or has nonempty current-hazard support of cardinality
 at most three.  This reduction neither supplies full binding nor consumes its
 two surviving branches.
+If full binding and eventual positive current support instead make the actual
+renewal uniformly ballistic, one common extraction produces a bi-infinite
+normalized omega chain whose every finite window comes from consecutive dates
+of that same ray.  Its balanced occupation law remains supported on the exact
+renewal/work/complementarity relation.  A separate rational normalized
+regression proves that the selected chain need not be periodic, while also
+exhibiting a fixed point elsewhere in its relation; it is not an actual ray.
 The separate binding-cardinality contract gives the same-ray
 positive-limit-root, full-binding, or cardinal-three conclusion only from a
 supplied mod-two parity implementation and a late finite-cap local

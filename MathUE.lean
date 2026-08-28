@@ -381,6 +381,7 @@ import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
+import MathUE.Topology.CompactOrbitOccupation
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactFinitePrefixRelation
@@ -399,7 +400,9 @@ import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
+import MathUE.Topology.SourceOmegaChain
 import MathUE.Topology.TailSupConvergence
+import MathUE.Topology.ThreeFourFifthsRotation
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit
