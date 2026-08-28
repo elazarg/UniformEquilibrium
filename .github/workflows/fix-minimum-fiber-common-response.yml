@@ -132,15 +132,14 @@ jobs:
           path.write_text(text.replace(old, new, 1))
           PY
 
-      - name: Check focused Lean files
+      - name: Check focused Lean modules
         shell: bash
         run: |
           set -euo pipefail
           python3 scripts/check_trust.py
-          lake env lean \
-            Research/Quitting/StoppingLawMinimumFiberCommonResponseCompiler.lean
-          lake env lean \
-            Research/Quitting/FinFourProducerAtlas/CanonicalPairEndpointSourceRegeneration.lean
+          lake build \
+            Research.Quitting.StoppingLawMinimumFiberCommonResponseCompiler \
+            Research.Quitting.FinFourProducerAtlas.CanonicalPairEndpointSourceRegeneration
 
       - name: Commit checked fixes
         shell: bash
