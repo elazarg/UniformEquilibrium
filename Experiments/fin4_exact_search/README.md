@@ -1,114 +1,31 @@
-# Exact Fin4 scale search
+# Exact Fin4 discovery search
+
+This package searches normalized rational four-player quitting tables using one
+exact equality-free finite-clock resolver.  It needs Python 3.11 or newer and
+the standard library only.
 
 ## Clean-clone quickstart
 
-This package needs only Python 3.11 or newer and the standard library. From a
-fresh clone at the repository root, run the complete focused validation gate:
+From the repository root:
 
 ```bash
 python3 Experiments/fin4_exact_search/validate.py
+
+python3 Experiments/fin4_exact_search/run.py discover \
+  --work-dir fin4-search-results
 ```
 
-Then inspect an exact scale and start a resumable search using only tracked
-files:
+`discover` is the unattended coarse-to-fine campaign.  It needs no external
+table file: it deterministically rationalizes and normalizes the tracked hard-
+candidate corpus, then searches candidates in scale-major order.  Repeating
+the same command resumes the checkpoint in the work directory automatically.
 
-```bash
-python3 Experiments/fin4_exact_search/run.py discover
+There is no default wall-clock stop or final scale.  The command continues
+until it verifies a positive-gap certificate or is interrupted.  `Ctrl-C` and
+`SIGTERM` preserve the most recent atomic quantum checkpoint; work inside the
+interrupted quantum may be repeated.
 
-python3 Experiments/fin4_exact_search/run.py scale 100
-
-python3 Experiments/fin4_exact_search/run.py search \
-  --table Experiments/fin4_exact_search/examples/zero_table.json \
-  --epsilon 100 --max-steps 4 \
-  --checkpoint /tmp/fin4-zero.checkpoint.json.gz \
-  --output /tmp/fin4-zero.certificate.json.gz
-
-python3 Experiments/fin4_exact_search/run.py campaign \
-  --table Experiments/fin4_exact_search/examples/zero_table.json \
-  --start-epsilon 100 --work-dir /tmp/fin4-zero-campaign \
-  --stop-after-scales 3
-```
-
-The large demonstration accuracy intentionally uses the smallest hierarchy
-level. No installation, network access, `pytest`, generated repository file,
-or `ephemeral/` runtime input is required. An optional editable install is
-described below.
-
-The first command is the unattended search. It needs no `TABLE.json`: it
-deterministically rationalizes and normalizes the tracked hard-candidate
-corpus, then runs the exact equality-free finite-clock resolver at successively
-finer scales. Its default work directory is
-`Experiments/fin4_exact_search/runs/default/`. Running the same command again
-resumes the exact checkpoint automatically.
-
-This package is a self-contained exact experiment for normalized rational
-four-player quitting tables. It implements the reviewed ordinary-mathematics
-scale-resolution contract directly, without importing or reading conference
-files at runtime.
-
-For a rational accuracy `epsilon > 0`, the fair search advances two exact
-producers:
-
-- a rational interval branch-and-bound tree proving
-  `alpha * epsilon <= eta(r)` (default `alpha = 1/2`), by proving the
-  finite-clock threshold `alpha * epsilon + 24 / N`; and
-- an exhaustive rational finite-clock enumeration seeking an actual profile
-  of unrestricted terminal exploitability below `epsilon`.
-
-The direct level is the least positive `N` with
-`24 / N < (1 - alpha) * epsilon`. The older explicit-table `search` and
-`campaign` commands use a separate semantic-shell contract with thresholds
-`epsilon / 4` and `3 * epsilon / 4`; those constants do not describe
-`discover`.
-
-The mathematical scale theorem says one of these searches terminates. The
-current Lean repository does **not** yet contain the scale resolver or the
-counterexample semidecision theorem. This package is an experiment and exact
-reference implementation, not a kernel-checked implementation of them.
-
-## Trust and claim boundary
-
-Only exact `fractions.Fraction` recomputation accepts a table, profile, or
-certificate. Heuristics influence candidate order only.
-
-A verified global direct lower tree proves its displayed transported bound
-`threshold - 24 / N <= eta(r)` against every behavioral profile. (Legacy
-semantic-shell trees display their own global `gamma`.) Because a cap is a
-supremum, this does not assert that one deviation attains the displayed bound.
-It yields the project's terminal-gap witness at any strictly smaller value,
-for example half the displayed bound.
-
-A verified profile certificate contains four independent marginal stopping
-laws, a finite clock, and a separate Never atom. Its cap includes all
-payoff-distinct deterministic dates and Never and therefore represents the
-complete behavioral deviation class through the checked pure-time extremality
-semantics.
-
-Nontermination, an unfinished checkpoint, an exhausted bounded upper region,
-or a failed heuristic region proves nothing. This is not a decision procedure
-for `eta(r) = 0`, and the package makes no claim of practical termination on
-hard instances. No positive-gap Fin4 table is currently included.
-
-The executable unit is one table at one rational scale. The `discover` command
-runs an unbounded scale-major campaign over the tracked candidate corpus. It is
-a targeted search, not an exhaustive enumeration of all rational reward
-tables. A lower certificate from any worker is globally useful immediately
-after exact local verification; a finite run of upper results is never a
-zero-gap certificate.
-
-## One-command long run
-
-From a clean clone, this is sufficient:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py discover
-```
-
-There is no default wall-clock stop or final scale. The command continues until
-it produces and verifies a positive-gap certificate, or until the process is
-interrupted. `Ctrl-C` and `SIGTERM` retain the most recent atomic quantum
-checkpoint; rerunning the same command resumes it. For a shell-managed two-day
-allocation, use:
+For a shell-managed two-day allocation on Linux:
 
 ```bash
 timeout --signal=TERM --kill-after=5m 48h \
@@ -116,72 +33,99 @@ timeout --signal=TERM --kill-after=5m 48h \
   --work-dir fin4-search-results
 ```
 
-`SIGTERM` preserves the most recent atomic quantum checkpoint. Work performed
-inside the interrupted quantum may be repeated. The optional `--max-seconds`
-is a cooperative Python limit checked between exact operations; a single DAG
-construction or exact interval step can overrun it. Neither limit is a
-mathematical stopping rule, and reaching one proves nothing.
+The process reports the current candidate, scale, exact steps, lower-tree
+size, upper enumeration position, elapsed time, and peak resident memory.  It
+keeps one expression DAG and one exact resolver resident.  Completed resolver
+state is released before its certificate is independently reconstructed and
+verified.
 
-The scheduler remains on one table/scale until its total exact lower/profile
-fork resolves, then advances scale-major. Exactly one expression DAG and one
-resolver are resident. The lower proof tree grows linearly with explored proof
-nodes; that state is necessary prospective certificate data, not an untracked
-cache. Its live DFS path uses one mutable interval map and constant-size
-sibling events, so it does not retain copied interval maps for every frontier
-box. Completed resolver checkpoints are deleted after their certificate is
-independently verified. Progress reports include the current candidate, scale,
-exact steps, lower-tree nodes/frontier, upper diagonal, and peak RSS.
+## Mathematical contract
 
-The default corpus is derived deterministically from the checked-in
-`Experiments/singleton_collision_candidate_search/results.json`; an embedded
-exact Solan--Vieille seed is the fallback. Floating scores only select source
-tables. Every table used by the exact campaign is rational, normalized, hashed,
-and recomputed from the checkpoint.
+For a rational accuracy `epsilon > 0` and `0 < alpha < 1`, the resolver fairly
+advances two exact producers:
 
-## Installation and smoke test
+- a rational interval branch-and-bound proof of
+  `alpha * epsilon <= eta(reward)`; and
+- exhaustive rational finite-clock profile enumeration seeking an actual
+  profile of unrestricted terminal exploitability below `epsilon`.
 
-The runtime uses only Python 3.11 or newer and the standard library.
+The finite-clock level is the least positive `N` satisfying
 
-From the repository root:
+```text
+24 / N < (1 - alpha) * epsilon.
+```
+
+The lower tree proves a finite-clock threshold of
+
+```text
+alpha * epsilon + 24 / N.
+```
+
+The common-quantile transport theorem then gives the displayed global lower
+bound `alpha * epsilon` against every behavioral profile.  Since a cap is a
+supremum, a verified lower bound `gamma <= eta(reward)` yields the project's
+terminal-gap witness at any strictly smaller value, for example `gamma / 2`;
+it does not claim that one deviation attains gain exactly `gamma`.
+
+A verified profile certificate contains four independent marginal stopping
+laws, all represented finite dates, and a separate Never atom.  Its cap checks
+all payoff-distinct pure dates and Never, which covers the complete behavioral
+deviation class through pure-time extremality.
+
+Only exact `fractions.Fraction` recomputation accepts a table, profile, or
+certificate.  Heuristics may order candidates but cannot accept a result.
+
+Nontermination, timeout, an unfinished checkpoint, or any finite sequence of
+profile certificates proves nothing about `eta(reward)=0`.  This is a
+semidecision procedure for positive gaps over the searched candidate stream,
+not a decision procedure for the quitting-game conjecture.
+
+## Commands
+
+The public CLI has one formulation and five commands:
+
+```text
+discover        search the tracked candidate corpus indefinitely
+search          run one explicit table at one exact scale
+scale           display the exact contract used by search/discover
+verify          independently verify a produced certificate
+validate-table  validate and hash a normalized rational table
+```
+
+Inspect a scale:
 
 ```bash
-python3 Experiments/fin4_exact_search/run.py validate-table \
-  Experiments/fin4_exact_search/examples/zero_table.json
-
 python3 Experiments/fin4_exact_search/run.py scale 1/10
+```
 
-python3 Experiments/fin4_exact_search/run.py direct-scale 1/10 --alpha 1/2
+Run or resume one explicit table/scale problem:
+
+```bash
+python3 Experiments/fin4_exact_search/run.py search \
+  --table TABLE.json --epsilon 1/2 \
+  --checkpoint state.json.gz \
+  --output certificate.json.gz \
+  --max-steps 10000 --max-seconds 3600
 
 python3 Experiments/fin4_exact_search/run.py search \
-  --table Experiments/fin4_exact_search/examples/zero_table.json \
-  --epsilon 100 \
-  --max-steps 4 \
-  --checkpoint /tmp/fin4-zero.checkpoint.json.gz \
-  --output /tmp/fin4-zero.certificate.json
-
-python3 Experiments/fin4_exact_search/run.py verify \
-  /tmp/fin4-zero.certificate.json
+  --table TABLE.json --epsilon 1/2 \
+  --checkpoint state.json.gz --resume \
+  --output certificate.json.gz \
+  --max-steps 10000
 ```
 
-The deliberately large smoke-test accuracy gives hierarchy level one. At a
-research-scale accuracy such as `1/10`, the legacy semantic-shell command
-`scale` reports level `961` and clock size `7689`. The direct command used by
-`discover`, `direct-scale 1/10 --alpha 1/2`, reports level `481` and clock size
-`3849`. Even constructing and searching either exact problem is expensive.
-Inspect the scale matching the intended engine before allocating a remote job.
-
-An editable install is optional:
+Verify a result independently:
 
 ```bash
-python3 -m pip install -e Experiments/fin4_exact_search
-fin4-exact-search --help
+python3 Experiments/fin4_exact_search/run.py verify certificate.json.gz
 ```
 
-There are no third-party runtime requirements.
+Exit status `0` means a certificate was produced and verified.  Status `2`
+means the allotted work ended with no conclusion.
 
 ## Input format
 
-A table file has all fifteen nonempty coalition masks and four rational
+A table file contains all fifteen nonempty coalition masks and four rational
 payoffs per mask:
 
 ```json
@@ -195,384 +139,89 @@ payoffs per mask:
 }
 ```
 
-The displayed fragment must be completed through mask `15`. Rational values
-may be integers, strings such as `"-3/7"`, `[numerator, denominator]`, or
-`{"num": ..., "den": ...}`. Every coordinate must lie in `[-1,1]`.
-`validate-table` prints the canonical SHA-256 table identifier used by remote
-work regions.
+The fragment must be completed through mask `15`.  Values may be integers,
+rational strings such as `"-3/7"`, `[numerator, denominator]`, or
+`{"num": ..., "den": ...}`.  Every coordinate must lie in `[-1,1]`.
 
-## Main search and checkpoints
-
-Run a bounded slice:
+Validate and print its canonical SHA-256 identifier:
 
 ```bash
-python3 Experiments/fin4_exact_search/run.py search \
-  --table TABLE.json --epsilon 1/2 \
-  --max-steps 10000 --max-seconds 3600 \
-  --checkpoint state.json.gz --checkpoint-every 100 \
-  --output certificate.json.gz
+python3 Experiments/fin4_exact_search/run.py validate-table TABLE.json
 ```
 
-Resume it exactly:
+## Checkpoints and resource behavior
 
-```bash
-python3 Experiments/fin4_exact_search/run.py search \
-  --table TABLE.json --epsilon 1/2 \
-  --checkpoint state.json.gz --resume \
-  --max-steps 10000 --output certificate.json.gz
-```
+Checkpoint and certificate files may use `.json.gz`.  Writes use a sibling
+temporary file followed by atomic replacement.  A checkpoint records both
+the lower and profile producers and whose turn comes next.  Resume validates
+the table hash, accuracy, scale level, and all threshold parameters before
+accepting state.
 
-For a remote handoff, stop at a checkpoint boundary, copy the compressed
-checkpoint together with the unchanged table (for example with `scp` or
-`rsync`), and run the same command with `--resume` on the receiving machine.
-The loader recomputes and compares the table hash, accuracy, hierarchy level,
-lower target, and upper target before accepting the state.
+The lower proof tree grows linearly with explored proof nodes because it is
+prospective certificate data.  Its live DFS state uses one mutable interval
+map and constant-size sibling/restore events rather than retaining copied maps
+for every frontier box.  The upper producer enumerates rational compositions
+by rank without materializing the simplex.
 
-The checkpoint stores both producer states and whose turn comes next. The
-lower frontier stores exact box bounds and a flat tree under construction. The
-direct lower frontier used by `discover` has the more compact mutable-path
-representation described below. The upper frontier stores the diagonal,
-`(clock, denominator)` pair offset, and product rank. Checkpoints and
-certificates may use `.json.gz`. Writes are atomic through a sibling temporary
-file.
+The optional `--max-seconds` bound is cooperative and checked between exact
+operations.  A single expression-DAG build or interval step may overrun it.
+The external `timeout` command sends `SIGTERM`, allowing the Python process to
+finish the current exact quantum and save its checkpoint.
 
-Exit status `0` means a certificate was written and exactly verified. Status
-`2` means the allotted work ended with no conclusion. A finite remote region
-that was completely exhausted without a certificate uses status `3`.
+## Multi-machine sharding
 
-## Automated coarse-to-fine campaign
-
-The `campaign` command automates the iterative process suggested by `scale`.
-At scale `k` it uses
-
-```text
-epsilon_k = start_epsilon / refinement^k
-```
-
-and fairly advances the exact lower and upper searches. A verified lower
-certificate stops the campaign with a positive lower bound on `eta(r)`. A
-verified profile certificate is saved and the campaign advances to the next,
-finer scale. By default `refinement` is `2`.
-
-Start a long run with a time budget:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py campaign \
-  --table TABLE.json --start-epsilon 1 \
-  --work-dir results/TABLE_CAMPAIGN \
-  --max-seconds 86400
-```
-
-Resume the exact state later:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py campaign \
-  --table TABLE.json --start-epsilon 1 \
-  --work-dir results/TABLE_CAMPAIGN --resume \
-  --max-seconds 86400
-```
-
-The work directory contains one deterministic compressed campaign checkpoint,
-every verified per-scale certificate, and a final summary when the campaign
-reaches a terminal status. Completed profile certificates are reverified on
-resume. Moving the complete directory to another machine preserves all
-relative certificate references.
-
-Long runs print one concise line at scale changes and periodically thereafter:
-
-```text
-progress scale=2 epsilon=1/4 level=385 steps=20000 lower_nodes=... lower_pending=... upper_diagonal=... upper_clock=... upper_rank=... elapsed_s=...
-```
-
-The defaults report every 10,000 steps or 60 seconds, whichever comes first,
-and checkpoint every 1,000 steps. Use `--report-every`, `--report-seconds`, and
-`--checkpoint-every` to change those frequencies. `Ctrl-C` writes a final
-checkpoint before exiting. Resource limits pause with exit status `2` and the
-explicit message `no mathematical conclusion`.
-
-For finite smoke tests or resource planning, `--stop-after-scales N` stops
-after `N` verified profile scales. This is only an engineering target: even a
-long finite sequence of improving profile certificates is not a zero-gap or
-uniform-equilibrium proof. If `eta(r)=0`, the unrestricted campaign is expected
-to keep producing finer profiles forever; if `eta(r)>0`, it is expected
-eventually to stop on a verified global lower certificate.
-
-The older `campaign` command takes one explicit table and uses the outer
-semantic-shell formulation. New searches should normally use `discover` or
-`direct-search`, which use the smaller equality-free hazard cube. The old
-formats remain verifiable for existing checkpoints and distributed regions.
-
-## Sharding the no-input campaign
-
-Independent machines split `discover` with `--shard-count N` and distinct
-`--shard-index I` values in `0,...,N-1`:
+Split `discover` across machines with one shared shard count and distinct
+indices:
 
 ```bash
 python3 Experiments/fin4_exact_search/run.py discover \
-  --work-dir fin4-shard-2-of-8 --shard-count 8 --shard-index 2
+  --work-dir fin4-shard-2-of-8 \
+  --shard-count 8 --shard-index 2
 ```
 
-Use one dedicated GitHub Issue discussion as a human-readable lease board.
-Each machine posts this stable descriptor before starting:
-
-```text
-commit=<git SHA>
-campaign_id=<printed campaign id>
-shard=I/N
-start_epsilon=4 refinement=2 alpha=1/2 denominator=10000
-worker=MACHINE_OR_PERSON
-lease_until_utc=ISO-8601 UTC TIME
-status=claimed|paused|completed
-checkpoint=<portable directory or host label>
-```
-
-Two posts with the same commit, campaign id, and shard are duplicate work.
-Changing a contract field creates a different campaign id. No automatic
-network coordination is required, and a claim post is not mathematical
-evidence. Before its lease expires, a worker posts a heartbeat with the same
-campaign/shard, a new `lease_until_utc`, exact-step count, and checkpoint hash.
-After expiry, another worker may post `RECLAIM_STALE` naming the old lease and
-either resume its published checkpoint or restart the deterministic shard.
-On handoff, post `RELEASE` with the checkpoint hash and human-provided
-location. A result counts only after its certificate passes `verify`. The
-detailed region claim/heartbeat/release/reclaim templates below can be adapted
-by replacing `region_id` with `campaign_id + shard`; region-only split and
-descriptor-file fields do not apply to campaign shards.
-
-## Exact implementation improvements
-
-The outer problem is regenerated from the table and never trusted from a
-payload. Compared with the initial reference prototype, this engine uses:
-
-- a hash-consed sparse expression DAG;
-- iterative sparse dependency evaluation, not recursive expression descent;
-- prefix sums for pure-deviation values, reducing cap construction from a
-  quadratic to a linear number of clock rows;
-- balanced sum/product/max expression trees;
-- flat indexed certificate trees and iterative verification, so Python's
-  recursion limit is not a correctness boundary;
-- one mutable lower-search path box plus constant-size sibling/restore events;
-- composition rank/unrank for upper enumeration, avoiding materialization of
-  all simplex laws; and
-- deterministic exact region identifiers and mergeable lower subtrees.
-
-The exact lower splitter always chooses a coordinate of maximal width after
-normalizing by its root width. This fairness is part of the mathematical
-strict-margin completeness argument. Heuristic scoring is not allowed to
-replace it.
-
-## Batch mode
-
-The manifest in `examples/batch.json` illustrates targeted table jobs:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py batch \
-  --manifest Experiments/fin4_exact_search/examples/batch.json \
-  --work-dir /tmp/fin4-batch \
-  --max-steps 1000 --checkpoint-every 100
-```
-
-Each job has an `id`, table path relative to the manifest, rational `epsilon`,
-and optional `max_steps` or `max_seconds`. Every job gets a separate compressed
-checkpoint and certificate. Batch completion still has the same claim
-discipline: an unfinished job says nothing.
-
-## Manual multi-machine coordination in one GitHub Issue
-
-Use one dedicated GitHub Issue discussion as a manual work ledger. Do not let
-workers post automatically. Each worker computes a canonical region locally,
-posts a time-limited claim, sends heartbeats, and posts a certificate hash or a
-release. The Issue is coordination only; comments are never trusted evidence.
-
-Every descriptor fixes:
-
-- canonical table SHA-256;
-- rational epsilon and derived quantile level;
-- work kind; and
-- a deterministic subregion:
-  - lower: a list of exact box splits `(variable, cut, side)`;
-  - upper: a half-open diagonal range `[start,end)`;
-  - heuristic: an algorithm name and half-open seed range; or
-  - full: the whole fair scale resolver.
-
-The `region_id` is the work kind followed by the first twenty hexadecimal
-digits of the SHA-256 of canonical descriptor JSON.
-
-### Generate work descriptors
-
-An upper enumeration range:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py region \
-  --table TABLE.json --epsilon 1/2 --kind upper \
-  --diagonal-start 2 --diagonal-end 20 \
-  --output upper-2-20.region.json
-```
-
-A deterministic complete lower partition:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py partition-lower \
-  --table TABLE.json --epsilon 1/2 --depth 8 \
-  --output lower-partition.json --regions-dir lower-regions
-```
-
-The `256` emitted lower descriptors are disjoint and cover the global root
-box. To split one claimed lower region further, extract its `parameters.prefix`
-array to `prefix.json` and run:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py partition-lower \
-  --table TABLE.json --epsilon 1/2 --depth 4 --prefix prefix.json \
-  --output child-partition.json --regions-dir child-regions
-```
-
-A bounded deterministic heuristic range:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py region \
-  --table TABLE.json --epsilon 1/2 --kind heuristic \
-  --seed-start 0 --seed-end 100000 \
-  --output heuristic-0-100000.region.json
-```
-
-For a single machine owning the complete fair resolver, use `--kind full`;
-the resulting descriptor is also accepted by `scan-region`:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py region \
-  --table TABLE.json --epsilon 1/2 --kind full \
-  --output full.region.json
-```
-
-Run or resume a claimed region with `scan-region`. Its checkpoint contains the
-canonical descriptor and is rejected if moved to a different table or region.
-
-```bash
-python3 Experiments/fin4_exact_search/run.py scan-region \
-  --table TABLE.json --region upper-2-20.region.json \
-  --checkpoint upper-2-20.state.json.gz \
-  --max-steps 1000000 --output upper-2-20.certificate.json.gz
-```
-
-An upper or heuristic certificate is globally useful immediately. A lower
-regional certificate proves only its declared box. Once every leaf of a
-complete lower partition is certified, merge them and verify the global tree:
-
-```bash
-python3 Experiments/fin4_exact_search/run.py merge-lower \
-  --output global-lower.certificate.json.gz \
-  lower-results/*.certificate.json.gz
-
-python3 Experiments/fin4_exact_search/run.py verify \
-  global-lower.certificate.json.gz
-```
-
-### Issue message templates
-
-Use UTC timestamps and a lease long enough for the next planned checkpoint.
-Copy the canonical descriptor or attach it and give the printed canonical
-`descriptor_sha256`. If attaching a file, also give its ordinary file hash.
-
-Claim:
+Indices range from `0` through `N-1`.  Use one dedicated GitHub Issue as a
+manual lease board.  Before starting, each worker posts:
 
 ```text
 CLAIM
-region_id: lower-0123456789abcdef0123
+commit: GIT_SHA
+campaign_id: PRINTED_CAMPAIGN_ID
+shard: I/N
+start_epsilon: 4
+refinement: 2
+alpha: 1/2
+denominator: 10000
 worker: MACHINE_OR_PERSON
-lease_until_utc: 2026-08-29T18:00:00Z
-descriptor_sha256: FULL_SHA256
-descriptor_file_sha256: FULL_FILE_SHA256
-descriptor: attached lower-....region.json
-checkpoint_start: none
-command: python3 Experiments/fin4_exact_search/run.py scan-region ...
+lease_until_utc: ISO_8601_UTC
+checkpoint: LOCAL_OR_SHARED_LOCATION
 ```
 
-Heartbeat or lease extension:
+Two claims with the same commit, campaign ID, and shard are duplicate work.
+A heartbeat repeats those fields and adds the exact-step count and checkpoint
+SHA-256.  A worker releasing a shard posts the final checkpoint hash and its
+human-provided location.  After a lease expires, another worker may post
+`RECLAIM_STALE` and resume the published checkpoint or restart the
+deterministic shard.
 
-```text
-HEARTBEAT
-region_id: lower-0123456789abcdef0123
-worker: MACHINE_OR_PERSON
-time_utc: 2026-08-29T15:00:00Z
-lease_until_utc: 2026-08-29T21:00:00Z
-steps: 250000
-checkpoint_sha256: FULL_SHA256
-status: unresolved; no mathematical conclusion
+Issue comments coordinate work only.  A result counts only after downloading
+the certificate and running the local `verify` command.
+
+## Installation and tests
+
+No installation is required.  An editable install is optional:
+
+```bash
+python3 -m pip install -e Experiments/fin4_exact_search
+fin4-exact-search --help
 ```
 
-Release:
+Run the complete clean-clone gate:
 
-```text
-RELEASE
-region_id: lower-0123456789abcdef0123
-worker: MACHINE_OR_PERSON
-time_utc: 2026-08-29T16:00:00Z
-checkpoint_sha256: FULL_SHA256
-reason: resource limit / maintenance / reassignment
-handoff_location: HUMAN-PROVIDED URL OR NONE
+```bash
+python3 Experiments/fin4_exact_search/validate.py
 ```
 
-Split and handoff:
-
-```text
-SPLIT
-parent_region_id: lower-0123456789abcdef0123
-worker: MACHINE_OR_PERSON
-time_utc: 2026-08-29T16:30:00Z
-parent_checkpoint_sha256: FULL_SHA256
-child_partition_sha256: FULL_SHA256
-children: lower-AAA..., lower-BBB..., ...
-parent_status: released after exact child partition generation
-```
-
-Exact result:
-
-```text
-RESULT
-region_id: upper-0123456789abcdef0123
-worker: MACHINE_OR_PERSON
-time_utc: 2026-08-29T17:00:00Z
-certificate_kind: fin4-rational-finite-clock-profile-v1
-certificate_payload_sha256: FULL_CANONICAL_PAYLOAD_SHA256
-certificate_file_sha256: FULL_FILE_SHA256
-certificate_location: HUMAN-PROVIDED URL
-local_verify_command: python3 Experiments/fin4_exact_search/run.py verify FILE
-local_verify_output: valid exact profile certificate: ...
-```
-
-For a regional lower result, say `certificate_scope: regional`; it becomes a
-global lower bound only after a complete partition is merged and the merged
-certificate verifies locally.
-
-### Stale-claim recovery
-
-A claim is stale only after its `lease_until_utc` has passed without a later
-heartbeat. A replacement worker posts:
-
-```text
-RECLAIM_STALE
-region_id: lower-0123456789abcdef0123
-new_worker: MACHINE_OR_PERSON
-time_utc: 2026-08-29T22:00:00Z
-observed_lease_until_utc: 2026-08-29T21:00:00Z
-last_heartbeat_comment: ISSUE COMMENT URL
-checkpoint_used: HASH/LOCATION OR none; restarting deterministically
-new_lease_until_utc: 2026-08-30T04:00:00Z
-```
-
-If two machines accidentally overlap, keep the first unexpired claim and ask
-the other to release or split. Duplicate results may be useful as independent
-checks but should not be mistaken for extra coverage.
-
-No Issue message, file hash, or claimed solver status accepts a result. A
-recipient downloads the file, checks its SHA-256, and runs the exact local
-`verify` command. Lower regional certificates must additionally be assembled
-into a complete partition and the merged tree verified.
-
-## Tests
-
-Run the standard-library suite from the repository root:
+Or run the standard-library test suite directly:
 
 ```bash
 PYTHONPATH=Experiments/fin4_exact_search \
@@ -580,24 +229,19 @@ PYTHONPATH=Experiments/fin4_exact_search \
     -s Experiments/fin4_exact_search/tests -v
 ```
 
-The tests cover exact late deviations, profile certificates, rational
-composition rank/unrank, seeded direct-versus-DAG agreement, checkpoint
-resumption, deterministic regions, and a depth-1200 invalid flat tree which is
-rejected without hitting Python's recursion limit.
+The tests cover exact late deviations, independent-law profile certificates,
+rational composition rank/unrank, direct-expression agreement with terminal
+semantics, deep iterative proof state, exact checkpoint resumption, candidate
+sharding, and the one-resident-resolver memory gate.
 
 ## Limitations
 
-- Exact outer systems grow rapidly with `1 / epsilon`; interval dependency
-  bounds can remain wide for a very long time.
-- Checkpoints can become large. Compression reduces disk size, not the memory
-  needed to resume a frontier.
-- The upper enumerator is complete but intentionally elementary. It is not an
-  efficient nonlinear equilibrium solver.
-- The stationary-grid heuristic is incomplete and untrusted; exhaustion has
-  no meaning.
-- Exhaustion of one finite upper diagonal range says only that the range has
-  no accepted profile.
-- A regional lower tree is not a global certificate until exact merge and
-  verification succeed.
-- There is no automated GitHub communication and no remote execution service.
-- No result here carries a Lean evidence seal.
+- Exact expression systems grow rapidly as `epsilon` decreases.
+- Interval dependency bounds can remain wide for a very long time.
+- Checkpoints can become large; compression reduces disk size, not resume
+  memory.
+- The complete profile enumerator is intentionally elementary.
+- Candidate discovery is targeted, not an exhaustive enumeration of all
+  rational reward tables.
+- No positive-gap Fin4 table is currently included.
+- No result from this Python package carries a Lean evidence seal.

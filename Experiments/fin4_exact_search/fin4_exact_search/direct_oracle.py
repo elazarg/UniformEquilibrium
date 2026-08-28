@@ -1,10 +1,7 @@
 """Equality-free direct-hazard finite-clock certificates for Fin4.
 
-This module is deliberately separate from :mod:`fin4_exact_search.engine`'s
-v2 outer-point problem. It reuses the engine's iterative expression evaluator
-and gives the direct problem a distinct compact depth-first search and
-certificate kind. Existing profile and legacy lower-tree formats are
-unchanged.
+This module combines the shared exact expression evaluator with a compact
+depth-first lower search and exhaustive rational profile enumeration.
 
 The direct problem minimizes the exact exploitability of actual independent
 finite-clock stopping laws.  Each marginal law is parameterized by behavioral

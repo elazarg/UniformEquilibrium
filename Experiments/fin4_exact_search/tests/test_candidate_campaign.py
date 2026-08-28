@@ -16,7 +16,6 @@ from fin4_exact_search.candidate_campaign import (
 )
 from fin4_exact_search.engine import (
     RewardTable,
-    SearchResult,
     read_json,
     write_json_atomic,
 )
@@ -39,6 +38,12 @@ class FakeCertificate:
         }
 
 
+@dataclass(frozen=True)
+class FakeResult:
+    kind: str
+    certificate: FakeCertificate
+
+
 class FakeResolver:
     def __init__(self, reward: RewardTable, epsilon: Fraction, steps: int = 0) -> None:
         self.reward = reward
@@ -49,13 +54,13 @@ class FakeResolver:
         self,
         max_steps: Optional[int] = None,
         max_seconds: Optional[float] = None,
-    ) -> Optional[SearchResult]:
+    ) -> Optional[FakeResult]:
         del max_seconds
         amount = 1 if max_steps is None else max_steps
         self.steps += amount
         if self.steps >= 3:
             certificate = FakeCertificate(self.reward, self.epsilon)
-            return SearchResult("profile", certificate)  # type: ignore[arg-type]
+            return FakeResult("profile", certificate)
         return None
 
     def to_checkpoint_json(self) -> dict[str, Any]:
