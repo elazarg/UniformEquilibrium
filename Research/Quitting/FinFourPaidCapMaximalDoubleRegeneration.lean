@@ -273,6 +273,7 @@ theorem exists_paidCapDoublePort_maximalRegeneration_or_doubleUnique
     {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
     {bound : ℝ}
     (residual : FinFourQuantitativeFullSupportHardResidual reward bound)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
     (owner : Fin 4) :
     ∃ double : FinFourSingletonBaseResetRepairPaidCapDoublePort
         reward bound residual owner,
@@ -285,7 +286,7 @@ theorem exists_paidCapDoublePort_maximalRegeneration_or_doubleUnique
               owner other)) ∨
           (double.chain.sourceCapLiftedSource.HasUniqueAllContinueAtCap ∧
             double.chain.repairedCapLiftedSource.HasUniqueAllContinueAtCap) := by
-  obtain ⟨double⟩ := residual.nonempty_paidCapDoublePort owner
+  obtain ⟨double⟩ := residual.nonempty_paidCapDoublePort hreward owner
   exact ⟨double,
     double.sourceMaximalRegeneration_or_repairedMaximalRegeneration_or_doubleUnique⟩
 
