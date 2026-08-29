@@ -171,8 +171,13 @@ theorem sourceResetOwner_debt_eq_zero
         (quittingTerminalSemanticPair reward
           double.chain.sourceCapLiftedSource.profile)
         double.chain.producer.resetOwner = 0 := by
+  have hresetMem : double.chain.producer.resetOwner ∈
+      finFourSingletonBaseFree owner := by
+    simp [finFourSingletonBaseFree,
+      double.chain.producer.resetOwner_ne_owner]
   rw [double.chain.sourceCapLiftedSource_profile]
-  exact double.chain.producer.source_terminalSemanticDebt_resetOwner
+  exact (double.chain.producer.free_solved
+    double.chain.producer.resetOwner hresetMem).1
 
 /-- The original singleton source has positive reset-owner incidence against
 its sure-Quit singleton owner. -/
@@ -184,7 +189,7 @@ theorem sourceResetOwner_owner_positiveIncidence
         (quittingTerminalOutcomeMass reward
           double.chain.sourceCapLiftedSource.profile) := by
   rw [double.chain.sourceCapLiftedSource_profile,
-    double.chain.producer.source_terminalOutcome_unitIncidence]
+    double.chain.producer.reset_incidence]
   norm_num
 
 /-- The repaired singleton owner has exact zero semantic debt. -/
