@@ -136,6 +136,7 @@ import Research.Quitting.NearMinimumActualDeviationRectangle
 import Research.Quitting.NearMinimumRecenteredStrategicSign
 import Research.Quitting.NearMinimumRetainedTailTimingNashIdentity
 import Research.Quitting.NegativeRectangleResetFaceCompensation
+import Research.Quitting.FinFourPaidCapMaximalDoubleRegeneration
 import Research.Quitting.NormalizedPassportMinimumReturn
 import Research.Quitting.NormalizedPassportZenoBoundary
 import Research.Quitting.ORRankReduction
