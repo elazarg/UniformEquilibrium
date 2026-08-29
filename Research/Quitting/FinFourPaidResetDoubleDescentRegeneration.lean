@@ -173,6 +173,12 @@ theorem exists_repairedPaidResetRegeneration
       (quittingTerminalSemanticPair reward
         double.chain.repairedCapLiftedSource.profile) owner = 0 := by
     rw [double.chain.repairedCapLiftedSource_profile]
+    change quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward
+        (quittingStationaryProfile reward
+          (quittingSingletonBaseRepairedRoot owner
+            (finFourSingletonBaseFree owner) double.chain.producer.point)))
+        owner = 0
     unfold quittingTerminalSemanticDebt
     rw [quittingTerminalSemanticPair_stationary_envelope_eq_cap]
     exact sub_eq_zero.mpr double.chain.repair.repaired_owner_cap_eq_payoff
