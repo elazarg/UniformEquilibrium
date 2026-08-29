@@ -89,7 +89,7 @@ Update only the owning source:
 | Mathematical boundary | `docs/FRONTIER.md` |
 | Process or promotion rule | `docs/PIPELINE.md` |
 | External citation | `docs/references/` |
-| Extraction or old-path provenance | `TRANSITION.md` |
+| Scoped historical evidence | Owning audit, reference, history, or experiment record |
 
 Run:
 
@@ -98,9 +98,9 @@ python scripts/generate_docs.py
 python scripts/check_docs.py
 ```
 
-Living documentation describes the current mathematics and workflow. Put
-repository-transition chronology, old paths, and superseded implementation
-approaches only in `TRANSITION.md`. Literature and source-history audits remain
-within their explicitly scoped reference or audit records. Every Markdown file
-directly under `docs/` is living documentation and must remain free of dated
-repository snapshots, raw commit locators, and changelog sections.
+Living documentation describes the current mathematics and workflow. Ordinary
+implementation history belongs in Git. Literature, source-history, and
+experiment provenance remain within their explicitly scoped owning records.
+Every Markdown file directly under `docs/` is living documentation and must
+remain free of dated repository snapshots, raw commit locators, and changelog
+sections.

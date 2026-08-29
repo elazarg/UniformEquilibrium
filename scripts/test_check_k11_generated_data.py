@@ -169,6 +169,20 @@ class K11GeneratedDataTests(unittest.TestCase):
             any(error.startswith("dyadic_data:") for error in errors), errors
         )
 
+    def test_manifest_provenance_record_drift_is_rejected(self) -> None:
+        manifest = copy.deepcopy(CHECKER.load_manifest())
+        manifest["provenance_record"] = (
+            "Experiments/certsearch/block_pair/K11/MANIFEST.md#missing"
+        )
+        with tempfile.TemporaryDirectory() as directory:
+            manifest_path = pathlib.Path(directory) / "manifest.json"
+            manifest_path.write_text(json.dumps(manifest), encoding="utf-8")
+            errors = CHECKER.check_repository(ROOT, manifest_path)
+        self.assertIn(
+            "K11 integrity manifest must point to its owning provenance record",
+            errors,
+        )
+
     def test_manifest_fingerprint_drift_is_rejected(self) -> None:
         manifest = copy.deepcopy(CHECKER.load_manifest())
         manifest["artifacts"]["row_zero_cache"][

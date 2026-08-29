@@ -129,11 +129,6 @@ class TimelessDocumentTests(unittest.TestCase):
                 self.assertIn(source, DOCS_PRUNED_DIRECTORIES)
                 self.assertIn(source, NAME_PRUNED_DIRECTORIES)
 
-    def test_transition_record_is_history_not_living(self) -> None:
-        transition = ROOT / "TRANSITION.md"
-        self.assertNotIn(transition, TIMELESS_DOCS)
-        self.assertTrue(is_dedicated_history_or_evidence(transition))
-
     def test_scoped_evidence_records_are_not_living(self) -> None:
         records = (
             ROOT / "docs" / "audits" / "README.md",
@@ -155,7 +150,7 @@ class TimelessDocumentTests(unittest.TestCase):
 ## Acceptance gates
 
 Run the full build when a dependency pin changes.
-Repository-transition provenance belongs in `TRANSITION.md`.
+Scoped historical evidence remains in its owning audit record.
 """
         self.assertEqual(timeless_document_issues(text), [])
 
@@ -225,10 +220,10 @@ Repository-transition provenance belongs in `TRANSITION.md`.
             [],
         )
 
-    def test_history_document_link_is_allowed(self) -> None:
+    def test_scoped_history_wording_is_allowed(self) -> None:
         self.assertEqual(
             timeless_document_issues(
-                "Extraction provenance belongs in [`TRANSITION.md`](../TRANSITION.md)."
+                "Source-verification evidence belongs in its owning audit record."
             ),
             [],
         )

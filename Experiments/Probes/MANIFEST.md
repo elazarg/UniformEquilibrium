@@ -23,4 +23,4 @@ The current probes are:
 - `reset_return_selection_search.py`: exact local reset/return selection
   passport search.
 
-Provenance is recorded in `TRANSITION.md`.
+Each probe's source records its finite scope, assumptions, and interpretation.

@@ -11,14 +11,12 @@ row is EXACTLY complementary for an own-set-shifted reward table `r'`, with
     |d_i| <= eps / min(x_i, 1 - x_i)       if coordinate i is interior
 
 so `‖r - r'‖_inf <= C * eps` with `C = 1` at a pure row and, in general,
-`C = max` over interior coordinates `i` of `1 / min(x_i, 1 - x_i)` (the
-condition number blowing up as an interior rate approaches a pure endpoint.
-Historical cycle-strata discussion is retained only in `TRANSITION.md`. Both
-the theorem and this
-module are period-ONE / fixed-tail: the row is a single stationary phase
-played forever, not a genuinely period-`L` sequence of varying phases (the
-cycle-feedback generalization is an open item, not attempted here; no
-period-specific search is claimed.
+`C = max` over interior coordinates `i` of `1 / min(x_i, 1 - x_i)`. The
+condition number blows up as an interior rate approaches a pure endpoint.
+Both the theorem and this module are period-ONE / fixed-tail: the row is a
+single stationary phase played forever, not a genuinely period-`L` sequence
+of varying phases. The cycle-feedback generalization is an open item, not
+attempted here; no period-specific search is claimed.
 
 ## What "defect" means for a stationary candidate row
 

@@ -9,9 +9,9 @@ that claim into the production import graph.
 An experiment result records its tracked executable source, exact reproduction
 command, assumptions, limitations, and compact evidence. A checked-in payload
 whose generator is unavailable instead has a deterministic integrity checker;
-its provenance belongs in `TRANSITION.md`. Generated caches, logs, screenshots,
-and raw runs are not experiment records. Experiments may import Research;
-Research must not import this directory.
+its owning experiment record states the provenance loss. Generated caches, logs,
+screenshots, and raw runs are not experiment records. Experiments may import
+Research; Research must not import this directory.
 
 ## Directory lifecycle
 

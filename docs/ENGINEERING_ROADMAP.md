@@ -2,9 +2,9 @@
 
 This is the living engineering plan for the current tree. It records desired
 architecture, active priorities, and acceptance criteria. It is not a
-changelog. Repository-transition provenance belongs in
-[`TRANSITION.md`](../TRANSITION.md); ordinary implementation history belongs
-in Git.
+changelog. Ordinary implementation history belongs in Git; scoped historical
+evidence remains with its owning audit, reference, history, or experiment
+record.
 
 The roadmap does not authorize a stable downstream API or a GameTheory2
 cutover. Exact theorem truth remains in Lean, while promotion and evidence
@@ -65,8 +65,8 @@ isolated renames that leave one mathematical API split between conventions.
   limitation and checks only reproducible integrity properties.
 - Synchronization tooling operates on explicit staging directories and never
   treats the live repository as a cleanup target.
-- Transition-specific paths, keep/drop decisions, and source-revision facts
-  remain confined to `TRANSITION.md`.
+- Old paths, keep/drop decisions, and source-revision chronology do not belong
+  in this living roadmap.
 
 ## Assumption normalization
 

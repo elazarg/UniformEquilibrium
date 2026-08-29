@@ -2,9 +2,8 @@
 
 This is the living software-engineering assessment of the current tree. It
 describes present strengths, risks, and review standards; it is not a record of
-the sequence by which the tree acquired them. Repository-transition provenance
-belongs in [`TRANSITION.md`](../TRANSITION.md), and ordinary implementation
-history belongs in Git.
+the sequence by which the tree acquired them. Ordinary implementation history
+belongs in Git; scoped historical evidence remains with its owning record.
 
 Exact theorem truth remains in the Lean declarations under their imports. This
 review does not turn a proposition, conditional theorem, Research module, or
@@ -181,8 +180,9 @@ not successful when it merely compresses a brittle expansion.
   comments, strings, and character literals. It supplements kernel checking;
   it does not replace it.
 - K11 numeric payloads have deterministic integrity checks. Their missing
-  original generator/input boundary is stated in `TRANSITION.md`; integrity
-  verification is not independent numerical regeneration.
+  original generator/input boundary is stated in
+  `Experiments/certsearch/block_pair/K11/MANIFEST.md`; integrity verification is
+  not independent numerical regeneration.
 - Generated data should be excluded from proof-golf metrics while remaining
   subject to provenance and freshness checks.
 - `scripts/sync_from_source.py` is staging-only and must reject the live tree,

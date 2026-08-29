@@ -132,8 +132,6 @@ def is_dedicated_history_or_evidence(document: pathlib.Path) -> bool:
     """Whether a Markdown file is an explicitly scoped non-living record."""
     relative_path = document.relative_to(ROOT)
     parts = relative_path.parts
-    if relative_path == pathlib.Path("TRANSITION.md"):
-        return True
     if parts[0] == "Experiments":
         return True
     if parts[:2] in {

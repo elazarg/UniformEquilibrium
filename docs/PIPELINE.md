@@ -140,7 +140,7 @@ Volatile documentation has structured ownership:
 | Research method | `PROGRAM.md` or `methods/` |
 | Promotion and validation workflow | `PIPELINE.md` |
 | External theorem or citation confidence | `references/` |
-| Extraction, old path, or migration provenance | `TRANSITION.md` |
+| Scoped historical evidence | Owning audit, reference, history, or experiment record |
 
 Do not copy headline status into agent policy or free-standing essays. Run
 `python scripts/generate_docs.py` after changing a structured source and

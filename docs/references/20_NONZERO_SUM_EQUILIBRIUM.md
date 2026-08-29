@@ -434,8 +434,8 @@ the printed equivalence before the endpoint convention is repaired.
 **Section 5 of the same paper is a separate and safe import.** Its detailed
 audit was recorded in the source repository at
 `ideas/UniformEquilibriumLiterature/QBarMatrixQuittingGamesHaveContinuousEquilibria.md`
-(a provenance locator, not a live target path; see
-[`../../TRANSITION.md`](../../TRANSITION.md)):
+(a provenance locator in source revision
+`171e014480bfd59f09403abc68af45b7f2c44fb5`, not a live target path):
 the `Q̄`-matrix sufficient condition (Thm 5.4), the published
 `S.1`/`S.2`/`S.3` characterization of `ε`-equilibrium existence (Thm 3.4,
 Simon 2007 + Solan–Vieille 2001), the `ε^{1/6}` bound (Thm 3.5), the

@@ -40,8 +40,7 @@ Use these sources for different questions:
 - current mathematical synthesis: `docs/FRONTIER.md`;
 - available integrated interfaces and nonclaims: `docs/TOOLKIT.md`;
 - stable research and formalization method: `docs/PROGRAM.md`;
-- workflow and promotion rules: `docs/PIPELINE.md`; and
-- extraction and repository-transition provenance: `TRANSITION.md` only.
+- workflow and promotion rules: `docs/PIPELINE.md`.
 
 Frontier claims use four independent evidence seals: `M` for rigorous
 mathematics, `L` for a checked Lean declaration, `A` for an adapter from actual
@@ -89,7 +88,6 @@ When a more precise description is needed, give it.
 - `Experiments/`: reproducible systematic searches and generated evidence.
 - `Reverse/`: backward proof-search questions and evidence.
 - `docs/`: current mathematical interfaces, methodology, and exposition.
-- `TRANSITION.md`: the only place for repository-transition history.
 
 Classify Research and Experiments by their durable output, not by implementation
 language or provenance. A reusable, human-maintained Lean declaration, checker,
@@ -124,8 +122,7 @@ Keep volatile facts in one structured source:
 - stable semantics: `docs/SEMANTICS.md`;
 - compiler and producer interfaces: `docs/TOOLKIT.md` and their route records;
 - research method: `docs/PROGRAM.md`;
-- GitHub Discussions, Issues, and PR promotion: `docs/PIPELINE.md`; and
-- extraction, old paths, and repository-transition history: `TRANSITION.md`.
+- GitHub Discussions, Issues, and PR promotion: `docs/PIPELINE.md`.
 
 `AGENTS.md` is the canonical agent policy. `CLAUDE.md` is generated from it;
 do not edit the copy independently. Run `python scripts/generate_docs.py`
@@ -198,7 +195,10 @@ Keep non-import Lean code within 100 characters per line.
 Lean 4.32.2 is required. Lean 4.32.0 is excluded because of a kernel soundness
 bug.
 
-Keep living documentation current and timeless. Put all transition provenance,
-keep/drop decisions, old paths, and migration notes only in `TRANSITION.md`.
+Keep living documentation current and timeless. Ordinary implementation history
+belongs in Git. Preserve historical evidence only in an explicitly scoped audit,
+reference, history, or experiment record when it remains necessary to interpret
+that record; do not copy old paths, migration notes, or keep/drop chronology into
+living documentation.
 Do not create commits, remotes, issues, pull requests, or releases unless the
 task explicitly asks for them.

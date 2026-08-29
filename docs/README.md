@@ -8,10 +8,10 @@ Every Markdown file directly under `docs/` is living documentation and is
 checked for snapshot dates, raw commit locators, and changelog-style sections.
 Backticked Lean-file references in living documents are repository-root
 relative; named line locators are checked against the cited source line.
-Repository-transition history belongs only in
-[`TRANSITION.md`](../TRANSITION.md). Explicitly historical literature,
-source-verification, experiment, or audit records may preserve the evidence
-they were created to record, but they are never current status authorities.
+Ordinary implementation history belongs in Git. Explicitly historical
+literature, source-verification, experiment, or audit records may preserve the
+evidence they were created to record, but they are never current status
+authorities.
 
 ## Start here
 

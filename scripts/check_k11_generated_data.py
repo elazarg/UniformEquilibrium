@@ -31,6 +31,10 @@ EXPECTED_CLASSIFICATION = (
     "checked_in_evidence_without_reproducible_generator"
 )
 EXPECTED_SCHEMA_VERSION = 2
+EXPECTED_PROVENANCE_RECORD = (
+    "Experiments/certsearch/block_pair/K11/MANIFEST.md"
+    "#provenance-and-limitations"
+)
 MATRIX_SIZE = 31
 
 PRECONDITIONER_ROW_RE = re.compile(
@@ -378,6 +382,35 @@ def resolve_project_path(root: pathlib.Path, relative_text: str) -> pathlib.Path
     return root.joinpath(*relative.parts)
 
 
+def markdown_heading_anchors(text: str) -> set[str]:
+    """Return the simple GitHub-style anchors used by the owning manifest."""
+    anchors: set[str] = set()
+    for line in text.splitlines():
+        match = re.fullmatch(r"#{1,6}\s+(.+?)\s*#*", line)
+        if match is None:
+            continue
+        heading = match.group(1).strip().lower()
+        heading = re.sub(r"[^a-z0-9 _-]", "", heading)
+        anchors.add(re.sub(r"[ _]+", "-", heading))
+    return anchors
+
+
+def check_provenance_record(root: pathlib.Path, record: object) -> list[str]:
+    if record != EXPECTED_PROVENANCE_RECORD:
+        return [
+            "K11 integrity manifest must point to its owning provenance record"
+        ]
+    path_text, anchor = EXPECTED_PROVENANCE_RECORD.split("#", 1)
+    try:
+        path = resolve_project_path(root, path_text)
+        anchors = markdown_heading_anchors(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeDecodeError, PayloadError) as error:
+        return [f"cannot read K11 provenance record: {error}"]
+    if anchor not in anchors:
+        return [f"K11 provenance record has no #{anchor} heading"]
+    return []
+
+
 def calculate_artifact(
     root: pathlib.Path, name: str, entry: dict[str, Any]
 ) -> dict[str, Any]:
@@ -443,6 +476,7 @@ def check_repository(
             "K11 original numeric generation must remain classified as "
             "non-reproducible"
         )
+    errors.extend(check_provenance_record(root, manifest.get("provenance_record")))
 
     artifacts = manifest.get("artifacts")
     if not isinstance(artifacts, dict) or set(artifacts) != set(PARSERS):

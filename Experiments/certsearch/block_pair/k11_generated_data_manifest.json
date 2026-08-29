@@ -1,7 +1,7 @@
 {
   "schema_version": 2,
   "classification": "checked_in_evidence_without_reproducible_generator",
-  "provenance_record": "TRANSITION.md#period-eleven-generated-data-provenance",
+  "provenance_record": "Experiments/certsearch/block_pair/K11/MANIFEST.md#provenance-and-limitations",
   "checker": "scripts/check_k11_generated_data.py",
   "scope": "Integrity and structure of the checked-in Lean payloads only; not regeneration of the numerical computation.",
   "integrity_check_reproducible": true,

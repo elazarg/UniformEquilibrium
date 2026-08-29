@@ -7,9 +7,8 @@ in [`TOOLKIT.md`](TOOLKIT.md), and the mechanically maintained quitting leaf
 ledger is [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
 This is not a chronology. Explicitly historical mathematical synthesis is
-scoped under [`audits/`](audits/README.md); repository-transition provenance,
-old source paths, and extraction decisions belong only in
-[`../TRANSITION.md`](../TRANSITION.md).
+scoped under [`audits/`](audits/README.md). Old source paths and extraction
+decisions are not part of this living mathematical ledger.
 
 ## Exact questions
 
@@ -1987,9 +1986,8 @@ The DAG nodes have these mathematical meanings:
 
 A change to this DAG belongs first in `QuittingProofFrontier.json`. The
 generated block above must not be hand-edited. Earlier named-leaf censuses,
-issue mappings, strengthening chronology, and keep/drop records are
-repository-transition provenance and belong only in `TRANSITION.md`, not in
-the live mathematical ledger.
+issue mappings, strengthening chronology, and keep/drop records do not belong
+in the live mathematical ledger.
 
 ## Serious routes that remain available
 

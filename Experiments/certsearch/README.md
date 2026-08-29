@@ -12,8 +12,8 @@ Run
 their full-file and formatting-independent logical hashes, 31-by-31 shapes,
 and basic payload invariants. This is an integrity check for checked-in Lean
 evidence, not a producer: the original numerical generator is unavailable.
-Historical provenance and that limitation are recorded only in
-[`../../TRANSITION.md`](../../TRANSITION.md).
+The exact provenance loss and its limitations are recorded in
+[`block_pair/K11/MANIFEST.md`](block_pair/K11/MANIFEST.md).
 
 P13 ("certificate-guided weight search", `Experiments/PROPOSALS.md`), slice
 one: the exact filter layer and its validation suite. Plain Python 3, stdlib
@@ -29,16 +29,17 @@ comparison.
   value into `{-1, 0, +1}`; see the module docstring for the exact map and
   why translation is unused), the invariant matrix (`invariant_matrix`,
   `B_ij = r_i({j}) - r_i({i})`), and five named reference weights embedded in
-  the tracked data. Historical source provenance is maintained only in
-  [`../../TRANSITION.md`](../../TRANSITION.md):
+  the tracked data. The `ideas/` and `questions/` entries below are provenance
+  locators in the predecessor source at revision
+  `171e014480bfd59f09403abc68af45b7f2c44fb5`, not live target paths:
 
   | Name | Source |
   |---|---|
-  | `G_EPS` (`eps=1/10`) | tracked reference weight |
-  | `Q154_WEIGHT` | tracked reference weight |
-  | `TWO_PLAYER_COUNTEREXAMPLE` | tracked reference weight |
-  | `FTV_WEIGHT` | tracked reference weight |
-  | `HOSTILE_WEIGHT` | tracked reference weight |
+  | `G_EPS` (`eps=1/10`) | source locator `ideas/AbsorbingCycleCarrier/APublishedWeightSitsInTheCycleExistenceHole.md` |
+  | `Q154_WEIGHT` | source locator `questions/Question154-DoRelaxedCyclesDivergeWithoutAnExactOne.md`, section 2, equation (9) |
+  | `TWO_PLAYER_COUNTEREXAMPLE` | `UniformEquilibrium/Quitting/Boundary/Repair/DisjunctionCounterexample.lean` |
+  | `FTV_WEIGHT` | `UniformEquilibrium/Quitting/Examples/Cyclic/ThreePlayer/AdmissibleCycle.lean` |
+  | `HOSTILE_WEIGHT` | `UniformEquilibrium/Quitting/Punishment/IsolatedPunishmentCeiling.lean` |
 
 - **`filters.py`** -- four exact deciders, each returning a `Certificate`
   (`ok: bool`, `detail: dict`) rather than a bare boolean, so every

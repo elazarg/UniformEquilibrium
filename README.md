@@ -132,7 +132,7 @@ promise for internal modules.
 | Experiments and their commands | [`Experiments/README.md`](Experiments/README.md) |
 | Current reverse-search questions | [`Reverse/Tasks/README.md`](Reverse/Tasks/README.md) |
 | Research and formalization method | [`docs/PROGRAM.md`](docs/PROGRAM.md) and [`docs/PIPELINE.md`](docs/PIPELINE.md) |
-| Extraction and repository provenance | [`TRANSITION.md`](TRANSITION.md) |
+| Scoped audits and source records | [`docs/audits/`](docs/audits/README.md) and [`docs/references/`](docs/references/README.md) |
 
 Integrated Lean is the source of exact theorem truth. `STATUS.md` is a generated
 declaration index and `FRONTIER.md` is the current mathematical synthesis;
