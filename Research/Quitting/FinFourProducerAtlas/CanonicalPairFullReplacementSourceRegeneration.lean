@@ -93,7 +93,8 @@ theorem nonempty_fullReplacementJointLimit
       (fun rank ↦ (node.replacementEndpointLawPoint mover endpoint
         (subsequence rank)).1) atTop (nhds endpoint.cluster) := by
     simpa only [replacementEndpointLawPoint, replacementEndpointProfile,
-      QuittingPositiveMinimumDebtTangentFamily.fullReplacementPair] using
+      QuittingPositiveMinimumDebtTangentFamily.fullReplacementPair,
+      Function.comp_apply] using
       endpoint.fullReplacement_tendsto.comp
         hsubsequence.tendsto_atTop
   exact ⟨{
