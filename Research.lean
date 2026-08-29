@@ -60,6 +60,7 @@ import Research.Quitting.ConstrainedRootNormalWork
 import Research.Quitting.CounterexampleAtomEndpointRisePassport
 import Research.Quitting.CounterfactualAtomMinimumResetSquare
 import Research.Quitting.CoupledCalibrationQuittingRoot
+import Research.Quitting.CrossSeamResponseContrastNoGo
 import Research.Quitting.CyclicSymmetricStationaryGapIVT
 import Research.Quitting.CyclicTripleSoloTail
 import Research.Quitting.DebtTransportMarkovMonodromy
@@ -86,6 +87,7 @@ import Research.Quitting.FinFourProducerAtlas.NormalizedInertVanishingDensityBou
 import Research.Quitting.FinFourProducerAtlas.PureNonsingletonCommonPrefixScreening
 import Research.Quitting.FinFourProducerAtlas.SelfTailContraction
 import Research.Quitting.FinFourSameStageEndpointMonodromy
+import Research.Quitting.FinFourSharpInducedOwnerMargin
 import Research.Quitting.FinFourSharpPairDefectZeroMinimumExclusion
 import Research.Quitting.FinFourSharpSureExitExclusion
 import Research.Quitting.FiniteClockPolynomialCenter
@@ -154,6 +156,7 @@ import Research.Quitting.PureTimeWitnessEscapeDichotomy
 import Research.Quitting.QuantileNashificationAlternative
 import Research.Quitting.QuantileVertexEndpointControl
 import Research.Quitting.RetainedTailFiniteTimingRecursion
+import Research.Quitting.RetainedTailGraftDecomposition
 import Research.Quitting.EndpointRecipientAtomSourceMismatchNoGo
 import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonClockDefectOverlap
