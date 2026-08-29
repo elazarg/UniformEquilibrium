@@ -36,7 +36,7 @@ DEFAULT_UMBRELLAS = (
 # production root is intentionally narrower.  Their source paths follow the
 # ordinary dotted Lean module layout.
 SECONDARY_UMBRELLAS = ("UniformEquilibrium.Diagnostics",)
-PRUNED_DIRECTORIES = {".git", ".lake", "__pycache__", "GameTheory"}
+PRUNED_DIRECTORIES = {".git", ".lake", "__pycache__", "GameTheory", "ephemeral"}
 LEAN_LIBRARY_RE = re.compile(
     r"^\s*lean_lib\s+([A-Za-z_][A-Za-z0-9_']*)\s+where\b", re.MULTILINE
 )
