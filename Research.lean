@@ -38,6 +38,7 @@ import Research.Quitting.AnchoredCyclicPreemptionEdge
 import Research.Quitting.AtomEndpointReturnSeparation
 import Research.Quitting.BenevolentSinkSoloist
 import Research.Quitting.BestEndpointForcedOwnerRectanglePassport
+import Research.Quitting.BindingCollisionGainPositivity
 import Research.Quitting.BlockPair.K11
 import Research.Quitting.CapChangingLawRetainedSquareNoGo
 import Research.Quitting.CausalEndpointAtomLocalStateMatch
