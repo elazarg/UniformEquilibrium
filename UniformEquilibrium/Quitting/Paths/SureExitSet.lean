@@ -573,6 +573,30 @@ theorem not_isQuittingSureExitSet_of_strict_toggle
   · exact (not_le_of_gt hgain) (houtsider outsider hout)
 
 omit [Fintype ι] in
+/-- Failure of the sure-exit property is exactly a strict profitable
+membership toggle.  The reverse direction of
+`not_isQuittingSureExitSet_of_strict_toggle`. -/
+theorem not_isQuittingSureExitSet_iff_strict_toggle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (S : Finset ι) :
+    ¬ IsQuittingSureExitSet reward S ↔
+      (∃ member ∈ S,
+          quittingSetReward reward S member <
+            quittingSetReward reward (S.erase member) member) ∨
+        (∃ outsider ∉ S,
+          quittingSetReward reward S outsider <
+            quittingSetReward reward (insert outsider S) outsider) := by
+  refine ⟨fun hfail => ?_, not_isQuittingSureExitSet_of_strict_toggle reward⟩
+  unfold IsQuittingSureExitSet at hfail
+  rw [not_and_or] at hfail
+  rcases hfail with hmember | houtsider
+  · push Not at hmember
+    obtain ⟨member, hmem, hgain⟩ := hmember
+    exact Or.inl ⟨member, hmem, hgain⟩
+  · push Not at houtsider
+    obtain ⟨outsider, hout, hgain⟩ := houtsider
+    exact Or.inr ⟨outsider, hout, hgain⟩
+
+omit [Fintype ι] in
 /-- The membership split is only bookkeeping: at each player one of the two
 toggles is the identity, so the sure-exit conditions are exactly the uniform
 toggle test. -/

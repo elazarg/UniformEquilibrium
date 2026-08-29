@@ -18,10 +18,10 @@ uniform-equilibrium payoff.
 The selecting filter is arbitrary: what the estimate consumes is vanishing
 adjacent distance, not growth of the selected deadlines.
 
-The realized error is `4 * bound` times the adjacent distance, which bounds
-unrestricted behavioral semantic debt.  It is not the deadline escape charge
-of `quittingFiniteDeadlineEscapeCharge`, which retains an opponent-survival
-factor that adjacent distance does not control.
+The realized error is four times a reward bound times the adjacent distance,
+which bounds unrestricted behavioral semantic debt.  It is not the deadline
+escape charge of `quittingFiniteDeadlineEscapeCharge`, which retains an
+opponent-survival factor that adjacent distance does not control.
 -/
 
 noncomputable section
@@ -36,7 +36,8 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 finite-deadline timing Nash pairs whose adjacent distances tend to zero, and
 whose realized prescribed payoffs tend to one target, make that target a
 uniform-equilibrium payoff.  The indexing filter is arbitrary, so the selected
-deadlines need not be cofinal in the natural numbers. -/
+deadlines need not be cofinal in the natural numbers.  No reward bound is
+supplied: `exists_quittingRewardBound` provides one. -/
 theorem quittingGame_isUniformEquilibriumPayoff_of_adjacentTV_tendsto
     {index : Type} {filter : Filter index} [filter.NeBot]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -48,8 +49,6 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_adjacentTV_tendsto
       (deadlines n)).mixedExtension.IsNash (old n))
     (hnewNash : ∀ n, (quittingFiniteDeadlineTimingGame reward
       (deadlines n + 1)).mixedExtension.IsNash (new n))
-    {bound : ℝ} (hbound : 0 ≤ bound)
-    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hdistance : Tendsto (fun n =>
       quittingFiniteDeadlineAdjacentTV (deadlines n) (old n) (new n))
       filter (nhds 0))
@@ -57,6 +56,7 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_adjacentTV_tendsto
         (quittingFiniteDeadlineTimingProfile reward (deadlines n) (old n)))
       filter (nhds target)) :
     (quittingGame reward).IsUniformEquilibriumPayoff none target := by
+  obtain ⟨bound, hbound, hreward⟩ := exists_quittingRewardBound reward
   apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
     reward target
     (fun n => 4 * bound *

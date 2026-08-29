@@ -95,6 +95,27 @@ theorem base_moverDebt_pos
     0 < quittingTerminalSemanticDebt frontier.base mover.1 :=
   (frontier.positiveDebtSupport_iff mover.1).1 mover.2
 
+/-- An active mover has a distinct opponent: its negative tangent diagonal
+forces a positive off-diagonal coordinate.  No endpoint cluster and no
+minimum-fiber hypothesis are involved. -/
+theorem nonmover_nonempty
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
+    (Finset.univ.erase mover.1).Nonempty := by
+  obtain ⟨observer, hobserver, -⟩ := frontier.exists_positiveOffDiagonal mover.2
+  exact ⟨observer, Finset.mem_erase.mpr ⟨hobserver, Finset.mem_univ observer⟩⟩
+
+/-- A positive-minimum tangent family with an active mover has at least two
+players. -/
+theorem two_le_card
+    (frontier : QuittingPositiveMinimumDebtTangentFamily reward)
+    (mover : {who // who ∈ frontier.positiveDebtSupport}) :
+    2 ≤ Fintype.card ι := by
+  have hcard : 0 < (Finset.univ.erase mover.1).card :=
+    Finset.card_pos.mpr (frontier.nonmover_nonempty mover)
+  rw [Finset.card_erase_of_mem (Finset.mem_univ _), Finset.card_univ] at hcard
+  omega
+
 namespace FullReplacementCluster
 
 variable {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
@@ -136,36 +157,6 @@ theorem minimumFiber_debtTransfer
   ⟨endpoint.mover_debt_eq_zero, frontier.base_moverDebt_pos mover,
     hminimumFiber, endpoint.nonmover_debtChange_sum_eq_moverDebt hminimumFiber⟩
 
-/-- Positive transferred debt needs somewhere to go, so the players other
-than the active mover form a nonempty finite set. -/
-theorem nonmover_nonempty
-    (endpoint : FullReplacementCluster frontier mover)
-    (hminimumFiber :
-      quittingTerminalSemanticDebtSum endpoint.cluster =
-        quittingTerminalSemanticDebtSum frontier.base) :
-    (Finset.univ.erase mover.1).Nonempty := by
-  rcases Finset.eq_empty_or_nonempty (Finset.univ.erase mover.1) with
-    hempty | hnonempty
-  · exfalso
-    have hsum := endpoint.nonmover_debtChange_sum_eq_moverDebt hminimumFiber
-    rw [hempty, Finset.sum_empty] at hsum
-    have hpos := frontier.base_moverDebt_pos mover
-    linarith
-  · exact hnonempty
-
-/-- A full-replacement endpoint cluster on the minimum total-debt fiber
-forces at least two players. -/
-theorem two_le_card
-    (endpoint : FullReplacementCluster frontier mover)
-    (hminimumFiber :
-      quittingTerminalSemanticDebtSum endpoint.cluster =
-        quittingTerminalSemanticDebtSum frontier.base) :
-    2 ≤ Fintype.card ι := by
-  have hcard : 0 < (Finset.univ.erase mover.1).card :=
-    Finset.card_pos.mpr (endpoint.nonmover_nonempty hminimumFiber)
-  rw [Finset.card_erase_of_mem (Finset.mem_univ _), Finset.card_univ] at hcard
-  omega
-
 /-- **Equal-share leakage.**  Some player other than the active mover absorbs
 at least a `(Fintype.card ι - 1)`-th part of the mover's base debt, and that
 share is strictly positive. -/
@@ -181,7 +172,7 @@ theorem exists_nonmover_debtChange_moverDebt_div_card_le
             ((Fintype.card ι : ℝ) - 1) ≤
           quittingTerminalSemanticDebtChange frontier.base endpoint.cluster
             observer := by
-  have hcard := endpoint.two_le_card hminimumFiber
+  have hcard := frontier.two_le_card mover
   have hdenom : 0 < (Fintype.card ι : ℝ) - 1 := by
     have hcast : (2 : ℝ) ≤ (Fintype.card ι : ℝ) := by exact_mod_cast hcard
     linarith
@@ -192,17 +183,12 @@ theorem exists_nonmover_debtChange_moverDebt_div_card_le
       (Fintype.card ι : ℝ) - 1 := by
     rw [Finset.card_erase_of_mem (Finset.mem_univ _), Finset.card_univ,
       Nat.cast_sub (by omega : 1 ≤ Fintype.card ι), Nat.cast_one]
-  have hconst : (∑ _observer ∈ Finset.univ.erase mover.1,
-      quittingTerminalSemanticDebt frontier.base mover.1 /
-        ((Fintype.card ι : ℝ) - 1)) =
-      quittingTerminalSemanticDebt frontier.base mover.1 := by
-    rw [Finset.sum_const, nsmul_eq_mul, hcardCast]
-    field_simp
   obtain ⟨observer, hobserver, hle⟩ :=
-    Finset.exists_le_of_sum_le
-      (endpoint.nonmover_nonempty hminimumFiber)
-      (le_of_eq (hconst.trans
-        (endpoint.nonmover_debtChange_sum_eq_moverDebt hminimumFiber).symm))
+    exists_opponent_average_le_debtChange frontier.base endpoint.cluster mover.1
+      (frontier.base_moverDebt_pos mover)
+      (le_of_eq (endpoint.nonmover_debtChange_sum_eq_moverDebt
+        hminimumFiber).symm)
+  rw [hcardCast] at hle
   exact ⟨observer, (Finset.mem_erase.mp hobserver).1, hshare, hle⟩
 
 /-- The four-player equal share.  Some player other than the active mover

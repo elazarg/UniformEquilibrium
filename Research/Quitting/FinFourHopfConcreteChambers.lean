@@ -295,9 +295,6 @@ def sharpOrientedField (R singletonLevel : ℝ)
     (fun who ↦ quittingFaceNumerator
       (weightOfReward (sharpReward R singletonLevel)) hazard who)
 
-def rationalSharpOrientedField (hazard : Player → ℝ) : Player → ℝ :=
-  sharpOrientedField (1 / 74) 1 hazard
-
 /-! ## Normalized exact polynomial checker -/
 
 abbrev SharpNormalizedCoordinate := Fin 5
@@ -764,66 +761,6 @@ theorem sharp_diagonal_error
   exact abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le
     (sharpNormalizedPoint hazard R)
     (abs_sharpNormalizedPoint_le_one hazard hhazard R hR) who
-
-/-- Literal lower-face margin, one statement uniformly covering all four
-coordinates and all certified parameters. -/
-theorem sharp_lower_face_margin
-    (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
-    (hazard : Player → ℝ)
-    (hhazard : hazard ∈
-      Icc
-        (quittingRationalBoxLower
-          (quittingCenteredRationalBoxLower sharpCenter sharpHalfWidth))
-        (quittingRationalBoxUpper
-          (quittingCenteredRationalBoxUpper sharpCenter sharpHalfWidth)))
-    (who : Player)
-    (hface : hazard who =
-      quittingRationalBoxLower
-        (quittingCenteredRationalBoxLower sharpCenter sharpHalfWidth) who) :
-    (sharpFaceMargin who : ℝ) ≤
-      sharpOrientedField R singletonLevel hazard who := by
-  have herror := sharp_diagonal_error
-    R singletonLevel hR hazard hhazard who
-  have hlower := (abs_le.mp herror).1
-  change hazard who =
-    ((sharpCenter who - sharpHalfWidth who : ℚ) : ℝ) at hface
-  have hcast :
-      ((sharpCenter who - sharpHalfWidth who : ℚ) : ℝ) =
-        (sharpCenter who : ℝ) - sharpHalfWidth who := by
-    norm_num
-  rw [hcast] at hface
-  rw [hface] at hlower
-  linarith
-
-/-- Literal upper-face margin, one statement uniformly covering all four
-coordinates and all certified parameters. -/
-theorem sharp_upper_face_margin
-    (R singletonLevel : ℝ) (hR : R ∈ Icc 0 (1 / 37))
-    (hazard : Player → ℝ)
-    (hhazard : hazard ∈
-      Icc
-        (quittingRationalBoxLower
-          (quittingCenteredRationalBoxLower sharpCenter sharpHalfWidth))
-        (quittingRationalBoxUpper
-          (quittingCenteredRationalBoxUpper sharpCenter sharpHalfWidth)))
-    (who : Player)
-    (hface : hazard who =
-      quittingRationalBoxUpper
-        (quittingCenteredRationalBoxUpper sharpCenter sharpHalfWidth) who) :
-    sharpOrientedField R singletonLevel hazard who ≤
-      -(sharpFaceMargin who : ℝ) := by
-  have herror := sharp_diagonal_error
-    R singletonLevel hR hazard hhazard who
-  have hupper := (abs_le.mp herror).2
-  change hazard who =
-    ((sharpCenter who + sharpHalfWidth who : ℚ) : ℝ) at hface
-  have hcast :
-      ((sharpCenter who + sharpHalfWidth who : ℚ) : ℝ) =
-        (sharpCenter who : ℝ) + sharpHalfWidth who := by
-    norm_num
-  rw [hcast] at hface
-  rw [hface] at hupper
-  linarith
 
 /-- The four mean-value bounds and the preconditioner determinant compile to
 the generic centered stationary certificate for every parameter in the closed
