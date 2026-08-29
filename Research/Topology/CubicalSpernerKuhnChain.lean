@@ -59,6 +59,26 @@ theorem spernerSimplex_step_le_add_one (hs : simplex SC m I) (i : Fin m)
     (I i.succ who).1 ≤ (I i.castSucc who).1 + 1 :=
   spernerSimplex_val_le_succ hs i.succ i.castSucc who
 
+/-- A coordinatewise monotone injective chain whose last vertex exceeds its
+first by at most one in every coordinate is a grid simplex.  This converts the
+wrap-around index form of `simplex` into successive-index form. -/
+theorem simplex_of_step_le (I : Fin (m + 1) → SC.G)
+    (hinjective : Function.Injective I)
+    (hstep : ∀ i : Fin m, ∀ who, (I i.castSucc who).1 ≤ (I i.succ who).1)
+    (hlast : ∀ who, (I (Fin.last m) who).1 ≤ (I 0 who).1 + 1) :
+    simplex SC m I := by
+  refine ⟨hinjective, fun i hi who ↦ ⟨?_, hlast who⟩⟩
+  have hcast : (Fin.ofNat (m + 1) i) = (⟨i, hi⟩ : Fin m).castSucc := by
+    apply Fin.val_injective
+    simp [Fin.ofNat_eq_cast, Fin.val_natCast,
+      Nat.mod_eq_of_lt (by omega : i < m + 1)]
+  have hsucc : (Fin.ofNat (m + 1) (i + 1)) = (⟨i, hi⟩ : Fin m).succ := by
+    apply Fin.val_injective
+    simp [Fin.ofNat_eq_cast, Fin.val_natCast,
+      Nat.mod_eq_of_lt (by omega : i + 1 < m + 1)]
+  rw [hcast, hsucc]
+  exact hstep ⟨i, hi⟩ who
+
 /-! ## Total grid weight -/
 
 /-- The sum of all grid coordinates of one cubical grid vertex. -/
