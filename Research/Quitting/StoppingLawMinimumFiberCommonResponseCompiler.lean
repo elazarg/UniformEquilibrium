@@ -283,9 +283,7 @@ theorem nonempty_stoppingLawCommonPureTimeCompiler_of_minimumFiber
   have hbound : Tendsto bound atTop (nhds 0) := by
     dsimp only [bound]
     convert (hexcess.add hepsilonZero).const_mul 2 using 1 <;> ring_nf
-  refine ⟨{ choice := choice,
-    source_regret_tendsto_zero := ?_,
-    target_regret_tendsto_zero := ?_ }⟩
+  refine ⟨⟨choice, ?_, ?_⟩⟩
   · apply squeeze_zero'
     · exact Eventually.of_forall fun rank =>
         quittingPureTimeResponseRegret_nonneg
