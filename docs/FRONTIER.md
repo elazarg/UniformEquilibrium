@@ -998,6 +998,34 @@ recursive closure, strict-inert consumer, or uniform-equilibrium conclusion
 follows; an arbitrary public chord without the actual endpoint law cannot be
 regenerated.
 
+The strict three-role endpoint-ascent branch now has a literal outgoing
+transition.  The production theorem
+`nonempty_pureTimeResetArrival_of_uniformDebtFloor`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinitePureTimeResetArrival.lean`)
+takes any actual profile to a zero-debt owner with positive incidence in a
+distinct opponent along at most `card ι + 3` profitable pure-time updates.
+The separate `nonempty_finiteDeadlineIncidenceSelection` retains exact cap
+attainment, length at most `deadline + 1`, and total opponent incidence at
+least one; with at least two players,
+`exists_finiteDeadlineIncidenceSelection_with_selectedOpponent` selects one
+opponent coordinate carrying at least `1 / (card ι - 1)`.
+`nonempty_actualProfileFixedLawResetHandoff` attaches the arbitrary-profile
+path and literal final law to the existing fixed-law reset dispatch.
+
+For the actual Fin4 endpoint data,
+`FinFourThreeRoleAscentResetHandoff.nonempty_of_strict_ascent`
+(`Research/Quitting/FinFourProducerAtlas/ThreeRoleAscentResetHandoff.lean`)
+selects one common retained rank with strict literal source-to-endpoint debt
+ascent and routed terminal mass above half the packet resolution.  Its path
+is structurally headed by the fixed recipient's profitable update, has length
+at most seven, and ends in a fixed-law reset dispatch based at the unchanged
+minimum source.  The recurrent source profiles converge to the endpoint's
+`sourceLimit`; Lean identifies only its total debt with the fixed source's
+minimum debt, not the two semantic points.  This transition has `M`, `L`,
+`A`, and branch-local `C` for the maintained target-ascent item.  It does not
+consume either reset-dispatch branch, produce a return or rank descent, or
+imply terminal approximation or a uniform-equilibrium payoff.
+
 The minimum-target branch now also has a source-faithful regeneration surface.
 `nonempty_sourceFaithfulMinimumCausalization`
 (`Research/Quitting/SourceFaithfulMinimumLawCausalization.lean`) keeps one
