@@ -17,6 +17,7 @@ PRUNED_DIRECTORIES = {
     ".pytest_cache",
     "GameTheory",
     "__pycache__",
+    "ephemeral",
 }
 TOKEN_PATTERNS = (
     (re.compile(r"\b(?:sorry|admit)\b"), "proof placeholder"),
