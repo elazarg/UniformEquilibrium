@@ -30,11 +30,17 @@ singleton level.
 to Continue, Quit, or `collisionForm` indifference, which is what makes the
 remaining problem finite.
 
-This file stops there.  It does not decide which activity patterns are
-feasible, so it does not establish that all Continue is the only exact root
-against this cap.  `not_isεQuittingRootNash_soloOwnerRoot` excludes one
-one-parameter family and nothing wider.  Nothing here concerns other tables,
-other caps, or any ray.
+Enumerating those activity patterns gives `eq_allContinueRoot_of_isNash`: all
+Continue is the only exact root against this cap, at every `R` and every
+singleton level.  `not_sum_quittingRootQuitRates_pos` is the immediate
+consequence in the shape a `Regression`-style `limitRoot_positive` field would
+need.
+
+What that discharges is uniqueness at this one cap for this one table.  It
+rests on the two properties above, both of which belong to `sharpReward` and
+not to quitting games in general.  It says nothing about a maximum-absorption
+or maximality obligation at a finite cap, about other tables, about other
+caps, or about whether any ray exists.
 -/
 
 noncomputable section
@@ -183,6 +189,20 @@ def collisionForm (hazard : Player → ℝ) (who : Player) : ℝ :=
     hazard 0 - 2 * hazard 2,
     (2 / 5) * (hazard 0 + hazard 1) - (39 / 100) * hazard 3,
     -hazard 0 - hazard 1 + hazard 2] who
+
+@[simp] theorem collisionForm_zero (hazard : Player → ℝ) :
+    collisionForm hazard 0 =
+      hazard 1 - 2 * hazard 2 + (1 / 100) * hazard 3 := rfl
+
+@[simp] theorem collisionForm_one (hazard : Player → ℝ) :
+    collisionForm hazard 1 = hazard 0 - 2 * hazard 2 := rfl
+
+@[simp] theorem collisionForm_two (hazard : Player → ℝ) :
+    collisionForm hazard 2 =
+      (2 / 5) * (hazard 0 + hazard 1) - (39 / 100) * hazard 3 := rfl
+
+@[simp] theorem collisionForm_three (hazard : Player → ℝ) :
+    collisionForm hazard 3 = -hazard 0 - hazard 1 + hazard 2 := rfl
 
 theorem quittingRootEndpointDifference_productRoot_zero
     (R singletonLevel : ℝ) (hazard : Player → ℝ)
@@ -359,6 +379,244 @@ theorem collisionForm_nonneg_of_hazard_eq_one
   have hendpoint := (collisionForm_endpoint_of_isNash hnash who).2
   rw [hpure] at hendpoint
   linarith
+
+/-! ## The owner-inactive slice -/
+
+/-- On the slice where the owner does not quit, an exact root against the solo
+cap is all Continue.  Player `2`'s trichotomy splits the slice three ways: two
+of the branches collapse the active pair immediately, and the pure-Quit branch
+runs out through players `1`, `0` and `3`.
+
+`hazard_eq_zero_of_isNash` subsumes this.  The slice is kept because its chain
+is short and independent of the owner coordinate. -/
+theorem hazard_eq_zero_of_isNash_of_owner_eq_zero
+    (hnash : IsεQuittingRootNash (sharpReward R singletonLevel)
+      (sharpCapLimit singletonLevel) 0 (productRoot hazard hzero hone))
+    (howner : hazard 3 = 0) (who : Player) :
+    hazard who = 0 := by
+  have hzero0 := hzero 0
+  have hzero1 := hzero 1
+  have hzero2 := hzero 2
+  have hone0 := hone 0
+  have howner3 := collisionForm_nonpos_of_hazard_eq_zero hnash howner
+  rw [collisionForm_three] at howner3
+  have hactive : hazard 0 = 0 ∧ hazard 1 = 0 := by
+    rcases hazard_trichotomy_of_isNash hnash 2 with hmid | hmid | hmid
+    · have hslack := collisionForm_nonpos_of_hazard_eq_zero hnash hmid
+      rw [collisionForm_two, howner] at hslack
+      constructor <;> linarith
+    · exfalso
+      have hsecond : hazard 1 = 0 := by
+        rcases hazard_trichotomy_of_isNash hnash 1 with hone' | hone' | hone'
+        · exact hone'
+        · have := collisionForm_nonneg_of_hazard_eq_one hnash hone'
+          rw [collisionForm_one, hmid] at this
+          linarith
+        · rw [collisionForm_one, hmid] at hone'
+          linarith
+      have hfirst : hazard 0 = 0 := by
+        rcases hazard_trichotomy_of_isNash hnash 0 with hzero' | hzero' | hzero'
+        · exact hzero'
+        · have := collisionForm_nonneg_of_hazard_eq_one hnash hzero'
+          rw [collisionForm_zero, hmid, hsecond, howner] at this
+          linarith
+        · rw [collisionForm_zero, hmid, hsecond, howner] at hzero'
+          linarith
+      rw [hfirst, hsecond, hmid] at howner3
+      linarith
+    · rw [collisionForm_two, howner] at hmid
+      constructor <;> linarith
+  have hthird : hazard 2 = 0 := by
+    rw [hactive.1, hactive.2] at howner3
+    linarith [hzero 2]
+  fin_cases who
+  · exact hactive.1
+  · exact hactive.2
+  · exact hthird
+  · exact howner
+
+/-! ## Every exact root against the solo cap is all Continue -/
+
+/-- **The enumeration.**  An exact root against `sharpCapLimit` has every
+hazard zero.  Player `2`'s trichotomy splits into a pure-Continue branch that
+kills the active pair through player `3`, a pure-Quit branch that runs out of
+room at player `2`'s own condition, and an indifferent branch carrying
+`(2 / 5) * (hazard 0 + hazard 1) = (39 / 100) * hazard 3`, which is then split
+again at players `1`, `0` and `3`.  Every leaf is a linear infeasibility over
+the rationals. -/
+theorem hazard_eq_zero_of_isNash
+    (hnash : IsεQuittingRootNash (sharpReward R singletonLevel)
+      (sharpCapLimit singletonLevel) 0 (productRoot hazard hzero hone))
+    (who : Player) :
+    hazard who = 0 := by
+  have b0 := hzero 0
+  have b1 := hzero 1
+  have b2 := hzero 2
+  have b3 := hzero 3
+  have u3 := hone 3
+  have low : ∀ i : Player, hazard i = 0 → collisionForm hazard i ≤ 0 :=
+    fun i hpure ↦ collisionForm_nonpos_of_hazard_eq_zero hnash hpure
+  have high : ∀ i : Player, hazard i = 1 → 0 ≤ collisionForm hazard i :=
+    fun i hpure ↦ collisionForm_nonneg_of_hazard_eq_one hnash hpure
+  have tri := hazard_trichotomy_of_isNash hnash
+  have hall : hazard 0 = 0 ∧ hazard 1 = 0 ∧ hazard 2 = 0 ∧ hazard 3 = 0 := by
+    rcases tri 2 with hmid | hmid | hmid
+    · -- Player `2` plays pure Continue.
+      have hpair : hazard 0 = 0 ∧ hazard 1 = 0 := by
+        rcases tri 3 with hown | hown | hown
+        · have hslack := low 2 hmid
+          rw [collisionForm_two, hown] at hslack
+          exact ⟨by linarith, by linarith⟩
+        · have hslack := high 3 hown
+          rw [collisionForm_three, hmid] at hslack
+          exact ⟨by linarith, by linarith⟩
+        · rw [collisionForm_three, hmid] at hown
+          exact ⟨by linarith, by linarith⟩
+      have hown : hazard 3 = 0 := by
+        have hslack := low 0 hpair.1
+        rw [collisionForm_zero, hpair.2, hmid] at hslack
+        linarith
+      exact ⟨hpair.1, hpair.2, hmid, hown⟩
+    · -- Player `2` plays pure Quit.
+      exfalso
+      have hsecond : hazard 1 = 0 := by
+        rcases tri 1 with h | h | h
+        · exact h
+        · have hslack := high 1 h
+          rw [collisionForm_one, hmid] at hslack
+          linarith [hone 0]
+        · rw [collisionForm_one, hmid] at h
+          linarith [hone 0]
+      have hfirst : hazard 0 = 0 := by
+        rcases tri 0 with h | h | h
+        · exact h
+        · have hslack := high 0 h
+          rw [collisionForm_zero, hsecond, hmid] at hslack
+          linarith
+        · rw [collisionForm_zero, hsecond, hmid] at h
+          linarith
+      have hown : hazard 3 = 0 := by
+        have hslack := high 2 hmid
+        rw [collisionForm_two, hfirst, hsecond] at hslack
+        linarith
+      have hslack := low 3 hown
+      rw [collisionForm_three, hfirst, hsecond, hmid] at hslack
+      linarith
+    · -- Player `2` is indifferent.
+      rw [collisionForm_two] at hmid
+      rcases tri 1 with h1 | h1 | h1
+      · have hg1 := low 1 h1
+        rw [collisionForm_one] at hg1
+        rcases tri 0 with h0 | h0 | h0
+        · have hown : hazard 3 = 0 := by rw [h0, h1] at hmid; linarith
+          have hthird : hazard 2 = 0 := by
+            have hslack := low 3 hown
+            rw [collisionForm_three, h0, h1] at hslack
+            linarith
+          exact ⟨h0, h1, hthird, hown⟩
+        · exfalso
+          have hslack := high 0 h0
+          rw [collisionForm_zero, h1] at hslack
+          rw [h0] at hg1
+          linarith
+        · rw [collisionForm_zero, h1] at h0
+          rw [h1] at hmid
+          have hthird : hazard 2 = 0 := by linarith
+          have hown : hazard 3 = 0 := by linarith
+          have hfirst : hazard 0 = 0 := by linarith
+          exact ⟨hfirst, h1, hthird, hown⟩
+      · exfalso
+        rw [h1] at hmid
+        linarith
+      · rw [collisionForm_one] at h1
+        rcases tri 0 with h0 | h0 | h0
+        · have hthird : hazard 2 = 0 := by rw [h0] at h1; linarith
+          have hslack := low 0 h0
+          rw [collisionForm_zero, hthird] at hslack
+          have hsecond : hazard 1 = 0 := by linarith
+          have hown : hazard 3 = 0 := by linarith
+          exact ⟨h0, hsecond, hthird, hown⟩
+        · exfalso
+          rw [h0] at hmid
+          linarith [hzero 1]
+        · rw [collisionForm_zero] at h0
+          rcases tri 3 with hown | hown | hown
+          · have hfirst : hazard 0 = 0 := by rw [hown] at hmid h0; linarith
+            have hthird : hazard 2 = 0 := by rw [hown] at h0; linarith
+            have hsecond : hazard 1 = 0 := by rw [hown] at hmid; linarith
+            exact ⟨hfirst, hsecond, hthird, hown⟩
+          · exfalso
+            have hslack := high 3 hown
+            rw [collisionForm_three] at hslack
+            rw [hown] at hmid h0
+            linarith
+          · rw [collisionForm_three] at hown
+            have hzero3 : hazard 3 = 0 := by linarith
+            have hfirst : hazard 0 = 0 := by rw [hzero3] at hmid h0; linarith
+            have hthird : hazard 2 = 0 := by rw [hzero3] at h0; linarith
+            have hsecond : hazard 1 = 0 := by rw [hzero3] at hmid; linarith
+            exact ⟨hfirst, hsecond, hthird, hzero3⟩
+  fin_cases who
+  · exact hall.1
+  · exact hall.2.1
+  · exact hall.2.2.1
+  · exact hall.2.2.2
+
+/-! ## Uniqueness of all Continue, and the excluded positive limit root -/
+
+/-- A Boolean marginal is determined by its Quit mass. -/
+theorem pmfBool_eq_of_quitProbability_eq {first second : PMF Bool}
+    (hquit : (first true).toReal = (second true).toReal) : first = second := by
+  apply Math.ProbabilityMassFunction.toVector_injective
+  funext value
+  cases value
+  · have hfirst := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex first).2
+    have hsecond := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex second).2
+    rw [Fintype.sum_bool] at hfirst hsecond
+    have htrue : Math.ProbabilityMassFunction.toVector first true =
+      Math.ProbabilityMassFunction.toVector second true := hquit
+    linarith
+  · exact hquit
+
+/-- Every root is the product root of its own Quit rates. -/
+theorem eq_productRoot (candidate : Player → PMF Bool)
+    (hzeroRate : ∀ who, 0 ≤ (candidate who true).toReal)
+    (honeRate : ∀ who, (candidate who true).toReal ≤ 1) :
+    candidate =
+      productRoot (fun who ↦ (candidate who true).toReal) hzeroRate honeRate := by
+  funext who
+  exact pmfBool_eq_of_quitProbability_eq (by simp [productRoot])
+
+/-- **All Continue is the only exact root against the solo cap**, at every `R`
+and every singleton level.  This is uniqueness at that cap as a theorem about
+`sharpReward`, not as an assumed hypothesis. -/
+theorem eq_allContinueRoot_of_isNash (candidate : Player → PMF Bool)
+    (hnash : IsεQuittingRootNash (sharpReward R singletonLevel)
+      (sharpCapLimit singletonLevel) 0 candidate) :
+    candidate = (quittingAllContinueRoot : Player → PMF Bool) := by
+  have hzeroRate : ∀ who : Player, 0 ≤ (candidate who true).toReal :=
+    fun _ ↦ ENNReal.toReal_nonneg
+  have honeRate : ∀ who : Player, (candidate who true).toReal ≤ 1 := by
+    intro who
+    have hsum := quittingRoot_continueProbability_add_quitProbability candidate who
+    have hcontinue : 0 ≤ (candidate who false).toReal := ENNReal.toReal_nonneg
+    linarith
+  have hproduct := eq_productRoot candidate hzeroRate honeRate
+  rw [hproduct] at hnash ⊢
+  funext who
+  refine pmfBool_eq_of_quitProbability_eq ?_
+  have hvanish := hazard_eq_zero_of_isNash hnash who
+  simp [productRoot, quittingAllContinueRoot, hvanish]
+
+/-- Consequently every exact root against the solo cap has zero total Quit
+rate, so no exact root there is positive.  A `Regression`-style container for
+`sharpReward` cannot satisfy a `limitRoot_positive` field against this cap. -/
+theorem not_sum_quittingRootQuitRates_pos (candidate : Player → PMF Bool)
+    (hnash : IsεQuittingRootNash (sharpReward R singletonLevel)
+      (sharpCapLimit singletonLevel) 0 candidate) :
+    ¬ 0 < ∑ who, quittingRootQuitRates candidate who := by
+  rw [eq_allContinueRoot_of_isNash candidate hnash]
+  simp [quittingRootQuitRates, quittingAllContinueRoot]
 
 end FinFourSharpCapLimitRootUniqueness
 
