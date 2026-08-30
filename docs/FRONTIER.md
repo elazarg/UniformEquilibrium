@@ -2507,6 +2507,15 @@ in the live mathematical ledger.
   decoded càdlàg path satisfies A1.  `HasClockGap.cdf_of_tendsto` preserves
   the canonical finite clock-gap law under weak convergence, and
   `ChronologicalLimit.absorptionPathA2` compiles that law into A2.  Meanwhile,
+  `pathJump_chronologicalCadlagPath_eq_clockCoalitionFiber_real` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceJump.lean`
+  identifies each decoded source jump with its exact clock--coalition fiber.
+  In that file, `exists_dominantClockWindowStage_of_width_lt_real` selects the
+  rightmost positive source stage whenever a finite open clock window carries
+  more mass than its width, with simultaneous nonnegative coalition residuals
+  whose total is strictly smaller than the width.  This is finite source
+  localization; no checked theorem yet passes the selected stages or their
+  root marks through the chronological weak limit.  Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional

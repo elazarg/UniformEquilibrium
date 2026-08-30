@@ -1097,6 +1097,7 @@ import UniformEquilibrium.ProofView.Native.Equilibrium
 import UniformEquilibrium.ProofView.Native.History
 import UniformEquilibrium.ProofView.Native.Semantics
 import UniformEquilibrium.Quitting.AbsorptionPath.All
+import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceJump
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceLaw
 import UniformEquilibrium.Quitting.AbsorptionPath.ClockGapA2
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
