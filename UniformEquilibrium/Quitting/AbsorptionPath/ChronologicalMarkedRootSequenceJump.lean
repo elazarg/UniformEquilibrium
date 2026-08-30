@@ -333,6 +333,10 @@ structure QuittingFiniteDominantClockWindowStage
   residual_nonneg : ∀ coalition, 0 ≤ residual coalition
   sum_residual_lt_width :
     (∑ coalition, residual coalition) < upper - lower
+  cumulative_eq_lowerCDF_add_residual : ∀ coalition,
+    quittingRootSequenceCumulativeCoalitionMass roots stage coalition =
+      chronologicalCoalitionCDF (certificate.chronologicalLaw reward)
+          coalition lower + residual coalition
 
 omit [Nonempty ι] in
 /-- If an open finite clock window carries more mass than its width, its
@@ -514,6 +518,91 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
     by_cases hwindow : inWindow stage
     · simp [hwindow, stageTotal]
     · simp [hwindow]
+  have hcumulative (coalition : {S : Finset ι // S.Nonempty}) :
+      quittingRootSequenceCumulativeCoalitionMass roots selected coalition =
+        chronologicalCoalitionCDF (certificate.chronologicalLaw reward)
+            coalition lower + residual coalition := by
+    have hlower_le_one : lower ≤ 1 :=
+      hselectedWindow.1.le.trans
+        (quittingRootSequenceClock_le_one roots selected)
+    rw [chronologicalCoalitionCDF_eq_clockCoalitionEvent_real _ _ hlower_le_one,
+      certificate.chronologicalLaw_clockCoalitionEvent_real_eq_value]
+    unfold QuittingFiniteRootSequenceAbsorption.value
+      quittingRootSequenceCumulativeCoalitionMass residual
+    let full := Finset.range (certificate.cutoff + 1)
+    have hprefix :
+        (∑ stage ∈ Finset.range selected,
+          quittingRootSequenceStageCoalitionMass roots stage coalition) =
+        ∑ stage ∈ full,
+          if stage < selected then
+            quittingRootSequenceStageCoalitionMass roots stage coalition else 0 := by
+      calc
+        _ = ∑ stage ∈ full.filter (fun stage ↦ stage < selected),
+            quittingRootSequenceStageCoalitionMass roots stage coalition := by
+          apply Finset.sum_congr
+          · ext stage
+            simp [full]
+            omega
+          · intro stage _
+            rfl
+        _ = _ := by rw [Finset.sum_filter]
+    have herase :
+        (∑ stage ∈ full.erase selected,
+          if inWindow stage then
+            quittingRootSequenceStageCoalitionMass roots stage coalition else 0) =
+        ∑ stage ∈ full,
+          if stage = selected then 0 else
+            if inWindow stage then
+              quittingRootSequenceStageCoalitionMass roots stage coalition else 0 := by
+      calc
+        _ = ∑ stage ∈ full.erase selected,
+            if stage = selected then 0 else
+              if inWindow stage then
+                quittingRootSequenceStageCoalitionMass roots stage coalition else 0 := by
+          apply Finset.sum_congr rfl
+          intro stage hstage
+          rw [if_neg (Finset.ne_of_mem_erase hstage)]
+        _ = _ := by
+          apply Finset.sum_subset (Finset.erase_subset selected full)
+          intro stage hstageFull hstageErase
+          have heq : stage = selected := by
+            by_contra hne
+            exact hstageErase (Finset.mem_erase.mpr ⟨hne, hstageFull⟩)
+          simp [heq]
+    rw [hprefix, herase, ← Finset.sum_add_distrib]
+    apply Finset.sum_congr rfl
+    intro current hcurrent
+    have hcurrentRange : current ∈ Finset.range (certificate.cutoff + 1) :=
+      hcurrent
+    rcases lt_trichotomy current selected with hbefore | heq | hafter
+    · have hclockLe : quittingRootSequenceClock roots current ≤
+          quittingRootSequenceClock roots selected :=
+        monotone_quittingRootSequenceClock roots hbefore.le
+      by_cases hlower : quittingRootSequenceClock roots current ≤ lower
+      · have hnotWindow : ¬inWindow current := by
+          intro hwindow
+          exact (not_lt_of_ge hlower) hwindow.1
+        simp [hbefore, hbefore.ne, hlower, hnotWindow]
+      · have hwindow : inWindow current := by
+          exact ⟨lt_of_not_ge hlower,
+            hclockLe.trans_lt hselectedWindow.2⟩
+        simp [hbefore, hbefore.ne, hlower, hwindow]
+    · subst current
+      simp [not_le_of_gt hselectedWindow.1]
+    · have hclockGt : lower < quittingRootSequenceClock roots current :=
+        hselectedWindow.1.trans_le
+          (monotone_quittingRootSequenceClock roots hafter.le)
+      by_cases hwindow : inWindow current
+      · have hzero := hlater_zero hcurrentRange hwindow hafter
+        have hcoordinateZero :
+            quittingRootSequenceStageCoalitionMass roots current coalition = 0 :=
+          (Finset.sum_eq_zero_iff_of_nonneg
+            (fun terminal _ ↦ quittingRootSequenceStageCoalitionMass_nonneg
+              roots current terminal)).mp hzero coalition (Finset.mem_univ coalition)
+        simp [not_lt_of_ge hafter.le, hafter.ne', not_le_of_gt hclockGt,
+          hwindow, hcoordinateZero]
+      · simp [not_lt_of_ge hafter.le, hafter.ne', not_le_of_gt hclockGt,
+          hwindow]
   exact ⟨{
     stage := selected
     stage_le_cutoff := hselectedLe
@@ -523,6 +612,7 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
     window_eq_stage_add_residual := hwindow_eq
     residual_nonneg := hresidual_nonneg
     sum_residual_lt_width := hsum_residual.trans_lt hresidualTotal_lt
+    cumulative_eq_lowerCDF_add_residual := hcumulative
   }⟩
 
 end QuittingFiniteRootSequenceAbsorption

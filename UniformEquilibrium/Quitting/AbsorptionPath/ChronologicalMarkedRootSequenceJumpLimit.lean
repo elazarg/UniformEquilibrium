@@ -95,6 +95,48 @@ variable
     {law : ProbabilityMeasure (QuittingChronologicalEvent reward)}
     {time : ℝ}
 
+omit [Nonempty ι] in
+/-- Coalition CDFs converge at a fixed clock whose full clock fiber is null.
+The discrete coalition mark contributes no additional boundary. -/
+theorem tendsto_chronologicalCoalitionCDF_at_lower
+    {laws : ℕ → ProbabilityMeasure (QuittingChronologicalEvent reward)}
+    (windows : QuittingChronologicalNullWindowSequence law time)
+    (hlaw : Tendsto laws atTop (nhds law)) (rank : ℕ)
+    (hlower : windows.lower rank ≤ 1)
+    (coalition : {S : Finset ι // S.Nonempty}) :
+    Tendsto (fun sourceRank ↦
+      chronologicalCoalitionCDF (laws sourceRank) coalition
+        (windows.lower rank)) atTop
+      (nhds (chronologicalCoalitionCDF law coalition
+        (windows.lower rank))) := by
+  let eventSet := chronologicalClockCoalitionEvent
+    (reward := reward) (windows.lower rank) coalition
+  have hfrontier : (law : Measure (QuittingChronologicalEvent reward))
+      (frontier eventSet) = 0 := by
+    have hsubset : frontier eventSet ⊆
+        {event | chronologicalEventClock event = windows.lower rank} := by
+      intro event hevent
+      rcases frontier_inter_subset
+          (chronologicalClockEvent (reward := reward) (windows.lower rank))
+          (chronologicalCoalitionEvent coalition) hevent with hclock | hcoalition
+      · simpa [frontier_Iic] using
+          (continuous_chronologicalEventClock.frontier_preimage_subset
+            (Set.Iic (windows.lower rank)) hclock.1)
+      · rw [(isClopen_chronologicalCoalitionEvent coalition).frontier_eq]
+          at hcoalition
+        exact hcoalition.2.elim
+    exact measure_mono_null hsubset (windows.lower_fiber_null rank)
+  have hfrontierNN : law (frontier eventSet) = 0 := by
+    rw [← ENNReal.coe_eq_zero,
+      ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure]
+    exact hfrontier
+  have hmeasure := ProbabilityMeasure.tendsto_measure_of_null_frontier_of_tendsto
+    hlaw hfrontierNN
+  have hreal := NNReal.continuous_coe.continuousAt.tendsto.comp hmeasure
+  simpa [eventSet, Function.comp_def,
+    chronologicalCoalitionCDF_eq_clockCoalitionEvent_real _ _ hlower,
+    ProbabilityMeasure.measureReal_eq_coe_coeFn] using hreal
+
 omit [DecidableEq ι] [Nonempty ι] in
 theorem lower_lt_time
     (windows : QuittingChronologicalNullWindowSequence law time)

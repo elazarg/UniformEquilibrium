@@ -60,6 +60,18 @@ structure ChronologicalJumpStageLimit
         (diagonal.completedRoots (limit.subsequence (rank index)))
         (stage index) coalition) atTop
       (nhds (QuittingAbsorptionPath.pathJump limit.path time coalition))
+  preCumulativeMass_tendsto : ∀ coalition,
+    Tendsto (fun index ↦
+      QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+        (diagonal.completedRoots (limit.subsequence (rank index)))
+        (stage index) coalition) atTop
+      (nhds (limit.path.leftValue time coalition))
+  postCumulativeMass_tendsto : ∀ coalition,
+    Tendsto (fun index ↦
+      QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+        (diagonal.completedRoots (limit.subsequence (rank index)))
+        (stage index + 1) coalition) atTop
+      (nhds (limit.path.value time coalition))
 
 omit [Nonempty ι] in
 /-- A1 rules out a jump at terminal clock one. -/
@@ -156,7 +168,7 @@ theorem nonempty_chronologicalJumpStageLimit
             (QuittingAbsorptionPath.chronologicalOpenClockWindow
               (windows.lower (windowRank rank))
               (windows.upper (windowRank rank))) ∧
-        ∀ coalition,
+        (∀ coalition,
           |(laws sourceRank : Measure
               (QuittingAbsorptionPath.QuittingChronologicalEvent reward)).real
                 (QuittingAbsorptionPath.chronologicalOpenClockCoalitionWindow
@@ -166,7 +178,13 @@ theorem nonempty_chronologicalJumpStageLimit
               (QuittingAbsorptionPath.QuittingChronologicalEvent reward)).real
                 (QuittingAbsorptionPath.chronologicalOpenClockCoalitionWindow
                   (windows.lower (windowRank rank))
-                  (windows.upper (windowRank rank)) coalition)| < accuracy rank := by
+                  (windows.upper (windowRank rank)) coalition)| < accuracy rank) ∧
+        ∀ coalition,
+          |QuittingAbsorptionPath.chronologicalCoalitionCDF
+              (laws sourceRank) coalition (windows.lower (windowRank rank)) -
+            QuittingAbsorptionPath.chronologicalCoalitionCDF
+              limit.law coalition (windows.lower (windowRank rank))| <
+            accuracy rank := by
     have htotal := (windows.tendsto_openClockWindow_real
       limit.law_tendsto (windowRank rank)).eventually_const_lt
         (hlimitWindow rank)
@@ -188,7 +206,23 @@ theorem nonempty_chronologicalJumpStageLimit
           (Metric.ball_mem_nhds _ (haccuracy_pos rank))
       simpa only [Real.dist_eq] using hnear
     rw [← Filter.eventually_all] at hcoalition
-    exact htotal.and hcoalition
+    have hlower : ∀ coalition,
+        ∀ᶠ sourceRank in atTop,
+          |QuittingAbsorptionPath.chronologicalCoalitionCDF
+              (laws sourceRank) coalition (windows.lower (windowRank rank)) -
+            QuittingAbsorptionPath.chronologicalCoalitionCDF
+              limit.law coalition (windows.lower (windowRank rank))| <
+            accuracy rank := by
+      intro coalition
+      have htendsto := windows.tendsto_chronologicalCoalitionCDF_at_lower
+        limit.law_tendsto (windowRank rank)
+        ((windows.lower_lt_time (windowRank rank)).le.trans htime.1.2)
+        coalition
+      have hnear := htendsto.eventually
+        (Metric.ball_mem_nhds _ (haccuracy_pos rank))
+      simpa only [Real.dist_eq] using hnear
+    rw [← Filter.eventually_all] at hlower
+    exact htotal.and (hcoalition.and hlower)
   obtain ⟨sourceRank, hsourceRank_strict, hsource⟩ :=
     Filter.extraction_forall_of_eventually hsourceEventually
   let dominant : ∀ rank,
@@ -266,7 +300,7 @@ theorem nonempty_chronologicalJumpStageLimit
           limitWindow rank|) atTop (nhds 0) := by
       apply squeeze_zero
       · exact fun _ ↦ abs_nonneg _
-      · exact fun rank ↦ (hsource (rootRank rank)).2 coalition |>.le
+      · exact fun rank ↦ (hsource (rootRank rank)).2.1 coalition |>.le
       · exact haccuracy.comp hrootRank_strict.tendsto_atTop
     have hdifference : Tendsto (fun rank ↦
         (laws (finalRank rank) : Measure
@@ -323,6 +357,97 @@ theorem nonempty_chronologicalJumpStageLimit
         QuittingRootSequenceAbsorbingCompletionDiagonal.selectedRoots] using
           hdecomposition
     linarith
+  have hpreCumulative (coalition : {S : Finset ι // S.Nonempty}) :
+      Tendsto (fun rank ↦
+        QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+          (diagonal.completedRoots (limit.subsequence (finalRank rank)))
+          (finalStage rank) coalition) atTop
+        (nhds (limit.path.leftValue time coalition)) := by
+    let limitLower := fun rank ↦
+      QuittingAbsorptionPath.chronologicalCoalitionCDF limit.law coalition
+        (windows.lower (windowRank (rootRank rank)))
+    have hlowerWithin : Tendsto
+        (fun rank ↦ windows.lower (windowRank (rootRank rank))) atTop
+        (nhdsWithin time (Set.Iio time)) := by
+      rw [tendsto_nhdsWithin_iff]
+      exact ⟨windows.lower_tendsto.comp
+          (hwindowRank_tendsto.comp hrootRank_strict.tendsto_atTop),
+        Filter.Eventually.of_forall fun rank ↦
+          windows.lower_lt_time (windowRank (rootRank rank))⟩
+    have hlimitLower : Tendsto limitLower atTop
+        (nhds (limit.path.leftValue time coalition)) := by
+      have hleft := (ProbabilityTheory.monotone_cdf
+        (QuittingAbsorptionPath.chronologicalCoalitionClockLaw
+          limit.law coalition)).tendsto_leftLim time
+      change Tendsto (fun rank ↦ ProbabilityTheory.cdf
+          (QuittingAbsorptionPath.chronologicalCoalitionClockLaw
+            limit.law coalition : Measure ℝ)
+          (windows.lower (windowRank (rootRank rank)))) atTop
+        (nhds (Function.leftLim (ProbabilityTheory.cdf
+          (QuittingAbsorptionPath.chronologicalCoalitionClockLaw
+            limit.law coalition : Measure ℝ)) time))
+      exact hleft.comp hlowerWithin
+    have hdiffAbs : Tendsto (fun rank ↦
+        |QuittingAbsorptionPath.chronologicalCoalitionCDF
+            (laws (finalRank rank)) coalition
+              (windows.lower (windowRank (rootRank rank))) -
+          limitLower rank|) atTop (nhds 0) := by
+      apply squeeze_zero
+      · exact fun _ ↦ abs_nonneg _
+      · exact fun rank ↦ (hsource (rootRank rank)).2.2 coalition |>.le
+      · exact haccuracy.comp hrootRank_strict.tendsto_atTop
+    have hdiff : Tendsto (fun rank ↦
+        QuittingAbsorptionPath.chronologicalCoalitionCDF
+            (laws (finalRank rank)) coalition
+              (windows.lower (windowRank (rootRank rank))) -
+          limitLower rank) atTop (nhds 0) := by
+      rw [tendsto_zero_iff_abs_tendsto_zero]
+      simpa [Function.comp_def] using hdiffAbs
+    have hsourceLower := hdiff.add hlimitLower
+    have hsourceLower' : Tendsto (fun rank ↦
+        QuittingAbsorptionPath.chronologicalCoalitionCDF
+            (laws (finalRank rank)) coalition
+              (windows.lower (windowRank (rootRank rank)))) atTop
+        (nhds (limit.path.leftValue time coalition)) := by
+      convert hsourceLower using 1
+      · funext rank
+        simp [limitLower]
+      · simp
+    have hsum := hsourceLower'.add (hresidual coalition)
+    have hsum' : Tendsto (fun rank ↦
+        QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+          (diagonal.completedRoots (limit.subsequence (finalRank rank)))
+          (finalStage rank) coalition) atTop
+        (nhds (limit.path.leftValue time coalition + 0)) := by
+      apply hsum.congr'
+      filter_upwards [] with rank
+      exact (dominant (rootRank rank)).cumulative_eq_lowerCDF_add_residual
+        coalition |>.symm
+    simpa using hsum'
+  have hpostCumulative (coalition : {S : Finset ι // S.Nonempty}) :
+      Tendsto (fun rank ↦
+        QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+          (diagonal.completedRoots (limit.subsequence (finalRank rank)))
+          (finalStage rank + 1) coalition) atTop
+        (nhds (limit.path.value time coalition)) := by
+    have hadd := (hpreCumulative coalition).add (hstageMass coalition)
+    have hadd' : Tendsto (fun rank ↦
+        QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass
+          (diagonal.completedRoots (limit.subsequence (finalRank rank)))
+          (finalStage rank + 1) coalition) atTop
+        (nhds (limit.path.leftValue time coalition +
+          QuittingAbsorptionPath.pathJump limit.path time coalition)) := by
+      apply hadd.congr'
+      filter_upwards [] with rank
+      exact (QuittingAbsorptionPath.quittingRootSequenceCumulativeCoalitionMass_succ
+        (diagonal.completedRoots (limit.subsequence (finalRank rank)))
+        (finalStage rank) coalition).symm
+    have hvalue : limit.path.leftValue time coalition +
+        QuittingAbsorptionPath.pathJump limit.path time coalition =
+        limit.path.value time coalition := by
+      unfold QuittingAbsorptionPath.pathJump
+      ring
+    rwa [hvalue] at hadd'
   refine ⟨{
     rank := finalRank
     rank_strictMono := hsourceRank_strict.comp hrootRank_strict
@@ -332,6 +457,8 @@ theorem nonempty_chronologicalJumpStageLimit
     root_tendsto := by
       simpa [rootPoint, finalRank, finalStage, Function.comp_def] using hrootTendsto
     stageCoalitionMass_tendsto := hstageMass
+    preCumulativeMass_tendsto := hpreCumulative
+    postCumulativeMass_tendsto := hpostCumulative
   }⟩
 
 omit [Nonempty ι] in

@@ -119,6 +119,103 @@ theorem quittingRootCoalitionMass_sum_nonempty
     exact (pmfBool_false_toReal (root who)).symm
   simpa [quittingRootCoalitionMass, hcontinue] using hcoalition
 
+/-- A product root assigns an exact joint action the mass of its quitter
+coalition. -/
+theorem pmfPi_apply_toReal_eq_quittingRootCoalitionMass_quitters
+    (root : ι → PMF Bool) (action : ι → Bool) :
+    ((pmfPi root) action).toReal =
+      quittingRootCoalitionMass root (quittingQuitters action) := by
+  classical
+  rw [pmfPi_apply, ENNReal.toReal_prod]
+  unfold quittingRootCoalitionMass quittingRootQuitRates coalitionMass
+  change (∏ player, (root player (action player)).toReal) =
+    (∏ player ∈ quittingQuitters action, (root player true).toReal) *
+      ∏ player ∈ Finset.univ \ quittingQuitters action,
+        (1 - (root player true).toReal)
+  rw [← Finset.prod_filter_mul_prod_filter_not Finset.univ
+    (fun player ↦ action player = true)]
+  congr 1
+  · apply Finset.prod_congr
+    · ext player
+      simp [quittingQuitters]
+    · intro player hplayer
+      have haction : action player = true := by
+        change player ∈ Finset.univ.filter
+          (fun owner ↦ action owner = true) at hplayer
+        exact (Finset.mem_filter.mp hplayer).2
+      rw [haction]
+  · apply Finset.prod_congr
+    · ext player
+      simp [quittingQuitters]
+    · intro player hplayer
+      have haction : action player ≠ true := by
+        intro htrue
+        apply (Finset.mem_sdiff.mp hplayer).2
+        simp [quittingQuitters, htrue]
+      have hfalse : action player = false := by
+        cases h : action player <;> simp_all
+      rw [hfalse, pmfBool_false_toReal]
+
+/-- A Boolean product root is determined by the masses of all its nonempty
+exact quitter coalitions. -/
+theorem quittingRoot_eq_of_coalitionMass_eq
+    {left right : ι → PMF Bool}
+    (hmass : ∀ coalition : {S : Finset ι // S.Nonempty},
+      quittingRootCoalitionMass left coalition =
+        quittingRootCoalitionMass right coalition) :
+    left = right := by
+  classical
+  have hsum (root : ι → PMF Bool) :
+      (∑ coalition : {S : Finset ι // S.Nonempty},
+        quittingRootCoalitionMass root coalition) =
+        1 - quittingStationaryContinueMass root := by
+    rw [← Finset.sum_subtype (Finset.univ.erase (∅ : Finset ι))]
+    · exact quittingRootCoalitionMass_sum_nonempty root
+    · intro coalition
+      simp [Finset.nonempty_iff_ne_empty]
+  have hcontinue : quittingStationaryContinueMass left =
+      quittingStationaryContinueMass right := by
+    have hleft := hsum left
+    have hright := hsum right
+    have heq : (∑ coalition : {S : Finset ι // S.Nonempty},
+        quittingRootCoalitionMass left coalition) =
+        ∑ coalition : {S : Finset ι // S.Nonempty},
+          quittingRootCoalitionMass right coalition := by
+      apply Finset.sum_congr rfl
+      intro coalition _
+      exact hmass coalition
+    linarith
+  have hall (coalition : Finset ι) :
+      quittingRootCoalitionMass left coalition =
+        quittingRootCoalitionMass right coalition := by
+    by_cases hcoalition : coalition.Nonempty
+    · exact hmass ⟨coalition, hcoalition⟩
+    · have hempty : coalition = ∅ := Finset.not_nonempty_iff_eq_empty.mp hcoalition
+      subst coalition
+      unfold quittingRootCoalitionMass quittingRootQuitRates
+      rw [coalitionMass_empty, coalitionMass_empty]
+      unfold continueMass
+      rw [quittingStationaryContinueMass_eq_prod_continueProbability,
+        quittingStationaryContinueMass_eq_prod_continueProbability] at hcontinue
+      simpa only [pmfBool_false_toReal] using hcontinue
+  funext who
+  have hjoint : pmfPi left = pmfPi right := by
+    apply PMF.ext
+    intro action
+    apply (ENNReal.toReal_eq_toReal_iff'
+      (PMF.apply_ne_top (pmfPi left) action)
+      (PMF.apply_ne_top (pmfPi right) action)).mp
+    rw [pmfPi_apply_toReal_eq_quittingRootCoalitionMass_quitters,
+      pmfPi_apply_toReal_eq_quittingRootCoalitionMass_quitters]
+    exact hall (quittingQuitters action)
+  calc
+    left who = Math.ProbabilityMassFunction.pushforward
+        (pmfPi left) (fun action ↦ action who) :=
+      (pmfPi_push_coord left who).symm
+    _ = Math.ProbabilityMassFunction.pushforward
+        (pmfPi right) (fun action ↦ action who) := by rw [hjoint]
+    _ = right who := pmfPi_push_coord right who
+
 /-- A positive exact coalition containing `other` contributes its full mass
 to the displayed opponent-incidence coordinate. -/
 theorem quittingRootCoalitionMass_le_opponentIncidenceMass_of_other_mem

@@ -105,6 +105,16 @@ def AbsorptionPathJumpRelation (path : AbsorptionPath (ι := ι))
     (t : ℝ) (ξ : ι → PMF Bool) : Prop :=
   ∀ a, pathJump path.1 t a / (1 - t) = quittingRootCoalitionMass ξ a.1
 
+/-- The normalized coalition law of a jump determines its product root. -/
+theorem AbsorptionPathJumpRelation.eq
+    {path : AbsorptionPath (ι := ι)} {t : ℝ} {left right : ι → PMF Bool}
+    (hleft : AbsorptionPathJumpRelation path t left)
+    (hright : AbsorptionPathJumpRelation path t right) :
+    left = right := by
+  apply quittingRoot_eq_of_coalitionMass_eq
+  intro coalition
+  rw [← hleft coalition, ← hright coalition]
+
 /-- One product-row witness selected from the path at each jump time. -/
 def absorptionPathJumpRoot
     (path : AbsorptionPath (ι := ι)) (t : ℝ) : ι → PMF Bool := by

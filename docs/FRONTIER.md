@@ -2544,13 +2544,22 @@ in the live mathematical ledger.
   `ChronologicalLimit.isAbsorptionPath` in
   `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalA4.lean`
   prove A4 and the literal A1--A4 conjunction for this same decoded path.
+  The finite prefix/tail identity in
+  `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalRootSequenceTail.lean`
+  and the shared jump-stage tail extraction in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalJumpPerfection.lean`
+  identify the limiting post-stage tail with `absorptionPathPayoff`.
+  Reached-stage Nash then closes to exact endpoint Nash at the path's literal
+  selected jump root, and `ChronologicalLimit.jumpPerfect` proves the exact
+  jump-row component of sequential perfection.
   Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No all-clock path convergence, sequential perfection, fixed
-  completion owner, or unconditional AGKRS branch is asserted.
+  compiler.  No all-clock path convergence, continuous-clock perfection,
+  full sequential perfection, fixed completion owner, or unconditional AGKRS
+  branch is asserted.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
