@@ -2866,12 +2866,24 @@ in the live mathematical ledger.
   `UniformEquilibrium/Quitting/Debt/Dynamic/SummableResidualNashBellmanSpine.lean`
   concatenate those returns into a `QuittingSummableResidualNashBellmanSpine`
   with arbitrarily small total Bellman-plus-Nash residual and at least one
-  persistent marginal label.  If two persistent labels are supplied at every
-  accuracy, `quittingGame_exists_uniformEquilibriumPayoff_of_summableResidualSpines`
-  feeds the spine into the checked all-behavior summable-seam consumer.  No
-  theorem produces unbounded capacity from the AGKRS source or the hard
-  residual, and total hazard alone does not produce the second persistent
-  label; capacity restricted by a source trace remains a separate interface.
+  persistent marginal label.
+  `QuittingSummableResidualNashBellmanSpine.exists_uniformEquilibriumPayoff_of_twoPersistent`
+  (`UniformEquilibrium/Quitting/Debt/Dynamic/SummableResidualPersistentClosure.lean`)
+  consumes one such spine when it has two persistent labels.  If it has only
+  one, the all-normal theorem
+  `exists_uniformEquilibriumPayoff_of_unboundedExactBlockHazardCapacity_of_allNormal`
+  (`UniformEquilibrium/Quitting/Classification/Existence/AllNormalUnboundedExactBlockHazardCapacity.lean`)
+  uses punishment normality and the summable opponent clock to consume the
+  owner's singleton payoff.  In Fin4,
+  `finFour_exists_uniformEquilibriumPayoff_of_unboundedExactBlockHazardCapacity`
+  (`UniformEquilibrium/Diagnostics/Quitting/FinFourUnboundedExactBlockHazardCapacity.lean`)
+  obtains all-player normality from the quantitative hard-residual alternative
+  under the contrary hypothesis.  Its literal contrapositive
+  `finFour_hasBoundedFiniteExactNashBellmanHazardCapacity_of_no_uniformPayoff`
+  says that any Fin4 counterexample has bounded exact-block hazard capacity in
+  the canonical reward box.  No theorem produces unbounded capacity from the
+  AGKRS source or a source trace, identifies a numerical bound in the bounded
+  branch, or equates exact-block capacity with source-trace capacity.
 - **Local periodic-anchor route:**
   `localPeriodicAnchor_theoremA`
   (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) turns supplied

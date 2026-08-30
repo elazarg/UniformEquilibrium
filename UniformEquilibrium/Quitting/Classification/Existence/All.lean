@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
+import UniformEquilibrium.Quitting.Classification.Existence.AllNormalUnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.CenteredStationaryFaceCertificate
