@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.BonferroniProductBounds
 import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.SumFubini
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchProfile
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
 /-!
@@ -381,27 +381,6 @@ theorem quittingRootAbsorbingContribution_passivePadding_fresh
     rfl
   rw [hindicator]
   ring
-
-omit [DecidableEq J] in
-/-- One-stage absorption is bounded by the sum of the marginal Quit
-probabilities. -/
-theorem quittingRootAbsorptionMass_le_sum_quitProbability
-    (root : J → PMF Bool) :
-    quittingRootAbsorptionMass root ≤
-      ∑ who, (root who true).toReal := by
-  let hazard : J → ℝ := fun who => (root who true).toReal
-  have hcontinue : ∀ who, (root who false).toReal = 1 - hazard who := by
-    intro who
-    linarith [quittingRoot_continueProbability_add_quitProbability root who]
-  rw [quittingRootAbsorptionMass,
-    quittingStationaryContinueMass_eq_prod_continueProbability]
-  simpa [hazard, hcontinue] using
-    (Math.one_sub_prod_one_sub_le_sum hazard Finset.univ
-      (fun who _ => ENNReal.toReal_nonneg)
-      (fun who _ => by
-        have := ENNReal.toReal_nonneg (a := root who false)
-        rw [hcontinue] at this
-        linarith))
 
 /-- Finite zero-boundary evaluation of a root sequence at its displayed
 marginals. -/

@@ -397,6 +397,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.Regression.NegativeSingletonCh
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 import UniformEquilibrium.Quitting.Bellman.Finite.UnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity
+import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRestartMoat
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler

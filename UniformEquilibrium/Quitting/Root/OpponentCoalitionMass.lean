@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.BonferroniProductBounds
 import MathUE.PMFProduct.Bool
 import MathUE.PMFProduct.CoalitionMass
 import UniformEquilibrium.Quitting.Stationary.LiveMass
@@ -118,6 +119,27 @@ theorem quittingRootCoalitionMass_sum_nonempty
     change 1 - (root who true).toReal = (root who false).toReal
     exact (pmfBool_false_toReal (root who)).symm
   simpa [quittingRootCoalitionMass, hcontinue] using hcoalition
+
+omit [DecidableEq ι] in
+/-- One-stage absorption is bounded by the sum of the marginal Quit
+probabilities. -/
+theorem quittingRootAbsorptionMass_le_sum_quitProbability
+    (root : ι → PMF Bool) :
+    quittingRootAbsorptionMass root ≤
+      ∑ who, (root who true).toReal := by
+  let hazard : ι → ℝ := fun who => (root who true).toReal
+  have hcontinue : ∀ who, (root who false).toReal = 1 - hazard who := by
+    intro who
+    exact pmfBool_false_toReal (root who)
+  rw [quittingRootAbsorptionMass,
+    quittingStationaryContinueMass_eq_prod_continueProbability]
+  simpa [hazard, hcontinue] using
+    (Math.one_sub_prod_one_sub_le_sum hazard Finset.univ
+      (fun who _ => ENNReal.toReal_nonneg)
+      (fun who _ => by
+        have hnonneg := ENNReal.toReal_nonneg (a := root who false)
+        rw [hcontinue] at hnonneg
+        linarith))
 
 /-- A product root assigns an exact joint action the mass of its quitter
 coalition. -/
