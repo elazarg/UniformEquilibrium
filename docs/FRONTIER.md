@@ -2852,6 +2852,19 @@ in the live mathematical ledger.
   direct no-uniform-payoff composition.  This is checked mathematics and a
   conditional spine consumer, not a producer selecting the unique-persistent
   branch or a resolution of the hard residual.
+- **Unbounded finite exact-block hazard capacity:**
+  `HasUnboundedFiniteExactNashBellmanHazardCapacity` and
+  `nonempty_finiteExactNashBellmanHazardReturn_of_unboundedCapacity`
+  (`UniformEquilibrium/Quitting/Bellman/Finite/UnboundedExactBlockHazardCapacity.lean`)
+  formalize positive-length exact Nash--Bellman blocks and their literal sum
+  of marginal Quit probabilities.  Using the game-independent compact return
+  theorem in `MathUE/CompactFiniteChargedReturn.lean`, failure of every
+  `BddAbove` hazard bound yields, at every positive radius, one block with two
+  close ordered annotations and intervening hazard at least one.  This is a
+  checked conditional capacity-to-return adapter.  It neither produces
+  unbounded capacity from the AGKRS source or the hard residual nor yet
+  concatenates returned blocks into a summable-residual spine or a uniform
+  payoff; capacity restricted by a source trace remains a separate interface.
 - **Local periodic-anchor route:**
   `localPeriodicAnchor_theoremA`
   (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) turns supplied

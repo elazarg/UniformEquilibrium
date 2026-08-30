@@ -394,6 +394,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.BellmanCapPureTimeStop
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Bellman.Finite.Regression.NegativeSingletonChargeRegression
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
+import UniformEquilibrium.Quitting.Bellman.Finite.UnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Cycles.BlockSurvival
