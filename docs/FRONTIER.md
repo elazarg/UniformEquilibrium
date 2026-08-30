@@ -2822,6 +2822,22 @@ in the live mathematical ledger.
   ambient blocks whose hazards vanish off the recursive normal core. This is a
   reduction on supplied local blocks, not a block producer, chronology, or
   unrestricted-behavior equilibrium consumer.
+- **Normal unique-persistent Nash--Bellman spine:**
+  `abs_value_sub_soloReward_le_of_bounded_bellman` and
+  `IsCanonicalExactQuittingNashBellmanSpine.isUniformEquilibriumPayoff_soloReward_of_persistent`
+  (`UniformEquilibrium/Quitting/Classification/Existence/NormalUniquePersistentNashBellmanSpine.lean`)
+  show that a nonsummable owner marginal together with a summable owner-deleted
+  clock concentrates bounded Bellman values on the owner's singleton vector;
+  exact root Nash and owner punishment normality then make that vector a
+  uniform-equilibrium payoff.  In the quantitative Fin4 full-support hard
+  residual,
+  `FinFourQuantitativeFullSupportHardResidual.all_marginalQuitHazards_summable`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/FullSupportHardNashBellmanSpine.lean`)
+  therefore forces every marginal of every supplied exact spine to be
+  summable; `all_marginalQuitHazards_summable_of_no_uniformPayoff` states the
+  direct no-uniform-payoff composition.  This is checked mathematics and a
+  conditional spine consumer, not a producer selecting the unique-persistent
+  branch or a resolution of the hard residual.
 - **Local periodic-anchor route:**
   `localPeriodicAnchor_theoremA`
   (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) turns supplied
