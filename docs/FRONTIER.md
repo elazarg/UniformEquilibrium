@@ -2522,14 +2522,23 @@ in the live mathematical ledger.
   then performs one explicit strict rank extraction and one compact root
   subextraction simultaneously for every coalition coordinate.
   `ChronologicalLimit.absorptionPathA3` proves the literal product-root jump
-  axiom, including the A1-derived exclusion of a terminal jump.  Meanwhile,
+  axiom, including the A1-derived exclusion of a terminal jump.
+  `one_sub_upper_mul_collisionCDF_sub_le_choose_mul_clockCDF_sub_sq` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceCollision.lean`
+  gives the exact finite quadratic nonsingleton-window estimate, and its
+  weak-limit form holds at fixed continuity endpoints.  The clock-gap
+  controlled right points then force every nonsingleton lower right
+  derivative to vanish.  `ChronologicalLimit.absorptionPathA4` and
+  `ChronologicalLimit.isAbsorptionPath` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalA4.lean`
+  prove A4 and the literal A1--A4 conjunction for this same decoded path.
+  Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No A4 closure, all-clock path convergence, sequential
-  perfection, fixed completion owner, or unconditional AGKRS branch is
-  asserted.
+  compiler.  No all-clock path convergence, sequential perfection, fixed
+  completion owner, or unconditional AGKRS branch is asserted.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
