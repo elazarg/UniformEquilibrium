@@ -1715,6 +1715,7 @@ import UniformEquilibrium.Quitting.Paths.CapPumpChronologicalAdapter
 import UniformEquilibrium.Quitting.Paths.CapPumpChronologicalSharpBoundary
 import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabel
 import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabelBoundary
+import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.HazardScaledResidualCompiler
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
@@ -1841,6 +1842,7 @@ import UniformEquilibrium.Quitting.Root.TerminalDebtBlock
 import UniformEquilibrium.Quitting.Root.TerminalDebtGreenAccount
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 import UniformEquilibrium.Quitting.Root.TerminalOpponentAdvantage
+import UniformEquilibrium.Quitting.Root.TerminalOutcome
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair

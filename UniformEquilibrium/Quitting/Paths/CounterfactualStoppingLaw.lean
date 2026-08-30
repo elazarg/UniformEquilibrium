@@ -6,7 +6,8 @@ Authors: GameTheory contributors
 
 import MathUE.PMFProduct.Update
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
-import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
+import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
+import UniformEquilibrium.Quitting.Root.TerminalOutcome
 
 /-!
 # Counterfactual stopping-law hierarchy
@@ -252,6 +253,226 @@ def quittingCounterfactualState [Nonempty ι] (order : Nat)
     QuittingCounterfactualQuery ι order -> PMF (QuittingTerminalOutcome ι) :=
   fun query => quittingCounterfactualOutcomeLaw laws query.1
 
+namespace QuittingStoppingIntervention
+
+/-- Empty pure intervention. -/
+def empty : QuittingStoppingIntervention ι where
+  carrier := ∅
+  stoppingTime := fun _ => none
+
+/-- Pin one displayed player to one pure stopping time. -/
+def pureTime (who : ι) (time : Option Nat) :
+    QuittingStoppingIntervention ι where
+  carrier := {who}
+  stoppingTime := fun _ => time
+
+end QuittingStoppingIntervention
+
+/-- Expected value of an arbitrary terminal observable after an intervention. -/
+def quittingCounterfactualExpectedValue [Nonempty ι]
+    (laws : ι -> PMF (Option Nat))
+    (intervention : QuittingStoppingIntervention ι)
+    (value : QuittingTerminalOutcome ι -> Real) : Real :=
+  expect (quittingCounterfactualOutcomeLaw laws intervention) value
+
+/-- Current value is the empty-intervention coordinate. -/
+def quittingCounterfactualCurrentValue [Nonempty ι]
+    (laws : ι -> PMF (Option Nat))
+    (value : QuittingTerminalOutcome ι -> Real) : Real :=
+  quittingCounterfactualExpectedValue laws
+    QuittingStoppingIntervention.empty value
+
+/-- Pure-time payoff menu read from singleton intervention coordinates. -/
+def quittingCounterfactualPureTimeValue [Nonempty ι]
+    (laws : ι -> PMF (Option Nat)) (who : ι) (time : Option Nat)
+    (value : QuittingTerminalOutcome ι -> Real) : Real :=
+  quittingCounterfactualExpectedValue laws
+    (QuittingStoppingIntervention.pureTime who time) value
+
+/-- Supremum of one player's pure-time terminal-observable menu. -/
+def quittingCounterfactualPureTimeCap [Nonempty ι]
+    (laws : ι -> PMF (Option Nat)) (who : ι)
+    (value : QuittingTerminalOutcome ι -> Real) : Real :=
+  sSup (Set.range fun time : Option Nat =>
+    quittingCounterfactualPureTimeValue laws who time value)
+
+/-- Equality of order-one states determines the current expected value of
+every terminal observable. -/
+theorem quittingCounterfactualState_one_determines_currentValue
+    [Nonempty ι] {first second : ι -> PMF (Option Nat)}
+    (hstate : quittingCounterfactualState 1 first =
+      quittingCounterfactualState 1 second)
+    (value : QuittingTerminalOutcome ι -> Real) :
+    quittingCounterfactualCurrentValue first value =
+      quittingCounterfactualCurrentValue second value := by
+  have hlaw := congrFun hstate
+    (⟨QuittingStoppingIntervention.empty, by
+      simp [QuittingStoppingIntervention.empty]⟩ :
+      QuittingCounterfactualQuery ι 1)
+  exact congrArg (fun law => expect law value) hlaw
+
+/-- Equality of order-one states determines every pure-time menu entry. -/
+theorem quittingCounterfactualState_one_determines_pureTimeValue
+    [Nonempty ι] {first second : ι -> PMF (Option Nat)}
+    (hstate : quittingCounterfactualState 1 first =
+      quittingCounterfactualState 1 second)
+    (who : ι) (time : Option Nat)
+    (value : QuittingTerminalOutcome ι -> Real) :
+    quittingCounterfactualPureTimeValue first who time value =
+      quittingCounterfactualPureTimeValue second who time value := by
+  have hlaw := congrFun hstate
+    (⟨QuittingStoppingIntervention.pureTime who time, by
+      simp [QuittingStoppingIntervention.pureTime]⟩ :
+      QuittingCounterfactualQuery ι 1)
+  exact congrArg (fun law => expect law value) hlaw
+
+/-- Equality of order-one states determines every pure-time cap. -/
+theorem quittingCounterfactualState_one_determines_pureTimeCap
+    [Nonempty ι] {first second : ι -> PMF (Option Nat)}
+    (hstate : quittingCounterfactualState 1 first =
+      quittingCounterfactualState 1 second)
+    (who : ι) (value : QuittingTerminalOutcome ι -> Real) :
+    quittingCounterfactualPureTimeCap first who value =
+      quittingCounterfactualPureTimeCap second who value := by
+  unfold quittingCounterfactualPureTimeCap
+  congr 2
+  funext time
+  exact quittingCounterfactualState_one_determines_pureTimeValue
+    hstate who time value
+
+/-- Literal order-one current-value and pure-time-cap projection package. -/
+theorem quittingCounterfactualState_one_determines_value_and_caps
+    [Nonempty ι] {first second : ι -> PMF (Option Nat)}
+    (hstate : quittingCounterfactualState 1 first =
+      quittingCounterfactualState 1 second)
+    (value : QuittingTerminalOutcome ι -> Real) :
+    quittingCounterfactualCurrentValue first value =
+        quittingCounterfactualCurrentValue second value ∧
+      forall who, quittingCounterfactualPureTimeCap first who value =
+        quittingCounterfactualPureTimeCap second who value := by
+  exact ⟨quittingCounterfactualState_one_determines_currentValue hstate value,
+    fun who =>
+      quittingCounterfactualState_one_determines_pureTimeCap
+        hstate who value⟩
+
+/-- Tuple of independent first-stopping laws induced by an actual behavior
+profile on the live spine. -/
+def quittingBehaviorStoppingLaws
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    ι -> PMF (Option Nat) :=
+  fun who => quittingBehaviorStoppingLaw reward (profile who)
+
+/-- Behavioral replacement is coordinate overwrite on stopping-law tuples. -/
+theorem quittingBehaviorStoppingLaws_update
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingBehaviorStoppingLaws reward
+        (Function.update profile who deviation) =
+      Function.update (quittingBehaviorStoppingLaws reward profile) who
+        (quittingBehaviorStoppingLaw reward deviation) := by
+  funext other
+  by_cases hother : other = who
+  · subst other
+    simp [quittingBehaviorStoppingLaws]
+  · simp [quittingBehaviorStoppingLaws, hother]
+
+/-- Counterfactual stopping-law state attached to an actual behavior profile.
+This is a stopping-law adapter, not a literal-suffix construction. -/
+def quittingBehaviorCounterfactualState [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (order : Nat) (profile : (quittingGame reward).BehaviorProfile) :=
+  quittingCounterfactualState order
+    (quittingBehaviorStoppingLaws reward profile)
+
+/-- Behavioral replacement feeds exactly the corresponding marginal overwrite
+into the abstract counterfactual state. -/
+theorem quittingBehaviorCounterfactualState_update [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (order : Nat) (profile : (quittingGame reward).BehaviorProfile)
+    (who : ι) (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingBehaviorCounterfactualState reward order
+        (Function.update profile who deviation) =
+      quittingCounterfactualState order
+        (Function.update (quittingBehaviorStoppingLaws reward profile) who
+          (quittingBehaviorStoppingLaw reward deviation)) := by
+  rw [quittingBehaviorCounterfactualState,
+    quittingBehaviorStoppingLaws_update]
+
+/-- Pure-time payoff menu against one fixed actual opponent profile. -/
+def quittingBehaviorPureTimePayoff
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (who : ι) (time : Option Nat) : Real :=
+  quittingTerminalPayoff reward
+    (Function.update profile who
+      (quittingPureTimeBehaviorStrategy reward who time)) who
+
+/-- An actual unilateral behavioral payoff is the stopping-law expectation of
+the pure-time payoff menu. -/
+theorem quittingTerminalPayoff_update_eq_expect_behaviorStoppingLaws
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingTerminalPayoff reward
+        (Function.update profile who deviation) who =
+      expect (quittingBehaviorStoppingLaws reward
+        (Function.update profile who deviation) who)
+        (quittingBehaviorPureTimePayoff reward profile who) := by
+  calc
+    _ = expect (quittingBehaviorStoppingLaw reward deviation)
+        (quittingBehaviorPureTimePayoff reward profile who) := by
+      change quittingTerminalPayoff reward
+          (Function.update profile who deviation) who =
+        expect (quittingBehaviorStoppingLaw reward deviation)
+          (fun choice => quittingTerminalPayoff reward
+            (Function.update profile who
+              (quittingPureTimeBehaviorStrategy reward who choice)) who)
+      exact quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
+        reward profile who deviation
+    _ = _ := by
+      rw [show quittingBehaviorStoppingLaws reward
+          (Function.update profile who deviation) who =
+          quittingBehaviorStoppingLaw reward deviation by
+        simp [quittingBehaviorStoppingLaws]]
+
+/-- Prescribed payoff is the same stopping-law expectation with the prescribed
+coordinate of the behavior adapter. -/
+theorem quittingTerminalPayoff_eq_expect_behaviorStoppingLaws
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff reward profile who =
+      expect (quittingBehaviorStoppingLaws reward profile who)
+        (quittingBehaviorPureTimePayoff reward profile who) := by
+  simpa using
+    quittingTerminalPayoff_update_eq_expect_behaviorStoppingLaws
+      reward profile who (profile who)
+
+/-- Complete behavioral deviation cap against one actual profile. -/
+def quittingBehaviorDeviationPayoffCap
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) : Real :=
+  sSup (Set.range fun deviation :
+      (quittingGame reward).BehaviorStrategy who =>
+    quittingTerminalPayoff reward
+      (Function.update profile who deviation) who)
+
+/-- Pure-time payoff cap against one actual profile. -/
+def quittingBehaviorPureTimePayoffCap
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) : Real :=
+  sSup (Set.range (quittingBehaviorPureTimePayoff reward profile who))
+
+/-- The pure-time projection is literally the unrestricted behavioral cap. -/
+theorem quittingBehaviorDeviationPayoffCap_eq_pureTime
+    (reward : {S : Finset ι // S.Nonempty} -> Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingBehaviorDeviationPayoffCap reward profile who =
+      quittingBehaviorPureTimePayoffCap reward profile who := by
+  exact sSup_range_quittingTerminalPayoff_update_eq_pureTime
+    reward profile who
+
 /-- An order is replacement determining when equality of its counterfactual
 states persists after every one-coordinate marginal replacement. -/
 def QuittingCounterfactualReplacementDetermining [Nonempty ι]
@@ -265,12 +486,11 @@ def QuittingCounterfactualReplacementDetermining [Nonempty ι]
         quittingCounterfactualState order
           (Function.update second who replacement)
 
-/-- Counterfactual laws through all but one label determine the same-order
-state after one arbitrary marginal replacement. -/
-theorem quittingCounterfactualReplacementDetermining_card_sub_one
-    [Nonempty ι] :
-    QuittingCounterfactualReplacementDetermining
-      (ι := ι) (Fintype.card ι - 1) := by
+/-- Every order at least `card ι - 1` is closed under one arbitrary marginal
+replacement. -/
+theorem quittingCounterfactualReplacementDetermining_of_card_sub_one_le
+    [Nonempty ι] {order : Nat} (horder : Fintype.card ι - 1 <= order) :
+    QuittingCounterfactualReplacementDetermining (ι := ι) order := by
   intro first second hstate who replacement
   funext query
   change quittingCounterfactualOutcomeLaw
@@ -291,7 +511,10 @@ theorem quittingCounterfactualReplacementDetermining_card_sub_one
       congr 1
       funext time
       exact congrFun hstate ⟨query.1.insert who time, by
-        simpa [QuittingStoppingIntervention.insert, hwho] using hcard⟩
+        have hinsert : (query.1.insert who time).carrier.card <=
+            Fintype.card ι - 1 := by
+          simpa [QuittingStoppingIntervention.insert, hwho] using hcard
+        exact hinsert.trans horder⟩
     · have hsubset :
           query.1.carrier ⊆ (Finset.univ : Finset ι).erase who := by
         intro other hother
@@ -300,8 +523,11 @@ theorem quittingCounterfactualReplacementDetermining_card_sub_one
       have hcardErase :
           ((Finset.univ : Finset ι).erase who).card = Fintype.card ι - 1 := by
         simp
+      have hcardLe : query.1.carrier.card <= Fintype.card ι - 1 := by
+        rw [← hcardErase]
+        exact Finset.card_le_card hsubset
       have hcardEq : query.1.carrier.card = Fintype.card ι - 1 :=
-        Nat.le_antisymm query.2 (Nat.le_of_not_gt hcard)
+        Nat.le_antisymm hcardLe (Nat.le_of_not_gt hcard)
       have hcarrier :
           query.1.carrier = (Finset.univ : Finset ι).erase who :=
         Finset.eq_of_subset_of_card_le hsubset (by simp [hcardErase, hcardEq])
@@ -318,6 +544,14 @@ theorem quittingCounterfactualReplacementDetermining_card_sub_one
           rw [hcarrier]
           simp [hother]
         simp [QuittingStoppingIntervention.applyLaws, hotherCarrier]
+
+/-- Counterfactual laws through all but one label determine the same-order
+state after one arbitrary marginal replacement. -/
+theorem quittingCounterfactualReplacementDetermining_card_sub_one
+    [Nonempty ι] :
+    QuittingCounterfactualReplacementDetermining
+      (ι := ι) (Fintype.card ι - 1) :=
+  quittingCounterfactualReplacementDetermining_of_card_sub_one_le le_rfl
 
 private theorem quittingFirstStoppingOutcome_eq_of_hidden_masked
     [Nonempty ι] (first second : ι -> Option Nat)
@@ -642,6 +876,21 @@ theorem not_quittingCounterfactualReplacementDetermining_of_le_card_sub_two
     exact (Finset.mem_erase.mp (hblockersSubset hmem)).1 rfl
   exact not_quittingCounterfactualReplacementDetermining_of_blockers
     hhidden hblockersCard
+
+/-- Exact unrestricted-order characterization of replacement closure. -/
+theorem quittingCounterfactualReplacementDetermining_iff [Nonempty ι]
+    {order : Nat} :
+    QuittingCounterfactualReplacementDetermining (ι := ι) order ↔
+      Fintype.card ι - 1 <= order := by
+  constructor
+  · intro hdetermining
+    by_contra hnot
+    have hplayers : 2 <= Fintype.card ι := by omega
+    have horder : order <= Fintype.card ι - 2 := by omega
+    exact
+      (not_quittingCounterfactualReplacementDetermining_of_le_card_sub_two
+        hplayers horder) hdetermining
+  · exact quittingCounterfactualReplacementDetermining_of_card_sub_one_le
 
 /-- The labelled pure-intervention hierarchy has exact replacement threshold
 `card ι - 1`: that order is closed, and every smaller admissible order is not. -/

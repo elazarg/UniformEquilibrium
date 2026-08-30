@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.LiveTail
+import UniformEquilibrium.Quitting.Root.TerminalOutcome
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
@@ -30,11 +31,6 @@ open Set StochasticGame
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- Terminal outcomes consist of Never and one atom for every nonempty
-quitting coalition. -/
-abbrev QuittingTerminalOutcome (ι : Type) :=
-  Option {S : Finset ι // S.Nonempty}
 
 /-- Reward vector attached to a terminal outcome; Never pays zero. -/
 def quittingTerminalOutcomeReward

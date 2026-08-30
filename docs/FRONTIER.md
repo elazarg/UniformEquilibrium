@@ -2497,6 +2497,18 @@ in the live mathematical ledger.
   existing infinite-horizon approximate-equilibrium interface; it is not a
   finite-horizon existence theorem and does not prove that interface for every
   game.
+  The independent stopping-law hierarchy in
+  `UniformEquilibrium/Quitting/Paths/CounterfactualStoppingLaw.lean` now makes
+  the replacement-order boundary literal:
+  `quittingCounterfactualReplacementDetermining_iff` says that all labelled
+  pure-intervention coordinates of order `k` determine every one-coordinate
+  replacement exactly when `card ι - 1 <= k`.  The actual behavior adapter
+  identifies profile replacement with stopping-law coordinate overwrite and
+  exposes the exact one-player payoff mixture and pure-time deviation cap.
+  This is an architecture restriction, not a suffix compactification: no
+  theorem identifies the abstract joint outcome law with the executable
+  terminal law, preserves Nash inequalities under replacement, or constructs
+  a compact suffix family.
   `nonempty_chronologicalLimit` in
   `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalLimit.lean`
   now sends the vanishing-Never arm through late sure-solo completion and one
