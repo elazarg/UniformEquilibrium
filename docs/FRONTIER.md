@@ -2565,14 +2565,28 @@ in the live mathematical ledger.
   Reached-stage Nash then closes to exact endpoint Nash at the path's literal
   selected jump root, and `ChronologicalLimit.jumpPerfect` proves the exact
   jump-row component of sequential perfection.
+  `QuittingFiniteCDFCut` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/FiniteRootSequenceCDFCut.lean`
+  gives the exact right staircase inverse of each finite source CDF.
+  `ChronologicalLimit.nonempty_chronologicalPathTimeAdjacentCutLimit` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalSingletonLowerBound.lean`
+  uses that inverse and one strict source extraction to make both adjacent
+  source clocks and every cumulative coalition coordinate converge at each
+  fixed nonterminal path time.  Reached-stage Nash and the finite tail payoff
+  identity then prove the literal singleton lower bound at every nonterminal
+  continuous-clock path time,
+  `ChronologicalLimit.singletonReward_le_absorptionPathPayoff` for every
+  player.
   Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No all-clock path convergence, continuous-clock perfection,
-  full sequential perfection, fixed completion owner, or unconditional AGKRS
-  branch is asserted.
+  compiler.  The open continuous-clock clause is: if player `i` has positive
+  singleton right derivative at `t`, then `absorptionPathPayoff reward path t i`
+  equals `singletonReward reward i`.  Full sequential perfection, all-clock
+  path convergence, a fixed completion owner, and an unconditional AGKRS
+  branch remain open.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
