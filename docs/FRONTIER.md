@@ -1651,8 +1651,8 @@ collar through such a chain, prove eventual local-parity stability, supply a
 regularity bridge or the open parity specification, build a Fin4 finite-cap
 certificate, or provide `A` or `C`.
 
-The canonical pair's literal paid endpoint now also has a checked one-time
-support-rank handoff.  The generic theorem
+The canonical pair's literal paid endpoint starts with the checked
+support-rank handoff supplied by the generic theorem
 `exists_minimumEndpointSupportRankHandoff_or_debtAscent`
 (`Research/Quitting/StoppingLawMinimumEndpointSupportRankHandoff.lean`)
 jointly compactifies the source, endpoint, and their literal half stopping-law
@@ -1660,7 +1660,7 @@ mixture.  At a minimum endpoint the half cluster has coordinate debt equal to
 the source/endpoint average and positive-debt support equal to their union.
 The payer has positive source debt and zero endpoint debt, so the endpoint
 support is a strict subset of the new half parent; the existing tangent-family
-extractor and minimum-fibre re-extractor consume this as a fresh one-time
+extractor and minimum-fibre re-extractor consume this as the first
 support-rank handoff.  If the endpoint is not minimal, the same theorem keeps
 the strict endpoint-debt ascent instead.
 
@@ -1679,13 +1679,39 @@ and endpoint/source convergence accessors retain the same joint clusters;
 retains the same half cluster, and the named total-debt limits retain either
 `D_*` or the strict endpoint value.
 
-The minimum-endpoint handoff has `M`, `L`, `A`, and `C` through the checked
-generic tangent-family re-extractor.  The off-minimum endpoint and inherited
-strict ray stall have `M`, `L`, and `A` but no `C`.  The strict comparison is
-from the fresh half parent to the endpoint, not from the old source support.
-No old-prefix exactness after the endpoint update, renewable canonical-pair
-rank descent, off-minimum or stall consumer, terminal approximation,
-uniform-equilibrium payoff, or counterexample follows.
+The minimum-fibre handoff is now renewable.  In
+`Research/Quitting/FinFourProducerAtlas/CanonicalPairEndpointSourceRegeneration.lean`,
+`CanonicalPairMinimumEndpointSupportRankHandoff.nonempty_endpointSourceRegeneration`
+rebuilds a complete minimum source from the handoff's literal endpoint
+profiles and dates.  In
+`Research/Quitting/FinFourProducerAtlas/CanonicalPairFullReplacementSourceRegeneration.lean`,
+every recursive minimum-fibre endpoint is compactified on the current node's
+literal full-replacement profiles, causalized into its own complete source
+with the same hard residual, and attached to a tangent family whose
+positive-debt support is a strict subset of its parent's support.
+
+`FinFourRenewableMinimumSourceNode.terminalExit_or_nonempty_supportDescent`
+(`Research/Quitting/FinFourProducerAtlas/CanonicalPairRenewableSourceRank.lean`)
+is the exhaustive one-step dispatch.  Only its minimum-fibre output is
+recursive; positive total slope, flat support entry, and an off-minimum paid
+first-disagreement endpoint are explicit residual exits.
+`canonicalPairRenewableRank` is zero at the residual state, one plus support
+cardinality at tangent nodes, and six at the nonrecurring incoming state.
+`canonicalPairRenewableTransitionRel_wellFounded` proves the resulting
+relation well founded, `FinFourRenewableTrace.descentCount_le_three` gives at
+most three recursive node-to-node edges, and
+`exists_renewalTerminalExit_sameResidual` retains the incoming hard residual
+at the final structural exit.  Thus the fresh half-parent comparison remains
+distinct from the old source support, but it no longer terminates the
+minimum-fibre branch after one use.
+
+This canonical minimum-endpoint reduction has `M`, `L`, `A`, and branch-local
+`C` through `consume_renewalTerminalExit`.  It supersedes the former one-time
+handoff boundary only on this actual canonical branch.  The off-minimum
+endpoint and inherited strict ray stall still have no terminal consumer, and
+positive slope, support entry, and the paid off-minimum exit remain downstream
+obligations.  No backward response compiler, terminal approximation,
+unconditional uniform-equilibrium payoff, or counterexample follows.
 
 That fibre also carries an exact debt ledger whose consequence is negative.
 At a full-replacement endpoint cluster on the minimum total-debt fibre the
@@ -1700,12 +1726,21 @@ absorbing at least a `Fintype.card ι - 1`-th part of it.  Hence
 is impossible.  `moverDebt_le_sum_positivePart_nonmover_debtChange` bounds the
 total positive part of that change below by the mover's base debt, so the
 transfer is not uniformly small either, and any backward compiler through this
-seam has to carry, cancel, or pay it.  The account uses neither flatness of the
+seam has to carry, cancel, or pay it.  In Fin4,
+`FinFourRenewableSupportDescent.exists_nonmover_debtChange_moverDebt_div_three_le`
+makes the sharp one-third share literal at every recursive edge, while
+`CanonicalPairMinimumEndpointSupportRankHandoff.exists_other_endpointDebtIncrease_div_three`
+does the same at the incoming canonical endpoint.
+`abs_quittingTerminalSemanticDebt_sub_le_of_forall_deviationGain_abs_le`
+turns a uniform full-behavior deviation-gain comparison into a debt-coordinate
+comparison.  Source and full-replacement convergence therefore make
+`FullReplacementCluster.not_hasVanishingHorizontalDeviationLeak_of_minimumFiber`
+a literal no-go: one vanishing error cannot compare every nonmover behavioral
+deviation gain across the seam.  The account uses neither flatness of the
 tangent column nor absence of entry into the inactive debt support.  Debt is
-the gap between the best-response envelope and the prescribed payoff, so a
-lower bound on debt change bounds no envelope coordinate on its own: nothing
-here asserts that the raw envelope vectors at the base and at the cluster are
-close, since the prescribed payoff may move together with the envelope.
+the gap between the best-response envelope and the prescribed payoff, so this
+still bounds no envelope or prescribed-payoff coordinate on its own: raw cap
+vectors at the base and cluster are not asserted close or far apart.
 
 The strict endpoint alternative is now normalized without losing that joint
 cluster.  In
@@ -1732,12 +1767,12 @@ The headline theorem
 is now the literal three-way source interface: minimum-endpoint support
 handoff, coherent strict normalized result, or unchanged scalar-ray stall.
 
-This strict-endpoint reduction has `M`, `L`, and `A`.  Only the normalized
-equality arm has `C`, and only to the existing strategic/collision residual;
-the normalized inert point and ray stall have no `C`.  No copied sibling is
-claimed cap--Nash, and there is no renewable support descent, terminal
-approximation, global completion, uniform-equilibrium payoff, or
-counterexample.
+This strict-endpoint reduction has `M`, `L`, and `A`.  The normalized equality
+arm has `C` to the existing strategic/collision residual, while the
+support-handoff arm now feeds the renewable finite-rank reduction above.  The
+normalized inert point and ray stall have no `C`.  No copied sibling is
+claimed cap--Nash, and there is no terminal approximation, global completion,
+unconditional uniform-equilibrium payoff, or counterexample.
 
 There is also an exact screen on one proposed way of changing that unchanged
 canonical ray.  `quittingTerminalSemanticPair_literalRootStack_pureSet_screen`
