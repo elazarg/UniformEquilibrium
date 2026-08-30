@@ -2463,7 +2463,21 @@ in the live mathematical ledger.
   conditional `C` for the supplied block. They have no source `A`: no theorem
   here constructs the cuts, positive hazard or reach floors, source ancestry,
   renewable child, terminal equilibrium, or uniform-equilibrium payoff. A
-  signed two-coordinate semantic-seam telescope is not formalized here.
+  signed semantic seam is not consumed by this paid-splice module.
+
+  The separate generic compiler
+  `QuittingTerminalSemanticSeamChain.debtSum_eq_totalCharge_add_endpoint_add_weightedSignedSeamError`
+  (`UniformEquilibrium/Quitting/Debt/Dynamic/TerminalSemanticSignedSeamTelescope.lean`)
+  gives the exact finite signed-debt telescope for supplied semantic prefix
+  equations whose expected and decoded children may differ. The absolute
+  error requires both prescribed-payoff and unrestricted-cap coordinates;
+  a common bound costs `2 * card ι`, or `8` in Fin4.
+  `totalCharge_add_coordinateSeamBound_add_theta_endpointExcess_ge` adds the
+  seam-stable coercive inequality from scalar endpoint debt floors and a
+  survival ceiling. This compiler has `M` and `L`, but no `A` or `C`: no
+  theorem constructs an executable chain, attaches behavior or a source
+  chronology, produces a renewable child, or derives a terminal equilibrium
+  or uniform-equilibrium payoff. Payoff-only seam control is insufficient.
 
   The approximate vanishing-incidence gap inside the tube is now quantified.
   `exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff`

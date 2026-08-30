@@ -1647,6 +1647,7 @@ import UniformEquilibrium.Quitting.Debt.Dynamic.StatePreservingChronologyCapacit
 import UniformEquilibrium.Quitting.Debt.Dynamic.SummableResidualNashBellmanSpine
 import UniformEquilibrium.Quitting.Debt.Dynamic.SummableResidualPersistentClosure
 import UniformEquilibrium.Quitting.Debt.Dynamic.TerminalContinuationMismatchRebase
+import UniformEquilibrium.Quitting.Debt.Dynamic.TerminalSemanticSignedSeamTelescope
 import UniformEquilibrium.Quitting.Debt.Dynamic.TwoEndedDynamicDebtCompactification
 import UniformEquilibrium.Quitting.Debt.Dynamic.ZeroAbsorptionPlateau
 import UniformEquilibrium.Quitting.Debt.Ledger.CapPackage
