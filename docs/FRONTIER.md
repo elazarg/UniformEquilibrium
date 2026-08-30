@@ -1520,9 +1520,51 @@ payoff, and hard pure-action-gain observables.
 mixed-law gauge with the literal root-word gauge exactly.
 `quittingFiniteDeadlineOperationalEffectDistance_zero_retainedTailSemantic_eq`
 therefore preserves the complete terminal semantic pair behind every common
-behavioral tail at zero mixed-law distance.  This is checked `M/L`; it does not
-assert terminal-law equality or construct the packet's explicit null
-regression, positive-minimum paid edge, or quantitative participant dispatch.
+behavioral tail at zero mixed-law distance.
+
+The independent adjacent-gap layer makes the finite source and its two local
+dispatches literal.  `QuittingAdjacentDeadlineGapSource.of_terminalExploitabilityGap`
+(`UniformEquilibrium/Diagnostics/Quitting/AdjacentDeadlineGapSource.lean`)
+attaches any supplied consecutive pair of exact timing Nash laws to the fixed
+terminal gap, and `censoredError_or_boundaryParticipation` returns the exact
+`gamma / (8 * R)` old-clock-error or new-boundary-participation split.
+`quittingAdjacentDeadline_paidOwnEdge_or_paidResponseSquare`
+(`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineTimingHybridDispatch.lean`)
+then gives either a literal behavioral own-coordinate payoff increase above
+`3 * gamma / 4`, with unchanged unrestricted cap and exact debt subtraction,
+or a common behavioral boundary-response square of size
+`gamma / (4 * (card I - 1))`, hence `gamma / 12` in Fin4.  The square carries
+no profitability claim for its mover.
+
+In the boundary-participation arm,
+`QuittingFiniteDeadlineBoundaryResponseCollision.of_boundaryParticipation`
+and `behavioralStagePairMass_ge_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineBoundaryResponseCollision.lean`)
+produce a counterfactual actual behavioral pair-stage atom with floor
+`gamma^3 / (32 * R^3)`.  `opponentNever_ge` retains the coordinatewise Never
+floors used in that estimate.  This is not a prescribed-play collision and
+does not assert that the forced response is profitable.
+
+The sharp limitation is also now a checked concrete regression.
+`FinFourCensoredClockNullDirection.regressionCertificate`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourCensoredClockNullDirection.lean`)
+packages adjacent exact timing Nash laws with boundary participation `1/6`,
+old boundary gain `(1-c)/2`, censored error `c`, canonical terminal-law
+equality, zero operational distance, and equal terminal semantics behind every
+common retained tail.  Its separate exact terminal Nash tail has singleton
+gap one and `D_* = 0`, while
+`FinFourCensoredClockNullDirection.exists_censoredError_div_boundaryScale_gt`
+shows that the normalized censor ratio is unbounded.  Thus raw censored TV
+cannot by itself price strategic effect; this zero-minimum example is neither
+a positive-minimum source nor a uniform-equilibrium counterexample.
+
+Separately, `exists_actualNearCarrierTail_of_uniformSingletonGap`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticActualNearCarrierTail.lean`)
+selects an actual behavioral profile arbitrarily close in the complete
+terminal-semantic pair to any carrier point whose prescribed coordinates are
+uniformly separated from their singleton rewards.  It retains half the
+singleton gap and an upper debt approximation, but neither identifies the
+profile with the carrier point nor places it on a minimum fibre.
 
 `QuittingFiniteDeadlineCompatibleNashFamily`
 (`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineProjectiveCompatibility.lean`)

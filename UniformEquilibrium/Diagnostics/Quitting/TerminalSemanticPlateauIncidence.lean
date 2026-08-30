@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauTimeDisintegration
+import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
 
 /-!
 # Exact semantic incidence of actual plateau rows
@@ -172,6 +173,66 @@ theorem quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass
           (quittingProfileLiveRoot reward profile time) terminal.val := by
   rw [quittingStageCoalitionMass,
     quittingLiveRowCoalitionMass_eq_rootCoalitionMass]
+
+omit [DecidableEq ι] in
+/-- The probability of reaching the unique live row is the product of the
+players' behavioral hazard survivals. -/
+theorem quittingLiveMass_eq_prod_behaviorHazardSurvival
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (profile : (quittingGame reward).BehaviorProfile) (time : ℕ) :
+    quittingLiveMass reward profile time =
+      ∏ who, quittingHazardSurvival
+        (quittingBehaviorLiveHazard reward (profile who)) time := by
+  induction time with
+  | zero => simp
+  | succ time ih =>
+      rw [quittingLiveMass_succ, ih, quittingJointContinueMass_eq_product]
+      rw [← Finset.prod_mul_distrib]
+      apply Finset.prod_congr rfl
+      intro who _
+      rw [quittingHazardSurvival_succ]
+      rfl
+
+/-- An actual stage-coalition mass factors into stopping-law atoms for its
+quitters and next-stage hazard survivals for its nonquitters. -/
+theorem quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) :
+    quittingStageCoalitionMass reward profile time terminal =
+      (∏ who ∈ terminal.val,
+        (quittingBehaviorStoppingLaw reward (profile who) (some time)).toReal) *
+      ∏ who ∈ terminal.valᶜ,
+        quittingHazardSurvival
+          (quittingBehaviorLiveHazard reward (profile who)) (time + 1) := by
+  rw [quittingStageCoalitionMass_eq_liveMass_mul_rootCoalitionMass,
+    quittingLiveMass_eq_prod_behaviorHazardSurvival]
+  unfold quittingRootCoalitionMass quittingRootQuitRates coalitionMass
+  rw [← Finset.prod_mul_prod_compl terminal.val (fun who =>
+    quittingHazardSurvival
+      (quittingBehaviorLiveHazard reward (profile who)) time)]
+  rw [mul_assoc]
+  rw [mul_left_comm (∏ who ∈ terminal.valᶜ,
+    quittingHazardSurvival
+      (quittingBehaviorLiveHazard reward (profile who)) time)]
+  rw [← mul_assoc]
+  rw [← Finset.prod_mul_distrib, ← Finset.prod_mul_distrib]
+  apply congrArg₂ (fun x y : ℝ => x * y)
+  · apply Finset.prod_congr rfl
+    intro who _
+    rw [quittingBehaviorStoppingLaw_some_toReal,
+      quittingHazardStopMass_eq_survival_mul_stop]
+    rfl
+  · apply Finset.prod_congr rfl
+    intro who _
+    rw [quittingHazardSurvival_succ]
+    have hcontinue := quittingRoot_continueProbability_add_quitProbability
+      (quittingProfileLiveRoot reward profile time) who
+    change _ * (1 -
+      (quittingProfileLiveRoot reward profile time who true).toReal) =
+        _ * (quittingProfileLiveRoot reward profile time who false).toReal
+    congr 1
+    linarith
 
 /-- Positive mass on an actual stage coalition exposes each quitter in the
 support of the corresponding actual live-root marginal. -/
