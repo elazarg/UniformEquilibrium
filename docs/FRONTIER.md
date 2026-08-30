@@ -1579,29 +1579,40 @@ joint `Never` mass, and no eventual source-level identity theorem.  Hence
 there is no Fin4 `A/C`; payoff return, cap Nash, recurrence, and uniform
 equilibrium remain open.
 
-The conditional cardinality contract is checked in
-`Research/Topology/ModTwoBoxComplementarityParity.lean`,
-`Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, and
-`Research/Quitting/FinFourProducerAtlas/StrictRayBindingCardinality.lean`.
-`ModTwoBoxComplementarityParitySpec` states global oddness, excision,
-common-isolating homotopy invariance, and finite-regular parity without
-asserting an implementation.  `QuittingEndpointNashBoxBridge` identifies
-cube complementarity with exact root Nash at one fixed cap.  In the Fin4
-contract, `FinFourBindingPairFiniteCapParityWitness` selects an actual late
-finite ray cap, localizes every solution into one isolating neighborhood, and
-uses `FinFourBindingPairLocalParityZero.direct` or `.perturbed` to compute
-zero local parity.  Conditional on those supplied objects,
+The strict-ray binding-pair exclusion is now source-attached and
+certificate-free.  `quittingEndpointNashBoxBridge`
+(`Research/Quitting/Root/EndpointNashBoxComplementarity.lean`) constructs the
+canonical Boolean-PMF box bridge at every finite cap, and
+`QuittingEndpointNashBoxBridge.isSolution_iff_isZeroQuittingRootNash`
+identifies its solutions with exact product-root Nash.  The low reindexing
+owners are `MathUE/PMFProduct/Reindex.lean` and
+`UniformEquilibrium/Quitting/Root/PlayerReindex.lean`.
+
+Under limiting all-Continue uniqueness on one actual strict flow,
+`FinFourStrictRayForwardExactCapTail.bindingFinset_card_ne_two`
+(`Research/Quitting/FinFourProducerAtlas/StrictRayBindingCardinalityExplicit.lean`)
+selects the late finite cap and common resolution internally.  It normalizes
+the binding pair, uses selected-root maximality and cap convergence to
+localize every exact root, derives the outsider and collision signs, and
+combines the both-active count-two and solo count-zero formulas with eventual
+same-grid parity one.  No `ModTwoBoxComplementarityParitySpec`, finite-cap
+certificate, or pinned GameTheory Sperner substitute is assumed.  The
+source-facing capstone first returns a positive limiting root when uniqueness
+fails and otherwise applies this exclusion.  Thus
 `positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three`
-returns, for the same strict flow, a positive-absorption exact root at the
-limiting cap, full binding, or binding cardinality three.  Neither the generic
-parity implementation nor the finite-cap localization/perturbation certificate
-is constructed, so this contract has no `A`.  Conditional on the supplied
-objects,
+has `M`, `L`, and `A` on the same actual flow.
+
+The source consumer
 `minimumLawHandoff_or_offMinimumDescent_or_ballistic_or_omitted_or_cardThree`
-adds `C` for the positive-root arm through exact minimum-source regeneration
-or strict off-minimum descent.  It leaves the descent, cardinal-three,
-ballistic, and omitted-player outputs open and proves no contradiction or
-uniform-equilibrium conclusion.
+now takes only that flow.  It consumes the positive-root arm into exact
+same-residual minimum regeneration or strict off-minimum descent, and the
+full-binding arm into uniformly ballistic renewal or one fixed player omitted
+infinitely often.  This gives branch-local `C`, while making binding
+cardinality three literal.  The returned minimum/descent, ballistic,
+omitted-player, and cardinal-three endpoints remain open; no strict-ray
+contradiction or uniform-equilibrium conclusion follows.  The older abstract
+parity contract remains a checked conditional interface, but it is no longer
+an input to the actual-flow consumer.
 
 The generic Sperner approximation and local-count seam is checked in
 `Research/Topology/BoxComplementarityCubicalSperner.lean`,
@@ -1994,7 +2005,7 @@ This dependency table is generated from [`QuittingProofFrontier.json`](QuittingP
 
 The open producer arrows are:
 
-- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The actual reached-port packet system must retain two fixed actual labels, give exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. A universal exact-spine two-label selector is impossible even for two players.
+- `VANISHING-DEBT-ATOM-ACCESS` to `CHRONOLOGICAL-DEBT-SHADOWING`: Missing: construct a two-tier input for the checked budget-stable iteration theorem. The bare packet structure cannot witness this producer obligation: `nonempty_quittingBudgetStablePacketSystem_iff_two_le_card` proves that it is inhabited for every reward table exactly when the player type has at least two elements, using an unrelated stationary self-loop. The actual reached-port layer must instead retain two fixed actual labels, exact literal source/successor anchoring, one globally bounded annotation family, and an operationally sublinear seam-plus-radius-loss modulus. Separately, an external source/payoff-to-candidate adapter must provide the compiler's small-debt seed, unless a solved-game disjunct is returned. A positive-minimum actual port cannot itself be that seed, and semantic closeness cannot pay the resulting fixed debt gap. Once both tiers are supplied, `exists_chronologicalDebtShadowingCertificate_of_seed` recursively selects compatible blocks and proves every same-root survival law. Moreover, any source-attached marked chain with divergent exposure and summable seams must carry divergent cumulative internal exact-Bellman debt drain by `tendsto_sum_positiveRowCoordinateDebtDrop_atTop`; no checked theorem converts that drain into prescribed-payoff charge or an admissible return. A universal exact-spine two-label selector is impossible even for two players.
 - `PAID-FIRST-DISAGREEMENT-ROW` to `CUMULATIVE-ADMISSIBLE-PAYOFF-NEAR-RETURN`: A positive terminal gap gives a full-gap paid cap port at every literal behavioral profile. Its exact trichotomy closes positive absorption with zero cap displacement through cumulative payoff near-return; the terminal gap excludes that charged branch in a counterexample. The remaining quantitative and inert branches satisfy D_* A <= D_source - D_* and D_* rho <= 2 R (D_source - D_*). An exact-minimum actual source is unconditionally inert. At arbitrary positive tolerances, one near-minimum literal profile makes every compatible source/port have small debt drop, absorption, and displacement, so no selector can maintain one fixed positive real debt-drop step over all profiles. Opponent-tight compact-law limits, and in particular limits with two proper clocks, realize the full semantic point. A fixed nonattained minimum subsequence is therefore all-nonproper or has one proper owner with a negative-singleton Never-cap jump. Missing downstream: consumption of those law-limit residuals, profile-dependent nonuniform or well-founded regeneration, or a consumer of the literal inert stall.
 
 The DAG nodes have these mathematical meanings:
