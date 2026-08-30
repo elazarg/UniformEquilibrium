@@ -148,7 +148,6 @@ import Research.Quitting.OpponentClockVariation
 import Research.Quitting.OwnerOutsiderSquareContextDecomposition
 import Research.Quitting.OwnerSoloCertification
 import Research.Quitting.PaidNonexactCapStackAccount
-import Research.Quitting.PaidResetCanonicalZenoRay
 import Research.Quitting.PairActiveSoloPhase
 import Research.Quitting.PathClosureKernels
 import Research.Quitting.PositiveJointSourceForwardTailDecoupling
