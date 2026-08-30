@@ -7,18 +7,15 @@ Authors: GameTheory contributors
 import MathUE.AffineIterateTelescope
 import MathUE.CyclicContraction
 import MathUE.Finset.MinimalMemberSum
-import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicRenewal
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
-import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
-import Research.Quitting.SolanVieilleSoloPeriodicGap
 import UniformEquilibrium.Quitting.Cycles.SingletonArcCycle
-import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryAnchoredSoloPeriodicGap
 
 /-!
 # Terminal-level exploitability of solo-periodic profiles on the Solan–Vieille table
 
-`SolanVieilleSoloPeriodicGap` bounds the accuracy of the one-stage anchored
+`SolanVieilleBoundaryAnchoredSoloPeriodicGap` bounds the accuracy of the one-stage anchored
 system.  This module works at the terminal-payoff level instead, where the
 bound is on the actual best-reply value of the induced behavior profile, and it
 settles the terminal-gap constant `1 / 12` negatively.
@@ -36,7 +33,7 @@ is exploitable by the shortfall.
 
 The other deviation is refusal, which faces the same schedule with the
 refuser's own phases carrying hazard zero.  It is available to the deviator
-(`quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue`), its gain
+(`quittingAnchoredCyclicRefusalOnPathValue_le_bestReplyValue`), its gain
 is a terminal gain (`terminalPayoff_add_refusalGain_le_bestReplyValue`), and
 once it dominates the quit-now value `1` at every phase it solves the
 max-linear response recursion, so the whole behavioral supremum collapses onto
@@ -72,42 +69,6 @@ not uniform over schedules.
 noncomputable section
 
 namespace GameTheory
-
-/-! ## Refusal is one of the deviations -/
-
-/-- **The refusal deviation is available.**  The best-reply value against an
-anchored cyclic profile is at least the on-path value of the same schedule with
-the deviator's own phases carrying hazard zero, which is what refusing to quit
-forever pays (`quittingPeriodicWindowRefusalValue_anchoredCyclic`). -/
-theorem quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue
-    {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ} [NeZero m]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (w : Fin m → ι) (hazard : Fin m → ℝ)
-    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : ι) :
-    quittingAnchoredCyclicOnPathValue reward w
-        (quittingAnchoredCyclicRefusalHazard w hazard who)
-        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
-        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
-        (quittingAnchoredCyclicStart m) who ≤
-      quittingBestReplyValue reward
-        (quittingAnchoredCyclicProfile reward w hazard h0 h1) who := by
-  have hsup := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
-    reward w hazard h0 h1 who
-  show _ ≤ ⨆ deviation, _
-  rw [show (⨆ deviation : (quittingGame reward).BehaviorStrategy who,
-      quittingTerminalPayoff reward
-        (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
-          who deviation) who) =
-      sSup (Set.range fun deviation :
-          (quittingGame reward).BehaviorStrategy who ↦
-        quittingTerminalPayoff reward
-          (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
-            who deviation) who) from rfl, hsup]
-  unfold quittingAnchoredCyclicResponseCap
-    quittingPeriodicWindowBestResponseValue
-  rw [← quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
-    (quittingAnchoredCyclicStart m) who]
-  exact le_max_left _ _
 
 namespace SolanVieilleBoundary
 
@@ -281,20 +242,8 @@ is therefore exactly four times the partner's at every phase, and the sum
 identity then forces one of the four values below the quit-now value.
 -/
 
-theorem player_eq (z : Player) : z = 0 ∨ z = 1 ∨ z = 2 ∨ z = 3 := by
+private theorem player_eq (z : Player) : z = 0 ∨ z = 1 ∨ z = 2 ∨ z = 3 := by
   revert z
-  decide
-
-/-- The own-pair partner of a player. -/
-def pairPartner : Player → Player := ![1, 0, 3, 2]
-
-theorem pairPartner_ne (who : Player) : pairPartner who ≠ who := by
-  revert who
-  decide
-
-theorem val_div_two_pairPartner (who : Player) :
-    (pairPartner who).val / 2 = who.val / 2 := by
-  revert who
   decide
 
 /-- A solo exit not owned by `absent` pays `absent` four times what it pays
@@ -420,14 +369,14 @@ theorem exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne
     simp only [← hU]
     linarith
   have hfour := onPathValue_eq_four_mul_of_forall_ne w hazard h0 h1 hsome
-    (val_div_two_pairPartner absent).symm (Ne.symm (pairPartner_ne absent)) hmiss
+    (boundaryPartner_val_div_two absent).symm (Ne.symm (boundaryPartner_ne absent)) hmiss
     (quittingAnchoredCyclicStart m)
   have hsum := sum_onPathValue_eq_five w hazard h0 h1 hsome
     (quittingAnchoredCyclicStart m)
   rw [Fin.sum_univ_four] at hsum
   simp only [← hU] at hfour hsum
-  rcases le_total (U (pairPartner absent)) (11 / 12) with hcase | hcase
-  · exact hgap (pairPartner absent) (by linarith)
+  rcases le_total (U (boundaryPartner absent)) (11 / 12) with hcase | hcase
+  · exact hgap (boundaryPartner absent) (by linarith)
   · have hsmall : ∀ i j : Player, U i + U j ≤ 5 / 12 →
         ∃ who : Player, U who + 1 / 12 ≤ 1 := by
       intro i j hij
@@ -436,13 +385,13 @@ theorem exists_terminalPayoff_add_twelfth_le_bestReplyValue_of_forall_ne
       · exact ⟨j, by linarith⟩
     have hpick : ∃ who : Player, U who + 1 / 12 ≤ 1 := by
       rcases player_eq absent with rfl | rfl | rfl | rfl
-      · rw [show pairPartner (0 : Player) = 1 from rfl] at hfour hcase
+      · rw [show boundaryPartner (0 : Player) = 1 from rfl] at hfour hcase
         exact hsmall 2 3 (by linarith)
-      · rw [show pairPartner (1 : Player) = 0 from rfl] at hfour hcase
+      · rw [show boundaryPartner (1 : Player) = 0 from rfl] at hfour hcase
         exact hsmall 2 3 (by linarith)
-      · rw [show pairPartner (2 : Player) = 3 from rfl] at hfour hcase
+      · rw [show boundaryPartner (2 : Player) = 3 from rfl] at hfour hcase
         exact hsmall 0 1 (by linarith)
-      · rw [show pairPartner (3 : Player) = 2 from rfl] at hfour hcase
+      · rw [show boundaryPartner (3 : Player) = 2 from rfl] at hfour hcase
         exact hsmall 0 1 (by linarith)
     obtain ⟨who, hwho⟩ := hpick
     exact hgap who hwho
@@ -476,7 +425,7 @@ theorem terminalPayoff_add_refusalGain_le_bestReplyValue {m : ℕ} [NeZero m]
         refusalGain w hazard h0 h1 who (quittingAnchoredCyclicStart m) ≤
       quittingBestReplyValue boundaryReward
         (quittingAnchoredCyclicProfile boundaryReward w hazard h0 h1) who := by
-  have hle := quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue
+  have hle := quittingAnchoredCyclicRefusalOnPathValue_le_bestReplyValue
     boundaryReward w hazard h0 h1 who
   rw [quittingTerminalPayoff_anchoredCyclicProfile]
   unfold refusalGain
@@ -530,7 +479,7 @@ theorem quittingBestReplyValue_eq_refusalOnPathValue {m : ℕ} [NeZero m]
         (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
         (quittingAnchoredCyclicStart m) who := by
   refine le_antisymm ?_
-    (quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue
+    (quittingAnchoredCyclicRefusalOnPathValue_le_bestReplyValue
       boundaryReward w hazard h0 h1 who)
   have hcap := quittingAnchoredCyclicResponseCap_le_of_response_of_spectatorHazard
     w hazard h0 h1 _
@@ -772,11 +721,11 @@ theorem refusalDrift_le_refusalGain {m : ℕ} (w : Fin m → Player)
 The two statements above ask that the refuser's on-path value never fall below
 the quit-now value `1`.  Exactness of the one-stage anchored system supplies
 that floor on this table
-(`one_le_onPathValue_of_isExactAnchoredSoloPeriodic`), and the floor is a
+(`one_le_onPathValue_of_isExactAnchoredSoloPeriodic_boundaryReward`), and the floor is a
 genuine restriction on the class: on `refutingSchedule` player `2`'s on-path
 value is below `1` (`refutingOnPathValue`).  Exactness itself is available here
 only where some hazard vanishes
-(`not_isExactAnchoredSoloPeriodic_of_quantitativeGap`).
+(`not_isExactAnchoredSoloPeriodic_boundaryReward`).
 -/
 
 /-- The accumulated drift of an exact anchored solo-periodic profile is
@@ -788,7 +737,7 @@ theorem refusalDrift_nonneg_of_isExactAnchoredSoloPeriodic {m : ℕ}
     (n : ℕ) (phase : Fin m) :
     0 ≤ refusalDrift w hazard h0 h1 refuser phase n :=
   refusalDrift_nonneg w hazard h0 h1 refuser
-    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic hexact k refuser)
+    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic_boundaryReward hexact k refuser)
     n phase
 
 /-- The refusal gain of an exact anchored solo-periodic profile dominates its
@@ -801,7 +750,7 @@ theorem refusalDrift_le_refusalGain_of_isExactAnchoredSoloPeriodic {m : ℕ}
     refusalDrift w hazard h0 h1 refuser phase m ≤
       refusalGain w hazard h0 h1 refuser phase :=
   refusalDrift_le_refusalGain w hazard h0 h1 refuser
-    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic hexact k refuser)
+    (fun k ↦ one_le_onPathValue_of_isExactAnchoredSoloPeriodic_boundaryReward hexact k refuser)
     phase hW
 
 /-! ## The uniform four-cycle
@@ -824,7 +773,7 @@ refutes the same constant at fixed hazards on an interleaved schedule.
 /-- The scalar bound behind the uniform four-cycle gap: with `q` in the unit
 interval, `4 / (1 + q + q ^ 2) - (1 + 4 * q) / (1 + q + q ^ 2 + q ^ 3)` is at
 least `1 / 12`, with equality only at `q = 1`. -/
-theorem twelfth_le_sub_of_fourCycleValues {q refusal onPath : ℝ}
+private theorem twelfth_le_sub_of_fourCycleValues {q refusal onPath : ℝ}
     (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
     (hrefusal : refusal * (1 + q + q ^ 2) = 4)
     (honPath : onPath * (1 + q + q ^ 2 + q ^ 3) = 1 + 4 * q) :
@@ -845,7 +794,7 @@ theorem twelfth_le_sub_of_fourCycleValues {q refusal onPath : ℝ}
 /-- The matching upper bound: on the uniform four-cycle the refusal gain
 exceeds `1 / 12` by at most `6 * (1 - q)`, so it tends to `1 / 12` as the
 hazard tends to zero. -/
-theorem sub_le_twelfth_add_of_fourCycleValues {q refusal onPath : ℝ}
+private theorem sub_le_twelfth_add_of_fourCycleValues {q refusal onPath : ℝ}
     (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
     (hrefusal : refusal * (1 + q + q ^ 2) = 4)
     (honPath : onPath * (1 + q + q ^ 2 + q ^ 3) = 1 + 4 * q) :
@@ -977,7 +926,7 @@ theorem twelfth_le_bestReplyValue_sub_terminalPayoff_uniformFourCycle
       quittingBestReplyValue boundaryReward
         (quittingAnchoredCyclicProfile boundaryReward (id : Fin 4 → Player)
           (fun _ ↦ p) (fun _ ↦ hp0.le) (fun _ ↦ hp1)) 0 := by
-  have hle := quittingAnchoredCyclicOnPathValue_refusalHazard_le_bestReplyValue
+  have hle := quittingAnchoredCyclicRefusalOnPathValue_le_bestReplyValue
     boundaryReward (id : Fin 4 → Player) (fun _ ↦ p) (fun _ ↦ hp0.le)
     (fun _ ↦ hp1) 0
   rw [show quittingAnchoredCyclicStart 4 = (0 : Fin 4) from rfl] at hle

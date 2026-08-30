@@ -44,6 +44,38 @@ namespace SolanVieilleBoundary
 
 abbrev Player := Fin 4
 
+/-- The paired player in the boundary table: `0 ↔ 1` and `2 ↔ 3`. -/
+def boundaryPartner : Player → Player := ![1, 0, 3, 2]
+
+/-- One canonical player in the pair opposite to the supplied player. -/
+def boundaryOppositeFirst : Player → Player := ![2, 2, 0, 0]
+
+/-- The other player in the pair opposite to the supplied player. -/
+def boundaryOppositeSecond : Player → Player := ![3, 3, 1, 1]
+
+@[simp] theorem boundaryPartner_ne (who : Player) : boundaryPartner who ≠ who := by
+  fin_cases who <;> decide
+
+@[simp] theorem boundaryPartner_partner (who : Player) :
+    boundaryPartner (boundaryPartner who) = who := by
+  fin_cases who <;> rfl
+
+@[simp] theorem boundaryPartner_val_div_two (who : Player) :
+    (boundaryPartner who).val / 2 = who.val / 2 := by
+  fin_cases who <;> rfl
+
+@[simp] theorem boundaryOppositeFirst_ne (who : Player) :
+    boundaryOppositeFirst who ≠ who := by
+  fin_cases who <;> decide
+
+@[simp] theorem boundaryPartner_oppositeFirst (who : Player) :
+    boundaryPartner (boundaryOppositeFirst who) = boundaryOppositeSecond who := by
+  fin_cases who <;> rfl
+
+@[simp] theorem boundaryPartner_oppositeSecond (who : Player) :
+    boundaryPartner (boundaryOppositeSecond who) = boundaryOppositeFirst who := by
+  fin_cases who <;> rfl
+
 /-- The Solan–Vieille Section 3 reward table, presented by membership
 pattern: the four Booleans record which of the players `0, 1, 2, 3` belong to
 the quitting coalition.  Each of the fifteen nonempty coalitions carries an
@@ -78,6 +110,34 @@ def boundaryReward (quitters : {S : Finset Player // S.Nonempty}) :
       else if owner.val / 2 = who.val / 2 then 4
       else 0 := by
   fin_cases owner <;> fin_cases who <;> rfl
+
+/-- Every two-player exit pays each displayed member exactly `1`. -/
+theorem boundaryReward_pair_eq_one (owner who : Player) :
+    boundaryReward ⟨{owner, who}, Finset.insert_nonempty owner {who}⟩ who = 1 := by
+  fin_cases owner <;> fin_cases who <;> rfl
+
+/-- A solo exit pays the canonical opposite-pair player `0`. -/
+theorem boundaryReward_solo_oppositeFirst (owner : Player) :
+    boundaryReward (quittingSingletonTerminal owner)
+      (boundaryOppositeFirst owner) = 0 := by
+  fin_cases owner <;> rfl
+
+/-- A solo exit pays its distinct own-pair partner `4`. -/
+theorem boundaryReward_solo_partner {owner who : Player}
+    (hne : owner ≠ who) (hpair : owner.val / 2 = who.val / 2) :
+    boundaryReward (quittingSingletonTerminal owner) who = 4 := by
+  have h := soloReward_eval owner who
+  rw [if_neg hne, if_pos hpair] at h
+  exact h
+
+/-- A solo exit pays every member of the opposite pair `0`. -/
+theorem boundaryReward_solo_cross {owner who : Player}
+    (hpair : owner.val / 2 ≠ who.val / 2) :
+    boundaryReward (quittingSingletonTerminal owner) who = 0 := by
+  have hne : owner ≠ who := fun h ↦ hpair (by rw [h])
+  have h := soloReward_eval owner who
+  rw [if_neg hne, if_neg hpair] at h
+  exact h
 
 @[simp] theorem collisionReward_zero_two :
     quittingSingletonCollisionReward boundaryReward 0 2 = 1 := rfl

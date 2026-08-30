@@ -33,7 +33,6 @@ import Research.Topology.BoxComplementarityFaceLocalCountTwo
 import Research.Topology.BoxComplementarityFaceLocalCountZero
 import Research.Topology.BoxComplementaritySpernerEventualLocalParity
 import Research.Topology.BoxComplementaritySpernerSubdivisionPrism
-import Research.Quitting.AGKRSTheorem34BoundaryAudit
 import Research.Quitting.AnchoredCyclicPatienceBridge
 import Research.Quitting.AnchoredCyclicPreemptionEdge
 import Research.Quitting.AtomEndpointReturnSeparation
@@ -169,8 +168,6 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonClockDefectOverlap
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
-import Research.Quitting.SolanVieilleSoloPeriodicGap
-import Research.Quitting.SolanVieilleSoloPeriodicTerminalGap
 import Research.Quitting.SoloPeriodicInterVisitBalance
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification

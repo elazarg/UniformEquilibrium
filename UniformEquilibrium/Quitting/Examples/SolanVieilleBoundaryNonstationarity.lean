@@ -312,9 +312,6 @@ theorem boundary_exists_player_value_ge
   rw [Fin.sum_univ_four] at hsocial
   linarith
 
-/-- The paired player in the boundary table: `0 ↔ 1` and `2 ↔ 3`. -/
-def boundaryPartner : Fin 4 → Fin 4 := ![1, 0, 3, 2]
-
 private theorem boundaryReward_singleton_eq_solo
     (owner who : Fin 4) :
     SolanVieilleBoundary.boundaryReward
@@ -683,25 +680,6 @@ theorem boundary_exists_firstDrop_with_partnerMass
     simpa [window] using hdecomp
   change window.singletonMass who ≤ Real.sqrt ε at hown
   linarith
-
-private theorem boundaryPartner_partner (who : Fin 4) :
-    boundaryPartner (boundaryPartner who) = who := by
-  fin_cases who <;> rfl
-
-/-- The two players in the pair opposite to `who` and its partner. -/
-def boundaryOppositeFirst : Fin 4 → Fin 4 := ![2, 2, 0, 0]
-
-def boundaryOppositeSecond : Fin 4 → Fin 4 := ![3, 3, 1, 1]
-
-private theorem boundaryPartner_oppositeFirst (who : Fin 4) :
-    boundaryPartner (boundaryOppositeFirst who) =
-      boundaryOppositeSecond who := by
-  fin_cases who <;> rfl
-
-private theorem boundaryPartner_oppositeSecond (who : Fin 4) :
-    boundaryPartner (boundaryOppositeSecond who) =
-      boundaryOppositeFirst who := by
-  fin_cases who <;> rfl
 
 private theorem finiteWindow_singletonTotal_eq_four_roles
     {roots : BoundaryRootSequence (ι := Fin 4)}

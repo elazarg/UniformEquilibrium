@@ -7,7 +7,6 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSmallSurvivorDeletionExcessBound
 import UniformEquilibrium.Quitting.Classification.BlockDeletionInequality
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
-import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 
 /-!
@@ -167,10 +166,6 @@ theorem soloPremium_eq_one (who : Player) :
 
 /-! ## The join cap -/
 
-theorem crossPartner_ne (who : Player) : crossPartner who ≠ who := by
-  revert who
-  decide
-
 /-- Every player's join cap over the other three players is exactly `1`. -/
 theorem quittingBlockJoinCap_eq_one (who : Player) :
     quittingBlockJoinCap boundaryReward {who} who = 1 := by
@@ -183,15 +178,16 @@ theorem quittingBlockJoinCap_eq_one (who : Player) :
     have hlower := zero_le_boundaryReward_of_notMem S hS who hnot
     linarith
   · have hwitness := sub_le_quittingBlockJoinCap boundaryReward {who} who
-      {crossPartner who} (Finset.singleton_nonempty _)
-      (Finset.disjoint_singleton.mpr (crossPartner_ne who))
+      {boundaryOppositeFirst who} (Finset.singleton_nonempty _)
+      (Finset.disjoint_singleton.mpr (boundaryOppositeFirst_ne who))
     have hgain : ∀ w : Player,
-        boundaryValue (insert w {crossPartner w}) w -
-          boundaryValue {crossPartner w} w = 1 := by decide
+        boundaryValue (insert w {boundaryOppositeFirst w}) w -
+          boundaryValue {boundaryOppositeFirst w} w = 1 := by decide
     rw [boundaryReward_eq_boundaryValue,
       boundaryReward_eq_boundaryValue] at hwitness
-    have hcast : ((boundaryValue (insert who {crossPartner who}) who : ℝ) -
-        (boundaryValue {crossPartner who} who : ℝ)) = 1 := by
+    have hcast :
+        ((boundaryValue (insert who {boundaryOppositeFirst who}) who : ℝ) -
+          (boundaryValue {boundaryOppositeFirst who} who : ℝ)) = 1 := by
       exact_mod_cast congrArg (fun n : ℤ => (n : ℝ)) (hgain who)
     linarith
 

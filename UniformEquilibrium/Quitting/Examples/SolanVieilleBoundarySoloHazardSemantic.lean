@@ -9,7 +9,7 @@ import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Cycles.SoloRootSequenceValues
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloHazardFloor
-import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 
 /-!
 # Semantic accounting for arbitrary solo-hazard calendars

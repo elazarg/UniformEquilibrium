@@ -458,6 +458,39 @@ theorem quittingPeriodicWindowRefusalValue_anchoredCyclic
     quittingCyclicDeletedCycle_anchoredCyclicCycle]
   rfl
 
+/-- **Refusal is an available behavioral deviation.**  The exact best-reply
+value against an anchored cyclic profile is at least the on-path value of the
+same schedule with the refuser's own hazards set to zero. -/
+theorem quittingAnchoredCyclicRefusalOnPathValue_le_bestReplyValue
+    [NeZero m]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (w : Fin m → ι) (hazard : Fin m → ℝ)
+    (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) (who : ι) :
+    quittingAnchoredCyclicOnPathValue reward w
+        (quittingAnchoredCyclicRefusalHazard w hazard who)
+        (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
+        (quittingAnchoredCyclicRefusalHazard_le_one h1 w who)
+        (quittingAnchoredCyclicStart m) who ≤
+      quittingBestReplyValue reward
+        (quittingAnchoredCyclicProfile reward w hazard h0 h1) who := by
+  have hsup := sSup_range_quittingTerminalPayoff_update_anchoredCyclicProfile
+    reward w hazard h0 h1 who
+  show _ ≤ ⨆ deviation, _
+  rw [show (⨆ deviation : (quittingGame reward).BehaviorStrategy who,
+      quittingTerminalPayoff reward
+        (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
+          who deviation) who) =
+      sSup (Set.range fun deviation :
+          (quittingGame reward).BehaviorStrategy who ↦
+        quittingTerminalPayoff reward
+          (Function.update (quittingAnchoredCyclicProfile reward w hazard h0 h1)
+            who deviation) who) from rfl, hsup]
+  unfold quittingAnchoredCyclicResponseCap
+    quittingPeriodicWindowBestResponseValue
+  rw [← quittingPeriodicWindowRefusalValue_anchoredCyclic reward w hazard h0 h1
+    (quittingAnchoredCyclicStart m) who]
+  exact le_max_left _ _
+
 /-- **One-turn opponent survival of an anchored cyclic cycle.**  A phase owned
 by the deviator contributes no absorption against it, and every other phase
 contributes its continuation probability. -/

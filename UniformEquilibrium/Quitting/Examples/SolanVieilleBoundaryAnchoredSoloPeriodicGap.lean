@@ -4,25 +4,24 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen
-import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
-import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloPeriodicNoGo
 import MathUE.Periodicity
+import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryTable
 
 /-!
-# A quantitative solo-periodic gap for the Solan–Vieille table
+# Quantitative anchored solo-periodic gaps for the Solan–Vieille boundary table
 
 On the table of Solan and Vieille, *Quitting games*,
 Math. Oper. Res. 26 (2001), Section 3, fixed in `boundaryReward`, an
 anchored solo-periodic profile cannot be `ε`-exact unless the product of two
 of its own hazards is at most `ε * (1 + h)` with `h` the second of the two:
-`exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic`.  With a
+`exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward`.  With a
 uniform floor `q` and a uniform ceiling `Q` on the hazards this reads
-`q ^ 2 ≤ ε * (1 + Q)` (`sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic`), so
+`q ^ 2 ≤ ε * (1 + Q)` (`sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward`), so
 the defect of the anchored system is bounded below by `q ^ 2 / (1 + Q)`,
 uniformly over every period and every schedule with repetitions.  Since every
 hazard is at most `1`, the readable form `q ^ 2 ≤ 2 * ε`
-(`sq_le_two_mul_of_isεExactAnchoredSoloPeriodic`) is the ceiling-free
+(`sq_le_two_mul_of_isεExactAnchoredSoloPeriodic_boundaryReward`) is the ceiling-free
 corollary.
 
 The bound is the accuracy of the one-stage anchored system
@@ -33,11 +32,11 @@ along the play.
 Underneath the three branches sits a floor that holds for every anchored
 `ε`-exact profile on this table, with no condition on the hazards: quitting on
 the spot pays every player exactly `1` here, so no on-path value falls below
-`1 - ε` (`one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic`).  At accuracy
-zero the floor is `1` (`one_le_onPathValue_of_isExactAnchoredSoloPeriodic`).
+`1 - ε` (`one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic_boundaryReward`).  At accuracy
+zero the floor is `1` (`one_le_onPathValue_of_isExactAnchoredSoloPeriodic_boundaryReward`).
 
 The three branches of the argument each contribute a bound of their own, and
-`one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic`
+`one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic_boundaryReward`
 records all three separately.  A constant schedule forces `1 ≤ ε` outright:
 the opposite pair's on-path value is driven below the floor whatever the
 hazards are.  At a phase where the schedule changes, a partner successor
@@ -62,7 +61,7 @@ pays every player exactly `1` there, alone or alongside the scheduled quitter,
 so no on-path coordinate of an `ε`-exact anchored solo-periodic profile falls
 below `1 - ε`.  Neither hazard positivity nor any condition on the schedule
 enters. -/
-theorem one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic
+theorem one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} {w : Fin m → Player} {hazard : Fin m → ℝ}
     {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1} {ε : ℝ}
     (hexact : IsεExactAnchoredSoloPeriodic boundaryReward ε w hazard h0 h1)
@@ -78,7 +77,7 @@ forces, or at some phase the hazard `h` there and the hazard `h'` at its
 cyclic successor satisfy one of two bounds: `3 * h * h' ≤ ε * (1 + h)`, forced
 when the successor is the pair partner of the scheduled quitter, or
 `h * h' ≤ ε * (1 + h' - h)`, forced when it belongs to the opposite pair. -/
-theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
+theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
     (hpos : ∀ k, 0 < hazard k) {ε : ℝ} (hε : 0 ≤ ε)
@@ -103,7 +102,7 @@ theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
     have h := anchorUpperBound_of_isεExactAnchoredSoloPeriodic hexact phase
     rwa [hself] at h
   have hfloor : ∀ (phase : Fin m) (who : Player), 1 - ε ≤ U phase who :=
-    one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic hexact
+    one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic_boundaryReward hexact
   have hown : ∀ phase : Fin m, hazard phase * (U phase (w phase) - 1) ≤ ε := by
     intro phase
     have hr := hren phase (w phase)
@@ -126,20 +125,22 @@ theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
     obtain ⟨designated, hdesignated⟩ := Math.exists_const_of_cyclic_succ_eq hsucc
     have hzero : ∀ phase : Fin m,
         boundaryReward (quittingSingletonTerminal (w phase))
-          (crossPartner (w origin)) = 0 := by
+          (boundaryOppositeFirst (w origin)) = 0 := by
       intro phase
       rw [(hdesignated phase).trans (hdesignated origin).symm]
-      exact boundaryReward_solo_crossPartner (w origin)
+      exact boundaryReward_solo_oppositeFirst (w origin)
     obtain ⟨peak, hpeak⟩ :=
-      Finite.exists_max fun phase : Fin m ↦ U phase (crossPartner (w origin))
-    have hr := hren peak (crossPartner (w origin))
+      Finite.exists_max fun phase : Fin m ↦
+        U phase (boundaryOppositeFirst (w origin))
+    have hr := hren peak (boundaryOppositeFirst (w origin))
     rw [hzero peak] at hr
     have hle := hpeak (finRotate m peak)
-    have hfl := hfloor peak (crossPartner (w origin))
+    have hfl := hfloor peak (boundaryOppositeFirst (w origin))
     nlinarith [hpos peak, h1 peak, hle, hr, hfl,
       mul_nonneg (by linarith [h1 peak] : (0 : ℝ) ≤ 1 - hazard peak)
-        (by linarith : (0 : ℝ) ≤ U peak (crossPartner (w origin)) -
-          U (finRotate m peak) (crossPartner (w origin)))]
+        (by linarith : (0 : ℝ) ≤
+          U peak (boundaryOppositeFirst (w origin)) -
+            U (finRotate m peak) (boundaryOppositeFirst (w origin)))]
   · right
     simp only [not_forall] at hconst
     obtain ⟨phase, hphase⟩ := hconst
@@ -191,7 +192,7 @@ theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
 /-- **The quantitative solo-periodic gap.**  Two of the profile's own hazards
 have product at most `ε * (1 + h)` with `h` the second of the two.  Hazard
 positivity is not needed: a vanishing hazard satisfies the bound at once. -/
-theorem exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
+theorem exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {ε : ℝ} (hε : 0 ≤ ε)
     (hexact : IsεExactAnchoredSoloPeriodic boundaryReward ε w hazard h0 h1) :
@@ -201,7 +202,7 @@ theorem exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
     exact ⟨k, k, by rw [hk]; simpa using hε⟩
   · push Not at hvanish
     have hpos : ∀ k, 0 < hazard k := fun k ↦ (h0 k).lt_of_ne (hvanish k).symm
-    rcases one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
+    rcases one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic_boundaryReward
         w hazard h0 h1 hpos hε hexact with hone | ⟨phase, hbranch⟩
     · obtain ⟨origin⟩ : Nonempty (Fin m) :=
         ⟨⟨0, Nat.pos_of_ne_zero (NeZero.ne m)⟩⟩
@@ -218,14 +219,14 @@ theorem exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
 /-- With a uniform floor `q` and a uniform ceiling `Q` on the hazards the gap
 is uniform over the whole class: every period, every schedule with
 repetitions, every hazard family inside `[q, Q]`. -/
-theorem sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
+theorem sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {ε q Q : ℝ} (hε : 0 ≤ ε)
     (hq : 0 ≤ q) (hfloor : ∀ k, q ≤ hazard k) (hceiling : ∀ k, hazard k ≤ Q)
     (hexact : IsεExactAnchoredSoloPeriodic boundaryReward ε w hazard h0 h1) :
     q ^ 2 ≤ ε * (1 + Q) := by
   obtain ⟨j, k, hjk⟩ :=
-    exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
+    exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward
       w hazard h0 h1 hε hexact
   have hsq : q ^ 2 ≤ hazard j * hazard k := by
     have hmul := mul_le_mul (hfloor j) (hfloor k) hq (le_trans hq (hfloor j))
@@ -235,48 +236,48 @@ theorem sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
   linarith
 
 /-- The ceiling-free reading: every hazard is at most `1`, so the sharp bound
-`sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic` implies `q ^ 2 ≤ 2 * ε`. -/
-theorem sq_le_two_mul_of_isεExactAnchoredSoloPeriodic
+`sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward` implies `q ^ 2 ≤ 2 * ε`. -/
+theorem sq_le_two_mul_of_isεExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {ε q : ℝ} (hε : 0 ≤ ε)
     (hq : 0 ≤ q) (hfloor : ∀ k, q ≤ hazard k)
     (hexact : IsεExactAnchoredSoloPeriodic boundaryReward ε w hazard h0 h1) :
     q ^ 2 ≤ 2 * ε := by
-  have hstep := sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic w hazard h0 h1
+  have hstep := sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward w hazard h0 h1
     hε hq hfloor h1 hexact
   linarith
 
 /-- The contrapositive: below the quantitative threshold no anchored
 solo-periodic profile is `ε`-exact. -/
-theorem not_isεExactAnchoredSoloPeriodic_of_mul_one_add_lt_sq
+theorem not_isεExactAnchoredSoloPeriodic_boundaryReward_of_mul_one_add_lt_sq
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1) {ε q Q : ℝ} (hε : 0 ≤ ε)
     (hq : 0 ≤ q) (hfloor : ∀ k, q ≤ hazard k) (hceiling : ∀ k, hazard k ≤ Q)
     (hsmall : ε * (1 + Q) < q ^ 2) :
     ¬ IsεExactAnchoredSoloPeriodic boundaryReward ε w hazard h0 h1 := by
   intro hexact
-  have := sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic w hazard h0 h1 hε hq
+  have := sq_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward w hazard h0 h1 hε hq
     hfloor hceiling hexact
   linarith
 
 /-- The exact no-go is the case `ε = 0` of the quantitative bound, and holds
 without any strict upper bound on the hazards. -/
-theorem not_isExactAnchoredSoloPeriodic_of_quantitativeGap
+theorem not_isExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} [NeZero m] (w : Fin m → Player) (hazard : Fin m → ℝ)
     (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1)
     (hpos : ∀ k, 0 < hazard k) :
     ¬ IsExactAnchoredSoloPeriodic boundaryReward w hazard h0 h1 := by
   intro hexact
   obtain ⟨j, k, hjk⟩ :=
-    exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic
+    exists_hazard_product_le_mul_one_add_of_isεExactAnchoredSoloPeriodic_boundaryReward
       w hazard h0 h1 le_rfl hexact
   nlinarith [hpos j, hpos k]
 
 /-- **The exact floor.**  At accuracy zero the one-stage floor is the quit-now
 value itself: every on-path coordinate of an exact anchored solo-periodic
 profile on this table is at least `1`.  Exactness is available only where some
-hazard vanishes (`not_isExactAnchoredSoloPeriodic_of_quantitativeGap`). -/
-theorem one_le_onPathValue_of_isExactAnchoredSoloPeriodic
+hazard vanishes (`not_isExactAnchoredSoloPeriodic_boundaryReward`). -/
+theorem one_le_onPathValue_of_isExactAnchoredSoloPeriodic_boundaryReward
     {m : ℕ} {w : Fin m → Player} {hazard : Fin m → ℝ}
     {h0 : ∀ k, 0 ≤ hazard k} {h1 : ∀ k, hazard k ≤ 1}
     (hexact : IsExactAnchoredSoloPeriodic boundaryReward w hazard h0 h1)
@@ -284,7 +285,17 @@ theorem one_le_onPathValue_of_isExactAnchoredSoloPeriodic
     1 ≤
       quittingAnchoredCyclicOnPathValue boundaryReward w hazard h0 h1 phase who := by
   simpa using
-    one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic hexact phase who
+    one_sub_le_onPathValue_of_isεExactAnchoredSoloPeriodic_boundaryReward hexact phase who
+
+/-- No exact anchored solo-periodic profile exists at any positive hazard
+vector; no strict upper hazard bound is needed. -/
+theorem not_exists_exactAnchoredSoloPeriodic_boundaryReward :
+    ¬ ∃ (m : ℕ) (_ : NeZero m) (w : Fin m → Player) (hazard : Fin m → ℝ)
+        (h0 : ∀ k, 0 ≤ hazard k) (h1 : ∀ k, hazard k ≤ 1),
+        (∀ k, 0 < hazard k) ∧
+          IsExactAnchoredSoloPeriodic boundaryReward w hazard h0 h1 := by
+  rintro ⟨m, hm, w, hazard, h0, h1, hpos, hexact⟩
+  exact not_isExactAnchoredSoloPeriodic_boundaryReward w hazard h0 h1 hpos hexact
 
 end SolanVieilleBoundary
 
