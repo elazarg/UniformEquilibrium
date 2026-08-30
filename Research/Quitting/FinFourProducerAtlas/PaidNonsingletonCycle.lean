@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
+import MathUE.Topology.FiniteLabelSubsequence
 import Research.Quitting.FinFourProducerAtlas.MinimumReturnForcedPair
 import Research.Quitting.PaidNonsingletonToggleCycle
 import Research.Quitting.SourceFaithfulMinimumLawCausalization
@@ -661,25 +662,6 @@ theorem atomAlternative
 
 end FinFourForcedPairPaidNonsingletonCycle
 
-private theorem exists_fixed_strictMono_subsequence
-    {Label : Type} [Fintype Label] (label : ℕ → Label) :
-    ∃ fixed : Label, ∃ subsequence : ℕ → ℕ,
-      StrictMono subsequence ∧ ∀ rank, label (subsequence rank) = fixed := by
-  have hfrequent : ∃ fixed : Label, ∃ᶠ rank in atTop,
-      label rank = fixed := by
-    by_contra hnone
-    push Not at hnone
-    have hall : ∀ᶠ rank in atTop, ∀ fixed : Label,
-        label rank ≠ fixed := by
-      rw [eventually_all]
-      exact hnone
-    obtain ⟨rank, hrank⟩ := hall.exists
-    exact hrank (label rank) rfl
-  obtain ⟨fixed, hfixed⟩ := hfrequent
-  obtain ⟨subsequence, hmono, hlabel⟩ :=
-    extraction_of_frequently_atTop hfixed
-  exact ⟨fixed, subsequence, hmono, hlabel⟩
-
 /-- Freeze one spectator-edge label on a strict subsequence of all actual
 forced-pair rows.  No profile or marked date is reselected before this
 finite-label extraction. -/
@@ -713,7 +695,7 @@ theorem nonempty_forcedPairPaidNonsingletonCycle
   let label : ℕ → Fin trace.segment.segment.period × Fin 4 :=
     fun index ↦ (offset index, observer index)
   obtain ⟨fixed, subsequence, hsubsequence, hlabel⟩ :=
-    exists_fixed_strictMono_subsequence label
+    Math.exists_fixed_label_on_strictMono_subsequence label
   refine ⟨{
     trace := trace
     outerSubsequence := subsequence
