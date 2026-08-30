@@ -628,9 +628,18 @@ carrier.  Given a positive global carrier debt floor and a positive finite
 origin atom,
 `exists_quittingLawTightCapNashSaturationHull_minimum_retaining_atom` gives a
 hull debt minimizer which retains the atom and satisfies the exact
-debt-weighted cone inequality.  This is `M` and `L`, but it supplies neither
-the origin hypotheses nor a downstream consumer: no minimum face, unique
-root, ancestry, timing, absorption, strict chamber, or uniform payoff follows.
+debt-weighted cone inequality.  The companion minimum layer
+(`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashMinimumFace.lean`)
+defines the hull's minimum equality level set; “face” does not assert
+convexity.  Every point on that level set minimizes debt on its complete
+terminal-law fibre.  At positive minimum debt, all Continue is the unique
+exact root against the displayed cap, and its semantic/law prefix fixes the
+point.  The off-minimum bound
+`quittingLawTightCapNashSaturationHull_rootAbsorptionMass_le_debtExcess_div`
+and its finite-chain telescopes charge exact-root absorption to debt above
+the hull minimum.  This layer is `M` and `L`, but supplies neither the origin
+hypotheses nor a downstream consumer: no Fin4 adapter, ancestry, timing,
+behavioral realization, strict chamber, or uniform payoff follows.
 
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`

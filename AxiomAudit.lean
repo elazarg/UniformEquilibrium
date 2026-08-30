@@ -756,6 +756,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Frozen.RadialScaling
 import UniformEquilibrium.Diagnostics.Quitting.Frozen.ResetCube
 import UniformEquilibrium.Diagnostics.Quitting.FullCoreDeadlockDebtBound
 import UniformEquilibrium.Diagnostics.Quitting.InducedOwnerChambers
+import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashMinimumFace
 import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashSaturationHull
 import UniformEquilibrium.Diagnostics.Quitting.MinimalFinCounterexample
 import UniformEquilibrium.Diagnostics.Quitting.OneActiveAlignedRankCollapse
