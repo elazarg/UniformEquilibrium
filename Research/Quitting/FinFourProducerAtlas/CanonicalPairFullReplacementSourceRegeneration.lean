@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FinFourProducerAtlas.CanonicalPairEndpointSourceRegeneration
+import Research.Quitting.MinimumFiberDebtTransfer
 import Research.Quitting.SourceFaithfulMinimumLawCausalization
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Endpoint.FlatCirculationSupportRankElimination
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFinFourMinimumLawFiniteAtom
@@ -294,6 +295,32 @@ structure FinFourRenewableSupportDescent
   support_ssubset : child.frontier.positiveDebtSupport ⊂
     parent.frontier.positiveDebtSupport
 
+namespace FinFourRenewableSupportDescent
+
+/-- Every recursive Fin4 renewal edge transfers at least one third of the
+killed mover's positive base debt to a named nonmover coordinate. -/
+theorem exists_nonmover_debtChange_moverDebt_div_three_le
+    {parent : FinFourRenewableMinimumSourceNode reward bound}
+    (edge : FinFourRenewableSupportDescent parent) :
+    ∃ observer, observer ≠ edge.mover.1 ∧
+      0 < quittingTerminalSemanticDebt parent.frontier.base edge.mover.1 / 3 ∧
+        quittingTerminalSemanticDebt parent.frontier.base edge.mover.1 / 3 ≤
+          quittingTerminalSemanticDebtChange parent.frontier.base
+            edge.endpoint.cluster observer := by
+  exact edge.endpoint.exists_nonmover_debtChange_moverDebt_div_three_le
+    (by simp) edge.minimumFiber
+
+/-- The arbitrary-response vanishing-leak predicate is impossible on every
+recursive minimum-fibre renewal edge. -/
+theorem not_hasVanishingHorizontalDeviationLeak
+    {parent : FinFourRenewableMinimumSourceNode reward bound}
+    (edge : FinFourRenewableSupportDescent parent) :
+    ¬ edge.endpoint.HasVanishingHorizontalDeviationLeak :=
+  edge.endpoint.not_hasVanishingHorizontalDeviationLeak_of_minimumFiber
+    edge.minimumFiber
+
+end FinFourRenewableSupportDescent
+
 namespace FinFourRenewableMinimumSourceNode
 
 /-- Build the complete child and orient it by the checked strict support drop. -/
@@ -334,35 +361,5 @@ theorem nonempty_supportDescent
     support_ssubset := hsupport }⟩
 
 end FinFourRenewableMinimumSourceNode
-
-namespace QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
-
-/-- The missing horizontal-seam control for a stronger backward compiler.
-It bounds the distortion of every non-mover's deviation gain across full
-replacement by one vanishing error.  Causalization does not prove this
-predicate. -/
-def HasVanishingHorizontalDeviationLeak
-    {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
-    {mover : {who // who ∈ frontier.positiveDebtSupport}}
-    (endpoint : FullReplacementCluster frontier mover) : Prop :=
-  ∃ error : ℕ → ℝ,
-    (∀ rank, 0 ≤ error rank) ∧ Tendsto error atTop (nhds 0) ∧
-      ∀ rank observer, observer ≠ mover.1 →
-        ∀ response : (quittingGame reward).BehaviorStrategy observer,
-          |(quittingTerminalPayoff reward
-                (Function.update
-                  (frontier.fullReplacementProfile mover
-                    (endpoint.subseq rank)) observer response) observer -
-              quittingTerminalPayoff reward
-                (frontier.fullReplacementProfile mover
-                  (endpoint.subseq rank)) observer) -
-            (quittingTerminalPayoff reward
-                (Function.update (frontier.source (endpoint.subseq rank))
-                  observer response) observer -
-              quittingTerminalPayoff reward
-                (frontier.source (endpoint.subseq rank)) observer)| ≤
-            error rank
-
-end QuittingPositiveMinimumDebtTangentFamily.FullReplacementCluster
 
 end GameTheory

@@ -31,7 +31,9 @@ the inactive debt support.
 Two consequences are recorded as statements rather than remarks.
 Coordinatewise debt nonincrease across such an endpoint is impossible, and
 the total positive part of the debt change over the other players is at least
-the mover's base debt, hence not uniformly small.
+the mover's base debt, hence not uniformly small.  More strongly, a single
+vanishing error cannot compare every nonmover behavioral deviation gain on
+the two literal profile sequences.
 
 Debt is the gap between the best-response envelope and the prescribed payoff,
 so a lower bound on debt change bounds no envelope coordinate on its own: the
@@ -46,6 +48,7 @@ namespace GameTheory
 open Filter
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
 /-- A convergent sequence of executable profiles has a strictly increasing
 subsequence whose joint terminal semantic/law points converge in the joint
@@ -82,6 +85,58 @@ theorem exists_retainedProfile_terminalSemanticLawCluster
       (fun rank ↦ quittingTerminalSemanticPair reward (profiles (subseq rank)))
       atTop (nhds limitPair) := hprofiles.comp hsubseq.tendsto_atTop
   exact tendsto_nhds_unique hjointFst hpairFst
+
+/-- A uniform comparison of every unilateral deviation gain controls the
+corresponding terminal-semantic debt coordinates.  The deviations are full
+behavior strategies; no attainment of either best-response supremum is used. -/
+theorem abs_quittingTerminalSemanticDebt_sub_le_of_forall_deviationGain_abs_le
+    (source target : (quittingGame reward).BehaviorProfile)
+    (observer : ι) {error : ℝ}
+    (hle : ∀ response : (quittingGame reward).BehaviorStrategy observer,
+      |(quittingTerminalPayoff reward
+            (Function.update target observer response) observer -
+          quittingTerminalPayoff reward target observer) -
+        (quittingTerminalPayoff reward
+            (Function.update source observer response) observer -
+          quittingTerminalPayoff reward source observer)| ≤ error) :
+    |quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward target) observer -
+        quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward source) observer| ≤ error := by
+  have htarget : quittingContinuationBestResponseValue reward target observer ≤
+      quittingTerminalPayoff reward target observer +
+        (quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward source) observer + error) := by
+    unfold quittingContinuationBestResponseValue
+    apply csSup_le (Set.range_nonempty _)
+    rintro _ ⟨response, rfl⟩
+    have hsource : quittingTerminalPayoff reward
+          (Function.update source observer response) observer ≤
+        quittingContinuationBestResponseValue reward source observer :=
+      quittingTerminalPayoff_update_le_continuationBestResponseValue
+        reward source observer response
+    have hsigned := (le_abs_self _).trans (hle response)
+    unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+    linarith
+  have hsource : quittingContinuationBestResponseValue reward source observer ≤
+      quittingTerminalPayoff reward source observer +
+        (quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward target) observer + error) := by
+    unfold quittingContinuationBestResponseValue
+    apply csSup_le (Set.range_nonempty _)
+    rintro _ ⟨response, rfl⟩
+    have htargetCap : quittingTerminalPayoff reward
+          (Function.update target observer response) observer ≤
+        quittingContinuationBestResponseValue reward target observer :=
+      quittingTerminalPayoff_update_le_continuationBestResponseValue
+        reward target observer response
+    have hsigned := (neg_le_abs _).trans (hle response)
+    unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
+    linarith
+  rw [abs_le]
+  constructor <;>
+    unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair at * <;>
+      linarith
 
 namespace QuittingPositiveMinimumDebtTangentFamily
 
@@ -120,6 +175,28 @@ namespace FullReplacementCluster
 
 variable {frontier : QuittingPositiveMinimumDebtTangentFamily reward}
   {mover : {who // who ∈ frontier.positiveDebtSupport}}
+
+/-- Uniformly vanishing distortion of every nonmover's behavioral deviation
+gain across the literal full-replacement seam. -/
+def HasVanishingHorizontalDeviationLeak
+    (endpoint : FullReplacementCluster frontier mover) : Prop :=
+  ∃ error : ℕ → ℝ,
+    (∀ rank, 0 ≤ error rank) ∧ Tendsto error atTop (nhds 0) ∧
+      ∀ rank observer, observer ≠ mover.1 →
+        ∀ response : (quittingGame reward).BehaviorStrategy observer,
+          |(quittingTerminalPayoff reward
+                (Function.update
+                  (frontier.fullReplacementProfile mover
+                    (endpoint.subseq rank)) observer response) observer -
+              quittingTerminalPayoff reward
+                (frontier.fullReplacementProfile mover
+                  (endpoint.subseq rank)) observer) -
+            (quittingTerminalPayoff reward
+                (Function.update (frontier.source (endpoint.subseq rank))
+                  observer response) observer -
+              quittingTerminalPayoff reward
+                (frontier.source (endpoint.subseq rank)) observer)| ≤
+            error rank
 
 /-- On the minimum total-debt fiber, the aggregate debt change over the
 players other than the active mover is exactly the mover's base debt. -/
@@ -242,6 +319,82 @@ theorem moverDebt_le_sum_positivePart_nonmover_debtChange
           endpoint.cluster observer) := by
   rw [← endpoint.nonmover_debtChange_sum_eq_moverDebt hminimumFiber]
   exact Finset.sum_le_sum fun observer _ ↦ le_max_right _ _
+
+/-- The exact minimum-fibre debt transfer rules out uniformly vanishing
+distortion of every nonmover's full behavioral deviation gain across the
+literal replacement seam. -/
+theorem not_hasVanishingHorizontalDeviationLeak_of_minimumFiber
+    (endpoint : FullReplacementCluster frontier mover)
+    (hminimumFiber :
+      quittingTerminalSemanticDebtSum endpoint.cluster =
+        quittingTerminalSemanticDebtSum frontier.base) :
+    ¬ endpoint.HasVanishingHorizontalDeviationLeak := by
+  rintro ⟨error, _herrorNonneg, herrorZero, hgain⟩
+  obtain ⟨observer, hobserver, hshare, hle⟩ :=
+    endpoint.exists_nonmover_debtChange_moverDebt_div_card_le hminimumFiber
+  have hsourcePair : Tendsto (fun rank ↦
+      quittingTerminalSemanticPair reward
+        (frontier.source (endpoint.subseq rank))) atTop
+      (nhds frontier.base) :=
+    frontier.source_tendsto.comp endpoint.subseq_strictMono.tendsto_atTop
+  have htargetPair : Tendsto (fun rank ↦
+      quittingTerminalSemanticPair reward
+        (frontier.fullReplacementProfile mover
+          (endpoint.subseq rank))) atTop (nhds endpoint.cluster) :=
+    endpoint.fullReplacement_tendsto
+  have hsourceDebt :=
+    (continuous_quittingTerminalSemanticDebt observer).tendsto
+      frontier.base |>.comp hsourcePair
+  have htargetDebt :=
+    (continuous_quittingTerminalSemanticDebt observer).tendsto
+      endpoint.cluster |>.comp htargetPair
+  have hdifference : Tendsto (fun rank ↦
+      quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (frontier.fullReplacementProfile mover
+              (endpoint.subseq rank))) observer -
+        quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (frontier.source (endpoint.subseq rank))) observer)
+      atTop (nhds (quittingTerminalSemanticDebtChange frontier.base
+        endpoint.cluster observer)) := by
+    simpa only [Function.comp_apply, quittingTerminalSemanticDebtChange] using
+      htargetDebt.sub hsourceDebt
+  have hdebtBound : ∀ rank,
+      |quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward
+              (frontier.fullReplacementProfile mover
+                (endpoint.subseq rank))) observer -
+          quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward
+              (frontier.source (endpoint.subseq rank))) observer| ≤
+        error rank := by
+    intro rank
+    exact abs_quittingTerminalSemanticDebt_sub_le_of_forall_deviationGain_abs_le
+      (frontier.source (endpoint.subseq rank))
+      (frontier.fullReplacementProfile mover (endpoint.subseq rank))
+      observer (hgain rank observer hobserver)
+  have habsZero : Tendsto (fun rank ↦
+      |quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward
+              (frontier.fullReplacementProfile mover
+                (endpoint.subseq rank))) observer -
+          quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward
+              (frontier.source (endpoint.subseq rank))) observer|)
+      atTop (nhds 0) := by
+    apply squeeze_zero'
+    · exact Eventually.of_forall fun _ ↦ abs_nonneg _
+    · exact Eventually.of_forall hdebtBound
+    · exact herrorZero
+  have habsLimit := hdifference.abs
+  have hzero :
+      |quittingTerminalSemanticDebtChange frontier.base
+        endpoint.cluster observer| = 0 :=
+    tendsto_nhds_unique habsLimit habsZero
+  have hchangeZero : quittingTerminalSemanticDebtChange frontier.base
+      endpoint.cluster observer = 0 := abs_eq_zero.mp hzero
+  linarith
 
 end FullReplacementCluster
 
