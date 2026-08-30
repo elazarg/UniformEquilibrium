@@ -2428,6 +2428,25 @@ in the live mathematical ledger.
   tail-oriented and do not exclude an incoming edge whose continuation is
   nonlocally outside the tube.
 
+  The restart consumers in
+  `UniformEquilibrium/Quitting/Bellman/Finite/AllContinueBasinRestartMoat.lean`
+  make the corresponding incoming-block restriction literal. A positively
+  absorbing finite exact block whose initial value lies on a compact plateau
+  inside the tube has a fixed terminal-seam floor. Summable restart seams
+  therefore make the aggregate block hazards summable, while bounded block
+  displacement converts the seam floor `rho` into the hazard floor
+  `rho / (2 * M)`. The Fin4 adapter
+  `exists_finFour_minimumFiber_uniformRestartMoat_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberRestartMoat.lean`)
+  supplies this moat over every actual minimum-fibre value. For any supplied
+  canonical exact spine,
+  `finFour_noUniformPayoff_constantAllContinue_or_limit_uniformlySeparated`
+  derives marginal-hazard summability from the no-uniform-payoff hypothesis
+  and returns either the constant all-Continue spine or a convergent limit
+  uniformly separated from the entire minimum fibre. These results do not
+  construct the exact spine, rule out either returned alternative, or prove a
+  uniform-equilibrium payoff.
+
   The approximate vanishing-incidence gap inside the tube is now quantified.
   `exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean`)
