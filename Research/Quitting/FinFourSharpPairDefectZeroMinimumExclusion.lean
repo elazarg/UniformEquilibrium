@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.FinFourHopfConcreteChambers
+import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
+import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyPairDefect
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
@@ -12,7 +13,7 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 Two independent groups of results: one about the zero-minimum regression
 structure at an arbitrary reward table, one about
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`.
 
 The first is a screen exclusion driven by a single field.  Every
 `GameTheory.FinFourMaximalRayZeroMinimumRegressions.Regression` carries
@@ -81,7 +82,7 @@ end FinFourMaximalRayZeroMinimumRegressions
 
 /-! ## The sharp table against that field, and its forced pure pair -/
 
-namespace FinFourHopfConcreteChambers
+namespace FinFourOwnerRiskyStationaryClosure
 
 open QuittingSureSetOwnerRepair
 
@@ -239,6 +240,6 @@ theorem forcedPairDebt_older_completions_not_distinct (R : ℝ) :
     forcedPairDebt_fullBindingLocalForcedPairFragment]
   simp
 
-end FinFourHopfConcreteChambers
+end FinFourOwnerRiskyStationaryClosure
 
 end GameTheory

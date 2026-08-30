@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.FinFourHopfConcreteChambers
+import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyStationaryClosure
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 /-!
@@ -17,7 +17,8 @@ that this is exactly when the pure profile "precisely `S` quits surely" is an
 exact terminal Nash equilibrium against all behavior deviations.
 
 For the reward table
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel` the test
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`
+the test
 fails at every one of the fifteen nonempty subsets of `Fin 4`, the grand
 coalition included: each such coalition carries one player whose single
 membership toggle strictly raises that player's own payoff, by a rational
@@ -25,7 +26,7 @@ constant independent of both parameters.  The empty coalition instead passes
 exactly when the singleton level is nonpositive, its only toggle being player
 three's solo exit at that level against the value `0` of never absorbing.
 
-`GameTheory.FinFourHopfConcreteChambers.isQuittingSureExitSet_sharpReward_iff`
+`GameTheory.FinFourOwnerRiskyStationaryClosure.isQuittingSureExitSet_sharpReward_iff`
 assembles the two halves into a classification holding at every real `R` and
 every real singleton level, with no hypothesis on either: the sure exit sets
 are exactly the empty coalition when that level is nonpositive, and there are
@@ -36,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-namespace FinFourHopfConcreteChambers
+namespace FinFourOwnerRiskyStationaryClosure
 
 open QuittingSureSetOwnerRepair
 
@@ -135,7 +136,8 @@ theorem exists_strict_toggle_sharpReward_of_nonempty (R singletonLevel : ℝ)
 
 /-- **No nonempty pure coalition screen holds.**  At every real `R` and every
 real singleton level, no nonempty subset of the four players is a sure exit set
-of `GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.  The
+of `GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`.
+The
 grand coalition is included. -/
 theorem not_isQuittingSureExitSet_sharpReward_of_nonempty
     (R singletonLevel : ℝ) {S : Finset Player} (hS : S.Nonempty) :
@@ -167,7 +169,7 @@ theorem isQuittingSureExitSet_sharpReward_empty_iff (R singletonLevel : ℝ) :
 
 /-- **The sure exit sets of the sharp table, classified.**  For every real `R`
 and every real singleton level, a subset of the four players is a sure exit set
-of `GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`
+of `GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`
 exactly when it is empty and that level is nonpositive.
 
 So at a positive singleton level the table has no sure exit set at all, and at
@@ -213,7 +215,8 @@ theorem exists_strict_toggle_sharpReward (R singletonLevel : ℝ)
 
 /-- **No pure coalition screen holds.**  At every positive singleton level and
 every real `R`, no subset of the four players at all is a sure exit set of
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.  The
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`.
+The
 empty coalition and the grand coalition are included. -/
 theorem not_isQuittingSureExitSet_sharpReward (R singletonLevel : ℝ)
     (hlevel : 0 < singletonLevel) (S : Finset Player) :
@@ -227,7 +230,8 @@ real `R` and every real singleton level, and for every nonempty subset `S` of
 the four players, the stationary pure profile at which exactly the members of
 `S` quit at every live history fails to be an exact terminal Nash equilibrium
 of the quitting game on
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.  The
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`.
+The
 deviation class is all behavior strategies. -/
 theorem not_isεAsymptoticNash_pureSetRoot_sharpReward_of_nonempty
     (R singletonLevel : ℝ) {S : Finset Player} (hS : S.Nonempty) :
@@ -243,7 +247,8 @@ theorem not_isεAsymptoticNash_pureSetRoot_sharpReward_of_nonempty
 `S` of the four players the stationary pure profile at which exactly the
 members of `S` quit at every live history fails to be an exact terminal Nash
 equilibrium of the quitting game on
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`.  The
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`.
+The
 deviation class is all behavior strategies. -/
 theorem not_isεAsymptoticNash_pureSetRoot_sharpReward (R singletonLevel : ℝ)
     (hlevel : 0 < singletonLevel) (S : Finset Player) :
@@ -255,6 +260,6 @@ theorem not_isεAsymptoticNash_pureSetRoot_sharpReward (R singletonLevel : ℝ)
     ((isεAsymptoticNash_pureSetRoot_iff_isQuittingSureExitSet
       (sharpReward R singletonLevel) S).mp hnash)
 
-end FinFourHopfConcreteChambers
+end FinFourOwnerRiskyStationaryClosure
 
 end GameTheory

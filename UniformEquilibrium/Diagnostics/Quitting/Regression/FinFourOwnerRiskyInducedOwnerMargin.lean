@@ -4,14 +4,16 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.FinFourSharpSureExitExclusion
-import Research.Quitting.HopfCompletionSafeChambers
+import UniformEquilibrium.Diagnostics.Quitting.InducedOwnerChambers
+import UniformEquilibrium.Quitting.Classification.Existence.SureExitChambers
+import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskySureExitExclusion
 
 /-!
 # The sharp table's induced owner margin at the persistent base `{2}`
 
 Take the persistent base `{2}` of
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel`, with
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`,
+with
 player three the single free player and players zero and one fixed on Continue.
 The induced binary game has one free coordinate, in which quitting beats
 continuing by exactly `1` — the spectator's reward rises from `singletonLevel`
@@ -26,18 +28,14 @@ point of the induced Nash carrier and at every real `R` and singleton level,
 because both rewards it is built from, `r₂({3}) = 0` and
 `r₂({2, 3}) = -39/100`, are rational constants.
 
-Owner two is the owner that *is* safe for the two older completions, by
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.rationalPureSingletonChamber`
-and
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.fullBindingPureSingletonChamber`.
-For the sharp table it is a chamber at no parameter at all.
+For the sharp table, owner two is a chamber at no parameter at all.
 
 ## The compact alternative is silent here
 
 `GameTheory.exists_uniformPayoff_or_singletonBase_pos_gap` offers a
 uniform-equilibrium payoff or a positive gap on the induced Nash carrier. For
 this table its left branch holds outright:
-`GameTheory.FinFourHopfConcreteChambers.sharpReward_exists_uniformEquilibriumPayoff`
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward_exists_uniformEquilibriumPayoff`
 supplies the payoff for every `R` in `[0, 1/37]`. A disjunction satisfied on the
 left constrains nothing on the right, so the margin below cannot be read off
 that alternative and is computed directly instead. Proving the equilibrium is
@@ -48,7 +46,7 @@ noncomputable section
 
 namespace GameTheory
 
-namespace FinFourHopfConcreteChambers
+namespace FinFourOwnerRiskyStationaryClosure
 
 open QuittingSureSetOwnerRepair
 
@@ -236,11 +234,7 @@ theorem quittingInducedOwnerNeverExcess_sharpReward_eq
 
 /-- **Owner two is a chamber for neither parameter.**  For the sharp table the
 pure singleton row owned by player two fails the sure-exit test at every real
-`R` and every real singleton level, in contrast with
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.rationalPureSingletonChamber`
-and
-`GameTheory.FinFourMaximalRayZeroMinimumRegressions.fullBindingPureSingletonChamber`,
-which hold at that same owner for the rational and full-binding completions. -/
+`R` and every real singleton level. -/
 theorem not_quittingPureSingletonChamber_sharpReward_two
     (R singletonLevel : ℝ) :
     ¬ QuittingPureSingletonChamber (sharpReward R singletonLevel) (2 : Player) :=
@@ -248,6 +242,6 @@ theorem not_quittingPureSingletonChamber_sharpReward_two
     not_isQuittingSureExitSet_sharpReward_of_nonempty R singletonLevel
       (Finset.singleton_nonempty (2 : Player)) chamber.isSureExitSet
 
-end FinFourHopfConcreteChambers
+end FinFourOwnerRiskyStationaryClosure
 
 end GameTheory

@@ -4,13 +4,15 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.FinFourHopfConcreteChambers
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
+import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
+import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyStationaryClosure
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionPayoff
 
 /-!
 # Exact roots of the sharp four-player table at its solo cap
 
-`GameTheory.FinFourHopfConcreteChambers.sharpReward R singletonLevel` is
+`GameTheory.FinFourOwnerRiskyStationaryClosure.sharpReward R singletonLevel`
+is
 evaluated here against the cap vector `![0, 0, 0, singletonLevel]`.  That
 vector is the table's own solo vector, so every cap gap
 `cap who - reward (quittingSingletonTerminal who) who` vanishes.
@@ -47,9 +49,9 @@ noncomputable section
 
 namespace GameTheory
 
-namespace FinFourSharpCapLimitRootUniqueness
+namespace FinFourOwnerRiskyCapLimitRootUniqueness
 
-open FinFourHopfConcreteChambers
+open FinFourOwnerRiskyStationaryClosure
 open Math.ProbabilityMassFunction
 
 abbrev Player := Fin 4
@@ -562,7 +564,7 @@ theorem hazard_eq_zero_of_isNash
   · exact hall.2.2.1
   · exact hall.2.2.2
 
-/-! ## Uniqueness of all Continue, and the excluded positive limit root -/
+/-! ## Existence and uniqueness of all Continue -/
 
 /-- A Boolean marginal is determined by its Quit mass. -/
 theorem pmfBool_eq_of_quitProbability_eq {first second : PMF Bool}
@@ -586,6 +588,15 @@ theorem eq_productRoot (candidate : Player → PMF Bool)
       productRoot (fun who ↦ (candidate who true).toReal) hzeroRate honeRate := by
   funext who
   exact pmfBool_eq_of_quitProbability_eq (by simp [productRoot])
+
+/-- **All Continue is an exact root Nash equilibrium at the solo cap.** -/
+theorem quittingAllContinueRoot_isNash (R singletonLevel : ℝ) :
+    IsεQuittingRootNash (sharpReward R singletonLevel)
+      (sharpCapLimit singletonLevel) 0
+      (quittingAllContinueRoot : Player → PMF Bool) := by
+  apply quittingAllContinueRoot_isZeroNash_of_singleton_le
+  intro who
+  rw [sharpCapLimit_eq_solo R singletonLevel who]
 
 /-- **All Continue is the only exact root against the solo cap**, at every `R`
 and every singleton level.  This is uniqueness at that cap as a theorem about
@@ -618,6 +629,16 @@ theorem not_sum_quittingRootQuitRates_pos (candidate : Player → PMF Bool)
   rw [eq_allContinueRoot_of_isNash candidate hnash]
   simp [quittingRootQuitRates, quittingAllContinueRoot]
 
-end FinFourSharpCapLimitRootUniqueness
+/-- **The exact root Nash equilibrium at the solo cap exists uniquely.** -/
+theorem existsUnique_isQuittingRootNash (R singletonLevel : ℝ) :
+    ∃! candidate : Player → PMF Bool,
+      IsεQuittingRootNash (sharpReward R singletonLevel)
+        (sharpCapLimit singletonLevel) 0 candidate := by
+  refine ⟨quittingAllContinueRoot,
+    quittingAllContinueRoot_isNash R singletonLevel, ?_⟩
+  intro candidate hnash
+  exact eq_allContinueRoot_of_isNash candidate hnash
+
+end FinFourOwnerRiskyCapLimitRootUniqueness
 
 end GameTheory

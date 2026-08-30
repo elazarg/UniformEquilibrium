@@ -186,13 +186,16 @@ has direct checked face signs and an exact stationary certificate, while
 showing that the coarse range hypotheses are not necessary.  This remains a
 conditional stationary class, not a producer for arbitrary quitting games.
 
-Research interfaces sharpen the supplied-data HOPF boundary.
+Integrated interfaces sharpen the supplied-data stationary-face boundary.
 `QuittingPureSingletonChamber` and
 `QuittingPurePairChamber`
-(`Research/Quitting/HopfCompletionSafeChambers.lean`) compile literal
+(`UniformEquilibrium/Quitting/Classification/Existence/SureExitChambers.lean`)
+compile literal
 sure-exit signs to exact terminal Nash profiles against arbitrary behavioral
 deviations and fixed uniform-equilibrium payoffs.
-`QuittingInducedOwnerChamber.uniformEquilibriumPayoff` delegates an actual
+`QuittingInducedOwnerChamber.uniformEquilibriumPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/InducedOwnerChambers.lean`) delegates
+an actual
 induced Nash point plus supplied owner-floor and outsider signs to the
 singleton-base all-behavior compiler.  The sharper
 `QuittingInducedOwnerNeverChamber.terminalNash` retains the actual induced
@@ -204,7 +207,8 @@ the corresponding compact alternative: a uniform payoff or one positive
 `Continue - Quit` margin on the whole induced Nash carrier.
 `QuittingRationalStationaryFaceBox` and
 `QuittingRationalStationaryFaceBox.nonempty_stationaryCertificate`
-(`Research/Quitting/StationaryFaceBoxClosure.lean`) turn supplied strict
+(`UniformEquilibrium/Quitting/Classification/Existence/RationalStationaryFaceBox.lean`)
+turn supplied strict
 rational-box face signs and a supplied `zero_to_numerator` bridge into an
 interior numerator zero and a full exact stationary behavioral certificate.
 `Math.Interval.RationalPolynomial.abs_evalReal_le_of_centeredMeanValueNumerator_le`
@@ -215,8 +219,8 @@ gradient row sum on the box, combine into a single scaled integer comparison.
 It is a generic finite checker and does not itself inhabit a table-specific
 certificate.  Finally,
 `QuittingCenteredStationaryFaceCertificate.exists_uniformEquilibriumPayoff`
-(`Research/Quitting/StationaryCenteredFaceCertificate.lean`) is its supplied-
-certificate stationary consumer.  These generic interfaces have checked
+(`UniformEquilibrium/Quitting/Classification/Existence/CenteredStationaryFaceCertificate.lean`)
+is its supplied-certificate stationary consumer.  These generic interfaces have checked
 `M/L/C` status, the centered bound through the sharp table's
 `abs_evalReal_sharpNormalizedDiagonalErrorPolynomial_le`.
 
@@ -230,11 +234,12 @@ general checkers, and neither inhabits a table-specific certificate.  No
 declaration outside that module consumes either, so they have `M/L` and
 no `C`.
 
-The sharp HOPF table is represented exactly, and its stationary payoff is
+The owner-risky stationary table is represented exactly, and its payoff is
 unconditional on the certified parameter range.  `sharpReward`,
 `sharpPreconditionerMatrix_det`, `applySharpPreconditioner_injective`, and
 `quittingFaceNumerator_sharpReward_eq_formula`
-(`Research/Quitting/FinFourHopfConcreteChambers.lean`) retain the owner-risky
+(`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskyStationaryClosure.lean`)
+retain the owner-risky
 reward family, the exact nonzero preconditioner, and the four division-free
 face polynomials; the normalized evaluation and singleton-level cancellation
 theorems are also checked.
@@ -255,6 +260,19 @@ different previously checked zero-minimum tables.  No theorem identifies
 either table with `sharpReward`, transports the maximal ray to the sharp
 family, or proves the advertised open reward neighborhood.
 
+The direct screens are also integrated.  `isQuittingSureExitSet_sharpReward_iff`
+(`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskySureExitExclusion.lean`)
+classifies every pure sure-exit set; `sharpPurePairDebt_eq`
+(`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskyPairDefect.lean`)
+gives the exact pair-debt vector; and `existsUnique_isQuittingRootNash`
+(`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskyCapLimitRootUniqueness.lean`)
+proves existence and uniqueness of all Continue at the solo cap.  The exact
+induced-owner margin and zero terminal-debt infimum live in the corresponding
+Diagnostics modules, and `checkedScreens`
+(`UniformEquilibrium/Diagnostics/Quitting/Regression/FinFourOwnerRiskyCheckedScreens.lean`)
+conjoins all of these checked facts.  None identifies this family with a HOPF
+or maximal-ray construction.
+
 Two checked facts separate the sharp completion from those two and bound how
 it can be fenced.  `forcedPairDebt_sharpLocalForcedPairFragment`
 (`Research/Quitting/FinFourSharpPairDefectZeroMinimumExclusion.lean`) computes
@@ -272,7 +290,8 @@ only for the sharp table.
 as a sure exit set, through that structure's vanishing-solo field alone.  The
 sharp solo vector is `(0, 0, 0, singletonLevel)`, and
 `isQuittingSureExitSet_sharpReward_iff`
-(`Research/Quitting/FinFourSharpSureExitExclusion.lean`) makes the empty
+(`UniformEquilibrium/Quitting/Examples/FinFourOwnerRiskySureExitExclusion.lean`)
+makes the empty
 coalition the table's only possible sure exit set and only at a nonpositive
 level, so `not_nonempty_regression_sharpReward` excludes that structure at
 every positive singleton level.  This bounds the fencing structure, not the

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Research.Quitting.MaximalRayZeroMinimumActiveRegression
 import Research.Quitting.FinFourProducerAtlas.Source
-import Research.Quitting.HopfCompletionSafeChambers
+import UniformEquilibrium.Quitting.Classification.Existence.SureExitChambers
 import MathUE.SummableChargeSurvival
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.Paths.SureExitSet

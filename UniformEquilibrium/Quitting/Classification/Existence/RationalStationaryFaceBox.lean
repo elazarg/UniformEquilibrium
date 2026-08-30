@@ -7,7 +7,7 @@ Authors: UniformEquilibrium contributors
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
 
 /-!
-# Rational stationary face-box closure
+# Rational stationary face boxes
 
 This file supplies the generic closure interface needed by exact rational
 face calculations.  A continuous, possibly preconditioned vector field has

@@ -156,6 +156,20 @@ theorem bddBelow_range_quittingTerminalDebtSum
   exact Finset.sum_nonneg fun player _ =>
     quittingTerminalDeviationDebt_nonneg reward profile player
 
+/-- The literal total-debt infimum is nonnegative. -/
+theorem quittingTerminalDebtSumInf_nonneg :
+    0 ≤ quittingTerminalDebtSumInf reward := by
+  unfold quittingTerminalDebtSumInf
+  have hrange : (Set.range (quittingTerminalDebtSum reward)).Nonempty :=
+    ⟨quittingTerminalDebtSum reward (quittingAlwaysContinueProfile reward),
+      quittingAlwaysContinueProfile reward, rfl⟩
+  apply (le_csInf_iff
+    (bddBelow_range_quittingTerminalDebtSum (reward := reward)) hrange).2
+  rintro total ⟨profile, rfl⟩
+  unfold quittingTerminalDebtSum
+  exact Finset.sum_nonneg fun player _ =>
+    quittingTerminalDeviationDebt_nonneg reward profile player
+
 /-- The total-debt infimum lies below every actual profile. -/
 theorem quittingTerminalDebtSumInf_le
     (profile : (quittingGame reward).BehaviorProfile) :
@@ -163,6 +177,27 @@ theorem quittingTerminalDebtSumInf_le
       quittingTerminalDebtSum reward profile := by
   exact csInf_le (bddBelow_range_quittingTerminalDebtSum
     (reward := reward)) ⟨profile, rfl⟩
+
+/-- One exact terminal Nash profile forces the literal total-debt infimum to
+zero. -/
+theorem quittingTerminalDebtSumInf_eq_zero_of_isZeroAsymptoticNash
+    (profile : (quittingGame reward).BehaviorProfile)
+    (hnash : (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0 profile) :
+    quittingTerminalDebtSumInf reward = 0 := by
+  apply le_antisymm
+  · calc
+      quittingTerminalDebtSumInf reward ≤
+          quittingTerminalDebtSum reward profile :=
+        quittingTerminalDebtSumInf_le profile
+      _ = quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward profile) :=
+        quittingTerminalDebtSum_eq_terminalSemanticDebtSum profile
+      _ ≤ Fintype.card ι * (0 : ℝ) :=
+        terminalSemanticDebtSum_le_card_mul_of_isEpsilonAsymptoticNash
+          reward profile 0 hnash
+      _ = 0 := by ring
+  · exact quittingTerminalDebtSumInf_nonneg
 
 /-- The literal-profile debt infimum equals the value of every global
 minimum on the compact terminal-semantic carrier.  Passing to the closure

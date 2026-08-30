@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.StationaryFaceBoxClosure
+import UniformEquilibrium.Quitting.Classification.Existence.RationalStationaryFaceBox
 
 /-!
 # Centered error certificates for stationary face boxes
