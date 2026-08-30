@@ -10,6 +10,7 @@ import UniformEquilibrium.Diagnostics.Uniform.HiddenFiberSpanCounterexample
 import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
 import UniformEquilibrium.Diagnostics.PrivateRecommendationTargetAbsorbingLift
 import UniformEquilibrium.Diagnostics.Quitting.All
+import UniformEquilibrium.Diagnostics.Quitting.FinFourLawTightCapNashMinimumFiberCollapse
 
 /-!
 # Integrated diagnostics umbrella
