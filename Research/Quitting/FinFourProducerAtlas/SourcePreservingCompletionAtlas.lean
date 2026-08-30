@@ -37,27 +37,6 @@ variable {entrance : FinFourSourcePreservingSingletonEntrance source}
 
 /-! ## Elementary sequence selection -/
 
-/-- A finite-valued sequence is constant along one strict subsequence. -/
-private theorem exists_fixed_strictMono_subsequence
-    {Label : Type} [Fintype Label] (label : ℕ → Label) :
-    ∃ fixed : Label, ∃ subsequence : ℕ → ℕ,
-      StrictMono subsequence ∧
-        ∀ rank, label (subsequence rank) = fixed := by
-  have hfrequent : ∃ fixed : Label, ∃ᶠ rank in atTop,
-      label rank = fixed := by
-    by_contra hnone
-    push Not at hnone
-    have hall : ∀ᶠ rank in atTop, ∀ fixed : Label,
-        label rank ≠ fixed := by
-      rw [eventually_all]
-      exact hnone
-    obtain ⟨rank, hrank⟩ := hall.exists
-    exact hrank (label rank) rfl
-  obtain ⟨fixed, hfixed⟩ := hfrequent
-  obtain ⟨subsequence, hmono, hlabel⟩ :=
-    extraction_of_frequently_atTop hfixed
-  exact ⟨fixed, subsequence, hmono, hlabel⟩
-
 /-- Priority classification of a nonnegative real sequence.  The first arm
 extracts one uniformly positive subsequence.  If no positive threshold occurs
 frequently, the original sequence tends to zero.  No converse exclusivity is
@@ -346,7 +325,7 @@ theorem nonempty
     Nonempty (FinFourStabilizedForcedPairStream parent) := by
   obtain ⟨forced⟩ := FinFourSourcePreservingForcedPairStream.nonempty parent
   obtain ⟨fixed, embedding, hembedding, hfixed⟩ :=
-    exists_fixed_strictMono_subsequence forced.label
+    Math.exists_fixed_label_on_strictMono_subsequence forced.label
   exact ⟨{
     stream := forced
     embedding := embedding

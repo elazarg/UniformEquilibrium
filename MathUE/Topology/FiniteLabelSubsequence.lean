@@ -105,4 +105,27 @@ theorem not_tendsto_zero_of_positive_lower_bound_on_strict_subsequence
   obtain ⟨n, hn⟩ := hsmall.exists
   exact (not_lt_of_ge (hbound n)) hn
 
+/-- Every sequence in a finite type is constant along one strict
+subsequence. -/
+theorem exists_fixed_label_on_strictMono_subsequence
+    {Label : Type} [Fintype Label] (label : ℕ → Label) :
+    ∃ fixed : Label, ∃ subsequence : ℕ → ℕ,
+      StrictMono subsequence ∧
+        ∀ rank, label (subsequence rank) = fixed := by
+  classical
+  have hfrequent : ∃ fixed : Label, ∃ᶠ rank in atTop,
+      label rank = fixed := by
+    by_contra hnone
+    push Not at hnone
+    have hall : ∀ᶠ rank in atTop, ∀ fixed : Label,
+        label rank ≠ fixed := by
+      rw [eventually_all]
+      exact hnone
+    obtain ⟨rank, hrank⟩ := hall.exists
+    exact hrank (label rank) rfl
+  obtain ⟨fixed, hfixed⟩ := hfrequent
+  obtain ⟨subsequence, hmono, hlabel⟩ :=
+    extraction_of_frequently_atTop hfixed
+  exact ⟨fixed, subsequence, hmono, hlabel⟩
+
 end Math
