@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import Research.Quitting.CensoredFiniteClockOperationalEffect
-import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingNash
+import UniformEquilibrium.Diagnostics.Quitting.CensoredFiniteClockOperationalEffect
+import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingRealization
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ContinuePrefixAtomAccess
 
 /-!
@@ -38,16 +38,6 @@ namespace GameTheory
 open Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-! ## The all-Continue reference graft -/
-
-/-- The finite timing word grafted onto the all-Continue tail. -/
-def quittingRetainedTailFiniteTimingHardGraft
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : List (ι → PMF Bool)) :
-    (quittingGame reward).BehaviorProfile :=
-  quittingRetainedTailFiniteTimingGraft reward roots
-    (quittingAlwaysContinueProfile reward)
 
 /-! ## Prescribed payoff -/
 

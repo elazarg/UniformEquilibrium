@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import Research.Quitting.FiniteDeadlineAdjacentTotalVariation
-import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingNash
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineAdjacentTotalVariation
+import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingRealization
 
 /-!
 # Operational quotients for censored finite clocks
@@ -471,6 +471,18 @@ structure FiniteClockOperationalObservables
   never : ι → ℝ
   payoff : ι → ℝ
   gain : ι → action → ℝ
+
+omit [Fintype ι] [DecidableEq ι] in
+@[ext]
+theorem FiniteClockOperationalObservables.ext
+    {action : Type}
+    {first second : FiniteClockOperationalObservables ι action}
+    (hnever : first.never = second.never)
+    (hpayoff : first.payoff = second.payoff)
+    (hgain : first.gain = second.gain) : first = second := by
+  cases first
+  cases second
+  simp_all
 
 /-- Operational pseudodistance between two finite clocks.  It is the maximum
 of the exact three normalized coordinate discrepancies from the reviewed
@@ -943,6 +955,98 @@ def quittingFiniteRootWordOperationalEffectDistance
     (quittingFiniteRootWordOperationalObservables reward length first)
     (quittingFiniteRootWordOperationalObservables reward length second)
 
+/-- The chronological root family realized by one mixed finite timing law. -/
+def quittingFiniteDeadlineMixedTimingRootWord
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deadline : ℕ)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
+    Fin deadline → ι → PMF Bool :=
+  fun date ↦ quittingProfileLiveRoot reward
+    (quittingFiniteDeadlineTimingProfile reward deadline mixed) date.val
+
+/-- The root-word operational observables reconstructed from a mixed timing
+law are exactly its normal-form Never, payoff, and pure-gain observables. -/
+theorem quittingFiniteRootWordOperationalObservables_mixedTiming_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deadline : ℕ)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
+    quittingFiniteRootWordOperationalObservables reward deadline
+        (quittingFiniteDeadlineMixedTimingRootWord reward deadline mixed) =
+      quittingFiniteDeadlineOperationalObservables reward deadline mixed := by
+  apply FiniteClockOperationalObservables.ext
+  · funext player
+    exact quittingRetainedTailMixedTimingRootStack_ownSurvival_eq_none
+      reward deadline mixed player
+  · funext player
+    have hprofile := congrArg
+      (fun profile ↦ quittingTerminalPayoff reward profile player)
+      (quittingRetainedTailMixedTimingHardGraft_eq_finiteDeadlineTimingProfile
+        reward deadline mixed)
+    change quittingTerminalPayoff reward
+        (quittingFiniteRootWordHardProfile reward deadline
+          (quittingFiniteDeadlineMixedTimingRootWord reward deadline mixed))
+        player = _
+    change quittingTerminalPayoff reward
+        (quittingRetainedTailFiniteTimingHardGraft reward
+          (quittingRetainedTailMixedTimingRootStack reward deadline mixed))
+        player = _
+    rw [hprofile, quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU]
+    rfl
+  · funext player action
+    have hprofile :=
+      quittingRetainedTailMixedTimingHardGraft_eq_finiteDeadlineTimingProfile
+        reward deadline mixed
+    change quittingPureTimeDeviationPayoff reward
+          (quittingRetainedTailFiniteTimingHardGraft reward
+            (quittingRetainedTailMixedTimingRootStack reward deadline mixed))
+          player (quittingFiniteRootWordActionTime action) -
+        quittingTerminalPayoff reward
+          (quittingRetainedTailFiniteTimingHardGraft reward
+            (quittingRetainedTailMixedTimingRootStack reward deadline mixed))
+          player = _
+    rw [hprofile]
+    change quittingPureTimeDeviationPayoff reward
+          (quittingFiniteDeadlineTimingProfile reward deadline mixed)
+          player (quittingFiniteRootWordActionTime action) -
+        quittingTerminalPayoff reward
+          (quittingFiniteDeadlineTimingProfile reward deadline mixed) player =
+      (quittingFiniteDeadlineTimingGame reward deadline).mixedGain
+        mixed player action
+    unfold KernelGame.mixedGain
+    rw [← quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU]
+    have hdeviation :=
+      quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU
+        reward deadline mixed player action
+    have hupdated :=
+      quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
+        reward deadline (Function.update mixed player (PMF.pure action)) player
+    have hdeviation' := hdeviation.trans hupdated.symm
+    have hbase := quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
+      reward deadline mixed player
+    rw [← hbase]
+    apply sub_left_inj.mpr
+    unfold quittingPureTimeDeviationPayoff at ⊢
+    cases action with
+    | none => exact hdeviation'
+    | some date => exact hdeviation'
+
+/-- Operational effect distance is unchanged by the exact mixed-law to
+finite-root-word reconstruction. -/
+theorem quittingFiniteRootWordOperationalEffectDistance_mixedTiming_eq
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (bound : ℝ) (deadline : ℕ)
+    (first second : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
+    quittingFiniteRootWordOperationalEffectDistance reward bound deadline
+        (quittingFiniteDeadlineMixedTimingRootWord reward deadline first)
+        (quittingFiniteDeadlineMixedTimingRootWord reward deadline second) =
+      quittingFiniteDeadlineOperationalEffectDistance reward bound deadline
+        first second := by
+  unfold quittingFiniteRootWordOperationalEffectDistance
+    quittingFiniteDeadlineOperationalEffectDistance
+  rw [quittingFiniteRootWordOperationalObservables_mixedTiming_eq,
+    quittingFiniteRootWordOperationalObservables_mixedTiming_eq]
+
 /-- Zero root-word operational effect gives equality of every pass
 coefficient. -/
 theorem quittingFiniteRootWord_never_eq_of_effectDistance_eq_zero
@@ -991,65 +1095,6 @@ theorem quittingFiniteRootWord_gain_eq_of_effectDistance_eq_zero
         player action := by
   exact ((finiteClockOperationalEffectDistance_eq_zero_iff hbound _ _).mp
     hzero).2.2 player action
-
-/-! ## Pass-coordinate reconstruction -/
-
-omit [DecidableEq ι] in
-/-- Joint pass mass is the product of the playerwise `Never` coefficients. -/
-theorem quittingLiteralRootStackJointSurvival_eq_prod_ownSurvival
-    (roots : List (ι → PMF Bool)) :
-    quittingLiteralRootStackJointSurvival roots =
-      ∏ player, quittingLiteralRootStackOwnSurvival roots player := by
-  induction roots with
-  | nil =>
-      simp [quittingLiteralRootStackJointSurvival,
-        quittingLiteralRootStackOwnSurvival]
-  | cons root roots ih =>
-      change quittingStationaryContinueMass root *
-          quittingLiteralRootStackJointSurvival roots =
-        ∏ player, (root player false).toReal *
-          quittingLiteralRootStackOwnSurvival roots player
-      rw [quittingStationaryContinueMass_eq_prod_continueProbability, ih,
-        Finset.prod_mul_distrib]
-
-private theorem quittingRootOpponentContinueMass_eq_prod_erase
-    (root : ι → PMF Bool) (player : ι) :
-    quittingRootOpponentContinueMass root player =
-      ∏ other ∈ Finset.univ.erase player, (root other false).toReal := by
-  classical
-  rw [quittingRootOpponentContinueMass,
-    quittingStationaryContinueMass_eq_prod_continueProbability]
-  have hfunction :
-      (fun other =>
-        ((Function.update root player (PMF.pure false)) other false).toReal) =
-        Function.update (fun other => (root other false).toReal) player 1 := by
-    funext other
-    by_cases hother : other = player
-    · subst other
-      simp
-    · simp [Function.update_of_ne hother]
-  rw [hfunction, Finset.prod_update_of_mem (Finset.mem_univ player)]
-  simp only [one_mul, Finset.sdiff_singleton_eq_erase]
-
-/-- Player-deleted pass mass is the product of every other player's `Never`
-coefficient. -/
-theorem quittingLiteralRootStackOpponentSurvival_eq_prod_ownSurvival_erase
-    (roots : List (ι → PMF Bool)) (player : ι) :
-    quittingLiteralRootStackOpponentSurvival roots player =
-      ∏ other ∈ Finset.univ.erase player,
-        quittingLiteralRootStackOwnSurvival roots other := by
-  induction roots with
-  | nil =>
-      simp [quittingLiteralRootStackOpponentSurvival,
-        quittingLiteralRootStackOwnSurvival]
-  | cons root roots ih =>
-      change quittingRootOpponentContinueMass root player *
-          quittingLiteralRootStackOpponentSurvival roots player =
-        ∏ other ∈ Finset.univ.erase player,
-          (root other false).toReal *
-            quittingLiteralRootStackOwnSurvival roots other
-      rw [quittingRootOpponentContinueMass_eq_prod_erase, ih,
-        Finset.prod_mul_distrib]
 
 /-- The hard `Never` deviation is the literal force-Continue pass profile. -/
 theorem quittingFiniteRootWordHardProfile_update_never_eq_pass
@@ -1301,5 +1346,33 @@ theorem finiteClockOperationalEffectDistance_zero_graftSemantic_eq
     · exact ⟨choice,
         quittingFiniteRootWord_graft_pureTime_eq_of_effectDistance_eq_zero
           reward hbound length first second tail hzero player choice⟩
+
+/-- Zero mixed-law operational distance gives equality of the full terminal
+semantic pair of the two actual retained-tail grafts.  This is a semantic
+quotient statement; terminal-law equality is not asserted. -/
+theorem quittingFiniteDeadlineOperationalEffectDistance_zero_retainedTailSemantic_eq
+    [Nonempty ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {bound : ℝ} (hbound : 0 < bound) (deadline : ℕ)
+    (first second : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
+    (hzero : quittingFiniteDeadlineOperationalEffectDistance
+      reward bound deadline first second = 0)
+    (tail : (quittingGame reward).BehaviorProfile) :
+    quittingTerminalSemanticPair reward
+        (quittingRetainedTailMixedTimingProfile reward deadline first tail) =
+      quittingTerminalSemanticPair reward
+        (quittingRetainedTailMixedTimingProfile reward deadline second tail) := by
+  have hrootZero : quittingFiniteRootWordOperationalEffectDistance
+      reward bound deadline
+        (quittingFiniteDeadlineMixedTimingRootWord reward deadline first)
+        (quittingFiniteDeadlineMixedTimingRootWord reward deadline second) = 0 := by
+    rw [quittingFiniteRootWordOperationalEffectDistance_mixedTiming_eq]
+    exact hzero
+  have hsemantic := finiteClockOperationalEffectDistance_zero_graftSemantic_eq
+    reward hbound deadline
+      (quittingFiniteDeadlineMixedTimingRootWord reward deadline first)
+      (quittingFiniteDeadlineMixedTimingRootWord reward deadline second)
+      hrootZero tail
+  exact hsemantic
 
 end GameTheory

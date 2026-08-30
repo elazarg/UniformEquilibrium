@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import Research.Quitting.FiniteDeadlineProjectiveCompatibility
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineProjectiveCompatibility
 
 /-!
 # Vanishing adjacent distance along a selected family of deadlines

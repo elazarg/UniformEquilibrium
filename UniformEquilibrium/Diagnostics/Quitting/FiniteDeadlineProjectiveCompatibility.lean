@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors.
 -/
 
-import Research.Quitting.CensoredFiniteClockOperationalEffect
+import UniformEquilibrium.Diagnostics.Quitting.CensoredFiniteClockOperationalEffect
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-!

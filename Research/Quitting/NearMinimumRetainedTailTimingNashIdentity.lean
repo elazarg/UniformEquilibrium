@@ -6,6 +6,7 @@ Authors: UniformEquilibrium contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingGame
 import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingNash
+import UniformEquilibrium.Diagnostics.Quitting.RetainedTailFiniteTimingRealization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticFinFourStrictMinimumPlateauIsolation
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
@@ -40,68 +41,6 @@ namespace GameTheory
 open Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-! ## The missing retained-tail normal-form source seam -/
-
-/-- Pure root word represented by one finite timing-action profile.  A player
-Quits at exactly its selected finite date and Continues at every displayed
-date when it selects `Never`. -/
-def quittingRetainedTailPureTimingRootStack
-    (deadline : ℕ)
-    (choices : ι → QuittingFiniteDeadlineTimingAction deadline) :
-    List (ι → PMF Bool) :=
-  List.ofFn fun date who => PMF.pure (decide (choices who = some date))
-
-/-- The finite normal-form timing game whose `Never` action resumes one fixed
-actual behavioral tail.  This is distinct from
-`quittingFiniteDeadlineTimingGame`, whose `Never` payoff is zero. -/
-abbrev quittingRetainedTailFiniteTimingGame
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ)
-    (tail : (quittingGame reward).BehaviorProfile) : KernelGame ι :=
-  KernelGame.ofPureEU (fun _ => QuittingFiniteDeadlineTimingAction deadline)
-    (fun choices who => quittingTerminalPayoff reward
-      (quittingRetainedTailFiniteTimingGraft reward
-        (quittingRetainedTailPureTimingRootStack deadline choices) tail) who)
-
-/-- The retained-tail timing game has the same finite outcome carrier as its
-finite timing-action profile space. -/
-instance quittingRetainedTailFiniteTimingGame_finiteOutcome
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ)
-    (tail : (quittingGame reward).BehaviorProfile) :
-    Finite (quittingRetainedTailFiniteTimingGame reward deadline tail).Outcome := by
-  unfold quittingRetainedTailFiniteTimingGame KernelGame.ofPureEU
-  infer_instance
-
-/-- The finite hazard word carried by independent mixed timing laws.  The
-missing source theorem must identify the retained-tail normal-form mixed
-payoff with the graft of this word, and then turn positive joint `Never` mass
-into an exact credible suffix stack. -/
-def quittingRetainedTailMixedTimingRootStack
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ)
-    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
-    List (ι → PMF Bool) :=
-  List.ofFn fun date : Fin deadline => quittingProfileLiveRoot reward
-    (quittingFiniteDeadlineTimingProfile reward deadline mixed) date.val
-
-omit [Fintype ι] [DecidableEq ι] in
-@[simp] theorem quittingRetainedTailPureTimingRootStack_length
-    (deadline : ℕ)
-    (choices : ι → QuittingFiniteDeadlineTimingAction deadline) :
-    (quittingRetainedTailPureTimingRootStack deadline choices).length =
-      deadline := by
-  simp [quittingRetainedTailPureTimingRootStack]
-
-omit [DecidableEq ι] in
-@[simp] theorem quittingRetainedTailMixedTimingRootStack_length
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ)
-    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
-    (quittingRetainedTailMixedTimingRootStack reward deadline mixed).length =
-      deadline := by
-  simp [quittingRetainedTailMixedTimingRootStack]
 
 /-- Positive Quit support and exact endpoint Nash force a quantitative amount
 of opponent absorption when the prescribed continuation dominates the

@@ -1490,7 +1490,7 @@ projective boundary.  The generic declarations
 (`MathUE/PMFProduct/TotalVariation.lean`) control finite independent products
 and identify equality after coordinatewise operational observation.
 
-In `Research/Quitting/FiniteDeadlineAdjacentTotalVariation.lean`,
+In `UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineAdjacentTotalVariation.lean`,
 `QuittingFiniteDeadlineNashProfile.semanticDebt_eq_boundaryGain_pospart`
 identifies the unrestricted behavioral debt of a finite-deadline Nash profile
 with the positive part of its first excluded pure-time gain.  Literal timing
@@ -1506,7 +1506,8 @@ common-action gains, while a gain change only yields some changed observed
 marginal through `exists_actionTime_map_ne_of_mixedGain_ne`.
 
 The censor and compatibility layers now sharpen this boundary.  In
-`Research/Quitting/CensoredFiniteClockOperationalEffect.lean`, censoring is a
+`UniformEquilibrium/Diagnostics/Quitting/CensoredFiniteClockOperationalEffect.lean`,
+censoring is a
 literal retraction and is nonexpansive in total variation;
 `pmfTV_quittingFiniteDeadline_include_censor_eq_boundary` identifies its exact
 erased boundary mass, and
@@ -1514,15 +1515,18 @@ erased boundary mass, and
 participation from old-clock reshuffling.  The generic
 `finiteClockOperationalEffectDistance` is a pseudometric on `Never`, hard
 payoff, and hard pure-action-gain observables.
-`finiteClockOperationalEffectDistance_zero_graftSemantic_eq` proves that zero
-distance between literal root words preserves the complete terminal semantic
-pair behind every common behavioral tail.  This is checked `M/L`, but no
-theorem identifies the separate mixed-law gauge with that root-word gauge or
-constructs the packet's explicit null regression, positive-minimum paid edge,
-or quantitative participant dispatch.
+`quittingFiniteRootWordOperationalObservables_mixedTiming_eq` and
+`quittingFiniteRootWordOperationalEffectDistance_mixedTiming_eq` identify the
+mixed-law gauge with the literal root-word gauge exactly.
+`quittingFiniteDeadlineOperationalEffectDistance_zero_retainedTailSemantic_eq`
+therefore preserves the complete terminal semantic pair behind every common
+behavioral tail at zero mixed-law distance.  This is checked `M/L`; it does not
+assert terminal-law equality or construct the packet's explicit null
+regression, positive-minimum paid edge, or quantitative participant dispatch.
 
 `QuittingFiniteDeadlineCompatibleNashFamily`
-(`Research/Quitting/FiniteDeadlineProjectiveCompatibility.lean`) retains one
+(`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineProjectiveCompatibility.lean`)
+retains one
 exact Nash law at every finite deadline and literal successor censoring.
 `neverMass_succ_add_boundaryMass`, `boundaryMass_tendsto_zero`, and
 `adjacentTV_eq_sum_boundaryMass` give the exact Never telescope and vanishing
@@ -1536,7 +1540,8 @@ is the compatible-family specialization.
 That specialization is sharpened from existence of some payoff to an
 identified profile.
 `QuittingFiniteDeadlineCompatibleNashFamily.isZeroAsymptoticNash_limitProfile`
-(`Research/Quitting/ProjectiveTimingInverseLimit.lean`) determines one
+(`UniformEquilibrium/Diagnostics/Quitting/ProjectiveTimingInverseLimit.lean`)
+determines one
 stopping law on the compactified times for each player whose deadline
 truncations are exactly the supplied marginals, and proves the independent
 product of those laws an exact terminal Nash profile against every unilateral
@@ -1544,7 +1549,8 @@ behavioral deviation, at error `0`.
 `QuittingFiniteDeadlineCompatibleNashFamily.isUniformEquilibriumPayoff_limitProfile`
 reads off its prescribed payoff.
 `quittingGame_isUniformEquilibriumPayoff_of_adjacentTV_tendsto`
-(`Research/Quitting/FiniteDeadlineVanishingAdjacentDistance.lean`) is the
+(`UniformEquilibrium/Diagnostics/Quitting/FiniteDeadlineVanishingAdjacentDistance.lean`)
+is the
 matching consumer over an arbitrary index filter: consecutive deadline Nash
 pairs whose adjacent distance tends to zero, with realized prescribed payoffs
 tending to one target, make that target uniform.  Cofinality of the selected
@@ -1580,14 +1586,20 @@ Nash root against the tail's prescribed payoff to be all Continue.
 `nearMinimum_literalExactRootStack_eq_replicate_allContinue` propagates this
 identity backward through a supplied exact credible-suffix root stack.
 
-The actual mixed-law recursion is checked in
-`Research/Quitting/RetainedTailFiniteTimingRecursion.lean`.
+The actual mixed-law realization is checked in
+`UniformEquilibrium/Diagnostics/Quitting/RetainedTailFiniteTimingRealization.lean`.
 `quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff` keeps the fixed
 behavioral tail literal in the finite normal form.
 `retainedTimingLawTail_isNash_of_isNash_of_positiveContinue` transfers Nash
 optimality to every conditioned suffix, while
 `retainedTimingCurrentRoot_isZeroEndpointNash_of_isNash` exposes the exact
-current endpoint root.  Consequently
+current endpoint root.  The realization additionally proves literal hard
+profile reconstruction, exact retained-graft payoff, finite-date and pass
+compatibility, and
+`isQuittingRetainedTailFiniteTimingNash_of_mixedNash` without a positivity
+hypothesis; positive `Never` mass is used only by
+`isQuittingLiteralExactRootStack_of_retainedTailMixedNash` to retain credible
+conditional suffixes.  Consequently
 `nearMinimum_retainedTailFiniteTimingNash_eq_pureNeverProfile` proves that any
 near-minimum mixed Nash law with positive `Never` mass in every marginal is
 literally pure `Never`.  This complete generic identity compiler has `M/L`

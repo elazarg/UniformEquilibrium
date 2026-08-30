@@ -5,7 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import MathUE.Topology.CompactDependentFinitePrefixRelation
-import Research.Quitting.FiniteDeadlineProjectiveCompatibility
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineProjectiveCompatibility
 
 /-!
 # Finite compatible timing-Nash chains

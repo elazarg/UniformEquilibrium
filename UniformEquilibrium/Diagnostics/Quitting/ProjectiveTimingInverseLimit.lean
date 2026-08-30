@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import Research.Quitting.FiniteDeadlineProjectiveCompatibility
+import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineProjectiveCompatibility
 
 /-!
 # Inverse limit of projectively compatible finite timing laws
@@ -937,4 +937,3 @@ theorem isUniformEquilibriumPayoff_limitProfile
 end QuittingFiniteDeadlineCompatibleNashFamily
 
 end GameTheory
-
