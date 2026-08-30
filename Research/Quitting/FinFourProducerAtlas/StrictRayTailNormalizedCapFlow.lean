@@ -82,6 +82,20 @@ theorem root_apply
     flow.forward.root time = packet.rayRoot time := by
   rw [flow.root_eq]
 
+/-- The root retained by the actual strict ray is maximal in absorption among
+all exact roots at that same finite cap. -/
+theorem root_maximal
+    (flow : FinFourStrictRayForwardExactCapTail packet) (time : ℕ)
+    (candidate : Fin 4 → PMF Bool)
+    (hcandidate : IsεQuittingRootNash reward
+      (flow.forward.pair time).2 0 candidate) :
+    quittingRootAbsorptionMass candidate ≤
+      quittingRootAbsorptionMass (flow.forward.root time) := by
+  rw [flow.pair_apply] at hcandidate
+  rw [flow.root_apply]
+  exact quittingMaximalCapSemanticRoot_maximal reward
+    (packet.rayPair time) candidate hcandidate
+
 theorem source_eq
     (flow : FinFourStrictRayForwardExactCapTail packet) :
     flow.forward.pair 0 = packet.raySource := by

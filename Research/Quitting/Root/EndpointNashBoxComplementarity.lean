@@ -5,7 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import Research.Topology.ModTwoBoxComplementarityParity
-import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import MathUE.PMFProduct.Bool
+import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 
 /-!
 # Endpoint Nash as box complementarity
@@ -20,9 +21,95 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Set
+open Math Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+/-- The Boolean simplex point whose `true` coordinate is a unit-interval
+coordinate. -/
+private def quittingUnitCubeRootSimplex (point : UnitCube ι) :
+    QuittingRootSimplex ι :=
+  fun who => ⟨fun action => if action then point who else 1 - point who, by
+    constructor
+    · intro action
+      cases action <;> simp only [Bool.false_eq_true, ↓reduceIte, eq_self]
+      · exact sub_nonneg.mpr (point who).property.2
+      · exact (point who).property.1
+    · simp⟩
+
+/-- Canonical Boolean product root represented by a unit-cube point. -/
+private def quittingUnitCubeRoot (point : UnitCube ι) : ι → PMF Bool :=
+  fun who => bernoulliBoolEquiv (point who)
+
+omit [DecidableEq ι] in
+@[simp] private theorem quittingUnitCubeRoot_true_toReal
+    (point : UnitCube ι) (who : ι) :
+    ((quittingUnitCubeRoot point who) true).toReal = (point who : ℝ) := by
+  simp [quittingUnitCubeRoot]
+
+omit [DecidableEq ι] in
+@[simp] private theorem quittingUnitCubeRoot_false_toReal
+    (point : UnitCube ι) (who : ι) :
+    ((quittingUnitCubeRoot point who) false).toReal = 1 - (point who : ℝ) := by
+  simp [quittingUnitCubeRoot]
+
+/-- The canonical coordinate-preserving equivalence between unit-cube points
+and Boolean product roots. -/
+private def quittingUnitCubeRootEquiv : UnitCube ι ≃ (ι → PMF Bool) :=
+  Equiv.piCongrRight fun _ => bernoulliBoolEquiv
+
+omit [DecidableEq ι] in
+private theorem quittingUnitCubeRoot_eq_rootOfSimplex
+    (point : UnitCube ι) :
+    quittingUnitCubeRoot point =
+      quittingRootOfSimplex (quittingUnitCubeRootSimplex point) := by
+  funext who
+  apply toVector_injective
+  funext action
+  cases action
+  · change ((quittingUnitCubeRoot point who) false).toReal =
+      ((quittingRootOfSimplex (quittingUnitCubeRootSimplex point) who) false).toReal
+    rw [quittingUnitCubeRoot_false_toReal,
+      quittingRootOfSimplex_apply_toReal]
+    rfl
+  · change ((quittingUnitCubeRoot point who) true).toReal =
+      ((quittingRootOfSimplex (quittingUnitCubeRootSimplex point) who) true).toReal
+    rw [quittingUnitCubeRoot_true_toReal,
+      quittingRootOfSimplex_apply_toReal]
+    rfl
+
+private theorem continuous_quittingUnitCubeRootEndpointDifference
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) (who : ι) :
+    Continuous (fun point : UnitCube ι =>
+      quittingRootEndpointDifference reward cap (quittingUnitCubeRoot point) who) := by
+  have hroot : Continuous (fun point : UnitCube ι =>
+      quittingUnitCubeRootSimplex point) := by
+    apply continuous_pi
+    intro player
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro action
+    have hcoordinate : Continuous (fun point : UnitCube ι =>
+        (point player : ℝ)) :=
+      continuous_subtype_val.comp (continuous_apply player)
+    cases action
+    · exact continuous_const.sub hcoordinate
+    · exact hcoordinate
+  have hsimplex : Continuous (fun point : UnitCube ι =>
+      (cap, quittingUnitCubeRootSimplex point)) :=
+    continuous_const.prodMk hroot
+  let endpoint : Payoff ι × QuittingRootSimplex ι → ℝ := fun point =>
+    quittingRootEndpointDifference reward point.1
+      (quittingRootOfSimplex point.2) who
+  have hcontinuous : Continuous (fun point : UnitCube ι =>
+      quittingRootEndpointDifference reward cap
+        (quittingRootOfSimplex (quittingUnitCubeRootSimplex point)) who) := by
+    change Continuous (endpoint ∘ fun point =>
+      (cap, quittingUnitCubeRootSimplex point))
+    exact (continuous_quittingRootEndpointDifference_simplex reward who).comp
+      hsimplex
+  simpa only [quittingUnitCubeRoot_eq_rootOfSimplex] using hcontinuous
 
 /-- A coordinate-preserving equivalence between the real unit cube and
 Boolean PMF roots, together with the quitting endpoint gain field. -/
@@ -38,6 +125,20 @@ structure QuittingEndpointNashBoxBridge
   gain_eq : ∀ point who,
     problem.gain point who =
       quittingRootEndpointDifference reward cap (rootEquiv point) who
+
+/-- The canonical endpoint-Nash complementarity bridge exists for every
+finite quitting reward table and every declared cap. -/
+noncomputable def quittingEndpointNashBoxBridge
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) : QuittingEndpointNashBoxBridge reward cap where
+  problem := {
+    gain := fun point who =>
+      quittingRootEndpointDifference reward cap (quittingUnitCubeRoot point) who
+    continuous_gain := continuous_quittingUnitCubeRootEndpointDifference reward cap }
+  rootEquiv := quittingUnitCubeRootEquiv
+  quitProbability_eq := quittingUnitCubeRoot_true_toReal
+  continueProbability_eq := quittingUnitCubeRoot_false_toReal
+  gain_eq := fun _ _ => rfl
 
 namespace QuittingEndpointNashBoxBridge
 

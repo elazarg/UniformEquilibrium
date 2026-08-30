@@ -40,6 +40,48 @@ def quittingTerminalSemanticDebtSum
     (pair : QuittingTerminalSemanticPair ι) : ℝ :=
   ∑ who, quittingTerminalSemanticDebt pair who
 
+omit [DecidableEq ι] in
+/-- Total terminal semantic debt is Lipschitz for the coordinatewise
+prescribed-payoff/cap `L¹` distance. -/
+theorem abs_quittingTerminalSemanticDebtSum_sub_le
+    (first second : QuittingTerminalSemanticPair ι) :
+    |quittingTerminalSemanticDebtSum first -
+        quittingTerminalSemanticDebtSum second| ≤
+      ∑ who, (|first.1 who - second.1 who| +
+        |first.2 who - second.2 who|) := by
+  unfold quittingTerminalSemanticDebtSum
+  calc
+    |∑ who, quittingTerminalSemanticDebt first who -
+        ∑ who, quittingTerminalSemanticDebt second who| =
+      |∑ who, (quittingTerminalSemanticDebt first who -
+        quittingTerminalSemanticDebt second who)| := by
+      rw [Finset.sum_sub_distrib]
+    _ ≤ ∑ who, |quittingTerminalSemanticDebt first who -
+        quittingTerminalSemanticDebt second who| :=
+      Finset.abs_sum_le_sum_abs _ _
+    _ ≤ ∑ who, (|first.1 who - second.1 who| +
+        |first.2 who - second.2 who|) := by
+      exact Finset.sum_le_sum fun who _ =>
+        abs_quittingTerminalSemanticDebt_sub_le first second who
+
+omit [DecidableEq ι] in
+/-- Summing one-sided coordinate implementation bounds gives the literal
+total-debt implementation bound. -/
+theorem quittingTerminalSemanticDebtSum_le_of_oneSidedImplementation
+    (seed actual : QuittingTerminalSemanticPair ι)
+    (eta : ι → ℝ) (payoffError capError : ι → ℝ)
+    (hseed : ∀ who, quittingTerminalSemanticDebt seed who ≤ eta who)
+    (hpayoff : ∀ who,
+      seed.1 who - payoffError who ≤ actual.1 who)
+    (hcap : ∀ who, actual.2 who ≤ seed.2 who + capError who) :
+    quittingTerminalSemanticDebtSum actual ≤
+      ∑ who, (eta who + payoffError who + capError who) := by
+  unfold quittingTerminalSemanticDebtSum
+  exact Finset.sum_le_sum fun who _ =>
+    quittingTerminalSemanticDebt_le_of_oneSidedImplementation
+      seed actual who (eta who) (payoffError who) (capError who)
+        (hseed who) (hpayoff who) (hcap who)
+
 /-- Maximum positive debt of a finite-dimensional terminal semantic pair. -/
 def quittingTerminalSemanticExploitability [Nonempty ι]
     (pair : QuittingTerminalSemanticPair ι) : ℝ :=

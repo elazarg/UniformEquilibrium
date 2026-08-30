@@ -8,6 +8,7 @@ import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.Conditioning
 import MathUE.PMFProduct.Update
 import MathUE.PMFProduct.Independence
+import MathUE.PMFProduct.Reindex
 
 /-!
 # Independent Product Distributions
@@ -19,4 +20,5 @@ Umbrella module. Split across `PMFProduct/`:
 - `Conditioning` — conditioning and disintegration.
 - `Update` — coordinate-update lemmas and coordinate conditioning.
 - `Independence` — bind/scalar coordinate independence.
+- `Reindex` — pushforward of products through coordinate equivalences.
 -/

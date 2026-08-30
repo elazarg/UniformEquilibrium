@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FinFourProducerAtlas.FullBindingPointwiseSupportBallistic
-import Research.Quitting.FinFourProducerAtlas.StrictRayBindingCardinality
+import Research.Quitting.FinFourProducerAtlas.StrictRayBindingCardinalityExplicit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 
 /-!
@@ -277,14 +277,12 @@ theorem nonempty_minimumLawHandoff_or_offMinimumDescent
 
 end FinFourStrictRayPositiveRootReturn
 
-/-- Conditional source capstone.  A supplied finite-cap parity certificate
-either exposes a positive exact root and hence a fresh minimum/descent return,
-or leaves the same ray ballistic, with an omitted current player infinitely
-often, or on a cardinal-three binding face. -/
+/-- Certificate-free source capstone.  The actual strict ray either exposes a
+positive exact root and hence a fresh minimum/descent return, or remains
+ballistic, omits a current player infinitely often, or has a cardinal-three
+binding face. -/
 theorem minimumLawHandoff_or_offMinimumDescent_or_ballistic_or_omitted_or_cardThree
-    (flow : FinFourStrictRayForwardExactCapTail packet)
-    (parity : ModTwoBoxComplementarityParitySpec (Fin 4))
-    (certificate : FinFourBindingPairParityCertificate flow parity) :
+    (flow : FinFourStrictRayForwardExactCapTail packet) :
     (∃ result : FinFourStrictRayPositiveRootReturn flow,
       Nonempty (FinFourStrictRayMinimumLawHandoff result)) ∨
       (∃ result : FinFourStrictRayPositiveRootReturn flow,
@@ -295,7 +293,7 @@ theorem minimumLawHandoff_or_offMinimumDescent_or_ballistic_or_omitted_or_cardTh
         flow.forward.currentHazard time who = 0) ∨
       flow.forward.bindingFinset.card = 3 := by
   rcases
-      certificate.positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three
+      flow.positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three
       with ⟨root, hnash, hpositive⟩ | hbinding
   · obtain ⟨result⟩ :=
       FinFourStrictRayPositiveRootReturn.nonempty_of_root_at_capLimit

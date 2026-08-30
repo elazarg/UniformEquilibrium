@@ -84,6 +84,42 @@ def quittingTerminalSemanticDebt
     (pair : QuittingTerminalSemanticPair ι) (who : ι) : ℝ :=
   pair.2 who - pair.1 who
 
+omit [Fintype ι] [DecidableEq ι] in
+/-- One coordinate of terminal semantic debt is Lipschitz in the prescribed
+payoff and continuation-cap coordinates. -/
+theorem abs_quittingTerminalSemanticDebt_sub_le
+    (first second : QuittingTerminalSemanticPair ι) (who : ι) :
+    |quittingTerminalSemanticDebt first who -
+        quittingTerminalSemanticDebt second who| ≤
+      |first.1 who - second.1 who| + |first.2 who - second.2 who| := by
+  unfold quittingTerminalSemanticDebt
+  calc
+    |first.2 who - first.1 who - (second.2 who - second.1 who)| =
+        |(first.2 who - second.2 who) +
+          (second.1 who - first.1 who)| := by
+      congr 1
+      ring
+    _ ≤ |first.2 who - second.2 who| +
+          |second.1 who - first.1 who| := abs_add_le _ _
+    _ = |first.1 who - second.1 who| +
+        |first.2 who - second.2 who| := by
+      rw [abs_sub_comm (second.1 who) (first.1 who)]
+      rw [add_comm]
+
+omit [Fintype ι] [DecidableEq ι] in
+/-- A one-sided prescribed-payoff/cap implementation error widens semantic
+debt by at most the sum of its two coordinate errors. -/
+theorem quittingTerminalSemanticDebt_le_of_oneSidedImplementation
+    (seed actual : QuittingTerminalSemanticPair ι) (who : ι)
+    (eta payoffError capError : ℝ)
+    (hseed : quittingTerminalSemanticDebt seed who ≤ eta)
+    (hpayoff : seed.1 who - payoffError ≤ actual.1 who)
+    (hcap : actual.2 who ≤ seed.2 who + capError) :
+    quittingTerminalSemanticDebt actual who ≤
+      eta + payoffError + capError := by
+  unfold quittingTerminalSemanticDebt at hseed ⊢
+  linarith
+
 /-- Every unilateral behavioral gain is bounded by the player's semantic
 debt at the original profile. -/
 theorem quittingTerminalPayoff_update_sub_le_terminalSemanticDebt

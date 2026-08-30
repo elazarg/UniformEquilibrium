@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.Simplex
+import MathUE.PMFProduct.Bool
 import Research.Quitting.ForwardExactCapTailFlow
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
@@ -69,9 +70,26 @@ theorem quittingRootEndpointDifference_soloStationaryRoot_owner_cap
     quittingSoloReward_self, quittingSingletonCapDefect]
   ring
 
-/-- Against a declared cap, any other coordinate's endpoint difference at the
-solo row is its affine joining slope: the rate-weighted collision gain less
-the complementary-weighted cap defect. -/
+/-- Against a declared cap, any other coordinate's endpoint difference at an
+arbitrary Boolean solo row is its affine joining slope. -/
+theorem quittingRootEndpointDifference_soloStationaryRoot_other_cap_pmf
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cap : Payoff ι) {owner other : ι} (hne : other ≠ owner)
+    (hazard : PMF Bool) :
+    quittingRootEndpointDifference reward cap
+        (quittingSoloStationaryRoot owner hazard) other =
+      (hazard true).toReal *
+          quittingSingletonCollisionGain reward owner other -
+        (hazard false).toReal *
+          quittingSingletonCapDefect reward cap other := by
+  rw [quittingRootEndpointDifference,
+    quittingRootQuitPayoff_soloStationaryRoot_other reward hne,
+    quittingRootContinuePayoff_soloStationaryRoot_other reward hne,
+    quittingSoloReward_self, quittingSingletonCollisionGain,
+    quittingSingletonCapDefect]
+  ring
+
+/-- Bernoulli-coordinate form of the arbitrary-PMF solo affine identity. -/
 theorem quittingRootEndpointDifference_soloStationaryRoot_other_cap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cap : Payoff ι) {owner other : ι} (hne : other ≠ owner)
@@ -81,13 +99,8 @@ theorem quittingRootEndpointDifference_soloStationaryRoot_other_cap
           (bernoulliBool rate hrate0 hrate1)) other =
       rate * quittingSingletonCollisionGain reward owner other -
         (1 - rate) * quittingSingletonCapDefect reward cap other := by
-  rw [quittingRootEndpointDifference,
-    quittingRootQuitPayoff_soloStationaryRoot_other reward hne,
-    quittingRootContinuePayoff_soloStationaryRoot_other reward hne,
-    bernoulliBool_true_toReal, bernoulliBool_false_toReal,
-    quittingSoloReward_self, quittingSingletonCollisionGain,
-    quittingSingletonCapDefect]
-  ring
+  rw [quittingRootEndpointDifference_soloStationaryRoot_other_cap_pmf
+    reward cap hne, bernoulliBool_true_toReal, bernoulliBool_false_toReal]
 
 /-! ## The solo probe is an exact root Nash -/
 

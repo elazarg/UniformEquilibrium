@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.PMFProduct
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
+import UniformEquilibrium.Quitting.Root.PlayerReindex
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.Existence
 
@@ -53,34 +54,6 @@ exactly three elements.
 
 noncomputable section
 
-namespace Math
-namespace PMFProduct
-
-open scoped BigOperators
-
-/-- Pushing an independent product of identically typed factors forward along
-an equivalence of profiles that acts by precomposition with `e.symm` reindexes
-the factor family along `e.symm`.  The profile equivalence `E` is abstract and
-constrained only pointwise, so call sites keep control of its syntactic
-form. -/
-theorem pmfPi_map_precompEquiv {ι κ B : Type*} [Fintype ι] [Fintype κ]
-    (e : ι ≃ κ) (E : (ι → B) ≃ (κ → B)) (hE : ∀ a j, E a j = a (e.symm j))
-    (x : ι → PMF B) :
-    PMF.map E (pmfPi (A := fun _ : ι => B) x) =
-      pmfPi (A := fun _ : κ => B) (fun j => x (e.symm j)) := by
-  have hEsymm : ∀ (b : κ → B) (i : ι), E.symm b i = b (e i) := by
-    intro b i
-    have hb := hE (E.symm b) (e i)
-    rw [Equiv.apply_symm_apply, Equiv.symm_apply_apply] at hb
-    exact hb.symm
-  ext b
-  rw [ProbabilityMassFunction.map_equiv_apply, pmfPi_apply, pmfPi_apply]
-  refine Fintype.prod_equiv e _ _ fun i => ?_
-  simp [hEsymm]
-
-end PMFProduct
-end Math
-
 namespace GameTheory
 
 open StochasticGame Math.Probability Math.PMFProduct
@@ -92,50 +65,6 @@ variable {ι κ : Type}
 A player equivalence `e : ι ≃ κ` acts on every layer of a quitting game's
 data.  None of the equivalences below needs finiteness or decidable equality
 of the player types. -/
-
-/-- Transport of nonempty quitter coalitions along a player equivalence:
-map the coalition forward through `e`. -/
-def quittingCoalitionEquiv (e : ι ≃ κ) :
-    {S : Finset ι // S.Nonempty} ≃ {T : Finset κ // T.Nonempty} where
-  toFun S := ⟨S.1.map e.toEmbedding, Finset.map_nonempty.mpr S.2⟩
-  invFun T := ⟨T.1.map e.symm.toEmbedding, Finset.map_nonempty.mpr T.2⟩
-  left_inv S := by
-    refine Subtype.ext ?_
-    refine Finset.ext fun i => ?_
-    simp [Finset.mem_map_equiv]
-  right_inv T := by
-    refine Subtype.ext ?_
-    refine Finset.ext fun j => ?_
-    simp [Finset.mem_map_equiv]
-
-/-- The transported coalition is the image of the original coalition. -/
-@[simp] theorem quittingCoalitionEquiv_coe (e : ι ≃ κ)
-    (S : {S : Finset ι // S.Nonempty}) :
-    (quittingCoalitionEquiv e S : Finset κ) = S.1.map e.toEmbedding :=
-  rfl
-
-/-- The pulled-back coalition is the preimage of the original coalition. -/
-@[simp] theorem quittingCoalitionEquiv_symm_coe (e : ι ≃ κ)
-    (T : {T : Finset κ // T.Nonempty}) :
-    ((quittingCoalitionEquiv e).symm T : Finset ι) = T.1.map e.symm.toEmbedding :=
-  rfl
-
-/-- Transport of a quitting-game terminal reward table along a player
-equivalence: the transported table, read at a coalition `T` of new-type
-players and a new-type player `j`, is the original table read at the
-pulled-back coalition and the pulled-back player. -/
-def quittingRewardReindex (e : ι ≃ κ)
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    {T : Finset κ // T.Nonempty} → Payoff κ :=
-  fun T j => reward ((quittingCoalitionEquiv e).symm T) (e.symm j)
-
-/-- Evaluation of the transported reward table. -/
-@[simp] theorem quittingRewardReindex_apply (e : ι ≃ κ)
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (T : {T : Finset κ // T.Nonempty}) (j : κ) :
-    quittingRewardReindex e reward T j =
-      reward ((quittingCoalitionEquiv e).symm T) (e.symm j) :=
-  rfl
 
 /-- Transport of quitting-game states along a player equivalence: the active
 state maps to the active state, and an absorbed state maps to absorption at
@@ -177,40 +106,9 @@ transported coalition. -/
       some ((quittingCoalitionEquiv e).symm T) :=
   rfl
 
-/-- Transport of joint quit/continue profiles along a player equivalence: the
-transported profile plays at `j` what the original profile plays at
-`e.symm j`. -/
-def quittingActEquiv (e : ι ≃ κ) : (ι → Bool) ≃ (κ → Bool) where
-  toFun a := fun j => a (e.symm j)
-  invFun b := fun i => b (e i)
-  left_inv a := by
-    funext i
-    simp
-  right_inv b := by
-    funext j
-    simp
-
-/-- Evaluation of a transported joint action. -/
-@[simp] theorem quittingActEquiv_apply (e : ι ≃ κ) (a : ι → Bool) (j : κ) :
-    quittingActEquiv e a j = a (e.symm j) :=
-  rfl
-
-/-- Evaluation of a pulled-back joint action. -/
-@[simp] theorem quittingActEquiv_symm_apply (e : ι ≃ κ) (b : κ → Bool) (i : ι) :
-    (quittingActEquiv e).symm b i = b (e i) :=
-  rfl
-
 section GameTransport
 
 variable [Fintype ι] [Fintype κ]
-
-/-- The quitter set of a transported joint action is the image of the
-original quitter set under the player equivalence. -/
-theorem quittingActEquiv_quitterSet (e : ι ≃ κ) (a : ι → Bool) :
-    Finset.filter (fun j => quittingActEquiv e a j = true) Finset.univ =
-      (Finset.filter (fun i => a i = true) Finset.univ).map e.toEmbedding := by
-  refine Finset.ext fun j => ?_
-  simp [Finset.mem_map_equiv]
 
 /-- **The transition kernel commutes with player reindexing.**  Transporting
 the state and the joint action and then stepping the reindexed game is

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.PMFProduct.Update
+import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
 # Boolean product PMFs
@@ -34,6 +35,49 @@ lemma pmfBool_false_toReal (mu : PMF Bool) :
   rw [expect_eq_sum, Fintype.sum_bool] at h
   norm_num at h ⊢
   linarith
+
+/-- Boolean PMFs are canonically equivalent to their `true` probability in
+the real unit interval. -/
+noncomputable def bernoulliBoolEquiv : Set.Icc (0 : ℝ) 1 ≃ PMF Bool where
+  toFun probability := ProbabilityMassFunction.bernoulliBool
+    probability.1 probability.2.1 probability.2.2
+  invFun marginal := ⟨(marginal true).toReal, by
+    exact ⟨ENNReal.toReal_nonneg,
+      ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one marginal true)⟩⟩
+  left_inv probability := by
+    apply Subtype.ext
+    exact ProbabilityMassFunction.bernoulliBool_true_toReal
+      probability.1 probability.2.1 probability.2.2
+  right_inv marginal := by
+    apply ProbabilityMassFunction.toVector_injective
+    funext action
+    cases action
+    · change (ProbabilityMassFunction.bernoulliBool
+          (marginal true).toReal _ _ false).toReal =
+        (marginal false).toReal
+      rw [ProbabilityMassFunction.bernoulliBool_false_toReal,
+        pmfBool_false_toReal]
+    · change (ProbabilityMassFunction.bernoulliBool
+          (marginal true).toReal _ _ true).toReal =
+        (marginal true).toReal
+      rw [ProbabilityMassFunction.bernoulliBool_true_toReal]
+
+@[simp] theorem bernoulliBoolEquiv_apply_true_toReal
+    (probability : Set.Icc (0 : ℝ) 1) :
+    ((bernoulliBoolEquiv probability) true).toReal = probability.1 := by
+  exact ProbabilityMassFunction.bernoulliBool_true_toReal
+    probability.1 probability.2.1 probability.2.2
+
+@[simp] theorem bernoulliBoolEquiv_apply_false_toReal
+    (probability : Set.Icc (0 : ℝ) 1) :
+    ((bernoulliBoolEquiv probability) false).toReal = 1 - probability.1 := by
+  exact ProbabilityMassFunction.bernoulliBool_false_toReal
+    probability.1 probability.2.1 probability.2.2
+
+@[simp] theorem bernoulliBoolEquiv_symm_apply_coe (marginal : PMF Bool) :
+    (((bernoulliBoolEquiv.symm marginal : Set.Icc (0 : ℝ) 1) : ℝ)) =
+      (marginal true).toReal :=
+  rfl
 
 /-- A Boolean PMF with zero real mass at `true` is concentrated at `false`. -/
 lemma eq_pure_false_of_true_toReal_eq_zero (mu : PMF Bool)
