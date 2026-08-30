@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
+import MathUE.Topology.FiniteLabelSubsequence
 import Research.Quitting.FinFourProducerAtlas.FullyScreenedFiniteClockClearing
 
 /-!
@@ -56,20 +57,6 @@ namespace FinFourActualZenoDeletedSurvivalSource
 
 variable (zeno : FinFourActualZenoDeletedSurvivalSource data)
 
-private theorem exists_pos_frequently_ge_of_not_tendsto_zero
-    (f : ℕ → ℝ) (hnonneg : ∀ rank, 0 ≤ f rank)
-    (hnot : ¬ Tendsto f atTop (nhds 0)) :
-    ∃ eta, 0 < eta ∧ ∃ᶠ rank in atTop, eta ≤ f rank := by
-  by_contra hnone
-  push Not at hnone
-  apply hnot
-  rw [tendsto_order]
-  constructor
-  · intro lower hlower
-    exact Eventually.of_forall fun rank ↦ hlower.trans_le (hnonneg rank)
-  · intro upper hupper
-    exact hnone upper hupper
-
 /-- Exact source-level classification.  The former `not fully screened` arm
 is strengthened to a fixed positive host and simultaneous screening of all
 other players on the same strict subsequence. -/
@@ -85,7 +72,7 @@ theorem nonempty_positiveHost_or_fullyScreened :
     push Not at hnotAll
     obtain ⟨host, hhostNot⟩ := hnotAll
     obtain ⟨eta, heta, hfrequent⟩ :=
-      exists_pos_frequently_ge_of_not_tendsto_zero
+      Math.exists_pos_frequently_ge_of_nonneg_of_not_tendsto_zero
         (fun rank ↦ quittingLiteralRootStackOpponentSurvival
           (zeno.combinedWord rank) host)
         (fun rank ↦

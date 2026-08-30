@@ -2486,6 +2486,17 @@ in the live mathematical ledger.
   or retains a literal low-survival approximate prefix.
   `QuittingPayoffTable.approximateEquilibriumExistence_iff_zeroNever` gives the
   exact arbitrary-Never behavioral normalization used by AGKRS, and
+  `QuittingPayoffTable.stationary_or_vanishingNeverNashFamily` in
+  `UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumVanishingNeverAlternative.lean`
+  now gives a direct conditional upstream fork: literal S.1, or actual root
+  sequences whose global Nash errors and `Never` masses both tend to zero.
+  The quantitative input `singletonReward_le_nashError_div_never` is
+  dimension-free.  The second arm retains weighted reached-stage and
+  positive-reach shifted-tail Nash bounds, not unweighted tailwise Nash,
+  complete absorption, or stagewise perfection.  The theorem assumes the
+  existing infinite-horizon approximate-equilibrium interface; it is not a
+  finite-horizon existence theorem and does not prove that interface for every
+  game.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,

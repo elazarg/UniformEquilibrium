@@ -24,6 +24,22 @@ namespace Math
 open Filter
 open scoped Topology
 
+/-- A nonnegative real sequence that does not tend to zero has a fixed
+positive lower bound frequently along `atTop`. -/
+theorem exists_pos_frequently_ge_of_nonneg_of_not_tendsto_zero
+    (value : ℕ → ℝ) (hnonneg : ∀ n, 0 ≤ value n)
+    (hnot : ¬Tendsto value atTop (nhds 0)) :
+    ∃ lower, 0 < lower ∧ ∃ᶠ n in atTop, lower ≤ value n := by
+  by_contra hnone
+  push Not at hnone
+  apply hnot
+  rw [tendsto_order]
+  constructor
+  · intro lower hlower
+    exact Eventually.of_forall fun n => hlower.trans_le (hnonneg n)
+  · intro upper hupper
+    exact hnone upper hupper
+
 /-- If a finite sum is bounded below by a positive floor up to an error
 converging to zero, one fixed label carries at least half the average along a
 strict subsequence.  Nonemptiness of `labels` is a consequence, not a premise.

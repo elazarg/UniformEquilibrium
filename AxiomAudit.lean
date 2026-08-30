@@ -1323,6 +1323,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemptio
 import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemptionRegression
 import UniformEquilibrium.Quitting.Classification.Existence.All
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumUniformPayoffEquivalence
+import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.CenteredStationaryFaceCertificate
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
@@ -1710,6 +1711,7 @@ import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Paths.InfinitePathSupersolution
 import UniformEquilibrium.Quitting.Paths.JointPolicySeparatedErrorCompiler
 import UniformEquilibrium.Quitting.Paths.JointSurvivalSelection
+import UniformEquilibrium.Quitting.Paths.JointSurvivalSummability
 import UniformEquilibrium.Quitting.Paths.LiveChainDominationCap
 import UniformEquilibrium.Quitting.Paths.LiveMass
 import UniformEquilibrium.Quitting.Paths.LiveMassRecurrence
@@ -1740,6 +1742,7 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 import UniformEquilibrium.Quitting.PayoffProcess.All
 import UniformEquilibrium.Quitting.PayoffProcess.Basic
 import UniformEquilibrium.Quitting.PayoffProcess.ExpectedTailEquilibrium

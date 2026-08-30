@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Order.Filter.AtTopBot.Basic
 import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletion
+import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 
 /-!
 # Diagonal absorbing completion of vanishing-Nash root sequences
@@ -27,18 +28,6 @@ namespace GameTheory
 open Filter StochasticGame Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
-
-/-- A source family of actual root sequences with vanishing Nash error and
-vanishing `Never` mass.  The reward is fixed across the family. -/
-structure QuittingRootSequenceVanishingNashFamily
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
-  roots : ℕ → ℕ → ι → PMF Bool
-  error : ℕ → ℝ
-  nash : ∀ index, IsεQuittingRootSequenceNash reward (error index) (roots index)
-  error_tendsto_zero : Tendsto error atTop (nhds 0)
-  never_tendsto_zero :
-    Tendsto (fun index => quittingJointSurvivalLimit (roots index) 0)
-      atTop (nhds 0)
 
 /-- The canonical accuracy scale used by the diagonal completion. -/
 def quittingLateCompletionDiagonalScale (rank : ℕ) : ℝ :=
