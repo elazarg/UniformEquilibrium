@@ -83,24 +83,6 @@ theorem realizedBlockFullSurvival_add
             (anchor.roots time)) (block.start + first) second := by
   exact Math.survivalProduct_add _ block.start first second
 
-theorem quittingRootCoalitionMass_sum_nonempty
-    (root : ι → PMF Bool) :
-    (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι),
-      quittingRootCoalitionMass root coalition) =
-      1 - quittingStationaryContinueMass root := by
-  have hcoalition :=
-    sum_coalitionMass_nonempty (quittingRootQuitRates root)
-  have hcontinue :
-      continueMass (quittingRootQuitRates root) =
-        quittingStationaryContinueMass root := by
-    rw [continueMass, quittingStationaryContinueMass_eq_prod_continueProbability]
-    congr 1
-    funext who
-    have hsum := quittingRoot_continueProbability_add_quitProbability root who
-    change 1 - (root who true).toReal = (root who false).toReal
-    linarith
-  simpa [quittingRootCoalitionMass, hcontinue] using hcoalition
-
 /-! ## The finite marked object -/
 
 /--

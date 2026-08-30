@@ -178,6 +178,23 @@ theorem cutoff_owner_eq_pureQuit
     completion.cutoff
 
 omit [Nonempty ι] in
+/-- Joint survival of the completed sequence is already exactly zero just
+after its literal sure-solo row. -/
+theorem jointSurvival_cutoff_succ_eq_zero
+    (completion : QuittingRootSequenceLateSureSoloCompletion
+      reward roots lowerBound ε d M) :
+    quittingJointSurvivalWeight
+        (quittingLateSureSoloRoots roots completion.owner completion.cutoff)
+        0 (completion.cutoff + 1) = 0 := by
+  simp only [Nat.zero_add, quittingJointSurvivalWeight_succ]
+  apply mul_eq_zero_of_right
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+  apply Finset.prod_eq_zero (Finset.mem_univ completion.owner)
+  have howner := completion.cutoff_owner_eq_pureQuit
+  rw [howner]
+  norm_num
+
+omit [Nonempty ι] in
 /-- A sure solo root makes the completed sequence completely absorbing. -/
 theorem completelyAbsorbing
     (completion : QuittingRootSequenceLateSureSoloCompletion
@@ -191,16 +208,7 @@ theorem completelyAbsorbing
           quittingJointSurvivalWeight completed 0 (completion.cutoff + 1) := by
         simpa using (quittingJointSurvivalWeight_eq_quittingSurvivalPrefix
           completed 0 (completion.cutoff + 1)).symm
-      _ = 0 := by
-        simp only [Nat.zero_add, quittingJointSurvivalWeight_succ]
-        apply mul_eq_zero_of_right
-        rw [quittingStationaryContinueMass_eq_prod_continueProbability]
-        apply Finset.prod_eq_zero (Finset.mem_univ completion.owner)
-        have howner := completion.cutoff_owner_eq_pureQuit
-        change (completed completion.cutoff completion.owner false).toReal = 0
-        dsimp only [completed]
-        rw [howner]
-        norm_num
+      _ = 0 := completion.jointSurvival_cutoff_succ_eq_zero
   change IsCompletelyAbsorbing completed
   unfold IsCompletelyAbsorbing
   rw [Metric.tendsto_atTop]

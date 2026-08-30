@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.RealizedMarkedAbsorptionCylinder
 import UniformEquilibrium.Quitting.Classification.ExistenceBranches
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
 /-!
 # Continuous absorption paths for quitting games

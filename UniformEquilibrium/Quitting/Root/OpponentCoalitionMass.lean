@@ -36,6 +36,15 @@ def quittingRootCoalitionMass (root : ι → PMF Bool)
     (coalition : Finset ι) : ℝ :=
   coalitionMass (quittingRootQuitRates root) coalition
 
+/-- Exact product-coalition mass is nonnegative. -/
+theorem quittingRootCoalitionMass_nonneg
+    (root : ι → PMF Bool) (coalition : Finset ι) :
+    0 ≤ quittingRootCoalitionMass root coalition := by
+  exact coalitionMass_nonneg (quittingRootQuitRates root)
+    (fun _ => ENNReal.toReal_nonneg)
+    (fun who => ENNReal.toReal_mono ENNReal.one_ne_top
+      ((root who).coe_le_one true)) coalition
+
 /-- First-stage mass of coalitions carrying `other`, with `who` retained as a
 distinguished label.  For `other = who` the incidence is zero. -/
 def quittingRootOpponentIncidenceMass
@@ -73,6 +82,25 @@ theorem quittingRootCoalitionMass_le_continueProbability_of_not_mem
       ((root who).coe_le_one true)) hmarked
   simpa [quittingRootCoalitionMass, quittingRootQuitRates,
     pmfBool_false_toReal] using hbound
+
+/-- The total mass of the nonempty exact coalitions is the one-stage
+absorption probability. -/
+theorem quittingRootCoalitionMass_sum_nonempty
+    (root : ι → PMF Bool) :
+    (∑ coalition ∈ Finset.univ.erase (∅ : Finset ι),
+      quittingRootCoalitionMass root coalition) =
+      1 - quittingStationaryContinueMass root := by
+  have hcoalition :=
+    sum_coalitionMass_nonempty (quittingRootQuitRates root)
+  have hcontinue :
+      continueMass (quittingRootQuitRates root) =
+        quittingStationaryContinueMass root := by
+    rw [continueMass, quittingStationaryContinueMass_eq_prod_continueProbability]
+    congr 1
+    funext who
+    change 1 - (root who true).toReal = (root who false).toReal
+    exact (pmfBool_false_toReal (root who)).symm
+  simpa [quittingRootCoalitionMass, hcontinue] using hcoalition
 
 /-- A positive exact coalition containing `other` contributes its full mass
 to the displayed opponent-incidence coordinate. -/

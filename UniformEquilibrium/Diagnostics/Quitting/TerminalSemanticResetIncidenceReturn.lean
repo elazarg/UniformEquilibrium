@@ -208,6 +208,18 @@ theorem mem_terminalSemanticLawCarrier_of_joint_tendsto
         quittingTerminalOutcomeMass reward (profiles n)),
     fun n => ⟨profiles n, rfl⟩, htendsto⟩
 
+/-- The semantic projection of a joint semantic/law carrier point belongs to
+the ordinary terminal-semantic carrier. -/
+theorem terminalSemanticLawCarrier_fst_mem_carrier
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (point : QuittingTerminalSemanticLawPoint ι)
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
+    point.1 ∈ quittingTerminalSemanticCarrier reward := by
+  rw [quittingTerminalSemanticCarrier]
+  apply map_mem_closure continuous_fst hpoint
+  rintro candidate ⟨profile, rfl⟩
+  exact ⟨profile, rfl⟩
+
 /-- **Fixed-law reset-face minimizer.**
 
 Starting from any joint reset point, minimize total debt without projecting

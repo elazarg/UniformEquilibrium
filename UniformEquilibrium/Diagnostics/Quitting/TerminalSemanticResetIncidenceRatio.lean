@@ -115,17 +115,6 @@ theorem quittingTerminalTotalOpponentIncidenceMass_lawPrefix
   simp_rw [quittingTerminalOpponentIncidenceMass_lawPrefix]
   rw [Finset.sum_add_distrib, Finset.mul_sum]
 
-/-- The semantic projection of a joint semantic/law carrier point belongs to
-the ordinary terminal-semantic carrier. -/
-theorem terminalSemanticLawCarrier_fst_mem_carrier
-    (point : QuittingTerminalSemanticLawPoint ι)
-    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
-    point.1 ∈ quittingTerminalSemanticCarrier reward := by
-  rw [quittingTerminalSemanticCarrier]
-  apply map_mem_closure continuous_fst hpoint
-  rintro candidate ⟨profile, rfl⟩
-  exact ⟨profile, rfl⟩
-
 /-- **Attainment of the debt/incidence quotient on a reset face.**
 
 Although positive incidence is an open condition, the positive global debt

@@ -117,6 +117,49 @@ theorem quittingRootExpectedPayoff_eq_sum_coalitionMass
   simp only [coalitionMass, hazardOfRoot, Finset.compl_eq_univ_sdiff]
   simp only [Finset.mem_univ, if_true]
 
+/-- The absorbing contribution is the exact sum of the nonempty coalition
+masses weighted by their terminal rewards. -/
+theorem quittingRootAbsorbingContribution_eq_sum_nonemptyCoalitionMass
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool) (who : ι) :
+    quittingRootAbsorbingContribution reward root who =
+      ∑ terminal : {S : Finset ι // S.Nonempty},
+        coalitionMass (hazardOfRoot root) terminal.1 * reward terminal who := by
+  rw [quittingRootAbsorbingContribution,
+    quittingRootExpectedPayoff_eq_sum_coalitionMass]
+  let support := Finset.univ.erase (∅ : Finset ι)
+  have hreindex :
+      (∑ terminal : {S : Finset ι // S.Nonempty},
+          coalitionMass (hazardOfRoot root) terminal.1 *
+            reward terminal who) =
+        ∑ coalition ∈ support,
+          coalitionMass (hazardOfRoot root) coalition *
+            quittingStageCoalitionPayoff reward 0 coalition who := by
+    symm
+    calc
+      (∑ coalition ∈ support,
+          coalitionMass (hazardOfRoot root) coalition *
+            quittingStageCoalitionPayoff reward 0 coalition who) =
+        ∑ terminal : {S : Finset ι // S.Nonempty},
+          coalitionMass (hazardOfRoot root) terminal.1 *
+            quittingStageCoalitionPayoff reward 0 terminal.1 who := by
+          exact Finset.sum_subtype support (fun coalition => by
+            simp only [support, Finset.mem_erase, Finset.mem_univ, and_true]
+            exact Finset.nonempty_iff_ne_empty.symm) _
+      _ = ∑ terminal : {S : Finset ι // S.Nonempty},
+          coalitionMass (hazardOfRoot root) terminal.1 *
+            reward terminal who := by
+          apply Finset.sum_congr rfl
+          intro terminal _
+          simp only [quittingStageCoalitionPayoff, terminal.2, dite_true]
+  rw [hreindex]
+  symm
+  apply Finset.sum_subset (Finset.erase_subset _ _)
+  intro coalition _ hcoalition
+  have hempty : coalition = ∅ := by simpa using hcoalition
+  subst coalition
+  simp [quittingStageCoalitionPayoff, coalitionMass]
+
 /-- **One-stage Boolean Möbius adapter.** A product root evaluates the full
 coalition-cube payoff by the multilinear polynomial of its centered
 unanimity coefficients, with the empty-coalition continuation restored as
