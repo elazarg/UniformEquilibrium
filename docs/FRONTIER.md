@@ -640,6 +640,15 @@ and its finite-chain telescopes charge exact-root absorption to debt above
 the hull minimum.  Taken alone, this foundation is `M` and `L` but supplies
 neither its origin hypotheses nor a downstream consumer.
 
+Global-minimum inheritance is also literal.
+`lawTightCapNashMinimum_globalMinimumOriginDebtMoat`
+(`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashGlobalMinimumMoat.lean`)
+shows that a positive hull minimum over a globally minimizing carrier origin
+has the same total debt as the origin, is itself globally debt-minimal, and
+satisfies the all-owner singleton moat with the origin debt on the left-hand
+side.  This remains a conditional carrier statement with `M` and `L`: it does
+not supply the origin or realize the minimum behaviorally.
+
 The strict carrier classification on that foundation is now literal.
 `lawTightStrictSaturation_fullDebt_or_resetRigid_or_singletonNeverCycle`
 (`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashStrictMinimum.lean`)
@@ -653,13 +662,20 @@ ingredients are
 `terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward`.
 
 For Fin4,
-`exists_finFourLawTightSaturationMinimum_of_no_uniformPayoff` and
-`finFour_noUniformPayoff_exists_lawTightStrictMinimumChamber`
+`finFour_noUniformPayoff_exists_lawTightGlobalMinimumMoatTwoChamber`
 (`UniformEquilibrium/Diagnostics/Quitting/FinFourLawTightCapNashStrictMinimum.lean`)
-construct the positive law-tight minimum and apply the classification from a
-literal no-uniform-payoff hypothesis.  This gives `M`, `L`, and a Fin4 source
-`A`, but still no chamber consumer `C`: no arm is converted into an actual
-behavioral realization, contradiction, or uniform-equilibrium payoff.
+constructs the origin and positive law-tight minimum, retains a positive
+finite atom, exposes both global-minimum statements and their debt equality,
+and applies the literal origin-debt moat to the classification.  The
+singleton/Never arm has cap equal to its singleton reward, so its owner's moat
+would force the positive origin debt to be nonpositive; this deletes that arm
+and leaves full debt support or reset-rigid same-law return.  The earlier
+`exists_finFourLawTightSaturationMinimum_of_no_uniformPayoff` and
+`finFour_noUniformPayoff_exists_lawTightStrictMinimumChamber` declarations are
+compatibility projections from this canonical result.  This gives `M`, `L`,
+Fin4 source `A`, and branch-local `C` for the singleton/Never exclusion only.
+Neither surviving chamber has a behavioral or chronological consumer, and no
+contradiction or uniform-equilibrium payoff follows.
 
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
