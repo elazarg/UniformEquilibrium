@@ -4,7 +4,9 @@
 from __future__ import annotations
 
 import pathlib
+import tempfile
 import unittest
+from unittest import mock
 
 from scripts import check_trust
 
@@ -42,6 +44,33 @@ def explanation := "sorry admit native_decide implemented_by unsafe partial def"
 def sorryAxName := 0
 '''
         self.assertEqual(self.labels(source), [])
+
+    def test_prunes_math_workspace_but_discovers_untracked_project_source(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            ignored = root / "math" / "fable" / "Ignored.lean"
+            ignored.parent.mkdir(parents=True)
+            ignored.write_text("example : True := by sorry\n", encoding="utf-8")
+            project = root / "UniformEquilibrium" / "Untracked.lean"
+            project.parent.mkdir(parents=True)
+            project.write_text("example : True := by sorry\n", encoding="utf-8")
+            nested = root / "UniformEquilibrium" / "math" / "Nested.lean"
+            nested.parent.mkdir(parents=True)
+            nested.write_text("example : True := by sorry\n", encoding="utf-8")
+
+            with mock.patch.object(check_trust, "ROOT", root):
+                files = check_trust.lean_files()
+
+            self.assertEqual(set(files), {project, nested})
+            for discovered in (project, nested):
+                with self.subTest(discovered=discovered):
+                    relative = discovered.relative_to(root)
+                    self.assertEqual(
+                        check_trust.token_failures(
+                            relative, discovered.read_text(encoding="utf-8")
+                        ),
+                        [f"{relative}:1: forbidden proof placeholder"],
+                    )
 
     def test_detects_every_forbidden_token_after_primed_identifier(self) -> None:
         source = """

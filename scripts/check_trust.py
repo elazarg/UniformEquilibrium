@@ -159,9 +159,15 @@ def strip_comments_and_strings(text: str) -> str:
 
 def project_files(suffix: str) -> list[pathlib.Path]:
     files: list[pathlib.Path] = []
+    root_pruned_directories = {(ROOT / "math").resolve()}
     for directory, names, filenames in os.walk(ROOT):
-        names[:] = [name for name in names if name not in PRUNED_DIRECTORIES]
         base = pathlib.Path(directory)
+        names[:] = [
+            name
+            for name in names
+            if name not in PRUNED_DIRECTORIES
+            and (base / name).resolve() not in root_pruned_directories
+        ]
         files.extend(base / name for name in filenames if name.endswith(suffix))
     return sorted(files)
 
