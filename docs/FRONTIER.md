@@ -637,25 +637,29 @@ exact root against the displayed cap, and its semantic/law prefix fixes the
 point.  The off-minimum bound
 `quittingLawTightCapNashSaturationHull_rootAbsorptionMass_le_debtExcess_div`
 and its finite-chain telescopes charge exact-root absorption to debt above
-the hull minimum.  This layer is `M` and `L`, but supplies neither the origin
-hypotheses nor a downstream consumer: no Fin4 adapter, ancestry, timing,
-behavioral realization, strict chamber, or uniform payoff follows.
+the hull minimum.  Taken alone, this foundation is `M` and `L` but supplies
+neither its origin hypotheses nor a downstream consumer.
 
-Two prerequisites for the unimplemented strict classification are now
-literal.  The finite-cap theorem
-`exists_quittingSingletonCollisionGain_pos_of_unique_allContinue`
-(`UniformEquilibrium/Quitting/Punishment/SingletonCapBindingCollision.lean`)
-gives every binding coordinate a distinct binding collision successor under
-a supplied unique all-Continue exact-root hypothesis.  Independently,
-`terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward`
-(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonNeverCapTightness.lean`)
-uses one common sequence realizing a supplied joint carrier point.  The
-underlying one-sided singleton cylinder and immediate-Quit/Never union bounds
-show that positive singleton/Never support and zero owner debt make the cap
-coordinate equal the singleton reward.  These prerequisites have `M` and
-`L`, but no source `A` or strict-chamber `C`: they do not construct their cap,
-carrier point, support law, unique root, Fin4 source, behavioral limit
-realization, strict trichotomy, or uniform-equilibrium payoff.
+The strict carrier classification on that foundation is now literal.
+`lawTightStrictSaturation_fullDebt_or_resetRigid_or_singletonNeverCycle`
+(`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashStrictMinimum.lean`)
+uses a supplied positive hull minimum, positive finite atom, and globally
+minimal semantic source.  Every selected minimum-face point has full debt
+support, a same-law reset-rigid return whose all-Continue prefix fixes the
+returned point, or exact singleton/Never support with cap binding and a
+binding-collision cycle of period at least two.  Its finite-cap and carrier
+ingredients are
+`exists_quittingSingletonCollisionGain_pos_of_unique_allContinue` and
+`terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward`.
+
+For Fin4,
+`exists_finFourLawTightSaturationMinimum_of_no_uniformPayoff` and
+`finFour_noUniformPayoff_exists_lawTightStrictMinimumChamber`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourLawTightCapNashStrictMinimum.lean`)
+construct the positive law-tight minimum and apply the classification from a
+literal no-uniform-payoff hypothesis.  This gives `M`, `L`, and a Fin4 source
+`A`, but still no chamber consumer `C`: no arm is converted into an actual
+behavioral realization, contradiction, or uniform-equilibrium payoff.
 
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
