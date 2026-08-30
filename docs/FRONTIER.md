@@ -2513,14 +2513,21 @@ in the live mathematical ledger.
   In that file, `exists_dominantClockWindowStage_of_width_lt_real` selects the
   rightmost positive source stage whenever a finite open clock window carries
   more mass than its width, with simultaneous nonnegative coalition residuals
-  whose total is strictly smaller than the width.  This is finite source
-  localization; no checked theorem yet passes the selected stages or their
-  root marks through the chronological weak limit.  Meanwhile,
+  whose total is strictly smaller than the width.
+  `nonempty_chronologicalNullWindowSequence` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceJumpLimit.lean`
+  supplies shrinking null-boundary windows and fixed-window Portmanteau
+  convergence.  `ChronologicalLimit.nonempty_chronologicalJumpStageLimit` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalA3.lean`
+  then performs one explicit strict rank extraction and one compact root
+  subextraction simultaneously for every coalition coordinate.
+  `ChronologicalLimit.absorptionPathA3` proves the literal product-root jump
+  axiom, including the A1-derived exclusion of a terminal jump.  Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No A3--A4 closure, all-clock path convergence, sequential
+  compiler.  No A4 closure, all-clock path convergence, sequential
   perfection, fixed completion owner, or unconditional AGKRS branch is
   asserted.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
