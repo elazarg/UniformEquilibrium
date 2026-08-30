@@ -641,6 +641,22 @@ the hull minimum.  This layer is `M` and `L`, but supplies neither the origin
 hypotheses nor a downstream consumer: no Fin4 adapter, ancestry, timing,
 behavioral realization, strict chamber, or uniform payoff follows.
 
+Two prerequisites for the unimplemented strict classification are now
+literal.  The finite-cap theorem
+`exists_quittingSingletonCollisionGain_pos_of_unique_allContinue`
+(`UniformEquilibrium/Quitting/Punishment/SingletonCapBindingCollision.lean`)
+gives every binding coordinate a distinct binding collision successor under
+a supplied unique all-Continue exact-root hypothesis.  Independently,
+`terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticSingletonNeverCapTightness.lean`)
+uses one common sequence realizing a supplied joint carrier point.  The
+underlying one-sided singleton cylinder and immediate-Quit/Never union bounds
+show that positive singleton/Never support and zero owner debt make the cap
+coordinate equal the singleton reward.  These prerequisites have `M` and
+`L`, but no source `A` or strict-chamber `C`: they do not construct their cap,
+carrier point, support law, unique root, Fin4 source, behavioral limit
+realization, strict trichotomy, or uniform-equilibrium payoff.
+
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
 (`UniformEquilibrium/Quitting/Cycles/CyclicGreenDebt.lean`) bounds attachment

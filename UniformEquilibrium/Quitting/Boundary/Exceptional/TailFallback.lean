@@ -431,6 +431,13 @@ def quittingSoloReward
     (owner : ι) : Payoff ι :=
   reward ⟨{owner}, Finset.singleton_nonempty owner⟩
 
+omit [Fintype ι] [DecidableEq ι] in
+/-- The solo weight of `who` is its singleton reward. -/
+theorem quittingSoloReward_self
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
+    quittingSoloReward reward who who =
+      reward (quittingSingletonTerminal who) who := rfl
+
 omit [DecidableEq ι] in
 /-- Every finite-time absorbed-state mass is nonnegative. -/
 theorem quittingAbsorbedMass_nonneg

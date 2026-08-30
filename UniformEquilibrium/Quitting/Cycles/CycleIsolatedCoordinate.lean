@@ -136,13 +136,6 @@ theorem isQuittingIsolatedRoot_iff_exists_soloStationaryRoot
   · rintro ⟨hazard, rfl⟩ other hother
     exact quittingSoloStationaryRoot_apply_other hother hazard
 
-omit [Fintype ι] [DecidableEq ι] in
-/-- The solo weight of `who` is its singleton reward. -/
-theorem quittingSoloReward_self
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
-    quittingSoloReward reward who who =
-      reward (quittingSingletonTerminal who) who := rfl
-
 /-! ## Step 1: `P_who = 1` is exactly isolation -/
 
 /-- In the isolated configuration the deleted survival factor is one: with

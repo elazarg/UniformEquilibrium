@@ -528,6 +528,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.BoundedSurgeryDescentCountere
 import UniformEquilibrium.Quitting.Boundary.Repair.RelaxedTraceStressTest
 import UniformEquilibrium.Quitting.Boundary.Repair.NegativeQuitPrefixRegression
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
+import UniformEquilibrium.Quitting.Punishment.SingletonCapBindingCollision
 import UniformEquilibrium.Quitting.Punishment.BlockerIntervalCover
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.PerturbedCycleExclusion
 import UniformEquilibrium.Quitting.Debt.Dynamic.CyclePinnedDebt
