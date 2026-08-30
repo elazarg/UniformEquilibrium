@@ -21,6 +21,7 @@ PRUNED_DIRECTORIES = {
     "literature",
     "overleaf",
 }
+ROOT_PRUNED_DIRECTORIES = {ROOT / "math"}
 TEXT_SUFFIXES = {
     ".json",
     ".md",
@@ -35,8 +36,13 @@ TEXT_SUFFIXES = {
 def project_files() -> list[pathlib.Path]:
     files: list[pathlib.Path] = []
     for directory, names, filenames in os.walk(ROOT):
-        names[:] = [name for name in names if name not in PRUNED_DIRECTORIES]
         base = pathlib.Path(directory)
+        names[:] = [
+            name
+            for name in names
+            if name not in PRUNED_DIRECTORIES
+            and base / name not in ROOT_PRUNED_DIRECTORIES
+        ]
         files.extend(base / filename for filename in filenames)
     return files
 

@@ -9,6 +9,7 @@ import unittest
 
 from scripts.check_docs import (
     PRUNED_DIRECTORIES as DOCS_PRUNED_DIRECTORIES,
+    ROOT_PRUNED_DIRECTORIES as DOCS_ROOT_PRUNED_DIRECTORIES,
     ROOT,
     TIMELESS_DOCS,
     is_dedicated_history_or_evidence,
@@ -19,6 +20,7 @@ from scripts.check_docs import (
 )
 from scripts.normalize_markdown_names import (
     PRUNED_DIRECTORIES as NAME_PRUNED_DIRECTORIES,
+    ROOT_PRUNED_DIRECTORIES as NAME_ROOT_PRUNED_DIRECTORIES,
 )
 
 
@@ -128,6 +130,16 @@ class TimelessDocumentTests(unittest.TestCase):
             with self.subTest(source=source):
                 self.assertIn(source, DOCS_PRUNED_DIRECTORIES)
                 self.assertIn(source, NAME_PRUNED_DIRECTORIES)
+
+    def test_external_root_math_workspace_is_not_project_documentation(self) -> None:
+        for pruned in (
+            DOCS_ROOT_PRUNED_DIRECTORIES,
+            NAME_ROOT_PRUNED_DIRECTORIES,
+        ):
+            with self.subTest(pruned=pruned):
+                self.assertIn(ROOT / "math", pruned)
+                self.assertNotIn(ROOT / "MathUE", pruned)
+                self.assertNotIn(ROOT / "nested" / "math", pruned)
 
     def test_scoped_evidence_records_are_not_living(self) -> None:
         records = (

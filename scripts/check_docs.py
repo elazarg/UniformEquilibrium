@@ -113,6 +113,7 @@ PRUNED_DIRECTORIES = {
     "literature",
     "overleaf",
 }
+ROOT_PRUNED_DIRECTORIES = {ROOT / "math"}
 
 
 def relative(path: pathlib.Path) -> str:
@@ -122,8 +123,13 @@ def relative(path: pathlib.Path) -> str:
 def project_markdown_files() -> list[pathlib.Path]:
     documents: list[pathlib.Path] = []
     for directory, names, filenames in os.walk(ROOT):
-        names[:] = [name for name in names if name not in PRUNED_DIRECTORIES]
         base = pathlib.Path(directory)
+        names[:] = [
+            name
+            for name in names
+            if name not in PRUNED_DIRECTORIES
+            and base / name not in ROOT_PRUNED_DIRECTORIES
+        ]
         documents.extend(base / name for name in filenames if name.endswith(".md"))
     return documents
 

@@ -8,6 +8,7 @@
 # Short-lived intake: move contents into a tracked project lane or delete them.
 /ephemeral/
 
+/math/
 /overleaf/
 /literature/
 *.log

@@ -237,7 +237,7 @@ theorem pmfTV_quittingCounterfactualOutcomeLaw_update_le [Nonempty ι]
       laws intervention first hwho,
     quittingCounterfactualOutcomeLaw_update_eq_bind
       laws intervention second hwho]
-  exact pmfTV_bind_le_pmfGeneralTV
+  exact Math.Probability.pmfTV_bind_le_pmfGeneralTV
     (fun time => quittingCounterfactualOutcomeLaw laws
       (intervention.insert who time)) first second
 
