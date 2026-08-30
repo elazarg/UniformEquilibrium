@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.InstantPunishmentEquivalence
 import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
+import UniformEquilibrium.Quitting.Paths.LiveTail
 
 /-!
 # The three existence branches over a payoff table with a nonzero never payoff
@@ -91,11 +92,8 @@ theorem histDist_quittingGame_congr_reward
     (state : Option {S : Finset ι // S.Nonempty}) (time : ℕ) :
     (quittingGame reward).histDist profile state time =
       (quittingGame reward').histDist profile state time := by
-  induction time with
-  | zero => rfl
-  | succ time ih =>
-      rw [StochasticGame.histDist_succ, StochasticGame.histDist_succ, ih]
-      rfl
+  exact histDist_quittingGame_reward_irrelevant
+    reward reward' profile state time
 
 omit [DecidableEq ι] in
 /-- Limiting absorption masses are the same for every reward table. -/
@@ -105,10 +103,8 @@ theorem quittingAbsorbedMassLimit_congr_reward
     (S : {S : Finset ι // S.Nonempty}) :
     quittingAbsorbedMassLimit reward profile S =
       quittingAbsorbedMassLimit reward' profile S := by
-  unfold quittingAbsorbedMassLimit quittingAbsorbedMass
-    StochasticGame.expectedStateValue
-  simp only [histDist_quittingGame_congr_reward reward reward' profile]
-  rfl
+  exact quittingAbsorbedMassLimit_reward_irrelevant
+    reward reward' profile S
 
 omit [DecidableEq ι] in
 /-- Splicing a root before a continuation profile does not depend on the

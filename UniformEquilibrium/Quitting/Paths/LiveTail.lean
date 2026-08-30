@@ -23,6 +23,35 @@ open StochasticGame Filter Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+omit [DecidableEq ι] in
+/-- Public history distributions of a quitting game do not depend on its
+numerical terminal reward table. -/
+theorem histDist_quittingGame_reward_irrelevant
+    (first second : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame first).BehaviorProfile)
+    (state : Option {S : Finset ι // S.Nonempty}) (time : ℕ) :
+    (quittingGame first).histDist profile state time =
+      (quittingGame second).histDist profile state time := by
+  induction time with
+  | zero => rfl
+  | succ time ih =>
+      rw [StochasticGame.histDist_succ, StochasticGame.histDist_succ, ih]
+      rfl
+
+omit [DecidableEq ι] in
+/-- Limiting absorption weights depend on the strategy and transition law,
+not on the numerical terminal rewards. -/
+theorem quittingAbsorbedMassLimit_reward_irrelevant
+    (first second : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame first).BehaviorProfile)
+    (terminal : {S : Finset ι // S.Nonempty}) :
+    quittingAbsorbedMassLimit first profile terminal =
+      quittingAbsorbedMassLimit second profile terminal := by
+  unfold quittingAbsorbedMassLimit quittingAbsorbedMass
+    StochasticGame.expectedStateValue
+  simp only [histDist_quittingGame_reward_irrelevant first second profile]
+  rfl
+
 /-- Limiting probability that play never leaves the live state. -/
 def quittingLiveMassLimit
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

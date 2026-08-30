@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
-import UniformEquilibrium.Quitting.Classification.TableExistenceBranches
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
+import UniformEquilibrium.Quitting.Paths.LiveTail
 
 /-!
 # Measurable step selection of constant-table quitting equilibria
@@ -30,18 +30,6 @@ theorem. -/
 def soloExitRewardSet : Set
     ({S : Finset ι // S.Nonempty} → Payoff ι) :=
   {reward | QuittingUnitSoloExit reward ∧ QuittingCappedJointExit reward}
-
-omit [DecidableEq ι] in
-/-- Limiting absorption weights depend on the strategy and transition law,
-not on the numerical terminal rewards. -/
-theorem quittingAbsorbedMassLimit_reward_irrelevant
-    (first second : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame first).BehaviorProfile)
-    (terminal : {S : Finset ι // S.Nonempty}) :
-    quittingAbsorbedMassLimit first profile terminal =
-      quittingAbsorbedMassLimit second profile terminal := by
-  exact QuittingLCPClassification.quittingAbsorbedMassLimit_congr_reward
-    first second profile terminal
 
 omit [DecidableEq ι] in
 /-- Terminal payoff is one-Lipschitz in the terminal table under the uniform
