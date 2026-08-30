@@ -2137,21 +2137,34 @@ in the live mathematical ledger.
   the same actual profile and law have zero owner debt, unit incidence from a
   base opponent, and the base-localized paid row. This has `M`, `L`, `A`, and
   fixed-law-dispatch `C`, but the paid debtor is not the reset owner. The
-  dynamic branch prefixes a separately selected returned semantic pair;
-  nevertheless `QuittingFixedLawResetDispatch.prescribed_eq_target` and
-  `QuittingTerminalExploitabilityWitness.exists_finFour_pairBasePaidResetDispatch_payoffAligned`
-  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetPayoffAlignment.lean`)
-  prove that its prescribed payoff is exactly the payoff of the stationary
-  paid target, because both retain the same complete terminal law.
+  general fixed-law comparison
+  `quittingSureBaseRoot_unique_fixedLawDebtMinimizer_of_complement_solved`
+  (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFixedLawCapRigidity.lean`)
+  proves that a sure-quitting base with solved complement is the unique
+  total-debt minimizer on its complete-law fibre.  Therefore
+  `FinFourPairBasePaidResetTarget.returned_eq_of_fixedLawResetDispatch`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/PairBasePaidResetCapRigidity.lean`)
+  identifies the dispatch's complete returned semantic pair, including every
+  unrestricted behavioral-cap coordinate, with the literal stationary paid
+  target.  The strengthened
+  `fixedLawReset_absorbingChild_or_allContinueFace` makes the remaining split
+  literal at that source: a positive-absorption exact cap root has a
+  strict-debt prefix whose complete terminal law differs from the target law,
+  or all-Continue is an exact cap root fixing the target pair.  This is
+  source-attached fixed-law `M/L/A/C`, but only for alignment and the
+  branch-local changed-law conclusion; it neither renews the strict child nor
+  consumes the all-Continue arm.
   Applying the generic cap lift directly to that same stationary target is
   now packaged by
   `QuittingTerminalExploitabilityWitness.nonempty_finFourSameSourcePaidResetCapPort`
   (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourSameSourcePaidResetCapPort.lean`).
   It retains the positive carrier minimum, the reset dispatch and returned
-  pair, the actual paid/reset profile and law, the full-gap paid observer in
+  pair (now literally equal to the target), the actual paid/reset profile and
+  law, the full-gap paid observer in
   the forced base, and the complete summable marked port. The cap chronology
-  deliberately bypasses the separately returned pair, so this closes source
-  construction and alignment but not the all-Continue-port discharge.
+  remains independent of the dispatch child, so this closes source
+  construction and fixed-law alignment but not changed-law regeneration or
+  the all-Continue-port discharge.
   Moreover,
   `QuittingFixedLawResetDispatch.allContinue_of_target_debt_le_source`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFixedLawMinimumTargetStall.lean`)
