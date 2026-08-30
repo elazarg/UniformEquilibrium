@@ -79,6 +79,7 @@ import UniformEquilibrium.Quitting.Classification.AbnormalSingletonConsequences
 import UniformEquilibrium.Quitting.Classification.AbnormalSingletonFloor
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalDebtShadowing
 import UniformEquilibrium.Quitting.Debt.Dynamic.ChronologicalSeamReduction
+import UniformEquilibrium.Quitting.Debt.Dynamic.SummableResidualNashBellmanSpine
 import UniformEquilibrium.Quitting.Debt.Dynamic.BudgetStableCompatiblePacketIteration
 import UniformEquilibrium.Quitting.Debt.Dynamic.MarkedInternalDebtDrain
 import UniformEquilibrium.Quitting.Debt.Dynamic.NashBellmanChronologicalForcing

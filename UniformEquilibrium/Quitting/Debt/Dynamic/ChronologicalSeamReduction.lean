@@ -1304,6 +1304,39 @@ private theorem summable_flatSeamNat_and_tsum_le
   have hsummable := summable_of_sum_range_le hflat0 hprefix
   exact ⟨hsummable, hsummable.tsum_le_of_sum_range_le hprefix⟩
 
+/-- Summable prescribed seams between consecutive variable-length blocks
+remain summable after canonical calendar flattening, with the same total
+upper bound. -/
+theorem summable_flatPrescribedSeamNat_and_tsum_le
+    (who : ι) {bound : ℝ}
+    (hsummable : Summable (blocks.prescribedBlockSeamNat who))
+    (htsum : ∑' block, blocks.prescribedBlockSeamNat who block ≤ bound) :
+    Summable (blocks.flatChainNat.prescribedSeam who) ∧
+      ∑' time, blocks.flatChainNat.prescribedSeam who time ≤ bound := by
+  apply blocks.summable_flatSeamNat_and_tsum_le
+    (blocks.flatChainNat.prescribedSeam who)
+    (blocks.prescribedBlockSeamNat who)
+    (blocks.flatChainNat.prescribedSeam_nonneg who) (fun _ => abs_nonneg _)
+    hsummable htsum
+  exact blocks.consecutiveBlockSum_flatSeamNat _ _
+    (blocks.flat_prescribedSeamNat_eq who)
+
+/-- Summable total seams between consecutive variable-length blocks remain
+summable after canonical calendar flattening, with the same total upper
+bound. -/
+theorem summable_flatTotalSeamNat_and_tsum_le
+    (who : ι) {bound : ℝ}
+    (hsummable : Summable (blocks.totalBlockSeamNat who))
+    (htsum : ∑' block, blocks.totalBlockSeamNat who block ≤ bound) :
+    Summable (blocks.flatChainNat.totalSeam who) ∧
+      ∑' time, blocks.flatChainNat.totalSeam who time ≤ bound := by
+  apply blocks.summable_flatSeamNat_and_tsum_le
+    (blocks.flatChainNat.totalSeam who) (blocks.totalBlockSeamNat who)
+    (blocks.flatChainNat.totalSeam_nonneg who)
+    (fun _ => add_nonneg (abs_nonneg _) (abs_nonneg _)) hsummable htsum
+  exact blocks.consecutiveBlockSum_flatSeamNat _ _
+    (blocks.flat_totalSeamNat_eq who)
+
 /-- Theorem B directly on nested block annotations: the actual initial
 semantic pair is bounded by the two block-end seam series. -/
 theorem flat_semanticRigidityNat

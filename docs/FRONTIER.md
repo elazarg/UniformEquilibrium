@@ -2861,10 +2861,17 @@ in the live mathematical ledger.
   theorem in `MathUE/CompactFiniteChargedReturn.lean`, failure of every
   `BddAbove` hazard bound yields, at every positive radius, one block with two
   close ordered annotations and intervening hazard at least one.  This is a
-  checked conditional capacity-to-return adapter.  It neither produces
-  unbounded capacity from the AGKRS source or the hard residual nor yet
-  concatenates returned blocks into a summable-residual spine or a uniform
-  payoff; capacity restricted by a source trace remains a separate interface.
+  checked conditional capacity-to-return adapter.  The compact refinement and
+  seam ledger in
+  `UniformEquilibrium/Quitting/Debt/Dynamic/SummableResidualNashBellmanSpine.lean`
+  concatenate those returns into a `QuittingSummableResidualNashBellmanSpine`
+  with arbitrarily small total Bellman-plus-Nash residual and at least one
+  persistent marginal label.  If two persistent labels are supplied at every
+  accuracy, `quittingGame_exists_uniformEquilibriumPayoff_of_summableResidualSpines`
+  feeds the spine into the checked all-behavior summable-seam consumer.  No
+  theorem produces unbounded capacity from the AGKRS source or the hard
+  residual, and total hazard alone does not produce the second persistent
+  label; capacity restricted by a source trace remains a separate interface.
 - **Local periodic-anchor route:**
   `localPeriodicAnchor_theoremA`
   (`Research/Quitting/LocalPeriodicAnchorObstructions.lean`) turns supplied
