@@ -308,6 +308,7 @@ import MathUE.Probability.ChargedCirculationChattering
 import MathUE.Probability.ChargedCirculationFiniteProbe
 import MathUE.Probability.ChargedClassSupportRank
 import MathUE.Probability.ChargedOccupationAlternative
+import MathUE.Probability.ClockGap
 import MathUE.Probability.CoalitionTargetMassLedger
 import MathUE.Probability.ContractionErrorRecurrence
 import MathUE.Probability.CoreShadow
@@ -1097,6 +1098,7 @@ import UniformEquilibrium.ProofView.Native.History
 import UniformEquilibrium.ProofView.Native.Semantics
 import UniformEquilibrium.Quitting.AbsorptionPath.All
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceLaw
+import UniformEquilibrium.Quitting.AbsorptionPath.ClockGapA2
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath

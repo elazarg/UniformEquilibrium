@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceLaw
+import UniformEquilibrium.Quitting.AbsorptionPath.ClockGapA2
 import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionPath
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
@@ -13,12 +14,12 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSele
 
 The completely absorbing diagonal admits one further shared strict subsequence
 whose chronological marked laws converge.  Its decoded càdlàg path satisfies
-A1, and its clopen endpoint coalition fibers are the literal limits of the
+A1 and A2, and its clopen endpoint coalition fibers are the literal limits of the
 completed terminal laws.  Their fixed reward moment is therefore the limit of
 the completed prescribed payoffs and is a uniform-equilibrium payoff.
 
 The result remains conditional on the supplied vanishing-Nash family and its
-absorbing-completion diagonal.  It does not assert A2--A4, path convergence,
+absorbing-completion diagonal.  It does not assert A3--A4, path convergence,
 sequential perfection, or a fixed completion owner or branch.
 -/
 
@@ -91,6 +92,57 @@ theorem le_pathTotal
     (diagonal.completion (limit.subsequence rank)).finiteAbsorptionCertificate
   exact QuittingAbsorptionPath.le_pathTotal_chronologicalCadlagPath_of_tendsto
     certificates limit.law limit.law_tendsto time htime
+
+omit [Nonempty ι] in
+/-- The limiting total clock CDF retains the exact clock-gap law. -/
+theorem hasClockGap_chronologicalClockCDF
+    (limit : diagonal.ChronologicalLimit) :
+    MathUE.HasClockGap
+      (QuittingAbsorptionPath.chronologicalClockCDF limit.law) := by
+  apply QuittingAbsorptionPath.hasClockGap_chronologicalClockCDF_of_tendsto
+    limit.law_tendsto
+  intro rank
+  exact (diagonal.completion (limit.subsequence rank))
+    |>.finiteAbsorptionCertificate.hasClockGap_chronologicalClockCDF
+
+omit [Nonempty ι] in
+/-- The decoded total mass never exceeds one on the path interval. -/
+theorem pathTotal_le_one
+    (limit : diagonal.ChronologicalLimit)
+    (time : ℝ) (htime : time ∈ Set.Icc (0 : ℝ) 1) :
+    QuittingAbsorptionPath.pathTotal limit.path time ≤ 1 := by
+  change QuittingAbsorptionPath.pathTotal
+    (QuittingAbsorptionPath.chronologicalCadlagPath limit.law) time ≤ 1
+  rw [QuittingAbsorptionPath.pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
+    limit.law htime.2]
+  exact ProbabilityTheory.cdf_le_one _ time
+
+omit [Nonempty ι] in
+/-- The decoded total mass has the clock-gap law on the path interval. -/
+theorem hasClockGapOn_pathTotal
+    (limit : diagonal.ChronologicalLimit) :
+    MathUE.HasClockGapOn
+      (QuittingAbsorptionPath.pathTotal limit.path) (Set.Icc (0 : ℝ) 1) := by
+  intro time later htime hlater htimeLater hlaterGap
+  change later < QuittingAbsorptionPath.pathTotal
+    (QuittingAbsorptionPath.chronologicalCadlagPath limit.law) time at hlaterGap
+  change QuittingAbsorptionPath.pathTotal
+      (QuittingAbsorptionPath.chronologicalCadlagPath limit.law) later =
+    QuittingAbsorptionPath.pathTotal
+      (QuittingAbsorptionPath.chronologicalCadlagPath limit.law) time
+  rw [QuittingAbsorptionPath.pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
+    limit.law htime.2] at hlaterGap ⊢
+  rw [QuittingAbsorptionPath.pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
+    limit.law hlater.2]
+  exact limit.hasClockGap_chronologicalClockCDF htimeLater hlaterGap
+
+omit [Nonempty ι] in
+/-- The decoded chronological limit satisfies absorption-path axiom A2. -/
+theorem absorptionPathA2
+    (limit : diagonal.ChronologicalLimit) :
+    QuittingAbsorptionPath.AbsorptionPathA2 limit.path := by
+  exact QuittingAbsorptionPath.absorptionPathA2_of_clockGap limit.path
+    limit.le_pathTotal limit.pathTotal_le_one limit.hasClockGapOn_pathTotal
 
 /-- The terminal coalition coordinate of the decoded chronological path. -/
 def endpointCoalitionMass

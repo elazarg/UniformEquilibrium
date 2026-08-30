@@ -8,6 +8,7 @@ import Mathlib.MeasureTheory.Measure.Portmanteau
 import Mathlib.MeasureTheory.Measure.Prokhorov
 import Mathlib.Probability.CDF
 import Mathlib.Probability.ProbabilityMassFunction.Constructions
+import MathUE.Probability.ClockGap
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
@@ -311,6 +312,52 @@ theorem continuous_chronologicalEventClock :
     Continuous (chronologicalEventClock :
       QuittingChronologicalEvent reward → ℝ) :=
   continuous_subtype_val.comp continuous_fst
+
+/-- The pushforward of a chronological law by its literal absorption clock. -/
+def chronologicalClockLaw
+    (law : ProbabilityMeasure (QuittingChronologicalEvent reward)) :
+    ProbabilityMeasure ℝ :=
+  law.map (continuous_chronologicalEventClock
+    (reward := reward)).measurable.aemeasurable
+
+/-- The total clock CDF of a chronological marked law. -/
+def chronologicalClockCDF
+    (law : ProbabilityMeasure (QuittingChronologicalEvent reward)) : ℝ → ℝ :=
+  ProbabilityTheory.cdf (chronologicalClockLaw law)
+
+omit [DecidableEq ι] [Nonempty ι] in
+/-- The total clock CDF is exactly the real mass of the chronological clock
+event. -/
+theorem chronologicalClockCDF_eq_clockEvent_real
+    (law : ProbabilityMeasure (QuittingChronologicalEvent reward))
+    (time : ℝ) :
+    chronologicalClockCDF law time =
+      (law : Measure (QuittingChronologicalEvent reward)).real
+        (chronologicalClockEvent time) := by
+  rw [chronologicalClockCDF, ProbabilityTheory.cdf_eq_real,
+    ProbabilityMeasure.measureReal_eq_coe_coeFn]
+  unfold chronologicalClockLaw
+  rw [ProbabilityMeasure.map_apply _ _ measurableSet_Iic,
+    ← ProbabilityMeasure.measureReal_eq_coe_coeFn]
+  rfl
+
+omit [DecidableEq ι] [Nonempty ι] in
+/-- Weak limits of chronological laws with clock gaps retain the clock-gap
+law. -/
+theorem hasClockGap_chronologicalClockCDF_of_tendsto
+    {index : Type*} {limitFilter : Filter index} [limitFilter.NeBot]
+    {laws : index → ProbabilityMeasure (QuittingChronologicalEvent reward)}
+    {law : ProbabilityMeasure (QuittingChronologicalEvent reward)}
+    (hlaw : Tendsto laws limitFilter (𝓝 law))
+    (hsource : ∀ rank, MathUE.HasClockGap
+      (chronologicalClockCDF (laws rank))) :
+    MathUE.HasClockGap (chronologicalClockCDF law) := by
+  unfold chronologicalClockCDF chronologicalClockLaw at hsource ⊢
+  apply MathUE.HasClockGap.cdf_of_tendsto
+    (limitFilter := limitFilter)
+  · exact ProbabilityMeasure.tendsto_map_of_tendsto_of_continuous
+      laws law hlaw continuous_chronologicalEventClock
+  · exact hsource
 
 omit [DecidableEq ι] [Nonempty ι] in
 theorem continuous_chronologicalEventMark :
@@ -653,6 +700,18 @@ theorem chronologicalLaw_clockEvent_real_eq_of_le_of_lt
   exact certificate.pathTotal_eq_of_le_of_lt_pathTotal
     htimeLater hlaterGap
 
+omit [Nonempty ι] in
+/-- Every canonical finite chronological law has the global clock-gap
+property. -/
+theorem hasClockGap_chronologicalClockCDF
+    (certificate : QuittingFiniteRootSequenceAbsorption roots) :
+    MathUE.HasClockGap
+      (chronologicalClockCDF (certificate.chronologicalLaw reward)) := by
+  intro time later htimeLater hlaterGap
+  simp_rw [chronologicalClockCDF_eq_clockEvent_real] at hlaterGap ⊢
+  exact certificate.chronologicalLaw_clockEvent_real_eq_of_le_of_lt
+    htimeLater hlaterGap
+
 end QuittingFiniteRootSequenceAbsorption
 
 /-- A chronological marked law decodes to a coordinatewise càdlàg path. -/
@@ -731,6 +790,16 @@ theorem pathTotal_chronologicalCadlagPath_eq_clockEvent_real
   simp_rw [chronologicalCoalitionCDF_eq_clockCoalitionEvent_real
     law _ htime]
   exact sum_clockCoalitionEvent_real_eq_clockEvent_real law time
+
+omit [Nonempty ι] in
+/-- On the path interval, decoded total mass is the total clock CDF. -/
+theorem pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
+    (law : ProbabilityMeasure (QuittingChronologicalEvent reward))
+    {time : ℝ} (htime : time ≤ 1) :
+    pathTotal (chronologicalCadlagPath law) time =
+      chronologicalClockCDF law time := by
+  rw [pathTotal_chronologicalCadlagPath_eq_clockEvent_real law htime,
+    chronologicalClockCDF_eq_clockEvent_real]
 
 namespace QuittingFiniteRootSequenceAbsorption
 

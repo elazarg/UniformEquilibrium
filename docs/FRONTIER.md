@@ -2504,12 +2504,14 @@ in the live mathematical ledger.
   The finite law records the literal root, bounded post-stage tail, and
   discrete nonempty coalition at each absorption clock.
   `le_pathTotal_chronologicalCadlagPath_of_tendsto` proves that the weakly
-  decoded càdlàg path satisfies A1, while
+  decoded càdlàg path satisfies A1.  `HasClockGap.cdf_of_tendsto` preserves
+  the canonical finite clock-gap law under weak convergence, and
+  `ChronologicalLimit.absorptionPathA2` compiles that law into A2.  Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No A2--A4 closure, all-clock path convergence, sequential
+  compiler.  No A3--A4 closure, all-clock path convergence, sequential
   perfection, fixed completion owner, or unconditional AGKRS branch is
   asserted.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
