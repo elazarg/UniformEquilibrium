@@ -2497,6 +2497,21 @@ in the live mathematical ledger.
   existing infinite-horizon approximate-equilibrium interface; it is not a
   finite-horizon existence theorem and does not prove that interface for every
   game.
+  `nonempty_chronologicalLimit` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalLimit.lean`
+  now sends the vanishing-Never arm through late sure-solo completion and one
+  shared strict subsequence of globally normalized chronological marked laws.
+  The finite law records the literal root, bounded post-stage tail, and
+  discrete nonempty coalition at each absorption clock.
+  `le_pathTotal_chronologicalCadlagPath_of_tendsto` proves that the weakly
+  decoded càdlàg path satisfies A1, while
+  `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
+  `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
+  fixed reward moment.  The conditional
+  `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
+  compiler.  No A2--A4 closure, all-clock path convergence, sequential
+  perfection, fixed completion owner, or unconditional AGKRS branch is
+  asserted.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
