@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.Probability
+import MathUE.ProbabilityMassFunction.TotalVariation
 
 /-!
 # Total variation for arbitrary probability mass functions
@@ -54,6 +54,69 @@ theorem abs_expect_sub_le_two_mul_bound_mul_pmfGeneralTV
     (hbound : forall omega, |f omega| <= M) :
     |expect mu f - expect nu f| <= 2 * M * pmfGeneralTV mu nu := by
   exact abs_expect_sub_le_two_mul_bound_mul_one_sub_overlap mu nu f hbound
+
+/-- Binding an arbitrary discrete source law through a finite-valued Markov
+kernel contracts general total variation. -/
+theorem pmfTV_bind_le_pmfGeneralTV {Alpha Beta : Type*} [Fintype Beta]
+    (kernel : Alpha -> PMF Beta) (mu nu : PMF Alpha) :
+    pmfTV (mu.bind kernel) (nu.bind kernel) <= pmfGeneralTV mu nu := by
+  let witness : Beta -> Real :=
+    pmfPositiveVariationWitness (mu.bind kernel) (nu.bind kernel) 1
+  let averaged : Alpha -> Real := fun a => expect (kernel a) witness
+  let centered : Alpha -> Real := fun a => averaged a - 1 / 2
+  have hw0 : forall b, 0 <= witness b := fun b =>
+    pmfPositiveVariationWitness_nonneg
+      (mu.bind kernel) (nu.bind kernel) zero_le_one b
+  have hw1 : forall b, witness b <= 1 := fun b =>
+    pmfPositiveVariationWitness_le
+      (mu.bind kernel) (nu.bind kernel) zero_le_one b
+  have ha0 : forall a, 0 <= averaged a := fun a =>
+    expect_nonneg (kernel a) witness hw0
+  have ha1 : forall a, averaged a <= 1 := by
+    intro a
+    simpa [averaged] using
+      expect_mono (kernel a) witness (fun _ => 1) hw1
+  have hc : forall a, |centered a| <= 1 / 2 := by
+    intro a
+    rw [abs_le]
+    constructor <;> dsimp only [centered] <;> linarith [ha0 a, ha1 a]
+  have hvariation :=
+    abs_expect_sub_le_two_mul_bound_mul_pmfGeneralTV mu nu centered hc
+  have havg_mu : Summable (fun a => (mu a).toReal * averaged a) :=
+    expect_summable_of_bounded mu averaged fun a => by
+      rw [abs_of_nonneg (ha0 a)]
+      exact ha1 a
+  have havg_nu : Summable (fun a => (nu a).toReal * averaged a) :=
+    expect_summable_of_bounded nu averaged fun a => by
+      rw [abs_of_nonneg (ha0 a)]
+      exact ha1 a
+  have hcenter_mu : expect mu centered = expect mu averaged - 1 / 2 := by
+    have h := expect_add_of_summable mu averaged (fun _ => -(1 / 2))
+      havg_mu ((pmf_toReal_summable mu).mul_right (-(1 / 2)))
+    simpa only [centered, sub_eq_add_neg, expect_const] using h
+  have hcenter_nu : expect nu centered = expect nu averaged - 1 / 2 := by
+    have h := expect_add_of_summable nu averaged (fun _ => -(1 / 2))
+      havg_nu ((pmf_toReal_summable nu).mul_right (-(1 / 2)))
+    simpa only [centered, sub_eq_add_neg, expect_const] using h
+  calc
+    pmfTV (mu.bind kernel) (nu.bind kernel) =
+        expect mu averaged - expect nu averaged := by
+      rw [show pmfTV (mu.bind kernel) (nu.bind kernel) =
+          expect (mu.bind kernel) witness - expect (nu.bind kernel) witness by
+        symm
+        simpa [witness] using
+          expect_sub_pmfPositiveVariationWitness
+            (mu.bind kernel) (nu.bind kernel) 1]
+      rw [expect_bind, expect_bind]
+    _ <= |expect mu centered - expect nu centered| := by
+      rw [hcenter_mu, hcenter_nu]
+      have heq :
+          (expect mu averaged - 1 / 2) - (expect nu averaged - 1 / 2) =
+            expect mu averaged - expect nu averaged := by ring
+      rw [heq]
+      exact le_abs_self _
+    _ <= 2 * (1 / 2) * pmfGeneralTV mu nu := hvariation
+    _ = pmfGeneralTV mu nu := by ring
 
 /-- If all but one atom are grouped together, total variation is at most the
 sum of the two masses outside the distinguished atom. -/
