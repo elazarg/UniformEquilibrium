@@ -2447,6 +2447,24 @@ in the live mathematical ledger.
   construct the exact spine, rule out either returned alternative, or prove a
   uniform-equilibrium payoff.
 
+  A separate conditional two-cut interface makes one local paid-splice
+  consumer literal. In
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPositiveMinimumTwoCutPaidSplice.lean`,
+  `quittingTerminalSemanticDebtSum_twoCut_eq` is the exact survival-weighted
+  debt telescope across two supplied cuts, and
+  `QuittingPositiveMinimumTwoCutBlock.totalCharge_add_theta_mul_exitExcess_ge`
+  is its arbitrary-survival coercive form. For a supplied uniformly reached
+  post-mark block, `offMinimum_or_exists_paidSplice` returns either a strict
+  exit above the minimum debt or one fixed coordinate payer with executable
+  suffix deviations at every tolerance. The Fin4 specialization gives the
+  literal `block.coerciveConstant / 16` suffix gain and debt drop and the
+  `block.reachFloor * block.coerciveConstant / 16` parent gain. These results
+  have `M` and `L`, with a
+  conditional `C` for the supplied block. They have no source `A`: no theorem
+  here constructs the cuts, positive hazard or reach floors, source ancestry,
+  renewable child, terminal equilibrium, or uniform-equilibrium payoff. A
+  signed two-coordinate semantic-seam telescope is not formalized here.
+
   The approximate vanishing-incidence gap inside the tube is now quantified.
   `exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean`)
