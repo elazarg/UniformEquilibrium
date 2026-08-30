@@ -618,6 +618,20 @@ into arbitrarily deep source-matched cap--Nash chronologies which retain it
 in their literal suffix.  The atom is not thereby a prefix-root atom,
 Bellman edge, paid row, reset, cumulative charge, or final consumer.
 
+A separate conditional hull foundation is now literal.
+`quittingLawTightCapNashSaturationHull`
+(`UniformEquilibrium/Diagnostics/Quitting/LawTightCapNashSaturationHull.lean`)
+closes one supplied joint-law origin under exact cap--Nash prefixes and
+debt-nonincreasing replacement within one fixed terminal-law fibre.  The hull
+is a compact carrier subset only when that origin is already in the joint
+carrier.  Given a positive global carrier debt floor and a positive finite
+origin atom,
+`exists_quittingLawTightCapNashSaturationHull_minimum_retaining_atom` gives a
+hull debt minimizer which retains the atom and satisfies the exact
+debt-weighted cone inequality.  This is `M` and `L`, but it supplies neither
+the origin hypotheses nor a downstream consumer: no minimum face, unique
+root, ancestry, timing, absorption, strict chamber, or uniform payoff follows.
+
 An independent finite-cycle route now has a sharp consumer and sharp producer
 barriers.  `quittingCyclic_norm_attachment_and_terminalDebt_le`
 (`UniformEquilibrium/Quitting/Cycles/CyclicGreenDebt.lean`) bounds attachment
