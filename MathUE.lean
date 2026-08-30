@@ -408,6 +408,7 @@ import MathUE.Topology.SingleOuterApproximation
 import MathUE.Topology.SourceOmegaChain
 import MathUE.Topology.TailSupConvergence
 import MathUE.Topology.ThreeFourFifthsRotation
+import MathUE.Topology.UniformProbeCompactness
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit

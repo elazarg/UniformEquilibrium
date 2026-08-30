@@ -2509,6 +2509,19 @@ in the live mathematical ledger.
   theorem identifies the abstract joint outcome law with the executable
   terminal law, preserves Nash inequalities under replacement, or constructs
   a compact suffix family.
+  The qualified obstruction in
+  `UniformEquilibrium/Diagnostics/Quitting/CounterfactualSuffixCompactnessNoGo.lean`
+  makes the limitation concrete.  Two rational Fin4 independent stopping
+  families have the same payoff-vector response law after every current
+  one-player replacement after the first-stopping map forgets dates and the
+  reward map forgets coalition labels.  A state encoded only by that signature
+  cannot realize the stated suffix transitions and successor payoff
+  observations.  A separate actual one-stage spike family is uniformly separated
+  by its depth-labelled probes.  Therefore no metric encoding of all those
+  probes with one common all-depth modulus has sequentially compact image or
+  one finite global net at the resulting resolution.  This does not obstruct
+  fixed-depth continuity, depth-dependent moduli, or finite programs, and it
+  does not prove an equilibrium or a uniform-equilibrium counterexample.
   `nonempty_chronologicalLimit` in
   `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalLimit.lean`
   now sends the vanishing-Never arm through late sure-solo completion and one

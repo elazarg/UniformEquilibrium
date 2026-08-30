@@ -458,6 +458,7 @@ import MathUE.Topology.SingleOuterApproximation
 import MathUE.Topology.SourceOmegaChain
 import MathUE.Topology.TailSupConvergence
 import MathUE.Topology.ThreeFourFifthsRotation
+import MathUE.Topology.UniformProbeCompactness
 import MathUE.TransferSummaryMonoid
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.Viability.AdaptiveEulerLimit
@@ -702,6 +703,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.SupportStatusCe
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.SupportStatusEnumeration
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.TerminalGapExactRootMarginalCap
 import UniformEquilibrium.Diagnostics.Quitting.CounterfactualAtomExternalityRegression
+import UniformEquilibrium.Diagnostics.Quitting.CounterfactualSuffixCompactnessNoGo
 import UniformEquilibrium.Diagnostics.Quitting.CutoffOneMixedActual
 import UniformEquilibrium.Diagnostics.Quitting.CyclicKofNFeasibilityObstruction
 import UniformEquilibrium.Diagnostics.Quitting.CyclicKofNSupportedRootRetentionNoGo
