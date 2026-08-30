@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Cycles.DiffuseTailSoloStructure
 # Zero-free calibration: the regular five-player tournament seed
 
 `QuittingZeroFreeSoloMatrix`
-(`Research/Quitting/DiffuseTailSoloStructure.lean`) names the regular
+(`UniformEquilibrium/Quitting/Cycles/DiffuseTailSoloStructure.lean`) names the regular
 five-player tournament seed as an intended instance; this module supplies the
 instance for the literal seed table of
 `Experiments/counterexample_search/RegularTournamentFiveSeed.lean`.
@@ -25,9 +25,9 @@ inequality `survivalGap_mul_abs_normalizedSoloMatrix_le_of_soloWindow`
 consumes.
 
 The companion instance for the Solan–Vieille boundary table is in
-`Research/Quitting/DiffuseTailSoloCalibrations.lean`.  It is in the Research
-lane because its table is production data; this one is in the Experiments
-lane because the seed table is, and Research must never import Experiments.
+`UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloMatrixCalibration.lean`.
+That table is production data; this instance remains in the Experiments lane
+because the seed table is experimental.
 
 ## Scope
 

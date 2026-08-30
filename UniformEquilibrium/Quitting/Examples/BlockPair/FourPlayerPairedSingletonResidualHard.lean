@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonLCP
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloMatrixCalibration
 import UniformEquilibrium.Quitting.Classification.LCP.Gate
 
 /-!
@@ -127,10 +128,8 @@ theorem normalizedSoloMatrix_stationaryCompletion :
 
 theorem normalizedSoloMatrix_periodTwo :
     normalizedSoloMatrix boundaryReward = pairedSingletonMatrix := by
-  funext who owner
-  rw [normalizedSoloMatrix,
-    normalized_singletonMatrix_eq_quittingSingletonMatrix]
-  exact periodTwo_singletonMatrix who owner
+  exact
+    SolanVieilleBoundary.normalizedSoloMatrix_boundaryReward_eq_pairedSingletonMatrix
 
 private theorem residualHardClass_of_normalizedSoloMatrix_eq
     (reward : {S : Finset Player // S.Nonempty} → Payoff Player)

@@ -68,7 +68,6 @@ import Research.Quitting.CyclicTripleSoloTail
 import Research.Quitting.DebtTransportMarkovMonodromy
 import Research.Quitting.DiffuseTailEffectiveCharge
 import Research.Quitting.DiffuseTailNonvacuity
-import Research.Quitting.DiffuseTailSoloCalibrations
 import Research.Quitting.DiffuseApproximateDeletion
 import Research.Quitting.DissipativePeriodizationCompleteness
 import Research.Quitting.DynamicDebtTerminalSemanticBridge
@@ -168,6 +167,7 @@ import Research.Quitting.SignedResetCommonEdgeSourceMismatchNoGo
 import Research.Quitting.SingletonClockDefectOverlap
 import Research.Quitting.SingletonMarkedUseDebtBudgetNoGo
 import Research.Quitting.SingletonOccupationOrderObstruction
+import Research.Quitting.SolanVieilleBoundaryPairCollisionCalibration
 import Research.Quitting.SoloPeriodicInterVisitBalance
 import Research.Quitting.SoloTailExactStructure
 import Research.Quitting.SoloTailStoppingVerification

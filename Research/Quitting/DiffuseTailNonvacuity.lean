@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.DiffuseTailEffectiveCharge
-import Research.Quitting.DiffuseTailSoloCalibrations
 import Research.Quitting.SourceMatchedSnellPurificationCollapse
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundarySoloMatrixCalibration
 
 /-!
 # A satisfied instance of the diffuse-tail hypothesis bundle
@@ -20,7 +20,7 @@ tightness at every persistently active player.  This module discharges all of
 them simultaneously for the explicit solo-hazard tail `svRoots` of
 `Research/Quitting/SourceMatchedSnellPurificationCollapse.lean` over the
 Solan--Vieille boundary table, whose zero-free margin `1` is
-`SolanVieilleBoundary.one_le_abs_normalizedSoloMatrix`.
+`SolanVieilleBoundary.one_le_abs_normalizedSoloMatrix_boundaryReward`.
 
 Two things follow.
 
@@ -106,7 +106,8 @@ theorem svQuittingTailPersistentlySolo : QuittingTailPersistentlySolo svRoots :=
   quittingTailPersistentlySolo_of_zeroFree svRoots svValue svBoundary svPolicy
     svEndpointNash (abs_reward_le_quittingRewardBound boundaryReward)
     svEventualAbsorption_pos svConditionedAbsorptionWeight_tendsto
-    svBoundary_eq_soloReward_of_persistentlyActive zeroFree_boundaryReward
+    svBoundary_eq_soloReward_of_persistentlyActive
+    quittingZeroFreeSoloMatrix_boundaryReward
     svQuittingSoloWindowExtraction
 
 /-! ## Closed forms for the window statistics -/
@@ -195,7 +196,8 @@ theorem svSoloWindowCharge_le {owner : Player} (hne : owner ≠ quitter)
     svEventualAbsorption_pos quitter owner
     (svBoundary_eq_soloReward_of_persistentlyActive quitter
       ((svQuittingTailPersistentlyActive_iff quitter).2 rfl))
-    one_pos (one_le_abs_normalizedSoloMatrix (Ne.symm hne)) fence 0 hhalf
+    one_pos (one_le_abs_normalizedSoloMatrix_boundaryReward (Ne.symm hne))
+    fence 0 hhalf
     (svRoots_quitter_active fence) (svRoots_quitter_active (fence + 1 + 0))
     (fun offset hoffset => absurd hoffset (Nat.not_lt_zero offset))
     (fun offset hoffset => absurd hoffset (Nat.not_lt_zero offset))
