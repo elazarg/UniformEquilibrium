@@ -10,8 +10,8 @@ import Mathlib.Probability.CDF
 import Mathlib.Probability.ProbabilityMassFunction.Constructions
 import MathUE.Probability.ClockGap
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
-import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Root.Simplex
 
 /-!
 # Chronological marked laws of finite root sequences
@@ -228,8 +228,7 @@ def chronologicalEventAt
   (⟨quittingRootSequenceClock roots index.1,
       quittingRootSequenceClock_nonneg roots index.1,
       quittingRootSequenceClock_le_one roots index.1⟩,
-    (fun who ↦ Math.ProbabilityMassFunction.stdSimplexEquiv
-      (roots index.1 who)),
+    quittingSimplexOfRoot (roots index.1),
     ⟨quittingRootSequenceTailVector reward roots (index.1 + 1),
       tail_mem_box reward index.1⟩,
     index.2)
@@ -278,9 +277,7 @@ theorem quittingRootOfSimplex_chronologicalEventAt_root
         (chronologicalEventRoot
           (certificate.chronologicalEventAt reward index)) =
       roots index.1 := by
-  funext who
-  exact Math.ProbabilityMassFunction.stdSimplexEquiv.symm_apply_apply
-    (roots index.1 who)
+  exact quittingRootOfSimplex_simplexOfRoot (roots index.1)
 
 end QuittingFiniteRootSequenceAbsorption
 

@@ -11,6 +11,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSingletonTightMin
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauNashMoat
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity
+import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 
 /-!
 # Strict minimum-plateau isolation for four-player quitting games

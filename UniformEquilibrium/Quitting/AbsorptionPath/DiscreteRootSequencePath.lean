@@ -49,6 +49,17 @@ def quittingRootSequenceStageCoalitionMass
   quittingRootSequenceSurvival roots time *
     quittingRootCoalitionMass (roots time) coalition.1
 
+/-- A stage coalition atom is the surviving mass `1 - clock` times the
+current root's exact coalition mass. -/
+theorem quittingRootSequenceStageCoalitionMass_eq_one_sub_clock_mul
+    (roots : ℕ → ι → PMF Bool) (time : ℕ)
+    (coalition : {S : Finset ι // S.Nonempty}) :
+    quittingRootSequenceStageCoalitionMass roots time coalition =
+      (1 - quittingRootSequenceClock roots time) *
+        quittingRootCoalitionMass (roots time) coalition.1 := by
+  unfold quittingRootSequenceStageCoalitionMass quittingRootSequenceClock
+  ring
+
 /-- Coalition mass accumulated strictly before stage `time`. -/
 def quittingRootSequenceCumulativeCoalitionMass
     (roots : ℕ → ι → PMF Bool) (time : ℕ)

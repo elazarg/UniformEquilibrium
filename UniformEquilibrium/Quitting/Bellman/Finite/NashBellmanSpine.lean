@@ -6,9 +6,9 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
 import MathUE.Topology.CompactSerialRelation
+import UniformEquilibrium.Quitting.Root.Simplex
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
-import MathUE.ProbabilityMassFunction.Simplex
 
 /-!
 # Exact Nash--Bellman spines for finite quitting games
@@ -28,23 +28,6 @@ open Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- Product of Boolean mixed-action simplices used as a topological model of
-quitting roots. -/
-abbrev QuittingRootSimplex (ι : Type) [Fintype ι] :=
-  ∀ _ : ι, stdSimplex ℝ Bool
-
-/-- Convert simplex coordinates to the corresponding profile of finite
-probability mass functions. -/
-def quittingRootOfSimplex (root : QuittingRootSimplex ι) :
-    ι → PMF Bool :=
-  fun who => (stdSimplexEquiv (α := Bool)).symm (root who)
-
-omit [DecidableEq ι] in
-@[simp] theorem quittingRootOfSimplex_apply_toReal
-    (root : QuittingRootSimplex ι) (who : ι) (action : Bool) :
-    ((quittingRootOfSimplex root who) action).toReal = root who action := by
-  simp [quittingRootOfSimplex, stdSimplexEquiv_symm_apply]
 
 /-- The expected quitting payoff in simplex coordinates is a finite
 multilinear sum. -/
@@ -458,11 +441,9 @@ theorem exists_quittingNashBellmanPredecessor
     refine ⟨root, ?_⟩
     exact (quittingContinuationGame_isNash_iff reward tail.1 root).1 hroot
   obtain ⟨root, hnash⟩ := hexists
-  let simplexRoot : QuittingRootSimplex ι :=
-    fun who => stdSimplexEquiv (root who)
-  have hroot : quittingRootOfSimplex simplexRoot = root := by
-    funext who
-    exact (stdSimplexEquiv (α := Bool)).symm_apply_apply (root who)
+  let simplexRoot : QuittingRootSimplex ι := quittingSimplexOfRoot root
+  have hroot : quittingRootOfSimplex simplexRoot = root :=
+    quittingRootOfSimplex_simplexOfRoot root
   let currentValue : Payoff ι :=
     quittingRootSuccessorPayoff reward tail.1 root
   have hcurrentBound : ∀ who, |currentValue who| ≤ M := by

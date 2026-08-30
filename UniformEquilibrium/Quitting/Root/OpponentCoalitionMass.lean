@@ -54,6 +54,23 @@ def quittingRootOpponentIncidenceMass
         other ∈ terminal.val ∧ other ≠ who),
     quittingRootCoalitionMass root terminal.val
 
+/-- Sum of all displayed opponent-incidence coordinates for one owner.
+A coalition containing several opponents is counted once for each such
+opponent. -/
+def quittingRootTotalOpponentIncidenceMass
+    (owner : ι) (root : ι → PMF Bool) : ℝ :=
+  ∑ other ∈ Finset.univ.erase owner,
+    quittingRootOpponentIncidenceMass owner other root
+
+/-- Total fresh root incidence is nonnegative. -/
+theorem quittingRootTotalOpponentIncidenceMass_nonneg
+    (owner : ι) (root : ι → PMF Bool) :
+    0 ≤ quittingRootTotalOpponentIncidenceMass owner root := by
+  unfold quittingRootTotalOpponentIncidenceMass
+  exact Finset.sum_nonneg fun other _ =>
+    Finset.sum_nonneg fun terminal _ =>
+      quittingRootCoalitionMass_nonneg root terminal.val
+
 /-- The mass of an exact coalition is bounded by the Quit probability of
 every member. -/
 theorem quittingRootCoalitionMass_le_quitProbability_of_mem

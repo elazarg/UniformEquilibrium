@@ -5,8 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticOwnStrategyTransport
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauNashMoat
 import UniformEquilibrium.Quitting.Cycles.PeriodOneTangentAtlas
+import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 
 /-!
 # Literal Nash support at minimum terminal debt

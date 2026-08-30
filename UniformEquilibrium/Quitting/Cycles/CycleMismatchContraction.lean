@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Debt.Dynamic.CyclePinnedDebt
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
+import UniformEquilibrium.Quitting.Root.Simplex
 
 /-!
 # The cyclic companion map contracts, and the mismatch vanishes
@@ -368,17 +369,6 @@ theorem tendsto_iterate_quittingRootCompanionMap
     start
 
 /-! ## Period one against a cyclic continuation block -/
-
-/-- Simplex coordinates of a product root, inverse to
-`quittingRootOfSimplex`. -/
-def quittingSimplexOfRoot (root : ι → PMF Bool) : QuittingRootSimplex ι :=
-  fun who ↦ stdSimplexEquiv (root who)
-
-omit [DecidableEq ι] in
-@[simp] theorem quittingRootOfSimplex_simplexOfRoot (root : ι → PMF Bool) :
-    quittingRootOfSimplex (quittingSimplexOfRoot root) = root := by
-  funext who
-  exact (stdSimplexEquiv (α := Bool)).symm_apply_apply (root who)
 
 /-- The length-one block sitting at `value` with root `root`. -/
 def quittingRowBlock (value : Payoff ι) (root : ι → PMF Bool) :

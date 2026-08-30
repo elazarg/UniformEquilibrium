@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.ProbabilityMassFunction.Bool
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
 /-!
@@ -75,12 +76,6 @@ def quittingTerminalTotalOpponentIncidenceMass
   ∑ other ∈ Finset.univ.erase owner,
     quittingTerminalOpponentIncidenceMass owner other mass
 
-/-- Root-stage analogue of total opponent incidence. -/
-def quittingRootTotalOpponentIncidenceMass
-    (owner : ι) (root : ι → PMF Bool) : ℝ :=
-  ∑ other ∈ Finset.univ.erase owner,
-    quittingRootOpponentIncidenceMass owner other root
-
 /-- Total opponent incidence is continuous in the terminal law. -/
 theorem continuous_quittingTerminalTotalOpponentIncidenceMass
     (owner : ι) :
@@ -88,18 +83,6 @@ theorem continuous_quittingTerminalTotalOpponentIncidenceMass
   unfold quittingTerminalTotalOpponentIncidenceMass
   exact continuous_finsetSum _ fun other _ =>
     continuous_quittingTerminalOpponentIncidenceMass owner other
-
-/-- Total fresh root incidence is nonnegative. -/
-theorem quittingRootTotalOpponentIncidenceMass_nonneg
-    (owner : ι) (root : ι → PMF Bool) :
-    0 ≤ quittingRootTotalOpponentIncidenceMass owner root := by
-  unfold quittingRootTotalOpponentIncidenceMass
-  apply Finset.sum_nonneg
-  intro other _
-  unfold quittingRootOpponentIncidenceMass
-  exact Finset.sum_nonneg fun terminal _ =>
-    MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg
-      root terminal.val
 
 /-- Exact affine action of a prefix on total opponent incidence. -/
 theorem quittingTerminalTotalOpponentIncidenceMass_lawPrefix

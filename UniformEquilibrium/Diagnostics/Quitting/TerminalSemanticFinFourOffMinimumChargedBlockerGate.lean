@@ -12,6 +12,7 @@ import
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDefectCharge
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
+import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 
 /-!
 # A charged blocker gate away from the four-player minimum fiber

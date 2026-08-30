@@ -1827,6 +1827,8 @@ import UniformEquilibrium.Quitting.Root.SelfTailClosure
 import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Root.SequencePayoff
+import UniformEquilibrium.Quitting.Root.Simplex
+import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Root.TailStability

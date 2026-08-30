@@ -690,6 +690,8 @@ import UniformEquilibrium.Quitting.Classification.TerminalExploitabilityToggles
 import UniformEquilibrium.Quitting.Cycles.TerminalExploitabilityExactCycleExclusion
 import UniformEquilibrium.Quitting.Root.NashExistence
 import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
+import UniformEquilibrium.Quitting.Root.Simplex
+import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect
 import UniformEquilibrium.Quitting.Nash.FiniteHorizon.MarkedSureQuit
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt

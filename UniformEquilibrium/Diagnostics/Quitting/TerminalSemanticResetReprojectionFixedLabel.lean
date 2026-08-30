@@ -5,8 +5,9 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetReprojectionConcentratedConsumer
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauNashMoat
 import UniformEquilibrium.Quitting.Debt.Marked.FencePacket
+import UniformEquilibrium.Quitting.Root.NashDefectContinuity
+import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 
 /-!
 # A fixed strategic label in the concentrated reprojection branch
