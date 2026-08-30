@@ -11,8 +11,9 @@ import Research.Quitting.FinFourProducerAtlas.CanonicalPairRenewableSourceRank
 
 Umbrella for exact endpoint source regeneration, minimum-fibre child
 regeneration, strict support descent, and the phase-tagged renewable rank.
-The stronger horizontal-seam backward compiler remains an explicit open
-condition, but source-independent downstream conclusions do not require it.
+The uncharged uniform comparison of every behavioral deviation gain across a
+horizontal seam is impossible; a charged or centered compiler remains open.
+Source-independent downstream conclusions do not require such a compiler.
 -/
 
 noncomputable section
@@ -66,6 +67,44 @@ end FinFourRenewableTrace
 namespace FinFourOwnerCompressedMinimumReturnForcedPairPacket
 namespace CanonicalPairMinimumEndpointSupportRankHandoff
 
+/-- The original canonical endpoint itself carries the exact Fin4 horizontal
+debt transfer: one nonpayer gains at least one third of the payer's positive
+source debt. -/
+theorem exists_other_endpointDebtIncrease_div_three
+    (handoff : CanonicalPairMinimumEndpointSupportRankHandoff packet) :
+    ∃ other, other ≠ packet.payer ∧
+      0 < quittingTerminalSemanticDebt
+          handoff.supportHandoff.sourceCluster packet.payer / 3 ∧
+        quittingTerminalSemanticDebt
+            handoff.supportHandoff.sourceCluster packet.payer / 3 ≤
+          quittingTerminalSemanticDebtChange
+            handoff.supportHandoff.sourceCluster
+            handoff.supportHandoff.endpointCluster other := by
+  have hsum :
+      quittingTerminalSemanticDebtSum
+          handoff.supportHandoff.endpointCluster =
+        quittingTerminalSemanticDebtSum
+          handoff.supportHandoff.sourceCluster := by
+    rw [handoff.supportHandoff.endpoint_debtSum_eq_minimum,
+      handoff.supportHandoff.source_debtSum_eq_minimum]
+  have htransfer :=
+    sum_opponent_debtChange_eq_totalChange_add_sourceDebt_of_target_zero
+      handoff.supportHandoff.sourceCluster
+      handoff.supportHandoff.endpointCluster packet.payer
+      handoff.supportHandoff.endpoint_moverDebt_eq_zero
+  rw [hsum, sub_self, zero_add] at htransfer
+  obtain ⟨other, hother, hle⟩ :=
+    exists_opponent_average_le_debtChange
+      handoff.supportHandoff.sourceCluster
+      handoff.supportHandoff.endpointCluster packet.payer
+      handoff.supportHandoff.source_moverDebt_pos
+      (le_of_eq htransfer.symm)
+  have hcard : (((Finset.univ.erase packet.payer).card : ℕ) : ℝ) = 3 := by
+    simp
+  rw [hcard] at hle
+  exact ⟨other, (Finset.mem_erase.mp hother).1,
+    div_pos handoff.supportHandoff.source_moverDebt_pos (by norm_num), hle⟩
+
 /-- The complete renewable construction reaches one of the three global
 terminal alternatives after finitely many same-residual source regenerations. -/
 theorem exists_renewalTerminalExit
@@ -74,6 +113,16 @@ theorem exists_renewalTerminalExit
       FinFourRenewableTerminalExit terminalNode := by
   obtain ⟨certificate⟩ := handoff.nonempty_renewalCertificate
   exact certificate.trace.exists_terminalExit
+
+/-- The terminal descendant retains the incoming canonical source's hard
+residual literally. -/
+theorem exists_renewalTerminalExit_sameResidual
+    (handoff : CanonicalPairMinimumEndpointSupportRankHandoff packet) :
+    ∃ terminalNode : FinFourRenewableMinimumSourceNode reward bound,
+      FinFourRenewableTerminalExit terminalNode ∧
+        terminalNode.source.residual = source.residual := by
+  obtain ⟨certificate⟩ := handoff.nonempty_renewalCertificate
+  exact certificate.exists_terminalExit_sameResidual
 
 /-- A downstream conclusion that no longer mentions the local source can be
 consumed at the terminal descendant.  Recursive composition therefore needs
