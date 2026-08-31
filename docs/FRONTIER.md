@@ -1218,6 +1218,27 @@ deadline descent.  The Fin4 specialization records the bound four.  This has
 produces the finite-clock minimum nor supplies chronology, renewal, a paid-port
 consumer, or a uniform-equilibrium payoff.
 
+The arbitrary-clock minimum branch now has its own actual-source adapter,
+without assuming a common finite stopping-law calendar.
+`minimumRealizingSequence_purify_or_offMinimum`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/ArbitraryClockMinimumPurification.lean`)
+uses positive-support pure-clock replacements and finite terminal-semantic
+codes to turn any supplied realizing sequence into a canonical minimum or an
+actual finite-replacement descendant strictly above it.  The canonical branch
+then passes through checked pure-time minimum descent.
+`exists_minimumRealizingSequence_offMinimumActualReachPaidPort_of_debtSumInf_pos`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ArbitraryClockMinimumActualReachPaidPort.lean`)
+selects the compact minimum and retained actual realizing sequence directly
+from positive terminal-debt infimum.  Its off-minimum target carries a
+source-supported paid first-disagreement row, debt at least the average
+minimum, paid gain at least one quarter of that average, and the literal
+`4M`, `8M`, and `32M²` actual-reach floors.  The Fin4 wrapper normalizes these
+to `D*/4` and `D*/16`.  This has `M`, `L`, and source `A` on the positive
+infimum branch, but no downstream `C`.  Finite replacement ancestry does not
+preserve nonmover caps or individual debts and is not a game chronology,
+renewal, Nash--Bellman path, paid-port consumer, or uniform-equilibrium
+conclusion.
+
 The zero-Never, zero-singleton joint-law face now has an exact production
 realization.  For a supplied point of the joint terminal semantic/law carrier,
 `exists_twoSureProductRoot_realizing_law_of_mem_terminalSemanticLawCarrier`

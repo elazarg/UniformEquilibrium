@@ -27,20 +27,6 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- A player's best-response envelope depends only on the opponents, not on
-that player's displayed strategy. -/
-theorem quittingContinuationBestResponseValue_update_self
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
-    (strategy : (quittingGame reward).BehaviorStrategy who) :
-    quittingContinuationBestResponseValue reward
-        (Function.update profile who strategy) who =
-      quittingContinuationBestResponseValue reward profile who := by
-  unfold quittingContinuationBestResponseValue
-  congr 2
-  funext deviation
-  rw [Function.update_idem]
-
 /-- Replacing one player by an asymptotic best response resets that player's
 semantic debt to zero.  This is a same-profile statement: the replacement
 payoff and the original envelope use the same opponents. -/

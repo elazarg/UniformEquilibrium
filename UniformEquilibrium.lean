@@ -467,6 +467,7 @@ import UniformEquilibrium.Quitting.Cycles.CyclicKofNPlayerPhaseHazards
 import UniformEquilibrium.Quitting.Cycles.CyclicKofNQuittingSchedule
 import UniformEquilibrium.Quitting.Cycles.CyclicGreenDebt
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
+import UniformEquilibrium.Quitting.Paths.BehaviorSupportedPureTimeReplacement
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
@@ -477,6 +478,7 @@ import UniformEquilibrium.Quitting.Paths.PureTimeDeadlineSelection
 import UniformEquilibrium.Quitting.Paths.ReversePrefixStoppingLaw
 import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
+import UniformEquilibrium.Quitting.Paths.StoppingLawBadMassSelection
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis

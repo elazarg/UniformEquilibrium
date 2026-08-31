@@ -105,6 +105,20 @@ def quittingContinuationBestResponseValue
     quittingTerminalPayoff reward
       (Function.update continuation who deviation) who)
 
+/-- A player's best-response envelope depends only on the opponents, not on
+that player's displayed strategy. -/
+theorem quittingContinuationBestResponseValue_update_self
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (strategy : (quittingGame reward).BehaviorStrategy who) :
+    quittingContinuationBestResponseValue reward
+        (Function.update profile who strategy) who =
+      quittingContinuationBestResponseValue reward profile who := by
+  unfold quittingContinuationBestResponseValue
+  congr 2
+  funext deviation
+  rw [Function.update_idem]
+
 /-- All unilateral behavioral terminal payoffs form a bounded-above set. -/
 theorem bddAbove_range_quittingTerminalPayoff_update
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
