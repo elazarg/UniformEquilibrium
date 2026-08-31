@@ -160,7 +160,9 @@ theorem finiteDeadlineCensoredGraft_payoffGain_ge
 
 /-! ## Localization from the adjacent source -/
 
-private theorem oldOpponentNeverProduct_ge_div
+/-- Positive old observer support converts the selected old boundary gain
+into a lower bound on the old opponent-`Never` product. -/
+theorem quittingAdjacentDeadlineOldOpponentNeverProduct_ge_div_of_support
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {gamma bound : ℝ}
     (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
@@ -184,7 +186,8 @@ private theorem oldOpponentNeverProduct_ge_div
     _ ≤ quittingAdjacentDeadlineOldOpponentNeverProduct source * bound := by
       gcongr
 
-private theorem oldOpponentNever_ge_div
+/-- Every old opponent `Never` coefficient inherits the old product floor. -/
+theorem quittingAdjacentDeadlineOldNever_ge_div_of_ne_observer
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {gamma bound : ℝ}
     (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
@@ -193,13 +196,33 @@ private theorem oldOpponentNever_ge_div
     (hsupport : source.old source.observer none ≠ 0)
     {other : ι} (hother : other ≠ source.observer) :
     gamma / bound ≤ (source.old other none).toReal := by
-  exact (oldOpponentNeverProduct_ge_div source hbound hreward hsupport).trans <|
+  exact
+    (quittingAdjacentDeadlineOldOpponentNeverProduct_ge_div_of_support
+      source hbound hreward hsupport).trans <|
     product_erase_le_factor
       (fun player => (source.old player none).toReal)
       source.observer other hother
       (fun _ => ENNReal.toReal_nonneg)
       (fun player => ENNReal.toReal_mono ENNReal.one_ne_top
         ((source.old player).coe_le_one none))
+
+/-- The spectator condition and `gamma / bound ≤ 1` imply literal positive
+old observer `Never` support. -/
+theorem quittingAdjacentDeadlineOldObserverNever_ne_zero_of_smallPass
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {gamma bound : ℝ}
+    (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
+    (hgamma : 0 < gamma) (hbound : 0 < bound)
+    (hscale : gamma / bound ≤ 1)
+    (hpass : 1 - (source.old source.observer none).toReal <
+      gamma / bound / 8) :
+    source.old source.observer none ≠ 0 := by
+  have hscalePos : 0 < gamma / bound := div_pos hgamma hbound
+  have hneverPos : 0 < (source.old source.observer none).toReal := by
+    nlinarith
+  intro hzero
+  rw [hzero] at hneverPos
+  exact (lt_irrefl 0) hneverPos
 
 private theorem censoredError_lt_of_total_lt
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -345,7 +368,8 @@ private theorem censoredOpponentNeverProduct_ge_of_small_pass_and_error
   let censoredNever := fun player =>
     ((quittingFiniteDeadlineTimingProfileCensor source.new) player none).toReal
   have ha : 0 ≤ gamma / bound := (div_pos hgamma hbound).le
-  have holdProduct := oldOpponentNeverProduct_ge_div
+  have holdProduct :=
+    quittingAdjacentDeadlineOldOpponentNeverProduct_ge_div_of_support
     source hbound hreward hsupport
   have holdProductLeOne :
       quittingAdjacentDeadlineOldOpponentNeverProduct source ≤ 1 := by
@@ -377,7 +401,7 @@ private theorem censoredOpponentNeverProduct_ge_of_small_pass_and_error
   have hothers : ∀ player, player ≠ source.observer →
       (7 / 8 : ℝ) * oldNever player ≤ censoredNever player := by
     intro player hplayer
-    have hold := oldOpponentNever_ge_div
+    have hold := quittingAdjacentDeadlineOldNever_ge_div_of_ne_observer
       source hbound hreward hsupport hplayer
     have hcensor := hcensoredLower player
     have he := herror player
@@ -394,27 +418,27 @@ private theorem censoredOpponentNeverProduct_ge_of_small_pass_and_error
   · exact ha
   · exact holdProduct
 
-private theorem exists_boundaryParticipant_ge_average
+/-- Some successor-boundary participant carries at least the average of any
+supplied lower bound on total boundary participation. -/
+theorem exists_quittingAdjacentDeadlineBoundaryParticipant_ge_average_of_total
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-    {gamma bound : ℝ}
+    {gamma bound total : ℝ}
     (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
-    (hboundary : gamma / bound / 8 ≤ source.boundaryParticipationMass) :
+    (hboundary : total ≤ source.boundaryParticipationMass) :
     ∃ participant,
-      gamma / (8 * bound * (Fintype.card ι : ℝ)) ≤
+      total / (Fintype.card ι : ℝ) ≤
         (source.new participant
           (quittingFiniteDeadlineTimingBoundaryAction source.deadline)).toReal := by
   have hcard : 0 < (Fintype.card ι : ℝ) := by
     exact_mod_cast Fintype.card_pos_iff.mpr ⟨source.observer⟩
-  let average := gamma / (8 * bound * (Fintype.card ι : ℝ))
+  let average := total / (Fintype.card ι : ℝ)
   have hsum : (∑ _player : ι, average) ≤
       ∑ player, (source.new player
         (quittingFiniteDeadlineTimingBoundaryAction source.deadline)).toReal := by
     rw [Finset.sum_const, nsmul_eq_mul, Finset.card_univ]
     dsimp only [average]
     have heq : (Fintype.card ι : ℝ) *
-        (gamma / (8 * bound * (Fintype.card ι : ℝ))) =
-      gamma / bound / 8 := by
-      field_simp
+        (total / (Fintype.card ι : ℝ)) = total := by field_simp
     rw [heq]
     simpa [QuittingAdjacentDeadlineGapSource.boundaryParticipationMass,
       quittingFiniteDeadlineBoundaryParticipation] using hboundary
@@ -424,6 +448,24 @@ private theorem exists_boundaryParticipant_ge_average
         ⟨source.observer, Finset.mem_univ source.observer⟩)
       hsum
   exact ⟨participant, hparticipant⟩
+
+/-- Robust-dispatch specialization of the arbitrary boundary-mass averaging
+helper. -/
+theorem exists_quittingAdjacentDeadlineBoundaryParticipant_ge_average
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {gamma bound : ℝ}
+    (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
+    (hboundary : gamma / (8 * bound) ≤ source.boundaryParticipationMass) :
+    ∃ participant,
+      gamma / (8 * bound * (Fintype.card ι : ℝ)) ≤
+        (source.new participant
+          (quittingFiniteDeadlineTimingBoundaryAction source.deadline)).toReal := by
+  obtain ⟨participant, hparticipant⟩ :=
+    exists_quittingAdjacentDeadlineBoundaryParticipant_ge_average_of_total
+      source hboundary
+  refine ⟨participant, ?_⟩
+  convert hparticipant using 1
+  ring
 
 /-! ## Literal singleton-separated-tail dispatch -/
 
@@ -575,8 +617,12 @@ theorem quittingAdjacentDeadline_singletonSeparatedTail_dispatch
         rw [hscale] at hsplit
         have hboundary : gamma / bound / 8 ≤
             source.boundaryParticipationMass := hsplit.resolve_left herror
+        have hboundary' : gamma / (8 * bound) ≤
+            source.boundaryParticipationMass := by
+          convert hboundary using 1
         obtain ⟨participant, hparticipant⟩ :=
-          exists_boundaryParticipant_ge_average source hboundary
+          exists_quittingAdjacentDeadlineBoundaryParticipant_ge_average
+            source hboundary'
         have hcylinder :=
           censoredOpponentNeverProduct_ge_of_small_pass_and_error
             source participant hgamma hbound hreward hzero

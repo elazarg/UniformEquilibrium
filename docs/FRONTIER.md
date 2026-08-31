@@ -1612,13 +1612,26 @@ the exact payoff gain from its terminal-semantic debt.  In Fin4,
 `quittingAdjacentDeadline_singletonSeparatedTail_dispatch_finFour` gives the
 literal floor `147 * delta * (gamma / R)^2 / 16384`.
 
-This compiler has `M/L` at its displayed supplied source and tail.  Its `A`
-seal is incomplete: no theorem jointly selects a consecutive exact-Nash
+The selected-effect companion
+`quittingAdjacentDeadline_operationalEffectDistance_ge_or_paidReverseParticipant_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/AdjacentDeadlineSelectedBoundaryEffectDispatch.lean`)
+uses a smaller gauge consisting of every `Never` discrepancy and one
+normalized observer boundary-gain discrepancy.  This selected gauge is
+bounded by, but is not equal to, the full operational-effect distance.  The
+Fin4 theorem returns either full operational effect at least
+`gamma / (8 * R)` or a paid reverse participant with payoff floor
+`27 * delta * (gamma / R)^4 / 4096`.  Under exact equality of the selected
+coordinates,
+`quittingAdjacentDeadline_paidReverseParticipant_finFour_of_selectedBoundaryCoordinates_eq`
+strengthens that floor to `7 * delta * (gamma / R)^3 / 256`.
+
+These compilers have `M/L` at their displayed supplied source and tail.  Their
+`A` seal is incomplete: no theorem jointly selects a consecutive exact-Nash
 source and a singleton-separated actual tail in the required source-facing
-configuration.  The raw censor-error arm remains without a downstream `C`.
-The compiler asserts no minimum-fibre membership, tail Nash property,
-chronology, return, renewal, terminal approximation, or uniform-equilibrium
-conclusion.
+configuration.  The raw censor-error and large selected-effect arms remain
+without a downstream `C`.  The compilers assert no minimum-fibre membership,
+tail Nash property, chronology, return, renewal, rank, terminal approximation,
+or uniform-equilibrium conclusion.
 
 In the boundary-participation arm,
 `QuittingFiniteDeadlineBoundaryResponseCollision.of_boundaryParticipation`

@@ -75,7 +75,8 @@ private theorem prod_update_none_toReal
   rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]
 
 omit [Fintype ι] [DecidableEq ι] in
-private theorem finiteDeadlineTimingProfileInclude_none_toReal
+/-- Successor-clock inclusion preserves the literal `Never` coefficient. -/
+theorem finiteDeadlineTimingProfileInclude_none_toReal
     {deadline : ℕ}
     (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) :
