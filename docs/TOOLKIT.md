@@ -325,6 +325,38 @@ The general reverse diagnostics are:
 - convergence of transition kernels alone does not preserve uniform-payoff
   targets.
 
+The checked debt-ratio interfaces separate source mathematics from the Fin4
+attachment:
+
+- `quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
+  (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)
+  proves the global gap `eta^2 / (2 * M)` between positive terminal
+  exploitability infimum `eta` and total-debt infimum under reward bound
+  `M > 0`; the same module exposes the weaker square-root form.
+- `quittingTerminal_exactResponse_debtRatioCrossing`
+  (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioResponse.lean`)
+  consumes a supplied source, a maximal-debt payer, and an attained complete
+  response. It returns exact response gain, zero target payer debt, both
+  ordered ratio comparisons, and positive target debt increase. It is not a
+  response selector.
+- `nonempty_quittingDebtRatioApproximateResponseSource`,
+  `QuittingDebtRatioApproximateResponseSource.ratioCrossing_le_liminf_target_debtExcess`,
+  and
+  `QuittingDebtRatioApproximateResponseSource.eventually_half_ratioCrossing_le_target_debtExcess`
+  (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioCarrierResponse.lean`)
+  select an actual cofinal carrier sequence with one fixed maximal-debt payer,
+  attach literal approximate responses, and give the liminf and eventual-half
+  target excess floors without assuming response attainment.
+- `exists_eventually_nonempty_finFourDebtRatioResponsePaidCapPort_of_no_uniformEquilibriumPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourDebtRatioChamberPaidCapPort.lean`)
+  chooses a minimum carrier point from failure of a Fin4 uniform-equilibrium
+  payoff and, under `D_* < 2 * eta` and `0 < gamma < eta`, attaches a
+  separately selected actual paid-cap port at every sufficiently late target.
+
+The first three layers provide `M` and `L`; the carrier and Fin4 layers
+also provide the stated actual-source `A`. No layer has downstream `C`:
+the paid-cap trichotomy and its descent-or-inert outputs remain unconsumed.
+
 `QuittingFiniteDeadlineNashProfile.semanticDebt_le_escapeCharge` and
 `TerminalSemanticGlobalDebtBarrierCertificate.Certificate.floor_le_sum_finiteDeadlineEscapeCharge`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFiniteDeadlineNashEscalation.lean`)

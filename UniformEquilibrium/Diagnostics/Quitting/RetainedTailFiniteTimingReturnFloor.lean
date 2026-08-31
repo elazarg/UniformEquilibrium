@@ -43,19 +43,6 @@ theorem HasTerminalExploitabilityGap.exists_debt_ge
   unfold quittingTerminalDeviationDebt
   linarith
 
-/-- Reward diameter bounds every coordinate of literal terminal debt. -/
-theorem quittingTerminalDeviationDebt_le_two_mul_bound
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile)
-    (who : ι) (R : ℝ)
-    (hreward : ∀ S player, |reward S player| ≤ R) :
-    quittingTerminalDeviationDebt reward profile who ≤ 2 * R := by
-  have hcap := abs_quittingContinuationBestResponseValue_le
-    reward profile who hreward
-  have hpayoff := abs_quittingTerminalPayoff_le reward profile who hreward
-  unfold quittingTerminalDeviationDebt
-  linarith [le_of_abs_le hcap, neg_le_of_abs_le hpayoff]
-
 /-- The gap-selected host has player-deleted return at least
 `gamma / (2 * R)`, stated without division for robust downstream use. -/
 theorem IsQuittingRetainedTailFiniteTimingNash.exists_host_gap_le_two_mul_bound_mul

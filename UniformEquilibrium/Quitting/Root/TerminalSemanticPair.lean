@@ -379,6 +379,19 @@ theorem abs_quittingContinuationBestResponseValue_le
   change |sSup values| ≤ M
   exact abs_le.mpr ⟨hlower, hupper⟩
 
+/-- Reward diameter bounds every coordinate of literal terminal debt. -/
+theorem quittingTerminalDeviationDebt_le_two_mul_bound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (who : ι) (bound : ℝ)
+    (hreward : ∀ S player, |reward S player| ≤ bound) :
+    quittingTerminalDeviationDebt reward profile who ≤ 2 * bound := by
+  have hcap := abs_quittingContinuationBestResponseValue_le
+    reward profile who hreward
+  have hpayoff := abs_quittingTerminalPayoff_le reward profile who hreward
+  unfold quittingTerminalDeviationDebt
+  linarith [le_of_abs_le hcap, neg_le_of_abs_le hpayoff]
+
 /-- Uniform coordinate box for terminal semantic pairs. -/
 def quittingTerminalSemanticBox (ι : Type) [Fintype ι] (M : ℝ) :
     Set (QuittingTerminalSemanticPair ι) :=

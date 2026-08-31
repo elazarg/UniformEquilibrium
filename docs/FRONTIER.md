@@ -560,6 +560,37 @@ zero. It does not realize the carrier minimum by a profile. The remaining
 downstream step is exactly to consume or regenerate the quantitative descent,
 or to consume the literal inert stall.
 
+The debt-ratio chamber now has a literal actual-source interface.
+`quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)
+shows that, for reward bound `M > 0` and positive terminal exploitability
+infimum `eta`, the total-debt infimum exceeds `eta` by at least
+`eta^2 / (2 * M)`. Its square-root companion records the weaker closed-form
+separation. The exact-response theorem
+`quittingTerminal_exactResponse_debtRatioCrossing`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioResponse.lean`)
+retains both displayed ratio comparisons and the positive endpoint debt
+increase, but is conditional on a supplied exact response.
+`nonempty_quittingDebtRatioApproximateResponseSource` and
+`QuittingDebtRatioApproximateResponseSource.ratioCrossing_le_liminf_target_debtExcess`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioCarrierResponse.lean`)
+instead select one fixed maximal-debt payer on a cofinal realizing sequence,
+attach literal approximate responses with decreasing errors, and transfer the
+ratio crossing to the target-debt liminf and an eventual half floor.
+
+For four players,
+`exists_eventually_nonempty_finFourDebtRatioResponsePaidCapPort_of_no_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourDebtRatioChamberPaidCapPort.lean`)
+starts from failure of a uniform-equilibrium payoff, a positive reward bound,
+the invariant upper chamber `D_* < 2 * eta`, and a prescribed
+`0 < gamma < eta`. It chooses the minimum carrier point internally and
+eventually attaches a separate actual paid-cap port to every
+approximate-response target. The separation supplies the strict lower chamber
+`eta < D_*`; no debt-minimum attainment by a behavioral profile is assumed.
+These modules have `M`, `L`, and actual-source `A`, but no downstream
+`C`: they do not consume the paid-cap trichotomy, force debt descent,
+eliminate the inert branch, or prove a uniform-equilibrium payoff.
+
 Changing the paid-row or port selector cannot restore a uniform real descent
 step. At every positive debt-drop, absorption, and displacement tolerance,
 `HasTerminalExploitabilityGap.exists_profileSequence_eventually_all_paidCapPorts_small`

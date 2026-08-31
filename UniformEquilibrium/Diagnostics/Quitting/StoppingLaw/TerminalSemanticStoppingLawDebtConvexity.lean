@@ -298,4 +298,54 @@ theorem quittingTerminalSemanticDebt_stoppingLawMixture_eq_self
         exact quittingContinuationBestResponseValue_update_self _ _ _ _]
   linarith
 
+/-- Coordinate debt along a one-player complete stopping-law chord is bounded
+by the source debt and the universal endpoint debt box. -/
+theorem quittingTerminalSemanticDebt_stoppingLawMixture_le_boundChord
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (mover observer : ι)
+    (source target : (quittingGame reward).BehaviorStrategy mover)
+    (lambda bound : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1)
+    (hreward : ∀ S player, |reward S player| ≤ bound) :
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (Function.update profile mover
+            (quittingStoppingLawMixtureBehaviorStrategy reward mover
+              source target lambda hlambda0 hlambda1))) observer ≤
+      (1 - lambda) * quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (Function.update profile mover source)) observer +
+        lambda * (2 * bound) := by
+  have hchord := quittingTerminalSemanticDebt_stoppingLawMixture_le
+    reward profile mover observer source target lambda hlambda0 hlambda1
+  have htarget : quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward
+        (Function.update profile mover target)) observer ≤ 2 * bound :=
+    quittingTerminalDeviationDebt_le_two_mul_bound
+      reward (Function.update profile mover target) observer bound hreward
+  exact hchord.trans (add_le_add_right
+    (mul_le_mul_of_nonneg_left htarget hlambda0) _)
+
+/-- Total terminal debt is convex along a one-player complete stopping-law
+mixture. -/
+theorem quittingTerminalDebtSum_stoppingLawMixture_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (mover : ι)
+    (source target : (quittingGame reward).BehaviorStrategy mover)
+    (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
+    quittingTerminalDebtSum reward
+        (Function.update profile mover
+          (quittingStoppingLawMixtureBehaviorStrategy reward mover source target
+            lambda hlambda0 hlambda1)) ≤
+      (1 - lambda) * quittingTerminalDebtSum reward
+          (Function.update profile mover source) +
+        lambda * quittingTerminalDebtSum reward
+          (Function.update profile mover target) := by
+  unfold quittingTerminalDebtSum
+  rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib]
+  apply Finset.sum_le_sum
+  intro observer _
+  exact quittingTerminalSemanticDebt_stoppingLawMixture_le
+    reward profile mover observer source target lambda hlambda0 hlambda1
+
 end GameTheory

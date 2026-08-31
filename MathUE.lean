@@ -403,6 +403,7 @@ import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.NestedOuterApproximation
+import MathUE.Topology.OneSidedAffineLimit
 import MathUE.Topology.OneSidedDiniFencing
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
