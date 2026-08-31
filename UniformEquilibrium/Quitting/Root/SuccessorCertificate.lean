@@ -64,10 +64,6 @@ def quittingRootEndpointDifference
   quittingRootQuitPayoff reward tail root who -
     quittingRootContinuePayoff reward tail root who
 
-/-- The pure product root at which every player continues. -/
-def quittingAllContinueRoot : ι → PMF Bool :=
-  fun _ => PMF.pure false
-
 omit [Fintype ι] [DecidableEq ι] in
 /-- The two real masses of a Boolean marginal sum to one. -/
   theorem quittingRoot_continueProbability_add_quitProbability

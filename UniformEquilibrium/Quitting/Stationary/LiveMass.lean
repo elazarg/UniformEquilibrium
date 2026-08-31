@@ -34,6 +34,13 @@ def quittingStationaryContinueMass (root : ι → PMF Bool) : ℝ :=
   ((pmfPi root) (quittingAllContinueAction : ι → Bool)).toReal
 
 omit [DecidableEq ι] in
+/-- The all-Continue root keeps all mass live for one stage. -/
+theorem quittingStationaryContinueMass_allContinueRoot :
+    quittingStationaryContinueMass (quittingAllContinueRoot : ι → PMF Bool) = 1 := by
+  simp [quittingStationaryContinueMass, quittingAllContinueRoot,
+    quittingAllContinueAction, pmfPi_apply]
+
+omit [DecidableEq ι] in
 /-- The all-continue mass is the product of the displayed Continue
 probabilities. -/
 theorem quittingStationaryContinueMass_eq_prod_continueProbability

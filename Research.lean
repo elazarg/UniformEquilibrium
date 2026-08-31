@@ -186,3 +186,4 @@ import Research.Quitting.TwoResetFourRoleAdapter
 import Research.Quitting.TwoReservoirConsumer
 import Research.Quitting.UniqueAllContinueCapStackNoGo
 import Research.Quitting.CemeteryPairClockDispatcher
+import Research.Quitting.FinFourProducerAtlas.MinimumReturnPacketSilentPaddingAdapter

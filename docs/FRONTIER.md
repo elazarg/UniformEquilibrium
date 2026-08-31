@@ -2780,6 +2780,25 @@ in the live mathematical ledger.
   renewable child, terminal equilibrium, or uniform-equilibrium payoff. A
   signed semantic seam is not consumed by this paid-splice module.
 
+  The silent-padding source modules make one concrete supplied-data route into
+  that two-cut interface literal. In
+  `UniformEquilibrium/Quitting/Paths/RootSequenceSilentPrefix.lean` and
+  `UniformEquilibrium/Diagnostics/Quitting/SilentPaddingTwoCutSource.lean`, a
+  leading all-Continue row preserves the complete terminal outcome law,
+  including Never, and has exact entry reach one. A positive finite-law atom
+  selects a finite hazard window after that artificial row. The common joint
+  compactification in
+  `UniformEquilibrium/Diagnostics/Quitting/MinimumTailSilentPaddingConsumer.lean`
+  fixes the atom and applies the off-minimum-or-paid-splice alternative at
+  every sufficiently late retained rank. The Research adapter
+  `FinFourMinimumReturnPacket.exists_finiteAtomCompactification_eventually_silentPaddingTwoCutRealization`
+  (`Research/Quitting/FinFourProducerAtlas/MinimumReturnPacketSilentPaddingAdapter.lean`)
+  supplies this data from the actual minimum-return packet. This route has
+  `M` and `L`, Research source `A`, and only the branch-local two-cut `C`. The
+  padded row records order, not meaningful chronology; no renewal, Nash
+  property, nonpayer cap control, terminal approximation, or uniform-payoff
+  conclusion is obtained.
+
   The separate generic compiler
   `QuittingTerminalSemanticSeamChain.debtSum_eq_totalCharge_add_endpoint_add_weightedSignedSeamError`
   (`UniformEquilibrium/Quitting/Debt/Dynamic/TerminalSemanticSignedSeamTelescope.lean`)

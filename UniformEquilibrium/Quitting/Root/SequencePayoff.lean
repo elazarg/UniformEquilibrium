@@ -31,6 +31,17 @@ def quittingRootSequenceProfile
     (quittingGame reward).BehaviorProfile :=
   fun player time _ => roots (start + time) player
 
+omit [DecidableEq ι] in
+/-- A root-sequence profile started at stage zero has exactly its own roots
+as canonical live roots. -/
+@[simp] theorem quittingProfileLiveRoot_quittingRootSequenceProfile_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) :
+    quittingProfileLiveRoot reward
+        (quittingRootSequenceProfile reward roots 0) = roots := by
+  funext time player
+  rw [quittingProfileLiveRoot, quittingRootSequenceProfile, Nat.zero_add]
+
 /-- Replacing one coordinate of every root by a supplied hazard sequence. -/
 def quittingRootSequenceUpdate
     (roots : ℕ → ι → PMF Bool) (who : ι)

@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
+import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 
@@ -95,13 +96,6 @@ theorem quittingTerminalSemanticPair_allContinuePrefixIterate_eq
       exact ih
 
 /-! ## Law invariance of an all-Continue prefix -/
-
-omit [DecidableEq ι] in
-/-- The all-Continue root keeps all mass live for one stage. -/
-theorem quittingStationaryContinueMass_allContinueRoot :
-    quittingStationaryContinueMass (quittingAllContinueRoot : ι → PMF Bool) = 1 := by
-  simp [quittingStationaryContinueMass, quittingAllContinueRoot,
-    quittingAllContinueAction, pmfPi_apply]
 
 /-- The all-Continue root absorbs no nonempty coalition. -/
 theorem quittingRootCoalitionMass_allContinueRoot_eq_zero

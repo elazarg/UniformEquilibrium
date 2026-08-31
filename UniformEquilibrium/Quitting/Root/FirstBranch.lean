@@ -28,6 +28,10 @@ open StochasticGame Filter Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-- The pure product root at which every player continues. -/
+def quittingAllContinueRoot : ι → PMF Bool :=
+  fun _ => PMF.pure false
+
 /-- A root product action has a sure quitter when one marginal is the point
 mass at `true`. -/
 def QuittingRootHasSureQuitter (root : ι → PMF Bool) : Prop :=

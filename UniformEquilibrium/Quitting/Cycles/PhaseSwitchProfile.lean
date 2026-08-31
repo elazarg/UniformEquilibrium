@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.JointComplementarity
 import UniformEquilibrium.Quitting.Boundary.Analytic.SeamPriceResidual
 import UniformEquilibrium.Quitting.Terminal.TargetTail.FiniteChainTerminalCompiler
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
+import UniformEquilibrium.Quitting.Root.SequencePayoff
 
 /-!
 # The phase-switch combinator for quitting games
@@ -195,19 +196,6 @@ def quittingPhaseSwitchProfile
     (quittingGame reward).BehaviorProfile :=
   quittingRootSequenceProfile reward
     (quittingPhaseSwitchRoots plan punish switch) 0
-
-omit [DecidableEq ι] in
-/-- A root-sequence profile started at stage zero has exactly its own roots
-as canonical live roots.  This is the elementary half of the live-hazard
-collapse: reading a history-free profile along the unique live history
-returns the sequence it was built from. -/
-@[simp] theorem quittingProfileLiveRoot_quittingRootSequenceProfile_zero
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) :
-    quittingProfileLiveRoot reward
-        (quittingRootSequenceProfile reward roots 0) = roots := by
-  funext time player
-  rw [quittingProfileLiveRoot, quittingRootSequenceProfile, Nat.zero_add]
 
 omit [DecidableEq ι] in
 /-- The canonical live roots of a phase-switch profile are the phase-switch

@@ -496,6 +496,10 @@ import UniformEquilibrium.Diagnostics.Quitting.ProductRootLimitCapSandwich
 import UniformEquilibrium.Diagnostics.Quitting.TwoSureProductRootTailScreen
 import UniformEquilibrium.Diagnostics.Quitting.ZeroSingletonBehavioralLawProductBase
 import UniformEquilibrium.Diagnostics.Quitting.ZeroSingletonProductBaseLaw
+import UniformEquilibrium.Diagnostics.Quitting.MinimumTailProfileSource
+import UniformEquilibrium.Diagnostics.Quitting.MinimumTailSilentPaddingConsumer
+import UniformEquilibrium.Diagnostics.Quitting.SilentPaddingTwoCutSource
+import UniformEquilibrium.Diagnostics.Quitting.SilentPrefixTerminalSemantics
 
 /-!
 # Quitting diagnostics inventory
