@@ -2874,6 +2874,17 @@ in the live mathematical ledger.
   `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath` bundles the checked
   jump rows, continuous lower bounds, and active equalities for this same
   actual chronological path.
+  On the terminal-jump side,
+  `ChronologicalJumpStageLimit.stageContinueMass_tendsto_zero_of_pathTotal_eq_one`
+  in
+  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalTerminalJumpS2.lean`
+  proves that the actual selected dominant rows have all-Continue mass tending
+  to zero whenever one path jump reaches total mass one.  Reached-source Nash
+  transfer, near-sure-to-sure perturbation, and the punishment adapter then
+  give literal S.2 in
+  `ChronologicalLimit.instantPunishmentEquilibriumExistence_of_terminalPathJump`.
+  This is an `M`/`L` theorem and an actual-source `A`/`C`, conditional on the
+  explicitly supplied terminal jump.
   The published small-cell productization is checked as
   `exists_agkrsSmallCellProductization` in
   `MathUE/PMFProduct/AGKRSSmallCellProductization.lean`.  The production
@@ -2902,10 +2913,11 @@ in the live mathematical ledger.
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No checked production theorem yet converts a terminal-total jump
-  into S.2 or decides the terminal/no-terminal alternative.  A fixed
-  completion branch and the unconditional AGKRS trichotomy also remain open;
-  no new uniform-equilibrium conclusion follows from the S.3 decoder alone.
+  compiler.  The terminal S.2 and no-terminal S.3 consumers are individually
+  checked, but no production theorem yet performs their exhaustive case split.
+  A fixed completion branch and the unconditional table-level AGKRS
+  trichotomy also remain open; no new uniform-equilibrium conclusion follows
+  from either branch consumer alone.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
