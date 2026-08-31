@@ -450,6 +450,25 @@ cube, expose the joint and deleted-player clocks, and retain the exact
 strategic square alternative.  These are frozen-source certificates: they do
 not provide a chronological carrier path or a renewal return.
 
+The cap-switch boundary of this static geometry is also literal.  The
+normalized first-disagreement estimate in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticCapSwitchFriction.lean`
+retains both pair-deleted survival and the moved law's inclusive post-mark
+tail.  Under a supplied two-edge first-order rectangle,
+`exists_quittingCapSwitchFullChordPaidRow_of_firstOrderRectangle`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticCapSwitchFullChord.lean`)
+selects one source/full endpoint with paid gain `gamma / (4 * C)` and
+pair-deleted survival at least `gamma / (8 * M * C)`.  Reset-cube source
+transfer and compact stopping-law extraction retain only a pair-deleted
+`Never` product in one selected weak limit.  The exact Fin4 regression in
+`UniformEquilibrium/Diagnostics/Quitting/Regression/FinFourCapSwitchAllProper.lean`
+has the same first-order counterfactual cap square while every displayed
+opponent law is proper and its finite-splice error tends to zero.  Thus this
+route has `M` and `L`, but no source `A` or downstream `C`: the selected edge
+is not chronological or on the minimum fibre, the compact atom is not an
+actual terminal-law atom, and no ancestry-preserving paid-row consumer or
+uniform-equilibrium payoff follows.
+
 Terminal differences between two pure-time witnesses also have an exact
 reached-history decoder.
 [`quittingPureTimeFirstDisagreementValue_sub_eq_opponentSurvival_mul`](../UniformEquilibrium/Quitting/Paths/SurvivalWeightedSuffixRegret.lean)

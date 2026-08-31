@@ -173,6 +173,54 @@ is immaterial. -/
     simp
   · simp [Function.update_of_ne hplayer]
 
+/-- Once `mover` is deleted from the clock, its supplied live-path hazard is
+likewise immaterial. -/
+@[simp] theorem quittingPairDeletedSurvivalWeight_update_mover
+    (roots : ℕ → ι → PMF Bool) (mover observer : ι)
+    (hazard : ℕ → PMF Bool) (start fuel : ℕ) :
+    quittingPairDeletedSurvivalWeight
+        (quittingRootSequenceUpdate roots mover hazard)
+        mover observer start fuel =
+      quittingPairDeletedSurvivalWeight roots mover observer start fuel := by
+  unfold quittingPairDeletedSurvivalWeight quittingOpponentSurvivalWeight
+  apply Finset.prod_congr rfl
+  intro offset _
+  unfold quittingFixedOpponentsContinueMass quittingRootSequenceUpdate
+  congr 1
+  funext player
+  by_cases hplayer : player = mover
+  · subst player
+    simp
+  · by_cases hobserver : player = observer
+    · subst player
+      simp [hplayer]
+    · simp [Function.update_of_ne hplayer,
+        Function.update_of_ne hobserver]
+
+/-- Opponent survival to a live row factors into the survival of every
+player outside the observer/mover pair and the mover's own survival. -/
+theorem quittingOpponentSurvivalWeight_eq_pairDeleted_mul_moverSurvival
+    (roots : ℕ → ι → PMF Bool) (mover observer : ι)
+    (hmoverObserver : mover ≠ observer) (cutoff : ℕ) :
+    quittingOpponentSurvivalWeight roots observer 0 cutoff =
+      quittingPairDeletedSurvivalWeight roots mover observer 0 cutoff *
+        quittingHazardSurvival (fun time ↦ roots time mover) cutoff := by
+  have hstage (time : ℕ) :
+      quittingFixedOpponentsContinueMass roots observer time =
+        quittingFixedOpponentsContinueMass
+            (quittingRootSequenceUpdate roots observer quittingAlwaysContinueHazard)
+            mover time *
+          (roots time mover false).toReal := by
+    unfold quittingFixedOpponentsContinueMass quittingRootSequenceUpdate
+    have hfactor := quittingStationaryContinueMass_eq_forcedContinue_mul_own
+      (Function.update (roots time) observer (PMF.pure false)) mover
+    simpa [quittingAlwaysContinueHazard,
+      Function.update_of_ne hmoverObserver] using hfactor
+  unfold quittingOpponentSurvivalWeight quittingPairDeletedSurvivalWeight
+  simp_rw [Nat.zero_add, hstage]
+  rw [Finset.prod_mul_distrib, quittingHazardSurvival_eq_prod]
+  simp [quittingOpponentSurvivalWeight]
+
 /-- Largest pair-deleted survival clock over observers distinct from the
 reset mover. -/
 def quittingMaxPairDeletedSurvivalWeight [Nontrivial ι]

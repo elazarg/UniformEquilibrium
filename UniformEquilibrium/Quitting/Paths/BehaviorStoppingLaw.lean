@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import MathUE.Probability.DiscreteHazardStopping
+import MathUE.Probability.StoppingLawReconstruction
 
 /-! # Stopping law of a live-spine quitting behavior
 
@@ -171,5 +172,22 @@ omit [DecidableEq ι] in
     (quittingBehaviorStoppingLaw reward strategy (some time)).toReal =
       quittingHazardStopMass (quittingBehaviorLiveHazard reward strategy) time := by
   simp [quittingBehaviorStoppingLaw]
+
+omit [DecidableEq ι] in
+/-- The inclusive stopping-law tail at `cutoff` is exactly live-spine
+survival through the rows strictly before `cutoff`. -/
+theorem stoppingLawSurvival_quittingBehaviorStoppingLaw
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {who : ι} (strategy : (quittingGame reward).BehaviorStrategy who)
+    (cutoff : ℕ) :
+    Math.Probability.DiscreteHazard.StoppingLaw.survival
+        (quittingBehaviorStoppingLaw reward strategy) cutoff =
+      quittingHazardSurvival
+        (quittingBehaviorLiveHazard reward strategy) cutoff := by
+  unfold Math.Probability.DiscreteHazard.StoppingLaw.survival
+    Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
+  simp_rw [quittingBehaviorStoppingLaw_some_toReal]
+  rw [sum_quittingHazardStopMass]
+  ring
 
 end GameTheory

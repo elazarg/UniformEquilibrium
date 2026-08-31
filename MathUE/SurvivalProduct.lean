@@ -141,4 +141,66 @@ theorem prod_sub_prod_le_sum_sub_of_le
         mul_le_of_le_one_left (sub_nonneg.mpr hprodLe) hfirstIndex1
       nlinarith
 
+/-- Products of two finite families in `[0,1]` differ by at most the sum of
+their coordinatewise absolute differences. -/
+theorem abs_prod_sub_prod_le_sum_abs
+    {κ : Type} [DecidableEq κ] (s : Finset κ) (first second : κ → ℝ)
+    (hfirst0 : ∀ index ∈ s, 0 ≤ first index)
+    (hfirst1 : ∀ index ∈ s, first index ≤ 1)
+    (hsecond0 : ∀ index ∈ s, 0 ≤ second index)
+    (hsecond1 : ∀ index ∈ s, second index ≤ 1) :
+    |(∏ index ∈ s, first index) - (∏ index ∈ s, second index)| ≤
+      ∑ index ∈ s, |first index - second index| := by
+  let lower := fun index ↦ min (first index) (second index)
+  let upper := fun index ↦ max (first index) (second index)
+  have hlower0 : ∀ index ∈ s, 0 ≤ lower index := by
+    intro index hindex
+    exact le_min (hfirst0 index hindex) (hsecond0 index hindex)
+  have hlower1 : ∀ index ∈ s, lower index ≤ 1 := by
+    intro index hindex
+    exact (min_le_left _ _).trans (hfirst1 index hindex)
+  have hupper0 : ∀ index ∈ s, 0 ≤ upper index := by
+    intro index hindex
+    exact (hfirst0 index hindex).trans (le_max_left _ _)
+  have hupper1 : ∀ index ∈ s, upper index ≤ 1 := by
+    intro index hindex
+    exact max_le (hfirst1 index hindex) (hsecond1 index hindex)
+  have hlowerUpper : ∀ index ∈ s, lower index ≤ upper index := by
+    intro index _
+    exact min_le_max
+  have hlowerFirst : (∏ index ∈ s, lower index) ≤
+      ∏ index ∈ s, first index :=
+    Finset.prod_le_prod hlower0 fun index _ ↦ min_le_left _ _
+  have hlowerSecond : (∏ index ∈ s, lower index) ≤
+      ∏ index ∈ s, second index :=
+    Finset.prod_le_prod hlower0 fun index _ ↦ min_le_right _ _
+  have hfirstUpper : (∏ index ∈ s, first index) ≤
+      ∏ index ∈ s, upper index :=
+    Finset.prod_le_prod hfirst0 fun index _ ↦ le_max_left _ _
+  have hsecondUpper : (∏ index ∈ s, second index) ≤
+      ∏ index ∈ s, upper index :=
+    Finset.prod_le_prod hsecond0 fun index _ ↦ le_max_right _ _
+  have hspan := prod_sub_prod_le_sum_sub_of_le s lower upper hlower0
+    hlower1 hupper0 hupper1 hlowerUpper
+  rw [abs_le]
+  constructor
+  · have :
+        (∏ index ∈ s, second index) - (∏ index ∈ s, first index) ≤
+          (∏ index ∈ s, upper index) - (∏ index ∈ s, lower index) := by
+      linarith
+    calc
+      -((∑ index ∈ s, |first index - second index|)) ≤
+          -((∏ index ∈ s, upper index) -
+            (∏ index ∈ s, lower index)) := by
+        rw [neg_le_neg_iff]
+        simpa [lower, upper, max_sub_min_eq_abs, abs_sub_comm] using hspan
+      _ ≤ (∏ index ∈ s, first index) -
+          (∏ index ∈ s, second index) := by linarith
+  · calc
+      (∏ index ∈ s, first index) - (∏ index ∈ s, second index) ≤
+          (∏ index ∈ s, upper index) -
+            (∏ index ∈ s, lower index) := by linarith
+      _ ≤ ∑ index ∈ s, |first index - second index| := by
+        simpa [lower, upper, max_sub_min_eq_abs, abs_sub_comm] using hspan
+
 end Math
