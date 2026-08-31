@@ -1187,6 +1187,21 @@ deadline descent.  The Fin4 specialization records the bound four.  This has
 produces the finite-clock minimum nor supplies chronology, renewal, a paid-port
 consumer, or a uniform-equilibrium payoff.
 
+The zero-Never, zero-singleton joint-law face now has an exact production
+realization.  For a supplied point of the joint terminal semantic/law carrier,
+`exists_twoSureProductRoot_realizing_law_of_mem_terminalSemanticLawCarrier`
+(`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`)
+constructs one product root with two fixed sure quitters and the exact complete
+terminal law.  Under strict singleton margins,
+`exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin`
+realizes the complete prescribed-payoff/unrestricted-cap pair and law both by
+root-then-Never and stationary repetition; the nonstrict theorem supplies one
+all-Continue padding row.  This has `M`, `L`, and branch-local `A` from the
+supplied joint carrier point, but no `C`.  It does not produce a positive global
+minimum, compose this realization with finite-clock purification, preserve a
+fixed calendar intervention law, implement sure-core descent, or prove a
+uniform-equilibrium payoff.
+
 For the actual Fin4 endpoint data,
 `FinFourThreeRoleAscentResetHandoff.nonempty_of_strict_ascent`
 (`Research/Quitting/FinFourProducerAtlas/ThreeRoleAscentResetHandoff.lean`)

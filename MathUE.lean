@@ -213,6 +213,8 @@ import MathUE.PMFProduct.Conditioning
 import MathUE.PMFProduct.FiniteFubini
 import MathUE.PMFProduct.Independence
 import MathUE.PMFProduct.PrincipalRestriction
+import MathUE.PMFProduct.ProductCoalitionSupportCard
+import MathUE.PMFProduct.SingletonRatioPairConcentration
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
 import MathUE.PMFProduct.SumFubini
