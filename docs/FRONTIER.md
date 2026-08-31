@@ -3015,6 +3015,27 @@ in the live mathematical ledger.
   `CyclicSingletonFourPlayer.isUniformEquilibriumPayoff`. The escort theorem
   guarantees at least two vertices, not exactly two; neither the arbitrary-
   sign producer nor a semantic adapter for all cyclic matrices is supplied.
+- **Normal sequentially perfect absorbing source compiler:**
+  `exists_normalSupportDelayedSwitch` and
+  `exists_terminalNash_of_all_normal_of_sequentiallyPerfectAbsorbing`
+  (`UniformEquilibrium/Quitting/Classification/Existence/NormalSequentiallyPerfectAbsorbingUniformPayoff.lean`)
+  compile a supplied sequentially row-perfect completely absorbing root
+  sequence, under all-player punishment normality, into terminal approximate
+  Nash profiles at every positive error. The equivalent well-supported source
+  formulation has parallel terminal and uniform-payoff wrappers. The delayed
+  switch scans only finitely many rows after the first support-survival
+  crossing; a target-closed tail handles the good branch, while all Continue
+  handles the branch whose deleted-player survival clocks are all small.
+  `exists_uniformEquilibriumPayoff_of_all_normal_of_sequentiallyPerfectAbsorbing`
+  then invokes the fixed-payoff terminal selection theorem. In Fin4,
+  `FinFourQuantitativeFullSupportHardResidual.exists_uniformEquilibriumPayoff_of_sequentiallyPerfectAbsorbing`
+  (`UniformEquilibrium/Diagnostics/Quitting/Collision/SingletonPacket/NormalSequentiallyPerfectAbsorbingUniformPayoff.lean`)
+  gets normality from the supplied quantitative hard residual. These results
+  have `M` and `L`, source-conditional `A`, and conditional terminal/uniform
+  `C`. Neither the generic theorem nor the Fin4 residual produces S.3 or a
+  well-supported source; there is no unconditional no-uniform-payoff
+  contradiction, stationary-equilibrium theorem, or general stochastic-game
+  extension.
 - **Solo-hazard boundary obstruction:**
   `Schedule.one_over_sixtyEight_lt_literal_exploitability` checks that every
   finite or infinite deterministic at-most-one-owner calendar on the

@@ -73,9 +73,53 @@ def HasQuittingSupportWitnessTailPackage
     ledgerCap + 2 * δ + continuationSlack +
         threshold * (7 * quittingRewardBound reward) ≤ ε
 
+/-- A target-closed tail admits playerwise deviation caps under any supplied
+coordinate reward bound. The bound is automatically nonnegative because the
+target's singleton coordinate is among the supplied coordinates. -/
+theorem exists_quittingPhaseSwitchPunishCap_of_targetClosedTail_of_coordinateBound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : ℕ → ι → PMF Bool) (target : ι) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hclosed : IsQuittingTargetClosedAt reward tail target 0) :
+    ∃ cap : ι → ℝ,
+      cap target = quittingRootSequenceTerminalValue reward tail target 0 ∧
+      (∀ (who : ι) (hazard : ℕ → PMF Bool),
+        quittingRootSequenceHazardTerminalValue reward tail who hazard 0 ≤
+          cap who) ∧
+      ∀ who : ι, cap who ≤ M := by
+  have hM : 0 ≤ M :=
+    (abs_nonneg (reward (quittingSingletonTerminal target) target)).trans
+      (hreward (quittingSingletonTerminal target) target)
+  let cap : ι → ℝ := fun who =>
+    if who = target then
+      quittingRootSequenceTerminalValue reward tail target 0
+    else M
+  refine ⟨cap, by simp [cap], ?_, ?_⟩
+  · intro who hazard
+    by_cases hwho : who = target
+    · subst who
+      simpa [cap] using hclosed hazard
+    · have hdeviationBound :=
+        abs_quittingRootSequenceTerminalValue_le reward
+          (quittingRootSequenceUpdate tail who hazard) who 0 hM hreward
+      have hupper :
+          quittingRootSequenceHazardTerminalValue reward tail who hazard 0 ≤ M := by
+        unfold quittingRootSequenceHazardTerminalValue
+        exact (le_abs_self _).trans hdeviationBound
+      simpa [cap, hwho] using hupper
+  · intro who
+    by_cases hwho : who = target
+    · subst who
+      have hvalueBound :=
+        abs_quittingRootSequenceTerminalValue_le reward tail target 0 hM hreward
+      have hupper : quittingRootSequenceTerminalValue reward tail target 0 ≤ M :=
+        (le_abs_self _).trans hvalueBound
+      simpa [cap] using hupper
+    · simp [cap, hwho]
+
 /-- A target-closed tail caps the marked player's deviations by its prescribed
-value.  Every unmarked player's deviations are bounded trivially by the
-reward bound. -/
+value. Every unmarked player's deviations are bounded trivially by the
+canonical reward bound. -/
 theorem exists_quittingPhaseSwitchPunishCap_of_targetClosedTail
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : ℕ → ι → PMF Bool) (target : ι)
@@ -85,40 +129,9 @@ theorem exists_quittingPhaseSwitchPunishCap_of_targetClosedTail
       (∀ (who : ι) (hazard : ℕ → PMF Bool),
         quittingRootSequenceHazardTerminalValue reward tail who hazard 0 ≤
           cap who) ∧
-      ∀ who : ι, cap who ≤ quittingRewardBound reward := by
-  let cap : ι → ℝ := fun who =>
-    if who = target then
-      quittingRootSequenceTerminalValue reward tail target 0
-    else quittingRewardBound reward
-  refine ⟨cap, by simp [cap], ?_, ?_⟩
-  · intro who hazard
-    by_cases hwho : who = target
-    · subst who
-      simpa [cap] using hclosed hazard
-    · have hdeviationBound :=
-        abs_quittingRootSequenceTerminalValue_le reward
-          (quittingRootSequenceUpdate tail who hazard) who 0
-          (quittingRewardBound_nonneg reward)
-          (abs_reward_le_quittingRewardBound reward)
-      have hupper :
-          quittingRootSequenceHazardTerminalValue reward tail who hazard 0 ≤
-            quittingRewardBound reward := by
-        unfold quittingRootSequenceHazardTerminalValue
-        exact (le_abs_self _).trans hdeviationBound
-      simpa [cap, hwho] using hupper
-  · intro who
-    by_cases hwho : who = target
-    · subst who
-      have hvalueBound :=
-        abs_quittingRootSequenceTerminalValue_le
-          reward tail target 0 (quittingRewardBound_nonneg reward)
-            (abs_reward_le_quittingRewardBound reward)
-      have hupper :
-          quittingRootSequenceTerminalValue reward tail target 0 ≤
-            quittingRewardBound reward :=
-        (le_abs_self _).trans hvalueBound
-      simpa [cap] using hupper
-    · simp [cap, hwho]
+      ∀ who : ι, cap who ≤ quittingRewardBound reward :=
+  exists_quittingPhaseSwitchPunishCap_of_targetClosedTail_of_coordinateBound
+    reward tail target (abs_reward_le_quittingRewardBound reward) hclosed
 
 /-- **Support-witness terminal-equilibrium compiler.**  A support-local
 witness sequence, one genuine own-survival crossing, and a player-indexed
