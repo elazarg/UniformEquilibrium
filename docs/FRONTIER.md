@@ -1166,6 +1166,20 @@ opponent coordinate carrying at least `1 / (card ι - 1)`.
 `nonempty_actualProfileFixedLawResetHandoff` attaches the arbitrary-profile
 path and literal final law to the existing fixed-law reset dispatch.
 
+The finite-clock minimum branch now also has a production-level conditional
+reduction.  For a supplied finite-clock positive global minimum,
+`finiteClockMinimum_exactCapPurification_or_pureTimeDescentPaidPort`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FiniteClockMinimumPaidPort.lean`)
+first canonicalizes the actual stopping laws without changing the prescribed
+payoffs or unrestricted behavioral caps, then follows at most `card ι` exact-cap
+pure-time replacements while retaining every pre-exit node on the source debt
+fibre.  It returns either a deadline-bounded off-minimum paid row or a canonical
+pure-time minimum whose paid row carries the literal ancestry constructed by
+deadline descent.  The Fin4 specialization records the bound four.  This has
+`M`, `L`, and branch-local `A` for the supplied profile, but no `C`: it neither
+produces the finite-clock minimum nor supplies chronology, renewal, a paid-port
+consumer, or a uniform-equilibrium payoff.
+
 For the actual Fin4 endpoint data,
 `FinFourThreeRoleAscentResetHandoff.nonempty_of_strict_ascent`
 (`Research/Quitting/FinFourProducerAtlas/ThreeRoleAscentResetHandoff.lean`)

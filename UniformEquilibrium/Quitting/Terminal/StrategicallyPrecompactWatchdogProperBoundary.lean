@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.ProperStoppingApproximation
+import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdogBoundary
 
 /-!
@@ -34,25 +35,6 @@ open StochasticGame
 open Math.Probability Math.Probability.DiscreteHazard
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
-
-/-- The canonical behavioral realization of an arbitrary complete stopping
-law. -/
-def quittingStoppingLawBehaviorStrategy
-    (reward : {S : Finset iota // S.Nonempty} -> Payoff iota)
-    (who : iota) (law : PMF (Option Nat)) :
-    (quittingGame reward).BehaviorStrategy who :=
-  fun time _history => (StoppingLaw.toScalarHazard law).toBoolean time
-
-omit [DecidableEq iota] in
-@[simp] theorem quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
-    (reward : {S : Finset iota // S.Nonempty} -> Payoff iota)
-    (who : iota) (law : PMF (Option Nat)) :
-    quittingBehaviorStoppingLaw reward
-        (quittingStoppingLawBehaviorStrategy reward who law) = law := by
-  unfold quittingBehaviorStoppingLaw quittingHazardStoppingLaw
-    quittingStoppingLawBehaviorStrategy quittingBehaviorLiveHazard
-  rw [ScalarHazard.toScalar_toBoolean,
-    StoppingLaw.stoppingLaw_toScalarHazard]
 
 /-- A behavior is proper when its induced live-spine stopping law has no
 Never atom. -/
