@@ -605,6 +605,7 @@ import UniformEquilibrium.Quitting.Conjecture.ReducedCapConjectureCounterexample
 import UniformEquilibrium.Quitting.Boundary.Analytic.RankOneCrossing
 import UniformEquilibrium.Quitting.Boundary.Analytic.ResidueResults
 import UniformEquilibrium.Quitting.Punishment.SharedPunishmentResults
+import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawCapUpperBound
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding

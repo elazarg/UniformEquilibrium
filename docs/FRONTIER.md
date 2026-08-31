@@ -602,12 +602,24 @@ subsequence. Every finite coalition mass of the profile reconstructed from the
 limiting marginals is bounded by the selected outcome-law coordinate, so their
 difference is nonnegative; its total is exactly reconstructed Never mass minus
 selected Never mass, and its reward moment is exactly target payoff minus the
-reconstructed payoff. Thus equations (1)--(3) have generic finite-player `M/L`
-and a carrier-facing `A`, but no downstream `C`. This is a subsequential
-terminal-law defect, not profile attainment. It proves none of equations (4)
-and later, strict positivity, reward or social-surplus sign, cap or debt
-estimate, minimum property, properness or tightness, Fin4 specialization,
-terminal Nash profile, or uniform-equilibrium payoff.
+reconstructed payoff. The same selected laws also carry exact cap and debt
+identities.
+`quittingCompactStoppingLawProfile_cap_le_target_add_opponentNeverProduct_mul_negPart_of_lawLimit`
+(`UniformEquilibrium/Quitting/Terminal/CompactStoppingLawCapUpperBound.lean`)
+bounds the reconstructed unrestricted behavioral cap by the selected target
+cap plus the opponents' Never product times the singleton reward's negative
+part. Thus a nonnegative singleton reward removes the correction.
+`QuittingTerminalSemanticEscapeAccount.`
+`debtSum_sub_target_eq_escapeSocialReward_sub_capDropSum`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeDebtJump.lean`)
+then identifies reconstructed-minus-target total debt with escaped social
+reward moment minus the sum of target-to-reconstructed cap drops. Thus
+equations (1)--(5) have generic finite-player `M/L` and a carrier-facing
+selected/account `A`, but no downstream `C`. This is a subsequential
+terminal-law defect and cap account, not profile attainment. It proves none of
+equations (6) and later, strict positivity, reward or social-surplus sign,
+positive debt or cap drop, minimum property, properness or tightness, Fin4
+specialization, terminal Nash profile, or uniform-equilibrium payoff.
 
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
