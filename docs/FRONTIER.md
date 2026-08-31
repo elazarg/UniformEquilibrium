@@ -626,12 +626,24 @@ strict. With a positive reward bound,
 coalition with positive escape mass and positive social reward, retaining the
 product lower bound `jump / (2^card - 1)` and escape-mass floor
 `jump / ((2^card - 1) * card * M)`. Thus equations (1)--(8) have generic
-finite-player `M/L` and a carrier-facing selected/account `A`, but no
-downstream `C`. This is a subsequential terminal-law defect, cap, and
-conditional minimum account, not profile attainment. It proves none of
-equations (9) and later, the social-nonpositive chamber, attainment,
-properness or tightness, a Fin4 specialization, terminal Nash play, or a
-uniform-equilibrium payoff.
+finite-player `M/L` and a carrier-facing selected/account `A`.
+`exists_actualProfile_debtSum_le_of_singleton_nonneg_socialReward_nonpos`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeSocialSignAttainment.lean`)
+shows that, when every own-singleton reward is nonnegative and every
+coalition's aggregate reward is nonpositive, each carrier point is weakly
+debt-dominated by an actual profile. At a supplied global carrier minimum,
+`exists_actual_minimum_of_singleton_nonneg_social_nonpos` returns an actual
+profile with the same minimum debt value and globally minimal debt. The
+minimum account has zero debt jump, zero total and coordinatewise cap drops,
+zero escaped social reward, and positive escape mass only on zero-social-
+reward coalitions. Under strict aggregate negativity,
+`minimum_point_attained_of_singleton_nonneg_social_neg` realizes the supplied
+minimizing semantic pair itself. The full packet therefore has `M/L`, the
+carrier adapter `A`, and branch-local `C` for weak-sign minimum-value
+attainment and strict-sign exact-point attainment. Weak signs do not realize
+an arbitrary supplied minimizer, and the positive-social escape arm still has
+no `C`. None of these results proves properness or tightness, a Fin4
+specialization, terminal Nash play, or a uniform-equilibrium payoff.
 
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
