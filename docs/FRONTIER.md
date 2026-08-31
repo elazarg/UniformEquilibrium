@@ -1239,6 +1239,37 @@ preserve nonmover caps or individual debts and is not a game chronology,
 renewal, Nash--Bellman path, paid-port consumer, or uniform-equilibrium
 conclusion.
 
+That actual paid port now also enters a finite horizontal response alternative.
+`exists_quittingPureTime_capAttainer_mem_inheritedResponseAlphabet`
+(`UniformEquilibrium/Diagnostics/Quitting/PureTimeInheritedResponseAlphabet.lean`)
+keeps exact pure-time responses inside the initial clocks together with
+`Never` and date zero, an alphabet of size at most `card ι + 2`.
+`exists_minimumDebtEntrance_xor_offMinimumExactResponseCycle`
+(`UniformEquilibrium/Diagnostics/Quitting/PureTimeExactResponseMinimumAlternative.lean`)
+therefore sends the deterministic maximal-debt exact-response orbit to exactly
+one of its first minimum-debt state or a nontrivial closed segment whose whole
+pre-repeat prefix stays strictly above the minimum.  Every edge gains at least
+`D*/card ι` and has a fresh paid first-disagreement row.  In Fin4 the orbit
+repeats by time `1296`;
+on an off-minimum cycle,
+`exists_nonmover_payoffFall_and_debtRise_ge_twelfth_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourPureTimeExactResponseCycleExternality.lean`)
+gives a nonmover prescribed-payoff fall and a possibly different nonmover debt
+rise, each at least `D*/12`, from the exact closed-cycle externality ledger.
+`exists_finFourActualSourcePureTimeResponseAlternative_of_debtSumInf_pos`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourActualSourcePureTimeResponseAlternative.lean`)
+starts directly from positive terminal-debt infimum, retains the normalized
+actual paid port, purifies through at most four support-selected non-worsening
+replacements, and records literal ancestry from its actual source to the
+initial pure profile and every displayed orbit profile.  Its selected
+entrance time or cycle endpoint and period are bounded literally by `1296`.
+These results have
+`M` and `L`; the direct positive-infimum theorem has source `A`, and attaching
+the paid port to the response alternative is a branch-local `C`.  The orbit is
+horizontal rather than temporal: it provides no chronology, renewal, Nash or
+Nash--Bellman path, preservation of nonmover caps or debts, consumer of the
+resulting entrance/cycle, or uniform-equilibrium conclusion.
+
 The zero-Never, zero-singleton joint-law face now has an exact production
 realization.  For a supplied point of the joint terminal semantic/law carrier,
 `exists_twoSureProductRoot_realizing_law_of_mem_terminalSemanticLawCarrier`

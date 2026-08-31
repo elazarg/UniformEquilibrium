@@ -468,6 +468,7 @@ import UniformEquilibrium.Quitting.Cycles.CyclicKofNQuittingSchedule
 import UniformEquilibrium.Quitting.Cycles.CyclicGreenDebt
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorSupportedPureTimeReplacement
+import UniformEquilibrium.Quitting.Paths.BoundedSupportedPureTimePurification
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
