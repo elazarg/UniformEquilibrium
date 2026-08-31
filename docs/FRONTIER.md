@@ -2794,17 +2794,29 @@ in the live mathematical ledger.
   identity then prove the literal singleton lower bound at every nonterminal
   continuous-clock path time,
   `ChronologicalLimit.singletonReward_le_absorptionPathPayoff` for every
-  player.
+  player.  The finite refusal-window localization in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalPositiveSingletonRate.lean`
+  combines a linear singleton increment, the quadratic collision estimate,
+  source-tail clock-diameter control, and the exact Nash refusal telescope.
+  At every actual nonterminal path time where a player's singleton coordinate
+  has positive right derivative,
+  `ChronologicalLimit.absorptionPathPayoff_le_singletonReward_of_pathRightDerivative_pos`
+  proves the matching upper bound, while
+  `ChronologicalLimit.absorptionPathPayoff_eq_singletonReward_of_pathRightDerivative_pos`
+  states the resulting singleton-payoff equality literally.
+  `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath` bundles the checked
+  jump rows, continuous lower bounds, and active equalities for this same
+  actual chronological path.
   Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  The open continuous-clock clause is: if player `i` has positive
-  singleton right derivative at `t`, then `absorptionPathPayoff reward path t i`
-  equals `singletonReward reward i`.  Full sequential perfection, all-clock
-  path convergence, a fixed completion owner, and an unconditional AGKRS
-  branch remain open.
+  compiler.  No checked theorem yet converts a terminal-total jump into S.2
+  or discretizes the sequentially perfect path into a support-preserving,
+  suffix-uniform well-supported S.3 sequence.  A fixed completion owner and
+  the unconditional AGKRS branch also remain open; no new uniform-equilibrium
+  conclusion follows from this path theorem alone.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
