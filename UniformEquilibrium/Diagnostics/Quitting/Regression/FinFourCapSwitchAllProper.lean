@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourCapSwitchAllProper
 
-open Math Math.Probability Math.ProbabilityMassFunction
+open Filter Math Math.Probability Math.ProbabilityMassFunction
 open Math.Probability.DiscreteHazard
 
 abbrev Player := Fin 4
@@ -627,6 +627,239 @@ theorem tendsto_quittingFiniteSpliceError_reconstructedHazard_zero
   apply tendsto_quittingFiniteSpliceError_zero_of_neverMass_zero
   rw [quittingHazardNeverMass_reconstructedHazard]
   exact laws_none_toReal_of_ne_observer n hn x y hx0 hx1 hy0 hy1 mover hmover
+
+/-! ## Literal asymptotic regression surface -/
+
+/-- The literal unrestricted-cap square of the regression. -/
+def quittingCounterfactualPureTimeCapSquare (n : ℕ) (hn : 2 ≤ n) : ℝ :=
+  quittingCounterfactualPureTimeCap
+        (laws n hn (lambda n) (lambda n)
+          (lambda_nonneg n) (lambda_le_one n hn)
+          (lambda_nonneg n) (lambda_le_one n hn)) observer terminalValue -
+      quittingCounterfactualPureTimeCap
+        (laws n hn (lambda n) 0
+          (lambda_nonneg n) (lambda_le_one n hn) (by positivity) (by norm_num))
+        observer terminalValue -
+    quittingCounterfactualPureTimeCap
+        (laws n hn 0 (lambda n)
+          (by positivity) (by norm_num)
+          (lambda_nonneg n) (lambda_le_one n hn)) observer terminalValue +
+      quittingCounterfactualPureTimeCap
+        (laws n hn 0 0
+          (by positivity) (by norm_num) (by positivity) (by norm_num))
+        observer terminalValue
+
+/-- The literal fixed pure-time square of the regression. -/
+def quittingCounterfactualPureTimeValueSquare
+    (n : ℕ) (hn : 2 ≤ n) (time : Option ℕ) : ℝ :=
+  quittingCounterfactualPureTimeValue
+        (laws n hn (lambda n) (lambda n)
+          (lambda_nonneg n) (lambda_le_one n hn)
+          (lambda_nonneg n) (lambda_le_one n hn))
+        observer time terminalValue -
+      quittingCounterfactualPureTimeValue
+        (laws n hn (lambda n) 0
+          (lambda_nonneg n) (lambda_le_one n hn) (by positivity) (by norm_num))
+        observer time terminalValue -
+    quittingCounterfactualPureTimeValue
+        (laws n hn 0 (lambda n)
+          (by positivity) (by norm_num)
+          (lambda_nonneg n) (lambda_le_one n hn))
+        observer time terminalValue +
+      quittingCounterfactualPureTimeValue
+        (laws n hn 0 0
+          (by positivity) (by norm_num) (by positivity) (by norm_num))
+        observer time terminalValue
+
+/-- Every fixed pure-time square vanishes except at the active source date,
+where its exact value is `delta * lambda ^ 2`. -/
+theorem quittingCounterfactualPureTimeValueSquare_eq
+    (n : ℕ) (hn : 2 ≤ n) (time : Option ℕ) :
+    quittingCounterfactualPureTimeValueSquare n hn time =
+      if time = some (specialTime n) then delta n * (lambda n) ^ 2 else 0 := by
+  unfold quittingCounterfactualPureTimeValueSquare
+  rw [quittingCounterfactualPureTimeValue_eq_menuFormula,
+    quittingCounterfactualPureTimeValue_eq_menuFormula,
+    quittingCounterfactualPureTimeValue_eq_menuFormula,
+    quittingCounterfactualPureTimeValue_eq_menuFormula]
+  cases time with
+  | none => simp [menuFormula]
+  | some date =>
+      simp only [menuFormula, Option.some.injEq]
+      by_cases hbefore : date < mark n
+      · have hne : date ≠ specialTime n := by
+          unfold mark specialTime at *
+          omega
+        simp [hbefore, hne]
+      · by_cases hmark : date = mark n
+        · subst date
+          have hspecialNeMark : specialTime n ≠ mark n := by
+            unfold mark specialTime
+            omega
+          have hmarkNeSpecial : mark n ≠ specialTime n :=
+            hspecialNeMark.symm
+          simp [hmarkNeSpecial]
+        · by_cases hspecial : date = specialTime n
+          · subst date
+            have hnotBefore : ¬specialTime n < mark n := by
+              unfold mark specialTime
+              omega
+            have hspecialNeMark : specialTime n ≠ mark n := by
+              unfold mark specialTime
+              omega
+            simp [hnotBefore, hspecialNeMark]
+            ring
+          · simp [hbefore, hmark, hspecial]
+
+/-- Uniform absolute bound for every fixed pure-time square. -/
+theorem abs_quittingCounterfactualPureTimeValueSquare_le
+    (n : ℕ) (hn : 2 ≤ n) (time : Option ℕ) :
+    |quittingCounterfactualPureTimeValueSquare n hn time| ≤
+      delta n * (lambda n) ^ 2 := by
+  rw [quittingCounterfactualPureTimeValueSquare_eq]
+  split
+  · rw [abs_of_nonneg]
+    exact mul_nonneg (delta_nonneg n hn) (sq_nonneg _)
+  · simp only [abs_zero]
+    exact mul_nonneg (delta_nonneg n hn) (sq_nonneg _)
+
+/-- The uniform fixed-response bound is sharp at the active source date. -/
+theorem quittingCounterfactualPureTimeValueSquare_specialTime
+    (n : ℕ) (hn : 2 ≤ n) :
+    quittingCounterfactualPureTimeValueSquare n hn (some (specialTime n)) =
+      delta n * (lambda n) ^ 2 := by
+  simp [quittingCounterfactualPureTimeValueSquare_eq]
+
+private theorem tendsto_lambda_shift_zero :
+    Tendsto (fun rank : ℕ => lambda (rank + 2)) atTop (nhds 0) := by
+  have h := (tendsto_one_div_atTop_nhds_zero_nat (𝕜 := ℝ)).comp
+    (tendsto_add_atTop_nat 2)
+  simpa [lambda, Function.comp_def] using h
+
+private theorem delta_eq_lambda_cube (n : ℕ) (hn : 2 ≤ n) :
+    delta n = (lambda n) ^ 3 := by
+  unfold delta lambda
+  have hn0 : (n : ℝ) ≠ 0 := by exact_mod_cast (show n ≠ 0 by omega)
+  field_simp
+
+/-- Along the canonical valid indices `n + 2`, the unrestricted-cap square
+divided by `lambda` tends to `-1`. -/
+theorem tendsto_quittingCounterfactualPureTimeCapSquare_div_lambda_neg_one :
+    Tendsto (fun rank : ℕ =>
+      quittingCounterfactualPureTimeCapSquare (rank + 2) (by omega) /
+        lambda (rank + 2)) atTop (nhds (-1)) := by
+  have hformula (rank : ℕ) :
+      quittingCounterfactualPureTimeCapSquare (rank + 2) (by omega) /
+          lambda (rank + 2) =
+        -1 + (1 - lambda (rank + 2) + (lambda (rank + 2)) ^ 2) *
+          (lambda (rank + 2)) ^ 2 := by
+    rw [show quittingCounterfactualPureTimeCapSquare (rank + 2) (by omega) =
+        -lambda (rank + 2) +
+          (1 - lambda (rank + 2) + (lambda (rank + 2)) ^ 2) *
+            delta (rank + 2) by
+      exact quittingCounterfactualPureTimeCap_square (rank + 2) (by omega)]
+    rw [delta_eq_lambda_cube (rank + 2) (by omega)]
+    have hlambda : lambda (rank + 2) ≠ 0 := by
+      unfold lambda
+      positivity
+    field_simp
+  have hcontinuous : ContinuousAt
+      (fun value : ℝ => -1 + (1 - value + value ^ 2) * value ^ 2) 0 := by
+    fun_prop
+  have ht : Tendsto (fun rank : ℕ =>
+      -1 + (1 - lambda (rank + 2) + (lambda (rank + 2)) ^ 2) *
+        (lambda (rank + 2)) ^ 2) atTop (nhds (-1)) := by
+    convert hcontinuous.tendsto.comp tendsto_lambda_shift_zero using 1 <;>
+      norm_num [Function.comp_def]
+  exact ht.congr' (Eventually.of_forall fun rank => (hformula rank).symm)
+
+/-- The sharp uniform fixed-response square bound is little-o of `lambda`,
+stated as convergence of its ratio to zero. -/
+theorem tendsto_uniformFixedResponseSquareBound_div_lambda_zero :
+    Tendsto (fun rank : ℕ =>
+      (delta (rank + 2) * (lambda (rank + 2)) ^ 2) /
+        lambda (rank + 2)) atTop (nhds 0) := by
+  have hformula (rank : ℕ) :
+      (delta (rank + 2) * (lambda (rank + 2)) ^ 2) /
+          lambda (rank + 2) =
+        (lambda (rank + 2)) ^ 4 := by
+    rw [delta_eq_lambda_cube (rank + 2) (by omega)]
+    have hlambda : lambda (rank + 2) ≠ 0 := by
+      unfold lambda
+      positivity
+    field_simp
+  have ht : Tendsto (fun rank : ℕ => (lambda (rank + 2)) ^ 4)
+      atTop (nhds 0) := by
+    simpa using tendsto_lambda_shift_zero.pow 4
+  exact ht.congr' (Eventually.of_forall fun rank => (hformula rank).symm)
+
+/-- The literal response mark escapes to infinity. -/
+theorem tendsto_mark_shift_atTop :
+    Tendsto (fun rank : ℕ => mark (rank + 2)) atTop atTop := by
+  simpa [mark] using tendsto_add_atTop_nat 2
+
+/-- Every displayed marginal survives with probability one through all dates
+strictly before the common reset mark. -/
+theorem stoppingLaw_survival_laws_mark_eq_one
+    (n : ℕ) (hn : 2 ≤ n) (x y : ℝ)
+    (hx0 : 0 ≤ x) (hx1 : x ≤ 1)
+    (hy0 : 0 ≤ y) (hy1 : y ≤ 1) (player : Player) :
+    StoppingLaw.survival
+      (laws n hn x y hx0 hx1 hy0 hy1 player) (mark n) = 1 := by
+  unfold StoppingLaw.survival
+  have hsum :
+      ∑ time ∈ Finset.range (mark n),
+        StoppingLaw.finiteMass
+          (laws n hn x y hx0 hx1 hy0 hy1 player) time = 0 := by
+    apply Finset.sum_eq_zero
+    intro time htime
+    unfold StoppingLaw.finiteMass
+    have htimeLt : time < mark n := Finset.mem_range.mp htime
+    fin_cases player
+    · simp [laws]
+    · unfold laws firstLaw
+      rw [Math.ProbabilityMassFunction.bind_apply_toReal_eq_sum,
+        Fintype.sum_bool]
+      simp only [Bool.false_eq_true, ↓reduceIte]
+      unfold resetTargetLaw firstSourceLaw twoPointLaw
+      rw [Math.ProbabilityMassFunction.bind_apply_toReal_eq_sum,
+        Fintype.sum_bool]
+      have htimeNeMark : time ≠ mark n := by omega
+      have htimeNeSpecial : time ≠ specialTime n := by
+        unfold mark specialTime at *
+        omega
+      have htimeNeBlocker : time ≠ blockerTime n := by
+        unfold mark blockerTime at *
+        omega
+      simp [htimeNeMark, htimeNeSpecial, htimeNeBlocker]
+    · unfold laws secondLaw twoPointLaw
+      rw [Math.ProbabilityMassFunction.bind_apply_toReal_eq_sum,
+        Fintype.sum_bool]
+      have htimeNeMark : time ≠ mark n := by omega
+      have htimeNeSource : time ≠ secondSourceTime n := by
+        unfold mark secondSourceTime blockerTime at *
+        omega
+      simp [htimeNeMark, htimeNeSource]
+    · have htimeNeBlocker : time ≠ blockerTime n := by
+        unfold mark blockerTime at *
+        omega
+      simp [laws, htimeNeBlocker]
+  rw [hsum]
+  ring
+
+/-- The full product of displayed opponent survivals is exactly one at the
+escaping reset mark, uniformly over the whole reset square. -/
+theorem prod_opponent_stoppingLawSurvival_laws_mark_eq_one
+    (n : ℕ) (hn : 2 ≤ n) (x y : ℝ)
+    (hx0 : 0 ≤ x) (hx1 : x ≤ 1)
+    (hy0 : 0 ≤ y) (hy1 : y ≤ 1) :
+    ∏ player ∈ Finset.univ.erase observer,
+      StoppingLaw.survival
+        (laws n hn x y hx0 hx1 hy0 hy1 player) (mark n) = 1 := by
+  apply Finset.prod_eq_one
+  intro player _
+  exact stoppingLaw_survival_laws_mark_eq_one
+    n hn x y hx0 hx1 hy0 hy1 player
 
 end FinFourCapSwitchAllProper
 end GameTheory

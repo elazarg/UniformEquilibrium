@@ -462,12 +462,16 @@ pair-deleted survival at least `gamma / (8 * M * C)`.  Reset-cube source
 transfer and compact stopping-law extraction retain only a pair-deleted
 `Never` product in one selected weak limit.  The exact Fin4 regression in
 `UniformEquilibrium/Diagnostics/Quitting/Regression/FinFourCapSwitchAllProper.lean`
-has the same first-order counterfactual cap square while every displayed
-opponent law is proper and its finite-splice error tends to zero.  Thus this
-route has `M` and `L`, but no source `A` or downstream `C`: the selected edge
-is not chronological or on the minimum fibre, the compact atom is not an
-actual terminal-law atom, and no ancestry-preserving paid-row consumer or
-uniform-equilibrium payoff follows.
+has the same first-order counterfactual cap square:
+`tendsto_quittingCounterfactualPureTimeCapSquare_div_lambda_neg_one` gives its
+ratio to the response scale converging to `-1`, whereas
+`tendsto_uniformFixedResponseSquareBound_div_lambda_zero` gives uniform
+fixed-response little-o.  Its mark tends to infinity, every displayed opponent
+survives to that mark with exact probability one, and its finite-splice error
+tends to zero.  Thus this route has `M` and `L`, but no source `A` or downstream
+`C`: the selected edge is not chronological or on the minimum fibre, the
+compact atom is not an actual terminal-law atom, and no ancestry-preserving
+paid-row consumer or uniform-equilibrium payoff follows.
 
 Terminal differences between two pure-time witnesses also have an exact
 reached-history decoder.
