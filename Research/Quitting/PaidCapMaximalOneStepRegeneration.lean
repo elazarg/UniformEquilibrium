@@ -62,6 +62,25 @@ structure MaximalOneStepPaidResetRegeneration
   descendant_profile : descendant.profile =
     quittingMaximalCapPrefixProfile reward source.profile 1
   descendant_minimum : descendant.minimum = source.minimum
+  descendant_observer : descendant.observer = source.observer
+  descendant_gain : descendant.gain =
+    quittingStationaryContinueMass
+        (quittingMaximalCapPrefixRoot reward source.profile) * source.gain
+  descendant_row_sourceWitness : descendant.row.sourceWitness =
+    quittingCapLiftPureTimeShift 1 source.row.sourceWitness
+  descendant_row_receivingWitness : descendant.row.receivingWitness =
+    quittingCapLiftPureTimeShift 1 source.row.receivingWitness
+  descendant_debt_coordinate : ∀ who,
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward descendant.profile) who =
+      quittingStationaryContinueMass
+          (quittingMaximalCapPrefixRoot reward source.profile) *
+        quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward source.profile) who
+  descendant_initialDebt : descendant.initialDebt =
+    quittingStationaryContinueMass
+        (quittingMaximalCapPrefixRoot reward source.profile) *
+      source.initialDebt
   strict_debt : descendant.initialDebt < source.initialDebt
   target_joint :
     (quittingTerminalSemanticPair reward descendant.profile,
@@ -72,6 +91,13 @@ structure MaximalOneStepPaidResetRegeneration
   reset_incidence : 0 <
     quittingTerminalOpponentIncidenceMass resetOwner other
       (quittingTerminalOutcomeMass reward descendant.profile)
+  reset_incidence_lower :
+    quittingStationaryContinueMass
+          (quittingMaximalCapPrefixRoot reward source.profile) *
+        quittingTerminalOpponentIncidenceMass resetOwner other
+          (quittingTerminalOutcomeMass reward source.profile) ≤
+      quittingTerminalOpponentIncidenceMass resetOwner other
+        (quittingTerminalOutcomeMass reward descendant.profile)
   returned : QuittingTerminalSemanticPair ι
   dispatch : QuittingFixedLawResetDispatch (reward := reward)
     source.minimum
@@ -161,7 +187,7 @@ theorem maximalOneStepPaidResetRegeneration_or_uniqueAllContinue
       exact hscaled
     have hgainPos : 0 < quittingStationaryContinueMass root * source.gain :=
       mul_pos hcontinue source.gain_pos
-    obtain ⟨row, _hsourceWitness, _hreceivingWitness⟩ :=
+    obtain ⟨row, hsourceWitness, hreceivingWitness⟩ :=
       exists_quittingPaidFirstDisagreementRow_of_pureTimePayoff_sub reward
         nextProfile source.observer
         (quittingCapLiftPureTimeShift 1 source.row.sourceWitness)
@@ -177,6 +203,19 @@ theorem maximalOneStepPaidResetRegeneration_or_uniqueAllContinue
       gain := quittingStationaryContinueMass root * source.gain
       gain_pos := hgainPos
       row := row }
+    have hdebtCoordinate : ∀ who,
+        quittingTerminalSemanticDebt
+            (quittingTerminalSemanticPair reward nextProfile) who =
+          quittingStationaryContinueMass root *
+            quittingTerminalSemanticDebt
+              (quittingTerminalSemanticPair reward source.profile) who := by
+      intro who
+      rw [hnextProfile,
+        quittingTerminalSemanticPair_rootThenContinuation reward root
+          source.profile,
+        quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
+          (reward := reward)
+          (quittingTerminalSemanticPair reward source.profile) root who hnash]
     have hresetNext : quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward nextProfile) resetOwner = 0 := by
       rw [hnextProfile,
@@ -187,16 +226,22 @@ theorem maximalOneStepPaidResetRegeneration_or_uniqueAllContinue
           (quittingTerminalSemanticPair reward source.profile) root resetOwner
           hnash,
         hreset, mul_zero]
-    have hincidenceNext : 0 <
-        quittingTerminalOpponentIncidenceMass resetOwner other
-          (quittingTerminalOutcomeMass reward nextProfile) := by
+    have hincidenceLower :
+        quittingStationaryContinueMass root *
+            quittingTerminalOpponentIncidenceMass resetOwner other
+              (quittingTerminalOutcomeMass reward source.profile) ≤
+          quittingTerminalOpponentIncidenceMass resetOwner other
+            (quittingTerminalOutcomeMass reward nextProfile) := by
       rw [hnextProfile,
         ← quittingTerminalOutcomeLawPrefix_outcomeMass
           reward root source.profile]
-      exact positive_incidence_lawPrefix_of_positive_continueMass
+      exact quittingStationaryContinueMass_mul_incidence_le_lawPrefix
         resetOwner other root
-        (quittingTerminalOutcomeMass reward source.profile)
-        hcontinue hincidence
+          (quittingTerminalOutcomeMass reward source.profile)
+    have hincidenceNext : 0 <
+        quittingTerminalOpponentIncidenceMass resetOwner other
+          (quittingTerminalOutcomeMass reward nextProfile) := by
+      exact (mul_pos hcontinue hincidence).trans_le hincidenceLower
     have hjoint := quittingTerminalSemanticLawPoint_mem_carrier reward
       nextProfile
     obtain ⟨returned, dispatch⟩ := witness.exists_fixedLawResetDispatch
@@ -211,11 +256,25 @@ theorem maximalOneStepPaidResetRegeneration_or_uniqueAllContinue
       descendant := descendant
       descendant_profile := rfl
       descendant_minimum := rfl
+      descendant_observer := rfl
+      descendant_gain := rfl
+      descendant_row_sourceWitness := by
+        simpa [descendant] using hsourceWitness
+      descendant_row_receivingWitness := by
+        simpa [descendant] using hreceivingWitness
+      descendant_debt_coordinate := by
+        intro who
+        simpa [descendant, root] using hdebtCoordinate who
+      descendant_initialDebt := by
+        simpa [descendant, root, QuittingPaidCapLiftedSource.initialDebt]
+          using hstep
       strict_debt := by
         simpa [descendant, QuittingPaidCapLiftedSource.initialDebt] using hstrict
       target_joint := by simpa [descendant] using hjoint
       reset_debt := by simpa [descendant] using hresetNext
       reset_incidence := by simpa [descendant] using hincidenceNext
+      reset_incidence_lower := by
+        simpa [descendant, root] using hincidenceLower
       returned := returned
       dispatch := by simpa [descendant] using dispatch }⟩
   · right
