@@ -58,10 +58,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbi
 
 Import-only inventory of the finite-quitting existence and classification
 layer.  The direct chronological AGKRS route proves the three-way forward
-classification from approximate-equilibrium existence.  The separate
-corrected fixed-branch route still has a fourth, stationarily generated
-residual; its optional source-compactification route remains incomplete and
-is not used by the direct theorem.
+classification from approximate-equilibrium existence.
 
 Ordinary consumers should import the narrow module that owns the declarations
 they use.
