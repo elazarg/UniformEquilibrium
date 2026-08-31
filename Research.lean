@@ -80,6 +80,7 @@ import Research.Quitting.ExactNashBellmanRepairReturnTrichotomy
 import Research.Quitting.ExactPrefixAtomTransport
 import Research.Quitting.FinFourConstrainedRootNormalWorkRegression
 import Research.Quitting.FinFourCounterexampleSemidecision
+import Research.Quitting.FinFourFixedTableCounterexampleSearch
 import Research.Quitting.FinFourExhaustiveProducerAtlas
 import Research.Quitting.FinFourHopfConcreteChambers
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions

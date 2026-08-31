@@ -87,9 +87,16 @@ not. At the global level,
 [`exists_finFourCounterexampleStep_iff_exists_real_infimum_pos`](../Research/Quitting/FinFourCounterexampleSemidecision.lean)
 uses positive scaling, 2-Lipschitz reward robustness, normalized rational
 approximation, and fair dovetailing to show that existence of a real Fin4
-positive-gap table is recursively enumerable. These declarations give
-`M/L/A/C` for the exact search route. They produce no positive-gap table, do
-not decide a supplied real table, and give no conclusion from nontermination;
+positive-gap table is recursively enumerable.  Separately,
+[`FinFourExactScaleCertificate.lower_verifies_infimum_sound`](../Research/Quitting/FinFourIndependentCertificateSoundness.lean)
+reads the unrestricted infimum lower bound directly from an accepted finite
+tree without trusting or replaying its generator.  For one supplied normalized
+rational table with positive unrestricted infimum,
+[`exists_finFourFixedTableCounterexampleStep_of_infimum_pos`](../Research/Quitting/FinFourFixedTableCounterexampleSearch.lean)
+proves that the table-specific dyadic-scale/local-stage dovetail emits at a
+finite stage.  These Research declarations give `M/L/A/C` for the exact search
+route at their stated inputs.  They produce no positive-gap table, do not
+decide a supplied real table, and give no conclusion from nontermination;
 therefore they neither solve the Fin4 conjecture nor close either structural
 atlas arrow.
 
