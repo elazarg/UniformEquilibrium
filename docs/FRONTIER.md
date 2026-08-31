@@ -1270,6 +1270,25 @@ horizontal rather than temporal: it provides no chronology, renewal, Nash or
 Nash--Bellman path, preservation of nonmover caps or debts, consumer of the
 resulting entrance/cycle, or uniform-equilibrium conclusion.
 
+A separate normalized Fin4 pair compiler is now integrated.
+`terminalDispatch_nonempty`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FinFourOrientedMinimumPairChord.lean`)
+starts from a supplied positive global-minimum pure pair, the two distinct
+outsiders, and a strict incoming triple-to-pair dropout gain.  It returns a
+profitable pair-member Never response, a strictly off-minimum join by the
+unique remaining outsider, or a same-minimum join.  In the equality arm,
+`pairToJoinedTripleChord_debt_eq` gives the exact coordinatewise affine debt
+formula, `pairToJoinedTripleChord_debtSum_eq` keeps total debt fixed, and
+`quitNowResponse_from_pairToJoinedTripleChord_gain_eq` states the literal
+updated-profile gain `(1 - lambda) * D_*`; the midpoint gain is `D_*/2`.  The
+one-date profile and update identities are owned by
+`UniformEquilibrium/Diagnostics/Quitting/PureCoalitionOneDateNeverAdapters.lean`
+and delegate unrestricted behavioral cap formulas to the canonical sure-exit
+theory.  This local compiler has `M` and `L`, but no actual-source `A` and no
+downstream or renewable `C`.  In particular it does not construct a
+positive-time endpoint, tail screen, chronology, renewal, Nash path, terminal
+equilibrium, or uniform-equilibrium payoff.
+
 The zero-Never, zero-singleton joint-law face now has an exact production
 realization.  For a supplied point of the joint terminal semantic/law carrier,
 `exists_twoSureProductRoot_realizing_law_of_mem_terminalSemanticLawCarrier`
