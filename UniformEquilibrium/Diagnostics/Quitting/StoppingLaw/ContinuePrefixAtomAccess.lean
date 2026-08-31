@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.DebtSlopeAtomAlternative
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 
 /-!

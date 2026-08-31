@@ -471,6 +471,8 @@ import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
+import UniformEquilibrium.Quitting.Paths.ReversePrefixStoppingLaw
+import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis
@@ -674,6 +676,7 @@ import UniformEquilibrium.Quitting.Punishment.ApproximateCompletedCycle
 import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSelfTailClosure
 import UniformEquilibrium.Quitting.Root.TerminalOutcome
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment

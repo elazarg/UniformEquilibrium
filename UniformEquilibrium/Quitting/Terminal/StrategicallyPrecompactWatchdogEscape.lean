@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.ProbabilityMassFunction.DiscreteTightness
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
+import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdog
 
 /-!
@@ -165,53 +165,6 @@ theorem exists_nonempty_selectorRange_not_strategicallyTotallyBounded
   have hsafeSelected :=
     hsafe (selector profile).1 (selector profile).2 hselectedPadded
   linarith [hgain profile]
-
-/-- Finite stopping outcomes through `horizon`, together with `Never`. -/
-def stoppingLawFinitePrefix (horizon : Nat) : Finset (Option Nat) :=
-  {none} ∪ (Finset.range (horizon + 1)).image some
-
-@[simp] theorem none_mem_stoppingLawFinitePrefix (horizon : Nat) :
-    none ∈ stoppingLawFinitePrefix horizon := by
-  simp [stoppingLawFinitePrefix]
-
-@[simp] theorem some_mem_stoppingLawFinitePrefix (horizon time : Nat) :
-    some time ∈ stoppingLawFinitePrefix horizon <-> time <= horizon := by
-  simp [stoppingLawFinitePrefix]
-
-/-- Probability of stopping at a finite date strictly after `horizon`.
-The retained prefix includes `Never`, so no `Never` mass is counted. -/
-def stoppingLawLateFiniteMass (law : PMF (Option Nat))
-    (horizon : Nat) : Real :=
-  pmfFiniteComplementMass law (stoppingLawFinitePrefix horizon)
-
-/-- The late-finite mass is literally the mass on the complement of the
-finite prefix.  Since that prefix contains `none`, this sum has no `Never`
-atom. -/
-theorem stoppingLawLateFiniteMass_eq_tsum_compl
-    (law : PMF (Option Nat)) (horizon : Nat) :
-    stoppingLawLateFiniteMass law horizon =
-      ∑' choice :
-        ↑((↑(stoppingLawFinitePrefix horizon) : Set (Option Nat))ᶜ),
-        (law choice).toReal := by
-  have hsplit := (pmf_toReal_summable law).sum_add_tsum_compl
-    (s := stoppingLawFinitePrefix horizon)
-  rw [pmf_toReal_tsum_one law] at hsplit
-  unfold stoppingLawLateFiniteMass pmfFiniteComplementMass
-  linarith
-
-theorem stoppingLawFinitePrefix_compl_is_late_finite
-    {horizon : Nat}
-    (choice : {choice // choice ∉ stoppingLawFinitePrefix horizon}) :
-    ∃ time : Nat, horizon < time ∧ choice.1 = some time := by
-  cases hchoice : choice.1 with
-  | none =>
-      exact False.elim (choice.property (hchoice ▸ none_mem_stoppingLawFinitePrefix horizon))
-  | some time =>
-      refine ⟨time, ?_, rfl⟩
-      have hnot : ¬ time <= horizon := by
-        intro hle
-        exact choice.property (hchoice ▸ (some_mem_stoppingLawFinitePrefix horizon time).2 hle)
-      omega
 
 /-- Failure of total-variation total boundedness supplies one fixed positive
 amount of late finite mass beyond every horizon. -/

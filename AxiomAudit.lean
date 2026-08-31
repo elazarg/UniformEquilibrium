@@ -410,6 +410,7 @@ import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
+import MathUE.ProbabilityMassFunction.OptionNatEscape
 import MathUE.ProbabilityMassFunction.ProperStoppingApproximation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.ProbabilityMassFunction.TotalVariation
@@ -1772,8 +1773,10 @@ import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
 import UniformEquilibrium.Quitting.Paths.PureNonsingletonCommonPrefixScreening
 import UniformEquilibrium.Quitting.Paths.QuitEndpointOpponentBound
+import UniformEquilibrium.Quitting.Paths.ReversePrefixStoppingLaw
 import UniformEquilibrium.Quitting.Paths.SixPlayerOnePairMassTargetLock
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
+import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Paths.StoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.StrictAllContinueBasinSuccessorPath
 import UniformEquilibrium.Quitting.Paths.SupportWitnessAbsorptionBridge
@@ -1854,6 +1857,7 @@ import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Root.FleschSuccessor
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Quitting.Root.NashDefect
 import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 import UniformEquilibrium.Quitting.Root.NashExistence

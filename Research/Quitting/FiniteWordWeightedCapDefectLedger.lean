@@ -5,7 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.NormalizedPassportMinimizer
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 
 /-!
 # Chronological weighted cap-defect ledger for a finite literal word

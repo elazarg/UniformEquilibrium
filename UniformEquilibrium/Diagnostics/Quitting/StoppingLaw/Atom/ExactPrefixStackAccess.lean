@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.OffDiagonal.SlopeFrontier
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 
 /-!

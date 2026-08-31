@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMarkedVariational
 
 /-!

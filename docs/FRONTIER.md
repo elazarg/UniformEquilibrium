@@ -2710,6 +2710,23 @@ in the live mathematical ledger.
   theorem identifies the abstract joint outcome law with the executable
   terminal law, preserves Nash inequalities under replacement, or constructs
   a compact suffix family.
+  The independent reverse-prefix clock seam is now literal.  In
+  `MathUE/ProbabilityMassFunction/OptionNatEscape.lean`,
+  `pmfGeneralTV_tendsto_one_sub_min_of_finiteCoordinates_tendsto_zero`
+  computes the exact total-variation limit after every fixed finite atom
+  vanishes.  In
+  `UniformEquilibrium/Quitting/Paths/ReversePrefixStoppingLaw.lean`, a supplied
+  reverse literal root word followed by a supplied behavioral tail has exact
+  `Never` transport through the selected player's own Continue product.  If
+  the root absorption masses tend to zero and every tail has zero selected
+  `Never` mass, `quittingReversePrefix_finiteHead_tendsto_zero`,
+  `quittingReversePrefix_lateFiniteMass_tendsto_one`, and
+  `quittingReversePrefix_pmfGeneralTV_tendsto_one` give vanishing finite heads,
+  unit late-finite escape, and distance one from every fixed stopping law.
+  These statements have `M` and `L` for the supplied-root/tail compiler.  They
+  do not provide a conjecture-facing source adapter `A` or downstream consumer
+  `C`: no positive-minimum exact-prefix ray, Fin4 pair adapter, Nash property,
+  terminal atom transport, or uniform payoff follows here.
   The qualified obstruction in
   `UniformEquilibrium/Diagnostics/Quitting/CounterfactualSuffixCompactnessNoGo.lean`
   makes the limitation concrete.  Two rational Fin4 independent stopping

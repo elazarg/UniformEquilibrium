@@ -361,6 +361,7 @@ import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
+import MathUE.ProbabilityMassFunction.OptionNatEscape
 import MathUE.ProbabilityMassFunction.ProperStoppingApproximation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.ProbabilityMassFunction.TotalVariation
