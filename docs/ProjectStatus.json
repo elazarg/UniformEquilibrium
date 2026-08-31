@@ -449,7 +449,16 @@
       "declaration": "quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target is still not classified as S.1, S.2, or S.3, so the unconditional AGKRS trichotomy remains open."
+      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target remains unclassified within the corrected-source route; the direct chronological theorem proves the table-level AGKRS trichotomy independently."
+    },
+    {
+      "id": "agkrs-theorem-34-forward-trichotomy",
+      "subject": "AGKRS Theorem 3.4 forward trichotomy",
+      "kind": "Conditional classification theorem",
+      "declaration": "QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/AGKRSTheorem34.lean",
+      "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
+      "scope": "For every finite arbitrary-never quitting payoff table, if for every positive error there exists an arbitrary behavioral terminal-payoff approximate equilibrium against all unilateral behavioral replacements, then one fixed branch holds: stationary S.1, instant-punishment S.2, or absorbing sequentially-perfect S.3. The proof handles the empty-player case and otherwise constructs one actual chronological source, then exhaustively dispatches its terminal and no-terminal branches. This proves the forward implication of AGKRS Theorem 3.4; it does not prove the approximate-equilibrium premise for every game, assert a fixed payoff target, control all sufficiently long finite horizons, or imply a uniform equilibrium."
     },
     {
       "id": "projective-qbar-uniform-payoff",
@@ -476,7 +485,7 @@
       "declaration": "QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. The sharper Literature capstone is recorded separately; unconditional theorem3_4 remains open."
+      "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. This remains a useful local consumer in the corrected-source route; the direct chronological theorem proves theorem3_4 independently."
     },
     {
       "id": "positive-debt-terminal-semantic-nonattainment",
@@ -512,7 +521,7 @@
       "declaration": "wellSupported_or_endpointBallisticBoundary",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every reached positive-joint punishment endpoint is diagonal in the literal terminal-semantic carrier, so its prescribed coordinate is a specific uniform-equilibrium payoff. Every pair on its canonical exact semantic-prefix orbit and every supplied summable-port limit has the same exact interpretation. Nonsummable absorption yields well-supported S.3; otherwise `wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom` retains one strict source subsequence, literal punishment suffixes, fixed punished label, convergence to the endpoint, no-sure-exit proof, summable port, all-Continue phantom, exact value equality, and uniform-payoff certificate. Positive total charge with return closes through S.3; under S.3 failure zero-charge rigidity or a displaced signed port remains. A uniform target is not an S.1/S.2/S.3 classification, so the Literature capstone and unconditional theorem3_4 remain open."
+      "scope": "Every reached positive-joint punishment endpoint is diagonal in the literal terminal-semantic carrier, so its prescribed coordinate is a specific uniform-equilibrium payoff. Every pair on its canonical exact semantic-prefix orbit and every supplied summable-port limit has the same exact interpretation. Nonsummable absorption yields well-supported S.3; otherwise `wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom` retains one strict source subsequence, literal punishment suffixes, fixed punished label, convergence to the endpoint, no-sure-exit proof, summable port, all-Continue phantom, exact value equality, and uniform-payoff certificate. Positive total charge with return closes through S.3; under S.3 failure zero-charge rigidity or a displaced signed port remains. A uniform target is not itself an S.1/S.2/S.3 classification; this older residual route remains locally incomplete, while the direct chronological theorem proves theorem3_4 independently."
     },
     {
       "id": "simon-normalized-motion-prefix-producer",

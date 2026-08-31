@@ -2913,11 +2913,22 @@ in the live mathematical ledger.
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  The terminal S.2 and no-terminal S.3 consumers are individually
-  checked, but no production theorem yet performs their exhaustive case split.
-  A fixed completion branch and the unconditional table-level AGKRS
-  trichotomy also remain open; no new uniform-equilibrium conclusion follows
-  from either branch consumer alone.
+  compiler.
+  `ChronologicalLimit.instantPunishment_or_wellSupportedAbsorbingSequenceExistence`
+  in
+  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalAbsorptionPathS2S3.lean`
+  performs the exhaustive terminal/no-terminal case split for every actual
+  completed chronological source.  Composing it with
+  `QuittingPayoffTable.stationary_or_vanishingNeverNashFamily`, the absorbing
+  completion, and chronological compactification gives
+  `QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing`
+  in `UniformEquilibrium/Quitting/Classification/Existence/AGKRSTheorem34.lean`.
+  This is the literal table-level forward implication of AGKRS Theorem 3.4,
+  including the empty-player stationary case.  Its premise says that for each
+  positive error some arbitrary behavior profile is terminal-payoff
+  approximate Nash against every unilateral behavioral replacement.  It does
+  not prove that premise for every game, select one fixed payoff target, or
+  supply the all-long-finite-horizon control required for uniform equilibrium.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
@@ -2936,7 +2947,9 @@ in the live mathematical ledger.
   rows. The spine branch still needs the all-restart survival condition (or an
   equivalent semantic boundary); compactification does not supply it. No
   global perfect sequence or finite orbit is produced.
-- **AGKRS Theorem 3.4 dependency boundary:** a raw refined source residual can
+- **Alternative corrected-source AGKRS route:** the direct chronological proof
+  above establishes Theorem 3.4 without closing every residual in the older
+  corrected-Simon route.  In that alternative route, a raw refined source residual can
   coexist with exact S.1, as checked by
   `RefinedSourceResidualRegression.stationaryExistence_and_refinedSourceResidualAt`.
   The proof must therefore prioritize classified branches rather than exclude

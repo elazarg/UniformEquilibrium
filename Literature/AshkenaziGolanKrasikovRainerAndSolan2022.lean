@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
+import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34
 import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
 import UniformEquilibrium.Quitting.Classification.Existence.DivergentExceptionalOwnerS3Dispatch
 import UniformEquilibrium.Quitting.Classification.Existence.ExceptionalOwnerPrefixConcentration
@@ -43,8 +44,8 @@ There are four kinds of material below.
 * The printed statement of Theorem 3.5 is a **refuted printed claim**; the
   theorem named `theorem3_5` proves its negation.
 
-Theorem 3.4 remains only partly proved here: the exact paper implication is
-displayed with `sorry`, after the branches and their quantifiers are defined.
+Theorem 3.4 is proved below by delegation to the production table theorem,
+after the branches and their paper-facing quantifiers are defined.
 -/
 
 namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2022
@@ -321,7 +322,8 @@ not merely nonexistence of stationary equilibria.  Thus the corrected cited
 argument has a fourth, stationarily generated output.  It does not by itself
 prove the displayed three-way theorem; one must additionally compactify that
 fourth output into S.1 or S.3.  This is a proof dependency, not a refutation
-of the three-way statement.
+of the three-way statement.  The checked production proof below instead uses
+the direct chronological absorption-path construction.
 
 Since the same branch must work on a punctured interval of error parameters,
 the conclusion is stronger than choosing one of three branches separately for
@@ -329,51 +331,31 @@ every ε.  In the sequential branch the continuation at stage `n` is the payoff
 induced by the actual tail beginning at `n+1`, and the resulting root sequence
 must absorb with probability one.
 
-The three predicates above preserve those quantifiers.  The checked proof
-below covers the empty-player case, the normalized nonpositive-solo regime,
-and a normalized positive-solo weak-preference regime.  The general
-fixed-disjunct extraction is the `sorry`; it is not supplied by the production
-existence interfaces. -/
+The three predicates above preserve those quantifiers.  The production theorem
+handles the empty-player case explicitly and, for a nonempty player type,
+extracts one chronological path from the approximate-equilibrium source.  Its
+terminal and no-terminal branches give S.2 and S.3 respectively. -/
 theorem theorem3_4
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι) :
     EpsilonEquilibriumExistence reward never →
       SmallStationaryBranch ⟨reward, never⟩ ∨
         SmallPunishmentBranch ⟨reward, never⟩ ∨
           SmallSequentialBranch ⟨reward, never⟩ := by
-  intro _hexists
+  intro hexists
   let table : QuittingPayoffTable ι := ⟨reward, never⟩
-  cases isEmpty_or_nonempty ι with
-  | inl hempty =>
-      left
-      rw [smallStationaryBranch_iff,
-        table.stationaryεEquilibriumExistence_iff]
-      intro ε _hε
-      refine ⟨fun who => hempty.elim who, ?_⟩
-      intro who
-      exact hempty.elim who
-  | inr hnonempty =>
-      letI := hnonempty
-      by_cases hzeroSolo : IsQuittingZeroSolo table.zeroNeverReward
-      · left
-        exact smallStationaryBranch_of_zeroSolo table hzeroSolo
-      · by_cases hnormalized :
-            (∀ who, 0 < quittingSoloReward table.zeroNeverReward who who) ∧
-              QuittingWeakSoloExitPreference table.zeroNeverReward
-        · right
-          right
-          exact smallSequentialBranch_of_positiveSolo_of_weakPreference
-            table hnormalized.1 hnormalized.2
-        · sorry
+  rw [smallBranchAlternative_iff_tableBranches]
+  exact table.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing
+    hexists
 
-/-! **Checked dependency capstone for Theorem 3.4.**  The two missing inputs
-are stated in production semantics as
+/-! **Alternative checked dependency capstone for Theorem 3.4.**  A separate
+conditional route is retained in production semantics through
 `QuittingPayoffTable.HasCorrectedPointwiseFourWayExtraction` and
 `HasDiffuseStationarilyGeneratedCompactification`.  The first is the
 source-faithful corrected four-way extraction from arbitrary-never
 approximate equilibria.  The second sends the diffuse stationarily generated
 residual to S.1 or the well-supported form of S.3.  The theorem below checks
-that these two inputs, with no additional arbitrary-never adapter, imply the
-literal fixed three-way conclusion above. -/
+that these two inputs also imply the literal fixed three-way conclusion.  They
+are no longer prerequisites for the direct chronological proof above. -/
 theorem theorem3_4_of_correctedDependencies
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (never : Payoff ι)
     (hextraction :

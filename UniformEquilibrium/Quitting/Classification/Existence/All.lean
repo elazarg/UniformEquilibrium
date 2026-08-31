@@ -4,11 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
+import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
 import UniformEquilibrium.Quitting.Classification.Existence.AllNormalUnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
 import UniformEquilibrium.Quitting.Classification.Existence.BlockerSwitch
 import UniformEquilibrium.Quitting.Classification.Existence.CenteredStationaryFaceCertificate
+import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalAbsorptionPathS2S3
 import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalTerminalJumpS2
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGap
 import UniformEquilibrium.Quitting.Classification.Existence.ConditionalFaceGapRange
@@ -54,10 +56,12 @@ import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbi
 /-!
 # Quitting classification existence inventory
 
-Import-only inventory of the finite-quitting existence and corrected
-classification layer.  In particular, the corrected fixed-branch theorem has
-a fourth, stationarily generated residual; this inventory does not assert the
-additional compactification needed to recover a three-way classification.
+Import-only inventory of the finite-quitting existence and classification
+layer.  The direct chronological AGKRS route proves the three-way forward
+classification from approximate-equilibrium existence.  The separate
+corrected fixed-branch route still has a fourth, stationarily generated
+residual; its optional source-compactification route remains incomplete and
+is not used by the direct theorem.
 
 Ordinary consumers should import the narrow module that owns the declarations
 they use.
