@@ -5,6 +5,8 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineGapSource
+import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineRetainedTailReprojection
+import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineSingletonSeparatedTailDispatch
 import UniformEquilibrium.Diagnostics.Quitting.BudgetStablePacketInterfaceVacuity
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicRenewal
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.AnchoredCyclicScreen

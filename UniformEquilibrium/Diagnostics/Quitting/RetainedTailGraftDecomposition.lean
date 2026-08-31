@@ -78,6 +78,25 @@ theorem quittingTerminalPayoff_retainedTailFiniteTimingGraft_eq_add_prod_ownSurv
   exact quittingTerminalPayoff_retainedTailFiniteTimingGraft_eq_add_jointSurvival_mul
     reward roots tail who
 
+/-- A mixed finite timing law followed by a behavioral tail has its hard
+finite-timing payoff plus the all-`Never` mass times the tail payoff. -/
+theorem quittingTerminalPayoff_retainedTailMixedTimingProfile_eq_add_prod_none_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deadline : ℕ)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
+    (tail : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff reward
+        (quittingRetainedTailMixedTimingProfile reward deadline mixed tail) who =
+      (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
+          mixed who +
+        (∏ player, (mixed player none).toReal) *
+          quittingTerminalPayoff reward tail who := by
+  unfold quittingRetainedTailMixedTimingProfile
+  rw [quittingTerminalPayoff_retainedTailFiniteTimingGraft_eq_add_jointSurvival_mul,
+    quittingRetainedTailMixedTimingHardGraft_eq_finiteDeadlineTimingProfile,
+    quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU,
+    quittingRetainedTailMixedTimingRootStack_jointSurvival_eq_prod_none]
+
 /-! ## Pure-time gain inside the word -/
 
 /-- Absolute pure-time gain of a stop strictly inside the finite word.  The

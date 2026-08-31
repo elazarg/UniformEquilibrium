@@ -31,31 +31,6 @@ open Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- On a finite timing-law realization, survival of all opponents to the
-deadline is exactly the product of their declared `Never` masses. -/
-theorem quittingFiniteDeadlineOpponentSurvival_timingProfile_eq_prod_none
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ)
-    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
-    (who : ι) :
-    quittingFiniteDeadlineOpponentSurvival reward
-        (quittingFiniteDeadlineTimingProfile reward deadline mixed)
-        deadline who =
-      ∏ other ∈ Finset.univ.erase who, (mixed other none).toReal := by
-  unfold quittingFiniteDeadlineOpponentSurvival
-  rw [quittingOpponentSurvivalWeight_eq_prod_hazardSurvival]
-  apply Finset.prod_congr rfl
-  intro other _
-  rw [quittingHazardSurvival_eq_prod]
-  have hstack :=
-    quittingRetainedTailMixedTimingRootStack_ownSurvival_eq_none
-      reward deadline mixed other
-  unfold quittingLiteralRootStackOwnSurvival
-    quittingRetainedTailMixedTimingRootStack at hstack
-  rw [List.map_ofFn, List.prod_ofFn] at hstack
-  rw [← Fin.prod_univ_eq_prod_range]
-  simpa only [Function.comp_apply] using hstack
-
 /-- The product-cylinder in which `participant` uses the new boundary atom,
 `responder` deterministically uses that same atom, and every other player
 declares `Never`. -/

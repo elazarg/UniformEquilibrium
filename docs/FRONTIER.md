@@ -1595,6 +1595,31 @@ or a common behavioral boundary-response square of size
 `gamma / (4 * (card I - 1))`, hence `gamma / 12` in Fin4.  The square carries
 no profitability claim for its mover.
 
+The retained-tail reprojection layer now consumes the same supplied adjacent
+source together with one supplied actual tail whose payoff is separated from
+every own singleton reward.  The concrete timing laws, behavioral profiles,
+and exact support/pass/reverse identities live in
+`UniformEquilibrium/Diagnostics/Quitting/AdjacentDeadlineRetainedTailReprojection.lean`.
+In particular, `quittingAdjacentDeadlineOldBoundaryProfile_eq_update` and
+`quittingAdjacentDeadlineCensoredGraft_eq_update_participant` expose literal
+unilateral behavioral updates.
+`quittingAdjacentDeadline_singletonSeparatedTail_dispatch`
+(`UniformEquilibrium/Diagnostics/Quitting/AdjacentDeadlineSingletonSeparatedTailDispatch.lean`)
+returns exactly four arms: lossless zero-`Never` response, paid pass response,
+paid reverse participant, or the unchanged raw censor-error lower bound.  The
+reverse arm preserves the mover's unrestricted behavioral cap and subtracts
+the exact payoff gain from its terminal-semantic debt.  In Fin4,
+`quittingAdjacentDeadline_singletonSeparatedTail_dispatch_finFour` gives the
+literal floor `147 * delta * (gamma / R)^2 / 16384`.
+
+This compiler has `M/L` at its displayed supplied source and tail.  Its `A`
+seal is incomplete: no theorem jointly selects a consecutive exact-Nash
+source and a singleton-separated actual tail in the required source-facing
+configuration.  The raw censor-error arm remains without a downstream `C`.
+The compiler asserts no minimum-fibre membership, tail Nash property,
+chronology, return, renewal, terminal approximation, or uniform-equilibrium
+conclusion.
+
 In the boundary-participation arm,
 `QuittingFiniteDeadlineBoundaryResponseCollision.of_boundaryParticipation`
 and `behavioralStagePairMass_ge_finFour`
