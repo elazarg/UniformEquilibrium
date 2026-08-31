@@ -592,6 +592,23 @@ law limit.  These are genuine source adapters, not attainment: no selected
 profile equals the carrier point and no approximating Never atom is asserted
 to converge.
 
+The same selected source now has an exact first terminal-law escape account.
+`exists_quittingTerminalSemanticEscapeAccount_of_mem_carrier`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeAccount.lean`)
+refines once more by compactness of the finite outcome simplex while retaining
+one strict composed source subsequence, the original semantic limit, and every
+marginal compact-law limit. The full outcome law converges on that same
+subsequence. Every finite coalition mass of the profile reconstructed from the
+limiting marginals is bounded by the selected outcome-law coordinate, so their
+difference is nonnegative; its total is exactly reconstructed Never mass minus
+selected Never mass, and its reward moment is exactly target payoff minus the
+reconstructed payoff. Thus equations (1)--(3) have generic finite-player `M/L`
+and a carrier-facing `A`, but no downstream `C`. This is a subsequential
+terminal-law defect, not profile attainment. It proves none of equations (4)
+and later, strict positivity, reward or social-surplus sign, cap or debt
+estimate, minimum property, properness or tightness, Fin4 specialization,
+terminal Nash profile, or uniform-equilibrium payoff.
+
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`)
