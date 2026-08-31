@@ -2727,6 +2727,21 @@ in the live mathematical ledger.
   do not provide a conjecture-facing source adapter `A` or downstream consumer
   `C`: no positive-minimum exact-prefix ray, Fin4 pair adapter, Nash property,
   terminal atom transport, or uniform payoff follows here.
+  The fixed-tail conditional compiler in
+  `UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashFixedTailPrefixRay.lean`
+  constructs one coherent literal prefix ray over every executable tail, with
+  each new root exact Nash against the preceding prefix's unrestricted
+  behavioral cap.  Its playerwise and total debts scale by the exact joint
+  Continue product.  A supplied positive debt floor forces a positive product
+  limit and vanishing one-stage absorption.  With a separately supplied
+  positive finite tail atom,
+  `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FixedTailCapNashPrefixClockEscape.lean`
+  proves exact marginal `Never` convergence and total-variation limits, a
+  uniform quantitative late-finite floor, and exclusion of every strictly
+  cofinal total-variation-convergent subsequence.  This has `M` and `L` only:
+  neither the floor nor atom is produced, the fixed tail and complete prefixes
+  are not asserted Nash, and there is no source `A`, consumer `C`, Fin4
+  specialization, weak-limit obstruction, or uniform-equilibrium conclusion.
   The qualified obstruction in
   `UniformEquilibrium/Diagnostics/Quitting/CounterfactualSuffixCompactnessNoGo.lean`
   makes the limitation concrete.  Two rational Fin4 independent stopping

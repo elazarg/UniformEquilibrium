@@ -234,6 +234,39 @@ theorem quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct
     congr 1
     linarith
 
+/-- An actual stage-coalition atom is bounded by each member's marginal
+stopping-law atom at the same date. -/
+theorem quittingStageCoalitionMass_le_member_stoppingLaw
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (profile : (quittingGame reward).BehaviorProfile)
+    (time : ℕ) (coalition : {S : Finset ι // S.Nonempty})
+    (who : ι) (hwho : who ∈ coalition.val) :
+    quittingStageCoalitionMass reward profile time coalition ≤
+      (quittingBehaviorStoppingLaw reward (profile who) (some time)).toReal := by
+  rw [quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct]
+  let stop : ι → ℝ := fun player =>
+    (quittingBehaviorStoppingLaw reward (profile player) (some time)).toReal
+  let tail : ι → ℝ := fun player =>
+    quittingHazardSurvival
+      (quittingBehaviorLiveHazard reward (profile player)) (time + 1)
+  have hstopNonneg : 0 ≤ ∏ player ∈ coalition.val, stop player :=
+    Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg
+  have htailLe : (∏ player ∈ coalition.valᶜ, tail player) ≤ 1 := by
+    apply Finset.prod_le_one
+    · exact fun player _ => quittingHazardSurvival_nonneg
+        (quittingBehaviorLiveHazard reward (profile player)) (time + 1)
+    · exact fun player _ => quittingHazardSurvival_le_one
+        (quittingBehaviorLiveHazard reward (profile player)) (time + 1)
+  have hstopLe : (∏ player ∈ coalition.val, stop player) ≤ stop who := by
+    rw [← Finset.mul_prod_erase coalition.val stop hwho]
+    apply mul_le_of_le_one_right ENNReal.toReal_nonneg
+    apply Finset.prod_le_one
+    · exact fun _ _ => ENNReal.toReal_nonneg
+    · exact fun player _ => ENNReal.toReal_mono ENNReal.one_ne_top
+        ((quittingBehaviorStoppingLaw reward (profile player)).coe_le_one
+          (some time))
+  exact (mul_le_of_le_one_right hstopNonneg htailLe).trans hstopLe
+
 /-- Positive mass on an actual stage coalition exposes each quitter in the
 support of the corresponding actual live-root marginal. -/
 theorem positive_profileLiveRoot_quit_of_positive_stageCoalitionMass

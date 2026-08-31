@@ -81,4 +81,19 @@ theorem stoppingLawLateFiniteMass_eq_one_sub_none_sub_finiteHead
     stoppingLawFiniteHeadMass, pmfFiniteComplementMass, Finset.sum_image]
   ring
 
+/-- Every finite atom beyond a cutoff is bounded by the canonical late-finite
+stopping-law mass. -/
+theorem stoppingLaw_atom_le_lateFiniteMass
+    (law : PMF (Option ℕ)) (horizon time : ℕ) (htime : horizon < time) :
+    (law (some time)).toReal ≤ stoppingLawLateFiniteMass law horizon := by
+  have hnot : some time ∉ stoppingLawFinitePrefix horizon := by
+    simpa using (not_le.mpr htime)
+  have hsum := (pmf_toReal_summable law).sum_le_tsum
+    (insert (some time) (stoppingLawFinitePrefix horizon))
+    (fun _ _ => ENNReal.toReal_nonneg)
+  rw [pmf_toReal_tsum_one law] at hsum
+  simp only [Finset.sum_insert hnot] at hsum
+  unfold stoppingLawLateFiniteMass pmfFiniteComplementMass
+  linarith
+
 end GameTheory
