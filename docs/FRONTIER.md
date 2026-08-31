@@ -1324,6 +1324,24 @@ shows that a positive displayed signed atom can coexist with zero opponent
 incidence and an exact all-Continue root.  It does not assert uniqueness of
 that root or furnish a hard-residual source.
 
+The same supplied rectangle now has a four-profile descendant-slice landing.
+The generic compact-orbit theorem
+`QuittingFourProfileResponseFamily.exists_minimum_normalizedDescendantSlice_eq_or_strict_inert`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFourProfileDescendantSlice.lean`)
+retains two independent debt-relative passports: the response/sibling signed
+atom and the source/full-replacement actual payoff gain.  Exact cap--Nash
+prefix closure makes all Continue the unique exact root at a positive-debt
+slice minimizer.  The Fin4 adapter
+`QuittingStoppingLawRectangleJointAtomLimit.exists_fourProfileDescendantSliceLanding`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourProfileDescendantSliceLanding.lean`)
+selects one common compact subsequence and positive densities.  Its point
+either has minimum debt, positive opponent incidence, and a reset-rigid
+chamber, or lies strictly off the minimum fibre; zero observer debt and both
+positive passport bounds survive in either arm.  The generic layer has `M`
+and `L`; the literal rectangle attachment adds branch-local `A`, but no `C`.
+Closure gives no finite ancestry code, marked date, stopping law, chronology,
+renewal, arm consumer, or uniform-equilibrium payoff.
+
 The same actual forced-pair provenance collapses the normalized passport to
 one density.  In
 `Research/Quitting/FinFourProducerAtlas/NormalizedInertSingleDensityToll.lean`,
