@@ -9,12 +9,12 @@ import Mathlib.Tactic
 /-!
 # Finite paid-collision extraction
 
-This file isolates the finite pigeonhole step used by a deletion near-cap
-argument.  Seven nonempty subsets of a three-element survivor set are
-given
-nonnegative masses and one signed reward increment per subset.  A positive
-sum, together with an upper bound on each increment, forces one positive
-increment whose mass has the corresponding quantitative lower bound.
+This file isolates a finite pigeonhole step used by deletion near-cap
+arguments.  On any nonempty finite index set, nonnegative masses and signed
+increments with a positive weighted sum select one positive increment, its
+average product share, and the corresponding quantitative mass floor.  The
+original seven-subset interfaces are retained as specializations for a
+three-element survivor set.
 
 The result is game-independent: it does not mention rewards, profiles,
 terminal laws, or a supplied collision atom.
@@ -42,6 +42,14 @@ theorem nonemptyCoalitions_card
   · rw [Finset.card_powerset]
     simp
   · simp
+
+/-- The subtype of nonempty finite subsets has exactly `2^n - 1` elements. -/
+theorem nonemptyCoalitionSubtype_card
+    (C : Type*) [Fintype C] [DecidableEq C] :
+    Fintype.card {S : Finset C // S.Nonempty} =
+      2 ^ Fintype.card C - 1 := by
+  rw [Fintype.card_subtype]
+  exact nonemptyCoalitions_card C
 
 @[simp] theorem nonemptyCoalitions_fin3_card :
     (nonemptyCoalitions (Fin 3)).card = 7 := by
@@ -74,6 +82,49 @@ private theorem exists_sum_le_card_mul_of_nonempty
         simp [nsmul_eq_mul]
   exact (lt_irrefl _ hirrefl)
 
+/-- Paid-collision extraction on a nonempty finite index set, retaining the
+average product and mass floors.  Increments remain signed; positivity is a
+conclusion. -/
+theorem exists_paid_collision_of_nonempty_finset_with_product
+    {α : Type*} (indices : Finset α) (hindices : indices.Nonempty)
+    (mass increment : α → ℝ) (residual cap : ℝ)
+    (hmass : ∀ a ∈ indices, 0 ≤ mass a)
+    (hresidual : 0 < residual)
+    (hsum : residual ≤ ∑ a ∈ indices, mass a * increment a)
+    (hincrement : ∀ a ∈ indices, increment a ≤ cap)
+    (hcap : 0 < cap) :
+    ∃ a ∈ indices,
+      residual / (indices.card : ℝ) ≤ mass a * increment a ∧
+      0 < mass a * increment a ∧ 0 < increment a ∧
+      residual / ((indices.card : ℝ) * cap) ≤ mass a := by
+  classical
+  obtain ⟨a, ha, haverage⟩ :=
+    exists_sum_le_card_mul_of_nonempty indices hindices
+      (fun a => mass a * increment a)
+  have hcard : 0 < (indices.card : ℝ) := by
+    exact_mod_cast hindices.card_pos
+  have hterm :
+      residual / (indices.card : ℝ) ≤ mass a * increment a := by
+    apply (div_le_iff₀ hcard).2
+    simpa [mul_comm] using hsum.trans haverage
+  have htermPos : 0 < mass a * increment a := by
+    exact (div_pos hresidual hcard).trans_le hterm
+  have hincrementPos : 0 < increment a := by
+    by_contra hnot
+    have hnonpos : increment a ≤ 0 := le_of_not_gt hnot
+    have : mass a * increment a ≤ 0 :=
+      mul_nonpos_of_nonneg_of_nonpos (hmass a ha) hnonpos
+    linarith
+  have hproductBound : mass a * increment a ≤ mass a * cap :=
+    mul_le_mul_of_nonneg_left (hincrement a ha) (hmass a ha)
+  have hmassBound :
+      residual / (indices.card : ℝ) ≤ mass a * cap :=
+    hterm.trans hproductBound
+  have hdenom : 0 < (indices.card : ℝ) * cap := mul_pos hcard hcap
+  refine ⟨a, ha, hterm, htermPos, hincrementPos, ?_⟩
+  apply (div_le_iff₀ hdenom).2
+  nlinarith [hmassBound]
+
 /-- Private strongest form of the seven-term paid-collision extraction.
 
 The increments may be signed.  Positivity of the total weighted sum forces
@@ -92,36 +143,16 @@ private theorem exists_paid_collision_of_card_seven_core
     ∃ a ∈ coalitions, residual / 7 ≤ mass a * increment a ∧
       0 < mass a * increment a ∧ 0 < increment a ∧
       residual / (7 * c) ≤ mass a := by
-  classical
-  obtain ⟨a, ha, haverage⟩ :=
-    exists_sum_le_card_mul_of_nonempty coalitions
-      (Finset.card_pos.mp (by omega))
-      (fun a => mass a * increment a)
+  have hnonempty : coalitions.Nonempty :=
+    Finset.card_pos.mp (by omega)
+  obtain ⟨a, ha, hterm, htermPos, hincrementPos, hmassFloor⟩ :=
+    exists_paid_collision_of_nonempty_finset_with_product
+      coalitions hnonempty mass increment residual c hmass hresidual hsum
+        hincrement hc
   have hcardReal : (coalitions.card : ℝ) = 7 := by
     exact_mod_cast hcard
-  have haverage' :
-      ∑ a ∈ coalitions, mass a * increment a ≤
-        7 * (mass a * increment a) := by
-    simpa [hcardReal] using haverage
-  have hterm : residual / 7 ≤ mass a * increment a := by
-    nlinarith [hsum, haverage']
-  have htermPos : 0 < mass a * increment a := by
-    have : 0 < residual / 7 := by positivity
-    exact this.trans_le hterm
-  have hincPos : 0 < increment a := by
-    by_contra hnot
-    have hnonpos : increment a ≤ 0 := le_of_not_gt hnot
-    have hnonposProduct : mass a * increment a ≤ 0 :=
-      mul_nonpos_of_nonneg_of_nonpos (hmass a ha) hnonpos
-    linarith
-  have hproductBound : mass a * increment a ≤ mass a * c :=
-    mul_le_mul_of_nonneg_left (hincrement a ha) (hmass a ha)
-  have hmassBound : residual / 7 ≤ mass a * c :=
-    hterm.trans hproductBound
-  have hdenom : 0 < 7 * c := by positivity
-  refine ⟨a, ha, hterm, htermPos, hincPos, ?_⟩
-  apply (div_le_iff₀ hdenom).2
-  nlinarith [hmassBound]
+  rw [hcardReal] at hterm hmassFloor
+  exact ⟨a, ha, hterm, htermPos, hincrementPos, hmassFloor⟩
 
 /-- Seven-term paid-collision extraction with an explicit seven-element index.
 

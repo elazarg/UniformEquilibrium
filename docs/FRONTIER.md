@@ -613,13 +613,25 @@ part. Thus a nonnegative singleton reward removes the correction.
 `debtSum_sub_target_eq_escapeSocialReward_sub_capDropSum`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeDebtJump.lean`)
 then identifies reconstructed-minus-target total debt with escaped social
-reward moment minus the sum of target-to-reconstructed cap drops. Thus
-equations (1)--(5) have generic finite-player `M/L` and a carrier-facing
-selected/account `A`, but no downstream `C`. This is a subsequential
-terminal-law defect and cap account, not profile attainment. It proves none of
-equations (6) and later, strict positivity, reward or social-surplus sign,
-positive debt or cap drop, minimum property, properness or tightness, Fin4
-specialization, terminal Nash profile, or uniform-equilibrium payoff.
+reward moment minus the sum of target-to-reconstructed cap drops. Under a
+supplied global carrier debt minimum and nonnegative singleton rewards,
+`QuittingTerminalSemanticEscapeAccount.`
+`capDropSum_nonneg_and_le_escapeSocialReward_of_minimum`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticAllPlayerEscapeMinimumConsequences.lean`)
+makes those cap drops nonnegative and bounds their sum by escaped social
+reward. If no actual profile attains the same minimum debt value,
+`reconstructedDebtJump_pos_of_minimumValue_not_attained` makes the debt jump
+strict. With a positive reward bound,
+`exists_positiveSocialRewardEscape_of_minimumValue_not_attained` selects a
+coalition with positive escape mass and positive social reward, retaining the
+product lower bound `jump / (2^card - 1)` and escape-mass floor
+`jump / ((2^card - 1) * card * M)`. Thus equations (1)--(8) have generic
+finite-player `M/L` and a carrier-facing selected/account `A`, but no
+downstream `C`. This is a subsequential terminal-law defect, cap, and
+conditional minimum account, not profile attainment. It proves none of
+equations (9) and later, the social-nonpositive chamber, attainment,
+properness or tightness, a Fin4 specialization, terminal Nash play, or a
+uniform-equilibrium payoff.
 
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
