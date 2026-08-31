@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStrictTailEscapeR
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
+import UniformEquilibrium.Quitting.Root.MaximalAbsorptionNash
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticLawCarrierCausalization
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeRectangleDisintegration
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAtomicSupportBoundary
@@ -54,51 +55,6 @@ namespace GameTheory
 open Set Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
-
-/-- Absorption attains a maximum on the exact cap--Nash correspondence at a
-fixed continuation vector. -/
-theorem exists_maximalAbsorption_isZeroQuittingRootNash
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    (tail : Payoff iota) :
-    ∃ root : iota → PMF Bool,
-      IsεQuittingRootNash reward tail 0 root ∧
-      ∀ other : iota → PMF Bool,
-        IsεQuittingRootNash reward tail 0 other →
-          quittingRootAbsorptionMass other ≤
-            quittingRootAbsorptionMass root := by
-  let roots : Set (QuittingRootSimplex iota) :=
-    {root | IsεQuittingRootEndpointNash reward tail 0
-      (quittingRootOfSimplex root)}
-  have hcompact : IsCompact roots := by
-    simpa only [roots] using
-      isCompact_setOf_isZeroQuittingRootEndpointNash_root reward tail
-  have hnonempty : roots.Nonempty := by
-    obtain ⟨root, hroot⟩ :=
-      exists_isZeroQuittingRootEndpointNash_simplex reward tail
-    exact ⟨root, hroot⟩
-  obtain ⟨chosen, hchosen, hmax⟩ := hcompact.exists_isMaxOn hnonempty
-    continuous_quittingSimplexAbsorptionMass.continuousOn
-  let root := quittingRootOfSimplex chosen
-  have hnash : IsεQuittingRootNash reward tail 0 root :=
-    (isεQuittingRootEndpointNash_iff_isεQuittingRootNash
-      reward tail 0 root).1 hchosen
-  refine ⟨root, hnash, ?_⟩
-  intro other hother
-  let otherSimplex : QuittingRootSimplex iota :=
-    fun who ↦ stdSimplexEquiv (other who)
-  have hotherRoot : quittingRootOfSimplex otherSimplex = other := by
-    funext who
-    exact (stdSimplexEquiv (α := Bool)).symm_apply_apply (other who)
-  have hotherEndpoint : IsεQuittingRootEndpointNash reward tail 0
-      (quittingRootOfSimplex otherSimplex) := by
-    rw [hotherRoot]
-    exact (isεQuittingRootEndpointNash_iff_isεQuittingRootNash
-      reward tail 0 other).2 hother
-  rw [isMaxOn_iff] at hmax
-  have hmaximal := hmax otherSimplex hotherEndpoint
-  rw [quittingSimplexAbsorptionMass_eq_rootAbsorptionMass,
-    quittingSimplexAbsorptionMass_eq_rootAbsorptionMass] at hmaximal
-  simpa only [root, hotherRoot] using hmaximal
 
 /-- **Maximal-absorption causal tail dispatch.**
 
@@ -243,39 +199,6 @@ open Math.ProbabilityMassFunction Math.Topology
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
-
-/-- A canonical maximal-absorption exact root indexed only by its continuation
-cap.  Keeping this selector cap-indexed makes its extensionality literal. -/
-noncomputable def quittingMaximalAbsorptionCapRoot
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    (cap : Payoff iota) : iota → PMF Bool :=
-  Classical.choose (exists_maximalAbsorption_isZeroQuittingRootNash reward
-    cap)
-
-theorem quittingMaximalAbsorptionCapRoot_exactNash
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    (cap : Payoff iota) :
-    IsεQuittingRootNash reward cap 0
-      (quittingMaximalAbsorptionCapRoot reward cap) :=
-  (Classical.choose_spec
-    (exists_maximalAbsorption_isZeroQuittingRootNash reward cap)).1
-
-theorem quittingMaximalAbsorptionCapRoot_maximal
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    (cap : Payoff iota) (other : iota → PMF Bool)
-    (hother : IsεQuittingRootNash reward cap 0 other) :
-    quittingRootAbsorptionMass other ≤
-      quittingRootAbsorptionMass
-        (quittingMaximalAbsorptionCapRoot reward cap) :=
-  (Classical.choose_spec
-    (exists_maximalAbsorption_isZeroQuittingRootNash reward cap)).2 other hother
-
-theorem quittingMaximalAbsorptionCapRoot_eq_of_cap_eq
-    (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
-    {cap cap' : Payoff iota} (hcap : cap = cap') :
-    quittingMaximalAbsorptionCapRoot reward cap =
-      quittingMaximalAbsorptionCapRoot reward cap' := by
-  rw [hcap]
 
 /-- Backwards-compatible profile-indexed view of the cap-indexed selector. -/
 noncomputable def quittingMaximalCapPrefixRoot

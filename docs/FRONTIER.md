@@ -1259,6 +1259,35 @@ response rectangle, and the strict support drop is one-time rather than a
 renewable source rank.  No branch here has a checked chronology return,
 terminal approximation, recursive consumer, or other `C`.
 
+The integrated maximal-root ledger now applies to that supplied response
+rectangle without changing its source.  The selector
+`exists_maximalAbsorption_isZeroQuittingRootNash`
+(`UniformEquilibrium/Quitting/Root/MaximalAbsorptionNash.lean`) chooses an
+absorption-maximal exact root at every endpoint cap.  The exact prefix debt,
+charge, and sibling-atom identities in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/RectangleMaximalRootLedger.lean`
+give playerwise debt scaling, the standalone survival floor
+`D_* / (8 * M) <= 1 - a_n`, and the retained lower estimate
+`c * D_* / (32 * M) <= 16 * atom`.  Under vanishing absorption,
+`quittingRectangleMaximalRootPrefixedEndpoint_tendsto_cluster` retains the
+common joint semantic/law limit after the literal maximal-root prefix.  The
+ordered capstone
+`QuittingStoppingLawRectangleJointAtomLimit.maximalRoot_exactlyOne`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/RectangleMaximalRootReduction.lean`)
+returns exactly one of a uniformly charged strict subsequence, a minimum-fibre
+reset-rigid chamber, or an off-minimum branch with vanishing absorption and
+charge; `maximalRoot_threeWay` remains the inclusive eliminator.  The
+minimum-fibre arm uses
+`totalOpponentIncidence_pos_of_minimumLaw_of_debt_eq_zero`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumOpponentIncidence.lean`).
+These declarations have `M`, `L`, and branch-local `A` from the supplied
+rectangle, but no `C`: they do not produce the rectangle, renew a row, or
+consume a returned branch.  The separate exact regression in
+`UniformEquilibrium/Diagnostics/Quitting/Regression/FinFourMaximalRootNegativeOrientation.lean`
+shows that a positive displayed signed atom can coexist with zero opponent
+incidence and an exact all-Continue root.  It does not assert uniqueness of
+that root or furnish a hard-residual source.
+
 The same actual forced-pair provenance collapses the normalized passport to
 one density.  In
 `Research/Quitting/FinFourProducerAtlas/NormalizedInertSingleDensityToll.lean`,

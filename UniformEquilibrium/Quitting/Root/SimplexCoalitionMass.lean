@@ -23,6 +23,33 @@ open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-- One-stage absorption, written polynomially in simplex coordinates. -/
+def quittingSimplexAbsorptionMass (root : QuittingRootSimplex ι) : ℝ :=
+  1 - ∏ who, root who false
+
+omit [DecidableEq ι] in
+/-- Simplex-coordinate absorption agrees with the PMF-root definition. -/
+theorem quittingSimplexAbsorptionMass_eq_rootAbsorptionMass
+    (root : QuittingRootSimplex ι) :
+    quittingSimplexAbsorptionMass root =
+      quittingRootAbsorptionMass (quittingRootOfSimplex root) := by
+  classical
+  unfold quittingSimplexAbsorptionMass quittingRootAbsorptionMass
+  rw [quittingStationaryContinueMass_eq_prod_continueProbability]
+  simp
+
+omit [DecidableEq ι] in
+/-- Simplex-coordinate absorption is continuous. -/
+theorem continuous_quittingSimplexAbsorptionMass :
+    Continuous (quittingSimplexAbsorptionMass :
+      QuittingRootSimplex ι → ℝ) := by
+  classical
+  unfold quittingSimplexAbsorptionMass
+  exact continuous_const.sub
+    (continuous_finsetProd (s := (Finset.univ : Finset ι)) fun who _ =>
+      (continuous_apply false).comp
+        (continuous_subtype_val.comp (continuous_apply who)))
+
 /-- Root coalition mass is continuous in simplex coordinates. -/
 theorem continuous_quittingRootCoalitionMass_simplex
     (coalition : Finset ι) :
