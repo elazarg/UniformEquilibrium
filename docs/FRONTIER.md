@@ -2874,16 +2874,38 @@ in the live mathematical ledger.
   `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath` bundles the checked
   jump rows, continuous lower bounds, and active equalities for this same
   actual chronological path.
+  The published small-cell productization is checked as
+  `exists_agkrsSmallCellProductization` in
+  `MathUE/PMFProduct/AGKRSSmallCellProductization.lean`.  The production
+  partition and decoder in
+  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartition.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartitionSmallCell.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartitionDecoder.lean`, and
+  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSSequentialPerfectionDecoder.lean`
+  copy large jumps, productize small cells, and preserve singleton support.
+  They use the exact cell parameter `1 / (resolution - 1)` with the published
+  dimension-factor coordinate bound
+  `2 ^ Fintype.card ι * parameter * pathCellAbsorption`.  These modules do not
+  claim the full weak-convergence conclusion of published Proposition 4.8.
+  `exists_wellSupportedAbsorbingSequence_of_sequentiallyPerfectAbsorptionPath`
+  in
+  `UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorptionPathS3.lean`
+  turns path-total boundedness, sequential perfection at zero, and no terminal
+  total jump into the literal well-supported completely absorbing S.3
+  sequence.  The source-facing
+  `ChronologicalLimit.wellSupportedAbsorbingSequenceExistence_of_noTerminalTotalJump`
+  applies that consumer to the actual chronological limit.  Thus the generic
+  productization has `M` and `L`, the supplied-path capstone adds conditional
+  `C`, and the chronological adapter has `M`, `L`, `A`, and conditional `C`.
   Meanwhile,
   `ChronologicalLimit.completedTerminalOutcomeMass_tendsto` and
   `completedTerminalPayoff_tendsto` identify its clopen endpoint fibers and
   fixed reward moment.  The conditional
   `payoff_isUniformEquilibriumPayoff` then uses the existing terminal-Nash
-  compiler.  No checked theorem yet converts a terminal-total jump into S.2
-  or discretizes the sequentially perfect path into a support-preserving,
-  suffix-uniform well-supported S.3 sequence.  A fixed completion owner and
-  the unconditional AGKRS branch also remain open; no new uniform-equilibrium
-  conclusion follows from this path theorem alone.
+  compiler.  No checked production theorem yet converts a terminal-total jump
+  into S.2 or decides the terminal/no-terminal alternative.  A fixed
+  completion branch and the unconditional AGKRS trichotomy also remain open;
+  no new uniform-equilibrium conclusion follows from the S.3 decoder alone.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,

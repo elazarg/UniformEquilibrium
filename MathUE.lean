@@ -203,6 +203,7 @@ import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.PMFIter
 import MathUE.PMFProduct
+import MathUE.PMFProduct.AGKRSSmallCellProductization
 import MathUE.PMFProduct.Basic
 import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.Bool
@@ -400,6 +401,7 @@ import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.NestedOuterApproximation
+import MathUE.Topology.OneSidedDiniFencing
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
