@@ -2938,6 +2938,22 @@ in the live mathematical ledger.
   chronology, produces a renewable child, or derives a terminal equilibrium
   or uniform-equilibrium payoff. Payoff-only seam control is insufficient.
 
+  The finite carrier-cycle specialization is also checked in
+  `UniformEquilibrium/Quitting/Debt/Dynamic/TerminalSemanticCarrierCycleSeamToll.lean`.
+  `QuittingTerminalSemanticCarrierCycle.sum_signedDebtRebase_eq_sum_netAbsorptionCharge`
+  closes the source-debt terms under any supplied finite successor
+  permutation. Exact roots charge every absorbed unit of a positive common
+  debt floor to the full prescribed-payoff/cap seam, and
+  `finFour_debtFloor_div_eight_mul_sum_absorptionMass_le_sum_semanticSupRebase`
+  gives the Fin4 factor `1/8`. Approximate roots subtract exactly `card ι`
+  times their total declared error. Equal-row/equal-column stationary
+  couplings retain the weighted toll, while
+  `QuittingTerminalSemanticCarrierOpenChain.debtFloor_mul_sum_absorptionMass_sub_initialExcess_le_sum_signedDebtRebase`
+  records that an open chain may spend its initial debt excess once. This
+  compiler has `M` and `L`, but no `A` or `C`: the cycle, roots, coupling, and
+  debt floor are supplied, and no behavior chronology, renewable transition,
+  terminal consumer, Nash profile, or uniform-equilibrium payoff is produced.
+
   The approximate vanishing-incidence gap inside the tube is now quantified.
   `exists_finFour_minimumFiber_linearAbsorptionDefect_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFinFourMinimumFiberLinearAbsorptionDefect.lean`)
