@@ -206,7 +206,7 @@ import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.PMFIter
 import MathUE.PMFProduct
-import MathUE.PMFProduct.AGKRSSmallCellProductization
+import MathUE.PMFProduct.SmallCellProductization
 import MathUE.PMFProduct.Basic
 import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.Bool

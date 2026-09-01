@@ -364,7 +364,7 @@ theorem punishmentPayoff_true_tendsto_zero :
     (tendsto_const_nhds : Tendsto (fun _ : ℕ ↦ (0 : ℝ))
       atTop (nhds 0))
 
-/-- The separating game is already on the sure-exit side of the AGKRS
+/-- The separating game is already on the sure-exit side of the AKRS
 classification.  Thus the regression does not test the additional
 no-sure-exit residual hypothesis. -/
 theorem exists_sureExit_exactNash_at_zero :

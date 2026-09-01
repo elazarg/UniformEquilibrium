@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 # Classification boundary of a positive-rho landing family
 
 A positive-rho landing family selects an actual uniform-payoff target, but
-that semantic fact alone does not put its profiles in one of the AGKRS
+that semantic fact alone does not put its profiles in one of the AKRS
 classes.  Compactifying the reached row gives a sharper classification
 split.  Zero limiting absorption is stationary exactly on the zero-solo
 side; otherwise it leaves the nonzero all-Continue phantom.  Positive
@@ -94,7 +94,7 @@ theorem QuittingLowSurvivalPositiveRhoAllContinueSourceResidual.nonempty_phantom
     residual.notZeroSolo
 
 /-- The retained source suffixes realize the phantom annotation as an actual
-uniform-payoff target.  This is semantic delivery, not an AGKRS classified
+uniform-payoff target.  This is semantic delivery, not an AKRS classified
 form. -/
 theorem
     QuittingLowSurvivalPositiveRhoAllContinueSourceResidual.isUniformEquilibriumPayoff
@@ -206,7 +206,7 @@ structure QuittingLowSurvivalPositiveAbsorptionSharpAttachmentResidual
     ∃ who, quittingPunishmentValue reward who < 0
 
 /-- **Strict landing-to-classification reduction.**  A literal positive-rho
-landing family either yields the full AGKRS stationary branch, or leaves one
+landing family either yields the full AKRS stationary branch, or leaves one
 of two already identified source-derived seams:
 the nonzero all-Continue phantom or the positive-absorption two-edge
 attachment residual, whose obstruction is now nonrecurrence or a negative

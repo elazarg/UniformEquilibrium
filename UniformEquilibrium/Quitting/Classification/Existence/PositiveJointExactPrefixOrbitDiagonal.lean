@@ -18,7 +18,7 @@ diagonal semantic pair to another diagonal semantic pair.
 Consequently the limit of any summable all-Continue port on this orbit is a
 diagonal point of the literal terminal-semantic carrier and is therefore an
 actual uniform-equilibrium payoff.  This does not classify that payoff into
-an AGKRS stationary, instant-punishment, or absorbing sequentially perfect
+an AKRS stationary, instant-punishment, or absorbing sequentially perfect
 branch.
 -/
 

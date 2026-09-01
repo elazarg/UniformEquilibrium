@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.PMFProduct.AGKRSSmallCellProductization
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartition
+import MathUE.PMFProduct.SmallCellProductization
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartition
 import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbingSequence
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 
 /-!
-# Product rows for the canonical AGKRS partition
+# Product rows for the canonical AKRS partition
 
 Large jumps are copied literally.  Every selected small cell is converted to
 an exact-absorption independent row with the same singleton support and an
@@ -28,33 +28,33 @@ open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
-namespace AGKRSSmallCellProductization
+namespace SmallCellProductization
 
 /-- Convert the real Bernoulli parameters produced by the game-independent
 small-cell theorem into literal quitting roots. -/
 def quittingRoot {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) : ι → PMF Bool :=
+    (packet : SmallCellProductization ε law) : ι → PMF Bool :=
   fun player => quittingHazardCoin (packet.root player)
     (packet.root_nonneg player) (packet.root_lt_one player).le
 
 omit [Nonempty ι] in
 @[simp] theorem quittingRoot_true_toReal
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) (player : ι) :
+    (packet : SmallCellProductization ε law) (player : ι) :
     (packet.quittingRoot player true).toReal = packet.root player := by
   simp [quittingRoot]
 
 omit [Nonempty ι] in
 @[simp] theorem quittingRoot_false_toReal
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) (player : ι) :
+    (packet : SmallCellProductization ε law) (player : ι) :
     (packet.quittingRoot player false).toReal = 1 - packet.root player := by
   simp [quittingRoot]
 
 omit [Nonempty ι] in
 theorem quittingRootCoalitionMass
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law)
+    (packet : SmallCellProductization ε law)
     (coalition : Finset ι) :
     GameTheory.quittingRootCoalitionMass packet.quittingRoot coalition =
       Math.PMFProduct.coalitionMass packet.root coalition := by
@@ -68,7 +68,7 @@ omit [Nonempty ι] in
 source cell. -/
 theorem quittingRoot_true_pos_iff_singletonMass_pos
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) (player : ι) :
+    (packet : SmallCellProductization ε law) (player : ι) :
     0 < (packet.quittingRoot player true).toReal ↔ 0 < law {player} := by
   rw [packet.quittingRoot_true_toReal]
   exact packet.quit_pos_iff_singletonMass_pos player
@@ -77,7 +77,7 @@ omit [Nonempty ι] in
 /-- Continue remains in support at every small-cell row. -/
 theorem quittingRoot_false_toReal_pos
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) (player : ι) :
+    (packet : SmallCellProductization ε law) (player : ι) :
     0 < (packet.quittingRoot player false).toReal := by
   rw [packet.quittingRoot_false_toReal]
   exact sub_pos.mpr (packet.root_lt_one player)
@@ -85,7 +85,7 @@ theorem quittingRoot_false_toReal_pos
 omit [Nonempty ι] in
 theorem quittingRoot_absorption_exact
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law) :
+    (packet : SmallCellProductization ε law) :
     quittingRootAbsorptionMass packet.quittingRoot = 1 - law ∅ := by
   rw [quittingRootAbsorptionMass,
     quittingStationaryContinueMass_eq_prod_continueProbability]
@@ -95,7 +95,7 @@ theorem quittingRoot_absorption_exact
 omit [Nonempty ι] in
 theorem quittingRoot_coalition_coordinate_error
     {ε : ℝ} {law : Finset ι → ℝ}
-    (packet : AGKRSSmallCellProductization ε law)
+    (packet : SmallCellProductization ε law)
     (coalition : Finset ι) (hcoalition : coalition.Nonempty) :
     |GameTheory.quittingRootCoalitionMass packet.quittingRoot coalition -
         law coalition| ≤
@@ -103,11 +103,11 @@ theorem quittingRoot_coalition_coordinate_error
   rw [packet.quittingRootCoalitionMass coalition]
   exact packet.coalition_coordinate_error coalition hcoalition
 
-end AGKRSSmallCellProductization
+end SmallCellProductization
 
 omit [Nonempty ι] in
 /-- A small independent Bernoulli row has the incident-collision estimate
-used at every discrete jump in the AGKRS partition.  The proof keeps one
+used at every discrete jump in the AKRS partition.  The proof keeps one
 distinguished additional quitter and bounds all remaining odds by one. -/
 theorem quittingRootCoalitionMass_le_absorptionOdds_mul_singleton
     (root : ι → PMF Bool) {δ : ℝ}
@@ -287,7 +287,7 @@ theorem quittingRootAbsorptionMass_eq_sum_coalitionMass
   · intro coalition
     simp [Finset.nonempty_iff_ne_empty]
 
-/-- One small cell in the published AGKRS partition.  The collision field is
+/-- One small cell in the published AKRS partition.  The collision field is
 the exact hypothesis established by the partition: a multi-quitter cell mass
 is at most `ε` times every incident singleton mass. -/
 structure SmallPathCell (path : CadlagPath (ι := ι)) (ε : ℝ) where
@@ -328,7 +328,7 @@ support-preserving product row for every valid small path cell. -/
 theorem nonempty_productization
     {path : CadlagPath (ι := ι)} {ε : ℝ}
     (cell : SmallPathCell path ε) (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2) :
-    Nonempty (AGKRSSmallCellProductization ε
+    Nonempty (SmallCellProductization ε
       (pathCellLaw path cell.start cell.stop)) := by
   apply exists_agkrsSmallCellProductization hεpos hεhalf
   · exact cell.law_nonneg
@@ -815,7 +815,7 @@ structure PartitionCellRowData
           (partitionCut path resolution stage)) ∨
     (∃ (cell : SmallPathCell path.1
           (partitionSmallCellError resolution))
-        (packet : AGKRSSmallCellProductization
+        (packet : SmallCellProductization
           (partitionSmallCellError resolution)
           (pathCellLaw path.1 cell.start cell.stop)),
       cell.start = partitionCut path resolution stage ∧
@@ -1034,7 +1034,7 @@ theorem partitionCellRoot_source
           absorptionPathJumpRoot path (partitionCut path resolution stage)) ∨
     (∃ (cell : SmallPathCell path.1
           (partitionSmallCellError resolution))
-        (packet : AGKRSSmallCellProductization
+        (packet : SmallCellProductization
           (partitionSmallCellError resolution)
           (pathCellLaw path.1 cell.start cell.stop)),
       cell.start = partitionCut path resolution stage ∧

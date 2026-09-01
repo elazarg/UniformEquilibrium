@@ -107,7 +107,7 @@ private theorem agkrsCoalitionMass_le_absorption_sq
         (hroot_nonneg second) habsorption_nonneg
       simpa [sq] using hmul
 
-/-- The coordinatewise dimension constant printed in the published AGKRS
+/-- The coordinatewise dimension constant printed in the published AKRS
 small-cell lemma. -/
 def agkrsSmallCellCoordinateConstant (ι : Type) [Fintype ι] : ℝ :=
   ((2 ^ Fintype.card ι : ℕ) : ℝ)
@@ -320,10 +320,10 @@ private theorem agkrsCollisionSum_le
   simpa [collisions] using
     hsum.trans (mul_le_mul_of_nonneg_right hcard hscale)
 
-/-- A product row realizing the conclusions needed from the AGKRS small-cell
+/-- A product row realizing the conclusions needed from the AKRS small-cell
 construction.  Relative singleton weights are stated by cross multiplication,
 so zero singleton coordinates do not require a division convention. -/
-structure AGKRSSmallCellProductization
+structure SmallCellProductization
     (ε : ℝ) (law : Finset ι → ℝ) where
   root : ι → ℝ
   root_nonneg : ∀ player, 0 ≤ root player
@@ -339,12 +339,12 @@ structure AGKRSSmallCellProductization
     |Math.PMFProduct.coalitionMass root coalition - law coalition| ≤
       agkrsSmallCellCoordinateConstant ι * ε * (1 - law ∅)
 
-/-- Exact formal statement suggested by the printed AGKRS small-cell lemma.
+/-- Exact formal statement suggested by the printed AKRS small-cell lemma.
 
 The existential threshold is the literal meaning of “sufficiently small” in
 the source.  It is uniform over all probability laws on a fixed finite player
 type, and is proved below with threshold `1 / 2`. -/
-def AGKRSSmallCellProductizationStatement (ι : Type)
+def AKRSSmallCellProductizationStatement (ι : Type)
     [Fintype ι] [DecidableEq ι] [Nonempty ι] : Prop :=
   ∃ ε₀ : ℝ, 0 < ε₀ ∧ ε₀ ≤ 1 / 2 ∧
     ∀ ε : ℝ, 0 < ε → ε ≤ ε₀ →
@@ -354,7 +354,7 @@ def AGKRSSmallCellProductizationStatement (ι : Type)
         1 - law ∅ ≤ ε →
         (∀ coalition player, 2 ≤ coalition.card → player ∈ coalition →
           law coalition ≤ ε * law {player}) →
-        Nonempty (AGKRSSmallCellProductization ε law)
+        Nonempty (SmallCellProductization ε law)
 
 private theorem exists_agkrsProductRoot_of_all_singletons_pos
     {ε : ℝ} {law : Finset ι → ℝ}
@@ -625,7 +625,7 @@ private theorem exists_agkrsProductRoot_of_all_singletons_pos
 /-! The published proof first treats the case in which every singleton atom
 is positive.  The next theorem packages that case, including the printed
 coordinate estimate.  The weak inequality is intentional: unlike the strict
-inequality printed in AGKRS, Lemma 4.9, it remains meaningful when the total
+inequality printed in AKRS, Lemma 4.9, it remains meaningful when the total
 absorption probability is zero. -/
 
 private theorem agkrsProductization_of_all_singletons_pos
@@ -638,7 +638,7 @@ private theorem agkrsProductization_of_all_singletons_pos
     (hcollision : ∀ coalition player, 2 ≤ coalition.card →
       player ∈ coalition → law coalition ≤ ε * law {player})
     (hsingleton_pos : ∀ player, 0 < law {player}) :
-    Nonempty (AGKRSSmallCellProductization ε law) := by
+    Nonempty (SmallCellProductization ε law) := by
   classical
   obtain ⟨root, hroot, habsorption, hrelative⟩ :=
     exists_agkrsProductRoot_of_all_singletons_pos
@@ -798,7 +798,7 @@ private theorem agkrsProductization_of_all_singletons_pos
           mul_le_mul_of_nonneg_right htwo_le_constant hscale_nonneg
         linarith
 
-/-! AGKRS dispatches zero singleton atoms by deleting their player
+/-! AKRS dispatches zero singleton atoms by deleting their player
 coordinates, applying the positive-singleton construction to the active
 subtype, and extending the resulting product row by zero.  This is the
 literal active-player reduction compressed into the opening sentence of the
@@ -812,7 +812,7 @@ private theorem agkrsSmallCellProductization
     (hp_le : 1 - law ∅ ≤ ε)
     (hcollision : ∀ coalition player, 2 ≤ coalition.card →
       player ∈ coalition → law coalition ≤ ε * law {player}) :
-    Nonempty (AGKRSSmallCellProductization ε law) := by
+    Nonempty (SmallCellProductization ε law) := by
   classical
   by_cases hp_zero : 1 - law ∅ = 0
   · let root : ι → ℝ := fun _ => 0
@@ -1084,7 +1084,7 @@ private theorem agkrsSmallCellProductization
           positivity
         exact mul_nonneg (mul_nonneg hconstant_nonneg hεpos.le) hp_pos.le
 
-/-- Published AGKRS small-cell productization, with the conservative weak
+/-- Published AKRS small-cell productization, with the conservative weak
 coordinate estimate that includes zero total absorption. -/
 theorem exists_agkrsSmallCellProductization
     {ε : ℝ} {law : Finset ι → ℝ}
@@ -1094,14 +1094,14 @@ theorem exists_agkrsSmallCellProductization
     (hp_le : 1 - law ∅ ≤ ε)
     (hcollision : ∀ coalition player, 2 ≤ coalition.card →
       player ∈ coalition → law coalition ≤ ε * law {player}) :
-    Nonempty (AGKRSSmallCellProductization ε law) :=
+    Nonempty (SmallCellProductization ε law) :=
   agkrsSmallCellProductization hεpos hεhalf hlaw_nonneg hlaw_sum
     hp_le hcollision
 
 /-- The existential-threshold specification is satisfied with the uniform
 threshold `1 / 2`. -/
 theorem agkrsSmallCellProductizationStatement :
-    AGKRSSmallCellProductizationStatement ι := by
+    AKRSSmallCellProductizationStatement ι := by
   refine ⟨1 / 2, by norm_num, le_rfl, ?_⟩
   intro ε hεpos hεhalf law hlaw_nonneg hlaw_sum hp_le hcollision
   exact exists_agkrsSmallCellProductization hεpos hεhalf hlaw_nonneg

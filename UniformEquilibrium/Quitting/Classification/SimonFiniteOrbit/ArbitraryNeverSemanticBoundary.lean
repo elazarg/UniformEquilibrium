@@ -191,7 +191,7 @@ If the well-supported absorbing branch does not hold at every positive scale,
 one scale at which it fails feeds the pointwise theorem.  All other outputs
 are scale-independent except for the retained positive-survival suffix datum.
 
-This is still a boundary theorem, not AGKRS Theorem 3.4: the uniform-payoff,
+This is still a boundary theorem, not AKRS Theorem 3.4: the uniform-payoff,
 phantom, attachment, and suffix-defect outputs are not silently identified
 with one of the paper's three branches. -/
 theorem

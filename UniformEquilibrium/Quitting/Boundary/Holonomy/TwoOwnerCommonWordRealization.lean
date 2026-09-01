@@ -6,6 +6,7 @@ Released under the MIT license as described in the file LICENSE.
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.TwoOwner.PacketEdge
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailGainDensity
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 
 /-!
 # Common-word realization for a two-owner tangent root
@@ -38,30 +39,6 @@ open StochasticGame QuittingBoundaryHolonomy
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-- Literal terminal exploitability bounds every behavioral deviation, hence
-is a terminal approximate-Nash certificate. -/
-theorem isεAsymptoticNash_of_quittingTerminalExploitability_le
-    (profile : (quittingGame reward).BehaviorProfile) {ε : ℝ}
-    (hexploit : quittingTerminalExploitability reward profile ≤ ε) :
-    (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) ε profile := by
-  intro who deviation
-  have hdeviation :=
-    quittingTerminalPayoff_update_le_continuationBestResponseValue
-      reward profile who deviation
-  have hcoordinate :
-      max 0 (quittingContinuationBestResponseValue reward profile who -
-        quittingTerminalPayoff reward profile who) ≤
-        quittingTerminalExploitability reward profile := by
-    unfold quittingTerminalExploitability
-    exact le_finitePlayerMax (fun player : ι =>
-      max 0 (quittingContinuationBestResponseValue reward profile player -
-        quittingTerminalPayoff reward profile player)) who
-  have hgap : quittingContinuationBestResponseValue reward profile who -
-      quittingTerminalPayoff reward profile who ≤ ε :=
-    (le_max_right 0 _).trans (hcoordinate.trans hexploit)
-  linarith
 
 omit [Nonempty ι] in
 /-- Every terminal approximate Nash profile remains above punishment up to

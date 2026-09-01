@@ -309,7 +309,7 @@ theorem false_of_wellSupportedExistence
       QuittingWellSupportedAbsorbingSequenceExistence reward) : False :=
   residual.not_wellSupported (hwellSupported delta hdelta)
 
-/-- A prioritized residual is incompatible with every literal fixed AGKRS
+/-- A prioritized residual is incompatible with every literal fixed AKRS
 branch.  Therefore a branch consumer for either surviving normal-form arm
 must eliminate that arm; it cannot consistently retain the source and merely
 append a branch witness. -/
@@ -602,7 +602,7 @@ theorem exists_allContinueSourceAt_or_cofinally_positiveSingletonDefectAt
     · exact ⟨delta, hdelta, hdeltaTarget, hdefect⟩
 
 /-- A cofinal prioritized residual family is incompatible with every fixed
-AGKRS branch.  The residual side of the corrected extraction must therefore
+AKRS branch.  The residual side of the corrected extraction must therefore
 be eliminated, not decorated with a branch witness. -/
 theorem cofinallyPrioritized_not_stationary_or_instant_or_wellSupported
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

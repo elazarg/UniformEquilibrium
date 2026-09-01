@@ -25,7 +25,7 @@ approximate-Nash inequality at the same error.  Thus this is not a stationary
 or pure-time restriction.
 
 The resulting alternative is deliberately weaker than the three branches of
-AGKRS Theorem 3.4.  Its low-survival disjunct still needs a source-matched
+AKRS Theorem 3.4.  Its low-survival disjunct still needs a source-matched
 stationary or instant-punishment adapter.  Its compact disjunct is an exact
 support-Bellman spine, but the selected values have not been identified with
 the terminal payoffs of its infinite suffixes and the spine has not been
@@ -119,7 +119,7 @@ theorem
 
 namespace QuittingLCPClassification
 
-/-- **Source-faithful compactification from the AGKRS hypothesis.**  At every
+/-- **Source-faithful compactification from the AKRS hypothesis.**  At every
 positive support tolerance and reach floor, arbitrary-never behavioral
 approximate equilibria produce either an actual normalized source prefix
 whose survival crosses below the floor, or a uniformly payoff-bounded exact

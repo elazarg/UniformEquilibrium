@@ -14,7 +14,7 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 For a unique player, a nonpositive singleton reward makes all-Continue an
 exact stationary terminal equilibrium.  A positive singleton reward makes
 sure solo quitting an exact stationary terminal equilibrium.  Thus the
-stronger AGKRS stationary branch holds, not merely existence of a uniform
+stronger AKRS stationary branch holds, not merely existence of a uniform
 payoff.
 -/
 

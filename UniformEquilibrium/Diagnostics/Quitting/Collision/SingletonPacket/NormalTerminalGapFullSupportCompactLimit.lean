@@ -163,7 +163,7 @@ theorem exists_fullSupport_normalizedSingletonSourcePacket_of_vanishingRoots
       convert hhazardLimit.const_mul (-(10 * quittingRewardBound reward)) using 1
       · funext n
         ring
-      · ring
+      · ring_nf
     exact le_of_tendsto_of_tendsto hlowerLimit hresidualLimit
       (Filter.Eventually.of_forall hlower)
   have hmixture : ∀ who,

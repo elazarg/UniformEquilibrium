@@ -17,7 +17,7 @@ Pure interventions replace a finite set of marginals.  This file records the
 one-coordinate replacement compiler and its sharp finite-player order bound.
 
 The state is counterfactual: the intervened labels remain visible.  It is not
-a suffix state, a conditional continuation law, or an AGKRS path limit.
+a suffix state, a conditional continuation law, or an AKRS path limit.
 -/
 
 noncomputable section

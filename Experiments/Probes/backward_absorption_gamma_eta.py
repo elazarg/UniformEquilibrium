@@ -2,7 +2,7 @@
 
 WHAT THIS COMPUTES
 -------------------
-The repository's canonical case-2 hard weight (the Solan/AGKRS Gamma_eta
+The repository's canonical case-2 hard weight (the Solan/AKRS Gamma_eta
 family under t -> (t+1)/3) is a 3-player quitting game with reward table
 (Fraction-exact):
 
@@ -10,11 +10,11 @@ family under t -> (t+1)/3) is a 3-player quitting game with reward table
     r({2}) = (0,   1/3, 1)          r({1,3}) = (0, 1/3, (1+eta)/3)
     r({3}) = (1,   0,   1/3)        r({2,3}) = (1/3, (1+eta)/3, 0)
     r({1,2,3}) = (0, 0, 0)
-    r(C)       = (-1, -1, -1)   [AGKRS's own raw never-terminate payoff;
+    r(C)       = (-1, -1, -1)   [AKRS's own raw never-terminate payoff;
                                   reported for documentation only -- it does
                                   NOT enter the recursion below, see NONCLAIMS]
 
-published (AGKRS p. 741) is the period-3m family: at stages 1..m player 1
+published (AKRS p. 741) is the period-3m family: at stages 1..m player 1
 quits at rate rho (others continue), then stages m+1..2m player 2 quits at
 rate rho, then stages 2m+1..3m player 3 quits at rate rho, cyclically
 forever, with (1-rho)^m = 1/2 so each block has combined survival 1/2.
@@ -88,7 +88,7 @@ NONCLAIMS
   search, not a certified linear-program optimum; the reported residual is
   an upper bound on the true minimax value, not the value itself.
 - r(C), the never-terminate payoff, is reported for documentation (it is
-  part of AGKRS's own printed table) but never used in the recursion or in
+  part of AKRS's own printed table) but never used in the recursion or in
   any gap formula: with combined per-block survival 1/2 repeated forever,
   the survival product over the infinite repetition of this family is 0, so
   the boundary term at r(C) is never consumed by this construction.
@@ -155,7 +155,7 @@ def table_as_json(eta: Fr) -> dict[str, object]:
         "r_C_never_terminate": [str(x) for x in R_C],
         "own_relevant_parameter_count": 3 * 7,
         "note": (
-            "r_C is AGKRS's own raw convention, documented for completeness; "
+            "r_C is AKRS's own raw convention, documented for completeness; "
             "it is not used by the recursion or gap formulas below (see NONCLAIMS)."
         ),
     }

@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartitionSmallCell
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionSmallCell
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalRootSequenceTail
 import UniformEquilibrium.Quitting.Cycles.PhantomBoundaryRestart
 import UniformEquilibrium.Quitting.Root.TailStability
 
 /-!
-# Payoff decoder for the canonical AGKRS partition
+# Payoff decoder for the canonical AKRS partition
 
 The independent cell rows have the same exact survival weights as the source
 path cells.  Their coordinatewise productization errors therefore telescope

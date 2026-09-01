@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Stationary.LiveMass
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Boundary.Repair.TerminalDebtSingletonDescent
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 
 /-!
 # Lexicographic terminal-debt descent by a literal root prefix
@@ -38,18 +39,6 @@ def quittingTerminalExploitabilityInf [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : ℝ :=
   sInf (Set.range fun profile : (quittingGame reward).BehaviorProfile =>
     quittingTerminalExploitability reward profile)
-
-theorem quittingTerminalExploitability_nonneg [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    0 ≤ quittingTerminalExploitability reward profile := by
-  unfold quittingTerminalExploitability
-  let who : ι := Classical.choice inferInstance
-  exact (le_max_left 0 _).trans
-    (le_finitePlayerMax
-      (fun player => max 0
-        (quittingContinuationBestResponseValue reward profile player -
-          quittingTerminalPayoff reward profile player)) who)
 
 theorem bddBelow_range_quittingTerminalExploitability [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :

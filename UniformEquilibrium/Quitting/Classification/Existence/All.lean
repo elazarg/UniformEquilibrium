@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
 import UniformEquilibrium.Quitting.Classification.Existence.AllNormalUnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
@@ -57,7 +57,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbi
 # Quitting classification existence inventory
 
 Import-only inventory of the finite-quitting existence and classification
-layer.  The direct chronological AGKRS route proves the three-way forward
+layer.  The direct chronological AKRS route proves the three-way forward
 classification from approximate-equilibrium existence.
 
 Ordinary consumers should import the narrow module that owns the declarations

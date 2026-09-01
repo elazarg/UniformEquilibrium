@@ -11,6 +11,7 @@ import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 import UniformEquilibrium.Quitting.Boundary.Holonomy.InfiniteBehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 
 /-!
 # Acyclic augmented solo preemption
@@ -169,29 +170,6 @@ theorem isQuittingZeroSolo_or_exists_nonnegative_noHarmSingleton_of_acyclic
             quittingSoloReward reward other other := fun hlt =>
           hedge ⟨hne, hlt⟩
         exact le_of_not_gt hnot
-
-/-- Any terminal `ε`-Nash certificate bounds literal maximum all-behavior
-terminal exploitability by `ε`. -/
-theorem quittingTerminalExploitability_le_of_isεAsymptoticNash
-    [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) {ε : ℝ}
-    (hε : 0 ≤ ε)
-    (hnash : (quittingGame reward).IsεAsymptoticNash
-      (quittingTerminalPayoff reward) ε profile) :
-    quittingTerminalExploitability reward profile ≤ ε := by
-  unfold quittingTerminalExploitability
-  apply QuittingBoundaryHolonomy.finitePlayerMax_le
-  intro who
-  apply max_le hε
-  have hbest : quittingContinuationBestResponseValue reward profile who ≤
-      quittingTerminalPayoff reward profile who + ε := by
-    unfold quittingContinuationBestResponseValue
-    apply csSup_le
-    · exact ⟨_, profile who, rfl⟩
-    · rintro value ⟨deviation, rfl⟩
-      exact hnash who deviation
-  linarith
 
 /-- Quantitative diffuse escape from a player sink.  Only the owner quits,
 with live-date probability `q`; the profile controls every unilateral

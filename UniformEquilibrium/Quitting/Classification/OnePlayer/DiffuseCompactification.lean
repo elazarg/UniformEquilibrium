@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Classification.OnePlayer.StationaryBranch
 /-!
 # Diffuse compactification is stationary for one player
 
-The two actual-source AGKRS attachment seams are genuinely multi-player.
+The two actual-source AKRS attachment seams are genuinely multi-player.
 With a unique player, the stationary branch holds independently of the source
 family, so both attachment obligations and their diffuse capstone close.
 -/
@@ -39,7 +39,7 @@ theorem hasUniqueExceptionalOwnerAttachment_onePlayer
   intro _source
   exact Or.inl (quittingStationaryεEquilibriumExistence_onePlayer reward)
 
-/-- The exact AGKRS diffuse compactification dependency holds for every
+/-- The exact AKRS diffuse compactification dependency holds for every
 one-player quitting game. -/
 theorem hasDiffuseStationarilyGeneratedCompactification_onePlayer
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :

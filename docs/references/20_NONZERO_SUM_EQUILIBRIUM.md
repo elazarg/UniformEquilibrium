@@ -379,7 +379,7 @@ uniformity" section — and Proposition 2.13 with it — was added between the
 against the working paper is citing a section that is not there.
 
 **For contrast, Proposition 2.4** (also widely re-cited, e.g. paired with
-2.13 in AGKRS's Theorem 3.5 above): published Prop. 2.4 *is* present in the
+2.13 in AKRS's Theorem 3.5 above): published Prop. 2.4 *is* present in the
 working paper, as Lemma 2.2/Lemma 2.6 — "either **x** is a subgame-perfect
 ε^{1/6}-equilibrium, or there is a stationary ε^{1/6}-equilibrium," proved in
 the published §2.5 ("Proof of the main proposition," which explicitly restates
@@ -482,7 +482,7 @@ However, Simon's 2012 correction is mathematically decisive: the proof of the
 relevant 2007 lemma requires nonexistence of *stationarily generated*
 approximate equilibria, not merely nonexistence of stationary approximate
 equilibria.  Consequently the citation leaves a fourth generated regime and
-does not, by itself, prove AGKRS's displayed S.1/S.2/S.3 trichotomy.  The
+does not, by itself, prove AKRS's displayed S.1/S.2/S.3 trichotomy.  The
 checked paper-facing account is
 `Literature/AshkenaziGolanKrasikovRainerAndSolan2022.lean`; the corrected source
 semantics are recorded in `Literature/Simon2012.lean`.
@@ -518,7 +518,7 @@ Formally: player set `N`; for every non-empty `A ⊆ N` a payoff vector
   simultaneously with the others' `p`, `bʲ(r,p)` her payoff from continuing
   (given continuation value `r`); `E_ε(r) := {p | pʲ>0 ⟹ aʲ(p) ≥ bʲ(p,r)−ε,
   pʲ<1 ⟹ bʲ(p,r) ≥ aʲ(p)−ε}` (a one-stage `ε`-equilibrium test — see the
-  clause-map note below, it is pointwise identical to AGKRS's Definition 3.1);
+  clause-map note below, it is pointwise identical to AKRS's Definition 3.1);
   `F_ε(r) := {f(r,p) | p ∈ E_ε(r)}` where `f(r,p)` is the resulting expected
   payoff vector; `q(p) := 1 − ∏ⱼ(1−pʲ)`, the probability someone quits.
 - **Stationary and instant approximate equilibria** (Definitions, p. 16),
@@ -633,9 +633,9 @@ depend on that machinery, not Theorem 3.
 
 ---
 
-## The clause map — AGKRS S.1/S.2/S.3 against the repository's three-branch disjunction (`MATH-P0-4`)
+## The clause map — AKRS S.1/S.2/S.3 against the repository's three-branch disjunction (`MATH-P0-4`)
 
-AGKRS Theorem 3.4 (p. 739, `[primary]`),
+AKRS Theorem 3.4 (p. 739, `[primary]`),
 verbatim: "A quitting game admits an `ε`-equilibrium for every `ε > 0`, if and
 only if at least one of the following statements holds. **(S.1)** For every
 `ε > 0` sufficiently small the game admits a stationary `ε`-equilibrium.
@@ -645,7 +645,7 @@ only if at least one of the following statements holds. **(S.1)** For every
 stage and on, all players punish player `i` with a payoff `ε`-close to her
 min-max level. **(S.3)** For every `ε > 0` sufficiently small there is an
 absorbing strategy profile `x` such that all players `i ∈ I` are sequentially
-`ε`-perfect at `x`." ("Absorbing" is AGKRS's Def., p. 738: `P_x(θ<∞)=1`;
+`ε`-perfect at `x`." ("Absorbing" is AKRS's Def., p. 738: `P_x(θ<∞)=1`;
 "sequentially `ε`-perfect," Definition 3.2, tests `ε`-perfectness — Definition
 3.1, borrowed explicitly from Solan–Vieille — at every stage against the
 continuation payoff.)
@@ -676,7 +676,7 @@ no counterexample search was run here to refute it either — left `open`.
 **Cell S.3 ↔ admissible cycle: `PROVED`, one direction only, and only the
 exact/periodic special case.** Simon's `E_ε(r)` (p. 15: `pʲ>0 ⟹ aʲ(p) ≥
 bʲ(p,r)−ε`, `pʲ<1 ⟹ bʲ(p,r) ≥ aʲ(p)−ε`) is, coordinate for coordinate, the
-same two inequalities as AGKRS's Definition 3.1 `ε`-perfectness applied to the
+same two inequalities as AKRS's Definition 3.1 `ε`-perfectness applied to the
 one-shot game `G(r)` (their Eqs. (2)–(3), p. 738: `rⁱ(aⁱ,σ⁻ⁱ) ≤ rⁱ(σ)+ε`,
 `σⁱ(aⁱ)>0 ⟹ rⁱ(aⁱ,σ⁻ⁱ) ≥ rⁱ(σ)−ε`). So Theorem 3 condition (ii) — a cyclic
 `p` with `rᵢ(p) ∈ F_ε(rᵢ₊₁(p))` for every `i` — says exactly that every player
@@ -689,7 +689,7 @@ stronger. So **admissible cycle ⟹ S.3** (via an exact witness, hence an
 `ε`-witness for every `ε`). The converse — every S.3-weight admitting a
 witness the repository's finite algebraic admissibility test can certify —
 is **not** established: general S.3 witnesses need not be periodic, and
-Theorem 3's (i)⟺(ii)⟺(iv)⟺(v) equivalence (which does let AGKRS pass between
+Theorem 3's (i)⟺(ii)⟺(iv)⟺(v) equivalence (which does let AKRS pass between
 periodic and general orbits) is Simon's, not re-proved or consumed here.
 Left `open`.
 
@@ -705,12 +705,12 @@ has no object to compare S.2 against. This is a **gap in the map**, not a
 mismatch: it says the repository's current machinery cannot even *state* the
 S.2 case, let alone decide whether it lines up with anything.
 
-**Cell isolated-negative ↔ (none): `OPEN`, no counterpart in AGKRS's
+**Cell isolated-negative ↔ (none): `OPEN`, no counterpart in AKRS's
 trichotomy.** The isolated-negative branch is the specific *failure mode* of
 the admissible-cycle construction at one candidate block (mismatch
 `= −r_who({who}) > 0`, a genuine profitable deviation for `who` away from
 that cycle — `quittingIsolatedNegativeCycle_mismatch_eq`), not a residual
-class that AGKRS's own proof leaves over. A weight landing here is not shown
+class that AKRS's own proof leaves over. A weight landing here is not shown
 to fail S.1, S.2, or S.3 for the *weight as a whole* — only that *this one
 block* fails to certify S.3. Two things keep this genuinely open rather than
 refuted: (a) the branches are exhaustive-but-not-exclusive, so an
@@ -732,14 +732,14 @@ an admissible cycle, or lands in isolated-negative for every candidate block)
 would only show — via the two proved implications — that every such weight
 satisfies **S.1, or S.3, or *neither is known***. The isolated-negative case
 supplies no witness for S.1 ∨ S.2 ∨ S.3, so exhaustiveness of the internal
-trichotomy would not, by this map, establish AGKRS's disjunction for every
+trichotomy would not, by this map, establish AKRS's disjunction for every
 weight, and therefore would not establish that every quitting game has
 `ε`-equilibria for every `ε`. What blocks the consequence, precisely: (1) the
 zero-solo/S.1 and admissible-cycle/S.3 correspondences are proved in one
 direction only; (2) S.2 has no located counterpart at all in the
 repository's vocabulary; (3) the isolated-negative branch is a per-block
 failure diagnostic internal to one specific construction, not a case Simon's
-or AGKRS's proofs leave open. A genuine equivalence would need, at minimum, a
+or AKRS's proofs leave open. A genuine equivalence would need, at minimum, a
 formalized min-max/punishment value to even attempt cell S.2, and a
 converse argument (general S.3 witness ⟹ some admissible cyclic block) for
 cell S.3 that this pass did not find and did not attempt to construct.

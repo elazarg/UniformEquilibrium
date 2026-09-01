@@ -17,7 +17,7 @@ target selection fixes one payoff vector.  Conversely, a uniform-equilibrium
 payoff supplies terminal approximate equilibria at every positive error.
 
 This equivalence is a notion-alignment result.  In particular, it cannot be
-used as evidence for the stronger AGKRS fixed-branch classification.
+used as evidence for the stronger AKRS fixed-branch classification.
 -/
 
 noncomputable section
@@ -42,7 +42,7 @@ theorem quittingApproximateEquilibriumExistence_iff_exists_uniformEquilibriumPay
 
 namespace QuittingLCPClassification
 
-/-- The arbitrary-never hypothesis used by AGKRS is likewise equivalent to
+/-- The arbitrary-never hypothesis used by AKRS is likewise equivalent to
 uniform-payoff existence for its normalized zero-never quitting game.  This
 does not identify any stationary, instant-punishment, or sequentially-perfect
 branch. -/

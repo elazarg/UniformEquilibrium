@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
+import UniformEquilibrium.Quitting.Boundary.FinitePlayerMax
 
 /-!
 # Fixed-prefix all-tail repair modulus
@@ -270,24 +271,6 @@ theorem coRealizedGain_lipschitz
     exact hprescribed
   unfold coordinateDistance
   linarith
-
-/-! ## Finite-player aggregate gain -/
-
-/-- Maximum of a real-valued quantity over the nonempty finite player set. -/
-def finitePlayerMax [Fintype ι] [Nonempty ι] (f : ι → ℝ) : ℝ :=
-  Finset.univ.sup' Finset.univ_nonempty f
-
-theorem finitePlayerMax_le [Fintype ι] [Nonempty ι]
-    {f : ι → ℝ} {bound : ℝ}
-    (hf : ∀ who, f who ≤ bound) : finitePlayerMax f ≤ bound := by
-  dsimp [finitePlayerMax]
-  exact Finset.sup'_le Finset.univ_nonempty f (fun who _ => hf who)
-
-theorem le_finitePlayerMax [Fintype ι] [Nonempty ι]
-    (f : ι → ℝ) (who : ι) :
-    f who ≤ finitePlayerMax f := by
-  dsimp [finitePlayerMax]
-  exact Finset.le_sup' f (Finset.mem_univ who)
 
 /-- Maximum positive gain over the fixed prefix at a co-realized pair. -/
 def maxCoRealizedGain [Fintype ι] [Nonempty ι]

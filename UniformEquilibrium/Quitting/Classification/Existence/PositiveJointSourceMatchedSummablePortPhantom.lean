@@ -18,7 +18,7 @@ terminal semantic pairs to that endpoint.
 The source-matched summable-port package then keeps this convergence witness,
 the no-sure-exit proof, exact-prefix port, phantom value, value identity, and
 uniform-payoff certificate together.  This repairs provenance only; it does
-not classify the surviving phantom into an AGKRS branch.
+not classify the surviving phantom into an AKRS branch.
 -/
 
 noncomputable section

@@ -22,7 +22,7 @@ The proof reuses the game-independent compact charged-return theorem after
 normalizing each stage charge by the number of players.
 
 The capacity in this module ranges over all supplied finite blocks.  It is not
-a source-trace capacity and no approximate-equilibrium, AGKRS, or hard-residual
+a source-trace capacity and no approximate-equilibrium, AKRS, or hard-residual
 producer for it is asserted.  This module also does not concatenate returned
 blocks or construct a uniform-equilibrium payoff.
 -/

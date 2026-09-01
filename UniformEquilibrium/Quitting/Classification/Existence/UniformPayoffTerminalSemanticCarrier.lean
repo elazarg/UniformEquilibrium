@@ -16,7 +16,7 @@ payoff/best-response pairs.  The forward direction selects terminal
 approximate equilibria delivering the fixed target.  Their prescribed and
 best-response coordinates converge to the target together.
 
-Consequently the AGKRS approximate-equilibrium premise is exactly the
+Consequently the AKRS approximate-equilibrium premise is exactly the
 existence of a diagonal point in this carrier.  This is a semantic
 reformulation, not a stationary, instant-punishment, or sequentially-perfect
 classification.
@@ -194,7 +194,7 @@ theorem quittingApproximateEquilibriumExistence_iff_exists_diagonal_mem_terminal
 
 namespace QuittingLCPClassification
 
-/-- The arbitrary-never AGKRS premise is exactly diagonal-carrier
+/-- The arbitrary-never AKRS premise is exactly diagonal-carrier
 nonemptiness for the normalized zero-never table. -/
 theorem
     QuittingPayoffTable.approximateEquilibriumExistence_iff_exists_diagonalCarrierPoint

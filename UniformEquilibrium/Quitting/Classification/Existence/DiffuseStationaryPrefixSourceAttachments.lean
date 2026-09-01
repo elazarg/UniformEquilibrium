@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34Dependencies
 import UniformEquilibrium.Quitting.Classification.Existence.StationaryPrefixExceptionalOwner
 
 /-!
@@ -21,7 +21,7 @@ occurs, the checked deleted-clock transport gives the stationary branch.
 The structures below retain the source family and the complete subsequential
 survival data.  They are stronger inputs than a bare assertion that the
 diffuse residual exists.  The reduction theorem proves that consumers for
-these two concrete inputs imply the AGKRS diffuse compactification dependency.
+these two concrete inputs imply the AKRS diffuse compactification dependency.
 It does not claim either attachment consumer.
 -/
 
@@ -156,7 +156,7 @@ def HasUniqueExceptionalOwnerAttachment
       QuittingWellSupportedAbsorbingSequenceExistence reward
 
 /-- The two actual-source attachment consumers imply exactly the diffuse
-compactification dependency used by the checked AGKRS Theorem 3.4 capstone. -/
+compactification dependency used by the checked AKRS Theorem 3.4 capstone. -/
 theorem hasDiffuseStationarilyGeneratedCompactification_of_sourceAttachments
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hpositive : HasPositiveJointPrefixReachAttachment reward)

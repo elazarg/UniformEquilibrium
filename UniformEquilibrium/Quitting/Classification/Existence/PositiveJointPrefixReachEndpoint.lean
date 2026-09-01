@@ -22,7 +22,7 @@ punishment payoff.
 
 This is the source-native attachment that the positive-reach seam genuinely
 provides.  It does not make the punishment tails stationary or sequentially
-perfect, and therefore does not by itself prove AGKRS branch S.1 or S.3.
+perfect, and therefore does not by itself prove AKRS branch S.1 or S.3.
 -/
 
 noncomputable section

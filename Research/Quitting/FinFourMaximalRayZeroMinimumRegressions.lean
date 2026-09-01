@@ -1880,7 +1880,7 @@ theorem summable_abs_rationalSpectatorCap_succ_sub :
     |activeTotalHazard time + activeRowSurvival time *
         rationalSpectatorCap time - rationalSpectatorCap time| =
         |activeTotalHazard time +
-          (activeRowSurvival time - 1) * rationalSpectatorCap time| := by ring
+          (activeRowSurvival time - 1) * rationalSpectatorCap time| := by ring_nf
     _ ≤ |activeTotalHazard time| +
         |(activeRowSurvival time - 1) * rationalSpectatorCap time| :=
       abs_add_le _ _

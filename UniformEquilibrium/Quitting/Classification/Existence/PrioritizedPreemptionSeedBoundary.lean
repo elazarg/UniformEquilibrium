@@ -21,7 +21,7 @@ finiteness to make the source owner and its first preemptor constant along a
 sequence of scales tending to zero.
 
 This is the strongest direct finite extraction available from the current
-interfaces.  It is not an AGKRS branch: the projective and anchored cyclic
+interfaces.  It is not an AKRS branch: the projective and anchored cyclic
 compilers additionally require roots, Bellman values, rationality, and
 support inequalities indexed by the cycle phases.  None of those fields is
 attached to the later edges of the augmented table cycle here.
@@ -416,7 +416,7 @@ structure QuittingCofinalPrioritizedSignedLassoBridge
     (sequence.delta n / 2)
 
 /-- The missing signed-lasso bridge would compile the cofinal seed boundary
-to the well-supported form of AGKRS branch S.3. -/
+to the well-supported form of AKRS branch S.3. -/
 theorem
     QuittingCofinalPrioritizedSignedLassoBridge.wellSupportedExistence
     [Nonempty ι]

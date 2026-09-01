@@ -1451,7 +1451,7 @@ theorem z_div_a_tendsto (orbit : Recurrence) :
   convert hscaled using 1
   · funext time
     exact orbit.z_div_a_eq time
-  · ring
+  · ring_nf
 
 /-- The active marginal hazard `2t+z`. -/
 def totalHazard (orbit : Recurrence) (time : ℕ) : ℝ :=
@@ -1471,7 +1471,7 @@ theorem totalHazard_div_a_tendsto (orbit : Recurrence) :
   · funext time
     unfold totalHazard
     field_simp [(orbit.a_pos time).ne']
-  · ring
+  · ring_nf
 
 theorem totalHazard_div_a_limit_pos (orbit : Recurrence) :
     0 < (25 / 8 : ℝ) * orbit.ratioLimit - 1 / 2 := by

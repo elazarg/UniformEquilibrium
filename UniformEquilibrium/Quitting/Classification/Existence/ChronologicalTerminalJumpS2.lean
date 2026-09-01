@@ -129,7 +129,7 @@ theorem ChronologicalJumpStageLimit.stageContinueMass_tendsto_zero_of_pathTotal_
     hpositive.ne'
 
 /-- A terminal jump of the actual chronological source path produces the
-literal AGKRS instant-punishment branch `S.2`. -/
+literal AKRS instant-punishment branch `S.2`. -/
 theorem instantPunishmentEquilibriumExistence_of_terminalPathJump
     (limit : diagonal.ChronologicalLimit) {time : ℝ}
     (htime : time ∈ QuittingAbsorptionPath.pathJumps limit.path)
@@ -269,4 +269,3 @@ end ChronologicalLimit
 end QuittingRootSequenceAbsorbingCompletionDiagonal
 
 end GameTheory
-

@@ -37,7 +37,7 @@ structure QuittingDivergentNegativeExceptionalOwnerResidual
     quittingSoloReward reward source.owner source.owner < 0
 
 /-- **Corrected-Simon source capstone.**  A diffuse stationarily generated
-family yields one of the three AGKRS branches, the finite-dimensional
+family yields one of the three AKRS branches, the finite-dimensional
 positive-reach no-sure-exit residual, or a divergent exceptional owner whose
 singleton self-payoff is strictly negative. -/
 theorem stationary_or_instant_or_wellSupported_or_noSureExit_or_negativeOwner

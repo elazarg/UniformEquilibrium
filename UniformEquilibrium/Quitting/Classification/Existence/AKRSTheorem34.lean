@@ -2,7 +2,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalAbsorpt
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
 
 /-!
-# AGKRS Theorem 3.4 from approximate-equilibrium existence
+# AKRS Theorem 3.4 from approximate-equilibrium existence
 
 The arbitrary-never approximate-equilibrium hypothesis first yields literal
 S.1 or an actual vanishing-Never root-sequence source.  In the second arm the
@@ -20,7 +20,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 namespace QuittingLCPClassification
 
-/-- AGKRS Theorem 3.4: arbitrary-never approximate-equilibrium existence
+/-- AKRS Theorem 3.4: arbitrary-never approximate-equilibrium existence
 implies one fixed quitting-game branch S.1, S.2, or S.3. -/
 theorem QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing
     (table : QuittingPayoffTable ι)

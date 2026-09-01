@@ -22,7 +22,7 @@ arbitrarily small residual spines by concatenating compact near-return blocks
 from unbounded finite exact-block hazard capacity.
 
 The capacity ranges over all exact blocks in the supplied carrier.  No theorem
-here produces that capacity from an AGKRS source trace or the Fin4 hard
+here produces that capacity from an AKRS source trace or the Fin4 hard
 residual.  The all-behavior uniform-payoff consumer additionally requires two
 persistent marginal labels on every supplied accuracy-indexed spine.
 -/

@@ -8,10 +8,10 @@ import UniformEquilibrium.Quitting.Classification.Existence.CorrectedFixedBranch
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.ArbitraryNeverExtraction
 
 /-!
-# Exact dependencies for AGKRS Theorem 3.4
+# Exact dependencies for AKRS Theorem 3.4
 
 Simon's corrected classification has a fourth, stationarily generated branch.
-Accordingly, the three-way AGKRS conclusion needs two logically separate
+Accordingly, the three-way AKRS conclusion needs two logically separate
 inputs.  The first extracts the corrected four-way alternative pointwise from
 arbitrary-never approximate equilibria.  The second compactifies the diffuse
 stationarily generated residual into the stationary or well-supported branch.
@@ -59,7 +59,7 @@ def HasDiffuseStationarilyGeneratedCompactification
 
 namespace QuittingLCPClassification
 
-/-- Dependencies A and B imply the exact three table-level branches of AGKRS
+/-- Dependencies A and B imply the exact three table-level branches of AKRS
 Theorem 3.4.  The arbitrary payoff at never is retained in the conclusion;
 normalization is used only inside the proof and is removed by the checked
 table-branch equivalences. -/

@@ -9,10 +9,10 @@ import MathUE.Topology.OneSidedDiniFencing
 import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 
 /-!
-# Canonical AGKRS absorption-path partition
+# Canonical AKRS absorption-path partition
 
 This module constructs the boundary cuts and exact correlated cell laws used
-by the AGKRS discretization.  It proves only the path and cut identities
+by the AKRS discretization.  It proves only the path and cut identities
 stated below; it does not claim the full weak-convergence statement of
 published Proposition 4.8.
 -/
@@ -1326,7 +1326,7 @@ def nextPartitionCut (path : AbsorptionPath (ι := ι))
     Set.Iic (partitionProbe resolution start)) ∪
       {pathTotal path.1 start})
 
-/-- The complete countable cut sequence used by the AGKRS path decoder. -/
+/-- The complete countable cut sequence used by the AKRS path decoder. -/
 def partitionCut (path : AbsorptionPath (ι := ι))
     (resolution : ℕ) : ℕ → ℝ
   | 0 => 0

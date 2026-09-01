@@ -3142,7 +3142,7 @@ in the live mathematical ledger.
   compactifies the fixed-reach prefixes into one bounded support-Bellman spine,
   or retains a literal low-survival approximate prefix.
   `QuittingPayoffTable.approximateEquilibriumExistence_iff_zeroNever` gives the
-  exact arbitrary-Never behavioral normalization used by AGKRS, and
+  exact arbitrary-Never behavioral normalization used by AKRS, and
   `QuittingPayoffTable.stationary_or_vanishingNeverNashFamily` in
   `UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumVanishingNeverAlternative.lean`
   now gives a direct conditional upstream fork: literal S.1, or actual root
@@ -3291,12 +3291,12 @@ in the live mathematical ledger.
   explicitly supplied terminal jump.
   The published small-cell productization is checked as
   `exists_agkrsSmallCellProductization` in
-  `MathUE/PMFProduct/AGKRSSmallCellProductization.lean`.  The production
+  `MathUE/PMFProduct/SmallCellProductization`.  The production
   partition and decoder in
-  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartition.lean`,
-  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartitionSmallCell.lean`,
-  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSPartitionDecoder.lean`, and
-  `UniformEquilibrium/Quitting/AbsorptionPath/AGKRSSequentialPerfectionDecoder.lean`
+  `UniformEquilibrium/Quitting/AbsorptionPath/AKRSPartition.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/AKRSPartitionSmallCell.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/AKRSPartitionDecoder.lean`, and
+  `UniformEquilibrium/Quitting/AbsorptionPath/AKRSSequentialPerfectionDecoder.lean`
   copy large jumps, productize small cells, and preserve singleton support.
   They use the exact cell parameter `1 / (resolution - 1)` with the published
   dimension-factor coordinate bound
@@ -3326,8 +3326,8 @@ in the live mathematical ledger.
   `QuittingPayoffTable.stationary_or_vanishingNeverNashFamily`, the absorbing
   completion, and chronological compactification gives
   `QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing`
-  in `UniformEquilibrium/Quitting/Classification/Existence/AGKRSTheorem34.lean`.
-  This is the literal table-level forward implication of AGKRS Theorem 3.4,
+  in `UniformEquilibrium/Quitting/Classification/Existence/AKRSTheorem34.lean`.
+  This is the literal table-level forward implication of AKRS Theorem 3.4,
   including the empty-player stationary case.  Its premise says that for each
   positive error some arbitrary behavior profile is terminal-payoff
   approximate Nash against every unilateral behavioral replacement.  It does
@@ -3351,7 +3351,7 @@ in the live mathematical ledger.
   rows. The spine branch still needs the all-restart survival condition (or an
   equivalent semantic boundary); compactification does not supply it. No
   global perfect sequence or finite orbit is produced.
-- **Alternative corrected-source AGKRS route:** the direct chronological proof
+- **Alternative corrected-source AKRS route:** the direct chronological proof
   above establishes Theorem 3.4 without closing every residual in the older
   corrected-Simon route.  In that alternative route, a raw refined source residual can
   coexist with exact S.1, as checked by
@@ -3401,7 +3401,7 @@ in the live mathematical ledger.
   retained.  This reduction has `M`, `L`, `A`, and attachment-arm `C`, but
   neither surviving normal-form arm has a branch consumer. The explicit
   `AllContinueSourceAt` and `PositiveSingletonDefectAt` packages show why the
-  final consumer must be eliminative: all three fixed AGKRS branches directly
+  final consumer must be eliminative: all three fixed AKRS branches directly
   contradict their retained same-scale priority negations. Cofinal residuals
   yield either one positive-scale all-Continue source or singleton defects
   cofinally toward zero. Every such residual in fact forces a positive-period
@@ -3475,7 +3475,7 @@ in the live mathematical ledger.
   is the exact fixed-target equivalence.  Its existential form identifies
   target-free approximate-equilibrium existence with diagonal-carrier
   nonemptiness, and the table adapter gives the same characterization of the
-  normalized arbitrary-Never AGKRS premise.  These are semantic
+  normalized arbitrary-Never AKRS premise.  These are semantic
   reformulations, not an existence proof for an arbitrary table.
 
   More importantly here, a specific
@@ -3651,7 +3651,7 @@ in the live mathematical ledger.
   `finFour_hasBoundedFiniteExactNashBellmanHazardCapacity_of_no_uniformPayoff`
   says that any Fin4 counterexample has bounded exact-block hazard capacity in
   the canonical reward box.  No theorem produces unbounded capacity from the
-  AGKRS source or a source trace, identifies a numerical bound in the bounded
+  AKRS source or a source trace, identifies a numerical bound in the bounded
   branch, or equates exact-block capacity with source-trace capacity.
 - **Local periodic-anchor route:**
   `localPeriodicAnchor_theoremA`

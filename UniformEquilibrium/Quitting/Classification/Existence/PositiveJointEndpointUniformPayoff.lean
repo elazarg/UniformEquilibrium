@@ -20,7 +20,7 @@ uniform-equilibrium payoff target without using its exact-prefix orbit or a
 summability assumption.  Source-level uniform-payoff existence was already
 available from the source's approximate-equilibrium family and the generic
 compiler.  This result does not place the source in one of the stationary,
-instant-punishment, or absorbing sequentially perfect branches of AGKRS
+instant-punishment, or absorbing sequentially perfect branches of AKRS
 Theorem 3.4.
 -/
 

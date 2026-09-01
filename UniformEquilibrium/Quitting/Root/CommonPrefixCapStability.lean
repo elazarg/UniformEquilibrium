@@ -348,7 +348,7 @@ theorem tendsto_quittingContinuationBestResponseValue_literalRootStack
       (1 - quittingLiteralRootStackOpponentSurvival
         (root n :: roots n) who)) atTop (nhds 0) := by
     convert tendsto_const_nhds.mul (tendsto_const_nhds.sub hsurvival) using 1
-    ring
+    ring_nf
   have habs : Tendsto (fun n =>
       |quittingContinuationBestResponseValue reward
           (quittingLiteralRootStackProfile reward (root n :: roots n) (tail n))

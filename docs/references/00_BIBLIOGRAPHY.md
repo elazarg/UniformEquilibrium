@@ -278,7 +278,7 @@ drops every Greek glyph and must not be used. Verbatim statements of Theorem
 3, Corollary 2, Theorem 4, Conjecture 1, and the Section 4.2–4.3 definitions
 are recorded in
 [`20_NONZERO_SUM_EQUILIBRIUM.md`](20_NONZERO_SUM_EQUILIBRIUM.md). This is the
-paper AGKRS's Theorem 3.4 cites as "Simon [13], Theorem 3" (bibliographic
+paper AKRS's Theorem 3.4 cites as "Simon [13], Theorem 3" (bibliographic
 match confirmed against the primary source PDF); Theorem 3 is proved in
 Section 4.4 for arbitrary quitting games, not only for the escape games of
 Section 5.

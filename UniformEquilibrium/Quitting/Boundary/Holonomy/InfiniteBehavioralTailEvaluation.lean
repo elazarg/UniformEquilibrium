@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailEvaluation
 import UniformEquilibrium.Quitting.Boundary.Holonomy.BehavioralTailRepairValue
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Cycles.PhaseSwitchDeviationCap
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 
 /-!
 # Infinite behavioral tails through a finite holonomy
@@ -369,19 +370,6 @@ theorem quittingPhaseSwitch_bestResponseAt_eq_continuationBestResponse
         _ ≤ prefixBest :=
           quittingFiniteTerminalBestResponseValue_mono_terminal
             reward plan who htail 0 switch
-
-/-! ## Literal terminal exploitability -/
-
-/-- Maximum positive unilateral terminal gain of one behavioral profile.
-This is a literal all-behavior quantity: each best-response coordinate is the
-supremum over all unilateral behavior strategies against the displayed
-profile. -/
-def quittingTerminalExploitability [Nonempty ι]
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) : ℝ :=
-  QuittingBoundaryHolonomy.finitePlayerMax fun who =>
-    max 0 (quittingContinuationBestResponseValue reward profile who -
-      quittingTerminalPayoff reward profile who)
 
 /-- The holonomy gain at the co-realized prescribed/best-response boundary
 of one actual tail is playerwise the literal terminal deviation gain of the

@@ -10,7 +10,7 @@ import UniformEquilibrium.Quitting.Classification.OnePlayer.StationaryBranch
 /-!
 # A regression for excluding refined pointwise source residuals
 
-The refined corrected-pointwise residual is not disjoint from the three AGKRS
+The refined corrected-pointwise residual is not disjoint from the three AKRS
 branches.  In the one-player unit-reward game, the exact stationary branch
 holds, but the constant all-Continue support--Bellman spine still supplies the
 positive-singleton suffix-defect residual at every nonnegative tolerance.
@@ -56,7 +56,7 @@ theorem refinedSourceResidualAt (delta : ℝ) (hdelta : 0 ≤ delta) :
   exact Or.inr (Or.inr (nonempty_positiveSingletonDefectResidual delta hdelta))
 
 /-- The same game belongs to the exact stationary classification branch.
-Hence occurrence of a refined source residual does not obstruct the AGKRS
+Hence occurrence of a refined source residual does not obstruct the AKRS
 conclusion and cannot be ruled out unconditionally. -/
 theorem stationaryExistence_and_refinedSourceResidualAt (delta : ℝ)
     (hdelta : 0 ≤ delta) :

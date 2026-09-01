@@ -911,7 +911,7 @@ theorem segmentRiskPotential_le_expect_row_step
               liveIndicator_live, one_mul]
             simp only [segmentIncrement]
             simp [hraw, hb]
-            ring]
+            ring_nf]
       rw [hDeq]
       have hsubPos : 0 < raw - b := sub_pos.mpr hrawGt
       have hidentity := potential_sub_id
@@ -1996,7 +1996,7 @@ theorem tendsto_finiteAveragePayoff_segmentProfile
               exact expectedStagePayoff_segmentProfile_playerOne
                 parameter initial time]
         convert tendsto_const_nhds.sub (tendsto_const_nhds.mul hlive) using 1
-        ring
+        ring_nf
     | true =>
         simp only [if_true]
         rw [show
@@ -2009,7 +2009,7 @@ theorem tendsto_finiteAveragePayoff_segmentProfile
               exact expectedStagePayoff_segmentProfile_playerTwo
                 parameter initial time]
         convert tendsto_const_nhds.sub (tendsto_const_nhds.mul hlive) using 1
-        ring
+        ring_nf
   simpa only [game.finiteAveragePayoff_eq_sum_expectedStagePayoff] using
     hstage.cesaro
 

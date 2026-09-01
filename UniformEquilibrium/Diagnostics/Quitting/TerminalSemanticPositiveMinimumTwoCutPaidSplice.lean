@@ -101,7 +101,7 @@ theorem quittingTerminalSemanticDebt_twoCut_eq
         (entryCut + length)] at hstep
       unfold quittingTerminalSemanticCoordinateCharge at ih ⊢
       rw [Finset.sum_range_succ, quittingJointSurvivalWeight_succ, ih, hstep]
-      ring
+      ring_nf
 
 theorem quittingTerminalSemanticDebtSum_twoCut_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -128,7 +128,7 @@ theorem quittingTerminalSemanticDebtSum_twoCut_eq
         (entryCut + length)] at hstep
       unfold quittingTerminalSemanticTotalCharge at ih ⊢
       rw [Finset.sum_range_succ, quittingJointSurvivalWeight_succ, ih, hstep]
-      ring
+      ring_nf
 
 theorem quittingTerminalSemanticTotalCharge_eq_sum_coordinateCharge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

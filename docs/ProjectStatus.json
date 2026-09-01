@@ -359,7 +359,7 @@
       "declaration": "exists_uniformEquilibriumPayoff_of_acyclic_augmentedSoloPreemption",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/AcyclicSoloPreemption.lean",
       "umbrella": "UniformEquilibrium.lean",
-      "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture satisfies AGKRS S.1, has a uniform-equilibrium payoff, and cannot force positive designated pair masses. Failure of S.1 forces a directed augmented cycle; cyclicity is necessary, not sufficient, for either the branch-classification or incentive-gadget route."
+      "scope": "For every nonempty finite player type, acyclicity of the strict solo-preemption graph augmented by own-singleton sign edges gives either exact all-Continue play or arbitrarily accurate solo-owner stationary profiles with a fixed singleton target and explicit q times pair-premium exploitability bound. Thus this architecture satisfies AKRS S.1, has a uniform-equilibrium payoff, and cannot force positive designated pair masses. Failure of S.1 forces a directed augmented cycle; cyclicity is necessary, not sufficient, for either the branch-classification or incentive-gadget route."
     },
     {
       "id": "participant-only-stationary-equilibrium",
@@ -449,16 +449,16 @@
       "declaration": "quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target remains unclassified within the corrected-source route; the direct chronological theorem proves the table-level AGKRS trichotomy independently."
+      "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target remains unclassified within the corrected-source route; the direct chronological theorem proves the table-level AKRS trichotomy independently."
     },
     {
       "id": "agkrs-theorem-34-forward-trichotomy",
-      "subject": "AGKRS Theorem 3.4 forward trichotomy",
+      "subject": "AKRS Theorem 3.4 forward trichotomy",
       "kind": "Conditional classification theorem",
       "declaration": "QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/AGKRSTheorem34.lean",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/AKRSTheorem34.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "For every finite arbitrary-never quitting payoff table, if for every positive error there exists an arbitrary behavioral terminal-payoff approximate equilibrium against all unilateral behavioral replacements, then one fixed branch holds: stationary S.1, instant-punishment S.2, or absorbing sequentially-perfect S.3. The proof handles the empty-player case and otherwise constructs one actual chronological source, then exhaustively dispatches its terminal and no-terminal branches. This proves the forward implication of AGKRS Theorem 3.4; it does not prove the approximate-equilibrium premise for every game, assert a fixed payoff target, control all sufficiently long finite horizons, or imply a uniform equilibrium."
+      "scope": "For every finite arbitrary-never quitting payoff table, if for every positive error there exists an arbitrary behavioral terminal-payoff approximate equilibrium against all unilateral behavioral replacements, then one fixed branch holds: stationary S.1, instant-punishment S.2, or absorbing sequentially-perfect S.3. The proof handles the empty-player case and otherwise constructs one actual chronological source, then exhaustively dispatches its terminal and no-terminal branches. This proves the forward implication of AKRS Theorem 3.4; it does not prove the approximate-equilibrium premise for every game, assert a fixed payoff target, control all sufficiently long finite horizons, or imply a uniform equilibrium."
     },
     {
       "id": "projective-qbar-uniform-payoff",
@@ -480,7 +480,7 @@
     },
     {
       "id": "agkrs-divergent-exceptional-owner-dispatch",
-      "subject": "AGKRS divergent exceptional-owner source closure",
+      "subject": "AKRS divergent exceptional-owner source closure",
       "kind": "Unconditional source consumer",
       "declaration": "QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
@@ -503,11 +503,11 @@
       "declaration": "isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
-      "scope": "For every inhabited finite player type and fixed payoff target, the target is a uniform-equilibrium payoff exactly when its diagonal pair belongs to the closure of executable terminal payoff/unrestricted-best-response pairs. Existentially, target-free approximate-equilibrium existence is exactly diagonal-carrier nonemptiness; the normalized arbitrary-Never AGKRS premise has the same characterization. Carrier membership need not be attained by one profile. This is a semantic equivalence, not a stationary, instant-punishment, or sequentially-perfect classification, and it reformulates rather than proves the unconditional quitting conjecture."
+      "scope": "For every inhabited finite player type and fixed payoff target, the target is a uniform-equilibrium payoff exactly when its diagonal pair belongs to the closure of executable terminal payoff/unrestricted-best-response pairs. Existentially, target-free approximate-equilibrium existence is exactly diagonal-carrier nonemptiness; the normalized arbitrary-Never AKRS premise has the same characterization. Carrier membership need not be attained by one profile. This is a semantic equivalence, not a stationary, instant-punishment, or sequentially-perfect classification, and it reformulates rather than proves the unconditional quitting conjecture."
     },
     {
       "id": "agkrs-prioritized-attachment-normal-form",
-      "subject": "AGKRS prioritized attachment reduction and exact residual normal form",
+      "subject": "AKRS prioritized attachment reduction and exact residual normal form",
       "kind": "Unconditional source reduction",
       "declaration": "nonempty_augmentedSoloPreemptionCycle",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PrioritizedAttachmentSingletonDefect.lean",
@@ -516,7 +516,7 @@
     },
     {
       "id": "agkrs-positive-joint-sequential-reduction",
-      "subject": "AGKRS positive-joint endpoint, diagonal carrier, and ballistic reductions",
+      "subject": "AKRS positive-joint endpoint, diagonal carrier, and ballistic reductions",
       "kind": "Unconditional source reductions and payoff identification; conditional Literature capstone",
       "declaration": "wellSupported_or_endpointBallisticBoundary",
       "source": "UniformEquilibrium/Quitting/Classification/Existence/PositiveJointSummablePortBallisticDispatch.lean",

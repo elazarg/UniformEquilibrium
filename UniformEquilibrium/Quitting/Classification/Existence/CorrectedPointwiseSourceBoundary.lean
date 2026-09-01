@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34Dependencies
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.ArbitraryNeverSemanticBoundary
 
 /-!
 # Actual-source boundary for the corrected pointwise extraction
 
-Dependency A in the AGKRS classification asks for a stationary,
+Dependency A in the AKRS classification asks for a stationary,
 instant-punishment, well-supported absorbing, or stationarily generated
 witness at each positive error.  The arbitrary-Never hypothesis reaches two
 of these outputs directly.  The only remaining outputs of the checked

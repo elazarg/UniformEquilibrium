@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartitionDecoder
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionDecoder
 import UniformEquilibrium.Quitting.Paths.QuitEndpointOpponentBound
 import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 
 /-!
-# Sequential-perfection estimates for the AGKRS partition decoder
+# Sequential-perfection estimates for the AKRS partition decoder
 
 This module proves the literal local estimates corresponding to published
 bounds (20)--(22).  In particular, positive singleton mass is transported to
@@ -789,7 +789,7 @@ theorem IsQuittingRootSupportApproxNash.mono
 
 /-- The exact remaining analytic producer in published estimate (22):
 positive singleton mass in a selected cell yields the reverse entrance
-estimate.  AGKRS proves this by the small-jump/interior-differentiability
+estimate.  AKRS proves this by the small-jump/interior-differentiability
 split; keeping it literal prevents the decoder from silently assuming it. -/
 def HasPartitionPositiveSingletonReverseEntranceEstimate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -961,7 +961,7 @@ def singletonCoordinateCellValue
 omit [Nonempty ι] in
 /-- A positive singleton increment on a path cell is witnessed either by a
 positive singleton jump or by positive lower-right rate at a continuous clock
-point.  This is the analytic split used in AGKRS estimate (22). -/
+point.  This is the analytic split used in AKRS estimate (22). -/
 theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ point ∈ Set.Icc (0 : ℝ) 1,

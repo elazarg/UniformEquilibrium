@@ -255,7 +255,7 @@ import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.PMFIter
 import MathUE.PMFProduct
-import MathUE.PMFProduct.AGKRSSmallCellProductization
+import MathUE.PMFProduct.SmallCellProductization
 import MathUE.PMFProduct.Basic
 import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.Bool
@@ -1200,10 +1200,10 @@ import UniformEquilibrium.ProofView.Native.Basic
 import UniformEquilibrium.ProofView.Native.Equilibrium
 import UniformEquilibrium.ProofView.Native.History
 import UniformEquilibrium.ProofView.Native.Semantics
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartition
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartitionDecoder
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartitionSmallCell
-import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSSequentialPerfectionDecoder
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartition
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionDecoder
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionSmallCell
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSSequentialPerfectionDecoder
 import UniformEquilibrium.Quitting.AbsorptionPath.All
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceA4
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceCollision
@@ -1443,8 +1443,8 @@ import UniformEquilibrium.Quitting.Classification.Circulant.Trichotomy
 import UniformEquilibrium.Quitting.Classification.Circulant.TrichotomyClosure
 import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
-import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34
-import UniformEquilibrium.Quitting.Classification.Existence.AGKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34Dependencies
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
 import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemption
 import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemptionRegression

@@ -23,7 +23,7 @@ theorem in `RootSequenceAbsorbingCompletionChronologicalSingletonLowerBound`.
 This module proves the active continuous-clock equality for the same decoded
 chronological path.  It does not reprove the jump-row component: the final
 bundle imports and consumes the already checked chronological jump theorem.
-It does not construct a well-supported absorbing sequence or assert the AGKRS
+It does not construct a well-supported absorbing sequence or assert the AKRS
 trichotomy.
 -/
 

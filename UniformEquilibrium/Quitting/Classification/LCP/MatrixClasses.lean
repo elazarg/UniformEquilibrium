@@ -14,7 +14,7 @@ simplex/projective LCP, while also comparing it with the textbook
 nonhomogeneous LCP whose coefficient of `q` is fixed to one.  The conventions
 are not equivalent in general.
 
-This file defines both and proves the exact split recorded in AGKRS Remark
+This file defines both and proves the exact split recorded in AKRS Remark
 5.5(3):
 
 `projective Q M ↔ standard Q M ∨ homogeneous simplex solution M`.
@@ -23,7 +23,7 @@ It also proves that Solan--Solan's "nontrivial solution of LCP(M, 0)" branch is
 exactly the homogeneous simplex branch.  Thus the two Q conventions coincide
 precisely after the simple stationary branch has been removed.
 `IsProjectiveQBarMatrix` applies the projective notion to every nonempty
-principal submatrix, exactly as in AGKRS Definition 5.2.  No strategic
+principal submatrix, exactly as in AKRS Definition 5.2.  No strategic
 conclusion is attached to any matrix predicate here.
 -/
 
@@ -481,13 +481,13 @@ def principalMatrix (M : ι → ι → ℝ) (players : Finset ι) :
     players → players → ℝ :=
   fun i j => M i.1 j.1
 
-/-- AGKRS Definition 5.2: projective `Q` on every nonempty principal
+/-- AKRS Definition 5.2: projective `Q` on every nonempty principal
 submatrix. -/
 def IsProjectiveQBarMatrix (M : ι → ι → ℝ) : Prop :=
   ∀ players : Finset ι, players.Nonempty →
     IsProjectiveQMatrix (principalMatrix M players)
 
-/-- The standard completely-Q property, kept distinct from AGKRS's weaker
+/-- The standard completely-Q property, kept distinct from AKRS's weaker
 projective `Q̄`. -/
 def IsStandardCompletelyQMatrix (M : ι → ι → ℝ) : Prop :=
   ∀ players : Finset ι, players.Nonempty →
