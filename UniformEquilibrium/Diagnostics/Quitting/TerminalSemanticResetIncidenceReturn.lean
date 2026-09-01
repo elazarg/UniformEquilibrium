@@ -723,4 +723,23 @@ theorem nearMinimum_resetPrefix_with_incidence_of_capNashReturnSelection
   exact ⟨hreturnedJoint, haccount.2.1, haccount.2.2.1, hnear,
     hincidenceLower, hincidencePositive, haccount.2.2.2.2.2.2⟩
 
+variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+
+/-- The law coordinate of every joint semantic/law carrier point remains a
+probability vector. -/
+theorem terminalSemanticLawCarrier_mass_mem_stdSimplex
+    (point : QuittingTerminalSemanticLawPoint ι)
+    (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
+    point.2 ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+  let lawSimplex : Set (QuittingTerminalSemanticLawPoint ι) :=
+    Set.univ ×ˢ stdSimplex ℝ (QuittingTerminalOutcome ι)
+  have hclosed : IsClosed lawSimplex :=
+    isClosed_univ.prod (isClosed_stdSimplex ℝ (QuittingTerminalOutcome ι))
+  have hsubset : quittingAttainableTerminalSemanticLawPoints reward ⊆
+      lawSimplex := by
+    rintro point ⟨profile, rfl⟩
+    exact ⟨Set.mem_univ _,
+      quittingTerminalOutcomeMass_mem_stdSimplex reward profile⟩
+  exact (closure_minimal hsubset hclosed hpoint).2
+
 end GameTheory

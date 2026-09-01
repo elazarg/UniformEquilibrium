@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
+import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 
 /-!
 # Finite cap--Nash chronologies
@@ -657,5 +658,13 @@ theorem exists_deep_nearMinimum_capNashChronology
     fun who =>
       abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_le
         (reward := reward) roots terminal who hreward hstack⟩
+
+omit [DecidableEq ι] in
+/-- The chronology joint product is the canonical literal-word joint
+survival. -/
+theorem quittingCapNashStackContinueProduct_eq_literalRootStackJointSurvival
+    (roots : List (ι → PMF Bool)) :
+    quittingCapNashStackContinueProduct roots =
+      quittingLiteralRootStackJointSurvival roots := rfl
 
 end GameTheory

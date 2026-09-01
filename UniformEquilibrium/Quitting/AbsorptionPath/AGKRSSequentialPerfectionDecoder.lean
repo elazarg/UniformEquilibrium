@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.AbsorptionPath.AGKRSPartitionDecoder
 import UniformEquilibrium.Quitting.Paths.QuitEndpointOpponentBound
+import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 
 /-!
 # Sequential-perfection estimates for the AGKRS partition decoder
@@ -27,22 +28,6 @@ open scoped BigOperators Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
 namespace QuittingAbsorptionPath
-
-omit [Nonempty ι] in
-/-- Forcing one player to Continue moves that endpoint away from the tail by
-at most twice the reward bound times opponent absorption. -/
-theorem abs_quittingRootContinuePayoff_sub_tail_le_two_mul_opponentAbsorptionMass
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (player : ι) (bound : ℝ)
-    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
-    (htail : |tail player| ≤ bound) :
-    |quittingRootContinuePayoff reward tail root player - tail player| ≤
-      2 * bound * quittingRootOpponentAbsorptionMass root player := by
-  simpa only [quittingRootContinuePayoff, quittingRootSuccessorPayoff,
-    quittingRootOpponentAbsorptionMass] using
-      abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
-        reward tail (Function.update root player (PMF.pure false)) player bound
-        hreward htail
 
 omit [Nonempty ι] in
 /-- The path payoff immediately before every finite partition cut stays in
@@ -1604,4 +1589,3 @@ theorem hasPartitionPositiveSingletonReverseEntranceEstimate
 
 end QuittingAbsorptionPath
 end GameTheory
-

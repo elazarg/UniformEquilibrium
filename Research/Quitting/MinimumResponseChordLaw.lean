@@ -4,8 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawMinimumFiberAffine
-import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.PositiveMinimumDebtTangentFamily
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticMinimumResponseChord
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticBoundedSelfReset
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
@@ -227,79 +226,7 @@ theorem quittingStageCoalitionMass_le_update_pureTime_routed
     (MarkedAbsorptionCylinder.quittingRootCoalitionMass_nonneg _ _)
     (quittingLiveMass_nonneg reward _ _)
 
-/-! ## Executable one-player response chords -/
-
-/-- Mix only `observer`'s complete stopping laws between two actual profiles. -/
-def quittingResponseChordProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (endpoint response : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (theta : ℝ) (htheta0 : 0 ≤ theta) (htheta1 : theta ≤ 1) :
-    (quittingGame reward).BehaviorProfile :=
-  Function.update endpoint observer
-    (quittingStoppingLawMixtureBehaviorStrategy reward observer
-      (endpoint observer) (response observer) theta htheta0 htheta1)
-
-/-- If the response changes only `observer`, the response endpoint is exactly
-the full endpoint of the stopping-law chord. -/
-theorem update_endpoint_with_response_observer_eq_response
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (endpoint response : (quittingGame reward).BehaviorProfile)
-    (observer : ι)
-    (hopponents : ∀ other, other ≠ observer →
-      response other = endpoint other) :
-    Function.update endpoint observer (response observer) = response := by
-  funext other
-  by_cases hother : other = observer
-  · subst other
-    simp
-  · rw [Function.update_of_ne hother]
-    exact (hopponents other hother).symm
-
-/-- The complete terminal law of the executable response chord is exactly
-the affine chord of the two endpoint laws. -/
-theorem quittingTerminalOutcomeMass_responseChord_eq
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (endpoint response : (quittingGame reward).BehaviorProfile)
-    (observer : ι) (theta : ℝ) (htheta0 : 0 ≤ theta) (htheta1 : theta ≤ 1)
-    (hopponents : ∀ other, other ≠ observer →
-      response other = endpoint other) (outcome : QuittingTerminalOutcome ι) :
-    quittingTerminalOutcomeMass reward
-        (quittingResponseChordProfile reward endpoint response observer theta
-          htheta0 htheta1) outcome =
-      (1 - theta) * quittingTerminalOutcomeMass reward endpoint outcome +
-        theta * quittingTerminalOutcomeMass reward response outcome := by
-  have haffine := quittingTerminalOutcomeMass_stoppingLawMixture_eq
-    reward endpoint observer (endpoint observer) (response observer)
-      theta htheta0 htheta1 outcome
-  rw [Function.update_eq_self,
-    update_endpoint_with_response_observer_eq_response reward endpoint response
-      observer hopponents] at haffine
-  exact haffine
-
-/-- Every debt coordinate of an executable response chord lies below the
-corresponding endpoint chord. -/
-theorem quittingTerminalSemanticDebt_responseChord_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (endpoint response : (quittingGame reward).BehaviorProfile)
-    (observer who : ι) (theta : ℝ)
-    (htheta0 : 0 ≤ theta) (htheta1 : theta ≤ 1)
-    (hopponents : ∀ other, other ≠ observer →
-      response other = endpoint other) :
-    quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPair reward
-          (quittingResponseChordProfile reward endpoint response observer theta
-            htheta0 htheta1)) who ≤
-      (1 - theta) * quittingTerminalSemanticDebt
-          (quittingTerminalSemanticPair reward endpoint) who +
-        theta * quittingTerminalSemanticDebt
-          (quittingTerminalSemanticPair reward response) who := by
-  have hconvex := quittingTerminalSemanticDebt_stoppingLawMixture_le
-    reward endpoint observer who (endpoint observer) (response observer)
-      theta htheta0 htheta1
-  rw [Function.update_eq_self,
-    update_endpoint_with_response_observer_eq_response reward endpoint response
-      observer hopponents] at hconvex
-  exact hconvex
+/-! ## Response-chord payoff calculations -/
 
 /-- Every prescribed payoff coordinate is exactly affine along the executable
 response chord. -/
@@ -457,35 +384,6 @@ theorem quittingResponseChord_moverGain_ge_half
 
 /-! ## Minimum joint-law chord geometry -/
 
-/-- Abstract joint-law geometry supplied by a cluster of executable response
-chords.  The only analytic input retained here is the coordinatewise convex
-upper bound; all equality and support conclusions are derived from minimum
-total debt. -/
-structure QuittingMinimumResponseChordLaw
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) where
-  endpoint : QuittingTerminalSemanticLawPoint ι
-  response : QuittingTerminalSemanticLawPoint ι
-  chord : QuittingTerminalSemanticLawPoint ι
-  theta : ℝ
-  theta_pos : 0 < theta
-  theta_lt_one : theta < 1
-  endpoint_mem : endpoint ∈ quittingTerminalSemanticLawCarrier reward
-  response_mem : response ∈ quittingTerminalSemanticLawCarrier reward
-  chord_mem : chord ∈ quittingTerminalSemanticLawCarrier reward
-  endpoint_minimum : ∀ candidate ∈ quittingTerminalSemanticCarrier reward,
-    quittingTerminalSemanticDebtSum endpoint.1 ≤
-      quittingTerminalSemanticDebtSum candidate
-  response_debtSum_eq_endpoint :
-    quittingTerminalSemanticDebtSum response.1 =
-      quittingTerminalSemanticDebtSum endpoint.1
-  chord_debt_le_affine : ∀ who,
-    quittingTerminalSemanticDebt chord.1 who ≤
-      (1 - theta) * quittingTerminalSemanticDebt endpoint.1 who +
-        theta * quittingTerminalSemanticDebt response.1 who
-  chord_law_eq_affine : ∀ outcome,
-    chord.2 outcome = (1 - theta) * endpoint.2 outcome +
-      theta * response.2 outcome
-
 /-- The endpoint has maximum positive-debt-support cardinality among actual
 minimum joint-law points carrying at least one positive finite atom.  This is
 an explicit property of the displayed endpoint, not of an incoming source. -/
@@ -504,137 +402,6 @@ def IsMaximumSupportMinimumAtomEndpoint
 namespace QuittingMinimumResponseChordLaw
 
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-- The chord remains on the same global minimum total-debt fibre. -/
-theorem chord_debtSum_eq_endpoint
-    (law : QuittingMinimumResponseChordLaw reward) :
-    quittingTerminalSemanticDebtSum law.chord.1 =
-      quittingTerminalSemanticDebtSum law.endpoint.1 := by
-  have hchordCarrier :=
-    terminalSemanticLawCarrier_fst_mem_carrier law.chord law.chord_mem
-  have hlower := law.endpoint_minimum law.chord.1 hchordCarrier
-  have hupper : quittingTerminalSemanticDebtSum law.chord.1 ≤
-      (1 - law.theta) *
-          quittingTerminalSemanticDebtSum law.endpoint.1 +
-        law.theta * quittingTerminalSemanticDebtSum law.response.1 := by
-    unfold quittingTerminalSemanticDebtSum
-    calc
-      ∑ who, quittingTerminalSemanticDebt law.chord.1 who ≤
-          ∑ who, ((1 - law.theta) *
-              quittingTerminalSemanticDebt law.endpoint.1 who +
-            law.theta * quittingTerminalSemanticDebt law.response.1 who) :=
-        Finset.sum_le_sum fun who _ => law.chord_debt_le_affine who
-      _ = (1 - law.theta) *
-            ∑ who, quittingTerminalSemanticDebt law.endpoint.1 who +
-          law.theta *
-            ∑ who, quittingTerminalSemanticDebt law.response.1 who := by
-        rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum]
-  rw [law.response_debtSum_eq_endpoint] at hupper
-  nlinarith
-
-/-- Every debt coordinate is exactly affine on a proper minimum chord. -/
-theorem chord_debt_eq_affine
-    (law : QuittingMinimumResponseChordLaw reward) (who : ι) :
-    quittingTerminalSemanticDebt law.chord.1 who =
-      (1 - law.theta) * quittingTerminalSemanticDebt law.endpoint.1 who +
-        law.theta * quittingTerminalSemanticDebt law.response.1 who := by
-  let gap : ι → ℝ := fun player =>
-    (1 - law.theta) * quittingTerminalSemanticDebt law.endpoint.1 player +
-      law.theta * quittingTerminalSemanticDebt law.response.1 player -
-        quittingTerminalSemanticDebt law.chord.1 player
-  have hgapNonneg : ∀ player, 0 ≤ gap player := fun player =>
-    sub_nonneg.mpr (law.chord_debt_le_affine player)
-  have hgapSum : (∑ player, gap player) = 0 := by
-    dsimp only [gap]
-    rw [Finset.sum_sub_distrib, Finset.sum_add_distrib,
-      ← Finset.mul_sum, ← Finset.mul_sum]
-    change (1 - law.theta) *
-          quittingTerminalSemanticDebtSum law.endpoint.1 +
-        law.theta * quittingTerminalSemanticDebtSum law.response.1 -
-          quittingTerminalSemanticDebtSum law.chord.1 = 0
-    rw [law.response_debtSum_eq_endpoint, law.chord_debtSum_eq_endpoint]
-    ring
-  have hrest : 0 ≤ ∑ player ∈ Finset.univ.erase who, gap player :=
-    Finset.sum_nonneg fun player _ => hgapNonneg player
-  have hsplit := Finset.sum_erase_add Finset.univ gap (Finset.mem_univ who)
-  rw [hgapSum] at hsplit
-  have hzero : gap who = 0 := by linarith [hgapNonneg who, hrest]
-  dsimp only [gap] at hzero
-  linarith
-
-/-- Positive debt support on a proper minimum chord is exactly the union of
-the endpoint supports. -/
-theorem chord_support_eq_union
-    (law : QuittingMinimumResponseChordLaw reward) :
-    quittingPositiveDebtSupport law.chord.1 =
-      quittingPositiveDebtSupport law.endpoint.1 ∪
-        quittingPositiveDebtSupport law.response.1 := by
-  ext who
-  simp only [quittingPositiveDebtSupport, Finset.mem_filter,
-    Finset.mem_univ, true_and, Finset.mem_union]
-  rw [law.chord_debt_eq_affine who]
-  have hendpointCarrier := terminalSemanticLawCarrier_fst_mem_carrier
-    law.endpoint law.endpoint_mem
-  have hresponseCarrier := terminalSemanticLawCarrier_fst_mem_carrier
-    law.response law.response_mem
-  have hendpointNonneg := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-    reward hendpointCarrier who
-  have hresponseNonneg := quittingTerminalSemanticDebt_nonneg_of_mem_carrier
-    reward hresponseCarrier who
-  have honeMinusPos : 0 < 1 - law.theta := sub_pos.mpr law.theta_lt_one
-  constructor
-  · intro hpositive
-    by_contra hnone
-    push Not at hnone
-    rcases hnone with ⟨hendpointNot, hresponseNot⟩
-    nlinarith
-  · rintro (hendpointPositive | hresponsePositive)
-    · exact add_pos_of_pos_of_nonneg
-        (mul_pos honeMinusPos hendpointPositive)
-        (mul_nonneg law.theta_pos.le hresponseNonneg)
-    · exact add_pos_of_nonneg_of_pos
-        (mul_nonneg honeMinusPos.le hendpointNonneg)
-        (mul_pos law.theta_pos hresponsePositive)
-
-/-- A response-law atom of mass `lambda` survives in the proper chord with
-mass at least `theta * lambda`. -/
-theorem theta_mul_le_chord_terminalMass
-    (law : QuittingMinimumResponseChordLaw reward)
-    (terminal : {S : Finset ι // S.Nonempty}) (lambda : ℝ)
-    (hlambda : lambda ≤ law.response.2 (some terminal)) :
-    law.theta * lambda ≤ law.chord.2 (some terminal) := by
-  rw [law.chord_law_eq_affine]
-  have hendpointSimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
-    law.endpoint law.endpoint_mem
-  have hendpointNonneg := hendpointSimplex.1 (some terminal)
-  have hweightNonneg : 0 ≤ 1 - law.theta := sub_nonneg.mpr law.theta_lt_one.le
-  nlinarith [mul_nonneg hweightNonneg hendpointNonneg,
-    mul_le_mul_of_nonneg_left hlambda law.theta_pos.le]
-
-/-- If the response endpoint kills a debt coordinate which is positive at
-the other endpoint, its support is strictly smaller than the chord support. -/
-theorem response_support_ssubset_chord_of_killed
-    (law : QuittingMinimumResponseChordLaw reward) (who : ι)
-    (hendpoint : 0 < quittingTerminalSemanticDebt law.endpoint.1 who)
-    (hresponse : quittingTerminalSemanticDebt law.response.1 who = 0) :
-    quittingPositiveDebtSupport law.response.1 ⊂
-      quittingPositiveDebtSupport law.chord.1 := by
-  apply Finset.ssubset_iff_subset_ne.mpr
-  constructor
-  · rw [law.chord_support_eq_union]
-    exact Finset.subset_union_right
-  · intro heq
-    have hchordMem : who ∈ quittingPositiveDebtSupport law.chord.1 := by
-      rw [law.chord_support_eq_union]
-      exact Finset.mem_union_left _
-        ((mem_quittingPositiveDebtSupport_iff law.endpoint.1 who).2 hendpoint)
-    have hresponseMem : who ∈ quittingPositiveDebtSupport law.response.1 := by
-      rw [heq]
-      exact hchordMem
-    have hpositive :=
-      (mem_quittingPositiveDebtSupport_iff law.response.1 who).1 hresponseMem
-    rw [hresponse] at hpositive
-    exact (lt_irrefl 0) hpositive
 
 /-- Orientation back to the other endpoint requires actual maximality of that
 endpoint in the positive-atom minimum class.  Without this hypothesis the

@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open Filter Math.Probability
 open Math.SurvivalWeightedObstruction
 open scoped Topology
 
@@ -219,5 +219,38 @@ theorem quittingLiteralTerminalDebtAggregateBlock_survival_eq
         quittingRootOpponentContinueMass root who *
           quittingLiteralRootStackOpponentSurvival roots who
       rw [ih]
+
+/-- Full joint survival through a finite root word is bounded by every
+player-deleted survival through that word. -/
+theorem quittingLiteralRootStackJointSurvival_le_opponentSurvival
+    (roots : List (ι → PMF Bool)) (who : ι) :
+    quittingLiteralRootStackJointSurvival roots ≤
+      quittingLiteralRootStackOpponentSurvival roots who := by
+  rw [quittingLiteralRootStackJointSurvival_eq_opponent_mul_own roots who]
+  calc
+    quittingLiteralRootStackOpponentSurvival roots who *
+        quittingLiteralRootStackOwnSurvival roots who ≤
+      quittingLiteralRootStackOpponentSurvival roots who * 1 :=
+        mul_le_mul_of_nonneg_left
+          (quittingLiteralRootStackOwnSurvival_le_one roots who)
+          (quittingLiteralRootStackOpponentSurvival_nonneg roots who)
+    _ = quittingLiteralRootStackOpponentSurvival roots who := mul_one _
+
+/-- Joint survival tending to one forces every fixed player-deleted survival
+factor to tend to one. -/
+theorem tendsto_quittingLiteralRootStackOpponentSurvival_one
+    (roots : ℕ → List (ι → PMF Bool)) (who : ι)
+    (hjoint : Tendsto
+      (fun rank ↦ quittingLiteralRootStackJointSurvival (roots rank))
+      atTop (nhds 1)) :
+    Tendsto (fun rank ↦
+      quittingLiteralRootStackOpponentSurvival (roots rank) who)
+      atTop (nhds 1) := by
+  apply tendsto_of_tendsto_of_tendsto_of_le_of_le hjoint tendsto_const_nhds
+  · exact fun rank ↦
+      quittingLiteralRootStackJointSurvival_le_opponentSurvival
+        (roots rank) who
+  · exact fun rank ↦
+      quittingLiteralRootStackOpponentSurvival_le_one (roots rank) who
 
 end GameTheory

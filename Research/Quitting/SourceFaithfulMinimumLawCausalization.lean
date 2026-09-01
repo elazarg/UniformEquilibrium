@@ -101,31 +101,6 @@ theorem quittingTerminalPayoff_shiftedBehavioralResponse_sub_ge_mul
   exact mul_le_mul_of_nonneg_left hbound
     (quittingLiteralRootStackOpponentSurvival_nonneg roots who)
 
-/-- Joint survival is bounded by every player-deleted survival factor. -/
-theorem quittingLiteralRootStackJointSurvival_le_opponentSurvival
-    (roots : List (ι → PMF Bool)) (who : ι) :
-    quittingLiteralRootStackJointSurvival roots ≤
-      quittingLiteralRootStackOpponentSurvival roots who := by
-  rw [← quittingLiteralRootStackJointSurvival_forceContinue]
-  exact quittingLiteralRootStackJointSurvival_le_forceContinue roots who
-
-/-- When the joint survival of a sequence of words tends to one, every fixed
-player-deleted survival tends to one as well. -/
-theorem tendsto_quittingLiteralRootStackOpponentSurvival_one
-    (roots : ℕ → List (ι → PMF Bool)) (who : ι)
-    (hjoint : Tendsto
-      (fun rank ↦ quittingLiteralRootStackJointSurvival (roots rank))
-      atTop (nhds 1)) :
-    Tendsto (fun rank ↦
-      quittingLiteralRootStackOpponentSurvival (roots rank) who)
-      atTop (nhds 1) := by
-  apply tendsto_of_tendsto_of_tendsto_of_le_of_le hjoint tendsto_const_nhds
-  · exact fun rank ↦
-      quittingLiteralRootStackJointSurvival_le_opponentSurvival
-        (roots rank) who
-  · exact fun rank ↦
-      quittingLiteralRootStackOpponentSurvival_le_one (roots rank) who
-
 /-! ## One supplied causal chronology -/
 
 /-- A minimum-law chronology built over the literal supplied profiles and

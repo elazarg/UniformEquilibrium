@@ -1370,6 +1370,39 @@ no `C`: no common observer is selected, no paid cycle is oriented, and no
 spectator-leakage, renewal, terminal-approximation, or uniform-equilibrium
 consumer is proved.
 
+The common-prefix unrestricted-cap transport is now integrated in
+`UniformEquilibrium/Quitting/Root/CommonPrefixCapStability.lean`.
+`abs_quittingContinuationBestResponseValue_literalRootStack_sub_max_le`
+controls the complete behavioral cap behind a nonempty finite word by the
+larger of singleton cash-out and the suffix cap, with error `2 * M` times the
+lost opponent-deleted survival.  The joint-survival limit wrapper transports
+convergent suffix caps whenever the limiting suffix cap strictly dominates
+singleton cash-out.  This is source-independent `M`/`L` only: it supplies no
+prefix source, Nash condition, minimum, chronology, renewal, or consumer.
+
+The source-independent chord geometry is now integrated in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticMinimumResponseChord.lean`.
+`QuittingMinimumResponseChordLaw.ofProfiles` starts from literal endpoint and
+one-player response profiles and their compact joint-law limits.  At equal
+global-minimum total debt, `chord_debt_eq_affine`,
+`chord_debtSum_eq_endpoint`, and `chord_support_eq_union` make every debt
+coordinate, total debt, and positive-debt support exact.  Killing one positive
+endpoint coordinate makes the response support a strict subset of the chord
+support; in Fin4 it is nonempty of cardinality at most three.  This generic
+layer has `M` and `L`, but no source `A` or consumer `C`.
+
+Independently, the supplied Fin4 tangent/full-replacement endpoint has a
+quantitative paid-row compiler in
+`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FullReplacementQuantitativePaidPort.lean`.
+`QuittingPositiveMinimumDebtTangentFamily.nonempty_finFourFullReplacementQuantitativePaidPort`
+selects one fixed nonmover with limit debt at least `D_*/3`, eventual debt at
+least `D_*/4`, paid gain `D_*/16`, and the literal `4M`, `8M`, and `32M²`
+reach inequalities.  The direct positive-minimum wrapper supplies the compact
+minimum, tangent family, mover, and full-replacement cluster, so this leaf has
+`M`, `L`, and branch-local `A`.  The replacement is horizontal rather than
+chronological; the varying paid rows have no downstream `C`, regeneration,
+renewal, or uniform-equilibrium consequence.
+
 A separate conditional response-chord compiler starts from a supplied
 `FinFourMinimumResponseRectanglePacket`.  In
 `Research/Quitting/MinimumResponseChordLaw.lean`,

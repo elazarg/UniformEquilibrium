@@ -54,7 +54,9 @@ structure QuittingOffMinimumActualReachPaidPort
         quittingSurvivalPrefix
           (quittingProfileLiveRoot reward target) row.start
 
-private theorem offMinimumAncestry_exists_actualReachPaidPort
+/-- One literal off-minimum unilateral-replacement descendant carries the
+fixed debt, paid-gain, source-support, and actual-reach passport. -/
+theorem replacementAncestry_exists_offMinimumActualReachPaidPort
     [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (original : ℕ → (quittingGame reward).BehaviorProfile)
@@ -66,9 +68,9 @@ private theorem offMinimumAncestry_exists_actualReachPaidPort
       (original sourceIndex) target)
     (hoff : minimumDebt < quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward target)) :
-    Nonempty
-      (QuittingOffMinimumActualReachPaidPort
-        reward original minimumDebt M) := by
+    ∃ port : QuittingOffMinimumActualReachPaidPort
+        reward original minimumDebt M,
+      port.sourceIndex = sourceIndex ∧ port.target = target := by
   let pair := quittingTerminalSemanticPair reward target
   have htargetPositive : 0 < quittingTerminalSemanticDebtSum pair :=
     hminimumPositive.trans (by simpa only [pair] using hoff)
@@ -98,7 +100,7 @@ private theorem offMinimumAncestry_exists_actualReachPaidPort
     rw [div_div]
     congr 1
     ring
-  exact ⟨{
+  refine ⟨{
     sourceIndex := sourceIndex
     target := target
     ancestry := hancestry
@@ -112,7 +114,7 @@ private theorem offMinimumAncestry_exists_actualReachPaidPort
     sourceSupport := hsupport
     ownSurvivalFloor := hown
     opponentLiveFloor := hlive
-    jointReachFloor := hjoint }⟩
+    jointReachFloor := hjoint }, rfl, rfl⟩
 
 /-- A supplied actual sequence realizing a positive global debt minimum has a
 literal off-minimum descendant with the fixed debt, paid-gain, and actual
@@ -159,12 +161,16 @@ theorem minimumRealizingSequence_exists_offMinimumActualReachPaidPort
       hancestry.trans
         (isQuittingBehaviorReplacementAncestry_pureTimeProfileBehavior
           hpureAncestry)
-    exact offMinimumAncestry_exists_actualReachPaidPort reward profiles
+    obtain ⟨port, _, _⟩ :=
+      replacementAncestry_exists_offMinimumActualReachPaidPort reward profiles
       (quittingTerminalSemanticDebtSum minimum) M hpositive hreward
       sourceIndex target hbehaviorAncestry (by simpa only [target] using hoff)
-  · exact offMinimumAncestry_exists_actualReachPaidPort reward profiles
+    exact ⟨port⟩
+  · obtain ⟨port, _, _⟩ :=
+      replacementAncestry_exists_offMinimumActualReachPaidPort reward profiles
       (quittingTerminalSemanticDebtSum minimum) M hpositive hreward
       sourceIndex target hancestry hoff
+    exact ⟨port⟩
 
 /-- Direct actual-source adapter: compactness supplies a global minimizer and
 an exact realizing sequence; positivity of that selected minimum is the only

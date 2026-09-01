@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveDebtSupport
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawVanishingRegretTangentExtraction
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ExhaustiveTangentAlternative
 
@@ -56,10 +57,6 @@ open Filter Set Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- The positive-debt coordinates of a terminal semantic pair. -/
-def quittingPositiveDebtSupport (base : QuittingTerminalSemanticPair ι) : Finset ι :=
-  Finset.univ.filter fun who ↦ 0 < quittingTerminalSemanticDebt base who
 
 /-- A common-scale family of literal normalized replacement chords based at a
 positive global minimum of terminal semantic debt.  `source` is already the
@@ -207,14 +204,6 @@ theorem QuittingPositiveMinimumDebtTangentFamily.tangent_diagonal
   have hpositive : 0 < quittingTerminalSemanticDebt family.base mover.1 := by
     exact (Finset.mem_filter.1 mover.2).2
   linarith
-
-omit [DecidableEq ι] in
-/-- Membership in the derived support is exactly strict positivity of debt. -/
-theorem mem_quittingPositiveDebtSupport_iff
-    (base : QuittingTerminalSemanticPair ι) (who : ι) :
-    who ∈ quittingPositiveDebtSupport base ↔
-      0 < quittingTerminalSemanticDebt base who := by
-  simp [quittingPositiveDebtSupport]
 
 /-- The family base is intrinsically a positive global minimum. -/
 theorem QuittingPositiveMinimumDebtTangentFamily.hasPositiveMinimumTerminalSemanticDebt
