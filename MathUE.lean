@@ -344,6 +344,7 @@ import MathUE.Probability.SquareRootCoalitionClock
 import MathUE.Probability.StationaryCommunicatingClass
 import MathUE.Probability.StationaryNonnegativeDrift
 import MathUE.Probability.StitchedMartingale
+import MathUE.Probability.StoppingLawCapBandRedistribution
 import MathUE.Probability.StoppingLawReconstruction
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount

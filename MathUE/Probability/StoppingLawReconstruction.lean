@@ -204,5 +204,38 @@ theorem toScalarHazard_toBoolean_quit_tendsto_zero_of_none_pos
   | none => simp [toScalarHazard_neverMass]
   | some time => simp [toScalarHazard_stopMass, finiteMass]
 
+/-- A scalar hazard's complete stopping law has exactly the hazard's finite
+survival prefixes. -/
+@[simp] theorem survival_stoppingLaw
+    (hazard : ScalarHazard) (time : ℕ) :
+    survival hazard.stoppingLaw time = hazard.survival 0 time := by
+  unfold survival finiteMass
+  simp_rw [ScalarHazard.stoppingLaw_some_toReal]
+  rw [ScalarHazard.sum_stopMass]
+  ring
+
+/-- Reconstructing a scalar hazard from its complete stopping law recovers
+the original stop probability wherever incoming survival is positive. -/
+theorem toScalarHazard_stoppingLaw_stop_eq_of_survival_pos
+    (hazard : ScalarHazard) (time : ℕ)
+    (hsurvival : 0 < hazard.survival 0 time) :
+    (toScalarHazard hazard.stoppingLaw).stop time = hazard.stop time := by
+  have hmassEq : finiteMass hazard.stoppingLaw time = hazard.stopMass time :=
+    ScalarHazard.stoppingLaw_some_toReal hazard time
+  rw [show (toScalarHazard hazard.stoppingLaw).stop time =
+      finiteMass hazard.stoppingLaw time / survival hazard.stoppingLaw time by
+    simp [toScalarHazard, ne_of_gt hsurvival]]
+  rw [hmassEq, survival_stoppingLaw]
+  unfold ScalarHazard.stopMass
+  field_simp
+
+/-- The surviving mass of a complete stopping law decreases with the cut. -/
+theorem survival_antitone (law : PMF (Option ℕ)) :
+    Antitone (survival law) := by
+  apply antitone_nat_of_succ_le
+  intro time
+  rw [survival_succ]
+  exact sub_le_self _ (finiteMass_nonneg law time)
+
 end StoppingLaw
 end Math.Probability.DiscreteHazard

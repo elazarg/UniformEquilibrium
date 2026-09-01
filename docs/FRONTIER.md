@@ -560,6 +560,25 @@ zero. It does not realize the carrier minimum by a profile. The remaining
 downstream step is exactly to consume or regenerate the quantitative descent,
 or to consume the literal inert stall.
 
+Complete stopping-law cap-band redistribution is now a checked local source
+adapter. `stoppingLawSourceCapDebt_le_epsilon_add_two_mul_badMass`
+(`MathUE/Probability/StoppingLawCapBandRedistribution.lean`) bounds cap debt by
+the band width plus twice the reward bound times the complete source-law mass
+outside that band; its pushforward preserves every survival prefix through the
+selected cut, without finite-support or finite-clock assumptions. At a supplied
+actual profile and mover whose debt exceeds a positive band width,
+`exists_quittingCapBandFiniteCut`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/CapBandRedistribution.lean`)
+selects a source-supported finite cut and reconstructs a literal unilateral
+behavioral target. The target preserves the mover's unrestricted behavioral
+cap, has debt at most the band width, gains at least source debt minus that
+width, and retains exact debt subtraction and the `2 * M` joint-reach bound.
+The generic compiler and game adapter have `M` and `L`; the latter is a local
+actual-profile `A` after its profile and positive-debt hypothesis are supplied.
+There is no source producer and no downstream `C`: these declarations do not
+compactify, renew, prove Nash behavior, or produce a uniform-equilibrium
+payoff.
+
 The debt-ratio chamber now has a literal actual-source interface.
 `quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)

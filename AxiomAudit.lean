@@ -393,6 +393,7 @@ import MathUE.Probability.SquareRootCoalitionClock
 import MathUE.Probability.StationaryCommunicatingClass
 import MathUE.Probability.StationaryNonnegativeDrift
 import MathUE.Probability.StitchedMartingale
+import MathUE.Probability.StoppingLawCapBandRedistribution
 import MathUE.Probability.StoppingLawReconstruction
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
@@ -823,6 +824,7 @@ import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ArbitraryClockMinimum
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ContinuePrefixAccess
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackAccess
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.Atom.ExactPrefixStackCharge
+import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.CapBandRedistribution
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ContinuePrefixAtomAccess
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.DeadlineBoundedPureTimeCap
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.DebtSlopeAtomAlternative
