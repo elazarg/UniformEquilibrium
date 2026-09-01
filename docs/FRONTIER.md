@@ -652,6 +652,47 @@ It does not construct the moving family, identify the public paired chronology
 with a regenerated producer's internal chronology, consume the terminal exit,
 or prove Nash play, terminal approximation, or a uniform-equilibrium payoff.
 
+The reset-rigid positive-Never branch is now a literal supplied-data compiler.
+`FinFourEscapeProductRestart.MinimumRestart.sourceAtProduct`
+(`Research/Quitting/FinFourProducerAtlas/EscapeProductRestart.lean`) accepts
+the exact product minimum with the constant product suffix behind words of
+`n + 1` all-Continue exact cap--Nash roots.  The singleton cap bound is derived
+inside this equality arm from global minimum semantics; it is not assumed of
+the supplied product.  The internal `QuittingMinimumLawCausalSuffixAtom`
+retains the exact point, complete law, survival-one prefix, and shifted
+positive atom.  The fresh-clock compiler then makes two literal replacements
+with quarter-Never reach and gain floors.
+`finFourResetRigidEscape_productExit_or_singletonExit_or_supportContraction`
+(`Research/Quitting/FinFourProducerAtlas/ResetRigidEscapeSupportContraction.lean`)
+returns the product paid exit, singleton paid exit, or existing moving
+support-contraction output, and `FinFourResetRigidProducerTransition.rank_lt`
+(`Research/Quitting/FinFourProducerAtlas/ResetRigidProducerRank.lean`) proves
+the stated one-way phase/support rank.  This chain has `M` and `L`, no
+escape-origin source `A`, and branch-local `C` only through the attached paid
+and moving consumers.  It constructs neither the product ancestry nor a
+terminal atlas exit and yields no Nash-play, terminal-approximation, or
+uniform-equilibrium conclusion.
+
+The signed response-cycle compiler keeps its source requirements explicit.
+`nonempty_quittingFinFourSignedRetraction`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FinFourSignedRetraction.lean`)
+is the source-independent signed debt ledger, and
+`nonempty_quittingNearMinimumExactResponseChordCompactification`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticNearMinimumExactResponseChordCompactification.lean`)
+compactifies the literal finite chord profiles before deriving their minimum
+geometry.  Given a supplied positive minimum producer, its chronology,
+cofinal response cycles, and an explicitly selected asymptotic arm,
+`nonempty_finFourSelectedCycleContractionResult`
+(`Research/Quitting/FinFourProducerAtlas/FinFourSignedCycleContraction.lean`)
+returns either one fixed paid label on a strict cofinal subsequence or a
+same-residual strict-support minimum child.  The typed paid-row eliminators
+retain the exact mover thresholds `epsilon / 16` and `epsilon / 64`, or the
+fixed nonmover thresholds `epsilon / 48` and `epsilon / 192`, with their full
+reach bounds.  These results have `M` and `L`; the high Research theorem has
+conditional source `A` only at those supplied inputs.  It does not produce
+the cofinal cycles or selected branch, attach renewal or terminal `C`, or
+prove Nash play, terminal approximation, or a uniform-equilibrium payoff.
+
 The debt-ratio chamber now has a literal actual-source interface.
 `quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)

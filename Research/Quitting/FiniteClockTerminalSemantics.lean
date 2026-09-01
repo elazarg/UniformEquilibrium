@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedSemanticCarrier
+import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
@@ -31,30 +32,6 @@ open QuittingSureSetOwnerRepair
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- A complete stopping law supported on the first `clockBound` finite dates,
-with `none` retained as an additional exact atom. -/
-def IsFiniteClockStoppingLaw (clockBound : ℕ)
-    (law : PMF (Option ℕ)) : Prop :=
-  ∀ choice, law choice ≠ 0 →
-    choice = none ∨ ∃ time < clockBound, choice = some time
-
-/-- Literal profile reconstructed independently from one complete stopping law
-per player. -/
-def quittingStoppingLawProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (laws : ι → PMF (Option ℕ)) :
-    (quittingGame reward).BehaviorProfile :=
-  fun who => quittingStoppingLawBehaviorStrategy reward who (laws who)
-
-omit [DecidableEq ι] in
-@[simp] theorem quittingBehaviorStoppingLaw_stoppingLawProfile
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (laws : ι → PMF (Option ℕ)) (who : ι) :
-    quittingBehaviorStoppingLaw reward
-        (quittingStoppingLawProfile reward laws who) = laws who := by
-  exact quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
-    reward who (laws who)
 
 /-- Semantic pairs realized by independent finite-clock stopping laws.  Their
 second coordinate remains the literal supremum over all behavioral
@@ -509,33 +486,6 @@ theorem quittingFiniteClockSemanticFold_mem_reachable
       reward clockBound word who
   · rw [← quittingTerminalSemanticPair_eq_stoppingLawProfile reward profile,
       quittingTerminalSemanticPair_finiteClockWordProfile_eq_fold]
-
-omit [DecidableEq ι] in
-theorem quittingStoppingLawProfile_liveHazard_eq_allContinue_of_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (clockBound : ℕ) (laws : ι → PMF (Option ℕ))
-    (hlaws : ∀ who, IsFiniteClockStoppingLaw clockBound (laws who))
-    {time : ℕ} (htime : clockBound ≤ time) :
-    quittingProfileLiveRoot reward (quittingStoppingLawProfile reward laws) time =
-      quittingAllContinueRoot := by
-  funext who
-  have hfinite : Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
-      (laws who) time = 0 := by
-    unfold Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
-    have hzero : laws who (some time) = 0 := by
-      by_contra hne
-      rcases hlaws who (some time) hne with hnever | ⟨other, hother, heq⟩
-      · cases hnever
-      · simp only [Option.some.injEq] at heq
-        subst other
-        omega
-    rw [hzero]
-    rfl
-  change (Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
-    (laws who)).toBoolean time = PMF.pure false
-  apply eq_pure_false_of_true_toReal_eq_zero
-  simp [Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
-    Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard, hfinite]
 
 theorem quittingFiniteClockSemanticReachable_subset_range_fold
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
