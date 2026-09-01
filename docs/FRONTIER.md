@@ -579,6 +579,42 @@ There is no source producer and no downstream `C`: these declarations do not
 compactify, renew, prove Nash behavior, or produce a uniform-equilibrium
 payoff.
 
+The Research atlas now compiles that local adapter through the supplied
+full-debt branch.  Starting from a positive global-minimum
+`FinFourMinimumAtomProducer` whose four debt coordinates are positive,
+`nonempty_finFourFullDebtCapBandTargetDispatch`
+(`Research/Quitting/FinFourProducerAtlas/FinFourFullDebtCapBandTargetDispatch.lean`)
+compactifies the cap-band targets and returns exactly one of two branches.  A
+strict target yields a literal actual-reach paid port.  A target on the same
+minimum fibre yields an actual fixed-weight stopping-law chord whose target
+positive-debt support is nonempty and has cardinality at most three.  No
+finite target or chord profile is asserted to be a minimum.
+
+In the minimum branch,
+`nonempty_finFourFullDebtCommonPrefixResponse`
+(`Research/Quitting/FinFourProducerAtlas/FinFourFullDebtCommonPrefixResponse.lean`)
+places the source, chord, and target tails behind common exact cap--Nash root
+words and proves convergence of their complete unrestricted behavioral caps,
+prescribed payoffs, and terminal laws.  The paired chronology compiler then
+regenerates a producer at the exact target law point with the incoming hard
+residual while retaining the literal chord-to-target update as a separate
+one-use origin edge.  The selected public paired chronology is not identified
+with the regenerated producer's internal chronology.
+
+`nonempty_finFourFullDebtSupportContractedRenewal`
+(`Research/Quitting/FinFourProducerAtlas/FinFourFullDebtSupportContractedRenewal.lean`)
+starts the neutral renewable trace at that regenerated target and bounds it by
+at most two further strict-support descents.  Independently, the strict branch
+attaches the existing paid-cap exact trichotomy.  The direct classifier
+entrance `finFour_noUniformPayoff_exists_fullDebtTargetDispatch_or_resetRigid`
+supplies a same-point producer only in the full-debt arm; its independently
+selected residual is not identified with the classifier's internal residual,
+and the reset-rigid arm is returned unchanged.  This Research chain has `M`
+and `L`, conditional source `A` at that entrance, and branch-local `C` through
+the paid-cap or support-contracted-renewal consumers.  It does not consume the
+resulting structural terminal exit, prove Nash play or terminal
+approximation, or yield a uniform-equilibrium payoff.
+
 The debt-ratio chamber now has a literal actual-source interface.
 `quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)
@@ -2174,7 +2210,7 @@ with the same hard residual, and attached to a tangent family whose
 positive-debt support is a strict subset of its parent's support.
 
 `FinFourRenewableMinimumSourceNode.terminalExit_or_nonempty_supportDescent`
-(`Research/Quitting/FinFourProducerAtlas/CanonicalPairRenewableSourceRank.lean`)
+(`Research/Quitting/FinFourProducerAtlas/RenewableSourceTrace.lean`)
 is the exhaustive one-step dispatch.  Only its minimum-fibre output is
 recursive; positive total slope, flat support entry, and an off-minimum paid
 first-disagreement endpoint are explicit residual exits.
