@@ -147,6 +147,8 @@ import MathUE.LinearAlgebra.CyclicSchur
 import MathUE.LinearAlgebra.ExactBlockElimination
 import MathUE.LinearAlgebra.ExactBlockEliminationConfluence
 import MathUE.LinearAlgebra.Farkas
+import MathUE.LinearAlgebra.FiniteConePositiveAlternative
+import MathUE.LinearAlgebra.FiniteConicSparseCombination
 import MathUE.LinearAlgebra.FiniteConvexStrictSeparation
 import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import MathUE.LinearAlgebra.FiniteRayMaximum

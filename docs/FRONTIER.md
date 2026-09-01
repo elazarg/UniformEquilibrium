@@ -839,6 +839,38 @@ an arbitrary supplied minimizer, and the positive-social escape arm still has
 no `C`. None of these results proves properness or tightness, a Fin4
 specialization, terminal Nash play, or a uniform-equilibrium payoff.
 
+The complementary nonnegative-weight chamber is now literal. At an ordinary
+positive global carrier minimum,
+`minimumTerminalSemantic_nonnegativeWeight_chamber`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonnegativeWeightChamber.lean`)
+turns the singleton margins into a sharp lower bound for every nonnegative
+player weight; two positive coordinates make the coefficient of the minimum
+debt strictly positive. An incompatible weighted terminal-outcome upper bound
+forces zero minimum debt, and
+`exists_uniformEquilibriumPayoff_of_nonnegativeWeightChamber` then invokes the
+checked unrestricted-behavior consumer. On the positive-minimum side,
+`minimumTerminalSemantic_exists_jointLawLiftFiniteAtom_weightedSurplus_and_mass_ge`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticNonnegativeWeightLawCertificate.lean`)
+selects an actual joint-law lift and one finite atom whose weighted surplus and
+mass obey the general `c D / (R T K)` floor; the Fin4 symmetric-bound
+specializations give `D / (16R)` and hence `D / (32R)`.
+
+The finite-dimensional boundary is also checked. The generic cone alternative
+in `MathUE/LinearAlgebra/FiniteConePositiveAlternative.lean` returns either a
+strict positive supported costate or a nonnegative probability improvement
+with support bounded by the player support cardinality.
+`nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticLawSparseSourceImprovement.lean`)
+applies this to an actual positive-minimum joint law while retaining the source
+atom identities. Its masses are reweighted, so this is law provenance rather
+than behavioral realization. The Fin4 sharp regression has exactly four
+positive pair atoms and is unrealizable by any behavioral profile or one-date
+product root; the two-player regression separately shows that a sparse
+positive-social law need not be Nash. Thus the chamber and sparse-law layers
+have `M/L` and actual compact-minimum or joint-law `A`; only the zero-minimum
+chamber has a downstream `C`. No sparse-law behavioral, chronological, or
+uniform-equilibrium consumer is claimed.
+
 The scalar and compact minimum notions are now identified exactly.
 `quittingTerminalDebtSumInf_eq_terminalSemanticDebtSum_of_minimum`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalCapNashEndpointTransport.lean`)
