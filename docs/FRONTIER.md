@@ -1794,6 +1794,21 @@ after a horizontal endpoint change nor gives support descent, source
 regeneration, recursive return, terminal approximation, a uniform-equilibrium
 payoff, or a counterexample.
 
+The strict ray's stopping clocks now have a literal source-facing boundary in
+`FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_finFourMaximalPrefixRayClockEscape`
+(`Research/Quitting/FinFourProducerAtlas/MaximalPrefixRayClockEscape.lean`).
+Every fixed marginal finite head vanishes.  Each member of the retained pair
+has zero `Never` mass, late finite mass tending to one, general total
+variation tending to one from every fixed stopping law, and no cofinal
+general-total-variation convergent subsequence.  Its shifted pair atom has
+limiting mass `L / D_0`, bounded below by `D_* / D_0` and lying in `(0,1]`.
+The generic fixed-tail and reverse-prefix theorems have `M` and `L`.  This
+Fin4 declaration is a Research adapter conditional on the already supplied
+producer, forced-pair packet, and strict-stall branch: it adds no unconditional
+source `A` and has no downstream `C`.  It proves no convergence in a weaker
+topology, compactness failure for another strategy model, terminal
+approximation, or uniform-equilibrium conclusion.
+
 The strict arm now has a further actual source split in
 `FinFourOwnerCompressedMinimumReturnForcedPairPacket.eventualAllContinue_or_nonempty_strictRayForwardExactCapTail`
 (`Research/Quitting/FinFourProducerAtlas/StrictRayTailNormalizedCapFlow.lean`).
