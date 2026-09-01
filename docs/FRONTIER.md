@@ -615,6 +615,43 @@ the paid-cap or support-contracted-renewal consumers.  It does not consume the
 resulting structural terminal exit, prove Nash play or terminal
 approximation, or yield a uniform-equilibrium payoff.
 
+The actual premark boundary is also literal.  A supplied
+`QuittingActualReachedScreenedEndpointMark` records one complete behavioral
+profile, a marked mover endpoint, and a distinct surely quitting screening
+player.  Its literal one-date target preserves all other strategy data.
+`source_mover_debt_eq_markedToggleGain_add_premarkResidual` and
+`markedToggleGain_eq_liveMass_mul_localEndpointGap`
+(`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/ActualReachedPairPremarkResidual.lean`)
+give the exact complete-debt split.  Positive residual selects an actual
+source-supported paid row strictly before the mark, and a separately supplied
+attained positive global minimum attaches that row to the paid-cap trichotomy.
+The pure nonempty-host specialization gives the complete signed source-to-target
+terminal law and restricted premark response envelope.  The exact Fin4
+deleted-reach regression shows that vanishing marked joint reach does not by
+itself control a nonmover's complete behavioral cap.  This interface has `M`
+and `L`, no source `A`, and branch-local `C` only after the separate minimum is
+supplied.  It does not select the mark or minimum, establish chronology,
+regenerate a source, or prove Nash play or a uniform-equilibrium payoff.
+
+The moving marked-pair compiler begins from a supplied
+`FinFourMovingMarkedPairMinimumSource`.  Its pure host is only required to be
+nonempty: when the mover is routed to Continue, the distinct surely quitting
+screening player witnesses target nonemptiness.  No support-cardinality result
+is inferred from the host size.  The residual split first returns an
+off-minimum actual-reach paid port or a minimum-approaching family.  In the
+latter arm, one strict refinement compactifies the literal fixed-weight chords;
+their target support is nonempty and has cardinality at most three by the
+killed-coordinate minimum-fibre geometry.  Common exact cap--Nash prefixes
+retain the literal chord-to-target update and converge in prescribed payoff,
+unrestricted behavioral cap, debt, and complete terminal law.
+`nonempty_finFourMovingMarkedPairSupportDescentAlternative`
+(`Research/Quitting/FinFourProducerAtlas/MovingMarkedPairSupportDescentAlternative.lean`)
+then returns the paid-port arm or same-residual support-contracted renewal.
+This Research compiler has `M` and `L`, no source `A`, and branch-local `C`.
+It does not construct the moving family, identify the public paired chronology
+with a regenerated producer's internal chronology, consume the terminal exit,
+or prove Nash play, terminal approximation, or a uniform-equilibrium payoff.
+
 The debt-ratio chamber now has a literal actual-source interface.
 `quittingTerminalExploitabilityInf_sq_div_two_bound_le_debtSumInf_sub`
 (`UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/TerminalSemanticDebtRatioSeparation.lean`)
