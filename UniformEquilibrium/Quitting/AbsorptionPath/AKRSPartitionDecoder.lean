@@ -45,7 +45,7 @@ def partitionDecoderPayoffErrorCoefficient
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (resolution : ℕ) : ℝ :=
   Fintype.card {S : Finset ι // S.Nonempty} *
-    quittingRewardBound reward * agkrsSmallCellCoordinateConstant ι *
+    quittingRewardBound reward * akrsSmallCellCoordinateConstant ι *
       partitionSmallCellError resolution
 
 /-- One decoded row's absorbing payoff contribution differs from its source
@@ -75,13 +75,13 @@ theorem abs_partitionCellRoot_absorbingContribution_sub_pathCell_le
     rw [← partitionCellRoot_absorption_exact path hpathTotal
       hnoTerminalJump resolution hresolution hcollision stage]
     exact quittingRootAbsorptionMass_nonneg _
-  have hcoordinateConstant : 0 ≤ agkrsSmallCellCoordinateConstant ι := by
-    unfold agkrsSmallCellCoordinateConstant
+  have hcoordinateConstant : 0 ≤ akrsSmallCellCoordinateConstant ι := by
+    unfold akrsSmallCellCoordinateConstant
     exact_mod_cast Nat.zero_le (2 ^ Fintype.card ι)
   have herrorNonneg : 0 ≤ partitionSmallCellError resolution :=
     (partitionSmallCellError_pos resolution hresolution).le
   have hcoordinateUpperNonneg : 0 ≤
-      agkrsSmallCellCoordinateConstant ι *
+      akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError resolution * cellAbsorption :=
     mul_nonneg (mul_nonneg hcoordinateConstant herrorNonneg)
       habsorptionNonneg
@@ -113,7 +113,7 @@ theorem abs_partitionCellRoot_absorbingContribution_sub_pathCell_le
               (partitionCut path resolution (stage + 1)) terminal.1 *
                 reward terminal player) Finset.univ
     _ ≤ ∑ _terminal : {S : Finset ι // S.Nonempty},
-        (agkrsSmallCellCoordinateConstant ι *
+        (akrsSmallCellCoordinateConstant ι *
           partitionSmallCellError resolution * cellAbsorption) *
             quittingRewardBound reward := by
       apply Finset.sum_le_sum
@@ -166,7 +166,7 @@ theorem sum_range_partitionDecoderWeightedPayoffError_le
         (mul_nonneg (Nat.cast_nonneg _)
           (quittingRewardBound_nonneg reward))
         (by
-          unfold agkrsSmallCellCoordinateConstant
+          unfold akrsSmallCellCoordinateConstant
           exact_mod_cast Nat.zero_le (2 ^ Fintype.card ι)))
       (partitionSmallCellError_pos resolution hresolution).le
   have habsorption (stage : ℕ) :

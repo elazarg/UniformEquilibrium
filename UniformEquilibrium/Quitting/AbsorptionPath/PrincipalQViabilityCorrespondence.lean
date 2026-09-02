@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQBoundaryDirection
+import Mathlib.Topology.Semicontinuity.Hemicontinuity
 
 /-!
 # The principal-Q viability correspondence
@@ -136,6 +137,44 @@ private theorem counterexampleWeight_not_mem :
   have hresidual := hmem.2 false rfl
   norm_num [singletonLCPResidual, upperHemicontinuityCounterexampleWeight,
     upperHemicontinuityCounterexampleMatrix, dotProduct] at hresidual
+
+private theorem isClosed_principalQViabilityControls_at_zero
+    (M : Bool → Bool → ℝ) :
+    IsClosed (principalQViabilityControls M (0 : Bool → ℝ)) := by
+  rw [show principalQViabilityControls M (0 : Bool → ℝ) =
+      ⋂ i, {weight | 0 ≤ singletonLCPResidual M weight i} by
+    ext weight
+    simp [principalQViabilityControls]]
+  apply isClosed_iInter
+  intro i
+  exact isClosed_le continuous_const (by
+    unfold singletonLCPResidual wsum dotProduct
+    apply continuous_finsetSum
+    intro owner _
+    exact ((continuous_apply owner).comp continuous_subtype_val).mul continuous_const)
+
+/-- Even for a projective-Q-bar zero-diagonal matrix, the principal-Q
+viability correspondence need not be upper hemicontinuous. -/
+theorem principalQViabilityControls_not_upperHemicontinuous :
+    ∃ M : Bool → Bool → ℝ,
+      IsProjectiveQBarMatrix M ∧
+        (∀ player, M player player = 0) ∧
+        ¬ UpperHemicontinuous (principalQViabilityControls M) := by
+  refine ⟨upperHemicontinuityCounterexampleMatrix,
+    upperHemicontinuityCounterexampleMatrix_projectiveQBar,
+    ?_, ?_⟩
+  · intro player
+    cases player <;> simp [upperHemicontinuityCounterexampleMatrix]
+  · intro hupper
+    have hmem :=
+      (hupper.upperHemicontinuousAt
+        upperHemicontinuityCounterexampleLimit).mem_of_tendsto
+        (isClosed_principalQViabilityControls_at_zero
+          upperHemicontinuityCounterexampleMatrix)
+        counterexamplePoint_tendsto_limit
+        (Filter.Frequently.of_forall counterexampleWeight_mem)
+        tendsto_const_nhds
+    exact counterexampleWeight_not_mem hmem
 
 /-- The viability correspondence can fail the sequential closed-graph test
 even for a projective-Q-bar zero-diagonal matrix: the controls are admissible

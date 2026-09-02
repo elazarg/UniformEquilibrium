@@ -5,13 +5,13 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalGlobalCounterexample
-import UniformEquilibrium.Quitting.Classification.ExistenceBranches
+import UniformEquilibrium.Quitting.Classification.Existence.PerfectSequenceExtraction
 
 /-!
 # The unqualified error-exponent claim is false
 
 Ashkenazi-Golan, Krasikov, Rainer and Solan, *Absorption paths and equilibria
-in quitting games*, Mathematical Programming (2022), Theorem 3.5, state that
+in quitting games*, Mathematical Programming 203 (2024), Theorem 3.5, state that
 for every sufficiently small `ε > 0` an absorbing profile at which every player
 is sequentially `ε`-perfect is an `ε ^ (1 / 6)`-equilibrium.  The theorem the
 statement is attributed to, Solan and Vieille, *Quitting games*, Math. Oper.
@@ -20,7 +20,7 @@ disjunction instead: either the absorbing sequentially perfect profile is
 globally approximately optimal, or the game has a stationary approximate
 equilibrium.
 
-`QuittingSequentialPerfectionErrorExponent` states the 2022 form over the
+`QuittingSequentialPerfectionErrorExponent` states the journal form over the
 repository's quitting semantics, and
 `not_quittingSequentialPerfectionErrorExponent` proves its negation.  The
 witness is the two-player game of
@@ -30,9 +30,10 @@ packaged here as the constant root sequence
 exactly `0`-perfect against the sequence's own continuation vector, and the
 generated profile has terminal regret exactly one.
 
-`QuittingSequentialPerfectionStationaryAlternative` states the disjunctive
-2001 form.  It is an open proposition here: nothing in this development proves
-it.  The counterexample satisfies its stationary disjunct, by
+The faithful every-tail disjunction from 2001 is checked in
+`exists_quittingSubgamePerfectOrStationary_of_unitSoloExit_of_terminatingTails`.
+It assumes unit solo-exit payoffs and termination after every restart.  The
+counterexample satisfies its stationary disjunct, by
 `quittingStationaryεEquilibriumExistence_localGlobalCounterexampleReward`, so
 the disjunction is not refuted by the same witness.
 
@@ -125,6 +126,31 @@ theorem quittingRowεPerfect_localGlobalCounterexampleRoots
   refine ⟨by rw [hquit]; linarith, by rw [hcontinue]; linarith,
     fun _ => by rw [hquit]; linarith, fun _ => by rw [hcontinue]; linarith⟩
 
+/-- The local-to-global separation in one literal theorem: the displayed
+root sequence is completely absorbing and exactly row-perfect against all of
+its restarted tail values, while its generated profile has terminal regret
+exactly one and is not even a terminal zero-equilibrium. -/
+theorem localGlobalCounterexample_rowwiseZeroPerfect_but_terminalRegretOne :
+    IsCompletelyAbsorbing localGlobalCounterexampleRoots ∧
+      (∀ time : ℕ, QuittingRowεPerfect localGlobalCounterexampleReward
+        (quittingRootSequenceTailVector localGlobalCounterexampleReward
+          localGlobalCounterexampleRoots (time + 1))
+        (localGlobalCounterexampleRoots time) 0) ∧
+      quittingTerminalPayoff localGlobalCounterexampleReward
+          (Function.update localGlobalCounterexampleProfile false
+            (quittingAlwaysContinueStrategy
+              localGlobalCounterexampleReward false)) false -
+        quittingTerminalPayoff localGlobalCounterexampleReward
+          localGlobalCounterexampleProfile false = 1 ∧
+      ¬(quittingGame localGlobalCounterexampleReward).IsεAsymptoticNash
+        (quittingTerminalPayoff localGlobalCounterexampleReward) 0
+        localGlobalCounterexampleProfile := by
+  refine ⟨isCompletelyAbsorbing_localGlobalCounterexampleRoots, ?_,
+    localGlobalCounterexample_terminalRegret_eq_one,
+    not_isεAsymptoticNash_localGlobalCounterexampleProfile (by norm_num)⟩
+  intro time
+  exact quittingRowεPerfect_localGlobalCounterexampleRoots le_rfl time
+
 /-! ## The printed claim and its negation -/
 
 /-- **Theorem 3.5 as printed**, over the repository's quitting semantics: in
@@ -179,30 +205,38 @@ theorem not_quittingSequentialPerfectionErrorExponent :
   exact not_isεAsymptoticNash_localGlobalCounterexampleProfile
     (Real.rpow_lt_one hε0.le hε1 (by norm_num)) hnash
 
-/-! ## The disjunctive form that the 2022 restatement dropped -/
+/-! ## The faithful every-tail disjunction -/
 
-/-- **Proposition 2.4 of Solan and Vieille (2001), in its disjunctive form.**
-Either the absorbing sequentially `ε`-perfect plan is itself an
-`ε ^ (1 / 6)`-equilibrium, or the game has a stationary approximate
-equilibrium at every positive tolerance.
+/-- **Solan--Vieille Proposition 2.4, in production semantics.**  Under unit
+solo-exit payoffs, a sufficiently accurate root sequence that terminates after
+every restart and is row-perfect against its actual restarted tail values is
+either a terminal approximate equilibrium after every restart or yields a
+stationary approximate equilibrium.
 
-This is an open proposition: no proof of it is supplied in this development.
-Unlike `QuittingSequentialPerfectionErrorExponent` it is not refuted by
-`localGlobalCounterexampleRoots`, whose game satisfies the second disjunct by
-`quittingStationaryεEquilibriumExistence_localGlobalCounterexampleReward`. -/
-def QuittingSequentialPerfectionStationaryAlternative : Prop :=
-  ∀ (ι : Type) [Fintype ι] [DecidableEq ι]
-      (reward : {S : Finset ι // S.Nonempty} → Payoff ι),
+The every-tail hypothesis is strictly stronger than initial
+`IsCompletelyAbsorbing` after a sure-absorption row.  This theorem therefore
+does not supply the missing reverse implication for the literal S.3 branch of
+AKRS Theorem 3.4. -/
+theorem exists_quittingSubgamePerfectOrStationary_of_unitSoloExit_of_terminatingTails
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward) :
     ∃ bound : ℝ, 0 < bound ∧
-      ∀ ε : ℝ, 0 < ε → ε < bound →
-        ∀ roots : ℕ → ι → PMF Bool, IsCompletelyAbsorbing roots →
-          (∀ time : ℕ, QuittingRowεPerfect reward
-              (quittingRootSequenceTailVector reward roots (time + 1))
-              (roots time) ε) →
-            (quittingGame reward).IsεAsymptoticNash
-                (quittingTerminalPayoff reward) (ε ^ ((1 : ℝ) / 6))
-                (quittingRootSequenceProfile reward roots 0) ∨
-              QuittingStationaryεEquilibriumExistence reward
+      ∀ (roots : ℕ → ι → PMF Bool) (ε : ℝ),
+        0 < ε → ε < bound →
+        (∀ start, Tendsto (quittingJointSurvivalWeight roots start)
+          atTop (nhds 0)) →
+        (∀ time : ℕ, QuittingRowεPerfect reward
+          (quittingRootSequenceTailVector reward roots (time + 1))
+          (roots time) ε) →
+        (∀ start, (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) (ε ^ ((1 : ℝ) / 6))
+          (quittingRootSequenceProfile reward roots start)) ∨
+        ∃ root : ι → PMF Bool,
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) (ε ^ ((1 : ℝ) / 6))
+            (quittingStationaryProfile reward root) :=
+  exists_quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference hunit
 
 /-- **The counterexample satisfies the stationary disjunct exactly.**  The
 all-continue profile is a terminal `0`-equilibrium of

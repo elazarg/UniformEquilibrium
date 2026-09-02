@@ -3290,7 +3290,7 @@ in the live mathematical ledger.
   This is an `M`/`L` theorem and an actual-source `A`/`C`, conditional on the
   explicitly supplied terminal jump.
   The published small-cell productization is checked as
-  `exists_agkrsSmallCellProductization` in
+  `exists_akrsSmallCellProductization` in
   `MathUE/PMFProduct/SmallCellProductization`.  The production
   partition and decoder in
   `UniformEquilibrium/Quitting/AbsorptionPath/AKRSPartition.lean`,

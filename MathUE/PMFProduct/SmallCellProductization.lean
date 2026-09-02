@@ -19,21 +19,21 @@ open scoped BigOperators
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
 omit [Nonempty ι] in
-private theorem continuous_agkrsCoalitionMass (coalition : Finset ι) :
+private theorem continuous_akrsCoalitionMass (coalition : Finset ι) :
     Continuous fun root : ι → ℝ =>
       Math.PMFProduct.coalitionMass root coalition := by
   unfold Math.PMFProduct.coalitionMass
   fun_prop
 
 omit [DecidableEq ι] [Nonempty ι] in
-private theorem continuous_agkrsAbsorptionMass :
+private theorem continuous_akrsAbsorptionMass :
     Continuous fun root : ι → ℝ =>
       1 - Math.PMFProduct.continueMass root := by
   unfold Math.PMFProduct.continueMass
   fun_prop
 
 omit [Nonempty ι] in
-private theorem agkrsLawMass_le_absorption_of_nonempty
+private theorem akrsLawMass_le_absorption_of_nonempty
     {law : Finset ι → ℝ}
     (hlaw_nonneg : ∀ coalition, 0 ≤ law coalition)
     (hlaw_sum : (∑ coalition, law coalition) = 1)
@@ -49,7 +49,7 @@ private theorem agkrsLawMass_le_absorption_of_nonempty
   linarith
 
 omit [Nonempty ι] in
-private theorem agkrsCoalitionMass_le_absorption_sq
+private theorem akrsCoalitionMass_le_absorption_sq
     {root : ι → ℝ}
     (hroot_nonneg : ∀ player, 0 ≤ root player)
     (hroot_le_one : ∀ player, root player ≤ 1)
@@ -109,70 +109,88 @@ private theorem agkrsCoalitionMass_le_absorption_sq
 
 /-- The coordinatewise dimension constant printed in the published AKRS
 small-cell lemma. -/
-def agkrsSmallCellCoordinateConstant (ι : Type) [Fintype ι] : ℝ :=
+def akrsSmallCellCoordinateConstant (ι : Type) [Fintype ι] : ℝ :=
   ((2 ^ Fintype.card ι : ℕ) : ℝ)
 
-private def agkrsCollisionCoalitions (ι : Type) [Fintype ι] :
+/-- The numerical two-player witness behind the correction of the printed
+`1 / k` collision factor at `k = 5`.  Its absorption probability is below
+`1 / 5`, but its double-quit to first-player-only odds ratio is above
+`1 / 5`. -/
+theorem akrsPrintedCollisionFactor_five_counterexample :
+    ∃ root : Bool → ℝ,
+      (∀ player, 0 ≤ root player ∧ root player ≤ 1) ∧
+        1 - Math.PMFProduct.continueMass root = 19081 / 100000 ∧
+        1 - Math.PMFProduct.continueMass root < 1 / 5 ∧
+        Math.PMFProduct.coalitionMass root Finset.univ /
+            Math.PMFProduct.coalitionMass root {false} = 19 / 81 ∧
+        1 / 5 < Math.PMFProduct.coalitionMass root Finset.univ /
+          Math.PMFProduct.coalitionMass root {false} := by
+  refine ⟨fun player ↦ if player then 19 / 100 else 1 / 1000, ?_⟩
+  have hfalseComplement : ({false} : Finset Bool)ᶜ = {true} := by decide
+  norm_num [Math.PMFProduct.continueMass, Math.PMFProduct.coalitionMass,
+    Fintype.univ_bool, hfalseComplement]
+
+private def akrsCollisionCoalitions (ι : Type) [Fintype ι] :
     Finset (Finset ι) :=
   Finset.univ.filter fun coalition : Finset ι => 2 ≤ coalition.card
 
 omit [Nonempty ι] in
-private def agkrsExtendRoot (players : Finset ι)
+private def akrsExtendRoot (players : Finset ι)
     (root : players → ℝ) : ι → ℝ :=
   fun player => if hplayer : player ∈ players then root ⟨player, hplayer⟩ else 0
 
 omit [Nonempty ι] in
-private def agkrsLiftCoalition (players : Finset ι)
+private def akrsLiftCoalition (players : Finset ι)
     (coalition : Finset players) : Finset ι :=
   coalition.map (Function.Embedding.subtype fun player => player ∈ players)
 
 omit [Fintype ι] [Nonempty ι] in
-@[simp] private theorem agkrsExtendRoot_apply_subtype
+@[simp] private theorem akrsExtendRoot_apply_subtype
     (players : Finset ι) (root : players → ℝ) (player : players) :
-    agkrsExtendRoot players root player.1 = root player := by
-  simp [agkrsExtendRoot, player.2]
+    akrsExtendRoot players root player.1 = root player := by
+  simp [akrsExtendRoot, player.2]
 
 omit [Fintype ι] [Nonempty ι] in
-private theorem agkrsExtendRoot_apply_not_mem
+private theorem akrsExtendRoot_apply_not_mem
     (players : Finset ι) (root : players → ℝ)
     {player : ι} (hplayer : player ∉ players) :
-    agkrsExtendRoot players root player = 0 := by
-  simp [agkrsExtendRoot, hplayer]
+    akrsExtendRoot players root player = 0 := by
+  simp [akrsExtendRoot, hplayer]
 
 omit [Nonempty ι] in
-private theorem agkrsContinueMass_extend
+private theorem akrsContinueMass_extend
     (players : Finset ι) (root : players → ℝ) :
-    Math.PMFProduct.continueMass (agkrsExtendRoot players root) =
+    Math.PMFProduct.continueMass (akrsExtendRoot players root) =
       Math.PMFProduct.continueMass root := by
   unfold Math.PMFProduct.continueMass
   calc
-    (∏ player, (1 - agkrsExtendRoot players root player)) =
-        ∏ player ∈ players, (1 - agkrsExtendRoot players root player) := by
+    (∏ player, (1 - akrsExtendRoot players root player)) =
+        ∏ player ∈ players, (1 - akrsExtendRoot players root player) := by
       symm
       apply Finset.prod_subset (Finset.subset_univ players)
       intro player _ hplayer
-      rw [agkrsExtendRoot_apply_not_mem players root hplayer]
+      rw [akrsExtendRoot_apply_not_mem players root hplayer]
       simp
     _ = ∏ player : players, (1 - root player) := by
       rw [Finset.prod_subtype players (fun _ => Iff.rfl)]
       apply Finset.prod_congr rfl
       intro player hplayer
-      simp [agkrsExtendRoot]
+      simp [akrsExtendRoot]
 
 omit [Nonempty ι] in
-private theorem agkrsCoalitionMass_extend_lift
+private theorem akrsCoalitionMass_extend_lift
     (players : Finset ι) (root : players → ℝ)
     (coalition : Finset players) :
-    Math.PMFProduct.coalitionMass (agkrsExtendRoot players root)
-        (agkrsLiftCoalition players coalition) =
+    Math.PMFProduct.coalitionMass (akrsExtendRoot players root)
+        (akrsLiftCoalition players coalition) =
       Math.PMFProduct.coalitionMass root coalition := by
   unfold Math.PMFProduct.coalitionMass
-  unfold agkrsLiftCoalition
+  unfold akrsLiftCoalition
   rw [Finset.prod_map]
   congr 1
   · apply Finset.prod_congr rfl
     intro player _
-    exact agkrsExtendRoot_apply_subtype players root player
+    exact akrsExtendRoot_apply_subtype players root player
   · let embedding :=
       Function.Embedding.subtype fun player => player ∈ players
     let activeComplement : Finset ι := coalitionᶜ.map embedding
@@ -189,7 +207,7 @@ private theorem agkrsCoalitionMass_extend_lift
       exact hprincipal hother
     have hoff : ∀ player ∈ (coalition.map embedding)ᶜ,
         player ∉ activeComplement →
-          1 - agkrsExtendRoot players root player = 1 := by
+          1 - akrsExtendRoot players root player = 1 := by
       intro player hcomplement hnot
       have houtside : player ∉ players := by
         intro hplayer
@@ -202,13 +220,13 @@ private theorem agkrsCoalitionMass_extend_lift
           simpa only [Finset.mem_compl] using hcomplement
         exact hnotMapped (Finset.mem_map.mpr
           ⟨⟨player, hplayer⟩, hcoalition, rfl⟩)
-      rw [agkrsExtendRoot_apply_not_mem players root houtside]
+      rw [akrsExtendRoot_apply_not_mem players root houtside]
       simp
     calc
       (∏ player ∈ (coalition.map embedding)ᶜ,
-          (1 - agkrsExtendRoot players root player)) =
+          (1 - akrsExtendRoot players root player)) =
           ∏ player ∈ activeComplement,
-            (1 - agkrsExtendRoot players root player) := by
+            (1 - akrsExtendRoot players root player) := by
         symm
         exact Finset.prod_subset hsubset hoff
       _ = ∏ player ∈ coalitionᶜ, (1 - root player) := by
@@ -217,44 +235,44 @@ private theorem agkrsCoalitionMass_extend_lift
         apply Finset.prod_congr rfl
         intro player _
         exact congrArg (fun value : ℝ => 1 - value)
-          (agkrsExtendRoot_apply_subtype players root player)
+          (akrsExtendRoot_apply_subtype players root player)
 
 omit [Nonempty ι] in
-private theorem agkrsCoalitionMass_extend_eq_zero_of_not_subset
+private theorem akrsCoalitionMass_extend_eq_zero_of_not_subset
     (players : Finset ι) (root : players → ℝ)
     {coalition : Finset ι} (hcoalition : ¬coalition ⊆ players) :
-    Math.PMFProduct.coalitionMass (agkrsExtendRoot players root) coalition = 0 := by
+    Math.PMFProduct.coalitionMass (akrsExtendRoot players root) coalition = 0 := by
   obtain ⟨player, hplayer, houtside⟩ := Set.not_subset.mp hcoalition
   unfold Math.PMFProduct.coalitionMass
   have hzero : ∏ member ∈ coalition,
-      agkrsExtendRoot players root member = 0 := by
+      akrsExtendRoot players root member = 0 := by
     exact Finset.prod_eq_zero hplayer
-      (agkrsExtendRoot_apply_not_mem players root houtside)
+      (akrsExtendRoot_apply_not_mem players root houtside)
   rw [hzero, zero_mul]
 
 omit [Fintype ι] [Nonempty ι] in
-private theorem agkrsLiftCoalition_subtype
+private theorem akrsLiftCoalition_subtype
     (players : Finset ι) (coalition : Finset ι)
     (hcoalition : coalition ⊆ players) :
-    agkrsLiftCoalition players
+    akrsLiftCoalition players
         (coalition.subtype fun player => player ∈ players) = coalition := by
   exact Finset.subtype_map_of_mem hcoalition
 
 omit [Nonempty ι] in
-private theorem agkrsLawSingletonMass_add_collisionMass
+private theorem akrsLawSingletonMass_add_collisionMass
     (law : Finset ι → ℝ) (hlaw_sum : (∑ coalition, law coalition) = 1) :
     (∑ player, law {player}) +
-        ∑ coalition ∈ agkrsCollisionCoalitions ι, law coalition =
+        ∑ coalition ∈ akrsCollisionCoalitions ι, law coalition =
       1 - law ∅ := by
   let singles : Finset (Finset ι) :=
     Finset.univ.image fun player : ι => ({player} : Finset ι)
-  let collisions : Finset (Finset ι) := agkrsCollisionCoalitions ι
+  let collisions : Finset (Finset ι) := akrsCollisionCoalitions ι
   have hdisjoint : Disjoint singles collisions := by
     rw [Finset.disjoint_left]
     intro coalition hsingle hcollision
     simp only [singles, Finset.mem_image, Finset.mem_univ, true_and] at hsingle
     obtain ⟨player, rfl⟩ := hsingle
-    simp [collisions, agkrsCollisionCoalitions] at hcollision
+    simp [collisions, akrsCollisionCoalitions] at hcollision
   have hpartition :
       Finset.univ.erase (∅ : Finset ι) = singles ∪ collisions := by
     ext coalition
@@ -268,7 +286,7 @@ private theorem agkrsLawSingletonMass_add_collisionMass
         obtain ⟨player, rfl⟩ := Finset.card_eq_one.mp hone
         simp [singles]
       · right
-        simp only [collisions, agkrsCollisionCoalitions,
+        simp only [collisions, akrsCollisionCoalitions,
           Finset.mem_filter, Finset.mem_univ, true_and]
         omega
     · rintro (hsingle | hcollision)
@@ -276,7 +294,7 @@ private theorem agkrsLawSingletonMass_add_collisionMass
           at hsingle
         obtain ⟨player, rfl⟩ := hsingle
         simp
-      · simp only [collisions, agkrsCollisionCoalitions,
+      · simp only [collisions, akrsCollisionCoalitions,
           Finset.mem_filter, Finset.mem_univ, true_and] at hcollision
         exact ⟨fun hempty => by simp [hempty] at hcollision, trivial⟩
   have hsingleSum :
@@ -294,13 +312,13 @@ private theorem agkrsLawSingletonMass_add_collisionMass
   linarith
 
 omit [DecidableEq ι] [Nonempty ι] in
-private theorem agkrsCollisionSum_le
+private theorem akrsCollisionSum_le
     {mass : Finset ι → ℝ} {scale : ℝ}
     (hscale : 0 ≤ scale)
     (hbound : ∀ coalition, 2 ≤ coalition.card → mass coalition ≤ scale) :
-    (∑ coalition ∈ agkrsCollisionCoalitions ι, mass coalition) ≤
-      agkrsSmallCellCoordinateConstant ι * scale := by
-  let collisions := agkrsCollisionCoalitions ι
+    (∑ coalition ∈ akrsCollisionCoalitions ι, mass coalition) ≤
+      akrsSmallCellCoordinateConstant ι * scale := by
+  let collisions := akrsCollisionCoalitions ι
   have hsum : (∑ coalition ∈ collisions, mass coalition) ≤
       (collisions.card : ℝ) * scale := by
     calc
@@ -311,7 +329,7 @@ private theorem agkrsCollisionSum_le
         exact hbound coalition (Finset.mem_filter.mp hcoalition).2
       _ = (collisions.card : ℝ) * scale := by simp
   have hcard : (collisions.card : ℝ) ≤
-      agkrsSmallCellCoordinateConstant ι := by
+      akrsSmallCellCoordinateConstant ι := by
     have hnat : collisions.card ≤ Fintype.card (Finset ι) := by
       simpa using Finset.card_le_card (Finset.subset_univ collisions)
     rw [Fintype.card_finset] at hnat
@@ -337,7 +355,7 @@ structure SmallCellProductization
     0 < root player ↔ 0 < law {player}
   coalition_coordinate_error : ∀ coalition, coalition.Nonempty →
     |Math.PMFProduct.coalitionMass root coalition - law coalition| ≤
-      agkrsSmallCellCoordinateConstant ι * ε * (1 - law ∅)
+      akrsSmallCellCoordinateConstant ι * ε * (1 - law ∅)
 
 /-- Exact formal statement suggested by the printed AKRS small-cell lemma.
 
@@ -356,7 +374,7 @@ def AKRSSmallCellProductizationStatement (ι : Type)
           law coalition ≤ ε * law {player}) →
         Nonempty (SmallCellProductization ε law)
 
-private theorem exists_agkrsProductRoot_of_all_singletons_pos
+private theorem exists_akrsProductRoot_of_all_singletons_pos
     {ε : ℝ} {law : Finset ι → ℝ}
     (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hp_pos : 0 < 1 - law ∅)
@@ -391,7 +409,7 @@ private theorem exists_agkrsProductRoot_of_all_singletons_pos
       root player * min (imbalance root player) 0
   have hratio (player : ι) : Continuous fun root : ι → ℝ => ratio root player := by
     dsimp only [ratio]
-    exact (continuous_agkrsCoalitionMass {player}).div_const _
+    exact (continuous_akrsCoalitionMass {player}).div_const _
   have haverage : Continuous average := by
     dsimp only [average]
     exact (continuous_finsetSum _ fun player _ => hratio player).div_const _
@@ -399,7 +417,7 @@ private theorem exists_agkrsProductRoot_of_all_singletons_pos
       Continuous fun root : ι → ℝ => imbalance root player := by
     dsimp only [imbalance]
     exact (continuous_const.mul
-      (continuous_const.sub continuous_agkrsAbsorptionMass)).add
+      (continuous_const.sub continuous_akrsAbsorptionMass)).add
         (haverage.sub (hratio player))
   have hfield : Continuous field := by
     exact continuous_pi fun player =>
@@ -628,7 +646,7 @@ coordinate estimate.  The weak inequality is intentional: unlike the strict
 inequality printed in AKRS, Lemma 4.9, it remains meaningful when the total
 absorption probability is zero. -/
 
-private theorem agkrsProductization_of_all_singletons_pos
+private theorem akrsProductization_of_all_singletons_pos
     {ε : ℝ} {law : Finset ι → ℝ}
     (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hlaw_nonneg : ∀ coalition, 0 ≤ law coalition)
@@ -641,23 +659,23 @@ private theorem agkrsProductization_of_all_singletons_pos
     Nonempty (SmallCellProductization ε law) := by
   classical
   obtain ⟨root, hroot, habsorption, hrelative⟩ :=
-    exists_agkrsProductRoot_of_all_singletons_pos
+    exists_akrsProductRoot_of_all_singletons_pos
       hεpos hεhalf hp_pos hp_le hsingleton_pos
   have hroot_nonneg (player : ι) : 0 ≤ root player := (hroot player).1.le
   have hroot_le_one (player : ι) : root player ≤ 1 := (hroot player).2.le
   let scale : ℝ := ε * (1 - law ∅)
-  let bound : ℝ := agkrsSmallCellCoordinateConstant ι * scale
+  let bound : ℝ := akrsSmallCellCoordinateConstant ι * scale
   have hscale_nonneg : 0 ≤ scale :=
     mul_nonneg hεpos.le hp_pos.le
-  have hconstant_nonneg : 0 ≤ agkrsSmallCellCoordinateConstant ι := by
-    unfold agkrsSmallCellCoordinateConstant
+  have hconstant_nonneg : 0 ≤ akrsSmallCellCoordinateConstant ι := by
+    unfold akrsSmallCellCoordinateConstant
     exact_mod_cast (Nat.zero_le (2 ^ Fintype.card ι))
   have hbound_nonneg : 0 ≤ bound :=
     mul_nonneg hconstant_nonneg hscale_nonneg
   have hrootCollisionAtom_le (coalition : Finset ι)
       (hcard : 2 ≤ coalition.card) :
       Math.PMFProduct.coalitionMass root coalition ≤ scale := by
-    have hsq := agkrsCoalitionMass_le_absorption_sq
+    have hsq := akrsCoalitionMass_le_absorption_sq
       hroot_nonneg hroot_le_one hcard
     rw [habsorption] at hsq
     dsimp only [scale]
@@ -668,27 +686,27 @@ private theorem agkrsProductization_of_all_singletons_pos
       exact Finset.card_pos.mp (by omega)
     obtain ⟨player, hplayer⟩ := hnonempty
     have hlocal := hcollision coalition player hcard hplayer
-    have hsingleton_le := agkrsLawMass_le_absorption_of_nonempty
+    have hsingleton_le := akrsLawMass_le_absorption_of_nonempty
       hlaw_nonneg hlaw_sum (coalition := ({player} : Finset ι)) (by simp)
     dsimp only [scale]
     nlinarith
   have hrootCollision_le : Math.PMFProduct.collisionMass root ≤ bound := by
     unfold Math.PMFProduct.collisionMass
-    exact agkrsCollisionSum_le hscale_nonneg hrootCollisionAtom_le
+    exact akrsCollisionSum_le hscale_nonneg hrootCollisionAtom_le
   have hlawCollision_le :
-      (∑ coalition ∈ agkrsCollisionCoalitions ι, law coalition) ≤ bound :=
-    agkrsCollisionSum_le hscale_nonneg hlawCollisionAtom_le
+      (∑ coalition ∈ akrsCollisionCoalitions ι, law coalition) ≤ bound :=
+    akrsCollisionSum_le hscale_nonneg hlawCollisionAtom_le
   have hrootCollision_nonneg :
       0 ≤ Math.PMFProduct.collisionMass root :=
     Math.PMFProduct.collisionMass_nonneg root hroot_nonneg hroot_le_one
   have hlawCollision_nonneg :
-      0 ≤ ∑ coalition ∈ agkrsCollisionCoalitions ι, law coalition :=
+      0 ≤ ∑ coalition ∈ akrsCollisionCoalitions ι, law coalition :=
     Finset.sum_nonneg fun coalition _ => hlaw_nonneg coalition
   have hrootSplit := Math.PMFProduct.singletonMass_add_collisionMass root
-  have hlawSplit := agkrsLawSingletonMass_add_collisionMass law hlaw_sum
+  have hlawSplit := akrsLawSingletonMass_add_collisionMass law hlaw_sum
   have hsingletonDifference :
       Math.PMFProduct.singletonMass root - (∑ player, law {player}) =
-        (∑ coalition ∈ agkrsCollisionCoalitions ι, law coalition) -
+        (∑ coalition ∈ akrsCollisionCoalitions ι, law coalition) -
           Math.PMFProduct.collisionMass root := by
     rw [habsorption] at hrootSplit
     linarith
@@ -765,11 +783,11 @@ private theorem agkrsProductization_of_all_singletons_pos
             (∑ other, law {other})| := by
           rw [abs_of_nonneg (sub_nonneg.mpr hsum_order)]
         _ ≤ bound := hsingletonTotal_error
-  have htwo_le_constant : (2 : ℝ) ≤ agkrsSmallCellCoordinateConstant ι := by
+  have htwo_le_constant : (2 : ℝ) ≤ akrsSmallCellCoordinateConstant ι := by
     have hcard : 1 ≤ Fintype.card ι := Fintype.card_pos
     have hpow : 2 ^ 1 ≤ 2 ^ Fintype.card ι :=
       Nat.pow_le_pow_right (by norm_num) hcard
-    unfold agkrsSmallCellCoordinateConstant
+    unfold akrsSmallCellCoordinateConstant
     norm_num at hpow ⊢
     exact_mod_cast hpow
   refine ⟨⟨root, hroot_nonneg, fun player => (hroot player).2,
@@ -804,7 +822,7 @@ subtype, and extending the resulting product row by zero.  This is the
 literal active-player reduction compressed into the opening sentence of the
 published proof of Lemma 4.9. -/
 
-private theorem agkrsSmallCellProductization
+private theorem akrsSmallCellProductization
     {ε : ℝ} {law : Finset ι → ℝ}
     (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hlaw_nonneg : ∀ coalition, 0 ≤ law coalition)
@@ -819,7 +837,7 @@ private theorem agkrsSmallCellProductization
     have hlaw_zero (coalition : Finset ι) (hcoalition : coalition.Nonempty) :
         law coalition = 0 := by
       apply le_antisymm
-      · have hle := agkrsLawMass_le_absorption_of_nonempty
+      · have hle := akrsLawMass_le_absorption_of_nonempty
           hlaw_nonneg hlaw_sum hcoalition
         linarith
       · exact hlaw_nonneg coalition
@@ -845,7 +863,7 @@ private theorem agkrsSmallCellProductization
         hlaw_zero coalition hcoalition, hp_zero]
       simp
   · have hp_pos : 0 < 1 - law ∅ := by
-      have hp_nonneg := agkrsLawMass_le_absorption_of_nonempty
+      have hp_nonneg := akrsLawMass_le_absorption_of_nonempty
         hlaw_nonneg hlaw_sum (coalition := ({Classical.choice
           (inferInstance : Nonempty ι)} : Finset ι)) (by simp)
       have hp_nonnegative : 0 ≤ 1 - law ∅ :=
@@ -891,7 +909,7 @@ private theorem agkrsSmallCellProductization
         have hle := hcollision coalition player hcard hplayer
         rw [hsingletons_zero player, mul_zero] at hle
         exact le_antisymm hle (hlaw_nonneg coalition)
-      have hsplit := agkrsLawSingletonMass_add_collisionMass law hlaw_sum
+      have hsplit := akrsLawSingletonMass_add_collisionMass law hlaw_sum
       rw [Finset.sum_eq_zero fun player _ => hsingletons_zero player,
         Finset.sum_eq_zero] at hsplit
       · linarith
@@ -900,10 +918,10 @@ private theorem agkrsSmallCellProductization
           (Finset.mem_filter.mp hcoalition).2
     letI : Nonempty players := Finset.nonempty_coe_sort.mpr hplayers_nonempty
     let activeLaw : Finset players → ℝ := fun coalition =>
-      law (agkrsLiftCoalition players coalition)
+      law (akrsLiftCoalition players coalition)
     have hactiveLaw_nonneg (coalition : Finset players) :
         0 ≤ activeLaw coalition :=
-      hlaw_nonneg (agkrsLiftCoalition players coalition)
+      hlaw_nonneg (akrsLiftCoalition players coalition)
     let supportedCoalitions : Finset (Finset ι) :=
       Finset.univ.filter fun coalition => coalition ⊆ players
     have hsupportedSum :
@@ -920,7 +938,7 @@ private theorem agkrsSmallCellProductization
     have hactiveLaw_sum : (∑ coalition, activeLaw coalition) = 1 := by
       rw [← hsupportedSum]
       apply Finset.sum_bij (fun coalition _ =>
-        agkrsLiftCoalition players coalition)
+        akrsLiftCoalition players coalition)
       · intro coalition _
         simp only [supportedCoalitions, Finset.mem_filter,
           Finset.mem_univ, true_and]
@@ -936,7 +954,7 @@ private theorem agkrsSmallCellProductization
             Finset.mem_univ, true_and] using hcoalition
         let principal := coalition.subtype fun player => player ∈ players
         refine ⟨principal, Finset.mem_univ principal, ?_⟩
-        exact agkrsLiftCoalition_subtype players coalition hsubset
+        exact akrsLiftCoalition_subtype players coalition hsubset
       · intro coalition _
         rfl
     have hactiveEmpty : activeLaw ∅ = law ∅ := by
@@ -953,27 +971,27 @@ private theorem agkrsSmallCellProductization
     have hactiveCollision (coalition : Finset players) (player : players)
         (hcard : 2 ≤ coalition.card) (hplayer : player ∈ coalition) :
         activeLaw coalition ≤ ε * activeLaw {player} := by
-      apply hcollision (agkrsLiftCoalition players coalition) player.1
-      · simpa only [agkrsLiftCoalition, Finset.card_map] using hcard
+      apply hcollision (akrsLiftCoalition players coalition) player.1
+      · simpa only [akrsLiftCoalition, Finset.card_map] using hcard
       · exact Finset.mem_map.mpr ⟨player, hplayer, rfl⟩
-    obtain ⟨activePacket⟩ := agkrsProductization_of_all_singletons_pos
+    obtain ⟨activePacket⟩ := akrsProductization_of_all_singletons_pos
       hεpos hεhalf hactiveLaw_nonneg hactiveLaw_sum hactive_p_pos
       hactive_p_le hactiveCollision hactiveSingleton_pos
-    let root : ι → ℝ := agkrsExtendRoot players activePacket.root
+    let root : ι → ℝ := akrsExtendRoot players activePacket.root
     have hroot_nonneg (player : ι) : 0 ≤ root player := by
       by_cases hplayer : player ∈ players
-      · simpa only [root, agkrsExtendRoot, hplayer, dite_true] using
+      · simpa only [root, akrsExtendRoot, hplayer, dite_true] using
           activePacket.root_nonneg ⟨player, hplayer⟩
-      · simp [root, agkrsExtendRoot, hplayer]
+      · simp [root, akrsExtendRoot, hplayer]
     have hroot_lt_one (player : ι) : root player < 1 := by
       by_cases hplayer : player ∈ players
-      · simpa only [root, agkrsExtendRoot, hplayer, dite_true] using
+      · simpa only [root, akrsExtendRoot, hplayer, dite_true] using
           activePacket.root_lt_one ⟨player, hplayer⟩
-      · simp [root, agkrsExtendRoot, hplayer]
+      · simp [root, akrsExtendRoot, hplayer]
     have hrootMass_zero_off (coalition : Finset ι)
         (hoff : ¬coalition ⊆ players) :
         Math.PMFProduct.coalitionMass root coalition = 0 := by
-      exact agkrsCoalitionMass_extend_eq_zero_of_not_subset
+      exact akrsCoalitionMass_extend_eq_zero_of_not_subset
         players activePacket.root hoff
     have hrootMass_restrict (coalition : Finset ι)
         (hsubset : coalition ⊆ players) :
@@ -981,14 +999,14 @@ private theorem agkrsSmallCellProductization
           Math.PMFProduct.coalitionMass activePacket.root
             (coalition.subtype fun player => player ∈ players) := by
       let principal := coalition.subtype fun player => player ∈ players
-      have htransport := agkrsCoalitionMass_extend_lift
+      have htransport := akrsCoalitionMass_extend_lift
         players activePacket.root principal
-      have hlift := agkrsLiftCoalition_subtype players coalition hsubset
+      have hlift := akrsLiftCoalition_subtype players coalition hsubset
       rw [hlift] at htransport
       simpa only [root] using htransport
-    have hconstant_le : agkrsSmallCellCoordinateConstant players ≤
-        agkrsSmallCellCoordinateConstant ι := by
-      unfold agkrsSmallCellCoordinateConstant
+    have hconstant_le : akrsSmallCellCoordinateConstant players ≤
+        akrsSmallCellCoordinateConstant ι := by
+      unfold akrsSmallCellCoordinateConstant
       have hcard : Fintype.card players ≤ Fintype.card ι := by
         simpa using Finset.card_le_univ players
       have hpow : 2 ^ Fintype.card players ≤ 2 ^ Fintype.card ι :=
@@ -996,8 +1014,8 @@ private theorem agkrsSmallCellProductization
       exact_mod_cast hpow
     refine ⟨⟨root, hroot_nonneg, hroot_lt_one, ?_, ?_, ?_, ?_⟩⟩
     · change 1 - Math.PMFProduct.continueMass
-          (agkrsExtendRoot players activePacket.root) = 1 - law ∅
-      rw [agkrsContinueMass_extend]
+          (akrsExtendRoot players activePacket.root) = 1 - law ∅
+      rw [akrsContinueMass_extend]
       simpa only [hactiveEmpty] using activePacket.absorption_exact
     · intro first second
       by_cases hfirst : first ∈ players
@@ -1043,15 +1061,15 @@ private theorem agkrsSmallCellProductization
     · intro player
       by_cases hplayer : player ∈ players
       · let principal : players := ⟨player, hplayer⟩
-        change 0 < agkrsExtendRoot players activePacket.root player ↔
+        change 0 < akrsExtendRoot players activePacket.root player ↔
           0 < law {player}
-        rw [agkrsExtendRoot_apply_subtype players activePacket.root principal]
+        rw [akrsExtendRoot_apply_subtype players activePacket.root principal]
         have hactive := activePacket.quit_pos_iff_singletonMass_pos principal
         change 0 < activePacket.root principal ↔ 0 < law {player} at hactive
         exact hactive
-      · change 0 < agkrsExtendRoot players activePacket.root player ↔
+      · change 0 < akrsExtendRoot players activePacket.root player ↔
           0 < law {player}
-        rw [agkrsExtendRoot_apply_not_mem players activePacket.root hplayer,
+        rw [akrsExtendRoot_apply_not_mem players activePacket.root hplayer,
           hlawSingleton_zero_of_not_mem hplayer]
     · intro coalition hcoalition
       by_cases hsubset : coalition ⊆ players
@@ -1061,16 +1079,16 @@ private theorem agkrsSmallCellProductization
           exact ⟨⟨player, hsubset hplayer⟩, by simp [principal, hplayer]⟩
         have hactiveError := activePacket.coalition_coordinate_error
           principal hprincipal_nonempty
-        have hlift := agkrsLiftCoalition_subtype players coalition hsubset
+        have hlift := akrsLiftCoalition_subtype players coalition hsubset
         have hactiveLawPrincipal : activeLaw principal = law coalition := by
-          change law (agkrsLiftCoalition players principal) = law coalition
+          change law (akrsLiftCoalition players principal) = law coalition
           rw [hlift]
         rw [hactiveLawPrincipal, hactiveEmpty] at hactiveError
         have hscale_nonneg : 0 ≤ ε * (1 - law ∅) :=
           mul_nonneg hεpos.le hp_pos.le
         have hbound_mono :
-            agkrsSmallCellCoordinateConstant players * ε * (1 - law ∅) ≤
-              agkrsSmallCellCoordinateConstant ι * ε * (1 - law ∅) := by
+            akrsSmallCellCoordinateConstant players * ε * (1 - law ∅) ≤
+              akrsSmallCellCoordinateConstant ι * ε * (1 - law ∅) := by
           simpa only [mul_assoc] using
             mul_le_mul_of_nonneg_right hconstant_le hscale_nonneg
         rw [hrootMass_restrict coalition hsubset]
@@ -1079,14 +1097,14 @@ private theorem agkrsSmallCellProductization
           hlaw_zero_off coalition hsubset]
         simp only [sub_self, abs_zero]
         have hconstant_nonneg :
-            0 ≤ agkrsSmallCellCoordinateConstant ι := by
-          unfold agkrsSmallCellCoordinateConstant
+            0 ≤ akrsSmallCellCoordinateConstant ι := by
+          unfold akrsSmallCellCoordinateConstant
           positivity
         exact mul_nonneg (mul_nonneg hconstant_nonneg hεpos.le) hp_pos.le
 
 /-- Published AKRS small-cell productization, with the conservative weak
 coordinate estimate that includes zero total absorption. -/
-theorem exists_agkrsSmallCellProductization
+theorem exists_akrsSmallCellProductization
     {ε : ℝ} {law : Finset ι → ℝ}
     (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2)
     (hlaw_nonneg : ∀ coalition, 0 ≤ law coalition)
@@ -1095,16 +1113,16 @@ theorem exists_agkrsSmallCellProductization
     (hcollision : ∀ coalition player, 2 ≤ coalition.card →
       player ∈ coalition → law coalition ≤ ε * law {player}) :
     Nonempty (SmallCellProductization ε law) :=
-  agkrsSmallCellProductization hεpos hεhalf hlaw_nonneg hlaw_sum
+  akrsSmallCellProductization hεpos hεhalf hlaw_nonneg hlaw_sum
     hp_le hcollision
 
 /-- The existential-threshold specification is satisfied with the uniform
 threshold `1 / 2`. -/
-theorem agkrsSmallCellProductizationStatement :
+theorem akrsSmallCellProductizationStatement :
     AKRSSmallCellProductizationStatement ι := by
   refine ⟨1 / 2, by norm_num, le_rfl, ?_⟩
   intro ε hεpos hεhalf law hlaw_nonneg hlaw_sum hp_le hcollision
-  exact exists_agkrsSmallCellProductization hεpos hεhalf hlaw_nonneg
+  exact exists_akrsSmallCellProductization hεpos hεhalf hlaw_nonneg
     hlaw_sum hp_le hcollision
 
 end GameTheory

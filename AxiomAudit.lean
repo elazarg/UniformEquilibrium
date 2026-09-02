@@ -209,6 +209,7 @@ import MathUE.LinearAlgebra.OwnerLabeledFlowHolonomy
 import MathUE.LinearAlgebra.OwnerObstructionCokernel
 import MathUE.LinearAlgebra.OwnerTypedDualLifting
 import MathUE.LinearAlgebra.Pi
+import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
 import MathUE.LinearAlgebra.UniformNonsingularity
 import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
@@ -1262,6 +1263,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathRates
 import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathSnell
 import UniformEquilibrium.Quitting.AbsorptionPath.SingletonPathSnellTail
 import UniformEquilibrium.Quitting.AbsorptionPath.SurvivalWeightedObstructionAdapter
+import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
 import UniformEquilibrium.Quitting.Bellman.Finite.ActiveSetSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRestartMoat
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity

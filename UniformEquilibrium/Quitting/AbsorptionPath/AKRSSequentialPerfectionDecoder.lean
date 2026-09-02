@@ -817,8 +817,8 @@ theorem partitionDecoderPayoffErrorCoefficient_nonneg
     (resolution : ℕ) (hresolution : 3 ≤ resolution) :
     0 ≤ partitionDecoderPayoffErrorCoefficient reward resolution := by
   unfold partitionDecoderPayoffErrorCoefficient
-  have hcoordinate : 0 ≤ agkrsSmallCellCoordinateConstant ι := by
-    unfold agkrsSmallCellCoordinateConstant
+  have hcoordinate : 0 ≤ akrsSmallCellCoordinateConstant ι := by
+    unfold akrsSmallCellCoordinateConstant
     exact_mod_cast Nat.zero_le (2 ^ Fintype.card ι)
   exact mul_nonneg
     (mul_nonneg
@@ -936,7 +936,7 @@ theorem tendsto_partitionSupportError_add_three
   let coefficient : ℝ :=
     12 * quittingRewardBound reward +
       Fintype.card {S : Finset ι // S.Nonempty} *
-        quittingRewardBound reward * agkrsSmallCellCoordinateConstant ι
+        quittingRewardBound reward * akrsSmallCellCoordinateConstant ι
   have hconstant : Tendsto (fun _ : ℕ => coefficient) atTop
       (nhds coefficient) := tendsto_const_nhds
   have hscaled : Tendsto (fun rank : ℕ =>

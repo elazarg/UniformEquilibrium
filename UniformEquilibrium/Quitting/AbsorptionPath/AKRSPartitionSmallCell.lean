@@ -99,7 +99,7 @@ theorem quittingRoot_coalition_coordinate_error
     (coalition : Finset ι) (hcoalition : coalition.Nonempty) :
     |GameTheory.quittingRootCoalitionMass packet.quittingRoot coalition -
         law coalition| ≤
-      agkrsSmallCellCoordinateConstant ι * ε * (1 - law ∅) := by
+      akrsSmallCellCoordinateConstant ι * ε * (1 - law ∅) := by
   rw [packet.quittingRootCoalitionMass coalition]
   exact packet.coalition_coordinate_error coalition hcoalition
 
@@ -330,7 +330,7 @@ theorem nonempty_productization
     (cell : SmallPathCell path ε) (hεpos : 0 < ε) (hεhalf : ε ≤ 1 / 2) :
     Nonempty (SmallCellProductization ε
       (pathCellLaw path cell.start cell.stop)) := by
-  apply exists_agkrsSmallCellProductization hεpos hεhalf
+  apply exists_akrsSmallCellProductization hεpos hεhalf
   · exact cell.law_nonneg
   · exact sum_pathCellLaw path cell.start cell.stop
   · rw [cell.law_absorption]
@@ -1273,7 +1273,7 @@ theorem partitionCellRoot_coalition_coordinate_error
             hresolution hcollision stage) coalition -
         pathCellLaw path.1 (partitionCut path resolution stage)
           (partitionCut path resolution (stage + 1)) coalition| ≤
-      agkrsSmallCellCoordinateConstant ι *
+      akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError resolution *
         pathCellAbsorption path.1 (partitionCut path resolution stage)
           (partitionCut path resolution (stage + 1)) := by
@@ -1329,8 +1329,8 @@ theorem partitionCellRoot_coalition_coordinate_error
             (1 - partitionCut path resolution stage) := by
       simpa using hlaw
     rw [hroot, hmass', hlaw', sub_self, abs_zero]
-    have hconstant : 0 ≤ agkrsSmallCellCoordinateConstant ι := by
-      unfold agkrsSmallCellCoordinateConstant
+    have hconstant : 0 ≤ akrsSmallCellCoordinateConstant ι := by
+      unfold akrsSmallCellCoordinateConstant
       exact_mod_cast Nat.zero_le (2 ^ Fintype.card ι)
     exact mul_nonneg
       (mul_nonneg hconstant
