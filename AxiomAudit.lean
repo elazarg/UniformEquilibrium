@@ -255,7 +255,6 @@ import MathUE.OutcomeClosure
 import MathUE.OutcomeClosure.TerminalTarget
 import MathUE.PMFIter
 import MathUE.PMFProduct
-import MathUE.PMFProduct.SmallCellProductization
 import MathUE.PMFProduct.Basic
 import MathUE.PMFProduct.Bind
 import MathUE.PMFProduct.Bool
@@ -269,6 +268,7 @@ import MathUE.PMFProduct.PrincipalRestriction
 import MathUE.PMFProduct.ProductCoalitionSupportCard
 import MathUE.PMFProduct.Reindex
 import MathUE.PMFProduct.SingletonRatioPairConcentration
+import MathUE.PMFProduct.SmallCellProductization
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
 import MathUE.PMFProduct.SumFubini
@@ -818,6 +818,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Regression.FinFourOwnerRiskyStati
 import UniformEquilibrium.Diagnostics.Quitting.Regression.FinFourPremarkDeletedReach
 import UniformEquilibrium.Diagnostics.Quitting.Regression.FinFourSparseRewardBoundary
 import UniformEquilibrium.Diagnostics.Quitting.Regression.NonpositiveFloorTerminalCap
+import UniformEquilibrium.Diagnostics.Quitting.Regression.PassivePaddingZeroPenaltyTargetRetractionFailure
 import UniformEquilibrium.Diagnostics.Quitting.Regression.SourceMatchedExposureNoGo
 import UniformEquilibrium.Diagnostics.Quitting.Regression.TwoPlayerSparseRewardNashBarrier
 import UniformEquilibrium.Diagnostics.Quitting.RetainedRoleClockArithmetic
@@ -1336,6 +1337,7 @@ import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailFallback
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailLimits
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
+import UniformEquilibrium.Quitting.Boundary.FinitePlayerMax
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AffineResidual
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregatePrefixConsumption
 import UniformEquilibrium.Quitting.Boundary.Holonomy.AggregateTerminalAnchor
@@ -2022,6 +2024,8 @@ import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealiza
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCorollaries
+import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingExploitabilityRetraction
+import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingRetraction
 import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.StoppingLawCanonicalization
 import UniformEquilibrium.Quitting.Terminal.StrategicallyPrecompactWatchdog
@@ -2046,12 +2050,14 @@ import UniformEquilibrium.Quitting.Terminal.TargetTail.InfiniteSingletonMeshSurv
 import UniformEquilibrium.Quitting.Terminal.TargetTail.InfiniteVariableSingletonMesh
 import UniformEquilibrium.Quitting.Terminal.TargetTail.InfiniteVariableSingletonMeshCertificate
 import UniformEquilibrium.Quitting.Terminal.TargetTail.InfiniteVariableSingletonMeshSurvival
+import UniformEquilibrium.Quitting.Terminal.TargetTail.PassivePlayerPaddingUniformTargetRetraction
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TargetAnchoredTail
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalPacketSimpleFallbackCounterexample
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalTargetSemantics
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
 import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityUniformPayoff
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Terminal.ToUniformDeviationApproximation
