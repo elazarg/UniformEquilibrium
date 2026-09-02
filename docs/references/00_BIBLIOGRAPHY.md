@@ -303,9 +303,13 @@ that the final manuscript demotes to its Section 5 α-players. Cite by version.
 
 **Munk & Solan 2020** — arXiv:2001.03094. `—`
 
-**Ashkenazi-Golan, Krasikov, Rainer & Solan 2022** — Mathematical Programming.
+**Ashkenazi-Golan, Krasikov, Rainer & Solan 2024** — *Absorption paths and
+equilibria in quitting games*. Mathematical Programming **203**, 735–762.
 DOI [`10.1007/s10107-022-01807-6`](https://doi.org/10.1007/s10107-022-01807-6),
-arXiv:2012.04369. `—`
+arXiv:2012.04369v1. `—`
+⚠ The journal version is canonical; arXiv v1 has materially different
+statements and numbering. The scoped map is in
+`Literature/AshkenaziGolanKrasikovRainerAndSolan2024.lean`.
 
 **Ashkenazi-Golan, Flesch & Solan** — *Absorbing Blackwell Games*.
 arXiv:2208.11425. `—`

@@ -422,9 +422,9 @@ until one repaired bridge is proved. Exact source points, one false positive,
 and one false negative for the naïve all-jumps repair were recorded in the
 source audit note.
 
-**Citation.** O. Ashkenazi-Golan, I. Krasikov, C. Rainer, and E. Solan,
+**Citation.** G. Ashkenazi-Golan, I. Krasikov, C. Rainer, and E. Solan,
 *Absorption Paths and Equilibria in Quitting Games*, Mathematical Programming
-(2022), DOI
+**203** (2024), 735–762, DOI
 [`10.1007/s10107-022-01807-6`](https://doi.org/10.1007/s10107-022-01807-6);
 [arXiv:2012.04369](https://arxiv.org/abs/2012.04369).
 
@@ -484,7 +484,8 @@ approximate equilibria, not merely nonexistence of stationary approximate
 equilibria.  Consequently the citation leaves a fourth generated regime and
 does not, by itself, prove AKRS's displayed S.1/S.2/S.3 trichotomy.  The
 checked paper-facing account is
-`Literature/AshkenaziGolanKrasikovRainerAndSolan2022.lean`; the corrected source
+`Literature/AshkenaziGolanKrasikovRainerAndSolan2024.lean`, which follows the
+journal version and includes a scoped arXiv-v1 map; the corrected source
 semantics are recorded in `Literature/Simon2012.lean`.
 
 ### The model Theorem 3 presupposes (§4.1, p. 14)
@@ -873,7 +874,7 @@ verified primary sources, not independently fetched:
 - arXiv:2208.11425 — Ashkenazi-Golan, Flesch & Solan, *Absorbing Blackwell
   Games*
 - arXiv:2012.04369 — Ashkenazi-Golan, Krasikov, Rainer & Solan, Math.
-  Programming 2022, DOI `10.1007/s10107-022-01807-6`
+  Programming **203** (2024), DOI `10.1007/s10107-022-01807-6`
 - arXiv:1707.02598 — Solan & Solan, *Quitting Games and Linear Complementarity
   Problems*, Math. OR 45(2), DOI `10.1287/moor.2019.0996` (sunspot
   ε-equilibria for all multiplayer quitting games; ordinary uniform
