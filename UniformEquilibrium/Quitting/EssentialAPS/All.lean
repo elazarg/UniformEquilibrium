@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.Regression
 import UniformEquilibrium.Quitting.EssentialAPS.InfiniteContraction
 import UniformEquilibrium.Quitting.EssentialAPS.OccupationCancellationRegression
 import UniformEquilibrium.Quitting.EssentialAPS.SegmentClosedExecution
+import UniformEquilibrium.Quitting.EssentialAPS.SingletonDataCongruence
 import UniformEquilibrium.Quitting.EssentialAPS.UniformPayoff
 import UniformEquilibrium.Quitting.EssentialAPS.AdaptiveMeshUniformPayoff
 
