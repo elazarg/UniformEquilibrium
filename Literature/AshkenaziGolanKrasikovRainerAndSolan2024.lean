@@ -52,9 +52,11 @@ version uses a weak inequality.  The literal path side of Theorem 4.15 is
 automatic for nonempty games because the printed absorption-path definition
 does not test terminal total jumps.  Its universal claim is therefore checked
 to be equivalent to the same general approximate-existence problem.  The
-conclusion of Theorem 5.4 is checked through the corrected
-facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.  The printed (A.1) omits the upper
+conclusion of Theorem 5.4 is checked through the corrected facewise polygonal
+construction: locally valid polygonal pieces are built one boundary face at a
+time, with consecutive pieces joined continuously at shared endpoints.  The
+printed global control correspondence is separately proved not upper hemicontinuous.
+The printed (A.1) omits the upper
 probability bound later used in Remark 4.4(9).  The corrected unit-bounded
 forms of Propositions 4.8, 4.11, and 4.14 are proved, with the additional
 repairs to the printed proof of Proposition 4.8 stated below.  The literal
