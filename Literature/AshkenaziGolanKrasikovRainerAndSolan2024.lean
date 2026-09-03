@@ -24,27 +24,36 @@ not change the mathematical passages recorded here.  The longer HAL manuscript
 locations discussed below.  A map to `arXiv:2012.04369v1` is provided at the
 end of the file.
 
-The file distinguishes three statuses literally.
+The file distinguishes four statuses literally.
 
 * A theorem proved below is checked at exactly its displayed type.
-* An unproved current-journal theorem statement uses `sorry`, as permitted in
-  `Literature/`; scoped v1-only comparison claims may be recorded as open
-  proposition definitions without asserting them.
+* A live open implication is a named proposition together with a checked
+  reduction to the identified general open problem; it is not asserted as a
+  theorem.
 * A false published statement is a named proposition followed by a checked
   theorem proving its negation.
+* A superseded version-only claim is a named proposition together with a
+  checked weakening to the corrected current statement; it is not asserted as
+  a current theorem.
 
-In particular, the forward implication of journal Theorem 3.4 is checked, but
-the printed reverse implication is left open.  The null-tail subcase of its
-S.3 branch is eliminated below.  Even the restricted stationary-exact every-restart
+In particular, the forward implication of journal Theorem 3.4 is checked.  The
+printed reverse implication is open, and the universal printed equivalence is
+checked below to be equivalent to general finite-quitting terminal
+approximate-equilibrium existence.  The null-tail subcase of its S.3 branch is
+eliminated below.  Even the restricted stationary-exact every-restart
 implication is universally equivalent, through a one-added-player reduction,
-to general terminal approximate-equilibrium existence; this is not a
-same-cardinality equivalence.  Theorem 3.5 is false.  The
+to the same open problem; this is not a same-cardinality equivalence.  Theorem
+3.5 is false.  The
 strict estimate in Lemma 4.9 is false at zero absorption; the checked corrected
-version uses a weak inequality.  The converse direction of Theorem 4.15 is left
-open because the printed absorption-path definition does not test terminal
-total jumps.  The conclusion of Theorem 5.4 is checked through the corrected
+version uses a weak inequality.  The literal path side of Theorem 4.15 is
+automatic for nonempty games because the printed absorption-path definition
+does not test terminal total jumps.  Its universal claim is therefore checked
+to be equivalent to the same general approximate-existence problem.  The
+conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.
+separately proved not upper hemicontinuous.  The only claims below still
+represented by `sorry` are the compactness/density chain: journal Proposition
+4.8, Proposition 4.11, and Proposition 4.14.
 -/
 
 noncomputable section
@@ -348,22 +357,35 @@ theorem approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorb
   exact QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing
       (⟨reward, never⟩ : QuittingPayoffTable ι) happrox
 
-/-- Journal Theorem 3.4 as printed.  The forward implication is checked by
-`approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection`.
-The reverse implication remains open because printed S.3 assumes only initial
-absorption, whereas the checked local-to-global alternative requires every
-restarted tail to terminate.  That alternative also assumes zero payoff at
-Never and unit singleton self-exit rewards; an arbitrary-table reduction for
-the remaining regimes has not been supplied. -/
-theorem publishedApproximateEquilibriumExistence_iff_threeBranchAlternative
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (never : Payoff ι) :
-    ApproximateEquilibriumExistenceIffThreeBranchAlternative reward never := by
+/-- The universal schema of journal Theorem 3.4 as printed.  This definition
+records the live claim without asserting its open reverse implication. -/
+def UniversalApproximateEquilibriumExistenceIffThreeBranchAlternative : Prop :=
+  ∀ (players : Type) [Fintype players] [DecidableEq players]
+      (reward : {S : Finset players // S.Nonempty} → Payoff players)
+      (never : Payoff players),
+    ApproximateEquilibriumExistenceIffThreeBranchAlternative reward never
+
+/-- The universal printed journal Theorem 3.4 is equivalent to general
+finite-quitting terminal approximate-equilibrium existence.  The hard
+direction passes through reverse S.3 and its one-added-player reduction; this
+does not prove either side of the equivalence. -/
+theorem universalThreeBranchAlternative_iff_universalApproximateEquilibriumExistence :
+    UniversalApproximateEquilibriumExistenceIffThreeBranchAlternative ↔
+      UniversalQuittingApproximateEquilibriumExistence := by
   constructor
-  · exact
-      approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection
-        reward never
-  · sorry
+  · intro hpublished
+    rw [← universalReverseS3_iff_universalApproximateEquilibriumExistence]
+    intro players _ _ table hbranch
+    apply (hpublished players table.terminal table.never).2
+    exact Or.inr (Or.inr
+      ((hasSmallAbsorbingSequentiallyPerfectProfiles_iff_table table).2 hbranch))
+  · intro happrox players _ _ reward never
+    constructor
+    · exact
+        approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection
+          reward never
+    · intro _hbranch
+      exact happrox players ⟨reward, never⟩
 
 /-! ### Checked erratum status for the reverse S.3 implication
 
@@ -915,13 +937,119 @@ def ApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath
       ∃ path : AbsorptionPath (ι := ι),
         IsSequentiallyPerfectAbsorptionPath reward path 0)
 
-/-- Journal Theorem 4.15 as printed.  Its converse remains unproved because
-Definition 4.13 admits untested terminal total jumps. -/
-theorem publishedApproximateEquilibriumExistence_iff_zeroPerfectAbsorptionPath
+/-- For a nonempty player set, the literal journal Theorem 4.15 is exactly the
+open assertion that every game in its nonsimple regime has approximate
+equilibria.  The path-existence side disappears because Definition 4.13 admits
+a zero-perfect terminal-total-jump path in every such game. -/
+theorem zeroPerfectAbsorptionPathEquivalence_iff_nonsimpleApproximateEquilibriumExistence
+    [Nonempty ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (never : Payoff ι) :
-    ApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath reward never := by
-  sorry
+    ApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath reward never ↔
+      (HasNoSmallSimpleApproximateEquilibria reward never →
+        HasApproximateEquilibriaAtEveryPositiveError reward never) := by
+  let hexists : ∃ path : AbsorptionPath (ι := ι),
+      IsSequentiallyPerfectAbsorptionPath reward path 0 :=
+    ⟨(exists_terminalTotalJump_sequentiallyZeroPerfectAbsorptionPath reward).choose,
+      (exists_terminalTotalJump_sequentiallyZeroPerfectAbsorptionPath
+        reward).choose_spec.1⟩
+  constructor
+  · intro hpublished hnonsimple
+    exact (hpublished hnonsimple).2 hexists
+  · intro hnonsimple hnonsimpleGame
+    exact ⟨fun _happrox ↦ hexists,
+      fun _hpath ↦ hnonsimple hnonsimpleGame⟩
+
+/-- Outside the paper's nonsimple regime, arbitrarily accurate simple
+equilibria already give approximate-equilibrium existence. -/
+theorem approximateEquilibria_of_not_noSmallSimpleApproximateEquilibria
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (never : Payoff ι)
+    (hnot : ¬HasNoSmallSimpleApproximateEquilibria reward never) :
+    HasApproximateEquilibriaAtEveryPositiveError reward never := by
+  classical
+  intro target htarget
+  have hfails : ¬∀ error : ℝ, 0 < error → error < target →
+      (¬∃ profile : (quittingGame reward).BehaviorProfile,
+        QuittingProfileAbsorbsSurelyAtFirstStage reward profile ∧
+          (quittingGame reward).IsεAsymptoticNash
+            (QuittingPayoffTable.terminalPayoff ⟨reward, never⟩)
+            error profile) ∧
+        ¬(quittingGame reward).IsεAsymptoticNash
+          (QuittingPayoffTable.terminalPayoff ⟨reward, never⟩) error
+          (quittingAlwaysContinueProfile reward) := by
+    intro hsmall
+    exact hnot ⟨target, htarget, hsmall⟩
+  push Not at hfails
+  obtain ⟨error, herror, hbelow, hsimple⟩ := hfails
+  by_cases hsure : ∃ profile : (quittingGame reward).BehaviorProfile,
+      QuittingProfileAbsorbsSurelyAtFirstStage reward profile ∧
+        (quittingGame reward).IsεAsymptoticNash
+          (QuittingPayoffTable.terminalPayoff ⟨reward, never⟩) error profile
+  · obtain ⟨profile, _hfirst, hnash⟩ := hsure
+    exact ⟨profile, hnash.mono hbelow.le⟩
+  · have hallContinue := hsimple (by
+      intro profile hfirst hnash
+      exact hsure ⟨profile, hfirst, hnash⟩)
+    exact ⟨quittingAlwaysContinueProfile reward,
+      hallContinue.mono hbelow.le⟩
+
+/-- The open nonsimple-game existence schema isolated by literal Theorem
+4.15. -/
+def UniversalNonsimpleApproximateEquilibriumExistence : Prop :=
+  ∀ (players : Type) [Fintype players] [DecidableEq players] [Nonempty players]
+      (reward : {S : Finset players // S.Nonempty} → Payoff players)
+      (never : Payoff players),
+    HasNoSmallSimpleApproximateEquilibria reward never →
+      HasApproximateEquilibriaAtEveryPositiveError reward never
+
+/-- The nonsimple-game schema is equivalent to general finite-quitting
+terminal approximate-equilibrium existence: failure of the nonsimple
+hypothesis supplies arbitrarily accurate simple equilibria. -/
+theorem universalNonsimpleApproximateEquilibriumExistence_iff_universalApproximateExistence :
+    UniversalNonsimpleApproximateEquilibriumExistence ↔
+      UniversalQuittingApproximateEquilibriumExistence := by
+  classical
+  constructor
+  · intro hnonsimple players _ _ table
+    cases isEmpty_or_nonempty players with
+    | inl hempty =>
+        letI : IsEmpty players := hempty
+        intro error _herror
+        refine ⟨quittingAlwaysContinueProfile table.terminal, ?_⟩
+        intro who
+        exact isEmptyElim who
+    | inr hnonempty =>
+        letI : Nonempty players := hnonempty
+        by_cases hsimple :
+          HasNoSmallSimpleApproximateEquilibria table.terminal table.never
+        · exact hnonsimple players table.terminal table.never hsimple
+        · exact approximateEquilibria_of_not_noSmallSimpleApproximateEquilibria
+            table.terminal table.never hsimple
+  · intro happrox players _ _ _ reward never _hnonsimple
+    exact happrox players ⟨reward, never⟩
+
+/-- Universal literal journal Theorem 4.15 over nonempty finite player sets. -/
+def UniversalApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath : Prop :=
+  ∀ (players : Type) [Fintype players] [DecidableEq players] [Nonempty players]
+      (reward : {S : Finset players // S.Nonempty} → Payoff players)
+      (never : Payoff players),
+    ApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath reward never
+
+/-- Because terminal-total-jump paths make its right side automatic, the
+universal literal journal Theorem 4.15 is equivalent to the general
+finite-quitting terminal approximate-equilibrium problem. -/
+theorem universalZeroPerfectAbsorptionPathEquivalence_iff_universalApproximateExistence :
+    UniversalApproximateEquilibriumExistenceIffZeroPerfectAbsorptionPath ↔
+      UniversalQuittingApproximateEquilibriumExistence := by
+  rw [← universalNonsimpleApproximateEquilibriumExistence_iff_universalApproximateExistence]
+  constructor
+  · intro hpublished players _ _ _ reward never hnonsimple
+    exact (zeroPerfectAbsorptionPathEquivalence_iff_nonsimpleApproximateEquilibriumExistence
+      reward never).1 (hpublished players reward never) hnonsimple
+  · intro hnonsimple players _ _ _ reward never
+    exact (zeroPerfectAbsorptionPathEquivalence_iff_nonsimpleApproximateEquilibriumExistence
+      reward never).2 (hnonsimple players reward never)
 
 /-! ## 5. Continuous equilibria
 
@@ -1112,11 +1240,52 @@ def ExactMinmaxThreeBranchForwardClaim
       HasSmallExactMinmaxInstantPunishmentEquilibria ⟨reward, never⟩ ∨
         HasSmallAbsorbingSequentiallyPerfectProfiles ⟨reward, never⟩
 
-/-- arXiv v1 Theorem 3.4 remains unproved at its exact-minmax strength. -/
-theorem publishedExactMinmaxThreeBranchForward
+/-- Exact minmax attainment in v1 branch S.2 implies the error-close branch
+used by the corrected current theorem. -/
+theorem exactMinmaxInstantPunishment_implies_errorCloseInstantPunishment
+    (table : QuittingPayoffTable ι)
+    (hexact : HasSmallExactMinmaxInstantPunishmentEquilibria table) :
+    HasSmallInstantPunishmentApproximateEquilibria table := by
+  obtain ⟨bound, hbound, hsmall⟩ := hexact
+  refine ⟨bound, hbound, ?_⟩
+  intro error herror hbelow
+  obtain ⟨quitter, root, punishment, hquit, hminmax, hnash⟩ :=
+    hsmall error herror hbelow
+  exact ⟨quitter, root, punishment, hquit, by linarith, hnash⟩
+
+/-- The corrected current error-close forward claim which supersedes v1
+Theorem 3.4. -/
+def ErrorClosePunishmentThreeBranchForwardClaim
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (never : Payoff ι) : ExactMinmaxThreeBranchForwardClaim reward never := by
-  sorry
+    (never : Payoff ι) : Prop :=
+  HasApproximateEquilibriaAtEveryPositiveError reward never →
+    HasSmallStationaryApproximateEquilibria ⟨reward, never⟩ ∨
+      HasSmallInstantPunishmentApproximateEquilibria ⟨reward, never⟩ ∨
+        HasSmallAbsorbingSequentiallyPerfectProfiles ⟨reward, never⟩
+
+/-- The corrected current forward statement is proved. -/
+theorem errorClosePunishmentThreeBranchForward
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (never : Payoff ι) :
+    ErrorClosePunishmentThreeBranchForwardClaim reward never :=
+  approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection
+    reward never
+
+/-- The historical v1 exact-minmax statement uses the stronger S.2 witness and
+implies the corrected current forward statement.
+No converse or refutation of the superseded v1 claim is asserted. -/
+theorem exactMinmaxThreeBranchForward_implies_errorClosePunishmentThreeBranchForward
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (never : Payoff ι)
+    (hv1 : ExactMinmaxThreeBranchForwardClaim reward never) :
+    ErrorClosePunishmentThreeBranchForwardClaim reward never := by
+  intro happrox
+  rcases hv1 happrox with hstationary | hexact | habsorbing
+  · exact Or.inl hstationary
+  · exact Or.inr (Or.inl
+      (exactMinmaxInstantPunishment_implies_errorCloseInstantPunishment
+        ⟨reward, never⟩ hexact))
+  · exact Or.inr (Or.inr habsorbing)
 
 /-- V1 Lemma 4.7 additionally claimed uniqueness and prescribed ratios of
 individual quit probabilities.  The current journal replaces it by the
