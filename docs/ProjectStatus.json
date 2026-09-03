@@ -443,6 +443,33 @@
       "scope": "For every finite periodic product-root word with coordinate Bellman residual delta, phasewise epsilon-root Nash data, and one positive nonempty exact coalition atom excluding each player, the annotated values lie within K delta / rho_max of the actual periodic terminal values and every player's unrestricted behavioral terminal debt is at most (K / rho_i)(epsilon + K delta / rho_max). Marked phases and atoms may differ, coincide, or repeat, with no quiet-face hypothesis. No theorem produces the covered cyclic word from deleted-game sources, a positive-minimum residual, or arbitrary behavioral profiles."
     },
     {
+      "id": "endogenous-interior-cyclic-nash-bellman-blocks",
+      "subject": "Endogenous interior cyclic Nash--Bellman blocks",
+      "kind": "Unconditional finite-dimensional producer",
+      "declaration": "nonempty_interiorApproximateNashCyclicBlock",
+      "source": "UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "Every finite quitting reward table, positive local error, and positive finite period have a strictly interior cyclic product-root word with reward-bounded values, exact Bellman return, a literal logistic response equation, and playerwise root Nash defect at most the error. Repeating the word gives an actual almost-surely absorbing behavioral profile with the displayed phase payoff, and the checked periodic cap theorem bounds complete behavioral debt, including Never and arbitrarily late deviations, by period times error divided by player-deleted absorption. Vanishing maximum debt ratios give one fixed uniform-equilibrium payoff. This route does not make the roots exact or either positive-gap escape branch terminal Nash."
+    },
+    {
+      "id": "interior-cyclic-terminal-debt-escape",
+      "subject": "Interior cyclic terminal-debt escape alternatives",
+      "kind": "Conditional counterexample reduction",
+      "declaration": "exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap",
+      "source": "UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For a nontrivial finite player type, a supplied positive terminal exploitability gap and a produced cyclic-block family whose period times local error tends to zero select one fixed debtor with a persistent debt floor and vanishing opponent absorption. On a further strict subsequence, either the actual terminal law and phase payoff converge to that player's singleton while every outsider's complete debt tends to zero, or the total displayed hazard tends to zero; both alternatives retain the owner debt floor and opponent-absorption convergence literally. Neither residual is consumed to terminal Nash, minimum-fibre anchoring, or a uniform payoff."
+    },
+    {
+      "id": "fixed-period-interior-cyclic-exact-limit",
+      "subject": "Fixed-period exact limit of interior cyclic blocks",
+      "kind": "Conditional compactness theorem",
+      "declaration": "exists_fixedPeriodExactNashCyclicLimit_of_terminalGap",
+      "source": "UniformEquilibrium/Quitting/Cycles/FixedPeriodInteriorCyclicTerminalGap.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For a fixed positive finite period, positive local errors tending to zero, and a supplied positive terminal exploitability gap, a strict subsequence converges to an exact cyclic Nash--Bellman word on which every player except one fixed debtor surely Continues at every phase. The limit may be all Continue or isolated-owner, need not absorb, and is not asserted to be terminal Nash."
+    },
+    {
       "id": "fin-five-full-face-phase-seam-regression",
       "subject": "Fin5 full-face sources with a sharp phase--seam obstruction",
       "kind": "Unconditional rational regression",

@@ -1033,6 +1033,41 @@ permit a sharp `31/32` phase--seam obstruction.  Its ambient all-Quit profile
 has `D_* = 0`; whether positive global minimum debt forces alignment remains
 the exact branch-facing question.
 
+The endogenous interior cyclic route now supplies its own actual source.
+`nonempty_interiorApproximateNashCyclicBlock`
+(`UniformEquilibrium/Quitting/Cycles/EndogenousInteriorCyclicBlock.lean`)
+constructs a strictly interior logistic-response word for every finite
+quitting table, positive local error, and positive finite period.  The roots
+have exact Bellman return and root Nash defect at most the error, and
+`InteriorApproximateNashCyclicBlock.quitProbability_odds_eq_exp` together
+with
+`tendsto_cyclicBlock_quitProbability_ratio_zero_of_separated_continueAdvantages`
+makes the exponential selection of uniformly separated Continue advantages
+literal.  Repetition is an actual almost-surely absorbing profile with the
+displayed phase payoff, and
+`quittingTerminalDeviationDebt_cyclicBehaviorProfile_le_card_mul_error_div_opponentAbsorption`
+bounds its unrestricted behavioral debt, including Never, by period times
+error divided by player-deleted absorption.  Vanishing maximum ratios feed
+`quittingGame_isUniformEquilibriumPayoff_of_interiorCyclicBlocks`, giving
+`M`, `L`, actual-profile `A`, and `C` on that branch.
+
+Under a supplied positive terminal exploitability gap and vanishing
+period-error,
+`exists_interiorCyclicFixedDebtor_and_ownerEscape_of_terminalGap`
+(`UniformEquilibrium/Quitting/Cycles/InteriorCyclicTerminalDebtRatio.lean`)
+instead fixes one debtor with vanishing opponent absorption.  A further
+strict subsequence either concentrates the literal terminal law and payoff
+on its singleton while every outsider debt vanishes, or has vanishing total
+hazard; both structures retain the owner debt floor and opponent-absorption
+convergence.  At a fixed period,
+`exists_fixedPeriodExactNashCyclicLimit_of_terminalGap`
+(`UniformEquilibrium/Quitting/Cycles/FixedPeriodInteriorCyclicTerminalGap.lean`)
+produces an exact cyclic Nash--Bellman limit on which every nonowner surely
+Continues.  These positive-gap results have `M`, `L`, and source `A`, but the
+two escape branches and the possibly nonabsorbing exact limit have no
+downstream `C`: none is asserted terminal Nash, minimum-anchored, or a uniform
+payoff.
+
 The Research same-stage endpoint route now has a checked Fin4 structural
 adapter, but not a closure theorem.  The literal closed-segment declarations
 `dispatchedClosedSegment_offset_edge_certificate`,
