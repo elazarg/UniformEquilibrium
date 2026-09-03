@@ -69,6 +69,21 @@ therefore sends any quitting-game counterexample on `I` to one on `I ⊕ J`.
 This is a counterexample transport theorem, not a construction of a
 counterexample or a reduction from higher to lower player cardinality.
 
+Exact finite-period certificates do not form a universal Fin4 producer.
+[`exists_boundedCompletelyAbsorbingInverseIterate_of_onePassivePlayerBlockCertificate`](../UniformEquilibrium/Quitting/Boundary/Analytic/PassivePaddingBlockCertificateRetraction.lean)
+projects every positive-penalty one-passive-player exact bounded absorbing
+admissible block certificate to a bounded completely absorbing inverse iterate
+of the old table, including phases where an old player Quits surely.
+[`no_isQuittingBlockCertificate_solanPassivePaddedReward_one`](../UniformEquilibrium/Quitting/Boundary/Analytic/SolanPassivePaddingBlockNoGo.lean)
+then exhibits the explicit rational four-player padding of the perturbed Solan
+table, with dummy-only row `(3,3,3,-1)`, for which no such certificate exists
+at any finite period. The parametric theorem is stronger, covering every
+`0 < epsilon <= 2`. Projection and quiet lift still preserve every literal
+period and compare unrestricted terminal exploitability by the explicit
+canonical multiplier. Thus this is an `M/L/A/C` no-go for universal exact
+periodic production, not a positive all-behavior exploitability gap and not a
+Fin4 counterexample.
+
 The Fin4 terminal problem also has an exact executable scale fork, orthogonal
 to the chronological proof-search DAG.
 [`finFourExactScaleStep`](../Research/Quitting/FinFourExactScaleResolution.lean)
