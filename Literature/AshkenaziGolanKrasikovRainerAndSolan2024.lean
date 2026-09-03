@@ -2,6 +2,7 @@ import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
 import MathUE.PMFProduct.SmallCellProductization
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
 import UniformEquilibrium.Quitting.AbsorptionPath.EndpointUnboundedWeakLimitCounterexample
+import UniformEquilibrium.Quitting.AbsorptionPath.LimitJumpRootLocalization
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorrespondence
 import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
@@ -56,8 +57,7 @@ separately proved not upper hemicontinuous.  The only claims below still
 represented by `sorry` are the unit-bounded density and compactness statements
 corresponding to journal Propositions 4.8 and 4.11.  The old endpoint-unbounded
 Lean interface for Proposition 4.14 is checked false, while the unit-bounded
-closure intended by the paper is retained as an open proposition rather than
-asserted as a theorem.
+closure intended by the paper is proved.
 -/
 
 noncomputable section
@@ -881,9 +881,9 @@ It is false: a constant linear sequence can converge weakly to a path with an
 additional singleton jump at clock one.  The limit then has endpoint total
 mass two, so this is a counterexample to that interface, not to the intended
 unit-bounded paper statement.  The corrected unit-bounded closure remains an
-open proposition: both continuous-clock clauses are checked under unit-bounded
-weak convergence, while the jump-row consumer still needs source realizations
-of the limit jumps.
+honest theorem: weak convergence constructs source realizations separately for
+each limit jump, which is sufficient to close the universal jump-row clause;
+the continuous-clock clauses pass directly to the weak limit.
 -/
 
 /-- The endpoint-unbounded playerwise closure predicate formerly used for
@@ -908,11 +908,17 @@ theorem not_everyTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClos
     exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound
   exact fun hclosed => hreward (hclosed reward)
 
-/-- The unit-bounded playerwise closure intended by journal Proposition 4.14.
-This is an open proposition, not a theorem. -/
+/-- The unit-bounded playerwise closure intended by journal Proposition 4.14. -/
 abbrev UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
+    reward
+
+/-- Journal Proposition 4.14 holds for unit-bounded absorption paths. -/
+theorem unitBoundedPlayerSequentialPerfection_isClosedUnderWeakLimits
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits reward :=
+  GameTheory.QuittingAbsorptionPath.unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
     reward
 
 /-!

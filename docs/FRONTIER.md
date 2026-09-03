@@ -3423,10 +3423,20 @@ in the live mathematical ledger.
   subclauses therefore have `M`/`L` and source-specific `A`/`C`.
   `playerSequentiallyPerfect_of_sourceApproximatedUnitBoundedWeakLimit` is the
   checked full-predicate consumer when source realizations of every limit jump
-  are supplied.  The corrected unit-bounded compactness and full closure
-  predicates remain open because weak convergence has not yet been shown to
-  produce those jump realizations; there is no corresponding source `A` or
-  unconditional full-closure `C`.  This generic gap does not weaken the checked source-specific
+  are supplied.  The source geometry in
+  `UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpSourceLocalization.lean`
+  constructs literal source jump boundaries, and
+  `unitBoundedWeakLimitJumpSubsequenceLocalization` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpRootLocalization.lean`
+  passes the normalized jump identity after compactifying left coordinates and
+  product roots.  Its strict source subsequence may depend on the chosen limit
+  jump, which suffices for
+  `unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits`: the corrected
+  unit-bounded full closure now has `M`/`L` and source `A`/consumer `C`.
+  `UnitBoundedAbsorptionPathSequentialCompactness` remains open: no theorem
+  constructs one common subsequence realizing every limit jump or the initial
+  weakly convergent absorption-path subsequence.  This remaining compactness
+  gap does not weaken the checked source-specific
   `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath`, whose localization
   is constructed directly from its actual chronological source.
   The published small-cell productization is checked as

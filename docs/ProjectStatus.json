@@ -470,6 +470,15 @@
       "scope": "For every finite arbitrary-never quitting payoff table, if for every positive error there exists an arbitrary behavioral terminal-payoff approximate equilibrium against all unilateral behavioral replacements, then one fixed branch holds: stationary S.1, instant-punishment S.2, or absorbing sequentially-perfect S.3. The proof handles the empty-player case and otherwise constructs one actual chronological source, then exhaustively dispatches its terminal and no-terminal branches. This proves the forward implication of AKRS Theorem 3.4; it does not prove the approximate-equilibrium premise for every game, assert a fixed payoff target, control all sufficiently long finite horizons, or imply a uniform equilibrium."
     },
     {
+      "id": "unit-bounded-absorption-path-weak-limit-closure",
+      "subject": "Unit-bounded absorption-path weak-limit sequential-perfection closure",
+      "kind": "Unconditional closure theorem",
+      "declaration": "unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits",
+      "source": "UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpRootLocalization.lean",
+      "umbrella": "UniformEquilibrium/Quitting/AbsorptionPath/All.lean",
+      "scope": "For every finite player type and reward table, if every source absorption path and the limit have total mass at most one, nonnegative playerwise perfection errors tend to zero, the paths converge coordinatewise at every continuity point of the limit, and the selected player is sequentially perfect on every source path at its error, then that player is sequentially perfect on the limit at error zero. Limit jumps are localized by literal source jumps along jump-dependent strict subsequences; one common subsequence for every jump, whole-path sequential compactness, path density, approximate-equilibrium existence, and a uniform-equilibrium conclusion are not asserted."
+    },
+    {
       "id": "projective-qbar-uniform-payoff",
       "subject": "Finite quitting games with projective-Q-bar normalized singleton matrix",
       "kind": "Unconditional family theorem",

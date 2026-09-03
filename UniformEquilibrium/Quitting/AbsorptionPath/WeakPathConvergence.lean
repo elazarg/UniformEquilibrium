@@ -98,11 +98,10 @@ def PlayerSequentialPerfectionClosedUnderWeakLimits
           player (errors index)) →
       IsPlayerSequentiallyPerfectAbsorptionPath reward limit player 0
 
-/-- Open target closure property on paths whose cumulative total mass is
-literally bounded by one, for every source path and for the limit.  The source
-jump and continuous-clock localization data used by checked intermediate
-consumers are intended consequences of weak convergence and path geometry;
-they are therefore proof obligations rather than hypotheses of this target. -/
+/-- Closure property on paths whose cumulative total mass is literally
+bounded by one, for every source path and for the limit. Source jump and
+continuous-clock localization data are consequences rather than hypotheses
+of this property. -/
 def UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ (errors : ℕ → ℝ) (paths : ℕ → AbsorptionPath (ι := ι))
