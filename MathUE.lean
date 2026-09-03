@@ -320,6 +320,7 @@ import MathUE.Probability.HarmonicStaticTransientVariation
 import MathUE.Probability.HarmonicTwoStateBranchingSCC
 import MathUE.Probability.HarmonicVisitEpoch
 import MathUE.Probability.HittingTimePotential
+import MathUE.Probability.IndependentFirstStoppingPair
 import MathUE.Probability.IntegratedResponseLedger
 import MathUE.Probability.KakutaniProductDichotomy
 import MathUE.Probability.KilledTailPotential
@@ -334,6 +335,7 @@ import MathUE.Probability.NonsingletonConcentration
 import MathUE.Probability.OccupationFlowAlternative
 import MathUE.Probability.OneSidedDebtShadowing
 import MathUE.Probability.OptionalTargetTransport
+import MathUE.Probability.OverlappingFirstStopping
 import MathUE.Probability.OwnerChargedOccupationAlternative
 import MathUE.Probability.PhaseOccupationDuality
 import MathUE.Probability.PositiveChargedCirculationClass
