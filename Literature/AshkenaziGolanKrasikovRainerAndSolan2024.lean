@@ -54,11 +54,11 @@ does not test terminal total jumps.  Its universal claim is therefore checked
 to be equivalent to the same general approximate-existence problem.  The
 conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.  The corrected unit-bounded density
-statement of Proposition 4.8 and compactness statement of Proposition 4.11 are
-proved.  The old endpoint-unbounded Lean interface for
-Proposition 4.14 is checked false, while the unit-bounded closure intended by
-the paper is proved.
+separately proved not upper hemicontinuous.  Journal Propositions 4.8 and 4.11
+are proved under the full probability bound in (A.1), with the corrections to
+the printed proof of Proposition 4.8 stated below.  The old endpoint-unbounded
+Lean interface for Proposition 4.14 is checked false, while journal
+Proposition 4.14 under the full bound in (A.1) is proved.
 -/
 
 noncomputable section
@@ -680,8 +680,8 @@ theorem printedOneOverResolutionCollisionFactor_failsAtResolutionFive :
           Math.PMFProduct.coalitionMass root {false} :=
   akrsPrintedCollisionFactor_five_counterexample
 
-/-- The unit-bounded density statement corresponding to journal Proposition
-4.8.  Bounds on both the target and every approximant are stated literally. -/
+/-- Journal Proposition 4.8, with the full upper probability bound from (A.1)
+stated literally for both the target and every approximating path. -/
 def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
   ∀ path : AbsorptionPath (ι := ι),
     HasUnitBoundedTotalMass path →
@@ -692,7 +692,8 @@ def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
           HasUnitBoundedTotalMass (approximants resolution)) ∧
         WeaklyConvergesAbsorptionPaths approximants path
 
-/-- The corrected unit-bounded form of journal Proposition 4.8. -/
+/-- Journal Proposition 4.8, using the corrected cell law, large-jump endpoint,
+and collision factor described above. -/
 theorem unitBoundedAbsorptionPaths_are_weakLimits_of_absorbingProfiles :
     UnitBoundedAbsorptionPathDensityByAbsorbingProfiles (ι := ι) := by
   exact unitBoundedAbsorptionPaths_are_weakLimits_of_completelyAbsorbingRootSequences
@@ -805,13 +806,15 @@ weak topology, with convergent source jumps and product witnesses at every
 limiting jump.
 -/
 
-/-- The unit-bounded sequential compactness statement corresponding to journal
-Proposition 4.11, delegated to the shared production proposition. -/
+/-- Journal Proposition 4.11 with the full upper probability bound from (A.1),
+delegated to the shared production proposition. -/
 abbrev UnitBoundedAbsorptionPathSequentialCompactness : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedAbsorptionPathSequentialCompactness
     (ι := ι)
 
-/-- Checked corrected unit-bounded form of journal Proposition 4.11. -/
+/-- Journal Proposition 4.11: one common strict subsequence converges weakly,
+has a unit-bounded absorption-path limit, and realizes every limiting jump by
+convergent source jumps and product rows along that same subsequence. -/
 theorem unitBoundedAbsorptionPaths_have_weaklyConvergentSubsequence :
     UnitBoundedAbsorptionPathSequentialCompactness (ι := ι) :=
   GameTheory.QuittingAbsorptionPath.unitBoundedAbsorptionPathSequentialCompactness
@@ -864,11 +867,11 @@ under weak limits of paths whose perfection errors tend to zero.
 The old Lean statement below omitted the upper probability-mass invariant.
 It is false: a constant linear sequence can converge weakly to a path with an
 additional singleton jump at clock one.  The limit then has endpoint total
-mass two, so this is a counterexample to that interface, not to the intended
-unit-bounded paper statement.  The corrected unit-bounded closure remains an
-honest theorem: weak convergence constructs source realizations separately for
-each limit jump, which is sufficient to close the universal jump-row clause;
-the continuous-clock clauses pass directly to the weak limit.
+mass two, so this is a counterexample to that interface, not to the paper's
+statement under (A.1).  Journal Proposition 4.14 is an honest theorem:
+weak convergence constructs source realizations separately for each limit
+jump, which is sufficient to close the universal jump-row clause; the
+continuous-clock clauses pass directly to the weak limit.
 -/
 
 /-- The endpoint-unbounded playerwise closure predicate formerly used for
@@ -893,7 +896,7 @@ theorem not_everyTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClos
     exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound
   exact fun hclosed => hreward (hclosed reward)
 
-/-- The unit-bounded playerwise closure intended by journal Proposition 4.14. -/
+/-- Journal Proposition 4.14 with the full upper probability bound from (A.1). -/
 abbrev UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
