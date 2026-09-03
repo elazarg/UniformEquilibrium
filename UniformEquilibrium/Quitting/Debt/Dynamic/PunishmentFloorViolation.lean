@@ -180,6 +180,29 @@ theorem successorValue_lt_quittingPunishmentValue_of_nashBellmanEdge
   rw [mul_zero] at hproduct
   linarith
 
+/-- Across an exact Nash--Bellman edge, a coordinate which is below its
+behavioral punishment value cannot increase at the successor. -/
+theorem successorValue_le_current_of_punishmentValue_violation
+    (current successor : QuittingNashBellmanPoint ι)
+    (hedge : IsQuittingNashBellmanEdge reward current successor) (who : ι)
+    (hviolation : current.1 who < quittingPunishmentValue reward who) :
+    successor.1 who ≤ current.1 who := by
+  obtain ⟨-, hgap⟩ :=
+    quittingPunishmentValue_sub_le_continueMass_mul_of_nashBellmanEdge
+      current successor hedge who hviolation
+  have hsuccessor :=
+    successorValue_lt_quittingPunishmentValue_of_nashBellmanEdge
+      current successor hedge who hviolation
+  have hmass1 := quittingStationaryFixedOpponentsContinueMass_le_one
+    (quittingRootOfSimplex current.2) who
+  have hshrink :
+      quittingStationaryFixedOpponentsContinueMass
+          (quittingRootOfSimplex current.2) who *
+        (quittingPunishmentValue reward who - successor.1 who) ≤
+      quittingPunishmentValue reward who - successor.1 who :=
+    mul_le_of_le_one_left (by linarith) hmass1
+  linarith
+
 /-! ## No rotation: the violating coordinate set is monotone -/
 
 /-- Along a chronological exact dynamic-debt tail, a punishment-floor
@@ -209,20 +232,8 @@ theorem quittingDynamicDebtTail_value_succ_le_of_floorViolation
     (who : ι) (time : ℕ)
     (hviolation : (tail time).1.1 who < quittingPunishmentValue reward who) :
     (tail (time + 1)).1.1 who ≤ (tail time).1.1 who := by
-  obtain ⟨-, hgap⟩ :=
-    quittingPunishmentValue_sub_le_continueMass_mul_of_nashBellmanEdge
-      (tail time).1 (tail (time + 1)).1 (hedge time).1 who hviolation
-  have hsuccessor := successorValue_lt_quittingPunishmentValue_of_nashBellmanEdge
+  exact successorValue_le_current_of_punishmentValue_violation
     (tail time).1 (tail (time + 1)).1 (hedge time).1 who hviolation
-  have hmass1 := quittingStationaryFixedOpponentsContinueMass_le_one
-    (quittingRootOfSimplex (tail time).1.2) who
-  have hshrink :
-      quittingStationaryFixedOpponentsContinueMass
-          (quittingRootOfSimplex (tail time).1.2) who *
-        (quittingPunishmentValue reward who - (tail (time + 1)).1.1 who) ≤
-      quittingPunishmentValue reward who - (tail (time + 1)).1.1 who :=
-    mul_le_of_le_one_left (by linarith) hmass1
-  linarith
 
 /-- Once positive, the punishment-floor gap of a violator is nondecreasing
 along a chronological exact dynamic-debt tail. -/

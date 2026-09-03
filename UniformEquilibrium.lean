@@ -533,6 +533,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefix
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorFinitePrefixChargedBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanValueConvergence
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanQuitEndpointLimit
+import UniformEquilibrium.Quitting.Bellman.Finite.SummableExactNashBellmanPunishmentFloor
 import UniformEquilibrium.Quitting.Cycles.PeriodicFiniteHorizonRate
 import UniformEquilibrium.Quitting.Cycles.CyclicSupersolution
 import UniformEquilibrium.Quitting.Circulation.SingletonFlowMesh
