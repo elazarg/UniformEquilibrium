@@ -1,6 +1,7 @@
 import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
 import MathUE.PMFProduct.SmallCellProductization
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
+import UniformEquilibrium.Quitting.AbsorptionPath.EndpointUnboundedWeakLimitCounterexample
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorrespondence
 import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
@@ -52,8 +53,11 @@ to be equivalent to the same general approximate-existence problem.  The
 conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
 separately proved not upper hemicontinuous.  The only claims below still
-represented by `sorry` are the compactness/density chain: journal Proposition
-4.8, Proposition 4.11, and Proposition 4.14.
+represented by `sorry` are the unit-bounded density and compactness statements
+corresponding to journal Propositions 4.8 and 4.11.  The old endpoint-unbounded
+Lean interface for Proposition 4.14 is checked false, while the unit-bounded
+closure intended by the paper is retained as an open proposition rather than
+asserted as a theorem.
 -/
 
 noncomputable section
@@ -62,6 +66,7 @@ namespace Literature.AshkenaziGolanKrasikovRainerAndSolan2024
 
 open GameTheory GameTheory.StochasticGame
 open GameTheory.QuittingAbsorptionPath
+open GameTheory.QuittingAbsorptionPath.EndpointUnboundedWeakLimitCounterexample
 open GameTheory.QuittingLCPClassification
 open Filter Set
 open scoped Topology
@@ -622,25 +627,28 @@ These are represented by `CadlagPath`, `pathTotal`, `pathJump`, `pathJumps`,
 `pathTimes`, and `pathRightDerivative`.
 -/
 
-/-- Weak convergence in the paper's cumulative-mass coordinates, defined
-immediately before journal Definition 4.3. -/
-def WeaklyConvergesAbsorptionPaths
+/-- Weak convergence in the paper's cumulative-mass coordinates, delegated to
+the shared production definition. -/
+abbrev WeaklyConvergesAbsorptionPaths
     (sequence : ℕ → AbsorptionPath (ι := ι))
     (limit : AbsorptionPath (ι := ι)) : Prop :=
-  ∀ time : ℝ, time ∈ Icc (0 : ℝ) 1 → time ∉ pathJumps limit.1 →
-    Tendsto (fun index coalition => (sequence index).1.value time coalition)
-      atTop (𝓝 fun coalition => limit.1.value time coalition)
+  GameTheory.QuittingAbsorptionPath.WeaklyConvergesAbsorptionPaths
+    sequence limit
 
 /-!
 
-**Definition 4.3.** An absorption path satisfies (A.1)--(A.4): total mass
-dominates the clock; gaps are filled by the preceding jump; every jump is a
-product law; and continuous motion carries singleton coalitions only.  This is
-the bundled type `AbsorptionPath`.
+**Definition 4.3.** An absorption path satisfies (A.1)--(A.4): its total mass
+lies between the clock and one; gaps are filled by the preceding jump; every
+jump is a product law; and continuous motion carries singleton coalitions
+only.  The repository's bundled type `AbsorptionPath` contains the lower clock
+bound and (A.2)--(A.4), but not the upper probability-mass bound.  The paper
+interface is therefore the unit-bounded subtype below.
 -/
 
-/-- The paper's Definition 4.3, delegated to the bundled repository type. -/
-abbrev PaperAbsorptionPath := AbsorptionPath (ι := ι)
+/-- The paper's Definition 4.3 as a bundled repository path together with the
+literal upper probability-mass invariant. -/
+abbrev PaperAbsorptionPath :=
+  {path : AbsorptionPath (ι := ι) // HasUnitBoundedTotalMass path}
 
 /-!
 
@@ -685,18 +693,22 @@ theorem printedOneOverResolutionCollisionFactor_failsAtResolutionFive :
           Math.PMFProduct.coalitionMass root {false} :=
   akrsPrintedCollisionFactor_five_counterexample
 
-/-- The density statement of journal Proposition 4.8. -/
-def EveryAbsorptionPathIsWeakLimitOfAbsorbingProfiles : Prop :=
+/-- The unit-bounded density statement corresponding to journal Proposition
+4.8.  Bounds on both the target and every approximant are stated literally. -/
+def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
   ∀ path : AbsorptionPath (ι := ι),
-    ∃ approximants : ℕ → AbsorptionPath (ι := ι),
-      (∀ resolution,
-        IsInducedByAbsorbingRootSequence (approximants resolution)) ∧
-      WeaklyConvergesAbsorptionPaths approximants path
+    HasUnitBoundedTotalMass path →
+      ∃ approximants : ℕ → AbsorptionPath (ι := ι),
+        (∀ resolution,
+          IsInducedByAbsorbingRootSequence (approximants resolution)) ∧
+        (∀ resolution,
+          HasUnitBoundedTotalMass (approximants resolution)) ∧
+        WeaklyConvergesAbsorptionPaths approximants path
 
-/-- Journal Proposition 4.8.  Its corrected full weak-path construction has
-not yet been checked in Lean. -/
-theorem absorptionPaths_are_weakLimits_of_absorbingProfiles :
-    EveryAbsorptionPathIsWeakLimitOfAbsorbingProfiles (ι := ι) := by
+/-- The corrected unit-bounded form of journal Proposition 4.8.  Its full
+weak-path construction has not yet been checked in Lean. -/
+theorem unitBoundedAbsorptionPaths_are_weakLimits_of_absorbingProfiles :
+    UnitBoundedAbsorptionPathDensityByAbsorbingProfiles (ι := ι) := by
   sorry
 
 /-!
@@ -807,37 +819,16 @@ weak topology, with convergent source jumps and product witnesses at every
 limiting jump.
 -/
 
-/-- The sequential compactness statement of journal Proposition 4.11. -/
-def AbsorptionPathSequentialCompactness : Prop :=
-  ∀ sequence : ℕ → AbsorptionPath (ι := ι),
-    ∃ (limit : AbsorptionPath (ι := ι)) (subsequence : ℕ → ℕ),
-      StrictMono subsequence ∧
-        WeaklyConvergesAbsorptionPaths (sequence ∘ subsequence) limit ∧
-        ∀ time ∈ pathJumps limit.1,
-          ∃ (sourceTimes : ℕ → ℝ)
-              (sourceRoots : ℕ → ι → PMF Bool)
-              (limitRoot : ι → PMF Bool),
-            Tendsto sourceTimes atTop (𝓝 time) ∧
-              Tendsto (fun index coalition =>
-                  (sequence (subsequence index)).1.value
-                    (sourceTimes index) coalition)
-                atTop (𝓝 fun coalition => limit.1.value time coalition) ∧
-              (∀ index,
-                sourceTimes index ∈
-                    pathJumps (sequence (subsequence index)).1 ∧
-                  AbsorptionPathJumpRelation
-                    (sequence (subsequence index)) (sourceTimes index)
-                    (sourceRoots index)) ∧
-              AbsorptionPathJumpRelation limit time limitRoot ∧
-              ∀ player action,
-                Tendsto (fun index =>
-                    ((sourceRoots index player) action).toReal)
-                  atTop (𝓝 ((limitRoot player) action).toReal)
+/-- The unit-bounded sequential compactness statement corresponding to journal
+Proposition 4.11, delegated to the shared open production proposition. -/
+abbrev UnitBoundedAbsorptionPathSequentialCompactness : Prop :=
+  GameTheory.QuittingAbsorptionPath.UnitBoundedAbsorptionPathSequentialCompactness
+    (ι := ι)
 
-/-- Journal Proposition 4.11.  The paper's whole-path weak compactness has not
-yet been checked in this interface. -/
-theorem absorptionPaths_have_weaklyConvergentSubsequence :
-    AbsorptionPathSequentialCompactness (ι := ι) := by
+/-- The corrected unit-bounded form of journal Proposition 4.11.  Whole-path
+weak compactness has not yet been checked in this interface. -/
+theorem unitBoundedAbsorptionPaths_have_weaklyConvergentSubsequence :
+    UnitBoundedAbsorptionPathSequentialCompactness (ι := ι) := by
   sorry
 
 /-!
@@ -882,29 +873,46 @@ theorem exists_terminalTotalJump_sequentiallyZeroPerfectAbsorptionPath
         0 ∈ pathJumps path.1 ∧ pathTotal path.1 0 = 1 :=
   exists_sequentiallyZeroPerfectAbsorptionPath_with_terminalTotalJumpAtZero reward
 
-/-! **Proposition 4.14.** Sequential zero-perfectness is closed under weak
-limits of paths whose perfection errors tend to zero.
+/-! **Proposition 4.14.** Sequential zero-perfectness is claimed to be closed
+under weak limits of paths whose perfection errors tend to zero.
+
+The old Lean statement below omitted the upper probability-mass invariant.
+It is false: a constant linear sequence can converge weakly to a path with an
+additional singleton jump at clock one.  The limit then has endpoint total
+mass two, so this is a counterexample to that interface, not to the intended
+unit-bounded paper statement.  The corrected unit-bounded closure remains an
+open proposition: the checked jump-row consumer still needs source-jump
+localization, and continuous-clock localization is not derived here.
 -/
 
-/-- The playerwise closedness assertion of journal Proposition 4.14. -/
-def PlayerSequentialPerfectionClosedUnderWeakLimits
+/-- The endpoint-unbounded playerwise closure predicate formerly used for
+journal Proposition 4.14, delegated to the shared production definition. -/
+abbrev PlayerSequentialPerfectionClosedUnderWeakLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
-  ∀ (errors : ℕ → ℝ) (paths : ℕ → AbsorptionPath (ι := ι))
-      (limit : AbsorptionPath (ι := ι)) (player : ι),
-    (∀ index, 0 ≤ errors index) →
-      Tendsto errors atTop (𝓝 0) →
-      WeaklyConvergesAbsorptionPaths paths limit →
-      (∀ index,
-        IsPlayerSequentiallyPerfectAbsorptionPath reward (paths index)
-          player (errors index)) →
-      IsPlayerSequentiallyPerfectAbsorptionPath reward limit player 0
+  GameTheory.QuittingAbsorptionPath.PlayerSequentialPerfectionClosedUnderWeakLimits
+    reward
 
-/-- Journal Proposition 4.14.  Its playerwise whole-path closure argument is
-not yet checked in Lean. -/
-theorem playerSequentialPerfection_closedUnderWeakLimits
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    PlayerSequentialPerfectionClosedUnderWeakLimits reward := by
-  sorry
+/-- The two-player universal instance of the old endpoint-unbounded closure
+interface.  One reward counterexample suffices to refute it. -/
+def EveryTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClosure :
+    Prop :=
+  ∀ reward : {S : Finset Bool // S.Nonempty} → Payoff Bool,
+    PlayerSequentialPerfectionClosedUnderWeakLimits reward
+
+/-- The old endpoint-unbounded closure interface is false already for two
+players.  The witness has endpoint total mass two. -/
+theorem not_everyTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClosure :
+    ¬EveryTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClosure := by
+  obtain ⟨reward, hreward⟩ :=
+    exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound
+  exact fun hclosed => hreward (hclosed reward)
+
+/-- The unit-bounded playerwise closure intended by journal Proposition 4.14.
+This is an open proposition, not a theorem. -/
+abbrev UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  GameTheory.QuittingAbsorptionPath.UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
+    reward
 
 /-!
 

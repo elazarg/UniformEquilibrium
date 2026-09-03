@@ -3362,6 +3362,31 @@ in the live mathematical ledger.
   `ChronologicalLimit.instantPunishmentEquilibriumExistence_of_terminalPathJump`.
   This is an `M`/`L` theorem and an actual-source `A`/`C`, conditional on the
   explicitly supplied terminal jump.
+  The generic weak-path interface now makes a separate boundary explicit.
+  The bundled `AbsorptionPath` contains the lower clock inequality but not the
+  upper probability-mass bound.  In
+  `UniformEquilibrium/Quitting/AbsorptionPath/EndpointUnboundedWeakLimitCounterexample.lean`,
+  `exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound`
+  constructs a two-player weak limit with endpoint total mass two and proves
+  that the unrestricted sequential-perfection closure predicate is false.
+  This refutes that old Lean interface, not the unit-bounded proposition
+  intended in the paper.  In
+  `UniformEquilibrium/Quitting/AbsorptionPath/WeakPathConvergence.lean`,
+  `HasUnitBoundedTotalMass` supplies the missing invariant; the endpoint
+  theorems derive total and left-total mass one, coordinatewise
+  left-continuity, and absence of a clock-one jump.  The generic row theorems
+  `quittingPlayerRowεPerfect_of_tendsto` and
+  `quittingRowεPerfect_of_tendsto` are checked in
+  `UniformEquilibrium/Quitting/Classification/Existence/RowPerfectionClosed.lean`.
+  Conditional on supplied `HasSourceApproximationsForLimitJumps`,
+  `playerJumpRowsPerfect_of_sourceApproximatedWeakLimit` in
+  `UniformEquilibrium/Quitting/AbsorptionPath/SequentialPerfectionWeakLimit.lean`
+  closes the jump-row subclause.  The corrected unit-bounded compactness and
+  full closure predicates remain open: weak convergence has not yet been
+  shown to produce the required limit-jump and continuous-clock source
+  localization.  This generic gap does not weaken the checked source-specific
+  `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath`, whose localization
+  is constructed directly from its actual chronological source.
   The published small-cell productization is checked as
   `exists_akrsSmallCellProductization` in
   `MathUE/PMFProduct/SmallCellProductization`.  The production
