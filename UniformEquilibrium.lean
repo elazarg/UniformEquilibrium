@@ -566,6 +566,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockJointBloc
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockRationalPolyhedralBlock
 import UniformEquilibrium.Quitting.Conjecture.Basic
 import UniformEquilibrium.Quitting.Examples.Cyclic.FourPlayerQuitting
+import UniformEquilibrium.Quitting.Examples.Cyclic.FinFourTwoBlockSingletonFiber
 import UniformEquilibrium.Quitting.Boundary.Analytic.Germ
 import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Boundary.Analytic.GermNondegeneracy

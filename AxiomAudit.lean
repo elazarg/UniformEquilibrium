@@ -1828,6 +1828,7 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorComposition
 import UniformEquilibrium.Quitting.Examples.BlockPair.QuadraticRootSelection
 import UniformEquilibrium.Quitting.Examples.Cyclic.CandidateHardWeightCoordinateSilence
 import UniformEquilibrium.Quitting.Examples.Cyclic.CandidateHardWeightCycle
+import UniformEquilibrium.Quitting.Examples.Cyclic.FinFourTwoBlockSingletonFiber
 import UniformEquilibrium.Quitting.Examples.Cyclic.FourPlayerQuitting
 import UniformEquilibrium.Quitting.Examples.Cyclic.RotatingFourPlayer
 import UniformEquilibrium.Quitting.Examples.Cyclic.ThreePlayer.AdmissibleCycle

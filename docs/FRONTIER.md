@@ -183,6 +183,20 @@ imposing eight explicit collision-cap inequalities.  Every such completion
 has target `deadlockRationalBlockValue s`.  This is a sufficient polyhedral
 slice and does not cover all full-core completions.
 
+The Fin4 two-block singleton fibre is another solved completion class.
+`TwoBlockTargetSingletonConditions.target_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Examples/Cyclic/FinFourTwoBlockSingletonFiber.lean`)
+fixes singleton rows 0 and 1, assumes only `r_2({2}) <= 0` and
+`r_3({3}) <= -1/4`, and proves the fixed uniform-equilibrium payoff
+`(1, -1/2, 0, -1/4)`.  Its periodic terminal profiles are approximate Nash
+against unrestricted behavioral deviations.  The exact four-row Candidate C
+table is a direct corollary, and all 44 reward coordinates on the eleven
+nonsingleton coalitions remain arbitrary.  The generalized cyclic
+supersolution permits the owner-1 Continue branch to lie below its declared
+value rather than requiring owner indifference.  This removes that singleton
+fibre from the counterexample search; it does not constrain arbitrary Fin4
+tables.
+
 The stationary construction boundary also has a checked finite source-data
 adapter.  `exists_uniformEquilibriumPayoff_of_conditionalFaceGapRange`
 (`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`)

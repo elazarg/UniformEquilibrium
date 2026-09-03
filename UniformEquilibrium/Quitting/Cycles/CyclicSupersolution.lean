@@ -11,13 +11,14 @@ import UniformEquilibrium.Quitting.Cycles.PeriodicFiniteHorizonRate
 
 An undifferentiated one-step root error is geometrically accumulated by the
 usual residual telescope.  The mesh certificates used for singleton flows
-have a stronger shape: prescribed Continue is exact, while immediate Quit is
-at most `e` above the prescribed value.  Adding the same constant `e` to
-every cyclic value is then a global Snell supersolution, because Continue
-propagates only `c * e ≤ e`.
+have a stronger shape: prescribed Continue is weakly below the declared
+value, while immediate Quit is at most `e` above it. Adding the same constant
+`e` to every cyclic value is then a global Snell supersolution, because
+Continue propagates only `c * e ≤ e`.
 
-This file formalizes that sharper comparison and packages it as a terminal
-behavioral `e`-Nash compiler.  No cycle-length amplification occurs.
+This file packages that one-sided comparison as a terminal behavioral
+`e`-Nash compiler and retains exact prescribed Continue as a corollary. No
+cycle-length amplification occurs.
 -/
 
 noncomputable section
@@ -155,12 +156,13 @@ theorem quittingSubBellmanValue_le_superSolution_of_survival_zero
 
 /-! ## Cyclic quit-only-error compiler -/
 
-/-- Exact cyclic policy evaluation, exact prescribed Continue, and an
+/-- Exact cyclic policy evaluation, a prescribed-Continue upper bound, and an
 `e`-upper bound on immediate Quit make `value + e` a global Snell
 supersolution.  Playerwise opponent contraction then controls every
 time-dependent unilateral hazard with the same error `e`, without a
 cycle-length factor. -/
-theorem quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
+theorem
+    quittingCyclicHazardTerminalValue_le_add_of_quitError_and_continueUpperBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cycle : Fin K → ι → PMF Bool) (value : Fin K → Payoff ι)
     (phase : Fin K) (player : ι) (deviation : ℕ → PMF Bool)
@@ -178,7 +180,7 @@ theorem quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
           reward (cycle cyclePhase) who +
         quittingStationaryFixedOpponentsContinueMass
             (cycle cyclePhase) who *
-          value (finRotate K cyclePhase) who = value cyclePhase who)
+          value (finRotate K cyclePhase) who ≤ value cyclePhase who)
     (hcontracts : ∀ who,
       (∏ cyclePhase : Fin K,
         quittingStationaryFixedOpponentsContinueMass
@@ -261,7 +263,84 @@ theorem quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
   rw [hvalue] at hcomparison
   simpa using hcomparison
 
-/-- Behavioral form of the cyclic quit-only-error supersolution compiler. -/
+/-- Exact prescribed Continue is a special case of the cyclic
+Continue-upper-bound supersolution compiler. -/
+theorem quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cycle : Fin K → ι → PMF Bool) (value : Fin K → Payoff ι)
+    (phase : Fin K) (player : ι) (deviation : ℕ → PMF Bool)
+    {e bound : ℝ} (he : 0 ≤ e) (hbound : 0 ≤ bound)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (hpolicy : ∀ cyclePhase,
+      value cyclePhase = quittingRootSuccessorPayoff reward
+        (value (finRotate K cyclePhase)) (cycle cyclePhase))
+    (hquit : ∀ cyclePhase who,
+      quittingStationaryFixedOpponentsQuitValue
+          reward (cycle cyclePhase) who ≤
+        value cyclePhase who + e)
+    (hcontinue : ∀ cyclePhase who,
+      quittingStationaryFixedOpponentsContinueReward
+          reward (cycle cyclePhase) who +
+        quittingStationaryFixedOpponentsContinueMass
+            (cycle cyclePhase) who *
+          value (finRotate K cyclePhase) who = value cyclePhase who)
+    (hcontracts : ∀ who,
+      (∏ cyclePhase : Fin K,
+        quittingStationaryFixedOpponentsContinueMass
+          (cycle cyclePhase) who) < 1) :
+    quittingRootSequenceHazardTerminalValue reward
+        (quittingCyclicRootSequence cycle phase) player deviation 0 ≤
+      quittingCyclicTerminalValue reward cycle phase player + e := by
+  exact
+    quittingCyclicHazardTerminalValue_le_add_of_quitError_and_continueUpperBound
+      reward cycle value phase player deviation he hbound hreward hpolicy hquit
+      (fun cyclePhase who ↦ (hcontinue cyclePhase who).le) hcontracts
+
+/-- Behavioral form of the cyclic Continue-upper-bound supersolution
+compiler. -/
+theorem
+    isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_and_continueUpperBound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (cycle : Fin K → ι → PMF Bool) (value : Fin K → Payoff ι)
+    (phase : Fin K) {e bound : ℝ}
+    (he : 0 ≤ e) (hbound : 0 ≤ bound)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ bound)
+    (hpolicy : ∀ cyclePhase,
+      value cyclePhase = quittingRootSuccessorPayoff reward
+        (value (finRotate K cyclePhase)) (cycle cyclePhase))
+    (hquit : ∀ cyclePhase who,
+      quittingStationaryFixedOpponentsQuitValue
+          reward (cycle cyclePhase) who ≤
+        value cyclePhase who + e)
+    (hcontinue : ∀ cyclePhase who,
+      quittingStationaryFixedOpponentsContinueReward
+          reward (cycle cyclePhase) who +
+        quittingStationaryFixedOpponentsContinueMass
+            (cycle cyclePhase) who *
+          value (finRotate K cyclePhase) who ≤ value cyclePhase who)
+    (hcontracts : ∀ who,
+      (∏ cyclePhase : Fin K,
+        quittingStationaryFixedOpponentsContinueMass
+          (cycle cyclePhase) who) < 1) :
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) e
+      (quittingCyclicBehaviorProfile reward cycle phase) := by
+  intro player deviation
+  have hhazard :=
+    quittingCyclicHazardTerminalValue_le_add_of_quitError_and_continueUpperBound
+      reward cycle value phase player
+        (quittingBehaviorLiveHazard reward deviation)
+        he hbound hreward hpolicy hquit hcontinue hcontracts
+  have hdeviation :=
+    quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
+      reward (quittingCyclicBehaviorProfile reward cycle phase)
+        player deviation
+  rw [quittingProfileLiveRoot_cyclicBehaviorProfile] at hdeviation
+  rw [hdeviation]
+  simpa only [quittingTerminalPayoff_cyclicBehaviorProfile] using hhazard
+
+/-- Exact prescribed Continue is a special case of the behavioral cyclic
+Continue-upper-bound compiler. -/
 theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_exactContinue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cycle : Fin K → ι → PMF Bool) (value : Fin K → Payoff ι)
@@ -288,18 +367,9 @@ theorem isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_exactConti
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) e
       (quittingCyclicBehaviorProfile reward cycle phase) := by
-  intro player deviation
-  have hhazard :=
-    quittingCyclicHazardTerminalValue_le_add_of_quitError_exactContinue
-      reward cycle value phase player
-        (quittingBehaviorLiveHazard reward deviation)
-        he hbound hreward hpolicy hquit hcontinue hcontracts
-  have hdeviation :=
-    quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
-      reward (quittingCyclicBehaviorProfile reward cycle phase)
-        player deviation
-  rw [quittingProfileLiveRoot_cyclicBehaviorProfile] at hdeviation
-  rw [hdeviation]
-  simpa only [quittingTerminalPayoff_cyclicBehaviorProfile] using hhazard
+  exact
+    isεAsymptoticNash_quittingCyclicBehaviorProfile_of_quitError_and_continueUpperBound
+      reward cycle value phase he hbound hreward hpolicy hquit
+      (fun cyclePhase who ↦ (hcontinue cyclePhase who).le) hcontracts
 
 end GameTheory
