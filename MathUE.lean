@@ -397,9 +397,14 @@ import MathUE.Topology.CompactOrbitOccupation
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
+import MathUE.Topology.CompactExecutableTraceGrammar
 import MathUE.Topology.CompactFinitePrefixRelation
+import MathUE.Topology.CompactProjectiveExecution
+import MathUE.Topology.CompactProofRelevantAdapter
+import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
+import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
@@ -418,6 +423,7 @@ import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
 import MathUE.Topology.SingleOuterApproximation
 import MathUE.Topology.SourceOmegaChain
+import MathUE.Topology.SummableExecutableDecoder
 import MathUE.Topology.TailSupConvergence
 import MathUE.Topology.ThreeFourFifthsRotation
 import MathUE.Topology.UniformProbeCompactness

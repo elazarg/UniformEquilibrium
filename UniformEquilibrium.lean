@@ -481,6 +481,7 @@ import UniformEquilibrium.Quitting.Paths.ReversePrefixStoppingLaw
 import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Paths.StoppingLawBadMassSelection
+import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis
