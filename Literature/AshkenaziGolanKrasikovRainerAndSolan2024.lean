@@ -6,6 +6,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorresponde
 import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalGlobalCounterexample
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSReverseS3Hardness
 import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34
 
 /-!
@@ -33,9 +34,11 @@ The file distinguishes three statuses literally.
   theorem proving its negation.
 
 In particular, the forward implication of journal Theorem 3.4 is checked, but
-the printed reverse implication is left open.  Its current checked
-local-to-global input also has a zero-Never, unit-solo-exit hypothesis which
-has not been reduced from an arbitrary payoff table.  Theorem 3.5 is false.  The
+the printed reverse implication is left open.  The null-tail subcase of its
+S.3 branch is eliminated below.  The remaining stationary exact every-restart
+implication is universally equivalent, through a one-added-player reduction,
+to general terminal approximate-equilibrium existence; this is not a
+same-cardinality equivalence.  Theorem 3.5 is false.  The
 strict estimate in Lemma 4.9 is false at zero absorption; the checked corrected
 version uses a weak inequality.  The converse direction of Theorem 4.15 is left
 open because the printed absorption-path definition does not test terminal
@@ -361,6 +364,97 @@ theorem publishedApproximateEquilibriumExistence_iff_threeBranchAlternative
       approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection
         reward never
   · sorry
+
+/-! ### Checked erratum status for the reverse S.3 implication
+
+The printed reverse implication remains open.  The declarations below record
+two checked facts about its S.3 branch.  A nonterminating restarted tail forces
+each singleton reward below the Never payoff plus the row error.  Consequently
+either all Continue is exact terminal Nash, or every sufficiently accurate
+initially absorbing row-perfect witness terminates after every restart.
+
+After that null-tail alternative, even the restricted implication for one
+stationary exact every-restart source is universally equivalent to general
+finite-quitting terminal approximate-equilibrium existence.  Its hard direction
+adds one player, so it makes no same-cardinality claim and does not prove or
+refute journal Theorem 3.4.
+-/
+
+/-- A nonterminating restarted tail forces the own singleton payoff below the
+Never payoff plus the row-perfectness error. -/
+theorem nonterminatingRestart_forces_singleton_le_never_add_error
+    (table : QuittingPayoffTable ι) (roots : ℕ → ι → PMF Bool)
+    (error : ℝ) (habsorbing : IsCompletelyAbsorbing roots)
+    (hperfect : ∀ time, QuittingRowεPerfect table.terminal
+      (table.rootSequenceTailVector roots (time + 1)) (roots time) error)
+    (hnotEveryRestart :
+      ¬ QuittingRootSequenceTerminatesAfterEveryRestart roots)
+    (player : ι) :
+    table.terminal (quittingSingletonTerminal player) player ≤
+      table.never player + error := by
+  have hbound :=
+    table.solo_sub_never_le_of_completelyAbsorbing_not_everyRestart
+      roots error habsorbing hperfect hnotEveryRestart player
+  linarith
+
+/-- Inclusive null-tail alternative.  Either all Continue is exact terminal
+Nash, or every sufficiently accurate initially absorbing row-perfect witness
+terminates after each finite restart. -/
+theorem allContinueExactNash_or_smallPerfectWitnesses_terminateAfterEveryRestart
+    (table : QuittingPayoffTable ι) :
+    (quittingGame table.terminal).IsεAsymptoticNash table.terminalPayoff 0
+        (quittingAlwaysContinueProfile table.terminal) ∨
+      ∃ bound : ℝ, 0 < bound ∧
+        ∀ (error : ℝ) (roots : ℕ → ι → PMF Bool),
+          0 < error → error < bound → IsCompletelyAbsorbing roots →
+          (∀ time, QuittingRowεPerfect table.terminal
+            (table.rootSequenceTailVector roots (time + 1))
+            (roots time) error) →
+          QuittingRootSequenceTerminatesAfterEveryRestart roots :=
+  table.allContinueExactNash_or_everyRestartWitnesses
+
+/-- The paper's small-error S.3 branch can be refined using the checked
+small-to-all-error adapter: either all Continue is exact terminal Nash, or it
+has witnesses at every sufficiently small error which terminate after every
+restart. -/
+theorem smallAbsorbingSequentiallyPerfectProfiles_refine_everyRestart
+    (table : QuittingPayoffTable ι)
+    (hsmall : HasSmallAbsorbingSequentiallyPerfectProfiles table) :
+    (quittingGame table.terminal).IsεAsymptoticNash table.terminalPayoff 0
+        (quittingAlwaysContinueProfile table.terminal) ∨
+      ∃ bound : ℝ, 0 < bound ∧ ∀ error : ℝ, 0 < error → error < bound →
+        ∃ roots : ℕ → ι → PMF Bool,
+          IsCompletelyAbsorbing roots ∧
+            (∀ time, QuittingRowεPerfect table.terminal
+              (table.rootSequenceTailVector roots (time + 1))
+              (roots time) error) ∧
+            QuittingRootSequenceTerminatesAfterEveryRestart roots := by
+  rcases table.allContinueExactNash_or_everyRestartWitnesses with
+    hexact | ⟨bound, hbound, hevery⟩
+  · exact Or.inl hexact
+  · right
+    refine ⟨bound, hbound, ?_⟩
+    intro error herror herrorBound
+    have hall :=
+      (hasSmallAbsorbingSequentiallyPerfectProfiles_iff_table table).1 hsmall
+    obtain ⟨roots, habsorbing, hperfect⟩ := hall error herror
+    exact ⟨roots, habsorbing, hperfect,
+      hevery error roots herror herrorBound habsorbing hperfect⟩
+
+/-- Paper-facing name for the restricted exact every-restart source left after
+the null-tail alternative. -/
+abbrev StationaryExactEveryRestartRowPerfectSource
+    (table : QuittingPayoffTable ι) : Prop :=
+  table.HasStationaryExactEveryRestartRowPerfectSource
+
+/-- Universally, the restricted stationary exact every-restart implication is
+equivalent to terminal approximate-equilibrium existence for all finite
+quitting games.  The hard direction maps `players` to `players ⊕ PUnit`; it
+does not give a same-cardinality equivalence. -/
+theorem universal_stationaryExactEveryRestartSource_iff_terminalApproximateExistence :
+    UniversalStationaryExactEveryRestartSourceImpliesApproximateEquilibrium ↔
+      UniversalQuittingApproximateEquilibriumExistence :=
+  universalStationaryExactEveryRestartSource_iff_approximateExistence
 
 /-! ### Theorem 3.5: refuted printed claim
 

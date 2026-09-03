@@ -3333,6 +3333,24 @@ in the live mathematical ledger.
   approximate Nash against every unilateral behavioral replacement.  It does
   not prove that premise for every game, select one fixed payoff target, or
   supply the all-long-finite-horizon control required for uniform equilibrium.
+  The reverse S.3 boundary is now stated literally.  If an initially absorbing
+  row-perfect source has a nonterminating restarted tail,
+  [`QuittingPayoffTable.solo_sub_never_le_of_completelyAbsorbing_not_everyRestart`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSNullTailAlternative.lean)
+  bounds every singleton payoff by Never plus the row error.  The inclusive
+  theorem
+  [`QuittingPayoffTable.allContinueExactNash_or_everyRestartWitnesses`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSNullTailAlternative.lean)
+  therefore gives exact all-Continue terminal Nash, or termination after every
+  restart for every sufficiently accurate initially absorbing row-perfect
+  witness.  Even within the remaining every-tail residue, the restricted predicate
+  [`QuittingPayoffTable.HasStationaryExactEveryRestartRowPerfectSource`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSReverseS3Hardness.lean)
+  records one stationary exact source, and
+  [`universalStationaryExactEveryRestartSource_iff_approximateExistence`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSReverseS3Hardness.lean)
+  proves that its universal reverse implication is equivalent to general
+  finite-quitting terminal approximate-equilibrium existence.  The hard
+  reduction maps `players` to `players ⊕ PUnit`; it is not a same-cardinality
+  equivalence.  This eliminates the null-tail subcase and shows that even this
+  restricted stationary-exact slice is universally hard.  It does not prove or
+  refute journal Theorem 3.4, whose reverse S.3 implication remains open.
   `QuittingPayoffTable.lowSurvivalPrefix_or_exists_boundedSupportBellmanSpine`
   applies this alternative with the canonical reward bound. If the compact
   spine's joint survival vanishes after every restart,
