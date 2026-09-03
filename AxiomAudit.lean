@@ -2065,6 +2065,7 @@ import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 import UniformEquilibrium.Quitting.Root.NashExistence
 import UniformEquilibrium.Quitting.Root.NearSureProfile
 import UniformEquilibrium.Quitting.Root.NearSureRoot
+import UniformEquilibrium.Quitting.Root.NestedImmediateQuitCapExactPrefixExit
 import UniformEquilibrium.Quitting.Root.NeverGeneratedSemanticCarrier
 import UniformEquilibrium.Quitting.Root.OneActiveCoalitionMass
 import UniformEquilibrium.Quitting.Root.OneDateNeverNashDebt
