@@ -95,6 +95,7 @@ import MathUE.FiniteChargedReturn
 import MathUE.FiniteDeflationIteration
 import MathUE.FiniteEmpiricalConvexity
 import MathUE.FinitePaidCollision
+import MathUE.FinitePartitionAffineSign
 import MathUE.FiniteResponseCycleLedger
 import MathUE.FiniteSetCoverClassification
 import MathUE.FiniteLinearChargedCapacity
@@ -137,6 +138,8 @@ import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.RationalPolynomialL1
 import MathUE.Interval.ScalarDyadicPolynomial
+import MathUE.Interval.SelectedCoordinatePolynomialLipschitz
+import MathUE.Interval.SuppliedPartialEnclosureMeanValue
 import MathUE.InverseCoordinateRecurrence
 import MathUE.InvisibleNeutralActionDrift
 import MathUE.KrawczykBridge
@@ -421,6 +424,7 @@ import MathUE.Topology.OneSidedDiniFencing
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
+import MathUE.Topology.RectangularPoincareMiranda
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
 import MathUE.Topology.SingleOuterApproximation

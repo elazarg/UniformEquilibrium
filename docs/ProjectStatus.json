@@ -335,6 +335,15 @@
       "scope": "The literal fifteen-row integer reward table has one fixed uniform-equilibrium payoff against arbitrary unilateral behavioral deviations, certified by an exact period-three product block. The algebraic root is unique only in the displayed affine parallelotope; the theorem does not assert stationary nonexistence."
     },
     {
+      "id": "fin-four-overlapping-period-three-affine-cylinder",
+      "subject": "Overlapping-support period-three uniform payoffs on an affine Fin4 cylinder",
+      "kind": "Unconditional family theorem",
+      "declaration": "exists_periodThreeClearedGapData_and_uniformPayoff_of_visible_affine_reward",
+      "source": "UniformEquilibrium/Quitting/Examples/Cyclic/FourPlayerOverlappingPeriodThreePositiveAffineCylinder.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "An exact rational Fin4 table, its full sixty-coordinate closed neighborhood of radius 1/50000000, and the larger cylinder obtained from four arbitrary invisible coordinates and independent positive playerwise affine transformations have absorbing period-three Nash--Bellman blocks and fixed phase-zero uniform-equilibrium payoffs against arbitrary unilateral behavioral deviations. This is a solved special class, not a period-three producer for every Fin4 table; no root uniqueness is asserted."
+    },
+    {
       "id": "conditional-face-gap-reward-range",
       "subject": "Finite reward-range sufficient condition for stationary quitting equilibria",
       "kind": "Conditional theorem",
