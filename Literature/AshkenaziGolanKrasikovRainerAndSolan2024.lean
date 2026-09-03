@@ -54,11 +54,11 @@ does not test terminal total jumps.  Its universal claim is therefore checked
 to be equivalent to the same general approximate-existence problem.  The
 conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.  Journal Propositions 4.8 and 4.11
-are proved under the full probability bound in (A.1), with the corrections to
-the printed proof of Proposition 4.8 stated below.  The old endpoint-unbounded
-Lean interface for Proposition 4.14 is checked false, while journal
-Proposition 4.14 under the full bound in (A.1) is proved.
+separately proved not upper hemicontinuous.  The printed (A.1) omits the upper
+probability bound later used in Remark 4.4(9).  The corrected unit-bounded
+forms of Propositions 4.8, 4.11, and 4.14 are proved, with the additional
+repairs to the printed proof of Proposition 4.8 stated below.  The literal
+endpoint-unbounded closure interface for Proposition 4.14 is checked false.
 -/
 
 noncomputable section
@@ -624,16 +624,17 @@ abbrev WeaklyConvergesAbsorptionPaths
 
 /-!
 
-**Definition 4.3.** An absorption path satisfies (A.1)--(A.4): its total mass
-lies between the clock and one; gaps are filled by the preceding jump; every
-jump is a product law; and continuous motion carries singleton coalitions
-only.  The repository's bundled type `AbsorptionPath` contains the lower clock
-bound and (A.2)--(A.4), but not the upper probability-mass bound.  The paper
-interface is therefore the unit-bounded subtype below.
+**Definition 4.3.** The printed (A.1) requires only that total mass dominate
+the clock; gaps are filled by the preceding jump, every jump is a product law,
+and continuous motion carries singleton coalitions only.  The ambient
+coordinatewise bounds do not imply that total mass is at most one.  That
+missing upper probability bound is nevertheless used in Remark 4.4(9), so the
+corrected paper-facing interface is the unit-bounded subtype below.
 -/
 
-/-- The paper's Definition 4.3 as a bundled repository path together with the
-literal upper probability-mass invariant. -/
+/-- The corrected form of journal Definition 4.3: the bundled printed
+conditions together with the missing upper probability-mass invariant used in
+Remark 4.4(9). -/
 abbrev PaperAbsorptionPath :=
   {path : AbsorptionPath (ι := ι) // HasUnitBoundedTotalMass path}
 
@@ -680,8 +681,9 @@ theorem printedOneOverResolutionCollisionFactor_failsAtResolutionFive :
           Math.PMFProduct.coalitionMass root {false} :=
   akrsPrintedCollisionFactor_five_counterexample
 
-/-- Journal Proposition 4.8, with the full upper probability bound from (A.1)
-stated literally for both the target and every approximating path. -/
+/-- The corrected unit-bounded density statement corresponding to journal
+Proposition 4.8.  Bounds on both the target and every approximant are stated
+literally. -/
 def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
   ∀ path : AbsorptionPath (ι := ι),
     HasUnitBoundedTotalMass path →
@@ -692,8 +694,8 @@ def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
           HasUnitBoundedTotalMass (approximants resolution)) ∧
         WeaklyConvergesAbsorptionPaths approximants path
 
-/-- Journal Proposition 4.8, using the corrected cell law, large-jump endpoint,
-and collision factor described above. -/
+/-- Corrected Proposition 4.8, using the added upper mass bound and the
+corrected cell law, large-jump endpoint, and collision factor described above. -/
 theorem unitBoundedAbsorptionPaths_are_weakLimits_of_absorbingProfiles :
     UnitBoundedAbsorptionPathDensityByAbsorbingProfiles (ι := ι) := by
   exact unitBoundedAbsorptionPaths_are_weakLimits_of_completelyAbsorbingRootSequences
@@ -806,13 +808,13 @@ weak topology, with convergent source jumps and product witnesses at every
 limiting jump.
 -/
 
-/-- Journal Proposition 4.11 with the full upper probability bound from (A.1),
-delegated to the shared production proposition. -/
+/-- The corrected unit-bounded sequential compactness statement corresponding
+to journal Proposition 4.11, delegated to the shared production proposition. -/
 abbrev UnitBoundedAbsorptionPathSequentialCompactness : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedAbsorptionPathSequentialCompactness
     (ι := ι)
 
-/-- Journal Proposition 4.11: one common strict subsequence converges weakly,
+/-- Corrected Proposition 4.11: one common strict subsequence converges weakly,
 has a unit-bounded absorption-path limit, and realizes every limiting jump by
 convergent source jumps and product rows along that same subsequence. -/
 theorem unitBoundedAbsorptionPaths_have_weaklyConvergentSubsequence :
@@ -867,11 +869,12 @@ under weak limits of paths whose perfection errors tend to zero.
 The old Lean statement below omitted the upper probability-mass invariant.
 It is false: a constant linear sequence can converge weakly to a path with an
 additional singleton jump at clock one.  The limit then has endpoint total
-mass two, so this is a counterexample to that interface, not to the paper's
-statement under (A.1).  Journal Proposition 4.14 is an honest theorem:
-weak convergence constructs source realizations separately for each limit
-jump, which is sufficient to close the universal jump-row clause; the
-continuous-clock clauses pass directly to the weak limit.
+mass two.  This refutes the literal endpoint-unbounded formal interface and
+exhibits why the omitted upper probability bound is necessary.  The corrected
+unit-bounded Proposition 4.14 is an honest theorem: weak convergence constructs
+source realizations separately for each limit jump, which is sufficient to
+close the universal jump-row clause; the continuous-clock clauses pass
+directly to the weak limit.
 -/
 
 /-- The endpoint-unbounded playerwise closure predicate formerly used for
@@ -896,7 +899,8 @@ theorem not_everyTwoPlayerRewardHasUnrestrictedSequentialPerfectionWeakLimitClos
     exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound
   exact fun hclosed => hreward (hclosed reward)
 
-/-- Journal Proposition 4.14 with the full upper probability bound from (A.1). -/
+/-- The corrected form of journal Proposition 4.14 with the missing upper
+probability bound added to every source path and the limit. -/
 abbrev UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits
@@ -1205,6 +1209,8 @@ The useful number map is:
 * journal 3.4 / v1 3.4: v1 is forward-only and asks for exact minmax
   punishment; journal 3.4 is an equivalence with error-close punishment;
 * journal 3.5 / v1 3.5: unchanged false claim;
+* journal Definition 4.3 / v1 Definition 4.1: both omit the upper total-mass
+  bound used in journal Remark 4.4(9);
 * journal Proposition 4.8 / v1 Proposition 4.6;
 * journal Lemma 4.9 / v1 Lemma 4.7: substantively rewritten;
 * journal Proposition 4.11 / v1 Proposition 4.9;
