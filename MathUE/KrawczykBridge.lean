@@ -133,4 +133,44 @@ theorem exists_zero_in_closedBall_of_preconditioned_contraction
     exact sub_eq_self.mp hrootFixed
   exact hpreconditioner (hzero.trans preconditioner.map_zero.symm)
 
+/-- A contracting preconditioned residual map has exactly one residual zero
+inside the certified closed ball.
+
+This strengthens `exists_zero_in_closedBall_of_preconditioned_contraction`
+only on the certified ball. It makes no claim that the residual has a unique
+zero outside that ball. -/
+theorem existsUnique_zero_in_closedBall_of_preconditioned_contraction
+    {E : Type*} [NormedAddCommGroup E] [NormedSpace ℝ E]
+    [CompleteSpace E]
+    (residual : E → E) (preconditioner : E →ₗ[ℝ] E)
+    (center : E) (radius : ℝ) (contraction : ℝ≥0)
+    (hradius : 0 ≤ radius) (hcontraction : contraction < 1)
+    (hpreconditioner : Injective preconditioner)
+    (hlipschitz : LipschitzOnWith contraction
+      (fun x ↦ x - preconditioner (residual x))
+      (closedBall center radius))
+    (hcorrection : norm (preconditioner (residual center)) ≤
+      (1 - (contraction : ℝ)) * radius) :
+    ∃! root, root ∈ closedBall center radius ∧ residual root = 0 := by
+  obtain ⟨root, hrootBall, hrootZero⟩ :=
+    exists_zero_in_closedBall_of_preconditioned_contraction
+      residual preconditioner center radius contraction hradius hcontraction
+      hpreconditioner hlipschitz hcorrection
+  refine ⟨root, ⟨hrootBall, hrootZero⟩, ?_⟩
+  intro other ⟨hotherBall, hotherZero⟩
+  have hdistance :
+      dist root other ≤ (contraction : ℝ) * dist root other := by
+    simpa [hrootZero, hotherZero] using
+      hlipschitz.dist_le_mul root hrootBall other hotherBall
+  have hcontractionReal : (contraction : ℝ) < 1 := by
+    exact_mod_cast hcontraction
+  have hrootOther : root = other := by
+    by_contra hne
+    have hdistancePositive : 0 < dist root other := dist_pos.mpr hne
+    have hstrict :
+        (contraction : ℝ) * dist root other < dist root other :=
+      (mul_lt_iff_lt_one_left hdistancePositive).mpr hcontractionReal
+    exact (not_lt_of_ge hdistance) hstrict
+  exact hrootOther.symm
+
 end Math

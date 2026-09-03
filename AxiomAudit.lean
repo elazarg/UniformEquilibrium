@@ -1544,6 +1544,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.FirstLayerSimple
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.All
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockChargedReturn
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockGlobalContraction
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockIntegerTablePeriodThree
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockJointBlockEquilibrium
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockRationalPolyhedralBlock
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockReducedSingletonLassoBarrier

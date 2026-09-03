@@ -326,6 +326,15 @@
       "scope": "For any baseline s, including negative coordinates, a completion satisfying IsDeadlockRationalJointBlockCompletion reward s has target deadlockRationalBlockValue s. The predicate fixes the full-core singleton matrix, requires reward({1,3}) = s, and imposes eight explicit collision-cap inequalities; it describes an unbounded nonlocal polyhedral slice, not all full-core completions."
     },
     {
+      "id": "full-core-deadlock-integer-table-period-three",
+      "subject": "Exact period-three uniform payoff for the integer full-core deadlock table",
+      "kind": "Unconditional theorem",
+      "declaration": "integerTableTarget_isUniformEquilibriumPayoff",
+      "source": "UniformEquilibrium/Quitting/Classification/LCP/FullCore/DeadlockIntegerTablePeriodThree.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "The literal fifteen-row integer reward table has one fixed uniform-equilibrium payoff against arbitrary unilateral behavioral deviations, certified by an exact period-three product block. The algebraic root is unique only in the displayed affine parallelotope; the theorem does not assert stationary nonexistence."
+    },
+    {
       "id": "conditional-face-gap-reward-range",
       "subject": "Finite reward-range sufficient condition for stationary quitting equilibria",
       "kind": "Conditional theorem",

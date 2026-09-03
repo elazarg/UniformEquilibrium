@@ -110,6 +110,86 @@ namespace Interval.RationalPolynomial
 
 variable {precision variableCount : ℕ}
 
+/-! ## Exact rational-box certificates -/
+
+/-- The real rectangular set represented by a rational input box. -/
+def rationalBoxSet
+    (box : Fin variableCount → RationalInterval) :
+    Set (Fin variableCount → ℝ) :=
+  {point | ∀ coordinate, (box coordinate).Contains (point coordinate)}
+
+theorem convex_rationalBoxSet
+    (box : Fin variableCount → RationalInterval) :
+    Convex ℝ (rationalBoxSet box) := by
+  intro first hfirst second hsecond a b ha hb hab coordinate
+  change (box coordinate).Contains
+    ((a • first + b • second) coordinate)
+  change (box coordinate).Contains
+    (a * first coordinate + b * second coordinate)
+  have hfirstCoordinate := hfirst coordinate
+  have hsecondCoordinate := hsecond coordinate
+  rw [RationalInterval.Contains] at hfirstCoordinate hsecondCoordinate ⊢
+  constructor
+  · have hscale :
+        a * (((box coordinate).lower : ℚ) : ℝ) +
+            b * (((box coordinate).lower : ℚ) : ℝ) =
+          (((box coordinate).lower : ℚ) : ℝ) := by
+      rw [← add_mul, hab, one_mul]
+    rw [← hscale]
+    exact add_le_add
+      (mul_le_mul_of_nonneg_left hfirstCoordinate.1 ha)
+      (mul_le_mul_of_nonneg_left hsecondCoordinate.1 hb)
+  · have hscale :
+        a * (((box coordinate).upper : ℚ) : ℝ) +
+            b * (((box coordinate).upper : ℚ) : ℝ) =
+          (((box coordinate).upper : ℚ) : ℝ) := by
+      rw [← add_mul, hab, one_mul]
+    rw [← hscale]
+    exact add_le_add
+      (mul_le_mul_of_nonneg_left hfirstCoordinate.2 ha)
+      (mul_le_mul_of_nonneg_left hsecondCoordinate.2 hb)
+
+/-- Coordinate endpoint containment puts a closed sup-norm ball inside a
+rational box. -/
+theorem closedBall_subset_rationalBoxSet_of_endpoints_mem
+    (box : Fin variableCount → RationalInterval)
+    (center : Fin variableCount → ℝ) (radius : ℝ)
+    (hendpoints : ∀ coordinate,
+      (box coordinate).Contains (center coordinate - radius) ∧
+        (box coordinate).Contains (center coordinate + radius)) :
+    closedBall center radius ⊆ rationalBoxSet box := by
+  intro point hpoint coordinate
+  have hcoordinate : |point coordinate - center coordinate| ≤ radius := by
+    calc
+      |point coordinate - center coordinate| =
+          ‖(point - center) coordinate‖ := by
+        rw [Real.norm_eq_abs]
+        rfl
+      _ ≤ ‖point - center‖ := norm_le_pi_norm (point - center) coordinate
+      _ = dist point center := by rw [dist_eq_norm]
+      _ ≤ radius := hpoint
+  have hlowerPoint : center coordinate - radius ≤ point coordinate := by
+    linarith [abs_le.mp hcoordinate |>.1]
+  have hpointUpper : point coordinate ≤ center coordinate + radius := by
+    linarith [abs_le.mp hcoordinate |>.2]
+  rw [RationalInterval.Contains]
+  exact ⟨(hendpoints coordinate).1.1.trans hlowerPoint,
+    hpointUpper.trans (hendpoints coordinate).2.2⟩
+
+/-- A value enclosed by a rational interval is bounded in absolute value by
+any common upper bound for the absolute endpoint values. -/
+theorem abs_le_of_rationalContains_of_endpoints_le
+    (interval : RationalInterval) (value bound : ℝ)
+    (hcontains : interval.Contains value)
+    (hlower : |((interval.lower : ℚ) : ℝ)| ≤ bound)
+    (hupper : |((interval.upper : ℚ) : ℝ)| ≤ bound) :
+    |value| ≤ bound := by
+  rw [RationalInterval.Contains] at hcontains
+  rw [abs_le]
+  constructor
+  · exact (abs_le.mp hlower).1.trans hcontains.1
+  · exact hcontains.2.trans (le_trans (le_abs_self _) hupper)
+
 /-- The formal gradient, interpreted as a continuous linear functional on
 the finite sup-norm coordinate space. -/
 noncomputable def differential
@@ -319,6 +399,105 @@ theorem differential_piBasisVector
     rw [piBasisVector, if_neg hne.symm]
     simp
   · simp
+
+/-! ## Exact rational-box derivative certificates -/
+
+/-- Exact rational automatic-differentiation bounds, combined by row sums,
+prove a sup-norm Lipschitz estimate on the represented box. -/
+theorem lipschitzOnWith_evalRealVector_of_evalDualInterval_rowSum
+    (expressions : Fin variableCount → RationalPolynomial variableCount)
+    (box : Fin variableCount → RationalInterval)
+    (bound : Fin variableCount → Fin variableCount → ℝ)
+    (contraction : ℝ≥0)
+    (hrow : ∀ output,
+      ∑ input, bound output input ≤ (contraction : ℝ))
+    (hlower : ∀ output input,
+      |((((evalDualInterval box
+          (expressions output)).derivative input).lower : ℚ) : ℝ)| ≤
+        bound output input)
+    (hupper : ∀ output input,
+      |((((evalDualInterval box
+          (expressions output)).derivative input).upper : ℚ) : ℝ)| ≤
+        bound output input) :
+    LipschitzOnWith contraction
+      (fun point output ↦ evalReal point (expressions output))
+      (rationalBoxSet box) := by
+  let derivative : (Fin variableCount → ℝ) →
+      ((Fin variableCount → ℝ) →L[ℝ]
+        (Fin variableCount → ℝ)) :=
+    fun point ↦ ContinuousLinearMap.pi fun output ↦
+      differential point (expressions output)
+  refine lipschitzOnWith_pi_of_hasFDerivAt_entrywise_rowSum
+    (function := fun point output ↦ evalReal point (expressions output))
+    (derivative := derivative) (bound := bound) (constant := contraction)
+    (domain := rationalBoxSet box) (convex_rationalBoxSet box) ?_ hrow ?_
+  · intro point _
+    exact hasFDerivAt_pi.mpr fun output ↦
+      hasFDerivAt_evalReal (expressions output) point
+  · intro point hpoint output input
+    change ‖differential point (expressions output)
+      (piBasisVector input)‖ ≤ bound output input
+    rw [differential_piBasisVector, Real.norm_eq_abs]
+    exact abs_le_of_rationalContains_of_endpoints_le _ _ _
+      ((evalDualInterval_sound
+        (expressions output) box point hpoint).2 input)
+      (hlower output input) (hupper output input)
+
+/-- Absolute endpoint envelope of one rational interval, viewed in `ℝ`. -/
+def rationalAbsBound (interval : RationalInterval) : ℝ :=
+  max |((interval.lower : ℚ) : ℝ)|
+    |((interval.upper : ℚ) : ℝ)|
+
+/-- Executable rational row-sum form of the polynomial Lipschitz
+certificate. -/
+theorem lipschitzOnWith_evalRealVector_of_evalDualInterval_absRowSum
+    (expressions : Fin variableCount → RationalPolynomial variableCount)
+    (box : Fin variableCount → RationalInterval)
+    (contraction : ℝ≥0)
+    (hrow : ∀ output,
+      ∑ input,
+          rationalAbsBound
+            ((evalDualInterval box
+              (expressions output)).derivative input) ≤
+        (contraction : ℝ)) :
+    LipschitzOnWith contraction
+      (fun point output ↦ evalReal point (expressions output))
+      (rationalBoxSet box) := by
+  apply lipschitzOnWith_evalRealVector_of_evalDualInterval_rowSum
+    expressions box
+    (fun output input ↦
+      rationalAbsBound
+        ((evalDualInterval box (expressions output)).derivative input))
+    contraction hrow
+  · intro output input
+    exact le_max_left _ _
+  · intro output input
+    exact le_max_right _ _
+
+/-- A rational automatic-differentiation row-sum certificate on a box
+restricts to any closed sup-norm ball whose endpoints lie in that box. -/
+theorem lipschitzOnWith_evalRealVector_closedBall_of_evalDualInterval_absRowSum
+    (expressions : Fin variableCount → RationalPolynomial variableCount)
+    (box : Fin variableCount → RationalInterval)
+    (center : Fin variableCount → ℝ) (radius : ℝ)
+    (contraction : ℝ≥0)
+    (hendpoints : ∀ coordinate,
+      (box coordinate).Contains (center coordinate - radius) ∧
+        (box coordinate).Contains (center coordinate + radius))
+    (hrow : ∀ output,
+      ∑ input,
+          rationalAbsBound
+            ((evalDualInterval box
+              (expressions output)).derivative input) ≤
+        (contraction : ℝ)) :
+    LipschitzOnWith contraction
+      (fun point output ↦ evalReal point (expressions output))
+      (closedBall center radius) := by
+  exact
+    (lipschitzOnWith_evalRealVector_of_evalDualInterval_absRowSum
+      expressions box contraction hrow).mono
+      (closedBall_subset_rationalBoxSet_of_endpoints_mem
+        box center radius hendpoints)
 
 /-- A value enclosed by a dyadic interval has absolute value bounded by any
 common upper bound for the absolute endpoint values. -/

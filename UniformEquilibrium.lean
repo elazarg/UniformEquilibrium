@@ -565,6 +565,7 @@ import UniformEquilibrium.Quitting.Classification.ThreePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.LCP.All
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockJointBlockEquilibrium
 import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockRationalPolyhedralBlock
+import UniformEquilibrium.Quitting.Classification.LCP.FullCore.DeadlockIntegerTablePeriodThree
 import UniformEquilibrium.Quitting.Conjecture.Basic
 import UniformEquilibrium.Quitting.Examples.Cyclic.FourPlayerQuitting
 import UniformEquilibrium.Quitting.Examples.Cyclic.FinFourTwoBlockSingletonFiber

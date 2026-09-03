@@ -64,6 +64,8 @@ This umbrella exports the theorem-bearing infrastructure proved in this folder:
   exactly three players, so every four-player counterexample has full core;
 * the exact carrier fixed point and `1/14` global-debt upper bound for every
   completion of the displayed four-player full-core deadlock matrix;
+* the exact period-three uniform-equilibrium payoff for the literal full-core
+  integer table, with a locally unique algebraic parameter certificate;
 * the unconditional algebraic matrix-regime gate with its precise residual
   class; and
 * the complete all-abnormal producer, including the later-layer
