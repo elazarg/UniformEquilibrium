@@ -35,7 +35,7 @@ The file distinguishes three statuses literally.
 
 In particular, the forward implication of journal Theorem 3.4 is checked, but
 the printed reverse implication is left open.  The null-tail subcase of its
-S.3 branch is eliminated below.  The remaining stationary exact every-restart
+S.3 branch is eliminated below.  Even the restricted stationary-exact every-restart
 implication is universally equivalent, through a one-added-player reduction,
 to general terminal approximate-equilibrium existence; this is not a
 same-cardinality equivalence.  Theorem 3.5 is false.  The
