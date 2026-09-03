@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Topology.Algebra.Module.Cardinality
+import MathUE.Probability.ClockGap
 import MathUE.Topology.OneSidedDiniFencing
 import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 
@@ -21,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Topology
+open Filter Set StochasticGame Math.Topology
 open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -1831,6 +1832,156 @@ theorem mem_pathJumps_of_probe_lt_pathTotal_of_boundary
       hclock.2.le.trans <|
         le_add_of_nonneg_right (div_nonneg
           (sub_nonneg.mpr hclock.1.2) (Nat.cast_nonneg resolution))
+
+omit [DecidableEq ι] [Nonempty ι] in
+/-- Clock domination passes from the right-continuous total to its left
+limit at every semantic clock point. -/
+theorem clock_le_pathLeftTotal_of_clock_le_pathTotal
+    (path : CadlagPath (ι := ι))
+    (hclock : ∀ point ∈ Icc (0 : ℝ) 1, point ≤ pathTotal path point)
+    {time : ℝ} (htime : time ∈ Icc (0 : ℝ) 1) :
+    time ≤ pathLeftTotal path time := by
+  by_cases hzero : time = 0
+  · subst time
+    simp [pathLeftTotal, path.left_zero]
+  · have htimePos : 0 < time :=
+      lt_of_le_of_ne htime.1 (Ne.symm hzero)
+    let leftFilter := nhdsWithin time (Icc (0 : ℝ) time \ {time})
+    have hsubset : Ioo (0 : ℝ) time ⊆
+        Icc (0 : ℝ) time \ {time} := by
+      intro point hpoint
+      exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
+    letI : leftFilter.NeBot :=
+      (right_nhdsWithin_Ioo_neBot htimePos).mono
+        (nhdsWithin_mono time hsubset)
+    have htimeTendsto : Tendsto id leftFilter (nhds time) :=
+      tendsto_id.mono_left inf_le_left
+    have htotalTendsto : Tendsto (fun point ↦ pathTotal path point)
+        leftFilter (nhds (pathLeftTotal path time)) := by
+      unfold pathTotal pathLeftTotal
+      exact tendsto_finsetSum Finset.univ fun coalition _ ↦
+        path.left_limit coalition time htime
+    apply le_of_tendsto_of_tendsto htimeTendsto htotalTendsto
+    filter_upwards [self_mem_nhdsWithin] with point hpoint
+    have hpointMem : point ∈ Icc (0 : ℝ) 1 :=
+      ⟨hpoint.1.1, hpoint.1.2.trans htime.2⟩
+    exact hclock point hpointMem
+
+
+/-- Controlled right continuity points of an unbundled càdlàg path. -/
+structure CadlagPathTotalControlledRightSequence
+    (path : CadlagPath (ι := ι)) (time : ℝ) where
+  point : ℕ → ℝ
+  point_mem : ∀ rank, point rank ∈ Ioo time 1
+  point_not_jump : ∀ rank, point rank ∉ pathJumps path
+  tendsto : Tendsto point atTop (nhds time)
+  pathTotal_sub_le_two_mul : ∀ rank,
+    pathTotal path (point rank) - pathTotal path time ≤
+      2 * (point rank - time)
+
+omit [DecidableEq ι] [Nonempty ι] in
+/-- Clock domination, unit boundedness, and the clock-gap law supply
+controlled right continuity points at every nonterminal fixed point. -/
+theorem nonempty_cadlagPathTotalControlledRightSequence
+    (path : CadlagPath (ι := ι))
+    (hclock : ∀ point ∈ Icc (0 : ℝ) 1, point ≤ pathTotal path point)
+    (hbound : ∀ point ∈ Icc (0 : ℝ) 1, pathTotal path point ≤ 1)
+    (hgap : MathUE.HasClockGapOn (pathTotal path) (Icc 0 1))
+    {time : ℝ} (htime : time ∈ pathTimes path) (htimeOne : time ≠ 1) :
+    Nonempty (CadlagPathTotalControlledRightSequence path time) := by
+  have htimeLtOne : time < 1 := lt_of_le_of_ne htime.1.2 htimeOne
+  let scale := fun rank : ℕ ↦ (1 : ℝ) / ((rank : ℝ) + 1)
+  let probe := fun rank : ℕ ↦ time + (1 - time) / 2 * scale rank
+  have hscalePos (rank : ℕ) : 0 < scale rank := by
+    dsimp only [scale]
+    positivity
+  have hscaleLeOne (rank : ℕ) : scale rank ≤ 1 := by
+    dsimp only [scale]
+    rw [div_le_one (by positivity : (0 : ℝ) < (rank : ℝ) + 1)]
+    norm_num
+  have hprobeMem (rank : ℕ) : probe rank ∈ Ioo time 1 := by
+    constructor <;> dsimp only [probe]
+    · have := hscalePos rank
+      nlinarith
+    · have := hscaleLeOne rank
+      nlinarith
+  have hprobeTendsto : Tendsto probe atTop (nhds time) := by
+    have hscaleTendsto : Tendsto scale atTop (nhds 0) :=
+      tendsto_one_div_add_atTop_nhds_zero_nat
+    simpa only [probe, mul_zero, add_zero] using
+      tendsto_const_nhds.add (tendsto_const_nhds.mul hscaleTendsto)
+  have hprobeWithin : Tendsto probe atTop
+      (nhdsWithin time (Icc time 1)) := by
+    rw [tendsto_nhdsWithin_iff]
+    exact ⟨hprobeTendsto,
+      Filter.Eventually.of_forall fun rank ↦
+        ⟨(hprobeMem rank).1.le, (hprobeMem rank).2.le⟩⟩
+  have htotalProbeTendsto : Tendsto
+      (fun rank ↦ pathTotal path (probe rank)) atTop (nhds time) := by
+    rw [← htime.2]
+    unfold pathTotal
+    exact tendsto_finsetSum Finset.univ fun coalition _ ↦
+      (path.right_continuous coalition time htime.1).comp hprobeWithin
+  have hdense : Dense ((pathJumps path)ᶜ) :=
+    (countable_pathJumps path).dense_compl ℝ
+  have hexists (rank : ℕ) : ∃ point : ℝ,
+      point ∈ Ioo time 1 ∧ point ∉ pathJumps path ∧
+      probe rank ≤ point ∧ point ≤ pathTotal path (probe rank) ∧
+      pathTotal path point - pathTotal path time ≤
+        2 * (point - time) := by
+    have hprobeIcc : probe rank ∈ Icc (0 : ℝ) 1 :=
+      ⟨htime.1.1.trans (hprobeMem rank).1.le, (hprobeMem rank).2.le⟩
+    by_cases heq : pathTotal path (probe rank) = probe rank
+    · refine ⟨probe rank, hprobeMem rank, ?_, le_rfl, heq.ge, ?_⟩
+      · intro hjump
+        have hleft : probe rank ≤ pathLeftTotal path (probe rank) :=
+          clock_le_pathLeftTotal_of_clock_le_pathTotal
+            path hclock hprobeIcc
+        have hstrict := pathLeftTotal_lt_pathTotal_of_mem_pathJumps path hjump
+        rw [heq] at hstrict
+        exact (not_lt_of_ge hleft hstrict).elim
+      · rw [heq, htime.2]
+        linarith [hprobeMem rank |>.1]
+    · have hprobeLt : probe rank < pathTotal path (probe rank) :=
+        lt_of_le_of_ne (hclock (probe rank) hprobeIcc) (Ne.symm heq)
+      let lower := max (probe rank)
+        ((pathTotal path (probe rank) + time) / 2)
+      have hlowerLt : lower < pathTotal path (probe rank) := by
+        rw [max_lt_iff]
+        exact ⟨hprobeLt, by linarith [hprobeMem rank |>.1]⟩
+      obtain ⟨point, hpointNotJump, hpoint⟩ :=
+        hdense.exists_mem_open isOpen_Ioo (nonempty_Ioo.mpr hlowerLt)
+      have hprobePoint : probe rank < point :=
+        (le_max_left _ _).trans_lt hpoint.1
+      have hpointTotal : point < pathTotal path (probe rank) := hpoint.2
+      have hpointMem : point ∈ Ioo time 1 :=
+        ⟨(hprobeMem rank).1.trans hprobePoint,
+          hpointTotal.trans_le (hbound (probe rank) hprobeIcc)⟩
+      have hpointIcc : point ∈ Icc (0 : ℝ) 1 :=
+        ⟨htime.1.1.trans hpointMem.1.le, hpointMem.2.le⟩
+      have htotalPoint : pathTotal path point =
+          pathTotal path (probe rank) :=
+        hgap hprobeIcc hpointIcc hprobePoint.le hpointTotal
+      refine ⟨point, hpointMem, hpointNotJump,
+        hprobePoint.le, hpointTotal.le, ?_⟩
+      rw [htotalPoint, htime.2]
+      have hmidpoint :
+          (pathTotal path (probe rank) + time) / 2 < point :=
+        (le_max_right _ _).trans_lt hpoint.1
+      linarith
+  choose point hpoint using hexists
+  exact ⟨{
+    point := point
+    point_mem := fun rank ↦ (hpoint rank).1
+    point_not_jump := fun rank ↦ (hpoint rank).2.1
+    tendsto := by
+      apply tendsto_of_tendsto_of_tendsto_of_le_of_le hprobeTendsto
+        htotalProbeTendsto
+      · exact fun rank ↦ (hpoint rank).2.2.1
+      · exact fun rank ↦ (hpoint rank).2.2.2.1
+    pathTotal_sub_le_two_mul := fun rank ↦ (hpoint rank).2.2.2.2
+  }⟩
+
 
 end QuittingAbsorptionPath
 end GameTheory

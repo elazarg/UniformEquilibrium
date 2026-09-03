@@ -31,15 +31,31 @@ unit-mass path invariant. -/
 def HasUnitBoundedTotalMass (path : AbsorptionPath (ι := ι)) : Prop :=
   ∀ time ∈ Icc (0 : ℝ) 1, pathTotal path.1 time ≤ 1
 
-/-- Coordinatewise weak convergence at every continuity point of the limit
-path.  For unit-bounded absorption paths, clock one is automatically a
-continuity point, so this predicate also sees terminal mass. -/
+/-- Coordinatewise weak convergence at every continuity point of an
+unbundled càdlàg limit. -/
+def WeaklyConvergesAbsorptionPathsToCadlag
+    (sequence : ℕ → AbsorptionPath (ι := ι))
+    (limit : CadlagPath (ι := ι)) : Prop :=
+  ∀ time : ℝ, time ∈ Icc (0 : ℝ) 1 → time ∉ pathJumps limit →
+    Tendsto (fun index coalition ↦ (sequence index).1.value time coalition)
+      atTop (nhds fun coalition ↦ limit.value time coalition)
+
+/-- Coordinatewise weak convergence at every continuity point of a bundled
+absorption-path limit. -/
 def WeaklyConvergesAbsorptionPaths
     (sequence : ℕ → AbsorptionPath (ι := ι))
     (limit : AbsorptionPath (ι := ι)) : Prop :=
-  ∀ time : ℝ, time ∈ Icc (0 : ℝ) 1 → time ∉ pathJumps limit.1 →
-    Tendsto (fun index coalition => (sequence index).1.value time coalition)
-      atTop (𝓝 fun coalition => limit.1.value time coalition)
+  WeaklyConvergesAbsorptionPathsToCadlag sequence limit.1
+
+/-- The existing bundled weak convergence predicate is definitionally the
+specialization of unbundled weak convergence to the underlying càdlàg path. -/
+theorem weaklyConvergesAbsorptionPathsToCadlag_iff
+    (sequence : ℕ → AbsorptionPath (ι := ι))
+    (limit : AbsorptionPath (ι := ι)) :
+    WeaklyConvergesAbsorptionPathsToCadlag sequence limit.1 ↔
+      WeaklyConvergesAbsorptionPaths sequence limit := by
+  rfl
+
 
 /-- A jump of a limit path is realized by jumps of its source paths.  The
 source times, post-jump cumulative coordinates, and normalized product rows
@@ -257,5 +273,81 @@ theorem WeaklyConvergesAbsorptionPaths.absorptionPathPayoff_tendsto
     exact (tendsto_pi_nhds.mp (hweak.tendsto_value_one hbounded)) coalition
   · intro coalition
     exact (tendsto_pi_nhds.mp (hweak time htime hnotJump)) coalition
+
+/-- A moving source-time evaluation converges at a continuity time of the
+unbundled limit when the source times approach that time from the right. -/
+theorem WeaklyConvergesAbsorptionPathsToCadlag.value_tendsto_of_tendsto_fromAbove
+    {paths : ℕ → AbsorptionPath (ι := ι)}
+    {limit : CadlagPath (ι := ι)}
+    (hweak : WeaklyConvergesAbsorptionPathsToCadlag paths limit)
+    {times : ℕ → ℝ} {time : ℝ}
+    (htime : time ∈ Icc (0 : ℝ) 1)
+    (htimeOne : time ≠ 1)
+    (hnotJump : time ∉ pathJumps limit)
+    (htimes : ∀ index, times index ∈ Icc (0 : ℝ) 1)
+    (hfromAbove : ∀ index, time ≤ times index)
+    (htimesTendsto : Tendsto times atTop (nhds time))
+    (coalition : {S : Finset ι // S.Nonempty}) :
+    Tendsto (fun index ↦ (paths index).1.value (times index) coalition)
+      atTop (nhds (limit.value time coalition)) := by
+  apply tendsto_order.2
+  constructor
+  · intro lower hlower
+    have hfixed := tendsto_pi_nhds.mp (hweak time htime hnotJump) coalition
+    filter_upwards [hfixed.eventually (Ioi_mem_nhds hlower)] with index hindex
+    exact hindex.trans_le <|
+      (paths index).1.monotone coalition htime (htimes index)
+        (hfromAbove index)
+  · intro upper hupper
+    have htimeLtOne : time < 1 := lt_of_le_of_ne htime.2 htimeOne
+    have hdense : Dense ((pathJumps limit)ᶜ) :=
+      (countable_pathJumps limit).dense_compl ℝ
+    obtain ⟨probe, _hprobeStrictAnti, hprobeMem, hprobeTendsto⟩ :=
+      hdense.exists_seq_strictAnti_tendsto_of_lt htimeLtOne
+    have hprobeWithin : Tendsto probe atTop
+        (nhdsWithin time (Icc time 1)) := by
+      rw [tendsto_nhdsWithin_iff]
+      exact ⟨hprobeTendsto,
+        Filter.Eventually.of_forall fun rank ↦
+          ⟨(hprobeMem rank).1.1.le, (hprobeMem rank).1.2.le⟩⟩
+    have hlimitProbe : Tendsto
+        (fun rank ↦ limit.value (probe rank) coalition) atTop
+        (nhds (limit.value time coalition)) :=
+      (limit.right_continuous coalition time htime).comp hprobeWithin
+    obtain ⟨rank, hrankUpper⟩ :=
+      (hlimitProbe.eventually (Iio_mem_nhds hupper)).exists
+    have htimesBefore : ∀ᶠ index in atTop, times index < probe rank :=
+      htimesTendsto.eventually_lt_const (hprobeMem rank).1.1
+    have hsourceProbe := tendsto_pi_nhds.mp
+      (hweak (probe rank)
+        ⟨htime.1.trans (hprobeMem rank).1.1.le,
+          (hprobeMem rank).1.2.le⟩
+        (hprobeMem rank).2) coalition
+    have hsourceUpper : ∀ᶠ index in atTop,
+        (paths index).1.value (probe rank) coalition < upper :=
+      hsourceProbe.eventually_lt_const hrankUpper
+    filter_upwards [htimesBefore, hsourceUpper] with index hbefore hsource
+    exact ((paths index).1.monotone coalition (htimes index)
+      ⟨htime.1.trans (hprobeMem rank).1.1.le,
+        (hprobeMem rank).1.2.le⟩ hbefore.le).trans_lt hsource
+
+/-- Bundled moving evaluation is the direct specialization of the unbundled theorem. -/
+theorem WeaklyConvergesAbsorptionPaths.value_tendsto_of_tendsto_fromAbove
+    {paths : ℕ → AbsorptionPath (ι := ι)}
+    {limit : AbsorptionPath (ι := ι)}
+    (hweak : WeaklyConvergesAbsorptionPaths paths limit)
+    {times : ℕ → ℝ} {time : ℝ}
+    (htime : time ∈ Icc (0 : ℝ) 1)
+    (htimeOne : time ≠ 1)
+    (hnotJump : time ∉ pathJumps limit.1)
+    (htimes : ∀ index, times index ∈ Icc (0 : ℝ) 1)
+    (hfromAbove : ∀ index, time ≤ times index)
+    (htimesTendsto : Tendsto times atTop (nhds time))
+    (coalition : {S : Finset ι // S.Nonempty}) :
+    Tendsto (fun index ↦ (paths index).1.value (times index) coalition)
+      atTop (nhds (limit.1.value time coalition)) := by
+  exact WeaklyConvergesAbsorptionPathsToCadlag.value_tendsto_of_tendsto_fromAbove
+    hweak htime htimeOne hnotJump htimes hfromAbove htimesTendsto coalition
+
 
 end GameTheory.QuittingAbsorptionPath

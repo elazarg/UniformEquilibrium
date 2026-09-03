@@ -3,6 +3,7 @@ import MathUE.PMFProduct.SmallCellProductization
 import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
 import UniformEquilibrium.Quitting.AbsorptionPath.EndpointUnboundedWeakLimitCounterexample
 import UniformEquilibrium.Quitting.AbsorptionPath.LimitJumpRootLocalization
+import UniformEquilibrium.Quitting.AbsorptionPath.UnitBoundedSequentialCompactness
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQContinuousPath
 import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorrespondence
 import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
@@ -53,11 +54,12 @@ does not test terminal total jumps.  Its universal claim is therefore checked
 to be equivalent to the same general approximate-existence problem.  The
 conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.  The only claims below still
-represented by `sorry` are the unit-bounded density and compactness statements
-corresponding to journal Propositions 4.8 and 4.11.  The old endpoint-unbounded
-Lean interface for Proposition 4.14 is checked false, while the unit-bounded
-closure intended by the paper is proved.
+separately proved not upper hemicontinuous.  The only claim below still
+represented by `sorry` is the unit-bounded density statement corresponding to
+journal Proposition 4.8.  The corrected unit-bounded compactness statement of
+Proposition 4.11 is proved.  The old endpoint-unbounded Lean interface for
+Proposition 4.14 is checked false, while the unit-bounded closure intended by
+the paper is proved.
 -/
 
 noncomputable section
@@ -820,16 +822,15 @@ limiting jump.
 -/
 
 /-- The unit-bounded sequential compactness statement corresponding to journal
-Proposition 4.11, delegated to the shared open production proposition. -/
+Proposition 4.11, delegated to the shared production proposition. -/
 abbrev UnitBoundedAbsorptionPathSequentialCompactness : Prop :=
   GameTheory.QuittingAbsorptionPath.UnitBoundedAbsorptionPathSequentialCompactness
     (ι := ι)
 
-/-- The corrected unit-bounded form of journal Proposition 4.11.  Whole-path
-weak compactness has not yet been checked in this interface. -/
+/-- Checked corrected unit-bounded form of journal Proposition 4.11. -/
 theorem unitBoundedAbsorptionPaths_have_weaklyConvergentSubsequence :
-    UnitBoundedAbsorptionPathSequentialCompactness (ι := ι) := by
-  sorry
+    UnitBoundedAbsorptionPathSequentialCompactness (ι := ι) :=
+  GameTheory.QuittingAbsorptionPath.unitBoundedAbsorptionPathSequentialCompactness
 
 /-!
 

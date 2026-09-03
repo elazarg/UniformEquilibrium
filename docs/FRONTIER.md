@@ -3464,14 +3464,22 @@ in the live mathematical ledger.
   `unitBoundedWeakLimitJumpSubsequenceLocalization` in
   `UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpRootLocalization.lean`
   passes the normalized jump identity after compactifying left coordinates and
-  product roots.  Its strict source subsequence may depend on the chosen limit
-  jump, which suffices for
+  product roots.  A jump-dependent strict source subsequence suffices for
   `unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits`: the corrected
   unit-bounded full closure now has `M`/`L` and source `A`/consumer `C`.
-  `UnitBoundedAbsorptionPathSequentialCompactness` remains open: no theorem
-  constructs one common subsequence realizing every limit jump or the initial
-  weakly convergent absorption-path subsequence.  This remaining compactness
-  gap does not weaken the checked source-specific
+  The separate compactness construction in
+  `UniformEquilibrium/Quitting/AbsorptionPath/RationalCoordinateCompactness.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/SingletonDerivativeWeakLimit.lean`,
+  `UniformEquilibrium/Quitting/AbsorptionPath/CommonLimitJumpSubsequence.lean`,
+  and
+  `UniformEquilibrium/Quitting/AbsorptionPath/UnitBoundedSequentialCompactness.lean`
+  reconstructs a unit-bounded absorption-path limit from one simultaneous
+  rational-coordinate subsequence, proves all four absorption-path clauses,
+  and then selects one common strict subsequence realizing every limit jump.
+  Thus `unitBoundedAbsorptionPathSequentialCompactness` proves the corrected
+  unit-bounded form of journal Proposition 4.11 with `M`/`L`.  This theorem
+  does not prove the Proposition 4.8 density construction.  The generic
+  compactness theorem is separate from the checked source-specific
   `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath`, whose localization
   is constructed directly from its actual chronological source.
   The published small-cell productization is checked as

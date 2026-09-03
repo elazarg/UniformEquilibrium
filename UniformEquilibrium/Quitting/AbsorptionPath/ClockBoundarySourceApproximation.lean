@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.MovingEvaluationWeakLimit
+import UniformEquilibrium.Quitting.AbsorptionPath.WeakPathConvergence
 
 /-!
 # Source boundary localization at a limit clock time
@@ -274,5 +274,92 @@ theorem nonempty_limitClockBoundarySourceApproximation
       htimesTendsto hvalues htime.2 htimeOne }⟩
   exact hsourceTotalTendsto.eventually (Iio_mem_nhds
     (lt_of_le_of_ne htime.1.2 htimeOne))
+
+/-- Literal source boundaries approaching a clock time of an unbundled
+càdlàg weak limit. -/
+structure CadlagLimitClockBoundarySourceApproximation
+    (sequence : ℕ → AbsorptionPath (ι := ι))
+    (limit : CadlagPath (ι := ι)) (time : ℝ) where
+  sourceTimes : ℕ → ℝ
+  source_boundary : ∀ index,
+    sourceTimes index ∈ partitionBoundaryTimes (sequence index)
+  times_tendsto : Tendsto sourceTimes atTop (nhds time)
+  leftValues_tendsto : ∀ coalition,
+    Tendsto (fun index ↦
+      (sequence index).1.leftValue (sourceTimes index) coalition) atTop
+      (nhds (limit.value time coalition))
+
+omit [DecidableEq ι] in
+/-- Clock domination makes a fixed point of an unbundled càdlàg path a
+continuity time. -/
+theorem not_mem_pathJumps_of_clock_eq_pathTotal
+    (path : CadlagPath (ι := ι))
+    (hclock : ∀ point ∈ Icc (0 : ℝ) 1, point ≤ pathTotal path point)
+    {time : ℝ} (htime : time ∈ Icc (0 : ℝ) 1)
+    (hfixed : pathTotal path time = time) :
+    time ∉ pathJumps path := by
+  intro hjump
+  have hleft : time ≤ pathLeftTotal path time :=
+    clock_le_pathLeftTotal_of_clock_le_pathTotal path hclock htime
+  have hstrict := pathLeftTotal_lt_pathTotal_of_mem_pathJumps path hjump
+  rw [hfixed] at hstrict
+  exact (not_lt_of_ge hleft hstrict).elim
+
+/-- Unit-bounded source paths weakly converging to an unbundled
+clock-dominating càdlàg path produce literal source boundaries at every
+nonterminal fixed point. -/
+theorem nonempty_cadlagLimitClockBoundarySourceApproximation
+    {paths : ℕ → AbsorptionPath (ι := ι)}
+    {limit : CadlagPath (ι := ι)}
+    (hclock : ∀ point ∈ Icc (0 : ℝ) 1, point ≤ pathTotal limit point)
+    (hsourceBounded : ∀ index, HasUnitBoundedTotalMass (paths index))
+    (hweak : WeaklyConvergesAbsorptionPathsToCadlag paths limit)
+    {time : ℝ} (htime : time ∈ pathTimes limit)
+    (htimeOne : time ≠ 1) :
+    Nonempty (CadlagLimitClockBoundarySourceApproximation paths limit time) := by
+  let sourceTimes := fun index ↦ pathTotal (paths index).1 time
+  have hnotJump : time ∉ pathJumps limit :=
+    not_mem_pathJumps_of_clock_eq_pathTotal limit hclock htime.1 htime.2
+  have htimesTendsto : Tendsto sourceTimes atTop (nhds time) := by
+    rw [← htime.2]
+    unfold sourceTimes pathTotal
+    exact tendsto_finsetSum Finset.univ fun coalition _ ↦
+      tendsto_pi_nhds.mp (hweak time htime.1 hnotJump) coalition
+  have hsourceTimesMem (index : ℕ) :
+      sourceTimes index ∈ Icc (0 : ℝ) 1 :=
+    ⟨htime.1.1.trans ((paths index).property.1 time htime.1),
+      hsourceBounded index time htime.1⟩
+  have hsourceBoundary (index : ℕ) :
+      sourceTimes index ∈ partitionBoundaryTimes (paths index) :=
+    pathTotal_mem_partitionBoundaryTimes (paths index) (hsourceBounded index)
+      htime.1
+  have hvalues : ∀ coalition,
+      Tendsto (fun index ↦
+        (paths index).1.value (sourceTimes index) coalition) atTop
+        (nhds (limit.value time coalition)) := by
+    intro coalition
+    exact hweak.value_tendsto_of_tendsto_fromAbove htime.1 htimeOne
+      hnotJump hsourceTimesMem
+      (fun index ↦ (paths index).property.1 time htime.1)
+      htimesTendsto coalition
+  have hleftValues : ∀ coalition,
+      Tendsto (fun index ↦
+        (paths index).1.leftValue (sourceTimes index) coalition) atTop
+        (nhds (limit.value time coalition)) := by
+    intro coalition
+    exact tendsto_of_tendsto_of_tendsto_of_le_of_le
+      (tendsto_pi_nhds.mp (hweak time htime.1 hnotJump) coalition)
+      (hvalues coalition)
+      (fun index ↦ value_le_leftValue_at_pathTotal_of_unitBounded (paths index)
+        (hsourceBounded index) htime.1 coalition)
+      (fun index ↦ (paths index).1.leftValue_le_value coalition
+        (hsourceTimesMem index))
+  exact ⟨{
+    sourceTimes := sourceTimes
+    source_boundary := hsourceBoundary
+    times_tendsto := htimesTendsto
+    leftValues_tendsto := hleftValues
+  }⟩
+
 
 end GameTheory.QuittingAbsorptionPath

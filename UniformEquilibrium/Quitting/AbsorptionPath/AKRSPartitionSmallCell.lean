@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.PMFProduct.SmallCellProductization
 import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartition
+import UniformEquilibrium.Quitting.Root.IncidentCoalitionOdds
 import UniformEquilibrium.Quitting.Classification.Existence.WellSupportedAbsorbingSequence
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 
@@ -105,141 +106,6 @@ theorem quittingRoot_coalition_coordinate_error
 
 end SmallCellProductization
 
-omit [Nonempty ι] in
-/-- A small independent Bernoulli row has the incident-collision estimate
-used at every discrete jump in the AKRS partition.  The proof keeps one
-distinguished additional quitter and bounds all remaining odds by one. -/
-theorem quittingRootCoalitionMass_le_absorptionOdds_mul_singleton
-    (root : ι → PMF Bool) {δ : ℝ}
-    (hδnonneg : 0 ≤ δ) (hδhalf : δ ≤ 1 / 2)
-    (habsorption : quittingRootAbsorptionMass root ≤ δ)
-    (coalition : Finset ι) (player : ι)
-    (hcard : 2 ≤ coalition.card) (hplayer : player ∈ coalition) :
-    quittingRootCoalitionMass root coalition ≤
-      (δ / (1 - δ)) * quittingRootCoalitionMass root {player} := by
-  let x : ι → ℝ := fun who ↦ (root who true).toReal
-  let others := coalition.erase player
-  have hothersNonempty : others.Nonempty := by
-    rw [Finset.nonempty_iff_ne_empty]
-    intro hempty
-    have hsubset : coalition ⊆ {player} := by
-      intro who hwho
-      by_contra hne
-      have hnePlayer : who ≠ player := by
-        simpa only [Finset.mem_singleton] using hne
-      have hwhoOthers : who ∈ others := by
-        exact Finset.mem_erase.mpr ⟨hnePlayer, hwho⟩
-      rw [hempty] at hwhoOthers
-      simp at hwhoOthers
-    have hcardLe : coalition.card ≤ 1 := by
-      exact (Finset.card_le_card hsubset).trans_eq (Finset.card_singleton player)
-    omega
-  obtain ⟨other, hother⟩ := hothersNonempty
-  have hδltOne : δ < 1 := hδhalf.trans_lt (by norm_num)
-  have hdenominatorPos : 0 < 1 - δ := sub_pos.mpr hδltOne
-  have hxnonneg (who : ι) : 0 ≤ x who := ENNReal.toReal_nonneg
-  have hxleδ (who : ι) : x who ≤ δ := by
-    exact (quittingQuitProbability_le_absorptionMass root who).trans
-      habsorption
-  have hxleone (who : ι) : x who ≤ 1 :=
-    (hxleδ who).trans (hδhalf.trans (by norm_num))
-  have hxlecontinue (who : ι) : x who ≤ 1 - x who := by
-    linarith [hxleδ who, hδhalf]
-  have hotherOdds : x other ≤ (δ / (1 - δ)) * (1 - x other) := by
-    rw [div_mul_eq_mul_div]
-    apply (le_div_iff₀ hdenominatorPos).2
-    have hxother := hxleδ other
-    nlinarith [hxnonneg other]
-  have hrestNonneg :
-      0 ≤ ∏ who ∈ others.erase other, x who :=
-    Finset.prod_nonneg fun who _ ↦ hxnonneg who
-  have hrestComparison :
-      (∏ who ∈ others.erase other, x who) ≤
-        ∏ who ∈ others.erase other, (1 - x who) := by
-    exact Finset.prod_le_prod
-      (fun who _ ↦ hxnonneg who)
-      (fun who _ ↦ hxlecontinue who)
-  have hcontinueRestNonneg :
-      0 ≤ ∏ who ∈ others.erase other, (1 - x who) :=
-    Finset.prod_nonneg fun who _ ↦ sub_nonneg.mpr (hxleone who)
-  have hoddsNonneg : 0 ≤ δ / (1 - δ) :=
-    div_nonneg hδnonneg hdenominatorPos.le
-  have hothersProduct :
-      (∏ who ∈ others, x who) ≤
-        (δ / (1 - δ)) * ∏ who ∈ others, (1 - x who) := by
-    rw [show (∏ who ∈ others, x who) =
-        x other * ∏ who ∈ others.erase other, x who by
-      simpa [mul_comm] using (Finset.prod_erase_mul others x hother).symm]
-    rw [show (∏ who ∈ others, (1 - x who)) =
-        (1 - x other) * ∏ who ∈ others.erase other, (1 - x who) by
-      simpa [mul_comm] using
-        (Finset.prod_erase_mul others (fun who ↦ 1 - x who) hother).symm]
-    calc
-      x other * ∏ who ∈ others.erase other, x who ≤
-          x other * ∏ who ∈ others.erase other, (1 - x who) :=
-        mul_le_mul_of_nonneg_left hrestComparison (hxnonneg other)
-      _ ≤ ((δ / (1 - δ)) * (1 - x other)) *
-          ∏ who ∈ others.erase other, (1 - x who) :=
-        mul_le_mul_of_nonneg_right hotherOdds hcontinueRestNonneg
-      _ = (δ / (1 - δ)) *
-          ((1 - x other) *
-            ∏ who ∈ others.erase other, (1 - x who)) := by ring
-  have hinside :
-      (∏ who ∈ coalition, x who) =
-        x player * ∏ who ∈ others, x who := by
-    simpa [others, mul_comm] using
-      (Finset.prod_erase_mul coalition x hplayer).symm
-  have hsingletonComplement :
-      ({player} : Finset ι)ᶜ = others ∪ coalitionᶜ := by
-    ext who
-    simp only [Finset.mem_compl, Finset.mem_singleton,
-      Finset.mem_union, Finset.mem_erase, others]
-    constructor
-    · intro hne
-      by_cases hwho : who ∈ coalition
-      · exact Or.inl ⟨hne, hwho⟩
-      · exact Or.inr hwho
-    · rintro (⟨hne, _⟩ | hnot)
-      · exact hne
-      · exact fun heq ↦ hnot (heq ▸ hplayer)
-  have hdisjoint : Disjoint others coalitionᶜ := by
-    refine Finset.disjoint_left.mpr ?_
-    intro who hwho hcomplement
-    have hnotCoalition : who ∉ coalition := by
-      simpa only [Finset.mem_compl] using hcomplement
-    exact hnotCoalition (Finset.mem_erase.mp hwho).2
-  have hsingletonOutside :
-      (∏ who ∈ ({player} : Finset ι)ᶜ, (1 - x who)) =
-        (∏ who ∈ others, (1 - x who)) *
-          ∏ who ∈ coalitionᶜ, (1 - x who) := by
-    rw [hsingletonComplement, Finset.prod_union hdisjoint]
-  have hcommonNonneg :
-      0 ≤ x player * ∏ who ∈ coalitionᶜ, (1 - x who) :=
-    mul_nonneg (hxnonneg player) <|
-      Finset.prod_nonneg fun who _ ↦ sub_nonneg.mpr (hxleone who)
-  unfold quittingRootCoalitionMass Math.PMFProduct.coalitionMass
-    quittingRootQuitRates
-  change
-    ((∏ who ∈ coalition, x who) *
-      ∏ who ∈ coalitionᶜ, (1 - x who)) ≤
-      (δ / (1 - δ)) *
-        ((∏ who ∈ ({player} : Finset ι), x who) *
-          ∏ who ∈ ({player} : Finset ι)ᶜ, (1 - x who))
-  rw [hinside, hsingletonOutside]
-  simp only [Finset.prod_singleton]
-  calc
-    (x player * ∏ who ∈ others, x who) *
-          ∏ who ∈ coalitionᶜ, (1 - x who) =
-        (x player * ∏ who ∈ coalitionᶜ, (1 - x who)) *
-          ∏ who ∈ others, x who := by ring
-    _ ≤ (x player * ∏ who ∈ coalitionᶜ, (1 - x who)) *
-          ((δ / (1 - δ)) *
-            ∏ who ∈ others, (1 - x who)) :=
-      mul_le_mul_of_nonneg_left hothersProduct hcommonNonneg
-    _ = (δ / (1 - δ)) *
-        (x player * ((∏ who ∈ others, (1 - x who)) *
-          ∏ who ∈ coalitionᶜ, (1 - x who))) := by ring
-
 namespace QuittingAbsorptionPath
 
 omit [Nonempty ι] in
@@ -273,19 +139,6 @@ theorem copiedJumpRoot_coalitionMass
     quittingRootCoalitionMass (absorptionPathJumpRoot path time) coalition.1 =
       pathJump path.1 time coalition / (1 - time) := by
   exact (absorptionPathJumpRoot_relation path htime coalition).symm
-
-omit [Nonempty ι] in
-/-- One-stage absorption is the sum of all nonempty exact coalition masses. -/
-theorem quittingRootAbsorptionMass_eq_sum_coalitionMass
-    (root : ι → PMF Bool) :
-    quittingRootAbsorptionMass root =
-      ∑ coalition : {S : Finset ι // S.Nonempty},
-        quittingRootCoalitionMass root coalition.1 := by
-  rw [← Finset.sum_subtype (Finset.univ.erase (∅ : Finset ι))]
-  · rw [quittingRootAbsorptionMass,
-      quittingRootCoalitionMass_sum_nonempty]
-  · intro coalition
-    simp [Finset.nonempty_iff_ne_empty]
 
 /-- One small cell in the published AKRS partition.  The collision field is
 the exact hypothesis established by the partition: a multi-quitter cell mass
@@ -474,7 +327,7 @@ theorem copiedJumpRoot_absorption_eq_pathCellAbsorption
     {stop : ℝ} (hstop : stop = pathTotal path.1 start) :
     quittingRootAbsorptionMass (absorptionPathJumpRoot path start) =
       pathCellAbsorption path.1 start stop := by
-  rw [quittingRootAbsorptionMass_eq_sum_coalitionMass]
+  rw [quittingRootAbsorptionMass_eq_sum_nonemptyCoalitionMass]
   simp_rw [copiedJumpRoot_coalitionMass path hstart]
   rw [← Finset.sum_div]
   unfold pathCellAbsorption
@@ -547,7 +400,6 @@ theorem pathJump_le_partitionSmallCellError_mul_singleton_of_probe
   have hresolutionReal : (3 : ℝ) ≤ resolution := by
     exact_mod_cast hresolution
   let δ : ℝ := 1 / (resolution : ℝ)
-  have hδnonneg : 0 ≤ δ := by positivity
   have hδhalf : δ ≤ 1 / 2 := by
     dsimp only [δ]
     have hresolutionPos : (0 : ℝ) < resolution := by positivity
@@ -558,8 +410,8 @@ theorem pathJump_le_partitionSmallCellError_mul_singleton_of_probe
     absorptionPathJumpRoot_absorption_le_inv_resolution_of_probe path
       hpathTotal resolution hresolutionOne htime hprobe
   have hroot :=
-    quittingRootCoalitionMass_le_absorptionOdds_mul_singleton
-      (absorptionPathJumpRoot path time) hδnonneg hδhalf habsorption
+    quittingRootIncidentCoalitionMass_le_absorptionOdds_mul_singleton
+      (absorptionPathJumpRoot path time) hδhalf habsorption
       coalition player hcard hplayer
   have hcoalitionNonempty : coalition.Nonempty :=
     Finset.card_pos.mp (lt_of_lt_of_le Nat.zero_lt_two hcard)

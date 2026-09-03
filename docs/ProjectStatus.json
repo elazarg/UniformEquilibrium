@@ -512,7 +512,16 @@
       "declaration": "unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits",
       "source": "UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpRootLocalization.lean",
       "umbrella": "UniformEquilibrium/Quitting/AbsorptionPath/All.lean",
-      "scope": "For every finite player type and reward table, if every source absorption path and the limit have total mass at most one, nonnegative playerwise perfection errors tend to zero, the paths converge coordinatewise at every continuity point of the limit, and the selected player is sequentially perfect on every source path at its error, then that player is sequentially perfect on the limit at error zero. Limit jumps are localized by literal source jumps along jump-dependent strict subsequences; one common subsequence for every jump, whole-path sequential compactness, path density, approximate-equilibrium existence, and a uniform-equilibrium conclusion are not asserted."
+      "scope": "For every finite player type and reward table, if every source absorption path and the limit have total mass at most one, nonnegative playerwise perfection errors tend to zero, the paths converge coordinatewise at every continuity point of the limit, and the selected player is sequentially perfect on every source path at its error, then that player is sequentially perfect on the limit at error zero. Limit jumps are localized by literal source jumps. This closure theorem does not assert path density, approximate-equilibrium existence, or a uniform-equilibrium conclusion."
+    },
+    {
+      "id": "unit-bounded-absorption-path-sequential-compactness",
+      "subject": "Unit-bounded absorption-path sequential compactness",
+      "kind": "Unconditional compactness theorem",
+      "declaration": "unitBoundedAbsorptionPathSequentialCompactness",
+      "source": "UniformEquilibrium/Quitting/AbsorptionPath/UnitBoundedSequentialCompactness.lean",
+      "umbrella": "UniformEquilibrium/Quitting/AbsorptionPath/All.lean",
+      "scope": "Every sequence of absorption paths whose total cumulative mass is at most one has one strict subsequence converging coordinatewise at every continuity point to a unit-bounded absorption path. Along that same subsequence, every jump of the limit has convergent literal source-jump times, cumulative coordinates, and normalized product rows. This proves the corrected unit-bounded form of AKRS Proposition 4.11; it does not prove the Proposition 4.8 density statement, approximate-equilibrium existence, or a uniform equilibrium."
     },
     {
       "id": "projective-qbar-uniform-payoff",
