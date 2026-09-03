@@ -3381,10 +3381,18 @@ in the live mathematical ledger.
   Conditional on supplied `HasSourceApproximationsForLimitJumps`,
   `playerJumpRowsPerfect_of_sourceApproximatedWeakLimit` in
   `UniformEquilibrium/Quitting/AbsorptionPath/SequentialPerfectionWeakLimit.lean`
-  closes the jump-row subclause.  The corrected unit-bounded compactness and
-  full closure predicates remain open: weak convergence has not yet been
-  shown to produce the required limit-jump and continuous-clock source
-  localization.  This generic gap does not weaken the checked source-specific
+  closes the jump-row subclause.  Plain unit-bounded weak convergence constructs
+  the moving source boundary in
+  `nonempty_limitClockBoundarySourceApproximation` and closes both continuous
+  clauses in `playerContinuousClockLowerBound_of_unitBoundedWeakLimit` and
+  `playerContinuousClockUpperBound_of_unitBoundedWeakLimit`.  These clock
+  subclauses therefore have `M`/`L` and source-specific `A`/`C`.
+  `playerSequentiallyPerfect_of_sourceApproximatedUnitBoundedWeakLimit` is the
+  checked full-predicate consumer when source realizations of every limit jump
+  are supplied.  The corrected unit-bounded compactness and full closure
+  predicates remain open because weak convergence has not yet been shown to
+  produce those jump realizations; there is no corresponding source `A` or
+  unconditional full-closure `C`.  This generic gap does not weaken the checked source-specific
   `ChronologicalLimit.isSequentiallyPerfectAbsorptionPath`, whose localization
   is constructed directly from its actual chronological source.
   The published small-cell productization is checked as

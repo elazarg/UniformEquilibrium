@@ -881,8 +881,9 @@ It is false: a constant linear sequence can converge weakly to a path with an
 additional singleton jump at clock one.  The limit then has endpoint total
 mass two, so this is a counterexample to that interface, not to the intended
 unit-bounded paper statement.  The corrected unit-bounded closure remains an
-open proposition: the checked jump-row consumer still needs source-jump
-localization, and continuous-clock localization is not derived here.
+open proposition: both continuous-clock clauses are checked under unit-bounded
+weak convergence, while the jump-row consumer still needs source realizations
+of the limit jumps.
 -/
 
 /-- The endpoint-unbounded playerwise closure predicate formerly used for
