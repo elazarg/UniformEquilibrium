@@ -651,6 +651,7 @@ import UniformEquilibrium.Quitting.Punishment.SharedPunishmentResults
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawCapUpperBound
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawProfile
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineCapSelection
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical
@@ -724,6 +725,9 @@ import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.LiteralPrefixDeviationTransport
+import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
+import UniformEquilibrium.Quitting.Root.TerminalGapPrefixDebtorTransport
 import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
 import UniformEquilibrium.Diagnostics.Quitting.LiteralOneDateProfile

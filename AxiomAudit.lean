@@ -2044,6 +2044,7 @@ import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Root.FleschSuccessor
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
+import UniformEquilibrium.Quitting.Root.LiteralPrefixDeviationTransport
 import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Quitting.Root.MaximalAbsorptionNash
 import UniformEquilibrium.Quitting.Root.NashDefect
@@ -2058,6 +2059,7 @@ import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionPayoff
 import UniformEquilibrium.Quitting.Root.PlayerReindex
 import UniformEquilibrium.Quitting.Root.ProductRootProbabilityBridge
+import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.SelfTailClosure
 import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
@@ -2070,6 +2072,7 @@ import UniformEquilibrium.Quitting.Root.TailStability
 import UniformEquilibrium.Quitting.Root.TerminalDebtBlock
 import UniformEquilibrium.Quitting.Root.TerminalDebtGreenAccount
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
+import UniformEquilibrium.Quitting.Root.TerminalGapPrefixDebtorTransport
 import UniformEquilibrium.Quitting.Root.TerminalOpponentAdvantage
 import UniformEquilibrium.Quitting.Root.TerminalOutcome
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
@@ -2103,6 +2106,7 @@ import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawCapUpperBound
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawProfile
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineCapSelection
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical
