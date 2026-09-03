@@ -534,6 +534,19 @@ theorem quittingFiniteClockSemanticReachable_isCompact
   simpa only [Set.image_univ] using isCompact_univ.image
     (continuous_quittingFiniteClockSemanticFold reward clockBound)
 
+/-- The finite-clock semantic set is connected.  This is the literal image
+of the connected product of root simplices; its cap coordinates remain the
+unrestricted behavioral envelopes. -/
+theorem quittingFiniteClockSemanticReachable_isConnected
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (clockBound : ℕ) :
+    IsConnected (quittingFiniteClockSemanticReachable reward clockBound) := by
+  rw [quittingFiniteClockSemanticReachable_eq_range_fold]
+  simpa only [Set.image_univ] using
+    (isConnected_univ.image
+      (quittingFiniteClockSemanticFold reward clockBound)
+      (continuous_quittingFiniteClockSemanticFold reward clockBound).continuousOn)
+
 /-- Literal compact finite-clock center used by the topological hierarchy. -/
 def quittingFiniteClockSemanticCenter
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

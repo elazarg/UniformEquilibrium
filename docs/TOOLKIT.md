@@ -390,10 +390,17 @@ Nash equilibrium or its behavioral realization.
 The Research quantile-clock hierarchy gives an escape-aware finite polynomial
 lower/upper architecture for the unrestricted terminal problem.
 `quittingTerminalSemanticPair_eq_stoppingLawProfile` and
-`quittingFiniteClockSemanticReachable_isCompact`
+`quittingFiniteClockSemanticReachable_isCompact`, together with
+`quittingFiniteClockSemanticReachable_isConnected`
 (`Research/Quitting/FiniteClockTerminalSemantics.lean`) state the literal
-stopping-law reconstruction and compact finite-clock center before any
-quantile argument.
+stopping-law reconstruction and compact connected finite-clock center before
+any quantile argument.  From a supplied positive global terminal gap,
+`exists_quittingFiniteClockDoubleFullGapCosource`
+(`Research/Quitting/FiniteClockDoubleFullGapCosource.lean`) uses the connected
+clock-one center to produce one actual finite-clock source, two distinct
+full-gap debtors, and a pure date-or-Never response attaining each debtor's
+unrestricted behavioral cap.  The theorem does not give a chronology or make
+the two responses compatible with one Nash--Bellman spine.
 `hasEscapeAwareQuantileClockCompression_of_normalized`
 (`Research/Quitting/EscapeAwareQuantileClockTransport.lean`) and
 `escapeAwareQuantileClock_normalized_quantitative_bracket`
@@ -424,6 +431,14 @@ event supplies an actual terminal gap and no-uniform-payoff conclusion; at
 zero infimum,
 `quittingGame_exists_uniformEquilibriumPayoff_of_finFourExactScale_infimum_eq_zero`
 selects one fixed payoff from profiles which may vary with the error.
+For a lower event, `finFourExactScaleStep_lower_doubleFullGapCosource`
+(`Research/Quitting/FinFourFiniteClockDoubleFullGapCosource.lean`) specializes
+the generic co-source at gap `epsilon / 8`, while
+`finFourExactScaleStep_lower_exists_checkedDoubleGapCode` finds a finite exact
+rational enumeration witness with two distinct literal gains at least
+`epsilon / 16`.  The rational payload keeps the two candidates fixed and
+preserves their reduced gains; it does not preserve cap attainment under
+approximation.
 Finally, `exists_finFourCounterexampleStep_iff_exists_real_infimum_pos`
 (`Research/Quitting/FinFourCounterexampleSemidecision.lean`) states the global
 existential recursive-enumerability equivalence.  The independent checker in

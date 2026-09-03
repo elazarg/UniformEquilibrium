@@ -80,6 +80,21 @@ profile with unrestricted exploitability below `3 * epsilon / 4`; lower output
 proves `epsilon / 4` below the global infimum and reaches the checked terminal-
 gap/no-uniform-payoff consumer at `epsilon / 8`.
 
+That positive terminal gap now also has a same-source co-realization theorem.
+[`exists_quittingFiniteClockDoubleFullGapCosource`](../Research/Quitting/FiniteClockDoubleFullGapCosource.lean)
+uses connectedness of the literal clock-one semantic center to produce one
+actual finite-clock source, two distinct players whose unrestricted debts are
+both at least the full gap, and a pure date-or-Never response attaining each
+corresponding unrestricted behavioral cap.  At a normalized rational Fin4
+lower event,
+[`finFourExactScaleStep_lower_doubleFullGapCosource`](../Research/Quitting/FinFourFiniteClockDoubleFullGapCosource.lean)
+gives the real co-source at `epsilon / 8`, and
+`finFourExactScaleStep_lower_exists_checkedDoubleGapCode` terminates an exact
+rational enumeration at reduced gain `epsilon / 16`.  Approximation preserves
+those two literal reduced gains, not cap attainment.  This result does not
+supply temporal compatibility, a common Nash--Bellman spine, a uniform
+equilibrium, or a counterexample.
+
 The semantic boundary is literal in both directions.
 [`finFourExactScale_infimum_zero_or_lower_event`](../Research/Quitting/FinFourExactScaleResolution.lean)
 states that zero infimum yields profiles at every positive real error and one

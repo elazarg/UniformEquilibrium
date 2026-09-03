@@ -82,6 +82,7 @@ import Research.Quitting.FinFourConstrainedRootNormalWorkRegression
 import Research.Quitting.FinFourCounterexampleSemidecision
 import Research.Quitting.FinFourFixedTableCounterexampleSearch
 import Research.Quitting.FinFourExhaustiveProducerAtlas
+import Research.Quitting.FinFourFiniteClockDoubleFullGapCosource
 import Research.Quitting.FinFourHopfConcreteChambers
 import Research.Quitting.FinFourMaximalRayZeroMinimumRegressions
 import Research.Quitting.FinFourProducerAtlas.ActualLowTail
@@ -113,6 +114,7 @@ import Research.Quitting.FinFourProducerAtlas.SelfTailContraction
 import Research.Quitting.FinFourProducerAtlas.SupportContractedRenewal
 import Research.Quitting.FinFourSameStageEndpointMonodromy
 import Research.Quitting.FinFourSharpPairDefectZeroMinimumExclusion
+import Research.Quitting.FiniteClockDoubleFullGapCosource
 import Research.Quitting.FiniteClockPolynomialCenter
 import Research.Quitting.FiniteClockPolynomialCertificate
 import Research.Quitting.FiniteClockTerminalSemantics
