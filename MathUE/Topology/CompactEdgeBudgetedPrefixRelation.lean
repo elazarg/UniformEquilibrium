@@ -4,6 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
+import MathUE.LinearAlgebra.RationalAffineFunctional
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.ExtendedOrbit
 
@@ -135,24 +136,6 @@ theorem not_hasFiniteCellLyapunovCertificate_of_positive_selfLoop
   have hdrop := hdecrease index index state state hindex hindex hloop
   have hpositive : 0 < constant * cost state state := mul_pos hconstant hcost
   linarith
-
-/-- An affine functional with exact rational coefficients, evaluated later in
-real coordinate space. -/
-structure RationalAffineFunctional (Coordinate : Type*) where
-  offset : ℚ
-  coefficient : Coordinate → ℚ
-
-namespace RationalAffineFunctional
-
-/-- Real evaluation of an exact rational affine functional. -/
-def eval {Coordinate : Type*} [Fintype Coordinate]
-    (functional : RationalAffineFunctional Coordinate)
-    (point : Coordinate → ℝ) : ℝ := by
-  classical
-  exact (functional.offset : ℝ) +
-    ∑ coordinate, (functional.coefficient coordinate : ℝ) * point coordinate
-
-end RationalAffineFunctional
 
 /-- A closed polyhedral cell described by exact rational weak halfspaces.
 Equalities can be represented by two opposite inequalities. A common finite

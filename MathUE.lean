@@ -162,6 +162,7 @@ import MathUE.LinearAlgebra.OwnerObstructionCokernel
 import MathUE.LinearAlgebra.OwnerTypedDualLifting
 import MathUE.LinearAlgebra.Pi
 import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
+import MathUE.LinearAlgebra.RationalAffineFunctional
 import MathUE.LinearAlgebra.UniformNonsingularity
 import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
