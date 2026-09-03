@@ -172,6 +172,7 @@ import MathUE.LinearProgramming.ColumnSumQ
 import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
+import MathUE.LinearProgramming.FinFourIntegralTournament
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
 import MathUE.LinearProgramming.R0Margin

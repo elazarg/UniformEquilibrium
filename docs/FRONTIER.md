@@ -199,6 +199,18 @@ value rather than requiring owner indifference.  This removes that singleton
 fibre from the counterexample search; it does not constrain arbitrary Fin4
 tables.
 
+The four-player integral-tournament singleton fibres are also closed
+branchwise.  `singletonLCPFeasible_or_exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Classification/LCP/FinFourIntegralTournamentBalancedSingleton.lean`)
+says that a tournament sink gives a homogeneous simplex-LCP witness, while
+the no-sink branch has an explicit period-three balanced singleton
+certificate and hence a fixed uniform-equilibrium payoff against unrestricted
+behavioral deviations.  `normalizedSoloMatrix_eq_tournamentSkewMatrix_iff`
+records the literal singleton-row hypothesis.  All 44 coordinates on
+nonsingleton coalitions remain arbitrary.  This removes the integral-
+tournament source family, not general standard-Q matrices or arbitrary Fin4
+tables.
+
 The stationary construction boundary also has a checked finite source-data
 adapter.  `exists_uniformEquilibriumPayoff_of_conditionalFaceGapRange`
 (`UniformEquilibrium/Quitting/Classification/Existence/ConditionalFaceGapRange.lean`)

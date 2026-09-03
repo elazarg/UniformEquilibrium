@@ -19,6 +19,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
 import UniformEquilibrium.Quitting.Classification.LCP.CyclicParametricQ
+import UniformEquilibrium.Quitting.Classification.LCP.FinFourIntegralTournamentBalancedSingleton
 import UniformEquilibrium.Quitting.Classification.LCP.StandardQSideExample
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeByThreeZeroDiagonalQ
 import UniformEquilibrium.Quitting.Classification.LCP.Gate
@@ -53,6 +54,9 @@ This umbrella exports the theorem-bearing infrastructure proved in this folder:
   a witness whose normal core is the full four-player set;
 * the exact nonhomogeneous standard-Q region `0 < a < b` for the
   two-parameter cyclic singleton-comparison family;
+* the exact four-player integral-tournament fibre split: a homogeneous
+  simplex-LCP witness in the sink branch, or a fixed uniform-equilibrium
+  payoff for the full reward table in the no-sink branch;
 * the complete zero-diagonal `3 × 3` classification: outside the homogeneous
   branch, standard Q is exactly one of the two strict directed-cycle sign
   orientations together with positive determinant;
