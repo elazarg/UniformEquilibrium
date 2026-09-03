@@ -433,6 +433,7 @@ import MathUE.RamifiedWeierstrass
 import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex
 import MathUE.RelationalKernel
+import MathUE.RenewedChargedPathPotentialRecharge
 import MathUE.SchauderFixedPoint
 import MathUE.SequenceVariation
 import MathUE.ShapleyOperator
@@ -756,6 +757,7 @@ import UniformEquilibrium.Diagnostics.Quitting.Debt.ViolationCollapse
 import UniformEquilibrium.Diagnostics.Quitting.ExactRepairCertificate
 import UniformEquilibrium.Diagnostics.Quitting.FinFourCensoredClockNullDirection
 import UniformEquilibrium.Diagnostics.Quitting.FinFourFiniteClockMinimumPaidPort
+import UniformEquilibrium.Diagnostics.Quitting.FinFourFullBoxExactPredecessorCapacity
 import UniformEquilibrium.Diagnostics.Quitting.FinFourHardDeadlineTimingNashBarrier
 import UniformEquilibrium.Diagnostics.Quitting.FinFourHardDeadlineTimingNashUniqueness
 import UniformEquilibrium.Diagnostics.Quitting.FinFourHardDeadlineTimingNashWorstCase
@@ -1310,6 +1312,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Bellman.Finite.BooleanMobiusAdapter
 import UniformEquilibrium.Quitting.Bellman.Finite.EndpointNashBellmanFactory
 import UniformEquilibrium.Quitting.Bellman.Finite.EndpointNashClosed
+import UniformEquilibrium.Quitting.Bellman.Finite.FullBoxExactPredecessorAbsorptionBudget
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.HorizonBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction

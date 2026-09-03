@@ -413,6 +413,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
 import UniformEquilibrium.Quitting.Bellman.Finite.Regression.NegativeSingletonChargeRegression
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 import UniformEquilibrium.Quitting.Bellman.Finite.UnboundedExactBlockHazardCapacity
+import UniformEquilibrium.Quitting.Bellman.Finite.FullBoxExactPredecessorAbsorptionBudget
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRigidity
 import UniformEquilibrium.Quitting.Bellman.Finite.AllContinueBasinRestartMoat
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed

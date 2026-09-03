@@ -384,6 +384,7 @@ import MathUE.RamifiedWeierstrass
 import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex
 import MathUE.RelationalKernel
+import MathUE.RenewedChargedPathPotentialRecharge
 import MathUE.SchauderFixedPoint
 import MathUE.SequenceVariation
 import MathUE.ShapleyOperator
