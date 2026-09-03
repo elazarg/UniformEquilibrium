@@ -29,10 +29,9 @@ The last theorem reads the screen against the max-linear response system of
 the production module.  Given a solution `S` of `IsAnchoredCyclicResponseSolution`
 whose refusal branch is also dominated, a terminal exploitability witness forces some
 player to satisfy `S⁰ ≥ U⁰ + γ` (`exists_anchoredCyclicResponse_gain`).  The
-refusal hypothesis `hrefusal` is the one step of the bridge not proved here:
-the deterministic-stop half is `quittingAnchoredCyclicPhaseStop_le`, and the
-refusal half is discharged in
-The renewal consequences are developed in
+refusal bound remains the explicit hypothesis `hrefusal`.  The deterministic
+stopping bound is proved by `quittingAnchoredCyclicPhaseStop_le`.  The renewal
+consequences are developed in
 `UniformEquilibrium/Diagnostics/Quitting/Chronology/AnchoredCyclicRenewal.lean`.
 -/
 

@@ -1072,8 +1072,8 @@ Along a germ whose quit family has leading order `m ≥ 1` and leading vector
 `m` at `0`, with leading coefficient **exactly** `∑ j, a j`; consequently
 `t ^ m / absorption → 1 / ∑ a`.
 
-This closes `LEAN-P0-3`: the matching regime of the germ bridge is no longer
-squeezed between `1/(|ι| · ∑ a)` and `1/∑ a` but pinned to `1/∑ a`, so the
+Thus the matching regime of the germ bridge is no longer squeezed between
+`1/(|ι| · ∑ a)` and `1/∑ a` but pinned to `1/∑ a`, so the
 three-way scaling comparison of `t ^ q` against the germ's absorption is
 complete on absorption itself.
 

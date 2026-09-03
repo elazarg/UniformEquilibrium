@@ -642,10 +642,10 @@ theorem deviatePlan_eventuallyConstantPlan_quitter (row0 π : CyclicIndex → �
 /-- **No instant approximate family.** No configuration where some player
 quits surely at stage `0`, followed by an arbitrary feasible punishment
 `π`, is a global equilibrium of `scaledCyclicWeight` at every positive
-tolerance: the "neither instant" half of (K1)'s hypothesis package.
+tolerance.
 
-Unlike the stationary case this is *not* a limiting argument: the source
-answer's "as `x_2 \to 0`, `x_3 \to 1`" becomes an *exact* pin at `0` and `1`
+Unlike the stationary case this is *not* a limiting argument: the two
+relevant coordinates are pinned *exactly* at `0` and `1`
 respectively, because `for every ε` already collapsed to the exact `ε = 0`
 deviation bound. The two non-quitters' payoffs never see the punishment `π`
 at all (`continueMass row0 = 0` kills its coefficient outright), and the

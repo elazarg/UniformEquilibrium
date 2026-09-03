@@ -7,20 +7,15 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Circulation.SingletonFaceCirculationOrbit
 
 /-!
-# The repaired four-player family's circulation certificate at its stress point
+# The four-player circulation certificate at its stress point
 
-This followup repairs the four-player
-cyclic weight `F(x, ε)` to `F'(x, λ)` by moving the second solo coordinate from
-`0` to `x` (`solo r({i})`: `i ↦ 1, i+1 ↦ 3, i+2 ↦ x, i+3 ↦ 0`).  The followup's
-answer ("## Answer to followup") produces a singleton-face circulation
-certificate for every `x > 0, λ ≥ 0` (§4) and names
-`(x, λ) = (2, 1)` as "the hardest stress test for the remaining exact-cycle
-classification" (§7): it lies off every bounded-period exact branch the answer
-proves (`x > 1` rules out the opposite-player branch, `λ ≤ 2` rules out the
-symmetric branch, `x ≠ 1` and `λ > 0` rule out the singleton lock).
+This file checks a singleton-face circulation certificate for the four-player
+cyclic weight at `(x, λ) = (2, 1)`.  Its solo row pays `1` to the quitter, `3`
+to the next player, `x` to the opposite player, and `0` to the preceding
+player.  The Lean development below uses only this fixed table and the
+displayed vertices.
 
-This file machine-checks the answer's §4 certificate data at exactly that
-point and instantiates the singleton-orbit theorem of
+The certificate instantiates the singleton-orbit theorem of
 `SingletonFaceCirculationOrbit.lean` on it. The downstream module
 `QuittingCirculationUniformPayoffExamples.lean` verifies the formal
 punishment-floor condition and compiles this certificate to a
@@ -30,52 +25,34 @@ uniform-equilibrium payoff.
 
 At `x = 2`, `λ = 1`:
 
-* `a = a(2) = 1/2`, from the followup's `a(x) = (1 - x + √((x-1)² + 8)) / 4`
-  (equation (1)); the answer records this value directly in §7.
-* the payoff `v(2) = (1, 2, 2, 1)` (§7), which is `V^0` of §4's equation (39)
-  `V^0 = (1, 3 - 2a, 1/a, 1)` at `a = 1/2`.
+* the contraction ratio is `a = 1/2`;
+* the initial vertex is `V^0 = (1, 2, 2, 1)`;
 * the four singleton payoff rows `R^k`, the rotations of `R^0 = (1, 3, 2, 0)`
-  under `ρ(v₀, v₁, v₂, v₃) = (v₃, v₀, v₁, v₂)` (§4): `R^0 = (1,3,2,0)`,
+  under `ρ(v₀, v₁, v₂, v₃) = (v₃, v₀, v₁, v₂)`: `R^0 = (1,3,2,0)`,
   `R^1 = (0,1,3,2)`, `R^2 = (2,0,1,3)`, `R^3 = (3,2,0,1)`.
 * the four cycle vertices `V^k = ρ^k V^0`: `V^0 = (1,2,2,1)`, `V^1 = (1,1,2,2)`,
-  `V^2 = (2,1,1,2)`, `V^3 = (2,2,1,1)`, satisfying the answer's boxed identity
-  (equation (40)) `V^k = (1 - a) R^k + a V^{k+1}` -- checked below by
-  `norm_num` at every `k`, with the exact rationals of §4.1, not a numeric
-  approximation.
+  `V^2 = (2,1,1,2)`, `V^3 = (2,2,1,1)`, satisfying
+  `V^k = (1 - a) R^k + a V^{k+1}`.  This identity is checked below by
+  `norm_num` at every `k` with exact rational arithmetic.
 
 `FaceCirculationCertificate.step` is stated *forward*
 (`vertex (l+1) = ratio l * vertex l + (1 - ratio l) * mixTarget ...`), while
-the answer's equation (40) is stated *backward* in its own cyclic index `k`
-(matching the "backward orbit convention" the orbit file's docstring already
-flags).  The certificate below reads the answer's cycle in reverse,
-`vertex l := V^{-l}`, with phase `l`'s owner set to coordinate `V^{-l-1}`'s
-label; §4.1's identity `V^k_k = V^{k+1}_k = 1` (equation (43)) is exactly what
-makes the owner pinning below hold on the nose.
+the displayed identity is naturally indexed *backward*.  The certificate reads
+the cycle in reverse, `vertex l := V^{-l}`, with phase `l`'s owner set to the
+label of coordinate `V^{-l-1}`.  The identities `V^k_k = V^{k+1}_k = 1` make
+the owner pinning below hold on the nose.
 
 ## The floor
 
-The answer's floor is `max{d_i, χ_i}`, `d_i` the solo diagonal and `χ_i` the
-true min-max (`Scope` note of `SingletonFaceCirculation.lean`).  Here
-`d_i = stressWeight {i} i = 1` for every `i` (read off the table, no
-computation needed), and §2.3/§2.4 compute the exact min-max at the branch
-`x ≥ x₊(λ)` (equation (14)): at `(2, 1)`,
-`x₊(1) = 1 - 1/((1+1)²(2+1)) = 11/12 ≤ 2`, so `χ(2,1) = q_1 = (1+1)/(2+1) =
-2/3` (the boxed equation (14)'s upper branch).  That min-max computation --
-the supersolution algebra of §2.2/§2.3 -- is **quoted, not formalized here**,
-exactly as `cyclicCirculationFloor`'s docstring already quotes the
-three-coordinate min-max for its own calibration instance.  The floor used
-below is the constant `1`, which is `d_i` exactly and dominates the quoted
-`χ(2,1) = 2/3` with room to spare; `solo_le_floor` is proved unconditionally
-from the table, so the only unformalized input is the strict inequality
-`χ(2,1) < 1`, needed only for the informal reading "the floor is
-`max{d, χ}`" and not for any field of the certificate itself.
+The floor used below is the constant `1`.  It equals every solo diagonal and
+is proved to dominate every cycle vertex.  This file makes no min-max claim.
+The downstream compiler instead proves directly that the actual punishment
+value is at most this floor.
 
 ## Contents
 
-* `stressWeight`: the repaired family's weight at `(x, λ) = (2, 1)`, all
-  sixteen rows.
-* `stressFloor`, `stressVertex`, `stressOwner`: the floor and the reversed
-  cycle of §4.1.
+* `stressWeight`: the cyclic weight at `(x, λ) = (2, 1)`, all sixteen rows.
+* `stressFloor`, `stressVertex`, `stressOwner`: the floor and reversed cycle.
 * `stressCirculation`: the `FaceCirculationCertificate`, with every step
   identity, floor bound, and pinning clause checked by `norm_num`.
 * `stressCirculationSupport`: its point-mass presentation.
@@ -99,12 +76,11 @@ this is first proved at the level of `L` (the game's live-state Bellman
 recursion, `oneStageNext`). The downstream singleton-circulation compiler
 turns the resulting path into a uniform-equilibrium payoff.
 
-What is *not* checked here: that `χ(2,1) = 2/3` (quoted above, from §2.3's
-supersolution algebra). That exact value is not needed for the formal
-cashout: `QuittingCirculationUniformPayoffExamples.lean` instead proves that
-the actual `quittingPunishmentValue` is at most the floor `1` from the
-general `max (solo payoff) 0` bound, and then applies the
-singleton-circulation compiler.
+No exact min-max value is asserted here.  The formal cashout in
+`QuittingCirculationUniformPayoffExamples.lean` proves that the actual
+`quittingPunishmentValue` is at most the floor `1` from the general
+`max (solo payoff) 0` bound, and then applies the singleton-circulation
+compiler.
 -/
 
 noncomputable section
@@ -117,8 +93,8 @@ open Finset Math.PMFProduct
 /-- The four cyclic players. -/
 abbrev Player := Fin 4
 
-/-- **The repaired family's weight at the stress point `(x, λ) = (2, 1)`**,
-from the followup's repaired family: solo `r({i})` pays
+/-- **The cyclic weight at the stress point `(x, λ) = (2, 1)`**: the solo
+row `r({i})` pays
 `i ↦ 1, i+1 ↦ 3, i+2 ↦ x, i+3 ↦ 0`; adjacent pairs `r({i,i+1})` pay
 `i ↦ 1+λ, i+1 ↦ 0`, both outsiders `↦ 1`; distance-two pairs pay both
 outsiders `↦ 1`, both members `↦ 0`; triples pay the outsider `↦ 1`, all
@@ -173,9 +149,8 @@ theorem abs_stressWeight_le_three (S : Finset Player) (j : Player) :
 /-! ## The floor -/
 
 /-- The rationality floor at the stress point: the constant `1`.  It equals
-the solo diagonal `d_i` exactly (`stressWeight_diagonal`) and dominates the
-quoted min-max `χ(2,1) = 2/3` of §2.3/§2.4 -- see the module docstring for
-why that min-max value is quoted rather than reproved here. -/
+the solo diagonal `d_i` exactly (`stressWeight_diagonal`).  The downstream
+compiler proves the required punishment-value bound directly. -/
 def stressFloor : Player → ℝ := fun _ => 1
 
 theorem stressWeight_solo_le_floor (j : Player) : stressWeight {j} j ≤ stressFloor j := by
@@ -187,7 +162,7 @@ theorem stressWeight_solo_le_floor (j : Player) : stressWeight {j} j ≤ stressF
 theorem zmod_four_cases (t : ZMod 4) : t = 0 ∨ t = 1 ∨ t = 2 ∨ t = 3 := by
   revert t; decide
 
-/-- The owner of phase `l`, reading the answer's cycle backwards: phase `l`
+/-- The owner of phase `l`, reading the displayed cycle backwards: phase `l`
 is owned by coordinate `3 - l`. -/
 def stressOwner (l : ZMod 4) : Player :=
   if l = 0 then 3 else if l = 1 then 2 else if l = 2 then 1 else 0
@@ -229,7 +204,7 @@ theorem stressVertex_owner_pinned (l : ZMod 4) :
 
 /-! ## The certificate -/
 
-/-- **The stress-point circulation certificate**: the answer's §4 cycle
+/-- **The stress-point circulation certificate**: the cycle
 `V^0 → V^3 → V^2 → V^1 → V^0`, with point-mass phase distributions, owners
 `3, 2, 1, 0`, and every contraction ratio `a = 1/2`. -/
 def stressCirculation :

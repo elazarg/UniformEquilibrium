@@ -659,6 +659,21 @@ theorem not_isQuittingZeroSolo_and_not_hasAdmissibleAbsorbingQuittingCycle :
 
 end QuittingDisjunctionCounterexample
 
+/-- There is an absorbing cyclic continuation block whose cycle is not
+admissible.  Thus cycle admissibility is not derivable from the continuation-
+block conditions alone. -/
+theorem exists_cyclicContinuationBlock_not_cycleAdmissible :
+    ∃ (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+      (terminal : Payoff Bool) (block : QuittingFiniteNashBellmanPath Bool 1),
+      IsQuittingCyclicContinuationBlock reward terminal 1 block ∧
+        ¬ IsQuittingCycleAdmissible reward
+          (quittingCyclicContinuationBlockCycle 0 block) :=
+  ⟨QuittingDisjunctionCounterexample.reward,
+    QuittingDisjunctionCounterexample.witnessValue,
+    QuittingDisjunctionCounterexample.witnessBlock,
+    QuittingDisjunctionCounterexample.witnessBlock_isCyclicContinuationBlock,
+    QuittingDisjunctionCounterexample.not_isQuittingCycleAdmissible_witnessBlock⟩
+
 /-- **The disjunction of the finite-quitting reduction is not exhaustive.**
 
 `HEADLINE` — the permanent regression against restating the disjunction

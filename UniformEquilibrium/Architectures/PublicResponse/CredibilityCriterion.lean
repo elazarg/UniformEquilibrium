@@ -56,8 +56,7 @@ For a complete target assignment `u : Config → Payoff ι`:
 None of the four mentions a ledger, a potential, a punishment system or a
 deviation-payoff cap.  The bounded potentials and the `O(1)` target-charge
 residual are *produced* by finite Farkas duality
-(`Math.Probability.normalizedPositiveChargedCirculation_xor_driftPotential`),
-exactly as in the answer.
+(`Math.Probability.normalizedPositiveChargedCirculation_xor_driftPotential`).
 
 The bundle is called `IsGlobalCredibilityCriterion`: see "Scope" below.
 
@@ -98,14 +97,13 @@ bundle is satisfiable, so no condition is vacuous.
 ## Scope
 
 Conditions (T0), (Ti), (N), (P) are quantified over *all* configurations of
-the supplied architecture.  The answer quantifies (Ti) and (N) over the
-configurations reachable under a unilateral behavior of the owner, and (P)
-over prescribed-reachable recurrent classes.  The two readings agree on an
-architecture supplied already pruned to its relevant configurations, which
-is the convention of the answer's §1 ("Only configurations reachable under
-some unilateral behavior of `i` … are relevant for player `i`").  On an
-unpruned architecture the conditions here are strictly stronger, so the
-implication proved below remains valid but is not tight.  The companion module
+the supplied architecture.  A reachability-pruned formulation instead tests
+(Ti) and (N) only on configurations reachable under a unilateral behavior of
+the owner, and (P) only on prescribed-reachable recurrent classes.  The two
+readings agree when the supplied architecture is already pruned to the
+relevant configurations.  On an unpruned architecture the conditions here
+are strictly stronger, so the implication proved below remains valid but is
+not tight.  The companion module
 `ReachablePublicResponseCredibilityCriterion` supplies a support-pruned
 formulation at a declared entry, its canonical least reachable region, and
 the same ledger and adaptive-certificate consumers.  It is still a sound

@@ -23,7 +23,7 @@ is the existing `PublicRecurrentClassChild` — a canonical child carrying the
 parent's *whole* payoff-vector target together with strict rank descent — plus
 the remaining components of the output tuple.
 
-## The five gates, verbatim
+## The five gates
 
 1. **Common support realization.**  All rows on `C` are realized
    simultaneously by one public behavioral profile and one total update rule;
@@ -55,36 +55,35 @@ the remaining components of the output tuple.
 
 * **Gate 1 is faithful and partly banked.**  The realization equations are
   written at the level of the actual game: *one* state-indexed product profile
-  `prescribed` occurs in the prescribed row and in every response row, which is
-  exactly the answer's decisive compatibility condition (its equation (8) is
-  enforced by using the same variable, not by a side equation).  The existing
+  `prescribed` occurs in the prescribed row and in every response row.  The
+  decisive compatibility condition is enforced by using the same variable,
+  not by a side equation.  The existing
   development discharges precisely this half:
   `AnalyticBellmanGerm.fixedOccupationActionDist_bind_transition`
   (`PlayerNeutralOccupationBehaviorRealization.lean`) is definitionally the
   `rows_realized` field, and `finkStateKernel` is definitionally the realized
   prescribed kernel; see `CommonProfileRowRealization.ofFinkActiveOccupation`.
-  The occupation lift (the answer's (10)–(11)) and the closed reachable class
+  The occupation lift and the closed reachable class
   are *not* supplied by that development and stay as fields.
-* **Gate 2 is faithful** for the answer's displayed finite system: the
-  whole-target conditions (17), the recurrent identity (19), the owner-labelled
-  Bellman inequality (20) with one potential per owner and one multiplier per
-  owner, the child entry target (15), and the parent target balance.  The
-  remaining clauses of the answer's witness set (22) — exact target/rebasing
+* **Gate 2 is faithful** to the displayed finite system: harmonicity of the
+  whole-target field, the recurrent identity, the owner-labelled Bellman
+  inequality with one potential and multiplier per owner, the child entry
+  target, and the parent target balance.  The remaining realization-cell
+  clauses — exact target/rebasing
   fibers, account resets, owner-history compatibility, canonical face — are
   *not* modelled; they are collected in one neutral socket `CellFiber`, which
   is trivially satisfiable when instantiated by `fun _ => True`.  That is an
   explicit gap, not a claim.
-* **Gate 3 is faithful** for (27), (28), (32), (33), the `Z = E ⊔ B ⊔ F`
+* **Gate 3 is faithful** to the target, deviation, and finite-dual inequalities,
+  the `Z = E ⊔ B ⊔ F`
   decomposition and the *deterministic-bound* form of the stopping condition
-  (the answer's third and strongest stopping variant: acyclicity of the
-  positive-support graph inside `E`, here witnessed by a strictly decreasing
-  `exitRank`).  The martingale/supermartingale delivery (37) and the entry-debt
-  bound (35)–(36) are **not** derived; they need stopped-process machinery.
+  given by acyclicity of the positive-support graph inside `E`, here witnessed
+  by a strictly decreasing `exitRank`.  The martingale/supermartingale delivery
+  and entry-debt bound are **not** derived; they need stopped-process machinery.
   What *is* derived here: no reachable closed prescribed class inside `E`
   (`no_closed_class_in_continuing`), no deviation self-loop inside `E`
-  (`no_deviation_selfLoop`, which is exactly the answer's entry
-  counterexample (39)), and the exact neutral-occupation condition (31) from
-  the finite dual (32) (`neutralOccupation_charge_nonpos`).
+  (`no_deviation_selfLoop`), and the exact neutral-occupation condition from
+  the finite dual (`neutralOccupation_charge_nonpos`).
 * **Gate 4 is faithful only for the inherited/restarted alternatives**:
   the endpoint equation (41)/(42) and the interface commutation (40), stated
   over neutral type parameters because the tree has no analytic restriction
@@ -98,8 +97,8 @@ the remaining components of the output tuple.
 
 ## Gates 4 and 5 are components of the conclusion
 
-The answer states this itself: *"Germ coherence and strict global progress are
-components of the tuple itself."*  Consequently the easy direction is genuinely
+Germ coherence and strict global progress are fields of the output tuple.
+Consequently the easy direction is genuinely
 contentful only for gates 1–3 (which manufacture the child, its whole target,
 and its legal entry); gate 4 is carried through unchanged and gate 5 is
 instantiated at the child.  No gate field is literally the conclusion:
@@ -114,19 +113,18 @@ Every new `Prop`/structure was checked against a trivial witness:
 * `CommonSupportRealization.classRows_nonempty` — the zero occupation cannot
   satisfy gate 1: normalization plus the support equivalence (11) forces the
   class row set to be nonempty.
-* `no_deviation_selfLoop`, `no_closed_class_in_continuing` — gate 3 is not
-  satisfied by the answer's entry counterexample (39), where `U ≡ 0` verifies
-  (28) yet a deviator stays forever.
+* `no_deviation_selfLoop`, `no_closed_class_in_continuing` — gate 3 rejects a
+  zero target field with a deviation that stays forever in one entry mode.
 * `CompleteTargetCompatibility.recurrent_charge_coboundary` — with a zero
   target field, gate 2 still forces the prescribed payoff to be an exact
-  coboundary of the bias, i.e. mean charge zero on every recurrent class
-  (the answer's (21)).  The zero witness is therefore admissible only for a
+  coboundary of the bias, i.e. mean charge zero on every recurrent class.  The
+  zero witness is therefore admissible only for a
   game with zero recurrent payoff, which is correct.
 * `hereditaryProgress_descends_vacuous_without_self` — the `descends` field
   alone is satisfied by the empty descendant relation while the conclusion
   fails; this is why `self_descendant` is a field.
-* `germEndpoint_not_sufficient` — the answer's Part D counterexample: two child
-  germs with the same endpoint vector and different strategic interfaces.  The
+* `germEndpoint_not_sufficient` — two child germs can have the same endpoint
+  vector and different strategic interfaces.  The
   endpoint field of gate 4 alone does not imply the commutation field.
 * The neutral socket `CellFiber` *is* vacuous under `fun _ => True`; that is
   documented above as a gap rather than a modelled condition.
@@ -134,9 +132,8 @@ Every new `Prop`/structure was checked against a trivial witness:
 ## What this file does not do
 
 The converse (a successful promotion supplies the five gates) is not proved.
-The two rank counterexamples of Part E (redundant support; reactivation under
-closure) are not formalized here; they bear on the converse and on whether
-gate 5 can be *derived* from proper support, which it cannot.
+In particular, gate 5 is not derived here from proper support; hereditary
+progress remains an explicit input.
 -/
 
 noncomputable section
@@ -160,12 +157,11 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- One common public behavioral profile realizing the prescribed row and
 every response row.
 
-This is the decisive half of the answer's Part A.  The prescribed row (6) and
-each response row (7) are produced by *the same* state-indexed product profile
-`prescribed`; the answer's compatibility equation (8) is therefore not a side
-condition but is enforced by the shared variable.  A response row differs from
-the prescribed row only in the owner's own coordinate, which is replaced by the
-row's own action `α^r`. -/
+The prescribed row and every response row are produced by *the same*
+state-indexed product profile `prescribed`; profile compatibility is therefore
+not a side condition but is enforced by the shared variable.  A response row
+differs from the prescribed row only in the owner's own coordinate, which is
+replaced by the row's own action `α^r`. -/
 structure CommonProfileRowRealization
     (rowOwner : Row → ι) (rowSource : Row → G.State)
     (rowKernel : Row → PMF G.State)
@@ -191,8 +187,8 @@ structure CommonProfileRowRealization
 behavioral profile and one total update rule, and the analytic circulation
 lifts to an actual invariant occupation whose support is exactly `supp_A(C)`.
 
-`core` records the answer's requirement that `C` be closed and reachable *in
-the realized support graph*, using the existing `ReachableClosedClass`. -/
+`core` records that `C` is closed and reachable *in the realized support
+graph*, using the existing `ReachableClosedClass`. -/
 structure CommonSupportRealization [Fintype Row]
     (rowOwner : Row → ι) (rowSource : Row → G.State)
     (rowKernel : Row → PMF G.State)
@@ -350,12 +346,12 @@ def targetCharge (rowOwner : Row → ι) (rowSource : Row → G.State)
 recurrent identities, every owner-labelled Bellman inequality, the parent
 target-balance equation, and the realization-cell/fiber conditions.
 
-The answer insists that the witness is the field `X : Q_C → ℝ^I` and not the
-bare vector `w`; that is why `targetField` is a field and `childTarget` is
+The witness is the field `X : Q_C → ℝ^I`, not merely the bare vector `w`; that
+is why `targetField` is a field and `childTarget` is
 *defined* from it at the child entry (15).
 
-`CellFiber` is a **neutral socket**: it stands for the clauses of the answer's
-witness set (22) that this file does not model (exact target/rebasing fibers,
+`CellFiber` is a **neutral socket** for clauses that this file does not model
+(exact target/rebasing fibers,
 account resets, owner-history compatibility, canonical face).  It is vacuous
 when instantiated by `fun _ => True`. -/
 structure CompleteTargetCompatibility
@@ -424,9 +420,9 @@ variable {G}
   {parentTarget : ι → ℝ} {classEntry : G.State}
 
 /-- **Falsifier probe for gate 2.**  Even a zero target field does not make
-gate 2 vacuous: the recurrent identity (19) still forces the prescribed
-recurrent charge to be an exact coboundary of the prescribed bias, which is
-the answer's (21).  So the zero witness is admissible only for a game whose
+gate 2 vacuous: the recurrent identity still forces the prescribed recurrent
+charge to be an exact coboundary of the prescribed bias.  So the zero witness is
+admissible only for a game whose
 recurrent payoff is already a coboundary. -/
 theorem recurrent_charge_coboundary
     (data :
@@ -452,12 +448,12 @@ inequalities in finite dual form, exact two-sided prescribed delivery, and an
 explicit stopping witness.
 
 `Arena` and `DevRow` are fields rather than parameters: the selector arena is
-part of the witness, not of the ambient data.  `DevRow` enumerates the answer's
+part of the witness, not of the ambient data.  `DevRow` enumerates the
 unilateral rows `(z, a)`; totality of the public update is the totality of
 `prescribedStep` and `devKernel`.
 
-Faithful to (27), (28), (32), (33) and the `Z = E ⊔ B ⊔ F` decomposition.  The
-stopping condition is taken in the answer's strongest listed form: the
+The target, deviation, and finite-dual inequalities are stated together with
+the `Z = E ⊔ B ⊔ F` decomposition.  The stopping condition says that the
 positive-support graph inside `E` is acyclic, witnessed by a strictly
 decreasing `exitRank`.  The entry-debt bound (35)–(36) and the stopped
 delivery (37) are *not* fields and are not derived here. -/
@@ -562,10 +558,9 @@ theorem slack_nonneg (gate : RobustFiniteEntry ι parentTarget childTarget)
     0 ≤ gate.slack d :=
   sub_nonneg.2 (gate.deviation_super d hd)
 
-/-- **Falsifier probe for gate 3 / the answer's entry counterexample (39).**
-A deviation self-loop inside the continuing region is impossible.  In the
-answer's example `U ≡ 0` satisfies (28) while the deviator stays at `z`
-forever; gate 3 rejects exactly that. -/
+/-- **Falsifier probe for gate 3.**  A deviation self-loop inside the continuing
+region is impossible.  Thus gate 3 rejects a zero target field paired with a
+deviation that stays forever at one continuing mode. -/
 theorem no_deviation_selfLoop
     (gate : RobustFiniteEntry ι parentTarget childTarget) (d : gate.DevRow)
     (hd : gate.devSource d ∈ gate.Continuing)
@@ -684,8 +679,8 @@ strategic realization is the strategic restriction of the parent's.
 
 This covers the inherited case (`childGerm = restrict parentGerm`, with
 `restrict` folded into the choice of `childGerm`) and the restarted case with a
-compatible interface morphism, i.e. the answer's (40)–(42).  The controlled
-all-accuracy approximation (43) is **not** modelled.
+compatible interface morphism.  Controlled all-accuracy approximation is
+**not** modelled.
 
 The types are neutral parameters because the tree currently has no analytic
 restriction map `R_C^an` on `AnalyticBellmanGerm`; instantiating `Interface` by
@@ -715,8 +710,8 @@ structure TargetConstrainedGermCoherence (ι : Type) (childTarget : ι → ℝ) 
     childRealization childGerm =
       strategicRestriction (parentRealization parentGerm)
 
-/-- **Falsifier probe for gate 4 / the answer's Part D counterexample.**  Two
-child germs may have the same endpoint vector and different strategic
+/-- **Falsifier probe for gate 4.**  Two child germs may have the same endpoint
+vector and different strategic
 interfaces.  The `endpoint` field alone therefore does not imply the
 `commutes` field: a germ with the correct numerical endpoint can be unrelated
 to the selected strategic child. -/
@@ -733,10 +728,10 @@ theorem germEndpoint_not_sufficient :
 
 /-- **Gate 5.**  After minimal strategic closure and canonical bisimulation
 quotient, *every* reachable descendant of the child has strictly smaller
-canonical global rank than the parent — the answer's (47) with (50)/(51).
+canonical global rank than the parent.
 
-`self_descendant` records the answer's "the maximum includes `Γ` itself"; it is
-load-bearing, see `hereditaryProgress_descends_vacuous_without_self`. -/
+`self_descendant` ensures the child is among the descendants being ranked; it
+is load-bearing, see `hereditaryProgress_descends_vacuous_without_self`. -/
 structure HereditaryIntrinsicProgress {Node Rank : Type}
     (rank : Node → Rank) (rankLt : Rank → Rank → Prop)
     (Descendant : Node → Node → Prop) (parent child : Node) : Prop where
