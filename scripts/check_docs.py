@@ -103,6 +103,8 @@ HISTORICAL_NARRATIVE_RE = re.compile(
     re.IGNORECASE,
 )
 PRUNED_DIRECTORIES = {
+    ".agents",
+    ".codex",
     ".git",
     ".lake",
     "GameTheory",

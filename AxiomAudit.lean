@@ -1225,6 +1225,7 @@ import UniformEquilibrium.ProofView.Native.Basic
 import UniformEquilibrium.ProofView.Native.Equilibrium
 import UniformEquilibrium.ProofView.Native.History
 import UniformEquilibrium.ProofView.Native.Semantics
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSFiniteProfileDensity
 import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartition
 import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionDecoder
 import UniformEquilibrium.Quitting.AbsorptionPath.AKRSPartitionSmallCell

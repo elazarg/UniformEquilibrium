@@ -1,6 +1,6 @@
 import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
 import MathUE.PMFProduct.SmallCellProductization
-import UniformEquilibrium.Quitting.AbsorptionPath.DiscreteRootSequencePath
+import UniformEquilibrium.Quitting.AbsorptionPath.AKRSFiniteProfileDensity
 import UniformEquilibrium.Quitting.AbsorptionPath.EndpointUnboundedWeakLimitCounterexample
 import UniformEquilibrium.Quitting.AbsorptionPath.LimitJumpRootLocalization
 import UniformEquilibrium.Quitting.AbsorptionPath.UnitBoundedSequentialCompactness
@@ -54,10 +54,9 @@ does not test terminal total jumps.  Its universal claim is therefore checked
 to be equivalent to the same general approximate-existence problem.  The
 conclusion of Theorem 5.4 is checked through the corrected
 facewise polygonal construction; the printed global control correspondence is
-separately proved not upper hemicontinuous.  The only claim below still
-represented by `sorry` is the unit-bounded density statement corresponding to
-journal Proposition 4.8.  The corrected unit-bounded compactness statement of
-Proposition 4.11 is proved.  The old endpoint-unbounded Lean interface for
+separately proved not upper hemicontinuous.  The corrected unit-bounded density
+statement of Proposition 4.8 and compactness statement of Proposition 4.11 are
+proved.  The old endpoint-unbounded Lean interface for
 Proposition 4.14 is checked false, while the unit-bounded closure intended by
 the paper is proved.
 -/
@@ -598,23 +597,9 @@ cumulative coalition law through that row.  Zero-absorption rows are invisible.
 
 /-- A discrete absorption path induced by an initially absorbing root
 sequence, in the paper's Definition 4.1. -/
-def IsInducedByAbsorbingRootSequence
+abbrev IsInducedByAbsorbingRootSequence
     (path : AbsorptionPath (ι := ι)) : Prop :=
-  ∃ roots : ℕ → ι → PMF Bool,
-    IsCompletelyAbsorbing roots ∧
-      pathTimes path.1 = {1} ∧
-      pathJumps path.1 =
-        {time | ∃ stage,
-          time = quittingRootSequenceClock roots stage ∧
-            quittingRootSequenceClock roots stage <
-              quittingRootSequenceClock roots (stage + 1)} ∧
-      ∀ stage,
-        quittingRootSequenceClock roots stage <
-            quittingRootSequenceClock roots (stage + 1) →
-          ∀ coalition,
-            path.1.value (quittingRootSequenceClock roots stage) coalition =
-              quittingRootSequenceCumulativeCoalitionMass roots
-                (stage + 1) coalition
+  IsInducedByCompletelyAbsorbingRootSequence path
 
 /-!
 
@@ -707,11 +692,10 @@ def UnitBoundedAbsorptionPathDensityByAbsorbingProfiles : Prop :=
           HasUnitBoundedTotalMass (approximants resolution)) ∧
         WeaklyConvergesAbsorptionPaths approximants path
 
-/-- The corrected unit-bounded form of journal Proposition 4.8.  Its full
-weak-path construction has not yet been checked in Lean. -/
+/-- The corrected unit-bounded form of journal Proposition 4.8. -/
 theorem unitBoundedAbsorptionPaths_are_weakLimits_of_absorbingProfiles :
     UnitBoundedAbsorptionPathDensityByAbsorbingProfiles (ι := ι) := by
-  sorry
+  exact unitBoundedAbsorptionPaths_are_weakLimits_of_completelyAbsorbingRootSequences
 
 /-!
 

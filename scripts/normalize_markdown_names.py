@@ -12,6 +12,8 @@ import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 PRUNED_DIRECTORIES = {
+    ".agents",
+    ".codex",
     ".git",
     ".lake",
     "GameTheory",

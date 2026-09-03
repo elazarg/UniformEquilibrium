@@ -126,7 +126,7 @@ class TimelessDocumentTests(unittest.TestCase):
         self.assertEqual(documents, living | evidence)
 
     def test_private_sources_are_not_project_documentation(self) -> None:
-        for source in ("literature", "overleaf"):
+        for source in (".agents", ".codex", "literature", "overleaf"):
             with self.subTest(source=source):
                 self.assertIn(source, DOCS_PRUNED_DIRECTORIES)
                 self.assertIn(source, NAME_PRUNED_DIRECTORIES)
