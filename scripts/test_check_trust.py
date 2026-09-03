@@ -45,12 +45,20 @@ def sorryAxName := 0
 '''
         self.assertEqual(self.labels(source), [])
 
-    def test_prunes_math_workspace_but_discovers_untracked_project_source(self) -> None:
+    def test_only_scans_canonical_roots_and_finds_untracked_lane_source(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
-            ignored = root / "math" / "fable" / "Ignored.lean"
-            ignored.parent.mkdir(parents=True)
-            ignored.write_text("example : True := by sorry\n", encoding="utf-8")
+            ignored_paths = (
+                root / "math" / "fable" / "Ignored.lean",
+                root / ".agents" / "Scratch.lean",
+                root / "Unrelated" / "Ignored.lean",
+                root / "Loose.lean",
+            )
+            for ignored in ignored_paths:
+                ignored.parent.mkdir(parents=True, exist_ok=True)
+                ignored.write_text(
+                    "example : True := by sorry\n", encoding="utf-8"
+                )
             project = root / "UniformEquilibrium" / "Untracked.lean"
             project.parent.mkdir(parents=True)
             project.write_text("example : True := by sorry\n", encoding="utf-8")

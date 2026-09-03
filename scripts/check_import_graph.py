@@ -10,7 +10,6 @@ dependency) are leaves of the graph unless they name a local project module.
 from __future__ import annotations
 
 import argparse
-import os
 import pathlib
 import re
 import sys
@@ -19,8 +18,10 @@ from typing import Iterable, Sequence
 
 try:
     from scripts.check_trust import strip_comments_and_strings
+    from scripts.lean_source_roots import project_lean_files
 except ModuleNotFoundError:  # Direct execution: ``python scripts/check_import_graph.py``.
     from check_trust import strip_comments_and_strings
+    from lean_source_roots import project_lean_files
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
@@ -36,7 +37,6 @@ DEFAULT_UMBRELLAS = (
 # production root is intentionally narrower.  Their source paths follow the
 # ordinary dotted Lean module layout.
 SECONDARY_UMBRELLAS = ("UniformEquilibrium.Diagnostics",)
-PRUNED_DIRECTORIES = {".git", ".lake", "__pycache__", "GameTheory", "ephemeral"}
 LEAN_LIBRARY_RE = re.compile(
     r"^\s*lean_lib\s+([A-Za-z_][A-Za-z0-9_']*)\s+where\b", re.MULTILINE
 )
@@ -178,17 +178,6 @@ def module_name(path: pathlib.Path, root: pathlib.Path) -> str:
 
     relative = path.resolve().relative_to(root.resolve())
     return ".".join(relative.with_suffix("").parts)
-
-
-def project_lean_files(root: pathlib.Path) -> list[pathlib.Path]:
-    """Find project-owned Lean files, excluding the pinned dependency/cache."""
-
-    files: list[pathlib.Path] = []
-    for directory, names, filenames in os.walk(root):
-        names[:] = [name for name in names if name not in PRUNED_DIRECTORIES]
-        base = pathlib.Path(directory)
-        files.extend(base / name for name in filenames if name.endswith(".lean"))
-    return sorted(files)
 
 
 def discover_umbrellas(root: pathlib.Path) -> list[Umbrella]:

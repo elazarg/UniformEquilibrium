@@ -3,22 +3,18 @@
 
 from __future__ import annotations
 
-import os
 import pathlib
 import re
 import subprocess
 import sys
 
+try:
+    from scripts.lean_source_roots import project_lean_files
+except ModuleNotFoundError:  # Direct execution: ``python scripts/check_trust.py``.
+    from lean_source_roots import project_lean_files
+
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PRUNED_DIRECTORIES = {
-    ".git",
-    ".lake",
-    ".pytest_cache",
-    "GameTheory",
-    "__pycache__",
-    "ephemeral",
-}
 TOKEN_PATTERNS = (
     (re.compile(r"\b(?:sorry|admit)\b"), "proof placeholder"),
     (
@@ -157,23 +153,8 @@ def strip_comments_and_strings(text: str) -> str:
     return "".join(output)
 
 
-def project_files(suffix: str) -> list[pathlib.Path]:
-    files: list[pathlib.Path] = []
-    root_pruned_directories = {(ROOT / "math").resolve()}
-    for directory, names, filenames in os.walk(ROOT):
-        base = pathlib.Path(directory)
-        names[:] = [
-            name
-            for name in names
-            if name not in PRUNED_DIRECTORIES
-            and (base / name).resolve() not in root_pruned_directories
-        ]
-        files.extend(base / name for name in filenames if name.endswith(suffix))
-    return sorted(files)
-
-
 def lean_files() -> list[pathlib.Path]:
-    return project_files(".lean")
+    return project_lean_files(ROOT)
 
 
 def library_roots(lakefile: str) -> set[str]:

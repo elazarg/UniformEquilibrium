@@ -87,6 +87,21 @@ lean_lib UniformEquilibrium where
                     for failure in failures)
             )
 
+    def test_ignores_lean_sources_outside_canonical_roots(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            self.write(root, "lakefile.lean", "lean_lib UniformEquilibrium where\n")
+            self.write(root, "UniformEquilibrium.lean", "")
+            for relative in (
+                ".agents/Scratch.lean",
+                "math/fable/Ignored.lean",
+                "Unrelated/Ignored.lean",
+                "Loose.lean",
+            ):
+                self.write(root, relative, "import Missing.LocalModule\n")
+
+            self.assertEqual(check_import_graph.check_import_graph(root), [])
+
     def test_discovers_all_declared_library_roots(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
