@@ -2752,6 +2752,21 @@ adapter and near-minimum composition are not yet formalized, so this route has
 `M`, `L`, and conditional one-step `C`, but no `A`; it claims no regeneration,
 terminal approximation, or uniform-equilibrium payoff.
 
+The same cap-pin estimate now has an approximate-root finite-ledger form in
+`UniformEquilibrium/Diagnostics/Quitting/FixedCapPinApproximateRootDebtExpenditure.lean`
+and
+`UniformEquilibrium/Diagnostics/Quitting/FixedCapPinDebtVisitBudget.lean`.
+The arbitrary-root identity and approximate-Nash inequality make every visit
+spend the fixed drop minus its root error. Literal prefix chains telescope this
+expenditure directly; arbitrary source reconstruction is allowed when each
+re-entry pays its positive named-debt replenishment, itself bounded by the
+named prescribed-payoff and cap seams. This has `M`, `L`, and a conditional
+finite-prefix `C`, but no source `A`. No theorem here turns the finite ledger
+into an infinite visit-cardinality or floor bound, supplies the initial
+`2 * M` debt estimate, proves summability of errors or seams, constructs a
+source or renewal adapter, regenerates the cap pin, or yields terminal
+approximation or a uniform-equilibrium payoff.
+
 <!-- BEGIN GENERATED OPEN LEAVES -->
 This dependency table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
