@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34
+import UniformEquilibrium.Quitting.Classification.Existence.AKRSReverseS3Hardness
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
 import UniformEquilibrium.Quitting.Classification.Existence.AllNormalUnboundedExactBlockHazardCapacity
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
