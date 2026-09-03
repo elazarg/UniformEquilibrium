@@ -4,13 +4,13 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumForwardTrichotomyDependencies
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.ArbitraryNeverSemanticBoundary
 
 /-!
 # Actual-source boundary for the corrected pointwise extraction
 
-Dependency A in the AKRS classification asks for a stationary,
+The corrected pointwise four-way extraction asks for a stationary,
 instant-punishment, well-supported absorbing, or stationarily generated
 witness at each positive error.  The arbitrary-Never hypothesis reaches two
 of these outputs directly.  The only remaining outputs of the checked
@@ -42,7 +42,7 @@ def QuittingCorrectedPointwiseSourceResidualAt
 
 namespace QuittingLCPClassification
 
-/-- **Source-faithful pointwise boundary for Dependency A.**  Arbitrary-Never
+/-- **Source-faithful pointwise extraction boundary.** Arbitrary-Never
 behavioral approximate equilibria give the instant branch, the
 well-supported absorbing branch, or one of the two literal source residuals.
 
@@ -76,7 +76,7 @@ theorem QuittingPayoffTable.instant_or_wellSupported_or_correctedSourceResidualA
 
 /-- The exact corrected four-way pointwise alternative, with only the two
 actual-source residuals appended.  The stationary and stationarily generated
-disjuncts are displayed to make the remaining distance to Dependency A
+disjuncts are displayed to make the remaining extraction obligation
 literal; the checked extraction already lands in the middle two disjuncts
 whenever no source residual remains. -/
 theorem QuittingPayoffTable.correctedPointwiseAlternative_or_sourceResidualAt
@@ -97,8 +97,8 @@ theorem QuittingPayoffTable.correctedPointwiseAlternative_or_sourceResidualAt
   · exact Or.inr (Or.inr (Or.inl hwellSupported))
   · exact Or.inr (Or.inr (Or.inr (Or.inr hresidual)))
 
-/-- Excluding the two concrete source residuals at every scale closes
-Dependency A.  Unlike a supplied four-way selector, the premise only rules
+/-- Excluding the two concrete source residuals at every scale supplies the
+corrected pointwise four-way extraction. Unlike a supplied four-way selector, the premise only rules
 out objects produced unconditionally by the reached-prefix extraction. -/
 theorem QuittingPayoffTable.hasCorrectedPointwiseFourWayExtraction_of_noSourceResidual
     (table : QuittingPayoffTable ι)

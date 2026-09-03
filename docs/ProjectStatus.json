@@ -456,7 +456,7 @@
       "subject": "Diffuse stationarily generated source four-way reduction",
       "kind": "Unconditional source reduction",
       "declaration": "quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerInstantPunishmentOrWellSupported.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
       "scope": "Every diffuse stationarily generated approximate-equilibrium source yields stationary approximate equilibria, instant punishment, a well-supported absorbing sequence, or a source-matched uniform all-Continue phantom. The last package retains the original positive-joint residual, one strict source subsequence, its literal punishment-suffix profiles and fixed punished label, semantic convergence to the reached endpoint, the no-sure-exit proof, exact-prefix summable port, phantom, exact value equality, and uniform-equilibrium-payoff certificate. This target remains unclassified within the corrected-source route; the direct chronological theorem proves the table-level AKRS trichotomy independently."
     },
@@ -465,7 +465,7 @@
       "subject": "AKRS Theorem 3.4 forward trichotomy",
       "kind": "Conditional classification theorem",
       "declaration": "QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/AKRSTheorem34.lean",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumForwardTrichotomy.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
       "scope": "For every finite arbitrary-never quitting payoff table, if for every positive error there exists an arbitrary behavioral terminal-payoff approximate equilibrium against all unilateral behavioral replacements, then one fixed branch holds: stationary S.1, instant-punishment S.2, or absorbing sequentially-perfect S.3. The proof handles the empty-player case and otherwise constructs one actual chronological source, then exhaustively dispatches its terminal and no-terminal branches. This proves the forward implication of AKRS Theorem 3.4; it does not prove the approximate-equilibrium premise for every game, assert a fixed payoff target, control all sufficiently long finite horizons, or imply a uniform equilibrium."
     },
@@ -492,7 +492,7 @@
       "subject": "AKRS divergent exceptional-owner source closure",
       "kind": "Unconditional source consumer",
       "declaration": "QuittingUniqueExceptionalOwnerSource.instantPunishment_or_wellSupported",
-      "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean",
+      "source": "UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerInstantPunishmentOrWellSupported.lean",
       "umbrella": "UniformEquilibrium/Quitting/Classification/Existence/All.lean",
       "scope": "Every actual unique-exceptional-owner source with divergent selected horizons yields literal S.2 or well-supported S.3; source Nash retains arbitrary unilateral behavioral deviations, while the explicit negative-owner solo sequence is not claimed terminal Nash. The residual adapter removes the entire divergent negative exceptional-owner class. This remains a useful local consumer in the corrected-source route; the direct chronological theorem proves theorem3_4 independently."
     },

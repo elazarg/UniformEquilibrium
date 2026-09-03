@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34Dependencies
+import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumForwardTrichotomyDependencies
 import UniformEquilibrium.Quitting.Classification.Existence.StationaryPrefixExceptionalOwner
 
 /-!

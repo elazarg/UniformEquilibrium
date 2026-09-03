@@ -1,8 +1,8 @@
-import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalAbsorptionPathS2S3
+import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalAbsorptionPathTerminalDispatch
 import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumVanishingNeverAlternative
 
 /-!
-# AKRS Theorem 3.4 from approximate-equilibrium existence
+# Forward trichotomy from terminal approximate-equilibrium existence
 
 The arbitrary-never approximate-equilibrium hypothesis first yields literal
 S.1 or an actual vanishing-Never root-sequence source.  In the second arm the

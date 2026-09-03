@@ -4,12 +4,12 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.Classification.Existence.AKRSNullTailAlternative
+import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorbingNullTailAlternative
 import UniformEquilibrium.Quitting.Cycles.PeriodicJointSurvival
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingExploitabilityRetraction
 
 /-!
-# One-added-player hardness of reverse S.3
+# One-added-player hardness of the reverse sequentially-perfect-absorbing implication
 
 An arbitrary finite quitting payoff table, including an arbitrary payoff at
 Never, embeds into a table with one additional dummy player. The padded table
@@ -669,9 +669,10 @@ theorem stationaryExactEveryRestartSource_sum_punit_implies_approximateEquilibri
   exact table.approximateEquilibriumExistence_of_oneDummyPadding
     (penalty := penalty) (by norm_num) hpadded
 
-/-- Reverse S.3 at the one-added-player type implies approximate equilibrium
+/-- The reverse sequentially-perfect-absorbing implication at the
+one-added-player type implies approximate equilibrium
 existence for every old table. This is the literal cardinal shift. -/
-theorem reverseS3_sum_punit_implies_approximateEquilibriumExistence
+theorem reverseSequentiallyPerfectAbsorbing_sum_punit_implies_approximateEquilibriumExistence
     [Nonempty ι]
     (hreverse : ∀ padded : QuittingPayoffTable (ι ⊕ PUnit),
       padded.ReverseSequentiallyPerfectAbsorbing)
@@ -683,9 +684,10 @@ theorem reverseS3_sum_punit_implies_approximateEquilibriumExistence
   exact table.approximateEquilibriumExistence_of_oneDummyPadding
     (penalty := penalty) (by norm_num) hpadded
 
-/-- Reverse S.3 for every finite player type. The quantifier ranges over the
-table with its explicit Never payoff and over arbitrary behavioral profiles
-inside approximate-equilibrium existence. -/
+/-- The reverse sequentially-perfect-absorbing implication for every finite
+player type. The quantifier ranges over the table with its explicit Never
+payoff and over arbitrary behavioral profiles inside approximate-equilibrium
+existence. -/
 def UniversalReverseSequentiallyPerfectAbsorbing : Prop :=
   ∀ (players : Type) [Fintype players] [DecidableEq players]
     (table : QuittingPayoffTable players),
@@ -735,11 +737,12 @@ theorem universalStationaryExactEveryRestartSource_iff_approximateExistence :
   · intro happrox players _ _ table _hsource
     exact happrox players table
 
-/-- Universal reverse S.3 is equivalent to the general finite-quitting
-approximate-equilibrium problem. The hard direction uses `players ⊕ PUnit`,
-so this theorem makes no same-cardinality claim. The empty-player source case
-is discharged directly by its unique vacuous behavioral profile. -/
-theorem universalReverseS3_iff_universalApproximateEquilibriumExistence :
+/-- The universal reverse sequentially-perfect-absorbing implication is
+equivalent to the general finite-quitting approximate-equilibrium problem.
+The hard direction uses `players ⊕ PUnit`, so this theorem makes no
+same-cardinality claim. The empty-player source case is discharged directly
+by its unique vacuous behavioral profile. -/
+theorem universalReverseSequentiallyPerfectAbsorbing_iff_universalApproximateEquilibriumExistence :
     UniversalReverseSequentiallyPerfectAbsorbing ↔
       UniversalQuittingApproximateEquilibriumExistence := by
   classical
@@ -754,7 +757,8 @@ theorem universalReverseS3_iff_universalApproximateEquilibriumExistence :
         exact isEmptyElim who
     | inr hnonempty =>
         letI : Nonempty players := hnonempty
-        exact reverseS3_sum_punit_implies_approximateEquilibriumExistence
+        exact
+          reverseSequentiallyPerfectAbsorbing_sum_punit_implies_approximateEquilibriumExistence
           (fun padded ↦ hreverse (players ⊕ PUnit) padded) table
   · intro happrox players _ _ table _hbranch
     exact happrox players table

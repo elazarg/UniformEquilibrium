@@ -8,12 +8,12 @@ import UniformEquilibrium.Quitting.Classification.Existence.CorrectedFixedBranch
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.ArbitraryNeverExtraction
 
 /-!
-# Exact dependencies for AKRS Theorem 3.4
+# Exact dependencies for the approximate-equilibrium forward trichotomy
 
 Simon's corrected classification has a fourth, stationarily generated branch.
-Accordingly, the three-way AKRS conclusion needs two logically separate
-inputs.  The first extracts the corrected four-way alternative pointwise from
-arbitrary-never approximate equilibria.  The second compactifies the diffuse
+Accordingly, the three-way conclusion needs two logically separate inputs.
+The first extracts the corrected four-way alternative pointwise from
+arbitrary-never approximate equilibria. The second compactifies the diffuse
 stationarily generated residual into the stationary or well-supported branch.
 
 These are proposition-valued dependencies, not claimed theorems.  The checked
@@ -32,7 +32,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 namespace QuittingLCPClassification
 
-/-- **Dependency A.**  Arbitrary-never approximate-equilibrium existence
+/-- Arbitrary-never approximate-equilibrium existence
 produces the corrected pointwise four-way alternative for the translated
 zero-never reward.  The output retains the actual stationary, punishment,
 absorbing-sequence, or stationarily-generated witness at the requested error.
@@ -49,7 +49,7 @@ def QuittingPayoffTable.HasCorrectedPointwiseFourWayExtraction
 
 end QuittingLCPClassification
 
-/-- **Dependency B.**  The corrected diffuse stationarily generated residual
+/-- The corrected diffuse stationarily generated residual
 compactifies to branch `S.1` or to the well-supported form of branch `S.3`. -/
 def HasDiffuseStationarilyGeneratedCompactification
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
@@ -59,10 +59,10 @@ def HasDiffuseStationarilyGeneratedCompactification
 
 namespace QuittingLCPClassification
 
-/-- Dependencies A and B imply the exact three table-level branches of AKRS
-Theorem 3.4.  The arbitrary payoff at never is retained in the conclusion;
-normalization is used only inside the proof and is removed by the checked
-table-branch equivalences. -/
+/-- Pointwise four-way extraction and diffuse-source compactification imply
+the exact three table-level branches. The arbitrary payoff at never is
+retained in the conclusion; normalization is used only inside the proof and
+is removed by the checked table-branch equivalences. -/
 theorem QuittingPayoffTable.threeBranches_of_correctedExtraction_of_compactification
     (table : QuittingPayoffTable ι)
     (hextraction : table.HasCorrectedPointwiseFourWayExtraction)

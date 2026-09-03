@@ -8,7 +8,7 @@ import UniformEquilibrium.Quitting.AbsorptionPath.AKRSSequentialPerfectionDecode
 import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalPositiveSingletonRate
 
 /-!
-# Sequentially perfect absorption paths produce branch S.3
+# Sequentially perfect absorption paths produce well-supported absorbing sequences
 
 The path-level consumer turns a supplied sequentially perfect absorption path
 with no terminal total jump into the literal well-supported, completely
@@ -83,23 +83,6 @@ theorem exists_wellSupportedAbsorbingSequence_of_sequentiallyPerfectAbsorptionPa
   exact hasPartitionPositiveSingletonReverseEntranceEstimate reward path
     hpathTotal hperfect hnoTerminalJump resolution hresolution
 
-/-- Literal short specification of the no-terminal-jump S.3 consumer. -/
-def SequentiallyPerfectAbsorptionPathS3Capstone : Prop :=
-  ∀
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (path : AbsorptionPath (ι := ι)),
-    (∀ time ∈ Set.Icc (0 : ℝ) 1, pathTotal path.1 time ≤ 1) →
-    IsSequentiallyPerfectAbsorptionPath reward path 0 →
-    HasNoTerminalTotalJump path →
-    QuittingWellSupportedAbsorbingSequenceExistence reward
-
-/-- The literal no-terminal-jump S.3 specification is satisfied. -/
-theorem sequentiallyPerfectAbsorptionPathS3Capstone :
-    SequentiallyPerfectAbsorptionPathS3Capstone (ι := ι) := by
-  intro reward path hpathTotal hperfect hnoTerminalJump
-  exact exists_wellSupportedAbsorbingSequence_of_sequentiallyPerfectAbsorptionPath
-    reward path hpathTotal hperfect hnoTerminalJump
-
 end QuittingAbsorptionPath
 
 namespace QuittingRootSequenceAbsorbingCompletionDiagonal
@@ -111,6 +94,8 @@ variable
 
 namespace ChronologicalLimit
 
+open QuittingAbsorptionPath
+
 /-- The actual chronological limit enters branch S.3 whenever it has no
 terminal total jump. -/
 theorem wellSupportedAbsorbingSequenceExistence_of_noTerminalTotalJump
@@ -119,7 +104,7 @@ theorem wellSupportedAbsorbingSequenceExistence_of_noTerminalTotalJump
       QuittingAbsorptionPath.HasNoTerminalTotalJump limit.absorptionPath) :
     QuittingWellSupportedAbsorbingSequenceExistence reward := by
   exact
-    QuittingAbsorptionPath.sequentiallyPerfectAbsorptionPathS3Capstone
+    exists_wellSupportedAbsorbingSequence_of_sequentiallyPerfectAbsorptionPath
       reward limit.absorptionPath
       (by simpa only [absorptionPath] using limit.pathTotal_le_one)
       limit.isSequentiallyPerfectAbsorptionPath hnoTerminalJump

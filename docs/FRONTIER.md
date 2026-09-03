@@ -3368,7 +3368,7 @@ in the live mathematical ledger.
   On the terminal-jump side,
   `ChronologicalJumpStageLimit.stageContinueMass_tendsto_zero_of_pathTotal_eq_one`
   in
-  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalTerminalJumpS2.lean`
+  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalTerminalJumpInstantPunishment.lean`
   proves that the actual selected dominant rows have all-Continue mass tending
   to zero whenever one path jump reaches total mass one.  Reached-source Nash
   transfer, near-sure-to-sure perturbation, and the punishment adapter then
@@ -3424,7 +3424,7 @@ in the live mathematical ledger.
   claim the full weak-convergence conclusion of published Proposition 4.8.
   `exists_wellSupportedAbsorbingSequence_of_sequentiallyPerfectAbsorptionPath`
   in
-  `UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorptionPathS3.lean`
+  `UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorptionPathWellSupportedSequence.lean`
   turns path-total boundedness, sequential perfection at zero, and no terminal
   total jump into the literal well-supported completely absorbing S.3
   sequence.  The source-facing
@@ -3440,13 +3440,13 @@ in the live mathematical ledger.
   compiler.
   `ChronologicalLimit.instantPunishment_or_wellSupportedAbsorbingSequenceExistence`
   in
-  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalAbsorptionPathS2S3.lean`
+  `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalAbsorptionPathTerminalDispatch.lean`
   performs the exhaustive terminal/no-terminal case split for every actual
   completed chronological source.  Composing it with
   `QuittingPayoffTable.stationary_or_vanishingNeverNashFamily`, the absorbing
   completion, and chronological compactification gives
   `QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing`
-  in `UniformEquilibrium/Quitting/Classification/Existence/AKRSTheorem34.lean`.
+  in `UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumForwardTrichotomy.lean`.
   This is the literal table-level forward implication of AKRS Theorem 3.4,
   including the empty-player stationary case.  Its premise says that for each
   positive error some arbitrary behavior profile is terminal-payoff
@@ -3455,16 +3455,16 @@ in the live mathematical ledger.
   supply the all-long-finite-horizon control required for uniform equilibrium.
   The reverse S.3 boundary is now stated literally.  If an initially absorbing
   row-perfect source has a nonterminating restarted tail,
-  [`QuittingPayoffTable.solo_sub_never_le_of_completelyAbsorbing_not_everyRestart`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSNullTailAlternative.lean)
+  [`QuittingPayoffTable.solo_sub_never_le_of_completelyAbsorbing_not_everyRestart`](../UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorbingNullTailAlternative.lean)
   bounds every singleton payoff by Never plus the row error.  The inclusive
   theorem
-  [`QuittingPayoffTable.allContinueExactNash_or_everyRestartWitnesses`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSNullTailAlternative.lean)
+  [`QuittingPayoffTable.allContinueExactNash_or_everyRestartWitnesses`](../UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorbingNullTailAlternative.lean)
   therefore gives exact all-Continue terminal Nash, or termination after every
   restart for every sufficiently accurate initially absorbing row-perfect
   witness.  Even within the remaining every-tail residue, the restricted predicate
-  [`QuittingPayoffTable.HasStationaryExactEveryRestartRowPerfectSource`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSReverseS3Hardness.lean)
+  [`QuittingPayoffTable.HasStationaryExactEveryRestartRowPerfectSource`](../UniformEquilibrium/Quitting/Classification/Existence/ReverseSequentiallyPerfectAbsorbingHardness.lean)
   records one stationary exact source, and
-  [`universalStationaryExactEveryRestartSource_iff_approximateExistence`](../UniformEquilibrium/Quitting/Classification/Existence/AKRSReverseS3Hardness.lean)
+  [`universalStationaryExactEveryRestartSource_iff_approximateExistence`](../UniformEquilibrium/Quitting/Classification/Existence/ReverseSequentiallyPerfectAbsorbingHardness.lean)
   proves that its universal reverse implication is equivalent to general
   finite-quitting terminal approximate-equilibrium existence.  The hard
   reduction maps `players` to `players ⊕ PUnit`; it is not a same-cardinality
@@ -3517,7 +3517,7 @@ in the live mathematical ledger.
 
   Composing the two residual consumers exposes the cleaner checked capstone
   `quittingDiffuseGenerated_stationary_or_instant_or_wellSupported_or_sourceMatchedPhantom`
-  (`UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerS3Dispatch.lean`):
+  (`UniformEquilibrium/Quitting/Classification/Existence/DivergentExceptionalOwnerInstantPunishmentOrWellSupported.lean`):
   every diffuse stationarily generated source yields S.1, S.2, well-supported
   S.3, or a source-matched uniform all-Continue phantom. The last package
   retains a strict source subsequence, literal punishment suffixes, fixed

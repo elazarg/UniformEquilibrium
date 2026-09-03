@@ -337,7 +337,7 @@ def QuittingCorrectedPointwiseRefinedSourceResidualAt
 
 namespace QuittingLCPClassification
 
-/-- Dependency A now reaches the corrected four-way alternative unless one
+/-- The source-faithful extraction now reaches the corrected four-way alternative unless one
 of three explicit source-derived seams survives.  In particular, neither a
 raw positive-rho landing family nor a nonpositive-singleton support--Bellman
 boundary remains a residual. -/
@@ -375,7 +375,8 @@ theorem
       · exact Or.inr (Or.inr (Or.inr (Or.inr (Or.inr (Or.inr hdefect)))))
 
 /-- Excluding the three refined source residuals at every positive scale
-closes Dependency A.  The premise is strictly weaker than excluding every
+supplies the corrected pointwise four-way extraction. The premise is strictly
+weaker than excluding every
 raw positive-rho landing family or positive-survival boundary, because the
 stationary cases above have already been consumed. -/
 theorem

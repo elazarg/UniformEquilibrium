@@ -9,7 +9,7 @@ import UniformEquilibrium.Quitting.Classification.InstantPunishmentEquivalence
 import UniformEquilibrium.Quitting.Root.NearSureProfile
 
 /-!
-# Terminal chronological jumps produce the instant-punishment branch
+# Terminal chronological jumps produce instant punishment
 
 A chronological jump whose post-jump path mass is one is approximated by
 actual reached rows with positive pre-row reach and vanishing post-row reach.

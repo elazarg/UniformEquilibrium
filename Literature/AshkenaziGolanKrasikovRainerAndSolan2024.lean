@@ -7,8 +7,8 @@ import UniformEquilibrium.Quitting.AbsorptionPath.PrincipalQViabilityCorresponde
 import UniformEquilibrium.Quitting.AbsorptionPath.TerminalTotalJumpVacuity
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalGlobalCounterexample
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
-import UniformEquilibrium.Quitting.Classification.Existence.AKRSReverseS3Hardness
-import UniformEquilibrium.Quitting.Classification.Existence.AKRSTheorem34
+import UniformEquilibrium.Quitting.Classification.Existence.ReverseSequentiallyPerfectAbsorbingHardness
+import UniformEquilibrium.Quitting.Classification.Existence.ApproximateEquilibriumForwardTrichotomy
 
 /-!
 # Ashkenazi--Golan--Krasikov--Rainer--Solan (2024)
@@ -379,7 +379,7 @@ theorem universalThreeBranchAlternative_iff_universalApproximateEquilibriumExist
       UniversalQuittingApproximateEquilibriumExistence := by
   constructor
   · intro hpublished
-    rw [← universalReverseS3_iff_universalApproximateEquilibriumExistence]
+    rw [← universalReverseSequentiallyPerfectAbsorbing_iff_universalApproximateEquilibriumExistence]
     intro players _ _ table hbranch
     apply (hpublished players table.terminal table.never).2
     exact Or.inr (Or.inr

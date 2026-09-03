@@ -1,8 +1,8 @@
-import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalTerminalJumpS2
-import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorptionPathS3
+import UniformEquilibrium.Quitting.Classification.Existence.ChronologicalTerminalJumpInstantPunishment
+import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorptionPathWellSupportedSequence
 
 /-!
-# The actual chronological absorption path enters S.2 or S.3
+# Terminal dispatch for the actual chronological absorption path
 
 This is only the terminal/no-terminal dispatch.  It assumes the existing
 chronological limit source; the upstream stationary-versus-vanishing-Never

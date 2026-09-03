@@ -13,7 +13,7 @@ import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
 /-!
-# Divergent exceptional-owner dispatch to S.2 or S.3
+# Divergent exceptional-owner instant-punishment or well-supported dispatch
 
 A divergent unique-exceptional-owner source is consumed completely.  After
 selecting a fixed punished label and a limit of the one-row live masses, a
