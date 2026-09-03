@@ -16,7 +16,7 @@ stage which accounts for the whole window up to a simultaneous nonnegative
 coalition residual smaller than the window width.
 
 This is finite source algebra.  It does not take weak limits, select limiting
-roots, or prove absorption-path axioms A3--A4.
+roots, or prove product-root jump realization or singleton derivative support.
 -/
 
 noncomputable section

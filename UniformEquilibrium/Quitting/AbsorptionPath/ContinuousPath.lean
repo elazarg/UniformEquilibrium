@@ -66,7 +66,7 @@ def pathRightDerivative (path : CadlagPath (ι := ι)) (t : ℝ)
 
 /-- On a component outside the jump and clock sets, total mass is fixed at
 the component's right endpoint. -/
-def AbsorptionPathA2 (path : CadlagPath (ι := ι)) : Prop :=
+def HasConstantTotalOnGapComponents (path : CadlagPath (ι := ι)) : Prop :=
   ∀ t ∈ Icc (0 : ℝ) 1 \ (pathJumps path ∪ pathTimes path),
     ∀ s ∈ connectedComponentIn
       (Icc 0 1 \ (pathJumps path ∪ pathTimes path)) t,
@@ -75,7 +75,8 @@ def AbsorptionPathA2 (path : CadlagPath (ι := ι)) : Prop :=
 
 /-- The four defining conditions for an absorption path. -/
 def IsAbsorptionPath (path : CadlagPath (ι := ι)) : Prop :=
-  (∀ t ∈ Icc (0 : ℝ) 1, t ≤ pathTotal path t) ∧ AbsorptionPathA2 path ∧
+  (∀ t ∈ Icc (0 : ℝ) 1, t ≤ pathTotal path t) ∧
+    HasConstantTotalOnGapComponents path ∧
     (∀ t ∈ pathJumps path, ∃ ξ : ι → PMF Bool, ∀ a,
       pathJump path t a / (1 - t) = quittingRootCoalitionMass ξ a.1) ∧
     (∀ t ∈ pathTimes path, t ≠ 1 → ∀ a,

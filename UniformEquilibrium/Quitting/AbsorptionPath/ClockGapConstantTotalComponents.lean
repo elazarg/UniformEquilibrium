@@ -8,11 +8,11 @@ import MathUE.Probability.ClockGap
 import UniformEquilibrium.Quitting.AbsorptionPath.ContinuousPath
 
 /-!
-# Clock gaps imply absorption-path axiom A2
+# Clock gaps make gap components have constant total mass
 
 For a càdlàg coalition path, clock domination and the clock-gap law force each
 component outside the jump and clock-time sets to be one plateau.  This is the
-decoder-facing form of absorption-path axiom A2.
+literal constant-total gap-component condition used by absorption paths.
 -/
 
 noncomputable section
@@ -174,16 +174,16 @@ private theorem Ico_subset_path_complement_of_clockGap
   exact ⟨htimeMem, fun hbad ↦ hbad.elim hnotJump hnotTime⟩
 
 omit [DecidableEq ι] in
-/-- Clock domination, a unit total-mass bound, and the clock-gap law imply
-absorption-path axiom A2. -/
-theorem absorptionPathA2_of_clockGap
+/-- Clock domination, a unit total-mass bound, and the clock-gap law make the
+total constant on every component outside the jump and clock-time sets. -/
+theorem hasConstantTotalOnGapComponents_of_clockGap
     (path : CadlagPath (ι := ι))
     (hdomination : ∀ time ∈ Icc (0 : ℝ) 1,
       time ≤ pathTotal path time)
     (htotalLe : ∀ time ∈ Icc (0 : ℝ) 1,
       pathTotal path time ≤ 1)
     (hgap : MathUE.HasClockGapOn (pathTotal path) (Icc (0 : ℝ) 1)) :
-    AbsorptionPathA2 path := by
+    HasConstantTotalOnGapComponents path := by
   intro base hbase time htime
   let support := Icc (0 : ℝ) 1 \ (pathJumps path ∪ pathTimes path)
   have htimeSupport : time ∈ support :=

@@ -641,10 +641,10 @@ private theorem Ico_subset_path_complement
   exact fun h => h.elim hnotJump hnotTime
 
 /-- Every plateau has total mass equal to the supremum of its connected
-component, so the finite step path satisfies absorption-path axiom A2. -/
-theorem absorptionPathA2_cadlagPath
+component, so the finite step path has constant total on gap components. -/
+theorem cadlagPath_hasConstantTotalOnGapComponents
     (certificate : QuittingFiniteRootSequenceAbsorption roots) :
-    AbsorptionPathA2 certificate.cadlagPath := by
+    HasConstantTotalOnGapComponents certificate.cadlagPath := by
   intro base hbase time htime
   let support := Icc (0 : ℝ) 1 \
     (pathJumps certificate.cadlagPath ∪ pathTimes certificate.cadlagPath)
@@ -926,7 +926,7 @@ axioms. -/
 theorem isAbsorptionPath_cadlagPath
     (certificate : QuittingFiniteRootSequenceAbsorption roots) :
     IsAbsorptionPath certificate.cadlagPath := by
-  refine ⟨?_, certificate.absorptionPathA2_cadlagPath, ?_, ?_⟩
+  refine ⟨?_, certificate.cadlagPath_hasConstantTotalOnGapComponents, ?_, ?_⟩
   · intro time htime
     exact certificate.le_pathTotal_cadlagPath htime
   · intro time htime

@@ -9,16 +9,16 @@ import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenc
 import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalLimit
 
 /-!
-# Product-root jumps of chronological absorbing-completion limits
+# Product-root jump realization for chronological absorbing-completion limits
 
 At every nonterminal jump of a chronological absorbing-completion limit, one
 shared subsequence of finite dominant stages has clocks converging to the jump,
 simplex roots converging to one product root, and every coalition stage mass
-converging to the corresponding path jump.  This proves absorption-path axiom
-A3 for the decoded limit.
+converging to the corresponding path jump.  This proves product-root
+realization at every jump of the decoded limit.
 
-No assertion of A4, sequential perfection, or a bundled full absorption path
-is made here.
+No assertion of singleton derivative support, sequential perfection, or a
+bundled full absorption path is made here.
 -/
 
 noncomputable section
@@ -74,12 +74,12 @@ structure ChronologicalJumpStageLimit
       (nhds (limit.path.value time coalition))
 
 omit [Nonempty ι] in
-/-- A1 rules out a jump at terminal clock one. -/
+/-- Clock domination rules out a jump at terminal clock one. -/
 theorem pathJump_one_eq_zero
     (limit : diagonal.ChronologicalLimit)
     (coalition : {S : Finset ι // S.Nonempty}) :
     QuittingAbsorptionPath.pathJump limit.path 1 coalition = 0 := by
-  exact QuittingAbsorptionPath.pathJump_chronologicalCadlagPath_one_eq_zero_of_A1
+  exact QuittingAbsorptionPath.pathJump_chronologicalCadlagPath_one_eq_zero_of_clock_le_pathTotal
       limit.law limit.le_pathTotal coalition
 
 omit [Nonempty ι] in
@@ -505,8 +505,9 @@ theorem ChronologicalJumpStageLimit.jump_relation
   field_simp [sub_ne_zero.mpr (Ne.symm htime_lt_one.ne)]
 
 omit [Nonempty ι] in
-/-- The decoded chronological limit satisfies absorption-path axiom A3. -/
-theorem absorptionPathA3
+/-- Every jump of the decoded chronological limit is realized by a product
+root. -/
+theorem everyPathJump_hasProductRoot
     (limit : diagonal.ChronologicalLimit) :
     ∀ time ∈ QuittingAbsorptionPath.pathJumps limit.path,
       ∃ root : ι → PMF Bool, ∀ coalition,

@@ -3320,9 +3320,11 @@ in the live mathematical ledger.
   The finite law records the literal root, bounded post-stage tail, and
   discrete nonempty coalition at each absorption clock.
   `le_pathTotal_chronologicalCadlagPath_of_tendsto` proves that the weakly
-  decoded càdlàg path satisfies A1.  `HasClockGap.cdf_of_tendsto` preserves
-  the canonical finite clock-gap law under weak convergence, and
-  `ChronologicalLimit.absorptionPathA2` compiles that law into A2.  Meanwhile,
+  decoded càdlàg path's total dominates its clock.
+  `HasClockGap.cdf_of_tendsto` preserves the canonical finite clock-gap law
+  under weak convergence, and
+  `ChronologicalLimit.hasConstantTotalOnGapComponents` turns that law into
+  literal constant total mass on every gap component. Meanwhile,
   `pathJump_chronologicalCadlagPath_eq_clockCoalitionFiber_real` in
   `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceJump.lean`
   identifies each decoded source jump with its exact clock--coalition fiber.
@@ -3334,20 +3336,23 @@ in the live mathematical ledger.
   `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceJumpLimit.lean`
   supplies shrinking null-boundary windows and fixed-window Portmanteau
   convergence.  `ChronologicalLimit.nonempty_chronologicalJumpStageLimit` in
-  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalA3.lean`
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalJumpRootRealization.lean`
   then performs one explicit strict rank extraction and one compact root
   subextraction simultaneously for every coalition coordinate.
-  `ChronologicalLimit.absorptionPathA3` proves the literal product-root jump
-  axiom, including the A1-derived exclusion of a terminal jump.
+  `ChronologicalLimit.everyPathJump_hasProductRoot` proves literal product-root
+  realization at every jump, including clock domination's exclusion of a
+  terminal jump.
   `one_sub_upper_mul_collisionCDF_sub_le_choose_mul_clockCDF_sub_sq` in
   `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalMarkedRootSequenceCollision.lean`
   gives the exact finite quadratic nonsingleton-window estimate, and its
   weak-limit form holds at fixed continuity endpoints.  The clock-gap
   controlled right points then force every nonsingleton lower right
-  derivative to vanish.  `ChronologicalLimit.absorptionPathA4` and
+  derivative to vanish.
+  `ChronologicalLimit.rightDerivative_supports_singletons` and
   `ChronologicalLimit.isAbsorptionPath` in
-  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalA4.lean`
-  prove A4 and the literal A1--A4 conjunction for this same decoded path.
+  `UniformEquilibrium/Quitting/AbsorptionPath/RootSequenceAbsorbingCompletionChronologicalSingletonDerivativeSupport.lean`
+  prove singleton derivative support and the literal complete absorption-path
+  conjunction for this same decoded path.
   The finite prefix/tail identity in
   `UniformEquilibrium/Quitting/AbsorptionPath/ChronologicalRootSequenceTail.lean`
   and the shared jump-stage tail extraction in

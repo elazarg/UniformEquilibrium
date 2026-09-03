@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalRootSequenceTail
-import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalA4
+import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalSingletonDerivativeSupport
 import UniformEquilibrium.Quitting.Bellman.Finite.EndpointNashClosed
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
 

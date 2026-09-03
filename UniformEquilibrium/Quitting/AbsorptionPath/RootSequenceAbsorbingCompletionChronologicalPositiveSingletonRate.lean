@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceA4
+import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceSingletonDerivativeSupport
 import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalSingletonLowerBound
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope
 import UniformEquilibrium.Quitting.Classification.Existence.GlobalRefusalLedger

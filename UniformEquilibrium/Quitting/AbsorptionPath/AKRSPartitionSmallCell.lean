@@ -358,9 +358,9 @@ theorem partitionSmallCellError_eq_resolutionAbsorptionOdds
     exact_mod_cast hresolution
   field_simp [ne_of_gt hresolutionReal, ne_of_gt (by linarith : (0 : ℝ) < resolution)]
 
-/-- Apart from the collision-domination field supplied by the published
-A3/A4 measure argument, the non-large arm is already a valid small path
-cell with error `1 / resolution`. -/
+/-- Apart from the collision-domination field supplied by the product-root
+jump and singleton-derivative measure argument, the non-large branch is
+already a valid small path cell with error `1 / resolution`. -/
 def smallPathCellOfPartition
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,
@@ -436,8 +436,8 @@ def smallPathCellOfPartition
         linarith
 
 omit [Nonempty ι] in
-/-- The exact published per-stage dichotomy, with the A3/A4 collision field
-kept literal on the small-cell arm. -/
+/-- The exact published per-stage dichotomy, with the collision field kept
+literal on the small-cell branch. -/
 theorem copiedJump_or_smallPathCellOfPartition
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,
@@ -489,8 +489,8 @@ theorem copiedJumpRoot_absorption_eq_pathCellAbsorption
 
 omit [Nonempty ι] in
 /-- A jump lying below the resolution probe has conditional absorption at
-most `1 / resolution`.  This is the quantitative A3 input before applying
-the product-row odds estimate. -/
+most `1 / resolution`. This is the quantitative product-root jump input
+before applying the product-row odds estimate. -/
 theorem absorptionPathJumpRoot_absorption_le_inv_resolution_of_probe
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,
@@ -526,8 +526,8 @@ theorem absorptionPathJumpRoot_absorption_le_inv_resolution_of_probe
       field_simp [ne_of_gt hresolutionPos]
 
 omit [Nonempty ι] in
-/-- At every non-large path jump, A3 gives the exact incident-collision
-bound used by the small-cell measure argument. -/
+/-- At every non-large path jump, product-root realization gives the exact
+incident-collision bound used by the small-cell measure argument. -/
 theorem pathJump_le_partitionSmallCellError_mul_singleton_of_probe
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,
@@ -653,8 +653,8 @@ theorem pathJump_le_partitionSmallCellError_mul_singleton_of_mem_small_cell
   · exact hplayer
 
 omit [Nonempty ι] in
-/-- The A3 jump estimate and A2/A4 fencing lemma give collision domination
-on every selected non-large partition cell. -/
+/-- The product-root jump estimate and gap-component/singleton-derivative
+fencing lemma give collision domination on every selected non-large cell. -/
 theorem pathCellLaw_le_partitionSmallCellError_mul_singleton_of_small_partition_cell
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,
@@ -733,9 +733,10 @@ theorem pathCellLaw_le_partitionSmallCellError_mul_singleton_of_small_partition_
         ((path.1.leftValue stop singleton -
           path.1.leftValue start singleton) / (1 - start)) := by ring
 
-/-- Exact A3/A4 analytic input for the published small-cell arm.  Collision
-domination is needed only when the selected cell is non-large; copied large
-jumps are decoded directly and do not satisfy a resolution-smallness claim. -/
+/-- Exact product-root and singleton-derivative analytic input for the
+published small-cell branch. Collision domination is needed only when the
+selected cell is non-large; copied large jumps are decoded directly and do
+not satisfy a resolution-smallness claim. -/
 def HasPartitionSmallCellCollisionDomination
     (path : AbsorptionPath (ι := ι)) (resolution : ℕ) : Prop :=
   ∀ stage,
@@ -823,7 +824,7 @@ structure PartitionCellRowData
         root = packet.quittingRoot)
 
 /-- Every recursive partition cell has a literal decoder row once the
-published A3/A4 collision domination has been supplied. -/
+published collision domination has been supplied. -/
 theorem nonempty_partitionCellRowData
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ time ∈ Set.Icc (0 : ℝ) 1,

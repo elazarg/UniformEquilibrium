@@ -14,10 +14,11 @@ import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 Every chronological probability law admits shrinking open clock windows about
 one prescribed time whose boundary fibers are null.  Weak convergence then
 gives literal convergence of the total and coalition-marked window masses.
-The decoded path also has no jump at time one whenever it satisfies A1.
+The decoded path also has no jump at time one whenever its total dominates
+the clock.
 
 These are generic probability and path facts.  They do not select a finite
-source stage or assert absorption-path axiom A3.
+source stage or assert product-root realization at every path jump.
 -/
 
 noncomputable section
@@ -333,11 +334,11 @@ theorem tendsto_openClockCoalitionWindow_real
 end QuittingChronologicalNullWindowSequence
 
 omit [Nonempty ι] in
-/-- A chronological decoded path satisfying A1 has no coalition jump at the
-terminal clock. -/
-theorem pathJump_chronologicalCadlagPath_one_eq_zero_of_A1
+/-- A chronological decoded path whose total dominates the clock has no
+coalition jump at the terminal clock. -/
+theorem pathJump_chronologicalCadlagPath_one_eq_zero_of_clock_le_pathTotal
     (law : ProbabilityMeasure (QuittingChronologicalEvent reward))
-    (hA1 : ∀ time ∈ Icc (0 : ℝ) 1,
+    (hclockLe : ∀ time ∈ Icc (0 : ℝ) 1,
       time ≤ pathTotal (chronologicalCadlagPath law) time)
     (coalition : {S : Finset ι // S.Nonempty}) :
     pathJump (chronologicalCadlagPath law) 1 coalition = 0 := by
@@ -360,7 +361,7 @@ theorem pathJump_chronologicalCadlagPath_one_eq_zero_of_A1
           linarith
         · dsimp [earlier]
           linarith
-      have hclock := hA1 earlier hearlier_mem
+      have hclock := hclockLe earlier hearlier_mem
       rw [pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
         law hearlier_mem.2] at hclock
       have hleLeft := hmono.le_leftLim (show earlier < 1 by
@@ -372,7 +373,7 @@ theorem pathJump_chronologicalCadlagPath_one_eq_zero_of_A1
       (chronologicalClockLaw law : Measure ℝ) ({1} : Set ℝ) = 0 := by
     have hclockOne : clockCDF 1 = 1 := by
       apply le_antisymm (ProbabilityTheory.cdf_le_one _ 1)
-      have h := hA1 1 (by simp)
+      have h := hclockLe 1 (by simp)
       rw [pathTotal_chronologicalCadlagPath_eq_chronologicalClockCDF
         law le_rfl] at h
       exact h

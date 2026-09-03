@@ -427,7 +427,7 @@ theorem countable_pathJumps (path : CadlagPath (ι := ι)) :
 omit [Nonempty ι] in
 /-- A point outside the jump/clock boundary carries its whole half-open
 plateau up to the current path total inside one connected component.  This is
-the literal interval consequence of absorption-path axiom A2. -/
+the literal interval consequence of constant total on gap components. -/
 theorem Ico_subset_boundaryComponent
     (path : AbsorptionPath (ι := ι))
     {base : ℝ}
@@ -465,8 +465,8 @@ theorem Ico_subset_boundaryComplement
     (connectedComponentIn_subset _ _)
 
 omit [Nonempty ι] in
-/-- Axiom A2 makes the total constant on the half-open plateau beginning at
-every nonboundary point. -/
+/-- The gap-component condition makes the total constant on the half-open
+plateau beginning at every nonboundary point. -/
 theorem pathTotal_eq_of_mem_Ico_of_not_boundary
     (path : AbsorptionPath (ι := ι))
     {base point : ℝ}
@@ -481,8 +481,8 @@ theorem pathTotal_eq_of_mem_Ico_of_not_boundary
     path.property.2.1 base hbase base hbaseComponent]
 
 omit [Nonempty ι] in
-/-- Axiom A2 recovers the clock-gap law: the total cannot change before the
-current post-jump/plateau total is reached.  At a jump time the proof
+/-- Constant total on gap components recovers the clock-gap law: the total
+cannot change before the current post-jump/plateau total is reached. At a jump time the proof
 approaches from nonjump points on the right and uses right continuity. -/
 theorem pathTotal_eq_of_le_of_lt_pathTotal
     (path : AbsorptionPath (ι := ι))
@@ -576,7 +576,7 @@ structure PathTotalControlledRightSequence
       2 * (point rank - time)
 
 omit [Nonempty ι] in
-/-- Axiom A2's clock-gap law supplies controlled right points at every
+/-- The gap-component clock law supplies controlled right points at every
 nonterminal fixed point of the path total. -/
 theorem nonempty_pathTotalControlledRightSequence
     (path : AbsorptionPath (ι := ι))
@@ -716,8 +716,8 @@ theorem CadlagPath.value_eq_of_total_eq
   · exact path.monotone coalition hearler hlater hearlerLater
 
 omit [Nonempty ι] in
-/-- At a nonterminal continuous-clock time, the A2 clock-gap structure makes
-every coordinate right-slope quotient frequently bounded above.  This is the
+/-- At a nonterminal continuous-clock time, the gap-component clock structure
+makes every coordinate right-slope quotient frequently bounded above. This is the
 missing boundedness premise needed to read the real-valued `liminf`
 literally. -/
 theorem frequently_coordinateSlope_le_two_of_mem_pathTimes
@@ -804,10 +804,10 @@ theorem incidentCorrectedValue_le_leftValue_of_pathJump_le
   linarith
 
 omit [Nonempty ι] in
-/-- The A2/A4 adapter: if every discrete jump on a cell satisfies an
-incident-collision estimate, then the entire half-open cell satisfies the
-same estimate.  A2 supplies flat clock gaps; A4 supplies zero nonsingleton
-lower-right slope at continuous-clock points. -/
+/-- If every discrete jump on a cell satisfies an incident-collision estimate,
+then the entire half-open cell satisfies the same estimate. Constant totals
+supply flat clock gaps; singleton derivative support supplies zero
+nonsingleton lower-right slope at continuous-clock points. -/
 theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
     (path : AbsorptionPath (ι := ι))
     (hpathTotal : ∀ point ∈ Set.Icc (0 : ℝ) 1,
@@ -1033,8 +1033,8 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
 
 omit [Nonempty ι] in
 /-- At every jump boundary, the total immediately before the jump is exactly
-the clock.  This is Remark 4.4's boundary identity, derived here from A1,
-A2, monotonicity, and left limits. -/
+the clock. This is Remark 4.4's boundary identity, derived here from clock
+domination, constant totals on gap components, monotonicity, and left limits. -/
 theorem pathLeftTotal_eq_of_mem_pathJumps
     (path : AbsorptionPath (ι := ι))
     {time : ℝ} (htime : time ∈ pathJumps path.1) :

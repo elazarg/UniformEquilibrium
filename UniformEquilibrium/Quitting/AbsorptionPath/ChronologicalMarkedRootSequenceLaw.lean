@@ -23,7 +23,9 @@ coalition.  The law uses the actual unconditional stage--coalition masses.
 
 Coalition coordinates are decoded as cumulative distribution functions using
 a cemetery clock outside `[0,1]`.  Weak limits retain the clock-domination
-inequality A1.  This module does not assert A2--A4, convergence at every clock,
+clock-below-total inequality.  This module does not assert constant totals on
+gap components, product-root jump realization, singleton derivative support,
+convergence at every clock,
 or sequential perfection.
 -/
 
@@ -173,7 +175,8 @@ theorem sum_chronologicalWeight
 
 omit [Nonempty ι] in
 /-- The gap between consecutive clocks is exactly the total coalition mass
-created at the earlier row.  This finite identity does not assert A2 for a
+created at the earlier row.  This finite identity does not assert the
+constant-total gap-component condition for a
 weak limit. -/
 theorem clock_succ_sub_clock_eq_sum_stageCoalitionMass
     (stage : ℕ) :
@@ -821,7 +824,7 @@ end QuittingFiniteRootSequenceAbsorption
 
 omit [Nonempty ι] in
 /-- Weak limits of finite chronological laws retain clock domination, hence
-the decoded càdlàg path satisfies absorption-path axiom A1. -/
+the decoded càdlàg path has total mass at least its clock. -/
 theorem le_pathTotal_chronologicalCadlagPath_of_tendsto
     {roots : ℕ → ℕ → ι → PMF Bool}
     (certificates : ∀ rank,

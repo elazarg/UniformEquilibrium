@@ -7,12 +7,12 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.AbsorptionPath.ChronologicalMarkedRootSequenceCollision
 
 /-!
-# Singleton right derivatives of chronological weak limits
+# Singleton-supported right derivatives of chronological weak limits
 
 The quadratic finite collision estimate and the clock-gap law force every
 nonsingleton coordinate to have zero lower right derivative at a clock time.
-This is the decoder-facing form of absorption-path axiom A4.  No jump-root,
-sequential-perfection, or full absorption-path assertion is made here.
+No jump-root, sequential-perfection, or full absorption-path assertion is
+made here.
 -/
 
 noncomputable section
@@ -52,7 +52,7 @@ theorem chronologicalCoalitionCDF_sub_le_collisionCDF_sub
 omit [Nonempty ι] in
 /-- At a clock time below one, every nonsingleton coordinate of a
 chronological weak limit has zero lower right derivative. -/
-theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_card_ne_one
+theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_not_singleton
     {roots : ℕ → ℕ → ι → PMF Bool}
     (certificates : ∀ rank,
       QuittingFiniteRootSequenceAbsorption (roots rank))
@@ -60,7 +60,7 @@ theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_card_ne_one
     (hlaw : Tendsto
       (fun rank ↦ (certificates rank).chronologicalLaw reward)
       atTop (nhds law))
-    (hA1 : ∀ time ∈ Icc (0 : ℝ) 1,
+    (hclockLe : ∀ time ∈ Icc (0 : ℝ) 1,
       time ≤ pathTotal (chronologicalCadlagPath law) time)
     (hgap : MathUE.HasClockGap (chronologicalClockCDF law))
     {time : ℝ} (htime : time ∈ pathTimes (chronologicalCadlagPath law))
@@ -82,7 +82,7 @@ theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_card_ne_one
       point ≤ distribution point := by
     by_cases hpoint_nonneg : 0 ≤ point
     · rw [← hdistributionPath point hpoint.le]
-      exact hA1 point ⟨hpoint_nonneg, hpoint.le⟩
+      exact hclockLe point ⟨hpoint_nonneg, hpoint.le⟩
     · exact (not_le.mp hpoint_nonneg).le.trans
         (ProbabilityTheory.cdf_nonneg _ point)
   have hcontinuousTime : ContinuousAt distribution time :=
@@ -261,9 +261,10 @@ theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_card_ne_one
   exact le_antisymm hliminf_le hliminf_nonneg
 
 omit [Nonempty ι] in
-/-- A1, the clock-gap law, and finite chronological approximation imply the
-literal A4 surface for the decoded weak-limit path. -/
-theorem absorptionPathA4_chronologicalCadlagPath_of_tendsto
+/-- Clock domination, the clock-gap law, and finite chronological
+approximation make every nonzero right derivative of the decoded weak-limit
+path lie on a singleton coalition. -/
+theorem chronologicalCadlagPath_rightDerivative_supports_singletons_of_tendsto
     {roots : ℕ → ℕ → ι → PMF Bool}
     (certificates : ∀ rank,
       QuittingFiniteRootSequenceAbsorption (roots rank))
@@ -271,7 +272,7 @@ theorem absorptionPathA4_chronologicalCadlagPath_of_tendsto
     (hlaw : Tendsto
       (fun rank ↦ (certificates rank).chronologicalLaw reward)
       atTop (nhds law))
-    (hA1 : ∀ time ∈ Icc (0 : ℝ) 1,
+    (hclockLe : ∀ time ∈ Icc (0 : ℝ) 1,
       time ≤ pathTotal (chronologicalCadlagPath law) time)
     (hgap : MathUE.HasClockGap (chronologicalClockCDF law)) :
     ∀ time ∈ pathTimes (chronologicalCadlagPath law), time ≠ 1 →
@@ -281,7 +282,7 @@ theorem absorptionPathA4_chronologicalCadlagPath_of_tendsto
   intro time htime htime_ne_one coalition hderivative
   by_contra hcard
   exact hderivative <|
-    pathRightDerivative_chronologicalCadlagPath_eq_zero_of_card_ne_one
-      certificates law hlaw hA1 hgap htime htime_ne_one coalition hcard
+    pathRightDerivative_chronologicalCadlagPath_eq_zero_of_not_singleton
+      certificates law hlaw hclockLe hgap htime htime_ne_one coalition hcard
 
 end GameTheory.QuittingAbsorptionPath

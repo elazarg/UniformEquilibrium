@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalA3
+import UniformEquilibrium.Quitting.AbsorptionPath.RootSequenceAbsorbingCompletionChronologicalJumpRootRealization
 import UniformEquilibrium.Quitting.Classification.InstantPunishmentEquivalence
 import UniformEquilibrium.Quitting.Root.NearSureProfile
 
