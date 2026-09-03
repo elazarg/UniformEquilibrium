@@ -2127,11 +2127,26 @@ coordinates,
 `quittingAdjacentDeadline_paidReverseParticipant_finFour_of_selectedBoundaryCoordinates_eq`
 strengthens that floor to `7 * delta * (gamma / R)^3 / 256`.
 
-These compilers have `M/L` at their displayed supplied source and tail.  Their
+The formerly open selected-large arm now reaches the paid-port waist.
+`finFourAdjacentSpectator_exists_sameTailPaidUpdate`
+(`UniformEquilibrium/Diagnostics/Quitting/AdjacentDeadlineOperationalEffectPaidPort.lean`)
+turns either selected-effect branch into a literal same-tail unilateral update
+at the common positive floor
+`min (27 * delta * (gamma / R)^4 / 4096)
+  (min (delta * gamma / (32 * R)) (gamma / 8))`.
+The update preserves the mover's unrestricted behavioral cap and subtracts
+its payoff gain exactly from its debt.  Its actual-support passport records
+the self, opponent, and joint reach floors; the tail-minimum capstone
+`finFourAdjacentSpectatorTailMinimum_nonempty_capLiftedSummablePort` also
+records finite all-Continue-prefix ancestry and composes the update with the
+cap-lifted summable port, including the literal `D_* / (8 * R)` suffix-reach
+and `D_* * W / (32 * R)` shifted paid-gain bounds.
+
+These compilers have `M/L/C` at their displayed supplied source and tail.  Their
 `A` seal is incomplete: no theorem jointly selects a consecutive exact-Nash
 source and a singleton-separated actual tail in the required source-facing
-configuration.  The raw censor-error and large selected-effect arms remain
-without a downstream `C`.  The compilers assert no minimum-fibre membership,
+configuration.  The raw censor-error arm remains without a downstream `C`.
+The compilers assert no minimum-fibre membership,
 tail Nash property, chronology, return, renewal, rank, terminal approximation,
 or uniform-equilibrium conclusion.
 
