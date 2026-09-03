@@ -6,7 +6,7 @@ Authors: UniformEquilibrium contributors
 
 import MathUE.PMFProduct.CollisionMass
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
-import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalCorePunishmentNormal
+import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
 import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalTerminalGapFullSupportCompactLimit
 import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalTerminalGapFullSupportLift
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.AmbientCarrierElimination

@@ -17,6 +17,8 @@ import UniformEquilibrium.Quitting.Classification.LCP.StrategicTransport
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.StationaryEquilibrium
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
+import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
+import UniformEquilibrium.Quitting.Classification.LCP.FullNormalCoreHomogeneousTransfer
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
 import UniformEquilibrium.Quitting.Classification.LCP.CyclicParametricQ
 import UniformEquilibrium.Quitting.Classification.LCP.FinFourIntegralTournamentBalancedSingleton

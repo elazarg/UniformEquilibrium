@@ -8,8 +8,7 @@ import
   UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.PaidMixedOwnerFloorDescent
 import
   UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.StrictToggleSemanticDispatch
-import
-  UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalCorePunishmentNormal
+import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
 import
   UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalTerminalGapConstrainedStationary
 import
