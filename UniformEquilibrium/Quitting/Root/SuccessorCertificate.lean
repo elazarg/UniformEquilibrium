@@ -359,6 +359,19 @@ theorem quittingRootSuccessorPayoff_sub_tail
   ring
 
 omit [DecidableEq ι] in
+/-- A root successor is linear in the selected player's tail coordinate. -/
+theorem quittingRootSuccessorPayoff_sub_eq_continueMass_mul
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (first second : Payoff ι) (root : ι → PMF Bool) (who : ι) :
+    quittingRootSuccessorPayoff reward first root who -
+        quittingRootSuccessorPayoff reward second root who =
+      quittingStationaryContinueMass root * (first who - second who) := by
+  unfold quittingRootSuccessorPayoff
+  rw [quittingRootExpectedPayoff_eq_absorbingContribution_add,
+    quittingRootExpectedPayoff_eq_absorbingContribution_add]
+  ring
+
+omit [DecidableEq ι] in
 /-- Equivalent expectation form of the successor update: all-continue has
 zero increment, while every absorbing action contributes `reward - tail`. -/
 theorem quittingRootSuccessorPayoff_sub_tail_eq_expect

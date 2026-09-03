@@ -8,6 +8,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Classification.ExistenceBranches
 import UniformEquilibrium.Quitting.Classification.SoloExitPreference
 import UniformEquilibrium.Quitting.RewardBound
+import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 
 /-!
@@ -44,93 +45,6 @@ namespace GameTheory
 open Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-! ## Mixture affinity in one coordinate -/
-
-/-- The one-shot expected payoff is affine in each coordinate's marginal:
-replacing one player's Boolean law mixes the two pure replacements with that
-law's weights.  The observed player is arbitrary, unlike the own-coordinate
-mix `quittingRootExpectedPayoff_update_eq_endpointMix`. -/
-theorem quittingRootExpectedPayoff_update_coord_eq_mix
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool)
-    (coord : ι) (marginal : PMF Bool) (who : ι) :
-    quittingRootExpectedPayoff reward tail
-        (Function.update root coord marginal) who =
-      (marginal true).toReal *
-          quittingRootExpectedPayoff reward tail
-            (Function.update root coord (PMF.pure true)) who +
-        (marginal false).toReal *
-          quittingRootExpectedPayoff reward tail
-            (Function.update root coord (PMF.pure false)) who := by
-  unfold quittingRootExpectedPayoff
-  rw [pmfPi_update_bind, expect_bind, expect_eq_sum, Fintype.sum_bool]
-
-/-- Replacing one coordinate's marginal moves the expected payoff by at most
-the change in Quit probability times twice the common payoff bound. -/
-theorem abs_quittingRootExpectedPayoff_update_coord_sub_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (coord who : ι)
-    (first second : PMF Bool) {M : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (htail : ∀ player, |tail player| ≤ M) :
-    |quittingRootExpectedPayoff reward tail
-        (Function.update root coord first) who -
-      quittingRootExpectedPayoff reward tail
-        (Function.update root coord second) who| ≤
-      |(first true).toReal - (second true).toReal| * (2 * M) := by
-  set quitBranch := quittingRootExpectedPayoff reward tail
-    (Function.update root coord (PMF.pure true)) who with hquitBranch
-  set continueBranch := quittingRootExpectedPayoff reward tail
-    (Function.update root coord (PMF.pure false)) who with hcontinueBranch
-  have hquitBound : |quitBranch| ≤ M :=
-    abs_quittingRootExpectedPayoff_le_bound reward tail _ who hreward htail
-  have hcontinueBound : |continueBranch| ≤ M :=
-    abs_quittingRootExpectedPayoff_le_bound reward tail _ who hreward htail
-  have hfirstSum : (first false).toReal = 1 - (first true).toReal := by
-    have hsum : (first false).toReal + (first true).toReal = 1 := by
-      simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one first
-    linarith
-  have hsecondSum : (second false).toReal = 1 - (second true).toReal := by
-    have hsum : (second false).toReal + (second true).toReal = 1 := by
-      simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one second
-    linarith
-  rw [quittingRootExpectedPayoff_update_coord_eq_mix reward tail root coord
-      first who,
-    quittingRootExpectedPayoff_update_coord_eq_mix reward tail root coord
-      second who, ← hquitBranch, ← hcontinueBranch]
-  have hsplit :
-      (first true).toReal * quitBranch +
-          (first false).toReal * continueBranch -
-        ((second true).toReal * quitBranch +
-          (second false).toReal * continueBranch) =
-      ((first true).toReal - (second true).toReal) *
-        (quitBranch - continueBranch) := by
-    rw [hfirstSum, hsecondSum]
-    ring
-  rw [hsplit, abs_mul]
-  have hgap : |quitBranch - continueBranch| ≤ 2 * M := by
-    have hquit' := abs_le.mp hquitBound
-    have hcontinue' := abs_le.mp hcontinueBound
-    rw [abs_le]
-    constructor <;> linarith
-  exact mul_le_mul_of_nonneg_left hgap (abs_nonneg _)
-
-/-- Perturbing one coordinate away from its own marginal moves the expected
-payoff by at most the Quit-probability change times twice the payoff bound. -/
-theorem abs_quittingRootExpectedPayoff_update_coord_sub_self_le
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) (coord who : ι)
-    (marginal : PMF Bool) {M : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (htail : ∀ player, |tail player| ≤ M) :
-    |quittingRootExpectedPayoff reward tail
-        (Function.update root coord marginal) who -
-      quittingRootExpectedPayoff reward tail root who| ≤
-      |(marginal true).toReal - (root coord true).toReal| * (2 * M) := by
-  have h := abs_quittingRootExpectedPayoff_update_coord_sub_le reward tail
-    root coord who marginal (root coord) hreward htail
-  rwa [Function.update_eq_self] at h
 
 /-! ## Capped joint exit caps every pure-Quit payoff -/
 

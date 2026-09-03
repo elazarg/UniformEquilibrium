@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Logic.Equiv.Fin.Rotate
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
+import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
@@ -434,19 +435,6 @@ theorem quittingCyclicTerminalValue_eq_rootSuccessorPayoff
   rfl
 
 /-! ## Quantitative terminal selection -/
-
-omit [DecidableEq ι] in
-/-- A root successor is linear in the selected player's tail coordinate. -/
-theorem quittingRootSuccessorPayoff_sub_eq_continueMass_mul
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (first second : Payoff ι) (root : ι → PMF Bool) (who : ι) :
-    quittingRootSuccessorPayoff reward first root who -
-        quittingRootSuccessorPayoff reward second root who =
-      quittingStationaryContinueMass root * (first who - second who) := by
-  unfold quittingRootSuccessorPayoff
-  rw [quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add]
-  ring
 
 /-- The probability that everyone continues is at most the probability
 that all opponents of any fixed player continue. -/

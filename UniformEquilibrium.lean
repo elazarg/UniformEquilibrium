@@ -376,6 +376,7 @@ import UniformEquilibrium.Quitting.Stationary.Payoff
 import UniformEquilibrium.Quitting.Circulation.DirectionBarycenter
 import UniformEquilibrium.Quitting.Root.FirstOrderProductFlow
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicPatience
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicScreen
 import UniformEquilibrium.Quitting.Cycles.AnchoredCyclicRenewal
@@ -728,6 +729,10 @@ import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 import UniformEquilibrium.Quitting.Root.LiteralPrefixDeviationTransport
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.TerminalGapPrefixDebtorTransport
+import UniformEquilibrium.Quitting.Root.ForcedContinuePayoffDisplacement
+import UniformEquilibrium.Quitting.Root.TerminalChildPayoffDisplacementSequence
+import UniformEquilibrium.Quitting.Root.ImmediateQuitCapDisplacement
+import UniformEquilibrium.Quitting.Root.CofinalImmediateQuitCapDisplacementLimit
 import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
 import UniformEquilibrium.Diagnostics.Quitting.LiteralOneDateProfile

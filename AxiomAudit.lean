@@ -2034,7 +2034,9 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.RewardBound
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
 import UniformEquilibrium.Quitting.Root.BoundedEndpoint
+import UniformEquilibrium.Quitting.Root.CofinalImmediateQuitCapDisplacementLimit
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
+import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Root.FaceGeometry
@@ -2042,7 +2044,9 @@ import UniformEquilibrium.Quitting.Root.FirstBranch
 import UniformEquilibrium.Quitting.Root.FirstOrderProductFlow
 import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Root.FleschSuccessor
+import UniformEquilibrium.Quitting.Root.ForcedContinuePayoffDisplacement
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
+import UniformEquilibrium.Quitting.Root.ImmediateQuitCapDisplacement
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 import UniformEquilibrium.Quitting.Root.LiteralPrefixDeviationTransport
 import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
@@ -2069,6 +2073,7 @@ import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Root.TailStability
+import UniformEquilibrium.Quitting.Root.TerminalChildPayoffDisplacementSequence
 import UniformEquilibrium.Quitting.Root.TerminalDebtBlock
 import UniformEquilibrium.Quitting.Root.TerminalDebtGreenAccount
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix

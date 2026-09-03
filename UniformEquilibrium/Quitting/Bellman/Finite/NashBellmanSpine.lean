@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.ProofView.Concepts.Existence.NashExistenceMixed
 import MathUE.Topology.CompactSerialRelation
+import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Root.Simplex
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformization
@@ -297,21 +298,6 @@ theorem continuous_quittingRootSuccessorPayoff_simplex
       (quittingRootOfSimplex point.2) who)
   exact continuous_pi fun who =>
     continuous_quittingRootExpectedPayoff_simplex reward who
-
-omit [DecidableEq ι] in
-/- A common bound on terminal and continuation payoffs bounds each expected
-root payoff. -/
-theorem abs_quittingRootExpectedPayoff_le_bound
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (continuation : Payoff ι) (root : ι → PMF Bool) (who : ι)
-    {M : ℝ} (hreward : ∀ S player, |reward S player| ≤ M)
-    (hcontinuation : ∀ player, |continuation player| ≤ M) :
-    |quittingRootExpectedPayoff reward continuation root who| ≤ M := by
-  unfold quittingRootExpectedPayoff
-  exact abs_expect_le_of_abs_le (pmfPi root)
-    (fun action => quittingRootPayoff reward continuation action who)
-    (fun action => abs_quittingRootPayoff_le reward continuation
-      hreward hcontinuation action who)
 
 /-- State space carrying the current payoff vector and the root which maps
 the next payoff vector back to it. -/
