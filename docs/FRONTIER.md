@@ -2738,6 +2738,20 @@ Seals use the independent `M`/`L`/`A`/`C` language of
 [`STATUS.md`](STATUS.md). An `L` seal on an open producer arrow means its
 proposition interface is checked, not that the implication has been proved.
 
+A separate one-step route is now checked by
+`eventually_fixedCapLimit_coordinateDebtDrop` and
+`eventually_fixedCapLimit_totalDebtDrop`
+(`UniformEquilibrium/Diagnostics/Quitting/FixedCapPinCoordinateDebtDrop.lean`).
+If a stationary source reduction supplies one fixed final debtor, a fixed
+positive debt floor, bounded source values, and convergence of that debtor's
+cap to its singleton reward, every late exact root gives a literal prefixed
+child with a fixed coordinate-debt drop; nonnegative source debts upgrade this
+to the same total-debt drop. If source pairs also approach the global minimum,
+the child would contradict the carrier lower bound. The fixed-debtor source
+adapter and near-minimum composition are not yet formalized, so this route has
+`M`, `L`, and conditional one-step `C`, but no `A`; it claims no regeneration,
+terminal approximation, or uniform-equilibrium payoff.
+
 <!-- BEGIN GENERATED OPEN LEAVES -->
 This dependency table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).
 
