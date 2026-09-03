@@ -40,6 +40,8 @@ gap against every behavioral profile. Excluding stationary, periodic,
 finite-public, or bounded-controller profiles is only a screen unless a theorem
 transfers it to the full behavioral class.
 
+The controller--tester formulation is now exact. `quittingControllerTesterValue_eq_minimum_rawMaximumDebt` identifies `eta(r)` with the minimum of `max_i (b_i-u_i)` on the compact unrestricted terminal-semantic carrier, and `quittingUniformHorizonTargetValue_eq_controllerTargetValue` identifies the literal offline `inf_profile inf_N sup_{H>=N}` value with the compact fixed-target value. `quittingControllerTesterValue_functionBarrierDuality` and `nonempty_closedInvariantBarrier_iff_le_controllerTesterValue` give complete full-reward-box function and closed-set barrier languages. This reduces the Fin4 question to the sign of `eta(r)`: prove it is always zero, or exhibit one table with a positive invariant barrier. The representation and duality do not by themselves settle that sign or produce an effective finite certificate.
+
 Thus the two accepted endpoints are:
 
 ```text

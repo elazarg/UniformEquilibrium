@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Quitting.Root.NeverGeneratedSemanticCarrier
 import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.TerminalSemanticStoppingLawExploitabilityFloor
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
@@ -359,9 +360,10 @@ theorem terminalSemanticCarrier_eq_closure_neverGeneratedSemanticReachable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingTerminalSemanticCarrier reward =
       closure (neverGeneratedSemanticReachable reward) := by
-  rw [← finiteElementarySemanticReachable_eq_neverGenerated]
-  exact terminalSemanticCarrier_eq_closure_finiteElementarySemanticReachable
-    reward
+  rw [GameTheory.terminalSemanticCarrier_eq_closure_neverGeneratedSemanticReachable]
+  apply congrArg closure
+  ext pair
+  rfl
 
 /-- Every finite prefix evaluated from the Never boundary lies in an
 inductive barrier. -/
