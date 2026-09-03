@@ -327,6 +327,36 @@ def removable {M : ℝ}
             self.assertEqual(first["summary"]["candidate_count"], 1)
             self.assertEqual(first["declarations"][0]["path"], "UniformEquilibrium/One.lean")
 
+    def test_inventory_scans_only_explicit_project_library_roots(self) -> None:
+        with self._root() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "Research").mkdir()
+            (root / "math").mkdir()
+            candidate = (
+                "theorem candidate {M : ℝ} (hM : 0 ≤ M) "
+                "(hreward : ∀ S, |reward S| ≤ M) : True := by trivial\n"
+            )
+            (root / "Research" / "Untracked.lean").write_text(
+                candidate.replace("candidate", "allowedDirectory"),
+                encoding="utf-8",
+            )
+            (root / "AxiomAudit.lean").write_text(
+                candidate.replace("candidate", "allowedUmbrella"),
+                encoding="utf-8",
+            )
+            (root / "math" / "Ignored.lean").write_text(
+                candidate.replace("candidate", "ignoredMath"),
+                encoding="utf-8",
+            )
+            declarations = check_reward_bounds.inventory(root)
+            self.assertEqual(
+                [(item.name, item.path) for item in declarations],
+                [
+                    ("allowedUmbrella", "AxiomAudit.lean"),
+                    ("allowedDirectory", "Research/Untracked.lean"),
+                ],
+            )
+
 
 if __name__ == "__main__":
     unittest.main()

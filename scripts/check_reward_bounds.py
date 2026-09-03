@@ -15,7 +15,6 @@ from __future__ import annotations
 
 import argparse
 import json
-import os
 import pathlib
 import re
 import sys
@@ -30,6 +29,7 @@ try:
         _body_equation_offset,
     )
     from scripts.check_trust import strip_comments_and_strings
+    from scripts.lean_source_roots import project_lean_files
 except ModuleNotFoundError:  # Direct execution.
     from check_proof_duplicates import (
         DECLARATION_RE,
@@ -38,10 +38,10 @@ except ModuleNotFoundError:  # Direct execution.
         _body_equation_offset,
     )
     from check_trust import strip_comments_and_strings
+    from lean_source_roots import project_lean_files
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-PRUNED_DIRECTORIES = {".git", ".lake", "GameTheory", "__pycache__", ".pytest_cache"}
 BOUND_VARIABLES = ("M", "B", "C")
 # Python's ``\b`` treats ``M'`` as ending at ``M``.  Account for Lean's
 # apostrophe/non-ASCII identifier continuations (and qualified names).
@@ -250,12 +250,7 @@ def _declaration_signatures(path: pathlib.Path) -> list[_Signature]:
 
 
 def _project_lean_files(root: pathlib.Path) -> list[pathlib.Path]:
-    files: list[pathlib.Path] = []
-    for directory, names, filenames in os.walk(root):
-        names[:] = [name for name in names if name not in PRUNED_DIRECTORIES]
-        base = pathlib.Path(directory)
-        files.extend(base / name for name in filenames if name.endswith(".lean"))
-    return sorted(files)
+    return project_lean_files(root)
 
 
 def inventory(root: pathlib.Path = ROOT) -> list[RewardBoundDeclaration]:

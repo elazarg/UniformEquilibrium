@@ -7,6 +7,11 @@ import argparse
 import subprocess
 from pathlib import PurePosixPath
 
+try:
+    from scripts.lean_source_roots import LIBRARY_ROOTS
+except ModuleNotFoundError:  # Direct execution.
+    from lean_source_roots import LIBRARY_ROOTS
+
 
 STRUCTURAL = {
     ".gitmodules",
@@ -16,17 +21,6 @@ STRUCTURAL = {
     "lakefile.toml",
     "lean-toolchain",
 }
-LIBRARY_ROOTS = {
-    "AxiomAudit",
-    "Experiments",
-    "Literature",
-    "MathUE",
-    "Research",
-    "Theorems",
-    "UniformEquilibrium",
-}
-
-
 def changed(base: str, head: str) -> list[tuple[str, tuple[str, ...]]]:
     output = subprocess.run(
         ["git", "diff", "--name-status", "--find-renames", base, head],
