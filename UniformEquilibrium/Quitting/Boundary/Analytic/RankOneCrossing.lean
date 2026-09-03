@@ -11,8 +11,8 @@ import MathUE.Probability.DecisionVariationMaximalInequality
 /-!
 # Abstract rank-one crossing alternative for quitting plans
 
-This module records the stochastic route corresponding to Simon's Case 1
-when the one-stage support witness has been forgotten.
+This module records the stochastic route to a reach bound for a ledger-clock
+switch after the one-stage support witness has been forgotten.
 
 It is intentionally abstract.  The main theorem assumes both pieces that a
 game-specific rank-one decision process would have to provide:
@@ -139,9 +139,9 @@ theorem quittingOpponentSurvivalWeight_le_of_survivalPrefix_le_mul
       mul_le_mul_of_nonneg_left htotal (inv_nonneg.mpr hlower.le)
     _ = upper := by field_simp
 
-/-- At Simon's Case-1 scale, joint reach at most `ε² / M²` and own survival
-at least `ε / M` force deleted reach at most `ε / M`. -/
-theorem quittingOpponentSurvivalWeight_le_caseOne
+/-- Joint reach at most `ε² / M²` and own survival at least `ε / M` force
+deleted reach at most `ε / M`. -/
+theorem quittingOpponentSurvivalWeight_le_epsilon_div_bound_of_jointSquare
     (roots : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
     {ε M : ℝ} (hε : 0 < ε) (hM : 0 < M)
     (hjoint : quittingSurvivalPrefix roots cutoff ≤ ε ^ 2 / M ^ 2)

@@ -64,14 +64,14 @@ error `ε + δ + reach · (5 · bound)`.
 ## Where the reach bound comes from, and where it does not
 
 The reach bound `quittingOpponentSurvivalWeight plan who 0 switch ≤ reach` is
-supplied in Simon's Case 2 by
+supplied for a planned-survival-clock switch by
 `quittingOpponentSurvivalWeight_le_of_target_plannedSurvivalStoppingIndex`
 (`QuittingPhaseSwitchResiduals.lean`): the punished player's own
 planned-survival clock has crossed the threshold there, and that player is
 one factor of every other player's opponent-survival product.
 
-In Case 1 -- the switch achieved by a ledger clock rather than a survival
-clock -- no such bound is available, and it stays an explicit hypothesis of
+For a switch achieved by a ledger clock rather than a survival clock, no such
+bound is available, and it stays an explicit hypothesis of
 every theorem below.  Supplying it is the rank-one crossing-probability
 estimate: its abstract layer is the one-sided decision-variation maximal
 inequality of `Math/Probability/DecisionVariationMaximalInequality.lean`, but
@@ -377,8 +377,9 @@ into the reach probability turns that bound into the plan-phase hypothesis of
 
 The three hypotheses are exactly the three quantities the clocks and the
 survival wiring produce: the ledger cap up to the switch, the quit regret
-before it, and the reach probability at it.  The last is Case 2's; in Case 1
-it is the open crossing estimate and stays a hypothesis here. -/
+before it, and the reach probability at it.  The last follows directly for a
+planned-survival-clock switch; for a ledger-clock switch it is the open
+crossing estimate and stays a hypothesis here. -/
 theorem quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_le_of_plan_ledger_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan : ℕ → ι → PMF Bool) (who : ι) (cutoff : ℕ)
@@ -491,9 +492,9 @@ theorem quittingRootSequenceHazardTerminalValue_quittingTruncatedRoots_le_of_pla
 /-- **The assembled cap, fed by the clocks alone.**  The phase-switch
 deviation cap whose plan phase is discharged by the *plan's* ledger, the
 plan's quit regret before the switch, and the reach probability at the
-switch -- the three quantities `QuittingLedgerPunishClock.lean`'s clocks and
-`QuittingPhaseSwitchResiduals.lean`'s Case-2 wiring produce.  Hypothesis (b),
-the punishment cap, is unchanged and remains hypothesised. -/
+switch -- the three quantities supplied by `QuittingLedgerPunishClock.lean`
+and the planned-survival wiring in `QuittingPhaseSwitchResiduals.lean`.
+Hypothesis (b), the punishment cap, is unchanged and remains hypothesised. -/
 theorem quittingTerminalPayoff_update_quittingPhaseSwitchProfile_le_of_plan_ledger_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (plan punish : ℕ → ι → PMF Bool) (switch : ℕ) (who : ι)

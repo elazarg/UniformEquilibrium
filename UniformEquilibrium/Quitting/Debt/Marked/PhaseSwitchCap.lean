@@ -521,9 +521,9 @@ theorem
   exact (quittingJointSurvivalWeight_le_quittingHazardSurvival_ownHazard
     plan target switch).trans hbound
 
-/-- Simon's Case-2 clock supplies exactly the marked survival package: joint
-survival for the target and deleted survival for every other player. -/
-theorem quittingCaseTwoMarkedSurvivalBounds
+/-- A planned-survival stopping clock supplies the marked survival package:
+joint survival for the target and deleted survival for every other player. -/
+theorem quittingMarkedSurvivalBounds_of_plannedSurvivalStoppingIndex
     (plan : ℕ → ι → PMF Bool) (target : ι) (threshold : ℝ) {switch : ℕ}
     (hswitch : switch =
       quittingRootSequencePlannedSurvivalStoppingIndex plan target threshold)

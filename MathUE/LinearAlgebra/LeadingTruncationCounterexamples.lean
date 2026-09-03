@@ -10,8 +10,9 @@ import Mathlib.FieldTheory.RatFunc.AsPolynomial
 /-!
 # Exact cancellation regressions against leading-only truncation
 
-These finite algebra examples record the verified C1 and C4 obstructions to
-leading-only truncation.  They use rational functions in one indeterminate, a
+These finite algebra examples record explicit two-term and arbitrarily long
+finite-cancellation obstructions to leading-only truncation.  They use
+rational functions in one indeterminate, a
 field already large enough for the examples.  A proper two-block elimination leaves the retained
 coordinate unchanged; rebasing then cancels every displayed low-order term and
 exposes the first omitted term.
@@ -65,7 +66,8 @@ private noncomputable def pivotInvertible : Invertible pivot :=
     ext (_ : Unit) (_ : Unit)
     simp [parameter_ne_zero]
 
-/-- Exact reduced-and-rebased right-hand side in the two-state C4 family. -/
+/-- Exact reduced-and-rebased right-hand side in the two-state finite-cancellation
+family. -/
 def exactRebasedRhs (N : ℕ) : Unit → RationalParameterField :=
   letI : Invertible pivot := pivotInvertible
   ExactBlockElimination.reducedRhs pivot 0 (fun _ => 0)
@@ -92,44 +94,44 @@ theorem exactRebasedRhs_ne_zero (N : ℕ) : exactRebasedRhs N ≠ 0 := by
   simp only [Pi.zero_apply] at this
   exact (pow_ne_zero _ parameter_ne_zero) this
 
-/-- C1 after the proper first-state elimination, but with `t+t²` replaced by
+/-- The two-term example after the proper first-state elimination, but with `t+t²` replaced by
 its leading-only surrogate `t` before rebasing. -/
-def c1LeadingOnlyRebasedRhs : Unit → RationalParameterField :=
+def twoTermLeadingOnlyRebasedRhs : Unit → RationalParameterField :=
   letI : Invertible pivot := pivotInvertible
   ExactBlockElimination.reducedRhs pivot 0 (fun _ => 0) (fun _ => parameter) -
     ExactBlockElimination.schurComplement pivot 0 0 pivot *ᵥ (fun _ => 1)
 
-theorem c1LeadingOnlyRebasedRhs_eq_zero : c1LeadingOnlyRebasedRhs = 0 := by
+theorem twoTermLeadingOnlyRebasedRhs_eq_zero : twoTermLeadingOnlyRebasedRhs = 0 := by
   letI : Invertible pivot := pivotInvertible
   funext coordinate
   cases coordinate
-  simp [c1LeadingOnlyRebasedRhs, ExactBlockElimination.reducedRhs,
+  simp [twoTermLeadingOnlyRebasedRhs, ExactBlockElimination.reducedRhs,
     ExactBlockElimination.schurComplement, pivot]
 
 /-- The proper two-state elimination regression: exact data leave `t²`, while
 leading-only data leave zero. -/
-theorem c1_properElimination_exact_ne_leadingOnly :
-    exactRebasedRhs 1 ≠ c1LeadingOnlyRebasedRhs := by
-  rw [c1LeadingOnlyRebasedRhs_eq_zero]
+theorem properElimination_twoTerm_exact_ne_leadingOnly :
+    exactRebasedRhs 1 ≠ twoTermLeadingOnlyRebasedRhs := by
+  rw [twoTermLeadingOnlyRebasedRhs_eq_zero]
   exact exactRebasedRhs_ne_zero 1
 
-/-- C1's exact retained right-hand side `t+t²`, rebased by `h=1`, leaves
+/-- The exact two-term retained right-hand side `t+t²`, rebased by `h=1`, leaves
 `t²`. -/
-theorem c1_exact_rebase :
+theorem twoTerm_exact_rebase :
     (parameter + parameter ^ 2) - parameter * 1 = parameter ^ 2 := by
   ring
 
 /-- If `t+t²` is first truncated to `t`, the same rebase instead returns
 zero. -/
-theorem c1_leadingOnly_rebase : parameter - parameter * 1 = 0 := by
+theorem twoTerm_leadingOnly_rebase : parameter - parameter * 1 = 0 := by
   ring
 
-/-- The discarded C1 term is genuinely revived: the exact and leading-only
+/-- The discarded quadratic term is genuinely revived: the exact and leading-only
 rebased right-hand sides differ. -/
-theorem c1_exact_ne_leadingOnly :
+theorem twoTerm_exact_ne_leadingOnly :
     (parameter + parameter ^ 2) - parameter * 1 ≠
       parameter - parameter * 1 := by
-  rw [c1_exact_rebase, c1_leadingOnly_rebase]
+  rw [twoTerm_exact_rebase, twoTerm_leadingOnly_rebase]
   exact pow_ne_zero 2 parameter_ne_zero
 
 end LeadingTruncationCounterexamples

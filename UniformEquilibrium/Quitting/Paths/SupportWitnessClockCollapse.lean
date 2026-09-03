@@ -447,7 +447,7 @@ and one genuine own-survival crossing simultaneously supply:
 * a marked target with joint reach at most `threshold`; and
 * deleted reach at most `threshold` for every other player.
 
-This is the deterministic replacement for Simon's Case-1/Case-2 split. -/
+This replaces the separate ledger-clock and planned-survival-clock routes. -/
 theorem quittingSupportApproxNash_survivalSwitchPackage
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool)

@@ -374,14 +374,16 @@ theorem excludedValue_le_of_isGlobalApproxEquilibrium {x : CyclicIndex → ℝ}
 
 /-! ## The stationary impossibility: source equations (8)-(14), adapted
 
-`Pkg a b c Ua Ub Uc` packages the nine relations available at a candidate
+`CyclicStationaryCandidateInequalities a b c Ua Ub Uc` packages the nine
+relations available at a candidate
 stationary row `(a,b,c)` whose cyclic predecessor/successor structure
 matches coordinate `a`'s (predecessor `c`, successor `b`): the
 self-consistency identity and the two deviation bounds, at each of the
 three coordinates. It is stated on bare reals so the same instance, cycled
-by `Pkg.rotate`, proves the claim at every coordinate without repeating the
-argument three times. -/
-structure Pkg (a b c Ua Ub Uc : ℝ) : Prop where
+by `CyclicStationaryCandidateInequalities.rotate`, proves the claim at every
+coordinate without repeating the argument three times. -/
+structure CyclicStationaryCandidateInequalities
+    (a b c Ua Ub Uc : ℝ) : Prop where
   /-- Self-consistency at `a`: `U_a (1 - c(x)) = a \Sigma_a + (1-a) A_a`. -/
   hfix_a : Ua * (1 - (1 - a) * (1 - b) * (1 - c)) =
     a * ((1 - c) / 3) + (1 - a) * (c * (3 - 2 * b) / 3)
@@ -399,8 +401,10 @@ structure Pkg (a b c Ua Ub Uc : ℝ) : Prop where
   hc_c : b * (3 - 2 * a) / 3 ≤ (1 - (1 - a) * (1 - b)) * Uc
 
 /-- Cyclic permutation: a package for `(a,b,c)` gives one for `(b,c,a)`. -/
-theorem Pkg.rotate {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc) :
-    Pkg b c a Ub Uc Ua := by
+theorem CyclicStationaryCandidateInequalities.rotate
+    {a b c Ua Ub Uc : ℝ}
+    (h : CyclicStationaryCandidateInequalities a b c Ua Ub Uc) :
+    CyclicStationaryCandidateInequalities b c a Ub Uc Ua := by
   have hmass : (1 - b) * (1 - c) * (1 - a) = (1 - a) * (1 - b) * (1 - c) := by ring
   refine ⟨?_, ?_, ?_, h.hq_b, h.hq_c, h.hq_a, h.hc_b, h.hc_c, h.hc_a⟩
   · rw [hmass]; exact h.hfix_b
@@ -411,7 +415,9 @@ theorem Pkg.rotate {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc) :
 without ambient box bounds.  At `a = 1`, its constraints reduce to three
 incompatible scalar inequalities, separated according to whether `c` lies
 below `1`, between `1` and `3 / 2`, or above `3 / 2`. -/
-theorem Pkg.case_one_impossible {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc)
+theorem CyclicStationaryCandidateInequalities.impossible_of_firstHazard_eq_one
+    {a b c Ua Ub Uc : ℝ}
+    (h : CyclicStationaryCandidateInequalities a b c Ua Ub Uc)
     (haeq : a = 1) : False := by
   subst haeq
   have hUa : Ua = (1 - c) / 3 := by have := h.hfix_a; nlinarith
@@ -465,12 +471,14 @@ theorem Pkg.case_one_impossible {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc)
 
 /-- `\varphi(t) = t(t+2)/(1+t^2)` strictly exceeds `t` for `0 < t \le 1`
 (cleared of its denominator): equation (11)-(14)'s monotonicity fact. -/
-theorem phi_gt (t : ℝ) (ht0 : 0 < t) (ht1 : t ≤ 1) :
+theorem clearedCyclicTransfer_gt_self
+    (t : ℝ) (ht0 : 0 < t) (ht1 : t ≤ 1) :
     t * (t + 2) > t * (1 + t ^ 2) := by nlinarith
 
 /-- **If `a` is strictly interior, exact complementarity pins `b` in terms
 of `c` via `\varphi`**: equation (11), `x_2 = \varphi(x_3)`, adapted. -/
-theorem eq_phi_of_interior {a b c Ua : ℝ}
+theorem successor_mul_one_add_predecessor_sq_eq_of_firstHazard_interior
+    {a b c Ua : ℝ}
     (hfix_a : Ua * (1 - (1 - a) * (1 - b) * (1 - c)) =
       a * ((1 - c) / 3) + (1 - a) * (c * (3 - 2 * b) / 3))
     (hq_a : (1 - c) / 3 ≤ Ua)
@@ -490,15 +498,19 @@ theorem eq_phi_of_interior {a b c Ua : ℝ}
 /-- **No exact stationary equilibrium with every coordinate below `1`
 exists.** The interior sub-case chains the three `\varphi` relations into
 `a > b > c > a`; the boundary sub-case (`c = 0`, forcing `b = 0` too) fails
-the quit-forever bound at `c`. Together with `case_one_impossible` and the
+the quit-forever bound at `c`. Together with
+`impossible_of_firstHazard_eq_one` and the
 all-zero row (handled separately, as `constantPayoff` is pinned to `0`
 there by definition, not merely by these relations), this exhausts every
 row in `[0,1]^3`. -/
-theorem Pkg.case_positive_impossible {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub Uc)
+theorem CyclicStationaryCandidateInequalities.impossible_of_firstHazard_interior
+    {a b c Ua Ub Uc : ℝ}
+    (h : CyclicStationaryCandidateInequalities a b c Ua Ub Uc)
     (ha0 : 0 < a) (ha1 : a < 1) (hb0 : 0 ≤ b) (hb1 : b < 1)
     (hc0 : 0 ≤ c) (hc1 : c < 1) : False := by
   have heqa : b * (1 + c ^ 2) = c * (c + 2) :=
-    eq_phi_of_interior h.hfix_a h.hq_a h.hc_a ha0 ha1 hb0 hb1.le hc0 hc1.le
+    successor_mul_one_add_predecessor_sq_eq_of_firstHazard_interior
+      h.hfix_a h.hq_a h.hc_a ha0 ha1 hb0 hb1.le hc0 hc1.le
   rcases eq_or_lt_of_le hc0 with hc0' | hc0'
   · have hb0' : b = 0 := by nlinarith [hc0']
     have hUc : Uc = 0 := by
@@ -508,16 +520,22 @@ theorem Pkg.case_positive_impossible {a b c Ua Ub Uc : ℝ} (h : Pkg a b c Ua Ub
     have hq := h.hq_c
     rw [hb0', hUc] at hq
     norm_num at hq
-  · have hbpos : 0 < b := by nlinarith [phi_gt c hc0' hc1.le]
+  · have hbpos : 0 < b := by
+      nlinarith [clearedCyclicTransfer_gt_self c hc0' hc1.le]
     have heqc : a * (1 + b ^ 2) = b * (b + 2) :=
-      eq_phi_of_interior (h.rotate.rotate).hfix_a (h.rotate.rotate).hq_a
+      successor_mul_one_add_predecessor_sq_eq_of_firstHazard_interior
+        (h.rotate.rotate).hfix_a (h.rotate.rotate).hq_a
         (h.rotate.rotate).hc_a hc0' hc1 ha0.le ha1.le hb0 hb1.le
     have heqb : c * (1 + a ^ 2) = a * (a + 2) :=
-      eq_phi_of_interior (h.rotate).hfix_a (h.rotate).hq_a (h.rotate).hc_a
+      successor_mul_one_add_predecessor_sq_eq_of_firstHazard_interior
+        (h.rotate).hfix_a (h.rotate).hq_a (h.rotate).hc_a
         hbpos hb1 hc0 hc1.le ha0.le ha1.le
-    have hab : a > b := by nlinarith [phi_gt b hbpos hb1.le]
-    have hbc : b > c := by nlinarith [phi_gt c hc0' hc1.le]
-    have hca : c > a := by nlinarith [phi_gt a ha0 ha1.le]
+    have hab : a > b := by
+      nlinarith [clearedCyclicTransfer_gt_self b hbpos hb1.le]
+    have hbc : b > c := by
+      nlinarith [clearedCyclicTransfer_gt_self c hc0' hc1.le]
+    have hca : c > a := by
+      nlinarith [clearedCyclicTransfer_gt_self a ha0 ha1.le]
     linarith
 
 /-- `c(x) = (1-x_0)(1-x_1)(1-x_2)` spelled out on `CyclicIndex = Fin 3`. -/
@@ -525,14 +543,17 @@ theorem continueMass_eq_prod3 (x : CyclicIndex → ℝ) :
     continueMass x = (1 - x 0) * (1 - x 1) * (1 - x 2) := by
   unfold continueMass; rw [Fin.prod_univ_three]
 
-/-- **The `Pkg` instance carried by a stationary global-approximate
+/-- **The cyclic candidate inequalities carried by a stationary global-approximate
 equilibrium candidate.** Assembles the self-consistency identity and the
 two deviation bounds at every coordinate into the abstract package
 consumed by the case analysis above. -/
-theorem pkg_of_isGlobalApproxEquilibrium {x : CyclicIndex → ℝ}
+theorem cyclicStationaryCandidateInequalities_of_isGlobalApproxEquilibrium
+    {x : CyclicIndex → ℝ}
     (hx0 : ∀ j, 0 ≤ x j) (hx1 : ∀ j, x j ≤ 1)
     (hp : IsGlobalApproxEquilibrium (constantPlan x)) :
-    Pkg (x 0) (x 1) (x 2) (constantPayoff x 0) (constantPayoff x 1) (constantPayoff x 2) := by
+    CyclicStationaryCandidateInequalities
+      (x 0) (x 1) (x 2)
+      (constantPayoff x 0) (constantPayoff x 1) (constantPayoff x 2) := by
   have e0p : cyclicPred (0 : CyclicIndex) = 2 := by decide
   have e0s : cyclicSucc (0 : CyclicIndex) = 1 := by decide
   have e1p : cyclicPred (1 : CyclicIndex) = 0 := by decide
@@ -570,13 +591,15 @@ theorem no_stationary_approxEquilibrium {x : CyclicIndex → ℝ}
     (hx0 : ∀ j, 0 ≤ x j) (hx1 : ∀ j, x j ≤ 1) :
     ¬ IsGlobalApproxEquilibrium (constantPlan x) := by
   intro hp
-  have hpkg := pkg_of_isGlobalApproxEquilibrium hx0 hx1 hp
+  have hpkg :=
+    cyclicStationaryCandidateInequalities_of_isGlobalApproxEquilibrium
+      hx0 hx1 hp
   by_cases h0 : x 0 = 1
-  · exact hpkg.case_one_impossible h0
+  · exact hpkg.impossible_of_firstHazard_eq_one h0
   by_cases h1 : x 1 = 1
-  · exact hpkg.rotate.case_one_impossible h1
+  · exact hpkg.rotate.impossible_of_firstHazard_eq_one h1
   by_cases h2 : x 2 = 1
-  · exact hpkg.rotate.rotate.case_one_impossible h2
+  · exact hpkg.rotate.rotate.impossible_of_firstHazard_eq_one h2
   have h0' : x 0 < 1 := lt_of_le_of_ne (hx1 0) h0
   have h1' : x 1 < 1 := lt_of_le_of_ne (hx1 1) h1
   have h2' : x 2 < 1 := lt_of_le_of_ne (hx1 2) h2
@@ -592,10 +615,12 @@ theorem no_stationary_approxEquilibrium {x : CyclicIndex → ℝ}
         have hq0 := hpkg.hq_a
         rw [hcp0, ← h2z] at hq0
         norm_num at hq0
-      · exact hpkg.rotate.rotate.case_positive_impossible h2z h2'
+      · exact hpkg.rotate.rotate.impossible_of_firstHazard_interior h2z h2'
           (hx0 0) h0' (hx0 1) h1'
-    · exact hpkg.rotate.case_positive_impossible h1z h1' (hx0 2) h2' (hx0 0) h0'
-  · exact hpkg.case_positive_impossible h0z h0' (hx0 1) h1' (hx0 2) h2'
+    · exact hpkg.rotate.impossible_of_firstHazard_interior
+        h1z h1' (hx0 2) h2' (hx0 0) h0'
+  · exact hpkg.impossible_of_firstHazard_interior
+      h0z h0' (hx0 1) h1' (hx0 2) h2'
 
 /-! ## The instant impossibility -/
 

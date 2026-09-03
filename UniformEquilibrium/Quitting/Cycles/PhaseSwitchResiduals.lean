@@ -41,12 +41,12 @@ attainment, which is the separate lower-bound question left open by
 false in general, so nothing here claims the ceiling is *reached* below it,
 only that it caps the punished player's incentive from above.
 
-## (3) The Case-2 survival wiring for hypothesis (c)
+## (3) Planned-survival clock wiring for hypothesis (c)
 
 Hypothesis (c) needs `quittingOpponentSurvivalWeight plan who 0 switch ≤
-survivalCap` for the player `who` under test.  In Simon's Case 2 -- the
-switch stage `î` achieved by the punished player `target`'s own
-planned-survival clock `i^target_♯` at threshold `ε / M`
+survivalCap` for the player `who` under test.  When the switch stage is
+selected by the punished player `target`'s own planned-survival clock at
+threshold `ε / M`
 (`quittingRootSequencePlannedSurvivalStoppingIndex`) -- this is wired from a
 single observation: `quittingOpponentSurvivalWeight plan who 0 switch` is a
 product over *every* opponent of `who`, and whenever `who ≠ target`, `target`
@@ -66,9 +66,9 @@ opponent-survival weight).
 
 The honest scope: this covers every deviator `who ≠ target`.  The case
 `who = target` -- the punished player's own incentive to deviate from a plan
-that is about to punish someone else, or Simon's Case 1 where the switch is
-instead achieved by a ledger clock -- is not addressed; it needs a different
-argument and is out of scope here.
+that is about to punish someone else -- is not addressed.  A switch selected
+by a ledger clock likewise needs a separate crossing estimate.  Both are out
+of scope here.
 
 ## The residual left untouched: hypothesis (a)'s truncation transfer
 
@@ -165,7 +165,7 @@ theorem hpunish_quittingAllContinueRoots_of_ceilingIR
   have hbound := hpunish_quittingAllContinueRoots reward who hpunishError g
   linarith
 
-/-! ## (3) The Case-2 survival wiring -/
+/-! ## (3) Planned-survival clock wiring -/
 
 /-- **A single opponent's continue probability bounds the whole deleted
 mass.**  At one root, deleting `who`'s own coordinate leaves a product over
@@ -221,9 +221,9 @@ theorem quittingOpponentSurvivalWeight_le_quittingHazardSurvival_ownHazard
   · intro offset _
     exact quittingFixedOpponentsContinueMass_le_of_ne roots hmarked offset
 
-/-- **Case 2's reach-probability bound.**  If the switch stage is exactly the
+/-- **Planned-survival reach-probability bound.**  If the switch stage is the
 punished player `target`'s own planned-survival stopping index at threshold
-`ε / M` (Simon's Case 2, `î = i^target_♯`), then for every *other* player
+`ε / M`, then for every *other* player
 `who` the plan's opponent-survival weight through the switch stage is at
 most `ε / M` too -- one of `who`'s opponents is `target`, and `target`'s own
 prescribed survival is already at or below the threshold there.  This is
@@ -245,8 +245,8 @@ theorem quittingOpponentSurvivalWeight_le_of_eq_quittingRootSequencePlannedSurvi
   exact (quittingOpponentSurvivalWeight_le_quittingHazardSurvival_ownHazard
     plan hwho.symm switch).trans hbound
 
-/-- **Case 2, with the deviator quantifier made explicit.**  The bound above,
-packaged as hypothesis (c) needs it: quantified over every candidate deviator
+/-- **Planned-survival bound with the deviator quantifier explicit.**  The
+bound above is packaged as hypothesis (c) needs it: over every candidate deviator
 other than the punished player. -/
 theorem quittingOpponentSurvivalWeight_le_of_target_plannedSurvivalStoppingIndex
     (plan : ℕ → ι → PMF Bool) (target : ι) (threshold : ℝ) {switch : ℕ}

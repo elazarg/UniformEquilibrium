@@ -288,7 +288,7 @@ theorem associativityWitness_right_mem
 one literal result coordinate.  The diagram records jointly approximable
 splice witnesses; it does not assert amalgamation of arbitrary independently
 chosen witnesses of the ternary relation. -/
-theorem associativityWitness_common_result
+theorem associativityWitness_common_composite
     (witness : MetrizableAssociativityWitness reward) :
     (associativityLeft witness.1).2 =
       (associativityRight witness.1).2 := rfl
