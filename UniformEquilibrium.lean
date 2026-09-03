@@ -96,6 +96,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.NashBellmanSingletonCycle
 import UniformEquilibrium.Quitting.PayoffProcess.All
 import UniformEquilibrium.Quitting.Punishment.CoalitionLock
 import UniformEquilibrium.Quitting.Root.ApproximateFirstBranch
+import UniformEquilibrium.Quitting.Root.SingletonGapSemanticDebtDescent
 import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
 import UniformEquilibrium.Quitting.Paths.SupportWitnessUniform
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalMechanismResidueWitness

@@ -89,6 +89,60 @@ theorem abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
   rw [abs_neg]
   exact abs_le.mpr ⟨hlower, hupper⟩
 
+/-- A singleton-to-tail gap controls the Quit-minus-Continue endpoint
+difference for an arbitrary bounded payoff tail. -/
+theorem quittingRootEndpointDifference_ge_singletonGap_sub_four_mul_of_tail_bound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι) {M gap : ℝ}
+    (hreward : ∀ S player, |reward S player| ≤ M)
+    (htail : |tail who| ≤ M)
+    (hsingleton : gap ≤
+      reward (quittingSingletonTerminal who) who - tail who) :
+    gap - 4 * M * quittingRootOpponentAbsorptionMass root who ≤
+      quittingRootEndpointDifference reward tail root who := by
+  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
+  let opponentAbsorption := quittingRootOpponentAbsorptionMass root who
+  let singleton := reward (quittingSingletonTerminal who) who
+  let actual := tail who
+  have hsingletonAbs : |singleton| ≤ M :=
+    hreward (quittingSingletonTerminal who) who
+  have hgapBound : gap ≤ 2 * M := by
+    have hsingletonUpper := (le_abs_self singleton).trans hsingletonAbs
+    have hactualLower := neg_le_of_abs_le htail
+    dsimp [singleton, actual] at hsingletonUpper hactualLower
+    linarith
+  have hopponentNonneg : 0 ≤ opponentAbsorption :=
+    quittingRootOpponentAbsorptionMass_nonneg root who
+  have hopponentLeOne : opponentAbsorption ≤ 1 :=
+    quittingRootOpponentAbsorptionMass_le_one root who
+  have hjoiningAbs :=
+    abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
+      reward root who hreward
+  have hjoiningLower : -(2 * M * opponentAbsorption) ≤
+      quittingOutsiderJoiningContribution reward root who := by
+    simpa [opponentAbsorption] using neg_le_of_abs_le hjoiningAbs
+  have hsurvivalNonneg : 0 ≤ 1 - opponentAbsorption := by linarith
+  have hweightedGap : (1 - opponentAbsorption) * gap ≤
+      (1 - opponentAbsorption) * (singleton - actual) :=
+    mul_le_mul_of_nonneg_left
+      (by simpa [singleton, actual] using hsingleton) hsurvivalNonneg
+  have hdecomposition :=
+    quittingRootEndpointDifference_eq_outsiderNever reward tail root who
+  rw [show quittingRootAbsorptionMass
+      (Function.update root who (PMF.pure false)) = opponentAbsorption by rfl]
+    at hdecomposition
+  change gap - 4 * M * opponentAbsorption ≤ _
+  calc
+    gap - 4 * M * opponentAbsorption ≤
+        (1 - opponentAbsorption) * gap -
+          2 * M * opponentAbsorption := by
+      nlinarith [mul_nonneg hopponentNonneg (sub_nonneg.mpr hgapBound)]
+    _ ≤ (1 - opponentAbsorption) * (singleton - actual) +
+          quittingOutsiderJoiningContribution reward root who := by
+      linarith
+    _ = quittingRootEndpointDifference reward tail root who := by
+      simpa [singleton, actual] using hdecomposition.symm
+
 /-- A uniform singleton gap forces a quantitative lower bound on the joint
 absorption of every exact endpoint-Nash root against the fixed target. -/
 theorem gap_div_le_quittingRootAbsorptionMass_of_isZeroEndpointNash

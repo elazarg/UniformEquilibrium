@@ -121,54 +121,12 @@ theorem quittingRootEndpointDifference_ge_singletonGap_sub_four_mul
       quittingRootEndpointDifference reward
         (fun player => quittingTerminalPayoff reward continuation player)
         root who := by
-  have hM := quittingRewardCoordinateBound_nonneg_of_player reward who hreward
-  let opponentAbsorption := quittingRootOpponentAbsorptionMass root who
-  let singleton := reward (quittingSingletonTerminal who) who
-  let actual := quittingTerminalPayoff reward continuation who
-  have hactualAbs : |actual| ≤ M := by
-    exact abs_quittingTerminalPayoff_le reward continuation who hreward
-  have hsingletonAbs : |singleton| ≤ M :=
-    hreward (quittingSingletonTerminal who) who
-  have hgapBound : gap ≤ 2 * M := by
-    have hsingletonUpper := (le_abs_self singleton).trans hsingletonAbs
-    have hactualLower := neg_le_of_abs_le hactualAbs
-    dsimp [singleton, actual] at hsingletonUpper hactualLower
-    linarith
-  have hopponentNonneg : 0 ≤ opponentAbsorption := by
-    exact quittingRootOpponentAbsorptionMass_nonneg root who
-  have hopponentLeOne : opponentAbsorption ≤ 1 := by
-    exact quittingRootOpponentAbsorptionMass_le_one root who
-  have hjoiningAbs :=
-    abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
-      reward root who hreward
-  have hjoiningLower : -(2 * M * opponentAbsorption) ≤
-      quittingOutsiderJoiningContribution reward root who := by
-    simpa [opponentAbsorption] using neg_le_of_abs_le hjoiningAbs
-  have hsurvivalNonneg : 0 ≤ 1 - opponentAbsorption := by linarith
-  have hweightedGap : (1 - opponentAbsorption) * gap ≤
-      (1 - opponentAbsorption) * (singleton - actual) := by
-    exact mul_le_mul_of_nonneg_left (by simpa [singleton, actual] using hsingleton)
-      hsurvivalNonneg
-  have hdecomposition :=
-    quittingRootEndpointDifference_eq_outsiderNever
+  exact
+    quittingRootEndpointDifference_ge_singletonGap_sub_four_mul_of_tail_bound
       reward (fun player => quittingTerminalPayoff reward continuation player)
-        root who
-  rw [show quittingRootAbsorptionMass
-      (Function.update root who (PMF.pure false)) = opponentAbsorption by rfl]
-    at hdecomposition
-  change gap - 4 * M * opponentAbsorption ≤ _
-  calc
-    gap - 4 * M * opponentAbsorption ≤
-        (1 - opponentAbsorption) * gap -
-          2 * M * opponentAbsorption := by
-      nlinarith [mul_nonneg hopponentNonneg (sub_nonneg.mpr hgapBound)]
-    _ ≤ (1 - opponentAbsorption) * (singleton - actual) +
-          quittingOutsiderJoiningContribution reward root who := by
-      linarith
-    _ = quittingRootEndpointDifference reward
-          (fun player => quittingTerminalPayoff reward continuation player)
-          root who := by
-      simpa [singleton, actual] using hdecomposition.symm
+      root who hreward
+      (abs_quittingTerminalPayoff_le reward continuation who hreward)
+      hsingleton
 
 /-- Quantitative strict descent of one player's literal terminal debt under
 every exact root Nash prefix against the continuation's literal payoff. -/

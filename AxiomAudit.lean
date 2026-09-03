@@ -2079,6 +2079,7 @@ import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Root.SequencePayoff
 import UniformEquilibrium.Quitting.Root.Simplex
 import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
+import UniformEquilibrium.Quitting.Root.SingletonGapSemanticDebtDescent
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
 import UniformEquilibrium.Quitting.Root.TailStability
@@ -2089,6 +2090,7 @@ import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 import UniformEquilibrium.Quitting.Root.TerminalGapPrefixDebtorTransport
 import UniformEquilibrium.Quitting.Root.TerminalOpponentAdvantage
 import UniformEquilibrium.Quitting.Root.TerminalOutcome
+import UniformEquilibrium.Quitting.Root.TerminalSemanticDebt
 import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
 import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
