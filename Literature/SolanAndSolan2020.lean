@@ -19383,12 +19383,14 @@ noncomputable def positiveOwner {M : ι → ι → ℝ}
     (hM : MMatrix M) (who : ι) : ι :=
   Classical.choose (Finset.card_eq_one.mp (hM.2.1 who))
 
+omit [DecidableEq ι] in
 theorem positiveOwner_filter {M : ι → ι → ℝ}
     (hM : MMatrix M) (who : ι) :
     Finset.filter (fun owner => 0 < M who owner) Finset.univ =
       {hM.positiveOwner who} :=
   Classical.choose_spec (Finset.card_eq_one.mp (hM.2.1 who))
 
+omit [DecidableEq ι] in
 theorem positive_positiveOwner {M : ι → ι → ℝ}
     (hM : MMatrix M) (who : ι) :
     0 < M who (hM.positiveOwner who) := by
@@ -19398,6 +19400,7 @@ theorem positive_positiveOwner {M : ι → ι → ℝ}
     simp
   exact (Finset.mem_filter.mp hmem).2
 
+omit [DecidableEq ι] in
 theorem owner_eq_positiveOwner_of_pos {M : ι → ι → ℝ}
     (hM : MMatrix M) {who owner : ι} (hpos : 0 < M who owner) :
     owner = hM.positiveOwner who := by
@@ -19407,6 +19410,7 @@ theorem owner_eq_positiveOwner_of_pos {M : ι → ι → ℝ}
   rw [hM.positiveOwner_filter who] at hmem
   simpa using hmem
 
+omit [DecidableEq ι] in
 theorem nonpos_of_ne_positiveOwner {M : ι → ι → ℝ}
     (hM : MMatrix M) {who owner : ι}
     (hne : owner ≠ hM.positiveOwner who) :
@@ -19418,12 +19422,14 @@ noncomputable def positiveRow {M : ι → ι → ℝ}
     (hM : MMatrix M) (owner : ι) : ι :=
   Classical.choose (Finset.card_eq_one.mp (hM.2.2 owner))
 
+omit [DecidableEq ι] in
 theorem positiveRow_filter {M : ι → ι → ℝ}
     (hM : MMatrix M) (owner : ι) :
     Finset.filter (fun who => 0 < M who owner) Finset.univ =
       {hM.positiveRow owner} :=
   Classical.choose_spec (Finset.card_eq_one.mp (hM.2.2 owner))
 
+omit [DecidableEq ι] in
 theorem positive_positiveRow {M : ι → ι → ℝ}
     (hM : MMatrix M) (owner : ι) :
     0 < M (hM.positiveRow owner) owner := by
@@ -19433,12 +19439,14 @@ theorem positive_positiveRow {M : ι → ι → ℝ}
     simp
   exact (Finset.mem_filter.mp hmem).2
 
+omit [DecidableEq ι] in
 theorem positiveOwner_positiveRow {M : ι → ι → ℝ}
     (hM : MMatrix M) (owner : ι) :
     hM.positiveOwner (hM.positiveRow owner) = owner := by
   exact (hM.owner_eq_positiveOwner_of_pos
     (hM.positive_positiveRow owner)).symm
 
+omit [DecidableEq ι] in
 theorem positiveRow_positiveOwner {M : ι → ι → ℝ}
     (hM : MMatrix M) (who : ι) :
     hM.positiveRow (hM.positiveOwner who) = who := by
@@ -19925,6 +19933,7 @@ structure NormalSingletonRepresentation (value : Payoff ι) where
     weight owner *
       table.terminal (quittingProjectiveSingletonTerminal owner.1) who
 
+omit [Nonempty (NormalPlayer table)] in
 theorem exists_normalSingletonRepresentation
     {value : Payoff ι} (hvalue : value ∈ NormalSingletonHull table) :
     Nonempty (NormalSingletonRepresentation table value) := by
@@ -19941,8 +19950,7 @@ theorem exists_normalSingletonRepresentation
     · exact le_rfl
   have hfullTotal : ∑ owner, fullWeight owner = 1 := by
     have hinter : (NormalPlayers table).attach ∩ support = support :=
-      Finset.inter_eq_right.mpr fun owner _ =>
-        by simpa using owner.property
+      Finset.inter_eq_right.mpr fun owner _ => by simp
     simpa [fullWeight, hinter] using hweightTotal
   let simplex : stdSimplex ℝ (NormalPlayer table) :=
     ⟨fullWeight, hfullNonneg, hfullTotal⟩
@@ -19956,8 +19964,7 @@ theorem exists_normalSingletonRepresentation
     table.terminal (quittingProjectiveSingletonTerminal owner.1) who
   rw [← hcoordinate]
   have hinter : (NormalPlayers table).attach ∩ support = support :=
-    Finset.inter_eq_right.mpr fun owner _ =>
-      by simpa using owner.property
+    Finset.inter_eq_right.mpr fun owner _ => by simp
   simp [fullWeight, hinter]
 
 /-! Coefficients of a nonnegative normal value in the axis basis. -/
@@ -20327,9 +20334,7 @@ theorem mContinuationPayoff_nonneg
 /-! The paper's transition distribution `βᵢ`: it expands `y^[i]` in the
 axis basis. -/
 noncomputable def mTransitionWeight
-    (target : NormalPlayer table)
-    (hnormalized : SoloExitNormalized table)
-    (hbounded : TablePayoffsBounded table) :
+    (target : NormalPlayer table) :
     stdSimplex ℝ (NormalPlayer table) := by
   let normalValue : NormalPlayer table → ℝ := fun who =>
     mContinuationPayoff table hM target who.1
@@ -20341,15 +20346,14 @@ noncomputable def mTransitionWeight
   exact hsum
 
 theorem mTransitionWeight_axis_balance
-    (target : NormalPlayer table)
-    (hnormalized : SoloExitNormalized table)
-    (hbounded : TablePayoffsBounded table) :
-    (∑ next, mTransitionWeight table hM target hnormalized hbounded next •
+    (target : NormalPlayer table) :
+    (∑ next, mTransitionWeight table hM target next •
       mAxisPayoff table hM next) =
       mContinuationPayoff table hM target := by
   exact mAxisPayoff_combination_eq table hM
     (mContinuationRepresentation table hM target)
 
+omit [Nonempty (NormalPlayer table)] in
 theorem mDesignatedOwner_ne_target
     (hnormalized : SoloExitNormalized table)
     (target : NormalPlayer table) :
@@ -20380,7 +20384,7 @@ theorem mFineExitProbability_pos
   exact lt_min (mExitProbability_pos table hM target) (half_pos haccuracy)
 
 theorem mFineExitProbability_lt_one
-    (target : NormalPlayer table) {accuracy : ℝ} (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     mFineExitProbability table hM target accuracy < 1 :=
   (min_le_left _ _).trans_lt (mExitProbability_lt_one table hM target)
 
@@ -20399,8 +20403,7 @@ noncomputable def mFineContinuationOwnerWeight
     (1 - mFineExitProbability table hM target accuracy)
 
 theorem mFineContinuationOwnerWeight_nonneg
-    (target owner : NormalPlayer table) {accuracy : ℝ}
-    (haccuracy : 0 < accuracy) :
+    (target owner : NormalPlayer table) (accuracy : ℝ) :
     0 ≤ mFineContinuationOwnerWeight table hM target owner accuracy := by
   apply div_nonneg
   · by_cases howner : owner = hM.positiveOwner target
@@ -20415,17 +20418,16 @@ theorem mFineContinuationOwnerWeight_nonneg
       linarith [hM.axisWeight_designated_pos target]
     · rw [if_neg howner, sub_zero]
       exact (hM.axisWeight target).property.1 owner
-  · linarith [mFineExitProbability_lt_one table hM target haccuracy]
+  · linarith [mFineExitProbability_lt_one table hM target accuracy]
 
 theorem sum_mFineContinuationOwnerWeight
-    (target : NormalPlayer table) {accuracy : ℝ}
-    (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     ∑ owner, mFineContinuationOwnerWeight table hM target owner accuracy = 1 := by
   let probability := mFineExitProbability table hM target accuracy
   let designated := hM.positiveOwner target
   have hdenominator : 1 - probability ≠ 0 :=
     ne_of_gt (sub_pos.mpr
-      (mFineExitProbability_lt_one table hM target haccuracy))
+      (mFineExitProbability_lt_one table hM target accuracy))
   simp only [mFineContinuationOwnerWeight]
   rw [← Finset.sum_div]
   have hindicator : (∑ owner,
@@ -20441,12 +20443,12 @@ theorem sum_mFineContinuationOwnerWeight
   exact div_self hdenominator
 
 noncomputable def mFineContinuationOwnerSimplex
-    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     stdSimplex ℝ (NormalPlayer table) :=
   ⟨fun owner => mFineContinuationOwnerWeight table hM target owner accuracy,
     fun owner => mFineContinuationOwnerWeight_nonneg
-      table hM target owner haccuracy,
-    sum_mFineContinuationOwnerWeight table hM target haccuracy⟩
+      table hM target owner accuracy,
+    sum_mFineContinuationOwnerWeight table hM target accuracy⟩
 
 noncomputable def mFineContinuationPayoff
     (target : NormalPlayer table) (accuracy : ℝ) : Payoff ι :=
@@ -20455,15 +20457,14 @@ noncomputable def mFineContinuationPayoff
       table.terminal (quittingProjectiveSingletonTerminal owner.1) who
 
 noncomputable def mFineContinuationRepresentation
-    (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     NormalSingletonRepresentation table
       (mFineContinuationPayoff table hM target accuracy) where
-  weight := mFineContinuationOwnerSimplex table hM target accuracy haccuracy
+  weight := mFineContinuationOwnerSimplex table hM target accuracy
   equation := fun _ => rfl
 
 theorem mAxisPayoff_fine_exit_balance
-    (target : NormalPlayer table) {accuracy : ℝ}
-    (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     mAxisPayoff table hM target =
       mFineExitProbability table hM target accuracy •
           (fun who => table.terminal
@@ -20478,7 +20479,7 @@ theorem mAxisPayoff_fine_exit_balance
   let designated := hM.positiveOwner target
   have hdenominator : 1 - probability ≠ 0 :=
     ne_of_gt (sub_pos.mpr
-      (mFineExitProbability_lt_one table hM target haccuracy))
+      (mFineExitProbability_lt_one table hM target accuracy))
   calc
     ∑ owner, hM.axisWeight target owner *
           table.terminal (quittingProjectiveSingletonTerminal owner.1) who =
@@ -20531,11 +20532,11 @@ theorem mFineContinuationPayoff_normal_nonneg
     (haccuracy : 0 < accuracy) :
     0 ≤ mFineContinuationPayoff table hM target accuracy who.1 := by
   have hbalance := congrFun
-    (mAxisPayoff_fine_exit_balance table hM target haccuracy) who.1
+    (mAxisPayoff_fine_exit_balance table hM target accuracy) who.1
   simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hbalance
   have hdenominator : 0 <
       1 - mFineExitProbability table hM target accuracy :=
-    sub_pos.mpr (mFineExitProbability_lt_one table hM target haccuracy)
+    sub_pos.mpr (mFineExitProbability_lt_one table hM target accuracy)
   by_cases hsame : who = target
   · subst who
     change mAxisPayoff table hM target target.1 =
@@ -20586,7 +20587,7 @@ theorem mFineContinuationPayoff_nonneg
     intro owner _
     apply mul_nonneg
       (mFineContinuationOwnerWeight_nonneg
-        table hM target owner haccuracy)
+        table hM target owner accuracy)
     exact (lemma2_6 table hnormalized hbounded
       (by simpa [mem_normalPlayers_iff] using hnormal)
       (by
@@ -20599,12 +20600,11 @@ continuation are zero.  This is the local indifference that lets that owner
 replace the prescribed rare quit by Continue. -/
 theorem mFineContinuationPayoff_designatedOwner_zero
     (hnormalized : SoloExitNormalized table)
-    (target : NormalPlayer table) {accuracy : ℝ}
-    (haccuracy : 0 < accuracy) :
+    (target : NormalPlayer table) (accuracy : ℝ) :
     mFineContinuationPayoff table hM target accuracy
         (hM.positiveOwner target).1 = 0 := by
   have hbalance := congrFun
-    (mAxisPayoff_fine_exit_balance table hM target haccuracy)
+    (mAxisPayoff_fine_exit_balance table hM target accuracy)
       (hM.positiveOwner target).1
   have haxis := mAxisPayoff_designatedOwner_zero
     table hM hnormalized target
@@ -20622,7 +20622,7 @@ theorem mFineContinuationPayoff_designatedOwner_zero
   rw [haxis, hdiagonal, mul_zero, zero_add] at hbalance
   exact (mul_eq_zero.mp hbalance.symm).resolve_left
     (ne_of_gt (sub_pos.mpr
-      (mFineExitProbability_lt_one table hM target haccuracy)))
+      (mFineExitProbability_lt_one table hM target accuracy)))
 
 noncomputable def mFineTransitionWeight
     (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
@@ -20634,7 +20634,7 @@ noncomputable def mFineTransitionWeight
       (fun who => mFineContinuationPayoff_normal_nonneg
         table hM target who haccuracy), ?_⟩
   exact sum_mAxisCoefficient_eq_one table hM
-    (mFineContinuationRepresentation table hM target accuracy haccuracy)
+    (mFineContinuationRepresentation table hM target accuracy)
 
 theorem mFineTransitionWeight_axis_balance
     (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
@@ -20642,7 +20642,7 @@ theorem mFineTransitionWeight_axis_balance
       mAxisPayoff table hM next) =
       mFineContinuationPayoff table hM target accuracy := by
   exact mAxisPayoff_combination_eq table hM
-    (mFineContinuationRepresentation table hM target accuracy haccuracy)
+    (mFineContinuationRepresentation table hM target accuracy)
 
 end Section4Geometry
 
@@ -20850,8 +20850,7 @@ noncomputable def strategy
             (mFineExitProbability table hM target accuracy)
             (mFineExitProbability_pos table hM target
               blueprint.accuracy_pos).le
-            (mFineExitProbability_lt_one table hM target
-              blueprint.accuracy_pos).le
+            (mFineExitProbability_lt_one table hM target accuracy).le
         else PMF.pure false
     | _ => PMF.pure false
 
@@ -20901,8 +20900,7 @@ noncomputable def modeKernel
       (quittingHazardCoin
           (mFineExitProbability table hM target accuracy)
           (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
-          (mFineExitProbability_lt_one table hM target
-            blueprint.accuracy_pos).le).bind fun quits =>
+          (mFineExitProbability_lt_one table hM target accuracy).le).bind fun quits =>
         if quits then PMF.pure .absorbed
         else PMF.pure (.draw (some target))
   | .absorbed => PMF.pure .absorbed
@@ -20955,16 +20953,14 @@ private theorem stageActionDist_active
       (quittingHazardCoin
           (mFineExitProbability table hM target accuracy)
           (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
-          (mFineExitProbability_lt_one table hM target
-            blueprint.accuracy_pos).le).bind fun quits =>
+          (mFineExitProbability_lt_one table hM target accuracy).le).bind fun quits =>
         PMF.pure (publicSingleQuitAction table blueprint.signalData.law
           (hM.positiveOwner target).1 quits) := by
   classical
   let coin := quittingHazardCoin
     (mFineExitProbability table hM target accuracy)
     (mFineExitProbability_pos table hM target blueprint.accuracy_pos).le
-    (mFineExitProbability_lt_one table hM target
-      blueprint.accuracy_pos).le
+    (mFineExitProbability_lt_one table hM target accuracy).le
   let base : ∀ who,
       PMF ((publicQuittingGame table
         blueprint.signalData.law).Act who) :=
@@ -21059,8 +21055,7 @@ private theorem stageActionDist_pureQuit_active
             (mFineExitProbability table hM target accuracy)
             (mFineExitProbability_pos table hM target
               blueprint.accuracy_pos).le
-            (mFineExitProbability_lt_one table hM target
-              blueprint.accuracy_pos).le).bind fun quits =>
+            (mFineExitProbability_lt_one table hM target accuracy).le).bind fun quits =>
           PMF.pure (Function.update
             (publicSingleQuitAction table blueprint.signalData.law
               (hM.positiveOwner target).1 quits) who true) := by
@@ -21085,8 +21080,7 @@ private theorem stageActionDist_pureQuit_active
       (mFineExitProbability table hM target accuracy)
       (mFineExitProbability_pos table hM target
         blueprint.accuracy_pos).le
-      (mFineExitProbability_lt_one table hM target
-        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target accuracy).le
     let base : ∀ player,
         PMF ((publicQuittingGame table
           blueprint.signalData.law).Act player) :=
@@ -21322,16 +21316,14 @@ private theorem hazardCoin_true_mem_support
       (mFineExitProbability table hM target accuracy)
       (mFineExitProbability_pos table hM target
         blueprint.accuracy_pos).le
-      (mFineExitProbability_lt_one table hM target
-        blueprint.accuracy_pos).le).support := by
+      (mFineExitProbability_lt_one table hM target accuracy).le).support := by
   rw [PMF.mem_support_iff]
   intro hzero
   have hreal : ((quittingHazardCoin
       (mFineExitProbability table hM target accuracy)
       (mFineExitProbability_pos table hM target
         blueprint.accuracy_pos).le
-      (mFineExitProbability_lt_one table hM target
-        blueprint.accuracy_pos).le) true).toReal = 0 := by
+      (mFineExitProbability_lt_one table hM target accuracy).le) true).toReal = 0 := by
     simp [hzero]
   rw [quittingHazardCoin_true_toReal] at hreal
   linarith [mFineExitProbability_pos table hM target
@@ -23333,8 +23325,7 @@ private theorem pureQuit_nextTerminalPayoff_le_accuracy
       (mFineExitProbability table hM target accuracy)
       (mFineExitProbability_pos table hM target
         blueprint.accuracy_pos).le
-      (mFineExitProbability_lt_one table hM target
-        blueprint.accuracy_pos).le
+      (mFineExitProbability_lt_one table hM target accuracy).le
     change expect coin (fun quits => expect
         ((publicQuittingGame table blueprint.signalData.law).transition
           (PublicQuittingState.active signal)
@@ -23436,8 +23427,7 @@ private theorem expect_hazard_terminal_continuation
         (mFineExitProbability table hM target accuracy)
         (mFineExitProbability_pos table hM target
           blueprint.accuracy_pos).le
-        (mFineExitProbability_lt_one table hM target
-          blueprint.accuracy_pos).le)
+        (mFineExitProbability_lt_one table hM target accuracy).le)
       (fun quits => if quits then
         table.terminal (quittingProjectiveSingletonTerminal
           (hM.positiveOwner target).1) who
@@ -23447,8 +23437,7 @@ private theorem expect_hazard_terminal_continuation
   simp only [quittingHazardCoin_false_toReal,
     quittingHazardCoin_true_toReal, Bool.false_eq_true, ↓reduceIte]
   have hbalance := congrFun
-    (mAxisPayoff_fine_exit_balance table hM target
-      blueprint.accuracy_pos) who
+    (mAxisPayoff_fine_exit_balance table hM target accuracy) who
   simpa only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] using hbalance.symm
 
 private theorem payoffPotential_snoc_active_of_draw
@@ -23607,8 +23596,7 @@ theorem payoffPotential_harmonic
                 (mFineExitProbability table hM target accuracy)
                 (mFineExitProbability_pos table hM target
                   blueprint.accuracy_pos).le
-                (mFineExitProbability_lt_one table hM target
-                  blueprint.accuracy_pos).le)
+                (mFineExitProbability_lt_one table hM target accuracy).le)
                 (fun quits => expect
                   ((publicQuittingGame table
                     blueprint.signalData.law).transition
@@ -23627,8 +23615,7 @@ theorem payoffPotential_harmonic
                     (mFineExitProbability table hM target accuracy)
                     (mFineExitProbability_pos table hM target
                       blueprint.accuracy_pos).le
-                    (mFineExitProbability_lt_one table hM target
-                      blueprint.accuracy_pos).le)
+                    (mFineExitProbability_lt_one table hM target accuracy).le)
                   (fun quits => if quits then
                     table.terminal (quittingProjectiveSingletonTerminal
                       (hM.positiveOwner target).1) who
@@ -23854,7 +23841,7 @@ private theorem pureContinue_deviationPotential_le
     rw [mAxisPayoff_designatedOwner_zero table hM
         blueprint.soloExitNormalized target,
       mFineContinuationPayoff_designatedOwner_zero table hM
-        blueprint.soloExitNormalized target blueprint.accuracy_pos]
+        blueprint.soloExitNormalized target accuracy]
   · let strategy := Function.update blueprint.strategy who
         (fun _ _ => PMF.pure false)
     have hupper := blueprint.historyContinuationEU_deviationPotential_le_add_accuracy
