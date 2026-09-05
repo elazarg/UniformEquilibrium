@@ -1,5 +1,6 @@
 import MathUE.AbelCesaro
 import MathUE.LinearSqrtGapBound
+import MathUE.SignedFourCycleAlgebra
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection
