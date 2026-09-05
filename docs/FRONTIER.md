@@ -42,6 +42,22 @@ transfers it to the full behavioral class.
 
 The controller--tester formulation is now exact. `quittingControllerTesterValue_eq_minimum_rawMaximumDebt` identifies `eta(r)` with the minimum of `max_i (b_i-u_i)` on the compact unrestricted terminal-semantic carrier, and `quittingUniformHorizonTargetValue_eq_controllerTargetValue` identifies the literal offline `inf_profile inf_N sup_{H>=N}` value with the compact fixed-target value. `quittingControllerTesterValue_functionBarrierDuality` and `nonempty_closedInvariantBarrier_iff_le_controllerTesterValue` give complete full-reward-box function and closed-set barrier languages. This reduces the Fin4 question to the sign of `eta(r)`: prove it is always zero, or exhibit one table with a positive invariant barrier. The representation and duality do not by themselves settle that sign or produce an effective finite certificate.
 
+Closing a chosen response orbit under arbitrary finite product-root prefixes
+does not supply a new global debt bound.
+[`exists_minimizer_rawMaximumDebt_universalPrefixHull_eq_sInf_wordInf_of_box`](../UniformEquilibrium/Quitting/ControllerTester/RenewableBarrierSaturation.lean)
+identifies its closed hull's attained debt floor with the infimum of the
+future-prefix debt envelope over the seeds, including seeds outside the
+behavioral carrier. For carrier seeds, adjoining the all-Never point makes
+that hull exactly the whole carrier. The same module proves the exact
+renewable envelope ledger and its nonpositive average-lift limsup; it supplies
+no strict increase from absorption or from a cap replacement.
+[`exists_cycleHull_minimum_rawMaximumDebt_eq_zero`](../UniformEquilibrium/Diagnostics/Quitting/RenewableTwoClockRegression.lean)
+gives an explicit four-player response cycle with raw debt one and attained
+cap gain one on every edge, but hull floor zero. An actual sentinel-prefixed
+profile is terminal Nash with raw debt zero. This excludes the inference
+from a cycle's positive displayed debts to a positive invariant barrier; it
+is not a counterexample to uniform-equilibrium existence.
+
 Thus the two accepted endpoints are:
 
 ```text
@@ -99,7 +115,14 @@ singleton specialization. Every child is obtained by changing the named
 player on the preceding actual profile; zero-share outsiders retain their
 original finite hazards. The module also proves convergence of the actual
 terminal coalition law and the subset's unrestricted endpoint payoffs.
-The final Quit0 exit and off-minimum paid-port assembly remain unfinished.
+[`exists_periodOne_literalPaidCapChain_of_fourPlayer_noUniformPayoff`](../UniformEquilibrium/Diagnostics/Quitting/PeriodOneOffMinimumPaidPort.lean)
+completes this descent with an attained Quit0 cap. On the same source
+subsequence it produces two to four literal unilateral updates, fixed movers,
+one positive gain floor, and a final paid date-zero row whose source stays
+uniformly above minimum total debt. The source row retains its stationary
+continuation and positive own, opponent, and joint Continue floors.
+This supplies the actual paid port, not ancestry from a minimum source or a
+consumer producing an approximate equilibrium.
 Changing to an equilibrium of a smaller support game does not preserve these
 source profiles or their outsider-debt conclusions.
 
@@ -125,6 +148,10 @@ and one sure limiting owner. The latter branch includes the attained finite
 shifted cap, positive opponent reach, and the same limiting stationary root's
 Never cap. Its hypotheses are on the actual stationary source, not on the
 desired limit or response. Neither branch renews those source hypotheses.
+[`StationaryOffMinimumQuitNowPort.toCapPinSource`](../UniformEquilibrium/Diagnostics/Quitting/PaidPortFirstExactRootHandoff.lean)
+supplies those hypotheses from the tropical paid port, retaining its literal
+root family, payer, and gain. No minimum-source ancestry is assumed in this
+handoff.
 `root_isZeroNash_exactTail` and `originalSource_uniqueDebtor`
 (`UniformEquilibrium/Quitting/Examples/UniqueSureNeverReactivationRegression.lean`)
 certify the regression root and its unique debtor; the owner's Never repair

@@ -10,6 +10,7 @@ import UniformEquilibrium.Quitting.ControllerTester.TesterFlowDuality
 import UniformEquilibrium.Quitting.ControllerTester.ControllerValue
 import UniformEquilibrium.Quitting.ControllerTester.FiniteWordValue
 import UniformEquilibrium.Quitting.ControllerTester.FunctionBarrierDuality
+import UniformEquilibrium.Quitting.ControllerTester.RenewableBarrierSaturation
 import UniformEquilibrium.Quitting.ControllerTester.BarrierDuality
 import UniformEquilibrium.Quitting.ControllerTester.UniformHorizonValue
 
