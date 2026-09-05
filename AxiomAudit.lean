@@ -235,6 +235,7 @@ import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
 import MathUE.LinearProgramming.TwoPointHomogeneousObstruction
+import MathUE.LinearSqrtGapBound
 import MathUE.List
 import MathUE.LocalPeriodicAnchor
 import MathUE.MaxAffineStoppingValue
@@ -1614,6 +1615,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProductionNorma
 import UniformEquilibrium.Quitting.Classification.LCP.IsolatedEndpointProducer
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
+import UniformEquilibrium.Quitting.Classification.LCP.MatrixPositiveScaling
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample
@@ -2005,6 +2007,7 @@ import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
 import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
 import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
+import UniformEquilibrium.Quitting.Paths.ProfileNeverMass
 import UniformEquilibrium.Quitting.Paths.PureNonsingletonCommonPrefixScreening
 import UniformEquilibrium.Quitting.Paths.PureTimeDeadlineProfile
 import UniformEquilibrium.Quitting.Paths.PureTimeDeadlineRank
@@ -2079,6 +2082,7 @@ import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentRecursion
 import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentValue
 import UniformEquilibrium.Quitting.Punishment.FinitePureReplyPunishment
 import UniformEquilibrium.Quitting.Punishment.FinitePureReplyValue
+import UniformEquilibrium.Quitting.Punishment.FiniteReplyPrefixCompletion
 import UniformEquilibrium.Quitting.Punishment.Floor
 import UniformEquilibrium.Quitting.Punishment.FreeReduction
 import UniformEquilibrium.Quitting.Punishment.InstantPunishment
@@ -2147,6 +2151,7 @@ import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
 import UniformEquilibrium.Quitting.Root.SequencePayoff
 import UniformEquilibrium.Quitting.Root.Simplex
 import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
+import UniformEquilibrium.Quitting.Root.SinglePivotFiniteBellmanTransport
 import UniformEquilibrium.Quitting.Root.SinglePivotNormalization
 import UniformEquilibrium.Quitting.Root.SingletonGapSemanticDebtDescent
 import UniformEquilibrium.Quitting.Root.StationaryTailSplice

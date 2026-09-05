@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
+import UniformEquilibrium.Quitting.Classification.LCP.MatrixPositiveScaling
 
 /-!
 # The exact two-parameter cyclic Q region
@@ -402,77 +403,6 @@ theorem normalizedCyclicMatrix_noHomogeneous_iff {t : ℝ} (ht0 : 0 < t) :
     ¬HasHomogeneousSimplexSolution (normalizedCyclicMatrix t) ↔ t ≠ 1 := by
   rw [not_congr (normalizedCyclicMatrix_hasHomogeneous_iff ht0)]
 
-section Scaling
-
-variable {α : Type} [Fintype α]
-
-private def scaleStandardLCPSolution (c : ℝ) {M : α → α → ℝ}
-    {q : α → ℝ} (hc : 0 < c)
-    (solution : StandardLCPSolution M (fun i => q i / c)) :
-    StandardLCPSolution (fun i j => c * M i j) q where
-  weight := solution.weight
-  weight_nonneg := solution.weight_nonneg
-  residual_nonneg := by
-    intro i
-    have h := solution.residual_nonneg i
-    have hsum : (∑ j, solution.weight j * (c * M i j)) =
-        c * ∑ j, solution.weight j * M i j := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      ring
-    have hfactor : q i + ∑ j, solution.weight j * (c * M i j) =
-        c * (q i / c + ∑ j, solution.weight j * M i j) := by
-      rw [hsum, mul_add]
-      field_simp [ne_of_gt hc]
-    rw [hfactor]
-    exact mul_nonneg hc.le h
-  complementary := by
-    intro i
-    have h := solution.complementary i
-    have hcne := ne_of_gt hc
-    change solution.weight i *
-      (q i + ∑ j, solution.weight j * (c * M i j)) = 0
-    have hsum : (∑ j, solution.weight j * (c * M i j)) =
-        c * ∑ j, solution.weight j * M i j := by
-      rw [Finset.mul_sum]
-      apply Finset.sum_congr rfl
-      intro j _
-      ring
-    have hfactor : q i + ∑ j, solution.weight j * (c * M i j) =
-        c * (q i / c + ∑ j, solution.weight j * M i j) := by
-      rw [hsum, mul_add]
-      field_simp [hcne]
-    rw [hfactor]
-    calc
-      solution.weight i *
-          (c * (q i / c + ∑ j, solution.weight j * M i j)) =
-          c * (solution.weight i *
-            (q i / c + ∑ j, solution.weight j * M i j)) := by ring
-      _ = 0 := by rw [h]; ring
-
-private theorem isStandardQMatrix_posScale (c : ℝ) (hc : 0 < c)
-    (M : α → α → ℝ) (hQ : IsStandardQMatrix M) :
-    IsStandardQMatrix (fun i j => c * M i j) := by
-  intro q
-  obtain ⟨solution⟩ := hQ (fun i => q i / c)
-  exact ⟨scaleStandardLCPSolution c hc solution⟩
-
-private theorem isStandardQMatrix_posScale_iff (c : ℝ) (hc : 0 < c)
-    (M : α → α → ℝ) :
-    IsStandardQMatrix (fun i j => c * M i j) ↔ IsStandardQMatrix M := by
-  constructor
-  · intro hscaled
-    have hrecip : 0 < 1 / c := one_div_pos.mpr hc
-    have hQ := isStandardQMatrix_posScale (1 / c) hrecip
-      (fun i j => c * M i j) hscaled
-    have heq : (fun i j => (1 / c) * (c * M i j)) = M := by
-      funext i j
-      field_simp [ne_of_gt hc]
-    rwa [heq] at hQ
-  · exact isStandardQMatrix_posScale c hc M
-
-end Scaling
 
 /-- Exact standard-Q region of the positive two-parameter family. -/
 theorem cyclicMatrix_standardQ_iff {a b : ℝ} (ha : 0 < a) (hb : 0 < b) :
