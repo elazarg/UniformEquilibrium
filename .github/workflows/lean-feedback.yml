@@ -55,14 +55,11 @@ jobs:
           mode="$(python3 scripts/ci_changed_lean_targets.py --mode "$BASE_SHA" "$HEAD_SHA")"
           case "$mode" in
             none)
-              echo "No Lean source changed."
               ;;
             focused)
               mapfile -t targets < <(
                 python3 scripts/ci_changed_lean_targets.py --targets "$BASE_SHA" "$HEAD_SHA"
               )
-              printf 'Building changed Lean targets:\n  %s\n' "${targets[@]}"
-
               focused_lakefile="$RUNNER_TEMP/lakefile.focused.lean"
               cp lakefile.lean "$focused_lakefile"
               cat >> "$focused_lakefile" <<'EOF'
@@ -71,12 +68,11 @@ jobs:
             srcDir := "."
             leanOptions := uniformEquilibriumLeanOptions
           EOF
-              lake --dir "$GITHUB_WORKSPACE" --file "$focused_lakefile" \
+              lake --quiet --iofail --dir "$GITHUB_WORKSPACE" --file "$focused_lakefile" \
                 build "${targets[@]}"
               ;;
             full)
-              echo "Structural Lean change; running the full build."
-              lake build
+              lake --quiet --iofail build
               ;;
             *)
               echo "Unknown build mode: $mode" >&2
@@ -86,7 +82,7 @@ jobs:
 
       - name: Full build for a manual run
         if: github.event_name == 'workflow_dispatch'
-        run: lake build
+        run: lake --quiet --iofail build
 
       - name: Trust scan
         run: python3 scripts/check_trust.py

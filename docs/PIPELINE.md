@@ -107,9 +107,10 @@ closing theorem or adapter, and acceptance command.
 
 Every PR, main-branch push, and manual CI run performs the documentation gate,
 trust-scanner regression tests, the exhaustive lexical trust scan, and a full
-`lake build`. The build treats project warnings as errors and includes the
-generated `AxiomAudit` target, which imports every project-owned Lean module and
-checks every project-owned declaration transitively. A changed-file build is
+`lake --quiet --iofail build`. Project warnings are errors, and informational
+diagnostics also fail the build. Successful builds are silent. The build includes
+the generated `AxiomAudit` target, which imports every `MathUE` and
+`UniformEquilibrium` module and checks their declarations transitively. A changed-file build is
 useful for local iteration but is not the CI trust boundary.
 
 Search scripts may use numerical solvers, randomized exploration, or external

@@ -151,13 +151,16 @@ modules.
 The project trust policy rejects `sorry`, `admit`, explicit axiom declarations,
 `native_decide`, `implemented_by`, unsafe declarations, partial definitions,
 and project-owned `set_option` commands. All project libraries compile with
-warnings as errors. Global linter weakening is forbidden. State open claims as
-proposition definitions until proved.
+warnings as errors. Clean Lean checks emit no informational diagnostics either;
+replace noisy tactics with their suggested alternatives instead of suppressing
+messages. Use `lake --quiet --iofail build` so a successful build is silent and
+informational diagnostics fail the check. Global linter weakening is forbidden.
+State open claims as proposition definitions until proved.
 
 For a Lean change, use the narrowest relevant checks while iterating:
 
 - `lake env lean path/to/File.lean` checks one source file;
-- `lake build Module.Name` checks a named module and its dependency closure;
+- `lake --quiet --iofail build Module.Name` checks a named module and its dependency closure;
 - `python scripts/check_trust.py` runs the lexical trust scan and does not
   substitute for Lean compilation; it also checks the warning policy and that
   the generated exhaustive axiom audit is current;
@@ -184,8 +187,8 @@ formalized on the strength of one; check such a declaration with
 `#print axioms` when its axiom use matters.
 
 Run the trust scan whenever Lean changes and regenerate the axiom audit whenever
-the module inventory changes. Run a full `lake build` only when the task or risk
-warrants it; changes to the toolchain, Lake configuration, dependency pin,
+the module inventory changes. Run a full `lake --quiet --iofail build` only when
+the task or risk warrants it; changes to the toolchain, Lake configuration, dependency pin,
 project umbrellas, or repository structure warrant the full build. Report
 exactly which checks ran. Do not run `lake update` unless the task actually
 requires dependency or manifest work.

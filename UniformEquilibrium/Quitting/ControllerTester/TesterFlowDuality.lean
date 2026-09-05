@@ -540,7 +540,7 @@ theorem quittingFiniteRootPayoff_eq_sum_testerTerms
         intro offset _
         rw [quittingOpponentSurvivalWeight_succ_left]
         simp only [quittingFiniteOwnContinueWeight, Nat.add_assoc]
-        ring
+        ring_nf
       rw [← htail]
       simp only [Nat.add_zero, quittingOpponentSurvivalWeight,
         quittingFiniteOwnContinueWeight]

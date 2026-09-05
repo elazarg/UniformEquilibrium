@@ -38,4 +38,4 @@ jobs:
           test: false
           use-mathlib-cache: true
           use-github-cache: true
-      - run: lake build
+      - run: lake --quiet --iofail build

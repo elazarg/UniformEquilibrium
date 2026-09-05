@@ -1253,7 +1253,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
         (1 - time) * (1 / (partitionDensityResolution index : ℝ)))
         atTop (nhds 0) := by
       convert (tendsto_const_nhds.mul hinv) using 1
-      all_goals ring
+      all_goals ring_nf
     simpa [partitionProbe, div_eq_mul_inv] using
       tendsto_const_nhds.add hgap
   have hprobeWithin : Tendsto (fun index ↦
@@ -1274,7 +1274,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
       path.1.value (partitionProbe (partitionDensityResolution index) time)
           coalition - path.1.value time coalition) atTop (nhds 0) := by
     convert hvalueProbe.sub tendsto_const_nhds using 1
-    all_goals ring
+    all_goals ring_nf
   have hproductization : Tendsto (fun index : ℕ ↦
       akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError (partitionDensityResolution index))
@@ -1284,7 +1284,7 @@ theorem tendsto_partitionDensityApproximant_value_of_lt_one
         atTop (nhds 0) :=
       tendsto_partitionSmallCellError_partitionDensityResolution
     convert herror.const_mul (akrsSmallCellCoordinateConstant ι) using 1
-    all_goals ring
+    all_goals ring_nf
   have hboundTendsto : Tendsto (fun index : ℕ ↦
       akrsSmallCellCoordinateConstant ι *
           partitionSmallCellError (partitionDensityResolution index) +
@@ -1418,7 +1418,7 @@ theorem tendsto_partitionDensityApproximant_value_one
       akrsSmallCellCoordinateConstant ι *
         partitionSmallCellError (resolution index)) atTop (nhds 0) := by
     convert herror.const_mul (akrsSmallCellCoordinateConstant ι) using 1
-    all_goals ring
+    all_goals ring_nf
   have hprefixDiff : Tendsto (fun index : ℕ ↦
       prefixMass index - reference index)
       atTop (nhds 0) := by
@@ -1448,7 +1448,7 @@ theorem tendsto_partitionDensityApproximant_value_one
   have hprefix : Tendsto prefixMass atTop
       (nhds (path.1.value 1 coalition)) := by
     convert hprefixDiff.add hreference using 1
-    all_goals ring
+    all_goals ring_nf
   have hinv : Tendsto (fun index : ℕ ↦ 1 / (resolution index : ℝ))
       atTop (nhds 0) := tendsto_one_div_partitionDensityResolution
   have hfiller : Tendsto filler atTop (nhds 0) := by
