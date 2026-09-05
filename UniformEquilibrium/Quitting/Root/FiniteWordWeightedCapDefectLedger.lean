@@ -4,7 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors.
 -/
 
-import Research.Quitting.NormalizedPassportMinimizer
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.CapDebtBellmanReduction
+import UniformEquilibrium.Quitting.Root.CapNashRootStack
 import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
 
 /-!
@@ -29,6 +30,78 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
+/-- One player's reached cap-defect ledger. Every row uses the complete
+behavioral cap of that row's actual literal suffix. -/
+def quittingFiniteWordPlayerCapDefectLedger
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    List (ι → PMF Bool) → (quittingGame reward).BehaviorProfile → ι → ℝ
+  | [], _, _ => 0
+  | root :: roots, terminal, who =>
+      quittingRootCoordinateNashDefect reward
+          (quittingTerminalSemanticPair reward
+            (quittingLiteralRootStackProfile reward roots terminal)).2 root who +
+        quittingStationaryContinueMass root *
+          quittingFiniteWordPlayerCapDefectLedger reward roots terminal who
+
+theorem quittingFiniteWordPlayerCapDefectLedger_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : List (ι → PMF Bool)) (terminal : (quittingGame reward).BehaviorProfile) (who : ι) :
+    0 ≤ quittingFiniteWordPlayerCapDefectLedger reward roots terminal who := by
+  induction roots with
+  | nil => exact le_rfl
+  | cons root roots ih =>
+      exact add_nonneg (quittingRootCoordinateNashDefect_nonneg reward _ root who)
+        (mul_nonneg (quittingStationaryContinueMass_nonneg root) ih)
+
+/-- Exact playerwise cap-anchored telescope, with joint rather than deleted
+survival multiplying the final actual tail debt. -/
+theorem quittingTerminalDeviationDebt_literalRootStack_eq_playerLedger_add
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : List (ι → PMF Bool)) (terminal : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalDeviationDebt reward
+        (quittingLiteralRootStackProfile reward roots terminal) who =
+      quittingFiniteWordPlayerCapDefectLedger reward roots terminal who +
+        quittingLiteralRootStackJointSurvival roots *
+          quittingTerminalDeviationDebt reward terminal who :=
+    by
+  induction roots with
+  | nil => simp [quittingFiniteWordPlayerCapDefectLedger, quittingLiteralRootStackJointSurvival]
+  | cons root roots ih =>
+      have hstep := quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_add_capDefect
+        reward (quittingTerminalSemanticPair reward
+          (quittingLiteralRootStackProfile reward roots terminal)) root who
+      rw [← quittingTerminalSemanticPair_rootThenContinuation] at hstep
+      change quittingTerminalDeviationDebt reward
+        (quittingRootThenContinuationProfile reward root
+          (quittingLiteralRootStackProfile reward roots terminal)) who = _ at hstep
+      rw [quittingLiteralRootStackProfile_cons, hstep]
+      change quittingStationaryContinueMass root * quittingTerminalDeviationDebt reward
+        (quittingLiteralRootStackProfile reward roots terminal) who + _ = _
+      rw [ih]
+      simp only [quittingFiniteWordPlayerCapDefectLedger, quittingLiteralRootStackJointSurvival,
+        List.map_cons, List.prod_cons]
+      ring
+
+/-- The outer ledger is unscaled by later concatenation; only the inner
+ledger receives the outer joint-survival weight. -/
+theorem quittingFiniteWordPlayerCapDefectLedger_append
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (first second : List (ι → PMF Bool)) (terminal : (quittingGame reward).BehaviorProfile)
+    (who : ι) :
+    quittingFiniteWordPlayerCapDefectLedger reward (first ++ second) terminal who =
+      quittingFiniteWordPlayerCapDefectLedger reward first
+        (quittingLiteralRootStackProfile reward second terminal) who +
+      quittingLiteralRootStackJointSurvival first *
+        quittingFiniteWordPlayerCapDefectLedger reward second terminal who := by
+  induction first with
+  | nil => simp [quittingFiniteWordPlayerCapDefectLedger, quittingLiteralRootStackJointSurvival]
+  | cons root first ih =>
+      simp only [List.cons_append, quittingFiniteWordPlayerCapDefectLedger,
+        quittingLiteralRootStackJointSurvival, List.map_cons, List.prod_cons] at ih ⊢
+      rw [quittingLiteralRootStackProfile_append]
+      rw [ih]
+      ring
+
 /-- The exact cap defect at the first row, evaluated against the actual
 literal suffix after that row. -/
 def quittingFiniteWordHeadCapDefect
@@ -50,6 +123,18 @@ def quittingFiniteWordWeightedCapDefectLedger
       quittingFiniteWordHeadCapDefect reward root roots terminal +
         quittingStationaryContinueMass root *
           quittingFiniteWordWeightedCapDefectLedger reward roots terminal
+
+theorem quittingFiniteWordWeightedCapDefectLedger_eq_sum_playerLedger
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : List (ι → PMF Bool)) (terminal : (quittingGame reward).BehaviorProfile) :
+    quittingFiniteWordWeightedCapDefectLedger reward roots terminal =
+      ∑ who, quittingFiniteWordPlayerCapDefectLedger reward roots terminal who := by
+  induction roots with
+  | nil => simp [quittingFiniteWordWeightedCapDefectLedger, quittingFiniteWordPlayerCapDefectLedger]
+  | cons root roots ih =>
+      simp only [quittingFiniteWordWeightedCapDefectLedger, quittingFiniteWordPlayerCapDefectLedger,
+        quittingFiniteWordHeadCapDefect, quittingRootTotalNashDefect, Finset.sum_add_distrib,
+        ← Finset.mul_sum, ih]
 
 @[simp] theorem quittingFiniteWordWeightedCapDefectLedger_nil
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -91,7 +176,9 @@ theorem quittingFiniteWordWeightedCapDefectLedger_append
         quittingCapNashStackContinueProduct first *
           quittingFiniteWordWeightedCapDefectLedger reward second terminal := by
   induction first with
-  | nil => simp [quittingCapNashStackContinueProduct]
+  | nil => simp only [List.nil_append,
+      quittingFiniteWordWeightedCapDefectLedger_nil,
+      quittingCapNashStackContinueProduct_nil, one_mul, zero_add]
   | cons root first ih =>
       rw [List.cons_append,
         quittingFiniteWordWeightedCapDefectLedger_cons,
@@ -115,7 +202,9 @@ theorem quittingTerminalSemanticDebtSum_literalRootStack_eq_weightedLedger_add
           quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward terminal) := by
   induction roots with
-  | nil => simp [quittingCapNashStackContinueProduct]
+  | nil => simp only [quittingLiteralRootStackProfile_nil,
+      quittingFiniteWordWeightedCapDefectLedger_nil,
+      quittingCapNashStackContinueProduct_nil, one_mul, zero_add]
   | cons root roots ih =>
       let suffix := quittingLiteralRootStackProfile reward roots terminal
       have hstep :=
@@ -162,7 +251,7 @@ theorem minimum_sub_transport_le_weightedLedger
   have hwhole := hminimum
     (quittingTerminalSemanticPair reward
       (quittingLiteralRootStackProfile reward roots terminal))
-    (quittingTerminalSemanticPair_mem_carrier reward _)
+    (subset_closure (Set.mem_range_self _))
   rw [quittingTerminalSemanticDebtSum_literalRootStack_eq_weightedLedger_add]
     at hwhole
   linarith
@@ -214,7 +303,7 @@ theorem half_minimum_le_weightedLedger_of_prefixSurvival_le
     unfold quittingTerminalSemanticDebtSum
     exact Finset.sum_nonneg fun who _ =>
       quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward
-        (quittingTerminalSemanticPair_mem_carrier reward terminal) who
+        (subset_closure (Set.mem_range_self terminal)) who
   have hbound0 : 0 ≤ quittingTerminalSemanticDebtSum minimum /
       (2 * maximumDebt) :=
     div_nonneg hminimum_pos.le (mul_nonneg (by norm_num) hmaximum_pos.le)
@@ -315,7 +404,8 @@ theorem nonempty_reachedPositiveCapDefect_of_weightedLedger_pos
           suffixRoots := roots
           roots_eq := rfl
           prefixSurvival_pos := by
-            simp [quittingCapNashStackContinueProduct]
+            rw [quittingCapNashStackContinueProduct_nil]
+            exact zero_lt_one
           capDefect_pos := hhead
         }⟩
       · have hheadEq :

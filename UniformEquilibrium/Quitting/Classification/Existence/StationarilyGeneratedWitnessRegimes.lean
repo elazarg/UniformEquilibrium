@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Topology.PureTimeWitnessNormalForm
+import MathUE.Topology.FiniteLabelSubsequence
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedSemanticCarrier
 
 /-!
@@ -104,18 +105,7 @@ subsequence. -/
 theorem exists_fixedPlayer_strictMono_subsequence (label : ℕ → ι) :
     ∃ fixed : ι, ∃ subsequence : ℕ → ℕ,
       StrictMono subsequence ∧ ∀ n, label (subsequence n) = fixed := by
-  have hfrequent : ∃ fixed : ι, ∃ᶠ n in atTop, label n = fixed := by
-    by_contra hnot
-    push Not at hnot
-    have hall : ∀ᶠ n in atTop, ∀ fixed : ι, label n ≠ fixed := by
-      rw [eventually_all]
-      exact hnot
-    obtain ⟨n, hn⟩ := hall.exists
-    exact hn (label n) rfl
-  obtain ⟨fixed, hfixed⟩ := hfrequent
-  obtain ⟨subsequence, hsubsequence, hlabel⟩ :=
-    extraction_of_frequently_atTop hfixed
-  exact ⟨fixed, subsequence, hsubsequence, hlabel⟩
+  exact Math.exists_fixed_label_on_strictMono_subsequence label
 
 /-- The two possible subsequential normal forms of a natural-number horizon. -/
 def HasFixedOrDivergentStationaryPrefixHorizon

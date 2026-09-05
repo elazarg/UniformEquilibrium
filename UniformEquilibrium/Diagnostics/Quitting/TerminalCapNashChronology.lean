@@ -7,8 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashEndpointTransport
 import UniformEquilibrium.Quitting.AbsorptionPath.CollisionConcentration
 import UniformEquilibrium.Quitting.Debt.Marked.TimeAdvance
-import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
-import UniformEquilibrium.Quitting.Root.LiteralRootStackSurvival
+import UniformEquilibrium.Quitting.Root.CapNashRootStack
 
 /-!
 # Finite cap--Nash chronologies
@@ -43,106 +42,10 @@ open Math.Probability
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 
-/-- Every root is exact Nash against the unilateral cap of the remaining
-executable suffix.  This differs from a literal exact-root stack, whose tail
-vector is the prescribed payoff rather than the best-response envelope. -/
-def IsQuittingCapNashRootStack
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
-    List (ι → PMF Bool) → (quittingGame reward).BehaviorProfile → Prop
-  | [], _ => True
-  | root :: roots, terminal =>
-      IsεQuittingRootNash reward
-        (fun player => quittingContinuationBestResponseValue reward
-          (quittingLiteralRootStackProfile reward roots terminal) player)
-        0 root ∧
-      IsQuittingCapNashRootStack reward roots terminal
-
-@[simp]
-theorem isQuittingCapNashRootStack_nil
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (terminal : (quittingGame reward).BehaviorProfile) :
-    IsQuittingCapNashRootStack reward [] terminal := trivial
-
-theorem isQuittingCapNashRootStack_cons_iff
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (root : ι → PMF Bool) (roots : List (ι → PMF Bool))
-    (terminal : (quittingGame reward).BehaviorProfile) :
-    IsQuittingCapNashRootStack reward (root :: roots) terminal ↔
-      IsεQuittingRootNash reward
-        (fun player => quittingContinuationBestResponseValue reward
-          (quittingLiteralRootStackProfile reward roots terminal) player)
-        0 root ∧
-      IsQuittingCapNashRootStack reward roots terminal := by
-  rfl
-
-/-- Dropping a chronological prefix preserves the cap--Nash stack property.
--/
-theorem IsQuittingCapNashRootStack.drop
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : List (ι → PMF Bool))
-    (terminal : (quittingGame reward).BehaviorProfile)
-    (hstack : IsQuittingCapNashRootStack reward roots terminal)
-    (count : ℕ) :
-    IsQuittingCapNashRootStack reward (roots.drop count) terminal := by
-  induction roots generalizing count with
-  | nil => simp
-  | cons root roots ih =>
-      cases count with
-      | zero => simpa using hstack
-      | succ count =>
-          rw [isQuittingCapNashRootStack_cons_iff] at hstack
-          simpa using ih hstack.2 count
-
-/-- Exact cap--Nash stacks exist over every executable terminal continuation
-at every finite depth. -/
-theorem exists_quittingCapNashRootStack
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (terminal : (quittingGame reward).BehaviorProfile) (depth : ℕ) :
-    ∃ roots : List (ι → PMF Bool),
-      roots.length = depth ∧
-        IsQuittingCapNashRootStack reward roots terminal := by
-  induction depth with
-  | zero => exact ⟨[], rfl, trivial⟩
-  | succ depth ih =>
-      obtain ⟨roots, hlength, hstack⟩ := ih
-      let suffix := quittingLiteralRootStackProfile reward roots terminal
-      obtain ⟨root, hnash⟩ := exists_isZeroQuittingRootNash
-        (reward := reward)
-        (fun player => quittingContinuationBestResponseValue reward suffix player)
-      refine ⟨root :: roots, by simp [hlength], ?_⟩
-      exact ⟨by simpa [suffix] using hnash, hstack⟩
-
-/-- Joint survival of a finite root word. -/
-def quittingCapNashStackContinueProduct
-    (roots : List (ι → PMF Bool)) : ℝ :=
-  (roots.map quittingStationaryContinueMass).prod
-
 /-- Unweighted sum of the root absorption hazards in a finite word. -/
 def quittingCapNashStackAbsorptionSum
     (roots : List (ι → PMF Bool)) : ℝ :=
   (roots.map quittingRootAbsorptionMass).sum
-
-omit [DecidableEq ι] in
-@[simp]
-theorem quittingCapNashStackContinueProduct_nil :
-    quittingCapNashStackContinueProduct ([] : List (ι → PMF Bool)) = 1 := rfl
-
-omit [DecidableEq ι] in
-@[simp]
-theorem quittingCapNashStackContinueProduct_cons
-    (root : ι → PMF Bool) (roots : List (ι → PMF Bool)) :
-    quittingCapNashStackContinueProduct (root :: roots) =
-      quittingStationaryContinueMass root *
-        quittingCapNashStackContinueProduct roots := rfl
-
-omit [DecidableEq ι] in
-@[simp]
-theorem quittingCapNashStackContinueProduct_append
-    (first second : List (ι → PMF Bool)) :
-    quittingCapNashStackContinueProduct (first ++ second) =
-      quittingCapNashStackContinueProduct first *
-        quittingCapNashStackContinueProduct second := by
-  simp [quittingCapNashStackContinueProduct]
 
 omit [DecidableEq ι] in
 @[simp]
@@ -156,30 +59,6 @@ theorem quittingCapNashStackAbsorptionSum_cons
     quittingCapNashStackAbsorptionSum (root :: roots) =
       quittingRootAbsorptionMass root +
         quittingCapNashStackAbsorptionSum roots := rfl
-
-omit [DecidableEq ι] in
-theorem quittingCapNashStackContinueProduct_nonneg
-    (roots : List (ι → PMF Bool)) :
-    0 ≤ quittingCapNashStackContinueProduct roots := by
-  induction roots with
-  | nil => simp
-  | cons root roots ih =>
-      rw [quittingCapNashStackContinueProduct_cons]
-      exact mul_nonneg (quittingStationaryContinueMass_nonneg root) ih
-
-omit [DecidableEq ι] in
-theorem quittingCapNashStackContinueProduct_le_one
-    (roots : List (ι → PMF Bool)) :
-    quittingCapNashStackContinueProduct roots ≤ 1 := by
-  induction roots with
-  | nil => simp
-  | cons root roots ih =>
-      rw [quittingCapNashStackContinueProduct_cons]
-      have hrootNonneg := quittingStationaryContinueMass_nonneg root
-      have hrootLe := quittingStationaryContinueMass_le_one root
-      have htailNonneg := quittingCapNashStackContinueProduct_nonneg roots
-      nlinarith [mul_nonneg hrootNonneg htailNonneg,
-        mul_nonneg (sub_nonneg.mpr hrootLe) htailNonneg]
 
 omit [DecidableEq ι] in
 theorem quittingCapNashStackAbsorptionSum_nonneg
@@ -294,28 +173,6 @@ theorem abs_quittingTerminalPayoff_rootStack_sub_terminal_le
           rw [quittingCapNashStackAbsorptionSum_cons]
           ring
 
-/-- Exact folded playerwise debt scaling along a cap--Nash chronology. -/
-theorem quittingTerminalDeviationDebt_capNashRootStack_eq
-    (roots : List (ι → PMF Bool))
-    (terminal : (quittingGame reward).BehaviorProfile) (who : ι)
-    (hstack : IsQuittingCapNashRootStack reward roots terminal) :
-    quittingTerminalDeviationDebt reward
-        (quittingLiteralRootStackProfile reward roots terminal) who =
-      quittingCapNashStackContinueProduct roots *
-        quittingTerminalDeviationDebt reward terminal who := by
-  induction roots with
-  | nil => simp
-  | cons root roots ih =>
-      rw [isQuittingCapNashRootStack_cons_iff] at hstack
-      rw [quittingLiteralRootStackProfile_cons,
-        quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
-          (reward := reward) root
-          (quittingLiteralRootStackProfile reward roots terminal) who
-          hstack.1,
-        ih hstack.2]
-      rw [quittingCapNashStackContinueProduct_cons]
-      ring
-
 /-- The unilateral best-response cap of a cap--Nash chronology returns to the
 terminal cap with a linear-in-absorption error.  Together with the payoff
 bound above, this makes the stack a genuine approximate semantic return, but
@@ -398,20 +255,6 @@ theorem abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_
     _ ≤ 2 * M * absorption + 2 * M * absorption :=
       add_le_add hpayoff hdebtDifference
     _ = 4 * M * absorption := by ring
-
-/-- Exact folded total-debt scaling along a cap--Nash chronology. -/
-theorem quittingTerminalDebtSum_capNashRootStack_eq
-    (roots : List (ι → PMF Bool))
-    (terminal : (quittingGame reward).BehaviorProfile)
-    (hstack : IsQuittingCapNashRootStack reward roots terminal) :
-    quittingTerminalDebtSum reward
-        (quittingLiteralRootStackProfile reward roots terminal) =
-      quittingCapNashStackContinueProduct roots *
-        quittingTerminalDebtSum reward terminal := by
-  unfold quittingTerminalDebtSum
-  simp_rw [quittingTerminalDeviationDebt_capNashRootStack_eq
-    (reward := reward) roots terminal _ hstack]
-  rw [Finset.mul_sum]
 
 /-- The global literal total-debt infimum lies below the product-scaled debt
 of every finite cap--Nash chronology. -/
@@ -658,13 +501,5 @@ theorem exists_deep_nearMinimum_capNashChronology
     fun who =>
       abs_quittingContinuationBestResponseValue_capNashRootStack_sub_terminal_le
         (reward := reward) roots terminal who hreward hstack⟩
-
-omit [DecidableEq ι] in
-/-- The chronology joint product is the canonical literal-word joint
-survival. -/
-theorem quittingCapNashStackContinueProduct_eq_literalRootStackJointSurvival
-    (roots : List (ι → PMF Bool)) :
-    quittingCapNashStackContinueProduct roots =
-      quittingLiteralRootStackJointSurvival roots := rfl
 
 end GameTheory

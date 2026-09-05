@@ -13,6 +13,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.SingletonDataCongruence
 import UniformEquilibrium.Quitting.EssentialAPS.UniformPayoff
 import UniformEquilibrium.Quitting.EssentialAPS.AdaptiveMeshUniformPayoff
 import UniformEquilibrium.Quitting.EssentialAPS.JumpFlowClosure
+import UniformEquilibrium.Quitting.EssentialAPS.FiniteJumpFlowCompiler
 
 /-!
 # Essential APS for the quitting singleton-flow stratum

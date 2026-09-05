@@ -125,7 +125,6 @@ import Research.Quitting.FiniteResetCirculationRegression
 import Research.Quitting.FinFourDeletionCollisionExpansion
 import Research.Quitting.FinFourDeletionNearCap
 import Research.Quitting.FinFourPeriodicAnchorResidualAdapter
-import Research.Quitting.FirstExactRootUniqueSureLimit
 import Research.Quitting.FixedLawGlobalMinimumPremiumNoGo
 import Research.Quitting.ForcedOwnerContinueFaceLossSupportNoGo
 import Research.Quitting.FourByFourQFiniteSupportReduction

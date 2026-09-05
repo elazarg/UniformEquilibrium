@@ -108,7 +108,8 @@ theorem eventually_continueProduct_eq_one
     have hzero := quittingRootAbsorptionMass_allContinueRoot (ι := ι)
     unfold quittingRootAbsorptionMass at hzero
     linarith
-  simp [quittingCapNashStackContinueProduct, hallContinue]
+  simp [quittingCapNashStackContinueProduct,
+    quittingLiteralRootStackJointSurvival, hallContinue]
 
 /-- The complete incoming marked-mass floor is eventually retained after the
 exact cap--Nash word. -/

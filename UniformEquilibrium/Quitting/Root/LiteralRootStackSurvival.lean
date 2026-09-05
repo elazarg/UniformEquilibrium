@@ -40,6 +40,23 @@ def quittingLiteralRootStackOpponentSurvival
     (roots : List (ι → PMF Bool)) (who : ι) : ℝ :=
   (roots.map fun root => quittingRootOpponentContinueMass root who).prod
 
+omit [DecidableEq ι] in
+/-- Joint survival factors exactly across literal word concatenation. -/
+theorem quittingLiteralRootStackJointSurvival_append
+    (first second : List (ι → PMF Bool)) :
+    quittingLiteralRootStackJointSurvival (first ++ second) =
+      quittingLiteralRootStackJointSurvival first *
+        quittingLiteralRootStackJointSurvival second := by
+  simp [quittingLiteralRootStackJointSurvival]
+
+/-- Player-deleted survival factors exactly across literal word concatenation. -/
+theorem quittingLiteralRootStackOpponentSurvival_append
+    (first second : List (ι → PMF Bool)) (who : ι) :
+    quittingLiteralRootStackOpponentSurvival (first ++ second) who =
+      quittingLiteralRootStackOpponentSurvival first who *
+        quittingLiteralRootStackOpponentSurvival second who := by
+  simp [quittingLiteralRootStackOpponentSurvival]
+
 /-- Product of one player's own Continue probabilities through a finite root
 stack. -/
 def quittingLiteralRootStackOwnSurvival

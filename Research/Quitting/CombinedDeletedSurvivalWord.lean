@@ -45,15 +45,6 @@ omit [DecidableEq ι] in
   | succ stage ih => simp [quittingBehaviorProfilePremarkRoots, ih]
 
 omit [DecidableEq ι] in
-/-- Joint survival factors exactly across literal word concatenation. -/
-theorem quittingLiteralRootStackJointSurvival_append
-    (first second : List (ι → PMF Bool)) :
-    quittingLiteralRootStackJointSurvival (first ++ second) =
-      quittingLiteralRootStackJointSurvival first *
-        quittingLiteralRootStackJointSurvival second := by
-  simp [quittingLiteralRootStackJointSurvival]
-
-omit [DecidableEq ι] in
 /-- The joint survival of the literal base word is exactly the probability of
 reaching its displayed marked row. -/
 theorem quittingLiteralRootStackJointSurvival_premarkRoots_eq_liveMass
@@ -75,15 +66,6 @@ theorem quittingLiteralRootStackJointSurvival_premarkRoots_eq_liveMass
         quittingStationaryContinueMass_eq_prod_continueProbability]
       unfold quittingProfileLiveRoot
       rfl
-
-/-- Player-deleted survival factors exactly across literal word
-concatenation. -/
-theorem quittingLiteralRootStackOpponentSurvival_append
-    (first second : List (ι → PMF Bool)) (who : ι) :
-    quittingLiteralRootStackOpponentSurvival (first ++ second) who =
-      quittingLiteralRootStackOpponentSurvival first who *
-        quittingLiteralRootStackOpponentSurvival second who := by
-  simp [quittingLiteralRootStackOpponentSurvival]
 
 /-- The complete premark word of one raw descendant: first its arbitrary new
 prefix, then every root already present before the base marked row. -/

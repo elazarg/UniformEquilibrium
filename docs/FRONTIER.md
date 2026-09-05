@@ -84,6 +84,34 @@ canonical multiplier. Thus this is an `M/L/A/C` no-go for universal exact
 periodic production, not a positive all-behavior exploitability gap and not a
 Fin4 counterexample.
 
+The hypothetical absence of a Fin4 uniform-equilibrium payoff also forces
+one actual stationary source family with vanishing total Quit hazard.
+[`exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff`](../UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardEndpointLimits.lean)
+retains a common subsequence with positive minimum singleton margin, the
+corresponding endpoint-regret-density limit, complete behavioral cap and debt
+limits, and two fixed profitable Never deviations on each sufficiently late
+source profile. Zero-share outsiders have vanishing debt on those same
+profiles. This supplies `M/L/A` for the source reduction; it does not turn the
+two responses into successive cap updates or consume the remaining support
+cases. Changing to an equilibrium of a smaller support game does not preserve
+the source's outsider-debt conclusion.
+
+At an actual stationary source whose fixed player's attained Quit0 cap tends
+to its singleton payoff while its debt stays positive,
+[`StationaryQuitNowCapPinSource.firstExactRoot_dichotomy`](../UniformEquilibrium/Diagnostics/Quitting/FirstExactRootStationaryDichotomy.lean)
+classifies every exact-root selection. Every root spends a uniform amount of
+the named debt and has a uniform absorption floor. Under absence of a
+uniform-equilibrium payoff, a common source/root subsequence retains either
+positive joint survival and a delayed paid response, or vanishing survival
+and one sure limiting owner. The latter branch includes the attained finite
+shifted cap, positive opponent reach, and the same limiting stationary root's
+Never cap. Its hypotheses are on the actual stationary source, not on the
+desired limit or response. Neither branch renews those source hypotheses.
+`root_isZeroNash_exactTail` and `originalSource_uniqueDebtor`
+(`UniformEquilibrium/Quitting/Examples/UniqueSureNeverReactivationRegression.lean`)
+certify the regression root and its unique debtor; the owner's Never repair
+gives another player a profitable Quit0 deviation.
+
 The Fin4 terminal problem also has an exact executable scale fork, orthogonal
 to the chronological proof-search DAG.
 [`finFourExactScaleStep`](../Research/Quitting/FinFourExactScaleResolution.lean)
@@ -1792,7 +1820,7 @@ cofinal, and the incoming absolute resolution need not survive.
 
 For any literal finite product-root word,
 `quittingTerminalSemanticDebtSum_literalRootStack_eq_weightedLedger_add`
-(`Research/Quitting/FiniteWordWeightedCapDefectLedger.lean`) is the exact
+(`UniformEquilibrium/Quitting/Root/FiniteWordWeightedCapDefectLedger.lean`) is the exact
 chronological telescope: whole debt is the survival-transported suffix debt
 plus the prefix-survival-weighted sum of complete-suffix product-root Nash
 defects.  `half_minimum_le_weightedLedger_of_prefixSurvival_le` gives the
@@ -1800,10 +1828,19 @@ half-minimum aggregate lower bound from bounded suffix debt and sufficiently
 small joint prefix survival, while
 `nonempty_reachedPositiveCapDefect_of_prefixSurvival_le` selects an actually
 reached row and `exists_positiveCoordinateNashDefect` selects a positive
-coordinate there.  These ledger declarations have `M` and `L`, but no
-source-facing screening adapter or downstream `A` or `C`.  The selected
-coordinate is not a prescribed action, paid edge, executable chronology, or
-return consumer; the charge may diffuse over arbitrarily many rows.
+coordinate there. The playerwise ledger and append identity are also checked.
+`terminalExploitability_tendsto_zero_iff_playerLedger_tendsto_zero`
+(`UniformEquilibrium/Quitting/Root/ZeroJointCapLedgerBoundary.lean`)
+characterizes vanishing full exploitability when joint survival tends to zero.
+The same module's
+`exists_positive_minimum_and_fixed_capLedger_payer_of_no_uniformPayoff`
+derives, under a Fin4 counterexample hypothesis, a fixed player on a strict
+subsequence with ledger at least one eighth of the positive global minimum.
+Thus these actual sources do not satisfy the conditional vanishing-ledger
+consumer. Distinct serial hosts may screen the deepest tail but cannot cancel
+a persistent outer ledger. The fixed payer is not a uniformly defective row,
+prescribed action, paid edge, executable chronology, or return consumer; the
+charge may diffuse over arbitrarily many rows.
 
 The zero-mass boundary now has an actual raw-row interface.
 `FinFourNormalizedInertVanishingDensityBoundary.nonempty_actualZenoDeletedSurvivalSource`

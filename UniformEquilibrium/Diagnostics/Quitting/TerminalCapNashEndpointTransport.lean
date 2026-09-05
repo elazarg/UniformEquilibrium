@@ -9,6 +9,7 @@ import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Boundary.Repair.SureSetOwnerRepair
 import UniformEquilibrium.Quitting.Cycles.ConditionedProductPurification
 import UniformEquilibrium.Quitting.Root.NashExistence
+import UniformEquilibrium.Quitting.Root.CapNashRootStack
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
 import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.TerminalDebtPrefixDescent
@@ -37,100 +38,6 @@ open Filter Math.Probability Math.PMFProduct StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
-
-/-! ## Exact cap--Nash prefix scaling -/
-
-/-- Prefixing an abstract semantic pair by an exact Nash root selected against
-its envelope scales each debt coordinate by the joint Continue mass.  The
-envelope need not be jointly realizable. -/
-theorem quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
-    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool) (who : ι)
-    (hnash : IsεQuittingRootNash reward pair.2 0 root) :
-    quittingTerminalSemanticDebt
-        (quittingTerminalSemanticPrefix reward root pair) who =
-      quittingStationaryContinueMass root *
-        quittingTerminalSemanticDebt pair who := by
-  have hquit : quittingRootQuitPayoff reward pair.1 root who =
-      quittingRootQuitPayoff reward pair.2 root who :=
-    quittingRootQuitPayoff_continuation_invariant
-      reward pair.1 pair.2 root who
-  have hcontinue :
-      quittingRootContinuePayoff reward
-          (Function.update pair.1 who (pair.2 who)) root who =
-        quittingRootContinuePayoff reward pair.2 root who := by
-    apply quittingRootExpectedPayoff_continuation_congr
-    simp
-  unfold quittingTerminalSemanticDebt quittingTerminalSemanticPrefix
-  dsimp only
-  rw [hquit, hcontinue,
-    ← quittingRootSuccessorPayoff_eq_max_of_isZeroNash
-      reward pair.2 root who hnash,
-    quittingRootSuccessorPayoff_sub_eq_continueMass_mul]
-
-/-- Exact Nash against the envelope makes the prefixed envelope the exact
-Bellman successor of the original envelope. -/
-theorem quittingTerminalSemanticPrefix_envelope_eq_rootSuccessorPayoff_of_capNash
-    (pair : QuittingTerminalSemanticPair ι) (root : ι → PMF Bool)
-    (hnash : IsεQuittingRootNash reward pair.2 0 root) :
-    (quittingTerminalSemanticPrefix reward root pair).2 =
-      quittingRootSuccessorPayoff reward pair.2 root := by
-  funext who
-  have hquit : quittingRootQuitPayoff reward pair.1 root who =
-      quittingRootQuitPayoff reward pair.2 root who :=
-    quittingRootQuitPayoff_continuation_invariant
-      reward pair.1 pair.2 root who
-  have hcontinue :
-      quittingRootContinuePayoff reward
-          (Function.update pair.1 who (pair.2 who)) root who =
-        quittingRootContinuePayoff reward pair.2 root who := by
-    apply quittingRootExpectedPayoff_continuation_congr
-    simp
-  unfold quittingTerminalSemanticPrefix
-  dsimp only
-  rw [quittingRootSuccessorPayoff_eq_max_of_isZeroNash
-    reward pair.2 root who hnash, hquit, hcontinue]
-
-/-- Literal specialization of exact cap--Nash debt scaling.  The root is
-selected against the continuation's coordinatewise unilateral cap, while the
-profile actually executed after all Continue remains the common continuation.
--/
-theorem quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (root : ι → PMF Bool)
-    (continuation : (quittingGame reward).BehaviorProfile)
-    (who : ι)
-    (hnash : IsεQuittingRootNash reward
-      (fun player =>
-        quittingContinuationBestResponseValue reward continuation player)
-      0 root) :
-    quittingTerminalDeviationDebt reward
-        (quittingRootThenContinuationProfile reward root continuation) who =
-      quittingStationaryContinueMass root *
-        quittingTerminalDeviationDebt reward continuation who := by
-  have hpair := quittingTerminalSemanticPair_rootThenContinuation
-    reward root continuation
-  have hsemantic :=
-    quittingTerminalSemanticDebt_prefix_eq_continueMass_mul_of_capNash
-      (reward := reward) (quittingTerminalSemanticPair reward continuation)
-      root who hnash
-  rw [← hpair] at hsemantic
-  exact hsemantic
-
-/-- Total literal debt obeys the same exact cap--Nash scaling. -/
-theorem quittingTerminalDebtSum_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (root : ι → PMF Bool)
-    (continuation : (quittingGame reward).BehaviorProfile)
-    (hnash : IsεQuittingRootNash reward
-      (fun player =>
-        quittingContinuationBestResponseValue reward continuation player)
-      0 root) :
-    quittingTerminalDebtSum reward
-        (quittingRootThenContinuationProfile reward root continuation) =
-      quittingStationaryContinueMass root *
-        quittingTerminalDebtSum reward continuation := by
-  unfold quittingTerminalDebtSum
-  simp_rw [quittingTerminalDeviationDebt_rootThenContinuation_eq_continueMass_mul_of_capNash
-    (reward := reward) root continuation _ hnash]
-  rw [Finset.mul_sum]
 
 /-! ## The actual-profile total-debt infimum -/
 

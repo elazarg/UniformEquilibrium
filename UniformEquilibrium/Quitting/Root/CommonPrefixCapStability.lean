@@ -129,6 +129,51 @@ private theorem abs_quittingCommonPrefixCapStep_sub_self_le
     _ ≤ 2 * M * (1 - quittingRootOpponentContinueMass root who) :=
       max_le hquit hcontinue
 
+/-- A finite word transports a positive suffix-cap discrepancy by precisely
+its player-deleted survival coefficient. Negative discrepancies require no
+allowance in this one-sided bound. -/
+theorem quittingFiniteRootWordCap_sub_le_opponentSurvival_mul_posPart
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : List (ι → PMF Bool)) (who : ι) (first second : ℝ) :
+    quittingFiniteRootWordCap reward roots who first -
+        quittingFiniteRootWordCap reward roots who second ≤
+      quittingLiteralRootStackOpponentSurvival roots who * max 0 (first - second) := by
+  have hstep : ∀ root a b,
+      quittingCommonPrefixCapStep reward root who a -
+          quittingCommonPrefixCapStep reward root who b ≤
+        quittingRootOpponentContinueMass root who * max 0 (a - b) := by
+    intro root a b
+    have hmass := quittingRootOpponentContinueMass_nonneg root who
+    have hdiff := quittingRootContinuePayoff_zeroUpdate_sub_eq reward root who a b
+    unfold quittingCommonPrefixCapStep
+    have hnonneg : 0 ≤ quittingRootOpponentContinueMass root who * max 0 (a - b) :=
+      mul_nonneg hmass (le_max_left _ _)
+    apply sub_le_iff_le_add.mpr
+    apply max_le
+    · have hleft := le_max_left
+        (quittingRootQuitPayoff reward 0 root who)
+        (quittingRootContinuePayoff reward (Function.update 0 who b) root who)
+      linarith
+    · have hscaled := mul_le_mul_of_nonneg_left (le_max_right 0 (a - b)) hmass
+      have hright := le_max_right
+        (quittingRootQuitPayoff reward 0 root who)
+        (quittingRootContinuePayoff reward (Function.update 0 who b) root who)
+      linarith
+  induction roots with
+  | nil => simp [quittingFiniteRootWordCap, quittingLiteralRootStackOpponentSurvival]
+  | cons root roots ih =>
+      have hnonneg : 0 ≤ quittingLiteralRootStackOpponentSurvival roots who *
+          max 0 (first - second) := mul_nonneg
+        (quittingLiteralRootStackOpponentSurvival_nonneg roots who) (le_max_left _ _)
+      have hmax := max_le hnonneg ih
+      have hscaled := mul_le_mul_of_nonneg_left hmax
+        (quittingRootOpponentContinueMass_nonneg root who)
+      have h := (hstep root (quittingFiniteRootWordCap reward roots who first)
+        (quittingFiniteRootWordCap reward roots who second)).trans hscaled
+      simpa only [quittingFiniteRootWordCap, List.foldr_cons,
+        quittingLiteralRootStackOpponentSurvival, List.map_cons, List.prod_cons,
+        mul_assoc] using h
+
 private theorem abs_quittingCommonPrefixCapStep_sub_max_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (who : ι) (suffixCap M : ℝ)

@@ -33,7 +33,7 @@ import Research.Quitting.FinFourProducerAtlas.StrictRayPositiveRootReturn
 import Research.Quitting.FinFourProducerAtlas.StrictRayTailNormalizedCapFlow
 import Research.Quitting.FinFourProducerAtlas.StrongConcentratedPacketConsumer
 import Research.Quitting.FinFourProducerAtlas.ThreeRoleAscentResetHandoff
-import Research.Quitting.FiniteWordWeightedCapDefectLedger
+import UniformEquilibrium.Quitting.Root.FiniteWordWeightedCapDefectLedger
 import Research.Quitting.NormalizedPassportCarrierActualizer
 
 /-!
