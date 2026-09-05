@@ -1,4 +1,5 @@
 import MathUE.ProbabilityMassFunction.StoppingLawFiniteTail
+import MathUE.ProbabilityMassFunction.ProperStoppingApproximation
 
 /-! # Censoring late finite stopping atoms to Never -/
 
@@ -106,5 +107,53 @@ theorem pmfGeneralTV_censorLateFiniteStoppingLaw_le
   rw [hprefixOverlap] at hfinite
   unfold pmfGeneralTV overlap at *
   linarith
+
+/-- Coordinatewise late-finite censoring. -/
+def censorLateFiniteStoppingLaws {ι : Type*}
+    (laws : ι → PMF (Option ℕ)) (horizon : ℕ) : ι → PMF (Option ℕ) :=
+  fun who => censorLateFiniteStoppingLaw (laws who) horizon
+
+/-- A fixed finite family of complete stopping laws has arbitrarily small
+summed late-finite mass. This is pointwise tightness, not uniform tightness of
+a varying family. -/
+theorem exists_horizon_sum_stoppingLawLateFiniteMass_lt
+    {ι : Type*} [Fintype ι] [Nonempty ι]
+    (laws : ι → PMF (Option ℕ)) {error : ℝ} (herror : 0 < error) :
+    ∃ horizon : ℕ,
+      ∑ who, stoppingLawLateFiniteMass (laws who) horizon < error := by
+  classical
+  have hcard : 0 < (Fintype.card ι : ℝ) := by exact_mod_cast Fintype.card_pos
+  have hsmall : 0 < error / Fintype.card ι := div_pos herror hcard
+  have hone (who : ι) : ∃ kept : Finset (Option ℕ),
+      pmfFiniteComplementMass (laws who) kept < error / Fintype.card ι :=
+    exists_finset_pmfFiniteComplementMass_lt (laws who) hsmall
+  choose kept hkept using hone
+  have hhorizon (who : ι) : ∃ horizon : ℕ,
+      kept who ⊆ stoppingLawFinitePrefix horizon := by
+    obtain ⟨horizon, hsubset⟩ := exists_horizon_finset_subset_optionPrefix (kept who)
+    refine ⟨horizon, ?_⟩
+    simpa [stoppingLawFinitePrefix, stoppingLawFiniteTimePrefix] using hsubset
+  choose cutoff hcutoff using hhorizon
+  let horizon := Finset.univ.sup cutoff
+  refine ⟨horizon, ?_⟩
+  have hterm (who : ι) :
+      stoppingLawLateFiniteMass (laws who) horizon < error / Fintype.card ι := by
+    apply (pmfFiniteComplementMass_anti (laws who) ?_).trans_lt (hkept who)
+    exact (hcutoff who).trans (by
+      intro outcome houtcome
+      rcases outcome with _ | time
+      · simp
+      · have htime := (some_mem_stoppingLawFinitePrefix (cutoff who) time).1 houtcome
+        rw [some_mem_stoppingLawFinitePrefix]
+        exact htime.trans (Finset.le_sup (Finset.mem_univ who)) )
+  calc
+    ∑ who, stoppingLawLateFiniteMass (laws who) horizon <
+        ∑ _who : ι, error / Fintype.card ι := by
+      apply Finset.sum_lt_sum (fun who _ => (hterm who).le)
+      exact ⟨Classical.choice inferInstance, Finset.mem_univ _,
+        hterm (Classical.choice inferInstance)⟩
+    _ = error := by
+      rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+      field_simp [ne_of_gt hcard]
 
 end Math.Probability

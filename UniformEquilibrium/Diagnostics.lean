@@ -10,6 +10,9 @@ import UniformEquilibrium.Diagnostics.Uniform.HiddenFiberSpanCounterexample
 import UniformEquilibrium.Diagnostics.Uniform.NonexistenceCertificate
 import UniformEquilibrium.Diagnostics.PrivateRecommendationTargetAbsorbingLift
 import UniformEquilibrium.Diagnostics.Quitting.All
+import UniformEquilibrium.Diagnostics.Quitting.FiniteMenuBoundaryRegressions
+import UniformEquilibrium.Diagnostics.Quitting.SinglePivotFiniteMenuRegression
+import UniformEquilibrium.Diagnostics.Quitting.TwoPlayerNegativeFiniteMenuBoundary
 
 /-!
 # Integrated diagnostics umbrella

@@ -6,6 +6,7 @@ Authors: GameTheory contributors.
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauMarkedTailLocalization
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Paths.LiveRootSurvival
 
 /-!
 # Legal consumption of a localized other-player defect
@@ -167,31 +168,6 @@ omit [DecidableEq ι] in
         (fun offset =>
           quittingProfileLiveRoot reward profile (stage + 1 + offset) who) := by
   rfl
-
-omit [DecidableEq ι] in
-/-- The live probability of an arbitrary profile is the joint survival of
-the root word read on its canonical live histories. -/
-theorem quittingLiveMass_eq_jointSurvivalWeight_profileLiveRoot
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    ∀ stage,
-      quittingLiveMass reward profile stage =
-        quittingJointSurvivalWeight
-          (quittingProfileLiveRoot reward profile) 0 stage := by
-  classical
-  intro stage
-  induction stage with
-  | zero => simp [quittingJointSurvivalWeight, quittingFiniteContinueWeight]
-  | succ stage ih =>
-      rw [quittingLiveMass_succ, quittingJointSurvivalWeight_succ, ih]
-      congr 1
-      rw [quittingJointContinueMass_eq_product,
-        quittingStationaryContinueMass_eq_prod_continueProbability]
-      apply Finset.prod_congr rfl
-      intro player _
-      unfold quittingProfileLiveRoot
-      rw [Nat.zero_add]
-      rfl
 
 omit [DecidableEq ι] in
 /-- The literal payoff of the shifted profile is the root-word terminal value

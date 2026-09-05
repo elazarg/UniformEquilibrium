@@ -124,6 +124,55 @@ This implication holds for arbitrary signed rewards and any finite nonempty
 player set. A general producer of those early-absorption sources is not
 supplied by the completion argument.
 
+For an arbitrary actual profile,
+[`prod_stoppingLaw_none_mul_singleton_le_terminalDebt`](../UniformEquilibrium/Quitting/Terminal/SingletonJointNeverDebt.lean)
+bounds the product of all original Never probabilities times a player's own
+singleton reward by that player's unrestricted debt. The proof changes only
+that player's original Never outcome to a late finite date and takes a limit;
+no best response is assumed attained. A positive singleton therefore forces
+joint Never mass to vanish along terminal approximate equilibria.
+`quittingTerminalExploitability_censored_le`
+(`UniformEquilibrium/Quitting/Paths/LateFiniteStoppingLawCensor.lean`)
+controls censoring of late finite atoms to Never by four times the reward
+bound times their summed mass. The original Never outcomes are kept, but
+their total probability increases by the censored finite mass. The cutoff
+lemma is for a fixed finite family of laws, not uniform tightness across
+arbitrary varying families.
+
+`exists_uniformEquilibriumPayoff_iff_finiteMenuEarlyAbsorption_of_singleton_pos`
+(`UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorptionNecessity.lean`)
+proves the converse when at least one own singleton payoff is positive.
+It censors a fixed family of actual approximate-equilibrium stopping laws,
+then places the resulting finite support before the required cutoff.
+Thus early finite-menu absorption characterizes uniform-payoff existence
+under that hypothesis; it is not an unconditional source producer.
+The negative one-player game has a uniform payoff but fails early absorption,
+as proved in `UniformEquilibrium/Diagnostics/Quitting/FiniteMenuBoundaryRegressions.lean`.
+
+For a table whose own singleton vector is one at a selected player and zero
+elsewhere, `singlePivot_fullExploitability_eq_max_menuExploitability_scalar`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`)
+reduces unrestricted exploitability of every actual finite-menu law to the
+larger of its menu exploitability and one explicit scalar for that player.
+Fresh exact menu Nash equilibria exist at every deadline. This does not
+make the scalar small: the one-date example in
+`UniformEquilibrium/Diagnostics/Quitting/SinglePivotFiniteMenuRegression.lean`
+is exact menu Nash, has zero joint-Never mass, and has unrestricted debt one half.
+
+The finite-date-only punishment value, allowing complete opponent plans but
+excluding Never from the responder's dates, equals the minimum of unrestricted
+punishment and the own singleton payoff. This is
+`quittingFinitePureReplyPunishmentValue_eq_min`
+(`UniformEquilibrium/Quitting/Punishment/FinitePureReplyPunishment.lean`).
+`quittingPunishmentValue_singlePivotNormalized`
+(`UniformEquilibrium/Quitting/Punishment/SinglePivotPunishment.lean`)
+uses it to prove exact punishment transport under single-pivot normalization
+when the original coordinate satisfies punishment normality. Never still pays
+zero. The payoff identity for an unchanged profile includes its joint-Never
+mass; it is not an unrestricted affine translation of every profile's payoff.
+The strategy construction and uniform-payoff-set transport are not established
+by these identities alone.
+
 The hypothetical absence of a Fin4 uniform-equilibrium payoff also forces
 one actual stationary source family with vanishing total Quit hazard.
 [`exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff`](../UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardEndpointLimits.lean)
