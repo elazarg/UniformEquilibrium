@@ -185,6 +185,7 @@ import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament
+import MathUE.LinearProgramming.TwoPointHomogeneousObstruction
 import MathUE.List
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic

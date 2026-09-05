@@ -91,10 +91,28 @@ retains a common subsequence with positive minimum singleton margin, the
 corresponding endpoint-regret-density limit, complete behavioral cap and debt
 limits, and two fixed profitable Never deviations on each sufficiently late
 source profile. Zero-share outsiders have vanishing debt on those same
-profiles. This supplies `M/L/A` for the source reduction; it does not turn the
-two responses into successive cap updates or consume the remaining support
-cases. Changing to an equilibrium of a smaller support game does not preserve
-the source's outsider-debt conclusion.
+profiles. This supplies `M/L/A` for the source reduction.
+[`exists_chronological_twoNever_supportDescent`](../UniformEquilibrium/Quitting/Cycles/PeriodOneStationarySubsetLimits.lean)
+then gives two successive exact Never cap updates when the positive-share
+support has at least three players. The two-player support has a one-update
+singleton specialization. Every child is obtained by changing the named
+player on the preceding actual profile; zero-share outsiders retain their
+original finite hazards. The module also proves convergence of the actual
+terminal coalition law and the subset's unrestricted endpoint payoffs.
+The final Quit0 exit and off-minimum paid-port assembly remain unfinished.
+Changing to an equilibrium of a smaller support game does not preserve these
+source profiles or their outsider-debt conclusions.
+
+Two source-independent tools supply parts of that assembly.
+[`exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform`](../UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean)
+derives one distinct blocker for every singleton owner and a common positive
+gap from the four-player counterexample hypothesis.
+[`exists_eventual_offMinimum_collar_of_completeCap_tendsto_singleton`](../UniformEquilibrium/Diagnostics/Quitting/CompleteCapSingletonLimitCollar.lean)
+proves that any actual profile family whose named complete cap tends to its
+singleton payoff eventually has total debt bounded strictly above the global
+minimum. This uses compactness and the minimum's singleton margin, not
+stationarity or minimum-source ancestry. The separation is not an additive
+charge budget or a source-return theorem.
 
 At an actual stationary source whose fixed player's attained Quit0 cap tends
 to its singleton payoff while its debt stays positive,
