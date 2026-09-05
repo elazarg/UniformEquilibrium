@@ -100,6 +100,23 @@ canonical multiplier. Thus this is an `M/L/A/C` no-go for universal exact
 periodic production, not a positive all-behavior exploitability gap and not a
 Fin4 counterexample.
 
+Finite timing menus admit an unconditional punishment approximation for
+arbitrary signed quitting rewards.
+[`quittingFiniteMenuPunishmentValue_eq_operator_iterate`](../UniformEquilibrium/Quitting/Punishment/FiniteMenuPunishmentRecursion.lean)
+identifies the minimum over actual independent date-or-Never laws with the
+Bellman iterate starting at zero.
+[`tendsto_quittingFiniteMenuPunishmentValue`](../UniformEquilibrium/Quitting/Punishment/FiniteMenuPunishmentRecursion.lean)
+proves convergence to unrestricted behavioral punishment; the same module
+proves that the nonnegative finite-player punishment deficit tends to zero.
+The finite-menu source has literal root-word and payoff adapters. Its Nash
+condition bounds only displayed dates and Never, not unrestricted deviations.
+`HasQuittingFiniteMenuEarlyAbsorption`
+(`UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorption.lean`)
+states the separate early-absorption property with independent mixed laws and
+the actual joint survival clock. Existence of such sources and same-prefix
+completion to unrestricted approximate equilibria are not consequences of
+the punishment convergence theorem.
+
 The hypothetical absence of a Fin4 uniform-equilibrium payoff also forces
 one actual stationary source family with vanishing total Quit hazard.
 [`exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff`](../UniformEquilibrium/Quitting/Cycles/PeriodOneVanishingHazardEndpointLimits.lean)
@@ -130,6 +147,17 @@ every source semantic cluster point and its gap below every minimum-face cap.
 The sure-Quit child is not asserted to regenerate a diffuse source.
 Changing to an equilibrium of a smaller support game does not preserve these
 source profiles or their outsider-debt conclusions.
+
+The duplicated-cyclic table distinguishes this finite descent from a
+contradiction. `eventually_all_core_twoNever_then_quitNow_exactCapChronology`
+and `carrier_minimum_totalDebt_eq_zero`
+(`UniformEquilibrium/Diagnostics/Quitting/DuplicatedCyclicReactivationBoundary.lean`)
+prove all three core-first choices of the literal Never/Never/Quit0 chain,
+with unrestricted cap attainment, while the same game's global minimum debt
+is zero. At the second step, exactly one of the two remaining core owners
+has positive Never gain for all sufficiently late indices. This uniqueness
+does not cover the lower-order duplicate. The regression is not a
+no-uniform-payoff example.
 
 Two source-independent tools supply parts of that assembly.
 [`exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform`](../UniformEquilibrium/Quitting/Classification/LCP/FourPlayerSingletonColumnBlockers.lean)

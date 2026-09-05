@@ -156,6 +156,7 @@ import MathUE.FiniteWeightedSelection
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
+import MathUE.Finset.FiniteMenuSupremum
 import MathUE.Finset.FreshSquareExtraction
 import MathUE.Finset.InsertExtremum
 import MathUE.Finset.MinimalMemberSum
@@ -424,6 +425,7 @@ import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.Coupling
 import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
+import MathUE.ProbabilityMassFunction.FiniteStoppingTimeMenu
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
@@ -759,6 +761,8 @@ import UniformEquilibrium.Diagnostics.Quitting.Debt.QuantitativeTail
 import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.DynamicAlternative
 import UniformEquilibrium.Diagnostics.Quitting.Debt.Source.ObstructionCarrier
 import UniformEquilibrium.Diagnostics.Quitting.Debt.ViolationCollapse
+import UniformEquilibrium.Diagnostics.Quitting.DuplicatedCyclicReactivationBoundary
+import UniformEquilibrium.Diagnostics.Quitting.DuplicatedCyclicReactivationRegression
 import UniformEquilibrium.Diagnostics.Quitting.ExactRepairCertificate
 import UniformEquilibrium.Diagnostics.Quitting.FinFourCensoredClockNullDirection
 import UniformEquilibrium.Diagnostics.Quitting.FinFourFiniteClockMinimumPaidPort
@@ -2057,6 +2061,10 @@ import UniformEquilibrium.Quitting.Punishment.BlockerIntervalCover
 import UniformEquilibrium.Quitting.Punishment.CoalitionLock
 import UniformEquilibrium.Quitting.Punishment.CompletedCycle
 import UniformEquilibrium.Quitting.Punishment.ContinueFloor
+import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentConvergence
+import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentOperator
+import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentRecursion
+import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentValue
 import UniformEquilibrium.Quitting.Punishment.Floor
 import UniformEquilibrium.Quitting.Punishment.FreeReduction
 import UniformEquilibrium.Quitting.Punishment.InstantPunishment
@@ -2083,6 +2091,9 @@ import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Root.ExactSuccessorClosure
 import UniformEquilibrium.Quitting.Root.FaceGeometry
+import UniformEquilibrium.Quitting.Root.FiniteDeadlineCapRecursion
+import UniformEquilibrium.Quitting.Root.FiniteDeadlineWordRealization
+import UniformEquilibrium.Quitting.Root.FiniteRootWordSequenceBridge
 import UniformEquilibrium.Quitting.Root.FiniteWordSemanticSplice
 import UniformEquilibrium.Quitting.Root.FiniteWordSurvivalSeams
 import UniformEquilibrium.Quitting.Root.FiniteWordWeightedCapDefectLedger
@@ -2169,6 +2180,7 @@ import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineCapSelection
 import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineReplyCap
 import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineTimingGame
+import UniformEquilibrium.Quitting.Terminal.FiniteMenuEarlyAbsorption
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical

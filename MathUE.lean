@@ -111,6 +111,7 @@ import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
+import MathUE.Finset.FiniteMenuSupremum
 import MathUE.Finset.FreshSquareExtraction
 import MathUE.Finset.InsertExtremum
 import MathUE.Finset.MinimalMemberSum
@@ -375,6 +376,7 @@ import MathUE.ProbabilityMassFunction.Coupling
 import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
+import MathUE.ProbabilityMassFunction.FiniteStoppingTimeMenu
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring
