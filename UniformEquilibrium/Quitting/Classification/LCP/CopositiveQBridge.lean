@@ -25,9 +25,8 @@ the generic `Prop` structure, the production data structure, and the
 simplex-normalized singleton form of `MathUE/LinearProgramming/SingletonLCP.lean`
 — of which the first two are now formally identified here.
 
-This file lives in `Research` rather than in either lane: `MathUE` may not
-depend on `UniformEquilibrium`, and the production LCP umbrella is not the
-place to land unintegrated work.
+The generic proofs remain in `MathUE`; this production adapter connects them
+to the quitting-game LCP interface without reversing that dependency.
 
 ## Main results
 

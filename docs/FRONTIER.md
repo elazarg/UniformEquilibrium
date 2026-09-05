@@ -149,6 +149,17 @@ under that hypothesis; it is not an unconditional source producer.
 The negative one-player game has a uniform payoff but fails early absorption,
 as proved in `UniformEquilibrium/Diagnostics/Quitting/FiniteMenuBoundaryRegressions.lean`.
 
+`exists_finiteDeadlineTimingProfile_approximation`
+(`UniformEquilibrium/Quitting/Terminal/FiniteMenuFullProfileApproximation.lean`)
+approximates any actual behavioral profile by one finite-menu product law,
+simultaneously controlling its payoff vector and unrestricted exploitability.
+The displayed deadline may exceed any given lower bound, and no singleton-sign
+or normality hypothesis is needed. The same module's
+`isUniformEquilibriumPayoff_iff_finiteMenu_fullCap_target_approximation`
+characterizes each fixed uniform-payoff target by such finite-menu approximants.
+This does not restrict the approximants to exact menu Nash equilibria and does
+not require early absorption.
+
 For a table whose own singleton vector is one at a selected player and zero
 elsewhere, `singlePivot_fullExploitability_eq_max_menuExploitability_scalar`
 (`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuSource.lean`)
