@@ -195,4 +195,3 @@ theorem quittingFiniteDeadlineTimingProfile_liveRoot_eq_allContinue_of_le
     Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard, hfinite]
 
 end GameTheory
-
