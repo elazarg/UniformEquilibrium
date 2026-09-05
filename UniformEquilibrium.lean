@@ -14,6 +14,7 @@ import UniformEquilibrium.Quitting.Terminal.SinglePivotFiniteMenuCompletion
 import UniformEquilibrium.Quitting.Terminal.FiniteMenuFullProfileApproximation
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleRewardAdapter
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleValues
+import UniformEquilibrium.Quitting.Cycles.SignedFourCycleCertificate
 import UniformEquilibrium.Quitting.Terminal.SingletonJointNeverDebt
 import UniformEquilibrium.Quitting.Paths.LateFiniteStoppingLawCensor
 import UniformEquilibrium.Quitting.Root.FiniteDeadlineCapRecursion
@@ -559,6 +560,7 @@ import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Paths.StoppingLawBadMassSelection
 import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
+import UniformEquilibrium.Quitting.Paths.FiniteOpponentPivotLaw
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis

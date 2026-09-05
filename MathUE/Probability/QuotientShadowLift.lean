@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability.PredictableCoreShadow
 import MathUE.Probability.MarkovOccupation
+import MathUE.ProbabilityMassFunction.MapSupport
 
 /-!
 # Causal lifting of finite quotient shadows
@@ -47,17 +48,6 @@ def quotientPairMap (χ : S → C) : S × R → C × R :=
 theorem quotientPairMap_apply (χ : S → C) (pair : S × R) :
     quotientPairMap χ pair = (χ pair.1, pair.2) :=
   rfl
-
-/-- Two maps that agree on the support of a PMF have the same pushforward. -/
-theorem pmf_map_eq_of_eq_on_support
-    (μ : PMF S) (f g : S → C)
-    (hfg : ∀ s, s ∈ μ.support → f s = g s) :
-    μ.map f = μ.map g := by
-  rw [← PMF.bind_pure_comp f μ, ← PMF.bind_pure_comp g μ]
-  apply ProbabilityMassFunction.bind_congr_on_support
-  intro s hs
-  simpa only [Function.comp_apply] using
-    congrArg PMF.pure (hfg s hs)
 
 /-- Lift a joint law of `(χ s, r)` to a joint law of `(s, r)` by
 disintegrating the full-state law over its quotient coordinate. -/
