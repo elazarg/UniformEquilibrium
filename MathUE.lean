@@ -377,6 +377,8 @@ import MathUE.ProbabilityMassFunction.CoordinateTest
 import MathUE.ProbabilityMassFunction.DiscreteTightness
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.FiniteStoppingTimeMenu
+import MathUE.ProbabilityMassFunction.StoppingLawFiniteTail
+import MathUE.ProbabilityMassFunction.LateFiniteStoppingLawCensor
 import MathUE.ProbabilityMassFunction.GeneralTotalVariation
 import MathUE.ProbabilityMassFunction.GroupSumUniform
 import MathUE.ProbabilityMassFunction.Monitoring

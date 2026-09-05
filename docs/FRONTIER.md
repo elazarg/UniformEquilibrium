@@ -113,9 +113,16 @@ condition bounds only displayed dates and Never, not unrestricted deviations.
 `HasQuittingFiniteMenuEarlyAbsorption`
 (`UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorption.lean`)
 states the separate early-absorption property with independent mixed laws and
-the actual joint survival clock. Existence of such sources and same-prefix
-completion to unrestricted approximate equilibria are not consequences of
-the punishment convergence theorem.
+the actual joint survival clock.
+[`exists_finiteMenu_samePrefix_completion`](../UniformEquilibrium/Quitting/Punishment/FiniteMenuCompletion.lean)
+preserves the actual menu profile before the cutoff and installs one fixed
+punishment target, bounding every behavioral deviation by the menu error
+plus `2Mρ + max(2M√ρ, ω(H) + η)`.
+[`exists_uniformEquilibriumPayoff_of_finiteMenuEarlyAbsorption`](../UniformEquilibrium/Quitting/Terminal/FiniteMenuEarlyAbsorptionCompletion.lean)
+then produces one fixed uniform payoff from the early-absorption property.
+This implication holds for arbitrary signed rewards and any finite nonempty
+player set. A general producer of those early-absorption sources is not
+supplied by the completion argument.
 
 The hypothetical absence of a Fin4 uniform-equilibrium payoff also forces
 one actual stationary source family with vanishing total Quit hazard.
@@ -189,6 +196,18 @@ handoff.
 (`UniformEquilibrium/Quitting/Examples/UniqueSureNeverReactivationRegression.lean`)
 certify the regression root and its unique debtor; the owner's Never repair
 gives another player a profitable Quit0 deviation.
+
+At every sufficiently late finite index in the vanishing-survival branch,
+`FirstStationaryRootZeroBranch.nonempty_finiteSourceCapHandoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourVanishingSurvivalFiniteSourceCapHandoff.lean`)
+retains the literal prefixed source and its shifted complete-cap child.
+The child resets the owner's debt exactly, with payoff gain equal to the
+source debt. `FinFourFiniteSourceCapHandoff.exists_distinctTerminalGapPaidRows`
+selects one different observer at that child and retains both a supported
+full-gap first-disagreement row and an actual-reach quarter-gap row, with
+the exported own-survival and opponent-reach bounds. The rows have the
+same observer but need not have the same date. Punishment-floor dispatch
+and renewed prefix ancestry are not conclusions of this interface.
 
 The Fin4 terminal problem also has an exact executable scale fork, orthogonal
 to the chronological proof-search DAG.

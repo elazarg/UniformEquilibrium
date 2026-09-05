@@ -31,6 +31,55 @@ namespace GameTheory
 
 open Math.Probability Math.ProbabilityMassFunction
 
+/-- Retain both the profitable behavioral deviation and its supported pure-time witnesses. -/
+theorem HasTerminalExploitabilityGap.exists_supported_pureTimePayoff_sub_at_with_gain
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {gap : ℝ}
+    (exploit : HasTerminalExploitabilityGap reward gap)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    ∃ observer, ∃ deviation : (quittingGame reward).BehaviorStrategy observer,
+      gap ≤ quittingTerminalPayoff reward (Function.update profile observer deviation) observer -
+        quittingTerminalPayoff reward profile observer ∧
+      ∃ sourceWitness receivingWitness,
+        sourceWitness ∈ (quittingBehaviorStoppingLaw reward (profile observer)).support ∧
+        receivingWitness ∈ (quittingBehaviorStoppingLaw reward deviation).support ∧
+        gap ≤ quittingPureTimeDeviationPayoff reward profile observer receivingWitness -
+          quittingPureTimeDeviationPayoff reward profile observer sourceWitness := by
+  obtain ⟨observer, deviation, hgain⟩ := exploit profile
+  let value : Option ℕ → ℝ := quittingPureTimeDeviationPayoff reward profile observer
+  have hvalue : ∀ quitTime, |value quitTime| ≤ quittingRewardBound reward := by
+    intro quitTime
+    exact abs_quittingTerminalPayoff_le reward _ observer
+      (abs_reward_le_quittingRewardBound reward)
+  have hdeviation : quittingTerminalPayoff reward
+      (Function.update profile observer deviation) observer =
+      Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value := by
+    exact quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
+      reward profile observer deviation
+  have hprescribed : quittingTerminalPayoff reward profile observer =
+      Math.Probability.expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
+    have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
+      reward profile observer (profile observer)
+    rw [Function.update_eq_self] at h
+    exact h
+  obtain ⟨receivingWitness, sourceWitness, hreceiving, hsource, havg⟩ :=
+    exists_support_pair_expect_sub_le_sub
+      (quittingBehaviorStoppingLaw reward deviation)
+      (quittingBehaviorStoppingLaw reward (profile observer)) value value hvalue hvalue
+  have hgain' : gap ≤ quittingTerminalPayoff reward
+      (Function.update profile observer deviation) observer -
+        quittingTerminalPayoff reward profile observer := by linarith
+  refine ⟨observer, deviation, hgain', sourceWitness, receivingWitness,
+    hsource, hreceiving, ?_⟩
+  calc
+    gap ≤ quittingTerminalPayoff reward
+        (Function.update profile observer deviation) observer -
+      quittingTerminalPayoff reward profile observer := hgain'
+    _ = Math.Probability.expect (quittingBehaviorStoppingLaw reward deviation) value -
+        Math.Probability.expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
+      rw [hdeviation, hprescribed]
+    _ ≤ value receivingWitness - value sourceWitness := havg
+
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
 variable {gamma : Real}
@@ -50,58 +99,9 @@ theorem HasTerminalExploitabilityGap.exists_supported_pureTimePayoff_sub_at
         gamma <=
           quittingPureTimeDeviationPayoff reward profile observer receivingWitness -
             quittingPureTimeDeviationPayoff reward profile observer sourceWitness := by
-  obtain ⟨observer, deviation, hgain⟩ := exploit profile
-  let value : Option Nat -> Real :=
-    quittingPureTimeDeviationPayoff reward profile observer
-  have hvalue : forall quitTime,
-      |value quitTime| <= quittingRewardBound reward := by
-    intro quitTime
-    exact abs_quittingTerminalPayoff_le reward _ observer
-      (abs_reward_le_quittingRewardBound reward)
-  have hdeviation :
-      quittingTerminalPayoff reward
-          (Function.update profile observer deviation) observer =
-        expect (quittingBehaviorStoppingLaw reward deviation) value := by
-    change quittingTerminalPayoff reward
-        (Function.update profile observer deviation) observer =
-      expect (quittingBehaviorStoppingLaw reward deviation) (fun choice =>
-        quittingTerminalPayoff reward
-          (Function.update profile observer
-            (quittingPureTimeBehaviorStrategy reward observer choice)) observer)
-    exact quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-      reward profile observer deviation
-  have hprescribed :
-      quittingTerminalPayoff reward profile observer =
-        expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
-    have hmixture :=
-      quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-        reward profile observer (profile observer)
-    rw [Function.update_eq_self] at hmixture
-    change quittingTerminalPayoff reward profile observer =
-      expect (quittingBehaviorStoppingLaw reward (profile observer)) (fun choice =>
-        quittingTerminalPayoff reward
-          (Function.update profile observer
-            (quittingPureTimeBehaviorStrategy reward observer choice)) observer)
-    exact hmixture
-  obtain ⟨receivingWitness, sourceWitness, hreceivingSupport,
-      hsourceSupport, havg⟩ :=
-    exists_support_pair_expect_sub_le_sub
-      (quittingBehaviorStoppingLaw reward deviation)
-      (quittingBehaviorStoppingLaw reward (profile observer))
-      value value hvalue hvalue
-  refine ⟨observer, deviation, sourceWitness, receivingWitness,
-    hsourceSupport, hreceivingSupport, ?_⟩
-  calc
-    gamma <=
-        quittingTerminalPayoff reward
-            (Function.update profile observer deviation) observer -
-          quittingTerminalPayoff reward profile observer := by linarith
-    _ = expect (quittingBehaviorStoppingLaw reward deviation) value -
-          expect (quittingBehaviorStoppingLaw reward (profile observer)) value := by
-      rw [hdeviation, hprescribed]
-    _ <= value receivingWitness - value sourceWitness := havg
-    _ = quittingPureTimeDeviationPayoff reward profile observer receivingWitness -
-          quittingPureTimeDeviationPayoff reward profile observer sourceWitness := rfl
+  obtain ⟨observer, deviation, _, sourceWitness, receivingWitness, hsource, hreceiving, hgap⟩ :=
+    exploit.exists_supported_pureTimePayoff_sub_at_with_gain profile
+  exact ⟨observer, deviation, sourceWitness, receivingWitness, hsource, hreceiving, hgap⟩
 
 /-- At every literal behavioral profile, a positive terminal gap supplies a
 full-gap paid first-disagreement row. -/
