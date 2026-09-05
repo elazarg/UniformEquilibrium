@@ -21,6 +21,7 @@ import UniformEquilibrium.Diagnostics.Quitting.FiniteMenuSignedZeroBoundaryRegre
 import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleMatrixFixtures
 import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleRawSpectralFixtures
 import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleValueFixtures
+import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleCoarseNonNash
 import UniformEquilibrium.Diagnostics.Quitting.TwoPlayerNegativeFiniteMenuBoundary
 
 /-!

@@ -553,7 +553,9 @@ theorem quittingCounterfactualReplacementDetermining_card_sub_one
       (ι := ι) (Fintype.card ι - 1) :=
   quittingCounterfactualReplacementDetermining_of_card_sub_one_le le_rfl
 
-private theorem quittingFirstStoppingOutcome_eq_of_hidden_masked
+/-- Changing one player's stopping date preserves the terminal coalition when
+another unchanged player stops strictly earlier in both profiles. -/
+theorem quittingFirstStoppingOutcome_eq_of_earlier_stopper
     [Nonempty ι] (first second : ι -> Option Nat)
     {hidden blocker : ι}
     (hagree : forall other, other ≠ hidden -> first other = second other)
@@ -685,7 +687,7 @@ private theorem counterfactual_hidden_profiles_state_eq
       Finset.exists_mem_notMem_of_card_lt_card hcardLt
     have hblockerNe : blocker ≠ hidden := fun heq =>
       hhidden (heq ▸ hblocker)
-    apply quittingFirstStoppingOutcome_eq_of_hidden_masked
+    apply quittingFirstStoppingOutcome_eq_of_earlier_stopper
       (hidden := hidden) (blocker := blocker)
     · intro other hother
       by_cases hotherCarrier : other ∈ query.1.carrier
