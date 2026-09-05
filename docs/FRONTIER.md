@@ -123,6 +123,11 @@ uniformly above minimum total debt. The source row retains its stationary
 continuation and positive own, opponent, and joint Continue floors.
 This supplies the actual paid port, not ancestry from a minimum source or a
 consumer producing an approximate equilibrium.
+[`LiteralStationaryPaidCapChain.finalTarget_terminalOutcomeMass_tendsto_singleton`](../UniformEquilibrium/Diagnostics/Quitting/PeriodOnePaidPortAdapters.lean)
+proves convergence of the recorded final child's complete terminal law to
+the final payer's singleton. The same module identifies that payer's cap at
+every source semantic cluster point and its gap below every minimum-face cap.
+The sure-Quit child is not asserted to regenerate a diffuse source.
 Changing to an equilibrium of a smaller support game does not preserve these
 source profiles or their outsider-debt conclusions.
 

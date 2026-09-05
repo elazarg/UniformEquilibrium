@@ -195,6 +195,7 @@ import MathUE.Minimax.DiscountedShapleySystem
 import MathUE.Minimax.Loomis
 import MathUE.Minimax.MinimaxLoomis
 import MathUE.Minimax.ShapleySnow
+import MathUE.MonotoneNonexpansiveIteration
 import MathUE.MultivariateElimination
 import MathUE.NonnegativeLeadingSymbol
 import MathUE.NormalizedFarkasBasis

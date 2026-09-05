@@ -1,6 +1,8 @@
 import MathUE
 import UniformEquilibrium.ProofView
 import UniformEquilibrium.Quitting.ControllerTester.All
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineTimingGame
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineReplyCap
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.ProjectiveGauge
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.ProjectiveGauge.Defect
 import UniformEquilibrium.Quitting.Boundary.Analytic.ChargeTangent.ProjectiveGauge.ScalarClosure
