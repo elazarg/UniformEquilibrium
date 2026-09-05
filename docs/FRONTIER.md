@@ -2787,7 +2787,7 @@ adapter and near-minimum composition are not yet formalized, so this route has
 `M`, `L`, and conditional one-step `C`, but no `A`; it claims no regeneration,
 terminal approximation, or uniform-equilibrium payoff.
 
-The same cap-pin estimate now has an approximate-root finite-ledger form in
+The cap-pin estimate has an approximate-root visit ledger in
 `UniformEquilibrium/Diagnostics/Quitting/FixedCapPinApproximateRootDebtExpenditure.lean`
 and
 `UniformEquilibrium/Diagnostics/Quitting/FixedCapPinDebtVisitBudget.lean`.
@@ -2795,12 +2795,16 @@ The arbitrary-root identity and approximate-Nash inequality make every visit
 spend the fixed drop minus its root error. Literal prefix chains telescope this
 expenditure directly; arbitrary source reconstruction is allowed when each
 re-entry pays its positive named-debt replenishment, itself bounded by the
-named prescribed-payoff and cap seams. This has `M`, `L`, and a conditional
-finite-prefix `C`, but no source `A`. No theorem here turns the finite ledger
-into an infinite visit-cardinality or floor bound, supplies the initial
-`2 * M` debt estimate, proves summability of errors or seams, constructs a
-source or renewal adapter, regenerates the cap pin, or yields terminal
-approximation or a uniform-equilibrium payoff.
+named prescribed-payoff and cap seams.
+`fixedCapPin_prefixChain_visitSet_finite_and_ncard_le` turns summable
+nonnegative errors into a finite visit set with an explicit floor-cardinality
+bound. `fixedCapPin_carrierPrefixChain_visitSet_finite_and_ncard_le` supplies
+the initial `2 * M` bound from carrier membership. The re-entry and
+coordinate-seam versions give the corresponding finiteness conclusions when
+replenishment or the two seams are summable. These are conditional consumers
+for supplied chains. No source construction or proof that its errors and
+seams are summable is supplied, and no regeneration or uniform payoff follows
+without those further inputs.
 
 <!-- BEGIN GENERATED OPEN LEAVES -->
 This dependency table is generated from [`QuittingProofFrontier.json`](QuittingProofFrontier.json).

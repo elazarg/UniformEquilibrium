@@ -514,6 +514,7 @@ import UniformEquilibrium.Quitting.Boundary.Exceptional.PeriodicExceptionalClosi
 import UniformEquilibrium.Quitting.Root.NearSureRoot
 import UniformEquilibrium.Quitting.Root.NearSureProfile
 import UniformEquilibrium.Quitting.Root.OneDateNeverNashDebt
+import UniformEquilibrium.Quitting.Root.ExactSuccessorClosure
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Bellman.Finite.HorizonBridge
 import UniformEquilibrium.Quitting.Debt.Marked.FencePacket
@@ -634,6 +635,7 @@ import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionPayoff
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyCapLimitRootUniqueness
+import UniformEquilibrium.Quitting.Examples.ExactRootNonconvexityRegression
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyPairDefect
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskyStationaryClosure
 import UniformEquilibrium.Quitting.Examples.FinFourOwnerRiskySureExitExclusion
