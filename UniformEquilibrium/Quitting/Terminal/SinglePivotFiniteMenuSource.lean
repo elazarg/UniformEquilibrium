@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineNashExistence
+import UniformEquilibrium.Quitting.Root.SinglePivotNormalization
 
 /-! # The single-pivot scalar obstruction in finite timing menus -/
 
@@ -13,6 +14,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 def IsSinglePivotSingletonTable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι) : Prop :=
   ∀ who, reward (quittingSingletonTerminal who) who = if who = pivot then 1 else 0
+
+omit [Fintype ι] in
+/-- Normalizing at a positive singleton gives the same player's unit singleton vector. -/
+theorem singlePivotNormalized_isSinglePivotSingletonTable
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (pivot : ι) (hpivot : 0 < reward (quittingSingletonTerminal pivot) pivot) :
+    IsSinglePivotSingletonTable (quittingSinglePivotNormalizedReward reward pivot) pivot := by
+  intro who
+  exact quittingSoloReward_singlePivotNormalized reward pivot who hpivot.ne'
 
 theorem singlePivot_nonpivot_fullCap_eq_menuCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)

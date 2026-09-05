@@ -98,4 +98,30 @@ theorem quittingPunishmentValue_singlePivotNormalized_le_solo
     quittingSoloReward reward pivot pivot
   exact div_le_div_of_nonneg_right (by linarith) hpivot.le
 
+/-- The singleton-to-punishment margin scales by the same positive pivot
+factor.  This is an equality of punishment levels, not a profilewise payoff
+translation. -/
+theorem quittingSoloReward_sub_punishmentValue_singlePivotNormalized
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot who : ι)
+    (hpivot : 0 < quittingSoloReward reward pivot pivot)
+    (hnormal : quittingPunishmentValue reward who ≤ quittingSoloReward reward who who) :
+    quittingSoloReward (quittingSinglePivotNormalizedReward reward pivot) who who -
+        quittingPunishmentValue (quittingSinglePivotNormalizedReward reward pivot) who =
+      (quittingSoloReward reward who who - quittingPunishmentValue reward who) /
+        quittingSoloReward reward pivot pivot := by
+  rw [quittingPunishmentValue_singlePivotNormalized reward pivot who hpivot hnormal]
+  change quittingSinglePivotNormalizedReward reward pivot
+      (quittingSingletonTerminal who) who - _ = _
+  rw [quittingSoloReward_singlePivotNormalized reward pivot who hpivot.ne']
+  by_cases hwho : who = pivot
+  · subst who
+    rw [if_pos rfl, quittingSinglePivotOffset_self]
+    field_simp [hpivot.ne']
+    ring_nf
+  · rw [if_neg hwho, quittingSinglePivotOffset_of_ne reward hwho]
+    change 0 -
+        (quittingPunishmentValue reward who - quittingSoloReward reward who who) /
+          quittingSoloReward reward pivot pivot = _
+    ring_nf
+
 end GameTheory

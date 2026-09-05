@@ -158,6 +158,14 @@ Fresh exact menu Nash equilibria exist at every deadline. This does not
 make the scalar small: the one-date example in
 `UniformEquilibrium/Diagnostics/Quitting/SinglePivotFiniteMenuRegression.lean`
 is exact menu Nash, has zero joint-Never mass, and has unrestricted debt one half.
+`singlePivotSingletonTable_punishment_le_solo`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotCanonicalConsequences.lean`)
+proves that every such table is punishment-normal, with no restriction on its
+other entries. The conditional consumer
+`exists_uniformEquilibriumPayoff_of_singlePivot_finiteMenu_scalar_source`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotFiniteMenuCompletion.lean`)
+requires only arbitrarily small menu error and exceptional scalar, not exact
+menu Nash. Constructing that source remains open.
 
 The finite-date-only punishment value, allowing complete opponent plans but
 excluding Never from the responder's dates, equals the minimum of unrestricted
@@ -170,8 +178,34 @@ uses it to prove exact punishment transport under single-pivot normalization
 when the original coordinate satisfies punishment normality. Never still pays
 zero. The payoff identity for an unchanged profile includes its joint-Never
 mass; it is not an unrestricted affine translation of every profile's payoff.
-The strategy construction and uniform-payoff-set transport are not established
-by these identities alone.
+`exists_singlePivot_samePrefix_terminal_lift`
+(`UniformEquilibrium/Quitting/Punishment/SinglePivotTailLift.lean`)
+supplies the actual strategy construction under all-player punishment normality
+and a positive pivot singleton. It retains every history before one common
+cutoff and selects one stationary punishment target. Its payoff and full-debt
+errors are controlled by the original profile's joint Never mass.
+`uniformEquilibriumPayoffSet_singlePivotNormalized`
+(`UniformEquilibrium/Quitting/Punishment/SinglePivotUniformPayoff.lean`)
+then proves equality of the fixed-target payoff sets under the terminal-only
+affine transformation. The forward fixed-target implication does not require
+punishment normality; the reverse implication uses the same-prefix lifts.
+`singlePivot_terminalExploitability_ge_gap_sq_div`
+(`UniformEquilibrium/Quitting/Punishment/SinglePivotTerminalGap.lean`)
+transports a positive global terminal gap to a quadratic positive lower bound.
+A separate theorem supplies actual profitable deviations with half that bound,
+without assuming that a best response attains its supremum.
+
+`nonempty_finFourSinglePivotNormalization_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSinglePivotNormalization.lean`)
+starts from a bare four-player no-uniform-payoff hypothesis and obtains the
+original table's hard residual and punishment normality. One positive pivot is
+then fixed for the normalized table and every subsequent deadline. The output
+includes its reward bound, exact punishment values, no-uniform-payoff statement,
+global full-debt floor, actual profitable deviations, and positive scalar and
+deleted-Never floors at every exact menu Nash equilibrium. The same module's
+`exists_finFour_no_uniformPayoff_iff_exists_singlePivot` states that restricting
+counterexamples to canonical single-pivot tables loses no four-player
+counterexample. It does not transport a chosen minimum or response ancestry.
 
 The hypothetical absence of a Fin4 uniform-equilibrium payoff also forces
 one actual stationary source family with vanishing total Quit hazard.
