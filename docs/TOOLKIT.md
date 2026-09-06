@@ -252,6 +252,39 @@ debt drop and absorption floor for every exact root against that child's
 payoff. These are conditional source tools; they do not yet construct a
 renewable reset sequence or a returned source.
 
+`HasTerminalExploitabilityGap.exists_positiveFloor_fixedDebtor_on_capChildren`
+(`UniformEquilibrium/Quitting/Root/NestedCapChildFixedDebtor.lean`) chooses
+one positive survival floor before the starting depth; at each requested depth,
+one outsider and one response are then fixed for all later literal children.
+The companion `HasTerminalExploitabilityGap.exists_fixedOutsiderResponse_for_all_capChildren`
+retains the copied behavioral response and exact survival-scaled gain.
+`exists_coherentOutsiderCapClock_on_pureTimeCapChildren`
+(`UniformEquilibrium/Quitting/Root/CoherentPureTimeCapClock.lean`) selects
+complete caps coherently, with each next clock either immediate Quit or the
+previous clock shifted by one date, including Never. The same module proves
+the eventual-shift/cofinal-reset alternative.
+`UniformEquilibrium/Quitting/Root/NestedChildBellmanEndpointDifference.lean`
+states the actual child Bellman identities and the expanded outsider endpoint
+difference; it does not make the child roots Nash or bound the payoff
+displacement by a summable sequence.
+
+`UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
+residual debt of copying the prescribed root before a cap response and the
+ordinary mixed-root Nash defect at the cap-raised tail. This is not a bound
+on every supported action's regret.
+`HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement`
+(`UniformEquilibrium/Diagnostics/Quitting/DeadlinePaidFirstDisagreement.lean`)
+selects a distinct paid observer before a zero-debt owner's sure deadline,
+with opponent reach at least the gap divided by twice the reward bound.
+`UniformEquilibrium/Diagnostics/Quitting/ActualReversePrefixAtomTransport.lean`
+transports terminal payoff-difference atoms through common literal prefixes.
+It does not by itself identify a marked row's conditional data.
+`UniformEquilibrium/Quitting/Paths/ActualPrefixPayoffLimit.lean` proves payoff
+convergence from summable hazards and actual nesting, without a Nash premise.
+`allContinue_exactNash_and_fixedPoint_of_tendsto_terminalPayoff`
+(`UniformEquilibrium/Quitting/Paths/ActualPrefixAllContinueLimit.lean`) combines
+root convergence, payoff convergence, and closedness of exact root Nash.
+
 `quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
 (`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`)
 identifies the independent-clock formula with the existing executed terminal
@@ -279,6 +312,10 @@ feasible crossing and the exact two-coordinate feasibility criterion.
 `MathUE/Probability/OverlappingFirstStoppingEquality.lean` supplies the
 zero-continuation one-row equality case; the full chronological equality
 classification is not implied by these sharpness constructions.
+`MathUE/Probability/OverlappingFirstStoppingPositiveContinueEquality.lean`
+proves the complementary positive-continuation one-row necessity, retaining
+the all-zero hazard degeneracy. Lifting equality to the full stopping laws
+remains separate.
 `exists_pureTime_gain_half_affinePairRootLeastCrossing`
 (`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
 supplied affine lower bounds on two pair masses into a profitable finite-time

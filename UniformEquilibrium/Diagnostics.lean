@@ -4,6 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 -/
 
 import UniformEquilibrium.Diagnostics.FiniteMixedNashSupport
+import UniformEquilibrium.Diagnostics.Quitting.ActualReversePrefixAtomTransport
+import UniformEquilibrium.Diagnostics.Quitting.DeadlinePaidFirstDisagreement
 import UniformEquilibrium.Diagnostics.Uniform.Consequences
 import UniformEquilibrium.Diagnostics.Uniform.PaddedDuplicateLotterySeparation
 import UniformEquilibrium.Diagnostics.Uniform.HiddenFiberSpanCounterexample
