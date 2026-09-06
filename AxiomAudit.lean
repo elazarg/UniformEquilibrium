@@ -9,6 +9,8 @@ import MathUE.AbelCesaro
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection
+import MathUE.Analysis.CoordinateSecantEstimate
+import MathUE.Analysis.PositiveWeightedApproximation
 import MathUE.Analysis.SummableTailAverage
 import MathUE.AnalyticConeDichotomy
 import MathUE.AnalyticConeLift
@@ -300,9 +302,11 @@ import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
+import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.TensorBernsteinDifferences
+import MathUE.Polynomial.TensorBernsteinGridEstimates
 import MathUE.PolynomialSignCell
 import MathUE.Probability
 import MathUE.Probability.Adaptive
@@ -806,6 +810,7 @@ import UniformEquilibrium.Diagnostics.Quitting.FinFourLawTightCapNashStrictMinim
 import UniformEquilibrium.Diagnostics.Quitting.FinFourNearSureRootApproxSingletonBase
 import UniformEquilibrium.Diagnostics.Quitting.FinFourNearSureRootClusterPoint
 import UniformEquilibrium.Diagnostics.Quitting.FinFourPureTimeExactResponseCycleExternality
+import UniformEquilibrium.Diagnostics.Quitting.FinFourRenewedLiteralExactWordCapacity
 import UniformEquilibrium.Diagnostics.Quitting.FinFourSinglePivotActualSource
 import UniformEquilibrium.Diagnostics.Quitting.FinFourSinglePivotNormalization
 import UniformEquilibrium.Diagnostics.Quitting.FinFourUnboundedExactBlockHazardCapacity
@@ -1398,6 +1403,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.FiniteEndpointErrorPunishmentF
 import UniformEquilibrium.Quitting.Bellman.Finite.FullBoxExactPredecessorAbsorptionBudget
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.HorizonBridge
+import UniformEquilibrium.Quitting.Bellman.Finite.LiteralExactPrefixBoxPath
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanFactory
@@ -2142,6 +2148,7 @@ import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
 import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
+import UniformEquilibrium.Quitting.Projective.RobustChargedRelation
 import UniformEquilibrium.Quitting.Projective.SequentiallyPerfectAbsorbingForwardPacket
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness
@@ -2233,6 +2240,7 @@ import UniformEquilibrium.Quitting.Root.PlayerwiseAffineReward
 import UniformEquilibrium.Quitting.Root.ProductRootProbabilityBridge
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
+import UniformEquilibrium.Quitting.Root.RenewedLiteralExactWordSequence
 import UniformEquilibrium.Quitting.Root.SelfTailClosure
 import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor

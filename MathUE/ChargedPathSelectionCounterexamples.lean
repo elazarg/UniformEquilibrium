@@ -198,20 +198,6 @@ def descentPath : ∀ delay : ℕ, relation.Path delay 0
       change (descentPath delay).length + 1 = delay + 1
       omega
 
-private theorem length_append {source middle target : ℕ}
-    (first : relation.Path source middle)
-    (second : relation.Path middle target) :
-    (first.append second).length = first.length + second.length := by
-  induction first with
-  | nil =>
-      change second.length = 0 + second.length
-      omega
-  | cons edge rest ih =>
-      change (rest.append second).length + 1 =
-        (rest.length + 1) + second.length
-      rw [ih]
-      omega
-
 /-- One selected unit block may contain an arbitrarily long initial zero-charge
 delay before its final positive loop. -/
 def firstUnitBlock (delay : ℕ) : relation.Path delay 0 :=
@@ -225,7 +211,7 @@ def firstUnitBlock (delay : ℕ) : relation.Path delay 0 :=
 
 @[simp] theorem firstUnitBlock_length (delay : ℕ) :
     (firstUnitBlock delay).length = delay + 1 := by
-  rw [firstUnitBlock, length_append, descentPath_length]
+  rw [firstUnitBlock, Path.length_append, descentPath_length]
   rfl
 
 theorem firstUnitBlock_length_pos (delay : ℕ) :

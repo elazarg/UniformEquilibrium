@@ -9,9 +9,10 @@ import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Root.NashDefect
 
 /-!
-# Continuity of one-stage quitting-root Nash defects
+# Continuity of one-stage quitting-root absorption and Nash defects
 
-The coordinatewise and total root defects are continuous jointly in the tail
+Root absorption is continuous in the product-root simplex. The coordinatewise
+and total root defects are continuous jointly in the tail
 payoff and finite product-root simplex. This production interface is
 independent of terminal-semantic diagnostics.
 -/
@@ -23,6 +24,19 @@ namespace GameTheory
 open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+omit [DecidableEq ι] in
+/-- Root absorption is continuous in simplex coordinates. -/
+theorem continuous_quittingRootAbsorptionMass_simplex :
+    Continuous (fun root : QuittingRootSimplex ι =>
+      quittingRootAbsorptionMass (quittingRootOfSimplex root)) := by
+  simp_rw [quittingRootAbsorptionMass,
+    quittingStationaryContinueMass_eq_prod_continueProbability,
+    quittingRootOfSimplex_apply_toReal]
+  exact continuous_const.sub
+    (continuous_finsetProd _ fun who _ =>
+      (continuous_apply false).comp
+        (continuous_subtype_val.comp (continuous_apply who)))
 
 /-- One-coordinate Nash defect is jointly continuous in the tail and root. -/
 theorem continuous_quittingRootCoordinateNashDefect_simplex
@@ -78,4 +92,3 @@ theorem continuous_quittingRootTotalNashDefect_fixedRoot
     continuous_quittingRootCoordinateNashDefect_fixedRoot reward root who
 
 end GameTheory
-

@@ -1,3 +1,4 @@
+import MathUE.Polynomial.MvPolynomialFDeriv
 import Mathlib.RingTheory.Polynomial.Bernstein
 import Mathlib.Analysis.SpecialFunctions.Bernstein
 import Mathlib.Algebra.BigOperators.Ring.Finset
@@ -255,27 +256,7 @@ theorem pderiv_tensorBernsteinPolynomial (degree : Fin dimension → ℕ)
   simp only [tensorBernsteinPolynomial, map_sum, MvPolynomial.pderiv_C_mul,
     pderiv_tensorBernsteinBasis]
 
-/-- Formal partial derivatives agree with the actual derivatives along coordinate lines. -/
-theorem hasDerivAt_eval_mvPolynomial_update (polynomial : MvPolynomial (Fin dimension) ℝ)
-    (point : Fin dimension → ℝ) (coordinate : Fin dimension) :
-    HasDerivAt (fun value ↦ MvPolynomial.eval (Function.update point coordinate value) polynomial)
-      (MvPolynomial.eval point (MvPolynomial.pderiv coordinate polynomial)) (point coordinate) := by
-  classical
-  induction polynomial using MvPolynomial.induction_on with
-  | C coefficient =>
-      simpa using hasDerivAt_const (point coordinate) coefficient
-  | add first second hfirst hsecond =>
-      simpa using! hfirst.add hsecond
-  | mul_X polynomial axis hpolynomial =>
-      by_cases haxis : axis = coordinate
-      · subst axis
-        simpa [MvPolynomial.pderiv_mul, add_comm, mul_comm] using!
-          hpolynomial.mul (hasDerivAt_id (point coordinate))
-      · simpa [MvPolynomial.pderiv_mul, Function.update_of_ne haxis,
-          MvPolynomial.pderiv_X_of_ne haxis, mul_comm] using!
-          hpolynomial.mul_const (point axis)
 
 end Tensor
 
 end Math
-

@@ -33,19 +33,6 @@ open scoped Topology
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
 omit [DecidableEq ι] [Nonempty ι] in
-/-- Root absorption is continuous in simplex coordinates. -/
-theorem continuous_quittingRootAbsorptionMass_simplex :
-    Continuous (fun root : QuittingRootSimplex ι =>
-      quittingRootAbsorptionMass (quittingRootOfSimplex root)) := by
-  simp_rw [quittingRootAbsorptionMass,
-    quittingStationaryContinueMass_eq_prod_continueProbability,
-    quittingRootOfSimplex_apply_toReal]
-  exact continuous_const.sub
-    (continuous_finsetProd _ fun who _ =>
-      (continuous_apply false).comp
-        (continuous_subtype_val.comp (continuous_apply who)))
-
-omit [DecidableEq ι] [Nonempty ι] in
 /-- Absorption mass is at most one. -/
 theorem quittingRootAbsorptionMass_le_one
     (root : ι → PMF Bool) :

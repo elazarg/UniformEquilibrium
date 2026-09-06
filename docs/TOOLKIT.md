@@ -60,6 +60,18 @@ Its evaluated formula is a tensor-weighted average, and
 with the actual coordinate-line derivative. The natural-index coefficient
 adapter is the same multivariate polynomial, not a separate polynomial model.
 
+`MathUE/Polynomial/MvPolynomialFDeriv.lean` separates general polynomial
+calculus from the Bernstein construction: smoothness of every order and
+`fderiv_eval_mvPolynomial_apply_single` identify formal partials with the
+actual derivative. `MathUE/Polynomial/TensorBernsteinGridEstimates.lean`
+bounds the canonical-grid second moment and the displacement of finite-
+difference sample segments from mixed-degree grid nodes. The two grids are
+kept distinct. `MathUE/Analysis/PositiveWeightedApproximation.lean` provides
+near/far bounds for finite positive averages, and
+`MathUE/Analysis/CoordinateSecantEstimate.lean` controls literal finite
+differences from actual derivative bounds. Uniform derivative convergence
+and smooth-to-polynomial approximation remain separate obligations.
+
 Stationary terminal approximate equilibria supply weighted packets through
 `hasAbsorptionWeightedFiniteForwardPackets_of_stationary`
 (`UniformEquilibrium/Quitting/Projective/StationaryAbsorptionWeightedForwardPacket.lean`).
@@ -110,6 +122,29 @@ cumulative cross-player injection additionally pays the sum of owner gains.
 These identities work for arbitrary finite player sets without a payoff-bound,
 punishment-floor, exact-prefix, or no-uniform-payoff premise. They do not
 construct a renewable source or turn its horizontal updates into charged edges.
+
+`quittingLiteralExactWordBoxPath`
+(`UniformEquilibrium/Quitting/Bellman/Finite/LiteralExactPrefixBoxPath.lean`)
+decodes a supplied exact literal root word over an actual profile into the
+full boxed predecessor relation, retaining endpoint payoff, root decoration,
+charge, and length. Empty words retain the supplied source decoration.
+`QuittingRenewedLiteralExactWordSequence.toRenewedPathSequence`
+(`UniformEquilibrium/Quitting/Root/RenewedLiteralExactWordSequence.lean`)
+uses those actual words and literally reuses the all-Continue-decorated
+cap child as the next source. `finFour_renewedLiteralExactWord_capacityRecharge`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourRenewedLiteralExactWordCapacity.lean`)
+applies the no-uniform-payoff capacity bound to this supplied sequence.
+It gives linear horizontal capacity recharge, not a renewable source producer
+or a bound on that recharge.
+
+`quittingFloorFreeRobustChargedRelation`
+(`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`) is the
+full relation of boxed payoff/root/payoff triples satisfying absorption-relative
+Bellman residual and ordinary Nash-regret bounds. Bare payoff states and the
+full edge space are compact; source, target, and absorption charge are
+continuous. No punishment floor, support-local condition, or selected-root
+restriction is imposed. A finite capacity bound is not supplied by this
+definition or its topological properties.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |

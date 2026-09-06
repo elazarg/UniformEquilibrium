@@ -263,7 +263,11 @@ import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
+import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.TensorBernsteinDifferences
+import MathUE.Polynomial.TensorBernsteinGridEstimates
+import MathUE.Analysis.PositiveWeightedApproximation
+import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Probability
 import MathUE.Probability.Adaptive
 import MathUE.Probability.AdaptiveOccupationFlow

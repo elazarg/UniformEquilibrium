@@ -234,6 +234,15 @@ def append : {s t w : State} → R.Path s t → R.Path t w → R.Path s w
       simp only [append, chargeSum_cons, ih]
       ring
 
+/-- Concatenation adds the exact numbers of edges. -/
+@[simp] theorem length_append {s t w : State} (p : R.Path s t) (q : R.Path t w) :
+    (p.append q).length = p.length + q.length := by
+  induction p with
+  | nil => simp only [append, length_nil, zero_add]
+  | cons edge rest ih =>
+      simp only [append, length_cons, ih]
+      omega
+
 /-- Move the terminal endpoint of a path along an equality of states. -/
 def castTgt {s t w : State} (h : t = w) (p : R.Path s t) : R.Path s w := h ▸ p
 
