@@ -1,6 +1,7 @@
 import UniformEquilibrium.Quitting.Root.CofinalImmediateQuitCapDisplacementLimit
 import UniformEquilibrium.Quitting.Root.CoherentPureTimeCapClock
 import UniformEquilibrium.Quitting.Root.NestedCapChildFixedDebtor
+import UniformEquilibrium.Quitting.Paths.SummableRootSurvival
 
 /-! # Coherent cap-clock dichotomy for literal nested children -/
 
@@ -12,38 +13,10 @@ open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-private theorem summable_forcedAbsorption_of_summable_marginalHazard
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hhazard : Summable (fun time =>
-      ∑ player, (roots time player true).toReal)) :
-    Summable (fun time => quittingRootAbsorptionMass
-      (Function.update (roots time) owner (PMF.pure false))) := by
-  apply Summable.of_nonneg_of_le
-    (fun time => quittingRootAbsorptionMass_nonneg _)
-    (fun time => ?_) hhazard
-  refine (quittingRootAbsorptionMass_le_sum_quitProbability _).trans ?_
-  apply Finset.sum_le_sum
-  intro player _
-  by_cases hplayer : player = owner
-  · subst player
-    simp
-  · rw [Function.update_of_ne hplayer]
-
-omit [DecidableEq ι] in
-private theorem summable_ownerHazard_of_summable_marginalHazard
-    (roots : ℕ → ι → PMF Bool) (owner : ι)
-    (hhazard : Summable (fun time =>
-      ∑ player, (roots time player true).toReal)) :
-    Summable (fun time => (roots time owner true).toReal) := by
-  apply Summable.of_nonneg_of_le (fun _ => ENNReal.toReal_nonneg)
-    (fun time => Finset.single_le_sum
-      (fun player _ => ENNReal.toReal_nonneg) (Finset.mem_univ owner))
-    hhazard
-
 /-- Literal nested cap children admit a coherent outsider cap clock.  It
 either shifts forever after a cutoff, or resets cofinally and forces the
-limiting child-minus-source payoff displacement below half the fixed debt
-floor. -/
+limiting child-minus-source payoff displacement to be at most the negative
+of the fixed debt floor. -/
 theorem quittingNestedCapChild_eventuallyShift_or_negativeHolonomy
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -56,7 +29,6 @@ theorem quittingNestedCapChild_eventuallyShift_or_negativeHolonomy
     (hexact : ∀ depth, IsεQuittingRootNash reward
       (fun player => quittingTerminalPayoff reward (profiles depth) player)
       0 (roots depth))
-    (hpositive : ∀ depth, 0 < quittingStationaryContinueMass (roots depth))
     (hhazard : Summable (fun depth =>
       ∑ player, (roots depth player true).toReal))
     (R : ℕ)
@@ -81,14 +53,14 @@ theorem quittingNestedCapChild_eventuallyShift_or_negativeHolonomy
           choices (depth + 1) = (choices depth).map Nat.succ) ∨
         ((∀ cutoff, ∃ depth, cutoff ≤ depth ∧
             choices (depth + 1) = some 0) ∧
-          limit ≤ -debtFloor / 2)) := by
+          limit ≤ -debtFloor)) := by
   obtain ⟨choices, _, hcaps, hsteps⟩ :=
     exists_coherentOutsiderCapClock_on_pureTimeCapChildren
       reward profiles roots hne hnested
   have hforced :=
-    summable_forcedAbsorption_of_summable_marginalHazard roots owner hhazard
+    summable_forcedContinue_absorption_of_summable_marginalHazard roots owner hhazard
   have howner :=
-    summable_ownerHazard_of_summable_marginalHazard roots owner hhazard
+    summable_coordinateHazard_of_summable_marginalHazard roots owner hhazard
   have hsourceNext : ∀ depth,
       (fun player => quittingTerminalPayoff reward (profiles (depth + 1)) player) =
         quittingRootSuccessorPayoff reward
@@ -146,7 +118,7 @@ theorem quittingNestedCapChild_eventuallyShift_or_negativeHolonomy
       rw [frequently_atTop]
       exact hreset
     obtain ⟨limit, hlimit, hlimitLe⟩ :=
-      exists_terminalChildPayoffDisplacement_limit_le_neg_half_of_frequently_quitZeroCap
+      exists_terminalChildPayoffDisplacement_limit_le_neg_of_frequently_quitZeroCap
         reward
         (fun depth player => quittingTerminalPayoff reward (profiles depth) player)
         (fun depth => quittingPureTimeCapChild reward
@@ -156,9 +128,7 @@ theorem quittingNestedCapChild_eventuallyShift_or_negativeHolonomy
           reward (profiles depth) player hreward)
         hsourceNext hchildNested
         (Eventually.of_forall hexact)
-        (Eventually.of_forall fun depth => (hpositive depth).trans_le
-          (quittingStationaryContinueMass_le_ownContinueProbability
-            (roots depth) who)) hforced howner
+        hforced howner
         (eventually_atTop.2 ⟨R, fun depth hR => by
           simpa [quittingPureTimeCapChild, hnested depth,
             update_quittingRootThenContinuationProfile_pureTime_succ_eq]

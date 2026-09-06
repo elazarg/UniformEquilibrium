@@ -1,4 +1,6 @@
 import MathUE.AbelCesaro
+import MathUE.Probability.ThreeIndependentFiniteLaws
+import MathUE.Probability.FiniteOverlapSparseCompression
 import MathUE.AffineRecurrenceFiniteUnroll
 import MathUE.AffineRecurrenceInfiniteUnroll
 import MathUE.TwoCoordinateSparseSimplex

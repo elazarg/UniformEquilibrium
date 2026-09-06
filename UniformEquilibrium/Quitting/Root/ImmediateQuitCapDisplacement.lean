@@ -194,7 +194,6 @@ theorem debtFloor_sub_ownerHazardError_le_neg_payoffDisplacement_of_quitZeroCap
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : ∀ player, |source player| ≤ M)
     (hroot : IsεQuittingRootNash reward source 0 root)
-    (hcontinue : 0 < (root who false).toReal)
     (hcap : quittingTerminalPayoff reward
         (Function.update
           (quittingRootThenContinuationProfile reward
@@ -223,6 +222,12 @@ theorem debtFloor_sub_ownerHazardError_le_neg_payoffDisplacement_of_quitZeroCap
   have hcontinueForced : (forced who false).toReal =
       (root who false).toReal := by
     simp [forced, Function.update_of_ne hne]
+  have hcontinue : 0 < (root who false).toReal := by
+    by_contra hnot
+    have hzero : (root who false).toReal = 0 :=
+      le_antisymm (le_of_not_gt hnot) ENNReal.toReal_nonneg
+    rw [hcontinueForced, hzero, zero_mul] at hdebtIdentity
+    linarith
   have hnewGap : debtFloor ≤ newGap := by
     have hcontinueLe : (root who false).toReal ≤ 1 := by
       exact ENNReal.toReal_mono ENNReal.one_ne_top

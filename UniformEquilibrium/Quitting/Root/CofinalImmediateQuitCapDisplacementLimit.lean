@@ -1,35 +1,19 @@
-/-
-Copyright (c) 2026 GameTheory contributors. All rights reserved.
-Released under the MIT license as described in the file LICENSE.
-Authors: GameTheory contributors
--/
-
 import UniformEquilibrium.Quitting.Root.ImmediateQuitCapDisplacement
 import UniformEquilibrium.Quitting.Root.TerminalChildPayoffDisplacementSequence
 
-/-!
-# Negative displacement from cofinal immediate-Quit cap resets
-
-Along literal source and owner-forced child Bellman sequences, summable
-forced-root absorption and owner hazard make the payoff displacement converge.
-If one outsider retains a positive debt floor and immediate Quit attains its
-complete cap cofinally, then the limiting child-minus-source displacement in
-that coordinate is at most minus half the debt floor.
--/
+/-! # Sharp negative displacement at cofinal immediate-Quit resets -/
 
 noncomputable section
-
 namespace GameTheory
 
 open Filter Math.Probability
+open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- Cofinal immediate-Quit cap attainment forces a fixed negative limiting
-payoff displacement.  Eventually the source roots are exact Nash, the
-outsider has positive Continue probability, and the child carries the fixed
-debt floor.  No Nash claim is made for the owner-forced child roots. -/
-theorem exists_terminalChildPayoffDisplacement_limit_le_neg_half_of_frequently_quitZeroCap
+/-- Along cofinal immediate-Quit resets, the limiting child-minus-source
+payoff displacement is at most the negative of the fixed outsider debt floor. -/
+theorem exists_terminalChildPayoffDisplacement_limit_le_neg_of_frequently_quitZeroCap
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : ℕ → Payoff ι)
     (childProfile : ℕ → (quittingGame reward).BehaviorProfile)
@@ -45,8 +29,6 @@ theorem exists_terminalChildPayoffDisplacement_limit_le_neg_half_of_frequently_q
         (childProfile time))
     (hroot : ∀ᶠ time in atTop,
       IsεQuittingRootNash reward (source time) 0 (roots time))
-    (hcontinue : ∀ᶠ time in atTop,
-      0 < ((roots time who) false).toReal)
     (hforcedAbsorption : Summable (fun time =>
       quittingRootAbsorptionMass
         (Function.update (roots time) owner (PMF.pure false))))
@@ -72,7 +54,7 @@ theorem exists_terminalChildPayoffDisplacement_limit_le_neg_half_of_frequently_q
       Tendsto (fun time =>
         quittingTerminalPayoff reward (childProfile time) who -
           source time who) atTop (nhds limit) ∧
-      limit ≤ -debtFloor / 2 := by
+      limit ≤ -debtFloor := by
   let child : ℕ → Payoff ι := fun time player =>
     quittingTerminalPayoff reward (childProfile time) player
   have hchildValueNext : ∀ time, child (time + 1) =
@@ -83,81 +65,69 @@ theorem exists_terminalChildPayoffDisplacement_limit_le_neg_half_of_frequently_q
     simp only [child, hchildNext time,
       quittingTerminalPayoff_rootThenContinuation_eq]
     rfl
-  obtain ⟨limit, hlimit⟩ :=
-    exists_tendsto_terminalChildPayoffDisplacement
-      reward source child roots owner who hreward hsource
-        (fun time player =>
-          abs_quittingTerminalPayoff_le reward (childProfile time) player
-            hreward)
-        hsourceNext hchildValueNext hforcedAbsorption hownerHazard
-  have hownerZero : Tendsto (fun time =>
-      ((roots time owner) true).toReal) atTop (nhds 0) :=
-    hownerHazard.tendsto_atTop_zero
-  have herrorZero : Tendsto (fun time =>
-      4 * M * ((roots time owner) true).toReal) atTop (nhds 0) := by
-    simpa using hownerZero.const_mul (4 * M)
-  have hsmall : ∀ᶠ time in atTop,
-      4 * M * ((roots time owner) true).toReal < debtFloor / 2 :=
-    (tendsto_order.1 herrorZero).2 (debtFloor / 2) (by linarith)
-  have hnegativeAtReset : ∀ᶠ time in atTop,
-      (quittingTerminalPayoff reward
-          (Function.update
-            (quittingRootThenContinuationProfile reward
-              (Function.update (roots time) owner (PMF.pure false))
-              (childProfile time))
-            who (quittingPureTimeBehaviorStrategy reward who (some 0))) who =
-          quittingContinuationBestResponseValue reward
-            (quittingRootThenContinuationProfile reward
-              (Function.update (roots time) owner (PMF.pure false))
-              (childProfile time)) who) →
-        child time who - source time who ≤ -debtFloor / 2 := by
-    filter_upwards [hsmall, hroot, hcontinue, hdebt] with time hsmallTime
-      hrootTime hcontinueTime hdebtTime
-    intro hcap
+  obtain ⟨limit, hlimit⟩ := exists_tendsto_terminalChildPayoffDisplacement
+    reward source child roots owner who hreward hsource
+      (fun time player => abs_quittingTerminalPayoff_le
+        reward (childProfile time) player hreward)
+      hsourceNext hchildValueNext hforcedAbsorption hownerHazard
+  change Tendsto (fun time =>
+    quittingTerminalPayoff reward (childProfile time) who - source time who)
+      atTop (nhds limit) at hlimit
+  let survival : ℕ → ℝ := fun time => quittingRootOpponentContinueMass
+    (Function.update (roots time) owner (PMF.pure false)) who
+  let displacement : ℕ → ℝ := fun time =>
+    quittingTerminalPayoff reward (childProfile time) who - source time who
+  let error : ℕ → ℝ := fun time =>
+    4 * M * ((roots time owner) true).toReal
+  have hsurvival : Tendsto survival atTop (nhds 1) := by
+    have hopponent : Summable (fun time =>
+        quittingRootOpponentAbsorptionMass
+          (Function.update (roots time) owner (PMF.pure false)) who) := by
+      apply Summable.of_nonneg_of_le
+        (fun _ => quittingRootOpponentAbsorptionMass_nonneg _ _)
+        (fun time => quittingRootOpponentAbsorptionMass_le_absorptionMass _ _)
+        hforcedAbsorption
+    have habsorb := hopponent.tendsto_atTop_zero
+    have hidentity : ∀ time, survival time = 1 -
+        quittingRootOpponentAbsorptionMass
+          (Function.update (roots time) owner (PMF.pure false)) who := by
+      intro time
+      exact quittingRootOpponentContinueMass_eq_one_sub_absorptionMass _ _
+    have hone : Tendsto (fun _ : ℕ => (1 : ℝ)) atTop (nhds 1) :=
+      tendsto_const_nhds
+    convert hone.sub habsorb using 1
+    · funext time
+      exact hidentity time
+    · norm_num
+  have herror : Tendsto error atTop (nhds 0) := by
+    simpa [error] using
+      hownerHazard.tendsto_atTop_zero.const_mul (4 * M)
+  have hrhs : Tendsto (fun time =>
+      -survival time * displacement time + error time) atTop
+      (nhds (-limit)) := by
+    convert (hsurvival.neg.mul (by simpa [displacement] using hlimit)).add
+      herror using 1
+    all_goals ring_nf
+  have hlower : ∃ᶠ time in atTop, debtFloor ≤
+      -survival time * displacement time + error time := by
+    apply (hreset.and_eventually (hroot.and hdebt)).mono
+    intro time htime
     have hstep :=
       debtFloor_sub_ownerHazardError_le_neg_payoffDisplacement_of_quitZeroCap
         reward (source time) (roots time) (childProfile time) hne hdebtFloor
-          hreward (hsource time) hrootTime hcontinueTime hcap hdebtTime
-    let survival := quittingRootOpponentContinueMass
-      (Function.update (roots time) owner (PMF.pure false)) who
-    let displacement := child time who - source time who
-    have hlower : debtFloor / 2 ≤ -survival * displacement := by
-      change debtFloor - 4 * M * ((roots time owner) true).toReal ≤
-        -survival * displacement at hstep
-      linarith
-    have hsurvivalNonneg : 0 ≤ survival :=
-      quittingRootOpponentContinueMass_nonneg _ _
-    have hsurvivalLe : survival ≤ 1 :=
-      quittingRootOpponentContinueMass_le_one _ _
-    let drop := -displacement
-    have hlowerDrop : debtFloor / 2 ≤ survival * drop := by
-      dsimp only [drop]
-      linarith
-    have hdropNonneg : 0 ≤ drop := by
-      by_contra hdrop
-      have hproductNonpos : survival * drop ≤ 0 :=
-        mul_nonpos_of_nonneg_of_nonpos hsurvivalNonneg
-          (le_of_not_ge hdrop)
-      linarith
-    have hproductLe : survival * drop ≤ drop := by
-      have hcharge := mul_nonneg (sub_nonneg.mpr hsurvivalLe) hdropNonneg
-      nlinarith
-    change displacement ≤ -debtFloor / 2
-    dsimp only [drop] at hdropNonneg hproductLe hlowerDrop
+          hreward (hsource time) htime.2.1 htime.1 htime.2.2
+    change debtFloor - error time ≤ -survival time * displacement time at hstep
     linarith
-  have hfrequentNegative : ∃ᶠ time in atTop,
-      child time who - source time who ≤ -debtFloor / 2 :=
-    (hreset.and_eventually hnegativeAtReset).mono fun time hboth =>
-      hboth.2 hboth.1
-  have hlimitLe : limit ≤ -debtFloor / 2 := by
+  have hlimitLe : limit ≤ -debtFloor := by
     by_contra hnot
-    have hstrict : -debtFloor / 2 < limit := lt_of_not_ge hnot
-    have heventuallyGreater : ∀ᶠ time in atTop,
-        -debtFloor / 2 < child time who - source time who :=
-      (tendsto_order.1 hlimit).1 (-debtFloor / 2) hstrict
-    obtain ⟨time, hle, hlt⟩ :=
-      (hfrequentNegative.and_eventually heventuallyGreater).exists
-    linarith
+    have hstrict : -limit < debtFloor := by linarith
+    have hsmall : ∀ᶠ time in atTop,
+        -survival time * displacement time + error time < debtFloor :=
+      (tendsto_order.1 hrhs).2 debtFloor hstrict
+    obtain ⟨_, hlowerTime, hsmallTime⟩ :=
+      (hlower.and_eventually hsmall).exists
+    exact (not_lt_of_ge hlowerTime) hsmallTime
   exact ⟨limit, hlimit, hlimitLe⟩
+
 
 end GameTheory

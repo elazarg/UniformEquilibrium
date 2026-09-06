@@ -157,4 +157,34 @@ theorem quittingCapClock_eventually_shift_or_cofinally_reset
     · exact hreset
     · exact (hnotShift hshift).elim
 
+/-- An eventual shift tail cannot contain cofinally many resets, including
+when the selected cap on that tail is Never. No coherence premise is needed. -/
+theorem quittingCapClock_not_eventually_shift_and_cofinally_reset
+    (choices : ℕ → Option ℕ) :
+    ¬ ((∃ cutoff, ∀ depth, cutoff ≤ depth →
+        choices (depth + 1) = (choices depth).map Nat.succ) ∧
+      ∀ cutoff, ∃ depth, cutoff ≤ depth ∧ choices (depth + 1) = some 0) := by
+  rintro ⟨⟨cutoff, hshift⟩, hreset⟩
+  obtain ⟨depth, hdepth, hzero⟩ := hreset cutoff
+  have h := hshift depth hdepth
+  rw [hzero] at h
+  cases hchoice : choices depth <;> simp [hchoice] at h
+
+/-- For a coherent clock, eventual pure shifting is exactly failure of
+cofinal resetting. Together with the existing disjunction this is exclusive. -/
+theorem quittingCapClock_eventually_shift_iff_not_cofinally_reset
+    (choices : ℕ → Option ℕ)
+    (hstep : ∀ depth, choices (depth + 1) = some 0 ∨
+      choices (depth + 1) = (choices depth).map Nat.succ) :
+    (∃ cutoff, ∀ depth, cutoff ≤ depth →
+        choices (depth + 1) = (choices depth).map Nat.succ) ↔
+      ¬ (∀ cutoff, ∃ depth, cutoff ≤ depth ∧ choices (depth + 1) = some 0) := by
+  constructor
+  · intro hshift hreset
+    exact quittingCapClock_not_eventually_shift_and_cofinally_reset choices
+      ⟨hshift, hreset⟩
+  · intro hnot
+    exact (quittingCapClock_eventually_shift_or_cofinally_reset choices hstep).resolve_right
+      hnot
+
 end GameTheory
