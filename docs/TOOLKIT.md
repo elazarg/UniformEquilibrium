@@ -54,6 +54,14 @@ proves preservation under shifted playerwise normalization, with the weights
 reweighted by the positive coordinate scales. It includes weak support-peeling
 and global strictly positive weighting as sufficient conditions.
 
+`weakQuittingPremiumSupportPeeling_iff_playerRanking`
+(`UniformEquilibrium/Quitting/Classification/QuittingPremiumSupportPeelingOrder.lean`)
+identifies weak premium support peeling with an injective player ranking:
+every coalition giving a member a positive own premium contains an earlier
+member. This is a ranking of player labels, not quitting dates. The underlying
+finite coalition relation theorem is game-independent and resides in
+`MathUE/FiniteCoalitionSupportPeelingOrder.lean`.
+
 The shared classical source is
 `exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff`
 (`UniformEquilibrium/Quitting/Classification/Existence/PerfectAbsorbingRootSequence.lean`).
@@ -282,6 +290,10 @@ prefixes, not independent supplied paths. The generic survival consequences
 in `UniformEquilibrium/Quitting/Paths/SummableRootSurvival.lean` include
 uniform late-window bounds and a positive floor for every finite prefix
 when each root has positive survival.
+`UniformEquilibrium/Quitting/Paths/InfiniteJointSurvivalDebt.lean` identifies
+the limit of the actual finite prefix products, proves its strict positivity
+under these hypotheses, and gives the cap owner's debt bound by this limit
+times the initial debt floor.
 `eventually_resetChild_everyExactRoot_debtDrop_and_absorptionFloor`
 (`UniformEquilibrium/Diagnostics/Quitting/LateResetChildCapPinExit.lean`)
 pins the actual reset child's cap near the singleton payoff and obtains a
@@ -313,9 +325,15 @@ on every supported action's regret.
 (`UniformEquilibrium/Diagnostics/Quitting/DeadlinePaidFirstDisagreement.lean`)
 selects a distinct paid observer before a zero-debt owner's sure deadline,
 with opponent reach at least the gap divided by twice the reward bound.
+It jointly retains a prescribed-support source time, a cap-attaining receiving
+time that is at most the deadline or Never, their payoff gap, and their exact
+identities in the paid row.
 `UniformEquilibrium/Diagnostics/Quitting/ActualReversePrefixAtomTransport.lean`
 transports terminal payoff-difference atoms through common literal prefixes.
 It does not by itself identify a marked row's conditional data.
+`UniformEquilibrium/Quitting/Paths/ActualReversePrefixMarkedSuffix.lean`
+separately proves literal equality of the complete suffix profile, preservation
+of its live roots, and the exact prefix factor for every later live mass.
 `UniformEquilibrium/Quitting/Paths/ActualPrefixPayoffLimit.lean` proves payoff
 convergence from summable hazards and actual nesting, without a Nash premise.
 `allContinue_exactNash_and_fixedPoint_of_tendsto_terminalPayoff`
@@ -335,8 +353,7 @@ supply its time-disintegration and product-factorization dependencies.
 that an actual terminal law with total pair mass one is concentrated on one
 pair. The same module excludes the uniform one-sixth law on the six Fin4
 pairs, although its two-coordinate square-root inequality holds.
-Equality-law classification and general coalition-law realizability remain
-separate obligations.
+This does not characterize general coalition-law realizability.
 `exists_actual_finFour_pairProjection_sharpProfile`
 (`UniformEquilibrium/Quitting/Paths/FinFourPairSharpness.lean`) constructs
 actual profiles attaining the square-root boundary for any two distinct
@@ -347,18 +364,22 @@ behavioral adapter in
 `MathUE/AffinePairRootCrossingAttainment.lean` proves attainment of the least
 feasible crossing and the exact two-coordinate feasibility criterion.
 `MathUE/Probability/OverlappingFirstStoppingEquality.lean` supplies the
-zero-continuation one-row equality case; the full chronological equality
-classification is not implied by these sharpness constructions.
+zero-continuation one-row equality case.
 `MathUE/Probability/OverlappingFirstStoppingPositiveContinueEquality.lean`
 proves the complementary positive-continuation one-row necessity, retaining
-the all-zero hazard degeneracy. Lifting equality to the full stopping laws
-remains separate.
+the all-zero hazard degeneracy.
 `MathUE/Probability/OverlappingFirstStoppingInfiniteRecurrence.lean` supplies
 the exact infinite first-row recurrence, including zero continuation.
 `equalFirstSecondBeforeThirdMass_eq_one_iff_deterministicFiniteAtom`
 (`MathUE/Probability/OverlappingFirstStoppingDeterministicAtom.lean`) identifies
 a mass-one pair event with a common deterministic finite atom and strict
 survival of the third clock, allowing its arbitrary later or Never behavior.
+`overlappingMass_sqrt_sum_eq_one_iff_deterministic_or_chronological`
+(`MathUE/Probability/OverlappingFirstStoppingChronologicalEquality.lean`)
+classifies equality for arbitrary complete stopping laws: either mass-one
+endpoint, or an initial silent prefix followed by one of three positive-mass
+chronological configurations. The staggered configurations retain a literal
+later deterministic residual atom; irrelevant tails remain unrestricted.
 `exists_pureTime_gain_half_affinePairRootLeastCrossing`
 (`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
 supplied affine lower bounds on two pair masses into a profitable finite-time
@@ -366,6 +387,15 @@ or Never deviation for every profile. Its positive gap depends on the
 forbidden zero-error corner. The module also proves terminal exploitability
 and no-uniform-payoff consequences; it does not construct those affine bounds
 from an arbitrary reward table.
+`UniformEquilibrium/Quitting/Terminal/FinFourAllPairCrossingConsumer.lean`
+takes the maximum of the fifteen pair crossings, proves it is attained, and
+gives the corresponding all-profile exploitability bound, pure-time response,
+and conditional no-uniform-payoff consumer. With nonnegative slopes it also
+characterizes simultaneous feasibility of all fifteen pair projections, not
+joint realizability of the six masses.
+`UniformEquilibrium/Quitting/Examples/OverlappingFirstStoppingBoundary.lean`
+computes complete stationary and rational clock laws and refutes the nested-
+coalition extension and the separate-square-root continuation estimate.
 `fixedCardProductRow_eq_deterministic`
 (`MathUE/PMFProduct/FixedCardinalityRigidity.lean`) proves a local rigidity
 result for any fixed coalition size at least two: if every supported nonempty
@@ -677,7 +707,7 @@ generic quitting-game existence theorems.
 | Tool | Module | Use |
 | --- | --- | --- |
 | Discrete hazard stopping | `MathUE/Probability/DiscreteHazardStopping.lean` | Survival products, first-hit weights, total stopping mass, and bounded stopped-payoff accounting independent of quitting games. |
-| Independent first-stopping coalition square-root laws | `MathUE/Probability/OverlappingFirstStopping.lean` and `MathUE/Probability/IndependentFirstStoppingPair.lean` | `twoOverlappingFirstStoppingMasses_sqrt_sum_le_one` proves the sharp square-root bound for two overlapping tie-before-third events of three arbitrary complete stopping laws, including positive Never mass. `sqrt_exactFiniteFirstStoppingCoalitionMass_add_sqrt_le_one_of_incomparable` gives the corresponding exact-coalition theorem for any two incomparable intersecting coalitions. Combining it with the disjoint-pair clock yields `sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one`: over any finite player type, every two distinct two-player exact first-stopping coalitions have square-root masses summing to at most one, and hence all fifteen pair projections for four players are covered without a Fin4 case split. Independence is encoded by products of the separately supplied marginal laws. The equality classification, adapter from an actual quitting behavior profile, affine pair-mass producer, and terminal-exploitability consumer are not supplied; this generic core has `M` and `L`, but no game-facing `A` or `C`. |
+| Independent first-stopping coalition square-root laws | `MathUE/Probability/OverlappingFirstStopping.lean` and `MathUE/Probability/IndependentFirstStoppingPair.lean` | `twoOverlappingFirstStoppingMasses_sqrt_sum_le_one` proves the sharp square-root bound for two overlapping tie-before-third events of three arbitrary complete stopping laws, including positive Never mass. `sqrt_exactFiniteFirstStoppingCoalitionMass_add_sqrt_le_one_of_incomparable` gives the corresponding exact-coalition theorem for any two incomparable intersecting coalitions. Combining it with the disjoint-pair clock yields `sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one`: over any finite player type, every two distinct two-player exact first-stopping coalitions have square-root masses summing to at most one, and hence all fifteen pair projections for four players are covered without a Fin4 case split. Independence is encoded by products of the separately supplied marginal laws. The complete overlapping-event equality classification is in `MathUE/Probability/OverlappingFirstStoppingChronologicalEquality.lean`. Actual-profile adapters and conditional pair-mass consumers are described above. An affine mass-bound producer for an arbitrary reward table is not supplied. |
 | Survival products | `MathUE/SurvivalProduct.lean` | Generic finite-product and cumulative-hazard estimates shared by stopping arguments. |
 | Survival coboundaries | `MathUE/Probability/SurvivalCoboundary.lean` | Exact varying-hazard survival-weighted telescopes and finite-difference remainder identities. |
 | Discounted backward recursion | `MathUE/Probability/DiscountedBackwardRecursion.lean` | Prefix-discrepancy Abel bounds, exact terminal shadow contraction, and summable block-tail accounting; it does not construct an infinite recursion. |

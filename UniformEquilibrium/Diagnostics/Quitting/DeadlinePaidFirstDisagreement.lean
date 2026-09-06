@@ -14,61 +14,6 @@ open Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-private theorem HasTerminalExploitabilityGap.exists_supported_pair_with_gain
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {gap : ℝ} (exploit : HasTerminalExploitabilityGap reward gap)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    ∃ observer, ∃ deviation : (quittingGame reward).BehaviorStrategy observer,
-      gap ≤ quittingTerminalPayoff reward
-          (Function.update profile observer deviation) observer -
-        quittingTerminalPayoff reward profile observer ∧
-      ∃ source receiving,
-        source ∈ (quittingBehaviorStoppingLaw reward (profile observer)).support ∧
-        receiving ∈ (quittingBehaviorStoppingLaw reward deviation).support ∧
-        gap ≤ quittingPureTimeDeviationPayoff reward profile observer receiving -
-          quittingPureTimeDeviationPayoff reward profile observer source := by
-  obtain ⟨observer, deviation, hgain⟩ := exploit profile
-  let value : Option ℕ → ℝ :=
-    quittingPureTimeDeviationPayoff reward profile observer
-  have hvalue : ∀ quitTime, |value quitTime| ≤ quittingRewardBound reward := by
-    intro quitTime
-    exact abs_quittingTerminalPayoff_le reward _ observer
-      (abs_reward_le_quittingRewardBound reward)
-  have hdeviation : quittingTerminalPayoff reward
-      (Function.update profile observer deviation) observer =
-      Math.Probability.expect
-        (quittingBehaviorStoppingLaw reward deviation) value :=
-    quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-      reward profile observer deviation
-  have hprescribed : quittingTerminalPayoff reward profile observer =
-      Math.Probability.expect
-        (quittingBehaviorStoppingLaw reward (profile observer)) value := by
-    have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
-      reward profile observer (profile observer)
-    rw [Function.update_eq_self] at h
-    exact h
-  obtain ⟨receiving, source, hreceiving, hsource, havg⟩ :=
-    exists_support_pair_expect_sub_le_sub
-      (quittingBehaviorStoppingLaw reward deviation)
-      (quittingBehaviorStoppingLaw reward (profile observer)) value value
-      hvalue hvalue
-  have hgain' : gap ≤ quittingTerminalPayoff reward
-      (Function.update profile observer deviation) observer -
-        quittingTerminalPayoff reward profile observer := by
-    linarith
-  refine ⟨observer, deviation, hgain', source, receiving,
-    hsource, hreceiving, ?_⟩
-  calc
-    gap ≤ quittingTerminalPayoff reward
-        (Function.update profile observer deviation) observer -
-      quittingTerminalPayoff reward profile observer := hgain'
-    _ = Math.Probability.expect
-          (quittingBehaviorStoppingLaw reward deviation) value -
-        Math.Probability.expect
-          (quittingBehaviorStoppingLaw reward (profile observer)) value := by
-      rw [hdeviation, hprescribed]
-    _ ≤ value receiving - value source := havg
-
 theorem quittingOpponentSurvivalWeight_eq_zero_of_sureOpponent_before
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile)
@@ -86,9 +31,9 @@ theorem quittingOpponentSurvivalWeight_eq_zero_of_sureOpponent_before
   rw [Function.update_of_ne hne]
   exact hsure
 
-/-- A positive terminal gap at a profile with one zero-debt sure-deadline
-owner yields a distinct paid observer.  Its first disagreement occurs by the
-deadline, and its opponent reach satisfies the sharp `gap/(2M)` lower bound. -/
+/-- A positive terminal gap jointly selects a prescribed-support source and
+a bounded cap-attaining recipient for a distinct paid observer.  Their first
+disagreement occurs by the sure-owner deadline and has the sharp reach floor. -/
 theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     {gap M : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
@@ -100,11 +45,19 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
     (hsure : quittingProfileLiveRoot reward profile deadline owner =
       PMF.pure true) :
     ∃ observer, observer ≠ owner ∧
-      ∃ row : QuittingPaidFirstDisagreementRow reward profile observer gap,
-        row.start ≤ deadline ∧ gap / (2 * M) ≤ row.liveMass := by
-  obtain ⟨observer, deviation, hactual, source, receiving,
-      _hsource, _hreceiving, hedge⟩ :=
-    exists_supported_pair_with_gain reward hexploit profile
+      ∃ source receiving : Option ℕ,
+        source ∈ (quittingBehaviorStoppingLaw reward
+          (profile observer)).support ∧
+        (receiving = none ∨
+          ∃ time ≤ deadline, receiving = some time) ∧
+        quittingPureTimeDeviationPayoff reward profile observer receiving =
+          quittingContinuationBestResponseValue reward profile observer ∧
+        gap ≤ quittingPureTimeDeviationPayoff reward profile observer receiving -
+          quittingPureTimeDeviationPayoff reward profile observer source ∧
+        ∃ row : QuittingPaidFirstDisagreementRow reward profile observer gap,
+          row.sourceWitness = source ∧ row.receivingWitness = receiving ∧
+            row.start ≤ deadline ∧ gap / (2 * M) ≤ row.liveMass := by
+  obtain ⟨observer, deviation, hactual⟩ := hexploit profile
   have hobserverDebt : gap ≤
       quittingTerminalDeviationDebt reward profile observer := by
     have hcap := quittingTerminalPayoff_update_le_continuationBestResponseValue
@@ -116,7 +69,35 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
     subst observer
     rw [hownerDebt] at hobserverDebt
     linarith
-  obtain ⟨row, _hrowSource, _hrowReceiving⟩ :=
+  obtain ⟨receiving, hreceivingBound, hreceivingCap⟩ :=
+    exists_pureTime_le_deadline_or_never_terminalPayoff_eq_cap
+      reward profile deadline hne.symm hsure
+  let value : Option ℕ → ℝ :=
+    quittingPureTimeDeviationPayoff reward profile observer
+  have hvalue : ∀ quitTime, |value quitTime| ≤ quittingRewardBound reward := by
+    intro quitTime
+    exact abs_quittingTerminalPayoff_le reward _ observer
+      (abs_reward_le_quittingRewardBound reward)
+  have hprescribed : quittingTerminalPayoff reward profile observer =
+      Math.Probability.expect
+        (quittingBehaviorStoppingLaw reward (profile observer)) value := by
+    have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
+      reward profile observer (profile observer)
+    rw [Function.update_eq_self] at h
+    exact h
+  obtain ⟨source, hsource, hsourceValue⟩ :=
+    exists_mem_support_le_expect
+      (quittingBehaviorStoppingLaw reward (profile observer)) value hvalue
+  have hreceivingValue : value receiving =
+      quittingContinuationBestResponseValue reward profile observer := by
+    exact hreceivingCap
+  have hedge : gap ≤ value receiving - value source := by
+    have hdeviationCap :=
+      quittingTerminalPayoff_update_le_continuationBestResponseValue
+        reward profile observer deviation
+    rw [hreceivingValue]
+    linarith
+  obtain ⟨row, hrowSource, hrowReceiving⟩ :=
     exists_quittingPaidFirstDisagreementRow_of_pureTimePayoff_sub
       reward profile observer source receiving gap hgap hedge
   have hlive0 : 0 ≤ row.liveMass := by
@@ -155,7 +136,9 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
       reward profile hne.symm hsure (Nat.lt_of_not_ge hnot)
     rw [row.liveMass_eq, hzero] at hpaid
     linarith
-  refine ⟨observer, hne, row, hstart, ?_⟩
-  exact (div_le_iff₀ (by positivity : 0 < 2 * M)).2 (by simpa [mul_comm] using hpaid)
+  refine ⟨observer, hne, source, receiving, hsource, hreceivingBound,
+    hreceivingValue, hedge, row, hrowSource, hrowReceiving, hstart, ?_⟩
+  exact (div_le_iff₀ (by positivity : 0 < 2 * M)).2
+    (by simpa [mul_comm] using hpaid)
 
 end GameTheory
