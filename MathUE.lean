@@ -8,6 +8,7 @@ import MathUE.LinearProgramming.PositiveInverseOpenness
 import MathUE.LinearProgramming.PivotRepairMassPolytope
 import MathUE.LinearProgramming.PivotRepairMassPerturbation
 import MathUE.LinearProgramming.PivotRepairStoppingLaw
+import MathUE.LinearProgramming.PivotRepairMassOfStoppingLaw
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection

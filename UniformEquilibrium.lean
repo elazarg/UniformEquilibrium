@@ -575,6 +575,7 @@ import UniformEquilibrium.Quitting.Terminal.PivotRepairFiniteLP
 import UniformEquilibrium.Quitting.Terminal.PivotRepairFiniteLPBoundary
 import UniformEquilibrium.Quitting.Terminal.PivotRepairPivotCap
 import UniformEquilibrium.Quitting.Terminal.PivotRepairSemanticRealization
+import UniformEquilibrium.Quitting.Terminal.PivotRepairExactObjective
 import UniformEquilibrium.Quitting.Root.ForcedQuitEndpointStability
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain

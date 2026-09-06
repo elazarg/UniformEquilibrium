@@ -148,7 +148,9 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pure_observer_eq_never_ad
   rw [hobs, hobs] at h
   exact h
 
-private theorem firstStoppingOutcome_one_date
+/-- A nonempty coalition quitting at one common date, with every other player
+at Never, is exactly the first quitting coalition. -/
+theorem quittingFirstStoppingOutcome_one_date
     (coalition : Finset ι) (hne : coalition.Nonempty) (time : ℕ) :
     letI : Nonempty ι := ⟨hne.choose⟩
     quittingFirstStoppingOutcome
@@ -205,7 +207,7 @@ theorem quittingFirstStoppingOutcome_late_pair
           simp
         · simp [hjp, hjo, hall j]
     rw [htimes]
-    exact firstStoppingOutcome_one_date {pivot, observer} (by simp) time
+    exact quittingFirstStoppingOutcome_one_date {pivot, observer} (by simp) time
   · rw [if_neg hall]
     obtain ⟨blocker, hblocker⟩ := not_forall.mp hall
     have hbp : blocker ≠ pivot := fun heq ↦ hblocker (heq ▸ hpivot)
