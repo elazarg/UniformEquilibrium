@@ -2133,6 +2133,7 @@ import UniformEquilibrium.Quitting.Projective.Boundary.TargetMismatchRegression
 import UniformEquilibrium.Quitting.Projective.CumulativeChargeNearReturn
 import UniformEquilibrium.Quitting.Projective.FiniteForwardPacketRewardBoxReduction
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
+import UniformEquilibrium.Quitting.Projective.FixedBoxForwardCharacterization
 import UniformEquilibrium.Quitting.Projective.FloorFreeForwardPacketInputRemoval
 import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
 import UniformEquilibrium.Quitting.Projective.Lasso
@@ -2230,6 +2231,7 @@ import UniformEquilibrium.Quitting.Root.PlayerReindex
 import UniformEquilibrium.Quitting.Root.PlayerwiseAffineReward
 import UniformEquilibrium.Quitting.Root.ProductRootProbabilityBridge
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
+import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
 import UniformEquilibrium.Quitting.Root.SelfTailClosure
 import UniformEquilibrium.Quitting.Root.SemanticExactPrefixOrbit
 import UniformEquilibrium.Quitting.Root.SeparatedTerminalAnchor
