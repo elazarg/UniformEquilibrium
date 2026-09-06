@@ -28,12 +28,14 @@ import MathUE.CaristiFixedPoint
 import MathUE.ChargedPacketAmplification
 import MathUE.ChargedPathBudget
 import MathUE.ChargedPathBudgetCounterexamples
+import MathUE.ChargedPathCode
 import MathUE.ChargedPathExecution
 import MathUE.ChargedPathFiniteHorizon
 import MathUE.ChargedPathSelection
 import MathUE.ChargedPathSelectionCounterexamples
 import MathUE.CoerciveIntervalMinimum
 import MathUE.CofiniteIdeal
+import MathUE.CompactChargedPathCapacity
 import MathUE.CompactFiniteChargedReturn
 import MathUE.ConstrainedAffineNormalWork
 import MathUE.ContinuationLatticeGluing
