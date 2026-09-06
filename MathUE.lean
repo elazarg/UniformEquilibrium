@@ -6,6 +6,8 @@ import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
 import MathUE.LinearProgramming.PivotRepairMassPolytope
+import MathUE.LinearProgramming.PivotRepairMassPerturbation
+import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection

@@ -572,6 +572,7 @@ import UniformEquilibrium.Quitting.Terminal.FiniteOpponentPivotResponseFormula
 import UniformEquilibrium.Quitting.Terminal.GeometricPivotCapDomination
 import UniformEquilibrium.Quitting.Terminal.FiniteOpponentPivotNeverResponse
 import UniformEquilibrium.Quitting.Terminal.PivotRepairFiniteLP
+import UniformEquilibrium.Quitting.Terminal.PivotRepairFiniteLPBoundary
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis
