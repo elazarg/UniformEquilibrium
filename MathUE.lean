@@ -18,6 +18,11 @@ import MathUE.AffineIterateTelescope
 import MathUE.AffinePairRootCrossing
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.SummableTailAverage
+import MathUE.Analysis.CompactSubtypeZeroExtension
+import MathUE.Analysis.DerivativeDifferenceMeanValue
+import MathUE.Analysis.OneSidedCapacitySmoothing
+import MathUE.Interval.RationalPolynomialChargedDrift
+import MathUE.PMFProduct.FixedCardinalityRigidity
 import MathUE.AnalyticConeDichotomy
 import MathUE.AnalyticConeLift
 import MathUE.AnalyticCoordinateCurve

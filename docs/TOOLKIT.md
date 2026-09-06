@@ -179,7 +179,42 @@ relation; its all-horizon capacity is Borel measurable under finite budget.
 `UniformEquilibrium/Quitting/Projective/RobustChargedRelationTranslation.lean`
 translates both endpoints by the same nonnegative vector, keeps the literal
 root and charge, and bounds endpoint displacement proportionally to
-absorption. It does not assert that the capacity is smooth.
+absorption. The capacity itself need not be smooth.
+
+`quittingRobustChargedEdge_charge_add_smoothedCapacity_target_le_source`
+(`UniformEquilibrium/Quitting/Projective/RobustChargedRelationSmoothing.lean`)
+constructs a globally smooth potential from finite outer capacity by one-sided
+convolution of its Borel zero extension. It retains the full absorption drift
+on every inner edge, with box radius reduced by one and tolerance divided by
+four. The generic smoothing and compact-domain zero-extension lemmas live in
+`MathUE/Analysis/OneSidedCapacitySmoothing.lean` and
+`MathUE/Analysis/CompactSubtypeZeroExtension.lean`.
+`exists_evalReal_charge_drift_of_contDiff`
+(`MathUE/Interval/RationalPolynomialChargedDrift.lean`) constructs one native
+rational polynomial preserving every supplied edge's full charge drift on a
+compact convex domain. It uses an absorption-proportional displacement bound
+and actual derivative approximation, including zero-charge edges. Neither
+the smooth potential nor the polynomial is assumed in the capacity-to-potential
+construction.
+
+`exists_quittingFloorRobustChargedRelation_rationalPotential_of_finiteBudget`
+(`UniformEquilibrium/Quitting/Projective/FloorRobustPolynomialSeparator.lean`)
+also proves the construction when both endpoints satisfy tolerance-dependent
+coordinate floors. The floor vector is arbitrary, not necessarily rational or
+a punishment vector; the theorem concerns the entire floor-bearing relation.
+`exists_quittingRobustChargedRelation_rationalPotential_of_finiteBudget`
+(`UniformEquilibrium/Quitting/Projective/RobustChargedRelationPolynomialSeparator.lean`)
+proves the floor-free construction.
+`quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential`
+(`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`)
+characterizes failure of uniform-payoff existence in a normal four-player game
+with a positive singleton payoff: no punishment-vector Nash root with a sure
+quitter, and one rational polynomial with full charge drift on every robust
+edge at a positive rational tolerance at most one quarter, in the fixed reward
+box enlarged by two. The forward implication constructs the polynomial from
+finite capacity in the box enlarged by three; no smoothness or polynomial
+producer is an extra hypothesis. No concrete polynomial counterexample or
+complete polynomial-checking algorithm is supplied.
 
 `quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
 (`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`)
@@ -191,6 +226,17 @@ for any two distinct two-player coalitions in any finite-player game.
 supply its time-disintegration and
 product-factorization dependencies. Equality-law classification and the
 full coalition-law realizability question are separate obligations.
+`exists_pureTime_gain_half_affinePairRootLeastCrossing`
+(`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
+supplied affine lower bounds on two pair masses into a profitable finite-time
+or Never deviation for every profile. Its positive gap depends on the
+forbidden zero-error corner. The module also proves terminal exploitability
+and no-uniform-payoff consequences; it does not construct those affine bounds
+from an arbitrary reward table.
+`fixedCardProductRow_eq_deterministic`
+(`MathUE/PMFProduct/FixedCardinalityRigidity.lean`) proves a local rigidity
+result for any fixed coalition size at least two: if every supported nonempty
+product-row action has that size and one exists, every marginal is pure.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
