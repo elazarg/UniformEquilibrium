@@ -428,6 +428,8 @@ import UniformEquilibrium.VanishingDiscount.Fink.BoundaryCalendar
 import UniformEquilibrium.Quitting.Root.FirstBranch
 import UniformEquilibrium.Quitting.Root.FirstStageAdapter
 import UniformEquilibrium.Quitting.Stationary.Root
+import UniformEquilibrium.Quitting.Stationary.UpwardTranslation
+import UniformEquilibrium.Quitting.Root.UpwardTranslation
 import UniformEquilibrium.Quitting.Boundary.Repair.LocalGlobalCounterexample
 import UniformEquilibrium.Quitting.Paths.LiveMass
 import UniformEquilibrium.Quitting.Paths.LiveMassRecurrence
@@ -599,6 +601,7 @@ import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacket
 import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacketRepair
 import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacketProducer
 import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacketTranslation
+import UniformEquilibrium.Quitting.Projective.StationaryAbsorptionWeightedForwardPacket
 import UniformEquilibrium.Quitting.Projective.FloorFreeForwardPacketInputRemoval
 import UniformEquilibrium.Quitting.Projective.FiniteForwardPacketRewardBoxReduction
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter

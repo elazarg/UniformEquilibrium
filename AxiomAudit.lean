@@ -2143,6 +2143,7 @@ import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness
 import UniformEquilibrium.Quitting.Projective.SinglePivotFiniteForwardPacketTransport
 import UniformEquilibrium.Quitting.Projective.SingleSeamProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SingletonLCP
+import UniformEquilibrium.Quitting.Projective.StationaryAbsorptionWeightedForwardPacket
 import UniformEquilibrium.Quitting.Projective.TargetMismatch
 import UniformEquilibrium.Quitting.Projective.WeightedProjectiveLasso
 import UniformEquilibrium.Quitting.Punishment.ApproximateCompletedCycle
@@ -2253,6 +2254,7 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
+import UniformEquilibrium.Quitting.Root.UpwardTranslation
 import UniformEquilibrium.Quitting.Root.ZeroJointCapLedgerBoundary
 import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Stationary.BestResponse
@@ -2280,6 +2282,7 @@ import UniformEquilibrium.Quitting.Stationary.SnellCap
 import UniformEquilibrium.Quitting.Stationary.StrictEndpointSelection
 import UniformEquilibrium.Quitting.Stationary.TerminalCoalitionLaw
 import UniformEquilibrium.Quitting.Stationary.TogglePotential
+import UniformEquilibrium.Quitting.Stationary.UpwardTranslation
 import UniformEquilibrium.Quitting.Terminal.AuxiliaryNashDebt
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawCapUpperBound
 import UniformEquilibrium.Quitting.Terminal.CompactStoppingLawProfile

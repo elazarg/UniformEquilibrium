@@ -42,6 +42,21 @@ coordinate-direction error and derivative operator-norm error.
 The cube specialization permits arbitrary real radii and dimension zero.
 This is not an approximation theorem for an arbitrary smooth function.
 
+Stationary terminal approximate equilibria supply weighted packets through
+`hasAbsorptionWeightedFiniteForwardPackets_of_stationary`
+(`UniformEquilibrium/Quitting/Projective/StationaryAbsorptionWeightedForwardPacket.lean`).
+One positive singleton reward suffices to obtain positive absorption at small
+error; normality is not assumed. The payoff box is the reward bound plus two.
+`exists_stationaryAbsorbingRoot_generating_weightedPackets` selects one root
+before all charge requests and retains its literal root and annotation in
+every resulting packet. The annotation is the actual stationary payoff plus
+twice the error. In `UniformEquilibrium/Quitting/Stationary/UpwardTranslation.lean`,
+`quittingRootCoordinateNashDefect_stationaryUpwardTranslate_le` bounds regret
+by twice the error times absorption, and
+`quittingStationaryUpwardTranslate_sub_successor_eq` gives equality for the
+Bellman residual. The general support-local translation retains its factor
+three in `UniformEquilibrium/Quitting/Root/UpwardTranslation.lean`.
+
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
 | Compact-edge path capacity | `MathUE/ChargedPathCode.lean` and `MathUE/CompactChargedPathCapacity.lean` | `exists_path_eq_compactFiniteHorizonMaxCharge` attains finite-horizon charge from each initial state for compact state and edge spaces, Hausdorff states, and continuous source, target, and charge. Codes decode to literal paths with exact endpoints and charge, including nil at dead ends. `upperSemicontinuous_compactFiniteHorizonMaxCharge` and `measurable_value_of_compact_edges` give finite-horizon upper semicontinuity and Borel measurability of the existing all-horizon value under finite budget. The latter is not asserted upper semicontinuous. The countable-supremum identity needs no topology. |
