@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Classification.LCP.PositiveInverse
 import UniformEquilibrium.Quitting.Classification.LCP.ElementaryMatrixObstructions
+import MathUE.LinearProgramming.RowNegativeShape
 
 noncomputable section
 
@@ -193,5 +194,21 @@ theorem gammaDoubleDagger_normalCore :
   intro i
   fin_cases i <;> norm_num [gammaDoubleDagger, cycleSuccessor,
     Matrix.cons_val_two, Matrix.cons_val_three]
+
+/-- The heterogeneous table has different negative-entry shapes in its first
+two rows. This obstruction is invariant under positive row scaling. -/
+theorem gammaDagger_not_uniformNegativeRowShape :
+    ¬HasUniformNegativeRowShape gammaDagger := by
+  intro h
+  have h01 := h 0 1
+  simp only [negativeRowSum_eq_sum_ite, negativeRowSquareSum_eq_sum_ite] at h01
+  norm_num [gammaDagger, Fin.sum_univ_succ, Matrix.cons_val_two,
+    Matrix.cons_val_three] at h01
+
+/-- No simultaneous relabeling and positive row scaling makes this table circulant. -/
+theorem gammaDagger_not_positiveRowScaledRelabelingRowCirculant :
+    ¬IsPositiveRowScaledRelabelingRowCirculant gammaDagger := by
+  exact fun h ↦ gammaDagger_not_uniformNegativeRowShape
+    (hasUniformNegativeRowShape_of_positiveRowScaledRelabelingRowCirculant h)
 
 end GameTheory.QuittingLCPClassification.SignedFourCycleMatrixFixtures

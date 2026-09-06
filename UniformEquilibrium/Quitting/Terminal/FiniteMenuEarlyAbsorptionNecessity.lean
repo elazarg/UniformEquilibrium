@@ -1,9 +1,11 @@
 import UniformEquilibrium.Quitting.Paths.LateFiniteStoppingLawCensor
+import UniformEquilibrium.Quitting.Paths.FiniteSupportStoppingLawSurvival
 import UniformEquilibrium.Quitting.Terminal.SingletonJointNeverDebt
 import UniformEquilibrium.Quitting.Terminal.FiniteMenuEarlyAbsorption
 import UniformEquilibrium.Quitting.Terminal.FiniteMenuEarlyAbsorptionCompletion
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineStoppingLawRealization
+import UniformEquilibrium.Quitting.Terminal.StoppingLawExploitability
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
-import MathUE.ProbabilityMassFunction.FiniteStoppingTimeMenu
 
 /-! # Positive-singleton necessity of finite-menu early absorption -/
 
@@ -15,126 +17,6 @@ open StochasticGame
 open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
-
-omit [Fintype ι] [DecidableEq ι] [Nonempty ι] in
-theorem exists_finiteDeadlineTimingLaws_of_censoredLaws
-    (laws : ι → PMF (Option ℕ)) (cutoff deadline : ℕ)
-    (hdeadline : cutoff < deadline) :
-    ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
-      ∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =
-        censorLateFiniteStoppingLaw (laws who) cutoff := by
-  classical
-  have hsupport (who : ι) (time : ℕ) (htime : deadline ≤ time) :
-      censorLateFiniteStoppingLaw (laws who) cutoff (some time) = 0 := by
-    have hnot : some time ∉ stoppingLawFinitePrefix cutoff := by
-      simp
-      omega
-    have hnotSupport : some time ∉
-        (censorLateFiniteStoppingLaw (laws who) cutoff).support :=
-      fun hmem => hnot
-        (censorLateFiniteStoppingLaw_support_subset (laws who) cutoff hmem)
-    by_contra hne
-    exact hnotSupport (by simpa [PMF.mem_support_iff] using hne)
-  have hexists (who : ι) : ∃ law : PMF (Option (Fin deadline)),
-      law.map (finiteStoppingTimeDecode deadline) =
-        censorLateFiniteStoppingLaw (laws who) cutoff := by
-    obtain ⟨law, hlaw, _⟩ := exists_finiteStoppingTimePMF_map_eq
-      (censorLateFiniteStoppingLaw (laws who) cutoff) deadline (hsupport who)
-    exact ⟨law, hlaw⟩
-  choose mixed hmixed using hexists
-  refine ⟨mixed, fun who => ?_⟩
-  rw [quittingFiniteDeadlineTimingLaw, CompactStoppingLaw.toPMF_ofPMF]
-  have hmaps : (mixed who).map quittingFiniteDeadlineTimingActionTime =
-      (mixed who).map (finiteStoppingTimeDecode deadline) := by
-    congr 1
-    funext action
-    cases action <;> rfl
-  rw [hmaps, hmixed who]
-
-/-- Canonical reconstruction preserves literal terminal exploitability. -/
-theorem quittingTerminalExploitability_stoppingLawProfile_behaviorLaws_eq
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) :
-    quittingTerminalExploitability reward
-        (quittingStoppingLawProfile reward
-          (quittingBehaviorStoppingLaws reward profile)) =
-      quittingTerminalExploitability reward profile := by
-  unfold quittingTerminalExploitability
-  congr 1
-  funext who
-  rw [← quittingStoppingLawCap_behaviorStoppingLaws_eq_continuationBestResponseValue,
-    quittingBehaviorStoppingLaws_stoppingLawProfile,
-    quittingStoppingLawCap_behaviorStoppingLaws_eq_continuationBestResponseValue,
-    quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
-    quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff]
-
-omit [DecidableEq ι] [Nonempty ι] in
-/-- A finite-support stopping-law profile realized on a deadline has exactly
-the canonical stopping-law behavioral profile. -/
-theorem finiteDeadlineTimingProfile_eq_stoppingLawProfile_of_laws
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
-    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
-    (laws : ι → PMF (Option ℕ))
-    (hlaws : ∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF = laws who) :
-    quittingFiniteDeadlineTimingProfile reward deadline mixed =
-      quittingStoppingLawProfile reward laws := by
-  funext who
-  unfold quittingFiniteDeadlineTimingProfile quittingCompactStoppingLawProfile
-    quittingStoppingLawProfile
-  rw [← hlaws who]
-
-/-- Beyond its finite support, a stopping law's inclusive survival is exactly
-its retained Never atom. -/
-theorem stoppingLawSurvival_eq_none_of_support_prefix
-    (law : PMF (Option ℕ)) (cutoff time : ℕ) (htime : cutoff < time)
-    (hsupport : law.support ⊆ ↑(stoppingLawFinitePrefix cutoff)) :
-    StoppingLaw.survival law time = (law none).toReal := by
-  have htotal : (law none).toReal +
-      ∑ date ∈ Finset.range time, (law (some date)).toReal = 1 := by
-    rw [← StoppingLaw.none_add_tsum_finiteMass law]
-    congr 1
-    symm
-    apply tsum_eq_sum
-    intro date hdate
-    have hnot : some date ∉ stoppingLawFinitePrefix cutoff := by
-      rw [some_mem_stoppingLawFinitePrefix]
-      have hle : time ≤ date := Nat.le_of_not_gt (by simpa using hdate)
-      omega
-    have hzero : law (some date) = 0 := by
-      by_contra hne
-      exact hnot (hsupport (by simpa [PMF.mem_support_iff] using hne))
-    simp [StoppingLaw.finiteMass, hzero]
-  unfold StoppingLaw.survival StoppingLaw.finiteMass
-  linarith
-
-omit [DecidableEq ι] [Nonempty ι] in
-/-- Once every marginal has no finite atom after `cutoff`, joint live-spine
-survival at a later date is exactly the product of the Never atoms. -/
-theorem quittingJointSurvivalWeight_eq_prod_none_of_support_prefix
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (profile : (quittingGame reward).BehaviorProfile) (cutoff time : ℕ)
-    (htime : cutoff < time)
-    (hsupport : ∀ who,
-      (quittingBehaviorStoppingLaw reward (profile who)).support ⊆
-        ↑(stoppingLawFinitePrefix cutoff)) :
-    quittingJointSurvivalWeight (quittingProfileLiveRoot reward profile) 0 time =
-      ∏ who, (quittingBehaviorStoppingLaw reward (profile who) none).toReal := by
-  rw [quittingJointSurvivalWeight_eq_prod]
-  simp_rw [quittingStationaryContinueMass_eq_prod_continueProbability]
-  rw [Finset.prod_comm]
-  apply Finset.prod_congr rfl
-  intro who _
-  rw [← quittingHazardSurvival_eq_prod]
-  have hhazard :
-      (fun x => quittingProfileLiveRoot reward profile (0 + x) who) =
-        quittingBehaviorLiveHazard reward (profile who) := by
-    funext x
-    simp only [quittingProfileLiveRoot, quittingBehaviorLiveHazard]
-    congr 2 <;> omega
-  rw [hhazard]
-  rw [← stoppingLawSurvival_quittingBehaviorStoppingLaw]
-  exact stoppingLawSurvival_eq_none_of_support_prefix
-    _ cutoff time htime (hsupport who)
 
 /-- A uniform-equilibrium payoff and one positive singleton produce the full
 finite-menu early-absorption predicate, in its stated quantifier order. -/

@@ -1,4 +1,6 @@
-import UniformEquilibrium.Quitting.Terminal.FiniteMenuEarlyAbsorptionNecessity
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineStoppingLawRealization
+import UniformEquilibrium.Quitting.Terminal.StoppingLawExploitability
+import UniformEquilibrium.Quitting.Paths.LateFiniteStoppingLawCensor
 import UniformEquilibrium.Quitting.Terminal.TargetTail.UniformTargetTerminalSequence
 
 /-! # Actual finite-menu approximation with full-deviation and payoff control -/
