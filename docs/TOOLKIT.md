@@ -223,9 +223,14 @@ coalition probability. The same module proves the square-root inequality
 for any two distinct two-player coalitions in any finite-player game.
 `UniformEquilibrium/Quitting/Paths/StageCoalitionMass.lean` and
 `UniformEquilibrium/Quitting/Paths/StageCoalitionStoppingLaw.lean`
-supply its time-disintegration and
-product-factorization dependencies. Equality-law classification and the
-full coalition-law realizability question are separate obligations.
+supply its time-disintegration and product-factorization dependencies.
+`exists_pair_terminalOutcomeMass_eq_one_of_terminalPairMass_eq_one`
+(`UniformEquilibrium/Quitting/Paths/PairOnlyTerminalLawRigidity.lean`) proves
+that an actual terminal law with total pair mass one is concentrated on one
+pair. The same module excludes the uniform one-sixth law on the six Fin4
+pairs, although its two-coordinate square-root inequality holds.
+Equality-law classification and general coalition-law realizability remain
+separate obligations.
 `exists_pureTime_gain_half_affinePairRootLeastCrossing`
 (`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
 supplied affine lower bounds on two pair masses into a profitable finite-time

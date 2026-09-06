@@ -242,4 +242,19 @@ theorem quittingTerminalOutcomeMass_eq_timeDisintegration
       simpa [quittingTerminalOutcomeMass] using
         (tsum_quittingStageCoalitionMass reward profile terminal).symm
 
+/-- Every chronological coalition atom is dominated by the matching actual
+terminal-law atom of the same profile. -/
+theorem quittingStageCoalitionMass_le_terminalOutcomeMass
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (time : ℕ)
+    (terminal : {S : Finset ι // S.Nonempty}) :
+    quittingStageCoalitionMass reward profile time terminal ≤
+      quittingTerminalOutcomeMass reward profile (some terminal) := by
+  change quittingStageCoalitionMass reward profile time terminal ≤
+    quittingAbsorbedMassLimit reward profile terminal
+  rw [← tsum_quittingStageCoalitionMass reward profile terminal]
+  exact (hasSum_quittingStageCoalitionMass reward profile terminal).summable.le_tsum
+    time (fun other _hne =>
+      quittingStageCoalitionMass_nonneg reward profile other terminal)
+
 end GameTheory

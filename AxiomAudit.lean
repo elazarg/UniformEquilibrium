@@ -2095,6 +2095,7 @@ import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy
 import UniformEquilibrium.Quitting.Paths.OpponentLiveMass
 import UniformEquilibrium.Quitting.Paths.OutsiderNeverGluing
+import UniformEquilibrium.Quitting.Paths.PairOnlyTerminalLawRigidity
 import UniformEquilibrium.Quitting.Paths.PersistentDeletedClockTwoLabel
 import UniformEquilibrium.Quitting.Paths.PersistentTwoLabelCounterexample
 import UniformEquilibrium.Quitting.Paths.PlannedSurvivalStoppingIndex
