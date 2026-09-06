@@ -2124,6 +2124,7 @@ import UniformEquilibrium.Quitting.Projective.Boundary.TargetMismatchRegression
 import UniformEquilibrium.Quitting.Projective.CumulativeChargeNearReturn
 import UniformEquilibrium.Quitting.Projective.FiniteForwardPacketRewardBoxReduction
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
+import UniformEquilibrium.Quitting.Projective.FloorFreeForwardPacketInputRemoval
 import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
 import UniformEquilibrium.Quitting.Projective.Lasso
 import UniformEquilibrium.Quitting.Projective.LassoAll
