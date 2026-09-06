@@ -16,7 +16,8 @@ import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 
 Proposition 2.2 of Solan and Vieille, *Quitting games*, Math. Oper. Res. 26
 (2001), in this development's one-shot vocabulary.  Under unit solo exit and
-capped joint exit, every continuation vector inside the canonical reward cube
+a low active Quit endpoint at every absorbing root, every continuation vector
+inside the canonical reward cube
 with some coordinate at most `1` admits, at every rate `δ ∈ (0, 1]`, a product
 row that
 
@@ -24,7 +25,9 @@ row that
   continuation, in the sense of `QuittingRowεPerfect`;
 * absorbs with probability at least `δ`; and
 * pays some coordinate at most `1` — the perturbed player, whose prescribed
-  value equals its pure-Quit payoff, capped by `1` under capped joint exit.
+  value equals its selected pure-Quit payoff, at most `1`.
+
+Capped joint exit is a sufficient special case of the root hypothesis.
 
 The construction starts from an exact mixed Nash row of the one-shot
 continuation game, supplied by
@@ -185,19 +188,57 @@ theorem exists_quitProbability_pos_of_continueMass_lt_one
   rw [quittingStationaryContinueMass_eq_prod_continueProbability] at hmass
   simp [hone] at hmass
 
+/-! ## The low active Quit endpoint condition -/
+
+/-- Every absorbing product root has an active player whose pure-Quit
+endpoint is at most the unit singleton level.  The zero tail is canonical:
+pure Quit does not read the continuation annotation. -/
+def HasLowActiveQuittingRootQuitPayoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
+  ∀ root : ι → PMF Bool, 0 < quittingRootAbsorptionMass root →
+    ∃ who, 0 < (root who true).toReal ∧
+      quittingRootQuitPayoff reward (0 : Payoff ι) root who ≤ 1
+
+/-- Capped joint exit implies the rootwise low-endpoint condition. -/
+theorem hasLowActiveQuittingRootQuitPayoff_of_cappedJointExit
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hcap : QuittingCappedJointExit reward) :
+    HasLowActiveQuittingRootQuitPayoff reward := by
+  intro root habsorption
+  have hmass : quittingStationaryContinueMass root < 1 := by
+    unfold quittingRootAbsorptionMass at habsorption
+    linarith
+  obtain ⟨who, hwho⟩ :=
+    exists_quitProbability_pos_of_continueMass_lt_one hmass
+  exact ⟨who, hwho,
+    quittingRootQuitPayoff_le_one_of_cappedJointExit hcap 0 root who⟩
+
+/-- The low endpoint can be read against any continuation payoff. -/
+theorem HasLowActiveQuittingRootQuitPayoff.exists_for_tail
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hlow : HasLowActiveQuittingRootQuitPayoff reward)
+    (tail : Payoff ι) (root : ι → PMF Bool)
+    (habsorption : 0 < quittingRootAbsorptionMass root) :
+    ∃ who, 0 < (root who true).toReal ∧
+      quittingRootQuitPayoff reward tail root who ≤ 1 := by
+  obtain ⟨who, hactive, hquit⟩ := hlow root habsorption
+  refine ⟨who, hactive, ?_⟩
+  rw [quittingRootQuitPayoff_continuation_invariant reward tail 0 root who]
+  exact hquit
+
 /-! ## The perturbed row -/
 
 /-- **The Solan–Vieille one-shot perturbation** (Solan and Vieille, *Quitting
 games*, Math. Oper. Res. 26 (2001), Proposition 2.2).  Under unit solo exit
-and capped joint exit, every continuation vector inside the canonical reward
-cube with some coordinate at most `1` admits, at every rate `δ ∈ (0, 1]`, a
+and the low-active-Quit root condition, every continuation vector inside the
+canonical reward cube with some coordinate at most `1` admits, at every rate `δ ∈ (0, 1]`, a
 product row that is one-stage `4 * quittingRewardBound reward * δ`-perfect
 against the continuation, absorbs with probability at least `δ`, and pays
 some coordinate at most `1`. -/
-theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
+theorem exists_quittingPerfectAbsorbingRow_of_lowActiveQuitPayoff
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward)
-    (hcap : QuittingCappedJointExit reward)
+    (hlowRoot : HasLowActiveQuittingRootQuitPayoff reward)
     (tail : Payoff ι)
     (htail : ∀ who, |tail who| ≤ quittingRewardBound reward)
     (hlow : ∃ who, tail who ≤ 1)
@@ -217,20 +258,25 @@ theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
   set base := quittingRootOfSimplex simplexBase with hbase
   -- Select the player to perturb: exactly indifferent, or already at pure Quit.
   have hselect : ∃ who : ι,
-      quittingRootQuitPayoff reward tail base who =
+      (quittingRootQuitPayoff reward tail base who =
           quittingRootContinuePayoff reward tail base who ∨
-        (base who true).toReal = 1 := by
+        (base who true).toReal = 1) ∧
+      quittingRootQuitPayoff reward tail base who ≤ 1 := by
     rcases lt_or_eq_of_le (quittingStationaryContinueMass_le_one base) with
       hlt | heq
-    · obtain ⟨who, hpos⟩ := exists_quitProbability_pos_of_continueMass_lt_one hlt
+    · have habsorption : 0 < quittingRootAbsorptionMass base := by
+        unfold quittingRootAbsorptionMass
+        linarith
+      obtain ⟨who, hpos, hquitLow⟩ :=
+        hlowRoot.exists_for_tail tail base habsorption
       have hdiff : 0 ≤ quittingRootEndpointDifference reward tail base who :=
         nonneg_of_mul_nonneg_left
           (by simpa [mul_comm] using (hbaseNash who).2) hpos
       by_cases hzero : (base who false).toReal = 0
-      · refine ⟨who, Or.inr ?_⟩
+      · refine ⟨who, Or.inr ?_, hquitLow⟩
         have hsum := quittingRoot_continueProbability_add_quitProbability base who
         linarith
-      · refine ⟨who, Or.inl ?_⟩
+      · refine ⟨who, Or.inl ?_, hquitLow⟩
         have hcpos : 0 < (base who false).toReal :=
           lt_of_le_of_ne ENNReal.toReal_nonneg (Ne.symm hzero)
         have hdiff' : quittingRootEndpointDifference reward tail base who ≤ 0 :=
@@ -241,7 +287,6 @@ theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
         unfold quittingRootEndpointDifference at hdiff0
         linarith
     · obtain ⟨who, hwho⟩ := hlow
-      refine ⟨who, Or.inl ?_⟩
       have hall : ∀ player, base player = PMF.pure false := fun player =>
         eq_pure_false_of_quittingStationaryContinueMass_eq_one heq player
       have hbaseAll : base = (quittingAllContinueRoot : ι → PMF Bool) :=
@@ -254,10 +299,13 @@ theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
         simp [quittingAllContinueRoot]
       rw [hcontinueWeight, one_mul] at hclause
       have hsolo : reward (quittingSingletonTerminal who) who = 1 := hunit who
+      have hquitLow : quittingRootQuitPayoff reward tail base who ≤ 1 := by
+        rw [hbaseAll, quittingRootQuitPayoff_allContinueRoot, hsolo]
+      refine ⟨who, Or.inl ?_, hquitLow⟩
       rw [hbaseAll, quittingRootQuitPayoff_allContinueRoot,
         quittingRootContinuePayoff_allContinueRoot, hsolo]
       linarith [hsolo ▸ hclause]
-  obtain ⟨chosen, hchosen⟩ := hselect
+  obtain ⟨chosen, hchosen, hchosenLow⟩ := hselect
   set q := (base chosen true).toReal with hqdef
   have hq0 : 0 ≤ q := ENNReal.toReal_nonneg
   have hq1 : q ≤ 1 := by
@@ -455,6 +503,24 @@ theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
     unfold quittingRootAbsorptionMass
     rw [hchosenfalse] at hmassle
     linarith
-  · -- The perturbed player's value is its pure-Quit payoff, capped by `1`.
+  · -- The perturbed player's value is its selected low pure-Quit payoff.
     rw [hsucc_chosen_quit]
-    exact quittingRootQuitPayoff_le_one_of_cappedJointExit hcap tail base chosen
+    exact hchosenLow
+
+/-- Unit solo exit and capped joint rewards imply the one-shot perturbation conclusion. -/
+theorem exists_quittingPerfectAbsorbingRow_of_soloExitPreference
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hcap : QuittingCappedJointExit reward)
+    (tail : Payoff ι)
+    (htail : ∀ who, |tail who| ≤ quittingRewardBound reward)
+    (hlow : ∃ who, tail who ≤ 1)
+    {δ : ℝ} (hδ0 : 0 < δ) (hδ1 : δ ≤ 1) :
+    ∃ root : ι → PMF Bool,
+      QuittingRowεPerfect reward tail root
+          (4 * quittingRewardBound reward * δ) ∧
+        δ ≤ quittingRootAbsorptionMass root ∧
+        ∃ who, quittingRootSuccessorPayoff reward tail root who ≤ 1 :=
+  exists_quittingPerfectAbsorbingRow_of_lowActiveQuitPayoff hunit
+    (hasLowActiveQuittingRootQuitPayoff_of_cappedJointExit hcap)
+    tail htail hlow hδ0 hδ1

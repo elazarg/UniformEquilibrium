@@ -39,21 +39,6 @@ def equalThirdFourthBeforeFirstSecondMass
   ∑' time, finiteMass third time * finiteMass fourth time *
     survival first (time + 1) * survival second (time + 1)
 
-private theorem finiteMass_le_one (law : PMF (Option ℕ)) (time : ℕ) :
-    finiteMass law time ≤ 1 := by
-  exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one law (some time))
-
-private theorem survival_le_one (law : PMF (Option ℕ)) (cutoff : ℕ) :
-    survival law cutoff ≤ 1 := by
-  unfold survival
-  exact sub_le_self _ (Finset.sum_nonneg fun time _ => finiteMass_nonneg law time)
-
-private theorem summable_finiteMass (law : PMF (Option ℕ)) :
-    Summable (finiteMass law) := by
-  change Summable (fun time : ℕ => (law (some time)).toReal)
-  exact (Math.Probability.pmf_toReal_summable law).comp_injective
-    (Option.some_injective ℕ)
-
 theorem summable_equalFirstSecondBeforeThirdFourthMass_terms
     (first second third fourth : PMF (Option ℕ)) :
     Summable fun time => finiteMass first time * finiteMass second time *

@@ -26,9 +26,10 @@ stages, so the window renormalizes into the quiet-window stationary repair
 with error `εr + 4 M η` at `η = 3 ρ / (1 - ρ)`.
 
 Choosing `ρ` and the row tolerance from the target tolerance proves the
-perfect-sequence extraction step for every table with unit solo exit and
-capped joint exit, and therefore — through the conditional reduction — the
-existence law `QuittingCappedJointExitUniformεExistence` itself.
+perfect-sequence extraction step for every table with unit solo exit.
+The low-active-Quit root condition supplies the required periodic source;
+capped joint exit is a sufficient special case. The final declarations give
+periodic terminal approximate equilibria and one fixed uniform payoff.
 -/
 
 noncomputable section
@@ -636,7 +637,8 @@ theorem quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
 
 /-- **Perfect-sequence extraction under unit solo exit.** A uniformly
 absorbing perfect sequence yields a terminal approximate equilibrium. Capped
-joint exit is needed only to construct such sequences, not for extraction. -/
+joint exit is one sufficient condition for constructing such sequences; it is
+not an extraction hypothesis. -/
 theorem quittingPerfectSequenceExtraction_of_soloExitPreference
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hunit : QuittingUnitSoloExit reward) :
@@ -690,6 +692,46 @@ theorem quittingPeriodicPerfectSequenceSubgameExtraction_of_soloExitPreference
     rw [hprofile]
     exact hroot
 
+/-- A unit-singleton table whose every absorbing product root has an active
+player with Quit endpoint at most one admits a periodic root sequence whose
+every actual tail is a terminal approximate Nash profile. -/
+theorem exists_cyclic_subgamePerfectTerminalNash_of_lowActiveQuitPayoff
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hlowRoot : HasLowActiveQuittingRootQuitPayoff reward)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ (roots : ℕ → ι → PMF Bool) (period : ℕ), 0 < period ∧
+      (∀ n, roots (n + period) = roots n) ∧
+      ∀ start,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) ε
+          (quittingRootSequenceProfile reward roots start) := by
+  obtain ⟨εrow, hεrow0, hextract⟩ :=
+    quittingPeriodicPerfectSequenceSubgameExtraction_of_soloExitPreference
+      hunit ε hε
+  obtain ⟨roots, δ, period, hδ0, hperiod0, hperiodic, hfloor, hperfect⟩ :=
+    exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff
+      hunit hlowRoot hεrow0
+  obtain ⟨resultRoots, ⟨resultPeriod, hresultPeriod0, hresultPeriodic⟩,
+      hsubgame⟩ :=
+    hextract roots δ period hδ0 hperiod0 hperiodic hfloor hperfect
+  exact ⟨resultRoots, resultPeriod, hresultPeriod0, hresultPeriodic, hsubgame⟩
+
+/-- Unit singleton rewards and the low-active-Quit root condition produce one
+fixed uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_lowActiveQuitPayoff
+    [Nonempty ι] {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hunit : QuittingUnitSoloExit reward)
+    (hlowRoot : HasLowActiveQuittingRootQuitPayoff reward) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
+  intro ε hε
+  obtain ⟨roots, _period, _hperiod0, _hperiodic, hterminal⟩ :=
+    exists_cyclic_subgamePerfectTerminalNash_of_lowActiveQuitPayoff
+      hunit hlowRoot hε
+  exact ⟨quittingRootSequenceProfile reward roots 0, hterminal 0⟩
+
 /-- **Cyclic subgame-perfect terminal equilibrium.** Under the paper's solo
 exit assumptions, every positive tolerance admits a periodic root sequence
 whose every tail is a terminal approximate Nash profile. -/
@@ -703,17 +745,9 @@ theorem exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference
       ∀ start,
         (quittingGame reward).IsεAsymptoticNash
           (quittingTerminalPayoff reward) ε
-          (quittingRootSequenceProfile reward roots start) := by
-  obtain ⟨εrow, hεrow0, hextract⟩ :=
-    quittingPeriodicPerfectSequenceSubgameExtraction_of_soloExitPreference
-      hunit ε hε
-  obtain ⟨roots, δ, period, hδ0, hperiod0, hperiodic, hfloor, hperfect⟩ :=
-    exists_periodic_quittingPerfectAbsorbingRootSequence_of_soloExitPreference
-      hunit hcap hεrow0
-  obtain ⟨resultRoots, ⟨resultPeriod, hresultPeriod0, hresultPeriodic⟩,
-      hsubgame⟩ :=
-    hextract roots δ period hδ0 hperiod0 hperiodic hfloor hperfect
-  exact ⟨resultRoots, resultPeriod, hresultPeriod0, hresultPeriodic, hsubgame⟩
+          (quittingRootSequenceProfile reward roots start) :=
+  exists_cyclic_subgamePerfectTerminalNash_of_lowActiveQuitPayoff hunit
+    (hasLowActiveQuittingRootQuitPayoff_of_cappedJointExit hcap) hε
 
 /-- **The Solan–Vieille existence law, unconditionally** (Solan and Vieille,
 *Quitting games*, Math. Oper. Res. 26 (2001), Theorem 1.2, profile-level

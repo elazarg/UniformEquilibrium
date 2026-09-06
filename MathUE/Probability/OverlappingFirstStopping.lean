@@ -378,17 +378,20 @@ def equalFirstThirdBeforeSecondMass
   ∑' time, finiteMass first time * finiteMass third time *
     survival second (time + 1)
 
-private theorem summable_finiteMass (law : PMF (Option ℕ)) :
+/-- The finite-date atoms of a stopping law form a summable real sequence. -/
+theorem summable_finiteMass (law : PMF (Option ℕ)) :
     Summable (finiteMass law) := by
   change Summable (fun time : ℕ => (law (some time)).toReal)
   exact (Math.Probability.pmf_toReal_summable law).comp_injective
     (Option.some_injective ℕ)
 
-private theorem finiteMass_le_one (law : PMF (Option ℕ)) (time : ℕ) :
+/-- A finite stopping-time atom has mass at most one. -/
+theorem finiteMass_le_one (law : PMF (Option ℕ)) (time : ℕ) :
     finiteMass law time ≤ 1 := by
   exact ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one law (some time))
 
-private theorem survival_le_one (law : PMF (Option ℕ)) (cutoff : ℕ) :
+/-- Survival through any finite cutoff has probability at most one. -/
+theorem survival_le_one (law : PMF (Option ℕ)) (cutoff : ℕ) :
     survival law cutoff ≤ 1 := by
   unfold survival
   exact sub_le_self _ (Finset.sum_nonneg fun time _ => finiteMass_nonneg law time)

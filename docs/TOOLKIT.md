@@ -32,6 +32,43 @@ without producing a witness.
 
 ## Canonical project entry points
 
+`exists_uniformEquilibriumPayoff_of_supportwiseBalance`
+(`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
+proves uniform-payoff existence for every finite nonempty player set with
+nonnegative singleton rewards and supportwise weighted premium balance.
+The input is a reward-table condition: on each nonempty support, one
+normalized nonnegative weighting makes the participant-only premium sum
+nonpositive for every contained nonempty coalition. Weights may vanish and
+depend on the support; passive rewards and own premiums may have either sign.
+`exists_periodic_allSuffix_terminalNash_of_supportwiseBalance` in the same
+module constructs periodic profiles whose every suffix is terminal approximate
+Nash against unrestricted behavioral deviations, before the fixed-payoff
+selection. No equilibrium source is supplied as an input.
+
+`IsSupportwiseBalancedQuittingPremiumTable` and its exact product-premium
+identity are in `UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremium.lean`.
+The raw-table identity gives an active player with Quit endpoint at most its
+singleton at every absorbing product root, without a Nash premise.
+`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumNormalization.lean`
+proves preservation under shifted playerwise normalization, with the weights
+reweighted by the positive coordinate scales. It includes weak support-peeling
+and global strictly positive weighting as sufficient conditions.
+
+The shared classical source is
+`exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff`
+(`UniformEquilibrium/Quitting/Classification/Existence/PerfectAbsorbingRootSequence.lean`).
+It assumes unit singletons and a low active Quit endpoint, not capped joint
+rewards, and constructs a literal periodic sequence with positive absorption
+floor and perfect rows against its actual next-tail payoffs. The unit-only
+full-response extraction in
+`UniformEquilibrium/Quitting/Classification/Existence/PerfectSequenceExtraction.lean`
+retains periodicity and every-suffix terminal Nash, but does not assert that
+the extracted profile keeps the absorption floor.
+`UniformEquilibrium/Quitting/Terminal/TerminalAffineNashTransfer.lean` transfers
+terminal Nash under nonnegative coordinate scaling and removes a nonnegative
+terminal-only shift bounded by `t` at error cost `t`, keeping Never's zero
+payoff and the same literal root sequence.
+
 Rational coefficient approximation is provided by
 `exists_evalReal_fderiv_close_on_compact`
 (`MathUE/Interval/RationalPolynomialDerivativeApproximation.lean`). It constructs
@@ -316,6 +353,12 @@ classification is not implied by these sharpness constructions.
 proves the complementary positive-continuation one-row necessity, retaining
 the all-zero hazard degeneracy. Lifting equality to the full stopping laws
 remains separate.
+`MathUE/Probability/OverlappingFirstStoppingInfiniteRecurrence.lean` supplies
+the exact infinite first-row recurrence, including zero continuation.
+`equalFirstSecondBeforeThirdMass_eq_one_iff_deterministicFiniteAtom`
+(`MathUE/Probability/OverlappingFirstStoppingDeterministicAtom.lean`) identifies
+a mass-one pair event with a common deterministic finite atom and strict
+survival of the third clock, allowing its arbitrary later or Never behavior.
 `exists_pureTime_gain_half_affinePairRootLeastCrossing`
 (`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
 supplied affine lower bounds on two pair masses into a profitable finite-time
