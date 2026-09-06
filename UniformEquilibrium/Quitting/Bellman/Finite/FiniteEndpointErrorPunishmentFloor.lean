@@ -165,8 +165,8 @@ theorem quittingEndpointError_punishmentDebtDrop_gt
     (mul_le_of_le_one_left (le_of_lt hdropPos) halpha1)
 
 /-- Finite endpoint inequalities force every endpoint after a fixed burn-in
-into the `τ`-punishment box.  Only the displayed finite window is bounded or
-constrained; in particular, `value 0` need not satisfy a punishment floor. -/
+into the `τ`-punishment box.  Only a lower coordinate bound on the initial
+annotation is needed; it need not satisfy a punishment floor. -/
 theorem quittingPunishmentFloor_le_of_finite_endpointErrors_after_burnIn
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (value : ℕ → Payoff ι) (roots : ℕ → ι → PMF Bool)
@@ -177,7 +177,7 @@ theorem quittingPunishmentFloor_le_of_finite_endpointErrors_after_burnIn
     (hτ : 0 < τ)
     (hζ : ζ ≤ min (τ / 2) (τ ^ 2 / (8 * M)))
     (hburn : M + B < (L : ℝ) * (τ ^ 2 / (8 * M)))
-    (hbound : ∀ time, time ≤ H → ∀ player, |value time player| ≤ B)
+    (hstart : ∀ player, -B ≤ value 0 player)
     (hquit : ∀ time, time < H → ∀ player,
       quittingRootQuitPayoff reward (value time) (roots time) player ≤
         value (time + 1) player + ζ)
@@ -230,8 +230,7 @@ theorem quittingPunishmentFloor_le_of_finite_endpointErrors_after_burnIn
     have := lt_of_not_ge hfloor
     linarith
   have haccumulated := hback time htimeH hbad
-  have hvalue0 : -B ≤ value 0 player :=
-    neg_le_of_abs_le (hbound 0 (Nat.zero_le H) player)
+  have hvalue0 : -B ≤ value 0 player := hstart player
   have hdebt0 : punishment - value 0 player ≤ M + B := by
     linarith
   have hcast : (L : ℝ) ≤ (time : ℝ) := by exact_mod_cast hLtime
