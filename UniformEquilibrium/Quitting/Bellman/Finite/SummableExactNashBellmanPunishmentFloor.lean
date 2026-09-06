@@ -17,8 +17,10 @@ singleton rewards.  A value below its behavioral punishment floor, however,
 propagates forward and cannot increase.  These two facts exclude every
 punishment-floor violation by a normal player.
 
-The tail is supplied as literal values and product roots.  No dynamic-debt
-annotation, compact selector, or source-generation hypothesis is used.
+The general result takes an arbitrary common finite bound on the terminal
+rewards and displayed values.  The canonical reward-box theorem is a short
+specialization.  No dynamic-debt annotation, compact selector, or
+source-generation hypothesis is used.
 -/
 
 noncomputable section
@@ -45,11 +47,14 @@ theorem IsCanonicalExactQuittingNashBellmanSpine.isQuittingNashBellmanEdge
       isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash] using
         hspine.2.2 time
 
-/-- A punishment-floor violation along an exact Nash--Bellman spine persists
+/-- A punishment-floor violation along an exact Nash--Bellman tail persists
 and bounds every later displayed value by the first violating value. -/
-theorem IsCanonicalExactQuittingNashBellmanSpine.value_le_of_punishmentValue_violation
-    {value : ℕ → Payoff ι} {roots : ℕ → ι → PMF Bool}
-    (hspine : IsCanonicalExactQuittingNashBellmanSpine reward value roots)
+theorem value_le_of_punishmentValue_violation_of_exactNashBellmanTail
+    (value : ℕ → Payoff ι) (roots : ℕ → ι → PMF Bool)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time, IsεQuittingRootNash reward
+      (value (time + 1)) 0 (roots time))
     (who : ι) {start : ℕ}
     (hviolation : value start who < quittingPunishmentValue reward who) :
     ∀ time, start ≤ time → value time who ≤ value start who := by
@@ -59,34 +64,59 @@ theorem IsCanonicalExactQuittingNashBellmanSpine.value_le_of_punishmentValue_vio
   | succ time _ ih =>
       have hcurrent : value time who < quittingPunishmentValue reward who :=
         lt_of_le_of_lt ih hviolation
+      have hedge : IsQuittingNashBellmanEdge reward
+          (value time, quittingSimplexOfRoot (roots time))
+          (value (time + 1), quittingSimplexOfRoot (roots (time + 1))) := by
+        constructor
+        · simpa only [quittingRootOfSimplex_simplexOfRoot] using hpolicy time
+        · simpa only [quittingRootOfSimplex_simplexOfRoot,
+            isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash] using
+              hnash time
       exact (successorValue_le_current_of_punishmentValue_violation
         (value time, quittingSimplexOfRoot (roots time))
         (value (time + 1), quittingSimplexOfRoot (roots (time + 1)))
-        (hspine.isQuittingNashBellmanEdge time) who hcurrent).trans ih
+        hedge who hcurrent).trans ih
 
-/-- Every normal player stays above the behavioral punishment floor at every
-date of a bounded exact Nash--Bellman spine with summable joint absorption. -/
-theorem IsCanonicalExactQuittingNashBellmanSpine.punishmentValue_le_of_normal_of_summable_absorption
+/-- A canonical spine specializes the bound-free violation propagation
+theorem. -/
+theorem IsCanonicalExactQuittingNashBellmanSpine.value_le_of_punishmentValue_violation
     {value : ℕ → Payoff ι} {roots : ℕ → ι → PMF Bool}
     (hspine : IsCanonicalExactQuittingNashBellmanSpine reward value roots)
+    (who : ι) {start : ℕ}
+    (hviolation : value start who < quittingPunishmentValue reward who) :
+    ∀ time, start ≤ time → value time who ≤ value start who := by
+  exact value_le_of_punishmentValue_violation_of_exactNashBellmanTail
+    value roots hspine.2.1 hspine.2.2 who hviolation
+
+/-- Every normal player stays above the behavioral punishment floor at every
+date of an arbitrarily bounded exact Nash--Bellman tail with summable joint
+absorption. -/
+theorem punishmentValue_le_of_normal_of_summable_exactNashBellmanTail
+    (value : ℕ → Payoff ι) (roots : ℕ → ι → PMF Bool) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hbound : ∀ time who, |value time who| ≤ M)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time, IsεQuittingRootNash reward
+      (value (time + 1)) 0 (roots time))
     (hcharge : Summable (fun time ↦
       quittingRootAbsorptionMass (roots time)))
     (who : ι) (hnormal : IsQuittingNormalPlayer reward who) (time : ℕ) :
     quittingPunishmentValue reward who ≤ value time who := by
   obtain ⟨boundary, hboundary, -⟩ :=
     exists_quittingAnnotationBoundary_of_summableAbsorption
-      reward roots value hspine.2.1 (abs_reward_le_quittingRewardBound reward)
-      hspine.1 hcharge
+      reward roots value hpolicy hreward hbound hcharge
   have hsingleton : reward (quittingSingletonTerminal who) who ≤ boundary who :=
     quittingSingletonReward_le_annotationBoundary reward roots value
-      hspine.2.1 hspine.2.2 boundary hboundary hcharge who
+      hpolicy hnash boundary hboundary hcharge who
   by_contra hfloor
   push Not at hfloor
   have hlater : ∀ offset,
       value (time + offset) who ≤ value time who := by
     intro offset
-    exact hspine.value_le_of_punishmentValue_violation who hfloor
-      (time + offset) (Nat.le_add_right time offset)
+    exact value_le_of_punishmentValue_violation_of_exactNashBellmanTail
+      value roots hpolicy hnash who hfloor
+        (time + offset) (Nat.le_add_right time offset)
   have hboundaryLe : boundary who ≤ value time who := by
     apply le_of_tendsto'
       ((hboundary who).comp (tendsto_add_atTop_nat time))
@@ -96,8 +126,40 @@ theorem IsCanonicalExactQuittingNashBellmanSpine.punishmentValue_le_of_normal_of
   exact (not_lt_of_ge (hnormal.trans hsingleton))
     (lt_of_le_of_lt hboundaryLe hfloor)
 
-/-- If every player is normal, every displayed value of a summable exact
-Nash--Bellman spine lies coordinatewise above the punishment vector. -/
+/-- If every player is normal, every displayed value of an arbitrarily
+bounded summable exact Nash--Bellman tail lies coordinatewise above the
+punishment vector. -/
+theorem summableExactNashBellmanTail_floorSafe_of_allNormal
+    (value : ℕ → Payoff ι) (roots : ℕ → ι → PMF Bool) {M : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hbound : ∀ time who, |value time who| ≤ M)
+    (hpolicy : ∀ time, value time =
+      quittingRootSuccessorPayoff reward (value (time + 1)) (roots time))
+    (hnash : ∀ time, IsεQuittingRootNash reward
+      (value (time + 1)) 0 (roots time))
+    (hcharge : Summable (fun time ↦
+      quittingRootAbsorptionMass (roots time)))
+    (hnormal : ∀ who, IsQuittingNormalPlayer reward who) :
+    ∀ time who, quittingPunishmentValue reward who ≤ value time who := by
+  intro time who
+  exact punishmentValue_le_of_normal_of_summable_exactNashBellmanTail
+    value roots hreward hbound hpolicy hnash hcharge who (hnormal who) time
+
+/-- Every normal player stays above the behavioral punishment floor at every
+date of a canonical exact Nash--Bellman spine with summable joint absorption. -/
+theorem IsCanonicalExactQuittingNashBellmanSpine.punishmentValue_le_of_normal_of_summable_absorption
+    {value : ℕ → Payoff ι} {roots : ℕ → ι → PMF Bool}
+    (hspine : IsCanonicalExactQuittingNashBellmanSpine reward value roots)
+    (hcharge : Summable (fun time ↦
+      quittingRootAbsorptionMass (roots time)))
+    (who : ι) (hnormal : IsQuittingNormalPlayer reward who) (time : ℕ) :
+    quittingPunishmentValue reward who ≤ value time who := by
+  exact punishmentValue_le_of_normal_of_summable_exactNashBellmanTail
+    value roots (abs_reward_le_quittingRewardBound reward) hspine.1
+      hspine.2.1 hspine.2.2 hcharge who hnormal time
+
+/-- If every player is normal, every displayed value of a summable canonical
+exact Nash--Bellman spine lies coordinatewise above the punishment vector. -/
 theorem IsCanonicalExactQuittingNashBellmanSpine.punishmentValue_le_of_all_normal_and_summable
     {value : ℕ → Payoff ι} {roots : ℕ → ι → PMF Bool}
     (hspine : IsCanonicalExactQuittingNashBellmanSpine reward value roots)
@@ -105,8 +167,8 @@ theorem IsCanonicalExactQuittingNashBellmanSpine.punishmentValue_le_of_all_norma
       quittingRootAbsorptionMass (roots time)))
     (hnormal : ∀ who, IsQuittingNormalPlayer reward who) :
     ∀ time who, quittingPunishmentValue reward who ≤ value time who := by
-  intro time who
-  exact hspine.punishmentValue_le_of_normal_of_summable_absorption
-    hcharge who (hnormal who) time
+  exact summableExactNashBellmanTail_floorSafe_of_allNormal value roots
+    (abs_reward_le_quittingRewardBound reward) hspine.1 hspine.2.1
+      hspine.2.2 hcharge hnormal
 
 end GameTheory

@@ -235,68 +235,160 @@ def QuittingFiniteForwardPacket.clipSuffix
   chargeTarget_le := by
     simpa only [Finset.sum_Ico_eq_sum_range] using hsuffixCharge }
 
-/-- Exact packets in any fixed bounding box reduce to exact packets in the
-reward box itself.  This proof requests the original packet with the explicit
-rational charge overhead `(large - rewardBound) / (supportError / 2) + 1`;
-it does not assert the sharper logarithmic overhead. -/
-theorem hasExactFiniteForwardPackets_rewardBox_of_box
-    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    {rewardBound large : ℝ} (hlarge : rewardBound ≤ large)
+/-- A finite root survival product is bounded by the exponential of
+minus its accumulated absorption charge. -/
+theorem quittingFiniteForwardPacket_survival_le_exp_neg_charge
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {supportError chargeTarget : ℝ}
+    (packet : QuittingFiniteForwardPacket reward carrier supportError chargeTarget)
+    (time : ℕ) :
+    (∏ offset ∈ Finset.range time,
+      quittingStationaryContinueMass (packet.roots offset)) ≤
+        Real.exp (-(∑ offset ∈ Finset.range time,
+          quittingRootAbsorptionMass (packet.roots offset))) := by
+  calc
+    (∏ offset ∈ Finset.range time,
+        quittingStationaryContinueMass (packet.roots offset)) =
+        ∏ offset ∈ Finset.range time,
+          (1 - quittingRootAbsorptionMass (packet.roots offset)) := by
+      apply Finset.prod_congr rfl
+      intro offset _
+      unfold quittingRootAbsorptionMass
+      ring
+    _ ≤ ∏ offset ∈ Finset.range time,
+        Real.exp (-quittingRootAbsorptionMass (packet.roots offset)) := by
+      apply Finset.prod_le_prod
+      · intro offset _
+        unfold quittingRootAbsorptionMass
+        linarith [quittingStationaryContinueMass_nonneg (packet.roots offset)]
+      · intro offset _
+        simpa only [neg_neg] using
+          Real.one_sub_le_exp_neg (quittingRootAbsorptionMass (packet.roots offset))
+    _ = _ := by
+      rw [← Real.exp_sum]
+      congr 1
+      rw [Finset.sum_neg_distrib]
+
+private theorem mul_exp_neg_le_of_log_threshold
+    {excess error charge : ℝ} (hexcess : 0 ≤ excess) (herror : 0 < error)
+    (hcharge : max 0 (Real.log (excess / error)) ≤ charge) :
+    excess * Real.exp (-charge) ≤ error := by
+  by_cases hzero : excess = 0
+  · simp [hzero, herror.le]
+  · have hexcessPos : 0 < excess := lt_of_le_of_ne hexcess (Ne.symm hzero)
+    have hratio : 0 < excess / error := div_pos hexcessPos herror
+    have hlog : Real.log (excess / error) ≤ charge :=
+      (le_max_right _ _).trans hcharge
+    have hexp : Real.exp (-charge) ≤ error / excess := by
+      calc
+        Real.exp (-charge) ≤ Real.exp (-Real.log (excess / error)) := by
+          rw [Real.exp_le_exp]
+          linarith
+        _ = error / excess := by
+          rw [Real.exp_neg, Real.exp_log hratio]
+          field_simp
+    calc
+      excess * Real.exp (-charge) ≤ excess * (error / excess) :=
+        mul_le_mul_of_nonneg_left hexp hexcess
+      _ = error := by field_simp
+
+/-- One supplied exact packet can be cut after a prefix costing at most the
+logarithmic threshold plus one and recomputed inside the reward box. -/
+theorem QuittingFiniteForwardPacket.clipSuffixLogarithmic
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {large oldError oldCharge rewardBound clipError requested : ℝ}
+    (packet : QuittingFiniteForwardPacket reward
+      (quittingForwardPacketCoordinateBox large) oldError oldCharge)
+    (hlarge : rewardBound ≤ large)
     (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
-    (hexact : HasExactFiniteForwardPackets reward large) :
-    HasExactFiniteForwardPackets reward rewardBound := by
+    (hclipError : 0 < clipError) (hrequested : 0 ≤ requested)
+    (htotal : requested + max 0 (Real.log ((large - rewardBound) / clipError)) + 1 ≤
+      ∑ time ∈ Finset.range packet.horizon,
+        quittingRootAbsorptionMass (packet.roots time)) :
+    ∃ cut ≤ packet.horizon,
+      (∑ time ∈ Finset.range cut,
+        quittingRootAbsorptionMass (packet.roots time)) ≤
+          max 0 (Real.log ((large - rewardBound) / clipError)) + 1 ∧
+      ∃ repaired : QuittingFiniteForwardPacket reward
+        (quittingForwardPacketCoordinateBox rewardBound)
+        (oldError + clipError) requested,
+        repaired.horizon = packet.horizon - cut ∧
+        (∀ time, repaired.roots time = packet.roots (cut + time)) ∧
+        repaired.value 0 =
+          quittingPayoffClip rewardBound (packet.value cut) ∧
+        ∀ time, time ≤ packet.horizon - cut → ∀ player,
+          |repaired.value time player - packet.value (cut + time) player| ≤
+            clipError := by
+  let excess := large - rewardBound
+  let threshold := max 0 (Real.log (excess / clipError))
   have hrewardBound : 0 ≤ rewardBound :=
     (abs_nonneg _).trans (hreward ⟨{0}, by simp⟩ 0)
-  intro supportError herror requested hrequested
-  let halfError := supportError / 2
-  let excess := large - rewardBound
-  let threshold := excess / halfError
-  have hhalf : 0 < halfError := div_pos herror (by norm_num)
   have hexcess : 0 ≤ excess := sub_nonneg.mpr hlarge
-  have hthreshold : 0 ≤ threshold := div_nonneg hexcess hhalf.le
-  have htotalTarget : 0 ≤ requested + threshold + 1 := by positivity
-  obtain ⟨packet⟩ := hexact halfError hhalf
-    (requested + threshold + 1) htotalTarget
   obtain ⟨cut, hcut, hcrossed, hprefixUpper, hsuffix⟩ :=
     Math.exists_firstFiniteChargeCrossing
       (fun time ↦ quittingRootAbsorptionMass (packet.roots time))
       (fun time ↦ by
         unfold quittingRootAbsorptionMass
         linarith [quittingStationaryContinueMass_nonneg (packet.roots time)])
-      hthreshold hrequested packet.chargeTarget_le
+      (show 0 ≤ threshold from le_max_left _ _) hrequested (by
+        simpa only [threshold, excess] using htotal)
   let survival := ∏ time ∈ Finset.range cut,
     quittingStationaryContinueMass (packet.roots time)
   let prefixCharge := ∑ time ∈ Finset.range cut,
     quittingRootAbsorptionMass (packet.roots time)
   have hsurvival0 : 0 ≤ survival := Finset.prod_nonneg fun time _ ↦
     quittingStationaryContinueMass_nonneg (packet.roots time)
-  have hproduct : survival * (1 + prefixCharge) ≤ 1 :=
-    quittingFiniteForwardPacket_survival_mul_one_add_charge_le_one packet cut
-  have hexcessLe : excess ≤ halfError * prefixCharge := by
-    have := mul_le_mul_of_nonneg_left hcrossed hhalf.le
-    dsimp only [threshold] at this
-    field_simp [ne_of_gt hhalf] at this
-    simpa [mul_comm] using this
-  have hsurvivalExcess : excess * survival ≤ halfError := by
-    have hprefix0 : 0 ≤ prefixCharge := Finset.sum_nonneg fun time _ ↦
-      quittingRootAbsorptionMass_nonneg (packet.roots time)
-    have hmul := mul_le_mul_of_nonneg_right hexcessLe hsurvival0
-    nlinarith
+  have hsurvivalExp : survival ≤ Real.exp (-prefixCharge) := by
+    simpa only [survival, prefixCharge] using
+      quittingFiniteForwardPacket_survival_le_exp_neg_charge packet cut
+  have hexpExcess : excess * Real.exp (-prefixCharge) ≤ clipError :=
+    mul_exp_neg_le_of_log_threshold hexcess hclipError (by
+      simpa only [threshold] using hcrossed)
+  have hsurvivalExcess : excess * survival ≤ clipError :=
+    (mul_le_mul_of_nonneg_left hsurvivalExp hexcess).trans hexpExcess
   have hvalueBound (player : Fin 4) :
       |packet.value cut player| ≤ rewardBound + excess * survival := by
     simpa only [excess, survival] using
       packet.abs_value_le_rewardBox_add_survival_excess hlarge hreward cut hcut player
   have hboundary (player : Fin 4) :
       |quittingPayoffClip rewardBound (packet.value cut) player -
-          packet.value cut player| ≤ halfError := by
+          packet.value cut player| ≤ clipError := by
     exact (abs_quittingPayoffClip_sub_le hrewardBound
       (le_add_of_nonneg_right (mul_nonneg hexcess hsurvival0))
       (packet.value cut) hvalueBound player).trans (by
         simpa using hsurvivalExcess)
+  let repaired := packet.clipSuffix cut hcut hreward hboundary hsuffix
+  refine ⟨cut, hcut, by simpa only [threshold, excess] using hprefixUpper,
+    repaired, rfl, fun _ ↦ rfl, rfl, ?_⟩
+  intro time htime player
+  exact packet.abs_clippedSuffixValue_sub_original_le
+    (time := time) (by omega) hboundary player
+
+/-- The reward-box reduction with the packet's logarithmic charge overhead.
+The original packet is requested at charge
+`requested + max 0 (log ((large-rewardBound)/(supportError/2))) + 1`; the
+selected discarded prefix costs at most the logarithmic threshold plus one. -/
+theorem hasExactFiniteForwardPackets_rewardBox_of_box
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    {rewardBound large : ℝ} (hlarge : rewardBound ≤ large)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound)
+    (hexact : HasExactFiniteForwardPackets reward large) :
+    HasExactFiniteForwardPackets reward rewardBound := by
+  intro supportError herror requested hrequested
+  let halfError := supportError / 2
+  let excess := large - rewardBound
+  let threshold := max 0 (Real.log (excess / halfError))
+  have hhalf : 0 < halfError := div_pos herror (by norm_num)
+  have hthreshold : 0 ≤ threshold := le_max_left _ _
+  have htotalTarget : 0 ≤ requested + threshold + 1 := by positivity
+  obtain ⟨packet⟩ := hexact halfError hhalf
+    (requested + threshold + 1) htotalTarget
+  obtain ⟨_, _, _, repaired, _, _, _, _⟩ :=
+    packet.clipSuffixLogarithmic hlarge hreward
+    hhalf hrequested (by simpa only [threshold, excess] using packet.chargeTarget_le)
   have hsum : halfError + halfError = supportError := by
     dsimp only [halfError]
     ring
-  rw [← hsum]
-  exact ⟨packet.clipSuffix cut hcut hreward hboundary hsuffix⟩
+  exact ⟨hsum ▸ repaired⟩
 
 end GameTheory
