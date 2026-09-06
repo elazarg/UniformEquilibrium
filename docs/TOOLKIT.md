@@ -61,6 +61,11 @@ every coalition giving a member a positive own premium contains an earlier
 member. This is a ranking of player labels, not quitting dates. The underlying
 finite coalition relation theorem is game-independent and resides in
 `MathUE/FiniteCoalitionSupportPeelingOrder.lean`.
+`exists_uniformEquilibriumPayoff_of_weakPremiumSupportPeeling` and
+`exists_uniformEquilibriumPayoff_of_positivePremiumPlayerRanking`
+(`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumSupportPeelingUniformPayoff.lean`)
+state the original-game fixed-payoff conclusions directly. Their companion
+periodic theorems retain unrestricted terminal approximate Nash at every suffix.
 
 The shared classical source is
 `exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff`
