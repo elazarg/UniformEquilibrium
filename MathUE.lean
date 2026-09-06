@@ -5,6 +5,7 @@ import MathUE.SignedFourCycleWeights
 import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
+import MathUE.LinearProgramming.PivotRepairMassPolytope
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection
@@ -181,6 +182,7 @@ import MathUE.LinearProgramming.CirculantPocketR0
 import MathUE.LinearProgramming.ClosedTrapPerturbation
 import MathUE.LinearProgramming.ColumnSumQ
 import MathUE.LinearProgramming.RowNegativeShape
+import MathUE.LinearProgramming.TwoRowNegativeShapeNeighborhood
 import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
@@ -386,6 +388,7 @@ import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
 import MathUE.ProbabilityMassFunction.FiniteStoppingTimeMenu
 import MathUE.ProbabilityMassFunction.FiniteTailCollapse
 import MathUE.ProbabilityMassFunction.StoppingLawLateIndicators
+import MathUE.ProbabilityMassFunction.GeometricPivotStoppingLaw
 import MathUE.ProbabilityMassFunction.StoppingLawFiniteTail
 import MathUE.ProbabilityMassFunction.FiniteSupportSurvival
 import MathUE.ProbabilityMassFunction.LateFiniteStoppingLawCensor

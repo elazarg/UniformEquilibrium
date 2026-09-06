@@ -16,6 +16,7 @@ import UniformEquilibrium.Quitting.Terminal.SinglePivotCanonicalConsequences
 import UniformEquilibrium.Quitting.Terminal.SinglePivotFiniteMenuCompletion
 import UniformEquilibrium.Quitting.Terminal.FiniteMenuFullProfileApproximation
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleRewardAdapter
+import UniformEquilibrium.Quitting.Cycles.SignedFourCycleStrictSourceBridge
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleValues
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleCertificate
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleFiniteEarlyAbsorption
@@ -568,6 +569,7 @@ import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
 import UniformEquilibrium.Quitting.Paths.FiniteOpponentPivotLaw
 import UniformEquilibrium.Quitting.Terminal.FiniteOpponentLateResponse
 import UniformEquilibrium.Quitting.Terminal.FiniteOpponentPivotResponseFormula
+import UniformEquilibrium.Quitting.Terminal.GeometricPivotCapDomination
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Boundary.Exceptional.Synthesis

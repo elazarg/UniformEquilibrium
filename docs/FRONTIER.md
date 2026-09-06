@@ -368,6 +368,21 @@ These are conditional producer/compiler strata at their stated inputs. None is
 silently a universal grammar for all quitting equilibria. Their exact inputs,
 outputs, and nonclaims are indexed in [`TOOLKIT.md`](TOOLKIT.md).
 
+There is also a direct heterogeneous signed four-player source class.
+`SignedFourCycleSingletonData.targetValue_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/SignedFourCycleCertificate.lean`)
+constructs a fixed payoff from explicit spectral tests on the actual singleton
+comparison table, with arbitrary signed own singleton and nonsingleton rewards.
+`hasFiniteMenuFullEarlyAbsorption`
+(`UniformEquilibrium/Quitting/Cycles/SignedFourCycleFiniteEarlyAbsorption.lean`)
+gives actual finite menus with unrestricted deviation control and early
+absorption. `exists_relative_open_uniformPayoff_neighborhood`
+(`UniformEquilibrium/Diagnostics/Quitting/SignedFourCycleNeighborhood.lean`)
+exhibits an open twelve-coordinate class around a genuinely noncyclic table,
+retaining full normal core, standard-Q, no homogeneous simplex solution, and
+failure of projective-Q-bar. This supplies actual raw-table coverage beyond
+the circulant inputs; it does not settle arbitrary Fin4 existence.
+
 The development also contains sound diagnostics and no-go theorems. A
 counterexample to one certificate language closes that route; it does not prove
 nonexistence of equilibrium unless it reaches the all-behavior terminal-gap
