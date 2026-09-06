@@ -301,6 +301,7 @@ import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.Polynomial.NonnegativeCertificate
+import MathUE.Polynomial.TensorBernstein
 import MathUE.PolynomialSignCell
 import MathUE.Probability
 import MathUE.Probability.Adaptive
@@ -1631,6 +1632,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.RefinedSourceResidua
 import UniformEquilibrium.Quitting.Classification.Existence.ReverseSequentiallyPerfectAbsorbingHardness
 import UniformEquilibrium.Quitting.Classification.Existence.RootSequenceWindowLedger
 import UniformEquilibrium.Quitting.Classification.Existence.RowPerfectionClosed
+import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorbingForwardSource
 import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorbingNullTailAlternative
 import UniformEquilibrium.Quitting.Classification.Existence.SequentiallyPerfectAbsorptionPathWellSupportedSequence
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -2138,6 +2140,7 @@ import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
 import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
+import UniformEquilibrium.Quitting.Projective.SequentiallyPerfectAbsorbingForwardPacket
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness
 import UniformEquilibrium.Quitting.Projective.SinglePivotFiniteForwardPacketTransport

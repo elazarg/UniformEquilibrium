@@ -42,6 +42,16 @@ coordinate-direction error and derivative operator-norm error.
 The cube specialization permits arbitrary real radii and dimension zero.
 This is not an approximation theorem for an arbitrary smooth function.
 
+`MathUE/Polynomial/TensorBernstein.lean` supplies actual tensor Bernstein
+multivariate polynomials with separate coordinate degrees. Exact evaluation,
+nonnegative unit-cube weights, total weight one, and coordinate variance are
+proved, including zero degrees and dimension zero where meaningful.
+`derivative_bernsteinCoefficientPolynomial` is the univariate consecutive-
+coefficient difference identity; `pderiv_tensorBernsteinPolynomial` and
+`hasDerivAt_eval_mvPolynomial_update` connect tensor formal derivatives to
+actual coordinate-line derivatives. These algebraic identities do not yet
+assert simultaneous derivative approximation of a smooth function.
+
 Stationary terminal approximate equilibria supply weighted packets through
 `hasAbsorptionWeightedFiniteForwardPackets_of_stationary`
 (`UniformEquilibrium/Quitting/Projective/StationaryAbsorptionWeightedForwardPacket.lean`).
@@ -56,6 +66,21 @@ by twice the error times absorption, and
 `quittingStationaryUpwardTranslate_sub_successor_eq` gives equality for the
 Bellman residual. The general support-local translation retains its factor
 three in `UniformEquilibrium/Quitting/Root/UpwardTranslation.lean`.
+
+Sequentially perfect absorbing sources supply exact finite packets through
+`hasExactFiniteForwardPackets_of_normal_of_sequentiallyPerfect`
+(`UniformEquilibrium/Quitting/Projective/SequentiallyPerfectAbsorbingForwardPacket.lean`).
+All-player normality, a reward bound, and one positive singleton reward are
+the game hypotheses. `exists_sequentiallyPerfectSource_generating_floorFreePackets`
+retains one source sequence before every charge request, with literal reversed
+roots, restarted terminal payoffs, and exact charge equality. The full producer
+uses fixed burn-in and retains the reward box, not the original horizon.
+Separately, `punishmentFloor_le_quittingRootSequenceTailVector_of_rowPerfect`
+(`UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorbingForwardSource.lean`)
+proves the approximate punishment floor at every restarted date under the
+explicit row-error bound. The same generic module proves that termination
+after every restart forces nonsummable absorption. No reverse AKRS implication
+is used in these source adapters.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |

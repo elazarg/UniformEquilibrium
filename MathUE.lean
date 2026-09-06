@@ -262,6 +262,7 @@ import MathUE.FiniteDirectedPeriod
 import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
 import MathUE.Polynomial.NonnegativeCertificate
+import MathUE.Polynomial.TensorBernstein
 import MathUE.Probability
 import MathUE.Probability.Adaptive
 import MathUE.Probability.AdaptiveOccupationFlow
