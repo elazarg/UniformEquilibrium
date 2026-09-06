@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacketProducer
+import UniformEquilibrium.Quitting.Projective.FiniteForwardPacketRewardBoxReduction
 import UniformEquilibrium.Quitting.Root.TerminalDebtPrefix
 
 /-! # Upward translation from exact to absorption-weighted packets -/
@@ -223,5 +224,25 @@ theorem exists_exactFiniteForwardPacketBox_iff_exists_absorptionWeightedBox
     exact ⟨B, hB, hasExactFiniteForwardPackets_of_absorptionWeighted
       reward B hBpos (fun terminal player ↦
         (hreward terminal player).trans hB) hweighted⟩
+
+/-- Exact packets in the supplied reward box exist at every accuracy and
+charge iff absorption-weighted packets exist in some one box fixed before
+accuracy and charge. -/
+theorem hasExactFiniteForwardPackets_rewardBox_iff_exists_absorptionWeightedBox
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (rewardBound : ℝ) (hbound : 0 < rewardBound)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ rewardBound) :
+    HasExactFiniteForwardPackets reward rewardBound ↔
+      ∃ B, rewardBound ≤ B ∧
+        HasAbsorptionWeightedFiniteForwardPackets reward B := by
+  constructor
+  · intro hexact
+    exact (exists_exactFiniteForwardPacketBox_iff_exists_absorptionWeightedBox
+      reward rewardBound hbound hreward).mp ⟨rewardBound, le_rfl, hexact⟩
+  · intro hweighted
+    obtain ⟨B, hB, hexact⟩ :=
+      (exists_exactFiniteForwardPacketBox_iff_exists_absorptionWeightedBox
+        reward rewardBound hbound hreward).mpr hweighted
+    exact hasExactFiniteForwardPackets_rewardBox_of_box reward hB hreward hexact
 
 end GameTheory

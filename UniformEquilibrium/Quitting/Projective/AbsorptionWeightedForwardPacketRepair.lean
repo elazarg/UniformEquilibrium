@@ -3,7 +3,6 @@ import UniformEquilibrium.Quitting.Root.AbsorptionWeightedRootPurification
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.Lasso
-import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
 
 /-! # Exact finite repair of absorption-weighted forward packets -/
 
@@ -272,5 +271,82 @@ def QuittingAbsorptionWeightedForwardPacket.repair
           quittingRootAbsorptionMass (packet.roots time) / 2 := by
         rw [Finset.sum_div]
       _ ≤ _ := hsum }
+
+/-- Every used root of the repaired packet differs coordinatewise from its
+input root by at most rho times the input row absorption. -/
+theorem QuittingAbsorptionWeightedForwardPacket.repair_root_coordinate_close
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {chargeTarget B ρ : ℝ}
+    (packet : QuittingAbsorptionWeightedForwardPacket reward carrier
+      (B * ρ ^ 2) chargeTarget)
+    (hB : 0 < B) (hρ : 0 < ρ) (hρmax : ρ ≤ 1 / 8)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (hcarrier : ∀ value ∈ carrier, ∀ player, |value player| ≤ B)
+    (time : ℕ) (htime : time < packet.horizon) (player : Fin 4) :
+    |((packet.repair hB hρ hρmax hreward hcarrier).roots time player true).toReal -
+        (packet.roots time player true).toReal| ≤
+      ρ * quittingRootAbsorptionMass (packet.roots time) := by
+  exact supportPurifiedRoot_coordinate_close_of_weighted_regret
+    reward (packet.value time) (packet.roots time) hB hρ
+      (packet.regret time htime) player
+
+@[simp] theorem QuittingAbsorptionWeightedForwardPacket.repair_horizon
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {chargeTarget B ρ : ℝ}
+    (packet : QuittingAbsorptionWeightedForwardPacket reward carrier
+      (B * ρ ^ 2) chargeTarget)
+    (hB : 0 < B) (hρ : 0 < ρ) (hρmax : ρ ≤ 1 / 8)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (hcarrier : ∀ value ∈ carrier, ∀ player, |value player| ≤ B) :
+    (packet.repair hB hρ hρmax hreward hcarrier).horizon = packet.horizon := rfl
+
+@[simp] theorem QuittingAbsorptionWeightedForwardPacket.repair_value_zero
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {chargeTarget B ρ : ℝ}
+    (packet : QuittingAbsorptionWeightedForwardPacket reward carrier
+      (B * ρ ^ 2) chargeTarget)
+    (hB : 0 < B) (hρ : 0 < ρ) (hρmax : ρ ≤ 1 / 8)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (hcarrier : ∀ value ∈ carrier, ∀ player, |value player| ≤ B) :
+    (packet.repair hB hρ hρmax hreward hcarrier).value 0 = packet.value 0 := rfl
+
+/-- The repaired packet value is within `17 * B * ρ` of
+the input annotation at every displayed time. -/
+theorem QuittingAbsorptionWeightedForwardPacket.repair_value_close
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {chargeTarget B ρ : ℝ}
+    (packet : QuittingAbsorptionWeightedForwardPacket reward carrier
+      (B * ρ ^ 2) chargeTarget)
+    (hB : 0 < B) (hρ : 0 < ρ) (hρmax : ρ ≤ 1 / 8)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (hcarrier : ∀ value ∈ carrier, ∀ player, |value player| ≤ B)
+    (time : ℕ) (htime : time ≤ packet.horizon) (player : Fin 4) :
+    |(packet.repair hB hρ hρmax hreward hcarrier).value time player -
+        packet.value time player| ≤ 17 * B * ρ := by
+  exact packet.repairedValue_close hB hρ hρmax hreward hcarrier
+    time htime player
+
+/-- Repair retains at least half of the full displayed absorption charge,
+not merely half of a requested lower bound. -/
+theorem QuittingAbsorptionWeightedForwardPacket.half_total_charge_le_repair_total_charge
+    {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+    {carrier : Set (Payoff (Fin 4))} {chargeTarget B ρ : ℝ}
+    (packet : QuittingAbsorptionWeightedForwardPacket reward carrier
+      (B * ρ ^ 2) chargeTarget)
+    (hB : 0 < B) (hρ : 0 < ρ) (hρmax : ρ ≤ 1 / 8)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (hcarrier : ∀ value ∈ carrier, ∀ player, |value player| ≤ B) :
+    (∑ time ∈ Finset.range packet.horizon,
+        quittingRootAbsorptionMass (packet.roots time)) / 2 ≤
+      ∑ time ∈ Finset.range
+          (packet.repair hB hρ hρmax hreward hcarrier).horizon,
+        quittingRootAbsorptionMass
+          ((packet.repair hB hρ hρmax hreward hcarrier).roots time) := by
+  rw [packet.repair_horizon hB hρ hρmax hreward hcarrier, Finset.sum_div]
+  apply Finset.sum_le_sum
+  intro time htime
+  exact finFour_half_absorption_le_supportPurifiedRoot reward
+    (packet.value time) (packet.roots time) hB hρ hρmax
+      (packet.regret time (Finset.mem_range.mp htime))
 
 end GameTheory

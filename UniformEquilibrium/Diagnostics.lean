@@ -30,6 +30,9 @@ import UniformEquilibrium.Diagnostics.Quitting.PivotRepairSignedThirdEndpoint
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairNonattainedZeroLP
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairNonattainedAllLaws
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairRationalFixture
+import UniformEquilibrium.Diagnostics.Quitting.PivotRepairRationalLowerBound
+import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedZeroChargeRampBoundary
+import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedRareInferiorActionBoundary
 
 /-!
 # Integrated diagnostics umbrella

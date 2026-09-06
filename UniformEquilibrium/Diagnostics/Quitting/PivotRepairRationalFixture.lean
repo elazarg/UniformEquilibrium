@@ -114,7 +114,8 @@ def input (N : ℕ) (hN : 1 ≤ N) : QuittingPivotRepairLPInput reward where
   simp [opponents, quitOrNever, PMF.map_apply]
   norm_num
 
-private def neverLaws : Fin 4 → PMF (Option ℕ) := fun _ ↦ PMF.pure none
+/-- The deterministic all-Never stopping-law profile used in the conditioning formula. -/
+def neverLaws : Fin 4 → PMF (Option ℕ) := fun _ ↦ PMF.pure none
 
 private theorem pureLawsPayoff (times : Fin 4 → Option ℕ) (who : Fin 4) :
     quittingTerminalPayoff reward
@@ -133,26 +134,27 @@ private theorem opponents_as_updates (N : ℕ) (hN : 1 ≤ N) :
   funext player
   fin_cases player <;> rfl
 
-private theorem pivotPayoff_conditioned (N : ℕ) (hN : 1 ≤ N)
-    (choice : Option ℕ) :
-    (input N hN).purePivotPayoff choice 0 =
+/-- The payoff of any observer conditions over the two independent opponent atoms. -/
+theorem observerPayoff_conditioned (N : ℕ) (hN : 1 ≤ N)
+    (choice : Option ℕ) (observer : Fin 4) :
+    (input N hN).purePivotPayoff choice observer =
       (6 / 7) * ((3 / 7) *
           quittingTerminalPayoff reward (quittingStoppingLawProfile reward
-            (Function.update neverLaws 0 (PMF.pure choice))) 0 +
+            (Function.update neverLaws 0 (PMF.pure choice))) observer +
         (4 / 7) * quittingTerminalPayoff reward (quittingStoppingLawProfile reward
           (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
-            (PMF.pure (some (N - 1))))) 0) +
+            (PMF.pure (some (N - 1))))) observer) +
       (1 / 7) * ((3 / 7) * quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward
             (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 2
-              (PMF.pure (some (N - 1))))) 0 +
+              (PMF.pure (some (N - 1))))) observer +
         (4 / 7) * quittingTerminalPayoff reward (quittingStoppingLawProfile reward
             (Function.update
             (Function.update (Function.update neverLaws 0 (PMF.pure choice)) 1
-              (PMF.pure (some (N - 1)))) 2 (PMF.pure (some (N - 1))))) 0) := by
+              (PMF.pure (some (N - 1)))) 2 (PMF.pure (some (N - 1))))) observer) := by
   change quittingTerminalPayoff reward
     (quittingStoppingLawProfile reward
-      (Function.update (opponents N hN) 0 (PMF.pure choice))) 0 = _
+      (Function.update (opponents N hN) 0 (PMF.pure choice))) observer = _
   rw [opponents_as_updates]
   have hmove : Function.update
       (Function.update
@@ -270,7 +272,7 @@ private theorem deterministicNeverBranches (N : ℕ) :
 /-- The pivot's actual Never payoff is `217/49`. -/
 theorem pivotPayoff_never (N : ℕ) (hN : 1 ≤ N) :
     (input N hN).purePivotPayoff none 0 = 217 / 49 := by
-  rw [pivotPayoff_conditioned]
+  rw [observerPayoff_conditioned N hN none 0]
   rcases deterministicNeverBranches N with ⟨h0, h1, h2, h12⟩
   rw [h0, h1, h2, h12]
   norm_num
@@ -354,7 +356,7 @@ private theorem deterministicAtBranches (N : ℕ) :
 /-- The pivot's actual payoff at the common opponent date is `217/49`. -/
 theorem pivotPayoff_at (N : ℕ) (hN : 1 ≤ N) :
     (input N hN).purePivotPayoff (some (N - 1)) 0 = 217 / 49 := by
-  rw [pivotPayoff_conditioned]
+  rw [observerPayoff_conditioned N hN (some (N - 1)) 0]
   rcases deterministicAtBranches N with ⟨h0, h1, h2, h12⟩
   rw [h0, h1, h2, h12]
   norm_num
@@ -411,7 +413,7 @@ private theorem deterministicBeforePayoff (N time : ℕ) (htime : time < N - 1)
 theorem pivotPayoff_before (N : ℕ) (hN : 1 ≤ N) {time : ℕ}
     (htime : time < N - 1) :
     (input N hN).purePivotPayoff (some time) 0 = 1 := by
-  rw [pivotPayoff_conditioned]
+  rw [observerPayoff_conditioned N hN (some time) 0]
   have hbranch (first second : Bool) :
       quittingTerminalPayoff reward (quittingStoppingLawProfile reward
         (Function.update
