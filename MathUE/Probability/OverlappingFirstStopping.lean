@@ -120,7 +120,8 @@ end ScalarHazard
 
 /-! ## Scalar square-root propagation -/
 
-private theorem sqrt_quadratic_chord
+/-- The square root of a nonnegative quadratic lies below its endpoint chord. -/
+theorem sqrt_quadratic_chord
     {constant scale weight : ℝ}
     (hconstant : 0 ≤ constant) (hscale : 0 ≤ scale)
     (hweight : weight ∈ Set.Icc (0 : ℝ) 1) :
@@ -152,7 +153,8 @@ private theorem sqrt_quadratic_chord
       mul_nonneg hcoefficient (sub_nonneg.mpr hcross)
     nlinarith
 
-private theorem sqrt_mul_add_sqrt_mul_le_sqrt_add_mul_add
+/-- The two-term Cauchy--Schwarz bound written with nonnegative square roots. -/
+theorem sqrt_mul_add_sqrt_mul_le_sqrt_add_mul_add
     {firstWeight secondWeight firstValue secondValue : ℝ}
     (hfirstWeight : 0 ≤ firstWeight) (hsecondWeight : 0 ≤ secondWeight)
     (hfirstValue : 0 ≤ firstValue) (hsecondValue : 0 ≤ secondValue) :
@@ -180,7 +182,8 @@ private theorem sqrt_mul_add_sqrt_mul_le_sqrt_add_mul_add
   rw [← Real.sqrt_mul (add_nonneg hfirstWeight hsecondWeight)] at hcs'
   exact hcs'
 
-private theorem firstSecond_endpoint_le_one
+/-- The overlapping-pair bound at the future endpoint concentrated on the first pair. -/
+theorem firstSecond_endpoint_le_one
     {first second third : ℝ}
     (hfirst : first ∈ Set.Icc (0 : ℝ) 1)
     (hsecond : second ∈ Set.Icc (0 : ℝ) 1)
@@ -223,7 +226,8 @@ private theorem firstSecond_endpoint_le_one
     _ = Real.sqrt (middle + first * (1 - second)) := by ring_nf
     _ ≤ 1 := hsqrtLe
 
-private theorem firstThird_endpoint_le_one
+/-- The overlapping-pair bound at the future endpoint concentrated on the second pair. -/
+theorem firstThird_endpoint_le_one
     {first second third : ℝ}
     (hfirst : first ∈ Set.Icc (0 : ℝ) 1)
     (hsecond : second ∈ Set.Icc (0 : ℝ) 1)

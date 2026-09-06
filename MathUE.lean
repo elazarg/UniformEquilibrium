@@ -16,6 +16,9 @@ import MathUE.PMFProduct.BooleanCoordinateStability
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AffinePairRootCrossing
+import MathUE.AffinePairRootCrossingAttainment
+import MathUE.FinFourPairRelabel
+import MathUE.SqrtQuadraticChordEquality
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.SummableTailAverage
 import MathUE.Analysis.CompactSubtypeZeroExtension
@@ -375,6 +378,8 @@ import MathUE.Probability.OccupationFlowAlternative
 import MathUE.Probability.OneSidedDebtShadowing
 import MathUE.Probability.OptionalTargetTransport
 import MathUE.Probability.OverlappingFirstStopping
+import MathUE.Probability.OverlappingFirstStoppingEquality
+import MathUE.Probability.FirstStoppingCoalitionRelabel
 import MathUE.Probability.OwnerChargedOccupationAlternative
 import MathUE.Probability.PhaseOccupationDuality
 import MathUE.Probability.PositiveChargedCirculationClass

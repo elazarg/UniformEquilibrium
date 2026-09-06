@@ -114,4 +114,36 @@ theorem exists_pos_le_prod_one_sub_of_summable
     apply mul_le_mul_of_nonneg_left _ hinitialProductPos.le
     simpa using htailLower
 
+/-- A summable unit-interval charge has uniformly near-one survival on every
+sufficiently late finite window. -/
+theorem eventually_one_sub_le_finiteSurvivalWindow_of_summable
+    (charge : ℕ → ℝ) (hcharge0 : ∀ n, 0 ≤ charge n)
+    (hcharge1 : ∀ n, charge n ≤ 1) (hsummable : Summable charge)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∀ᶠ start in atTop, ∀ fuel,
+      1 - ε ≤ ∏ offset ∈ Finset.range fuel,
+        (1 - charge (start + offset)) := by
+  have htail : Tendsto (fun start : ℕ =>
+      ∑' offset : ℕ, charge (offset + start)) atTop (nhds 0) :=
+    tendsto_sum_nat_add charge
+  filter_upwards [htail.eventually (Iio_mem_nhds hε)] with start hstart
+  intro fuel
+  have hsuffix : Summable (fun offset => charge (start + offset)) := by
+    simpa [Nat.add_comm] using (summable_nat_add_iff start).2 hsummable
+  have hfinite :
+      (∑ offset ∈ Finset.range fuel, charge (start + offset)) ≤
+        ∑' offset, charge (start + offset) :=
+    hsuffix.sum_le_tsum (Finset.range fuel) fun offset _ =>
+      hcharge0 (start + offset)
+  have hrewrite : (∑' offset, charge (start + offset)) =
+      ∑' offset, charge (offset + start) := by
+    congr 1
+    funext offset
+    rw [Nat.add_comm]
+  rw [hrewrite] at hfinite
+  exact (by linarith : 1 - ε ≤
+    1 - ∑ offset ∈ Finset.range fuel, charge (start + offset)) |>.trans
+      (one_sub_sum_range_le_prod_one_sub
+        charge hcharge0 hcharge1 start fuel)
+
 end Math

@@ -38,6 +38,8 @@ import UniformEquilibrium.Diagnostics.Quitting.PivotRepairRationalResponseCoeffi
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairRationalSequentialReplacement
 import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedZeroChargeRampBoundary
 import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedRareInferiorActionBoundary
+import UniformEquilibrium.Diagnostics.Quitting.FinFourActualPrefixHazard
+import UniformEquilibrium.Diagnostics.Quitting.LateResetChildCapPinExit
 
 /-!
 # Integrated diagnostics umbrella

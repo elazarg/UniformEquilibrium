@@ -216,6 +216,42 @@ finite capacity in the box enlarged by three; no smoothness or polynomial
 producer is an extra hypothesis. No concrete polynomial counterexample or
 complete polynomial-checking algorithm is supplied.
 
+The boundary examples are literal game-semantic statements.
+`UniformEquilibrium/Quitting/Root/AllContinueWeightedRoot.lean` records the
+zero-charge root and the failure of negative-translation invariance.
+`UniformEquilibrium/Quitting/Examples/ZeroRewardEntryFloor.lean` and
+`UniformEquilibrium/Quitting/Examples/NonNormalFloorFailure.lean` distinguish
+the deleted entry endpoint from the retained floor and expose the role of
+normality. `UniformEquilibrium/Quitting/Examples/SureRootNonrepeatability.lean`
+computes the semantic punishment vector and an actual exact terminal Nash
+profile whose prescribed sure root is not repeatable against its own payoff.
+`UniformEquilibrium/Quitting/Examples/ThreeOwnerRobustCycle.lean` rules out
+every potential on a literal charged three-cycle; composing it with the
+polynomial characterization proves `ThreeOwnerRobustCycle.exists_uniformEquilibriumPayoff`
+in `UniformEquilibrium/Quitting/Examples/ThreeOwnerRobustCycleUniformPayoff.lean`.
+This conclusion concerns that table only and does not select a numerical payoff.
+
+`quitting_pureTimeCap_literalPrefix_transport`
+(`UniformEquilibrium/Quitting/Root/ExactCapClockTransport.lean`) transports an
+actual pure-time cap through exact Nash roots with positive owner Continue
+probability, retaining the literal updated profiles and exact debt multiplier.
+`UniformEquilibrium/Quitting/Root/PureTimeCapChild.lean` fixes the single-profile
+child constructor and its cap-attaining owner's zero debt and exact gain.
+`finFour_summable_actualExactPrefix_hazard_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourActualPrefixHazard.lean`)
+derives summable marginal hazards for a supplied nested exact-root sequence
+under no uniform payoff. The finite-block adapter uses actual reversed
+prefixes, not independent supplied paths. The generic survival consequences
+in `UniformEquilibrium/Quitting/Paths/SummableRootSurvival.lean` include
+uniform late-window bounds and a positive floor for every finite prefix
+when each root has positive survival.
+`eventually_resetChild_everyExactRoot_debtDrop_and_absorptionFloor`
+(`UniformEquilibrium/Diagnostics/Quitting/LateResetChildCapPinExit.lean`)
+pins the actual reset child's cap near the singleton payoff and obtains a
+debt drop and absorption floor for every exact root against that child's
+payoff. These are conditional source tools; they do not yet construct a
+renewable reset sequence or a returned source.
+
 `quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
 (`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`)
 identifies the independent-clock formula with the existing executed terminal
@@ -231,6 +267,18 @@ pair. The same module excludes the uniform one-sixth law on the six Fin4
 pairs, although its two-coordinate square-root inequality holds.
 Equality-law classification and general coalition-law realizability remain
 separate obligations.
+`exists_actual_finFour_pairProjection_sharpProfile`
+(`UniformEquilibrium/Quitting/Paths/FinFourPairSharpness.lean`) constructs
+actual profiles attaining the square-root boundary for any two distinct
+Fin4 pairs, whether overlapping or disjoint. Generic player relabeling is
+proved in `MathUE/Probability/FirstStoppingCoalitionRelabel.lean` and its
+behavioral adapter in
+`UniformEquilibrium/Quitting/Paths/FirstStoppingCoalitionRelabel.lean`.
+`MathUE/AffinePairRootCrossingAttainment.lean` proves attainment of the least
+feasible crossing and the exact two-coordinate feasibility criterion.
+`MathUE/Probability/OverlappingFirstStoppingEquality.lean` supplies the
+zero-continuation one-row equality case; the full chronological equality
+classification is not implied by these sharpness constructions.
 `exists_pureTime_gain_half_affinePairRootLeastCrossing`
 (`UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean`) turns
 supplied affine lower bounds on two pair masses into a profitable finite-time
