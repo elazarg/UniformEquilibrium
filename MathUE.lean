@@ -15,6 +15,7 @@ import MathUE.ProbabilityMassFunction.GeometricPivotFiniteCensor
 import MathUE.PMFProduct.BooleanCoordinateStability
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
+import MathUE.AffinePairRootCrossing
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.SummableTailAverage
 import MathUE.AnalyticConeDichotomy
@@ -151,6 +152,7 @@ import MathUE.Interval.DyadicPolynomial
 import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalPolynomialDerivativeApproximation
+import MathUE.Interval.RationalPolynomialSmoothDerivativeApproximation
 import MathUE.Interval.RationalInterval
 import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial
@@ -266,6 +268,9 @@ import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.TensorBernsteinDifferences
 import MathUE.Polynomial.TensorBernsteinGridEstimates
+import MathUE.Polynomial.TensorBernsteinDerivativeEstimate
+import MathUE.Polynomial.TensorBernsteinDerivativeConvergence
+import MathUE.Polynomial.PolynomialDerivativeApproximation
 import MathUE.Analysis.PositiveWeightedApproximation
 import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Probability
@@ -425,6 +430,7 @@ import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex
 import MathUE.RelationalKernel
 import MathUE.RenewedChargedPathPotentialRecharge
+import MathUE.PathFamilyPotentialRecharge
 import MathUE.SchauderFixedPoint
 import MathUE.SequenceVariation
 import MathUE.ShapleyOperator

@@ -177,6 +177,21 @@ theorem card_mul_minimumDebtDrop_add_gain_sub_initial_le_sum_crossPlayerDebtInje
   have hterminal := totalDebt_nonneg (sequence.source horizon)
   linarith
 
+/-- Exact cross-player recharge pays vertical debt drops and owner gains, with both boundaries. -/
+theorem sum_crossPlayerDebtInjection_eq_sum_verticalDrop_add_gain_boundary
+    (sequence : QuittingRenewedActualProfileSequence reward) (horizon : ℕ) :
+    (∑ phase ∈ Finset.range horizon, sequence.crossPlayerDebtInjection phase) =
+      (∑ phase ∈ Finset.range horizon,
+        (totalDebt (sequence.source phase) - totalDebt (sequence.endpoint phase))) +
+      (∑ phase ∈ Finset.range horizon, sequence.capGain phase) +
+      totalDebt (sequence.source horizon) - totalDebt (sequence.source 0) := by
+  have hphase (phase : ℕ) : sequence.crossPlayerDebtInjection phase =
+      sequence.horizontalDebtInjection phase + sequence.capGain phase := by
+    rw [sequence.horizontalDebtInjection_eq_neg_capGain_add_cross]
+    ring
+  simp_rw [hphase, Finset.sum_add_distrib]
+  rw [sequence.sum_horizontalDebtInjection_eq_sum_verticalDrop_add_boundary]
+  ring
+
 end QuittingRenewedActualProfileSequence
 end GameTheory
-

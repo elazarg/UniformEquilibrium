@@ -1,5 +1,5 @@
 import MathUE.RenewedChargedPathPotentialRecharge
-import UniformEquilibrium.Quitting.Bellman.Finite.LiteralExactPrefixBoxPath
+import UniformEquilibrium.Quitting.Bellman.Finite.LiteralExactWordCapacityRecharge
 import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
 
 /-! # Actual renewed literal words as coherent full-box path sequences
@@ -24,7 +24,7 @@ words and one common positive absorption expenditure. -/
 structure QuittingRenewedLiteralExactWordSequence
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     extends QuittingRenewedActualProfileSequence reward where
-  /-- Chronological exact roots above the actual phase source. -/
+  /-- Exact roots in outermost-first prefix order above the actual phase source. -/
   roots : ℕ → List (ι → PMF Bool)
   /-- Every supplied word is an exact literal predecessor stack. -/
   roots_exact : ∀ phase,
@@ -132,7 +132,39 @@ theorem toRenewedPathSequence_horizontalTarget_eq_child
       ((sequence.roots phase).map quittingRootAbsorptionMass).sum := by
   exact quittingLiteralExactWordBoxPath_chargeSum _ _ _ _
 
+/-- All actual phase absorption expenditures enter the capacity ledger with exact boundaries. -/
+theorem sum_absorption_add_capacityBoundary_le_sum_capacityRecharge
+    (sequence : QuittingRenewedLiteralExactWordSequence reward)
+    (hbudget : (quittingPunishmentFloorBoxChargedRelation reward).HasFiniteBudget)
+    (horizon : ℕ) :
+    (∑ phase ∈ Finset.range horizon,
+        ((sequence.roots phase).map quittingRootAbsorptionMass).sum) +
+      (quittingPunishmentFloorBoxChargedRelation reward).value (sequence.boxSource horizon) -
+      (quittingPunishmentFloorBoxChargedRelation reward).value (sequence.boxSource 0) ≤
+      ∑ phase ∈ Finset.range horizon,
+        sequence.toRenewedPathSequence.potentialRecharge
+          (quittingPunishmentFloorBoxChargedRelation reward).value phase := by
+  exact sum_literalExactWord_absorption_add_capacityBoundary_le_sum_recharge
+    sequence.source sequence.roots (fun _ ↦ quittingAllContinueSimplexRoot)
+    sequence.roots_exact hbudget horizon
+
+/-- Dropping terminal capacity costs only the initial state's capacity, not the global budget. -/
+theorem sum_absorption_sub_initialCapacity_le_sum_capacityRecharge
+    (sequence : QuittingRenewedLiteralExactWordSequence reward)
+    (hbudget : (quittingPunishmentFloorBoxChargedRelation reward).HasFiniteBudget)
+    (horizon : ℕ) :
+    (∑ phase ∈ Finset.range horizon,
+        ((sequence.roots phase).map quittingRootAbsorptionMass).sum) -
+      (quittingPunishmentFloorBoxChargedRelation reward).value (sequence.boxSource 0) ≤
+      ∑ phase ∈ Finset.range horizon,
+        sequence.toRenewedPathSequence.potentialRecharge
+          (quittingPunishmentFloorBoxChargedRelation reward).value phase := by
+  have hledger := sequence.sum_absorption_add_capacityBoundary_le_sum_capacityRecharge
+    hbudget horizon
+  have hterminal := (quittingPunishmentFloorBoxChargedRelation reward).value_nonneg hbudget
+    (sequence.boxSource horizon)
+  linarith
+
 end QuittingRenewedLiteralExactWordSequence
 
 end GameTheory
-

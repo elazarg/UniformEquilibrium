@@ -18,11 +18,6 @@ universe u v
 
 variable {State : Type u} {Edge : Type v} (R : ChargedRelation State Edge)
 
-@[simp] theorem Path.length_castSrc {s t w : State} (h : s = t) (path : R.Path s w) :
-    (path.castSrc h).length = path.length := by
-  subst h
-  rfl
-
 def compactSlotSource : State ⊕ Edge → State := Sum.elim id R.src
 
 def compactSlotTarget : State ⊕ Edge → State := Sum.elim id R.tgt

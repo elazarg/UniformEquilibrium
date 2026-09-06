@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import MathUE.ChargedPathBudget
+import MathUE.PathFamilyPotentialRecharge
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 
@@ -104,16 +104,9 @@ theorem sum_verticalCharge_add_terminalPotentialDifference_le_sum_recharge
         potential (sequence.source 0) ≤
       ∑ phase ∈ Finset.range horizon,
         sequence.potentialRecharge potential phase := by
-  have hcharge :
-      (∑ phase ∈ Finset.range horizon,
-          (sequence.verticalPath phase).chargeSum) ≤
-        ∑ phase ∈ Finset.range horizon,
-          (potential (sequence.source phase) -
-            potential (sequence.endpoint phase)) := by
-    exact Finset.sum_le_sum fun phase _ =>
-      hpotential.chargeSum_le (sequence.verticalPath phase)
-  rw [sequence.sum_potentialRecharge_eq_sum_verticalPotentialDrop_add_boundary]
-  linarith
+  simpa only [potentialRecharge, sequence.horizontalTarget_eq_nextSource] using
+    sum_pathFamily_charge_add_boundary_le_sum_recharge
+      sequence.source sequence.endpoint sequence.verticalPath potential hpotential horizon
 
 /-- A common positive vertical charge produces linear horizontal potential
 recharge, modulo the exact two source boundary values. -/

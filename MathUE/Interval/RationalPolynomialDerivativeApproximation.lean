@@ -1,6 +1,5 @@
 import MathUE.Interval.PolynomialLipschitz
-import Mathlib.Algebra.MvPolynomial.Eval
-import Mathlib.Analysis.Calculus.ContDiff.Operations
+import MathUE.Polynomial.MvPolynomialFDeriv
 import Mathlib.Analysis.Normed.Group.Bounded
 import Mathlib.Topology.Instances.Rat
 
@@ -38,26 +37,17 @@ theorem exists_evalReal_eq_eval₂ (polynomial : MvPolynomial (Fin variableCount
       intro point
       simp [evalReal_mul, evalReal_var, MvPolynomial.eval₂_mul, hexpression]
 
-private theorem contDiff_eval_realPolynomial
-    (polynomial : MvPolynomial (Fin variableCount) ℝ) :
-    ContDiff ℝ 1 (fun point ↦ MvPolynomial.eval point polynomial) := by
-  induction polynomial using MvPolynomial.induction_on with
-  | C coefficient => simpa using contDiff_const (c := coefficient)
-  | add first second hfirst hsecond => simpa using hfirst.add hsecond
-  | mul_X polynomial index hpolynomial =>
-      simpa using hpolynomial.mul (contDiff_apply ℝ ℝ index)
-
 private def monomialFunction (exponent : Fin variableCount →₀ ℕ) :
     (Fin variableCount → ℝ) → ℝ :=
   fun point ↦ MvPolynomial.eval point (MvPolynomial.monomial exponent (1 : ℝ))
 
 private theorem differentiable_monomialFunction (exponent : Fin variableCount →₀ ℕ) :
     Differentiable ℝ (monomialFunction exponent) :=
-  (contDiff_eval_realPolynomial (MvPolynomial.monomial exponent 1)).differentiable_one
+  (Math.contDiff_eval_mvPolynomial (MvPolynomial.monomial exponent 1) 1).differentiable_one
 
 private theorem continuous_fderiv_monomialFunction (exponent : Fin variableCount →₀ ℕ) :
     Continuous (fderiv ℝ (monomialFunction exponent)) :=
-  (contDiff_eval_realPolynomial (MvPolynomial.monomial exponent 1)).continuous_fderiv
+  (Math.contDiff_eval_mvPolynomial (MvPolynomial.monomial exponent 1) 1).continuous_fderiv
     (by norm_num)
 
 private theorem eval_eq_sum_monomialFunction
@@ -247,4 +237,3 @@ theorem exists_evalReal_fderiv_close_on_cube
   exact exists_evalReal_fderiv_close_on_compact polynomial _ hcompact herror
 
 end Math.Interval.RationalPolynomial
-

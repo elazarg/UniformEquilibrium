@@ -28,5 +28,22 @@ theorem finFour_renewedLiteralExactWord_capacityRecharge
   exact finFour_card_mul_minimumCharge_sub_fullBoxBudget_le_sum_valueRecharge
     reward hnot sequence.toRenewedPathSequence horizon
 
-end GameTheory
+/-- Fin4 nonexistence supplies the capacity bound for the exact actual-expenditure ledger. -/
+theorem finFour_renewedLiteralExactWord_actualAbsorption_capacityRecharge
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (sequence : QuittingRenewedLiteralExactWordSequence reward)
+    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
+    (horizon : ℕ) :
+    (∑ phase ∈ Finset.range horizon,
+        ((sequence.roots phase).map quittingRootAbsorptionMass).sum) +
+      (quittingPunishmentFloorBoxChargedRelation reward).value (sequence.boxSource horizon) -
+      (quittingPunishmentFloorBoxChargedRelation reward).value (sequence.boxSource 0) ≤
+      ∑ phase ∈ Finset.range horizon,
+        sequence.toRenewedPathSequence.potentialRecharge
+          (quittingPunishmentFloorBoxChargedRelation reward).value phase :=
+  sequence.sum_absorption_add_capacityBoundary_le_sum_capacityRecharge
+    (finFour_quittingFullBoxExactPredecessor_hasFiniteBudget_of_no_uniformPayoff reward hnot)
+    horizon
 
+end GameTheory

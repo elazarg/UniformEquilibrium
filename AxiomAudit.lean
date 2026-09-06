@@ -8,6 +8,7 @@ Other modules such as Research and Literature are not to be quoted as formalized
 import MathUE.AbelCesaro
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
+import MathUE.AffinePairRootCrossing
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Analysis.PositiveWeightedApproximation
@@ -191,6 +192,7 @@ import MathUE.Interval.RationalMaxExpression
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.RationalPolynomialDerivativeApproximation
 import MathUE.Interval.RationalPolynomialL1
+import MathUE.Interval.RationalPolynomialSmoothDerivativeApproximation
 import MathUE.Interval.ScalarDyadicPolynomial
 import MathUE.Interval.SelectedCoordinatePolynomialLipschitz
 import MathUE.Interval.SuppliedPartialEnclosureMeanValue
@@ -300,11 +302,15 @@ import MathUE.PMFProduct.SumFubini
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
 import MathUE.ParametricFarkasBasis
+import MathUE.PathFamilyPotentialRecharge
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
+import MathUE.Polynomial.PolynomialDerivativeApproximation
 import MathUE.Polynomial.TensorBernstein
+import MathUE.Polynomial.TensorBernsteinDerivativeConvergence
+import MathUE.Polynomial.TensorBernsteinDerivativeEstimate
 import MathUE.Polynomial.TensorBernsteinDifferences
 import MathUE.Polynomial.TensorBernsteinGridEstimates
 import MathUE.PolynomialSignCell
@@ -1404,6 +1410,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.FullBoxExactPredecessorAbsorpt
 import UniformEquilibrium.Quitting.Bellman.Finite.HazardRowBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.HorizonBridge
 import UniformEquilibrium.Quitting.Bellman.Finite.LiteralExactPrefixBoxPath
+import UniformEquilibrium.Quitting.Bellman.Finite.LiteralExactWordCapacityRecharge
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanFactory
@@ -2049,6 +2056,7 @@ import UniformEquilibrium.Quitting.Examples.UniqueSureNeverReactivationRegressio
 import UniformEquilibrium.Quitting.Nash.FiniteHorizon.MarkedSureQuit
 import UniformEquilibrium.Quitting.Paths.AlmostSureOpponentUniformization
 import UniformEquilibrium.Quitting.Paths.AnchoredJoinPromotion
+import UniformEquilibrium.Quitting.Paths.BehaviorFirstStoppingPairLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingPayoff
 import UniformEquilibrium.Quitting.Paths.BehaviorSupportedPureTimeReplacement
@@ -2093,6 +2101,8 @@ import UniformEquilibrium.Quitting.Paths.QuitEndpointOpponentBound
 import UniformEquilibrium.Quitting.Paths.ReversePrefixStoppingLaw
 import UniformEquilibrium.Quitting.Paths.RootSequenceSilentPrefix
 import UniformEquilibrium.Quitting.Paths.SixPlayerOnePairMassTargetLock
+import UniformEquilibrium.Quitting.Paths.StageCoalitionMass
+import UniformEquilibrium.Quitting.Paths.StageCoalitionStoppingLaw
 import UniformEquilibrium.Quitting.Paths.StoppingLawBadMassSelection
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
 import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
@@ -2148,7 +2158,11 @@ import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
 import UniformEquilibrium.Quitting.Projective.PunishmentFloorNearReturn
 import UniformEquilibrium.Quitting.Projective.ResolvedChart
+import UniformEquilibrium.Quitting.Projective.RobustChargedPath
 import UniformEquilibrium.Quitting.Projective.RobustChargedRelation
+import UniformEquilibrium.Quitting.Projective.RobustChargedRelationCapacity
+import UniformEquilibrium.Quitting.Projective.RobustChargedRelationPacketAdapter
+import UniformEquilibrium.Quitting.Projective.RobustChargedRelationTranslation
 import UniformEquilibrium.Quitting.Projective.SequentiallyPerfectAbsorbingForwardPacket
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.SignedProjectiveLassoStrictness
@@ -2269,6 +2283,7 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
 import UniformEquilibrium.Quitting.Root.UpwardTranslation
+import UniformEquilibrium.Quitting.Root.VectorTranslation
 import UniformEquilibrium.Quitting.Root.ZeroJointCapLedgerBoundary
 import UniformEquilibrium.Quitting.Stationary.ApproximabilityCompactification
 import UniformEquilibrium.Quitting.Stationary.BestResponse

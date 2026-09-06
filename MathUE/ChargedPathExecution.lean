@@ -29,20 +29,6 @@ variable {State : Type u} {Edge : Type v}
 namespace Path
 
 @[simp]
-theorem length_castTgt {R : ChargedRelation State Edge} {s t w : State}
-    (h : t = w) (path : R.Path s t) :
-    (path.castTgt h).length = path.length := by
-  subst h
-  rfl
-
-@[simp]
-theorem length_castSrc {R : ChargedRelation State Edge} {s t w : State}
-    (h : s = t) (path : R.Path s w) :
-    (path.castSrc h).length = path.length := by
-  subst h
-  rfl
-
-@[simp]
 theorem length_edge {R : ChargedRelation State Edge} (edge : Edge)
     {s t : State} (hsrc : R.src edge = s) (htgt : R.tgt edge = t) :
     (Path.edge edge hsrc htgt).length = 1 := by

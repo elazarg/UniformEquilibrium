@@ -246,6 +246,11 @@ def append : {s t w : State} → R.Path s t → R.Path t w → R.Path s w
 /-- Move the terminal endpoint of a path along an equality of states. -/
 def castTgt {s t w : State} (h : t = w) (p : R.Path s t) : R.Path s w := h ▸ p
 
+@[simp] theorem length_castTgt {s t w : State} (h : t = w) (p : R.Path s t) :
+    (p.castTgt h).length = p.length := by
+  subst h
+  rfl
+
 @[simp] theorem chargeSum_castTgt {s t w : State} (h : t = w) (p : R.Path s t) :
     (p.castTgt h).chargeSum = p.chargeSum := by
   subst h
@@ -253,6 +258,11 @@ def castTgt {s t w : State} (h : t = w) (p : R.Path s t) : R.Path s w := h ▸ p
 
 /-- Move the initial endpoint of a path along an equality of states. -/
 def castSrc {s t w : State} (h : s = t) (p : R.Path s w) : R.Path t w := h ▸ p
+
+@[simp] theorem length_castSrc {s t w : State} (h : s = t) (p : R.Path s w) :
+    (p.castSrc h).length = p.length := by
+  subst h
+  rfl
 
 @[simp] theorem chargeSum_castSrc {s t w : State} (h : s = t) (p : R.Path s w) :
     (p.castSrc h).chargeSum = p.chargeSum := by

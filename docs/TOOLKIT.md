@@ -70,7 +70,19 @@ kept distinct. `MathUE/Analysis/PositiveWeightedApproximation.lean` provides
 near/far bounds for finite positive averages, and
 `MathUE/Analysis/CoordinateSecantEstimate.lean` controls literal finite
 differences from actual derivative bounds. Uniform derivative convergence
-and smooth-to-polynomial approximation remain separate obligations.
+is supplied by
+`eventually_fderiv_tensorBernsteinApproximation_close_on_unitCube`
+(`MathUE/Polynomial/TensorBernsteinDerivativeConvergence.lean`), with one
+degree working for all coordinates and cube points. Affine transport in
+`MathUE/Polynomial/PolynomialDerivativeApproximation.lean` extends this to
+bounded real domains. `exists_evalReal_fderiv_close_of_contDiff_on_box`
+(`MathUE/Interval/RationalPolynomialSmoothDerivativeApproximation.lean`)
+constructs one native rational polynomial with uniform coordinate-derivative
+and derivative-operator error bounds for a supplied global continuously
+differentiable function. Boxes need not have rational endpoints or positive
+width; empty boxes and dimension zero are included. These are derivative
+approximation theorems, not function-value approximation or smoothing of a
+Borel capacity function.
 
 Stationary terminal approximate equilibria supply weighted packets through
 `hasAbsorptionWeightedFiniteForwardPackets_of_stationary`
@@ -137,6 +149,17 @@ applies the no-uniform-payoff capacity bound to this supplied sequence.
 It gives linear horizontal capacity recharge, not a renewable source producer
 or a bound on that recharge.
 
+`sum_pathFamily_charge_add_boundary_le_sum_recharge`
+(`MathUE/PathFamilyPotentialRecharge.lean`) states the exact-boundary
+inequality for arbitrary path families without a positive minimum charge.
+Its actual-word adapter in
+`UniformEquilibrium/Quitting/Bellman/Finite/LiteralExactWordCapacityRecharge.lean`
+allows empty words and arbitrary chosen source decorations. The same next
+decorated source occurs on both sides of every horizontal seam.
+`sum_crossPlayerDebtInjection_eq_sum_verticalDrop_add_gain_boundary`
+(`UniformEquilibrium/Quitting/Root/RenewedActualProfileDebtRecharge.lean`)
+retains the exact vertical drops, cap gains, and debt boundary as an equality.
+
 `quittingFloorFreeRobustChargedRelation`
 (`UniformEquilibrium/Quitting/Projective/RobustChargedRelation.lean`) is the
 full relation of boxed payoff/root/payoff triples satisfying absorption-relative
@@ -145,6 +168,29 @@ full edge space are compact; source, target, and absorption charge are
 continuous. No punishment floor, support-local condition, or selected-root
 restriction is imposed. A finite capacity bound is not supplied by this
 definition or its topological properties.
+
+The literal conversions in
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelationPacketAdapter.lean`
+preserve roots, values through the endpoint, horizon, and total charge in
+both directions between robust paths and floor-free finite packets.
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelationCapacity.lean`
+specializes finite-horizon attainment and upper semicontinuity to this full
+relation; its all-horizon capacity is Borel measurable under finite budget.
+`UniformEquilibrium/Quitting/Projective/RobustChargedRelationTranslation.lean`
+translates both endpoints by the same nonnegative vector, keeps the literal
+root and charge, and bounds endpoint displacement proportionally to
+absorption. It does not assert that the capacity is smooth.
+
+`quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
+(`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`)
+identifies the independent-clock formula with the existing executed terminal
+coalition probability. The same module proves the square-root inequality
+for any two distinct two-player coalitions in any finite-player game.
+`UniformEquilibrium/Quitting/Paths/StageCoalitionMass.lean` and
+`UniformEquilibrium/Quitting/Paths/StageCoalitionStoppingLaw.lean`
+supply its time-disintegration and
+product-factorization dependencies. Equality-law classification and the
+full coalition-law realizability question are separate obligations.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
