@@ -19,15 +19,16 @@ floor into a lower bound on that root's Quit-versus-Continue endpoint gap.
 The endpoint comparison then puts the displayed child payoff below its
 singleton reward, up to the opponents' one-stage absorption.
 
-For a nested sequence of actual profiles, summability of the displayed root
-hazards makes that error vanish.  Every sufficiently late reset child is
-therefore separated from the singleton reward by half the fixed debt floor.
+For a nested sequence of actual profiles, vanishing opponent absorption for
+the fixed observer makes that error vanish. Every sufficiently late reset
+parent is separated from the singleton reward by half the fixed debt floor.
 Every exact root against that child's literal payoff then supplies the same
 quantitative debt drop and absorption floor.
 
-This argument is local at each reset.  It does not require convergence of the
-profile payoff sequence, and it does not claim that the exact-prefix
-descendant regenerates the nested source sequence.
+The local exit does not require payoff convergence. Separately, summable
+marginal hazards yield a simultaneous payoff limit, separated from the
+singleton reward by the full debt floor when resets are cofinal. Neither
+result regenerates the nested source sequence after the exact prefix.
 -/
 
 noncomputable section
@@ -101,9 +102,9 @@ theorem debtFloor_sub_four_mul_opponentAbsorption_le_singletonGap_of_immediateQu
       quittingTerminalPayoff reward continuation who at hwall
   linarith
 
-/-- Summable displayed marginal hazards make every sufficiently late
-immediate-Quit cap reset cross half of the fixed singleton wall.  Literal
-nesting identifies the reset parent; no payoff-limit hypothesis is used. -/
+/-- Vanishing opponent absorption for the fixed observer makes every
+sufficiently late immediate-Quit cap reset cross half of the fixed singleton
+wall. -/
 theorem eventually_terminalPayoff_le_singleton_sub_half_at_immediateQuitCapReset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -112,26 +113,20 @@ theorem eventually_terminalPayoff_le_singleton_sub_half_at_immediateQuitCapReset
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnested : ∀ time, profiles (time + 1) =
       quittingRootThenContinuationProfile reward (roots time) (profiles time))
-    (hhazard : Summable (fun time =>
-      ∑ player, ((roots time player) true).toReal))
+    (hopponentAbsorptionZero : Tendsto (fun time =>
+      quittingRootOpponentAbsorptionMass (roots time) who) atTop (nhds 0))
     (hdebt : ∀ᶠ time in atTop, debtFloor ≤
       quittingTerminalDeviationDebt reward (profiles time) who) :
     ∀ᶠ time in atTop,
       ImmediateQuitAttainsTerminalCap reward (profiles (time + 1)) who →
       quittingTerminalPayoff reward (profiles time) who ≤
         reward (quittingSingletonTerminal who) who - debtFloor / 2 := by
-  have hM : 0 ≤ M :=
-    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
-      (hreward (quittingSingletonTerminal who) who)
-  have htotalZero : Tendsto (fun time =>
-      ∑ player, ((roots time player) true).toReal) atTop (nhds 0) :=
-    hhazard.tendsto_atTop_zero
   have hscaledZero : Tendsto (fun time =>
-      4 * M * ∑ player, ((roots time player) true).toReal)
+      4 * M * quittingRootOpponentAbsorptionMass (roots time) who)
       atTop (nhds 0) := by
-    simpa using htotalZero.const_mul (4 * M)
+    simpa using hopponentAbsorptionZero.const_mul (4 * M)
   have hsmall : ∀ᶠ time in atTop,
-      4 * M * ∑ player, ((roots time player) true).toReal <
+      4 * M * quittingRootOpponentAbsorptionMass (roots time) who <
         debtFloor / 2 :=
     hscaledZero.eventually (Iio_mem_nhds (by linarith))
   have hdebtNext : ∀ᶠ time in atTop, debtFloor ≤
@@ -150,23 +145,12 @@ theorem eventually_terminalPayoff_le_singleton_sub_half_at_immediateQuitCapReset
   have hwall :=
     debtFloor_sub_four_mul_opponentAbsorption_le_singletonGap_of_immediateQuitCap
       reward (roots time) (profiles time) who hdebtFloor hreward
-        (by simpa [ImmediateQuitAttainsTerminalCap] using hcapAtPrefix)
-        hdebtAtPrefix
-  have hopponentLeTotal : quittingRootOpponentAbsorptionMass
-      (roots time) who ≤
-        ∑ player, ((roots time player) true).toReal :=
-    (quittingRootOpponentAbsorptionMass_le_absorptionMass
-      (roots time) who).trans
-        (quittingRootAbsorptionMass_le_sum_quitProbability (roots time))
-  have herrorLe :
-      4 * M * quittingRootOpponentAbsorptionMass (roots time) who ≤
-        4 * M * ∑ player, ((roots time player) true).toReal :=
-    mul_le_mul_of_nonneg_left hopponentLeTotal (mul_nonneg (by norm_num) hM)
+        hcapAtPrefix hdebtAtPrefix
   linarith
 
-/-- Every exact product root against a sufficiently late reset child's actual
-payoff gives a literal exact prefix with fixed debt-drop and absorption
-floors. -/
+/-- Every exact root against a sufficiently late reset parent's actual payoff
+gives fixed debt-drop and absorption floors when the observer's opponent
+absorption tends to zero. -/
 theorem eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitCapReset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -175,8 +159,8 @@ theorem eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitC
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnested : ∀ time, profiles (time + 1) =
       quittingRootThenContinuationProfile reward (roots time) (profiles time))
-    (hhazard : Summable (fun time =>
-      ∑ player, ((roots time player) true).toReal))
+    (hopponentAbsorptionZero : Tendsto (fun time =>
+      quittingRootOpponentAbsorptionMass (roots time) who) atTop (nhds 0))
     (hdebt : ∀ᶠ time in atTop, debtFloor ≤
       quittingTerminalDeviationDebt reward (profiles time) who) :
     ∀ᶠ time in atTop,
@@ -195,7 +179,8 @@ theorem eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitC
               quittingRootAbsorptionMass exactRoot := by
   have hwall :=
     eventually_terminalPayoff_le_singleton_sub_half_at_immediateQuitCapReset
-      reward profiles roots who hdebtFloor hreward hnested hhazard hdebt
+      reward profiles roots who hdebtFloor hreward hnested
+        hopponentAbsorptionZero hdebt
   have hdebtNow := hdebt
   filter_upwards [hwall, hdebtNow] with time hwallTime hdebtTime
   intro hcap exactRoot hnash
@@ -241,8 +226,8 @@ theorem eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitC
     exact hexit.2.2
   exact ⟨hdrop, habsorption⟩
 
-/-- Cofinal immediate-Quit cap resets supply cofinally many children for
-which every exact root has the same fixed debt-drop and absorption floors. -/
+/-- Cofinal resets retain the every-exact-root exit when the observer's
+opponent absorption tends to zero. -/
 theorem frequently_every_exactRoot_has_debtDrop_and_absorption_of_frequently_immediateQuitCapReset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -251,8 +236,8 @@ theorem frequently_every_exactRoot_has_debtDrop_and_absorption_of_frequently_imm
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnested : ∀ time, profiles (time + 1) =
       quittingRootThenContinuationProfile reward (roots time) (profiles time))
-    (hhazard : Summable (fun time =>
-      ∑ player, ((roots time player) true).toReal))
+    (hopponentAbsorptionZero : Tendsto (fun time =>
+      quittingRootOpponentAbsorptionMass (roots time) who) atTop (nhds 0))
     (hdebt : ∀ᶠ time in atTop, debtFloor ≤
       quittingTerminalDeviationDebt reward (profiles time) who)
     (hreset : ∃ᶠ time in atTop,
@@ -272,12 +257,12 @@ theorem frequently_every_exactRoot_has_debtDrop_and_absorption_of_frequently_imm
             quittingRootAbsorptionMass exactRoot := by
   have hexit :=
     eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitCapReset
-      reward profiles roots who hdebtFloor hreward hnested hhazard hdebt
+      reward profiles roots who hdebtFloor hreward hnested
+        hopponentAbsorptionZero hdebt
   exact (hreset.and_eventually hexit).mono fun _ hboth => hboth.2 hboth.1
 
-/-- If total semantic debt has a supplied lower bound on the actual carrier,
-every sufficiently late immediate-Quit cap reset child lies above that bound
-by the same fixed amount spent by an exact root prefix. -/
+/-- A supplied carrier-wide debt lower bound gives the same fixed
+off-minimum conclusion when the observer's opponent absorption tends to zero. -/
 theorem eventually_resetChild_totalDebt_ge_minimum_add_fixedDrop
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile)
@@ -286,8 +271,8 @@ theorem eventually_resetChild_totalDebt_ge_minimum_add_fixedDrop
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hnested : ∀ time, profiles (time + 1) =
       quittingRootThenContinuationProfile reward (roots time) (profiles time))
-    (hhazard : Summable (fun time =>
-      ∑ player, ((roots time player) true).toReal))
+    (hopponentAbsorptionZero : Tendsto (fun time =>
+      quittingRootOpponentAbsorptionMass (roots time) who) atTop (nhds 0))
     (hdebt : ∀ᶠ time in atTop, debtFloor ≤
       quittingTerminalDeviationDebt reward (profiles time) who)
     (hminimum : ∀ pair ∈ quittingTerminalSemanticCarrier reward,
@@ -300,7 +285,8 @@ theorem eventually_resetChild_totalDebt_ge_minimum_add_fixedDrop
           quittingTerminalDebtSum reward (profiles time) := by
   have hexit :=
     eventually_every_exactRoot_has_debtDrop_and_absorption_at_immediateQuitCapReset
-      reward profiles roots who hdebtFloor hreward hnested hhazard hdebt
+      reward profiles roots who hdebtFloor hreward hnested
+        hopponentAbsorptionZero hdebt
   filter_upwards [hexit] with time hexitTime
   intro hcap
   obtain ⟨exactRoot, hnash⟩ := exists_isZeroQuittingRootNash
