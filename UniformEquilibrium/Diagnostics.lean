@@ -26,6 +26,7 @@ import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleNeighborhood
 import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleValueFixtures
 import UniformEquilibrium.Diagnostics.Quitting.SignedFourCycleCoarseNonNash
 import UniformEquilibrium.Diagnostics.Quitting.TwoPlayerNegativeFiniteMenuBoundary
+import UniformEquilibrium.Diagnostics.Quitting.PivotRepairSignedThirdEndpoint
 
 /-!
 # Integrated diagnostics umbrella

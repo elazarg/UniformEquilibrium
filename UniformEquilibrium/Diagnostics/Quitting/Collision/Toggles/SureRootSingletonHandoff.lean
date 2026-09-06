@@ -7,6 +7,7 @@ Authors: UniformEquilibrium contributors
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.LargePersistentBaseDeletionAdapter
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.PrescribedOwnerStationaryHandoff
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.LargeBasePaidEndpointExactStack
+import UniformEquilibrium.Quitting.Root.ForcedQuitEndpointStability
 
 /-!
 # Same-profile singleton handoff from an exact root with a sure quitter
@@ -53,26 +54,6 @@ theorem quittingPersistentBaseRoot_rootFreeMixedPoint_eq
       simp [quittingRootFreeMixedPoint, FinDist.toPMF]
     · exact Finset.disjoint_singleton_left.mpr (by simp)
 
-/-- A sure owner screens an arbitrary continuation tail from every free
-player's endpoint difference. -/
-theorem quittingRootEndpointDifference_eq_zeroTail_of_sureOpponent
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (root : ι → PMF Bool) {owner who : ι}
-    (hne : who ≠ owner) (howner : root owner = PMF.pure true) :
-    quittingRootEndpointDifference reward tail root who =
-      quittingRootEndpointDifference reward 0 root who := by
-  have hupdated (action : Bool) :
-      Function.update root who (PMF.pure action) owner = PMF.pure true := by
-    simp [Function.update_of_ne hne.symm, howner]
-  unfold quittingRootEndpointDifference quittingRootQuitPayoff
-    quittingRootContinuePayoff
-  rw [quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingRootExpectedPayoff_eq_absorbingContribution_add,
-    quittingStationaryContinueMass_of_sureQuitter (hupdated true),
-    quittingStationaryContinueMass_of_sureQuitter (hupdated false)]
-  simp
 
 /-- The free marginals of an exact root with a sure owner form the same
 singleton-base induced Nash point. -/
