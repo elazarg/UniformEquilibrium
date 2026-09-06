@@ -62,7 +62,7 @@ theorem optimizerMass_atMass (N : ℕ) (hN : 1 ≤ N) :
     atMass hN (optimizerMass N hN) = 88 / 107 := by
   exact optimizerMass_head_tau N hN
 
-private theorem optimizerMass_headWeightedSum (N : ℕ) (hN : 1 ≤ N)
+theorem optimizerMass_headWeightedSum (N : ℕ) (hN : 1 ≤ N)
     (coefficient : Fin N → ℝ) :
     (∑ time, pivotRepairHead (optimizerMass N hN) time * coefficient time) =
       (88 / 107) * coefficient (tauIndex N hN) := by
