@@ -52,6 +52,14 @@ coefficient difference identity; `pderiv_tensorBernsteinPolynomial` and
 actual coordinate-line derivatives. These algebraic identities do not yet
 assert simultaneous derivative approximation of a smooth function.
 
+`pderiv_tensorBernsteinCoefficientPolynomial`
+(`MathUE/Polynomial/TensorBernsteinDifferences.lean`) lowers the differentiated
+coordinate degree by one and replaces coefficients by consecutive differences.
+Its evaluated formula is a tensor-weighted average, and
+`hasDerivAt_eval_tensorBernsteinCoefficientPolynomial_update` identifies it
+with the actual coordinate-line derivative. The natural-index coefficient
+adapter is the same multivariate polynomial, not a separate polynomial model.
+
 Stationary terminal approximate equilibria supply weighted packets through
 `hasAbsorptionWeightedFiniteForwardPackets_of_stationary`
 (`UniformEquilibrium/Quitting/Projective/StationaryAbsorptionWeightedForwardPacket.lean`).

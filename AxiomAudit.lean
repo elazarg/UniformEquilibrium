@@ -302,6 +302,7 @@ import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
+import MathUE.Polynomial.TensorBernsteinDifferences
 import MathUE.PolynomialSignCell
 import MathUE.Probability
 import MathUE.Probability.Adaptive
