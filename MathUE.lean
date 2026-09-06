@@ -150,6 +150,7 @@ import MathUE.Interval.DyadicInterval
 import MathUE.Interval.DyadicPolynomial
 import MathUE.Interval.PolynomialKrawczyk
 import MathUE.Interval.PolynomialLipschitz
+import MathUE.Interval.RationalPolynomialDerivativeApproximation
 import MathUE.Interval.RationalInterval
 import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial

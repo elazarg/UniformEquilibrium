@@ -32,6 +32,16 @@ without producing a witness.
 
 ## Canonical project entry points
 
+Rational coefficient approximation is provided by
+`exists_evalReal_fderiv_close_on_compact`
+(`MathUE/Interval/RationalPolynomialDerivativeApproximation.lean`). It constructs
+one native rational polynomial approximating the derivative of a supplied real
+multivariate polynomial uniformly on any compact set, retaining both summed
+coordinate-direction error and derivative operator-norm error.
+`exists_evalReal_eq_eval₂` supplies the exact rational-polynomial syntax bridge.
+The cube specialization permits arbitrary real radii and dimension zero.
+This is not an approximation theorem for an arbitrary smooth function.
+
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
 | Compact-edge path capacity | `MathUE/ChargedPathCode.lean` and `MathUE/CompactChargedPathCapacity.lean` | `exists_path_eq_compactFiniteHorizonMaxCharge` attains finite-horizon charge from each initial state for compact state and edge spaces, Hausdorff states, and continuous source, target, and charge. Codes decode to literal paths with exact endpoints and charge, including nil at dead ends. `upperSemicontinuous_compactFiniteHorizonMaxCharge` and `measurable_value_of_compact_edges` give finite-horizon upper semicontinuity and Borel measurability of the existing all-horizon value under finite budget. The latter is not asserted upper semicontinuous. The countable-supremum identity needs no topology. |

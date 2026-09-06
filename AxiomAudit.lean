@@ -187,6 +187,7 @@ import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalLowerBoxTree
 import MathUE.Interval.RationalMaxExpression
 import MathUE.Interval.RationalPolynomial
+import MathUE.Interval.RationalPolynomialDerivativeApproximation
 import MathUE.Interval.RationalPolynomialL1
 import MathUE.Interval.ScalarDyadicPolynomial
 import MathUE.Interval.SelectedCoordinatePolynomialLipschitz
