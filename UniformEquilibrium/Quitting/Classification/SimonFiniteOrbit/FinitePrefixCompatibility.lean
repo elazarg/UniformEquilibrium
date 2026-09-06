@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.SimonFiniteOrbit.SurvivalCrossingRepair
 import UniformEquilibrium.Quitting.Cycles.CyclicPeriodicExtension
 import UniformEquilibrium.Quitting.Projective.Lasso
+import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 
 /-!
 # Finite-prefix compatibility for reached support purification
@@ -82,34 +83,6 @@ theorem quittingReachedSupportPurifiedPrefixValue_eq_successor
     quittingRootSequenceBackwardPayoff_succ]
   congr 2
 
-/-- Changing all Boolean marginals of one root by at most `d` changes each
-successor coordinate by at most `2 * M * card * d`, provided terminal rewards
-and the displayed tail are bounded by `M`. -/
-theorem abs_quittingRootSuccessorPayoff_sub_of_quitProbability_close
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (tail : Payoff ι) (first second : ι → PMF Bool) (who : ι)
-    {M d : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (htail : ∀ player, |tail player| ≤ M)
-    (hclose : ∀ player,
-      |(first player true).toReal - (second player true).toReal| ≤ d) :
-    |quittingRootSuccessorPayoff reward tail first who -
-        quittingRootSuccessorPayoff reward tail second who| ≤
-      (2 * M) * ((Fintype.card ι : ℝ) * d) := by
-  have hM : 0 ≤ M :=
-    (abs_nonneg (reward (quittingSingletonTerminal who) who)).trans
-      (hreward (quittingSingletonTerminal who) who)
-  have hlaw := pmfTV_pmfPi_bool_le_card_mul_of_quitProbability_close
-    first second hclose
-  have hobservable : ∀ action : ι → Bool,
-      |quittingRootPayoff reward tail action who| ≤ M := by
-    intro action
-    exact abs_quittingRootPayoff_le reward tail hreward htail action who
-  exact (abs_expect_sub_le_two_mul_pmfTV
-    (pmfPi first) (pmfPi second)
-    (fun action => quittingRootPayoff reward tail action who)
-    hobservable).trans
-      (mul_le_mul_of_nonneg_left hlaw (mul_nonneg (by norm_num) hM))
 
 /-- A finite sequence of root perturbations accumulates additively under
 backward Bellman evaluation.  The terminal boundary is the source sequence's

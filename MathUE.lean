@@ -10,6 +10,9 @@ import MathUE.LinearProgramming.PivotRepairMassPerturbation
 import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.LinearProgramming.PivotRepairMassOfStoppingLaw
 import MathUE.ProbabilityMassFunction.ExactLateFiniteCensor
+import MathUE.ProbabilityMassFunction.IndicatorExpectation
+import MathUE.ProbabilityMassFunction.GeometricPivotFiniteCensor
+import MathUE.PMFProduct.BooleanCoordinateStability
 import MathUE.AffineEqualityFarkas
 import MathUE.AffineIterateTelescope
 import MathUE.AlgebraicSelection

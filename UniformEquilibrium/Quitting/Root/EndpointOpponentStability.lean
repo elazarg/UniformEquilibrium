@@ -6,6 +6,7 @@ Authors: UniformEquilibrium contributors
 
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import MathUE.PMFProduct.BooleanCoordinateStability
 
 /-!
 # Opponent-product stability of a quitting endpoint difference
@@ -139,5 +140,32 @@ theorem abs_quittingRootEndpointDifference_sub_le_opponentTVSum
         2 * bound * quittingRootOpponentTVSum first second who :=
       add_le_add hquit hcontinue
     _ = 4 * bound * quittingRootOpponentTVSum first second who := by ring
+
+/-- A uniform Boolean-coordinate perturbation changes each successor payoff
+by at most twice the payoff bound times cardinality times the perturbation. -/
+theorem abs_quittingRootSuccessorPayoff_sub_of_quitProbability_close
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (first second : ι → PMF Bool) (who : ι)
+    {bound d : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (htail : ∀ player, |tail player| ≤ bound)
+    (hclose : ∀ player,
+      |(first player true).toReal - (second player true).toReal| ≤ d) :
+    |quittingRootSuccessorPayoff reward tail first who -
+        quittingRootSuccessorPayoff reward tail second who| ≤
+      (2 * bound) * ((Fintype.card ι : ℝ) * d) := by
+  have hlaw := pmfTV_pmfPi_bool_le_card_mul_of_trueProbability_close
+    first second hclose
+  have hobservable : ∀ action : ι → Bool,
+      |quittingRootPayoff reward tail action who| ≤ bound :=
+    fun action ↦ abs_quittingRootPayoff_le reward tail hreward htail action who
+  exact (abs_expect_sub_le_two_mul_pmfTV
+    (pmfPi first) (pmfPi second)
+    (fun action => quittingRootPayoff reward tail action who)
+    hobservable).trans
+      (mul_le_mul_of_nonneg_left hlaw (by
+        have hbound : 0 ≤ bound :=
+          (abs_nonneg (tail who)).trans (htail who)
+        positivity))
 
 end GameTheory
