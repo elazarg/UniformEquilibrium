@@ -42,8 +42,44 @@ private theorem opponentNeverProduct_le_one :
       (PMF.coe_le_one _ _) |>.trans_eq (by simp)
 
 /-- Every signed feasible repair point produces actual finite laws with
-the censor source retained, full-deviation error control, and exact survival.
+full-deviation error controlled by any supplied coordinate reward bound.
 Approximation does not change the pivot Never atom. -/
+theorem exists_finite_menu_of_feasible_mass_signed_of_reward_bound
+    (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
+    (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
+    (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ)
+    (bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
+      input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
+      ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
+        (law none).toReal = pivotRepairNever mass ∧
+        stoppingLawLateFiniteMass law cutoff < tolerance ∧
+        (∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =
+          Function.update input.opponents input.pivot
+            (censorLateFiniteStoppingLaw law cutoff) who) ∧
+        quittingTerminalExploitability reward
+            (quittingFiniteDeadlineTimingProfile reward deadline mixed) ≤
+          input.objective mass + error +
+            4 * bound * stoppingLawLateFiniteMass law cutoff ∧
+        quittingJointSurvivalWeight
+            (quittingProfileLiveRoot reward
+              (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
+          (pivotRepairNever mass + stoppingLawLateFiniteMass law cutoff) *
+            ∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal := by
+  letI : Nonempty ι := ⟨input.pivot⟩
+  obtain ⟨law, _, hlawError, hnone⟩ :=
+    input.exists_law_payoff_eq_and_exploitability_le_objective_add mass hfeasible error herror
+  obtain ⟨cutoff, hcutoff, htail⟩ := input.exists_cutoff_lateFiniteMass_lt law tolerance htolerance
+  obtain ⟨deadline, hdeadline, mixed, hmixed, hexploit, hsurvival⟩ :=
+    input.exists_finite_censor_menu_of_reward_bound
+      law cutoff hcutoff horizon hhorizon lowerDeadline bound hreward
+  refine ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed, ?_, ?_⟩
+  · linarith
+  · rw [hsurvival, hnone]
+
+/-- The summed project reward bound specializes the supplied-bound signed
+finite-menu consumer. -/
 theorem exists_finite_menu_of_feasible_mass_signed
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
@@ -66,18 +102,54 @@ theorem exists_finite_menu_of_feasible_mass_signed
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
           (pivotRepairNever mass + stoppingLawLateFiniteMass law cutoff) *
             ∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal := by
-  letI : Nonempty ι := ⟨input.pivot⟩
-  obtain ⟨law, _, hlawError, hnone⟩ :=
-    input.exists_law_payoff_eq_and_exploitability_le_objective_add mass hfeasible error herror
-  obtain ⟨cutoff, hcutoff, htail⟩ := input.exists_cutoff_lateFiniteMass_lt law tolerance htolerance
-  obtain ⟨deadline, hdeadline, mixed, hmixed, hexploit, hsurvival⟩ :=
-    input.exists_finite_censor_menu law cutoff hcutoff horizon hhorizon lowerDeadline
-  refine ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed, ?_, ?_⟩
-  · linarith
-  · rw [hsurvival, hnone]
+  exact input.exists_finite_menu_of_feasible_mass_signed_of_reward_bound mass hfeasible
+    error herror tolerance htolerance horizon hhorizon lowerDeadline
+    (quittingRewardBound reward) (abs_reward_le_quittingRewardBound reward)
 
 /-- A positive pivot singleton converts the exact finite-censor survival
 identity into the sharp LP objective budget. The finite producer itself is signed. -/
+theorem exists_finite_menu_of_feasible_mass_of_reward_bound
+    (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
+    (hpositive : 0 < reward (quittingSingletonTerminal input.pivot) input.pivot)
+    (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
+    (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ)
+    (bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
+      input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
+      ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
+        (law none).toReal = pivotRepairNever mass ∧
+        stoppingLawLateFiniteMass law cutoff < tolerance ∧
+        (∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =
+          Function.update input.opponents input.pivot
+            (censorLateFiniteStoppingLaw law cutoff) who) ∧
+        quittingTerminalExploitability reward
+            (quittingFiniteDeadlineTimingProfile reward deadline mixed) ≤
+          input.objective mass + error +
+            4 * bound * stoppingLawLateFiniteMass law cutoff ∧
+        quittingJointSurvivalWeight
+            (quittingProfileLiveRoot reward
+              (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) ≤
+          input.objective mass / reward (quittingSingletonTerminal input.pivot) input.pivot +
+            stoppingLawLateFiniteMass law cutoff := by
+  letI : Nonempty ι := ⟨input.pivot⟩
+  obtain ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed,
+      hexploit, hsurvival⟩ :=
+    input.exists_finite_menu_of_feasible_mass_signed_of_reward_bound
+      mass hfeasible error herror tolerance htolerance horizon hhorizon lowerDeadline
+        bound hreward
+  refine ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed, hexploit, ?_⟩
+  rw [hsurvival, add_mul]
+  have hnever := input.jointNever_le_objective_div_pivot_singleton mass hfeasible hpositive
+  have htailBound := mul_le_mul_of_nonneg_left input.opponentNeverProduct_le_one
+    (pmfFiniteComplementMass_nonneg law (stoppingLawFinitePrefix cutoff))
+  change stoppingLawLateFiniteMass law cutoff *
+    (∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal) ≤
+    stoppingLawLateFiniteMass law cutoff * 1 at htailBound
+  linarith
+
+/-- The summed project reward bound specializes the supplied-bound consumer
+with the same positive-singleton survival budget. -/
 theorem exists_finite_menu_of_feasible_mass
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hpositive : 0 < reward (quittingSingletonTerminal input.pivot) input.pivot)
@@ -101,18 +173,8 @@ theorem exists_finite_menu_of_feasible_mass
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) ≤
           input.objective mass / reward (quittingSingletonTerminal input.pivot) input.pivot +
             stoppingLawLateFiniteMass law cutoff := by
-  letI : Nonempty ι := ⟨input.pivot⟩
-  obtain ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed,
-      hexploit, hsurvival⟩ := input.exists_finite_menu_of_feasible_mass_signed
-    mass hfeasible error herror tolerance htolerance horizon hhorizon lowerDeadline
-  refine ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed, hexploit, ?_⟩
-  rw [hsurvival, add_mul]
-  have hnever := input.jointNever_le_objective_div_pivot_singleton mass hfeasible hpositive
-  have htailBound := mul_le_mul_of_nonneg_left input.opponentNeverProduct_le_one
-    (pmfFiniteComplementMass_nonneg law (stoppingLawFinitePrefix cutoff))
-  change stoppingLawLateFiniteMass law cutoff *
-    (∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal) ≤
-    stoppingLawLateFiniteMass law cutoff * 1 at htailBound
-  linarith
+  exact input.exists_finite_menu_of_feasible_mass_of_reward_bound mass hfeasible hpositive
+    error herror tolerance htolerance horizon hhorizon lowerDeadline
+    (quittingRewardBound reward) (abs_reward_le_quittingRewardBound reward)
 
 end GameTheory.QuittingPivotRepairLPInput

@@ -178,6 +178,23 @@ other entries. The conditional consumer
 requires only arbitrarily small menu error and exceptional scalar, not exact
 menu Nash. Constructing that source remains open.
 
+The pivot optimization against fixed finite opponent laws is a finite affine
+program. Its attained minimum equals the infimum of unrestricted exploitability
+over all pivot behavioral strategies, by
+`exists_objective_minimizer_eq_behavioral_infimum`
+(`UniformEquilibrium/Quitting/Terminal/PivotRepairBehavioralInfimum.lean`).
+The behavioral infimum need not be attained. Selecting the opponent laws with
+arbitrarily small optimal value remains the source obligation:
+`smallPivotRepairValue_iff_exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Terminal/PivotRepairUniformPayoffCharacterization.lean`)
+identifies this selection with fixed-target uniform-payoff existence, for any
+signed table and selected pivot. In the canonical single-pivot case,
+`singlePivotFiniteMenuScalarSource_iff_smallPivotRepairValue`
+(`UniformEquilibrium/Quitting/Terminal/SinglePivotRepairSourceEquivalence.lean`)
+identifies it with the preceding same-menu scalar source. For four players,
+only the three nonpivot laws remain to be selected; the inner optimization
+does not supply that selection.
+
 The finite-date-only punishment value, allowing complete opponent plans but
 excluding Never from the responder's dates, equals the minimum of unrestricted
 punishment and the own singleton payoff. This is

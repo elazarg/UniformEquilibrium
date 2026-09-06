@@ -70,10 +70,12 @@ theorem prod_censored_none_eq (law : PMF (Option ℕ)) {cutoff : ℕ}
   rw [Function.update_of_ne (Finset.ne_of_mem_erase hwho)]
 
 /-- An actual finite menu retains the precise one-coordinate censor, full
-behavioral regret control, and the exact survival at any requested window. -/
-theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
+behavioral regret control under a supplied reward bound, and exact survival. -/
+theorem exists_finite_censor_menu_of_reward_bound
+    (law : PMF (Option ℕ)) (cutoff : ℕ)
     (hcutoff : input.deadline ≤ cutoff + 1) (horizon : ℕ) (hhorizon : 1 ≤ horizon)
-    (lowerDeadline : ℕ) :
+    (lowerDeadline : ℕ) (bound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
     letI : Nonempty ι := ⟨input.pivot⟩
     ∃ deadline : ℕ, max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
@@ -85,7 +87,7 @@ theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
           quittingTerminalExploitability reward
               (quittingStoppingLawProfile reward
                 (Function.update input.opponents input.pivot law)) +
-            4 * quittingRewardBound reward * stoppingLawLateFiniteMass law cutoff ∧
+            4 * bound * stoppingLawLateFiniteMass law cutoff ∧
         quittingJointSurvivalWeight
             (quittingProfileLiveRoot reward
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
@@ -107,8 +109,7 @@ theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
     rw [hmixed who]
     exact congrFun (input.censor_laws_eq_update law hcutoff) who
   · rw [hprofile]
-    have h := quittingTerminalExploitability_censored_le reward laws cutoff
-      (abs_reward_le_quittingRewardBound reward)
+    have h := quittingTerminalExploitability_censored_le reward laws cutoff hreward
     rw [input.sum_lateFiniteMass_update_eq law hcutoff] at h
     exact h
   · rw [hprofile, quittingJointSurvivalWeight_eq_prod_none_of_support_prefix
@@ -123,5 +124,30 @@ theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
         (quittingStoppingLawProfile reward censored) who).support ⊆ _
       rw [quittingBehaviorStoppingLaws_stoppingLawProfile]
       exact censorLateFiniteStoppingLaw_support_subset (laws who) cutoff
+
+/-- The summed project reward bound is a short specialization of the
+supplied-coordinate-bound finite-censor theorem. -/
+theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
+    (hcutoff : input.deadline ≤ cutoff + 1) (horizon : ℕ) (hhorizon : 1 ≤ horizon)
+    (lowerDeadline : ℕ) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ deadline : ℕ, max horizon lowerDeadline ≤ deadline ∧
+      ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
+        (∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =
+          Function.update input.opponents input.pivot
+            (censorLateFiniteStoppingLaw law cutoff) who) ∧
+        quittingTerminalExploitability reward
+            (quittingFiniteDeadlineTimingProfile reward deadline mixed) ≤
+          quittingTerminalExploitability reward
+              (quittingStoppingLawProfile reward
+                (Function.update input.opponents input.pivot law)) +
+            4 * quittingRewardBound reward * stoppingLawLateFiniteMass law cutoff ∧
+        quittingJointSurvivalWeight
+            (quittingProfileLiveRoot reward
+              (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
+          ((law none).toReal + stoppingLawLateFiniteMass law cutoff) *
+            ∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal := by
+  exact input.exists_finite_censor_menu_of_reward_bound law cutoff hcutoff horizon hhorizon
+    lowerDeadline (quittingRewardBound reward) (abs_reward_le_quittingRewardBound reward)
 
 end GameTheory.QuittingPivotRepairLPInput

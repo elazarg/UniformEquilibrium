@@ -29,6 +29,7 @@ import UniformEquilibrium.Diagnostics.Quitting.TwoPlayerNegativeFiniteMenuBounda
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairSignedThirdEndpoint
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairNonattainedZeroLP
 import UniformEquilibrium.Diagnostics.Quitting.PivotRepairNonattainedAllLaws
+import UniformEquilibrium.Diagnostics.Quitting.PivotRepairRationalFixture
 
 /-!
 # Integrated diagnostics umbrella

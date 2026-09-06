@@ -322,4 +322,54 @@ theorem tendsto_prod_one_sub_zero_of_not_summable
   exact prod_one_sub_mul_one_add_sum_range_le_one
     charge hcharge0 hcharge1 start fuel
 
+/-- The first crossing of a nonnegative threshold by charges bounded above by
+one overshoots it by at most one and leaves the requested suffix charge. -/
+theorem exists_firstFiniteChargeCrossing
+    (charge : ℕ → ℝ) (hcharge1 : ∀ time, charge time ≤ 1)
+    {horizon : ℕ} {threshold requested : ℝ}
+    (hthreshold : 0 ≤ threshold) (hrequested : 0 ≤ requested)
+    (htotal : requested + threshold + 1 ≤
+      ∑ time ∈ Finset.range horizon, charge time) :
+    ∃ cut ≤ horizon,
+      threshold ≤ ∑ time ∈ Finset.range cut, charge time ∧
+      (∑ time ∈ Finset.range cut, charge time) ≤ threshold + 1 ∧
+      requested ≤ ∑ time ∈ Finset.Ico cut horizon, charge time := by
+  by_cases hzero : threshold = 0
+  · subst threshold
+    refine ⟨0, Nat.zero_le _, by simp, by simp, ?_⟩
+    rw [Finset.sum_Ico_eq_sub charge (Nat.zero_le horizon)]
+    simp only [Finset.sum_range_zero, sub_zero]
+    linarith
+  · have hthresholdPos : 0 < threshold := lt_of_le_of_ne hthreshold (Ne.symm hzero)
+    let P := fun cut ↦ cut ≤ horizon ∧
+      threshold ≤ ∑ time ∈ Finset.range cut, charge time
+    have hexists : ∃ cut, P cut := by
+      refine ⟨horizon, le_rfl, ?_⟩
+      linarith
+    let cut := Nat.find hexists
+    have hcut : P cut := Nat.find_spec hexists
+    have hcutPos : 0 < cut := by
+      by_contra hnot
+      have : cut = 0 := Nat.eq_zero_of_not_pos hnot
+      rw [this] at hcut
+      simp only [P, Finset.sum_range_zero] at hcut
+      linarith
+    have hbefore : (∑ time ∈ Finset.range (cut - 1), charge time) < threshold := by
+      by_contra hnot
+      have hcandidate : cut - 1 ≤ horizon ∧
+          threshold ≤ ∑ time ∈ Finset.range (cut - 1), charge time := by
+        exact ⟨(Nat.sub_le cut 1).trans hcut.1, le_of_not_gt hnot⟩
+      have hminimal : cut ≤ cut - 1 := Nat.find_min' hexists hcandidate
+      omega
+    have hprefixUpper :
+        (∑ time ∈ Finset.range cut, charge time) ≤ threshold + 1 := by
+      obtain ⟨previous, hprevious⟩ :=
+        Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hcutPos)
+      rw [hprevious, Nat.succ_sub_one] at hbefore
+      rw [hprevious, Finset.sum_range_succ]
+      linarith [hcharge1 previous]
+    refine ⟨cut, hcut.1, hcut.2, hprefixUpper, ?_⟩
+    rw [Finset.sum_Ico_eq_sub charge hcut.1]
+    linarith
+
 end Math

@@ -69,11 +69,15 @@ theorem provisional_exploitability_eq_objective_of_late_eq_zero
     _ input.deadline_pos htail, provisionalLaws] using h
 
 /-- A positive replacement first atom realizes the same prescribed payoff
-exactly and raises exploitability by at most the signed reward-bound error. -/
-theorem exists_law_boundary_approximation
+exactly, with error controlled by a tie-minus-later coefficient bound. -/
+theorem exists_law_boundary_approximation_of_coefficient_bound
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
-    (hzero : pivotRepairFirstAtom mass = 0) (firstAtom : ℝ)
-    (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass) :
+    (hzero : pivotRepairFirstAtom mass = 0) (firstAtom coefficientBound : ℝ)
+    (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass)
+    (hbound : 0 ≤ coefficientBound)
+    (hcoefficient : ∀ responder, responder ≠ input.pivot →
+      |input.responderTieReward responder -
+        responderLaterReward (reward := reward) responder| ≤ coefficientBound) :
     letI : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
@@ -81,7 +85,7 @@ theorem exists_law_boundary_approximation
         input.prescribedPayoff mass ∧
       quittingTerminalExploitability reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
-        input.objective mass + 2 * quittingRewardBound reward * firstAtom ∧
+        input.objective mass + coefficientBound * firstAtom ∧
       (law none).toReal = pivotRepairNever mass := by
   letI : Nonempty ι := ⟨input.pivot⟩
   let changed := pivotRepairMassWithFirstAtom mass firstAtom
@@ -95,12 +99,86 @@ theorem exists_law_boundary_approximation
     have h := congrFun hpayoff observer
     simpa only [changed, prescribedPayoff_withFirstAtom] using h
   · rw [hobjective]
-    have h := input.abs_objective_withFirstAtom_sub_le mass firstAtom
+    have h := input.abs_objective_withFirstAtom_sub_le_of_coefficient_bound
+      mass firstAtom coefficientBound hbound hcoefficient
     rw [hzero, sub_zero, abs_of_pos hpositive] at h
     have hupper := (le_abs_self _).trans h
     change input.objective changed - input.objective mass ≤ _ at hupper
     linarith
   · simpa only [changed, pivotRepairNever_withFirstAtom] using hnone
+
+/-- An arbitrary supplied coordinate reward bound gives the explicit
+`2 * bound * firstAtom` boundary error. -/
+theorem exists_law_boundary_approximation_of_reward_bound
+    (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
+    (hzero : pivotRepairFirstAtom mass = 0) (firstAtom bound : ℝ)
+    (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ law : PMF (Option ℕ),
+      quittingTerminalPayoff reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
+        input.prescribedPayoff mass ∧
+      quittingTerminalExploitability reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
+        input.objective mass + 2 * bound * firstAtom ∧
+      (law none).toReal = pivotRepairNever mass := by
+  have hbound : 0 ≤ bound :=
+    (abs_nonneg (reward (quittingSingletonTerminal input.pivot) input.pivot)).trans
+      (hreward (quittingSingletonTerminal input.pivot) input.pivot)
+  apply input.exists_law_boundary_approximation_of_coefficient_bound mass hfeasible hzero
+    firstAtom (2 * bound) hpositive hle (by positivity)
+  intro responder _
+  calc
+    |_ - _| ≤ |input.responderTieReward responder| +
+        |responderLaterReward (reward := reward) responder| := abs_sub _ _
+    _ ≤ bound + bound := add_le_add (hreward _ _) (hreward _ _)
+    _ = 2 * bound := by ring
+
+/-- Zero nonpivot singleton rewards sharpen the boundary error to
+`bound * firstAtom`. -/
+theorem exists_law_boundary_approximation_of_reward_bound_of_later_zero
+    (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
+    (hzero : pivotRepairFirstAtom mass = 0) (firstAtom bound : ℝ)
+    (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hlater : ∀ responder, responder ≠ input.pivot →
+      responderLaterReward (reward := reward) responder = 0) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ law : PMF (Option ℕ),
+      quittingTerminalPayoff reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
+        input.prescribedPayoff mass ∧
+      quittingTerminalExploitability reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
+        input.objective mass + bound * firstAtom ∧
+      (law none).toReal = pivotRepairNever mass := by
+  have hbound : 0 ≤ bound :=
+    (abs_nonneg (reward (quittingSingletonTerminal input.pivot) input.pivot)).trans
+      (hreward (quittingSingletonTerminal input.pivot) input.pivot)
+  apply input.exists_law_boundary_approximation_of_coefficient_bound mass hfeasible hzero
+    firstAtom bound hpositive hle hbound
+  intro responder hne
+  rw [hlater responder hne, sub_zero]
+  exact hreward _ _
+
+/-- The summed project reward bound is a convenient specialization of the
+coefficient-parametric boundary theorem. -/
+theorem exists_law_boundary_approximation
+    (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
+    (hzero : pivotRepairFirstAtom mass = 0) (firstAtom : ℝ)
+    (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass) :
+    letI : Nonempty ι := ⟨input.pivot⟩
+    ∃ law : PMF (Option ℕ),
+      quittingTerminalPayoff reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
+        input.prescribedPayoff mass ∧
+      quittingTerminalExploitability reward
+          (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
+        input.objective mass + 2 * quittingRewardBound reward * firstAtom ∧
+      (law none).toReal = pivotRepairNever mass := by
+  exact input.exists_law_boundary_approximation_of_reward_bound mass hfeasible hzero firstAtom
+    (quittingRewardBound reward) hpositive hle (abs_reward_le_quittingRewardBound reward)
 
 /-- Every feasible relaxed point has actual independent-law approximants
 with the very same payoff vector and arbitrarily small objective error. -/

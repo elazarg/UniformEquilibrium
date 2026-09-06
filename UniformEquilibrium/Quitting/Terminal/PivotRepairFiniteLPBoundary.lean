@@ -133,17 +133,121 @@ private theorem otherNeverProduct_le_one (responder : ι) :
     (fun j _ ↦ ENNReal.toReal_mono ENNReal.one_ne_top
       (PMF.coe_le_one (input.opponents j) none))
 
-private theorem abs_tie_sub_later_le (responder : ι) :
-    |input.responderTieReward responder -
-        responderLaterReward (reward := reward) responder| ≤
-      2 * quittingRewardBound reward := by
+theorem abs_constraintGain_withFirstAtom_sub_le_of_coefficient_bound
+    (mass : PivotRepairMass input.deadline) (firstAtom coefficientBound : ℝ)
+    (hbound : 0 ≤ coefficientBound)
+    (hcoefficient : ∀ responder, responder ≠ input.pivot →
+      |input.responderTieReward responder -
+        responderLaterReward (reward := reward) responder| ≤ coefficientBound)
+    (index : input.ConstraintIndex) :
+    |input.constraintGain (pivotRepairMassWithFirstAtom mass firstAtom) index -
+        input.constraintGain mass index| ≤
+      coefficientBound * |firstAtom - pivotRepairFirstAtom mass| := by
+  rw [input.constraintGain_withFirstAtom_sub mass firstAtom index]
+  rcases index with _ | (_ | ⟨responder, time | endpoint⟩)
+  · simp only [abs_zero]
+    positivity
+  · simp only [abs_zero]
+    positivity
+  · simp only [abs_zero]
+    positivity
+  · fin_cases endpoint
+    · norm_num
+      positivity
+    · norm_num
+      have hdabs : |input.otherNeverProduct responder| ≤ 1 := by
+        rw [abs_of_nonneg (input.otherNeverProduct_nonneg responder)]
+        exact input.otherNeverProduct_le_one responder
+      calc
+        |input.otherNeverProduct responder| *
+              |input.responderTieReward responder -
+                responderLaterReward (reward := reward) responder| *
+            |firstAtom - pivotRepairFirstAtom mass| ≤
+            1 * coefficientBound *
+              |firstAtom - pivotRepairFirstAtom mass| := by
+          gcongr
+          exact hcoefficient responder responder.property
+        _ = coefficientBound *
+              |firstAtom - pivotRepairFirstAtom mass| := by ring
+    · norm_num
+      positivity
+
+theorem abs_objective_withFirstAtom_sub_le_of_coefficient_bound
+    (mass : PivotRepairMass input.deadline) (firstAtom coefficientBound : ℝ)
+    (hbound : 0 ≤ coefficientBound)
+    (hcoefficient : ∀ responder, responder ≠ input.pivot →
+      |input.responderTieReward responder -
+        responderLaterReward (reward := reward) responder| ≤ coefficientBound) :
+    |input.objective (pivotRepairMassWithFirstAtom mass firstAtom) -
+        input.objective mass| ≤
+      coefficientBound * |firstAtom - pivotRepairFirstAtom mass| := by
+  unfold objective
+  apply Math.Finset.abs_sup'_sub_sup'_le_const Finset.univ_nonempty
+  intro index _
+  exact input.abs_constraintGain_withFirstAtom_sub_le_of_coefficient_bound
+    mass firstAtom coefficientBound hbound hcoefficient index
+
+omit [Fintype ι] [DecidableEq ι] in
+private theorem rewardBound_nonneg (input : QuittingPivotRepairLPInput reward)
+    (bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
+    0 ≤ bound := by
+  exact (abs_nonneg
+    (reward (quittingSingletonTerminal input.pivot) input.pivot)).trans
+      (hreward (quittingSingletonTerminal input.pivot) input.pivot)
+
+theorem abs_constraintGain_withFirstAtom_sub_le_of_reward_bound
+    (mass : PivotRepairMass input.deadline) (firstAtom bound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (index : input.ConstraintIndex) :
+    |input.constraintGain (pivotRepairMassWithFirstAtom mass firstAtom) index -
+        input.constraintGain mass index| ≤
+      2 * bound * |firstAtom - pivotRepairFirstAtom mass| := by
+  apply input.abs_constraintGain_withFirstAtom_sub_le_of_coefficient_bound
+    mass firstAtom (2 * bound) (by positivity [input.rewardBound_nonneg bound hreward])
+  intro responder _
   calc
     |_ - _| ≤ |input.responderTieReward responder| +
         |responderLaterReward (reward := reward) responder| := abs_sub _ _
-    _ ≤ quittingRewardBound reward + quittingRewardBound reward := by
-      exact add_le_add (abs_reward_le_quittingRewardBound reward _ _)
-        (abs_reward_le_quittingRewardBound reward _ _)
-    _ = 2 * quittingRewardBound reward := by ring
+    _ ≤ bound + bound := add_le_add (hreward _ _) (hreward _ _)
+    _ = 2 * bound := by ring
+
+theorem abs_objective_withFirstAtom_sub_le_of_reward_bound
+    (mass : PivotRepairMass input.deadline) (firstAtom bound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
+    |input.objective (pivotRepairMassWithFirstAtom mass firstAtom) -
+        input.objective mass| ≤
+      2 * bound * |firstAtom - pivotRepairFirstAtom mass| := by
+  apply input.abs_objective_withFirstAtom_sub_le_of_coefficient_bound
+    mass firstAtom (2 * bound) (by positivity [input.rewardBound_nonneg bound hreward])
+  intro responder _
+  calc
+    |_ - _| ≤ |input.responderTieReward responder| +
+        |responderLaterReward (reward := reward) responder| := abs_sub _ _
+    _ ≤ bound + bound := add_le_add (hreward _ _) (hreward _ _)
+    _ = 2 * bound := by ring
+
+theorem abs_objective_withFirstAtom_sub_le_of_reward_bound_of_later_zero
+    (mass : PivotRepairMass input.deadline) (firstAtom bound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (hlater : ∀ responder, responder ≠ input.pivot →
+      responderLaterReward (reward := reward) responder = 0) :
+    |input.objective (pivotRepairMassWithFirstAtom mass firstAtom) -
+        input.objective mass| ≤
+      bound * |firstAtom - pivotRepairFirstAtom mass| := by
+  apply input.abs_objective_withFirstAtom_sub_le_of_coefficient_bound
+    mass firstAtom bound (input.rewardBound_nonneg bound hreward)
+  intro responder hne
+  rw [hlater responder hne, sub_zero]
+  exact hreward _ _
+
+theorem responderLimitEndpoint_eq_neverEndpoint_of_later_zero
+    (mass : PivotRepairMass input.deadline) (responder : ι)
+    (hlater : responderLaterReward (reward := reward) responder = 0) :
+    input.responderLimitEndpoint mass responder =
+      input.responderNeverEndpoint mass responder := by
+  unfold responderLimitEndpoint responderNeverEndpoint
+  rw [hlater]
+  ring
 
 theorem abs_constraintGain_withFirstAtom_sub_le
     (mass : PivotRepairMass input.deadline) (firstAtom : ℝ)
@@ -152,33 +256,8 @@ theorem abs_constraintGain_withFirstAtom_sub_le
         input.constraintGain mass index| ≤
       2 * quittingRewardBound reward *
         |firstAtom - pivotRepairFirstAtom mass| := by
-  rw [input.constraintGain_withFirstAtom_sub mass firstAtom index]
-  rcases index with _ | (_ | ⟨responder, time | endpoint⟩)
-  · simp only [abs_zero]
-    positivity [quittingRewardBound_nonneg reward]
-  · simp only [abs_zero]
-    positivity [quittingRewardBound_nonneg reward]
-  · simp only [abs_zero]
-    positivity [quittingRewardBound_nonneg reward]
-  · fin_cases endpoint
-    · norm_num
-      positivity [quittingRewardBound_nonneg reward]
-    · norm_num
-      have hdabs : |input.otherNeverProduct responder| ≤ 1 := by
-        rw [abs_of_nonneg (input.otherNeverProduct_nonneg responder)]
-        exact input.otherNeverProduct_le_one responder
-      have hreward := input.abs_tie_sub_later_le responder
-      calc
-        |input.otherNeverProduct responder| *
-              |input.responderTieReward responder -
-                responderLaterReward (reward := reward) responder| *
-            |firstAtom - pivotRepairFirstAtom mass| ≤
-            1 * (2 * quittingRewardBound reward) *
-              |firstAtom - pivotRepairFirstAtom mass| := by gcongr
-        _ = 2 * quittingRewardBound reward *
-              |firstAtom - pivotRepairFirstAtom mass| := by ring
-    · norm_num
-      positivity [quittingRewardBound_nonneg reward]
+  exact input.abs_constraintGain_withFirstAtom_sub_le_of_reward_bound mass firstAtom
+    (quittingRewardBound reward) (abs_reward_le_quittingRewardBound reward) index
 
 theorem abs_objective_withFirstAtom_sub_le
     (mass : PivotRepairMass input.deadline) (firstAtom : ℝ) :
@@ -186,9 +265,7 @@ theorem abs_objective_withFirstAtom_sub_le
         input.objective mass| ≤
       2 * quittingRewardBound reward *
         |firstAtom - pivotRepairFirstAtom mass| := by
-  unfold objective
-  apply Math.Finset.abs_sup'_sub_sup'_le_const Finset.univ_nonempty
-  intro index _
-  exact input.abs_constraintGain_withFirstAtom_sub_le mass firstAtom index
+  exact input.abs_objective_withFirstAtom_sub_le_of_reward_bound mass firstAtom
+    (quittingRewardBound reward) (abs_reward_le_quittingRewardBound reward)
 
 end GameTheory.QuittingPivotRepairLPInput
