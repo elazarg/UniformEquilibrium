@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremium
+import UniformEquilibrium.Quitting.Root.PlayerwiseUnitNormalization
 
 /-! # Normalization and sufficient conditions for supportwise premium balance -/
 
@@ -6,28 +7,6 @@ noncomputable section
 namespace GameTheory
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- Add a common positive absorption bonus and normalize each payoff
-coordinate by its shifted own singleton reward. -/
-def quittingPlayerwiseUnitNormalization
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (shift : ℝ) : {S : Finset ι // S.Nonempty} → Payoff ι :=
-  fun terminal player =>
-    (reward terminal player + shift) /
-      (reward (quittingSingletonTerminal player) player + shift)
-
-omit [Fintype ι] [DecidableEq ι] in
-theorem quittingPlayerwiseUnitNormalization_singleton
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    {shift : ℝ} (hshift : 0 < shift)
-    (hsingleton : ∀ player,
-      0 ≤ reward (quittingSingletonTerminal player) player)
-    (player : ι) :
-    quittingPlayerwiseUnitNormalization reward shift
-      (quittingSingletonTerminal player) player = 1 := by
-  unfold quittingPlayerwiseUnitNormalization
-  exact div_self (ne_of_gt (add_pos_of_nonneg_of_pos
-    (hsingleton player) hshift))
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- Supportwise balance survives playerwise normalization when the witness

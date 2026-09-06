@@ -52,6 +52,9 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
           ∃ time ≤ deadline, receiving = some time) ∧
         quittingPureTimeDeviationPayoff reward profile observer receiving =
           quittingContinuationBestResponseValue reward profile observer ∧
+        gap ≤ quittingTerminalDeviationDebt reward profile observer ∧
+        gap ≤ quittingPureTimeDeviationPayoff reward profile observer receiving -
+          quittingTerminalPayoff reward profile observer ∧
         gap ≤ quittingPureTimeDeviationPayoff reward profile observer receiving -
           quittingPureTimeDeviationPayoff reward profile observer source ∧
         ∃ row : QuittingPaidFirstDisagreementRow reward profile observer gap,
@@ -91,6 +94,10 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
   have hreceivingValue : value receiving =
       quittingContinuationBestResponseValue reward profile observer := by
     exact hreceivingCap
+  have hreceivingGain : gap ≤ value receiving -
+      quittingTerminalPayoff reward profile observer := by
+    rw [hreceivingValue]
+    exact hobserverDebt
   have hedge : gap ≤ value receiving - value source := by
     have hdeviationCap :=
       quittingTerminalPayoff_update_le_continuationBestResponseValue
@@ -137,7 +144,8 @@ theorem HasTerminalExploitabilityGap.exists_deadline_paidFirstDisagreement
     rw [row.liveMass_eq, hzero] at hpaid
     linarith
   refine ⟨observer, hne, source, receiving, hsource, hreceivingBound,
-    hreceivingValue, hedge, row, hrowSource, hrowReceiving, hstart, ?_⟩
+    hreceivingValue, hobserverDebt, hreceivingGain, hedge, row,
+    hrowSource, hrowReceiving, hstart, ?_⟩
   exact (div_le_iff₀ (by positivity : 0 < 2 * M)).2
     (by simpa [mul_comm] using hpaid)
 

@@ -1,4 +1,8 @@
 import MathUE.AbelCesaro
+import MathUE.AffineRecurrenceFiniteUnroll
+import MathUE.AffineRecurrenceInfiniteUnroll
+import MathUE.TwoCoordinateSparseSimplex
+import MathUE.Probability.FiniteOverlapSparseMaximizer
 import MathUE.FiniteCoalitionSupportPeelingOrder
 import MathUE.Probability.OverlappingFirstStoppingChronologicalEquality
 import MathUE.Probability.OverlappingFirstStoppingPositiveContinueEquality

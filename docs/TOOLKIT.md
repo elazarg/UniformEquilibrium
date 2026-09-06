@@ -32,6 +32,18 @@ without producing a witness.
 
 ## Canonical project entry points
 
+`exists_uniformEquilibriumPayoff_of_productLowPremium`
+(`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumUniformPayoff.lean`)
+proves fixed-payoff existence on every finite nonempty player set with
+nonnegative singleton rewards whenever each absorbing product root has an
+active player's Quit payoff at most its singleton. Its periodic producer
+gives unrestricted terminal approximate Nash at every suffix in the original
+game. `HasProductLowQuittingPremium`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremium.lean`)
+states this reward-table condition and preserves it under nonnegative
+playerwise affine changes of terminal rewards. Positive normalization uses
+`UniformEquilibrium/Quitting/Root/PlayerwiseUnitNormalization.lean`.
+
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
 proves uniform-payoff existence for every finite nonempty player set with
@@ -66,6 +78,16 @@ finite coalition relation theorem is game-independent and resides in
 (`UniformEquilibrium/Quitting/Classification/Existence/QuittingPremiumSupportPeelingUniformPayoff.lean`)
 state the original-game fixed-payoff conclusions directly. Their companion
 periodic theorems retain unrestricted terminal approximate Nash at every suffix.
+
+`UniformEquilibrium/Quitting/Examples/SupportwisePremiumClassSeparation.lean`
+gives exact cyclic, one-positive-premium, and combined Fin4 tables separating
+weak peeling from global positive weighting, with supportwise balance holding
+even when both special conditions fail. Passive payoffs remain arbitrary.
+`UniformEquilibrium/Quitting/Examples/SemipositiveGlobalWeightCounterexample.lean`
+shows that a single nonnegative weighting can miss the active support: its
+sure-pair root is exact Nash while every active Quit endpoint exceeds its
+singleton reward. These are failures of sufficient conditions, not failures
+of equilibrium existence.
 
 The shared classical source is
 `exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff`
@@ -306,12 +328,12 @@ debt drop and absorption floor for every exact root against that child's
 payoff. These are conditional source tools; they do not yet construct a
 renewable reset sequence or a returned source.
 
-`HasTerminalExploitabilityGap.exists_positiveFloor_fixedDebtor_on_capChildren`
-(`UniformEquilibrium/Quitting/Root/NestedCapChildFixedDebtor.lean`) chooses
-one positive survival floor before the starting depth; at each requested depth,
+`HasTerminalExploitabilityGap.exists_infiniteSurvival_fixedOutsiderResponse`
+(`UniformEquilibrium/Quitting/Root/NestedCapChildInfiniteSurvivalDebtor.lean`)
+uses the actual infinite joint-survival product before the starting depth; at each requested depth,
 one outsider and one response are then fixed for all later literal children.
-The companion `HasTerminalExploitabilityGap.exists_fixedOutsiderResponse_for_all_capChildren`
-retains the copied behavioral response and exact survival-scaled gain.
+It retains the copied behavioral response, exact survival-scaled gain, and
+debt bounds using both the actual window and infinite-survival factors.
 `exists_coherentOutsiderCapClock_on_pureTimeCapChildren`
 (`UniformEquilibrium/Quitting/Root/CoherentPureTimeCapClock.lean`) selects
 complete caps coherently, with each next clock either immediate Quit or the
@@ -319,8 +341,12 @@ previous clock shifted by one date, including Never. The same module proves
 the eventual-shift/cofinal-reset alternative.
 `UniformEquilibrium/Quitting/Root/NestedChildBellmanEndpointDifference.lean`
 states the actual child Bellman identities and the expanded outsider endpoint
-difference; it does not make the child roots Nash or bound the payoff
-displacement by a summable sequence.
+difference.
+`UniformEquilibrium/Quitting/Root/NestedOwnerRootNashSeamSummable.lean`
+proves the zero-debt owner's forced-Continue action is root-optimal and
+separately proves summability of the first, second, and fourth outsider seam
+terms from summable owner hazard. It does not make outsider roots Nash or
+bound the third, nonlocal payoff-displacement term by a summable sequence.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the
@@ -332,7 +358,8 @@ selects a distinct paid observer before a zero-debt owner's sure deadline,
 with opponent reach at least the gap divided by twice the reward bound.
 It jointly retains a prescribed-support source time, a cap-attaining receiving
 time that is at most the deadline or Never, their payoff gap, and their exact
-identities in the paid row.
+identities in the paid row. The same observer's debt and the same receiving
+response's gain over the actual prescribed payoff also remain explicit.
 `UniformEquilibrium/Diagnostics/Quitting/ActualReversePrefixAtomTransport.lean`
 transports terminal payoff-difference atoms through common literal prefixes.
 It does not by itself identify a marked row's conditional data.
@@ -344,6 +371,18 @@ convergence from summable hazards and actual nesting, without a Nash premise.
 `allContinue_exactNash_and_fixedPoint_of_tendsto_terminalPayoff`
 (`UniformEquilibrium/Quitting/Paths/ActualPrefixAllContinueLimit.lean`) combines
 root convergence, payoff convergence, and closedness of exact root Nash.
+`finFour_positiveSurvival_capChild_paidRow_source`
+(`UniformEquilibrium/Diagnostics/Quitting/PositiveSurvivalCapChildSource.lean`)
+assembles the actual exact recursion, positive survival, initial cap, and
+positive terminal gap into one infinite-survival floor and all-depth literal
+cap children with persistent owner gain, zero owner debt, deadline absorption,
+and jointly selected bounded paid responses. The infinite survival and
+summability conclusions are derived, not input fields.
+`finFour_actualExactPrefix_frontLimit_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/ActualExactPrefixFrontLimit.lean`)
+derives one payoff limit and convergence of every fixed reverse-front root
+and continuation coordinate, with an exact all-Continue limiting root. It
+does not need the positive-survival assumption.
 
 `quittingBehaviorExactFiniteFirstCoalitionMass_eq_terminalOutcomeMass`
 (`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`)
@@ -405,6 +444,20 @@ coalition extension and the separate-square-root continuation estimate.
 (`MathUE/PMFProduct/FixedCardinalityRigidity.lean`) proves a local rigidity
 result for any fixed coalition size at least two: if every supported nonempty
 product-row action has that size and one exists, every marginal is pure.
+
+`exists_twoSupported_simplex_preserving_first_improving_second`
+(`MathUE/TwoCoordinateSparseSimplex.lean`) replaces any finite mixture by one
+supported on at most two atoms while preserving one real expectation and
+weakly increasing another. Its three-marginal version retains independence
+and performs the replacement successively for arbitrary finite trilinear
+kernels. A continuous objective monotone in the second expectation therefore
+has a global maximizer with all three marginals two-supported. No assumption
+that every maximizer is sparse is made.
+`exists_twoSupported_canonicalOverlap_maximizer_on_dates`
+(`MathUE/Probability/FiniteOverlapSparseMaximizer.lean`) applies this to
+canonical complete stopping laws on any finite menu of natural-number dates
+plus Never. Exact indicator identities, embedding transport, and reconstruction
+cover every law supported on that menu, not merely supplied encodings.
 
 | Family | Canonical import | What it exports |
 | --- | --- | --- |
