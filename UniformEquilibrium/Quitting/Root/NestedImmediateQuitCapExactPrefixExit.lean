@@ -319,4 +319,140 @@ theorem eventually_resetChild_totalDebt_ge_minimum_add_fixedDrop
         (profiles time)) at hminimumPrefix
   linarith
 
+/-- Cofinal immediate-Quit cap resets put the limit of a supplied nested
+actual-payoff sequence below the resetting player's singleton reward by the
+full fixed debt floor. -/
+theorem exists_nestedPayoffLimit_le_singleton_sub_debtFloor_of_cofinal_quitCap
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profiles : ℕ → (quittingGame reward).BehaviorProfile)
+    (roots : ℕ → ι → PMF Bool) (who : ι) {M debtFloor : ℝ}
+    (hdebtFloor : 0 < debtFloor)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hnested : ∀ time, profiles (time + 1) =
+      quittingRootThenContinuationProfile reward (roots time) (profiles time))
+    (hhazard : Summable (fun time =>
+      ∑ player, ((roots time player) true).toReal))
+    (hdebt : ∀ᶠ time in atTop, debtFloor ≤
+      quittingTerminalDeviationDebt reward (profiles time) who)
+    (hreset : ∃ᶠ time in atTop,
+      ImmediateQuitAttainsTerminalCap reward (profiles (time + 1)) who) :
+    ∃ limit : Payoff ι,
+      (∀ player, Tendsto
+        (fun time => quittingTerminalPayoff reward (profiles time) player)
+        atTop (nhds (limit player))) ∧
+      limit who ≤
+        reward (quittingSingletonTerminal who) who - debtFloor := by
+  let value : ℕ → Payoff ι := fun time player =>
+    quittingTerminalPayoff reward (profiles time) player
+  have hvalueNext : ∀ time, value (time + 1) =
+      quittingRootSuccessorPayoff reward (value time) (roots time) := by
+    intro time
+    funext player
+    simp only [value, hnested time,
+      quittingTerminalPayoff_rootThenContinuation_eq]
+    rfl
+  have habsorptionSummable : Summable (fun time =>
+      quittingRootAbsorptionMass (roots time)) := by
+    apply Summable.of_nonneg_of_le
+      (fun time => quittingRootAbsorptionMass_nonneg (roots time))
+      (fun time => quittingRootAbsorptionMass_le_sum_quitProbability
+        (roots time))
+      hhazard
+  have hcoordinate : ∀ player, ∃ coordinateLimit : ℝ,
+      Tendsto (fun time => value time player) atTop (nhds coordinateLimit) := by
+    intro player
+    have hincrements : Summable (fun time =>
+        |value (time + 1) player - value time player|) := by
+      apply Summable.of_nonneg_of_le (fun _ => abs_nonneg _)
+        (fun time => ?_)
+        (habsorptionSummable.mul_left (2 * M))
+      rw [hvalueNext time]
+      exact abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
+        reward (value time) (roots time) player M hreward
+          (abs_quittingTerminalPayoff_le reward (profiles time) player hreward)
+    have hdist : Summable (fun time =>
+        dist (value time player) (value (time + 1) player)) := by
+      simpa [Real.dist_eq, abs_sub_comm] using hincrements
+    exact cauchySeq_tendsto_of_complete (cauchySeq_of_summable_dist hdist)
+  choose limit hlimit using hcoordinate
+  refine ⟨limit, ?_, ?_⟩
+  · intro player
+    simpa only [value] using hlimit player
+  · have htotalZero : Tendsto (fun time =>
+        ∑ player, ((roots time player) true).toReal)
+        atTop (nhds 0) := hhazard.tendsto_atTop_zero
+    have hopponentZero : Tendsto (fun time =>
+        quittingRootOpponentAbsorptionMass (roots time) who)
+        atTop (nhds 0) := by
+      apply squeeze_zero
+      · intro time
+        exact quittingRootOpponentAbsorptionMass_nonneg (roots time) who
+      · intro time
+        exact (quittingRootOpponentAbsorptionMass_le_absorptionMass
+          (roots time) who).trans
+            (quittingRootAbsorptionMass_le_sum_quitProbability (roots time))
+      · exact htotalZero
+    have herrorZero : Tendsto (fun time =>
+        4 * M * quittingRootOpponentAbsorptionMass (roots time) who)
+        atTop (nhds 0) := by
+      simpa using hopponentZero.const_mul (4 * M)
+    have hrightLimit : Tendsto (fun time =>
+        reward (quittingSingletonTerminal who) who - debtFloor +
+          4 * M * quittingRootOpponentAbsorptionMass (roots time) who)
+        atTop
+        (nhds (reward (quittingSingletonTerminal who) who - debtFloor)) := by
+      simpa using
+        (tendsto_const_nhds.add herrorZero)
+    have hdebtNext : ∀ᶠ time in atTop, debtFloor ≤
+        quittingTerminalDeviationDebt reward (profiles (time + 1)) who :=
+      (tendsto_add_atTop_nat 1).eventually hdebt
+    have hwall : ∀ᶠ time in atTop,
+        ImmediateQuitAttainsTerminalCap reward (profiles (time + 1)) who →
+          value time who ≤
+            reward (quittingSingletonTerminal who) who - debtFloor +
+              4 * M * quittingRootOpponentAbsorptionMass
+                (roots time) who := by
+      filter_upwards [hdebtNext] with time hdebtTime
+      intro hcap
+      have hcapAtPrefix : ImmediateQuitAttainsTerminalCap reward
+          (quittingRootThenContinuationProfile reward (roots time)
+            (profiles time)) who := by
+        simpa only [← hnested time] using hcap
+      have hdebtAtPrefix : debtFloor ≤ quittingTerminalDeviationDebt reward
+          (quittingRootThenContinuationProfile reward (roots time)
+            (profiles time)) who := by
+        simpa only [← hnested time] using hdebtTime
+      have hraw :=
+        debtFloor_sub_four_mul_opponentAbsorption_le_singletonGap_of_immediateQuitCap
+          reward (roots time) (profiles time) who hdebtFloor hreward
+            hcapAtPrefix hdebtAtPrefix
+      dsimp only [value]
+      linarith
+    have hfrequentWall : ∃ᶠ time in atTop,
+        value time who ≤
+          reward (quittingSingletonTerminal who) who - debtFloor +
+            4 * M * quittingRootOpponentAbsorptionMass
+              (roots time) who :=
+      (hreset.and_eventually hwall).mono fun _ hboth => hboth.2 hboth.1
+    by_contra hnot
+    have hstrict :
+        reward (quittingSingletonTerminal who) who - debtFloor < limit who :=
+      lt_of_not_ge hnot
+    have hdifference : Tendsto (fun time =>
+        (reward (quittingSingletonTerminal who) who - debtFloor +
+            4 * M * quittingRootOpponentAbsorptionMass (roots time) who) -
+          value time who)
+        atTop
+        (nhds ((reward (quittingSingletonTerminal who) who - debtFloor) -
+          limit who)) :=
+      hrightLimit.sub (hlimit who)
+    have hnegative : ∀ᶠ time in atTop,
+        (reward (quittingSingletonTerminal who) who - debtFloor +
+            4 * M * quittingRootOpponentAbsorptionMass (roots time) who) -
+          value time who < 0 :=
+      (tendsto_order.1 hdifference).2 0 (by linarith)
+    obtain ⟨time, hle, hlt⟩ :=
+      (hfrequentWall.and_eventually hnegative).exists
+    linarith
+
 end GameTheory
