@@ -5,6 +5,7 @@ Released under the MIT license as described in the file LICENSE.
 
 import UniformEquilibrium.Diagnostics.FiniteMixedNashSupport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPreemptedOwnerQuadraticMargin
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPayoffEnvelope
 import UniformEquilibrium.Diagnostics.Quitting.ActualExactPrefixFrontLimit
 import UniformEquilibrium.Diagnostics.Quitting.PositiveSurvivalCapChildSource
 import UniformEquilibrium.Diagnostics.Quitting.ActualReversePrefixAtomTransport

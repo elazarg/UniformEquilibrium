@@ -184,7 +184,18 @@ into at least two pairs. The actual cyclic profile is exact terminal Nash
 against unrestricted deviations at every literal suffix, and its actual
 value at each initial phase is a uniform-equilibrium payoff. The proof
 retains the strict inactive-player advantage and opponent-cycle absorption.
-Exact finite-truncation cap and debt identities remain separate work.
+`GameTheory.PairedCycle.exists_one_hazards_all_finiteTruncations_of_rawRegion`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteSource.lean`) retains
+that one hazard vector for all initial phases and all positive cycle counts.
+After K complete cycles, prescribed payoff is `(1 - C^K) * v`, the full
+response cap is `v`, and debt is `C^K * v`, where C is joint cycle survival.
+The same truncations approach the fixed periodic target with geometric
+error at most `(21/10) * (99/100)^(n*K)`. Exact finite-menu realization,
+independent censoring, and the individual geometric stopping-law atoms
+are proved in `UniformEquilibrium/Quitting/Cycles/CyclicFiniteMenu.lean`
+and `UniformEquilibrium/Quitting/Cycles/PairedCycleStoppingLaws.lean`.
+The Fin4 pivot transformation and the quantitative finite-horizon bound
+for the same infinite cyclic profile are separate constructions.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -213,8 +224,17 @@ It constructs a literal finite word with arbitrarily small total debt,
 including for signed singleton rewards. The proof obtains the common
 preemption floor internally. The same module proves fixed uniform-payoff
 existence under these two hypotheses, without an external reward-bound
-parameter. Its quantitative phase/date count and the finite
-unpreempted-owner alternative require separate constructions.
+parameter. `UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionRates.lean`
+uses the same selected words for the reciprocal phase bound and the total
+date bound, including the logarithmic cost of each phase.
+`UniformEquilibrium/Quitting/Paths/FiniteUnpreemptedSoloExit.lean` constructs
+arbitrarily accurate finite solo words when an owner is unpreempted and
+singleton rewards are nonnegative. Combining the alternatives,
+`exists_uniformEquilibriumPayoff_of_weakExclusion_nonnegativeSingleton`
+(`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionSelection.lean`)
+requires only finite-word weak exclusion and nonnegative singleton rewards.
+These are real-table existence constructions; rational grid algorithms
+are not supplied by these results.
 
 `exists_sparseFiniteStoppingLawMixture_wholePayoff_eq`
 (`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteMixture.lean`)
@@ -223,6 +243,12 @@ number of players plus one original positive-support generators. It
 preserves every observer's prescribed terminal payoff simultaneously.
 This is a payoff-only replacement: it does not preserve response caps,
 compress all players at once, or produce a common finite calendar.
+`UniformEquilibrium/Quitting/Paths/CommonStoppingCalendarRetiming.lean`
+separately ranks the union of finite support dates using one common map,
+preserving the independent first-quitter outcome law, ties, and Never.
+If each marginal has at most n+1 support points, the retimed finite dates
+are below n(n+1). Sequential sparsification of all players and realization
+of the closed payoff set on that fixed calendar remain separate work.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)
@@ -234,6 +260,12 @@ by at least `d²/(8M)`. The module extends this to each nonnegative-singleton
 owner, and to every owner in four-player games without singleton signs.
 These are consequences of a hypothetical positive minimum, not a proof
 that no such minimum exists.
+`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPayoffEnvelope.lean`
+also bounds the attained minimum by `sqrt(8*M*ρ)` if every actual profile
+has some player's prescribed payoff at most its singleton plus `ρ ≥ 0`.
+This applies to nonnegative singleton tables with any finite player set,
+and to signed four-player tables. The witnessing player may vary with
+the actual profile.
 The general nonpreempted-owner alternative is stated separately as
 `isUniformEquilibriumPayoff_soloReward_of_nonnegative_noPreemptor`
 (`UniformEquilibrium/Quitting/Classification/Existence/SoloPreemptionUniformPayoff.lean`):

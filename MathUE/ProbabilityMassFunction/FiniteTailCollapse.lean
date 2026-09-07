@@ -75,7 +75,8 @@ theorem collapseLateFiniteStoppingLaw_some_of_gt
       simp only [collapseLateFiniteStoppingTime, Option.some.injEq]
       omega
 
-private theorem pmf_eq_of_eq_away {α : Type*} (first second : PMF α) (point : α)
+/-- Probability normalization determines the remaining atom from equality elsewhere. -/
+theorem pmf_eq_of_eq_away {α : Type*} (first second : PMF α) (point : α)
     (heq : ∀ other, other ≠ point → first other = second other) : first = second := by
   classical
   have hfirst := (pmf_toReal_summable first).tsum_eq_add_tsum_ite point
