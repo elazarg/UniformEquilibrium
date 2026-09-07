@@ -402,7 +402,17 @@ The [real quantifier-elimination plan](REAL_QUANTIFIER_ELIMINATION.md)
 specifies the shared library dependency, executable interfaces, and proof
 stages. `MathUE/Polynomial/RealSignCell.lean` proves bounded root-insertion
 and sign-characterization lemmas and unbounded monotone-cell root criteria.
-These interval lemmas do not yet construct complete sign diagrams.
+`MathUE/Polynomial/DensePolynomial.lean` implements arithmetic on coefficient
+lists without requiring algebraic laws on the source syntax. It proves the
+even-exponent pseudo-division identity after evaluation, strict remainder
+length, exact sign preservation at divisor roots, and a polynomial/degree
+interpretation. `MathUE/RealQuantifierElimination/RingExpression.lean`
+and `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` provide
+executable rational expressions and truth-preserving coefficient-sign
+case splits. `MathUE/Polynomial/OrderedRealSignDiagram.lean` proves the
+ordered cell partition and correct cut deletion and bounded root insertion.
+These components do not yet construct complete sign diagrams or decide
+general quantified polynomial formulas.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)

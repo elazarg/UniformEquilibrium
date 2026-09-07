@@ -296,7 +296,11 @@ import MathUE.FiniteDirectedPeriod
 import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
 import MathUE.Logic.SignFormula
+import MathUE.RealQuantifierElimination.RingExpression
+import MathUE.RealQuantifierElimination.CoefficientSignBranch
 import MathUE.Polynomial.RealSignCell
+import MathUE.Polynomial.DensePolynomial
+import MathUE.Polynomial.OrderedRealSignDiagram
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.MvPolynomialFDeriv

@@ -2,8 +2,33 @@
 
 This is an implementation plan for known mathematics. The complete
 quantifier-elimination and decision theorems remain unproved here.
-`MathUE/Polynomial/RealSignCell.lean` supplies the first interval lemmas;
-its scope is described below.
+The checked components and remaining dependencies are described below.
+
+## Available components
+
+- `MathUE/Polynomial/DensePolynomial.lean` implements coefficient-list
+  arithmetic, differentiation, and terminating even-exponent pseudo-division.
+  Its identity holds after any operation-preserving evaluation into a
+  commutative ring. Remainders have smaller formal length than a nonempty
+  divisor. At a divisor root, nonzero evaluated leading coefficient gives
+  exact preservation of the dividend's sign in the remainder. Polynomial
+  interpretation and degree lemmas connect the executable representation
+  to Mathlib's polynomial analysis.
+- `MathUE/RealQuantifierElimination/RingExpression.lean` supplies rational
+  expression syntax, rational and real evaluation, and variable renaming.
+  `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` proves that
+  finite coefficient-sign trees compile to truth-equivalent Boolean formulas
+  at every real environment. It does not generate a sign diagram.
+- `MathUE/Polynomial/RealSignCell.lean` supplies interval root and sign
+  lemmas. `MathUE/Polynomial/OrderedRealSignDiagram.lean` proves the ordered
+  cell partition, exact diagram dimensions, removable-cut deletion, and
+  bounded root-insertion transformations. These transformations consume
+  previously established row signs and derivative conditions.
+
+Specialization trimming, polynomial asymptotic signs, complete reconstruction,
+the recursive sign-diagram producer, formula elimination, and the two packet
+adapters remain to be completed. Targeted checks of the available components
+do not establish those later stages.
 
 ## Endpoint and coefficient scope
 
@@ -32,10 +57,12 @@ TODO. A completed real theorem must be described at that actual scope.
 
 ## Implementation interfaces
 
-Names below are proposed contracts, not declarations already present in Lean.
+The interfaces below specify how the components fit together. The full
+formula type and sign-diagram producer are still proposed interfaces.
 
 - `RingExpression n`: the expression syntax above, with evaluation at `Fin n -> Real`.
-- `DensePolynomial n := List (RingExpression n)`, coefficients in ascending order. An empty list
+- Coefficient polynomials use `Math.DensePolynomial (RingExpression n)`,
+  with coefficients in ascending order. An empty list
   represents zero. `evalAt p rho x` uses Horner evaluation. List length is a
   formal upper bound; it need not equal the specialized polynomial degree.
 - Reuse Mathlib `SignType` directly, whose constructors are `neg`, `zero`, and `pos`.
@@ -54,7 +81,7 @@ Names below are proposed contracts, not declarations already present in Lean.
   No executable real-valued evaluator is needed. Prove exhaustiveness,
   single-path uniqueness, `map`/`bind` semantics, and compilation of a tree
   with `QuantifierFreeFormula n` leaves into one such formula using guarded disjunctions.
-- `signDiagram : List (DensePolynomial n) ->
+- `signDiagram : List (Math.DensePolynomial (RingExpression n)) ->
   CoefficientSignBranch n (List (List SignType))` is the
   eventual core output. For every `rho`, the selected leaf has a real ordered
   cell decomposition realizing every sign entry. The cut points are witnesses

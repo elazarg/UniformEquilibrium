@@ -326,8 +326,10 @@ import MathUE.ParametricFarkasBasis
 import MathUE.PathFamilyPotentialRecharge
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
+import MathUE.Polynomial.DensePolynomial
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
+import MathUE.Polynomial.OrderedRealSignDiagram
 import MathUE.Polynomial.PolynomialDerivativeApproximation
 import MathUE.Polynomial.RealSignCell
 import MathUE.Polynomial.TensorBernstein
@@ -506,6 +508,8 @@ import MathUE.ProbabilityMassFunction.TotalVariation
 import MathUE.ProjectiveBellmanPacket
 import MathUE.RamifiedBinomialBranch
 import MathUE.RamifiedWeierstrass
+import MathUE.RealQuantifierElimination.CoefficientSignBranch
+import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex
