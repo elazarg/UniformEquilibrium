@@ -126,7 +126,28 @@ literal coordinate Nash defects. Its common-shift sum is
 `UniformEquilibrium/Quitting/Root/BelowSingletonRootAbsorption.lean`
 gives exact and approximate absorption floors when one continuation
 coordinate lies below its singleton. These are one-step bounds, not
-finite-word selectors or recurrence hypotheses supplied by the game.
+recurrence hypotheses supplied by the game.
+`UniformEquilibrium/Quitting/Terminal/PayoffExclusionStrictDeficitStep.lean`
+applies them to a strict singleton deficit, with separate exact and
+approximate root-defect budgets.
+`quittingStrictDeficitExactWords_step`
+(`UniformEquilibrium/Quitting/Paths/StrictDeficitFiniteWords.lean`)
+constructs successive literal finite words followed by all-Continue and
+proves their per-step absorption floor and total-debt contraction.
+Its strict-deficit hypothesis ranges only over finite-word profiles,
+not all carrier points. Root selection is noncomputable exact Nash
+selection; a rational algorithm and a global rate are not asserted by this
+module.
+
+`exists_first_solo_capThreshold_hit`
+(`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
+constructs the first cap crossing for repeated solo prefixes of a strictly
+preempted owner, assuming all initial cap margins exceed the chosen threshold.
+It retains the distinct crossing player, logarithmic step bound, exact
+payoff/cap formulas, and total-debt bound by the maximum of source debt and
+owner cap margin. The affine formulas hold through the first hit only.
+The same module realizes these iterates by literal repeated-root words
+over the unchanged source profile; cap attainment is not assumed.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)

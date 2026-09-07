@@ -186,6 +186,7 @@ import MathUE.Finset.ProdLtOne
 import MathUE.Finset.RetainedRoleClockArithmetic
 import MathUE.Finset.SupNonexpansive
 import MathUE.FixedRatioConvexity
+import MathUE.GeometricMinimumRecurrence
 import MathUE.GradedConvolution
 import MathUE.GroupAction.CyclicKofNArithmetic
 import MathUE.GroupAction.CyclicKofNBlockCosets
@@ -2109,6 +2110,9 @@ import UniformEquilibrium.Quitting.Examples.FinTwoHazardWeightedPremiumBoundary
 import UniformEquilibrium.Quitting.Examples.HostClearingBoundary
 import UniformEquilibrium.Quitting.Examples.HostClearingCapLedgerBoundary
 import UniformEquilibrium.Quitting.Examples.NonNormalFloorFailure
+import UniformEquilibrium.Quitting.Examples.OrderedPremiumBoundaryFixtures
+import UniformEquilibrium.Quitting.Examples.OrderedPremiumNegativeBoundary
+import UniformEquilibrium.Quitting.Examples.OrderedPremiumPassiveSeparation
 import UniformEquilibrium.Quitting.Examples.OverlappingFirstStoppingBoundary
 import UniformEquilibrium.Quitting.Examples.ProductLowFinFourFamily
 import UniformEquilibrium.Quitting.Examples.ProductLowPremiumBoundaryIdentities
@@ -2198,6 +2202,7 @@ import UniformEquilibrium.Quitting.Paths.StoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
 import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.StrictAllContinueBasinSuccessorPath
+import UniformEquilibrium.Quitting.Paths.StrictDeficitFiniteWords
 import UniformEquilibrium.Quitting.Paths.SummableRootSurvival
 import UniformEquilibrium.Quitting.Paths.SupportWitnessAbsorptionBridge
 import UniformEquilibrium.Quitting.Paths.SupportWitnessClockCollapse
@@ -2400,6 +2405,7 @@ import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPrefixMetric
 import UniformEquilibrium.Quitting.Root.TerminalSemanticResetFaceRigidity
+import UniformEquilibrium.Quitting.Root.TerminalSemanticSoloCapThreshold
 import UniformEquilibrium.Quitting.Root.UpwardTranslation
 import UniformEquilibrium.Quitting.Root.VectorTranslation
 import UniformEquilibrium.Quitting.Root.ZeroJointCapLedgerBoundary
@@ -2459,6 +2465,7 @@ import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCorollaries
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingExploitabilityRetraction
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingPeriodRetraction
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingRetraction
+import UniformEquilibrium.Quitting.Terminal.PayoffExclusionStrictDeficitStep
 import UniformEquilibrium.Quitting.Terminal.PivotRepairBehavioralApproximation
 import UniformEquilibrium.Quitting.Terminal.PivotRepairBehavioralInfimum
 import UniformEquilibrium.Quitting.Terminal.PivotRepairExactObjective

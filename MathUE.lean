@@ -1,4 +1,5 @@
 import MathUE.AbelCesaro
+import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.FiniteContinuousIntervalSelection
 import MathUE.EventuallyPositiveLastZero
