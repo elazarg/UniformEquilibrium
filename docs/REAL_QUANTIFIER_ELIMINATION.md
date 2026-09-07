@@ -17,7 +17,10 @@ proved. The game-specific predicate encodings remain separate adapters.
   interpretation and degree lemmas connect the executable representation
   to Mathlib's polynomial analysis.
 - `MathUE/RealQuantifierElimination/RingExpression.lean` supplies rational
-  expression syntax, rational and real evaluation, and variable renaming.
+  expression syntax, rational and real evaluation, variable renaming, and
+  finite sums and products. `MathUE/RealQuantifierElimination/QuantifierFreeFormula.lean`
+  supplies the shared sign-test syntax and its evaluation lemmas without
+  importing the elimination algorithm.
   `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` proves that
   finite coefficient-sign trees compile to truth-equivalent Boolean formulas
   at every real environment. It does not generate a sign diagram.
@@ -126,8 +129,14 @@ proved. The game-specific predicate encodings remain separate adapters.
   proves the preimage result; projecting the polynomial graph proves the
   image result. Empty source and output dimensions are allowed.
 
-The two packet adapters remain to be completed. Generic quantifier elimination
-does not by itself encode their predicates or prove their semantic equivalences.
+`decideHasProductLowQuittingPremium_eq_true_iff`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumDecision.lean`)
+connects executable rational-table decision to the original product-low
+quitting-premium property, including the empty-player case.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRewardTableSemialgebraic.lean`
+proves semialgebraicity of strict-exclusion and weak-subset-exclusion
+acceptance sets with the reward entries themselves as free coordinates.
+These set-theoretic results do not yet supply executable raw-table tests.
 
 ## Endpoint and coefficient scope
 

@@ -424,4 +424,30 @@ theorem quittingStationary_liveMass_regime
   · exact Or.inr
       (tendsto_quittingLiveMass_stationary_zero reward root hquit)
 
+/-- A product row absorbs with positive probability exactly when some player
+has positive quitting probability. -/
+theorem quittingRootAbsorptionMass_pos_iff_exists_quitProbability_pos
+    {ι : Type} [Fintype ι] [DecidableEq ι] (root : ι → PMF Bool) :
+    0 < quittingRootAbsorptionMass root ↔
+      ∃ player, 0 < (root player true).toReal := by
+  constructor
+  · intro habsorption
+    by_contra hnone
+    push Not at hnone
+    have hzero : ∀ player, (root player true).toReal = 0 := fun player =>
+      le_antisymm (hnone player) ENNReal.toReal_nonneg
+    unfold quittingRootAbsorptionMass at habsorption
+    rw [quittingStationaryContinueMass_eq_prod_continueProbability] at habsorption
+    have hcontinue : (fun player => (root player false).toReal) = fun _ => 1 := by
+      funext player
+      have hsum :
+          (root player false).toReal + (root player true).toReal = 1 := by
+        simpa [Fintype.sum_bool, add_comm] using pmf_toReal_sum_one (root player)
+      rw [hzero player] at hsum
+      linarith
+    rw [hcontinue] at habsorption
+    simp at habsorption
+  · rintro ⟨player, hplayer⟩
+    exact hplayer.trans_le (quittingQuitProbability_le_absorptionMass root player)
+
 end GameTheory

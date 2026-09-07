@@ -274,5 +274,65 @@ theorem evalReal_ratCast
       rw [ihLeft, ihRight]
       exact (Rat.cast_mul _ _).symm
 
+/-- A right-associated syntactic sum. -/
+def sum : List (RingExpression n) → RingExpression n
+  | [] => 0
+  | expression :: expressions => expression + sum expressions
+
+/-- A right-associated syntactic product. -/
+def product : List (RingExpression n) → RingExpression n
+  | [] => 1
+  | expression :: expressions => expression * product expressions
+
+@[simp]
+theorem eval_sum {R : Type*} [Zero R] [Neg R] [Add R] [Mul R]
+    (ofRat : ℚ → R) (environment : Fin n → R) (hzero : ofRat 0 = 0)
+    (expressions : List (RingExpression n)) :
+    (sum expressions).eval ofRat environment =
+      (expressions.map (RingExpression.eval ofRat environment)).sum := by
+  induction expressions with
+  | nil => simp [sum, hzero]
+  | cons expression expressions ih =>
+      simp [sum, ih]
+
+@[simp]
+theorem eval_product {R : Type*} [One R] [Neg R] [Add R] [Mul R]
+    (ofRat : ℚ → R) (environment : Fin n → R) (hone : ofRat 1 = 1)
+    (expressions : List (RingExpression n)) :
+    (product expressions).eval ofRat environment =
+      (expressions.map (RingExpression.eval ofRat environment)).prod := by
+  induction expressions with
+  | nil => simp [product, hone]
+  | cons expression expressions ih =>
+      simp [product, ih]
+
+@[simp]
+theorem evalRat_sum
+    (expressions : List (RingExpression n)) (environment : Fin n → ℚ) :
+    (sum expressions).evalRat environment =
+      (expressions.map (RingExpression.evalRat environment)).sum := by
+  exact eval_sum id environment rfl expressions
+
+@[simp]
+theorem evalRat_product
+    (expressions : List (RingExpression n)) (environment : Fin n → ℚ) :
+    (product expressions).evalRat environment =
+      (expressions.map (RingExpression.evalRat environment)).prod := by
+  exact eval_product id environment rfl expressions
+
+@[simp]
+theorem evalReal_sum
+    (expressions : List (RingExpression n)) (environment : Fin n → ℝ) :
+    (sum expressions).evalReal environment =
+      (expressions.map (RingExpression.evalReal environment)).sum := by
+  exact eval_sum (fun value : ℚ => (value : ℝ)) environment (Rat.cast_zero) expressions
+
+@[simp]
+theorem evalReal_product
+    (expressions : List (RingExpression n)) (environment : Fin n → ℝ) :
+    (product expressions).evalReal environment =
+      (expressions.map (RingExpression.evalReal environment)).prod := by
+  exact eval_product (fun value : ℚ => (value : ℝ)) environment (Rat.cast_one) expressions
+
 end RingExpression
 end MathUE.RealQuantifierElimination

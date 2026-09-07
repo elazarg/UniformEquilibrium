@@ -1,5 +1,4 @@
-import MathUE.RealQuantifierElimination.RingExpression
-import MathUE.Logic.SignFormula
+import MathUE.RealQuantifierElimination.QuantifierFreeFormula
 
 /-! # Symbolic coefficient-sign branches
 
@@ -9,38 +8,6 @@ or eliminate quantifiers.
 -/
 
 namespace MathUE.RealQuantifierElimination
-
-/-- Quantifier-free formulas are finite Boolean formulas in expression signs. -/
-abbrev QuantifierFreeFormula (n : Nat) :=
-  Math.PolynomialSignCell.SignFormula (RingExpression n)
-
-/-- The exact signs of all rational expressions at a real environment. -/
-noncomputable def realSignAssignment {n : Nat} (environment : Fin n → ℝ) :
-    RingExpression n → SignType :=
-  fun expression => SignType.sign (expression.evalReal environment)
-
-namespace QuantifierFreeFormula
-
-variable {n : Nat}
-
-/-- Real truth semantics of a quantifier-free sign formula. -/
-def HoldsAt (formula : QuantifierFreeFormula n) (environment : Fin n → ℝ) : Prop :=
-  formula.Holds (realSignAssignment environment)
-
-/-- Boolean evaluation after a sign assignment has been supplied. -/
-def evalSigns
-    (formula : QuantifierFreeFormula n)
-    (signs : RingExpression n → SignType) : Bool :=
-  formula.eval signs
-
-@[simp]
-theorem evalSigns_eq_true_iff
-    (formula : QuantifierFreeFormula n)
-    (signs : RingExpression n → SignType) :
-    formula.evalSigns signs = true ↔ formula.Holds signs :=
-  formula.eval_eq_true_iff signs
-
-end QuantifierFreeFormula
 
 /-- A finite decision tree branching on the sign of symbolic coefficients. -/
 inductive CoefficientSignBranch (n : Nat) (α : Type*)

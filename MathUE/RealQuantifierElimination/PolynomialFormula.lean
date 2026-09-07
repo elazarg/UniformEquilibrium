@@ -1,4 +1,4 @@
-import MathUE.RealQuantifierElimination.CoefficientSignBranch
+import MathUE.RealQuantifierElimination.QuantifierFreeFormula
 import Mathlib.Data.Rat.Cast.Order
 
 /-!

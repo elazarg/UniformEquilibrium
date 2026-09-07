@@ -1,4 +1,4 @@
-import MathUE.RealQuantifierElimination.CoefficientSignBranch
+import MathUE.RealQuantifierElimination.QuantifierFreeFormula
 import MathUE.Logic.SignFormulaMap
 import MathUE.Semialgebraic.Basic
 import Mathlib.Data.Fin.Tuple.Basic

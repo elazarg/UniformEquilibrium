@@ -53,7 +53,12 @@ supportwise balance.
 shows that failure can always be witnessed by an actual absorbing product
 root with no sure quitter and a strictly positive Quit premium at every
 active player. The construction preserves the original active support.
-It does not provide a quantifier-elimination algorithm for testing tables.
+`decideHasProductLowQuittingPremium_eq_true_iff`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumDecision.lean`)
+proves that an executable rational-table test returns true exactly when the
+original product-low condition holds. The decision procedure uses actual
+real quantifier elimination and includes the empty-player case. It has no
+efficiency guarantee and does not decide uniform-equilibrium existence.
 
 `UniformEquilibrium/Quitting/Examples/ProductLowFinFourFamily.lean` gives
 a four-player family with arbitrary singleton levels, positive coordinate
@@ -374,6 +379,14 @@ Every payoff in its closure has an exact realization with at most n+1
 support actions per player and finite dates below n(n+1). The proof
 compactifies in the full finite simplex and recompresses the limit;
 no response-cap preservation is asserted.
+`forall_finiteRootWordPayoff_iff_forall_actualTerminalPayoff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarFiniteWordPayoffEquivalence.lean`)
+also identifies the predicates satisfied by all finite-root-word payoffs
+with zero tail and by all actual behavioral terminal payoffs. The module
+constructs a chronological root word from each finite-calendar profile,
+proves literal profile equality with that word followed by Always Continue,
+and connects the fixed-calendar and finite-word payoff images. Arbitrary
+payoff predicates are allowed; response caps are not being compressed.
 `image_fst_quittingTerminalSemanticCarrier_eq_actualPayoffSet`
 (`UniformEquilibrium/Quitting/Paths/TerminalSemanticPayoffProjection.lean`)
 identifies the prescribed-payoff projection of the full semantic carrier
@@ -389,6 +402,11 @@ semantics. The masses sum to one.
 represents the coalition masses and fixed-table prescribed payoffs by
 multivariate polynomials and identifies their evaluations with those
 semantic formulas. Their degree is at most the number of players.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarJointPolynomial.lean`
+treats reward entries and calendar probabilities as separate variable
+blocks. Joint payoff and singleton-surplus polynomials have degree at
+most the number of players plus one; their evaluations agree with the
+existing raw payoff formulas. Never mass has its own polynomial.
 `isSemialgebraic_quittingActualTerminalPayoffSet`
 (`UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffSemialgebraic.lean`)
 proves that all actual prescribed payoffs form a semialgebraic set for
@@ -407,6 +425,11 @@ pointwise singleton exclusion equivalent to one positive uniform deficit.
 reduces group exclusion to distinct ordered pairs with one positive
 parameter at most one half, chosen before the calendar point. The pair
 may depend on that point. The same module proves the actual-profile form.
+`isSemialgebraic_quittingRewardTables_rawStrictExclusion` and
+`isSemialgebraic_quittingRewardTables_rawWeakSubsetExclusion`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRewardTableSemialgebraic.lean`)
+prove semialgebraicity of the accepted real reward-table sets themselves.
+The weak-subset test retains its nonnegative-own-singleton requirement.
 An executable raw-table recognition procedure remains to be supplied.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
 supplies the shared elimination algorithm using its proved recursive

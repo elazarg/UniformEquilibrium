@@ -301,6 +301,7 @@ import MathUE.Logic.SignFormulaFiniteFolds
 import MathUE.FiniteCappedSimplexPairReduction
 import MathUE.Logic.SignFormulaMap
 import MathUE.RealQuantifierElimination.RingExpression
+import MathUE.RealQuantifierElimination.QuantifierFreeFormula
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
 import MathUE.RealQuantifierElimination.CoefficientSignBranchInvariants
 import MathUE.RealQuantifierElimination.PolynomialEvaluation
@@ -321,6 +322,7 @@ import MathUE.RealQuantifierElimination.RealCoefficientReification
 import MathUE.Semialgebraic.Basic
 import MathUE.Semialgebraic.Projection
 import MathUE.Semialgebraic.PolynomialMap
+import MathUE.Semialgebraic.FiniteQuantification
 import MathUE.RealQuantifierElimination.FocusedSignReconstruction
 import MathUE.RealQuantifierElimination.PolynomialFamilyFocusSelection
 import MathUE.Polynomial.RealSignCell

@@ -131,4 +131,42 @@ theorem not_hasProductLowQuittingPremium_iff_exists_inwardViolation
     obtain ⟨player, hactive, hle⟩ := hlow root habsorption
     exact (not_lt_of_ge hle) (hstrict player hactive)
 
+/-- The product-low condition written on real hazard vectors. -/
+theorem hasProductLowQuittingPremium_iff_hazard
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    HasProductLowQuittingPremium reward ↔
+      ∀ hazard : ι → ℝ, (∀ player, 0 ≤ hazard player) →
+        (∀ player, hazard player ≤ 1) → (∃ player, 0 < hazard player) →
+          ∃ player, 0 < hazard player ∧
+            quittingHazardQuitPremium reward hazard player ≤ 0 := by
+  constructor
+  · intro hlow hazard hzero hone hactive
+    let root := rootOfHazard hazard hzero hone
+    have hrootHazard : hazardOfRoot root = hazard :=
+      hazardOfRoot_rootOfHazard hazard hzero hone
+    have habsorption : 0 < quittingRootAbsorptionMass root := by
+      rw [quittingRootAbsorptionMass_pos_iff_exists_quitProbability_pos]
+      change ∃ player, 0 < hazardOfRoot root player
+      rwa [hrootHazard]
+    obtain ⟨player, hplayer, hpremium⟩ := hlow root habsorption
+    refine ⟨player, ?_, ?_⟩
+    · change 0 < hazardOfRoot root player at hplayer
+      rwa [hrootHazard] at hplayer
+    · rw [quittingHazardQuitPremium_eq_rootQuitPremium reward hazard hzero hone]
+      exact sub_nonpos.mpr hpremium
+  · intro hhazard root habsorption
+    have hactive : ∃ player, 0 < hazardOfRoot root player := by
+      simpa [hazardOfRoot] using
+        (quittingRootAbsorptionMass_pos_iff_exists_quitProbability_pos root).mp
+          habsorption
+    obtain ⟨player, hplayer, hpremium⟩ :=
+      hhazard (hazardOfRoot root) (hazardOfRoot_nonneg root)
+        (hazardOfRoot_le_one root) hactive
+    refine ⟨player, hplayer, ?_⟩
+    rw [quittingHazardQuitPremium_eq_rootQuitPremium reward (hazardOfRoot root)
+      (hazardOfRoot_nonneg root) (hazardOfRoot_le_one root),
+      rootOfHazard_hazardOfRoot] at hpremium
+    exact sub_nonpos.mp hpremium
+
 end GameTheory
