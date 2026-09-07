@@ -1,8 +1,10 @@
-# Real quantifier elimination: constructive implementation contract
+# Real quantifier elimination
 
-This is an implementation plan for known mathematics. The complete
-quantifier-elimination and decision theorems remain unproved here.
-The checked components and remaining dependencies are described below.
+The library implements real quantifier elimination for rational polynomial
+formulas, with arbitrary finite Boolean and quantifier nesting. The actual
+recursive producer and the correctness theorems pass strict, silent Lean
+checks. Real-coefficient semialgebraic projection and the game-specific
+adapters remain separate integration steps.
 
 ## Available components
 
@@ -95,16 +97,24 @@ The checked components and remaining dependencies are described below.
 - `MathUE/RealQuantifierElimination/PolynomialFormula.lean` defines
   arbitrary nested quantified formulas and their real semantics. Rational
   evaluation decides closed quantifier-free formulas with checked agreement
-  to real truth; it does not yet decide quantified formulas.
+  to real truth.
+- `signDiagram_correct`
+  (`MathUE/RealQuantifierElimination/SignDiagramProducer.lean`) proves that
+  the executable well-founded producer returns an exact reduced sign diagram
+  at every real parameter environment. It derives the reconstruction inputs
+  from preprocessing and restores the original family, including zero and
+  constant columns.
+- `eliminateQuantifiers_holdsAt_iff` and `decideClosedFormula_eq_true_iff`
+  (`MathUE/RealQuantifierElimination/QuantifierElimination.lean`) prove
+  correctness of the actual full eliminator and closed rational decision
+  procedure. Neither theorem takes a producer or eliminator as a hypothesis.
 
-The recursive sign-diagram producer,
-formula elimination, and the two packet
-adapters remain to be completed. Targeted checks of the available components
-do not establish those later stages.
+The two packet adapters remain to be completed. Generic quantifier elimination
+does not by itself encode their predicates or prove their semantic equivalences.
 
 ## Endpoint and coefficient scope
 
-The two completion endpoints are a computable
+The two implemented endpoints are a computable
 `eliminateQuantifiers : PolynomialFormula n -> QuantifierFreeFormula n` with
 truth preservation at every environment `Fin n -> Real`, and a computable
 `decideClosedFormula : PolynomialFormula 0 -> Bool` whose answer is true exactly when the
@@ -119,8 +129,8 @@ The algorithm is permitted to be inefficient; canonical expansion is not an
 endpoint requirement. All real reward entries remain free variables. For
 semialgebraic sets with arbitrary real coefficients, finitely many additional
 free variables represent those coefficients and are specialized after QE.
-This yields projection closure with real coefficients without pretending to
-compute on an unrestricted real-number encoding.
+The real-coefficient projection adapter uses this parameter representation;
+it does not compute on an unrestricted real-number encoding.
 
 The target is real semantics first. Generalization to arbitrary instances of
 Mathlib `IsRealClosed` is a separate task: the pinned class does not yet provide
@@ -129,8 +139,7 @@ TODO. A completed real theorem must be described at that actual scope.
 
 ## Implementation interfaces
 
-The interfaces below specify how the components fit together. The sign-diagram
-producer remains to be completed.
+The interfaces below describe how the checked components fit together.
 
 - `RingExpression n`: the expression syntax above, with evaluation at `Fin n -> Real`.
 - Coefficient polynomials use `Math.DensePolynomial (RingExpression n)`,
@@ -144,8 +153,9 @@ producer remains to be completed.
   `MathUE/Logic/SignFormula.lean`; `MathUE/PolynomialSignCell.lean` imports
   them for its topology results. `SignFormula.eval` evaluates a sign assignment
   using Boolean operations, with a proved equivalence to `Holds`.
-- `PolynomialFormula n`: sign atoms and Boolean connectives, plus `exists` on
-  `PolynomialFormula (n+1)`. Universal quantification is negated existence. Fix the bound
+- `PolynomialFormula n`: sign atoms and Boolean connectives, plus `ex` and `all` on
+  `PolynomialFormula (n+1)`. Elimination implements universal quantification by negated
+  existence. Fix the bound
   variable at index zero and shift outer variables by `Fin.succ`.
 - `CoefficientSignBranch n alpha`: leaves in `alpha`, or a `RingExpression n` test
   with negative, zero, and positive child branches.
@@ -155,11 +165,11 @@ producer remains to be completed.
   with `QuantifierFreeFormula n` leaves into one such formula using guarded disjunctions.
 - `signDiagram : List (Math.DensePolynomial (RingExpression n)) ->
   CoefficientSignBranch n (List (List SignType))` is the
-  eventual core output. For every `rho`, the selected leaf has a real ordered
+  core output. For every `rho`, the selected leaf has a real ordered
   cell decomposition realizing every sign entry. The cut points are witnesses
   in the correctness theorem, not executable real numbers in the output.
 
-`DiagramRealizes ps rho rows` must assert existence of a strictly increasing
+`Realizes ps rows` asserts existence of a strictly increasing
 finite list of real cuts, exactly `2*cuts.length+1` nonempty alternating cells,
 correct row width, and correct signs for all points in each cell. Its reduced
 form also asserts that every cut is a root of some nonzero specialized input
@@ -167,7 +177,9 @@ polynomial and that every root of such a polynomial is a cut. Identically zero
 polynomials have sign zero everywhere and do not create cuts. Extra-cut diagrams
 may be useful internally, but reduction must restore this exact invariant.
 
-## Dependency DAG and implementable chunks
+## Dependency structure
+
+Stages 1–6 below are implemented. Stage 7 describes their consumer boundary.
 
 1. Executable dense polynomial kernel, independent of real analysis.
    Implement list operations, Horner evaluation, differentiation, and bounded
@@ -239,9 +251,8 @@ may be useful internally, but reduction must restore this exact invariant.
    existential-only frontend. Semialgebraic projection is the existential case
    of the theorem, with Boolean closure and iteration giving alternating cases.
 
-Chunks 1, 2, and 3 can be assigned independently with the interfaces above.
-Chunk 4 is the principal join and chunk 5 is the principal termination join.
-Chunk 6 alone is not completion if it accepts the missing eliminator as data.
+Stage 4 joins the algebraic and geometric components; stage 5 supplies the
+well-founded recursion. Stage 6 calls that concrete producer.
 
 ## Pseudo-division and boundary requirements
 
@@ -294,7 +305,7 @@ infinity, including parity at negative infinity; bounded IVT alone is insufficie
   limited abstract
   foundations, not a QE API.
 
-## Proof references and remaining work
+## Proof references
 
 The chosen proof route is Cohen-Hormander's recursive sign diagrams, presented
 in McLaughlin and Harrison, *A Proof-Producing Decision Procedure for Real
@@ -314,12 +325,11 @@ sign determination and associated algebraic counting infrastructure.
 Kosaian, Tan, and Platzer, *A First Complete Algorithm for Real Quantifier
 Elimination in Isabelle/HOL* (2023), verifies a Tarski/BKR hybrid with general
 multivariate formula elimination. This is another complete precedent, not a
-Lean import or proof of our proposed implementation.
+Lean import or proof of this implementation.
 [Author paper](https://arxiv.org/abs/2209.10978).
 
-Risk estimate: this is a substantial multi-session library development, likely
-several thousand Lean lines even with existing polynomial analysis. The exact
-size has not been measured. The difficult work is exhaustive diagram
-reconstruction, symbolic specialization, and the total recursive producer.
-Completion requires a computable implementation and its universal correctness
-theorem, including the recursive sign-diagram producer.
+No practical complexity bound is claimed. The implementation proves termination
+and universal correctness; its coefficient branching can produce large trees.
+Nor does finite-dimensional quantifier elimination decide the uniform-equilibrium
+conjecture: that would require a finite formula equivalent to the original
+strategy and horizon quantifiers.

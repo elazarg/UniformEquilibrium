@@ -396,11 +396,10 @@ equivalence for weak exclusion on a designated nonnegative-singleton
 subset, strict singleton deficit with a fixed margin, and nonconcentrated
 group exclusion with a fixed weight cap. Compactness also makes strict
 pointwise singleton exclusion equivalent to one positive uniform deficit.
-Quantifier elimination and an executable raw-table recognition procedure
-remain to be supplied.
-The [real quantifier-elimination plan](REAL_QUANTIFIER_ELIMINATION.md)
-specifies the shared library dependency, executable interfaces, and proof
-stages. `MathUE/Polynomial/RealSignCell.lean` proves bounded root-insertion
+An executable raw-table recognition procedure remains to be supplied.
+The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
+supplies the shared elimination algorithm and its correctness theorem.
+`MathUE/Polynomial/RealSignCell.lean` proves bounded root-insertion
 and sign-characterization lemmas and unbounded monotone-cell root criteria.
 `MathUE/Polynomial/DensePolynomial.lean` implements arithmetic on coefficient
 lists without requiring algebraic laws on the source syntax. It proves the
@@ -419,8 +418,15 @@ and unbounded monotone root criteria without extra limit hypotheses.
 `MathUE/Polynomial/LocalSignReconstruction.lean` implements each local
 sign-row reconstruction and proves exact coverage of the new roots,
 including both rays and the whole line.
-These components do not yet construct complete sign diagrams or decide
-general quantified polynomial formulas.
+`signDiagram_correct`
+(`MathUE/RealQuantifierElimination/SignDiagramProducer.lean`) proves exact
+reduced realization for the executable recursive producer.
+`eliminateQuantifiers_holdsAt_iff` and `decideClosedFormula_eq_true_iff`
+(`MathUE/RealQuantifierElimination/QuantifierElimination.lean`) establish
+truth preservation for arbitrary nested real quantification and correctness
+of closed rational-formula decision. The game-specific predicate encodings
+and semantic adapters remain necessary before using these endpoints for
+raw-table recognition.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
