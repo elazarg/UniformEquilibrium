@@ -416,6 +416,9 @@ specialized leading zeroes without changing polynomial evaluation and
 proves the remaining formal length determines the specialized degree.
 `MathUE/Polynomial/InfinitySign.lean` supplies polynomial infinity signs
 and unbounded monotone root criteria without extra limit hypotheses.
+`MathUE/Polynomial/LocalSignReconstruction.lean` implements each local
+sign-row reconstruction and proves exact coverage of the new roots,
+including both rays and the whole line.
 These components do not yet construct complete sign diagrams or decide
 general quantified polynomial formulas.
 

@@ -328,6 +328,7 @@ import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.Polynomial.DensePolynomial
 import MathUE.Polynomial.InfinitySign
+import MathUE.Polynomial.LocalSignReconstruction
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.OrderedRealSignDiagram
@@ -512,6 +513,7 @@ import MathUE.RamifiedWeierstrass
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
 import MathUE.RealQuantifierElimination.CoefficientTrimming
 import MathUE.RealQuantifierElimination.PolynomialEvaluation
+import MathUE.RealQuantifierElimination.PolynomialFamilyMeasure
 import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.ReciprocalDebtRecurrence

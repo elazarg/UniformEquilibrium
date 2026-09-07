@@ -38,8 +38,16 @@ The checked components and remaining dependencies are described below.
   from polynomial coefficients, including zero and constant polynomials.
   It supplies root-free cell signs and bounded, half-line, and whole-line
   root criteria; the unbounded monotone cases require no supplied limits.
+- `MathUE/Polynomial/LocalSignReconstruction.lean` implements sign-row
+  reconstruction on each bounded interval, ray, or whole-line cell.
+  Correctness includes all roots introduced into that cell. Its source-diagram
+  consumer derives the nonzero derivative sign from reduced root coverage
+  and the selected polynomial's positive degree.
+- `MathUE/RealQuantifierElimination/PolynomialFamilyMeasure.lean` supplies
+  the well-founded lexicographic measure on formal polynomial families.
+  Transformation-specific decrease proofs are separate obligations.
 
-Complete reconstruction, the recursive sign-diagram producer,
+Global reconstruction, the recursive sign-diagram producer,
 formula elimination, and the two packet
 adapters remain to be completed. Targeted checks of the available components
 do not establish those later stages.
