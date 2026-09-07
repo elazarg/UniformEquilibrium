@@ -196,6 +196,16 @@ are proved in `UniformEquilibrium/Quitting/Cycles/CyclicFiniteMenu.lean`
 and `UniformEquilibrium/Quitting/Cycles/PairedCycleStoppingLaws.lean`.
 The Fin4 pivot transformation and the quantitative finite-horizon bound
 for the same infinite cyclic profile are separate constructions.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteMenu.lean` combines
+the selected cycle's law, payoff, cap, debt, early-attainer and geometric
+Nash conclusions for one actual finite menu.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleAffineTruncation.lean`
+transports positive playerwise affine changes through the infinite cycle,
+then truncates the transformed game afresh. The finite prescribed payoff
+is the transformed infinite value multiplied by the absorption probability;
+there is no unqualified translation identity for its positive Never mass.
+The exact finite-cap and debt identities require a nonnegative transformed
+singleton only for the queried player.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -243,6 +253,11 @@ number of players plus one original positive-support generators. It
 preserves every observer's prescribed terminal payoff simultaneously.
 This is a payoff-only replacement: it does not preserve response caps,
 compress all players at once, or produce a common finite calendar.
+`exists_sparseFiniteStoppingLaw_wholePayoff_eq`
+(`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteStoppingLaw.lean`)
+specializes that construction to independent finite clock laws, retaining
+the original positive-support dates and every observer's payoff against
+the current opponents.
 `UniformEquilibrium/Quitting/Paths/CommonStoppingCalendarRetiming.lean`
 separately ranks the union of finite support dates using one common map,
 preserving the independent first-quitter outcome law, ties, and Never.
