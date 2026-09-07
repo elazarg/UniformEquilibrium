@@ -43,13 +43,26 @@ game. `HasProductLowQuittingPremium`
 states this reward-table condition and preserves it under nonnegative
 playerwise affine changes of terminal rewards. Positive normalization uses
 `UniformEquilibrium/Quitting/Root/PlayerwiseUnitNormalization.lean`.
+`hasProductLowQuittingPremium_of_noLargerOwnPremium`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumMonotonicity.lean`)
+proves downward closure under every participant's singleton-relative premium,
+with arbitrary passive rewards. This need not preserve failure of
+supportwise balance.
+`not_hasProductLowQuittingPremium_iff_exists_inwardViolation`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumInwardViolation.lean`)
+shows that failure can always be witnessed by an actual absorbing product
+root with no sure quitter and a strictly positive Quit premium at every
+active player. The construction preserves the original active support.
+It does not provide a quantifier-elimination algorithm for testing tables.
 
 `UniformEquilibrium/Quitting/Examples/ProductLowFinFourFamily.lean` gives
 a four-player family with arbitrary singleton levels, positive coordinate
 scales, and arbitrary passive rewards. It is product-low, admits a weighting
 on every proper support, and fails supportwise balance on the full support.
 Nonnegative singleton levels give periodic terminal approximate equilibria
-and a fixed uniform payoff for each family member. In contrast,
+and a fixed uniform payoff for each family member. Product-low and these
+existence conclusions also allow zero coordinate scales; the strict
+separation assertion requires positive scales. In contrast,
 `productLow_iff_supportwiseBalance_finTwo`
 (`UniformEquilibrium/Quitting/Classification/FinTwoProductLowSupportwiseEquivalence.lean`)
 identifies the two conditions for arbitrary signed two-player tables.
@@ -80,6 +93,17 @@ selection. No equilibrium source is supplied as an input.
 
 `IsSupportwiseBalancedQuittingPremiumTable` and its exact product-premium
 identity are in `UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremium.lean`.
+`IsSupportwiseQuittingPremiumWeightCertificate`
+(`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumBalanceAt.lean`)
+is the shared one-weight predicate; the global table condition quantifies
+its existence over nonempty supports. The aggregate theorem retains the
+same certificate and a positive-weight active player with low Quit payoff.
+`UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumFeasibleSet.lean`
+proves the literal one-support feasible set closed, and compact for finite
+player types. `MathUE/FinFourSubsetIncidenceCounts.lean` supplies the counts:
+15 supports, 32 weight coordinates, 65 coalition inequalities, and 33 after
+discarding singleton tautologies. These are counts of the sufficient test,
+not an equilibrium-computation complexity bound.
 The raw-table identity gives an active player with Quit endpoint at most its
 singleton at every absorbing product root, without a Nash premise.
 `UniformEquilibrium/Quitting/Classification/SupportwiseQuittingPremiumNormalization.lean`
@@ -393,6 +417,17 @@ weighted series of owner-correction charges. Both the absolute charge tail
 and the weighted series are explicitly summable. The actual genealogy and
 summable marginal hazards are inputs; Nash, positive survival, and a
 distinct observer are not needed for this series identity.
+`quittingForcedContinueOwnerCorrection_eq_sum_opponentCoalitionMass`
+(`UniformEquilibrium/Quitting/Root/ForcedContinueOwnerCorrectionCoalitionSum.lean`)
+identifies each correction as the exact owner-deleted coalition average of
+the payoff without the owner minus the payoff with the owner inserted.
+The empty coalition contributes continuation minus singleton payoff.
+`MathUE/DisplacementSeamScalarBoundaries.lean` distinguishes finite variation
+from summability of values: harmonic displacement has summable increments
+and zero limit but nonsummable values. A nonzero limiting displacement with
+survival coefficient tending to one and a summable remainder gives a seam
+that neither tends to zero nor is summable. These are scalar results, not
+counterexample games.
 
 `exists_offMinimum_collar_on_completeCap_singletonSlab`
 (`UniformEquilibrium/Diagnostics/Quitting/CompleteCapSingletonSlabCollar.lean`)
@@ -404,8 +439,35 @@ parameter set nor attained responses.
 applies this to the entire closed interval of actual unilateral stopping-law
 mixtures. The moved player's complete cap is constant, and an attained
 response makes its debt equal to the uninstalled fraction times its old
-debt. This does not yet identify a literal stationary surviving suffix or
-provide the two-cut return consumer.
+debt.
+`UniformEquilibrium/Diagnostics/Quitting/StationaryQuitNowSegment.lean`
+provides a literal first-root installation followed by the unchanged
+stationary source. It agrees with the mixture's full payoff/cap pair, retains
+the original suffix at cuts one and two, and bounds the installed row's
+hazard from below by its parameter. No positive-survival assumption is needed
+for these profile equalities, including null continuation histories.
+The underlying complete stopping-law identity is in
+`MathUE/Probability/DiscreteHazardQuitZeroInstallation.lean`.
+`exists_quittingStationaryQuitNowSegmentTwoCut_offMinimum`
+(`UniformEquilibrium/Diagnostics/Quitting/StationaryQuitNowSegmentTwoCutReturn.lean`)
+places this installation between literal cuts one and two. Positive source
+excess determines a hazard scale for which the actual exit satisfies the
+quantitative off-minimum alternative. No paid splice or return to a minimum
+is asserted. `eventually_capResponseSegment_exactRoot_debtDrop_and_absorption`
+(`UniformEquilibrium/Diagnostics/Quitting/CapResponseSegmentExactRootExpenditure.lean`)
+gives uniform debt-drop and absorption floors for every sufficiently late
+exact root at any fixed proper installation parameter, from a positive
+source-debt floor and convergence of the owner's cap to its singleton.
+
+`HasTerminalExploitabilityGap.exists_late_childRestart_capPinDichotomy`
+(`UniformEquilibrium/Diagnostics/Quitting/LateResetChildRestartAssembly.lean`)
+attaches a coherent cap clock to the same selected late outsider and response.
+It retains bounded finite-or-Never seed attainment, original gap debt, and
+all later copied-response gain identities and half-gap floors. At sufficiently
+late resets, the actual child is cap-pinned, and every exact root against its
+payoff has the stated debt-drop and absorption floors. The output is a
+shift/reset dichotomy; by itself it does not construct the subsequent exact
+ray from that reset child.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the

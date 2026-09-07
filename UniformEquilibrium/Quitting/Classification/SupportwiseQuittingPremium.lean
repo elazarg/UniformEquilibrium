@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Classification.Existence.PerfectAbsorbingRow
+import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumBalanceAt
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionPayoff
 
 /-! # Supportwise weighted quitting premiums
@@ -20,15 +21,7 @@ participant-only premium is nonpositive on every contained coalition. -/
 def IsSupportwiseBalancedQuittingPremiumTable
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ (active : Finset ι), active.Nonempty →
-    ∃ weight : ι → ℝ,
-      (∀ player, 0 ≤ weight player) ∧
-      (∀ player, player ∉ active → weight player = 0) ∧
-      (∑ player ∈ active, weight player) = 1 ∧
-      ∀ (terminal : Finset ι) (hterminal : terminal.Nonempty),
-        terminal ⊆ active →
-        (∑ player ∈ terminal, weight player *
-          (reward ⟨terminal, hterminal⟩ player -
-            reward (quittingSingletonTerminal player) player)) ≤ 0
+    HasSupportwiseQuittingPremiumBalanceAt reward active
 
 private theorem quitProbability_mul_opponentCoalitionMass
     (root : ι → PMF Bool) (who : ι) (coalition : Finset ι)
@@ -141,25 +134,20 @@ theorem quittingQuitProbability_mul_quitPremium_eq_sum_terminalPremium
       Finset.insert_erase hterminal
     simp only [hinsert]
 
-/-- Supportwise balance makes the active weighted aggregate of endpoint
-premiums nonpositive at every product root. -/
-theorem weighted_quittingRootQuitPremium_sum_nonpos
+/-- A supplied supportwise certificate controls the active weighted aggregate
+of endpoint premiums at every product root with that exact active support. -/
+theorem weighted_quittingRootQuitPremium_sum_nonpos_of_certificate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (hbalanced : IsSupportwiseBalancedQuittingPremiumTable reward)
     (root : ι → PMF Bool)
     (active : Finset ι)
     (hactive : ∀ player, player ∈ active ↔ 0 < (root player true).toReal)
-    (hne : active.Nonempty) :
-    ∃ weight : ι → ℝ,
-      (∀ player, 0 ≤ weight player) ∧
-      (∑ player ∈ active, weight player) = 1 ∧
-      (∑ player ∈ active, weight player * (root player true).toReal *
+    (weight : ι → ℝ)
+    (hcertificate : IsSupportwiseQuittingPremiumWeightCertificate
+      reward active weight) :
+    (∑ player ∈ active, weight player * (root player true).toReal *
         (quittingRootQuitPayoff reward 0 root player -
           reward (quittingSingletonTerminal player) player)) ≤ 0 := by
   classical
-  obtain ⟨weight, hweight, hsupport, hsum, hpremium⟩ :=
-    hbalanced active hne
-  refine ⟨weight, hweight, hsum, ?_⟩
   simp_rw [mul_assoc,
     quittingQuitProbability_mul_quitPremium_eq_sum_terminalPremium]
   simp_rw [Finset.mul_sum]
@@ -193,7 +181,7 @@ theorem weighted_quittingRootQuitPremium_sum_nonpos
     rw [hinner]
     exact mul_nonpos_of_nonneg_of_nonpos
       (quittingRootCoalitionMass_nonneg root terminal.val)
-      (hpremium terminal terminal.property hsubset)
+      (hcertificate.2.2.2 terminal hsubset)
   · obtain ⟨outside, houtTerminal, houtActive⟩ :=
       Set.not_subset.mp hsubset
     have hquit : (root outside true).toReal = 0 := by
@@ -204,6 +192,85 @@ theorem weighted_quittingRootQuitPremium_sum_nonpos
       unfold quittingRootCoalitionMass coalitionMass quittingRootQuitRates
       rw [Finset.prod_eq_zero (s := terminal.val) houtTerminal hquit, zero_mul]
     simp [hmass]
+
+/-- Supportwise balance supplies one certificate, its exact aggregate bound,
+and a positive-weight active coordinate with nonpositive Quit premium. -/
+theorem exists_supportwiseCertificate_with_aggregate_and_positiveWeight_low
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hbalanced : IsSupportwiseBalancedQuittingPremiumTable reward)
+    (root : ι → PMF Bool) (active : Finset ι)
+    (hactive : ∀ player, player ∈ active ↔ 0 < (root player true).toReal)
+    (hne : active.Nonempty) :
+    ∃ weight : ι → ℝ,
+      IsSupportwiseQuittingPremiumWeightCertificate reward active weight ∧
+      (∑ player ∈ active, weight player * (root player true).toReal *
+        (quittingRootQuitPayoff reward 0 root player -
+          reward (quittingSingletonTerminal player) player)) ≤ 0 ∧
+      ∃ player ∈ active, 0 < weight player ∧
+        quittingRootQuitPayoff reward 0 root player ≤
+          reward (quittingSingletonTerminal player) player := by
+  obtain ⟨weight, hcertificate⟩ := hbalanced active hne
+  have haggregate :=
+    weighted_quittingRootQuitPremium_sum_nonpos_of_certificate
+      reward root active hactive weight hcertificate
+  refine ⟨weight, hcertificate, haggregate, ?_⟩
+  have hpositive : ∃ player ∈ active, 0 < weight player := by
+    by_contra hnone
+    push Not at hnone
+    have hzero : ∀ player ∈ active, weight player = 0 := by
+      intro player hplayer
+      exact le_antisymm (hnone player hplayer) (hcertificate.1 player)
+    have : (∑ player ∈ active, weight player) = 0 := by
+      apply Finset.sum_eq_zero
+      exact hzero
+    linarith [hcertificate.2.2.1]
+  obtain ⟨marked, hmarked, hwmarked⟩ := hpositive
+  by_contra hnone
+  push Not at hnone
+  have htermNonneg : ∀ player ∈ active,
+      0 ≤ weight player * (root player true).toReal *
+        (quittingRootQuitPayoff reward 0 root player -
+          reward (quittingSingletonTerminal player) player) := by
+    intro player hplayer
+    by_cases hw : weight player = 0
+    · simp [hw]
+    · have hwpos : 0 < weight player :=
+        lt_of_le_of_ne (hcertificate.1 player) (Ne.symm hw)
+      exact mul_nonneg
+        (mul_nonneg hwpos.le (hactive player |>.mp hplayer).le)
+        (sub_nonneg.mpr (hnone player hplayer hwpos).le)
+  have hmarkedPremium : reward (quittingSingletonTerminal marked) marked <
+      quittingRootQuitPayoff reward 0 root marked :=
+    hnone marked hmarked hwmarked
+  have hsumPositive : 0 < ∑ player ∈ active,
+      weight player * (root player true).toReal *
+        (quittingRootQuitPayoff reward 0 root player -
+          reward (quittingSingletonTerminal player) player) := by
+    apply Finset.sum_pos'
+    · exact htermNonneg
+    · exact ⟨marked, hmarked, mul_pos
+        (mul_pos hwmarked (hactive marked |>.mp hmarked))
+        (sub_pos.mpr hmarkedPremium)⟩
+  linarith
+
+/-- Supportwise balance supplies a normalized weight with nonpositive
+hazard-weighted aggregate Quit premium. -/
+theorem weighted_quittingRootQuitPremium_sum_nonpos
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hbalanced : IsSupportwiseBalancedQuittingPremiumTable reward)
+    (root : ι → PMF Bool) (active : Finset ι)
+    (hactive : ∀ player, player ∈ active ↔ 0 < (root player true).toReal)
+    (hne : active.Nonempty) :
+    ∃ weight : ι → ℝ,
+      (∀ player, 0 ≤ weight player) ∧
+      (∑ player ∈ active, weight player) = 1 ∧
+      (∑ player ∈ active, weight player * (root player true).toReal *
+        (quittingRootQuitPayoff reward 0 root player -
+          reward (quittingSingletonTerminal player) player)) ≤ 0 := by
+  obtain ⟨weight, hcertificate, haggregate, _⟩ :=
+    exists_supportwiseCertificate_with_aggregate_and_positiveWeight_low
+      reward hbalanced root active hactive hne
+  exact ⟨weight, hcertificate.1, hcertificate.2.2.1, haggregate⟩
 
 /-- Every absorbing product root has an active player whose Quit endpoint is
 at most that player's own singleton reward. -/
@@ -240,46 +307,11 @@ theorem exists_active_quitPayoff_le_singleton_of_supportwiseBalance
       linarith
     rw [hfalse] at habsorption
     simp at habsorption
-  obtain ⟨weight, hweight, hsum, haggregate⟩ :=
-    weighted_quittingRootQuitPremium_sum_nonpos
+  obtain ⟨weight, _hcertificate, _haggregate, marked, hmarked,
+      _hwmarked, hlow⟩ :=
+    exists_supportwiseCertificate_with_aggregate_and_positiveWeight_low
       reward hbalanced root active hactive hne
-  have hpositive : ∃ player ∈ active, 0 < weight player := by
-    by_contra hnone
-    push Not at hnone
-    have hzero : ∀ player ∈ active, weight player = 0 := by
-      intro player hplayer
-      exact le_antisymm (hnone player hplayer) (hweight player)
-    have : (∑ player ∈ active, weight player) = 0 := by
-      apply Finset.sum_eq_zero
-      exact hzero
-    linarith
-  obtain ⟨marked, hmarked, hwmarked⟩ := hpositive
-  by_contra hnone
-  push Not at hnone
-  have htermNonneg : ∀ player ∈ active,
-      0 ≤ weight player * (root player true).toReal *
-        (quittingRootQuitPayoff reward 0 root player -
-          reward (quittingSingletonTerminal player) player) := by
-    intro player hplayer
-    by_cases hw : weight player = 0
-    · simp [hw]
-    · exact mul_nonneg
-        (mul_nonneg (hweight player) (hactive player |>.mp hplayer).le)
-        (sub_nonneg.mpr
-          (hnone player (hactive player |>.mp hplayer)).le)
-  have hmarkedPremium : reward (quittingSingletonTerminal marked) marked <
-      quittingRootQuitPayoff reward 0 root marked := by
-    exact hnone marked (hactive marked |>.mp hmarked)
-  have hsumPositive : 0 < ∑ player ∈ active,
-      weight player * (root player true).toReal *
-        (quittingRootQuitPayoff reward 0 root player -
-          reward (quittingSingletonTerminal player) player) := by
-    apply Finset.sum_pos'
-    · exact htermNonneg
-    · exact ⟨marked, hmarked, mul_pos
-        (mul_pos hwmarked (hactive marked |>.mp hmarked))
-        (sub_pos.mpr hmarkedPremium)⟩
-  linarith
+  exact ⟨marked, (hactive marked).mp hmarked, hlow⟩
 
 /-- Unit own singleton rewards turn supportwise balance into the canonical
 low-active-Quit-payoff condition consumed by the row producer. -/

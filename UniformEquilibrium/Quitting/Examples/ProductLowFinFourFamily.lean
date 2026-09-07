@@ -93,7 +93,7 @@ singleton-relative Quit premium. -/
 theorem exists_active_quitPayoff_le_singleton
     (singleton scale : Payoff (Fin 4))
     (passive : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (hscale : ∀ player, 0 < scale player)
+    (hscale : ∀ player, 0 ≤ scale player)
     (root : Fin 4 → PMF Bool)
     (habsorption : 0 < quittingRootAbsorptionMass root) :
     ∃ player, 0 < (root player true).toReal ∧
@@ -110,7 +110,7 @@ theorem exists_active_quitPayoff_le_singleton
     rw [reward_singleton]
     apply sub_nonpos.mp
     rw [quitPremium_formula]
-    exact mul_nonpos_of_nonneg_of_nonpos (hscale player).le hlow
+    exact mul_nonpos_of_nonneg_of_nonpos (hscale player) hlow
   have hmass : quittingStationaryContinueMass root < 1 := by
     unfold quittingRootAbsorptionMass at habsorption
     linarith
@@ -168,12 +168,12 @@ theorem exists_active_quitPayoff_le_singleton
         apply hfinish 3 h3
         simp [quitPremiumPolynomial, hz0, hz1, hz2]
 
-/-- Positive coordinate scales make every member of the family product-low,
+/-- Nonnegative coordinate scales make every member of the family product-low,
 independently of singleton levels and all passive rewards. -/
 theorem hasProductLowQuittingPremium
     (singleton scale : Payoff (Fin 4))
     (passive : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (hscale : ∀ player, 0 < scale player) :
+    (hscale : ∀ player, 0 ≤ scale player) :
     GameTheory.HasProductLowQuittingPremium
       (reward singleton scale passive) := by
   intro root habsorption
@@ -366,10 +366,7 @@ theorem not_supportwiseBalance
       (reward singleton scale passive) := by
   intro hbalanced
   apply not_fullSupportBalanceAt singleton scale passive hscale
-  obtain ⟨weight, hweight, hsupport, hsum, hpremium⟩ :=
-    hbalanced Finset.univ Finset.univ_nonempty
-  exact ⟨weight, hweight, hsupport, hsum, fun terminal hsubset =>
-    hpremium terminal.val terminal.property hsubset⟩
+  exact hbalanced Finset.univ Finset.univ_nonempty
 
 /-- Nonnegative singleton levels give the family one literal periodic root
 sequence whose every actual suffix is terminal approximate Nash. -/
@@ -377,7 +374,7 @@ theorem exists_periodic_allSuffix_terminalNash
     (singleton scale : Payoff (Fin 4))
     (passive : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (hsingleton : ∀ player, 0 ≤ singleton player)
-    (hscale : ∀ player, 0 < scale player)
+    (hscale : ∀ player, 0 ≤ scale player)
     {ε : ℝ} (hε : 0 < ε) :
     ∃ (roots : ℕ → Fin 4 → PMF Bool) (period : ℕ), 0 < period ∧
       (∀ n, roots (n + period) = roots n) ∧
@@ -392,12 +389,12 @@ theorem exists_periodic_allSuffix_terminalNash
   · exact hε
 
 /-- Every member of the family with nonnegative singleton levels and
-positive coordinate scales has a fixed uniform-equilibrium payoff. -/
+nonnegative coordinate scales has a fixed uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff
     (singleton scale : Payoff (Fin 4))
     (passive : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (hsingleton : ∀ player, 0 ≤ singleton player)
-    (hscale : ∀ player, 0 < scale player) :
+    (hscale : ∀ player, 0 ≤ scale player) :
     ∃ payoff : Payoff (Fin 4),
       (quittingGame (reward singleton scale passive)).IsUniformEquilibriumPayoff
         none payoff := by

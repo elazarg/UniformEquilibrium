@@ -5,6 +5,10 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineGapSource
+import UniformEquilibrium.Diagnostics.Quitting.LateResetChildRestartAssembly
+import UniformEquilibrium.Diagnostics.Quitting.StationaryQuitNowSegment
+import UniformEquilibrium.Diagnostics.Quitting.StationaryQuitNowSegmentTwoCutReturn
+import UniformEquilibrium.Diagnostics.Quitting.CapResponseSegmentExactRootExpenditure
 import UniformEquilibrium.Diagnostics.Quitting.CapResponseSegmentCollar
 import UniformEquilibrium.Diagnostics.Quitting.CompleteCapSingletonSlabCollar
 import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineOperationalEffectPaidPort

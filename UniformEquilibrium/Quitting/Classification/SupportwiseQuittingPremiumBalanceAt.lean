@@ -9,20 +9,25 @@ namespace GameTheory
 
 variable {ι : Type} [DecidableEq ι]
 
-/-- One normalized nonnegative weight supported on `active` controls every
-participant-only premium on its nonempty subcoalitions. -/
+/-- One supplied weight is nonnegative, supported and normalized on `active`,
+and controls every participant-only premium on its nonempty subcoalitions. -/
+def IsSupportwiseQuittingPremiumWeightCertificate
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (active : Finset ι) (weight : ι → ℝ) : Prop :=
+  (∀ player, 0 ≤ weight player) ∧
+  (∀ player, player ∉ active → weight player = 0) ∧
+  (∑ player ∈ active, weight player) = 1 ∧
+  ∀ terminal : {S : Finset ι // S.Nonempty},
+    terminal.val ⊆ active →
+    (∑ player ∈ terminal.val, weight player *
+      (reward terminal player -
+        reward (quittingSingletonTerminal player) player)) ≤ 0
+
+/-- One supportwise certificate exists on `active`. -/
 def HasSupportwiseQuittingPremiumBalanceAt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (active : Finset ι) : Prop :=
-  ∃ weight : ι → ℝ,
-    (∀ player, 0 ≤ weight player) ∧
-    (∀ player, player ∉ active → weight player = 0) ∧
-    (∑ player ∈ active, weight player) = 1 ∧
-    ∀ terminal : {S : Finset ι // S.Nonempty},
-      terminal.val ⊆ active →
-      (∑ player ∈ terminal.val, weight player *
-        (reward terminal player -
-          reward (quittingSingletonTerminal player) player)) ≤ 0
+  ∃ weight, IsSupportwiseQuittingPremiumWeightCertificate reward active weight
 
 /-- A player whose premium is nonpositive on every subcoalition containing
 it supplies a point-mass supportwise certificate. -/

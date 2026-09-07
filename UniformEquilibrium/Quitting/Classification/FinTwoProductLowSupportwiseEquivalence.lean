@@ -33,9 +33,8 @@ theorem supportwiseBalance_of_productLow_finTwo
   intro active hactive
   by_cases hfull : active = Finset.univ
   · subst active
-    obtain ⟨weight, hweight, hsupport, hsum, hpremium⟩ :=
-      hasSupportwiseQuittingPremiumBalanceAt_of_point reward Finset.univ
-        lowPlayer (Finset.mem_univ lowPlayer) (by
+    exact hasSupportwiseQuittingPremiumBalanceAt_of_point reward Finset.univ
+      lowPlayer (Finset.mem_univ lowPlayer) (by
           intro terminal _hsubset hmem
           by_cases hsingleton : terminal.val = {lowPlayer}
           · rw [show terminal = quittingSingletonTerminal lowPlayer by
@@ -51,8 +50,6 @@ theorem supportwiseBalance_of_productLow_finTwo
             rw [show terminal = ⟨Finset.univ, Finset.univ_nonempty⟩ by
               exact Subtype.ext hterminalFull]
             exact hfullLow)
-    exact ⟨weight, hweight, hsupport, hsum, fun terminal hterminal hsubset =>
-      hpremium ⟨terminal, hterminal⟩ hsubset⟩
   · obtain ⟨chosen, hchosen⟩ := hactive
     have hactiveSingleton : active = {chosen} := by
       fin_cases chosen
@@ -71,18 +68,14 @@ theorem supportwiseBalance_of_productLow_finTwo
         ext player
         fin_cases player <;> simp_all
     subst active
-    obtain ⟨weight, hweight, hsupport, hsum, hpremium⟩ :=
-      hasSupportwiseQuittingPremiumBalanceAt_of_point reward {chosen}
-        chosen (by simp) (by
+    exact hasSupportwiseQuittingPremiumBalanceAt_of_point reward {chosen}
+      chosen (by simp) (by
           intro terminal hsubset hmem
           have hterminalSingleton : terminal.val = {chosen} := by
             apply Finset.Subset.antisymm hsubset
             simpa using hmem
           rw [show terminal = quittingSingletonTerminal chosen by
-            exact Subtype.ext hterminalSingleton]
-        )
-    exact ⟨weight, hweight, hsupport, hsum, fun terminal hterminal hsubset =>
-      hpremium ⟨terminal, hterminal⟩ hsubset⟩
+            exact Subtype.ext hterminalSingleton])
 
 /-- Thus the two raw table conditions are equivalent for two players. -/
 theorem productLow_iff_supportwiseBalance_finTwo

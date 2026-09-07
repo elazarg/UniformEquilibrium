@@ -49,15 +49,15 @@ theorem supportwiseBalance_playerwiseUnitNormalization
     simp [normalizedWeight, hsupport player hout]
   · simp only [normalizedWeight, ← Finset.sum_div, total]
     exact div_self htotal.ne'
-  · intro terminal hterminal hsubset
-    have hold := hpremium terminal hterminal hsubset
-    have hidentity : (∑ player ∈ terminal, normalizedWeight player *
+  · intro terminal hsubset
+    have hold := hpremium terminal hsubset
+    have hidentity : (∑ player ∈ terminal.val, normalizedWeight player *
         (quittingPlayerwiseUnitNormalization reward shift
-            ⟨terminal, hterminal⟩ player -
+            terminal player -
           quittingPlayerwiseUnitNormalization reward shift
             (quittingSingletonTerminal player) player)) =
-        (∑ player ∈ terminal, weight player *
-          (reward ⟨terminal, hterminal⟩ player -
+        (∑ player ∈ terminal.val, weight player *
+          (reward terminal player -
             reward (quittingSingletonTerminal player) player)) / total := by
       rw [div_eq_mul_inv, Finset.sum_mul]
       apply Finset.sum_congr rfl
@@ -100,12 +100,12 @@ theorem supportwiseBalance_of_weakPremiumPeeling
       exact (hout hchosen).elim
     · rfl
   · simp [weight, hchosen]
-  · intro terminal hterminal hsubset
-    by_cases hmem : chosen ∈ terminal
+  · intro terminal hsubset
+    by_cases hmem : chosen ∈ terminal.val
     · simp [weight, hmem]
-      exact hpremium terminal hterminal hsubset hmem
-    · have hzero : (∑ player ∈ terminal, weight player *
-          (reward ⟨terminal, hterminal⟩ player -
+      exact hpremium terminal.val terminal.property hsubset hmem
+    · have hzero : (∑ player ∈ terminal.val, weight player *
+          (reward terminal player -
             reward (quittingSingletonTerminal player) player)) = 0 := by
         apply Finset.sum_eq_zero
         intro player hplayer
@@ -148,12 +148,12 @@ theorem supportwiseBalance_of_globalPositiveWeight
         simp [weight, hplayer]
       _ = total / total := by rw [Finset.sum_div]
       _ = 1 := div_self htotal.ne'
-  · intro terminal hterminal hsubset
-    have hsum : (∑ player ∈ terminal, weight player *
-        (reward ⟨terminal, hterminal⟩ player -
+  · intro terminal hsubset
+    have hsum : (∑ player ∈ terminal.val, weight player *
+        (reward terminal player -
           reward (quittingSingletonTerminal player) player)) =
-        (∑ player ∈ terminal, globalWeight player *
-          (reward ⟨terminal, hterminal⟩ player -
+        (∑ player ∈ terminal.val, globalWeight player *
+          (reward terminal player -
             reward (quittingSingletonTerminal player) player)) / total := by
       rw [div_eq_mul_inv, Finset.sum_mul]
       apply Finset.sum_congr rfl
@@ -161,6 +161,7 @@ theorem supportwiseBalance_of_globalPositiveWeight
       simp [weight, hsubset hplayer]
       ring
     rw [hsum]
-    exact div_nonpos_of_nonpos_of_nonneg (hpremium terminal hterminal) htotal.le
+    exact div_nonpos_of_nonpos_of_nonneg
+      (hpremium terminal.val terminal.property) htotal.le
 
 end GameTheory

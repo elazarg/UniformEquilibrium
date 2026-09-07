@@ -81,16 +81,16 @@ theorem tendsto_affineWeightedChargeSum
       simp only [finiteWeight, if_neg hnotLt]
     exact hk hzero
 
-/-- A convergent affine recurrence equals its initial infinite product term
-plus the absolutely convergent series of tail-product-weighted charges. -/
-theorem affineRecurrence_limit_eq_productTail_add_tsum
-    (x a b : ℕ → ℝ) (limit : ℝ)
+/-- Unit-interval coefficients and absolutely summable charges force the
+affine recurrence to converge to its explicit infinite-product/series value.
+No previously supplied limit or summability of coefficient deficits is needed. -/
+theorem tendsto_affineRecurrence_productTail_add_tsum
+    (x a b : ℕ → ℝ)
     (hstep : ∀ n, x (n + 1) = a n * x n + b n)
     (ha0 : ∀ n, 0 ≤ a n) (ha1 : ∀ n, a n ≤ 1)
-    (hb : Summable fun n => |b n|)
-    (hx : Tendsto x atTop (nhds limit)) :
-    limit = affineProductTail a 0 * x 0 +
-      ∑' n, affineProductTail a (n + 1) * b n := by
+    (hb : Summable fun n => |b n|) :
+    Tendsto x atTop (nhds (affineProductTail a 0 * x 0 +
+      ∑' n, affineProductTail a (n + 1) * b n)) := by
   have hunroll : ∀ n, x n =
       (∏ i ∈ Ico 0 n, a i) * x 0 +
         ∑ k ∈ Ico 0 n, (∏ i ∈ Ico (k + 1) n, a i) * b k :=
@@ -104,7 +104,20 @@ theorem affineRecurrence_limit_eq_productTail_add_tsum
         ∑ k ∈ range n, (∏ i ∈ Ico (k + 1) n, a i) * b k := by
     funext n
     simpa using hunroll n
-  rw [heq] at hx
-  exact tendsto_nhds_unique hx (by simpa only [zero_add] using hright)
+  conv => arg 1; rw [heq]
+  simpa only [zero_add] using hright
+
+/-- Any supplied limit of the same recurrence is its explicit product/series
+value, by uniqueness of limits. -/
+theorem affineRecurrence_limit_eq_productTail_add_tsum
+    (x a b : ℕ → ℝ) (limit : ℝ)
+    (hstep : ∀ n, x (n + 1) = a n * x n + b n)
+    (ha0 : ∀ n, 0 ≤ a n) (ha1 : ∀ n, a n ≤ 1)
+    (hb : Summable fun n => |b n|)
+    (hx : Tendsto x atTop (nhds limit)) :
+    limit = affineProductTail a 0 * x 0 +
+      ∑' n, affineProductTail a (n + 1) * b n := by
+  exact tendsto_nhds_unique hx
+    (tendsto_affineRecurrence_productTail_add_tsum x a b hstep ha0 ha1 hb)
 
 end Math

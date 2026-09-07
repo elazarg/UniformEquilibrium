@@ -56,8 +56,8 @@ theorem not_supportwiseBalance :
   intro hbalanced
   obtain ⟨localWeight, hnonneg, _hsupport, hsum, hpremium⟩ :=
     hbalanced ({1, 2} : Finset (Fin 3)) (by simp)
-  have h := hpremium ({1, 2} : Finset (Fin 3)) (by simp)
-    (fun _ hmem => hmem)
+  have h := hpremium
+    ⟨({1, 2} : Finset (Fin 3)), by simp⟩ (fun _ hmem => hmem)
   rw [Finset.sum_insert
     (by decide : (1 : Fin 3) ∉ ({2} : Finset (Fin 3))),
     Finset.sum_singleton] at hsum h

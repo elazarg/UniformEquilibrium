@@ -393,9 +393,9 @@ theorem combinedFinFour_supportwiseBalance
   obtain ⟨hweight, hsupport, hsum⟩ :=
     combinedFinFour_weightCertificate active hactive
   exact ⟨combinedFinFourWeight active, hweight, hsupport, hsum,
-    fun terminal hterminal hsubset =>
-      combinedFinFour_weightedPremium_nonpos passive active terminal
-        hterminal hsubset⟩
+    fun terminal hsubset =>
+      combinedFinFour_weightedPremium_nonpos passive active terminal.val
+        terminal.property hsubset⟩
 
 theorem combinedFinFour_not_weakPremiumPeeling
     (passive : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
