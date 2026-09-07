@@ -104,7 +104,7 @@ semantic update. -/
 theorem quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : QuittingTerminalSemanticPair ι)
-    (owner : ι) {M θ : ℝ} (hM : 0 ≤ M)
+    (owner : ι) {M θ : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : source ∈ quittingTerminalSemanticBox ι M)
     (hθ0 : 0 < θ) (hθ1 : θ < 1)
@@ -123,6 +123,8 @@ theorem quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
           θ * reward (quittingSingletonTerminal owner) player +
             (1 - θ) * source.2 player) := by
   dsimp only
+  have hM : 0 ≤ M := (abs_nonneg _).trans
+    (hreward (quittingSingletonTerminal owner) owner)
   let coin := quittingHazardCoin θ hθ0.le hθ1.le
   let root := quittingSoloStationaryRoot owner coin
   have hcoinTrue : (coin true).toReal = θ := by
@@ -282,7 +284,7 @@ requested number of steps; it does not continue across a threshold hit. -/
 theorem quittingSoloSemanticIterate_eq_affine_of_before_threshold
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : QuittingTerminalSemanticPair ι)
-    (owner : ι) {M θ : ℝ} (hM : 0 ≤ M)
+    (owner : ι) {M θ : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : source ∈ quittingTerminalSemanticCarrier reward)
     (hθ0 : 0 < θ) (hθ1 : θ < 1)
@@ -306,6 +308,8 @@ theorem quittingSoloSemanticIterate_eq_affine_of_before_threshold
             (1 - θ) ^ steps *
               (source.2 player -
                 reward (quittingSingletonTerminal owner) player)) := by
+  have hM : 0 ≤ M := (abs_nonneg _).trans
+    (hreward (quittingSingletonTerminal owner) owner)
   induction steps with
   | zero =>
       rw [quittingSoloSemanticIterate_zero]
@@ -326,7 +330,7 @@ theorem quittingSoloSemanticIterate_eq_affine_of_before_threshold
       have hcurrentAbove := hbefore steps (Nat.lt_succ_self steps)
       rw [quittingSoloSemanticIterate_succ]
       rw [quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
-        reward _ owner hM hreward
+        reward _ owner hreward
         (quittingTerminalSemanticCarrier_mem_box reward _ hreward
           (quittingSoloSemanticIterate_mem_carrier
             reward owner _ source hsource steps))
@@ -348,7 +352,7 @@ of the source debt and the owner's source singleton margin. -/
 theorem quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : QuittingTerminalSemanticPair ι)
-    (owner : ι) {M θ : ℝ} (hM : 0 ≤ M)
+    (owner : ι) {M θ : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : source ∈ quittingTerminalSemanticCarrier reward)
     (hθ0 : 0 < θ) (hθ1 : θ < 1)
@@ -366,7 +370,7 @@ theorem quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
           (source.2 owner -
             reward (quittingSingletonTerminal owner) owner) := by
   rw [quittingSoloSemanticIterate_eq_affine_of_before_threshold
-    reward source owner hM hreward hsource hθ0 hθ1 steps hbefore]
+    reward source owner hreward hsource hθ0 hθ1 steps hbefore]
   unfold quittingTerminalSemanticDebtSum quittingTerminalSemanticDebt
   rw [← Finset.sum_erase_add _ _ (Finset.mem_univ owner)]
   have hsourceSplit := Finset.sum_erase_add
@@ -396,7 +400,7 @@ theorem quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
 theorem quittingSoloSemanticIterate_debtSum_le_max_of_before_threshold
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : QuittingTerminalSemanticPair ι)
-    (owner : ι) {M θ : ℝ} (hM : 0 ≤ M)
+    (owner : ι) {M θ : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hsource : source ∈ quittingTerminalSemanticCarrier reward)
     (hθ0 : 0 < θ) (hθ1 : θ < 1)
@@ -413,7 +417,7 @@ theorem quittingSoloSemanticIterate_debtSum_le_max_of_before_threshold
         (source.2 owner -
           reward (quittingSingletonTerminal owner) owner) := by
   rw [quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
-    reward source owner hM hreward hsource hθ0 hθ1 steps hbefore]
+    reward source owner hreward hsource hθ0 hθ1 steps hbefore]
   have hweight0 : 0 ≤ (1 - θ) ^ steps :=
     pow_nonneg (by linarith : 0 ≤ 1 - θ) steps
   have hweight1 : (1 - θ) ^ steps ≤ 1 := pow_le_one₀ (by linarith) (by linarith)
@@ -439,7 +443,7 @@ theorem two_mul_bound_mul_lt_singletonMargin_semanticPrefix_solo
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (source : QuittingTerminalSemanticPair ι)
     {owner player : ι} (hne : player ≠ owner)
-    {M θ : ℝ} (hM : 0 ≤ M)
+    {M θ : ℝ}
     (hreward : ∀ terminal who, |reward terminal who| ≤ M)
     (hsource : source ∈ quittingTerminalSemanticBox ι M)
     (hθ0 : 0 < θ) (hθ1 : θ < 1)
@@ -451,8 +455,10 @@ theorem two_mul_bound_mul_lt_singletonMargin_semanticPrefix_solo
         (quittingSoloStationaryRoot owner
           (quittingHazardCoin θ hθ0.le hθ1.le)) source).2 player -
         reward (quittingSingletonTerminal player) player := by
+  have hM : 0 ≤ M := (abs_nonneg _).trans
+    (hreward (quittingSingletonTerminal owner) owner)
   rw [quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
-    reward source owner hM hreward hsource hθ0 hθ1 habove]
+    reward source owner hreward hsource hθ0 hθ1 habove]
   simp only [hne, if_false]
   have hpassive := hreward (quittingSingletonTerminal owner) player
   have hcap := hsource.2.2 player
@@ -546,7 +552,7 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
       intro k hk
       exact haboveThrough k hk.le
     have haffine := quittingSoloSemanticIterate_eq_affine_of_before_threshold
-      reward source owner hM.le hreward hsource hθ0 hθ1 horizon hbefore
+      reward source owner hreward hsource hθ0 hθ1 horizon hbefore
     have hcap := congrArg
       (fun pair : QuittingTerminalSemanticPair ι => pair.2 blocker) haffine
     simp only [hne, if_false] at hcap
@@ -599,7 +605,7 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
     intro heq
     subst crossing
     have haffine := quittingSoloSemanticIterate_eq_affine_of_before_threshold
-      reward source owner hM.le hreward hsource hθ0 hθ1 steps hbefore
+      reward source owner hreward hsource hθ0 hθ1 steps hbefore
     have hownerCap := congrArg
       (fun pair : QuittingTerminalSemanticPair ι => pair.2 owner) haffine
     simp only [if_true] at hownerCap
@@ -618,7 +624,7 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
     dsimp only [state]
     rw [quittingSoloSemanticIterate_succ]
     apply two_mul_bound_mul_lt_singletonMargin_semanticPrefix_solo
-      reward _ (owner := owner) (player := crossing) hcrossingNe hM.le hreward
+      reward _ (owner := owner) (player := crossing) hcrossingNe hreward
       (quittingTerminalSemanticCarrier_mem_box reward _ hreward
         (quittingSoloSemanticIterate_mem_carrier
           reward owner coin source hsource prior))
@@ -629,11 +635,11 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
     ⟨hlower, ?_⟩, ?_, ?_, ?_⟩
   · simpa only [coin, state, threshold] using hcrossing
   · exact quittingSoloSemanticIterate_eq_affine_of_before_threshold
-      reward source owner hM.le hreward hsource hθ0 hθ1 steps hbefore
+      reward source owner hreward hsource hθ0 hθ1 steps hbefore
   · exact quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
-      reward source owner hM.le hreward hsource hθ0 hθ1 steps hbefore
+      reward source owner hreward hsource hθ0 hθ1 steps hbefore
   · exact quittingSoloSemanticIterate_debtSum_le_max_of_before_threshold
-      reward source owner hM.le hreward hsource hθ0 hθ1 steps hbefore
+      reward source owner hreward hsource hθ0 hθ1 steps hbefore
 
 /-- A strictly preempted owner has a produced finite solo block whose first
 threshold hit occurs within the explicit logarithmic horizon. -/

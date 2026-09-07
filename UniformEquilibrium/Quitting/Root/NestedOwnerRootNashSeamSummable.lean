@@ -185,9 +185,7 @@ theorem summable_nestedChildSeam_quitPayoffDifference
 numerator, is summable under the same owner-hazard hypothesis. -/
 theorem summable_nestedChildSeam_absorbingContributionDifference
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) {owner who : ι} (hne : who ≠ owner) {M : ℝ}
-    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hM : 0 ≤ M)
+    (roots : ℕ → ι → PMF Bool) {owner who : ι} (hne : who ≠ owner)
     (hownerHazard : Summable (fun time =>
       (roots time owner true).toReal)) :
     Summable (fun time =>
@@ -197,6 +195,10 @@ theorem summable_nestedChildSeam_absorbingContributionDifference
             who (PMF.pure false)) who -
         quittingRootAbsorbingContribution reward
           (Function.update (roots time) who (PMF.pure false)) who) := by
+  let M := quittingRewardBound reward
+  have hM : 0 ≤ M := quittingRewardBound_nonneg reward
+  have hreward : ∀ terminal player, |reward terminal player| ≤ M :=
+    abs_reward_le_quittingRewardBound reward
   have hmajorant : Summable (fun time =>
       (roots time owner true).toReal * (2 * M)) :=
     hownerHazard.mul_right (2 * M)
