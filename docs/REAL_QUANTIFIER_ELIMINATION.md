@@ -19,14 +19,28 @@ The checked components and remaining dependencies are described below.
   `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` proves that
   finite coefficient-sign trees compile to truth-equivalent Boolean formulas
   at every real environment. It does not generate a sign diagram.
+- `MathUE/RealQuantifierElimination/PolynomialEvaluation.lean` interprets
+  expression coefficients in the dense polynomial kernel.
+  `MathUE/RealQuantifierElimination/CoefficientTrimming.lean` branches on
+  leading coefficients, preserving every real evaluation while removing
+  specialized leading zeroes. Each selected nonempty result has polynomial
+  degree equal to its formal length minus one.
+- `MathUE/RealQuantifierElimination/UnivariateCompilation.lean` compiles
+  variable zero to the polynomial indeterminate and the remaining variables
+  to coefficient expressions. Evaluation agrees with the original expression
+  at every bound value and real parameter environment.
 - `MathUE/Polynomial/RealSignCell.lean` supplies interval root and sign
   lemmas. `MathUE/Polynomial/OrderedRealSignDiagram.lean` proves the ordered
   cell partition, exact diagram dimensions, removable-cut deletion, and
   bounded root-insertion transformations. These transformations consume
   previously established row signs and derivative conditions.
+- `MathUE/Polynomial/InfinitySign.lean` derives signs at both infinities
+  from polynomial coefficients, including zero and constant polynomials.
+  It supplies root-free cell signs and bounded, half-line, and whole-line
+  root criteria; the unbounded monotone cases require no supplied limits.
 
-Specialization trimming, polynomial asymptotic signs, complete reconstruction,
-the recursive sign-diagram producer, formula elimination, and the two packet
+Complete reconstruction, the recursive sign-diagram producer,
+formula elimination, and the two packet
 adapters remain to be completed. Targeted checks of the available components
 do not establish those later stages.
 

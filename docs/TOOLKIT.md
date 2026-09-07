@@ -411,6 +411,11 @@ and `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` provide
 executable rational expressions and truth-preserving coefficient-sign
 case splits. `MathUE/Polynomial/OrderedRealSignDiagram.lean` proves the
 ordered cell partition and correct cut deletion and bounded root insertion.
+`MathUE/RealQuantifierElimination/CoefficientTrimming.lean` removes
+specialized leading zeroes without changing polynomial evaluation and
+proves the remaining formal length determines the specialized degree.
+`MathUE/Polynomial/InfinitySign.lean` supplies polynomial infinity signs
+and unbounded monotone root criteria without extra limit hypotheses.
 These components do not yet construct complete sign diagrams or decide
 general quantified polynomial formulas.
 

@@ -327,6 +327,7 @@ import MathUE.PathFamilyPotentialRecharge
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
 import MathUE.Polynomial.DensePolynomial
+import MathUE.Polynomial.InfinitySign
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.OrderedRealSignDiagram
@@ -509,7 +510,10 @@ import MathUE.ProjectiveBellmanPacket
 import MathUE.RamifiedBinomialBranch
 import MathUE.RamifiedWeierstrass
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
+import MathUE.RealQuantifierElimination.CoefficientTrimming
+import MathUE.RealQuantifierElimination.PolynomialEvaluation
 import MathUE.RealQuantifierElimination.RingExpression
+import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex

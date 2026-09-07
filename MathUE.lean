@@ -298,7 +298,11 @@ import MathUE.PolynomialSignCell
 import MathUE.Logic.SignFormula
 import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
+import MathUE.RealQuantifierElimination.PolynomialEvaluation
+import MathUE.RealQuantifierElimination.CoefficientTrimming
+import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.Polynomial.RealSignCell
+import MathUE.Polynomial.InfinitySign
 import MathUE.Polynomial.DensePolynomial
 import MathUE.Polynomial.OrderedRealSignDiagram
 import MathUE.Polynomial.NonnegativeCertificate
