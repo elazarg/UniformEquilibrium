@@ -161,7 +161,10 @@ The field is a multivariate polynomial on the whole coordinate space;
 `MathUE/PairedAffineIntervalEstimates.lean` supplies its strict face bounds
 and ordered-composition estimates. These are game-independent results.
 An actual cyclic strategy and its finite-truncation caps require separate
-game-semantic adapters.
+game-semantic adapters. `UniformEquilibrium/Quitting/Root/PairedProductRoot.lean`
+realizes the two-active-player root, identifies its payoff map and all
+pure-response endpoints, and proves the inactive-player margin from the
+specified reward bounds. A cyclic certificate is still a separate step.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -181,6 +184,21 @@ debt and owner cap margin, and its length is at most one plus the explicit
 solo horizon. This is not necessarily descent below the old debt when the
 owner cap margin is larger, and does not itself supply a repeatable
 weak-exclusion selector.
+
+`positive_minimum_preemptedOwner_quadraticMargins`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)
+proves explicit cap and prescribed-payoff margins at a positive global
+minimum of total semantic debt. If that minimum is `d` and rewards have
+absolute bound `M > 0`, a preempted owner's cap exceeds its singleton by
+at least `d + d²/(8M)`, and its prescribed payoff exceeds its singleton
+by at least `d²/(8M)`. The module extends this to each nonnegative-singleton
+owner, and to every owner in four-player games without singleton signs.
+These are consequences of a hypothetical positive minimum, not a proof
+that no such minimum exists.
+The general nonpreempted-owner alternative is stated separately as
+`isUniformEquilibriumPayoff_soloReward_of_nonnegative_noPreemptor`
+(`UniformEquilibrium/Quitting/Classification/Existence/SoloPreemptionUniformPayoff.lean`):
+the fixed target is the owner's singleton reward vector.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)

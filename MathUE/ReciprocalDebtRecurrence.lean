@@ -1,0 +1,135 @@
+import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Tactic.FieldSimp
+import Mathlib.Tactic.Linarith
+import Mathlib.Tactic.Positivity
+
+/-! # Reciprocal bounds for quadratic debt decrease -/
+
+namespace Math
+
+/-- One quadratic-decrease step increases the reciprocal by the uniform
+amount obtained from an initial upper bound. -/
+theorem one_div_sub_one_div_ge_of_variable_quadratic_step
+    {base slope initial current next : ℝ}
+    (hbase : 0 ≤ base) (hslope : 1 ≤ slope)
+    (hinitial : current ≤ initial) (hcurrent : 0 < current)
+    (hnext : 0 < next)
+    (hstep : next ≤ current - current ^ 2 / (base + slope * current)) :
+    1 / (base + (slope - 1) * initial) ≤ 1 / next - 1 / current := by
+  let denominator := base + slope * current
+  let C := base + (slope - 1) * initial
+  have hdenominator : 0 < denominator := by
+    dsimp only [denominator]
+    nlinarith [mul_pos (by linarith : 0 < slope) hcurrent]
+  have hC : 0 < C := by
+    by_cases hslopeEq : slope = 1
+    · subst slope
+      have hbasePos : 0 < base := by
+        by_contra hbaseNot
+        have hbaseZero : base = 0 := le_antisymm (le_of_not_gt hbaseNot) hbase
+        subst base
+        have hquotient : current ^ 2 / current = current := by
+          field_simp [hcurrent.ne']
+        simp only [zero_add, one_mul, hquotient, sub_self] at hstep
+        linarith
+      simpa [C] using hbasePos
+    · have hcoefficient : 0 < slope - 1 := lt_of_le_of_ne
+        (sub_nonneg.mpr hslope) (Ne.symm (sub_ne_zero.mpr hslopeEq))
+      dsimp only [C]
+      nlinarith [mul_pos hcoefficient hcurrent]
+  have hdrop : current ^ 2 ≤ (current - next) * denominator := by
+    apply (div_le_iff₀ hdenominator).mp
+    nlinarith
+  have hnextDenominator : next * denominator ≤
+      current * (base + (slope - 1) * current) := by
+    have hscaled := (le_sub_iff_add_le).mp hstep
+    have hmul := (div_le_iff₀ hdenominator).mp
+      (show current ^ 2 / denominator ≤ current - next by linarith)
+    dsimp only [denominator]
+    nlinarith
+  have hcoefficient : base + (slope - 1) * current ≤ C := by
+    dsimp only [C]
+    nlinarith [mul_nonneg (sub_nonneg.mpr hslope) (sub_nonneg.mpr hinitial)]
+  have htarget : current * next ≤ C * (current - next) := by
+    have hleft := mul_le_mul_of_nonneg_left hnextDenominator hcurrent.le
+    have hright := mul_le_mul_of_nonneg_left hdrop hC.le
+    have hmiddle := mul_le_mul_of_nonneg_right hcoefficient
+      (sq_nonneg current)
+    have hdenominatorNonneg := hdenominator.le
+    nlinarith [mul_nonneg (mul_nonneg hcurrent.le hnext.le) hdenominatorNonneg]
+  rw [show 1 / next - 1 / current =
+      (current - next) / (next * current) by field_simp]
+  apply (div_le_div_iff₀ hC (mul_pos hnext hcurrent)).2
+  nlinarith
+
+/-- Iterating the variable-denominator quadratic decrease gives the sharp
+reciprocal envelope. Zero values are handled without taking reciprocals. -/
+theorem sequence_le_reciprocal_of_variable_quadratic_step
+    (value : ℕ → ℝ) (base slope initial : ℝ)
+    (hbase : 0 ≤ base) (hslope : 1 ≤ slope) (hinitial : 0 < initial)
+    (hC : 0 < base + (slope - 1) * initial)
+    (hzero : value 0 ≤ initial)
+    (hnonneg : ∀ time, 0 ≤ value time)
+    (hantitone : Antitone value)
+    (hstep : ∀ time, 0 < value time → value (time + 1) ≤
+      value time - value time ^ 2 / (base + slope * value time)) :
+    ∀ time, value time ≤
+      (base + (slope - 1) * initial) * initial /
+        (base + (slope - 1) * initial + time * initial) := by
+  let C := base + (slope - 1) * initial
+  intro time
+  induction time with
+  | zero => simpa [C, hC.ne'] using hzero
+  | succ time ih =>
+      let current := value time
+      let next := value (time + 1)
+      let currentTarget := C * initial / (C + time * initial)
+      let nextTarget := C * initial / (C + (time + 1) * initial)
+      have hcurrentTarget : 0 < currentTarget := by
+        dsimp only [currentTarget]
+        positivity
+      have hnextTarget : 0 < nextTarget := by
+        dsimp only [nextTarget]
+        positivity
+      by_cases hnextZero : next = 0
+      · dsimp only [next, nextTarget, C] at hnextZero hnextTarget ⊢
+        rw [hnextZero]
+        simpa [Nat.cast_add, Nat.cast_one] using hnextTarget.le
+      · have hnextPos : 0 < next := lt_of_le_of_ne
+          (hnonneg (time + 1)) (Ne.symm hnextZero)
+        have hnextLeCurrent : next ≤ current :=
+          hantitone (Nat.le_add_right time 1)
+        have hcurrentPos : 0 < current := hnextPos.trans_le hnextLeCurrent
+        have hcurrentLeTarget : current ≤ currentTarget := ih
+        have hinvCurrent : 1 / currentTarget ≤ 1 / current :=
+          one_div_le_one_div_of_le hcurrentPos hcurrentLeTarget
+        have hincrement : 1 / C ≤ 1 / next - 1 / current :=
+          one_div_sub_one_div_ge_of_variable_quadratic_step hbase hslope
+            ((hantitone (Nat.zero_le time)).trans hzero) hcurrentPos hnextPos
+              (hstep time hcurrentPos)
+        have hcurrentIdentity : 1 / currentTarget =
+            1 / initial + time / C := by
+          dsimp only [currentTarget]
+          field_simp [show C ≠ 0 from hC.ne', hinitial.ne']
+        have hnextIdentity : 1 / nextTarget =
+            1 / initial + (time + 1) / C := by
+          dsimp only [nextTarget]
+          field_simp [show C ≠ 0 from hC.ne', hinitial.ne']
+        have hinvNext : 1 / nextTarget ≤ 1 / next := by
+          rw [hnextIdentity]
+          calc
+            1 / initial + (time + 1) / C =
+                1 / C + 1 / currentTarget := by
+              rw [hcurrentIdentity]
+              ring
+            _ ≤ 1 / C + 1 / current := by
+              simpa [add_comm] using add_le_add_right hinvCurrent (1 / C)
+            _ ≤ 1 / next := by linarith
+        by_contra hbound
+        have hstrict : nextTarget < next := by
+          dsimp only [next, nextTarget, C]
+          simpa [Nat.cast_add, Nat.cast_one] using lt_of_not_ge hbound
+        have hinverse := one_div_lt_one_div_of_lt hnextTarget hstrict
+        exact (not_lt_of_ge hinvNext) hinverse
+
+end Math
