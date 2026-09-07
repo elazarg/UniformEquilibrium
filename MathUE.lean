@@ -1,4 +1,6 @@
 import MathUE.AbelCesaro
+import MathUE.PairedAffineIntervalEstimates
+import MathUE.PairedAffineClearedField
 import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.FiniteContinuousIntervalSelection

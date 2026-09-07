@@ -143,6 +143,26 @@ finite-word deficit, without imposing singleton signs. Root selection is
 noncomputable exact Nash selection; no rational algorithm or exact infinite
 all-suffix equilibrium is asserted there.
 
+`HasQuittingFiniteWordNonconcentratedGroupExclusion`
+(`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWords.lean`)
+requires one fixed concentration bound and permits a different probability
+weight at each literal finite-word profile. Under a bound strictly below
+one, `quittingGroupExclusionExactWords_step` constructs successive exact
+auxiliary roots and proves a quadratic debt decrease at every positive-debt
+word. The absorption floor and one-step debt estimate are in
+`UniformEquilibrium/Quitting/Terminal/GroupExclusionExactPrefixStep.lean`.
+These declarations do not yet supply a global reciprocal rate or a
+group-exclusion uniform-payoff consumer.
+
+`Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
+(`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
+hazard vector for paired affine equations from literal reward intervals.
+The field is a multivariate polynomial on the whole coordinate space;
+`MathUE/PairedAffineIntervalEstimates.lean` supplies its strict face bounds
+and ordered-composition estimates. These are game-independent results.
+An actual cyclic strategy and its finite-truncation caps require separate
+game-semantic adapters.
+
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
 constructs the first cap crossing for repeated solo prefixes of a strictly
