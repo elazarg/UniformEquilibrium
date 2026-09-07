@@ -109,4 +109,18 @@ theorem exists_accuracy_lt_third_minimumQuittingAbnormalGap
   have hgap := minimumQuittingAbnormalGap_pos reward habnormal
   exact ⟨minimumQuittingAbnormalGap reward / 6, by positivity, by linarith⟩
 
+/-- Every nonnegative singleton level is punishment-normal, independently
+of the signs of other own premiums or passive rewards. -/
+theorem isQuittingNormalPlayer_of_singleton_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (who : ι) (hsingleton : 0 ≤ reward (quittingSingletonTerminal who) who) :
+    IsQuittingNormalPlayer reward who := by
+  unfold IsQuittingNormalPlayer quittingSoloSelfPayoff
+  have hupper := quittingPunishmentValue_le_max_solo reward who
+  have hrew : QuittingSureSetOwnerRepair.quittingSetReward reward {who} who =
+      reward (quittingSingletonTerminal who) who := by
+    simp [QuittingSureSetOwnerRepair.quittingSetReward, quittingSingletonTerminal]
+  rw [hrew, max_eq_left hsingleton] at hupper
+  exact hupper
+
 end GameTheory

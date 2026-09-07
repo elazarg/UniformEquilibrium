@@ -76,8 +76,13 @@ law. `exactRootSuccessor_mem_singletonLowerBoundary`
 (`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowExactRootBoundary.lean`)
 shows that nonnegative own premiums and product-low imply every absorbing
 exact root's successor lies above all singleton levels, with an active
-coordinate attaining its singleton exactly. The converse from this root
-boundary property is not asserted here.
+coordinate attaining its singleton exactly.
+`weakPeeling_iff_every_boxedExactRoot_singletonLowerBoundary`
+(`UniformEquilibrium/Quitting/Classification/NonnegativePremiumBoxBoundary.lean`)
+proves the converse under nonnegative own premiums on every box strictly
+larger than a reward bound. Failure of peeling constructs an actual absorbing
+exact root whose continuation lies in that box and whose successor is
+strictly above every singleton and strictly below the upper bound.
 `hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative`
 (`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSupportPeelingConverse.lean`)
 identifies product-low with weak support peeling when every participant's
@@ -87,6 +92,41 @@ singleton levels or restrict passive rewards.
 The same module identifies this condition with supportwise balance and
 positive-premium player ranking, and proves that every product-low table
 failing supportwise balance has a strictly negative participant premium.
+
+`not_differentiable_absorptionDrift_of_nonnegative_productLow`
+(`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSmoothDrift.lean`)
+excludes a differentiable potential with full absorption drift on all
+absorbing exact Nash edges in a padded box. Differentiability at every box
+point suffices; no continuously differentiable neighborhood or convexity is
+assumed. Singleton levels may be signed. The same hypotheses give fixed-box
+floor-free weighted packets at every positive tolerance and requested charge
+for four players in
+`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowForwardPackets.lean`.
+The radius is one fixed reward bound plus two, independent of both requests.
+These floor-free packets do not by themselves supply punishment floors.
+`quittingPunishmentValue_eq_singleton_of_nonnegativePremium`
+(`UniformEquilibrium/Quitting/Classification/NonnegativePremiumPunishment.lean`)
+identifies the unrestricted behavioral punishment value with any nonnegative
+singleton reward under nonnegative own premiums. Punishment normality at a
+nonnegative singleton needs no premium-sign assumption, by
+`isQuittingNormalPlayer_of_singleton_nonneg`
+(`UniformEquilibrium/Quitting/Classification/AbnormalPlayers.lean`).
+With nonnegative singleton rewards, the same fixed-radius packets acquire
+punishment floors and yield a fixed uniform payoff through the weighted
+packet consumer in
+`UniformEquilibrium/Quitting/Classification/NonnegativePremiumForwardPacketConsumer.lean`.
+This route does not use the periodic approximate-equilibrium producer.
+
+`quittingTerminalSemanticDebt_prefix_le_auxiliaryNashDefect`
+(`UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDebt.lean`) extends the
+auxiliary-continuation coordinate debt bound to arbitrary roots with their
+literal coordinate Nash defects. Its common-shift sum is
+`quittingTerminalSemanticDebtSum_prefix_le_auxiliaryNashDefect`
+(`UniformEquilibrium/Quitting/Terminal/AuxiliaryNashDefectBudget.lean`).
+`UniformEquilibrium/Quitting/Root/BelowSingletonRootAbsorption.lean`
+gives exact and approximate absorption floors when one continuation
+coordinate lies below its singleton. These are one-step bounds, not
+finite-word selectors or recurrence hypotheses supplied by the game.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
