@@ -111,4 +111,35 @@ theorem smallPivotRepairValue_of_finiteMenuFullEarlyAbsorption
     (fun who ↦ isFiniteClockStoppingLaw_finiteDeadlineTimingLaw (mixed who)), mass, hmass, ?_⟩
   exact hobjective.trans_lt hexploit
 
+open _root_.Math.LinearProgramming
+
+/-- The exact finite repair LP has a minimizing feasible point no worse than
+the full behavioral regret of the displayed finite-menu competitor. -/
+theorem exists_pivotRepairMinimizer_objective_le_finiteMenu_exploitability
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
+    (deadline : ℕ) (hdeadline : 0 < deadline)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
+    letI : Nonempty ι := ⟨pivot⟩
+    let input := QuittingPivotRepairLPInput.ofNonpivotLaws (reward := reward)
+      pivot deadline hdeadline
+      (fun who : {who : ι // who ≠ pivot} =>
+        (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF)
+      (fun who => isFiniteClockStoppingLaw_finiteDeadlineTimingLaw (mixed who))
+    ∃ mass : PivotRepairMass deadline, IsPivotRepairMassFeasible mass ∧
+      IsMinOn input.objective (pivotRepairMassFeasibleSet deadline) mass ∧
+      input.objective mass ≤ quittingTerminalExploitability reward
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) := by
+  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let input := QuittingPivotRepairLPInput.ofNonpivotLaws (reward := reward)
+    pivot deadline hdeadline
+    (fun who : {who : ι // who ≠ pivot} =>
+      (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF)
+    (fun who => isFiniteClockStoppingLaw_finiteDeadlineTimingLaw (mixed who))
+  obtain ⟨competitor, hcompetitor, hbound⟩ :=
+    exists_pivotRepairMass_objective_le_finiteMenu_exploitability
+      reward pivot deadline hdeadline mixed
+  obtain ⟨mass, hmass, hmin⟩ := input.exists_objective_minimizer
+  exact ⟨mass, hmass, hmin, (hmin hcompetitor).trans hbound⟩
+
 end GameTheory

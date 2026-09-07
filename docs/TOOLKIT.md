@@ -194,8 +194,8 @@ error at most `(21/10) * (99/100)^(n*K)`. Exact finite-menu realization,
 independent censoring, and the individual geometric stopping-law atoms
 are proved in `UniformEquilibrium/Quitting/Cycles/CyclicFiniteMenu.lean`
 and `UniformEquilibrium/Quitting/Cycles/PairedCycleStoppingLaws.lean`.
-The Fin4 pivot transformation and the quantitative finite-horizon bound
-for the same infinite cyclic profile are separate constructions.
+The quantitative finite-horizon bound for the same infinite cyclic profile
+is a separate construction.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteMenu.lean` combines
 the selected cycle's law, payoff, cap, debt, early-attainer and geometric
 Nash conclusions for one actual finite menu.
@@ -206,6 +206,16 @@ is the transformed infinite value multiplied by the absorption probability;
 there is no unqualified translation identity for its positive Never mass.
 The exact finite-cap and debt identities require a nonnegative transformed
 singleton only for the queried player.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Pivot.lean` fixes the
+ordered pairs `{0,2}`, `{1,3}` and divides only the pivot coordinate by
+its singleton, shifting the others without rescaling. Its transformed
+initial value is at most `5/3` at the pivot and `6/5` elsewhere.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Menu.lean` constructs
+one menu from the selected hazards, with exact transformed payoff/cap
+coordinates and full exploitability at most `(5/3)*(99/100)^(4*K)`.
+That same menu satisfies both the restricted-menu and extra late-pivot
+inequalities. The raw-region selection of an entire menu family remains
+separate from this selected-hazard consumer.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -225,6 +235,14 @@ debt and owner cap margin, and its length is at most one plus the explicit
 solo horizon. This is not necessarily descent below the old debt when the
 owner cap margin is larger, and does not itself supply a repeatable
 weak-exclusion selector.
+`UniformEquilibrium/Quitting/Root/RationalApproximateQuittingRoot.lean`
+proves existence of rational product roots with arbitrarily small total
+Nash defect, allowing real reward and continuation data.
+`UniformEquilibrium/Quitting/Paths/RationalAuxiliaryRootDebtDrop.lean`
+uses this to produce a rational cap-threshold word with the same row bound
+and decrease `3*C^2/(128*M+24*C)`, assuming the derived solo hazard is
+rational. These are noncomputable existence results, not executable
+rational grid search or a finite-source cap-evaluation algorithm.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -262,8 +280,13 @@ the current opponents.
 separately ranks the union of finite support dates using one common map,
 preserving the independent first-quitter outcome law, ties, and Never.
 If each marginal has at most n+1 support points, the retimed finite dates
-are below n(n+1). Sequential sparsification of all players and realization
-of the closed payoff set on that fixed calendar remain separate work.
+are below n(n+1).
+`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteStoppingProfile.lean`
+performs successive current-opponent replacements and common retiming for
+arbitrary finite independent clock laws. The output preserves the entire
+payoff vector, has at most n+1 support points per marginal, and uses finite
+dates below n(n+1). Realization of the closed payoff set, including limits
+of arbitrary infinite profiles, remains separate work.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)
