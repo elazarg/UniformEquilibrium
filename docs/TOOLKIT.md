@@ -459,6 +459,12 @@ players from the deficit assumption itself. With nonnegative own singletons,
 group exclusion implies weak exclusion on all players. Both actual-profile
 and raw-calendar forms are provided.
 An executable raw-table recognition procedure remains to be supplied.
+`StrictDeficitAndZeroBoundaryTables.strictDeficitReward_has_actualStrictSingletonDeficit`
+(`UniformEquilibrium/Quitting/Examples/StrictDeficitAndZeroBoundaryTables.lean`)
+gives a concrete four-player table with uniform deficit margin one. The same
+module proves that the zero table has no positive strict-deficit margin but
+does satisfy group exclusion and weak exclusion on every nonempty subset,
+with equality. These statements concern all actual behavioral profiles.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
 supplies the shared elimination algorithm using its proved recursive
 sign-diagram producer.
