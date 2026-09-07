@@ -298,6 +298,7 @@ import MathUE.PolynomialSignCell
 import MathUE.Logic.SignFormula
 import MathUE.Logic.SignFormulaFiniteAtoms
 import MathUE.Logic.SignFormulaFiniteFolds
+import MathUE.FiniteCappedSimplexPairReduction
 import MathUE.Logic.SignFormulaMap
 import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.RealQuantifierElimination.CoefficientSignBranch

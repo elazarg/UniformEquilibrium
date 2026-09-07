@@ -389,6 +389,12 @@ semantics. The masses sum to one.
 represents the coalition masses and fixed-table prescribed payoffs by
 multivariate polynomials and identifies their evaluations with those
 semantic formulas. Their degree is at most the number of players.
+`isSemialgebraic_quittingActualTerminalPayoffSet`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffSemialgebraic.lean`)
+proves that all actual prescribed payoffs form a semialgebraic set for
+nonempty `Fin n` and arbitrary real rewards. It identifies the actual set
+with the polynomial image of the literal finite-calendar simplex; it does
+not represent response caps.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPredicates.lean`
 transports arbitrary payoff predicates between the raw fixed-calendar
 formulas and all actual behavioral profiles. It instantiates this
@@ -396,31 +402,15 @@ equivalence for weak exclusion on a designated nonnegative-singleton
 subset, strict singleton deficit with a fixed margin, and nonconcentrated
 group exclusion with a fixed weight cap. Compactness also makes strict
 pointwise singleton exclusion equivalent to one positive uniform deficit.
+`exists_finiteCalendarRawNonconcentratedGroupExclusion_iff_orderedPair`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarOrderedPairGroupExclusion.lean`)
+reduces group exclusion to distinct ordered pairs with one positive
+parameter at most one half, chosen before the calendar point. The pair
+may depend on that point. The same module proves the actual-profile form.
 An executable raw-table recognition procedure remains to be supplied.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
-supplies the shared elimination algorithm and its correctness theorem.
-`MathUE/Polynomial/RealSignCell.lean` proves bounded root-insertion
-and sign-characterization lemmas and unbounded monotone-cell root criteria.
-`MathUE/Polynomial/DensePolynomial.lean` implements arithmetic on coefficient
-lists without requiring algebraic laws on the source syntax. It proves the
-even-exponent pseudo-division identity after evaluation, strict remainder
-length, exact sign preservation at divisor roots, and a polynomial/degree
-interpretation. `MathUE/RealQuantifierElimination/RingExpression.lean`
-and `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` provide
-executable rational expressions and truth-preserving coefficient-sign
-case splits. `MathUE/Polynomial/OrderedRealSignDiagram.lean` proves the
-ordered cell partition and correct cut deletion and bounded root insertion.
-`MathUE/RealQuantifierElimination/CoefficientTrimming.lean` removes
-specialized leading zeroes without changing polynomial evaluation and
-proves the remaining formal length determines the specialized degree.
-`MathUE/Polynomial/InfinitySign.lean` supplies polynomial infinity signs
-and unbounded monotone root criteria without extra limit hypotheses.
-`MathUE/Polynomial/LocalSignReconstruction.lean` implements each local
-sign-row reconstruction and proves exact coverage of the new roots,
-including both rays and the whole line.
-`signDiagram_correct`
-(`MathUE/RealQuantifierElimination/SignDiagramProducer.lean`) proves exact
-reduced realization for the executable recursive producer.
+supplies the shared elimination algorithm using its proved recursive
+sign-diagram producer.
 `eliminateQuantifiers_holdsAt_iff` and `decideClosedFormula_eq_true_iff`
 (`MathUE/RealQuantifierElimination/QuantifierElimination.lean`) establish
 truth preservation for arbitrary nested real quantification and correctness

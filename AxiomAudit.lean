@@ -153,6 +153,7 @@ import MathUE.FiniteAffineIntervalFeasibility
 import MathUE.FiniteBinaryBlockEquilibrium
 import MathUE.FiniteBinaryWeightedPotential
 import MathUE.FiniteBooleanEndpointOrbit
+import MathUE.FiniteCappedSimplexPairReduction
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteCoalitionSupportPeelingOrder
 import MathUE.FiniteContinuousIntervalSelection
@@ -2223,7 +2224,9 @@ import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
 import UniformEquilibrium.Quitting.Paths.FinFourPairSharpness
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarOrderedPairGroupExclusion
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffClosure
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffSemialgebraic
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPayoff
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPredicates
