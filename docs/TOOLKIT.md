@@ -194,8 +194,12 @@ error at most `(21/10) * (99/100)^(n*K)`. Exact finite-menu realization,
 independent censoring, and the individual geometric stopping-law atoms
 are proved in `UniformEquilibrium/Quitting/Cycles/CyclicFiniteMenu.lean`
 and `UniformEquilibrium/Quitting/Cycles/PairedCycleStoppingLaws.lean`.
-The quantitative finite-horizon bound for the same infinite cyclic profile
-is a separate construction.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteHorizon.lean` bounds
+the same infinite profile's delivery and every unilateral finite-average
+deviation by `M*m/((1-(99/100)^(n-1))*H)`. It also proves summability
+and the corresponding bound on the live-time tail sum under every
+deviation. The raw-region theorem selects one hazard vector before all
+positive horizons and uses a bound covering every reward coordinate.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleFiniteMenu.lean` combines
 the selected cycle's law, payoff, cap, debt, early-attainer and geometric
 Nash conclusions for one actual finite menu.
@@ -206,6 +210,10 @@ is the transformed infinite value multiplied by the absorption probability;
 there is no unqualified translation identity for its positive Never mass.
 The exact finite-cap and debt identities require a nonnegative transformed
 singleton only for the queried player.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleAffineEquilibrium.lean`
+states exact terminal Nash at every suffix and the fixed transformed
+uniform payoff for the actual infinite profile. Positive scales suffice;
+shifts and transformed singleton signs are unrestricted for that result.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Pivot.lean` fixes the
 ordered pairs `{0,2}`, `{1,3}` and divides only the pivot coordinate by
 its singleton, shifting the others without rescaling. Its transformed
@@ -214,8 +222,16 @@ initial value is at most `5/3` at the pivot and `6/5` elsewhere.
 one menu from the selected hazards, with exact transformed payoff/cap
 coordinates and full exploitability at most `(5/3)*(99/100)^(4*K)`.
 That same menu satisfies both the restricted-menu and extra late-pivot
-inequalities. The raw-region selection of an entire menu family remains
-separate from this selected-hazard consumer.
+inequalities.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Source.lean` selects
+one hazard vector and one entire menu family from the raw region, before
+the accuracy quantifier. The geometric estimates hold at every positive
+cycle count; for each accuracy all sufficiently long members of that
+same family satisfy both inequalities.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Repair.lean` retains
+each menu's actual nonpivot laws, obtains a minimizing feasible pivot
+repair with no larger geometric regret, and supplies the existing
+small-pivot-repair source.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -263,6 +279,11 @@ singleton rewards are nonnegative. Combining the alternatives,
 requires only finite-word weak exclusion and nonnegative singleton rewards.
 These are real-table existence constructions; rational grid algorithms
 are not supplied by these results.
+`UniformEquilibrium/Quitting/Paths/WeakExclusionSinglePivotFiniteMenu.lean`
+deduces arbitrarily accurate canonical single-pivot menus above any
+prescribed deadline, for any finite player set. This existence corollary
+does not assert preservation of a particular selected word or its
+quantitative length bound.
 
 `exists_sparseFiniteStoppingLawMixture_wholePayoff_eq`
 (`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteMixture.lean`)
