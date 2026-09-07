@@ -284,6 +284,17 @@ and decrease `3*C^2/(128*M+24*C)`, assuming the derived solo hazard is
 rational. These are noncomputable existence results, not executable
 rational grid search or a finite-source cap-evaluation algorithm.
 
+`rationalBooleanRootGridSearch_isSome_of_pos`
+(`UniformEquilibrium/Finite/RationalBooleanRootGrid.lean`)
+proves that an executable exhaustive rational grid search succeeds for every
+positive rational accuracy and finite rational Boolean payoff table.
+`rationalBooleanRootGridSelector_totalNashDefect_le` bounds the sum of
+positive player regrets of the selected product row by that accuracy.
+The search uses rational arithmetic and an explicit finite list; its
+success proof uses exact mixed-Nash existence and a rounding estimate.
+This supplies the generic root-search algorithm, not yet the quitting
+finite-word cap evaluation and selection algorithm.
+
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
 does renew the source when every owner has a strict preemptor and every
@@ -372,8 +383,25 @@ semantics. The masses sum to one.
 represents the coalition masses and fixed-table prescribed payoffs by
 multivariate polynomials and identifies their evaluations with those
 semantic formulas. Their degree is at most the number of players.
-These identities do not by themselves supply raw-table class equivalences
-or a quantifier-elimination procedure.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPredicates.lean`
+transports arbitrary payoff predicates between the raw fixed-calendar
+formulas and all actual behavioral profiles. It instantiates this
+equivalence for weak exclusion on a designated nonnegative-singleton
+subset, strict singleton deficit with a fixed margin, and nonconcentrated
+group exclusion with a fixed weight cap. Compactness also makes strict
+pointwise singleton exclusion equivalent to one positive uniform deficit.
+Quantifier elimination and an executable raw-table recognition procedure
+remain to be supplied.
+
+`AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
+gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
+Quit-at-zero/Never clocks and one sure-quitting anchor. The actual profile
+is exact terminal Nash against all behavioral deviations. The module also
+identifies the unique completely mixed active root probabilities and
+reconstructs each three-player deletion with the surviving stopping laws
+unchanged. It does not yet prove a parent/child exploitability gap or its
+persistence under perturbing the reward table.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)

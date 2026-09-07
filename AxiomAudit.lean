@@ -1282,6 +1282,7 @@ import UniformEquilibrium.Examples.Sorin.OccupationStopping
 import UniformEquilibrium.Examples.Sorin.OccupationVanishing
 import UniformEquilibrium.Examples.Sorin.UniformPayoffSegment
 import UniformEquilibrium.Examples.Sorin.UniformSeparation
+import UniformEquilibrium.Finite.RationalBooleanRootGrid
 import UniformEquilibrium.MeasurableSelection.FiniteGameNash
 import UniformEquilibrium.ProofView
 import UniformEquilibrium.ProofView.Basic
@@ -2087,6 +2088,7 @@ import UniformEquilibrium.Quitting.EssentialAPS.UniformHazard
 import UniformEquilibrium.Quitting.EssentialAPS.UniformPayoff
 import UniformEquilibrium.Quitting.EssentialAPS.UniformWindowMass
 import UniformEquilibrium.Quitting.EssentialAPS.UniformWindowMassLive
+import UniformEquilibrium.Quitting.Examples.AdaptiveChildCenter
 import UniformEquilibrium.Quitting.Examples.AllMinusOneLiveBoundary
 import UniformEquilibrium.Quitting.Examples.BlockPair.All
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingleton
@@ -2186,6 +2188,7 @@ import UniformEquilibrium.Quitting.Paths.FinFourPairSharpness
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffClosure
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPayoff
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPredicates
 import UniformEquilibrium.Quitting.Paths.FiniteOpponentPivotLaw
 import UniformEquilibrium.Quitting.Paths.FiniteSoloCapThresholdDescent
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
