@@ -80,9 +80,9 @@ theorem affine_finiteProfile_firstActiveTime_attains
     finiteProfile_firstActiveTime_attains_value reward schedule hregion q hq
       hinterior hzero initial turns hturns player]
 
-/-- Nonnegative transformed singletons ensure that the transformed Never boundary
-is dominated. Consequently the fresh transformed truncation has the exact affine cap. -/
-theorem affine_finiteProfile_cap_eq
+/-- Nonnegative transformed cyclic value is exactly the condition needed to
+dominate the fresh truncation's zero Never boundary. -/
+theorem affine_finiteProfile_cap_eq_of_value_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (schedule : Schedule ι period) (hregion : RawRegion reward schedule) (q : ι → ℝ)
     (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
@@ -92,7 +92,7 @@ theorem affine_finiteProfile_cap_eq
       (quietRows reward schedule) q player = 0)
     (scale shift : Payoff ι) (hscale : ∀ player, 0 < scale player)
     (initial : Fin period) (turns : ℕ) (hturns : 1 ≤ turns) (player : ι)
-    (hsingleton : 0 ≤ scale player * singleton reward player + shift player) :
+    (hvalue : 0 ≤ scale player * value reward schedule q hq initial player + shift player) :
     quittingContinuationBestResponseValue (quittingPlayerwiseAffineReward reward scale shift)
         (quittingCyclicFiniteProfile (quittingPlayerwiseAffineReward reward scale shift)
           (cycle schedule q hq) initial (turns * period)) player =
@@ -106,11 +106,11 @@ theorem affine_finiteProfile_cap_eq
         hinterior hzero scale shift hscale)
     change max 0 (scale player * singleton reward player + shift player) ≤
       value (quittingPlayerwiseAffineReward reward scale shift) schedule q hq _ player
-    rw [affine_value reward schedule q hq hpositive]
+    rw [quittingCyclicOrbit_mul_card, affine_value reward schedule q hq hpositive]
     have hv := (value_bounds_of_selected reward schedule hregion q hq hinterior hzero
-      (quittingCyclicOrbit initial (turns * period)) player).1
+      initial player).1
     have hmul := mul_lt_mul_of_pos_left hv (hscale player)
-    apply max_le <;> linarith
+    exact max_le hvalue (by linarith)
   · rw [← affine_finiteProfile_firstActiveTime_attains reward schedule hregion q hq
       hinterior hzero scale shift initial turns hturns player]
     exact quittingTerminalPayoff_update_le_continuationBestResponseValue _ _ player _
@@ -129,8 +129,91 @@ theorem affine_finiteProfile_payoff_eq
         (scale player * value reward schedule q hq initial player + shift player) := by
   rw [finiteProfile_payoff_eq, affine_value reward schedule q hq hpositive]
 
-/-- The fresh transformed truncation has exact debt equal to cycle survival
-times the transformed infinite value, including the transformed shift. -/
+/-- The exact affine cap is attained precisely when the transformed cyclic
+value is nonnegative. -/
+theorem affine_finiteProfile_cap_eq_iff_value_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι period) (hregion : RawRegion reward schedule) (q : ι → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
+    (hinterior : ∀ player, q player ∈ Set.Ioo (1 / 100 : ℝ) (1 / 2))
+    (hzero : ∀ player, playerGap schedule.partner (singleton reward)
+      (partnerReward reward schedule) (jointReward reward schedule)
+      (quietRows reward schedule) q player = 0)
+    (scale shift : Payoff ι) (hscale : ∀ player, 0 < scale player)
+    (initial : Fin period) (turns : ℕ) (hturns : 1 ≤ turns) (player : ι) :
+    (quittingContinuationBestResponseValue (quittingPlayerwiseAffineReward reward scale shift)
+        (quittingCyclicFiniteProfile (quittingPlayerwiseAffineReward reward scale shift)
+          (cycle schedule q hq) initial (turns * period)) player =
+      scale player * value reward schedule q hq initial player + shift player) ↔
+      0 ≤ scale player * value reward schedule q hq initial player + shift player := by
+  constructor
+  · intro hcap
+    have hdebt := quittingTerminalDeviationDebt_nonneg
+      (quittingPlayerwiseAffineReward reward scale shift)
+      (quittingCyclicFiniteProfile (quittingPlayerwiseAffineReward reward scale shift)
+        (cycle schedule q hq) initial (turns * period)) player
+    rw [quittingTerminalDeviationDebt, hcap,
+      affine_finiteProfile_payoff_eq reward schedule q hq
+        (fun player => by linarith [(hinterior player).1])] at hdebt
+    have hsurvival : 0 < jointCycleSurvival q := by
+      apply Finset.prod_pos
+      intro who _
+      linarith [(hinterior who).2]
+    have hpower := pow_pos hsurvival turns
+    nlinarith
+  · exact affine_finiteProfile_cap_eq_of_value_nonneg reward schedule hregion q hq
+      hinterior hzero scale shift hscale initial turns hturns player
+
+/-- Nonnegative transformed singletons imply nonnegative transformed cyclic
+value, so the fresh transformed truncation has the exact affine cap. -/
+theorem affine_finiteProfile_cap_eq
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι period) (hregion : RawRegion reward schedule) (q : ι → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
+    (hinterior : ∀ player, q player ∈ Set.Ioo (1 / 100 : ℝ) (1 / 2))
+    (hzero : ∀ player, playerGap schedule.partner (singleton reward)
+      (partnerReward reward schedule) (jointReward reward schedule)
+      (quietRows reward schedule) q player = 0)
+    (scale shift : Payoff ι) (hscale : ∀ player, 0 < scale player)
+    (initial : Fin period) (turns : ℕ) (hturns : 1 ≤ turns) (player : ι)
+    (hsingleton : 0 ≤ scale player * singleton reward player + shift player) :
+    quittingContinuationBestResponseValue (quittingPlayerwiseAffineReward reward scale shift)
+        (quittingCyclicFiniteProfile (quittingPlayerwiseAffineReward reward scale shift)
+          (cycle schedule q hq) initial (turns * period)) player =
+      scale player * value reward schedule q hq initial player + shift player := by
+  apply affine_finiteProfile_cap_eq_of_value_nonneg reward schedule hregion q hq
+    hinterior hzero scale shift hscale initial turns hturns player
+  have hv := (value_bounds_of_selected reward schedule hregion q hq hinterior hzero
+    initial player).1
+  have hmul := mul_lt_mul_of_pos_left hv (hscale player)
+  linarith
+
+/-- Under the exact cap condition, transformed truncation debt is cycle survival
+times the transformed infinite value, including the shift. -/
+theorem affine_finiteProfile_debt_eq_of_value_nonneg
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι period) (hregion : RawRegion reward schedule) (q : ι → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
+    (hinterior : ∀ player, q player ∈ Set.Ioo (1 / 100 : ℝ) (1 / 2))
+    (hzero : ∀ player, playerGap schedule.partner (singleton reward)
+      (partnerReward reward schedule) (jointReward reward schedule)
+      (quietRows reward schedule) q player = 0)
+    (scale shift : Payoff ι) (hscale : ∀ player, 0 < scale player)
+    (initial : Fin period) (turns : ℕ) (hturns : 1 ≤ turns) (player : ι)
+    (hvalue : 0 ≤ scale player * value reward schedule q hq initial player + shift player) :
+    quittingTerminalDeviationDebt (quittingPlayerwiseAffineReward reward scale shift)
+        (quittingCyclicFiniteProfile (quittingPlayerwiseAffineReward reward scale shift)
+          (cycle schedule q hq) initial (turns * period)) player =
+      jointCycleSurvival q ^ turns *
+        (scale player * value reward schedule q hq initial player + shift player) := by
+  rw [quittingTerminalDeviationDebt,
+    affine_finiteProfile_cap_eq_of_value_nonneg reward schedule hregion q hq
+      hinterior hzero scale shift hscale initial turns hturns player hvalue,
+    affine_finiteProfile_payoff_eq reward schedule q hq
+      (fun player => by linarith [(hinterior player).1])]
+  ring
+
+/-- Nonnegative transformed singletons suffice for the exact truncation debt formula. -/
 theorem affine_finiteProfile_debt_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (schedule : Schedule ι period) (hregion : RawRegion reward schedule) (q : ι → ℝ)

@@ -208,8 +208,10 @@ transports positive playerwise affine changes through the infinite cycle,
 then truncates the transformed game afresh. The finite prescribed payoff
 is the transformed infinite value multiplied by the absorption probability;
 there is no unqualified translation identity for its positive Never mass.
-The exact finite-cap and debt identities require a nonnegative transformed
-singleton only for the queried player.
+For each queried player, the exact finite-cap identity holds if and only
+if the transformed initial cyclic value is nonnegative. Under that
+condition the exact debt identity holds as well. Nonnegative transformed
+singletons are sufficient but unnecessary.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleAffineEquilibrium.lean`
 states exact terminal Nash at every suffix and the fixed transformed
 uniform payoff for the actual infinite profile. Positive scales suffice;
@@ -355,6 +357,23 @@ Every payoff in its closure has an exact realization with at most n+1
 support actions per player and finite dates below n(n+1). The proof
 compactifies in the full finite simplex and recompresses the limit;
 no response-cap preservation is asserted.
+`image_fst_quittingTerminalSemanticCarrier_eq_actualPayoffSet`
+(`UniformEquilibrium/Quitting/Paths/TerminalSemanticPayoffProjection.lean`)
+identifies the prescribed-payoff projection of the full semantic carrier
+with that actual payoff set. Any predicate on payoff vectors can therefore
+be tested equivalently on the fixed calendar or on every carrier point's
+prescribed coordinate; the predicate needs no regularity assumption.
+The realizing profile need not have the carrier point's response caps.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPayoff.lean` identifies
+the displayed finite sums and products for first-quitter coalition mass,
+Never mass, and prescribed payoff with the actual independent stopping-law
+semantics. The masses sum to one.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawPolynomial.lean`
+represents the coalition masses and fixed-table prescribed payoffs by
+multivariate polynomials and identifies their evaluations with those
+semantic formulas. Their degree is at most the number of players.
+These identities do not by themselves supply raw-table class equivalences
+or a quantifier-elimination procedure.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)

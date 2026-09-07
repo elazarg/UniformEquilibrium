@@ -2184,6 +2184,8 @@ import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
 import UniformEquilibrium.Quitting.Paths.FinFourPairSharpness
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffClosure
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPayoff
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
 import UniformEquilibrium.Quitting.Paths.FiniteOpponentPivotLaw
 import UniformEquilibrium.Quitting.Paths.FiniteSoloCapThresholdDescent
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
@@ -2258,6 +2260,7 @@ import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
+import UniformEquilibrium.Quitting.Paths.TerminalSemanticPayoffProjection
 import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 import UniformEquilibrium.Quitting.Paths.WeakExclusionFiniteWordMenuRate
 import UniformEquilibrium.Quitting.Paths.WeakExclusionSinglePivotFiniteMenu
