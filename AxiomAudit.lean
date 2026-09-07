@@ -2155,6 +2155,7 @@ import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
 import UniformEquilibrium.Quitting.Paths.FinFourPairSharpness
 import UniformEquilibrium.Quitting.Paths.FiniteOpponentPivotLaw
+import UniformEquilibrium.Quitting.Paths.FiniteSoloCapThresholdDescent
 import UniformEquilibrium.Quitting.Paths.FiniteStoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.FiniteSupportStoppingLawSurvival
 import UniformEquilibrium.Quitting.Paths.FirstStoppingCoalitionRelabel
@@ -2202,6 +2203,7 @@ import UniformEquilibrium.Quitting.Paths.StoppingLawMixture
 import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
 import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Paths.StrictAllContinueBasinSuccessorPath
+import UniformEquilibrium.Quitting.Paths.StrictDeficitFiniteWordRates
 import UniformEquilibrium.Quitting.Paths.StrictDeficitFiniteWords
 import UniformEquilibrium.Quitting.Paths.SummableRootSurvival
 import UniformEquilibrium.Quitting.Paths.SupportWitnessAbsorptionBridge

@@ -1,4 +1,6 @@
 import MathUE
+import UniformEquilibrium.Quitting.Paths.StrictDeficitFiniteWordRates
+import UniformEquilibrium.Quitting.Paths.FiniteSoloCapThresholdDescent
 import UniformEquilibrium.Quitting.Examples.OrderedPremiumBoundaryFixtures
 import UniformEquilibrium.Quitting.Examples.OrderedPremiumNegativeBoundary
 import UniformEquilibrium.Quitting.Examples.OrderedPremiumPassiveSeparation

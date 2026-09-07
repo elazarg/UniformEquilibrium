@@ -135,9 +135,13 @@ approximate root-defect budgets.
 constructs successive literal finite words followed by all-Continue and
 proves their per-step absorption floor and total-debt contraction.
 Its strict-deficit hypothesis ranges only over finite-word profiles,
-not all carrier points. Root selection is noncomputable exact Nash
-selection; a rational algorithm and a global rate are not asserted by this
-module.
+not all carrier points. The explicit geometric total-debt bound, convergence
+to zero, and actual finite-word full behavioral approximate Nash selection
+are in `UniformEquilibrium/Quitting/Paths/StrictDeficitFiniteWordRates.lean`.
+The same module proves fixed uniform-payoff existence from a positive
+finite-word deficit, without imposing singleton signs. Root selection is
+noncomputable exact Nash selection; no rational algorithm or exact infinite
+all-suffix equilibrium is asserted there.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -148,6 +152,15 @@ payoff/cap formulas, and total-debt bound by the maximum of source debt and
 owner cap margin. The affine formulas hold through the first hit only.
 The same module realizes these iterates by literal repeated-root words
 over the unchanged source profile; cap attainment is not assumed.
+`exists_literal_capThreshold_block_debtSum_le_quadraticDrop`
+(`UniformEquilibrium/Quitting/Paths/FiniteSoloCapThresholdDescent.lean`)
+attaches an internally selected auxiliary exact Nash row when needed and
+constructs the complete finite word. Its total-debt bound is
+`C - 3 * C ^ 2 / (32 * M + 6 * C)`, where `C` is the maximum of the old
+debt and owner cap margin, and its length is at most one plus the explicit
+solo horizon. This is not necessarily descent below the old debt when the
+owner cap margin is larger, and does not itself supply a repeatable
+weak-exclusion selector.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
