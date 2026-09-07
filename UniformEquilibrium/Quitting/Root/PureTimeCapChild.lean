@@ -64,4 +64,25 @@ theorem quittingPureTimeCapChild_sure_owner_at_deadline
   simp [quittingBehaviorLiveHazard,
     quittingPureTimeBehaviorStrategy, quittingPureTimeHazard]
 
+/-- Installing an attained immediate-Quit cap makes the owner surely Quit at
+date zero and gives that owner zero unrestricted terminal debt. -/
+theorem immediateQuitCapInstallation_sureAtZero_and_debtZero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (owner : ι)
+    (hcap : quittingTerminalPayoff reward
+        (Function.update profile owner
+          (quittingPureTimeBehaviorStrategy reward owner (some 0))) owner =
+      quittingContinuationBestResponseValue reward profile owner) :
+    let installed := Function.update profile owner
+      (quittingPureTimeBehaviorStrategy reward owner (some 0))
+    quittingProfileLiveRoot reward installed 0 owner = PMF.pure true ∧
+      quittingTerminalDeviationDebt reward installed owner = 0 := by
+  dsimp only
+  constructor
+  · simp [quittingProfileLiveRoot, quittingPureTimeBehaviorStrategy,
+      quittingPureTimeHazard]
+  · exact quittingTerminalDeviationDebt_update_eq_zero_of_attainsCap
+      reward profile owner
+        (quittingPureTimeBehaviorStrategy reward owner (some 0)) hcap
+
 end GameTheory

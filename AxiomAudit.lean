@@ -141,6 +141,7 @@ import MathUE.DirectedTransport.SimpleCycleBalance
 import MathUE.DisplacementSeamScalarBoundaries
 import MathUE.DivergentChargeRecurrence
 import MathUE.EdgeGraph
+import MathUE.EventuallyPositiveLastZero
 import MathUE.ExponentialExcessScale
 import MathUE.FinFourCoalitionCycle
 import MathUE.FinFourOrderedCoalitionCycle
@@ -660,6 +661,7 @@ import UniformEquilibrium.Diagnostics.PrivateRecommendationTargetSeparator
 import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedRareInferiorActionBoundary
 import UniformEquilibrium.Diagnostics.Quitting.AbsorptionWeightedZeroChargeRampBoundary
 import UniformEquilibrium.Diagnostics.Quitting.ActualExactPrefixFrontLimit
+import UniformEquilibrium.Diagnostics.Quitting.ActualExactPrefixRayRestart
 import UniformEquilibrium.Diagnostics.Quitting.ActualReversePrefixAtomTransport
 import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineGapSource
 import UniformEquilibrium.Diagnostics.Quitting.AdjacentDeadlineOperationalEffectPaidPort
@@ -1764,6 +1766,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCa
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonZeroRetentionCarrier
 import UniformEquilibrium.Quitting.Classification.LCP.ZeroSoloGeneratedStandardQ
 import UniformEquilibrium.Quitting.Classification.NonnegativeProductLowExactRootBoundary
+import UniformEquilibrium.Quitting.Classification.NonnegativeProductLowSupportPeelingConverse
 import UniformEquilibrium.Quitting.Classification.OnePlayer.DiffuseCompactification
 import UniformEquilibrium.Quitting.Classification.OnePlayer.Existence
 import UniformEquilibrium.Quitting.Classification.OnePlayer.FiniteMenuPunishment
@@ -2120,6 +2123,7 @@ import UniformEquilibrium.Quitting.Examples.UniqueSureNeverReactivationRegressio
 import UniformEquilibrium.Quitting.Examples.ZeroRewardEntryFloor
 import UniformEquilibrium.Quitting.Nash.FiniteHorizon.MarkedSureQuit
 import UniformEquilibrium.Quitting.Paths.ActualExactPrefixBlock
+import UniformEquilibrium.Quitting.Paths.ActualExactPrefixRay
 import UniformEquilibrium.Quitting.Paths.ActualPrefixAllContinueLimit
 import UniformEquilibrium.Quitting.Paths.ActualPrefixPayoffLimit
 import UniformEquilibrium.Quitting.Paths.ActualReversePrefixMarkedSuffix
@@ -2308,6 +2312,7 @@ import UniformEquilibrium.Quitting.Root.CorrectedNeverPrefixPayoff
 import UniformEquilibrium.Quitting.Root.EndpointBackwardStability
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
 import UniformEquilibrium.Quitting.Root.ExactCapClockTransport
+import UniformEquilibrium.Quitting.Root.ExactRootContinuationConstruction
 import UniformEquilibrium.Quitting.Root.ExactSuccessorClosure
 import UniformEquilibrium.Quitting.Root.FaceGeometry
 import UniformEquilibrium.Quitting.Root.FiniteDeadlineCapRecursion

@@ -127,4 +127,45 @@ theorem quittingTerminalOutcomeMass_stationary_eq_oneDateThenNever_of_sureQuitte
   rw [hstationary, honeDate]
   cases outcome <;> simp [hcontinue]
 
+/-- Two sure quitters turn exact root Nash against an actual continuation
+payoff into complete unrestricted terminal Nash of the literal prefix. -/
+theorem isZeroAsymptoticNash_rootThenContinuation_of_twoSureQuitters
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool)
+    (continuation : (quittingGame reward).BehaviorProfile)
+    {first second : ι} (hne : first ≠ second)
+    (hfirst : (root first true).toReal = 1)
+    (hsecond : (root second true).toReal = 1)
+    (hnash : IsεQuittingRootNash reward
+      (fun who ↦ quittingTerminalPayoff reward continuation who) 0 root) :
+    (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) 0
+      (quittingRootThenContinuationProfile reward root continuation) := by
+  let tail : Payoff ι :=
+    fun who ↦ quittingTerminalPayoff reward continuation who
+  have hpair : quittingTerminalSemanticPair reward
+        (quittingRootThenContinuationProfile reward root continuation) =
+      (quittingRootSuccessorPayoff reward tail root,
+        quittingRootSuccessorPayoff reward tail root) := by
+    rw [quittingTerminalSemanticPair_rootThenContinuation]
+    calc
+      quittingTerminalSemanticPrefix reward root
+          (quittingTerminalSemanticPair reward continuation) =
+          quittingTerminalSemanticPrefix reward root (tail, tail) :=
+        quittingTerminalSemanticPrefix_congr_of_twoSureQuitters
+          reward root hne hfirst hsecond _ _
+      _ = _ := quittingTerminalSemanticPrefix_diagonal_eq_of_isZeroNash
+        reward tail root hnash
+  intro who deviation
+  have hbound := quittingTerminalPayoff_update_sub_le_terminalSemanticDebt
+    reward (quittingRootThenContinuationProfile reward root continuation)
+      who deviation
+  have hzero : quittingTerminalSemanticDebt
+      (quittingTerminalSemanticPair reward
+        (quittingRootThenContinuationProfile reward root continuation)) who = 0 := by
+    rw [hpair]
+    simp [quittingTerminalSemanticDebt]
+  rw [hzero] at hbound
+  linarith
+
 end GameTheory

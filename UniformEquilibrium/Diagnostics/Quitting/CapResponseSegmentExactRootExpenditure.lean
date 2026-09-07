@@ -27,14 +27,15 @@ theorem eventually_capResponseSegment_exactRoot_debtDrop_and_absorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (owner : ι)
     (responses : ℕ → (quittingGame reward).BehaviorStrategy owner)
-    (hattains : ∀ index,
+    (hattains : ∀ᶠ index in atTop,
       quittingTerminalPayoff reward (Function.update (profiles index) owner
           (responses index)) owner =
         quittingContinuationBestResponseValue reward (profiles index) owner)
     (parameter : Set.Icc (0 : ℝ) 1) (hproper : parameter.val < 1)
     {M gamma : ℝ} (hM : 0 < M) (hgamma : 0 < gamma)
     (hreward : ∀ terminal who, |reward terminal who| ≤ M)
-    (hdebt : ∀ index, gamma ≤ quittingTerminalDeviationDebt reward (profiles index) owner)
+    (hdebt : ∀ᶠ index in atTop,
+      gamma ≤ quittingTerminalDeviationDebt reward (profiles index) owner)
     (hcap : Tendsto (fun index =>
       quittingContinuationBestResponseValue reward (profiles index) owner) atTop
         (nhds (reward (quittingSingletonTerminal owner) owner))) :
@@ -53,12 +54,13 @@ theorem eventually_capResponseSegment_exactRoot_debtDrop_and_absorption
   let pairs := fun index => quittingTerminalSemanticPair reward (segments index)
   let floor := (1 - parameter.val) * gamma
   have hfloor : 0 < floor := mul_pos (sub_pos.mpr hproper) hgamma
-  have hsegmentDebt : ∀ index, floor ≤ quittingTerminalSemanticDebt (pairs index) owner := by
-    intro index
+  have hsegmentDebt : ∀ᶠ index in atTop,
+      floor ≤ quittingTerminalSemanticDebt (pairs index) owner := by
+    filter_upwards [hattains, hdebt] with index hattainsIndex hdebtIndex
     change floor ≤ quittingTerminalDeviationDebt reward (segments index) owner
     rw [capResponseSegment_ownerDebt_eq_oneSub_mul reward (profiles index) owner
-      (responses index) (hattains index) parameter]
-    exact mul_le_mul_of_nonneg_left (hdebt index) (sub_nonneg.mpr parameter.property.2)
+      (responses index) hattainsIndex parameter]
+    exact mul_le_mul_of_nonneg_left hdebtIndex (sub_nonneg.mpr parameter.property.2)
   have hsegmentCap : Tendsto (fun index => (pairs index).2 owner) atTop
       (nhds (reward (quittingSingletonTerminal owner) owner)) := by
     simpa only [pairs, segments, quittingTerminalSemanticPair,
@@ -67,14 +69,19 @@ theorem eventually_capResponseSegment_exactRoot_debtDrop_and_absorption
     fun index => abs_quittingTerminalPayoff_le reward (segments index) owner hreward
   have hnonneg : ∀ index who, 0 ≤ quittingTerminalSemanticDebt (pairs index) who :=
     fun index who => quittingTerminalDeviationDebt_nonneg reward (segments index) who
-  have hdrop := eventually_fixedCapLimit_totalDebtDrop reward pairs owner
-    hM hfloor hreward hvalue hnonneg hsegmentDebt hsegmentCap
-  have habsorption := eventually_fixedCapLimit_exactRoot_absorptionMass_lowerBound
-    reward pairs owner hM hfloor hreward hvalue hsegmentDebt hsegmentCap
-  filter_upwards [hdrop, habsorption] with index hdropIndex habsorptionIndex
+  have hnear : ∀ᶠ index in atTop,
+      |(pairs index).2 owner - reward (quittingSingletonTerminal owner) owner| ≤ floor / 4 :=
+    (hsegmentCap.eventually
+      (Metric.closedBall_mem_nhds _
+        (show 0 < floor / 4 from div_pos hfloor (by norm_num)))).mono
+      (fun _ h => by simpa only [Metric.mem_closedBall, Real.dist_eq] using h)
+  filter_upwards [hsegmentDebt, hnear] with index hdebtIndex hnearIndex
   intro root
   dsimp only
   intro hnash
-  exact ⟨hdropIndex root hnash, habsorptionIndex root hnash⟩
+  exact ⟨fixedCapPin_totalDebtDrop reward (pairs index) root owner hM hfloor
+      hreward (hvalue index) (hnonneg index) hdebtIndex hnearIndex hnash,
+    fixedCapPin_exactRoot_absorptionMass_lowerBound reward (pairs index) root owner
+      hM hfloor hreward (hvalue index) hdebtIndex hnearIndex hnash⟩
 
 end GameTheory

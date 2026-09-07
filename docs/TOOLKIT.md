@@ -76,7 +76,14 @@ law. `exactRootSuccessor_mem_singletonLowerBoundary`
 (`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowExactRootBoundary.lean`)
 shows that nonnegative own premiums and product-low imply every absorbing
 exact root's successor lies above all singleton levels, with an active
-coordinate attaining its singleton exactly. Its converse is not asserted.
+coordinate attaining its singleton exactly. The converse from this root
+boundary property is not asserted here.
+`hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative`
+(`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowSupportPeelingConverse.lean`)
+identifies product-low with weak support peeling when every participant's
+own premium is nonnegative. The proof tests a literal half-hazard root on
+each active support. This equivalence does not require nonnegative
+singleton levels or restrict passive rewards.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
@@ -458,6 +465,7 @@ is asserted. `eventually_capResponseSegment_exactRoot_debtDrop_and_absorption`
 gives uniform debt-drop and absorption floors for every sufficiently late
 exact root at any fixed proper installation parameter, from a positive
 source-debt floor and convergence of the owner's cap to its singleton.
+Source attainment and the debt floor need hold only eventually.
 
 `HasTerminalExploitabilityGap.exists_late_childRestart_capPinDichotomy`
 (`UniformEquilibrium/Diagnostics/Quitting/LateResetChildRestartAssembly.lean`)
@@ -468,6 +476,15 @@ late resets, the actual child is cap-pinned, and every exact root against its
 payoff has the stated debt-drop and absorption floors. The output is a
 shift/reset dichotomy; by itself it does not construct the subsequent exact
 ray from that reset child.
+
+`exists_quittingActualExactPrefixRay`
+(`UniformEquilibrium/Quitting/Paths/ActualExactPrefixRay.lean`) recursively
+constructs an infinite sequence of literal exact-root prefixes from any
+actual profile. The same module transports a finite-or-Never attained cap
+along an arbitrary supplied ray with summable hazards and positive survival
+on its chosen tail, retaining one positive debt floor. A prescribed sure
+deadline and zero anchor debt persist under every exact prefix. This generic
+construction does not prove that its chosen roots have positive survival.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the
