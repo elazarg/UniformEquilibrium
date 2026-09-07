@@ -133,10 +133,28 @@ proved. The game-specific predicate encodings remain separate adapters.
 (`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumDecision.lean`)
 connects executable rational-table decision to the original product-low
 quitting-premium property, including the empty-player case.
+`isSemialgebraic_hasProductLowQuittingPremium_rewardTables`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumSemialgebraic.lean`)
+proves semialgebraicity of that class with all real reward entries free.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarRewardTableSemialgebraic.lean`
 proves semialgebraicity of strict-exclusion and weak-subset-exclusion
 acceptance sets with the reward entries themselves as free coordinates.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarGroupRewardTableSemialgebraic.lean`
+proves the group-exclusion version, retaining its uniform parameter outside
+the calendar quantifier.
 These set-theoretic results do not yet supply executable raw-table tests.
+
+`IsolatedRealRootData.validate_eq_true_iff` and
+`decideAtIsolatedRoots_eq_true_iff_exists`
+(`MathUE/RealQuantifierElimination/IsolatedRealRootParameters.lean`) extend
+the decision interface to certified isolated roots. Each input contains
+only rational polynomial coefficients and rational interval endpoints.
+Validation checks existence and uniqueness of a real root in the open
+interval, permitting repeated polynomial roots. Decision then constrains
+the formula's parameters to those roots and applies rational quantifier
+elimination. It never computes or compares an unencoded real value.
+Coverage of all real-algebraic inputs and game-specific encoded-table
+frontends are separate obligations.
 
 ## Endpoint and coefficient scope
 

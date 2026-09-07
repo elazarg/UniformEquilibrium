@@ -13,27 +13,6 @@ open Math.PolynomialSignCell
 
 variable {n : ℕ}
 
-/-- Read each raw reward entry from its own coordinate, without restrictions on its value. -/
-def quittingRewardTableFromCoordinates
-    (table : Fin (Fintype.card (QuittingRewardTableVariable (Fin n))) → ℝ) :
-    {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n) :=
-  fun terminal observer => table
-    (Fintype.equivFin (QuittingRewardTableVariable (Fin n)) (terminal, observer))
-
-/-- Every real reward table has coordinates in the same fixed layout. -/
-def quittingRewardTableCoordinates
-    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n)) :
-    Fin (Fintype.card (QuittingRewardTableVariable (Fin n))) → ℝ :=
-  fun index => reward
-    ((Fintype.equivFin (QuittingRewardTableVariable (Fin n))).symm index).1
-    ((Fintype.equivFin (QuittingRewardTableVariable (Fin n))).symm index).2
-
-theorem quittingRewardTableFromCoordinates_encode
-    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n)) :
-    quittingRewardTableFromCoordinates (quittingRewardTableCoordinates reward) = reward := by
-  funext terminal observer
-  unfold quittingRewardTableFromCoordinates quittingRewardTableCoordinates
-  rw [Equiv.symm_apply_apply]
 
 /-- The joint surplus polynomial in a reward-first finite coordinate layout. -/
 def quittingFiniteCalendarCoordinateSingletonSurplusPolynomial
@@ -145,7 +124,7 @@ theorem isSemialgebraic_forall_quittingFiniteCalendarSurplusSigns
     Fin.append_right]
   exact imp_iff_not_or
 
-/-- Packet P: every calendar payoff has a strictly negative singleton surplus. -/
+/-- Strict exclusion: every calendar payoff has a strictly negative singleton surplus. -/
 theorem isSemialgebraic_quittingRewardTables_rawStrictExclusion [Nonempty (Fin n)] :
     MathUE.IsSemialgebraic {table |
       HasQuittingFiniteCalendarRawStrictExclusion
@@ -157,7 +136,7 @@ theorem isSemialgebraic_quittingRewardTables_rawStrictExclusion [Nonempty (Fin n
     SignFormula.holds_disjunction_iff, List.mem_ofFn, exists_exists_eq_and,
     SignFormula.Holds, sign_eq_neg_one_iff, sub_neg] using hresult
 
-/-- Packet W_J retains both its singleton nonnegativity conjunct and weak payoff exclusion. -/
+/-- Weak subset exclusion includes singleton nonnegativity and weak payoff exclusion. -/
 theorem isSemialgebraic_quittingRewardTables_rawWeakSubsetExclusion
     [Nonempty (Fin n)] (owners : Finset (Fin n)) :
     MathUE.IsSemialgebraic {table |

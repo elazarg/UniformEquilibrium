@@ -317,6 +317,7 @@ import MathUE.RealQuantifierElimination.OneVariableDiagramConsumer
 import MathUE.RealQuantifierElimination.PolynomialFormula
 import MathUE.RealQuantifierElimination.SignDiagramProducer
 import MathUE.RealQuantifierElimination.QuantifierElimination
+import MathUE.RealQuantifierElimination.IsolatedRealRootParameters
 import MathUE.RealQuantifierElimination.SemialgebraicPresentation
 import MathUE.RealQuantifierElimination.RealCoefficientReification
 import MathUE.Semialgebraic.Basic

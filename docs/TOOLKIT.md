@@ -59,6 +59,16 @@ proves that an executable rational-table test returns true exactly when the
 original product-low condition holds. The decision procedure uses actual
 real quantifier elimination and includes the empty-player case. It has no
 efficiency guarantee and does not decide uniform-equilibrium existence.
+`isSemialgebraic_hasProductLowQuittingPremium_rewardTables`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumSemialgebraic.lean`)
+proves that the accepted real reward tables form a semialgebraic set, with
+reward entries as free coordinates and no singleton sign restriction.
+`exists_uniformEquilibriumPayoff_of_productLowPremiumDecision`
+(`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumDecisionUniformPayoff.lean`)
+connects a true decision to fixed-payoff existence when the player set is
+nonempty and own-singleton rewards are nonnegative. The same module gives
+periodic all-suffix terminal approximate equilibria. These conclusions are
+existence theorems, not executable strategy extraction.
 
 `UniformEquilibrium/Quitting/Examples/ProductLowFinFourFamily.lean` gives
 a four-player family with arbitrary singleton levels, positive coordinate
@@ -387,6 +397,11 @@ constructs a chronological root word from each finite-calendar profile,
 proves literal profile equality with that word followed by Always Continue,
 and connects the fixed-calendar and finite-word payoff images. Arbitrary
 payoff predicates are allowed; response caps are not being compressed.
+`EqualPayoffDifferentBehavioralCaps.equal_terminalPayoff_and_different_playerZero_responseCaps`
+(`UniformEquilibrium/Diagnostics/Quitting/EqualPayoffDifferentBehavioralCaps.lean`)
+gives two actual four-player chronological profiles with the same zero
+payoff vector but player-zero response caps one and zero. The caps range
+over unrestricted behavioral responses.
 `image_fst_quittingTerminalSemanticCarrier_eq_actualPayoffSet`
 (`UniformEquilibrium/Quitting/Paths/TerminalSemanticPayoffProjection.lean`)
 identifies the prescribed-payoff projection of the full semantic carrier
@@ -430,6 +445,19 @@ may depend on that point. The same module proves the actual-profile form.
 (`UniformEquilibrium/Quitting/Paths/FiniteCalendarRewardTableSemialgebraic.lean`)
 prove semialgebraicity of the accepted real reward-table sets themselves.
 The weak-subset test retains its nonnegative-own-singleton requirement.
+`isSemialgebraic_quittingRewardTables_rawNonconcentratedGroupExclusion`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarGroupRewardTableSemialgebraic.lean`)
+gives the corresponding accepted-table set for group exclusion, preserving
+one uniform positive parameter before the universal calendar quantifier.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarReciprocalParameterRecovery.lean`
+proves that strict-deficit and ordered-pair parameters can be chosen as
+positive rational reciprocals. This establishes successful search candidates,
+not an implemented search or a bound on the successful denominator.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarStrictDeficitGroupWeakImplications.lean`
+proves strict deficit implies group exclusion, deriving the required distinct
+players from the deficit assumption itself. With nonnegative own singletons,
+group exclusion implies weak exclusion on all players. Both actual-profile
+and raw-calendar forms are provided.
 An executable raw-table recognition procedure remains to be supplied.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
 supplies the shared elimination algorithm using its proved recursive
@@ -1377,6 +1405,18 @@ These tools transport a supplied mechanism or existence result.  They do not
 supply density of solved games or construct a missing certificate.
 
 ## Boundary analysis and diagnostics
+
+`minimumTerminalSemantic_maximumDebt_allPlayersTie` and
+`minimumTerminalSemantic_maximumDebt_lt_half`
+(`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`)
+show that, for unit-bounded rewards and any finite nonempty player type,
+every debt coordinate equals the positive global minimum of maximum debt,
+and that minimum is strictly below one half. These statements concern
+minimum points in the full prescribed-payoff/response-cap carrier. The
+module also extends attained actual-profile minima to the carrier and gives
+the corresponding actual-profile corollaries. Signed singletons are allowed.
+The results do not establish existence of a positive minimum or an attaining
+best response. The objective is maximum debt, not total debt.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and

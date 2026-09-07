@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
+import UniformEquilibrium.Quitting.Root.RewardTableCoordinates
 
 /-!
 # Joint reward-table and finite-calendar payoff polynomials
@@ -16,9 +17,6 @@ open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- One independent coordinate for every nonempty-coalition reward entry. -/
-abbrev QuittingRewardTableVariable (ι : Type) :=
-  {S : Finset ι // S.Nonempty} × ι
 
 /-- Reward coordinates precede the full, uncompressed calendar coordinate block. -/
 abbrev QuittingFiniteCalendarJointVariable (ι : Type) (deadline : ℕ) :=
