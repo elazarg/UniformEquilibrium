@@ -292,8 +292,14 @@ positive rational accuracy and finite rational Boolean payoff table.
 positive player regrets of the selected product row by that accuracy.
 The search uses rational arithmetic and an explicit finite list; its
 success proof uses exact mixed-Nash existence and a rounding estimate.
-This supplies the generic root-search algorithm, not yet the quitting
-finite-word cap evaluation and selection algorithm.
+`quittingTerminalSemanticPair_rationalFiniteWord_eq_cast`
+(`UniformEquilibrium/Quitting/Root/RationalFiniteWordSemantics.lean`)
+identifies the executable rational payoff/cap fold with the complete
+semantic pair of its actual finite root stack followed by Always Continue.
+The cap bounds all behavioral responses; its tail boundary is the maximum
+of zero and the owner's singleton payoff. Together these supply root search
+and exact finite-word evaluation. The complete rational cap-threshold
+selection algorithm still requires their selection and hazard adapters.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -392,6 +398,11 @@ group exclusion with a fixed weight cap. Compactness also makes strict
 pointwise singleton exclusion equivalent to one positive uniform deficit.
 Quantifier elimination and an executable raw-table recognition procedure
 remain to be supplied.
+The [real quantifier-elimination plan](REAL_QUANTIFIER_ELIMINATION.md)
+specifies the shared library dependency, executable interfaces, and proof
+stages. `MathUE/Polynomial/RealSignCell.lean` proves bounded root-insertion
+and sign-characterization lemmas and unbounded monotone-cell root criteria.
+These interval lemmas do not yet construct complete sign diagrams.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)

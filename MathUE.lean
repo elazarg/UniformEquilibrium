@@ -11,6 +11,7 @@ import MathUE.ExponentialExcessScale
 import MathUE.FinFourSubsetIncidenceCounts
 import MathUE.FiniteSupportInwardScaling
 import MathUE.Probability.DiscreteHazardQuitZeroInstallation
+import MathUE.Probability.StoppingLawQuantile
 import MathUE.Probability.ThreeIndependentFiniteLaws
 import MathUE.Probability.FiniteOverlapSparseCompression
 import MathUE.AffineRecurrenceFiniteUnroll
@@ -294,6 +295,8 @@ import MathUE.FiniteCycleAggregate
 import MathUE.FiniteDirectedPeriod
 import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
+import MathUE.Logic.SignFormula
+import MathUE.Polynomial.RealSignCell
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.MvPolynomialFDeriv

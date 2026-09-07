@@ -7,7 +7,7 @@ import Mathlib.Topology.Algebra.MvPolynomial
 import Mathlib.Topology.Closure
 import Mathlib.Topology.LocallyClosed
 import Mathlib.Topology.Instances.Real.Lemmas
-import Mathlib.Data.Sign.Defs
+import MathUE.Logic.SignFormula
 
 /-!
 # Finite polynomial sign cells
@@ -310,25 +310,7 @@ theorem exists_signCell_subset_of_mem_closure
     exists_mem_closure_signCell_of_mem_closure_iUnion hx
   exact ⟨τ, signCell_subset_of_mem_selectedPatterns hA hτ, hxτ⟩
 
-/-- A finite Boolean formula in exact polynomial sign atoms. -/
-inductive SignFormula (ι : Type*)
-  | atom (i : ι) (s : SignType)
-  | top
-  | bot
-  | and (φ ψ : SignFormula ι)
-  | or (φ ψ : SignFormula ι)
-  | not (φ : SignFormula ι)
-
 namespace SignFormula
-
-/-- Truth of a Boolean sign formula on a sign pattern. -/
-def Holds : SignFormula ι → SignPattern ι → Prop
-  | atom i s, τ => τ i = s
-  | top, _ => True
-  | bot, _ => False
-  | and φ ψ, τ => φ.Holds τ ∧ ψ.Holds τ
-  | or φ ψ, τ => φ.Holds τ ∨ ψ.Holds τ
-  | not φ, τ => ¬φ.Holds τ
 
 /-- The assignments satisfying a Boolean formula in the signs of `P`. -/
 def realization

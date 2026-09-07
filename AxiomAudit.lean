@@ -271,6 +271,7 @@ import MathUE.LinearProgramming.TwoRowNegativeShapeNeighborhood
 import MathUE.LinearSqrtGapBound
 import MathUE.List
 import MathUE.LocalPeriodicAnchor
+import MathUE.Logic.SignFormula
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
 import MathUE.MeasurableSelection
@@ -328,6 +329,7 @@ import MathUE.Periodicity
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.PolynomialDerivativeApproximation
+import MathUE.Polynomial.RealSignCell
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.TensorBernsteinDerivativeConvergence
 import MathUE.Polynomial.TensorBernsteinDerivativeEstimate
@@ -462,6 +464,7 @@ import MathUE.Probability.StationaryCommunicatingClass
 import MathUE.Probability.StationaryNonnegativeDrift
 import MathUE.Probability.StitchedMartingale
 import MathUE.Probability.StoppingLawCapBandRedistribution
+import MathUE.Probability.StoppingLawQuantile
 import MathUE.Probability.StoppingLawReconstruction
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
@@ -2427,6 +2430,7 @@ import UniformEquilibrium.Quitting.Root.ProductRootProbabilityBridge
 import UniformEquilibrium.Quitting.Root.PureTimeCapChild
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.RationalApproximateQuittingRoot
+import UniformEquilibrium.Quitting.Root.RationalFiniteWordSemantics
 import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
 import UniformEquilibrium.Quitting.Root.RenewedLiteralExactWordSequence
 import UniformEquilibrium.Quitting.Root.SelfTailClosure
