@@ -136,6 +136,13 @@ quitting-premium property, including the empty-player case.
 `isSemialgebraic_hasProductLowQuittingPremium_rewardTables`
 (`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumSemialgebraic.lean`)
 proves semialgebraicity of that class with all real reward entries free.
+The premium polynomial itself is defined in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumPolynomial.lean`,
+without importing quantifier elimination. Its fixed-reward specialization
+has degree at most one in each opponent's hazard and zero in the player's
+own hazard, with total degree at most the number of opponents, by
+`degrees_quittingFixedRewardPremiumPolynomial_le`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumHazardDegree.lean`).
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarRewardTableSemialgebraic.lean`
 proves semialgebraicity of strict-exclusion and weak-subset-exclusion
 acceptance sets with the reward entries themselves as free coordinates.
@@ -158,7 +165,20 @@ elimination. It never computes or compares an unencoded real value.
 (`MathUE/RealQuantifierElimination/IsolatedRealRootCoverage.lean`) prove
 that these descriptions cover exactly the algebraic reals, including every
 finite tuple. Coverage is existential, not a computable encoder from an
-unencoded real number. Game-specific encoded-table frontends remain separate.
+unencoded real number.
+`decideHasProductLowQuittingPremiumAtIsolatedRoots_eq_true_iff`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootDecision.lean`)
+instantiates this interface for product-low quitting reward tables. Its
+correctness holds for every actual real table denoted by the certified
+entries. `UniformEquilibrium/Quitting/Root/RewardTableParameters.lean`
+provides the shared computable reward-entry enumeration and inverse
+parameter maps; it has no quantifier-elimination dependency. Rational and
+algebraic decision share the expression frontend in
+`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumFormula.lean`.
+`exists_certifiedIsolatedRootQuittingReward_of_isAlgebraic`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootCoverage.lean`)
+supplies a denoting encoding for every coordinatewise algebraic actual table;
+the same module proves that every certified input denotes a real table.
 
 ## Endpoint and coefficient scope
 

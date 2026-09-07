@@ -59,10 +59,30 @@ proves that an executable rational-table test returns true exactly when the
 original product-low condition holds. The decision procedure uses actual
 real quantifier elimination and includes the empty-player case. It has no
 efficiency guarantee and does not decide uniform-equilibrium existence.
+`decideHasProductLowQuittingPremiumAtIsolatedRoots_eq_true_iff`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootDecision.lean`)
+provides the corresponding executable test for certified algebraic reward
+entries. For every actual real table denoted by those entries, its Boolean
+answer is true exactly when that table is product-low. The algorithm uses
+only rational polynomial coefficients and isolating intervals, not real
+comparisons. Both decision procedures share the same hazard-premium formula
+implementation.
+`exists_certifiedIsolatedRootQuittingReward_of_isAlgebraic`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootCoverage.lean`)
+proves that every coordinatewise algebraic table has such an encoding of
+that same table. The companion denotation theorem rules out vacuous inputs.
+Encoding existence is not an algorithm taking unencoded real numbers.
 `isSemialgebraic_hasProductLowQuittingPremium_rewardTables`
 (`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumSemialgebraic.lean`)
 proves that the accepted real reward tables form a semialgebraic set, with
 reward entries as free coordinates and no singleton sign restriction.
+`degrees_quittingFixedRewardPremiumPolynomial_le`
+(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumHazardDegree.lean`)
+bounds the fixed-reward premium's variable multiset by the opponent set.
+Thus each hazard has degree at most one, the player's own hazard has degree
+zero, and total hazard degree is at most the number of opponents. The
+polynomial specializes the joint reward-hazard polynomial and evaluates to
+the actual premium at every real hazard vector.
 `exists_uniformEquilibriumPayoff_of_productLowPremiumDecision`
 (`UniformEquilibrium/Quitting/Classification/Existence/ProductLowPremiumDecisionUniformPayoff.lean`)
 connects a true decision to fixed-payoff existence when the player set is
@@ -81,13 +101,24 @@ separation assertion requires positive scales. In contrast,
 `productLow_iff_supportwiseBalance_finTwo`
 (`UniformEquilibrium/Quitting/Classification/FinTwoProductLowSupportwiseEquivalence.lean`)
 identifies the two conditions for arbitrary signed two-player tables.
+`finTwo_not_hasProductLowQuittingPremium_iff`
+(`UniformEquilibrium/Quitting/Classification/FinTwoProductLowPremiumCriterion.lean`)
+identifies their failure with both full-coalition premiums being positive.
 `UniformEquilibrium/Quitting/Examples/PureCoalitionLowProductFailure.lean`
 shows that testing only pure coalitions does not establish product-low:
 its three-player half-hazard root has every Quit premium equal to one quarter.
+`UniformEquilibrium/Quitting/Examples/PureCoalitionLowProductFailureFinFour.lean`
+gives the four-player version with an inactive fourth player, arbitrary
+passive rewards, absorption probability seven eighths, and the same active
+premiums.
 `UniformEquilibrium/Quitting/Examples/ProductLowPremiumBoundaryIdentities.lean`
 gives the separating family's positive integer dual combination and a
 normalized correlated coalition law which cannot be an independent product
-law. `exactRootSuccessor_mem_singletonLowerBoundary`
+law. Its expected participant premium is one seventh of the coordinate
+scale, including an equality stated directly on the actual reward table
+with nonparticipants excluded. The same module records the all-Quit premium
+vector and the zero active premium when only player three quits.
+`exactRootSuccessor_mem_singletonLowerBoundary`
 (`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowExactRootBoundary.lean`)
 shows that nonnegative own premiums and product-low imply every absorbing
 exact root's successor lies above all singleton levels, with an active
@@ -465,6 +496,12 @@ gives a concrete four-player table with uniform deficit margin one. The same
 module proves that the zero table has no positive strict-deficit margin but
 does satisfy group exclusion and weak exclusion on every nonempty subset,
 with equality. These statements concern all actual behavioral profiles.
+`UniformEquilibrium/Quitting/Examples/FiniteCalendarPredicateFailureExactNashBoundary.lean`
+gives a four-player table whose full-quitting profile is exact terminal Nash
+against every behavioral deviation, while its payoff exceeds all singleton
+rewards. It therefore refutes every positive strict-deficit certificate,
+group exclusion for every weight cap, and weak exclusion for every subset.
+These tests are sufficient conditions, not an equilibrium-existence decision.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
 supplies the shared elimination algorithm using its proved recursive
 sign-diagram producer.
