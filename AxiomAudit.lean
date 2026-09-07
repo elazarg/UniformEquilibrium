@@ -154,6 +154,7 @@ import MathUE.FiniteBinaryWeightedPotential
 import MathUE.FiniteBooleanEndpointOrbit
 import MathUE.FiniteChargedReturn
 import MathUE.FiniteCoalitionSupportPeelingOrder
+import MathUE.FiniteContinuousIntervalSelection
 import MathUE.FiniteCycleAggregate
 import MathUE.FiniteCyclicVariation
 import MathUE.FiniteDeflationIteration
@@ -1625,6 +1626,7 @@ import UniformEquilibrium.Quitting.Classification.Circulant.TerminalExploitabili
 import UniformEquilibrium.Quitting.Classification.Circulant.TerminalExploitabilityTrichotomyClosure
 import UniformEquilibrium.Quitting.Classification.Circulant.Trichotomy
 import UniformEquilibrium.Quitting.Classification.Circulant.TrichotomyClosure
+import UniformEquilibrium.Quitting.Classification.CommonSupportHazardPolynomials
 import UniformEquilibrium.Quitting.Classification.EquivariantSecurityWelfareAssembly
 import UniformEquilibrium.Quitting.Classification.ErrorExponentRefutation
 import UniformEquilibrium.Quitting.Classification.Existence.ActiveOpponentDeviationTelescope

@@ -1,4 +1,5 @@
 import MathUE.AbelCesaro
+import MathUE.FiniteContinuousIntervalSelection
 import MathUE.EventuallyPositiveLastZero
 import MathUE.DisplacementSeamScalarBoundaries
 import MathUE.ExponentialExcessScale

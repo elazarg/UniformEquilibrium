@@ -153,4 +153,28 @@ theorem exists_pureTime_le_deadline_or_never_terminalPayoff_eq_cap_of_opponentPu
   simp [quittingBehaviorLiveHazard,
     quittingPureTimeBehaviorStrategy, quittingPureTimeHazard]
 
+/-- An anchor may quit surely before the displayed deadline and behave
+arbitrarily at its later null live histories. The complete cap still attains
+at `Never` or at a pure time no later than the displayed deadline. -/
+theorem exists_pureTime_le_deadline_or_never_terminalPayoff_eq_cap_of_sureOpponentBy
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    {who opponent : ι} (deadline : ℕ) (hne : opponent ≠ who)
+    (hsure : ∃ time ≤ deadline,
+      quittingProfileLiveRoot reward profile time opponent = PMF.pure true) :
+    ∃ choice : Option ℕ,
+      (choice = none ∨ ∃ time ≤ deadline, choice = some time) ∧
+        quittingTerminalPayoff reward
+            (Function.update profile who
+              (quittingPureTimeBehaviorStrategy reward who choice)) who =
+          quittingContinuationBestResponseValue reward profile who := by
+  obtain ⟨time, htime, hsure⟩ := hsure
+  obtain ⟨choice, hchoice, hattains⟩ :=
+    exists_pureTime_le_deadline_or_never_terminalPayoff_eq_cap
+      reward profile time hne hsure
+  refine ⟨choice, ?_, hattains⟩
+  rcases hchoice with hnone | ⟨chosen, hchosen, hchoice⟩
+  · exact Or.inl hnone
+  · exact Or.inr ⟨chosen, hchosen.trans htime, hchoice⟩
+
 end GameTheory

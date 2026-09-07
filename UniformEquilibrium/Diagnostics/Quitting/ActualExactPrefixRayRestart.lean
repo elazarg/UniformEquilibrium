@@ -22,18 +22,17 @@ quitter carries the full supplied gap at the literal child and starts the
 shifted cap tail there. -/
 theorem initial_or_lastZero_uniqueSure_shiftedCapTail
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (hnot : ¬ ∃ payoff : Payoff (Fin 4),
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     {gap : ℝ} (hexploit : HasTerminalExploitabilityGap reward gap)
     (hgap : 0 < gap)
     (source : (quittingGame reward).BehaviorProfile)
     (ray : QuittingActualExactPrefixRay reward source)
     (anchor : Fin 4) (deadline : ℕ)
-    (hsure : quittingProfileLiveRoot reward source deadline anchor =
-      PMF.pure true)
+    (hsureBy : ∃ time ≤ deadline,
+      quittingProfileLiveRoot reward source time anchor = PMF.pure true)
     (hanchorDebt : quittingTerminalDeviationDebt reward source anchor = 0) :
-    (∀ depth, quittingProfileLiveRoot reward (ray.profiles depth)
-        (deadline + depth) anchor = PMF.pure true) ∧
+    (∀ depth, ∃ time ≤ deadline + depth,
+      quittingProfileLiveRoot reward (ray.profiles depth) time anchor =
+        PMF.pure true) ∧
     (∀ depth,
       quittingTerminalDeviationDebt reward (ray.profiles depth) anchor = 0) ∧
     ((∃ tail : ShiftedCapTail ray,
@@ -52,12 +51,22 @@ theorem initial_or_lastZero_uniqueSure_shiftedCapTail
             tail.initialChoice = some time) ∧
         gap ≤ quittingTerminalDeviationDebt reward
           (ray.profiles (last + 1)) owner) := by
+  have hnot :=
+    quittingGame_not_exists_uniformEquilibriumPayoff_of_terminalExploitabilityGap
+      reward hgap hexploit
   have hsummable :=
     finFour_summable_actualExactPrefix_hazard_of_no_uniformPayoff
       reward hnot ray.profiles ray.roots ray.profiles_succ ray.roots_exact
   have heventually :=
     eventually_jointSurvival_pos_of_summable_marginalHazard ray.roots hsummable
-  have hsureAll := ray.anchor_sureQuit_at_shiftedDeadline anchor deadline hsure
+  obtain ⟨anchorTime, hanchorTime, hsure⟩ := hsureBy
+  have hsureAllAt :=
+    ray.anchor_sureQuit_at_shiftedDeadline anchor anchorTime hsure
+  have hsureAll : ∀ depth, ∃ time ≤ deadline + depth,
+      quittingProfileLiveRoot reward (ray.profiles depth) time anchor =
+        PMF.pure true := by
+    intro depth
+    exact ⟨anchorTime + depth, by omega, hsureAllAt depth⟩
   have hanchorZero := ray.anchor_debt_eq_zero anchor hanchorDebt
   refine ⟨hsureAll, hanchorZero, ?_⟩
   by_cases hzeroRoot : ∃ depth,
@@ -95,8 +104,13 @@ theorem initial_or_lastZero_uniqueSure_shiftedCapTail
       linarith
     obtain ⟨choice, hchoiceBound, hcap⟩ :=
       exists_pureTime_le_deadline_or_never_terminalPayoff_eq_cap
-        reward (ray.profiles (last + 1)) (deadline + (last + 1))
-          hownerNe.symm (hsureAll (last + 1))
+        reward (ray.profiles (last + 1)) (anchorTime + (last + 1))
+          hownerNe.symm (hsureAllAt (last + 1))
+    have hchoiceBound' : choice = none ∨
+        ∃ time ≤ deadline + (last + 1), choice = some time := by
+      rcases hchoiceBound with hnone | ⟨time, htime, rfl⟩
+      · exact Or.inl hnone
+      · exact Or.inr ⟨time, by omega, rfl⟩
     have hpositiveTail : ∀ fuel,
         0 < quittingStationaryContinueMass
           (ray.roots ((last + 1) + fuel)) := by
@@ -107,7 +121,7 @@ theorem initial_or_lastZero_uniqueSure_shiftedCapTail
         hcap (hgap.trans_le hownerDebt) hpositiveTail hsummable
     subst choice
     exact Or.inr ⟨last, owner, tail, hlastZero, howner, hunique,
-      hownerNe, htailStart, htailOwner, hchoiceBound, hownerDebt⟩
+      hownerNe, htailStart, htailOwner, hchoiceBound', hownerDebt⟩
   · have hpositive : ∀ depth,
         0 < quittingStationaryContinueMass (ray.roots depth) := by
       intro depth
@@ -116,8 +130,13 @@ theorem initial_or_lastZero_uniqueSure_shiftedCapTail
         (fun h => hzeroRoot ⟨depth, h.symm⟩)
     obtain ⟨owner, choice, hownerNe, hchoiceBound, hcap, hownerDebt, -, -⟩ :=
       hexploit.exists_outsider_pureTimeCap_with_prefix_debt reward source
-        anchor deadline (by rw [hanchorDebt]; exact hgap) hsure [] 1
+        anchor anchorTime (by rw [hanchorDebt]; exact hgap) hsure [] 1
           (by simp [quittingLiteralRootStackJointSurvival])
+    have hchoiceBound' : choice = none ∨
+        ∃ time ≤ deadline, choice = some time := by
+      rcases hchoiceBound with hnone | ⟨time, htime, rfl⟩
+      · exact Or.inl hnone
+      · exact Or.inr ⟨time, by omega, rfl⟩
     have hcapRay : quittingTerminalPayoff reward
         (Function.update (ray.profiles 0) owner
           (quittingPureTimeBehaviorStrategy reward owner choice)) owner =
@@ -131,7 +150,7 @@ theorem initial_or_lastZero_uniqueSure_shiftedCapTail
         hdebtRay (by simpa using hpositive) hsummable
     subst owner
     subst choice
-    exact Or.inl ⟨tail, htailStart, hownerNe, hchoiceBound, by
+    exact Or.inl ⟨tail, htailStart, hownerNe, hchoiceBound', by
       simpa [ray.profiles_zero] using hownerDebt⟩
 
 end QuittingActualExactPrefixRay

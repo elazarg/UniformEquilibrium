@@ -58,4 +58,19 @@ theorem quittingPureTimeCapChild_owner_zeroDebt_and_deadlineAbsorption
     quittingLiveMass_succ_eq_zero_of_sure_owner reward _ owner depth
       (hfacts.2.2.1 depth)⟩
 
+/-- A named anchor's sure live-row Quit makes absorption at the next stage
+robust to every behavioral deviation of every distinct player. -/
+theorem quittingLiveMass_update_succ_eq_zero_of_sureOpponentAt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    {who opponent : ι} (deadline : ℕ) (hne : opponent ≠ who)
+    (hsure : quittingProfileLiveRoot reward profile deadline opponent = PMF.pure true)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingLiveMass reward (Function.update profile who deviation) (deadline + 1) = 0 := by
+  apply quittingLiveMass_succ_eq_zero_of_sure_owner reward _ opponent deadline
+  rw [quittingProfileLiveRoot_update_eq_rootSequenceUpdate]
+  unfold quittingRootSequenceUpdate
+  rw [Function.update_of_ne hne]
+  exact hsure
+
 end GameTheory

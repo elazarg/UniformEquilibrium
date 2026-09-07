@@ -84,6 +84,9 @@ identifies product-low with weak support peeling when every participant's
 own premium is nonnegative. The proof tests a literal half-hazard root on
 each active support. This equivalence does not require nonnegative
 singleton levels or restrict passive rewards.
+The same module identifies this condition with supportwise balance and
+positive-premium player ranking, and proves that every product-low table
+failing supportwise balance has a strictly negative participant premium.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
@@ -485,6 +488,18 @@ along an arbitrary supplied ray with summable hazards and positive survival
 on its chosen tail, retaining one positive debt floor. A prescribed sure
 deadline and zero anchor debt persist under every exact prefix. This generic
 construction does not prove that its chosen roots have positive survival.
+`QuittingActualExactPrefixRay.initial_or_lastZero_uniqueSure_shiftedCapTail`
+(`UniformEquilibrium/Diagnostics/Quitting/ActualExactPrefixRayRestart.lean`)
+applies to every actual ray from a zero-debt anchor that quits surely by a
+finite deadline. A positive terminal gap supplies summable hazards. Either
+one fixed outsider's cap shifts from the initial source, or the last
+zero-survival root's unique sure quitter starts a shifted cap at its literal
+child. Both alternatives retain bounded finite-or-Never attainment and one
+positive debt floor. No stationary tail replacement or forward infinite
+chronology is inferred. `quittingLiveMass_update_succ_eq_zero_of_sureOpponentAt`
+(`UniformEquilibrium/Quitting/Root/CapChildDeadlineAbsorption.lean`) states
+the anchor's deadline absorption after every distinct player's behavioral
+deviation.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the

@@ -113,4 +113,45 @@ theorem hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative
     exact hasProductLowQuittingPremium_of_supportwiseBalance reward
       (supportwiseBalance_of_weakQuittingPremiumSupportPeeling reward hpeel)
 
+/-- On nonnegative own premiums, supportwise certificates and the product-low
+condition are equivalent. No singleton-sign assumption is needed. -/
+theorem hasProductLowQuittingPremium_iff_supportwiseBalance_of_nonnegative
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnonnegative : HasNonnegativeOwnQuittingPremium reward) :
+    HasProductLowQuittingPremium reward ↔
+      IsSupportwiseBalancedQuittingPremiumTable reward := by
+  constructor
+  · intro hlow
+    exact supportwiseBalance_of_weakQuittingPremiumSupportPeeling reward
+      ((hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative
+        reward hnonnegative).mp hlow)
+  · exact hasProductLowQuittingPremium_of_supportwiseBalance reward
+
+/-- On nonnegative own premiums, product-low is exactly a full player-label
+ranking of the positive-premium relation. -/
+theorem hasProductLowQuittingPremium_iff_playerRanking_of_nonnegative
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnonnegative : HasNonnegativeOwnQuittingPremium reward) :
+    HasProductLowQuittingPremium reward ↔
+      HasPositiveQuittingPremiumPlayerRanking reward :=
+  (hasProductLowQuittingPremium_iff_weakSupportPeeling_of_nonnegative
+    reward hnonnegative).trans
+      (weakQuittingPremiumSupportPeeling_iff_playerRanking reward)
+
+/-- Every separation of product-low from supportwise balance uses a strictly
+negative own premium somewhere; it cannot occur in the nonnegative cone. -/
+theorem exists_negativeOwnPremium_of_productLow_not_supportwiseBalance
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hlow : HasProductLowQuittingPremium reward)
+    (hnot : ¬ IsSupportwiseBalancedQuittingPremiumTable reward) :
+    ∃ (terminal : {S : Finset ι // S.Nonempty}) (player : ι),
+      player ∈ terminal.val ∧
+        reward terminal player < reward (quittingSingletonTerminal player) player := by
+  by_contra hnone
+  apply hnot
+  apply (hasProductLowQuittingPremium_iff_supportwiseBalance_of_nonnegative reward ?_).mp hlow
+  intro terminal player hplayer
+  by_contra hlt
+  exact hnone ⟨terminal, player, hplayer, lt_of_not_ge hlt⟩
+
 end GameTheory
