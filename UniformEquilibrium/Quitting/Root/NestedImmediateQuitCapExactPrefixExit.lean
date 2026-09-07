@@ -441,4 +441,45 @@ theorem exists_nestedPayoffLimit_le_singleton_sub_debtFloor_of_cofinal_quitCap
       (hfrequentWall.and_eventually hnegative).exists
     linarith
 
+/-- If a player Quits surely at the displayed root, its prescribed payoff is
+the immediate-Quit payoff.  Positive debt therefore prevents immediate Quit
+from attaining its complete cap at the literal prefixed profile. -/
+theorem not_immediateQuitAttainsTerminalCap_of_sureQuitter_of_positiveDebt
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (root : ι → PMF Bool)
+    (continuation : (quittingGame reward).BehaviorProfile) (owner : ι)
+    (howner : root owner = PMF.pure true)
+    (hdebt : 0 < quittingTerminalDeviationDebt reward
+      (quittingRootThenContinuationProfile reward root continuation) owner) :
+    ¬ImmediateQuitAttainsTerminalCap reward
+      (quittingRootThenContinuationProfile reward root continuation) owner := by
+  intro hcap
+  have hpayoff : quittingTerminalPayoff reward
+        (quittingRootThenContinuationProfile reward root continuation) owner =
+      quittingRootQuitPayoff reward
+        (fun who ↦ quittingTerminalPayoff reward continuation who) root owner := by
+    rw [quittingTerminalPayoff_rootThenContinuation_eq]
+    calc
+      quittingRootExpectedPayoff reward
+          (fun who ↦ quittingTerminalPayoff reward continuation who) root owner =
+          quittingRootExpectedPayoff reward
+            (fun who ↦ quittingTerminalPayoff reward continuation who)
+            (Function.update root owner (root owner)) owner := by
+              rw [Function.update_eq_self]
+      _ = _ := by
+        rw [quittingRootExpectedPayoff_update_eq_endpointMix, howner]
+        simp
+  have hquit : quittingTerminalPayoff reward
+        (Function.update
+          (quittingRootThenContinuationProfile reward root continuation) owner
+          (quittingPureTimeBehaviorStrategy reward owner (some 0))) owner =
+      quittingRootQuitPayoff reward
+        (fun who ↦ quittingTerminalPayoff reward continuation who) root owner :=
+    quittingTerminalPayoff_rootThen_pureTime_zero_eq_quitPayoff
+      reward root continuation owner
+  unfold ImmediateQuitAttainsTerminalCap at hcap
+  unfold quittingTerminalDeviationDebt at hdebt
+  rw [hcap.symm, hquit, ← hpayoff] at hdebt
+  linarith
+
 end GameTheory

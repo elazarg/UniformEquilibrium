@@ -1,4 +1,5 @@
 import MathUE
+import UniformEquilibrium.Quitting.Root.SingletonBoundaryExactRoot
 import UniformEquilibrium.Quitting.Classification.CommonSupportHazardPolynomials
 import UniformEquilibrium.Quitting.Root.ExactRootContinuationConstruction
 import UniformEquilibrium.Quitting.Paths.ActualExactPrefixRay

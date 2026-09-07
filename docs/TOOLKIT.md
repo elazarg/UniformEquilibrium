@@ -479,6 +479,16 @@ late resets, the actual child is cap-pinned, and every exact root against its
 payoff has the stated debt-drop and absorption floors. The output is a
 shift/reset dichotomy; by itself it does not construct the subsequent exact
 ray from that reset child.
+`finFour_lateResetChild_exists_directShiftedCapRestart`
+(`UniformEquilibrium/Diagnostics/Quitting/LateResetDirectSourceRestart.lean`)
+constructs that ray from the unchanged reset child. Its all-positive-survival
+branch keeps the reset owner's profitable immediate-Quit cap as its initial
+choice. Its other branch retains the old zero-debt anchor and starts the
+unique sure quitter's shifted cap at the literal last-zero child.
+`LateResetChildCapPin.totalDebt_ge_minimum_add_expenditure`
+(`UniformEquilibrium/Diagnostics/Quitting/LateResetChildCapPinExit.lean`)
+places the reset child's debt above any global carrier lower bound by the
+fixed cap-pin expenditure; the proof selects an exact root internally.
 
 `exists_quittingActualExactPrefixRay`
 (`UniformEquilibrium/Quitting/Paths/ActualExactPrefixRay.lean`) recursively
@@ -500,6 +510,11 @@ chronology is inferred. `quittingLiveMass_update_succ_eq_zero_of_sureOpponentAt`
 (`UniformEquilibrium/Quitting/Root/CapChildDeadlineAbsorption.lean`) states
 the anchor's deadline absorption after every distinct player's behavioral
 deviation.
+`not_immediateQuitAttainsTerminalCap_of_sureQuitter_of_positiveDebt`
+(`UniformEquilibrium/Quitting/Root/NestedImmediateQuitCapExactPrefixExit.lean`)
+proves that the sure quitter's positive-debt literal child cannot have an
+immediate-Quit cap. This prevents identifying that branch with a cap-pinned
+stationary replacement.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the

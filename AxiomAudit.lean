@@ -16,6 +16,7 @@ import MathUE.AlgebraicSelection
 import MathUE.Analysis.CompactSubtypeZeroExtension
 import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Analysis.DerivativeDifferenceMeanValue
+import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.OneSidedCapacitySmoothing
 import MathUE.Analysis.PositiveWeightedApproximation
 import MathUE.Analysis.SummableTailAverage
@@ -899,6 +900,7 @@ import UniformEquilibrium.Diagnostics.Quitting.FullCoreDeadlockDebtBound
 import UniformEquilibrium.Diagnostics.Quitting.InducedOwnerChambers
 import UniformEquilibrium.Diagnostics.Quitting.LateResetChildCapPinExit
 import UniformEquilibrium.Diagnostics.Quitting.LateResetChildRestartAssembly
+import UniformEquilibrium.Diagnostics.Quitting.LateResetDirectSourceRestart
 import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashGlobalMinimumMoat
 import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashMinimumFace
 import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashSaturationHull
@@ -2371,6 +2373,7 @@ import UniformEquilibrium.Quitting.Root.Simplex
 import UniformEquilibrium.Quitting.Root.SimplexCoalitionMass
 import UniformEquilibrium.Quitting.Root.SinglePivotFiniteBellmanTransport
 import UniformEquilibrium.Quitting.Root.SinglePivotNormalization
+import UniformEquilibrium.Quitting.Root.SingletonBoundaryExactRoot
 import UniformEquilibrium.Quitting.Root.SingletonGapSemanticDebtDescent
 import UniformEquilibrium.Quitting.Root.StationaryTailSplice
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect

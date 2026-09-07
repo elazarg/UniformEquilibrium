@@ -1,4 +1,5 @@
 import UniformEquilibrium.Diagnostics.Quitting.FixedCapPinCoordinateDebtDrop
+import UniformEquilibrium.Quitting.Root.NashExistence
 import UniformEquilibrium.Quitting.Root.NestedImmediateQuitCapExactPrefixExit
 
 /-! # Quantitative exact-root exit at literal late-reset children -/
@@ -232,5 +233,35 @@ theorem eventually_resetChild_everyExactRoot_debtDrop_and_absorptionFloor
   intro exactRoot hnash
   exact pin.everyExactRoot_debtDrop_and_absorptionFloor
     hM hdelta hreward exactRoot hnash
+
+/-- If the exact successor of a pinned reset child lies above a supplied
+global total-debt lower bound, then the child lies above that bound by the
+full fixed cap-pin expenditure. -/
+theorem LateResetChildCapPin.totalDebt_ge_minimum_add_expenditure
+    {reward : {S : Finset player // S.Nonempty} → Payoff player}
+    {child : (quittingGame reward).BehaviorProfile}
+    {observer : player} {M delta minimum : ℝ}
+    (pin : LateResetChildCapPin reward child observer delta)
+    (hM : 0 < M) (hdelta : 0 < delta)
+    (hreward : ∀ terminal who, |reward terminal who| ≤ M)
+    (hminimum : ∀ pair ∈ quittingTerminalSemanticCarrier reward,
+      minimum ≤ quittingTerminalSemanticDebtSum pair) :
+    minimum + min (delta / 2) (delta ^ 2 / (16 * M)) ≤
+      quittingTerminalDebtSum reward child := by
+  obtain ⟨exactRoot, hnash⟩ := exists_isZeroQuittingRootNash
+    (reward := reward) (fun who ↦ quittingTerminalPayoff reward child who)
+  have hdrop :=
+    pin.everyExactRoot_debtDrop_and_absorptionFloor
+      hM hdelta hreward exactRoot hnash |>.1
+  have hpair : quittingTerminalSemanticPair reward child ∈
+      quittingTerminalSemanticCarrier reward :=
+    subset_closure ⟨child, rfl⟩
+  have hprefix := quittingTerminalSemanticPrefix_mem_carrier
+    reward exactRoot (quittingTerminalSemanticPair reward child) hpair
+  have hminimumSuccessor := hminimum _ hprefix
+  rw [← quittingTerminalSemanticPair_rootThenContinuation] at hminimumSuccessor
+  change minimum ≤ quittingTerminalDebtSum reward
+    (quittingRootThenContinuationProfile reward exactRoot child) at hminimumSuccessor
+  linarith
 
 end GameTheory
