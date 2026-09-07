@@ -30,6 +30,10 @@ def root : Fin 3 → PMF Bool := quittingPureSetRoot {1, 2}
 theorem weight_nonneg (player : Fin 3) : 0 ≤ weight player := by
   fin_cases player <;> norm_num [weight]
 
+/-- The displayed semipositive global weight is normalized. -/
+theorem weight_sum_one : (∑ player : Fin 3, weight player) = 1 := by
+  norm_num [weight, Fin.sum_univ_three]
+
 theorem weight_not_strictlyPositive : ¬∀ player, 0 < weight player := by
   intro h
   have hzero := h 1

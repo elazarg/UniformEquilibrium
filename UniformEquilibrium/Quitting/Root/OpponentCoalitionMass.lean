@@ -276,4 +276,15 @@ theorem quittingOpponentCoalitionMass_nonneg
     (Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg)
     (Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg)
 
+/-- The masses of all coalitions of opponents sum to one. -/
+theorem quittingOpponentCoalitionMass_sum_powerset
+    (root : ι → PMF Bool) (who : ι) :
+    (∑ coalition ∈ (Finset.univ.erase who).powerset,
+      quittingOpponentCoalitionMass root who coalition) = 1 := by
+  unfold quittingOpponentCoalitionMass
+  rw [← Finset.prod_add]
+  apply Finset.prod_eq_one
+  intro opponent _
+  simp [pmfBool_false_toReal]
+
 end GameTheory

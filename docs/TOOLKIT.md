@@ -56,6 +56,14 @@ identifies the two conditions for arbitrary signed two-player tables.
 `UniformEquilibrium/Quitting/Examples/PureCoalitionLowProductFailure.lean`
 shows that testing only pure coalitions does not establish product-low:
 its three-player half-hazard root has every Quit premium equal to one quarter.
+`UniformEquilibrium/Quitting/Examples/ProductLowPremiumBoundaryIdentities.lean`
+gives the separating family's positive integer dual combination and a
+normalized correlated coalition law which cannot be an independent product
+law. `exactRootSuccessor_mem_singletonLowerBoundary`
+(`UniformEquilibrium/Quitting/Classification/NonnegativeProductLowExactRootBoundary.lean`)
+shows that nonnegative own premiums and product-low imply every absorbing
+exact root's successor lies above all singleton levels, with an active
+coordinate attaining its singleton exactly. Its converse is not asserted.
 
 `exists_uniformEquilibriumPayoff_of_supportwiseBalance`
 (`UniformEquilibrium/Quitting/Classification/Existence/SupportwisePremiumUniformPayoff.lean`)
@@ -101,6 +109,10 @@ shows that a single nonnegative weighting can miss the active support: its
 sure-pair root is exact Nash while every active Quit endpoint exceeds its
 singleton reward. These are failures of sufficient conditions, not failures
 of equilibrium existence.
+`UniformEquilibrium/Quitting/Examples/FinTwoHazardWeightedPremiumBoundary.lean`
+exhibits an actual two-player reward table, product root, and normalized
+weights whose plain average Quit premium is positive while the average
+multiplied by the actual Quit hazards is zero.
 
 The shared classical source is
 `exists_periodic_quittingPerfectAbsorbingRootSequence_of_lowActiveQuitPayoff`
@@ -347,6 +359,14 @@ uses the actual infinite joint-survival product before the starting depth; at ea
 one outsider and one response are then fixed for all later literal children.
 It retains the copied behavioral response, exact survival-scaled gain, and
 debt bounds using both the actual window and infinite-survival factors.
+`HasTerminalExploitabilityGap.exists_late_fixedOutsider_halfGap`
+(`UniformEquilibrium/Quitting/Root/LateResetFixedOutsiderHalfGap.lean`)
+chooses a starting child beyond any requested depth, then one outsider and
+one bounded finite-or-Never attained response. At every later child it
+retains the exact copied-response gain and both its gain and debt bounds by
+half the game-level gap. This late bound is independent of the initial
+infinite-survival product; positive initial survival is still used to
+transport the owner's cap along the supplied source.
 `exists_coherentOutsiderCapClock_on_pureTimeCapChildren`
 (`UniformEquilibrium/Quitting/Root/CoherentPureTimeCapClock.lean`) selects
 complete caps coherently, with each next clock either immediate Quit or the
@@ -364,6 +384,28 @@ proves the zero-debt owner's forced-Continue action is root-optimal and
 separately proves summability of the first, second, and fourth outsider seam
 terms from summable owner hazard. It does not make outsider roots Nash or
 bound the third, nonlocal payoff-displacement term by a summable sequence.
+
+`exists_terminalCapChildDisplacement_limit_series`
+(`UniformEquilibrium/Quitting/Root/TerminalChildPayoffDisplacementSeries.lean`)
+identifies the literal child-minus-source payoff limit from any starting
+depth as its displacement times the infinite forced-root product plus the
+weighted series of owner-correction charges. Both the absolute charge tail
+and the weighted series are explicitly summable. The actual genealogy and
+summable marginal hazards are inputs; Nash, positive survival, and a
+distinct observer are not needed for this series identity.
+
+`exists_offMinimum_collar_on_completeCap_singletonSlab`
+(`UniformEquilibrium/Diagnostics/Quitting/CompleteCapSingletonSlabCollar.lean`)
+gives a uniform positive debt margin above a positive global lower bound on
+the semantic carrier's closed singleton-cap slab. No attaining minimizer is
+an input. Its parameter-family corollary requires neither compactness of the
+parameter set nor attained responses.
+`UniformEquilibrium/Diagnostics/Quitting/CapResponseSegmentCollar.lean`
+applies this to the entire closed interval of actual unilateral stopping-law
+mixtures. The moved player's complete cap is constant, and an attained
+response makes its debt equal to the uninstalled fraction times its old
+debt. This does not yet identify a literal stationary surviving suffix or
+provide the two-cut return consumer.
 
 `UniformEquilibrium/Quitting/Root/CopiedCapResidualDebt.lean` computes the
 residual debt of copying the prescribed root before a cap response and the

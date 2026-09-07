@@ -4,8 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAuxiliaryNashBudget
-import UniformEquilibrium.Quitting.Root.TerminalSemanticEqualityStratum
+import UniformEquilibrium.Diagnostics.Quitting.CompleteCapSingletonSlabCollar
 
 /-! # Complete-cap singleton limits stay off the minimum fiber -/
 
@@ -46,56 +45,12 @@ theorem exists_eventual_offMinimum_collar_of_completeCap_tendsto_singleton
     hpayer.trans_le (Finset.single_le_sum
       (fun player _ ↦ quittingTerminalSemanticDebt_nonneg_of_mem_carrier
         reward hminimumMem player) (Finset.mem_univ payer))
-  let solo := reward (quittingSingletonTerminal who) who
-  let slab : Set (QuittingTerminalSemanticPair ι) :=
-    quittingTerminalSemanticCarrier reward ∩
-      {pair | |pair.2 who - solo| ≤ quittingTerminalSemanticDebtSum minimum / 2}
-  have hslabCompact : IsCompact slab := by
-    apply (quittingTerminalSemanticCarrier_isCompact reward).inter_right
-    exact isClosed_le (continuous_abs.comp
-      (((continuous_apply who).comp continuous_snd).sub continuous_const))
-      continuous_const
-  have hcapEventually : ∀ᶠ index in atTop,
-      |(quittingTerminalSemanticPair reward (profile index)).2 who - solo| ≤
-        quittingTerminalSemanticDebtSum minimum / 2 := by
-    have hopen : 0 < quittingTerminalSemanticDebtSum minimum / 2 := half_pos hminimumPos
-    exact hcap.eventually (Metric.closedBall_mem_nhds _ hopen) |>.mono fun _ h ↦ by
-      simpa [solo, Metric.mem_closedBall, Real.dist_eq,
-        quittingTerminalSemanticPair] using h
-  have hslabNonempty : slab.Nonempty := by
-    obtain ⟨index, hindex⟩ := hcapEventually.exists
-    exact ⟨quittingTerminalSemanticPair reward (profile index),
-      subset_closure (Set.mem_range_self (profile index)), hindex⟩
-  obtain ⟨selected, hselected, hselectedMin⟩ :=
-    hslabCompact.exists_isMinOn hslabNonempty
-      continuous_quittingTerminalSemanticDebtSum.continuousOn
-  have hstrict : quittingTerminalSemanticDebtSum minimum <
-      quittingTerminalSemanticDebtSum selected := by
-    have hle := hminimum selected hselected.1
-    refine lt_of_le_of_ne hle ?_
-    intro heq
-    have hmargin := minimumTerminalSemantic_singletonMargin
-      selected hselected.1 (fun candidate hcandidate ↦ by
-        rw [← heq]
-        exact hminimum candidate hcandidate) (by rwa [← heq]) who
-    have habsUpper : selected.2 who - solo ≤
-        quittingTerminalSemanticDebtSum minimum / 2 :=
-      (abs_le.mp (show |selected.2 who - solo| ≤
-        quittingTerminalSemanticDebtSum minimum / 2 from hselected.2)).2
-    dsimp only [solo] at hmargin habsUpper
-    linarith
-  let collar := (quittingTerminalSemanticDebtSum selected -
-    quittingTerminalSemanticDebtSum minimum) / 2
-  have hcollar : 0 < collar := by dsimp only [collar]; linarith
+  obtain ⟨collar, hcollar, hfamily⟩ :=
+    exists_uniform_offMinimum_collar_of_completeCap_tendsto_singleton
+      reward (fun index (_ : Unit) => profile index) who
+      (fun index => quittingContinuationBestResponseValue reward (profile index) who)
+      hminimumPos hminimum (fun _ _ => rfl) hcap
   refine ⟨minimum, hminimumMem, hminimum, hminimumPos, collar, hcollar, ?_⟩
-  filter_upwards [hcapEventually] with index hindex
-  have hpairSlab : quittingTerminalSemanticPair reward (profile index) ∈ slab :=
-    ⟨subset_closure (Set.mem_range_self (profile index)), hindex⟩
-  have hselectedLe := hselectedMin hpairSlab
-  change quittingTerminalSemanticDebtSum selected ≤
-    quittingTerminalSemanticDebtSum
-      (quittingTerminalSemanticPair reward (profile index)) at hselectedLe
-  dsimp only [collar]
-  linarith
+  exact hfamily.mono fun _ hindex => hindex ()
 
 end GameTheory
