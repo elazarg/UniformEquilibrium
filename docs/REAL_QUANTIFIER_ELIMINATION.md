@@ -153,8 +153,12 @@ Validation checks existence and uniqueness of a real root in the open
 interval, permitting repeated polynomial roots. Decision then constrains
 the formula's parameters to those roots and applies rational quantifier
 elimination. It never computes or compares an unencoded real value.
-Coverage of all real-algebraic inputs and game-specific encoded-table
-frontends are separate obligations.
+`isAlgebraic_iff_exists_isolatedRealRootData` and
+`exists_certifiedIsolatedRootParameters`
+(`MathUE/RealQuantifierElimination/IsolatedRealRootCoverage.lean`) prove
+that these descriptions cover exactly the algebraic reals, including every
+finite tuple. Coverage is existential, not a computable encoder from an
+unencoded real number. Game-specific encoded-table frontends remain separate.
 
 ## Endpoint and coefficient scope
 
