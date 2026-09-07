@@ -119,6 +119,12 @@ proved. The game-specific predicate encodings remain separate adapters.
   (`MathUE/Semialgebraic/Projection.lean`) prove closure under projection
   and universal quantification over any finite block. These consume the
   actual eliminator, not an assumed projection theorem.
+- `IsSemialgebraic.preimage_polynomialMap` and
+  `IsSemialgebraic.image_polynomialMap`
+  (`MathUE/Semialgebraic/PolynomialMap.lean`) apply this interface to
+  actual finite tuples of real multivariate polynomials. Substitution
+  proves the preimage result; projecting the polynomial graph proves the
+  image result. Empty source and output dimensions are allowed.
 
 The two packet adapters remain to be completed. Generic quantifier elimination
 does not by itself encode their predicates or prove their semantic equivalences.

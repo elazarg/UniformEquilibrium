@@ -319,6 +319,7 @@ import MathUE.RealQuantifierElimination.SemialgebraicPresentation
 import MathUE.RealQuantifierElimination.RealCoefficientReification
 import MathUE.Semialgebraic.Basic
 import MathUE.Semialgebraic.Projection
+import MathUE.Semialgebraic.PolynomialMap
 import MathUE.RealQuantifierElimination.FocusedSignReconstruction
 import MathUE.RealQuantifierElimination.PolynomialFamilyFocusSelection
 import MathUE.Polynomial.RealSignCell

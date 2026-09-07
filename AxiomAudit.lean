@@ -545,6 +545,7 @@ import MathUE.RelationalKernel
 import MathUE.RenewedChargedPathPotentialRecharge
 import MathUE.SchauderFixedPoint
 import MathUE.Semialgebraic.Basic
+import MathUE.Semialgebraic.PolynomialMap
 import MathUE.Semialgebraic.Projection
 import MathUE.SequenceVariation
 import MathUE.ShapleyOperator
