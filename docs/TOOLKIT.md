@@ -173,9 +173,18 @@ specified reward bounds.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean` represents an
 ordered partition of the entire player set into pairs, constructs the
 literal cyclic roots, and selects their hazards from the raw reward region.
-The equality between those roots' actual continuation values and the
-selected affine values, and hence the cyclic equilibrium certificate,
-remains a separate step.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleValues.lean` identifies the
+actual cyclic continuation values with the selected affine values and
+bounds every phase's payoff strictly above the singleton and at most
+`21/10`.
+`GameTheory.PairedCycle.exists_exact_allSuffix_uniformPayoff_of_rawRegion`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleEquilibrium.lean`) constructs
+one interior hazard vector from the reward region and an ordered partition
+into at least two pairs. The actual cyclic profile is exact terminal Nash
+against unrestricted deviations at every literal suffix, and its actual
+value at each initial phase is a uniform-equilibrium payoff. The proof
+retains the strict inactive-player advantage and opponent-cycle absorption.
+Exact finite-truncation cap and debt identities remain separate work.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -202,8 +211,18 @@ does renew the source when every owner has a strict preemptor and every
 actual finite-word profile has some owner's payoff at most its singleton.
 It constructs a literal finite word with arbitrarily small total debt,
 including for signed singleton rewards. The proof obtains the common
-preemption floor internally. Its quantitative phase/date count and the
-finite unpreempted-owner alternative require separate constructions.
+preemption floor internally. The same module proves fixed uniform-payoff
+existence under these two hypotheses, without an external reward-bound
+parameter. Its quantitative phase/date count and the finite
+unpreempted-owner alternative require separate constructions.
+
+`exists_sparseFiniteStoppingLawMixture_wholePayoff_eq`
+(`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteMixture.lean`)
+replaces a finite mixture of one player's strategies using at most the
+number of players plus one original positive-support generators. It
+preserves every observer's prescribed terminal payoff simultaneously.
+This is a payoff-only replacement: it does not preserve response caps,
+compress all players at once, or produce a common finite calendar.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)

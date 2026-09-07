@@ -281,4 +281,32 @@ theorem exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted
   exact exists_finiteWord_debtSum_le_of_weakExclusion
     reward hWE preemption hM hε hreward
 
+/-- The produced literal finite words at every accuracy feed the standard
+all-errors selector and therefore yield one fixed uniform-equilibrium payoff. -/
+theorem exists_uniformEquilibriumPayoff_of_finiteWordWeakExclusion_allPreempted
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hWE : QuittingFiniteWordWeakSingletonExclusion reward)
+    (hpreempted : ∀ owner, ∃ blocker, 0 <
+      reward (quittingSingletonTerminal blocker) blocker -
+        reward (quittingSingletonTerminal owner) blocker) :
+    ∃ payoff : Payoff ι,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  let M := quittingRewardBound reward + 1
+  have hM : 0 < M := by
+    dsimp only [M]
+    linarith [quittingRewardBound_nonneg reward]
+  have hreward : ∀ terminal player, |reward terminal player| ≤ M := by
+    intro terminal player
+    exact (abs_reward_le_quittingRewardBound reward terminal player).trans (by
+      dsimp only [M]
+      linarith)
+  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
+  intro ε hε
+  obtain ⟨roots, hdebt⟩ :=
+    exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted
+      reward hWE hpreempted hM hε hreward
+  refine ⟨quittingLiteralRootStackProfile reward roots
+    (quittingAlwaysContinueProfile reward), ?_⟩
+  exact isEpsilonAsymptoticNash_of_terminalSemanticDebtSum_le reward _ hdebt
+
 end GameTheory
