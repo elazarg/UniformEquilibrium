@@ -92,4 +92,22 @@ theorem isSemialgebraic_fixed_parameters {n k : ℕ} (parameters : Fin k → ℝ
 
 end QuantifierFreeFormula
 end RealQuantifierElimination
+
+namespace IsSemialgebraic
+
+open RealQuantifierElimination
+
+/-- A rational formula with finitely many fixed real parameters presents a semialgebraic set. -/
+theorem of_rational_presentation {n k : ℕ} {set : Set (Fin n → ℝ)}
+    (parameters : Fin k → ℝ) (formula : QuantifierFreeFormula (n + k))
+    (hpresentation : ∀ environment, environment ∈ set ↔
+      QuantifierFreeFormula.HoldsAt formula (Fin.append environment parameters)) :
+    IsSemialgebraic set := by
+  refine ⟨formula.specializeParameters parameters, ?_⟩
+  intro environment
+  exact (hpresentation environment).trans
+    (formula.holdsAt_specializeParameters parameters environment).symm
+
+end IsSemialgebraic
+
 end MathUE

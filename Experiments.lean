@@ -1,4 +1,5 @@
 import Experiments.Base.SemanticFinalRegimeArithmetic
+import Experiments.RealQuantifierEliminationRegression
 import Experiments.certsearch.block_pair.K11
 import Experiments.counterexample_search.BlockPeriodicMultiVisit
 import Experiments.counterexample_search.ColliderMirrorPocketEquilibrium

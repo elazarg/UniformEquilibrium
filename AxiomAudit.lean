@@ -273,6 +273,7 @@ import MathUE.List
 import MathUE.LocalPeriodicAnchor
 import MathUE.Logic.SignFormula
 import MathUE.Logic.SignFormulaFiniteAtoms
+import MathUE.Logic.SignFormulaFiniteFolds
 import MathUE.Logic.SignFormulaMap
 import MathUE.MaxAffineStoppingValue
 import MathUE.MeanErgodic
@@ -544,6 +545,7 @@ import MathUE.RelationalKernel
 import MathUE.RenewedChargedPathPotentialRecharge
 import MathUE.SchauderFixedPoint
 import MathUE.Semialgebraic.Basic
+import MathUE.Semialgebraic.Projection
 import MathUE.SequenceVariation
 import MathUE.ShapleyOperator
 import MathUE.SignedFourCycleAlgebra
@@ -2463,6 +2465,7 @@ import UniformEquilibrium.Quitting.Root.PureTimeCapChild
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.RationalApproximateQuittingRoot
 import UniformEquilibrium.Quitting.Root.RationalFiniteWordSemantics
+import UniformEquilibrium.Quitting.Root.RationalReward
 import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
 import UniformEquilibrium.Quitting.Root.RenewedLiteralExactWordSequence
 import UniformEquilibrium.Quitting.Root.SelfTailClosure

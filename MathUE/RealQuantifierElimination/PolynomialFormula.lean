@@ -74,6 +74,48 @@ theorem holdsAt_ofQuantifierFree_iff
   | not formula ih =>
       exact not_congr ih
 
+/-- Universally bind every free variable. At arity zero this is the identity.
+Original index zero becomes the innermost added universal binder,
+followed outward by successor indices. -/
+def universallyClose : {n : Nat} → PolynomialFormula n → PolynomialFormula 0
+  | 0, formula => formula
+  | _ + 1, formula => universallyClose (.all formula)
+
+/-- Universal closure is true exactly when the source formula is true at every
+real assignment of its free variables. -/
+theorem holdsAt_universallyClose_iff
+    (formula : PolynomialFormula n) :
+    formula.universallyClose.HoldsAt Fin.elim0 ↔
+      ∀ environment : Fin n → ℝ, formula.HoldsAt environment := by
+  induction n with
+  | zero =>
+      constructor
+      · intro h environment
+        have hempty : environment = Fin.elim0 := by
+          funext index
+          exact Fin.elim0 index
+        simpa [universallyClose, hempty] using h
+      · intro h
+        simpa [universallyClose] using h Fin.elim0
+  | succ n ih =>
+      rw [universallyClose, ih]
+      change (∀ environment : Fin n → ℝ, ∀ value : ℝ,
+          formula.HoldsAt (Fin.cases value environment)) ↔
+        ∀ environment : Fin (n + 1) → ℝ, formula.HoldsAt environment
+      constructor
+      · intro h environment
+        have hformula := h (fun index => environment index.succ) (environment 0)
+        have hcases :
+            Fin.cases (environment 0) (fun index => environment index.succ) = environment := by
+          funext index
+          refine Fin.cases ?_ (fun successor => ?_) index
+          · rfl
+          · rfl
+        rwa [hcases] at hformula
+      · intro h environment value
+        exact h (Fin.cases value environment)
+
+
 end PolynomialFormula
 
 namespace QuantifierFreeFormula

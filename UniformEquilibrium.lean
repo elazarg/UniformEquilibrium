@@ -38,6 +38,7 @@ import UniformEquilibrium.Quitting.Paths.WeakExclusionFiniteWordMenuRate
 import UniformEquilibrium.Quitting.Paths.WeakExclusionSinglePivotFiniteMenu
 import UniformEquilibrium.Quitting.Root.RationalApproximateQuittingRoot
 import UniformEquilibrium.Quitting.Root.RationalFiniteWordSemantics
+import UniformEquilibrium.Quitting.Root.RationalReward
 import UniformEquilibrium.Quitting.Paths.RationalAuxiliaryRootDebtDrop
 import UniformEquilibrium.Quitting.Paths.SparseWholePayoffFiniteMixture
 import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming

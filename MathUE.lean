@@ -297,6 +297,7 @@ import MathUE.LocalPeriodicAnchor
 import MathUE.PolynomialSignCell
 import MathUE.Logic.SignFormula
 import MathUE.Logic.SignFormulaFiniteAtoms
+import MathUE.Logic.SignFormulaFiniteFolds
 import MathUE.Logic.SignFormulaMap
 import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
@@ -317,6 +318,7 @@ import MathUE.RealQuantifierElimination.QuantifierElimination
 import MathUE.RealQuantifierElimination.SemialgebraicPresentation
 import MathUE.RealQuantifierElimination.RealCoefficientReification
 import MathUE.Semialgebraic.Basic
+import MathUE.Semialgebraic.Projection
 import MathUE.RealQuantifierElimination.FocusedSignReconstruction
 import MathUE.RealQuantifierElimination.PolynomialFamilyFocusSelection
 import MathUE.Polynomial.RealSignCell

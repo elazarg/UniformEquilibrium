@@ -3,8 +3,8 @@
 The library implements real quantifier elimination for rational polynomial
 formulas, with arbitrary finite Boolean and quantifier nesting. The actual
 recursive producer and the correctness theorems pass strict, silent Lean
-checks. Real-coefficient semialgebraic projection and the game-specific
-adapters remain separate integration steps.
+checks. Projection of arbitrary-real-coefficient semialgebraic sets is also
+proved. The game-specific predicate encodings remain separate adapters.
 
 ## Available components
 
@@ -108,6 +108,17 @@ adapters remain separate integration steps.
   (`MathUE/RealQuantifierElimination/QuantifierElimination.lean`) prove
   correctness of the actual full eliminator and closed rational decision
   procedure. Neither theorem takes a producer or eliminator as a hypothesis.
+- `IsSemialgebraic` (`MathUE/Semialgebraic/Basic.lean`) describes ordinary
+  finite Boolean combinations of signs of real-coefficient multivariate
+  polynomials, with Boolean closure and coordinate pullbacks.
+  `exists_rationalReification`
+  (`MathUE/RealQuantifierElimination/RealCoefficientReification.lean`)
+  represents every such formula using rational syntax with finitely many
+  fixed real parameters. `IsSemialgebraic.image_coordinate_projection`
+  and `IsSemialgebraic.forall_coordinates`
+  (`MathUE/Semialgebraic/Projection.lean`) prove closure under projection
+  and universal quantification over any finite block. These consume the
+  actual eliminator, not an assumed projection theorem.
 
 The two packet adapters remain to be completed. Generic quantifier elimination
 does not by itself encode their predicates or prove their semantic equivalences.
@@ -129,8 +140,8 @@ The algorithm is permitted to be inefficient; canonical expansion is not an
 endpoint requirement. All real reward entries remain free variables. For
 semialgebraic sets with arbitrary real coefficients, finitely many additional
 free variables represent those coefficients and are specialized after QE.
-The real-coefficient projection adapter uses this parameter representation;
-it does not compute on an unrestricted real-number encoding.
+The checked real-coefficient projection theorem uses this parameter
+representation; it does not compute on an unrestricted real-number encoding.
 
 The target is real semantics first. Generalization to arbitrary instances of
 Mathlib `IsRealClosed` is a separate task: the pinned class does not yet provide
@@ -330,6 +341,10 @@ Lean import or proof of this implementation.
 
 No practical complexity bound is claimed. The implementation proves termination
 and universal correctness; its coefficient branching can produce large trees.
+`Experiments/RealQuantifierEliminationRegression.lean` records small executable
+tests separately from proofs through the correctness theorem. The executable
+polynomial tests use one quantified variable; they do not establish practical
+performance for alternating polynomial formulas or game-table inputs.
 Nor does finite-dimensional quantifier elimination decide the uniform-equilibrium
 conjecture: that would require a finite formula equivalent to the original
 strategy and horizon quantifiers.

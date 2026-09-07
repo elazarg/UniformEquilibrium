@@ -428,6 +428,16 @@ of closed rational-formula decision. The game-specific predicate encodings
 and semantic adapters remain necessary before using these endpoints for
 raw-table recognition.
 
+`IsSemialgebraic.image_coordinate_projection` and
+`IsSemialgebraic.forall_coordinates`
+(`MathUE/Semialgebraic/Projection.lean`) give projection and universal
+quantification over any finite coordinate block for ordinary semialgebraic
+sets with arbitrary real polynomial coefficients. The proof represents
+finitely many coefficients as fixed real parameters, applies the concrete
+eliminator, and substitutes them back. This is not an algorithm on
+unencoded real-valued input tables, nor a finite-formula characterization
+of uniform-equilibrium existence.
+
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
