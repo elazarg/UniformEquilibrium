@@ -218,6 +218,10 @@ shifts and transformed singleton signs are unrestricted for that result.
 ordered pairs `{0,2}`, `{1,3}` and divides only the pivot coordinate by
 its singleton, shifting the others without rescaling. Its transformed
 initial value is at most `5/3` at the pivot and `6/5` elsewhere.
+`fin4PivotValue_gt_singleton_of_selected`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Menu.lean`) proves
+that this same transformed value strictly exceeds the canonical singleton
+vector `(1,0,0,0)`.
 `UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Menu.lean` constructs
 one menu from the selected hazards, with exact transformed payoff/cap
 coordinates and full exploitability at most `(5/3)*(99/100)^(4*K)`.
@@ -232,6 +236,24 @@ same family satisfy both inequalities.
 each menu's actual nonpivot laws, obtains a minimizing feasible pivot
 repair with no larger geometric regret, and supplies the existing
 small-pivot-repair source.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Infinite.lean` identifies
+the same selected hazards' transformed infinite profile, its exact terminal
+Nash property at every suffix, and its fixed uniform-equilibrium payoff.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleClassSeparation.lean` proves
+that the raw paired region fails product-low quitting premiums and
+finite-word weak exclusion. The latter uses one sufficiently long literal
+finite truncation whose payoffs exceed every player's singleton.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleRegionCenter.lean` and
+`UniformEquilibrium/Quitting/Cycles/PairedCycleOpenRegion.lean` give an
+explicit center table and a nonempty open subset of the full reward space
+satisfying the paired hypotheses. Coordinates not mentioned in those
+hypotheses remain unrestricted.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4Chart.lean` identifies
+the canonical singleton affine space with 56 independent real coordinates.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleFin4OpenRegion.lean` gives
+a nonempty relatively open subset in that space, supplies a literal raw
+paired preimage for every point, and proves the small-pivot-repair source
+property throughout it.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -284,6 +306,24 @@ deduces arbitrarily accurate canonical single-pivot menus above any
 prescribed deadline, for any finite player set. This existence corollary
 does not assert preservation of a particular selected word or its
 quantitative length bound.
+`exists_finiteDeadlineTimingProfile_literalRootStack_exact`
+(`UniformEquilibrium/Quitting/Root/LiteralFiniteWordMenuRealization.lean`)
+realizes any literal finite root word over Always Continue on any menu
+whose deadline is at least the word's length. It preserves each player's
+actual stopping law and the full prescribed-payoff/response-cap pair.
+`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineHorizonError.lean`
+bounds prescribed terminal/finite-average error by `M*N/H` for a menu
+with deadline N. With nonnegative singleton rewards it bounds every
+unilateral finite-average payoff above by terminal payoff plus `M*N/H`.
+A terminal D-Nash menu is therefore horizon Nash with error
+`D + 2*M*N/H`, including at deadline zero.
+`exists_singlePivot_selectedFiniteWordMenu_errors_and_length_le`
+(`UniformEquilibrium/Quitting/Paths/WeakExclusionFiniteWordMenuRate.lean`)
+retains one quantitative weak-exclusion word and its actual menu, under
+the strict-preemption and canonical-singleton hypotheses. That same
+witness satisfies the explicit length bound, full terminal Nash bound,
+both canonical menu inequalities, and every positive-horizon Nash bound.
+The menu realization does not reselect the word or discard its rate.
 
 `exists_sparseFiniteStoppingLawMixture_wholePayoff_eq`
 (`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteMixture.lean`)
@@ -306,8 +346,15 @@ are below n(n+1).
 performs successive current-opponent replacements and common retiming for
 arbitrary finite independent clock laws. The output preserves the entire
 payoff vector, has at most n+1 support points per marginal, and uses finite
-dates below n(n+1). Realization of the closed payoff set, including limits
-of arbitrary infinite profiles, remains separate work.
+dates below n(n+1).
+`quittingActualTerminalPayoffSet_eq_finiteCalendarPayoff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffClosure.lean`)
+identifies the entire actual behavioral terminal-payoff set with the
+fixed n(n+1)-date timing game's payoff image and proves that set compact.
+Every payoff in its closure has an exact realization with at most n+1
+support actions per player and finite dates below n(n+1). The proof
+compactifies in the full finite simplex and recompresses the limit;
+no response-cap preservation is asserted.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)

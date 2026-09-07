@@ -112,4 +112,25 @@ theorem exists_fin4PivotMenu_exact_of_selected
       (fin4PivotScale reward) (fin4PivotShift reward) (fin4PivotScale_pos reward hregion)
       0 turns hturns player (fin4PivotSingleton_nonneg reward hregion player)
 
+/-- The actual transformed target strictly exceeds the canonical singleton
+vector, including the pivot's unit singleton, not merely zero. -/
+theorem fin4PivotValue_gt_singleton_of_selected
+    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
+    (hregion : RawRegion reward fin4Schedule) (q : Fin 4 → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
+    (hinterior : ∀ player, q player ∈ Set.Ioo (1 / 100 : ℝ) (1 / 2))
+    (hzero : ∀ player, playerGap fin4Schedule.partner (singleton reward)
+      (partnerReward reward fin4Schedule) (jointReward reward fin4Schedule)
+      (quietRows reward fin4Schedule) q player = 0) (player : Fin 4) :
+    (if player = 0 then (1 : ℝ) else 0) < fin4PivotValue reward q hq player := by
+  have hv := (value_bounds_of_selected reward fin4Schedule hregion q hq hinterior hzero
+    0 player).1
+  have hmul := mul_lt_mul_of_pos_left hv (fin4PivotScale_pos reward hregion player)
+  have hsingleton := fin4PivotReward_isSinglePivotSingletonTable reward hregion player
+  change fin4PivotScale reward player * singleton reward player +
+    fin4PivotShift reward player = _ at hsingleton
+  unfold fin4PivotValue
+  linarith
+
+
 end GameTheory.PairedCycle

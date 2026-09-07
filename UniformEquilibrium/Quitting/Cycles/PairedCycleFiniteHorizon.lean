@@ -293,4 +293,40 @@ theorem exists_one_hazards_all_finiteHorizon_bounds_of_rawRegion
       initial horizon hhorizon (quittingRewardBound reward)
       (abs_reward_le_quittingRewardBound reward)
 
+/-- Both signs of the terminal/finite-average boundary error are uniformly
+controlled for every behavioral deviation against the same cyclic profile. -/
+theorem finiteAverage_deviation_error_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (schedule : Schedule ι period) (q : ι → ℝ)
+    (hq : ∀ player, q player ∈ Set.Icc (0 : ℝ) 1)
+    (hinterior : ∀ player, q player ∈ Set.Ioo (1 / 100 : ℝ) (1 / 2))
+    (initial : Fin period) (player : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy player)
+    (horizon : ℕ) (hhorizon : 0 < horizon)
+    (bound : ℝ) (hreward : ∀ terminal, |reward terminal player| ≤ bound) :
+    |(quittingGame reward).finiteAveragePayoff none horizon
+        (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
+          player deviation) player -
+      quittingTerminalPayoff reward
+        (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
+          player deviation) player| ≤
+      bound * ((period : ℝ) / (1 - (99 / 100 : ℝ) ^ (Fintype.card ι - 1))) /
+        (horizon : ℝ) := by
+  have hbound : 0 ≤ bound := (abs_nonneg _).trans (hreward (quittingSingletonTerminal player))
+  have herror := abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro reward
+    (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
+      player deviation) player horizon hhorizon bound hbound hreward
+  have hsame : quittingOpponentOnlyProfile reward
+      (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
+        player deviation) player =
+      quittingOpponentOnlyProfile reward
+        (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial) player := by
+    unfold quittingOpponentOnlyProfile
+    exact Function.update_idem _ _ _
+  unfold quittingOpponentLiveCesaro at herror
+  rw [hsame] at herror
+  have hclock := mul_le_mul_of_nonneg_left
+    (opponentLiveCesaro_le_geometric reward schedule q hq hinterior initial player horizon) hbound
+  exact herror.trans (by simpa only [mul_div_assoc, quittingOpponentLiveCesaro] using hclock)
+
 end GameTheory.PairedCycle
