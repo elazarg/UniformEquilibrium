@@ -19,6 +19,9 @@ The checked components and remaining dependencies are described below.
   `MathUE/RealQuantifierElimination/CoefficientSignBranch.lean` proves that
   finite coefficient-sign trees compile to truth-equivalent Boolean formulas
   at every real environment. It does not generate a sign diagram.
+  `MathUE/RealQuantifierElimination/CoefficientSignBranchInvariants.lean`
+  supplies structural all-leaf predicates and a proof-aware bind, distinct
+  from real-environment selection.
 - `MathUE/RealQuantifierElimination/PolynomialEvaluation.lean` interprets
   expression coefficients in the dense polynomial kernel.
   `MathUE/RealQuantifierElimination/CoefficientTrimming.lean` branches on
@@ -55,9 +58,10 @@ The checked components and remaining dependencies are described below.
   trims and classifies each original column at every real environment.
   Removed zero columns are zero polynomials, constant columns have fixed
   nonzero signs, and retained columns have specialized positive degree.
-  It restores correct pointwise rows in original order. Restoration of a
-  complete reduced diagram and global measure nonincrease remain separate
-  obligations.
+  `MathUE/RealQuantifierElimination/PolynomialFamilyDiagramRestoration.lean`
+  restores complete diagrams in original column order, preserving the same
+  cuts and the exact nonzero-root predicate. Global preprocessing measure
+  nonincrease remains a separate obligation.
 - `MathUE/Polynomial/RemainderCutSignInference.lean` finds a vanishing
   divisor in a point row and returns its aligned remainder's sign. The
   actual pseudo-division identity proves the inferred sign equals the
@@ -67,8 +71,15 @@ The checked components and remaining dependencies are described below.
   nonzero retained polynomials. Empty retained families are allowed.
   `MathUE/Polynomial/TaggedRowCondensation.lean` preserves the original
   order and payloads of retained point rows under the same deletion rule.
+- `MathUE/Polynomial/GlobalSignReconstruction.lean` traverses all local
+  insertions and removes derivative-only cuts. Its correctness theorem
+  currently supplies the selected polynomial's signs at old cuts; the
+  computed pseudo-remainder inference must still be connected to it.
+- `MathUE/Logic/SignFormulaFiniteAtoms.lean` extracts atom occurrences in
+  syntax order and evaluates their finite sign rows, preserving formula
+  truth without assuming decidable equality on the atom type.
 
-Global reconstruction, the recursive sign-diagram producer,
+The global inference/reconstruction connection, the recursive sign-diagram producer,
 formula elimination, and the two packet
 adapters remain to be completed. Targeted checks of the available components
 do not establish those later stages.

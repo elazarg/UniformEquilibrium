@@ -1,4 +1,5 @@
 import MathUE.Polynomial.OrderedRealSignDiagram
+import MathUE.Polynomial.TaggedRowCondensation
 
 /-!
 # Removing auxiliary-only cuts from real sign diagrams
@@ -126,5 +127,23 @@ theorem ReducedRealizes.project_and_condense
   apply RealizesFrom.condense_reduced ⟨hrealizes.1, hrealizes.2.take_columns⟩ hn
   intro p hp x hz
   exact (hroots x).mpr ⟨p, List.mem_append_left _ hp, hn p hp, hz⟩
+
+/-- Forgetting payloads commutes exactly with alternating-row condensation. -/
+theorem map_fst_condenseTaggedRows :
+    ∀ rows : List (List SignType × α),
+      (condenseTaggedRows rows).map Prod.fst = condenseRows (rows.map Prod.fst)
+  | [] => rfl
+  | [left] => rfl
+  | left :: point :: rest => by
+      rw [condenseTaggedRows]
+      by_cases hzero : 0 ∈ point.1
+      · simp only [if_pos hzero, List.map_cons]
+        rw [map_fst_condenseTaggedRows rest]
+        change _ = if 0 ∈ point.1 then _ else _
+        rw [if_pos hzero]
+      · simp only [if_neg hzero, List.map_cons, List.map_drop]
+        rw [map_fst_condenseTaggedRows rest]
+        change _ = if 0 ∈ point.1 then _ else _
+        rw [if_neg hzero]
 
 end MathUE.OrderedRealSignDiagram
