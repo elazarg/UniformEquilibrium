@@ -93,4 +93,48 @@ theorem familyTotalSize_cons {A : Type*}
       polynomial.length + 1 + familyTotalSize family :=
   rfl
 
+theorem length_le_familyMaximumLength {A : Type*} {polynomial : Math.DensePolynomial A}
+    {family : List (Math.DensePolynomial A)} (hmem : polynomial ∈ family) :
+    polynomial.length ≤ familyMaximumLength family := by
+  induction family with
+  | nil => simp at hmem
+  | cons head tail ih =>
+      rw [List.mem_cons] at hmem
+      rw [familyMaximumLength]
+      rcases hmem with rfl | hmem
+      · exact Nat.le_max_left _ _
+      · exact (ih hmem).trans (Nat.le_max_right _ _)
+
+/-- Lexicographic nonincrease, allowing equality in the final component. -/
+def FamilyRecursionMeasure.AtMost
+    (left right : FamilyRecursionMeasure) : Prop :=
+  left.maximumLength < right.maximumLength ∨
+    (left.maximumLength = right.maximumLength ∧
+      (left.maximalCount < right.maximalCount ∨
+        (left.maximalCount = right.maximalCount ∧
+          left.totalSize ≤ right.totalSize)))
+
+/-- A strict decrease followed by measure nonincrease remains a strict decrease. -/
+theorem FamilyRecursionMeasure.less_of_less_of_atMost
+    {left middle right : FamilyRecursionMeasure}
+    (hleft : left < middle) (hmiddle : middle.AtMost right) :
+    left < right := by
+  rw [FamilyRecursionMeasure.less_iff] at hleft ⊢
+  rcases hleft with hleftMaximum | ⟨hmaximumEq, hleftRest⟩
+  · rcases hmiddle with hmiddleMaximum | ⟨hmiddleMaximumEq, hmiddleRest⟩
+    · exact Or.inl (hleftMaximum.trans hmiddleMaximum)
+    · exact Or.inl (hmiddleMaximumEq ▸ hleftMaximum)
+  · rcases hmiddle with hmiddleMaximum | ⟨hmiddleMaximumEq, hmiddleRest⟩
+    · exact Or.inl (hmaximumEq ▸ hmiddleMaximum)
+    · right
+      refine ⟨hmaximumEq.trans hmiddleMaximumEq, ?_⟩
+      rcases hleftRest with hleftCount | ⟨hcountEq, hleftTotal⟩
+      · rcases hmiddleRest with hmiddleCount | ⟨hmiddleCountEq, hmiddleTotal⟩
+        · exact Or.inl (hleftCount.trans hmiddleCount)
+        · exact Or.inl (hmiddleCountEq ▸ hleftCount)
+      · rcases hmiddleRest with hmiddleCount | ⟨hmiddleCountEq, hmiddleTotal⟩
+        · exact Or.inl (hcountEq ▸ hmiddleCount)
+        · exact Or.inr ⟨hcountEq.trans hmiddleCountEq,
+            hleftTotal.trans_le hmiddleTotal⟩
+
 end MathUE.RealQuantifierElimination

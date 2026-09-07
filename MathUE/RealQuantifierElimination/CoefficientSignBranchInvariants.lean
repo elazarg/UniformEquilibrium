@@ -92,5 +92,44 @@ theorem of_selects_of_allLeaves (predicate : α → Prop)
       | pos =>
           exact hpositive hallPositive (by simpa [Selects, hsign] using hselected)
 
+/-- A selected proof-aware bind leaf comes from the selected input leaf and its callback. -/
+theorem selects_bindWithProof_iff (predicate : α → Prop)
+    (tree : CoefficientSignBranch n α) (hall : tree.AllLeaves predicate)
+    (function : ∀ value, predicate value → CoefficientSignBranch n β)
+    (environment : Fin n → ℝ) (selected : β) :
+    (tree.bindWithProof predicate hall function).Selects environment selected ↔
+      ∃ value, ∃ hvalue : predicate value,
+        tree.Selects environment value ∧
+          (function value hvalue).Selects environment selected := by
+  induction tree with
+  | leaf value =>
+      constructor
+      · intro hselected
+        exact ⟨value, hall, rfl, hselected⟩
+      · rintro ⟨other, hother, heq, hselected⟩
+        subst other
+        have hproof : hother = hall := Subsingleton.elim _ _
+        subst hother
+        exact hselected
+  | test coefficient negative zero positive hnegative hzero hpositive =>
+      cases hsign : SignType.sign (coefficient.evalReal environment) with
+      | neg =>
+          simpa [bindWithProof, Selects, hsign] using
+            hnegative hall.1
+      | zero =>
+          simpa [bindWithProof, Selects, hsign] using
+            hzero hall.2.1
+      | pos =>
+          simpa [bindWithProof, Selects, hsign] using
+            hpositive hall.2.2
+
+theorem AllLeaves.mono {tree : CoefficientSignBranch n α} {predicate result : α → Prop}
+    (hall : tree.AllLeaves predicate) (himp : ∀ value, predicate value → result value) :
+    tree.AllLeaves result := by
+  induction tree with
+  | leaf value => exact himp value hall
+  | test coefficient negative zero positive hnegative hzero hpositive =>
+      exact ⟨hnegative hall.1, hzero hall.2.1, hpositive hall.2.2⟩
+
 end CoefficientSignBranch
 end MathUE.RealQuantifierElimination

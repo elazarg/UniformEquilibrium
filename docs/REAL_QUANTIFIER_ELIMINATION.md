@@ -60,8 +60,10 @@ The checked components and remaining dependencies are described below.
   nonzero signs, and retained columns have specialized positive degree.
   `MathUE/RealQuantifierElimination/PolynomialFamilyDiagramRestoration.lean`
   restores complete diagrams in original column order, preserving the same
-  cuts and the exact nonzero-root predicate. Global preprocessing measure
-  nonincrease remains a separate obligation.
+  cuts and the exact nonzero-root predicate.
+  `MathUE/RealQuantifierElimination/PolynomialFamilyPreprocessingBounds.lean`
+  proves measure nonincrease for every syntactic leaf, including unreachable
+  branches, and composes it with the strict recursive-step decrease.
 - `MathUE/Polynomial/RemainderCutSignInference.lean` finds a vanishing
   divisor in a point row and returns its aligned remainder's sign. The
   actual pseudo-division identity proves the inferred sign equals the
@@ -72,14 +74,30 @@ The checked components and remaining dependencies are described below.
   `MathUE/Polynomial/TaggedRowCondensation.lean` preserves the original
   order and payloads of retained point rows under the same deletion rule.
 - `MathUE/Polynomial/GlobalSignReconstruction.lean` traverses all local
-  insertions and removes derivative-only cuts. Its correctness theorem
-  currently supplies the selected polynomial's signs at old cuts; the
-  computed pseudo-remainder inference must still be connected to it.
+  insertions and removes derivative-only cuts.
+  `MathUE/Polynomial/SignDiagramReconstruction.lean` supplies its point
+  signs by executable pseudo-remainder inference and preserves them through
+  auxiliary-cut removal. The resulting sign-list-only pipeline proves exact
+  reduced realization for the selected polynomial and retained family.
 - `MathUE/Logic/SignFormulaFiniteAtoms.lean` extracts atom occurrences in
   syntax order and evaluates their finite sign rows, preserving formula
   truth without assuming decidable equality on the atom type.
+- `MathUE/RealQuantifierElimination/OneVariableDiagramConsumer.lean`
+  turns a correctly realized diagram tree into a quantifier-free formula
+  equivalent to one-variable existential quantification. This is a consumer
+  of diagrams, not their producer.
+- `MathUE/RealQuantifierElimination/PolynomialFamilyFocusSelection.lean`
+  selects a maximal-length polynomial using only natural-number comparisons.
+  `MathUE/RealQuantifierElimination/FocusedSignReconstruction.lean`
+  reconstructs the literal replacement family in its original column order.
+  Its derivative-leading coefficient condition is derived from the original
+  trimmed nonconstant input.
+- `MathUE/RealQuantifierElimination/PolynomialFormula.lean` defines
+  arbitrary nested quantified formulas and their real semantics. Rational
+  evaluation decides closed quantifier-free formulas with checked agreement
+  to real truth; it does not yet decide quantified formulas.
 
-The global inference/reconstruction connection, the recursive sign-diagram producer,
+The recursive sign-diagram producer,
 formula elimination, and the two packet
 adapters remain to be completed. Targeted checks of the available components
 do not establish those later stages.
@@ -111,8 +129,8 @@ TODO. A completed real theorem must be described at that actual scope.
 
 ## Implementation interfaces
 
-The interfaces below specify how the components fit together. The full
-formula type and sign-diagram producer are still proposed interfaces.
+The interfaces below specify how the components fit together. The sign-diagram
+producer remains to be completed.
 
 - `RingExpression n`: the expression syntax above, with evaluation at `Fin n -> Real`.
 - Coefficient polynomials use `Math.DensePolynomial (RingExpression n)`,

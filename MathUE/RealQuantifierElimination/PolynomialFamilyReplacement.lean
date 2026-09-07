@@ -170,17 +170,6 @@ theorem replacement_length_le_selected [Zero A] [Add A] [Neg A] [Mul A]
 
 end PolynomialFamilyFocus
 
-theorem length_le_familyMaximumLength {polynomial : Math.DensePolynomial A}
-    {family : List (Math.DensePolynomial A)} (hmem : polynomial ∈ family) :
-    polynomial.length ≤ familyMaximumLength family := by
-  induction family with
-  | nil => simp at hmem
-  | cons head tail ih =>
-      rw [List.mem_cons] at hmem
-      rw [familyMaximumLength]
-      rcases hmem with rfl | hmem
-      · exact Nat.le_max_left _ _
-      · exact (ih hmem).trans (Nat.le_max_right _ _)
 
 theorem familyMaximumLength_le {family : List (Math.DensePolynomial A)} {bound : Nat}
     (hbound : ∀ polynomial ∈ family, polynomial.length ≤ bound) :
