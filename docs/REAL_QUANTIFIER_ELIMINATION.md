@@ -45,7 +45,28 @@ The checked components and remaining dependencies are described below.
   and the selected polynomial's positive degree.
 - `MathUE/RealQuantifierElimination/PolynomialFamilyMeasure.lean` supplies
   the well-founded lexicographic measure on formal polynomial families.
-  Transformation-specific decrease proofs are separate obligations.
+  `MathUE/RealQuantifierElimination/PolynomialFamilyReplacement.lean`
+  replaces a chosen maximal nonconstant polynomial by its derivative and
+  aligned pseudo-remainders, preserving the other column positions and
+  proving strict measure decrease.
+  `MathUE/RealQuantifierElimination/PolynomialFamilyReduction.lean`
+  proves strict decrease for shortening or removing lower-degree columns.
+- `MathUE/RealQuantifierElimination/PolynomialFamilyPreprocessing.lean`
+  trims and classifies each original column at every real environment.
+  Removed zero columns are zero polynomials, constant columns have fixed
+  nonzero signs, and retained columns have specialized positive degree.
+  It restores correct pointwise rows in original order. Restoration of a
+  complete reduced diagram and global measure nonincrease remain separate
+  obligations.
+- `MathUE/Polynomial/RemainderCutSignInference.lean` finds a vanishing
+  divisor in a point row and returns its aligned remainder's sign. The
+  actual pseudo-division identity proves the inferred sign equals the
+  selected polynomial's sign; a failed scan identifies a removable cut.
+- `MathUE/Polynomial/SignDiagramCondensation.lean` projects away auxiliary
+  columns and deletes their cuts, preserving an exact reduced diagram for
+  nonzero retained polynomials. Empty retained families are allowed.
+  `MathUE/Polynomial/TaggedRowCondensation.lean` preserves the original
+  order and payloads of retained point rows under the same deletion rule.
 
 Global reconstruction, the recursive sign-diagram producer,
 formula elimination, and the two packet
@@ -165,6 +186,11 @@ may be useful internally, but reduction must restore this exact invariant.
    or removing lower-degree zero/constant inputs. Make every
    recursive-call inequality explicit. Different zero/nonzero branches may
    have different degrees and diagrams.
+   Termination bounds must hold for every syntactic branch leaf, including
+   leaves unreachable by a real environment. Correctness of selected leaves
+   alone cannot justify recursive calls inside a branch callback. Supply a
+   structural all-leaf invariant and a proof-aware branch bind, or equivalent
+   attached leaf data, so each recursive call carries its measure bound.
 
 6. One-variable elimination and arbitrary formula recursion, dependent on 5.
    Extract the body's polynomial list, evaluate its Boolean skeleton on each

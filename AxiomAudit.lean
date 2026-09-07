@@ -334,6 +334,9 @@ import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.OrderedRealSignDiagram
 import MathUE.Polynomial.PolynomialDerivativeApproximation
 import MathUE.Polynomial.RealSignCell
+import MathUE.Polynomial.RemainderCutSignInference
+import MathUE.Polynomial.SignDiagramCondensation
+import MathUE.Polynomial.TaggedRowCondensation
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.TensorBernsteinDerivativeConvergence
 import MathUE.Polynomial.TensorBernsteinDerivativeEstimate
@@ -514,6 +517,9 @@ import MathUE.RealQuantifierElimination.CoefficientSignBranch
 import MathUE.RealQuantifierElimination.CoefficientTrimming
 import MathUE.RealQuantifierElimination.PolynomialEvaluation
 import MathUE.RealQuantifierElimination.PolynomialFamilyMeasure
+import MathUE.RealQuantifierElimination.PolynomialFamilyPreprocessing
+import MathUE.RealQuantifierElimination.PolynomialFamilyReduction
+import MathUE.RealQuantifierElimination.PolynomialFamilyReplacement
 import MathUE.RealQuantifierElimination.RingExpression
 import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.ReciprocalDebtRecurrence
