@@ -151,8 +151,13 @@ one, `quittingGroupExclusionExactWords_step` constructs successive exact
 auxiliary roots and proves a quadratic debt decrease at every positive-debt
 word. The absorption floor and one-step debt estimate are in
 `UniformEquilibrium/Quitting/Terminal/GroupExclusionExactPrefixStep.lean`.
-These declarations do not yet supply a global reciprocal rate or a
-group-exclusion uniform-payoff consumer.
+`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWordRates.lean`
+proves the explicit reciprocal rate, convergence of actual-word total debt
+to zero, and terminal approximate Nash selection against unrestricted
+behavioral deviations. Its fixed-uniform-payoff consequence requires only
+the finite-word exclusion hypothesis and the concentration bound below one;
+singleton signs are unrestricted. Root selection is exact and noncomputable;
+rational grid selection is a separate construction.
 
 `Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
 (`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
@@ -164,7 +169,13 @@ An actual cyclic strategy and its finite-truncation caps require separate
 game-semantic adapters. `UniformEquilibrium/Quitting/Root/PairedProductRoot.lean`
 realizes the two-active-player root, identifies its payoff map and all
 pure-response endpoints, and proves the inactive-player margin from the
-specified reward bounds. A cyclic certificate is still a separate step.
+specified reward bounds.
+`UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean` represents an
+ordered partition of the entire player set into pairs, constructs the
+literal cyclic roots, and selects their hazards from the raw reward region.
+The equality between those roots' actual continuation values and the
+selected affine values, and hence the cyclic equilibrium certificate,
+remains a separate step.
 
 `exists_first_solo_capThreshold_hit`
 (`UniformEquilibrium/Quitting/Root/TerminalSemanticSoloCapThreshold.lean`)
@@ -184,6 +195,15 @@ debt and owner cap margin, and its length is at most one plus the explicit
 solo horizon. This is not necessarily descent below the old debt when the
 owner cap margin is larger, and does not itself supply a repeatable
 weak-exclusion selector.
+
+`exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
+(`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
+does renew the source when every owner has a strict preemptor and every
+actual finite-word profile has some owner's payoff at most its singleton.
+It constructs a literal finite word with arbitrarily small total debt,
+including for signed singleton rewards. The proof obtains the common
+preemption floor internally. Its quantitative phase/date count and the
+finite unpreempted-owner alternative require separate constructions.
 
 `positive_minimum_preemptedOwner_quadraticMargins`
 (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPreemptedOwnerQuadraticMargin.lean`)

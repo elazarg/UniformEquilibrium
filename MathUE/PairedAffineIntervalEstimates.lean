@@ -480,4 +480,68 @@ theorem compose_upper_face_gap_ge {rows : List Row} {singleton partner joint : �
   have hpost := post_upper_face_ge hown
   linarith
 
+theorem bellman_sub (left right tie u v first second : ℝ) :
+    bellman left right tie u v first - bellman left right tie u v second =
+      (1 - u) * (1 - v) * (first - second) := by
+  unfold bellman
+  ring
+
+theorem abs_bellman_sub_le (left right tie first second : ℝ) {u v : ℝ}
+    (hu : u ∈ Set.Icc (0 : ℝ) 1) (hv : v ∈ Set.Icc (0 : ℝ) 1) :
+    |bellman left right tie u v first - bellman left right tie u v second| ≤
+      |first - second| := by
+  rw [bellman_sub, abs_mul, abs_of_nonneg (survival_mem_Icc hu hv).1]
+  exact mul_le_of_le_one_left (abs_nonneg _) (survival_mem_Icc hu hv).2
+
+theorem compose_append (first second : List Row) (value : ℝ) :
+    compose (first ++ second) value = compose first (compose second value) := by
+  simp [compose, List.foldr_append]
+
+theorem Row.Valid.hazards {row : Row} (hrow : row.Valid) :
+    row.firstHazard ∈ Set.Icc (0 : ℝ) 1 ∧ row.secondHazard ∈ Set.Icc (0 : ℝ) 1 := by
+  exact ⟨⟨by linarith [hrow.first.1], by linarith [hrow.first.2]⟩,
+    ⟨by linarith [hrow.second.1], by linarith [hrow.second.2]⟩⟩
+
+theorem abs_compose_sub_le {rows : List Row}
+    (hrows : ∀ row ∈ rows,
+      row.firstHazard ∈ Set.Icc (0 : ℝ) 1 ∧ row.secondHazard ∈ Set.Icc (0 : ℝ) 1)
+    (first second : ℝ) : |compose rows first - compose rows second| ≤ |first - second| := by
+  induction rows with
+  | nil => exact le_rfl
+  | cons row rows ih =>
+      have hrow := hrows row (by simp)
+      have htail := ih (fun next hnext => hrows next (by simp [hnext]))
+      have hstep := abs_bellman_sub_le row.left row.right row.tie
+        (compose rows first) (compose rows second)
+        (u := row.firstHazard) (v := row.secondHazard)
+        hrow.1 hrow.2
+      exact hstep.trans htail
+
+/-- One strictly contracting active pair makes a nonexpansive quiet word have at most one
+fixed active value. Only hazard bounds are used; all rewards are unrestricted. -/
+theorem eq_of_active_cycle_fixed {rows : List Row}
+    (hrows : ∀ row ∈ rows,
+      row.firstHazard ∈ Set.Icc (0 : ℝ) 1 ∧ row.secondHazard ∈ Set.Icc (0 : ℝ) 1)
+    {left right tie u v first second : ℝ}
+    (hu : u ∈ Set.Ioc (0 : ℝ) 1) (hv : v ∈ Set.Icc (0 : ℝ) 1)
+    (hfirst : first = bellman left right tie u v (compose rows first))
+    (hsecond : second = bellman left right tie u v (compose rows second)) : first = second := by
+  have hc := survival_mem_Icc ⟨hu.1.le, hu.2⟩ hv
+  have hstrict : (1 - u) * (1 - v) < 1 := by
+    have hmul := mul_le_mul_of_nonneg_left (show 1 - v ≤ 1 by linarith [hv.1])
+      (sub_nonneg.mpr hu.2)
+    nlinarith [hu.1]
+  have hdiff : first - second = (1 - u) * (1 - v) *
+      (compose rows first - compose rows second) := by
+    calc
+      first - second = bellman left right tie u v (compose rows first) -
+          bellman left right tie u v (compose rows second) := congrArg₂ (· - ·) hfirst hsecond
+      _ = _ := bellman_sub _ _ _ _ _ _ _
+  have habs := congrArg abs hdiff
+  rw [abs_mul, abs_of_nonneg hc.1] at habs
+  have hbound := mul_le_mul_of_nonneg_left (abs_compose_sub_le hrows first second) hc.1
+  have hzero : |first - second| = 0 := by
+    nlinarith [abs_nonneg (first - second)]
+  exact sub_eq_zero.mp (abs_eq_zero.mp hzero)
+
 end Math.PairedAffine

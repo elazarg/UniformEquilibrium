@@ -132,4 +132,73 @@ theorem sequence_le_reciprocal_of_variable_quadratic_step
         have hinverse := one_div_lt_one_div_of_lt hnextTarget hstrict
         exact (not_lt_of_ge hinvNext) hinverse
 
+/-- A real sequence with quadratic drop `x² / scale` at positive values crosses every
+positive threshold within `ceil (scale / threshold)` steps. -/
+theorem exists_index_le_ceil_of_quadratic_descent
+    (value : ℕ → ℝ) {scale threshold : ℝ}
+    (hscale : 0 < scale) (hthreshold : 0 < threshold)
+    (hstep : ∀ n, 0 < value n →
+      value (n + 1) ≤ value n - value n ^ 2 / scale) :
+    ∃ n ≤ Nat.ceil (scale / threshold), value n ≤ threshold := by
+  let horizon := Nat.ceil (scale / threshold)
+  by_contra hnone
+  push Not at hnone
+  have habove : ∀ n, n ≤ horizon → threshold < value n := by
+    intro n hn
+    exact hnone n hn
+  have hinverseStep : ∀ n, n < horizon →
+      1 / value n + 1 / scale ≤ 1 / value (n + 1) := by
+    intro n hn
+    have hx : 0 < value n := hthreshold.trans (habove n hn.le)
+    have hy : 0 < value (n + 1) := hthreshold.trans (habove (n + 1) hn)
+    have hdropNonnegative : 0 ≤ value n ^ 2 / scale := by positivity
+    have hyx : value (n + 1) ≤ value n :=
+      (hstep n hx).trans (sub_le_self _ hdropNonnegative)
+    have hscaledStep :
+        scale * value (n + 1) ≤ scale * value n - value n ^ 2 := by
+      have := mul_le_mul_of_nonneg_left (hstep n hx) hscale.le
+      field_simp at this
+      nlinarith
+    have hproduct : value n * value (n + 1) ≤ value n ^ 2 := by
+      nlinarith [mul_le_mul_of_nonneg_left hyx hx.le]
+    have hcombined :
+        (scale + value n) * value (n + 1) ≤ scale * value n := by
+      nlinarith
+    rw [show 1 / value n + 1 / scale =
+        (scale + value n) / (scale * value n) by
+      field_simp]
+    apply (div_le_iff₀ (mul_pos hscale hx)).2
+    calc
+      scale + value n ≤ scale * value n / value (n + 1) :=
+        (le_div_iff₀ hy).2 hcombined
+      _ = 1 / value (n + 1) * (scale * value n) := by ring
+  have hinverse : ∀ n, n ≤ horizon →
+      (n : ℝ) / scale ≤ 1 / value n := by
+    intro n hn
+    induction n with
+    | zero =>
+        simp only [Nat.cast_zero, zero_div]
+        exact div_nonneg zero_le_one
+          (hthreshold.trans (habove 0 (Nat.zero_le horizon))).le
+    | succ n ih =>
+        have hnlt : n < horizon := by omega
+        have hprior := ih hnlt.le
+        have hnext := hinverseStep n hnlt
+        push_cast
+        calc
+          ((n : ℝ) + 1) / scale = (n : ℝ) / scale + 1 / scale := by ring
+          _ ≤ 1 / value n + 1 / scale := by linarith
+          _ ≤ 1 / value (n + 1) := hnext
+  have hceil : scale / threshold ≤ (horizon : ℝ) := by
+    exact Nat.le_ceil _
+  have hhorizon : (horizon : ℝ) / scale ≤ 1 / value horizon :=
+    hinverse horizon le_rfl
+  have hthresholdInverse : 1 / threshold ≤ (horizon : ℝ) / scale := by
+    apply (div_le_div_iff₀ hthreshold hscale).2
+    have hscaled := (div_le_iff₀ hthreshold).mp hceil
+    simpa [mul_comm] using hscaled
+  have hstrictInverse : 1 / value horizon < 1 / threshold := by
+    exact one_div_lt_one_div_of_lt hthreshold (habove horizon le_rfl)
+  exact (not_lt_of_ge (hthresholdInverse.trans hhorizon)) hstrictInverse
+
 end Math
