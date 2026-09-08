@@ -6,13 +6,14 @@ Authors: GameTheory contributors
 
 import Research.Topology.BoxComplementaritySpernerLocalCount
 import MathUE.Topology.KuhnSimplexIncidence
+import MathUE.Topology.KuhnSignedParameterEnd
 
 /-!
-# Common refinements and the cubical subdivision-prism seam
+# Common refinements and cubical prisms
 
 This module begins the concrete cross-resolution prism construction below the
 finite local counts.  It constructs the full same-resolution prism incidence,
-identifies both endpoint counts, and proves the parity of one elementary
+identifies the endpoint counts and signed sums, and proves the parity of one elementary
 stellar-subdivision move.  Product resolution contains both endpoint grids at
 their literal geometric points, but the pinned ordered Kuhn simplices are not
 preserved by those vertex embeddings: a unit coarse jump becomes a jump by the
@@ -1098,5 +1099,97 @@ theorem productRefinement_unitJump_not_unit_of_one_lt
     (factor : ℕ) (hfactor : 1 < factor) :
     ¬factor ≤ 0 + 1 := by
   omega
+
+/-- The existing actual spatial-boundary labeling gives equality of signed
+spatial endpoint weights, with no supplied signed-incidence invariant. -/
+theorem KuhnPrismSpatialBoundaryLabeling.leftEndSignedWeight_eq_rightEndSignedWeight
+    {resolution : ℕ} {hresolution : 0 < resolution}
+    (boundary : KuhnPrismSpatialBoundaryLabeling n resolution hresolution) :
+    (∑ face ∈ Finset.univ.filter (fun face :
+      KuhnPrismFace n resolution hresolution boundary.label => face.IsLeftEnd),
+      KuhnSimplex.parameterFaceWeight rfl boundary.label face) =
+    ∑ face ∈ Finset.univ.filter (fun face :
+      KuhnPrismFace n resolution hresolution boundary.label => face.IsRightEnd),
+      KuhnSimplex.parameterFaceWeight rfl boundary.label face := by
+  have hcast : Fin.cast
+      (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
+      (Fin.last n) = Fin.last n := Fin.ext rfl
+  have h := KuhnSimplex.sum_parameterFaceWeight_left_eq_right rfl boundary.label (by
+    intro face hface
+    rw [hcast]
+    exact (boundary.isGeometricBoundary_iff face).mp hface)
+  have hp : (kuhnPrismGeometryCube n resolution hresolution).p = resolution := rfl
+  simpa only [hcast, hp, KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd] using h
+
+/-- Literal geometric and label orientation of an endpoint simplex. -/
+def KuhnEndpointLabeledSimplex.signedWeight
+    {problem : BoxComplementarityProblem (Fin n)} {resolution : ℕ}
+    {hresolution : 0 < resolution}
+    (vertices : KuhnEndpointLabeledSimplex problem resolution hresolution) : ℤ :=
+  OrientedSimplexFacet.determinant
+    (fun vertex coordinate => ((vertices.1 vertex coordinate).val : ℤ)) *
+      SignedSimplexLabel.orientation
+        (fun vertex => boxComplementarityFinLabel problem resolution (vertices.1 vertex))
+
+/-- The existing parameter-end equivalence preserves the actual signed weight. -/
+theorem boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
+    (resolution : ℕ) (hresolution : 0 < resolution)
+    (family : Fin (resolution + 1) → BoxComplementarityProblem (Fin n))
+    (parameter : Fin (resolution + 1))
+    (face : {face : KuhnPrismFace n resolution hresolution
+      (boxComplementarityDiscretePrismBoundaryLabeling resolution hresolution family).label //
+      ∀ index, face.1 index (Fin.last n) = parameter}) :
+    KuhnSimplex.parameterFaceWeight rfl
+      (boxComplementarityDiscretePrismBoundaryLabeling resolution hresolution family).label
+      face.1 =
+    (boxComplementarityDiscretePrismParameterEndEquiv
+      resolution hresolution family parameter face).signedWeight := by
+  unfold KuhnSimplex.parameterFaceWeight KuhnEndpointLabeledSimplex.signedWeight
+  congr 1
+  apply congrArg SignedSimplexLabel.orientation
+  funext vertex
+  exact boxComplementarityDiscretePrismBoundaryLabeling_eq_finLabel_of_last_eq
+    resolution hresolution family parameter (face.1.1 vertex) (face.2 vertex)
+
+/-- Actual signed complete-simplex sums agree at the two ends of the existing
+same-resolution discrete complementarity prism. -/
+theorem boxComplementarityDiscretePrism_endpointSignedWeight_eq
+    (resolution : ℕ) (hresolution : 0 < resolution)
+    (family : Fin (resolution + 1) → BoxComplementarityProblem (Fin n)) :
+    (∑ vertices : KuhnEndpointLabeledSimplex (family 0) resolution hresolution,
+      vertices.signedWeight) =
+    ∑ vertices : KuhnEndpointLabeledSimplex
+      (family (Fin.last resolution)) resolution hresolution, vertices.signedWeight := by
+  let boundary := boxComplementarityDiscretePrismBoundaryLabeling
+    resolution hresolution family
+  have hleft :
+      (∑ face ∈ Finset.univ.filter (fun face :
+        KuhnPrismFace n resolution hresolution boundary.label => face.IsLeftEnd),
+        KuhnSimplex.parameterFaceWeight rfl boundary.label face) =
+      ∑ vertices : KuhnEndpointLabeledSimplex (family 0) resolution hresolution,
+        vertices.signedWeight := by
+    rw [Finset.sum_subtype (p := KuhnPrismFace.IsLeftEnd) _ (by intro face; simp)
+      (KuhnSimplex.parameterFaceWeight rfl boundary.label)]
+    apply Fintype.sum_equiv
+      (boxComplementarityDiscretePrismLeftEndEquiv resolution hresolution family)
+    intro face
+    exact boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
+      resolution hresolution family 0 face
+  have hright :
+      (∑ face ∈ Finset.univ.filter (fun face :
+        KuhnPrismFace n resolution hresolution boundary.label => face.IsRightEnd),
+        KuhnSimplex.parameterFaceWeight rfl boundary.label face) =
+      ∑ vertices : KuhnEndpointLabeledSimplex
+        (family (Fin.last resolution)) resolution hresolution, vertices.signedWeight := by
+    rw [Finset.sum_subtype (p := KuhnPrismFace.IsRightEnd) _ (by intro face; simp)
+      (KuhnSimplex.parameterFaceWeight rfl boundary.label)]
+    apply Fintype.sum_equiv
+      (boxComplementarityDiscretePrismRightEndEquiv resolution hresolution family)
+    intro face
+    exact boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
+      resolution hresolution family (Fin.last resolution)
+      ⟨face.1, fun index => Fin.ext (face.2 index)⟩
+  rw [← hleft, ← hright]
+  exact boundary.leftEndSignedWeight_eq_rightEndSignedWeight
 
 end Math

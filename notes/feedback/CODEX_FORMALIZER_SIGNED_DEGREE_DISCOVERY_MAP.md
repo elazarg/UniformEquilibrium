@@ -82,6 +82,11 @@ In `Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`:
   faces with endpoint simplices. Their orientation behavior is not yet proved.
 - `boxComplementarityDiscretePrism_endpointParity_eq` equates endpoint counts
   on ONE common grid, in `ZMod 2`. It is not signed homotopy invariance.
+- `boxComplementarityDiscretePrism_endpointSignedWeight_eq` equates actual
+  signed integer sums at the ends of a full-box discrete prism on one fixed
+  positive resolution. It uses the existing boundary-labeling theorem and
+  endpoint equivalences. It does not compare local isolating regions or
+  different resolutions.
 - `kuhnStarSubdivision_completeFacetParity_eq` proves one stellar move's
   mod-two count identity. Its statement explicitly does not connect arbitrary
   coarse and fine Kuhn triangulations by those moves.
@@ -208,9 +213,15 @@ They place the parameter coordinate last and include spatial dimension zero.
 (`MathUE/Topology/KuhnSignedIncidence.lean`) gives the actual integer
 incident-face sum for each cell. It transports the existing label-deletion
 identity through `Cell.completeDeletionEquivIncidentFace`; nonincident faces
-have zero weight. Interior-face column cancellation, transport through the
-concrete prism's endpoint bijections, and subdivision-independent degree
-remain separate obligations.
+have zero weight. `sum_signedIncidence_cells_eq_zero_of_not_boundary`
+(`MathUE/Topology/KuhnSignedColumnCancellation.lean`) cancels each interior
+face column using the pinned exact parent count.
+`sum_parameterFaceWeight_left_eq_right`
+(`MathUE/Topology/KuhnSignedParameterEnd.lean`) gives full-grid endpoint
+equality under explicit boundary-end coverage. The concrete Research prism
+source discharges that coverage and transports the weights through its
+endpoint equivalences. Local-region homotopy and subdivision-independent
+degree remain separate obligations.
 
 ## 3. Actual source comparison
 

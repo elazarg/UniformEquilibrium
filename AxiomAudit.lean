@@ -446,6 +446,7 @@ import MathUE.Probability.KakutaniProductDichotomy
 import MathUE.Probability.KilledTailPotential
 import MathUE.Probability.MarkovOccupation
 import MathUE.Probability.MarkovPathConcentration
+import MathUE.Probability.MarkovPathRestart
 import MathUE.Probability.MarkovStateElimination
 import MathUE.Probability.MarkovStateEliminationChronology
 import MathUE.Probability.MaximalCoupling
@@ -605,7 +606,9 @@ import MathUE.Topology.KuhnEndpointSharedFaceOrientation
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
 import MathUE.Topology.KuhnParameterEndOrientation
 import MathUE.Topology.KuhnSharedFaceOrientation
+import MathUE.Topology.KuhnSignedColumnCancellation
 import MathUE.Topology.KuhnSignedIncidence
+import MathUE.Topology.KuhnSignedParameterEnd
 import MathUE.Topology.KuhnSimplexGeometry
 import MathUE.Topology.KuhnSimplexIncidence
 import MathUE.Topology.KuhnSimplexOrientation
