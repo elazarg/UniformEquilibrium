@@ -146,6 +146,7 @@ def is_dedicated_history_or_evidence(document: pathlib.Path) -> bool:
         ("docs", "audits"),
         ("docs", "history"),
         ("docs", "references"),
+        ("notes", "feedback"),
     }:
         return True
     if parts[:2] == ("Reverse", "Tasks") and document.name != "README.md":

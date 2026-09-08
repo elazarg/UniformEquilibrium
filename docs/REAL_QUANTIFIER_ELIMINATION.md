@@ -207,6 +207,13 @@ instantiates all three with certified isolated-root rewards. Their Boolean
 answers characterize the respective raw predicates at every denoted table,
 including one common group parameter before all calendars. They do not
 extract a calendar counterexample or a successful reciprocal parameter.
+For rational reward tables,
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarReciprocalSearch.lean`
+separately searches exact fixed-parameter tests. It returns the least
+admissible successful reciprocal denominator, or `none` exactly when the
+corresponding strict or group exclusion property fails. Termination follows
+from the proved existence of reciprocal witnesses; no denominator bound is
+assumed or extracted from quantifier elimination.
 For rational tables,
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawAlgebraicRejectionWitnesses.lean`
 proves that strict rejection has a genuine algebraic-coordinate calendar

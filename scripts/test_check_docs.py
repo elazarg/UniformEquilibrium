@@ -144,6 +144,7 @@ class TimelessDocumentTests(unittest.TestCase):
     def test_scoped_evidence_records_are_not_living(self) -> None:
         records = (
             ROOT / "docs" / "audits" / "README.md",
+            ROOT / "notes" / "feedback" / "CODEX_FORMALIZER_LIBRARY_AUDIT.md",
             ROOT / "docs" / "references" / "README.md",
             ROOT / "docs" / "case-studies" / "FTV_ARCHITECTURE_ANALYSIS.md",
             ROOT / "docs" / "design" / "HISTORY_CARRIER.md",

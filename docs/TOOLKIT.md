@@ -350,8 +350,19 @@ identifies the executable rational payoff/cap fold with the complete
 semantic pair of its actual finite root stack followed by Always Continue.
 The cap bounds all behavioral responses; its tail boundary is the maximum
 of zero and the owner's singleton payoff. Together these supply root search
-and exact finite-word evaluation. The complete rational cap-threshold
-selection algorithm still requires a threshold scan and hazard adapters.
+and exact finite-word evaluation.
+`UniformEquilibrium/Quitting/Root/RationalFiniteSourceCapThresholdScan.lean`
+adds an executable rational solo-row scan, its earliest threshold index and
+a crossing player, with exact real semantic identities. Strict preemption
+proves termination and the logarithmic row bound; the scan does not evaluate
+real logarithms.
+`rationalAuxiliaryRootGridSelector_debtSum_le_quarterQuadraticDrop`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalAuxiliaryRootDebtDrop.lean`)
+proves that the selected rational auxiliary root lowers total semantic debt
+to at most `C - 3*C²/(128*M + 24*C)` when the old debt is at most positive
+`C` and one cap-to-singleton margin is at most `C/8`. Its search accuracy
+controls total Nash defect. Selecting the actual hazard and combining the
+initial-low and solo-crossing branches remain separate steps.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -532,8 +543,16 @@ gives the corresponding accepted-table set for group exclusion, preserving
 one uniform positive parameter before the universal calendar quantifier.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarReciprocalParameterRecovery.lean`
 proves that strict-deficit and ordered-pair parameters can be chosen as
-positive rational reciprocals. This establishes successful search candidates,
-not an implemented search or a bound on the successful denominator.
+positive rational reciprocals.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarReciprocalParameterDecision.lean`
+provides exact Boolean tests at a supplied rational deficit or ordered-pair
+weight. The chosen parameter is fixed before all calendar coordinates.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarReciprocalSearch.lean`
+uses these tests in terminating searches for rational reward tables. Strict
+search returns the first positive denominator; group search starts at two.
+Each result supplies the exact raw predicate at its reciprocal, and `none`
+is equivalent to failure of the corresponding exclusion property. The proof
+gives termination and minimality, not an a priori denominator bound.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarStrictDeficitGroupWeakImplications.lean`
 proves strict deficit implies group exclusion, deriving the required distinct
 players from the deficit assumption itself. With nonnegative own singletons,
@@ -562,7 +581,8 @@ the same quantifier order and exact raw-predicate semantics.
 provides the three corresponding executable tests for certified algebraic
 reward entries. Each correctness theorem applies to every real table denoted
 by the input. Algebraic coverage is existential; no algorithm encodes an
-arbitrary unencoded real table. Parameter recovery remains separate work.
+arbitrary unencoded real table. The reciprocal searches above take rational
+reward tables, not general isolated-root inputs.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffFormula.lean` constructs
 executable rational expressions for coalition masses, payoffs, and singleton
 surpluses from supplied reward and calendar terms. Its simplex guard includes
@@ -614,6 +634,15 @@ finitely many coefficients as fixed real parameters, applies the concrete
 eliminator, and substitutes them back. This is not an algorithm on
 unencoded real-valued input tables, nor a finite-formula characterization
 of uniform-equilibrium existence.
+
+`StochasticGame.exists_analyticBellmanGerm_of_mem_closure_positiveDiscount`
+(`UniformEquilibrium/VanishingDiscount/Bellman/SpecifiedEndpointGerm.lean`)
+constructs an analytic Bellman germ through a supplied complete assignment
+in the closure of positive-discount solutions, with discount coordinate zero.
+Its endpoint equals that assignment literally; no curve-selection hypothesis
+or action-nonemptiness assumption is required. The proof uses the existing
+unconditional polynomial sign-cell arc theorem. A root-only quitting source
+still needs its full Bellman-assignment lift and closure proof.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
