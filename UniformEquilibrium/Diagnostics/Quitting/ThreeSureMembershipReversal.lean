@@ -165,34 +165,10 @@ theorem exists_sureOwner_strictOptionalReversal_of_membershipStretch_positiveMin
     exact ⟨opponent, hne.2, hsure opponent hne.1⟩
   obtain ⟨first, _, hfirst⟩ := hscreen optional
   obtain ⟨second, hsecondFirst, hsecond⟩ := hscreen first
-  obtain ⟨preferred, hbest⟩ := exists_quittingAveragedBestDirections final root
-  have hglobal (candidate : (quittingGame final).BehaviorProfile) :
-      quittingTerminalExploitability final (quittingOneDateThenNeverProfile final root) ≤
-        quittingTerminalExploitability final candidate := by
-    rw [hminimum]
-    exact quittingTerminalExploitabilityInf_le final candidate
-  have hrootPositive : 0 < quittingTerminalExploitability final
-      (quittingOneDateThenNeverProfile final root) := by rwa [hminimum]
-  have hdebtPositive (who : Fin 4) : 0 < quittingTerminalDeviationDebt final
-      (quittingOneDateThenNeverProfile final root) who := by
-    rw [quittingTerminalDeviationDebt_eq_exploitability_of_attained_positive_minimum
-      final _ hfinalBound hglobal hrootPositive who]
-    exact hrootPositive
-  have hnegative : ∃ who action, action ∈ (pmfPi root).support ∧
-      quittingDirectedMembershipGap original who (preferred who) action < 0 := by
-    by_contra hnone
-    have hcoherent (who : Fin 4) (action : Fin 4 → Bool)
-        (hsupport : action ∈ (pmfPi root).support) :
-        0 ≤ quittingDirectedMembershipGap original who (preferred who) action := by
-      apply le_of_not_gt
-      intro hgap
-      exact hnone ⟨who, action, hsupport, hgap⟩
-    exact not_membershipStretch_coherent_positiveMinimum_finFour
-      original final halpha hagrees horiginalBound hfinalBound root preferred first second
-        (Ne.symm hsecondFirst) hfirst hsecond hcoherent hpositive hinfOrder hminimum
-  have hreversal := exists_supported_oppositeMembershipGaps_of_negativeGap_and_positiveDebt
-    original final halpha.le hagrees horiginalBound root preferred hscreen hbest
-      hdebtPositive hnegative
+  obtain ⟨preferred, hbest, hdebtPositive, hreversal⟩ :=
+    exists_supported_oppositeMembershipGaps_of_membershipStretch_positiveMinimum_finFour
+      original final halpha hagrees horiginalBound hfinalBound root first second
+        (Ne.symm hsecondFirst) hfirst hsecond hpositive hinfOrder hminimum
   exact exists_sureOwner_canonical_optional_reversal_of_supported_oppositeGaps
     original final root optional preferred hsure hscreen hbest hdebtPositive hreversal
 

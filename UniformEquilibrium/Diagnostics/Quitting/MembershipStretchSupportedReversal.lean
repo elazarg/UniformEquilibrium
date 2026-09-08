@@ -116,4 +116,70 @@ theorem exists_supported_oppositeMembershipGaps_of_negativeGap_and_positiveDebt
   exact ⟨who, negative, positive, hnegativeSupport, hpositiveSupport,
     hnegativeGap, hpositiveOriginal, hnegativeFinal, hpositiveFinal⟩
 
+/-- The literal two-sure positive-minimum source itself produces averaged-best
+directions and an owner's opposite supported strict gaps at both tables. -/
+theorem exists_supported_oppositeMembershipGaps_of_membershipStretch_positiveMinimum_finFour
+    (original final : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) {alpha : ℝ}
+    (halpha : 0 < alpha)
+    (hagrees : QuittingAgreesWithMembershipStretch original final alpha)
+    (horiginalBound : ∀ terminal who, |original terminal who| ≤ 1)
+    (hfinalBound : ∀ terminal who, |final terminal who| ≤ 1)
+    (root : Fin 4 → PMF Bool) (first second : Fin 4)
+    (hdistinct : first ≠ second)
+    (hfirst : (root first true).toReal = 1)
+    (hsecond : (root second true).toReal = 1)
+    (hpositive : 0 < quittingTerminalExploitabilityInf final)
+    (hinfOrder : quittingTerminalExploitabilityInf final ≤
+      quittingTerminalExploitabilityInf original)
+    (hminimum : quittingTerminalExploitability final
+        (quittingOneDateThenNeverProfile final root) =
+      quittingTerminalExploitabilityInf final) :
+    ∃ preferred : Fin 4 → Bool,
+      (∀ who, 0 ≤ expect (pmfPi root)
+        (quittingDirectedMembershipGap final who (preferred who))) ∧
+      (∀ who, 0 < quittingTerminalDeviationDebt final
+        (quittingOneDateThenNeverProfile final root) who) ∧
+      ∃ who negative positive,
+        negative ∈ (pmfPi root).support ∧ positive ∈ (pmfPi root).support ∧
+        quittingDirectedMembershipGap original who (preferred who) negative < 0 ∧
+        0 < quittingDirectedMembershipGap original who (preferred who) positive ∧
+        quittingDirectedMembershipGap final who (preferred who) negative < 0 ∧
+        0 < quittingDirectedMembershipGap final who (preferred who) positive := by
+  have hscreen (who : Fin 4) :
+      ∃ opponent, opponent ≠ who ∧ (root opponent true).toReal = 1 := by
+    by_cases hwho : first = who
+    · refine ⟨second, ?_, hsecond⟩
+      intro heq
+      exact hdistinct (hwho.trans heq.symm)
+    · exact ⟨first, hwho, hfirst⟩
+  obtain ⟨preferred, hbest⟩ := exists_quittingAveragedBestDirections final root
+  have hglobal (candidate : (quittingGame final).BehaviorProfile) :
+      quittingTerminalExploitability final (quittingOneDateThenNeverProfile final root) ≤
+        quittingTerminalExploitability final candidate := by
+    rw [hminimum]
+    exact quittingTerminalExploitabilityInf_le final candidate
+  have hrootPositive : 0 < quittingTerminalExploitability final
+      (quittingOneDateThenNeverProfile final root) := by rwa [hminimum]
+  have hdebtPositive (who : Fin 4) : 0 < quittingTerminalDeviationDebt final
+      (quittingOneDateThenNeverProfile final root) who := by
+    rw [quittingTerminalDeviationDebt_eq_exploitability_of_attained_positive_minimum
+      final _ hfinalBound hglobal hrootPositive who]
+    exact hrootPositive
+  have hnegative : ∃ who action, action ∈ (pmfPi root).support ∧
+      quittingDirectedMembershipGap original who (preferred who) action < 0 := by
+    by_contra hnone
+    have hcoherent (who : Fin 4) (action : Fin 4 → Bool)
+        (hsupport : action ∈ (pmfPi root).support) :
+        0 ≤ quittingDirectedMembershipGap original who (preferred who) action := by
+      apply le_of_not_gt
+      intro hgap
+      exact hnone ⟨who, action, hsupport, hgap⟩
+    exact not_membershipStretch_coherent_positiveMinimum_finFour
+      original final halpha hagrees horiginalBound hfinalBound root preferred first second
+        hdistinct hfirst hsecond hcoherent hpositive hinfOrder hminimum
+  exact ⟨preferred, hbest, hdebtPositive,
+    exists_supported_oppositeMembershipGaps_of_negativeGap_and_positiveDebt
+      original final halpha.le hagrees horiginalBound root preferred hscreen hbest
+        hdebtPositive hnegative⟩
+
 end GameTheory

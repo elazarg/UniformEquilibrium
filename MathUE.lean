@@ -332,6 +332,7 @@ import MathUE.Semialgebraic.FiniteQuantification
 import MathUE.RealQuantifierElimination.FocusedSignReconstruction
 import MathUE.RealQuantifierElimination.PolynomialFamilyFocusSelection
 import MathUE.Polynomial.RealSignCell
+import MathUE.Polynomial.AlgebraicRoot
 import MathUE.Polynomial.InfinitySign
 import MathUE.Polynomial.DensePolynomial
 import MathUE.Polynomial.OrderedRealSignDiagram

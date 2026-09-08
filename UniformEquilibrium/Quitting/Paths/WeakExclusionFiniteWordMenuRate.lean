@@ -2,6 +2,7 @@ import UniformEquilibrium.Quitting.Root.LiteralFiniteWordMenuRealization
 import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineHorizonError
 import UniformEquilibrium.Quitting.Paths.FiniteWordWeakExclusionRates
 import UniformEquilibrium.Quitting.Terminal.SinglePivotFiniteMenuSource
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 
 /-! # Source-preserving finite-menu and horizon bounds for weak exclusion -/
 

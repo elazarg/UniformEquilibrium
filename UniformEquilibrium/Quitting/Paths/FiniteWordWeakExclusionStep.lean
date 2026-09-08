@@ -1,7 +1,5 @@
-import UniformEquilibrium.Quitting.Paths.FiniteSoloCapThresholdDescent
-import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
-import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 import UniformEquilibrium.Quitting.Classification.LCP.FourPlayerSingletonColumnBlockers
+import UniformEquilibrium.Quitting.Paths.FiniteWordSelectedOwnerStep
 
 /-! # Literal finite-word debt descent under weak singleton exclusion -/
 
@@ -24,6 +22,29 @@ def QuittingFiniteWordWeakSingletonExclusion
       reward (quittingSingletonTerminal owner) owner
 
 omit [DecidableEq ι] in
+/-- Global weak exclusion is selected-owner exclusion with every owner
+eligible. -/
+theorem finiteWordOwnerExclusion_all_of_weakSingletonExclusion
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hWE : QuittingFiniteWordWeakSingletonExclusion reward) :
+    QuittingFiniteWordOwnerExclusion reward (fun _ => True) := by
+  intro roots
+  obtain ⟨owner, howner⟩ := hWE roots
+  exact ⟨owner, True.intro, howner⟩
+
+/-- A global singleton-column blocker certificate is the selected-owner
+certificate with every owner eligible. -/
+def SingletonColumnBlockerCertificate.toEligible
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (preemption : SingletonColumnBlockerCertificate reward) :
+    QuittingEligibleBlockerCertificate reward (fun _ => True) where
+  blocker := preemption.blocker
+  gap := preemption.gap
+  gap_pos := preemption.gap_pos
+  blocker_ne := fun owner _ => preemption.blocker_ne owner
+  gap_le := fun owner _ => preemption.gap_le owner
+
+omit [DecidableEq ι] in
 /-- Pointwise strict preemption over a finite nonempty player set has a
 single positive floor, packaged in the existing blocker certificate. -/
 theorem nonempty_singletonColumnBlockerCertificate_of_all_strictPreempted
@@ -33,36 +54,19 @@ theorem nonempty_singletonColumnBlockerCertificate_of_all_strictPreempted
       reward (quittingSingletonTerminal blocker) blocker -
         reward (quittingSingletonTerminal owner) blocker) :
     Nonempty (SingletonColumnBlockerCertificate reward) := by
-  classical
-  choose blocker hblocker using hpreempted
-  let gaps : Finset ℝ := Finset.univ.image fun owner =>
-    reward (quittingSingletonTerminal (blocker owner)) (blocker owner) -
-      reward (quittingSingletonTerminal owner) (blocker owner)
-  have hgaps : gaps.Nonempty := Finset.image_nonempty.mpr Finset.univ_nonempty
-  let gap := gaps.min' hgaps
-  refine ⟨{
-    blocker := blocker
-    gap := gap
-    gap_pos := ?_
-    blocker_ne := ?_
-    gap_le := ?_ }⟩
-  · have hmem := Finset.min'_mem gaps hgaps
-    rw [Finset.mem_image] at hmem
-    obtain ⟨owner, howner, hgap⟩ := hmem
-    change 0 < gaps.min' hgaps
-    rw [← hgap]
-    exact hblocker owner
-  · intro owner heq
-    have h := hblocker owner
-    rw [heq] at h
-    linarith
-  · intro owner
-    exact Finset.min'_le gaps _
-      (Finset.mem_image.mpr ⟨owner, Finset.mem_univ owner, rfl⟩)
+  obtain ⟨selected⟩ := nonempty_eligibleBlockerCertificate_of_strictPreempted
+    reward (fun _ => True) (by exact ⟨Classical.choice inferInstance, True.intro⟩)
+      (fun owner _ => hpreempted owner)
+  exact ⟨{
+    blocker := selected.blocker
+    gap := selected.gap
+    gap_pos := selected.gap_pos
+    blocker_ne := fun owner => selected.blocker_ne owner True.intro
+    gap_le := fun owner => selected.gap_le owner True.intro }⟩
 
 /-- One exact cap-threshold phase, selected by weak exclusion, renews an actual finite
 word and strictly decreases its total debt by the explicit quadratic term.
-The owner inequality is converted to `L_owner ≤ D` inside the proof. -/
+The owner's singleton margin is bounded by total debt inside the generic proof. -/
 theorem exists_finiteWord_weakExclusion_quadraticDebtStep
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (hWE : QuittingFiniteWordWeakSingletonExclusion reward)
@@ -90,61 +94,11 @@ theorem exists_finiteWord_weakExclusion_quadraticDebtStep
               (quittingAlwaysContinueProfile reward))) ≤
         D - 3 * D ^ 2 / (32 * M + 6 * D) := by
   dsimp only
-  let source := quittingLiteralRootStackProfile reward oldRoots
-    (quittingAlwaysContinueProfile reward)
-  let pair := quittingTerminalSemanticPair reward source
-  let D := quittingTerminalSemanticDebtSum pair
-  obtain ⟨owner, howner⟩ := hWE oldRoots
-  change pair.1 owner ≤ reward (quittingSingletonTerminal owner) owner at howner
-  have hownerDebtLe : quittingTerminalSemanticDebt pair owner ≤ D := by
-    dsimp only [D, quittingTerminalSemanticDebtSum]
-    exact Finset.single_le_sum
-      (fun player _ => quittingTerminalSemanticDebt_nonneg_of_attainable
-        reward ⟨source, rfl⟩ player)
-      (Finset.mem_univ owner)
-  have hmarginLeDebt : pair.2 owner -
-      reward (quittingSingletonTerminal owner) owner ≤
-        quittingTerminalSemanticDebt pair owner := by
-    dsimp only [pair, source, quittingTerminalSemanticDebt]
-    linarith
-  have hmarginLe : pair.2 owner -
-      reward (quittingSingletonTerminal owner) owner ≤ D :=
-    hmarginLeDebt.trans hownerDebtLe
-  have hpreempted : 0 <
-      reward (quittingSingletonTerminal (preemption.blocker owner))
-          (preemption.blocker owner) -
-        reward (quittingSingletonTerminal owner) (preemption.blocker owner) :=
-    preemption.gap_pos.trans_le (preemption.gap_le owner)
-  obtain ⟨block, hlength, hdebt⟩ :=
-    exists_literal_capThreshold_block_debtSum_le_quadraticDrop
-      reward source owner (preemption.blocker owner) hM hreward
-        (by simpa only [D, pair, source] using hdebtPos) hpreempted
-  have hmax : max D
-      (pair.2 owner - reward (quittingSingletonTerminal owner) owner) = D :=
-    max_eq_left hmarginLe
-  refine ⟨owner, block, ?_, ?_⟩
-  · change block.length ≤ 1 + quittingSoloCapThresholdHorizon M
-        (max D (pair.2 owner - reward (quittingSingletonTerminal owner) owner) /
-          (32 * (M +
-            max D (pair.2 owner - reward (quittingSingletonTerminal owner) owner))))
-        (reward (quittingSingletonTerminal (preemption.blocker owner))
-            (preemption.blocker owner) -
-          reward (quittingSingletonTerminal owner) (preemption.blocker owner)) at hlength
-    rw [hmax] at hlength
-    exact hlength
-  · rw [quittingLiteralRootStackProfile_append]
-    change quittingTerminalSemanticDebtSum
-        (quittingTerminalSemanticPair reward
-          (quittingLiteralRootStackProfile reward block source)) ≤
-      D - 3 * D ^ 2 / (32 * M + 6 * D)
-    change quittingTerminalSemanticDebtSum
-        (quittingTerminalSemanticPair reward
-          (quittingLiteralRootStackProfile reward block source)) ≤
-      max D (pair.2 owner - reward (quittingSingletonTerminal owner) owner) -
-        3 * max D (pair.2 owner - reward (quittingSingletonTerminal owner) owner) ^ 2 /
-          (32 * M +
-            6 * max D (pair.2 owner - reward (quittingSingletonTerminal owner) owner)) at hdebt
-    rw [hmax] at hdebt
-    exact hdebt
+  obtain ⟨owner, -, block, hlength, hdebt⟩ :=
+    exists_finiteWord_ownerExclusion_quadraticDebtStep
+      reward (fun _ => True)
+        (finiteWordOwnerExclusion_all_of_weakSingletonExclusion reward hWE)
+        (preemption.toEligible reward) oldRoots hM hreward hdebtPos
+  exact ⟨owner, block, hlength, hdebt⟩
 
 end GameTheory

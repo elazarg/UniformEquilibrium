@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Paths.FiniteWordWeakExclusionRates
+import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalUniformPayoffSelection
 
 /-! # Finite weak-exclusion descent and uniform-payoff consumption -/

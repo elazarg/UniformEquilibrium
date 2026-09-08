@@ -5,7 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.FinFourRationalRewardApproximation
-import Research.Quitting.TerminalExploitabilityRewardRobustness
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityRewardRobustness
 import UniformEquilibrium.Quitting.RewardBound
 
 /-!

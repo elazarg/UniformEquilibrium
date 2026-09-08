@@ -358,6 +358,11 @@ existence under these two hypotheses, without an external reward-bound
 parameter. `UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionRates.lean`
 uses the same selected words for the reciprocal phase bound and the total
 date bound, including the logarithmic cost of each phase.
+The all-owner interface delegates to
+`UniformEquilibrium/Quitting/Paths/FiniteWordSelectedOwnerRates.lean`, whose
+single recurrence retains an eligible owner, its strict preemptor, and each
+literal block length. Eligibility can restrict the witnesses to a designated
+set without requiring preemption outside that set.
 `UniformEquilibrium/Quitting/Paths/FiniteUnpreemptedSoloExit.lean` constructs
 arbitrarily accurate finite solo words when an owner is unpreempted and
 that owner's singleton reward is nonnegative. The theorem
@@ -472,12 +477,24 @@ group exclusion with a fixed weight cap. Compactness also makes strict
 pointwise singleton exclusion equivalent to one positive uniform deficit.
 `exists_uniformEquilibriumPayoff_of_actualWeakSubsetExclusion` and
 `exists_uniformEquilibriumPayoff_of_finiteCalendarRawWeakSubsetExclusion`
-(`UniformEquilibrium/Diagnostics/Quitting/WeakSubsetUniformPayoff.lean`)
+(`UniformEquilibrium/Quitting/Paths/FiniteWordWeakSubsetSelection.lean`)
 give the uniform-equilibrium-payoff consequence for any finite player type.
 Only designated owners need nonnegative singleton rewards; other rewards may
 have either sign. The exclusion assumption itself implies that the designated
-set is nonempty. This qualitative consequence does not supply a finite-word
-selector for the signed case.
+set is nonempty. The same module constructs literal finite-word approximate
+Nash profiles against unrestricted behavioral deviations, already from
+exclusion on finite words alone. In the all-designated-preempted branch,
+`exists_designatedBlockerCertificate_forall_epsilon_finiteWord_length_le`
+chooses one actual preemption certificate before all positive accuracies
+and bounds the resulting word lengths. That bound depends on the fixed
+table's preemption gap, not only the reward bound and requested accuracy.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarWeakSubsetMaximalOwners.lean`
+proves that a successful owner set can be enlarged to all players with
+nonnegative own-singleton rewards, and gives the corresponding existence
+equivalence. `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawRejectionWitnesses.lean`
+states the exact real-calendar rejection alternatives. For group exclusion,
+every admissible common weight has a counterprofile; the profile may depend
+on the weight. These are existence statements, not witness-extraction algorithms.
 `exists_uniformEquilibriumPayoff_of_finFour_signFreeWeakSubsetExclusion`
 (`UniformEquilibrium/Diagnostics/Quitting/FinFourSignFreeWeakSubsetUniformPayoff.lean`)
 removes the singleton-sign condition for four players. Its assumption is
@@ -1526,6 +1543,17 @@ the corresponding actual-profile corollaries. Signed singletons are allowed.
 The results do not establish existence of a positive minimum or an attaining
 best response. The objective is maximum debt, not total debt.
 
+`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`
+proves that uniform reward perturbations of size `delta` change each actual
+profile's unrestricted response cap by at most `delta`, and its maximum
+terminal debt and the global infimum by at most `2 * delta`. The same
+behavioral strategies are used at both tables; no response supremum must be
+attained. Exact nonnegative scaling laws are also provided.
+`exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in that
+module proves reward-closedness of uniform-payoff existence. The nearby
+tables' targets may vary; the conclusion selects one fixed target for the
+limit table via terminal approximate equilibria at every positive accuracy.
+
 `quittingTerminalDeviationDebt_oneDateThenNever_eq_expect_of_supported_coherent`
 (`UniformEquilibrium/Diagnostics/Quitting/ScreenedMembershipDebt.lean`)
 expresses the full behavioral debt as the expected losing-action reward gap
@@ -1580,6 +1608,9 @@ chooses averaged-best actions from the actual root endpoints. A negative
 supported original gap and positive final debts then force opposite strict
 supported gaps for one player at both tables. It does not construct the
 minimum source or require pointwise optimal actions.
+Its actual two-sure positive-minimum theorem chooses those directions and
+produces the opposite strict gaps internally from the literal table
+correspondence, actual minimum, and infimum ordering.
 `exists_sureOwner_strictOptionalReversal_of_membershipStretch_positiveMinimum_finFour`
 (`UniformEquilibrium/Diagnostics/Quitting/ThreeSureMembershipReversal.lean`)
 specializes the actual minimum comparison to a root with three sure quitters.
@@ -1588,6 +1619,16 @@ whose Continue-minus-Quit gap has opposite strict signs at the two supported
 optional configurations, at both reward tables. The same input root is
 retained. This gives one reversing player, not the two opposed players
 required by the stronger three-sure continuation.
+`UniformEquilibrium/Diagnostics/Quitting/Regression/MembershipStretchCountBoundary.lean`
+gives complete four-player tables testing the pure-vertex count. At the
+critical half-debt boundary, every supported pure vertex has nonzero full
+debt. Both displayed mixed roots are explicitly proved not to be global
+minima: actual all-Never strictly improves their maximum debt.
+`UniformEquilibrium/Diagnostics/Quitting/Regression/MembershipStretchTimingBoundary.lean`
+keeps all nonsingleton entries fixed while changing one own singleton.
+The unpadded two-sure cap remains zero, but one all-Continue prefix restores
+that singleton as a deviation payoff. A one-sure root also exposes it.
+The full-cap changes are evaluated explicitly, including the zero-to-one case.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and
