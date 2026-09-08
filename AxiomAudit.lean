@@ -214,6 +214,7 @@ import MathUE.Interval.RationalPolynomialSmoothDerivativeApproximation
 import MathUE.Interval.ScalarDyadicPolynomial
 import MathUE.Interval.SelectedCoordinatePolynomialLipschitz
 import MathUE.Interval.SuppliedPartialEnclosureMeanValue
+import MathUE.Interval.UnitIntervalClip
 import MathUE.InverseCoordinateRecurrence
 import MathUE.InvisibleNeutralActionDrift
 import MathUE.KrawczykBridge
@@ -2582,6 +2583,7 @@ import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Stationary.CompleteBehavioralCap
 import UniformEquilibrium.Quitting.Stationary.CompleteEndpointChoices
 import UniformEquilibrium.Quitting.Stationary.ComponentwiseWeightedPotential
+import UniformEquilibrium.Quitting.Stationary.DiscountedDisplacement
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 import UniformEquilibrium.Quitting.Stationary.FaceNumerator
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier

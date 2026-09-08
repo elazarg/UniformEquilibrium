@@ -188,6 +188,7 @@ import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalPolynomialDerivativeApproximation
 import MathUE.Interval.RationalPolynomialSmoothDerivativeApproximation
 import MathUE.Interval.RationalInterval
+import MathUE.Interval.UnitIntervalClip
 import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial
 import MathUE.Interval.RationalPolynomialL1

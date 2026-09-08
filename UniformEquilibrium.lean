@@ -676,6 +676,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanDebtMonotonicity
 import UniformEquilibrium.Quitting.Bellman.Finite.PositiveAdmissibleCycle
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Stationary.CompleteBehavioralCap
+import UniformEquilibrium.Quitting.Stationary.DiscountedDisplacement
 import UniformEquilibrium.Quitting.Stationary.CompleteEndpointChoices
 import UniformEquilibrium.Quitting.Stationary.StrictEndpointSelection
 import UniformEquilibrium.Quitting.Stationary.TerminalCoalitionLaw

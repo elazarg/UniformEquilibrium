@@ -644,6 +644,15 @@ or action-nonemptiness assumption is required. The proof uses the existing
 unconditional polynomial sign-cell arc theorem. A root-only quitting source
 still needs its full Bellman-assignment lift and closure proof.
 
+`UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean`
+defines the discounted displacement and live value from the actual reward
+table and product root. It proves the positive denominator, the exact
+displacement/endpoint-gap identity, live Bellman consistency, uniform value
+bounds from the reward box, and all three clipped-map face conditions.
+These statements hold at the supplied root; no favorable fixed point is
+selected. They do not yet construct a complete Bellman assignment or exclude
+nonzero root limits.
+
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
@@ -1590,9 +1599,11 @@ terminal debt and the global infimum by at most `2 * delta`. The same
 behavioral strategies are used at both tables; no response supremum must be
 attained. Exact nonnegative scaling laws are also provided.
 `exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables` in that
-module proves reward-closedness of uniform-payoff existence. The nearby
-tables' targets may vary; the conclusion selects one fixed target for the
-limit table via terminal approximate equilibria at every positive accuracy.
+module delegates reward-closedness of uniform-payoff existence to
+`quittingGame_exists_uniformEquilibriumPayoff_of_arbitrarily_close_rewards`
+(`UniformEquilibrium/ProofView/Concepts/Stochastic/Models/Quitting/UniformPayoffExistenceClosure.lean`).
+The nearby tables' targets may vary; fixed-skeleton payoff closure selects
+one fixed target for the limit table.
 
 `quittingTerminalDeviationDebt_oneDateThenNever_eq_expect_of_supported_coherent`
 (`UniformEquilibrium/Diagnostics/Quitting/ScreenedMembershipDebt.lean`)
