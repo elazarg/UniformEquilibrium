@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.ProofView.Concepts.Mixed.MixedExtension
+import MathUE.PMFProduct.PureUpdateExpectation
 import UniformEquilibrium.ProofView.Concepts.Potential.PotentialGame
 import UniformEquilibrium.ProofView.Concepts.Potential.PotentialTeam
 import UniformEquilibrium.ProofView.Concepts.Classes.TeamGame
@@ -45,10 +46,7 @@ theorem expect_pmfPi_update_pure [DecidableEq ι] [Fintype ι]
     (f : (∀ i, A i) → ℝ) :
     expect (pmfPi (A := A) (Function.update σ j (PMF.pure a))) f =
       expect (pmfPi (A := A) σ) (fun s => f (Function.update s j a)) := by
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
-  rw [← pmfPi_bind_update_pure (A := A) σ j a]
-  rw [expect_bind]
-  simp
+  exact Math.PMFProduct.expect_pmfPi_update_pure σ j a f
 
 open Classical in
 /-- The expected potential after a unilateral mixed update is the updating

@@ -1,4 +1,5 @@
 import Mathlib.Algebra.MvPolynomial.Degrees
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarParameters
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPayoff
 
 /-! # Polynomial presentation of finite-calendar terminal masses -/
@@ -10,9 +11,6 @@ namespace GameTheory
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-abbrev QuittingFiniteCalendarVariable (ι : Type) (deadline : ℕ) :=
-  ι × Option (Fin deadline)
 
 def quittingFiniteCalendarStrictTailPolynomial (deadline : ℕ)
     (who : ι) (time : Fin deadline) :

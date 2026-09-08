@@ -496,12 +496,24 @@ gives a concrete four-player table with uniform deficit margin one. The same
 module proves that the zero table has no positive strict-deficit margin but
 does satisfy group exclusion and weak exclusion on every nonempty subset,
 with equality. These statements concern all actual behavioral profiles.
+`UniformEquilibrium/Quitting/Examples/FiniteCalendarWeakExclusionBeyondGroupBoundary.lean`
+gives weak exclusion on player zero's singleton owner set, but no group
+exclusion with a cap strictly below one and no positive strict deficit.
+The same pure-zero profile witnesses both failures and is exact terminal Nash.
 `UniformEquilibrium/Quitting/Examples/FiniteCalendarPredicateFailureExactNashBoundary.lean`
 gives a four-player table whose full-quitting profile is exact terminal Nash
 against every behavioral deviation, while its payoff exceeds all singleton
 rewards. It therefore refutes every positive strict-deficit certificate,
 group exclusion for every weight cap, and weak exclusion for every subset.
 These tests are sufficient conditions, not an equilibrium-existence decision.
+`UniformEquilibrium/Quitting/Examples/FiniteCalendarGroupExclusionBeyondDeficitBoundary.lean`
+gives a four-player table satisfying group exclusion with weight cap one
+half, while strict singleton deficit and product-low premiums both fail.
+The proof applies the actual first-stopping-pair square-root law and keeps
+Never mass explicit. No nonzero nonnegative fixed weight bounds every
+terminal row by the singleton benchmark, although the table has an exact
+terminal Nash profile. The correlated midpoint used to refute fixed weights
+is not asserted to come from an actual behavioral profile.
 The [real quantifier-elimination library](REAL_QUANTIFIER_ELIMINATION.md)
 supplies the shared elimination algorithm using its proved recursive
 sign-diagram producer.
@@ -1460,6 +1472,15 @@ module also extends attained actual-profile minima to the carrier and gives
 the corresponding actual-profile corollaries. Signed singletons are allowed.
 The results do not establish existence of a positive minimum or an attaining
 best response. The objective is maximum debt, not total debt.
+
+`quittingTerminalDeviationDebt_oneDateThenNever_eq_expect_of_supported_coherent`
+(`UniformEquilibrium/Diagnostics/Quitting/ScreenedMembershipDebt.lean`)
+expresses the full behavioral debt as the expected losing-action reward gap
+on the original product draws. One sure opponent suffices, and the preferred
+action must have a nonnegative directed gap on those draws. The same module
+gives the losing-probability times expected-gap identity under the weaker
+averaged optimality premise. Neither form assumes root Nash, a global
+minimum, reward bounds, or an earlier padding date.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and

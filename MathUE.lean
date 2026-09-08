@@ -287,6 +287,7 @@ import MathUE.PMFProduct.SumFubini
 import MathUE.PMFProduct.NormalizedSmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
 import MathUE.PMFProduct.Update
+import MathUE.PMFProduct.PureUpdateExpectation
 import MathUE.ParametricFarkasBasis
 import MathUE.PeriodicSnellCap
 import MathUE.Periodicity
