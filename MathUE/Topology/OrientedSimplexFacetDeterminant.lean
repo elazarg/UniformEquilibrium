@@ -78,4 +78,43 @@ theorem facetDeterminant_add_eq_zero_of_reflection
   rw [hfirst, hsecond] at hdet
   exact hdet
 
+/-- A constant-last-coordinate face has the spatial determinant multiplied
+by its signed apex displacement. The coordinate order is spatial, then parameter. -/
+theorem facetDeterminant_eq_lastCoordinate_displacement
+    {n : ℕ} {R : Type*} [CommRing R]
+    (face : Fin (n + 1) → Fin (n + 1) → R) (apex : Fin (n + 1) → R)
+    (parameter : R) (hface : ∀ vertex, face vertex (Fin.last n) = parameter) :
+    facetDeterminant face apex = (-1) ^ (n + 1) *
+      (apex (Fin.last n) - parameter) * determinant (fun vertex => Fin.init (face vertex)) := by
+  let matrix : Matrix (Fin (n + 2)) (Fin (n + 2)) R :=
+    fun vertex => Fin.cons 1
+      ((Fin.cons apex face : Fin (n + 2) → Fin (n + 1) → R) vertex)
+  let shifted := matrix.updateCol (Fin.last (n + 1))
+    (fun vertex => matrix vertex (Fin.last (n + 1)) + (-parameter) • matrix vertex 0)
+  have hlast : (Fin.last (n + 1) : Fin (n + 2)) ≠ 0 := by
+    intro h
+    have hval := congrArg Fin.val h
+    simp at hval
+  have hdet : shifted.det = matrix.det :=
+    Matrix.det_updateCol_add_smul_self matrix hlast (-parameter)
+  have hzero : shifted 0 (Fin.last (n + 1)) = apex (Fin.last n) - parameter := by
+    simp [shifted, matrix, sub_eq_add_neg]
+  have hsucc (vertex : Fin (n + 1)) : shifted vertex.succ (Fin.last (n + 1)) = 0 := by
+    simp [shifted, matrix, hface]
+  have hminor : shifted.submatrix (0 : Fin (n + 2)).succAbove
+      (Fin.last (n + 1)).succAbove =
+      (fun vertex => Fin.cons (1 : R) (Fin.init (face vertex))) := by
+    ext vertex coordinate
+    simp only [Matrix.submatrix_apply, Fin.succAbove_zero, Fin.succAbove_last]
+    have hne : coordinate.castSucc ≠ Fin.last (n + 1) := Fin.castSucc_ne_last coordinate
+    simp only [shifted, Matrix.updateCol_ne hne]
+    induction coordinate using Fin.cases with
+    | zero => simp [matrix]
+    | succ coordinate => simp [matrix, Fin.init]
+  change matrix.det = _
+  rw [← hdet, Matrix.det_succ_column shifted (Fin.last (n + 1)), Fin.sum_univ_succ]
+  simp only [hzero, hsucc, mul_zero, zero_mul, Finset.sum_const_zero, add_zero,
+    Fin.val_zero, Fin.val_last, zero_add, hminor]
+  rfl
+
 end Math.OrientedSimplexFacet

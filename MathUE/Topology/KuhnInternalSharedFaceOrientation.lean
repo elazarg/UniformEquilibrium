@@ -1,5 +1,5 @@
 import MathUE.Topology.OrientedSimplexFacetDeterminant
-import FixedPointTheorems.cubical_sperner_prep
+import MathUE.Topology.KuhnSimplexGeometry
 
 /-!
 # Opposite orientations at an internal Kuhn deletion
@@ -17,56 +17,6 @@ noncomputable section
 namespace Math.KuhnSharedFace
 
 open OrientedSimplexFacet
-
-/-- Every actual full-dimensional Kuhn edge increments exactly one coordinate by one. -/
-theorem exists_unitCoordinateStep_of_simplex
-    (cube : SpernerCube) (vertices : Fin (cube.n + 1) → cube.G)
-    (hsimplex : simplex cube cube.n vertices) (step : Fin cube.n) :
-    ∃ axis : Fin cube.n, ∀ coordinate,
-      (vertices step.succ coordinate).val = (vertices step.castSucc coordinate).val +
-        if coordinate = axis then 1 else 0 := by
-  have hcumulative : ∀ index, ccc_fun cube vertices index = index :=
-    is_id_of_strict_mono _ _ (ccc_fun_strict_mono cube vertices hsimplex)
-  have hbefore := congrArg Fin.val (hcumulative step.castSucc)
-  have hafter := congrArg Fin.val (hcumulative step.succ)
-  have hadd := ccc_add cube vertices hsimplex 0 step.castSucc step.succ
-    ⟨Fin.zero_le _, Fin.castSucc_le_succ step⟩
-  have hcount : coord_change_count cube (vertices step.castSucc) (vertices step.succ) = 1 := by
-    dsimp only [ccc_fun] at hbefore hafter
-    simp only [Fin.val_castSucc, Fin.val_succ] at hbefore hafter
-    omega
-  obtain ⟨axis, haxis⟩ := Finset.card_eq_one.mp hcount
-  refine ⟨axis, fun coordinate => ?_⟩
-  have hmem : vertices step.castSucc coordinate ≠ vertices step.succ coordinate ↔
-      coordinate = axis := by
-    have h := Finset.ext_iff.mp haxis coordinate
-    simpa only [Finset.mem_filter, Finset.mem_univ, true_and, Finset.mem_singleton] using h
-  by_cases hequal : coordinate = axis
-  · have hne := hmem.mpr hequal
-    have hmono := monotone_1_of_simplex cube vertices hsimplex
-      step.castSucc step.succ (Fin.castSucc_le_succ step) coordinate
-    have hbound := le_add_one_of_simplex cube vertices hsimplex
-      step.succ step.castSucc coordinate
-    have hvalne : (vertices step.castSucc coordinate).val ≠
-        (vertices step.succ coordinate).val := fun h => hne (Fin.ext h)
-    rw [if_pos hequal]
-    omega
-  · have heq : vertices step.castSucc coordinate = vertices step.succ coordinate :=
-      not_not.mp (fun h => hequal (hmem.mp h))
-    simp only [hequal, if_false, add_zero, heq]
-
-/-- Integer-coordinate form of the same actual unit step. -/
-theorem exists_integerUnitCoordinateStep_of_simplex
-    (cube : SpernerCube) (vertices : Fin (cube.n + 1) → cube.G)
-    (hsimplex : simplex cube cube.n vertices) (step : Fin cube.n) :
-    ∃ axis : Fin cube.n, ∀ coordinate,
-      ((vertices step.succ coordinate).val : ℤ) =
-        ((vertices step.castSucc coordinate).val : ℤ) +
-          if coordinate = axis then 1 else 0 := by
-  obtain ⟨axis, haxis⟩ := exists_unitCoordinateStep_of_simplex cube vertices hsimplex step
-  refine ⟨axis, fun coordinate => ?_⟩
-  have h := haxis coordinate
-  split_ifs at h ⊢ <;> exact_mod_cast h
 
 /-- The missing vertices of two distinct actual internal-deletion parents are
 reflected across the two common neighboring vertices. -/
@@ -103,12 +53,21 @@ theorem internalParents_missingVertex_reflection
     by_cases heq : index = before.succ
     · simpa only [heq] using h
     · exact hequal_away index heq
-  obtain ⟨firstAxis, hfirst⟩ :=
-    exists_integerUnitCoordinateStep_of_simplex cube lower hlower before
-  obtain ⟨secondAxis, hsecond⟩ :=
-    exists_integerUnitCoordinateStep_of_simplex cube upper hupper before
-  obtain ⟨lastAxis, hlast⟩ :=
-    exists_integerUnitCoordinateStep_of_simplex cube lower hlower after
+  let firstAxis := spernerChainStep hlower rfl before
+  have hfirst := KuhnSimplex.integerCoordinate_eq_add_stepIndicator hlower rfl before
+  change ∀ coordinate, ((lower before.succ coordinate).val : ℤ) =
+    ((lower before.castSucc coordinate).val : ℤ) +
+      if coordinate = firstAxis then 1 else 0 at hfirst
+  let secondAxis := spernerChainStep hupper rfl before
+  have hsecond := KuhnSimplex.integerCoordinate_eq_add_stepIndicator hupper rfl before
+  change ∀ coordinate, ((upper before.succ coordinate).val : ℤ) =
+    ((upper before.castSucc coordinate).val : ℤ) +
+      if coordinate = secondAxis then 1 else 0 at hsecond
+  let lastAxis := spernerChainStep hlower rfl after
+  have hlast := KuhnSimplex.integerCoordinate_eq_add_stepIndicator hlower rfl after
+  change ∀ coordinate, ((lower after.succ coordinate).val : ℤ) =
+    ((lower after.castSucc coordinate).val : ℤ) +
+      if coordinate = lastAxis then 1 else 0 at hlast
   simp only [hmiddle] at hlast
   have haxes : firstAxis ≠ secondAxis := by
     intro heq

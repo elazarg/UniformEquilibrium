@@ -377,3 +377,29 @@ theorem spernerChain_val_eq_base_iff (hs : simplex SC m I) (hm : m = SC.n)
   · exact fun hle ↦ spernerChain_val_eq_of_le_raiseIndex hs hm who hle
 
 end Math
+
+namespace Math.KuhnSimplex
+
+variable {cube : SpernerCube} {dimension : ℕ}
+  {vertices : Fin (dimension + 1) → cube.G}
+
+/-- The existing chronological step witness, bundled with its existing
+injectivity and surjectivity proofs. -/
+def coordinateEquivalence (hsimplex : simplex cube dimension vertices)
+    (hdimension : dimension = cube.n) : Fin dimension ≃ Fin cube.n :=
+  Equiv.ofBijective (spernerChainStep hsimplex hdimension)
+    ⟨spernerChainStep_injective hsimplex hdimension,
+      spernerChainStep_surjective hsimplex hdimension⟩
+
+/-- Integer coordinates retain the existing named chronological step witness. -/
+theorem integerCoordinate_eq_add_stepIndicator
+    (hsimplex : simplex cube dimension vertices) (hdimension : dimension = cube.n)
+    (step : Fin dimension) (coordinate : Fin cube.n) :
+    ((vertices step.succ coordinate).val : ℤ) =
+      ((vertices step.castSucc coordinate).val : ℤ) +
+        if coordinate = spernerChainStep hsimplex hdimension step then 1 else 0 := by
+  have h := spernerSimplex_step_value hsimplex step coordinate
+  simp only [mem_spernerChainStepSet_iff hsimplex hdimension] at h
+  split_ifs at h ⊢ <;> exact_mod_cast h
+
+end Math.KuhnSimplex

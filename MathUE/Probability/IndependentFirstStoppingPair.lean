@@ -175,12 +175,14 @@ private theorem fourLawTwoPairHazardClock_secondTargetAmplitude_sq
       fourLawTwoPairHazardClock_firstTargetAmplitude_sq
         third fourth first second time
 
-/-- The existing disjoint two-pair hazard theorem, applied to four arbitrary
-complete stopping laws. -/
-theorem twoDisjointFirstStoppingPairMasses_sqrt_sum_le_one
+/-- For four complete stopping laws, the two disjoint finite pair events and
+the joint Never event obey the endpoint-retaining square-root simplex law. -/
+theorem twoDisjointFirstStoppingPairMasses_sqrt_sum_add_never_le_one
     (first second third fourth : PMF (Option ℕ)) :
     Real.sqrt (equalFirstSecondBeforeThirdFourthMass first second third fourth) +
-      Real.sqrt (equalThirdFourthBeforeFirstSecondMass first second third fourth) ≤ 1 := by
+        Real.sqrt (equalThirdFourthBeforeFirstSecondMass first second third fourth) +
+        Real.sqrt ((first none).toReal * (second none).toReal *
+          (third none).toReal * (fourth none).toReal) ≤ 1 := by
   let clock := fourLawTwoPairHazardClock first second third fourth
   have hfirstTendsto : Filter.Tendsto
       (fun cutoff => Real.sqrt
@@ -206,11 +208,111 @@ theorem twoDisjointFirstStoppingPairMasses_sqrt_sum_le_one
     unfold equalThirdFourthBeforeFirstSecondMass
     exact (summable_equalThirdFourthBeforeFirstSecondMass_terms
       first second third fourth).hasSum.tendsto_sum_nat
-  apply le_of_tendsto' (hfirstTendsto.add hsecondTendsto)
+  have hfirstSurvival := (Real.continuous_sqrt.continuousAt.tendsto.comp
+    (tendsto_survival_none first))
+  have hsecondSurvival := (Real.continuous_sqrt.continuousAt.tendsto.comp
+    (tendsto_survival_none second))
+  have hthirdSurvival := (Real.continuous_sqrt.continuousAt.tendsto.comp
+    (tendsto_survival_none third))
+  have hfourthSurvival := (Real.continuous_sqrt.continuousAt.tendsto.comp
+    (tendsto_survival_none fourth))
+  have hendpointTendsto : Filter.Tendsto
+      (fun cutoff => clock.survivalRoot cutoff) Filter.atTop
+      (nhds (Real.sqrt ((first none).toReal * (second none).toReal *
+        (third none).toReal * (fourth none).toReal))) := by
+    have hproduct := ((hfirstSurvival.mul hsecondSurvival).mul
+      hthirdSurvival).mul hfourthSurvival
+    have hfirst : 0 ≤ (first none).toReal := ENNReal.toReal_nonneg
+    have hsecond : 0 ≤ (second none).toReal := ENNReal.toReal_nonneg
+    have hthird : 0 ≤ (third none).toReal := ENNReal.toReal_nonneg
+    have hfourth : 0 ≤ (fourth none).toReal := ENNReal.toReal_nonneg
+    have hsqrtProduct :
+        Real.sqrt ((first none).toReal * (second none).toReal *
+          (third none).toReal * (fourth none).toReal) =
+          Real.sqrt (first none).toReal * Real.sqrt (second none).toReal *
+            Real.sqrt (third none).toReal * Real.sqrt (fourth none).toReal := by
+      calc
+        _ = Real.sqrt ((first none).toReal * (second none).toReal *
+              (third none).toReal) * Real.sqrt (fourth none).toReal := by
+            rw [Real.sqrt_mul
+              (mul_nonneg (mul_nonneg hfirst hsecond) hthird)]
+        _ = (Real.sqrt ((first none).toReal * (second none).toReal) *
+              Real.sqrt (third none).toReal) * Real.sqrt (fourth none).toReal := by
+            rw [Real.sqrt_mul (mul_nonneg hfirst hsecond)]
+        _ = _ := by rw [Real.sqrt_mul hfirst]
+    rw [hsqrtProduct]
+    simpa only [clock, fourLawTwoPairHazardClock,
+      toScalarHazard_survival, Function.comp_apply] using hproduct
+  apply le_of_tendsto' ((hfirstTendsto.add hsecondTendsto).add hendpointTendsto)
   intro cutoff
-  simpa only [clock, fourLawTwoPairHazardClock_firstTargetAmplitude_sq,
-    fourLawTwoPairHazardClock_secondTargetAmplitude_sq] using
-    clock.finite_targetMass_sqrt_sum_le_one cutoff
+  have hfinite := sqrt_targetMass_add_sqrt_targetMass_add_endpoint_le_one
+    clock.firstTargetAmplitude clock.secondTargetAmplitude clock.survivalRoot
+      clock.localDefect cutoff clock.firstTargetAmplitude_nonneg
+      clock.secondTargetAmplitude_nonneg clock.localDefect_nonneg clock.survivalRoot_zero
+      (fun time _ => clock.local_conservation time)
+  simpa only [clock,
+    fourLawTwoPairHazardClock_firstTargetAmplitude_sq,
+    fourLawTwoPairHazardClock_secondTargetAmplitude_sq] using hfinite
+
+/-- The two target pair masses leave enough finite mass outside both targets;
+the joint Never atom is not included in this leftover. -/
+theorem twoDisjointFirstStoppingPairMasses_finiteLeftover_ge_two_sqrt_mul
+    (first second third fourth : PMF (Option ℕ)) :
+    2 * Real.sqrt
+        (equalFirstSecondBeforeThirdFourthMass first second third fourth *
+          equalThirdFourthBeforeFirstSecondMass first second third fourth) ≤
+      1 - equalFirstSecondBeforeThirdFourthMass first second third fourth -
+        equalThirdFourthBeforeFirstSecondMass first second third fourth -
+        ((first none).toReal * (second none).toReal *
+          (third none).toReal * (fourth none).toReal) := by
+  let x := equalFirstSecondBeforeThirdFourthMass first second third fourth
+  let y := equalThirdFourthBeforeFirstSecondMass first second third fourth
+  let ν := (first none).toReal * (second none).toReal *
+    (third none).toReal * (fourth none).toReal
+  have hx : 0 ≤ x := by
+    apply tsum_nonneg
+    intro time
+    exact mul_nonneg
+      (mul_nonneg
+        (mul_nonneg (finiteMass_nonneg first time) (finiteMass_nonneg second time))
+        (survival_nonneg third (time + 1)))
+      (survival_nonneg fourth (time + 1))
+  have hy : 0 ≤ y := by
+    apply tsum_nonneg
+    intro time
+    exact mul_nonneg
+      (mul_nonneg
+        (mul_nonneg (finiteMass_nonneg third time) (finiteMass_nonneg fourth time))
+        (survival_nonneg first (time + 1)))
+      (survival_nonneg second (time + 1))
+  have hν : 0 ≤ ν := by positivity
+  have hsimplex :=
+    twoDisjointFirstStoppingPairMasses_sqrt_sum_add_never_le_one
+      first second third fourth
+  change Real.sqrt x + Real.sqrt y + Real.sqrt ν ≤ 1 at hsimplex
+  have hsumNonnegative :
+      0 ≤ Real.sqrt x + Real.sqrt y + Real.sqrt ν := by positivity
+  have hsquare := mul_self_le_mul_self hsumNonnegative hsimplex
+  have hxSq := Real.sq_sqrt hx
+  have hySq := Real.sq_sqrt hy
+  have hνSq := Real.sq_sqrt hν
+  have hxy : Real.sqrt (x * y) = Real.sqrt x * Real.sqrt y :=
+    Real.sqrt_mul hx y
+  change 2 * Real.sqrt (x * y) ≤ 1 - x - y - ν
+  rw [hxy]
+  nlinarith [mul_nonneg (Real.sqrt_nonneg x) (Real.sqrt_nonneg ν),
+    mul_nonneg (Real.sqrt_nonneg y) (Real.sqrt_nonneg ν)]
+
+/-- The existing disjoint two-pair hazard theorem, applied to four arbitrary
+complete stopping laws. -/
+theorem twoDisjointFirstStoppingPairMasses_sqrt_sum_le_one
+    (first second third fourth : PMF (Option ℕ)) :
+    Real.sqrt (equalFirstSecondBeforeThirdFourthMass first second third fourth) +
+      Real.sqrt (equalThirdFourthBeforeFirstSecondMass first second third fourth) ≤ 1 := by
+  have h := twoDisjointFirstStoppingPairMasses_sqrt_sum_add_never_le_one
+    first second third fourth
+  linarith [Real.sqrt_nonneg ((first none).toReal * (second none).toReal *
+    (third none).toReal * (fourth none).toReal)]
 
 section Coalitions
 

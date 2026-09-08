@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Topology.BoxComplementaritySpernerApproximation
-import Research.Topology.CubicalSpernerKuhnChain
+import MathUE.Topology.KuhnSimplexGeometry
 
 /-!
 # Face position of complete grid simplices with negative leading gain

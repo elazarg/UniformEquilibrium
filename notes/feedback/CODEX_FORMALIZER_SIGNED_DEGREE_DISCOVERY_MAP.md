@@ -184,10 +184,22 @@ for two actual Kuhn parents sharing their endpoint-deletion face, using the
 pinned full-simplex coordinate increment identity.
 `internalParents_signed_determinant_add_eq_zero`
 (`MathUE/Topology/KuhnInternalSharedFaceOrientation.lean`) handles two distinct
-actual parents with the same internal deletion. Its unit-coordinate step
-theorem reuses the pinned cumulative coordinate-change counts. Classification
-of arbitrary shared faces, unit-volume normalization, and subdivision-independent
-degree are separate obligations; these local adapters do not supply them.
+actual parents with the same internal deletion. It uses `spernerChainStep`
+and `spernerSimplex_step_value` in
+`MathUE/Topology/KuhnSimplexGeometry.lean`, the shared coordinate-step and
+coordinate-position API.
+`exists_sharedFace_signed_determinant_cancellation`
+(`MathUE/Topology/KuhnSharedFaceOrientation.lean`) combines these cases from
+literal shared-face incidence, extracting the deletion indices rather than
+assuming a signed incidence witness.
+`abs_determinant_eq_one_of_simplex`
+(`MathUE/Topology/KuhnSimplexOrientation.lean`) proves that each actual top
+simplex has integer determinant of absolute value one. This is lattice
+determinant normalization, not Euclidean volume one. The proof bundles the
+existing step bijection as `coordinateEquivalence` and reuses determinant
+row operations.
+The signed incidence sum, endpoint identification, and subdivision-independent
+degree remain separate obligations; these local adapters do not supply them.
 
 ## 3. Actual source comparison
 

@@ -602,6 +602,9 @@ import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.KuhnEndpointSharedFaceOrientation
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
+import MathUE.Topology.KuhnSharedFaceOrientation
+import MathUE.Topology.KuhnSimplexGeometry
+import MathUE.Topology.KuhnSimplexOrientation
 import MathUE.Topology.NestedOuterApproximation
 import MathUE.Topology.NonnegativeSubsequenceDichotomy
 import MathUE.Topology.OneSidedAffineLimit

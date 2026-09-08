@@ -66,6 +66,11 @@ project libraries and pinned dependencies for the result and its
 generalizations. Search by mathematical conclusion and underlying objects,
 not only the packet's terminology or a proposed declaration name.
 
+Include `Research/` and the relevant Literature source, not only production
+imports: a result may already exist outside the integrated surface. When such
+a result is reusable, promote its canonical proof and update its clients
+rather than reconstructing it under another name.
+
 For each candidate, inspect its exact statement and imports. Compare
 quantifiers, hypotheses, source data, and conclusion with the obligation.
 Distinguish a missing theorem from a missing representation adapter or an

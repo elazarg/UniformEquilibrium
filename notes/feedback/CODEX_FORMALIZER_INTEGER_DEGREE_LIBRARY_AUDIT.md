@@ -184,7 +184,7 @@ Available pieces:
   implemented parity invariant. Replacing `ZMod 2` by `ℤ` in such a structure
   would not implement the missing theory.
 - `spernerChainStepSet_card` and the raised-coordinate/chain-position lemmas
-  (`Research/Topology/CubicalSpernerKuhnChain.lean`) expose actual Kuhn-grid
+  (`MathUE/Topology/KuhnSimplexGeometry.lean`) expose actual Kuhn-grid
   geometry. `dist_boxComplementarityGridPoint_le_one_div_of_simplex` and
   `BoxComplementarityProblem.isSolution_of_completeSimplexAnchorPoint_tendsto`
   (`Research/Topology/BoxComplementaritySpernerApproximation.lean`) provide

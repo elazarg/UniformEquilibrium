@@ -1540,6 +1540,27 @@ theorem finite_twoTarget_dominant_chronology_bounds
     · rw [← htailConservation]
       linarith
 
+/-- The finite two-target square-root ledger retains its endpoint term;
+no sign assumption on that term is needed. -/
+theorem sqrt_targetMass_add_sqrt_targetMass_add_endpoint_le_one
+    (x y z defect : ℕ → ℝ) (horizon : ℕ)
+    (x_nonneg : ∀ time, 0 ≤ x time) (y_nonneg : ∀ time, 0 ≤ y time)
+    (defect_nonneg : ∀ time, 0 ≤ defect time)
+    (initial : z 0 = 1)
+    (local_eq : ∀ time, time < horizon →
+      x time + y time + defect time + z (time + 1) = z time) :
+    Real.sqrt (∑ time ∈ Finset.range horizon, x time ^ 2) +
+        Real.sqrt (∑ time ∈ Finset.range horizon, y time ^ 2) + z horizon ≤ 1 := by
+  have hx := sqrt_sum_sq_le_sum_of_nonneg (Finset.range horizon) x
+    (fun time _ => x_nonneg time)
+  have hy := sqrt_sum_sq_le_sum_of_nonneg (Finset.range horizon) y
+    (fun time _ => y_nonneg time)
+  have htelescope := sum_localSquareRootDefect_add_endpoint
+    x y z defect horizon initial local_eq
+  have hdefect : 0 ≤ ∑ time ∈ Finset.range horizon, defect time :=
+    Finset.sum_nonneg fun time _ => defect_nonneg time
+  linarith
+
 /-- Finite-horizon global square-root simplex inequality obtained from the exact local ledger. -/
 theorem sqrt_targetMass_add_sqrt_targetMass_le_one
     (x y z defect : ℕ → ℝ) (horizon : ℕ)
@@ -1551,14 +1572,8 @@ theorem sqrt_targetMass_add_sqrt_targetMass_le_one
       x time + y time + defect time + z (time + 1) = z time) :
     Real.sqrt (∑ time ∈ Finset.range horizon, x time ^ 2) +
         Real.sqrt (∑ time ∈ Finset.range horizon, y time ^ 2) ≤ 1 := by
-  have hx := sqrt_sum_sq_le_sum_of_nonneg (Finset.range horizon) x
-    (fun time _ => x_nonneg time)
-  have hy := sqrt_sum_sq_le_sum_of_nonneg (Finset.range horizon) y
-    (fun time _ => y_nonneg time)
-  have htelescope := sum_localSquareRootDefect_add_endpoint
-    x y z defect horizon initial local_eq
-  have hdefect : 0 ≤ ∑ time ∈ Finset.range horizon, defect time :=
-    Finset.sum_nonneg fun time _ => defect_nonneg time
+  have h := sqrt_targetMass_add_sqrt_targetMass_add_endpoint_le_one
+    x y z defect horizon x_nonneg y_nonneg defect_nonneg initial local_eq
   linarith
 
 namespace TwoPairHazardClock
