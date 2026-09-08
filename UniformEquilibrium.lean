@@ -50,6 +50,7 @@ import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPayoff
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPolynomial
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarParameters
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffFormula
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarExclusionFormula
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarFormulaCoordinates
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawStrictDecision
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPurePoints

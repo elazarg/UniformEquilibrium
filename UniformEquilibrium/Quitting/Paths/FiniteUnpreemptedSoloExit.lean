@@ -3,7 +3,13 @@ import UniformEquilibrium.Quitting.Terminal.PositiveMinimumSemanticDebt
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryTailSemanticReduction
 
-/-! # Literal finite solo exit for an unpreempted owner -/
+/-! # Finite solo exit with signs only on the designated owner
+
+The outsider estimate is made relative to the finite word's prescribed
+payoff.  Thus a negative payoff from the designated owner's singleton does
+not require a nonnegativity hypothesis: its geometric tail is charged by the
+same reward bound.
+-/
 
 noncomputable section
 
@@ -57,6 +63,9 @@ theorem quittingSoloSemanticIterate_never_owner_cap
         quittingRootContinuePayoff_soloStationaryRoot_owner,
         Function.update_self, ih, quittingSoloReward_self, max_self]
 
+/-- The absolute outsider-cap estimate under globally nonnegative
+singleton rewards.  The signed theorem below instead estimates the cap
+relative to the finite word's prescribed payoff. -/
 theorem quittingSoloSemanticIterate_never_other_cap_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner : ι) {M t : ℝ}
@@ -115,15 +124,87 @@ theorem quittingSoloSemanticIterate_never_other_cap_le
         nlinarith [mul_nonneg hM ht0,
           mul_nonneg (sub_nonneg.mpr ht1) (mul_nonneg hM ht0)]
 
-/-- A repeated solo word followed by Never has every coordinate debt bounded
-by its geometric tail plus the one-row spectator cap surcharge. -/
-theorem quittingTerminalSemanticDebt_replicate_solo_never_le
+/-- Against an unpreempted solo owner, an outsider's finite-word cap is at
+most its prescribed payoff plus the one-row surcharge and geometric tail.
+No singleton sign is required for the outsider. -/
+theorem quittingSoloSemanticIterate_never_other_cap_le_payoff_add
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) {M t : ℝ}
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (hunpreempted : ∀ player, player ≠ owner →
+      reward (quittingSingletonTerminal player) player ≤
+        reward (quittingSingletonTerminal owner) player)
+    {player : ι} (hne : player ≠ owner) :
+    ∀ steps,
+      (quittingSoloSemanticIterate reward owner
+          (quittingHazardCoin t ht0 ht1)
+          (quittingNeverBoundarySemanticPair reward) steps).2 player ≤
+        (1 - (1 - t) ^ steps) *
+            reward (quittingSingletonTerminal owner) player +
+          2 * M * t + M * (1 - t) ^ steps := by
+  have hM : 0 ≤ M :=
+    quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
+  let a := reward (quittingSingletonTerminal owner) player
+  let s := reward (quittingSingletonTerminal player) player
+  have hsa : s ≤ a := hunpreempted player hne
+  have haLower : -M ≤ a :=
+    (neg_le_of_abs_le (hreward (quittingSingletonTerminal owner) player))
+  have haUpper : a ≤ M :=
+    le_of_abs_le (hreward (quittingSingletonTerminal owner) player)
+  have hsUpper : s ≤ M := hsa.trans haUpper
+  have hcollision : quittingSingletonCollisionReward reward owner player ≤ M := by
+    unfold quittingSingletonCollisionReward
+    exact le_of_abs_le (hreward ⟨{owner, player}, by simp⟩ player)
+  intro steps
+  induction steps with
+  | zero =>
+      simp only [quittingSoloSemanticIterate_zero,
+        quittingNeverBoundarySemanticPair, pow_zero, sub_self, zero_mul]
+      exact max_le (by positivity) (hsUpper.trans (by nlinarith [mul_nonneg hM ht0]))
+  | succ steps ih =>
+      rw [quittingSoloSemanticIterate_succ]
+      unfold quittingTerminalSemanticPrefix
+      dsimp only
+      rw [quittingRootQuitPayoff_soloStationaryRoot_other reward hne,
+        quittingRootContinuePayoff_soloStationaryRoot_other reward hne,
+        quittingHazardCoin_true_toReal, quittingHazardCoin_false_toReal,
+        Function.update_self, pow_succ]
+      change max ((1 - t) * s + t * quittingSingletonCollisionReward
+          reward owner player)
+          (t * a + (1 - t) *
+            (quittingSoloSemanticIterate reward owner
+              (quittingHazardCoin t ht0 ht1)
+              (quittingNeverBoundarySemanticPair reward) steps).2 player) ≤
+        (1 - (1 - t) ^ steps * (1 - t)) * a +
+          2 * M * t + M * ((1 - t) ^ steps * (1 - t))
+      have hpow0 : 0 ≤ (1 - t) ^ steps :=
+        pow_nonneg (sub_nonneg.mpr ht1) _
+      apply max_le
+      · have hquit : (1 - t) * s + t * quittingSingletonCollisionReward
+            reward owner player ≤ (1 - t) * a + t * M := by
+          exact add_le_add
+            (mul_le_mul_of_nonneg_left hsa (sub_nonneg.mpr ht1))
+            (mul_le_mul_of_nonneg_left hcollision ht0)
+        have haPlus : 0 ≤ a + M := by linarith
+        have hfirstNonnegative : 0 ≤ t * (a + M) :=
+          mul_nonneg ht0 haPlus
+        have hsecondNonnegative :
+            0 ≤ (1 - t) ^ steps * (1 - t) * (M - a) := by positivity
+        nlinarith
+      · have hscaled := mul_le_mul_of_nonneg_left ih (sub_nonneg.mpr ht1)
+        dsimp only [a] at hscaled ⊢
+        have hextra : 0 ≤ t * (2 * M * t) := by positivity
+        nlinarith
+
+/-- A repeated solo word followed by Never has the standard coordinate debt
+bound when only the designated owner's singleton is known nonnegative. -/
+theorem quittingTerminalSemanticDebt_replicate_solo_never_le_of_owner_nonnegative
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner player : ι) {M t : ℝ}
     (hreward : ∀ terminal who, |reward terminal who| ≤ M)
     (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
-    (hsingleton : ∀ who,
-      0 ≤ reward (quittingSingletonTerminal who) who)
+    (howner : 0 ≤ reward (quittingSingletonTerminal owner) owner)
     (hunpreempted : ∀ who, who ≠ owner →
       reward (quittingSingletonTerminal who) who ≤
         reward (quittingSingletonTerminal owner) who)
@@ -154,28 +235,48 @@ theorem quittingTerminalSemanticDebt_replicate_solo_never_le
   by_cases hplayer : player = owner
   · subst player
     rw [quittingSoloSemanticIterate_never_owner_cap
-      reward owner ht0 ht1 (hsingleton owner)]
+      reward owner ht0 ht1 howner]
     have hselfUpper : reward (quittingSingletonTerminal owner) owner ≤ M :=
-      (le_abs_self _).trans (hreward (quittingSingletonTerminal owner) owner)
+      le_of_abs_le (hreward (quittingSingletonTerminal owner) owner)
     nlinarith [mul_nonneg hM ht0,
       mul_nonneg hpow (sub_nonneg.mpr hselfUpper)]
-  · have hcap := quittingSoloSemanticIterate_never_other_cap_le
-      reward owner hreward ht0 ht1 hsingleton hunpreempted hplayer steps
-    have haLower : 0 ≤ reward (quittingSingletonTerminal owner) player :=
-      (hsingleton player).trans (hunpreempted player hplayer)
-    have haUpper : reward (quittingSingletonTerminal owner) player ≤ M :=
-      (le_abs_self _).trans (hreward (quittingSingletonTerminal owner) player)
-    nlinarith [mul_nonneg hpow (sub_nonneg.mpr haUpper)]
+  · have hcap :=
+      quittingSoloSemanticIterate_never_other_cap_le_payoff_add
+        reward owner hreward ht0 ht1 hunpreempted hplayer steps
+    linarith
 
-/-- Summing the coordinatewise estimate gives a total complete-deviation
-debt bound for the actual finite repeated-solo word. -/
-theorem quittingTerminalSemanticDebtSum_replicate_solo_never_le
+/-- The coordinate estimate with all singleton rewards nonnegative. -/
+theorem quittingTerminalSemanticDebt_replicate_solo_never_le
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner player : ι) {M t : ℝ}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ M)
+    (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
+    (hsingleton : ∀ who,
+      0 ≤ reward (quittingSingletonTerminal who) who)
+    (hunpreempted : ∀ who, who ≠ owner →
+      reward (quittingSingletonTerminal who) who ≤
+        reward (quittingSingletonTerminal owner) who)
+    (steps : ℕ) :
+    quittingTerminalSemanticDebt
+        (quittingTerminalSemanticPair reward
+          (quittingLiteralRootStackProfile reward
+            (List.replicate steps (quittingSoloStationaryRoot owner
+              (quittingHazardCoin t ht0 ht1)))
+            (quittingAlwaysContinueProfile reward))) player ≤
+      2 * M * t + M * (1 - t) ^ steps := by
+  exact
+    quittingTerminalSemanticDebt_replicate_solo_never_le_of_owner_nonnegative
+      reward owner player hreward ht0 ht1 (hsingleton owner)
+        hunpreempted steps
+
+/-- Summing the signed coordinate estimates retains the same total-debt
+bound as the globally nonnegative version. -/
+theorem quittingTerminalSemanticDebtSum_replicate_solo_never_le_of_owner_nonnegative
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (owner : ι) {M t : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
-    (hsingleton : ∀ player,
-      0 ≤ reward (quittingSingletonTerminal player) player)
+    (howner : 0 ≤ reward (quittingSingletonTerminal owner) owner)
     (hunpreempted : ∀ player, player ≠ owner →
       reward (quittingSingletonTerminal player) player ≤
         reward (quittingSingletonTerminal owner) player)
@@ -197,20 +298,43 @@ theorem quittingTerminalSemanticDebtSum_replicate_solo_never_le
             (quittingAlwaysContinueProfile reward))) player ≤
       ∑ _player : ι, (2 * M * t + M * (1 - t) ^ steps) :=
         Finset.sum_le_sum fun player _ =>
-          quittingTerminalSemanticDebt_replicate_solo_never_le
-            reward owner player hreward ht0 ht1 hsingleton hunpreempted steps
+          quittingTerminalSemanticDebt_replicate_solo_never_le_of_owner_nonnegative
+            reward owner player hreward ht0 ht1 howner hunpreempted steps
     _ = Fintype.card ι * (2 * M * t + M * (1 - t) ^ steps) := by
       rw [Finset.sum_const, Finset.card_univ]
       simp only [nsmul_eq_mul]
 
-/-- A nonnegative singleton table with one unpreempted owner admits an
-actual finite repeated-solo word of arbitrarily small total debt. -/
-theorem exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedOwner
+/-- The total-debt estimate with all singleton rewards nonnegative. -/
+theorem quittingTerminalSemanticDebtSum_replicate_solo_never_le
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (owner : ι) {M ε : ℝ} (hM : 0 < M) (hε : 0 < ε)
+    (owner : ι) {M t : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (ht0 : 0 ≤ t) (ht1 : t ≤ 1)
     (hsingleton : ∀ player,
       0 ≤ reward (quittingSingletonTerminal player) player)
+    (hunpreempted : ∀ player, player ≠ owner →
+      reward (quittingSingletonTerminal player) player ≤
+        reward (quittingSingletonTerminal owner) player)
+    (steps : ℕ) :
+    quittingTerminalSemanticDebtSum
+        (quittingTerminalSemanticPair reward
+          (quittingLiteralRootStackProfile reward
+            (List.replicate steps (quittingSoloStationaryRoot owner
+              (quittingHazardCoin t ht0 ht1)))
+            (quittingAlwaysContinueProfile reward))) ≤
+      Fintype.card ι * (2 * M * t + M * (1 - t) ^ steps) := by
+  exact
+    quittingTerminalSemanticDebtSum_replicate_solo_never_le_of_owner_nonnegative
+      reward owner hreward ht0 ht1 (hsingleton owner) hunpreempted steps
+
+/-- One unpreempted owner with nonnegative own singleton reward admits an
+actual finite repeated-solo word of arbitrarily small total debt.  No sign
+condition is imposed on outsider singleton rewards. -/
+theorem exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedDesignatedOwner
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) {M epsilon : ℝ} (hM : 0 < M) (hepsilon : 0 < epsilon)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (howner : 0 ≤ reward (quittingSingletonTerminal owner) owner)
     (hunpreempted : ∀ player, player ≠ owner →
       reward (quittingSingletonTerminal player) player ≤
         reward (quittingSingletonTerminal owner) player) :
@@ -218,13 +342,13 @@ theorem exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedOwner
       quittingTerminalSemanticDebtSum
           (quittingTerminalSemanticPair reward
             (quittingLiteralRootStackProfile reward roots
-              (quittingAlwaysContinueProfile reward))) ≤ ε := by
-  let n : ℝ := Fintype.card ι
-  have hn : 0 < n := by
-    dsimp only [n]
+              (quittingAlwaysContinueProfile reward))) ≤ epsilon := by
+  let playerCount : ℝ := Fintype.card ι
+  have hplayerCount : 0 < playerCount := by
+    dsimp only [playerCount]
     exact_mod_cast (Fintype.card_pos_iff.mpr ⟨owner⟩ : 0 < Fintype.card ι)
-  let t := min (1 / 2 : ℝ) (ε / (4 * n * M))
-  have hfraction : 0 < ε / (4 * n * M) := by positivity
+  let t := min (1 / 2 : ℝ) (epsilon / (4 * playerCount * M))
+  have hfraction : 0 < epsilon / (4 * playerCount * M) := by positivity
   have ht : 0 < t := by
     dsimp only [t]
     exact lt_min (by norm_num) hfraction
@@ -239,36 +363,58 @@ theorem exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedOwner
     simpa only [mul_comm, mul_zero] using
       (tendsto_pow_atTop_nhds_zero_of_lt_one
         honeSubNonnegative honeSubOne).mul_const M
-  have htarget : 0 < ε / (2 * n) := by positivity
-  have heventually : ∀ᶠ steps in atTop, M * (1 - t) ^ steps < ε / (2 * n) :=
+  have htarget : 0 < epsilon / (2 * playerCount) := by positivity
+  have heventually : ∀ᶠ steps in atTop,
+      M * (1 - t) ^ steps < epsilon / (2 * playerCount) :=
     (tendsto_order.1 hlimit).2 _ htarget
   obtain ⟨steps, hsteps⟩ := heventually.exists
   let roots := List.replicate steps (quittingSoloStationaryRoot owner
     (quittingHazardCoin t ht.le htOne))
   refine ⟨roots, ?_⟩
-  have hraw := quittingTerminalSemanticDebtSum_replicate_solo_never_le
-    reward owner hreward ht.le htOne hsingleton hunpreempted steps
-  have htUpper : t ≤ ε / (4 * n * M) := by
+  have hraw :=
+    quittingTerminalSemanticDebtSum_replicate_solo_never_le_of_owner_nonnegative
+      reward owner hreward ht.le htOne howner hunpreempted steps
+  have htUpper : t ≤ epsilon / (4 * playerCount * M) := by
     dsimp only [t]
     exact min_le_right _ _
-  have hfirst : n * (2 * M * t) ≤ ε / 2 := by
+  have hfirst : playerCount * (2 * M * t) ≤ epsilon / 2 := by
     have hscaled := mul_le_mul_of_nonneg_left htUpper
-      (by positivity : 0 ≤ n * (2 * M))
-    field_simp [hn.ne', hM.ne'] at hscaled ⊢
+      (by positivity : 0 ≤ playerCount * (2 * M))
+    field_simp [hplayerCount.ne', hM.ne'] at hscaled ⊢
     nlinarith
-  have hsecond : n * (M * (1 - t) ^ steps) ≤ ε / 2 := by
-    have hscaled := mul_le_mul_of_nonneg_left hsteps.le hn.le
-    field_simp [hn.ne'] at hscaled ⊢
+  have hsecond : playerCount * (M * (1 - t) ^ steps) ≤ epsilon / 2 := by
+    have hscaled := mul_le_mul_of_nonneg_left hsteps.le hplayerCount.le
+    field_simp [hplayerCount.ne'] at hscaled ⊢
     nlinarith
   change quittingTerminalSemanticDebtSum
       (quittingTerminalSemanticPair reward
         (quittingLiteralRootStackProfile reward roots
-          (quittingAlwaysContinueProfile reward))) ≤ ε
+          (quittingAlwaysContinueProfile reward))) ≤ epsilon
   dsimp only [roots]
   calc
-    _ ≤ n * (2 * M * t + M * (1 - t) ^ steps) := by
-      simpa only [n] using hraw
-    _ = n * (2 * M * t) + n * (M * (1 - t) ^ steps) := by ring
-    _ ≤ ε := by linarith
+    _ ≤ playerCount * (2 * M * t + M * (1 - t) ^ steps) := by
+      simpa only [playerCount] using hraw
+    _ = playerCount * (2 * M * t) +
+        playerCount * (M * (1 - t) ^ steps) := by ring
+    _ ≤ epsilon := by linarith
+
+/-- The finite exit with all singleton rewards nonnegative. -/
+theorem exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedOwner
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) {M ε : ℝ} (hM : 0 < M) (hε : 0 < ε)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ M)
+    (hsingleton : ∀ player,
+      0 ≤ reward (quittingSingletonTerminal player) player)
+    (hunpreempted : ∀ player, player ≠ owner →
+      reward (quittingSingletonTerminal player) player ≤
+        reward (quittingSingletonTerminal owner) player) :
+    ∃ roots : List (ι → PMF Bool),
+      quittingTerminalSemanticDebtSum
+          (quittingTerminalSemanticPair reward
+            (quittingLiteralRootStackProfile reward roots
+              (quittingAlwaysContinueProfile reward))) ≤ ε := by
+  exact
+    exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedDesignatedOwner
+      reward owner hM hε hreward (hsingleton owner) hunpreempted
 
 end GameTheory

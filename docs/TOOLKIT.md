@@ -360,7 +360,11 @@ uses the same selected words for the reciprocal phase bound and the total
 date bound, including the logarithmic cost of each phase.
 `UniformEquilibrium/Quitting/Paths/FiniteUnpreemptedSoloExit.lean` constructs
 arbitrarily accurate finite solo words when an owner is unpreempted and
-singleton rewards are nonnegative. Combining the alternatives,
+that owner's singleton reward is nonnegative. The theorem
+`exists_finiteWord_debtSum_le_of_nonnegative_unpreemptedDesignatedOwner`
+allows signed outsider singleton rewards and retains the geometric-tail
+debt estimate. The globally nonnegative specializations delegate to it.
+Combining the globally nonnegative alternatives,
 `exists_uniformEquilibriumPayoff_of_weakExclusion_nonnegativeSingleton`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionSelection.lean`)
 requires only finite-word weak exclusion and nonnegative singleton rewards.
@@ -1518,7 +1522,8 @@ final table. This module does not construct a worst table or a minimum source.
 `UniformEquilibrium/Diagnostics/Quitting/MembershipStretchDebtComparison.lean`
 compares full behavioral debts at the same unpadded product root. Under
 supported coherent preferences, undoing the stretch cannot increase debt.
-Equal positive debts force every supported directed gap to be zero or two.
+For a positive stretch, equal positive debts force every supported directed
+gap to be zero or two.
 The comparison does not assume a global minimum; applying it to an actual
 minimum source still requires the original and final tables and their ordering.
 
