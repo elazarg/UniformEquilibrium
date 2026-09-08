@@ -17,7 +17,8 @@ There is substantial reusable geometry. In particular the concrete Research
 Kuhn-prism construction must not be rebuilt merely because its current
 conclusion is modulo two. Its incidence and endpoint bijections are actual
 theorems. Local integer orientation and cancellation are available below.
-The remaining work is assembling the oriented count and proving independence
+Signed counts and uniform mixed-time vertex clearance are available. The
+remaining work includes local restricted-prism comparison and independence
 of admissible approximation/subdivision.
 
 The actual discounted displacement's linear expansion on bounded signed sets
@@ -150,9 +151,12 @@ proposition, not a hidden LCP-degree theorem.
 
 1. **Local restricted-prism comparison.** Integer cell weights, interior-face
    cancellation, endpoint orientation, and local signed counts are available.
-   The missing source is uniform clearance of mixed-parameter prism faces near
-   an isolating frontier, followed by cancellation over the selected local
-   cells. Full-box endpoint equality does not supply this local comparison.
+   Uniform mixed-parameter face-vertex clearance is supplied by
+   `IsContinuousBoxComplementarityFamily.exists_isolatingFrontierCollar_eventually_prismCleared`
+   (`Research/Topology/BoxComplementarityPrismCluster.lean`). The missing source
+   identifies the boundary between selected and unselected local cells with
+   vertices in that collar, then cancels over the selected cells. Full-box
+   endpoint equality does not supply this local comparison.
 2. **Subdivision/approximation independence.** Prove signed invariance under
    the actual refinements used, then that sufficiently close admissible
    approximations give the same integer. Generic fields asserting invariance

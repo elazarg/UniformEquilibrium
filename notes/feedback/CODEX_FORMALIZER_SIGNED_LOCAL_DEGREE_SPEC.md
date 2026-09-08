@@ -49,23 +49,32 @@ Let a family of box-complementarity problems have a jointly continuous gain
 function of parameter and spatial point. Let the same relatively open region
 be isolating for every parameter in the closed unit interval.
 
-The next source theorem must produce a positive spatial collar radius and a
-mesh threshold such that every sufficiently fine actual parameter-spatial
-prism has no externally complete face meeting that collar. A face can carry
-labels evaluated at several adjacent parameter levels. Consequently, the
-existing single-problem eventual-clearing theorem does not by itself supply
-this mixed-parameter assertion, even if invoked separately at every time.
+`IsContinuousBoxComplementarityFamily.exists_isolatingFrontierCollar_eventually_prismCleared`
+(`Research/Topology/BoxComplementarityPrismCluster.lean`) produces a positive
+spatial collar radius and one mesh threshold: every sufficiently fine actual
+parameter-spatial prism has no complete face with a spatial vertex in that
+collar. Each label is evaluated at its own vertex's parameter; joint continuity
+passes all label inequalities to the same space-time limit. The uniform
+solution-free collar is constructed in
+`Research/Topology/BoxComplementarityFamilyCollar.lean`.
 
-The standard proof obligations are:
+This is vertex clearance, not a statement that the geometric realization of
+every face avoids the collar. The selected-cell boundary argument below must
+still produce an actual face vertex in the cleared collar.
+
+The proof dependencies are:
 
 1. Compactness of parameter times the region frontier and absence of family
-   solutions there give one uniform solution-free collar. Preserve the same
-   family and region; do not assume a supplied unrelated clearance oracle.
+   solutions there give one uniform solution-free collar. This is proved by
+   `IsContinuousBoxComplementarityFamily.exists_uniform_isolatingFrontierCollar`
+   (`Research/Topology/BoxComplementarityFamilyCollar.lean`).
 2. Generalize the existing complete-simplex cluster argument to actual prism
    faces: adjacent vertex parameters and spatial positions converge to one
    pair, and joint continuity transfers all retained label inequalities to a
-   complementarity solution at that pair. This rules out complete faces in
-   the collar uniformly at fine meshes.
+   complementarity solution at that pair. This is proved by
+   `IsContinuousBoxComplementarityFamily.isSolution_of_prismFace_vertex_tendsto`
+   (`Research/Topology/BoxComplementarityPrismCluster.lean`); compactness then
+   gives the uniform vertex-clearance theorem above.
 3. Select a literal finite family of prism cells from the region. Prove that
    a complete face with one selected and one unselected parent lies in the
    collar. The geometric step uses the mesh bound and an actual path or

@@ -31,6 +31,8 @@ import Research.General.RolloverLiquidationGame
 import Research.General.SeveranceMutualThreeGames
 import Research.Topology.BoxComplementarityFaceLocalCountTwo
 import Research.Topology.BoxComplementarityFaceLocalCountZero
+import Research.Topology.BoxComplementarityFamilyCollar
+import Research.Topology.BoxComplementarityPrismCluster
 import Research.Topology.BoxComplementaritySignedLocalCount
 import Research.Topology.BoxComplementaritySpernerEventualLocalParity
 import Research.Topology.BoxComplementaritySpernerSubdivisionPrism
