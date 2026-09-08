@@ -490,6 +490,7 @@ import MathUE.Probability.SurvivalCoboundary
 import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import MathUE.Probability.SwitchedPotentialCalculus
 import MathUE.Probability.ThreeIndependentFiniteLaws
+import MathUE.Probability.TrajectoryPrefixRestriction
 import MathUE.Probability.TriangularLedger
 import MathUE.Probability.WeightedClockRankReduction
 import MathUE.Probability.WeightedCollisionConcentration
@@ -602,8 +603,11 @@ import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.KuhnEndpointSharedFaceOrientation
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
+import MathUE.Topology.KuhnParameterEndOrientation
 import MathUE.Topology.KuhnSharedFaceOrientation
+import MathUE.Topology.KuhnSignedIncidence
 import MathUE.Topology.KuhnSimplexGeometry
+import MathUE.Topology.KuhnSimplexIncidence
 import MathUE.Topology.KuhnSimplexOrientation
 import MathUE.Topology.NestedOuterApproximation
 import MathUE.Topology.NonnegativeSubsequenceDichotomy
@@ -2399,6 +2403,7 @@ import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Paths.TerminalSemanticPayoffProjection
+import UniformEquilibrium.Quitting.Paths.TwoPairGroupExclusion
 import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 import UniformEquilibrium.Quitting.Paths.WeakExclusionFiniteWordMenuRate
 import UniformEquilibrium.Quitting.Paths.WeakExclusionSinglePivotFiniteMenu
@@ -2665,6 +2670,7 @@ import UniformEquilibrium.Quitting.Terminal.GeometricPivotCapDomination
 import UniformEquilibrium.Quitting.Terminal.GroupExclusionApproximatePrefixStep
 import UniformEquilibrium.Quitting.Terminal.GroupExclusionExactPrefixStep
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
+import UniformEquilibrium.Quitting.Terminal.PairAverageSurplus
 import UniformEquilibrium.Quitting.Terminal.PairMassForcingConsumer
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPadding
 import UniformEquilibrium.Quitting.Terminal.PassivePlayerPaddingCanonical

@@ -131,6 +131,14 @@ The exact deadline horizon estimate is in
 the stronger error `D + 2MN/H`. The selected same-word menu and pivot bounds
 are in `UniformEquilibrium/Quitting/Paths/WeakExclusionFiniteWordMenuRate.lean`.
 
+The generic four-player two-pair reward-table entrance of equation (10) is
+covered by `hasQuittingActualNonconcentratedGroupExclusion_half_of_twoPairRewardBounds`
+and its raw counterpart in
+`UniformEquilibrium/Quitting/Paths/TwoPairGroupExclusion.lean`. The favorable-pair
+bound need not be nonnegative. The actual pair-mass and Never adapters are in
+`UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`; they reuse
+the endpoint-retaining square-root ledger and complete stopping-law limit.
+
 The following are genuine remaining obligations:
 
 1. There is no strict-deficit instantiation constructing one infinite profile
@@ -147,12 +155,7 @@ The following are genuine remaining obligations:
    weak-subset selection is fixed-table, and the rational engine covers only
    the all-designated-preempted branch; an executable rational unpreempted
    solo exit and the combined rational selector are still missing.
-4. The generic four-player two-pair reward-table entrance of equation (10) is
-   absent. The existing first-stopping pair square-root law and
-   `UniformEquilibrium/Quitting/Terminal/PairMassForcingConsumer.lean` do not
-   attach those reward inequalities to
-   group exclusion. The Section 6 example is one specialized table.
-5. The separate-cross-mass determinant attachment of equations (18)--(19),
+4. The separate-cross-mass determinant attachment of equations (18)--(19),
    its finite row criterion, and its displayed numerical fixture and long-word
    regression are absent.
 

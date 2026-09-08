@@ -402,4 +402,61 @@ theorem integerCoordinate_eq_add_stepIndicator
   simp only [mem_spernerChainStepSet_iff hsimplex hdimension] at h
   split_ifs at h ⊢ <;> exact_mod_cast h
 
+/-- A parent of an ordered zero-coordinate deletion has missing coordinate one. -/
+theorem omittedCoordinate_eq_one_of_zero_face
+    (cube : SpernerCube) (parent : Fin (cube.n + 1) → cube.G)
+    (hsimplex : simplex cube cube.n parent) (omitted : Fin (cube.n + 1))
+    (coordinate : Fin cube.n)
+    (hface : ∀ kept : Fin cube.n, parent (omitted.succAbove kept) coordinate = 0) :
+    (parent omitted coordinate).val = 1 := by
+  have hlast := last_eq_first_add_one cube parent hsimplex coordinate
+  have homitted : omitted = Fin.last cube.n := by
+    by_contra hne
+    obtain ⟨kept, hkept⟩ := Fin.exists_succAbove_eq (Ne.symm hne)
+    have hzero := congrArg Fin.val (hface kept)
+    rw [hkept] at hzero
+    simp only [Fin.val_zero] at hzero
+    omega
+  have hpositive : 0 < cube.n := by have := coordinate.isLt; omega
+  have hzero : (0 : Fin (cube.n + 1)) ≠ omitted := by
+    rw [homitted]
+    intro h
+    have hval := congrArg Fin.val h
+    simp only [Fin.val_zero, Fin.val_last] at hval
+    omega
+  obtain ⟨kept, hkept⟩ := Fin.exists_succAbove_eq hzero
+  have hbase := congrArg Fin.val (hface kept)
+  rw [hkept] at hbase
+  simp only [Fin.val_zero] at hbase
+  rw [homitted, hlast, hbase]
+
+/-- A parent of a maximal-coordinate deletion has missing coordinate one below it. -/
+theorem omittedCoordinate_add_one_eq_resolution_of_maximal_face
+    (cube : SpernerCube) (parent : Fin (cube.n + 1) → cube.G)
+    (hsimplex : simplex cube cube.n parent) (omitted : Fin (cube.n + 1))
+    (coordinate : Fin cube.n)
+    (hface : ∀ kept : Fin cube.n,
+      (parent (omitted.succAbove kept) coordinate).val = cube.p) :
+    (parent omitted coordinate).val + 1 = cube.p := by
+  have hlast := last_eq_first_add_one cube parent hsimplex coordinate
+  have homitted : omitted = 0 := by
+    by_contra hne
+    obtain ⟨kept, hkept⟩ := Fin.exists_succAbove_eq (Ne.symm hne)
+    have hmax := hface kept
+    rw [hkept] at hmax
+    have hbound := (parent (Fin.last cube.n) coordinate).isLt
+    omega
+  have hpositive : 0 < cube.n := by have := coordinate.isLt; omega
+  have hne : Fin.last cube.n ≠ omitted := by
+    rw [homitted]
+    intro h
+    have hval := congrArg Fin.val h
+    simp only [Fin.val_zero, Fin.val_last] at hval
+    omega
+  obtain ⟨kept, hkept⟩ := Fin.exists_succAbove_eq hne
+  have hmax := hface kept
+  rw [hkept] at hmax
+  rw [homitted]
+  omega
+
 end Math.KuhnSimplex

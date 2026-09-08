@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Topology.BoxComplementaritySpernerLocalCount
+import MathUE.Topology.KuhnSimplexIncidence
 
 /-!
 # Common refinements and the cubical subdivision-prism seam
@@ -522,49 +523,21 @@ theorem simplex_finInit_of_kuhnPrismEnd
     · exact hcoordinate.2
 
 /-- A top-dimensional ordered Kuhn simplex in the parameter-times-cube grid. -/
-def KuhnPrismCell (n resolution : ℕ) (hresolution : 0 < resolution) :=
-  {vertices : Fin (n + 2) →
-      (kuhnPrismGeometryCube n resolution hresolution).G //
-    simplex (kuhnPrismGeometryCube n resolution hresolution) (n + 1) vertices}
+abbrev KuhnPrismCell (n resolution : ℕ) (hresolution : 0 < resolution) :=
+  KuhnSimplex.Cell (kuhnPrismGeometryCube n resolution hresolution)
 
 /-- A fully externally labeled codimension-one Kuhn face. -/
-def KuhnPrismFace (n resolution : ℕ) (hresolution : 0 < resolution)
+abbrev KuhnPrismFace (n resolution : ℕ) (hresolution : 0 < resolution)
     (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)) :=
-  {vertices : Fin (n + 1) →
-      (kuhnPrismGeometryCube n resolution hresolution).G //
-    simplex (kuhnPrismGeometryCube n resolution hresolution) n vertices ∧
-      Function.Injective fun index ↦ label (vertices index)}
+  KuhnSimplex.CompleteFace (kuhnPrismGeometryCube n resolution hresolution) n label
 
-instance kuhnPrismCellFinite
-    (n resolution : ℕ) (hresolution : 0 < resolution) :
-    Finite (KuhnPrismCell n resolution hresolution) :=
-  Finite.of_injective (fun cell ↦ cell.1) Subtype.val_injective
-
-noncomputable instance kuhnPrismCellFintype
-    (n resolution : ℕ) (hresolution : 0 < resolution) :
-    Fintype (KuhnPrismCell n resolution hresolution) :=
-  Fintype.ofFinite _
-
-instance kuhnPrismFaceFinite
-    (n resolution : ℕ) (hresolution : 0 < resolution)
-    (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)) :
-    Finite (KuhnPrismFace n resolution hresolution label) :=
-  Finite.of_injective (fun face ↦ face.1) Subtype.val_injective
-
-noncomputable instance kuhnPrismFaceFintype
-    (n resolution : ℕ) (hresolution : 0 < resolution)
-    (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)) :
-    Fintype (KuhnPrismFace n resolution hresolution label) :=
-  Fintype.ofFinite _
-
-/-- A face is incident to a cell when its vertices form a pinned Kuhn face of
-that cell. -/
-def kuhnPrismIncident
+/-- Actual prism incidence specializes the generic ordered-Kuhn face relation. -/
+abbrev kuhnPrismIncident
     {resolution : ℕ} {hresolution : 0 < resolution}
     {label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)}
     (cell : KuhnPrismCell n resolution hresolution)
     (face : KuhnPrismFace n resolution hresolution label) : Prop :=
-  is_face (kuhnPrismGeometryCube n resolution hresolution) face.1 cell.1
+  KuhnSimplex.Incident cell face
 
 /-- The external label sequence around one concrete prism cell. -/
 def kuhnPrismCellLabels
@@ -574,41 +547,37 @@ def kuhnPrismCellLabels
     Fin (n + 2) → Fin (n + 1) :=
   fun index ↦ label (cell.1 index)
 
-/-- On the concrete prism cube, the pinned library's deletion embedding is
-the standard `Fin.succAbove` embedding used by the finite deletion count. -/
+/-- On the concrete prism cube, the pinned deletion is the standard ordered embedding. -/
 theorem kuhnPrism_insertIndex_eq_succAbove
     {resolution : ℕ} {hresolution : 0 < resolution}
     (omitted : Fin (n + 2)) (kept : Fin (n + 1)) :
     @insert_index (kuhnPrismGeometryCube n resolution hresolution) n rfl
         omitted kept =
       omitted.succAbove kept := by
-  apply Fin.ext
-  by_cases hlt : kept.castSucc < omitted
-  · have hval : kept.val < omitted.val := hlt
-    simp [insert_index, Fin.succAbove, hlt, hval]
-  · have hval : ¬kept.val < omitted.val := hlt
-    simp [insert_index, Fin.succAbove, hlt, hval]
+  exact (KuhnSimplex.insertIndex_eq_succAbove_cast
+    (kuhnPrismGeometryCube n resolution hresolution) rfl omitted kept).trans
+      (congrArg omitted.succAbove (Fin.ext rfl))
 
-/-- Delete one vertex of a prism cell when the remaining external labels are
-complete. -/
+/-- The original prism deletion predicate is the generic literal-deletion predicate. -/
+theorem kuhnPrism_completeDeletion_iff
+    {resolution : ℕ} {hresolution : 0 < resolution}
+    (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1))
+    (cell : KuhnPrismCell n resolution hresolution) (omitted : Fin (n + 2)) :
+    kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) omitted ↔
+      KuhnSimplex.CompleteDeletion rfl label cell omitted := by
+  simp only [kuhnDeletionFaceIsComplete, kuhnPrismCellLabels, KuhnSimplex.CompleteDeletion,
+    delete_vertex, kuhnPrism_insertIndex_eq_succAbove]
+
+/-- Delete one vertex using the shared actual-incidence construction. -/
 def KuhnPrismCell.deletionFace
     {resolution : ℕ} {hresolution : 0 < resolution}
     (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1))
     (cell : KuhnPrismCell n resolution hresolution)
     (omitted : {index : Fin (n + 2) //
       kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) index}) :
-    KuhnPrismFace n resolution hresolution label where
-  val := @delete_vertex (kuhnPrismGeometryCube n resolution hresolution) n rfl
-    omitted.1 cell.1
-  property := by
-    constructor
-    · exact @delete_vertex_simplex
-        (kuhnPrismGeometryCube n resolution hresolution) n rfl cell.1
-          cell.2 omitted.1
-    · intro first second heq
-      apply omitted.2
-      simpa only [kuhnPrismCellLabels, delete_vertex,
-        kuhnPrism_insertIndex_eq_succAbove] using heq
+    KuhnPrismFace n resolution hresolution label :=
+  KuhnSimplex.Cell.deletionFace rfl label cell
+    ⟨omitted.1, (kuhnPrism_completeDeletion_iff label cell omitted.1).mp omitted.2⟩
 
 /-- A deletion face is incident to its originating prism cell. -/
 theorem KuhnPrismCell.deletionFace_incident
@@ -617,13 +586,11 @@ theorem KuhnPrismCell.deletionFace_incident
     (cell : KuhnPrismCell n resolution hresolution)
     (omitted : {index : Fin (n + 2) //
       kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) index}) :
-    kuhnPrismIncident cell (cell.deletionFace label omitted) := by
-  exact delete_vertex_is_face
-    (kuhnPrismGeometryCube n resolution hresolution) cell.1
-      (hs := cell.2) omitted.1
+    kuhnPrismIncident cell (cell.deletionFace label omitted) :=
+  KuhnSimplex.Cell.deletionFace_incident rfl label cell
+    ⟨omitted.1, (kuhnPrism_completeDeletion_iff label cell omitted.1).mp omitted.2⟩
 
-/-- Complete deletions of one prism cell are exactly its incident externally
-complete faces. -/
+/-- Complete prism deletions specialize the shared incidence equivalence. -/
 def KuhnPrismCell.completeDeletionEquivIncidentFace
     {resolution : ℕ} {hresolution : 0 < resolution}
     (label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1))
@@ -631,38 +598,10 @@ def KuhnPrismCell.completeDeletionEquivIncidentFace
     {index : Fin (n + 2) //
         kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) index} ≃
       {face : KuhnPrismFace n resolution hresolution label //
-        kuhnPrismIncident cell face} := by
-  let forward : {index : Fin (n + 2) //
-      kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) index} →
-      {face : KuhnPrismFace n resolution hresolution label //
         kuhnPrismIncident cell face} :=
-    fun omitted ↦ ⟨cell.deletionFace label omitted,
-      cell.deletionFace_incident label omitted⟩
-  refine Equiv.ofBijective forward ⟨?_, ?_⟩
-  · intro first second heq
-    apply Subtype.ext
-    apply delete_vertex_inj
-      (kuhnPrismGeometryCube n resolution hresolution) cell.1
-        (hs := cell.2)
-    exact congrArg (fun face ↦ face.1.1) heq
-  · rintro ⟨face, hface⟩
-    obtain ⟨omitted, homitted⟩ :=
-      (@child_simplex_char
-        (kuhnPrismGeometryCube n resolution hresolution) n rfl face.1 cell.1
-          cell.2).mp hface
-    have hcomplete : kuhnDeletionFaceIsComplete
-        (kuhnPrismCellLabels label cell) omitted := by
-      intro first second heq
-      apply face.2.2
-      simpa only [homitted, kuhnPrismCellLabels, delete_vertex,
-        kuhnPrism_insertIndex_eq_succAbove] using heq
-    let selected : {index : Fin (n + 2) //
-        kuhnDeletionFaceIsComplete (kuhnPrismCellLabels label cell) index} :=
-      ⟨omitted, hcomplete⟩
-    refine ⟨selected, ?_⟩
-    apply Subtype.ext
-    apply Subtype.ext
-    exact homitted.symm
+  (Equiv.subtypeEquivProp (funext fun index =>
+    propext (kuhnPrism_completeDeletion_iff label cell index))).trans
+      (KuhnSimplex.Cell.completeDeletionEquivIncidentFace rfl label cell)
 
 /-- Every concrete prism cell has even indexed external boundary degree.  The
 later subdivision constructor only has to identify equal deletion faces
@@ -710,8 +649,7 @@ theorem KuhnPrismCell.even_incidentFaceDegree
   rw [← hincidentCard, ← hequivalentCard, hdeletionCard]
   exact even_card_kuhnCompleteDeletionFaces _
 
-/-- Incident prism cells are definitionally the pinned Kuhn parents of a
-fixed face; the subtype wrapper retains each parent's simplex proof. -/
+/-- Actual prism parents specialize the shared proof-retaining parent equivalence. -/
 def KuhnPrismFace.incidentCellEquivParent
     {resolution : ℕ} {hresolution : 0 < resolution}
     {label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)}
@@ -721,11 +659,8 @@ def KuhnPrismFace.incidentCellEquivParent
       {vertices : Fin (n + 2) →
           (kuhnPrismGeometryCube n resolution hresolution).G //
         is_face (kuhnPrismGeometryCube n resolution hresolution)
-          face.1 vertices} where
-  toFun cell := ⟨cell.1.1, cell.2⟩
-  invFun parent := ⟨⟨parent.1, parent.2.2.1⟩, parent.2⟩
-  left_inv := by rintro ⟨⟨vertices, hvertices⟩, hincident⟩; rfl
-  right_inv := by rintro ⟨vertices, hincident⟩; rfl
+          face.1 vertices} :=
+  KuhnSimplex.CompleteFace.incidentCellEquivParent face
 
 /-- Actual incident-cell cardinality is the pinned parent cardinality. -/
 theorem KuhnPrismFace.incidentCell_card_eq_parent_card
@@ -738,36 +673,7 @@ theorem KuhnPrismFace.incidentCell_card_eq_parent_card
           (kuhnPrismGeometryCube n resolution hresolution).G ↦
         is_face (kuhnPrismGeometryCube n resolution hresolution)
           face.1 vertices).card := by
-  classical
-  let incidentPredicate : KuhnPrismCell n resolution hresolution → Prop :=
-    fun cell ↦ kuhnPrismIncident cell face
-  let parentPredicate :
-      (Fin (n + 2) → (kuhnPrismGeometryCube n resolution hresolution).G) →
-        Prop :=
-    fun vertices ↦ is_face (kuhnPrismGeometryCube n resolution hresolution)
-      face.1 vertices
-  have hincidentCard : Fintype.card {cell // incidentPredicate cell} =
-      (Finset.univ.filter incidentPredicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter incidentPredicate) (by
-      intro cell
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-        incidentPredicate]
-      rfl)
-  have hparentCard : Fintype.card {vertices // parentPredicate vertices} =
-      (Finset.univ.filter parentPredicate).card :=
-    Fintype.card_ofFinset (Finset.univ.filter parentPredicate) (by
-      intro vertices
-      simp only [Finset.mem_filter, Finset.mem_univ, true_and,
-        parentPredicate]
-      rfl)
-  have hequivalentCard : Fintype.card {cell // incidentPredicate cell} =
-      Fintype.card {vertices // parentPredicate vertices} := by
-    change Fintype.card {cell // kuhnPrismIncident cell face} =
-      Fintype.card {vertices //
-        is_face (kuhnPrismGeometryCube n resolution hresolution)
-          face.1 vertices}
-    exact Fintype.card_congr face.incidentCellEquivParent
-  rw [← hincidentCard, hequivalentCard, hparentCard]
+  exact KuhnSimplex.CompleteFace.incidentCell_card_eq_parent_card face
 
 /-- A concrete face lies on the left parameter end. -/
 def KuhnPrismFace.IsLeftEnd

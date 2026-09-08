@@ -16,9 +16,9 @@ This is a bounded negative search, not a statement about external projects.
 There is substantial reusable geometry. In particular the concrete Research
 Kuhn-prism construction must not be rebuilt merely because its current
 conclusion is modulo two. Its incidence and endpoint bijections are actual
-theorems. What is absent is a compatible oriented integer count, its signed
-cancellation laws, and a bridge making that count independent of admissible
-approximation/subdivision.
+theorems. Local integer orientation and cancellation are available below.
+The remaining work is assembling the oriented count and proving independence
+of admissible approximation/subdivision.
 
 The actual discounted displacement's linear expansion on bounded signed sets
 is available; its scope is recorded in Section 3 below.
@@ -75,7 +75,8 @@ In `Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`:
 - `completeSimplexEquivKuhnEndpointLabeledSimplex` connects the two existing
   finite simplex representations.
 - `KuhnPrismCell.completeDeletionEquivIncidentFace` and
-  `KuhnPrismFace.incidentCellEquivParent` expose actual incidence bijections.
+  `KuhnPrismFace.incidentCellEquivParent` specialize the actual incidence
+  bijections in `MathUE/Topology/KuhnSimplexIncidence.lean`.
 - `boxComplementarityDiscretePrismLeftEndEquiv` and
   `boxComplementarityDiscretePrismRightEndEquiv` identify the actual endpoint
   faces with endpoint simplices. Their orientation behavior is not yet proved.
@@ -198,8 +199,18 @@ simplex has integer determinant of absolute value one. This is lattice
 determinant normalization, not Euclidean volume one. The proof bundles the
 existing step bijection as `coordinateEquivalence` and reuses determinant
 row operations.
-The signed incidence sum, endpoint identification, and subdivision-independent
-degree remain separate obligations; these local adapters do not supply them.
+`exists_leftParameterEnd_signed_determinant` and
+`exists_rightParameterEnd_signed_determinant`
+(`MathUE/Topology/KuhnParameterEndOrientation.lean`) identify the inherited
+signed spatial determinant at each parameter end from literal face incidence.
+They place the parameter coordinate last and include spatial dimension zero.
+`sum_signedIncidence_faces_eq_zero`
+(`MathUE/Topology/KuhnSignedIncidence.lean`) gives the actual integer
+incident-face sum for each cell. It transports the existing label-deletion
+identity through `Cell.completeDeletionEquivIncidentFace`; nonincident faces
+have zero weight. Interior-face column cancellation, transport through the
+concrete prism's endpoint bijections, and subdivision-independent degree
+remain separate obligations.
 
 ## 3. Actual source comparison
 

@@ -1,5 +1,6 @@
 import MathUE.Topology.KuhnEndpointSharedFaceOrientation
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
+import MathUE.Topology.KuhnSimplexIncidence
 
 /-!
 # Signed determinant cancellation across every shared Kuhn face
@@ -15,18 +16,7 @@ noncomputable section
 namespace Math.KuhnSharedFace
 
 open OrientedSimplexFacet
-
-/-- The pinned dimension-indexed insertion is the ordinary order-preserving
-deletion embedding after the explicit dimension cast. -/
-theorem insertIndex_eq_succAbove_cast
-    (cube : SpernerCube) {dimension : ℕ} (hdimension : dimension + 1 = cube.n)
-    (omitted : Fin (cube.n + 1)) (kept : Fin (dimension + 1)) :
-    @insert_index cube dimension hdimension omitted kept =
-      omitted.succAbove (Fin.cast hdimension kept) := by
-  apply Fin.ext
-  by_cases hlt : kept.val < omitted.val
-  · simp [insert_index, Fin.succAbove, hlt, Fin.lt_def]
-  · simp [insert_index, Fin.succAbove, hlt, Fin.lt_def]
+open KuhnSimplex
 
 /-- Same-endpoint deletion is injective on actual full Kuhn simplices. -/
 theorem parents_eq_of_same_endpoint_deletion

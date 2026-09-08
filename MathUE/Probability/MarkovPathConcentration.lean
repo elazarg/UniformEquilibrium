@@ -49,6 +49,17 @@ instance lawFrom_isProbability (transition : Kernel State State)
   unfold lawFrom
   infer_instance
 
+/-- The coordinate at time one under `lawFrom` has the prescribed transition law. -/
+theorem map_lawFrom_one (transition : Kernel State State) [IsMarkovKernel transition]
+    (start : State) :
+    (lawFrom transition start).map (fun path => path 1) = transition start := by
+  have hkernel := Kernel.map_traj_succ_self
+    (X := fun _ : ℕ => State) (κ := trajectoryKernel transition) (a := 0)
+  have happ := congrArg
+    (fun kernel => kernel (initialPrefix start)) hkernel
+  rw [Kernel.map_apply _ (by fun_prop)] at happ
+  simpa [lawFrom, trajectoryKernel, lastPrefix, initialPrefix] using happ
+
 /-- A path follows the displayed edge relation at every adjacent pair. -/
 def Follows (allowed : Set (State × State)) (path : ℕ → State) : Prop :=
   ∀ time, (path time, path (time + 1)) ∈ allowed

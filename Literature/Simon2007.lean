@@ -1,6 +1,8 @@
 import Mathlib
 import MathUE.PMFProduct.Basic
+import MathUE.Probability.MarkovPathConcentration
 import MathUE.Topology.CountableObservation
+import MathUE.Topology.CountableObservationRegularity
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Probability.FinitePathLawAdapter
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -243,6 +245,36 @@ theorem InfiniteHistory.prefix_succ_eq_snoc {F : StochasticGameForm}
   cases haction
   rfl
 
+theorem InfiniteHistory.ext_of_prefix_eq {F : StochasticGameForm}
+    (first second : InfiniteHistory F)
+    (heq : ∀ time, first.prefix time = second.prefix time) :
+    first = second := by
+  have hstate : first.state = second.state := by
+    funext time
+    exact congrArg FiniteHistory.terminal (heq time)
+  cases first with
+  | mk firstState firstAction firstStarts firstPositive =>
+    cases second with
+    | mk secondState secondAction secondStarts secondPositive =>
+      dsimp only at hstate
+      subst secondState
+      have haction : firstAction = secondAction := by
+        funext time player
+        have hpref := heq (time + 1)
+        have hhistory := (Sigma.ext_iff.mp hpref).2
+        change HEq
+          (HistoryTo.snoc (InfiniteHistory.prefixTo
+            ⟨firstState, firstAction, firstStarts, firstPositive⟩ time)
+              (firstAction time) (firstState (time + 1)) (firstPositive time))
+          (HistoryTo.snoc (InfiniteHistory.prefixTo
+            ⟨firstState, secondAction, secondStarts, secondPositive⟩ time)
+              (secondAction time) (firstState (time + 1)) (secondPositive time)) at hhistory
+        have hinjective := eq_of_heq hhistory
+        rw [HistoryTo.snoc.injEq] at hinjective
+        exact congrFun (eq_of_heq hinjective.2.2) player
+      subst secondAction
+      rfl
+
 theorem HistoryTo.prefix_prependContinuation {F : StochasticGameForm} {state : F.State}
     (history : HistoryTo F state) (tail : HistoryContinuation F state) :
     (history.prependContinuation tail).prefix history.length = ⟨state, history⟩ := by
@@ -274,6 +306,37 @@ theorem FiniteHistory.prefix_prependContinuation {F : StochasticGameForm}
     (history.prependContinuation tail).prefix history.length = history := by
   rcases history with ⟨state, history⟩
   exact history.prefix_prependContinuation tail
+
+theorem HistoryTo.prefix_prependContinuation_eq_of_le {F : StochasticGameForm}
+    {state : F.State} (history : HistoryTo F state)
+    (first second : HistoryContinuation F state) (time : ℕ)
+    (htime : time ≤ history.length) :
+    (history.prependContinuation first).prefix time =
+      (history.prependContinuation second).prefix time := by
+  induction history with
+  | root =>
+      have hzero : time = 0 := by
+        simpa [HistoryTo.length] using htime
+      subst time
+      have hfirst := HistoryTo.prefix_prependContinuation (.root) first
+      have hsecond := HistoryTo.prefix_prependContinuation (.root) second
+      simpa [HistoryTo.length] using hfirst.trans hsecond.symm
+  | @snoc source prior action target positive inductionHypothesis =>
+      by_cases hprior : time ≤ prior.length
+      · simp only [HistoryTo.prependContinuation]
+        exact inductionHypothesis
+          (first.prependStep action target positive)
+          (second.prependStep action target positive) hprior
+      · have hlast : time = prior.length + 1 := by
+          simp only [HistoryTo.length] at htime
+          omega
+        subst time
+        have hfirst := HistoryTo.prefix_prependContinuation
+          (.snoc prior action target positive) first
+        have hsecond := HistoryTo.prefix_prependContinuation
+          (.snoc prior action target positive) second
+        simpa [HistoryTo.length] using hfirst.trans hsecond.symm
+
 
 /-- The exact-length finite observation of an infinite history. -/
 def InfiniteHistory.observedPrefix {F : StochasticGameForm}
@@ -322,7 +385,8 @@ theorem historyTopologicalSpace_eq_countableObservation :
 
 theorem historyMeasurableSpace_eq_countableObservation :
     historyMeasurableSpace F =
-      Math.CountableObservation.measurableSpace (HistoryPrefix F) InfiniteHistory.observedPrefix := by
+      Math.CountableObservation.measurableSpace (HistoryPrefix F)
+        InfiniteHistory.observedPrefix := by
   apply le_antisymm
   · apply MeasurableSpace.generateFrom_le
     rintro set ⟨history, rfl⟩
@@ -541,6 +605,49 @@ theorem historyStepPMF_support_subset_extensions (profile : Profile G)
     ((G.transition history.terminal action).apply_pos_iff target).mpr htarget, ?_⟩
   exact hnext
 
+theorem FiniteHistory.snoc_target_action_eq_of_eq
+    (history : FiniteHistory G.toStochasticGameForm)
+    (firstAction secondAction : JointActionAt G history)
+    (firstTarget secondTarget : G.State)
+    (firstPositive : 0 < G.transition history.terminal firstAction firstTarget)
+    (secondPositive : 0 < G.transition history.terminal secondAction secondTarget)
+    (heq : history.snoc firstAction firstTarget firstPositive =
+      history.snoc secondAction secondTarget secondPositive) :
+    firstTarget = secondTarget ∧ HEq firstAction secondAction := by
+  cases heq
+  exact ⟨rfl, HEq.rfl⟩
+
+theorem historyStepPMF_apply_snoc (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G history) (target : G.State)
+    (positive : 0 < G.transition history.terminal action target) :
+    historyStepPMF profile history (history.snoc action target positive) =
+      OneStepProbability G profile history action target := by
+  classical
+  simp only [historyStepPMF, PMF.bind_apply, PMF.bindOnSupport_apply,
+    PMF.pure_apply, jointActionPMF_apply, OneStepProbability]
+  rw [tsum_eq_single action]
+  · rw [tsum_eq_single target]
+    · simp [positive.ne', mul_comm]
+    · intro other hother
+      split_ifs with hzero heq
+      · simp
+      · have htarget :=
+          (history.snoc_target_action_eq_of_eq action action target other positive _ heq).1
+        exact (hother htarget.symm).elim
+      · simp
+  · intro otherAction haction
+    apply mul_eq_zero_of_right
+    rw [ENNReal.tsum_eq_zero]
+    intro otherTarget
+    split_ifs with hzero heq
+    · simp
+    · have hactions :=
+        (history.snoc_target_action_eq_of_eq action otherAction target otherTarget
+          positive _ heq).2
+      exact (haction (eq_of_heq hactions).symm).elim
+    · simp
+
 instance finiteHistoryMeasurableSpace :
     MeasurableSpace (FiniteHistory G.toStochasticGameForm) := ⊤
 
@@ -632,6 +739,379 @@ theorem CoherentHistoryStream.toInfiniteHistory_mem_Cylinder {G : NormalStochast
     (stream : CoherentHistoryStream G start) :
     stream.toInfiniteHistory ∈ Cylinder start := by
   exact start.prefix_prependContinuation stream.toContinuation
+
+/-- Add a specified positive child as the first entry of a coherent history stream. -/
+def CoherentHistoryStream.prependChild {G : NormalStochasticGame}
+    (start : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G start)
+    (target : G.State) (positive : 0 < G.transition start.terminal action target)
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    CoherentHistoryStream G start where
+  val
+    | 0 => start
+    | time + 1 => stream.1 time
+  property := by
+    constructor
+    · rfl
+    · intro time
+      cases time with
+      | zero =>
+          refine ⟨action, target, positive, ?_⟩
+          change stream.1 0 = start.snoc action target positive
+          exact stream.property.1
+      | succ time => exact stream.property.2 time
+
+theorem CoherentHistoryStream.prependChild_one {G : NormalStochasticGame}
+    (start : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G start)
+    (target : G.State) (positive : 0 < G.transition start.terminal action target)
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    (stream.prependChild start action target positive).1 1 =
+      start.snoc action target positive := by
+  exact stream.property.1
+
+/-- Drop the first entry of a coherent stream known to pass through the specified child. -/
+def CoherentHistoryStream.tailAtChild {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm} {action : JointActionAt G start}
+    {target : G.State} {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStream G start)
+    (hchild : stream.1 1 = start.snoc action target positive) :
+    CoherentHistoryStream G (start.snoc action target positive) where
+  val time := stream.1 (time + 1)
+  property := ⟨hchild, fun time => stream.property.2 (time + 1)⟩
+
+@[simp] theorem CoherentHistoryStream.tailAtChild_prependChild
+    {G : NormalStochasticGame} (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target)
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    (stream.prependChild start action target positive).tailAtChild
+      (stream.prependChild_one start action target positive) = stream := by
+  apply Subtype.ext
+  funext time
+  rfl
+
+theorem CoherentHistoryStream.prependChild_tailAtChild
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    {action : JointActionAt G start} {target : G.State}
+    {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStream G start)
+    (hchild : stream.1 1 = start.snoc action target positive) :
+    (stream.tailAtChild hchild).prependChild start action target positive = stream := by
+  apply Subtype.ext
+  funext time
+  cases time with
+  | zero => exact stream.property.1.symm
+  | succ time => rfl
+
+theorem CoherentHistoryStream.measurable_prependChild
+    {G : NormalStochasticGame} (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target) :
+    Measurable (fun stream : CoherentHistoryStream G (start.snoc action target positive) =>
+      stream.prependChild start action target positive) := by
+  apply Measurable.subtype_mk
+  apply measurable_pi_lambda
+  intro time
+  cases time with
+  | zero => exact measurable_const
+  | succ time => exact (measurable_pi_apply time).comp measurable_subtype_coe
+
+/-- Coherent streams from `start` whose first child is the displayed extension. -/
+abbrev CoherentHistoryStreamThroughChild {G : NormalStochasticGame}
+    (start : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G start)
+    (target : G.State) (positive : 0 < G.transition start.terminal action target) :=
+  {stream : CoherentHistoryStream G start //
+    stream.1 1 = start.snoc action target positive}
+
+def CoherentHistoryStreamThroughChild.toChildStream {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm} {action : JointActionAt G start}
+    {target : G.State} {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStreamThroughChild start action target positive) :
+    CoherentHistoryStream G (start.snoc action target positive) :=
+  stream.1.tailAtChild stream.property
+
+def CoherentHistoryStreamThroughChild.fromChildStream {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm} {action : JointActionAt G start}
+    {target : G.State} {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    CoherentHistoryStreamThroughChild start action target positive :=
+  ⟨stream.prependChild start action target positive,
+    stream.prependChild_one start action target positive⟩
+
+@[simp] theorem CoherentHistoryStreamThroughChild.toChildStream_fromChildStream
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    {action : JointActionAt G start} {target : G.State}
+    {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    CoherentHistoryStreamThroughChild.toChildStream
+      (CoherentHistoryStreamThroughChild.fromChildStream stream) = stream :=
+  stream.tailAtChild_prependChild start action target positive
+
+@[simp] theorem CoherentHistoryStreamThroughChild.fromChildStream_toChildStream
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    {action : JointActionAt G start} {target : G.State}
+    {positive : 0 < G.transition start.terminal action target}
+    (stream : CoherentHistoryStreamThroughChild start action target positive) :
+    CoherentHistoryStreamThroughChild.fromChildStream
+      (CoherentHistoryStreamThroughChild.toChildStream stream) = stream := by
+  apply Subtype.ext
+  exact stream.1.prependChild_tailAtChild stream.property
+
+def CoherentHistoryStream.childEquiv {G : NormalStochasticGame}
+    (start : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G start)
+    (target : G.State) (positive : 0 < G.transition start.terminal action target) :
+    CoherentHistoryStream G (start.snoc action target positive) ≃
+      CoherentHistoryStreamThroughChild start action target positive where
+  toFun := CoherentHistoryStreamThroughChild.fromChildStream
+  invFun := CoherentHistoryStreamThroughChild.toChildStream
+  left_inv := CoherentHistoryStreamThroughChild.toChildStream_fromChildStream
+  right_inv := CoherentHistoryStreamThroughChild.fromChildStream_toChildStream
+
+theorem CoherentHistoryStreamThroughChild.measurable_fromChildStream
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    {action : JointActionAt G start} {target : G.State}
+    {positive : 0 < G.transition start.terminal action target} :
+    Measurable (CoherentHistoryStreamThroughChild.fromChildStream
+      (G := G) (start := start) (action := action)
+      (target := target) (positive := positive)) := by
+  apply Measurable.subtype_mk
+  exact CoherentHistoryStream.measurable_prependChild
+    start action target positive
+
+theorem CoherentHistoryStreamThroughChild.measurable_toChildStream
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    {action : JointActionAt G start} {target : G.State}
+    {positive : 0 < G.transition start.terminal action target} :
+    Measurable (CoherentHistoryStreamThroughChild.toChildStream
+      (G := G) (start := start) (action := action)
+      (target := target) (positive := positive)) := by
+  apply Measurable.subtype_mk
+  apply measurable_pi_lambda
+  intro time
+  exact (measurable_pi_apply (time + 1)).comp
+    (measurable_subtype_coe.comp measurable_subtype_coe)
+
+def CoherentHistoryStream.childMeasurableEquiv {G : NormalStochasticGame}
+    (start : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G start)
+    (target : G.State) (positive : 0 < G.transition start.terminal action target) :
+    CoherentHistoryStream G (start.snoc action target positive) ≃ᵐ
+      CoherentHistoryStreamThroughChild start action target positive :=
+  MeasurableEquiv.mk (CoherentHistoryStream.childEquiv start action target positive)
+    CoherentHistoryStreamThroughChild.measurable_fromChildStream
+    CoherentHistoryStreamThroughChild.measurable_toChildStream
+
+theorem CoherentHistoryStream.toInfiniteHistory_prefix_add
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm}
+    (stream : CoherentHistoryStream G start) (time : ℕ) :
+    stream.toInfiniteHistory.prefix (start.length + time) = stream.1 time := by
+  induction time with
+  | zero =>
+      rw [Nat.add_zero]
+      change (start.prependContinuation stream.toContinuation).prefix start.length =
+        stream.1 0
+      rw [start.prefix_prependContinuation stream.toContinuation, stream.property.1]
+  | succ time inductionHypothesis =>
+      rw [Nat.add_succ]
+      let step := stream.step time
+      have htarget :
+          stream.toInfiniteHistory.state (start.length + time + 1) = step.target := by
+        rw [show start.length + time + 1 = start.length + (time + 1) by omega]
+        change (start.2.prependContinuation stream.toContinuation).state
+          (start.2.length + (time + 1)) = step.target
+        rw [start.2.prependContinuation_state_add stream.toContinuation (time + 1)]
+        change (stream.1 (time + 1)).terminal = step.target
+        exact congrArg FiniteHistory.terminal step.next_eq
+      have haction :
+          HEq (stream.toInfiniteHistory.action (start.length + time)) step.action := by
+        exact start.2.prependContinuation_action_add stream.toContinuation time
+      calc
+        stream.toInfiniteHistory.prefix (start.length + time + 1) =
+            (stream.1 time).snoc step.action step.target step.positive := by
+          exact stream.toInfiniteHistory.prefix_succ_eq_snoc
+            (start.length + time) (stream.1 time).2 step.action step.positive
+            inductionHypothesis htarget haction
+        _ = stream.1 (time + 1) := step.next_eq.symm
+
+theorem CoherentHistoryStream.prependChild_toInfiniteHistory
+    {G : NormalStochasticGame} (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target)
+    (stream : CoherentHistoryStream G (start.snoc action target positive)) :
+    (stream.prependChild start action target positive).toInfiniteHistory =
+      stream.toInfiniteHistory := by
+  apply InfiniteHistory.ext_of_prefix_eq
+  intro time
+  by_cases htime : time ≤ start.length
+  · change (start.2.prependContinuation
+        (stream.prependChild start action target positive).toContinuation).prefix time =
+      (start.2.prependContinuation
+        (stream.toContinuation.prependStep action target positive)).prefix time
+    exact start.2.prefix_prependContinuation_eq_of_le _ _ time htime
+  · let offset := time - (start.length + 1)
+    have htimeEq : start.length + (offset + 1) = time := by
+      dsimp only [offset]
+      omega
+    rw [← htimeEq]
+    rw [CoherentHistoryStream.toInfiniteHistory_prefix_add
+      (stream.prependChild start action target positive) (offset + 1)]
+    simp only [CoherentHistoryStream.prependChild]
+    rw [show start.length + (offset + 1) =
+      (start.snoc action target positive).length + offset by
+        change start.2.length + (offset + 1) = (start.2.length + 1) + offset
+        omega]
+    rw [stream.toInfiniteHistory_prefix_add offset]
+
+theorem CoherentHistoryStream.measurable_toInfiniteHistory
+    {G : NormalStochasticGame} {start : FiniteHistory G.toStochasticGameForm} :
+    Measurable (CoherentHistoryStream.toInfiniteHistory
+      (G := G) (start := start)) := by
+  apply measurable_generateFrom
+  rintro set ⟨history, rfl⟩
+  by_cases hlength : history.length ≤ start.length
+  · by_cases hall : ∀ stream : CoherentHistoryStream G start,
+        stream.toInfiniteHistory ∈ Cylinder history
+    · have hset : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder history =
+          Set.univ := Set.eq_univ_of_forall hall
+      rw [hset]
+      exact MeasurableSet.univ
+    · push Not at hall
+      obtain ⟨witness, hwitness⟩ := hall
+      have hnone : ∀ stream : CoherentHistoryStream G start,
+          stream.toInfiniteHistory ∉ Cylinder history := by
+        intro stream hstream
+        apply hwitness
+        have hpref := start.2.prefix_prependContinuation_eq_of_le
+          witness.toContinuation stream.toContinuation history.length hlength
+        exact hpref.trans hstream
+      have hset : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder history =
+          ∅ := Set.eq_empty_iff_forall_notMem.mpr hnone
+      rw [hset]
+      exact MeasurableSet.empty
+  · have hstart : start.length ≤ history.length := Nat.le_of_not_ge hlength
+    let offset := history.length - start.length
+    have hadd : start.length + offset = history.length := Nat.add_sub_of_le hstart
+    have hset : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder history =
+        (fun stream : CoherentHistoryStream G start => stream.1 offset) ⁻¹' {history} := by
+      ext stream
+      simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_setOf_eq]
+      rw [← hadd, stream.toInfiniteHistory_prefix_add offset]
+    rw [hset]
+    exact (measurableSet_singleton history).preimage
+      ((measurable_pi_apply offset).comp measurable_subtype_coe)
+
+/-! ### Laws on coherent streams and infinite histories -/
+
+/-- The Ionescu--Tulcea finite-history path law on its literal coherent carrier. -/
+def coherentHistoryStreamLaw {G : NormalStochasticGame} (profile : Profile G)
+    (start : FiniteHistory G.toStochasticGameForm) :
+    Measure (CoherentHistoryStream G start) :=
+  Math.MarkovPath.supportedLawFrom (historyTransitionKernel profile)
+    {pair | IsHistoryExtension pair.1 pair.2} start
+
+theorem map_coherentHistoryStreamLaw {G : NormalStochasticGame} (profile : Profile G)
+    (start : FiniteHistory G.toStochasticGameForm) :
+    (coherentHistoryStreamLaw profile start).map Subtype.val =
+      Math.MarkovPath.lawFrom (historyTransitionKernel profile) start := by
+  exact Math.MarkovPath.map_supportedLawFrom
+    (historyTransitionKernel profile)
+    {pair | IsHistoryExtension pair.1 pair.2}
+    measurableSet_historyExtensions
+    (ae_historyTransitionKernel_extension profile) start
+
+theorem coherentHistoryStreamLaw_isProbability {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
+    IsProbabilityMeasure (coherentHistoryStreamLaw profile start) := by
+  exact Math.MarkovPath.supportedLawFrom_isProbability
+    (historyTransitionKernel profile)
+    {pair | IsHistoryExtension pair.1 pair.2}
+    measurableSet_historyExtensions
+    (ae_historyTransitionKernel_extension profile) start
+
+theorem map_coherentHistoryStreamLaw_one {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
+    (coherentHistoryStreamLaw profile start).map (fun stream => stream.1 1) =
+      historyTransitionKernel profile start := by
+  calc
+    (coherentHistoryStreamLaw profile start).map (fun stream => stream.1 1) =
+        ((coherentHistoryStreamLaw profile start).map Subtype.val).map
+          (fun path => path 1) := by
+      exact (Measure.map_map (measurable_pi_apply 1) measurable_subtype_coe).symm
+    _ = (Math.MarkovPath.lawFrom (historyTransitionKernel profile) start).map
+        (fun path => path 1) := by rw [map_coherentHistoryStreamLaw]
+    _ = historyTransitionKernel profile start :=
+      Math.MarkovPath.map_lawFrom_one (historyTransitionKernel profile) start
+
+/-- The behavioral infinite-history law obtained from the coherent finite-history stream. -/
+def profileHistoryLaw {G : NormalStochasticGame} (profile : Profile G)
+    (start : FiniteHistory G.toStochasticGameForm) :
+    Measure (InfiniteHistory G.toStochasticGameForm) :=
+  (coherentHistoryStreamLaw profile start).map
+    CoherentHistoryStream.toInfiniteHistory
+
+theorem profileHistoryLaw_isProbability {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
+    IsProbabilityMeasure (profileHistoryLaw profile start) := by
+  letI : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
+    coherentHistoryStreamLaw_isProbability profile start
+  exact Measure.isProbabilityMeasure_map
+    CoherentHistoryStream.measurable_toInfiniteHistory.aemeasurable
+
+theorem profileHistoryLaw_supported {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
+    profileHistoryLaw profile start (Cylinder start) = 1 := by
+  letI : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
+    coherentHistoryStreamLaw_isProbability profile start
+  rw [profileHistoryLaw, Measure.map_apply
+    CoherentHistoryStream.measurable_toInfiniteHistory
+    (measurableSet_Cylinder G.toStochasticGameForm start)]
+  have hpreimage :
+      CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder start = Set.univ :=
+    Set.eq_univ_of_forall fun stream =>
+      stream.toInfiniteHistory_mem_Cylinder
+  rw [hpreimage, measure_univ]
+
+theorem profileHistoryLaw_oneStep {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target) :
+    profileHistoryLaw profile start (Cylinder (start.snoc action target positive)) =
+      OneStepProbability G profile start action target := by
+  let child := start.snoc action target positive
+  rw [profileHistoryLaw, Measure.map_apply
+    CoherentHistoryStream.measurable_toInfiniteHistory
+    (measurableSet_Cylinder G.toStochasticGameForm child)]
+  have hpreimage : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder child =
+      (fun stream : CoherentHistoryStream G start => stream.1 1) ⁻¹' {child} := by
+    ext stream
+    simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_setOf_eq]
+    change stream.toInfiniteHistory.prefix (start.length + 1) = child ↔ _
+    rw [stream.toInfiniteHistory_prefix_add 1]
+  rw [hpreimage]
+  have hmeasurable : Measurable
+      (fun stream : CoherentHistoryStream G start => stream.1 1) :=
+    (measurable_pi_apply 1).comp measurable_subtype_coe
+  rw [← Measure.map_apply hmeasurable (measurableSet_singleton child)]
+  rw [map_coherentHistoryStreamLaw_one]
+  change (historyStepPMF profile start).toMeasure {child} = _
+  rw [(historyStepPMF profile start).toMeasure_apply_singleton child
+    (measurableSet_singleton child)]
+  exact historyStepPMF_apply_snoc profile start action target positive
+
+theorem profileHistoryLaw_regular {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm)
+    (set : Set (InfiniteHistory G.toStochasticGameForm)) (hset : MeasurableSet set)
+    (epsilon : ℝ) (hepsilon : 0 < epsilon) :
+    ∃ closed openSet, IsClosed closed ∧ IsOpen openSet ∧ closed ⊆ set ∧
+      set ⊆ openSet ∧
+      profileHistoryLaw profile start (openSet \ closed) ≤ ENNReal.ofReal epsilon := by
+  letI : IsProbabilityMeasure (profileHistoryLaw profile start) :=
+    profileHistoryLaw_isProbability profile start
+  have hregularity :=
+    @Math.CountableObservation.exists_isClosed_isOpen_measure_sdiff_le
+      (InfiniteHistory G.toStochasticGameForm) (HistoryPrefix G.toStochasticGameForm)
+      InfiniteHistory.observedPrefix inferInstance
+  rw [← historyMeasurableSpace_eq_countableObservation G.toStochasticGameForm,
+    ← historyTopologicalSpace_eq_countableObservation G.toStochasticGameForm] at hregularity
+  exact hregularity (profileHistoryLaw profile start) hset hepsilon
 
 /--
 The induced-law data from Kolmogorov extension: every start law is a probability,

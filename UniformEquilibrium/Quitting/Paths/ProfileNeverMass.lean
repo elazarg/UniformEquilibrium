@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Paths.LiveRootSurvival
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
+import UniformEquilibrium.Quitting.Root.TerminalSemanticMoment
 
 /-! # Joint Never mass of an actual behavioral profile -/
 
@@ -54,5 +55,20 @@ theorem quittingLiveMassLimit_eq_prod_hazardNeverMass
   apply Finset.prod_congr rfl
   intro player _
   congr 1
+
+/-- An actual profile's terminal Never mass is the product of its marginal
+stopping-law Never atoms. -/
+theorem quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (profile : (quittingGame reward).BehaviorProfile) :
+    quittingTerminalOutcomeMass reward profile none =
+      ∏ who, (quittingBehaviorStoppingLaw reward (profile who) none).toReal := by
+  rw [show quittingTerminalOutcomeMass reward profile none =
+      quittingLiveMassLimit reward profile by rfl,
+    quittingLiveMassLimit_eq_prod_hazardNeverMass]
+  apply Finset.prod_congr rfl
+  intro who _
+  exact (quittingBehaviorStoppingLaw_none_toReal reward (profile who)).symm
 
 end GameTheory

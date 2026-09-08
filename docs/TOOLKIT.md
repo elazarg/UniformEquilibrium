@@ -230,6 +230,17 @@ and raw-calendar adapters are in
 These results do not recognize the exclusion hypothesis or construct an
 exact infinite all-suffix equilibrium.
 
+`hasQuittingActualNonconcentratedGroupExclusion_half_of_twoPairRewardBounds`
+(`UniformEquilibrium/Quitting/Paths/TwoPairGroupExclusion.lean`) supplies the
+group-exclusion hypothesis from finite reward-row bounds for two complementary
+four-player pairs. The two pair-average singleton levels must be nonnegative;
+the favorable-pair bound may have either sign. The theorem uses the actual
+pair masses and joint Never mass, not a supplied mass inequality. Its raw
+calendar counterpart delegates to the existing representation equivalence.
+The stronger stopping-law estimate retains the square root of the joint
+Never probability in the sum bounded by one; the resulting finite leftover
+bound is in `UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`.
+
 `Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
 (`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
 hazard vector for paired affine equations from literal reward intervals.

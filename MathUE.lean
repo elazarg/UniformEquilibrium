@@ -481,6 +481,7 @@ import MathUE.Probability.SurvivalAmplification
 import MathUE.Probability.SurvivalCoboundary
 import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import MathUE.Probability.SwitchedPotentialCalculus
+import MathUE.Probability.TrajectoryPrefixRestriction
 import MathUE.Probability.TriangularLedger
 import MathUE.Probability.WeightedClockRankReduction
 import MathUE.Probability.WeightedCollisionConcentration
@@ -553,8 +554,11 @@ import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.KuhnEndpointSharedFaceOrientation
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
+import MathUE.Topology.KuhnParameterEndOrientation
 import MathUE.Topology.KuhnSharedFaceOrientation
+import MathUE.Topology.KuhnSignedIncidence
 import MathUE.Topology.KuhnSimplexGeometry
+import MathUE.Topology.KuhnSimplexIncidence
 import MathUE.Topology.KuhnSimplexOrientation
 import MathUE.Topology.NestedOuterApproximation
 import MathUE.Topology.NonnegativeSubsequenceDichotomy

@@ -1,6 +1,7 @@
 import MathUE.Probability.IndependentFirstStoppingPair
 import UniformEquilibrium.Quitting.Paths.StageCoalitionStoppingLaw
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
+import UniformEquilibrium.Quitting.Paths.ProfileNeverMass
 
 /-! # Actual behavioral first-stopping pair laws
 
@@ -70,5 +71,119 @@ theorem quittingBehaviorFirstStoppingPairMass_sqrt_add_sqrt_le_one
   exact sqrt_exactFiniteFirstStoppingPairMass_add_sqrt_le_one
     (quittingBehaviorStoppingLaws reward profile) firstCoalition secondCoalition
     hfirstCard hsecondCard hne
+
+section FourPlayers
+
+variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
+
+private def firstPair : {S : Finset (Fin 4) // S.Nonempty} :=
+  ⟨{0, 1}, by simp⟩
+
+private def secondPair : {S : Finset (Fin 4) // S.Nonempty} :=
+  ⟨{2, 3}, by simp⟩
+
+private theorem prod_zero_one (value : Fin 4 → ℝ) :
+    ∏ who ∈ ({0, 1} : Finset (Fin 4)), value who = value 0 * value 1 := by
+  rw [Finset.prod_insert (by decide), Finset.prod_singleton]
+
+private theorem prod_two_three (value : Fin 4 → ℝ) :
+    ∏ who ∈ ({2, 3} : Finset (Fin 4)), value who = value 2 * value 3 := by
+  rw [Finset.prod_insert (by decide), Finset.prod_singleton]
+
+private theorem exactFiniteFirstStoppingCoalitionMass_firstPair_eq
+    (laws : Fin 4 → PMF (Option ℕ)) :
+    exactFiniteFirstStoppingCoalitionMass laws firstPair =
+      equalFirstSecondBeforeThirdFourthMass (laws 0) (laws 1) (laws 2) (laws 3) := by
+  unfold exactFiniteFirstStoppingCoalitionMass
+    equalFirstSecondBeforeThirdFourthMass firstPair
+  apply tsum_congr
+  intro time
+  have hcomplement : ({0, 1} : Finset (Fin 4))ᶜ = {2, 3} := by decide
+  rw [hcomplement]
+  rw [prod_zero_one, prod_two_three]
+  ring
+
+private theorem exactFiniteFirstStoppingCoalitionMass_secondPair_eq
+    (laws : Fin 4 → PMF (Option ℕ)) :
+    exactFiniteFirstStoppingCoalitionMass laws secondPair =
+      equalThirdFourthBeforeFirstSecondMass (laws 0) (laws 1) (laws 2) (laws 3) := by
+  unfold exactFiniteFirstStoppingCoalitionMass
+    equalThirdFourthBeforeFirstSecondMass secondPair
+  apply tsum_congr
+  intro time
+  have hcomplement : ({2, 3} : Finset (Fin 4))ᶜ = {0, 1} := by decide
+  rw [hcomplement]
+  rw [prod_two_three, prod_zero_one]
+  ring
+
+/-- The two complementary pair masses and Never mass of every actual
+four-player quitting profile obey the endpoint-retaining square-root law. -/
+theorem quittingBehaviorTwoDisjointPairMasses_sqrt_sum_add_never_le_one
+    (profile : (quittingGame reward).BehaviorProfile) :
+    Real.sqrt (quittingBehaviorExactFiniteFirstCoalitionMass profile
+          ⟨{0, 1}, by simp⟩) +
+        Real.sqrt (quittingBehaviorExactFiniteFirstCoalitionMass profile
+          ⟨{2, 3}, by simp⟩) +
+        Real.sqrt (quittingTerminalOutcomeMass reward profile none) ≤ 1 := by
+  let laws := quittingBehaviorStoppingLaws reward profile
+  have h := twoDisjointFirstStoppingPairMasses_sqrt_sum_add_never_le_one
+    (laws 0) (laws 1) (laws 2) (laws 3)
+  rw [← exactFiniteFirstStoppingCoalitionMass_firstPair_eq laws,
+    ← exactFiniteFirstStoppingCoalitionMass_secondPair_eq laws] at h
+  change Real.sqrt (quittingBehaviorExactFiniteFirstCoalitionMass profile firstPair) +
+      Real.sqrt (quittingBehaviorExactFiniteFirstCoalitionMass profile secondPair) +
+      Real.sqrt ((laws 0 none).toReal * (laws 1 none).toReal *
+        (laws 2 none).toReal * (laws 3 none).toReal) ≤ 1 at h
+  have hproduct :
+      (∏ who, (quittingBehaviorStoppingLaw reward (profile who) none).toReal) =
+        (laws 0 none).toReal * (laws 1 none).toReal *
+          (laws 2 none).toReal * (laws 3 none).toReal := by
+    change (∏ who, (laws who none).toReal) = _
+    norm_num [Fin.prod_univ_succ, laws]
+    have hthree : Fin.succ (2 : Fin 3) = (3 : Fin 4) := by decide
+    rw [hthree]
+    ring
+  rw [quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none profile, hproduct]
+  exact h
+
+/-- The finite terminal mass outside the two complementary pair coalitions
+is at least twice the geometric mean of their masses. -/
+theorem quittingBehaviorTwoDisjointPairMasses_finiteLeftover_ge_two_sqrt_mul
+    (profile : (quittingGame reward).BehaviorProfile) :
+    2 * Real.sqrt
+        (quittingBehaviorExactFiniteFirstCoalitionMass profile
+            ⟨{0, 1}, by simp⟩ *
+          quittingBehaviorExactFiniteFirstCoalitionMass profile
+            ⟨{2, 3}, by simp⟩) ≤
+      1 - quittingBehaviorExactFiniteFirstCoalitionMass profile
+          ⟨{0, 1}, by simp⟩ -
+        quittingBehaviorExactFiniteFirstCoalitionMass profile
+          ⟨{2, 3}, by simp⟩ -
+        quittingTerminalOutcomeMass reward profile none := by
+  let laws := quittingBehaviorStoppingLaws reward profile
+  have h := twoDisjointFirstStoppingPairMasses_finiteLeftover_ge_two_sqrt_mul
+    (laws 0) (laws 1) (laws 2) (laws 3)
+  rw [← exactFiniteFirstStoppingCoalitionMass_firstPair_eq laws,
+    ← exactFiniteFirstStoppingCoalitionMass_secondPair_eq laws] at h
+  change 2 * Real.sqrt
+      (quittingBehaviorExactFiniteFirstCoalitionMass profile firstPair *
+        quittingBehaviorExactFiniteFirstCoalitionMass profile secondPair) ≤
+    1 - quittingBehaviorExactFiniteFirstCoalitionMass profile firstPair -
+      quittingBehaviorExactFiniteFirstCoalitionMass profile secondPair -
+      ((laws 0 none).toReal * (laws 1 none).toReal *
+        (laws 2 none).toReal * (laws 3 none).toReal) at h
+  have hproduct :
+      (∏ who, (quittingBehaviorStoppingLaw reward (profile who) none).toReal) =
+        (laws 0 none).toReal * (laws 1 none).toReal *
+          (laws 2 none).toReal * (laws 3 none).toReal := by
+    change (∏ who, (laws who none).toReal) = _
+    norm_num [Fin.prod_univ_succ, laws]
+    have hthree : Fin.succ (2 : Fin 3) = (3 : Fin 4) := by decide
+    rw [hthree]
+    ring
+  rw [quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none profile, hproduct]
+  exact h
+
+end FourPlayers
 
 end GameTheory
