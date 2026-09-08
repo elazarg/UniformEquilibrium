@@ -466,6 +466,18 @@ equivalence for weak exclusion on a designated nonnegative-singleton
 subset, strict singleton deficit with a fixed margin, and nonconcentrated
 group exclusion with a fixed weight cap. Compactness also makes strict
 pointwise singleton exclusion equivalent to one positive uniform deficit.
+`exists_uniformEquilibriumPayoff_of_actualWeakSubsetExclusion` and
+`exists_uniformEquilibriumPayoff_of_finiteCalendarRawWeakSubsetExclusion`
+(`UniformEquilibrium/Diagnostics/Quitting/WeakSubsetUniformPayoff.lean`)
+give the uniform-equilibrium-payoff consequence for any finite player type.
+Only designated owners need nonnegative singleton rewards; other rewards may
+have either sign. The exclusion assumption itself implies that the designated
+set is nonempty. This qualitative consequence does not supply a finite-word
+selector for the signed case.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarPurePoints.lean` supplies
+literal All-Never and pure-coalition simplex points, with exact mass and payoff
+evaluations on any finite calendar. These evaluations do not preserve caps
+under compression.
 `exists_finiteCalendarRawNonconcentratedGroupExclusion_iff_orderedPair`
 (`UniformEquilibrium/Quitting/Paths/FiniteCalendarOrderedPairGroupExclusion.lean`)
 reduces group exclusion to distinct ordered pairs with one positive
@@ -490,6 +502,11 @@ players from the deficit assumption itself. With nonnegative own singletons,
 group exclusion implies weak exclusion on all players. Both actual-profile
 and raw-calendar forms are provided.
 An executable raw-table recognition procedure remains to be supplied.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffFormula.lean` constructs
+executable rational expressions for coalition masses, payoffs, and singleton
+surpluses from supplied reward and calendar terms. Its simplex guard includes
+every Never coordinate. Evaluation agrees with the raw semantic payoff map;
+the caller must still bind the calendar variables and invoke elimination.
 `StrictDeficitAndZeroBoundaryTables.strictDeficitReward_has_actualStrictSingletonDeficit`
 (`UniformEquilibrium/Quitting/Examples/StrictDeficitAndZeroBoundaryTables.lean`)
 gives a concrete four-player table with uniform deficit margin one. The same

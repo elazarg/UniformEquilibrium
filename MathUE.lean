@@ -25,6 +25,7 @@ import MathUE.Probability.OverlappingFirstStoppingInfiniteRecurrence
 import MathUE.Probability.OverlappingFirstStoppingDeterministicAtom
 import MathUE.LinearSqrtGapBound
 import MathUE.SignedFourCycleAlgebra
+import MathUE.SignedEndpointStretch
 import MathUE.SignedFourCycleWeights
 import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
@@ -35,6 +36,7 @@ import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.LinearProgramming.PivotRepairMassOfStoppingLaw
 import MathUE.ProbabilityMassFunction.ExactLateFiniteCensor
 import MathUE.ProbabilityMassFunction.IndicatorExpectation
+import MathUE.ProbabilityMassFunction.SupportExpectationEquality
 import MathUE.ProbabilityMassFunction.GeometricPivotFiniteCensor
 import MathUE.PMFProduct.BooleanCoordinateStability
 import MathUE.AffineEqualityFarkas
