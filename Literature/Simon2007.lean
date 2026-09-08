@@ -1,6 +1,6 @@
 import Mathlib
 import MathUE.PMFProduct.Basic
-import MathUE.Probability.MarkovPathConcentration
+import MathUE.Probability.MarkovPathRestart
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.CompactFiniteChargedReturn
@@ -1137,10 +1137,114 @@ structure InducedLawSemantics (G : NormalStochasticGame) where
     (lawFrom profile h).restrict (Cylinder (h.snoc a t positive)) =
       OneStepProbability G profile h a t • lawFrom profile (h.snoc a t positive)
 
-/-- Kolmogorov extension and regularity provide the induced laws used by the paper. -/
+theorem coherentHistoryStreamLaw_restrict_child
+    {G : NormalStochasticGame} (profile : Profile G)
+    (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target) :
+    (coherentHistoryStreamLaw profile start).restrict
+        {stream | stream.1 1 = start.snoc action target positive} =
+      OneStepProbability G profile start action target •
+        (coherentHistoryStreamLaw profile
+          (start.snoc action target positive)).map
+            (fun stream => stream.prependChild start action target positive) := by
+  let child := start.snoc action target positive
+  let event : Set (ℕ → FiniteHistory G.toStochasticGameForm) :=
+    {path | path 1 = child}
+  have hevent : MeasurableSet event :=
+    (measurableSet_singleton child).preimage (measurable_pi_apply 1)
+  have hcarrier : MeasurableSet
+      {path : ℕ → FiniteHistory G.toStochasticGameForm |
+        Math.MarkovPath.StartsAt start path ∧
+          Math.MarkovPath.Follows
+            {pair | IsHistoryExtension pair.1 pair.2} path} :=
+    (Math.MarkovPath.measurableSet_startsAt start).inter
+      (Math.MarkovPath.measurableSet_follows _ measurableSet_historyExtensions)
+  have hval : MeasurableEmbedding
+      (Subtype.val : CoherentHistoryStream G start →
+        ℕ → FiniteHistory G.toStochasticGameForm) := by
+    exact MeasurableEmbedding.subtype_coe hcarrier
+  apply MeasurableEmbedding.map_injective hval
+  rw [Measure.map_smul]
+  calc
+    ((coherentHistoryStreamLaw profile start).restrict
+          {stream | stream.1 1 = child}).map Subtype.val =
+        ((coherentHistoryStreamLaw profile start).map Subtype.val).restrict
+          event := by
+      exact (Measure.restrict_map measurable_subtype_coe hevent).symm
+    _ = (Math.MarkovPath.lawFrom
+          (historyTransitionKernel profile) start).restrict event := by
+      rw [map_coherentHistoryStreamLaw]
+    _ = historyTransitionKernel profile start {child} •
+        (Math.MarkovPath.lawFrom
+          (historyTransitionKernel profile) child).map
+            (Math.MarkovPath.prependFirst start) := by
+      exact Math.MarkovPath.lawFrom_restrict_next_eq_smul_map_prependFirst
+        (historyTransitionKernel profile) start child
+    _ = OneStepProbability G profile start action target •
+        ((coherentHistoryStreamLaw profile child).map
+          (fun stream => stream.prependChild start action target positive)).map
+            Subtype.val := by
+      rw [show historyTransitionKernel profile start {child} =
+          OneStepProbability G profile start action target by
+        change (historyStepPMF profile start).toMeasure {child} = _
+        rw [(historyStepPMF profile start).toMeasure_apply_singleton child
+          (measurableSet_singleton child)]
+        exact historyStepPMF_apply_snoc profile start action target positive]
+      rw [Measure.map_map measurable_subtype_coe
+        (CoherentHistoryStream.measurable_prependChild
+          start action target positive)]
+      rw [show Subtype.val ∘
+          (fun stream : CoherentHistoryStream G child =>
+            stream.prependChild start action target positive) =
+          Math.MarkovPath.prependFirst start ∘ Subtype.val by rfl]
+      rw [← Measure.map_map (Math.MarkovPath.measurable_prependFirst start)
+        measurable_subtype_coe]
+      rw [map_coherentHistoryStreamLaw]
+
+theorem profileHistoryLaw_condition {G : NormalStochasticGame}
+    (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm)
+    (action : JointActionAt G start) (target : G.State)
+    (positive : 0 < G.transition start.terminal action target) :
+    (profileHistoryLaw profile start).restrict
+        (Cylinder (start.snoc action target positive)) =
+      OneStepProbability G profile start action target •
+        profileHistoryLaw profile (start.snoc action target positive) := by
+  let child := start.snoc action target positive
+  rw [profileHistoryLaw]
+  rw [Measure.restrict_map CoherentHistoryStream.measurable_toInfiniteHistory
+    (measurableSet_Cylinder G.toStochasticGameForm child)]
+  have hpreimage : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder child =
+      {stream : CoherentHistoryStream G start | stream.1 1 = child} := by
+    ext stream
+    simp only [Set.mem_preimage, Cylinder, Set.mem_setOf_eq]
+    change stream.toInfiniteHistory.prefix (start.length + 1) = child ↔ _
+    rw [stream.toInfiniteHistory_prefix_add 1]
+  rw [hpreimage]
+  rw [coherentHistoryStreamLaw_restrict_child]
+  rw [Measure.map_smul]
+  rw [Measure.map_map CoherentHistoryStream.measurable_toInfiniteHistory
+    (CoherentHistoryStream.measurable_prependChild
+      start action target positive)]
+  rw [show CoherentHistoryStream.toInfiniteHistory ∘
+      (fun stream : CoherentHistoryStream G child =>
+        stream.prependChild start action target positive) =
+      CoherentHistoryStream.toInfiniteHistory by
+    funext stream
+    exact stream.prependChild_toInfiniteHistory start action target positive]
+  rfl
+
+/-- The profile-generated history laws satisfy the paper's induced-law semantics. -/
 theorem inducedLawSemantics_exists (G : NormalStochasticGame) :
     Nonempty (InducedLawSemantics G) := by
-  sorry
+  refine ⟨{
+    lawFrom := profileHistoryLaw
+    probability := profileHistoryLaw_isProbability
+    borelCompatible := historyMeasurableSpace_eq_borel G.toStochasticGameForm
+    regular := profileHistoryLaw_regular
+    supported := profileHistoryLaw_supported
+    oneStep := profileHistoryLaw_oneStep
+    condition := profileHistoryLaw_condition }⟩
 
 /--
 The payoff extension and actual induced laws for every state-restarted game.  Simon's

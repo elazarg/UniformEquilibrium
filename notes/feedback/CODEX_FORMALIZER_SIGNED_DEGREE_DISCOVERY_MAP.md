@@ -153,10 +153,12 @@ proposition, not a hidden LCP-degree theorem.
    cancellation, endpoint orientation, and local signed counts are available.
    Uniform mixed-parameter face-vertex clearance is supplied by
    `IsContinuousBoxComplementarityFamily.exists_isolatingFrontierCollar_eventually_prismCleared`
-   (`Research/Topology/BoxComplementarityPrismCluster.lean`). The missing source
-   identifies the boundary between selected and unselected local cells with
-   vertices in that collar, then cancels over the selected cells. Full-box
-   endpoint equality does not supply this local comparison.
+   (`Research/Topology/BoxComplementarityPrismCluster.lean`). Actual incident
+   parent selections agree by
+   `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
+   (`Research/Topology/KuhnPrismBoundaryCollar.lean`). The remaining adapter
+   applies the weighted endpoint identity to these selections and identifies
+   its endpoint sums with the existing local counts.
 2. **Subdivision/approximation independence.** Prove signed invariance under
    the actual refinements used, then that sufficiently close admissible
    approximations give the same integer. Generic fields asserting invariance

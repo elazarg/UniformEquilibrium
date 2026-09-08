@@ -1,7 +1,9 @@
 # Simon path-law reuse audit
 
-This is a static, declaration-level audit for the path-law obligation in Simon (2007). It does
-not claim that `inducedLawSemantics_exists` is proved.
+`inducedLawSemantics_exists` (`Literature/Simon2007.lean`) is proved in Lean
+from the profile-generated history laws. Its axiom check reports only
+`propext`, `Classical.choice`, and `Quot.sound`; no unfinished paper proof is
+used. The reuse map below records the construction's dependencies.
 
 ## Reusable results
 
@@ -38,7 +40,7 @@ pattern: exact-length accumulated histories, a support-dependent one-step law, a
 and coordinate marginals. It starts only at the root, does not package coherent streams into a
 path subtype, and proves no exact cylinder restriction identity. It is not a production dependency.
 
-## Irreducible Simon adapters
+## Constructed Simon adapters
 
 `ae_follows_of_transition` and `map_supportedLawFrom`
 (`MathUE/Probability/MarkovPathConcentration.lean`) supply the generic
@@ -48,11 +50,22 @@ and subtype-measure APIs above. The paper-specific `historyTransitionKernel`
 and `ae_historyTransitionKernel_extension` (`Literature/Simon2007.lean`)
 retain positive transition support in possible finite histories.
 
-The remaining paper-facing work is:
+`coherentHistoryStreamLaw` and `profileHistoryLaw`
+(`Literature/Simon2007.lean`) instantiate the coherent-carrier construction
+and map accumulated histories to Simon's infinite histories. Their probability,
+support, and one-step cylinder theorems retain the supplied behavioral profile
+and starting history.
 
-1. specialize the generic coherent-carrier concentration theorem;
-2. identify coherent streams of accumulated histories with Simon's `InfiniteHistory`;
-3. compute cylinder masses and prove the exact restriction identity at every positive extension.
+`lawFrom_restrict_next_eq_smul_map_prependFirst`
+(`MathUE/Probability/MarkovPathRestart.lean`) gives exact restriction and restart
+for a homogeneous Markov kernel on a measurable state space with measurable
+singletons. It does not require countability or positive transition mass.
+`coherentHistoryStreamLaw_restrict_child` and `profileHistoryLaw_condition`
+(`Literature/Simon2007.lean`) transport it through the actual history maps.
+The latter supplies the required cylinder restriction identity, including
+extensions with zero behavioral one-step probability.
 
-Regularity is separate and already follows from the countable-observation topology once the
-probability law has been constructed.
+`profileHistoryLaw_regular` (`Literature/Simon2007.lean`) delegates to the
+generic countable-observation regularity theorem. Together these declarations
+construct every field of the paper's induced-law semantics; other Simon
+proof obligations remain separate.

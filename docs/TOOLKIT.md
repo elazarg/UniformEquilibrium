@@ -241,6 +241,14 @@ The stronger stopping-law estimate retains the square root of the joint
 Never probability in the sum bounded by one; the resulting finite leftover
 bound is in `UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean`.
 
+`quittingBehaviorTwoPair_crossMassDeterminant`
+(`UniformEquilibrium/Quitting/Paths/TwoPairCrossMassDeterminant.lean`) bounds
+the product of the exact `{0,1}` and `{2,3}` first-quitter masses by the
+product of the `{0}`, `{3}`, `{0,3}` mass sum and the `{1}`, `{2}`, `{1,2}`
+mass sum. The independent-law theorem retains Never and ties without an
+absorption or finite-support hypothesis. This is an actual mass inequality;
+a reward-table exclusion conclusion requires its separate payoff consumer.
+
 `Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
 (`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
 hazard vector for paired affine equations from literal reward intervals.

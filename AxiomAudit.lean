@@ -599,6 +599,7 @@ import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
+import MathUE.Topology.FiniteUnitCubeFrontier
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
@@ -2406,6 +2407,7 @@ import UniformEquilibrium.Quitting.Paths.SurvivalPrefixBridge
 import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Paths.TerminalSemanticPayoffProjection
+import UniformEquilibrium.Quitting.Paths.TwoPairCrossMassDeterminant
 import UniformEquilibrium.Quitting.Paths.TwoPairGroupExclusion
 import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 import UniformEquilibrium.Quitting.Paths.WeakExclusionFiniteWordMenuRate

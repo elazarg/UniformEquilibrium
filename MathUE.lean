@@ -550,6 +550,7 @@ import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
+import MathUE.Topology.FiniteUnitCubeFrontier
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift

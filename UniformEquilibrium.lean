@@ -766,6 +766,7 @@ import UniformEquilibrium.Quitting.Paths.StageCoalitionMass
 import UniformEquilibrium.Quitting.Paths.StageCoalitionStoppingLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorFirstStoppingPairLaw
 import UniformEquilibrium.Quitting.Paths.TwoPairGroupExclusion
+import UniformEquilibrium.Quitting.Paths.TwoPairCrossMassDeterminant
 import UniformEquilibrium.Quitting.Terminal.PairAverageSurplus
 import UniformEquilibrium.Quitting.Paths.OverlappingPairSharpProfiles
 import UniformEquilibrium.Quitting.Paths.FirstStoppingCoalitionRelabel

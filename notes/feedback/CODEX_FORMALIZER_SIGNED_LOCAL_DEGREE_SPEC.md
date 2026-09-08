@@ -59,8 +59,8 @@ solution-free collar is constructed in
 `Research/Topology/BoxComplementarityFamilyCollar.lean`.
 
 This is vertex clearance, not a statement that the geometric realization of
-every face avoids the collar. The selected-cell boundary argument below must
-still produce an actual face vertex in the cleared collar.
+every face avoids the collar. The selected-cell boundary argument below
+uses an actual shared face vertex in the cleared collar.
 
 The proof dependencies are:
 
@@ -75,15 +75,24 @@ The proof dependencies are:
    `IsContinuousBoxComplementarityFamily.isSolution_of_prismFace_vertex_tendsto`
    (`Research/Topology/BoxComplementarityPrismCluster.lean`); compactness then
    gives the uniform vertex-clearance theorem above.
-3. Select a literal finite family of prism cells from the region. Prove that
-   a complete face with one selected and one unselected parent lies in the
-   collar. The geometric step uses the mesh bound and an actual path or
-   segment crossing the relative frontier. Merely restricting the existing
-   full-box sum does not discharge this new boundary obligation.
+3. Select a literal finite family of prism cells by base-point membership in
+   the region. `prismFace_vertex_mem_frontierCollar_of_parent_membership`
+   (`Research/Topology/KuhnPrismBoundaryCollar.lean`) puts every shared face
+   vertex within one mesh width of the frontier when parent selections differ.
+   It reuses a connected coordinate rectangle. The same file's
+   `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
+   combines this bound with actual uniform clearance to prove parent-selection
+   agreement at all sufficiently fine resolutions.
 4. Use the checked integer row and interior-column cancellation on those
    actual selected cells. Identify the selected parameter-end faces with
    the existing anchor-selected simplex sets, using cleared-collar set
    equality to reconcile the selection convention with the existing anchor.
+
+`sum_weighted_parameterFaceWeight_left_eq_right`
+(`MathUE/Topology/KuhnSignedParameterEnd.lean`) supplies the weighted finite
+algebra for step 4. Its integer multipliers must agree on actual incidences;
+the remaining adapter supplies those multipliers from the selected region
+and identifies the resulting endpoint sums with the existing local counts.
 
 The resulting local, same-resolution theorem should have the order:
 

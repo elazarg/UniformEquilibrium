@@ -96,6 +96,82 @@ theorem sum_signedIncidence_cells_eq_rightParameterEnd_weight
   rw [sum_signedIncidence_cells_eq_incident_sum, hcell, Finset.sum_singleton]
   exact signedIncidence_eq_rightParameterEnd_weight hdimension label cell face hincident hend
 
+/-- Actual-incidence-compatible multipliers restrict the existing integer endpoint identity. -/
+theorem sum_weighted_parameterFaceWeight_left_eq_right
+    {cube : SpernerCube} {dimension : ℕ}
+    (hdimension : dimension + 1 = cube.n) (label : cube.G → Fin (dimension + 1))
+    (cellMultiplier : Cell cube → ℤ)
+    (faceMultiplier : CompleteFace cube dimension label → ℤ)
+    (hcompatible : ∀ cell face, Incident cell face →
+      cellMultiplier cell = faceMultiplier face)
+    (hboundary : ∀ face : CompleteFace cube dimension label, is_boundary_face cube face.1 →
+      (∀ vertex, face.1 vertex (Fin.cast hdimension (Fin.last dimension)) = 0) ∨
+      (∀ vertex,
+        (face.1 vertex (Fin.cast hdimension (Fin.last dimension))).val = cube.p)) :
+    (∑ face ∈ Finset.univ.filter (fun face : CompleteFace cube dimension label =>
+      ∀ vertex, face.1 vertex (Fin.cast hdimension (Fin.last dimension)) = 0),
+      faceMultiplier face * parameterFaceWeight hdimension label face) =
+    ∑ face ∈ Finset.univ.filter (fun face : CompleteFace cube dimension label =>
+      ∀ vertex, (face.1 vertex (Fin.cast hdimension (Fin.last dimension))).val = cube.p),
+      faceMultiplier face * parameterFaceWeight hdimension label face := by
+  let leftEnd (face : CompleteFace cube dimension label) : Prop :=
+    ∀ vertex, face.1 vertex (Fin.cast hdimension (Fin.last dimension)) = 0
+  let rightEnd (face : CompleteFace cube dimension label) : Prop :=
+    ∀ vertex, (face.1 vertex (Fin.cast hdimension (Fin.last dimension))).val = cube.p
+  have hdisjoint (face : CompleteFace cube dimension label)
+      (hleft : leftEnd face) (hright : rightEnd face) : False := by
+    have hzero := congrArg Fin.val (hleft 0)
+    have hmax := hright 0
+    have hp : cube.p = 0 := by simp only [Fin.val_zero] at hzero; omega
+    exact (@p_ne_zero_of_cube cube dimension hdimension) (Fin.ext hp)
+  have hterm (cell : Cell cube) (face : CompleteFace cube dimension label) :
+      faceMultiplier face * signedIncidence hdimension label cell face =
+        cellMultiplier cell * signedIncidence hdimension label cell face := by
+    by_cases hincident : Incident cell face
+    · rw [hcompatible cell face hincident]
+    · simp only [signedIncidence, dif_neg hincident, mul_zero]
+  have htotal : (∑ face : CompleteFace cube dimension label,
+      faceMultiplier face * ∑ cell : Cell cube,
+        signedIncidence hdimension label cell face) = 0 := by
+    simp_rw [Finset.mul_sum, hterm]
+    rw [Finset.sum_comm]
+    simp only [← Finset.mul_sum, sum_signedIncidence_faces_eq_zero, mul_zero,
+      Finset.sum_const_zero]
+  have hcolumn (face : CompleteFace cube dimension label) :
+      faceMultiplier face * (∑ cell : Cell cube, signedIncidence hdimension label cell face) =
+      (if leftEnd face then (-1) ^ (dimension + 1) *
+        (faceMultiplier face * parameterFaceWeight hdimension label face) else 0) +
+      (if rightEnd face then (-1) ^ dimension *
+        (faceMultiplier face * parameterFaceWeight hdimension label face) else 0) := by
+    by_cases hleft : leftEnd face
+    · have hright : ¬ rightEnd face := hdisjoint face hleft
+      simp only [if_pos hleft, if_neg hright, add_zero]
+      rw [sum_signedIncidence_cells_eq_leftParameterEnd_weight hdimension label face hleft]
+      ring
+    · by_cases hright : rightEnd face
+      · simp only [if_neg hleft, if_pos hright, zero_add]
+        rw [sum_signedIncidence_cells_eq_rightParameterEnd_weight hdimension label face hright]
+        ring
+      · simp only [if_neg hleft, if_neg hright, zero_add]
+        have hnotBoundary : ¬ is_boundary_face cube face.1 := by
+          intro hface
+          exact (hboundary face hface).elim hleft hright
+        rw [sum_signedIncidence_cells_eq_zero_of_not_boundary
+          hdimension label face hnotBoundary, mul_zero]
+  simp_rw [hcolumn] at htotal
+  rw [Finset.sum_add_distrib, ← Finset.sum_filter, ← Finset.sum_filter,
+    ← Finset.mul_sum, ← Finset.mul_sum] at htotal
+  have hfactor : (-1 : ℤ) ^ dimension *
+      ((∑ face ∈ Finset.univ.filter rightEnd,
+          faceMultiplier face * parameterFaceWeight hdimension label face) -
+        ∑ face ∈ Finset.univ.filter leftEnd,
+          faceMultiplier face * parameterFaceWeight hdimension label face) = 0 := by
+    rw [pow_succ] at htotal
+    convert htotal using 1
+    ring
+  exact (sub_eq_zero.mp ((mul_eq_zero.mp hfactor).resolve_left
+    (pow_ne_zero _ (by norm_num)))).symm
+
 /-- Actual finite signed endpoint sums agree when every complete geometric
 boundary face lies at a parameter end. The external-labeling prism interface
 supplies this boundary classification; no degree invariant is assumed. -/
@@ -110,49 +186,7 @@ theorem sum_parameterFaceWeight_left_eq_right
     ∑ face ∈ Finset.univ.filter (fun face : CompleteFace cube dimension label =>
       ∀ vertex, (face.1 vertex (Fin.cast hdimension (Fin.last dimension))).val = cube.p),
       parameterFaceWeight hdimension label face := by
-  let leftEnd (face : CompleteFace cube dimension label) : Prop :=
-    ∀ vertex, face.1 vertex (Fin.cast hdimension (Fin.last dimension)) = 0
-  let rightEnd (face : CompleteFace cube dimension label) : Prop :=
-    ∀ vertex, (face.1 vertex (Fin.cast hdimension (Fin.last dimension))).val = cube.p
-  have hdisjoint (face : CompleteFace cube dimension label)
-      (hleft : leftEnd face) (hright : rightEnd face) : False := by
-    have hzero := congrArg Fin.val (hleft 0)
-    have hmax := hright 0
-    have hp : cube.p = 0 := by simp only [Fin.val_zero] at hzero; omega
-    exact (@p_ne_zero_of_cube cube dimension hdimension) (Fin.ext hp)
-  have htotal : (∑ face : CompleteFace cube dimension label, ∑ cell : Cell cube,
-      signedIncidence hdimension label cell face) = 0 := by
-    rw [Finset.sum_comm]
-    simp only [sum_signedIncidence_faces_eq_zero, Finset.sum_const_zero]
-  have hcolumn (face : CompleteFace cube dimension label) :
-      (∑ cell : Cell cube, signedIncidence hdimension label cell face) =
-      (if leftEnd face then (-1) ^ (dimension + 1) *
-        parameterFaceWeight hdimension label face else 0) +
-      (if rightEnd face then (-1) ^ dimension *
-        parameterFaceWeight hdimension label face else 0) := by
-    by_cases hleft : leftEnd face
-    · have hright : ¬ rightEnd face := hdisjoint face hleft
-      simp only [if_pos hleft, if_neg hright, add_zero]
-      exact sum_signedIncidence_cells_eq_leftParameterEnd_weight
-        hdimension label face hleft
-    · by_cases hright : rightEnd face
-      · simp only [if_neg hleft, if_pos hright, zero_add]
-        exact sum_signedIncidence_cells_eq_rightParameterEnd_weight
-          hdimension label face hright
-      · simp only [if_neg hleft, if_neg hright, zero_add]
-        apply sum_signedIncidence_cells_eq_zero_of_not_boundary
-        intro hface
-        exact (hboundary face hface).elim hleft hright
-  simp_rw [hcolumn] at htotal
-  rw [Finset.sum_add_distrib, ← Finset.sum_filter, ← Finset.sum_filter,
-    ← Finset.mul_sum, ← Finset.mul_sum] at htotal
-  have hfactor : (-1 : ℤ) ^ dimension *
-      ((∑ face ∈ Finset.univ.filter rightEnd, parameterFaceWeight hdimension label face) -
-        ∑ face ∈ Finset.univ.filter leftEnd, parameterFaceWeight hdimension label face) = 0 := by
-    rw [pow_succ] at htotal
-    convert htotal using 1
-    ring
-  exact (sub_eq_zero.mp ((mul_eq_zero.mp hfactor).resolve_left
-    (pow_ne_zero _ (by norm_num)))).symm
+  simpa only [one_mul] using sum_weighted_parameterFaceWeight_left_eq_right
+    hdimension label (fun _ => 1) (fun _ => 1) (fun _ _ _ => rfl) hboundary
 
 end Math.KuhnSimplex

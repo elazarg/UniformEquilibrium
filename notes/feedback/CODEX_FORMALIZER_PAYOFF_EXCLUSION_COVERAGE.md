@@ -155,9 +155,13 @@ The following are genuine remaining obligations:
    weak-subset selection is fixed-table, and the rational engine covers only
    the all-designated-preempted branch; an executable rational unpreempted
    solo exit and the combined rational selector are still missing.
-4. The separate-cross-mass determinant attachment of equations (18)--(19),
-   its finite row criterion, and its displayed numerical fixture and long-word
-   regression are absent.
+4. The separate-cross-mass determinant of equation (18) is covered by
+   `quittingIndependentTerminalOutcomeLaw_twoPair_crossMassDeterminant` and
+   `quittingBehaviorTwoPair_crossMassDeterminant` in
+   `UniformEquilibrium/Quitting/Paths/TwoPairCrossMassDeterminant.lean`.
+   They retain arbitrary independent complete stopping laws, Never, and ties.
+   Equation (19)'s reward-table consumer, the displayed numerical fixture,
+   and the long-word regression remain to be supplied.
 
 ## Cap-threshold blocks and weak exclusion
 
