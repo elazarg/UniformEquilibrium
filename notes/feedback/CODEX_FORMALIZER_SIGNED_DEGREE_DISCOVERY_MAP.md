@@ -1,12 +1,9 @@
-# Signed degree: bounded discovery map before implementation
+# Signed degree: reusable foundations and missing adapters
 
-Status: static source audit, not a build or a new proof. No topology foundation
-has been started. This map addresses the next dependency of
+This declaration-level discovery map addresses the dependency boundary of
 `math/exports/INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md`.
-It supplements the earlier formalizer integer-degree audit; the endpoint and
-localization layers described there as pending have since been implemented.
-Exact current declarations, not the older audit's historical task list, govern
-reuse.
+The map is not itself a proof or a build record. Exact current declarations,
+not historical gap lists, govern reuse.
 
 ## Outcome
 
@@ -23,9 +20,8 @@ theorems. What is absent is a compatible oriented integer count, its signed
 cancellation laws, and a bridge making that count independent of admissible
 approximation/subdivision.
 
-A separate, smaller source obligation precedes the degree comparison: the
-actual discounted displacement must have its linear expansion on a signed
-ambient neighborhood, not only on probabilistic hazards.
+The actual discounted displacement's linear expansion on bounded signed sets
+is available; its scope is recorded in Section 3 below.
 
 ## 1. Already available: do not re-prove
 
@@ -173,7 +169,27 @@ need the absent oriented relative/sphere computation and excision bridge.
 This audit does not justify starting both routes or rebuilding generic
 homotopy/linear algebra already available.
 
-## 3. Smaller source obligation before the comparison
+### Available local signed adapters
+
+`sum_complete_deletionWeight_eq_zero`
+(`MathUE/Topology/SignedSimplexLabelBoundary.lean`) proves integer cancellation
+of alternating label determinants over the complete deletion faces of one
+simplex. It reuses determinant expansion and repeated-row vanishing.
+`facetDeterminant_delete`
+(`MathUE/Topology/OrientedSimplexFacetDeterminant.lean`) identifies the
+inherited face coefficient over any commutative ring.
+`endpointParents_signed_determinant_add_eq_zero`
+(`MathUE/Topology/KuhnEndpointSharedFaceOrientation.lean`) obtains cancellation
+for two actual Kuhn parents sharing their endpoint-deletion face, using the
+pinned full-simplex coordinate increment identity.
+`internalParents_signed_determinant_add_eq_zero`
+(`MathUE/Topology/KuhnInternalSharedFaceOrientation.lean`) handles two distinct
+actual parents with the same internal deletion. Its unit-coordinate step
+theorem reuses the pinned cumulative coordinate-change counts. Classification
+of arbitrary shared faces, unit-volume normalization, and subdivision-independent
+degree are separate obligations; these local adapters do not supply them.
+
+## 3. Actual source comparison
 
 `abs_quittingDiscountedSingletonRemainder_le`
 (`UniformEquilibrium/Quitting/Stationary/DiscountedQuadraticRemainder.lean`)
@@ -182,28 +198,22 @@ discount and cube hazards. This is enough for localization of actual roots.
 It does NOT prove uniform convergence on a degree domain containing negative
 hazard coordinates.
 
-For any fixed bounded ambient box in the scaled variable `h`, the packet needs
-the SAME actual polynomial displacement to satisfy
+`tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`)
+proves, on every fixed bounded signed set of scaled hazards,
 
 ```text
 −D(discount, discount · h) / discount → Γ h − a
 ```
 
-uniformly over that box as positive discount tends to zero. A sufficient
-ordinary source adapter identifies the Fréchet derivative of actual D at
-the ambient origin with `(discount, q) ↦ discount · a − Γ q`.
-
-Do not implement Taylor theory for this. The exact reusable pieces include
-`contDiff_eval_mvPolynomial` and `fderiv_eval_mvPolynomial_apply_single`
-(`MathUE/Polynomial/MvPolynomialFDeriv.lean`),
-`eval_mvPolynomialAffineSubstitution` and
-`fderiv_mvPolynomialAffineSubstitution`
-(`MathUE/Polynomial/PolynomialDerivativeApproximation.lean`), and the pinned
-`HasFDerivAt.isLittleO` theorem. First inspect whether the actual polynomial
-already has a coordinate representation or use existing finite sum/product
-derivative rules directly; do not create a new polynomial merely to rename D.
-The derivative identity and the compact scaled-box adapter remain to be
-proved. No such proof was begun in this discovery pass.
+uniformly as positive discount tends to zero.
+`hasFDerivAt_quittingDiscountedDisplacement_zero`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedAmbientDerivative.lean`)
+identifies the ambient Fréchet derivative with
+`(discount, q) ↦ discount · a − Γ q`. The proofs reuse finite sum/product
+differentiability, uniqueness of derivatives within the full-dimensional
+cube, and `HasFDerivAt.isLittleO`. No new Taylor theory, polynomial copy,
+or extension of the probabilistic inequality to signed hazards is needed.
 
 ## 4. Bounded fable lookup and nonclaims
 
@@ -214,6 +224,5 @@ about a payoff seam, not oriented simplex or integer-degree statements.
 No fable proof relevant to this signed-degree obligation was found; unrelated
 fable constructions were not re-audited or copied.
 
-No source, cache, umbrella or math-owned note was edited. No Lean build was
-run for this map. The map does not claim the degree packet complete, infer
+This map does not claim the degree packet complete, infer
 integer signs from parity, or reopen new quitting-game mathematics.

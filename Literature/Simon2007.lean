@@ -158,6 +158,123 @@ theorem InfiniteHistory.prefix_length {F : StochasticGameForm}
         InfiniteHistory.prefixTo, HistoryTo.length]
       exact congrArg (fun length ↦ length + 1) inductionHypothesis
 
+/-- A positive infinite continuation from `start`, represented by the restarted game. -/
+abbrev HistoryContinuation (F : StochasticGameForm) (start : F.State) :=
+  InfiniteHistory (F.restartAt start)
+
+/-- Add one positive transition in front of an infinite continuation. -/
+def HistoryContinuation.prependStep {F : StochasticGameForm} {source : F.State}
+    (action : (player : F.Player) → F.Action player source) (target : F.State)
+    (positive : 0 < F.transition source action target)
+    (tail : HistoryContinuation F target) : HistoryContinuation F source where
+  state
+    | 0 => source
+    | time + 1 => tail.state time
+  action
+    | 0 => action
+    | time + 1 => tail.action time
+  starts := rfl
+  positive
+    | 0 => by
+        have hstarts : tail.state 0 = target := by
+          simpa [HistoryContinuation, StochasticGameForm.restartAt] using tail.starts
+        change 0 < F.transition source action (tail.state 0)
+        rw [hstarts]
+        exact positive
+    | time + 1 => by
+        change 0 < F.transition (tail.state time) (tail.action time)
+          (tail.state (time + 1))
+        exact tail.positive time
+
+/-- Prepend every edge of a possible finite history to a continuation from its terminal state. -/
+def HistoryTo.prependContinuation {F : StochasticGameForm} :
+    {state : F.State} → HistoryTo F state → HistoryContinuation F state → InfiniteHistory F
+  | _, .root, tail =>
+      { state := tail.state
+        action := tail.action
+        starts := tail.starts
+        positive := tail.positive }
+  | _, .snoc history action target positive, tail =>
+      history.prependContinuation (tail.prependStep action target positive)
+
+theorem HistoryTo.prependContinuation_state_add {F : StochasticGameForm} {state : F.State}
+    (history : HistoryTo F state) (tail : HistoryContinuation F state) (time : ℕ) :
+    (history.prependContinuation tail).state (history.length + time) = tail.state time := by
+  induction history generalizing time with
+  | root => simp [HistoryTo.length, HistoryTo.prependContinuation]
+  | @snoc source prior action target positive inductionHypothesis =>
+      simp only [HistoryTo.length, HistoryTo.prependContinuation]
+      rw [Nat.add_assoc, Nat.add_comm 1 time, ← Nat.add_assoc]
+      exact inductionHypothesis (tail.prependStep action target positive) (time + 1)
+
+theorem HistoryTo.prependContinuation_action_add {F : StochasticGameForm} {state : F.State}
+    (history : HistoryTo F state) (tail : HistoryContinuation F state) (time : ℕ) :
+    HEq ((history.prependContinuation tail).action (history.length + time))
+      (tail.action time) := by
+  induction history generalizing time with
+  | root =>
+      simp only [HistoryTo.length, HistoryTo.prependContinuation]
+      rw [Nat.zero_add]
+      rfl
+  | @snoc source prior action target positive inductionHypothesis =>
+      simp only [HistoryTo.length, HistoryTo.prependContinuation]
+      rw [Nat.add_assoc, Nat.add_comm 1 time, ← Nat.add_assoc]
+      exact inductionHypothesis (tail.prependStep action target positive) (time + 1)
+
+theorem InfiniteHistory.prefix_succ {F : StochasticGameForm} (path : InfiniteHistory F)
+    (time : ℕ) :
+    path.prefix (time + 1) =
+      (path.prefix time).snoc (path.action time) (path.state (time + 1))
+        (path.positive time) := by
+  rfl
+
+theorem InfiniteHistory.prefix_succ_eq_snoc {F : StochasticGameForm}
+    (path : InfiniteHistory F) (time : ℕ) {source target : F.State}
+    (history : HistoryTo F source)
+    (action : (player : F.Player) → F.Action player source)
+    (positive : 0 < F.transition source action target)
+    (hprefix : path.prefix time = ⟨source, history⟩)
+    (htarget : path.state (time + 1) = target)
+    (haction : HEq (path.action time) action) :
+    path.prefix (time + 1) = ⟨target, .snoc history action target positive⟩ := by
+  rw [path.prefix_succ time]
+  cases hprefix
+  cases htarget
+  cases haction
+  rfl
+
+theorem HistoryTo.prefix_prependContinuation {F : StochasticGameForm} {state : F.State}
+    (history : HistoryTo F state) (tail : HistoryContinuation F state) :
+    (history.prependContinuation tail).prefix history.length = ⟨state, history⟩ := by
+  induction history with
+  | root =>
+      apply Sigma.ext tail.starts
+      simp [InfiniteHistory.prefix, InfiniteHistory.prefixTo,
+        HistoryTo.prependContinuation, HistoryTo.length]
+  | @snoc source prior action target positive inductionHypothesis =>
+      rw [HistoryTo.length]
+      simp only [HistoryTo.prependContinuation]
+      apply InfiniteHistory.prefix_succ_eq_snoc
+      · exact inductionHypothesis (tail.prependStep action target positive)
+      · rw [prior.prependContinuation_state_add
+          (tail.prependStep action target positive) 1]
+        change tail.state 0 = target
+        simpa [HistoryContinuation, StochasticGameForm.restartAt] using tail.starts
+      · exact prior.prependContinuation_action_add
+          (tail.prependStep action target positive) 0
+
+/-- Prepend a possible finite history to a continuation from its terminal state. -/
+def FiniteHistory.prependContinuation {F : StochasticGameForm}
+    (history : FiniteHistory F) (tail : HistoryContinuation F history.terminal) :
+    InfiniteHistory F :=
+  history.2.prependContinuation tail
+
+theorem FiniteHistory.prefix_prependContinuation {F : StochasticGameForm}
+    (history : FiniteHistory F) (tail : HistoryContinuation F history.terminal) :
+    (history.prependContinuation tail).prefix history.length = history := by
+  rcases history with ⟨state, history⟩
+  exact history.prefix_prependContinuation tail
+
 /-- The exact-length finite observation of an infinite history. -/
 def InfiniteHistory.observedPrefix {F : StochasticGameForm}
     (n : ℕ) (path : InfiniteHistory F) : HistoryPrefix F n :=
@@ -457,6 +574,64 @@ theorem ae_historyTransitionKernel_extension (profile : Profile G)
   exact halmostSupport.mono (historyStepPMF_support_subset_extensions profile history)
 
 end HistoryStepKernel
+
+/-! ### Coherent possible-history streams -/
+
+/-- A stream of possible finite histories starting at a specified history. -/
+abbrev CoherentHistoryStream (G : NormalStochasticGame)
+    (start : FiniteHistory G.toStochasticGameForm) :=
+  {path : ℕ → FiniteHistory G.toStochasticGameForm //
+    path 0 = start ∧ ∀ time, IsHistoryExtension (path time) (path (time + 1))}
+
+/-- Chosen data witnessing one positive finite-history extension. -/
+structure HistoryExtensionData (G : NormalStochasticGame)
+    (first second : FiniteHistory G.toStochasticGameForm) where
+  action : JointActionAt G first
+  target : G.State
+  positive : 0 < G.transition first.terminal action target
+  next_eq : second = first.snoc action target positive
+
+noncomputable def IsHistoryExtension.data {G : NormalStochasticGame}
+    {first second : FiniteHistory G.toStochasticGameForm}
+    (extension : IsHistoryExtension first second) :
+    HistoryExtensionData G first second := by
+  let action := Classical.choose extension
+  let targetExistence := Classical.choose_spec extension
+  let target := Classical.choose targetExistence
+  let positiveExistence := Classical.choose_spec targetExistence
+  let positive := Classical.choose positiveExistence
+  let next_eq := Classical.choose_spec positiveExistence
+  exact ⟨action, target, positive, next_eq⟩
+
+noncomputable def CoherentHistoryStream.step {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm}
+    (stream : CoherentHistoryStream G start) (time : ℕ) :
+    HistoryExtensionData G (stream.1 time) (stream.1 (time + 1)) :=
+  (stream.property.2 time).data
+
+noncomputable def CoherentHistoryStream.toContinuation {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm}
+    (stream : CoherentHistoryStream G start) :
+    HistoryContinuation G.toStochasticGameForm start.terminal where
+  state time := (stream.1 time).terminal
+  action time := (stream.step time).action
+  starts := congrArg FiniteHistory.terminal stream.property.1
+  positive time := by
+    have hterminal := congrArg FiniteHistory.terminal (stream.step time).next_eq
+    rw [hterminal]
+    exact (stream.step time).positive
+
+noncomputable def CoherentHistoryStream.toInfiniteHistory {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm}
+    (stream : CoherentHistoryStream G start) :
+    InfiniteHistory G.toStochasticGameForm :=
+  start.prependContinuation stream.toContinuation
+
+theorem CoherentHistoryStream.toInfiniteHistory_mem_Cylinder {G : NormalStochasticGame}
+    {start : FiniteHistory G.toStochasticGameForm}
+    (stream : CoherentHistoryStream G start) :
+    stream.toInfiniteHistory ∈ Cylinder start := by
+  exact start.prefix_prependContinuation stream.toContinuation
 
 /--
 The induced-law data from Kolmogorov extension: every start law is a probability,

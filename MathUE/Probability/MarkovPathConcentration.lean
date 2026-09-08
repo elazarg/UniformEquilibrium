@@ -131,6 +131,97 @@ theorem supportedLaw_isProbability
   rw [Measure.map_apply measurable_subtype_coe MeasurableSet.univ] at huniv
   simpa using huniv
 
+section Started
+
+variable [MeasurableSingletonClass State]
+
+/-- A path starts at the displayed state. -/
+def StartsAt (start : State) (path : ℕ → State) : Prop :=
+  path 0 = start
+
+theorem measurableSet_startsAt (start : State) :
+    MeasurableSet {path : ℕ → State | StartsAt start path} := by
+  exact measurableSet_singleton start |>.preimage (measurable_pi_apply 0)
+
+theorem ae_startsAt
+    (transition : Kernel State State) [IsMarkovKernel transition]
+    (start : State) :
+    ∀ᵐ path ∂lawFrom transition start, StartsAt start path := by
+  have hprefix := Kernel.traj_map_frestrictLe_apply
+    (X := fun _ : ℕ => State) (κ := trajectoryKernel transition)
+    0 0 (initialPrefix start)
+  rw [Kernel.partialTraj_self, Kernel.id_apply] at hprefix
+  have hevent : {path : ℕ → State | StartsAt start path} =
+      Preorder.frestrictLe 0 ⁻¹'
+        ({initialPrefix start} : Set ((i : Finset.Iic 0) → State)) := by
+    ext path
+    simp only [Set.mem_setOf_eq, Set.mem_preimage, Set.mem_singleton_iff, StartsAt]
+    constructor
+    · intro hstart
+      funext index
+      have hindex : (index : ℕ) = 0 :=
+        Nat.eq_zero_of_le_zero (Finset.mem_Iic.mp index.property)
+      simpa [Preorder.frestrictLe, initialPrefix, hindex] using hstart
+    · intro hprefixValue
+      have hzero := congrFun hprefixValue ⟨0, Finset.mem_Iic.mpr le_rfl⟩
+      simpa [Preorder.frestrictLe, initialPrefix] using hzero
+  change ∀ᵐ path ∂lawFrom transition start,
+    path ∈ {path : ℕ → State | StartsAt start path}
+  rw [ae_mem_iff_measure_eq (measurableSet_startsAt start).nullMeasurableSet]
+  rw [hevent, ← Measure.map_apply (by fun_prop)
+    (measurableSet_singleton (initialPrefix start))]
+  rw [show lawFrom transition start =
+      Kernel.traj (trajectoryKernel transition) 0 (initialPrefix start) by rfl]
+  rw [hprefix]
+  simp
+
+/-- Paths that start at `start` and whose adjacent pairs all lie in `allowed`. -/
+abbrev SupportedPathFrom (allowed : Set (State × State)) (start : State) :=
+  {path : ℕ → State // StartsAt start path ∧ Follows allowed path}
+
+/-- The generated path law transported to the literal started-and-supported carrier. -/
+def supportedLawFrom
+    (transition : Kernel State State) [IsMarkovKernel transition]
+    (allowed : Set (State × State)) (start : State) :
+    Measure (SupportedPathFrom allowed start) :=
+  Measure.comap Subtype.val (lawFrom transition start)
+
+theorem map_supportedLawFrom
+    (transition : Kernel State State) [IsMarkovKernel transition]
+    (allowed : Set (State × State)) (hallowed : MeasurableSet allowed)
+    (hsupported : ∀ state, ∀ᵐ next ∂transition state, (state, next) ∈ allowed)
+    (start : State) :
+    (supportedLawFrom transition allowed start).map Subtype.val =
+      lawFrom transition start := by
+  have hcarrier : MeasurableSet
+      {path : ℕ → State | StartsAt start path ∧ Follows allowed path} :=
+    (measurableSet_startsAt start).inter (measurableSet_follows allowed hallowed)
+  unfold supportedLawFrom
+  calc
+    (Measure.comap Subtype.val (lawFrom transition start)).map Subtype.val =
+        (lawFrom transition start).restrict
+          {path | StartsAt start path ∧ Follows allowed path} := by
+      exact map_comap_subtype_coe hcarrier _
+    _ = lawFrom transition start := Measure.restrict_eq_self_of_ae_mem <| by
+      filter_upwards [ae_startsAt transition start,
+        ae_follows_of_transition transition allowed hallowed hsupported start] with
+        path hstart hfollows
+      exact ⟨hstart, hfollows⟩
+
+theorem supportedLawFrom_isProbability
+    (transition : Kernel State State) [IsMarkovKernel transition]
+    (allowed : Set (State × State)) (hallowed : MeasurableSet allowed)
+    (hsupported : ∀ state, ∀ᵐ next ∂transition state, (state, next) ∈ allowed)
+    (start : State) :
+    IsProbabilityMeasure (supportedLawFrom transition allowed start) := by
+  constructor
+  have hmap := map_supportedLawFrom transition allowed hallowed hsupported start
+  have huniv := congrArg (fun measure : Measure (ℕ → State) => measure Set.univ) hmap
+  rw [Measure.map_apply measurable_subtype_coe MeasurableSet.univ] at huniv
+  simpa using huniv
+
+end Started
+
 end
 
 end Math.MarkovPath

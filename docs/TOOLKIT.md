@@ -218,6 +218,18 @@ the finite-word exclusion hypothesis and the concentration bound below one;
 singleton signs are unrestricted. Root selection is exact and noncomputable;
 rational grid selection is a separate construction.
 
+`executableRationalGroupExclusionFirstWord_nash_and_length`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalGroupExclusionRates.lean`)
+constructs a rational first-hit word with complete terminal-deviation debt
+strictly below the requested accuracy. Its rational reciprocal envelope bounds the
+first phase by the ceiling of its explicit constant divided by accuracy;
+the same word has length at most that phase. Exclusion weights are used only
+in the correctness proof, not computed by the selector. The actual-profile
+and raw-calendar adapters are in
+`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWordSource.lean`.
+These results do not recognize the exclusion hypothesis or construct an
+exact infinite all-suffix equilibrium.
+
 `Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
 (`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
 hazard vector for paired affine equations from literal reward intervals.

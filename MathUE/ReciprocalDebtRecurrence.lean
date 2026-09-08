@@ -11,7 +11,8 @@ namespace Math
 /-- One quadratic-decrease step increases the reciprocal by the uniform
 amount obtained from an initial upper bound. -/
 theorem one_div_sub_one_div_ge_of_variable_quadratic_step
-    {base slope initial current next : ℝ}
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    {base slope initial current next : K}
     (hbase : 0 ≤ base) (hslope : 1 ≤ slope)
     (hinitial : current ≤ initial) (hcurrent : 0 < current)
     (hnext : 0 < next)
@@ -66,7 +67,8 @@ theorem one_div_sub_one_div_ge_of_variable_quadratic_step
 /-- Iterating the variable-denominator quadratic decrease gives the sharp
 reciprocal envelope. Zero values are handled without taking reciprocals. -/
 theorem sequence_le_reciprocal_of_variable_quadratic_step
-    (value : ℕ → ℝ) (base slope initial : ℝ)
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    (value : ℕ → K) (base slope initial : K)
     (hbase : 0 ≤ base) (hslope : 1 ≤ slope) (hinitial : 0 < initial)
     (hC : 0 < base + (slope - 1) * initial)
     (hzero : value 0 ≤ initial)

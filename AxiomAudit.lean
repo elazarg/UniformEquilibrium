@@ -600,14 +600,18 @@ import MathUE.Topology.FiniteLimitDecomposition
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
+import MathUE.Topology.KuhnEndpointSharedFaceOrientation
+import MathUE.Topology.KuhnInternalSharedFaceOrientation
 import MathUE.Topology.NestedOuterApproximation
 import MathUE.Topology.NonnegativeSubsequenceDichotomy
 import MathUE.Topology.OneSidedAffineLimit
 import MathUE.Topology.OneSidedDiniFencing
+import MathUE.Topology.OrientedSimplexFacetDeterminant
 import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.RectangularPoincareMiranda
+import MathUE.Topology.SignedSimplexLabelBoundary
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion
 import MathUE.Topology.SingleOuterApproximation
@@ -2277,6 +2281,8 @@ import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
 import UniformEquilibrium.Quitting.Paths.ExecutableRationalAuxiliaryRootDebtDrop
 import UniformEquilibrium.Quitting.Paths.ExecutableRationalCapThresholdBlock
+import UniformEquilibrium.Quitting.Paths.ExecutableRationalGroupExclusionRates
+import UniformEquilibrium.Quitting.Paths.ExecutableRationalGroupExclusionStep
 import UniformEquilibrium.Quitting.Paths.ExecutableRationalSelectedOwnerRates
 import UniformEquilibrium.Quitting.Paths.ExecutableRationalSelectedOwnerStep
 import UniformEquilibrium.Quitting.Paths.ExecutableRationalStrictDeficitRates
@@ -2326,6 +2332,7 @@ import UniformEquilibrium.Quitting.Paths.FiniteWordWeakSubsetSelection
 import UniformEquilibrium.Quitting.Paths.FirstStoppingCoalitionRelabel
 import UniformEquilibrium.Quitting.Paths.FirstStoppingOutcomeCoalition
 import UniformEquilibrium.Quitting.Paths.GroupExclusionFiniteWordRates
+import UniformEquilibrium.Quitting.Paths.GroupExclusionFiniteWordSource
 import UniformEquilibrium.Quitting.Paths.GroupExclusionFiniteWords
 import UniformEquilibrium.Quitting.Paths.HazardScaledResidualCompiler
 import UniformEquilibrium.Quitting.Paths.InfiniteJointSurvivalDebt

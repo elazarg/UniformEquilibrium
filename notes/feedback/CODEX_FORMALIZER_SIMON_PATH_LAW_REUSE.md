@@ -40,13 +40,19 @@ path subtype, and proves no exact cylinder restriction identity. It is not a pro
 
 ## Irreducible Simon adapters
 
+`ae_follows_of_transition` and `map_supportedLawFrom`
+(`MathUE/Probability/MarkovPathConcentration.lean`) supply the generic
+concentration step and exact map-back for the carrier with a prescribed
+initial state and allowed adjacent transitions. They reuse the trajectory
+and subtype-measure APIs above. The paper-specific `historyTransitionKernel`
+and `ae_historyTransitionKernel_extension` (`Literature/Simon2007.lean`)
+retain positive transition support in possible finite histories.
+
 The remaining paper-facing work is:
 
-1. form the joint-action PMF and bind the transition on its support;
-2. define the exact-history one-step kernel and show that it is concentrated on extension edges;
-3. specialize the generic coherent-carrier concentration theorem;
-4. identify coherent streams of accumulated histories with Simon's `InfiniteHistory`;
-5. compute cylinder masses and prove the exact restriction identity at every positive extension.
+1. specialize the generic coherent-carrier concentration theorem;
+2. identify coherent streams of accumulated histories with Simon's `InfiniteHistory`;
+3. compute cylinder masses and prove the exact restriction identity at every positive extension.
 
 Regularity is separate and already follows from the countable-observation topology once the
 probability law has been constructed.
