@@ -522,6 +522,8 @@ import MathUE.ProbabilityMassFunction.TotalVariation
 import MathUE.ProjectiveBellmanPacket
 import MathUE.RamifiedBinomialBranch
 import MathUE.RamifiedWeierstrass
+import MathUE.RealQuantifierElimination.AlgebraicEvaluation
+import MathUE.RealQuantifierElimination.AlgebraicWitnesses
 import MathUE.RealQuantifierElimination.CoefficientSignBranch
 import MathUE.RealQuantifierElimination.CoefficientSignBranchInvariants
 import MathUE.RealQuantifierElimination.CoefficientTrimming
@@ -2271,6 +2273,7 @@ import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffClosure
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffFormula
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffSemialgebraic
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPurePoints
+import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawAlgebraicRejectionWitnesses
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawGroupDecision
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawIsolatedRootDecision
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawParameterFormula
@@ -2528,6 +2531,7 @@ import UniformEquilibrium.Quitting.Root.PureTimeCapChild
 import UniformEquilibrium.Quitting.Root.PureTimeCapPrefixSelection
 import UniformEquilibrium.Quitting.Root.RationalApproximateQuittingRoot
 import UniformEquilibrium.Quitting.Root.RationalFiniteWordSemantics
+import UniformEquilibrium.Quitting.Root.RationalQuittingRootGridSelector
 import UniformEquilibrium.Quitting.Root.RationalReward
 import UniformEquilibrium.Quitting.Root.RenewedActualProfileDebtRecharge
 import UniformEquilibrium.Quitting.Root.RenewedLiteralExactWordSequence

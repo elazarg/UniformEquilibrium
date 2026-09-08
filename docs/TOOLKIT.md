@@ -338,6 +338,12 @@ positive rational accuracy and finite rational Boolean payoff table.
 positive player regrets of the selected product row by that accuracy.
 The search uses rational arithmetic and an explicit finite list; its
 success proof uses exact mixed-Nash existence and a rounding estimate.
+`rationalQuittingRootGridSelector_totalNashDefect_le`
+(`UniformEquilibrium/Quitting/Root/RationalQuittingRootGridSelector.lean`)
+packages that search result as a rational quitting root and bounds its
+actual total Nash defect at the supplied rational continuation payoff.
+Coordinate and total defect identities identify the rational acceptance
+quantity with the real game semantics.
 `quittingTerminalSemanticPair_rationalFiniteWord_eq_cast`
 (`UniformEquilibrium/Quitting/Root/RationalFiniteWordSemantics.lean`)
 identifies the executable rational payoff/cap fold with the complete
@@ -345,7 +351,7 @@ semantic pair of its actual finite root stack followed by Always Continue.
 The cap bounds all behavioral responses; its tail boundary is the maximum
 of zero and the owner's singleton payoff. Together these supply root search
 and exact finite-word evaluation. The complete rational cap-threshold
-selection algorithm still requires their selection and hazard adapters.
+selection algorithm still requires a threshold scan and hazard adapters.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -495,6 +501,11 @@ equivalence. `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawRejectionWitnes
 states the exact real-calendar rejection alternatives. For group exclusion,
 every admissible common weight has a counterprofile; the profile may depend
 on the weight. These are existence statements, not witness-extraction algorithms.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawAlgebraicRejectionWitnesses.lean`
+strengthens strict and weak-subset rejection for rational reward tables:
+the counterprofile can have algebraic coordinates. Weak rejection retains
+the alternative that a designated owner's singleton reward is negative.
+These theorems do not extract an encoded counterprofile.
 `exists_uniformEquilibriumPayoff_of_finFour_signFreeWeakSubsetExclusion`
 (`UniformEquilibrium/Diagnostics/Quitting/FinFourSignFreeWeakSubsetUniformPayoff.lean`)
 removes the singleton-sign condition for four players. Its assumption is

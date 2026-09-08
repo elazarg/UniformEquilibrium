@@ -111,6 +111,13 @@ proved. The game-specific predicate encodings remain separate adapters.
   (`MathUE/RealQuantifierElimination/QuantifierElimination.lean`) prove
   correctness of the actual full eliminator and closed rational decision
   procedure. Neither theorem takes a producer or eliminator as a hypothesis.
+- `PolynomialFormula.exists_isAlgebraic_environment_iff`
+  (`MathUE/RealQuantifierElimination/AlgebraicWitnesses.lean`) proves that
+  an inhabited first-order rational polynomial formula has a satisfying
+  environment with algebraic coordinates. Its one-variable theorem keeps
+  the supplied algebraic parameters fixed. The proof obtains algebraic
+  points in realized sign cells and iterates elimination; it proves
+  existence, not executable witness extraction.
 - `IsSemialgebraic` (`MathUE/Semialgebraic/Basic.lean`) describes ordinary
   finite Boolean combinations of signs of real-coefficient multivariate
   polynomials, with Boolean closure and coordinate pullbacks.
@@ -200,6 +207,12 @@ instantiates all three with certified isolated-root rewards. Their Boolean
 answers characterize the respective raw predicates at every denoted table,
 including one common group parameter before all calendars. They do not
 extract a calendar counterexample or a successful reciprocal parameter.
+For rational tables,
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawAlgebraicRejectionWitnesses.lean`
+proves that strict rejection has a genuine algebraic-coordinate calendar
+counterprofile. Weak-subset rejection either fails a singleton-sign condition
+or has such a counterprofile with strictly positive surplus at every
+designated owner. This existence result does not compute the profile.
 
 ## Endpoint and coefficient scope
 
