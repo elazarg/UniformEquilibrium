@@ -478,6 +478,12 @@ Only designated owners need nonnegative singleton rewards; other rewards may
 have either sign. The exclusion assumption itself implies that the designated
 set is nonempty. This qualitative consequence does not supply a finite-word
 selector for the signed case.
+`exists_uniformEquilibriumPayoff_of_finFour_signFreeWeakSubsetExclusion`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSignFreeWeakSubsetUniformPayoff.lean`)
+removes the singleton-sign condition for four players. Its assumption is
+literal actual-payoff exclusion on the designated set; a raw twenty-date
+form is also provided. It uses the four-player strict-minimum plateau and
+exact payoff projection, without transferring the plateau's response caps.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarPurePoints.lean` supplies
 literal All-Never and pure-coalition simplex points, with exact mass and payoff
 evaluations on any finite calendar. These evaluations do not preserve caps
@@ -511,7 +517,17 @@ proves correctness of executable strict-exclusion recognition for rational
 tables with a nonempty finite player set. The Boolean procedure universally
 quantifies every calendar coordinate and accepts exactly the canonical raw
 strict-exclusion predicate. It decides this sufficient condition, not
-uniform-equilibrium existence. Weak and group decision adapters remain open.
+uniform-equilibrium existence.
+`decideHasQuittingFiniteCalendarRawWeakSubsetExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawWeakSubsetDecision.lean`)
+provides rational weak-subset recognition, including its designated singleton
+sign condition and equality cases.
+`decideExistsQuittingFiniteCalendarRawGroupExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawGroupDecision.lean`)
+provides rational group-exclusion recognition. One positive pair weight is
+chosen before the universal calendar quantifier; the distinct player pair
+may vary with the calendar. Algebraic-input versions and parameter recovery
+algorithms remain separate work.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffFormula.lean` constructs
 executable rational expressions for coalition masses, payoffs, and singleton
 surpluses from supplied reward and calendar terms. Its simplex guard includes
@@ -1526,6 +1542,28 @@ For a positive stretch, equal positive debts force every supported directed
 gap to be zero or two.
 The comparison does not assume a global minimum; applying it to an actual
 minimum source still requires the original and final tables and their ordering.
+`membershipStretch_sameRoot_minimumEquality_and_supportedSaturation`
+(`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchMinimumEquality.lean`)
+supplies the global comparison when the final root attains a positive global
+minimum, both tables are unit-bounded, and the final infimum is at most the
+original one. Two sure quitters and supported coherent preferences are
+required. It first proves that the same root attains the original minimum,
+then obtains equal player debts and zero-or-two supported gaps. The worst-table
+source construction must still supply these hypotheses.
+`exists_supported_pureRoot_zeroDebt_of_saturatedGaps`
+(`UniformEquilibrium/Diagnostics/Quitting/SaturatedMembershipPureVertex.lean`)
+selects one supported deterministic root with zero full behavioral debt.
+It requires a sure opponent for each player, supported gaps in `{0,2}`, and
+total debt below two. This finite-player statement does not require Fin4
+or a minimum hypothesis. It selects a pure profile, not correlated play.
+`not_membershipStretch_coherent_positiveMinimum_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/InverseMembershipStretchExclusion.lean`)
+rules out supported coherent preferences at a four-player unpadded root
+with two sure quitters, under the same positive-minimum, unit-bound and
+infimum-ordering hypotheses. It derives the strict-half bound internally
+and constructs one supported pure root with zero full debt at both tables.
+The carrier entrance and the subsequent sign-reversal conclusions are
+separate from this root-level consumer.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and

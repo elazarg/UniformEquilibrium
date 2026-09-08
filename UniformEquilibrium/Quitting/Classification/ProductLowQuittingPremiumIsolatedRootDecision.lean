@@ -1,7 +1,6 @@
-import MathUE.RealQuantifierElimination.IsolatedRealRootParameters
 import MathUE.RealQuantifierElimination.QuantifierBlocks
 import UniformEquilibrium.Quitting.Classification.ProductLowQuittingPremiumFormula
-import UniformEquilibrium.Quitting.Root.RewardTableParameters
+import UniformEquilibrium.Quitting.Root.IsolatedRootRewardParameters
 
 /-! # Product-low decision for isolated-root reward entries -/
 
@@ -91,23 +90,6 @@ theorem isolatedRootProductLowParameterFormula_holdsAt_iff
       evalReal_isolatedRootProductLowPremiumTerm]
     rintro ⟨⟨hzero, hone⟩, hactive⟩
     exact hhazard hazard hzero hone hactive
-
-/-- An exact real-algebraic description for each reward-table entry. -/
-abbrev CertifiedIsolatedRootQuittingReward (players : Nat) :=
-  QuittingRewardTableVariable (Fin players) → CertifiedIsolatedRealRoot
-
-/-- A real reward table is denoted coordinatewise by the certified inputs. -/
-def CertifiedIsolatedRootQuittingReward.Denotes
-    (encoded : CertifiedIsolatedRootQuittingReward players)
-    (reward : {S : Finset (Fin players) // S.Nonempty} → Payoff (Fin players)) : Prop :=
-  ∀ terminal observer,
-    (encoded (terminal, observer)).data.RootWithin (reward terminal observer)
-
-/-- Enumerate certified reward entries in the same deterministic order as the formula. -/
-def certifiedIsolatedRootRewardParameters
-    (encoded : CertifiedIsolatedRootQuittingReward players) :
-    Fin (quittingRewardParameterCount players) → CertifiedIsolatedRealRoot :=
-  fun index => encoded ((quittingRewardTableVariableList players).get index)
 
 /-- Execute product-low recognition for a table of certified isolated roots. -/
 def decideHasProductLowQuittingPremiumAtIsolatedRoots

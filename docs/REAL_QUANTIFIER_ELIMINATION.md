@@ -154,7 +154,16 @@ the calendar quantifier.
 supplies executable strict-exclusion recognition for rational tables with
 nonempty player set. Its sentence universally closes the guarded finite-calendar
 payoff formula and has the canonical raw strict-exclusion semantics.
-The weak-subset and group-exclusion Boolean adapters remain to be supplied.
+`decideHasQuittingFiniteCalendarRawWeakSubsetExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawWeakSubsetDecision.lean`)
+gives the rational weak-subset decision adapter, retaining the singleton sign
+condition on the supplied owner set and accepting equality exactly.
+`decideExistsQuittingFiniteCalendarRawGroupExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawGroupDecision.lean`)
+gives the rational group-exclusion decision adapter. Its sentence chooses
+one positive parameter before quantifying all calendar coordinates; the
+ordered player pair is selected inside the calendar quantifier. These are
+class-recognition procedures, not uniform-equilibrium decision procedures.
 
 `IsolatedRealRootData.validate_eq_true_iff` and
 `decideAtIsolatedRoots_eq_true_iff_exists`
