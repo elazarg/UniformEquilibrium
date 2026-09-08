@@ -35,11 +35,12 @@ results and directly support arbitrary signed sums over the existing set:
 - `boxComplementarityLocalCompleteSimplices_eq_empty_of_no_vertex`;
 - `BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_cleared`.
 
-The immediate implementation is a signed local sum over that set, plus
-union/excision/cleared-collar consequences using these exact equalities and
-ordinary finite-sum theorems. A Research companion importing the prism owner
-avoids the cycle that would arise by importing prism labels into its existing
-local-count dependency. This stage does not stabilize the signed count in
+`boxComplementarityLocalSignedCount`
+(`Research/Topology/BoxComplementaritySignedLocalCount.lean`) sums the existing
+endpoint signed weight over that set. Its union, excision, and cleared-collar
+theorems use these exact equalities and ordinary finite-sum theorems. The
+companion imports the prism owner without introducing a cycle through its
+local-count dependency. These results do not stabilize the signed count in
 the mesh parameter.
 
 ## Required local restricted-prism source

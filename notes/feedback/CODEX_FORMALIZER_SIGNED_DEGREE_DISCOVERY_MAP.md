@@ -79,7 +79,9 @@ In `Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`:
   bijections in `MathUE/Topology/KuhnSimplexIncidence.lean`.
 - `boxComplementarityDiscretePrismLeftEndEquiv` and
   `boxComplementarityDiscretePrismRightEndEquiv` identify the actual endpoint
-  faces with endpoint simplices. Their orientation behavior is not yet proved.
+  faces with endpoint simplices.
+  `boxComplementarityDiscretePrismParameterEndEquiv_signedWeight` proves
+  preservation of their signed weights.
 - `boxComplementarityDiscretePrism_endpointParity_eq` equates endpoint counts
   on ONE common grid, in `ZMod 2`. It is not signed homotopy invariance.
 - `boxComplementarityDiscretePrism_endpointSignedWeight_eq` equates actual
@@ -146,10 +148,11 @@ proposition, not a hidden LCP-degree theorem.
 
 ## 2. Actual missing primitives, in dependency order
 
-1. **Signed finite count and orientation compatibility.** Choose a concrete
-   existing triangulation representation, attach actual integer local signs,
-   and prove interior-face cancellation plus endpoint orientation. The existing
-   even-incidence statements cannot distinguish equal from opposite signs.
+1. **Local restricted-prism comparison.** Integer cell weights, interior-face
+   cancellation, endpoint orientation, and local signed counts are available.
+   The missing source is uniform clearance of mixed-parameter prism faces near
+   an isolating frontier, followed by cancellation over the selected local
+   cells. Full-box endpoint equality does not supply this local comparison.
 2. **Subdivision/approximation independence.** Prove signed invariance under
    the actual refinements used, then that sufficiently close admissible
    approximations give the same integer. Generic fields asserting invariance
