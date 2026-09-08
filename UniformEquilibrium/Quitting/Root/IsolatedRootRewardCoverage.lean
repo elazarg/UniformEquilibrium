@@ -1,5 +1,5 @@
 import MathUE.RealQuantifierElimination.IsolatedRealRootCoverage
-import UniformEquilibrium.Quitting.Classification.ProductLowQuittingPremiumIsolatedRootDecision
+import UniformEquilibrium.Quitting.Root.IsolatedRootRewardParameters
 
 /-! # Coverage of isolated-root quitting reward inputs -/
 

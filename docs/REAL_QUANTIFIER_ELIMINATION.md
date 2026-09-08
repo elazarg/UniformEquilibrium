@@ -190,9 +190,16 @@ parameter maps; it has no quantifier-elimination dependency. Rational and
 algebraic decision share the expression frontend in
 `UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumFormula.lean`.
 `exists_certifiedIsolatedRootQuittingReward_of_isAlgebraic`
-(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootCoverage.lean`)
+(`UniformEquilibrium/Quitting/Root/IsolatedRootRewardCoverage.lean`)
 supplies a denoting encoding for every coordinatewise algebraic actual table;
 the same module proves that every certified input denotes a real table.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawParameterFormula.lean`
+gives strict, weak-subset, and group-exclusion formulas with free reward
+coordinates. `UniformEquilibrium/Quitting/Paths/FiniteCalendarRawIsolatedRootDecision.lean`
+instantiates all three with certified isolated-root rewards. Their Boolean
+answers characterize the respective raw predicates at every denoted table,
+including one common group parameter before all calendars. They do not
+extract a calendar counterexample or a successful reciprocal parameter.
 
 ## Endpoint and coefficient scope
 

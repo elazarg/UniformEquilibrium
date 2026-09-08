@@ -68,7 +68,7 @@ only rational polynomial coefficients and isolating intervals, not real
 comparisons. Both decision procedures share the same hazard-premium formula
 implementation.
 `exists_certifiedIsolatedRootQuittingReward_of_isAlgebraic`
-(`UniformEquilibrium/Quitting/Classification/ProductLowQuittingPremiumIsolatedRootCoverage.lean`)
+(`UniformEquilibrium/Quitting/Root/IsolatedRootRewardCoverage.lean`)
 proves that every coordinatewise algebraic table has such an encoding of
 that same table. The companion denotation theorem rules out vacuous inputs.
 Encoding existence is not an algorithm taking unencoded real numbers.
@@ -526,8 +526,15 @@ sign condition and equality cases.
 (`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawGroupDecision.lean`)
 provides rational group-exclusion recognition. One positive pair weight is
 chosen before the universal calendar quantifier; the distinct player pair
-may vary with the calendar. Algebraic-input versions and parameter recovery
-algorithms remain separate work.
+may vary with the calendar.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawParameterFormula.lean`
+retains the reward entries as free coordinates in all three formulas, with
+the same quantifier order and exact raw-predicate semantics.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawIsolatedRootDecision.lean`
+provides the three corresponding executable tests for certified algebraic
+reward entries. Each correctness theorem applies to every real table denoted
+by the input. Algebraic coverage is existential; no algorithm encodes an
+arbitrary unencoded real table. Parameter recovery remains separate work.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffFormula.lean` constructs
 executable rational expressions for coalition masses, payoffs, and singleton
 surpluses from supplied reward and calendar terms. Its simplex guard includes
@@ -1562,8 +1569,25 @@ rules out supported coherent preferences at a four-player unpadded root
 with two sure quitters, under the same positive-minimum, unit-bound and
 infimum-ordering hypotheses. It derives the strict-half bound internally
 and constructs one supported pure root with zero full debt at both tables.
-The carrier entrance and the subsequent sign-reversal conclusions are
-separate from this root-level consumer.
+`exists_twoSureRoot_with_supported_negativeGap_of_membershipStretch_carrierMinimum`
+(`UniformEquilibrium/Diagnostics/Quitting/InverseMembershipStretchCarrier.lean`)
+realizes a carrier minimum with zero Never and singleton masses by one
+two-sure root, preserving the entire payoff/cap pair and terminal law.
+Under the same table bounds and infimum ordering, every choice of preferred
+actions has a negative original gap on a supported draw.
+`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchSupportedReversal.lean`
+chooses averaged-best actions from the actual root endpoints. A negative
+supported original gap and positive final debts then force opposite strict
+supported gaps for one player at both tables. It does not construct the
+minimum source or require pointwise optimal actions.
+`exists_sureOwner_strictOptionalReversal_of_membershipStretch_positiveMinimum_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/ThreeSureMembershipReversal.lean`)
+specializes the actual minimum comparison to a root with three sure quitters.
+It forces the remaining player to mix strictly, and identifies a sure player
+whose Continue-minus-Quit gap has opposite strict signs at the two supported
+optional configurations, at both reward tables. The same input root is
+retained. This gives one reversing player, not the two opposed players
+required by the stronger three-sure continuation.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and

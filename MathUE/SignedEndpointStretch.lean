@@ -185,4 +185,55 @@ theorem signedEndpointGapStretch_eq_self_iff {alpha gap : ℝ}
       · linarith
       · linarith
 
+theorem signedEndpointGapStretch_pos_iff_of_abs_le_two {alpha gap : ℝ}
+    (halpha : 0 ≤ alpha) (hgap : |gap| ≤ 2) :
+    0 < signedEndpointGapStretch alpha gap ↔ 0 < gap := by
+  rcases abs_le.mp hgap with ⟨hlower, hupper⟩
+  rcases lt_trichotomy gap 0 with hnegative | rfl | hpositive
+  · have hexpand := le_signedEndpointGapStretch (gap := -gap)
+      halpha (by linarith) (by linarith)
+    rw [signedEndpointGapStretch_neg] at hexpand
+    have hstretched : signedEndpointGapStretch alpha gap < 0 := by linarith
+    exact iff_of_false (not_lt_of_gt hstretched) (not_lt_of_gt hnegative)
+  · simp
+  · exact iff_of_true
+      (hpositive.trans_le (le_signedEndpointGapStretch halpha hpositive.le hupper)) hpositive
+
+theorem signedEndpointGapStretch_neg_iff_of_abs_le_two {alpha gap : ℝ}
+    (halpha : 0 ≤ alpha) (hgap : |gap| ≤ 2) :
+    signedEndpointGapStretch alpha gap < 0 ↔ gap < 0 := by
+  have h := signedEndpointGapStretch_pos_iff_of_abs_le_two
+    (gap := -gap) halpha (by rwa [abs_neg])
+  rw [signedEndpointGapStretch_neg] at h
+  simpa only [neg_pos] using h
+
+theorem signedEndpointGapStretch_at_quarter_zero_one_two :
+    signedEndpointGapStretch ((1 : ℝ) / 4) 0 = 0 ∧
+      signedEndpointGapStretch ((1 : ℝ) / 4) 1 = (5 : ℝ) / 4 ∧
+      signedEndpointGapStretch ((1 : ℝ) / 4) 2 = 2 := by
+  norm_num [signedEndpointGapStretch]
+
+/-- A zero stretch fixes a strictly intermediate gap, so saturation needs positive stretch. -/
+theorem signedEndpointGapStretch_zero_fixes_nonsaturated_one :
+    signedEndpointGapStretch 0 1 = 1 ∧ (1 : ℝ) ≠ 0 ∧ (1 : ℝ) ≠ 2 := by
+  norm_num [signedEndpointGapStretch]
+
+/-- The supplied signed two-atom mean decreases despite its positive original value. -/
+theorem signedEndpointGapStretch_two_atom_signed_mean (alpha : ℝ) :
+    (2 : ℝ) / 5 * 2 + (3 : ℝ) / 5 * (-(1 : ℝ) / 2) = (1 : ℝ) / 2 ∧
+      (2 : ℝ) / 5 * signedEndpointGapStretch alpha 2 +
+        (3 : ℝ) / 5 * signedEndpointGapStretch alpha (-(1 : ℝ) / 2) =
+          (1 : ℝ) / 2 - 9 * alpha / 10 := by
+  constructor
+  · norm_num
+  · norm_num [signedEndpointGapStretch]
+    ring
+
+theorem signedEndpointGapStretch_two_atom_signed_mean_lt_original {alpha : ℝ}
+    (halpha : 0 < alpha) :
+    (2 : ℝ) / 5 * signedEndpointGapStretch alpha 2 +
+      (3 : ℝ) / 5 * signedEndpointGapStretch alpha (-(1 : ℝ) / 2) < (1 : ℝ) / 2 := by
+  rw [(signedEndpointGapStretch_two_atom_signed_mean alpha).2]
+  linarith
+
 end Math
