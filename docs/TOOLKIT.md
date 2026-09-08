@@ -189,6 +189,19 @@ finite-word deficit, without imposing singleton signs. Root selection is
 noncomputable exact Nash selection; no rational algorithm or exact infinite
 all-suffix equilibrium is asserted there.
 
+`executableRationalStrictDeficitFirstWord_nash_and_length`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalStrictDeficitRates.lean`)
+constructs rational words using approximate grid roots and a rational first-hit
+search. The same word has total terminal-deviation debt below the requested
+rational accuracy and length at most its selected phase. Its geometric debt
+envelope uses the existing ordered-field recurrence lemmas; real convergence
+is needed only in the termination proof. The exact source adapters in
+`UniformEquilibrium/Quitting/Paths/ExecutableRationalStrictDeficitSource.lean`
+restrict real finite-word or actual-profile deficit to the rational words,
+with one positive margin fixed before accuracy selection. No recognition
+algorithm for the source hypothesis or exact infinite all-suffix equilibrium
+is supplied.
+
 `HasQuittingFiniteWordNonconcentratedGroupExclusion`
 (`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWords.lean`)
 requires one fixed concentration bound and permits a different probability
@@ -368,8 +381,10 @@ combines the initial-low, solo-crossing, and auxiliary-root branches on the
 actual rational source word, with the same debt bound and a literal row bound.
 `UniformEquilibrium/Quitting/Paths/ExecutableRationalSelectedOwnerStep.lean`
 selects an owner from a designated finite set using the source payoff
-inequality, computes a strict preemptor, and supplies a common positive
-rational preemption floor. Only designated owners need preemption. The block
+inequality, computes a maximum-gap preemptor, and supplies a common positive
+rational preemption floor. The floor is literally the minimum, over designated
+owners, of their maximum blocker gaps. Blocker selection itself requires only
+the reward table and owner; only designated owners need preemption. The block
 then lowers actual total debt by `3*D²/(128*M + 24*D)`.
 `executableRationalSelectedOwnerFirstWord_debt_and_length_le`
 (`UniformEquilibrium/Quitting/Paths/ExecutableRationalSelectedOwnerRates.lean`)
@@ -379,6 +394,12 @@ an executable rational-ceiling phase bound, and a fixed-table logarithmic row
 bound using the common preemption floor. Real logarithms occur only in the
 proved row bound, not in the computation. This does not supply the separate
 reward-table-uniform accuracy-threshold algorithm.
+`executableRationalSelectedOwnerFirstWord_actualDebt_nash_and_length_le`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalWeakSubsetSelection.lean`)
+retains those same roots, phase and date bounds while proving their actual
+unrestricted terminal approximate-Nash guarantee. The module also transports
+real finite-word and actual-profile weak-subset hypotheses to the rational
+selector; it does not decide these hypotheses.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -693,6 +714,60 @@ threshold precedes both the discount and the fixed point. The proof handles
 signed rewards through the existing original-game punishment consumer;
 it requires neither normality nor an R0 or degree hypothesis. It does not
 construct the integer degree used in the remaining LCP argument.
+
+`isStandardLCPSolution_of_quittingDiscountedFixedPoint`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedR0Localization.lean`)
+rewrites every actual cube fixed point below the upper faces as a standard
+LCP for its own singleton matrix. The right-hand side uses the literal
+discounted-displacement remainder, and the slack is minus that displacement.
+The same module bounds hazard divided by discount from an R0 matrix
+hypothesis, a quadratic bound on that remainder, and a smallness condition.
+These source hypotheses are explicit; the algebraic rewrite does not prove
+them.
+`abs_quittingRootExpectedPayoff_sub_singletonExpansion_le`
+(`UniformEquilibrium/Quitting/Root/BernoulliExpectation.lean`)
+gives the actual root's quadratic singleton-expansion error, retaining
+separate tail and terminal-reward box constants. Its expectation identity
+uses the existing reward extension and the supplied root's hazards.
+
+`abs_quittingDiscountedSingletonRemainder_le`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedQuadraticRemainder.lean`)
+supplies the literal discounted remainder bound from the actual reward box:
+`4*M*(discount + totalHazard)²`, at every cube hazard and every nonnegative
+discount complement. No fixed-point, small-hazard, or equilibrium hypothesis
+is needed for this estimate. Its localization corollaries therefore need no
+supplied remainder certificate.
+`isR0Matrix_quittingSingletonMatrix_of_normal_of_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Classification/LCP/PunishmentNormalR0.lean`)
+proves the full original singleton matrix is R0 under all-player punishment
+normality and absence of an original uniform payoff.
+`quittingSingletonMatrix_sub_payoff`
+(`UniformEquilibrium/Quitting/Classification/LCP/QuittingRewardAdapter.lean`)
+proves invariance under playerwise terminal shifts. This matrix identity does
+not assert strategic equivalence when Never still pays zero.
+`finFour_auxiliaryDiscounted_fixedPoint_scaled_sum_lt_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourAuxiliaryDiscountedLocalization.lean`)
+supplies one positive radius and discount threshold controlling total hazard
+divided by discount, and every coordinate, for all actual auxiliary cube
+fixed points of a four-player table with no original uniform payoff. The same
+original-table contrary hypothesis supplies punishment normality and full R0;
+matrix shift invariance transfers R0 to the actual auxiliary table. No
+normality, remainder certificate, or selected fixed point is an input to this
+Fin4 conclusion. The generic quantitative theorem in
+`UniformEquilibrium/Quitting/Classification/AuxiliaryDiscountedQuantitativeLocalization.lean`
+retains R0 as an explicit premise. Neither theorem supplies signed integer
+degree.
+
+`hasFDerivAt_quittingDiscountedDisplacement_zero`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedAmbientDerivative.lean`)
+identifies the ambient derivative of the actual displacement from the cube
+remainder and uniqueness of derivatives on that full-dimensional cube.
+`tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`)
+then proves uniform convergence of minus displacement divided by discount
+to the singleton-matrix affine map on every fixed bounded set of signed
+scaled hazards. It needs no fixed-point or no-equilibrium premise. This
+supplies the ambient comparison, not integer degree or its invariance laws.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)

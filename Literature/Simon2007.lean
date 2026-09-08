@@ -1,4 +1,6 @@
 import Mathlib
+import MathUE.PMFProduct.Basic
+import MathUE.Topology.CountableObservation
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Probability.FinitePathLawAdapter
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -81,6 +83,7 @@ inductive HistoryTo (F : StochasticGameForm) : F.State → Type
   | snoc {s : F.State} (h : HistoryTo F s)
       (a : (n : F.Player) → F.Action n s) (t : F.State)
       (positive : 0 < F.transition s a t) : HistoryTo F t
+  deriving Countable
 
 /-- `H_ω` is the set of possible finite histories. -/
 abbrev FiniteHistory (F : StochasticGameForm) := (s : F.State) × HistoryTo F s
@@ -138,6 +141,126 @@ instance historyTopologicalSpace (F : StochasticGameForm) :
 instance historyMeasurableSpace (F : StochasticGameForm) :
     MeasurableSpace (InfiniteHistory F) :=
   MeasurableSpace.generateFrom {U | ∃ h : FiniteHistory F, U = Cylinder h}
+
+/-- Finite histories having exactly the displayed number of stages. -/
+abbrev HistoryPrefix (F : StochasticGameForm) (n : ℕ) :=
+  {history : FiniteHistory F // history.length = n}
+
+theorem InfiniteHistory.prefix_length {F : StochasticGameForm}
+    (path : InfiniteHistory F) (n : ℕ) : (path.prefix n).length = n := by
+  induction n with
+  | zero =>
+      change (path.starts.symm ▸ HistoryTo.root).length = 0
+      rw [HistoryTo.length_transport]
+      rfl
+  | succ n inductionHypothesis =>
+      simp only [InfiniteHistory.prefix, FiniteHistory.length,
+        InfiniteHistory.prefixTo, HistoryTo.length]
+      exact congrArg (fun length ↦ length + 1) inductionHypothesis
+
+/-- The exact-length finite observation of an infinite history. -/
+def InfiniteHistory.observedPrefix {F : StochasticGameForm}
+    (n : ℕ) (path : InfiniteHistory F) : HistoryPrefix F n :=
+  ⟨path.prefix n, path.prefix_length n⟩
+
+theorem countableObservation_cylinder_eq_Cylinder
+    {F : StochasticGameForm} (n : ℕ) (history : HistoryPrefix F n) :
+    Math.CountableObservation.cylinder (HistoryPrefix F)
+      InfiniteHistory.observedPrefix n history = Cylinder history := by
+  ext path
+  simp only [Math.CountableObservation.cylinder, InfiniteHistory.observedPrefix,
+    Cylinder, Set.mem_setOf_eq]
+  constructor
+  · intro heq
+    have hvalue := congrArg Subtype.val heq
+    simpa [history.property] using hvalue
+  · intro heq
+    apply Subtype.ext
+    simpa [history.property] using heq
+
+section Countable
+
+variable (F : StochasticGameForm)
+
+theorem historyTopologicalSpace_eq_countableObservation :
+    historyTopologicalSpace F =
+      Math.CountableObservation.topology (HistoryPrefix F) InfiniteHistory.observedPrefix := by
+  apply le_antisymm
+  · apply le_generateFrom
+    rintro set ⟨n, history, rfl⟩
+    rw [countableObservation_cylinder_eq_Cylinder]
+    exact TopologicalSpace.isOpen_generateFrom_of_mem ⟨history, rfl⟩
+  · apply le_generateFrom
+    rintro set ⟨history, rfl⟩
+    let value : HistoryPrefix F history.length := ⟨history, rfl⟩
+    have heq : Cylinder history =
+        Math.CountableObservation.cylinder (HistoryPrefix F) InfiniteHistory.observedPrefix
+          history.length value := by
+      exact (countableObservation_cylinder_eq_Cylinder
+        history.length value).symm
+    rw [heq]
+    exact TopologicalSpace.isOpen_generateFrom_of_mem
+      (Math.CountableObservation.cylinder_mem_cylinders
+        (HistoryPrefix F) InfiniteHistory.observedPrefix history.length value)
+
+theorem historyMeasurableSpace_eq_countableObservation :
+    historyMeasurableSpace F =
+      Math.CountableObservation.measurableSpace (HistoryPrefix F) InfiniteHistory.observedPrefix := by
+  apply le_antisymm
+  · apply MeasurableSpace.generateFrom_le
+    rintro set ⟨history, rfl⟩
+    let value : HistoryPrefix F history.length := ⟨history, rfl⟩
+    have heq : Cylinder history =
+        Math.CountableObservation.cylinder (HistoryPrefix F) InfiniteHistory.observedPrefix
+          history.length value := by
+      exact (countableObservation_cylinder_eq_Cylinder
+        history.length value).symm
+    rw [heq]
+    exact Math.CountableObservation.measurableSet_cylinder
+      (HistoryPrefix F) InfiniteHistory.observedPrefix history.length value
+  · apply MeasurableSpace.generateFrom_le
+    rintro set ⟨n, history, rfl⟩
+    rw [countableObservation_cylinder_eq_Cylinder]
+    exact MeasurableSpace.measurableSet_generateFrom ⟨history, rfl⟩
+
+theorem isOpen_Cylinder (history : FiniteHistory F) : IsOpen (Cylinder history) := by
+  let value : HistoryPrefix F history.length := ⟨history, rfl⟩
+  rw [historyTopologicalSpace_eq_countableObservation F,
+    ← countableObservation_cylinder_eq_Cylinder history.length value]
+  exact Math.CountableObservation.isOpen_cylinder
+    (HistoryPrefix F) InfiniteHistory.observedPrefix history.length value
+
+theorem isClosed_Cylinder (history : FiniteHistory F) : IsClosed (Cylinder history) := by
+  let value : HistoryPrefix F history.length := ⟨history, rfl⟩
+  rw [historyTopologicalSpace_eq_countableObservation F,
+    ← countableObservation_cylinder_eq_Cylinder history.length value]
+  exact Math.CountableObservation.isClosed_cylinder
+    (HistoryPrefix F) InfiniteHistory.observedPrefix history.length value
+
+theorem measurableSet_Cylinder (history : FiniteHistory F) :
+    MeasurableSet (Cylinder history) := by
+  let value : HistoryPrefix F history.length := ⟨history, rfl⟩
+  rw [historyMeasurableSpace_eq_countableObservation F,
+    ← countableObservation_cylinder_eq_Cylinder history.length value]
+  exact Math.CountableObservation.measurableSet_cylinder
+    (HistoryPrefix F) InfiniteHistory.observedPrefix history.length value
+
+instance secondCountableTopologyInfiniteHistory :
+    SecondCountableTopology (InfiniteHistory F) := by
+  rw [historyTopologicalSpace_eq_countableObservation F]
+  exact Math.CountableObservation.secondCountableTopology
+    (HistoryPrefix F) InfiniteHistory.observedPrefix
+
+theorem historyMeasurableSpace_eq_borel :
+    historyMeasurableSpace F =
+      @borel (InfiniteHistory F) (historyTopologicalSpace F) := by
+  rw [historyTopologicalSpace_eq_countableObservation F,
+    historyMeasurableSpace_eq_countableObservation F]
+  exact (Math.CountableObservation.borel_eq_measurableSpace
+    (HistoryPrefix F) InfiniteHistory.observedPrefix).symm
+
+end Countable
+
 
 /-- A Borel probability on the history space is a probability measure on its Borel sigma algebra. -/
 def IsHistoryBorelProbability (F : StochasticGameForm)
@@ -249,6 +372,91 @@ def RestartOneStepProbability (G : NormalStochasticGame) {s : G.State}
     (a : (n : G.Player) → G.Action n h.terminal) (t : G.State) : ℝ≥0∞ := by
   classical
   exact G.transition h.terminal a t * ∏ n, (profile n).play h (a n)
+
+/-! ### Exact finite-history transition kernel -/
+
+section HistoryStepKernel
+
+variable {G : NormalStochasticGame}
+
+/-- The joint action profile available at the terminal state of `history`. -/
+abbrev JointActionAt (G : NormalStochasticGame)
+    (history : FiniteHistory G.toStochasticGameForm) :=
+  (player : G.Player) → G.Action player history.terminal
+
+/-- The independent joint-action law prescribed by a behavioral profile at `history`. -/
+def jointActionPMF (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm) : PMF (JointActionAt G history) :=
+  Math.PMFProduct.pmfPi fun player => (profile player).play history
+
+@[simp] theorem jointActionPMF_apply (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm) (action : JointActionAt G history) :
+    jointActionPMF profile history action =
+      ∏ player, (profile player).play history (action player) :=
+  Math.PMFProduct.pmfPi_apply _ _
+
+/-- One possible finite history is a literal positive one-step extension of another. -/
+def IsHistoryExtension (first second : FiniteHistory G.toStochasticGameForm) : Prop :=
+  ∃ (action : JointActionAt G first) (target : G.State)
+      (positive : 0 < G.transition first.terminal action target),
+    second = first.snoc action target positive
+
+/-- One profile step on possible finite histories, retaining transition positivity in the output. -/
+def historyStepPMF (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm) :
+    PMF (FiniteHistory G.toStochasticGameForm) :=
+  (jointActionPMF profile history).bind fun action =>
+    (G.transition history.terminal action).bindOnSupport fun target htarget =>
+      let positive : 0 < G.transition history.terminal action target :=
+        ((G.transition history.terminal action).apply_pos_iff target).mpr htarget
+      PMF.pure (history.snoc action target positive)
+
+theorem historyStepPMF_support_subset_extensions (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm) :
+    (historyStepPMF profile history).support ⊆ {next | IsHistoryExtension history next} := by
+  intro next hnext
+  rw [historyStepPMF, PMF.mem_support_bind_iff] at hnext
+  obtain ⟨action, _haction, hnext⟩ := hnext
+  rw [PMF.mem_support_bindOnSupport_iff] at hnext
+  obtain ⟨target, htarget, hnext⟩ := hnext
+  rw [PMF.mem_support_pure_iff] at hnext
+  refine ⟨action, target,
+    ((G.transition history.terminal action).apply_pos_iff target).mpr htarget, ?_⟩
+  exact hnext
+
+instance finiteHistoryMeasurableSpace :
+    MeasurableSpace (FiniteHistory G.toStochasticGameForm) := ⊤
+
+/-- The finite-history PMF bundled as a measurable Markov kernel. -/
+def historyTransitionKernel (profile : Profile G) :
+    Kernel (FiniteHistory G.toStochasticGameForm) (FiniteHistory G.toStochasticGameForm) where
+  toFun history := (historyStepPMF profile history).toMeasure
+  measurable' := Measurable.of_discrete
+
+instance historyTransitionKernel_isMarkov (profile : Profile G) :
+    IsMarkovKernel (historyTransitionKernel profile) :=
+  ⟨fun history => PMF.toMeasure.isProbabilityMeasure (historyStepPMF profile history)⟩
+
+theorem measurableSet_historyExtensions :
+    MeasurableSet {pair : FiniteHistory G.toStochasticGameForm ×
+        FiniteHistory G.toStochasticGameForm | IsHistoryExtension pair.1 pair.2} :=
+  Set.countable_univ.mono (Set.subset_univ _) |>.measurableSet
+
+theorem ae_historyTransitionKernel_extension (profile : Profile G)
+    (history : FiniteHistory G.toStochasticGameForm) :
+    ∀ᵐ next ∂historyTransitionKernel profile history, IsHistoryExtension history next := by
+  let law := historyStepPMF profile history
+  letI : IsProbabilityMeasure law.toMeasure := PMF.toMeasure.isProbabilityMeasure law
+  have hsupportMeasurable : MeasurableSet law.support := law.support_countable.measurableSet
+  have halmostSupport : ∀ᵐ next ∂law.toMeasure, next ∈ law.support := by
+    rw [ae_mem_iff_measure_eq hsupportMeasurable.nullMeasurableSet]
+    calc
+      law.toMeasure law.support = 1 :=
+        (law.toMeasure_apply_eq_one_iff hsupportMeasurable).mpr Subset.rfl
+      _ = law.toMeasure Set.univ := measure_univ.symm
+  exact halmostSupport.mono (historyStepPMF_support_subset_extensions profile history)
+
+end HistoryStepKernel
 
 /--
 The induced-law data from Kolmogorov extension: every start law is a probability,

@@ -52,5 +52,16 @@ theorem quittingSingletonLCPFeasible_iff
         ∀ i, lam.val i * singletonLCPResidual (quittingSingletonMatrix reward) lam i = 0 :=
   Iff.rfl
 
+omit [Fintype ι] in
+/-- Playerwise terminal shifts cancel in every singleton comparison entry.
+This is a matrix identity, not strategic equivalence when Never remains zero. -/
+theorem quittingSingletonMatrix_sub_payoff
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (shift : Payoff ι) :
+    quittingSingletonMatrix (fun coalition player => reward coalition player - shift player) =
+      quittingSingletonMatrix reward := by
+  funext who owner
+  simp only [quittingSingletonMatrix]
+  ring
+
 end QuittingLCPClassification
 end GameTheory

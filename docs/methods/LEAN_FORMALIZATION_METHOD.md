@@ -59,6 +59,26 @@ direction first, provided its one-way scope is explicit.
 Stable auxiliary mathematics may be formalized independently when its
 statement does not freeze an unsettled strategic interface.
 
+## Discover before implementing
+
+Before starting a proof or declaring a library gap, search the existing
+project libraries and pinned dependencies for the result and its
+generalizations. Search by mathematical conclusion and underlying objects,
+not only the packet's terminology or a proposed declaration name.
+
+For each candidate, inspect its exact statement and imports. Compare
+quantifiers, hypotheses, source data, and conclusion with the obligation.
+Distinguish a missing theorem from a missing representation adapter or an
+unnecessarily specialized existing theorem. Record the relevant declaration
+names and the remaining difference in the task handoff.
+
+Reuse an existing proof through specialization or an adapter when possible.
+If one proof works over a broader scalar type or weaker assumptions,
+strengthen the canonical theorem and reuse it rather than copy its body into
+a parallel development. Before promotion, reconcile scratch proofs with
+results integrated while the task was running. Documentation and old gap
+reports are navigation aids, not evidence that a theorem is still missing.
+
 ## Interface discipline
 
 ### Add rather than rewrite speculatively
@@ -107,11 +127,13 @@ credible play.
 
 Each integration package records its focused build and umbrella build when imports
 change. Repository acceptance additionally requires the exhaustive generated
-`AxiomAudit` target: it imports every project-owned module and rejects every
-transitive axiom except `propext`, `Quot.sound`, and `Classical.choice`.
-Per-declaration `#print axioms` remains useful for diagnosis, but it is not a
-separate acceptance gate. “No `sorry` in the new file” is insufficient if the
-theorem does not compile or inherits a conjectural axiom.
+`AxiomAudit` target: it imports every `MathUE` and `UniformEquilibrium` module
+and rejects every transitive axiom except `propext`, `Quot.sound`, and
+`Classical.choice`. Other lanes are outside that audit; use `#print axioms`
+when reporting their declarations' axiom dependencies. Per-declaration
+checks also remain useful for diagnosis within production. “No `sorry` in
+the new file” is insufficient if the theorem does not compile or inherits a
+conjectural axiom.
 
 Preserve unrelated work and isolate refactors from mathematical translations.
 Use a stable committed base when the active tree is changing.

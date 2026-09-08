@@ -19,6 +19,24 @@ def rationalFiniteSourceDebt
   rationalQuittingSemanticDebtSum
     (rationalQuittingFiniteWordSemanticPair reward sourceRoots)
 
+/-- Every rational finite source has nonnegative unrestricted terminal debt. -/
+theorem rationalFiniteSourceDebt_nonneg
+    (reward : RationalQuittingReward players)
+    (roots : List (RationalQuittingRoot players)) :
+    0 ≤ rationalFiniteSourceDebt reward roots := by
+  let profile := quittingLiteralRootStackProfile
+    (rationalQuittingRewardToReal reward)
+    (roots.map RationalQuittingRoot.toPMF)
+    (quittingAlwaysContinueProfile (rationalQuittingRewardToReal reward))
+  have hnonnegative : 0 ≤ quittingTerminalSemanticDebtSum
+      (quittingTerminalSemanticPair
+        (rationalQuittingRewardToReal reward) profile) :=
+    Finset.sum_nonneg fun who _ =>
+      quittingTerminalDeviationDebt_nonneg
+        (rationalQuittingRewardToReal reward) profile who
+  rw [quittingTerminalSemanticDebtSum_rationalFiniteWord_eq_cast] at hnonnegative
+  exact_mod_cast hnonnegative
+
 /-- The cap-threshold scale `max(D,B_i-s_i)` at a rational finite source. -/
 def rationalFiniteSourceCapThresholdScale
     (reward : RationalQuittingReward players)

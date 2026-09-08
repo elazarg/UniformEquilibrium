@@ -58,59 +58,102 @@ theorem rationalQuittingFiniteWordExcludedOwnerOn_payoff_le
         (rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE roots) := by
   exact (Fin.find_spec (hWE roots)).2
 
-/-- Total executable blocker scan, using an excluded owner as harmless fallback
-outside the designated owner set. -/
+/-- The singleton-column preemption gap produced by a candidate blocker. -/
+def rationalQuittingOwnerPreemptionGap
+    (reward : RationalQuittingReward players)
+    (owner blocker : Fin players) : ℚ :=
+  reward (quittingSingletonTerminal blocker) blocker -
+    reward (quittingSingletonTerminal owner) blocker
+
+private theorem exists_rationalQuittingMaximumGapBlocker
+    (reward : RationalQuittingReward players) (owner : Fin players) :
+    ∃ blocker, ∀ candidate,
+      rationalQuittingOwnerPreemptionGap reward owner candidate ≤
+        rationalQuittingOwnerPreemptionGap reward owner blocker := by
+  obtain ⟨blocker, -, hmaximal⟩ := Finset.exists_max_image Finset.univ
+    (rationalQuittingOwnerPreemptionGap reward owner)
+    ⟨owner, Finset.mem_univ owner⟩
+  exact ⟨blocker, fun candidate => hmaximal candidate (Finset.mem_univ candidate)⟩
+
+/-- Executable maximum-gap blocker scan for any supplied owner. -/
 def rationalQuittingSelectedOwnerBlocker
     (reward : RationalQuittingReward players)
-    (owners : Finset (Fin players))
-    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
-    (hpreempted : RationalQuittingOwnersStrictPreempted reward owners)
     (owner : Fin players) : Fin players :=
-  if howner : owner ∈ owners then
-    Fin.find (fun blocker => 0 <
-      reward (quittingSingletonTerminal blocker) blocker -
-        reward (quittingSingletonTerminal owner) blocker)
-      (hpreempted owner howner)
-  else rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE []
+  Fin.find (fun blocker => ∀ candidate,
+    rationalQuittingOwnerPreemptionGap reward owner candidate ≤
+      rationalQuittingOwnerPreemptionGap reward owner blocker)
+    (exists_rationalQuittingMaximumGapBlocker reward owner)
+
+theorem rationalQuittingSelectedOwnerBlocker_maximizes
+    (reward : RationalQuittingReward players)
+    (owner candidate : Fin players) :
+    rationalQuittingOwnerPreemptionGap reward owner candidate ≤
+      rationalQuittingOwnerPreemptionGap reward owner
+        (rationalQuittingSelectedOwnerBlocker reward owner) := by
+  exact Fin.find_spec
+    (exists_rationalQuittingMaximumGapBlocker reward owner) candidate
 
 theorem rationalQuittingSelectedOwnerBlocker_spec
     (reward : RationalQuittingReward players)
     (owners : Finset (Fin players))
-    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
     (hpreempted : RationalQuittingOwnersStrictPreempted reward owners)
     (owner : Fin players) (howner : owner ∈ owners) :
     0 < reward (quittingSingletonTerminal
-          (rationalQuittingSelectedOwnerBlocker
-            reward owners hWE hpreempted owner))
-        (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner) -
+          (rationalQuittingSelectedOwnerBlocker reward owner))
+        (rationalQuittingSelectedOwnerBlocker reward owner) -
       reward (quittingSingletonTerminal owner)
-        (rationalQuittingSelectedOwnerBlocker
-          reward owners hWE hpreempted owner) := by
-  rw [rationalQuittingSelectedOwnerBlocker, dif_pos howner]
-  exact Fin.find_spec (hpreempted owner howner)
+        (rationalQuittingSelectedOwnerBlocker reward owner) := by
+  obtain ⟨blocker, hpositive⟩ := hpreempted owner howner
+  exact hpositive.trans_le
+    (rationalQuittingSelectedOwnerBlocker_maximizes reward owner blocker)
+
+/-- The maximum singleton-column gap for one owner. -/
+def rationalQuittingOwnerMaximumPreemptionGap
+    (reward : RationalQuittingReward players) (owner : Fin players) : ℚ :=
+  let gaps := Finset.univ.image
+    (rationalQuittingOwnerPreemptionGap reward owner)
+  gaps.max' (Finset.image_nonempty.mpr ⟨owner, Finset.mem_univ owner⟩)
+
+theorem rationalQuittingSelectedOwnerBlocker_gap_eq_maximum
+    (reward : RationalQuittingReward players) (owner : Fin players) :
+    rationalQuittingOwnerPreemptionGap reward owner
+        (rationalQuittingSelectedOwnerBlocker reward owner) =
+      rationalQuittingOwnerMaximumPreemptionGap reward owner := by
+  unfold rationalQuittingOwnerMaximumPreemptionGap
+  apply le_antisymm
+  · apply Finset.le_max'
+    exact Finset.mem_image.mpr ⟨
+      rationalQuittingSelectedOwnerBlocker reward owner,
+      Finset.mem_univ _, rfl⟩
+  · apply Finset.max'_le
+    intro gap hgap
+    obtain ⟨candidate, -, rfl⟩ := Finset.mem_image.mp hgap
+    exact rationalQuittingSelectedOwnerBlocker_maximizes reward owner candidate
 
 /-- The rational gap attached to the executable blocker of one owner. -/
 def rationalQuittingSelectedOwnerGap
     (reward : RationalQuittingReward players)
-    (owners : Finset (Fin players))
-    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
-    (hpreempted : RationalQuittingOwnersStrictPreempted reward owners)
     (owner : Fin players) : ℚ :=
   reward (quittingSingletonTerminal
-      (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner))
-    (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner) -
+      (rationalQuittingSelectedOwnerBlocker reward owner))
+    (rationalQuittingSelectedOwnerBlocker reward owner) -
   reward (quittingSingletonTerminal owner)
-    (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner)
+    (rationalQuittingSelectedOwnerBlocker reward owner)
 
-/-- One fixed positive rational floor for all designated-owner preemption
+theorem rationalQuittingSelectedOwnerGap_eq_maximum
+    (reward : RationalQuittingReward players) (owner : Fin players) :
+    rationalQuittingSelectedOwnerGap reward owner =
+      rationalQuittingOwnerMaximumPreemptionGap reward owner := by
+  exact rationalQuittingSelectedOwnerBlocker_gap_eq_maximum reward owner
+
+/-- One fixed rational floor for all designated-owner preemption
 gaps. -/
 def rationalQuittingSelectedOwnerPreemptionFloor
     (reward : RationalQuittingReward players)
     (owners : Finset (Fin players))
-    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
-    (hpreempted : RationalQuittingOwnersStrictPreempted reward owners) : ℚ :=
+    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners) : ℚ :=
   let gaps := owners.image
-    (rationalQuittingSelectedOwnerGap reward owners hWE hpreempted)
+    (rationalQuittingOwnerMaximumPreemptionGap reward)
   gaps.min' (by
     obtain ⟨owner, howner, -⟩ := hWE []
     exact Finset.image_nonempty.mpr ⟨owner, howner⟩)
@@ -121,9 +164,9 @@ theorem rationalQuittingSelectedOwnerPreemptionFloor_pos
     (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
     (hpreempted : RationalQuittingOwnersStrictPreempted reward owners) :
     0 < rationalQuittingSelectedOwnerPreemptionFloor
-      reward owners hWE hpreempted := by
+      reward owners hWE := by
   let gaps := owners.image
-    (rationalQuittingSelectedOwnerGap reward owners hWE hpreempted)
+    (rationalQuittingOwnerMaximumPreemptionGap reward)
   let hnonempty : gaps.Nonempty := by
     obtain ⟨owner, howner, -⟩ := hWE []
     exact Finset.image_nonempty.mpr ⟨owner, howner⟩
@@ -132,19 +175,34 @@ theorem rationalQuittingSelectedOwnerPreemptionFloor_pos
   obtain ⟨owner, howner, hgap⟩ := hmem
   change 0 < gaps.min' hnonempty
   rw [← hgap]
+  rw [← rationalQuittingSelectedOwnerGap_eq_maximum]
   exact rationalQuittingSelectedOwnerBlocker_spec
-    reward owners hWE hpreempted owner howner
+      reward owners hpreempted owner howner
 
 theorem rationalQuittingSelectedOwnerPreemptionFloor_le
     (reward : RationalQuittingReward players)
     (owners : Finset (Fin players))
     (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners)
-    (hpreempted : RationalQuittingOwnersStrictPreempted reward owners)
     (owner : Fin players) (howner : owner ∈ owners) :
-    rationalQuittingSelectedOwnerPreemptionFloor reward owners hWE hpreempted ≤
-      rationalQuittingSelectedOwnerGap reward owners hWE hpreempted owner := by
+    rationalQuittingSelectedOwnerPreemptionFloor reward owners hWE ≤
+      rationalQuittingSelectedOwnerGap reward owner := by
+  rw [rationalQuittingSelectedOwnerGap_eq_maximum]
   apply Finset.min'_le
   exact Finset.mem_image.mpr ⟨owner, howner, rfl⟩
+
+/-- The common floor is literally the minimum over designated owners of their
+maximum blocker gaps, as in the quantitative packet. -/
+theorem rationalQuittingSelectedOwnerPreemptionFloor_eq_minimumMaximum
+    (reward : RationalQuittingReward players)
+    (owners : Finset (Fin players))
+    (hWE : RationalQuittingFiniteWordOwnerExclusionOn reward owners) :
+    rationalQuittingSelectedOwnerPreemptionFloor reward owners hWE =
+      let maximumGaps := owners.image
+        (rationalQuittingOwnerMaximumPreemptionGap reward)
+      maximumGaps.min' (by
+        obtain ⟨owner, howner, -⟩ := hWE []
+        exact Finset.image_nonempty.mpr ⟨owner, howner⟩) := by
+  rfl
 
 private theorem rationalFiniteWord_coordinateDebt_nonneg_on
     (reward : RationalQuittingReward players)
@@ -194,10 +252,9 @@ def executableRationalSelectedOwnerDebtBlock
     List (RationalQuittingRoot players) :=
   if hpositive : 0 < rationalFiniteSourceDebt reward roots then
     let owner := rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE roots
-    let blocker := rationalQuittingSelectedOwnerBlocker
-      reward owners hWE hpreempted owner
+    let blocker := rationalQuittingSelectedOwnerBlocker reward owner
     executableRationalCapThresholdBlock reward roots owner blocker M hM hreward
-      hpositive (rationalQuittingSelectedOwnerBlocker_spec reward owners hWE hpreempted
+      hpositive (rationalQuittingSelectedOwnerBlocker_spec reward owners hpreempted
         owner (rationalQuittingFiniteWordExcludedOwnerOn_mem reward owners hWE roots))
   else []
 
@@ -217,10 +274,10 @@ theorem executableRationalSelectedOwnerDebtBlock_length_le
       1 + quittingSoloCapThresholdHorizon (M : ℝ)
         ((rationalFiniteSourceDebt reward roots /
           (32 * (M + rationalFiniteSourceDebt reward roots)) : ℚ) : ℝ)
-        ((rationalQuittingSelectedOwnerGap reward owners hWE hpreempted
+        ((rationalQuittingSelectedOwnerGap reward
           (rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE roots) : ℚ) : ℝ) := by
   let owner := rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE roots
-  let blocker := rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner
+  let blocker := rationalQuittingSelectedOwnerBlocker reward owner
   have howner := rationalQuittingFiniteWordExcludedOwnerOn_payoff_le
     reward owners hWE roots
   have hmargin := rationalFiniteWord_selectedOwnerMargin_le_debt_on
@@ -230,7 +287,7 @@ theorem executableRationalSelectedOwnerDebtBlock_length_le
   have hblock :=
     (executableRationalCapThresholdBlock_length_and_debtSum_le
       reward roots owner blocker M hM hreward hpositive
-        (rationalQuittingSelectedOwnerBlocker_spec reward owners hWE hpreempted
+        (rationalQuittingSelectedOwnerBlocker_spec reward owners hpreempted
           owner (rationalQuittingFiniteWordExcludedOwnerOn_mem
             reward owners hWE roots))).1
   rw [hscale] at hblock
@@ -255,7 +312,7 @@ theorem executableRationalSelectedOwnerDebtBlock_debtSum_le
         3 * rationalFiniteSourceDebt reward roots ^ 2 /
           (128 * M + 24 * rationalFiniteSourceDebt reward roots) := by
   let owner := rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE roots
-  let blocker := rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner
+  let blocker := rationalQuittingSelectedOwnerBlocker reward owner
   have howner := rationalQuittingFiniteWordExcludedOwnerOn_payoff_le
     reward owners hWE roots
   have hmargin := rationalFiniteWord_selectedOwnerMargin_le_debt_on
@@ -265,7 +322,7 @@ theorem executableRationalSelectedOwnerDebtBlock_debtSum_le
   have hblock :=
     (executableRationalCapThresholdBlock_length_and_debtSum_le
       reward roots owner blocker M hM hreward hpositive
-        (rationalQuittingSelectedOwnerBlocker_spec reward owners hWE hpreempted
+        (rationalQuittingSelectedOwnerBlocker_spec reward owners hpreempted
           owner (rationalQuittingFiniteWordExcludedOwnerOn_mem
             reward owners hWE roots))).2
   rw [hscale] at hblock
@@ -274,14 +331,14 @@ theorem executableRationalSelectedOwnerDebtBlock_debtSum_le
       (rationalQuittingFiniteWordSemanticPair reward
         (executableRationalCapThresholdBlock reward roots owner blocker M hM hreward
           hpositive (rationalQuittingSelectedOwnerBlocker_spec
-            reward owners hWE hpreempted owner
+            reward owners hpreempted owner
               (rationalQuittingFiniteWordExcludedOwnerOn_mem
                 reward owners hWE roots)) ++ roots)) ≤ _
   have hblock' :
       ((rationalFiniteSourceDebt reward
         (executableRationalCapThresholdBlock reward roots owner blocker M hM hreward
           hpositive (rationalQuittingSelectedOwnerBlocker_spec
-            reward owners hWE hpreempted owner
+            reward owners hpreempted owner
               (rationalQuittingFiniteWordExcludedOwnerOn_mem
                 reward owners hWE roots)) ++ roots) : ℚ) : ℝ) ≤
         ((rationalFiniteSourceDebt reward roots -

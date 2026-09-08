@@ -441,6 +441,7 @@ import MathUE.Probability.IntegratedResponseLedger
 import MathUE.Probability.KakutaniProductDichotomy
 import MathUE.Probability.KilledTailPotential
 import MathUE.Probability.MarkovOccupation
+import MathUE.Probability.MarkovPathConcentration
 import MathUE.Probability.MarkovStateElimination
 import MathUE.Probability.MarkovStateEliminationChronology
 import MathUE.Probability.PivotExcursionRenewal
@@ -541,6 +542,8 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
+import MathUE.Topology.CountableObservation
+import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence

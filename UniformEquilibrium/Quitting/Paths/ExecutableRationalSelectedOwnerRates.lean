@@ -79,19 +79,9 @@ theorem executableRationalSelectedOwnerDebt_nonneg
     (phase : ℕ) :
     0 ≤ executableRationalSelectedOwnerDebt
       reward owners hWE hpreempted M hM hreward phase := by
-  let roots := executableRationalSelectedOwnerWords
-    reward owners hWE hpreempted M hM hreward phase
-  let profile := quittingLiteralRootStackProfile
-    (rationalQuittingRewardToReal reward)
-    (roots.map RationalQuittingRoot.toPMF)
-    (quittingAlwaysContinueProfile (rationalQuittingRewardToReal reward))
-  have hnonnegative : 0 ≤ quittingTerminalSemanticDebtSum
-      (quittingTerminalSemanticPair (rationalQuittingRewardToReal reward) profile) := by
-    exact Finset.sum_nonneg fun who _ =>
-      quittingTerminalSemanticDebt_nonneg_of_attainable
-        (rationalQuittingRewardToReal reward) ⟨profile, rfl⟩ who
-  rw [quittingTerminalSemanticDebtSum_rationalFiniteWord_eq_cast] at hnonnegative
-  exact_mod_cast hnonnegative
+  simpa only [executableRationalSelectedOwnerDebt] using
+    rationalFiniteSourceDebt_nonneg reward
+      (executableRationalSelectedOwnerWords reward owners hWE hpreempted M hM hreward phase)
 
 theorem executableRationalSelectedOwnerDebt_step_of_pos
     (reward : RationalQuittingReward players)
@@ -344,16 +334,16 @@ theorem executableRationalSelectedOwnerDebtBlock_length_le_uniform
       executableRationalSelectedOwnerUniformPhaseRowBound
         (M : ℝ) (initial : ℝ) (ε : ℝ)
           (rationalQuittingSelectedOwnerPreemptionFloor
-            reward owners hWE hpreempted : ℝ) := by
+            reward owners hWE : ℝ) := by
   dsimp only
   let debt := executableRationalSelectedOwnerDebt
     reward owners hWE hpreempted M hM hreward
   let old := executableRationalSelectedOwnerWords
     reward owners hWE hpreempted M hM hreward phase
   let owner := rationalQuittingFiniteWordExcludedOwnerOn reward owners hWE old
-  let ell := rationalQuittingSelectedOwnerGap reward owners hWE hpreempted owner
+  let ell := rationalQuittingSelectedOwnerGap reward owner
   let gap := rationalQuittingSelectedOwnerPreemptionFloor
-    reward owners hWE hpreempted
+    reward owners hWE
   have hD : 0 < debt phase := hε.trans habove
   have hlength := executableRationalSelectedOwnerDebtBlock_length_le
     reward owners hWE hpreempted old M hM hreward hD
@@ -363,20 +353,20 @@ theorem executableRationalSelectedOwnerDebtBlock_length_le_uniform
   have hownerMem := rationalQuittingFiniteWordExcludedOwnerOn_mem
     reward owners hWE old
   have hell : 0 < ell := rationalQuittingSelectedOwnerBlocker_spec
-    reward owners hWE hpreempted owner hownerMem
+    reward owners hpreempted owner hownerMem
   have hgapLeEll : gap ≤ ell :=
     rationalQuittingSelectedOwnerPreemptionFloor_le
-      reward owners hWE hpreempted owner hownerMem
+      reward owners hWE owner hownerMem
   have hgap : 0 < gap :=
     rationalQuittingSelectedOwnerPreemptionFloor_pos
       reward owners hWE hpreempted
   have hleftUpper :
       reward (quittingSingletonTerminal
-          (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner))
-        (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner) ≤ M :=
+          (rationalQuittingSelectedOwnerBlocker reward owner))
+        (rationalQuittingSelectedOwnerBlocker reward owner) ≤ M :=
     (le_abs_self _).trans (hreward _ _)
   have hrightLower : -M ≤ reward (quittingSingletonTerminal owner)
-      (rationalQuittingSelectedOwnerBlocker reward owners hWE hpreempted owner) :=
+      (rationalQuittingSelectedOwnerBlocker reward owner) :=
     neg_le_of_abs_le (hreward _ _)
   have hellUpper : ell ≤ 2 * M := by
     dsimp only [ell, rationalQuittingSelectedOwnerGap]
@@ -445,7 +435,7 @@ theorem executableRationalSelectedOwnerFirstWord_debt_and_length_le
       roots.length ≤ phase * executableRationalSelectedOwnerUniformPhaseRowBound
         (M : ℝ) (initial : ℝ) (ε : ℝ)
           (rationalQuittingSelectedOwnerPreemptionFloor
-            reward owners hWE hpreempted : ℝ) := by
+            reward owners hWE : ℝ) := by
   dsimp only
   let debt := executableRationalSelectedOwnerDebt
     reward owners hWE hpreempted M hM hreward
@@ -455,7 +445,7 @@ theorem executableRationalSelectedOwnerFirstWord_debt_and_length_le
     reward owners hWE hpreempted M hM hreward ε hε
   let rowBound := executableRationalSelectedOwnerUniformPhaseRowBound
     (M : ℝ) (debt 0 : ℝ) (ε : ℝ)
-      (rationalQuittingSelectedOwnerPreemptionFloor reward owners hWE hpreempted : ℝ)
+      (rationalQuittingSelectedOwnerPreemptionFloor reward owners hWE : ℝ)
   have hhit := executableRationalSelectedOwnerFirstPhase_spec
     reward owners hWE hpreempted M hM hreward ε hε
   have hphaseLe := executableRationalSelectedOwnerFirstPhase_le

@@ -1,8 +1,9 @@
 # Auxiliary discounted localization: available source construction
 
 This formalizer feedback records the completed source construction needed
-before the integer-LCP-degree argument. The declarations apply to arbitrary
-finite player types, not only four players. They formalize the discounted
+before the integer-LCP-degree argument. The generic constructions apply to
+arbitrary finite player types; the four-player corollary below discharges
+their R0 premise. They formalize the discounted
 source argument; they do not construct an integer degree or prove the
 remaining LCP criterion.
 
@@ -43,11 +44,42 @@ has total hazard below the tolerance. The threshold is chosen before both
 the discount and the fixed point. This is not a convergence theorem for
 only one selected family.
 
-The theorem requires neither an R0 matrix hypothesis nor integer degree.
-The next degree-packet obligations remain separate: the actual small-root
-LCP rewrite and quantitative scaling bound, followed by the integer-degree
-construction and its consumer. The existing parity machinery is not a
-substitute for integer degree.
+The unscaled theorem requires neither an R0 matrix hypothesis nor integer
+degree.
+
+## Four-player scaled control
+
+`finFour_auxiliaryDiscounted_fixedPoint_scaled_sum_lt_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourAuxiliaryDiscountedLocalization.lean`)
+also bounds total hazard divided by discount, uniformly over all actual
+auxiliary cube fixed points at sufficiently small positive discounts. One
+positive radius and threshold precede both discount and root. The only
+substantive premise is absence of an original four-player uniform payoff.
+
+The construction obtains original punishment normality from the existing
+four-player hard residual, excludes homogeneous singleton solutions to get
+full R0, and transfers that matrix property to the actual auxiliary reward
+by terminal-shift cancellation. It uses no auxiliary strategic-equivalence
+claim. The actual displacement supplies the exact perturbed LCP, while
+`abs_quittingDiscountedSingletonRemainder_le`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedQuadraticRemainder.lean`)
+supplies its quadratic remainder bound from the same reward table.
+
+`hasFDerivAt_quittingDiscountedDisplacement_zero`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedAmbientDerivative.lean`)
+identifies the ambient derivative of the same literal displacement.
+`tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`)
+proves convergence of minus displacement divided by discount to the
+singleton-matrix affine map, uniformly on every fixed bounded signed set.
+The actual polynomial's ambient differentiability and uniqueness of the
+derivative within the full-dimensional cube justify this comparison; the
+probabilistic remainder inequality is not asserted outside the cube.
+
+The remaining construction is integer degree with the required invariance
+and excision laws. The existing parity
+machinery is not a substitute for integer degree. See the bounded discovery
+map in [CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md](CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md).
 
 ## Verification scope
 

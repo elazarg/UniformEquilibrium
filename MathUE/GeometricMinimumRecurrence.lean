@@ -9,7 +9,8 @@ namespace Math
 /-- A quantity bounded by its initial value controls its own capped minimum
 from below. -/
 theorem scaled_le_min_of_le_initial
-    {current initial threshold : ℝ}
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    {current initial threshold : K}
     (hcurrent : 0 ≤ current) (hbound : current ≤ initial)
     (hthreshold : 0 ≤ threshold) (hinitial : threshold ≤ initial) :
     threshold * current / initial ≤ min current threshold := by
@@ -30,7 +31,8 @@ theorem scaled_le_min_of_le_initial
 /-- Iterating a nonnegative multiplicative contraction gives its literal
 geometric envelope. -/
 theorem sequence_le_geometric_of_step
-    (value : ℕ → ℝ) (initial ratio : ℝ)
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    (value : ℕ → K) (initial ratio : K)
     (hratio : 0 ≤ ratio) (hzero : value 0 ≤ initial)
     (hstep : ∀ time, value (time + 1) ≤ ratio * value time) :
     ∀ time, value time ≤ ratio ^ time * initial := by

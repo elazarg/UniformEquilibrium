@@ -3960,19 +3960,18 @@ in the live mathematical ledger.
   approximate-equilibrium family with a checked target-free uniform-payoff
   consumer.
 
-  The checked Literature theorem
-  `theorem3_4_of_prioritizedAndSummablePortClosures` therefore composes
-  consumers for exactly the prioritized corrected-pointwise residual and
-  the summable-port residual into the literal S.1/S.2/S.3 conclusion. A
-  branch-classification consumer for the retained uniform phantom would
-  discharge the latter, but none is known. On the prioritized side, the exact
-  surviving obligation is to construct the signed-lasso bridge from the
-  cofinal source-matched preemption seed, or otherwise eliminate that seed.
-  The ballistic theorem closes only its returned positive-charge subarm and
-  quantitatively classifies the rest; the diagonal-payoff theorems do not
-  supply a classification branch.  No complete universal consumer and no
-  counterexample is known; the unconditional general `theorem3_4` remains the
-  sole proof hole in the paper-facing file.
+  This source route still requires a branch-classification consumer for its
+  retained uniform phantom and a signed-lasso bridge from its cofinal
+  preemption seed. The forward implication of journal Theorem 3.4 is proved
+  independently by
+  `QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing`
+  (`UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumForwardTrichotomy.lean`).
+  The literal paper adapter is
+  `approximateEquilibria_imply_stationary_or_punishedFirstQuitter_or_absorbingRowPerfection`
+  (`Literature/AshkenaziGolanKrasikovRainerAndSolan2024.lean`). Both retain the
+  approximate-equilibrium-existence premise. The printed reverse implication
+  remains an open proposition with checked reductions; it is not a `sorry`
+  in the paper-facing file.
 - **Simon compact alternatives:** the near-total-absorption branch is checked
   in `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`:
   `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows`
@@ -3982,8 +3981,17 @@ in the live mathematical ledger.
   actual arbitrarily small rational support-local rows with positive absorption
   and strict normalized motion produce the stationary-prefix branch against
   arbitrary behavioral deviations. Its fixed-scale contrapositive asserts no
-  feasibility. The positive-solo clause, the common compact-carrier scale, and
-  Simon Lemma 2 remain open.
+  feasibility.
+  `exists_compactContinuationMotion_of_not_branches`
+  (`UniformEquilibrium/Quitting/Classification/CompactContinuationMotion.lean`)
+  supplies one positive motion and Continue-mass bound on any fixed compact
+  continuation set. Compact neighborhoods of the finite feasible payoff
+  polytope are supplied by
+  `UniformEquilibrium/Quitting/Classification/CompactFeasibleNeighborhood.lean`.
+  The literal `lemma2_1_part2` and `lemma2_1_part2_compact`
+  (`Literature/Simon2012.lean`) are proved without unfinished imported proofs.
+  The positive-normal-solo and normal-solo-harm clauses of the full corrected
+  Simon (2007) Lemma 5 are separate obligations.
 - **Simon positive-absorption splice:**
   `quittingStationarilyGeneratedApproximateEquilibria_of_positiveAbsorptionStationary`
   in `UniformEquilibrium/Quitting/Classification/Existence/PositiveAbsorptionStationarySplice.lean`
@@ -4068,6 +4076,21 @@ in the live mathematical ledger.
   use only single-owner rows on this residual-hard table.  The packet's
   rational upper schedule and the exact optimal solo-hazard floor remain
   unformalized; the checked two-owner period-two equilibrium is unaffected.
+- **Discounted singleton-matrix localization:**
+  `finFour_auxiliaryDiscounted_fixedPoint_scaled_sum_lt_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/FinFourAuxiliaryDiscountedLocalization.lean`)
+  proves that a four-player table without an original uniform payoff has one
+  positive radius and discount threshold controlling total hazard divided by
+  discount for every actual fixed point of its canonical auxiliary table.
+  The same original hypothesis supplies punishment normality and full R0;
+  the actual displacement supplies the perturbed LCP and its reward-derived
+  quadratic remainder. No selected fixed point or extra normality certificate
+  is an input. The actual signed-box comparison is supplied by
+  `tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
+  (`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`),
+  uniformly on every fixed bounded signed set. A constructed signed degree
+  with homotopy, excision and normalization laws is still needed. Mod-two
+  counts do not supply that integer invariant.
 - **Returned-block tangent obstruction:**
   `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` proves that
   bounded returned product blocks with vanishing total hazard and aggregate
