@@ -43,7 +43,7 @@ companion imports the prism owner without introducing a cycle through its
 local-count dependency. These results do not stabilize the signed count in
 the mesh parameter.
 
-## Required local restricted-prism source
+## Constructed same-mesh local comparison
 
 Let a family of box-complementarity problems have a jointly continuous gain
 function of parameter and spatial point. Let the same relatively open region
@@ -83,26 +83,29 @@ The proof dependencies are:
    `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
    combines this bound with actual uniform clearance to prove parent-selection
    agreement at all sufficiently fine resolutions.
-4. Use the checked integer row and interior-column cancellation on those
-   actual selected cells. Identify the selected parameter-end faces with
-   the existing anchor-selected simplex sets, using cleared-collar set
-   equality to reconcile the selection convention with the existing anchor.
+4. Weighted integer row and interior-column cancellation transports the
+   selected endpoint sums. The endpoint-base representation in
+   `Research/Topology/BoxComplementaritySignedLocalCount.lean` retains the
+   existing label-dimension anchor; cleared-face membership coherence
+   identifies it with the base-point selection.
 
 `sum_weighted_parameterFaceWeight_left_eq_right`
 (`MathUE/Topology/KuhnSignedParameterEnd.lean`) supplies the weighted finite
-algebra for step 4. Its integer multipliers must agree on actual incidences;
-the remaining adapter supplies those multipliers from the selected region
-and identifies the resulting endpoint sums with the existing local counts.
+algebra for step 4. Its integer multipliers must agree on actual incidences.
+`IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
+(`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`) supplies those
+multipliers from the original family and region and proves equality of the
+existing local counts at the actual parameter endpoints.
 
-The resulting local, same-resolution theorem should have the order:
+The proved local, same-resolution theorem has the quantifier order:
 
 > For every jointly continuous family and one region isolating for all its
 > parameters, there exists a threshold such that at every positive mesh
 > resolution above it, the two endpoint local signed sums are equal.
 
-This is a known-mathematics formalization obligation, not a new quitting-game
-proposition. It is stronger in locality than the checked full-box theorem,
-but it still does not compare different resolutions.
+This proves local homotopy invariance at every sufficiently fine common
+resolution. It does not compare different resolutions or construct an
+integer degree independent of the mesh.
 
 ## Separate cross-resolution and approximation independence
 
@@ -164,7 +167,7 @@ double-counting library is warranted.
 
 All remaining interfaces above concern standard finite-dimensional topology
 and combinatorics. They introduce no new uniform-equilibrium argument.
-Neither local integer degree nor its homotopy, approximation-independence,
-cross-resolution, or regular-Jacobian comparison theorem is supplied by the
-current full-box count. Signed integer information must not be replaced by
-parity in the integer-LCP degree criterion.
+Local homotopy invariance of the mesh-dependent count is proved above.
+A local integer degree independent of resolution, its approximation-independence
+and regular-Jacobian comparison theorems remain to be constructed. Signed
+integer information must not be replaced by parity in the integer-LCP criterion.

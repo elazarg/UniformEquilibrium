@@ -17,9 +17,9 @@ There is substantial reusable geometry. In particular the concrete Research
 Kuhn-prism construction must not be rebuilt merely because its current
 conclusion is modulo two. Its incidence and endpoint bijections are actual
 theorems. Local integer orientation and cancellation are available below.
-Signed counts and uniform mixed-time vertex clearance are available. The
-remaining work includes local restricted-prism comparison and independence
-of admissible approximation/subdivision.
+Signed counts, uniform mixed-time vertex clearance, and local endpoint
+equality at every sufficiently fine common mesh are available. Independence
+of admissible approximation/subdivision remains to be proved.
 
 The actual discounted displacement's linear expansion on bounded signed sets
 is available; its scope is recorded in Section 3 below.
@@ -147,7 +147,7 @@ Likewise `IsStandardQOnPocketCirculants`
 (`MathUE/LinearProgramming/CirculantPocketR0.lean`) is explicitly an unproved
 proposition, not a hidden LCP-degree theorem.
 
-## 2. Actual missing primitives, in dependency order
+## 2. Degree construction dependencies
 
 1. **Local restricted-prism comparison.** Integer cell weights, interior-face
    cancellation, endpoint orientation, and local signed counts are available.
@@ -156,9 +156,11 @@ proposition, not a hidden LCP-degree theorem.
    (`Research/Topology/BoxComplementarityPrismCluster.lean`). Actual incident
    parent selections agree by
    `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
-   (`Research/Topology/KuhnPrismBoundaryCollar.lean`). The remaining adapter
-   applies the weighted endpoint identity to these selections and identifies
-   its endpoint sums with the existing local counts.
+   (`Research/Topology/KuhnPrismBoundaryCollar.lean`).
+   `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
+   (`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`) applies
+   the weighted endpoint identity to these selections and identifies its
+   endpoint sums with the existing local counts. This step is proved.
 2. **Subdivision/approximation independence.** Prove signed invariance under
    the actual refinements used, then that sufficiently close admissible
    approximations give the same integer. Generic fields asserting invariance
@@ -229,8 +231,11 @@ face column using the pinned exact parent count.
 (`MathUE/Topology/KuhnSignedParameterEnd.lean`) gives full-grid endpoint
 equality under explicit boundary-end coverage. The concrete Research prism
 source discharges that coverage and transports the weights through its
-endpoint equivalences. Local-region homotopy and subdivision-independent
-degree remain separate obligations.
+endpoint equivalences. The actual local-region theorem is
+`IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
+(`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`), with one
+threshold for all sufficiently fine common resolutions and the same isolating
+region throughout the family. Subdivision-independent degree remains separate.
 
 ## 3. Actual source comparison
 

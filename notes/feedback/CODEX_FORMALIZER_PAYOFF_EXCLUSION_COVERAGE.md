@@ -160,8 +160,16 @@ The following are genuine remaining obligations:
    `quittingBehaviorTwoPair_crossMassDeterminant` in
    `UniformEquilibrium/Quitting/Paths/TwoPairCrossMassDeterminant.lean`.
    They retain arbitrary independent complete stopping laws, Never, and ties.
-   Equation (19)'s reward-table consumer, the displayed numerical fixture,
-   and the long-word regression remain to be supplied.
+   Equation (19)'s actual and raw reward-table consumers are in
+   `UniformEquilibrium/Quitting/Paths/TwoPairCrossMassRewardExclusion.lean`.
+   The displayed numerical fixture and long-word regression remain to be
+   supplied.
+
+The checked equation (19) consumer strengthens the packet's coefficient
+assumptions: the favorable coefficients can have either sign, and the two
+loss coefficients need only be nonnegative, not strictly positive. The
+product bound and designated-owner singleton signs are retained. This does
+not extend coverage to reward tables without the displayed row inequalities.
 
 ## Cap-threshold blocks and weak exclusion
 

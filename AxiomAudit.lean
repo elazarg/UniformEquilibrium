@@ -2408,6 +2408,7 @@ import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
 import UniformEquilibrium.Quitting.Paths.SurvivalWindowLanding
 import UniformEquilibrium.Quitting.Paths.TerminalSemanticPayoffProjection
 import UniformEquilibrium.Quitting.Paths.TwoPairCrossMassDeterminant
+import UniformEquilibrium.Quitting.Paths.TwoPairCrossMassRewardExclusion
 import UniformEquilibrium.Quitting.Paths.TwoPairGroupExclusion
 import UniformEquilibrium.Quitting.Paths.VanishingNashRootSequenceFamily
 import UniformEquilibrium.Quitting.Paths.WeakExclusionFiniteWordMenuRate

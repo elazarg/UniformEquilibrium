@@ -111,4 +111,65 @@ theorem IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_me
     (hmesh resolution ((le_max_right _ _).trans hresolution)).le
     (hcleared resolution ((le_max_left _ _).trans hresolution)) face first second hfirst hsecond
 
+/-- A cleared face vertex and any displayed nearby point have the same open-region membership. -/
+theorem familyPrismFace_vertex_mem_iff_nearby_of_cleared
+    (family : Set.Icc (0 : ℝ) 1 → BoxComplementarityProblem (Fin n))
+    (region : Set (UnitCube (Fin n))) (hopen : IsOpen region) (radius : ℝ)
+    (hcleared : ¬HasFamilyPrismFaceVertexIn family
+      (Metric.cthickening radius (frontier region)) p)
+    (face : KuhnPrismFace n p hp (boxComplementarityFamilyPrismLabeling family p hp).label)
+    (index : Fin (n + 1)) (point : UnitCube (Fin n))
+    (hdist : dist (Fin.init (boxComplementarityGridPoint p (face.1 index))) point ≤ radius) :
+    Fin.init (boxComplementarityGridPoint p (face.1 index)) ∈ region ↔ point ∈ region := by
+  let center := Fin.init (boxComplementarityGridPoint p (face.1 index))
+  have hself : dist center center ≤ radius := by
+    rw [dist_self]
+    exact dist_nonneg.trans hdist
+  constructor
+  · intro hcenter
+    by_contra hpoint
+    exact hcleared ⟨hp, face, index,
+      mem_cthickening_frontier_of_unitCube_endpoints region hopen center center point radius
+        hcenter hpoint hself hdist⟩
+  · intro hpoint
+    by_contra hcenter
+    exact hcleared ⟨hp, face, index,
+      mem_cthickening_frontier_of_unitCube_endpoints region hopen center point center radius
+        hpoint hcenter hdist hself⟩
+
+/-- Literal parent base selection agrees with every incident complete-face vertex selection. -/
+theorem familyPrismFace_parent_base_mem_iff_vertex_of_cleared
+    (family : Set.Icc (0 : ℝ) 1 → BoxComplementarityProblem (Fin n))
+    (region : Set (UnitCube (Fin n))) (hopen : IsOpen region)
+    (radius : ℝ) (hmesh : 1 / (p : ℝ) ≤ radius)
+    (hcleared : ¬HasFamilyPrismFaceVertexIn family
+      (Metric.cthickening radius (frontier region)) p)
+    (face : KuhnPrismFace n p hp (boxComplementarityFamilyPrismLabeling family p hp).label)
+    (cell : KuhnPrismCell n p hp) (hincident : kuhnPrismIncident cell face)
+    (index : Fin (n + 1)) :
+    Fin.init (boxComplementarityGridPoint p (cell.1 0)) ∈ region ↔
+      Fin.init (boxComplementarityGridPoint p (face.1 index)) ∈ region := by
+  exact (familyPrismFace_vertex_mem_iff_nearby_of_cleared family region hopen radius hcleared
+    face index _ ((dist_prismFace_parent_spatial_vertices_le_one_div
+      face cell hincident index 0).trans hmesh)).symm
+
+/-- All spatial vertices of the same actual complete face have equal region selection. -/
+theorem familyPrismFace_vertices_mem_iff_of_cleared
+    (family : Set.Icc (0 : ℝ) 1 → BoxComplementarityProblem (Fin n))
+    (region : Set (UnitCube (Fin n))) (hopen : IsOpen region)
+    (radius : ℝ) (hmesh : 1 / (p : ℝ) ≤ radius)
+    (hcleared : ¬HasFamilyPrismFaceVertexIn family
+      (Metric.cthickening radius (frontier region)) p)
+    (face : KuhnPrismFace n p hp (boxComplementarityFamilyPrismLabeling family p hp).label)
+    (first second : Fin (n + 1)) :
+    Fin.init (boxComplementarityGridPoint p (face.1 first)) ∈ region ↔
+      Fin.init (boxComplementarityGridPoint p (face.1 second)) ∈ region := by
+  apply familyPrismFace_vertex_mem_iff_nearby_of_cleared family region hopen radius hcleared
+    face first _
+  apply le_trans _ hmesh
+  have hfull := dist_familyPrismFace_vertices_le_one_div family p hp face first second
+  rw [dist_pi_le_iff (by positivity : (0 : ℝ) ≤ 1 / (p : ℝ))] at hfull ⊢
+  intro coordinate
+  exact hfull coordinate.castSucc
+
 end Math

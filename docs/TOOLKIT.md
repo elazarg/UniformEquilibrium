@@ -246,8 +246,14 @@ bound is in `UniformEquilibrium/Quitting/Paths/BehaviorFirstStoppingPairLaw.lean
 the product of the exact `{0,1}` and `{2,3}` first-quitter masses by the
 product of the `{0}`, `{3}`, `{0,3}` mass sum and the `{1}`, `{2}`, `{1,2}`
 mass sum. The independent-law theorem retains Never and ties without an
-absorption or finite-support hypothesis. This is an actual mass inequality;
-a reward-table exclusion conclusion requires its separate payoff consumer.
+absorption or finite-support hypothesis.
+`hasQuittingActualWeakSubsetExclusion_zero_one_of_crossMassBounds`
+(`UniformEquilibrium/Quitting/Paths/TwoPairCrossMassRewardExclusion.lean`)
+converts the literal reward-row bounds into actual weak exclusion on `{0,1}`;
+the same file supplies its raw-calendar counterpart. The two designated
+singleton levels and loss coefficients must be nonnegative, but the favorable
+coefficients may have either sign. The product bound is retained. These
+outputs feed the existing weak-subset finite-word and fixed-payoff consumers.
 
 `Math.PairedAffine.exists_interior_hazards_all_playerGap_zero`
 (`MathUE/PairedAffineClearedField.lean`) selects one simultaneous interior
