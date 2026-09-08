@@ -1,4 +1,6 @@
 import Literature.Simon2007
+import UniformEquilibrium.Quitting.Classification.CompactContinuationMotion
+import UniformEquilibrium.Quitting.Classification.CompactFeasibleNeighborhood
 import MathUE.BonferroniProductBounds
 import MathUE.LinearAlgebra.UniformNonsingularity
 import MathUE.PMFProduct.TotalVariation
@@ -415,6 +417,169 @@ private theorem euclideanNorm_le_card_mul_norm {N : Type} [Fintype N] [Nonempty 
       simpa only [Real.norm_eq_abs, nsmul_eq_mul] using
         (Pi.sum_norm_apply_le_norm (f := x))
 
+/-- The paper's one-stage payoff is the production successor payoff of its
+canonical Bernoulli root. -/
+theorem quittingOneStagePayoff_eq_productionSuccessor
+    (G : QuittingGame) [DecidableEq G.Player]
+    (tail : Payoff G.Player) (row : QuitRow G) :
+    QuittingOneStagePayoff G tail row =
+      GameTheory.quittingRootSuccessorPayoff G.reward tail
+        (productionRootOfQuitRow G row) := by
+  funext who
+  change QuittingOneStagePayoff G tail row who =
+    GameTheory.quittingHazardOneStagePayoff G.reward tail row who
+  rw [GameTheory.quittingHazardOneStagePayoff_eq_expanded]
+  simp only [QuittingOneStagePayoff]
+  rw [show GameTheory.quittingHazardRowExitProbability row =
+      QuitProbability G row by rfl]
+  apply congrArg₂ (· + ·) rfl
+  apply Finset.sum_congr rfl
+  intro coalition _
+  split_ifs with hcoalition
+  · rw [← coalitionProbability_eq_quittingHazardCoalitionProbability]
+  · rfl
+
+private theorem productionRootOfQuitRow_replace_one
+    (G : QuittingGame) [DecidableEq G.Player]
+    (row : QuitRow G) (who : G.Player) :
+    productionRootOfQuitRow G (row.replace G who 1) =
+      Function.update (productionRootOfQuitRow G row) who (PMF.pure true) := by
+  funext player
+  by_cases hplayer : player = who
+  · subst player
+    rw [Function.update_self]
+    apply Math.PMFProduct.eq_pure_true_of_true_toReal_eq_one
+    simp [QuitRow.replace]
+  · rw [Function.update_of_ne hplayer]
+    exact GameTheory.quittingRootOfHazardRow_apply_congr (by
+      simp [QuitRow.replace, hplayer])
+
+private theorem productionRootOfQuitRow_replace_zero
+    (G : QuittingGame) [DecidableEq G.Player]
+    (row : QuitRow G) (who : G.Player) :
+    productionRootOfQuitRow G (row.replace G who 0) =
+      Function.update (productionRootOfQuitRow G row) who (PMF.pure false) := by
+  funext player
+  by_cases hplayer : player = who
+  · subst player
+    rw [Function.update_self]
+    apply Math.PMFProduct.eq_pure_false_of_true_toReal_eq_zero
+    simp [QuitRow.replace]
+  · rw [Function.update_of_ne hplayer]
+    exact GameTheory.quittingRootOfHazardRow_apply_congr (by
+      simp [QuitRow.replace, hplayer])
+
+/-- Forcing one paper coordinate to Quit gives the production pure-Quit
+endpoint payoff. -/
+theorem forcedQuitPayoff_eq_production
+    (G : QuittingGame) [DecidableEq G.Player]
+    (tail : Payoff G.Player) (row : QuitRow G) (who : G.Player) :
+    ForcedQuitPayoff G row who =
+      GameTheory.quittingRootQuitPayoff G.reward tail
+        (productionRootOfQuitRow G row) who := by
+  rw [ForcedQuitPayoff]
+  rw [congrFun (quittingOneStagePayoff_eq_productionSuccessor
+    G 0 (row.replace G who 1)) who]
+  rw [GameTheory.quittingRootSuccessorPayoff,
+    productionRootOfQuitRow_replace_one]
+  exact GameTheory.quittingRootQuitPayoff_continuation_invariant
+    G.reward 0 tail (productionRootOfQuitRow G row) who
+
+/-- Forcing one paper coordinate to Continue gives the production
+pure-Continue endpoint payoff. -/
+theorem forcedContinuePayoff_eq_production
+    (G : QuittingGame) [DecidableEq G.Player]
+    (tail : Payoff G.Player) (row : QuitRow G) (who : G.Player) :
+    ForcedContinuePayoff G tail row who =
+      GameTheory.quittingRootContinuePayoff G.reward tail
+        (productionRootOfQuitRow G row) who := by
+  rw [ForcedContinuePayoff]
+  rw [congrFun (quittingOneStagePayoff_eq_productionSuccessor
+    G tail (row.replace G who 0)) who]
+  rw [GameTheory.quittingRootSuccessorPayoff,
+    productionRootOfQuitRow_replace_zero]
+  rfl
+
+/-- The paper endpoint correspondence is exactly production support-local
+approximate Nash under the canonical row encoding. -/
+theorem epsilonRow_iff_productionSupportApproxNash
+    (G : QuittingGame) [DecidableEq G.Player]
+    (error : ℝ) (tail : Payoff G.Player) (row : QuitRow G) :
+    row ∈ EpsilonRow G error tail ↔
+      GameTheory.IsQuittingRootSupportApproxNash G.reward tail error
+        (productionRootOfQuitRow G row) := by
+  constructor
+  · rintro ⟨hquit, hcontinue⟩ who
+    constructor
+    · intro hpositive
+      unfold GameTheory.quittingRootEndpointDifference
+      rw [← forcedQuitPayoff_eq_production G tail row who,
+        ← forcedContinuePayoff_eq_production G tail row who]
+      linarith [hquit who (by
+        simpa only [productionRootOfQuitRow_true_toReal] using hpositive)]
+    · intro hpositive
+      unfold GameTheory.quittingRootEndpointDifference
+      rw [← forcedQuitPayoff_eq_production G tail row who,
+        ← forcedContinuePayoff_eq_production G tail row who]
+      have hrow : (row who : ℝ) < 1 := by
+        simp only [productionRootOfQuitRow_false_toReal] at hpositive
+        linarith
+      linarith [hcontinue who hrow]
+  · intro hsupport
+    constructor
+    · intro who hpositive
+      have hbound := (hsupport who).1 (by
+        simpa only [productionRootOfQuitRow_true_toReal] using hpositive)
+      unfold GameTheory.quittingRootEndpointDifference at hbound
+      rw [← forcedQuitPayoff_eq_production G tail row who,
+        ← forcedContinuePayoff_eq_production G tail row who] at hbound
+      linarith
+    · intro who hcontinue
+      have hpositive :
+          0 < (productionRootOfQuitRow G row who false).toReal := by
+        simp only [productionRootOfQuitRow_false_toReal]
+        linarith
+      have hbound := (hsupport who).2 hpositive
+      unfold GameTheory.quittingRootEndpointDifference at hbound
+      rw [← forcedQuitPayoff_eq_production G tail row who,
+        ← forcedContinuePayoff_eq_production G tail row who] at hbound
+      linarith
+
+/-- Paper individual rationality is production Simon rationality. -/
+theorem isRational_iff_production
+    (G : QuittingGame) [DecidableEq G.Player]
+    (error : ℝ) (tail : Payoff G.Player) :
+    IsRational G error tail ↔
+      GameTheory.QuittingSimonRationalPayoffAt G.reward error tail := by
+  simp only [IsRational,
+    GameTheory.QuittingSimonRationalPayoffAt]
+  constructor <;> intro h who
+  · rw [← minMaxQuit_eq_quittingPunishmentValue]
+    exact h who
+  · rw [minMaxQuit_eq_quittingPunishmentValue]
+    exact h who
+
+/-- Paper quitting probability is production one-stage absorption. -/
+theorem quitProbability_eq_productionAbsorption
+    (G : QuittingGame) [DecidableEq G.Player] (row : QuitRow G) :
+    QuitProbability G row =
+      GameTheory.quittingRootAbsorptionMass
+        (productionRootOfQuitRow G row) := by
+  rw [GameTheory.quittingRootAbsorptionMass,
+    GameTheory.quittingStationaryContinueMass_eq_prod_continueProbability]
+  simp only [productionRootOfQuitRow_false_toReal, QuitProbability]
+
+/-- One coordinate's absolute value is bounded by the paper's Euclidean
+norm. -/
+theorem abs_apply_le_euclideanNorm {N : Type} [Fintype N]
+    (value : Payoff N) (who : N) :
+    |value who| ≤ Real.sqrt (∑ player, (value player) ^ 2) := by
+  rw [show Real.sqrt (∑ player, (value player) ^ 2) =
+      ‖WithLp.toLp 2 value‖ by
+    simp only [EuclideanSpace.norm_eq, Real.norm_eq_abs, sq_abs]]
+  simpa only [Real.norm_eq_abs] using
+    PiLp.norm_apply_le (WithLp.toLp 2 value) who
+
 /--
 Lemma 2.1(1), the sign-pattern clause of the corrected 2007 Lemma 5.
 -/
@@ -441,18 +606,65 @@ theorem lemma2_1_part2 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     ∃ ρ, SatisfiesCorrectedLemma2_1Parameter G ρ := by
-  have hinstant2007 : ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+  classical
+  have hgenerated2007 :
+      ¬Literature.Simon2007.HasStationarilyGeneratedApproximateEquilibria G := by
+    intro h2007
+    apply hgenerated
+    intro punishmentError hpunishmentError
+    exact h2007 punishmentError hpunishmentError
+  have hgeneratedProduction :
+      ¬GameTheory.QuittingStationarilyGeneratedApproximateEquilibria
+        G.reward := by
+    intro hproduction
+    apply hgenerated2007
+    exact
+      (hasStationarilyGeneratedApproximateEquilibria_iff_production G).mpr
+        hproduction
+  have hinstant2007 :
+      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
     fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
-  obtain ⟨_, _, ρ, hρ, hρ1, hbound⟩ :=
-    Literature.Simon2007.lemma5_corrected_2012 G hgenerated hinstant2007
-  refine ⟨ρ, hρ, hρ1.le, ?_⟩
-  intro r p hnear hrational hp
-  have hnear' : Literature.Simon2007.NearFeasible G 1 r := by
-    obtain ⟨z, hz, hdist⟩ := hnear
-    exact ⟨z, hz, (norm_le_euclideanNorm (r - z)).trans hdist⟩
-  obtain ⟨hmotion, hquit⟩ := hbound r hnear' hrational p hp
-  exact ⟨hmotion.trans (norm_le_euclideanNorm (r - QuittingOneStagePayoff G r p)),
-    hquit⟩
+  have hinstantProduction :
+      ¬GameTheory.QuittingInstantPunishmentεEquilibriumExistence G.reward := by
+    intro hproduction
+    apply hinstant2007
+    exact (hasInstantApproximateEquilibria_iff_production G).mpr hproduction
+  let carrier := GameTheory.QuittingFeasibleClosedNeighborhood G.reward 1
+  have hcarrier : IsCompact carrier :=
+    GameTheory.isCompact_quittingFeasibleClosedNeighborhood G.reward 1
+  obtain ⟨rate, hrate, hrateOne, hbound⟩ :=
+    GameTheory.exists_compactContinuationMotion_of_not_branches
+      G.reward hinstantProduction hgeneratedProduction hcarrier
+  refine ⟨rate, hrate, hrateOne.le, ?_⟩
+  intro tail row hnear hrational hrow
+  have htail : tail ∈ carrier := by
+    obtain ⟨feasible, hfeasible, hdistance⟩ := hnear
+    refine ⟨feasible, hfeasible, ?_⟩
+    exact (norm_le_euclideanNorm (tail - feasible)).trans hdistance
+  let root := productionRootOfQuitRow G row
+  have hrationalProduction :
+      GameTheory.QuittingSimonRationalPayoffAt G.reward rate tail :=
+    (isRational_iff_production G rate tail).mp hrational
+  have hsupportProduction :
+      GameTheory.IsQuittingRootSupportApproxNash G.reward tail rate root :=
+    (epsilonRow_iff_productionSupportApproxNash G rate tail row).mp hrow
+  obtain ⟨⟨who, hmotion⟩, hcontinue⟩ :=
+    hbound tail htail root hrationalProduction hsupportProduction
+  have hsuccessor : QuittingOneStagePayoff G tail row =
+      GameTheory.quittingRootSuccessorPayoff G.reward tail root :=
+    quittingOneStagePayoff_eq_productionSuccessor G tail row
+  have hquit : QuitProbability G row =
+      GameTheory.quittingRootAbsorptionMass root :=
+    quitProbability_eq_productionAbsorption G row
+  constructor
+  · rw [hquit]
+    exact hmotion.trans (by
+      rw [← hsuccessor]
+      simpa only [EuclideanDist, EuclideanNorm, Pi.sub_apply, abs_sub_comm]
+        using abs_apply_le_euclideanNorm
+          (tail - QuittingOneStagePayoff G tail row) who)
+  · rw [hquit, GameTheory.quittingRootAbsorptionMass]
+    linarith
 
 /-- Lemma 2.1, combining its two corrected clauses. -/
 theorem lemma2_1 (G : QuittingGame)
@@ -485,7 +697,58 @@ theorem lemma2_1_part2_compact (G : QuittingGame)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (K : Set (Payoff G.Player)) (hK : IsCompact K) :
     SatisfiesCompactMotionBound G K := by
-  sorry
+  classical
+  have hgenerated2007 :
+      ¬Literature.Simon2007.HasStationarilyGeneratedApproximateEquilibria G := by
+    intro h2007
+    apply hgenerated
+    intro punishmentError hpunishmentError
+    exact h2007 punishmentError hpunishmentError
+  have hgeneratedProduction :
+      ¬GameTheory.QuittingStationarilyGeneratedApproximateEquilibria
+        G.reward := by
+    intro hproduction
+    apply hgenerated2007
+    exact
+      (hasStationarilyGeneratedApproximateEquilibria_iff_production G).mpr
+        hproduction
+  have hinstant2007 :
+      ¬Literature.Simon2007.HasInstantApproximateEquilibria G :=
+    fun hold => hinstant ((instantApproximateEquilibria_iff_simon2007 G).mpr hold)
+  have hinstantProduction :
+      ¬GameTheory.QuittingInstantPunishmentεEquilibriumExistence G.reward := by
+    intro hproduction
+    apply hinstant2007
+    exact (hasInstantApproximateEquilibria_iff_production G).mpr hproduction
+  obtain ⟨rate, hrate, hrateOne, hbound⟩ :=
+    GameTheory.exists_compactContinuationMotion_of_not_branches
+      G.reward hinstantProduction hgeneratedProduction hK
+  refine ⟨rate, hrate, hrateOne.le, ?_⟩
+  intro tail htail row hrational hrow
+  let root := productionRootOfQuitRow G row
+  have hrationalProduction :
+      GameTheory.QuittingSimonRationalPayoffAt G.reward rate tail :=
+    (isRational_iff_production G rate tail).mp hrational
+  have hsupportProduction :
+      GameTheory.IsQuittingRootSupportApproxNash G.reward tail rate root :=
+    (epsilonRow_iff_productionSupportApproxNash G rate tail row).mp hrow
+  obtain ⟨⟨who, hmotion⟩, hcontinue⟩ :=
+    hbound tail htail root hrationalProduction hsupportProduction
+  have hsuccessor : QuittingOneStagePayoff G tail row =
+      GameTheory.quittingRootSuccessorPayoff G.reward tail root :=
+    quittingOneStagePayoff_eq_productionSuccessor G tail row
+  have hquit : QuitProbability G row =
+      GameTheory.quittingRootAbsorptionMass root :=
+    quitProbability_eq_productionAbsorption G row
+  constructor
+  · rw [hquit]
+    exact hmotion.trans (by
+      rw [← hsuccessor, EuclideanDist]
+      simpa only [EuclideanNorm, Pi.sub_apply, abs_sub_comm] using
+        abs_apply_le_euclideanNorm
+          (tail - QuittingOneStagePayoff G tail row) who)
+  · rw [hquit, GameTheory.quittingRootAbsorptionMass]
+    linarith
 
 /-- A vector lies within Euclidean distance `ε` of the feasible vectors. -/
 def NearFeasible (G : QuittingGame) (ε : ℝ)

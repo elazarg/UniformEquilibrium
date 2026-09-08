@@ -23,6 +23,11 @@ structure QuittingSelectedOwnerRenewal
     (M : ℝ) (roots : List (ι → PMF Bool)) where
   owner : ι
   owner_eligible : Eligible owner
+  owner_payoff_le_singleton :
+    quittingTerminalPayoff reward
+        (quittingLiteralRootStackProfile reward roots
+          (quittingAlwaysContinueProfile reward)) owner ≤
+      reward (quittingSingletonTerminal owner) owner
   block : List (ι → PMF Bool)
   block_eq_nil_of_nonpos : ¬ 0 < quittingFiniteWordDebt reward roots → block = []
   length_le_of_pos : 0 < quittingFiniteWordDebt reward roots →
@@ -48,20 +53,22 @@ theorem exists_quittingSelectedOwnerRenewal
     (roots : List (ι → PMF Bool)) :
     Nonempty (QuittingSelectedOwnerRenewal reward Eligible preemption M roots) := by
   by_cases hpositive : 0 < quittingFiniteWordDebt reward roots
-  · obtain ⟨owner, howner, block, hlength, hdebt⟩ :=
-      exists_finiteWord_ownerExclusion_quadraticDebtStep
+  · obtain ⟨owner, hownerEligible, howner, block, hlength, hdebt⟩ :=
+      exists_finiteWord_ownerExclusion_witnessed_quadraticDebtStep
         reward Eligible hWE preemption roots hM hreward hpositive
     exact ⟨{
       owner := owner
-      owner_eligible := howner
+      owner_eligible := hownerEligible
+      owner_payoff_le_singleton := howner
       block := block
       block_eq_nil_of_nonpos := fun hnonpos => (hnonpos hpositive).elim
       length_le_of_pos := fun _ => hlength
       debt_le_of_pos := fun _ => hdebt }⟩
-  · obtain ⟨owner, howner, -⟩ := hWE roots
+  · obtain ⟨owner, hownerEligible, howner⟩ := hWE roots
     exact ⟨{
       owner := owner
-      owner_eligible := howner
+      owner_eligible := hownerEligible
+      owner_payoff_le_singleton := howner
       block := []
       block_eq_nil_of_nonpos := fun _ => rfl
       length_le_of_pos := fun hpos => (hpositive hpos).elim

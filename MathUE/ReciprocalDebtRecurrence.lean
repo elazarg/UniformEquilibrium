@@ -1,4 +1,5 @@
 import Mathlib.Analysis.SpecificLimits.Basic
+import Mathlib.Algebra.Order.Floor.Ring
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
@@ -132,10 +133,11 @@ theorem sequence_le_reciprocal_of_variable_quadratic_step
         have hinverse := one_div_lt_one_div_of_lt hnextTarget hstrict
         exact (not_lt_of_ge hinvNext) hinverse
 
-/-- A real sequence with quadratic drop `x² / scale` at positive values crosses every
-positive threshold within `ceil (scale / threshold)` steps. -/
+/-- A positive sequence over an ordered field with a natural ceiling crosses
+a positive threshold under fixed quadratic descent. -/
 theorem exists_index_le_ceil_of_quadratic_descent
-    (value : ℕ → ℝ) {scale threshold : ℝ}
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K] [FloorRing K]
+    (value : ℕ → K) {scale threshold : K}
     (hscale : 0 < scale) (hthreshold : 0 < threshold)
     (hstep : ∀ n, 0 < value n →
       value (n + 1) ≤ value n - value n ^ 2 / scale) :
@@ -173,7 +175,7 @@ theorem exists_index_le_ceil_of_quadratic_descent
         (le_div_iff₀ hy).2 hcombined
       _ = 1 / value (n + 1) * (scale * value n) := by ring
   have hinverse : ∀ n, n ≤ horizon →
-      (n : ℝ) / scale ≤ 1 / value n := by
+      (n : K) / scale ≤ 1 / value n := by
     intro n hn
     induction n with
     | zero =>
@@ -186,19 +188,28 @@ theorem exists_index_le_ceil_of_quadratic_descent
         have hnext := hinverseStep n hnlt
         push_cast
         calc
-          ((n : ℝ) + 1) / scale = (n : ℝ) / scale + 1 / scale := by ring
+          ((n : K) + 1) / scale = (n : K) / scale + 1 / scale := by ring
           _ ≤ 1 / value n + 1 / scale := by linarith
           _ ≤ 1 / value (n + 1) := hnext
-  have hceil : scale / threshold ≤ (horizon : ℝ) := by
-    exact Nat.le_ceil _
-  have hhorizon : (horizon : ℝ) / scale ≤ 1 / value horizon :=
+  have hceil : scale / threshold ≤ (horizon : K) := Nat.le_ceil _
+  have hhorizon : (horizon : K) / scale ≤ 1 / value horizon :=
     hinverse horizon le_rfl
-  have hthresholdInverse : 1 / threshold ≤ (horizon : ℝ) / scale := by
+  have hthresholdInverse : 1 / threshold ≤ (horizon : K) / scale := by
     apply (div_le_div_iff₀ hthreshold hscale).2
     have hscaled := (div_le_iff₀ hthreshold).mp hceil
     simpa [mul_comm] using hscaled
-  have hstrictInverse : 1 / value horizon < 1 / threshold := by
-    exact one_div_lt_one_div_of_lt hthreshold (habove horizon le_rfl)
+  have hstrictInverse : 1 / value horizon < 1 / threshold :=
+    one_div_lt_one_div_of_lt hthreshold (habove horizon le_rfl)
   exact (not_lt_of_ge (hthresholdInverse.trans hhorizon)) hstrictInverse
+
+/-- Rational specialization of the ordered-field recurrence. -/
+theorem exists_index_le_rationalCeil_of_quadratic_descent
+    (value : ℕ → ℚ) {scale threshold : ℚ}
+    (hscale : 0 < scale) (hthreshold : 0 < threshold)
+    (hstep : ∀ n, 0 < value n →
+      value (n + 1) ≤ value n - value n ^ 2 / scale) :
+    ∃ n ≤ Nat.ceil (scale / threshold), value n ≤ threshold :=
+  exists_index_le_ceil_of_quadratic_descent
+    value hscale hthreshold hstep
 
 end Math

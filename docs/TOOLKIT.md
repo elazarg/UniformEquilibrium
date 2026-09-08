@@ -361,8 +361,24 @@ real logarithms.
 proves that the selected rational auxiliary root lowers total semantic debt
 to at most `C - 3*C²/(128*M + 24*C)` when the old debt is at most positive
 `C` and one cap-to-singleton margin is at most `C/8`. Its search accuracy
-controls total Nash defect. Selecting the actual hazard and combining the
-initial-low and solo-crossing branches remain separate steps.
+controls total Nash defect.
+`executableRationalCapThresholdBlock_length_and_debtSum_le`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalCapThresholdBlock.lean`)
+combines the initial-low, solo-crossing, and auxiliary-root branches on the
+actual rational source word, with the same debt bound and a literal row bound.
+`UniformEquilibrium/Quitting/Paths/ExecutableRationalSelectedOwnerStep.lean`
+selects an owner from a designated finite set using the source payoff
+inequality, computes a strict preemptor, and supplies a common positive
+rational preemption floor. Only designated owners need preemption. The block
+then lowers actual total debt by `3*D²/(128*M + 24*D)`.
+`executableRationalSelectedOwnerFirstWord_debt_and_length_le`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalSelectedOwnerRates.lean`)
+iterates these blocks and searches for the first phase below a positive
+rational debt threshold. The same literal word satisfies the debt bound,
+an executable rational-ceiling phase bound, and a fixed-table logarithmic row
+bound using the common preemption floor. Real logarithms occur only in the
+proved row bound, not in the computation. This does not supply the separate
+reward-table-uniform accuracy-threshold algorithm.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -377,8 +393,12 @@ uses the same selected words for the reciprocal phase bound and the total
 date bound, including the logarithmic cost of each phase.
 The all-owner interface delegates to
 `UniformEquilibrium/Quitting/Paths/FiniteWordSelectedOwnerRates.lean`, whose
-single recurrence retains an eligible owner, its strict preemptor, and each
-literal block length. Eligibility can restrict the witnesses to a designated
+single recurrence retains an eligible owner, that same owner's source payoff
+inequality, its strict preemptor, and each literal block length.
+`exists_finiteWord_selectedOwner_quadraticDebtStep`
+(`UniformEquilibrium/Quitting/Paths/FiniteWordSelectedOwnerStep.lean`)
+needs only the specified owner's local payoff and preemption inequalities,
+not a global weak-exclusion hypothesis. Eligibility can restrict the witnesses to a designated
 set without requiring preemption outside that set.
 `UniformEquilibrium/Quitting/Paths/FiniteUnpreemptedSoloExit.lean` constructs
 arbitrarily accurate finite solo words when an owner is unpreempted and
@@ -641,8 +661,7 @@ constructs an analytic Bellman germ through a supplied complete assignment
 in the closure of positive-discount solutions, with discount coordinate zero.
 Its endpoint equals that assignment literally; no curve-selection hypothesis
 or action-nonemptiness assumption is required. The proof uses the existing
-unconditional polynomial sign-cell arc theorem. A root-only quitting source
-still needs its full Bellman-assignment lift and closure proof.
+unconditional polynomial sign-cell arc theorem.
 
 `UniformEquilibrium/Quitting/Stationary/DiscountedDisplacement.lean`
 defines the discounted displacement and live value from the actual reward
@@ -650,8 +669,30 @@ table and product root. It proves the positive denominator, the exact
 displacement/endpoint-gap identity, live Bellman consistency, uniform value
 bounds from the reward box, and all three clipped-map face conditions.
 These statements hold at the supplied root; no favorable fixed point is
-selected. They do not yet construct a complete Bellman assignment or exclude
-nonzero root limits.
+selected.
+`UniformEquilibrium/Quitting/Bellman/Discounted/PayoffBridge.lean`
+owns the quitting-game discounted payoff identities used by both the lift and
+the analytic boundary consumer.
+`quittingDiscountedBellmanAssignment_of_hazard_fixedPoint`
+(`UniformEquilibrium/Quitting/Bellman/Discounted/FixedPointLift.lean`)
+lifts every supplied cube fixed point to a complete Bellman assignment for
+the same reward table, retaining its live hazards and values.
+`exists_analyticBellmanGerm_at_quittingDiscountedFixedPoint_limit`
+(`UniformEquilibrium/Quitting/Bellman/Discounted/SpecifiedEndpoint.lean`)
+constructs a germ through the full limiting assignment of an actual source.
+`exists_analyticBellmanGerm_at_discountedFixedPoint_hazardCluster`
+(`UniformEquilibrium/Quitting/Bellman/Discounted/ClusterCompletion.lean`)
+needs only the supplied hazard cluster: compactness selects a compatible
+value cluster along a nontrivial refinement of the same source.
+`auxiliaryDiscounted_fixedPoint_sum_lt_of_no_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Classification/AuxiliaryDiscountedLocalization.lean`)
+then proves that, if the original game has no uniform-equilibrium payoff,
+every sufficiently small positive discount has only small-total-hazard
+fixed points in the cube for the canonical auxiliary reward table. The
+threshold precedes both the discount and the fixed point. The proof handles
+signed rewards through the existing original-game punishment consumer;
+it requires neither normality nor an R0 or degree hypothesis. It does not
+construct the integer degree used in the remaining LCP argument.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
@@ -1397,7 +1438,7 @@ compression and preservation of both masses exactly are not asserted.
 | AKRS checked correction witnesses | `MathUE/LinearAlgebra/PrincipalMinorDiagonalPerturbation.lean`, `MathUE/PMFProduct/SmallCellProductization.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/PrincipalQViabilityCorrespondence.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/TerminalTotalJumpVacuity.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/WeakPathConvergence.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/EndpointUnboundedWeakLimitCounterexample.lean`, `UniformEquilibrium/Quitting/Classification/Existence/RowPerfectionClosed.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/SequentialPerfectionWeakLimit.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/ClockBoundarySourceApproximation.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/ContinuousClockLowerBoundWeakLimit.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/UnitBoundedBoundaryPayoffTransport.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/PositiveSingletonBoundaryCellEstimate.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/ContinuousClockActiveWeakLimit.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/JumpSubsequenceWeakLimit.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/PreviousBoundaryJumpLocalization.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpSourceLocalization.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/LimitJumpRootLocalization.lean`, `UniformEquilibrium/Quitting/Root/IncidentCoalitionOdds.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/BoundaryCellProductRootOdds.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/RationalCoordinateCompactness.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/SingletonDerivativeWeakLimit.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/CommonLimitJumpSubsequence.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/UnitBoundedSequentialCompactness.lean`, `UniformEquilibrium/Quitting/AbsorptionPath/AKRSFiniteProfileDensity.lean`, and `UniformEquilibrium/Quitting/Classification/ErrorExponentRefutation.lean` | `det_add_smul_one_eq_sum_principalMinors` states the exact principal-minor expansion for a scalar diagonal perturbation, and `det_add_smul_one_pos_of_principalMinors_nonneg` gives its positive-determinant consequence. `akrsPrintedCollisionFactor_five_counterexample` checks the printed `1 / k` collision-factor failure at `k = 5`. `principalQViabilityControls_not_upperHemicontinuous` states the direct upper-hemicontinuity failure. `exists_sequentiallyZeroPerfectAbsorptionPath_with_terminalTotalJumpAtZero` gives, for every nonempty finite quitting game, a path with an immediate terminal total jump which is vacuously zero-perfect under the printed test. `localGlobalCounterexample_rowwiseZeroPerfect_but_terminalRegretOne` bundles exact rowwise perfection with unit unrestricted terminal regret. `HasUnitBoundedTotalMass` records the missing upper probability-mass invariant; its endpoint theorems give total and left-total mass one, coordinatewise left-continuity, and no jump at clock one. `exists_reward_not_closedUnderWeakLimits_without_totalMassUpperBound` gives a two-player endpoint-total-two witness refuting only the unrestricted current Lean closure predicate. The generic row-closedness declarations end in `quittingPlayerRowεPerfect_of_tendsto` and `quittingRowεPerfect_of_tendsto`. Supplied source realizations feed `playerJumpRowsPerfect_of_sourceApproximatedWeakLimit`; plain unit-bounded weak convergence supplies both continuous-clock clauses. The source-localization modules construct literal source jump boundaries and pass the normalized jump identity along a jump-dependent strict subsequence. This is sufficient for `unitBoundedPlayerSequentialPerfectionClosedUnderWeakLimits`, so the corrected full closure has `M`/`L` and source `A`/consumer `C`. `unitBoundedAbsorptionPathSequentialCompactness` separately constructs one common strict subsequence, a unit-bounded absorption-path limit, weak convergence at every continuity point, and convergent literal source realizations of every limit jump. `unitBoundedAbsorptionPaths_are_weakLimits_of_completelyAbsorbingRootSequences` proves the corrected unit-bounded density statement of AKRS Proposition 4.8 with `M`/`L`. `unitBoundedAbsorptionPathSequentialCompactness` proves the corrected unit-bounded compactness statement of Proposition 4.11 with `M`/`L`. These checked corrections do not repair the reverse S.3 implication in AKRS Theorem 3.4. |
 | Chronological S.2/S.3 dispatch and AKRS Theorem 3.4 | `UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumVanishingNeverAlternative.lean`, `UniformEquilibrium/Quitting/Classification/Existence/ChronologicalAbsorptionPathTerminalDispatch.lean`, `UniformEquilibrium/Quitting/Classification/Existence/ApproximateEquilibriumForwardTrichotomy.lean` | `ChronologicalLimit.instantPunishment_or_wellSupportedAbsorbingSequenceExistence` exhaustively sends every actual completed chronological source to literal S.2 or well-supported S.3. `QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfectAbsorbing` then proves the table-level forward implication in AKRS Theorem 3.4, including the empty-player stationary case. Its premise `ApproximateEquilibriumExistence` says that for every positive error there is an arbitrary behavior profile that is terminal-payoff approximate Nash against every unilateral behavioral replacement; the profile may vary with the error, and no fixed payoff target is quantified. The conclusion is one fixed disjunction S.1, S.2, or S.3. This has `M`, `L`, `A`, and `C`. It does not prove the approximate-equilibrium premise for every quitting game, require or imply one fixed uniform payoff target, control all sufficiently long finite horizons, or prove a uniform equilibrium. |
 | AKRS reverse-S.3 null-tail boundary and restricted hardness | `UniformEquilibrium/Quitting/Classification/Existence/SequentiallyPerfectAbsorbingNullTailAlternative.lean`, `UniformEquilibrium/Quitting/Classification/Existence/ReverseSequentiallyPerfectAbsorbingHardness.lean` | `QuittingPayoffTable.solo_sub_never_le_of_completelyAbsorbing_not_everyRestart` proves that any nonterminating restarted tail of an initially absorbing row-perfect source forces each singleton payoff below Never plus the row error. `QuittingPayoffTable.allContinueExactNash_or_everyRestartWitnesses` gives the inclusive consequence: all Continue is exact terminal Nash, or every sufficiently accurate such witness terminates after every restart. The restricted predicate `HasStationaryExactEveryRestartRowPerfectSource` retains one fixed stationary exact source and its literal all-restart termination. `universalStationaryExactEveryRestartSource_iff_approximateExistence` proves that the universal implication from this restricted source to terminal approximate-equilibrium existence is equivalent to general finite-quitting terminal approximate-equilibrium existence. Its hard direction adds exactly one player, so it is not a same-cardinality equivalence. These results eliminate the null-tail subcase and show that even this restricted stationary-exact slice is universally hard; they neither prove nor refute the reverse implication of journal Theorem 3.4 for an unresolved table. |
-| Simon compact alternatives | `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/CompactQuantitativeAlternatives.lean`, `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean` | `quittingInstantPunishmentεEquilibriumExistence_of_nearTotalSupportRows` turns uniformly bounded rational support rows with absorption tending to one into the instant-punishment branch. `stationarilyGenerated_of_arbitrarilySmallNormalizedMotionRows` turns actual arbitrarily small positive-absorption normalized-motion rows into the corrected stationary-prefix branch against arbitrary behavioral deviations. Its contrapositive `exists_normalizedMotionLowerBound_of_not_branches` supplies one fixed positive lower-bound scale but deliberately asserts no row feasibility. The positive-solo clause, common compact-carrier scale, Simon Lemma 2, and full finite-orbit theorem remain open. |
+| Compact continuation motion | `UniformEquilibrium/Quitting/Classification/CompactContinuationMotion.lean`, `UniformEquilibrium/Quitting/Classification/CompactFeasibleNeighborhood.lean`, and `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean` | `exists_compactContinuationMotion_of_not_branches` supplies one positive motion and Continue-mass lower bound for every support-rational row on a fixed compact continuation set, assuming failure of the instant-punishment and stationarily generated branches. `isCompact_quittingFeasibleClosedNeighborhood` supplies compact neighborhoods of the finite feasible payoff polytope. The compact-motion result transfers to literal `lemma2_1_part2_compact` in `Literature/Simon2012.lean` without unfinished imported proofs. These bounds do not construct feasible rows or establish the full finite-orbit theorem. |
 | Simon positive-absorption splice | `UniformEquilibrium/Quitting/Classification/Existence/PositiveAbsorptionStationarySplice.lean`, `UniformEquilibrium/Quitting/Classification/Existence/StationarilyGeneratedBranch.lean` | `quittingStationarilyGeneratedApproximateEquilibria_of_positiveAbsorptionStationary` and its every-error adapter turn a cofinal family of stationary approximate equilibria with positive one-stage absorption into the stationarily generated branch, while the resulting Nash inequalities quantify over arbitrary behavioral hazard sequences. The direct residual corollary `quittingApproximateEquilibriumExistence_of_stationarilyGenerated` and the direct adapter `quittingGame_exists_uniformEquilibriumPayoff_of_approximateEquilibriumExistence` consume these approximate profiles without a cycle classification. This is a checked producer under the stated cofinal hypothesis, not a proof that every stationary family has positive absorption. |
 | Uniform payoff and diagonal terminal semantics | `UniformEquilibrium/Quitting/Classification/Existence/UniformPayoffTerminalSemanticCarrier.lean` | `isUniformEquilibriumPayoff_iff_diagonal_mem_terminalSemanticCarrier` characterizes each fixed uniform-payoff target exactly as a diagonal point in the closure of executable terminal payoff/unrestricted-best-response pairs. `quittingApproximateEquilibriumExistence_iff_exists_diagonal_mem_terminalSemanticCarrier` gives the target-free existential form, and `QuittingPayoffTable.approximateEquilibriumExistence_iff_exists_diagonalCarrierPoint` gives the normalized arbitrary-Never AKRS premise. The carrier point need not be attained by one profile. These are semantic equivalences, not branch classifications or an existence proof for every game. |
 | Simon equilibrium-to-positive-cycle assembly | `UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/EquilibriumToPositiveCycle.lean` | Supplied exact charged forward packets in one compact carrier close through a single-seam projective lasso to positive cyclic `F_epsilon` orbits, and the periodic support-witness consumer yields a uniform-equilibrium payoff. Here `IsQuittingZeroSolo reward` means that every own singleton reward is nonpositive. The primary supplied hard-branch interface is the disjunction `IsQuittingZeroSolo reward ∨ QuittingSimonArbitrarilyChargedForwardPacketCondition reward`; the positive-cycle corollary assumes the zero-solo branch is absent. The equilibrium-to-packet necessity and seam exactification are substantive supplied obligations: audited approximate paths have not been turned into exact packets in one common carrier, and no arbitrary-game producer is claimed. Raw packet absorption charge is not Euclidean finite-orbit variation and does not automatically feed the Simon variation obstruction. |
