@@ -501,12 +501,21 @@ proves strict deficit implies group exclusion, deriving the required distinct
 players from the deficit assumption itself. With nonnegative own singletons,
 group exclusion implies weak exclusion on all players. Both actual-profile
 and raw-calendar forms are provided.
-An executable raw-table recognition procedure remains to be supplied.
+`decideHasQuittingFiniteCalendarRawStrictExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawStrictDecision.lean`)
+proves correctness of executable strict-exclusion recognition for rational
+tables with a nonempty finite player set. The Boolean procedure universally
+quantifies every calendar coordinate and accepts exactly the canonical raw
+strict-exclusion predicate. It decides this sufficient condition, not
+uniform-equilibrium existence. Weak and group decision adapters remain open.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarPayoffFormula.lean` constructs
 executable rational expressions for coalition masses, payoffs, and singleton
 surpluses from supplied reward and calendar terms. Its simplex guard includes
 every Never coordinate. Evaluation agrees with the raw semantic payoff map;
 the caller must still bind the calendar variables and invoke elimination.
+`UniformEquilibrium/Quitting/Paths/FiniteCalendarFormulaCoordinates.lean` supplies the
+deterministic coordinate terms and the two-way simplex encoding: every
+guarded coordinate vector decodes to a genuine independent calendar profile.
 `StrictDeficitAndZeroBoundaryTables.strictDeficitReward_has_actualStrictSingletonDeficit`
 (`UniformEquilibrium/Quitting/Examples/StrictDeficitAndZeroBoundaryTables.lean`)
 gives a concrete four-player table with uniform deficit margin one. The same
@@ -1498,6 +1507,20 @@ action must have a nonnegative directed gap on those draws. The same module
 gives the losing-probability times expected-gap identity under the weaker
 averaged optimality premise. Neither form assumes root Nash, a global
 minimum, reward bounds, or an earlier padding date.
+
+`UniformEquilibrium/Diagnostics/Quitting/MembershipStretch.lean` defines the
+literal paired reward stretch, preserving own singleton entries. It proves
+the reward bounds and displacement estimate for the constructed table.
+A final table may reselect its own singleton entries; with one sure opponent,
+supported directed gaps still follow the same original-table stretch.
+The displacement estimate is not asserted for that arbitrarily reselected
+final table. This module does not construct a worst table or a minimum source.
+`UniformEquilibrium/Diagnostics/Quitting/MembershipStretchDebtComparison.lean`
+compares full behavioral debts at the same unpadded product root. Under
+supported coherent preferences, undoing the stretch cannot increase debt.
+Equal positive debts force every supported directed gap to be zero or two.
+The comparison does not assume a global minimum; applying it to an actual
+minimum source still requires the original and final tables and their ordering.
 
 `UniformEquilibrium/Quitting/Boundary/Holonomy/All.lean` has two complementary compactness modes.
 Fixed-cutoff and fixed-last lifts retain the actual root block, endpoints, and

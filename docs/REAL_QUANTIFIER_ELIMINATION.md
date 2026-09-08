@@ -149,7 +149,12 @@ acceptance sets with the reward entries themselves as free coordinates.
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarGroupRewardTableSemialgebraic.lean`
 proves the group-exclusion version, retaining its uniform parameter outside
 the calendar quantifier.
-These set-theoretic results do not yet supply executable raw-table tests.
+`decideHasQuittingFiniteCalendarRawStrictExclusion_eq_true_iff`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarRawStrictDecision.lean`)
+supplies executable strict-exclusion recognition for rational tables with
+nonempty player set. Its sentence universally closes the guarded finite-calendar
+payoff formula and has the canonical raw strict-exclusion semantics.
+The weak-subset and group-exclusion Boolean adapters remain to be supplied.
 
 `IsolatedRealRootData.validate_eq_true_iff` and
 `decideAtIsolatedRoots_eq_true_iff_exists`
