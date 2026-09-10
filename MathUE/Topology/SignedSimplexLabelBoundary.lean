@@ -1,5 +1,6 @@
 import Mathlib.LinearAlgebra.Matrix.Determinant.Basic
 import Mathlib.Data.Fintype.Pigeonhole
+import Mathlib.GroupTheory.Perm.Fin
 
 /-!
 # Integer cancellation for the labeled boundary of one simplex
@@ -119,5 +120,51 @@ theorem sum_complete_deletionWeight_eq_zero {n : ℕ}
     · rfl
     · exact (deletionWeight_eq_zero_of_not_injective labels omitted hinjective).symm
   rw [hsum, sum_deletionWeight_eq_zero]
+
+/-! ## Inserting an extra label in an arbitrary position -/
+
+theorem injective_insertNth_last_castSucc (permutation : Equiv.Perm (Fin n))
+    (pivot : Fin (n + 1)) :
+    Function.Injective
+      (Fin.insertNth pivot (Fin.last n) (fun step => (permutation step).castSucc)) := by
+  rw [← Fin.cons_comp_cycleRange]
+  apply Function.Injective.comp _ pivot.cycleRange.injective
+  apply Fin.cons_injective_of_injective
+  · rintro ⟨step, heq⟩
+    exact Fin.castSucc_ne_last (permutation step) heq
+  · intro first second heq
+    exact permutation.injective (Fin.castSucc_inj.mp heq)
+
+private theorem orientation_cons_last_castSucc (permutation : Equiv.Perm (Fin n)) :
+    SignedSimplexLabel.orientation
+      (Fin.cons (Fin.last n) (fun step => (permutation step).castSucc)) =
+      (-1 : ℤ) ^ n * (Equiv.Perm.sign permutation : ℤ) := by
+  let matrix : Matrix (Fin (n + 1)) (Fin (n + 1)) ℤ := fun row column =>
+    if (Fin.cons (Fin.last n) (fun step => (permutation step).castSucc) :
+      Fin (n + 1) → Fin (n + 1)) row = column
+      then 1 else 0
+  have hminor : matrix.submatrix (0 : Fin (n + 1)).succAbove (Fin.last n).succAbove =
+      (fun row column => if permutation row = column then (1 : ℤ) else 0) := by
+    ext row column
+    simp [matrix]
+  change matrix.det = _
+  rw [Matrix.det_succ_row matrix 0, Fin.sum_univ_castSucc]
+  have hzero (column : Fin n) : matrix 0 column.castSucc = 0 := by
+    simp [matrix, Ne.symm (Fin.castSucc_ne_last column)]
+  have hone : matrix 0 (Fin.last n) = 1 := by simp [matrix]
+  simp only [hzero, mul_zero, zero_mul, Finset.sum_const_zero, zero_add,
+    Fin.val_zero, Fin.val_last, hminor, hone]
+  change (-1 : ℤ) ^ n * 1 * SignedSimplexLabel.orientation permutation = _
+  rw [SignedSimplexLabel.orientation_equiv, mul_one]
+
+/-- Inserting the extra label at the pivot records the explicit permutation sign. -/
+theorem orientation_insertNth_last_castSucc (permutation : Equiv.Perm (Fin n))
+    (pivot : Fin (n + 1)) :
+    SignedSimplexLabel.orientation
+      (Fin.insertNth pivot (Fin.last n) (fun step => (permutation step).castSucc)) =
+      (-1 : ℤ) ^ pivot.val * ((-1 : ℤ) ^ n * (Equiv.Perm.sign permutation : ℤ)) := by
+  rw [← Fin.cons_comp_cycleRange, SignedSimplexLabel.orientation_comp_permutation,
+    Fin.sign_cycleRange, Units.val_pow_eq_pow_val, Units.val_neg, Units.val_one,
+    orientation_cons_last_castSucc]
 
 end Math.SignedSimplexLabel

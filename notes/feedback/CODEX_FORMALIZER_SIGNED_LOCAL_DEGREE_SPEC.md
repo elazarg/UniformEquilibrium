@@ -347,7 +347,16 @@ positive-entry coordinates in decreasing order. Its raw signed weight should
 be `(-1)^(number of positive entries)`, giving normalized degree equal to the
 product of the diagonal signs. Dimension zero must remain included.
 
-This statement is not yet proved. The confinement proof must use both anchor
+`completeSimplex_diagonalOrderedChain` and `signedWeight_diagonalOrderedChain`
+(`Research/Topology/BoxComplementarityDiagonalChain.lean`) construct that
+complete simplex and compute its actual raw weight as
+`(-1)^n * (-1)^(number of negative entries)` on every odd mesh `2*k+1` with
+`k > 0`. The coordinate order and labels are actual constructions, not
+supplied witnesses. Generic extra-label insertion and orientation lemmas
+reside in `MathUE/Topology/SignedSimplexLabelBoundary.lean`.
+
+Uniqueness and the local-count statement are not yet proved. The confinement
+proof must use both anchor
 membership and the simplex's unit coordinate span to exclude cube-boundary
 labels. The coarse-mesh restriction matters: at mesh three a negative
 one-dimensional slope also has a boundary simplex with anchor inside this

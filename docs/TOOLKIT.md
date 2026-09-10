@@ -861,6 +861,14 @@ uses the field `scalar⁻¹ * field(shift + scalar * point)` and derives equalit
 of the pulled-back problems up to positive scaling. It does not compare
 arbitrary charts for an unchanged ambient field.
 
+`completeSimplex_diagonalOrderedChain` and `signedWeight_diagonalOrderedChain`
+(`Research/Topology/BoxComplementarityDiagonalChain.lean`) construct one
+actual complete central simplex for a centered nonzero diagonal field and
+compute its signed weight, including dimension zero. The negative
+coordinates are ordered increasingly and the positive ones decreasingly;
+the dimension label lies between the two groups. These theorems do not yet
+prove that this is the only selected simplex or compute the local degree.
+
 `Math.LinearAlgebra.exists_path_diagonal_det_eq`
 (`MathUE/LinearAlgebra/MatrixDiagonalDeterminantPath.lean`) constructs a
 continuous determinant-preserving path from any real square matrix to a
