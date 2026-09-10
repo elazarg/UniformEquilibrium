@@ -201,9 +201,12 @@ also compares arbitrary independently sufficiently fine resolutions.
 `BoxComplementarityProblem.localDegree` and
 `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
 (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) package
-the resulting integer and its homotopy invariance on a common isolating region.
-Affine normalization and approximation independence remain separate
-obligations. The refinement specification belongs with
+the normalized integer and its homotopy invariance on a common isolating region.
+`BoxComplementarityProblem.localDegree_univ_eq_one`
+(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+whole-cube normalization from the actual unique mesh-one simplex and its
+signed weight. Ambient identification, affine comparison, and approximation
+independence remain separate obligations. The refinement specification belongs with
 `CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md` and
 `CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md`.
 

@@ -229,15 +229,18 @@ above it and every positive factor, the existing local count at `p` equals
 the count at `p * k`. Comparing `p` and `q` through `p * q` proves the
 independent-resolution theorem above.
 
-`BoxComplementarityProblem.localDegree`
+`BoxComplementarityProblem.rawLocalDegree`
 (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) is the
 resulting integer value. Its
-`BoxComplementarityProblem.eventually_localSignedCount_eq_localDegree`
+`BoxComplementarityProblem.eventually_localSignedCount_eq_rawLocalDegree`
 identifies it with every sufficiently fine positive grid count.
+The public `BoxComplementarityProblem.localDegree` is that raw value
+multiplied by `(-1)^n`, with a separate calibrated stabilization theorem.
 `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq` in the same
 file proves homotopy invariance on a common isolating region by comparing
-both stabilized values on one sufficiently fine common mesh. Affine
-normalization and approximation independence remain further obligations.
+both normalized values on one sufficiently fine common mesh. Ambient
+identification, affine comparison, and approximation independence remain
+further obligations.
 
 `BoxComplementarityProblem.localDegree_union_of_disjoint`
 (`Research/Topology/BoxComplementarityLocalDegreeConsequences.lean`)
@@ -252,34 +255,33 @@ proves existence of an actual solution in any isolating region with nonzero
 degree. It does not require the open region itself to be compact: compactness
 of its closure and absence of frontier solutions suffice.
 
-## Normalization and ambient comparison: implementation specification
+## Whole-cube normalization and remaining ambient comparison
 
-The next finite calculation is the actual resolution-one count.
 `boxComplementarityLocalSignedCount_univ_eq_resolution_one`
 (`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 identifies every positive-mesh whole-cube count with the mesh-one count.
-`BoxComplementarityProblem.localDegree_univ_eq_resolution_one`
+`BoxComplementarityProblem.rawLocalDegree_univ_eq_resolution_one`
 (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) identifies
-the stabilized value with that finite count, without an isolation premise.
+the raw stabilized value with that finite count, without an isolation premise.
 Both specialize the actual floor comparison to the empty frontier collar.
 At mesh one, the label rule depends only on the corner: its label is the
 first coordinate equal to one, or the dimension if there is none. The
-candidate unique complete ordered simplex raises coordinates in reverse
+unique complete ordered simplex raises coordinates in reverse
 order. Its vertex at position `j` has coordinate `i` equal to one exactly
-when `n - 1 - i < j`. The required producer must prove completeness and
-uniqueness for the existing simplex type, then evaluate its actual weight.
-A displayed corner or determinant alone is not that enumeration theorem.
+when `n ≤ i + j`.
+`boxComplementarityLocalCompleteSimplices_one_univ`
+(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+that the actual selected finite set contains exactly that simplex.
+`boxComplementarityCompleteSimplexSignedWeight_meshOneCornerChain` in the
+same file computes its signed weight as `(-1)^n`, including dimension zero.
 
-The chronological coordinate permutation and the label permutation have
-different sizes, `n` and `n + 1`. Their sign product is expected to give
-`(-1)^n` under the current raw orientation. A kernel-checked one-dimensional
-determinant calculation confirms the negative edge weight, but the general
-whole-cube normalization is not yet proved. Do not identify the raw degree
-with the conventional degree of `x - T(x)` without proving its sign
-conversion. Even dimension four can conceal the distinction; quotient
-dimensions need not be even.
+`BoxComplementarityProblem.rawLocalDegree_univ_eq_neg_one_pow` and
+`BoxComplementarityProblem.localDegree_univ_eq_one` in that file prove
+the raw and normalized whole-cube values. The public degree is thus
+whole-cube-normalized. Identification with ambient Brouwer degree remains
+unproved; the sign calibration alone does not supply that comparison.
 
-The remaining geometric adapters are separate from that finite calculation:
+The remaining geometric adapters are:
 
 1. Pull an ambient map through a positive rectangular chart and use its
    negative as the complementarity gain. The existing `rectangularPoint`

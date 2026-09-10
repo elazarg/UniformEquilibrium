@@ -1,6 +1,6 @@
 import Research.Topology.BoxComplementarityStabilizedLocalDegree
 
-/-! # Direct consequences of the stabilized local signed degree -/
+/-! # Consequences of the whole-cube-normalized local degree -/
 
 noncomputable section
 
@@ -45,11 +45,11 @@ theorem BoxComplementarityProblem.localDegree_union_of_disjoint
       problem.localDegree first hfirst + problem.localDegree second hsecond := by
   let hunion := problem.isIsolating_union first second hfirst hsecond
   obtain ⟨firstThreshold, hfirstCount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree first hfirst
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree first hfirst
   obtain ⟨secondThreshold, hsecondCount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree second hsecond
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree second hsecond
   obtain ⟨unionThreshold, hunionCount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree (first ∪ second) hunion
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree (first ∪ second) hunion
   let p := max (max firstThreshold secondThreshold) unionThreshold + 1
   have hp : 0 < p := Nat.zero_lt_succ _
   have hpFirst : firstThreshold ≤ p :=
@@ -63,12 +63,12 @@ theorem BoxComplementarityProblem.localDegree_union_of_disjoint
       (Nat.le_add_right _ 1)
   calc
     problem.localDegree (first ∪ second) hunion =
-        boxComplementarityLocalSignedCount problem p hp (first ∪ second) :=
+        (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem p hp (first ∪ second) :=
       (hunionCount p hpUnion hp).symm
-    _ = boxComplementarityLocalSignedCount problem p hp first +
-        boxComplementarityLocalSignedCount problem p hp second :=
-      boxComplementarityLocalSignedCount_union_of_disjoint
-        problem p hp hdisjoint
+    _ = (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem p hp first +
+        (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem p hp second :=
+      by rw [boxComplementarityLocalSignedCount_union_of_disjoint problem p hp hdisjoint,
+        mul_add]
     _ = problem.localDegree first hfirst + problem.localDegree second hsecond := by
       rw [hfirstCount p hpFirst hp, hsecondCount p hpSecond hp]
 
@@ -84,9 +84,9 @@ theorem BoxComplementarityProblem.localDegree_eq_of_eventually_cleared_differenc
       ¬problem.HasCompleteSimplexVertexIn cleared p) :
     problem.localDegree first hfirst = problem.localDegree second hsecond := by
   obtain ⟨firstThreshold, hfirstCount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree first hfirst
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree first hfirst
   obtain ⟨secondThreshold, hsecondCount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree second hsecond
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree second hsecond
   obtain ⟨clearThreshold, hclear⟩ := hcleared
   let p := max (max firstThreshold secondThreshold) clearThreshold + 1
   have hp : 0 < p := Nat.zero_lt_succ _
@@ -101,11 +101,12 @@ theorem BoxComplementarityProblem.localDegree_eq_of_eventually_cleared_differenc
       (Nat.le_add_right _ 1)
   calc
     problem.localDegree first hfirst =
-        boxComplementarityLocalSignedCount problem p hp first :=
+        (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem p hp first :=
       (hfirstCount p hpFirst hp).symm
-    _ = boxComplementarityLocalSignedCount problem p hp second :=
-      boxComplementarityLocalSignedCount_eq_of_difference_subset_cleared
-        problem p hp first second cleared hdifference (hclear p hpClear)
+    _ = (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem p hp second :=
+      congrArg (fun value : ℤ => (-1 : ℤ) ^ n * value)
+        (boxComplementarityLocalSignedCount_eq_of_difference_subset_cleared
+          problem p hp first second cleared hdifference (hclear p hpClear))
     _ = problem.localDegree second hsecond := hsecondCount p hpSecond hp
 
 /-- One isolating frontier collar permits all stabilized region changes whose
@@ -139,12 +140,13 @@ theorem BoxComplementarityProblem.eventually_hasCompleteSimplexVertexIn_of_local
     ∃ threshold, ∀ p, threshold ≤ p → ∀ _hp : 0 < p,
       problem.HasCompleteSimplexVertexIn region p := by
   obtain ⟨threshold, hcount⟩ :=
-    problem.eventually_localSignedCount_eq_localDegree region hisolating
+    problem.eventually_normalizedLocalSignedCount_eq_localDegree region hisolating
   refine ⟨threshold, fun p hpThreshold _hp => ?_⟩
   by_contra hno
   have hzero := boxComplementarityLocalSignedCount_eq_zero_of_no_vertex
     problem p _hp region hno
-  exact hnonzero ((hcount p hpThreshold _hp).symm.trans hzero)
+  apply hnonzero
+  rw [← hcount p hpThreshold _hp, hzero, mul_zero]
 
 /-- On any isolating region, nonzero stabilized degree forces an actual
 complementarity solution in that region. -/

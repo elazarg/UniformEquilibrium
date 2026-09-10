@@ -4092,9 +4092,12 @@ in the live mathematical ledger.
   `BoxComplementarityProblem.localDegree` and
   `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
   (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) construct
-  the mesh-independent integer and homotopy invariance on an isolating
-  region. Affine normalization and the integer-LCP comparison remain to be
-  supplied. These Research results do not yet close this game-semantic route.
+  the mesh-independent normalized integer and homotopy invariance on an
+  isolating region. `BoxComplementarityProblem.localDegree_univ_eq_one`
+  (`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+  whole-cube normalization. Ambient identification, affine comparison, and
+  the integer-LCP consumer remain to be supplied. These Research results do
+  not yet close this game-semantic route.
 - **Returned-block tangent obstruction:**
   `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` proves that
   bounded returned product blocks with vanishing total hazard and aggregate

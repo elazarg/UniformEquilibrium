@@ -809,7 +809,9 @@ supplies the ambient comparison, not integer degree or its invariance laws.
 The Research construction
 `BoxComplementarityProblem.localDegree`
 (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
-integer on an isolating relatively open region of the unit cube.
+whole-cube-normalized integer on an isolating relatively open region of the
+unit cube. It is `(-1)^n` times `BoxComplementarityProblem.rawLocalDegree`,
+the literal eventual signed count.
 `BoxComplementarityProblem.eventually_localSignedCount_eq`
 (`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 proves that every sufficiently fine positive grid gives the same actual
@@ -818,8 +820,12 @@ coordinate-floor refinement and an actual solution-free frontier collar;
 count invariance is not a premise.
 `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
 in the stabilized-degree file proves homotopy invariance for jointly
-continuous families on a common isolating region. Affine normalization,
-regular-Jacobian comparison, and the game-specific integer-LCP consumer
+continuous families on a common isolating region.
+`BoxComplementarityProblem.localDegree_univ_eq_one`
+(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+normalization from the actual unique mesh-one simplex, whose signed weight
+is `(-1)^n`. Ambient Brouwer identification, affine and regular-Jacobian
+comparison, and the game-specific integer-LCP consumer
 are not supplied by these Research theorems.
 `BoxComplementarityProblem.localDegree_union_of_disjoint` and
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_localDegree_coherent`
