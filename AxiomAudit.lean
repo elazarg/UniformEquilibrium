@@ -468,6 +468,7 @@ import MathUE.Probability.PivotExcursionRenewal
 import MathUE.Probability.PositiveChargedCirculationClass
 import MathUE.Probability.PotentialDominatedTransitionCost
 import MathUE.Probability.PredictableCoreShadow
+import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Probability.QuantileClock
 import MathUE.Probability.QuantileClockCollision
 import MathUE.Probability.QuotientShadowLift

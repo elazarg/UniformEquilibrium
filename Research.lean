@@ -37,6 +37,7 @@ import Research.Topology.BoxComplementarityPrismCluster
 import Research.Topology.BoxComplementaritySignedLocalCount
 import Research.Topology.BoxComplementaritySpernerEventualLocalParity
 import Research.Topology.BoxComplementaritySpernerSubdivisionPrism
+import Research.Topology.KuhnExternalCubePrism
 import Research.Topology.KuhnPrismBoundaryCollar
 import Research.Quitting.AnchoredCyclicPatienceBridge
 import Research.Quitting.AnchoredCyclicPreemptionEdge

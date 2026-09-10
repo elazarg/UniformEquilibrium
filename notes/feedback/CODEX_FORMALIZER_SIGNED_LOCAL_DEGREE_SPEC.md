@@ -171,12 +171,15 @@ The required combinatorial producer has three parts:
    coordinate-permutation sign theorem. There is no Euclidean volume factor.
 
 This compares coarse labels with pulled labels, not with the actual fine
-labels. Bridge those two labelings using the existing external-label prism:
-use the pulled label at the left parameter face and the actual fine label
-elsewhere. The finite signed cancellation argument needs the spatial
-boundary rules, not continuity of this discrete switch. Factor geometric
-endpoint transport out of family-specific wrappers rather than inventing a
-continuous problem that produces these labels.
+labels. `externalCubeLabelPrism`
+(`Research/Topology/KuhnExternalCubePrism.lean`) constructs a discrete switch
+between two proper labelings on one grid. Its
+`externalPrismParameterEndEquiv` preserves ordered vertices and signed
+weights, and `externalCubeLabelPrism_endpointWeightedSum_eq` transports
+signed simplex sums under an incident-compatible integer selection.
+The finite cancellation needs spatial boundary rules, not continuity of
+the switch. Applying it to pulled labels at the left end and actual fine
+labels elsewhere still requires the collar and selection argument below.
 
 The analytic producer must establish one collar radius and one coarse
 threshold working for every positive `k`. Each label is sampled either at

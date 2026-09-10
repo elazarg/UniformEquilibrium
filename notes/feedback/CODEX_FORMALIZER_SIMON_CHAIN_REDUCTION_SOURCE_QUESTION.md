@@ -82,6 +82,16 @@ masses, use reduced-law normalization to establish coverage, and transport
 the resulting sampled path law. These are proof obligations, not assumed
 fields asserting the desired trace law or Lemma 1.
 
+The generic mass inequality is available as `sum_prefixFree_mass_le` and
+`tsum_prefixFree_mass_le`
+(`MathUE/Probability/PrefixFreeSubstochasticMass.lean`). It bounds actual
+prefix-free word sets under finite-child substochasticity, without an
+alphabet finiteness or countability restriction. To apply it here, products
+must be restricted to supported composite prefixes: arbitrary tagged
+actions can belong to different states, so their choice probabilities do
+not form one probability distribution. Probability-one next-state
+uniqueness and that state's action law must supply the local child bound.
+
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`
 (`Literature/Simon2007.lean`) is unaffected: a positive-mass observed first
