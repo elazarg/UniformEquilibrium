@@ -45,6 +45,23 @@ directions in the full equivalences. Extracting them from the larger proof
 bodies removes that unnecessary dependency; it does not prove a missing
 forward implication.
 
+## Section 4 cutoff and coordinate drift
+
+Simon (2012), printed page 191, makes the cutoff vanish at distance at least
+δ from the lower boundary. The ω attribution in the earlier Lean interface
+was incorrect; this is a correction to the formalization, not a paper error.
+
+`exists_section4Cutoff` (`Literature/Simon2012.lean`) constructs a continuous
+cutoff for every positive radius and every truncation parameter, including an
+empty lower boundary. It uses the canonical metric infimum distance after
+the Euclidean coordinate identification.
+`section4_coordinate_drift_of_radius_le_one` in the same file extracts the
+coordinate drift argument for any supplied cutoff radius at most one,
+without unused branch exclusions or domain-membership assumptions.
+`lemma4_3` specializes this to the printed δ; `lemma4_3_omega` gives the
+ω specialization. Both radius bounds follow from the stated parameters.
+This does not change or discharge the requirements of `lemma4_5`.
+
 ## Markov variation
 
 `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound`

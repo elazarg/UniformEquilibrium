@@ -6807,6 +6807,23 @@ def Section4Omega (G : QuittingGame) (M d ρ ξ R ε : ℝ) : ℝ :=
   d * ε * ξ * ρ * Section4Delta G M ε /
     (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M)
 
+/-- The Section 4 quitting bound is positive and at most one under the accuracy restriction. -/
+theorem section4Delta_mem_Ioc (G : QuittingGame) (M ρ ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Delta G M ε ∈ Set.Ioc 0 1 := by
+  have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by exact_mod_cast hplayers
+  have hM1 : 1 ≤ M := hM.1
+  have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+  have hε1 : ε ≤ 1 := by linarith
+  constructor
+  · rw [Section4Delta]
+    positivity
+  · rw [Section4Delta, div_le_one (by positivity :
+      0 < 2 * (Fintype.card G.Player : ℝ) * M)]
+    nlinarith
+
 private theorem section4Omega_mem_Ioc (G : QuittingGame)
     (M d ρ ξ R ε : ℝ) (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
@@ -6824,14 +6841,7 @@ private theorem section4Omega_mem_Ioc (G : QuittingGame)
   have hM1 : 1 ≤ M := hM.1
   have hρ1 : ρ ≤ 1 := hmotion.2.2.1
   have hε1 : ε ≤ 1 := by linarith
-  have hδpos : 0 < Section4Delta G M ε := by
-    rw [Section4Delta]
-    positivity
-  have hδ1 : Section4Delta G M ε ≤ 1 := by
-    rw [Section4Delta, div_le_one (by positivity :
-      0 < 2 * (Fintype.card G.Player : ℝ) * M)]
-    dsimp only [N] at hN ⊢
-    nlinarith
+  obtain ⟨hδpos, hδ1⟩ := section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ
   have hproduct1 : d * ε * ξ * ρ * Section4Delta G M ε ≤ 1 := by
     have hdε : d * ε ≤ 1 := mul_le_one₀ hd1 hε.le hε1
     have hdεξ : d * ε * ξ ≤ 1 := mul_le_one₀ hdε hξ.le hξ1.le
@@ -6867,14 +6877,83 @@ private theorem section4Omega_mem_Ioc (G : QuittingGame)
 
 /--
 The cutoff `λ` used to glue the structure homotopy to the identity near `D`.
-Its support radius is the paper's `ω`, not the separate quitting bound `δ`.
+The support radius is supplied explicitly; the printed construction uses `δ`.
 -/
-def IsSection4Cutoff (G : QuittingGame) (R ω : ℝ)
+def IsSection4Cutoff (G : QuittingGame) (R radius : ℝ)
     (cutoff : Payoff G.Player → UnitInterval) : Prop :=
   Continuous cutoff ∧
   (∀ x ∈ LowerBoundary G R, (cutoff x : ℝ) = 1) ∧
-  (∀ x, ω ≤ EuclideanInfDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
+  (∀ x, radius ≤ EuclideanInfDist x (LowerBoundary G R) → (cutoff x : ℝ) = 0) ∧
   ∀ x ∈ TruncatedW G R \ LowerBoundary G R, (cutoff x : ℝ) < 1
+
+/-- The paper's Euclidean distance to a set is the canonical metric infimum
+distance after the finite-dimensional `WithLp` coordinate identification. -/
+theorem euclideanInfDist_eq_infDist_toLp {N : Type} [Fintype N]
+    (point : Payoff N) (set : Set (Payoff N)) :
+    EuclideanInfDist point set =
+      Metric.infDist (WithLp.toLp 2 point) (WithLp.toLp 2 '' set) := by
+  rw [Metric.infDist_eq_iInf, ← sInf_image', Set.image_image]
+  simp only [EuclideanInfDist, EuclideanDist, euclideanNorm_eq_norm_toLp,
+    WithLp.toLp_sub, dist_eq_norm]
+
+/-- Euclidean distance to a fixed set is continuous, including for the empty set. -/
+theorem continuous_euclideanInfDist {N : Type} [Fintype N]
+    (set : Set (Payoff N)) : Continuous (fun point => EuclideanInfDist point set) := by
+  simp_rw [euclideanInfDist_eq_infDist_toLp]
+  exact (Metric.continuous_infDist_pt _).comp (PiLp.continuous_toLp 2 _)
+
+/-- Every positive supplied radius admits the Section 4 cutoff. The construction
+also covers an empty lower boundary, without restrictions on the truncation radius. -/
+theorem exists_section4Cutoff (G : QuittingGame) (R : ℝ) {radius : ℝ}
+    (hradius : 0 < radius) : ∃ cutoff, IsSection4Cutoff G R radius cutoff := by
+  classical
+  by_cases hnonempty : (LowerBoundary G R).Nonempty
+  · let distance := fun point => EuclideanInfDist point (LowerBoundary G R)
+    have hnonneg : ∀ point, 0 ≤ distance point := by
+      intro point
+      dsimp only [distance]
+      rw [euclideanInfDist_eq_infDist_toLp]
+      exact Metric.infDist_nonneg
+    let cutoff : Payoff G.Player → UnitInterval := fun point =>
+      ⟨max 0 (1 - distance point / radius), le_max_left _ _, by
+        exact max_le zero_le_one (sub_le_self _ (div_nonneg (hnonneg point) hradius.le))⟩
+    have hzero : ∀ point ∈ LowerBoundary G R, distance point = 0 := by
+      intro point hpoint
+      dsimp only [distance]
+      rw [euclideanInfDist_eq_infDist_toLp]
+      exact Metric.infDist_zero_of_mem (mem_image_of_mem _ hpoint)
+    have hpositive : ∀ point ∉ LowerBoundary G R, 0 < distance point := by
+      intro point hpoint
+      dsimp only [distance]
+      rw [euclideanInfDist_eq_infDist_toLp]
+      have hclosed : IsClosed (WithLp.toLp 2 '' LowerBoundary G R) :=
+        (PiLp.homeomorph 2 (fun _ : G.Player => ℝ)).symm.isClosedMap _ isClosed_closure
+      apply (hclosed.notMem_iff_infDist_pos (hnonempty.image _)).mp
+      rintro ⟨other, hother, hequal⟩
+      have heq : other = point := congrArg WithLp.ofLp hequal
+      exact hpoint (heq ▸ hother)
+    refine ⟨cutoff, ?_, ?_, ?_, ?_⟩
+    · apply Continuous.subtype_mk
+      exact continuous_const.max
+        (continuous_const.sub ((continuous_euclideanInfDist _).div_const radius))
+    · intro point hpoint
+      simp [cutoff, hzero point hpoint]
+    · intro point hpoint
+      have hquotient : 1 ≤ distance point / radius :=
+        (le_div_iff₀ hradius).mpr (by simpa only [one_mul] using hpoint)
+      change max 0 (1 - distance point / radius) = 0
+      exact max_eq_left (by linarith)
+    · intro point hpoint
+      change max 0 (1 - distance point / radius) < 1
+      exact max_lt zero_lt_one (sub_lt_self _ (div_pos (hpositive point hpoint.2) hradius))
+  · have hempty : LowerBoundary G R = ∅ := Set.not_nonempty_iff_eq_empty.mp hnonempty
+    refine ⟨fun _ => 0, continuous_const, ?_, ?_, ?_⟩
+    · simp [hempty]
+    · intro point _
+      rfl
+    · intro point _
+      exact zero_lt_one
+
 
 /-- The first coordinate `x(a)` of the deformed graph. -/
 def Section4X (G : QuittingGame) {M d : ℝ}
@@ -7708,32 +7787,20 @@ private theorem lowHazard_minMax_le_stagePayoff_add
   have hupper := le_of_abs_le hstageDistance
   linarith
 
-/--
-Lemma 4.3's coordinate drift statement for `z = f(x,p)`, under the standing
-Section 3--4 choices used in its proof.  The deformed graph coordinate is the
-separate vector `y = λx + (1-λ)z`.  The hypotheses are not optional: the paper
-uses normality, exclusion of the two simple equilibrium classes, the common
-motion parameter, the constants `ξ,R`, the accuracy restriction `ε < ρ/3`, and
-the cutoff supported in the radius `ω` defined in Section 4.3.  The proof uses
-the paper's three-way split according to the player's quitting probability and
-continuation coordinate, with Lemma 2.2 supplying the strict coordinate
-increase in the low-rationality case.
--/
-theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+/-- The coordinate drift argument only needs a cutoff radius at most one. -/
+theorem section4_coordinate_drift_of_radius_le_one
+    (G : QuittingGame) (M d ρ ξ R radius : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
     (hd : 0 < d) (hd1 : d ≤ 1)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (_hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hmotion : IsStructureMotionParameter G M ρ)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
-    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
-    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hcutoff : IsSection4Cutoff G R radius cutoff)
+    (hradius : radius ≤ 1)
     (a : Payoff G.Player)
-    (_haC : a ∈ TruncatedW G R)
     (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
     (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
       Section4X G inverse cutoff a j ≤ M) :
@@ -7765,10 +7832,8 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
   have hD : (LowerBoundary G R).Nonempty :=
     ⟨lowerCubeCorner G R,
       lowerCubeCorner_mem_lowerBoundary G R (by linarith) hsolo⟩
-  have hω := section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
-    hmotion hconstants hε hερ
   obtain ⟨large, hlarge⟩ := exists_large_coordinate_of_cutoff_pos G
-    (by linarith) hω.2 hD cutoff hcutoff.2.2.1 a hcutoff0
+    (by linarith) hradius hD cutoff hcutoff.2.2.1 a hcutoff0
   have hxFormula : x =
       (1 - (cutoff a : ℝ)) • z.1.1 + (cutoff a : ℝ) • a := by
     dsimp only [x, z, Section4X]
@@ -7977,6 +8042,60 @@ theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
           ((le_add_of_nonneg_right hstepNonneg).trans hdrift)
       · intro _
         exact hdrift
+
+/-- Lemma 4.3's coordinate drift specialized to the small-step radius `ω`. -/
+theorem lemma4_3_omega (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player)
+    (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
+    (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
+      Section4X G inverse cutoff a j ≤ M) :
+    ∀ j,
+      (MinMaxQuit G j - ρ / 3 ≤ Section4X G inverse cutoff a j →
+        MinMaxQuit G j - ρ / 3 ≤ Section4Z G inverse cutoff a j) ∧
+      (Section4X G inverse cutoff a j < MinMaxQuit G j - ρ / 3 →
+        Section4X G inverse cutoff a j + ρ ^ 2 / (500 * M) ≤
+          Section4Z G inverse cutoff a j) := by
+  exact section4_coordinate_drift_of_radius_le_one G M d ρ ξ R _
+    hplayers hM hd hd1 hnormal hmotion hconstants inverse cutoff hcutoff
+    (section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
+      hmotion hconstants hε hερ).2 a hcutoff0 hcutoff1 hxbox
+
+/-- Lemma 4.3's coordinate drift for the printed cutoff radius `δ`. -/
+theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Delta G M ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player)
+    (hcutoff0 : 0 < (cutoff a : ℝ)) (hcutoff1 : (cutoff a : ℝ) < 1)
+    (hxbox : ∀ j, -M ≤ Section4X G inverse cutoff a j ∧
+      Section4X G inverse cutoff a j ≤ M) :
+    ∀ j,
+      (MinMaxQuit G j - ρ / 3 ≤ Section4X G inverse cutoff a j →
+        MinMaxQuit G j - ρ / 3 ≤ Section4Z G inverse cutoff a j) ∧
+      (Section4X G inverse cutoff a j < MinMaxQuit G j - ρ / 3 →
+        Section4X G inverse cutoff a j + ρ ^ 2 / (500 * M) ≤
+          Section4Z G inverse cutoff a j) := by
+  exact section4_coordinate_drift_of_radius_le_one G M d ρ ξ R _
+    hplayers hM hd hd1 hnormal hmotion hconstants inverse cutoff hcutoff
+    (section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ).2
+    a hcutoff0 hcutoff1 hxbox
 
 /-!
 The proof of Lemma 4.4 uses the local inference that `pⱼ = 0` implies
