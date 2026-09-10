@@ -604,6 +604,7 @@ import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity
 import MathUE.Topology.GraphDirectedPeriodicLift
 import MathUE.Topology.KuhnEndpointSharedFaceOrientation
+import MathUE.Topology.KuhnFloorRefinement
 import MathUE.Topology.KuhnInternalSharedFaceOrientation
 import MathUE.Topology.KuhnParameterEndOrientation
 import MathUE.Topology.KuhnSharedFaceOrientation

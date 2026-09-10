@@ -134,7 +134,9 @@ and its cleared collar. No such producer was found in the bounded search.
 
 ### Coordinate-floor comparison specification
 
-The following is an implementation specification, not a checked theorem.
+The coordinate-floor maps and injective-image simplex theorem are proved in
+`MathUE/Topology/KuhnFloorRefinement.lean`. The remaining comparison below is
+an implementation specification, not a checked theorem.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -143,10 +145,10 @@ of `k`.
 The required combinatorial producer has three parts:
 
 1. An injectively rounded fine Kuhn simplex is a coarse Kuhn simplex.
-   Reuse `simplex_of_step_le`, `spernerSimplex_step_le`, and
-   `spernerSimplex_val_le_succ`
-   (`MathUE/Topology/KuhnSimplexGeometry.lean`) for monotonicity and the
-   endpoint coordinate bound.
+   This is `simplex_kuhnFloorVertex_of_injective`
+   (`MathUE/Topology/KuhnFloorRefinement.lean`), for arbitrary compatible
+   labelled cubes and arbitrary simplex dimension. It reuses the existing
+   simplex constructor, monotonicity, and endpoint coordinate bounds.
 2. Each coarse top simplex with base `b` has exactly one noncollapsed fine
    preimage, with coordinate bases `k * (b + 1) - 1` and the same chronological
    coordinate permutation. Prove both existence and uniqueness from the
