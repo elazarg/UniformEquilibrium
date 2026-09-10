@@ -86,11 +86,19 @@ The generic mass inequality is available as `sum_prefixFree_mass_le` and
 `tsum_prefixFree_mass_le`
 (`MathUE/Probability/PrefixFreeSubstochasticMass.lean`). It bounds actual
 prefix-free word sets under finite-child substochasticity, without an
-alphabet finiteness or countability restriction. To apply it here, products
-must be restricted to supported composite prefixes: arbitrary tagged
-actions can belong to different states, so their choice probabilities do
-not form one probability distribution. Probability-one next-state
-uniqueness and that state's action law must supply the local child bound.
+alphabet finiteness or countability restriction.
+
+`compositeActionList_tsum_tailChoiceProduct_le_one` and
+`compositeActionList_tsum_choiceProduct_le_first`
+(`Literature/Simon2007.lean`) apply it to the actual valid composite words.
+For a fixed first action, the tail products sum to at most one, and the
+whole-word products sum to at most that action's choice probability.
+The prefix mass is the choice product on deterministic first-exit chains
+and zero elsewhere. All permitted next actions at a nonempty chain belong
+to one state, by probability-one first-exit uniqueness; its action law
+therefore supplies the finite-child mass bound. No finite action assumption
+or initial-root alternative is added. Reduced-law normalization, coverage,
+and the sampled path-law transport remain to be connected to this bound.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

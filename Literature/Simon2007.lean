@@ -1,6 +1,7 @@
 import Mathlib
 import MathUE.PMFProduct.Basic
 import MathUE.Probability.MarkovPathRestart
+import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.CompactFiniteChargedReturn
@@ -7331,6 +7332,174 @@ private theorem compositeActionList_prefix_eq
       have hzero := measure_mono_null hsubset hcomplete
       rw [hrelation] at hzero
       exact one_ne_zero hzero
+
+/-- A finite family of dependent actions all based at one state has total
+prescribed mass at most one. -/
+private theorem DiscreteDecisionProcess.sum_choose_le_one_of_fst_eq
+    (P : DiscreteDecisionProcess) (state : P.X)
+    (actions : Finset ((z : P.X) × P.Y z))
+    (hstate : ∀ action ∈ actions, action.1 = state) :
+    (∑ action ∈ actions, P.choose action.1 action.2) ≤ 1 := by
+  classical
+  let atState : actions → P.Y state := fun action =>
+    _root_.cast (congrArg P.Y (hstate action.1 action.2)) action.1.2
+  have hinjective : Function.Injective atState := by
+    intro first second heq
+    rcases first with ⟨⟨firstState, firstAction⟩, hfirst⟩
+    rcases second with ⟨⟨secondState, secondAction⟩, hsecond⟩
+    have hfirstState := hstate ⟨firstState, firstAction⟩ hfirst
+    have hsecondState := hstate ⟨secondState, secondAction⟩ hsecond
+    cases hfirstState
+    cases hsecondState
+    simp only [atState, cast_eq] at heq
+    apply Subtype.ext
+    exact Sigma.ext rfl (heq_of_eq heq)
+  have hvalue (action : actions) :
+      P.choose action.1.1 action.1.2 = P.choose state (atState action) := by
+    rcases action with ⟨⟨actionState, action⟩, haction⟩
+    dsimp only at haction ⊢
+    have heq := hstate ⟨actionState, action⟩ haction
+    cases heq
+    rfl
+  calc
+    (∑ action ∈ actions, P.choose action.1 action.2) =
+        ∑ action : actions, P.choose state (atState action) := by
+      rw [Finset.sum_subtype (p := fun action => action ∈ actions)]
+      · exact Finset.sum_congr rfl fun action _ => hvalue action
+      · intro action
+        simp
+    _ = ∑ action ∈ Finset.univ.image atState, P.choose state action := by
+      rw [Finset.sum_image]
+      exact hinjective.injOn
+    _ ≤ ∑' action, P.choose state action :=
+      ENNReal.sum_le_tsum _
+    _ = 1 := PMF.tsum_coe _
+
+
+private def compositeTailPrefixMass
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (T : Set P.X)
+    (first : (state : P.X) × P.Y state)
+    (tail : List ((state : P.X) × P.Y state)) : ℝ≥0∞ := by
+  classical
+  exact if List.IsChain
+      (fun u v => PS.afterAction u.1 u.2 (FirstOutsideTAt P T v.1) = 1)
+      (first :: tail)
+    then (tail.map fun action => P.choose action.1 action.2).prod else 0
+
+/-- Deterministic first-exit prefixes have a substochastic finite family of
+children: all admissible next actions belong to one actual state. -/
+private theorem compositeTailPrefixMass_children_le
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (T : Set P.X)
+    (first : (state : P.X) × P.Y state)
+    (stem : List ((state : P.X) × P.Y state))
+    (children : Finset ((state : P.X) × P.Y state)) :
+    (∑ action ∈ children, compositeTailPrefixMass P PS T first (stem ++ [action])) ≤
+      compositeTailPrefixMass P PS T first stem := by
+  classical
+  let relation := fun u v : (state : P.X) × P.Y state =>
+    PS.afterAction u.1 u.2 (FirstOutsideTAt P T v.1) = 1
+  by_cases hstem : List.IsChain relation (first :: stem)
+  · let allowed := children.filter fun action =>
+      List.IsChain relation (first :: (stem ++ [action]))
+    have hsum :
+        (∑ action ∈ children, compositeTailPrefixMass P PS T first (stem ++ [action])) =
+        (stem.map fun action => P.choose action.1 action.2).prod *
+          ∑ action ∈ allowed, P.choose action.1 action.2 := by
+      rw [Finset.mul_sum]
+      rw [Finset.sum_filter]
+      apply Finset.sum_congr rfl
+      intro action _
+      unfold compositeTailPrefixMass
+      split_ifs <;> simp [List.map_append, List.prod_append]
+    rw [hsum]
+    have hmass : compositeTailPrefixMass P PS T first stem =
+        (stem.map fun action => P.choose action.1 action.2).prod := by
+      change (if List.IsChain relation (first :: stem) then _ else _) = _
+      rw [if_pos hstem]
+    rw [hmass]
+    suffices hsum : (∑ action ∈ allowed, P.choose action.1 action.2) ≤ 1 by
+      simpa using mul_le_mul_right hsum
+        (stem.map fun action => P.choose action.1 action.2).prod
+    by_cases hempty : allowed = ∅
+    · simp [hempty]
+    · obtain ⟨chosen, hchosen⟩ := Finset.nonempty_iff_ne_empty.mpr hempty
+      let last := (first :: stem).getLast (List.cons_ne_nil _ _)
+      have hnext (action) (haction : action ∈ allowed) : relation last action := by
+        have hchain := (Finset.mem_filter.mp haction).2
+        have happend : List.IsChain relation ((first :: stem) ++ [action]) := by
+          simpa only [List.cons_append] using hchain
+        exact (List.isChain_append.mp happend).2.2 last
+          (List.getLast_mem_getLast? (List.cons_ne_nil _ _)) action (by simp)
+      apply P.sum_choose_le_one_of_fst_eq chosen.1 allowed
+      intro action haction
+      exact firstOutsideTAt_eq_of_pos_of_eq_one P PS T
+        (by rw [show PS.afterAction last.1 last.2
+          (FirstOutsideTAt P T action.1) = 1 from hnext action haction]; exact zero_lt_one)
+        (hnext chosen hchosen)
+  · have hzero : ∀ action,
+        compositeTailPrefixMass P PS T first (stem ++ [action]) = 0 := by
+      intro action
+      unfold compositeTailPrefixMass
+      apply if_neg
+      intro hchain
+      apply hstem
+      exact List.IsChain.left_of_append
+        (show List.IsChain relation ((first :: stem) ++ [action]) from hchain)
+    simp only [hzero, Finset.sum_const_zero]
+    exact bot_le
+
+/-- For one fixed first action, the products of prescribed probabilities
+along all its valid composite tails have total mass at most one. -/
+theorem compositeActionList_tsum_tailChoiceProduct_le_one
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (A T : Set P.X) (s : P.X) (first : (state : P.X) × P.Y state) :
+    (∑' tail : {tail : List ((state : P.X) × P.Y state) |
+        IsCompositeActionList P PS A T s (first :: tail)},
+      (tail.val.map fun action => P.choose action.1 action.2).prod) ≤ 1 := by
+  classical
+  let code : Set (List ((state : P.X) × P.Y state)) :=
+    {tail | IsCompositeActionList P PS A T s (first :: tail)}
+  have hprefix : Math.IsPrefixFreeCode code := by
+    intro short hshort long hlong hpre
+    have heq := compositeActionList_prefix_eq P PS A T s hshort hlong
+      (List.cons_prefix_cons.mpr ⟨rfl, hpre⟩)
+    exact (List.cons.inj heq).2
+  have hbound := Math.tsum_prefixFree_mass_le
+    (compositeTailPrefixMass P PS T first)
+    (compositeTailPrefixMass_children_le P PS T first) code hprefix []
+  have hvalid (tail : code) : compositeTailPrefixMass P PS T first tail.val =
+      (tail.val.map fun action => P.choose action.1 action.2).prod := by
+    have hchain : List.IsChain
+        (fun u v => PS.afterAction u.1 u.2 (FirstOutsideTAt P T v.1) = 1)
+        (first :: tail.val) := by
+      rcases tail.property with ⟨initial, rest, heq, _, _, hchain, _⟩
+      exact hchain
+    simp only [compositeTailPrefixMass, if_pos hchain]
+  change (∑' tail : code,
+    (tail.val.map fun action => P.choose action.1 action.2).prod) ≤ 1
+  calc
+    _ = ∑' tail : code, compositeTailPrefixMass P PS T first tail.val := by
+      apply tsum_congr
+      intro tail
+      exact (hvalid tail).symm
+    _ ≤ 1 := by
+      simpa only [List.nil_append, compositeTailPrefixMass, List.isChain_singleton,
+        if_true, List.map_nil, List.prod_nil] using hbound
+
+/-- The same actual composite words, including their fixed first action,
+have total product mass at most that first action's prescribed probability. -/
+theorem compositeActionList_tsum_choiceProduct_le_first
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (A T : Set P.X) (s : P.X) (first : (state : P.X) × P.Y state) :
+    (∑' tail : {tail : List ((state : P.X) × P.Y state) |
+        IsCompositeActionList P PS A T s (first :: tail)},
+      ((first :: tail.val).map fun action => P.choose action.1 action.2).prod) ≤
+      P.choose first.1 first.2 := by
+  simp only [List.map_cons, List.prod_cons]
+  rw [ENNReal.tsum_mul_left]
+  simpa using mul_le_mul_right
+    (compositeActionList_tsum_tailChoiceProduct_le_one P PS A T s first)
+    (P.choose first.1 first.2)
 
 /-- The retained state set of the chain reduction. -/
 def ChainRetainedStates (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
