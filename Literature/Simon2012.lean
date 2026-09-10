@@ -5,6 +5,8 @@ import MathUE.PMFProduct.TotalVariation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.Topology.SimonViabilityQuestion
 import Mathlib.Analysis.Convex.Contractible
+import Mathlib.Analysis.Convex.Join
+import Mathlib.Topology.MetricSpace.Thickening
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
@@ -7284,6 +7286,237 @@ def Section4J (G : QuittingGame) {M d : ℝ}
     (R ε δ : ℝ) : Set (Payoff G.Player × Payoff G.Player) :=
   HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) ∪
     correspondenceGraph (GluedFiber G R ε δ)
+
+theorem isCompact_truncatedPiece (G : QuittingGame) (R : ℝ) (j : G.Player) :
+    IsCompact (TruncatedPiece G R j) := by
+  rw [truncatedPiece_eq_Icc]
+  exact isCompact_Icc
+
+/-- The finite union defining the truncated domain is compact. -/
+theorem isCompact_truncatedW (G : QuittingGame) (R : ℝ) :
+    IsCompact (TruncatedW G R) := by
+  rw [truncatedW_eq_iUnion]
+  exact isCompact_iUnion fun j => isCompact_truncatedPiece G R j
+
+/-- The lower boundary is compact, even when it is empty. -/
+theorem isCompact_lowerBoundary (G : QuittingGame) (R : ℝ) :
+    IsCompact (LowerBoundary G R) := by
+  have hcompact := isCompact_truncatedW G R
+  exact hcompact.closure_of_subset (Set.sdiff_subset.trans hcompact.isClosed.frontier_subset)
+
+/-- Each upper neighborhood is a closed subset of a compact coordinate rectangle. -/
+theorem isCompact_upperNeighborhoodFor (G : QuittingGame) (R ε : ℝ) (j : G.Player) :
+    IsCompact (UpperNeighborhoodFor G R ε j) := by
+  have heq : UpperNeighborhoodFor G R ε j =
+      Set.Icc (fun who => SoloPayoff G who - ε / 3) (fun _ => R + 1 + ε / 3) ∩
+        {x | x j ≤ SoloPayoff G j + ε / 3} := by
+    ext x
+    simp only [UpperNeighborhoodFor, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_Icc,
+      Pi.le_def, forall_and]
+  rw [heq]
+  exact isCompact_Icc.inter_right (isClosed_le (continuous_apply j) continuous_const)
+
+/-- The upper neighborhood is compact for every pair of radius parameters. -/
+theorem isCompact_upperNeighborhood (G : QuittingGame) (R ε : ℝ) :
+    IsCompact (UpperNeighborhood G R ε) := by
+  exact isCompact_iUnion fun j => isCompact_upperNeighborhoodFor G R ε j
+
+/-- The real-distance lower neighborhood is compact when its lower boundary is nonempty. -/
+theorem isCompact_lowerNeighborhood (G : QuittingGame) (R ε : ℝ)
+    (hnonempty : (LowerBoundary G R).Nonempty) :
+    IsCompact (LowerNeighborhood G R ε) := by
+  let coordinate := (PiLp.homeomorph 2 (fun _ : G.Player => ℝ)).symm
+  have hcompact : IsCompact (WithLp.toLp 2 '' LowerBoundary G R) :=
+    (isCompact_lowerBoundary G R).image (PiLp.continuous_toLp 2 _)
+  have hthick : IsCompact (coordinate ⁻¹'
+      Metric.cthickening (ε / 3) (WithLp.toLp 2 '' LowerBoundary G R)) :=
+    coordinate.isCompact_preimage.mpr hcompact.cthickening
+  apply hthick.of_isClosed_subset
+    (isClosed_le (continuous_euclideanInfDist _) continuous_const)
+  intro point hpoint
+  have hbound : Metric.infDist (WithLp.toLp 2 point)
+      (WithLp.toLp 2 '' LowerBoundary G R) ≤ ε / 3 := by
+    simpa only [LowerNeighborhood, Set.mem_setOf_eq,
+      euclideanInfDist_eq_infDist_toLp] using hpoint
+  obtain ⟨target, htarget, hdist⟩ := hcompact.exists_infDist_eq_dist
+    (hnonempty.image _) (WithLp.toLp 2 point)
+  exact Metric.mem_cthickening_of_dist_le _ _ _ _ htarget (hdist ▸ hbound)
+
+/-- The glued neighborhood is compact under the explicit nonempty-boundary condition. -/
+theorem isCompact_gluedNeighborhood (G : QuittingGame) (R ε : ℝ)
+    (hnonempty : (LowerBoundary G R).Nonempty) :
+    IsCompact (GluedNeighborhood G R ε) :=
+  (isCompact_upperNeighborhood G R ε).union (isCompact_lowerNeighborhood G R ε hnonempty)
+
+/-- With the real-valued distance convention, an empty lower boundary gives the whole space. -/
+theorem lowerNeighborhood_eq_univ_of_lowerBoundary_eq_empty
+    (G : QuittingGame) (R ε : ℝ) (hboundary : LowerBoundary G R = ∅) (hε : 0 ≤ ε) :
+    LowerNeighborhood G R ε = Set.univ := by
+  have hnonneg : 0 ≤ ε / 3 := by positivity
+  simp [LowerNeighborhood, EuclideanInfDist, hboundary, hnonneg]
+
+/-- The lower glue always contains its base point, using the actual feasible zero vector. -/
+theorem self_mem_lowerGlueFiber (G : QuittingGame) (x : Payoff G.Player) :
+    x ∈ LowerGlueFiber G x := by
+  refine ⟨0, ?_, 0, ?_⟩
+  · exact subset_convexHull ℝ _ (by simp : (0 : Payoff G.Player) ∈ Set.range G.reward ∪ {0})
+  · simp
+
+/-- A nonnegative quitting bound admits the actual all-continue row in the upper glue. -/
+theorem self_mem_upperGlueFiber (G : QuittingGame) (R ε δ : ℝ)
+    (hδ : 0 ≤ δ) (x : Payoff G.Player) : x ∈ UpperGlueFiber G R ε δ x := by
+  classical
+  refine ⟨zeroQuitRow G, (quittingOneStagePayoff_zero G x).symm, ?_⟩
+  intro j
+  split_ifs
+  · exact hδ
+  · rfl
+
+/-- Every actual glue edge starts in the displayed glued neighborhood. -/
+theorem mem_gluedNeighborhood_of_mem_gluedFiber
+    (G : QuittingGame) (R ε δ : ℝ) {x y : Payoff G.Player}
+    (hxy : y ∈ GluedFiber G R ε δ x) : x ∈ GluedNeighborhood G R ε := by
+  classical
+  by_cases hlow : x ∈ LowerNeighborhood G R ε
+  · exact Or.inr hlow
+  · by_cases hupp : x ∈ UpperNeighborhood G R ε
+    · exact Or.inl hupp
+    · simp [GluedFiber, hlow, hupp] at hxy
+
+/-- Every point in the glued neighborhood belongs to its actual glue fiber. -/
+theorem self_mem_gluedFiber (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤ δ)
+    {x : Payoff G.Player} (hx : x ∈ GluedNeighborhood G R ε) :
+    x ∈ GluedFiber G R ε δ x := by
+  classical
+  by_cases hlow : x ∈ LowerNeighborhood G R ε
+  · simpa only [GluedFiber, if_pos hlow] using self_mem_lowerGlueFiber G x
+  · have hupp : x ∈ UpperNeighborhood G R ε := hx.resolve_right hlow
+    simpa only [GluedFiber, if_neg hlow, if_pos hupp] using
+      self_mem_upperGlueFiber G R ε δ hδ x
+
+/-- The actual terminal homotopy image is a defining part of J. -/
+theorem homotopyTerminalImage_subset_section4J (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (R ε δ : ℝ) :
+    HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) ⊆
+      Section4J G inverse cutoff R ε δ := Set.subset_union_left
+
+/-- The actual local glue graph is a defining part of J. -/
+theorem gluedGraph_subset_section4J (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (R ε δ : ℝ) :
+    correspondenceGraph (GluedFiber G R ε δ) ⊆
+      Section4J G inverse cutoff R ε δ := Set.subset_union_right
+
+/-- The Section 3 scale bounds make the actual lower boundary nonempty. -/
+theorem lowerBoundary_nonempty_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    (LowerBoundary G R).Nonempty := by
+  obtain ⟨hR, hsolo⟩ := truncatedPiece_strict_slack_of_section3Constants
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  exact ⟨lowerCubeCorner G R, lowerCubeCorner_mem_lowerBoundary G R hR.le hsolo⟩
+
+/-- The actual glued neighborhood is compact under the Section 3 choices. -/
+theorem isCompact_gluedNeighborhood_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    IsCompact (GluedNeighborhood G R ε) :=
+  isCompact_gluedNeighborhood G R ε
+    (lowerBoundary_nonempty_of_section3Constants G M d ρ ξ R
+      hplayers hM hd hd1 hmotion hconstants)
+
+theorem lowerGlueFiber_eq_convexJoin (G : QuittingGame) (x : Payoff G.Player) :
+    LowerGlueFiber G x = convexJoin ℝ {x} {z | Feasible G z} := by
+  ext y
+  rw [convexJoin_singleton_left]
+  simp only [Set.mem_iUnion, Set.mem_setOf_eq, segment_eq_image, Set.mem_image]
+  constructor
+  · rintro ⟨z, hz, t, heq⟩
+    exact ⟨z, hz, t, t.property, heq.symm⟩
+  · rintro ⟨z, hz, t, ht, heq⟩
+    exact ⟨z, hz, ⟨t, ht⟩, heq.symm⟩
+
+/-- Every actual lower-glue fiber is convex. -/
+theorem convex_lowerGlueFiber (G : QuittingGame) (x : Payoff G.Player) :
+    Convex ℝ (LowerGlueFiber G x) := by
+  rw [lowerGlueFiber_eq_convexJoin]
+  exact (convex_singleton x).convexJoin (convex_convexHull ℝ _)
+
+/-- Every actual lower-glue fiber is intrinsically contractible. -/
+theorem isContractibleSet_lowerGlueFiber (G : QuittingGame) (x : Payoff G.Player) :
+    IsContractibleSet (LowerGlueFiber G x) :=
+  (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
+    ((convex_lowerGlueFiber G x).contractibleSpace ⟨x, self_mem_lowerGlueFiber G x⟩)
+
+/-- On the lower neighborhood the actual glued fiber is contractible. -/
+theorem isContractibleSet_gluedFiber_of_mem_lowerNeighborhood
+    (G : QuittingGame) (R ε δ : ℝ) {x : Payoff G.Player}
+    (hx : x ∈ LowerNeighborhood G R ε) :
+    IsContractibleSet (GluedFiber G R ε δ x) := by
+  simpa only [GluedFiber, if_pos hx] using isContractibleSet_lowerGlueFiber G x
+
+/-- A positive distance radius puts lower-boundary points in the lower neighborhood's interior. -/
+theorem mem_interior_lowerNeighborhood_of_mem_lowerBoundary
+    (G : QuittingGame) (R ε : ℝ) (hε : 0 < ε) {x : Payoff G.Player}
+    (hx : x ∈ LowerBoundary G R) : x ∈ interior (LowerNeighborhood G R ε) := by
+  have hdistance : EuclideanInfDist x (LowerBoundary G R) = 0 := by
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact Metric.infDist_zero_of_mem (Set.mem_image_of_mem _ hx)
+  have hopen : IsOpen {y | EuclideanInfDist y (LowerBoundary G R) < ε / 3} :=
+    isOpen_lt (continuous_euclideanInfDist _) continuous_const
+  have hsubset : {y | EuclideanInfDist y (LowerBoundary G R) < ε / 3} ⊆
+      LowerNeighborhood G R ε := by
+    intro y hy
+    change EuclideanInfDist y (LowerBoundary G R) < ε / 3 at hy
+    exact hy.le
+  exact (hopen.subset_interior_iff.mpr hsubset) (by
+    change EuclideanInfDist x (LowerBoundary G R) < ε / 3
+    rw [hdistance]
+    positivity)
+
+
+/-- The full truncated frontier lies in the interior of the actual glued neighborhood. -/
+theorem frontier_truncatedW_subset_interior_gluedNeighborhood
+    (G : QuittingGame) (R ε : ℝ) (hε : 0 < ε) :
+    frontier (TruncatedW G R) ⊆ interior (GluedNeighborhood G R ε) := by
+  intro x hx
+  by_cases hW : x ∈ frontier (WSet G)
+  · have hxC : x ∈ TruncatedW G R :=
+      (isCompact_truncatedW G R).isClosed.frontier_subset hx
+    have hclosure : x ∈ closure ((WSet G)ᶜ) := by
+      rw [frontier_eq_closure_inter_closure] at hW
+      exact hW.2
+    have hsolo := soloPayoff_le_of_mem_closure_compl_WSet G hclosure
+    obtain ⟨j, hj⟩ := hxC.1
+    have hequal : x j = SoloPayoff G j := le_antisymm hj (hsolo j)
+    let openPiece : Set (Payoff G.Player) :=
+      Set.univ.pi (fun who =>
+        Set.Ioo (SoloPayoff G who - ε / 3) (R + 1 + ε / 3)) ∩
+          {y | y j < SoloPayoff G j + ε / 3}
+    have hopen : IsOpen openPiece :=
+      (isOpen_set_pi Set.finite_univ (fun _ _ => isOpen_Ioo)).inter
+        (isOpen_lt (continuous_apply j) continuous_const)
+    have hxOpen : x ∈ openPiece := by
+      refine ⟨fun who _ => ⟨?_, ?_⟩, ?_⟩
+      · linarith [hsolo who]
+      · linarith [(hxC.2 who).2]
+      · change x j < SoloPayoff G j + ε / 3
+        linarith
+    have hsubset : openPiece ⊆ UpperNeighborhoodFor G R ε j := by
+      intro y hy
+      exact ⟨fun who => ⟨(hy.1 who trivial).1.le, (hy.1 who trivial).2.le⟩, hy.2.le⟩
+    have hupper : x ∈ interior (UpperNeighborhoodFor G R ε j) :=
+      (hopen.subset_interior_iff.mpr hsubset) hxOpen
+    apply interior_mono (s := UpperNeighborhoodFor G R ε j) (t := GluedNeighborhood G R ε)
+      (fun y hy => Or.inl (Set.mem_iUnion.mpr ⟨j, hy⟩)) hupper
+  · have hlower : x ∈ LowerBoundary G R := subset_closure ⟨hx, hW⟩
+    exact interior_mono Set.subset_union_right
+      (mem_interior_lowerNeighborhood_of_mem_lowerBoundary G R ε hε hlower)
 
 /-- The mass of the nonempty Bernoulli coalitions is the one-stage quit probability. -/
 private theorem nonemptyCoalitionMass_eq_quitProbability

@@ -100,16 +100,33 @@ remaining substantive fields of `QuestionOneHypotheses`
 (`MathUE/Topology/SimonViabilityQuestion.lean`) are:
 
 - terminal diagonal points of the actual homotopy lie on the frontier;
-- compactness of the neighborhood and inclusion of the frontier in its interior;
 - compactness of the local graph, including its switching boundary;
 - contractibility of the actual upper fibers, using their injectivity and
   inverse-continuity estimates; and
 - one common positive scale for both small-step containment and all
   boundary-piece escape clauses.
 
-The graph's first-coordinate containment, base-point fiber membership,
-defining inclusions into the joined graph, and compact terminal-image
-adapters are smaller remaining steps. The upper-fiber estimates are not
+`isCompact_gluedNeighborhood_of_section3Constants`
+(`Literature/Simon2012.lean`) proves compactness of the actual neighborhood.
+The lower-neighborhood theorem explicitly assumes a nonempty lower boundary;
+the source-scale adapter supplies it. The empty-boundary convention is also
+literal: `lowerNeighborhood_eq_univ_of_lowerBoundary_eq_empty` in that file
+identifies the lower neighborhood with the whole space at nonnegative
+accuracy when its boundary is empty.
+
+`frontier_truncatedW_subset_interior_gluedNeighborhood` in the same file
+proves the required frontier inclusion for every positive neighborhood
+radius and arbitrary truncation parameter. `isContractibleSet_lowerGlueFiber`
+proves contractibility of every actual lower fiber: it is the convex join
+of its base point and the feasible payoff set. These results do not supply
+the upper-fiber or switching-boundary arguments.
+
+The graph's first-coordinate containment, base-point fiber membership, and
+both defining inclusions into the joined graph are proved by the direct
+`mem_gluedNeighborhood_of_mem_gluedFiber`, `self_mem_gluedFiber`,
+`homotopyTerminalImage_subset_section4J`, and `gluedGraph_subset_section4J`
+adapters in the same file. Compact terminal-image assembly remains a smaller
+step. The upper-fiber estimates are not
 conclusions of `corollary4_1` alone. Separate unrelated scale choices would
 not prove the final common-scale field.
 
