@@ -20,8 +20,9 @@ that the paper's Lemma 1 is false. A normalized, correctly specified reduced
 action law provides positive first-action coverage through the mass bounds
 and normalization argument below. The completed-block probability formula is
 proved, and the completed blocks form a full-mass disjoint partition from
-every retained state. The concatenated trace law and completed-block
-advantage comparison are also proved; control of the unfinished block remains.
+every retained state. The concatenated trace law, completed-block advantage
+comparison, unfinished-block bound, and Lemma 1 are proved under the
+reduction data specified below.
 
 ## Separate encoding error
 
@@ -208,8 +209,34 @@ first-return observations exclude a return into that chain after completion.
 All remaining interior increments are zero at removable states.
 `ChainReductionData.ae_retainedClockFrom_advantage` in the same file proves
 the cumulative equality at every actual retained clock time on one common
-full-measure set. Control of the unfinished block and the final event
-inclusion remain; Lemma 1 remains open.
+full-measure set.
+
+`deterministicActionWord_length_le_visitBound`
+(`Literature/Simon2007.lean`) derives a word-length bound from the actual
+controlled-path visit bound: a supported word is realized with positive
+probability by the existing composite event, then the visit bound applies
+to a path in that event. No independent word-depth bound is assumed.
+`ChainReductionData.exists_nonnegative_composite_completion` completes every
+supported deterministic root prefix by supported nonnegative-increment
+actions. Maximality among the bounded admissible suffix lengths forces the
+last action to complete. `ChainReductionData.compositePrefix_sum_increment_le_of_balanced`
+therefore obtains the balance bound for each such prefix from an actual
+reduced action.
+
+`ChainReductionData.compositeBlockAt_prefix_advantage_le_of_balanced` in the
+same file applies that bound to every nonempty original-time prefix of a
+completed block. It also handles unchanged nonroot states, whose block
+interiors have only removable zero increments. `lemma1` then splits an
+original crossing into completed-block advantage and a bounded unfinished
+prefix. The positive crossing threshold rules out an empty reduced prefix,
+and the actual retained-trace law transfers the resulting event inclusion
+to the claimed probability inequality.
+
+The complete paper file checks with ten other open proof declarations.
+The explicit axiom check for `lemma1` uses only `propext`, `Classical.choice`,
+and `Quot.sound`. This proves Lemma 1 for the specified reduction data; it
+does not construct a reduction from every chain-reducibility witness or
+close the remaining paper statements.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`
