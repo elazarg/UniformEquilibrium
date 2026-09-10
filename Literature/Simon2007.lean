@@ -7571,6 +7571,120 @@ structure ChainReductionData (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
     reduced.valueY x y - reduced.valueX x =
       ((composite x y).map fun z => P.valueY z.1 z.2 - P.valueX z.1).sum
 
+private theorem pmf_eq_of_pointwise_le {α : Type*} (p q : PMF α)
+    (h : ∀ a, p a ≤ q a) : p = q := by
+  apply PMF.ext
+  intro a
+  apply le_antisymm (h a)
+  by_contra hn
+  have hh := ENNReal.tsum_lt_tsum p.tsum_coe_ne_top h (lt_of_not_ge hn)
+  simp only [p.tsum_coe, q.tsum_coe, lt_self_iff_false] at hh
+
+private theorem composite_root_exists_first
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (S T : Set P.X) (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (y : R.reduced.Y x) :
+    ∃ first : P.Y (R.kept x), ∃ tail,
+      R.composite x y = ⟨R.kept x, first⟩ :: tail := by
+  have hv := R.composite_valid x y
+  simp only [IsChainReductionAction, dif_pos hx] at hv
+  obtain ⟨⟨state, first⟩, tail, heq, hs, _⟩ := hv
+  cases hs
+  exact ⟨first, tail, heq⟩
+
+/-- The literal first original action of a reduced composite at a retained root. -/
+def ChainReductionData.rootFirstAction
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (y : R.reduced.Y x) :
+    P.Y (R.kept x) :=
+  (composite_root_exists_first P PS S T R x hx y).choose
+
+theorem ChainReductionData.composite_eq_rootFirstAction_cons
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (y : R.reduced.Y x) :
+    R.composite x y = ⟨R.kept x, R.rootFirstAction x hx y⟩ ::
+      (R.composite x y).tail := by
+  obtain ⟨tail, heq⟩ := (composite_root_exists_first P PS S T R x hx y).choose_spec
+  change R.composite x y = ⟨R.kept x,
+    (composite_root_exists_first P PS S T R x hx y).choose⟩ :: _
+  exact heq.trans (congrArg (List.cons _) (congrArg List.tail heq).symm)
+
+private theorem composite_injective
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    Function.Injective (R.composite x) := by
+  intro a b hab
+  obtain ⟨c, _, hc⟩ := R.composite_complete x _ (R.composite_valid x b)
+  exact (hc a hab).trans (hc b rfl).symm
+
+theorem ChainReductionData.rootFirstAction_map_le
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (first : P.Y (R.kept x)) :
+    (R.reduced.choose x).map (R.rootFirstAction x hx) first ≤
+      P.choose (R.kept x) first := by
+  classical
+  let fiber := {y : R.reduced.Y x // R.rootFirstAction x hx y = first}
+  let code := {tail : List ((state : P.X) × P.Y state) //
+    IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x)
+      (⟨R.kept x, first⟩ :: tail)}
+  have hcons (y : fiber) :
+      R.composite x y.val = ⟨R.kept x, first⟩ :: (R.composite x y.val).tail := by
+    simpa only [y.property] using R.composite_eq_rootFirstAction_cons x hx y.val
+  let embed : fiber → code := fun y => ⟨(R.composite x y.val).tail, by
+    rw [← hcons y]
+    simpa only [IsChainReductionAction, dif_pos hx] using R.composite_valid x y.val⟩
+  have hinj : Function.Injective embed := by
+    intro a b hab
+    apply Subtype.ext
+    apply composite_injective R x
+    rw [hcons a, hcons b]
+    exact congrArg (List.cons ⟨R.kept x, first⟩) (congrArg Subtype.val hab)
+  have hmass (y : fiber) : R.reduced.choose x y.val =
+      ((⟨R.kept x, first⟩ :: (embed y).val).map
+        fun action => P.choose action.1 action.2).prod := by
+    rw [R.composite_probability, hcons y]
+  calc
+    (R.reduced.choose x).map (R.rootFirstAction x hx) first =
+        ∑' y : fiber, R.reduced.choose x y.val := by
+      change _ = ∑' y : {y | R.rootFirstAction x hx y = first}, _
+      rw [PMF.map_apply, tsum_subtype]
+      congr 1
+      funext y
+      simp only [Set.indicator_apply, Set.mem_setOf_eq, eq_comm]
+    _ = ∑' y : fiber, ((⟨R.kept x, first⟩ :: (embed y).val).map
+        fun action => P.choose action.1 action.2).prod := tsum_congr hmass
+    _ ≤ ∑' tail : code, ((⟨R.kept x, first⟩ :: tail.val).map
+        fun action => P.choose action.1 action.2).prod :=
+      ENNReal.tsum_comp_le_tsum_of_injective hinj _
+    _ ≤ P.choose (R.kept x) first :=
+      compositeActionList_tsum_choiceProduct_le_first P PS _ T _ _
+
+/-- Normalization forces the first original action marginal to be exactly the original PMF. -/
+theorem ChainReductionData.rootFirstAction_map
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) :
+    (R.reduced.choose x).map (R.rootFirstAction x hx) = P.choose (R.kept x) :=
+  pmf_eq_of_pointwise_le _ _ (R.rootFirstAction_map_le x hx)
+
+/-- Every positive original root action starts a positive-probability reduced composite. -/
+theorem ChainReductionData.exists_positive_composite_with_first
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (first : P.Y (R.kept x))
+    (hfirst : 0 < P.choose (R.kept x) first) :
+    ∃ y : R.reduced.Y x, 0 < R.reduced.choose x y ∧
+      R.composite x y = ⟨R.kept x, first⟩ :: (R.composite x y).tail := by
+  have hsupport : first ∈ ((R.reduced.choose x).map (R.rootFirstAction x hx)).support := by
+    rw [R.rootFirstAction_map x hx, PMF.mem_support_iff]
+    exact ne_of_gt hfirst
+  obtain ⟨y, hy, heq⟩ := (PMF.mem_support_map_iff _ _ _).mp hsupport
+  refine ⟨y, pos_iff_ne_zero.mpr hy, ?_⟩
+  simpa only [heq] using R.composite_eq_rootFirstAction_cons x hx y
+
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
 probability of `sup W_i > ε+δ` is at most the reduced probability of `sup W_i > ε`.

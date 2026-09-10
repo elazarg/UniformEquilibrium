@@ -17,8 +17,9 @@ This was checked against the rendered journal page, not only extracted text.
 
 The question concerns the definition of chain reduction. It is not a claim
 that the paper's Lemma 1 is false. A normalized, correctly specified reduced
-action law may itself provide the necessary positive-probability coverage;
-proving that implication requires a partition argument.
+action law provides positive first-action coverage through the mass bounds
+and normalization argument below. The block-event and trace-law construction
+remains separate.
 
 ## Separate encoding error
 
@@ -97,8 +98,20 @@ The prefix mass is the choice product on deterministic first-exit chains
 and zero elsewhere. All permitted next actions at a nonempty chain belong
 to one state, by probability-one first-exit uniqueness; its action law
 therefore supplies the finite-child mass bound. No finite action assumption
-or initial-root alternative is added. Reduced-law normalization, coverage,
-and the sampled path-law transport remain to be connected to this bound.
+or initial-root alternative is added.
+
+`ChainReductionData.rootFirstAction_map`
+(`Literature/Simon2007.lean`) proves that the literal first-action marginal
+of the reduced choice law equals the original choice law at every retained
+root. The proof injects each fixed-first reduced-action fiber into the valid
+composite tails, applies the mass bound, and uses normalization to turn
+pointwise domination into equality.
+`ChainReductionData.exists_positive_composite_with_first` in the same file
+therefore supplies a positive-probability composite for every original root
+action of positive probability. These are consequences of the existing
+reduction data, not additional coverage fields. Measurable completed-block
+events, their probabilities, and the concatenated sampled trace law remain
+to be constructed.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`
