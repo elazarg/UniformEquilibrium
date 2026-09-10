@@ -739,6 +739,14 @@ private theorem extendedOrbitCondition_iff_simon2007 (G : QuittingGame) :
     exact ⟨x, hrational,
       unboundedExtendedVariation_simon2007_to_euclidean hvariation⟩
 
+/-- The rational extended-orbit direction uses the checked periodization
+argument, not the open equilibrium-to-orbit direction of Theorem 2.1. -/
+theorem ExtendedOrbitCondition.hasQuitApproximateEquilibria
+    (G : QuittingGame) (hextended : ExtendedOrbitCondition G) :
+    HasQuitApproximateEquilibria G :=
+  Literature.Simon2007.ExtendedOrbitCondition.hasQuitApproximateEquilibria G
+    ((extendedOrbitCondition_iff_simon2007 G).mp hextended)
+
 /--
 Theorem 2.1.  This is the corrected Simon 2007 five-way theorem transported
 from the max norm to the paper's Euclidean norm by finite-dimensional norm
@@ -1621,6 +1629,95 @@ private theorem exists_rational_extendedOrbit_of_all_finite
       exact hallBounded j (hallActive j)
     · exact hvariation
 
+/-- Discarding a prefix yields a rational extended orbit. This construction
+does not use the equilibrium/orbit equivalence. -/
+theorem ExtendedUnrestrictedOrbitCondition.toExtendedOrbitCondition (G : QuittingGame)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hunrestricted : ExtendedUnrestrictedOrbitCondition G) : ExtendedOrbitCondition G := by
+  classical
+  intro ε hε
+  obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
+  have hBpos : 0 < B := zero_lt_one.trans_le hB.1
+  let a : ℝ := min (ε / 3) (1 / 2)
+  have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
+  have ha1 : a ≤ 1 := (min_le_right _ _).trans (by norm_num)
+  have h3a : 3 * a ≤ ε := by
+    have := min_le_left (ε / 3) (1 / 2)
+    linarith
+  let δ : ℝ := a ^ 2 / (2 * B)
+  have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
+  have hδε : δ ≤ ε := by
+    rw [div_le_iff₀ (mul_pos (by norm_num) hBpos)]
+    have haHalf := min_le_right (ε / 3) (1 / 2)
+    have haEps := min_le_left (ε / 3) (1 / 2)
+    nlinarith [sq_nonneg a, hB.1]
+  obtain ⟨orbit, hvariation⟩ := hunrestricted δ hδ
+  have htail : ∃ tail : ExtendedOrbitData (FRow G ε),
+      (∀ j, ActiveSegment tail.segmentCount j → ∀ i,
+        SegmentIndex (tail.segmentLength j) i →
+          IsRational G (3 * a) (tail.point j i)) ∧
+      HasUnboundedExtendedVariation tail := by
+    by_cases hinfinite : ∃ j, ActiveSegment orbit.segmentCount j ∧
+        orbit.segmentLength j = none
+    · let first := Nat.find hinfinite
+      have hfirst := Nat.find_spec hinfinite
+      have hprefixFinite : ∀ j, j < first →
+          ∃ size, orbit.segmentLength j = some size := by
+        intro j hj
+        have hjFind : j < Nat.find hinfinite := by simpa [first] using hj
+        cases hlength : orbit.segmentLength j with
+        | none =>
+            exfalso
+            exact Nat.find_min hinfinite hjFind ⟨by
+              intro total htotal
+              have := hfirst.1 total htotal
+              omega, hlength⟩
+        | some size => exact ⟨size, rfl⟩
+      have hprefixBounded : ∀ j, j < first →
+          HasBoundedSegmentVariation orbit j := by
+        intro j hj
+        obtain ⟨size, hsize⟩ := hprefixFinite j hj
+        exact hasBoundedSegmentVariation_of_finite orbit j size hsize
+      let shifted := ExtendedOrbitData.dropSegments orbit first hfirst.1
+      have hshiftedVariation : HasUnboundedExtendedVariation shifted :=
+        ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix orbit first
+          hfirst.1 hprefixBounded hvariation
+      have hshiftedLength : shifted.segmentLength 0 = none := by
+        simpa [shifted] using hfirst.2
+      exact exists_rational_extendedOrbit_of_firstInfinite G hB hnormal
+        hgenerated hinstant ha ha1 hδε shifted hshiftedLength hshiftedVariation
+    · push Not at hinfinite
+      have hfinite : ∀ j, ActiveSegment orbit.segmentCount j →
+          ∃ size, orbit.segmentLength j = some size := by
+        intro j hj
+        cases hlength : orbit.segmentLength j with
+        | none => exact (hinfinite j hj hlength).elim
+        | some size => exact ⟨size, rfl⟩
+      exact exists_rational_extendedOrbit_of_all_finite G hB hnormal
+        hgenerated hinstant ha ha1 hδε orbit hfinite hvariation
+  obtain ⟨tail, hrational, htailVariation⟩ := htail
+  refine ⟨tail, ?_, htailVariation⟩
+  intro j hj i hi n
+  have := hrational j hj i hi n
+  linarith
+
+/-- The backward implication of Theorem 2.3 has no dependency on its open
+forward implication. -/
+theorem ExtendedUnrestrictedOrbitCondition.hasQuitApproximateEquilibria
+    (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hunrestricted : ExtendedUnrestrictedOrbitCondition G) : HasQuitApproximateEquilibria G := by
+  classical
+  by_cases hgenerated : HasStationarilyGeneratedApproximateEquilibria G
+  · exact (show Literature.Simon2007.HasStationarilyGeneratedApproximateEquilibria G from
+      hgenerated).hasQuitApproximateEquilibria G
+  · by_cases hinstant : HasInstantApproximateEquilibria G
+    · exact Literature.Simon2007.HasInstantApproximateEquilibria.hasQuitApproximateEquilibria G
+        ((instantApproximateEquilibria_iff_simon2007 G).mp hinstant)
+    · exact ExtendedOrbitCondition.hasQuitApproximateEquilibria G
+        (hunrestricted.toExtendedOrbitCondition G hnormal hgenerated hinstant)
+
 /--
 Theorem 2.3.  Removing rationality from an extended orbit uses Lemma 2.2 to
 show eventual entry into, and permanence in, the rational region.  Infinite
@@ -1632,81 +1729,15 @@ theorem theorem2_3 (G : QuittingGame)
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G) :
     HasQuitApproximateEquilibria G ↔ ExtendedUnrestrictedOrbitCondition G := by
-  classical
-  have hfive := theorem2_1 G hgenerated hinstant
-  have hequivalent : HasQuitApproximateEquilibria G ↔ ExtendedOrbitCondition G :=
-    hfive.1.trans (hfive.2.1.trans (hfive.2.2.1.trans hfive.2.2.2))
   constructor
   · intro hequilibrium ε hε
+    have hfive := theorem2_1 G hgenerated hinstant
+    have hequivalent : HasQuitApproximateEquilibria G ↔ ExtendedOrbitCondition G :=
+      hfive.1.trans (hfive.2.1.trans (hfive.2.2.1.trans hfive.2.2.2))
     obtain ⟨orbit, _, hvariation⟩ := hequivalent.mp hequilibrium ε hε
     exact ⟨orbit, hvariation⟩
-  · intro hunrestricted
-    apply hequivalent.mpr
-    intro ε hε
-    obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
-    have hBpos : 0 < B := zero_lt_one.trans_le hB.1
-    let a : ℝ := min (ε / 3) (1 / 2)
-    have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
-    have ha1 : a ≤ 1 := (min_le_right _ _).trans (by norm_num)
-    have h3a : 3 * a ≤ ε := by
-      have := min_le_left (ε / 3) (1 / 2)
-      linarith
-    let δ : ℝ := a ^ 2 / (2 * B)
-    have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hBpos)
-    have hδε : δ ≤ ε := by
-      rw [div_le_iff₀ (mul_pos (by norm_num) hBpos)]
-      have haHalf := min_le_right (ε / 3) (1 / 2)
-      have haEps := min_le_left (ε / 3) (1 / 2)
-      nlinarith [sq_nonneg a, hB.1]
-    obtain ⟨orbit, hvariation⟩ := hunrestricted δ hδ
-    have htail : ∃ tail : ExtendedOrbitData (FRow G ε),
-        (∀ j, ActiveSegment tail.segmentCount j → ∀ i,
-          SegmentIndex (tail.segmentLength j) i →
-            IsRational G (3 * a) (tail.point j i)) ∧
-        HasUnboundedExtendedVariation tail := by
-      by_cases hinfinite : ∃ j, ActiveSegment orbit.segmentCount j ∧
-          orbit.segmentLength j = none
-      · let first := Nat.find hinfinite
-        have hfirst := Nat.find_spec hinfinite
-        have hprefixFinite : ∀ j, j < first →
-            ∃ size, orbit.segmentLength j = some size := by
-          intro j hj
-          have hjFind : j < Nat.find hinfinite := by simpa [first] using hj
-          cases hlength : orbit.segmentLength j with
-          | none =>
-              exfalso
-              exact Nat.find_min hinfinite hjFind ⟨by
-                intro total htotal
-                have := hfirst.1 total htotal
-                omega, hlength⟩
-          | some size => exact ⟨size, rfl⟩
-        have hprefixBounded : ∀ j, j < first →
-            HasBoundedSegmentVariation orbit j := by
-          intro j hj
-          obtain ⟨size, hsize⟩ := hprefixFinite j hj
-          exact hasBoundedSegmentVariation_of_finite orbit j size hsize
-        let shifted := ExtendedOrbitData.dropSegments orbit first hfirst.1
-        have hshiftedVariation : HasUnboundedExtendedVariation shifted :=
-          ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix orbit first
-            hfirst.1 hprefixBounded hvariation
-        have hshiftedLength : shifted.segmentLength 0 = none := by
-          simpa [shifted] using hfirst.2
-        exact exists_rational_extendedOrbit_of_firstInfinite G hB hnormal
-          hgenerated hinstant ha ha1 hδε shifted hshiftedLength hshiftedVariation
-      · push Not at hinfinite
-        have hfinite : ∀ j, ActiveSegment orbit.segmentCount j →
-            ∃ size, orbit.segmentLength j = some size := by
-          intro j hj
-          cases hlength : orbit.segmentLength j with
-          | none => exact (hinfinite j hj hlength).elim
-          | some size => exact ⟨size, rfl⟩
-        exact exists_rational_extendedOrbit_of_all_finite G hB hnormal
-          hgenerated hinstant ha ha1 hδε orbit hfinite hvariation
-    obtain ⟨tail, hrational, htailVariation⟩ := htail
-    refine ⟨tail, ?_, htailVariation⟩
-    intro j hj i hi n
-    have := hrational j hj i hi n
-    linarith
+  · exact fun hunrestricted =>
+      hunrestricted.hasQuitApproximateEquilibria G hnormal
 
 /-- Lemma 2.3's pointwise small parameter. -/
 def SatisfiesLemma2_3At (G : QuittingGame) (r : Payoff G.Player)

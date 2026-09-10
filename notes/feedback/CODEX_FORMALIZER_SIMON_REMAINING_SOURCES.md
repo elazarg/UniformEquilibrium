@@ -24,6 +24,27 @@ No general conversion between those two notions is proved by this work.
 This records a remaining source obligation, not a counterexample to the
 corrected lemma.
 
+## Extended orbits
+
+`ExtendedOrbitCondition.hasQuitApproximateEquilibria`
+(`Literature/Simon2007.lean`) proves the rational extended-orbit-to-equilibrium
+direction without excluding either solved branch. Its cyclic-orbit producer
+uses bounded-prefix extraction and periodization under failure of the instant
+branch; the instant case already supplies approximate equilibria.
+
+`ExtendedUnrestrictedOrbitCondition.hasQuitApproximateEquilibria`
+(`Literature/Simon2012.lean`) drops rationality of the supplied extended orbit
+when all players are normal. It handles the instant and stationarily
+generated branches directly; in the remaining case the checked prefix
+removal yields a rational extended orbit. The public equilibrium conclusion
+therefore needs neither branch exclusion. The rationalization theorem
+retains those exclusions where they are used.
+
+These proofs are independent of the unfinished equilibrium-to-orbit
+directions in the full equivalences. Extracting them from the larger proof
+bodies removes that unnecessary dependency; it does not prove a missing
+forward implication.
+
 ## Markov variation
 
 `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound`

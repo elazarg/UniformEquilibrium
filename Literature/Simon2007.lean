@@ -20298,6 +20298,97 @@ theorem FiniteNearOrbitCondition.toCyclicOrbitCondition
 def EquivalentFive (A B C D E : Prop) : Prop :=
   (A ↔ B) ∧ (B ↔ C) ∧ (C ↔ D) ∧ (D ↔ E)
 
+/-- The stationarily generated branch yields approximate equilibria through
+the existing production compiler and the exact paper/root semantic adapters. -/
+theorem HasStationarilyGeneratedApproximateEquilibria.hasQuitApproximateEquilibria
+    (G : QuittingGame) (hgenerated : HasStationarilyGeneratedApproximateEquilibria G) :
+    HasQuitApproximateEquilibria G := by
+  classical
+  have hproduction := (hasStationarilyGeneratedApproximateEquilibria_iff_production G).mp
+    hgenerated
+  have hequilibria :=
+    GameTheory.quittingApproximateEquilibriumExistence_of_stationarilyGenerated hproduction
+  intro ε hε
+  obtain ⟨roots, hroots⟩ := hequilibria ε hε
+  exact ⟨quitProfileOfProductionRoots G roots,
+    isQuitEpsilonEquilibrium_of_isεQuittingRootSequenceNash G hroots⟩
+
+/-- An unbounded rational extended orbit produces a cyclic orbit using
+bounded-prefix extraction and periodization. Only instant equilibria are excluded. -/
+theorem ExtendedOrbitCondition.toCyclicOrbitCondition
+    (G : QuittingGame) (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hextended : ExtendedOrbitCondition G) : CyclicOrbitCondition G := by
+  classical
+  intro ε hε
+  obtain ⟨σ, hσ, hnoSureσ⟩ :=
+    exists_scale_without_sure_quitter_of_not_instant G hinstant
+  let η := min (ε / 5) σ
+  have hη : 0 < η := lt_min (div_pos hε (by norm_num)) hσ
+  have hηε : 4 * η ≤ ε := by
+    have := min_le_left (ε / 5) σ
+    dsimp only [η]
+    linarith
+  have hησ : η ≤ σ := min_le_right _ _
+  obtain ⟨x, hrational, hvariation⟩ := hextended η hη
+  obtain ⟨R, hR⟩ := exists_quittingPayoffDifferenceBound G
+  let M := max R ‖x.point 0 0‖
+  have hM : 0 < M := lt_of_lt_of_le zero_lt_one (hR.1.trans (le_max_left _ _))
+  have hreward : ∀ A n, |G.reward A n| ≤ M := fun A n =>
+    (le_of_lt (hR.2.2 A n)).trans (le_max_left _ _)
+  have hxstart : ‖x.point 0 0‖ ≤ M := le_max_right _ _
+  have hxbound : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
+      SegmentIndex (x.segmentLength j) i → ‖x.point j i‖ ≤ M :=
+    extendedFRowOrbit_point_norm_le G x hreward hxstart
+  have hnoSure : ∀ r p n, IsRational G η r → p ∈ EpsilonRow G η r →
+      (p n : ℝ) ≠ 1 := by
+    intro r p n hr hp
+    exact hnoSureσ r p n (IsRational.mono G hησ hr)
+      (EpsilonRow.mono G hησ r hp)
+  obtain ⟨B, hB, hcompile⟩ :=
+    exists_cyclicOrbit_of_large_approximatePath G hη hM hηε hreward hnoSure
+  cases hcount : x.segmentCount with
+  | none =>
+      rcases (hasUnboundedExtendedVariation_iff_prefix x).1 hvariation B with
+        ⟨J, I, hlarge⟩
+      have hJ : 0 < J := by
+        by_contra hJ
+        have hJ0 : J = 0 := Nat.eq_zero_of_not_pos hJ
+        subst J
+        simp [extendedPrefixVariation] at hlarge
+        linarith
+      let e := η / (4 * J)
+      have he : 0 < e := div_pos hη (mul_pos (by norm_num) (by exact_mod_cast hJ))
+      rcases exists_extendedPrefixPath G hcount hrational J I he with
+        ⟨z, hz0, _hzlast, hzerror, hzvariation⟩
+      apply hcompile z
+      · rw [hz0]
+        exact hxstart
+      · apply hzerror.trans_eq
+        dsimp only [e]
+        field_simp
+      · exact hlarge.trans hzvariation
+  | some L =>
+      rcases exists_largeSegmentPrefixPath G hrational hvariation hcount hB with
+        ⟨z, j, hj, hz0, hzerror, hzvariation⟩
+      apply hcompile z
+      · rw [hz0]
+        apply hxbound j hj 0
+        intro k hk
+        exact x.segmentLengthPositive j hj k hk
+      · rw [hzerror]
+        positivity
+      · exact hzvariation
+
+/-- The extended-orbit-to-equilibrium direction is independent of the open
+converse in the five-way theorem. -/
+theorem ExtendedOrbitCondition.hasQuitApproximateEquilibria
+    (G : QuittingGame) (hextended : ExtendedOrbitCondition G) :
+    HasQuitApproximateEquilibria G := by
+  classical
+  by_cases hinstant : HasInstantApproximateEquilibria G
+  · exact hinstant.hasQuitApproximateEquilibria G
+  · exact (hextended.toCyclicOrbitCondition G hinstant).hasQuitApproximateEquilibria G
+
 /--
 Theorem 3 as printed in 2007: in the absence of stationary and instant approximate
 equilibria, approximate equilibrium and the four orbit conditions are equivalent.
@@ -20315,66 +20406,9 @@ theorem theorem3 (G : QuittingGame)
     sorry
   have hfiniteCyclic : FiniteNearOrbitCondition G → CyclicOrbitCondition G :=
     fun hfinite => hfinite.toCyclicOrbitCondition G hinstant
-  have hextendedCyclic : ExtendedOrbitCondition G → CyclicOrbitCondition G := by
-    intro hextended ε hε
-    obtain ⟨σ, hσ, hnoSureσ⟩ :=
-      exists_scale_without_sure_quitter_of_not_instant G hinstant
-    let η := min (ε / 5) σ
-    have hη : 0 < η := lt_min (div_pos hε (by norm_num)) hσ
-    have hηε : 4 * η ≤ ε := by
-      have := min_le_left (ε / 5) σ
-      dsimp only [η]
-      linarith
-    have hησ : η ≤ σ := min_le_right _ _
-    obtain ⟨x, hrational, hvariation⟩ := hextended η hη
-    obtain ⟨R, hR⟩ := exists_quittingPayoffDifferenceBound G
-    let M := max R ‖x.point 0 0‖
-    have hM : 0 < M := lt_of_lt_of_le zero_lt_one (hR.1.trans (le_max_left _ _))
-    have hreward : ∀ A n, |G.reward A n| ≤ M := fun A n =>
-      (le_of_lt (hR.2.2 A n)).trans (le_max_left _ _)
-    have hxstart : ‖x.point 0 0‖ ≤ M := le_max_right _ _
-    have hxbound : ∀ j, ActiveSegment x.segmentCount j → ∀ i,
-        SegmentIndex (x.segmentLength j) i → ‖x.point j i‖ ≤ M :=
-      extendedFRowOrbit_point_norm_le G x hreward hxstart
-    have hnoSure : ∀ r p n, IsRational G η r → p ∈ EpsilonRow G η r →
-        (p n : ℝ) ≠ 1 := by
-      intro r p n hr hp
-      exact hnoSureσ r p n (IsRational.mono G hησ hr)
-        (EpsilonRow.mono G hησ r hp)
-    obtain ⟨B, hB, hcompile⟩ :=
-      exists_cyclicOrbit_of_large_approximatePath G hη hM hηε hreward hnoSure
-    cases hcount : x.segmentCount with
-    | none =>
-        rcases (hasUnboundedExtendedVariation_iff_prefix x).1 hvariation B with
-          ⟨J, I, hlarge⟩
-        have hJ : 0 < J := by
-          by_contra hJ
-          have hJ0 : J = 0 := Nat.eq_zero_of_not_pos hJ
-          subst J
-          simp [extendedPrefixVariation] at hlarge
-          linarith
-        let e := η / (4 * J)
-        have he : 0 < e := div_pos hη (mul_pos (by norm_num) (by exact_mod_cast hJ))
-        rcases exists_extendedPrefixPath G hcount hrational J I he with
-          ⟨z, hz0, _hzlast, hzerror, hzvariation⟩
-        apply hcompile z
-        · rw [hz0]
-          exact hxstart
-        · apply hzerror.trans_eq
-          dsimp only [e]
-          field_simp
-        · exact hlarge.trans hzvariation
-    | some L =>
-        rcases exists_largeSegmentPrefixPath G hrational hvariation hcount hB with
-          ⟨z, j, hj, hz0, hzerror, hzvariation⟩
-        apply hcompile z
-        · rw [hz0]
-          apply hxbound j hj 0
-          intro k hk
-          exact x.segmentLengthPositive j hj k hk
-        · rw [hzerror]
-          positivity
-        · exact hzvariation
+  have hextendedCyclic : ExtendedOrbitCondition G → CyclicOrbitCondition G :=
+    fun hextended => hextended.toCyclicOrbitCondition G hinstant
+
   exact ⟨
     ⟨hequilibriumCyclic, CyclicOrbitCondition.hasQuitApproximateEquilibria G⟩,
     ⟨fun hcycle => hcyclicInfinite hcycle |>.toFiniteNearOrbitCondition G, hfiniteCyclic⟩,
