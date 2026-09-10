@@ -74,6 +74,44 @@ def IsIsolating (problem : BoxComplementarityProblem ι)
     (neighborhood : Set (UnitCube ι)) : Prop :=
   IsOpen neighborhood ∧ problem.solutionSet ∩ frontier neighborhood = ∅
 
+/-- The continuous gain field determines the complementarity problem. -/
+@[ext] theorem ext {first second : Math.BoxComplementarityProblem ι}
+    (hgain : first.gain = second.gain) : first = second := by
+  cases first
+  cases second
+  cases hgain
+  rfl
+
+/-- Multiply the literal gain field by a constant real scalar. -/
+def scaleGain (problem : Math.BoxComplementarityProblem ι) (scalar : ℝ) :
+    Math.BoxComplementarityProblem ι where
+  gain point who := scalar * problem.gain point who
+  continuous_gain who := (problem.continuous_gain who).const_mul scalar
+
+/-- Positive gain rescaling preserves every solution, including on cube faces. -/
+theorem isSolution_scaleGain_iff (problem : Math.BoxComplementarityProblem ι)
+    {scalar : ℝ} (hscalar : 0 < scalar) (point : Math.UnitCube ι) :
+    (problem.scaleGain scalar).IsSolution point ↔ problem.IsSolution point := by
+  have hnonpos (value : ℝ) : scalar * value ≤ 0 ↔ value ≤ 0 := by
+    simpa only [mul_zero] using
+      (mul_le_mul_iff_right₀ hscalar : scalar * value ≤ scalar * 0 ↔ value ≤ 0)
+  simp only [IsSolution, scaleGain, hnonpos,
+    mul_nonneg_iff_of_pos_left hscalar, mul_eq_zero, ne_of_gt hscalar, false_or]
+
+/-- Positive rescaling preserves the literal solution set. -/
+theorem solutionSet_scaleGain (problem : Math.BoxComplementarityProblem ι)
+    {scalar : ℝ} (hscalar : 0 < scalar) :
+    (problem.scaleGain scalar).solutionSet = problem.solutionSet := by
+  ext point
+  exact problem.isSolution_scaleGain_iff hscalar point
+
+/-- A region is isolating before positive gain rescaling exactly when it is after. -/
+theorem isIsolating_scaleGain_iff (problem : Math.BoxComplementarityProblem ι)
+    {scalar : ℝ} (hscalar : 0 < scalar) (region : Set (Math.UnitCube ι)) :
+    (problem.scaleGain scalar).IsIsolating region ↔ problem.IsIsolating region := by
+  rw [IsIsolating, problem.solutionSet_scaleGain hscalar]
+  rfl
+
 end BoxComplementarityProblem
 
 /-- Joint continuity of a one-parameter family of box-complementarity
@@ -90,4 +128,3 @@ def unitIntervalZero : Set.Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num�
 def unitIntervalOne : Set.Icc (0 : ℝ) 1 := ⟨1, by constructor <;> norm_num⟩
 
 end Math
-

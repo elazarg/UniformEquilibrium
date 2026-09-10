@@ -851,6 +851,16 @@ degree when the gain fields agree on the region frontier. The explicit
 straight-line family supplies continuity and common isolation from just
 one endpoint's isolation.
 
+`BoxComplementarityProblem.localDegree_scaleGain` and
+`BoxComplementarityProblem.localDegree_ofAmbientMap_dilation`
+(`Research/Topology/BoxComplementarityPositiveRescalingDegree.lean`) preserve
+normalized degree under positive gain scaling and under a translated positive
+dilation with the displayed transformed field, rectangle, and region.
+Positive scaling also preserves every actual grid label. The dilation result
+uses the field `scalar⁻¹ * field(shift + scalar * point)` and derives equality
+of the pulled-back problems up to positive scaling. It does not compare
+arbitrary charts for an unchanged ambient field.
+
 `Math.LinearAlgebra.exists_path_diagonal_det_eq`
 (`MathUE/LinearAlgebra/MatrixDiagonalDeterminantPath.lean`) constructs a
 continuous determinant-preserving path from any real square matrix to a

@@ -303,11 +303,24 @@ The generic problem and continuous-family definitions reside in
 `MathUE/Topology/BoxComplementarityProblem.lean`; the parity specification
 and integer-degree construction remain in Research.
 
+`BoxComplementarityProblem.localDegree_scaleGain` and
+`BoxComplementarityProblem.localDegree_ofAmbientMap_dilation`
+(`Research/Topology/BoxComplementarityPositiveRescalingDegree.lean`) prove
+positive gain-rescaling invariance and covariance under the literal translated
+dilation `point ↦ shift + scalar * point`. The latter uses the transformed
+rectangle and region and the inverse-scaled field
+`point ↦ scalar⁻¹ * field(shift + scalar * point)`, with `scalar > 0`.
+Continuity is required only on the transformed closed rectangle.
+The underlying solution sets and grid labels are proved unchanged;
+degree invariance reuses the existing common-isolating homotopy theorem.
+This is the displayed rescaling needed for the blow-up comparison, not
+independence from an arbitrary choice of chart.
+
 The remaining geometric adapters are:
 
-1. Prove chart independence, positive-dilation invariance, and the orientation
-   conversion against the constructed count. The ambient pullback and its
-   isolation and zero-set adapters do not supply these degree equalities.
+1. Prove chart independence and the orientation conversion against the
+   constructed count. The literal positive-dilation result above does not
+   establish arbitrary chart independence.
 2. Compute the local degree of an invertible affine root as the sign of its
    determinant under the conventional orientation. Existing prism
    cancellation does not supply that affine comparison.
@@ -322,6 +335,26 @@ The remaining geometric adapters are:
 
 These are known finite-dimensional constructions still to implement, not
 new strategic hypotheses or a new mathematical conjecture.
+
+### Centered diagonal count: next implementation specification
+
+For nonzero diagonal entries `d i`, use gain `-d i * (x i - 1/2)` and the
+region where every coordinate lies strictly between `1/4` and `3/4`.
+The intended finite-count statement uses odd meshes `p = 2*k + 1`, `k ≥ 2`:
+the actual selected complete-simplex set should consist of the central-cell
+chain raising negative-entry coordinates in increasing order, followed by
+positive-entry coordinates in decreasing order. Its raw signed weight should
+be `(-1)^(number of positive entries)`, giving normalized degree equal to the
+product of the diagonal signs. Dimension zero must remain included.
+
+This statement is not yet proved. The confinement proof must use both anchor
+membership and the simplex's unit coordinate span to exclude cube-boundary
+labels. The coarse-mesh restriction matters: at mesh three a negative
+one-dimensional slope also has a boundary simplex with anchor inside this
+region. Adjacent-facet reflection identities do not give an ambient
+coordinate-reflection theorem; a partial coordinate reflection does not
+preserve the monotone Kuhn triangulation. The intended sign calculation
+instead uses the actual coordinate and label permutations.
 
 `Math.LinearAlgebra.exists_path_diagonal_det_eq`
 (`MathUE/LinearAlgebra/MatrixDiagonalDeterminantPath.lean`) constructs an

@@ -143,3 +143,126 @@ end BoxComplementarityProblem
 
 end Math
 
+namespace Math.Topology
+
+open Set
+
+variable {ι : Type*} [Fintype ι]
+
+/-- A translated scalar dilation on the ambient coordinate space. -/
+def positiveDilation (shift : ι → ℝ) (scalar : ℝ) (point : ι → ℝ) : ι → ℝ :=
+  fun who => shift who + scalar * point who
+
+omit [Fintype ι] in
+theorem continuous_positiveDilation (shift : ι → ℝ) (scalar : ℝ) :
+    Continuous (positiveDilation shift scalar) :=
+  continuous_pi fun who => continuous_const.add
+    (continuous_const.mul (continuous_apply who))
+
+omit [Fintype ι] in
+/-- Positive dilation preserves strict coordinate widths. -/
+theorem positiveDilation_width (shift : ι → ℝ) {scalar : ℝ} (hscalar : 0 < scalar)
+    {lower upper : ι → ℝ} (hwidth : ∀ who, lower who < upper who) :
+    ∀ who, positiveDilation shift scalar lower who < positiveDilation shift scalar upper who := by
+  intro who
+  simpa only [positiveDilation, add_comm] using
+    add_lt_add_left (mul_lt_mul_of_pos_left (hwidth who) hscalar) (shift who)
+
+omit [Fintype ι] in
+/-- The source closed box is mapped into its dilated closed box. -/
+theorem positiveDilation_mem_Icc (shift : ι → ℝ) {scalar : ℝ} (hscalar : 0 < scalar)
+    {lower upper point : ι → ℝ} (hpoint : point ∈ Icc lower upper) :
+    positiveDilation shift scalar point ∈
+      Icc (positiveDilation shift scalar lower) (positiveDilation shift scalar upper) := by
+  constructor <;> intro who
+  · simpa only [positiveDilation, add_comm] using
+      add_le_add_left (mul_le_mul_of_nonneg_left (hpoint.1 who) hscalar.le) (shift who)
+  · simpa only [positiveDilation, add_comm] using
+      add_le_add_left (mul_le_mul_of_nonneg_left (hpoint.2 who) hscalar.le) (shift who)
+
+/-- Rectangular coordinates commute exactly with simultaneous ambient dilation. -/
+theorem rectangularCubePoint_positiveDilation (shift : ι → ℝ) (scalar : ℝ)
+    (lower upper : ι → ℝ) (point : Math.UnitCube ι) :
+    rectangularCubePoint (positiveDilation shift scalar lower)
+        (positiveDilation shift scalar upper) point =
+      positiveDilation shift scalar (rectangularCubePoint lower upper point) := by
+  funext who
+  dsimp [rectangularCubePoint, rectangularPoint, positiveDilation]
+  ring
+
+/-- The reference-cube region is unchanged when both chart and ambient region
+are transported by the displayed dilation. -/
+theorem rectangularCubePoint_preimage_positiveDilation (shift : ι → ℝ) (scalar : ℝ)
+    (lower upper : ι → ℝ) (region : Set (ι → ℝ)) :
+    rectangularCubePoint (positiveDilation shift scalar lower)
+        (positiveDilation shift scalar upper) ⁻¹' region =
+      rectangularCubePoint lower upper ⁻¹' (positiveDilation shift scalar ⁻¹' region) := by
+  ext point
+  simp only [mem_preimage, rectangularCubePoint_positiveDilation]
+
+/-- The literal source field after coordinate dilation and inverse output scaling. -/
+def dilatedAmbientField (shift : ι → ℝ) (scalar : ℝ)
+    (field : (ι → ℝ) → ι → ℝ) (point : ι → ℝ) : ι → ℝ :=
+  fun who => scalar⁻¹ * field (positiveDilation shift scalar point) who
+
+omit [Fintype ι] in
+theorem continuousOn_dilatedAmbientField (shift : ι → ℝ) {scalar : ℝ}
+    (hscalar : 0 < scalar) (lower upper : ι → ℝ) (field : (ι → ℝ) → ι → ℝ)
+    (hfield : ContinuousOn field
+      (Icc (positiveDilation shift scalar lower) (positiveDilation shift scalar upper))) :
+    ContinuousOn (dilatedAmbientField shift scalar field) (Icc lower upper) := by
+  change ContinuousOn (fun point => scalar⁻¹ • field (positiveDilation shift scalar point))
+    (Icc lower upper)
+  have hconstant : ContinuousOn (fun _ : ι → ℝ => (scalar⁻¹ : ℝ)) (Icc lower upper) :=
+    continuousOn_const
+  exact (hconstant.smul
+    (hfield.comp (continuous_positiveDilation shift scalar).continuousOn
+      (fun _ hpoint => positiveDilation_mem_Icc shift hscalar hpoint)))
+
+end Math.Topology
+
+namespace Math.BoxComplementarityProblem
+
+open Set Math.Topology
+
+variable {ι : Type*} [Fintype ι]
+
+/-- The two actual pulled-back problems differ only by positive output scaling. -/
+theorem ofAmbientMap_dilatedAmbientField (shift : ι → ℝ) {scalar : ℝ}
+    (hscalar : 0 < scalar) (lower upper : ι → ℝ)
+    (hwidth : ∀ who, lower who < upper who) (field : (ι → ℝ) → ι → ℝ)
+    (hfield : ContinuousOn field
+      (Icc (positiveDilation shift scalar lower) (positiveDilation shift scalar upper))) :
+    ofAmbientMap lower upper hwidth (dilatedAmbientField shift scalar field)
+        (continuousOn_dilatedAmbientField shift hscalar lower upper field hfield) =
+      (ofAmbientMap (positiveDilation shift scalar lower) (positiveDilation shift scalar upper)
+        (positiveDilation_width shift hscalar hwidth) field hfield).scaleGain scalar⁻¹ := by
+  have hgain :
+      (ofAmbientMap lower upper hwidth (dilatedAmbientField shift scalar field)
+        (continuousOn_dilatedAmbientField shift hscalar lower upper field hfield)).gain =
+      ((ofAmbientMap (positiveDilation shift scalar lower) (positiveDilation shift scalar upper)
+        (positiveDilation_width shift hscalar hwidth) field hfield).scaleGain scalar⁻¹).gain := by
+    funext point who
+    simp only [ofAmbientMap, dilatedAmbientField, scaleGain,
+      rectangularCubePoint_positiveDilation, mul_neg]
+  exact Math.BoxComplementarityProblem.ext hgain
+
+/-- Isolation is unchanged under the simultaneous literal chart/field/region dilation. -/
+theorem isIsolating_ofAmbientMap_dilation_iff (shift : ι → ℝ) {scalar : ℝ}
+    (hscalar : 0 < scalar) (lower upper : ι → ℝ)
+    (hwidth : ∀ who, lower who < upper who) (field : (ι → ℝ) → ι → ℝ)
+    (hfield : ContinuousOn field
+      (Icc (positiveDilation shift scalar lower) (positiveDilation shift scalar upper)))
+    (region : Set (ι → ℝ)) :
+    (ofAmbientMap lower upper hwidth (dilatedAmbientField shift scalar field)
+        (continuousOn_dilatedAmbientField shift hscalar lower upper field hfield)).IsIsolating
+        (rectangularCubePoint lower upper ⁻¹' (positiveDilation shift scalar ⁻¹' region)) ↔
+      (ofAmbientMap (positiveDilation shift scalar lower) (positiveDilation shift scalar upper)
+        (positiveDilation_width shift hscalar hwidth) field hfield).IsIsolating
+        (rectangularCubePoint (positiveDilation shift scalar lower)
+          (positiveDilation shift scalar upper) ⁻¹' region) := by
+  rw [ofAmbientMap_dilatedAmbientField shift hscalar lower upper hwidth field hfield,
+    ← rectangularCubePoint_preimage_positiveDilation]
+  exact isIsolating_scaleGain_iff _ (inv_pos.mpr hscalar) _
+
+end Math.BoxComplementarityProblem
