@@ -58,10 +58,16 @@ integrates the gain inequality over the independent child profile and the
 outsider clock. Reward and evaluation bounds supply summability internally.
 The finite sum is interchanged with expectation using
 `expect_finset_sum_of_bounded`
-(`MathUE/ProbabilityMassFunction/FiniteSumExpectation.lean`). Identifying the
-separate expectations with actual behavioral replacement payoffs and applying
-the full deviation caps remain to be supplied; these results do not yet close
-either packet.
+(`MathUE/ProbabilityMassFunction/FiniteSumExpectation.lean`).
+
+`map_pmfPi_cappedClockParentSourceLaws_quiet` and
+`map_pmfPi_cappedClockParentSourceLaws_cappedChild`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockParentLawPushforward.lean`)
+identify the exact product laws after discarding the outsider clock, or first
+using it to cap one child. The latter replaces precisely that child's marginal
+by the compiled minimum law. Identifying the resulting expectations with
+behavioral payoffs and applying the full deviation caps remain to be supplied;
+these results do not yet close either packet.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are

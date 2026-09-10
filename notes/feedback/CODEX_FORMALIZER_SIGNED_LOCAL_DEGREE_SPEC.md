@@ -173,10 +173,14 @@ The required combinatorial producer has three parts:
 This compares coarse labels with pulled labels, not with the actual fine
 labels. `externalCubeLabelPrism`
 (`Research/Topology/KuhnExternalCubePrism.lean`) constructs a discrete switch
-between two proper labelings on one grid. Its
-`externalPrismParameterEndEquiv` preserves ordered vertices and signed
-weights, and `externalCubeLabelPrism_endpointWeightedSum_eq` transports
-signed simplex sums under an incident-compatible integer selection.
+between two proper labelings on one grid.
+`externalPrismParameterEndEquiv` and
+`KuhnPrismSpatialBoundaryLabeling.externalEndpointWeightedSum_eq`
+(`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) supply
+the shared endpoint equivalence and weighted transport for arbitrary proper
+prism labels with specified endpoint labels. Ordered vertices and signed
+weights are preserved. The box-family and discrete-switch theorems both
+specialize this construction under an incident-compatible integer selection.
 The finite cancellation needs spatial boundary rules, not continuity of
 the switch. Applying it to pulled labels at the left end and actual fine
 labels elsewhere still requires the collar and selection argument below.

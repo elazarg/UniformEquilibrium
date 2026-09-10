@@ -27,7 +27,7 @@ namespace Math
 
 open Classical Set
 
-variable {n : ℕ}
+variable {n resolution : ℕ}
 
 /-- Scale one grid coordinate into a product-resolution grid. -/
 def finProductRefinementCoordinate (p factor : ℕ)
@@ -755,6 +755,26 @@ structure KuhnPrismSpatialBoundaryLabeling
   label_le_of_spatial_eq_top : ∀ vertex (who : Fin n),
     (vertex who.castSucc).1 = resolution → label vertex ≤ who.castSucc
 
+/-- A bounded external label on one cubical grid, with exactly the spatial
+boundary conditions needed by the finite prism argument. -/
+structure KuhnCubeBoundaryLabeling (n resolution : ℕ) where
+  label : (Fin n → Fin (resolution + 1)) → Fin (n + 1)
+  label_ne_of_eq_zero : ∀ vertex (who : Fin n),
+    vertex who = 0 → label vertex ≠ who.castSucc
+  label_le_of_eq_top : ∀ vertex (who : Fin n),
+    (vertex who).1 = resolution → label vertex ≤ who.castSucc
+
+/-- The bounded finite label supplied by a proper `SpernerCube`. -/
+def SpernerCube.toKuhnCubeBoundaryLabeling (cube : SpernerCube) :
+    KuhnCubeBoundaryLabeling cube.n cube.p where
+  label vertex := ⟨cube.RL vertex, Nat.lt_succ_of_le (cube.rl_proper vertex).1⟩
+  label_ne_of_eq_zero vertex who hzero := by
+    intro heq
+    exact (cube.rl_proper vertex).2 who |>.1 hzero (congrArg Fin.val heq)
+  label_le_of_eq_top vertex who htop := by
+    apply Fin.val_fin_le.mpr
+    exact (cube.rl_proper vertex).2 who |>.2 htop
+
 /-- A fully externally labeled face cannot lie on a spatial side of the
 prism.  Thus every odd geometric boundary face, once incidence is constructed,
 must lie on one of the two parameter ends. -/
@@ -825,6 +845,241 @@ theorem KuhnPrismSpatialBoundaryLabeling.isGeometricBoundary_iff
     · exact @case_B_boundary
         (kuhnPrismGeometryCube n resolution hresolution) n rfl face.1
           face.2.1 ⟨Fin.last n, fun index ↦ Fin.ext (hright index)⟩
+
+/-- A spatial Kuhn simplex carrying every external finite label. -/
+def KuhnExternalEndpointSimplex
+    (labeling : KuhnCubeBoundaryLabeling n resolution)
+    (hresolution : 0 < resolution) :=
+  {vertices : Fin (n + 1) →
+      (boxComplementaritySpernerCube (zeroBoxComplementarityProblem n)
+        resolution hresolution).G //
+    simplex (boxComplementaritySpernerCube (zeroBoxComplementarityProblem n)
+      resolution hresolution) n vertices ∧
+      Function.Injective fun index ↦ labeling.label (vertices index)}
+
+instance (labeling : KuhnCubeBoundaryLabeling n resolution)
+    (hresolution : 0 < resolution) :
+    Finite (KuhnExternalEndpointSimplex labeling hresolution) :=
+  Finite.of_injective Subtype.val Subtype.val_injective
+
+noncomputable instance (labeling : KuhnCubeBoundaryLabeling n resolution)
+    (hresolution : 0 < resolution) :
+    Fintype (KuhnExternalEndpointSimplex labeling hresolution) :=
+  Fintype.ofFinite _
+
+/-- Literal geometric and external-label weight of an endpoint simplex. -/
+def KuhnExternalEndpointSimplex.signedWeight
+    {labeling : KuhnCubeBoundaryLabeling n resolution}
+    {hresolution : 0 < resolution}
+    (vertices : KuhnExternalEndpointSimplex labeling hresolution) : ℤ :=
+  OrientedSimplexFacet.determinant
+      (fun vertex coordinate ↦ ((vertices.1 vertex coordinate).val : ℤ)) *
+    SignedSimplexLabel.orientation
+      (fun vertex ↦ labeling.label (vertices.1 vertex))
+
+theorem externalPrism_label_eq_endpoint_of_last_eq
+    (hresolution : 0 < resolution)
+    (boundary : KuhnPrismSpatialBoundaryLabeling n resolution hresolution)
+    (parameter : Fin (resolution + 1))
+    (endpoint : KuhnCubeBoundaryLabeling n resolution)
+    (hlabel : ∀ vertex, boundary.label
+      (kuhnPrismEndVertex resolution hresolution parameter vertex) =
+        endpoint.label vertex)
+    (vertex : (kuhnPrismGeometryCube n resolution hresolution).G)
+    (hlast : vertex (Fin.last n) = parameter) :
+    boundary.label vertex = endpoint.label (Fin.init vertex) := by
+  rw [← hlabel]
+  congr 1
+  funext coordinate
+  refine Fin.lastCases ?_ (fun who ↦ ?_) coordinate
+  · simpa using hlast
+  · rw [kuhnPrismEndVertex_castSucc]
+    rfl
+
+/-- A prism parameter end is the corresponding externally labeled simplex. -/
+def externalPrismParameterEndEquiv
+    (hresolution : 0 < resolution)
+    (boundary : KuhnPrismSpatialBoundaryLabeling n resolution hresolution)
+    (parameter : Fin (resolution + 1))
+    (endpoint : KuhnCubeBoundaryLabeling n resolution)
+    (hlabel : ∀ vertex : Fin n → Fin (resolution + 1),
+      boundary.label (kuhnPrismEndVertex resolution hresolution parameter vertex) =
+        endpoint.label vertex) :
+    {face : KuhnPrismFace n resolution hresolution boundary.label //
+      ∀ index, face.1 index (Fin.last n) = parameter} ≃
+      KuhnExternalEndpointSimplex endpoint hresolution where
+  toFun face := ⟨fun index ↦ Fin.init (face.1.1 index),
+    simplex_finInit_of_kuhnPrismEnd (zeroBoxComplementarityProblem n)
+      resolution hresolution parameter face.1.1 face.1.2.1 face.2, by
+      intro first second heq
+      apply face.1.2.2
+      change endpoint.label (Fin.init (face.1.1 first)) =
+        endpoint.label (Fin.init (face.1.1 second)) at heq
+      change boundary.label (face.1.1 first) = boundary.label (face.1.1 second)
+      rw [externalPrism_label_eq_endpoint_of_last_eq hresolution boundary parameter
+        endpoint hlabel (face.1.1 first) (face.2 first),
+        externalPrism_label_eq_endpoint_of_last_eq hresolution boundary parameter
+          endpoint hlabel (face.1.1 second) (face.2 second)]
+      exact heq⟩
+  invFun vertices := ⟨⟨fun index ↦
+      kuhnPrismEndVertex resolution hresolution parameter (vertices.1 index),
+    simplex_kuhnPrismEndVertex (zeroBoxComplementarityProblem n)
+      resolution hresolution parameter vertices.1 vertices.2.1, by
+        intro first second heq
+        apply vertices.2.2
+        simpa only [hlabel] using heq⟩, fun index ↦
+          kuhnPrismEndVertex_last resolution hresolution parameter
+            (vertices.1 index)⟩
+  left_inv face := by
+    apply Subtype.ext
+    apply Subtype.ext
+    funext index coordinate
+    refine Fin.lastCases ?_ (fun who ↦ ?_) coordinate
+    · simpa using (face.2 index).symm
+    · simp only [kuhnPrismEndVertex_castSucc]
+      rfl
+  right_inv vertices := by
+    apply Subtype.ext
+    funext index who
+    simp
+
+/-- The parameter-end equivalence preserves the existing signed weight. -/
+theorem externalPrismParameterEndEquiv_signedWeight
+    (hresolution : 0 < resolution)
+    (boundary : KuhnPrismSpatialBoundaryLabeling n resolution hresolution)
+    (parameter : Fin (resolution + 1))
+    (endpoint : KuhnCubeBoundaryLabeling n resolution)
+    (hlabel : ∀ vertex, boundary.label
+      (kuhnPrismEndVertex resolution hresolution parameter vertex) =
+        endpoint.label vertex)
+    (face : {face : KuhnPrismFace n resolution hresolution boundary.label //
+      ∀ index, face.1 index (Fin.last n) = parameter}) :
+    KuhnSimplex.parameterFaceWeight rfl boundary.label face.1 =
+      (externalPrismParameterEndEquiv hresolution boundary parameter endpoint
+        hlabel face).signedWeight := by
+  unfold KuhnSimplex.parameterFaceWeight
+    KuhnExternalEndpointSimplex.signedWeight
+  congr 1
+  apply congrArg SignedSimplexLabel.orientation
+  funext vertex
+  exact externalPrism_label_eq_endpoint_of_last_eq hresolution boundary parameter
+    endpoint hlabel (face.1.1 vertex) (face.2 vertex)
+
+/-- Weighted signed endpoint sums agree for any external prism boundary with
+literal end labels and any multiplier constant across incident pairs. -/
+theorem KuhnPrismSpatialBoundaryLabeling.externalEndpointWeightedSum_eq
+    {resolution : ℕ} {hresolution : 0 < resolution}
+    (boundary : KuhnPrismSpatialBoundaryLabeling n resolution hresolution)
+    (left right : KuhnCubeBoundaryLabeling n resolution)
+    (hleft : ∀ vertex, boundary.label
+      (kuhnPrismEndVertex resolution hresolution 0 vertex) = left.label vertex)
+    (hright : ∀ vertex, boundary.label
+      (kuhnPrismEndVertex resolution hresolution (Fin.last resolution) vertex) =
+        right.label vertex)
+    (selection : (Fin n → Fin (resolution + 1)) → ℤ)
+    (hcompatible : ∀ cell : KuhnPrismCell n resolution hresolution,
+      ∀ face : KuhnPrismFace n resolution hresolution boundary.label,
+        kuhnPrismIncident cell face →
+          selection (Fin.init (cell.1 0)) = selection (Fin.init (face.1 0))) :
+    (∑ endpoint : KuhnExternalEndpointSimplex left hresolution,
+      selection (endpoint.1 0) * endpoint.signedWeight) =
+    ∑ endpoint : KuhnExternalEndpointSimplex right hresolution,
+      selection (endpoint.1 0) * endpoint.signedWeight := by
+  let faceWeight := fun face : KuhnPrismFace n resolution hresolution boundary.label ↦
+    selection (Fin.init (face.1 0)) *
+      KuhnSimplex.parameterFaceWeight rfl boundary.label face
+  have hleftSum : (∑ face ∈ Finset.univ.filter (fun face :
+      KuhnPrismFace n resolution hresolution boundary.label ↦ face.IsLeftEnd),
+      faceWeight face) =
+      ∑ endpoint : KuhnExternalEndpointSimplex left hresolution,
+        selection (endpoint.1 0) * endpoint.signedWeight := by
+    rw [Finset.sum_subtype (p := KuhnPrismFace.IsLeftEnd) _
+      (by intro face; simp) faceWeight]
+    apply Fintype.sum_equiv
+      (externalPrismParameterEndEquiv hresolution boundary 0 left hleft)
+    intro face
+    unfold faceWeight
+    rw [externalPrismParameterEndEquiv_signedWeight]
+    rfl
+  have hrightSum : (∑ face ∈ Finset.univ.filter (fun face :
+      KuhnPrismFace n resolution hresolution boundary.label ↦ face.IsRightEnd),
+      faceWeight face) =
+      ∑ endpoint : KuhnExternalEndpointSimplex right hresolution,
+        selection (endpoint.1 0) * endpoint.signedWeight := by
+    rw [Finset.sum_subtype (p := KuhnPrismFace.IsRightEnd) _
+      (by intro face; simp) faceWeight]
+    apply Fintype.sum_equiv
+      ((Equiv.subtypeEquivProp (by
+        funext face
+        apply propext
+        constructor
+        · intro h index
+          apply Fin.ext
+          exact h index
+        · intro h index
+          exact congrArg Fin.val (h index))).trans
+        (externalPrismParameterEndEquiv hresolution boundary
+          (Fin.last resolution) right hright))
+    intro face
+    unfold faceWeight
+    have hparameter : ∀ index,
+        face.1.1 index (Fin.last n) = Fin.last resolution :=
+      fun index ↦ Fin.ext (face.2 index)
+    have hweight := externalPrismParameterEndEquiv_signedWeight hresolution
+      boundary (Fin.last resolution) right hright ⟨face.1, hparameter⟩
+    rw [hweight]
+    change selection (Fin.init (face.1.1 0)) * _ = _
+    simp only [Equiv.trans_apply]
+    rfl
+  rw [← hleftSum, ← hrightSum]
+  have h := KuhnSimplex.sum_weighted_parameterFaceWeight_left_eq_right
+    rfl boundary.label (fun cell ↦ selection (Fin.init (cell.1 0)))
+    (fun face ↦ selection (Fin.init (face.1 0))) hcompatible
+    (fun face hface ↦ (boundary.isGeometricBoundary_iff face).mp hface)
+  have hcast : Fin.cast
+      (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
+      (Fin.last n) = Fin.last n := Fin.ext rfl
+  have hp : (kuhnPrismGeometryCube n resolution hresolution).p = resolution := rfl
+  simpa only [hcast, hp, KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd,
+    faceWeight] using h
+
+/-- The external endpoint labeling carried by one box-complementarity cube. -/
+def boxComplementarityKuhnCubeBoundaryLabeling
+    (problem : BoxComplementarityProblem (Fin n))
+    (resolution : ℕ) (hresolution : 0 < resolution) :
+    KuhnCubeBoundaryLabeling n resolution :=
+  Math.SpernerCube.toKuhnCubeBoundaryLabeling
+    (boxComplementaritySpernerCube problem resolution hresolution)
+
+/-- The established box endpoint subtype and the generic external endpoint
+subtype have the same vertices, simplex relation, and finite labels. -/
+def kuhnEndpointLabeledSimplexEquivExternal
+    (problem : BoxComplementarityProblem (Fin n))
+    (resolution : ℕ) (hresolution : 0 < resolution) :
+    KuhnEndpointLabeledSimplex problem resolution hresolution ≃
+      KuhnExternalEndpointSimplex
+        (boxComplementarityKuhnCubeBoundaryLabeling
+          problem resolution hresolution) hresolution where
+  toFun endpoint := ⟨endpoint.1, by
+    constructor
+    · simpa only [simplex, SpernerCube.G, boxComplementaritySpernerCube,
+        zeroBoxComplementarityProblem] using endpoint.2.1
+    · simpa only [boxComplementarityKuhnCubeBoundaryLabeling,
+        SpernerCube.toKuhnCubeBoundaryLabeling, boxComplementaritySpernerCube,
+        boxComplementarityFinLabel] using endpoint.2.2⟩
+  invFun endpoint := ⟨endpoint.1, by
+    constructor
+    · simpa only [simplex, SpernerCube.G, boxComplementaritySpernerCube,
+        zeroBoxComplementarityProblem] using endpoint.2.1
+    · simpa only [boxComplementarityKuhnCubeBoundaryLabeling,
+        SpernerCube.toKuhnCubeBoundaryLabeling, boxComplementaritySpernerCube,
+        boxComplementarityFinLabel] using endpoint.2.2⟩
+  left_inv endpoint := by
+    apply Subtype.ext
+    rfl
+  right_inv endpoint := by
+    apply Subtype.ext
+    rfl
 
 /-- Finite double counting on the concrete ordered-Kuhn prism equates the
 mod-two counts of fully labeled faces at its two parameter ends. -/
@@ -925,56 +1180,16 @@ def boxComplementarityDiscretePrismParameterEndEquiv
         (boxComplementarityDiscretePrismBoundaryLabeling
           resolution hresolution family).label //
       ∀ index, face.1 index (Fin.last n) = parameter} ≃
-      KuhnEndpointLabeledSimplex (family parameter) resolution hresolution where
-  toFun face := by
-    refine ⟨fun index ↦ Fin.init (face.1.1 index), ?_, ?_⟩
-    · exact simplex_finInit_of_kuhnPrismEnd
-        (family parameter) resolution hresolution parameter face.1.1
-          face.1.2.1 face.2
-    · intro first second heq
-      apply face.1.2.2
-      change boxComplementarityFinLabel (family parameter) resolution
-          (Fin.init (face.1.1 first)) =
-        boxComplementarityFinLabel (family parameter) resolution
-          (Fin.init (face.1.1 second)) at heq
-      change (boxComplementarityDiscretePrismBoundaryLabeling
-          resolution hresolution family).label (face.1.1 first) =
-        (boxComplementarityDiscretePrismBoundaryLabeling
-          resolution hresolution family).label (face.1.1 second)
-      rw [boxComplementarityDiscretePrismBoundaryLabeling_eq_finLabel_of_last_eq
-          resolution hresolution family parameter (face.1.1 first)
-            (face.2 first),
-        boxComplementarityDiscretePrismBoundaryLabeling_eq_finLabel_of_last_eq
-          resolution hresolution family parameter (face.1.1 second)
-            (face.2 second)]
-      exact heq
-  invFun endpoint := by
-    refine ⟨⟨fun index ↦ kuhnPrismEndVertex resolution hresolution parameter
-        (endpoint.1 index), ?_, ?_⟩, ?_⟩
-    · exact simplex_kuhnPrismEndVertex
-        (family parameter) resolution hresolution parameter endpoint.1
-          endpoint.2.1
-    · intro first second heq
-      apply endpoint.2.2
-      simpa only [boxComplementarityDiscretePrismBoundaryLabeling_endVertex]
-        using heq
-    · intro index
-      exact kuhnPrismEndVertex_last
-        resolution hresolution parameter (endpoint.1 index)
-  left_inv := by
-    intro face
-    apply Subtype.ext
-    apply Subtype.ext
-    funext index coordinate
-    refine Fin.lastCases ?_ (fun who ↦ ?_) coordinate
-    · simpa only [kuhnPrismEndVertex_last] using (face.2 index).symm
-    · simp only [kuhnPrismEndVertex_castSucc, Fin.init]
-  right_inv := by
-    intro endpoint
-    apply Subtype.ext
-    funext index who
-    exact kuhnPrismEndVertex_castSucc
-      resolution hresolution parameter (endpoint.1 index) who
+      KuhnEndpointLabeledSimplex (family parameter) resolution hresolution :=
+  (externalPrismParameterEndEquiv hresolution
+    (boxComplementarityDiscretePrismBoundaryLabeling
+      resolution hresolution family) parameter
+    (boxComplementarityKuhnCubeBoundaryLabeling
+      (family parameter) resolution hresolution)
+    (boxComplementarityDiscretePrismBoundaryLabeling_endVertex
+      resolution hresolution family parameter)).trans
+    (kuhnEndpointLabeledSimplexEquivExternal
+      (family parameter) resolution hresolution).symm
 
 /-- The left parameter-end faces are the endpoint simplices of the first
 problem in the discrete family. -/
@@ -1131,6 +1346,15 @@ def KuhnEndpointLabeledSimplex.signedWeight
       SignedSimplexLabel.orientation
         (fun vertex => boxComplementarityFinLabel problem resolution (vertices.1 vertex))
 
+/-- The box-to-external endpoint adapter preserves the literal signed weight. -/
+theorem kuhnEndpointLabeledSimplexEquivExternal_signedWeight
+    (problem : BoxComplementarityProblem (Fin n))
+    (resolution : ℕ) (hresolution : 0 < resolution)
+    (endpoint : KuhnEndpointLabeledSimplex problem resolution hresolution) :
+    (kuhnEndpointLabeledSimplexEquivExternal problem resolution hresolution
+      endpoint).signedWeight = endpoint.signedWeight := by
+  rfl
+
 /-- The existing parameter-end equivalence preserves the actual signed weight. -/
 theorem boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
     (resolution : ℕ) (hresolution : 0 < resolution)
@@ -1144,12 +1368,19 @@ theorem boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
       face.1 =
     (boxComplementarityDiscretePrismParameterEndEquiv
       resolution hresolution family parameter face).signedWeight := by
-  unfold KuhnSimplex.parameterFaceWeight KuhnEndpointLabeledSimplex.signedWeight
-  congr 1
-  apply congrArg SignedSimplexLabel.orientation
-  funext vertex
-  exact boxComplementarityDiscretePrismBoundaryLabeling_eq_finLabel_of_last_eq
-    resolution hresolution family parameter (face.1.1 vertex) (face.2 vertex)
+  rw [externalPrismParameterEndEquiv_signedWeight hresolution
+    (boxComplementarityDiscretePrismBoundaryLabeling
+      resolution hresolution family) parameter
+    (boxComplementarityKuhnCubeBoundaryLabeling
+      (family parameter) resolution hresolution)
+    (boxComplementarityDiscretePrismBoundaryLabeling_endVertex
+      resolution hresolution family parameter) face]
+  rw [← kuhnEndpointLabeledSimplexEquivExternal_signedWeight
+    (family parameter) resolution hresolution
+    (boxComplementarityDiscretePrismParameterEndEquiv
+      resolution hresolution family parameter face)]
+  simp only [boxComplementarityDiscretePrismParameterEndEquiv,
+    Equiv.trans_apply, Equiv.apply_symm_apply]
 
 /-- Spatial selection weights transport through the actual discrete-family prism. -/
 theorem boxComplementarityDiscretePrism_endpointWeightedSum_eq
@@ -1168,48 +1399,66 @@ theorem boxComplementarityDiscretePrism_endpointWeightedSum_eq
       selection (boxComplementarityGridPoint resolution (endpoint.1 0)) *
         endpoint.signedWeight := by
   let boundary := boxComplementarityDiscretePrismBoundaryLabeling resolution hresolution family
-  let faceWeight := fun face : KuhnPrismFace n resolution hresolution boundary.label =>
-    selection (Fin.init (boxComplementarityGridPoint resolution (face.1 0))) *
-      KuhnSimplex.parameterFaceWeight rfl boundary.label face
-  have hleft : (∑ face ∈ Finset.univ.filter (fun face :
-      KuhnPrismFace n resolution hresolution boundary.label => face.IsLeftEnd), faceWeight face) =
-      ∑ endpoint : KuhnEndpointLabeledSimplex (family 0) resolution hresolution,
-        selection (boxComplementarityGridPoint resolution (endpoint.1 0)) *
-          endpoint.signedWeight := by
-    rw [Finset.sum_subtype (p := KuhnPrismFace.IsLeftEnd) _ (by intro face; simp) faceWeight]
+  let left := boxComplementarityKuhnCubeBoundaryLabeling
+    (family 0) resolution hresolution
+  let right := boxComplementarityKuhnCubeBoundaryLabeling
+    (family (Fin.last resolution)) resolution hresolution
+  let gridSelection := fun vertex : Fin n → Fin (resolution + 1) ↦
+    selection (boxComplementarityGridPoint resolution vertex)
+  have hgeneric := boundary.externalEndpointWeightedSum_eq left right
+    (by
+      intro vertex
+      change boundary.label
+        (kuhnPrismEndVertex resolution hresolution 0 vertex) =
+          boxComplementarityFinLabel (family 0) resolution vertex
+      exact boxComplementarityDiscretePrismBoundaryLabeling_endVertex
+        resolution hresolution family 0 vertex)
+    (by
+      intro vertex
+      change boundary.label (kuhnPrismEndVertex resolution hresolution
+        (Fin.last resolution) vertex) =
+          boxComplementarityFinLabel
+            (family (Fin.last resolution)) resolution vertex
+      exact boxComplementarityDiscretePrismBoundaryLabeling_endVertex
+        resolution hresolution family (Fin.last resolution) vertex)
+    gridSelection (by
+      intro cell face hincident
+      have hcell : boxComplementarityGridPoint resolution (Fin.init (cell.1 0)) =
+          Fin.init (boxComplementarityGridPoint resolution (cell.1 0)) := by
+        funext who
+        apply Subtype.ext
+        rfl
+      have hface : boxComplementarityGridPoint resolution (Fin.init (face.1 0)) =
+          Fin.init (boxComplementarityGridPoint resolution (face.1 0)) := by
+        funext who
+        apply Subtype.ext
+        rfl
+      simpa only [gridSelection, hcell, hface] using hcompatible cell face hincident)
+  have hleft : (∑ endpoint :
+      KuhnEndpointLabeledSimplex (family 0) resolution hresolution,
+      selection (boxComplementarityGridPoint resolution (endpoint.1 0)) *
+        endpoint.signedWeight) =
+      ∑ endpoint : KuhnExternalEndpointSimplex left hresolution,
+        gridSelection (endpoint.1 0) * endpoint.signedWeight := by
     apply Fintype.sum_equiv
-      (boxComplementarityDiscretePrismLeftEndEquiv resolution hresolution family)
-    intro face
-    unfold faceWeight
-    rw [boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
-      resolution hresolution family 0 face]
+      (kuhnEndpointLabeledSimplexEquivExternal
+        (family 0) resolution hresolution)
+    intro endpoint
+    rw [kuhnEndpointLabeledSimplexEquivExternal_signedWeight]
     rfl
-  have hright : (∑ face ∈ Finset.univ.filter (fun face :
-      KuhnPrismFace n resolution hresolution boundary.label => face.IsRightEnd), faceWeight face) =
-      ∑ endpoint : KuhnEndpointLabeledSimplex
-          (family (Fin.last resolution)) resolution hresolution,
-        selection (boxComplementarityGridPoint resolution (endpoint.1 0)) *
-          endpoint.signedWeight := by
-    rw [Finset.sum_subtype (p := KuhnPrismFace.IsRightEnd) _ (by intro face; simp) faceWeight]
+  have hright : (∑ endpoint : KuhnEndpointLabeledSimplex
+      (family (Fin.last resolution)) resolution hresolution,
+      selection (boxComplementarityGridPoint resolution (endpoint.1 0)) *
+        endpoint.signedWeight) =
+      ∑ endpoint : KuhnExternalEndpointSimplex right hresolution,
+        gridSelection (endpoint.1 0) * endpoint.signedWeight := by
     apply Fintype.sum_equiv
-      (boxComplementarityDiscretePrismRightEndEquiv resolution hresolution family)
-    intro face
-    unfold faceWeight
-    rw [boxComplementarityDiscretePrismParameterEndEquiv_signedWeight
-      resolution hresolution family (Fin.last resolution)
-      ⟨face.1, fun index => Fin.ext (face.2 index)⟩]
+      (kuhnEndpointLabeledSimplexEquivExternal
+        (family (Fin.last resolution)) resolution hresolution)
+    intro endpoint
+    rw [kuhnEndpointLabeledSimplexEquivExternal_signedWeight]
     rfl
-  rw [← hleft, ← hright]
-  have h := KuhnSimplex.sum_weighted_parameterFaceWeight_left_eq_right rfl boundary.label
-    (fun cell => selection (Fin.init (boxComplementarityGridPoint resolution (cell.1 0))))
-    (fun face => selection (Fin.init (boxComplementarityGridPoint resolution (face.1 0))))
-    hcompatible (by
-      intro face hface
-      exact (boundary.isGeometricBoundary_iff face).mp hface)
-  have hcast : Fin.cast (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n
-      from rfl) (Fin.last n) = Fin.last n := Fin.ext rfl
-  have hp : (kuhnPrismGeometryCube n resolution hresolution).p = resolution := rfl
-  simpa only [hcast, hp, KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd, faceWeight] using h
+  exact hleft.trans (hgeneric.trans hright.symm)
 
 
 /-- Actual signed complete-simplex sums agree at the two ends of the existing
