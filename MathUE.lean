@@ -579,6 +579,8 @@ import MathUE.Topology.PathConcatenation
 import MathUE.Topology.PureTimeWitnessNormalForm
 import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.RectangularPoincareMiranda
+import MathUE.Topology.BoxComplementarityProblem
+import MathUE.Topology.BoxComplementarityAmbientMapAdapter
 import MathUE.Topology.SignedSimplexLabelBoundary
 import MathUE.Topology.SimonViabilityBudgetCompiler
 import MathUE.Topology.SimonViabilityQuestion

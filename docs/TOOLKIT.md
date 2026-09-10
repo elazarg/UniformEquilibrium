@@ -806,11 +806,22 @@ to the singleton-matrix affine map on every fixed bounded set of signed
 scaled hazards. It needs no fixed-point or no-equilibrium premise. This
 supplies the ambient comparison, not integer degree or its invariance laws.
 
+`BoxComplementarityProblem.ofAmbientMap`
+(`MathUE/Topology/BoxComplementarityAmbientMapAdapter.lean`) pulls an ambient
+field through a positive rectangular chart and negates it to obtain the gain.
+It requires continuity only on the closed rectangle. Interior complementarity
+solutions are exactly ambient zeros. The same module proves isolation of the
+pulled-back region from a zero-free frontier inside the open rectangle, and
+identifies its selected solution set with the preimage of the ambient zeros.
+These are chart-level statements, not chart independence or an identification
+with ambient Brouwer degree. The generic problem and continuous-family
+definitions reside in `MathUE/Topology/BoxComplementarityProblem.lean`.
+
 The Research construction
 `BoxComplementarityProblem.localDegree`
 (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
-whole-cube-normalized integer on an isolating relatively open region of the
-unit cube. It is `(-1)^n` times `BoxComplementarityProblem.rawLocalDegree`,
+integer for each isolating relatively open region of the unit cube, normalized
+to one on the whole cube. It is `(-1)^n` times `BoxComplementarityProblem.rawLocalDegree`,
 the literal eventual signed count.
 `BoxComplementarityProblem.eventually_localSignedCount_eq`
 (`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)

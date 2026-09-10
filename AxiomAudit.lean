@@ -583,6 +583,8 @@ import MathUE.SurvivalProductComparison
 import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
+import MathUE.Topology.BoxComplementarityAmbientMapAdapter
+import MathUE.Topology.BoxComplementarityProblem
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactDependentFinitePrefixRelation

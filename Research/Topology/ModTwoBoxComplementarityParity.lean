@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Data.ZMod.Basic
-import Mathlib.Topology.Instances.Real.Lemmas
+import MathUE.Topology.BoxComplementarityProblem
 
 /-!
 # An open mod-two parity interface for box complementarity
@@ -48,57 +48,7 @@ namespace Math
 
 open Set
 
-/-- The finite product of closed unit intervals. -/
-abbrev UnitCube (ι : Type*) [Fintype ι] := ∀ _ : ι, Set.Icc (0 : ℝ) 1
-
 variable (ι : Type*) [Fintype ι]
-
-/-- A continuous gain field on a finite unit cube.  Positive gain means that
-the upper action is preferred to the lower action. -/
-structure BoxComplementarityProblem where
-  gain : UnitCube ι → ι → ℝ
-  continuous_gain : ∀ who, Continuous fun point ↦ gain point who
-
-namespace BoxComplementarityProblem
-
-variable {ι}
-
-/-- Exact coordinatewise complementarity on the closed unit cube. -/
-def IsSolution (problem : BoxComplementarityProblem ι) (point : UnitCube ι) : Prop :=
-  ∀ who,
-    ((point who : ℝ) = 0 → problem.gain point who ≤ 0) ∧
-    ((point who : ℝ) = 1 → 0 ≤ problem.gain point who) ∧
-    (0 < (point who : ℝ) → (point who : ℝ) < 1 → problem.gain point who = 0)
-
-/-- All box-complementarity solutions. -/
-def solutionSet (problem : BoxComplementarityProblem ι) : Set (UnitCube ι) :=
-  {point | problem.IsSolution point}
-
-/-- Solutions lying in a displayed relative neighborhood. -/
-def solutionsIn (problem : BoxComplementarityProblem ι)
-    (neighborhood : Set (UnitCube ι)) : Set (UnitCube ι) :=
-  problem.solutionSet ∩ neighborhood
-
-/-- A relative open set isolates the solutions it contains when no solution
-lies on its relative frontier in the compact cube. -/
-def IsIsolating (problem : BoxComplementarityProblem ι)
-    (neighborhood : Set (UnitCube ι)) : Prop :=
-  IsOpen neighborhood ∧ problem.solutionSet ∩ frontier neighborhood = ∅
-
-end BoxComplementarityProblem
-
-/-- Joint continuity of a one-parameter family of box-complementarity
-problems. -/
-def IsContinuousBoxComplementarityFamily
-    (family : Set.Icc (0 : ℝ) 1 → BoxComplementarityProblem ι) : Prop :=
-  ∀ who, Continuous fun data : Set.Icc (0 : ℝ) 1 × UnitCube ι ↦
-    (family data.1).gain data.2 who
-
-/-- The zero endpoint of the unit parameter interval. -/
-def unitIntervalZero : Set.Icc (0 : ℝ) 1 := ⟨0, by constructor <;> norm_num⟩
-
-/-- The one endpoint of the unit parameter interval. -/
-def unitIntervalOne : Set.Icc (0 : ℝ) 1 := ⟨1, by constructor <;> norm_num⟩
 
 /-- Open contract for a mod-two local parity on box-complementarity problems.
 

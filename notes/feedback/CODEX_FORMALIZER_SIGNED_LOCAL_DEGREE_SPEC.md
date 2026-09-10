@@ -288,14 +288,26 @@ the raw and normalized whole-cube values. The public degree is thus
 whole-cube-normalized. Identification with ambient Brouwer degree remains
 unproved; the sign calibration alone does not supply that comparison.
 
+`BoxComplementarityProblem.ofAmbientMap`
+(`MathUE/Topology/BoxComplementarityAmbientMapAdapter.lean`) constructs the
+negative-gain pullback through a positive rectangular chart. Continuity is
+required only on the closed rectangle.
+`BoxComplementarityProblem.isIsolating_ofAmbientMap_preimage` in the same
+file derives isolation from an open ambient region whose frontier, where it
+meets the closed rectangle, is interior to the rectangle and zero-free.
+`BoxComplementarityProblem.solutionsIn_ofAmbientMap_preimage_eq` identifies
+the selected solution set with the preimage of the ambient zeros; it requires
+interiority only where the region meets the rectangle. These hypotheses
+exclude boundary complementarity solutions that are not ambient zeros.
+The generic problem and continuous-family definitions reside in
+`MathUE/Topology/BoxComplementarityProblem.lean`; the parity specification
+and integer-degree construction remain in Research.
+
 The remaining geometric adapters are:
 
-1. Pull an ambient map through a positive rectangular chart and use its
-   negative as the complementarity gain. The existing `rectangularPoint`
-   (`MathUE/Topology/RectangularPoincareMiranda.lean`) supplies the coordinate
-   map. Local zero regions must lie inside the chart. Chart independence,
-   positive-dilation invariance, and the orientation conversion still need
-   proofs against the constructed count.
+1. Prove chart independence, positive-dilation invariance, and the orientation
+   conversion against the constructed count. The ambient pullback and its
+   isolation and zero-set adapters do not supply these degree equalities.
 2. Compute the local degree of an invertible affine root as the sign of its
    determinant under the conventional orientation. Existing prism
    cancellation does not supply that affine comparison.
