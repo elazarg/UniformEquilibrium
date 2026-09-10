@@ -7165,6 +7165,30 @@ def FirstOutsideTAt (P : DiscreteDecisionProcess) (T : Set P.X) (z : P.X) :
     Set (DDPPath P) :=
   {p | ∃ k, 0 < k ∧ p.x k = z ∧ z ∉ T ∧ ∀ i, 0 < i → i < k → p.x i ∈ T}
 
+/-- Exiting `T` for the first time is returning to its complement for the first time. -/
+theorem firstOutsideTAt_eq_firstReturnAt_compl (P : DiscreteDecisionProcess)
+    (T : Set P.X) (z : P.X) :
+    FirstOutsideTAt P T z = FirstReturnAt P Tᶜ z := by
+  ext path
+  simp only [FirstOutsideTAt, FirstReturnAt, mem_setOf_eq, mem_compl_iff]
+  constructor
+  · rintro ⟨k, hk, hx, hz, hbefore⟩
+    exact ⟨k, hk, hx, hz, fun i hi hik hiOutside ↦ hiOutside (hbefore i hi hik)⟩
+  · rintro ⟨k, hk, hx, hz, hbefore⟩
+    exact ⟨k, hk, hx, hz, fun i hi hik ↦ not_not.mp (hbefore i hi hik)⟩
+
+/-- First-exit-at-state events are measurable. -/
+theorem measurableSet_firstOutsideTAt (P : DiscreteDecisionProcess)
+    (T : Set P.X) (z : P.X) : MeasurableSet (FirstOutsideTAt P T z) := by
+  rw [firstOutsideTAt_eq_firstReturnAt_compl]
+  exact measurableSet_firstReturnAt P Tᶜ z
+
+/-- A union of first-exit-at-state events over any state set is measurable. -/
+theorem measurableSet_iUnion_firstOutsideTAt (P : DiscreteDecisionProcess)
+    (T A : Set P.X) : MeasurableSet (⋃ z ∈ A, FirstOutsideTAt P T z) := by
+  exact MeasurableSet.iUnion fun z ↦
+    MeasurableSet.iUnion fun _ ↦ measurableSet_firstOutsideTAt P T z
+
 /-- An action is completing when the first subsequent state outside `T` lies outside `A`. -/
 def CompletingAction (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (A T : Set P.X) (x : P.X) (y : P.Y x) : Prop :=
@@ -7217,6 +7241,18 @@ def FirstRetainedAt (P : DiscreteDecisionProcess) (K : Set P.X) (z : P.X) :
     Set (DDPPath P) :=
   {p | ∃ k, 0 < k ∧ p.x k = z ∧ z ∈ K ∧
     ∀ i, 0 < i → i < k → p.x i ∉ K}
+
+/-- A first retained-state visit is exactly a first return to the retained set. -/
+theorem firstRetainedAt_eq_firstReturnAt (P : DiscreteDecisionProcess)
+    (K : Set P.X) (z : P.X) :
+    FirstRetainedAt P K z = FirstReturnAt P K z :=
+  rfl
+
+/-- First retained-state visit events are measurable. -/
+theorem measurableSet_firstRetainedAt (P : DiscreteDecisionProcess)
+    (K : Set P.X) (z : P.X) : MeasurableSet (FirstRetainedAt P K z) := by
+  rw [firstRetainedAt_eq_firstReturnAt]
+  exact measurableSet_firstReturnAt P K z
 
 /--
 The permitted reduced actions: a composite chain at a root in `S`, and the unchanged

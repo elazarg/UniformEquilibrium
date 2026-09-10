@@ -132,6 +132,59 @@ The missing construction is a compatible geometric triangulation or
 subdivision-chain comparison, including its restriction to the local region
 and its cleared collar. No such producer was found in the bounded search.
 
+### Coordinate-floor comparison specification
+
+The following is an implementation specification, not a checked theorem.
+For positive resolutions `p` and factors `k`, round a fine-grid coordinate
+`v` to `v / k` using natural-number division. This preserves the zero and
+top faces and moves its represented point by at most `1 / p`, independently
+of `k`.
+
+The required combinatorial producer has three parts:
+
+1. An injectively rounded fine Kuhn simplex is a coarse Kuhn simplex.
+   Reuse `simplex_of_step_le`, `spernerSimplex_step_le`, and
+   `spernerSimplex_val_le_succ`
+   (`MathUE/Topology/KuhnSimplexGeometry.lean`) for monotonicity and the
+   endpoint coordinate bound.
+2. Each coarse top simplex with base `b` has exactly one noncollapsed fine
+   preimage, with coordinate bases `k * (b + 1) - 1` and the same chronological
+   coordinate permutation. Prove both existence and uniqueness from the
+   existing one-raise-per-coordinate geometry, including dimension zero.
+3. Pull the coarse labels back by rounding. Complete pulled-label simplices
+   cannot collapse, so the preceding producer gives an actual bijection of
+   complete simplices. Their integer weights agree by
+   `KuhnSimplex.determinant_eq_coordinateEquivalence_sign`
+   (`MathUE/Topology/KuhnSimplexOrientation.lean`). There is no Euclidean
+   volume factor in these unit-step orientation weights.
+
+This compares coarse labels with pulled labels, not with the actual fine
+labels. Bridge those two labelings using the existing external-label prism:
+use the pulled label at the left parameter face and the actual fine label
+elsewhere. The finite signed cancellation argument needs the spatial
+boundary rules, not continuity of this discrete switch. Factor geometric
+endpoint transport out of family-specific wrappers rather than inventing a
+continuous problem that produces these labels.
+
+The analytic producer must establish one collar radius and one coarse
+threshold working for every positive `k`. Each label is sampled either at
+the actual fine point or at its rounded coarse point, within `1 / p`.
+Complete-face sample points therefore share a limit as `p` tends to infinity,
+even when `k` varies. The label inequalities and compactness argument in
+`Research/Topology/BoxComplementarityPrismCluster.lean` should identify that
+limit as an actual solution, contradicting the solution-free frontier collar.
+
+Local anchor membership also needs this collar. The coarse label-dimension
+anchor and its fine lift can be different points: in dimension one an
+anchor at zero can lift to `(k - 1) / (p * k)`. Equality for arbitrary
+regions without clearance is not part of the specification.
+
+The combined target is one threshold such that for every coarse resolution
+above it and every positive factor, the existing local count at `p` equals
+the count at `p * k`. Comparing `p` and `q` through `p * q` then supplies
+independent-resolution stabilization. Affine normalization and approximation
+independence remain further obligations.
+
 ## Subdivision library discovery and reuse boundary
 
 `kuhnStarSubdivision_completeFacetParity_eq`
