@@ -1784,9 +1784,24 @@ changing its coordinates.
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFinFourExistence.lean`)
 supplies a four-player uniform payoff from the reward certificate alone,
 using the three-player existence theorem for the child. It does not assume
-a child profile, a strategic source, or a dispensability gate. Neither the
-relaxed Never-row criterion nor a decision procedure for this raw class is
-claimed by these declarations.
+a child profile, a strategic source, or a dispensability gate.
+
+`CappedClockParentFutureJoinCertificate` and
+`exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonQuietExtension.lean`)
+drop the separate Never-row inequality when some child own singleton is
+strictly positive. The positive part of the Never-row residual, multiplied
+by actual child joint-Never mass, is charged to that child's unrestricted
+debt. This gives the fixed error multiplier `max(1, sum(weight) + excess/singleton)`
+and preserves every coordinate of the specified child target.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockPositiveSingleton`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonFinFourExistence.lean`)
+supplies four-player existence under this relaxed raw-table criterion.
+The shared pointwise and expectation theorems allow an explicit nonnegative
+Never-row slack; the exact certificate specializes it to zero. For general
+nonincreasing evaluations the correction includes the evaluation drop, so
+the terminal relaxation does not assert the same bound for all evaluations.
+A decision procedure for these raw classes remains to be supplied.
 
 ## Boundary analysis and diagnostics
 

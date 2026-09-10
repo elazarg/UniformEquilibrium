@@ -142,6 +142,26 @@ No child strategy or equilibrium witness is an extra premise. For specified targ
 (`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`)
 already supplies payoff-preserving reindexing.
 
+`CappedClockParentRewardSlackCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
+allows nonnegative slack in the Never row. The common pointwise proof retains
+the exact evaluation-drop charge, and the old certificate is its zero-slack
+specialization. The expectation theorem still accepts any coupled clock law;
+independence is used when realizing actual unilateral deviations.
+
+`quietLift_outsideDebt_le_of_positiveSingleton` and
+`exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonQuietExtension.lean`)
+need only future and joining rows and one strictly positive child own
+singleton. They charge the positive Never-row excess to that child's actual
+debt using joint-Never mass. Their fixed Nash-error multiplier is the maximum
+of one and the sum of certificate weights plus excess divided by that singleton.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockPositiveSingleton`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonFinFourExistence.lean`)
+then supplies the raw Fin4 consumer using actual three-player child existence.
+The criterion and target-preserving lift are proved; arbitrary proper children
+with multiple outsiders and the withdrawal criteria below are separate work.
+
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are
 incomparable. Patient withdrawal controls terminal regret with summed

@@ -59,24 +59,26 @@ theorem quittingBehaviorStoppingLaws_liftDeletedProfile_eq_quiet
           (profile who)
       exact hlift
 
-/-- The capped-clock full parent bound, transported to the actual Never lift,
-has exactly the child game's unrestricted survivor debts on its right side. -/
-theorem quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt
+/-- The slack capped-clock parent bound transported to the actual Never lift,
+with actual child debts and joint-Never mass on its right side. -/
+theorem quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack
     [Nonempty ι]
     (reward : {S : Finset (Option ι) // S.Nonempty} → Payoff (Option ι))
-    (certificate : CappedClockParentRewardCertificate reward)
+    (certificate : CappedClockParentRewardSlackCertificate reward)
     (childProfile : (quittingGame
       (quittingDeleteReward reward (· = none))).BehaviorProfile) :
     let lifted := quittingLiftDeletedProfile reward (· = none) childProfile
     quittingBehaviorDeviationPayoffCap reward lifted none -
         quittingTerminalPayoff reward lifted none ≤
-      ∑ i, certificate.weight i *
+      (∑ i, certificate.weight i *
         (quittingBehaviorDeviationPayoffCap
             (quittingDeleteReward reward (· = none)) childProfile
               ⟨some i, Option.some_ne_none i⟩ -
           quittingTerminalPayoff
             (quittingDeleteReward reward (· = none)) childProfile
-              ⟨some i, Option.some_ne_none i⟩) := by
+              ⟨some i, Option.some_ne_none i⟩)) +
+      certificate.neverSlack *
+        ∏ i, (quietOutsiderChildLaws reward childProfile i none).toReal := by
   dsimp only
   let childLaws := quietOutsiderChildLaws reward childProfile
   let lifted := quittingLiftDeletedProfile reward (· = none) childProfile
@@ -93,13 +95,15 @@ theorem quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt
       (quietParentStoppingLaws childLaws) player
   have hsame : quittingBehaviorStoppingLaws reward canonical =
       quittingBehaviorStoppingLaws reward lifted := hcanonical.trans hlift.symm
-  have h := outsideBehaviorDeviationDebt_le_weighted_childBehaviorDeviationDebt
+  have h :=
+    outsideBehaviorDeviationDebt_le_weighted_childBehaviorDeviationDebt_add_slack
     reward certificate childLaws
   change quittingBehaviorDeviationPayoffCap reward canonical none -
       quittingTerminalPayoff reward canonical none ≤
-    ∑ i, certificate.weight i *
+    (∑ i, certificate.weight i *
       (quittingBehaviorDeviationPayoffCap reward canonical (some i) -
-        quittingTerminalPayoff reward canonical (some i)) at h
+        quittingTerminalPayoff reward canonical (some i))) +
+      certificate.neverSlack * ∏ i, (childLaws i none).toReal at h
   have hdebt (who : Option ι) :
       quittingBehaviorDeviationPayoffCap reward canonical who -
           quittingTerminalPayoff reward canonical who =
@@ -113,22 +117,47 @@ theorem quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt
   calc
     quittingBehaviorDeviationPayoffCap reward lifted none -
         quittingTerminalPayoff reward lifted none ≤
-      ∑ i, certificate.weight i *
+      (∑ i, certificate.weight i *
         (quittingBehaviorDeviationPayoffCap reward canonical (some i) -
-          quittingTerminalPayoff reward canonical (some i)) := h
-    _ = ∑ i, certificate.weight i *
+          quittingTerminalPayoff reward canonical (some i))) +
+        certificate.neverSlack * ∏ i, (childLaws i none).toReal := h
+    _ = (∑ i, certificate.weight i *
         (quittingBehaviorDeviationPayoffCap
             (quittingDeleteReward reward (· = none)) childProfile
               ⟨some i, Option.some_ne_none i⟩ -
           quittingTerminalPayoff
             (quittingDeleteReward reward (· = none)) childProfile
-              ⟨some i, Option.some_ne_none i⟩) := by
+              ⟨some i, Option.some_ne_none i⟩)) +
+        certificate.neverSlack *
+          ∏ i, (quietOutsiderChildLaws reward childProfile i none).toReal := by
+      congr 1
       apply Finset.sum_congr rfl
       intro i _
       rw [hdebt (some i)]
       congr 1
       exact quittingBehaviorDeviationDebt_liftDeletedProfile reward
         (· = none) childProfile ⟨some i, Option.some_ne_none i⟩
+
+/-- Exact N/F/J transport is the zero-slack specialization. -/
+theorem quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt
+    [Nonempty ι]
+    (reward : {S : Finset (Option ι) // S.Nonempty} → Payoff (Option ι))
+    (certificate : CappedClockParentRewardCertificate reward)
+    (childProfile : (quittingGame
+      (quittingDeleteReward reward (· = none))).BehaviorProfile) :
+    let lifted := quittingLiftDeletedProfile reward (· = none) childProfile
+    quittingBehaviorDeviationPayoffCap reward lifted none -
+        quittingTerminalPayoff reward lifted none ≤
+      ∑ i, certificate.weight i *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward reward (· = none)) childProfile
+              ⟨some i, Option.some_ne_none i⟩ -
+          quittingTerminalPayoff
+            (quittingDeleteReward reward (· = none)) childProfile
+              ⟨some i, Option.some_ne_none i⟩) := by
+  simpa [CappedClockParentRewardCertificate.withZeroSlack] using
+    quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_slack
+      reward certificate.withZeroSlack childProfile
 
 end QuietOutsider
 
