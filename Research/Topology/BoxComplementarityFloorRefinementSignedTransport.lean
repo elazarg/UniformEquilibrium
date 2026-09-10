@@ -611,4 +611,14 @@ theorem BoxComplementarityProblem.eventually_localSignedCount_eq
   exact hpq.trans (by
     simpa only [Nat.mul_comm] using hqp.symm)
 
+/-- On the whole cube, the existing floor comparison works starting at mesh one. -/
+theorem boxComplementarityLocalSignedCount_univ_eq_resolution_one
+    (problem : BoxComplementarityProblem (Fin n)) (p : ℕ) (hp : 0 < p) :
+    boxComplementarityLocalSignedCount problem p hp univ =
+      boxComplementarityLocalSignedCount problem 1 (by omega) univ := by
+  have h := boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
+    problem 1 p (by omega) hp univ isOpen_univ 3 (by norm_num) (by
+      simp [HasFloorRefinementPrismFaceSampleIn])
+  simpa only [one_mul] using h.symm
+
 end Math

@@ -83,4 +83,14 @@ theorem IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq
     ((hhomotopy p hhomotopyThreshold hp).trans
       (hright p hrightThreshold hp))
 
+/-- Exact finite normalization reduction, retaining the existing orientation convention. -/
+theorem BoxComplementarityProblem.localDegree_univ_eq_resolution_one
+    (problem : BoxComplementarityProblem (Fin n)) :
+    problem.localDegree univ (by simp [IsIsolating]) =
+      boxComplementarityLocalSignedCount problem 1 (by omega) univ := by
+  obtain ⟨threshold, hcount⟩ :=
+    problem.eventually_localSignedCount_eq_localDegree univ (by simp [IsIsolating])
+  exact (hcount (threshold + 1) (by omega) (by omega)).symm.trans
+    (boxComplementarityLocalSignedCount_univ_eq_resolution_one problem _ (by omega))
+
 end Math

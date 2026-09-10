@@ -252,6 +252,56 @@ proves existence of an actual solution in any isolating region with nonzero
 degree. It does not require the open region itself to be compact: compactness
 of its closure and absence of frontier solutions suffice.
 
+## Normalization and ambient comparison: implementation specification
+
+The next finite calculation is the actual resolution-one count.
+`boxComplementarityLocalSignedCount_univ_eq_resolution_one`
+(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+identifies every positive-mesh whole-cube count with the mesh-one count.
+`BoxComplementarityProblem.localDegree_univ_eq_resolution_one`
+(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) identifies
+the stabilized value with that finite count, without an isolation premise.
+Both specialize the actual floor comparison to the empty frontier collar.
+At mesh one, the label rule depends only on the corner: its label is the
+first coordinate equal to one, or the dimension if there is none. The
+candidate unique complete ordered simplex raises coordinates in reverse
+order. Its vertex at position `j` has coordinate `i` equal to one exactly
+when `n - 1 - i < j`. The required producer must prove completeness and
+uniqueness for the existing simplex type, then evaluate its actual weight.
+A displayed corner or determinant alone is not that enumeration theorem.
+
+The chronological coordinate permutation and the label permutation have
+different sizes, `n` and `n + 1`. Their sign product is expected to give
+`(-1)^n` under the current raw orientation. A kernel-checked one-dimensional
+determinant calculation confirms the negative edge weight, but the general
+whole-cube normalization is not yet proved. Do not identify the raw degree
+with the conventional degree of `x - T(x)` without proving its sign
+conversion. Even dimension four can conceal the distinction; quotient
+dimensions need not be even.
+
+The remaining geometric adapters are separate from that finite calculation:
+
+1. Pull an ambient map through a positive rectangular chart and use its
+   negative as the complementarity gain. The existing `rectangularPoint`
+   (`MathUE/Topology/RectangularPoincareMiranda.lean`) supplies the coordinate
+   map. Local zero regions must lie inside the chart. Chart independence,
+   positive-dilation invariance, and the orientation conversion still need
+   proofs against the constructed count.
+2. Compute the local degree of an invertible affine root as the sign of its
+   determinant under the conventional orientation. Existing prism
+   cancellation does not supply that affine comparison.
+3. At a strictly complementary LCP root, the minimum map is locally affine:
+   active rows select slack and inactive rows select coordinates. This
+   application needs affine comparison and a block-determinant calculation,
+   not a general differentiability theorem.
+4. General regular-Jacobian comparison can then use the derivative's small
+   remainder and the inverse linear map's lower bound to construct a
+   boundary-free straight homotopy. It is not a premise to put into the
+   degree definition.
+
+These are known finite-dimensional constructions still to implement, not
+new strategic hypotheses or a new mathematical conjecture.
+
 ## Subdivision library discovery and reuse boundary
 
 `kuhnStarSubdivision_completeFacetParity_eq`
