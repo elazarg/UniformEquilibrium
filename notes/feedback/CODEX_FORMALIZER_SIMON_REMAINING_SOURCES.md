@@ -62,6 +62,15 @@ without unused branch exclusions or domain-membership assumptions.
 ω specialization. Both radius bounds follow from the stated parameters.
 This does not change or discharge the requirements of `lemma4_5`.
 
+`continuous_section4H`, `section4H_isStraightLineOn`, and
+`section4H_eq_diagonal_on_frontier` in the same file prove joint continuity,
+straightness, and fixing of the full truncated-domain frontier for the actual
+constructed homotopy. The endpoint identities are explicit. Frontier fixing
+uses the cutoff value one on the lower boundary and the actual inverse's
+zero-quitting identity on the exterior closure. These results do not supply
+contractibility or terminal-diagonal exclusion, and do not complete Question 1
+or Lemma 4.5.
+
 ## Markov variation
 
 `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound`

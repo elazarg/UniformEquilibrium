@@ -6987,6 +6987,126 @@ def Section4H (G : QuittingGame) {M d : ℝ}
   (1 - (t : ℝ)) • (a, a) +
     (t : ℝ) • (Section4X G inverse cutoff a, Section4Y G inverse cutoff a)
 
+/-- The first deformed graph coordinate is continuous. -/
+theorem continuous_section4X (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) : Continuous (Section4X G inverse cutoff) := by
+  have hlambda := continuous_subtype_val.comp hcutoff
+  have hbeta := continuous_fst.comp (continuous_subtype_val.comp inverse.continuousInv)
+  exact (hlambda.smul continuous_id).add ((continuous_const.sub hlambda).smul hbeta)
+
+/-- The one-stage coordinate of the deformed graph is continuous. -/
+theorem continuous_section4Z (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) : Continuous (Section4Z G inverse cutoff) := by
+  apply continuous_pi_iff.mpr
+  intro j
+  exact continuous_quittingOneStagePayoff_comp G _ _
+    (continuous_section4X G inverse cutoff hcutoff)
+    (continuous_snd.comp (continuous_subtype_val.comp inverse.continuousInv)) j
+
+/-- The second deformed graph coordinate is continuous. -/
+theorem continuous_section4Y (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) : Continuous (Section4Y G inverse cutoff) := by
+  have hlambda := continuous_subtype_val.comp hcutoff
+  exact (hlambda.smul (continuous_section4X G inverse cutoff hcutoff)).add
+    ((continuous_const.sub hlambda).smul (continuous_section4Z G inverse cutoff hcutoff))
+
+/-- The Section 4 homotopy is jointly continuous. -/
+theorem continuous_section4H (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) :
+    Continuous (fun z : Payoff G.Player × UnitInterval =>
+      Section4H G inverse cutoff z.1 z.2) := by
+  have ht := continuous_subtype_val.comp
+    (continuous_snd : Continuous (Prod.snd : Payoff G.Player × UnitInterval → UnitInterval))
+  exact ((continuous_const.sub ht).smul
+    (continuous_fst.prodMk continuous_fst)).add
+      (ht.smul (((continuous_section4X G inverse cutoff hcutoff).comp continuous_fst).prodMk
+        ((continuous_section4Y G inverse cutoff hcutoff).comp continuous_fst)))
+
+/-- The Section 4 homotopy starts at the diagonal embedding. -/
+theorem section4H_zero (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (a : Payoff G.Player) : Section4H G inverse cutoff a 0 = (a, a) := by
+  simp [Section4H]
+
+/-- The terminal map is the actual deformed graph pair. -/
+theorem section4H_one (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (a : Payoff G.Player) :
+    Section4H G inverse cutoff a 1 =
+      (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) := by
+  simp [Section4H]
+
+/-- The actual Section 4 homotopy is straight-line on any supplied domain. -/
+theorem section4H_isStraightLineOn (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) (domain : Set (Payoff G.Player)) :
+    IsStraightLineOn domain (Section4H G inverse cutoff) := by
+  constructor
+  · exact (continuous_section4H G inverse cutoff hcutoff).comp
+      ((continuous_subtype_val.comp continuous_fst).prodMk continuous_snd)
+  · intro a _ t
+    rw [section4H_zero, section4H_one]
+    exact add_comm _ _
+
+/-- A cutoff value of one fixes the point throughout the homotopy. -/
+theorem section4H_eq_diagonal_of_cutoff_eq_one (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (a : Payoff G.Player) (ha : (cutoff a : ℝ) = 1) (t : UnitInterval) :
+    Section4H G inverse cutoff a t = (a, a) := by
+  simp only [Section4H, Section4Y, Section4X, ha, sub_self, zero_smul, one_smul, add_zero]
+  rw [← add_smul]
+  simp
+
+/-- The inverse is the zero-quitting graph on the exterior closure. -/
+theorem PhiInverseData.eq_zeroQuitRow_of_mem_closure_compl (G : QuittingGame)
+    {M d : ℝ} (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (inverse : PhiInverseData G M d) (a : Payoff G.Player)
+    (ha : a ∈ closure ((WSet G)ᶜ)) :
+    (inverse.inv a).1 = (a, zeroQuitRow G) := by
+  have hfixed := (structureHomotopy_basic G M d hM hd hd1 inverse).2.2.2 a ha 1
+  simpa only [structureHomotopy_one] using hfixed
+
+/-- Exterior-closure points are fixed, independently of the cutoff value. -/
+theorem section4H_eq_diagonal_of_mem_closure_compl (G : QuittingGame)
+    {M d : ℝ} (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (a : Payoff G.Player) (ha : a ∈ closure ((WSet G)ᶜ)) (t : UnitInterval) :
+    Section4H G inverse cutoff a t = (a, a) := by
+  have hinv := inverse.eq_zeroQuitRow_of_mem_closure_compl G hM hd hd1 a ha
+  have hx : Section4X G inverse cutoff a = a := by
+    simp only [Section4X, congrArg Prod.fst hinv]
+    rw [← add_smul]
+    simp
+  have hz : Section4Z G inverse cutoff a = a := by
+    funext j
+    simp only [Section4Z, hx, congrArg Prod.snd hinv]
+    exact congrFun (quittingOneStagePayoff_zero G a) j
+  have hy : Section4Y G inverse cutoff a = a := by
+    simp only [Section4Y, hx, hz]
+    rw [← add_smul]
+    simp
+  simp only [Section4H, hx, hy]
+  rw [← add_smul]
+  simp
+
+/-- The actual Section 4 homotopy fixes the full truncated-domain frontier. -/
+theorem section4H_eq_diagonal_on_frontier (G : QuittingGame) {M d R radius : ℝ}
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R radius cutoff) :
+    ∀ a ∈ frontier (TruncatedW G R), ∀ t, Section4H G inverse cutoff a t = (a, a) := by
+  intro a ha t
+  by_cases hW : a ∈ frontier (WSet G)
+  · exact section4H_eq_diagonal_of_mem_closure_compl G hM hd hd1 inverse cutoff a
+      (by simpa only [frontier_compl] using
+        (frontier_subset_closure (s := (WSet G)ᶜ) (by simpa using hW))) t
+  · exact section4H_eq_diagonal_of_cutoff_eq_one G inverse cutoff a
+      (hcutoff.2.1 a (subset_closure ⟨ha, hW⟩)) t
+
 /-- The upper neighborhoods `V_j`. -/
 def UpperNeighborhoodFor (G : QuittingGame) (R ε : ℝ)
     (j : G.Player) : Set (Payoff G.Player) :=
