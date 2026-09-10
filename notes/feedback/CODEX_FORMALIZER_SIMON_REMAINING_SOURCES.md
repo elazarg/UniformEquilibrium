@@ -67,9 +67,18 @@ This does not change or discharge the requirements of `lemma4_5`.
 straightness, and fixing of the full truncated-domain frontier for the actual
 constructed homotopy. The endpoint identities are explicit. Frontier fixing
 uses the cutoff value one on the lower boundary and the actual inverse's
-zero-quitting identity on the exterior closure. These results do not supply
-contractibility or terminal-diagonal exclusion, and do not complete Question 1
-or Lemma 4.5.
+zero-quitting identity on the exterior closure.
+
+`isContractibleSet_truncatedW` in the same file proves contractibility under
+the weak lower-corner bounds `0 ≤ R+1` and `-(R+1) ≤ SoloPayoff G j` for every
+player. The actual coordinate pieces are convex and have that corner in
+common; their union is the literal truncated domain. The proof reuses
+Mathlib's star-convex contractibility theorem through
+`isContractibleSet_iff_contractibleSpace`
+(`MathUE/Topology/SimonViabilityQuestion.lean`). No separate contraction
+construction is assumed. Full-dimensionality of the pieces and terminal-
+diagonal exclusion are not supplied by these results; Question 1 and
+Lemma 4.5 remain incomplete.
 
 ## Markov variation
 

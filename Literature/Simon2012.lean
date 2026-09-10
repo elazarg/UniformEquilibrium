@@ -4,6 +4,7 @@ import MathUE.LinearAlgebra.UniformNonsingularity
 import MathUE.PMFProduct.TotalVariation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.Topology.SimonViabilityQuestion
+import Mathlib.Analysis.Convex.Contractible
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
@@ -6634,6 +6635,55 @@ def TruncatedPiece (G : QuittingGame) (R : ℝ) (j : G.Player) :
 /-- `C = W ∩ [-R-1,R+1]ᴺ`. -/
 def TruncatedW (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
   WSet G ∩ ClosedCoordinateCube (R + 1)
+
+/-- The coordinate cube is convex. -/
+theorem convex_closedCoordinateCube {N : Type} [Fintype N] (R : ℝ) :
+    Convex ℝ (ClosedCoordinateCube (N := N) R) := by
+  change Convex ℝ {x : N → ℝ | ∀ j, x j ∈ Set.Icc (-R) R}
+  simpa only [Set.pi, Set.mem_univ, forall_const] using
+    (convex_pi (𝕜 := ℝ) (s := Set.univ) (t := fun _ : N => Set.Icc (-R) R)
+      (by intro i hi; exact convex_Icc (-R) R))
+
+/-- Every truncated coordinate piece is convex. -/
+theorem convex_truncatedPiece (G : QuittingGame) (R : ℝ) (j : G.Player) :
+    Convex ℝ (TruncatedPiece G R j) := by
+  have hhalfspace : Convex ℝ (Wj G j) :=
+    (convex_Iic (𝕜 := ℝ) (SoloPayoff G j)).linear_preimage
+      (LinearMap.proj (R := ℝ) (φ := fun _ : G.Player => ℝ) j)
+  exact hhalfspace.inter (convex_closedCoordinateCube (R + 1))
+
+/-- The truncation is exactly the union of its displayed coordinate pieces. -/
+theorem truncatedW_eq_iUnion (G : QuittingGame) (R : ℝ) :
+    TruncatedW G R = ⋃ j, TruncatedPiece G R j := by
+  rw [TruncatedW, wSet_eq_iUnion, Set.iUnion_inter]
+  rfl
+
+/-- The common lower cube corner belongs to every truncated coordinate piece. -/
+theorem lowerCorner_mem_truncatedPiece (G : QuittingGame) (R : ℝ)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) (j : G.Player) :
+    (fun _ => -(R + 1)) ∈ TruncatedPiece G R j := by
+  refine ⟨hsolo j, fun _ => ⟨le_rfl, ?_⟩⟩
+  linarith
+
+/-- The actual truncated domain is star-convex at its common lower corner. -/
+theorem starConvex_truncatedW (G : QuittingGame) (R : ℝ)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) :
+    StarConvex ℝ (fun _ => -(R + 1)) (TruncatedW G R) := by
+  rw [truncatedW_eq_iUnion]
+  exact starConvex_iUnion fun j =>
+    (convex_truncatedPiece G R j).starConvex (lowerCorner_mem_truncatedPiece G R hR hsolo j)
+
+/-- The actual truncated domain is intrinsically contractible under the geometric bounds. -/
+theorem isContractibleSet_truncatedW (G : QuittingGame) (R : ℝ)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) :
+    IsContractibleSet (TruncatedW G R) := by
+  have hnonempty : (TruncatedW G R).Nonempty := by
+    obtain ⟨j⟩ := G.nonemptyPlayer
+    rw [truncatedW_eq_iUnion]
+    exact ⟨_, Set.mem_iUnion.mpr
+      ⟨j, lowerCorner_mem_truncatedPiece G R hR hsolo j⟩⟩
+  exact (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
+    ((starConvex_truncatedW G R hR hsolo).contractibleSpace hnonempty)
 
 /-- The lower part `D = closure(∂C \ ∂W)`. -/
 def LowerBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=

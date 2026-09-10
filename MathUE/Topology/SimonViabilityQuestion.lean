@@ -7,6 +7,7 @@ Authors: GameTheory contributors
 import MathUE.Topology.ExtendedOrbit
 import Mathlib.Analysis.Convex.Hull
 import Mathlib.Analysis.InnerProductSpace.PiL2
+import Mathlib.Topology.Homotopy.Contractible
 
 /-!
 # Simon's extended-orbit viability question
@@ -98,6 +99,19 @@ def IsContractibleSet {X : Type*} [TopologicalSpace X] (set : Set X) : Prop :=
     Continuous (fun pair : set × UnitInterval ↦ homotopy pair.1 pair.2) ∧
       (∀ point, homotopy point 0 = point) ∧
       ∀ point, homotopy point 1 = center
+
+/-- Simon's intrinsic set contraction is equivalent to contractibility of its subtype. -/
+theorem isContractibleSet_iff_contractibleSpace {X : Type*} [TopologicalSpace X]
+    (set : Set X) : IsContractibleSet set ↔ ContractibleSpace set := by
+  rw [contractible_iff_id_nullhomotopic]
+  constructor
+  · rintro ⟨center, homotopy, hcontinuous, hzero, hone⟩
+    refine ⟨center, ⟨⟨⟨fun pair => homotopy pair.2 pair.1,
+      hcontinuous.comp continuous_swap⟩, hzero, hone⟩⟩⟩
+  · rintro ⟨center, ⟨homotopy⟩⟩
+    exact ⟨center, fun point time => homotopy (time, point),
+      homotopy.continuous.comp continuous_swap, homotopy.map_zero_left,
+      homotopy.map_one_left⟩
 
 /-- A compact convex polytope with nonempty ambient interior. -/
 def IsFullDimensionalCompactConvexPolytope
