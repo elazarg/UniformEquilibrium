@@ -7518,6 +7518,145 @@ theorem frontier_truncatedW_subset_interior_gluedNeighborhood
     exact interior_mono Set.subset_union_right
       (mem_interior_lowerNeighborhood_of_mem_lowerBoundary G R ε hε hlower)
 
+/-- Every one-stage payoff lies in the convex join used by the lower glue. -/
+theorem quittingOneStagePayoff_mem_lowerGlueFiber (G : QuittingGame)
+    (x : Payoff G.Player) (p : QuitRow G) :
+    QuittingOneStagePayoff G x p ∈ LowerGlueFiber G x := by
+  apply QuittingOneStagePayoff.mem_of_convex G (convex_lowerGlueFiber G x)
+    (self_mem_lowerGlueFiber G x)
+  intro A
+  rw [lowerGlueFiber_eq_convexJoin]
+  exact subset_convexJoin_right (Set.singleton_nonempty x)
+    (subset_convexHull ℝ _ (Or.inl ⟨A, rfl⟩))
+
+/-- Upper glue is contained in lower glue, including on the switching boundary. -/
+theorem upperGlueFiber_subset_lowerGlueFiber (G : QuittingGame)
+    (R ε δ : ℝ) (x : Payoff G.Player) :
+    UpperGlueFiber G R ε δ x ⊆ LowerGlueFiber G x := by
+  rintro y ⟨p, rfl, _⟩
+  exact quittingOneStagePayoff_mem_lowerGlueFiber G x p
+
+/-- The priority-switched graph is the union of the two restricted graph pieces. -/
+theorem gluedGraph_eq_union (G : QuittingGame) (R ε δ : ℝ) :
+    correspondenceGraph (GluedFiber G R ε δ) =
+      {z | z.1 ∈ LowerNeighborhood G R ε ∧ z.2 ∈ LowerGlueFiber G z.1} ∪
+      {z | z.1 ∈ UpperNeighborhood G R ε ∧ z.2 ∈ UpperGlueFiber G R ε δ z.1} := by
+  classical
+  ext z
+  simp only [correspondenceGraph, GluedFiber, Set.mem_setOf_eq]
+  by_cases hD : z.1 ∈ LowerNeighborhood G R ε
+  · simp only [hD, if_true, Set.mem_union, Set.mem_setOf_eq, true_and]
+    exact ⟨Or.inl, fun h => h.elim id
+      (fun h => upperGlueFiber_subset_lowerGlueFiber G R ε δ z.1 h.2)⟩
+  · simp only [hD, if_false, Set.mem_union, Set.mem_setOf_eq, false_and, false_or]
+    by_cases hU : z.1 ∈ UpperNeighborhood G R ε <;> simp [hU]
+
+/-- The lower graph piece is compact when the actual lower boundary is nonempty. -/
+theorem isCompact_lowerGlueGraph (G : QuittingGame) (R ε : ℝ)
+    (hnonempty : (LowerBoundary G R).Nonempty) :
+    IsCompact {z : Payoff G.Player × Payoff G.Player |
+      z.1 ∈ LowerNeighborhood G R ε ∧ z.2 ∈ LowerGlueFiber G z.1} := by
+  let F : Set (Payoff G.Player) := {z | Feasible G z}
+  have hF : IsCompact F :=
+    ((Set.finite_range G.reward).union (Set.finite_singleton 0)).isCompact_convexHull ℝ
+  let map : (Payoff G.Player × Payoff G.Player) × UnitInterval →
+      Payoff G.Player × Payoff G.Player :=
+    fun z => (z.1.1, (1 - (z.2 : ℝ)) • z.1.1 + (z.2 : ℝ) • z.1.2)
+  have hmap : Continuous map := by
+    dsimp [map]
+    fun_prop
+  have heq : {z : Payoff G.Player × Payoff G.Player |
+      z.1 ∈ LowerNeighborhood G R ε ∧ z.2 ∈ LowerGlueFiber G z.1} =
+      map '' ((LowerNeighborhood G R ε ×ˢ F) ×ˢ Set.univ) := by
+    ext z
+    constructor
+    · rintro ⟨hx, w, hw, t, hy⟩
+      exact ⟨((z.1, w), t), ⟨⟨hx, hw⟩, Set.mem_univ _⟩, Prod.ext rfl hy.symm⟩
+    · rintro ⟨⟨⟨x, w⟩, t⟩, ⟨⟨hx, hw⟩, _⟩, rfl⟩
+      exact ⟨hx, w, hw, t, rfl⟩
+  rw [heq]
+  exact (((isCompact_lowerNeighborhood G R ε hnonempty).prod hF).prod
+    isCompact_univ).image hmap
+
+/-- The upper graph piece is compact for a nonnegative quitting cap. -/
+theorem isCompact_upperGlueGraph (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤ δ) :
+    IsCompact {z : Payoff G.Player × Payoff G.Player |
+      z.1 ∈ UpperNeighborhood G R ε ∧ z.2 ∈ UpperGlueFiber G R ε δ z.1} := by
+  classical
+  let K : Set (Payoff G.Player × QuitRow G) :=
+    {z | z.1 ∈ UpperNeighborhood G R ε ∧
+      ∀ j, (z.2 j : ℝ) ≤ δ ∧
+        (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)}
+  have hclosed : IsClosed K := by
+    apply ((isCompact_upperNeighborhood G R ε).isClosed.preimage continuous_fst).inter
+    change IsClosed {z : Payoff G.Player × QuitRow G | ∀ j,
+      (z.2 j : ℝ) ≤ δ ∧ (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)}
+    rw [Set.setOf_forall]
+    apply isClosed_iInter
+    intro j
+    have hp : Continuous (fun z : Payoff G.Player × QuitRow G => (z.2 j : ℝ)) := by
+      fun_prop
+    exact (isClosed_le hp continuous_const).inter
+      (((isCompact_upperNeighborhoodFor G R ε j).isClosed.preimage continuous_fst).union
+        (isClosed_eq hp continuous_const))
+  have hK : IsCompact K :=
+    ((isCompact_upperNeighborhood G R ε).prod
+      (isCompact_univ : IsCompact (Set.univ : Set (QuitRow G)))).of_isClosed_subset
+        hclosed (fun _ h => ⟨h.1, Set.mem_univ _⟩)
+  let map : Payoff G.Player × QuitRow G → Payoff G.Player × Payoff G.Player :=
+    fun z => (z.1, QuittingOneStagePayoff G z.1 z.2)
+  have hmap : Continuous map := by
+    apply continuous_fst.prodMk
+    exact continuous_pi (fun j => continuous_quittingOneStagePayoff_comp
+      G Prod.fst Prod.snd continuous_fst continuous_snd j)
+  have heq : {z : Payoff G.Player × Payoff G.Player |
+      z.1 ∈ UpperNeighborhood G R ε ∧ z.2 ∈ UpperGlueFiber G R ε δ z.1} =
+      map '' K := by
+    ext z
+    constructor
+    · rintro ⟨hx, p, hy, hp⟩
+      refine ⟨(z.1, p), ⟨hx, ?_⟩, Prod.ext rfl hy.symm⟩
+      intro j
+      by_cases hj : z.1 ∈ UpperNeighborhoodFor G R ε j
+      · exact ⟨by simpa [hj] using hp j, Or.inl hj⟩
+      · have hz : (p j : ℝ) = 0 := by simpa [hj] using hp j
+        exact ⟨by simpa only [hz] using hδ, Or.inr hz⟩
+    · rintro ⟨⟨x, p⟩, ⟨hx, hp⟩, rfl⟩
+      refine ⟨hx, p, rfl, ?_⟩
+      intro j
+      by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+      · simpa [map, hj] using (hp j).1
+      · simpa [map, hj] using (hp j).2.resolve_left hj
+  rw [heq]
+  exact hK.image hmap
+
+/-- Compactness of the actual switched local graph. -/
+theorem isCompact_gluedGraph (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤ δ)
+    (hnonempty : (LowerBoundary G R).Nonempty) :
+    IsCompact (correspondenceGraph (GluedFiber G R ε δ)) := by
+  rw [gluedGraph_eq_union]
+  exact (isCompact_lowerGlueGraph G R ε hnonempty).union
+    (isCompact_upperGlueGraph G R ε δ hδ)
+
+/-- The terminal image of the actual homotopy is compact. -/
+theorem isCompact_section4HomotopyTerminalImage (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) (R : ℝ) :
+    IsCompact (HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff)) := by
+  change IsCompact ((fun x => Section4H G inverse cutoff x 1) '' TruncatedW G R)
+  exact (isCompact_truncatedW G R).image
+    ((continuous_section4H G inverse cutoff hcutoff).comp
+      (continuous_id.prodMk continuous_const))
+
+/-- Compactness of the literal union defining Section 4's `J`. -/
+theorem isCompact_section4J (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d) (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : Continuous cutoff) (R ε δ : ℝ) (hδ : 0 ≤ δ)
+    (hnonempty : (LowerBoundary G R).Nonempty) :
+    IsCompact (Section4J G inverse cutoff R ε δ) :=
+  (isCompact_section4HomotopyTerminalImage G inverse cutoff hcutoff R).union
+    (isCompact_gluedGraph G R ε δ hδ hnonempty)
+
 /-- The mass of the nonempty Bernoulli coalitions is the one-stage quit probability. -/
 private theorem nonemptyCoalitionMass_eq_quitProbability
     (G : QuittingGame) (p : QuitRow G) :

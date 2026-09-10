@@ -13835,53 +13835,41 @@ private theorem finiteQuittingPayoff_norm_sub_le (G : QuittingGame) (k : ℕ)
     _ ≤ ‖x - y‖ := by
       simpa [Real.norm_eq_abs] using norm_le_pi_norm (x - y) n
 
-/-- A one-stage quitting payoff with a feasible continuation is feasible. -/
-theorem QuittingOneStagePayoff.feasible (G : QuittingGame)
-    {r : Payoff G.Player} (hr : Feasible G r) (p : QuitRow G) :
-    Feasible G (QuittingOneStagePayoff G r p) := by
+/-- A one-stage payoff stays in any convex carrier containing the continuation
+and every terminal reward. -/
+theorem QuittingOneStagePayoff.mem_of_convex (G : QuittingGame)
+    {C : Set (Payoff G.Player)} (hC : Convex ℝ C)
+    {r : Payoff G.Player} (hr : r ∈ C)
+    (hreward : ∀ A, G.reward A ∈ C) (p : QuitRow G) :
+    QuittingOneStagePayoff G r p ∈ C := by
   classical
-  change QuittingOneStagePayoff G r p ∈ convexHull ℝ (range G.reward ∪ {0})
-  change r ∈ convexHull ℝ (range G.reward ∪ {0}) at hr
   let point : Finset G.Player → Payoff G.Player := fun A =>
     if hA : A.Nonempty then G.reward ⟨A, hA⟩ else r
   have hpayoff : QuittingOneStagePayoff G r p =
       ∑ A : Finset G.Player, CoalitionProbability G p A • point A := by
     funext n
-    rw [Finset.sum_apply]
-    change (1 - QuitProbability G p) * r n +
-        (∑ A ∈ Finset.univ.powerset, if hA : A.Nonempty then
-          CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0) =
-      ∑ A ∈ Finset.univ.powerset, CoalitionProbability G p A * point A n
-    have hempty : CoalitionProbability G p ∅ = 1 - QuitProbability G p := by
-      simp [CoalitionProbability, QuitProbability]
-    rw [← Finset.add_sum_erase Finset.univ.powerset
-      (fun A => CoalitionProbability G p A * point A n) (by simp :
-        (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
-    rw [hempty]
-    simp only [point, Finset.not_nonempty_empty, dite_false]
-    congr 1
-    let rewardTerm : Finset G.Player → ℝ := fun A =>
-      if hA : A.Nonempty then
-        CoalitionProbability G p A * G.reward ⟨A, hA⟩ n else 0
-    change (∑ A ∈ Finset.univ.powerset, rewardTerm A) = _
-    rw [← Finset.sum_erase_add Finset.univ.powerset rewardTerm
-      (by simp : (∅ : Finset G.Player) ∈ Finset.univ.powerset)]
-    simp only [rewardTerm, Finset.not_nonempty_empty, dite_false, add_zero]
+    rw [quittingOneStagePayoff_eq_coalition_sum]
+    simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul]
+    rw [Finset.powerset_univ]
     apply Finset.sum_congr rfl
-    intro A hA
-    have hnonempty : A.Nonempty := by
-      simpa [Finset.nonempty_iff_ne_empty] using hA
-    simp [hnonempty]
+    intro A _hA
+    by_cases hA : A.Nonempty <;> simp [point, hA]
   rw [hpayoff]
-  apply Convex.sum_mem (convex_convexHull ℝ _)
+  apply Convex.sum_mem hC
   · intro A _hA
     exact coalitionProbability_nonneg G p A
   · exact coalitionProbability_sum G p
   · intro A _hA
     by_cases hA : A.Nonempty
-    · apply subset_convexHull ℝ _
-      exact Or.inl ⟨⟨A, hA⟩, by simp [point, hA]⟩
+    · simpa only [point, dif_pos hA] using hreward ⟨A, hA⟩
     · simpa only [point, dif_neg hA] using hr
+
+/-- A one-stage quitting payoff with a feasible continuation is feasible. -/
+theorem QuittingOneStagePayoff.feasible (G : QuittingGame)
+    {r : Payoff G.Player} (hr : Feasible G r) (p : QuitRow G) :
+    Feasible G (QuittingOneStagePayoff G r p) :=
+  QuittingOneStagePayoff.mem_of_convex G (convex_convexHull ℝ _) hr
+    (fun A => subset_convexHull ℝ _ (Or.inl ⟨A, rfl⟩)) p
 
 /-- Every finite quitting recursion preserves feasibility of its terminal vector. -/
 theorem finiteQuittingPayoff_feasible (G : QuittingGame) (k : ℕ)

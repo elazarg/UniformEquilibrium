@@ -100,7 +100,6 @@ remaining substantive fields of `QuestionOneHypotheses`
 (`MathUE/Topology/SimonViabilityQuestion.lean`) are:
 
 - terminal diagonal points of the actual homotopy lie on the frontier;
-- compactness of the local graph, including its switching boundary;
 - contractibility of the actual upper fibers, using their injectivity and
   inverse-continuity estimates; and
 - one common positive scale for both small-step containment and all
@@ -119,14 +118,25 @@ proves the required frontier inclusion for every positive neighborhood
 radius and arbitrary truncation parameter. `isContractibleSet_lowerGlueFiber`
 proves contractibility of every actual lower fiber: it is the convex join
 of its base point and the feasible payoff set. These results do not supply
-the upper-fiber or switching-boundary arguments.
+the upper-fiber inverse argument.
 
 The graph's first-coordinate containment, base-point fiber membership, and
 both defining inclusions into the joined graph are proved by the direct
 `mem_gluedNeighborhood_of_mem_gluedFiber`, `self_mem_gluedFiber`,
 `homotopyTerminalImage_subset_section4J`, and `gluedGraph_subset_section4J`
-adapters in the same file. Compact terminal-image assembly remains a smaller
-step. The upper-fiber estimates are not
+adapters in the same file.
+
+`QuittingOneStagePayoff.mem_of_convex` (`Literature/Simon2007.lean`)
+generalizes the one-stage feasibility theorem to every convex carrier
+containing the continuation and terminal rewards. Its application
+`upperGlueFiber_subset_lowerGlueFiber` (`Literature/Simon2012.lean`) proves
+compatibility on the entire overlap, including the switching boundary.
+`isCompact_gluedGraph` proves compactness of the actual graph for a
+nonnegative quitting cap and nonempty lower boundary; the source-scale
+adapter above supplies the latter. `isCompact_section4J` combines it with
+the compact terminal image of the continuous homotopy.
+
+The upper-fiber estimates are not
 conclusions of `corollary4_1` alone. Separate unrelated scale choices would
 not prove the final common-scale field.
 
