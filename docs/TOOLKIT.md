@@ -1844,8 +1844,20 @@ child lift. This uses an arbitrary deletion predicate and literal restricted
 reward tables. The shared player-reindexing module
 `UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`
 proves exact terminal-payoff and unrestricted behavioral-cap transport in
-both directions. These restriction results are prerequisites for a family
-of outsider debt bounds, not themselves a multiple-outsider existence theorem.
+both directions.
+`quittingLiftDeletedProfile_debt_of_cappedClockCertificateFamily` and
+`quittingLiftDeletedProfile_debt_of_cappedClockPositiveSingletonFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMultipleOutsiderFamily.lean`)
+give survivor debt equalities and every outsider's weighted debt bound at the
+same actual lifted profile. The relaxed family permits a separate positive
+child singleton for each outsider. Its terminal-Nash error multiplier is
+the maximum of one and the corrected outsider weight totals, not their sum.
+`exists_uniformEquilibriumPayoff_eq_on_child_of_cappedClockCertificateFamily`
+and `exists_uniformEquilibriumPayoff_eq_on_child_of_cappedClockPositiveSingletonFamily`
+in that file extend each specified child target while preserving all child
+coordinates. The maximum-factor and fixed-target interfaces assume a
+nonempty outsider family; the exact criterion also assumes a nonempty child.
+No outsider weight is asserted optimal among possible certificates.
 
 ## Boundary analysis and diagnostics
 
