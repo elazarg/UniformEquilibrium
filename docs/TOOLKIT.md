@@ -1826,6 +1826,17 @@ nonincreasing evaluations the correction includes the evaluation drop, so
 the terminal relaxation does not assert the same bound for all evaluations.
 A decision procedure for these raw classes remains to be supplied.
 
+`quittingBehaviorStoppingLaws_childWithOutsiderFullProfile`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMultipleOutsiderRestriction.lean`)
+proves that retaining the child and one chosen outsider, applying its quiet
+lift, and lifting back gives the same complete stopping laws as the direct
+child lift. This uses an arbitrary deletion predicate and literal restricted
+reward tables. The shared player-reindexing module
+`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`
+proves exact terminal-payoff and unrestricted behavioral-cap transport in
+both directions. These restriction results are prerequisites for a family
+of outsider debt bounds, not themselves a multiple-outsider existence theorem.
+
 ## Boundary analysis and diagnostics
 
 `minimumTerminalSemantic_maximumDebt_allPlayersTie` and

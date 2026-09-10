@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Certificates.Adaptive.Certificate
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
+import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 
 /-!
 # Naturality of player reindexing
@@ -15,6 +16,10 @@ module records the identity, composition, and inverse laws and upgrades the
 one-way equilibrium transport to an exact statement for the transported
 payoff vector. Consequently existence and nonexistence of a uniform-equilibrium
 payoff are invariant under relabeling.
+
+Behavioral pushforward and pullback are inverse. Complete stopping laws,
+terminal payoffs, and unrestricted behavioral deviation caps commute with
+these maps; the cap identities transport every unilateral strategy.
 -/
 
 noncomputable section
@@ -212,5 +217,225 @@ theorem not_exists_uniformEquilibriumPayoff_reindex_iff (e : ι ≃ κ)
   exact not_congr (exists_uniformEquilibriumPayoff_reindex_iff e reward)
 
 end Equilibrium
+
+section Terminal
+
+variable [Fintype ι] [DecidableEq ι] [Fintype κ] [DecidableEq κ]
+
+/-- Push a behavioral profile forward along a player equivalence. -/
+def quittingProfilePushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    (quittingGame (quittingRewardReindex e reward)).BehaviorProfile :=
+  fun who time history =>
+    profile (e.symm who) time ((quittingHistEquiv e reward time).symm history)
+
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- The player reindexing sends the unique live history to the unique live history. -/
+theorem quittingHistEquiv_liveHist (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (time : ℕ) :
+    quittingHistEquiv e reward time (quittingLiveHist reward time) =
+      quittingLiveHist (quittingRewardReindex e reward) time := by
+  apply Prod.ext
+  · funext stage
+    apply Prod.ext
+    · rfl
+    · funext who
+      rfl
+  · rfl
+
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- Complete stopping laws commute with behavioral pullback. -/
+theorem quittingBehaviorStoppingLaw_profilePullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame
+      (quittingRewardReindex e reward)).BehaviorProfile) (who : ι) :
+    quittingBehaviorStoppingLaw reward
+        (quittingProfilePullback e reward profile who) =
+      quittingBehaviorStoppingLaw (quittingRewardReindex e reward)
+        (profile (e who)) := by
+  unfold quittingBehaviorStoppingLaw quittingBehaviorLiveHazard
+  congr 1
+
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- Terminal payoffs commute with behavioral pullback. -/
+theorem quittingTerminalPayoff_profilePullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame
+      (quittingRewardReindex e reward)).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff (quittingRewardReindex e reward) profile (e who) =
+      quittingTerminalPayoff reward
+        (quittingProfilePullback e reward profile) who := by
+  have hleft := tendsto_finiteAveragePayoff_quittingGame
+    (quittingRewardReindex e reward) profile (e who)
+  have hright := tendsto_finiteAveragePayoff_quittingGame reward
+    (quittingProfilePullback e reward profile) who
+  apply tendsto_nhds_unique hleft
+  exact hright.congr' (Filter.Eventually.of_forall fun horizon =>
+    (finiteAveragePayoff_quittingProfilePullback
+      e reward profile horizon who).symm)
+
+omit [DecidableEq ι] [DecidableEq κ] in
+@[simp] theorem quittingProfilePullback_pushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) :
+    quittingProfilePullback e reward
+        (quittingProfilePushforward e reward profile) = profile := by
+  funext who time history
+  simp only [quittingProfilePullback, quittingProfilePushforward,
+    Equiv.symm_apply_apply]
+  rw [e.symm_apply_apply]
+
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- Complete stopping laws commute with behavioral pushforward. -/
+theorem quittingBehaviorStoppingLaw_profilePushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingBehaviorStoppingLaw (quittingRewardReindex e reward)
+        (quittingProfilePushforward e reward profile (e who)) =
+      quittingBehaviorStoppingLaw reward (profile who) := by
+  symm
+  simpa only [quittingProfilePullback_pushforward] using
+    quittingBehaviorStoppingLaw_profilePullback e reward
+      (quittingProfilePushforward e reward profile) who
+
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- Terminal payoffs commute with behavioral pushforward. -/
+theorem quittingTerminalPayoff_profilePushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff (quittingRewardReindex e reward)
+        (quittingProfilePushforward e reward profile) (e who) =
+      quittingTerminalPayoff reward profile who := by
+  rw [quittingTerminalPayoff_profilePullback,
+    quittingProfilePullback_pushforward]
+
+/-- Push a unilateral behavioral strategy forward along a player equivalence. -/
+def quittingStrategyPushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    (quittingGame (quittingRewardReindex e reward)).BehaviorStrategy (e who) :=
+  fun time history => deviation time ((quittingHistEquiv e reward time).symm history)
+
+/-- Pushing forward a unilateral update updates the transported player. -/
+theorem quittingProfilePushforward_update (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι)
+    (deviation : (quittingGame reward).BehaviorStrategy who) :
+    quittingProfilePushforward e reward (Function.update profile who deviation) =
+      Function.update (quittingProfilePushforward e reward profile) (e who)
+        (quittingStrategyPushforward e reward who deviation) := by
+  funext player time history
+  by_cases hplayer : player = e who
+  · subst player
+    change Function.update profile who deviation (e.symm (e who)) time _ = _
+    rw [e.symm_apply_apply, Function.update_self]
+    simp [quittingStrategyPushforward]
+  · have hpreimage : e.symm player ≠ who := by
+      intro heq
+      apply hplayer
+      simpa using congrArg e heq
+    simp [quittingProfilePushforward,
+      Function.update_of_ne hplayer, Function.update_of_ne hpreimage]
+
+/-- The unrestricted behavioral deviation cap commutes with pushforward. -/
+theorem quittingBehaviorDeviationPayoffCap_profilePushforward (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
+    quittingBehaviorDeviationPayoffCap (quittingRewardReindex e reward)
+        (quittingProfilePushforward e reward profile) (e who) =
+      quittingBehaviorDeviationPayoffCap reward profile who := by
+  unfold quittingBehaviorDeviationPayoffCap
+  congr 1
+  ext value
+  constructor
+  · rintro ⟨deviation, rfl⟩
+    let pulled : (quittingGame reward).BehaviorStrategy who :=
+      fun time history => deviation time (quittingHistEquiv e reward time history)
+    refine ⟨pulled, ?_⟩
+    have hupdate := quittingProfilePullback_update e reward
+      (quittingProfilePushforward e reward profile) who deviation
+    rw [quittingProfilePullback_pushforward] at hupdate
+    change quittingTerminalPayoff reward (Function.update profile who pulled) who =
+      quittingTerminalPayoff (quittingRewardReindex e reward)
+        (Function.update (quittingProfilePushforward e reward profile) (e who)
+          deviation) (e who)
+    rw [quittingTerminalPayoff_profilePullback, hupdate]
+  · rintro ⟨deviation, rfl⟩
+    refine ⟨quittingStrategyPushforward e reward who deviation, ?_⟩
+    change quittingTerminalPayoff (quittingRewardReindex e reward)
+        (Function.update (quittingProfilePushforward e reward profile) (e who)
+          (quittingStrategyPushforward e reward who deviation)) (e who) = _
+    rw [← quittingProfilePushforward_update,
+      quittingTerminalPayoff_profilePushforward]
+
+/-- Regard a behavioral profile as a profile for an equal reward table. -/
+def quittingProfileOfRewardEq
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : first = second)
+    (profile : (quittingGame second).BehaviorProfile) :
+    (quittingGame first).BehaviorProfile := by
+  rw [hreward]
+  exact profile
+
+omit [DecidableEq ι] in
+@[simp] theorem quittingBehaviorStoppingLaw_profileOfRewardEq
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : first = second)
+    (profile : (quittingGame second).BehaviorProfile) (who : ι) :
+    quittingBehaviorStoppingLaw first
+        (quittingProfileOfRewardEq hreward profile who) =
+      quittingBehaviorStoppingLaw second (profile who) := by
+  subst second
+  rfl
+
+omit [DecidableEq ι] in
+@[simp] theorem quittingTerminalPayoff_profileOfRewardEq
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : first = second)
+    (profile : (quittingGame second).BehaviorProfile) (who : ι) :
+    quittingTerminalPayoff first
+        (quittingProfileOfRewardEq hreward profile) who =
+      quittingTerminalPayoff second profile who := by
+  subst second
+  rfl
+
+@[simp] theorem quittingBehaviorDeviationPayoffCap_profileOfRewardEq
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : first = second)
+    (profile : (quittingGame second).BehaviorProfile) (who : ι) :
+    quittingBehaviorDeviationPayoffCap first
+        (quittingProfileOfRewardEq hreward profile) who =
+      quittingBehaviorDeviationPayoffCap second profile who := by
+  subst second
+  rfl
+
+omit [DecidableEq ι] [DecidableEq κ] in
+@[simp] theorem quittingProfilePushforward_pullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame
+      (quittingRewardReindex e reward)).BehaviorProfile) :
+    quittingProfilePushforward e reward
+        (quittingProfilePullback e reward profile) = profile := by
+  funext who time history
+  simp only [quittingProfilePushforward, quittingProfilePullback,
+    Equiv.apply_symm_apply]
+  rw [e.apply_symm_apply]
+
+/-- The unrestricted behavioral deviation cap commutes with pullback. -/
+theorem quittingBehaviorDeviationPayoffCap_profilePullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame
+      (quittingRewardReindex e reward)).BehaviorProfile) (who : ι) :
+    quittingBehaviorDeviationPayoffCap reward
+        (quittingProfilePullback e reward profile) who =
+      quittingBehaviorDeviationPayoffCap
+        (quittingRewardReindex e reward) profile (e who) := by
+  symm
+  simpa only [quittingProfilePushforward_pullback] using
+    quittingBehaviorDeviationPayoffCap_profilePushforward e reward
+      (quittingProfilePullback e reward profile) who
+
+end Terminal
 
 end GameTheory
