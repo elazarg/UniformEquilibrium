@@ -133,9 +133,22 @@ reduction data.
 (`Literature/Simon2007.lean`) prove the disjoint partition and almost-everywhere
 unique completed block and retained exit from every retained start. The
 action and transition PMF normalizations give total mass one. These results
-include the unchanged singleton actions outside the root set. Measurable
-decoding with return times, continuation restart, and iteration to the
-concatenated retained trace remain to be constructed; Lemma 1 remains open.
+include the unchanged singleton actions outside the root set.
+
+`ChainReductionData.completedBlockIndex`
+(`Literature/Simon2007.lean`) decodes the actual action, retained exit, and
+elapsed original time, returning `none` off the completed-block partition.
+Its measurability and almost-everywhere successful decoding are proved.
+`ChainReductionData.completedBlockIndex_firstRetained` in the same file
+identifies the recorded time as the first positive retained return, including
+the absence of earlier retained visits.
+`ChainReductionData.completedBlockIndex_restart` proves that continuation
+after the decoded block has the original state-started law at its endpoint:
+the block-and-continuation event has probability equal to the reduced action
+probability times the reduced transition probability times that continuation
+probability. The elapsed time is read from the path, not supplied as a
+certificate. Iteration to the infinite retained trace and the balanced-prefix
+comparison remain to be constructed; Lemma 1 remains open.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

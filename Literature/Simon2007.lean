@@ -8220,6 +8220,439 @@ theorem ChainReductionData.ae_existsUnique_compositeBlock
   exact Set.disjoint_left.mp
     (R.pairwise_disjoint_compositeBlockEvent x hne) hother hpair
 
+
+/-- A completed action word with its actual elapsed original time. -/
+def CompositeBlockAt (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X) :
+    List ((state : P.X) × P.Y state) → ℕ → Set (DDPPath P)
+  | [], _ => ∅
+  | first :: tail, n => {p | p.x 0 = first.1 ∧ HEq (p.y 0) first.2} ∩
+      match tail with
+      | [] => FirstReturnAtTime P K z n
+      | next :: _ => ⋃ k : ℕ, ⋃ l : ℕ, if k + l = n then
+          DDPPath.shift P k ⁻¹' CompositeBlockAt P T K z tail l ∩
+            FirstReturnAtTime P Tᶜ next.1 k else ∅
+
+theorem measurableSet_compositeBlockAt
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) (n : ℕ) :
+    MeasurableSet (CompositeBlockAt P T K z actions n) := by
+  induction actions generalizing n with
+  | nil => exact MeasurableSet.empty
+  | cons first tail ih =>
+      apply (measurableSet_ddpInitialStateAction P first.1 first.2).inter
+      cases tail with
+      | nil => exact measurableSet_firstReturnAtTime P K z n
+      | cons next rest =>
+          apply MeasurableSet.iUnion
+          intro k
+          apply MeasurableSet.iUnion
+          intro l
+          split_ifs
+          · exact ((DDPPath.measurable_shift P k) (ih l)).inter
+              (measurableSet_firstReturnAtTime P Tᶜ next.1 k)
+          · exact MeasurableSet.empty
+
+/-- Forgetting the elapsed time gives precisely the existing completed-block event. -/
+theorem compositeBlockEvent_eq_iUnion_at
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) :
+    CompositeBlockEvent P T K z actions = ⋃ n, CompositeBlockAt P T K z actions n := by
+  induction actions with
+  | nil => simp [CompositeBlockEvent, CompositeBlockAt]
+  | cons first tail ih =>
+      cases tail with
+      | nil =>
+          simp only [CompositeBlockEvent, CompositeBlockAt, firstRetainedAt_eq_firstReturnAt,
+            firstReturnAt_eq_iUnion_time, inter_iUnion]
+      | cons next rest =>
+          ext p
+          simp only [CompositeBlockEvent, CompositeBlockAt, mem_inter_iff,
+            FirstReturnThen, mem_iUnion, mem_preimage, mem_ite_empty_right]
+          constructor
+          · rintro ⟨hfirst, k, htail, hreturn⟩
+            change DDPPath.shift P k p ∈ CompositeBlockEvent P T K z (next :: rest) at htail
+            rw [ih] at htail
+            obtain ⟨l, hl⟩ := mem_iUnion.mp htail
+            exact ⟨k + l, hfirst, k, l, rfl, hl, hreturn⟩
+          · rintro ⟨n, hfirst, k, l, _, htail, hreturn⟩
+            refine ⟨hfirst, k, ?_, hreturn⟩
+            change DDPPath.shift P k p ∈ CompositeBlockEvent P T K z (next :: rest)
+            rw [ih]
+            exact mem_iUnion.mpr ⟨l, htail⟩
+
+/-- The elapsed time of an observed completed word is unique, including on null paths. -/
+theorem compositeBlockAt_time_unique
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) {m n : ℕ} {p : DDPPath P}
+    (hm : p ∈ CompositeBlockAt P T K z actions m)
+    (hn : p ∈ CompositeBlockAt P T K z actions n) : m = n := by
+  induction actions generalizing m n p with
+  | nil => exact False.elim hm
+  | cons first tail ih =>
+      cases tail with
+      | nil =>
+          by_contra hne
+          exact Set.disjoint_left.mp (pairwise_disjoint_firstReturnAtTime P K z hne)
+            hm.2 hn.2
+      | cons next rest =>
+          rcases hm with ⟨_, hm⟩
+          rcases hn with ⟨_, hn⟩
+          simp only [mem_iUnion, mem_ite_empty_right, mem_inter_iff, mem_preimage] at hm hn
+          obtain ⟨k, l, hsum, htail, hreturn⟩ := hm
+          obtain ⟨k', l', hsum', htail', hreturn'⟩ := hn
+          have hk : k = k' := by
+            by_contra hne
+            exact Set.disjoint_left.mp
+              (pairwise_disjoint_firstReturnAtTime P Tᶜ next.1 hne) hreturn hreturn'
+          subst k'
+          have hl := ih htail htail'
+          omega
+
+/-- The recorded endpoint occurs at the recorded strictly positive original time. -/
+theorem compositeBlockAt_endpoint
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) {n : ℕ} {p : DDPPath P}
+    (hn : p ∈ CompositeBlockAt P T K z actions n) : 0 < n ∧ p.x n = z := by
+  induction actions generalizing n p with
+  | nil => exact False.elim hn
+  | cons first tail ih =>
+      cases tail with
+      | nil => exact ⟨hn.2.1, hn.2.2.1⟩
+      | cons next rest =>
+          rcases hn with ⟨_, hn⟩
+          simp only [mem_iUnion, mem_ite_empty_right, mem_inter_iff, mem_preimage] at hn
+          obtain ⟨k, l, hsum, htail, _⟩ := hn
+          have hend := ih htail
+          refine ⟨by omega, ?_⟩
+          simpa only [DDPPath.shift, hsum] using hend.2
+
+private theorem timedCompositeBlock_index_unique
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X)
+    {i j : (R.reduced.Y x × R.reduced.X) × ℕ} {p : DDPPath P}
+    (hi : p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+      (R.kept i.1.2) (R.composite x i.1.1) i.2)
+    (hj : p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+      (R.kept j.1.2) (R.composite x j.1.1) j.2) : i = j := by
+  have hblock : ∀ index : (R.reduced.Y x × R.reduced.X) × ℕ,
+      p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+        (R.kept index.1.2) (R.composite x index.1.1) index.2 →
+      p ∈ CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+        (R.kept index.1.2) (R.composite x index.1.1) := by
+    intro index hindex
+    rw [compositeBlockEvent_eq_iUnion_at]
+    exact mem_iUnion.mpr ⟨index.2, hindex⟩
+  have hpair : i.1 = j.1 := by
+    by_contra hne
+    exact Set.disjoint_left.mp (R.pairwise_disjoint_compositeBlockEvent x hne)
+      (hblock i hi) (hblock j hj)
+  rcases i with ⟨pair, n⟩
+  rcases j with ⟨other, m⟩
+  change pair = other at hpair
+  subst other
+  exact Prod.ext rfl (compositeBlockAt_time_unique P T _ _ _ hi hj)
+
+/-- Decode the actual reduced action, retained exit, and elapsed original time; `none`
+records precisely paths outside the completed-block partition. -/
+def ChainReductionData.completedBlockIndex
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X)
+    (p : DDPPath P) : Option ((R.reduced.Y x × R.reduced.X) × ℕ) := by
+  classical
+  exact if h : ∃ index : (R.reduced.Y x × R.reduced.X) × ℕ,
+      p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+        (R.kept index.1.2) (R.composite x index.1.1) index.2
+    then some h.choose else none
+
+theorem ChainReductionData.completedBlockIndex_eq_some_iff
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X)
+    (p : DDPPath P) (index : (R.reduced.Y x × R.reduced.X) × ℕ) :
+    R.completedBlockIndex x p = some index ↔
+      p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+        (R.kept index.1.2) (R.composite x index.1.1) index.2 := by
+  classical
+  constructor
+  · intro heq
+    unfold completedBlockIndex at heq
+    split_ifs at heq with h
+    · have hi := Option.some.inj heq
+      exact hi ▸ h.choose_spec
+  · intro hindex
+    have hex : ∃ i : (R.reduced.Y x × R.reduced.X) × ℕ,
+        p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+          (R.kept i.1.2) (R.composite x i.1.1) i.2 := ⟨index, hindex⟩
+    unfold completedBlockIndex
+    rw [dif_pos hex]
+    exact congrArg some (timedCompositeBlock_index_unique R x hex.choose_spec hindex)
+
+/-- The decoder is measurable for the discrete sigma algebra on its countable output. -/
+theorem ChainReductionData.measurable_completedBlockIndex
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    Measurable[_, ⊤] (R.completedBlockIndex x) := by
+  classical
+  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  apply measurable_to_countable'
+  intro index
+  cases index with
+  | none =>
+      have heq : R.completedBlockIndex x ⁻¹' {none} =
+          (⋃ index : (R.reduced.Y x × R.reduced.X) × ℕ,
+            CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+              (R.kept index.1.2) (R.composite x index.1.1) index.2)ᶜ := by
+        ext p
+        simp only [mem_preimage, mem_singleton_iff, mem_compl_iff, mem_iUnion]
+        unfold completedBlockIndex
+        split_ifs with h
+        · simp only [not_true_eq_false, h]
+        · simp only [h, not_false_eq_true]
+      rw [heq]
+      exact (MeasurableSet.iUnion fun index =>
+        measurableSet_compositeBlockAt P T _ _ _ _).compl
+  | some index =>
+      have heq : R.completedBlockIndex x ⁻¹' {some index} =
+          CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+            (R.kept index.1.2) (R.composite x index.1.1) index.2 := by
+        ext p
+        exact R.completedBlockIndex_eq_some_iff x p index
+      rw [heq]
+      exact measurableSet_compositeBlockAt P T _ _ _ _
+
+/-- Almost every original path decodes to a genuine positive-time completed block
+whose endpoint is the displayed original state at the recorded elapsed time. -/
+theorem ChainReductionData.ae_completedBlockIndex
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    ∀ᵐ p ∂PS.fromState (R.kept x),
+      ∃ index : (R.reduced.Y x × R.reduced.X) × ℕ,
+        R.completedBlockIndex x p = some index ∧
+        p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+          (R.kept index.1.2) (R.composite x index.1.1) index.2 ∧
+        0 < index.2 ∧ p.x index.2 = R.kept index.1.2 := by
+  filter_upwards [R.ae_existsUnique_compositeBlock x] with p hp
+  obtain ⟨pair, hpair, _⟩ := hp
+  rw [compositeBlockEvent_eq_iUnion_at] at hpair
+  obtain ⟨n, hn⟩ := mem_iUnion.mp hpair
+  refine ⟨⟨pair, n⟩, (R.completedBlockIndex_eq_some_iff x p _).mpr hn, hn, ?_⟩
+  exact compositeBlockAt_endpoint P T _ _ _ hn
+
+private theorem compositeBlockAt_firstReturnAtTime
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (hTK : Disjoint T K) (first : (state : P.X) × P.Y state)
+    (tail : List ((state : P.X) × P.Y state))
+    (hstates : ∀ action ∈ tail, action.1 ∉ K) {n : ℕ} {p : DDPPath P}
+    (hn : p ∈ CompositeBlockAt P T K z (first :: tail) n) :
+    p ∈ FirstReturnAtTime P K z n := by
+  induction tail generalizing first n p with
+  | nil => exact hn.2
+  | cons next rest ih =>
+      rcases hn with ⟨_, hn⟩
+      simp only [mem_iUnion, mem_ite_empty_right, mem_inter_iff, mem_preimage] at hn
+      obtain ⟨k, l, hsum, htail, hk, hpk, _, hbefore⟩ := hn
+      have hrest := ih next (fun action ha => hstates action (List.mem_cons_of_mem _ ha)) htail
+      rcases hrest with ⟨hl, hpl, hz, hbeforeTail⟩
+      refine ⟨by omega, ?_, hz, ?_⟩
+      · simpa only [DDPPath.shift, hsum] using hpl
+      · intro i hi hin
+        rcases lt_trichotomy i k with hik | hik | hik
+        · have hTi : p.x i ∈ T := by
+            simpa only [mem_compl_iff, not_not] using hbefore i hi hik
+          exact fun hKi => Set.disjoint_left.mp hTK hTi hKi
+        · subst i
+          rw [hpk]
+          exact hstates next List.mem_cons_self
+        · have htailNot := hbeforeTail (i - k) (by omega) (by omega)
+          simpa only [DDPPath.shift, Nat.add_sub_of_le (Nat.le_of_lt hik)] using htailNot
+
+/-- The decoded elapsed time is exactly the first positive return to the retained set. -/
+theorem ChainReductionData.completedBlockIndex_firstRetained
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X)
+    (p : DDPPath P) (index : (R.reduced.Y x × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex x p = some index) :
+    0 < index.2 ∧ p.x index.2 = R.kept index.1.2 ∧
+      R.kept index.1.2 ∈ ChainRetainedStates P PS R.witness ∧
+      ∀ i, 0 < i → i < index.2 → p.x i ∉ ChainRetainedStates P PS R.witness := by
+  classical
+  have hn := (R.completedBlockIndex_eq_some_iff x p index).mp hindex
+  have hv := R.composite_valid x index.1.1
+  by_cases hx : R.kept x ∈ S
+  · simp only [IsChainReductionAction, dif_pos hx] at hv
+    obtain ⟨first, tail, hword, _, hstates, _⟩ := hv
+    rw [hword] at hn
+    have hTK : Disjoint T (ChainRetainedStates P PS R.witness) := by
+      rw [Set.disjoint_left]
+      intro state ht hK
+      exact hK (Or.inl ht)
+    apply compositeBlockAt_firstReturnAtTime P T _ _ hTK first tail ?_ hn
+    intro action ha hK
+    exact hK (Or.inr (mem_iUnion_of_mem (R.kept x)
+      (mem_iUnion_of_mem hx (hstates action ha).1)))
+  · simp only [IsChainReductionAction, dif_neg hx] at hv
+    obtain ⟨first, hword⟩ := hv
+    rw [hword] at hn
+    exact hn.2
+
+private theorem DDPPath.shift_prefix_eq
+    (P : DiscreteDecisionProcess) {p q : DDPPath P} (k l : ℕ)
+    (h : p.prefix P (k + l) = q.prefix P (k + l)) :
+    (DDPPath.shift P k p).prefix P l = (DDPPath.shift P k q).prefix P l := by
+  apply DDPFinitePath.ext_of_stages P
+  · intro i
+    exact congrArg (fun r : DDPFinitePath P (k + l) =>
+      r.x ⟨k + i.1, by omega⟩) h
+  · intro i
+    exact congrArg (fun r : DDPFinitePath P (k + l) =>
+      (⟨r.x ⟨k + i.1, by omega⟩, r.y ⟨k + i.1, by omega⟩⟩ : DDPStage P)) h
+
+/-- A timed block event depends only on the finite path through its recorded endpoint. -/
+theorem compositeBlockAt_of_prefix_eq
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) {n : ℕ} {p q : DDPPath P}
+    (hp : p ∈ CompositeBlockAt P T K z actions n)
+    (hpq : p.prefix P n = q.prefix P n) :
+    q ∈ CompositeBlockAt P T K z actions n := by
+  have hn : 0 < n := (compositeBlockAt_endpoint P T K z actions hp).1
+  have hstate (i : ℕ) (hi : i ≤ n) : p.x i = q.x i :=
+    congrArg (fun r : DDPFinitePath P n => r.x ⟨i, by omega⟩) hpq
+  induction actions generalizing n p q with
+  | nil => exact False.elim hp
+  | cons first tail ih =>
+      have hzero : (⟨p.x 0, p.y 0⟩ : DDPStage P) = ⟨q.x 0, q.y 0⟩ :=
+        congrArg (fun r : DDPFinitePath P n =>
+          (⟨r.x ⟨0, by omega⟩, r.y ⟨0, hn⟩⟩ : DDPStage P)) hpq
+      have hfirst : (⟨q.x 0, q.y 0⟩ : DDPStage P) = first :=
+        hzero.symm.trans (Sigma.ext hp.1.1 hp.1.2)
+      refine ⟨⟨congrArg Sigma.fst hfirst, (Sigma.mk.inj_iff.mp hfirst).2⟩, ?_⟩
+      cases tail with
+      | nil =>
+          rcases hp.2 with ⟨_, hlast, hz, hbefore⟩
+          refine ⟨hn, (hstate n le_rfl).symm.trans hlast, hz, ?_⟩
+          intro i hi hin
+          rw [← hstate i (Nat.le_of_lt hin)]
+          exact hbefore i hi hin
+      | cons next rest =>
+          have htail := hp.2
+          simp only [mem_iUnion, mem_ite_empty_right, mem_inter_iff, mem_preimage] at htail ⊢
+          obtain ⟨k, l, hsum, htail, hk, hpk, hnext, hbefore⟩ := htail
+          have hshift : (DDPPath.shift P k p).prefix P l =
+              (DDPPath.shift P k q).prefix P l :=
+            DDPPath.shift_prefix_eq P k l (hsum ▸ hpq)
+          refine ⟨k, l, hsum, ?_, hk, (hstate k (by omega)).symm.trans hpk, hnext, ?_⟩
+          · exact ih htail hshift (compositeBlockAt_endpoint P T K z _ htail).1
+              (fun i hi => congrArg
+                (fun r : DDPFinitePath P l => r.x ⟨i, by omega⟩) hshift)
+          · intro i hi hik
+            rw [← hstate i (by omega)]
+            exact hbefore i hi hik
+
+/-- State-started finite-cylinder restart, including zero-probability cylinders. -/
+theorem DDPSemantics.fromState_cylinder_shift
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (start : P.X) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.fromState start (DDPPath.shift P (k + 1) ⁻¹' E ∩ DDPCylinder P h) =
+      PS.fromState start (DDPCylinder P h) * PS.fromState (h.x (Fin.last (k + 1))) E := by
+  rw [PS.fromState_eq_initialActionMixture P start]
+  rw [Measure.sum_apply _
+    (((DDPPath.measurable_shift P (k + 1)) hE).inter (measurableSet_ddpCylinder P h))]
+  rw [Measure.sum_apply _ (measurableSet_ddpCylinder P h)]
+  simp only [Measure.smul_apply, smul_eq_mul, PS.afterAction_cylinder_shift_mass P _ _ _ hE]
+  simp_rw [← mul_assoc]
+  exact ENNReal.tsum_mul_right
+
+/-- Conditional on an actual timed block, the continuation is the original law at its endpoint. -/
+theorem DDPSemantics.compositeBlockAt_restart
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (start : P.X)
+    (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) (n : ℕ)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.fromState start (DDPPath.shift P n ⁻¹' E ∩ CompositeBlockAt P T K z actions n) =
+      PS.fromState start (CompositeBlockAt P T K z actions n) * PS.fromState z E := by
+  classical
+  cases n with
+  | zero =>
+      have hempty : CompositeBlockAt P T K z actions 0 = ∅ := by
+        apply Set.eq_empty_iff_forall_notMem.mpr
+        intro p hp
+        exact (Nat.lt_irrefl 0) (compositeBlockAt_endpoint P T K z actions hp).1
+      simp only [hempty, inter_empty, measure_empty, zero_mul]
+  | succ n =>
+      let H := {h : DDPFinitePath P (n + 1) //
+        ∃ p ∈ CompositeBlockAt P T K z actions (n + 1), p.prefix P (n + 1) = h}
+      let C : H → Set (DDPPath P) := fun h => DDPCylinder P h.1
+      have hevent : CompositeBlockAt P T K z actions (n + 1) = ⋃ h, C h := by
+        ext p
+        constructor
+        · intro hp
+          exact mem_iUnion.mpr ⟨⟨p.prefix P (n + 1), p, hp, rfl⟩, rfl⟩
+        · intro hp
+          obtain ⟨h, hh⟩ := mem_iUnion.mp hp
+          obtain ⟨q, hq, hqprefix⟩ := h.2
+          exact compositeBlockAt_of_prefix_eq P T K z actions hq (hqprefix.trans hh.symm)
+      have hmeasurable (h : H) : MeasurableSet (C h) := measurableSet_ddpCylinder P h.1
+      have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+        intro first second hne
+        rw [Function.onFun, Set.disjoint_left]
+        intro p hfirst hsecond
+        exact hne (Subtype.ext (hfirst.symm.trans hsecond))
+      have hlast (h : H) : h.1.x (Fin.last (n + 1)) = z := by
+        obtain ⟨p, hp, heq⟩ := h.2
+        have hend := (compositeBlockAt_endpoint P T K z actions hp).2
+        exact (congrArg (fun q : DDPFinitePath P (n + 1) =>
+          q.x (Fin.last (n + 1))) heq).symm.trans hend
+      have hcell (h : H) :
+          PS.fromState start (DDPPath.shift P (n + 1) ⁻¹' E ∩ C h) =
+            PS.fromState start (C h) * PS.fromState z E := by
+        rw [PS.fromState_cylinder_shift P start h.1 hE, hlast h]
+      rw [hevent, inter_iUnion, measure_iUnion]
+      · simp_rw [hcell]
+        rw [measure_iUnion hpairwise hmeasurable, ENNReal.tsum_mul_right]
+      · intro first second hne
+        exact (hpairwise hne).mono inter_subset_right inter_subset_right
+      · intro h
+        exact ((DDPPath.measurable_shift P (n + 1)) hE).inter (hmeasurable h)
+
+/-- The decoded block restarts at its actual elapsed time with the original endpoint law. -/
+theorem ChainReductionData.completedBlockIndex_restart
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (y : R.reduced.Y x) (z : R.reduced.X)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.fromState (R.kept x)
+        (⋃ n : ℕ, DDPPath.shift P n ⁻¹' E ∩
+          {p | R.completedBlockIndex x p = some ((y, z), n)}) =
+      (R.reduced.choose x y * R.reduced.move x y z) * PS.fromState (R.kept z) E := by
+  have hfiber (n : ℕ) : {p | R.completedBlockIndex x p = some ((y, z), n)} =
+      CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+        (R.kept z) (R.composite x y) n := by
+    ext p
+    exact R.completedBlockIndex_eq_some_iff x p _
+  let B : ℕ → Set (DDPPath P) := fun n =>
+    CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+      (R.kept z) (R.composite x y) n
+  have hmeasurable (n : ℕ) : MeasurableSet (B n) :=
+    measurableSet_compositeBlockAt P T _ _ _ n
+  have hpairwise : Pairwise (Function.onFun Disjoint B) := by
+    intro m n hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro p hm hn
+    exact hne (compositeBlockAt_time_unique P T _ _ _ hm hn)
+  simp_rw [hfiber]
+  change PS.fromState (R.kept x) (⋃ n, DDPPath.shift P n ⁻¹' E ∩ B n) = _
+  have hcell (n : ℕ) : PS.fromState (R.kept x) (DDPPath.shift P n ⁻¹' E ∩ B n) =
+      PS.fromState (R.kept x) (B n) * PS.fromState (R.kept z) E :=
+    PS.compositeBlockAt_restart P _ T _ _ _ n hE
+  rw [measure_iUnion]
+  · simp_rw [hcell]
+    rw [ENNReal.tsum_mul_right, ← measure_iUnion hpairwise hmeasurable,
+      ← compositeBlockEvent_eq_iUnion_at, R.compositeBlockEvent_probability]
+  · intro m n hne
+    exact (hpairwise hne).mono inter_subset_right inter_subset_right
+  · intro n
+    exact ((DDPPath.measurable_shift P n) hE).inter (hmeasurable n)
+
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
 probability of `sup W_i > ε+δ` is at most the reduced probability of `sup W_i > ε`.

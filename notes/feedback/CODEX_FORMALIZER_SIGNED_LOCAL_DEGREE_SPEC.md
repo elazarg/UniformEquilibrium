@@ -139,8 +139,9 @@ The coordinate-floor maps and injective-image simplex theorem are proved in
 coordinate-raising agreement are proved in
 `MathUE/Topology/KuhnFloorSimplexLift.lean`. Complete-simplex equivalence and
 integer determinant preservation are proved in
-`MathUE/Topology/KuhnFloorCompleteSimplex.lean`. Local signed-count transport
-and clearance below remain an implementation specification.
+`MathUE/Topology/KuhnFloorCompleteSimplex.lean`. The mixed-label prism and
+sample-point clearance below are proved in Research. Local signed-count
+transport remains an implementation specification.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -191,16 +192,22 @@ coarse labels and its right endpoint uses actual fine labels.
 `dist_boxComplementarityGridPoint_kuhnFloor_le_one_div` in the same file
 proves that every fine-grid point and its rounded coarse point are at most
 one coarse mesh width apart, uniformly over positive refinement factors.
-The collar and incident-compatible selection argument below remain to be
-supplied; the prism construction alone does not equate local counts.
+The sample-point collar is proved below. Incident-compatible local selection
+remains to be supplied; the prism construction alone does not equate counts.
 
-The analytic producer must establish one collar radius and one coarse
-threshold working for every positive `k`. Each label is sampled either at
-the actual fine point or at its rounded coarse point, within `1 / p`.
-Complete-face sample points therefore share a limit as `p` tends to infinity,
-even when `k` varies. The label inequalities and compactness argument in
-`Research/Topology/BoxComplementarityPrismCluster.lean` should identify that
-limit as an actual solution, contradicting the solution-free frontier collar.
+`BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_floorRefinementCleared`
+(`Research/Topology/BoxComplementarityFloorRefinementPrismCluster.lean`)
+establishes one collar radius and one coarse threshold working for every
+positive refinement factor. Each label is sampled either at the actual fine
+point or at its rounded coarse point, within one coarse mesh width.
+`dist_floorRefinementPrismFace_labelSamplePoints_le_three_div` in that file
+bounds the distance between any two samples on a complete face by three
+coarse mesh widths. Thus they share a limit as the coarse resolution tends
+to infinity even when the refinement factor varies.
+`BoxComplementarityProblem.isSolution_of_floorRefinementPrismFace_sample_tendsto`
+in the same file identifies that limit as an actual solution from the sampled
+label inequalities. Compactness then gives clearance, not a clearance premise.
+These are Research declarations; the local signed-count comparison remains open.
 
 Local anchor membership also needs this collar. The coarse label-dimension
 anchor and its fine lift can be different points: in dimension one an
