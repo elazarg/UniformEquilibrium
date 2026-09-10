@@ -135,8 +135,10 @@ and its cleared collar. No such producer was found in the bounded search.
 ### Coordinate-floor comparison specification
 
 The coordinate-floor maps and injective-image simplex theorem are proved in
-`MathUE/Topology/KuhnFloorRefinement.lean`. The remaining comparison below is
-an implementation specification, not a checked theorem.
+`MathUE/Topology/KuhnFloorRefinement.lean`. The unique noncollapsed lift and
+coordinate-raising agreement are proved in
+`MathUE/Topology/KuhnFloorSimplexLift.lean`. Signed-count transport and
+clearance below remain an implementation specification, not checked theorems.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -151,8 +153,13 @@ The required combinatorial producer has three parts:
    simplex constructor, monotonicity, and endpoint coordinate bounds.
 2. Each coarse top simplex with base `b` has exactly one noncollapsed fine
    preimage, with coordinate bases `k * (b + 1) - 1` and the same chronological
-   coordinate permutation. Prove both existence and uniqueness from the
-   existing one-raise-per-coordinate geometry, including dimension zero.
+   coordinate permutation. The explicit `kuhnFloorSimplexLift`,
+   `simplex_kuhnFloorSimplexLift`, `kuhnFloorVertex_kuhnFloorSimplexLift`, and
+   `eq_kuhnFloorSimplexLift_of_floor_eq`
+   (`MathUE/Topology/KuhnFloorSimplexLift.lean`) prove construction, simplex
+   validity, literal tuple recovery, and uniqueness. Dimension zero is
+   included. `kuhnFloorVertex_spernerChainStep_eq` in the same file supplies
+   the coordinate-raising agreement needed for signed weights.
 3. Pull the coarse labels back by rounding. Complete pulled-label simplices
    cannot collapse, so the preceding producer gives an actual bijection of
    complete simplices. Their integer weights agree by
