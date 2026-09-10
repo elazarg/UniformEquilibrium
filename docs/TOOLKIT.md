@@ -834,6 +834,11 @@ disjoint-region additivity and excision within an actual frontier collar.
 `BoxComplementarityProblem.exists_solution_mem_of_localDegree_ne_zero`
 in the same file gives an actual solution in any isolating region of nonzero
 degree, without requiring that relatively open region to be compact.
+`BoxComplementarityProblem.localDegree_eq_of_gain_eqOn_frontier`
+(`Research/Topology/BoxComplementarityFrontierReplacement.lean`) preserves
+degree when the gain fields agree on the region frontier. The explicit
+straight-line family supplies continuity and common isolation from just
+one endpoint's isolation.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)

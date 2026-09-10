@@ -255,6 +255,13 @@ proves existence of an actual solution in any isolating region with nonzero
 degree. It does not require the open region itself to be compact: compactness
 of its closure and absence of frontier solutions suffice.
 
+`BoxComplementarityProblem.localDegree_eq_of_gain_eqOn_frontier`
+(`Research/Topology/BoxComplementarityFrontierReplacement.lean`) permits
+replacement of the gain field away from the frontier. Its literal
+straight-line interpolation is jointly continuous and fixes the frontier;
+isolation at the second endpoint and throughout the family is derived from
+the first endpoint's isolation. This is not an ambient-degree comparison.
+
 ## Whole-cube normalization and remaining ambient comparison
 
 `boxComplementarityLocalSignedCount_univ_eq_resolution_one`
@@ -303,6 +310,16 @@ The remaining geometric adapters are:
 
 These are known finite-dimensional constructions still to implement, not
 new strategic hypotheses or a new mathematical conjecture.
+
+For the matrix deformation, the existing
+`Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec`
+(`Mathlib/LinearAlgebra/Matrix/Transvection.lean`) supplies actual finite
+transvection lists and a diagonal factor. Scaling their coefficients to
+zero is the available route to a determinant-preserving path; no second
+Gaussian-elimination construction is needed.
+`MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
+perturbation and uniform lower bounds for matrix multiplication for the
+later local-linearization step.
 
 ## Subdivision library discovery and reuse boundary
 
