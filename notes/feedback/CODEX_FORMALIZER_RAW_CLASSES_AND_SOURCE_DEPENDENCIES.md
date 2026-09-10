@@ -50,9 +50,18 @@ behavioral strategy, and `cappedClockStoppingLaw_survival` proves the
 product formula for inclusive survival
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockStoppingLaw.lean`).
 `expect_cappedClockStoppingLaw_of_bounded` in that file supplies the bounded
-iterated-expectation identity. Integration over the whole child profile and
-the full behavioral deviation-cap comparison remain to be supplied; these
-results do not yet close either packet.
+iterated-expectation identity.
+
+`expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExpectationDomination.lean`)
+integrates the gain inequality over the independent child profile and the
+outsider clock. Reward and evaluation bounds supply summability internally.
+The finite sum is interchanged with expectation using
+`expect_finset_sum_of_bounded`
+(`MathUE/ProbabilityMassFunction/FiniteSumExpectation.lean`). Identifying the
+separate expectations with actual behavioral replacement payoffs and applying
+the full deviation caps remain to be supplied; these results do not yet close
+either packet.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are
