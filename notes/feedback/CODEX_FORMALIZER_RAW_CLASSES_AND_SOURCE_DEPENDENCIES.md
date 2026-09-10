@@ -42,8 +42,17 @@ the parent reward table. The conclusion uses actual first stopping times
 and coalitions, including ties and joint Never, for every nonnegative
 antitone evaluation and arbitrary signed rewards. Terminal domination is
 its specialization, `cappedClockActualOutsideGain_le_weighted_actualChildGain`
-in the same file. Private-law integration and full behavioral deviation
-caps remain to be supplied; this does not yet close either packet.
+in the same file.
+
+`cappedClockStoppingLaw` constructs the independent minimum pushforward;
+`quittingBehaviorStoppingLaw_cappedClockStrategy` realizes it by an actual
+behavioral strategy, and `cappedClockStoppingLaw_survival` proves the
+product formula for inclusive survival
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockStoppingLaw.lean`).
+`expect_cappedClockStoppingLaw_of_bounded` in that file supplies the bounded
+iterated-expectation identity. Integration over the whole child profile and
+the full behavioral deviation-cap comparison remain to be supplied; these
+results do not yet close either packet.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are
