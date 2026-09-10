@@ -1813,6 +1813,12 @@ same compactness theorem under their respective hypotheses.
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
 contains nonnegative weights and finite Never, future, and joining reward
 inequalities for one outsider and a nonempty child. It allows signed rewards.
+`cappedClockActualGain_le_iff_rewardRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseNecessity.lean`)
+characterizes these rows by universal deterministic terminal-gain domination
+with the same fixed nonnegative weights. Necessity uses explicit all-Never,
+future-coalition, and tied-coalition clock tuples. This is not a necessity
+claim for arbitrary behavioral debt bounds.
 `quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)
 bounds the outsider's unrestricted terminal debt at the actual Never lift of
