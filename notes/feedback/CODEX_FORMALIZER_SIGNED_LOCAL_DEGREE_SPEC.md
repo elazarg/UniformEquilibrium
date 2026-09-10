@@ -336,16 +336,16 @@ The remaining geometric adapters are:
 These are known finite-dimensional constructions still to implement, not
 new strategic hypotheses or a new mathematical conjecture.
 
-### Centered diagonal count: next implementation specification
+### Centered diagonal count and local index
 
 For nonzero diagonal entries `d i`, use gain `-d i * (x i - 1/2)` and the
 region where every coordinate lies strictly between `1/4` and `3/4`.
-The intended finite-count statement uses odd meshes `p = 2*k + 1`, `k ≥ 2`:
-the actual selected complete-simplex set should consist of the central-cell
+The finite-count statement uses odd meshes `p = 2*k + 1`, `k ≥ 2`:
+the actual selected complete-simplex set consists of the central-cell
 chain raising negative-entry coordinates in increasing order, followed by
-positive-entry coordinates in decreasing order. Its raw signed weight should
-be `(-1)^(number of positive entries)`, giving normalized degree equal to the
-product of the diagonal signs. Dimension zero must remain included.
+positive-entry coordinates in decreasing order. Its raw signed weight is
+`(-1)^(number of positive entries)`, giving normalized degree equal to the
+product of the diagonal signs. Dimension zero is included.
 
 `completeSimplex_diagonalOrderedChain` and `signedWeight_diagonalOrderedChain`
 (`Research/Topology/BoxComplementarityDiagonalChain.lean`) construct that
@@ -355,14 +355,21 @@ complete simplex and compute its actual raw weight as
 supplied witnesses. Generic extra-label insertion and orientation lemmas
 reside in `MathUE/Topology/SignedSimplexLabelBoundary.lean`.
 
-Uniqueness and the local-count statement are not yet proved. The confinement
-proof must use both anchor
+`localCompleteSimplices_centeredDiagonal_eq_singleton` and
+`localSignedCount_centeredDiagonal_odd`
+(`Research/Topology/BoxComplementarityDiagonalLocalIndex.lean`) prove
+uniqueness and the actual local count. Confinement uses both anchor
 membership and the simplex's unit coordinate span to exclude cube-boundary
-labels. The coarse-mesh restriction matters: at mesh three a negative
+labels. `isIsolating_centeredDiagonal_centralRegion` derives isolation from
+the literal interior zero equation, and `localDegree_centeredDiagonal_eq_sign_det`
+identifies the normalized local degree with the integer sign of the diagonal
+determinant. No count or isolation identity is assumed.
+
+The coarse-mesh restriction matters: at mesh three a negative
 one-dimensional slope also has a boundary simplex with anchor inside this
 region. Adjacent-facet reflection identities do not give an ambient
 coordinate-reflection theorem; a partial coordinate reflection does not
-preserve the monotone Kuhn triangulation. The intended sign calculation
+preserve the monotone Kuhn triangulation. The sign calculation
 instead uses the actual coordinate and label permutations.
 
 `Math.LinearAlgebra.exists_path_diagonal_det_eq`
@@ -374,7 +381,8 @@ It uses the existing
 `Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec`
 (`Mathlib/LinearAlgebra/Matrix/Transvection.lean`) to obtain actual finite
 transvection lists and a diagonal factor, then scales their coefficients
-to zero. Diagonal sign reduction and affine local-degree comparison remain
+to zero. Transport from a general nonsingular centered matrix field to the
+computed diagonal index, and then affine local-degree comparison, remain
 separate obligations.
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
