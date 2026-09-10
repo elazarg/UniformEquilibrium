@@ -128,11 +128,16 @@ same generic compactness theorem with factor one and its existing
 dispensability hypothesis. The capped-clock criterion does not assume or
 claim that deletion gate.
 
-The raw four-player consumer can use
+The raw four-player consumer
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFinFourExistence.lean`)
+requires only a certificate on the reward table reindexed around a specified
+owner. It supplies child existence using
 `quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three`
 (`UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`) directly on
-the survivor type after proving its cardinality. It need not rebuild the
-three-player relabeling argument. For specified targets,
+the survivor type after proving its cardinality, then applies fixed-target
+quiet extension and reindexes the resulting parent payoff back to Fin4.
+No child strategy or equilibrium witness is an extra premise. For specified targets,
 `isUniformEquilibriumPayoff_of_reindex`
 (`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`)
 already supplies payoff-preserving reindexing.
@@ -189,9 +194,16 @@ to one. The example's integer-degree calculation is a separate conclusion.
 The checked topology endpoint is
 `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
 (`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`): equality
-at every sufficiently fine common resolution. Comparing independent
-resolutions remains necessary. Neither new stationary packet constructs
-this comparison. The refinement specification belongs with
+at every sufficiently fine common resolution.
+`BoxComplementarityProblem.eventually_localSignedCount_eq`
+(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+also compares arbitrary independently sufficiently fine resolutions.
+`BoxComplementarityProblem.localDegree` and
+`IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
+(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) package
+the resulting integer and its homotopy invariance on a common isolating region.
+Affine normalization and approximation independence remain separate
+obligations. The refinement specification belongs with
 `CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md` and
 `CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md`.
 

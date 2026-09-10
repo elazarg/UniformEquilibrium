@@ -1,4 +1,4 @@
-# Simon 2007: chain-reduction words and the initial action
+# Simon 2007: chain-reduction words, retained roots, and the initial action
 
 ## Source question
 
@@ -72,6 +72,39 @@ and cumulative advantage one. The reduced process has cumulative advantage
 zero on every path. With both error parameters equal to one quarter, the
 encoded Lemma 1 inequality fails. Normalization alone therefore cannot
 repair the permissive word predicate.
+
+## Retention of all designated roots
+
+Printed page 12 removes the union of the removable set and every chain set,
+then defines a reduced action space for every designated root. These two
+clauses require every designated root to survive the simultaneous deletion.
+The displayed condition that a root avoids its own chain set does not alone
+ensure that it avoids the other chain sets.
+
+`ChainReductionData.roots_retained` (`Literature/Simon2007.lean`) records this
+well-formedness requirement on the reduction data. It does not change
+`ChainReducibilityWitness.omitsRoot` or the witness's dynamic conditions.
+`ChainReductionData.root_not_mem_chainSet` in the same file derives exclusion
+of every root from every removed chain set. No theorem constructing a
+reduction from every chain-reducibility witness is claimed here.
+
+The necessity of recording this requirement was checked against the primary
+page and by two independent mathematical audits. Without it, the encoding
+allows a deterministic path through states a, b, c, followed by an equally
+likely transition from c to absorbing values plus one and minus one. Give a,
+b, and c value zero; take roots a and b, empty removable set, and chain sets
+{b} for a and {c} for b. The encoded retained states are then a and the two
+sinks. Its composite at a records only the actions at a and b; its final
+retained-exit transition skips the varied action at c. All reduced action
+advantages can be zero although the original cumulative action advantage
+reaches one with probability one half. The chain-entry and visit-bound
+conditions do not exclude this example.
+
+This is a mathematical audit, not a Lean-formalized counterexample. It is
+not a reduction of the kind described by the paper's two clauses: b has
+been removed, so it cannot have the required reduced action space. The
+trace-law results remain valid without root retention; whole-block
+advantage accounting needs the retained-root requirement.
 
 ## Formalization consequence
 
@@ -156,8 +189,15 @@ cylinder probabilities and identify the mapped original law with the actual
 reduced path law. The total definition uses a fallback after decoding failure;
 `ChainReductionData.ae_retainedRemainderFrom_decodes` proves that every
 iteration succeeds on one common full-measure set. Thus the fallback does not
-affect the path law. The balanced pathwise prefix comparison remains;
-Lemma 1 remains open.
+affect the path law.
+`ChainReductionData.ae_retainedClockFrom_alignment` and
+`ChainReductionData.ae_existsUnique_retainedClockFrom_block` in the same
+file identify the cumulative original clock, align every reduced state
+with its original state, and put every original time into one unique
+half-open decoded block on a common full-measure set, including time zero.
+`DiscreteDecisionProcess.exists_positive_action_valueX_le_valueY` supplies
+a supported nonnegative-increment action from harmonicity. The balanced
+pathwise prefix comparison remains; Lemma 1 remains open.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

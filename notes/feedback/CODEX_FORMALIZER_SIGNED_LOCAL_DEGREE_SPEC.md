@@ -107,10 +107,12 @@ This proves local homotopy invariance at every sufficiently fine common
 resolution. It does not compare different resolutions or construct an
 integer degree independent of the mesh.
 
-## Separate cross-resolution and approximation independence
+## Cross-resolution stabilization and remaining approximation independence
 
-For one fixed problem and isolating region, the required eventual mesh
-independence has two independent mesh quantifiers:
+For one fixed problem and isolating region,
+`BoxComplementarityProblem.eventually_localSignedCount_eq`
+(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+proves eventual mesh independence with two independent mesh quantifiers:
 
 > There exists a threshold such that for every pair of positive resolutions
 > above it, the existing anchor-selected signed sums at those resolutions
@@ -128,9 +130,9 @@ assuming equality of the desired signed counts is not a construction.
 the represented coarse grid points in a product resolution. They do not
 send coarse unit Kuhn simplices to target unit Kuhn simplices:
 `productRefinement_unitJump_not_unit_of_one_lt` records that obstruction.
-The missing construction is a compatible geometric triangulation or
-subdivision-chain comparison, including its restriction to the local region
-and its cleared collar. No such producer was found in the bounded search.
+The coordinate-floor construction below supplies the needed comparison,
+including the local region and its cleared collar. It does not use the
+point-preserving product embedding as a simplex map.
 
 ### Coordinate-floor comparison specification
 
@@ -139,9 +141,9 @@ The coordinate-floor maps and injective-image simplex theorem are proved in
 coordinate-raising agreement are proved in
 `MathUE/Topology/KuhnFloorSimplexLift.lean`. Complete-simplex equivalence and
 integer determinant preservation are proved in
-`MathUE/Topology/KuhnFloorCompleteSimplex.lean`. The mixed-label prism and
-sample-point clearance below are proved in Research. Local signed-count
-transport remains an implementation specification.
+`MathUE/Topology/KuhnFloorCompleteSimplex.lean`. The mixed-label prism,
+sample-point clearance, and local signed-count transport below are proved
+in Research.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -192,8 +194,9 @@ coarse labels and its right endpoint uses actual fine labels.
 `dist_boxComplementarityGridPoint_kuhnFloor_le_one_div` in the same file
 proves that every fine-grid point and its rounded coarse point are at most
 one coarse mesh width apart, uniformly over positive refinement factors.
-The sample-point collar is proved below. Incident-compatible local selection
-remains to be supplied; the prism construction alone does not equate counts.
+The sample-point collar is proved below. The signed-transport module uses it
+to supply incident-compatible local selection; the prism construction alone
+does not equate counts.
 
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_floorRefinementCleared`
 (`Research/Topology/BoxComplementarityFloorRefinementPrismCluster.lean`)
@@ -207,18 +210,34 @@ to infinity even when the refinement factor varies.
 `BoxComplementarityProblem.isSolution_of_floorRefinementPrismFace_sample_tendsto`
 in the same file identifies that limit as an actual solution from the sampled
 label inequalities. Compactness then gives clearance, not a clearance premise.
-These are Research declarations; the local signed-count comparison remains open.
+These are Research declarations.
 
 Local anchor membership also needs this collar. The coarse label-dimension
 anchor and its fine lift can be different points: in dimension one an
 anchor at zero can lift to `(k - 1) / (p * k)`. Equality for arbitrary
 regions without clearance is not part of the specification.
 
-The combined target is one threshold such that for every coarse resolution
+`boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared`
+(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+proves transport under the actual sample-clearance condition. It identifies
+the left samples with coarse endpoint points and the right samples with
+fine endpoint points, transports signed weights, and uses the collar to
+compare anchor membership without asserting equality of the anchor points.
+`BoxComplementarityProblem.eventually_localSignedCount_floorRefinement_eq`
+in that file supplies one threshold such that for every coarse resolution
 above it and every positive factor, the existing local count at `p` equals
-the count at `p * k`. Comparing `p` and `q` through `p * q` then supplies
-independent-resolution stabilization. Affine normalization and approximation
-independence remain further obligations.
+the count at `p * k`. Comparing `p` and `q` through `p * q` proves the
+independent-resolution theorem above.
+
+`BoxComplementarityProblem.localDegree`
+(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) is the
+resulting integer value. Its
+`BoxComplementarityProblem.eventually_localSignedCount_eq_localDegree`
+identifies it with every sufficiently fine positive grid count.
+`IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq` in the same
+file proves homotopy invariance on a common isolating region by comparing
+both stabilized values on one sufficiently fine common mesh. Affine
+normalization and approximation independence remain further obligations.
 
 ## Subdivision library discovery and reuse boundary
 
@@ -256,6 +275,7 @@ double-counting library is warranted.
 All remaining interfaces above concern standard finite-dimensional topology
 and combinatorics. They introduce no new uniform-equilibrium argument.
 Local homotopy invariance of the mesh-dependent count is proved above.
-A local integer degree independent of resolution, its approximation-independence
-and regular-Jacobian comparison theorems remain to be constructed. Signed
+The local integer degree and its homotopy invariance are proved above.
+Approximation independence and regular-Jacobian comparison remain to be
+constructed. Signed
 integer information must not be replaced by parity in the integer-LCP criterion.

@@ -7550,6 +7550,8 @@ structure ChainReductionData (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
   kept : reduced.X → P.X
   kept_injective : Function.Injective kept
   kept_range : range kept = ChainRetainedStates P PS witness
+  /-- The paper assigns a reduced action space to every designated root. -/
+  roots_retained : S ⊆ range kept
   initial_eq : kept reduced.initial = P.initial
   composite : (x : reduced.X) → reduced.Y x →
     List ((z : P.X) × P.Y z)
@@ -7570,6 +7572,42 @@ structure ChainReductionData (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
   telescopes : ∀ x y,
     reduced.valueY x y - reduced.valueX x =
       ((composite x y).map fun z => P.valueY z.1 z.2 - P.valueX z.1).sum
+
+/-- Every designated root belongs to the simultaneous reduction's retained state set. -/
+theorem ChainReductionData.root_mem_retained
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) {s : P.X} (hs : s ∈ S) :
+    s ∈ ChainRetainedStates P PS R.witness := by
+  rw [← R.kept_range]
+  exact R.roots_retained hs
+
+/-- No designated root lies in any of the chain sets removed by this reduction. -/
+theorem ChainReductionData.root_not_mem_chainSet
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    {s r : P.X} (hs : s ∈ S) (hr : r ∈ S) : s ∉ R.witness.chainSet r := by
+  have hretained := R.root_mem_retained hs
+  intro hchain
+  exact hretained (Or.inr (mem_iUnion.mpr ⟨r, mem_iUnion.mpr ⟨hr, hchain⟩⟩))
+
+/-- Global root exclusion is derived from reduction well-formedness, not assumed
+as an additional condition on the paper's chain-reducibility witness. -/
+theorem ChainReductionData.disjoint_roots_chainSet
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    {r : P.X} (hr : r ∈ S) : Disjoint S (R.witness.chainSet r) := by
+  exact Set.disjoint_left.mpr fun _ hs => R.root_not_mem_chainSet hs hr
+
+/-- A kept state belongs to neither the removable set nor any removed chain. -/
+theorem ChainReductionData.kept_not_mem_removed
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    R.kept x ∉ T ∧ ∀ s ∈ S, R.kept x ∉ R.witness.chainSet s := by
+  have hretained : R.kept x ∈ ChainRetainedStates P PS R.witness := by
+    rw [← R.kept_range]
+    exact mem_range_self x
+  exact ⟨fun hT => hretained (Or.inl hT), fun s hs hchain =>
+    hretained (Or.inr (mem_iUnion.mpr ⟨s, mem_iUnion.mpr ⟨hs, hchain⟩⟩))⟩
 
 private theorem pmf_eq_of_pointwise_le {α : Type*} (p q : PMF α)
     (h : ∀ a, p a ≤ q a) : p = q := by
@@ -9025,6 +9063,184 @@ theorem ChainReductionData.retainedTraceFrom_state
   cases hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
       (R.retainedRemainderFrom x p n).2 <;>
     simp [retainedTraceFrom, DDPPath.ofRaw, retainedStage, hindex]
+
+/-- The original elapsed time at the start of the `n`th decoded retained block.
+On a decoding failure the clock stays put, exactly as the retained remainder does. -/
+def ChainReductionData.retainedClockFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) : ℕ → ℕ
+  | 0 => 0
+  | n + 1 => R.retainedClockFrom x p n +
+      match R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+          (R.retainedRemainderFrom x p n).2 with
+      | none => 0
+      | some index => index.2
+
+/-- The iterated remainder is the actual original suffix at its cumulative clock. -/
+theorem ChainReductionData.retainedRemainderFrom_eq_shift
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) (n : ℕ) :
+    (R.retainedRemainderFrom x p n).2 =
+      DDPPath.shift P (R.retainedClockFrom x p n) p := by
+  induction n with
+  | zero =>
+      change DDPPath.ofRaw P (fun i => (⟨p.x i, p.y i⟩ : DDPStage P)) =
+        DDPPath.ofRaw P (fun i => (⟨p.x (0 + i), p.y (0 + i)⟩ : DDPStage P))
+      congr 1
+      funext i
+      exact congrArg (fun j => (⟨p.x j, p.y j⟩ : DDPStage P)) (Nat.zero_add i).symm
+  | succ n ih =>
+      rw [retainedRemainderFrom, retainedUpdate]
+      cases hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+          (R.retainedRemainderFrom x p n).2 with
+      | none =>
+          simpa only [hindex, retainedClockFrom, Nat.add_zero] using ih
+      | some index =>
+          simp only [retainedClockFrom, hindex]
+          rw [ih]
+          change DDPPath.ofRaw P (fun i =>
+            (⟨p.x (R.retainedClockFrom x p n + (index.2 + i)),
+              p.y (R.retainedClockFrom x p n + (index.2 + i))⟩ : DDPStage P)) =
+            DDPPath.ofRaw P (fun i =>
+            (⟨p.x (R.retainedClockFrom x p n + index.2 + i),
+              p.y (R.retainedClockFrom x p n + index.2 + i)⟩ : DDPStage P))
+          congr 1
+          funext i
+          exact congrArg (fun j => (⟨p.x j, p.y j⟩ : DDPStage P))
+            (Nat.add_assoc _ _ _).symm
+
+/-- Every successful next block strictly advances the original clock. -/
+theorem ChainReductionData.retainedClockFrom_lt_succ
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) (n : ℕ)
+    (index : (R.reduced.Y (R.retainedRemainderFrom x p n).1 × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+      (R.retainedRemainderFrom x p n).2 = some index) :
+    R.retainedClockFrom x p n < R.retainedClockFrom x p (n + 1) := by
+  have hpositive := (R.completedBlockIndex_firstRetained _ _ index hindex).1
+  simpa only [retainedClockFrom, hindex, Nat.lt_add_right_iff_pos] using hpositive
+
+/-- Successful decoding identifies the next reduced state at the next original clock. -/
+theorem ChainReductionData.retainedTraceFrom_state_at_clock_succ
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) (n : ℕ)
+    (index : (R.reduced.Y (R.retainedRemainderFrom x p n).1 × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+      (R.retainedRemainderFrom x p n).2 = some index) :
+    p.x (R.retainedClockFrom x p (n + 1)) =
+      R.kept ((R.retainedTraceFrom x p).x (n + 1)) := by
+  have hend := (R.completedBlockIndex_firstRetained _ _ index hindex).2.1
+  rw [R.retainedRemainderFrom_eq_shift] at hend
+  rw [R.retainedTraceFrom_state]
+  rw [retainedRemainderFrom, retainedUpdate]
+  simpa only [retainedClockFrom, hindex, DDPPath.shift] using hend
+
+/-- Between consecutive successful clock times there is no retained original state. -/
+theorem ChainReductionData.retainedClockFrom_no_retained_between
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) (n : ℕ)
+    (index : (R.reduced.Y (R.retainedRemainderFrom x p n).1 × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+      (R.retainedRemainderFrom x p n).2 = some index)
+    {i : ℕ} (hlower : R.retainedClockFrom x p n < i)
+    (hupper : i < R.retainedClockFrom x p (n + 1)) :
+    p.x i ∉ ChainRetainedStates P PS R.witness := by
+  have hbetween := (R.completedBlockIndex_firstRetained _ _ index hindex).2.2.2
+  have htime : i - R.retainedClockFrom x p n < index.2 := by
+    simp only [retainedClockFrom, hindex] at hupper
+    omega
+  have h := hbetween (i - R.retainedClockFrom x p n) (by omega) htime
+  rw [R.retainedRemainderFrom_eq_shift] at h
+  simpa only [DDPPath.shift, Nat.add_sub_of_le (Nat.le_of_lt hlower)] using h
+
+/-- On one full-measure set the actual return clock is strictly increasing and every
+trace state is aligned with its original retained state. -/
+theorem ChainReductionData.ae_retainedClockFrom_alignment
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    ∀ᵐ p ∂PS.fromState (R.kept x),
+      StrictMono (R.retainedClockFrom x p) ∧
+      (∀ n, p.x (R.retainedClockFrom x p n) =
+        R.kept ((R.retainedTraceFrom x p).x n)) ∧
+      (∀ n i, R.retainedClockFrom x p n < i →
+        i < R.retainedClockFrom x p (n + 1) →
+        p.x i ∉ ChainRetainedStates P PS R.witness) := by
+  letI : IsProbabilityMeasure (PS.fromState (R.kept x)) := PS.fromStateProbability _
+  have hstart : ∀ᵐ p ∂PS.fromState (R.kept x), p.x 0 = R.kept x :=
+    (mem_ae_iff_prob_eq_one (measurableSet_ddpInitialState P (R.kept x))).2
+      (PS.fromStateSupport _)
+  filter_upwards [R.ae_retainedRemainderFrom_decodes x, hstart] with p hp hpstart
+  refine ⟨strictMono_nat_of_lt_succ (fun n => ?_), (fun n => ?_), fun n i hlo hhi => ?_⟩
+  · obtain ⟨index, hindex⟩ := hp n
+    exact R.retainedClockFrom_lt_succ x p n index hindex
+  · cases n with
+    | zero => simpa only [retainedClockFrom, R.retainedTraceFrom_initial] using hpstart
+    | succ n =>
+        obtain ⟨index, hindex⟩ := hp n
+        exact R.retainedTraceFrom_state_at_clock_succ x p n index hindex
+  · obtain ⟨index, hindex⟩ := hp n
+    exact R.retainedClockFrom_no_retained_between x p n index hindex hlo hhi
+
+/-- Every original finite prefix ends in exactly one decoded block, almost surely. -/
+theorem ChainReductionData.ae_existsUnique_retainedClockFrom_block
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    ∀ᵐ p ∂PS.fromState (R.kept x), ∀ i : ℕ,
+      ∃! n, R.retainedClockFrom x p n ≤ i ∧
+        i < R.retainedClockFrom x p (n + 1) := by
+  filter_upwards [R.ae_retainedClockFrom_alignment x] with p hp
+  intro i
+  have hex : ∃ n, i < R.retainedClockFrom x p n :=
+    ⟨i + 1, (Nat.lt_succ_self i).trans_le (hp.1.id_le (i + 1))⟩
+  have hfind : i < R.retainedClockFrom x p (Nat.find hex) := Nat.find_spec hex
+  have hpositive : 0 < Nat.find hex := by
+    by_contra h
+    have hz : Nat.find hex = 0 := by omega
+    simp only [hz, retainedClockFrom, Nat.not_lt_zero] at hfind
+  have hprev : R.retainedClockFrom x p (Nat.find hex - 1) ≤ i :=
+    not_lt.mp (Nat.find_min hex (by omega))
+  refine ⟨Nat.find hex - 1, ⟨hprev, ?_⟩, ?_⟩
+  · simpa only [Nat.sub_add_cancel hpositive] using hfind
+  · intro m hm
+    apply le_antisymm
+    · by_contra h
+      have hle : Nat.find hex ≤ m := by omega
+      exact (not_lt_of_ge (hp.1.monotone hle |>.trans hm.1)) hfind
+    · by_contra h
+      have hle : m + 1 ≤ Nat.find hex - 1 := by omega
+      exact (not_lt_of_ge (hp.1.monotone hle |>.trans hprev)) hm.2
+/-- Harmonicity supplies a positive-probability action with nonnegative decision increment. -/
+theorem DiscreteDecisionProcess.exists_positive_action_valueX_le_valueY
+    (P : DiscreteDecisionProcess) (x : P.X) :
+    ∃ y : P.Y x, 0 < P.choose x y ∧ P.valueX x ≤ P.valueY x y := by
+  by_contra h
+  push Not at h
+  let f : P.Y x → ℝ := fun y =>
+    (P.choose x y).toReal * (P.valueY x y - P.valueX x)
+  have hsummable : Summable f :=
+    PMF.summable_toReal_mul_of_norm_le (P.choose x)
+      (fun y => P.valueY x y - P.valueX x)
+      (fun y => by
+        simpa only [Real.norm_eq_abs] using (P.valueDifference x x y y).2.1)
+  have hnonpos : ∀ y, f y ≤ 0 := by
+    intro y
+    by_cases hy : 0 < P.choose x y
+    · exact mul_nonpos_of_nonneg_of_nonpos ENNReal.toReal_nonneg
+        (sub_nonpos.mpr (h y hy).le)
+    · have hz : P.choose x y = 0 := nonpos_iff_eq_zero.mp (not_lt.mp hy)
+      simp [f, hz]
+  obtain ⟨y, hy⟩ := (P.choose x).support_nonempty
+  have hypos : 0 < P.choose x y := bot_lt_iff_ne_bot.mpr hy
+  have hstrict : f y < 0 :=
+    mul_neg_of_pos_of_neg (ENNReal.toReal_pos hy (PMF.apply_ne_top _ _))
+      (sub_neg.mpr (h y hypos))
+  have hsumlt := Summable.tsum_lt_tsum hnonpos hstrict hsummable summable_zero
+  simp only [f, P.tsum_choose_mul_increment_eq_zero x, tsum_zero, lt_self_iff_false] at hsumlt
 
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
