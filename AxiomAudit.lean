@@ -232,6 +232,7 @@ import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import MathUE.LinearAlgebra.FiniteRayMaximum
 import MathUE.LinearAlgebra.FourierMotzkin
 import MathUE.LinearAlgebra.LeadingTruncationCounterexamples
+import MathUE.LinearAlgebra.MatrixDiagonalDeterminantPath
 import MathUE.LinearAlgebra.MixedCompatibilityAlternative
 import MathUE.LinearAlgebra.MixedCompatibilityCharge
 import MathUE.LinearAlgebra.OrientedAccountBridge

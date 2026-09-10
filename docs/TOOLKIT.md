@@ -840,6 +840,13 @@ degree when the gain fields agree on the region frontier. The explicit
 straight-line family supplies continuity and common isolation from just
 one endpoint's isolation.
 
+`Math.LinearAlgebra.exists_path_diagonal_det_eq`
+(`MathUE/LinearAlgebra/MatrixDiagonalDeterminantPath.lean`) constructs a
+continuous determinant-preserving path from any real square matrix to a
+diagonal matrix, including singular matrices and the empty index type.
+It reuses finite transvection factorization. This supplies a matrix
+deformation, not the remaining affine local-degree comparison.
+
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair

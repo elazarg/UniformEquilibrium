@@ -224,6 +224,7 @@ import MathUE.LinearAlgebra.PrincipalMinorDiagonalPerturbation
 import MathUE.LinearAlgebra.RationalAffineFunctional
 import MathUE.LinearAlgebra.RationalAffineCoefficients
 import MathUE.LinearAlgebra.UniformNonsingularity
+import MathUE.LinearAlgebra.MatrixDiagonalDeterminantPath
 import MathUE.LinearAlgebra.WeightedSaturationDefect
 import MathUE.LinearAlgebra.ZeroSum
 import MathUE.LinearProgramming.Basic
