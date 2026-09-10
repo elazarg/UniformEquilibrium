@@ -137,8 +137,10 @@ and its cleared collar. No such producer was found in the bounded search.
 The coordinate-floor maps and injective-image simplex theorem are proved in
 `MathUE/Topology/KuhnFloorRefinement.lean`. The unique noncollapsed lift and
 coordinate-raising agreement are proved in
-`MathUE/Topology/KuhnFloorSimplexLift.lean`. Signed-count transport and
-clearance below remain an implementation specification, not checked theorems.
+`MathUE/Topology/KuhnFloorSimplexLift.lean`. Complete-simplex equivalence and
+integer determinant preservation are proved in
+`MathUE/Topology/KuhnFloorCompleteSimplex.lean`. Local signed-count transport
+and clearance below remain an implementation specification.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -160,12 +162,13 @@ The required combinatorial producer has three parts:
    validity, literal tuple recovery, and uniqueness. Dimension zero is
    included. `kuhnFloorVertex_spernerChainStep_eq` in the same file supplies
    the coordinate-raising agreement needed for signed weights.
-3. Pull the coarse labels back by rounding. Complete pulled-label simplices
-   cannot collapse, so the preceding producer gives an actual bijection of
-   complete simplices. Their integer weights agree by
-   `KuhnSimplex.determinant_eq_coordinateEquivalence_sign`
-   (`MathUE/Topology/KuhnSimplexOrientation.lean`). There is no Euclidean
-   volume factor in these unit-step orientation weights.
+3. `floorPullbackSpernerCube` pulls the coarse labels back by rounding.
+   Complete pulled-label simplices cannot collapse: `floorCompleteSimplex`
+   derives injectivity from completeness. `completeSimplexFloorEquiv` gives
+   the resulting bijection, and `kuhnFloorSimplexLift_determinant_eq` proves
+   equality of the integer geometric determinants. These declarations are
+   in `MathUE/Topology/KuhnFloorCompleteSimplex.lean` and reuse the existing
+   coordinate-permutation sign theorem. There is no Euclidean volume factor.
 
 This compares coarse labels with pulled labels, not with the actual fine
 labels. Bridge those two labelings using the existing external-label prism:

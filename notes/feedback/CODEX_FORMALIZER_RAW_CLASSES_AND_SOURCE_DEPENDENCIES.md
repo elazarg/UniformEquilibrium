@@ -34,6 +34,17 @@ private pushforward laws and integrates separate unilateral experiments.
 The common sampled outside deadline is a proof coupling, not public
 correlation in the played profile.
 
+The deterministic comparison is proved by
+`cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`).
+Its `CappedClockParentRewardCertificate` reads the three inequalities from
+the parent reward table. The conclusion uses actual first stopping times
+and coalitions, including ties and joint Never, for every nonnegative
+antitone evaluation and arbitrary signed rewards. Terminal domination is
+its specialization, `cappedClockActualOutsideGain_le_weighted_actualChildGain`
+in the same file. Private-law integration and full behavioral deviation
+caps remain to be supplied; this does not yet close either packet.
+
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are
 incomparable. Patient withdrawal controls terminal regret with summed
