@@ -1858,6 +1858,13 @@ in that file extend each specified child target while preserving all child
 coordinates. The maximum-factor and fixed-target interfaces assume a
 nonempty outsider family; the exact criterion also assumes a nonempty child.
 No outsider weight is asserted optimal among possible certificates.
+`quittingLiftDeletedProfile_debt_of_cappedClockFutureJoinFamily` in the same
+file also states the terminal slack bound without a positive pivot: each
+outsider's correction is its Never-row excess times the literal product of
+the original child profile's Never probabilities. The positive-singleton
+bound is derived from this common statement by charging that product to the
+chosen child's debt. This slack statement permits an empty outsider family
+but still assumes a nonempty child.
 
 ## Boundary analysis and diagnostics
 

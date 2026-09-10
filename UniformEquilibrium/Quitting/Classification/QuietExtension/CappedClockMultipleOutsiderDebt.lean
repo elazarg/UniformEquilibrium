@@ -178,7 +178,80 @@ theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockCertificate
       rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
         quittingTerminalPayoff_childWithOutsiderChildProfile]
 
-/-- future/joining plus a positive child singleton bounds one outsider's actual debt by
+/-- Future and joining rows bound one outsider's actual terminal debt by
+weighted child debts plus its Never-row excess times the actual child
+joint-Never mass. -/
+theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockFutureJoin
+    (deleted : ι → Prop) [DecidablePred deleted]
+    [Nonempty (QuittingChildPlayer deleted)]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (outside : {who : ι // deleted who})
+    (certificate : CappedClockParentFutureJoinCertificate
+      (quittingChildWithOutsiderReward reward deleted outside))
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile) :
+    quittingBehaviorDeviationPayoffCap reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 -
+        quittingTerminalPayoff reward
+          (quittingLiftDeletedProfile reward deleted profile) outside.1 ≤
+      (∑ who, certificate.weight who *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward reward deleted) profile who -
+          quittingTerminalPayoff
+            (quittingDeleteReward reward deleted) profile who)) +
+      cappedClockNeverExcess
+          (quittingChildWithOutsiderReward reward deleted outside) certificate *
+        ∏ who, (quittingBehaviorStoppingLaw
+          (quittingDeleteReward reward deleted) (profile who) none).toReal := by
+  let optionReward := quittingChildWithOutsiderReward reward deleted outside
+  let childProfile :=
+    quittingChildWithOutsiderChildProfile reward deleted outside profile
+  let optionProfile := quittingLiftDeletedProfile optionReward (· = none) childProfile
+  have hoption :=
+    quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt_add_neverExcess
+      optionReward certificate childProfile
+  have hnone := quittingBehaviorDeviationDebt_childWithOutsider_none
+    reward deleted outside profile
+  have hsame := quittingBehaviorDeviationDebt_childWithOutsiderFullProfile
+    reward deleted outside profile outside.1
+  rw [← hsame, ← hnone]
+  calc
+    quittingBehaviorDeviationPayoffCap optionReward optionProfile none -
+        quittingTerminalPayoff optionReward optionProfile none ≤
+      (∑ who, certificate.weight who *
+        (quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward optionReward (· = none)) childProfile
+              ⟨some who, Option.some_ne_none who⟩ -
+          quittingTerminalPayoff
+            (quittingDeleteReward optionReward (· = none)) childProfile
+              ⟨some who, Option.some_ne_none who⟩)) +
+      cappedClockNeverExcess optionReward certificate *
+        ∏ who, (quietOutsiderChildLaws optionReward childProfile who none).toReal := by
+      simpa [optionReward, optionProfile, childProfile,
+        CappedClockParentFutureJoinCertificate.toSlack] using hoption
+    _ = _ := by
+      congr 1
+      · apply Finset.sum_congr rfl
+        intro who _
+        change certificate.weight who *
+          (quittingBehaviorDeviationPayoffCap
+              (quittingDeleteReward
+                (quittingChildWithOutsiderReward reward deleted outside)
+                  (· = none))
+              (quittingChildWithOutsiderChildProfile
+                reward deleted outside profile)
+              (quittingChildSomeEquiv deleted who) -
+            quittingTerminalPayoff
+              (quittingDeleteReward
+                (quittingChildWithOutsiderReward reward deleted outside)
+                  (· = none))
+              (quittingChildWithOutsiderChildProfile
+                reward deleted outside profile)
+              (quittingChildSomeEquiv deleted who)) = _
+        rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
+          quittingTerminalPayoff_childWithOutsiderChildProfile]
+
+/-- Future/joining plus a positive child singleton bounds one outsider's actual debt by
 the weighted child debts and the singleton correction. -/
 theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockPositiveSingleton
     (deleted : ι → Prop) [DecidablePred deleted]
@@ -207,88 +280,57 @@ theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockPositiveSingleto
           quittingTerminalPayoff
             (quittingDeleteReward reward deleted) profile pivot) := by
   letI : Nonempty (QuittingChildPlayer deleted) := ⟨pivot⟩
-  let optionReward := quittingChildWithOutsiderReward reward deleted outside
-  let childProfile :=
-    quittingChildWithOutsiderChildProfile reward deleted outside profile
-  let optionProfile := quittingLiftDeletedProfile optionReward (· = none) childProfile
-  have hpivotOption : 0 < optionReward
-      (quittingSingletonTerminal (some pivot)) (some pivot) := by
-    change 0 < quittingChildWithOutsiderReward reward deleted outside
-      (quittingSingletonTerminal (some pivot)) (some pivot)
-    rw [quittingChildWithOutsiderReward_singleton_some]
-    exact hpivot
-  have hoption := quietLift_outsideDebt_le_of_positiveSingleton
-    optionReward certificate childProfile pivot hpivotOption
-  have hnone := quittingBehaviorDeviationDebt_childWithOutsider_none
-    reward deleted outside profile
-  have hsame := quittingBehaviorDeviationDebt_childWithOutsiderFullProfile
-    reward deleted outside profile outside.1
-  rw [← hsame, ← hnone]
-  calc
-    quittingBehaviorDeviationPayoffCap optionReward optionProfile none -
-        quittingTerminalPayoff optionReward optionProfile none ≤
-      (∑ who, certificate.weight who *
-        (quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some who, Option.some_ne_none who⟩ -
-          quittingTerminalPayoff
-            (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some who, Option.some_ne_none who⟩)) +
-      (cappedClockNeverExcess optionReward certificate /
-        optionReward
-          ⟨{some pivot}, Finset.singleton_nonempty (some pivot)⟩ (some pivot)) *
-        (quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some pivot, Option.some_ne_none pivot⟩ -
-          quittingTerminalPayoff
-            (quittingDeleteReward optionReward (· = none)) childProfile
-              ⟨some pivot, Option.some_ne_none pivot⟩) := by
-      simpa [optionReward, optionProfile, childProfile] using hoption
-    _ = _ := by
-      have hsingleton : optionReward
-          ⟨{some pivot}, Finset.singleton_nonempty (some pivot)⟩ (some pivot) =
-        reward (quittingSingletonTerminal pivot.1) pivot.1 := by
-        change quittingChildWithOutsiderReward reward deleted outside
-            (quittingSingletonTerminal (some pivot)) (some pivot) = _
-        exact quittingChildWithOutsiderReward_singleton_some
-          reward deleted outside pivot
-      rw [hsingleton]
+  let childReward := quittingDeleteReward reward deleted
+  let jointNever := ∏ who, (quittingBehaviorStoppingLaw
+    childReward (profile who) none).toReal
+  let singleton := reward (quittingSingletonTerminal pivot.1) pivot.1
+  let pivotDebt := quittingBehaviorDeviationPayoffCap childReward profile pivot -
+    quittingTerminalPayoff childReward profile pivot
+  have hrelaxed :=
+    quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockFutureJoin
+      deleted reward outside certificate profile
+  have hcharge : jointNever * singleton ≤ pivotDebt := by
+    have h := prod_stoppingLaw_none_mul_singleton_le_terminalDebt
+      childReward profile pivot
+    have hsingletonChild :
+        childReward (quittingSingletonTerminal pivot) pivot = singleton := by
+      change reward _ _ = reward _ _
       congr 1
-      · apply Finset.sum_congr rfl
-        intro who _
-        change certificate.weight who *
-          (quittingBehaviorDeviationPayoffCap
-              (quittingDeleteReward
-                (quittingChildWithOutsiderReward reward deleted outside)
-                  (· = none))
-              (quittingChildWithOutsiderChildProfile
-                reward deleted outside profile)
-              (quittingChildSomeEquiv deleted who) -
-            quittingTerminalPayoff
-              (quittingDeleteReward
-                (quittingChildWithOutsiderReward reward deleted outside)
-                  (· = none))
-              (quittingChildWithOutsiderChildProfile
-                reward deleted outside profile)
-              (quittingChildSomeEquiv deleted who)) = _
-        rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
-          quittingTerminalPayoff_childWithOutsiderChildProfile]
-      · congr 1
-        change quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside)
-                (· = none))
-            (quittingChildWithOutsiderChildProfile
-              reward deleted outside profile)
-            (quittingChildSomeEquiv deleted pivot) -
-          quittingTerminalPayoff
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside)
-                (· = none))
-            (quittingChildWithOutsiderChildProfile
-              reward deleted outside profile)
-            (quittingChildSomeEquiv deleted pivot) = _
-        rw [quittingBehaviorDeviationPayoffCap_childWithOutsiderChildProfile,
-          quittingTerminalPayoff_childWithOutsiderChildProfile]
+    rw [hsingletonChild] at h
+    simpa [childReward, jointNever, singleton, pivotDebt,
+      quittingTerminalDeviationDebt,
+      quittingContinuationBestResponseValue,
+      quittingBehaviorDeviationPayoffCap] using h
+  have hcoefficient : 0 ≤ cappedClockNeverExcess
+        (quittingChildWithOutsiderReward reward deleted outside) certificate /
+      singleton :=
+    div_nonneg
+      (cappedClockNeverExcess_nonneg
+        (quittingChildWithOutsiderReward reward deleted outside) certificate)
+      hpivot.le
+  have hcorrection : cappedClockNeverExcess
+        (quittingChildWithOutsiderReward reward deleted outside) certificate *
+          jointNever ≤
+      (cappedClockNeverExcess
+          (quittingChildWithOutsiderReward reward deleted outside) certificate /
+        singleton) * pivotDebt := by
+    calc
+      cappedClockNeverExcess
+            (quittingChildWithOutsiderReward reward deleted outside) certificate *
+          jointNever =
+        (cappedClockNeverExcess
+            (quittingChildWithOutsiderReward reward deleted outside) certificate /
+          singleton) * (jointNever * singleton) := by
+            field_simp [singleton, ne_of_gt hpivot]
+      _ ≤ (cappedClockNeverExcess
+            (quittingChildWithOutsiderReward reward deleted outside) certificate /
+          singleton) * pivotDebt :=
+        mul_le_mul_of_nonneg_left hcharge hcoefficient
+  exact hrelaxed.trans (by
+    simpa only [childReward, jointNever, singleton, pivotDebt, add_comm] using
+      add_le_add_right hcorrection
+        (∑ who, certificate.weight who *
+          (quittingBehaviorDeviationPayoffCap childReward profile who -
+            quittingTerminalPayoff childReward profile who)))
 
 end GameTheory

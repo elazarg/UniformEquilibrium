@@ -99,7 +99,49 @@ theorem quittingLiftDeletedProfile_debt_of_cappedClockCertificateFamily
       quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockCertificate
         deleted reward outside (certificate outside) profile
 
-/-- future/joining plus one positive child singleton per outsider gives the survivor
+/-- Future and joining rows give survivor debt identities and every
+outsider's joint-Never-corrected debt bound in one playerwise package. -/
+theorem quittingLiftDeletedProfile_debt_of_cappedClockFutureJoinFamily
+    (deleted : ι → Prop) [DecidablePred deleted]
+    [Nonempty (QuittingChildPlayer deleted)]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (certificate : ∀ outside : {who : ι // deleted who},
+      CappedClockParentFutureJoinCertificate
+        (quittingChildWithOutsiderReward reward deleted outside))
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile) :
+    (∀ who : QuittingChildPlayer deleted,
+      quittingBehaviorDeviationPayoffCap reward
+            (quittingLiftDeletedProfile reward deleted profile) who.1 -
+          quittingTerminalPayoff reward
+            (quittingLiftDeletedProfile reward deleted profile) who.1 =
+        quittingBehaviorDeviationPayoffCap
+            (quittingDeleteReward reward deleted) profile who -
+          quittingTerminalPayoff
+            (quittingDeleteReward reward deleted) profile who) ∧
+    ∀ outside : {who : ι // deleted who},
+      quittingBehaviorDeviationPayoffCap reward
+            (quittingLiftDeletedProfile reward deleted profile) outside.1 -
+          quittingTerminalPayoff reward
+            (quittingLiftDeletedProfile reward deleted profile) outside.1 ≤
+        (∑ who, (certificate outside).weight who *
+          (quittingBehaviorDeviationPayoffCap
+              (quittingDeleteReward reward deleted) profile who -
+            quittingTerminalPayoff
+              (quittingDeleteReward reward deleted) profile who)) +
+        cappedClockNeverExcess
+            (quittingChildWithOutsiderReward reward deleted outside)
+            (certificate outside) *
+          ∏ who, (quittingBehaviorStoppingLaw
+            (quittingDeleteReward reward deleted) (profile who) none).toReal := by
+  constructor
+  · exact fun who => quittingBehaviorDeviationDebt_liftDeletedProfile
+      reward deleted profile who
+  · exact fun outside =>
+      quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockFutureJoin
+        deleted reward outside (certificate outside) profile
+
+/-- Future/joining plus one positive child singleton per outsider gives the survivor
 identities and all corrected outsider debt bounds. -/
 theorem quittingLiftDeletedProfile_debt_of_cappedClockPositiveSingletonFamily
     (deleted : ι → Prop) [DecidablePred deleted]
@@ -298,7 +340,7 @@ theorem cappedClockPositiveSingletonOutsiderWeight_le_maxWeight
     (Finset.mem_univ outside))
   exact le_max_right _ _
 
-/-- future/joining and one positive child singleton per outsider lift every child
+/-- Future/joining and one positive child singleton per outsider lift every child
 terminal approximate equilibrium with the maximum corrected outsider weight. -/
 theorem isεAsymptoticNash_liftDeletedProfile_of_cappedClockPositiveSingletonFamily
     (deleted : ι → Prop) [DecidablePred deleted]
