@@ -79,11 +79,18 @@ payoff and bound it by the full behavioral cap.
 then bounds the outsider's full terminal deviation debt by the weighted
 survivor debts at the reconstructed quiet parent profile. It first bounds
 every outsider strategy and then takes the supremum. Neither cap attainment
-nor a supremum/expectation interchange is assumed. Identifying those survivor
-debts with the child-game debts and extending fixed targets remain separate;
-these results do not yet close either packet.
+nor a supremum/expectation interchange is assumed.
 
-The child-game adapter should reuse
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)
+transports this bound to the actual Never lift of any child behavioral
+profile, with the child game's unrestricted debts on the right side.
+`quittingBehaviorStoppingLaws_liftDeletedProfile_eq_quiet` in the same file
+supplies the actual-law identification. Fixed-target extension, the relaxed
+Never-row criterion, and the remaining packet conclusions are not supplied
+by this debt theorem; neither packet is closed yet.
+
+The child-game adapter reuses
 `quittingTerminalPayoff_liftDeletedProfile`,
 `quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation`, and
 `quittingBestReplyValue_liftDeletedProfile`
@@ -94,8 +101,15 @@ values under the Never lift. `quittingBestReplyValue`
 `quittingBehaviorDeviationPayoffCap`
 (`UniformEquilibrium/Quitting/Paths/CounterfactualStoppingLaw.lean`) describe
 the same supremum, using indexed-supremum and range-supremum notation.
-The remaining adapter must identify the actual reconstructed quiet profile
-with this lift at the level needed for payoffs and deviations.
+`quittingBehaviorDeviationDebt_liftDeletedProfile` and
+`quittingBehaviorStoppingLaw_liftDeletedProfile` in the deletion-lift file
+expose debt and stopping-law preservation directly.
+`quittingTerminalPayoff_eq_of_behaviorStoppingLaws_eq` and
+`quittingBehaviorDeviationPayoffCap_eq_of_behaviorStoppingLaws_eq`
+(`UniformEquilibrium/Quitting/Paths/StoppingLawOperationalDistance.lean`)
+transport payoff and full-cap conclusions between arbitrary actual profiles
+with equal complete stopping laws. No equality on unreachable histories is
+required.
 
 For fixed targets,
 `exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable`
@@ -104,6 +118,15 @@ the existing subsequence and survivor-coordinate argument. Its dispensability
 hypothesis is not supplied by the new criterion. Reuse or generalize the
 compactness step with the new vanishing-regret bound, rather than invoke that
 theorem under an unproved deletion gate.
+
+The raw four-player consumer can use
+`quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three`
+(`UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`) directly on
+the survivor type after proving its cardinality. It need not rebuild the
+three-player relabeling argument. For specified targets,
+`isUniformEquilibriumPayoff_of_reindex`
+(`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`)
+already supplies payoff-preserving reindexing.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are

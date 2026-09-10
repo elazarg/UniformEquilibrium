@@ -1363,4 +1363,40 @@ theorem abs_quittingContinuationBestResponseValue_sub_le_opponentStoppingLaws
     reward (quittingBehaviorStoppingLaws reward first)
       (quittingBehaviorStoppingLaws reward second) who hreward
 
+section BehavioralStoppingLawCongruence
+
+variable {κ : Type} [Fintype κ] [DecidableEq κ]
+
+/-- Terminal payoff depends only on complete live-spine stopping laws. -/
+theorem quittingTerminalPayoff_eq_of_behaviorStoppingLaws_eq
+    (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
+    (first second : (quittingGame reward).BehaviorProfile)
+    (hlaws : quittingBehaviorStoppingLaws reward first =
+      quittingBehaviorStoppingLaws reward second) (who : κ) :
+    quittingTerminalPayoff reward first who =
+      quittingTerminalPayoff reward second who := by
+  letI : Nonempty κ := ⟨who⟩
+  rw [← quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff,
+    ← quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff,
+    hlaws]
+
+/-- The unrestricted deviation cap depends only on complete live-spine
+stopping laws. -/
+theorem quittingBehaviorDeviationPayoffCap_eq_of_behaviorStoppingLaws_eq
+    (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
+    (first second : (quittingGame reward).BehaviorProfile)
+    (hlaws : quittingBehaviorStoppingLaws reward first =
+      quittingBehaviorStoppingLaws reward second) (who : κ) :
+    quittingBehaviorDeviationPayoffCap reward first who =
+      quittingBehaviorDeviationPayoffCap reward second who := by
+  letI : Nonempty κ := ⟨who⟩
+  unfold quittingBehaviorDeviationPayoffCap
+  congr 2
+  funext deviation
+  apply quittingTerminalPayoff_eq_of_behaviorStoppingLaws_eq
+  rw [quittingBehaviorStoppingLaws_update,
+    quittingBehaviorStoppingLaws_update, hlaws]
+
+end BehavioralStoppingLawCongruence
+
 end GameTheory

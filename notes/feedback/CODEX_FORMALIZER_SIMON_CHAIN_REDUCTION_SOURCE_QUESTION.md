@@ -20,7 +20,8 @@ that the paper's Lemma 1 is false. A normalized, correctly specified reduced
 action law provides positive first-action coverage through the mass bounds
 and normalization argument below. The completed-block probability formula is
 proved, and the completed blocks form a full-mass disjoint partition from
-every retained state. Constructing the concatenated trace law remains separate.
+every retained state. The concatenated trace law is also proved; the balanced
+pathwise prefix comparison remains.
 
 ## Separate encoding error
 
@@ -79,10 +80,9 @@ by another action in the same composite: the next action would be at a
 chain-set state with probability-one first-exit mass, contradicting
 completion. The private `compositeActionList_prefix_eq`
 (`Literature/Simon2007.lean`) proves that completed words are prefix-free.
-Their cylinder masses and full-mass partition are proved below using
-reduced-law normalization. Transporting the concatenated sampled path law
-remains a proof obligation, not an assumed field asserting the desired trace
-law or Lemma 1.
+Their cylinder masses, full-mass partition, and concatenated sampled path law
+are proved below using reduced-law normalization. No field asserting the
+desired trace law or Lemma 1 is assumed.
 
 The generic mass inequality is available as `sum_prefixFree_mass_le` and
 `tsum_prefixFree_mass_le`
@@ -147,8 +147,17 @@ after the decoded block has the original state-started law at its endpoint:
 the block-and-continuation event has probability equal to the reduced action
 probability times the reduced transition probability times that continuation
 probability. The elapsed time is read from the path, not supplied as a
-certificate. Iteration to the infinite retained trace and the balanced-prefix
-comparison remain to be constructed; Lemma 1 remains open.
+certificate.
+
+`ChainReductionData.retainedTrace` (`Literature/Simon2007.lean`) iterates that
+decoder. `ChainReductionData.retainedTraceFrom_cylinder` and
+`ChainReductionData.map_retainedTrace` in the same file prove all finite
+cylinder probabilities and identify the mapped original law with the actual
+reduced path law. The total definition uses a fallback after decoding failure;
+`ChainReductionData.ae_retainedRemainderFrom_decodes` proves that every
+iteration succeeds on one common full-measure set. Thus the fallback does not
+affect the path law. The balanced pathwise prefix comparison remains;
+Lemma 1 remains open.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

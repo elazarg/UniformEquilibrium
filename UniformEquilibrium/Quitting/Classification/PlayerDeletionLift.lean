@@ -6,7 +6,9 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Classification.PlayerDeletion
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
+import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
+import UniformEquilibrium.Quitting.Paths.StoppingLawReconstruction
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
 
@@ -719,5 +721,106 @@ theorem nonempty_deletedPlayer_of_ownerJoinAntitone_and_gap
     hdeleted (quittingAlwaysContinueProfile
       (quittingDeletePlayerReward reward owner))
   exact ⟨who⟩
+
+section StoppingLawAndDeviationCap
+
+variable {κ : Type} [Fintype κ] [DecidableEq κ]
+
+/-- The range-supremum behavioral cap is definitionally the indexed-supremum
+best-reply value. -/
+theorem quittingBehaviorDeviationPayoffCap_eq_bestReplyValue
+    (reward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (profile : (quittingGame reward).BehaviorProfile) (who : κ) :
+    quittingBehaviorDeviationPayoffCap reward profile who =
+      quittingBestReplyValue reward profile who := by
+  rfl
+
+/-- A survivor's unrestricted behavioral deviation cap is preserved by the
+canonical Never lift from a deleted-player game. -/
+theorem quittingBehaviorDeviationPayoffCap_liftDeletedProfile
+    (reward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (deleted : κ → Prop) [DecidablePred deleted]
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile)
+    (who : {who : κ // ¬ deleted who}) :
+    quittingBehaviorDeviationPayoffCap reward
+        (quittingLiftDeletedProfile reward deleted profile) who.1 =
+      quittingBehaviorDeviationPayoffCap
+        (quittingDeleteReward reward deleted) profile who := by
+  rw [quittingBehaviorDeviationPayoffCap_eq_bestReplyValue,
+    quittingBehaviorDeviationPayoffCap_eq_bestReplyValue]
+  exact quittingBestReplyValue_liftDeletedProfile reward deleted profile who
+
+/-- A survivor's behavioral deviation debt is preserved by the Never lift. -/
+theorem quittingBehaviorDeviationDebt_liftDeletedProfile
+    (reward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (deleted : κ → Prop) [DecidablePred deleted]
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile)
+    (who : {who : κ // ¬ deleted who}) :
+    quittingBehaviorDeviationPayoffCap reward
+          (quittingLiftDeletedProfile reward deleted profile) who.1 -
+        quittingTerminalPayoff reward
+          (quittingLiftDeletedProfile reward deleted profile) who.1 =
+      quittingBehaviorDeviationPayoffCap
+          (quittingDeleteReward reward deleted) profile who -
+        quittingTerminalPayoff
+          (quittingDeleteReward reward deleted) profile who := by
+  rw [quittingBehaviorDeviationPayoffCap_liftDeletedProfile,
+    quittingTerminalPayoff_liftDeletedProfile]
+
+omit [DecidableEq κ] in
+theorem quittingBehaviorStoppingLaw_liftDeletedProfile
+    (reward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (deleted : κ → Prop) [DecidablePred deleted]
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile)
+    (who : {who : κ // ¬ deleted who}) :
+    quittingBehaviorStoppingLaw reward
+        (quittingLiftDeletedProfile reward deleted profile who.1) =
+      quittingBehaviorStoppingLaw (quittingDeleteReward reward deleted)
+        (profile who) := by
+  unfold quittingBehaviorStoppingLaw
+  congr 1
+  funext time
+  change quittingProfileLiveRoot reward
+      (quittingLiftDeletedProfile reward deleted profile) time who.1 =
+    quittingProfileLiveRoot (quittingDeleteReward reward deleted)
+      profile time who
+  rw [quittingProfileLiveRoot_liftDeletedProfile]
+  exact quittingExtendDeletedRoots_apply deleted
+    (quittingProfileLiveRoot (quittingDeleteReward reward deleted) profile)
+      time who
+
+theorem quittingBehaviorStoppingLaw_liftDeletedProfile_of_deleted
+    (reward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (deleted : κ → Prop) [DecidablePred deleted]
+    (profile : (quittingGame
+      (quittingDeleteReward reward deleted)).BehaviorProfile)
+    {owner : κ} (howner : deleted owner) :
+    quittingBehaviorStoppingLaw reward
+        (quittingLiftDeletedProfile reward deleted profile owner) =
+      PMF.pure none := by
+  have hprofile := congrFun
+    (Function.update_liftDeletedProfile_never reward deleted profile howner) owner
+  simp only [Function.update_self] at hprofile
+  rw [← hprofile]
+  have hpure : quittingPureTimeBehaviorStrategy reward owner none =
+      quittingStoppingLawBehaviorStrategy reward owner (PMF.pure none) := by
+    funext time history
+    change (PMF.pure false : PMF Bool) = _
+    ext action
+    simp [quittingStoppingLawBehaviorStrategy,
+      Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard,
+      Math.Probability.DiscreteHazard.StoppingLaw.survival,
+      Math.Probability.DiscreteHazard.StoppingLaw.finiteMass,
+      Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
+      Math.Probability.DiscreteHazard.booleanCoin]
+    cases action <;> simp
+  rw [hpure]
+  exact quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
+    reward owner (PMF.pure none)
+
+end StoppingLawAndDeviationCap
 
 end GameTheory

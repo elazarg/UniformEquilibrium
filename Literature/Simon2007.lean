@@ -8653,6 +8653,379 @@ theorem ChainReductionData.completedBlockIndex_restart
   · intro n
     exact ((DDPPath.measurable_shift P n) hE).inter (hmeasurable n)
 
+
+private def ChainReductionData.retainedUpdate
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (current : R.reduced.X × DDPPath P) : R.reduced.X × DDPPath P :=
+  match R.completedBlockIndex current.1 current.2 with
+  | none => current
+  | some index => (index.1.2, DDPPath.shift P index.2 current.2)
+
+private def ChainReductionData.retainedStage
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (current : R.reduced.X × DDPPath P) : DDPStage R.reduced :=
+  match R.completedBlockIndex current.1 current.2 with
+  | none => ⟨current.1, R.reduced.fallbackAction current.1 PUnit.unit.{1}⟩
+  | some index => ⟨current.1, index.1.1⟩
+
+private theorem ChainReductionData.measurable_retainedUpdate
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedUpdate := by
+  apply measurable_from_prod_countable_right
+  intro x
+  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let update : Option ((R.reduced.Y x × R.reduced.X) × ℕ) × DDPPath P →
+      R.reduced.X × DDPPath P := fun pair =>
+    match pair.1 with
+    | none => (x, pair.2)
+    | some index => (index.1.2, DDPPath.shift P index.2 pair.2)
+  have hu : Measurable update := by
+    apply measurable_from_prod_countable_right
+    intro index
+    cases index with
+    | none => exact measurable_const.prodMk measurable_id
+    | some index => exact measurable_const.prodMk (DDPPath.measurable_shift P index.2)
+  convert hu.comp ((R.measurable_completedBlockIndex x).prodMk measurable_id) using 1
+  funext p
+  cases h : R.completedBlockIndex x p <;> simp [retainedUpdate, update, h]
+
+private theorem ChainReductionData.measurable_retainedStage
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedStage := by
+  apply measurable_from_prod_countable_right
+  intro x
+  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let stage : Option ((R.reduced.Y x × R.reduced.X) × ℕ) → DDPStage R.reduced :=
+    fun index => match index with
+    | none => ⟨x, R.reduced.fallbackAction x PUnit.unit.{1}⟩
+    | some index => ⟨x, index.1.1⟩
+  convert (show Measurable stage from measurable_from_top).comp
+    (R.measurable_completedBlockIndex x) using 1
+  funext p
+  cases h : R.completedBlockIndex x p <;> simp [retainedStage, stage, h]
+
+/-- Current reduced state and original suffix after successive completed-block extractions.
+Decoding failure leaves this pair unchanged. -/
+def ChainReductionData.retainedRemainderFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) : ℕ → R.reduced.X × DDPPath P
+  | 0 => (x, p)
+  | n + 1 => R.retainedUpdate (R.retainedRemainderFrom x p n)
+
+private theorem ChainReductionData.measurable_retainedRemainderFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (n : ℕ) : Measurable (fun p => R.retainedRemainderFrom x p n) := by
+  induction n with
+  | zero => exact measurable_const.prodMk measurable_id
+  | succ n ih => exact R.measurable_retainedUpdate.comp ih
+
+/-- Iterate the actual completed-block decoder. A decoding failure leaves the original suffix
+unchanged and selects a supported fallback action. -/
+def ChainReductionData.retainedTraceFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) : DDPPath R.reduced :=
+  DDPPath.ofRaw R.reduced (fun n => R.retainedStage (R.retainedRemainderFrom x p n))
+
+theorem ChainReductionData.measurable_retainedTraceFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) : Measurable (R.retainedTraceFrom x) :=
+  (DDPPath.measurable_ofRaw R.reduced).comp
+    (measurable_pi_lambda _ fun n =>
+      R.measurable_retainedStage.comp (R.measurable_retainedRemainderFrom x n))
+
+theorem ChainReductionData.retainedTraceFrom_initial
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) : (R.retainedTraceFrom x p).x 0 = x := by
+  cases h : R.completedBlockIndex x p <;>
+    simp [retainedTraceFrom, DDPPath.ofRaw, retainedRemainderFrom, retainedStage, h]
+
+private theorem ChainReductionData.retainedRemainderFrom_succ_of_some
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P)
+    (index : (R.reduced.Y x × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex x p = some index) (n : ℕ) :
+    R.retainedRemainderFrom x p (n + 1) =
+      R.retainedRemainderFrom index.1.2 (DDPPath.shift P index.2 p) n := by
+  induction n with
+  | zero => simp [retainedRemainderFrom, retainedUpdate, hindex]
+  | succ n ih => exact congrArg R.retainedUpdate ih
+
+private theorem ChainReductionData.retainedTraceFrom_stage_zero_of_some
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P)
+    (index : (R.reduced.Y x × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex x p = some index) :
+    (⟨(R.retainedTraceFrom x p).x 0, (R.retainedTraceFrom x p).y 0⟩ : DDPStage R.reduced) =
+      ⟨x, index.1.1⟩ := by
+  simp [retainedTraceFrom, DDPPath.ofRaw, retainedStage, retainedRemainderFrom, hindex]
+
+/-- Successful decoding makes the shifted trace exactly the recursively restarted trace. -/
+theorem ChainReductionData.retainedTraceFrom_shift_of_some
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P)
+    (index : (R.reduced.Y x × R.reduced.X) × ℕ)
+    (hindex : R.completedBlockIndex x p = some index) :
+    DDPPath.shift R.reduced 1 (R.retainedTraceFrom x p) =
+      R.retainedTraceFrom index.1.2 (DDPPath.shift P index.2 p) := by
+  change DDPPath.ofRaw R.reduced
+    (fun n => R.retainedStage (R.retainedRemainderFrom x p (1 + n))) = _
+  apply congrArg (DDPPath.ofRaw R.reduced)
+  funext n
+  rw [Nat.one_add, R.retainedRemainderFrom_succ_of_some x p index hindex n]
+
+private def DDPFinitePath.dropFirst (P : DiscreteDecisionProcess) {k : ℕ}
+    (h : DDPFinitePath P (k + 1)) : DDPFinitePath P k where
+  x i := h.x i.succ
+  y i := h.y i.succ
+
+private theorem DDPFinitePath.dropFirst_probability (P : DiscreteDecisionProcess) {k : ℕ}
+    (h : DDPFinitePath P (k + 1)) :
+    h.probability P = (P.choose (h.x 0) (h.y 0) * P.move (h.x 0) (h.y 0) (h.x 1)) *
+      (h.dropFirst P).probability P := by
+  simp only [DDPFinitePath.probability, Fin.prod_univ_succ, DDPFinitePath.dropFirst]
+  rfl
+
+private theorem DDPPath.prefix_succ_eq_iff
+    (P : DiscreteDecisionProcess) {k : ℕ} (p : DDPPath P) (h : DDPFinitePath P (k + 1)) :
+    p.prefix P (k + 1) = h ↔
+      (⟨p.x 0, p.y 0⟩ : DDPStage P) = ⟨h.x 0, h.y 0⟩ ∧
+        (DDPPath.shift P 1 p).prefix P k = h.dropFirst P := by
+  constructor
+  · intro hp
+    refine ⟨congrArg (fun q : DDPFinitePath P (k + 1) =>
+      (⟨q.x 0, q.y 0⟩ : DDPStage P)) hp, ?_⟩
+    have hdrop : (DDPPath.shift P 1 p).prefix P k = (p.prefix P (k + 1)).dropFirst P := by
+      apply DDPFinitePath.ext_of_stages P
+      · intro i
+        exact congrArg p.x (Nat.add_comm 1 i.val)
+      · intro i
+        exact congrArg (fun n => (⟨p.x n, p.y n⟩ : DDPStage P)) (Nat.add_comm 1 i.val)
+    exact hdrop.trans (congrArg (DDPFinitePath.dropFirst P) hp)
+  · rintro ⟨hfirst, htail⟩
+    apply DDPFinitePath.ext_of_stages P
+    · intro i
+      refine Fin.cases ?_ (fun j => ?_) i
+      · exact congrArg Sigma.fst hfirst
+      · have hj := congrArg (fun q : DDPFinitePath P k => q.x j) htail
+        exact (congrArg p.x (Nat.add_comm j.val 1)).trans hj
+    · intro i
+      refine Fin.cases hfirst (fun j => ?_) i
+      have hj := congrArg (fun q : DDPFinitePath P k =>
+        (⟨q.x j.castSucc, q.y j⟩ : DDPStage P)) htail
+      exact (congrArg (fun n => (⟨p.x n, p.y n⟩ : DDPStage P))
+        (Nat.add_comm j.val 1)).trans hj
+
+/-- Every finite cylinder of the actual iterated trace has the reduced product probability. -/
+theorem ChainReductionData.retainedTraceFrom_cylinder
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (k : ℕ) (h : DDPFinitePath R.reduced k) :
+    PS.fromState (R.kept (h.x 0))
+      (R.retainedTraceFrom (h.x 0) ⁻¹' DDPCylinder R.reduced h) = h.probability R.reduced := by
+  induction k with
+  | zero =>
+      have hevent : R.retainedTraceFrom (h.x 0) ⁻¹' DDPCylinder R.reduced h = Set.univ := by
+        apply Set.eq_univ_of_forall
+        intro p
+        apply DDPFinitePath.ext_of_stages R.reduced
+        · intro i
+          have hi : i = 0 := by omega
+          subst i
+          exact R.retainedTraceFrom_initial (h.x 0) p
+        · intro i
+          exact Fin.elim0 i
+      letI := PS.fromStateProbability (R.kept (h.x 0))
+      rw [hevent, measure_univ]
+      simp [DDPFinitePath.probability]
+  | succ k ih =>
+      let first : R.reduced.Y (h.x 0) := h.y 0
+      let E : Set (DDPPath P) :=
+        R.retainedTraceFrom (h.x 1) ⁻¹' DDPCylinder R.reduced (h.dropFirst R.reduced)
+      have hE : MeasurableSet E :=
+        (R.measurable_retainedTraceFrom (h.x 1)) (measurableSet_ddpCylinder R.reduced _)
+      have hevent : PS.fromState (R.kept (h.x 0))
+          (R.retainedTraceFrom (h.x 0) ⁻¹' DDPCylinder R.reduced h) =
+          PS.fromState (R.kept (h.x 0))
+            (⋃ n : ℕ, DDPPath.shift P n ⁻¹' E ∩
+              {p | R.completedBlockIndex (h.x 0) p = some ((first, h.x 1), n)}) := by
+        apply measure_congr
+        filter_upwards [R.ae_completedBlockIndex (h.x 0)] with p hp
+        obtain ⟨⟨⟨a, z⟩, n⟩, hdecode, _⟩ := hp
+        apply propext
+        constructor
+        · intro hprefix
+          change (R.retainedTraceFrom (h.x 0) p).prefix R.reduced (k + 1) = h at hprefix
+          obtain ⟨hfirst, htail⟩ := (DDPPath.prefix_succ_eq_iff R.reduced _ h).mp hprefix
+          rw [R.retainedTraceFrom_stage_zero_of_some (h.x 0) p _ hdecode] at hfirst
+          have ha : a = first := eq_of_heq (Sigma.mk.inj_iff.mp hfirst).2
+          subst a
+          rw [R.retainedTraceFrom_shift_of_some (h.x 0) p _ hdecode] at htail
+          have hz : z = h.x 1 := by
+            have hstate := congrArg (fun q : DDPFinitePath R.reduced k => q.x 0) htail
+            simpa only [DDPPath.prefix, Fin.val_zero, R.retainedTraceFrom_initial,
+              DDPFinitePath.dropFirst, Fin.succ_zero_eq_one] using hstate
+          subst z
+          exact mem_iUnion.mpr ⟨n, htail, hdecode⟩
+        · intro hfuture
+          obtain ⟨m, htail, hindex⟩ := mem_iUnion.mp hfuture
+          apply (DDPPath.prefix_succ_eq_iff R.reduced _ h).mpr
+          refine ⟨R.retainedTraceFrom_stage_zero_of_some (h.x 0) p _ hindex, ?_⟩
+          rw [R.retainedTraceFrom_shift_of_some (h.x 0) p _ hindex]
+          exact htail
+      rw [hevent, R.completedBlockIndex_restart (h.x 0) first (h.x 1) hE]
+      change _ * PS.fromState (R.kept ((h.dropFirst R.reduced).x 0))
+        (R.retainedTraceFrom ((h.dropFirst R.reduced).x 0) ⁻¹'
+          DDPCylinder R.reduced (h.dropFirst R.reduced)) = _
+      rw [ih, ← DDPFinitePath.dropFirst_probability]
+
+/-- Cylinder uniqueness identifies the actual trace law with the supplied reduced DDP law. -/
+theorem ChainReductionData.map_retainedTraceFrom
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    Measure.map (R.retainedTraceFrom x) (PS.fromState (R.kept x)) =
+      R.semantics.fromState x := by
+  letI := PS.fromStateProbability (R.kept x)
+  letI := R.semantics.fromStateProbability x
+  apply ext_of_generate_finite
+    {U | ∃ k, ∃ h : DDPFinitePath R.reduced k, U = DDPCylinder R.reduced h}
+    rfl (isPiSystem_ddpCylinders R.reduced)
+  · intro U hU
+    obtain ⟨k, h, rfl⟩ := hU
+    rw [Measure.map_apply (R.measurable_retainedTraceFrom x) (measurableSet_ddpCylinder _ h)]
+    by_cases hstart : h.x 0 = x
+    · rw [R.semantics.fromStateCylinder x k h hstart, ← hstart]
+      exact R.retainedTraceFrom_cylinder k h
+    · rw [R.semantics.fromState_cylinder_eq_zero_of_wrong R.reduced x h hstart]
+      have hempty : R.retainedTraceFrom x ⁻¹' DDPCylinder R.reduced h = ∅ := by
+        apply Set.eq_empty_iff_forall_notMem.mpr
+        intro p hp
+        have hzero := congrArg (fun q : DDPFinitePath R.reduced k => q.x 0) hp
+        exact hstart (hzero.symm.trans (R.retainedTraceFrom_initial x p))
+      rw [hempty, measure_empty]
+  · rw [Measure.map_apply (R.measurable_retainedTraceFrom x) MeasurableSet.univ]
+    simp
+
+/-- The retained trace initialized at the reduction's prescribed initial state. -/
+def ChainReductionData.retainedTrace
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) : DDPPath P → DDPPath R.reduced :=
+  R.retainedTraceFrom R.reduced.initial
+
+theorem ChainReductionData.measurable_retainedTrace
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedTrace :=
+  R.measurable_retainedTraceFrom R.reduced.initial
+
+/-- The actual initial retained trace has exactly the reduced path law. -/
+theorem ChainReductionData.map_retainedTrace
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) :
+    Measure.map R.retainedTrace PS.law = R.semantics.law := by
+  rw [PS.lawFromInitial, ← R.initial_eq, R.semantics.lawFromInitial]
+  exact R.map_retainedTraceFrom R.reduced.initial
+
+private def ChainReductionData.retainedSuccess
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (current : R.reduced.X × DDPPath P) : Bool :=
+  (R.completedBlockIndex current.1 current.2).isSome
+
+private theorem ChainReductionData.measurable_retainedSuccess
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedSuccess := by
+  apply measurable_from_prod_countable_right
+  intro x
+  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  exact (show Measurable (fun index : Option ((R.reduced.Y x × R.reduced.X) × ℕ) =>
+    index.isSome) from measurable_from_top).comp (R.measurable_completedBlockIndex x)
+
+private def ChainReductionData.retainedFailureAt
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X)
+    (n : ℕ) : Set (DDPPath P) :=
+  {p | R.retainedSuccess (R.retainedRemainderFrom x p n) = false}
+
+private theorem ChainReductionData.measurableSet_retainedFailureAt
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) (n : ℕ) :
+    MeasurableSet (R.retainedFailureAt x n) :=
+  (R.measurable_retainedSuccess.comp (R.measurable_retainedRemainderFrom x n))
+    (measurableSet_singleton false)
+
+private theorem ChainReductionData.retainedFailureAt_measure_zero
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (n : ℕ) (x : R.reduced.X) :
+    PS.fromState (R.kept x) (R.retainedFailureAt x n) = 0 := by
+  induction n generalizing x with
+  | zero =>
+      have hae : ∀ᵐ p ∂PS.fromState (R.kept x), p ∉ R.retainedFailureAt x 0 := by
+        filter_upwards [R.ae_completedBlockIndex x] with p hp
+        obtain ⟨index, hindex, _⟩ := hp
+        simp [retainedFailureAt, retainedRemainderFrom, retainedSuccess, hindex]
+      simpa only [not_not, Set.setOf_mem_eq] using ae_iff.mp hae
+  | succ n ih =>
+      let C : R.reduced.Y x × R.reduced.X → Set (DDPPath P) := fun pair =>
+        ⋃ m : ℕ, DDPPath.shift P m ⁻¹' R.retainedFailureAt pair.2 n ∩
+          {p | R.completedBlockIndex x p = some (pair, m)}
+      have hzero (pair : R.reduced.Y x × R.reduced.X) :
+          PS.fromState (R.kept x) (C pair) = 0 := by
+        rw [R.completedBlockIndex_restart x pair.1 pair.2
+          (R.measurableSet_retainedFailureAt pair.2 n), ih, mul_zero]
+      apply le_antisymm ?_ bot_le
+      calc
+        PS.fromState (R.kept x) (R.retainedFailureAt x (n + 1)) ≤
+            PS.fromState (R.kept x) (⋃ pair, C pair) := by
+          apply measure_mono_ae
+          filter_upwards [R.ae_completedBlockIndex x] with p hp
+          intro hfail
+          obtain ⟨⟨pair, m⟩, hindex, _⟩ := hp
+          refine mem_iUnion.mpr ⟨pair, mem_iUnion.mpr ⟨m, ?_, hindex⟩⟩
+          change R.retainedSuccess (R.retainedRemainderFrom x p (n + 1)) = false at hfail
+          rw [R.retainedRemainderFrom_succ_of_some x p _ hindex n] at hfail
+          exact hfail
+        _ ≤ ∑' pair, PS.fromState (R.kept x) (C pair) := measure_iUnion_le _
+        _ = 0 := by simp only [hzero, tsum_zero]
+
+/-- Almost surely every step of the infinite iteration extracts an actual completed block. -/
+theorem ChainReductionData.ae_retainedRemainderFrom_decodes
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
+    ∀ᵐ p ∂PS.fromState (R.kept x), ∀ n,
+      ∃ index : (R.reduced.Y (R.retainedRemainderFrom x p n).1 × R.reduced.X) × ℕ,
+        R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+          (R.retainedRemainderFrom x p n).2 = some index := by
+  have hae (n : ℕ) : ∀ᵐ p ∂PS.fromState (R.kept x), p ∉ R.retainedFailureAt x n := by
+    apply ae_iff.mpr
+    simpa only [not_not, Set.setOf_mem_eq] using R.retainedFailureAt_measure_zero n x
+  filter_upwards [ae_all_iff.mpr hae] with p hp
+  intro n
+  cases hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+      (R.retainedRemainderFrom x p n).2 with
+  | none =>
+      have hnot := hp n
+      simp [retainedFailureAt, retainedSuccess, hindex] at hnot
+  | some index => exact ⟨index, rfl⟩
+
+/-- Each displayed trace state is the state of the corresponding iterated original suffix. -/
+theorem ChainReductionData.retainedTraceFrom_state
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (p : DDPPath P) (n : ℕ) :
+    (R.retainedTraceFrom x p).x n = (R.retainedRemainderFrom x p n).1 := by
+  cases hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
+      (R.retainedRemainderFrom x p n).2 <;>
+    simp [retainedTraceFrom, DDPPath.ofRaw, retainedStage, hindex]
+
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
 probability of `sup W_i > ε+δ` is at most the reduced probability of `sup W_i > ε`.
