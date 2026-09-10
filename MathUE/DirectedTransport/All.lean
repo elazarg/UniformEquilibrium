@@ -19,6 +19,7 @@ import MathUE.DirectedTransport.Closure
 import MathUE.DirectedTransport.Exact
 import MathUE.DirectedTransport.FiniteInequality.Basic
 import MathUE.DirectedTransport.FiniteInequality.Arithmetic
+import MathUE.DirectedTransport.FiniteInequality.Nonnegative
 import MathUE.DirectedTransport.FiniteInequality.Quantitative
 import MathUE.DirectedTransport.FiniteInequality.Sparse
 import MathUE.DirectedTransport.JoinSemidirect

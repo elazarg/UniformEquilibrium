@@ -1850,6 +1850,18 @@ nonincreasing evaluations the correction includes the evaluation drop, so
 the terminal relaxation does not assert the same bound for all evaluations.
 A decision procedure for these raw classes remains to be supplied.
 
+`not_nonempty_cappedClockParentRewardCertificate_iff_exactLPDual`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExactLPAlternative.lean`)
+characterizes failure of the exact reward criterion by a nonnegative
+combination of its actual Never, future, and joining rows, with nonpositive
+weighted columns and strictly positive weighted lower bound. The same file
+gives rational weights or a rational dual for rational tables.
+`exists_rationalNonnegativePotential_iff_exists_realNonnegativePotential`
+(`MathUE/DirectedTransport/FiniteInequality/Nonnegative.lean`) proves that
+rational finite systems have nonnegative rational solutions whenever they
+have nonnegative real solutions. These are certificate-existence theorems,
+not an implemented executable LP solver or finite-law equilibrium search.
+
 `quittingBehaviorStoppingLaws_childWithOutsiderFullProfile`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMultipleOutsiderRestriction.lean`)
 proves that retaining the child and one chosen outsider, applying its quiet
