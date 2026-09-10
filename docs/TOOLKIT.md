@@ -821,6 +821,13 @@ in the stabilized-degree file proves homotopy invariance for jointly
 continuous families on a common isolating region. Affine normalization,
 regular-Jacobian comparison, and the game-specific integer-LCP consumer
 are not supplied by these Research theorems.
+`BoxComplementarityProblem.localDegree_union_of_disjoint` and
+`BoxComplementarityProblem.exists_isolatingFrontierCollar_localDegree_coherent`
+(`Research/Topology/BoxComplementarityLocalDegreeConsequences.lean`) give
+disjoint-region additivity and excision within an actual frontier collar.
+`BoxComplementarityProblem.exists_solution_mem_of_localDegree_ne_zero`
+in the same file gives an actual solution in any isolating region of nonzero
+degree, without requiring that relatively open region to be compact.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)

@@ -9242,6 +9242,315 @@ theorem DiscreteDecisionProcess.exists_positive_action_valueX_le_valueY
   have hsumlt := Summable.tsum_lt_tsum hnonpos hstrict hsummable summable_zero
   simp only [f, P.tsum_choose_mul_increment_eq_zero x, tsum_zero, lt_self_iff_false] at hsumlt
 
+/-- A chain visited between retained times belongs to the root at the block's start. -/
+theorem ChainReductionData.prescribed_chainSet_root_eq_of_no_retained
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (p : PrescribedDDPPath P P.initial) (x : R.reduced.X) (n m : ℕ)
+    (hstart : p.x n = R.kept x)
+    (hno : ∀ i, n < i → i ≤ n + m →
+      p.x i ∉ ChainRetainedStates P PS R.witness)
+    {s : P.X} (hs : s ∈ S) (hmem : p.x (n + m) ∈ R.witness.chainSet s) :
+    s = R.kept x := by
+  induction m with
+  | zero =>
+      have hm : R.kept x ∈ R.witness.chainSet s := by
+        simpa only [Nat.add_zero, hstart] using hmem
+      exact False.elim ((R.kept_not_mem_removed x).2 s hs hm)
+  | succ m ih =>
+      by_cases hprev : p.x (n + m) ∈ R.witness.chainSet s
+      · exact ih (fun i hlo hhi => hno i hlo (by omega)) hprev
+      · by_cases hroot : p.x (n + m) = s
+        · by_cases hm : m = 0
+          · simpa only [hm, Nat.add_zero, hstart] using hroot.symm
+          · have houtside := hno (n + m) (by omega) (by omega)
+            exact False.elim (houtside (hroot ▸ R.root_mem_retained hs))
+        · have hentry := R.witness.everyVisitBeginsAtRoot s hs p (n + (m + 1))
+            (Or.inl hmem) (Or.inr (by
+              have hpred : n + (m + 1) - 1 = n + m := by omega
+              rw [hpred]
+              exact fun h => h.elim hprev (fun heq => hroot heq)))
+          exact False.elim (R.witness.omitsRoot s hs (hentry ▸ hmem))
+
+/-- Every non-removable state strictly inside an actual retained block belongs to
+the chain rooted at that block's initial retained state. -/
+theorem ChainReductionData.prescribed_inside_block_mem_chainSet
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (p : PrescribedDDPPath P P.initial) (x : R.reduced.X) (n i : ℕ)
+    (hstart : p.x n = R.kept x) (hni : n < i)
+    (hno : ∀ j, n < j → j ≤ i →
+      p.x j ∉ ChainRetainedStates P PS R.witness)
+    (hT : p.x i ∉ T) :
+    R.kept x ∈ S ∧ p.x i ∈ R.witness.chainSet (R.kept x) := by
+  have hremoved : p.x i ∈ T ∪ ⋃ s ∈ S, R.witness.chainSet s :=
+    not_not.mp (hno i hni le_rfl)
+  obtain ⟨s, hs⟩ := mem_iUnion.mp (hremoved.resolve_left hT)
+  obtain ⟨hs, hchain⟩ := mem_iUnion.mp hs
+  have heq := R.prescribed_chainSet_root_eq_of_no_retained p x n (i - n) hstart
+    (by simpa only [Nat.add_sub_of_le hni.le] using hno) hs
+    (by simpa only [Nat.add_sub_of_le hni.le] using hchain)
+  exact heq ▸ ⟨hs, hchain⟩
+/-- Almost every original path starts at the prescribed state and uses only supported
+actions and supported stochastic moves at every finite time. -/
+theorem DDPSemantics.ae_prescribed_support
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (start : P.X) :
+    ∀ᵐ p ∂PS.fromState start, p.x 0 = start ∧ ∀ i : ℕ,
+      0 < P.choose (p.x i) (p.y i) ∧
+      0 < P.move (p.x i) (p.y i) (p.x (i + 1)) := by
+  letI : IsProbabilityMeasure (PS.fromState start) := PS.fromStateProbability start
+  have hstart : ∀ᵐ p ∂PS.fromState start, p.x 0 = start :=
+    (mem_ae_iff_prob_eq_one (measurableSet_ddpInitialState P start)).2
+      (PS.fromStateSupport start)
+  have havoid (k : ℕ) : ∀ᵐ p ∂PS.fromState start, ∀ h : DDPFinitePath P k,
+      PS.fromState start (DDPCylinder P h) = 0 → p ∉ DDPCylinder P h := by
+    apply ae_all_iff.mpr
+    intro h
+    by_cases hzero : PS.fromState start (DDPCylinder P h) = 0
+    · filter_upwards [measure_eq_zero_iff_ae_notMem.mp hzero] with p hp using fun _ => hp
+    · exact ae_of_all _ fun _ h => False.elim (hzero h)
+  filter_upwards [hstart, ae_all_iff.mpr havoid] with p hpstart hpavoid
+  have hprob (k : ℕ) : 0 < (p.prefix P k).probability P := by
+    rw [← PS.fromStateCylinder start k (p.prefix P k) hpstart]
+    apply bot_lt_iff_ne_bot.mpr
+    intro hzero
+    exact hpavoid k (p.prefix P k) hzero rfl
+  refine ⟨hpstart, fun i => ?_⟩
+  have hprod : (∏ j : Fin (i + 1),
+      P.choose ((p.prefix P (i + 1)).x j.castSucc) ((p.prefix P (i + 1)).y j) *
+        P.move ((p.prefix P (i + 1)).x j.castSucc) ((p.prefix P (i + 1)).y j)
+          ((p.prefix P (i + 1)).x j.succ)) ≠ 0 := ne_of_gt (hprob (i + 1))
+  have hfactor := Finset.prod_ne_zero_iff.mp hprod (Fin.last i) (Finset.mem_univ _)
+  exact ⟨bot_lt_iff_ne_bot.mpr (mul_ne_zero_iff.mp hfactor).1,
+    bot_lt_iff_ne_bot.mpr (mul_ne_zero_iff.mp hfactor).2⟩
+/-- A finite first-return observation on a supported path has positive probability
+under the actual law with its first action forced. -/
+theorem DDPSemantics.firstReturnAt_pos_of_supported
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (p : DDPPath P)
+    (hchoose : ∀ i, 0 < i → 0 < P.choose (p.x i) (p.y i))
+    (hmove : ∀ i, 0 < P.move (p.x i) (p.y i) (p.x (i + 1)))
+    (A : Set P.X) (z : P.X) (hp : p ∈ FirstReturnAt P A z) :
+    0 < PS.afterAction (p.x 0) (p.y 0) (FirstReturnAt P A z) := by
+  obtain ⟨k, hk, hpk, hz, hbefore⟩ := hp
+  obtain ⟨l, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hk)
+  have hpositive :
+      0 < PS.afterAction (p.x 0) (p.y 0) (DDPCylinder P (p.prefix P (l + 1))) := by
+    rw [PS.afterActionCylinder (p.x 0) (p.y 0) l (p.prefix P (l + 1)) rfl (HEq.rfl)]
+    apply bot_lt_iff_ne_bot.mpr
+    rw [DDPFinitePath.afterActionProbability]
+    apply mul_ne_zero (ne_of_gt (hmove 0))
+    apply Finset.prod_ne_zero_iff.mpr
+    intro i _
+    exact mul_ne_zero (ne_of_gt (hchoose (i + 1) (by omega)))
+      (ne_of_gt (hmove (i + 1)))
+  apply hpositive.trans_le (measure_mono ?_)
+  intro q hq
+  have hstate (i : ℕ) (hi : i ≤ l + 1) : q.x i = p.x i :=
+    congrArg (fun h : DDPFinitePath P (l + 1) => h.x ⟨i, by omega⟩) hq
+  exact ⟨l + 1, Nat.succ_pos l, (hstate _ le_rfl).trans hpk, hz,
+    fun i hi hik => (hstate i (by omega)) ▸ hbefore i hi hik⟩
+
+/-- A completing action cannot have a supported first exit back into its chain. -/
+theorem completingAction_firstOutsideT_not_mem_of_supported
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (p : DDPPath P)
+    (hchoose : ∀ i, 0 < i → 0 < P.choose (p.x i) (p.y i))
+    (hmove : ∀ i, 0 < P.move (p.x i) (p.y i) (p.x (i + 1)))
+    (A T : Set P.X) (hcomplete : CompletingAction P PS A T (p.x 0) (p.y 0))
+    (z : P.X) (hz : p ∈ FirstOutsideTAt P T z) : z ∉ A := by
+  intro hA
+  have hpositive : 0 < PS.afterAction (p.x 0) (p.y 0) (FirstOutsideTAt P T z) := by
+    rw [firstOutsideTAt_eq_firstReturnAt_compl] at hz ⊢
+    exact PS.firstReturnAt_pos_of_supported P p hchoose hmove Tᶜ z hz
+  have hzero : PS.afterAction (p.x 0) (p.y 0) (FirstOutsideTAt P T z) = 0 :=
+    measure_mono_null (fun _ hp => mem_iUnion_of_mem z (mem_iUnion_of_mem hA hp))
+      hcomplete
+  exact (ne_of_gt hpositive) hzero
+private theorem sum_increment_eq_first_of_interior_mem_removable
+    (P : DiscreteDecisionProcess) (p : DDPPath P) (T : Set P.X)
+    (hT : ∀ x ∈ T, ¬IsVaried P x) {n : ℕ} (hn : 0 < n)
+    (hinterior : ∀ i, 0 < i → i < n → p.x i ∈ T) :
+    (∑ i ∈ Finset.range n, (P.valueY (p.x i) (p.y i) - P.valueX (p.x i))) =
+      P.valueY (p.x 0) (p.y 0) - P.valueX (p.x 0) := by
+  apply Finset.sum_eq_single 0
+  · intro i hi hne
+    apply sub_eq_zero.mpr
+    exact not_ne_iff.mp (not_exists.mp
+      (hT _ (hinterior i (Nat.pos_of_ne_zero hne) (Finset.mem_range.mp hi))) (p.y i))
+  · exact fun h => False.elim (h (Finset.mem_range.mpr hn))
+
+private theorem interior_mem_removable_of_completing
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (p : DDPPath P)
+    (hchoose : ∀ i, 0 < i → 0 < P.choose (p.x i) (p.y i))
+    (hmove : ∀ i, 0 < P.move (p.x i) (p.y i) (p.x (i + 1)))
+    (A T : Set P.X) (hcomplete : CompletingAction P PS A T (p.x 0) (p.y 0))
+    (n : ℕ) (hlocal : ∀ i, 0 < i → i < n → p.x i ∉ T → p.x i ∈ A) :
+    ∀ i, 0 < i → i < n → p.x i ∈ T := by
+  classical
+  intro i hi hin
+  by_contra hT
+  have hex : ∃ k, 0 < k ∧ p.x k ∉ T := ⟨i, hi, hT⟩
+  have hk := Nat.find_spec hex
+  have hki : Nat.find hex ≤ i := Nat.find_min' hex ⟨hi, hT⟩
+  have hreturn : p ∈ FirstOutsideTAt P T (p.x (Nat.find hex)) :=
+    ⟨Nat.find hex, hk.1, rfl, hk.2, fun j hj hjk => by
+      have hminimal := Nat.find_min hex hjk
+      exact not_not.mp (fun hjT => hminimal ⟨hj, hjT⟩)⟩
+  exact completingAction_firstOutsideT_not_mem_of_supported P PS p hchoose hmove A T
+    hcomplete _ hreturn (hlocal _ hk.1 (hki.trans_lt hin) hk.2)
+
+/-- The actual elapsed block has the sum of its recorded decision increments:
+intermediate removable states contribute zero, including the wait after completion. -/
+theorem compositeBlockAt_sum_increment
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (A T K : Set P.X)
+    (hT : ∀ x ∈ T, ¬IsVaried P x) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state))
+    (hcomplete : ∀ last, actions.getLast? = some last →
+      CompletingAction P PS A T last.1 last.2)
+    {p : DDPPath P} {n : ℕ}
+    (hchoose : ∀ i, 0 < P.choose (p.x i) (p.y i))
+    (hmove : ∀ i, 0 < P.move (p.x i) (p.y i) (p.x (i + 1)))
+    (hlocal : ∀ i, 0 < i → i < n → p.x i ∉ T → p.x i ∈ A)
+    (hp : p ∈ CompositeBlockAt P T K z actions n) :
+    (∑ i ∈ Finset.range n, (P.valueY (p.x i) (p.y i) - P.valueX (p.x i))) =
+      (actions.map fun action => P.valueY action.1 action.2 - P.valueX action.1).sum := by
+  induction actions generalizing p n with
+  | nil => exact False.elim hp
+  | cons first tail ih =>
+      have hfirst : (⟨p.x 0, p.y 0⟩ : DDPStage P) = first :=
+        Sigma.ext hp.1.1 hp.1.2
+      have hfirstValue : P.valueY (p.x 0) (p.y 0) - P.valueX (p.x 0) =
+          P.valueY first.1 first.2 - P.valueX first.1 :=
+        congrArg (fun action : DDPStage P =>
+          P.valueY action.1 action.2 - P.valueX action.1) hfirst
+      cases tail with
+      | nil =>
+          have hcompletion : CompletingAction P PS A T (p.x 0) (p.y 0) := by
+            have hc := hcomplete first rfl
+            exact (congrArg (fun action : DDPStage P =>
+              CompletingAction P PS A T action.1 action.2) hfirst).mpr hc
+          have hrem := interior_mem_removable_of_completing P PS p
+            (fun i _ => hchoose i) hmove A T hcompletion n hlocal
+          rw [sum_increment_eq_first_of_interior_mem_removable P p T hT hp.2.1 hrem]
+          simpa only [List.map_cons, List.map_nil, List.sum_cons, List.sum_nil, add_zero]
+            using hfirstValue
+      | cons next rest =>
+          have htail := hp.2
+          simp only [mem_iUnion, mem_ite_empty_right, mem_inter_iff, mem_preimage] at htail
+          obtain ⟨k, l, hsum, htail, hk, _, _, hbefore⟩ := htail
+          have hfront := sum_increment_eq_first_of_interior_mem_removable P p T hT hk
+            (fun i hi hik => not_not.mp (hbefore i hi hik))
+          have hrest := ih (fun last hlast => hcomplete last (by
+              simpa only [List.getLast?_cons_cons] using hlast))
+            (p := DDPPath.shift P k p) (n := l)
+            (fun i => hchoose (k + i))
+            (fun i => by simpa only [DDPPath.shift, Nat.add_assoc] using hmove (k + i))
+            (fun i hi hil hiT => hlocal (k + i) (by omega) (by omega) hiT) htail
+          rw [← hsum, Finset.sum_range_add, hfront, hfirstValue]
+          change _ + (∑ i ∈ Finset.range l,
+            (P.valueY ((DDPPath.shift P k p).x i) ((DDPPath.shift P k p).y i) -
+              P.valueX ((DDPPath.shift P k p).x i))) = _
+          rw [hrest]
+          rfl
+/-- On a supported original path, a decoded completed block has precisely the
+decision advantage of its actual reduced composite action. -/
+theorem ChainReductionData.compositeBlockAt_advantage_eq
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (p : DDPPath P) (hstart : p.x 0 = P.initial)
+    (hchoose : ∀ i, 0 < P.choose (p.x i) (p.y i))
+    (hmove : ∀ i, 0 < P.move (p.x i) (p.y i) (p.x (i + 1)))
+    (x : R.reduced.X) (y : R.reduced.Y x) (z : R.reduced.X) (n k : ℕ)
+    (hblock : DDPPath.shift P n p ∈
+      CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
+        (R.kept z) (R.composite x y) k) :
+    (∑ i ∈ Finset.range k,
+      (P.valueY (p.x (n + i)) (p.y (n + i)) - P.valueX (p.x (n + i)))) =
+      R.reduced.valueY x y - R.reduced.valueX x := by
+  classical
+  let A : Set P.X := if R.kept x ∈ S then R.witness.chainSet (R.kept x) else ∅
+  have hv := R.composite_valid x y
+  have hroot : p.x n = R.kept x := by
+    by_cases hx : R.kept x ∈ S
+    · simp only [IsChainReductionAction, dif_pos hx] at hv
+      obtain ⟨first, tail, hword, hfirst, _⟩ := hv
+      rw [hword] at hblock
+      have hf := hblock.1.1.trans hfirst
+      simpa only [DDPPath.shift, Nat.add_zero] using hf
+    · simp only [IsChainReductionAction, dif_neg hx] at hv
+      obtain ⟨first, hword⟩ := hv
+      rw [hword] at hblock
+      simpa only [DDPPath.shift, Nat.add_zero] using hblock.1.1
+  have hcomplete : ∀ last, (R.composite x y).getLast? = some last →
+      CompletingAction P PS A T last.1 last.2 := by
+    intro last hlast
+    by_cases hx : R.kept x ∈ S
+    · simp only [IsChainReductionAction, dif_pos hx] at hv
+      obtain ⟨_, _, _, _, _, _, init, final, hword, hcompletion⟩ := hv
+      have heq : final = last := by simpa [hword] using hlast
+      subst last
+      simpa only [A, if_pos hx] using hcompletion
+    · simp only [A, if_neg hx, CompletingAction, mem_empty_iff_false,
+        iUnion_of_empty, iUnion_empty, measure_empty]
+  have hreturn := R.completedBlockIndex_firstRetained x (DDPPath.shift P n p)
+    ((y, z), k) ((R.completedBlockIndex_eq_some_iff x _ _).2 hblock)
+  let prescribed : PrescribedDDPPath P P.initial :=
+    { x := p.x, y := p.y, starts := hstart, movePositive := hmove,
+      choosePositive := hchoose }
+  have hlocal : ∀ i, 0 < i → i < k →
+      (DDPPath.shift P n p).x i ∉ T → (DDPPath.shift P n p).x i ∈ A := by
+    intro i hi hik hiT
+    have hno : ∀ j, n < j → j ≤ n + i →
+        prescribed.x j ∉ ChainRetainedStates P PS R.witness := by
+      intro j hnj hji
+      have h := hreturn.2.2.2 (j - n) (by omega) (by omega)
+      simpa only [DDPPath.shift, Nat.add_sub_of_le hnj.le] using h
+    have hchain := R.prescribed_inside_block_mem_chainSet prescribed x n (n + i)
+      hroot (by omega) hno hiT
+    simpa only [A, if_pos hchain.1, DDPPath.shift] using hchain.2
+  rw [R.telescopes]
+  exact compositeBlockAt_sum_increment P PS A T _ R.witness.removable.1 _ _ hcomplete
+    (fun i => hchoose (n + i))
+    (fun i => by simpa only [DDPPath.shift, Nat.add_assoc] using hmove (n + i))
+    hlocal hblock
+/-- At every actual retained clock time, the original cumulative decision advantage
+equals that of the constructed retained trace, on one full-measure set. -/
+theorem ChainReductionData.ae_retainedClockFrom_advantage
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T) :
+    ∀ᵐ p ∂PS.law, ∀ n : ℕ,
+      (∑ i ∈ Finset.range (R.retainedClockFrom R.reduced.initial p n),
+        (P.valueY (p.x i) (p.y i) - P.valueX (p.x i))) =
+      ∑ j ∈ Finset.range n,
+        (R.reduced.valueY ((R.retainedTrace p).x j) ((R.retainedTrace p).y j) -
+          R.reduced.valueX ((R.retainedTrace p).x j)) := by
+  rw [PS.lawFromInitial, ← R.initial_eq]
+  filter_upwards [PS.ae_prescribed_support P (R.kept R.reduced.initial),
+    R.ae_retainedRemainderFrom_decodes R.reduced.initial] with p hp hdecodes
+  have hstart : p.x 0 = P.initial := hp.1.trans R.initial_eq
+  intro n
+  induction n with
+  | zero => simp only [retainedClockFrom, Finset.range_zero, Finset.sum_empty]
+  | succ n ih =>
+      obtain ⟨index, hindex⟩ := hdecodes n
+      have hblock := (R.completedBlockIndex_eq_some_iff
+        (R.retainedRemainderFrom R.reduced.initial p n).1
+        (R.retainedRemainderFrom R.reduced.initial p n).2 index).mp hindex
+      rw [R.retainedRemainderFrom_eq_shift] at hblock
+      have hsum := R.compositeBlockAt_advantage_eq p hstart
+        (fun i => (hp.2 i).1) (fun i => (hp.2 i).2)
+        (R.retainedRemainderFrom R.reduced.initial p n).1 index.1.1 index.1.2
+        (R.retainedClockFrom R.reduced.initial p n) index.2 hblock
+      have hstage :
+          (⟨(R.retainedTrace p).x n, (R.retainedTrace p).y n⟩ : DDPStage R.reduced) =
+            ⟨(R.retainedRemainderFrom R.reduced.initial p n).1, index.1.1⟩ := by
+        change R.retainedStage (R.retainedRemainderFrom R.reduced.initial p n) = _
+        unfold retainedStage
+        rw [hindex]
+      have hincrement := congrArg (fun stage : DDPStage R.reduced =>
+        R.reduced.valueY stage.1 stage.2 - R.reduced.valueX stage.1) hstage
+      rw [retainedClockFrom, hindex, Finset.sum_range_add, ih,
+        Finset.sum_range_succ, hsum, hincrement]
+
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
 probability of `sup W_i > ε+δ` is at most the reduced probability of `sup W_i > ε`.

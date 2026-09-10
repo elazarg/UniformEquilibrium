@@ -20,8 +20,8 @@ that the paper's Lemma 1 is false. A normalized, correctly specified reduced
 action law provides positive first-action coverage through the mass bounds
 and normalization argument below. The completed-block probability formula is
 proved, and the completed blocks form a full-mass disjoint partition from
-every retained state. The concatenated trace law is also proved; the balanced
-pathwise prefix comparison remains.
+every retained state. The concatenated trace law and completed-block
+advantage comparison are also proved; control of the unfinished block remains.
 
 ## Separate encoding error
 
@@ -196,8 +196,20 @@ file identify the cumulative original clock, align every reduced state
 with its original state, and put every original time into one unique
 half-open decoded block on a common full-measure set, including time zero.
 `DiscreteDecisionProcess.exists_positive_action_valueX_le_valueY` supplies
-a supported nonnegative-increment action from harmonicity. The balanced
-pathwise prefix comparison remains; Lemma 1 remains open.
+a supported nonnegative-increment action from harmonicity.
+
+`DDPSemantics.ae_prescribed_support` (`Literature/Simon2007.lean`) places
+almost every actual path in the supported-path class simultaneously at
+every finite time. `ChainReductionData.compositeBlockAt_advantage_eq`
+identifies the sum of original decision increments over a completed block
+with its actual reduced-action advantage. Root retention ensures that all
+interior non-removable states belong to the block-start chain; supported
+first-return observations exclude a return into that chain after completion.
+All remaining interior increments are zero at removable states.
+`ChainReductionData.ae_retainedClockFrom_advantage` in the same file proves
+the cumulative equality at every actual retained clock time on one common
+full-measure set. Control of the unfinished block and the final event
+inclusion remain; Lemma 1 remains open.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

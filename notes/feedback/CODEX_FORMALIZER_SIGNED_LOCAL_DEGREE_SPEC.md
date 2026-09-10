@@ -239,6 +239,19 @@ file proves homotopy invariance on a common isolating region by comparing
 both stabilized values on one sufficiently fine common mesh. Affine
 normalization and approximation independence remain further obligations.
 
+`BoxComplementarityProblem.localDegree_union_of_disjoint`
+(`Research/Topology/BoxComplementarityLocalDegreeConsequences.lean`)
+proves additivity on disjoint isolating regions. Isolation of the union is
+derived from that of its two components.
+`BoxComplementarityProblem.exists_isolatingFrontierCollar_localDegree_coherent`
+in the same file gives one actual collar permitting all region changes
+whose symmetric difference lies inside it. Its more general excision
+theorem accepts eventual finite-grid vertex clearance.
+`BoxComplementarityProblem.exists_solution_mem_of_localDegree_ne_zero`
+proves existence of an actual solution in any isolating region with nonzero
+degree. It does not require the open region itself to be compact: compactness
+of its closure and absence of frontier solutions suffice.
+
 ## Subdivision library discovery and reuse boundary
 
 `kuhnStarSubdivision_completeFacetParity_eq`
