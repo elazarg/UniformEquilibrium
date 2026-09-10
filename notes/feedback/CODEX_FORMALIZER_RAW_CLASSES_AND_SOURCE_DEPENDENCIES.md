@@ -54,8 +54,10 @@ iterated-expectation identity.
 
 `expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExpectationDomination.lean`)
-integrates the gain inequality over the independent child profile and the
-outsider clock. Reward and evaluation bounds supply summability internally.
+integrates the gain inequality over any coupled child/outsider clock law.
+Reward and evaluation bounds supply summability internally. This stronger
+integration statement does not make correlated clock laws legal profiles;
+the behavioral application uses independent laws.
 The finite sum is interchanged with expectation using
 `expect_finset_sum_of_bounded`
 (`MathUE/ProbabilityMassFunction/FiniteSumExpectation.lean`).
@@ -65,9 +67,43 @@ The finite sum is interchanged with expectation using
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockParentLawPushforward.lean`)
 identify the exact product laws after discarding the outsider clock, or first
 using it to cap one child. The latter replaces precisely that child's marginal
-by the compiled minimum law. Identifying the resulting expectations with
-behavioral payoffs and applying the full deviation caps remain to be supplied;
+by the compiled minimum law.
+
+`expect_parentSource_cappedChild_eq_stoppingLawExpectedPayoff` and
+`cappedChild_stoppingLawExpectedPayoff_le_behaviorDeviationCap`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockActualPayoffAdapter.lean`)
+identify the capped-child expectation with an actual behavioral deviation
+payoff and bound it by the full behavioral cap.
+`outsideBehaviorDeviationDebt_le_weighted_childBehaviorDeviationDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFullBehavioralCap.lean`)
+then bounds the outsider's full terminal deviation debt by the weighted
+survivor debts at the reconstructed quiet parent profile. It first bounds
+every outsider strategy and then takes the supremum. Neither cap attainment
+nor a supremum/expectation interchange is assumed. Identifying those survivor
+debts with the child-game debts and extending fixed targets remain separate;
 these results do not yet close either packet.
+
+The child-game adapter should reuse
+`quittingTerminalPayoff_liftDeletedProfile`,
+`quittingTerminalPayoff_update_liftDeletedProfile_eq_deleteDeviation`, and
+`quittingBestReplyValue_liftDeletedProfile`
+(`UniformEquilibrium/Quitting/Classification/PlayerDeletionLift.lean`).
+They already preserve survivor payoffs and full behavioral best-response
+values under the Never lift. `quittingBestReplyValue`
+(`UniformEquilibrium/Quitting/Stationary/MinMax.lean`) and
+`quittingBehaviorDeviationPayoffCap`
+(`UniformEquilibrium/Quitting/Paths/CounterfactualStoppingLaw.lean`) describe
+the same supremum, using indexed-supremum and range-supremum notation.
+The remaining adapter must identify the actual reconstructed quiet profile
+with this lift at the level needed for payoffs and deviations.
+
+For fixed targets,
+`exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable`
+(`UniformEquilibrium/Quitting/Classification/BlockDeletion.lean`) contains
+the existing subsequence and survivor-coordinate argument. Its dispensability
+hypothesis is not supplied by the new criterion. Reuse or generalize the
+compactness step with the new vanishing-regret bound, rather than invoke that
+theorem under an unproved deletion gate.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are

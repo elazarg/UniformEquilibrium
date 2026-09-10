@@ -3,13 +3,13 @@ import MathUE.ProbabilityMassFunction.FiniteSumExpectation
 import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockStoppingLaw
 import UniformEquilibrium.Quitting.RewardBound
 
-
 /-!
 # Expectation bridge for capped-clock pointwise domination
 
-This module integrates the literal deterministic comparison over independent
-child clocks and one fresh outsider clock.  It does not exchange a supremum
-with an expectation and does not assume a response cap is attained.
+This module integrates the literal deterministic comparison over any coupled
+child/outsider clock law. Independence is needed later to identify the samples
+with legal unilateral experiments, not for this expectation inequality.
+No supremum is exchanged with an expectation and no response cap is assumed attained.
 -/
 
 noncomputable section
@@ -28,7 +28,9 @@ def cappedClockIndependentSample
   (pmfPi childLaws).bind fun times =>
     outsideLaw.map fun deadline => (times, deadline)
 
-private theorem abs_quittingPureClockEvaluatedPayoff_le
+/-- A nonnegative antitone clock evaluation bounds every literal evaluated
+payoff by its value at time zero times the finite reward-table bound. -/
+theorem abs_quittingPureClockEvaluatedPayoff_le
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (evaluation : WithTop ℕ → ℝ)
     (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
@@ -70,20 +72,20 @@ private theorem abs_actualEvaluatedGain_le
         evaluation_nonneg evaluation_antitone second who)
     _ = _ := by ring
 
-/-- Integrating the literal pointwise theorem over independent child and
-outsider clocks preserves its inequality.  Summability is supplied internally
-by the finite reward bound, so no analytic or strategic witness is assumed. -/
+/-- Integrating the literal pointwise theorem over any coupled child/outsider
+clock law preserves its inequality.  Summability is supplied internally by the
+finite reward bound, so no analytic or strategic witness is assumed. -/
 theorem expect_cappedClockActualEvaluatedOutsideGain_le_weighted_childGain
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (certificate : CappedClockParentRewardCertificate reward)
     (evaluation : WithTop ℕ → ℝ)
     (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
     (evaluation_antitone : Antitone evaluation)
-    (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
-    expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+    (law : PMF ((ι → Option ℕ) × Option ℕ)) :
+    expect law (fun sample =>
         cappedClockActualEvaluatedOutsideGain reward evaluation
           sample.1 sample.2) ≤
-      expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+      expect law (fun sample =>
         ∑ i, certificate.weight i *
           cappedClockActualEvaluatedChildGain reward evaluation
             sample.1 sample.2 i) := by
@@ -143,16 +145,15 @@ theorem expect_cappedClock_weighted_childGain_eq_sum_expect
     (evaluation : WithTop ℕ → ℝ)
     (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
     (evaluation_antitone : Antitone evaluation)
-    (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
-    expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+    (law : PMF ((ι → Option ℕ) × Option ℕ)) :
+    expect law (fun sample =>
         ∑ i, certificate.weight i *
           cappedClockActualEvaluatedChildGain reward evaluation
             sample.1 sample.2 i) =
       ∑ i, certificate.weight i *
-        expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+        expect law (fun sample =>
           cappedClockActualEvaluatedChildGain reward evaluation
             sample.1 sample.2 i) := by
-  let law := cappedClockIndependentSample childLaws outsideLaw
   let gainBound := 2 * (evaluation 0 * quittingRewardBound reward)
   have hgain (i : ι) (sample : (ι → Option ℕ) × Option ℕ) :
       |cappedClockActualEvaluatedChildGain reward evaluation
@@ -180,7 +181,7 @@ theorem expect_cappedClock_weighted_childGain_eq_sum_expect
     · intro i _ sample
       rw [abs_mul]
       exact mul_le_mul_of_nonneg_left (hgain i sample) (abs_nonneg _)
-  simpa [law] using hcomm Finset.univ
+  simpa using hcomm Finset.univ
 
 /-- Integrated pointwise domination with every child counterfactual exposed as
 its own expectation. -/
@@ -190,18 +191,18 @@ theorem expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations
     (evaluation : WithTop ℕ → ℝ)
     (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
     (evaluation_antitone : Antitone evaluation)
-    (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
-    expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+    (law : PMF ((ι → Option ℕ) × Option ℕ)) :
+    expect law (fun sample =>
         cappedClockActualEvaluatedOutsideGain reward evaluation
           sample.1 sample.2) ≤
       ∑ i, certificate.weight i *
-        expect (cappedClockIndependentSample childLaws outsideLaw) (fun sample =>
+        expect law (fun sample =>
           cappedClockActualEvaluatedChildGain reward evaluation
             sample.1 sample.2 i) := by
   rw [← expect_cappedClock_weighted_childGain_eq_sum_expect reward certificate
-    evaluation evaluation_nonneg evaluation_antitone childLaws outsideLaw]
+    evaluation evaluation_nonneg evaluation_antitone law]
   exact expect_cappedClockActualEvaluatedOutsideGain_le_weighted_childGain
     reward certificate evaluation evaluation_nonneg evaluation_antitone
-      childLaws outsideLaw
+      law
 
 end GameTheory

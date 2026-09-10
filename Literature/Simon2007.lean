@@ -8014,28 +8014,33 @@ theorem DDPSemantics.compositeBlockEvent_probability
       simp only [List.map_cons, List.prod_cons]
       exact (mul_assoc _ _ _).symm
 
-/-- An actual composite reduced action has its original block-and-exit cylinder probability. -/
+/-- Every reduced action has its original block-and-exit cylinder probability. -/
 theorem ChainReductionData.compositeBlockEvent_probability
     {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
     {S T : Set P.X} (R : ChainReductionData P PS S T)
-    (x : R.reduced.X) (hx : R.kept x ∈ S)
-    (y : R.reduced.Y x) (z : R.reduced.X) :
+    (x : R.reduced.X) (y : R.reduced.Y x) (z : R.reduced.X) :
     PS.fromState (R.kept x)
         (CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
           (R.kept z) (R.composite x y)) =
       R.reduced.choose x y * R.reduced.move x y z := by
   classical
   have hv := R.composite_valid x y
-  simp only [IsChainReductionAction, dif_pos hx] at hv
-  obtain ⟨first, tail, hword, hfirst, _, hchain, _⟩ := hv
-  rw [hword] at hchain
-  rw [← hfirst, hword, PS.compositeBlockEvent_probability P T _ _ first tail hchain]
-  rw [R.composite_probability, hword]
-  congr 1
-  apply Eq.symm
-  apply R.exitTransition x y z (first :: tail).dropLast
-    ((first :: tail).getLast (List.cons_ne_nil _ _))
-  exact hword.trans (List.dropLast_append_getLast (List.cons_ne_nil _ _)).symm
+  by_cases hx : R.kept x ∈ S
+  · simp only [IsChainReductionAction, dif_pos hx] at hv
+    obtain ⟨first, tail, hword, hfirst, _, hchain, _⟩ := hv
+    rw [hword] at hchain
+    rw [← hfirst, hword, PS.compositeBlockEvent_probability P T _ _ first tail hchain]
+    rw [R.composite_probability, hword]
+    congr 1
+    apply Eq.symm
+    apply R.exitTransition x y z (first :: tail).dropLast
+      ((first :: tail).getLast (List.cons_ne_nil _ _))
+    exact hword.trans (List.dropLast_append_getLast (List.cons_ne_nil _ _)).symm
+  · simp only [IsChainReductionAction, dif_neg hx] at hv
+    obtain ⟨first, hword⟩ := hv
+    rw [hword]
+    exact R.singletonCompositeBlock_probability x y z first hword
+
 /-- Normalized composite coverage supplies the root action alternative on positive support. -/
 theorem ChainReductionData.positive_root_actionStructure
     {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
@@ -8065,6 +8070,155 @@ theorem ChainReductionData.positive_root_actionStructure
   | cons next tail =>
       exact Or.inr ⟨next.1, hstates next (List.mem_cons_self),
         (List.isChain_cons_cons.mp hchain).1⟩
+
+
+private theorem firstReturnThen_common_time
+    (P : DiscreteDecisionProcess) (A : Set P.X) (z w : P.X)
+    (E F : Set (DDPPath P)) {p : DDPPath P}
+    (hE : p ∈ FirstReturnThen P A z E) (hF : p ∈ FirstReturnThen P A w F) :
+    ∃ k, DDPPath.shift P k p ∈ E ∧ DDPPath.shift P k p ∈ F := by
+  rcases mem_iUnion.mp hE with ⟨k, hpE, hk, hpk, hz, hbeforeK⟩
+  rcases mem_iUnion.mp hF with ⟨l, hpF, hl, hpl, hw, hbeforeL⟩
+  have hkl : k = l := by
+    apply le_antisymm
+    · by_contra hnot
+      exact (hbeforeK l hl (lt_of_not_ge hnot)) (hpl.symm ▸ hw)
+    · by_contra hnot
+      exact (hbeforeL k hk (lt_of_not_ge hnot)) (hpk.symm ▸ hz)
+  subst l
+  exact ⟨k, hpE, hpF⟩
+
+/-- Two action words actually observed on the same path are prefix-comparable. -/
+theorem compositeBlockEvent_prefix_comparable
+    (P : DiscreteDecisionProcess) (T K : Set P.X)
+    (actions other : List ((state : P.X) × P.Y state))
+    (z w : P.X) {p : DDPPath P}
+    (ha : p ∈ CompositeBlockEvent P T K z actions)
+    (hb : p ∈ CompositeBlockEvent P T K w other) :
+    actions <+: other ∨ other <+: actions := by
+  induction actions generalizing other p with
+  | nil => exact False.elim ha
+  | cons first tail ih =>
+      cases other with
+      | nil => exact False.elim hb
+      | cons next rest =>
+          rcases ha with ⟨hfirst, htail⟩
+          rcases hb with ⟨hnext, hrest⟩
+          have heq : first = next := Sigma.ext (hfirst.1.symm.trans hnext.1)
+            (hfirst.2.symm.trans hnext.2)
+          subst next
+          cases tail with
+          | nil => exact Or.inl (List.cons_prefix_cons.mpr ⟨rfl, List.nil_prefix⟩)
+          | cons second tail =>
+              cases rest with
+              | nil => exact Or.inr (List.cons_prefix_cons.mpr ⟨rfl, List.nil_prefix⟩)
+              | cons next rest =>
+                  obtain ⟨k, hk, hl⟩ := firstReturnThen_common_time P Tᶜ second.1 next.1
+                    _ _ htail hrest
+                  rcases ih (next :: rest) hk hl with hprefix | hprefix
+                  · exact Or.inl (List.cons_prefix_cons.mpr ⟨rfl, hprefix⟩)
+                  · exact Or.inr (List.cons_prefix_cons.mpr ⟨rfl, hprefix⟩)
+
+/-- A fixed observed action word has only one retained exit state. -/
+theorem compositeBlockEvent_exit_unique
+    (P : DiscreteDecisionProcess) (T K : Set P.X)
+    (actions : List ((state : P.X) × P.Y state)) (z w : P.X)
+    {p : DDPPath P}
+    (hz : p ∈ CompositeBlockEvent P T K z actions)
+    (hw : p ∈ CompositeBlockEvent P T K w actions) : z = w := by
+  induction actions generalizing p with
+  | nil => exact False.elim hz
+  | cons first tail ih =>
+      cases tail with
+      | nil =>
+          by_contra hne
+          exact Set.disjoint_left.mp (pairwise_disjoint_firstReturnAt P K hne) hz.2 hw.2
+      | cons next rest =>
+          obtain ⟨k, hk, hl⟩ := firstReturnThen_common_time P Tᶜ next.1 next.1
+            _ _ hz.2 hw.2
+          exact ih hk hl
+
+/-- Distinct reduced action/exit pairs describe disjoint literal completed-block events. -/
+theorem ChainReductionData.pairwise_disjoint_compositeBlockEvent
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) :
+    Pairwise (Function.onFun Disjoint fun pair : R.reduced.Y x × R.reduced.X =>
+      CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+        (R.kept pair.2) (R.composite x pair.1)) := by
+  intro first second hne
+  rw [Function.onFun, Set.disjoint_left]
+  intro p hp hq
+  classical
+  have hprefixeq (a b : R.reduced.Y x)
+      (hab : R.composite x a <+: R.composite x b) :
+      R.composite x a = R.composite x b := by
+    by_cases hx : R.kept x ∈ S
+    · have hv (y : R.reduced.Y x) :
+          IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x)
+            (R.composite x y) := by
+        simpa only [IsChainReductionAction, dif_pos hx] using R.composite_valid x y
+      exact compositeActionList_prefix_eq P PS _ T _ (hv a) (hv b) hab
+    · have hlen (y : R.reduced.Y x) : (R.composite x y).length = 1 := by
+        have hv := R.composite_valid x y
+        simp only [IsChainReductionAction, dif_neg hx] at hv
+        obtain ⟨first, hword⟩ := hv
+        simp only [hword, List.length_singleton]
+      exact hab.eq_of_length ((hlen a).trans (hlen b).symm)
+  have hword : R.composite x first.1 = R.composite x second.1 := by
+    rcases compositeBlockEvent_prefix_comparable P T _ _ _ _ _ hp hq with hab | hba
+    · exact hprefixeq first.1 second.1 hab
+    · exact (hprefixeq second.1 first.1 hba).symm
+  have hy : first.1 = second.1 := composite_injective R x hword
+  have hz : first.2 = second.2 := by
+    apply R.kept_injective
+    rw [hword] at hp
+    exact compositeBlockEvent_exit_unique P T _ _ _ _ hp hq
+  exact hne (Prod.ext hy hz)
+
+/-- Normalization gives total mass one to the union of actual completed-block events. -/
+theorem ChainReductionData.compositeBlockEvent_union_measure
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) :
+    PS.fromState (R.kept x)
+      (⋃ pair : R.reduced.Y x × R.reduced.X,
+        CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+          (R.kept pair.2) (R.composite x pair.1)) = 1 := by
+  rw [measure_iUnion (R.pairwise_disjoint_compositeBlockEvent x)
+    (fun pair => measurableSet_compositeBlockEvent P T _ _ _)]
+  simp_rw [R.compositeBlockEvent_probability x]
+  rw [ENNReal.tsum_prod']
+  simp only [ENNReal.tsum_mul_left, PMF.tsum_coe, mul_one]
+
+/-- Almost every original path has exactly one completed reduced action and retained exit. -/
+theorem ChainReductionData.ae_existsUnique_compositeBlock
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) :
+    ∀ᵐ p ∂PS.fromState (R.kept x),
+      ∃! pair : R.reduced.Y x × R.reduced.X,
+        p ∈ CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+          (R.kept pair.2) (R.composite x pair.1) := by
+  let U : Set (DDPPath P) := ⋃ pair : R.reduced.Y x × R.reduced.X,
+    CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+      (R.kept pair.2) (R.composite x pair.1)
+  have hU : MeasurableSet U := MeasurableSet.iUnion fun pair =>
+    measurableSet_compositeBlockEvent P T _ _ _
+  have hmass : PS.fromState (R.kept x) U = 1 := R.compositeBlockEvent_union_measure x
+  letI := PS.fromStateProbability (R.kept x)
+  have hae : ∀ᵐ p ∂PS.fromState (R.kept x), p ∈ U := by
+    apply ae_iff.mpr
+    change PS.fromState (R.kept x) Uᶜ = 0
+    rw [measure_compl hU (by rw [hmass]; simp), measure_univ, hmass]
+    simp
+  filter_upwards [hae] with p hp
+  obtain ⟨pair, hpair⟩ := mem_iUnion.mp hp
+  refine ⟨pair, hpair, ?_⟩
+  intro other hother
+  by_contra hne
+  exact Set.disjoint_left.mp
+    (R.pairwise_disjoint_compositeBlockEvent x hne) hother hpair
 
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original

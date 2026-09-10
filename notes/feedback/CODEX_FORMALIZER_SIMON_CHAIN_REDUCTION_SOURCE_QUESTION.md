@@ -19,7 +19,8 @@ The question concerns the definition of chain reduction. It is not a claim
 that the paper's Lemma 1 is false. A normalized, correctly specified reduced
 action law provides positive first-action coverage through the mass bounds
 and normalization argument below. The completed-block probability formula is
-proved; constructing the concatenated trace law remains separate.
+proved, and the completed blocks form a full-mass disjoint partition from
+every retained state. Constructing the concatenated trace law remains separate.
 
 ## Separate encoding error
 
@@ -78,10 +79,10 @@ by another action in the same composite: the next action would be at a
 chain-set state with probability-one first-exit mass, contradicting
 completion. The private `compositeActionList_prefix_eq`
 (`Literature/Simon2007.lean`) proves that completed words are prefix-free.
-Their cylinder masses are proved below. The remaining construction must use
-reduced-law normalization to establish the completed-block partition and
-transport the resulting sampled path law. These are proof obligations, not
-assumed fields asserting the desired trace law or Lemma 1.
+Their cylinder masses and full-mass partition are proved below using
+reduced-law normalization. Transporting the concatenated sampled path law
+remains a proof obligation, not an assumed field asserting the desired trace
+law or Lemma 1.
 
 The generic mass inequality is available as `sum_prefixFree_mass_le` and
 `tsum_prefixFree_mass_le`
@@ -114,8 +115,9 @@ reduction data, not additional coverage fields.
 `CompositeBlockEvent` (`Literature/Simon2007.lean`) records the literal action
 word at successive first exits from the removable set, followed by the first
 retained exit. `ChainReductionData.compositeBlockEvent_probability` in that
-file proves that its original-path probability equals the reduced action
-probability times the reduced transition probability. The proof uses the
+file proves, at every retained state, that its original-path probability
+equals the reduced action probability times the reduced transition
+probability. The proof uses the
 existing path law and its restart identity, including arbitrary measurable
 continuation events, rather than a new trajectory-law assumption.
 
@@ -123,8 +125,17 @@ continuation events, rather than a new trajectory-law assumption.
 (`Literature/Simon2007.lean`) derives the completing-or-deterministic-successor
 alternative for every positive-probability root action from normalized
 composite coverage. No extra root-action hypothesis is required for existing
-reduction data. The actual disjoint completed-block partition and the
-concatenated sampled trace law remain to be constructed; Lemma 1 remains open.
+reduction data.
+
+`ChainReductionData.pairwise_disjoint_compositeBlockEvent`,
+`ChainReductionData.compositeBlockEvent_union_measure`, and
+`ChainReductionData.ae_existsUnique_compositeBlock`
+(`Literature/Simon2007.lean`) prove the disjoint partition and almost-everywhere
+unique completed block and retained exit from every retained start. The
+action and transition PMF normalizations give total mass one. These results
+include the unchanged singleton actions outside the root set. Measurable
+decoding with return times, continuation restart, and iteration to the
+concatenated retained trace remain to be constructed; Lemma 1 remains open.
 
 The checked nonroot result
 `ChainReducibilityWitness.observedFirstOutside_classification`

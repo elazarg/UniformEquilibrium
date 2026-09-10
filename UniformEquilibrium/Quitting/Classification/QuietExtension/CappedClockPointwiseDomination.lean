@@ -811,12 +811,12 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain
 def cappedClockTerminalEvaluation (clock : WithTop ℕ) : ℝ :=
   if clock = ⊤ then 0 else 1
 
-private theorem cappedClockTerminalEvaluation_nonneg (clock : WithTop ℕ) :
+theorem cappedClockTerminalEvaluation_nonneg (clock : WithTop ℕ) :
     0 ≤ cappedClockTerminalEvaluation clock := by
   unfold cappedClockTerminalEvaluation
   split_ifs <;> norm_num
 
-private theorem cappedClockTerminalEvaluation_antitone :
+theorem cappedClockTerminalEvaluation_antitone :
     Antitone cappedClockTerminalEvaluation := by
   intro first second hle
   by_cases hfirst : first = ⊤
@@ -825,7 +825,7 @@ private theorem cappedClockTerminalEvaluation_antitone :
   · unfold cappedClockTerminalEvaluation
     split_ifs <;> norm_num
 
-private theorem quittingPureClockEvaluatedPayoff_terminalEvaluation
+theorem quittingPureClockEvaluatedPayoff_terminalEvaluation
     {κ : Type} [Fintype κ] [DecidableEq κ] [Nonempty κ]
     (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
     (times : κ → Option ℕ) (who : κ) :
