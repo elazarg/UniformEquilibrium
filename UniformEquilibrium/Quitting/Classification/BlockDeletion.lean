@@ -11,6 +11,7 @@ import UniformEquilibrium.Quitting.Paths.InfinitePathCompiler
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Stationary.CoalitionToggleDeletion
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
+import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalNashLift
 import MathUE.Finset.InsertExtremum
 
 /-!
@@ -671,59 +672,16 @@ theorem exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable
     ∃ payoff : Payoff ι,
       (∀ who : QuittingBlockSurvivor B, payoff who.1 = target who) ∧
         (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  classical
-  let error : ℕ → ℝ := fun step => 1 / ((step : ℝ) + 1)
-  have herrorPos : ∀ step, 0 < error step := by
-    intro step
-    dsimp [error]
-    positivity
-  have hexists : ∀ step, ∃ profile : (quittingGame
-      (quittingDeleteBlockReward reward B)).BehaviorProfile,
-      (quittingGame (quittingDeleteBlockReward reward B)).IsεAsymptoticNash
-          (quittingTerminalPayoff (quittingDeleteBlockReward reward B))
-          (error step) profile ∧
-        ∀ who, |quittingTerminalPayoff (quittingDeleteBlockReward reward B)
-          profile who - target who| ≤ error step :=
-    fun step =>
-      exists_terminalNash_terminalPayoff_close_of_isUniformEquilibriumPayoff
-        (quittingDeleteBlockReward reward B) target htarget (herrorPos step)
-  choose profiles hnash hclose using hexists
-  let lifted : ℕ → (quittingGame reward).BehaviorProfile :=
-    fun step => quittingLiftDeletedProfile reward (· ∈ B) (profiles step)
-  have hmem : ∀ step, quittingTerminalPayoff reward (lifted step) ∈
-      Set.Icc (fun _ : ι => -quittingRewardBound reward)
-        (fun _ : ι => quittingRewardBound reward) :=
-    fun step => quittingTerminalPayoff_mem_rewardCube reward (lifted step)
-  obtain ⟨payoff, -, subsequence, hsubsequence, hlimit⟩ :=
-    (isCompact_Icc : IsCompact
-      (Set.Icc (fun _ : ι => -quittingRewardBound reward)
-        (fun _ : ι => quittingRewardBound reward))).tendsto_subseq hmem
-  have herrorLimit : Tendsto error atTop (nhds 0) := by
-    simpa [error] using (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
-  have hsubLimit : Tendsto (error ∘ subsequence) atTop (nhds 0) :=
-    herrorLimit.comp hsubsequence.tendsto_atTop
-  refine ⟨payoff, fun who => ?_, ?_⟩
-  · have hcoord : Tendsto
-        (fun step => quittingTerminalPayoff reward (lifted (subsequence step)) who.1)
-        atTop (nhds (payoff who.1)) :=
-      (tendsto_pi_nhds.mp hlimit) who.1
-    have hbound : ∀ step,
-        |quittingTerminalPayoff reward (lifted (subsequence step)) who.1 -
-          target who| ≤ (error ∘ subsequence) step := by
-      intro step
-      rw [quittingTerminalPayoff_liftDeletedProfile]
-      exact hclose (subsequence step) who
-    have hzero : |payoff who.1 - target who| ≤ 0 := by
-      refine le_of_tendsto_of_tendsto' ((hcoord.sub tendsto_const_nhds).abs)
-        hsubLimit hbound
-    have := abs_nonpos_iff.mp hzero
-    linarith [sub_eq_zero.mp this]
-  · refine quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
-      (filter := atTop) reward payoff (error ∘ subsequence)
-      (fun step => lifted (subsequence step)) hsubLimit ?_ hlimit
-    refine Filter.Frequently.of_forall fun step => ?_
-    exact isεAsymptoticNash_liftDeletedProfile_of_blockDispensable reward B hgate
-      (herrorPos (subsequence step)).le (hnash (subsequence step))
+  exact exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
+    reward (quittingDeleteBlockReward reward B) (fun who => who.1)
+    (quittingLiftDeletedProfile reward (· ∈ B)) 1
+    (fun profile who =>
+      quittingTerminalPayoff_liftDeletedProfile reward (· ∈ B) profile who)
+    (fun herror profile hnash => by
+      simpa only [one_mul] using
+        isεAsymptoticNash_liftDeletedProfile_of_blockDispensable
+          reward B hgate herror hnash)
+    target htarget
 
 /-! ## Cardinally symmetric survivors -/
 

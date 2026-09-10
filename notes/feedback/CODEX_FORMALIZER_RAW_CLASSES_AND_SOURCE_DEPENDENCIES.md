@@ -86,9 +86,9 @@ nor a supremum/expectation interchange is assumed.
 transports this bound to the actual Never lift of any child behavioral
 profile, with the child game's unrestricted debts on the right side.
 `quittingBehaviorStoppingLaws_liftDeletedProfile_eq_quiet` in the same file
-supplies the actual-law identification. Fixed-target extension, the relaxed
-Never-row criterion, and the remaining packet conclusions are not supplied
-by this debt theorem; neither packet is closed yet.
+supplies the actual-law identification. The relaxed Never-row criterion and
+the remaining packet conclusions are not supplied by this debt theorem;
+neither packet is closed yet.
 
 The child-game adapter reuses
 `quittingTerminalPayoff_liftDeletedProfile`,
@@ -112,12 +112,21 @@ with equal complete stopping laws. No equality on unreachable histories is
 required.
 
 For fixed targets,
+`exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalNashLift.lean`)
+extracts one parent payoff from a payoff-preserving profile lift with a fixed
+multiple of terminal Nash error. It preserves every mapped coordinate of
+the specified child target. The player map need not be injective.
+`isεAsymptoticNash_quietLift_of_cappedClockCertificate` and
+`exists_uniformEquilibriumPayoff_eq_some_of_cappedClockCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFixedTargetQuietExtension.lean`)
+apply this construction to the actual Never lift, with common error factor
+the maximum of one and the sum of certificate weights.
 `exists_uniformEquilibriumPayoff_eq_on_survivors_of_blockDispensable`
-(`UniformEquilibrium/Quitting/Classification/BlockDeletion.lean`) contains
-the existing subsequence and survivor-coordinate argument. Its dispensability
-hypothesis is not supplied by the new criterion. Reuse or generalize the
-compactness step with the new vanishing-regret bound, rather than invoke that
-theorem under an unproved deletion gate.
+(`UniformEquilibrium/Quitting/Classification/BlockDeletion.lean`) uses the
+same generic compactness theorem with factor one and its existing
+dispensability hypothesis. The capped-clock criterion does not assume or
+claim that deletion gate.
 
 The raw four-player consumer can use
 `quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three`
