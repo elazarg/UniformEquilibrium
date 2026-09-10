@@ -5,9 +5,10 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Topology.ExtendedOrbit
-import Mathlib.Analysis.Convex.Hull
+import Mathlib.Analysis.Convex.Combination
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Topology.Homotopy.Contractible
+import Mathlib.Topology.Order.Compact
 
 /-!
 # Simon's extended-orbit viability question
@@ -120,6 +121,26 @@ def IsFullDimensionalCompactConvexPolytope
   IsCompact set ∧ Convex ℝ set ∧ (interior set).Nonempty ∧
     ∃ vertices : Finset (EuclideanSpace Coordinate),
       set = convexHull ℝ (↑vertices : Set (EuclideanSpace Coordinate))
+
+/-- A rectangle with strict coordinate widths is a full-dimensional compact convex polytope. -/
+theorem isFullDimensionalCompactConvexPolytope_Icc
+    {Coordinate : Type*} [Fintype Coordinate] (lower upper : Coordinate → ℝ)
+    (hwidth : ∀ who, lower who < upper who) :
+    IsFullDimensionalCompactConvexPolytope (Set.Icc lower upper) := by
+  classical
+  refine ⟨isCompact_Icc, convex_Icc lower upper, ?_, ?_⟩
+  · rw [← Set.pi_univ_Icc, interior_pi_set Set.finite_univ]
+    refine ⟨fun who => (lower who + upper who) / 2, ?_⟩
+    intro who _
+    change (lower who + upper who) / 2 ∈ interior (Set.Icc (lower who) (upper who))
+    rw [interior_Icc]
+    constructor <;> linarith [hwidth who]
+  · have hfinite : (Set.univ.pi (fun who => {lower who, upper who})).Finite :=
+      Set.Finite.pi (fun who => (Set.finite_singleton (upper who)).insert (lower who))
+    refine ⟨hfinite.toFinset, ?_⟩
+    rw [Set.Finite.coe_toFinset, convexHull_pi]
+    simp_rw [convexHull_pair, segment_eq_Icc (hwidth _).le]
+    exact (Set.pi_univ_Icc lower upper).symm
 
 /-- The terminal image `H(C,1)` of the homotopy. -/
 def homotopyTerminalImage {E : Type*} (domain : Set E)

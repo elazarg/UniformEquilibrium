@@ -6685,6 +6685,82 @@ theorem isContractibleSet_truncatedW (G : QuittingGame) (R : ℝ)
   exact (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
     ((starConvex_truncatedW G R hR hsolo).contractibleSpace hnonempty)
 
+/-- The clipped upper corner of a truncated coordinate piece. -/
+noncomputable def truncatedPieceUpperCorner (G : QuittingGame) (R : ℝ) (j : G.Player) :
+    Payoff G.Player := by
+  classical
+  exact fun who => if who = j then min (R + 1) (SoloPayoff G j) else R + 1
+
+/-- A truncated coordinate piece is its literal clipped rectangle. -/
+theorem truncatedPiece_eq_Icc (G : QuittingGame) (R : ℝ) (j : G.Player) :
+    TruncatedPiece G R j =
+      Set.Icc (fun _ => -(R + 1))
+        (truncatedPieceUpperCorner G R j) := by
+  classical
+  ext point
+  constructor
+  · rintro ⟨hsolo, hbox⟩
+    refine ⟨fun who => (hbox who).1, fun who => ?_⟩
+    by_cases hwho : who = j
+    · subst who
+      simpa [truncatedPieceUpperCorner] using le_min (hbox j).2 hsolo
+    · simpa only [truncatedPieceUpperCorner, if_neg hwho] using (hbox who).2
+  · rintro ⟨hlower, hupper⟩
+    have hj : point j ≤ min (R + 1) (SoloPayoff G j) := by
+      simpa [truncatedPieceUpperCorner] using hupper j
+    refine ⟨hj.trans (min_le_right _ _), fun who => ⟨hlower who, ?_⟩⟩
+    by_cases hwho : who = j
+    · subst who
+      exact hj.trans (min_le_left _ _)
+    · simpa only [truncatedPieceUpperCorner, if_neg hwho] using hupper who
+
+/-- Strict lower-corner slack makes the actual truncated piece full-dimensional. -/
+theorem isFullDimensionalCompactConvexPolytope_truncatedPiece
+    (G : QuittingGame) (R : ℝ) (j : G.Player)
+    (hR : 0 < R + 1) (hsolo : -(R + 1) < SoloPayoff G j) :
+    IsFullDimensionalCompactConvexPolytope (TruncatedPiece G R j) := by
+  classical
+  rw [truncatedPiece_eq_Icc]
+  apply Math.Topology.SimonViability.isFullDimensionalCompactConvexPolytope_Icc
+  intro who
+  dsimp only [truncatedPieceUpperCorner]
+  by_cases hwho : who = j
+  · simp only [if_pos hwho]
+    exact lt_min (by linarith) hsolo
+  · simp only [if_neg hwho]
+    linarith
+
+/-- The Section 3 scale bounds provide the strict slack needed by every truncated piece. -/
+theorem truncatedPiece_strict_slack_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    0 < R + 1 ∧ ∀ j, -(R + 1) < SoloPayoff G j := by
+  obtain ⟨_, _, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by exact_mod_cast hplayers
+  have hM1 : 1 ≤ M := hM.1
+  have hNM : 3 ≤ (Fintype.card G.Player : ℝ) * M := by
+    nlinarith [mul_le_mul hN hM1 (by norm_num)
+      (by linarith : 0 ≤ (Fintype.card G.Player : ℝ))]
+  refine ⟨by linarith, fun j => ?_⟩
+  have hj := hM.2.1 ⟨{j}, Finset.singleton_nonempty j⟩ j
+  change |SoloPayoff G j| ≤ M / 3 at hj
+  have hRM : M / 3 < R + 1 := by nlinarith [hR, hNM]
+  linarith [neg_le_of_abs_le hj]
+
+/-- The actual coordinate pieces satisfy the polytope condition under the Section 3 choices. -/
+theorem truncatedPieces_areFullDimensionalCompactConvexPolytopes
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    ∀ j, IsFullDimensionalCompactConvexPolytope (TruncatedPiece G R j) := by
+  obtain ⟨hR, hsolo⟩ := truncatedPiece_strict_slack_of_section3Constants
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  exact fun j => isFullDimensionalCompactConvexPolytope_truncatedPiece G R j hR (hsolo j)
+
 /-- The lower part `D = closure(∂C \ ∂W)`. -/
 def LowerBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
   closure (frontier (TruncatedW G R) \ frontier (WSet G))
@@ -8626,10 +8702,9 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
 /--
 Theorem 4.1.  Besides Lemma 4.5, the paper uses perturbation stability,
 restriction to a cluster-point tail, exclusion of the lower glue, and the
-extended-orbit/equilibrium implication of Theorem 2.3.  These interfaces are
-all stated above, but their analytic proofs remain open; therefore the
-conditional theorem is not marked as checked by merely chaining `sorry`-based
-literature declarations.
+extended-orbit/equilibrium implication of Theorem 2.3. The latter implication
+is proved separately without unfinished imports. The other steps and the
+assembly through Lemma 4.5 remain incomplete.
 -/
 theorem theorem4_1 (hquestion : Question1Affirmative) :
     ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →

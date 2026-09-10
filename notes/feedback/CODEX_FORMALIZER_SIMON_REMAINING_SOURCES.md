@@ -76,9 +76,56 @@ common; their union is the literal truncated domain. The proof reuses
 Mathlib's star-convex contractibility theorem through
 `isContractibleSet_iff_contractibleSpace`
 (`MathUE/Topology/SimonViabilityQuestion.lean`). No separate contraction
-construction is assumed. Full-dimensionality of the pieces and terminal-
-diagonal exclusion are not supplied by these results; Question 1 and
-Lemma 4.5 remain incomplete.
+construction is assumed.
+
+`truncatedPieces_areFullDimensionalCompactConvexPolytopes`
+(`Literature/Simon2012.lean`) supplies full-dimensionality of every actual
+piece from the standing Section 3 constants. The proof identifies each piece
+with a clipped coordinate rectangle and derives strict lower-corner slack
+from the paper's scale bounds. The generic
+`isFullDimensionalCompactConvexPolytope_Icc`
+(`MathUE/Topology/SimonViabilityQuestion.lean`) supplies the literal finite
+corner convex hull, compactness, and nonempty ambient interior. Weak slack
+is sufficient for the contractibility result above but not for this
+full-dimensionality result. Terminal-diagonal exclusion is not supplied;
+Question 1 and Lemma 4.5 remain incomplete.
+
+## Remaining Section 4 assembly
+
+For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
+contractibility, polytope pieces, union decomposition, homotopy straightness,
+initial diagonal, and frontier fixing have component proofs. Positive piece
+count and the finite-index reindexing still need routine assembly. The
+remaining substantive fields of `QuestionOneHypotheses`
+(`MathUE/Topology/SimonViabilityQuestion.lean`) are:
+
+- terminal diagonal points of the actual homotopy lie on the frontier;
+- compactness of the neighborhood and inclusion of the frontier in its interior;
+- compactness of the local graph, including its switching boundary;
+- contractibility of the actual upper fibers, using their injectivity and
+  inverse-continuity estimates; and
+- one common positive scale for both small-step containment and all
+  boundary-piece escape clauses.
+
+The graph's first-coordinate containment, base-point fiber membership,
+defining inclusions into the joined graph, and compact terminal-image
+adapters are smaller remaining steps. The upper-fiber estimates are not
+conclusions of `corollary4_1` alone. Separate unrelated scale choices would
+not prove the final common-scale field.
+
+`lemma4_4` in the same Literature file is still open in its full stated form.
+Its supported positive-quitting-coordinate bound is proved. The checked
+counterexamples refute the isolated zero-quitter inference and a formulation
+without the standing assumptions, not the full lemma. The current
+`lemma4_5` assumes an ω cutoff; the corrected δ statement of `lemma4_3` does
+not by itself establish a δ version of `lemma4_5`.
+
+For `theorem4_1`, `exists_nonsingularPerturbation` in the same file already
+constructs the perturbation and preserves normality. The standalone
+extended-orbit-to-equilibrium direction is also proved. The actual joined-
+graph orbit localization, lower-glue and cutoff elimination, payoff/error
+transfer from the perturbation, and final assembly remain incomplete;
+generic orbit-tail machinery should be reused, not rebuilt.
 
 ## Markov variation
 
