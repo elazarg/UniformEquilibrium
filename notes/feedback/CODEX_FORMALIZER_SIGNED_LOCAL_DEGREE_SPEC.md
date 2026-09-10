@@ -182,8 +182,17 @@ prism labels with specified endpoint labels. Ordered vertices and signed
 weights are preserved. The box-family and discrete-switch theorems both
 specialize this construction under an incident-compatible integer selection.
 The finite cancellation needs spatial boundary rules, not continuity of
-the switch. Applying it to pulled labels at the left end and actual fine
-labels elsewhere still requires the collar and selection argument below.
+the switch.
+
+`boxComplementarityFloorRefinementPrism`
+(`Research/Topology/BoxComplementarityFloorRefinementPrism.lean`) constructs
+that switch for the actual problem: its left endpoint uses floor-pulled
+coarse labels and its right endpoint uses actual fine labels.
+`dist_boxComplementarityGridPoint_kuhnFloor_le_one_div` in the same file
+proves that every fine-grid point and its rounded coarse point are at most
+one coarse mesh width apart, uniformly over positive refinement factors.
+The collar and incident-compatible selection argument below remain to be
+supplied; the prism construction alone does not equate local counts.
 
 The analytic producer must establish one collar radius and one coarse
 threshold working for every positive `k`. Each label is sampled either at

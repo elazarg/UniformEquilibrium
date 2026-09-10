@@ -7685,6 +7685,387 @@ theorem ChainReductionData.exists_positive_composite_with_first
   refine ⟨y, pos_iff_ne_zero.mpr hy, ?_⟩
   simpa only [heq] using R.composite_eq_rootFirstAction_cons x hx y
 
+
+
+/-- Restricting a state-started law to its first action removes exactly the action PMF factor. -/
+theorem DDPSemantics.fromState_initialAction_inter
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.fromState x ({p | p.x 0 = x ∧ HEq (p.y 0) y} ∩ E) =
+      P.choose x y * PS.afterAction x y E := by
+  classical
+  let B : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
+  have hB : MeasurableSet B := measurableSet_ddpInitialStateAction P x y
+  have hterm (other : P.Y x) :
+      PS.afterAction x other (B ∩ E) = if other = y then PS.afterAction x y E else 0 := by
+    letI := PS.afterActionProbability x other
+    have hae : ∀ᵐ p ∂PS.afterAction x other,
+        p.x 0 = x ∧ HEq (p.y 0) other := by
+      apply (ae_iff.mpr ?_)
+      change PS.afterAction x other {p | p.x 0 = x ∧ HEq (p.y 0) other}ᶜ = 0
+      rw [measure_compl (measurableSet_ddpInitialStateAction P x other)
+        (by rw [PS.afterActionSupport]; simp), measure_univ, PS.afterActionSupport]
+      simp
+    by_cases heq : other = y
+    · subst other
+      rw [if_pos rfl]
+      apply measure_congr
+      filter_upwards [hae] with p hp
+      exact propext (and_iff_right hp)
+    · rw [if_neg heq]
+      apply measure_mono_null (show B ∩ E ⊆ {p | p.x 0 = x ∧ HEq (p.y 0) other}ᶜ from ?_)
+        (ae_iff.mp hae)
+      intro p hp hother
+      exact heq (eq_of_heq (hother.2.symm.trans hp.1.2))
+  change PS.fromState x (B ∩ E) = _
+  rw [PS.fromState_eq_initialActionMixture P x, Measure.sum_apply _ (hB.inter hE)]
+  simp only [Measure.smul_apply, smul_eq_mul, hterm, mul_ite, mul_zero]
+  exact tsum_ite_eq y _
+
+/-- A singleton block specifies its initial action and the first subsequent retained state. -/
+def SingletonCompositeBlockEvent (P : DiscreteDecisionProcess) (K : Set P.X)
+    (x : P.X) (y : P.Y x) (z : P.X) : Set (DDPPath P) :=
+  {p | p.x 0 = x ∧ HEq (p.y 0) y} ∩ FirstRetainedAt P K z
+
+theorem measurableSet_singletonCompositeBlockEvent
+    (P : DiscreteDecisionProcess) (K : Set P.X)
+    (x : P.X) (y : P.Y x) (z : P.X) :
+    MeasurableSet (SingletonCompositeBlockEvent P K x y z) :=
+  (measurableSet_ddpInitialStateAction P x y).inter
+    (measurableSet_firstRetainedAt P K z)
+
+/-- Actual original-path probability of a reduced action whose composite is a singleton. -/
+theorem ChainReductionData.singletonCompositeBlock_probability
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (y : R.reduced.Y x) (z : R.reduced.X)
+    (first : P.Y (R.kept x))
+    (hword : R.composite x y = [⟨R.kept x, first⟩]) :
+    PS.fromState (R.kept x)
+        (SingletonCompositeBlockEvent P (ChainRetainedStates P PS R.witness)
+          (R.kept x) first (R.kept z)) =
+      R.reduced.choose x y * R.reduced.move x y z := by
+  rw [SingletonCompositeBlockEvent, PS.fromState_initialAction_inter P _ _
+    (measurableSet_firstRetainedAt P _ _)]
+  rw [R.exitTransition x y z [] ⟨R.kept x, first⟩ (by simpa using hword)]
+  rw [R.composite_probability, hword]
+  simp only [List.map_cons, List.map_nil, List.prod_cons, List.prod_nil, mul_one]
+
+/-- Restart a DDP path at a specified sampled state, retaining the action chosen there. -/
+def DDPPath.shift (P : DiscreteDecisionProcess) (n : ℕ) (p : DDPPath P) : DDPPath P where
+  x i := p.x (n + i)
+  y i := p.y (n + i)
+
+theorem DDPPath.measurable_shift (P : DiscreteDecisionProcess) (n : ℕ) :
+    Measurable (DDPPath.shift P n) := by
+  have hstage (i : ℕ) :
+      Measurable (fun p : DDPPath P => (⟨p.x i, p.y i⟩ : DDPStage P)) := by
+    have hfinite : Measurable (fun h : DDPFinitePath P (i + 1) =>
+        (⟨h.x ⟨i, by omega⟩, h.y ⟨i, by omega⟩⟩ : DDPStage P)) :=
+      Measurable.of_discrete
+    exact hfinite.comp (DDPPath.measurable_prefix P (i + 1))
+  exact (DDPPath.measurable_ofRaw P).comp
+    (measurable_pi_lambda _ fun i => hstage (n + i))
+
+private theorem DiscreteDecisionProcess.rawLawAfterAction_cylinder_shift
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    (hstart : h.x 0 = x) (haction : HEq (h.y 0) y)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    P.rawLawAfterAction x y
+        (P.rawShift (k + 1) ⁻¹' (DDPPath.ofRaw P ⁻¹' E) ∩
+          (DDPPath.ofRaw P ⁻¹' DDPCylinder P h)) =
+      h.afterActionProbability P * PS.fromState (h.x (Fin.last (k + 1))) E := by
+  classical
+  let C : P.Y (h.x (Fin.last (k + 1))) → Set (ℕ → DDPStage P) := fun last =>
+    {stage | ∀ i : Fin (k + 2), stage i = h.stagesWithFinal P last i}
+  have hevent : DDPPath.ofRaw P ⁻¹' DDPCylinder P h = ⋃ last, C last := by
+    rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
+    ext stage
+    simp only [mem_iUnion, mem_setOf_eq, C]
+    constructor
+    · rintro ⟨⟨state, last⟩, hstate, hstage⟩
+      change state = h.x (Fin.last (k + 1)) at hstate
+      subst state
+      refine ⟨last, ?_⟩
+      simpa [h.extendWithFinalStage_mk P] using hstage
+    · rintro ⟨last, hstage⟩
+      refine ⟨⟨h.x (Fin.last (k + 1)), last⟩, rfl, ?_⟩
+      simpa [h.extendWithFinalStage_mk P] using hstage
+  have hmeasurable (last : P.Y (h.x (Fin.last (k + 1)))) : MeasurableSet (C last) :=
+    P.measurableSet_rawStageCylinder (k + 1) (h.stagesWithFinal P last)
+  have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro stage hfirst hsecond
+    apply hne
+    have hfinal := (hfirst (Fin.last (k + 1))).symm.trans
+      (hsecond (Fin.last (k + 1)))
+    exact eq_of_heq (by simpa using (Sigma.mk.inj_iff.mp hfinal).2)
+  have hrawE : MeasurableSet (DDPPath.ofRaw P ⁻¹' E) :=
+    (DDPPath.measurable_ofRaw P) hE
+  have hcell (last : P.Y (h.x (Fin.last (k + 1)))) :
+      P.rawLawAfterAction x y
+        (P.rawShift (k + 1) ⁻¹' (DDPPath.ofRaw P ⁻¹' E) ∩ C last) =
+      h.afterActionProbability P * (P.choose (h.x (Fin.last (k + 1))) last *
+        PS.afterAction (h.x (Fin.last (k + 1))) last E) := by
+    rw [DiscreteDecisionProcess.rawLawAfterAction]
+    rw [P.rawLawWithInitial_inter_shift _ (h.stagesWithFinal P last) hrawE]
+    have hlast : h.stagesWithFinal P last (Fin.last (k + 1)) =
+        (⟨h.x (Fin.last (k + 1)), last⟩ : DDPStage P) := by
+      simp only [DDPFinitePath.stagesWithFinal, DDPFinitePath.actionsWithFinal_last]
+    rw [hlast]
+    change P.rawLawAfterAction x y (C last) *
+      P.rawLawAfterAction (h.x (Fin.last (k + 1))) last (DDPPath.ofRaw P ⁻¹' E) = _
+    rw [P.rawLawAfterAction_stagesWithFinal x y h hstart haction last]
+    rw [PS.afterAction_eq_rawLaw P _ _,
+      Measure.map_apply (DDPPath.measurable_ofRaw P) hE]
+    exact mul_assoc _ _ _
+  rw [hevent, inter_iUnion, measure_iUnion]
+  · simp_rw [hcell]
+    rw [ENNReal.tsum_mul_left, PS.fromState_eq_initialActionMixture P _,
+      Measure.sum_apply _ hE]
+    simp only [Measure.smul_apply, smul_eq_mul]
+  · intro first second hne
+    exact (hpairwise hne).mono inter_subset_right inter_subset_right
+  · intro last
+    exact ((P.measurable_rawShift (k + 1)) hrawE).inter (hmeasurable last)
+
+/-- An actual finite forced-action cylinder restarts with the original state-started law. -/
+theorem DDPSemantics.afterAction_cylinder_shift
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    (hstart : h.x 0 = x) (haction : HEq (h.y 0) y)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.afterAction x y (DDPPath.shift P (k + 1) ⁻¹' E ∩ DDPCylinder P h) =
+      h.afterActionProbability P * PS.fromState (h.x (Fin.last (k + 1))) E := by
+  rw [PS.afterAction_eq_rawLaw P x y,
+    Measure.map_apply (DDPPath.measurable_ofRaw P)
+      (((DDPPath.measurable_shift P (k + 1)) hE).inter (measurableSet_ddpCylinder P h))]
+  exact P.rawLawAfterAction_cylinder_shift PS x y h hstart haction hE
+
+/-- The same restart identity includes cylinders inconsistent with the forced first action. -/
+theorem DDPSemantics.afterAction_cylinder_shift_mass
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) {k : ℕ} (h : DDPFinitePath P (k + 1))
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.afterAction x y (DDPPath.shift P (k + 1) ⁻¹' E ∩ DDPCylinder P h) =
+      PS.afterAction x y (DDPCylinder P h) * PS.fromState (h.x (Fin.last (k + 1))) E := by
+  by_cases hstart : h.x 0 = x
+  · by_cases haction : HEq (h.y 0) y
+    · rw [PS.afterAction_cylinder_shift P x y h hstart haction hE,
+        PS.afterActionCylinder x y k h hstart haction]
+    · have hz := PS.afterAction_cylinder_eq_zero_of_wrong P x y h (Or.inr haction)
+      rw [hz, zero_mul]
+      exact measure_mono_null inter_subset_right hz
+  · have hz := PS.afterAction_cylinder_eq_zero_of_wrong P x y h (Or.inl hstart)
+    rw [hz, zero_mul]
+    exact measure_mono_null inter_subset_right hz
+
+/-- First arrival at a specified positive time restarts with the actual law from that state. -/
+theorem DDPSemantics.afterAction_firstReturnAtTime_shift
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (z : P.X) (k : ℕ)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.afterAction x y (DDPPath.shift P (k + 1) ⁻¹' E ∩
+      {p | p.x (k + 1) = z ∧ z ∈ A ∧
+        ∀ i, 0 < i → i < k + 1 → p.x i ∉ A}) =
+      PS.afterAction x y {p | p.x (k + 1) = z ∧ z ∈ A ∧
+        ∀ i, 0 < i → i < k + 1 → p.x i ∉ A} * PS.fromState z E := by
+  classical
+  let H := {h : DDPFinitePath P (k + 1) //
+    h.x (Fin.last (k + 1)) = z ∧ z ∈ A ∧
+      ∀ i : Fin (k + 2), 0 < i.1 → i.1 < k + 1 → h.x i ∉ A}
+  let C : H → Set (DDPPath P) := fun h => DDPCylinder P h.1
+  have hevent : {p : DDPPath P | p.x (k + 1) = z ∧ z ∈ A ∧
+      ∀ i, 0 < i → i < k + 1 → p.x i ∉ A} = ⋃ h, C h := by
+    ext p
+    simp only [mem_setOf_eq, mem_iUnion, C]
+    constructor
+    · rintro ⟨hlast, hz, hbefore⟩
+      refine ⟨⟨p.prefix P (k + 1), hlast, hz, ?_⟩, rfl⟩
+      intro i hi hik
+      exact hbefore i.1 hi hik
+    · rintro ⟨h, hpref⟩
+      change p.prefix P (k + 1) = h.1 at hpref
+      refine ⟨?_, h.2.2.1, ?_⟩
+      · exact (congrArg
+          (fun q : DDPFinitePath P (k + 1) => q.x (Fin.last (k + 1))) hpref).trans h.2.1
+      · intro i hi hik
+        let j : Fin (k + 2) := ⟨i, by omega⟩
+        have hstate := congrArg (fun q : DDPFinitePath P (k + 1) => q.x j) hpref
+        change p.x i = h.1.x j at hstate
+        rw [hstate]
+        exact h.2.2.2 j hi hik
+  have hmeasurable (h : H) : MeasurableSet (C h) := measurableSet_ddpCylinder P h.1
+  have hpairwise : Pairwise (Function.onFun Disjoint C) := by
+    intro first second hne
+    rw [Function.onFun, Set.disjoint_left]
+    intro p hfirst hsecond
+    exact hne (Subtype.ext (hfirst.symm.trans hsecond))
+  have hcell (h : H) :
+      PS.afterAction x y (DDPPath.shift P (k + 1) ⁻¹' E ∩ C h) =
+        PS.afterAction x y (C h) * PS.fromState z E := by
+    rw [PS.afterAction_cylinder_shift_mass P x y h.1 hE, h.2.1]
+  rw [hevent, inter_iUnion, measure_iUnion]
+  · simp_rw [hcell]
+    rw [measure_iUnion hpairwise hmeasurable, ENNReal.tsum_mul_right]
+  · intro first second hne
+    exact (hpairwise hne).mono inter_subset_right inter_subset_right
+  · intro h
+    exact ((DDPPath.measurable_shift P (k + 1)) hE).inter (hmeasurable h)
+
+/-- First return to `A` at `z`, followed by `E` on the path restarted at that return. -/
+def FirstReturnThen (P : DiscreteDecisionProcess) (A : Set P.X) (z : P.X)
+    (E : Set (DDPPath P)) : Set (DDPPath P) :=
+  ⋃ k : ℕ, DDPPath.shift P k ⁻¹' E ∩
+    {p | 0 < k ∧ p.x k = z ∧ z ∈ A ∧ ∀ i, 0 < i → i < k → p.x i ∉ A}
+
+theorem measurableSet_firstReturnThen
+    (P : DiscreteDecisionProcess) (A : Set P.X) (z : P.X)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    MeasurableSet (FirstReturnThen P A z E) := by
+  apply MeasurableSet.iUnion
+  intro k
+  exact ((DDPPath.measurable_shift P k) hE).inter
+    (measurableSet_firstReturnAtTime P A z k)
+
+/-- The original forced-action law restarts at the first return; no return is presumed. -/
+theorem DDPSemantics.afterAction_firstReturnThen
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (x : P.X) (y : P.Y x) (A : Set P.X) (z : P.X)
+    {E : Set (DDPPath P)} (hE : MeasurableSet E) :
+    PS.afterAction x y (FirstReturnThen P A z E) =
+      PS.afterAction x y (FirstReturnAt P A z) * PS.fromState z E := by
+  have hcell (k : ℕ) :
+      PS.afterAction x y
+          (DDPPath.shift P k ⁻¹' E ∩ FirstReturnAtTime P A z k) =
+        PS.afterAction x y (FirstReturnAtTime P A z k) * PS.fromState z E := by
+    cases k with
+    | zero => simp [FirstReturnAtTime]
+    | succ k =>
+        simpa only [FirstReturnAtTime, Nat.succ_pos, true_and] using
+          PS.afterAction_firstReturnAtTime_shift P x y A z k hE
+  change PS.afterAction x y
+    (⋃ k, DDPPath.shift P k ⁻¹' E ∩ FirstReturnAtTime P A z k) = _
+  rw [measure_iUnion]
+  · simp_rw [hcell]
+    rw [firstReturnAt_eq_iUnion_time, measure_iUnion
+      (pairwise_disjoint_firstReturnAtTime P A z)
+      (measurableSet_firstReturnAtTime P A z), ENNReal.tsum_mul_right]
+  · intro first second hne
+    exact (pairwise_disjoint_firstReturnAtTime P A z hne).mono
+      inter_subset_right inter_subset_right
+  · intro k
+    exact ((DDPPath.measurable_shift P k) hE).inter
+      (measurableSet_firstReturnAtTime P A z k)
+
+/-- The literal action word observed at successive exits from `T`, followed by a retained exit. -/
+def CompositeBlockEvent (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X) :
+    List ((state : P.X) × P.Y state) → Set (DDPPath P)
+  | [] => ∅
+  | first :: tail => {p | p.x 0 = first.1 ∧ HEq (p.y 0) first.2} ∩
+      match tail with
+      | [] => FirstRetainedAt P K z
+      | next :: _ => FirstReturnThen P Tᶜ next.1 (CompositeBlockEvent P T K z tail)
+
+theorem measurableSet_compositeBlockEvent
+    (P : DiscreteDecisionProcess) (T K : Set P.X) (z : P.X)
+    (actions : List ((state : P.X) × P.Y state)) :
+    MeasurableSet (CompositeBlockEvent P T K z actions) := by
+  induction actions with
+  | nil => exact MeasurableSet.empty
+  | cons first tail ih =>
+      cases tail with
+      | nil =>
+          exact (measurableSet_ddpInitialStateAction P first.1 first.2).inter
+            (measurableSet_firstRetainedAt P K z)
+      | cons next rest =>
+          exact (measurableSet_ddpInitialStateAction P first.1 first.2).inter
+            (measurableSet_firstReturnThen P Tᶜ next.1 ih)
+
+/-- Deterministic first-exit links remove exactly their probability-one transition factors. -/
+theorem DDPSemantics.compositeBlockEvent_probability
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (T K : Set P.X) (z : P.X)
+    (first : (state : P.X) × P.Y state)
+    (tail : List ((state : P.X) × P.Y state))
+    (hchain : List.IsChain
+      (fun u v => PS.afterAction u.1 u.2 (FirstOutsideTAt P T v.1) = 1)
+      (first :: tail)) :
+    PS.fromState first.1 (CompositeBlockEvent P T K z (first :: tail)) =
+      ((first :: tail).map fun action => P.choose action.1 action.2).prod *
+        PS.afterAction ((first :: tail).getLast (List.cons_ne_nil _ _)).1
+          ((first :: tail).getLast (List.cons_ne_nil _ _)).2 (FirstRetainedAt P K z) := by
+  induction tail generalizing first with
+  | nil =>
+      rw [CompositeBlockEvent, PS.fromState_initialAction_inter P _ _
+        (measurableSet_firstRetainedAt P K z)]
+      simp
+  | cons next rest ih =>
+      have hlink := (List.isChain_cons_cons.mp hchain).1
+      have htail := (List.isChain_cons_cons.mp hchain).2
+      rw [CompositeBlockEvent, PS.fromState_initialAction_inter P _ _
+        (measurableSet_firstReturnThen P Tᶜ next.1
+          (measurableSet_compositeBlockEvent P T K z (next :: rest)))]
+      rw [PS.afterAction_firstReturnThen P first.1 first.2 Tᶜ next.1
+        (measurableSet_compositeBlockEvent P T K z (next :: rest))]
+      rw [← firstOutsideTAt_eq_firstReturnAt_compl, hlink, one_mul, ih next htail]
+      simp only [List.map_cons, List.prod_cons]
+      exact (mul_assoc _ _ _).symm
+
+/-- An actual composite reduced action has its original block-and-exit cylinder probability. -/
+theorem ChainReductionData.compositeBlockEvent_probability
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S)
+    (y : R.reduced.Y x) (z : R.reduced.X) :
+    PS.fromState (R.kept x)
+        (CompositeBlockEvent P T (ChainRetainedStates P PS R.witness)
+          (R.kept z) (R.composite x y)) =
+      R.reduced.choose x y * R.reduced.move x y z := by
+  classical
+  have hv := R.composite_valid x y
+  simp only [IsChainReductionAction, dif_pos hx] at hv
+  obtain ⟨first, tail, hword, hfirst, _, hchain, _⟩ := hv
+  rw [hword] at hchain
+  rw [← hfirst, hword, PS.compositeBlockEvent_probability P T _ _ first tail hchain]
+  rw [R.composite_probability, hword]
+  congr 1
+  apply Eq.symm
+  apply R.exitTransition x y z (first :: tail).dropLast
+    ((first :: tail).getLast (List.cons_ne_nil _ _))
+  exact hword.trans (List.dropLast_append_getLast (List.cons_ne_nil _ _)).symm
+/-- Normalized composite coverage supplies the root action alternative on positive support. -/
+theorem ChainReductionData.positive_root_actionStructure
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
+    {S T : Set P.X} (R : ChainReductionData P PS S T)
+    (x : R.reduced.X) (hx : R.kept x ∈ S) (first : P.Y (R.kept x))
+    (hfirst : 0 < P.choose (R.kept x) first) :
+    CompletingAction P PS (R.witness.chainSet (R.kept x)) T (R.kept x) first ∨
+      ∃ z ∈ R.witness.chainSet (R.kept x) \ T,
+        PS.afterAction (R.kept x) first (FirstOutsideTAt P T z) = 1 := by
+  classical
+  obtain ⟨y, _, hword⟩ := R.exists_positive_composite_with_first x hx first hfirst
+  have hv := R.composite_valid x y
+  simp only [IsChainReductionAction, dif_pos hx] at hv
+  obtain ⟨head, rest, heq, _, hstates, hchain, initial, last, hlast, hcomplete⟩ := hv
+  have hhead : head = ⟨R.kept x, first⟩ := (List.cons.inj (heq.symm.trans hword)).1
+  subst head
+  rw [heq] at hchain hlast
+  cases rest with
+  | nil =>
+      left
+      have hmem : last ∈ [Sigma.mk (R.kept x) first] := by
+        rw [hlast]
+        simp
+      have heqLast : last = Sigma.mk (R.kept x) first := List.mem_singleton.mp hmem
+      subst last
+      exact hcomplete
+  | cons next tail =>
+      exact Or.inr ⟨next.1, hstates next (List.mem_cons_self),
+        (List.isChain_cons_cons.mp hchain).1⟩
+
 /--
 Lemma 1.  If a chain reduction is `δ`-balanced, then for every `ε > 0` the original
 probability of `sup W_i > ε+δ` is at most the reduced probability of `sup W_i > ε`.
