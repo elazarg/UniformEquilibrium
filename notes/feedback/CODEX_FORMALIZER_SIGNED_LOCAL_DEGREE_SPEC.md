@@ -381,9 +381,13 @@ It uses the existing
 `Matrix.Pivot.exists_list_transvec_mul_diagonal_mul_list_transvec`
 (`Mathlib/LinearAlgebra/Matrix/Transvection.lean`) to obtain actual finite
 transvection lists and a diagonal factor, then scales their coefficients
-to zero. Transport from a general nonsingular centered matrix field to the
-computed diagonal index, and then affine local-degree comparison, remain
-separate obligations.
+to zero. `localDegree_centeredMatrix_eq_sign_det`
+(`Research/Topology/BoxComplementarityCenteredMatrixLocalIndex.lean`)
+transports the computed diagonal index to every nonsingular centered matrix
+field on the same central region. Joint continuity follows from the matrix
+path; pointwise injectivity supplies common isolation. No uniform inverse
+bound or supplied solution identity is required. Arbitrary affine-chart
+comparison remains a separate obligation.
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
 later local-linearization step.
