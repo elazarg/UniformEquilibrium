@@ -806,6 +806,22 @@ to the singleton-matrix affine map on every fixed bounded set of signed
 scaled hazards. It needs no fixed-point or no-equilibrium premise. This
 supplies the ambient comparison, not integer degree or its invariance laws.
 
+The Research construction
+`BoxComplementarityProblem.localDegree`
+(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
+integer on an isolating relatively open region of the unit cube.
+`BoxComplementarityProblem.eventually_localSignedCount_eq`
+(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+proves that every sufficiently fine positive grid gives the same actual
+anchor-selected signed count. The construction derives this equality from
+coordinate-floor refinement and an actual solution-free frontier collar;
+count invariance is not a premise.
+`IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
+in the stabilized-degree file proves homotopy invariance for jointly
+continuous families on a common isolating region. Affine normalization,
+regular-Jacobian comparison, and the game-specific integer-LCP consumer
+are not supplied by these Research theorems.
+
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
@@ -1730,6 +1746,34 @@ a game or strategy producer.
 
 These tools transport a supplied mechanism or existence result.  They do not
 supply density of solved games or construct a missing certificate.
+
+`exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalNashLift.lean`)
+transports every specified child payoff through an exact coordinate-payoff
+preserving profile lift whose terminal Nash errors have a fixed multiplier.
+One compact selection produces a parent target agreeing at every mapped
+child coordinate. Block deletion and capped-clock quiet extension use this
+same compactness theorem under their respective hypotheses.
+
+`CappedClockParentRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
+contains nonnegative weights and finite Never, future, and joining reward
+inequalities for one outsider and a nonempty child. It allows signed rewards.
+`quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)
+bounds the outsider's unrestricted terminal debt at the actual Never lift of
+every child profile. Survivor debts are preserved.
+`exists_uniformEquilibriumPayoff_eq_some_of_cappedClockCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFixedTargetQuietExtension.lean`)
+therefore extends each fixed child uniform-equilibrium payoff without
+changing its coordinates.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFinFourExistence.lean`)
+supplies a four-player uniform payoff from the reward certificate alone,
+using the three-player existence theorem for the child. It does not assume
+a child profile, a strategic source, or a dispensability gate. Neither the
+relaxed Never-row criterion nor a decision procedure for this raw class is
+claimed by these declarations.
 
 ## Boundary analysis and diagnostics
 

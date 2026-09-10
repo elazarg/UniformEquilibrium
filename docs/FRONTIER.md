@@ -4088,9 +4088,13 @@ in the live mathematical ledger.
   is an input. The actual signed-box comparison is supplied by
   `tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
   (`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`),
-  uniformly on every fixed bounded signed set. A constructed signed degree
-  with homotopy, excision and normalization laws is still needed. Mod-two
-  counts do not supply that integer invariant.
+  uniformly on every fixed bounded signed set.
+  `BoxComplementarityProblem.localDegree` and
+  `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
+  (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) construct
+  the mesh-independent integer and homotopy invariance on an isolating
+  region. Affine normalization and the integer-LCP comparison remain to be
+  supplied. These Research results do not yet close this game-semantic route.
 - **Returned-block tangent obstruction:**
   `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` proves that
   bounded returned product blocks with vanishing total hazard and aggregate
