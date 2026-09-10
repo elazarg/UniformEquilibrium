@@ -7212,6 +7212,66 @@ structure ChainReducibilityWitness (P : DiscreteDecisionProcess) (PS : DDPSemant
     CompletingAction P PS (chainSet s) T x y ∨ ∃ z ∈ chainSet s \ T,
       PS.afterAction x y (FirstOutsideTAt P T z) = 1
 
+/-- First exits at distinct displayed states are disjoint. -/
+private theorem disjoint_firstOutsideTAt_of_ne
+    (P : DiscreteDecisionProcess) (T : Set P.X) {z w : P.X} (hzw : z ≠ w) :
+    Disjoint (FirstOutsideTAt P T z) (FirstOutsideTAt P T w) := by
+  rw [firstOutsideTAt_eq_firstReturnAt_compl,
+    firstOutsideTAt_eq_firstReturnAt_compl]
+  exact pairwise_disjoint_firstReturnAt P Tᶜ hzw
+
+/-- A positive-mass first exit cannot be disjoint from a probability-one first exit. -/
+private theorem firstOutsideTAt_eq_of_pos_of_eq_one
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P) (T : Set P.X)
+    {x : P.X} {y : P.Y x} {z w : P.X}
+    (hz : 0 < PS.afterAction x y (FirstOutsideTAt P T z))
+    (hw : PS.afterAction x y (FirstOutsideTAt P T w) = 1) : z = w := by
+  by_contra hne
+  have hdisjoint := disjoint_firstOutsideTAt_of_ne P T hne
+  have hsubset : FirstOutsideTAt P T z ⊆ (FirstOutsideTAt P T w)ᶜ :=
+    Set.disjoint_left.mp hdisjoint
+  have hcomplement : PS.afterAction x y (FirstOutsideTAt P T w)ᶜ = 0 := by
+    letI : IsProbabilityMeasure (PS.afterAction x y) :=
+      PS.afterActionProbability x y
+    rw [measure_compl (measurableSet_firstOutsideTAt P T w)]
+    · rw [hw]
+      simp
+    · exact measure_ne_top _ _
+  have hzero : PS.afterAction x y (FirstOutsideTAt P T z) = 0 :=
+    measure_mono_null hsubset hcomplement
+  rw [hzero] at hz
+  exact (lt_irrefl 0) hz
+
+/--
+The action-structure alternative is determined by an actually observed
+positive-mass first exit.  An exit back into the chain set is its unique
+probability-one successor; an exit outside the chain set makes the action
+completing.
+-/
+theorem ChainReducibilityWitness.observedFirstOutside_classification
+    {P : DiscreteDecisionProcess} {PS : DDPSemantics P} {S T : Set P.X}
+    (W : ChainReducibilityWitness P PS S T) {s x z : P.X}
+    (hs : s ∈ S) (hx : x ∈ W.chainSet s \ T) (y : P.Y x)
+    (hpositive : 0 < PS.afterAction x y (FirstOutsideTAt P T z)) :
+    (z ∈ W.chainSet s →
+      PS.afterAction x y (FirstOutsideTAt P T z) = 1) ∧
+    (z ∉ W.chainSet s → CompletingAction P PS (W.chainSet s) T x y) := by
+  rcases W.actionStructure s hs x hx y with hcomplete | ⟨w, hw, hprobability⟩
+  · exact ⟨fun hz ↦ by
+      exfalso
+      have hsubset : FirstOutsideTAt P T z ⊆
+          ⋃ state ∈ W.chainSet s, FirstOutsideTAt P T state := by
+        intro path hpath
+        exact mem_iUnion_of_mem z (mem_iUnion_of_mem hz hpath)
+      have hzero := measure_mono_null hsubset hcomplete
+      rw [hzero] at hpositive
+      exact (lt_irrefl 0) hpositive,
+      fun _ ↦ hcomplete⟩
+  · have hzw : z = w :=
+      firstOutsideTAt_eq_of_pos_of_eq_one P PS T hpositive hprobability
+    subst w
+    exact ⟨fun _ ↦ hprobability, fun hz ↦ (hz hw.1).elim⟩
+
 /-- `S,T` are chain reducible when the paper's explicit chain witness exists. -/
 def ChainReducible (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
     (S T : Set P.X) : Prop :=
@@ -7224,12 +7284,53 @@ inside `A \ T`, and ends in a completing action.
 def IsCompositeActionList (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
     (A T : Set P.X) (s : P.X) (actions : List ((z : P.X) × P.Y z)) : Prop :=
   ∃ first rest, actions = first :: rest ∧ first.1 = s ∧
-    (∀ z ∈ actions, z.1 = s ∨ z.1 ∈ A \ T) ∧
+    (∀ z ∈ rest, z.1 ∈ A \ T) ∧
     List.IsChain
       (fun u v => PS.afterAction u.1 u.2 (FirstOutsideTAt P T v.1) = 1)
       actions ∧
     ∃ initialActions last, actions = initialActions ++ [last] ∧
       CompletingAction P PS A T last.1 last.2
+
+/-- A completing composite word cannot be a proper prefix of another one. -/
+private theorem compositeActionList_prefix_eq
+    (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
+    (A T : Set P.X) (s : P.X)
+    {actions longer : List ((z : P.X) × P.Y z)}
+    (hactions : IsCompositeActionList P PS A T s actions)
+    (hlonger : IsCompositeActionList P PS A T s longer)
+    (hprefix : actions <+: longer) : actions = longer := by
+  rcases hprefix with ⟨tail, rfl⟩
+  cases tail with
+  | nil => simp
+  | cons next suffix =>
+      exfalso
+      rcases hactions with
+        ⟨first, rest, hnonempty, _hfirst, _hstates, _hchain,
+          initial, last, hlast, hcomplete⟩
+      rcases hlonger with
+        ⟨longFirst, longRest, hlongNonempty, _hlongFirst, hlongStates,
+          hlongChain, _hlongLast⟩
+      have hnextMem : next ∈ longRest := by
+        have hlongEq : first :: (rest ++ next :: suffix) =
+            longFirst :: longRest := by
+          simpa only [hnonempty, List.cons_append] using hlongNonempty
+        have hrestEq : rest ++ next :: suffix = longRest :=
+          (List.cons.inj hlongEq).2
+        rw [← hrestEq]
+        simp
+      have hnextA : next.1 ∈ A := (hlongStates next hnextMem).1
+      have hrelation :
+          PS.afterAction last.1 last.2 (FirstOutsideTAt P T next.1) = 1 := by
+        apply (List.isChain_iff_forall_rel_of_append_cons_cons.mp hlongChain)
+          (l₁ := initial) (l₂ := suffix)
+        simp only [hlast, List.append_assoc, List.singleton_append]
+      have hsubset : FirstOutsideTAt P T next.1 ⊆
+          ⋃ z ∈ A, FirstOutsideTAt P T z := by
+        intro path hpath
+        exact mem_iUnion_of_mem next.1 (mem_iUnion_of_mem hnextA hpath)
+      have hzero := measure_mono_null hsubset hcomplete
+      rw [hrelation] at hzero
+      exact one_ne_zero hzero
 
 /-- The retained state set of the chain reduction. -/
 def ChainRetainedStates (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
