@@ -904,6 +904,11 @@ of the homogeneous minimum-complementarity map. The same module proves its
 independence of positive scalar chart radius, equality with every bounded
 offset family's degree on one sufficiently large central region, and
 `isStandardQ_of_r0Degree_ne_zero`. These statements allow nonisolated roots.
+`BoxComplementarityProblem.exists_solution_not_mem_closure_of_localDegree_ne_one`
+(`MathUE/Topology/BoxComplementarityDegreeEscape.lean`) extracts an actual
+solution outside the closure of any isolating region whose local degree differs
+from the whole cube's degree one. Applying it to a quitting-game response
+quotient still requires a source-specific local-degree calculation.
 `r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
 (`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`) derives
 degree one from full R0 and a uniform scaled bound on every actual discounted
@@ -1050,7 +1055,49 @@ lift a balanced certificate on the literal deleted child to the parent and
 then to one fixed uniform payoff when each outside singleton-difference row
 is a nonnegative combination of child rows. Nonsingleton rewards are
 unrestricted. Producing the child certificate from a raw strict
-inverse-positive triple is a separate obligation.
+inverse-positive triple is supplied by
+`exists_balancedCertificate_of_strictlyPositiveInverse_child`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/StrictInversePassiveRowCycle.lean`).
+Together with the literal passive rows,
+`exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows` gives a fixed
+uniform payoff for the parent game. This is an actual child-cycle producer,
+not a theorem conditional on a supplied cycle.
+`exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowCycle.lean`)
+extends this to an invertible three-player child matrix with entrywise
+nonnegative inverse. Its literal nearby parent reward tables preserve the
+same outside row weights, and reward-table closure selects one fixed payoff
+for the original game. The theorem still requires the raw outside-row
+factorization; it does not assert that every reward table has one.
+`PassiveRowInverseCriterion.exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`)
+supplies that factorization from the packet's literal matrix test: an
+invertible three-player child matrix `T` with `T⁻¹ ≥ 0` and, for every
+outside receiver, `ΓₖS T⁻¹ ≥ 0`. It then returns a fixed parent uniform
+payoff, without a supplied cycle, row factorization, or strategy. This is
+the full raw-table sufficient class; it is not a universal existence theorem.
+`PassiveRowFourFixture.target_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourFixture.lean`)
+checks the packet's rational four-player singleton matrix, its selected
+three-player inverse and outside-row weights, and its explicit phase-zero
+uniform payoff for every reward completion with that singleton matrix.
+The module does not calculate the matrix's R0 degree or prove an open
+neighborhood result; those are proved in
+`PassiveRowFourDegreeNeighborhood.exists_open_degree_one_uniformPayoff_class`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourDegreeNeighborhood.lean`).
+It gives a nonempty open set in the full four-player reward-table space on
+which the literal singleton matrix has R0 degree one and every game has a
+uniform-equilibrium payoff. The degree calculation uses a finite support
+inventory; the payoff conclusion uses the raw inverse-weight criterion.
+
+`QuittingResponseInvariantOnUnitCube` and
+`quittingSingletonMatrix_mulVec_blockLift_eq_quotient`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotient.lean`)
+turn equality of the actual stationary residual within each block of a
+partition into the exact singleton-matrix relation `Γ E = E A`. The same
+module defines a continuous clipped quotient response map and proves its
+coordinatewise fixed-point sign conditions. It does not yet compute the
+map's local degree or produce a nonzero stationary Nash–Bellman root.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2042,6 +2089,28 @@ same compactness theorem under their respective hypotheses.
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
 contains nonnegative weights and finite Never, future, and joining reward
 inequalities for one outsider and a finite child set. It allows signed rewards.
+`DeadlineWithdrawalRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalRaw.lean`)
+records the distinct finite deadline-withdrawal N/F/J rows, the zero/passive
+withdrawal floor, and separate advance and withdrawal weights. Its checked
+all-evaluation debt theorem currently covers the zero-withdrawal subcone by
+the capped-clock consumer. The positive-withdrawal comparison requires a
+mixed private-clock law and is not yet proved by this module.
+`deadlineMixedPrivateClockLaw_gain_identity` and
+`deadlineMixedPrivateClockLaw_evaluatedGain_identity`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalMixedLaw.lean`)
+construct the legal private-clock coin and prove that its conditional gain,
+multiplied by `max(a,b)`, equals the advance gain weighted by `a` plus the
+exact deadline-atom withdrawal gain weighted by `b`. Advancing and withdrawal
+are selected on disjoint clock events. The independent-product expectation
+and full behavioral-debt comparison remain separate obligations.
+`deadlineWithdrawalActualEvaluatedChildGain_tie_ge_floor` and
+`deadlineWithdrawal_futureRows_evaluated`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalPointwise.lean`)
+give the actual evaluated withdrawal floor on a tied deadline, including
+singleton and nonsingleton first coalitions, and the weighted future-row
+inequality. The deterministic combination of all N/F/J rows, product-law
+expectation, and full behavioral comparison are not yet checked.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.

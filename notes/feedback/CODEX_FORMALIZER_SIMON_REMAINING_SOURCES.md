@@ -392,12 +392,55 @@ joined-graph localization and half-box results are also proved. The remaining
 work is the source-required cutoff elimination and assembly through
 Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
 
+### Remaining Simon (2012) declarations
+
+- `lemma4_4` (`Literature/Simon2012.lean`):
+  `continuationCoordinate_ge_neg_half_radius_of_mem_truncatedW` supplies every
+  lower coordinate bound, and `supportedContinuation_abs_le_half_radius`
+  supplies both bounds when the player quits with positive probability. The
+  missing premise is the upper bound `z.1.1 j ≤ R + 1` for a zero-quitting
+  player under the theorem's full standing hypotheses.
+- `lemma4_5` (`Literature/Simon2012.lean`): the checked Section 4 component
+  declarations supply every field of `Question1Hypotheses` except the
+  common-scale `smallStepGraph` containment. The zero-cutoff,
+  positive-cutoff small-quitting, and bounded positive-cutoff branches have
+  terminal-image adapters. The remaining positive-cutoff, large-quitting,
+  outside-box branch needs a cutoff-coefficient bound sufficient to make its
+  checked terminal displacement exceed `Section4Omega`; no such bound is
+  established without the open upper-coordinate conclusion of `lemma4_4`.
+- `theorem4_1` (`Literature/Simon2012.lean`): a completed `lemma4_5` would let
+  `Question1Affirmative` supply unbounded `Section4J` orbits. The checked
+  `exists_unbounded_section4J_tail_in_halfPayoffBox`,
+  `gluedFiber_subset_fRow_of_mem_halfPayoffBox`,
+  `ExtendedUnrestrictedOrbitCondition.hasQuitApproximateEquilibria`, and
+  `allNormal_quitApproximateEquilibria_of_nonsingular_case` provide the
+  localization, quitting, and perturbation interfaces. The remaining Lean
+  adapter must convert the actual small-step graph orbit through those
+  interfaces; it also depends on the open `lemma4_5` field.
+- `question1_affirmative_implies_all_quitting_games`
+  (`Literature/Simon2012.lean`): `lemma5_1`, `minimumAbnormalGap_pos`,
+  `exists_section5Accuracy`, and `Section5ModifiedC` supply only the Section 5
+  setup. The paper sketches, but does not verify, the modified boundary
+  homotopy and glue or their seven Question 1 hypotheses. The all-normal
+  `theorem4_1` does not cover this abnormal-player branch.
+
+No remaining `sorry` has a source-complete proof obtainable solely by
+assembling the currently checked declarations.
+
 ## Markov variation
 
 `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound`
 (`Literature/Simon2007.lean`) reduces Lemma 2 to a finite-horizon global bound
 by the number of states. The same file proves qualitative finiteness under
 time homogeneity and supplies the actual cylinder-law adapters.
+The remaining mathematical statement is self-contained in
+[the finite homogeneous Markov variation question](../../math/questions/FINITE_HOMOGENEOUS_MARKOV_MARTINGALE_VARIATION.md):
+for every finite homogeneous kernel, horizon, and unit-interval
+backward-harmonic value, the expected total absolute martingale increment
+is at most the state count. The exact state-owned decomposition is already
+`finiteExpectedSpaceTimeMarkovVariation_eq_sum_stateOwned`
+(`MathUE/Probability/HarmonicStateAccount.lean`). No replacement proof of
+the global bound is formalized.
 
 The proposed per-state renewal input is false:
 `SevenStateVisitEpochCounterexample.not_homogeneousBackwardHarmonicVisitEpochPrinciple`
@@ -414,3 +457,25 @@ reduced transition law. It does not construct that data from every
 chain-reducibility witness. The root-action and simultaneous-root-retention
 questions, and the checked trace and advantage comparisons, are recorded in
 [the chain-reduction source note](CODEX_FORMALIZER_SIMON_CHAIN_REDUCTION_SOURCE_QUESTION.md).
+
+## Remaining Simon (2007) declarations
+
+The ten live `sorry` occurrences in `Literature/Simon2007.lean` have these
+nearest checked dependencies and unresolved inputs:
+
+| Declaration | Checked boundary | Missing input |
+| --- | --- | --- |
+| `ApproximateEquilibriaImplyPerfect` | `EpsilonSelfPerfect.mono` only transports a supplied perfection witness across tolerances. | Simon [16]'s equilibrium-to-perfection construction for the actual stochastic-game law; no checked witness extractor supplies the common good set and local action inequalities. |
+| `theorem1` | `EpsilonViable.mono` and the paper's `CumulativeAdvantage`/`AdvantageCrossingEvent` are available. | The behavioral-profile patching and payoff estimate from self-perfection, viability, and the crossing-event bound to the stated equilibrium constant. |
+| `lemma2` | `MarkovSemantics.finiteExpectedVariation_eq_production` and `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound` give the cylinder-law adapter and exact finite-horizon reduction. | The global state-count finite-horizon variation inequality; the proposed single-state renewal bound is false, as noted above. |
+| `lemma5` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` apply under the *corrected* stronger branch exclusion and restricted carrier. | The printed 2007 hypotheses and unrestricted global motion conclusion are not supplied by those results. The 2012 correction changes both; this is not a Lean transport task. |
+| `lemma5_corrected_2012` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` prove its harm and motion/survival clauses. `Literature.Simon2012.lemma2_1_part1`, `lemma2_1_part2`, and `lemma2_1` reuse this declaration. | The positive-normal-player clause under failure of the instant and stationarily generated branches, exactly the source obligation in “Corrected Lemma 5” above. The 2012 theorems cannot be imported back to discharge it. |
+| `theorem3` | `CyclicOrbitCondition.hasQuitApproximateEquilibria`, `FiniteNearOrbitCondition.toCyclicOrbitCondition`, and `CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho` assemble the other edges. | Its local `HasQuitApproximateEquilibria → CyclicOrbitCondition` hole, as well as the open printed `lemma5` it invokes. The checked `hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction` requires a separate extraction premise and corrected motion. |
+| `theorem3_corrected_2012` | `CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion` and the same orbit compilers cover the non-forward edges; `Literature.Simon2012.theorem2_1` only transports this very declaration to Euclidean norm. | `lemma5_corrected_2012` plus `HasCorrectedFirstCrossingPathExtraction` (or an equivalent equilibrium-to-cyclic proof). The conditional checked first-crossing compiler does not construct its extraction premise. |
+| `KohlbergMertensStatement` | `MatrixEquilibriumGraph` and `MatrixNorm` express the matrix-game target. | The external Kohlberg–Mertens homotopy theorem in the stated straight/proper form; no checked homotopy construction is present. |
+| `lemma8` | `repeatedF_eq_iterate_of_no_sure_quit` identifies the repeated payoff correspondence under the no-sure-quit premise. | A connected-component lifting argument for the repeated-equilibrium graph over connected compact `D`, using the matrix-equilibrium topology (including the open Kohlberg–Mertens input), not just payoff-set equality. |
+| `theorem4` | `lemma10` preserves the restricted escape region and `lemma11_of_crossHarm` reaches a critical point by a finite restricted orbit under its explicit motion/cross-harm inputs. | The final critical-point-to-approximate-equilibrium assembly, including the requisite equilibrium-component/topological step and discharge of the corrected Lemma 5 inputs. The checked critical-point orbit alone is not an equilibrium. |
+
+None of these ten is currently a source-complete theorem awaiting only a
+non-circular Lean transport: the apparently matching 2012 statements depend
+on the corresponding open 2007 declarations.

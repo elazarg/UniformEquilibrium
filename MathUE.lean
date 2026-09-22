@@ -602,6 +602,7 @@ import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex
 import MathUE.Topology.BoxComplementarityCubicalSperner
 import MathUE.Topology.BoxComplementarityDiagonalChain
 import MathUE.Topology.BoxComplementarityDiagonalLocalIndex
+import MathUE.Topology.BoxComplementarityDegreeEscape
 import MathUE.Topology.BoxComplementarityFamilyCollar
 import MathUE.Topology.BoxComplementarityFiniteAdditivity
 import MathUE.Topology.BoxComplementarityFloorRefinementPrism
