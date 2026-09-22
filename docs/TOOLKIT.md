@@ -749,8 +749,8 @@ every sufficiently small positive discount has only small-total-hazard
 fixed points in the cube for the canonical auxiliary reward table. The
 threshold precedes both the discount and the fixed point. The proof handles
 signed rewards through the existing original-game punishment consumer;
-it requires neither normality nor an R0 or degree hypothesis. It does not
-construct the integer degree used in the remaining LCP argument.
+it requires neither normality nor an R0 or degree hypothesis. The degree
+comparison below uses this source result.
 
 `isStandardLCPSolution_of_quittingDiscountedFixedPoint`
 (`UniformEquilibrium/Quitting/Stationary/DiscountedR0Localization.lean`)
@@ -817,14 +817,14 @@ These are chart-level statements, not chart independence or an identification
 with ambient Brouwer degree. The generic problem and continuous-family
 definitions reside in `MathUE/Topology/BoxComplementarityProblem.lean`.
 
-The Research construction
+The construction
 `BoxComplementarityProblem.localDegree`
-(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
+(`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
 integer for each isolating relatively open region of the unit cube, normalized
 to one on the whole cube. It is `(-1)^n` times `BoxComplementarityProblem.rawLocalDegree`,
 the literal eventual signed count.
 `BoxComplementarityProblem.eventually_localSignedCount_eq`
-(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 proves that every sufficiently fine positive grid gives the same actual
 anchor-selected signed count. The construction derives this equality from
 coordinate-floor refinement and an actual solution-free frontier collar;
@@ -833,27 +833,27 @@ count invariance is not a premise.
 in the stabilized-degree file proves homotopy invariance for jointly
 continuous families on a common isolating region.
 `BoxComplementarityProblem.localDegree_univ_eq_one`
-(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+(`MathUE/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
 normalization from the actual unique mesh-one simplex, whose signed weight
-is `(-1)^n`. Ambient Brouwer identification, affine and regular-Jacobian
-comparison, and the game-specific integer-LCP consumer
-are not supplied by these Research theorems.
+is `(-1)^n`. The ambient affine comparison and game-specific consumer are
+described below. No general regular-Jacobian or arbitrary-chart theorem is
+assumed by that consumer.
 `BoxComplementarityProblem.localDegree_union_of_disjoint` and
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_localDegree_coherent`
-(`Research/Topology/BoxComplementarityLocalDegreeConsequences.lean`) give
+(`MathUE/Topology/BoxComplementarityLocalDegreeConsequences.lean`) give
 disjoint-region additivity and excision within an actual frontier collar.
 `BoxComplementarityProblem.exists_solution_mem_of_localDegree_ne_zero`
 in the same file gives an actual solution in any isolating region of nonzero
 degree, without requiring that relatively open region to be compact.
 `BoxComplementarityProblem.localDegree_eq_of_gain_eqOn_frontier`
-(`Research/Topology/BoxComplementarityFrontierReplacement.lean`) preserves
+(`MathUE/Topology/BoxComplementarityFrontierReplacement.lean`) preserves
 degree when the gain fields agree on the region frontier. The explicit
 straight-line family supplies continuity and common isolation from just
 one endpoint's isolation.
 
 `BoxComplementarityProblem.localDegree_scaleGain` and
 `BoxComplementarityProblem.localDegree_ofAmbientMap_dilation`
-(`Research/Topology/BoxComplementarityPositiveRescalingDegree.lean`) preserve
+(`MathUE/Topology/BoxComplementarityPositiveRescalingDegree.lean`) preserve
 normalized degree under positive gain scaling and under a translated positive
 dilation with the displayed transformed field, rectangle, and region.
 Positive scaling also preserves every actual grid label. The dilation result
@@ -862,19 +862,55 @@ of the pulled-back problems up to positive scaling. It does not compare
 arbitrary charts for an unchanged ambient field.
 
 `completeSimplex_diagonalOrderedChain` and `signedWeight_diagonalOrderedChain`
-(`Research/Topology/BoxComplementarityDiagonalChain.lean`) construct one
+(`MathUE/Topology/BoxComplementarityDiagonalChain.lean`) construct one
 actual complete central simplex for a centered nonzero diagonal field and
 compute its signed weight, including dimension zero. The negative
 coordinates are ordered increasingly and the positive ones decreasingly;
-the dimension label lies between the two groups. These theorems do not yet
-prove that this is the only selected simplex or compute the local degree.
+the dimension label lies between the two groups.
+`localCompleteSimplices_centeredDiagonal_eq_singleton` and
+`localDegree_centeredDiagonal_eq_sign_det`
+(`MathUE/Topology/BoxComplementarityDiagonalLocalIndex.lean`) prove uniqueness
+in the central region and identify the normalized local degree with the
+determinant sign.
 
 `Math.LinearAlgebra.exists_path_diagonal_det_eq`
 (`MathUE/LinearAlgebra/MatrixDiagonalDeterminantPath.lean`) constructs a
 continuous determinant-preserving path from any real square matrix to a
 diagonal matrix, including singular matrices and the empty index type.
 It reuses finite transvection factorization. This supplies a matrix
-deformation, not the remaining affine local-degree comparison.
+deformation.
+`localDegree_affineRootProblem_eq_sign_det`
+(`MathUE/Topology/BoxComplementarityAffineLocalIndex.lean`) supplies the affine
+local-degree comparison. `exists_finset_lcpMinBoxProblem_localDegree_eq_sum_sign_det`
+(`MathUE/LinearProgramming/RootDegreeSum.lean`) constructs the complete finite
+root set in a supplied isolating interior region and computes its total index
+from active determinant signs when its actual roots are strictly complementary
+and have nonsingular active matrices. These regularity assumptions serve
+finite calculations; they are absent from the following existence criterion.
+
+`r0Degree` (`MathUE/LinearProgramming/R0Degree.lean`) is the canonical integer
+of the homogeneous minimum-complementarity map. The same module proves its
+independence of positive scalar chart radius, equality with every bounded
+offset family's degree on one sufficiently large central region, and
+`isStandardQ_of_r0Degree_ne_zero`. These statements allow nonisolated roots.
+`r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`) derives
+degree one from full R0 and a uniform scaled bound on every actual discounted
+clipped fixed point. It compares shrinking regions in one fixed chart using
+the actual source approximation, self-map normalization, and solution excision.
+It includes dimension zero and supplies no localization assumption itself.
+
+`singleton_r0Degree_eq_one_of_no_uniformPayoff` and
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+(`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`)
+give the game-semantic criterion for every player count `Fin n`: full R0 and
+degree different from one yield an original uniform payoff. Rewards may have
+arbitrary signs. The actual auxiliary-source localization is derived from
+original-game nonexistence, never from an assumed auxiliary-game nonexistence.
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`)
+additionally derives full R0 itself from nonexistence in four players.
+The general four-player conjecture remains open.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
@@ -1563,7 +1599,7 @@ compression and preservation of both masses exactly are not asserted.
 | Ballistic normalized omega chain, balanced occupation, and selected-chain no-go (Research-only) | `MathUE/Topology/SourceOmegaChain.lean`, `MathUE/Topology/CompactOrbitOccupation.lean`, `Research/Quitting/FinFourProducerAtlas/BallisticNormalizedOmegaChain.lean`, `Research/Quitting/FinFourProducerAtlas/BallisticNormalizedOccupation.lean`, and `Research/Quitting/BallisticNormalizedSelectedChainRegression.lean` | `Math.Topology.nonempty_sourceOmegaChain` extracts one bi-infinite path from a one-sided compact source with a common strict center subsequence; `SourceOmegaChain.sourceFiniteWindow_tendsto` retains literal consecutive finite source windows. From a source-attached strict Fin4 flow with full limiting binding and eventual positive current hazards, `nonempty_ballisticNormalizedOmegaChain_of_fullBinding_of_eventually_all_currentHazard_pos` constructs this chain on the same actual ray. `source_current_tendsto`, `source_tail_tendsto`, `source_ratio_tendsto`, `renewal`, `work_nonpos`, and `current_work_eq_zero` expose exact source dates, renewal, collision feasibility, and complementarity. `FinFourBallisticNormalizedOmegaChain.nonempty_normalizedOccupation` produces an empirical edge limit whose `marginals_eq` and `support_subset_ballisticEdgeGraph` give a balanced probability flow on the closed normalized relation. The actual chain has `M`, `L`, and `A` under its explicit full-binding/eventual-support hypotheses, but no `C`. Separately, `BallisticNormalizedSelectedChainRegression.stateAt_edge`, `stateAt_current_ge_one_eighth`, and `stateAt_not_periodic` give an exact full-support aperiodic orbit with ratio `1/2`; `fixedState_edge` exhibits a fixed point in the same relation, and the `soloMatrix_...` declarations retain the full paired-singleton hard class. That regression has `M` and `L` only: it is not an actual quitting ray, positive-minimum source, absolute product-root/payoff/Bellman realization, or terminal consumer. |
 | Zero-minimum maximal-ray regressions and exact equilibrium consumers (Research-only) | `Research/Quitting/MaximalRayZeroMinimumActiveRegression.lean` and `Research/Quitting/FinFourMaximalRayZeroMinimumRegressions.lean` | The rational and fixed-real Fin4 tables construct actual canonical maximum-absorption prefix rays from a literal forced-pair profile. `LocalForcedPairFragment.pairStageMass_eq_one`, `postDateSpines_eq`, and `distinctPayer_pairDebt_pos` retain full marked mass, the complete common behavioral tail, zero marked debt, and a distinct positive payer debt. `Regression.pair_zero_eq_fragment` and `root_zero_eq_fragment` attach that exact fragment to the first semantic pair and selected maximal root. `rationalCardThree` has binding cardinality three; `fullBindingBallistic` has full limiting binding, three-player current support, and renewal ratio tending to `1 / 2`. The selected roots tend to all Continue, while `Regression.limitRoot` is a separate positive exact root at the limiting cap. These are actual zero-minimum regressions (`M/L/A`) with checked no-go and equilibrium consumers (`C`): `Regression.neverPair_globalMinimum` and `not_nonempty_minimumAtomProducer` expose the zero global debt floor, `Regression.neverUniformEquilibriumPayoff` gives the all-Never zero payoff, and the two `...PureSingleton_uniformEquilibriumPayoff` declarations give concrete all-behavior singleton equilibria. They do not attach to a positive-minimum source or contradict the strict ray in the conjecture regime. |
 | Certificate-free strict-ray binding-cardinality reduction (Research-only) | `MathUE/PMFProduct/Reindex.lean`, `MathUE/PMFProduct/Bool.lean`, `UniformEquilibrium/Quitting/Root/PlayerReindex.lean`, `UniformEquilibrium/Quitting/Punishment/SingletonCapBindingCollision.lean`, `Research/Quitting/Root/EndpointNashBoxComplementarity.lean`, `Research/Quitting/BindingCollisionGainPositivity.lean`, `Research/Topology/BoxComplementarityFaceLocalCountTwo.lean`, `Research/Topology/BoxComplementarityFaceLocalCountZero.lean`, `Research/Topology/BoxComplementaritySpernerEventualLocalParity.lean`, `Research/Quitting/FinFourProducerAtlas/StrictRayBindingCardinalityExplicit.lean`, and `Research/Quitting/FinFourProducerAtlas/StrictRayPositiveRootReturn.lean` | `quittingEndpointNashBoxBridge` constructs the canonical Boolean-PMF box bridge at every finite cap, and `QuittingEndpointNashBoxBridge.isSolution_iff_isZeroQuittingRootNash` identifies its solutions with exact product-root Nash. Under limiting all-Continue uniqueness on one actual `FinFourStrictRayForwardExactCapTail`, `bindingFinset_card_ne_two` internally selects the late cap and common resolution, normalizes the binding pair, uses selected-root maximality and cap convergence to localize every exact root, derives the outsider and collision signs, and combines the both-active count-two and solo count-zero formulas with eventual same-grid parity one. No `ModTwoBoxComplementarityParitySpec`, finite-cap certificate, or GameTheory Sperner substitute is supplied. `positiveAbsorptionExactRoot_at_capLimit_or_bindingFinset_eq_univ_or_card_eq_three` first returns a positive limiting root when uniqueness fails and otherwise applies that exclusion, giving the unconditional actual-flow trichotomy. `minimumLawHandoff_or_offMinimumDescent_or_ballistic_or_omitted_or_cardThree` consumes the positive-root arm into minimum regeneration or strict off-minimum descent and the full-binding arm into ballistic renewal or a frequently omitted player. This has `M`, `L`, `A`, and branch-local `C`. The returned minimum/descent, ballistic, omitted-player, and cardinal-three endpoints remain open; no strict-ray contradiction or uniform-equilibrium payoff follows. The older abstract parity declarations remain checked conditional interfaces but are no longer inputs to this consumer. |
-| Cubical-Sperner box-complementarity approximation, local counts, and discrete prism seam (Research-only) | `Research/Topology/BoxComplementarityCubicalSperner.lean`, `Research/Topology/BoxComplementaritySpernerApproximation.lean`, `Research/Topology/BoxComplementaritySpernerLocalCount.lean`, and `Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean` | `boxComplementarity_completeSimplex_card_odd` specializes the pinned strong cubical Sperner theorem to the reduced complementarity labeling. `BoxComplementarityProblem.isSolution_of_completeSimplexAnchorPoint_tendsto` turns every convergent sequence of complete-simplex anchors on a vanishing mesh into a box-complementarity solution, including dimension zero. The local-count layer proves global parity one, exact finite-mesh excision, and eventual clearing of compact isolating frontier collars. `KuhnPrismSpatialBoundaryLabeling.leftEndParity_eq_rightEndParity` constructs the same-resolution cell/face incidence and lateral cancellation; `boxComplementarityDiscretePrism_endpointParity_eq` identifies its ends with the actual pinned endpoint simplex counts. `kuhnStarSubdivision_completeFacetParity_eq` proves mod-two preservation for one elementary stellar subdivision directly from deletion-face pairing. This seam has `M` and `L`, but no geometric finite stellar chain connecting two pinned Kuhn resolutions, local-anchor/collar transport through such a chain, eventual local-parity stability, regularity bridge, `ModTwoBoxComplementarityParitySpec`, finite-cap Fin4 certificate, `A`, or `C`. |
+| Cubical-Sperner box-complementarity approximation, local counts, and discrete prism seam (Research-only) | `MathUE/Topology/BoxComplementarityCubicalSperner.lean`, `MathUE/Topology/BoxComplementaritySpernerApproximation.lean`, `MathUE/Topology/BoxComplementaritySpernerLocalCount.lean`, and `MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean` | `boxComplementarity_completeSimplex_card_odd` specializes the pinned strong cubical Sperner theorem to the reduced complementarity labeling. `BoxComplementarityProblem.isSolution_of_completeSimplexAnchorPoint_tendsto` turns every convergent sequence of complete-simplex anchors on a vanishing mesh into a box-complementarity solution, including dimension zero. The local-count layer proves global parity one, exact finite-mesh excision, and eventual clearing of compact isolating frontier collars. `KuhnPrismSpatialBoundaryLabeling.leftEndParity_eq_rightEndParity` constructs the same-resolution cell/face incidence and lateral cancellation; `boxComplementarityDiscretePrism_endpointParity_eq` identifies its ends with the actual pinned endpoint simplex counts. `kuhnStarSubdivision_completeFacetParity_eq` proves mod-two preservation for one elementary stellar subdivision directly from deletion-face pairing. This seam has `M` and `L`, but no geometric finite stellar chain connecting two pinned Kuhn resolutions, local-anchor/collar transport through such a chain, eventual local-parity stability, regularity bridge, `ModTwoBoxComplementarityParitySpec`, finite-cap Fin4 certificate, `A`, or `C`. |
 | Canonical pair renewable minimum-endpoint support descent (Research-only) | `Research/Quitting/StoppingLawMinimumEndpointSupportRankHandoff.lean`, `Research/Quitting/MinimumFiberDebtTransfer.lean`, `Research/Quitting/FinFourProducerAtlas/CanonicalPairMinimumEndpointSupportRankHandoff.lean`, `Research/Quitting/FinFourProducerAtlas/CanonicalPairEndpointSourceRegeneration.lean`, `Research/Quitting/FinFourProducerAtlas/CanonicalPairFullReplacementSourceRegeneration.lean`, `Research/Quitting/FinFourProducerAtlas/RenewableSourceTrace.lean`, `Research/Quitting/FinFourProducerAtlas/CanonicalPairRenewableSourceRank.lean`, and `Research/Quitting/FinFourProducerAtlas/CanonicalPairMinimumEndpointRenewal.lean` | The actual canonical minimum-endpoint handoff is no longer only a one-use support comparison. `nonempty_endpointSourceRegeneration` rebuilds a complete source from the literal endpoint profiles and dates. Every minimum-fibre full-replacement child is rebuilt from its own literal profile sequence with the same hard residual, and `terminalExit_or_nonempty_supportDescent` recursively returns positive total slope, flat support entry, or an off-minimum paid first-disagreement endpoint. `canonicalPairRenewableRank` is exactly zero on the residual state, one plus positive-debt-support cardinality on tangent nodes, and six on the nonrecurring incoming state; `canonicalPairRenewableTransitionRel_wellFounded`, `descentCount_le_three`, and `exists_renewalTerminalExit_sameResidual` make well-foundedness, the Fin4 three-descent bound, and residual preservation literal. The initial handoff and every recursive edge expose a positive one-third nonmover debt increase. `not_hasVanishingHorizontalDeviationLeak_of_minimumFiber` proves that no one vanishing error can compare every nonmover behavioral deviation gain across the literal replacement seam. This source-attached structural reduction has `M`, `L`, `A`, and branch-local `C`; the three residual exits remain open. It supplies no backward response compiler, terminal approximation, unconditional uniform-equilibrium payoff, or branch-global completion, and the debt no-go alone says nothing about separate closeness of prescribed payoffs or raw cap vectors. |
 | Strict canonical endpoint normalization (Research-only) | `Research/Quitting/FinFourProducerAtlas/StrictEndpointNormalizedReturn.lean` | `FinFourCanonicalPaidEndpointRows.exists_origin_refining` compactifies direct fixed-action endpoint rows on a further strict subsequence. For an actual canonical debt-ascent branch, `CanonicalPairMinimumEndpointDebtAscent.nonempty_strictEndpointOrigin` starts with the already aligned endpoint packet, records the literal composed depth map, and uses uniqueness of semantic limits to identify the decorated whole limit with that exact generic endpoint cluster. `CanonicalPairMinimumEndpointDebtAscent.nonempty_strictNormalizedReturnOrInert` applies normalized-passport minimization to this coherent origin. Its equality arm produces the existing source-attached strategic-singleton or collision-minimum residual; its strict arm retains the unique-all-Continue inert point. `FinFourOwnerCompressedMinimumReturnForcedPairPacket.nonempty_canonicalPairSupportHandoff_or_strictNormalized_or_rayStall` is the coherent source-facing handoff/normalized-endpoint/stall trichotomy. The reduction has `M`, `L`, and `A`; `C` applies to the normalized equality arm's maintained residual, while the support-handoff arm now feeds the renewable finite-rank reduction recorded above. The normalized inert point and ray stall have no `C`, and no arm supplies global completion, terminal approximation, or an unconditional uniform-equilibrium payoff. |
 | Normalized Fin4 minimum-pair response chord | `UniformEquilibrium/Diagnostics/Quitting/PureCoalitionOneDateNeverAdapters.lean` and `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/FinFourOrientedMinimumPairChord.lean` | The thin one-date layer delegates complete unrestricted behavioral caps and debts to the canonical pure sure-exit-set theory while exposing literal Never deletion and immediate-Quit insertion updates. From supplied normalized data consisting of a positive global-minimum pure pair, its two distinct outsiders, and a strict incoming triple-to-pair dropout gain, `terminalDispatch_nonempty` returns a profitable pair-member singleton response, a strictly off-minimum unique-outsider join, or a same-minimum unique-outsider join. In the equality arm, `pairToJoinedTripleChord_debt_eq` and `pairToJoinedTripleChord_debtSum_eq` give the coordinatewise affine debt formula and constant total debt for every legal stopping-law weight. `quitNowResponse_from_pairToJoinedTripleChord_gain_eq` states the literal updated-profile gain `(1 - lambda) * D_*`; the midpoint corollary gives `D_*/2`. This supplied-data compiler has `M` and `L`, but no actual-source `A` and no downstream or renewable `C`. It constructs no positive-time source, marked row, tail screen, ancestry, chronology, renewal, Nash path, terminal equilibrium, or uniform-equilibrium payoff. |
@@ -1824,6 +1860,12 @@ characterizes these rows by universal deterministic terminal-gain domination
 with the same fixed nonnegative weights. Necessity uses explicit all-Never,
 future-coalition, and tied-coalition clock tuples. This is not a necessity
 claim for arbitrary behavioral debt bounds.
+`cappedClockExpectedActualGain_le_iff_rewardRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExpectationNecessity.lean`)
+gives the same characterization for terminal expectation domination over
+every coupled child/deadline clock law. Dirac laws recover the deterministic
+necessity tests. Arbitrary coupling here is a proof-level comparison of
+clock experiments, not permission to correlate players' strategies.
 
 `CappedClockParentRewardRowErrorCertificate` and
 `cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_rowErrors`
@@ -1838,8 +1880,9 @@ joining error. The existing Never-only slack theorem is an exact specialization.
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockAdditiveDomination.lean`)
 bound a common row error by that error times the evaluation at time zero,
 both pointwise and in expectation. The two early-deadline coefficients add
-to one evaluation weight; no factor of two is charged. Its unrestricted
-behavioral-cap adapter remains separate.
+to one evaluation weight; no factor of two is charged.
+`outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_error`
+in the same file transports this allowance to unrestricted behavioral caps.
 
 `quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap`
 (`UniformEquilibrium/Quitting/Paths/StoppingLawEvaluatedPayoff.lean`) identifies
@@ -1863,6 +1906,14 @@ transports this bound to the actual Never lift of every child behavioral
 profile, with literal deleted-child debts on the right. Equality of complete
 profile stopping laws preserves both evaluated payoff and unrestricted cap;
 no equality of off-path behavioral profiles is claimed.
+`quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_error`
+in the same file gives the corresponding actual-child bound for a common
+additive reward-row error. The allowance is the row error times the evaluation
+at time zero. Its `quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_rowError`
+corollary charges just the row error when that evaluation is at most one.
+These approximate bounds impose no reward-sign restriction or normalization
+of the nonnegative weights. They do not by themselves eliminate a fixed
+positive row error to obtain an exact uniform-equilibrium payoff.
 
 `quittingBehaviorEvaluatedPayoff_liftDeletedProfile` and
 `quittingBehaviorEvaluatedDeviationPayoffCap_liftDeletedProfile`

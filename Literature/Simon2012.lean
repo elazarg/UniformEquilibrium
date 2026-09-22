@@ -7083,6 +7083,171 @@ private theorem section4Omega_le_epsilon_third (G : QuittingGame)
   dsimp only [N] at hscaled
   nlinarith
 
+/-- The printed constants make the small-step radius much smaller than the
+lower-neighborhood thickness. -/
+private theorem section4Omega_le_epsilon_div_thousand (G : QuittingGame)
+    (M d ρ ξ R ε : ℝ) (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Omega G M d ρ ξ R ε ≤ ε / 1000 := by
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  obtain ⟨_hδpos, hδ1⟩ := section4Delta_mem_Ioc
+    G M ρ ε hplayers hM hmotion hε hερ
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpow : 9 ≤ N ^ 2 := by nlinarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hdεNonneg : 0 ≤ d * ε := mul_nonneg hd.le hε.le
+  have hdεLe : d * ε ≤ ε := by
+    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd1 hε.le
+  have hdεξNonneg : 0 ≤ d * ε * ξ := mul_nonneg hdεNonneg hξ.le
+  have hdεξLe : d * ε * ξ ≤ d * ε := by
+    simpa only [mul_one] using mul_le_mul_of_nonneg_left hξ1.le hdεNonneg
+  have hdεξρNonneg : 0 ≤ d * ε * ξ * ρ :=
+    mul_nonneg hdεξNonneg hmotion.2.1.le
+  have hdεξρLe : d * ε * ξ * ρ ≤ d * ε * ξ := by
+    simpa only [mul_one] using
+      mul_le_mul_of_nonneg_left hmotion.2.2.1 hdεξNonneg
+  have hnum : d * ε * ξ * ρ * Section4Delta G M ε ≤ ε := by
+    calc
+      d * ε * ξ * ρ * Section4Delta G M ε ≤ d * ε * ξ * ρ := by
+        simpa only [mul_one] using
+          mul_le_mul_of_nonneg_left hδ1 hdεξρNonneg
+      _ ≤ d * ε * ξ := hdεξρLe
+      _ ≤ d * ε := hdεξLe
+      _ ≤ ε := hdεLe
+  have hNM : 3 * M ≤ N * M :=
+    mul_le_mul_of_nonneg_right hN hMpos.le
+  have hRthirty : 30 ≤ R := by
+    have hRthirtyM : 30 * M ≤ R := by
+      dsimp only [N] at hR hNM
+      nlinarith
+    nlinarith [hM.1]
+  have hfirst : 6000 ≤ 200 * R := by nlinarith
+  have hsecond : 54000 ≤ 200 * R * N ^ 2 := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ 200 * R - 6000)
+      (by linarith : 0 ≤ N ^ 2 - 9)]
+  have hden : 54000 ≤ 200 * R * N ^ 2 * M := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ 200 * R * N ^ 2)
+      (by linarith [hM.1] : 0 ≤ M - 1)]
+  have hdenpos : 0 < 200 * R * N ^ 2 * M := by linarith
+  rw [Section4Omega, div_le_iff₀ (by simpa only [N] using hdenpos)]
+  have hscaled : 1000 * ε ≤ ε * (200 * R * N ^ 2 * M) := by
+    have hdenThousand : 1000 ≤ 200 * R * N ^ 2 * M := by linarith
+    simpa only [mul_comm] using mul_le_mul_of_nonneg_left hdenThousand hε.le
+  dsimp only [N] at hscaled
+  nlinarith
+
+/-- At a sufficiently small-quitting exact row, the singular correction in
+`Phi` is uniformly small, including the zero-quitting edge case. -/
+private theorem euclideanNorm_phi_sub_oneStagePayoff_le
+    (G : QuittingGame) (M d : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (z : EZeroTilde G)
+    (hqsmall : QuitProbability G z.1.2 <
+      1 / (2 * (Fintype.card G.Player : ℝ))) :
+    EuclideanNorm
+        (Phi G M d z - QuittingOneStagePayoff G z.1.1 z.1.2) ≤
+      11 * (Fintype.card G.Player : ℝ) ^ 2 * M *
+        QuitProbability G z.1.2 / d := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let q := QuitProbability G z.1.2
+  have hNpos : 0 < N := by
+    dsimp only [N]
+    exact_mod_cast Fintype.card_pos
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hqnonneg : 0 ≤ q := quitProbability_mem_Icc G z.1.2 |>.1
+  have hcoordinate : ∀ j,
+      |Phi G M d z j - QuittingOneStagePayoff G z.1.1 z.1.2 j| ≤
+        11 * N * M * q / d := by
+    intro j
+    by_cases hqzero : q = 0
+    · have hpzero : z.1.2 = zeroQuitRow G := by
+        funext k
+        apply Subtype.ext
+        have hk := quitProbability_apply_le G z.1.2 k
+        simp only [zeroQuitRow, Set.Icc.coe_zero]
+        linarith [(z.1.2 k).property.1]
+      have hleft : Phi G M d z j =
+          QuittingOneStagePayoff G z.1.1 z.1.2 j := by
+        simp [Phi, hpzero, zeroQuitRow]
+      rw [hleft, sub_self, abs_zero, hqzero]
+      positivity
+    · have hqpos : 0 < q := lt_of_le_of_ne hqnonneg (Ne.symm hqzero)
+      have hpenalty := quitPenalty_le_two_mul G z.1.2 hqpos hqsmall j
+      have hsum := quitRow_sum_erase_le_card_mul_quitProbability G z.1.2 j
+      have hpenaltyNonneg : 0 ≤
+          (z.1.2 j : ℝ) /
+            (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player :=
+        div_nonneg (z.1.2 j).property.1
+          (pow_nonneg (sub_nonneg.mpr (z.1.2 j).property.2) _)
+      have hsumNonneg : 0 ≤ ∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ) :=
+        Finset.sum_nonneg fun k _ => (z.1.2 k).property.1
+      have hcoefficientNonneg : 0 ≤ 5 * N * M / d := by positivity
+      have hpenaltyTerm :
+          (5 * N * M / d) *
+              ((z.1.2 j : ℝ) /
+                (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) ≤
+            10 * N * M * q / d := by
+        calc
+          _ ≤ (5 * N * M / d) * (2 * q) :=
+            mul_le_mul_of_nonneg_left hpenalty.le hcoefficientNonneg
+          _ = 10 * N * M * q / d := by ring
+      have hsumTerm :
+          M * (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) ≤
+            N * M * q / d := by
+        have hbase :
+            M * (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) ≤
+              N * M * q := by
+          have := mul_le_mul_of_nonneg_left hsum hMpos.le
+          nlinarith
+        rw [le_div_iff₀ hd]
+        nlinarith [mul_le_mul_of_nonneg_left hd1
+          (mul_nonneg (mul_nonneg hNpos.le hMpos.le) hqnonneg)]
+      have habs :
+          |-(5 * N * M / d) *
+                ((z.1.2 j : ℝ) /
+                  (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+              M * (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ))| ≤
+            (5 * N * M / d) *
+                ((z.1.2 j : ℝ) /
+                  (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+              M * (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) := by
+        rw [abs_le]
+        constructor <;> nlinarith
+      have hformula :
+          Phi G M d z j - QuittingOneStagePayoff G z.1.1 z.1.2 j =
+            -(5 * N * M / d) *
+                ((z.1.2 j : ℝ) /
+                  (1 - (z.1.2 j : ℝ)) ^ Fintype.card G.Player) +
+              M * (∑ k ∈ Finset.univ.erase j, (z.1.2 k : ℝ)) := by
+        dsimp only [Phi, N]
+        ring
+      rw [hformula]
+      exact habs.trans ((add_le_add hpenaltyTerm hsumTerm).trans_eq (by ring))
+  calc
+    EuclideanNorm
+          (Phi G M d z - QuittingOneStagePayoff G z.1.1 z.1.2) ≤
+        ∑ j, |Phi G M d z j -
+          QuittingOneStagePayoff G z.1.1 z.1.2 j| :=
+      euclideanDist_le_sum_abs (Phi G M d z)
+        (QuittingOneStagePayoff G z.1.1 z.1.2)
+    _ ≤ ∑ _j : G.Player, 11 * N * M * q / d := by
+      apply Finset.sum_le_sum
+      intro j _hj
+      exact hcoordinate j
+    _ = 11 * (Fintype.card G.Player : ℝ) ^ 2 * M *
+        QuitProbability G z.1.2 / d := by
+      simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
+      dsimp only [N, q]
+      ring
+
 /--
 The cutoff `λ` used to glue the structure homotopy to the identity near `D`.
 The support radius is supplied explicitly; the printed construction uses `δ`.
@@ -7694,6 +7859,191 @@ theorem upperGlueFiber_subset_lowerGlueFiber (G : QuittingGame)
     UpperGlueFiber G R ε δ x ⊆ LowerGlueFiber G x := by
   rintro y ⟨p, rfl, _⟩
   exact quittingOneStagePayoff_mem_lowerGlueFiber G x p
+
+/-- Property (6), Case 1 with positive cutoff: a small terminal step and the
+paper's small-quitting bound put the first endpoint in the lower neighborhood. -/
+theorem section4X_mem_lowerNeighborhood_of_positive_cutoff_small_quit
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (hcutoffPos : 0 < (cutoff a : ℝ))
+    (hqsmall : QuitProbability G (inverse.inv a).1.2 <
+      ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M))
+    (hstep : EuclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) <
+        Section4Omega G M d ρ ξ R ε) :
+    Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε := by
+  let N : ℝ := Fintype.card G.Player
+  let z : EZeroTilde G := inverse.inv a
+  let alpha : ℝ := cutoff a
+  let q : ℝ := QuitProbability G z.1.2
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  let y : Payoff G.Player := Section4Y G inverse cutoff a
+  let base : Payoff G.Player :=
+    QuittingOneStagePayoff G z.1.1 z.1.2
+  let correction : Payoff G.Player := a - base
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρ1 : ρ ≤ 1 := hmotion.2.2.1
+  have hε1 : ε < 1 := by linarith
+  have hqnonneg : 0 ≤ q := quitProbability_mem_Icc G z.1.2 |>.1
+  have hdenpos : 0 < 40 * N ^ 2 * M := by positivity
+  have hqscaled : q * (40 * N ^ 2 * M) < ε * d := by
+    rw [lt_div_iff₀ hdenpos] at hqsmall
+    simpa only [q, z, N] using hqsmall
+  have hεd : ε * d ≤ 1 := by
+    have := mul_le_mul_of_nonneg_left hd1 hε.le
+    nlinarith
+  have hfactorDen : 2 * N ≤ 40 * N ^ 2 * M := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ N - 1)
+      (by linarith [hM.1] : 0 ≤ M - 1)]
+  have hqhalf : q < 1 / (2 * N) := by
+    rw [lt_div_iff₀ (by positivity : 0 < 2 * N)]
+    have hscaled := mul_le_mul_of_nonneg_left hfactorDen hqnonneg
+    nlinarith
+  have hqSixth : q < 1 / 6 := by
+    have hhalfSixth : 1 / (2 * N) ≤ 1 / 6 := by
+      rw [div_le_div_iff₀ (by positivity : (0 : ℝ) < 2 * N) (by norm_num)]
+      nlinarith
+    exact hqhalf.trans_le hhalfSixth
+  have hphi : Phi G M d z = a := inverse.rightInverse a
+  have hcorrectionBound : EuclideanNorm correction < 11 * ε / 40 := by
+    have hbound := euclideanNorm_phi_sub_oneStagePayoff_le
+      G M d hM hd hd1 z (by simpa only [q, N] using hqhalf)
+    have hscale : 11 * N ^ 2 * M * q / d < 11 * ε / 40 := by
+      rw [div_lt_iff₀ hd]
+      nlinarith [hqscaled]
+    have hrewrite :
+        correction = Phi G M d z -
+          QuittingOneStagePayoff G z.1.1 z.1.2 := by
+      dsimp only [correction, base]
+      rw [hphi]
+    rw [hrewrite]
+    exact hbound.trans_lt (by simpa only [N, q] using hscale)
+  have hidentity :
+      (1 - alpha * q) • (x - a) =
+        -(y - x) - (1 - alpha) • correction := by
+    funext j
+    have hstage := quittingOneStagePayoff_sub G x z.1.1 z.1.2 j
+    have hxcoord : x j = alpha * a j + (1 - alpha) * z.1.1 j := by
+      rfl
+    have hycoord : y j = alpha * x j +
+        (1 - alpha) * QuittingOneStagePayoff G x z.1.2 j := by
+      rfl
+    have hcorrectionCoord : correction j = a j - base j := by rfl
+    dsimp only [base] at hcorrectionCoord
+    simp only [Pi.smul_apply, Pi.sub_apply, Pi.neg_apply, smul_eq_mul]
+    nlinarith
+  have halphaNonneg : 0 ≤ alpha := (cutoff a).property.1
+  have halphaOne : alpha ≤ 1 := (cutoff a).property.2
+  have halphaq : alpha * q < 1 / 6 := by
+    have hproduct : alpha * q ≤ q := by
+      simpa only [one_mul] using mul_le_mul_of_nonneg_right halphaOne hqnonneg
+    exact hproduct.trans_lt hqSixth
+  have hfactor : 5 / 6 < 1 - alpha * q := by linarith
+  have hfactorNonneg : 0 ≤ 1 - alpha * q := by linarith
+  have hOneSubAlpha : 0 ≤ 1 - alpha := by linarith
+  have hnormIdentity :
+      (1 - alpha * q) * EuclideanDist x a ≤
+        EuclideanDist x y + (1 - alpha) * EuclideanNorm correction := by
+    calc
+      (1 - alpha * q) * EuclideanDist x a =
+          ‖WithLp.toLp 2 ((1 - alpha * q) • (x - a))‖ := by
+        rw [EuclideanDist, euclideanNorm_eq_norm_toLp,
+          WithLp.toLp_smul, norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg hfactorNonneg]
+      _ = ‖WithLp.toLp 2
+          (-(y - x) - (1 - alpha) • correction)‖ := by rw [hidentity]
+      _ ≤ ‖WithLp.toLp 2 (-(y - x))‖ +
+          ‖WithLp.toLp 2 ((1 - alpha) • correction)‖ := by
+        simpa only [WithLp.toLp_sub] using
+          norm_sub_le (WithLp.toLp 2 (-(y - x)))
+            (WithLp.toLp 2 ((1 - alpha) • correction))
+      _ = EuclideanDist x y + (1 - alpha) * EuclideanNorm correction := by
+        simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+          WithLp.toLp_smul, norm_smul, Real.norm_eq_abs,
+          abs_of_nonneg hOneSubAlpha]
+        rw [show -(y - x) = x - y by abel]
+  have hscaledStep :
+      (1 - alpha * q) * EuclideanDist x a <
+        Section4Omega G M d ρ ξ R ε + 11 * ε / 40 := by
+    apply hnormIdentity.trans_lt
+    have hscaledCorrection :
+        (1 - alpha) * EuclideanNorm correction < 11 * ε / 40 := by
+      have hcNonneg : 0 ≤ EuclideanNorm correction := Real.sqrt_nonneg _
+      have hle : (1 - alpha) * EuclideanNorm correction ≤
+          EuclideanNorm correction := by
+        simpa only [one_mul] using mul_le_mul_of_nonneg_right
+          (by linarith : 1 - alpha ≤ 1) hcNonneg
+      exact hle.trans_lt hcorrectionBound
+    exact add_lt_add (by simpa only [x, y] using hstep) hscaledCorrection
+  have hdistNonneg : 0 ≤ EuclideanDist x a := Real.sqrt_nonneg _
+  have hxa : EuclideanDist x a <
+      (6 / 5) * (Section4Omega G M d ρ ξ R ε + 11 * ε / 40) := by
+    have hscaledLower : (5 / 6) * EuclideanDist x a ≤
+        (1 - alpha * q) * EuclideanDist x a :=
+      mul_le_mul_of_nonneg_right hfactor.le hdistNonneg
+    nlinarith [hscaledLower.trans_lt hscaledStep]
+  have haDistance : EuclideanInfDist a (LowerBoundary G R) <
+      Section4Omega G M d ρ ξ R ε := by
+    by_contra hnot
+    have hzero := hcutoff.2.2.1 a (le_of_not_gt hnot)
+    linarith
+  have htransport : EuclideanInfDist x (LowerBoundary G R) ≤
+      EuclideanInfDist a (LowerBoundary G R) + EuclideanDist x a := by
+    rw [euclideanInfDist_eq_infDist_toLp,
+      euclideanInfDist_eq_infDist_toLp]
+    simpa only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+      WithLp.toLp_sub, dist_eq_norm] using
+      (Metric.infDist_le_infDist_add_dist :
+        Metric.infDist (WithLp.toLp 2 x)
+            (WithLp.toLp 2 '' LowerBoundary G R) ≤
+          Metric.infDist (WithLp.toLp 2 a)
+              (WithLp.toLp 2 '' LowerBoundary G R) +
+            dist (WithLp.toLp 2 x) (WithLp.toLp 2 a))
+  have homega := section4Omega_le_epsilon_div_thousand
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+  have htotal : EuclideanInfDist x (LowerBoundary G R) < ε / 3 := by
+    have hsum := htransport.trans_lt (add_lt_add haDistance hxa)
+    nlinarith
+  simpa only [LowerNeighborhood, Set.mem_ofPred_eq, x] using htotal.le
+
+/-- In Property (6)'s lower-neighborhood branch, the terminal homotopy's
+second coordinate belongs to the literal glued fiber over its first. -/
+theorem section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
+    (G : QuittingGame) {M d : ℝ} (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    (a : Payoff G.Player)
+    (hx : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε) :
+    Section4Y G inverse cutoff a ∈
+      GluedFiber G R ε δ (Section4X G inverse cutoff a) := by
+  let x := Section4X G inverse cutoff a
+  let z := Section4Z G inverse cutoff a
+  have hz : z ∈ LowerGlueFiber G x := by
+    exact quittingOneStagePayoff_mem_lowerGlueFiber G x (inverse.inv a).1.2
+  have hparameter : 1 - (cutoff a : ℝ) ∈ Set.Icc 0 1 := by
+    exact ⟨sub_nonneg.mpr (cutoff a).property.2, by
+      linarith [(cutoff a).property.1]⟩
+  have hline : AffineMap.lineMap x z (1 - (cutoff a : ℝ)) ∈
+      LowerGlueFiber G x :=
+    (convex_lowerGlueFiber G x).lineMap_mem
+      (self_mem_lowerGlueFiber G x) hz hparameter
+  have hy : Section4Y G inverse cutoff a =
+      AffineMap.lineMap x z (1 - (cutoff a : ℝ)) := by
+    dsimp only [Section4Y, x, z]
+    simp only [AffineMap.lineMap_apply_module, sub_sub_cancel]
+  rw [hy]
+  simpa only [GluedFiber, hx, ↓reduceIte] using hline
 
 /-- The priority-switched graph is the union of the two restricted graph pieces. -/
 theorem gluedGraph_eq_union (G : QuittingGame) (R ε δ : ℝ) :

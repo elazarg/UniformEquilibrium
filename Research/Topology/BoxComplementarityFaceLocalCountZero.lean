@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Topology.BoxComplementarityFaceSimplexPosition
-import Research.Topology.BoxComplementaritySpernerLocalCount
+import MathUE.Topology.BoxComplementaritySpernerLocalCount
 
 /-!
 # Vanishing local counts from a nonnegative trailing face gain

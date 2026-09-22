@@ -84,13 +84,20 @@ set. The lower clip is retained exactly, using
 `quittingDiscountedClippedMap_scaled_sub_eq_min` in the same module. These
 source statements do not assume fixed-point selection or localization.
 
-The project-owned integer degree now supplies homotopy invariance, excision,
-R0 right-hand-side independence, and fixed-point normalization in Research.
-The remaining degree comparison must apply the source estimate on shrinking
-domains, retaining every root. Its perturbation and scaling requirements are
-recorded in
+`r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`) uses
+the source estimate on shrinking domains and retains every actual root.
+The generic integer-degree construction in `MathUE` supplies homotopy
+invariance, excision, R0 right-hand-side independence, and fixed-point
+normalization. The existing generic auxiliary source gives
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+(`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`):
+for every player count `Fin n`, full R0 and canonical degree different from
+one imply an original-game uniform payoff. The hypotheses impose no signs on
+the reward table. The four-player specialization additionally derives full
+R0 itself from original-game nonexistence.
+The construction and its scope are recorded in
 [the signed local degree specification](CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md).
-Research is not imported by the production source modules above.
 
 ## Verification scope
 

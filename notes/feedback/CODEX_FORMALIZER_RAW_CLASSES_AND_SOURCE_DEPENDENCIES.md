@@ -213,20 +213,29 @@ to one. The example's integer-degree calculation is a separate conclusion.
 
 The checked topology endpoint is
 `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
-(`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`): equality
+(`MathUE/Topology/BoxComplementarityLocalSignedHomotopy.lean`): equality
 at every sufficiently fine common resolution.
 `BoxComplementarityProblem.eventually_localSignedCount_eq`
-(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 also compares arbitrary independently sufficiently fine resolutions.
 `BoxComplementarityProblem.localDegree` and
 `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
-(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) package
+(`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) package
 the normalized integer and its homotopy invariance on a common isolating region.
 `BoxComplementarityProblem.localDegree_univ_eq_one`
-(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+(`MathUE/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
 whole-cube normalization from the actual unique mesh-one simplex and its
-signed weight. Ambient identification, affine comparison, and approximation
-independence remain separate obligations. The refinement specification belongs with
+signed weight. The affine local-index, R0 total-degree, and actual discounted
+comparison theorems give the raw criterion
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+(`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`).
+It holds for every player count `Fin n`, strengthening the packet's
+four-player statement by direct composition with the existing generic
+auxiliary localization. It imposes no reward signs or regular-root hypotheses.
+Only the separate deduction of full R0 from bare nonexistence is specific to
+four players. The packet's explicit
+matrix degree calculations and the other stationary-response consumers remain
+separate obligations. The detailed construction is described in
 `CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md` and
 `CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md`.
 

@@ -2627,11 +2627,11 @@ parity contract remains a checked conditional interface, but it is no longer
 an input to the actual-flow consumer.
 
 The generic Sperner approximation and local-count seam is checked in
-`Research/Topology/BoxComplementarityCubicalSperner.lean`,
-`Research/Topology/BoxComplementaritySpernerApproximation.lean`, and
-`Research/Topology/BoxComplementaritySpernerLocalCount.lean`; the concrete
+`MathUE/Topology/BoxComplementarityCubicalSperner.lean`,
+`MathUE/Topology/BoxComplementaritySpernerApproximation.lean`, and
+`MathUE/Topology/BoxComplementaritySpernerLocalCount.lean`; the concrete
 same-grid prism layer is in
-`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`.
+`MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`.
 `boxComplementarity_completeSimplex_card_odd` specializes the pinned strong
 cubical Sperner theorem to the reduced box-complementarity labeling at every
 positive resolution.  The selected anchor and coordinate-label vertices lie
@@ -4076,7 +4076,7 @@ in the live mathematical ledger.
   use only single-owner rows on this residual-hard table.  The packet's
   rational upper schedule and the exact optimal solo-hazard floor remain
   unformalized; the checked two-owner period-two equilibrium is unaffected.
-- **Discounted singleton-matrix localization:**
+- **Singleton-matrix integer-degree criterion:**
   `finFour_auxiliaryDiscounted_fixedPoint_scaled_sum_lt_of_no_uniformPayoff`
   (`UniformEquilibrium/Diagnostics/Quitting/FinFourAuxiliaryDiscountedLocalization.lean`)
   proves that a four-player table without an original uniform payoff has one
@@ -4089,15 +4089,17 @@ in the live mathematical ledger.
   `tendstoUniformlyOn_quittingDiscountedDisplacement_scaled`
   (`UniformEquilibrium/Quitting/Stationary/DiscountedUniformScaling.lean`),
   uniformly on every fixed bounded signed set.
-  `BoxComplementarityProblem.localDegree` and
-  `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
-  (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) construct
-  the mesh-independent normalized integer and homotopy invariance on an
-  isolating region. `BoxComplementarityProblem.localDegree_univ_eq_one`
-  (`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
-  whole-cube normalization. Ambient identification, affine comparison, and
-  the integer-LCP consumer remain to be supplied. These Research results do
-  not yet close this game-semantic route.
+  `finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+  (`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`)
+  combines this source with the constructed integer degree and proves that
+  the full original matrix has canonical degree one.
+  `exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+  (`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`)
+  gives original uniform-payoff existence from full R0 and degree different
+  from one for every player count `Fin n`, with arbitrary signed rewards.
+  No regularity or finiteness assumption on the
+  actual roots is used. This closes the raw degree criterion, not the general
+  four-player conjecture or the packet's remaining explicit matrix examples.
 - **Returned-block tangent obstruction:**
   `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` proves that
   bounded returned product blocks with vanishing total hazard and aggregate

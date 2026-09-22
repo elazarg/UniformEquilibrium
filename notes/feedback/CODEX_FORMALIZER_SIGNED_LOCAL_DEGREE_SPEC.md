@@ -6,7 +6,7 @@
 (`MathUE/Topology/KuhnSignedParameterEnd.lean`) compares sums over the entire
 parameter ends of one finite cube. The literal discrete-family adapter is
 `boxComplementarityDiscretePrism_endpointSignedWeight_eq`
-(`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`). It uses
+(`MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`). It uses
 the existing actual boundary classification and endpoint equivalences. These
 are fixed-resolution, full-box integer identities. They do not establish a
 local index, local homotopy invariance, or independence of resolution.
@@ -20,7 +20,7 @@ of that determinant, not its unnormalized volume as a counting multiplicity.
 ## Exact existing local source to retain
 
 `boxComplementarityLocalCompleteSimplices`
-(`Research/Topology/BoxComplementaritySpernerLocalCount.lean`) already selects
+(`MathUE/Topology/BoxComplementaritySpernerLocalCount.lean`) already selects
 the literal finite set of complete simplices whose label-dimension anchor
 belongs to a displayed region. Reuse this set and this anchor; do not replace
 them with an independently defined collection of cells.
@@ -36,7 +36,7 @@ results and directly support arbitrary signed sums over the existing set:
 - `BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_cleared`.
 
 `boxComplementarityLocalSignedCount`
-(`Research/Topology/BoxComplementaritySignedLocalCount.lean`) sums the existing
+(`MathUE/Topology/BoxComplementaritySignedLocalCount.lean`) sums the existing
 endpoint signed weight over that set. Its union, excision, and cleared-collar
 theorems use these exact equalities and ordinary finite-sum theorems. The
 companion imports the prism owner without introducing a cycle through its
@@ -50,13 +50,13 @@ function of parameter and spatial point. Let the same relatively open region
 be isolating for every parameter in the closed unit interval.
 
 `IsContinuousBoxComplementarityFamily.exists_isolatingFrontierCollar_eventually_prismCleared`
-(`Research/Topology/BoxComplementarityPrismCluster.lean`) produces a positive
+(`MathUE/Topology/BoxComplementarityPrismCluster.lean`) produces a positive
 spatial collar radius and one mesh threshold: every sufficiently fine actual
 parameter-spatial prism has no complete face with a spatial vertex in that
 collar. Each label is evaluated at its own vertex's parameter; joint continuity
 passes all label inequalities to the same space-time limit. The uniform
 solution-free collar is constructed in
-`Research/Topology/BoxComplementarityFamilyCollar.lean`.
+`MathUE/Topology/BoxComplementarityFamilyCollar.lean`.
 
 This is vertex clearance, not a statement that the geometric realization of
 every face avoids the collar. The selected-cell boundary argument below
@@ -67,17 +67,17 @@ The proof dependencies are:
 1. Compactness of parameter times the region frontier and absence of family
    solutions there give one uniform solution-free collar. This is proved by
    `IsContinuousBoxComplementarityFamily.exists_uniform_isolatingFrontierCollar`
-   (`Research/Topology/BoxComplementarityFamilyCollar.lean`).
+   (`MathUE/Topology/BoxComplementarityFamilyCollar.lean`).
 2. Generalize the existing complete-simplex cluster argument to actual prism
    faces: adjacent vertex parameters and spatial positions converge to one
    pair, and joint continuity transfers all retained label inequalities to a
    complementarity solution at that pair. This is proved by
    `IsContinuousBoxComplementarityFamily.isSolution_of_prismFace_vertex_tendsto`
-   (`Research/Topology/BoxComplementarityPrismCluster.lean`); compactness then
+   (`MathUE/Topology/BoxComplementarityPrismCluster.lean`); compactness then
    gives the uniform vertex-clearance theorem above.
 3. Select a literal finite family of prism cells by base-point membership in
    the region. `prismFace_vertex_mem_frontierCollar_of_parent_membership`
-   (`Research/Topology/KuhnPrismBoundaryCollar.lean`) puts every shared face
+   (`MathUE/Topology/KuhnPrismBoundaryCollar.lean`) puts every shared face
    vertex within one mesh width of the frontier when parent selections differ.
    It reuses a connected coordinate rectangle. The same file's
    `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
@@ -85,7 +85,7 @@ The proof dependencies are:
    agreement at all sufficiently fine resolutions.
 4. Weighted integer row and interior-column cancellation transports the
    selected endpoint sums. The endpoint-base representation in
-   `Research/Topology/BoxComplementaritySignedLocalCount.lean` retains the
+   `MathUE/Topology/BoxComplementaritySignedLocalCount.lean` retains the
    existing label-dimension anchor; cleared-face membership coherence
    identifies it with the base-point selection.
 
@@ -93,7 +93,7 @@ The proof dependencies are:
 (`MathUE/Topology/KuhnSignedParameterEnd.lean`) supplies the weighted finite
 algebra for step 4. Its integer multipliers must agree on actual incidences.
 `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
-(`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`) supplies those
+(`MathUE/Topology/BoxComplementarityLocalSignedHomotopy.lean`) supplies those
 multipliers from the original family and region and proves equality of the
 existing local counts at the actual parameter endpoints.
 
@@ -111,7 +111,7 @@ integer degree independent of the mesh.
 
 For one fixed problem and isolating region,
 `BoxComplementarityProblem.eventually_localSignedCount_eq`
-(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 proves eventual mesh independence with two independent mesh quantifiers:
 
 > There exists a threshold such that for every pair of positive resolutions
@@ -126,7 +126,7 @@ assuming equality of the desired signed counts is not a construction.
 
 `productRefinementVertex` and
 `boxComplementarityGridPoint_productRefinementVertex`
-(`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) preserve
+(`MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) preserve
 the represented coarse grid points in a product resolution. They do not
 send coarse unit Kuhn simplices to target unit Kuhn simplices:
 `productRefinement_unitJump_not_unit_of_one_lt` records that obstruction.
@@ -143,7 +143,7 @@ coordinate-raising agreement are proved in
 integer determinant preservation are proved in
 `MathUE/Topology/KuhnFloorCompleteSimplex.lean`. The mixed-label prism,
 sample-point clearance, and local signed-count transport below are proved
-in Research.
+in `MathUE`.
 For positive resolutions `p` and factors `k`, round a fine-grid coordinate
 `v` to `v / k` using natural-number division. This preserves the zero and
 top faces and moves its represented point by at most `1 / p`, independently
@@ -175,11 +175,11 @@ The required combinatorial producer has three parts:
 
 This compares coarse labels with pulled labels, not with the actual fine
 labels. `externalCubeLabelPrism`
-(`Research/Topology/KuhnExternalCubePrism.lean`) constructs a discrete switch
+(`MathUE/Topology/KuhnExternalCubePrism.lean`) constructs a discrete switch
 between two proper labelings on one grid.
 `externalPrismParameterEndEquiv` and
 `KuhnPrismSpatialBoundaryLabeling.externalEndpointWeightedSum_eq`
-(`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) supply
+(`MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) supply
 the shared endpoint equivalence and weighted transport for arbitrary proper
 prism labels with specified endpoint labels. Ordered vertices and signed
 weights are preserved. The box-family and discrete-switch theorems both
@@ -188,7 +188,7 @@ The finite cancellation needs spatial boundary rules, not continuity of
 the switch.
 
 `boxComplementarityFloorRefinementPrism`
-(`Research/Topology/BoxComplementarityFloorRefinementPrism.lean`) constructs
+(`MathUE/Topology/BoxComplementarityFloorRefinementPrism.lean`) constructs
 that switch for the actual problem: its left endpoint uses floor-pulled
 coarse labels and its right endpoint uses actual fine labels.
 `dist_boxComplementarityGridPoint_kuhnFloor_le_one_div` in the same file
@@ -199,7 +199,7 @@ to supply incident-compatible local selection; the prism construction alone
 does not equate counts.
 
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_eventually_floorRefinementCleared`
-(`Research/Topology/BoxComplementarityFloorRefinementPrismCluster.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementPrismCluster.lean`)
 establishes one collar radius and one coarse threshold working for every
 positive refinement factor. Each label is sampled either at the actual fine
 point or at its rounded coarse point, within one coarse mesh width.
@@ -210,7 +210,7 @@ to infinity even when the refinement factor varies.
 `BoxComplementarityProblem.isSolution_of_floorRefinementPrismFace_sample_tendsto`
 in the same file identifies that limit as an actual solution from the sampled
 label inequalities. Compactness then gives clearance, not a clearance premise.
-These are Research declarations.
+These are game-independent declarations in `MathUE`.
 
 Local anchor membership also needs this collar. The coarse label-dimension
 anchor and its fine lift can be different points: in dimension one an
@@ -218,7 +218,7 @@ anchor at zero can lift to `(k - 1) / (p * k)`. Equality for arbitrary
 regions without clearance is not part of the specification.
 
 `boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared`
-(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 proves transport under the actual sample-clearance condition. It identifies
 the left samples with coarse endpoint points and the right samples with
 fine endpoint points, transports signed weights, and uses the collar to
@@ -230,7 +230,7 @@ the count at `p * k`. Comparing `p` and `q` through `p * q` proves the
 independent-resolution theorem above.
 
 `BoxComplementarityProblem.rawLocalDegree`
-(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) is the
+(`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) is the
 resulting integer value. Its
 `BoxComplementarityProblem.eventually_localSignedCount_eq_rawLocalDegree`
 identifies it with every sufficiently fine positive grid count.
@@ -243,7 +243,7 @@ identification, arbitrary-chart comparison, and approximation independence remai
 further obligations.
 
 `BoxComplementarityProblem.localDegree_union_of_disjoint`
-(`Research/Topology/BoxComplementarityLocalDegreeConsequences.lean`)
+(`MathUE/Topology/BoxComplementarityLocalDegreeConsequences.lean`)
 proves additivity on disjoint isolating regions. Isolation of the union is
 derived from that of its two components.
 `BoxComplementarityProblem.exists_isolatingFrontierCollar_localDegree_coherent`
@@ -256,7 +256,7 @@ degree. It does not require the open region itself to be compact: compactness
 of its closure and absence of frontier solutions suffice.
 
 `BoxComplementarityProblem.localDegree_eq_of_gain_eqOn_frontier`
-(`Research/Topology/BoxComplementarityFrontierReplacement.lean`) permits
+(`MathUE/Topology/BoxComplementarityFrontierReplacement.lean`) permits
 replacement of the gain field away from the frontier. Its literal
 straight-line interpolation is jointly continuous and fixes the frontier;
 isolation at the second endpoint and throughout the family is derived from
@@ -265,10 +265,10 @@ the first endpoint's isolation. This is not an ambient-degree comparison.
 ## Whole-cube normalization and remaining ambient comparison
 
 `boxComplementarityLocalSignedCount_univ_eq_resolution_one`
-(`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+(`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
 identifies every positive-mesh whole-cube count with the mesh-one count.
 `BoxComplementarityProblem.rawLocalDegree_univ_eq_resolution_one`
-(`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) identifies
+(`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) identifies
 the raw stabilized value with that finite count, without an isolation premise.
 Both specialize the actual floor comparison to the empty frontier collar.
 At mesh one, the label rule depends only on the corner: its label is the
@@ -277,7 +277,7 @@ unique complete ordered simplex raises coordinates in reverse
 order. Its vertex at position `j` has coordinate `i` equal to one exactly
 when `n ≤ i + j`.
 `boxComplementarityLocalCompleteSimplices_one_univ`
-(`Research/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
+(`MathUE/Topology/BoxComplementarityMeshOneNormalization.lean`) proves
 that the actual selected finite set contains exactly that simplex.
 `boxComplementarityCompleteSimplexSignedWeight_meshOneCornerChain` in the
 same file computes its signed weight as `(-1)^n`, including dimension zero.
@@ -300,12 +300,12 @@ the selected solution set with the preimage of the ambient zeros; it requires
 interiority only where the region meets the rectangle. These hypotheses
 exclude boundary complementarity solutions that are not ambient zeros.
 The generic problem and continuous-family definitions reside in
-`MathUE/Topology/BoxComplementarityProblem.lean`; the parity specification
-and integer-degree construction remain in Research.
+`MathUE/Topology/BoxComplementarityProblem.lean`. The unused abstract parity
+specification remains in Research; the integer-degree construction is in `MathUE`.
 
 `BoxComplementarityProblem.localDegree_scaleGain` and
 `BoxComplementarityProblem.localDegree_ofAmbientMap_dilation`
-(`Research/Topology/BoxComplementarityPositiveRescalingDegree.lean`) prove
+(`MathUE/Topology/BoxComplementarityPositiveRescalingDegree.lean`) prove
 positive gain-rescaling invariance and covariance under the literal translated
 dilation `point ↦ shift + scalar * point`. The latter uses the transformed
 rectangle and region and the inverse-scaled field
@@ -345,7 +345,7 @@ positive-entry coordinates in decreasing order. Its raw signed weight is
 product of the diagonal signs. Dimension zero is included.
 
 `completeSimplex_diagonalOrderedChain` and `signedWeight_diagonalOrderedChain`
-(`Research/Topology/BoxComplementarityDiagonalChain.lean`) construct that
+(`MathUE/Topology/BoxComplementarityDiagonalChain.lean`) construct that
 complete simplex and compute its actual raw weight as
 `(-1)^n * (-1)^(number of negative entries)` on every odd mesh `2*k+1` with
 `k > 0`. The coordinate order and labels are actual constructions, not
@@ -354,7 +354,7 @@ reside in `MathUE/Topology/SignedSimplexLabelBoundary.lean`.
 
 `localCompleteSimplices_centeredDiagonal_eq_singleton` and
 `localSignedCount_centeredDiagonal_odd`
-(`Research/Topology/BoxComplementarityDiagonalLocalIndex.lean`) prove
+(`MathUE/Topology/BoxComplementarityDiagonalLocalIndex.lean`) prove
 uniqueness and the actual local count. Confinement uses both anchor
 membership and the simplex's unit coordinate span to exclude cube-boundary
 labels. `isIsolating_centeredDiagonal_centralRegion` derives isolation from
@@ -379,14 +379,14 @@ It uses the existing
 (`Mathlib/LinearAlgebra/Matrix/Transvection.lean`) to obtain actual finite
 transvection lists and a diagonal factor, then scales their coefficients
 to zero. `localDegree_centeredMatrix_eq_sign_det`
-(`Research/Topology/BoxComplementarityCenteredMatrixLocalIndex.lean`)
+(`MathUE/Topology/BoxComplementarityCenteredMatrixLocalIndex.lean`)
 transports the computed diagonal index to every nonsingular centered matrix
 field on the same central region. Joint continuity follows from the matrix
 path; pointwise injectivity supplies common isolation. No uniform inverse
 bound or supplied solution identity is required. Arbitrary affine-chart
 comparison remains a separate obligation.
 `localDegree_affineRootProblem_eq_sign_det`
-(`Research/Topology/BoxComplementarityAffineLocalIndex.lean`) gives the
+(`MathUE/Topology/BoxComplementarityAffineLocalIndex.lean`) gives the
 affine-root calculation in a displayed scalar box centered at an arbitrary
 root. The inner ambient box pulls back to the actual central counting
 region, and the pulled-back gain is the centered matrix gain multiplied by
@@ -401,14 +401,14 @@ from strict inactive slacks and identify the selected-row determinant with
 the active principal determinant. The same file identifies ambient zeros
 of the literal minimum map with the existing LCP solution predicate.
 `IsStandardLCPSolution.exists_box_localDegree_eq_sign_det`
-(`Research/Topology/LinearComplementarityLocalIndex.lean`) uses these facts
+(`MathUE/LinearProgramming/LocalDegree.lean`) uses these facts
 to construct an isolating box and compute the actual local integer degree
 when the active principal matrix is nonsingular. Empty active support and
 dimension zero are included; nonsingularity of the full matrix is not needed.
 This remains a root-centered calculation, not a common-chart sum of indices.
 
 `BoxComplementarityProblem.localDegree_eq_of_solutionsIn_eq`
-(`Research/Topology/BoxComplementaritySolutionExcision.lean`) derives excision
+(`MathUE/Topology/BoxComplementaritySolutionExcision.lean`) derives excision
 for two isolating regions of the same problem from equality of their actual
 solution sets. Compactness supplies the finite-mesh clearance used by the
 existing count theorem. No clearance witness is assumed, but the problems
@@ -416,7 +416,7 @@ must be identical; this does not compare different ambient charts.
 
 `localDegree_offCenterMatrix_eq_sign_det` and
 `localDegree_offCenterMatrix_region_eq_sign_det`
-(`Research/Topology/BoxComplementarityOffCenterMatrixLocalIndex.lean`)
+(`MathUE/Topology/BoxComplementarityOffCenterMatrixLocalIndex.lean`)
 compute a nonsingular affine root's index in the fixed reference cube when
 the root lies in its central region. Moving that root to the center supplies
 the common-region homotopy. Excision then gives the same index on any open
@@ -425,7 +425,7 @@ that neighborhood is not contained in the central region. Isolation and
 equality of the selected solution sets are derived.
 
 `exists_ball_lcpMinBoxProblem_localDegree_eq_sign_det`
-(`Research/Topology/LinearComplementarityCommonChartLocalIndex.lean`)
+(`MathUE/LinearProgramming/CommonChartLocalDegree.lean`)
 transfers that calculation to the literal LCP minimum map in one fixed scalar
 chart. An actual strictly complementary root in its central region, with
 nonsingular active principal matrix, gives a constructed positive-radius
@@ -449,10 +449,10 @@ zero are included.
 
 `BoxComplementarityProblem.localDegree_finsetUnion_of_pairwiseDisjoint` and
 `BoxComplementarityProblem.localDegree_iUnion_of_pairwiseDisjoint`
-(`Research/Topology/BoxComplementarityFiniteAdditivity.lean`) prove additivity
+(`MathUE/Topology/BoxComplementarityFiniteAdditivity.lean`) prove additivity
 on finite disjoint families of isolating regions, including the empty family.
 `exists_finset_lcpMinBoxProblem_localDegree_eq_sum_sign_det`
-(`Research/Topology/LinearComplementarityRootSum.lean`) constructs an exact
+(`MathUE/LinearProgramming/RootDegreeSum.lean`) constructs an exact
 finite enumeration of the selected solutions and computes their total index
 as the sum of active determinant signs. It requires an isolating region and
 centrality, strict complementarity, and active nonsingularity only for the
@@ -465,7 +465,7 @@ integer-LCP packet. Its main degree comparison concerns the complete root set
 and must also handle degenerate or nonisolated roots; regularity must not
 become a hypothesis of that game-semantic criterion.
 
-`r0Degree` (`Research/Topology/LinearComplementarityR0Degree.lean`) defines
+`r0Degree` (`MathUE/LinearProgramming/R0Degree.lean`) defines
 the integer from the homogeneous minimum map in a fixed zero-centered scalar
 chart. `localDegree_lcpMinBoxProblem_zero_eq_r0Degree` in the same file
 proves independence of its positive radius by exact homogeneous gain scaling.
@@ -479,7 +479,7 @@ before offsets and roots are considered. This permits one chart large enough
 for both the LCP root bound and the independent discounted-source bound.
 `isStandardQ_of_r0Degree_ne_zero` derives solvability for every offset, and
 `r0Degree_fin_zero` gives the dimension-zero normalization. These are
-Research results, not yet the quitting-game degree comparison.
+generic degree results; the actual quitting-game comparison is described below.
 
 `lcpMinMap_smul` and `isStandardLCPSolution_smul_iff`
 (`MathUE/LinearProgramming/LocalAffine.lean`) give simultaneous offset/point
@@ -488,7 +488,7 @@ zero scaling; the equivalence requires a strictly positive scalar. No
 regularity, strict complementarity, or nonempty-coordinate premise is used.
 
 `BoxComplementarityProblem.localDegree_of_selfMap_preimage_eq_one`
-(`Research/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
+(`MathUE/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
 degree one for the actual pulled-back box-complementarity problem of the
 identity minus a continuous closed-rectangle self-map. An open region need
 only contain its fixed points, not its whole image. The same file proves
@@ -499,7 +499,7 @@ the box-complementarity degree; they do not assert an ambient degree at a
 boundary zero.
 
 `BoxComplementarityProblem.exists_pos_localDegree_eq_of_norm_sub_lt`
-(`Research/Topology/BoxComplementarityFrontierPerturbation.lean`) constructs
+(`MathUE/Topology/BoxComplementarityFrontierPerturbation.lean`) constructs
 one positive frontier-gain tolerance from isolation, derives isolation of
 every sufficiently close second problem, and equates their degrees. It
 allows frontiers meeting cube faces. The proof separates the compact gain
@@ -517,32 +517,37 @@ displacement convergence, on every fixed bounded signed set. The same file's
 exact rescaling identity. These production source results have no degree,
 fixed-point, or localization premise.
 
-The integer-LCP packet still needs the combined degree comparison: choose one
-large chart, select its shrinking source regions, obtain their frontier margin,
-and use the actual all-fixed-point localization, approximation, and LCP root
-scaling to compare degrees without discarding roots. R0 comparison and
-self-map normalization supply the two resulting integers. Arbitrary
-affine-chart independence and a general regular-Jacobian theorem need not
-precede this composition.
-
-The proposed generic consumer takes the actual reward table on `Fin n`,
+`r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`)
+proves the combined degree comparison for an actual reward table on `Fin n`,
 R0 of its full singleton matrix, and the following localization hypothesis:
 there exist positive constants `R` and `δ` such that, for every
 `0 < discount ≤ δ` and every ambient fixed point `q` of the actual
 `quittingDiscountedClippedMap`, every coordinate of `q / discount` is less
-than `R`. Cube membership is derived from clipping, not supplied. The desired
-conclusion is equality of the canonical `r0Degree` to one. This is a remaining
-theorem contract, not a checked declaration.
+than `R`. Cube membership is derived from clipping, not supplied. The
+conclusion is equality of the canonical `r0Degree` to one.
 
 One requested-radius chart contains both the LCP roots and the localization
-bound. Use preimages of shrinking sup-norm balls within that chart; continuity
+bound. Preimages of shrinking sup-norm balls stay within that chart; continuity
 transfers frontier membership to their spheres. A positive minimum-map margin
 on the fixed sphere and the source estimate supply the relative-norm bound.
 Actual root scaling and same-problem excision then compare the selected LCP
-solutions without changing charts. The empty-sphere case must be retained.
-The four-player specialization must discharge localization and R0 from the
-existing original-game no-uniform-payoff hypothesis, not assume absence of
-an auxiliary-game uniform payoff.
+solutions without changing charts. Empty spheres and dimension zero are
+included. No regularity or finiteness assumption on the root set is used.
+
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`)
+supplies full R0 and degree one under absence of an original-game uniform
+payoff. Localization concerns every fixed point of the actual auxiliary
+table; terminal-shift invariance identifies its matrix with the original
+one. `exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+(`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`)
+proves the raw R0/degree-different-from-one existence criterion for every
+player count `Fin n`, not just four. This strengthening reuses the existing
+generic auxiliary localization under the supplied R0 hypothesis. Neither
+theorem assumes absence of an auxiliary-game uniform payoff. The packet's
+explicit matrix calculations and comparisons with other raw criteria remain
+separate obligations.
 
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
@@ -551,7 +556,7 @@ later local-linearization step.
 ## Subdivision library discovery and reuse boundary
 
 `kuhnStarSubdivision_completeFacetParity_eq`
-(`Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) is a
+(`MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`) is a
 local label-deletion parity identity. It constructs neither geometric
 stellar cells nor a sequence connecting the two grid triangulations.
 Its integer label analogue follows routinely from

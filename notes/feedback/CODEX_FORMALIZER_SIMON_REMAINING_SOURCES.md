@@ -176,16 +176,29 @@ The upper-fiber estimates are not conclusions of `corollary4_1` alone.
 Separate unrelated scale choices would not prove the final common-scale field.
 
 For Property (6), Case 1, contractibility of the upper payoff image does
-not justify membership of a straight segment. A source-level reduction
-remains to be implemented: a zero cutoff leaves the actual payoff endpoint.
-For positive cutoff, the small-step premise and the small-quitting bound
-control the distance from the homotopy's first coordinate to its original
-base point, using the exact one-stage payoff identity and the bound on the
-structure-map correction. Under the current small-step-radius cutoff, this
-puts the first coordinate in the lower neighborhood, where the required
-segment belongs to the convex lower fiber. This ordinary mathematical
-argument is not yet a checked declaration; it uses no star-convexity of the
-upper image.
+not justify membership of a straight segment.
+`section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood`
+(`Literature/Simon2012.lean`) proves the required fiber membership whenever
+the actual first coordinate lies in the lower neighborhood. It uses the
+one-stage payoff's membership in the convex lower fiber and assumes no
+small-step or scale bound.
+`section4X_mem_lowerNeighborhood_of_positive_cutoff_small_quit` in the same
+file supplies that membership for positive cutoff and the stated small-
+quitting bound under the literal common-scale small-step premise. The exact
+one-stage affine identity and structure-map correction bound control the
+distance to the original base point. Zero quitting is included. Both the
+cutoff and the small-step premise use the same Section 4 radius; neither
+Lemma 4.4 nor star-convexity of the upper image is assumed. The zero-cutoff
+endpoint branch and the other small-step cases still need assembly.
+
+For the zero-cutoff, positive-quitting branch, the upper-neighborhood
+coordinate cap still depends on the global part of Lemma 4.4. The large-
+quitting zero-cutoff case also needs the continuation vector in the exact
+box required by `IsStructureMotionParameter`; the broader bounds asserted
+by Lemma 4.4 alone do not supply that premise. This is a remaining source
+alignment obligation, not a counterexample to the paper's result. The
+bounded-continuation, positive-cutoff case can reuse the checked supported
+coordinate bound and coordinate drift without assuming that global part.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved. The checked

@@ -533,6 +533,15 @@
       "scope": "Ambient projective Q-bar yields a uniform-equilibrium payoff against every unilateral behavioral deviation. The punishment-normal path decoder is constructed through the deleted-survival Snell fork; this does not cover ResidualHardClass."
     },
     {
+      "id": "singleton-degree-uniform-payoff",
+      "subject": "Finite quitting games with R0 singleton matrix of degree different from one",
+      "kind": "Unconditional family theorem",
+      "declaration": "exists_uniformEquilibriumPayoff_of_r0Degree_ne_one",
+      "source": "UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean",
+      "umbrella": "UniformEquilibrium.lean",
+      "scope": "For every player count Fin n, full R0 of the original singleton-difference matrix and canonical integer degree different from one imply an original-game uniform-equilibrium payoff against every behavioral deviation. All reward signs and dimension zero are allowed. The argument uses localization of every actual auxiliary discounted fixed point; it assumes neither normality, auxiliary-game nonexistence, nor regular or finitely many roots. In four players, original-game nonexistence additionally forces full R0 itself. The remaining degree-one class is not solved."
+    },
+    {
       "id": "solan-vieille-solo-hazard-floor",
       "subject": "At-most-one-owner calendars on the Solan--Vieille boundary table",
       "kind": "Unconditional obstruction",

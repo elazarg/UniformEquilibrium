@@ -1,4 +1,4 @@
-import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockExpectationDomination
+import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockEvaluatedFullBehavioralCap
 
 /-!
 # Capped-clock domination with uniformly approximate reward rows
@@ -158,5 +158,100 @@ theorem
           cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_error
             reward certificate evaluation evaluation_nonneg evaluation_antitone
               sample.1 sample.2
+
+/-- Every complete outsider stopping law obeys the weighted child behavioral
+debt bound plus the single common row allowance. -/
+theorem
+    outsideStoppingLawEvaluatedGain_le_weighted_behaviorDeviationDebt_add_error
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
+    (certificate : CappedClockParentRewardAdditiveCertificate reward)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ)) :
+    quittingStoppingLawEvaluatedPayoff reward evaluation
+        (cappedClockParentSourceLaws childLaws outsideLaw) none -
+      quittingStoppingLawEvaluatedPayoff reward evaluation
+        (quietParentStoppingLaws childLaws) none ≤
+      (∑ i, certificate.weight i *
+        (quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
+            (quittingStoppingLawProfile reward
+              (quietParentStoppingLaws childLaws)) (some i) -
+          quittingStoppingLawEvaluatedPayoff reward evaluation
+            (quietParentStoppingLaws childLaws) (some i))) +
+        certificate.rowError * evaluation 0 := by
+  let source := pmfPi (cappedClockParentSourceLaws childLaws outsideLaw)
+  let coupled : PMF ((ι → Option ℕ) × Option ℕ) := source.map fun clocks =>
+    (fun i => clocks (some i), clocks none)
+  have hExpectation :=
+    expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations_add_error
+      reward certificate evaluation evaluation_nonneg evaluation_antitone coupled
+  simp only [coupled, expect_map] at hExpectation
+  exact
+    outsideStoppingLawEvaluatedGain_le_weighted_behaviorDeviationDebt_add_const_of_expectation
+      reward certificate.weight certificate.weight_nonneg evaluation
+        evaluation_nonneg evaluation_antitone childLaws outsideLaw
+          (certificate.rowError * evaluation 0) hExpectation
+
+/-- The outsider's unrestricted behavioral evaluated debt pays the common
+N/F/J row allowance only once. -/
+theorem outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_error
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
+    (certificate : CappedClockParentRewardAdditiveCertificate reward)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (childLaws : ι → PMF (Option ℕ)) :
+    quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
+        (quittingStoppingLawProfile reward
+          (quietParentStoppingLaws childLaws)) none -
+      quittingBehaviorEvaluatedPayoff reward evaluation
+        (quittingStoppingLawProfile reward
+          (quietParentStoppingLaws childLaws)) none ≤
+      (∑ i, certificate.weight i *
+        (quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
+            (quittingStoppingLawProfile reward
+              (quietParentStoppingLaws childLaws)) (some i) -
+          quittingBehaviorEvaluatedPayoff reward evaluation
+            (quittingStoppingLawProfile reward
+              (quietParentStoppingLaws childLaws)) (some i))) +
+        certificate.rowError * evaluation 0 := by
+  exact
+    outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_const_of_stoppingLaw
+      reward certificate.weight evaluation childLaws
+        (certificate.rowError * evaluation 0) fun outsideLaw =>
+          outsideStoppingLawEvaluatedGain_le_weighted_behaviorDeviationDebt_add_error
+            reward certificate evaluation evaluation_nonneg evaluation_antitone
+              childLaws outsideLaw
+
+/-- If the time-zero evaluation weight is at most one, the common row
+allowance enters the unrestricted behavioral bound literally. -/
+theorem outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_rowError
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
+    (certificate : CappedClockParentRewardAdditiveCertificate reward)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (evaluation_zero_le_one : evaluation 0 ≤ 1)
+    (childLaws : ι → PMF (Option ℕ)) :
+    quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
+        (quittingStoppingLawProfile reward
+          (quietParentStoppingLaws childLaws)) none -
+      quittingBehaviorEvaluatedPayoff reward evaluation
+        (quittingStoppingLawProfile reward
+          (quietParentStoppingLaws childLaws)) none ≤
+      (∑ i, certificate.weight i *
+        (quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
+            (quittingStoppingLawProfile reward
+              (quietParentStoppingLaws childLaws)) (some i) -
+          quittingBehaviorEvaluatedPayoff reward evaluation
+            (quittingStoppingLawProfile reward
+              (quietParentStoppingLaws childLaws)) (some i))) +
+        certificate.rowError := by
+  refine (outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_error
+    reward certificate evaluation evaluation_nonneg evaluation_antitone
+      childLaws).trans ?_
+  exact add_le_add le_rfl
+    (mul_le_of_le_one_right certificate.rowError_nonneg evaluation_zero_le_one)
 
 end GameTheory

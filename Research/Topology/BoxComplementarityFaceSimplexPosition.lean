@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Research.Topology.BoxComplementaritySpernerApproximation
+import MathUE.Topology.BoxComplementaritySpernerApproximation
 import MathUE.Topology.KuhnSimplexGeometry
 
 /-!

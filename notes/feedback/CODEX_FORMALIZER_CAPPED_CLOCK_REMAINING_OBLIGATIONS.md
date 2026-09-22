@@ -24,8 +24,24 @@ in the literal deleted child game on its right side. Its evaluation is
 nonnegative and nonincreasing. The terminal adapter supplies the checked
 fixed-target quiet-extension and four-player existence theorems.
 
+`quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_error`
+in the same evaluated child-deletion adapter transports a common reward-row
+error to the actual Never lift and unrestricted behavioral debts. It charges
+the row error times the evaluation at time zero, not twice that amount.
+The `quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_rowError`
+corollary charges just the row error when the evaluation at zero is at most
+one. Separate Never/future/joining errors share the deterministic proof in
+`CappedClockPointwiseDomination.lean`; the older Never-only theorem retains
+its sharper clock-dependent correction. The cap transport factors through
+one common-allowance argument instead of duplicating the exact proof.
+
 The raw reward criterion has exact real and rational LP alternatives. Its
 zero-weight case is equivalent to exact singleton block dispensability.
+`cappedClockExpectedActualGain_le_iff_rewardRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExpectationNecessity.lean`)
+characterizes universal terminal expectation domination by the same fixed
+nonnegative weights and reward rows. Dirac laws supply necessity; this is
+not a necessity theorem for arbitrary behavioral debt comparisons.
 The paired-family constructor preserves arbitrary nonsingleton coordinates
 of the three surviving players and supplies a uniform-equilibrium payoff.
 Every member fails exact singleton block deletion for every player.
@@ -36,28 +52,19 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 
 ## Work still needed
 
-1. Transport the checked common-row-error pointwise and expectation bounds
-   to unrestricted behavioral caps and the actual child-profile lift.
-   `expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations_add_error`
-   (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockAdditiveDomination.lean`)
-   already charges the row error times the evaluation at time zero, not twice
-   that amount. Separate Never/future/joining errors share one deterministic
-   proof; the older Never-only theorem retains its sharper clock-dependent
-   correction.
-2. Package the expectation-level necessity direction through deterministic
-   clock laws. Deterministic necessity and expectation-level sufficiency
-   already have proofs.
-3. Construct the terminating rational finite-law enumeration: rational
+1. Construct the terminating rational finite-law enumeration: rational
    approximation, exact cap computation on consecutive calendars, and the
    termination argument. Rational LP certificates and real finite-menu
-   approximation are not this producer.
-4. Seal the additional example conclusions: slack values, terminal Nash laws,
+   approximation are not this producer. Existing exact rational-code and
+   semantic adapters, including the missing pure-Never restriction, are mapped
+   in [the rational producer dependency note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
+2. Seal the additional example conclusions: slack values, terminal Nash laws,
    payoffs and caps, absence of pure terminal Nash equilibria, robustness under
    reward perturbations, and the comparison with the capped-joint hypothesis.
-5. Formalize the solved table failing every deletion LP, the missing-Never
+3. Formalize the solved table failing every deletion LP, the missing-Never
    example with zero child singleton, and the sparse-calendar missed response
    with its consecutive-menu repair.
-6. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
+4. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.
    Its hypotheses concern an exact balanced singleton schedule, not all child

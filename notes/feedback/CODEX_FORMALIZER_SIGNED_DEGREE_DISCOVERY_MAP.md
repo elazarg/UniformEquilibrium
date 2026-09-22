@@ -12,19 +12,18 @@ the selected pinned Mathlib topology, analysis, and algebraic-topology trees
 or the fixed-point dependency. The project-owned construction now supplies
 local integer degree, homotopy invariance, excision, common-chart affine and
 strict LCP index calculations, R0 total degree, and self-map normalization.
-Its current theorem surface and remaining source comparisons are recorded in
+Its current theorem surface and the actual-source comparison are recorded in
 [the signed local degree specification](CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md).
 The dependency search is bounded, not a statement about external projects.
 
-There is substantial reusable geometry. In particular the concrete Research
-Kuhn-prism construction must not be rebuilt merely because its current
-conclusion is modulo two. Its incidence and endpoint bijections are actual
-theorems. Local integer orientation and cancellation are available below.
+The concrete Kuhn-prism construction has reusable incidence and endpoint
+bijections beyond its parity corollaries. Local integer orientation and
+cancellation are available below.
 Signed counts, uniform mixed-time vertex clearance, and local endpoint
 equality at every sufficiently fine common mesh are available. Coordinate-floor
 refinement proves independence of sufficiently fine mesh resolutions.
-Frontier-gain perturbation stability is proved; its application to the actual
-discounted field remains separate.
+Frontier-gain perturbation stability and its application to the actual
+discounted field are proved.
 
 The actual discounted displacement's linear expansion on bounded signed sets
 is available; its scope is recorded in Section 3 below.
@@ -63,7 +62,7 @@ is available; its scope is recorded in Section 3 below.
 
 ### Finite geometry, stronger than its parity-only corollaries
 
-In `Research/Topology/BoxComplementaritySpernerLocalCount.lean`:
+In `MathUE/Topology/BoxComplementaritySpernerLocalCount.lean`:
 
 - `boxComplementarityLocalCompleteSimplices_eq_of_difference_subset_cleared`
   proves literal equality of finite simplex sets at one resolution when the
@@ -76,7 +75,7 @@ In `Research/Topology/BoxComplementaritySpernerLocalCount.lean`:
   produces a collar with no fine-grid complete-simplex vertex from isolation.
   It does not assert resolution-independent signed degree.
 
-In `Research/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`:
+In `MathUE/Topology/BoxComplementaritySpernerSubdivisionPrism.lean`:
 
 - `completeSimplexEquivKuhnEndpointLabeledSimplex` connects the two existing
   finite simplex representations.
@@ -124,13 +123,13 @@ root-owned coherent promotion, not a production import of Research.
 The regular LCP calculation reuses these determinant identities, without a
 general differentiable local-degree theorem.
 `IsStandardLCPSolution.exists_box_localDegree_eq_sign_det`
-(`Research/Topology/LinearComplementarityLocalIndex.lean`) now constructs
+(`MathUE/LinearProgramming/LocalDegree.lean`) now constructs
 the affine neighborhood and computes the local index in a root-centered
 chart. `exists_ball_lcpMinBoxProblem_localDegree_eq_sign_det`
-(`Research/Topology/LinearComplementarityCommonChartLocalIndex.lean`)
+(`MathUE/LinearProgramming/CommonChartLocalDegree.lean`)
 computes the same index in a supplied common scalar chart.
 `exists_finset_lcpMinBoxProblem_localDegree_eq_sum_sign_det`
-(`Research/Topology/LinearComplementarityRootSum.lean`) sums over the complete
+(`MathUE/LinearProgramming/RootDegreeSum.lean`) sums over the complete
 finite actual root set under strict complementarity and nonsingularity.
 These regularity hypotheses concern the finite calculation, not total R0
 degree or the actual discounted source.
@@ -167,52 +166,52 @@ proposition, not a hidden LCP-degree theorem.
    cancellation, endpoint orientation, and local signed counts are available.
    Uniform mixed-parameter face-vertex clearance is supplied by
    `IsContinuousBoxComplementarityFamily.exists_isolatingFrontierCollar_eventually_prismCleared`
-   (`Research/Topology/BoxComplementarityPrismCluster.lean`). Actual incident
+   (`MathUE/Topology/BoxComplementarityPrismCluster.lean`). Actual incident
    parent selections agree by
    `IsContinuousBoxComplementarityFamily.eventually_prismFace_parent_base_mem_iff`
-   (`Research/Topology/KuhnPrismBoundaryCollar.lean`).
+   (`MathUE/Topology/KuhnPrismBoundaryCollar.lean`).
    `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
-   (`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`) applies
+   (`MathUE/Topology/BoxComplementarityLocalSignedHomotopy.lean`) applies
    the weighted endpoint identity to these selections and identifies its
    endpoint sums with the existing local counts. This step is proved.
 2. **Mesh independence.**
    `BoxComplementarityProblem.eventually_localSignedCount_eq`
-   (`Research/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
+   (`MathUE/Topology/BoxComplementarityFloorRefinementSignedTransport.lean`)
    compares every pair of sufficiently fine positive resolutions. This step
    is proved using actual coordinate-floor refinements, not a field asserting
    invariance.
 3. **Local degree and its laws.**
    `BoxComplementarityProblem.localDegree`
-   (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`)
+   (`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`)
    is the stabilized normalized integer. Finite additivity is in
-   `Research/Topology/BoxComplementarityFiniteAdditivity.lean`; preservation
+   `MathUE/Topology/BoxComplementarityFiniteAdditivity.lean`; preservation
    of the complete solution set gives excision in
-   `Research/Topology/BoxComplementaritySolutionExcision.lean`.
+   `MathUE/Topology/BoxComplementaritySolutionExcision.lean`.
    `localDegree_of_selfMap_preimage_eq_one`
-   (`Research/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
+   (`MathUE/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
    normalization for a rectangle self-map on any open region containing all
    its fixed points, including boundary fixed points. This is the constructed
    box-complementarity degree; arbitrary ambient chart independence is not
    claimed.
 4. **Homotopy and perturbation.**
    `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq`
-   (`Research/Topology/BoxComplementarityStabilizedLocalDegree.lean`) proves
+   (`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) proves
    invariance on a common isolating region. Positive output scaling is also
    available. `exists_pos_localDegree_eq_of_norm_sub_lt` and
    `localDegree_eq_of_norm_sub_lt_norm`
-   (`Research/Topology/BoxComplementarityFrontierPerturbation.lean`) derive
+   (`MathUE/Topology/BoxComplementarityFrontierPerturbation.lean`) derive
    isolation and degree equality from, respectively, a uniform frontier-gain
    tolerance and an explicit relative-norm bound on an interior frontier.
    The latter bound is suitable for the packet's shrinking domains.
 5. **R0 degree and the actual-source comparison.**
    `exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree`
-   (`Research/Topology/LinearComplementarityR0Degree.lean`) supplies one chart
+   (`MathUE/LinearProgramming/R0Degree.lean`) supplies one chart
    containing all LCP roots for every bounded offset and proves equality to
    the canonical homogeneous integer. No finiteness or regularity premise is
    used. The actual discounted comparison and the packet's final game
    criterion remain to be assembled from this and the source results below.
 
-The signed finite construction is implemented through these Research
+The signed finite construction is implemented through these generic
 declarations. Reuse it; a separate singular-homology implementation is not a
 dependency of the packet. Promotion must precede any production consumer.
 
@@ -259,11 +258,11 @@ have zero weight. `sum_signedIncidence_cells_eq_zero_of_not_boundary`
 face column using the pinned exact parent count.
 `sum_parameterFaceWeight_left_eq_right`
 (`MathUE/Topology/KuhnSignedParameterEnd.lean`) gives full-grid endpoint
-equality under explicit boundary-end coverage. The concrete Research prism
+equality under explicit boundary-end coverage. The concrete prism
 source discharges that coverage and transports the weights through its
 endpoint equivalences. The actual local-region theorem is
 `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`
-(`Research/Topology/BoxComplementarityLocalSignedHomotopy.lean`), with one
+(`MathUE/Topology/BoxComplementarityLocalSignedHomotopy.lean`), with one
 threshold for all sufficiently fine common resolutions and the same isolating
 region throughout the family. The separate floor-refinement construction
 supplies subdivision-independent degree, as recorded in Section 2.
@@ -299,8 +298,18 @@ or extension of the probabilistic inequality to signed hazards is needed.
 (`UniformEquilibrium/Quitting/Stationary/DiscountedClippedScaling.lean`)
 derive uniform upper-clip inactivity and approximate the actual rescaled
 clipped field by `lcpMinMap` on every bounded signed set. The lower clip is
-retained in the exact minimum identity. The degree comparison must still
-apply these estimates on the shrinking domains and retain all actual roots.
+retained in the exact minimum identity.
+`r0Degree_quittingSingletonMatrix_eq_one_of_discounted_fixedPoint_localization`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedDegree.lean`) applies
+these estimates on shrinking domains in one fixed chart and retains every
+actual root. Full R0 and uniform localization of all actual fixed points
+imply canonical degree one. The original-game no-uniform-payoff hypothesis
+supplies these premises in four players through
+`finFour_singleton_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourSingletonDegreeCriterion.lean`).
+With R0 supplied, the positive existence criterion holds for every `Fin n`:
+`exists_uniformEquilibriumPayoff_of_r0Degree_ne_one`
+(`UniformEquilibrium/Quitting/Classification/LCP/SingletonDegreeCriterion.lean`).
 
 ## 4. Bounded fable lookup and nonclaims
 

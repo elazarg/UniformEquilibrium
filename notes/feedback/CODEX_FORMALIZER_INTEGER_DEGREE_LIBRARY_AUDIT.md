@@ -1,5 +1,9 @@
 # Integer degree and specified-endpoint curve selection: library audit
 
+Historical scope: this records the discovery audit before construction of the
+project-owned degree library. Current declarations and completed adapters are
+listed in [the signed degree specification](CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md).
+
 Status: bounded static formalization audit by CODEX_FORMALIZER. No build,
 cache write, production edit, or new mathematical theorem is claimed here.
 The report records exact declarations under their current imports and proposed
@@ -171,11 +175,11 @@ Available pieces:
   proves a fixed point for a continuous self-map of a nonempty compact convex
   finite-dimensional set. It does not attach an integer index to its roots.
 - `boxComplementarity_completeSimplex_card_odd`
-  (`Research/Topology/BoxComplementarityCubicalSperner.lean`) is an actual
+  (`MathUE/Topology/BoxComplementarityCubicalSperner.lean`) is an actual
   finite-grid odd-cardinality theorem.
 - `boxComplementarityLocalCompleteSimplexParity_univ`, local disjoint-union
   additivity, and `relativeCubicalPrism_boundaryParity_eq`
-  (`Research/Topology/BoxComplementaritySpernerLocalCount.lean`) are mod-two
+  (`MathUE/Topology/BoxComplementaritySpernerLocalCount.lean`) are mod-two
   results. The relative-prism theorem assumes its finite incidence data and
   boundary classification; it does not build a continuous signed degree.
 - `ModTwoBoxComplementarityParitySpec`
@@ -187,7 +191,7 @@ Available pieces:
   (`MathUE/Topology/KuhnSimplexGeometry.lean`) expose actual Kuhn-grid
   geometry. `dist_boxComplementarityGridPoint_le_one_div_of_simplex` and
   `BoxComplementarityProblem.isSolution_of_completeSimplexAnchorPoint_tendsto`
-  (`Research/Topology/BoxComplementaritySpernerApproximation.lean`) provide
+  (`MathUE/Topology/BoxComplementaritySpernerApproximation.lean`) provide
   mesh estimates and a solution limit, not signed refinement invariance.
 - `AlgebraicTopology.singularHomologyFunctor`
   (pinned `Mathlib/AlgebraicTopology/SingularHomology/Basic.lean`) and
