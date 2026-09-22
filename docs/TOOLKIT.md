@@ -1832,8 +1832,26 @@ for clock-evaluated payoffs. Reconstruction preserves these payoffs, and
 nonnegative nonincreasing evaluations give finite bounds from the reward table.
 The terminal specializations are proved equal to the existing terminal payoff
 and deviation cap. This interface does not by itself identify an evaluation
-with the existing finite-horizon stage-payoff semantics or prove the evaluated
-quiet-extension comparison.
+with the existing finite-horizon stage-payoff semantics.
+
+`outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedFullBehavioralCap.lean`)
+bounds the outsider's unrestricted evaluated debt by weighted survivor debts
+at the reconstructed quiet parent profile, for every nonnegative nonincreasing
+evaluation and every complete tuple of child stopping laws. The proof realizes
+each capped-child law as an actual deviation before taking the outsider's
+supremum. Its right side still uses survivor debts in the parent game;
+transport to the literal deleted child game is a separate adapter.
+
+`quittingBehaviorEvaluatedPayoff_liftDeletedProfile` and
+`quittingBehaviorEvaluatedDeviationPayoffCap_liftDeletedProfile`
+(`UniformEquilibrium/Quitting/Classification/PlayerDeletionEvaluatedPayoff.lean`)
+prove payoff and full-cap preservation for every survivor under the existing
+Never lift. They allow an arbitrary deleted-player predicate and arbitrary
+clock evaluation; neither monotonicity nor boundedness is needed for these
+equalities. The parent and survivor player types are nonempty. The proof
+preserves the actual first clock and quitting coalition and identifies the
+entire replacement-law payoff ranges.
 
 `quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)

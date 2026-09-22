@@ -7021,6 +7021,68 @@ private theorem section4Omega_mem_Ioc (G : QuittingGame)
     · simpa only [N] using hproduct1.trans hden1
     · simpa only [N] using hdenpos
 
+/-- The Section 4 small-step radius is smaller than the neighborhood
+thickness used in the upper/lower priority split. -/
+private theorem section4Omega_le_epsilon_third (G : QuittingGame)
+    (M d ρ ξ R ε : ℝ) (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Omega G M d ρ ξ R ε ≤ ε / 3 := by
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  obtain ⟨_hδpos, hδ1⟩ := section4Delta_mem_Ioc
+    G M ρ ε hplayers hM hmotion hε hερ
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpow : 1 ≤ N ^ 2 := by nlinarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hdεNonneg : 0 ≤ d * ε := mul_nonneg hd.le hε.le
+  have hdεLe : d * ε ≤ ε := by
+    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd1 hε.le
+  have hdεξNonneg : 0 ≤ d * ε * ξ := mul_nonneg hdεNonneg hξ.le
+  have hdεξLe : d * ε * ξ ≤ d * ε := by
+    simpa only [mul_one] using mul_le_mul_of_nonneg_left hξ1.le hdεNonneg
+  have hdεξρNonneg : 0 ≤ d * ε * ξ * ρ :=
+    mul_nonneg hdεξNonneg hmotion.2.1.le
+  have hdεξρLe : d * ε * ξ * ρ ≤ d * ε * ξ := by
+    simpa only [mul_one] using
+      mul_le_mul_of_nonneg_left hmotion.2.2.1 hdεξNonneg
+  have hnum :
+      d * ε * ξ * ρ * Section4Delta G M ε ≤ ε := by
+    calc
+      d * ε * ξ * ρ * Section4Delta G M ε ≤ d * ε * ξ * ρ := by
+        simpa only [mul_one] using
+          mul_le_mul_of_nonneg_left hδ1 hdεξρNonneg
+      _ ≤ d * ε * ξ := hdεξρLe
+      _ ≤ d * ε := hdεξLe
+      _ ≤ ε := hdεLe
+  have hNM : 3 * M ≤ N * M :=
+    mul_le_mul_of_nonneg_right hN hMpos.le
+  have hRthirty : 30 ≤ R := by
+    have hRthirtyM : 30 * M ≤ R := by
+      dsimp only [N] at hR hNM
+      nlinarith
+    nlinarith [hM.1]
+  have hfirst : 3 ≤ 200 * R := by nlinarith
+  have hsecond : 200 * R ≤ 200 * R * N ^ 2 := by
+    nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R)
+      (by linarith : 0 ≤ N ^ 2 - 1)]
+  have hthird : 200 * R * N ^ 2 ≤ 200 * R * N ^ 2 * M := by
+    nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R * N ^ 2)
+      (by linarith [hM.1] : 0 ≤ M - 1)]
+  have hden : 3 ≤ 200 * R * N ^ 2 * M :=
+    hfirst.trans (hsecond.trans hthird)
+  have hdenpos : 0 < 200 * R * N ^ 2 * M := by linarith
+  rw [Section4Omega, div_le_iff₀ (by simpa only [N] using hdenpos)]
+  have hscaled : 3 * ε ≤ ε * (200 * R * N ^ 2 * M) := by
+    simpa only [mul_comm] using mul_le_mul_of_nonneg_left hden hε.le
+  dsimp only [N] at hscaled
+  nlinarith
+
 /--
 The cutoff `λ` used to glue the structure homotopy to the identity near `D`.
 The support radius is supplied explicitly; the printed construction uses `δ`.
@@ -7363,6 +7425,81 @@ theorem isCompact_lowerNeighborhood (G : QuittingGame) (R ε : ℝ)
   obtain ⟨target, htarget, hdist⟩ := hcompact.exists_infDist_eq_dist
     (hnonempty.image _) (WithLp.toLp 2 point)
   exact Metric.mem_cthickening_of_dist_le _ _ _ _ htarget (hdist ▸ hbound)
+
+/-- Outside the lower-priority neighborhood, proximity to a displayed
+frontier piece makes that piece's coordinate active in the upper glue. -/
+private theorem upper_piece_distance_gives_active_coordinate
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (x : Payoff G.Player) (hxUpper : x ∈ UpperNeighborhood G R ε)
+    (hxNotLower : x ∉ LowerNeighborhood G R ε) (j : G.Player)
+    (hpiece :
+      (frontier (TruncatedW G R) ∩ TruncatedPiece G R j).Nonempty)
+    (hdistance :
+      EuclideanInfDist x
+          (frontier (TruncatedW G R) ∩ TruncatedPiece G R j) ≤
+        Section4Omega G M d ρ ξ R ε) :
+    x ∈ UpperNeighborhoodFor G R ε j ∧
+      |x j - SoloPayoff G j| ≤ Section4Omega G M d ρ ξ R ε := by
+  have homega : Section4Omega G M d ρ ξ R ε ≤ ε / 3 :=
+    section4Omega_le_epsilon_third G M d ρ ξ R ε
+      hplayers hM hd hd1 hmotion hconstants hε hερ
+  have hfrontierCompact : IsCompact (frontier (TruncatedW G R)) :=
+    (isCompact_truncatedW G R).of_isClosed_subset isClosed_frontier
+      (isCompact_truncatedW G R).isClosed.frontier_subset
+  have hpieceCompact :
+      IsCompact (frontier (TruncatedW G R) ∩ TruncatedPiece G R j) :=
+    hfrontierCompact.inter_right (isCompact_truncatedPiece G R j).isClosed
+  have himageCompact : IsCompact
+      (WithLp.toLp 2 ''
+        (frontier (TruncatedW G R) ∩ TruncatedPiece G R j)) :=
+    hpieceCompact.image (PiLp.continuous_toLp 2 _)
+  obtain ⟨a', ha', hdist⟩ := himageCompact.exists_infDist_eq_dist
+    (hpiece.image _) (WithLp.toLp 2 x)
+  obtain ⟨a, ha, rfl⟩ := ha'
+  have hxa : EuclideanDist x a ≤ Section4Omega G M d ρ ξ R ε := by
+    calc
+      EuclideanDist x a =
+          dist (WithLp.toLp 2 x) (WithLp.toLp 2 a) := by
+            simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+              WithLp.toLp_sub, dist_eq_norm]
+      _ = Metric.infDist (WithLp.toLp 2 x)
+          (WithLp.toLp 2 ''
+            (frontier (TruncatedW G R) ∩ TruncatedPiece G R j)) := hdist.symm
+      _ = EuclideanInfDist x
+          (frontier (TruncatedW G R) ∩ TruncatedPiece G R j) :=
+        (euclideanInfDist_eq_infDist_toLp x
+          (frontier (TruncatedW G R) ∩ TruncatedPiece G R j)).symm
+      _ ≤ Section4Omega G M d ρ ξ R ε := hdistance
+  have haNotLower : a ∉ LowerBoundary G R := by
+    intro haLower
+    apply hxNotLower
+    change EuclideanInfDist x (LowerBoundary G R) ≤ ε / 3
+    exact (euclideanInfDist_le_dist_of_mem x a haLower).trans
+      (hxa.trans homega)
+  have haFrontierW : a ∈ frontier (WSet G) := by
+    by_contra haNotFrontierW
+    exact haNotLower (subset_closure ⟨ha.1, haNotFrontierW⟩)
+  have haSoloLower : ∀ k, SoloPayoff G k ≤ a k :=
+    soloPayoff_le_of_mem_closure_compl_WSet G (by
+      simpa only [frontier_compl] using
+        (frontier_subset_closure (s := (WSet G)ᶜ) (by simpa using haFrontierW)))
+  have haSolo : a j = SoloPayoff G j := by
+    exact le_antisymm ha.2.1 (haSoloLower j)
+  have hcoordinate := abs_coordinate_sub_le_euclideanDist x a j
+  have hclose :
+      |x j - SoloPayoff G j| ≤ Section4Omega G M d ρ ξ R ε := by
+    rw [← haSolo]
+    exact hcoordinate.trans hxa
+  rw [UpperNeighborhood] at hxUpper
+  obtain ⟨witness, hwitness⟩ := Set.mem_iUnion.mp hxUpper
+  refine ⟨⟨hwitness.1, ?_⟩, hclose⟩
+  linarith [le_of_abs_le hclose]
 
 /-- The glued neighborhood is compact under the explicit nonempty-boundary condition. -/
 theorem isCompact_gluedNeighborhood (G : QuittingGame) (R ε : ℝ)
@@ -7860,19 +7997,15 @@ private theorem forcedQuitPayoff_sub_solo_mem_Icc
         (coalitionProbability_nonneg G pQuit A)
     · exact mul_nonneg hD (coalitionProbability_nonneg G pQuit A)
 
-/--
-Lemma 4.2: the upper glue is contained in `F_ε`.  Membership of `x` in the
-upper neighborhood is explicit; without it `UpperGlueFiber` contains the
-all-continue image even outside the domain intended in the paper.  The missing
-proof is the finite product estimate that changing a row with total coordinate
-hazard at most `|N|δ` changes each endpoint payoff by at most `ε/3`, followed
-by the two support inequalities defining `E_ε`.
--/
-theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
+/-- Every row in the literal upper-glue row domain satisfies the one-stage
+`ε`-equilibrium inequalities used in Lemma 4.2. -/
+theorem upperGlueRow_mem_epsilonRow (G : QuittingGame) (M R ε δ : ℝ)
     (hM : IsSimonPayoffScale G M) (hε : 0 < ε)
     (hδ : δ = Section4Delta G M ε) :
-    ∀ x, x ∈ UpperNeighborhood G R ε → ∀ y,
-      y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
+    ∀ x, x ∈ UpperNeighborhood G R ε → ∀ p : QuitRow G,
+      (∀ j, x ∈ UpperNeighborhoodFor G R ε j → (p j : ℝ) ≤ δ) →
+      (∀ j, x ∉ UpperNeighborhoodFor G R ε j → (p j : ℝ) = 0) →
+      p ∈ EpsilonRow G ε x := by
   classical
   have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
   have hcardNat : 0 < Fintype.card G.Player := Fintype.card_pos
@@ -7890,15 +8023,14 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
       ⟨{n}, Finset.singleton_nonempty n⟩ n
     dsimp only [SoloPayoff]
     nlinarith
-  intro x hx y hy
+  intro x hx p hpcap hpsupport
   rw [UpperNeighborhood] at hx
   rcases Set.mem_iUnion.mp hx with ⟨witness, hxWitness⟩
-  rcases hy with ⟨p, rfl, hp⟩
   have hpδ : ∀ n, (p n : ℝ) ≤ δ := by
     intro n
     by_cases hn : x ∈ UpperNeighborhoodFor G R ε n
-    · simpa [hn] using hp n
-    · have hzero : (p n : ℝ) = 0 := by simpa [hn] using hp n
+    · exact hpcap n hn
+    · have hzero : (p n : ℝ) = 0 := hpsupport n hn
       linarith
   have hreplaceδ : ∀ n k, ((p.replace G n 0) k : ℝ) ≤ δ := by
     intro n k
@@ -7981,16 +8113,33 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
       SoloPayoff G n + ε / 2
     dsimp only [q] at hweighted hcentered' hqError hεq ⊢
     nlinarith [hweighted, hcentered'.2, hεq]
-  refine ⟨p, ⟨?_, ?_⟩, rfl⟩
+  constructor
   · intro n hnQuit
     have hnNeighborhood : x ∈ UpperNeighborhoodFor G R ε n := by
       by_contra hn
-      have hzero : (p n : ℝ) = 0 := by simpa [hn] using hp n
+      have hzero : (p n : ℝ) = 0 := hpsupport n hn
       linarith
     have hxUpper : x n ≤ SoloPayoff G n + ε / 3 := hnNeighborhood.2
     linarith [hforced n |>.1, hcontinueUpper n hxUpper]
   · intro n _hnContinue
     linarith [hcontinueLower n, hforced n |>.2]
+
+/--
+Lemma 4.2: the upper glue is contained in `F_ε`.  Membership of `x` in the
+upper neighborhood is explicit; without it `UpperGlueFiber` contains the
+all-continue image even outside the domain intended in the paper.
+-/
+theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
+    (hM : IsSimonPayoffScale G M) (hε : 0 < ε)
+    (hδ : δ = Section4Delta G M ε) :
+    ∀ x, x ∈ UpperNeighborhood G R ε → ∀ y,
+      y ∈ UpperGlueFiber G R ε δ x → y ∈ FRow G ε x := by
+  rintro x hx y ⟨p, rfl, hp⟩
+  refine ⟨p, upperGlueRow_mem_epsilonRow G M R ε δ hM hε hδ x hx p ?_ ?_, rfl⟩
+  · intro j hj
+    simpa only [hj, ↓reduceIte] using hp j
+  · intro j hj
+    simpa only [hj, ↓reduceIte] using hp j
 
 /-- The players whose quitting coordinates are allowed to vary in the upper
 glue above `x`. -/
@@ -8786,6 +8935,114 @@ theorem isContractibleSet_gluedFiber
   · have hupper : x ∈ UpperNeighborhood G R ε := hx.resolve_right hlower
     simpa only [GluedFiber, hlower, hupper, ↓reduceIte] using
       isContractibleSet_upperGlueFiber G M R η ε hM hη hε hεη x hupper
+
+/-- In the lower-glue branch of Property (7), the singleton terminal reward
+in the requested truncated piece is already a full escape target. -/
+theorem lowerGlueFiber_piece_escape_at_section4Omega
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (x : Payoff G.Player) (hx : x ∈ LowerNeighborhood G R ε)
+    (j : G.Player) :
+    ∃ target ∈ GluedFiber G R ε (Section4Delta G M ε) x,
+      EuclideanInfDist target (TruncatedPiece G R j) ≤
+          EuclideanInfDist x (TruncatedPiece G R j) ∧
+        Section4Omega G M d ρ ξ R ε ≤ EuclideanDist x target ∧
+        segment ℝ x target ⊆
+          GluedFiber G R ε (Section4Delta G M ε) x := by
+  classical
+  let coalition : {A : Finset G.Player // A.Nonempty} :=
+    ⟨{j}, Finset.singleton_nonempty j⟩
+  let target : Payoff G.Player := G.reward coalition
+  have htargetFeasible : Feasible G target := by
+    exact subset_convexHull ℝ _ (Or.inl ⟨coalition, rfl⟩)
+  have htargetLower : target ∈ LowerGlueFiber G x := by
+    refine ⟨target, htargetFeasible, 1, ?_⟩
+    simp
+  have htargetGlued :
+      target ∈ GluedFiber G R ε (Section4Delta G M ε) x := by
+    simpa only [GluedFiber, hx, ↓reduceIte] using htargetLower
+  obtain ⟨_, _, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by
+    exact_mod_cast hplayers
+  have hNM : 3 * M ≤ (Fintype.card G.Player : ℝ) * M :=
+    mul_le_mul_of_nonneg_right hN (by linarith [hM.1])
+  have hRM : 30 * M ≤ R := by
+    nlinarith
+  have htargetBound : ∀ k, |target k| ≤ M / 3 := by
+    intro k
+    exact hM.2.1 coalition k
+  have htargetPiece : target ∈ TruncatedPiece G R j := by
+    refine ⟨?_, fun k => ?_⟩
+    · simp only [Wj, Set.mem_ofPred_eq, target, coalition, SoloPayoff]
+      exact le_rfl
+    · have hk := htargetBound k
+      obtain ⟨hkLower, hkUpper⟩ := abs_le.mp hk
+      constructor <;> nlinarith [hM.1]
+  have htargetInfDist :
+      EuclideanInfDist target (TruncatedPiece G R j) = 0 := by
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact Metric.infDist_zero_of_mem (Set.mem_image_of_mem _ htargetPiece)
+  have hxInfDistNonneg :
+      0 ≤ EuclideanInfDist x (TruncatedPiece G R j) := by
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact Metric.infDist_nonneg
+  have hboundaryNonempty : (LowerBoundary G R).Nonempty :=
+    lowerBoundary_nonempty_of_section3Constants G M d ρ ξ R
+      hplayers hM hd hd1 hmotion hconstants
+  have hcompact : IsCompact (WithLp.toLp 2 '' LowerBoundary G R) :=
+    (isCompact_lowerBoundary G R).image (PiLp.continuous_toLp 2 _)
+  obtain ⟨b', hb', hdist⟩ := hcompact.exists_infDist_eq_dist
+    (hboundaryNonempty.image _) (WithLp.toLp 2 x)
+  obtain ⟨b, hb, rfl⟩ := hb'
+  have hxb : EuclideanDist x b ≤ ε / 3 := by
+    calc
+      EuclideanDist x b =
+          dist (WithLp.toLp 2 x) (WithLp.toLp 2 b) := by
+            simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+              WithLp.toLp_sub, dist_eq_norm]
+      _ = Metric.infDist (WithLp.toLp 2 x)
+          (WithLp.toLp 2 '' LowerBoundary G R) := hdist.symm
+      _ = EuclideanInfDist x (LowerBoundary G R) :=
+        (euclideanInfDist_eq_infDist_toLp x (LowerBoundary G R)).symm
+      _ ≤ ε / 3 := by
+        simpa only [LowerNeighborhood, Set.mem_ofPred_eq] using hx
+  obtain ⟨k, hbk⟩ := lowerBoundary_has_cube_coordinate G (by
+    linarith [hM.1]) hb
+  have hbxCoordinate : |b k - x k| ≤ EuclideanDist x b := by
+    rw [abs_sub_comm]
+    exact abs_coordinate_sub_le_euclideanDist x b k
+  have hxtargetCoordinate : |x k - target k| ≤ EuclideanDist x target :=
+    abs_coordinate_sub_le_euclideanDist x target k
+  have htriangle :
+      |b k| ≤ |b k - x k| + |x k - target k| + |target k| := by
+    calc
+      |b k| = |(b k - x k) + ((x k - target k) + target k)| :=
+        congrArg abs (by ring)
+      _ ≤
+          |b k - x k| + |(x k - target k) + target k| := abs_add_le _ _
+      _ ≤ |b k - x k| + (|x k - target k| + |target k|) :=
+        add_le_add le_rfl (abs_add_le _ _)
+      _ = |b k - x k| + |x k - target k| + |target k| := by ring
+  have hdistanceOne : 1 ≤ EuclideanDist x target := by
+    have htargetK := htargetBound k
+    rw [hbk] at htriangle
+    nlinarith [hM.1, hε, hερ, hmotion.2.2.1]
+  have homegaOne : Section4Omega G M d ρ ξ R ε ≤ 1 :=
+    (section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
+      hmotion hconstants hε hερ).2
+  have hsegmentLower : segment ℝ x target ⊆ LowerGlueFiber G x :=
+    (convex_lowerGlueFiber G x).segment_subset
+      (self_mem_lowerGlueFiber G x) htargetLower
+  refine ⟨target, htargetGlued, ?_, homegaOne.trans hdistanceOne, ?_⟩
+  · rw [htargetInfDist]
+    exact hxInfDistNonneg
+  · simpa only [GluedFiber, hx, ↓reduceIte] using hsegmentLower
 
 /-- The one-stage value differs from the terminal reward conditional on
 absorption only through the all-Continue branch. -/

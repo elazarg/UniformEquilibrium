@@ -8,10 +8,18 @@ constructors are described in [the toolkit](../../docs/TOOLKIT.md).
 ## Checked scope
 
 The deterministic and expected-clock inequalities allow general nonnegative
-nonincreasing evaluations. The actual behavioral-cap and deletion-profile
-adapters currently use terminal payoffs. The latter suffice for the checked
-fixed-target quiet-extension and four-player existence theorems; they do not
-establish the packet's evaluation-by-evaluation behavioral conclusion.
+nonincreasing evaluations. So does the actual full behavioral-cap comparison
+at reconstructed quiet parent profiles, by
+`outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedFullBehavioralCap.lean`).
+Its right side contains survivor debts in the parent game.
+`quittingBehaviorEvaluatedDeviationDebt_liftDeletedProfile`
+(`UniformEquilibrium/Quitting/Classification/PlayerDeletionEvaluatedPayoff.lean`)
+preserves survivor debts under the existing Never lift for arbitrary clock
+evaluations and arbitrary deleted-player predicates. The final all-evaluation
+quiet-extension adapter still needs to combine these results for every actual
+child behavioral profile. The terminal adapter already supplies the checked
+fixed-target quiet-extension and four-player existence theorems.
 
 The raw reward criterion has exact real and rational LP alternatives. Its
 zero-weight case is equivalent to exact singleton block dispensability.
@@ -25,9 +33,9 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 
 ## Work still needed
 
-1. Extend the actual behavioral-law and full deviation-cap adapters to the
-   general evaluations of the packet. Do not infer this from the expected-clock
-   inequality or the terminal adapter alone.
+1. Combine evaluated payoff and full-cap preservation under the actual Never
+   lift with the checked evaluated parent-debt comparison, using equality of
+   the actual profile's complete stopping laws and those of its reconstruction.
 2. Prove the additive-error theorem when every Never, future, and joining row
    may violate its inequality by the same nonnegative tolerance. The current
    slack certificate relaxes only the Never row.

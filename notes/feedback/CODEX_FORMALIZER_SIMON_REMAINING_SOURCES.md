@@ -115,6 +115,13 @@ combines this with the existing lower-fiber theorem using the literal branch
 definition. These are pointwise contractibility statements, not a continuous
 choice of contractions across base points.
 
+`lowerGlueFiber_piece_escape_at_section4Omega` in the same file proves
+Property (7)'s lower-neighborhood branch at the actual common scale. For
+each requested truncated piece, its owner's singleton terminal reward is
+a constructed feasible target in that piece. The theorem supplies the step
+length, nonincreasing distance to the piece, and the entire segment in the
+literal glued fiber. It does not use the unfinished Lemma 4.4.
+
 ## Remaining Section 4 assembly
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
@@ -157,9 +164,28 @@ nonnegative quitting cap and nonempty lower boundary; the source-scale
 adapter above supplies the latter. `isCompact_section4J` combines it with
 the compact terminal image of the continuous homotopy.
 
-The upper-fiber estimates are not
-conclusions of `corollary4_1` alone. Separate unrelated scale choices would
-not prove the final common-scale field.
+The upper-fiber estimates are not conclusions of `corollary4_1` alone.
+Separate unrelated scale choices would not prove the final common-scale field.
+
+Two source-level reductions guide the remaining implementation. They are
+ordinary mathematical arguments, not additional checked declarations:
+
+- For the upper part of Property (7), the sole-quitter row admits the paper's
+  common motion bound without choosing a new parameter. If all continuation
+  coordinates are at most twice the player count times the payoff scale,
+  the existing bounded-region motion estimate applies. Otherwise one larger
+  coordinate and the exact affine payoff of the sole-quitter row give the
+  bound directly. This avoids a new compactness parameter depending on the
+  truncation radius.
+- For Property (6), Case 1, contractibility of the upper payoff image does
+  not justify membership of a straight segment. Instead, a zero cutoff
+  leaves the actual payoff endpoint. For positive cutoff, the small-step
+  premise and the small-quitting bound control the distance from the
+  homotopy's first coordinate to its original base point, using the exact
+  one-stage payoff identity and the bound on the structure-map correction.
+  Under the current small-step-radius cutoff, this puts the first coordinate
+  in the lower neighborhood, where the required segment belongs to the
+  convex lower fiber. No star-convexity of the upper image is needed.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved. The checked

@@ -465,6 +465,35 @@ integer-LCP packet. Its main degree comparison concerns the complete root set
 and must also handle degenerate or nonisolated roots; regularity must not
 become a hypothesis of that game-semantic criterion.
 
+`r0Degree` (`Research/Topology/LinearComplementarityR0Degree.lean`) defines
+the integer from the homogeneous minimum map in a fixed zero-centered scalar
+chart. `localDegree_lcpMinBoxProblem_zero_eq_r0Degree` in the same file
+proves independence of its positive radius by exact homogeneous gain scaling.
+`exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree` constructs one
+radius for every offset in a coordinatewise bounded family, returns a bound
+on every actual LCP root, and proves isolation and equality with the canonical
+integer. It imposes no regularity or finiteness condition on those roots.
+`isStandardQ_of_r0Degree_ne_zero` derives solvability for every offset, and
+`r0Degree_fin_zero` gives the dimension-zero normalization. These are
+Research results, not yet the quitting-game degree comparison.
+
+`BoxComplementarityProblem.localDegree_of_selfMap_preimage_eq_one`
+(`Research/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
+degree one for the actual pulled-back box-complementarity problem of the
+identity minus a continuous closed-rectangle self-map. An open region need
+only contain its fixed points, not its whole image. The same file proves
+that all box solutions are precisely the fixed points, including boundary
+ones. `coordinateInterior_of_isSolution_of_inwardMap` separately derives
+boundary exclusion when the map is strictly inward. These statements use
+the box-complementarity degree; they do not assert an ambient degree at a
+boundary zero.
+
+For the integer-LCP packet's main criterion, stability under the actual
+uniform frontier perturbation remains to be supplied. The fixed common-chart
+route can use the R0 comparison and normalization above; arbitrary
+affine-chart independence and a general regular-Jacobian theorem need not
+precede it.
+
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
 later local-linearization step.

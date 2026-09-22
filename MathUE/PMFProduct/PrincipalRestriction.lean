@@ -125,7 +125,6 @@ theorem pmfPi_bind_eq_principal
 
 /-- Real-expectation form of `pmfPi_eq_map_principal`. -/
 theorem expect_pmfPi_eq_principal
-    [∀ i, Finite (A i)]
     (sigma : ∀ i, PMF (A i)) (players : Finset ι) (outside : ∀ i, A i)
     (hpure : ∀ i, i ∉ players → sigma i = PMF.pure (outside i))
     (f : (∀ i, A i) → ℝ) :
@@ -133,6 +132,6 @@ theorem expect_pmfPi_eq_principal
       expect (pmfPi (principalMarginals sigma players))
         (fun assignment => f (principalExtend players outside assignment)) := by
   rw [pmfPi_eq_map_principal sigma players outside hpure]
-  exact expect_pushforward _ _ _
+  exact expect_map _ _ _
 
 end Math.PMFProduct
