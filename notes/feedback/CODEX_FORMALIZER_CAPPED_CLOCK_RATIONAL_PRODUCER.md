@@ -236,5 +236,5 @@ zero-clock executable branch is needed only if the public producer statement
 must reproduce the packet's explicit `H = 0` acceptance case.
 
 This completes the child-first search-to-parent composition. The packet's
-additional examples and inverse-row sharpness statements remain listed in
-[the remaining-obligations note](CODEX_FORMALIZER_CAPPED_CLOCK_REMAINING_OBLIGATIONS.md).
+additional examples and inverse-row sharpness statements are listed in
+[the coverage note](CODEX_FORMALIZER_CAPPED_CLOCK_COVERAGE.md).

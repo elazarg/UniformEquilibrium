@@ -1,9 +1,10 @@
-# Capped-clock packet: remaining formalization obligations
+# Capped-clock packet: formalization coverage
 
 The source is
-`math/exports/CAPPED_CLOCK_DEVIATION_DOMINATION_AND_QUIET_EXTENSION.md`.
-The packet is not fully formalized. The integrated interfaces and source
-constructors are described in [the toolkit](../../docs/TOOLKIT.md).
+`math/formalized/CAPPED_CLOCK_DEVIATION_DOMINATION_AND_QUIET_EXTENSION.md`.
+The useful statements of the packet have checked Lean declarations. The
+integrated interfaces and source constructors are described in
+[the toolkit](../../docs/TOOLKIT.md).
 
 ## Checked scope
 
@@ -316,41 +317,39 @@ child floors, and owner ties are explicit. Both modules passed silent named
 checks; the child value and time quantifiers also passed independent review.
 No parent floor is assumed.
 
-## Work still needed
+## Completed compositions and scope
 
-The terminating child-first rational search and its original-parent consumer
-are proved in Research, including exact Never preservation and rational
-amplification selection. Their scope is recorded in
+`BalancedSingletonCycleCertificate.deletedThree_singletonFloor_on_tail_iff_inverseRow_nonneg`,
+`deletedThree_exists_pureTimeDeviationGain_ge`, and
+`deletedThree_behaviorDeviationDebt_ge`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonDeletedStrictThreeCycle.lean`)
+compose the child certificate's actual parent Never lift with strict-cycle
+floor, finite deadline, and unrestricted response-debt conclusions at every
+starting date. An equivalence with the three surviving players derives the
+owner labels. The parent singleton-floor condition is not assumed. The
+strict-cycle matrix equation and reward bound remain explicit, as does a
+positive adjusted deficit for the finite deadline. The module passed a
+silent named build.
+
+`quittingLiftDeletedProfile_evaluatedDebt_of_cappedClockCertificateFamily`,
+`quittingBehaviorEvaluatedMaxDebt_liftDeletedProfile_le`, and
+`quittingBehaviorEvaluatedTotalDebt_liftDeletedProfile_le`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedMultipleOutsiderFamily.lean`)
+give simultaneous survivor and outsider debt transport and the source's
+maximum and sum bounds for every nonnegative antitone evaluation. The
+maximum theorem needs a nonempty outsider family; the sum theorem permits
+an empty one. The generic evaluated player-reindex transport is in
+`UniformEquilibrium/Quitting/Classification/PlayerReindexEvaluatedPayoff.lean`.
+Both modules passed silent named builds.
+
+The terminating child-first rational search and its original-parent
+consumer are proved in Research, including exact Never preservation and
+rational amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
-The response-debt bound and its positive deterministic-deadline witness are
-proved at every starting date of the same fixed schedule.
-The matrix algebra, forced vertex visits, and actual continuation-floor
-equivalence are proved as described above. Its hypotheses concern an exact
-balanced singleton schedule, not all child equilibria or approximate ties.
-
-The periodic application still needs a public composition of the checked
-child-certificate parent lift with the strict-cycle floor/deadline/debt
-consumers. Its actual-value, absorption, and child-floor premises are now
-produced, but the final certificate-level conclusion is not yet stated.
-A certificate on the full parent would assume the outsider floor being tested.
-
-Source equation (6) also states simultaneous multi-outsider maximum and
-sum debt bounds for every nonnegative nonincreasing evaluation. The
-evaluated one-outsider comparison and the terminal multi-outsider family
-theorems are proved; the simultaneous evaluated family and both aggregate
-bounds still need literal declarations. This is a composition of the
-existing evaluated child-deletion comparison and survivor identities, not
-a missing mathematical argument.
-
-These are missing Lean compositions from the
-packet, not missing source mathematics. They must not be replaced by an
-implicit appeal to the reader to assemble the required conclusion.
-
-The strict inverse-row work uses the existing three-cycle labeling,
-singleton-versus-quit payoff estimate, and survival-weighted deviation
-transport. Both the survival lower bound and its initial-profile full-debt
-consumer are proved without supplied vertex visits or periodicity. The
-remaining adapters must retain that scope.
+The strict inverse-row work still concerns exact balanced singleton
+schedules, not all child equilibria or approximate ties. Neither the
+weighted criterion nor the rational search is a completeness theorem for
+four-player games.
 
 These are known results supplied by the packet. This record does not assert
 that the weighted criterion covers every four-player game, that its weights

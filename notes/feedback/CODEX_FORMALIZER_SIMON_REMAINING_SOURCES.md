@@ -96,8 +96,13 @@ lower-bounded decreasing potential pays a fixed positive multiple of each
 valid edge cost. Its finite-segment case includes the final segment; its
 infinite-segment case telescopes through finite and infinite stitches.
 These generic declarations passed a silent named build. The coordinate
-floor/drift corollary and its application to Simon's actual graph remain
-Lean work; these generic results alone do not complete that application.
+floor corollary is now `ExtendedOrbitData.floor_le_coordinate_of_unbounded_variation`
+in the same file. `section4J_floor_le_coordinate_of_unbounded_extended_orbit`
+(`Literature/Simon2012.lean`) applies it to the actual Section 4 graph,
+using the checked edge drift and an explicit half-payoff-box hypothesis at
+every valid orbit point. The Simon module passed a silent named build; a
+separate axiom check reports only the three standard axioms. This does not
+prove the global half-box condition or Lemma 4.4.
 
 `exists_nearFeasible_unbounded_section4J_tail` in that file covers both
 an unbounded segment and infinitely many bounded-variation segments. From
@@ -311,8 +316,9 @@ by one thousand times the payoff scale. The terminal and glued branches are
 both covered. The proof uses the checked positive-bound form of the earlier
 coordinate-drift lemma, not Lemma 4.4's unfinished global upper bound. It
 passed a silent named build and a separate transitive standard-axiom check.
-The subsequent recurrent-coordinate argument for extended orbits remains
-formalization work.
+The recurrent-coordinate consequence for an unbounded extended orbit
+staying in the half-payoff box is the theorem above. Producing or retaining
+that box for the orbit remains separate formalization work.
 The remaining positive-cutoff branches and their assembly remain to be
 formalized.
 

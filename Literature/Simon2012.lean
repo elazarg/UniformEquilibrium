@@ -13588,6 +13588,186 @@ theorem section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox
     dsimp only [q] at hqScale hrewardLower hxScaled ⊢
     nlinarith
 
+/-- A progressive cluster point of an unbounded Section 4 graph orbit cannot
+fall below the rationality floor when every valid orbit point stays in the
+half-payoff box. This is a consequence of the edgewise floor and drift result;
+it does not establish the global box condition or the open Lemma 4.4. -/
+theorem section4J_floor_le_coordinate_of_unbounded_extended_orbit
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hbox : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) index →
+        InClosedPayoffBox (M / 2) (orbit.point segment index))
+    (hvariation : HasUnboundedExtendedVariation orbit)
+    {limit : Payoff G.Player}
+    (hcluster : IsExtendedOrbitClusterPoint orbit limit)
+    (j : G.Player) :
+    MinMaxQuit G j - ρ / 3 ≤ limit j := by
+  classical
+  let genericOrbit := toMathTopologyExtendedOrbitData orbit
+  let floor : ℝ := MinMaxQuit G j - ρ / 3
+  let drift : ℝ := ρ ^ 2 / (1000 * M)
+  let bound : ℝ := (Fintype.card G.Player : ℝ) * M
+  let cost : Payoff G.Player → Payoff G.Player → ℝ :=
+    fun x y => EuclideanDist y x
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hdriftPos : 0 < drift := by dsimp only [drift]; positivity
+  have hboundPos : 0 < bound := by
+    dsimp only [bound]
+    exact mul_pos (positive_card G) hMpos
+  have hcostBound : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      cost (orbit.point segment index)
+        (orbit.point segment (index + 1)) ≤ bound := by
+    intro segment index hactive hindex
+    let x := orbit.point segment index
+    let y := orbit.point segment (index + 1)
+    have hx := hbox segment index hactive (by
+      intro length hlength
+      exact lt_trans (Nat.lt_succ_self index) (hindex length hlength))
+    have hy := hbox segment (index + 1) hactive hindex
+    have hcoordinate : ∀ k : G.Player, |y k - x k| ≤ M := by
+      intro k
+      exact abs_le.mpr ⟨by linarith [(hy k).1, (hx k).2],
+        by linarith [(hy k).2, (hx k).1]⟩
+    calc
+      cost x y ≤ ∑ k : G.Player, |y k - x k| :=
+        euclideanDist_le_sum_abs y x
+      _ ≤ ∑ _k : G.Player, M := by
+        exact Finset.sum_le_sum (fun k _ => hcoordinate k)
+      _ = bound := by simp [bound]
+  have hedge : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      (floor ≤ orbit.point segment index j →
+          floor ≤ orbit.point segment (index + 1) j) ∧
+        (orbit.point segment index j < floor →
+          orbit.point segment index j + drift ≤
+            orbit.point segment (index + 1) j) := by
+    intro segment index hactive hindex
+    have hxbox := hbox segment index hactive (by
+      intro length hlength
+      exact lt_trans (Nat.lt_succ_self index) (hindex length hlength))
+    have hxy := orbit.step segment hactive index hindex
+    have hxy' : (orbit.point segment index,
+        orbit.point segment (index + 1)) ∈
+        Section4J G inverse cutoff R ε δ := by
+      change (orbit.point segment index,
+        orbit.point segment (index + 1)) ∈
+          Section4J G inverse cutoff R ε δ at hxy
+      exact hxy
+    simpa only [floor, drift] using
+      section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ hδ hxy' hxbox j
+  have hgenericVariation :
+      Math.Topology.HasUnboundedExtendedVariationWith cost genericOrbit := by
+    intro B
+    obtain ⟨J, I, hJI⟩ := hvariation B
+    refine ⟨J, I, ?_⟩
+    calc
+      B ≤ ∑ segment ∈ Finset.range J, ∑ index ∈ Finset.range I,
+          if ActiveSegment orbit.segmentCount segment ∧
+              SegmentIndex (orbit.segmentLength segment) (index + 1)
+          then EuclideanDist (orbit.point segment (index + 1))
+            (orbit.point segment index)
+          else 0 := hJI
+      _ = genericOrbit.prefixVariationWith cost J I := by
+        unfold Math.Topology.ExtendedOrbitData.prefixVariationWith
+        apply Finset.sum_congr rfl
+        intro segment _
+        apply Finset.sum_congr rfl
+        intro index _
+        by_cases hvalid : ActiveSegment orbit.segmentCount segment ∧
+            SegmentIndex (orbit.segmentLength segment) (index + 1)
+        · have hgenericValid :
+              Math.Topology.ActiveSegment genericOrbit.segmentCount segment ∧
+                Math.Topology.SegmentIndex
+                  (genericOrbit.segmentLength segment) (index + 1) := by
+            simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+              Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment,
+              Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+              using hvalid
+          simp only [genericOrbit, toMathTopologyExtendedOrbitData] at hgenericValid
+          simp only [hvalid, hgenericValid.1, hgenericValid.2,
+            cost, genericOrbit, toMathTopologyExtendedOrbitData]
+        · have hgenericInvalid :
+              ¬(Math.Topology.ActiveSegment genericOrbit.segmentCount segment ∧
+                Math.Topology.SegmentIndex
+                  (genericOrbit.segmentLength segment) (index + 1)) := by
+            simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+              Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment,
+              Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+              using hvalid
+          simp only [hvalid, hgenericInvalid, ite_false]
+  have hgenericCluster : genericOrbit.IsProgressiveClusterPoint limit := by
+    simpa only [IsExtendedOrbitClusterPoint, genericOrbit,
+      toMathTopologyExtendedOrbitData,
+      Math.Topology.ExtendedOrbitData.IsProgressiveClusterPoint,
+      Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment,
+      Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+      using hcluster
+  have hconstant : 0 < drift / bound := div_pos hdriftPos hboundPos
+  have hresult := genericOrbit.floor_le_coordinate_of_unbounded_variation
+    cost (fun x : Payoff G.Player => x j) (continuous_apply j)
+    floor (drift / bound) hconstant (by
+      intro segment index hactive hindex
+      exact (hedge segment index (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+          using hactive) (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+          using hindex)).1) (by
+      intro segment index hactive hindex hbelow
+      have hstep := hedge segment index (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+          using hactive) (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+          using hindex)
+      dsimp only [genericOrbit, toMathTopologyExtendedOrbitData] at hbelow ⊢
+      linarith [hstep.2 hbelow]) (by
+      intro segment index hactive hindex hbelow
+      have hactive' : ActiveSegment orbit.segmentCount segment := by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+          using hactive
+      have hindex' : SegmentIndex (orbit.segmentLength segment) (index + 1) := by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+          using hindex
+      have hraise := (hedge segment index hactive' hindex').2
+      have hbound := hcostBound segment index hactive' hindex'
+      have hscaled : drift / bound * cost
+          (orbit.point segment index) (orbit.point segment (index + 1)) ≤
+          drift := by
+        calc
+          _ ≤ drift / bound * bound :=
+            mul_le_mul_of_nonneg_left hbound (div_nonneg hdriftPos.le hboundPos.le)
+          _ = drift := by field_simp [hboundPos.ne']
+      dsimp only [genericOrbit, toMathTopologyExtendedOrbitData] at hbelow ⊢
+      linarith [hraise hbelow]) hgenericVariation hgenericCluster
+  exact hresult
+
 /-- In the bounded positive-cutoff branch of Property (6), a terminal step
 smaller than `ω` lies in the actual glued graph. -/
 theorem section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep

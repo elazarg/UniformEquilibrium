@@ -1033,8 +1033,24 @@ singleton floors, and exact owner ties are also explicit.
 preserves those child values in the actual parent root sequence with every
 deleted player at Never. The same file supplies its absorption, child floors,
 and owner ties for arbitrary deletion blocks. It does not assume parent
-singleton floors. A public composition with the strict-cycle floor/debt
-theorems remains to be supplied.
+singleton floors. `BalancedSingletonCycleCertificate.deletedThree_singletonFloor_on_tail_iff_inverseRow_nonneg`
+and `deletedThree_behaviorDeviationDebt_ge`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonDeletedStrictThreeCycle.lean`)
+compose that actual parent schedule with the strict three-cycle theorems at
+every starting date. A three-survivor equivalence supplies the owner labels;
+the reward-table strict-cycle equation and bounded rewards remain explicit.
+The same module gives a finite pure-deadline witness when the adjusted
+inverse-row deficit is positive. This is a sharpness result for a supplied
+balanced child certificate, not a new producer of one.
+
+`PassiveSingletonRowFactorization.certificate` and
+`PassiveSingletonRowFactorization.isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonPassiveRows.lean`)
+lift a balanced certificate on the literal deleted child to the parent and
+then to one fixed uniform payoff when each outside singleton-difference row
+is a nonnegative combination of child rows. Nonsingleton rewards are
+unrestricted. Producing the child certificate from a raw strict
+inverse-positive triple is a separate obligation.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2088,6 +2104,18 @@ in the same file gives the corresponding actual-child bound for a common
 additive reward-row error. The allowance is the row error times the evaluation
 at time zero. Its `quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt_add_rowError`
 corollary charges just the row error when that evaluation is at most one.
+`quittingBehaviorEvaluatedPayoff_profilePullback` and
+`quittingBehaviorEvaluatedDeviationPayoffCap_profilePullback`
+(`UniformEquilibrium/Quitting/Classification/PlayerReindexEvaluatedPayoff.lean`)
+transport evaluated payoffs and unrestricted caps through player relabeling.
+`quittingLiftDeletedProfile_evaluatedDebt_of_cappedClockCertificateFamily`,
+`quittingBehaviorEvaluatedMaxDebt_liftDeletedProfile_le`, and
+`quittingBehaviorEvaluatedTotalDebt_liftDeletedProfile_le`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedMultipleOutsiderFamily.lean`)
+apply every outsider's certificate to the same actual Never lift, preserving
+child debts and giving the maximum and sum bounds for every nonnegative
+nonincreasing clock evaluation. These are stronger evaluation-wise bounds;
+the terminal fixed-target existence consumer below was already complete.
 These approximate bounds impose no reward-sign restriction or normalization
 of the nonnegative weights. They do not by themselves eliminate a fixed
 positive row error to obtain an exact uniform-equilibrium payoff.

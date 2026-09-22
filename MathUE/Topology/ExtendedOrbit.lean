@@ -758,6 +758,7 @@ theorem ExtendedOrbitData.not_hasUnboundedExtendedVariationWith_of_potential
         apply (le_div_iff₀ hconstant).2
         simpa only [mul_comm] using hscaledPrefix
       exact (not_le_of_gt (lt_add_one bound)) (hlarge.trans hprefixBound)
+
   | some count =>
       let budget := potential (orbit.point 0 0) - lower
       let bound := (count : ℝ) * budget / constant
@@ -852,6 +853,104 @@ theorem ExtendedOrbitData.not_hasUnboundedExtendedVariationWith_of_potential
         apply (le_div_iff₀ hconstant).2
         simpa only [bound, mul_comm] using hscaledPrefix
       exact (not_le_of_gt (lt_add_one bound)) (hlarge.trans hprefixBound)
+
+/-- A progressive cluster point of an orbit with unbounded variation cannot
+lie below a coordinate floor. Below the floor, every edge raises the
+coordinate and pays a fixed positive multiple of its cost; at or above the
+floor, edges preserve the floor. The conclusion concerns this particular
+cluster point and does not assert that one exists. -/
+theorem ExtendedOrbitData.floor_le_coordinate_of_unbounded_variation
+    {X : Type*} [TopologicalSpace X] {relation : Correspondence X X}
+    (orbit : ExtendedOrbitData relation) (cost : X → X → ℝ)
+    (coordinate : X → ℝ) (hcontinuous : Continuous coordinate)
+    (floor constant : ℝ) (hconstant : 0 < constant)
+    (hfloor : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      floor ≤ coordinate (orbit.point segment index) →
+        floor ≤ coordinate (orbit.point segment (index + 1)))
+    (hraise : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      coordinate (orbit.point segment index) < floor →
+        coordinate (orbit.point segment index) ≤
+          coordinate (orbit.point segment (index + 1)))
+    (hpay : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      coordinate (orbit.point segment index) < floor →
+        constant * cost (orbit.point segment index)
+            (orbit.point segment (index + 1)) ≤
+          coordinate (orbit.point segment (index + 1)) -
+            coordinate (orbit.point segment index))
+    (hunbounded : HasUnboundedExtendedVariationWith cost orbit)
+    {limit : X} (hcluster : orbit.IsProgressiveClusterPoint limit) :
+    floor ≤ coordinate limit := by
+  by_contra hbelow
+  have hlimit : coordinate limit < floor := lt_of_not_ge hbelow
+  let cap : X → ℝ := fun x ↦ -(min (coordinate x) floor)
+  have hcapContinuous : Continuous cap := (hcontinuous.min continuous_const).neg
+  have hcapStep : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      cap (orbit.point segment (index + 1)) ≤
+        cap (orbit.point segment index) := by
+    intro segment index hactive hindex
+    let x := orbit.point segment index
+    let y := orbit.point segment (index + 1)
+    have hmin : min (coordinate x) floor ≤ min (coordinate y) floor := by
+      by_cases hx : floor ≤ coordinate x
+      · rw [min_eq_right hx, min_eq_right (hfloor segment index hactive hindex hx)]
+      · have hxlt : coordinate x < floor := lt_of_not_ge hx
+        rw [min_eq_left hxlt.le]
+        exact le_min (hraise segment index hactive hindex hxlt) hxlt.le
+    exact neg_le_neg hmin
+  have hcoordinateBound : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) index →
+      coordinate (orbit.point segment index) ≤ coordinate limit := by
+    intro segment index hactive hindex
+    have hcomparison := hcluster.potential_le_point cap hcapContinuous
+      hcapStep segment index hactive hindex
+    have hmin : min (coordinate (orbit.point segment index)) floor ≤
+        coordinate limit := by
+      dsimp only [cap] at hcomparison
+      rw [min_eq_left hlimit.le] at hcomparison
+      linarith
+    rcases min_le_iff.mp hmin with hbound | hbound
+    · exact hbound
+    · exact (not_le_of_gt hlimit hbound).elim
+  let potential : X → ℝ := fun x ↦ coordinate limit - coordinate x
+  have hpotentialContinuous : Continuous potential :=
+    continuous_const.sub hcontinuous
+  have hpotentialStep : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      potential (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index) := by
+    intro segment index hactive hindex
+    have hsource := hcoordinateBound segment index hactive
+      (hindex.mono (Nat.le_succ index))
+    dsimp only [potential]
+    linarith [hraise segment index hactive hindex (hsource.trans_lt hlimit)]
+  have hpotentialPay : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      constant * cost (orbit.point segment index)
+          (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index) -
+          potential (orbit.point segment (index + 1)) := by
+    intro segment index hactive hindex
+    have hsource := hcoordinateBound segment index hactive
+      (hindex.mono (Nat.le_succ index))
+    dsimp only [potential]
+    linarith [hpay segment index hactive hindex (hsource.trans_lt hlimit)]
+  exact (orbit.not_hasUnboundedExtendedVariationWith_of_potential
+    cost potential hpotentialContinuous constant 0 hconstant
+    (by
+      intro segment index hactive hindex
+      exact sub_nonneg.mpr (hcoordinateBound segment index hactive hindex))
+    hpotentialStep hpotentialPay) hunbounded
 
 end Topology
 end Math
