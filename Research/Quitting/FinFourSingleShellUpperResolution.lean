@@ -137,9 +137,9 @@ theorem nonempty_finFourSingleShellUpperResolution
     rw [← hpairExploitability, hpairValue]
     norm_num only [Rat.cast_div, Rat.cast_mul, Rat.cast_ofNat]
     linarith
-  obtain ⟨stage, code, hchecked, hcodeClock, -⟩ :=
+  obtain ⟨stage, code, hchecked, hcodeClock⟩ :=
     exists_checkedCandidateAt_of_finiteClockStoppingLaws reward
-      (3 * epsilon / 4) hnormalized (8 * level + 1) (by positivity)
+      (3 * epsilon / 4) (8 * level + 1) (by positivity)
       laws hlaws hprofileExploitability
   exact ⟨⟨laws, hlaws, hprofileExploitability, stage, code,
     hchecked, hcodeClock⟩⟩

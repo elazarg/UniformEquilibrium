@@ -7143,6 +7143,72 @@ private theorem section4Omega_le_epsilon_div_thousand (G : QuittingGame)
   dsimp only [N] at hscaled
   nlinarith
 
+/-- The common small-step radius is strictly below the coordinate drift used
+in Property (6), Case 5. -/
+private theorem section4Omega_lt_quadratic_drift (G : QuittingGame)
+    (M d ρ ξ R ε : ℝ) (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Omega G M d ρ ξ R ε < ρ ^ 2 / (1000 * M) := by
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  obtain ⟨_hδpos, hδ1⟩ := section4Delta_mem_Ioc
+    G M ρ ε hplayers hM hmotion hε hερ
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpow : 9 ≤ N ^ 2 := by nlinarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hdεNonneg : 0 ≤ d * ε := mul_nonneg hd.le hε.le
+  have hdεLe : d * ε ≤ ε := by
+    simpa only [one_mul] using mul_le_mul_of_nonneg_right hd1 hε.le
+  have hdεξNonneg : 0 ≤ d * ε * ξ := mul_nonneg hdεNonneg hξ.le
+  have hdεξLe : d * ε * ξ ≤ ε := by
+    have hle : d * ε * ξ ≤ d * ε := by
+      simpa only [mul_one] using
+        mul_le_mul_of_nonneg_left hξ1.le hdεNonneg
+    exact hle.trans hdεLe
+  have hdεξρNonneg : 0 ≤ d * ε * ξ * ρ :=
+    mul_nonneg hdεξNonneg hρpos.le
+  have hnumLe :
+      d * ε * ξ * ρ * Section4Delta G M ε ≤ ε * ρ := by
+    calc
+      d * ε * ξ * ρ * Section4Delta G M ε ≤ d * ε * ξ * ρ := by
+        simpa only [mul_one] using
+          mul_le_mul_of_nonneg_left hδ1 hdεξρNonneg
+      _ ≤ ε * ρ := mul_le_mul_of_nonneg_right hdεξLe hρpos.le
+  have hnum :
+      d * ε * ξ * ρ * Section4Delta G M ε < ρ ^ 2 / 3 := by
+    have hερScaled := mul_lt_mul_of_pos_right hερ hρpos
+    exact hnumLe.trans_lt (by
+      convert hερScaled using 1
+      ring)
+  have hRthirty : 30 ≤ R := by
+    have hNM : 3 * M ≤ N * M :=
+      mul_le_mul_of_nonneg_right hN hMpos.le
+    have hRthirtyM : 30 * M ≤ R := by
+      dsimp only [N] at hR hNM
+      nlinarith
+    nlinarith [hM.1]
+  have hfirst : 6000 ≤ 200 * R := by nlinarith
+  have hsecond : 54000 ≤ 200 * R * N ^ 2 := by
+    nlinarith [mul_nonneg (by linarith : 0 ≤ 200 * R - 6000)
+      (by linarith : 0 ≤ N ^ 2 - 9)]
+  have hfactor : 1000 * M / 3 ≤ 200 * R * N ^ 2 * M := by
+    have hscaled := mul_le_mul_of_nonneg_right hsecond hMpos.le
+    nlinarith
+  have hdenpos : 0 < 200 * R * N ^ 2 * M := by positivity
+  rw [Section4Omega, div_lt_div_iff₀
+    (by simpa only [N] using hdenpos) (by positivity : 0 < 1000 * M)]
+  have hnumScaled := mul_lt_mul_of_pos_right hnum (by positivity : 0 < 1000 * M)
+  have hfactorScaled := mul_le_mul_of_nonneg_left hfactor (sq_nonneg ρ)
+  dsimp only [N] at hnumScaled hfactorScaled
+  nlinarith
+
 /-- At a sufficiently small-quitting exact row, the singular correction in
 `Phi` is uniformly small, including the zero-quitting edge case. -/
 private theorem euclideanNorm_phi_sub_oneStagePayoff_le
@@ -10474,6 +10540,59 @@ private theorem lowerBoundary_subset_frontier (G : QuittingGame) (R : ℝ) :
     LowerBoundary G R ⊆ frontier (TruncatedW G R) := by
   exact closure_minimal (fun _ h => h.1) isClosed_frontier
 
+/-- In Property (6)'s zero-quitting branch, the terminal endpoint is the
+diagonal frontier point and hence belongs to the literal glued graph. -/
+theorem section4_terminal_mem_gluedGraph_of_quitProbability_eq_zero
+    (G : QuittingGame) (M d R ε δ : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hε : 0 < ε) (hδ : 0 ≤ δ)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hqzero : QuitProbability G (inverse.inv a).1.2 = 0) :
+    (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+      correspondenceGraph (GluedFiber G R ε δ) := by
+  let z : EZeroTilde G := inverse.inv a
+  have hphi : Phi G M d z = a := inverse.rightInverse a
+  have hpzero : z.1.2 = zeroQuitRow G :=
+    quitRow_eq_zeroQuitRow_of_quitProbability_eq_zero G z.1.2 hqzero
+  have hzZero : (z.1.1, zeroQuitRow G) ∈ EZeroTilde G := by
+    have hzProperty := z.2
+    change z.1.2 ∈ EpsilonRow G 0 z.1.1 ∧
+      QuitProbability G z.1.2 < 1 at hzProperty
+    change zeroQuitRow G ∈ EpsilonRow G 0 z.1.1 ∧
+      QuitProbability G (zeroQuitRow G) < 1
+    simpa only [hpzero] using hzProperty
+  have hzEq : z = ⟨(z.1.1, zeroQuitRow G), hzZero⟩ := by
+    apply Subtype.ext
+    exact Prod.ext rfl hpzero
+  have hsolo : ∀ j, SoloPayoff G j ≤ z.1.1 j :=
+    ((lemma3_1 G M d hM hd hd1).2.1 z.1.1).mp hzZero
+  have hclosure : z.1.1 ∈ closure ((WSet G)ᶜ) :=
+    mem_closure_compl_WSet_of_soloPayoff_le G hsolo
+  have hphiZero := (lemma3_1 G M d hM hd hd1).2.2 z.1.1 hzZero
+  have haBeta : a = z.1.1 := by
+    rw [hzEq, hphiZero] at hphi
+    exact hphi.symm
+  have hx : Section4X G inverse cutoff a = a := by
+    dsimp only [Section4X]
+    rw [← haBeta, ← add_smul]
+    simp
+  have hy : Section4Y G inverse cutoff a = a := by
+    have hzeroPayoff : QuittingOneStagePayoff G a (zeroQuitRow G) = a :=
+      quittingOneStagePayoff_zero G a
+    dsimp only [Section4Y, Section4Z]
+    rw [hx, hpzero, hzeroPayoff, ← add_smul]
+    simp
+  have hfrontier : a ∈ frontier (TruncatedW G R) :=
+    mem_frontier_truncatedW_of_mem_closure_compl_WSet G R ha
+      (haBeta.symm ▸ hclosure)
+  have hneighborhood : a ∈ GluedNeighborhood G R ε :=
+    interior_subset
+      (frontier_truncatedW_subset_interior_gluedNeighborhood G R ε hε hfrontier)
+  rw [hx, hy]
+  exact self_mem_gluedFiber G R ε δ hδ hneighborhood
+
 /-- Property (3) of Question 1 for the actual Section 4 homotopy: a diagonal
 point in the terminal image lies on the frontier of the truncated domain. -/
 theorem section4H_terminal_diagonal_mem_frontier
@@ -10965,6 +11084,220 @@ private theorem supportedContinuation_abs_le_half_radius
         linarith
       _ < -(R + 1) := by linarith
   exact (not_lt_of_ge hphiLower hstrictUpper).elim
+
+/-- Property (6), Case 5: inside the reward box and outside the lower
+neighborhood, a positive cutoff forces a terminal step larger than `ω`. -/
+theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hcutoffPos : 0 < (cutoff a : ℝ))
+    (hxNotLower : Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε)
+    (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a)) :
+    Section4Omega G M d ρ ξ R ε <
+      EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) := by
+  let N : ℝ := Fintype.card G.Player
+  let z : EZeroTilde G := inverse.inv a
+  let alpha : ℝ := cutoff a
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  let y : Payoff G.Player := Section4Y G inverse cutoff a
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  obtain ⟨_hξ, _hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hRpos : 0 < R := by
+    have hNMpos : 0 < N * M := mul_pos hNpos hMpos
+    dsimp only [N] at hR hNMpos
+    nlinarith
+  have hRlarge : 30 * M ≤ R := by
+    have hNM : 3 * M ≤ N * M :=
+      mul_le_mul_of_nonneg_right hN hMpos.le
+    dsimp only [N] at hR hNM
+    nlinarith
+  have haNotLower : a ∉ LowerBoundary G R := by
+    intro haLower
+    have hcutoffOne : (cutoff a : ℝ) = 1 := hcutoff.2.1 a haLower
+    have hxA : x = a := by
+      dsimp only [x, Section4X]
+      simp only [hcutoffOne, sub_self, zero_smul, one_smul, add_zero]
+    apply hxNotLower
+    have haNeighborhood : a ∈ LowerNeighborhood G R ε :=
+      interior_subset
+        (mem_interior_lowerNeighborhood_of_mem_lowerBoundary G R ε hε haLower)
+    simpa only [x, hxA] using haNeighborhood
+  have hcutoffLt : (cutoff a : ℝ) < 1 :=
+    hcutoff.2.2.2 a ⟨ha, haNotLower⟩
+  have hLowerNonempty : (LowerBoundary G R).Nonempty := by
+    by_contra hnot
+    have hempty : LowerBoundary G R = ∅ := Set.not_nonempty_iff_eq_empty.mp hnot
+    apply hxNotLower
+    rw [lowerNeighborhood_eq_univ_of_lowerBoundary_eq_empty G R ε hempty hε.le]
+    exact Set.mem_univ x
+  have homega := section4Omega_mem_Ioc G M d ρ ξ R ε
+    hplayers hM hd hd1 hmotion hconstants hε hερ
+  obtain ⟨large, hlarge⟩ := exists_large_coordinate_of_cutoff_pos G
+    (by linarith : 0 < R + 1) homega.2 hLowerNonempty
+      cutoff hcutoff.2.2.1 a hcutoffPos
+  have hphi : a = Phi G M d z := (inverse.rightInverse a).symm
+  have hxFormula : x = (1 - alpha) • z.1.1 + alpha • a := by
+    dsimp only [x, alpha, z, Section4X]
+    exact add_comm _ _
+  have hsection3 := lemma3_4 G M d ρ ξ R hplayers hM hd hd1
+    hmotion hconstants hgenerated hinstant hnormal z (cutoff a)
+      hcutoffPos hcutoffLt a hphi x hxFormula
+  have hlargeAbs : R < |a large| := hlarge
+  have hnegative : a large < -R := by
+    rw [lt_abs] at hlarge
+    rcases hlarge with hpositive | hnegative
+    · have hbeta := (hsection3.2.1 large hpositive).1
+      have hbetaM : M < z.1.1 large := by
+        have hNM : 3 * M ≤ N * M :=
+          mul_le_mul_of_nonneg_right hN hMpos.le
+        dsimp only [N] at hR hNM
+        nlinarith
+      have haM : M < a large := by nlinarith
+      have hxcoord := congrFun hxFormula large
+      simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxcoord
+      have hOneSubAlphaPos : 0 < 1 - alpha := by
+        dsimp only [alpha]
+        linarith
+      have hAlphaPos : 0 < alpha := hcutoffPos
+      have hleft := mul_lt_mul_of_pos_left hbetaM hOneSubAlphaPos
+      have hright := mul_lt_mul_of_pos_left haM hAlphaPos
+      have hxUpper := (hxbox large).2
+      nlinarith
+    · linarith
+  have hbetaUpper : z.1.1 large ≤ R / 2 := by
+    by_cases hbetaLow : z.1.1 large < MinMaxQuit G large - ρ
+    · have hminmax := abs_minMaxQuit_le_of_reward_bound G large
+        (by positivity) (fun outcome => hM.2.1 outcome large)
+      have hminmaxUpper := (abs_le.mp hminmax).2
+      nlinarith
+    · have hprobability := hsection3.2.2 large hnegative (le_of_not_gt hbetaLow)
+      have hratioNonneg : 0 ≤ ρ / (2 * N * M) := by positivity
+      have hratioOne : ρ / (2 * N * M) ≤ 1 := by
+        rw [div_le_one (by positivity : 0 < 2 * N * M)]
+        nlinarith [hmotion.2.2.1, hM.1]
+      have hpowOne :
+          (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤ 1 :=
+        pow_le_one₀ hratioNonneg hratioOne
+      have hthresholdPos : 0 < 1 - (1 / 20 : ℝ) *
+          (ρ / (2 * N * M)) ^ Fintype.card G.Player := by
+        have hpowNonneg := pow_nonneg hratioNonneg (Fintype.card G.Player)
+        nlinarith
+      have hpLarge : 0 < (z.1.2 large : ℝ) := by
+        exact hthresholdPos.trans_le hprobability
+      exact (abs_le.mp (supportedContinuation_abs_le_half_radius
+        G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants z
+          (by simpa only [hphi] using ha) large hpLarge)).2
+  have halphaHalf : alpha < 1 / 2 := by
+    by_contra hnot
+    have halphaHalf' : 1 / 2 ≤ alpha := le_of_not_gt hnot
+    have hOneSubAlpha : 0 ≤ 1 - alpha := by
+      dsimp only [alpha]
+      linarith [(cutoff a).property.2]
+    have hbetaWeighted :=
+      mul_le_mul_of_nonneg_left hbetaUpper hOneSubAlpha
+    have haWeighted := mul_lt_mul_of_pos_left hnegative hcutoffPos
+    have hxcoord := congrFun hxFormula large
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul] at hxcoord
+    have halphaProduct := mul_nonneg
+      (by linarith : 0 ≤ alpha - 1 / 2) hRpos.le
+    have hxLower := (hxbox large).1
+    nlinarith
+  have hnotTarget : ¬StructureTargetBox G M ρ x :=
+    hsection3.1 ⟨large, hlargeAbs⟩
+  have hlowerCoordinate : ∃ k, x k < MinMaxQuit G k - ρ / 2 := by
+    by_contra hnot
+    push Not at hnot
+    apply hnotTarget
+    intro k
+    exact ⟨hnot k, (hxbox k).2⟩
+  obtain ⟨low, hlow⟩ := hlowerCoordinate
+  have hlowThird : x low < MinMaxQuit G low - ρ / 3 := by
+    nlinarith
+  have hdrift := (lemma4_3_omega G M d ρ ξ R ε hplayers hM hd hd1
+    hnormal hmotion hconstants inverse cutoff hcutoff hε hερ a
+      hcutoffPos hcutoffLt
+        (by simpa only [x, InClosedPayoffBox] using hxbox) low).2 hlowThird
+  have hdriftNonneg : 0 ≤ ρ ^ 2 / (500 * M) := by positivity
+  have hOneSubAlphaHalf : 1 / 2 ≤ 1 - alpha := by linarith
+  have hstageDifference :
+      ρ ^ 2 / (500 * M) ≤ Section4Z G inverse cutoff a low - x low := by
+    nlinarith
+  have hscaledDrift : ρ ^ 2 / (1000 * M) ≤
+      (1 - alpha) * (Section4Z G inverse cutoff a low - x low) := by
+    have hmul := mul_le_mul hOneSubAlphaHalf hstageDifference
+      hdriftNonneg (by linarith : 0 ≤ 1 - alpha)
+    calc
+      ρ ^ 2 / (1000 * M) = (1 / 2) * (ρ ^ 2 / (500 * M)) := by ring
+      _ ≤ _ := hmul
+  have hycoord : y low = alpha * x low +
+      (1 - alpha) * Section4Z G inverse cutoff a low := by
+    rfl
+  have hyx : ρ ^ 2 / (1000 * M) ≤ y low - x low := by
+    nlinarith
+  have hcoordinate : |x low - y low| ≤ EuclideanDist x y :=
+    abs_coordinate_sub_le_euclideanDist x y low
+  have hstepLower : ρ ^ 2 / (1000 * M) ≤ EuclideanDist x y := by
+    have hyxNonneg : 0 ≤ y low - x low :=
+      (by positivity : 0 ≤ ρ ^ 2 / (1000 * M)).trans hyx
+    rw [abs_of_nonpos (by linarith : x low - y low ≤ 0)] at hcoordinate
+    linarith
+  exact (section4Omega_lt_quadratic_drift G M d ρ ξ R ε
+    hplayers hM hd hd1 hmotion hconstants hε hερ).trans_le (by
+      simpa only [x, y] using hstepLower)
+
+/-- In the bounded positive-cutoff branch of Property (6), a terminal step
+smaller than `ω` lies in the actual glued graph. -/
+theorem section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hcutoffPos : 0 < (cutoff a : ℝ))
+    (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a))
+    (hstep : EuclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) <
+        Section4Omega G M d ρ ξ R ε) :
+    (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+      correspondenceGraph (GluedFiber G R ε δ) := by
+  have hxLower : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε := by
+    by_contra hxNotLower
+    have hobstruction :=
+      section4Omega_lt_terminalStep_of_bounded_positive_cutoff
+        G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
+          hmotion hconstants inverse cutoff hcutoff hε hερ a ha hcutoffPos
+            hxNotLower hxbox
+    exact (not_lt_of_ge hobstruction.le) hstep
+  exact section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
+    G inverse cutoff R ε δ a hxLower
 
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the

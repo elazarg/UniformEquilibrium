@@ -52,11 +52,12 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 
 ## Work still needed
 
-1. Construct the terminating rational finite-law enumeration: rational
-   approximation, exact cap computation on consecutive calendars, and the
-   termination argument. Rational LP certificates and real finite-menu
-   approximation are not this producer. Existing exact rational-code and
-   semantic adapters, including the missing pure-Never restriction, are mapped
+1. Complete the terminating child-first rational finite-law enumeration.
+   Exact rational cap computation, normalization-free same-clock discovery,
+   and exact pure-Never preservation are proved in Research. The remaining
+   producer must test child exploitability, derive finite discovery from the
+   actual child source, and feed the accepted child into the Never-lift
+   consumer. These checked components and the remaining composition are mapped
    in [the rational producer dependency note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 2. Seal the additional example conclusions: slack values, terminal Nash laws,
    payoffs and caps, absence of pure terminal Nash equilibria, robustness under

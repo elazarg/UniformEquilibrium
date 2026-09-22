@@ -212,6 +212,7 @@ import MathUE.LinearProgramming.CommonChartLocalDegree
 import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
+import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrix
 import MathUE.LinearProgramming.FinFourIntegralTournament
 import MathUE.LinearProgramming.FiniteSolutions
 import MathUE.LinearProgramming.FlowCostateDuality
@@ -225,6 +226,7 @@ import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
 import MathUE.LinearProgramming.R0Degree
+import MathUE.LinearProgramming.R0DegreeSum
 import MathUE.LinearProgramming.R0Margin
 import MathUE.LinearProgramming.RootDegreeSum
 import MathUE.LinearProgramming.RowNegativeShape
@@ -232,6 +234,7 @@ import MathUE.LinearProgramming.SingletonLCP
 import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
+import MathUE.LinearProgramming.SupportTest
 import MathUE.LinearProgramming.Tournament
 import MathUE.LinearProgramming.TwoPointHomogeneousObstruction
 import MathUE.LinearProgramming.TwoRowNegativeShapeNeighborhood

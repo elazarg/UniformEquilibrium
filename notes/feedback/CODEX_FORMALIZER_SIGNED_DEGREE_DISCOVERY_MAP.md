@@ -134,6 +134,37 @@ finite actual root set under strict complementarity and nonsingularity.
 These regularity hypotheses concern the finite calculation, not total R0
 degree or the actual discounted source.
 
+`isStandardLCPSolution_iff_support_conditions` and
+`IsStandardLCPSolution.eq_of_supported_linear_system`
+(`MathUE/LinearProgramming/SupportTest.lean`) reduce exact support checks to
+the active linear equations and inactive residual inequalities. A supplied
+exact candidate is identified with every root on its nonsingular support,
+even when the candidate itself fails the sign conditions.
+`isR0Matrix_of_negative_columns_of_nonsingular_principals` in the same file
+proves full R0 from a negative entry in each column and nonsingularity of
+every principal block of size at least two; it needs no zero-diagonal
+hypothesis. The zero-diagonal, positive-anchor theorem
+`IsStandardLCPSolution.two_le_card_positive_support_of_zero_diagonal`
+excludes empty and singleton supports in nonempty dimension. The other
+support tests and the R0 criterion include dimension zero.
+
+`NegativeDegreeFourMatrix.isStandardLCPSolution_iff` and
+`NegativeDegreeFourMatrix.isR0Matrix`
+(`MathUE/LinearProgramming/Examples/NegativeDegreeFourMatrix.lean`) prove
+the packet's complete eleven-support inventory and full R0 for its explicit
+matrix. Exactly three candidates solve the test LCP. Their active principal
+determinants are included in the checked inventory. The canonical degree
+calculation still needs the root-sum application; the inventory alone is not
+that degree theorem.
+
+`exists_finset_r0Degree_eq_sum_sign_det`
+(`MathUE/LinearProgramming/R0DegreeSum.lean`) computes the canonical R0 integer
+from exactly all actual roots at one test offset. It assumes strict
+complementarity and active-principal nonsingularity at those roots, not their
+finiteness or a supplied enumeration. It derives the complete finite root
+set and its determinant-sign sum. Empty root sets and dimension zero are
+included.
+
 ### Topology that does not yet produce an integer
 
 - `ContinuousMap.Homotopy.affine`
@@ -208,12 +239,14 @@ proposition, not a hidden LCP-degree theorem.
    (`MathUE/LinearProgramming/R0Degree.lean`) supplies one chart
    containing all LCP roots for every bounded offset and proves equality to
    the canonical homogeneous integer. No finiteness or regularity premise is
-   used. The actual discounted comparison and the packet's final game
-   criterion remain to be assembled from this and the source results below.
+   used. The actual discounted comparison and the original-game existence
+   criterion are proved by the declarations in Section 3 below. The packet's
+   explicit degree calculation and class comparisons remain to be formalized.
+   The algebraic support tests and complete finite inventory are recorded above.
 
 The signed finite construction is implemented through these generic
-declarations. Reuse it; a separate singular-homology implementation is not a
-dependency of the packet. Promotion must precede any production consumer.
+declarations, integrated under `MathUE`. Reuse it; a separate singular-homology
+implementation is not a dependency of the packet.
 
 ### Available local signed adapters
 

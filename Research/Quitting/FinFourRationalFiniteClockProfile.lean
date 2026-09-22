@@ -494,6 +494,65 @@ def toBehaviorProfile (reward : RationalFinFourRewardCode)
   finiteClockDecodedProfile reward.realReward code.clockBound code.realMass
     (code.realMass_mem_stdSimplex hvalid)
 
+/-- A valid rational code whose non-Never coordinates vanish for one player
+decodes that player's stopping law to deterministic Never. -/
+theorem decodedLaw_eq_pureNever_of_mass_eq_zero
+    (code : RationalFinFourFiniteClockProfileCode) (hvalid : code.Valid)
+    (player : Fin 4)
+    (hzero : ∀ atom, atom ≠ none → code.mass player atom = 0) :
+    finiteClockDecodedLaws code.clockBound code.realMass
+        (code.realMass_mem_stdSimplex hvalid) player = PMF.pure none := by
+  have hrealZero : ∀ atom, atom ≠ none → code.realMass player atom = 0 := by
+    intro atom hatom
+    change (code.mass player atom : ℝ) = 0
+    rw [hzero atom hatom]
+    norm_num
+  have hrest :
+      ∑ atom ∈ (Finset.univ.erase none :
+        Finset (FiniteClockAtom code.clockBound)),
+          code.realMass player atom = 0 := by
+    apply Finset.sum_eq_zero
+    intro atom hatom
+    exact hrealZero atom (Finset.ne_of_mem_erase hatom)
+  have hnone : code.realMass player none = 1 := by
+    have hsum := code.realMass_sum_eq_one hvalid player
+    have hsplit : code.realMass player none +
+        ∑ atom ∈ (Finset.univ.erase none :
+          Finset (FiniteClockAtom code.clockBound)),
+            code.realMass player atom = 1 := by
+      rw [Finset.add_sum_erase (Finset.univ :
+        Finset (FiniteClockAtom code.clockBound)) _ (Finset.mem_univ none)]
+      exact hsum
+    rw [hrest, add_zero] at hsplit
+    exact hsplit
+  have hatomLaw :
+      ofVector (code.realMass player) (code.realMass_mem_stdSimplex hvalid player) =
+        PMF.pure none := by
+    apply PMF.ext
+    intro atom
+    rw [ofVector_apply]
+    by_cases hatom : atom = none
+    · subst atom
+      simp [hnone]
+    · rw [hrealZero atom hatom]
+      simp [hatom]
+  unfold finiteClockDecodedLaws finiteClockDecodeLaw
+  rw [hatomLaw, PMF.pure_map]
+  rfl
+
+/-- The behavioral profile decoded from such a code has the prescribed
+player's actual complete stopping law equal to deterministic Never. -/
+theorem behaviorStoppingLaw_toBehaviorProfile_eq_pureNever
+    (reward : RationalFinFourRewardCode)
+    (code : RationalFinFourFiniteClockProfileCode) (hvalid : code.Valid)
+    (player : Fin 4)
+    (hzero : ∀ atom, atom ≠ none → code.mass player atom = 0) :
+    quittingBehaviorStoppingLaw reward.realReward
+        (code.toBehaviorProfile reward hvalid player) = PMF.pure none := by
+  unfold toBehaviorProfile finiteClockDecodedProfile
+  rw [quittingBehaviorStoppingLaw_stoppingLawProfile]
+  exact code.decodedLaw_eq_pureNever_of_mass_eq_zero hvalid player hzero
+
 theorem cast_payoff_eq_quittingTerminalPayoff
     (reward : RationalFinFourRewardCode)
     (code : RationalFinFourFiniteClockProfileCode) (hvalid : code.Valid)

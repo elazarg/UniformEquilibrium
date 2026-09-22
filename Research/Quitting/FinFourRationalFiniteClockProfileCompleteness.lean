@@ -48,6 +48,21 @@ structure RealFiniteClockProfile
 
 namespace RealFiniteClockProfile
 
+/-- Package finite complete stopping laws as the exact coordinate source used
+by rational approximation. -/
+def ofStoppingLaws {reward : RationalFinFourRewardCode}
+    (clock : ℕ) (hclock : 0 < clock)
+    (laws : Fin 4 → PMF (Option ℕ))
+    (hlaws : ∀ player, IsFiniteClockStoppingLaw clock (laws player)) :
+    RealFiniteClockProfile reward where
+  clockBound := clock
+  clockBound_pos := hclock
+  weight := fun player ↦ finiteClockLawCoordinates clock (laws player)
+  weight_simplex player :=
+    finiteClockLawCoordinates_mem_stdSimplex clock (laws player)
+  auxiliary_eq_zero player :=
+    finiteClockLawCoordinates_aux_eq_zero clock (laws player) (hlaws player)
+
 /-- Literal behavioral profile decoded from the real finite-clock product
 coordinates. -/
 def toBehaviorProfile {reward : RationalFinFourRewardCode}
@@ -55,6 +70,21 @@ def toBehaviorProfile {reward : RationalFinFourRewardCode}
     (quittingGame reward.realReward).BehaviorProfile :=
   finiteClockDecodedProfile reward.realReward profile.clockBound
     profile.weight profile.weight_simplex
+
+/-- The coordinate source packaged from finite stopping laws decodes back to
+their canonical behavioral profile exactly. -/
+theorem toBehaviorProfile_ofStoppingLaws
+    (reward : RationalFinFourRewardCode)
+    (clock : ℕ) (hclock : 0 < clock)
+    (laws : Fin 4 → PMF (Option ℕ))
+    (hlaws : ∀ player, IsFiniteClockStoppingLaw clock (laws player)) :
+    (ofStoppingLaws (reward := reward) clock hclock laws hlaws).toBehaviorProfile =
+      quittingStoppingLawProfile reward.realReward laws := by
+  unfold toBehaviorProfile ofStoppingLaws finiteClockDecodedProfile
+    finiteClockDecodedLaws
+  congr 1
+  funext player
+  exact finiteClockDecodeLaw_coordinates clock (laws player) (hlaws player)
 
 end RealFiniteClockProfile
 
@@ -121,6 +151,56 @@ theorem rationalCode_mass
   rw [List.getElem?_ofFn, dite_eq_left hindex', Option.getD_some]
   congr 1
   exact finSuccEquivLast_atomIndex (rationalCode weight level) atom
+
+/-- Residual-floor approximation preserves a zero non-Never coordinate
+exactly. -/
+theorem rationalMass_eq_zero_of_ne_none
+    (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
+    (level : ℕ) (player : Fin 4) (atom : FiniteClockAtom clockBound)
+    (hatom : atom ≠ none) (hzero : weight player atom = 0) :
+    rationalMass weight level player atom = 0 := by
+  unfold rationalMass
+  rw [Math.SimplexApproximation.residualFloorCounts_ne hatom, hzero]
+  norm_num
+
+/-- If every non-Never source coordinate vanishes, the residual coordinate
+retains unit mass exactly. -/
+theorem rationalMass_none_eq_one_of_nonNever_eq_zero
+    (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
+    (level : ℕ) (player : Fin 4)
+    (hzero : ∀ atom, atom ≠ none → weight player atom = 0) :
+    rationalMass weight level player none = 1 := by
+  unfold rationalMass
+  rw [Math.SimplexApproximation.residualFloorCounts_self]
+  have hsum :
+      ∑ atom ∈ (Finset.univ.erase none : Finset (FiniteClockAtom clockBound)),
+          ⌊((level + 1 : ℕ) : ℝ) * weight player atom⌋₊ = 0 := by
+    apply Finset.sum_eq_zero
+    intro atom hatom
+    rw [hzero atom (Finset.ne_of_mem_erase hatom)]
+    norm_num
+  rw [hsum]
+  have hden : (((level + 1 : ℕ) : ℚ)) ≠ 0 := by positivity
+  simpa only [Nat.sub_zero, Nat.cast_add, Nat.cast_one] using
+    (div_self hden)
+
+/-- A pure-Never source marginal remains literally pure Never in every
+residual-floor rational code. -/
+theorem rationalCode_mass_eq_pureNever
+    (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
+    (level : ℕ) (player : Fin 4)
+    (hzero : ∀ atom, atom ≠ none → weight player atom = 0)
+    (atom : FiniteClockAtom clockBound) :
+    (rationalCode weight level).mass player atom =
+      if atom = none then 1 else 0 := by
+  rw [rationalCode_mass]
+  by_cases hatom : atom = none
+  · subst atom
+    rw [ite_eq_left rfl]
+    exact rationalMass_none_eq_one_of_nonNever_eq_zero weight level player hzero
+  · rw [ite_eq_right hatom]
+    exact rationalMass_eq_zero_of_ne_none weight level player atom hatom
+      (hzero atom hatom)
 
 theorem rationalMass_nonneg
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
@@ -581,27 +661,52 @@ theorem nonempty_rationalUpperWitness
       source.auxiliary_eq_zero level hlevel
   exact ⟨⟨code, rfl, hverified⟩⟩
 
-/-- Every strict real finite-clock upper witness is found at a finite stage of
-the explicit rational enumeration.  Normalization is retained literally as
-caller-side reward provenance; the approximation theorem itself is valid for
-every rational reward table. -/
+/-- Every strict real finite-clock upper witness for an arbitrary rational
+reward table is found at a finite stage of the explicit rational enumeration. -/
 theorem exists_checkedCandidateAt_of_realFiniteClockProfile
     (reward : RationalFinFourRewardCode) (target : ℚ)
-    (hnormalized : reward.normalized = true)
     (source : RealFiniteClockProfile reward)
     (hbelow : quittingTerminalExploitability reward.realReward
       source.toBehaviorProfile < (target : ℝ)) :
     ∃ stage code,
       RationalFinFourFiniteClockProfileCode.checkedCandidateAt
           reward target stage = some code ∧
-        code.clockBound = source.clockBound ∧
-        reward.normalized = true := by
+        code.clockBound = source.clockBound := by
   obtain ⟨witness⟩ :=
     nonempty_rationalUpperWitness reward target source hbelow
   obtain ⟨stage, hstage⟩ :=
     RationalFinFourFiniteClockProfileCode.exists_checkedCandidateAt_of_verifiesUpper
       reward target witness.code witness.verifies_upper
-  exact ⟨stage, witness.code, hstage, witness.same_clock, hnormalized⟩
+  exact ⟨stage, witness.code, hstage, witness.same_clock⟩
+
+/-- Rational discovery preserves a prescribed pure-Never marginal of the real
+finite-clock source exactly, rather than only in the limit. -/
+theorem exists_checkedCandidateAt_of_realFiniteClockProfile_preserving_pureNever
+    (reward : RationalFinFourRewardCode) (target : ℚ)
+    (source : RealFiniteClockProfile reward)
+    (hbelow : quittingTerminalExploitability reward.realReward
+      source.toBehaviorProfile < (target : ℝ))
+    (player : Fin 4)
+    (hpureNever : ∀ atom, atom ≠ none → source.weight player atom = 0) :
+    ∃ stage code,
+      RationalFinFourFiniteClockProfileCode.checkedCandidateAt
+          reward target stage = some code ∧
+        code.clockBound = source.clockBound ∧
+        ∀ atom, code.mass player atom = if atom = none then 1 else 0 := by
+  obtain ⟨level, hlevel⟩ :=
+    exists_rationalApproximant_exploitability_lt reward target source hbelow
+  let code := rationalCode source.weight level
+  have hverified : code.verifiesUpper reward target = true :=
+    rationalCode_verifiesUpper_of_realExploitability_lt reward target
+      source.clockBound_pos source.weight source.weight_simplex
+      source.auxiliary_eq_zero level hlevel
+  obtain ⟨stage, hstage⟩ :=
+    RationalFinFourFiniteClockProfileCode.exists_checkedCandidateAt_of_verifiesUpper
+      reward target code hverified
+  refine ⟨stage, code, hstage, rfl, ?_⟩
+  intro atom
+  exact rationalCode_mass_eq_pureNever source.weight level player
+    hpureNever atom
 
 theorem target_pos_of_realFiniteClockProfile
     (reward : RationalFinFourRewardCode) (target : ℚ)
@@ -614,12 +719,12 @@ theorem target_pos_of_realFiniteClockProfile
       (quittingTerminalExploitability_nonneg reward.realReward
         source.toBehaviorProfile) hbelow)
 
-/-- Existing finite-clock stopping-law witnesses feed the same-clock rational
-upper enumeration directly.  Thus the coordinate presentation above does not
-restrict which valid finite-clock product profiles are covered. -/
+/-- Existing finite-clock stopping-law witnesses for an arbitrary rational
+reward table feed the same-clock rational upper enumeration directly. Thus the
+coordinate presentation above does not restrict which valid finite-clock
+product profiles are covered. -/
 theorem exists_checkedCandidateAt_of_finiteClockStoppingLaws
     (reward : RationalFinFourRewardCode) (target : ℚ)
-    (hnormalized : reward.normalized = true)
     (clock : ℕ) (hclock : 0 < clock)
     (laws : Fin 4 → PMF (Option ℕ))
     (hlaws : ∀ player, IsFiniteClockStoppingLaw clock (laws player))
@@ -628,33 +733,62 @@ theorem exists_checkedCandidateAt_of_finiteClockStoppingLaws
     ∃ stage code,
       RationalFinFourFiniteClockProfileCode.checkedCandidateAt
           reward target stage = some code ∧
-        code.clockBound = clock ∧
-        reward.normalized = true := by
-  let source : RealFiniteClockProfile reward := {
-    clockBound := clock
-    clockBound_pos := hclock
-    weight := fun player ↦ finiteClockLawCoordinates clock (laws player)
-    weight_simplex player :=
-      finiteClockLawCoordinates_mem_stdSimplex clock (laws player)
-    auxiliary_eq_zero player :=
-      finiteClockLawCoordinates_aux_eq_zero clock (laws player)
-        (hlaws player) }
+        code.clockBound = clock := by
+  let source := RealFiniteClockProfile.ofStoppingLaws
+    (reward := reward) clock hclock laws hlaws
   have hsourceProfile : source.toBehaviorProfile =
-      quittingStoppingLawProfile reward.realReward laws := by
-    unfold RealFiniteClockProfile.toBehaviorProfile finiteClockDecodedProfile
-      finiteClockDecodedLaws source
-    congr 1
-    funext player
-    exact finiteClockDecodeLaw_coordinates clock (laws player)
-      (hlaws player)
+      quittingStoppingLawProfile reward.realReward laws :=
+    RealFiniteClockProfile.toBehaviorProfile_ofStoppingLaws
+      reward clock hclock laws hlaws
   have hbelowSource :
       quittingTerminalExploitability reward.realReward
         source.toBehaviorProfile < (target : ℝ) := by
     rw [hsourceProfile]
     exact hbelow
-  simpa only [source] using
-    exists_checkedCandidateAt_of_realFiniteClockProfile reward target
-      hnormalized source hbelowSource
+  simpa only [source, RealFiniteClockProfile.ofStoppingLaws] using
+    exists_checkedCandidateAt_of_realFiniteClockProfile
+      reward target source hbelowSource
+
+/-- Same-clock rational discovery preserves any finite-clock source player
+whose complete stopping law is prescribed to be deterministic Never. -/
+theorem exists_checkedCandidateAt_of_finiteClockStoppingLaws_preserving_pureNever
+    (reward : RationalFinFourRewardCode) (target : ℚ)
+    (clock : ℕ) (hclock : 0 < clock)
+    (laws : Fin 4 → PMF (Option ℕ))
+    (hlaws : ∀ player, IsFiniteClockStoppingLaw clock (laws player))
+    (hbelow : quittingTerminalExploitability reward.realReward
+      (quittingStoppingLawProfile reward.realReward laws) < (target : ℝ))
+    (player : Fin 4) (hpureNever : laws player = PMF.pure none) :
+    ∃ stage code,
+      RationalFinFourFiniteClockProfileCode.checkedCandidateAt
+          reward target stage = some code ∧
+        code.clockBound = clock ∧
+        ∀ atom, code.mass player atom = if atom = none then 1 else 0 := by
+  let source := RealFiniteClockProfile.ofStoppingLaws
+    (reward := reward) clock hclock laws hlaws
+  have hsourceProfile : source.toBehaviorProfile =
+      quittingStoppingLawProfile reward.realReward laws :=
+    RealFiniteClockProfile.toBehaviorProfile_ofStoppingLaws
+      reward clock hclock laws hlaws
+  have hbelowSource :
+      quittingTerminalExploitability reward.realReward
+        source.toBehaviorProfile < (target : ℝ) := by
+    rw [hsourceProfile]
+    exact hbelow
+  have hsourcePureNever : ∀ atom, atom ≠ none →
+      source.weight player atom = 0 := by
+    change ∀ atom : FiniteClockAtom clock, atom ≠ none →
+      finiteClockLawCoordinates clock (laws player) atom = 0
+    intro atom hatom
+    rw [hpureNever]
+    unfold finiteClockLawCoordinates finiteClockEncodeLaw toVector
+    rw [PMF.pure_map]
+    rw [stoppingTimeToFiniteClockAtom_none]
+    rw [PMF.pure_apply_of_ne none atom hatom]
+    rfl
+  simpa only [source, RealFiniteClockProfile.ofStoppingLaws] using
+    exists_checkedCandidateAt_of_realFiniteClockProfile_preserving_pureNever
+      reward target source hbelowSource player hsourcePureNever
 
 end FinFourRationalFiniteClockProfileCompleteness
 

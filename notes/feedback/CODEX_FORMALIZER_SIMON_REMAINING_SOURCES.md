@@ -1,4 +1,9 @@
-# Simon: proved adapters and remaining source obligations
+# Simon: proved components and remaining formalization
+
+The unfinished Lean proofs below remain formalization work. A missing proof
+in the repository does not by itself identify a gap in the paper. Specific
+source questions and refuted intermediate claims are distinguished where
+they arise.
 
 ## Corrected Lemma 5
 
@@ -138,7 +143,7 @@ fiber contractibility, and boundary-piece escape have component proofs.
 `truncatedW_eq_iUnion_fin` in the same file supplies the
 finite-index union; positive piece count follows from the player-count
 hypothesis. These components still need assembly into the full statement.
-The remaining substantive requirement of `QuestionOneHypotheses`
+The remaining field to prove in `QuestionOneHypotheses`
 (`MathUE/Topology/SimonViabilityQuestion.lean`) is small-step containment at
 the same scale already used for boundary-piece escape.
 
@@ -188,8 +193,19 @@ quitting bound under the literal common-scale small-step premise. The exact
 one-stage affine identity and structure-map correction bound control the
 distance to the original base point. Zero quitting is included. Both the
 cutoff and the small-step premise use the same Section 4 radius; neither
-Lemma 4.4 nor star-convexity of the upper image is assumed. The zero-cutoff
-endpoint branch and the other small-step cases still need assembly.
+Lemma 4.4 nor star-convexity of the upper image is assumed.
+`section4_terminal_mem_gluedGraph_of_quitProbability_eq_zero` in the same
+file handles zero quitting for every cutoff value: both terminal coordinates
+equal the original base point, which lies on the truncated frontier and in
+the literal glued graph.
+`section4Omega_lt_terminalStep_of_bounded_positive_cutoff` proves that positive
+cutoff and a first endpoint inside the reward box but outside the lower
+neighborhood force a terminal step larger than the common radius.
+`section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep`
+states the resulting small-step containment directly. Neither theorem needs
+a lower bound on quitting probability or the global part of Lemma 4.4.
+The remaining positive-quitting branches and their assembly remain to be
+formalized.
 
 For the zero-cutoff, positive-quitting branch, the upper-neighborhood
 coordinate cap still depends on the global part of Lemma 4.4. The large-
@@ -197,8 +213,8 @@ quitting zero-cutoff case also needs the continuation vector in the exact
 box required by `IsStructureMotionParameter`; the broader bounds asserted
 by Lemma 4.4 alone do not supply that premise. This is a remaining source
 alignment obligation, not a counterexample to the paper's result. The
-bounded-continuation, positive-cutoff case can reuse the checked supported
-coordinate bound and coordinate drift without assuming that global part.
+bounded-continuation, positive-cutoff case is proved by the declarations
+above, using the supported-coordinate bound and coordinate drift.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved. The checked

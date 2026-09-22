@@ -121,17 +121,15 @@ The strict-margin completeness proof is also already present in
   connect a real finite-clock source to discovery at a finite enumeration
   stage.
 
-The last two public discovery theorems currently carry
-`reward.normalized = true`. Their own module documentation and proof show that
-this hypothesis is retained reward provenance, not a mathematical premise of
-the rational approximation. The lower-level
-`nonempty_rationalUpperWitness` has no normalization hypothesis.
+Both discovery theorems accept arbitrary rational reward tables. Neither
+their hypotheses nor their conclusions require `reward.normalized = true`.
+The shell-resolution caller retains normalization only for its separate
+shell estimates.
 
 This distinction is essential here: the packet's displayed singleton rows
 contain entries equal to four, so their literal rational reward code is not
-unit-normalized. No packet theorem may silently assert normalization, rescale
-the table without transporting the requested accuracy, or apply the current
-normalized discovery theorem directly.
+unit-normalized. The literal table can now feed rational discovery directly,
+without rescaling or changing the requested accuracy.
 
 ## Actual semantic Nash endpoint
 
@@ -158,13 +156,16 @@ deterministic Never law for the outsider. The existing Fin4 checker permits
 all four rational marginals. Its soundness theorem therefore does not state
 that the decoded outsider is pure Never.
 
-Residual-floor rationalization uses Never as the residual coordinate. Hence,
-when its real source has an outsider marginal equal to pure Never, all of that
-outsider's non-Never floor counts remain zero and the rational approximant is
-again pure Never. This fact is not currently exposed by a named declaration
-or retained as a field of the checked output. Until such a theorem is proved,
-the existing unrestricted Fin4 enumerator must not be described as the
-packet's literal "rational child profile, then append Never" producer.
+Residual-floor rationalization uses Never as the residual coordinate.
+`FinFourRationalFiniteClockProfileCompleteness.exists_checkedCandidateAt_of_finiteClockStoppingLaws_preserving_pureNever`
+(`Research/Quitting/FinFourRationalFiniteClockProfileCompleteness.lean`)
+returns a finite checked stage at the same clock and preserves the prescribed
+outsider marginal exactly. The reusable coordinate constructor
+`RealFiniteClockProfile.ofStoppingLaws` and its decoding identity in that file
+serve both discovery variants.
+`RationalFinFourFiniteClockProfileCode.behaviorStoppingLaw_toBehaviorProfile_eq_pureNever`
+(`Research/Quitting/FinFourRationalFiniteClockProfile.lean`) proves that the
+decoded behavioral profile has the same deterministic Never stopping law.
 
 There are two honest output scopes:
 
@@ -174,23 +175,26 @@ There are two honest output scopes:
    pure-Never outsider and proving that both rational approximation and
    semantic decoding preserve that restriction.
 
-The second scope is the one required for a literal formalization of the
-algorithm in the packet.
+Pure-Never preservation supplies the restriction in the second scope. One
+acceptance-rule difference remains: the existing checker tests the full
+parent exploitability, whereas the packet tests only the child's
+exploitability against the tolerance divided by the amplification factor,
+then appends Never. The stronger parent check is not the packet's literal
+child-first acceptance rule.
 
 ## Existing-code-first next step
 
 The smallest coherent next implementation should reuse the Fin4 Research
 checker rather than introduce a parallel Fin3 rational PMF language.
 
-1. Add a normalization-free corollary of
-   `nonempty_rationalUpperWitness` and finite enumeration surjectivity for
-   finite-clock stopping laws. It should have the conclusion of
-   `exists_checkedCandidateAt_of_finiteClockStoppingLaws` without the false
-   unit-normalization premise or conclusion.
-2. Add the pure-Never preservation lemma for the residual-floor rational code
-   and a checked-output restriction recording that the outsider marginal is
-   still deterministic Never.
-3. Compose the existing child existence, finite-menu approximation,
+1. Reuse the exact finite payoff and response-cap calculations in a checker
+   that tests the surviving child coordinates and requires the outsider to
+   be pure Never. Its acceptance threshold is the requested tolerance
+   divided by the amplification factor.
+2. Prove finite discovery for that checker from the actual child source,
+   using the existing strict-margin rational approximation and exact
+   pure-Never preservation.
+3. Compose child existence, finite-menu approximation,
    capped-clock Never lift, normalization-free rational discovery, checker
    soundness, and terminal-exploitability Nash consumer. The result should
    take a rational Fin4 reward code, an owner, the actual capped-clock
