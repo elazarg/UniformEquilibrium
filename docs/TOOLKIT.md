@@ -948,6 +948,22 @@ that a zero-diagonal two-by-two matrix cannot have a strictly positive inverse.
 The four-cycle module above certifies the exact one-twentieth perturbation
 and shows why its first-order inverse correction alone is insufficient.
 
+`exists_pos_strictlyPositiveInverse_singletonMatrix_rewardApproximation`
+(`UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseRewardApproximation.lean`)
+realizes this matrix approximation by actual reward tables. It subtracts the
+parameter only from off-own singleton coordinates, preserves own-singleton
+and nonsingleton rewards, and bounds every reward change by the parameter's
+absolute value. The matrix identity and the common positive threshold are
+literal conclusions, not supplied compatibility assumptions.
+
+`PositiveInverseFourMatrixComparisons.not_projectiveQBar`
+(`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`)
+separates the strict-inverse criterion from the projective-Q-bar criterion
+on the determinant-minus-three example. The same module proves full standard Q,
+absence of a homogeneous solution, full normal core, and failure of the named
+signed-four-cycle input under relabeling. The example still has a covering
+negative walk with repeated owners; arbitrary longer calendars are not excluded.
+
 `exists_finset_r0Degree_eq_sum_sign_det`
 (`MathUE/LinearProgramming/R0DegreeSum.lean`) computes this integer from all
 actual roots at one regular test offset. The finite root set is derived, not
@@ -2040,6 +2056,19 @@ exclude balanced singleton cycles of every period in every member of the
 paired family and its deletion-3 child. The fixed singleton columns exclude
 every escort edge, so the proof uses the existing escort necessity theorem;
 it is not restricted to the displayed rational example.
+
+`HasQuittingPureTimeMembershipToggleGap.exists_behaviorDeviation`
+(`UniformEquilibrium/Quitting/Paths/PureTimeMembershipToggleObstruction.lean`)
+turns a solo escape from Never and a joining or nonterminal leaving gain at
+each nonempty coalition into a uniform gain against every complete pure-clock
+profile. The constructed deviation is behavioral, and the pure clocks may
+use arbitrary dates and Never. This does not exclude mixed equilibria.
+`CappedClockPairedFixtureNoPureTerminal.membershipToggleGap_one`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureNoPureTerminal.lean`)
+supplies a gain of one for the paired rational example. Its mixed one-date
+profile nevertheless is exact terminal Nash, as proved by
+`CappedClockPairedFixtureTerminal.profile_exactTerminalNash`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureTerminal.lean`).
 
 `CappedClockParentFutureJoinCertificate` and
 `exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`

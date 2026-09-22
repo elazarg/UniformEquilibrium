@@ -59,12 +59,33 @@ both terminal payoff and unrestricted behavioral best-response value
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureTerminal.lean`).
 The module passed a silent named build.
 
+The complete pure-date reply values are also proved in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixturePureReplies.lean`:
+`pureReplyValue_zero`, `pureReplyValue_some_succ`, and `pureReplyValue_none`
+distinguish immediate quitting, every strictly later finite date, and Never.
+This module passed a silent named build and reuses the canonical root-prefix
+payoff identities; it does not restrict the full behavioral caps above.
+
 The exact Never, future, and joining margins, and every singleton deletion's
 own payoff, continue floor, and joining cap, are proved in
 `UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureSlacks.lean`.
 `futureSlack_eq_certificateMargin` and `joinSlack_eq_certificateMargin`
 identify the displayed numbers with the actual weighted reward-row expressions.
 The module passed a silent named build.
+
+The reusable pure-clock obstruction is also proved:
+`HasQuittingPureTimeMembershipToggleGap.exists_behaviorDeviation`
+(`UniformEquilibrium/Quitting/Paths/PureTimeMembershipToggleObstruction.lean`)
+turns one solo escape and a joining or nonterminal leaving gain at every
+nonempty coalition into an actual behavioral deviation against every complete
+pure-clock profile. The same gain lower bound holds at arbitrary deterministic
+dates and Never. A positive gap excludes exact terminal Nash in this pure
+class; no exclusion of mixed behavioral profiles is asserted.
+`CappedClockPairedFixtureNoPureTerminal.membershipToggleGap_one` and
+`CappedClockPairedFixtureNoPureTerminal.exists_behaviorDeviation_gain_one`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureNoPureTerminal.lean`)
+give the fixture's literal row certificate and a gain of at least one against
+every complete pure-clock profile. Both modules passed silent named builds.
 
 ## Work still needed
 
@@ -74,12 +95,18 @@ amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 The remaining packet work is:
 
-1. Seal the additional example conclusions: individual pure-date reply values,
-   absence of pure terminal Nash equilibria, robustness under
-   reward perturbations, and the comparison with the capped-joint hypothesis.
-2. Formalize the solved table failing every deletion LP, the missing-Never
-   example with zero child singleton, and the sparse-calendar missed response
-   with its consecutive-menu repair.
+1. Seal robustness under reward perturbations and the comparison with the
+   capped-joint hypothesis.
+2. Prove that every deletion LP fails for the already defined
+   `AdaptiveChildCenter.reward`
+   (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`).
+   Its exact profile, payoff, unrestricted terminal Nash property, and uniform
+   payoff are already proved in that module; no second table or equilibrium
+   construction is needed. The missing LP evidence is one future row for
+   deletion zero and one joining row for each other deletion, with no Never
+   row needed. Also formalize the missing-Never example with zero child
+   singleton and the sparse-calendar missed response with its consecutive
+   repair.
 3. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.

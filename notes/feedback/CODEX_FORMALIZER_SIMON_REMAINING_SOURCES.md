@@ -76,8 +76,18 @@ file proves that every convergent subsequence limit of an unbounded ordinary
 orbit is feasible. `exists_feasible_cluster_of_unbounded_section4J_orbit`
 constructs such a limit and a strict convergent subsequence from compactness
 of the actual graph; no cluster is a supplied input. These declarations
-passed a silent named build. Localization across the full extended orbit's
-finite and infinite segment cases remains to be formalized.
+passed a silent named build.
+
+`ExtendedOrbitData.potential_nextStart_le_point`
+(`MathUE/Topology/ExtendedOrbit.lean`) propagates a continuous decreasing
+potential across either a finite endpoint stitch or an infinite-segment
+limit. Only the next segment's activity is required, not infinitely many
+segments. Simon's paper-specific orbit record is explicitly mapped to this
+generic interface. The Euclidean segment-variation estimate and removal of
+bounded predecessors before an unbounded segment are also checked in
+`Literature/Simon2012.lean`. The remaining localization case has infinitely
+many segments, each with bounded variation; its final assembly remains Lean
+work.
 
 ## Section 4 cutoff and coordinate drift
 

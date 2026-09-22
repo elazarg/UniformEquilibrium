@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Topology.MetricSpace.Pseudo.Basic
+import Mathlib.Topology.Instances.Real.Lemmas
 
 /-!
 # Extended orbits of a correspondence
@@ -240,6 +241,69 @@ structure ExtendedOrbitData {X : Type*} [TopologicalSpace X]
   infiniteStitch : ∀ segment, ActiveSegment segmentCount (segment + 1) →
     segmentLength segment = none →
       Tendsto (point segment) atTop (nhds (point (segment + 1) 0))
+
+/-- A continuous scalar potential that decreases along every valid edge is
+no larger at the next segment start than at any point of the current segment.
+The finite and infinite stitch clauses are used separately. -/
+theorem ExtendedOrbitData.potential_nextStart_le_point
+    {X : Type*} [TopologicalSpace X] {relation : Correspondence X X}
+    (orbit : ExtendedOrbitData relation)
+    (potential : X → ℝ) (hcontinuous : Continuous potential)
+    (hstep : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      potential (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index))
+    (segment : ℕ)
+    (hnextActive : ActiveSegment orbit.segmentCount (segment + 1))
+    (index : ℕ)
+    (hindex : SegmentIndex (orbit.segmentLength segment) index) :
+    potential (orbit.point (segment + 1) 0) ≤
+      potential (orbit.point segment index) := by
+  have hactive : ActiveSegment orbit.segmentCount segment := hnextActive.pred
+  cases hlength : orbit.segmentLength segment with
+  | some length =>
+      have hlengthPositive : 0 < length :=
+        orbit.segmentLengthPositive segment hactive length hlength
+      have hindexLt : index < length := hindex length hlength
+      have hindexEnd : index ≤ length - 1 := by omega
+      have hreach : ∀ endpoint, index ≤ endpoint → endpoint < length →
+          potential (orbit.point segment endpoint) ≤
+            potential (orbit.point segment index) := by
+        intro endpoint hindexEndpoint
+        induction endpoint, hindexEndpoint using Nat.le_induction with
+        | base =>
+            intro _
+            exact le_rfl
+        | succ later hindexLater ih =>
+            intro hlaterSucc
+            have hlaterIndex :
+                SegmentIndex (orbit.segmentLength segment) (later + 1) := by
+              intro total htotal
+              have htotalLength : total = length :=
+                Option.some.inj (htotal.symm.trans hlength)
+              subst total
+              omega
+            exact (hstep segment later hactive hlaterIndex).trans
+              (ih (by omega))
+      have hendLe : potential (orbit.point segment (length - 1)) ≤
+          potential (orbit.point segment index) :=
+        hreach (length - 1) hindexEnd (by omega)
+      rw [← orbit.finiteStitch segment hnextActive length hlength]
+      exact hendLe
+  | none =>
+      have hanti : Antitone (fun i => potential (orbit.point segment i)) := by
+        apply antitone_nat_of_succ_le
+        intro i
+        apply hstep segment i hactive
+        simp [SegmentIndex, hlength]
+      have htendsto : Tendsto (fun i => potential (orbit.point segment i))
+          atTop (nhds (potential (orbit.point (segment + 1) 0))) :=
+        hcontinuous.continuousAt.tendsto.comp
+          (orbit.infiniteStitch segment hnextActive hlength)
+      apply le_of_tendsto htendsto
+      filter_upwards [eventually_ge_atTop index] with later hlater
+      exact hanti hlater
 
 /-- An ordinary infinite orbit is an extended orbit with one infinite segment. -/
 def ExtendedOrbitData.ofInfiniteOrbit {X : Type*} [TopologicalSpace X]

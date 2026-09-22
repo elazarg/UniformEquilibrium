@@ -9999,6 +9999,299 @@ theorem exists_feasible_cluster_of_unbounded_section4J_orbit
     G inverse cutoff R ε δ hgraph point horbit hvariation subsequence
       hsubsequence limit htendsto
 
+private theorem hasUnboundedVariation_of_not_boundedSegmentVariation
+    {N : Type} [Fintype N]
+    {J : Set (Payoff N × Payoff N)}
+    (orbit : ExtendedOrbitData (graphCorrespondence J))
+    (segment : ℕ) (hactive : ActiveSegment orbit.segmentCount segment)
+    (hunbounded : ¬HasBoundedSegmentVariation orbit segment) :
+    orbit.segmentLength segment = none ∧
+      HasUnboundedVariation (orbit.point segment) := by
+  have hlength : orbit.segmentLength segment = none := by
+    cases hlength : orbit.segmentLength segment with
+    | none => rfl
+    | some length =>
+        exact (hunbounded
+          (hasBoundedSegmentVariation_of_finite orbit segment length hlength)).elim
+  refine ⟨hlength, ?_⟩
+  rw [HasBoundedSegmentVariation] at hunbounded
+  push Not at hunbounded
+  intro bound
+  obtain ⟨horizon, hhorizon⟩ := hunbounded bound
+  refine ⟨horizon, ?_⟩
+  simpa [extendedSegmentVariation, SegmentIndex, hlength, hactive] using
+    hhorizon.le
+
+/-- If one active segment has unbounded variation, truncating at its bounded
+predecessors and then inside that infinite segment produces the paper's
+remaining orbit, starting arbitrarily close to a feasible vector. -/
+private theorem exists_nearFeasible_unbounded_section4J_tail_of_unbounded_segment
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ radius : ℝ)
+    (hradius : 0 < radius)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hvariation : HasUnboundedExtendedVariation orbit)
+    (segment : ℕ) (hactive : ActiveSegment orbit.segmentCount segment)
+    (hprefixBounded : ∀ previous, previous < segment →
+      HasBoundedSegmentVariation orbit previous)
+    (hsegmentUnbounded : ¬HasBoundedSegmentVariation orbit segment) :
+    ∃ tail : ExtendedOrbitData
+        (graphCorrespondence (Section4J G inverse cutoff R ε δ)),
+      HasUnboundedExtendedVariation tail ∧
+        NearFeasible G radius (tail.point 0 0) := by
+  let shifted := ExtendedOrbitData.dropSegments orbit segment hactive
+  have hshiftedVariation : HasUnboundedExtendedVariation shifted :=
+    ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix
+      orbit segment hactive hprefixBounded hvariation
+  obtain ⟨hlength, hsegmentVariation⟩ :=
+    hasUnboundedVariation_of_not_boundedSegmentVariation
+      orbit segment hactive hsegmentUnbounded
+  have hshiftedLength : shifted.segmentLength 0 = none := by
+    simpa only [shifted, ExtendedOrbitData.dropSegments_segmentLength,
+      zero_add, Nat.add_zero] using hlength
+  have hshiftedOrbit : IsInfiniteOrbit
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ))
+      (shifted.point 0) := by
+    intro index
+    apply shifted.step 0
+    · intro total htotal
+      have := shifted.segmentCountPositive total htotal
+      omega
+    · intro total htotal
+      rw [hshiftedLength] at htotal
+      simp at htotal
+  have hshiftedPoint : shifted.point 0 = orbit.point segment := by
+    funext index
+    rfl
+  have hshiftedPointVariation : HasUnboundedVariation (shifted.point 0) := by
+    simpa only [hshiftedPoint] using hsegmentVariation
+  obtain ⟨limit, _hlimitGraph, hlimitFeasible, subsequence,
+      hsubsequence, htendsto⟩ :=
+    exists_feasible_cluster_of_unbounded_section4J_orbit
+      G inverse cutoff R ε δ hgraph (shifted.point 0) hshiftedOrbit
+        hshiftedPointVariation
+  have hdistanceTendsto : Tendsto
+      (fun rank => EuclideanDist (shifted.point 0 (subsequence rank)) limit)
+      atTop (nhds 0) := by
+    have hcontinuous : Continuous
+        (fun x : Payoff G.Player => EuclideanDist x limit) := by
+      unfold EuclideanDist EuclideanNorm
+      fun_prop
+    have hlimitZero : EuclideanDist limit limit = 0 := by
+      simp [EuclideanDist, EuclideanNorm]
+    rw [← hlimitZero]
+    exact hcontinuous.continuousAt.tendsto.comp htendsto
+  have hnearEventually : ∀ᶠ rank in atTop,
+      EuclideanDist (shifted.point 0 (subsequence rank)) limit < radius :=
+    (tendsto_order.1 hdistanceTendsto).2 radius hradius
+  obtain ⟨rank, hrank⟩ := hnearEventually.exists
+  let tail := ExtendedOrbitData.dropFirstInfinitePrefix
+    shifted (subsequence rank) hshiftedLength
+  refine ⟨tail, ?_, ?_⟩
+  · exact ExtendedOrbitData.dropFirstInfinitePrefix_extended_unbounded
+      shifted (subsequence rank) hshiftedLength hshiftedVariation
+  · refine ⟨limit, hlimitFeasible, hrank.le⟩
+
+/-- The literature orbit record has the same data as the canonical generic
+extended-orbit record. -/
+private def toMathTopologyExtendedOrbitData
+    {X : Type} [TopologicalSpace X]
+    {J : Literature.Simon2007.Correspondence X X}
+    (orbit : Literature.Simon2007.ExtendedOrbitData J) :
+    Math.Topology.ExtendedOrbitData J where
+  segmentCount := orbit.segmentCount
+  segmentCountPositive := orbit.segmentCountPositive
+  segmentLength := orbit.segmentLength
+  segmentLengthPositive := by
+    intro segment hactive length hlength
+    apply orbit.segmentLengthPositive segment _ length hlength
+    simpa only [Literature.Simon2007.ActiveSegment,
+      Math.Topology.ActiveSegment] using hactive
+  point := orbit.point
+  step := by
+    intro segment hactive index hindex
+    apply orbit.step segment _ index _
+    · simpa only [Literature.Simon2007.ActiveSegment,
+        Math.Topology.ActiveSegment] using hactive
+    · simpa only [Literature.Simon2007.SegmentIndex,
+        Math.Topology.SegmentIndex] using hindex
+  finiteStitch := by
+    intro segment hactive length hlength
+    apply orbit.finiteStitch segment _ length hlength
+    simpa only [Literature.Simon2007.ActiveSegment,
+      Math.Topology.ActiveSegment] using hactive
+  infiniteStitch := by
+    intro segment hactive hlength
+    apply orbit.infiniteStitch segment _ hlength
+    simpa only [Literature.Simon2007.ActiveSegment,
+      Math.Topology.ActiveSegment] using hactive
+
+private theorem literatureExtendedOrbit_potential_nextStart_le_point
+    {X : Type} [TopologicalSpace X]
+    {J : Literature.Simon2007.Correspondence X X}
+    (orbit : Literature.Simon2007.ExtendedOrbitData J)
+    (potential : X → ℝ) (hcontinuous : Continuous potential)
+    (hstep : ∀ segment index,
+      Literature.Simon2007.ActiveSegment orbit.segmentCount segment →
+      Literature.Simon2007.SegmentIndex
+        (orbit.segmentLength segment) (index + 1) →
+      potential (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index))
+    (segment : ℕ)
+    (hnextActive : Literature.Simon2007.ActiveSegment
+      orbit.segmentCount (segment + 1))
+    (index : ℕ)
+    (hindex : Literature.Simon2007.SegmentIndex
+      (orbit.segmentLength segment) index) :
+    potential (orbit.point (segment + 1) 0) ≤
+      potential (orbit.point segment index) := by
+  let genericOrbit := toMathTopologyExtendedOrbitData orbit
+  have hgeneric :=
+    Math.Topology.ExtendedOrbitData.potential_nextStart_le_point
+      genericOrbit potential hcontinuous (by
+        intro current step hcurrent hstepIndex
+        apply hstep current step
+        · simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+            Literature.Simon2007.ActiveSegment,
+            Math.Topology.ActiveSegment] using hcurrent
+        · simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+            Literature.Simon2007.SegmentIndex,
+            Math.Topology.SegmentIndex] using hstepIndex)
+      segment (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.ActiveSegment,
+          Math.Topology.ActiveSegment] using hnextActive)
+      index (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+          Literature.Simon2007.SegmentIndex,
+          Math.Topology.SegmentIndex] using hindex)
+  simpa only [genericOrbit, toMathTopologyExtendedOrbitData] using hgeneric
+
+/-- If a scalar potential pays a fixed multiple of every edge length, then
+it pays the whole rectangular prefix of one segment out of the drop to the
+next segment start. -/
+private theorem ExtendedOrbitData.mul_extendedSegmentVariation_le_potentialDrop
+    {N : Type} [Fintype N]
+    {J : Correspondence (Payoff N) (Payoff N)}
+    (orbit : ExtendedOrbitData J) (hcount : orbit.segmentCount = none)
+    (potential : Payoff N → ℝ) (hcontinuous : Continuous potential)
+    (constant : ℝ)
+    (hstep : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      potential (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index))
+    (hscaled : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      constant * EuclideanDist
+          (orbit.point segment (index + 1)) (orbit.point segment index) ≤
+        potential (orbit.point segment index) -
+          potential (orbit.point segment (index + 1)))
+    (segment horizon : ℕ) :
+    constant * extendedSegmentVariation orbit segment horizon ≤
+      potential (orbit.point segment 0) -
+        potential (orbit.point (segment + 1) 0) := by
+  classical
+  have hactive : ∀ j, ActiveSegment orbit.segmentCount j := by
+    intro j
+    simp [ActiveSegment, hcount]
+  rw [extendedSegmentVariation, Finset.mul_sum]
+  calc
+    ∑ index ∈ Finset.range horizon,
+          constant *
+            (if ActiveSegment orbit.segmentCount segment ∧
+                SegmentIndex (orbit.segmentLength segment) (index + 1)
+              then EuclideanDist
+                (orbit.point segment (index + 1)) (orbit.point segment index)
+              else 0) ≤
+        ∑ index ∈ Finset.range horizon,
+          (if ActiveSegment orbit.segmentCount segment ∧
+              SegmentIndex (orbit.segmentLength segment) (index + 1)
+            then potential (orbit.point segment index) -
+              potential (orbit.point segment (index + 1))
+            else 0) := by
+      apply Finset.sum_le_sum
+      intro index _
+      by_cases hindex :
+          SegmentIndex (orbit.segmentLength segment) (index + 1)
+      · simp only [hactive segment, hindex, and_self, ite_true]
+        exact hscaled segment index (hactive segment) hindex
+      · simp only [hactive segment, hindex, and_false, ite_false, mul_zero]
+        exact le_rfl
+    _ ≤ potential (orbit.point segment 0) -
+          potential (orbit.point (segment + 1) 0) := by
+      cases hlength : orbit.segmentLength segment with
+      | none =>
+          have hnextLe :=
+            literatureExtendedOrbit_potential_nextStart_le_point
+              orbit potential hcontinuous hstep segment (hactive (segment + 1))
+                horizon (by simp [SegmentIndex, hlength])
+          have htelescope := Finset.sum_range_sub'
+            (fun index => potential (orbit.point segment index)) horizon
+          have hnone : ∀ index, SegmentIndex (none : Option ℕ) index := by
+            intro index total htotal
+            cases htotal
+          simp only [hactive segment, true_and]
+          simp only [hnone, ite_true]
+          rw [htelescope]
+          exact sub_le_sub_left hnextLe _
+      | some length =>
+          have hlengthPositive : 0 < length :=
+            orbit.segmentLengthPositive segment (hactive segment) length hlength
+          have hsum : ∀ cutoff,
+              (∑ index ∈ Finset.range cutoff,
+                (if ActiveSegment orbit.segmentCount segment ∧
+                    SegmentIndex (orbit.segmentLength segment) (index + 1)
+                  then potential (orbit.point segment index) -
+                    potential (orbit.point segment (index + 1))
+                  else 0)) =
+                potential (orbit.point segment 0) -
+                  potential (orbit.point segment (min cutoff (length - 1))) := by
+            intro cutoff
+            induction cutoff with
+            | zero => simp
+            | succ cutoff ih =>
+                rw [Finset.sum_range_succ, ih]
+                by_cases hvalid : cutoff + 1 < length
+                · have hmin : min cutoff (length - 1) = cutoff := by omega
+                  have hminSucc : min (cutoff + 1) (length - 1) =
+                      cutoff + 1 := by omega
+                  rw [ite_eq_left]
+                  · rw [hmin, hminSucc]
+                    ring
+                  · refine ⟨hactive segment, ?_⟩
+                    intro total htotal
+                    have htotalLength : total = length :=
+                      Option.some.inj (htotal.symm.trans hlength)
+                    subst total
+                    exact hvalid
+                · have hmin : min cutoff (length - 1) = length - 1 := by omega
+                  have hminSucc : min (cutoff + 1) (length - 1) =
+                      length - 1 := by omega
+                  rw [ite_eq_right]
+                  · rw [hmin, hminSucc, add_zero]
+                  · rintro ⟨_, hindex⟩
+                    exact hvalid (hindex length hlength)
+          have hsumHorizon := hsum horizon
+          simp only [hlength] at hsumHorizon
+          rw [hsumHorizon]
+          have hminIndex :
+              SegmentIndex (orbit.segmentLength segment)
+                (min horizon (length - 1)) := by
+            intro total htotal
+            have htotalLength : total = length :=
+              Option.some.inj (htotal.symm.trans hlength)
+            subst total
+            omega
+          exact sub_le_sub_left
+            (literatureExtendedOrbit_potential_nextStart_le_point
+              orbit potential hcontinuous hstep segment (hactive (segment + 1))
+                (min horizon (length - 1)) hminIndex) _
+
 /-- In the lower-glue branch of Property (7), the singleton terminal reward
 in the requested truncated piece is already a full escape target. -/
 theorem lowerGlueFiber_piece_escape_at_section4Omega
