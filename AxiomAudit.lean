@@ -1843,6 +1843,8 @@ import UniformEquilibrium.Quitting.Classification.LCP.IsolatedEndpointProducer
 import UniformEquilibrium.Quitting.Classification.LCP.LaterLayerAbnormal
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixClasses
 import UniformEquilibrium.Quitting.Classification.LCP.MatrixPositiveScaling
+import UniformEquilibrium.Quitting.Classification.LCP.NegativeDegreeFourMatrixComparisons
+import UniformEquilibrium.Quitting.Classification.LCP.NegativeDegreeFourMatrixCriterion
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCore
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCoreStrictnessExample

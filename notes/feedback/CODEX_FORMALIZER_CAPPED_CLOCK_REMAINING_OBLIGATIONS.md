@@ -53,10 +53,10 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 ## Work still needed
 
 1. Complete the terminating child-first rational finite-law enumeration.
-   Exact rational cap computation, normalization-free same-clock discovery,
-   and exact pure-Never preservation are proved in Research. The remaining
-   producer must test child exploitability, derive finite discovery from the
-   actual child source, and feed the accepted child into the Never-lift
+   The child-only checker, its exact deleted-game exploitability identity,
+   strict-margin same-clock discovery, and exact pure-Never preservation
+   are proved in Research. The remaining producer must derive finite discovery
+   from the actual child source and feed the accepted child into the Never-lift
    consumer. These checked components and the remaining composition are mapped
    in [the rational producer dependency note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 2. Seal the additional example conclusions: slack values, terminal Nash laws,

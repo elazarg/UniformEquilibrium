@@ -1,5 +1,7 @@
 import UniformEquilibrium.Quitting.Stationary.DiscountedClippedDegree
 import UniformEquilibrium.Quitting.Classification.LCP.SingletonDegreeCriterion
+import UniformEquilibrium.Quitting.Classification.LCP.NegativeDegreeFourMatrixCriterion
+import UniformEquilibrium.Quitting.Classification.LCP.NegativeDegreeFourMatrixComparisons
 import MathUE
 import UniformEquilibrium.Finite.RationalBooleanRootGrid
 import UniformEquilibrium.Quitting.Terminal.GroupExclusionExactPrefixStep

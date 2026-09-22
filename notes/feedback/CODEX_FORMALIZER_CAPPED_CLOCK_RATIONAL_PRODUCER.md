@@ -175,26 +175,33 @@ There are two honest output scopes:
    pure-Never outsider and proving that both rational approximation and
    semantic decoding preserve that restriction.
 
-Pure-Never preservation supplies the restriction in the second scope. One
-acceptance-rule difference remains: the existing checker tests the full
-parent exploitability, whereas the packet tests only the child's
-exploitability against the tolerance divided by the amplification factor,
-then appends Never. The stronger parent check is not the packet's literal
-child-first acceptance rule.
+The child-only checker is
+`RationalFinFourFiniteClockProfileCode.verifiesChildUpper`
+(`Research/Quitting/FinFourRationalFiniteClockChildUpper.lean`). It requires a
+valid code and a pure-Never owner, and tests only the surviving coordinates.
+`cast_childExploitability_eq_deletedChildTerminalExploitability` in that file
+identifies its rational maximum with the actual deleted game's unrestricted
+terminal exploitability. `checkedChildCandidateAt_sound` proves soundness of
+every emitted row, using the existing raw-code enumeration.
+
+`FinFourRationalFiniteClockChildUpperCompleteness.exists_checkedChildCandidateAt_of_realFiniteClockProfile`
+(`Research/Quitting/FinFourRationalFiniteClockChildUpperCompleteness.lean`)
+proves finite discovery from a real finite-clock profile with a strict
+child-only margin. The clock is unchanged and the owner marginal remains
+exactly pure Never. It reuses the existing residual-floor approximation and
+proves continuity of the masked survivor maximum. No reward normalization
+is assumed. The actual child-existence source has not yet been composed
+with this discovery theorem.
 
 ## Existing-code-first next step
 
-The smallest coherent next implementation should reuse the Fin4 Research
-checker rather than introduce a parallel Fin3 rational PMF language.
+The remaining implementation should compose the child-only checker with
+the existing actual-child source; no parallel Fin3 rational PMF language
+is needed.
 
-1. Reuse the exact finite payoff and response-cap calculations in a checker
-   that tests the surviving child coordinates and requires the outsider to
-   be pure Never. Its acceptance threshold is the requested tolerance
-   divided by the amplification factor.
-2. Prove finite discovery for that checker from the actual child source,
-   using the existing strict-margin rational approximation and exact
-   pure-Never preservation.
-3. Compose child existence, finite-menu approximation,
+1. Identify the real finite-clock masked maximum with the exploitability of
+   the supplied child finite-menu laws, with its pure-Never extension.
+2. Compose child existence, finite-menu approximation,
    capped-clock Never lift, normalization-free rational discovery, checker
    soundness, and terminal-exploitability Nash consumer. The result should
    take a rational Fin4 reward code, an owner, the actual capped-clock

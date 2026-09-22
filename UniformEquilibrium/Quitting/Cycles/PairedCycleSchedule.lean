@@ -154,6 +154,31 @@ structure RawRegion (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
       reward ⟨insert player coalition, Finset.insert_nonempty player coalition⟩ player ≤
         singleton reward player + 1 / 50
 
+/-- In the paired raw region, only the recipient's partner can have a
+singleton payoff below that recipient's own singleton payoff. -/
+theorem RawRegion.eq_partner_of_singleton_lt
+    {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
+    {schedule : Schedule ι period} (hregion : RawRegion reward schedule)
+    {recipient quitter : ι}
+    (hbelow : reward (quittingSingletonTerminal quitter) recipient <
+      singleton reward recipient) : quitter = schedule.partner recipient := by
+  have hphase : schedule.phase quitter = schedule.phase recipient := by
+    by_contra hne
+    have hpassive := hregion.passive recipient (schedule.phase quitter) hne
+    have hlower : 19 / 10 ≤ reward (quittingSingletonTerminal quitter) recipient := by
+      rcases schedule.player_eq_first_or_second quitter with hfirst | hsecond
+      · simpa only [← hfirst] using hpassive.left_lower
+      · simpa only [← hsecond] using hpassive.right_lower
+    linarith [(hregion.own recipient).singleton_upper]
+  have hmem : quitter ∈ schedule.pair (schedule.phase quitter) := by
+    rw [schedule.pair_phase_eq]
+    simp
+  rw [hphase, schedule.pair_phase_eq] at hmem
+  rcases Finset.mem_insert.mp hmem with hequal | hpartner
+  · subst quitter
+    exact (lt_irrefl (singleton reward recipient) hbelow).elim
+  · exact Finset.mem_singleton.mp hpartner
+
 def indexedRow (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (schedule : Schedule ι period) (player : ι) (phase : Fin period) :
     Math.PairedAffine.IndexedRow ι where

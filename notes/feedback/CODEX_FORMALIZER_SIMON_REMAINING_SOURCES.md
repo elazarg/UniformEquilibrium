@@ -217,7 +217,11 @@ bounded-continuation, positive-cutoff case is proved by the declarations
 above, using the supported-coordinate bound and coordinate drift.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
-Its supported positive-quitting-coordinate bound is proved. The checked
+Its supported positive-quitting-coordinate bound is proved.
+`continuationCoordinate_ge_neg_half_radius_of_mem_truncatedW` also proves
+the lower bound for every continuation coordinate under the full Section 3
+assumptions, by the published maximal-quitter argument. The global upper
+bound remains unproved. The checked
 counterexamples refute the isolated zero-quitter inference and a formulation
 without the standing assumptions, not the full lemma. The current
 `lemma4_5` assumes an ω cutoff; the corrected δ statement of `lemma4_3` does

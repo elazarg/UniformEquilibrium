@@ -21,6 +21,13 @@ explicitly identified. No packet is closed by this audit.
 The degree-free branches need not wait for integer degree. Conversely, a
 matrix-free existence result does not replace a stronger stationary conclusion.
 
+For the three payoff-exclusion packets, the declaration-level discovery map
+is [the payoff-exclusion coverage audit](CODEX_FORMALIZER_PAYOFF_EXCLUSION_COVERAGE.md).
+It identifies existing finite-calendar decisions, finite selectors, and
+cap-threshold blocks separately from the missing full rational weak selector,
+table-uniform rate, and one-profile exact-suffix construction. Reuse those
+owners rather than rebuilding the already covered packet sections.
+
 ## Quiet extensions
 
 Sources:
@@ -233,9 +240,15 @@ It holds for every player count `Fin n`, strengthening the packet's
 four-player statement by direct composition with the existing generic
 auxiliary localization. It imposes no reward signs or regular-root hypotheses.
 Only the separate deduction of full R0 from bare nonexistence is specific to
-four players. The packet's explicit
-matrix degree calculations and the other stationary-response consumers remain
-separate obligations. The detailed construction is described in
+four players. The explicit matrix's degree is proved by
+`NegativeDegreeFourMatrix.r0Degree_eq_neg_one`
+(`MathUE/LinearProgramming/Examples/NegativeDegreeFourMatrix.lean`).
+`exists_uniformEquilibriumPayoff_of_negativeDegreeFourMatrix`
+(`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixCriterion.lean`)
+applies it to every raw reward table with that literal singleton matrix,
+without restricting singleton payoff levels or nonsingleton rewards.
+The other stationary-response consumers remain separate obligations.
+The detailed construction is described in
 `CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md` and
 `CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md`.
 
@@ -289,3 +302,35 @@ Face-only inequalities and the full exact-root inequality are different
 premises. Rational approximate-root witnesses must not be described as exact
 roots. These exclusions restrict a potential certificate; they do not
 exclude every polynomial degree or prove arbitrary Fin4 existence.
+
+## Adaptive unchanged-child obstruction
+
+Source: `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO.md`.
+
+`AdaptiveChildCenter.reward`, `AdaptiveChildCenter.restrictedProfileOfParent`,
+`AdaptiveChildCenter.profile_exactTerminalNash`, and
+`AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) already
+define the literal table and unchanged-law restrictions and prove the exact
+center equilibrium and its target. Reuse these definitions.
+`unique_completelyMixed_active_probabilities` in that file covers only
+completely mixed equilibria of the active finite game; the packet also
+excludes its boundary equilibria.
+
+The main all-profile obstruction remains to be formalized. Its dependencies
+are the actual quantile estimates for every parent approximate-equilibrium
+sequence, uniqueness of the full active finite-game equilibrium, the exact
+adjacent-date payoff identity after deleting the anchor, and positive child
+exploitability along every such sequence. These must retain arbitrary hidden
+tails and Never masses. Refuting the four restrictions of the displayed
+center profile alone does not prove the packet's universal inequality.
+
+The reward-neighborhood result uses the existing all-profile bound
+`abs_quittingTerminalExploitability_sub_le_of_reward_close`
+(`UniformEquilibrium/Quitting/Terminal/TerminalExploitabilityRewardRobustness.lean`).
+The separate nearby equilibrium construction uses
+`Math.Topology.exists_rectangular_zero_of_strict_face_signs`
+(`MathUE/Topology/RectangularPoincareMiranda.lean`) on the literal three-action
+gap field, followed by the one-date-then-Never full-response check. These
+generic tools do not supply the table-specific quantile rigidity or the
+nearby profile without those adapters.

@@ -153,9 +153,24 @@ support tests and the R0 criterion include dimension zero.
 (`MathUE/LinearProgramming/Examples/NegativeDegreeFourMatrix.lean`) prove
 the packet's complete eleven-support inventory and full R0 for its explicit
 matrix. Exactly three candidates solve the test LCP. Their active principal
-determinants are included in the checked inventory. The canonical degree
-calculation still needs the root-sum application; the inventory alone is not
-that degree theorem.
+determinants have signs minus one, minus one, and plus one.
+`NegativeDegreeFourMatrix.r0Degree_eq_neg_one` in the same file applies the
+root-sum theorem to that complete inventory. The module also proves the
+positive determinant, mixed-sign inverse, standard-Q property, and an infinite
+solution set at a different offset. The separate game-semantic consumer is
+`exists_uniformEquilibriumPayoff_of_negativeDegreeFourMatrix`
+(`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixCriterion.lean`).
+
+`NegativeDegreeFourMatrixComparisons.not_projectiveQBar`,
+`NegativeDegreeFourMatrixComparisons.normalCore_eq_univ`,
+`NegativeDegreeFourMatrixComparisons.not_nonempty_signedFourCycleSingletonData_of_positive_scaled_reindex`,
+and `NegativeDegreeFourMatrixComparisons.not_pairedRawRegion_of_positive_scaled_reindex`
+(`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixComparisons.lean`)
+prove the named-class comparisons. The cycle and paired exclusions include
+all coordinate relabelings and positive row/column scalings. They concern
+the literal supplied-data classes, not arbitrary calendars or paired
+equilibria. The paired comparison reuses `PairedCycle.RawRegion.eq_partner_of_singleton_lt`
+(`UniformEquilibrium/Quitting/Cycles/PairedCycleSchedule.lean`).
 
 `exists_finset_r0Degree_eq_sum_sign_det`
 (`MathUE/LinearProgramming/R0DegreeSum.lean`) computes the canonical R0 integer
@@ -240,9 +255,11 @@ proposition, not a hidden LCP-degree theorem.
    containing all LCP roots for every bounded offset and proves equality to
    the canonical homogeneous integer. No finiteness or regularity premise is
    used. The actual discounted comparison and the original-game existence
-   criterion are proved by the declarations in Section 3 below. The packet's
-   explicit degree calculation and class comparisons remain to be formalized.
-   The algebraic support tests and complete finite inventory are recorded above.
+   criterion are proved by the declarations in Section 3 below. The explicit
+   degree calculation, algebraic support tests, and complete finite inventory
+   are recorded above. The general finite raw-support criterion,
+   inverse-nonnegative recovery and neighborhood persistence are separate
+   packet obligations. The named-class comparisons are recorded above.
 
 The signed finite construction is implemented through these generic
 declarations, integrated under `MathUE`. Reuse it; a separate singular-homology

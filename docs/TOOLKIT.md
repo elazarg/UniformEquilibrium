@@ -912,6 +912,22 @@ original-game nonexistence, never from an assumed auxiliary-game nonexistence.
 additionally derives full R0 itself from nonexistence in four players.
 The general four-player conjecture remains open.
 
+`exists_finset_r0Degree_eq_sum_sign_det`
+(`MathUE/LinearProgramming/R0DegreeSum.lean`) computes this integer from all
+actual roots at one regular test offset. The finite root set is derived, not
+supplied; its membership is exactly the standard LCP solution predicate.
+`NegativeDegreeFourMatrix.r0Degree_eq_neg_one`
+(`MathUE/LinearProgramming/Examples/NegativeDegreeFourMatrix.lean`) applies
+the computation to an explicit four-by-four matrix with three roots of
+indices minus one, minus one, and plus one. Its determinant is positive and
+its inverse has both signs. The same matrix is standard Q and has an infinite
+solution set at another offset, so regularity of the test offset is not a
+claim about every offset.
+`exists_uniformEquilibriumPayoff_of_negativeDegreeFourMatrix`
+(`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixCriterion.lean`)
+gives an original uniform payoff for every reward table with that singleton
+matrix, with no restrictions on own-singleton levels or nonsingleton rewards.
+
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
 gives the payoff `(1,0,0,1)` for a signed four-player table with three fair
