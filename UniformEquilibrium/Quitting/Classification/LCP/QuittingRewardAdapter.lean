@@ -32,7 +32,7 @@ variable {ι : Type} [Fintype ι]
 is player `i`'s payoff when `j` solo-terminates minus player `i`'s payoff
 when `i` itself solo-terminates. -/
 def quittingSingletonMatrix
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (i j : ι) : ℝ :=
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Matrix ι ι ℝ := fun i j =>
   reward ⟨{j}, Finset.singleton_nonempty j⟩ i -
     reward ⟨{i}, Finset.singleton_nonempty i⟩ i
 

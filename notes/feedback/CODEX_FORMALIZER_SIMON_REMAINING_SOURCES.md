@@ -50,6 +50,20 @@ directions in the full equivalences. Extracting them from the larger proof
 bodies removes that unnecessary dependency; it does not prove a missing
 forward implication.
 
+The compact-graph cluster machinery is also available independently of the
+game-specific localization argument. In
+`MathUE/Topology/SimonViabilityQuestion.lean`,
+`IsInfiniteOrbit.exists_tendsto_subsequence_of_compact_graph` supplies a
+convergent strict subsequence of an ordinary infinite orbit.
+`ExtendedOrbitData.point_mem_initial_union_snd_of_compact_graph` puts every
+valid extended-orbit point in one compact carrier, handling both finite
+endpoint stitches and infinite-segment limits.
+`ExtendedOrbitData.exists_tendsto_segmentStart_subsequence_of_compact_graph`
+supplies a convergent strict subsequence of actual segment starts when there
+are infinitely many segments. These statements do not yet prove that the
+cluster is feasible or that an unbounded tail stays in the required payoff
+box.
+
 ## Section 4 cutoff and coordinate drift
 
 Simon (2012), printed page 191, makes the cutoff vanish at distance at least
@@ -135,6 +149,26 @@ that one row gives the entire segment in the same fiber.
 Property (7) for the actual correspondence at the common Section 4 scale.
 
 ## Remaining Section 4 assembly
+
+`abs_quitPayoff_withReward_sub_le_of_reward_close` and
+`isQuitEpsilonEquilibrium_original_of_reward_close`
+(`Literature/Simon2012.lean`) transfer the production reward-robustness
+estimate to the paper's profiles and deviations. A terminal reward error
+of at most the tolerance changes a fixed profile's payoff by at most that
+tolerance, and increases its equilibrium error by at most twice the
+tolerance. No new tail-sum argument is needed.
+`allNormal_quitApproximateEquilibria_of_nonsingular_case` in the same file
+composes this estimate with the checked normality-preserving perturbation.
+It reduces the all-normal conclusion to the nonsingular case; it does not
+supply the remaining orbit construction in that case.
+
+`not_mem_lowerNeighborhood_of_mem_halfPayoffBox` and
+`gluedFiber_subset_fRow_of_mem_halfPayoffBox` in the same file prove the
+lower-glue exclusion used in Theorem 4.1. Their input places every coordinate
+of the actual point between minus half and plus half of the payoff bound.
+The second theorem then puts the actual glued fiber inside the paper's
+quitting correspondence. Constructing an unbounded extended orbit that
+satisfies those bounds remains formalization work.
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,

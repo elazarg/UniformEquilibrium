@@ -49,6 +49,52 @@ theorem reindex_cornerPair :
   fin_cases row <;> fin_cases column <;>
     norm_num [reindexMatrix, principalMatrix, cornerPairEquiv, matrix, negativePairMatrix]
 
+/-- The reciprocal negative corner pair excludes copositivity of its principal. -/
+theorem cornerPrincipal_not_isCopositive :
+    ¬IsCopositive (principalMatrix matrix cornerPair) := by
+  intro hcopositive
+  have hvalue := hcopositive (fun _ => (1 : ℝ)) (fun _ => by norm_num)
+  change 0 ≤ ∑ row : cornerPair, (1 : ℝ) * ∑ column : cornerPair,
+    (1 : ℝ) * principalMatrix matrix cornerPair row column at hvalue
+  have hinner (row : cornerPair) :
+      (∑ column : Fin 2, (1 : ℝ) * principalMatrix matrix cornerPair
+        row (cornerPairEquiv column)) =
+        ∑ column : cornerPair, (1 : ℝ) *
+          principalMatrix matrix cornerPair row column :=
+    Equiv.sum_comp cornerPairEquiv
+      (fun column : cornerPair => (1 : ℝ) *
+        principalMatrix matrix cornerPair row column)
+  have htransport :
+      (∑ row : Fin 2, (1 : ℝ) * ∑ column : Fin 2,
+        (1 : ℝ) * principalMatrix matrix cornerPair
+          (cornerPairEquiv row) (cornerPairEquiv column)) =
+        ∑ row : cornerPair, (1 : ℝ) * ∑ column : cornerPair,
+          (1 : ℝ) * principalMatrix matrix cornerPair row column := by
+    calc
+      _ = ∑ row : Fin 2, (1 : ℝ) * ∑ column : cornerPair,
+          (1 : ℝ) * principalMatrix matrix cornerPair
+            (cornerPairEquiv row) column := by
+        exact Finset.sum_congr rfl fun row _ =>
+          congrArg (fun value : ℝ => (1 : ℝ) * value)
+            (hinner (cornerPairEquiv row))
+      _ = _ := Equiv.sum_comp cornerPairEquiv
+        (fun row : cornerPair => (1 : ℝ) * ∑ column : cornerPair,
+          (1 : ℝ) * principalMatrix matrix cornerPair row column)
+  have hvalue' : 0 ≤ ∑ row : Fin 2, (1 : ℝ) * ∑ column : Fin 2,
+      (1 : ℝ) * principalMatrix matrix cornerPair
+        (cornerPairEquiv row) (cornerPairEquiv column) := by
+    calc
+      0 ≤ ∑ row : cornerPair, (1 : ℝ) * ∑ column : cornerPair,
+          (1 : ℝ) * principalMatrix matrix cornerPair row column := hvalue
+      _ = _ := htransport.symm
+  have hentry (row column : Fin 2) :
+      principalMatrix matrix cornerPair
+          (cornerPairEquiv row) (cornerPairEquiv column) =
+        negativePairMatrix 1 1 row column := by
+    simpa [reindexMatrix] using congrFun (congrFun reindex_cornerPair row) column
+  simp_rw [hentry] at hvalue'
+  norm_num [negativePairMatrix, Fin.sum_univ_succ] at hvalue'
+
 theorem cornerPrincipal_not_projectiveQ :
     ¬IsProjectiveQMatrix (principalMatrix matrix cornerPair) := by
   intro hprincipal

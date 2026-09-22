@@ -240,7 +240,11 @@ import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FinFourIntegralTournament
 import MathUE.LinearProgramming.FiniteSolutions
+import MathUE.LinearProgramming.FiniteSupportDegree
+import MathUE.LinearProgramming.NonnegativeInverseDegree
+import MathUE.LinearProgramming.Examples.CycleFourNonnegativeInverse
 import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrix
+import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrixStability
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.LocalAffine
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
@@ -248,6 +252,7 @@ import MathUE.LinearProgramming.R0Margin
 import MathUE.LinearProgramming.SingletonLCP
 import MathUE.LinearProgramming.Standard
 import MathUE.LinearProgramming.SupportTest
+import MathUE.LinearProgramming.SupportTestStability
 import MathUE.LinearProgramming.StrongComplementarity
 import MathUE.LinearProgramming.StrongDuality
 import MathUE.LinearProgramming.Tournament

@@ -64,6 +64,125 @@ def graphCorrespondence {X : Type*} (graph : Set (X × X)) :
     Correspondence X X :=
   fun first ↦ {second | (first, second) ∈ graph}
 
+/-- An infinite orbit in a compact graph has a convergent subsequence of
+actual orbit points.  The one-step shift puts every selected point in the
+second-coordinate projection of the graph. -/
+theorem IsInfiniteOrbit.exists_tendsto_subsequence_of_compact_graph
+    {Coordinate : Type*} [Fintype Coordinate]
+    {graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate)}
+    {point : ℕ → EuclideanSpace Coordinate}
+    (horbit : IsInfiniteOrbit (graphCorrespondence graph) point)
+    (hgraph : IsCompact graph) :
+    ∃ limit ∈ Prod.snd '' graph, ∃ subsequence : ℕ → ℕ,
+      StrictMono subsequence ∧
+        Tendsto (point ∘ subsequence) atTop (nhds limit) := by
+  let tail : ℕ → EuclideanSpace Coordinate := fun index => point (index + 1)
+  have htail : ∀ index, tail index ∈ Prod.snd '' graph := by
+    intro index
+    have hpair : (point index, point (index + 1)) ∈ graph := by
+      simpa only [graphCorrespondence, Set.mem_ofPred_eq] using horbit index
+    exact ⟨(point index, point (index + 1)), hpair, rfl⟩
+  obtain ⟨limit, hlimit, select, hselect, htendsto⟩ :=
+    (hgraph.image continuous_snd).tendsto_subseq htail
+  let subsequence : ℕ → ℕ := fun index => select index + 1
+  refine ⟨limit, hlimit, subsequence, ?_, ?_⟩
+  · intro first second hfirstSecond
+    exact Nat.add_lt_add_right (hselect hfirstSecond) 1
+  · change Tendsto (fun index => point (select index + 1)) atTop (nhds limit)
+      at htendsto ⊢
+    exact htendsto
+
+/-- Every valid point of an extended orbit in a compact graph belongs to the
+compact carrier consisting of the initial point and the second-coordinate
+projection of the graph.  At a stitch this follows either by equality with a
+finite endpoint or by closedness at the limit of an infinite segment. -/
+theorem ExtendedOrbitData.point_mem_initial_union_snd_of_compact_graph
+    {Coordinate : Type*} [Fintype Coordinate]
+    {graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate)}
+    (hgraph : IsCompact graph)
+    (orbit : ExtendedOrbitData (graphCorrespondence graph)) :
+    ∀ segment, ActiveSegment orbit.segmentCount segment →
+      ∀ index, SegmentIndex (orbit.segmentLength segment) index →
+        orbit.point segment index ∈
+          {orbit.point 0 0} ∪ Prod.snd '' graph := by
+  intro segment
+  induction segment with
+  | zero =>
+      intro hactive index hindex
+      cases index with
+      | zero => exact Or.inl rfl
+      | succ index =>
+          have hpair :
+              (orbit.point 0 index, orbit.point 0 (index + 1)) ∈ graph := by
+            simpa only [graphCorrespondence, Set.mem_ofPred_eq] using
+              orbit.step 0 hactive index hindex
+          exact Or.inr ⟨_, hpair, rfl⟩
+  | succ segment ih =>
+      intro hactive index hindex
+      cases index with
+      | succ index =>
+          have hpair :
+              (orbit.point (segment + 1) index,
+                orbit.point (segment + 1) (index + 1)) ∈ graph := by
+            simpa only [graphCorrespondence, Set.mem_ofPred_eq] using
+              orbit.step (segment + 1) hactive index hindex
+          exact Or.inr ⟨_, hpair, rfl⟩
+      | zero =>
+          have hprevious : ActiveSegment orbit.segmentCount segment :=
+            hactive.pred
+          cases hlength : orbit.segmentLength segment with
+          | some length =>
+              have hpositive : 0 < length :=
+                orbit.segmentLengthPositive segment hprevious length hlength
+              have hendIndex :
+                  SegmentIndex (orbit.segmentLength segment) (length - 1) := by
+                intro total htotal
+                have htotalLength : total = length :=
+                  Option.some.inj (htotal.symm.trans hlength)
+                omega
+              have hend := ih hprevious (length - 1) hendIndex
+              rwa [orbit.finiteStitch segment hactive length hlength] at hend
+          | none =>
+              have hclosed : IsClosed
+                  ({orbit.point 0 0} ∪ Prod.snd '' graph) :=
+                (isCompact_singleton.union
+                  (hgraph.image continuous_snd)).isClosed
+              apply hclosed.mem_of_tendsto
+                (orbit.infiniteStitch segment hactive hlength)
+              exact Filter.Eventually.of_forall fun index =>
+                ih hprevious index (by simp [SegmentIndex, hlength])
+
+/-- If an extended compact-graph orbit has infinitely many segments, a strict
+subsequence of its actual segment starts converges inside the compact orbit
+carrier. -/
+theorem ExtendedOrbitData.exists_tendsto_segmentStart_subsequence_of_compact_graph
+    {Coordinate : Type*} [Fintype Coordinate]
+    {graph : Set (EuclideanSpace Coordinate × EuclideanSpace Coordinate)}
+    (hgraph : IsCompact graph)
+    (orbit : ExtendedOrbitData (graphCorrespondence graph))
+    (hcount : orbit.segmentCount = none) :
+    ∃ limit ∈ {orbit.point 0 0} ∪ Prod.snd '' graph,
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun rank => orbit.point (subsequence rank) 0)
+          atTop (nhds limit) := by
+  have hcarrier : IsCompact ({orbit.point 0 0} ∪ Prod.snd '' graph) :=
+    isCompact_singleton.union (hgraph.image continuous_snd)
+  have hstart : ∀ segment,
+      orbit.point segment 0 ∈ {orbit.point 0 0} ∪ Prod.snd '' graph := by
+    intro segment
+    have hactive : ActiveSegment orbit.segmentCount segment := by
+      simp [ActiveSegment, hcount]
+    apply ExtendedOrbitData.point_mem_initial_union_snd_of_compact_graph
+      hgraph orbit segment hactive 0
+    intro length hlength
+    exact orbit.segmentLengthPositive segment hactive length hlength
+  obtain ⟨limit, hlimit, subsequence, hsubsequence, htendsto⟩ :=
+    hcarrier.tendsto_subseq hstart
+  refine ⟨limit, hlimit, subsequence, hsubsequence, ?_⟩
+  change Tendsto (fun rank => orbit.point (subsequence rank) 0)
+    atTop (nhds limit) at htendsto ⊢
+  exact htendsto
+
 /-- A bounded strict Lyapunov certificate on a graph rules out finite graph
 orbits with arbitrarily large accumulated cost. The state type may itself be
 a carrier subtype. This is only the finite-orbit obstruction and supplies no

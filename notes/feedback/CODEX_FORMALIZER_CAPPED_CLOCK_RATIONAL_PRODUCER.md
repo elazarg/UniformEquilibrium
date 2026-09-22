@@ -190,24 +190,43 @@ proves finite discovery from a real finite-clock profile with a strict
 child-only margin. The clock is unchanged and the owner marginal remains
 exactly pure Never. It reuses the existing residual-floor approximation and
 proves continuity of the masked survivor maximum. No reward normalization
-is assumed. The actual child-existence source has not yet been composed
-with this discovery theorem.
+is assumed.
 
-## Existing-code-first next step
+`FinFourRationalFiniteClockChildProducer.realChildExploitability_ofDeletedChildStoppingLaws_eq`
+(`Research/Quitting/FinFourRationalFiniteClockChildProducer.lean`) identifies
+that masked maximum with the unrestricted exploitability of the actual
+deleted-child stopping laws. Its source uses the canonical Never lift and
+preserves the complete stopping laws, not just their terminal payoffs.
+`FinFourRationalFiniteClockChildProducer.exists_checkedChildCandidateAt`
+in the same file combines three-player existence, finite-menu approximation,
+and rational discovery. For every rational Fin4 table, owner, and positive
+rational threshold, it supplies a finite accepted stage with positive clock
+and an exactly pure-Never owner. There is no remaining child-existence
+hypothesis in this theorem.
 
-The remaining implementation should compose the child-only checker with
-the existing actual-child source; no parallel Fin3 rational PMF language
-is needed.
+## Checked original-parent consumer
 
-1. Identify the real finite-clock masked maximum with the exploitability of
-   the supplied child finite-menu laws, with its pure-Never extension.
-2. Compose child existence, finite-menu approximation,
-   capped-clock Never lift, normalization-free rational discovery, checker
-   soundness, and terminal-exploitability Nash consumer. The result should
-   take a rational Fin4 reward code, an owner, the actual capped-clock
-   certificate on the corresponding owner reindexing of its real reward
-   table, and a positive rational tolerance. It should return a finite checked
-   stage/code together with the actual parent terminal Nash certificate.
+`FinFourRationalCappedClockProducer.exists_checkedChildCandidateAt_and_rawParentTerminalNash`
+(`Research/Quitting/FinFourRationalCappedClockProducer.lean`) feeds the literal
+accepted child into the capped-clock Never-lift consumer and transports the
+result back to the original Fin4 reward table. Given a rational upper bound
+on the certificate's real multiplier, its checker threshold is the requested
+error divided by that bound. The conclusion retains the accepted stage/code,
+positive clock, exact pure-Never owner mass, the actual original-parent
+terminal Nash certificate, and its owner's complete pure-Never stopping law.
+
+`FinFourRationalCappedClockProducer.exists_rationalAmplification_checkedChildCandidateAt_and_rawParentTerminalNash`
+in the same file supplies the rational bound and states its inequality
+explicitly. Its only inputs are the rational reward table, the owner, the
+actual real capped-clock certificate on the corresponding owner reindexing,
+and a positive rational error. No child equilibrium, finite calendar,
+normalization, or rational-weight certificate is assumed.
+
+The generic deletion/reindex identity and exact terminal-exploitability
+pullback belong to
+`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`.
+The executable-search composition remains Research-only. There is no
+parallel Fin3 rational PMF language.
 
 The executable Fin4 code currently requires a positive clock bound. This is
 not an obstacle to termination because
@@ -216,7 +235,6 @@ The semantic deadline-zero response theorem is already checked. A separate
 zero-clock executable branch is needed only if the public producer statement
 must reproduce the packet's explicit `H = 0` acceptance case.
 
-No new rational-density proof, full-cap case split, behavioral deviation
-argument, or three-player existence proof is needed. The remaining work is a
-normalization-honest, pure-Never-preserving composition of those existing
-interfaces.
+This completes the child-first search-to-parent composition. The packet's
+additional examples and inverse-row sharpness statements remain listed in
+[the remaining-obligations note](CODEX_FORMALIZER_CAPPED_CLOCK_REMAINING_OBLIGATIONS.md).

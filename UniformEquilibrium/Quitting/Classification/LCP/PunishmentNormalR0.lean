@@ -25,7 +25,7 @@ theorem isR0Matrix_quittingSingletonMatrix_of_normal_of_no_uniformPayoff
     (hnot : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
     IsR0Matrix (quittingSingletonMatrix reward) := by
-  rw [isR0Matrix_iff_not_singletonLCPFeasible]
+  apply (isR0Matrix_iff_not_singletonLCPFeasible (quittingSingletonMatrix reward)).mpr
   rintro ⟨weight, hresidual, hcomplementary⟩
   have hmatrix : normalizedSoloMatrix reward = quittingSingletonMatrix reward := by
     funext who owner

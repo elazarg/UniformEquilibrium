@@ -12,6 +12,7 @@ import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
+import UniformEquilibrium.Quitting.PayoffProcess.TailStepSelector
 
 /-!
 # Robert Samuel Simon, *A Topological Approach to Quitting Games* (2012)
@@ -158,6 +159,31 @@ def IsExtendedOrbitClusterPoint {N : Type} [Fintype N]
     ((orbit.segmentCount = none ∧ Tendsto segment atTop atTop) ∨
       ∃ L, orbit.segmentCount = some L ∧ 0 < L ∧
         (∀ᶠ m in atTop, segment m = L - 1) ∧ Tendsto point atTop atTop)
+
+/-- A selected infinite segment of an extended orbit in a compact graph has
+a cluster point witnessed by a strict subsequence of actual points of that
+segment. -/
+theorem ExtendedOrbitData.exists_tendsto_subsequence_of_infinite_segment
+    {N : Type} [Fintype N] {J : Set (Payoff N × Payoff N)}
+    (orbit : ExtendedOrbitData (graphCorrespondence J))
+    (segment : ℕ) (hactive : ActiveSegment orbit.segmentCount segment)
+    (hlength : orbit.segmentLength segment = none) (hcompact : IsCompact J) :
+    ∃ z ∈ Prod.snd '' J, ∃ subsequence : ℕ → ℕ,
+      StrictMono subsequence ∧
+        Tendsto (orbit.point segment ∘ subsequence) atTop (nhds z) := by
+  have hsegmentOrbit :
+      IsInfiniteOrbit
+        (Math.Topology.SimonViability.graphCorrespondence J)
+        (orbit.point segment) := by
+    intro index
+    have hindex : SegmentIndex (orbit.segmentLength segment) (index + 1) := by
+      simp [SegmentIndex, hlength]
+    have hstep := orbit.step segment hactive index hindex
+    simpa only [graphCorrespondence, Set.mem_ofPred_eq,
+      Math.Topology.SimonViability.graphCorrespondence] using hstep
+  exact
+    Math.Topology.SimonViability.IsInfiniteOrbit.exists_tendsto_subsequence_of_compact_graph
+      hsegmentOrbit hcompact
 
 /-! ### 2.2. The two topological questions -/
 
@@ -6450,6 +6476,133 @@ theorem exists_nonsingularPerturbation (G : QuittingGame)
     _ = SoloPayoff (G.withReward (perturbedSingletonReward G η)) n := by
       simp [SoloPayoff]
 
+/-- The paper payoff of a fixed quitting profile is one-Lipschitz in the
+terminal reward table.  This is the paper-profile form of the production
+terminal-payoff robustness theorem. -/
+theorem abs_quitPayoff_withReward_sub_le_of_reward_close
+    (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (profile : QuitProfile G) (who : G.Player) {tol : ℝ}
+    (htol : 0 ≤ tol)
+    (hclose : ∀ terminal player,
+      |reward' terminal player - G.reward terminal player| ≤ tol) :
+    |QuitPayoff (G.withReward reward') profile who -
+        QuitPayoff G profile who| ≤ tol := by
+  classical
+  let roots := productionRootsOfQuitProfile G profile
+  let behavior :=
+    GameTheory.quittingRootSequenceProfile reward' roots 0
+  have hprofilePerturbed :
+      quitProfileOfProductionRoots (G.withReward reward') roots = profile := by
+    dsimp only [roots]
+    exact quitProfileOfProductionRoots_productionRootsOfQuitProfile G profile
+  have hprofileOriginal :
+      quitProfileOfProductionRoots G roots = profile := by
+    dsimp only [roots]
+    exact quitProfileOfProductionRoots_productionRootsOfQuitProfile G profile
+  have hbehaviorPerturbed :
+      GameTheory.quittingTerminalPayoff reward' behavior who =
+        GameTheory.quittingRootSequenceTerminalValue reward' roots who 0 := by
+    rw [GameTheory.quittingTerminalPayoff_eq_rootSequence_profileLiveRoot,
+      GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+  have hbehaviorOriginal :
+      GameTheory.quittingTerminalPayoff G.reward behavior who =
+        GameTheory.quittingRootSequenceTerminalValue G.reward roots who 0 := by
+    have hbehavior : behavior =
+        GameTheory.quittingRootSequenceProfile G.reward roots 0 := by
+      rfl
+    rw [hbehavior]
+    rw [GameTheory.quittingTerminalPayoff_eq_rootSequence_profileLiveRoot,
+      GameTheory.quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+  have hpaperPerturbed :
+      QuitPayoff (G.withReward reward') profile who =
+        GameTheory.quittingTerminalPayoff reward' behavior who := by
+    calc
+      QuitPayoff (G.withReward reward') profile who =
+          QuitPayoff (G.withReward reward')
+            (quitProfileOfProductionRoots (G.withReward reward') roots) who := by
+              rw [hprofilePerturbed]
+      _ = GameTheory.quittingRootSequenceTerminalValue reward' roots who 0 :=
+        quitPayoff_quitProfileOfProductionRoots
+          (G.withReward reward') roots who
+      _ = GameTheory.quittingTerminalPayoff reward' behavior who :=
+        hbehaviorPerturbed.symm
+  have hpaperOriginal :
+      QuitPayoff G profile who =
+        GameTheory.quittingTerminalPayoff G.reward behavior who := by
+    calc
+      QuitPayoff G profile who =
+          QuitPayoff G (quitProfileOfProductionRoots G roots) who := by
+            rw [hprofileOriginal]
+      _ = GameTheory.quittingRootSequenceTerminalValue G.reward roots who 0 :=
+        quitPayoff_quitProfileOfProductionRoots G roots who
+      _ = GameTheory.quittingTerminalPayoff G.reward behavior who :=
+        hbehaviorOriginal.symm
+  rw [hpaperPerturbed, hpaperOriginal]
+  exact GameTheory.abs_quittingTerminalPayoff_sub_le_of_forall_abs_sub_le
+    reward' G.reward behavior who htol hclose
+
+/-- An approximate equilibrium for a nearby reward table is an approximate
+equilibrium of the original game after paying twice the reward error. -/
+theorem isQuitEpsilonEquilibrium_original_of_reward_close
+    (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (profile : QuitProfile G) {tol approximation : ℝ}
+    (htol : 0 ≤ tol)
+    (hclose : ∀ terminal player,
+      |reward' terminal player - G.reward terminal player| ≤ tol)
+    (hequilibrium : IsQuitEpsilonEquilibrium
+      (G.withReward reward') approximation profile) :
+    IsQuitEpsilonEquilibrium G (approximation + 2 * tol) profile := by
+  intro who deviation
+  have hbase := abs_quitPayoff_withReward_sub_le_of_reward_close
+    G reward' profile who htol hclose
+  have hdeviation := abs_quitPayoff_withReward_sub_le_of_reward_close
+    G reward' (profile.replace G who deviation) who htol hclose
+  have hperturbed := hequilibrium who deviation
+  change QuitPayoff (G.withReward reward')
+      (profile.replace G who deviation) who ≤
+    QuitPayoff (G.withReward reward') profile who + approximation at hperturbed
+  rw [abs_le] at hbase hdeviation
+  linarith
+
+/-- The perturbation sizes used in Theorem 4.1 transfer an `ê/2`-equilibrium
+of the perturbed game to an `ê`-equilibrium of the original game. -/
+theorem isQuitEpsilonEquilibrium_original_of_quarter_nonsingularPerturbation
+    (G : QuittingGame)
+    (reward' : {A : Finset G.Player // A.Nonempty} → Payoff G.Player)
+    (profile : QuitProfile G) {accuracy : ℝ} (haccuracy : 0 < accuracy)
+    (hperturbation : IsNonsingularPerturbation G reward' (accuracy / 4))
+    (hequilibrium : IsQuitEpsilonEquilibrium
+      (G.withReward reward') (accuracy / 2) profile) :
+    IsQuitEpsilonEquilibrium G accuracy profile := by
+  have htransfer := isQuitEpsilonEquilibrium_original_of_reward_close
+    G reward' profile (show 0 ≤ accuracy / 4 by positivity)
+      hperturbation.1 hequilibrium
+  convert htransfer using 1
+  ring
+
+/-- The perturbation step at the start of Theorem 4.1 reduces the all-normal
+case to games whose singleton-difference matrices are nonsingular. -/
+theorem allNormal_quitApproximateEquilibria_of_nonsingular_case
+    (hnonsingularCase : ∀ K : QuittingGame,
+      (∀ n, IsNormalPlayer K n) →
+      HasNonsingularSingletonDifferences K →
+      HasQuitApproximateEquilibria K) :
+    ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
+      HasQuitApproximateEquilibria G := by
+  intro G hnormal accuracy haccuracy
+  obtain ⟨reward', hperturbation, hnormal'⟩ :=
+    exists_nonsingularPerturbation G hnormal (div_pos haccuracy (by norm_num :
+      (0 : ℝ) < 4))
+  have hperturbedEquilibria := hnonsingularCase
+    (G.withReward reward') hnormal' hperturbation.2.2.2.2
+  obtain ⟨profile, hprofile⟩ :=
+    hperturbedEquilibria (accuracy / 2) (half_pos haccuracy)
+  exact ⟨profile,
+    isQuitEpsilonEquilibrium_original_of_quarter_nonsingularPerturbation
+      G reward' profile haccuracy hperturbation hprofile⟩
+
 /-- Every matrix entry is bounded in absolute value by `B`. -/
 def MatrixEntriesBounded {n : ℕ} (A : Matrix (Fin n) (Fin n) ℝ)
     (B : ℝ) : Prop :=
@@ -8583,6 +8736,98 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
     simpa only [hj, ↓reduceIte] using hp j
   · intro j hj
     simpa only [hj, ↓reduceIte] using hp j
+
+/-- A point in the half-payoff box is separated from the lower boundary by
+more than the lower-neighborhood thickness. -/
+theorem not_mem_lowerNeighborhood_of_mem_halfPayoffBox
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hερ : ε < ρ / 3) (x : Payoff G.Player)
+    (hx : ∀ j, -M / 2 ≤ x j ∧ x j ≤ M / 2) :
+    x ∉ LowerNeighborhood G R ε := by
+  intro hxLower
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨_, _, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hNM : 3 * M ≤ N * M :=
+    mul_le_mul_of_nonneg_right hN hMpos.le
+  have hRM : 30 * M ≤ R := by
+    dsimp only [N] at hR hNM
+    nlinarith
+  have hboundaryNonempty : (LowerBoundary G R).Nonempty :=
+    lowerBoundary_nonempty_of_section3Constants G M d ρ ξ R
+      hplayers hM hd hd1 hmotion hconstants
+  have hcompact : IsCompact (WithLp.toLp 2 '' LowerBoundary G R) :=
+    (isCompact_lowerBoundary G R).image (PiLp.continuous_toLp 2 _)
+  obtain ⟨b', hb', hdist⟩ := hcompact.exists_infDist_eq_dist
+    (hboundaryNonempty.image _) (WithLp.toLp 2 x)
+  obtain ⟨b, hb, rfl⟩ := hb'
+  have hxb : EuclideanDist x b ≤ ε / 3 := by
+    calc
+      EuclideanDist x b =
+          dist (WithLp.toLp 2 x) (WithLp.toLp 2 b) := by
+            simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+              WithLp.toLp_sub, dist_eq_norm]
+      _ = Metric.infDist (WithLp.toLp 2 x)
+          (WithLp.toLp 2 '' LowerBoundary G R) := hdist.symm
+      _ = EuclideanInfDist x (LowerBoundary G R) :=
+        (euclideanInfDist_eq_infDist_toLp x (LowerBoundary G R)).symm
+      _ ≤ ε / 3 := by
+        simpa only [LowerNeighborhood, Set.mem_ofPred_eq] using hxLower
+  obtain ⟨j, hbj⟩ := lowerBoundary_has_cube_coordinate G
+    (by nlinarith [hRM, hM.1]) hb
+  have hxAbs : |x j| ≤ M / 2 := by
+    rw [abs_le]
+    constructor <;> linarith [(hx j).1, (hx j).2]
+  have hreverse : |b j| - |x j| ≤ |b j - x j| := by
+    calc
+      |b j| - |x j| ≤ |(|b j| - |x j|)| := le_abs_self _
+      _ ≤ |b j - x j| := abs_abs_sub_abs_le_abs_sub _ _
+  have hgap : M ≤ |b j| - |x j| := by
+    rw [hbj]
+    nlinarith
+  have hdistanceLower : M ≤ EuclideanDist x b := by
+    calc
+      M ≤ |b j| - |x j| := hgap
+      _ ≤ |b j - x j| := hreverse
+      _ = |x j - b j| := abs_sub_comm _ _
+      _ ≤ EuclideanDist x b := abs_coordinate_sub_le_euclideanDist x b j
+  have hεM : ε / 3 < M := by
+    nlinarith [hmotion.2.2.1, hM.1]
+  linarith
+
+/-- Once a point has been localized to the half-payoff box, the lower glue
+cannot occur and every edge of the switched local correspondence is an
+`F_ε` edge by Lemma 4.2. -/
+theorem gluedFiber_subset_fRow_of_mem_halfPayoffBox
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε) (x : Payoff G.Player)
+    (hx : ∀ j, -M / 2 ≤ x j ∧ x j ≤ M / 2) :
+    GluedFiber G R ε δ x ⊆ FRow G ε x := by
+  intro y hy
+  have hxNotLower := not_mem_lowerNeighborhood_of_mem_halfPayoffBox
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hερ x hx
+  have hxUpper : x ∈ UpperNeighborhood G R ε := by
+    by_contra hxNotUpper
+    simp only [GluedFiber, hxNotLower, hxNotUpper, ↓reduceIte,
+      Set.mem_empty_iff_false] at hy
+  have hyUpper : y ∈ UpperGlueFiber G R ε δ x := by
+    simpa only [GluedFiber, hxNotLower, hxUpper, ↓reduceIte] using hy
+  exact lemma4_2 G M R ε δ hM hε hδ x hxUpper y hyUpper
 
 /-- The players whose quitting coordinates are allowed to vary in the upper
 glue above `x`. -/
@@ -11665,11 +11910,10 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
 /-! ### 4.5. Application of Question 1 -/
 
 /--
-Theorem 4.1.  Besides Lemma 4.5, the paper uses perturbation stability,
-restriction to a cluster-point tail, exclusion of the lower glue, and the
-extended-orbit/equilibrium implication of Theorem 2.3. The latter implication
-is proved separately without unfinished imports. The other steps and the
-assembly through Lemma 4.5 remain incomplete.
+Theorem 4.1.  The perturbation transfer to the original reward, the exclusion
+of the lower glue on the half payoff box, and the extended-orbit/equilibrium
+implication of Theorem 2.3 are proved separately.  The cluster-point-tail
+localization and the assembly through Lemma 4.5 remain incomplete.
 -/
 theorem theorem4_1 (hquestion : Question1Affirmative) :
     ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →

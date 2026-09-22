@@ -1,7 +1,7 @@
 # Signed degree: reusable foundations and missing adapters
 
 This declaration-level discovery map addresses the dependency boundary of
-`math/exports/INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md`.
+`math/formalized/INTEGER_LCP_DEGREE_CRITERION_FOR_FOUR_PLAYER_QUITTING_GAMES.md`.
 The map is not itself a proof or a build record. Exact current declarations,
 not historical gap lists, govern reuse.
 
@@ -180,6 +180,48 @@ finiteness or a supplied enumeration. It derives the complete finite root
 set and its determinant-sign sum. Empty root sets and dimension zero are
 included.
 
+`r0Degree_eq_sum_admissible_inverse_supports`
+(`MathUE/LinearProgramming/FiniteSupportDegree.lean`) supplies the finite raw
+test: a zero-diagonal matrix, an arbitrary strictly positive anchor, a
+negative entry in every column, nonsingular principals of size at least two,
+and strict inactive slacks on every admissible inverse-principal candidate.
+It derives R0 and computes the degree by the support determinant signs.
+The complete-root enumeration is proved first, without strictness or R0,
+by `isStandardLCPSolution_iff_exists_admissible_inverse_support` in the same
+file. Exact active-system candidates can replace the inverse-defined ones.
+The root enumeration works on any nonempty finite coordinate type; the
+degree computation uses `Fin n`, for any positive player count.
+
+`exists_uniformEquilibriumPayoff_of_finite_support_degree_test`
+(`UniformEquilibrium/Quitting/Classification/LCP/FiniteSupportDegreeCriterion.lean`)
+is the actual-game consumer of these raw finite tests. It does not assume
+R0, an externally computed degree, or a strategic witness.
+
+`r0Degree_eq_sign_det_of_nonnegative_inverse`
+(`MathUE/LinearProgramming/NonnegativeInverseDegree.lean`) supplies the weak
+inverse computation, including zero inverse entries, with R0 retained as a
+separate premise. Its raw four-player consumer is
+`finFour_exists_uniformEquilibriumPayoff_of_nonnegative_inverse`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourNonnegativeInverseCriterion.lean`).
+Here R0 is derived inside the original-game nonexistence contradiction.
+`CycleFourNonnegativeInverse.not_isR0Matrix`
+(`MathUE/LinearProgramming/Examples/CycleFourNonnegativeInverse.lean`) checks
+why nonnegative inverse alone cannot supply R0.
+
+`eventually_r0Degree_eq_of_strict_support_inventory`
+(`MathUE/LinearProgramming/SupportTestStability.lean`) preserves the exact
+admissible-support set and R0 on one matrix neighborhood, and preserves
+degree among its zero-diagonal matrices. Each rejected support needs only
+one strictly negative candidate coordinate or inactive residual. It need
+not have every test coordinate nonzero.
+`NegativeDegreeFourMatrix.eventually_r0Degree_neg_one_and_three_supports`
+(`MathUE/LinearProgramming/Examples/NegativeDegreeFourMatrixStability.lean`)
+retains the concrete three-support root inventory and degree minus one.
+`eventually_exists_uniformEquilibriumPayoff_near_negativeDegreeFourMatrix`
+(`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixCriterion.lean`)
+is the actual-game neighborhood consumer, with all nonsingleton rewards
+unrestricted.
+
 ### Topology that does not yet produce an integer
 
 - `ContinuousMap.Homotopy.affine`
@@ -257,9 +299,9 @@ proposition, not a hidden LCP-degree theorem.
    used. The actual discounted comparison and the original-game existence
    criterion are proved by the declarations in Section 3 below. The explicit
    degree calculation, algebraic support tests, and complete finite inventory
-   are recorded above. The general finite raw-support criterion,
-   inverse-nonnegative recovery and neighborhood persistence are separate
-   packet obligations. The named-class comparisons are recorded above.
+   are recorded above, together with the finite raw-support computation.
+   Inverse-nonnegative recovery, neighborhood persistence, and the named-class
+   comparisons are also recorded above.
 
 The signed finite construction is implemented through these generic
 declarations, integrated under `MathUE`. Reuse it; a separate singular-homology

@@ -5,8 +5,10 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Certificates.Adaptive.Certificate
+import UniformEquilibrium.Quitting.Classification.PlayerDeletionLift
 import UniformEquilibrium.Quitting.Classification.PlayerReindex
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
+import UniformEquilibrium.Quitting.Terminal.TerminalExploitability
 
 /-!
 # Naturality of player reindexing
@@ -63,6 +65,37 @@ theorem quittingRewardReindex_trans (e : ι ≃ κ) (f : κ ≃ ν)
     rfl
   rw [hcoal]
   rfl
+
+/-- An equivalence restricts to the corresponding surviving-player subtypes
+before and after transporting a deletion predicate. -/
+def quittingDeletedPlayerEquiv (e : ι ≃ κ) (deleted : ι → Prop) :
+    {who : ι // ¬ deleted who} ≃
+      {who : κ // ¬ deleted (e.symm who)} where
+  toFun who := ⟨e who.1, by simpa using who.2⟩
+  invFun who := ⟨e.symm who.1, who.2⟩
+  left_inv who := by
+    apply Subtype.ext
+    exact e.symm_apply_apply who.1
+  right_inv who := by
+    apply Subtype.ext
+    exact e.apply_symm_apply who.1
+
+/-- Deleting players and transporting player labels commute exactly, with the
+survivor labels transported by `quittingDeletedPlayerEquiv`. -/
+theorem quittingDeleteReward_reindex (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) :
+    quittingDeleteReward (quittingRewardReindex e reward)
+        (fun who => deleted (e.symm who)) =
+      quittingRewardReindex (quittingDeletedPlayerEquiv e deleted)
+        (quittingDeleteReward reward deleted) := by
+  funext terminal who
+  change reward _ (e.symm who.1) = reward _ (e.symm who.1)
+  congr 1
+  apply Subtype.ext
+  ext player
+  simp [quittingExtendDeletedCoalition, quittingCoalitionEquiv,
+    quittingDeletedPlayerEquiv, Finset.mem_map_equiv]
 
 /-- Relabeling and then relabeling back recovers the original reward table. -/
 @[simp] theorem quittingRewardReindex_symm_apply
@@ -438,6 +471,56 @@ theorem quittingBehaviorDeviationPayoffCap_profilePullback (e : ι ≃ κ)
   simpa only [quittingProfilePushforward_pullback] using
     quittingBehaviorDeviationPayoffCap_profilePushforward e reward
       (quittingProfilePullback e reward profile) who
+
+/-- Literal unrestricted terminal exploitability is invariant under behavioral
+pullback along a player equivalence. -/
+theorem quittingTerminalExploitability_profilePullback
+    [Nonempty ι] [Nonempty κ]
+    (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame
+      (quittingRewardReindex e reward)).BehaviorProfile) :
+    quittingTerminalExploitability reward
+        (quittingProfilePullback e reward profile) =
+      quittingTerminalExploitability
+        (quittingRewardReindex e reward) profile := by
+  unfold quittingTerminalExploitability
+    QuittingBoundaryHolonomy.finitePlayerMax
+  apply le_antisymm
+  · apply Finset.sup'_le Finset.univ_nonempty
+    intro who _
+    rw [show quittingContinuationBestResponseValue reward
+        (quittingProfilePullback e reward profile) who =
+          quittingBehaviorDeviationPayoffCap reward
+            (quittingProfilePullback e reward profile) who from rfl,
+      quittingBehaviorDeviationPayoffCap_profilePullback,
+      ← quittingTerminalPayoff_profilePullback]
+    exact Finset.le_sup'
+      (fun player : κ =>
+        max 0
+          (quittingContinuationBestResponseValue
+              (quittingRewardReindex e reward) profile player -
+            quittingTerminalPayoff
+              (quittingRewardReindex e reward) profile player))
+      (Finset.mem_univ (e who))
+  · apply Finset.sup'_le Finset.univ_nonempty
+    intro who _
+    have hcoordinate := Finset.le_sup'
+      (fun player : ι =>
+        max 0
+          (quittingContinuationBestResponseValue reward
+              (quittingProfilePullback e reward profile) player -
+            quittingTerminalPayoff reward
+              (quittingProfilePullback e reward profile) player))
+      (Finset.mem_univ (e.symm who))
+    rw [show quittingContinuationBestResponseValue reward
+        (quittingProfilePullback e reward profile) (e.symm who) =
+          quittingBehaviorDeviationPayoffCap reward
+            (quittingProfilePullback e reward profile) (e.symm who) from rfl,
+      quittingBehaviorDeviationPayoffCap_profilePullback,
+      ← quittingTerminalPayoff_profilePullback,
+      e.apply_symm_apply] at hcoordinate
+    exact hcoordinate
 
 end Terminal
 

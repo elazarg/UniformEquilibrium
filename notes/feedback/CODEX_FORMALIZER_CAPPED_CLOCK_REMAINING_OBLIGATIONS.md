@@ -52,20 +52,19 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 
 ## Work still needed
 
-1. Complete the terminating child-first rational finite-law enumeration.
-   The child-only checker, its exact deleted-game exploitability identity,
-   strict-margin same-clock discovery, and exact pure-Never preservation
-   are proved in Research. The remaining producer must derive finite discovery
-   from the actual child source and feed the accepted child into the Never-lift
-   consumer. These checked components and the remaining composition are mapped
-   in [the rational producer dependency note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
-2. Seal the additional example conclusions: slack values, terminal Nash laws,
+The terminating child-first rational search and its original-parent consumer
+are proved in Research, including exact Never preservation and rational
+amplification selection. Their scope is recorded in
+[the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
+The remaining packet work is:
+
+1. Seal the additional example conclusions: slack values, terminal Nash laws,
    payoffs and caps, absence of pure terminal Nash equilibria, robustness under
    reward perturbations, and the comparison with the capped-joint hypothesis.
-3. Formalize the solved table failing every deletion LP, the missing-Never
+2. Formalize the solved table failing every deletion LP, the missing-Never
    example with zero child singleton, and the sparse-calendar missed response
    with its consecutive-menu repair.
-4. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
+3. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.
    Its hypotheses concern an exact balanced singleton schedule, not all child

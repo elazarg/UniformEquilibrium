@@ -912,6 +912,31 @@ original-game nonexistence, never from an assumed auxiliary-game nonexistence.
 additionally derives full R0 itself from nonexistence in four players.
 The general four-player conjecture remains open.
 
+`exists_uniformEquilibriumPayoff_of_finite_support_degree_test`
+(`UniformEquilibrium/Quitting/Classification/LCP/FiniteSupportDegreeCriterion.lean`)
+turns finite tests on the literal singleton matrix into a uniform payoff for
+any positive player count. Its inputs are a positive test anchor, one negative
+entry in each column, nonsingular principals of size at least two, strict
+inactive residuals on admissible inverse-principal candidates, and a support
+determinant-sign sum different from one. The complete root inventory and R0
+are derived. The anchor is not a strategic payoff target, and no reward
+normalization is imposed.
+
+`r0Degree_eq_sign_det_of_nonnegative_inverse`
+(`MathUE/LinearProgramming/NonnegativeInverseDegree.lean`) computes the degree
+of an R0 matrix with entrywise nonnegative inverse as its determinant sign.
+Zero inverse entries are allowed. The separate R0 premise cannot be dropped:
+`CycleFourNonnegativeInverse.not_isR0Matrix`
+(`MathUE/LinearProgramming/Examples/CycleFourNonnegativeInverse.lean`) gives
+an invertible four-cycle matrix with nonnegative inverse and a nonzero
+homogeneous LCP solution.
+`finFour_exists_uniformEquilibriumPayoff_of_nonnegative_inverse`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourNonnegativeInverseCriterion.lean`)
+needs only negative determinant and nonnegative inverse of the raw singleton
+matrix. Its contradiction argument derives R0 from original-game
+nonexistence. This is a four-player result; the matrix degree computation
+it uses is dimension-independent.
+
 `exists_finset_r0Degree_eq_sum_sign_det`
 (`MathUE/LinearProgramming/R0DegreeSum.lean`) computes this integer from all
 actual roots at one regular test offset. The finite root set is derived, not
@@ -927,6 +952,15 @@ claim about every offset.
 (`UniformEquilibrium/Quitting/Classification/LCP/NegativeDegreeFourMatrixCriterion.lean`)
 gives an original uniform payoff for every reward table with that singleton
 matrix, with no restrictions on own-singleton levels or nonsingleton rewards.
+`eventually_exists_uniformEquilibriumPayoff_near_negativeDegreeFourMatrix`
+in the same file extends this conclusion to every sufficiently nearby
+singleton matrix. The generic strict support-test stability theorem
+`eventually_r0Degree_eq_of_strict_support_inventory`
+(`MathUE/LinearProgramming/SupportTestStability.lean`) preserves the complete
+admissible-support inventory and R0; degree is constant among nearby
+zero-diagonal matrices. The concrete matrix retains exactly its three
+supports and degree minus one, with the roots recomputed from the perturbed
+principals.
 
 `AdaptiveChildCenter.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`)
@@ -1954,6 +1988,19 @@ changing its coordinates.
 supplies a four-player uniform payoff from the reward certificate alone,
 using the three-player existence theorem for the child. It does not assume
 a child profile, a strategic source, or a dispensability gate.
+
+The rational search-to-parent construction is checked separately in Research:
+`FinFourRationalCappedClockProducer.exists_rationalAmplification_checkedChildCandidateAt_and_rawParentTerminalNash`
+(`Research/Quitting/FinFourRationalCappedClockProducer.lean`). Given any
+rational Fin4 table, its owner-reindexed capped-clock certificate, and a
+positive rational error, it supplies a rational amplification bound and a
+finite child-only checker acceptance at the error divided by that bound.
+The accepted code has positive clock and a pure-Never owner. Its canonical
+parent profile is terminal approximate Nash for the original table against
+every behavioral deviation, with the owner's complete stopping law exactly
+Never. Three-player existence supplies the child source; no reward
+normalization or finite-calendar bound is assumed. This Research result is
+not imported by production.
 
 `CappedClockPairedFamily.exists_uniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFamily.lean`)
