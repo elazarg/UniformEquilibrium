@@ -1118,8 +1118,23 @@ decodes positive absorption and the original players' Nash–Bellman equations.
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientStrategic.lean`)
 consumes this root when singleton-block owners have nonnegative singleton
 rewards; the same module has a no-singleton-block corollary. Normal-negative
-singleton owners and the unconditional signed four-player consequence still
-need a punishment-completion adapter.
+singleton owners are handled by
+`exists_uniformEquilibriumPayoff_of_responseInvariant_normality`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`),
+which reuses the existing solo punishment compiler. The same module proves
+`exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one`
+for arbitrary signed four-player rewards, deriving normality under a
+same-table no-UE assumption and discharging that assumption. No punishment
+plan is supplied to the raw-table theorem.
+
+`quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with
+`quittingCrossedClippedMap_eq_self_iff`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseFaces.lean`),
+define the different full-player swapped-response map with its selected-player
+ceiling, derivative, and exact fixed-point face signs. They do not yet compute
+its local degree or prove an absorbing root from the exported guard conditions;
+the quotient RI result does not apply to this map.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2142,7 +2157,15 @@ and `UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawa
 bounds every outsider behavioral deviation for the actual quiet lift at every
 nonnegative antitone evaluation by the weighted child debts. Its total-debt
 corollary has coefficients `1 + max(a_i,b_i)`. Multiple-outsider certificate
-families and a fixed-target uniform-payoff extension remain separate adapters.
+families and a fixed-target uniform-payoff extension are proved by
+`quittingLiftDeletedProfile_evaluatedDebt_of_deadlineWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalMultipleOutsiderFamily.lean`)
+and `exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFixedTarget.lean`).
+The latter takes raw certificates for every outsider and an actual child
+uniform-equilibrium target; it adds no favorable child profile or root.
+All-evaluation family max/sum corollaries, terminal pathwise necessity, and
+the packet's stationary-security and Fin4 applications remain separate.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.
