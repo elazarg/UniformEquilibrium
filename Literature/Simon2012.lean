@@ -13803,6 +13803,43 @@ theorem section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep
   exact section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
     G inverse cutoff R ε δ a hxLower
 
+/-- Property (6)'s terminal-edge inclusion on the half-payoff box. This
+combines the zero-cutoff branch with the positive-cutoff drift obstruction;
+the global inclusion still requires the continuation bound of Lemma 4.4. -/
+theorem section4_terminal_mem_gluedGraph_of_halfPayoffBox_smallStep
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a))
+    (hstep : EuclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) <
+        Section4Omega G M d ρ ξ R ε) :
+    (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+      correspondenceGraph (GluedFiber G R ε δ) := by
+  by_cases hzero : (cutoff a : ℝ) = 0
+  · subst δ
+    exact section4_terminal_mem_gluedGraph_of_zero_cutoff_smallStep
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants
+        inverse cutoff hε hερ a ha hzero hstep
+  · have hpositive : 0 < (cutoff a : ℝ) :=
+      lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hzero)
+    exact section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep
+      G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ a ha hpositive
+          hxbox hstep
+
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the
 standing Section 3 assumptions and the `d,ρ,ξ,R` relations made explicit.

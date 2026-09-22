@@ -21596,6 +21596,98 @@ theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion
   rw [(quitTailPayoff_eq_oneStage G profile i).symm] at hbound
   exact hbound
 
+/-- A generated rational profile with unbounded Quit mass already supplies
+arbitrarily charged exact row paths. The finite path runs backward through
+the profile's conditional tail payoffs. -/
+theorem exists_largeExactPath_of_generated_unboundedQuitMass
+    (G : QuittingGame) {η M ρ : ℝ} (hM : 0 ≤ M)
+    (hreward : ∀ A n, |G.reward A n| ≤ M)
+    (hmotion : CorrectedUniformMotionAt G ρ)
+    (p : QuitProfile G) (horbit : GeneratesFRowOrbit G η p)
+    (hrational : ∀ i, IsRational G ρ (QuitTailPayoff G p i))
+    (hmass : HasUnboundedQuitMass G p) (hηρ : η ≤ ρ) (B : ℝ) :
+    ∃ z : ApproximateFRowPath G ρ,
+      ‖z.point 0‖ ≤ M ∧ z.totalError = 0 ∧ B ≤ z.exactVariation := by
+  classical
+  obtain ⟨k, hk⟩ := hmass (B / ρ)
+  have hindex (i : Fin k) : k - (i : ℕ) = k - 1 - (i : ℕ) + 1 := by
+    omega
+  let z : ApproximateFRowPath G ρ :=
+    { length := k
+      point := fun i => QuitTailPayoff G p (k - i)
+      row := fun i => p (k - 1 - i)
+      seamError := fun _ => 0
+      seamError_nonneg := fun _ => le_rfl
+      row_mem := by
+        intro i
+        change p (k - 1 - (i : ℕ)) ∈ EpsilonRow G ρ
+          (QuitTailPayoff G p (k - (i : ℕ)))
+        rw [hindex i]
+        exact EpsilonRow.mono G hηρ _ (horbit (k - 1 - i))
+      step_error := by
+        intro i
+        change ‖QuitTailPayoff G p (k - ((i : ℕ) + 1)) -
+          QuittingOneStagePayoff G (QuitTailPayoff G p (k - (i : ℕ)))
+            (p (k - 1 - i))‖ ≤ 0
+        rw [show k - ((i : ℕ) + 1) = k - 1 - i by omega, hindex i]
+        rw [← quitTailPayoff_eq_oneStage G p (k - 1 - i)]
+        simp
+      rational := by
+        intro i
+        exact hrational (k - i) }
+  have hvariation : z.exactVariation =
+      ∑ i ∈ Finset.range k,
+        ‖QuitTailPayoff G p i - QuitTailPayoff G p (i + 1)‖ := by
+    rw [ApproximateFRowPath.exactVariation, Finset.sum_fin_eq_sum_range]
+    simp only [z, Fin.val_castSucc]
+    rw [show (∑ t ∈ Finset.range k, if ht : t < k then
+        ‖QuittingOneStagePayoff G (QuitTailPayoff G p (k - t))
+            (p (k - 1 - t)) - QuitTailPayoff G p (k - t)‖ else 0) =
+      ∑ t ∈ Finset.range k,
+        ‖QuittingOneStagePayoff G (QuitTailPayoff G p (k - t))
+            (p (k - 1 - t)) - QuitTailPayoff G p (k - t)‖ by
+      apply Finset.sum_congr rfl
+      intro t ht
+      rw [dite_eq_left (Finset.mem_range.mp ht)]]
+    let motion : ℕ → ℝ := fun i =>
+      ‖QuitTailPayoff G p i - QuitTailPayoff G p (i + 1)‖
+    calc
+      (∑ t ∈ Finset.range k,
+          ‖QuittingOneStagePayoff G (QuitTailPayoff G p (k - t))
+              (p (k - 1 - t)) - QuitTailPayoff G p (k - t)‖) =
+          ∑ t ∈ Finset.range k, motion (k - 1 - t) := by
+        apply Finset.sum_congr rfl
+        intro t ht
+        have _ht' : t < k := Finset.mem_range.mp ht
+        dsimp only [motion]
+        rw [show k - t = k - 1 - t + 1 by omega,
+          ← quitTailPayoff_eq_oneStage G p (k - 1 - t)]
+      _ = ∑ t ∈ Finset.range k, motion t := by rw [Finset.sum_range_reflect]
+      _ = _ := rfl
+  have hstep (i : ℕ) :
+      ρ * QuitProbability G (p i) ≤
+        ‖QuitTailPayoff G p i - QuitTailPayoff G p (i + 1)‖ := by
+    have hnear : NearFeasible G 1 (QuitTailPayoff G p (i + 1)) := by
+      refine ⟨QuitTailPayoff G p (i + 1), QuitTailPayoff.feasible G p (i + 1), ?_⟩
+      simp
+    have hrow : p i ∈ EpsilonRow G ρ (QuitTailPayoff G p (i + 1)) :=
+      EpsilonRow.mono G hηρ _ (horbit i)
+    have hbound := (hmotion.2.2 (QuitTailPayoff G p (i + 1)) hnear
+      (hrational (i + 1)) (p i) hrow).1
+    rw [(quitTailPayoff_eq_oneStage G p i).symm] at hbound
+    simpa only [norm_sub_rev] using hbound
+  have hsum : ρ * (∑ i ∈ Finset.range k, QuitProbability G (p i)) ≤
+      z.exactVariation := by
+    rw [hvariation, Finset.mul_sum]
+    exact Finset.sum_le_sum fun i _ => hstep i
+  refine ⟨z, ?_, ?_, ?_⟩
+  · exact norm_quitTailPayoff_le G p k hM hreward
+  · simp [ApproximateFRowPath.totalError, z]
+  · have hscaled := mul_le_mul_of_nonneg_left hk hmotion.1.le
+    have hcancel : ρ * (B / ρ) = B := by field_simp [hmotion.1.ne']
+    rw [hcancel] at hscaled
+    exact hscaled.trans hsum
+
 /-- The corrected five-way theorem follows from the remaining first-crossing
 path extraction. All other implications use the compact-carrier motion bound
 and the checked orbit compilers. -/

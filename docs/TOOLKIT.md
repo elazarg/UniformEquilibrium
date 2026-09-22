@@ -1172,9 +1172,23 @@ Nash/uniform-payoff conclusion. The full unswapped singleton matrix has R0
 degree plus one by
 `quittingSingletonMatrix_r0_degree_one_of_positiveInverse`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawMatrix.lean`).
-The packet's half-ceiling Bernstein branch, weak-boundary and matrix-free
-Fin4 producers, and annular total-degree identity remain separate. The
-quotient RI route does not apply to the crossed map.
+`exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_halfStrictRaw`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseHalfCeilingProducer.lean`)
+closes the four-player strict half-ceiling branch from the same determinant
+and inverse conditions, two lower ranking comparisons, and nine strictly
+negative tensor Bernstein coefficients for each selected residual. The
+coefficient reconstruction applies to the actual reward-table residuals
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseHalfCeilingCoefficients.lean`),
+not a supplied polynomial. The packet's weak-boundary and matrix-free Fin4
+producers, worked example, and annular total-degree identity remain separate.
+For the weak boundary, `quittingCrossedWeakHalfPerturb` and
+`quittingCrossed_strictLowerRanking_of_weakHalfPerturb`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakHalfPerturbation.lean`,
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakHalfLower.lean`)
+give the literal nearby reward table, its singleton-matrix identity, and
+strict lower comparisons. Strict upper residual coefficients and the
+fixed-original-payoff limit are not yet connected in this branch.
+The quotient RI route does not apply to the crossed map.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2225,8 +2239,23 @@ proves the actual post-deadline geometric private law's terminal payoff floor
 against every deterministic future opponent clock tuple; the law and legal
 independent replacement are in
 `UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityRestart.lean`.
-The all-evaluation nonpositive-floor comparison and its mixed atom-restart
-debt consumer remain separate. A Fin4 application still needs finite-table
+`exists_deadlineWithdrawalSecurityEvaluatedPlan`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityEvaluatedPlan.lean`)
+selects one actual post-deadline law, independent of the evaluation and
+opponent clocks, securing the nonpositive floor `min(gamma,0)` for every
+nonnegative antitone evaluation. `DeadlineSecurityRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityMixedRaw.lean`)
+states the improved literal N/F/J reward rows. The mixed restart's exact
+gain identity, product marginal, and expected gain comparison are proved in
+the intervening `DeadlineWithdrawalSecurityMixed*` modules.
+`deadlineSecurity_quietLift_outsideBehaviorDebt_le_weighted_childDebt` and
+`deadlineSecurity_quietLift_totalBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityMixedFullBehavioralDebt.lean`)
+then bound full behavioral debt of the actual Never lift, for every
+nonnegative antitone evaluation, by child debt with coefficients
+`max(a_i,b_i)` and `1 + max(a_i,b_i)`. This all-evaluation result uses the
+truncated floor `min(gamma,0)`; transferring a positive terminal security
+value remains separate. A Fin4 application still needs finite-table
 certificate and child-target producers.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
