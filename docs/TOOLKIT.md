@@ -200,7 +200,17 @@ is needed only in the termination proof. The exact source adapters in
 restrict real finite-word or actual-profile deficit to the rational words,
 with one positive margin fixed before accuracy selection. No recognition
 algorithm for the source hypothesis or exact infinite all-suffix equilibrium
-is supplied.
+is supplied by these rational-selection modules.
+
+`exists_strictDeficitExactSuffix_allTerminalNash`
+(`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixNash.lean`)
+adds the exact infinite conclusion when every singleton reward is
+nonnegative: one common sequence of finite-word depths yields one root
+sequence with exact terminal Nash at every suffix and a uniform initial
+payoff. `exists_strictDeficitExactSuffix_payoffDiagonal`
+(`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixDiagonal.lean`)
+is the source-derived common-depth payoff and row limit. The finite-word
+uniform-payoff result above does not require the singleton-sign assumption.
 
 `HasQuittingFiniteWordNonconcentratedGroupExclusion`
 (`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWords.lean`)
@@ -1096,8 +1106,20 @@ inventory; the payoff conclusion uses the raw inverse-weight criterion.
 turn equality of the actual stationary residual within each block of a
 partition into the exact singleton-matrix relation `Γ E = E A`. The same
 module defines a continuous clipped quotient response map and proves its
-coordinatewise fixed-point sign conditions. It does not yet compute the
-map's local degree or produce a nonzero stationary Nash–Bellman root.
+coordinatewise fixed-point sign conditions.
+`exists_nonzero_quittingQuotientStationaryClippedMap_fixedPoint`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientDegreeEscape.lean`)
+computes the actual quotient map's local degree from the raw R0 quotient
+matrix and produces a nonzero fixed point when that degree is not one.
+`exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientBellman.lean`)
+decodes positive absorption and the original players' Nash–Bellman equations.
+`exists_uniformEquilibriumPayoff_of_responseInvariant_singletonSign`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientStrategic.lean`)
+consumes this root when singleton-block owners have nonnegative singleton
+rewards; the same module has a no-singleton-block corollary. Normal-negative
+singleton owners and the unconditional signed four-player consequence still
+need a punishment-completion adapter.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2092,10 +2114,8 @@ inequalities for one outsider and a finite child set. It allows signed rewards.
 `DeadlineWithdrawalRewardCertificate`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalRaw.lean`)
 records the distinct finite deadline-withdrawal N/F/J rows, the zero/passive
-withdrawal floor, and separate advance and withdrawal weights. Its checked
-all-evaluation debt theorem currently covers the zero-withdrawal subcone by
-the capped-clock consumer. The positive-withdrawal comparison requires a
-mixed private-clock law and is not yet proved by this module.
+withdrawal floor, and separate advance and withdrawal weights. Its
+zero-withdrawal subcone reuses the capped-clock consumer.
 `deadlineMixedPrivateClockLaw_gain_identity` and
 `deadlineMixedPrivateClockLaw_evaluatedGain_identity`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalMixedLaw.lean`)
@@ -2103,14 +2123,26 @@ construct the legal private-clock coin and prove that its conditional gain,
 multiplied by `max(a,b)`, equals the advance gain weighted by `a` plus the
 exact deadline-atom withdrawal gain weighted by `b`. Advancing and withdrawal
 are selected on disjoint clock events. The independent-product expectation
-and full behavioral-debt comparison remain separate obligations.
+and full behavioral-debt comparison are proved in the modules below.
 `deadlineWithdrawalActualEvaluatedChildGain_tie_ge_floor` and
 `deadlineWithdrawal_futureRows_evaluated`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalPointwise.lean`)
 give the actual evaluated withdrawal floor on a tied deadline, including
 singleton and nonsingleton first coalitions, and the weighted future-row
 inequality. The deterministic combination of all N/F/J rows, product-law
-expectation, and full behavioral comparison are not yet checked.
+expectation, and full behavioral comparison are proved in the modules below.
+`deadlineWithdrawalActualEvaluatedOutsideGain_le_weighted_childGains`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalDomination.lean`)
+combines all deterministic N/F/J cases. The exact private mixed parent law
+and gain identity are in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalMixedMarginal.lean`
+and `UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalMixedGain.lean`.
+`deadlineWithdrawal_quietLift_outsideBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFullBehavioralDebt.lean`)
+bounds every outsider behavioral deviation for the actual quiet lift at every
+nonnegative antitone evaluation by the weighted child debts. Its total-debt
+corollary has coefficients `1 + max(a_i,b_i)`. Multiple-outsider certificate
+families and a fixed-target uniform-payoff extension remain separate adapters.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.

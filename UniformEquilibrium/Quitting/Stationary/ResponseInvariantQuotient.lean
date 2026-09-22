@@ -274,4 +274,52 @@ theorem quittingQuotientStationaryClippedMap_eq_self_iff
     Math.UnitIntervalClip.clipped_unitInterval_add_eq_self_iff
       (hzero coordinate) (hone coordinate)
 
+/-! ## Ambient linearization of the literal quotient residual -/
+
+/-- The representative response polynomial before coordinate clipping. -/
+def quittingQuotientResponse
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (representative : Fin k → ι)
+    (point : Fin k → ℝ) : Fin k → ℝ :=
+  fun coordinate => quittingDiscountedDisplacement reward 0
+    (quittingBlockLift block point) (representative coordinate)
+
+/-- The ambient quotient response is differentiable at all-Continue and its
+derivative is the negative of the literal singleton row-sum matrix. -/
+theorem hasFDerivAt_quittingQuotientResponse_zero
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (representative : Fin k → ι) :
+    HasFDerivAt (quittingQuotientResponse reward block representative)
+      (ContinuousLinearMap.pi fun coordinate =>
+        (quittingDiscountedSingletonLinearization reward
+          (representative coordinate)).comp (quittingBlockPathCLM block)) 0 := by
+  exact hasFDerivAt_pi.mpr fun coordinate =>
+    hasFDerivAt_quittingBlockResponse_zero reward block (representative coordinate)
+
+omit [DecidableEq ι] in
+/-- Under raw response invariance, the derivative's value is exactly `-Ax`.
+No selected block is treated as a smaller game. -/
+theorem quittingQuotientResponse_derivative_apply
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (representative : Fin k → ι)
+    (point : Fin k → ℝ) :
+    (ContinuousLinearMap.pi fun coordinate =>
+      (quittingDiscountedSingletonLinearization reward
+        (representative coordinate)).comp (quittingBlockPathCLM block)) point =
+      -(quittingResponseQuotientMatrix reward block representative).mulVec point := by
+  funext coordinate
+  rw [ContinuousLinearMap.pi_apply,
+    quittingBlockResponseLinearization_apply]
+  dsimp [quittingResponseQuotientMatrix]
+  rw [Matrix.mulVec, dotProduct]
+  congr 1
+  conv_lhs =>
+    arg 2
+    ext player
+    rw [mul_comm]
+  rw [sum_mul_blockLift_eq_sum_rowSum]
+  apply Finset.sum_congr rfl
+  intro column _
+  rfl
+
 end GameTheory
