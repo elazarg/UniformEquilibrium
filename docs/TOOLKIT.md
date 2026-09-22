@@ -937,6 +937,17 @@ matrix. Its contradiction argument derives R0 from original-game
 nonexistence. This is a four-player result; the matrix degree computation
 it uses is dimension-independent.
 
+`exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes`
+(`MathUE/LinearProgramming/NonnegativeInverseApproximation.lean`) approximates
+every invertible matrix with nonnegative inverse in dimension at least three
+by subtracting a small positive multiple of the off-diagonal-ones matrix.
+One threshold works for all smaller positive parameters: the actual inverse
+is strictly positive, the determinant sign is unchanged, and the diagonal
+is preserved. No zero-diagonal assumption is needed. The same module proves
+that a zero-diagonal two-by-two matrix cannot have a strictly positive inverse.
+The four-cycle module above certifies the exact one-twentieth perturbation
+and shows why its first-order inverse correction alone is insufficient.
+
 `exists_finset_r0Degree_eq_sum_sign_det`
 (`MathUE/LinearProgramming/R0DegreeSum.lean`) computes this integer from all
 actual roots at one regular test offset. The finite root set is derived, not

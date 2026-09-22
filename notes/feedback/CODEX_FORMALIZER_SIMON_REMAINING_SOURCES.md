@@ -64,6 +64,21 @@ are infinitely many segments. These statements do not yet prove that the
 cluster is feasible or that an unbounded tail stays in the required payoff
 box.
 
+`section4J_target_mem_lowerGlueFiber` (`Literature/Simon2012.lean`) proves
+that every edge of the actual Section 4 graph moves inside the convex join
+of its source and the feasible payoff set. It uses
+`section4Y_mem_lowerGlueFiber` for the homotopy image and
+`gluedFiber_subset_lowerGlueFiber` for the glued correspondence. These
+statements do not depend on Lemma 4.4. The quantitative line-segment distance
+estimate and the orbit-length telescope are also checked.
+`feasible_of_tendsto_subsequence_of_unbounded_section4J_orbit` in the same
+file proves that every convergent subsequence limit of an unbounded ordinary
+orbit is feasible. `exists_feasible_cluster_of_unbounded_section4J_orbit`
+constructs such a limit and a strict convergent subsequence from compactness
+of the actual graph; no cluster is a supplied input. These declarations
+passed a silent named build. Localization across the full extended orbit's
+finite and infinite segment cases remains to be formalized.
+
 ## Section 4 cutoff and coordinate drift
 
 Simon (2012), printed page 191, makes the cutoff vanish at distance at least

@@ -8079,6 +8079,21 @@ theorem upperGlueFiber_subset_lowerGlueFiber (G : QuittingGame)
   rintro y ⟨p, rfl, _⟩
   exact quittingOneStagePayoff_mem_lowerGlueFiber G x p
 
+/-- The priority-switched glue remains inside the convex join of its source
+with the feasible payoff set, whichever neighborhood branch is active. -/
+theorem gluedFiber_subset_lowerGlueFiber (G : QuittingGame)
+    (R ε δ : ℝ) (x : Payoff G.Player) :
+    GluedFiber G R ε δ x ⊆ LowerGlueFiber G x := by
+  classical
+  intro y hy
+  by_cases hxLower : x ∈ LowerNeighborhood G R ε
+  · simpa only [GluedFiber, hxLower, ↓reduceIte] using hy
+  · by_cases hxUpper : x ∈ UpperNeighborhood G R ε
+    · apply upperGlueFiber_subset_lowerGlueFiber G R ε δ x
+      simpa only [GluedFiber, hxLower, hxUpper, ↓reduceIte] using hy
+    · simp only [GluedFiber, hxLower, hxUpper, ↓reduceIte,
+        Set.mem_empty_iff_false] at hy
+
 /-- Property (6), Case 1 with positive cutoff: a small terminal step and the
 paper's small-quitting bound put the first endpoint in the lower neighborhood. -/
 theorem section4X_mem_lowerNeighborhood_of_positive_cutoff_small_quit
@@ -8237,15 +8252,13 @@ theorem section4X_mem_lowerNeighborhood_of_positive_cutoff_small_quit
     nlinarith
   simpa only [LowerNeighborhood, Set.mem_ofPred_eq, x] using htotal.le
 
-/-- In Property (6)'s lower-neighborhood branch, the terminal homotopy's
-second coordinate belongs to the literal glued fiber over its first. -/
-theorem section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
+/-- The terminal homotopy's second coordinate always lies in the convex join
+of its first coordinate with the feasible payoff set. -/
+theorem section4Y_mem_lowerGlueFiber
     (G : QuittingGame) {M d : ℝ} (inverse : PhiInverseData G M d)
-    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
-    (a : Payoff G.Player)
-    (hx : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε) :
+    (cutoff : Payoff G.Player → UnitInterval) (a : Payoff G.Player) :
     Section4Y G inverse cutoff a ∈
-      GluedFiber G R ε δ (Section4X G inverse cutoff a) := by
+      LowerGlueFiber G (Section4X G inverse cutoff a) := by
   let x := Section4X G inverse cutoff a
   let z := Section4Z G inverse cutoff a
   have hz : z ∈ LowerGlueFiber G x := by
@@ -8261,8 +8274,38 @@ theorem section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
       AffineMap.lineMap x z (1 - (cutoff a : ℝ)) := by
     dsimp only [Section4Y, x, z]
     simp only [AffineMap.lineMap_apply_module, sub_sub_cancel]
-  rw [hy]
-  simpa only [GluedFiber, hx, ↓reduceIte] using hline
+  simpa only [hy, x] using hline
+
+/-- In Property (6)'s lower-neighborhood branch, the terminal homotopy's
+second coordinate belongs to the literal glued fiber over its first. -/
+theorem section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
+    (G : QuittingGame) {M d : ℝ} (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    (a : Payoff G.Player)
+    (hx : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε) :
+    Section4Y G inverse cutoff a ∈
+      GluedFiber G R ε δ (Section4X G inverse cutoff a) := by
+  simpa only [GluedFiber, hx, ↓reduceIte] using
+    section4Y_mem_lowerGlueFiber G inverse cutoff a
+
+/-- Every edge of the full Section 4 graph moves inside the convex join of
+its source with the feasible payoff set. -/
+theorem section4J_target_mem_lowerGlueFiber
+    (G : QuittingGame) {M d : ℝ} (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    {x y : Payoff G.Player}
+    (hxy : (x, y) ∈ Section4J G inverse cutoff R ε δ) :
+    y ∈ LowerGlueFiber G x := by
+  rcases hxy with hterminal | hglue
+  · rcases hterminal with ⟨a, _ha, hpair⟩
+    rw [section4H_one] at hpair
+    have hx : Section4X G inverse cutoff a = x := by
+      simpa only using congrArg Prod.fst hpair
+    have hy : Section4Y G inverse cutoff a = y := by
+      simpa only using congrArg Prod.snd hpair
+    rw [← hx, ← hy]
+    exact section4Y_mem_lowerGlueFiber G inverse cutoff a
+  · exact gluedFiber_subset_lowerGlueFiber G R ε δ x hglue
 
 /-- In Property (6)'s positive-cutoff, small-quitting branch, a terminal step
 smaller than `ω` lies in the actual glued graph. -/
@@ -9681,11 +9724,14 @@ private theorem singletonReward_mem_truncatedPiece_of_section3Constants
     obtain ⟨hkLower, hkUpper⟩ := abs_le.mp hk
     constructor <;> nlinarith [hM.1]
 
-private theorem euclideanInfDist_lineMap_le_of_mem_compact_convex
+/-- Moving a fraction `t` toward a point of a compact convex set contracts
+distance to that set by at least the factor `1 - t`. -/
+private theorem euclideanInfDist_lineMap_le_one_sub_mul_of_mem_compact_convex
     {N : Type} [Fintype N] (S : Set (Payoff N))
     (hcompact : IsCompact S) (hconvex : Convex ℝ S)
     (x z : Payoff N) (hz : z ∈ S) {t : ℝ} (ht : t ∈ Set.Icc 0 1) :
-    EuclideanInfDist (AffineMap.lineMap x z t) S ≤ EuclideanInfDist x S := by
+    EuclideanInfDist (AffineMap.lineMap x z t) S ≤
+      (1 - t) * EuclideanInfDist x S := by
   have himageCompact : IsCompact (WithLp.toLp 2 '' S) :=
     hcompact.image (PiLp.continuous_toLp 2 _)
   obtain ⟨a', ha', hdist⟩ := himageCompact.exists_infDist_eq_dist
@@ -9701,25 +9747,257 @@ private theorem euclideanInfDist_lineMap_le_of_mem_compact_convex
       Pi.smul_apply, smul_eq_mul]
     ring
   have hdistance :
-      EuclideanDist (AffineMap.lineMap x z t) (AffineMap.lineMap a z t) ≤
-        EuclideanDist x a := by
+      EuclideanDist (AffineMap.lineMap x z t) (AffineMap.lineMap a z t) =
+        (1 - t) * EuclideanDist x a := by
     rw [EuclideanDist, hdiff, euclideanNorm_eq_norm_toLp,
       WithLp.toLp_smul, norm_smul, Real.norm_eq_abs,
       abs_of_nonneg (by linarith [ht.2])]
-    simpa only [one_mul, EuclideanDist, euclideanNorm_eq_norm_toLp] using
-      mul_le_mul_of_nonneg_right (by linarith [ht.1] : 1 - t ≤ 1)
-        (norm_nonneg (WithLp.toLp 2 (x - a)))
+    simp only [EuclideanDist, euclideanNorm_eq_norm_toLp]
   calc
     EuclideanInfDist (AffineMap.lineMap x z t) S ≤
         EuclideanDist (AffineMap.lineMap x z t) (AffineMap.lineMap a z t) :=
       euclideanInfDist_le_dist_of_mem _ _ hlineMem
-    _ ≤ EuclideanDist x a := hdistance
-    _ = Metric.infDist (WithLp.toLp 2 x) (WithLp.toLp 2 '' S) := by
+    _ = (1 - t) * EuclideanDist x a := hdistance
+    _ = (1 - t) *
+        Metric.infDist (WithLp.toLp 2 x) (WithLp.toLp 2 '' S) := by
       rw [hdist]
       simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
         WithLp.toLp_sub, dist_eq_norm]
-    _ = EuclideanInfDist x S :=
-      (euclideanInfDist_eq_infDist_toLp x S).symm
+    _ = (1 - t) * EuclideanInfDist x S := by
+      rw [euclideanInfDist_eq_infDist_toLp]
+
+private theorem euclideanInfDist_lineMap_le_of_mem_compact_convex
+    {N : Type} [Fintype N] (S : Set (Payoff N))
+    (hcompact : IsCompact S) (hconvex : Convex ℝ S)
+    (x z : Payoff N) (hz : z ∈ S) {t : ℝ} (ht : t ∈ Set.Icc 0 1) :
+    EuclideanInfDist (AffineMap.lineMap x z t) S ≤ EuclideanInfDist x S := by
+  have hnonneg : 0 ≤ EuclideanInfDist x S := by
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact Metric.infDist_nonneg
+  calc
+    EuclideanInfDist (AffineMap.lineMap x z t) S ≤
+        (1 - t) * EuclideanInfDist x S :=
+      euclideanInfDist_lineMap_le_one_sub_mul_of_mem_compact_convex
+        S hcompact hconvex x z hz ht
+    _ ≤ EuclideanInfDist x S :=
+      mul_le_of_le_one_left hnonneg (by linarith [ht.1])
+
+/-- The length of a line-map step is its parameter times the full distance
+to the target. -/
+private theorem euclideanDist_lineMap_eq_mul
+    {N : Type} [Fintype N] (x z : Payoff N) {t : ℝ} (ht : 0 ≤ t) :
+    EuclideanDist x (AffineMap.lineMap x z t) = t * EuclideanDist x z := by
+  have hdiff : x - AffineMap.lineMap x z t = t • (x - z) := by
+    funext k
+    simp only [AffineMap.lineMap_apply_module, Pi.sub_apply, Pi.add_apply,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  rw [EuclideanDist, hdiff, euclideanNorm_eq_norm_toLp,
+    WithLp.toLp_smul, norm_smul, Real.norm_eq_abs, abs_of_nonneg ht]
+  simp only [EuclideanDist, euclideanNorm_eq_norm_toLp]
+
+private theorem euclideanDist_comm {N : Type} [Fintype N]
+    (x y : Payoff N) : EuclideanDist x y = EuclideanDist y x := by
+  simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+    WithLp.toLp_sub, norm_sub_rev]
+
+/-- Along an ordinary infinite orbit in the actual Section 4 graph, unbounded
+variation forces every subsequential limit to be feasible.  This is the
+single-infinite-segment localization step in the proof of Theorem 4.1. -/
+theorem feasible_of_tendsto_subsequence_of_unbounded_section4J_orbit
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (point : ℕ → Payoff G.Player)
+    (horbit : IsInfiniteOrbit
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)) point)
+    (hvariation : HasUnboundedVariation point)
+    (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
+    (limit : Payoff G.Player)
+    (htendsto : Tendsto (point ∘ subsequence) atTop (nhds limit)) :
+    Feasible G limit := by
+  classical
+  let F : Set (Payoff G.Player) := {z | Feasible G z}
+  have hFcompact : IsCompact F := by
+    change IsCompact (convexHull ℝ (Set.range G.reward ∪ {0}))
+    exact ((Set.finite_range G.reward).union
+      (Set.finite_singleton (0 : Payoff G.Player))).isCompact_convexHull ℝ
+  have hFconvex : Convex ℝ F := by
+    change Convex ℝ (convexHull ℝ (Set.range G.reward ∪ {0}))
+    exact convex_convexHull ℝ (Set.range G.reward ∪ {0})
+  have hFnonempty : F.Nonempty := by
+    refine ⟨0, ?_⟩
+    exact subset_convexHull ℝ _ (by simp)
+  by_contra hlimit
+  have hlimitNotMem : limit ∉ F := by
+    simpa only [F, Set.mem_ofPred_eq] using hlimit
+  let potential : Payoff G.Player → ℝ :=
+    fun x => EuclideanInfDist x F
+  let gap : ℝ := potential limit
+  have hgapPositive : 0 < gap := by
+    have hclosed : IsClosed (WithLp.toLp 2 '' F) :=
+      (hFcompact.image (PiLp.continuous_toLp 2 _)).isClosed
+    have hnotImage : WithLp.toLp 2 limit ∉ WithLp.toLp 2 '' F := by
+      rintro ⟨z, hz, heq⟩
+      apply hlimitNotMem
+      have hzlimit : z = limit := by
+        exact congrArg WithLp.ofLp heq
+      simpa only [hzlimit] using hz
+    dsimp only [gap, potential]
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact (hclosed.notMem_iff_infDist_pos (hFnonempty.image _)).mp hnotImage
+  let carrier : Set (Payoff G.Player) :=
+    {point 0} ∪ Prod.snd '' Section4J G inverse cutoff R ε δ
+  have hcarrierCompact : IsCompact carrier := by
+    exact isCompact_singleton.union (hgraph.image continuous_snd)
+  have hpointCarrier : ∀ index, point index ∈ carrier := by
+    intro index
+    cases index with
+    | zero => exact Or.inl rfl
+    | succ index =>
+        apply Or.inr
+        refine ⟨(point index, point (index + 1)), ?_, rfl⟩
+        simpa only [graphCorrespondence, Set.mem_ofPred_eq] using horbit index
+  have hdistanceContinuous : Continuous
+      (fun pair : Payoff G.Player × Payoff G.Player =>
+        EuclideanDist pair.1 pair.2) := by
+    unfold EuclideanDist EuclideanNorm
+    fun_prop
+  obtain ⟨distanceBound, hdistanceBound⟩ :=
+    (hcarrierCompact.prod hFcompact).exists_bound_of_continuousOn
+      hdistanceContinuous.continuousOn
+  let D : ℝ := max 1 distanceBound
+  have hDPositive : 0 < D := lt_of_lt_of_le zero_lt_one (le_max_left _ _)
+  have hsourceTargetBound : ∀ index z, z ∈ F →
+      EuclideanDist (point index) z ≤ D := by
+    intro index z hz
+    calc
+      EuclideanDist (point index) z ≤
+          |EuclideanDist (point index) z| := le_abs_self _
+      _ ≤ distanceBound :=
+        hdistanceBound (point index, z) ⟨hpointCarrier index, hz⟩
+      _ ≤ D := le_max_right _ _
+  have hpotentialStep : ∀ index,
+      potential (point (index + 1)) ≤ potential (point index) := by
+    intro index
+    have hedge : (point index, point (index + 1)) ∈
+        Section4J G inverse cutoff R ε δ := by
+      simpa only [graphCorrespondence, Set.mem_ofPred_eq] using horbit index
+    rcases section4J_target_mem_lowerGlueFiber
+        G inverse cutoff R ε δ hedge with ⟨z, hz, t, heq⟩
+    have ht : (t : ℝ) ∈ Set.Icc 0 1 := t.property
+    have hline : point (index + 1) =
+        AffineMap.lineMap (point index) z (t : ℝ) := by
+      simpa only [AffineMap.lineMap_apply_module] using heq
+    rw [hline]
+    exact euclideanInfDist_lineMap_le_of_mem_compact_convex
+      F hFcompact hFconvex (point index) z hz ht
+  have hpotentialAntitone : Antitone (fun index => potential (point index)) :=
+    antitone_nat_of_succ_le hpotentialStep
+  have hpotentialTendsto : Tendsto
+      (fun rank => potential (point (subsequence rank))) atTop (nhds gap) := by
+    dsimp only [gap, potential]
+    exact (continuous_euclideanInfDist F).continuousAt.tendsto.comp htendsto
+  have hgapLower : ∀ index, gap ≤ potential (point index) := by
+    intro index
+    apply le_of_tendsto hpotentialTendsto
+    filter_upwards
+      [hsubsequence.tendsto_atTop.eventually (eventually_ge_atTop index)]
+      with rank hrank
+    exact hpotentialAntitone hrank
+  let constant : ℝ := gap / D
+  have hconstantPositive : 0 < constant := div_pos hgapPositive hDPositive
+  have hdecrease : ∀ index,
+      potential (point (index + 1)) ≤
+        potential (point index) - constant *
+          EuclideanDist (point index) (point (index + 1)) := by
+    intro index
+    have hedge : (point index, point (index + 1)) ∈
+        Section4J G inverse cutoff R ε δ := by
+      simpa only [graphCorrespondence, Set.mem_ofPred_eq] using horbit index
+    rcases section4J_target_mem_lowerGlueFiber
+        G inverse cutoff R ε δ hedge with ⟨z, hz, t, heq⟩
+    have ht : (t : ℝ) ∈ Set.Icc 0 1 := t.property
+    have hline : point (index + 1) =
+        AffineMap.lineMap (point index) z (t : ℝ) := by
+      simpa only [AffineMap.lineMap_apply_module] using heq
+    have hcontraction :=
+      euclideanInfDist_lineMap_le_one_sub_mul_of_mem_compact_convex
+        F hFcompact hFconvex (point index) z hz ht
+    rw [← hline] at hcontraction
+    have hstep : EuclideanDist (point index) (point (index + 1)) =
+        (t : ℝ) * EuclideanDist (point index) z := by
+      rw [hline]
+      exact euclideanDist_lineMap_eq_mul _ _ ht.1
+    have hconstantD : constant * D = gap := by
+      dsimp only [constant]
+      field_simp [hDPositive.ne']
+    have hscaledTarget :
+        constant * EuclideanDist (point index) z ≤ gap := by
+      calc
+        constant * EuclideanDist (point index) z ≤ constant * D :=
+          mul_le_mul_of_nonneg_left (hsourceTargetBound index z hz)
+            hconstantPositive.le
+        _ = gap := hconstantD
+    have hscaledStep :
+        constant * EuclideanDist (point index) (point (index + 1)) ≤
+          (t : ℝ) * potential (point index) := by
+      rw [hstep]
+      calc
+        constant * ((t : ℝ) * EuclideanDist (point index) z) =
+            (t : ℝ) *
+              (constant * EuclideanDist (point index) z) := by ring
+        _ ≤ (t : ℝ) * gap :=
+          mul_le_mul_of_nonneg_left hscaledTarget ht.1
+        _ ≤ (t : ℝ) * potential (point index) :=
+          mul_le_mul_of_nonneg_left (hgapLower index) ht.1
+    nlinarith
+  obtain ⟨horizon, hhorizon⟩ := hvariation
+    ((potential (point 0) - 0) / constant + 1)
+  have hprefix := Math.Topology.sum_range_cost_le_of_potential_bounds
+    (point := point)
+    (cost := fun first next => EuclideanDist first next)
+    (potential := potential) hconstantPositive
+    (fun index => by
+      dsimp only [potential]
+      rw [euclideanInfDist_eq_infDist_toLp]
+      exact Metric.infDist_nonneg)
+    (le_refl _) hdecrease horizon
+  have hvariationSymm :
+      (∑ index ∈ Finset.range horizon,
+        EuclideanDist (point (index + 1)) (point index)) =
+      ∑ index ∈ Finset.range horizon,
+        EuclideanDist (point index) (point (index + 1)) := by
+    apply Finset.sum_congr rfl
+    intro index _
+    exact euclideanDist_comm _ _
+  rw [hvariationSymm] at hhorizon
+  exact (not_le_of_gt (lt_add_one ((potential (point 0) - 0) / constant)))
+    (hhorizon.trans hprefix)
+
+/-- An ordinary Section 4 graph orbit of unbounded variation has an actual
+feasible cluster point in the graph's second-coordinate projection. -/
+theorem exists_feasible_cluster_of_unbounded_section4J_orbit
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (point : ℕ → Payoff G.Player)
+    (horbit : IsInfiniteOrbit
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)) point)
+    (hvariation : HasUnboundedVariation point) :
+    ∃ limit ∈ Prod.snd '' Section4J G inverse cutoff R ε δ,
+      Feasible G limit ∧ ∃ subsequence : ℕ → ℕ,
+        StrictMono subsequence ∧
+          Tendsto (point ∘ subsequence) atTop (nhds limit) := by
+  obtain ⟨limit, hlimitGraph, subsequence, hsubsequence, htendsto⟩ :=
+    Math.Topology.SimonViability.IsInfiniteOrbit.exists_tendsto_subsequence_of_compact_graph
+      horbit hgraph
+  refine ⟨limit, hlimitGraph, ?_, subsequence, hsubsequence, htendsto⟩
+  exact feasible_of_tendsto_subsequence_of_unbounded_section4J_orbit
+    G inverse cutoff R ε δ hgraph point horbit hvariation subsequence
+      hsubsequence limit htendsto
 
 /-- In the lower-glue branch of Property (7), the singleton terminal reward
 in the requested truncated piece is already a full escape target. -/

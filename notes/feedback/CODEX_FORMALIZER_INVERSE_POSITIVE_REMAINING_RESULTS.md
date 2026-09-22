@@ -24,37 +24,50 @@ They control the full behavioral cap, exploitability, and existence under
 reward-table limits. No new payoff-continuity or deviation-cap argument is
 needed.
 
+## Checked approximation and its boundaries
+
+The generic strict approximation is proved by
+`exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes`
+(`MathUE/LinearProgramming/NonnegativeInverseApproximation.lean`). For every
+finite coordinate type of cardinality at least three, it chooses one positive
+threshold before all positive perturbations below that threshold. The actual
+matrix inverse is strictly positive, its determinant sign is preserved, and
+its diagonal is unchanged. The original diagonal need not vanish.
+The proof reuses Mathlib's Neumann series and the canonical `offDiagonalOnes`;
+`first_or_second_inverse_correction_pos` in the same file proves the entrywise
+coverage by the first two correction terms. This module passed a silent named
+build. It is distinct from mere openness of the strictly positive class.
+
+The same module proves the two-dimensional obstruction by
+`not_hasStrictlyPositiveInverse_fin_two_of_diagonal_zero`. Its inverse-diagonal
+identity also covers singular matrices under the matrix-inverse convention.
+
+`CycleFourNonnegativeInverse.perturbedMatrix_inverse_eq`,
+`CycleFourNonnegativeInverse.perturbedMatrix_det_neg`,
+`CycleFourNonnegativeInverse.opposite_entries_inverse_and_first_correction_eq_zero`,
+and `CycleFourNonnegativeInverse.inverse_add_first_add_second_correction_pos`
+(`MathUE/LinearProgramming/Examples/CycleFourNonnegativeInverse.lean`)
+cover the explicit perturbation by one twentieth and the second-order boundary
+test. This module and its approximation dependency passed a silent named build.
+
 ## Independent results still to formalize
 
-1. **Strict inverse approximation.** In dimension at least three, subtracting
-   a sufficiently small positive multiple of the off-diagonal all-ones matrix
-   from an invertible matrix with nonnegative inverse preserves the diagonal
-   and determinant sign and makes the inverse strictly positive. This matrix
-   result does not need a zero-diagonal premise.
-   `isOpen_hasStrictlyPositiveInverse`
-   (`MathUE/LinearProgramming/PositiveInverseOpenness.lean`) proves openness,
-   not this density statement. Reuse `offDiagonalOnes`
-   (`MathUE/LinearAlgebra/UniformNonsingularity.lean`).
+The two exact matrices, their determinants and positive inverses, and the
+zero-coordinate anchor calculation are proved in
+`MathUE/LinearProgramming/Examples/PositiveInverseFourMatrices.lean`.
+The namespaces `PositiveInverseFourMatrices.NegativeDeterminant` and
+`PositiveInverseFourMatrices.Paired` separate the two fixtures. This module
+passed a silent named build; it makes no strategic or class-comparison claim.
 
-2. **Approximation boundaries.** Prove the zero-diagonal two-dimensional
-   obstruction. Extend the existing four-cycle example in
-   `MathUE/LinearProgramming/Examples/CycleFourNonnegativeInverse.lean`
-   with the packet's perturbation of size one twentieth, exact inverse, and
-   second-order positivity calculation. The unperturbed determinant,
-   nonnegative inverse, unique regular test root, and failure of R0 are
-   already proved.
-
-3. **Distinct arithmetic and class-comparison examples.** Add the
-   determinant-minus-three and determinant-forty-five matrices with their
-   positive inverses. For the former, retain the zero-coordinate anchor,
-   non-projective-Q principal, failure of projective Q-bar, full normal core,
+1. **Class-comparison examples.** For the determinant-minus-three matrix,
+   retain the non-projective-Q principal, failure of projective Q-bar, full normal core,
    and absence of relabeled negative Hamiltonian cycles. Also retain the
    displayed covering walk with repeated owners: the packet does not exclude
    longer calendars. Reuse `isStandardQMatrix_of_positive_rightInverse` and
    `noHomogeneousSimplexSolution_of_positive_leftInverse`
    (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverse.lean`).
 
-4. **Localization counterexample.** Define the additive coalition completion,
+2. **Localization counterexample.** Define the additive coalition completion,
    compute its actual discounted displacement, certify the displayed small
    interior fixed point and the remote fixed points with at least two sure
    quitters, and prove the all-sure profile's exact terminal Nash property.
@@ -63,7 +76,7 @@ needed.
    This is the literal regression against deriving global localization from
    the matrix hypotheses alone.
 
-5. **Literal reward perturbation.** After the matrix approximation theorem,
+3. **Literal reward perturbation.** Using the matrix approximation theorem,
    prove that subtracting the same amount from every off-own singleton
    coordinate gives precisely the stated matrix perturbation, preserves all
    own-singleton and nonsingleton coordinates, and has the stated reward

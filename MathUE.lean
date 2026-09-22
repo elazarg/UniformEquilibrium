@@ -30,6 +30,7 @@ import MathUE.SignedFourCycleWeights
 import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
+import MathUE.LinearProgramming.NonnegativeInverseApproximation
 import MathUE.LinearProgramming.PivotRepairMassPolytope
 import MathUE.LinearProgramming.PivotRepairMassPerturbation
 import MathUE.LinearProgramming.PivotRepairStoppingLaw
@@ -243,6 +244,7 @@ import MathUE.LinearProgramming.FiniteSolutions
 import MathUE.LinearProgramming.FiniteSupportDegree
 import MathUE.LinearProgramming.NonnegativeInverseDegree
 import MathUE.LinearProgramming.Examples.CycleFourNonnegativeInverse
+import MathUE.LinearProgramming.Examples.PositiveInverseFourMatrices
 import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrix
 import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrixStability
 import MathUE.LinearProgramming.FlowCostateDuality

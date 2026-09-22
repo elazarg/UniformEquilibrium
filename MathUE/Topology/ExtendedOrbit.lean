@@ -163,6 +163,39 @@ theorem not_hasArbitrarilyLargeFiniteOrbitVariationWith_of_potential_bounds
       hconstant hlower hupper hdecrease
   exact (not_le_of_gt (lt_add_one bound)) (hbound.trans hvariation)
 
+/-- A positive potential drop along a sequence gives a uniform bound on every
+finite prefix of its accumulated cost. -/
+theorem sum_range_cost_le_of_potential_bounds
+    {X : Type*} {point : ℕ → X}
+    {cost : X → X → ℝ} {potential : X → ℝ}
+    {constant lower upper : ℝ}
+    (hconstant : 0 < constant)
+    (hlower : ∀ index, lower ≤ potential (point index))
+    (hupper : potential (point 0) ≤ upper)
+    (hdecrease : ∀ index,
+      potential (point (index + 1)) ≤
+        potential (point index) - constant * cost (point index) (point (index + 1)))
+    (horizon : ℕ) :
+    ∑ index ∈ Finset.range horizon,
+        cost (point index) (point (index + 1)) ≤
+      (upper - lower) / constant := by
+  apply (le_div_iff₀ hconstant).2
+  rw [Finset.sum_mul]
+  calc
+    ∑ index ∈ Finset.range horizon,
+          cost (point index) (point (index + 1)) * constant ≤
+        ∑ index ∈ Finset.range horizon,
+          (potential (point index) - potential (point (index + 1))) := by
+      apply Finset.sum_le_sum
+      intro index _
+      simpa only [mul_comm] using
+        (le_sub_iff_add_le.2 (by
+          simpa only [add_comm] using
+            (le_sub_iff_add_le.1 (hdecrease index))))
+    _ = potential (point 0) - potential (point horizon) := by
+      rw [Finset.sum_range_sub']
+    _ ≤ upper - lower := sub_le_sub hupper (hlower horizon)
+
 /-- `none` means an infinite segment; `some k` means exactly `k` points. -/
 def SegmentIndex (length : Option ℕ) (index : ℕ) : Prop :=
   ∀ k, length = some k → index < k

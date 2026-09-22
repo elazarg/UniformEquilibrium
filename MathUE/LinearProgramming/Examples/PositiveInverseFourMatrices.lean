@@ -1,0 +1,110 @@
+import MathUE.LinearProgramming.PositiveInverseOpenness
+
+/-!
+# Four-by-four matrices with strictly positive inverses and opposite determinant signs
+
+The first zero-diagonal matrix has determinant minus three and maps a
+nonnegative anchor with zero coordinates to a strictly positive inverse image.
+The paired zero-diagonal matrix has determinant forty-five and a strictly
+positive inverse. These are exact arithmetic fixtures; no game-semantic or
+matrix-class comparison is asserted in this module.
+-/
+
+noncomputable section
+
+namespace Math.LinearProgramming.PositiveInverseFourMatrices
+
+namespace NegativeDeterminant
+
+/-- The explicit strict-inverse matrix with negative determinant. -/
+def matrix : Matrix (Fin 4) (Fin 4) ℝ :=
+  !![0, 2, 1, -3; -3, 0, 2, 3; -3, 2, 0, 2; 3, -3, -1, 0]
+
+theorem diagonal_zero (i : Fin 4) : matrix i i = 0 := by
+  fin_cases i <;> rfl
+
+theorem det_eq : matrix.det = -3 := by
+  rw [Matrix.det_succ_row_zero]
+  norm_num [matrix, Matrix.det_fin_three, Fin.sum_univ_succ, Fin.succAbove,
+    Matrix.submatrix]
+
+theorem det_neg : matrix.det < 0 := by
+  rw [det_eq]
+  norm_num
+
+/-- The displayed inverse is certified by exact matrix multiplication. -/
+theorem inverse_eq : matrix⁻¹ =
+    !![6, 4 / 3, 7, 26 / 3; 5, 1, 6, 7; 3, 1, 3, 4; 4, 1, 5, 6] := by
+  apply Matrix.inv_eq_left_inv
+  ext row column
+  fin_cases row <;> fin_cases column <;>
+    norm_num [matrix, Matrix.mul_apply, Fin.sum_univ_succ, Matrix.one_apply]
+
+theorem inverse_pos (row column : Fin 4) : 0 < matrix⁻¹ row column := by
+  rw [inverse_eq]
+  fin_cases row <;> fin_cases column <;> norm_num
+
+theorem hasStrictlyPositiveInverse : HasStrictlyPositiveInverse matrix :=
+  ⟨det_neg.ne, inverse_pos⟩
+
+/-- A nonnegative test anchor with two zero coordinates. -/
+def boundaryAnchor : Fin 4 → ℝ := ![0, 2, 0, 3]
+
+theorem boundaryAnchor_nonnegative (i : Fin 4) : 0 ≤ boundaryAnchor i := by
+  fin_cases i <;> norm_num [boundaryAnchor]
+
+theorem boundaryAnchor_zero_coordinates : boundaryAnchor 0 = 0 ∧ boundaryAnchor 2 = 0 :=
+  ⟨rfl, rfl⟩
+
+/-- Zero coordinates in the anchor still give the displayed positive inverse image. -/
+theorem inverse_mulVec_boundaryAnchor :
+    matrix⁻¹.mulVec boundaryAnchor = ![86 / 3, 23, 14, 20] := by
+  rw [inverse_eq]
+  funext i
+  fin_cases i <;>
+    norm_num [boundaryAnchor, Matrix.mulVec, dotProduct, Fin.sum_univ_succ]
+
+theorem inverse_mulVec_boundaryAnchor_pos (i : Fin 4) :
+    0 < matrix⁻¹.mulVec boundaryAnchor i := by
+  rw [inverse_mulVec_boundaryAnchor]
+  fin_cases i <;> norm_num
+
+end NegativeDeterminant
+
+namespace Paired
+
+/-- The paired strict-inverse matrix with positive determinant. -/
+def matrix : Matrix (Fin 4) (Fin 4) ℝ :=
+  !![0, 3, -1, -1; 3, 0, -1, -1; -1, -1, 0, 3; -1, -1, 3, 0]
+
+theorem diagonal_zero (i : Fin 4) : matrix i i = 0 := by
+  fin_cases i <;> rfl
+
+theorem det_eq : matrix.det = 45 := by
+  rw [Matrix.det_succ_row_zero]
+  norm_num [matrix, Matrix.det_fin_three, Fin.sum_univ_succ, Fin.succAbove,
+    Matrix.submatrix]
+
+theorem det_pos : 0 < matrix.det := by
+  rw [det_eq]
+  norm_num
+
+/-- Diagonal entries are two fifteenths, partner entries seven fifteenths,
+and cross-pair entries one fifth. -/
+theorem inverse_eq : matrix⁻¹ = (1 / 15 : ℝ) •
+    !![2, 7, 3, 3; 7, 2, 3, 3; 3, 3, 2, 7; 3, 3, 7, 2] := by
+  apply Matrix.inv_eq_left_inv
+  ext row column
+  fin_cases row <;> fin_cases column <;>
+    norm_num [matrix, Matrix.mul_apply, Fin.sum_univ_succ, Matrix.one_apply]
+
+theorem inverse_pos (row column : Fin 4) : 0 < matrix⁻¹ row column := by
+  rw [inverse_eq]
+  fin_cases row <;> fin_cases column <;> norm_num
+
+theorem hasStrictlyPositiveInverse : HasStrictlyPositiveInverse matrix :=
+  ⟨det_pos.ne', inverse_pos⟩
+
+end Paired
+
+end Math.LinearProgramming.PositiveInverseFourMatrices

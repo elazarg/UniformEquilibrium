@@ -50,6 +50,22 @@ period, by `not_nonempty_balancedSingletonCycleCertificate` and
 `not_nonempty_balancedSingletonCycleCertificate_deleteThree`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedCycleExclusion.lean`).
 
+The explicit positive fixture's one-date profile, followed by Never, has
+both terminal payoff and unrestricted behavioral best-response value
+`![13 / 9, 2, 2 / 3, 4 / 3]`. Its literal semantic results are
+`CappedClockPairedFixtureTerminal.profile_terminalPayoff`,
+`CappedClockPairedFixtureTerminal.profile_continuationBestResponseValue`, and
+`CappedClockPairedFixtureTerminal.profile_exactTerminalNash`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureTerminal.lean`).
+The module passed a silent named build.
+
+The exact Never, future, and joining margins, and every singleton deletion's
+own payoff, continue floor, and joining cap, are proved in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureSlacks.lean`.
+`futureSlack_eq_certificateMargin` and `joinSlack_eq_certificateMargin`
+identify the displayed numbers with the actual weighted reward-row expressions.
+The module passed a silent named build.
+
 ## Work still needed
 
 The terminating child-first rational search and its original-parent consumer
@@ -58,8 +74,8 @@ amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 The remaining packet work is:
 
-1. Seal the additional example conclusions: slack values, terminal Nash laws,
-   payoffs and caps, absence of pure terminal Nash equilibria, robustness under
+1. Seal the additional example conclusions: individual pure-date reply values,
+   absence of pure terminal Nash equilibria, robustness under
    reward perturbations, and the comparison with the capped-joint hypothesis.
 2. Formalize the solved table failing every deletion LP, the missing-Never
    example with zero child singleton, and the sparse-calendar missed response
