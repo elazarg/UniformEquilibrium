@@ -1,4 +1,4 @@
-import MathUE.LinearProgramming.PositiveEntries
+import MathUE.LinearProgramming.PositiveInverseR0
 import UniformEquilibrium.Quitting.Classification.LCP.CopositiveQBridge
 
 noncomputable section
@@ -72,48 +72,7 @@ theorem isStandardQMatrix_of_positive_rightInverse
 theorem noHomogeneousSimplexSolution_of_positive_leftInverse
     (M B : Matrix I I ℝ) (hBM : B * M = 1)
     (hB : HasStrictlyPositiveEntries B) : ¬HasHomogeneousSimplexSolution M := by
-  change ¬SingletonLCPFeasible (fun i j => M i j)
-  rw [← isR0Matrix_iff_not_singletonLCPFeasible]
-  intro z hz
-  let w := M.mulVec z
-  have hw : ∀ i, 0 ≤ w i := by
-    intro i
-    change 0 ≤ ∑ j, M i j * z j
-    convert hz.residual_nonneg i using 1
-    simp only [lcpResidual, Pi.zero_apply, zero_add]
-    apply Finset.sum_congr rfl
-    intro j _
-    ring
-  have hzw : B.mulVec w = z := by
-    dsimp only [w]
-    rw [Matrix.mulVec_mulVec, hBM, Matrix.one_mulVec]
-  have hwZero : w = 0 := by
-    by_contra hwne
-    have hexists : ∃ k, 0 < w k := by
-      by_contra hnone
-      push Not at hnone
-      apply hwne
-      funext i
-      exact le_antisymm (hnone i) (hw i)
-    obtain ⟨k, hk⟩ := hexists
-    have hzpos : ∀ i, 0 < z i := by
-      intro i
-      rw [← hzw]
-      simp only [Matrix.mulVec]
-      apply Finset.sum_pos'
-      · intro j _
-        exact mul_nonneg (hB i j).le (hw j)
-      · exact ⟨k, Finset.mem_univ k, mul_pos (hB i k) hk⟩
-    have hwzero : ∀ i, w i = 0 := by
-      intro i
-      have hc := hz.complementary i
-      have hwi : lcpResidual M 0 z i = w i := by
-        simp [lcpResidual, w, Matrix.mulVec, dotProduct, mul_comm]
-      rw [hwi] at hc
-      exact (mul_eq_zero.mp hc).resolve_left (ne_of_gt (hzpos i))
-    exact hwne (funext hwzero)
-  intro i
-  rw [← hzw, hwZero]
-  simp
+  exact (isR0Matrix_iff_not_singletonLCPFeasible M).mp
+    (isR0Matrix_of_positive_leftInverse M B hBM hB)
 
 end GameTheory.QuittingLCPClassification

@@ -85,9 +85,25 @@ limit. Only the next segment's activity is required, not infinitely many
 segments. Simon's paper-specific orbit record is explicitly mapped to this
 generic interface. The Euclidean segment-variation estimate and removal of
 bounded predecessors before an unbounded segment are also checked in
-`Literature/Simon2012.lean`. The remaining localization case has infinitely
-many segments, each with bounded variation; its final assembly remains Lean
-work.
+`Literature/Simon2012.lean`.
+`exists_nearFeasible_unbounded_section4J_tail` in that file covers both
+an unbounded segment and infinitely many bounded-variation segments. From
+an unbounded extended orbit in the compact actual Section 4 graph, it
+constructs an unbounded extended orbit in the same graph starting arbitrarily
+near a feasible payoff. No limit or convergent subsequence is supplied by
+the caller. The theorem and its private bounded-segment estimates passed a
+silent named build and a separate standard-axiom check.
+
+`extendedOrbitStaysIn_halfPayoffBox_of_nearFeasible` in the same file
+propagates the required coordinate bound through every valid point and
+every finite or infinite stitch. It uses only the payoff normalization,
+the actual Section 4 graph, and an initial distance at most one sixth of
+the payoff scale from the feasible set. It does not require compactness,
+unbounded variation, normality, or Lemma 4.4.
+`exists_unbounded_section4J_tail_in_halfPayoffBox` combines this invariant
+with the preceding construction. Both declarations passed the full silent
+build and separate standard-axiom checks. The graph-to-quitting-orbit and
+Lemma 4.5 assembly remain Lean work.
 
 ## Section 4 cutoff and coordinate drift
 

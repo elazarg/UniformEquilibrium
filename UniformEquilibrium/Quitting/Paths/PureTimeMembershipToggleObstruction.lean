@@ -68,6 +68,34 @@ private theorem quittingStoppingTimeValue_lt_of_firstCoalition_not_mem
 
 namespace HasQuittingPureTimeMembershipToggleGap
 
+omit [Fintype ι] in
+/-- A reward perturbation loses at most twice its radius from a membership
+toggle gap. The solo exit loses only one radius because Never still pays zero. -/
+theorem of_reward_close
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι} {gap radius : ℝ}
+    (condition : HasQuittingPureTimeMembershipToggleGap first gap)
+    (hradius : 0 ≤ radius)
+    (hclose : ∀ coalition who, |first coalition who - second coalition who| ≤ radius) :
+    HasQuittingPureTimeMembershipToggleGap second (gap - 2 * radius) := by
+  constructor
+  · obtain ⟨who, hsolo⟩ := condition.solo
+    refine ⟨who, ?_⟩
+    have hbound := (abs_le.mp (hclose ⟨{who}, Finset.singleton_nonempty who⟩ who)).2
+    linarith
+  · intro coalition
+    rcases condition.toggle coalition with hjoin | hleave
+    · obtain ⟨who, houtside, hgain⟩ := hjoin
+      refine Or.inl ⟨who, houtside, ?_⟩
+      have hbase := (abs_le.mp (hclose coalition who)).1
+      have hnew := (abs_le.mp
+        (hclose ⟨insert who coalition.1, Finset.insert_nonempty who coalition.1⟩ who)).2
+      linarith
+    · obtain ⟨who, hinside, hremaining, hgain⟩ := hleave
+      refine Or.inr ⟨who, hinside, hremaining, ?_⟩
+      have hbase := (abs_le.mp (hclose coalition who)).1
+      have hnew := (abs_le.mp (hclose ⟨coalition.1.erase who, hremaining⟩ who)).2
+      linarith
+
 /-- Every complete pure-clock profile admits an actual behavioral unilateral
 deviation gaining at least the table-level toggle gap. -/
 theorem exists_behaviorDeviation

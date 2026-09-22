@@ -87,6 +87,41 @@ class; no exclusion of mixed behavioral profiles is asserted.
 give the fixture's literal row certificate and a gain of at least one against
 every complete pure-clock profile. Both modules passed silent named builds.
 
+Reward-neighborhood statements are proved in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureRobustness.lean`:
+
+- `certificate_of_reward_close` preserves the actual weight-two certificate
+  for entrywise radius below one sixth, with singleton coordinates allowed
+  to vary. `exists_uniformEquilibriumPayoff_of_reward_close` consumes it to
+  supply a fixed uniform payoff for each nearby game.
+- `not_isεAsymptoticNash_zero_of_reward_close` excludes every complete pure
+  clock at radius below one half. `profile_terminalNash_of_reward_close`
+  instead concerns the fixture's one mixed profile, whose error against all
+  behavioral deviations is at most twice the radius. It is not asserted to
+  remain an exact equilibrium or realize the nearby game's uniform payoff.
+- `not_nonempty_balancedSingletonCycleCertificate_delete_of_reward_close`
+  excludes every period on every principal player restriction below radius
+  one half. The parent exclusion is also proved.
+- `not_blockDispensable_of_reward_close` and
+  `not_cappedJointExit_of_reward_close` exclude exact singleton deletion and
+  the capped joint-exit hypothesis below radius one. The latter uses the
+  packet's coalition `{0,2}` witness, not a claim about other hypotheses of
+  the cited theorem.
+
+The module passed a silent named build and independent declaration-level
+review. The generic membership-toggle reward transport is shared through
+`HasQuittingPureTimeMembershipToggleGap.of_reward_close`
+(`UniformEquilibrium/Quitting/Paths/PureTimeMembershipToggleObstruction.lean`).
+
+`AdaptiveChildCenterCappedClockObstruction.not_nonempty_cappedClockParentFutureJoinCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/AdaptiveChildCenterCappedClockObstruction.lean`)
+proves that every deletion of the existing adaptive-child center table fails
+the weighted future/join system, even without its Never row. The raw
+certificate also fails for every deletion. The proof reuses
+`AdaptiveChildCenter.reward`; its already proved equilibrium and uniform
+payoff do not need a second construction. This module passed a silent named
+build and independent declaration-level review.
+
 ## Work still needed
 
 The terminating child-first rational search and its original-parent consumer
@@ -95,23 +130,20 @@ amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 The remaining packet work is:
 
-1. Seal robustness under reward perturbations and the comparison with the
-   capped-joint hypothesis.
-2. Prove that every deletion LP fails for the already defined
-   `AdaptiveChildCenter.reward`
-   (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`).
-   Its exact profile, payoff, unrestricted terminal Nash property, and uniform
-   payoff are already proved in that module; no second table or equilibrium
-   construction is needed. The missing LP evidence is one future row for
-   deletion zero and one joining row for each other deletion, with no Never
-   row needed. Also formalize the missing-Never example with zero child
-   singleton and the sparse-calendar missed response with its consecutive
-   repair.
-3. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
+1. Formalize the missing-Never example with zero child singleton and the
+   sparse-calendar missed response with its consecutive repair.
+2. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.
    Its hypotheses concern an exact balanced singleton schedule, not all child
    equilibria or approximate ties.
+
+The strict inverse-row work can reuse the existing three-cycle labeling,
+periodic escort transitions, singleton-versus-quit payoff estimate, and
+survival-weighted deviation transport. What remains includes the universal
+infinite schedule's finite owner blocks, forced vertex visits, and uniform
+survival lower bound. A theorem assuming the vertex visits or restricting
+the schedule to a finite period would not cover the packet's statement.
 
 These are known results supplied by the packet. This record does not assert
 that the weighted criterion covers every four-player game, that its weights

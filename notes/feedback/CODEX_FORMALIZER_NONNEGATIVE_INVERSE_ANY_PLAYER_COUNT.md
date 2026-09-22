@@ -1,9 +1,13 @@
 # Nonnegative inverse criterion beyond four players
 
-## Status and proposed theorem
+## Checked theorem
 
-Proof mining identified the following direct composition of checked results.
-The composite theorem has not yet been checked in Lean.
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse`
+(`UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean`)
+is integrated and passed the full silent build and axiom audit. A separate
+declaration-level review verified
+the determinant-sign transport, the threshold quantifiers, and selection of
+one fixed payoff target for the original game.
 
 For every natural number `n` with `3 ≤ n` and every quitting reward table
 on `Fin n`, let its singleton comparison matrix be `M`. If `M.det < 0`
@@ -12,7 +16,7 @@ uniform-equilibrium payoff. The payoff target is fixed before the accuracy;
 all behavioral deviations and all sufficiently large horizons are covered.
 No restrictions on own-singleton levels or nonsingleton rewards are added.
 
-This would extend the player-count scope of
+This extends the player-count scope of
 `math/formalized/INVERSE_POSITIVE_SINGLETON_MATRIX_DISCOUNTED_INDEX_ESCAPE.md`.
 The source packet's four-player theorem is already checked; this additional
 composition is not being attributed to the packet.
@@ -20,9 +24,10 @@ composition is not being attributed to the packet.
 ## Existing proof chain
 
 1. For a strictly positive inverse, derive full R0 using
-   `noHomogeneousSimplexSolution_of_positive_leftInverse`
-   (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverse.lean`)
-   and the canonical homogeneous/R0 dictionary.
+   `isR0Matrix_of_strictlyPositiveInverse`
+   (`MathUE/LinearProgramming/PositiveInverseR0.lean`). Its positive-left-inverse
+   proof is shared with the existing semantic homogeneous-solution theorem,
+   which delegates through the canonical dictionary.
 2. Apply `r0Degree_eq_sign_det_of_nonnegative_inverse`
    (`MathUE/LinearProgramming/NonnegativeInverseDegree.lean`): the degree is
    minus one.
@@ -40,7 +45,7 @@ composition is not being attributed to the packet.
 
 No arbitrary-player theorem deriving R0 from nonexistence is required.
 Strict inverse positivity supplies R0 for the approximating games.
-The proposed interface makes no claim for a nonnegative determinant and
+The interface makes no claim for a nonnegative determinant and
 does not resolve arbitrary finite-player quitting games.
 
 ## Reuse in remaining degree packets

@@ -930,12 +930,19 @@ Zero inverse entries are allowed. The separate R0 premise cannot be dropped:
 (`MathUE/LinearProgramming/Examples/CycleFourNonnegativeInverse.lean`) gives
 an invertible four-cycle matrix with nonnegative inverse and a nonzero
 homogeneous LCP solution.
-`finFour_exists_uniformEquilibriumPayoff_of_nonnegative_inverse`
-(`UniformEquilibrium/Diagnostics/Quitting/FinFourNonnegativeInverseCriterion.lean`)
+`exists_uniformEquilibriumPayoff_of_nonnegative_singletonInverse`
+(`UniformEquilibrium/Quitting/Classification/LCP/NonnegativeInverseCriterion.lean`)
 needs only negative determinant and nonnegative inverse of the raw singleton
-matrix. Its contradiction argument derives R0 from original-game
-nonexistence. This is a four-player result; the matrix degree computation
-it uses is dimension-independent.
+matrix, for every player count at least three. It obtains strictly positive
+inverses through literal reward-table approximation, applies the degree
+criterion there, and uses reward closure to select one fixed original target.
+`isR0Matrix_of_strictlyPositiveInverse`
+(`MathUE/LinearProgramming/PositiveInverseR0.lean`) supplies R0 for the
+approximating matrices; no arbitrary-player inference from nonexistence to
+R0 is assumed. The four-player theorem in
+`UniformEquilibrium/Diagnostics/Quitting/FinFourNonnegativeInverseCriterion.lean`
+is a specialization. That file also retains the separate four-player result
+for a singleton matrix that fails R0.
 
 `exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes`
 (`MathUE/LinearProgramming/NonnegativeInverseApproximation.lean`) approximates
@@ -2069,6 +2076,24 @@ supplies a gain of one for the paired rational example. Its mixed one-date
 profile nevertheless is exact terminal Nash, as proved by
 `CappedClockPairedFixtureTerminal.profile_exactTerminalNash`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureTerminal.lean`).
+
+`certificate_of_reward_close` and `exists_uniformEquilibriumPayoff_of_reward_close`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFixtureRobustness.lean`)
+preserve the weight-two certificate, and hence uniform-payoff existence,
+throughout the fixture's entrywise reward neighborhood of radius below one
+sixth. The same module excludes complete pure-clock exact equilibria and
+balanced singleton cycles on every principal restriction below radius one
+half. Exact singleton deletion and capped joint exit are excluded below
+radius one. Its fixed-profile robustness theorem gives only a terminal
+Nash error of twice the radius; the nearby uniform-payoff theorem uses the
+certificate and does not identify its payoff or profile with the fixture's.
+
+`AdaptiveChildCenterCappedClockObstruction.not_nonempty_cappedClockParentFutureJoinCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/AdaptiveChildCenterCappedClockObstruction.lean`)
+proves that every deletion of the existing adaptive-child center fails even
+the future/join system without the Never row. That table already has a proved
+uniform payoff. Thus failure of all these certificates is compatible with
+uniform equilibrium.
 
 `CappedClockParentFutureJoinCertificate` and
 `exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`

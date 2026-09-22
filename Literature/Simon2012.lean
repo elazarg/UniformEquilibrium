@@ -58,6 +58,7 @@ namespace Literature.Simon2012
 
 open Literature.Simon2007
 open Set Filter Matrix
+open Math.Topology.SimonViability.ExtendedOrbitData
 open scoped BigOperators ENNReal Topology
 
 noncomputable section
@@ -10129,6 +10130,26 @@ private def toMathTopologyExtendedOrbitData
     simpa only [Literature.Simon2007.ActiveSegment,
       Math.Topology.ActiveSegment] using hactive
 
+private theorem literatureExtendedOrbit_exists_tendsto_segmentStart_subsequence
+    {N : Type} [Fintype N] {J : Set (Payoff N × Payoff N)}
+    (hcompact : IsCompact J)
+    (orbit : ExtendedOrbitData (graphCorrespondence J))
+    (hcount : orbit.segmentCount = none) :
+    ∃ limit ∈ {orbit.point 0 0} ∪ Prod.snd '' J,
+      ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
+        Tendsto (fun rank => orbit.point (subsequence rank) 0)
+          atTop (nhds limit) := by
+  let genericOrbit := toMathTopologyExtendedOrbitData orbit
+  obtain ⟨limit, hlimit, subsequence, hsubsequence, htendsto⟩ :=
+    exists_tendsto_segmentStart_subsequence_of_compact_graph
+      hcompact genericOrbit (by
+        simpa only [genericOrbit, toMathTopologyExtendedOrbitData] using hcount)
+  refine ⟨limit, ?_, subsequence, hsubsequence, ?_⟩
+  · simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+      Math.Topology.SimonViability.graphCorrespondence, graphCorrespondence]
+      using hlimit
+  · simpa only [genericOrbit, toMathTopologyExtendedOrbitData] using htendsto
+
 private theorem literatureExtendedOrbit_potential_nextStart_le_point
     {X : Type} [TopologicalSpace X]
     {J : Literature.Simon2007.Correspondence X X}
@@ -10291,6 +10312,408 @@ private theorem ExtendedOrbitData.mul_extendedSegmentVariation_le_potentialDrop
             (literatureExtendedOrbit_potential_nextStart_le_point
               orbit potential hcontinuous hstep segment (hactive (segment + 1))
                 (min horizon (length - 1)) hminIndex) _
+
+/-- In the all-bounded-segments branch, every convergent subsequence of
+segment starts has a feasible limit.  The proof charges each complete segment
+to the decrease of distance from the feasible set, including infinite
+segments through their limiting stitch. -/
+private theorem feasible_of_tendsto_segmentStarts_of_all_segments_bounded
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ : ℝ)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hvariation : HasUnboundedExtendedVariation orbit)
+    (hallBounded : ∀ segment, ActiveSegment orbit.segmentCount segment →
+      HasBoundedSegmentVariation orbit segment)
+    (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
+    (limit : Payoff G.Player)
+    (htendsto : Tendsto (fun rank => orbit.point (subsequence rank) 0)
+      atTop (nhds limit)) :
+    Feasible G limit := by
+  classical
+  have hcount : orbit.segmentCount = none :=
+    segmentCount_eq_none_of_all_segments_bounded orbit hallBounded hvariation
+  have hactive : ∀ segment, ActiveSegment orbit.segmentCount segment := by
+    intro segment
+    simp [ActiveSegment, hcount]
+  let F : Set (Payoff G.Player) := {z | Feasible G z}
+  have hFcompact : IsCompact F := by
+    change IsCompact (convexHull ℝ (Set.range G.reward ∪ {0}))
+    exact ((Set.finite_range G.reward).union
+      (Set.finite_singleton (0 : Payoff G.Player))).isCompact_convexHull ℝ
+  have hFconvex : Convex ℝ F := by
+    change Convex ℝ (convexHull ℝ (Set.range G.reward ∪ {0}))
+    exact convex_convexHull ℝ (Set.range G.reward ∪ {0})
+  have hFnonempty : F.Nonempty := by
+    refine ⟨0, ?_⟩
+    exact subset_convexHull ℝ _ (by simp)
+  by_contra hlimit
+  have hlimitNotMem : limit ∉ F := by
+    simpa only [F, Set.mem_ofPred_eq] using hlimit
+  let potential : Payoff G.Player → ℝ :=
+    fun x => EuclideanInfDist x F
+  have hpotentialContinuous : Continuous potential := by
+    exact continuous_euclideanInfDist F
+  let gap : ℝ := potential limit
+  have hgapPositive : 0 < gap := by
+    have hclosed : IsClosed (WithLp.toLp 2 '' F) :=
+      (hFcompact.image (PiLp.continuous_toLp 2 _)).isClosed
+    have hnotImage : WithLp.toLp 2 limit ∉ WithLp.toLp 2 '' F := by
+      rintro ⟨z, hz, heq⟩
+      apply hlimitNotMem
+      have hzlimit : z = limit := congrArg WithLp.ofLp heq
+      simpa only [hzlimit] using hz
+    dsimp only [gap, potential]
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact (hclosed.notMem_iff_infDist_pos (hFnonempty.image _)).mp hnotImage
+  let carrier : Set (Payoff G.Player) :=
+    {orbit.point 0 0} ∪ Prod.snd '' Section4J G inverse cutoff R ε δ
+  have hcarrierCompact : IsCompact carrier := by
+    exact isCompact_singleton.union (hgraph.image continuous_snd)
+  let genericOrbit := toMathTopologyExtendedOrbitData orbit
+  have hpointCarrier : ∀ segment,
+      ActiveSegment orbit.segmentCount segment → ∀ index,
+      SegmentIndex (orbit.segmentLength segment) index →
+      orbit.point segment index ∈ carrier := by
+    intro segment hsegment index hindex
+    have hgeneric :=
+      Math.Topology.SimonViability.ExtendedOrbitData.point_mem_initial_union_snd_of_compact_graph
+        hgraph genericOrbit
+          segment (by
+            simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+              Literature.Simon2007.ActiveSegment,
+              Math.Topology.ActiveSegment] using hsegment)
+          index (by
+            simpa only [genericOrbit, toMathTopologyExtendedOrbitData,
+              Literature.Simon2007.SegmentIndex,
+              Math.Topology.SegmentIndex] using hindex)
+    simpa only [carrier, genericOrbit, toMathTopologyExtendedOrbitData,
+      Math.Topology.SimonViability.graphCorrespondence, graphCorrespondence]
+      using hgeneric
+  have hdistanceContinuous : Continuous
+      (fun pair : Payoff G.Player × Payoff G.Player =>
+        EuclideanDist pair.1 pair.2) := by
+    unfold EuclideanDist EuclideanNorm
+    fun_prop
+  obtain ⟨distanceBound, hdistanceBound⟩ :=
+    (hcarrierCompact.prod hFcompact).exists_bound_of_continuousOn
+      hdistanceContinuous.continuousOn
+  let D : ℝ := max 1 distanceBound
+  have hDPositive : 0 < D := lt_of_lt_of_le zero_lt_one (le_max_left _ _)
+  have hsourceTargetBound : ∀ segment index,
+      SegmentIndex (orbit.segmentLength segment) index → ∀ z, z ∈ F →
+      EuclideanDist (orbit.point segment index) z ≤ D := by
+    intro segment index hindex z hz
+    calc
+      EuclideanDist (orbit.point segment index) z ≤
+          |EuclideanDist (orbit.point segment index) z| := le_abs_self _
+      _ ≤ distanceBound := hdistanceBound (orbit.point segment index, z)
+        ⟨hpointCarrier segment (hactive segment) index hindex, hz⟩
+      _ ≤ D := le_max_right _ _
+  have hpotentialStep : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      potential (orbit.point segment (index + 1)) ≤
+        potential (orbit.point segment index) := by
+    intro segment index hsegment hindex
+    have hedge : (orbit.point segment index, orbit.point segment (index + 1)) ∈
+        Section4J G inverse cutoff R ε δ := by
+      simpa only [graphCorrespondence, Set.mem_ofPred_eq] using
+        orbit.step segment hsegment index hindex
+    rcases section4J_target_mem_lowerGlueFiber
+        G inverse cutoff R ε δ hedge with ⟨z, hz, t, heq⟩
+    have ht : (t : ℝ) ∈ Set.Icc 0 1 := t.property
+    have hline : orbit.point segment (index + 1) =
+        AffineMap.lineMap (orbit.point segment index) z (t : ℝ) := by
+      simpa only [AffineMap.lineMap_apply_module] using heq
+    rw [hline]
+    exact euclideanInfDist_lineMap_le_of_mem_compact_convex
+      F hFcompact hFconvex (orbit.point segment index) z hz ht
+  have hstartStep : ∀ segment,
+      potential (orbit.point (segment + 1) 0) ≤
+        potential (orbit.point segment 0) := by
+    intro segment
+    apply literatureExtendedOrbit_potential_nextStart_le_point orbit potential
+      hpotentialContinuous hpotentialStep segment (hactive (segment + 1)) 0
+    intro length hlength
+    exact orbit.segmentLengthPositive segment (hactive segment) length hlength
+  have hstartAntitone : Antitone
+      (fun segment => potential (orbit.point segment 0)) :=
+    antitone_nat_of_succ_le hstartStep
+  have hpotentialTendsto : Tendsto
+      (fun rank => potential (orbit.point (subsequence rank) 0))
+      atTop (nhds gap) := by
+    dsimp only [gap]
+    exact hpotentialContinuous.continuousAt.tendsto.comp htendsto
+  have hgapStart : ∀ segment,
+      gap ≤ potential (orbit.point segment 0) := by
+    intro segment
+    apply le_of_tendsto hpotentialTendsto
+    filter_upwards
+      [hsubsequence.tendsto_atTop.eventually (eventually_ge_atTop segment)]
+      with rank hrank
+    exact hstartAntitone hrank
+  have hgapPoint : ∀ segment index,
+      SegmentIndex (orbit.segmentLength segment) index →
+      gap ≤ potential (orbit.point segment index) := by
+    intro segment index hindex
+    exact (hgapStart (segment + 1)).trans
+      (literatureExtendedOrbit_potential_nextStart_le_point orbit potential
+        hpotentialContinuous hpotentialStep segment (hactive (segment + 1))
+          index hindex)
+  let constant : ℝ := gap / D
+  have hconstantPositive : 0 < constant := div_pos hgapPositive hDPositive
+  have hconstantD : constant * D = gap := by
+    dsimp only [constant]
+    field_simp [hDPositive.ne']
+  have hscaledEdge : ∀ segment index,
+      ActiveSegment orbit.segmentCount segment →
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+      constant * EuclideanDist
+          (orbit.point segment (index + 1)) (orbit.point segment index) ≤
+        potential (orbit.point segment index) -
+          potential (orbit.point segment (index + 1)) := by
+    intro segment index hsegment hindex
+    have hedge : (orbit.point segment index, orbit.point segment (index + 1)) ∈
+        Section4J G inverse cutoff R ε δ := by
+      simpa only [graphCorrespondence, Set.mem_ofPred_eq] using
+        orbit.step segment hsegment index hindex
+    rcases section4J_target_mem_lowerGlueFiber
+        G inverse cutoff R ε δ hedge with ⟨z, hz, t, heq⟩
+    have ht : (t : ℝ) ∈ Set.Icc 0 1 := t.property
+    have hline : orbit.point segment (index + 1) =
+        AffineMap.lineMap (orbit.point segment index) z (t : ℝ) := by
+      simpa only [AffineMap.lineMap_apply_module] using heq
+    have hcontraction :=
+      euclideanInfDist_lineMap_le_one_sub_mul_of_mem_compact_convex
+        F hFcompact hFconvex (orbit.point segment index) z hz ht
+    rw [← hline] at hcontraction
+    have hstepDistance :
+        EuclideanDist (orbit.point segment (index + 1))
+            (orbit.point segment index) =
+          (t : ℝ) * EuclideanDist (orbit.point segment index) z := by
+      rw [euclideanDist_comm, hline]
+      exact euclideanDist_lineMap_eq_mul _ _ ht.1
+    have hscaledTarget :
+        constant * EuclideanDist (orbit.point segment index) z ≤ gap := by
+      calc
+        constant * EuclideanDist (orbit.point segment index) z ≤
+            constant * D := mul_le_mul_of_nonneg_left
+          (hsourceTargetBound segment index (hindex.mono (Nat.le_add_right _ 1))
+            z hz) hconstantPositive.le
+        _ = gap := hconstantD
+    have hscaledStep : constant *
+        EuclideanDist (orbit.point segment (index + 1))
+          (orbit.point segment index) ≤
+        (t : ℝ) * potential (orbit.point segment index) := by
+      rw [hstepDistance]
+      calc
+        constant * ((t : ℝ) * EuclideanDist (orbit.point segment index) z) =
+            (t : ℝ) *
+              (constant * EuclideanDist (orbit.point segment index) z) := by ring
+        _ ≤ (t : ℝ) * gap :=
+          mul_le_mul_of_nonneg_left hscaledTarget ht.1
+        _ ≤ (t : ℝ) * potential (orbit.point segment index) :=
+          mul_le_mul_of_nonneg_left (hgapPoint segment index
+            (hindex.mono (Nat.le_add_right _ 1))) ht.1
+    nlinarith
+  obtain ⟨segments, horizon, hlargeRaw⟩ := hvariation
+    ((potential (orbit.point 0 0) - 0) / constant + 1)
+  have hlarge : (potential (orbit.point 0 0) - 0) / constant + 1 ≤
+      ∑ segment ∈ Finset.range segments,
+        extendedSegmentVariation orbit segment horizon := by
+    simpa only [extendedSegmentVariation] using hlargeRaw
+  have hscaledSum : constant *
+      (∑ segment ∈ Finset.range segments,
+        extendedSegmentVariation orbit segment horizon) ≤
+      potential (orbit.point 0 0) - potential (orbit.point segments 0) := by
+    rw [Finset.mul_sum]
+    calc
+      ∑ segment ∈ Finset.range segments,
+          constant * extendedSegmentVariation orbit segment horizon ≤
+        ∑ segment ∈ Finset.range segments,
+          (potential (orbit.point segment 0) -
+            potential (orbit.point (segment + 1) 0)) := by
+        apply Finset.sum_le_sum
+        intro segment _
+        exact
+          Literature.Simon2012.ExtendedOrbitData.mul_extendedSegmentVariation_le_potentialDrop
+            orbit hcount potential hpotentialContinuous constant hpotentialStep
+              hscaledEdge segment horizon
+      _ = potential (orbit.point 0 0) - potential (orbit.point segments 0) := by
+        rw [Finset.sum_range_sub']
+  have hpotentialNonneg : 0 ≤ potential (orbit.point segments 0) := by
+    dsimp only [potential]
+    rw [euclideanInfDist_eq_infDist_toLp]
+    exact Metric.infDist_nonneg
+  have hprefix :
+      (∑ segment ∈ Finset.range segments,
+        extendedSegmentVariation orbit segment horizon) ≤
+      (potential (orbit.point 0 0) - 0) / constant := by
+    apply (le_div_iff₀ hconstantPositive).2
+    simpa only [mul_comm] using
+      hscaledSum.trans (sub_le_sub_left hpotentialNonneg _)
+  exact (not_le_of_gt
+    (lt_add_one ((potential (orbit.point 0 0) - 0) / constant)))
+      (hlarge.trans hprefix)
+
+/-- If the actual Section 4 graph has an unbounded extended orbit, then it has
+an extended orbit of unbounded variation whose initial point is arbitrarily
+close to a feasible payoff.  The proof constructs it by truncation and keeps
+separate the unbounded-infinite-segment and infinitely-many-bounded-segments
+cases. -/
+theorem exists_nearFeasible_unbounded_section4J_tail
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ radius : ℝ)
+    (hradius : 0 < radius)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ tail : ExtendedOrbitData
+        (graphCorrespondence (Section4J G inverse cutoff R ε δ)),
+      HasUnboundedExtendedVariation tail ∧
+        NearFeasible G radius (tail.point 0 0) := by
+  classical
+  by_cases hunboundedSegment : ∃ segment,
+      ActiveSegment orbit.segmentCount segment ∧
+        ¬HasBoundedSegmentVariation orbit segment
+  · let first := Nat.find hunboundedSegment
+    have hfirst := Nat.find_spec hunboundedSegment
+    have hprefixBounded : ∀ segment, segment < first →
+        HasBoundedSegmentVariation orbit segment := by
+      intro segment hsegment
+      have hactive : ActiveSegment orbit.segmentCount segment := by
+        intro total htotal
+        exact hsegment.trans (hfirst.1 total htotal)
+      by_contra hnotBounded
+      exact Nat.find_min hunboundedSegment hsegment ⟨hactive, hnotBounded⟩
+    exact exists_nearFeasible_unbounded_section4J_tail_of_unbounded_segment
+      G inverse cutoff R ε δ radius hradius hgraph orbit hvariation first
+        hfirst.1 hprefixBounded hfirst.2
+  · push Not at hunboundedSegment
+    have hallBounded : ∀ segment,
+        ActiveSegment orbit.segmentCount segment →
+          HasBoundedSegmentVariation orbit segment := by
+      intro segment hactive
+      exact hunboundedSegment segment hactive
+    have hcount : orbit.segmentCount = none :=
+      segmentCount_eq_none_of_all_segments_bounded orbit hallBounded hvariation
+    have hactive : ∀ segment, ActiveSegment orbit.segmentCount segment := by
+      intro segment
+      simp [ActiveSegment, hcount]
+    obtain ⟨limit, _hlimitCarrier, subsequence, hsubsequence, htendsto⟩ :=
+      literatureExtendedOrbit_exists_tendsto_segmentStart_subsequence
+        hgraph orbit hcount
+    have hlimitFeasible :=
+      feasible_of_tendsto_segmentStarts_of_all_segments_bounded
+        G inverse cutoff R ε δ hgraph orbit hvariation hallBounded subsequence
+          hsubsequence limit htendsto
+    have hdistanceTendsto : Tendsto
+        (fun rank => EuclideanDist (orbit.point (subsequence rank) 0) limit)
+        atTop (nhds 0) := by
+      have hcontinuous : Continuous
+          (fun x : Payoff G.Player => EuclideanDist x limit) := by
+        unfold EuclideanDist EuclideanNorm
+        fun_prop
+      have hlimitZero : EuclideanDist limit limit = 0 := by
+        simp [EuclideanDist, EuclideanNorm]
+      rw [← hlimitZero]
+      exact hcontinuous.continuousAt.tendsto.comp htendsto
+    have hnearEventually : ∀ᶠ rank in atTop,
+        EuclideanDist (orbit.point (subsequence rank) 0) limit < radius :=
+      (tendsto_order.1 hdistanceTendsto).2 radius hradius
+    obtain ⟨rank, hrank⟩ := hnearEventually.exists
+    let tail := ExtendedOrbitData.dropSegments orbit (subsequence rank)
+      (hactive (subsequence rank))
+    refine ⟨tail, ?_, ?_⟩
+    · apply ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix
+        orbit (subsequence rank) (hactive (subsequence rank)) _ hvariation
+      intro segment _
+      exact hallBounded segment (hactive segment)
+    · refine ⟨limit, hlimitFeasible, ?_⟩
+      simpa only [tail, ExtendedOrbitData.dropSegments_point, zero_add,
+        Nat.add_zero] using hrank.le
+
+/-- Every feasible payoff lies in the coordinate cube determined by the
+paper's reward normalization. -/
+theorem feasible_mem_closedCoordinateCube_third
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    {z : Payoff G.Player} (hz : Feasible G z) :
+    z ∈ ClosedCoordinateCube (M / 3) := by
+  apply (convexHull_min ?_ (convex_closedCoordinateCube (M / 3))) hz
+  rintro x (hx | hx)
+  · obtain ⟨coalition, rfl⟩ := hx
+    intro player
+    exact abs_le.mp (hM.2.1 coalition player)
+  · subst x
+    intro player
+    simp only [Pi.zero_apply]
+    constructor <;> nlinarith [hM.1]
+
+/-- A Section 4 extended orbit starting sufficiently near the feasible set
+stays in the half-payoff box.  Radiality gives forward invariance, and the
+closed-set orbit principle handles both finite and infinite stitches. -/
+theorem extendedOrbitStaysIn_halfPayoffBox_of_nearFeasible
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    {M' d : ℝ} (inverse : PhiInverseData G M' d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ radius : ℝ)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hnear : NearFeasible G radius (orbit.point 0 0))
+    (hradius : radius ≤ M / 6) :
+    ExtendedOrbitStaysIn orbit (ClosedCoordinateCube (M / 2)) := by
+  have hstart : orbit.point 0 0 ∈ ClosedCoordinateCube (M / 2) := by
+    obtain ⟨z, hz, hdistance⟩ := hnear
+    have hzbox := feasible_mem_closedCoordinateCube_third G M hM hz
+    intro player
+    have hcoordinate :=
+      (abs_coordinate_sub_le_euclideanDist (orbit.point 0 0) z player).trans
+        (hdistance.trans hradius)
+    obtain ⟨hdifferenceLower, hdifferenceUpper⟩ := abs_le.mp hcoordinate
+    constructor <;> nlinarith [(hzbox player).1, (hzbox player).2]
+  apply extendedOrbitStaysIn_of_closed_forwardInvariant orbit
+    (ClosedCoordinateCube (M / 2)) (isClosed_closedCoordinateCube (M / 2))
+    _ hstart
+  intro x hx y hy
+  rcases section4J_target_mem_lowerGlueFiber
+      G inverse cutoff R ε δ hy with ⟨z, hz, t, heq⟩
+  have hzbox := feasible_mem_closedCoordinateCube_third G M hM hz
+  have hzhalf : z ∈ ClosedCoordinateCube (M / 2) := by
+    intro player
+    constructor <;> nlinarith [hM.1, (hzbox player).1, (hzbox player).2]
+  have hline :=
+    (convex_closedCoordinateCube (M / 2)).lineMap_mem hx hzhalf t.property
+  have hyLine : y = AffineMap.lineMap x z (t : ℝ) := by
+    simpa only [AffineMap.lineMap_apply_module] using heq
+  simpa only [hyLine] using hline
+
+/-- An unbounded extended orbit in the compact Section 4 graph yields an
+unbounded extended orbit entirely contained in the half-payoff box, with its
+initial point still witnessed near the feasible set. -/
+theorem exists_unbounded_section4J_tail_in_halfPayoffBox
+    (G : QuittingGame) (M : ℝ) (hM : IsSimonPayoffScale G M)
+    {M' d : ℝ} (inverse : PhiInverseData G M' d)
+    (cutoff : Payoff G.Player → UnitInterval) (R ε δ radius : ℝ)
+    (hradiusPositive : 0 < radius) (hradius : radius ≤ M / 6)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ tail : ExtendedOrbitData
+        (graphCorrespondence (Section4J G inverse cutoff R ε δ)),
+      HasUnboundedExtendedVariation tail ∧
+        NearFeasible G radius (tail.point 0 0) ∧
+          ExtendedOrbitStaysIn tail (ClosedCoordinateCube (M / 2)) := by
+  obtain ⟨tail, htailVariation, htailNear⟩ :=
+    exists_nearFeasible_unbounded_section4J_tail
+      G inverse cutoff R ε δ radius hradiusPositive hgraph orbit hvariation
+  refine ⟨tail, htailVariation, htailNear, ?_⟩
+  exact extendedOrbitStaysIn_halfPayoffBox_of_nearFeasible
+    G M hM inverse cutoff R ε δ radius tail htailNear hradius
 
 /-- In the lower-glue branch of Property (7), the singleton terminal reward
 in the requested truncated piece is already a full escape target. -/
@@ -12483,8 +12906,10 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
 /--
 Theorem 4.1.  The perturbation transfer to the original reward, the exclusion
 of the lower glue on the half payoff box, and the extended-orbit/equilibrium
-implication of Theorem 2.3 are proved separately.  The cluster-point-tail
-localization and the assembly through Lemma 4.5 remain incomplete.
+implication of Theorem 2.3 are proved separately.  Feasible-cluster tail
+localization and whole-tail half-payoff-box containment are also proved below
+the Section 4 graph construction.  The remaining graph-to-orbit assembly,
+including the open part of Lemma 4.5, is incomplete.
 -/
 theorem theorem4_1 (hquestion : Question1Affirmative) :
     ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
