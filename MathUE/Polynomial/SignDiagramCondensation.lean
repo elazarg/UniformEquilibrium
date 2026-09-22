@@ -56,7 +56,7 @@ theorem RealizesFrom.condense {lower : Option ℝ} {cuts : List ℝ}
                   List.Forall₂.cons hleft (List.Forall₂.cons hpoint hnew.2)⟩
               by_cases hz : 0 ∈ point
               · refine ⟨c :: newCuts, ?_, ?_⟩
-                · simpa only [condenseRows, if_pos hz] using haug
+                · simpa only [condenseRows, ite_eq_left hz] using haug
                 · intro x
                   have hroot := hpoint.contains_zero_iff.mp hz
                   simp only [List.mem_cons, hmem]
@@ -73,7 +73,7 @@ theorem RealizesFrom.condense {lower : Option ℝ} {cuts : List ℝ}
                   cases heq : condenseRows tail with
                   | nil => simp only [heq, List.length_nil] at hlength; omega
                   | cons first rest =>
-                      simpa only [condenseRows, if_neg hz, heq, List.drop_succ_cons,
+                      simpa only [condenseRows, ite_eq_right hz, heq, List.drop_succ_cons,
                         List.drop_zero, eraseFirstCutRows] using herase
                 · intro x
                   rw [hmem]
@@ -137,13 +137,13 @@ theorem map_fst_condenseTaggedRows :
   | left :: point :: rest => by
       rw [condenseTaggedRows]
       by_cases hzero : 0 ∈ point.1
-      · simp only [if_pos hzero, List.map_cons]
+      · simp only [ite_eq_left hzero, List.map_cons]
         rw [map_fst_condenseTaggedRows rest]
         change _ = if 0 ∈ point.1 then _ else _
-        rw [if_pos hzero]
-      · simp only [if_neg hzero, List.map_cons, List.map_drop]
+        rw [ite_eq_left hzero]
+      · simp only [ite_eq_right hzero, List.map_cons, List.map_drop]
         rw [map_fst_condenseTaggedRows rest]
         change _ = if 0 ∈ point.1 then _ else _
-        rw [if_neg hzero]
+        rw [ite_eq_right hzero]
 
 end MathUE.OrderedRealSignDiagram

@@ -21,7 +21,7 @@ noncomputable section
 namespace GameTheory
 namespace IdealSingletonBlockApproximation
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Filter
 open QuittingSureSetOwnerRepair
 open QuittingLCPClassification

@@ -18,7 +18,7 @@ restart. The alternatives are inclusive.
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
   QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

@@ -12,7 +12,7 @@ import MathUE.ChargedPathBudgetCounterexamples
 /-!
 # The repo's canonical one-stage operator reproduces the quit-bonus self-loop
 
-`Math.ChargedPathBudget.QuitBonus` proves, over the explicit two-coordinate
+`Maths.ChargedPathBudget.QuitBonus` proves, over the explicit two-coordinate
 table `wFirst a = (a, 0)`, `wSecond = (1, -1)`, `wBoth = (0, 1)` indexed by
 `Fin 2` and a hand-rolled `oneStageUpdate`, that the row `x = (1/2, 0)` fixes
 the value vector `v = (a, 0)` exactly, giving a positive-charge self-loop and
@@ -149,18 +149,18 @@ theorem oneStageNext_reward_isSelfLoop (a : ℝ) :
 
 /-- The relabelling sending the first player (`false`) to coordinate `0` and
 the second player (`true`) to coordinate `1`, matching the indexing of
-`Math.ChargedPathBudget.QuitBonus`. -/
+`Maths.ChargedPathBudget.QuitBonus`. -/
 def finOfBool : Bool → Fin 2 := fun b => if b then 1 else 0
 
 /-- The calibrating value vector here is exactly `QuitBonus.val`, reindexed. -/
 theorem val_eq_quitBonus_val (a : ℝ) (i : Bool) :
-    val a i = Math.ChargedPathBudget.QuitBonus.val a (finOfBool i) := by
-  cases i <;> simp [val, finOfBool, Math.ChargedPathBudget.QuitBonus.val]
+    val a i = Maths.ChargedPathBudget.QuitBonus.val a (finOfBool i) := by
+  cases i <;> simp [val, finOfBool, Maths.ChargedPathBudget.QuitBonus.val]
 
 /-- The calibrating row here is exactly `QuitBonus.row`, reindexed. -/
 theorem row_eq_quitBonus_row (i : Bool) :
-    row i = Math.ChargedPathBudget.QuitBonus.row (finOfBool i) := by
-  cases i <;> simp [row, finOfBool, Math.ChargedPathBudget.QuitBonus.row]
+    row i = Maths.ChargedPathBudget.QuitBonus.row (finOfBool i) := by
+  cases i <;> simp [row, finOfBool, Maths.ChargedPathBudget.QuitBonus.row]
 
 /-! ## No bounded potential for the repo-operator relation -/
 
@@ -182,7 +182,7 @@ theorem quitCharge_pos : 0 < quitCharge := by rw [quitCharge_eq]; norm_num
 quitting charge. By `val_eq_quitBonus_val`, `row_eq_quitBonus_row` and
 `quitCharge_eq` (which matches `QuitBonus.quitCharge_row`), this is the same
 edge as `QuitBonus.relation a`, reindexed by `finOfBool`. -/
-def relation (a : ℝ) : Math.ChargedPathBudget.ChargedRelation (Bool → ℝ) Unit where
+def relation (a : ℝ) : Maths.ChargedPathBudget.ChargedRelation (Bool → ℝ) Unit where
   src _ := val a
   tgt _ := val a
   charge _ := quitCharge

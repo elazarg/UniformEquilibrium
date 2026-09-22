@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace QuittingCutoffOneMixedActual
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 -- BEGIN GENERATED CUTOFF_ONE_MIXED_DATA
 -- checked finite table

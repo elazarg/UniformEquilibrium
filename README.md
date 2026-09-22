@@ -173,11 +173,13 @@ The whole integrated development, including `MathUE`, is available through:
 import UniformEquilibrium
 ```
 
-The game-independent and featured-theorem surfaces can also be loaded directly:
+The game-independent, featured-theorem, and paper-audit surfaces can also be
+loaded directly:
 
 ```lean
 import MathUE
 import Theorems
+import Literature
 ```
 
 These umbrellas are project-wide build and navigation boundaries, not stable
@@ -188,18 +190,20 @@ small.
 
 Project Lean sources reject `sorry`, `admit`, explicit axiom declarations,
 `native_decide`, `implemented_by`, unsafe declarations, and partial
-definitions. They also reject project-owned `set_option` commands and global
-linter weakening. Every project library builds with warnings as errors. Open
-claims remain definitions of propositions until a kernel-checked proof is
-available.
+definitions. Literature source audits are the sole `sorry` exception, and
+their library disables only the dedicated `warn.sorry` diagnostic. Project
+sources reject `admit`, project-owned `set_option` commands, and global linter
+weakening in every lane. Every library keeps warnings as errors. Open claims
+outside Literature remain definitions of propositions until a kernel-checked
+proof is available.
 
-The generated `AxiomAudit.lean` imports every project-owned Lean module and
-checks every project-owned declaration transitively. It permits only the
-standard `propext`, `Quot.sound`, and `Classical.choice` axioms. As a default
-Lake target, it covers orphaned Research and experiment modules as well as the
-main umbrellas.
+The generated `AxiomAudit.lean` imports every `MathUE` and
+`UniformEquilibrium` module and checks their declarations transitively. It
+permits only the standard `propext`, `Quot.sound`, and `Classical.choice`
+axioms and runs as a default Lake target. `Research`, `Theorems`,
+`Experiments`, and `Literature` are outside its audit scope.
 
-Lean 4.32.2 is the required toolchain. Lean 4.32.0 is excluded because of a
+Lean 4.34.0 is the required toolchain. Lean 4.32.0 is excluded because of a
 kernel soundness bug.
 
 From a fresh checkout:
@@ -214,8 +218,9 @@ python scripts/check_trust.py
 python scripts/check_docs.py
 ```
 
-`lake build` performs the Lean compilation check. `check_trust.py` is a lexical
-escape-hatch scan and is not a substitute for compilation. The static
+`lake build` compiles every library, including all complete and partial
+Literature source audits. `check_trust.py` is a lexical escape-hatch scan and
+is not a substitute for compilation. The static
 duplicate check rejects long exact Research copies of maintained MathUE or
 UniformEquilibrium declaration bodies; it is a narrow ownership ratchet, not a
 semantic proof-equivalence test. Do not run

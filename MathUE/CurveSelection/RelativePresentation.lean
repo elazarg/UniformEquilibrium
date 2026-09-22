@@ -57,6 +57,7 @@ theorem presentationPointRingHom_apply
     presentationPointRingHom P f z hrelation s =
       MvPolynomial.eval₂ f z (P.σ s) := by
   simp [presentationPointRingHom]
+  rfl
 
 theorem eval₂_eq_zero_of_mem_presentationKer
     {R S T ι κ : Type*}
@@ -187,7 +188,7 @@ theorem continuous_presentationSectionMap
         (Polynomial ℝ) S ι κ)
     (t : ℝ) (coordinate : ν → S) :
     Continuous (presentationSectionMap P t coordinate) := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   rw [continuous_pi_iff]
   intro k
   exact
@@ -418,7 +419,7 @@ theorem isLocalMaxOn_presentationFiber
               (specializeParameterPolynomial t
                 (P.relation j))}
       x := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   let fiber : Set (ι → ℝ) :=
     {z |
       ∀ j : κ,
@@ -744,7 +745,7 @@ theorem exists_multipliers_of_localExtrOn_presentationFiber
                 (MvPolynomial.pderiv k
                   (P.relation j)) := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   let relation : κ → MvPolynomial ι ℝ :=
     fun j =>
       specializeParameterPolynomial t (P.relation j)

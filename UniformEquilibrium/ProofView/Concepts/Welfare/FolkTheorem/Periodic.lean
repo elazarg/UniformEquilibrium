@@ -233,7 +233,7 @@ theorem exists_common_discountFactor_threshold_of_finite
     ∃ δ₀ : ℝ, 0 ≤ δ₀ ∧ δ₀ < 1 ∧
       ∀ δ : ℝ, δ₀ < δ → δ < 1 → ∀ a : α, P a δ := by
   classical
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   choose d hd0 hd1 hdP using hP
   by_cases hne : (Finset.univ : Finset α).Nonempty
   · let δ₀ : ℝ := (Finset.univ : Finset α).sup' hne d
@@ -329,7 +329,7 @@ theorem exists_discountFactor_threshold_periodic_payoff_close_feasibleSet
                   (fun time ↦ cycle (Fin.ofNat n time)) 0 who -
                 value who| < ε := by
   classical
-  letI : Nonempty (Profile G) := inferInstance
+  let : Nonempty (Profile G) := inferInstance
   obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
     (fun profile : Profile G ↦ ‖G.payoffVector profile‖)
   have hbound : ∀ profile : Profile G, ‖G.payoffVector profile‖ ≤ bound := by
@@ -341,7 +341,7 @@ theorem exists_discountFactor_threshold_periodic_payoff_close_feasibleSet
   obtain ⟨n, hn, happrox⟩ :=
     MathUE.exists_uniformAverage_close_of_mem_convexHull_range
       G.payoffVector hbound hbound0 (half_pos hε)
-  letI : NeZero n := ⟨Nat.ne_of_gt hn⟩
+  let : NeZero n := ⟨Nat.ne_of_gt hn⟩
   let Cycle := Fin n → Profile G
   let Index := Cycle × ι
   have hthreshold : ∀ index : Index,

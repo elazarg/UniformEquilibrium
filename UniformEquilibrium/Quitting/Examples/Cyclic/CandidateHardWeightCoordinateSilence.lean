@@ -42,7 +42,7 @@ namespace GameTheory
 
 namespace QuittingCandidateHardWeightCoordinateSilence
 
-open Filter Math.Probability Math.PMFProduct QuittingCandidateHardWeightCycle
+open Filter _root_.Math.Probability Math.PMFProduct QuittingCandidateHardWeightCycle
 
 /-! ## Reward-table bounds for this weight -/
 
@@ -89,10 +89,10 @@ theorem quittingRootAbsorbingContribution_le_of
       quittingRootPayoff reward (0 : Payoff ι) action who ≤
         absorbingBound action := by
     by_cases hquit : (quittingQuitters action).Nonempty
-    · simp only [quittingRootPayoff, dif_pos hquit, absorbingBound, if_pos hquit]
+    · simp only [quittingRootPayoff, dite_eq_left hquit, absorbingBound, ite_eq_left hquit]
       exact hreward _
-    · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply, absorbingBound,
-        if_neg hquit, le_refl]
+    · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply, absorbingBound,
+        ite_eq_right hquit, le_refl]
   have hupper :
       quittingRootAbsorbingContribution reward root who ≤
         expect (pmfPi root) absorbingBound := by
@@ -124,10 +124,10 @@ theorem le_quittingRootAbsorbingContribution_of
       absorbingBound action ≤
         quittingRootPayoff reward (0 : Payoff ι) action who := by
     by_cases hquit : (quittingQuitters action).Nonempty
-    · simp only [quittingRootPayoff, dif_pos hquit, absorbingBound, if_pos hquit]
+    · simp only [quittingRootPayoff, dite_eq_left hquit, absorbingBound, ite_eq_left hquit]
       exact hreward _
-    · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply, absorbingBound,
-        if_neg hquit, le_refl]
+    · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply, absorbingBound,
+        ite_eq_right hquit, le_refl]
   have hlower :
       expect (pmfPi root) absorbingBound ≤
         quittingRootAbsorbingContribution reward root who := by
@@ -273,7 +273,7 @@ theorem quitPayoff_true (α : ℝ) (tail : Payoff Bool) (root : Bool → PMF Boo
       (root false false).toReal := by
   unfold quittingRootQuitPayoff quittingRootExpectedPayoff
   rw [Math.PMFProduct.expect_pmfPi_bool]
-  simp only [Function.update_apply, if_true, Bool.false_eq_true, if_false]
+  simp only [Function.update_apply, ite_true, Bool.false_eq_true, ite_false]
   simp only [expect_pure]
   rw [expect_eq_sum, Fintype.sum_bool]
   simp +decide [quittingRootPayoff, reward]

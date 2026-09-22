@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Four-player unbounded exact-block hazard capacity in the canonical reward
 box gives a uniform-equilibrium payoff. -/

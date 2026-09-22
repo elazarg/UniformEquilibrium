@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Set Math.Probability
+open Set _root_.Math.Probability
 
 universe uPlayer uChild
 
@@ -64,7 +64,7 @@ theorem isFiniteChildTargetTransportable_iff_lottery
     obtain ⟨Index, finiteIndex, weight, value,
         hweightNonneg, hweightSum, hvalue, hsum⟩ :=
       mem_convexHull_iff_exists_fintype.mp feasible
-    letI : Fintype Index := finiteIndex
+    let : Fintype Index := finiteIndex
     choose child hchild using hvalue
     let indexLaw : PMF Index :=
       PMF.ofFintype
@@ -86,7 +86,7 @@ theorem isFiniteChildTargetTransportable_iff_lottery
     simpa [expect_eq_sum, hindexLaw, hchild,
       Pi.smul_apply, smul_eq_mul] using hcoordinate
   · rintro ⟨law, hlaw⟩
-    letI : Fintype Child := Fintype.ofFinite Child
+    let : Fintype Child := Fintype.ofFinite Child
     apply mem_convexHull_of_exists_fintype
       (fun child => (law child).toReal) childTarget
     · exact fun _ => ENNReal.toReal_nonneg

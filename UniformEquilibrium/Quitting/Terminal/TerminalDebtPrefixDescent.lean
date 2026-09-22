@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability QuittingBoundaryHolonomy
+open _root_.Math.Probability QuittingBoundaryHolonomy
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

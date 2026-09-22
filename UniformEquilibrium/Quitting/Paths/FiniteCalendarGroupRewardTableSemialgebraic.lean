@@ -125,14 +125,14 @@ theorem isSemialgebraic_quittingRewardTables_rawOrderedPairGroupExclusion :
             (∅ : Set (Fin ((Fintype.card (QuittingRewardTableVariable (Fin n)) + 1) +
               Fintype.card (QuittingFiniteCalendarVariable (Fin n) deadline)) → ℝ))) using 1
         ext point
-        simp only [Set.mem_setOf_eq, hne, false_and, Set.mem_empty_iff_false])
+        simp only [Set.mem_ofPred_eq, hne, false_and, Set.mem_empty_iff_false])
   have hadmissible :=
     (isSemialgebraic_quittingFiniteCalendarCoordinateSimplex coordinates).preimage_coordinates
       (Fin.natAdd (Fintype.card (QuittingRewardTableVariable (Fin n)) + 1))
   have hresult := (hadmissible.compl.union hpairs).forall_last_coordinates
   convert hresult using 1
   ext point
-  simp only [Set.mem_setOf_eq, HasQuittingFiniteCalendarRawOrderedPairGroupExclusion]
+  simp only [Set.mem_ofPred_eq, HasQuittingFiniteCalendarRawOrderedPairGroupExclusion]
   rw [← forall_quittingFiniteCalendarCoordinates_iff
     (quittingRewardTableFromCoordinates (point ∘ Fin.castAdd 1)) deadline
       (fun value => ∃ first second : Fin n, first ≠ second ∧
@@ -144,7 +144,7 @@ theorem isSemialgebraic_quittingRewardTables_rawOrderedPairGroupExclusion :
               (quittingSingletonTerminal second) second) ≤ 0)]
   apply forall_congr'
   intro calendar
-  simp only [Set.mem_setOf_eq, Set.mem_union, Set.mem_compl_iff,
+  simp only [Set.mem_ofPred_eq, Set.mem_union, Set.mem_compl_iff,
     Finset.mem_univ, true_and, eval_quittingFiniteCalendarOrderedPairPolynomial_parameterPoint,
     Function.comp_def, Fin.append_right]
   exact imp_iff_not_or
@@ -166,9 +166,9 @@ theorem isSemialgebraic_quittingRewardTables_rawNonconcentratedGroupExclusion
   have hresult := hbounded.exists_last_coordinates
   convert hresult using 1
   ext table
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   rw [exists_finiteCalendarRawNonconcentratedGroupExclusion_iff_orderedPair]
-  simp only [Set.mem_setOf_eq, Set.mem_inter_iff, parameter, MvPolynomial.eval_X,
+  simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, parameter, MvPolynomial.eval_X,
     map_sub, MvPolynomial.eval_C, Fin.append_right, Function.comp_def, Fin.append_left,
     sub_nonneg]
   constructor

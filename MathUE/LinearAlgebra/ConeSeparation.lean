@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.LinearAlgebra.FourierMotzkin
+import Maths.LinearProgramming.FourierMotzkin
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import Mathlib.Analysis.InnerProductSpace.Projection.Minimal
@@ -31,6 +31,8 @@ open Finset BigOperators
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 
 /-- Rows used to encode equality with a conic combination.  The two Boolean
 rows impose the two orientations of each equality; the final rows impose
@@ -301,7 +303,7 @@ theorem euclideanConicSpan_isClosed {d m : ℕ}
     ext x
     constructor
     · rintro ⟨α, hα, hαx⟩
-      simp only [D, Set.mem_iInter, Set.mem_setOf_eq]
+      simp only [D, Set.mem_iInter, Set.mem_ofPred_eq]
       intro h hh
       calc
         0 ≤ ∑ j, α j * (∑ i, h i * A i j) :=
@@ -321,7 +323,7 @@ theorem euclideanConicSpan_isClosed {d m : ℕ}
       obtain ⟨h, _, hhA, hhx⟩ :=
         exists_euclideanUnit_conicSeparator A x hnot
       have := hx
-      simp only [D, Set.mem_iInter, Set.mem_setOf_eq] at this
+      simp only [D, Set.mem_iInter, Set.mem_ofPred_eq] at this
       exact (not_lt_of_ge (this h hhA)) hhx
   rw [hCD]
   exact hDclosed

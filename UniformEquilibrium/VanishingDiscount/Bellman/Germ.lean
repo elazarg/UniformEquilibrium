@@ -24,7 +24,7 @@ analytic curve selection for the selected polynomial sign cell.
 
 noncomputable section
 
-open Math Set
+open _root_.Math Set
 
 namespace GameTheory
 namespace StochasticGame

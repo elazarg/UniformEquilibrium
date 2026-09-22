@@ -1,15 +1,15 @@
 # Design: directed transport and max-affine transport graphs
 
-The integrated generic interface is exported by `MathUE/DirectedTransport.lean`.
-`MathUE/DirectedTransport/Basic.lean` owns the computational walk/transport
-core; the dedicated submodules own exact, categorical, order-theoretic,
-additive, polyhedral, and max-affine extensions.  Game-semantic consumers live
+The integrated generic interface is supplied by the pinned `multitubes`
+dependency. `Maths.Multitubes.Basic` owns the computational walk/transport
+core; its dedicated submodules own exact, categorical, order-theoretic,
+additive, polyhedral, and max-affine extensions. Game-semantic consumers live
 under `UniformEquilibrium/`.
 
 Status: Layers 0 and 1 (milestones M0 and M1) are implemented in
-`MathUE/DirectedTransport/Basic.lean` and
-`MathUE/DirectedTransport/MaxAffine/Basic.lean`, with the T6a/T6b duality
-regimes in `MathUE/DirectedTransport/MaxAffine/Sections.lean`. Each stage below
+`Maths.Multitubes.Basic` and
+`Maths.Multitubes.MaxAffine.Basic`, with the T6a/T6b duality
+regimes in `Maths.Multitubes.MaxAffine.Sections`. Each stage below
 is marked implemented, staged, or refuted.
 
 ## The object, in one sentence
@@ -25,10 +25,10 @@ equal:
 
 | Module | Reading inside the transport theory |
 | --- | --- |
-| `MathUE/DirectedTransport/Additive/Exact.lean` | translation-valued transport on one fiber; cycle sums are holonomy; exact data is a trivialization |
-| `MathUE/DirectedTransport/Additive/Potentials.lean` | lax sections (subsolutions) for ordered translation transport |
-| `MathUE/TransferSummaryMonoid.lean` | the label algebra: affine and max-affine endomorphism composition |
-| `MathUE/InverseCoordinateRecurrence.lean` | conjugation of one-dimensional transport inside a projective-linear action |
+| `Maths.Multitubes.Additive.Exact` | translation-valued transport on one fiber; cycle sums are holonomy; exact data is a trivialization |
+| `Maths.Multitubes.Additive.Potentials` | lax sections (subsolutions) for ordered translation transport |
+| `Maths.Recursion.TransferSummary` | the label algebra: affine and max-affine endomorphism composition |
+| `Maths.Recursion.InverseCoordinate` | conjugation of one-dimensional transport inside a projective-linear action |
 | `MathUE/IndependenceModelValuation.lean` | leading-order degeneration of a hazard-parameterized transport family |
 
 The vertex-indexed generality is not decoration.  The quitting frontier's
@@ -44,17 +44,17 @@ the hazards vanish.
 
 ## Graph carrier and two semantic layers
 
-### Graph layer — `MathUE/EdgeGraph.lean`
+### Graph layer — `Maths.Graph.EdgeGraph`
 
 The graph carrier and finite typed-walk calculus live here: explicit edge
 identities, chronological edge lists, endpoint facts, concatenation, edge
 multiplicities, and splitting and splicing at visited vertices. This layer has
 no edge labels, transport, charges, or discrepancy.
 
-### Layer 0 — `MathUE/DirectedTransport/Basic.lean`
+### Layer 0 — `Maths.Multitubes.Basic`
 
 Deliberately small; no category-theory library.  Data over
-`Math.EdgeGraph V E`:
+`Maths.EdgeGraph V E`:
 
 ```
 Fiber   : V → Type*
@@ -78,7 +78,7 @@ Definitions:
 
 Theorems (implemented, all by walk induction):
 
-- `walkMap_append`, `walkMap` vs `Math.CycleCoboundary.transport` when all
+- `walkMap_append`, `walkMap` vs `Maths.transport` when all
   fibers are equal (definitional bridge);
 - sections transport exactly: `walkMap walk (s start) = s finish`;
 - lax sections transport laxly (monotone edge maps):
@@ -87,14 +87,14 @@ Theorems (implemented, all by walk induction):
   marks; a lax section forces every closed-walk holonomy to have `s base` as
   a pre-fixed point;
 - for one common fiber and labels acting through a monoid, `walkMap` is the
-  action of `Math.CycleCoboundary.walkLabel` (this is `transport_eq_smul`,
+  action of `Maths.walkLabel` (this is `transport_eq_smul`,
   re-exported rather than reproved).
 
 Layer 0's job is vocabulary plus the four or five induction lemmas that every
 specialization would otherwise reprove.  It should stay under a few hundred
 lines.
 
-### Layer 1 — `MathUE/DirectedTransport/MaxAffine/Basic.lean`
+### Layer 1 — `Maths.Multitubes.MaxAffine.Basic`
 
 The first useful specialization: one common fiber `ℝ`, edge maps monotone
 max-affine.  This is where quantitative content lives.
@@ -128,14 +128,14 @@ decisions:
 
 Embeddings and identifications (T1, implemented):
 
-- `Math.TransferSummary.AffineSummary` at floor `⊥` (a monoid homomorphism)
-  and `Math.TransferSummary.MaxAffineSummary` at coerced floors, both
+- `Maths.TransferSummary.AffineSummary` at floor `⊥` (a monoid homomorphism)
+  and `Maths.TransferSummary.MaxAffineSummary` at coerced floors, both
   action-preserving;
 - the `MulAction` of nonnegative-slope labels on `ℝ`, so Layer 0's `walkMap` and
-  `Math.CycleCoboundary.walkLabel` agree here;
+  `Maths.walkLabel` agree here;
 - the identification tying the two representations together: the transfer
   matrices of
-  `Math.InverseCoordinate` assemble into a monoid homomorphism
+  `Maths.InverseCoordinate` assemble into a monoid homomorphism
   `AffineSummary →* Matrix (Fin 2) (Fin 2) ℝ` (upper-triangular image), whose
   composition law is `affineTransferMatrix_mul`; this ties the matrix
   representation to the summary monoid instead of leaving them parallel.
@@ -162,9 +162,9 @@ holonomy (φ start) ≤ φ finish + Σᵢ Wᵢ · max 0 (defect φ eᵢ)
 
 by induction from the one-sided Lipschitz estimate
 `apply f (x + d) ≤ apply f x + slope * d` for `0 ≤ d`.  At all slopes `1`
-this is `Math.MaxPlusPotential.sum_defect_eq` weakened to an inequality; at
+this is `Maths.MaxPlusPotential.sum_defect_eq` weakened to an inequality; at
 reflected labels it is the survival-weighted accounting of
-`Math.TransferSummary.reflectedIter_eq_sup'` read as a bound.  This is the
+`Maths.TransferSummary.reflectedIter_eq_sup'` read as a bound.  This is the
 checkable content of "the inequalities live in different fibers and do not
 telescope additively": they telescope with slope-product weights.
 
@@ -181,11 +181,11 @@ generalization of "cycle weight ≤ 0".
 **T5 — quantitative obstruction (implemented).**  If a cycle's holonomy
 satisfies `holonomy x ≥ x + γ` at `x = φ base`, some edge has
 `defect φ e ≥ γ / (Σᵢ Wᵢ)`.  At slopes `1` this is
-`Math.MaxPlusPotential.exists_edge_defect_ge`.  T4 identifies when the
+`Maths.MaxPlusPotential.exists_edge_defect_ge`.  T4 identifies when the
 hypothesis holds at every `x`, making the obstruction candidate-free.
 
 **T6 — strong duality (a and b implemented in
-`MathUE/DirectedTransport/MaxAffine/Sections.lean`).** Does "every cycle
+`Maths.Multitubes.MaxAffine.Sections`).** Does "every cycle
 holonomy has a pre-fixed point" give a lax section?
 
   a. *Slope 1* (implemented; floors may be `⊥` or finite): a lax section
@@ -211,13 +211,13 @@ holonomy has a pre-fixed point" give a lax section?
      `shift_e + slope_e · φ(source e) ≤ φ(target e)`, a finite linear
      system in `φ` whatever the slope signs, so existence is governed by
      the Farkas alternative in
-     `MathUE/DirectedTransport/FiniteInequality/Basic.lean`: a lax section
+     `Maths.Multitubes.FiniteInequality.Basic`: a lax section
      exists iff no nonnegative balanced combination of the rows is infeasible. At
      nonnegative slopes the certificate reads as a generalized-flow
      (gain-flow) certificate; the classical positive cycle is the
      affine-only case at unit slope product, and floor rows enter for
      expanding cycles.  (Implemented in
-     `MathUE/DirectedTransport/MaxAffine/Farkas.lean`: the counterexample and
+     `Maths.Multitubes.MaxAffine.Farkas`: the counterexample and
      the Farkas instantiation.) The spectral reading —
      min-max function theory (Gunawardena, Discrete Event Dynamic Systems 4
      (1994)), topical-map Perron–Frobenius (Gaubert–Gunawardena, Trans.
@@ -226,20 +226,20 @@ holonomy has a pre-fixed point" give a lax section?
 
 **T7 — periodic certificates (implemented, bridge).**  A fixed point of a
 cycle's holonomy is a solution of that cycle's cyclic system; bridge to
-`Math.CyclicMaxAffine.CyclicSolution`, whose equations
+`Maths.CyclicMaxAffine.CyclicSolution`, whose equations
 `C k = max (1 - p k) (q k * C (k + 1) + p k)` are the labels
 `⟨↑(1 - p k), p k, q k⟩` read around a cycle, and whose survival-weighted
 bound is T2 on that cycle.
 
 **Specializations to recover as theorems**: translation labels recover
-`Math.MaxPlusPotential.IsPotential` and its duality; their equality case
-recovers `Math.CycleCoboundary.IsCoboundary` through
+`Maths.MaxPlusPotential.IsPotential` and its duality; their equality case
+recovers `Maths.CycleCoboundary.IsCoboundary` through
 `isCoboundary_iff_exists_defect_eq_zero`; reflected labels `⟨↑0, -g, a⟩`
-recover `Math.TransferSummary.reflectedIter` as transport along a path.
+recover `Maths.TransferSummary.reflectedIter` as transport along a path.
 
 ## Naming
 
-Layer 0: `Math.DirectedTransport`.  Other names for the object, to be listed
+Layer 0: `Maths.Transport`.  Other names for the object, to be listed
 in its docstring: a labelled transition system whose transitions transform a
 per-state value, with `walkMap` as its exact (concrete) semantics — the
 thing an abstract interpretation would soundly overapproximate, none being
@@ -250,7 +250,7 @@ fibers coincide (Zaslavsky, *Biased graphs. I*, J. Combin. Theory Ser. B 47
 (1989)); a discrete connection, with `holonomy` as its holonomy; sections are
 flat/equivariant sections, and `IsLaxSection` is a subsolution.
 
-Layer 1: `Math.MaxAffineTransport`.  Nearest named neighbours: min-max
+Layer 1: `Maths.MaxAffineTransport`.  Nearest named neighbours: min-max
 function networks (Gunawardena), topical maps (Gaubert–Gunawardena),
 sub-topical maps (Rubinov–Singer; nonnegative slope-at-most-one labels are
 monotone and additively subhomogeneous), timed event graphs of max-plus
@@ -267,7 +267,7 @@ A variant of Layer 0 with relations in place of functions — edge labels
 sections satisfying `(s (source e), s (target e)) ∈ R_e` — would faithfully
 carry constraint data that is not functional, and for labels that are finite
 conjunctions of affine inequalities the Farkas layer covers it: the
-row encoding of `MathUE/DirectedTransport/MaxAffine/Farkas.lean` never uses
+row encoding of `Maths.Multitubes.MaxAffine.Farkas` never uses
 functionality.  The variant is nonetheless not written, and the reason has a
 proved core with an honest scope: on the one-real-coordinate-per-player
 vertex set, the constraints the terminal exploitability witness forces on preemption
@@ -419,14 +419,14 @@ theorem.
 
 All implemented.
 
-- **M0**: Layer 0 (`MathUE/DirectedTransport/Basic.lean`).
+- **M0**: Layer 0 (`Maths.Multitubes.Basic`).
 - **M1**: Layer 1 label algebra + T2 + T3 + T4 + T5 + T7 + the
   `AffineSummary →* Matrix` identification
-  (`MathUE/DirectedTransport/MaxAffine/Basic.lean`), with the additive bridge
-  in `MathUE/DirectedTransport/MaxAffine/Additive.lean`.
-- **M2**: T6a and T6b (`MathUE/DirectedTransport/MaxAffine/Sections.lean`).
+  (`Maths.Multitubes.MaxAffine.Basic`), with the additive bridge
+  in `Maths.Multitubes.MaxAffine.Additive`.
+- **M2**: T6a and T6b (`Maths.Multitubes.MaxAffine.Sections`).
 - **M3**: the cyclewise-completeness refutation and the general Farkas
-  duality (`MathUE/DirectedTransport/MaxAffine/Farkas.lean`).
+  duality (`Maths.Multitubes.MaxAffine.Farkas`).
 
 ## Scope boundaries
 

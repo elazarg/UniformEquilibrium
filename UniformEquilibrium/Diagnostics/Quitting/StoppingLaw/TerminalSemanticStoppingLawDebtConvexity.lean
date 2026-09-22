@@ -22,9 +22,11 @@ entry/exit anchor equations.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -99,11 +101,14 @@ theorem quittingTerminalOutcomeMass_stoppingLawMixture_eq
           reward profile mover source target lambda hlambda0 hlambda1 terminal
   | none =>
       have hmixed :=
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward mixedProfile).2
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward mixedProfile)).2
       have hsource :=
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).2
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile)).2
       have htarget :=
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).2
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile)).2
       rw [Fintype.sum_option] at hmixed hsource htarget
       have hcoalitions :
           (∑ terminal,

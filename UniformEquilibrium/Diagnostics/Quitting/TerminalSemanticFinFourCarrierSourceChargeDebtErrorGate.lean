@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.ChargedPathBudget Math.Probability
+open Filter Set Maths.ChargedPathBudget _root_.Math.Probability
 open Math.ProbabilityMassFunction Math.PMFProduct
 
 /-- Carrier compactness prices failure to lie within half of a prescribed

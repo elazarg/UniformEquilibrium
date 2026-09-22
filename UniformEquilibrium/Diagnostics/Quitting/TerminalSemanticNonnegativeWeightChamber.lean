@@ -164,6 +164,7 @@ theorem terminalSemantic_weightedPrescribed_le_outcomeMaximum
   obtain ⟨mass, hmass, hmoment⟩ :=
     quittingTerminalSemanticCarrier_prescribed_mem_rewardMomentSet
       reward pair hpair
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have houtcome : ∀ outcome,
       quittingWeightedTerminalOutcomeReward reward weight outcome ≤
         quittingWeightedTerminalOutcomeMaximum reward weight := fun outcome =>

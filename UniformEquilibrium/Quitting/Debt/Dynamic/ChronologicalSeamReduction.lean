@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -1152,7 +1152,7 @@ private theorem flatCandidateNat_next_eq (time : ℕ) :
       consecutiveBlockOffset blocks.length blocks.length_pos time + 1 <
         blocks.length
           (consecutiveBlockIndex blocks.length blocks.length_pos time)
-  · rw [if_pos hinternal]
+  · rw [ite_eq_left hinternal]
     have htime : time + 1 =
         consecutiveBlockStart blocks.length
             (consecutiveBlockIndex blocks.length blocks.length_pos time) +
@@ -1164,7 +1164,7 @@ private theorem flatCandidateNat_next_eq (time : ℕ) :
         _ _ hinternal,
       consecutiveBlockOffset_start_add blocks.length blocks.length_pos
         _ _ hinternal]
-  · rw [if_neg hinternal]
+  · rw [ite_eq_right hinternal]
     have hboundary :
         consecutiveBlockOffset blocks.length blocks.length_pos time + 1 =
           blocks.length
@@ -1266,12 +1266,12 @@ private theorem consecutiveBlockSum_flatSeamNat
       consecutiveBlockIndex_start_add blocks.length blocks.length_pos
         block offset (by omega),
       consecutiveBlockOffset_start_add blocks.length blocks.length_pos
-        block offset (by omega), if_pos (by omega)]
+        block offset (by omega), ite_eq_left (by omega)]
   rw [Finset.sum_eq_zero hbefore, zero_add, hflat,
     consecutiveBlockIndex_start_add blocks.length blocks.length_pos
       block (blocks.length block - 1) hlast,
     consecutiveBlockOffset_start_add blocks.length blocks.length_pos
-      block (blocks.length block - 1) hlast, if_neg (by omega)]
+      block (blocks.length block - 1) hlast, ite_eq_right (by omega)]
 
 private theorem summable_flatSeamNat_and_tsum_le
     (flat blockSeam : ℕ → ℝ) {eta : ℝ}

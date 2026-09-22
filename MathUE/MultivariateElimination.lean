@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Algebra.MvPolynomial.Equiv
 import Mathlib.Algebra.Polynomial.Reverse
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.LinearAlgebra.Matrix.NonsingularInverse
 import Mathlib.RingTheory.Algebraic.Basic
 import Mathlib.RingTheory.IntegralClosure.Algebra.Basic
@@ -262,7 +262,7 @@ theorem eval_bivariateOfEquiv
       ext q
       · simp
       · rw [show q = () from Subsingleton.elim _ _]
-        simp [MvPolynomial.uniqueAlgEquiv, b]
+        simp [MvPolynomial.uniqueAlgEquiv_apply, b]
     _ = MvPolynomial.eval b
         (MvPolynomial.rename e P) := by
       rw [← MvPolynomial.optionEquivLeft_elim_eval
@@ -383,7 +383,7 @@ theorem isIntegral_of_mul_eq_one_of_isIntegral
   obtain ⟨p, hpmonic, hp⟩ := hd
   have hpne : p ≠ 0 := hpmonic.ne_zero
   have hunit : IsUnit d := IsUnit.of_mul_eq_one y hdy
-  letI : Invertible d := hunit.invertible
+  let : Invertible d := hunit.invertible
   have hinv : ⅟ d = y := invOf_eq_right_inv hdy
   let q := p.reverse *
     Polynomial.C p.reverse.leadingCoeff⁻¹
@@ -427,7 +427,7 @@ theorem moduleFinite_quotient_of_integral_coordinates
     exact Algebra.adjoin_le fun x hx => by
       obtain ⟨i, rfl⟩ := hx
       exact hcoordinate i
-  letI : Algebra.IsIntegral K (MvPolynomial κ K ⧸ I) :=
+  let : Algebra.IsIntegral K (MvPolynomial κ K ⧸ I) :=
     integralClosure_eq_top_iff.mp hclosure
   exact Algebra.IsIntegral.finite
 
@@ -819,7 +819,7 @@ theorem moduleFinite_quotient_iff_exists_monic_coordinateRelations
         ∀ i, Polynomial.aeval (MvPolynomial.X i) (p i) ∈ I := by
   constructor
   · intro hfinite
-    letI : Module.Finite K (MvPolynomial κ K ⧸ I) := hfinite
+    let : Module.Finite K (MvPolynomial κ K ⧸ I) := hfinite
     choose p hpmonic hpmem using
       fun i => exists_monic_coordinateRelation_of_moduleFinite I i
     exact ⟨p, hpmonic, hpmem⟩
@@ -878,10 +878,10 @@ theorem exists_nonzero_coordinateRelation_mem_of_moduleFinite_fractionRing
     ∃ q : Polynomial A,
       q ≠ 0 ∧
         Polynomial.aeval (MvPolynomial.X target) q ∈ J := by
-  letI : Algebra (MvPolynomial κ A)
+  let : Algebra (MvPolynomial κ A)
       (MvPolynomial κ (FractionRing A)) :=
     MvPolynomial.algebraMvPolynomial
-  letI : IsLocalization
+  let : IsLocalization
       ((nonZeroDivisors A).map
         (MvPolynomial.C : A →+*
           MvPolynomial κ A).toMonoidHom)
@@ -961,7 +961,7 @@ theorem not_moduleFinite_quotient_span_X_sub_X
       (MvPolynomial κ K ⧸ I) →ₐ[K] Polynomial K :=
     Ideal.Quotient.liftₐ I f hI
   intro hfinite
-  letI : Module.Finite K (MvPolynomial κ K ⧸ I) :=
+  let : Module.Finite K (MvPolynomial κ K ⧸ I) :=
     hfinite
   let xi : MvPolynomial κ K ⧸ I :=
     Ideal.Quotient.mk I (MvPolynomial.X i)
@@ -970,7 +970,8 @@ theorem not_moduleFinite_quotient_span_X_sub_X
   have hmap : IsIntegral K (qf xi) :=
     hxi.map qf
   have hqf : qf xi = Polynomial.X := by
-    simp [qf, xi, f, assign]
+    change (MvPolynomial.aeval assign) (MvPolynomial.X i) = Polynomial.X
+    simp [assign]
   rw [hqf] at hmap
   exact Polynomial.transcendental_X K hmap.isAlgebraic
 
@@ -985,7 +986,7 @@ theorem not_moduleFinite_quotient_of_le_span_X_sub_X
         MvPolynomial.X j}) :
     ¬ Module.Finite K (MvPolynomial κ K ⧸ J) := by
   intro hfinite
-  letI : Module.Finite K (MvPolynomial κ K ⧸ J) :=
+  let : Module.Finite K (MvPolynomial κ K ⧸ J) :=
     hfinite
   let I : Ideal (MvPolynomial κ K) :=
     Ideal.span {
@@ -996,7 +997,7 @@ theorem not_moduleFinite_quotient_of_le_span_X_sub_X
   let q : (MvPolynomial κ K ⧸ J) →ₗ[K]
       (MvPolynomial κ K ⧸ I) :=
     (Ideal.Quotient.factorₐ K hJI).toLinearMap
-  letI : Module.Finite K (MvPolynomial κ K ⧸ I) :=
+  let : Module.Finite K (MvPolynomial κ K ⧸ I) :=
     Module.Finite.of_surjective q
       (Ideal.Quotient.factor_surjective hJI)
   exact

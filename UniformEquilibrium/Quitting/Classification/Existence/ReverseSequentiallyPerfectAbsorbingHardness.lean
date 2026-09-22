@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
   QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -723,13 +723,13 @@ theorem universalStationaryExactEveryRestartSource_iff_approximateExistence :
   · intro hrestricted players _ _ table
     cases isEmpty_or_nonempty players with
     | inl hempty =>
-        letI : IsEmpty players := hempty
+        let : IsEmpty players := hempty
         intro ε _hε
         refine ⟨quittingAlwaysContinueProfile table.terminal, ?_⟩
         intro who
         exact isEmptyElim who
     | inr hnonempty =>
-        letI : Nonempty players := hnonempty
+        let : Nonempty players := hnonempty
         exact
           stationaryExactEveryRestartSource_sum_punit_implies_approximateEquilibriumExistence
             (fun padded hsource ↦
@@ -750,13 +750,13 @@ theorem universalReverseSequentiallyPerfectAbsorbing_iff_universalApproximateEqu
   · intro hreverse players _ _ table
     cases isEmpty_or_nonempty players with
     | inl hempty =>
-        letI : IsEmpty players := hempty
+        let : IsEmpty players := hempty
         intro ε _hε
         refine ⟨quittingAlwaysContinueProfile table.terminal, ?_⟩
         intro who
         exact isEmptyElim who
     | inr hnonempty =>
-        letI : Nonempty players := hnonempty
+        let : Nonempty players := hnonempty
         exact
           reverseSequentiallyPerfectAbsorbing_sum_punit_implies_approximateEquilibriumExistence
           (fun padded ↦ hreverse (players ⊕ PUnit) padded) table

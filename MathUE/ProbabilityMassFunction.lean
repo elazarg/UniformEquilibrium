@@ -255,7 +255,7 @@ theorem reweightPMF_degenerate (μ : PMF α) (w : α → ENNReal)
     (hC : (∑ a : α, μ a * w a) = 0 ∨ (∑ a : α, μ a * w a) = ⊤) :
     reweightPMF μ w = μ := by
   unfold reweightPMF
-  exact dif_pos hC
+  exact dite_eq_left hC
 
 open Classical in
 /-- Scaling the weight function by a finite nonzero constant doesn't change
@@ -371,7 +371,13 @@ noncomputable def pmfCond (μ : PMF α) (E : α → Prop)
 @[simp] theorem pmfCond_apply (μ : PMF α) (E : α → Prop)
     (h : pmfMass (μ := μ) E ≠ 0) (a : α) :
     pmfCond (μ := μ) E h a = pmfMask (μ := μ) E a / pmfMass (μ := μ) E := by
-  simp [pmfCond, pmfMass, div_eq_mul_inv]
+  have h' : (∑' x : α, pmfMask (μ := μ) E x) ≠ 0 := by
+    simpa [pmfMass] using h
+  have htop : (∑' x : α, pmfMask (μ := μ) E x) ≠ ⊤ := by
+    simpa [pmfMass] using pmfMass_ne_top μ E
+  change PMF.normalize (pmfMask (μ := μ) E) h' htop a = _
+  rw [PMF.normalize_apply]
+  rfl
 
 theorem pmfCond_ne_zero_implies
     (μ : PMF α) (E : α → Prop)
@@ -668,7 +674,7 @@ theorem expect_mono_on_support
     (hfg : ∀ a, a ∈ μ.support → f a ≤ g a) :
     Math.Probability.expect μ f ≤ Math.Probability.expect μ g := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [Math.Probability.expect_eq_sum, Math.Probability.expect_eq_sum]
   apply Finset.sum_le_sum
   intro a _
@@ -739,7 +745,7 @@ theorem expect_pushforward
     Math.Probability.expect (pushforward μ f) φ =
       Math.Probability.expect μ (fun a => φ (f a)) := by
   classical
-  letI : Fintype Ξ := Fintype.ofFinite Ξ
+  let : Fintype Ξ := Fintype.ofFinite Ξ
   exact Math.Probability.expect_map_fintype_target μ f φ
 
 open Classical in
@@ -752,7 +758,7 @@ theorem expect_eq_sum_fiber_cond
         if hx : pmfMass (μ := μ) (fun ω => x = proj ω) ≠ 0 then
           Math.Probability.expect (pmfCond (μ := μ) (fun ω => x = proj ω) hx) f
         else 0 := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [Math.Probability.expect_eq_sum]
   calc
     (∑ ω : Ω, (μ ω).toReal * f ω)
@@ -771,7 +777,7 @@ theorem expect_eq_sum_fiber_cond
           refine Finset.sum_congr rfl ?_
           intro x _
           by_cases hx : pmfMass (μ := μ) (fun ω => x = proj ω) ≠ 0
-          · simp only [dif_pos hx]
+          · simp only [dite_eq_left hx]
             rw [Math.Probability.expect_eq_sum]
             rw [Finset.mul_sum]
             refine Eq.symm (Finset.sum_congr rfl ?_)
@@ -789,7 +795,7 @@ theorem expect_eq_sum_fiber_cond
             · simp [pmfCond_apply, pmfMask, hω]
           · have hx0 : pmfMass (μ := μ) (fun ω => x = proj ω) = 0 := by
               exact not_not.mp hx
-            simp only [dif_neg hx, mul_zero]
+            simp only [dite_eq_right hx, mul_zero]
             refine Finset.sum_eq_zero ?_
             intro ω _
             by_cases hω : x = proj ω
@@ -840,8 +846,8 @@ theorem expect_pmfCond_pushforward
       Math.Probability.expect
         (pmfCond (μ := μ) (fun ω => E (proj ω))
           (by simpa [pmfMass_pushforward] using hE)) (fun ω => f (proj ω)) := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
-  letI : Fintype Ξ := Fintype.ofFinite Ξ
+  let : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ξ := Fintype.ofFinite Ξ
   let hpre : pmfMass (μ := μ) (fun ω => E (proj ω)) ≠ 0 := by
     simpa [pmfMass_pushforward] using hE
   have hmass_eq :
@@ -892,8 +898,8 @@ theorem expect_pmfCond_pushforward_fiberCond
       Math.Probability.expect
         (pmfCond (μ := μ) (fun ω => E (proj ω))
           (by simpa [pmfMass_pushforward] using hE)) f := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
-  letI : Fintype Ξ := Fintype.ofFinite Ξ
+  let : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ξ := Fintype.ofFinite Ξ
   let pooled : Ξ → ℝ := fun x =>
     if hx : pmfMass (μ := μ) (fun ω => proj ω = x) ≠ 0 then
       Math.Probability.expect (pmfCond (μ := μ) (fun ω => proj ω = x) hx) f
@@ -958,14 +964,14 @@ theorem expect_pmfCond_pushforward_fiberCond
             refine Finset.sum_congr rfl ?_
             intro ω _
             by_cases hEω : E (proj ω)
-            · rw [if_pos hEω]
+            · rw [ite_eq_left hEω]
               rw [Finset.sum_eq_single (proj ω)]
               · simp [hEω]
               · intro x _ hxne
                 by_cases hxE : E x <;> simp [hxE, hxne.symm]
               · intro hnot
                 exact absurd (Finset.mem_univ (proj ω)) hnot
-            · rw [if_neg hEω]
+            · rw [ite_eq_right hEω]
               refine Finset.sum_eq_zero ?_
               intro x _
               by_cases hxE : E x
@@ -1011,7 +1017,7 @@ theorem expect_cond_le_of_expect_le_of_eq_off
     (hoff : ∀ ω, ¬ E ω → g ω = f ω) :
     Math.Probability.expect (pmfCond (μ := μ) E hE) g ≤
       Math.Probability.expect (pmfCond (μ := μ) E hE) f := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   have hmass_pos : 0 < (pmfMass (μ := μ) E).toReal :=
     ENNReal.toReal_pos hE (pmfMass_ne_top μ E)
   have hsplit_g :
@@ -1145,7 +1151,7 @@ theorem le_pushforward_apply
     {β : Type*} [Finite α]
     (μ : PMF α) (proj : α → β) (a : α) :
     μ a ≤ pushforward μ proj (proj a) := by
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   classical
   have hle :
       (if proj a = proj a then (μ a : ENNReal) else 0) ≤
@@ -1200,16 +1206,15 @@ theorem condOn_apply
   change (if h : ∃ a ∈ ({a | b = proj a} : Set α), a ∈ μ.support then
       μ.filter {a | b = proj a} h else μ) a =
     if proj a = b then μ a / pushforward μ proj b else 0
-  rw [dif_pos hs]
+  rw [dite_eq_left hs]
   simp [pushforward, PMF.map_apply, Set.indicator, div_eq_mul_inv, eq_comm]
-  rfl
 
 theorem bind_pushforward_condOn
     {β : Type*} [Finite α] [Finite β]
     (μ : PMF α) (proj : α → β) (g : α → PMF γ) :
     μ.bind g = (pushforward μ proj).bind (fun b => (condOn μ proj b).bind g) := by
-  letI : Fintype α := Fintype.ofFinite α
-  letI : Fintype β := Fintype.ofFinite β
+  let : Fintype α := Fintype.ofFinite α
+  let : Fintype β := Fintype.ofFinite β
   classical
   ext x
   have hL :=
@@ -1318,7 +1323,7 @@ noncomputable def iterCondOn
     List (FiniteProjection α) → PMF α
   | [] => μ
   | projection :: rest =>
-      letI : Finite projection.β := projection.finite
+      let : Finite projection.β := projection.finite
       (pushforward μ projection.project).bind fun value =>
         iterCondOn (condOn μ projection.project value) rest
 
@@ -1331,7 +1336,7 @@ theorem bind_pushforward_condOn_pure_list
       μ = iterCondOn μ projections
   | [] => rfl
   | projection :: rest => by
-      letI : Finite projection.β := projection.finite
+      let : Finite projection.β := projection.finite
       calc
         μ =
             (pushforward μ projection.project).bind fun value =>
@@ -1398,7 +1403,7 @@ theorem iterCondOn_support_subset
       intro a ha
       exact ha
   | projection :: rest => by
-      letI : Finite projection.β := projection.finite
+      let : Finite projection.β := projection.finite
       intro a ha
       rw [iterCondOn, PMF.mem_support_bind_iff] at ha
       rcases ha with ⟨value, _hvalue, haRest⟩

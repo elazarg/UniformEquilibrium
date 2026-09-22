@@ -26,7 +26,7 @@ survival factor written as `1 - (true mass)`.
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- The mass of `false` in a Boolean PMF is one minus the mass of `true`. -/
 lemma pmfBool_false_toReal (mu : PMF Bool) :

@@ -172,11 +172,10 @@ private theorem continuous_quittingDebtEdgeCoalitionMass
   simp_rw [quittingRootOfSimplex_apply_toReal]
   have hcoordinate : ∀ who : ι, Continuous
       (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
-        edge.1.1.2 who true) := by
+        (edge.1.1.2 who).weights true) := by
     intro who
-    exact (continuous_apply true).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply who).comp (by fun_prop)))
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+      ((continuous_apply who).comp (by fun_prop))
   apply Continuous.mul
   · apply continuous_finsetProd
     intro who _

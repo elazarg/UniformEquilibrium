@@ -154,13 +154,13 @@ theorem quittingEarliestStoppingValue_cappedChildParentClocks
         unfold cappedStoppingClock at hle
         by_cases hc : quittingStoppingTimeValue (times i) ≤
             quittingStoppingTimeValue deadline
-        · rw [if_pos hc] at hle
+        · rw [ite_eq_left hc] at hle
           change quittingEarliestStoppingValue
               (cappedChildParentClocks times deadline i) ≤
             quittingStoppingTimeValue (times i) at hle
           rw [hj]
           exact hle
-        · rw [if_neg hc] at hle
+        · rw [ite_eq_right hc] at hle
           change quittingEarliestStoppingValue
               (cappedChildParentClocks times deadline i) ≤
             quittingStoppingTimeValue deadline at hle
@@ -177,12 +177,12 @@ theorem quittingEarliestStoppingValue_cappedChildParentClocks
       unfold cappedStoppingClock at hle
       by_cases hc : quittingStoppingTimeValue (times i) ≤
           quittingStoppingTimeValue deadline
-      · rw [if_pos hc] at hle
+      · rw [ite_eq_left hc] at hle
         change quittingEarliestStoppingValue
             (cappedChildParentClocks times deadline i) ≤
           quittingStoppingTimeValue (times i) at hle
         exact hle.trans hc
-      · rw [if_neg hc] at hle
+      · rw [ite_eq_right hc] at hle
         change quittingEarliestStoppingValue
             (cappedChildParentClocks times deadline i) ≤
           quittingStoppingTimeValue deadline at hle
@@ -195,13 +195,13 @@ theorem quittingEarliestStoppingValue_cappedChildParentClocks
     | some j =>
         by_cases hji : j = i
         · subst j
-          simp only [cappedChildParentClocks, if_true]
+          simp only [cappedChildParentClocks, ite_true]
           unfold cappedStoppingClock
           split_ifs
           · exact (min_le_left _ _).trans
               (Finset.inf_le (Finset.mem_univ i))
           · exact min_le_right _ _
-        · simp only [cappedChildParentClocks, hji, if_false]
+        · simp only [cappedChildParentClocks, hji, ite_false]
           exact (min_le_left _ _).trans
             (Finset.inf_le (Finset.mem_univ j))
 
@@ -374,7 +374,7 @@ theorem quittingFirstStoppingOutcome_cappedChildParentClocks_of_lt_first
     rw [cappedChildParentClocks]
     simp only [ite_true]
     unfold cappedStoppingClock
-    rw [if_neg hnle']
+    rw [ite_eq_right hnle']
   · intro player hplayer
     cases player with
     | none => simp [cappedChildParentClocks, quittingStoppingTimeValue]
@@ -412,10 +412,10 @@ theorem quittingFirstStoppingOutcome_cappedChildParentClocks_of_eq_first
       unfold cappedStoppingClock
       by_cases hle : quittingStoppingTimeValue (times i) ≤
           quittingStoppingTimeValue (some time)
-      · rw [if_pos hle]
+      · rw [ite_eq_left hle]
         apply stoppingTime_eq_some_of_value_eq
         exact le_antisymm (by simpa [quittingStoppingTimeValue] using hle) hge
-      · rw [if_neg hle]
+      · rw [ite_eq_right hle]
     · have hclock : times j = some time := by
         apply stoppingTime_eq_some_of_value_eq
         simpa [quittingEarliestStoppingCoalition, hfirst] using hj
@@ -474,12 +474,12 @@ theorem quittingFirstStoppingOutcome_cappedChildParentClocks_of_first_lt
       else times j) = some firstTime
     by_cases hji : j = i
     · subst j
-      simp only [if_true, hclock]
+      simp only [ite_true, hclock]
       unfold cappedStoppingClock
       have hle : quittingStoppingTimeValue (some firstTime) ≤
           quittingStoppingTimeValue (some deadline) := by
         simpa [quittingStoppingTimeValue] using hafter.le
-      rw [if_pos hle]
+      rw [ite_eq_left hle]
     · simp [hji, hclock]
   · intro player hplayer
     cases player with
@@ -503,7 +503,7 @@ theorem quittingFirstStoppingOutcome_cappedChildParentClocks_of_first_lt
               else times j) > (firstTime : WithTop ℕ)
         by_cases hji : j = i
         · subst j
-          simp only [if_true]
+          simp only [ite_true]
           unfold cappedStoppingClock
           split_ifs <;> simp only [quittingStoppingTimeValue]
           · exact hclockAfter
@@ -1001,7 +1001,7 @@ theorem quittingPureClockEvaluatedPayoff_terminalEvaluation
   | some A =>
       have hfinite : quittingEarliestStoppingValue times ≠ ⊤ := by
         intro htop
-        rw [quittingFirstStoppingOutcome, if_pos htop] at hOutcome
+        rw [quittingFirstStoppingOutcome, ite_eq_left htop] at hOutcome
         contradiction
       simp [cappedClockTerminalEvaluation, hfinite]
 

@@ -44,11 +44,11 @@ theorem localizedGermParameterAlgHom_injective
     Function.Injective
       (localizedGermParameterAlgHom
         source J parameter g hg hJmem) := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     CurveSelection.FunctionField.parameterPolynomialAlgebra
       J parameter
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra source parameter
   rw [localizedGermParameterAlgHom]
   apply (IsLocalization.lift_injective_iff _).2
@@ -126,11 +126,11 @@ theorem exists_exact_relation_eventually_derivative_ne_zero
             bivEval Q.derivative
               (source n parameter) (value n) ≠
               0 := by
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra source parameter
   intro φ hφ s value hvalue halgebraic
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       source parameter hinjective
   obtain ⟨Q, hQne, hroot, hderiv⟩ :=
@@ -242,11 +242,11 @@ theorem
                    φ P n)) ≠
               0 := by
   simp only
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     CurveSelection.FunctionField.parameterPolynomialAlgebra
       J parameter
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra source parameter
   intro P s halgebraic
   let φ :

@@ -155,7 +155,7 @@ theorem add_indicator_preserves_gain
     exact hgain source action
   · have hindicator_expect :=
       sum_mul_indicator_nonneg transition region htrans_nonneg source action
-    simp only [indicator, if_neg hsource, mul_zero, add_zero]
+    simp only [indicator, ite_eq_right hsource, mul_zero, add_zero]
     exact (hgain source action).trans (le_add_of_nonneg_right
       (mul_nonneg hε hindicator_expect))
 
@@ -172,9 +172,9 @@ theorem add_indicator_le_of_region_le_slack
       lhs state action + ε * indicator region state ≤ rhs state action := by
   intro state action
   by_cases hstate : region state
-  · simp only [indicator, if_pos hstate, mul_one]
+  · simp only [indicator, ite_eq_left hstate, mul_one]
     linarith [hslack state hstate action]
-  · simp only [indicator, if_neg hstate, mul_zero, add_zero]
+  · simp only [indicator, ite_eq_right hstate, mul_zero, add_zero]
     exact hbase state action
 
 /-- A positive indicator bump on a nonempty region strictly raises the sum

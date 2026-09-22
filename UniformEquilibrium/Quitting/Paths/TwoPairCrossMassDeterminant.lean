@@ -17,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 private def regroupedStoppingTimes
     (sample : Fin 2 → Option ℕ × Option ℕ) : Fin 4 → Option ℕ :=

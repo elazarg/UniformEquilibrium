@@ -7,6 +7,7 @@ Authors: UniformEquilibrium contributors
 import
   UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.LargePersistentBaseFiniteNashDispatch
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.PersistentBaseConcreteGap
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Same-profile deletion adapter for persistent bases
@@ -243,20 +244,21 @@ def quittingBinaryPairMixedPoint
     (hfirst0 : 0 ≤ firstRate) (hfirst1 : firstRate ≤ 1)
     (hsecond0 : 0 ≤ secondRate) (hsecond1 : secondRate ≤ 1) :
     mixedPolytope (quittingBinaryForm free).sig := by
-  let firstSimplex : stdSimplex ℝ Bool :=
+  let firstSimplex : Convexity.StdSimplex ℝ Bool :=
     Math.ProbabilityMassFunction.stdSimplexEquiv
       (Math.ProbabilityMassFunction.bernoulliBool
         firstRate hfirst0 hfirst1)
-  let secondSimplex : stdSimplex ℝ Bool :=
+  let secondSimplex : Convexity.StdSimplex ℝ Bool :=
     Math.ProbabilityMassFunction.stdSimplexEquiv
       (Math.ProbabilityMassFunction.bernoulliBool
         secondRate hsecond0 hsecond1)
-  refine ⟨fun who => if who.1 = first then firstSimplex else secondSimplex, ?_⟩
+  refine ⟨fun who => if who.1 = first then firstSimplex.weights else
+    secondSimplex.weights, ?_⟩
   rw [mem_mixedPolytope]
   intro who
   split
-  · exact firstSimplex.property
-  · exact secondSimplex.property
+  · exact Math.ProbabilityMassFunction.weights_mem_simplexWeights firstSimplex
+  · exact Math.ProbabilityMassFunction.weights_mem_simplexWeights secondSimplex
 
 omit [Fintype ι] [Nonempty ι] in
 @[simp] theorem quittingBinaryPairMixedPoint_apply_first
@@ -269,7 +271,7 @@ omit [Fintype ι] [Nonempty ι] in
         hfirst0 hfirst1 hsecond0 hsecond1).1 ⟨first, hfirst⟩ action =
       (Math.ProbabilityMassFunction.stdSimplexEquiv
         (Math.ProbabilityMassFunction.bernoulliBool
-          firstRate hfirst0 hfirst1) : stdSimplex ℝ Bool) action := by
+          firstRate hfirst0 hfirst1)).weights action := by
   simp [quittingBinaryPairMixedPoint]
 
 omit [Fintype ι] [Nonempty ι] in
@@ -284,7 +286,7 @@ omit [Fintype ι] [Nonempty ι] in
         hfirst0 hfirst1 hsecond0 hsecond1).1 ⟨other, hother⟩ action =
       (Math.ProbabilityMassFunction.stdSimplexEquiv
         (Math.ProbabilityMassFunction.bernoulliBool
-          secondRate hsecond0 hsecond1) : stdSimplex ℝ Bool) action := by
+          secondRate hsecond0 hsecond1)).weights action := by
   simp [quittingBinaryPairMixedPoint, hne]
 
 omit [Fintype ι] [Nonempty ι] in

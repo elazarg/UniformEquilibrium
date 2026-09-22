@@ -15,10 +15,11 @@ An affine inequality valid strictly to the right of a point remains valid at
 the point.  This is game-independent real analysis.
 -/
 
+open scoped Topology
+
 namespace Math.Topology
 
 open Filter
-open scoped Topology
 
 /-- An affine inequality holding at every point immediately to the right of
 `base` also holds at `base`.  The explicit sequence keeps the theorem free of

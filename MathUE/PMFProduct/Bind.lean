@@ -147,7 +147,7 @@ theorem pmfPi_bind_factor [∀ i, Finite (A i)]
       =
     (σ j).bind (fun a => (pmfPi σ).bind (fun s => g a s)) := by
   classical
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
+  let (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
   ext b
   simp only [PMF.bind_apply, pmfPi_apply]
   exact tsum_pmfPi_factor σ j (fun a s => g a s b) (fun a0 s a => by
@@ -203,7 +203,7 @@ theorem pmfPi_push_coordwise
   by_cases h : b = fun i => g i (f i)
   · subst h
     simp
-  · rw [if_neg h]
+  · rw [ite_eq_right h]
     symm
     have ⟨i0, hi0⟩ : ∃ i0, b i0 ≠ g i0 (f i0) := by
       by_contra hall
@@ -249,7 +249,10 @@ theorem pmfPi_coord_mass_mul_indicator
     (σ : ∀ i, PMF (A i)) (j : ι) (a : A j) :
     (∑ s : (∀ i, A i),
       (pmfPi σ) s * (if s j = a then 1 else 0)) = σ j a := by
-  simpa [mul_ite] using pmfPi_coord_mass σ j a
+  rw [← pmfPi_coord_mass σ j a]
+  apply Finset.sum_congr rfl
+  intro s _
+  by_cases h : s j = a <;> simp [h]
 
 /-! A single finite signal realizes any finite family of finite marginals:
 sample their product and reveal the requested coordinate. The extra `Fin`
@@ -287,7 +290,7 @@ noncomputable def commonFiniteSignal
     simp only [Function.comp_apply, selector, encoding]
     have hlt : ((Fintype.equivFin Raw value).castSucc).1 <
         Fintype.card Raw := (Fintype.equivFin Raw value).isLt
-    rw [dif_pos hlt]
+    rw [dite_eq_left hlt]
     have hfin :
         ⟨((Fintype.equivFin Raw value).castSucc).1, hlt⟩ =
           Fintype.equivFin Raw value := Fin.ext rfl

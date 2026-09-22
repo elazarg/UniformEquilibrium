@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Analysis.Asymptotics.AsymptoticEquivalent
-import Mathlib.Data.NNReal.Basic
+import Mathlib.Basic.NNReal.Basic
 import Mathlib.RingTheory.Congruence.Basic
 
 /-!

@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter MeasureTheory Set StochasticGame
+open Filter MeasureTheory _root_.Set StochasticGame
 open _root_.Math.Probability _root_.Math.ProbabilityMassFunction
 open _root_.Math.Probability.DiscreteHazard
 open scoped Topology
@@ -132,7 +132,7 @@ theorem quittingPairDeletedSurvivalWeight_eq_compactStoppingLawSurvival
   have hlaw :
       (quittingCompactStoppingLawsOfProfile reward profile player).toPMF =
         quittingBehaviorStoppingLaw reward (profile player) := by
-    simp [quittingCompactStoppingLawsOfProfile]
+    exact CompactStoppingLaw.toPMF_ofPMF_option _
   rw [hlaw]
   dsimp only [factor]
   simp only [quittingRootSequenceUpdate, Function.update_of_ne hobserver]

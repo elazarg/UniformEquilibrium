@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -89,12 +89,12 @@ theorem quittingTerminalOpponentAdvantage_eq_zero_of_quitters_not_nonempty
     rw [quittingQuitters_update_true_of_apply_false action owner, hquitters]
     simp
   unfold quittingTerminalOpponentAdvantage quittingRootPayoff
-  rw [dif_neg hempty]
+  rw [dite_eq_right hempty]
   have hupdatedNonempty :
       (quittingQuitters (Function.update action owner true)).Nonempty := by
     rw [hupdated]
     simp
-  rw [dif_pos hupdatedNonempty]
+  rw [dite_eq_left hupdatedNonempty]
   change reward (quittingSingletonTerminal owner) owner -
       reward
         ⟨quittingQuitters (Function.update action owner true),
@@ -125,7 +125,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
         2 * M * (if (quittingQuitters action).Nonempty then 1 else 0) := by
     intro action
     by_cases hquit : (quittingQuitters action).Nonempty
-    · simp only [if_pos hquit, mul_one]
+    · simp only [ite_eq_left hquit, mul_one]
       exact (neg_le_abs (advantage action)).trans
         (abs_quittingTerminalOpponentAdvantage_le_two_mul
           reward who action hreward)

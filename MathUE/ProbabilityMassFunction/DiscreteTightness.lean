@@ -129,14 +129,14 @@ theorem isPMFGeneralTVTotallyBounded_of_uniformlyFiniteTight
   · exact ⟨∅, Set.finite_empty, by simp [hempty]⟩
   obtain ⟨kept, hkept⟩ := htight (error / 2) (by linarith)
   have hfamilyNonempty : family.Nonempty := Set.nonempty_iff_ne_empty.mpr hempty
-  letI : Nonempty {law // law ∈ family} := hfamilyNonempty.to_subtype
+  let : Nonempty {law // law ∈ family} := hfamilyNonempty.to_subtype
   let vectors : Set ({omega // omega ∈ kept} -> Real) :=
     Metric.closedBall 0 1
   have hvectorsCompact : IsCompact vectors := isCompact_closedBall 0 1
   obtain ⟨centers, hcentersFinite, hcentersCover⟩ :=
     (Metric.totallyBounded_iff.mp hvectorsCompact.totallyBounded)
       (error / (4 * max 1 kept.card)) (by positivity)
-  letI : Fintype {point // point ∈ centers} := hcentersFinite.fintype
+  let : Fintype {point // point ∈ centers} := hcentersFinite.fintype
   let vectorOf : PMF Omega -> ({omega // omega ∈ kept} -> Real) :=
     fun law omega => (law omega).toReal
   have hcenterExists : ∀ law ∈ family,

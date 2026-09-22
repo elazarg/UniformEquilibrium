@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -82,8 +82,8 @@ theorem chargeSum_quittingFiniteDynamicDebtAdmissibleReverseSegment
               (start + fuel)).1.2 =
           quittingFiniteNashBellmanPathRoots cutoff path (start + fuel) := by
         unfold quittingFiniteNashBellmanPathDynamicDebtPoint
-        rw [dif_pos (by omega)]
-        rw [quittingFiniteNashBellmanPathRoots, dif_pos (by omega)]
+        rw [dite_eq_left (by omega)]
+        rw [quittingFiniteNashBellmanPathRoots, dite_eq_left (by omega)]
       rw [hroot]
       ring
 
@@ -169,7 +169,7 @@ theorem quittingFiniteZeroBoundaryChainCharge_prependPoint
         (quittingFiniteNashBellmanPathPrependPoint cutoff predecessor path) 0 =
       quittingRootOfSimplex predecessor.2 := by
     unfold quittingFiniteNashBellmanPathRoots
-    rw [dif_pos (by omega)]
+    rw [dite_eq_left (by omega)]
     rfl
   have hshift : (∑ time ∈ Finset.range cutoff,
         quittingRootAbsorptionMass

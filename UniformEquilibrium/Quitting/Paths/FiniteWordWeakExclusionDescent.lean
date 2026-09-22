@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -48,7 +48,7 @@ theorem exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted
             (quittingLiteralRootStackProfile reward roots
               (quittingAlwaysContinueProfile reward))) ≤ ε := by
   obtain ⟨owner, howner⟩ := hWE []
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   obtain ⟨preemption⟩ :=
     nonempty_singletonColumnBlockerCertificate_of_all_strictPreempted
       reward hpreempted

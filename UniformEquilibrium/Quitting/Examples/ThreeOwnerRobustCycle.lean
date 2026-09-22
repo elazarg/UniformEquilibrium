@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory.ThreeOwnerRobustCycle
 
-open Math.ChargedPathBudget Math.Probability QuittingSureSetOwnerRepair
+open Maths.ChargedPathBudget _root_.Math.Probability QuittingSureSetOwnerRepair
 
 def reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) :=
   fun terminal who ↦
@@ -122,7 +122,7 @@ theorem halfRoot_continuePayoff (tail : Payoff (Fin 4)) (owner who : Fin 4) :
   unfold halfRoot
   by_cases hwho : who = owner
   · subst who
-    simp only [if_pos]
+    simp only [ite_eq_left]
     unfold quittingStationaryFixedOpponentsContinueReward
       quittingFixedOpponentsContinueReward
       quittingStationaryFixedOpponentsContinueMass
@@ -146,7 +146,7 @@ theorem halfRoot_continuePayoff (tail : Payoff (Fin 4)) (owner who : Fin 4) :
         simp only [quittingSureSetOwnerValue_empty]
         rw [quittingSetReward_singleton_eq_soloReward]
         unfold quittingSoloReward quittingSingletonTerminal
-        simp only [if_neg hwho]
+        simp only [ite_eq_right hwho]
         ring
       · exact hwho
     · simp

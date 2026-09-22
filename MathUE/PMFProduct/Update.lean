@@ -107,7 +107,7 @@ theorem eq_of_mem_support_pmfPi_update_pure
   have hzero : pmfPi (Function.update σ j (PMF.pure value)) draw = 0 := by
     rw [pmfPi_apply]
     apply Finset.prod_eq_zero (Finset.mem_univ j)
-    rw [Function.update_self, PMF.pure_apply, if_neg hne]
+    rw [Function.update_self, PMF.pure_apply, ite_eq_right hne]
   exact (PMF.mem_support_iff _ draw).mp hdraw hzero
 
 open Classical in
@@ -155,7 +155,7 @@ theorem pmfPi_bind_update_pure_eq_of_ignores [∀ i, Finite (A i)]
     (pmfPi (Function.update σ j (PMF.pure a))).bind f =
       (pmfPi (Function.update σ j (PMF.pure a'))).bind f := by
   classical
-  letI : DecidableEq (A j) := Classical.decEq (A j)
+  let : DecidableEq (A j) := Classical.decEq (A j)
   ext t
   simp only [PMF.bind_apply, pmfPi_apply_update_family, PMF.pure_apply]
   -- Swap at coordinate `j` and identity elsewhere; involutive since `Equiv.swap` is.
@@ -515,7 +515,7 @@ theorem pmfPi_mass_invariant_of_ignores [∀ i, Finite (A i)]
       =
     pmfMass (μ := pmfPi (A := A) σ) P := by
   classical
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
+  let (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
   have h :=
     pmfPi_event_ratio_invariant_of_ignores
       (A := A) (σ := σ) (j := j) (τ := τ)
@@ -557,7 +557,7 @@ theorem pmfPi_cond_prob_invariant_of_ignores [∀ i, Finite (A i)]
     (pmfMass (μ := pmfPi (A := A) σ) Num) /
       (pmfMass (μ := pmfPi (A := A) σ) Denom) := by
   classical
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
+  let (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
   -- abbreviate the four masses
   set mNU : ENNReal := pmfMass (μ := pmfPi (A := A) (Function.update σ j τ)) Num
   set mDU : ENNReal := pmfMass (μ := pmfPi (A := A) (Function.update σ j τ)) Denom

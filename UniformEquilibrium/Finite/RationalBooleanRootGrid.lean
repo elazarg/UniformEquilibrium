@@ -441,7 +441,7 @@ theorem rationalBooleanRootGridSearch_isSome_of_pos
     simp [rationalBooleanGridAccepts, rationalBooleanTotalNashDefect, haccuracy.le]
   have hplayers : 0 < players := Nat.pos_of_ne_zero hplayersZero
   let game := rationalBooleanTableGame payoff
-  letI (who : Fin players) : Nonempty (game.toForm.sig.Strategy who) :=
+  let (who : Fin players) : Nonempty (game.toForm.sig.Strategy who) :=
     ⟨(show Bool from false)⟩
   obtain ⟨exactProfile, hexactNash⟩ :=
     exists_isNash_mixed (F := game.toForm) game.utility

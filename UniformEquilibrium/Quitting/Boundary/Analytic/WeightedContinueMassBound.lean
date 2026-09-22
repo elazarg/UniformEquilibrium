@@ -514,7 +514,7 @@ theorem isStationaryPunishment_scaledCyclicWeight :
   · intro b _ hb1
     have hsucc : (if cyclicSucc q = cyclicSucc q then (1 : ℝ) else 0) = 1 := by simp
     have hpred : (if cyclicPred q = cyclicSucc q then (1 : ℝ) else 0) = 0 := by
-      rw [if_neg (cyclicPred_ne_cyclicSucc q)]
+      rw [ite_eq_right (cyclicPred_ne_cyclicSucc q)]
     rw [sigmaValue_scaledCyclicWeight, excludedValue_scaledCyclicWeight, hpred, hsucc]
     linarith
 

@@ -35,7 +35,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.LinearAlgebra Math.OnlineLearning Math.Probability
+open Math.LinearAlgebra Maths.LinearProgramming Math.OnlineLearning _root_.Math.Probability
 open NormalizedFinkSupportTangentObstructionFlow
 
 variable {ι : Type} {G : StochasticGame ι}

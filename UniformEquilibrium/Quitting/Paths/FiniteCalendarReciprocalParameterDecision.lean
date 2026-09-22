@@ -94,7 +94,7 @@ private theorem rationalRawStrictDeficitFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction
         (reciprocalDeadline players))) :
     (rationalQuittingFiniteCalendarRawStrictDeficitFormula reward gap).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) ↔
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) ↔
       ∃ observer,
         quittingFiniteCalendarRawPayoff (rationalQuittingRewardToReal reward)
             (reciprocalDeadline players) profile observer ≤
@@ -106,7 +106,7 @@ private theorem rationalRawStrictDeficitFormula_holdsAt_profile_iff
       (quittingFiniteCalendarSimplexFormulaWithTerms
         (quittingFiniteCalendarVariableTerm (players := players)
           (deadline := reciprocalDeadline players))).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) := by
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) := by
     simpa [quittingFiniteCalendarSimplexFormula] using
       quittingFiniteCalendarSimplexFormula_holdsAt_parameters profile
   simp only [hsimplex, not_true_eq_false, false_or]
@@ -143,7 +143,7 @@ private theorem rationalRawStrictDeficitFormula_forall_iff
   · intro hformula profile
     exact (rationalRawStrictDeficitFormula_holdsAt_profile_iff
       reward gap profile).mp
-        (hformula (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2))
+        (hformula (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2))
   · intro hraw environment
     by_cases hsimplex :
         (quittingFiniteCalendarSimplexFormula players
@@ -220,7 +220,7 @@ private theorem rationalRawOrderedPairAtFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction
         (reciprocalDeadline players))) :
     (rationalQuittingFiniteCalendarRawOrderedPairAtFormula reward lambda).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) ↔
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) ↔
       ∃ first second, first ≠ second ∧
         (1 - (lambda : ℝ)) *
             (quittingFiniteCalendarRawPayoff
@@ -240,7 +240,7 @@ private theorem rationalRawOrderedPairAtFormula_holdsAt_profile_iff
       (quittingFiniteCalendarSimplexFormulaWithTerms
         (quittingFiniteCalendarVariableTerm (players := players)
           (deadline := reciprocalDeadline players))).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) := by
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) := by
     simpa [quittingFiniteCalendarSimplexFormula] using
       quittingFiniteCalendarSimplexFormula_holdsAt_parameters profile
   simp only [hsimplex, not_true_eq_false, false_or]
@@ -254,7 +254,7 @@ private theorem rationalRawOrderedPairAtFormula_holdsAt_profile_iff
       (quittingFiniteCalendarSingletonSurplusExpressionWithTerms
         (fun terminal who => RingExpression.const (reward terminal who))
         quittingFiniteCalendarVariableTerm observer).evalReal
-          (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) =
+          (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) =
         quittingFiniteCalendarRawPayoff
             (fun terminal who => (reward terminal who : ℝ))
             (reciprocalDeadline players) profile observer -
@@ -294,7 +294,7 @@ private theorem rationalRawOrderedPairAtFormula_forall_iff
   · intro hformula profile
     exact (rationalRawOrderedPairAtFormula_holdsAt_profile_iff
       reward lambda profile).mp
-        (hformula (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2))
+        (hformula (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2))
   · intro hraw environment
     by_cases hsimplex :
         (quittingFiniteCalendarSimplexFormula players

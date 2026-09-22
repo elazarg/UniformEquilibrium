@@ -59,7 +59,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -127,6 +127,12 @@ theorem quittingRootSequenceHazardTerminalValue_eq_terminalPayoff_update
       quittingTerminalPayoff reward
         (Function.update (quittingRootSequenceProfile reward roots 0) who
           (fun time _history => hazard time)) who := by
+  let deviation : (quittingGame reward).BehaviorStrategy who :=
+    fun time _history => hazard time
+  change quittingRootSequenceHazardTerminalValue reward roots who hazard 0 =
+    quittingTerminalPayoff reward
+      (Function.update (quittingRootSequenceProfile reward roots 0) who
+        deviation) who
   rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
     quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
   rfl

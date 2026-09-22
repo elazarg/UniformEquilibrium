@@ -32,7 +32,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame
-open Math.Probability Math.Probability.DiscreteHazard
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
@@ -265,13 +265,13 @@ theorem exists_essentialNeverWitness_of_totallyBounded_not_properApproximable
   have hproper : ∀ center ∈ net,
       IsProperQuittingBehaviorStrategy reward who (proper center) := by
     intro center hcenter
-    simpa only [proper, dif_pos hcenter] using
+    simpa only [proper, dite_eq_left hcenter] using
       (hproperChoice center hcenter).choose_spec.1
   have hproperClose : ∀ center ∈ net,
       QuittingStrategicallyWithin reward who radius center
         (proper center) := by
     intro center hcenter
-    simpa only [proper, dif_pos hcenter] using
+    simpa only [proper, dite_eq_left hcenter] using
       (hproperChoice center hcenter).choose_spec.2
   let properNet : Set ((quittingGame reward).BehaviorStrategy who) :=
     proper '' net

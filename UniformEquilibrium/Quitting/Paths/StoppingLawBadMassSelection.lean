@@ -12,7 +12,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Division-free bad-set mass bound: if the expected value under the quitting
 stopping law falls short of the ceiling `C` by at least `Δ`, then the mass of
@@ -194,12 +194,12 @@ theorem quittingStoppingLaw_exists_leastBad_survival_lowerBound
         ≤ (if Nat.find hex ≤ t then quittingHazardStopMass hazard t else 0) := by
       intro t
       by_cases ht : Nat.find hex ≤ t
-      · rw [if_pos ht]
+      · rw [ite_eq_left ht]
         calc quittingHazardStopMass hazard t * ind (some t)
             ≤ quittingHazardStopMass hazard t * 1 :=
               mul_le_mul_of_nonneg_left (hind_le_one _) (hstop_nonneg t)
           _ = quittingHazardStopMass hazard t := mul_one _
-      · rw [if_neg ht]
+      · rw [ite_eq_right ht]
         have hlt : t < Nat.find hex := not_le.1 ht
         by_cases hp : P (some t)
         · rw [hmin t hlt hp]
@@ -223,16 +223,16 @@ theorem quittingStoppingLaw_exists_leastBad_survival_lowerBound
       refine Finset.sum_congr rfl ?_
       intro t ht
       simp only [Finset.mem_range] at ht
-      rw [if_pos ht]
+      rw [ite_eq_left ht]
     rw [hsumfin] at hfin
     have htailc : ∀ t, quittingHazardStopMass hazard t -
         (if t < Nat.find hex then quittingHazardStopMass hazard t else 0)
         = (if Nat.find hex ≤ t then quittingHazardStopMass hazard t else 0) := by
       intro t
       by_cases ht : Nat.find hex ≤ t
-      · rw [if_pos ht, if_neg (not_lt.2 ht)]
+      · rw [ite_eq_left ht, ite_eq_right (not_lt.2 ht)]
         ring
-      · rw [if_neg ht, if_pos (not_le.1 ht)]
+      · rw [ite_eq_right ht, ite_eq_left (not_le.1 ht)]
         ring
     have htail : HasSum
         (fun t => if Nat.find hex ≤ t then quittingHazardStopMass hazard t else 0)

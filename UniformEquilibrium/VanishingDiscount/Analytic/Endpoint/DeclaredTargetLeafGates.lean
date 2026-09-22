@@ -157,7 +157,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.LinearAlgebra.OwnerLabeledFlowHolonomy
 open Math.LinearAlgebra.OrientedAccountBridge
 open Math.LinearAlgebra.OwnerTypedDualLifting
@@ -1050,7 +1050,9 @@ theorem prescribedGluingGate_not_hasAccountPotential :
 
 theorem prescribedGluingGate_verdict :
     prescribedGluingGate.verdict = GateVerdict.fail :=
-  (NodeGluingGate.verdict_eq_fail_iff _).mpr prescribedGluingGate_not_glues
+  (NodeGluingGate.verdict_eq_fail_iff
+    (G := game) (Row := Bool) prescribedGluingGate).mpr
+      prescribedGluingGate_not_glues
 
 /-- The typed falsifier is present at the prescribed node. -/
 theorem nonempty_prescribed_farkasWitness :
@@ -1070,7 +1072,8 @@ theorem oneGluingGate_hasAccountPotential : oneGluingGate.HasAccountPotential :=
   (oneGluingGate.glues_iff_hasAccountPotential).mp oneGluingGate_glues
 
 theorem oneGluingGate_verdict : oneGluingGate.verdict = GateVerdict.pass :=
-  (NodeGluingGate.verdict_eq_pass_iff _).mpr oneGluingGate_glues
+  (NodeGluingGate.verdict_eq_pass_iff
+    (G := game) (Row := Bool) oneGluingGate).mpr oneGluingGate_glues
 
 /-! ### The account-bridge gates -/
 
@@ -1099,7 +1102,9 @@ theorem prescribedBridgeGate_not_bridges : ¬ prescribedBridgeGate.Bridges :=
 
 theorem prescribedBridgeGate_verdict :
     prescribedBridgeGate.verdict = GateVerdict.fail :=
-  (NodeAccountBridgeGate.verdict_eq_fail_iff _).mpr prescribedBridgeGate_not_bridges
+  (NodeAccountBridgeGate.verdict_eq_fail_iff
+    (G := game) (Row := Bool) prescribedBridgeGate).mpr
+      prescribedBridgeGate_not_bridges
 
 /-- **Bridge success at the constant-`1` node**: the zero charge is the exact
 drift of the zero potential. -/
@@ -1110,7 +1115,8 @@ theorem oneBridgeGate_bridges : oneBridgeGate.Bridges := by
   exact isExactBridge_zero _ _
 
 theorem oneBridgeGate_verdict : oneBridgeGate.verdict = GateVerdict.pass :=
-  (NodeAccountBridgeGate.verdict_eq_pass_iff _).mpr oneBridgeGate_bridges
+  (NodeAccountBridgeGate.verdict_eq_pass_iff
+    (G := game) (Row := Bool) oneBridgeGate).mpr oneBridgeGate_bridges
 
 /-- The two-sided cycle criterion at the constant-`1` node. -/
 theorem oneBridgeGate_neutralGlues : oneBridgeGate.NeutralGlues :=
@@ -1140,7 +1146,9 @@ theorem prescribedCustodyGate_not_lifts (i : Player) (β : ℝ) :
 theorem prescribedCustodyGate_verdict (i : Player) (β : ℝ) :
     prescribedCustodyGate.verdict i CrossOwnerCancellation.crossNormal β =
       GateVerdict.fail :=
-  (NodeCustodyGate.verdict_eq_fail_iff _ _ _ _).mpr
+  (NodeCustodyGate.verdict_eq_fail_iff
+    (G := game) (E := Empty) (N := Unit) (U := Bool) (Y := Unit)
+    prescribedCustodyGate i CrossOwnerCancellation.crossNormal β).mpr
     (prescribedCustodyGate_not_lifts i β)
 
 /-- Yet the same functional is valid on the full typed system: the gate failure
@@ -1158,7 +1166,9 @@ theorem prescribedCustodyGate_lifts_ownNormal :
 theorem prescribedCustodyGate_verdict_ownNormal :
     prescribedCustodyGate.verdict false (CrossOwnerCancellation.ownNormal false) 0 =
       GateVerdict.pass :=
-  (NodeCustodyGate.verdict_eq_pass_iff _ _ _ _).mpr
+  (NodeCustodyGate.verdict_eq_pass_iff
+    (G := game) (E := Empty) (N := Unit) (U := Bool) (Y := Unit)
+    prescribedCustodyGate false (CrossOwnerCancellation.ownNormal false) 0).mpr
     prescribedCustodyGate_lifts_ownNormal
 
 /-- The escape direction is invisible to owner `i`'s custody map, evaluated at

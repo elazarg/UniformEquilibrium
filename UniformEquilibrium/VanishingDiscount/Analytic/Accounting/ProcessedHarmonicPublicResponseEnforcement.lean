@@ -32,7 +32,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}

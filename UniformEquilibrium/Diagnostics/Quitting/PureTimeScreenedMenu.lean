@@ -20,14 +20,14 @@ private theorem quittingPureTimeCoalitionAt_update_eq_opponents_of_ne
     (hne : replacement ≠ some time) :
     quittingPureTimeCoalitionAt (Function.update times who replacement) time =
       quittingPureTimeOpponentCoalitionAt times who time := by
-  rw [quittingPureTimeCoalitionAt_update, if_neg hne]
+  rw [quittingPureTimeCoalitionAt_update, ite_eq_right hne]
   rfl
 
 private theorem quittingPureTimeCoalitionAt_update_eq_insert_opponents
     (times : QuittingPureTimeProfile ι) (who : ι) (time : ℕ) :
     quittingPureTimeCoalitionAt (Function.update times who (some time)) time =
       insert who (quittingPureTimeOpponentCoalitionAt times who time) := by
-  rw [quittingPureTimeCoalitionAt_update, if_pos rfl]
+  rw [quittingPureTimeCoalitionAt_update, ite_eq_left rfl]
   rfl
 
 /-- `Never` reaches the first nonempty opponent deadline and receives that

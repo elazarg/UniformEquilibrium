@@ -26,7 +26,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct Math.Topology
+open Filter _root_.Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+  Math.Topology
 open QuittingBoundaryHolonomy
 open QuittingSureSetOwnerRepair
 open scoped Topology
@@ -146,7 +147,7 @@ theorem quittingFiniteClockRoots_succ_shift
       quittingFiniteClockRoots clockBound (fun index => word index.succ) time := by
   by_cases htime : time < clockBound
   · simp only [quittingFiniteClockRoots,
-      dif_pos (Nat.succ_lt_succ htime), dif_pos htime]
+      dite_eq_left (Nat.succ_lt_succ htime), dite_eq_left htime]
     congr 2
   · have hsucc : ¬time + 1 < clockBound + 1 := by omega
     simp [quittingFiniteClockRoots, htime, hsucc]
@@ -273,8 +274,11 @@ theorem quittingTerminalSemanticPair_eq_stoppingLawProfile
         quittingStoppingLawProfile reward (fun who =>
           quittingBehaviorStoppingLaw reward (profile who)) := by
     funext who
-    simp [quittingCompactStoppingLawProfile,
-      quittingCompactStoppingLawsOfProfile, quittingStoppingLawProfile]
+    change quittingStoppingLawBehaviorStrategy reward who
+      (CompactStoppingLaw.ofPMF
+        (quittingBehaviorStoppingLaw reward (profile who))).toPMF = _
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
+    rfl
   rw [← hprofiles]
   exact quittingTerminalSemanticPair_eq_compactStoppingLawsOfProfile
     reward profile
@@ -298,8 +302,11 @@ theorem quittingTerminalPayoff_update_pureTime_eq_stoppingLawProfile
       quittingStoppingLawProfile reward (fun player =>
         quittingBehaviorStoppingLaw reward (profile player)) := by
     funext player
-    simp [quittingCompactStoppingLawProfile,
-      quittingCompactStoppingLawsOfProfile, quittingStoppingLawProfile]
+    change quittingStoppingLawBehaviorStrategy reward player
+      (CompactStoppingLaw.ofPMF
+        (quittingBehaviorStoppingLaw reward (profile player))).toPMF = _
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
+    rfl
   rw [← hprofile]
   exact quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile
     reward profile who choice
@@ -319,7 +326,10 @@ theorem quittingTerminalPayoff_stoppingLawProfile_eq_expect
       (fun who => Math.Probability.CompactStoppingLaw.ofPMF (laws who)) =
       quittingStoppingLawProfile reward laws := by
     funext who
-    simp [quittingCompactStoppingLawProfile, quittingStoppingLawProfile]
+    change quittingStoppingLawBehaviorStrategy reward who
+      (CompactStoppingLaw.ofPMF (laws who)).toPMF = _
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
+    rfl
   rw [← hprofile]
   convert quittingTerminalPayoff_compactStoppingLawProfile_eq_expect
     reward (fun who => Math.Probability.CompactStoppingLaw.ofPMF (laws who))
@@ -329,7 +339,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_eq_expect
       (quittingPureStoppingTimeProfile reward choices) observer)
   apply congrArg pmfPi
   funext who
-  simp
+  exact (CompactStoppingLaw.toPMF_ofPMF_option _).symm
 
 /-- Replace one discrete complete stopping law by a deterministic finite date
 or Never. -/
@@ -356,8 +366,10 @@ theorem quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect
   have hprofile : quittingCompactStoppingLawProfile reward compactLaws =
       quittingStoppingLawProfile reward laws := by
     funext player
-    simp [compactLaws, quittingCompactStoppingLawProfile,
-      quittingStoppingLawProfile]
+    change quittingStoppingLawBehaviorStrategy reward player
+      (CompactStoppingLaw.ofPMF (laws player)).toPMF = _
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
+    rfl
   rw [← hprofile]
   convert
     quittingTerminalPayoff_update_compactStoppingLawProfile_pureTime_eq_expect
@@ -372,8 +384,9 @@ theorem quittingTerminalPayoff_update_stoppingLawProfile_pureTime_eq_expect
     simp [quittingPureDeviationStoppingLaws,
       quittingPureDeviationCompactLaws, compactLaws]
     rfl
-  · simp [quittingPureDeviationStoppingLaws,
-      quittingPureDeviationCompactLaws, compactLaws, hplayer]
+  · simp only [quittingPureDeviationStoppingLaws,
+      quittingPureDeviationCompactLaws, compactLaws, hplayer, ite_false]
+    exact (CompactStoppingLaw.toPMF_ofPMF_option _).symm
 
 /-- A root sequence that first reaches a nonempty pure quitting set at one
 specified date pays exactly that set's terminal reward. -/
@@ -418,18 +431,16 @@ theorem quittingPureStoppingTimeProfile_root_eq_pureSetRoot
       quittingPureSetRoot
         (Finset.univ.filter fun who => choices who = some time) := by
   funext who
-  simp only [quittingProfileLiveRoot_pureStoppingTimeProfile]
+  change quittingPureTimeHazard (choices who) time = _
   cases hchoice : choices who with
-  | none => simp [quittingPureSetRoot, quittingSetAction,
-      quittingPureTimeHazard, hchoice]
+  | none => simp [quittingPureSetRoot, quittingSetAction, hchoice]
   | some quitTime =>
       by_cases heq : time = quitTime
       · subst quitTime
-        simp [quittingPureSetRoot, quittingSetAction,
-          quittingPureTimeHazard, hchoice]
+        simp [quittingPureSetRoot, quittingSetAction, hchoice]
       · have hne : quitTime ≠ time := Ne.symm heq
-        simp [quittingPureSetRoot, quittingSetAction,
-          quittingPureTimeHazard, hchoice, heq, hne]
+        rw [quittingPureTimeHazard_some_of_ne heq]
+        simp [quittingPureSetRoot, quittingSetAction, hchoice, hne]
 
 /-- A deterministic stopping-time profile with earliest finite date `first`
 pays the reward of the coalition tied at that date. -/
@@ -506,10 +517,10 @@ theorem quittingFiniteClockSemanticReachable_subset_range_fold
   change (quittingFiniteClockRoots clockBound word time) who =
     quittingStoppingLawBehaviorStrategy reward who (laws who) time history
   by_cases htime : time < clockBound
-  · rw [quittingFiniteClockRoots, dif_pos htime]
+  · rw [quittingFiniteClockRoots, dite_eq_left htime]
     simp [word, profile, quittingRootOfSimplex, quittingProfileLiveRoot,
       quittingStoppingLawProfile, quittingStoppingLawBehaviorStrategy]
-  · rw [quittingFiniteClockRoots, dif_neg htime,
+  · rw [quittingFiniteClockRoots, dite_eq_right htime,
       ← quittingStoppingLawProfile_liveHazard_eq_allContinue_of_le
         reward clockBound laws hlaws (Nat.le_of_not_gt htime)]
     rfl

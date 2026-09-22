@@ -20,7 +20,7 @@ canonical module; the underlying result remains owned there.
 
 `Theorems.ChargedPaths.finiteBudget_iff_exists_boundedPotential` characterizes
 finite nonnegative path budgets by bounded potentials.
-`Math.ChargedPathBudget.ChargedRelation.budget_eq_oscillation_value` gives the
+`Maths.ChargedPathBudget.ChargedRelation.budget_eq_oscillation_value` gives the
 sharp oscillation duality, attained by the budget-to-go potential.
 
 ## Renewal and divergent charged paths

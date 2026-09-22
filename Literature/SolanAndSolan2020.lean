@@ -37,7 +37,7 @@ table, including the nontermination payoff.
 namespace Literature.SolanAndSolan2020
 
 open GameTheory StochasticGame QuittingLCPClassification
-open Math.Probability
+open _root_.Math.Probability
 open Math.LinearProgramming
 open Filter
 open scoped BigOperators
@@ -113,7 +113,7 @@ state samples a label before every live decision, including the first one.
 At an `active` state a nonempty quitter set absorbs, while unanimous Continue
 returns to `draw`. Thus no strategic decision is made before the first public
 signal, exactly as in Definition 2.3. -/
-def publicQuittingGame {Signal : Type} [Finite Signal]
+@[reducible] def publicQuittingGame {Signal : Type} [Finite Signal]
     (table : Table ι)
     (signalLaw : PMF Signal) :
     StochasticGame ι where
@@ -167,32 +167,6 @@ def publicQuittingGame {Signal : Type} [Finite Signal]
       PMF.pure (.absorbed quitters) :=
   rfl
 
-private instance publicQuittingHistFinite
-    {Signal : Type} [Fintype Signal]
-    (table : Table ι) (signalLaw : PMF Signal) (t : ℕ) :
-    Finite ((publicQuittingGame table signalLaw).Hist t) :=
-  inferInstanceAs (Finite
-    ((Fin t → PublicQuittingState ι Signal × (ι → Bool)) ×
-      PublicQuittingState ι Signal))
-
-private instance publicQuittingStateFinite
-    {Signal : Type} [Fintype Signal]
-    (table : Table ι) (signalLaw : PMF Signal) :
-    Finite (publicQuittingGame table signalLaw).State :=
-  inferInstanceAs (Finite (PublicQuittingState ι Signal))
-
-private instance publicQuittingJointActFinite
-    {Signal : Type} [Fintype Signal]
-    (table : Table ι) (signalLaw : PMF Signal) :
-    Finite (publicQuittingGame table signalLaw).JointAct :=
-  inferInstanceAs (Finite (ι → Bool))
-
-private instance publicQuittingActFinite
-    {Signal : Type} [Fintype Signal]
-    (table : Table ι) (signalLaw : PMF Signal) (who : ι) :
-    Finite ((publicQuittingGame table signalLaw).Act who) :=
-  inferInstanceAs (Finite Bool)
-
 /-! Indicator and time-`t` mass of one absorbing quitter set. -/
 def publicAbsorbedIndicator {Signal : Type} [Fintype Signal]
     (quitters : {S : Finset ι // S.Nonempty})
@@ -223,10 +197,10 @@ theorem publicAbsorbedMass_succ_ge
     (t : ℕ) (quitters : {S : Finset ι // S.Nonempty}) :
     publicAbsorbedMass table signalLaw strategy t quitters ≤
       publicAbsorbedMass table signalLaw strategy (t + 1) quitters := by
-  letI : Finite (publicQuittingGame table signalLaw).State :=
+  let _ : Finite (publicQuittingGame table signalLaw).State :=
     inferInstanceAs (Finite (PublicQuittingState ι (Fin (signalCount + 1))))
-  letI : ∀ i : ι, Finite ((publicQuittingGame table signalLaw).Act i) :=
-    fun _ => inferInstanceAs (Finite Bool)
+  let _ : ∀ i : ι, Finite ((publicQuittingGame table signalLaw).Act i) :=
+    fun _ => Finite.of_fintype Bool
   rw [publicAbsorbedMass, publicAbsorbedMass,
     (publicQuittingGame table signalLaw).expectedStateValue_succ]
   unfold StochasticGame.expectedStateValue
@@ -256,10 +230,10 @@ theorem publicAbsorbedMass_le_one
     (strategy : (publicQuittingGame table signalLaw).BehaviorProfile)
     (t : ℕ) (quitters : {S : Finset ι // S.Nonempty}) :
     publicAbsorbedMass table signalLaw strategy t quitters ≤ 1 := by
-  letI : Finite (publicQuittingGame table signalLaw).State :=
+  let _ : Finite (publicQuittingGame table signalLaw).State :=
     inferInstanceAs (Finite (PublicQuittingState ι (Fin (signalCount + 1))))
-  letI : ∀ i : ι, Finite ((publicQuittingGame table signalLaw).Act i) :=
-    fun _ => inferInstanceAs (Finite Bool)
+  let _ : ∀ i : ι, Finite ((publicQuittingGame table signalLaw).Act i) :=
+    fun _ => Finite.of_fintype Bool
   unfold publicAbsorbedMass StochasticGame.expectedStateValue
   calc
     expect ((publicQuittingGame table signalLaw).histDist strategy
@@ -508,7 +482,7 @@ theorem lemma2_7
 /-! The payoff to `who` from the paper's distribution over unilateral
 quittings by normal players. -/
 def NormalMixturePayoff (table : Table ι)
-    (weight : stdSimplex ℝ (NormalPlayer table)) (who : ι) : ℝ :=
+    (weight : Convexity.StdSimplex ℝ (NormalPlayer table)) (who : ι) : ℝ :=
   wsum weight fun owner =>
     table.terminal (quittingProjectiveSingletonTerminal owner.1) who
 
@@ -533,52 +507,58 @@ def extendNormalPlayerWeight (table : Table ι)
 
 /-! Zero-extension preserves nonnegativity and total mass one. -/
 def extendNormalPlayerSimplex (table : Table ι)
-    (weight : stdSimplex ℝ (NormalPlayer table)) : stdSimplex ℝ ι := by
+    (weight : Convexity.StdSimplex ℝ (NormalPlayer table)) :
+    Convexity.StdSimplex ℝ ι := by
   classical
-  refine ⟨extendNormalPlayerWeight table weight.1, ?_, ?_⟩
+  refine {
+    weights := Finsupp.equivFunOnFinite.symm
+      (extendNormalPlayerWeight table weight.weights)
+    nonneg := ?_
+    total := ?_ }
   · intro who
     by_cases hwho : who ∈ NormalPlayers table
-    · rw [extendNormalPlayerWeight_of_mem table weight.1 hwho]
-      exact weight.2.1 ⟨who, hwho⟩
+    · simp [extendNormalPlayerWeight, hwho, weight.weights_nonneg]
     · simp [extendNormalPlayerWeight, hwho]
-  · calc
-      (∑ who, extendNormalPlayerWeight table weight.1 who) =
+  · rw [Finsupp.equivFunOnFinite_symm_sum]
+    calc
+      (∑ who, extendNormalPlayerWeight table weight.weights who) =
           ∑ who ∈ NormalPlayers table,
-            extendNormalPlayerWeight table weight.1 who := by
+            extendNormalPlayerWeight table weight.weights who := by
         symm
         apply Finset.sum_subset (Finset.subset_univ _)
         intro who _ hwho
-        exact extendNormalPlayerWeight_of_notMem table weight.1 hwho
-      _ = ∑ who : NormalPlayer table, weight.1 who := by
+        exact extendNormalPlayerWeight_of_notMem table weight.weights hwho
+      _ = ∑ who : NormalPlayer table, weight.weights who := by
         calc
           (∑ who ∈ NormalPlayers table,
-              extendNormalPlayerWeight table weight.1 who) =
+              extendNormalPlayerWeight table weight.weights who) =
               ∑ who : NormalPlayer table,
-                extendNormalPlayerWeight table weight.1 who.1 :=
+                extendNormalPlayerWeight table weight.weights who.1 :=
             Finset.sum_subtype (NormalPlayers table) (fun _ => Iff.rfl) _
-          _ = ∑ who : NormalPlayer table, weight.1 who := by
+          _ = ∑ who : NormalPlayer table, weight.weights who := by
             apply Finset.sum_congr rfl
             intro who _
-            exact extendNormalPlayerWeight_of_mem table weight.1 who.2
-      _ = 1 := weight.2.2
+            exact extendNormalPlayerWeight_of_mem table weight.weights who.2
+      _ = 1 := weight.total_of_fintype
 
 @[simp] theorem extendNormalPlayerSimplex_apply_of_mem
-    (table : Table ι) (weight : stdSimplex ℝ (NormalPlayer table))
+    (table : Table ι) (weight : Convexity.StdSimplex ℝ (NormalPlayer table))
     {who : ι} (hwho : who ∈ NormalPlayers table) :
-    (extendNormalPlayerSimplex table weight).1 who = weight.1 ⟨who, hwho⟩ := by
+    (extendNormalPlayerSimplex table weight).weights who =
+      weight.weights ⟨who, hwho⟩ := by
   simp [extendNormalPlayerSimplex, hwho]
 
 @[simp] theorem extendNormalPlayerSimplex_apply_of_notMem
-    (table : Table ι) (weight : stdSimplex ℝ (NormalPlayer table))
+    (table : Table ι) (weight : Convexity.StdSimplex ℝ (NormalPlayer table))
     {who : ι} (hwho : who ∉ NormalPlayers table) :
-    (extendNormalPlayerSimplex table weight).1 who = 0 := by
+    (extendNormalPlayerSimplex table weight).weights who = 0 := by
   simp [extendNormalPlayerSimplex, hwho]
 
 /-! On a normal coordinate, the full zero-extended singleton residual is
 the mixture appearing in Lemma 2.8. -/
 theorem singletonLCPResidual_extendNormalPlayerSimplex
     (table : Table ι) (hnormalized : SoloExitNormalized table)
-    (weight : stdSimplex ℝ (NormalPlayer table))
+    (weight : Convexity.StdSimplex ℝ (NormalPlayer table))
     (who : NormalPlayer table) :
     singletonLCPResidual (normalizedSoloMatrix table.zeroNeverReward)
         (extendNormalPlayerSimplex table weight) who.1 =
@@ -589,10 +569,10 @@ theorem singletonLCPResidual_extendNormalPlayerSimplex
     table hnormalized]
   calc
     (∑ owner,
-        (extendNormalPlayerSimplex table weight).1 owner *
+        (extendNormalPlayerSimplex table weight).weights owner *
           table.singletonMatrix who.1 owner) =
         ∑ owner ∈ NormalPlayers table,
-          (extendNormalPlayerSimplex table weight).1 owner *
+          (extendNormalPlayerSimplex table weight).weights owner *
             table.singletonMatrix who.1 owner := by
       symm
       apply Finset.sum_subset (Finset.subset_univ _)
@@ -600,23 +580,23 @@ theorem singletonLCPResidual_extendNormalPlayerSimplex
       rw [extendNormalPlayerSimplex_apply_of_notMem table weight howner,
         zero_mul]
     _ = ∑ owner : NormalPlayer table,
-        weight.1 owner * table.singletonMatrix who.1 owner.1 := by
+        weight.weights owner * table.singletonMatrix who.1 owner.1 := by
       calc
         (∑ owner ∈ NormalPlayers table,
-            (extendNormalPlayerSimplex table weight).1 owner *
+            (extendNormalPlayerSimplex table weight).weights owner *
               table.singletonMatrix who.1 owner) =
             ∑ owner : NormalPlayer table,
-              (extendNormalPlayerSimplex table weight).1 owner.1 *
+              (extendNormalPlayerSimplex table weight).weights owner.1 *
                 table.singletonMatrix who.1 owner.1 :=
           Finset.sum_subtype (NormalPlayers table) (fun _ => Iff.rfl) _
         _ = ∑ owner : NormalPlayer table,
-            weight.1 owner * table.singletonMatrix who.1 owner.1 := by
+            weight.weights owner * table.singletonMatrix who.1 owner.1 := by
           apply Finset.sum_congr rfl
           intro owner _
           rw [extendNormalPlayerSimplex_apply_of_mem
             table weight owner.2]
     _ = ∑ owner : NormalPlayer table,
-        weight.1 owner *
+        weight.weights owner *
           table.terminal (quittingProjectiveSingletonTerminal owner.1)
             who.1 := by
       apply Finset.sum_congr rfl
@@ -633,13 +613,13 @@ nonvertex distribution. -/
 theorem lemma2_8
     (table : Table ι) (hnormalized : SoloExitNormalized table)
     (hbounded : TablePayoffsBounded table)
-    (weight : stdSimplex ℝ (NormalPlayer table))
+    (weight : Convexity.StdSimplex ℝ (NormalPlayer table))
     (hnonnegative : ∀ who : NormalPlayer table,
       0 ≤ NormalMixturePayoff table weight who.1)
     (hcomplementary : ∀ who : NormalPlayer table,
-      0 < weight.1 who → NormalMixturePayoff table weight who.1 = 0)
+      0 < weight.weights who → NormalMixturePayoff table weight who.1 = 0)
     (hvertexNever : ∀ owner : NormalPlayer table,
-      weight.1 owner = 1 → table.never owner.1 ≤ 0) :
+      weight.weights owner = 1 → table.never owner.1 ≤ 0) :
     StationaryEpsilonEquilibria table := by
   classical
   let fullWeight := extendNormalPlayerSimplex table weight
@@ -658,30 +638,30 @@ theorem lemma2_8
       intro owner _
       by_cases howner : owner ∈ NormalPlayers table
       · have hne : owner ≠ who := fun heq => hwho (heq ▸ howner)
-        exact mul_nonneg (fullWeight.2.1 owner)
+        exact mul_nonneg (fullWeight.weights_nonneg owner)
           (lemma2_6 table hnormalized hbounded
             (by simpa only [mem_normalPlayers_iff] using hwho) hne).le
-      · change 0 ≤ (extendNormalPlayerSimplex table weight).1 owner * _
+      · change 0 ≤ (extendNormalPlayerSimplex table weight).weights owner * _
         rw [extendNormalPlayerSimplex_apply_of_notMem
           table weight howner, zero_mul]
   have hfullComplementary : ∀ who,
-      fullWeight.1 who * singletonLCPResidual
+      fullWeight.weights who * singletonLCPResidual
         (normalizedSoloMatrix table.zeroNeverReward) fullWeight who = 0 := by
     intro who
     by_cases hwho : who ∈ NormalPlayers table
     · rw [singletonLCPResidual_extendNormalPlayerSimplex
         table hnormalized weight ⟨who, hwho⟩,
       extendNormalPlayerSimplex_apply_of_mem table weight hwho]
-      by_cases hweight : weight.1 ⟨who, hwho⟩ = 0
+      by_cases hweight : weight.weights ⟨who, hwho⟩ = 0
       · rw [hweight, zero_mul]
-      · have hpositive : 0 < weight.1 ⟨who, hwho⟩ :=
-          lt_of_le_of_ne (weight.2.1 _) (Ne.symm hweight)
+      · have hpositive : 0 < weight.weights ⟨who, hwho⟩ :=
+          lt_of_le_of_ne (weight.weights_nonneg _) (Ne.symm hweight)
         rw [hcomplementary ⟨who, hwho⟩ hpositive, mul_zero]
     · rw [extendNormalPlayerSimplex_apply_of_notMem
         table weight hwho, zero_mul]
   change table.StationaryεEquilibriumExistence
   rw [QuittingPayoffTable.stationaryεEquilibriumExistence_iff]
-  by_cases hvertex : ∃ owner, fullWeight.1 owner = 1
+  by_cases hvertex : ∃ owner, fullWeight.weights owner = 1
   · obtain ⟨owner, howner⟩ := hvertex
     have hownerMem : owner ∈ NormalPlayers table := by
       by_contra hnot
@@ -689,7 +669,7 @@ theorem lemma2_8
         table weight hnot
       rw [howner] at hzero
       norm_num at hzero
-    have hownerWeight : weight.1 ⟨owner, hownerMem⟩ = 1 := by
+    have hownerWeight : weight.weights ⟨owner, hownerMem⟩ = 1 := by
       rw [← extendNormalPlayerSimplex_apply_of_mem
         table weight hownerMem]
       exact howner
@@ -748,12 +728,12 @@ theorem lemma2_8
         simpa only [quittingProjectiveSingletonTerminal] using hcolumn who
       rw [hsolo, max_le_iff]
       constructor <;> nlinarith
-  · have hnonvertex : ∀ who, fullWeight.1 who < 1 := by
+  · have hnonvertex : ∀ who, fullWeight.weights who < 1 := by
       intro who
-      have hle : fullWeight.1 who ≤ 1 := by
-        rw [← fullWeight.2.2]
+      have hle : fullWeight.weights who ≤ 1 := by
+        rw [← fullWeight.total_of_fintype]
         exact Finset.single_le_sum
-          (fun owner _ => fullWeight.2.1 owner) (Finset.mem_univ who)
+          (fun owner _ => fullWeight.weights_nonneg owner) (Finset.mem_univ who)
       exact lt_of_le_of_ne hle (fun heq => hvertex ⟨who, heq⟩)
     exact
       (isQuittingStationaryUniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
@@ -869,7 +849,7 @@ theorem lemma2_12
     exact hnonnegative who
   · intro who hpositive
     have hproduct := hcomplementary who
-    change weight.1 who * NormalMixturePayoff table weight who.1 = 0 at hproduct
+    change weight.weights who * NormalMixturePayoff table weight who.1 = 0 at hproduct
     exact (mul_eq_zero.mp hproduct).resolve_left hpositive.ne'
   · intro owner _
     exact hnormalNever owner
@@ -887,7 +867,7 @@ private theorem epsilonEquilibria_of_nontrivialZeroProjectiveLCPSolution
         EpsilonEquilibrium table ε profile := by
   rw [hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous] at h
   obtain ⟨weight, hnonnegative, hcomplementary⟩ := h
-  by_cases hvertex : ∃ owner : NormalPlayer table, weight.1 owner = 1
+  by_cases hvertex : ∃ owner : NormalPlayer table, weight.weights owner = 1
   · obtain ⟨owner, howner⟩ := hvertex
     have hcolumn : ∀ who,
         0 ≤ table.terminal
@@ -913,7 +893,7 @@ private theorem epsilonEquilibria_of_nontrivialZeroProjectiveLCPSolution
         exact hnonnegative who
       · intro who hpositive
         have hproduct := hcomplementary who
-        change weight.1 who * NormalMixturePayoff table weight who.1 = 0
+        change weight.weights who * NormalMixturePayoff table weight who.1 = 0
           at hproduct
         exact (mul_eq_zero.mp hproduct).resolve_left hpositive.ne'
       · intro owner howner
@@ -1374,7 +1354,7 @@ theorem isClosed_DZero (M : ι → ι → ℝ) :
   rw [show {w | DZero M w} =
       ⋃ who, D M ∩ {w | w who = 0} by
     ext w
-    simp only [DZero, Set.mem_setOf_eq, Set.mem_iUnion, Set.mem_inter_iff]
+    simp only [DZero, Set.mem_ofPred_eq, Set.mem_iUnion, Set.mem_inter_iff]
     aesop]
   exact isClosed_iUnion_of_finite fun who =>
     (isClosed_D M).inter <| isClosed_eq
@@ -1659,38 +1639,44 @@ structure SimplexWeights (ι : Type) [Fintype ι] [DecidableEq ι] where
 /-! The lottery on `{0}∪I` represented by the paper's vector
 `z=(z₀,(zᵢ)ᵢ)`. -/
 def SimplexWeights.toStdSimplex (weight : SimplexWeights ι) :
-    stdSimplex ℝ (Option ι) := by
-  refine ⟨fun choice => match choice with
+    Convexity.StdSimplex ℝ (Option ι) := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (fun choice => match choice with
     | none => weight.cemetery
-    | some owner => weight.singleton owner, ?_, ?_⟩
+    | some owner => weight.singleton owner), ?_, ?_⟩
   · intro choice
     cases choice with
     | none => exact weight.cemetery_nonneg
     | some owner => exact weight.singleton_nonneg owner
-  · rw [Fintype.sum_option]
+  · rw [Finsupp.equivFunOnFinite_symm_sum, Fintype.sum_option]
     exact weight.total
 
 /-! The corresponding finite public lottery. -/
 noncomputable def SimplexWeights.toPMF (weight : SimplexWeights ι) :
     PMF (Option ι) :=
   Math.ProbabilityMassFunction.ofVector
-    weight.toStdSimplex.1 weight.toStdSimplex.2
+    weight.toStdSimplex.weights
+      (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+        weight.toStdSimplex)
 
 @[simp] theorem SimplexWeights.toPMF_none_toReal
     (weight : SimplexWeights ι) :
     (weight.toPMF none).toReal = weight.cemetery := by
   change ((Math.ProbabilityMassFunction.ofVector
-    weight.toStdSimplex.1 weight.toStdSimplex.2) none).toReal = _
+    weight.toStdSimplex.weights
+      (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+        weight.toStdSimplex)) none).toReal = _
   rw [Math.ProbabilityMassFunction.ofVector_toReal]
-  rfl
+  simp [SimplexWeights.toStdSimplex]
 
 @[simp] theorem SimplexWeights.toPMF_some_toReal
     (weight : SimplexWeights ι) (owner : ι) :
     (weight.toPMF (some owner)).toReal = weight.singleton owner := by
   change ((Math.ProbabilityMassFunction.ofVector
-    weight.toStdSimplex.1 weight.toStdSimplex.2) (some owner)).toReal = _
+    weight.toStdSimplex.weights
+      (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+        weight.toStdSimplex)) (some owner)).toReal = _
   rw [Math.ProbabilityMassFunction.ofVector_toReal]
-  rfl
+  simp [SimplexWeights.toStdSimplex]
 
 /-! Conditions (F.1)--(F.5) of the published Theorem 3.3 for `(M,y,ε)`.
 The published condition (F.1) allows the segment containing `wⁱ` to start
@@ -1955,11 +1941,11 @@ theorem BuildingBlock.w_ne_y_of_column_negative
     · exact fun i _ => hmassNonneg i
     · exact ⟨owner, Finset.mem_univ owner,
         mul_pos howner (attempt owner).quitWeight_pos⟩
-  let weight : stdSimplex ℝ ι :=
-    ⟨fun owner => mass owner * totalMass⁻¹,
+  let weight : Convexity.StdSimplex ℝ ι :=
+    ⟨Finsupp.equivFunOnFinite.symm (fun owner => mass owner * totalMass⁻¹),
       fun owner => mul_nonneg (hmassNonneg owner)
         (inv_nonneg.mpr htotalMassPos.le), by
-        rw [← Finset.sum_mul]
+        rw [Finsupp.equivFunOnFinite_symm_sum, ← Finset.sum_mul]
         exact mul_inv_cancel₀ (ne_of_gt htotalMassPos)⟩
   have hbalance (who : ι) :
       ∑ owner, mass owner * M who owner = totalMass * y who := by
@@ -2172,7 +2158,7 @@ private theorem subfamilyHull_weights
       (∀ who, ∑ i, weight i * M who i = y who) := by
   rw [SubfamilyHull, mem_convexHull_iff_exists_fintype] at hy
   obtain ⟨κ, hκ, a, point, ha, hatotal, hpoint, hsum⟩ := hy
-  letI : Fintype κ := hκ
+  let _ : Fintype κ := hκ
   choose owner howner using hpoint
   let weight : ι → ℝ := fun i =>
     ∑ k, if (owner k : ι) = i then a k else 0
@@ -2690,8 +2676,6 @@ private theorem affine_slice_mem_subfamilyHull
     convexHull ℝ (Set.range fun i : J =>
       fun who => (1 - η) * y who + η * M who i)
   convert hsImage using 1
-  ext who
-  simp [slice, smul_eq_mul]
 
 omit [Fintype ι] [DecidableEq ι] in
 private theorem mem_augmentedHull
@@ -2984,7 +2968,7 @@ theorem lemma3_4
           by_cases howner : owner ∈ J
           · change (if owner ∈ J then (fun who => M who owner)
                 else q (subseq n)) ∈ C ∪ {q (subseq n)}
-            rw [if_pos howner]
+            rw [ite_eq_left howner]
             apply Set.mem_union_left
             exact subset_convexHull ℝ _ ⟨⟨owner, howner⟩, rfl⟩
           · exact Set.mem_union_right _ (by simp [point, howner])
@@ -3086,7 +3070,7 @@ theorem lemma3_5
   have hJ : (ZeroCoordinates y).Nonempty := by
     by_contra hempty
     rw [Finset.not_nonempty_iff_eq_empty] at hempty
-    letI : IsEmpty (ZeroCoordinates y : Type) :=
+    let _ : IsEmpty (ZeroCoordinates y : Type) :=
       ⟨fun owner => by simpa [hempty] using owner.property⟩
     have hrange : (Set.range fun i : ZeroCoordinates y =>
         fun who => M who i) = ∅ :=
@@ -3469,10 +3453,10 @@ theorem exists_buildingBlock_approximationWitness [Nonempty ι]
     (c C : ℝ) (hc : 0 < c) (hC : 0 ≤ C) :
     ApproximationWitness
       (buildingBlockMap M hbound hdiag hzero hQ hε) c C := by
-  letI : Nonempty {value // DZero M value} := by
+  let _ : Nonempty {value // DZero M value} := by
     obtain ⟨value, hvalue⟩ := exists_mem_DZero M hdiag hzero hQ
     exact ⟨⟨value, hvalue⟩⟩
-  letI : CompleteSpace {value // DZero M value} :=
+  let _ : CompleteSpace {value // DZero M value} :=
     (isClosed_DZero M).completeSpace_coe
   exact theorem3_6
     (buildingBlockMap M hbound hdiag hzero hQ hε)
@@ -3738,7 +3722,7 @@ theorem exists_kiloblockBlueprint
     {requested : ℝ} (hrequested : 0 < requested) :
     ∃ ε : ℝ, 7 * ε ≤ requested ∧
       Nonempty (KiloblockBlueprint table ε) := by
-  letI : Nonempty (NormalPlayer table) := hnormal.to_subtype
+  let _ : Nonempty (NormalPlayer table) := hnormal.to_subtype
   let M := NormalMatrix table
   have hmatrixBound : MatrixPayoffsBounded M :=
     normalMatrix_payoffsBounded table hbounded
@@ -3984,7 +3968,7 @@ theorem nextKiloblockMode_validRemaining
                   | restart =>
                       simp [phaseAfterAttempt, hcontinuation]
                   | advance =>
-                      simp only [if_pos True.intro, phaseAfterAttempt,
+                      simp only [ite_eq_left True.intro, phaseAfterAttempt,
                         hcontinuation]
                       change (KiloblockMode.draw
                         (precedingKiloblockPhase table k)).ValidRemaining mesh
@@ -4051,21 +4035,21 @@ theorem nextKiloblockMode_step
           by_cases hquit :
               ({who | action who = true} : Finset ι).Nonempty
           · have hnext : nextState = .absorbed ⟨_, hquit⟩ := by
-              simp only [publicQuittingGame, dif_pos hquit,
+              simp only [publicQuittingGame, dite_eq_left hquit,
                 PMF.support_pure] at hsupport
               exact Set.mem_singleton_iff.mp hsupport
             subst nextState
             simp [KiloblockModeStep, nextKiloblockMode, hquit]
           · by_cases hremaining : remaining ≤ 1
             · have hnext : nextState = .draw := by
-                simp only [publicQuittingGame, dif_neg hquit,
+                simp only [publicQuittingGame, dite_eq_right hquit,
                   PMF.support_pure] at hsupport
                 exact Set.mem_singleton_iff.mp hsupport
               subst nextState
               simp [KiloblockModeStep, nextKiloblockMode, hquit,
                 hremaining]
             · have hnext : nextState = .draw := by
-                simp only [publicQuittingGame, dif_neg hquit,
+                simp only [publicQuittingGame, dite_eq_right hquit,
                   PMF.support_pure] at hsupport
                 exact Set.mem_singleton_iff.mp hsupport
               subst nextState
@@ -4079,13 +4063,13 @@ theorem nextKiloblockMode_step
           by_cases hquit :
               ({who | action who = true} : Finset ι).Nonempty
           · have hnext : nextState = .absorbed ⟨_, hquit⟩ := by
-              simp only [publicQuittingGame, dif_pos hquit,
+              simp only [publicQuittingGame, dite_eq_left hquit,
                 PMF.support_pure] at hsupport
               exact Set.mem_singleton_iff.mp hsupport
             subst nextState
             simp [KiloblockModeStep, nextKiloblockMode, hquit]
           · have hnext : nextState = .draw := by
-              simp only [publicQuittingGame, dif_neg hquit,
+              simp only [publicQuittingGame, dite_eq_right hquit,
                 PMF.support_pure] at hsupport
               exact Set.mem_singleton_iff.mp hsupport
             subst nextState
@@ -4429,23 +4413,18 @@ noncomputable def KiloblockBlueprint.toConstruction
     cases hmode : blueprint.mode t history with
     | draw =>
         simp [KiloblockBlueprint.strategy, hmode]
-        rfl
     | active k choice remaining =>
         cases choice with
         | none =>
             simp [KiloblockBlueprint.strategy, hmode]
-            rfl
         | some owner =>
             by_cases hwho : who = owner.1
             · simp [KiloblockBlueprint.strategy, hmode, hwho]
             · simp [KiloblockBlueprint.strategy, hmode, hwho]
-              rfl
     | finalActive =>
         simp [KiloblockBlueprint.strategy, hmode]
-        rfl
     | absorbed =>
         simp [KiloblockBlueprint.strategy, hmode]
-        rfl
 
 theorem exists_kiloblockConstruction
     (table : Table ι)
@@ -5106,7 +5085,7 @@ theorem KiloblockConstruction.macroSurvival_mul_one_add_total_le_one
     apply Finset.sum_congr rfl
     intro k _
     rw [show charge k.1 = construction.macroAbsorptionProbability k by
-      simp only [charge, dif_pos k.isLt]]
+      simp only [charge, dite_eq_left k.isLt]]
     rfl
   have hprod : (∏ j ∈ Finset.range (construction.blockCount + 1),
       (1 - charge j)) = construction.macroSurvivalProbability := by
@@ -5114,7 +5093,7 @@ theorem KiloblockConstruction.macroSurvival_mul_one_add_total_le_one
     unfold KiloblockConstruction.macroSurvivalProbability
     apply Finset.prod_congr rfl
     intro k _
-    simp only [charge, dif_pos k.isLt]
+    simp only [charge, dite_eq_left k.isLt]
     exact (construction.macroAdvanceProbability_eq_one_sub k).symm
   simp only [zero_add] at hmain
   rw [hsum, hprod] at hmain
@@ -5286,7 +5265,7 @@ theorem KiloblockConstruction.macroAt_total
     construction.macroAdvanceAt j +
       ∑ owner, construction.macroAbsorbAt j owner = 1 := by
   simp only [KiloblockConstruction.macroAdvanceAt,
-    KiloblockConstruction.macroAbsorbAt, dif_pos hj]
+    KiloblockConstruction.macroAbsorbAt, dite_eq_left hj]
   exact construction.macroProbability_total ⟨j, hj⟩
 
 theorem KiloblockConstruction.macroMassFuel_total
@@ -5369,7 +5348,7 @@ theorem KiloblockConstruction.macroSurvivalFuel_full
       intro k _
       rw [show construction.macroAdvanceAt k.1 =
           construction.macroAdvanceProbability k by
-        simp only [KiloblockConstruction.macroAdvanceAt, dif_pos k.isLt]]
+        simp only [KiloblockConstruction.macroAdvanceAt, dite_eq_left k.isLt]]
 
 /-! The coordinate error in (A.2'') between the endpoint of block `j` and
 the next point in the chain. It is zero outside the actual chain, which lets
@@ -5454,7 +5433,7 @@ theorem KiloblockConstruction.abs_trackingCorrection_lt
       have hjcount : j < construction.blockCount := by omega
       simp only [KiloblockConstruction.trackingIncrement,
         KiloblockConstruction.trackingDistanceIncrement, hjcount,
-        dif_pos]
+        dite_eq_left]
       rw [dist_eq_norm]
       simpa only [Pi.sub_apply, Real.norm_eq_abs, abs_sub_comm] using
         norm_le_pi_norm
@@ -5589,14 +5568,14 @@ private theorem KiloblockConstruction.macroCorrectedValueFuel_step
   rw [KiloblockConstruction.macroCorrectedValueFuel, hprevious]
   have hadvance : construction.macroAdvanceAt j =
       construction.macroAdvanceProbability ⟨j, hj⟩ := by
-    simp only [KiloblockConstruction.macroAdvanceAt, dif_pos hj]
+    simp only [KiloblockConstruction.macroAdvanceAt, dite_eq_left hj]
   have habsorb : ∀ owner, construction.macroAbsorbAt j owner =
       construction.macroAbsorbProbability ⟨j, hj⟩ owner := by
     intro owner
-    simp only [KiloblockConstruction.macroAbsorbAt, dif_pos hj]
+    simp only [KiloblockConstruction.macroAbsorbAt, dite_eq_left hj]
   have htracking : construction.macroTrackingAt j who =
       construction.trackingCorrection ⟨j, hj⟩ who := by
-    simp only [KiloblockConstruction.macroTrackingAt, dif_pos hj]
+    simp only [KiloblockConstruction.macroTrackingAt, dite_eq_left hj]
   rw [hadvance]
   simp_rw [habsorb, htracking, mul_add]
   rw [Finset.sum_add_distrib, ← Finset.sum_mul]
@@ -5654,7 +5633,7 @@ theorem KiloblockConstruction.macroTrackingAt_abs_lt
     |construction.macroTrackingAt j who| < ε := by
   rw [show construction.macroTrackingAt j who =
       construction.trackingCorrection ⟨j, hj⟩ who by
-    simp only [KiloblockConstruction.macroTrackingAt, dif_pos hj]]
+    simp only [KiloblockConstruction.macroTrackingAt, dite_eq_left hj]]
   exact construction.abs_trackingCorrection_lt ⟨j, hj⟩ who
 
 private theorem KiloblockConstruction.macro_terminal_sum_le
@@ -5882,7 +5861,7 @@ theorem KiloblockConstruction.continueExitProbabilityWeight_pos
       have hexcluded := construction.macroAbsorbProbability_nonneg k excluded
       have hadvanceBase := construction.macroAdvanceProbability_nonneg k
       unfold KiloblockConstruction.continueAdvanceProbabilityWeight at hadvanceZero
-      simp only [hbranch, if_pos] at hadvanceZero
+      simp only [hbranch, ite_eq_left] at hadvanceZero
       have hall : ∑ owner, construction.macroAbsorbProbability k owner =
           construction.macroAbsorbProbability k excluded +
             ∑ owner ∈ Finset.univ.erase excluded,
@@ -5894,7 +5873,7 @@ theorem KiloblockConstruction.continueExitProbabilityWeight_pos
   | restart =>
       have htotal := construction.macroProbability_total k
       unfold KiloblockConstruction.continueAdvanceProbabilityWeight at hadvanceZero
-      simp only [hbranch, reduceCtorEq, if_false, add_zero] at hadvanceZero
+      simp only [hbranch, reduceCtorEq, ite_false, add_zero] at hadvanceZero
       have hall : ∑ owner, construction.macroAbsorbProbability k owner =
           construction.macroAbsorbProbability k excluded +
             ∑ owner ∈ Finset.univ.erase excluded,
@@ -5967,7 +5946,7 @@ theorem KiloblockConstruction.continueMacroProbability_total
       _ = _ := by
         apply Finset.sum_congr rfl
         intro owner howner
-        simp only [summand, if_neg (Finset.ne_of_mem_erase howner)]
+        simp only [summand, ite_eq_right (Finset.ne_of_mem_erase howner)]
   rw [hsum, ← Finset.sum_div, ← add_div]
   exact div_self (ne_of_gt
     (construction.continueExitProbabilityWeight_pos k excluded))
@@ -6095,7 +6074,7 @@ theorem KiloblockConstruction.sum_point_sub_w_eq
     rw [← Fin.sum_univ_eq_sum_range]
     apply Finset.sum_congr rfl
     intro k _
-    simp only [y, w, dif_pos k.isLt]
+    simp only [y, w, dite_eq_left k.isLt]
   have htracking : construction.trackingCorrection
       (Fin.last construction.blockCount) who =
       ∑ j ∈ Finset.range construction.blockCount,
@@ -6107,8 +6086,8 @@ theorem KiloblockConstruction.sum_point_sub_w_eq
     intro j hj
     have hjcount := Finset.mem_range.mp hj
     simp only [KiloblockConstruction.trackingIncrement, hjcount,
-      dif_pos, y, w]
-    rw [dif_pos (by omega), dif_pos (by omega)]
+      dite_eq_left, y, w]
+    rw [dite_eq_left (by omega), dite_eq_left (by omega)]
   have hfinite :
       (∑ j ∈ Finset.range (construction.blockCount + 1), (y j - w j)) +
           ∑ j ∈ Finset.range construction.blockCount, (w j - y (j + 1)) =
@@ -6148,7 +6127,7 @@ theorem KiloblockConstruction.sum_point_sub_w_eq
   have hwlast : w construction.blockCount =
       (construction.buildingBlock (Fin.last construction.blockCount)).w who := by
     dsimp only [w]
-    rw [dif_pos (by omega)]
+    rw [dite_eq_left (by omega)]
     congr 2
   rw [hyzero, hwlast] at hfinite
   linarith
@@ -6357,7 +6336,7 @@ theorem KiloblockConstruction.macroOther_le_continueMacroAbsorption
         _ = _ := by
           apply Finset.sum_congr rfl
           intro owner howner
-          simp only [summand, if_neg (Finset.ne_of_mem_erase howner)]
+          simp only [summand, ite_eq_right (Finset.ne_of_mem_erase howner)]
     rw [herase, ← Finset.sum_div]
   rw [hsum]
   exact (le_div_iff₀
@@ -6430,7 +6409,7 @@ theorem KiloblockConstruction.continueMacroSurvivalProbability_lt_epsilon
     intro k _
     rw [show charge k.1 =
         construction.continueMacroAbsorptionProbability k excluded by
-      simp only [charge, dif_pos k.isLt]]
+      simp only [charge, dite_eq_left k.isLt]]
   have hprod : (∏ j ∈ Finset.range (construction.blockCount + 1),
       (1 - charge j)) =
       construction.continueMacroSurvivalProbability excluded := by
@@ -6438,7 +6417,7 @@ theorem KiloblockConstruction.continueMacroSurvivalProbability_lt_epsilon
     unfold KiloblockConstruction.continueMacroSurvivalProbability
     apply Finset.prod_congr rfl
     intro k _
-    simp only [charge, dif_pos k.isLt]
+    simp only [charge, dite_eq_left k.isLt]
     exact (construction.continueMacroAdvance_eq_one_sub_absorption
       k excluded).symm
   simp only [zero_add] at hmain
@@ -6632,7 +6611,10 @@ theorem rawSingleQuitAction_true_quitters (owner : ι) :
   ext who
   by_cases hwho : who = owner
   · subst who
-    simp [rawSingleQuitAction]
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+      Finset.mem_singleton]
+    rw [rawSingleQuitAction, Function.update_self]
+    simp
   · simp only [Finset.mem_filter, Finset.mem_univ, true_and,
       Finset.mem_singleton]
     rw [rawSingleQuitAction, Function.update_of_ne hwho]
@@ -6704,7 +6686,6 @@ private theorem KiloblockConstruction.stageActionDist_continue_all
     by_cases hwho : who = excluded.1
     · subst who
       rw [Function.update_self]
-      simp only [publicQuittingGame]
     · rw [Function.update_of_ne hwho]
       exact construction.strategy_eq_pure_continue_of_no_owner
         history hmode who]
@@ -6752,10 +6733,9 @@ private theorem KiloblockConstruction.stageActionDist_continue_selected_self
     by_cases hwho : who = excluded.1
     · subst who
       rw [Function.update_self]
-      rfl
     · rw [Function.update_of_ne hwho, construction.strategy_eq]
       simp [hmode, hwho]
-      rfl]
+      ]
   exact Math.PMFProduct.pmfPi_pure
     (publicAllContinueAction table construction.profile.signalLaw)
 
@@ -7212,6 +7192,12 @@ private theorem KiloblockConstruction.historyModeStepDist_continue_eq
                     have htransition :=
                       publicQuittingGame_transition_publicSingleQuitAction_false
                         table construction.profile.signalLaw signal owner.1
+                    change PMF.map _
+                      ((publicQuittingGame table
+                        construction.profile.signalLaw).transition
+                          (PublicQuittingState.active signal)
+                          (publicSingleQuitAction table
+                            construction.profile.signalLaw owner.1 false)) = _
                     rw [htransition, PMF.pure_map]
                     have hsupport : PublicQuittingState.draw ∈
                         ((publicQuittingGame table
@@ -7263,6 +7249,12 @@ private theorem KiloblockConstruction.historyModeStepDist_continue_eq
                     have htransition :=
                       publicQuittingGame_transition_publicSingleQuitAction
                         table construction.profile.signalLaw signal owner.1
+                    change PMF.map _
+                      ((publicQuittingGame table
+                        construction.profile.signalLaw).transition
+                          (PublicQuittingState.active signal)
+                          (publicSingleQuitAction table
+                            construction.profile.signalLaw owner.1 true)) = _
                     rw [htransition, PMF.pure_map]
                     let quitState : (publicQuittingGame table
                         construction.profile.signalLaw).State :=
@@ -7622,7 +7614,7 @@ private theorem KiloblockConstruction.exists_exitCapableChoice
     unfold KiloblockConstruction.continueExitProbabilityWeight
       KiloblockConstruction.continueAdvanceProbabilityWeight
     rw [hadvance]
-    simp only [hbranch, reduceCtorEq, if_false, zero_add]
+    simp only [hbranch, reduceCtorEq, ite_false, zero_add]
     rw [Finset.sum_eq_zero habsorbOther]
   linarith [construction.continueExitProbabilityWeight_pos k excluded]
 
@@ -7840,7 +7832,7 @@ private theorem KiloblockConstruction.continueKernel_active_reaches_after
       by_cases hsmall : remaining ≤ 1
       · have hstep := construction.continueKernel_active_continue_step
           excluded k choice remaining hremaining
-        simpa only [Math.Probability.PMFReachable, if_pos hsmall] using
+        simpa only [Math.Probability.PMFReachable, ite_eq_left hsmall] using
           (Relation.ReflTransGen.single hstep)
       · have hremainingPred : remaining - 1 ≤ construction.totalMesh := by
           omega
@@ -7849,7 +7841,7 @@ private theorem KiloblockConstruction.continueKernel_active_reaches_after
         have hdraw := construction.continueKernel_drawResume_step
           excluded k choice (remaining - 1) hremainingPred
         have htail := ih (remaining - 1) (by omega) hremainingPred
-        simp only [if_neg hsmall] at hactive
+        simp only [ite_eq_right hsmall] at hactive
         exact Relation.ReflTransGen.head hactive
           (Relation.ReflTransGen.head hdraw htail)
 
@@ -8138,7 +8130,7 @@ theorem KiloblockConstruction.continueKernel_transienceCertificate
     Nonempty (Math.Probability.ClosedCoreTransienceCertificate
       (construction.continueFiniteModeKernel excluded)
       construction.continueBoundary) := by
-  letI : Nonempty (KiloblockFiniteMode construction) :=
+  let _ : Nonempty (KiloblockFiniteMode construction) :=
     ⟨FiniteKiloblockMode.drawFinal⟩
   exact Math.Probability.exists_closedCoreTransienceCertificate
     (construction.continueFiniteModeKernel excluded)
@@ -8276,7 +8268,7 @@ theorem KiloblockConstruction.profileKernel_transienceCertificate
     Nonempty (Math.Probability.ClosedCoreTransienceCertificate
       construction.profileFiniteModeKernel
       construction.continueBoundary) := by
-  letI : Nonempty (KiloblockFiniteMode construction) :=
+  let _ : Nonempty (KiloblockFiniteMode construction) :=
     ⟨FiniteKiloblockMode.drawFinal⟩
   exact Math.Probability.exists_closedCoreTransienceCertificate
     construction.profileFiniteModeKernel
@@ -8464,7 +8456,7 @@ theorem KiloblockConstruction.macroSurvivalFuel_succ
   rw [KiloblockConstruction.macroSurvivalFuel]
   have hk : construction.macroAdvanceAt k.1 =
       construction.macroAdvanceProbability k := by
-    simp only [KiloblockConstruction.macroAdvanceAt, dif_pos k.isLt]
+    simp only [KiloblockConstruction.macroAdvanceAt, dite_eq_left k.isLt]
   rw [hk]
 
 /-! Hitting probability of the final all-Continue tail under the prescribed
@@ -8599,7 +8591,7 @@ private theorem KiloblockConstruction.profileSelectedSurvival_step
     have hsub : remaining - 1 + 1 - 1 = remaining - 1 := by omega
     cases hcontinuation : (construction.attempt k owner).continuation <;>
       simp only [KiloblockConstruction.profileSelectedSurvival,
-        hsmall, if_false, hmax, hmaxPred, hcontinuation]
+        hsmall, ite_false, hmax, hmaxPred, hcontinuation]
     <;> rw [hremaining, pow_succ, hsub]
     <;> ring
 
@@ -8701,7 +8693,7 @@ private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
       | none =>
           by_cases hsmall : remaining ≤ 1
           · simp only [KiloblockConstruction.profileModeKernel,
-              if_pos hsmall]
+              ite_eq_left hsmall]
             rw [Math.Probability.expect_pure,
               construction.profileFinalPotential_after k none,
               hcurrent]
@@ -8709,7 +8701,7 @@ private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
           · have hpred : remaining - 1 ≤ construction.totalMesh := by
               omega
             simp only [KiloblockConstruction.profileModeKernel,
-              if_neg hsmall]
+              ite_eq_right hsmall]
             rw [Math.Probability.expect_pure,
               construction.profileFinalPotential_finiteMode_drawResume
                 k none (remaining - 1) hpred,
@@ -8718,7 +8710,7 @@ private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
       | some owner =>
           by_cases hsmall : remaining ≤ 1
           · simp only [KiloblockConstruction.profileModeKernel,
-              if_pos hsmall]
+              ite_eq_left hsmall]
             let coin := quittingMeshHazardCoin
               (construction.attempt k owner).quitWeight
               (construction.mesh k)
@@ -8764,14 +8756,14 @@ private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
             rw [construction.expect_profileMeshCoin_zero_else]
             rw [hcurrent]
             dsimp only [downstream]
-            simpa only [if_pos hsmall] using
+            simpa only [ite_eq_left hsmall] using
               (construction.profileSelectedSurvival_step
                 k owner remaining
                   (construction.macroSurvivalFuel k.1)).symm
           · have hpred : remaining - 1 ≤
                 construction.totalMesh := by omega
             simp only [KiloblockConstruction.profileModeKernel,
-              if_neg hsmall]
+              ite_eq_right hsmall]
             let coin := quittingMeshHazardCoin
               (construction.attempt k owner).quitWeight
               (construction.mesh k)
@@ -8813,7 +8805,7 @@ private theorem KiloblockConstruction.profileRawFinalPotential_harmonic
             rw [construction.expect_profileMeshCoin_zero_else]
             rw [hcurrent]
             dsimp only [downstream]
-            simpa only [if_neg hsmall] using
+            simpa only [ite_eq_right hsmall] using
               (construction.profileSelectedSurvival_step
                 k owner remaining
                   (construction.macroSurvivalFuel k.1)).symm
@@ -9024,18 +9016,18 @@ theorem KiloblockConstruction.continueSelectedSurvival_mesh
         · rw [KiloblockConstruction.continueSelectedSurvival,
             KiloblockConstruction.continueChoiceAdvanceProbability,
             KiloblockConstruction.continueChoiceAbsorbProbability,
-            hcontinuation, if_neg howner,
+            hcontinuation, ite_eq_right howner,
             max_eq_left (construction.mesh_pos k),
             construction.mesh_survival k owner]
-          simp only [if_neg howner]
+          simp only [ite_eq_right howner]
           ring
         · rw [KiloblockConstruction.continueSelectedSurvival,
             KiloblockConstruction.continueChoiceAdvanceProbability,
             KiloblockConstruction.continueChoiceAbsorbProbability,
-            hcontinuation, if_neg howner,
+            hcontinuation, ite_eq_right howner,
             max_eq_left (construction.mesh_pos k),
             construction.mesh_survival k owner]
-          simp only [if_neg howner]
+          simp only [ite_eq_right howner]
           ring
 
 private theorem KiloblockConstruction.continueChoiceAdvance_other
@@ -9124,7 +9116,7 @@ theorem KiloblockConstruction.expect_continueChoiceAbsorb_eq
       KiloblockConstruction.absorbMass
     apply Finset.sum_congr rfl
     intro owner howner
-    simp only [if_neg (Finset.ne_of_mem_erase howner)]
+    simp only [ite_eq_right (Finset.ne_of_mem_erase howner)]
   · intro owner _ howner
     have heq : owner = excluded := by
       simpa using howner
@@ -9249,7 +9241,7 @@ theorem KiloblockConstruction.continueMacroSurvivalFuel_succ
   rw [KiloblockConstruction.continueMacroSurvivalFuel]
   have hk : construction.continueMacroAdvanceAt excluded k.1 =
       construction.continueMacroAdvanceProbability k excluded := by
-    simp only [KiloblockConstruction.continueMacroAdvanceAt, dif_pos k.isLt]
+    simp only [KiloblockConstruction.continueMacroAdvanceAt, dite_eq_left k.isLt]
   rw [hk]
 
 theorem KiloblockConstruction.continueMacroSurvivalFuel_full
@@ -9285,7 +9277,7 @@ theorem KiloblockConstruction.continueMacroSurvivalFuel_full
       apply Finset.prod_congr rfl
       intro k _
       simp only [KiloblockConstruction.continueMacroAdvanceAt,
-        dif_pos k.isLt]
+        dite_eq_left k.isLt]
 
 /-! Hitting potential of the final infinite tail for the explicit finite
 kernel. Absorbed modes have value zero; final-tail modes have value one. -/
@@ -9353,7 +9345,7 @@ theorem KiloblockConstruction.continueSelectedSurvival_nonneg
       · simpa [KiloblockConstruction.continueSelectedSurvival, howner]
           using hendpoint
       · simp only [KiloblockConstruction.continueSelectedSurvival,
-          howner, if_false]
+          howner, ite_false]
         apply mul_nonneg (pow_nonneg _ _) hendpoint
         have hhazard := quittingMeshHazard_le_one
           (construction.mesh k)
@@ -9521,7 +9513,7 @@ private theorem KiloblockConstruction.continueSelectedSurvival_other_step
     have hsub : remaining - 1 + 1 - 1 = remaining - 1 := by omega
     cases hcontinuation : (construction.attempt k owner).continuation <;>
       simp only [KiloblockConstruction.continueSelectedSurvival, howner,
-        if_false, hsmall, hmax, hmaxPred, hcontinuation]
+        ite_false, hsmall, hmax, hmaxPred, hcontinuation]
     · rw [hremaining, pow_succ, hsub]
       ring
     · rw [hremaining, pow_succ, hsub]
@@ -9586,14 +9578,14 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
       | none =>
           by_cases hsmall : remaining ≤ 1
           · simp only [KiloblockConstruction.continueModeKernel,
-              if_pos hsmall]
+              ite_eq_left hsmall]
             rw [Math.Probability.expect_pure,
               construction.continueFinalPotential_after excluded k none,
               hcurrent]
             rfl
           · have hpred : remaining - 1 ≤ construction.totalMesh := by omega
             simp only [KiloblockConstruction.continueModeKernel,
-              if_neg hsmall]
+              ite_eq_right hsmall]
             rw [Math.Probability.expect_pure,
               construction.continueFinalPotential_finiteMode_drawResume
                 excluded k none (remaining - 1) hpred,
@@ -9604,7 +9596,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
           · subst owner
             by_cases hsmall : remaining ≤ 1
             · simp only [KiloblockConstruction.continueModeKernel,
-                if_pos hsmall, ite_true,
+                ite_eq_left hsmall, ite_true,
                 Math.Probability.expect_pure]
               rw [construction.continueFinalPotential_after
                 excluded k (some excluded), hcurrent]
@@ -9615,7 +9607,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
             · have hpred : remaining - 1 ≤
                   construction.totalMesh := by omega
               simp only [KiloblockConstruction.continueModeKernel,
-                if_neg hsmall, ite_true,
+                ite_eq_right hsmall, ite_true,
                 Math.Probability.expect_pure]
               rw [construction.continueFinalPotential_finiteMode_drawResume
                 excluded k (some excluded) (remaining - 1) hpred,
@@ -9626,7 +9618,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
                   hcontinuation]
           · by_cases hsmall : remaining ≤ 1
             · simp only [KiloblockConstruction.continueModeKernel,
-                if_pos hsmall, howner, ite_false]
+                ite_eq_left hsmall, howner, ite_false]
               let coin := quittingMeshHazardCoin
                 (construction.attempt k owner).quitWeight
                 (construction.mesh k)
@@ -9673,7 +9665,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
               rw [construction.expect_meshCoin_zero_else]
               rw [hcurrent]
               dsimp only [downstream]
-              simpa only [if_pos hsmall] using
+              simpa only [ite_eq_left hsmall] using
                 (construction.continueSelectedSurvival_other_step
                   k excluded owner howner remaining
                     (construction.continueMacroSurvivalFuel
@@ -9681,7 +9673,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
             · have hpred : remaining - 1 ≤
                   construction.totalMesh := by omega
               simp only [KiloblockConstruction.continueModeKernel,
-                if_neg hsmall, howner, ite_false]
+                ite_eq_right hsmall, howner, ite_false]
               let coin := quittingMeshHazardCoin
                 (construction.attempt k owner).quitWeight
                 (construction.mesh k)
@@ -9722,7 +9714,7 @@ private theorem KiloblockConstruction.continueRawFinalPotential_harmonic
               rw [construction.expect_meshCoin_zero_else]
               rw [hcurrent]
               dsimp only [downstream]
-              simpa only [if_neg hsmall] using
+              simpa only [ite_eq_right hsmall] using
                 (construction.continueSelectedSurvival_other_step
                   k excluded owner howner remaining
                     (construction.continueMacroSurvivalFuel
@@ -10162,7 +10154,10 @@ theorem singleQuitAction_true_quitters (owner : ι) :
   ext who
   by_cases hwho : who = owner
   · subst who
-    simp [singleQuitAction]
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and,
+      Finset.mem_singleton]
+    rw [singleQuitAction, Function.update_self]
+    simp
   · simp only [Finset.mem_filter, Finset.mem_univ, true_and,
       Finset.mem_singleton]
     rw [singleQuitAction, Function.update_of_ne hwho]
@@ -10510,7 +10505,7 @@ private theorem KiloblockConstruction.endpointPotential_active_some_step
         unfold actionLaw coin singleQuitAction
         exact construction.stageActionDist_active_some
           (past, PublicQuittingState.active signal) k owner remaining hmode
-      letI : Finite ((publicQuittingGame table
+      let _ : Finite ((publicQuittingGame table
           construction.profile.signalLaw).JointAct) :=
         inferInstanceAs (Finite (ι → Bool))
       unfold StochasticGame.historyContinuationEU
@@ -10519,6 +10514,16 @@ private theorem KiloblockConstruction.endpointPotential_active_some_step
       rw [Math.Probability.expect_bind]
       simp_rw [Math.Probability.expect_pure]
       rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+      change (coin true).toReal * expect
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 true)) _ +
+        (coin false).toReal * expect
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 false)) _ = _
       rw [htransitionContinue, Math.Probability.expect_pure,
         hcontinueValue, htransitionQuit, Math.Probability.expect_pure,
         hquitValue]
@@ -11310,7 +11315,7 @@ theorem KiloblockConstruction.abs_trackingCorrection_sub_last_le
       have hjcount : j < construction.blockCount :=
         (Finset.mem_Ico.mp hj).2
       simp only [increment, KiloblockConstruction.trackingIncrement,
-        KiloblockConstruction.trackingDistanceIncrement, hjcount, dif_pos]
+        KiloblockConstruction.trackingDistanceIncrement, hjcount, dite_eq_left]
       rw [dist_eq_norm]
       simpa only [Pi.sub_apply, Real.norm_eq_abs, abs_sub_comm] using
         norm_le_pi_norm
@@ -12363,7 +12368,7 @@ private theorem KiloblockConstruction.normalPotential_active_some_step
         unfold actionLaw coin singleQuitAction
         exact construction.stageActionDist_active_some
           (past, PublicQuittingState.active signal) k owner remaining hmode
-      letI : Finite ((publicQuittingGame table
+      let _ : Finite ((publicQuittingGame table
           construction.profile.signalLaw).JointAct) :=
         inferInstanceAs (Finite (ι → Bool))
       unfold StochasticGame.historyContinuationEU
@@ -12372,6 +12377,16 @@ private theorem KiloblockConstruction.normalPotential_active_some_step
       rw [Math.Probability.expect_bind]
       simp_rw [Math.Probability.expect_pure]
       rw [Math.Probability.expect_eq_sum, Fintype.sum_bool]
+      change (coin true).toReal * expect
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 true)) _ +
+        (coin false).toReal * expect
+          ((publicQuittingGame table
+            construction.profile.signalLaw).transition
+              (PublicQuittingState.active signal)
+              (singleQuitAction owner.1 false)) _ = _
       rw [htransitionContinue, Math.Probability.expect_pure,
         hcontinueValue, htransitionQuit, Math.Probability.expect_pure,
         hquitValue]
@@ -13174,23 +13189,17 @@ private theorem rootSequenceFinitePotential_draw_harmonic
         (rootSequenceFinitePotential table roots who horizon) history =
       rootSequenceFinitePotential table roots who horizon time history := by
   unfold StochasticGame.historyContinuationEU
+  rw [hstate]
   let activeLaw : PMF
       (publicQuittingGame table trivialSignalLaw).State :=
     trivialSignalLaw.map PublicQuittingState.active
-  have htransition (action :
-      (publicQuittingGame table trivialSignalLaw).JointAct) :
-      (publicQuittingGame table trivialSignalLaw).transition history.2
-          action =
-        activeLaw := by
-    rw [hstate]
-    exact publicQuittingGame_transition_draw table trivialSignalLaw action
-  simp_rw [htransition]
   have hinner (action :
       (publicQuittingGame table trivialSignalLaw).JointAct) :
       expect activeLaw
           (fun nextState => rootSequenceFinitePotential table roots who
             horizon (time + 1)
-            (Fin.snoc history.1 (history.2, action), nextState)) =
+            (Fin.snoc history.1 (PublicQuittingState.draw, action),
+              nextState)) =
         finiteStoppingBest table.zeroNeverReward roots who
           ((time + 1) / 2) (horizon - (time + 1) / 2) := by
     unfold activeLaw
@@ -13199,6 +13208,7 @@ private theorem rootSequenceFinitePotential_draw_harmonic
       finiteStoppingBest table.zeroNeverReward roots who
         ((time + 1) / 2) (horizon - (time + 1) / 2)) = _
     exact Math.Probability.expect_const _ _
+  unfold activeLaw at hinner
   simp_rw [hinner]
   rw [Math.Probability.expect_const]
   simp only [rootSequenceFinitePotential, hstate]
@@ -13223,8 +13233,7 @@ private theorem rootSequenceFinitePotential_absorbed_harmonic
         injection hstate
       subst terminal
       unfold StochasticGame.historyContinuationEU
-      simp only [publicQuittingGame_transition_absorbed,
-        Math.Probability.expect_pure, rootSequenceFinitePotential]
+      simp only [Math.Probability.expect_pure, rootSequenceFinitePotential]
       exact Math.Probability.expect_const _ _
 
 private theorem rootSequenceFinitePotential_active_pure
@@ -13261,7 +13270,6 @@ private theorem rootSequenceFinitePotential_active_pure
         by_cases hplayer : player = who
         · subst player
           simp only [Function.update_self]
-          rfl
         · rw [Function.update_of_ne hplayer]
           simp [rootSequenceSunspotStrategy, rootSequencePublicStrategy,
             Function.update_of_ne hplayer]
@@ -13272,14 +13280,14 @@ private theorem rootSequenceFinitePotential_active_pure
         (Function.update (roots (time / 2)) who (PMF.pure action))))
       funext jointAction
       by_cases hquit : (quittingQuitters jointAction).Nonempty
-      · rw [publicQuittingGame_transition_active, dif_pos hquit,
+      · rw [publicQuittingGame_transition_active, dite_eq_left hquit,
           Math.Probability.expect_pure]
         simp only [rootSequenceFinitePotential, quittingRootPayoff,
-          dif_pos hquit]
-      · rw [publicQuittingGame_transition_active, dif_neg hquit,
+          dite_eq_left hquit]
+      · rw [publicQuittingGame_transition_active, dite_eq_right hquit,
           Math.Probability.expect_pure]
         simp only [rootSequenceFinitePotential, quittingRootPayoff,
-          dif_neg hquit]
+          dite_eq_right hquit]
         rw [show (time + 1 + 1) / 2 = time / 2 + 1 by omega]
 
 private theorem rootSequenceFinitePotential_superharmonic
@@ -13336,13 +13344,13 @@ private theorem rootSequenceFinitePotential_superharmonic
           cases action with
           | false =>
               simp only [PMF.pure_apply,
-                if_neg (by decide : (true : Bool) ≠ false),
-                ENNReal.toReal_zero, if_true, ENNReal.toReal_one,
+                ite_eq_right (by decide : (true : Bool) ≠ false),
+                ENNReal.toReal_zero, ite_true, ENNReal.toReal_one,
                 zero_mul, one_mul, zero_add]
               exact le_max_right _ _
           | true =>
-              simp only [PMF.pure_apply, if_true, ENNReal.toReal_one,
-                if_neg (by decide : (false : Bool) ≠ true),
+              simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one,
+                ite_eq_right (by decide : (false : Bool) ≠ true),
                 ENNReal.toReal_zero, one_mul, zero_mul, add_zero]
               exact le_max_left _ _
         _ = rootSequenceFinitePotential table roots who horizon time
@@ -13603,22 +13611,17 @@ private theorem rootSequencePrescribedFinitePotential_draw_harmonic
       rootSequencePrescribedFinitePotential table roots who horizon time
         history := by
   unfold StochasticGame.historyContinuationEU
+  rw [hstate]
   let activeLaw : PMF
       (publicQuittingGame table trivialSignalLaw).State :=
     trivialSignalLaw.map PublicQuittingState.active
-  have htransition (action :
-      (publicQuittingGame table trivialSignalLaw).JointAct) :
-      (publicQuittingGame table trivialSignalLaw).transition history.2
-          action = activeLaw := by
-    rw [hstate]
-    exact publicQuittingGame_transition_draw table trivialSignalLaw action
-  simp_rw [htransition]
   have hinner (action :
       (publicQuittingGame table trivialSignalLaw).JointAct) :
       expect activeLaw (fun nextState =>
           rootSequencePrescribedFinitePotential table roots who horizon
             (time + 1)
-            (Fin.snoc history.1 (history.2, action), nextState)) =
+            (Fin.snoc history.1 (PublicQuittingState.draw, action),
+              nextState)) =
         quittingFiniteRootPayoff table.zeroNeverReward roots who
           (fun stage => roots stage who) ((time + 1) / 2)
             (horizon - (time + 1) / 2) := by
@@ -13629,6 +13632,7 @@ private theorem rootSequencePrescribedFinitePotential_draw_harmonic
         (fun stage => roots stage who) ((time + 1) / 2)
           (horizon - (time + 1) / 2)) = _
     exact Math.Probability.expect_const _ _
+  unfold activeLaw at hinner
   simp_rw [hinner]
   rw [Math.Probability.expect_const]
   simp only [rootSequencePrescribedFinitePotential, hstate]
@@ -13654,8 +13658,7 @@ private theorem rootSequencePrescribedFinitePotential_absorbed_harmonic
       have heq : terminal = quitters := by injection hstate
       subst terminal
       unfold StochasticGame.historyContinuationEU
-      simp only [publicQuittingGame_transition_absorbed,
-        Math.Probability.expect_pure,
+      simp only [Math.Probability.expect_pure,
         rootSequencePrescribedFinitePotential]
       exact Math.Probability.expect_const _ _
 
@@ -13700,16 +13703,16 @@ private theorem rootSequencePrescribedFinitePotential_active_harmonic
   · rw [show (publicQuittingGame table
         trivialSignalLaw).transition history.2 jointAction =
         PMF.pure (.absorbed ⟨quittingQuitters jointAction, hquit⟩) by
-      rw [hstate, publicQuittingGame_transition_active, dif_pos hquit]]
+      rw [hstate, publicQuittingGame_transition_active, dite_eq_left hquit]]
     rw [Math.Probability.expect_pure]
     simp only [rootSequencePrescribedFinitePotential, quittingRootPayoff,
-      dif_pos hquit]
+      dite_eq_left hquit]
   · rw [show (publicQuittingGame table
         trivialSignalLaw).transition history.2 jointAction = PMF.pure .draw by
-      rw [hstate, publicQuittingGame_transition_active, dif_neg hquit]]
+      rw [hstate, publicQuittingGame_transition_active, dite_eq_right hquit]]
     rw [Math.Probability.expect_pure]
     simp only [rootSequencePrescribedFinitePotential, quittingRootPayoff,
-      dif_neg hquit]
+      dite_eq_right hquit]
     rw [show (time + 1 + 1) / 2 = time / 2 + 1 by omega]
 
 private theorem rootSequencePrescribedFinitePotential_harmonic
@@ -14143,12 +14146,8 @@ theorem KiloblockConstruction.selectedChoiceSupported_of_mem_support
               cases nextState with
               | draw =>
                   simp [publicQuittingGame] at hnextState
-                  obtain ⟨signal, _, hfalse⟩ := hnextState
-                  cases hfalse
               | absorbed quitters =>
                   simp [publicQuittingGame] at hnextState
-                  obtain ⟨signal, _, hfalse⟩ := hnextState
-                  cases hfalse
               | active signal =>
                   have hsignal : signal ∈
                       construction.profile.signalLaw.support := by
@@ -14621,7 +14620,7 @@ private theorem expect_le_expect_of_le_on_support
   intro value
   by_cases hzero : distribution value = 0
   · simp [repaired, hzero]
-  · simp only [repaired, hzero, if_false]
+  · simp only [repaired, hzero, ite_false]
     apply hle value
     exact (PMF.mem_support_iff _ value).mpr hzero
 
@@ -14687,7 +14686,7 @@ private theorem KiloblockConstruction.pureQuit_normalDeviationPotential_eq
           (Function.update root excluded.1 (PMF.pure true)) action = 0 := by
         rw [Math.PMFProduct.pmfPi_apply]
         apply Finset.prod_eq_zero (Finset.mem_univ excluded.1)
-        rw [Function.update_self, PMF.pure_apply, if_neg hne]
+        rw [Function.update_self, PMF.pure_apply, ite_eq_right hne]
       exact (PMF.mem_support_iff _ action).mp haction hzero
     change (show Bool from action excluded.1) = true at hactionQuit
     have hstep := construction.mode_step t history action nextState hnextState
@@ -16445,7 +16444,6 @@ theorem KiloblockConstruction.finiteTruncatedContinuation_absorbed
               construction.profile.signalLaw).transition history.2 action =
             PMF.pure absorbedState := by
             rw [hstate']
-            simp [publicQuittingGame, absorbedState]
           rw [htransition, Math.Probability.expect_pure]
           have hsupport : absorbedState ∈
               ((publicQuittingGame table
@@ -16548,7 +16546,6 @@ theorem KiloblockConstruction.strategy_abnormal_continue
             subst who
             exact habnormal owner.2
           with_unfolding_all simp [hne]
-          with_unfolding_all rfl
 
 theorem KiloblockConstruction.update_abnormal_continue_eq_profile
     {table : Table ι} {ε : ℝ}
@@ -16969,7 +16966,7 @@ private theorem KiloblockConstruction.abnormal_pureQuit_continuation_le
           (Function.update root excluded (PMF.pure true)) action = 0 := by
         rw [Math.PMFProduct.pmfPi_apply]
         apply Finset.prod_eq_zero (Finset.mem_univ excluded)
-        rw [Function.update_self, PMF.pure_apply, if_neg hne]
+        rw [Function.update_self, PMF.pure_apply, ite_eq_right hne]
       exact (PMF.mem_support_iff _ action).mp haction hzero
     change (show Bool from action excluded) = true at hactionQuit
     have hstep := construction.mode_step t history action nextState hnextState
@@ -17091,7 +17088,6 @@ private theorem KiloblockConstruction.finiteTruncated_absorbed_step
           construction.profile.signalLaw).transition history.2 action =
         PMF.pure absorbedState := by
         rw [hstate']
-        simp [publicQuittingGame, absorbedState]
       rw [htransition, Math.Probability.expect_pure]
       have hsupport : absorbedState ∈
           ((publicQuittingGame table
@@ -18533,7 +18529,6 @@ theorem KiloblockConstruction.profile_preFinal_payoff_nonneg
                 (publicQuittingGame table
                   construction.profile.signalLaw).State) := by
             rw [hstate]
-            simp [publicQuittingGame]
           have hnextState' : nextState ∈ (PMF.pure
               (PublicQuittingState.absorbed quitters :
                 (publicQuittingGame table
@@ -19250,9 +19245,9 @@ theorem lemma3_10
         else construction.profile.payoff i + 5 * ε := by
   intro i deviation
   by_cases hi : i ∈ NormalPlayers table
-  · rw [dif_pos hi]
+  · rw [dite_eq_left hi]
     exact construction.normalDeviationPayoff_le ⟨i, hi⟩ deviation
-  · rw [dif_neg hi]
+  · rw [dite_eq_right hi]
     exact construction.abnormalDeviationPayoff_le i hi deviation
 
 /-! Section 3.4 concludes from Lemmas 3.8--3.10 that the constructed profile
@@ -19275,11 +19270,11 @@ theorem section3_4
   intro who deviation
   have hupper := hdeviation who deviation
   by_cases hwho : who ∈ NormalPlayers table
-  · rw [dif_pos hwho] at hupper
+  · rw [dite_eq_left hwho] at hupper
     have hlower := (abs_lt.mp (hpayoff ⟨who, hwho⟩)).1
     dsimp only [SunspotProfile.payoff] at hlower
     linarith
-  · rw [dif_neg hwho] at hupper
+  · rw [dite_eq_right hwho] at hupper
     dsimp only [SunspotProfile.payoff] at hupper
     linarith
 
@@ -19786,27 +19781,28 @@ theorem axisMass_pos [Nonempty ι] {M : ι → ι → ℝ}
 
 /-! The normalized inverse column `λ̂ᵢ` in Eq. (20). -/
 noncomputable def axisWeight [Nonempty ι] {M : ι → ι → ℝ}
-    (hM : MMatrix M) (target : ι) : stdSimplex ℝ ι := by
+    (hM : MMatrix M) (target : ι) : Convexity.StdSimplex ℝ ι := by
   let mass := hM.axisMass target
-  refine ⟨fun owner => (hM.axisSolution target).weight owner / mass,
+  refine ⟨Finsupp.equivFunOnFinite.symm
+      (fun owner => (hM.axisSolution target).weight owner / mass),
     fun owner => div_nonneg ((hM.axisSolution target).weight_nonneg owner)
       (hM.axisMass_pos target).le, ?_⟩
-  rw [← Finset.sum_div]
+  rw [Finsupp.equivFunOnFinite_symm_sum, ← Finset.sum_div]
   exact div_self (ne_of_gt (hM.axisMass_pos target))
 
 theorem axisWeight_apply [Nonempty ι] {M : ι → ι → ℝ}
     (hM : MMatrix M) (target owner : ι) :
-    hM.axisWeight target owner =
+    (hM.axisWeight target).weights owner =
       (hM.axisSolution target).weight owner / hM.axisMass target := rfl
 
 theorem columnAction_axisWeight [Nonempty ι]
     {M : ι → ι → ℝ} (hM : MMatrix M) (target : ι) :
-    columnAction M (hM.axisWeight target) = fun who =>
+    columnAction M (hM.axisWeight target).weights = fun who =>
       (hM.axisMass target)⁻¹ * unitVector target who := by
   funext who
   have hequation := congrFun (hM.axisSolution target).equation who
   calc
-    columnAction M (hM.axisWeight target) who =
+    columnAction M (hM.axisWeight target).weights who =
         (hM.axisMass target)⁻¹ *
           columnAction M (hM.axisSolution target).weight who := by
       simp only [columnAction, axisWeight_apply]
@@ -19819,7 +19815,7 @@ theorem columnAction_axisWeight [Nonempty ι]
 
 theorem axisWeight_designated_pos [Nonempty ι]
     {M : ι → ι → ℝ} (hM : MMatrix M) (target : ι) :
-    0 < hM.axisWeight target (hM.positiveOwner target) := by
+    0 < (hM.axisWeight target).weights (hM.positiveOwner target) := by
   have hequation := congrFun (hM.axisSolution target).equation target
   have hnonpos : ∀ owner, owner ≠ hM.positiveOwner target →
       (hM.axisSolution target).weight owner * M target owner ≤ 0 := by
@@ -19858,7 +19854,7 @@ variable (table : Table ι) [Nonempty (NormalPlayer table)]
 noncomputable def mAxisPayoff
     (target : NormalPlayer table) : Payoff ι :=
   fun who => ∑ owner,
-    hM.axisWeight target owner *
+    (hM.axisWeight target).weights owner *
       table.terminal (quittingProjectiveSingletonTerminal owner.1) who
 
 theorem mAxisPayoff_normal
@@ -19884,11 +19880,11 @@ theorem mAxisPayoff_mem_normalSingletonHull
     (target : NormalPlayer table) :
     mAxisPayoff table hM target ∈ NormalSingletonHull table := by
   apply mem_convexHull_of_exists_fintype
-    (hM.axisWeight target)
+    (hM.axisWeight target).weights
     (fun owner : NormalPlayer table => fun who =>
       table.terminal (quittingProjectiveSingletonTerminal owner.1) who)
-  · exact fun owner => (hM.axisWeight target).property.1 owner
-  · exact (hM.axisWeight target).property.2
+  · exact fun owner => (hM.axisWeight target).weights_nonneg owner
+  · exact (hM.axisWeight target).total_of_fintype
   · exact fun owner => ⟨owner, rfl⟩
   · funext who
     simp [mAxisPayoff, Pi.smul_apply, smul_eq_mul]
@@ -19910,7 +19906,7 @@ theorem mAxisPayoff_nonneg
   · unfold mAxisPayoff
     apply Finset.sum_nonneg
     intro owner _
-    apply mul_nonneg ((hM.axisWeight target).property.1 owner)
+    apply mul_nonneg ((hM.axisWeight target).weights_nonneg owner)
     exact (lemma2_6 table hnormalized hbounded
       (by simpa [mem_normalPlayers_iff] using hnormal)
       (by
@@ -19928,9 +19924,9 @@ theorem mAxisPayoff_mem_tildeD
 
 /-! A simplex representation of a full payoff by normal singleton columns. -/
 structure NormalSingletonRepresentation (value : Payoff ι) where
-  weight : stdSimplex ℝ (NormalPlayer table)
+  weight : Convexity.StdSimplex ℝ (NormalPlayer table)
   equation : ∀ who, value who = ∑ owner,
-    weight owner *
+    weight.weights owner *
       table.terminal (quittingProjectiveSingletonTerminal owner.1) who
 
 omit [Nonempty (NormalPlayer table)] in
@@ -19952,8 +19948,10 @@ theorem exists_normalSingletonRepresentation
     have hinter : (NormalPlayers table).attach ∩ support = support :=
       Finset.inter_eq_right.mpr fun owner _ => by simp
     simpa [fullWeight, hinter] using hweightTotal
-  let simplex : stdSimplex ℝ (NormalPlayer table) :=
-    ⟨fullWeight, hfullNonneg, hfullTotal⟩
+  let simplex : Convexity.StdSimplex ℝ (NormalPlayer table) :=
+    ⟨Finsupp.equivFunOnFinite.symm fullWeight, hfullNonneg, by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact hfullTotal⟩
   refine ⟨{ weight := simplex, equation := ?_ }⟩
   intro who
   rw [Finset.affineCombination_eq_linear_combination _ _ _ hweightTotal]
@@ -19978,7 +19976,7 @@ noncomputable def mAxisExpandedWeight
     (normalValue : NormalPlayer table → ℝ)
     (owner : NormalPlayer table) : ℝ :=
   ∑ target, mAxisCoefficient table hM normalValue target *
-    hM.axisWeight target owner
+    (hM.axisWeight target).weights owner
 
 theorem mAxisExpandedWeight_eq_of_columnAction
     (normalValue : NormalPlayer table → ℝ)
@@ -19996,7 +19994,7 @@ theorem mAxisExpandedWeight_eq_of_columnAction
   calc
     _ = ∑ target, normalValue target * hM.axisMass target *
           MMatrix.columnAction (NormalMatrix table)
-            (hM.axisWeight target) who := by
+            (hM.axisWeight target).weights who := by
       apply Finset.sum_congr rfl
       intro target _
       simp only [MMatrix.columnAction]
@@ -20012,7 +20010,7 @@ theorem mAxisExpandedWeight_eq_of_columnAction
       rw [hM.columnAction_axisWeight]
     _ = normalValue who := by
       rw [Finset.sum_eq_single who]
-      · simp only [MMatrix.unitVector, if_pos]
+      · simp only [MMatrix.unitVector, ite_eq_left]
         field_simp [ne_of_gt (hM.axisMass_pos who)]
       · intro target _ hne
         simp [MMatrix.unitVector, Ne.symm hne]
@@ -20031,12 +20029,12 @@ theorem sum_mAxisCoefficient_eq_one
     ∑ target, mAxisCoefficient table hM
       (fun who => value who.1) target = 1 := by
   have hnormalEquation : MMatrix.columnAction (NormalMatrix table)
-      representation.weight = fun who => value who.1 := by
+      representation.weight.weights = fun who => value who.1 := by
     funext who
     have heq := representation.equation who.1
     exact heq.symm
   have hexpanded := mAxisExpandedWeight_eq_of_columnAction table hM
-    (fun who => value who.1) representation.weight hnormalEquation
+    (fun who => value who.1) representation.weight.weights hnormalEquation
   calc
     ∑ target, mAxisCoefficient table hM
         (fun who => value who.1) target =
@@ -20047,11 +20045,10 @@ theorem sum_mAxisCoefficient_eq_one
       apply Finset.sum_congr rfl
       intro target _
       rw [← Finset.mul_sum]
-      have hsum := (hM.axisWeight target).property.2
-      change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+      have hsum := (hM.axisWeight target).total_of_fintype
       rw [hsum, mul_one]
-    _ = ∑ owner, representation.weight owner := by rw [hexpanded]
-    _ = 1 := representation.weight.property.2
+    _ = ∑ owner, representation.weight.weights owner := by rw [hexpanded]
+    _ = 1 := representation.weight.total_of_fintype
 
 theorem mAxisPayoff_combination_eq
     {value : Payoff ι}
@@ -20060,11 +20057,11 @@ theorem mAxisPayoff_combination_eq
       (fun who => value who.1) target • mAxisPayoff table hM target) =
       value := by
   have hnormalEquation : MMatrix.columnAction (NormalMatrix table)
-      representation.weight = fun who => value who.1 := by
+      representation.weight.weights = fun who => value who.1 := by
     funext who
     exact (representation.equation who.1).symm
   have hexpanded := mAxisExpandedWeight_eq_of_columnAction table hM
-    (fun who => value who.1) representation.weight hnormalEquation
+    (fun who => value who.1) representation.weight.weights hnormalEquation
   funext who
   simp only [Finset.sum_apply, Pi.smul_apply, smul_eq_mul,
     mAxisPayoff]
@@ -20082,7 +20079,7 @@ theorem mAxisPayoff_combination_eq
       apply Finset.sum_congr rfl
       intro target _
       ring
-    _ = ∑ owner, representation.weight owner *
+    _ = ∑ owner, representation.weight.weights owner *
           table.terminal
             (quittingProjectiveSingletonTerminal owner.1) who := by
       rw [hexpanded]
@@ -20093,7 +20090,7 @@ second bound is the paper's requirement that removing this exit branch leave
 the target coordinate nonnegative. -/
 noncomputable def mExitProbability
     (target : NormalPlayer table) : ℝ :=
-  min (hM.axisWeight target (hM.positiveOwner target) / 2)
+  min ((hM.axisWeight target).weights (hM.positiveOwner target) / 2)
     (mAxisPayoff table hM target target.1 /
       (2 * NormalMatrix table target (hM.positiveOwner target)))
 
@@ -20106,17 +20103,17 @@ theorem mExitProbability_pos (target : NormalPlayer table) :
 
 theorem mExitProbability_lt_one (target : NormalPlayer table) :
     mExitProbability table hM target < 1 := by
-  have hcoordinateLe : hM.axisWeight target
+  have hcoordinateLe : (hM.axisWeight target).weights
       (hM.positiveOwner target) ≤ 1 := by
     calc
-      hM.axisWeight target (hM.positiveOwner target) ≤
-          ∑ owner, hM.axisWeight target owner :=
+      (hM.axisWeight target).weights (hM.positiveOwner target) ≤
+          ∑ owner, (hM.axisWeight target).weights owner :=
         Finset.single_le_sum
-          (fun owner _ => (hM.axisWeight target).property.1 owner)
+          (fun owner _ => (hM.axisWeight target).weights_nonneg owner)
           (Finset.mem_univ _)
-      _ = 1 := (hM.axisWeight target).property.2
+      _ = 1 := (hM.axisWeight target).total_of_fintype
   unfold mExitProbability
-  have hhalf : hM.axisWeight target (hM.positiveOwner target) / 2 < 1 := by
+  have hhalf : (hM.axisWeight target).weights (hM.positiveOwner target) / 2 < 1 := by
     linarith [hM.axisWeight_designated_pos target]
   exact (min_le_left _ _).trans_lt hhalf
 
@@ -20127,7 +20124,7 @@ theorem mExitProbability_mul_designated_le_axis
       mAxisPayoff table hM target target.1 := by
   have hcolumnPos := hM.positive_positiveOwner target
   have hle := min_le_right
-    (hM.axisWeight target (hM.positiveOwner target) / 2)
+    ((hM.axisWeight target).weights (hM.positiveOwner target) / 2)
     (mAxisPayoff table hM target target.1 /
       (2 * NormalMatrix table target (hM.positiveOwner target)))
   change mExitProbability table hM target ≤
@@ -20146,7 +20143,7 @@ theorem mExitProbability_mul_designated_le_axis
 designated owner survives the block. -/
 noncomputable def mContinuationOwnerWeight
     (target owner : NormalPlayer table) : ℝ :=
-  (hM.axisWeight target owner -
+  ((hM.axisWeight target).weights owner -
       if owner = hM.positiveOwner target then
         mExitProbability table hM target else 0) /
     (1 - mExitProbability table hM target)
@@ -20156,15 +20153,15 @@ theorem mContinuationOwnerWeight_nonneg
     0 ≤ mContinuationOwnerWeight table hM target owner := by
   apply div_nonneg
   · by_cases howner : owner = hM.positiveOwner target
-    · rw [if_pos howner]
+    · rw [ite_eq_left howner]
       subst owner
       have hle : mExitProbability table hM target ≤
-          hM.axisWeight target (hM.positiveOwner target) / 2 := by
+          (hM.axisWeight target).weights (hM.positiveOwner target) / 2 := by
         unfold mExitProbability
         exact min_le_left _ _
       linarith [hM.axisWeight_designated_pos target]
-    · rw [if_neg howner, sub_zero]
-      exact (hM.axisWeight target).property.1 owner
+    · rw [ite_eq_right howner, sub_zero]
+      exact (hM.axisWeight target).weights_nonneg owner
   · linarith [mExitProbability_lt_one table hM target]
 
 theorem sum_mContinuationOwnerWeight (target : NormalPlayer table) :
@@ -20182,17 +20179,19 @@ theorem sum_mContinuationOwnerWeight (target : NormalPlayer table) :
     · intro owner _ hne
       simp [hne]
     · simp
-  have hsum := (hM.axisWeight target).property.2
-  change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+  have hsum := (hM.axisWeight target).total_of_fintype
+  change (∑ owner, (hM.axisWeight target).weights owner) = 1 at hsum
   rw [Finset.sum_sub_distrib, hsum, hindicator]
   exact div_self hdenominator
 
 noncomputable def mContinuationOwnerSimplex
     (target : NormalPlayer table) :
-    stdSimplex ℝ (NormalPlayer table) :=
-  ⟨mContinuationOwnerWeight table hM target,
+    Convexity.StdSimplex ℝ (NormalPlayer table) :=
+  ⟨Finsupp.equivFunOnFinite.symm (mContinuationOwnerWeight table hM target),
     mContinuationOwnerWeight_nonneg table hM target,
-    sum_mContinuationOwnerWeight table hM target⟩
+    by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact sum_mContinuationOwnerWeight table hM target⟩
 
 /-! The full continuation payoff `y^[i]`. -/
 noncomputable def mContinuationPayoff
@@ -20224,7 +20223,7 @@ theorem mAxisPayoff_exit_balance
   have hdenominator : 1 - mExitProbability table hM target ≠ 0 :=
     ne_of_gt (sub_pos.mpr (mExitProbability_lt_one table hM target))
   calc
-    ∑ owner, hM.axisWeight target owner *
+    ∑ owner, (hM.axisWeight target).weights owner *
           table.terminal (quittingProjectiveSingletonTerminal owner.1) who =
         ∑ owner,
           (if owner = designated then
@@ -20232,7 +20231,7 @@ theorem mAxisPayoff_exit_balance
             table.terminal
               (quittingProjectiveSingletonTerminal owner.1) who +
           ∑ owner,
-            (hM.axisWeight target owner -
+            ((hM.axisWeight target).weights owner -
               if owner = designated then
                 mExitProbability table hM target else 0) *
               table.terminal
@@ -20245,7 +20244,7 @@ theorem mAxisPayoff_exit_balance
           table.terminal
             (quittingProjectiveSingletonTerminal designated.1) who +
         ∑ owner,
-          (hM.axisWeight target owner -
+          ((hM.axisWeight target).weights owner -
             if owner = designated then
               mExitProbability table hM target else 0) *
             table.terminal
@@ -20335,19 +20334,20 @@ theorem mContinuationPayoff_nonneg
 axis basis. -/
 noncomputable def mTransitionWeight
     (target : NormalPlayer table) :
-    stdSimplex ℝ (NormalPlayer table) := by
+    Convexity.StdSimplex ℝ (NormalPlayer table) := by
   let normalValue : NormalPlayer table → ℝ := fun who =>
     mContinuationPayoff table hM target who.1
-  refine ⟨mAxisCoefficient table hM normalValue,
+  refine ⟨Finsupp.equivFunOnFinite.symm (mAxisCoefficient table hM normalValue),
     mAxisCoefficient_nonneg table hM
       (fun who => mContinuationPayoff_normal_nonneg table hM target who), ?_⟩
+  rw [Finsupp.equivFunOnFinite_symm_sum]
   have hsum := sum_mAxisCoefficient_eq_one table hM
     (mContinuationRepresentation table hM target)
   exact hsum
 
 theorem mTransitionWeight_axis_balance
     (target : NormalPlayer table) :
-    (∑ next, mTransitionWeight table hM target next •
+    (∑ next, (mTransitionWeight table hM target).weights next •
       mAxisPayoff table hM next) =
       mContinuationPayoff table hM target := by
   exact mAxisPayoff_combination_eq table hM
@@ -20397,7 +20397,7 @@ theorem mFineExitProbability_lt_accuracy
 
 noncomputable def mFineContinuationOwnerWeight
     (target owner : NormalPlayer table) (accuracy : ℝ) : ℝ :=
-  (hM.axisWeight target owner -
+  ((hM.axisWeight target).weights owner -
       if owner = hM.positiveOwner target then
         mFineExitProbability table hM target accuracy else 0) /
     (1 - mFineExitProbability table hM target accuracy)
@@ -20407,17 +20407,17 @@ theorem mFineContinuationOwnerWeight_nonneg
     0 ≤ mFineContinuationOwnerWeight table hM target owner accuracy := by
   apply div_nonneg
   · by_cases howner : owner = hM.positiveOwner target
-    · rw [if_pos howner]
+    · rw [ite_eq_left howner]
       subst owner
       have hfineLe : mFineExitProbability table hM target accuracy ≤
           mExitProbability table hM target := min_le_left _ _
       have hexitLe : mExitProbability table hM target ≤
-          hM.axisWeight target (hM.positiveOwner target) / 2 := by
+          (hM.axisWeight target).weights (hM.positiveOwner target) / 2 := by
         unfold mExitProbability
         exact min_le_left _ _
       linarith [hM.axisWeight_designated_pos target]
-    · rw [if_neg howner, sub_zero]
-      exact (hM.axisWeight target).property.1 owner
+    · rw [ite_eq_right howner, sub_zero]
+      exact (hM.axisWeight target).weights_nonneg owner
   · linarith [mFineExitProbability_lt_one table hM target accuracy]
 
 theorem sum_mFineContinuationOwnerWeight
@@ -20437,18 +20437,21 @@ theorem sum_mFineContinuationOwnerWeight
     · intro owner _ hne
       simp [hne]
     · simp
-  have hsum := (hM.axisWeight target).property.2
-  change (∑ owner, hM.axisWeight target owner) = 1 at hsum
+  have hsum := (hM.axisWeight target).total_of_fintype
+  change (∑ owner, (hM.axisWeight target).weights owner) = 1 at hsum
   rw [Finset.sum_sub_distrib, hsum, hindicator]
   exact div_self hdenominator
 
 noncomputable def mFineContinuationOwnerSimplex
     (target : NormalPlayer table) (accuracy : ℝ) :
-    stdSimplex ℝ (NormalPlayer table) :=
-  ⟨fun owner => mFineContinuationOwnerWeight table hM target owner accuracy,
+    Convexity.StdSimplex ℝ (NormalPlayer table) :=
+  ⟨Finsupp.equivFunOnFinite.symm
+      (fun owner => mFineContinuationOwnerWeight table hM target owner accuracy),
     fun owner => mFineContinuationOwnerWeight_nonneg
       table hM target owner accuracy,
-    sum_mFineContinuationOwnerWeight table hM target accuracy⟩
+    by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact sum_mFineContinuationOwnerWeight table hM target accuracy⟩
 
 noncomputable def mFineContinuationPayoff
     (target : NormalPlayer table) (accuracy : ℝ) : Payoff ι :=
@@ -20481,14 +20484,14 @@ theorem mAxisPayoff_fine_exit_balance
     ne_of_gt (sub_pos.mpr
       (mFineExitProbability_lt_one table hM target accuracy))
   calc
-    ∑ owner, hM.axisWeight target owner *
+    ∑ owner, (hM.axisWeight target).weights owner *
           table.terminal (quittingProjectiveSingletonTerminal owner.1) who =
         ∑ owner,
           (if owner = designated then probability else 0) *
             table.terminal
               (quittingProjectiveSingletonTerminal owner.1) who +
           ∑ owner,
-            (hM.axisWeight target owner -
+            ((hM.axisWeight target).weights owner -
               if owner = designated then probability else 0) *
               table.terminal
                 (quittingProjectiveSingletonTerminal owner.1) who := by
@@ -20499,7 +20502,7 @@ theorem mAxisPayoff_fine_exit_balance
     _ = probability * table.terminal
           (quittingProjectiveSingletonTerminal designated.1) who +
         ∑ owner,
-          (hM.axisWeight target owner -
+          ((hM.axisWeight target).weights owner -
             if owner = designated then probability else 0) *
             table.terminal
               (quittingProjectiveSingletonTerminal owner.1) who := by
@@ -20626,19 +20629,21 @@ theorem mFineContinuationPayoff_designatedOwner_zero
 
 noncomputable def mFineTransitionWeight
     (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
-    stdSimplex ℝ (NormalPlayer table) := by
+    Convexity.StdSimplex ℝ (NormalPlayer table) := by
   let normalValue : NormalPlayer table → ℝ := fun who =>
     mFineContinuationPayoff table hM target accuracy who.1
-  refine ⟨mAxisCoefficient table hM normalValue,
+  refine ⟨Finsupp.equivFunOnFinite.symm (mAxisCoefficient table hM normalValue),
     mAxisCoefficient_nonneg table hM
       (fun who => mFineContinuationPayoff_normal_nonneg
         table hM target who haccuracy), ?_⟩
+  rw [Finsupp.equivFunOnFinite_symm_sum]
   exact sum_mAxisCoefficient_eq_one table hM
     (mFineContinuationRepresentation table hM target accuracy)
 
 theorem mFineTransitionWeight_axis_balance
     (target : NormalPlayer table) (accuracy : ℝ) (haccuracy : 0 < accuracy) :
-    (∑ next, mFineTransitionWeight table hM target accuracy haccuracy next •
+    (∑ next,
+      (mFineTransitionWeight table hM target accuracy haccuracy).weights next •
       mAxisPayoff table hM next) =
       mFineContinuationPayoff table hM target accuracy := by
   exact mAxisPayoff_combination_eq table hM
@@ -20665,14 +20670,17 @@ variable {table : Table ι} [Nonempty (NormalPlayer table)]
 
 noncomputable def initialWeight
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
-    stdSimplex ℝ (NormalPlayer table) :=
-  ⟨mAxisCoefficient table hM (fun who => value who.1),
+    Convexity.StdSimplex ℝ (NormalPlayer table) :=
+  ⟨Finsupp.equivFunOnFinite.symm
+      (mAxisCoefficient table hM (fun who => value who.1)),
     mAxisCoefficient_nonneg table hM (fun who => blueprint.value_nonneg who.1),
-    sum_mAxisCoefficient_eq_one table hM blueprint.representation⟩
+    by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact sum_mAxisCoefficient_eq_one table hM blueprint.representation⟩
 
 theorem initialWeight_axis_balance
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
-    (∑ target, blueprint.initialWeight target •
+    (∑ target, blueprint.initialWeight.weights target •
       mAxisPayoff table hM target) = value :=
   mAxisPayoff_combination_eq table hM blueprint.representation
 
@@ -20680,11 +20688,14 @@ noncomputable def signalMarginal
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
     Option (NormalPlayer table) → PMF (NormalPlayer table)
   | none => Math.ProbabilityMassFunction.ofVector
-      blueprint.initialWeight blueprint.initialWeight.property
+      blueprint.initialWeight.weights
+        (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+          blueprint.initialWeight)
   | some target => Math.ProbabilityMassFunction.ofVector
-      (mFineTransitionWeight table hM target accuracy blueprint.accuracy_pos)
       (mFineTransitionWeight table hM target accuracy
-        blueprint.accuracy_pos).property
+        blueprint.accuracy_pos).weights
+      (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+        (mFineTransitionWeight table hM target accuracy blueprint.accuracy_pos))
 
 noncomputable def signalData
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
@@ -20697,19 +20708,21 @@ noncomputable def signalData
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     (target : NormalPlayer table) :
     (blueprint.signalMarginal none target).toReal =
-      blueprint.initialWeight target := by
+      blueprint.initialWeight.weights target := by
   exact Math.ProbabilityMassFunction.ofVector_toReal
-    blueprint.initialWeight.property target
+    (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+      blueprint.initialWeight) target
 
 @[simp] theorem signalMarginal_some_toReal
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy)
     (source target : NormalPlayer table) :
     (blueprint.signalMarginal (some source) target).toReal =
-      mFineTransitionWeight table hM source accuracy
-        blueprint.accuracy_pos target := by
+      (mFineTransitionWeight table hM source accuracy
+        blueprint.accuracy_pos).weights target := by
   exact Math.ProbabilityMassFunction.ofVector_toReal
-    (mFineTransitionWeight table hM source accuracy
-      blueprint.accuracy_pos).property target
+    (Math.ProbabilityMassFunction.weights_mem_simplexWeights
+      (mFineTransitionWeight table hM source accuracy
+        blueprint.accuracy_pos)) target
 
 end MMatrixPayoffBlueprint
 
@@ -20887,8 +20900,9 @@ theorem mode_state
         (Fin.snoc history.1 (history.2, action), nextState) =
       nextMMatrixPayoffMode blueprint.signalData.selector
         (blueprint.mode t history) action nextState := by
-  simp [MMatrixPayoffBlueprint.mode, compiledMMatrixPayoffMode,
+  rw [MMatrixPayoffBlueprint.mode, compiledMMatrixPayoffMode,
     publicHistoryInit_snoc]
+  simp only [Fin.snoc_last]
 
 /-! The finite control-state kernel induced by the prescribed profile. -/
 noncomputable def modeKernel
@@ -21024,10 +21038,9 @@ private theorem stageActionDist_pureContinue_active
       by_cases hplayer : player = (hM.positiveOwner target).1
       · subst player
         simp
-        rfl
       · rw [Function.update_of_ne hplayer]
         simp [strategy, hmode, hplayer]
-        rfl]
+        ]
     exact Math.PMFProduct.pmfPi_pure _
   · apply congrArg Math.PMFProduct.pmfPi
     funext player
@@ -21374,7 +21387,7 @@ theorem modeKernel_transienceCertificate
     (blueprint : MMatrixPayoffBlueprint table hM value accuracy) :
     Nonempty (Math.Probability.ClosedCoreTransienceCertificate
       blueprint.modeKernel absorbedCore) := by
-  letI : Nonempty (MMatrixPayoffMode table) := ⟨.absorbed⟩
+  let _ : Nonempty (MMatrixPayoffMode table) := ⟨.absorbed⟩
   exact Math.Probability.exists_closedCoreTransienceCertificate
     blueprint.modeKernel absorbedCore blueprint.absorbedCore_closed
     fun source => ⟨.absorbed, trivial,
@@ -21440,10 +21453,9 @@ private theorem stageActionDist_continueProfile
         by_cases hplayer : player = who
         · subst player
           rw [Function.update_self]
-          rfl
         · rw [Function.update_of_ne hplayer]
           simp [strategy, hmode]
-          rfl]
+          ]
       exact Math.PMFProduct.pmfPi_pure _
   | absorbed =>
       unfold continueProfile StochasticGame.stageActionDist
@@ -21454,10 +21466,9 @@ private theorem stageActionDist_continueProfile
         by_cases hplayer : player = who
         · subst player
           rw [Function.update_self]
-          rfl
         · rw [Function.update_of_ne hplayer]
           simp [strategy, hmode]
-          rfl]
+          ]
       exact Math.PMFProduct.pmfPi_pure _
 
 theorem historyModeStepDist_continueProfile_eq
@@ -21527,7 +21538,7 @@ theorem historyModeStepDist_continueProfile_eq
             who (past, PublicQuittingState.active signal)
           simp only [hmode] at haction
           by_cases hwho : who = (hM.positiveOwner target).1
-          · rw [if_pos hwho] at haction
+          · rw [ite_eq_left hwho] at haction
             unfold historyModeStepDist
             rw [haction, PMF.pure_bind]
             have hall :
@@ -21544,7 +21555,7 @@ theorem historyModeStepDist_continueProfile_eq
             rw [blueprint.mode_snoc]
             simp [continueModeKernel, hmode, hwho,
               nextMMatrixPayoffMode]
-          · rw [if_neg hwho] at haction
+          · rw [ite_eq_right hwho] at haction
             unfold historyModeStepDist
             rw [haction]
             simpa [historyModeStepDist, hmode, continueModeKernel, hwho] using
@@ -21653,7 +21664,7 @@ theorem continueModeKernel_transienceCertificate
     (who : ι) :
     Nonempty (Math.Probability.ClosedCoreTransienceCertificate
       (blueprint.continueModeKernel who) (blueprint.continueCore who)) := by
-  letI : Nonempty (MMatrixPayoffMode table) := ⟨.absorbed⟩
+  let _ : Nonempty (MMatrixPayoffMode table) := ⟨.absorbed⟩
   exact Math.Probability.exists_closedCoreTransienceCertificate
     (blueprint.continueModeKernel who) (blueprint.continueCore who)
     (blueprint.continueCore_closed who)
@@ -21672,7 +21683,7 @@ theorem positiveOwner_eq_of_active_mem_continueCore
     apply Relation.ReflTransGen.single
     have hkernel : blueprint.continueModeKernel who (.active target) =
         blueprint.modeKernel (.active target) := by
-      simp only [continueModeKernel, if_neg (Ne.symm hne)]
+      simp only [continueModeKernel, ite_eq_right (Ne.symm hne)]
     rw [Math.Probability.PMFSupportStep, hkernel]
     simpa [Math.Probability.PMFSupportStep] using
       blueprint.active_absorbed_support_step target
@@ -21888,8 +21899,16 @@ private theorem continueTailHistoryPotential_pureQuit_le_continue
           have hquitters : (quittingQuitters quitAction).Nonempty := by
             refine ⟨who, ?_⟩
             simp [quittingQuitters, quitAction]
+          change expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  (PublicQuittingState.active signal) quitAction) _ ≤
+            expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  (PublicQuittingState.active signal) continueAction) _
           rw [publicQuittingGame_transition_active,
-            dif_pos hquitters, Math.Probability.expect_pure]
+            dite_eq_left hquitters, Math.Probability.expect_pure]
           have hnextMode : blueprint.mode (time + 1)
               (Fin.snoc past
                 (PublicQuittingState.active signal, quitAction),
@@ -21927,8 +21946,14 @@ private theorem continueTailHistoryPotential_pureQuit_le_continue
       | absorbed =>
           simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
       | draw source =>
-          rw [publicQuittingGame_transition_draw,
-            publicQuittingGame_transition_draw]
+          change expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  PublicQuittingState.draw quitAction) _ ≤
+            expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  PublicQuittingState.draw continueAction) _
           apply le_of_eq
           apply Math.ProbabilityMassFunction.expect_congr_on_support
           intro nextState _
@@ -21950,9 +21975,15 @@ private theorem continueTailHistoryPotential_pureQuit_le_continue
       | draw source =>
           simp [MMatrixPayoffMode.MatchesState, hmode] at hmatches
       | absorbed =>
-          rw [publicQuittingGame_transition_absorbed,
-            publicQuittingGame_transition_absorbed,
-            Math.Probability.expect_pure, Math.Probability.expect_pure]
+          change expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  (PublicQuittingState.absorbed quitters) quitAction) _ ≤
+            expect
+              ((publicQuittingGame table
+                blueprint.signalData.law).transition
+                  (PublicQuittingState.absorbed quitters) continueAction) _
+          rw [Math.Probability.expect_pure, Math.Probability.expect_pure]
           unfold continueTailHistoryPotential
           rw [blueprint.mode_snoc
             (past, (PublicQuittingState.absorbed quitters :
@@ -22290,21 +22321,16 @@ private theorem stationaryPublicFinitePotential_draw_harmonic
       stationaryPublicFinitePotential table signalLaw root who horizon
         time history := by
   unfold StochasticGame.historyContinuationEU
+  rw [hstate]
   let activeLaw : PMF (publicQuittingGame table signalLaw).State :=
     signalLaw.map PublicQuittingState.active
-  have htransition (action :
-      (publicQuittingGame table signalLaw).JointAct) :
-      (publicQuittingGame table signalLaw).transition history.2 action =
-        activeLaw := by
-    rw [hstate]
-    exact publicQuittingGame_transition_draw table signalLaw action
-  simp_rw [htransition]
   have hinner (action :
       (publicQuittingGame table signalLaw).JointAct) :
       expect activeLaw (fun nextState =>
           stationaryPublicFinitePotential table signalLaw root who horizon
             (time + 1)
-            (Fin.snoc history.1 (history.2, action), nextState)) =
+            (Fin.snoc history.1 (PublicQuittingState.draw, action),
+              nextState)) =
         quittingStationaryFiniteSnellValue
           (quittingStationaryFixedOpponentsQuitValue
             table.zeroNeverReward root who)
@@ -22315,6 +22341,7 @@ private theorem stationaryPublicFinitePotential_draw_harmonic
     unfold activeLaw
     rw [Math.Probability.expect_map]
     exact Math.Probability.expect_const _ _
+  unfold activeLaw at hinner
   simp_rw [hinner]
   rw [Math.Probability.expect_const]
   simp only [stationaryPublicFinitePotential, hstate]
@@ -22341,8 +22368,8 @@ private theorem stationaryPublicFinitePotential_absorbed_harmonic
       have heq : terminal = quitters := by injection hstate
       subst terminal
       unfold StochasticGame.historyContinuationEU
-      simp only [publicQuittingGame_transition_absorbed,
-        Math.Probability.expect_pure, stationaryPublicFinitePotential]
+      simp only [Math.Probability.expect_pure,
+        stationaryPublicFinitePotential]
       exact Math.Probability.expect_const _ _
 
 private theorem stationaryPublicFinitePotential_active_pure
@@ -22390,7 +22417,6 @@ private theorem stationaryPublicFinitePotential_active_pure
         by_cases hplayer : player = who
         · subst player
           simp only [Function.update_self]
-          rfl
         · rw [Function.update_of_ne hplayer]
           simp [rootSequencePublicStrategy, Function.update_of_ne hplayer]
       unfold StochasticGame.historyContinuationEU
@@ -22400,14 +22426,14 @@ private theorem stationaryPublicFinitePotential_active_pure
         (Function.update root who (PMF.pure action))))
       funext jointAction
       by_cases hquit : (quittingQuitters jointAction).Nonempty
-      · rw [publicQuittingGame_transition_active, dif_pos hquit,
+      · rw [publicQuittingGame_transition_active, dite_eq_left hquit,
           Math.Probability.expect_pure]
         simp only [stationaryPublicFinitePotential, quittingRootPayoff,
-          dif_pos hquit]
-      · rw [publicQuittingGame_transition_active, dif_neg hquit,
+          dite_eq_left hquit]
+      · rw [publicQuittingGame_transition_active, dite_eq_right hquit,
           Math.Probability.expect_pure]
         simp only [stationaryPublicFinitePotential, quittingRootPayoff,
-          dif_neg hquit]
+          dite_eq_right hquit]
         rw [show (time + 1 + 1) / 2 = time / 2 + 1 by omega]
 
 private theorem stationaryPublicFinitePotential_superharmonic
@@ -22520,13 +22546,13 @@ private theorem stationaryPublicFinitePotential_superharmonic
           cases action with
           | false =>
               simp only [PMF.pure_apply,
-                if_neg (by decide : (true : Bool) ≠ false),
-                ENNReal.toReal_zero, if_true, ENNReal.toReal_one,
+                ite_eq_right (by decide : (true : Bool) ≠ false),
+                ENNReal.toReal_zero, ite_true, ENNReal.toReal_one,
                 zero_mul, one_mul, zero_add]
               exact le_max_right _ _
           | true =>
-              simp only [PMF.pure_apply, if_true, ENNReal.toReal_one,
-                if_neg (by decide : (false : Bool) ≠ true),
+              simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one,
+                ite_eq_right (by decide : (false : Bool) ≠ true),
                 ENNReal.toReal_zero, one_mul, zero_mul, add_zero]
               exact le_max_left _ _
         _ = stationaryPublicFinitePotential table signalLaw root who horizon
@@ -23305,7 +23331,7 @@ private theorem pureQuit_nextTerminalPayoff_le_accuracy
   have haction := blueprint.stageActionDist_pureQuit_active who
     (past, PublicQuittingState.active signal) target hmode
   by_cases hwho : who = (hM.positiveOwner target).1
-  · rw [if_pos hwho] at haction
+  · rw [ite_eq_left hwho] at haction
     unfold StochasticGame.historyContinuationEU
     rw [haction, Math.Probability.expect_pure,
       publicQuittingGame_transition_publicSingleQuitAction,
@@ -23317,7 +23343,7 @@ private theorem pureQuit_nextTerminalPayoff_le_accuracy
         (hM.positiveOwner target).1 ≤ accuracy
     rw [blueprint.soloExitNormalized]
     exact blueprint.accuracy_pos.le
-  · rw [if_neg hwho] at haction
+  · rw [ite_eq_right hwho] at haction
     unfold StochasticGame.historyContinuationEU
     rw [haction, Math.Probability.expect_bind]
     simp_rw [Math.Probability.expect_pure]
@@ -23762,7 +23788,7 @@ private theorem pureQuit_deviationPotential_le
           (Function.update root who (PMF.pure true)) action = 0 := by
         rw [Math.PMFProduct.pmfPi_apply]
         apply Finset.prod_eq_zero (Finset.mem_univ who)
-        rw [Function.update_self, PMF.pure_apply, if_neg hne]
+        rw [Function.update_self, PMF.pure_apply, ite_eq_right hne]
       exact (PMF.mem_support_iff _ action).mp haction hzero
     simp only [publicQuittingGame] at hnextState
     split at hnextState
@@ -23823,7 +23849,7 @@ private theorem pureContinue_deviationPotential_le
     subst state
     have haction := blueprint.stageActionDist_pureContinue_active who
       (past, PublicQuittingState.active signal) target hmode
-    rw [if_pos hwho] at haction
+    rw [ite_eq_left hwho] at haction
     unfold StochasticGame.historyContinuationEU
     rw [haction, Math.Probability.expect_pure]
     have hall : publicAllContinueAction table blueprint.signalData.law =
@@ -23848,7 +23874,7 @@ private theorem pureContinue_deviationPotential_le
       who strategy history
     have haction := blueprint.stageActionDist_pureContinue_active who
       history target hmode
-    rw [if_neg hwho] at haction
+    rw [ite_eq_right hwho] at haction
     dsimp only [strategy] at hupper
     unfold StochasticGame.historyContinuationEU at hupper
     rw [haction] at hupper
@@ -24318,7 +24344,7 @@ private theorem completedStrategy_deviationFinitePayoff_lt
         apply Math.Probability.expect_mono
         intro base
         by_cases hbase : base ∈ distribution.support
-        · simp only [if_pos hbase]
+        · simp only [ite_eq_left hbase]
           apply blueprint.completedStrategy_localDeviationPayoff_le
             horizon hodd htailError hslack suffixThreshold suffixHorizon
             hsuffix hfinite who deviation base
@@ -24928,7 +24954,7 @@ theorem theorem4_3
     have hhull := hvalue.1
     rw [NormalSingletonHull, hrange, convexHull_empty] at hhull
     exact hhull
-  letI : Nonempty (NormalPlayer table) := hnormal.to_subtype
+  let _ : Nonempty (NormalPlayer table) := hnormal.to_subtype
   let representation : NormalSingletonRepresentation table value :=
     Classical.choice (exists_normalSingletonRepresentation table hvalue.1)
   have hbuild : ∀ n : ℕ, ∃ profile : SunspotProfile table,

@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.NormalForms
-import MathUE.DirectedTransport.SCC
+import Maths.Multitubes.NormalForms
+import Maths.Multitubes.SCC
 import MathUE.DirectedTransport.SimpleCycleBalance
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceBlock
 
@@ -25,9 +25,8 @@ noncomputable section
 namespace GameTheory
 
 open MathUE
-open Math
-open Math.DirectedTransport
-open Math.CycleCoboundary
+open _root_.Math
+open Maths
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -131,7 +130,7 @@ def EveryDirectedInfluenceCyclePositive
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Prop :=
   ∀ (base : ι)
     (cycle : (quittingInfluenceGraph reward).Walk base base),
-    Math.AdditiveTransport.IsSimpleCycle cycle →
+    Maths.AdditiveTransport.IsSimpleCycle cycle →
       walkLabel quittingInfluenceLabel cycle = 1
 
 omit [Fintype ι] in
@@ -606,7 +605,7 @@ theorem exists_negativeSimpleInfluenceCycle_of_no_sureExitSet
     (hnoExit : ¬∃ S, IsQuittingSureExitSet reward S) :
     ∃ (base : ι)
       (cycle : (quittingInfluenceGraph reward).Walk base base),
-      Math.AdditiveTransport.IsSimpleCycle cycle ∧
+      Maths.AdditiveTransport.IsSimpleCycle cycle ∧
         walkLabel quittingInfluenceLabel cycle = -1 := by
   by_contra hnegative
   have hcycle : EveryDirectedInfluenceCyclePositive reward := by

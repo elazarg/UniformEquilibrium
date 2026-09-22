@@ -30,7 +30,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -419,10 +419,14 @@ theorem finkPureDeviationStateKernel_switch :
     game.finkPureDeviationStateKernel
         germ.endpointFinkPoint false false true =
       PMF.pure true := by
+  classical
   unfold StochasticGame.finkPureDeviationStateKernel
-  rw [germ.finkProfile_endpointFinkPoint, germ_endpointProfile,
-    pmfPi_profile_update_pure]
-  simp [game, ownerAction]
+  rw [germ.finkProfile_endpointFinkPoint, germ_endpointProfile]
+  have hpure := pmfPi_profile_update_pure false false true
+  rw [hpure]
+  have hupdate : Function.update prescribedAction false true false = true :=
+    Function.update_self false true prescribedAction
+  simp [game, ownerAction, hupdate]
 
 def switchAtFalse :
     germ.ContinuationNeutralAction false :=

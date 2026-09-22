@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -133,6 +133,7 @@ theorem abs_quittingRootSequencePureTimeTerminalValue_sub_singleton_le
     · simp [profile, quittingOpponentOnlyProfile,
         quittingRootSequenceProfile, quittingRootSequenceUpdate,
         Function.update_of_ne hp]
+      rfl
   have hbound :=
     abs_quittingTerminalPayoff_sub_soloReward_le_of_opponentLiveTail
       reward profile who who hreward habsorbs (η :=
@@ -210,8 +211,8 @@ theorem quittingRootSequencePureTimeTerminalValue_elementaryNever_of_le
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
       rw [quittingPureTimeHazard_some_of_ne (show start ≠ start + (fuel + 1) by omega)]
       simp only [PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       have hcontinueReward :
           quittingFixedOpponentsContinueReward reward sequence who start = 0 := by
         unfold quittingFixedOpponentsContinueReward

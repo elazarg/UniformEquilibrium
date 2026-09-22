@@ -161,36 +161,36 @@ theorem sharpPreconditionerMatrix_det :
           -5358 / 10000, 54 / 10000, -5571 / 10000;
           -6953 / 10000, -30444 / 10000, -17754 / 10000] := by
     ext row column
+    change sharpPreconditionerRat (Fin.succ row) ((0 : Player).succAbove column) = _
     fin_cases row <;> fin_cases column <;>
-      simp +decide [sharpPreconditionerMatrix, sharpPreconditionerRat,
-        ]
+      simp +decide [sharpPreconditionerRat]
   have hminorOne :
       sharpPreconditionerMatrix.submatrix Fin.succ (1 : Player).succAbove =
         !![1021 / 1000, 451 / 10000, -10923 / 10000;
           -1725 / 10000, 54 / 10000, -5571 / 10000;
           591 / 1000, -30444 / 10000, -17754 / 10000] := by
     ext row column
+    change sharpPreconditionerRat (Fin.succ row) ((1 : Player).succAbove column) = _
     fin_cases row <;> fin_cases column <;>
-      simp +decide [sharpPreconditionerMatrix, sharpPreconditionerRat,
-        ]
+      simp +decide [sharpPreconditionerRat]
   have hminorTwo :
       sharpPreconditionerMatrix.submatrix Fin.succ (2 : Player).succAbove =
         !![1021 / 1000, -10619 / 10000, -10923 / 10000;
           -1725 / 10000, -5358 / 10000, -5571 / 10000;
           591 / 1000, -6953 / 10000, -17754 / 10000] := by
     ext row column
+    change sharpPreconditionerRat (Fin.succ row) ((2 : Player).succAbove column) = _
     fin_cases row <;> fin_cases column <;>
-      simp +decide [sharpPreconditionerMatrix, sharpPreconditionerRat,
-        ]
+      simp +decide [sharpPreconditionerRat]
   have hminorThree :
       sharpPreconditionerMatrix.submatrix Fin.succ (3 : Player).succAbove =
         !![1021 / 1000, -10619 / 10000, 451 / 10000;
           -1725 / 10000, -5358 / 10000, 54 / 10000;
           591 / 1000, -6953 / 10000, -30444 / 10000] := by
     ext row column
+    change sharpPreconditionerRat (Fin.succ row) ((3 : Player).succAbove column) = _
     fin_cases row <;> fin_cases column <;>
-      simp +decide [sharpPreconditionerMatrix, sharpPreconditionerRat,
-        ]
+      simp +decide [sharpPreconditionerRat]
   have hminorOneSucc :
       sharpPreconditionerMatrix.submatrix Fin.succ
           (Fin.succ 0).succAbove =
@@ -677,7 +677,7 @@ theorem abs_sharpNormalizedPoint_le_one
       ((sharpCenter who + sharpHalfWidth who : ℚ) : ℝ) at hupper
     rw [hlowerCast] at hlower
     rw [hupperCast] at hupper
-    rw [sharpNormalizedPoint, dif_pos hcoordinate, abs_le]
+    rw [sharpNormalizedPoint, dite_eq_left hcoordinate, abs_le]
     constructor
     · rw [le_div_iff₀ hhalfWidth]
       linarith

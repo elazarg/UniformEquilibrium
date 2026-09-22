@@ -41,7 +41,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace KernelGame
 
@@ -212,7 +212,7 @@ theorem nash_eu_ge_mixedSecurityLevel {σ : Profile G} (hN : G.IsNash σ)
       BddBelow (Set.range (fun τ : Profile G =>
         expect p (fun a => G.eu (Function.update τ who a) who)))) :
     G.eu σ who ≥ G.mixedSecurityLevel who := by
-  haveI : Nonempty (PMF (G.Strategy who)) := ⟨PMF.pure (Classical.arbitrary _)⟩
+  have : Nonempty (PMF (G.Strategy who)) := ⟨PMF.pure (Classical.arbitrary _)⟩
   apply ciSup_le
   intro p
   have h1 : G.mixedWorstCaseEUInf who p ≤
@@ -243,7 +243,7 @@ open Classical in
 theorem worstCaseEU_le (who : ι) (s : G.Strategy who) (σ : Profile G) :
     G.worstCaseEU who s ≤ G.eu (Function.update σ who s) who :=
   by
-    letI := Fintype.ofFinite (Profile G)
+    let := Fintype.ofFinite (Profile G)
     exact Finset.inf'_le _ (Finset.mem_univ σ)
 
 open Classical in
@@ -258,7 +258,7 @@ open Classical in
 the order-theoretic infimum. -/
 theorem worstCaseEU_eq_worstCaseEUInf (who : ι) (s : G.Strategy who) :
     G.worstCaseEU who s = G.worstCaseEUInf who s := by
-  letI := Fintype.ofFinite (Profile G)
+  let := Fintype.ofFinite (Profile G)
   unfold worstCaseEU worstCaseEUInf
   exact Finset.inf'_univ_eq_ciInf _
 
@@ -277,7 +277,7 @@ open Classical in
 level is the order-theoretic supremal security level. -/
 theorem securityLevel_eq_securityLevelSup (who : ι) :
     G.securityLevel who = G.securityLevelSup who := by
-  letI := Fintype.ofFinite (G.Strategy who)
+  let := Fintype.ofFinite (G.Strategy who)
   unfold securityLevel securityLevelSup
   rw [Finset.sup'_univ_eq_ciSup]
   apply iSup_congr
@@ -316,7 +316,7 @@ open Classical in
 /-- In a Nash equilibrium, each player's EU is at least their security level. -/
 theorem nash_eu_ge_securityLevel {σ : Profile G} (hN : G.IsNash σ) (who : ι) :
     G.eu σ who ≥ G.securityLevel who := by
-  letI := Fintype.ofFinite (G.Strategy who)
+  let := Fintype.ofFinite (G.Strategy who)
   simp only [securityLevel]
   apply Finset.sup'_le
   intro s _
@@ -331,7 +331,7 @@ theorem IsDominant.eu_ge_securityLevel
     {who : ι} {s : G.Strategy who} (hdom : G.IsDominant who s)
     (σ : Profile G) :
     G.eu (Function.update σ who s) who ≥ G.securityLevel who := by
-  letI := Fintype.ofFinite (G.Strategy who)
+  let := Fintype.ofFinite (G.Strategy who)
   simp only [securityLevel]
   apply Finset.sup'_le
   intro t _
@@ -346,7 +346,7 @@ open Classical in
 theorem le_securityLevel_of_forall_eu_ge (who : ι) (s : G.Strategy who) (v : ℝ)
     (hg : ∀ σ : Profile G, G.eu (Function.update σ who s) who ≥ v) :
     v ≤ G.securityLevel who := by
-  letI := Fintype.ofFinite (G.Strategy who)
+  let := Fintype.ofFinite (G.Strategy who)
   calc v ≤ G.worstCaseEU who s := by
           apply Finset.le_inf'
           intro σ _
@@ -358,7 +358,7 @@ open Classical in
 /-- A security strategy exists: some strategy achieves the security level. -/
 theorem exists_securityStrategy (who : ι) :
     ∃ s : G.Strategy who, G.worstCaseEU who s = G.securityLevel who := by
-  letI := Fintype.ofFinite (G.Strategy who)
+  let := Fintype.ofFinite (G.Strategy who)
   obtain ⟨s, _, hs⟩ := Finset.exists_max_image Finset.univ
     (fun s => G.worstCaseEU who s) ⟨Classical.arbitrary _, Finset.mem_univ _⟩
   exact ⟨s, le_antisymm (Finset.le_sup' _ (Finset.mem_univ s))

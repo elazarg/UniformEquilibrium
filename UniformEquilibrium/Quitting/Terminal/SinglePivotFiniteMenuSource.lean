@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -33,7 +33,7 @@ theorem singlePivot_nonpivot_fullCap_eq_menuCap
         (quittingFiniteDeadlineTimingProfile reward deadline mixed) who =
       quittingFiniteDeadlineReplyCap reward deadline mixed who := by
   rw [quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max,
-    hcanonical who, if_neg hne, mul_zero, add_zero]
+    hcanonical who, ite_eq_right hne, mul_zero, add_zero]
   apply max_eq_left
   exact quittingFiniteDeadline_purePayoff_le_replyCap reward deadline mixed who none
 
@@ -47,7 +47,7 @@ theorem singlePivot_pivot_fullCap_eq_max_menu_never_add_deletedNever
         (quittingFiniteDeadlineNeverPayoff reward deadline mixed pivot +
           quittingFiniteDeadlineOpponentNeverProduct deadline mixed pivot) := by
   rw [quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max,
-    hcanonical pivot, if_pos rfl, mul_one]
+    hcanonical pivot, ite_eq_left rfl, mul_one]
 
 theorem singlePivot_nonpivot_fullDebt_eq_menuDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)

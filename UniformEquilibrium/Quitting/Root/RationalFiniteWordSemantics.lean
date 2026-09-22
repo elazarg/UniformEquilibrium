@@ -8,7 +8,7 @@ import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryCaps
 namespace GameTheory
 
 open GameTheory.Finite
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {players : ℕ}
 

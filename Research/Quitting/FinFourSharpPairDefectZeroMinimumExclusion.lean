@@ -224,9 +224,6 @@ theorem forcedPairDebt_fullBindingLocalForcedPairFragment (R : ℝ) :
       rationalReward, FinFourMaximalRayZeroMinimumRegressions.activeBaseReward,
       FinFourMaximalRayZeroMinimumRegressions.passive,
       FinFourMaximalRayZeroMinimumRegressions.interaction, rationalScale]
-  have hcoefficient : ![R, -R - 1, 0, 0] (3 : Player) = 0 := by simp
-  rw [hcoefficient, max_eq_right (by linarith)]
-  ring
 
 /-- **The older completions do not separate their two nonmembers.**  Both carry
 equal pair defects there, so the distinct-defect property of

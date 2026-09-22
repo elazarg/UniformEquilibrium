@@ -197,7 +197,7 @@ theorem liminf_neg_eq_neg_limsup {β : Type*} (u : β → ℝ) (f : Filter β) :
   rw [liminf_eq, limsup_eq, ← Real.sSup_neg]
   congr 1
   ext a
-  simp only [Set.mem_neg, Set.mem_setOf_eq, le_neg]
+  simp only [Set.mem_neg, Set.mem_ofPred_eq, le_neg]
 
 /-- **Real Fatou for a uniformly bounded family, composed with an eventual
 expectation bound.** If `A : ℕ → Ω → ℝ` is uniformly bounded by `C` and its
@@ -426,9 +426,9 @@ theorem measurable_pathwiseAveragePayoff [Finite ι] [Finite G.State]
     [∀ i, Finite (G.Act i)] (who : ι) (n : ℕ) :
     Measurable (G.pathwiseAveragePayoff who n) := by
   classical
-  haveI : Fintype ι := Fintype.ofFinite ι
-  haveI : Fintype G.State := Fintype.ofFinite G.State
-  haveI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  have : Fintype ι := Fintype.ofFinite ι
+  have : Fintype G.State := Fintype.ofFinite G.State
+  have : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   have hg : Measurable (fun h : G.Hist n => (n : ℝ)⁻¹ * G.totalPayoff who h) :=
     Measurable.of_discrete
   exact hg.comp (G.measurable_histOfPlay n)

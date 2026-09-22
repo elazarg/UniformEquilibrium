@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -172,7 +172,7 @@ def finitePublicHistoryControlledStoppingModel
           (G.boundedPublicHistoryPrescribedKernel
             profile node).support := by
       simpa [PMF.mem_support_iff] using nonzero
-    rw [boundedPublicHistoryPrescribedKernel, dif_pos strict] at member
+    rw [boundedPublicHistoryPrescribedKernel, dite_eq_left strict] at member
     simp only [PMF.mem_support_bind_iff, PMF.mem_support_pure_iff]
       at member
     obtain ⟨action, _, successor, _, rfl⟩ := member
@@ -190,7 +190,7 @@ def finitePublicHistoryControlledStoppingModel
           (G.boundedPublicHistoryControlledKernel
             profile node who deviation).support := by
       simpa [PMF.mem_support_iff] using nonzero
-    rw [boundedPublicHistoryControlledKernel, dif_pos strict] at member
+    rw [boundedPublicHistoryControlledKernel, dite_eq_left strict] at member
     simp only [PMF.mem_support_bind_iff, PMF.mem_support_pure_iff]
       at member
     obtain ⟨action, _, successor, _, rfl⟩ := member
@@ -199,7 +199,7 @@ def finitePublicHistoryControlledStoppingModel
   prescribed_eq_mix := by
     intro node who
     by_cases strict : node.1.val < fuel
-    · rw [boundedPublicHistoryPrescribedKernel, dif_pos strict]
+    · rw [boundedPublicHistoryPrescribedKernel, dite_eq_left strict]
       unfold stageActionDist
       let actions : ∀ player, PMF (G.Act player) :=
         fun player => profile player node.1.val node.2
@@ -224,10 +224,10 @@ def finitePublicHistoryControlledStoppingModel
       rw [product_decomposition, PMF.bind_bind]
       apply congrArg
       funext deviation
-      rw [boundedPublicHistoryControlledKernel, dif_pos strict]
+      rw [boundedPublicHistoryControlledKernel, dite_eq_left strict]
     · rw [
         boundedPublicHistoryPrescribedKernel,
-        dif_neg strict
+        dite_eq_right strict
       ]
       calc
         PMF.pure node =
@@ -240,7 +240,7 @@ def finitePublicHistoryControlledStoppingModel
                 profile node who) := by
           apply congrArg
           funext deviation
-          rw [boundedPublicHistoryControlledKernel, dif_neg strict]
+          rw [boundedPublicHistoryControlledKernel, dite_eq_right strict]
 
 namespace FinitePublicHistoryControlledStoppingModel
 

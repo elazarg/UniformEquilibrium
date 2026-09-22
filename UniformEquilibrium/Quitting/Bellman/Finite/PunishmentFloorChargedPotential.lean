@@ -11,7 +11,7 @@ import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorChargedRelation
 
 A common absorption-charge bound for every exact Nash--Bellman predecessor
 prefix from the punishment floor bounds every path in the reachable class.
-`Math.ChargedPathBudget` therefore supplies its canonical budget-to-go
+`Maths.ChargedPathBudget` therefore supplies its canonical budget-to-go
 potential.  This file records the potential with its sharp range and edge
 decrement inequality, and specializes that inequality to the canonical
 forward orbit.
@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

@@ -44,12 +44,25 @@ theorem quittingTerminalPayoff_update_stoppingLawBehaviorStrategy_eq_expect
   have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
     observerReward profile mixer
       (quittingStoppingLawBehaviorStrategy reward mixer law)
-  rw [quittingTerminalPayoff_observerReward reward _ observer mixer] at h
+  change quittingTerminalPayoff observerReward
+      (Function.update profile mixer
+        (quittingStoppingLawBehaviorStrategy reward mixer law)) mixer =
+    expect (quittingBehaviorStoppingLaw observerReward
+      (quittingStoppingLawBehaviorStrategy reward mixer law))
+      (fun choice => quittingTerminalPayoff observerReward
+        (Function.update profile mixer
+          (quittingPureTimeBehaviorStrategy observerReward mixer choice)) mixer) at h
+  have hleft := quittingTerminalPayoff_observerReward reward
+    (Function.update profile mixer
+      (quittingStoppingLawBehaviorStrategy reward mixer law)) observer mixer
   calc
     quittingTerminalPayoff reward
         (Function.update profile mixer
           (quittingStoppingLawBehaviorStrategy reward mixer law)) observer =
-      expect
+      quittingTerminalPayoff observerReward
+        (Function.update profile mixer
+          (quittingStoppingLawBehaviorStrategy reward mixer law)) mixer := hleft.symm
+    _ = expect
         (quittingBehaviorStoppingLaw observerReward
           (quittingStoppingLawBehaviorStrategy reward mixer law))
         (fun choice =>
@@ -69,8 +82,12 @@ theorem quittingTerminalPayoff_update_stoppingLawBehaviorStrategy_eq_expect
           observerReward mixer law]
       apply congrArg (expect law)
       funext choice
-      rw [quittingTerminalPayoff_observerReward reward _ observer mixer]
-      rfl
+      change quittingTerminalPayoff observerReward
+          (Function.update profile mixer
+            (quittingPureTimeBehaviorStrategy reward mixer choice)) mixer = _
+      exact quittingTerminalPayoff_observerReward reward
+        (Function.update profile mixer
+          (quittingPureTimeBehaviorStrategy reward mixer choice)) observer mixer
 
 omit [Nontrivial ι] in
 /-- The payoff to any observer is the stopping-law mixture of one displayed
@@ -87,10 +104,21 @@ theorem quittingTerminalPayoff_eq_expect_behaviorStoppingLaw_pureTime
   let observerReward := quittingObserverReward reward observer
   have h := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
     observerReward profile mixer (profile mixer)
-  rw [Function.update_eq_self] at h
-  rw [quittingTerminalPayoff_observerReward reward _ observer mixer] at h
+  have hupdate :
+      (Function.update profile mixer (profile mixer) :
+        (quittingGame observerReward).BehaviorProfile) = profile := by
+    exact Function.update_eq_self mixer profile
+  rw [hupdate] at h
+  change quittingTerminalPayoff observerReward profile mixer =
+    expect (quittingBehaviorStoppingLaw observerReward (profile mixer))
+      (fun choice => quittingTerminalPayoff observerReward
+        (Function.update profile mixer
+          (quittingPureTimeBehaviorStrategy observerReward mixer choice)) mixer) at h
+  have hleft := quittingTerminalPayoff_observerReward reward profile observer mixer
   calc
     quittingTerminalPayoff reward profile observer =
+        quittingTerminalPayoff observerReward profile mixer := hleft.symm
+    _ =
         expect (quittingBehaviorStoppingLaw observerReward (profile mixer))
           (fun choice => quittingTerminalPayoff observerReward
             (Function.update profile mixer
@@ -102,8 +130,12 @@ theorem quittingTerminalPayoff_eq_expect_behaviorStoppingLaw_pureTime
               (quittingPureTimeBehaviorStrategy reward mixer choice)) observer) := by
       apply congrArg
       funext choice
-      rw [quittingTerminalPayoff_observerReward reward _ observer mixer]
-      rfl
+      change quittingTerminalPayoff observerReward
+          (Function.update profile mixer
+            (quittingPureTimeBehaviorStrategy reward mixer choice)) mixer = _
+      exact quittingTerminalPayoff_observerReward reward
+        (Function.update profile mixer
+          (quittingPureTimeBehaviorStrategy reward mixer choice)) observer mixer
 
 omit [Nontrivial ι] in
 /-- Reconstructing one player's conditional hazard from that player's actual
@@ -189,6 +221,8 @@ theorem quittingStoppingLawCanonicalizeOn_univ_eq_compactStoppingLawProfile
   funext who
   simp [quittingStoppingLawCanonicalizeOn,
     quittingCompactStoppingLawProfile, quittingCompactStoppingLawsOfProfile]
+  congr 1
+  exact (CompactStoppingLaw.toPMF_ofPMF _).symm
 
 omit [Nontrivial ι] in
 /-- Prescribed terminal payoffs depend only on the players' complete
@@ -234,6 +268,8 @@ theorem quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile
     · simp [quittingStoppingLawCanonicalizeOn, updated,
         quittingCompactStoppingLawProfile, quittingCompactStoppingLawsOfProfile,
         hplayer]
+      congr 1
+      exact (CompactStoppingLaw.toPMF_ofPMF _).symm
   have hinvariant := quittingTerminalPayoff_stoppingLawCanonicalizeOn_eq
     reward updated (Finset.univ.erase who) who
   rw [hcanonical] at hinvariant

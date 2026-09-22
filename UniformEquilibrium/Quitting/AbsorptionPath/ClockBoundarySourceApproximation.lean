@@ -181,7 +181,7 @@ private theorem boundaryRoots_tendsto_allContinue
           (hboundary index)).symm)
   apply tendsto_pi_nhds.2
   intro player
-  rw [tendsto_subtype_rng]
+  apply (Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff.mpr
   apply tendsto_pi_nhds.2
   intro action
   have hquit : Tendsto (fun index ↦

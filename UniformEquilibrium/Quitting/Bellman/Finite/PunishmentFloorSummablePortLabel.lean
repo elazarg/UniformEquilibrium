@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.PMFProduct Math.Probability
+open Filter Math.PMFProduct _root_.Math.Probability
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}

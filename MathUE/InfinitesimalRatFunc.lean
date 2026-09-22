@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.Algebra.Order.Ring.Cone
 import Mathlib.Algebra.Polynomial.Reverse
 import Mathlib.FieldTheory.RatFunc.AsPolynomial
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # `ℝ(t)` ordered by behavior at `0⁺`, with `t` a positive infinitesimal

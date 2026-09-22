@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.Probability.DiscreteHazard
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -93,6 +93,7 @@ theorem quittingStationaryQuitNowSegment_semanticPair
     exact quittingStationaryQuitNowSegment_ownerStoppingLaw reward root owner parameter
   · rw [quittingStationaryQuitNowSegment_opponents reward root hwho parameter]
     simp only [quittingCapResponseSegment, Function.update_of_ne hwho]
+    rfl
 
 /-- The complete surviving suffix is the original stationary profile,
 including at a sure-Quit boundary and at full cap installation. -/

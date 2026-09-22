@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -275,7 +275,7 @@ theorem opponentFactor_mul_max_cumulativeDifference_le_sourceStageMass
       quittingStageCoalitionMass reward (Function.update base mover source)
         time terminal := by
   rw [quittingStageCoalitionMass_update_eq_opponentFactor_mul]
-  simp only [hmover, if_false]
+  simp only [hmover, ite_false]
   exact mul_le_mul_of_nonneg_left
     (max_cumulativeDifference_le_sourceSurvival reward mover source target time)
     (quittingStageCoalitionOpponentFactor_nonneg
@@ -296,7 +296,7 @@ theorem opponentFactor_mul_max_neg_cumulativeDifference_le_targetStageMass
       quittingStageCoalitionMass reward (Function.update base mover target)
         time terminal := by
   rw [quittingStageCoalitionMass_update_eq_opponentFactor_mul]
-  simp only [hmover, if_false]
+  simp only [hmover, ite_false]
   exact mul_le_mul_of_nonneg_left
     (max_neg_cumulativeDifference_le_targetSurvival reward mover source target
       time)
@@ -323,8 +323,8 @@ theorem opponentFactor_mul_survival_eq_stageMass_add_insertStageMass
     quittingStageCoalitionMass_update_eq_opponentFactor_mul,
     quittingStageCoalitionOpponentFactor_insert_eq
       (quittingProfileLiveRoot reward base) mover time terminal hmover]
-  simp only [hmover, if_false, quittingInsertTerminal,
-    Finset.mem_insert, true_or, if_true]
+  simp only [hmover, ite_false, quittingInsertTerminal,
+    Finset.mem_insert, true_or, ite_true]
   rw [quittingHazardStopMass_eq_survival_sub_succ]
   ring
 
@@ -503,9 +503,9 @@ theorem quittingStoppingLawRectangleStageAtom_eq_causalFactor
     quittingStageCoalitionMass_update_eq_opponentFactor_mul]
   unfold quittingStoppingLawChronologicalFactorDifference
   by_cases hmover : mover ∈ terminal.val
-  · simp only [hmover, if_true]
+  · simp only [hmover, ite_true]
     ring
-  · simp only [hmover, if_false]
+  · simp only [hmover, ite_false]
     ring
 
 /-- The chronological rectangle atoms form a summable signed series. -/

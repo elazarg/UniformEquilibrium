@@ -22,7 +22,7 @@ theorem exists_pow_eq_of_constantCoeff_ne_zero
     (u : PowerSeries K) (hu : u.constantCoeff ≠ 0)
     {m : ℕ} (hm : 0 < m) :
     ∃ v : PowerSeries K, v ^ m = u := by
-  letI : IsAdicComplete
+  let : IsAdicComplete
       (IsLocalRing.maximalIdeal (PowerSeries K)) (PowerSeries K) := by
     rw [PowerSeries.maximalIdeal_eq_span_X]
     infer_instance
@@ -205,7 +205,7 @@ theorem monic_natDegree_two_eq
   rw [Polynomial.coeff_eq_zero_of_natDegree_lt hn]
   have h1n : 1 ≠ n := Ne.symm hn1
   simp only [coeff_add, coeff_X_pow, coeff_C_mul]
-  rw [Polynomial.coeff_C, if_neg hn0]
+  rw [Polynomial.coeff_C, ite_eq_right hn0]
   simp [hn2, Polynomial.coeff_X, h1n]
 
 /-- Full ramified-root property for every monic quadratic. -/
@@ -312,7 +312,7 @@ theorem exists_powerSeries_root_of_simple_constant_root
     (hsimple :
       (f.derivative.map PowerSeries.constantCoeff).eval c ≠ 0) :
     ∃ s : PowerSeries K, f.IsRoot s := by
-  letI : IsAdicComplete
+  let : IsAdicComplete
       (IsLocalRing.maximalIdeal (PowerSeries K)) (PowerSeries K) := by
     rw [PowerSeries.maximalIdeal_eq_span_X]
     infer_instance
@@ -367,7 +367,7 @@ theorem isRoot_of_isWeierstrassFactorization
     (s : PowerSeries K) (hs0 : s.constantCoeff = 0)
     (hs : f.IsRoot s) :
     g.IsRoot s := by
-  letI : UniformSpace K := ⊥
+  let : UniformSpace K := ⊥
   have hsub : PowerSeries.HasSubst s :=
     PowerSeries.HasSubst.of_constantCoeff_zero' hs0
   have heval : PowerSeries.HasEval s := hsub.hasEval
@@ -450,7 +450,7 @@ theorem exists_ramifiedRoot_of_weierstrass_order_drop
             (ramifyPowerSeriesPolynomial p hp f).IsRoot s) :
     ∃ (p : ℕ) (hp : p ≠ 0) (s : PowerSeries K),
       (ramifyPowerSeriesPolynomial p hp g).IsRoot s := by
-  letI : IsAdicComplete
+  let : IsAdicComplete
       (IsLocalRing.maximalIdeal (PowerSeries K)) (PowerSeries K) := by
     rw [PowerSeries.maximalIdeal_eq_span_X]
     infer_instance
@@ -509,7 +509,7 @@ theorem X_pow_mul_divByXPow
     (n : ℕ) (a : PowerSeries K)
     (h : (PowerSeries.X : PowerSeries K) ^ n ∣ a) :
     PowerSeries.X ^ n * divByXPow n a = a := by
-  rw [divByXPow, dif_pos h]
+  rw [divByXPow, dite_eq_left h]
   exact (Classical.choose_spec h).symm
 
 theorem divByXPow_zero (n : ℕ) :
@@ -574,7 +574,7 @@ theorem exists_nonzero_isRoot_of_monic_of_coeff_ne_zero
       _ = Polynomial.X ^ P.natDegree := by
         rw [hroots, ← hsplit.natDegree_eq_card_roots]
         simp
-  rw [hPpow, Polynomial.coeff_X_pow, if_neg hk.ne] at hcoeff
+  rw [hPpow, Polynomial.coeff_X_pow, ite_eq_right hk.ne] at hcoeff
   exact hcoeff rfl
 
 /-- The finite Newton polygon has a lowest slope.  Denominators are kept
@@ -998,7 +998,7 @@ theorem translated_specialFiber_order_drop
       apply hdc
       rw [← htranslated_next]
       rw [Polynomial.nextCoeff, htranslated_degree,
-        if_neg (Nat.ne_of_gt hd)]
+        ite_eq_right (Nat.ne_of_gt hd)]
       exact hzero
     simp only [T, PowerSeries.coeff_map, Polynomial.coeff_coe]
     rw [IsLocalRing.residue_ne_zero_iff_isUnit,
@@ -1015,7 +1015,7 @@ theorem translated_specialFiber_order_drop
       T.order.toNat ≤ d - 1 := by
     have hle := PowerSeries.order_le (φ := T) (d - 1) hTprev
     rw [← PowerSeries.coe_toNat_order hTne] at hle
-    exact ENat.coe_le_coe.mp hle
+    exact ENat.natCast_le_natCast.mp hle
   exact
     ⟨hTne, hTorder_pos,
       horder_le.trans_lt (Nat.sub_lt hd (by omega))⟩
@@ -1058,10 +1058,10 @@ theorem newtonTransform_nextCoeff_eq_zero
     (newtonTransform f d p q hq).nextCoeff = 0 := by
   have hprev : f.coeff (d - 1) = 0 := by
     rw [Polynomial.nextCoeff, hdegree,
-      if_neg (Nat.ne_of_gt hd)] at hnext
+      ite_eq_right (Nat.ne_of_gt hd)] at hnext
     exact hnext
   rw [Polynomial.nextCoeff, hGdegree,
-    if_neg (Nat.ne_of_gt hd)]
+    ite_eq_right (Nat.ne_of_gt hd)]
   rw [coeff_newtonTransform_of_le f d p q hq
     (Nat.sub_le d 1)]
   simp [newtonCoefficient, hprev, divByXPow_zero]

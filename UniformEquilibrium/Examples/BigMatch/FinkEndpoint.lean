@@ -30,7 +30,7 @@ theorem not_hasFastFinkCorrectedCalendarSelection_of_halfLiveValue
   have hpay : ∀ s a who, |game.stagePayoff s a who| ≤ (1 : ℝ) := by
     intro s a who
     cases s <;> cases who <;>
-      simp only [payoff, Bool.false_eq_true, if_false, if_true]
+      simp only [payoff, Bool.false_eq_true, ite_false, ite_true]
     all_goals simp only [reward]
     all_goals try split <;> norm_num
     all_goals norm_num

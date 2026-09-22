@@ -38,7 +38,6 @@ theorem orientation_equiv {n : ℕ} (labels : Equiv.Perm (Fin n)) :
       (1 : Matrix (Fin n) (Fin n) ℤ).submatrix labels id := by
     ext vertex label
     simp only [Matrix.submatrix_apply, Matrix.one_apply, id_eq]
-    rfl
   rw [orientation, hmatrix, Matrix.det_permute, Matrix.det_one, mul_one]
   rfl
 
@@ -146,7 +145,10 @@ private theorem orientation_cons_last_castSucc (permutation : Equiv.Perm (Fin n)
   have hminor : matrix.submatrix (0 : Fin (n + 1)).succAbove (Fin.last n).succAbove =
       (fun row column => if permutation row = column then (1 : ℤ) else 0) := by
     ext row column
-    simp [matrix]
+    rw [Matrix.submatrix_apply, Fin.succAbove_zero_apply, Fin.succAbove_last_apply]
+    dsimp only [matrix]
+    rw [Fin.cons_succ]
+    simp only [Fin.castSucc_inj]
   change matrix.det = _
   rw [Matrix.det_succ_row matrix 0, Fin.sum_univ_castSucc]
   have hzero (column : Fin n) : matrix 0 column.castSucc = 0 := by

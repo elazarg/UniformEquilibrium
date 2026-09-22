@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} -> Payoff iota}
@@ -302,7 +302,7 @@ theorem absorptionMass_lt_one_of_terminalWitness
     (marked : QuittingPaidRowMarkedExactOrbit source)
     (witness : QuittingTerminalExploitabilityWitness reward) (time : Nat) :
     quittingRootAbsorptionMass (marked.orbit.roots time) < 1 := by
-  letI : Nonempty iota := witness.nonempty_players
+  let : Nonempty iota := witness.nonempty_players
   have hboundPos : 0 < quittingRewardBound reward := by
     have hgapBound := terminalExploitabilityGap_le_two_mul_bound
       reward (abs_reward_le_quittingRewardBound reward)

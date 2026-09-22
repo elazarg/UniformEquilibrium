@@ -28,42 +28,43 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.PMFProduct
+open Set _root_.Math.Probability Math.PMFProduct
 open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-- A finite simplex barycenter of points in `[lower, 1]`. -/
 def heterogeneousRateBarycenter (lower : ℝ) (_hlower : lower ≤ 1)
-    (n : ℕ) (weight : stdSimplex ℝ (Fin (n + 1)))
+    (n : ℕ) (weight : Convexity.StdSimplex ℝ (Fin (n + 1)))
     (point : Fin (n + 1) → Set.Icc lower 1) : Set.Icc lower 1 := by
-  refine ⟨∑ action, weight.val action * (point action).val, ?_, ?_⟩
+  refine ⟨∑ action, weight.weights action * (point action).val, ?_, ?_⟩
   · calc
-      lower = ∑ action, weight.val action * lower := by
-        rw [← Finset.sum_mul, weight.property.2, one_mul]
-      _ ≤ ∑ action, weight.val action * (point action).val := by
+      lower = ∑ action, weight.weights action * lower := by
+        rw [← Finset.sum_mul, weight.total_of_fintype, one_mul]
+      _ ≤ ∑ action, weight.weights action * (point action).val := by
         exact Finset.sum_le_sum fun action _ =>
           mul_le_mul_of_nonneg_left (point action).property.1
-            (weight.property.1 action)
+            (weight.weights_nonneg action)
   · calc
-      (∑ action, weight.val action * (point action).val) ≤
-          ∑ action, weight.val action * 1 := by
+      (∑ action, weight.weights action * (point action).val) ≤
+          ∑ action, weight.weights action * 1 := by
         exact Finset.sum_le_sum fun action _ =>
           mul_le_mul_of_nonneg_left (point action).property.2
-            (weight.property.1 action)
+            (weight.weights_nonneg action)
       _ = 1 := by
-        rw [← Finset.sum_mul, weight.property.2, one_mul]
+        rw [← Finset.sum_mul, weight.total_of_fintype, one_mul]
 
 /-- The interval barycenter is continuous in its weights. -/
 theorem continuous_heterogeneousRateBarycenter
     (lower : ℝ) (hlower : lower ≤ 1) (n : ℕ)
     (point : Fin (n + 1) → Set.Icc lower 1) :
-    Continuous fun weight : stdSimplex ℝ (Fin (n + 1)) =>
+    Continuous fun weight : Convexity.StdSimplex ℝ (Fin (n + 1)) =>
       heterogeneousRateBarycenter lower hlower n weight point := by
   apply Continuous.subtype_mk
   apply continuous_finsetSum
   intro action _
-  exact ((continuous_apply action).comp continuous_subtype_val).mul continuous_const
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ action).mul
+    continuous_const
 
 /-- The face numerator ignores the selected player's own coordinate. -/
 theorem heterogeneousFaceNumerator_update_self
@@ -143,7 +144,7 @@ def heterogeneousStationaryFaceGame
     change
       (heterogeneousRateBarycenter
           (lower who) (hlower who) n weight point).val * coefficient =
-        ∑ action, weight action *
+        ∑ action, weight.weights action *
           ((point action).val *
             quittingFaceNumerator (weightOfReward reward)
               (fun player =>
@@ -153,7 +154,6 @@ def heterogeneousStationaryFaceGame
     rw [Finset.sum_mul]
     apply Finset.sum_congr rfl
     intro action _
-    rw [show weight action = weight.val action by rfl]
     ring
 
 /-- A stationary auxiliary Nash root exists for player-dependent compact
@@ -177,7 +177,15 @@ theorem exists_heterogeneousStationaryFaceNash
   let deviation : Set.Icc (lower who) 1 := ⟨rate, hrate0, hrate1⟩
   have hbest := hnash who deviation
   dsimp only [heterogeneousStationaryFaceGame] at hbest
-  simp only [Function.update_self] at hbest
+  have hself :
+      (((@Function.update ι (fun player => Set.Icc (lower player) 1)
+        (heterogeneousStationaryFaceGame reward lower hlower).decidablePlayer
+        profile who deviation) who).val) = deviation.val :=
+    congrArg Subtype.val
+      (@Function.update_self ι (fun player => Set.Icc (lower player) 1)
+        (heterogeneousStationaryFaceGame reward lower hlower).decidablePlayer
+        who deviation profile)
+  rw [hself] at hbest
   let deviatedHazard : ι → ℝ := fun player =>
     ((Function.update profile who deviation) player).val
   have hcoefficient : quittingFaceNumerator (weightOfReward reward)
@@ -217,7 +225,7 @@ theorem fixedOpponentsContinueMass_rootOfHazard_eq_continueMassExcl
     (fun player => ((Function.update root who (PMF.pure false)) player
       (quittingAllContinueAction player)).toReal) (Finset.mem_univ who)]
   simp only [quittingAllContinueAction, Function.update_self, PMF.pure_apply,
-    if_true, ENNReal.toReal_one, one_mul, continueMassExcl]
+    ite_true, ENNReal.toReal_one, one_mul, continueMassExcl]
   apply Finset.prod_congr rfl
   intro other hother
   rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]

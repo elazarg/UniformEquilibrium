@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A finite-dimensional dual witness that the supported Fink tangent target
 does not lie in the range of the harmonic-adjustment operator. -/
@@ -1012,7 +1012,7 @@ lemma selection_normalizedObstructionFlow_actionWeight_live_playerOne_actionA :
       (game.finkSupportTangentTarget selectionLimitPoint
         (0 : CState → Payoff Player) 0) = -1
     rw [game.finkSupportActionCoordinateDual_target]
-    rw [if_pos selection_limit_live_playerOne_actionA_support]
+    rw [ite_eq_left selection_limit_live_playerOne_actionA_support]
     exact selection_tangentTarget_live_playerOne_actionA
   change (selectionTangentDualObstruction.functional
       (game.finkSupportTangentTarget selectionLimitPoint

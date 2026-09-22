@@ -5,7 +5,7 @@ noncomputable section
 
 namespace GameTheory.FiniteMenuSignedBoundaryRegression
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology
 
 def negativeReward : {S : Finset Bool // S.Nonempty} → Payoff Bool := fun _ _ ↦ -1

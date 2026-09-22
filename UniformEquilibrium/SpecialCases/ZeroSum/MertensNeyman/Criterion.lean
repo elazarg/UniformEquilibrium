@@ -217,7 +217,7 @@ open scoped NNReal
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 -- ============================================================================
 -- Stage A: the discounted-value family and its contract
@@ -398,8 +398,8 @@ theorem IsDiscountedStationaryBellmanEq.value_zeroSum
     (hF : G.IsDiscountedStationaryBellmanEq β x V)
     (hzs : G.IsZeroSum) :
     ∀ s, V s 1 = -V s 0 := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI (i : Fin 2) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let (i : Fin 2) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
   let C : G.State → ℝ := fun s => V s 0 + V s 1
   have hstage (s : G.State) :
       expect (pmfPi (x s)) (fun a => G.stagePayoff s a 0) +
@@ -545,8 +545,8 @@ theorem IsDiscountedStationaryBellmanEq.rowValue_eq_discountedShapleyValue
         v s := by
     let A : G.Act 0 → G.Act 1 → ℝ :=
       fun i j => u s i j + (β : ℝ) * expect (q s i j) v
-    let xr : stdSimplex ℝ (G.Act 0) := stdSimplexEquiv (x s 0)
-    let yc : stdSimplex ℝ (G.Act 1) := stdSimplexEquiv (x s 1)
+    let xr : Convexity.StdSimplex ℝ (G.Act 0) := stdSimplexEquiv (x s 0)
+    let yc : Convexity.StdSimplex ℝ (G.Act 1) := stdSimplexEquiv (x s 1)
     have hrow (j : G.Act 1) :
         v s ≤ wsum xr (fun i => A i j) := by
       have hprotect :=
@@ -1638,18 +1638,18 @@ theorem uniformValue_of_rowColumnTrackingCertificates
   constructor
   · intro who
     rcases hcase who with rfl | rfl
-    · rw [if_pos rfl, abs_le]
+    · rw [ite_eq_left rfl, abs_le]
       exact ⟨by linarith, by linarith [hzs0]⟩
-    · rw [if_neg (by decide), abs_le]
+    · rw [ite_eq_right (by decide), abs_le]
       exact ⟨by linarith [hzs0], by linarith⟩
   · intro who dev
     rcases hcase who with rfl | rfl
-    · rw [G.update_pairBehaviorProfile_zero, if_pos rfl]
+    · rw [G.update_pairBehaviorProfile_zero, ite_eq_left rfl]
       have hhi' := hTc dev T hTc'
       have hzs' := G.finiteAveragePayoff_one_eq_neg_zero hzs
         (G.pairBehaviorProfile dev σcol) s₀ T
       linarith
-    · rw [G.update_pairBehaviorProfile_one, if_neg (by decide)]
+    · rw [G.update_pairBehaviorProfile_one, ite_eq_right (by decide)]
       have hlo' := hTr dev T hTr'
       have hzs' := G.finiteAveragePayoff_one_eq_neg_zero hzs
         (G.pairBehaviorProfile σrow dev) s₀ T

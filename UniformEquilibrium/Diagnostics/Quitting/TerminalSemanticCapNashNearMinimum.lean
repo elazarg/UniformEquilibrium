@@ -40,7 +40,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -618,16 +618,16 @@ theorem exists_pos_nearMinimum_capNash_eq_allContinue_radius
           (nhds (reference - q - 0)))
   have hfirstRatio : Tendsto
       (fun n ↦ error n / (reference - error n)) atTop (nhds 0) := by
-    convert herrorTendsto.div hreferenceSub (ne_of_gt hreference) using 1 <;>
-      try rfl
+    (convert herrorTendsto.div hreferenceSub (ne_of_gt hreference) using 1;
+      try rfl)
     simp
   have hqPos : 0 < reference - q := by
     dsimp only [q]
     linarith
   have hsecondRatio : Tendsto
       (fun n ↦ error n / (reference - q - error n)) atTop (nhds 0) := by
-    convert herrorTendsto.div hqSub (ne_of_gt hqPos) using 1 <;>
-      try rfl
+    (convert herrorTendsto.div hqSub (ne_of_gt hqPos) using 1;
+      try rfl)
     simp
   let M := quittingRewardBound reward
   have hcost : Tendsto

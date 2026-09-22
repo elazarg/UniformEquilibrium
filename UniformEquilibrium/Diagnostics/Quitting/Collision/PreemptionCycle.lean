@@ -220,7 +220,7 @@ theorem nonempty_soloPreemptionCycle
       quittingSoloReward reward owner owner := by
     linarith [witness.terminalGap_pos]
   obtain ⟨first, hfirst⟩ := witness.exists_soloPreemptor hownerViable
-  letI : Nonempty Carrier := ⟨⟨first, owner, hfirst⟩⟩
+  let : Nonempty Carrier := ⟨⟨first, owner, hfirst⟩⟩
   let R : Carrier → Carrier → Prop := fun current next ↦
     QuittingSoloPreempts reward witness.terminalGap current.1 next.1
   have hserial : ∀ state : Carrier, ∃ next, R state next := by

@@ -19,7 +19,7 @@ observer-indexed continuations, or debt coordinates.
 
 noncomputable section
 
-open Math Math.MaxAffineTransport
+open _root_.Math Maths.MaxAffineTransport
 
 namespace GameTheory
 
@@ -77,7 +77,7 @@ walk. -/
 theorem augmentedCycleWeight_eq_walkWeight
     (data : QuittingStaticObserverSwitchData witness cycle) :
     data.augmentedCycleWeight =
-      Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
+      Maths.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight data.cost)
         cycle.augmentedCellWalk :=
   (cycle.walkWeight_augmentedCellWalk data.cost).symm
 

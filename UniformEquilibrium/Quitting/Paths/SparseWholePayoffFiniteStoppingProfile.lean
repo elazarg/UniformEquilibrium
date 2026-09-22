@@ -177,7 +177,7 @@ theorem quittingFiniteCalendarPayoffLaws_wholePayoff_eq
       quittingTerminalPayoff reward
         (quittingStoppingLawProfile reward (fun who => (laws who).toPMF))
         observer := by
-  letI : Nonempty ι := ⟨observer⟩
+  let : Nonempty ι := ⟨observer⟩
   let sparse := quittingSparseFiniteStoppingLaws reward laws
   let calendar := quittingFiniteStoppingCalendar sparse
   have houtcome :=
@@ -204,7 +204,7 @@ theorem quittingFiniteCalendarPayoffLaws_finiteDate_lt
     (htime : some time ∈
       (quittingFiniteCalendarPayoffLaws reward laws who).support) :
     time < Fintype.card ι * (Fintype.card ι + 1) := by
-  letI : Nonempty ι := ⟨who⟩
+  let : Nonempty ι := ⟨who⟩
   let sparse := quittingSparseFiniteStoppingLaws reward laws
   let calendar := quittingFiniteStoppingCalendar sparse
   have hdate : time < calendar.card := by

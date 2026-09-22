@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace FullCoreDeadlock
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 /-! ## The algebraic parameter -/
 

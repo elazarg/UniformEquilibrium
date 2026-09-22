@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -104,7 +104,7 @@ theorem nonempty_interiorCyclicFixedDebtorSubsequence
         (block (select n)).cycle owner := by
     intro n
     unfold quittingCyclicOpponentAbsorptionMass
-    exact sub_nonneg.mpr <| Finset.prod_le_one
+    exact sub_nonneg.mpr <| Finset.prod_le_one₀
       (fun phase _ =>
         quittingStationaryFixedOpponentsContinueMass_nonneg _ _)
       (fun phase _ => by
@@ -230,7 +230,7 @@ theorem InteriorCyclicFixedDebtorSubsequence.nonempty_ownerEscapeAlternative
   have hownNonneg : ∀ n, 0 ≤ ownAbsorption n := by
     intro n
     unfold ownAbsorption quittingCyclicPlayerAbsorptionMass
-    exact sub_nonneg.mpr <| Finset.prod_le_one
+    exact sub_nonneg.mpr <| Finset.prod_le_one₀
       (fun phase _ => ENNReal.toReal_nonneg)
       (fun phase _ => ENNReal.toReal_mono ENNReal.one_ne_top
         (((block (fixed.select n)).cycle phase fixed.owner).coe_le_one false))

@@ -16,7 +16,7 @@ theorem expect_pmfPi_update_pure
       Math.Probability.expect (pmfPi marginals)
         (fun draw => observable (Function.update draw selected value)) := by
   classical
-  letI (index : ι) : Fintype (A index) := Fintype.ofFinite (A index)
+  let (index : ι) : Fintype (A index) := Fintype.ofFinite (A index)
   rw [← pmfPi_bind_update_pure]
   simp only [Math.Probability.expect_bind, Math.Probability.expect_pure]
 

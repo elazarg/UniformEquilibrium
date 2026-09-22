@@ -380,7 +380,7 @@ theorem conditionalVariation_add_singleTransientPotential_le
       (kernel owner) owner (fun successor ↦ value successor (time + 1))
       (fun successor ↦ harmonic.1 successor (time + 1))
     rw [← harmonic.2 owner time] at honeAtom
-    simp only [singleTransientBernoulliPotential, if_pos] at honeAtom ⊢
+    simp only [singleTransientBernoulliPotential, ite_eq_left] at honeAtom ⊢
     nlinarith
   · have hsourceNotTransient : source ∉ finiteTransientStates kernel := by
       rw [uniqueTransient]

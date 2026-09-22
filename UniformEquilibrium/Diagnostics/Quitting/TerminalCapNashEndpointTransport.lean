@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct StochasticGame
+open Filter _root_.Math.Probability Math.PMFProduct StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -295,16 +295,8 @@ def quittingJoiningLoss
 theorem quittingJoiningLoss_nonneg (who : ι) :
     0 ≤ quittingJoiningLoss reward who := by
   unfold quittingJoiningLoss
-  have hempty : (∅ : Finset ι) ∈
-      (Finset.univ : Finset (Finset ι)) := Finset.mem_univ _
-  have hle := Finset.le_sup' (s := (Finset.univ : Finset (Finset ι)))
-    (fun S => if S.Nonempty ∧ who ∉ S then
-      max 0
-        (QuittingSureSetOwnerRepair.quittingSetReward reward S who -
-          QuittingSureSetOwnerRepair.quittingSetReward reward
-            (insert who S) who)
-      else 0) hempty
-  simpa using hle
+  rw [Finset.le_sup'_iff]
+  exact ⟨∅, Finset.mem_univ _, by simp⟩
 
 /-- Every opponent coalition's joining loss is bounded by the sharp maximum.
 -/
@@ -325,7 +317,7 @@ theorem quittingSetReward_sub_insert_le_joiningLoss
           QuittingSureSetOwnerRepair.quittingSetReward reward
             (insert who S) who ≤ loss S := by
     dsimp [loss]
-    rw [if_pos ⟨hS, hwho⟩]
+    rw [ite_eq_left ⟨hS, hwho⟩]
     exact le_max_right _ _
   have hsup : loss S ≤
       Finset.sup' (Finset.univ : Finset (Finset ι))
@@ -379,7 +371,7 @@ theorem neg_joiningLoss_mul_opponentAbsorption_le_joiningContribution
       advantage action ≤ quittingJoiningLoss reward who * indicator action := by
     intro action
     by_cases hquit : (quittingQuitters action).Nonempty
-    · simp only [indicator, if_pos hquit, mul_one]
+    · simp only [indicator, ite_eq_left hquit, mul_one]
       by_cases hown : action who = true
       · have hupdate : Function.update action who true = action := by
           funext player
@@ -403,17 +395,17 @@ theorem neg_joiningLoss_mul_opponentAbsorption_le_joiningContribution
         change quittingTerminalOpponentAdvantage reward who action ≤
           quittingJoiningLoss reward who
         unfold quittingTerminalOpponentAdvantage quittingRootPayoff
-        rw [dif_pos hquit]
+        rw [dite_eq_left hquit]
         have hupdatedNonempty :
             (quittingQuitters (Function.update action who true)).Nonempty := by
           rw [hupdated]
           exact Finset.insert_nonempty who _
-        rw [dif_pos hupdatedNonempty]
+        rw [dite_eq_left hupdatedNonempty]
         have hloss := quittingSetReward_sub_insert_le_joiningLoss
           (reward := reward) who (quittingQuitters action) hquit hwho
         simpa [QuittingSureSetOwnerRepair.quittingSetReward,
           hquit, hupdatedNonempty, hupdated] using hloss
-    · simp only [indicator, if_neg hquit, mul_zero]
+    · simp only [indicator, ite_eq_right hquit, mul_zero]
       change quittingTerminalOpponentAdvantage reward who action ≤ 0
       rw [quittingTerminalOpponentAdvantage_eq_zero_of_quitters_not_nonempty
         reward who action hquit]

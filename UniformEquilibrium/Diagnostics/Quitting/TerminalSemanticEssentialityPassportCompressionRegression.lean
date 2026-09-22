@@ -182,7 +182,7 @@ theorem quittingCyclicSingletonJoinReward_strict_witness
       {(finRotate n).symm joiner, joiner} := by
     rw [hpred]
     exact Finset.pair_comm _ _
-  rw [if_neg hsingletonNe', if_pos hpairEq']
+  rw [ite_eq_right hsingletonNe', ite_eq_left hpairEq']
   norm_num
 
 /-- Game-facing unbounded-passport family: for every `n ≥ 5` there is an

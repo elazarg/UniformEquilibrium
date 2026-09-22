@@ -1558,11 +1558,11 @@ theorem unitBoundedAbsorptionPaths_are_weakLimits_of_completelyAbsorbingRootSequ
           (∀ index, HasUnitBoundedTotalMass (approximants index)) ∧
           WeaklyConvergesAbsorptionPaths approximants path := by
   intro path hpathTotal
-  letI : Nonempty ι := by
+  let : Nonempty ι := by
     classical
     by_contra hempty
-    haveI : IsEmpty ι := ⟨fun player ↦ hempty ⟨player⟩⟩
-    haveI : IsEmpty {S : Finset ι // S.Nonempty} :=
+    have : IsEmpty ι := ⟨fun player ↦ hempty ⟨player⟩⟩
+    have : IsEmpty {S : Finset ι // S.Nonempty} :=
       ⟨fun coalition ↦ by
         obtain ⟨player, _⟩ := coalition.2
         exact isEmptyElim player⟩

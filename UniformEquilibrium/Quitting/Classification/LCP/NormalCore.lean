@@ -169,7 +169,7 @@ theorem exists_normalLayer_eq_normalCore (M : ι → ι → ℝ) :
     have hnot := Classical.choose_spec (hmissing i hcore)
     have hfirst : i ∉ normalLayer M (firstMissing i) := by
       rw [show firstMissing i = Classical.choose (hmissing i hcore) by
-        simp only [firstMissing, dif_neg hcore]]
+        simp only [firstMissing, dite_eq_right hcore]]
       exact hnot
     have hle : firstMissing i ≤ cutoff := by
       dsimp only [cutoff]

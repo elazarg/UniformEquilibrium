@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -110,19 +110,19 @@ theorem abs_quittingRootExpectedPayoff_forcedQuit_sub_soloReward_le
       ⟨owner, hmem⟩
     by_cases hquiet : Function.update sample owner false =
         (quittingAllContinueAction : ι → Bool)
-    · rw [if_pos hquiet]
+    · rw [ite_eq_left hquiet]
       have hsingleton := quittingQuitters_update_true_eq_singleton sample owner
         ((update_false_eq_allContinue_iff sample owner).1 hquiet)
       unfold quittingRootPayoff
-      rw [dif_pos hnonempty]
+      rw [dite_eq_left hnonempty]
       rw [show (⟨quittingQuitters (Function.update sample owner true),
           hnonempty⟩ : {S : Finset ι // S.Nonempty}) =
           ⟨{owner}, Finset.singleton_nonempty owner⟩ from
         Subtype.ext hsingleton]
       simp [quittingSoloReward]
-    · rw [if_neg hquiet]
+    · rw [ite_eq_right hquiet]
       unfold quittingRootPayoff
-      rw [dif_pos hnonempty]
+      rw [dite_eq_left hnonempty]
       have hvalue := hreward ⟨_, hnonempty⟩ who
       have hsolo : |quittingSoloReward reward owner who| ≤ M := hreward _ who
       obtain ⟨hvalue₁, hvalue₂⟩ := abs_le.mp hvalue

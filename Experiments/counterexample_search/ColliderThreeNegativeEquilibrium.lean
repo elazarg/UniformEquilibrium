@@ -51,19 +51,19 @@ def threeNegativeMargin : ZMod 5 → ℝ :=
   fun d => if d = 0 then 0 else if d = 4 then 10 else -1
 
 @[simp] theorem threeNegativeMargin_zero : threeNegativeMargin 0 = 0 := by
-  rw [threeNegativeMargin, if_pos rfl]
+  rw [threeNegativeMargin, ite_eq_left rfl]
 
 @[simp] theorem threeNegativeMargin_one : threeNegativeMargin 1 = -1 := by
-  rw [threeNegativeMargin, if_neg (by decide), if_neg (by decide)]
+  rw [threeNegativeMargin, ite_eq_right (by decide), ite_eq_right (by decide)]
 
 @[simp] theorem threeNegativeMargin_two : threeNegativeMargin 2 = -1 := by
-  rw [threeNegativeMargin, if_neg (by decide), if_neg (by decide)]
+  rw [threeNegativeMargin, ite_eq_right (by decide), ite_eq_right (by decide)]
 
 @[simp] theorem threeNegativeMargin_three : threeNegativeMargin 3 = -1 := by
-  rw [threeNegativeMargin, if_neg (by decide), if_neg (by decide)]
+  rw [threeNegativeMargin, ite_eq_right (by decide), ite_eq_right (by decide)]
 
 @[simp] theorem threeNegativeMargin_four : threeNegativeMargin 4 = 10 := by
-  rw [threeNegativeMargin, if_neg (by decide), if_pos rfl]
+  rw [threeNegativeMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 /-- The collider completion at solo self value `1`, joint value `-2`, and the
 margin vector `threeNegativeMargin`. -/

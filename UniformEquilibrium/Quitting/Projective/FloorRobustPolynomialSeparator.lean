@@ -30,7 +30,7 @@ theorem exists_quittingFloorRobustChargedRelation_rationalPotential_of_contDiff
   have hdomain : domain = Set.Icc
       (fun coordinate ↦ max (-bound) (floor coordinate - tolerance)) (fun _ ↦ bound) := by
     ext point
-    simp only [domain, Set.mem_setOf_eq, Set.mem_Icc, Pi.le_def, max_le_iff, abs_le, forall_and]
+    simp only [domain, Set.mem_ofPred_eq, Set.mem_Icc, Pi.le_def, max_le_iff, abs_le, forall_and]
     tauto
   have hconvex : Convex ℝ domain := by rw [hdomain]; exact convex_Icc _ _
   let displacementBound := max 1 (rewardBound + bound + tolerance)

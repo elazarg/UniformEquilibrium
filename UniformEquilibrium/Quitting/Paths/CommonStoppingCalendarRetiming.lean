@@ -165,7 +165,7 @@ theorem mem_quittingEarliestStoppingCoalition_iff
     rw [heq]
     exact Finset.inf_le (Finset.mem_univ other)
   · intro hleast
-    letI : Nonempty ι := ⟨who⟩
+    let : Nonempty ι := ⟨who⟩
     apply le_antisymm
     · obtain ⟨other, _, hother⟩ := Finset.exists_mem_eq_inf
           (Finset.univ : Finset ι) Finset.univ_nonempty
@@ -195,8 +195,8 @@ theorem quittingFirstStoppingOutcome_eq_of_clockOrderEquivalent
     exact forall_congr' fun other => hequivalent.2 who other
   unfold quittingFirstStoppingOutcome
   by_cases hnever : quittingEarliestStoppingValue first = ⊤
-  · rw [if_pos hnever, if_pos (htop.mp hnever)]
-  · rw [if_neg hnever, if_neg (mt htop.mpr hnever)]
+  · rw [ite_eq_left hnever, ite_eq_left (htop.mp hnever)]
+  · rw [ite_eq_right hnever, ite_eq_right (mt htop.mpr hnever)]
     congr
 
 omit [DecidableEq ι] in

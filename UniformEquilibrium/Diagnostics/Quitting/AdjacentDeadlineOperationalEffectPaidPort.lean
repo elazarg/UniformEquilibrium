@@ -27,9 +27,15 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+omit [DecidableEq ι] in
+private theorem mem_quittingQuitters_iff
+    (action : ι → Bool) (who : ι) :
+    who ∈ quittingQuitters action ↔ action who = true := by
+  simp [quittingQuitters]
 
 /-- A passive finite-timing probe: every opponent passes the whole finite
 word, while `mover` uses the displayed timing law, and every `none` outcome
@@ -86,7 +92,7 @@ private theorem timingPurePayoff_passiveNone
       intro action
       cases action with
       | none =>
-          rw [if_pos rfl]
+          rw [ite_eq_left rfl]
           have hempty : (quittingQuitters fun player =>
               timingActionCurrent
                 ((Function.update
@@ -115,9 +121,9 @@ private theorem timingPurePayoff_passiveNone
                   mover none := by
             funext player
             simp [timingChoicesTail, Function.update_apply, timingActionTail]
-          rw [htail, ih none, if_pos rfl]
+          rw [htail, ih none, ite_eq_left rfl]
       | some time =>
-          rw [if_neg (Option.some_ne_none time)]
+          rw [ite_eq_right (Option.some_ne_none time)]
           cases time using Fin.cases with
           | zero =>
               have hcurrent : quittingQuitters (fun player =>
@@ -127,8 +133,8 @@ private theorem timingPurePayoff_passiveNone
                 ext player
                 by_cases hplayer : player = mover
                 · subst player
-                  simp [quittingQuitters, timingActionCurrent]
-                · simp [quittingQuitters, timingActionCurrent, hplayer]
+                  simp [mem_quittingQuitters_iff, timingActionCurrent]
+                · simp [mem_quittingQuitters_iff, timingActionCurrent, hplayer]
               have hnonempty : (quittingQuitters fun player =>
                   timingActionCurrent
                     ((Function.update (fun _ : ι => none) mover
@@ -146,8 +152,8 @@ private theorem timingPurePayoff_passiveNone
                 ext player
                 by_cases hplayer : player = mover
                 · subst player
-                  simp [quittingQuitters, timingActionCurrent]
-                · simp [quittingQuitters, hplayer, timingActionCurrent]
+                  simp [mem_quittingQuitters_iff, timingActionCurrent]
+                · simp [mem_quittingQuitters_iff, hplayer, timingActionCurrent]
               have hcurrent : ¬(quittingQuitters fun player =>
                   timingActionCurrent
                     ((Function.update (fun _ : ι => none) mover
@@ -174,7 +180,7 @@ private theorem timingPurePayoff_passiveNone
                   congrArg (fun choices =>
                     timingPurePayoff reward deadline choices mover) htail
                 _ = _ := by
-                  rw [ih (some later), if_neg (Option.some_ne_none later)]
+                  rw [ih (some later), ite_eq_right (Option.some_ne_none later)]
 
 /-- The hard payoff of a passive timing probe depends only on the law's
 finite mass: every finite date stops alone, while timing `none` has hard-tail
@@ -203,9 +209,7 @@ private theorem quittingFiniteDeadlineTimingGame_passiveNone_mixedEU
       by_cases hplayer : player = mover
       · subst player
         simp only [Function.update_self]
-        rfl
       · simp only [Function.update_of_ne hplayer]
-        rfl
     calc
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
           (Function.update (fun _ => PMF.pure none) mover (PMF.pure action)) mover =

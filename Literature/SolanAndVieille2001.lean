@@ -39,7 +39,7 @@ namespace Literature.SolanAndVieille2001
 
 open GameTheory StochasticGame MeasureTheory Filter Set
 open GameTheory.QuittingSureSetOwnerRepair
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -135,7 +135,7 @@ theorem theorem1_2 :
       intro _start who
       exact isEmptyElim who
   | inr hnonempty =>
-      letI : Nonempty ι := hnonempty
+      let : Nonempty ι := hnonempty
       obtain ⟨roots, period, hperiod, hperiodic, hsubgame⟩ :=
         exists_cyclic_subgamePerfectTerminalNash_of_soloExitPreference
           hunit hcap hε
@@ -195,7 +195,7 @@ theorem theorem1_3 :
   intro reward hsymmetry
   obtain ⟨quitterPayoff, nonquitterPayoff, hreward⟩ := hsymmetry
   by_cases hplayers : Fintype.card ι = 0
-  · haveI : IsEmpty ι := Fintype.card_eq_zero_iff.mp hplayers
+  · have : IsEmpty ι := Fintype.card_eq_zero_iff.mp hplayers
     let root : ι → PMF Bool := fun who ↦ isEmptyElim who
     refine ⟨root, fun who ↦ isEmptyElim who, ?_⟩
     intro who
@@ -1381,7 +1381,7 @@ theorem lemma2_5 :
         refine ⟨currentNhd ×ˢ tailNhd, ?_,
           hcurrentOpen.prod htailOpen, ⟨hcurrent, htailMem⟩⟩
         rintro ⟨current', tail'⟩ ⟨hcurrent', htail'⟩
-        simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+        simp only [Set.mem_compl_iff, Set.mem_ofPred_eq]
         rintro ⟨_, htailK', hrelation⟩
         exact Set.disjoint_left.1 hdisjoint
           (hnearby tail' ⟨htail', htailK'⟩ hrelation) hcurrent'
@@ -1389,13 +1389,13 @@ theorem lemma2_5 :
           isOpen_univ.prod hKcompact.isClosed.isOpen_compl,
           ⟨Set.mem_univ current, htailK⟩⟩
         rintro ⟨current', tail'⟩ ⟨_, htail'⟩
-        simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+        simp only [Set.mem_compl_iff, Set.mem_ofPred_eq]
         exact fun h ↦ htail' h.2.1
     · refine ⟨Kᶜ ×ˢ Set.univ, ?_,
         hKcompact.isClosed.isOpen_compl.prod isOpen_univ,
         ⟨hcurrentK, Set.mem_univ tail⟩⟩
       rintro ⟨current', tail'⟩ ⟨hcurrent', _⟩
-      simp only [Set.mem_compl_iff, Set.mem_setOf_eq]
+      simp only [Set.mem_compl_iff, Set.mem_ofPred_eq]
       exact fun h ↦ hcurrent' h.1
   let system : Math.Topology.CompactSerialRelation α := {
     box := K
@@ -3924,7 +3924,7 @@ theorem theorem2_14 (process : PayoffProcess ι)
   intro ε hε
   cases isEmpty_or_nonempty ι with
   | inl hempty =>
-      letI : IsEmpty ι := hempty
+      let : IsEmpty ι := hempty
       let profile : ProcessProfile process := fun _ who ↦ isEmptyElim who
       refine ⟨profile, ?_, ?_⟩
       · intro _time who
@@ -3932,7 +3932,7 @@ theorem theorem2_14 (process : PayoffProcess ι)
       · intro who
         exact isEmptyElim who
   | inr hnonempty =>
-      letI : Nonempty ι := hnonempty
+      let : Nonempty ι := hnonempty
       let integrated := process.toQuittingPayoffProcess
       have hintegrated : integrated.SoloExitAssumptions := by
         filter_upwards [hprocess] with ω hω
@@ -4215,7 +4215,7 @@ private theorem iUnion_firstAtEvent_range { Ω : Type* }
       beforeEvent first N := by
   ext ω
   simp only [Set.mem_iUnion, Finset.mem_range, firstAtEvent, beforeEvent,
-    Set.mem_setOf_eq]
+    Set.mem_ofPred_eq]
   constructor
   · rintro ⟨index, ⟨hindex, heq⟩⟩
     rw [heq]

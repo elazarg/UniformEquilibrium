@@ -34,8 +34,8 @@ namespace GameTheory
 namespace StochasticGame
 namespace MovingEndpointOccupationEvidence
 
-open Filter Math Math.OnlineLearning Math.Probability Set
-open Math.Probability.MovingEndpointOccupationEvidence
+open Filter _root_.Math Math.OnlineLearning _root_.Math.Probability Set
+open _root_.Math.Probability.MovingEndpointOccupationEvidence
 
 /-! ## The actual prescribed analytic calendar -/
 

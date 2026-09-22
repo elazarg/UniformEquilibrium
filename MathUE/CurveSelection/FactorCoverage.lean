@@ -193,7 +193,7 @@ theorem exists_irreducibleFactorTuple_frequently_isRoot
           CurveSelection.Internal.Termination.bivEvalAt
             (q j) (x n) (y n j) = 0 := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   choose q hqmem hqirr hqdegree hqdvd hqroot using
     fun n j =>
       exists_positiveDegree_irreducibleFactor_isRoot

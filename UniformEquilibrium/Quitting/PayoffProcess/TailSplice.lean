@@ -49,7 +49,7 @@ theorem QuittingPayoffProcess.soloExitTailProfile_adapted_after
         (fun ω => (process.soloExitTailProfile cutoff ε hε
           time who ω action).toReal) := by
   intro time htime who action
-  letI : MeasurableSpace process.Ω := process.filtration time
+  let : MeasurableSpace process.Ω := process.filtration time
   have hreward : @Measurable process.Ω
       ({S : Finset ι // S.Nonempty} → Payoff ι)
       (process.filtration time) inferInstance

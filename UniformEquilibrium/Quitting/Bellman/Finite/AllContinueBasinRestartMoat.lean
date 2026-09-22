@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology BigOperators
 
 variable {X : Type} [PseudoMetricSpace X]
@@ -239,7 +239,7 @@ theorem dist_terminal_start_le_two_mul_bound_mul_hazardCharge
     dist (block.state block.horizon).1 (block.state 0).1 ≤
       2 * M * block.hazardCharge := by
   rcases isEmpty_or_nonempty ι with hι | hι
-  · letI := hι
+  · let := hι
     have heq : (block.state block.horizon).1 = (block.state 0).1 := by
       funext player
       exact isEmptyElim player
@@ -249,7 +249,7 @@ theorem dist_terminal_start_le_two_mul_bound_mul_hazardCharge
         QuittingFiniteExactNashBellmanBlock.marginalQuitHazard]
     rw [heq, hcharge]
     simp
-  letI := hι
+  let := hι
   have hM : 0 ≤ M := by
     obtain ⟨player⟩ := hι
     exact (abs_nonneg ((block.state 0).1 player)).trans

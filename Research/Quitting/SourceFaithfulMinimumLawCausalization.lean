@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open QuittingNonsingletonMinimumLawTransfer
 open scoped Topology
 
@@ -401,7 +401,7 @@ theorem nonempty_sourceFaithfulMinimumCausalization
         ∑ time ∈ Finset.range (rawCutoff rank),
           quittingStageCoalitionMass reward (profiles rank) time terminal := by
       dsimp only [rawCutoff]
-      rw [dif_pos hrank]
+      rw [dite_eq_left hrank]
       exact Classical.choose_spec
         (exists_finiteWindow_sum_stageCoalitionMass_gt
           (reward := reward) (profiles rank) terminal hrank)
@@ -571,7 +571,7 @@ theorem nonempty_sourceFaithfulMinimumCausalChronology
           quittingStageCoalitionMass reward (profiles rank) time terminal := by
     filter_upwards [hpersistent] with rank hrank
     dsimp only [cutoff]
-    rw [dif_pos hrank]
+    rw [dite_eq_left hrank]
     exact Classical.choose_spec
       (exists_finiteWindow_sum_stageCoalitionMass_gt
         (reward := reward) (profiles rank) terminal hrank)
@@ -606,7 +606,7 @@ theorem nonempty_sourceFaithfulMinimumCausalChronology
           (profiles rank) time terminal :=
       ⟨time, Finset.mem_range.mp htime, htimePos⟩
     dsimp only [mark]
-    rw [dif_pos hexists]
+    rw [dite_eq_left hexists]
     exact ⟨hrank, (Classical.choose_spec hexists).1,
       (Classical.choose_spec hexists).2⟩
   have hrootChoice : ∀ rank : ℕ,

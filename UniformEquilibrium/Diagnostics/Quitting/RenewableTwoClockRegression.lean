@@ -53,20 +53,40 @@ private theorem payoff_eq_reward_at_first
   exact quittingTerminalPayoff_pureTimeProfileBehavior_eq
     reward clocks deadline hbefore hat
 
+@[simp] theorem coalition_A_zero :
+    quittingPureTimeCoalitionAt clocksA 0 = ∅ := by
+  ext who
+  fin_cases who <;> decide
+
+@[simp] theorem coalition_A_one :
+    quittingPureTimeCoalitionAt clocksA 1 = {2, 3} := by
+  ext who
+  fin_cases who <;> decide
+
 @[simp] theorem coalition_B_zero :
     quittingPureTimeCoalitionAt clocksB 0 = {0} := by
   ext who
-  fin_cases who <;> simp [quittingPureTimeCoalitionAt, clocksB]
+  fin_cases who <;> decide
+
+@[simp] theorem coalition_B_one :
+    quittingPureTimeCoalitionAt clocksB 1 = {2, 3} := by
+  ext who
+  fin_cases who <;> decide
 
 @[simp] theorem coalition_C_zero :
     quittingPureTimeCoalitionAt clocksC 0 = {0, 1} := by
   ext who
-  fin_cases who <;> simp [quittingPureTimeCoalitionAt, clocksC]
+  fin_cases who <;> decide
 
 @[simp] theorem coalition_D_zero :
     quittingPureTimeCoalitionAt clocksD 0 = {1} := by
   ext who
-  fin_cases who <;> simp [quittingPureTimeCoalitionAt, clocksD]
+  fin_cases who <;> decide
+
+@[simp] theorem coalition_D_one :
+    quittingPureTimeCoalitionAt clocksD 1 = {2, 3} := by
+  ext who
+  fin_cases who <;> decide
 
 theorem payoff_A :
     quittingTerminalPayoff reward (profile clocksA) = (fun _ => 0) := by
@@ -74,21 +94,21 @@ theorem payoff_A :
     intro time htime
     interval_cases time
     ext who
-    fin_cases who <;> simp [quittingPureTimeCoalitionAt, clocksA]
+    fin_cases who <;> simp
   have hat : (quittingPureTimeCoalitionAt clocksA 1).Nonempty := by
     refine ⟨2, ?_⟩
-    simp [quittingPureTimeCoalitionAt, clocksA]
+    simp
   rw [payoff_eq_reward_at_first clocksA 1 hbefore hat]
   funext who
   apply reward_of_sentinel_mem
   left
-  simp [quittingPureTimeCoalitionAt, clocksA]
+  simp
 
 theorem payoff_B :
     quittingTerminalPayoff reward (profile clocksB) = ![1, 0, 0, 0] := by
   have hat : (quittingPureTimeCoalitionAt clocksB 0).Nonempty := by
     refine ⟨0, ?_⟩
-    simp [quittingPureTimeCoalitionAt, clocksB]
+    simp
   rw [payoff_eq_reward_at_first clocksB 0 (by omega) hat]
   funext who
   fin_cases who <;> simp [reward]
@@ -97,7 +117,7 @@ theorem payoff_C :
     quittingTerminalPayoff reward (profile clocksC) = ![0, 1, 0, 0] := by
   have hat : (quittingPureTimeCoalitionAt clocksC 0).Nonempty := by
     refine ⟨0, ?_⟩
-    simp [quittingPureTimeCoalitionAt, clocksC]
+    simp
   rw [payoff_eq_reward_at_first clocksC 0 (by omega) hat]
   have hne : ({0, 1} : Finset Player) ≠ {0} := by decide
   funext who
@@ -107,7 +127,7 @@ theorem payoff_D :
     quittingTerminalPayoff reward (profile clocksD) = ![1, -1, 0, 0] := by
   have hat : (quittingPureTimeCoalitionAt clocksD 0).Nonempty := by
     refine ⟨1, ?_⟩
-    simp [quittingPureTimeCoalitionAt, clocksD]
+    simp
   rw [payoff_eq_reward_at_first clocksD 0 (by omega) hat]
   funext who
   fin_cases who <;> simp [reward]
@@ -118,20 +138,15 @@ private theorem clocksA_before_one (who : Player) :
   interval_cases time
   ext other
   fin_cases who <;> fin_cases other <;>
-    simp [quittingPureTimeOpponentCoalitionAt, quittingPureTimeCoalitionAt,
-      clocksA]
+    simp [quittingPureTimeOpponentCoalitionAt]
 
 private theorem clocksA_opponents_one_nonempty (who : Player) :
     (quittingPureTimeOpponentCoalitionAt clocksA who 1).Nonempty := by
   fin_cases who
-  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksA]⟩
-  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksA]⟩
-  · exact ⟨3, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksA]⟩
-  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksA]⟩
+  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨3, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt]⟩
 
 theorem cap_A :
     quittingContinuationBestResponseValue reward (profile clocksA) =
@@ -145,13 +160,12 @@ theorem cap_A :
   rw [hcap]
   fin_cases who <;>
     simp [reward, quittingSingletonTerminal,
-      quittingPureTimeOpponentCoalitionAt, quittingPureTimeCoalitionAt, clocksA]
+      quittingPureTimeOpponentCoalitionAt]
 
 @[simp] theorem opponents_B_one_zero :
     quittingPureTimeOpponentCoalitionAt clocksB 1 0 = {0} := by
   ext other
-  fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt,
-    quittingPureTimeCoalitionAt, clocksB]
+  fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt]
 
 theorem cap_B :
     quittingContinuationBestResponseValue reward (profile clocksB) =
@@ -166,20 +180,16 @@ theorem cap_B :
       intro time htime
       interval_cases time
       ext other
-      fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksB]
+      fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt]
     have hat : (quittingPureTimeOpponentCoalitionAt clocksB 0 1).Nonempty := by
-      exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksB]⟩
+      exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_three
       reward clocksB 0 1 (by omega) hbefore hat]
-    simp [reward, quittingSingletonTerminal, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksB]
+    simp [reward, quittingSingletonTerminal, quittingPureTimeOpponentCoalitionAt]
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksB) 1 = 1
     have hat : (quittingPureTimeOpponentCoalitionAt clocksB 1 0).Nonempty := by
-      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksB]⟩
+      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksB 1 hat]
     simp only [opponents_B_one_zero]
@@ -191,33 +201,25 @@ theorem cap_B :
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksB) 2 = 0
     have hat : (quittingPureTimeOpponentCoalitionAt clocksB 2 0).Nonempty := by
-      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksB]⟩
+      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksB 2 hat]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksB]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksB) 3 = 0
     have hat : (quittingPureTimeOpponentCoalitionAt clocksB 3 0).Nonempty := by
-      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksB]⟩
+      exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksB 3 hat]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksB]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
 
 private theorem clocksC_opponents_zero_nonempty (who : Player) :
     (quittingPureTimeOpponentCoalitionAt clocksC who 0).Nonempty := by
   fin_cases who
-  · exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]⟩
-  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]⟩
-  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]⟩
-  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]⟩
+  · exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
+  · exact ⟨0, by simp [quittingPureTimeOpponentCoalitionAt]⟩
 
 theorem cap_C :
     quittingContinuationBestResponseValue reward (profile clocksC) =
@@ -245,14 +247,12 @@ theorem cap_C :
       (quittingPureTimeProfileBehavior reward clocksC) 2 = 0
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksC 2 (clocksC_opponents_zero_nonempty 2)]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksC) 3 = 0
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksC 3 (clocksC_opponents_zero_nonempty 3)]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksC]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
 
 theorem cap_D :
     quittingContinuationBestResponseValue reward (profile clocksD) =
@@ -263,8 +263,7 @@ theorem cap_D :
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksD) 0 = 1
     have hat : (quittingPureTimeOpponentCoalitionAt clocksD 0 0).Nonempty := by
-      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksD]⟩
+      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksD 0 hat]
     simp only [quittingPureTimeOpponentCoalitionAt, coalition_D_zero]
@@ -277,33 +276,26 @@ theorem cap_D :
       intro time htime
       interval_cases time
       ext other
-      fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksD]
+      fin_cases other <;> simp [quittingPureTimeOpponentCoalitionAt]
     have hat : (quittingPureTimeOpponentCoalitionAt clocksD 1 1).Nonempty := by
-      exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksD]⟩
+      exact ⟨2, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_three
       reward clocksD 1 1 (by omega) hbefore hat]
-    simp [reward, quittingSingletonTerminal, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksD]
+    simp [reward, quittingSingletonTerminal, quittingPureTimeOpponentCoalitionAt]
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksD) 2 = 0
     have hat : (quittingPureTimeOpponentCoalitionAt clocksD 2 0).Nonempty := by
-      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksD]⟩
+      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksD 2 hat]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksD]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
   · change quittingContinuationBestResponseValue reward
       (quittingPureTimeProfileBehavior reward clocksD) 3 = 0
     have hat : (quittingPureTimeOpponentCoalitionAt clocksD 3 0).Nonempty := by
-      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt,
-        quittingPureTimeCoalitionAt, clocksD]⟩
+      exact ⟨1, by simp [quittingPureTimeOpponentCoalitionAt]⟩
     rw [quittingContinuationBestResponseValue_pureTimeProfile_eq_max_two_at_zero
       reward clocksD 3 hat]
-    simp [reward, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt, clocksD]
+    simp [reward, quittingPureTimeOpponentCoalitionAt]
 
 theorem clocks_B_eq_update_A : clocksB = Function.update clocksA 0 (some 0) := by
   funext who
@@ -375,7 +367,7 @@ theorem rawMaximumDebt_A : quittingControllerRawMaximumDebt
       have h := Finset.le_sup'
         (fun who : Player => (![1, 0, 0, 0] : Player → ℝ) who)
         (Finset.mem_univ (0 : Player))
-      simpa using h)
+      convert h using 1 <;> norm_num)
 
 private theorem finitePlayerMax_eq_one
     (value : Player → ℝ) (hle : ∀ who, value who ≤ 1)

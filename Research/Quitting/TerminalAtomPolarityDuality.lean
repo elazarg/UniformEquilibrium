@@ -29,6 +29,8 @@ reward table reverses that player's optimization order.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Set StochasticGame
@@ -108,10 +110,12 @@ theorem positive_terminalMass_at_polarity_endpoint
         0 < quittingTerminalOutcomeMass reward second (some terminal)) := by
   have hfirstNonneg : 0 ≤ quittingTerminalOutcomeMass reward first
       (some terminal) :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward first).1 (some terminal)
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward first)).1 (some terminal)
   have hsecondNonneg : 0 ≤ quittingTerminalOutcomeMass reward second
       (some terminal) :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward second).1 (some terminal)
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward second)).1 (some terminal)
   rw [positive_quittingTerminalPayoffDifferenceAtom_iff_polarity] at hatom
   rcases hatom with hattractive | hrepulsive
   · exact Or.inl ⟨hattractive, hsecondNonneg.trans_lt hattractive.2⟩

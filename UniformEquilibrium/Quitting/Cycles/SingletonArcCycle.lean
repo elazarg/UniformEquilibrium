@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {L m : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -300,7 +300,7 @@ theorem quittingSingletonArcCycleRoot_continueMass_phase
   by_cases howner : who = owner block
   · subst who
     simp [quittingSingletonArcCycleRoot]
-  · rw [if_neg howner]
+  · rw [ite_eq_right howner]
     simp only [quittingSingletonArcCycleRoot,
       quittingSingletonMeshBlock_phase]
     rw [quittingStationaryFixedOpponentsContinueMass_solo_other
@@ -322,7 +322,7 @@ theorem prod_quittingSingletonArcCycleRoot_continueMass_block
   simp_rw [quittingSingletonArcCycleRoot_continueMass_phase]
   by_cases howner : who = owner block
   · simp [howner]
-  · rw [if_neg howner, if_neg howner, Fin.prod_const]
+  · rw [ite_eq_right howner, ite_eq_right howner, Fin.prod_const]
     exact one_sub_quittingMeshHazard_pow (hp1 block).le hm
 
 /-- The complete opponent-cycle continuation product is independent of the

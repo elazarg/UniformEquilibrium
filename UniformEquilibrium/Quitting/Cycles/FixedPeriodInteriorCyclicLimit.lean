@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Set
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 
@@ -212,7 +212,7 @@ theorem nonempty_fixedPeriodExactNashCyclicLimit
         (Finset.mem_univ phase)
       have hrestLe : (∏ stage ∈ Finset.univ.erase phase,
           continueProbability stage) ≤ 1 :=
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun stage _ ↦ ENNReal.toReal_nonneg)
           (fun stage _ ↦ ENNReal.toReal_mono ENNReal.one_ne_top
             (((block (select n)).cycle stage other).coe_le_one false))
@@ -246,17 +246,16 @@ theorem nonempty_fixedPeriodExactNashCyclicLimit
         (nhds ((quittingRootOfSimplex (point phase).2 other true).toReal)) := by
       let quitCoordinate :
           (Fin (m + 1) → QuittingNashBellmanPoint ι) → ℝ :=
-        fun path ↦ (path phase).2 other true
+        fun path ↦ ((path phase).2 other).weights true
       have hquitContinuous : Continuous quitCoordinate := by
         dsimp only [quitCoordinate]
-        exact (continuous_apply true).comp
-          (continuous_subtype_val.comp
-            ((continuous_apply other).comp
-              (continuous_snd.comp (continuous_apply phase))))
+        exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+          ((continuous_apply other).comp
+            (continuous_snd.comp (continuous_apply phase)))
       have hquitCoordinate := (hquitContinuous.tendsto point).comp hpoint
       change Tendsto (fun n ↦
-        (sourcePoint (select n) phase).2 other true) atTop
-          (nhds ((point phase).2 other true)) at hquitCoordinate
+        ((sourcePoint (select n) phase).2 other).weights true) atTop
+          (nhds (((point phase).2 other).weights true)) at hquitCoordinate
       rw [quittingRootOfSimplex_apply_toReal]
       simpa only [sourcePoint, InteriorApproximateNashCyclicBlock.point,
         quittingSimplexOfRoot,

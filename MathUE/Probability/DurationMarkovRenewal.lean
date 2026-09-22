@@ -63,13 +63,13 @@ theorem pivotEliminatedRenewalKernel_duration_pos
   rcases (PMF.mem_support_bind_iff _ _ (outcome, duration)).mp support with
     ⟨successor, _successor_support, branch_support⟩
   by_cases successor_eq : successor = pivot
-  · rw [dif_pos successor_eq] at branch_support
+  · rw [dite_eq_left successor_eq] at branch_support
     rcases (PMF.mem_support_map_iff _ _ (outcome, duration)).mp branch_support with
       ⟨pivotOutcome, _pivot_support, outcome_eq⟩
     have duration_eq := congrArg Prod.snd outcome_eq
     dsimp at duration_eq
     omega
-  · rw [dif_neg successor_eq] at branch_support
+  · rw [dite_eq_right successor_eq] at branch_support
     have pair_eq : (outcome, duration) = (⟨successor, successor_eq⟩, 1) := by
       simpa only [PMF.support_pure, Set.mem_singleton_iff] using branch_support
     have duration_eq := congrArg Prod.snd pair_eq
@@ -169,7 +169,6 @@ theorem expect_returnPotential :
   norm_num [law_toReal, weight, nextValue, Fin.sum_univ_succ]
   rw [bernoulliVariationPotential_one_fifth,
     bernoulliVariationPotential_four_fifths]
-  simp [show (0 : Fin 3) ≠ 2 by decide, show (1 : Fin 3) ≠ 2 by decide]
   norm_num
 
 /-- A row can be harmonic at its displayed time and have positive exit mass, while the naive

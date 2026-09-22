@@ -105,7 +105,7 @@ theorem endpoint_scaled_inequality
       Tendsto rhs (nhdsWithin 0 (Ioi 0)) (nhds (rhs 0)) :=
     rhs_analytic.continuousAt.tendsto.mono_left
       nhdsWithin_le_nhds
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   exact le_of_tendsto_of_tendsto
     lhs_tendsto rhs_tendsto
@@ -597,7 +597,7 @@ theorem order_lt_poleOrder
       right_analytic.continuousAt.tendsto.mono_left
         nhdsWithin_le_nhds
     simpa only [weightedPair_zero, mul_zero] using h
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   have impossible : (1 : ℝ) ≤ 0 :=
     le_of_tendsto_of_tendsto
@@ -699,7 +699,7 @@ theorem leading_pair_nonneg
             jet.factor 0 state * column 0 index state)) :=
     right_analytic.continuousAt.tendsto.mono_left
       nhdsWithin_le_nhds
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   exact le_of_tendsto_of_tendsto
     left_tendsto right_tendsto eventual_divided

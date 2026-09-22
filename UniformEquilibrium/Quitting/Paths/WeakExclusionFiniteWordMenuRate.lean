@@ -64,7 +64,7 @@ theorem exists_singlePivot_selectedFiniteWordMenu_errors_and_length_le
     (M : ℝ)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     {ε : ℝ} (hε : 0 < ε) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     let D₀ := ∑ player, reward (quittingSingletonTerminal player) player
     let scale := (32 * M + 6 * D₀) / 3
     ∃ roots : List (ι → PMF Bool),
@@ -90,7 +90,7 @@ theorem exists_singlePivot_selectedFiniteWordMenu_errors_and_length_le
             (ε + 2 * M * roots.length / horizon)
             (quittingFiniteDeadlineTimingProfile reward roots.length mixed) := by
   dsimp only
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   have hsingleton : ∀ player,
       0 ≤ reward (quittingSingletonTerminal player) player := by
     intro player

@@ -35,7 +35,7 @@ namespace Literature.FleschThuijsmanAndVrieze1997
 
 open Filter Set
 open GameTheory GameTheory.StochasticGame
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 abbrev Player := CyclicThreePlayerQuitting.Minimality.Player
 abbrev Hazard := Set.Icc (0 : ℝ) 1
@@ -1489,7 +1489,7 @@ theorem theorem3_2_corrected :
           Matrix.cons_val_one, Matrix.cons_val_zero, Function.comp_apply]
         field_simp [(hdenominator_pos (ψ n)).ne']
       · simp only [a, b]
-        ring
+        ring_nf
     have hvalueTwoLimit : Tendsto (fun n ↦ value (ψ n) 2) atTop
         (nhds (3 * b + c)) := by
       have hexpression := (hnormalizedCoord 2).mul
@@ -1506,7 +1506,7 @@ theorem theorem3_2_corrected :
           Matrix.cons_val_two, Function.comp_apply]
         field_simp [(hdenominator_pos (ψ n)).ne']
       · simp only [b, c]
-        ring
+        ring_nf
     have hquitZero (n : ℕ) :
         1 - (((p ∘ ψ) n) 2).1 - value (ψ n) 0 - (error ∘ ψ) n ≤ 0 := by
       have hquit := (stationaryEquilibrium_divisionFreeInequalities
@@ -1604,7 +1604,7 @@ theorem theorem3_2_corrected :
       · funext n
         simp only [Function.comp_apply]
       · simp only [a, b, c]
-        ring
+        ring_nf
     have hn0 : 3 * c - (b + c) * (a + 3 * c) ≤ 0 :=
       le_of_tendsto' hneverZeroLimit hneverZero
     have hneverOne (n : ℕ) :
@@ -1645,7 +1645,7 @@ theorem theorem3_2_corrected :
       · funext n
         simp only [Function.comp_apply]
       · simp only [a, b, c]
-        ring
+        ring_nf
     have hn1 : 3 * a - (a + c) * (3 * a + b) ≤ 0 :=
       le_of_tendsto' hneverOneLimit hneverOne
     have hneverTwo (n : ℕ) :
@@ -1687,7 +1687,7 @@ theorem theorem3_2_corrected :
       · funext n
         simp only [Function.comp_apply]
       · simp only [a, b, c]
-        ring
+        ring_nf
     have hn2 : 3 * b - (a + b) * (3 * b + c) ≤ 0 :=
       le_of_tendsto' hneverTwoLimit hneverTwo
     exact not_singularStationaryLimit a b c ha hb hc habc
@@ -1701,9 +1701,9 @@ theorem theorem3_2_corrected :
       convert hlimit using 1
       · funext n
         simp only [denominator, stationaryAbsorptionDenominator]
-        ring
+        ring_nf
       · simp only [stationaryAbsorptionDenominator]
-        ring
+        ring_nf
     push Not at hlimitZero
     obtain ⟨active, hactive⟩ := hlimitZero
     have hlimitCoordinate_le :
@@ -1795,16 +1795,17 @@ theorem theorem3_2_corrected :
     have hsimplexRoot : Tendsto simplexRoot atTop (nhds limitSimplexRoot) := by
       rw [tendsto_pi_nhds]
       intro who
-      rw [tendsto_subtype_rng, tendsto_pi_nhds]
+      rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff,
+        tendsto_pi_nhds]
       intro action
       have hcoordinate : ∀ n,
-          ((simplexRoot n who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+          (simplexRoot n who).weights action =
             (stationaryRoot (p n) who action).toReal := by
         intro n
         exact congrFun (coe_stdSimplexEquiv_apply
           (stationaryRoot (p n) who)) action
       have hlimitCoordinate :
-          ((limitSimplexRoot who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+          (limitSimplexRoot who).weights action =
             (stationaryRoot limit who action).toReal := by
         exact congrFun (coe_stdSimplexEquiv_apply
           (stationaryRoot limit who)) action
@@ -2281,7 +2282,7 @@ private theorem blockCycle_policy
         CyclicThreePlayerQuitting.AdmissibleCycle.reward
         (blockCycleValue n α (finRotate (n * 3) phase))
         (blockCycle n α phase) := by
-  letI : NeZero (n * 3) := ⟨by omega⟩
+  let : NeZero (n * 3) := ⟨by omega⟩
   have hstep := blockValue_policy n hn α hα phase.val
   unfold blockCycleValue blockCycle
   rw [finRotate_apply]
@@ -2298,7 +2299,7 @@ private theorem blockCycle_rootNash
       CyclicThreePlayerQuitting.AdmissibleCycle.reward
       (blockCycleValue n α (finRotate (n * 3) phase)) 0
       (blockCycle n α phase) := by
-  letI : NeZero (n * 3) := ⟨by omega⟩
+  let : NeZero (n * 3) := ⟨by omega⟩
   have hstep := blockValue_rootNash n hn α hα phase.val
   unfold blockCycleValue blockCycle
   rw [finRotate_apply]
@@ -5225,7 +5226,7 @@ private theorem terminal_coordinate_sum_eq_four
                     rw [Finset.sum_range_succ, ih,
                       quittingJointSurvivalWeight_succ]
                     unfold quittingRootAbsorptionMass
-                    ring
+                    ring_nf
               rw [← Finset.mul_sum, htelescope fuel]
     change quittingRootSequenceTerminalValue
         CyclicThreePlayerQuitting.AdmissibleCycle.reward roots 0 0 +

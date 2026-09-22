@@ -18,9 +18,10 @@ theorem finiteMenuFullEarlyAbsorption_of_smallPivotRepairValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hpositive : 0 < reward (quittingSingletonTerminal pivot) pivot)
     (hsource : HasQuittingSmallPivotRepairValue reward pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     HasQuittingFiniteMenuFullEarlyAbsorption reward := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro error herror horizon hhorizon reach hreach lowerDeadline
   let singleton := reward (quittingSingletonTerminal pivot) pivot
   let bound := quittingRewardBound reward
@@ -64,10 +65,10 @@ remain arbitrary signed real numbers. -/
 theorem smallPivotRepairValue_iff_finiteMenuFullEarlyAbsorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hpositive : 0 < reward (quittingSingletonTerminal pivot) pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     HasQuittingSmallPivotRepairValue reward pivot ↔
       HasQuittingFiniteMenuFullEarlyAbsorption reward := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   exact ⟨finiteMenuFullEarlyAbsorption_of_smallPivotRepairValue reward pivot hpositive,
     smallPivotRepairValue_of_finiteMenuFullEarlyAbsorption reward pivot⟩
 
@@ -77,7 +78,7 @@ theorem exists_uniformEquilibriumPayoff_of_smallPivotRepairValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hsource : HasQuittingSmallPivotRepairValue reward pivot) :
     ∃ payoff : Payoff ι, (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
   intro error herror
   obtain ⟨deadline, hdeadline, opponents, hfinite, mass, hmass, hvalue⟩ :=

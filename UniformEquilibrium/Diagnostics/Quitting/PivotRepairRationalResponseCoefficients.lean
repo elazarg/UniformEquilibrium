@@ -518,7 +518,7 @@ theorem playerThreeResponsePayoff_at_at (N : ℕ) (hN : 1 ≤ N) :
   have h10 := playerThreeResponseOutcome_at N hN true true false
   have h01 := playerThreeResponseOutcome_at N hN true false true
   have h11 := playerThreeResponseOutcome_at N hN true true true
-  simp only [if_true] at h00 h10 h01 h11
+  simp only [ite_true] at h00 h10 h01 h11
   rw [pureTimesPayoff, h00, pureTimesPayoff, h10, pureTimesPayoff, h01,
     pureTimesPayoff, h11]
   norm_num [quittingTerminalOutcomeReward, playerThreeAtCoalition, reward, Fin.ext_iff]
@@ -530,7 +530,7 @@ theorem playerThreeResponsePayoff_late_at (N : ℕ) (hN : 1 ≤ N) :
   have h10 := playerThreeResponseOutcome_at N hN false true false
   have h01 := playerThreeResponseOutcome_at N hN false false true
   have h11 := playerThreeResponseOutcome_at N hN false true true
-  simp only [Bool.false_eq_true, if_false] at h00 h10 h01 h11
+  simp only [Bool.false_eq_true, ite_false] at h00 h10 h01 h11
   rw [pureTimesPayoff, h00, pureTimesPayoff, h10, pureTimesPayoff, h01,
     pureTimesPayoff, h11]
   norm_num [quittingTerminalOutcomeReward, playerThreeAtCoalition, reward, Fin.ext_iff]

@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -76,8 +76,8 @@ theorem quittingTerminalOpponentAdvantage_nonneg_of_singletonJoinAntitone
       simp [quittingQuitters, howner] at this
     unfold quittingTerminalOpponentAdvantage quittingRootPayoff
     rw [quittingQuitters_update_true_of_apply_false action owner,
-      dif_pos hquitters,
-      dif_pos (Finset.insert_nonempty owner (quittingQuitters action))]
+      dite_eq_left hquitters,
+      dite_eq_left (Finset.insert_nonempty owner (quittingQuitters action))]
     have hterminalBefore :
         (⟨quittingQuitters action, hquitters⟩ :
             {S : Finset ι // S.Nonempty}) =
@@ -112,7 +112,7 @@ theorem quittingTerminalOpponentAdvantage_eq_zero_of_owner_eq_true
       simp [howner]
     · simp [Function.update_of_ne hwho]
   unfold quittingTerminalOpponentAdvantage quittingRootPayoff
-  rw [dif_pos hnonempty, hupdate, dif_pos hnonempty]
+  rw [dite_eq_left hnonempty, hupdate, dite_eq_left hnonempty]
   ring
 
 /-- The expectation of the indicator of a multi-quitter outcome is the
@@ -132,7 +132,7 @@ theorem expect_quittingCollisionIndicator_eq_collisionMass
     (t := Finset.univ) (q := root) (rest := fun _ => false)
     (k := fun action =>
       if 2 ≤ (quittingQuitters action).card then (1 : ℝ) else 0)]
-  simp only [Finset.mem_univ, if_true, Finset.powerset_univ]
+  simp only [Finset.mem_univ, ite_true, Finset.powerset_univ]
   rw [quittingRootCollisionMass_eq_sum_coalitionMass]
   simp only [Finset.sum_filter]
   apply Finset.sum_congr rfl
@@ -175,7 +175,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_collisionMass_of_singleto
     · have hownerFalse : action owner = false :=
         Bool.eq_false_of_not_eq_true howner
       by_cases hcollision : 2 ≤ (quittingQuitters action).card
-      · simp only [if_pos hcollision, mul_one]
+      · simp only [ite_eq_left hcollision, mul_one]
         exact (neg_le_abs (advantage action)).trans
           (abs_quittingTerminalOpponentAdvantage_le_two_mul
             reward owner action hreward)
@@ -183,7 +183,7 @@ theorem quittingOutsiderJoiningContribution_le_two_mul_collisionMass_of_singleto
         have hadvantage : 0 ≤ advantage action :=
           quittingTerminalOpponentAdvantage_nonneg_of_singletonJoinAntitone
             reward owner hjoin action hownerFalse hsmall
-        simp only [if_neg hcollision, mul_zero]
+        simp only [ite_eq_right hcollision, mul_zero]
         linarith
   have hmono := expect_mono (pmfPi opponentRoot)
     (fun action ↦ -advantage action)

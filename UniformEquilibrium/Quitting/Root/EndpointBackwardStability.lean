@@ -95,7 +95,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -120,10 +120,10 @@ theorem quittingRootPayoff_ownShiftReward
   by_cases h : (quittingQuitters action).Nonempty
   · have hmem : who ∈ quittingQuitters action ↔ action who = true := by
       simp [quittingQuitters]
-    simp only [quittingRootPayoff, ownShiftReward, dif_pos h, hmem]
+    simp only [quittingRootPayoff, ownShiftReward, dite_eq_left h, hmem]
   · have hnot : action who ≠ true := fun hc =>
       h ((quittingQuitters_nonempty_iff action).2 ⟨who, hc⟩)
-    simp only [quittingRootPayoff, dif_neg h]
+    simp only [quittingRootPayoff, dite_eq_right h]
     simp [hnot]
 
 /-- The Quit endpoint payoff shifts by exactly `d who`: every realized

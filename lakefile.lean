@@ -15,6 +15,9 @@ package UniformEquilibrium where
 
 require GameTheory from "GameTheory"
 
+require maths from git
+  "https://github.com/elazarg/multitubes" @ "v4.34.0"
+
 @[default_target]
 lean_lib MathUE where
   srcDir := "."
@@ -41,6 +44,13 @@ lean_lib Theorems where
 lean_lib Experiments where
   srcDir := "."
   leanOptions := uniformEquilibriumLeanOptions
+
+@[default_target]
+lean_lib Literature where
+  srcDir := "."
+  leanOptions := uniformEquilibriumLeanOptions ++ #[
+    ⟨`warn.sorry, false⟩
+  ]
 
 @[default_target]
 lean_lib AxiomAudit where

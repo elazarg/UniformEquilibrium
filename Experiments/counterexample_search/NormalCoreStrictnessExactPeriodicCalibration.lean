@@ -51,7 +51,7 @@ namespace GameTheory
 namespace QuittingLCPClassification
 namespace NormalCoreStrictnessExample
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-! ## The witness schedule and hazard -/
 
@@ -79,15 +79,15 @@ theorem reward_singletonTerminal_eval (owner : Player) :
   · show (if (({0} : Finset Player) = {0}) then (![0, -1, 1] : Payoff Player)
         else if ({0} : Finset Player) = {1} then ![1, 0, -1]
         else if ({0} : Finset Player) = {2} then ![1, 1, 0] else 0) = ![0, -1, 1]
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
   · show (if (({1} : Finset Player) = {0}) then (![0, -1, 1] : Payoff Player)
         else if ({1} : Finset Player) = {1} then ![1, 0, -1]
         else if ({1} : Finset Player) = {2} then ![1, 1, 0] else 0) = ![1, 0, -1]
-    rw [if_neg (by decide), if_pos rfl]
+    rw [ite_eq_right (by decide), ite_eq_left rfl]
   · show (if (({2} : Finset Player) = {0}) then (![0, -1, 1] : Payoff Player)
         else if ({2} : Finset Player) = {1} then ![1, 0, -1]
         else if ({2} : Finset Player) = {2} then ![1, 1, 0] else 0) = ![1, 1, 0]
-    rw [if_neg (by decide), if_neg (by decide), if_pos rfl]
+    rw [ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 /-- Player `2`'s explicit singleton row. -/
 theorem reward_singletonTerminal_two :
@@ -114,7 +114,7 @@ theorem reward_pair_eq_zero (first second : Player) (hne : first ≠ second) :
   show (if ({first, second} : Finset Player) = {0} then (![0, -1, 1] : Payoff Player)
       else if ({first, second} : Finset Player) = {1} then ![1, 0, -1]
       else if ({first, second} : Finset Player) = {2} then ![1, 1, 0] else 0) = 0
-  rw [if_neg (hnotsingle 0), if_neg (hnotsingle 1), if_neg (hnotsingle 2)]
+  rw [ite_eq_right (hnotsingle 0), ite_eq_right (hnotsingle 1), ite_eq_right (hnotsingle 2)]
 
 /-! ## The on-path value is player `2`'s own singleton row, for any hazard -/
 

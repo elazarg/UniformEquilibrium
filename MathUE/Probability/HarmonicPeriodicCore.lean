@@ -233,7 +233,7 @@ theorem value_eq_of_same_phase
     value first time = value second time := by
   classical
   let label := mixing.phase first
-  letI : Nonempty (mixing.Fiber label) :=
+  let : Nonempty (mixing.Fiber label) :=
     ⟨⟨first, hfirst, rfl⟩⟩
   have hzero := mixing.finiteSpan_value_eq_zero
     value bounded harmonic label time

@@ -42,7 +42,7 @@ open scoped ENNReal Topology
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.OnlineLearning Math.PMFProduct Math.Probability
+open Filter _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability
   MeasureTheory Set
 open ProbabilityTheory
 
@@ -181,7 +181,7 @@ theorem baseline_falseActivation_le
         (publicDetectorActivation
           D.cumulative D.incrementBound D.alpha) ≤
       ENNReal.ofReal D.alpha := by
-  letI : IsProbabilityMeasure baselineLaw :=
+  let : IsProbabilityMeasure baselineLaw :=
     D.baseline_probability
   exact
     measure_exists_geometricStitchedBoundary_le_of_boundedIncrements
@@ -221,7 +221,7 @@ theorem comparison_missedActivation_le
         (publicDetectorActivation
           D.cumulative D.incrementBound D.alpha)ᶜ ≤
       ENNReal.ofReal D.alpha := by
-  letI : IsProbabilityMeasure comparisonLaw :=
+  let : IsProbabilityMeasure comparisonLaw :=
     D.comparison_probability
   calc
     comparisonLaw
@@ -350,7 +350,7 @@ theorem falseActivation_le
             postResetIncrement
               D.process D.reset n ω} ≤
       ENNReal.ofReal D.alpha := by
-  letI : IsProbabilityMeasure baselineLaw :=
+  let : IsProbabilityMeasure baselineLaw :=
     D.probability
   simpa only [publicDetectorBoundary] using
     (measure_exists_geometricStitchedBoundary_postReset_le

@@ -122,7 +122,7 @@ theorem survival_nonneg (hmass : ∀ k, 0 ≤ mass k) (phase count : ℕ) :
 theorem survival_le_one (hmass0 : ∀ k, 0 ≤ mass k) (hmass1 : ∀ k, mass k ≤ 1)
     (phase count : ℕ) :
     survival mass phase count ≤ 1 :=
-  prod_le_one (fun i _ => hmass0 (phase + i)) (fun i _ => hmass1 (phase + i))
+  prod_le_one₀ (fun i _ => hmass0 (phase + i)) fun i _ => hmass1 (phase + i)
 
 /-- Splitting a pure quit time into a prefix and a remainder. -/
 theorem pureTimeValue_add (count steps phase : ℕ) :

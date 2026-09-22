@@ -28,7 +28,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace BigMatch
 
-open Math.Probability
+open _root_.Math.Probability
 open Filter
 
 /-- The live joint action in which the maximizer continues and the minimizer

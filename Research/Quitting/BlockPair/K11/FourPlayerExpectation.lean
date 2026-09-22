@@ -5,7 +5,7 @@ noncomputable section
 
 namespace GameTheory.BlockPairK11.ConditionalData
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 theorem expect_quittingHazardCoin
     (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) (f : Bool → ℝ) :

@@ -79,9 +79,9 @@ theorem exists_coordinates {n k : ℕ} {set : Set (Fin (k + n) → ℝ)}
       constructor
       · rintro ⟨witnesses, hw⟩
         have heq : witnesses = Fin.elim0 := Subsingleton.elim _ _
-        simpa only [heq, Fin.elim0_append, Set.mem_setOf_eq] using hw
+        simpa only [heq, Fin.elim0_append, Set.mem_ofPred_eq] using hw
       · intro he
-        exact ⟨Fin.elim0, by simpa only [Fin.elim0_append, Set.mem_setOf_eq] using he⟩
+        exact ⟨Fin.elim0, by simpa only [Fin.elim0_append, Set.mem_ofPred_eq] using he⟩
   | succ k ih =>
       have hreordered := h.preimage_coordinates (Fin.cast (Nat.add_right_comm k 1 n))
       have hresult := ih hreordered.exists_first

@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -47,7 +47,7 @@ theorem exists_continueProbability_lt_of_continueMass_lt_pow_card
     calc
       rate ^ Fintype.card ι = ∏ _who : ι, rate := by simp
       _ ≤ ∏ who, (root who false).toReal :=
-        Finset.prod_le_prod (fun _ _ => hrate) (fun who _ => hnot who)
+        Finset.prod_le_prod₀ (fun _ _ => hrate) (fun who _ => hnot who)
   linarith
 
 /-- Rounding one coordinate to sure Quit. -/
@@ -249,7 +249,7 @@ theorem exists_oneStagePunishedProfile_of_rational_support_sureQuitter
     exists_punishRow_stationaryUnilateralCap_le reward quitter hδ
   let continuation := quittingStationaryProfile reward punishRow
   let best := quittingContinuationBestResponse reward continuation
-  letI : Nonempty ((quittingGame reward).BehaviorStrategy quitter) :=
+  let : Nonempty ((quittingGame reward).BehaviorStrategy quitter) :=
     ⟨fun _ _ => PMF.pure false⟩
   have hbest : best quitter ≤
       quittingStationaryUnilateralCap reward punishRow quitter := by

@@ -20,7 +20,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Filter
 
 

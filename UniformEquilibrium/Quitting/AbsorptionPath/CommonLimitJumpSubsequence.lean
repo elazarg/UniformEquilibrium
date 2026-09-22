@@ -159,7 +159,7 @@ theorem exists_commonLimitJumpSourceApproximation_subsequence
       Classical.choice (hselected rank (selectedRank rank))
     have hselectedRank (rank : ℕ) (hrank : jumpRank ≤ rank) :
         (selectedRank rank : ℕ) = jumpRank := by
-      simp only [selectedRank, dif_pos (Nat.lt_succ_iff.mpr hrank)]
+      simp only [selectedRank, dite_eq_left (Nat.lt_succ_iff.mpr hrank)]
     have htarget (rank : ℕ) (hrank : jumpRank ≤ rank) :
         (enumerate (selectedRank rank)).1 = time := by
       rw [hselectedRank rank hrank]

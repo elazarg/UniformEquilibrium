@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -78,7 +78,7 @@ def QuittingSoloRateControlled
 /-- Maximum positive collision-over-solo gain over the finite player set. -/
 def quittingSingletonCollisionGainMax
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) : ℝ :=
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   QuittingBoundaryHolonomy.finitePlayerMax (fun other ↦
     if other = owner then 0 else
       max 0 (quittingSingletonCollisionReward reward owner other -
@@ -94,7 +94,7 @@ theorem quittingSoloRateControlled_of_q_le_debt_div_debt_add_gainMax
       (quittingTerminalSemanticDebtSum pair +
         quittingSingletonCollisionGainMax reward owner)) :
     QuittingSoloRateControlled reward owner pair rate := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   refine ⟨hrate0, hrate1, ?_⟩
   intro other hother
   have hgain : max 0 (quittingSingletonCollisionReward reward owner other -

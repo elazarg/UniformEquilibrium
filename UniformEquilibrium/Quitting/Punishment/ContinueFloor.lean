@@ -67,7 +67,7 @@ guarantees the floor against every opponent plan. -/
 theorem quittingContinueFloor_le_quittingPunishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) :
     quittingContinueFloor reward owner ≤ quittingPunishmentValue reward owner := by
-  haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  have : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   rw [quittingPunishmentValue]
   refine le_ciInf fun profile => ?_

@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -50,7 +50,7 @@ theorem not_all_limitValue_eq_singleton_of_diffuse
       (quittingDynamicDebtTailRoots seam.tail)) atTop (nhds 0)) :
     ¬ ∀ who, seam.limit.value who = quittingSoloBaseline reward who := by
   intro htight
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   have hpolicy : ∀ time, value time =
@@ -214,7 +214,7 @@ theorem
           (quittingDynamicDebtTailRoots seam.tail)
           (fun time => (seam.tail time).1.1) seam.limit.value hpositive)
         atTop (nhds 0) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   by_cases hclock : ∃ who start, Summable (fun offset =>
@@ -352,7 +352,7 @@ theorem not_tendsto_rescaledQuitDefect_of_diffuse
         (fun time => (seam.tail time).1.1) seam.limit.value hpositive)
       atTop (nhds 0) := by
   intro hdefect
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   have hclockOr :=

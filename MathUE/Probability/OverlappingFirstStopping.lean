@@ -580,7 +580,7 @@ theorem summable_exactFiniteFirstStoppingCoalitionMass_terms
           finiteMass (laws anchor) time := by
       have hsubset : ({anchor} : Finset Player) ⊆ coalition.1 := by
         simpa only [Finset.singleton_subset_iff] using hanchor
-      have h := Finset.prod_le_prod_of_subset_of_le_one hsubset
+      have h := Finset.prod_le_prod_of_subset_of_le_one₀ hsubset
         (fun who _ => (finiteMass_mem_Icc (laws who) time).1)
         (fun who _ _ => (finiteMass_mem_Icc (laws who) time).2)
       simpa using h
@@ -589,7 +589,7 @@ theorem summable_exactFiniteFirstStoppingCoalitionMass_terms
       Finset.prod_nonneg fun who _ => finiteMass_nonneg (laws who) time
     have hcontinueLe :
         (∏ who ∈ coalition.1ᶜ, survival (laws who) (time + 1)) ≤ 1 :=
-      Finset.prod_le_one
+      Finset.prod_le_one₀
         (fun who _ => (survival_mem_Icc (laws who) (time + 1)).1)
         (fun who _ => (survival_mem_Icc (laws who) (time + 1)).2)
     calc
@@ -630,7 +630,7 @@ theorem exactFiniteFirstStoppingCoalitionMass_le_equalFirstSecondBeforeThirdMass
     have hquit :
         (∏ who ∈ coalition.1, finiteMass (laws who) time) ≤
           finiteMass (laws first) time * finiteMass (laws second) time := by
-      have h := Finset.prod_le_prod_of_subset_of_le_one hpairSubset
+      have h := Finset.prod_le_prod_of_subset_of_le_one₀ hpairSubset
         (fun who _ => (finiteMass_mem_Icc (laws who) time).1)
         (fun who _ _ => (finiteMass_mem_Icc (laws who) time).2)
       simpa [hfirstSecond, mul_comm] using h
@@ -639,7 +639,7 @@ theorem exactFiniteFirstStoppingCoalitionMass_le_equalFirstSecondBeforeThirdMass
           survival (laws third) (time + 1) := by
       have hsubset : ({third} : Finset Player) ⊆ coalition.1ᶜ := by
         simpa only [Finset.singleton_subset_iff] using hthirdComplement
-      have h := Finset.prod_le_prod_of_subset_of_le_one hsubset
+      have h := Finset.prod_le_prod_of_subset_of_le_one₀ hsubset
         (fun who _ => (survival_mem_Icc (laws who) (time + 1)).1)
         (fun who _ _ => (survival_mem_Icc (laws who) (time + 1)).2)
       simpa using h

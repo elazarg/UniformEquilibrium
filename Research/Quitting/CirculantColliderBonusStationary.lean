@@ -57,7 +57,7 @@ noncomputable section
 namespace GameTheory
 namespace CirculantColliderBonus
 
-open Math.Probability Math.PMFProduct CirculantConstantStepCycle
+open _root_.Math.Probability Math.PMFProduct CirculantConstantStepCycle
 open CirculantColliderCompletion
 
 /-! ## Coalition weights among the opponents of one player -/
@@ -139,16 +139,16 @@ theorem colliderBonusReward_insert_eq
     have herase : (insert who J).erase who = J := Finset.erase_insert hwho
     rw [hcontra, erase_collider_pair] at herase
     exact herase.symm
-  rw [weightOfReward, dif_pos hnonempty, colliderBonusReward,
+  rw [weightOfReward, dite_eq_left hnonempty, colliderBonusReward,
     colliderReward_of_mem s low m ⟨insert who J, hnonempty⟩ hcard who
       (Finset.mem_insert_self who J) hnotcollider,
-    if_neg hnotcollider, add_zero]
+    ite_eq_right hnotcollider, add_zero]
 
 theorem colliderBonusReward_insert_empty (hm0 : m 0 = 0) (who : ZMod 5) :
     weightOfReward (colliderBonusReward s low bonus m) (insert who ∅) who = s := by
   have hnonempty : (insert who (∅ : Finset (ZMod 5))).Nonempty :=
     Finset.insert_nonempty who ∅
-  rw [weightOfReward, dif_pos hnonempty]
+  rw [weightOfReward, dite_eq_left hnonempty]
   have hset : (⟨insert who (∅ : Finset (ZMod 5)), hnonempty⟩ :
       {S : Finset (ZMod 5) // S.Nonempty}) = quittingSingletonTerminal who :=
     Subtype.ext (by simp [quittingSingletonTerminal])
@@ -162,12 +162,12 @@ theorem colliderBonusReward_insert_collider (who : ZMod 5) :
   have hset : insert who ({who - 1} : Finset (ZMod 5)) = {who - 1, who} := by
     revert who
     decide
-  rw [weightOfReward, dif_pos hnonempty]
+  rw [weightOfReward, dite_eq_left hnonempty]
   have hsub : (⟨insert who ({who - 1} : Finset (ZMod 5)), hnonempty⟩ :
       {S : Finset (ZMod 5) // S.Nonempty}) =
       ⟨{who - 1, who}, Finset.insert_nonempty (who - 1) {who}⟩ := Subtype.ext hset
   rw [hsub, colliderBonusReward, colliderReward_collider,
-    if_pos (rfl : ({who - 1, who} : Finset (ZMod 5)) = {who - 1, who})]
+    ite_eq_left (rfl : ({who - 1, who} : Finset (ZMod 5)) = {who - 1, who})]
 
 /-! ### The support of the two endpoint sums -/
 
@@ -230,15 +230,15 @@ theorem colliderBonusReward_outsider {who : ZMod 5} {J : Finset (ZMod 5)}
   have hnotcollider : J ≠ ({who - 1, who} : Finset (ZMod 5)) := by
     intro hcontra
     exact hwho (by rw [hcontra]; exact Finset.mem_insert_of_mem (Finset.mem_singleton_self _))
-  rw [weightOfReward, dif_pos hne, colliderBonusReward,
-    colliderReward_of_notMem s low m ⟨J, hne⟩ hcard who hwho, if_neg hnotcollider, add_zero]
+  rw [weightOfReward, dite_eq_left hne, colliderBonusReward,
+    colliderReward_of_notMem s low m ⟨J, hne⟩ hcard who hwho, ite_eq_right hnotcollider, add_zero]
 
 /-- A single opponent quitting pays a spectator that opponent's circulant
 singleton row. -/
 theorem colliderBonusReward_singleton_weight (j who : ZMod 5) :
     weightOfReward (colliderBonusReward s low bonus m) {j} who = s + m (j - who) := by
   have hne : ({j} : Finset (ZMod 5)).Nonempty := Finset.singleton_nonempty j
-  rw [weightOfReward, dif_pos hne]
+  rw [weightOfReward, dite_eq_left hne]
   have hsub : (⟨({j} : Finset (ZMod 5)), hne⟩ : {S : Finset (ZMod 5) // S.Nonempty}) =
       quittingSingletonTerminal j := Subtype.ext rfl
   rw [hsub, colliderBonusReward_singleton]
@@ -338,7 +338,7 @@ theorem colliderBonusReward_collider (who : ZMod 5) :
     colliderBonusReward s low bonus m
         ⟨{who - 1, who}, Finset.insert_nonempty (who - 1) {who}⟩ who = s + bonus := by
   rw [colliderBonusReward, colliderReward_collider,
-    if_pos (rfl : ({who - 1, who} : Finset (ZMod 5)) = {who - 1, who})]
+    ite_eq_left (rfl : ({who - 1, who} : Finset (ZMod 5)) = {who - 1, who})]
 
 theorem abs_self_le_bound (hm0 : m 0 = 0) :
     |s| ≤ quittingRewardBound (colliderBonusReward s low bonus m) := by
@@ -369,7 +369,7 @@ theorem abs_low_le_bound :
     rw [colliderBonusReward,
       colliderReward_of_mem s low m ⟨{0, 1, 2}, nonempty_triple⟩ card_triple 0 mem_triple
         triple_ne_collider,
-      if_neg triple_ne_collider, add_zero]
+      ite_eq_right triple_ne_collider, add_zero]
   rwa [hval] at hentry
 
 /-! ## The certificate -/

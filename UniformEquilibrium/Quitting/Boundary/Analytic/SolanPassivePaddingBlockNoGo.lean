@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open GameTheory.CyclicThreePlayerQuitting.Minimality
 open GameTheory.CyclicThreePlayerQuitting.PerturbedCycleExclusion
 

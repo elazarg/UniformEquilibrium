@@ -89,7 +89,7 @@ theorem normalizeAct_of_jointlyLegal {s : G.State} {a : ∀ i, G.Act i}
     G.normalizeAct Legal hLegal s a = a := by
   funext i
   unfold normalizeAct
-  rw [if_pos (h i)]
+  rw [ite_eq_left (h i)]
 
 /-- On a jointly legal action profile, the normalized stage payoff agrees
 with the original stage payoff. -/

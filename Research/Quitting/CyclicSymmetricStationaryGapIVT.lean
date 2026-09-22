@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 namespace CyclicSymmetricStationaryGapIVT
 
-open Math.Probability Math.PMFProduct Set StochasticGame
+open _root_.Math.Probability Math.PMFProduct Set StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

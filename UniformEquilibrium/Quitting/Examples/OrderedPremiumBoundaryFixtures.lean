@@ -74,8 +74,6 @@ theorem twoRecipient_coMember_twoCycle :
     norm_num +decide [twoRecipientReward, singleton, quittingSingletonTerminal]
   · refine ⟨by decide, ⟨{0, 1, 2}, by simp⟩, by simp, by simp, ?_⟩
     norm_num +decide [twoRecipientReward, singleton, quittingSingletonTerminal]
-    change (0 : ℝ) < 3
-    norm_num
 
 /-- `false` is the exceptional pair; `true` is the exceptional triple. -/
 def raisedCoalition (triple : Bool) : Finset (Fin 4) :=

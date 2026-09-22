@@ -29,7 +29,7 @@ Provides:
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.ProbabilityMassFunction
 namespace KernelGame
 open Math.PMFProduct
@@ -137,7 +137,7 @@ theorem IsCorrelatedEq.conditional_obedience [Finite (Profile G)] [Finite G.Outc
         (fun σ => G.eu σ who) ≥
       expect (pmfCond (μ := μ) (fun σ => σ who = s) hs)
         (fun σ => G.eu (Function.update σ who t) who) := by
-  letI : Fintype (Profile G) := Fintype.ofFinite (Profile G)
+  let : Fintype (Profile G) := Fintype.ofFinite (Profile G)
   let dev : G.Strategy who → G.Strategy who := fun a => if a = s then t else a
   have hle : expect μ
       (fun σ => G.eu (Function.update σ who (dev (σ who))) who) ≤
@@ -263,7 +263,7 @@ theorem IsCorrelatedEq.support_avoids_dominated_relative
       (if S σ then G.eu (Function.update σ who (dev (σ who))) who else G.eu σ who) := by
     intro σ
     by_cases hSσ : S σ
-    · rw [if_pos hSσ]
+    · rw [ite_eq_left hSσ]
       by_cases h : σ who = s
       · have hdevσ : dev (σ who) = t := by simp [hdev_def, h]
         have heq : Function.update σ who s = σ := by rw [← h]; exact Function.update_eq_self _ _
@@ -274,10 +274,10 @@ theorem IsCorrelatedEq.support_avoids_dominated_relative
         exact le_of_lt hd
       · have hdevσ : dev (σ who) = σ who := by simp [hdev_def, h]
         rw [hdevσ, Function.update_eq_self]
-    · rw [if_neg hSσ]
+    · rw [ite_eq_right hSσ]
   have hlt0 : G.eu σ0 who <
       (if S σ0 then G.eu (Function.update σ0 who (dev (σ0 who))) who else G.eu σ0 who) := by
-    rw [if_pos (hS σ0 hσ0)]
+    rw [ite_eq_left (hS σ0 hσ0)]
     have hdevσ0 : dev (σ0 who) = t := by simp [hdev_def, hσ0eq]
     have heq : Function.update σ0 who s = σ0 := by rw [← hσ0eq]; exact Function.update_eq_self _ _
     rw [hdevσ0]
@@ -293,7 +293,7 @@ theorem IsCorrelatedEq.support_avoids_dominated_relative
       Math.Probability.expect μ (fun σ => G.eu (Function.update σ who (dev (σ who))) who) := by
     apply Math.ProbabilityMassFunction.expect_congr_of_ne_zero
     intro σ hσ
-    rw [if_pos (hS σ hσ)]
+    rw [ite_eq_left (hS σ hσ)]
   rw [hcongr] at hstrict
   linarith
 

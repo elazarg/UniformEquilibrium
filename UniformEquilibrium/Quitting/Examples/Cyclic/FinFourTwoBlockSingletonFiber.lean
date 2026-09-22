@@ -23,7 +23,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourTwoBlockSingletonFiber
 
-open Filter Math.Probability Math.PMFProduct StochasticGame
+open Filter _root_.Math.Probability Math.PMFProduct StochasticGame
 
 abbrev Player := Fin 4
 

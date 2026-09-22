@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.LawTightCapNashMinimumFace
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceRatio
 import UniformEquilibrium.Quitting.Punishment.SingletonCapBindingCollision
@@ -26,6 +27,8 @@ consume any chamber, or prove a uniform-equilibrium payoff.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Set
@@ -38,10 +41,11 @@ variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
 literal positive opponent-incidence coordinate. -/
 theorem exists_positive_opponentIncidenceCoordinate_of_total_pos
     (owner : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (htotal : 0 < quittingTerminalTotalOpponentIncidenceMass owner mass) :
     ∃ other, other ≠ owner ∧
       0 < quittingTerminalOpponentIncidenceMass owner other mass := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   unfold quittingTerminalTotalOpponentIncidenceMass at htotal
   have hnonneg : ∀ other ∈ Finset.univ.erase owner,
       0 ≤ quittingTerminalOpponentIncidenceMass owner other mass := by
@@ -86,7 +90,7 @@ theorem exists_quittingSingletonCapBindingCollisionCycle
   let binding := {who : ι // quittingSingletonCapDefect reward cap who = 0}
   let edge : binding → binding → Prop := fun first second ↦
     QuittingSingletonCapBindingCollisionEdge reward cap first.1 second.1
-  letI : Nonempty binding := ⟨⟨owner, howner⟩⟩
+  let : Nonempty binding := ⟨⟨owner, howner⟩⟩
   have hserial : ∀ first : binding, ∃ second : binding, edge first second := by
     intro first
     obtain ⟨other, hne, hzero, hgain⟩ :=
@@ -195,11 +199,12 @@ theorem exists_quittingLawTightResetRigidChamber
 atom is the owner's singleton. -/
 theorem terminal_eq_singleton_of_totalOpponentIncidence_eq_zero_of_mass_pos
     (owner : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (htotal : quittingTerminalTotalOpponentIncidenceMass owner mass = 0)
     (terminal : {S : Finset ι // S.Nonempty})
     (hterminal : 0 < mass (some terminal)) :
     terminal.val = {owner} := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have hcoordinateZero : ∀ other, other ≠ owner →
       quittingTerminalOpponentIncidenceMass owner other mass = 0 := by
     intro other hother
@@ -298,16 +303,16 @@ theorem exists_quittingSingletonNeverMinimumSupport
         if candidate.val = {owner} then p else 0 := by
     intro candidate
     by_cases hcandidate : candidate.val = {owner}
-    · rw [if_pos hcandidate]
+    · rw [ite_eq_left hcandidate]
       have hcandidateEq : candidate = quittingSingletonTerminal owner :=
         Subtype.ext hcandidate
       exact congrArg (fun selected ↦ point.2 (some selected))
         hcandidateEq
-    · rw [if_neg hcandidate]
+    · rw [ite_eq_right hcandidate]
       by_cases hzero : point.2 (some candidate) = 0
       · exact hzero
       · have hpositive : 0 < point.2 (some candidate) :=
-          lt_of_le_of_ne (hmass.1 (some candidate)) (Ne.symm hzero)
+          lt_of_le_of_ne ((mem_simplexWeights.mp hmass).1 (some candidate)) (Ne.symm hzero)
         exact (hcandidate
           (terminal_eq_singleton_of_totalOpponentIncidence_eq_zero_of_mass_pos
             owner point.2 hmass (hzeroIncidence owner hownerZero)
@@ -316,11 +321,11 @@ theorem exists_quittingSingletonNeverMinimumSupport
     calc
       p ≤ ∑ outcome, point.2 outcome := by
         exact Finset.single_le_sum
-          (fun outcome _ ↦ hmass.1 outcome)
+          (fun outcome _ ↦ (mem_simplexWeights.mp hmass).1 outcome)
           (Finset.mem_univ (some (quittingSingletonTerminal owner)))
-      _ = 1 := hmass.2
+      _ = 1 := (mem_simplexWeights.mp hmass).2
   have hnever : point.2 none = 1 - p := by
-    have hsum := hmass.2
+    have hsum := (mem_simplexWeights.mp hmass).2
     rw [Fintype.sum_option] at hsum
     have hfiniteSum :
         ∑ candidate : {S : Finset ι // S.Nonempty},
@@ -428,7 +433,7 @@ theorem lawTightStrictSaturation_fullDebt_or_resetRigid_or_singletonNeverCycle
           exact Finset.sum_nonneg fun other _ => by
             unfold quittingTerminalOpponentIncidenceMass
             exact Finset.sum_nonneg fun candidate _ =>
-              hmass.1 (some candidate)
+              (mem_simplexWeights.mp hmass).1 (some candidate)
         exact le_antisymm (le_of_not_gt hnotPositive) hnonneg
       obtain ⟨support⟩ := exists_quittingSingletonNeverMinimumSupport
         point hpointJoint hzero hzeroIncidence terminal hterminal

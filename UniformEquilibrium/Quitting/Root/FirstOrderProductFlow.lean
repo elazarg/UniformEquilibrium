@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingLCPClassification
+open _root_.Math.Probability Math.PMFProduct QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -124,15 +124,15 @@ private theorem quittingRootQuitPayoff_eq_liftedSuccessor
       (quittingQuitters (Function.update action who true)).Nonempty := by
     rw [hquitters]
     exact Finset.insert_nonempty _ _
-  rw [dif_pos hleft]
+  rw [dite_eq_left hleft]
   by_cases hright :
       (quittingQuitters (Function.update action who false)).Nonempty
-  · rw [dif_pos hright]
+  · rw [dite_eq_left hright]
     change reward _ who = reward _ who
     apply congrArg (fun terminal ↦ reward terminal who)
     apply Subtype.ext
     exact hquitters
-  · rw [dif_neg hright]
+  · rw [dite_eq_right hright]
     change reward _ who = quittingSoloReward reward who who
     unfold quittingSoloReward
     apply congrArg (fun terminal ↦ reward terminal who)

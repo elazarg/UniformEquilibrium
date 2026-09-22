@@ -11,7 +11,7 @@ This theorem does not construct a closure witness from a root-only game source.
 
 noncomputable section
 
-open Math Math.PolynomialSignCell Set Topology
+open _root_.Math Math.PolynomialSignCell Set Topology
 
 namespace GameTheory.StochasticGame
 

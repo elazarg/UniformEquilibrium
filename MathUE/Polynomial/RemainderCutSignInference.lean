@@ -41,10 +41,10 @@ theorem inferRootSign_sound {divisors remainders : List SignType} {target result
   | nil => simp [inferRootSign] at hfound
   | @cons d r divisors remainders hhead htail ih =>
       by_cases hd : d = 0
-      · have hr : r = result := by simpa only [inferRootSign, if_pos hd, Option.some.injEq]
+      · have hr : r = result := by simpa only [inferRootSign, ite_eq_left hd, Option.some.injEq]
           using hfound
         exact hr.symm.trans (hhead hd)
-      · exact ih (by simpa only [inferRootSign, if_neg hd] using hfound)
+      · exact ih (by simpa only [inferRootSign, ite_eq_right hd] using hfound)
 
 /-- The first-zero scan both finds and correctly labels every available divisor root. -/
 theorem inferRootSign_eq_some_iff {divisors remainders : List SignType} {target : SignType}

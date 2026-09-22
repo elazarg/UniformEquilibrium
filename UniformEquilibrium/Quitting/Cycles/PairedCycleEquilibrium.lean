@@ -180,6 +180,7 @@ theorem rootSequenceProfile_cyclic_suffix
   funext player time history
   simp [quittingRootSequenceProfile, quittingCyclicBehaviorProfile,
     quittingCyclicRootSequence_add]
+  rfl
 
 omit [Fintype ι] [DecidableEq ι] in
 theorem unitBoundsOfInterior (q : ι → ℝ)

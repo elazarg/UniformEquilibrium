@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -80,14 +80,30 @@ theorem quittingProfileLiveRoot_literalOneDateProfile
         (quittingLiteralOneDateProfile reward profile who stage action) stage =
       Function.update (quittingProfileLiveRoot reward profile stage) who
         (PMF.pure action) := by
-  unfold quittingProfileLiveRoot quittingLiteralOneDateProfile
-    quittingLiteralOneDateOverride
+  let baseRoot : ι → PMF Bool := quittingProfileLiveRoot reward profile stage
+  change quittingProfileLiveRoot reward
+      (quittingLiteralOneDateProfile reward profile who stage action) stage =
+    Function.update baseRoot who (PMF.pure action)
   funext player
   by_cases hplayer : player = who
   · subst player
-    simp
-    rfl
-  · simp [Function.update_of_ne hplayer]
+    calc
+      quittingProfileLiveRoot reward
+          (quittingLiteralOneDateProfile reward profile who stage action)
+          stage who = PMF.pure action := by
+        unfold quittingProfileLiveRoot quittingLiteralOneDateProfile
+        rw [Function.update_self, quittingLiteralOneDateOverride_self]
+      _ = Function.update baseRoot who (PMF.pure action) who := by
+        simp only [Function.update_apply, reduceIte]
+  · calc
+      quittingProfileLiveRoot reward
+          (quittingLiteralOneDateProfile reward profile who stage action)
+          stage player = baseRoot player := by
+        unfold quittingProfileLiveRoot quittingLiteralOneDateProfile
+        rw [Function.update_of_ne hplayer]
+        rfl
+      _ = Function.update baseRoot who (PMF.pure action) player := by
+        simp only [Function.update_apply, hplayer, reduceIte]
 
 omit [DecidableEq ι] in
 theorem quittingBehaviorLiveHazard_literalOneDateOverride
@@ -100,29 +116,41 @@ theorem quittingBehaviorLiveHazard_literalOneDateOverride
         who stage (PMF.pure action)
         (fun offset =>
           quittingProfileLiveRoot reward profile (stage + 1 + offset) who) := by
+  let base : ℕ → PMF Bool :=
+    fun time => quittingProfileLiveRoot reward profile time who
+  let literal : ℕ → PMF Bool :=
+    fun time => if time = stage then PMF.pure action else base time
+  change quittingBehaviorLiveHazard reward
+      (quittingLiteralOneDateOverride (profile who) stage action) =
+    quittingStageDeviationHazard (quittingProfileLiveRoot reward profile)
+      who stage (PMF.pure action) (fun offset => base (stage + 1 + offset))
+  have hleft :
+      quittingBehaviorLiveHazard reward
+          (quittingLiteralOneDateOverride (profile who) stage action) = literal := by
+    funext time
+    rfl
+  rw [hleft]
   funext time
-  unfold quittingBehaviorLiveHazard quittingLiteralOneDateOverride
-  change (if time = stage then PMF.pure action else
-    profile who time (quittingLiveHist reward time)) = _
   by_cases hlt : time < stage
-  · rw [if_neg (ne_of_lt hlt)]
+  · rw [show literal time = base time by
+      simp only [literal, ne_of_lt hlt, reduceIte]]
     rw [quittingStageDeviationHazard_of_lt
       (quittingProfileLiveRoot reward profile) who (PMF.pure action)
       (fun offset =>
-        quittingProfileLiveRoot reward profile (stage + 1 + offset) who) hlt]
-    rfl
+        base (stage + 1 + offset)) hlt]
   · by_cases heq : time = stage
     · subst time
       rw [quittingStageDeviationHazard_self]
-      simp
+      simp only [literal, reduceIte]
     · have hstage : stage < time := lt_of_le_of_ne (Nat.le_of_not_gt hlt)
         (Ne.symm heq)
+      rw [show literal time = base time by
+        simp only [literal, heq, reduceIte]]
       rw [quittingStageDeviationHazard]
-      simp only [if_neg hlt, if_neg heq]
-      change profile who time (quittingLiveHist reward time) =
-        profile who (stage + 1 + (time - (stage + 1)))
-          (quittingLiveHist reward (stage + 1 + (time - (stage + 1))))
-      rw [Nat.add_sub_of_le (Nat.succ_le_iff.mpr hstage)]
+      simp only [hlt, heq, reduceIte]
+      have htime : stage + 1 + (time - (stage + 1)) = time :=
+        Nat.add_sub_of_le (Nat.succ_le_iff.mpr hstage)
+      rw [htime]
 
 theorem quittingProfileLiveRoot_literalOneDateProfile_eq_rootSequenceUpdate
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)

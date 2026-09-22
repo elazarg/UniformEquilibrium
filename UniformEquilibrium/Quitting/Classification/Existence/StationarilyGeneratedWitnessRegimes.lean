@@ -345,7 +345,7 @@ theorem quittingInstantPunishment_of_stationaryPrefix_liveMass_tendsto_zero
         (family.nash (subsequence (limitSubsequence n)))
   have hsure : QuittingRootHasSureQuitter rootLimit :=
     quittingRootHasSureQuitter_of_stationaryContinueMass_eq_zero rootLimit hliveZero
-  letI : Nonempty ι := ⟨Classical.choose hsure⟩
+  let : Nonempty ι := ⟨Classical.choose hsure⟩
   have hfullCarrier : quittingTerminalSemanticPrefixSimplex reward limit ∈
       quittingTerminalSemanticCarrier reward := by
     exact quittingTerminalSemanticPrefix_mem_carrier reward rootLimit limit.2

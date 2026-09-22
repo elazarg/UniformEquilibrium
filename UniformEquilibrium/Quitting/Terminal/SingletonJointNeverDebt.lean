@@ -168,10 +168,11 @@ theorem stoppingLaw_none_mul_opponentNeverProduct_eq_prod_none
   unfold quittingOpponentNeverProduct quittingCompactStoppingLawsOfProfile
   apply Finset.prod_congr rfl
   intro player _
-  change (((_root_.Math.Probability.CompactStoppingLaw.ofPMF
-    (quittingBehaviorStoppingLaw reward (profile player))).toPMF ⊤)).toReal = _
-  rw [_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
-  rfl
+  change ((((_root_.Math.Probability.CompactStoppingLaw.ofPMF
+    (quittingBehaviorStoppingLaw reward (profile player))).toPMF :
+      PMF (Option ℕ)) none)).toReal = _
+  exact congrArg (fun law : PMF (Option ℕ) => (law none).toReal)
+    (_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF_option _)
 
 /-- Source-facing form of the positive-singleton joint-Never debt bound. -/
 theorem prod_stoppingLaw_none_mul_singleton_le_terminalDebt

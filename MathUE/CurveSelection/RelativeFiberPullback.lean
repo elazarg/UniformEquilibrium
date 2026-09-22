@@ -176,7 +176,7 @@ theorem isLocalExtrOn_presentationFiber_relative
               (specializeParameterPolynomial t
                 (P.relation j))}
       x := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   let fiber : Set (ι → ℝ) :=
     {z |
       ∀ j : κ,

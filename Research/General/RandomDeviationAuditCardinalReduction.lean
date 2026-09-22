@@ -145,7 +145,7 @@ theorem counterexampleCardinalReductionToFour_of_auditCardinalReduction
   have hthree : 3 < n := by
     simpa using (Classical.choice hwitness).three_lt_card
   have hnpos : 0 < n := by omega
-  letI : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hnpos)
+  let : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hnpos)
   have hno : ¬ ∃ payoff : Payoff (Fin n),
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff :=
     (Classical.choice hwitness).not_exists_uniformEquilibriumPayoff
@@ -174,7 +174,7 @@ theorem counterexampleCardinalReductionToFour_of_allMinimal
     have hthree : 3 < n := by
       simpa using (Classical.choice hwitness).three_lt_card
     omega
-  letI : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hn)
+  let : Nonempty (Fin n) := Fintype.card_pos_iff.mp (by simpa using hn)
   obtain ⟨minimal⟩ :=
     exists_minimalFinQuittingCounterexample reward hwitness
   have hcount : minimal.playerCount = 4 := hminimal minimal

@@ -126,7 +126,7 @@ theorem executableRationalSelectedOwnerDebt_step_of_nonpos
     simpa only [old, executableRationalSelectedOwnerDebt] using hnonpos
   unfold executableRationalSelectedOwnerDebt
   rw [executableRationalSelectedOwnerWords_succ,
-    executableRationalSelectedOwnerDebtBlock, dif_neg hnonpos']
+    executableRationalSelectedOwnerDebtBlock, dite_eq_right hnonpos']
   simp
 
 theorem executableRationalSelectedOwnerDebt_antitone

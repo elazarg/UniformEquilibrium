@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

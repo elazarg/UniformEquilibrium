@@ -32,11 +32,9 @@ import MathUE.AnalyticPowerNormalization
 import MathUE.BackwardOrbitSelection
 import MathUE.BanachLimit
 import MathUE.BonferroniProductBounds
-import MathUE.BoundedDiscrepancyCirculation
 import MathUE.CalendarSummability
 import MathUE.CaristiFixedPoint
 import MathUE.ChargedPacketAmplification
-import MathUE.ChargedPathBudget
 import MathUE.ChargedPathBudgetCounterexamples
 import MathUE.ChargedPathCode
 import MathUE.ChargedPathExecution
@@ -99,50 +97,10 @@ import MathUE.CurveSelection.Termination
 import MathUE.CurveSelection.UltrafilterSubsequence
 import MathUE.CyclicContraction
 import MathUE.CyclicExposure
-import MathUE.CyclicMaxAffineBound
-import MathUE.DirectedTransport
-import MathUE.DirectedTransport.Additive.Circuits
-import MathUE.DirectedTransport.Additive.CirculationDecomposition
-import MathUE.DirectedTransport.Additive.Cycles
-import MathUE.DirectedTransport.Additive.Exact
-import MathUE.DirectedTransport.Additive.Potentials
-import MathUE.DirectedTransport.Additive.Quantitative
-import MathUE.DirectedTransport.Additive.ShortCycles
-import MathUE.DirectedTransport.All
-import MathUE.DirectedTransport.Basic
-import MathUE.DirectedTransport.CategoricalRetractAdapter
-import MathUE.DirectedTransport.CategoricalRetracts
-import MathUE.DirectedTransport.Category
-import MathUE.DirectedTransport.Closure
-import MathUE.DirectedTransport.Exact
-import MathUE.DirectedTransport.FiniteInequality.Arithmetic
-import MathUE.DirectedTransport.FiniteInequality.Basic
 import MathUE.DirectedTransport.FiniteInequality.Nonnegative
-import MathUE.DirectedTransport.FiniteInequality.Quantitative
-import MathUE.DirectedTransport.FiniteInequality.Sparse
-import MathUE.DirectedTransport.JoinSemidirect
-import MathUE.DirectedTransport.MaxAffine.Additive
-import MathUE.DirectedTransport.MaxAffine.Arithmetic
-import MathUE.DirectedTransport.MaxAffine.Basic
-import MathUE.DirectedTransport.MaxAffine.CycleSlack
-import MathUE.DirectedTransport.MaxAffine.Duality
-import MathUE.DirectedTransport.MaxAffine.Farkas
-import MathUE.DirectedTransport.MaxAffine.GaugeFeasibility
-import MathUE.DirectedTransport.MaxAffine.GaugeHolonomy
-import MathUE.DirectedTransport.MaxAffine.JoinSemidirect
-import MathUE.DirectedTransport.MaxAffine.Paths
-import MathUE.DirectedTransport.MaxAffine.Relaxation
-import MathUE.DirectedTransport.MaxAffine.Scalar
-import MathUE.DirectedTransport.MaxAffine.Sections
-import MathUE.DirectedTransport.MaxAffine.Slopes
-import MathUE.DirectedTransport.MaxAffine.Sparse
-import MathUE.DirectedTransport.NormalForms
-import MathUE.DirectedTransport.PotentialRigidity
-import MathUE.DirectedTransport.SCC
 import MathUE.DirectedTransport.SimpleCycleBalance
 import MathUE.DisplacementSeamScalarBoundaries
 import MathUE.DivergentChargeRecurrence
-import MathUE.EdgeGraph
 import MathUE.EventuallyPositiveLastZero
 import MathUE.ExponentialExcessScale
 import MathUE.FinFourCoalitionCycle
@@ -231,7 +189,6 @@ import MathUE.LinearAlgebra.FiniteConicSparseCombination
 import MathUE.LinearAlgebra.FiniteConvexStrictSeparation
 import MathUE.LinearAlgebra.FiniteGroupInvariantWeights
 import MathUE.LinearAlgebra.FiniteRayMaximum
-import MathUE.LinearAlgebra.FourierMotzkin
 import MathUE.LinearAlgebra.LeadingTruncationCounterexamples
 import MathUE.LinearAlgebra.MatrixDiagonalDeterminantPath
 import MathUE.LinearAlgebra.MixedCompatibilityAlternative
@@ -2935,10 +2892,7 @@ import Lean.Util.CollectAxioms
 open Lean Elab Command
 
 private def projectModuleRoots : Array Name := #[
-  `Experiments,
   `MathUE,
-  `Research,
-  `Theorems,
   `UniformEquilibrium,
 ]
 

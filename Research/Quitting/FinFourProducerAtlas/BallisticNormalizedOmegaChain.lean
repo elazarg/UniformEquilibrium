@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors.
 -/
 
 import MathUE.Topology.SourceOmegaChain
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.FinFourProducerAtlas.FullBindingPointwiseSupportBallistic
 
 /-!
@@ -26,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {bound : ℝ}
@@ -43,7 +44,7 @@ variable {flow : FinFourStrictRayForwardExactCapTail packet}
 
 /-- Compact normalized state with a literal positive renewal-ratio floor. -/
 abbrev FinFourBallisticNormalizedState (eta : ℝ) :=
-  stdSimplex ℝ (Fin 4) × stdSimplex ℝ (Fin 4) × Set.Icc eta 1
+  Convexity.StdSimplex ℝ (Fin 4) × Convexity.StdSimplex ℝ (Fin 4) × Set.Icc eta 1
 
 /-- Same-ray data placing every retained tail date in one ballistic compact
 box.  The finite cutoff is retained rather than silently deleted. -/
@@ -72,11 +73,11 @@ def stateAt (time : ℕ) : FinFourBallisticNormalizedState data.eta :=
 def actualDate (time : ℕ) : ℕ := data.cutoff + time
 
 @[simp] theorem stateAt_current (time : ℕ) (who : Fin 4) :
-    (data.stateAt time).1.val who =
+    (data.stateAt time).1.weights who =
       flow.forward.currentHazard (data.actualDate time) who := rfl
 
 @[simp] theorem stateAt_tail (time : ℕ) (who : Fin 4) :
-    (data.stateAt time).2.1.val who =
+    (data.stateAt time).2.1.weights who =
       flow.forward.tailAverage (data.actualDate time) who := rfl
 
 @[simp] theorem stateAt_ratio (time : ℕ) :
@@ -86,9 +87,9 @@ def actualDate (time : ℕ) : ℕ := data.cutoff + time
 /-- Exact renewal relation on normalized states. -/
 def IsRenewalEdge
     (current next : FinFourBallisticNormalizedState data.eta) : Prop :=
-  ∀ who, current.2.1.val who =
-    (current.2.2 : ℝ) * current.1.val who +
-      (1 - (current.2.2 : ℝ)) * next.2.1.val who
+  ∀ who, current.2.1.weights who =
+    (current.2.2 : ℝ) * current.1.weights who +
+      (1 - (current.2.2 : ℝ)) * next.2.1.weights who
 
 theorem isClosed_renewalEdgeGraph :
     IsClosed {edge : FinFourBallisticNormalizedState data.eta ×
@@ -99,11 +100,11 @@ theorem isClosed_renewalEdgeGraph :
       data.IsRenewalEdge edge.1 edge.2} =
       ⋂ who, {edge : FinFourBallisticNormalizedState data.eta ×
           FinFourBallisticNormalizedState data.eta |
-        edge.1.2.1.val who =
-          (edge.1.2.2 : ℝ) * edge.1.1.val who +
-            (1 - (edge.1.2.2 : ℝ)) * edge.2.2.1.val who} := by
+        edge.1.2.1.weights who =
+          (edge.1.2.2 : ℝ) * edge.1.1.weights who +
+            (1 - (edge.1.2.2 : ℝ)) * edge.2.2.1.weights who} := by
     ext edge
-    simp only [Set.mem_setOf_eq, Set.mem_iInter]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter]
     rfl
   rw [heq]
   apply isClosed_iInter
@@ -111,14 +112,14 @@ theorem isClosed_renewalEdgeGraph :
   have hcurrent : Continuous (fun edge :
       FinFourBallisticNormalizedState data.eta ×
         FinFourBallisticNormalizedState data.eta ↦
-      edge.1.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp
+      edge.1.1.weights who) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
       (continuous_fst.comp continuous_fst)
   have htail : Continuous (fun edge :
       FinFourBallisticNormalizedState data.eta ×
         FinFourBallisticNormalizedState data.eta ↦
-      edge.1.2.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp
+      edge.1.2.1.weights who) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
       ((continuous_fst.comp continuous_snd).comp continuous_fst)
   have hratio : Continuous (fun edge :
       FinFourBallisticNormalizedState data.eta ×
@@ -129,8 +130,8 @@ theorem isClosed_renewalEdgeGraph :
   have hnextTail : Continuous (fun edge :
       FinFourBallisticNormalizedState data.eta ×
         FinFourBallisticNormalizedState data.eta ↦
-      edge.2.2.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp
+      edge.2.2.1.weights who) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
       ((continuous_fst.comp continuous_snd).comp continuous_snd)
   exact isClosed_eq htail
     ((hratio.mul hcurrent).add
@@ -146,17 +147,17 @@ theorem stateAt_renewal (time : ℕ) :
 def work
     (state : FinFourBallisticNormalizedState data.eta) (who : Fin 4) : ℝ :=
   (∑ owner, flow.analysis.normalized.soloMatrix who owner *
-      state.2.1.val owner) +
+      state.2.1.weights owner) +
     (state.2.2 : ℝ) *
       ∑ owner, flow.analysis.normalized.collisionMatrix who owner *
-        state.1.val owner
+        state.1.weights owner
 
 /-- The closed normalized ballistic relation. -/
 def IsBallisticEdge
     (current next : FinFourBallisticNormalizedState data.eta) : Prop :=
   data.IsRenewalEdge current next ∧
     (∀ who, data.work current who ≤ 0) ∧
-      ∀ who, current.1.val who * data.work current who = 0
+      ∀ who, current.1.weights who * data.work current who = 0
 
 end FinFourUniformlyBallisticNormalizedSource
 
@@ -203,33 +204,33 @@ theorem source_state_tendsto (offset : ℤ) :
 theorem source_current_tendsto (offset : ℤ) (who : Fin 4) :
     Tendsto (fun rank ↦ flow.forward.currentHazard
       (omega.actualDate offset rank) who) atTop
-      (nhds ((omega.state offset).1.val who)) := by
+      (nhds ((omega.state offset).1.weights who)) := by
   have hcontinuous : Continuous
       (fun state : FinFourBallisticNormalizedState data.eta ↦
-        state.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp continuous_fst
+        state.1.weights who) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp continuous_fst
   have hlimit := hcontinuous.continuousAt.tendsto.comp
     (omega.source_state_tendsto offset)
   change Tendsto (fun rank ↦
-    (data.stateAt (omega.sourceIndex offset rank)).1.val who) atTop
-      (nhds ((omega.state offset).1.val who)) at hlimit
+    (data.stateAt (omega.sourceIndex offset rank)).1.weights who) atTop
+      (nhds ((omega.state offset).1.weights who)) at hlimit
   simpa only [FinFourUniformlyBallisticNormalizedSource.stateAt_current,
     actualDate] using hlimit
 
 theorem source_tail_tendsto (offset : ℤ) (who : Fin 4) :
     Tendsto (fun rank ↦ flow.forward.tailAverage
       (omega.actualDate offset rank) who) atTop
-      (nhds ((omega.state offset).2.1.val who)) := by
+      (nhds ((omega.state offset).2.1.weights who)) := by
   have hcontinuous : Continuous
       (fun state : FinFourBallisticNormalizedState data.eta ↦
-        state.2.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp
+        state.2.1.weights who) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
       (continuous_fst.comp continuous_snd)
   have hlimit := hcontinuous.continuousAt.tendsto.comp
     (omega.source_state_tendsto offset)
   change Tendsto (fun rank ↦
-    (data.stateAt (omega.sourceIndex offset rank)).2.1.val who) atTop
-      (nhds ((omega.state offset).2.1.val who)) at hlimit
+    (data.stateAt (omega.sourceIndex offset rank)).2.1.weights who) atTop
+      (nhds ((omega.state offset).2.1.weights who)) at hlimit
   simpa only [FinFourUniformlyBallisticNormalizedSource.stateAt_tail,
     actualDate] using hlimit
 
@@ -292,7 +293,7 @@ theorem work_nonpos (offset : ℤ) (who : Fin 4) :
   (omega.edge offset).2.1 who
 
 theorem current_work_eq_zero (offset : ℤ) (who : Fin 4) :
-    (omega.state offset).1.val who * data.work (omega.state offset) who = 0 :=
+    (omega.state offset).1.weights who * data.work (omega.state offset) who = 0 :=
   (omega.edge offset).2.2 who
 
 /-- The path stores normalized data only.  This name-only predicate makes the
@@ -330,30 +331,30 @@ theorem nonempty_omegaChain :
   have hstate := extraction.source_coordinate_tendsto offset
   have hcurrent : ∀ who, Tendsto (fun rank ↦
       flow.forward.currentHazard (subseq rank) who) atTop
-      (nhds ((extraction.path offset).1.val who)) := by
+      (nhds ((extraction.path offset).1.weights who)) := by
     intro who
     have hcontinuous : Continuous
         (fun state : FinFourBallisticNormalizedState data.eta ↦
-          state.1.val who) :=
-      ((continuous_apply who).comp continuous_subtype_val).comp continuous_fst
+          state.1.weights who) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp continuous_fst
     have hlimit := hcontinuous.continuousAt.tendsto.comp hstate
     change Tendsto (fun rank ↦
-      (data.stateAt (extraction.sourceIndex offset rank)).1.val who) atTop
-        (nhds ((extraction.path offset).1.val who)) at hlimit
+      (data.stateAt (extraction.sourceIndex offset rank)).1.weights who) atTop
+        (nhds ((extraction.path offset).1.weights who)) at hlimit
     simpa only [stateAt_current, subseq, actualDate] using hlimit
   have htail : ∀ who, Tendsto (fun rank ↦
       flow.forward.tailAverage (subseq rank) who) atTop
-      (nhds ((extraction.path offset).2.1.val who)) := by
+      (nhds ((extraction.path offset).2.1.weights who)) := by
     intro who
     have hcontinuous : Continuous
         (fun state : FinFourBallisticNormalizedState data.eta ↦
-          state.2.1.val who) :=
-      ((continuous_apply who).comp continuous_subtype_val).comp
+          state.2.1.weights who) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
         (continuous_fst.comp continuous_snd)
     have hlimit := hcontinuous.continuousAt.tendsto.comp hstate
     change Tendsto (fun rank ↦
-      (data.stateAt (extraction.sourceIndex offset rank)).2.1.val who) atTop
-        (nhds ((extraction.path offset).2.1.val who)) at hlimit
+      (data.stateAt (extraction.sourceIndex offset rank)).2.1.weights who) atTop
+        (nhds ((extraction.path offset).2.1.weights who)) at hlimit
     simpa only [stateAt_tail, subseq, actualDate] using hlimit
   have hratio : Tendsto (fun rank ↦
       flow.forward.renewalRatio (subseq rank)) atTop
@@ -373,8 +374,8 @@ theorem nonempty_omegaChain :
       rw [data.fullBinding]
       exact Finset.mem_univ who
     have hnonpos := flow.analysis.normalized.subseq_collision_nonpos
-      subseq hsubseq (extraction.path offset).1.val
-        (extraction.path offset).2.1.val
+      subseq hsubseq (extraction.path offset).1.weights
+        (extraction.path offset).2.1.weights
         (extraction.path offset).2.2 hcurrent htail hratio who hbinding
     unfold work
     linarith
@@ -383,8 +384,8 @@ theorem nonempty_omegaChain :
       rw [data.fullBinding]
       exact Finset.mem_univ who
     exact flow.analysis.normalized.subseq_collision_complementarity
-      subseq hsubseq (extraction.path offset).1.val
-        (extraction.path offset).2.1.val
+      subseq hsubseq (extraction.path offset).1.weights
+        (extraction.path offset).2.1.weights
         (extraction.path offset).2.2 hcurrent htail hratio who hbinding
 
 end FinFourUniformlyBallisticNormalizedSource

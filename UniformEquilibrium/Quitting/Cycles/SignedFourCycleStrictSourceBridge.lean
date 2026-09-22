@@ -46,7 +46,8 @@ theorem hasStrictTests_singletonMatrix (data : SignedFourCycleSingletonData rewa
     (tests : data.StrictTests) :
     Math.HasSignedFourCycleStrictTests (quittingSingletonMatrix reward) := by
   have hcoeff := data.coefficientsOfSingletonMatrix_eq
-  rw [Math.HasSignedFourCycleStrictTests, hcoeff]
+  unfold Math.HasSignedFourCycleStrictTests
+  rw [hcoeff]
   refine ⟨⟨?_, ?_⟩, ⟨?_, ?_⟩, ⟨?_, ?_⟩, ⟨?_, ?_⟩,
     tests.discriminant_pos, tests.smallerEigenvalue_gt_one, tests.upperRight_neg,
     tests.rawWeightOne_pos, tests.rawWeightTwo_pos, tests.rawWeightThree_pos⟩

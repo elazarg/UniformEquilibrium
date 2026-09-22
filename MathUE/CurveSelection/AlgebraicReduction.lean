@@ -10,7 +10,7 @@ import MathUE.MultivariateElimination
 import MathUE.UnivariatePolynomialCurveSelection
 import MathUE.WeierstrassCurve
 import MathUE.RamifiedWeierstrass
-import Mathlib.Data.Complex.Basic
+import Mathlib.Basic.Complex.Basic
 import MathUE.PolynomialSignCell
 
 noncomputable section
@@ -330,7 +330,7 @@ theorem exists_strictAnti_parameter_approach
       (∀ n, 0 < x n parameter) ∧
       Tendsto x atTop (𝓝 x₀) ∧
       Tendsto (fun n => x n parameter) atTop (𝓝 0) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨z, hzmem, hzlim⟩ :=
     (mem_closure_iff_seq_limit.mp hclosure)
   let a : ℕ → ℝ := fun n => z n parameter
@@ -489,7 +489,7 @@ theorem exists_algebraic_strictAnti_signCell_approach
       ∀ n j,
         bivEval (q j) (x n parameter) (x n j.1) = 0 := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨x, hxmem, hxanti, hxpos, hxlim, hxparameter⟩ :=
     exists_strictAnti_parameter_approach
       hparameter hclosure
@@ -512,7 +512,7 @@ theorem bivEval_endpoint_eq_zero_of_tendsto
     (hroot :
       ∀ n, bivEval q (x n parameter) (x n target) = 0) :
     bivEval q (x₀ parameter) (x₀ target) = 0 := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let F : (σ → ℝ) → ℝ :=
     (fun p : ℝ × ℝ => bivEval q p.1 p.2) ∘
       fun y => (y parameter, y target)
@@ -567,7 +567,7 @@ theorem exists_algebraic_strictAnti_signCell_approach_with_endpoint
       (∀ n j,
         bivEval (q j) (x n parameter) (x n j.1) = 0) ∧
       ∀ j, bivEval (q j) 0 (x₀ j.1) = 0 := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨x, q, hxmem, hxanti, hxpos, hxlim,
     hxparameter, hqne, hqroot⟩ :=
     exists_algebraic_strictAnti_signCell_approach
@@ -736,7 +736,7 @@ theorem exists_commonRamification_centeredSplittings
           (ramifyPowerSeriesPolynomial q hq (f j)).IsRoot s →
             s.constantCoeff = 0 := by
   classical
-  letI : Fintype J := Fintype.ofFinite J
+  let : Fintype J := Fintype.ofFinite J
   choose p hp hsplit using fun j =>
     hasRamifiedPowerSeriesSplitting_of_hasRamifiedRootProperty
       Hroot (f j) (Hdist j).monic
@@ -787,7 +787,7 @@ theorem exists_commonRamification_centeredSplittingsOver
             (mapPowerSeriesPolynomial σ (f j))).IsRoot s →
             s.constantCoeff = 0 := by
   classical
-  letI : Fintype J := Fintype.ofFinite J
+  let : Fintype J := Fintype.ofFinite J
   choose p hp hsplit using fun j =>
     hasRamifiedPowerSeriesSplittingOver_of_hasRamifiedRootProperty
       σ Hroot (Hdist j).monic
@@ -867,7 +867,7 @@ theorem exists_coordinate_weierstrassBoundaries_of_saturated_moduleFinite
             (q j) (x₀ j.1)).primPart).IsWeierstrassFactorization
               (f j) (unit j) := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨x, q, hxmem, hxanti, hxpos, hxlim,
     hxparameter, hqne, hqroot⟩ :=
     exists_algebraic_strictAnti_signCell_approach
@@ -951,7 +951,7 @@ theorem exists_coordinate_commonRamifiedSplittings_of_saturated_moduleFinite
           (ramifyPowerSeriesPolynomial ram hram (f j)).IsRoot s →
             s.constantCoeff = 0 := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨x, relation, f, unit, hxmem, hxanti, hxpos, hxlim,
     hrelation_ne, hrelation_root, hprimitive, hdegree, hfactor⟩ :=
     exists_coordinate_weierstrassBoundaries_of_saturated_moduleFinite
@@ -1024,7 +1024,7 @@ theorem
             (mapPowerSeriesPolynomial Complex.ofRealHom (f j))).IsRoot s →
             s.constantCoeff = 0 := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨x, relation, f, unit, hxmem, hxanti, hxpos, hxlim,
     hrelation_ne, hrelation_root, hprimitive, hdegree, hfactor⟩ :=
     exists_coordinate_weierstrassBoundaries_of_saturated_moduleFinite

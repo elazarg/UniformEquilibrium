@@ -295,20 +295,20 @@ theorem boxComplementarityReducedLabel_face_eq (p : ℕ) (hp : 0 < p)
   rw [boxComplementarityFaceLabel]
   by_cases hviolationTwo : 1 ≤ (vertex 2).1 ∧
       (vertex 3).1 < boxComplementarityFaceGridBound p defectTwo crossTwo
-  · rw [if_pos hviolationTwo]
+  · rw [ite_eq_left hviolationTwo]
     have hle := (hprops.2 (2 : Fin 4)).2 (htwo.2 hviolationTwo)
     omega
-  · rw [if_neg hviolationTwo]
+  · rw [ite_eq_right hviolationTwo]
     have hneTwo : boxComplementarityReducedLabel problem p vertex ≠ 2 := by
       intro heq
       exact hviolationTwo (htwo.1 ((hprops.2 (2 : Fin 4)).1 (by omega)))
     by_cases hviolationThree : 1 ≤ (vertex 3).1 ∧
         (vertex 2).1 <
           boxComplementarityFaceGridBound p defectThree crossThree
-    · rw [if_pos hviolationThree]
+    · rw [ite_eq_left hviolationThree]
       have hle := (hprops.2 (3 : Fin 4)).2 (hthree.2 hviolationThree)
       omega
-    · rw [if_neg hviolationThree]
+    · rw [ite_eq_right hviolationThree]
       have hneThree : boxComplementarityReducedLabel problem p vertex ≠ 3 := by
         intro heq
         exact hviolationThree (hthree.1 ((hprops.2 (3 : Fin 4)).1 (by omega)))
@@ -427,12 +427,12 @@ theorem boxComplementarityCompleteSimplex_value_eq (p : ℕ) (hp : 0 < p)
           else (vertices 0 (2 : Fin 4)).1 + 1 := by
       intro index
       by_cases hle : (index : ℕ) ≤ 1
-      · rw [if_pos hle]
+      · rw [ite_eq_left hle]
         rcases fin_five_eq_cases index with rfl | rfl | rfl | rfl | rfl
         · rfl
         · exact hmiddleTwo
         all_goals exact absurd hle (by decide)
-      · rw [if_neg hle]
+      · rw [ite_eq_right hle]
         exact htrail index (by omega) (2 : Fin 4) (by decide)
     have hcoordinateThree : ∀ index : Fin (4 + 1),
         (vertices index (3 : Fin 4)).1 =
@@ -440,11 +440,11 @@ theorem boxComplementarityCompleteSimplex_value_eq (p : ℕ) (hp : 0 < p)
           else (vertices 0 (3 : Fin 4)).1 + 1 := by
       intro index
       by_cases hle : (index : ℕ) ≤ 0
-      · rw [if_pos hle]
+      · rw [ite_eq_left hle]
         rcases fin_five_eq_cases index with rfl | rfl | rfl | rfl | rfl
         · rfl
         all_goals exact absurd hle (by decide)
-      · rw [if_neg hle]
+      · rw [ite_eq_right hle]
         rcases fin_five_eq_cases index with rfl | rfl | rfl | rfl | rfl
         · exact absurd (by decide : ((0 : Fin (4 + 1)) : ℕ) ≤ 0) hle
         · exact hmiddleThree
@@ -746,7 +746,7 @@ theorem boxComplementarityCornerChain_label (p : ℕ) (hp : 0 < p)
         decide)
     have hval : ((1 : Fin 4) : ℕ) = 1 := rfl
     have hindex : ((3 : Fin (4 + 1)) : ℕ) = 3 := rfl
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
     omega
   · have hle := boxComplementarityReducedLabel_le_of_leading_ne_zero problem p
       hp region hregion _ (hin 4) (0 : Fin 4) (by decide) (by
@@ -754,7 +754,7 @@ theorem boxComplementarityCornerChain_label (p : ℕ) (hp : 0 < p)
         decide)
     have hval : ((0 : Fin 4) : ℕ) = 0 := rfl
     have hindex : ((4 : Fin (4 + 1)) : ℕ) = 4 := rfl
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
     omega
 
 /-! ## Completeness of the candidate chains -/
@@ -773,7 +773,7 @@ theorem completeSimplex_of_label
     complete_simplex (boxComplementaritySpernerCube problem p hp) 4 chain := by
   refine ⟨hsimplex, ?_⟩
   ext value
-  simp only [Set.mem_range, Set.mem_setOf_eq]
+  simp only [Set.mem_range, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨index, hindex⟩
     rw [← hindex]
@@ -861,11 +861,11 @@ theorem boxComplementarityLocalCompleteSimplices_card_eq_two_of_sharpFace
       rcases Nat.lt_or_ge value 2 with hlt | hge
       · exact ⟨⟨4 - value, by omega⟩, by
           show (if 4 - value ≤ 2 then 4 - value + 2 else 4 - (4 - value)) = value
-          rw [if_neg (by omega)]
+          rw [ite_eq_right (by omega)]
           omega⟩
       · exact ⟨⟨value - 2, by omega⟩, by
           show (if value - 2 ≤ 2 then value - 2 + 2 else 4 - (value - 2)) = value
-          rw [if_pos (by omega)]
+          rw [ite_eq_left (by omega)]
           omega⟩)
   have hanchorIndexOrigin := anchorIndex_eq_of_label problem p hp _
     hcompleteOrigin (fun index ↦ 4 - (index : ℕ)) hlabelOrigin 0
@@ -890,7 +890,7 @@ theorem boxComplementarityLocalCompleteSimplices_card_eq_two_of_sharpFace
       boxComplementarityCornerChainValue_fourth] at hcoordinate
     have hleft : (boxComplementarityOriginChain p hp 0 3).1 = 0 := rfl
     rw [hleft] at hcoordinate
-    rw [if_neg (by omega)] at hcoordinate
+    rw [ite_eq_right (by omega)] at hcoordinate
     omega
   refine Finset.card_eq_two.2 ⟨boxComplementarityOriginChain p hp,
     boxComplementarityCornerChain p

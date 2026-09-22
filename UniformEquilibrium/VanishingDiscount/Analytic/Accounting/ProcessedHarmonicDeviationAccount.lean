@@ -34,7 +34,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Filter Math.Probability Set Topology
+open Filter _root_.Math.Probability Set Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}
@@ -582,7 +582,7 @@ end AnalyticBellmanGerm
 
 namespace ProcessedHarmonicDeviationRemainderCounterexample
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 /-- A two-state analytic baseline law. -/
 def baseline (_t : ℝ) (_state : Bool) : ℝ := 1 / 2

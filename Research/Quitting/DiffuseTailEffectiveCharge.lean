@@ -153,7 +153,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingLCPClassification
+open Filter _root_.Math.Probability QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -1253,7 +1253,7 @@ theorem quittingTailConditionedAbsorptionWeight_le_quittingSoloWindowCharge
     hmem
   have hrest : (∏ o ∈ (Finset.range length).erase offset,
       (1 - quittingTailConditionedAbsorptionWeight roots (fence + 1 + o))) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun o _ => by
         linarith [quittingTailConditionedAbsorptionWeight_le_one_of_positive
           roots hpositive (fence + 1 + o)])

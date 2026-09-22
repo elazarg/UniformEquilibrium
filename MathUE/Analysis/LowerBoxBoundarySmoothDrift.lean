@@ -25,7 +25,7 @@ theorem isCompact_lowerBoxBoundary (lower upper : ι → ℝ) :
   apply isCompact_Icc.inter_right
   have hclosed := isClosed_iUnion_of_finite fun player : ι =>
     isClosed_eq (continuous_apply player) (continuous_const (y := lower player))
-  simpa only [Set.iUnion_setOf] using hclosed
+  simpa only [Set.iUnion_ofPred] using hclosed
 
 omit [Fintype ι] [DecidableEq ι] in
 theorem lowerBoxBoundary_nonempty (lower upper : ι → ℝ)

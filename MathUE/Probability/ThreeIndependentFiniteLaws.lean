@@ -29,14 +29,17 @@ theorem threeIndependentValue_eq_simplex (kernel : First → Second → Third �
 
 /-- Passing from a simplex vector to its PMF preserves the actual support cardinality. -/
 theorem card_support_simplexLaw {Atom : Type*} [Fintype Atom]
-    (source : stdSimplex ℝ Atom) :
-    Fintype.card {atom // ProbabilityMassFunction.ofVector source.val source.property atom ≠ 0} =
-      Fintype.card {atom // source.val atom ≠ 0} := by
+    (source : Convexity.StdSimplex ℝ Atom) :
+    Fintype.card {atom //
+        ProbabilityMassFunction.ofVector source.weights
+          (ProbabilityMassFunction.weights_mem_simplexWeights source) atom ≠ 0} =
+      Fintype.card {atom // source.weights atom ≠ 0} := by
   classical
   apply Fintype.card_congr
   exact Equiv.subtypeEquivRight fun atom => by
     rw [ProbabilityMassFunction.ofVector_ne_zero_iff]
-    exact ⟨ne_of_gt, fun hne => lt_of_le_of_ne (source.property.1 atom) hne.symm⟩
+    exact ⟨ne_of_gt, fun hne =>
+      lt_of_le_of_ne (source.weights_nonneg atom) hne.symm⟩
 
 /-- The sparse global maximizer is a product of genuine finite PMFs, with the
 cardinality bound stated on their actual nonzero supports. -/

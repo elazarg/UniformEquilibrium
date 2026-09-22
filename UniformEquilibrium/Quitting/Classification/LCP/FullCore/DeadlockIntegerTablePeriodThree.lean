@@ -27,7 +27,7 @@ namespace FullCoreDeadlock
 open Function Metric Set
 open Math.Interval
 open Math.Interval.RationalPolynomial
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 open scoped NNReal
 
 /-! ## The exact algebraic parameter -/
@@ -49,11 +49,12 @@ def integerTableChartMatrix : Player → Player → ℚ :=
 /-- The affine chart is nonsingular, with its exact rational determinant. -/
 theorem integerTableChartMatrix_det :
     Matrix.det integerTableChartMatrix = -41914379009 / 10 ^ 12 := by
+  change Matrix.det (show Matrix (Fin 4) (Fin 4) ℚ from
+    integerTableChartMatrix) = _
+  unfold integerTableChartMatrix
   rw [Matrix.det_succ_row_zero, Fin.sum_univ_succ]
-  simp only [Matrix.det_fin_three, Matrix.submatrix_apply]
-  simp +decide [Fin.sum_univ_succ, Fin.succAbove_of_le_castSucc,
-    show (3 : Fin 4).succAbove (2 : Fin 3) = 2 by decide,
-    integerTableChartMatrix]
+  simp only [Matrix.det_fin_three]
+  simp +decide [Matrix.submatrix, Fin.sum_univ_succ, Fin.succAbove]
   norm_num
 
 /-- The affine chart carrying a small cube to the parameter parallelotope. -/
@@ -512,8 +513,6 @@ theorem integerTableParameter_bounds :
     integerTableCenter, integerTableChartMatrix, integerTableRadius,
     Fin.sum_univ_succ, Matrix.cons_val_zero, Matrix.cons_val_one,
     Matrix.cons_val_two, Matrix.cons_val_three] at *
-  change -(1 / 1000000) ≤ integerTableCubeRoot (Fin.succ 2) at hthreeLower
-  change integerTableCubeRoot (Fin.succ 2) ≤ 1 / 1000000 at hthreeUpper
   constructor
   · linarith
   constructor

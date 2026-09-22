@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.PersistentBaseArbitraryCompletionEscape
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Paths.SixPlayerOnePairMassTargetLock
 
 /-!
@@ -45,12 +46,16 @@ theorem coalitionMemberMass_terminalOutcomeMass_eq_payoff_of_persistentBaseMembe
   | some terminal =>
       simp [CoalitionOutcome.coalition, quittingTerminalOutcomeReward,
         hmembership terminal member hmember]
+      rfl
 
 /-- The probability that a player belongs to the realized coalition is at most one. -/
 theorem coalitionMemberMass_le_one
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player)) (member : Player) :
+    (hmass : mass ∈
+      GameTheory.Math.Probability.simplexWeights (CoalitionOutcome Player))
+    (member : Player) :
     coalitionMemberMass mass member ≤ 1 := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   rw [← hmass.2]
   unfold coalitionMemberMass coalitionEventMass
   apply Finset.sum_le_sum
@@ -61,21 +66,22 @@ theorem coalitionMemberMass_le_one
 `member` is absent. -/
 theorem exactCoalitionMass_le_one_sub_coalitionMemberMass_of_not_mem
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (CoalitionOutcome Player))
     (target : Finset Player) (member : Player) (hnot : member ∉ target) :
     exactCoalitionMass mass target ≤ 1 - coalitionMemberMass mass member := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   rw [le_sub_iff_add_le, ← hmass.2]
   unfold exactCoalitionMass coalitionMemberMass coalitionEventMass
   rw [← Finset.sum_add_distrib]
   apply Finset.sum_le_sum
   intro outcome _
   by_cases htarget : outcome.coalition = target
-  · rw [if_pos htarget]
+  · rw [ite_eq_left htarget]
     have hmember : member ∉ outcome.coalition := by
       simpa [htarget] using hnot
-    rw [if_neg hmember]
+    rw [ite_eq_right hmember]
     simp
-  · rw [if_neg htarget]
+  · rw [ite_eq_right htarget]
     split_ifs <;> simp [hmass.1 outcome]
 
 /-- **Six-player arbitrary-completion escape.**  If the two coordinates of `A` retain literal

@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Filter GameTheory.Math.Probability
+open _root_.Set Filter GameTheory.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -37,7 +37,7 @@ omit [DecidableEq ι] in
 theorem isCompact_range_finiteDeadlineTimingPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ) :
     IsCompact (Set.range (quittingFiniteDeadlineTimingPayoffMap reward deadline)) := by
-  letI : ∀ player,
+  let : ∀ player,
       Fintype ((quittingFiniteDeadlineTimingGame reward deadline).Strategy player) :=
     fun _ => by
       change Fintype (Option (Fin deadline))
@@ -57,7 +57,7 @@ theorem quittingFiniteDeadlineTimingPayoffMap_stdSimplexEquiv
       fun observer =>
         quittingTerminalPayoff reward
           (quittingFiniteDeadlineTimingProfile reward deadline mixed) observer := by
-  letI : ∀ player,
+  let : ∀ player,
       Fintype ((quittingFiniteDeadlineTimingGame reward deadline).Strategy player) :=
     fun _ => by
       change Fintype (Option (Fin deadline))

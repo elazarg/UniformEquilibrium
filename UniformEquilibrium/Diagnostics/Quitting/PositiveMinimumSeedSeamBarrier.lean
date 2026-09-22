@@ -124,10 +124,10 @@ theorem exists_baseDebt_ge_average :
     ∃ who,
       quittingTerminalSemanticDebtSum family.base / Fintype.card ι ≤
         quittingTerminalSemanticDebt family.base who := by
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by
     by_contra hnot
     have hzero : Fintype.card ι = 0 := by omega
-    haveI : IsEmpty ι := Fintype.card_eq_zero_iff.mp hzero
+    have : IsEmpty ι := Fintype.card_eq_zero_iff.mp hzero
     have hbaseZero : quittingTerminalSemanticDebtSum family.base = 0 := by
       simp [quittingTerminalSemanticDebtSum]
     have hpositive := family.base_positive

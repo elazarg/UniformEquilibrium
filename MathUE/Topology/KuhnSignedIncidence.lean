@@ -55,7 +55,7 @@ theorem signedIncidence_deletionFace (cell : Cell cube)
   have hinverse : cell.incidentDeletion hdimension label
       (cell.deletionFace hdimension label omitted) hincident = omitted :=
     (cell.completeDeletionEquivIncidentFace hdimension label).symm_apply_apply omitted
-  simp only [signedIncidence, dif_pos hincident, hinverse]
+  simp only [signedIncidence, dite_eq_left hincident, hinverse]
   rfl
 
 /-- Any literal deletion equality identifies the same signed incidence weight. -/

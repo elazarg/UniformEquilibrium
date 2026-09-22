@@ -22,7 +22,7 @@ private def codeTails (code : Finset (List Label)) (label : Label) : Finset (Lis
 omit [DecidableEq Label] in
 @[simp] private theorem mem_codeTails (code : Finset (List Label)) (label : Label)
     (word : List Label) : word ∈ codeTails code label ↔ label :: word ∈ code := by
-  simp [codeTails]
+  exact Finset.mem_preimage
 
 private theorem sum_prefixFree_mass_le_of_length
     (mass : List Label → ℝ≥0∞)

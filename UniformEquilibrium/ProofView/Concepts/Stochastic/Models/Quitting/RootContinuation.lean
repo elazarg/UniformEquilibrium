@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -134,12 +134,13 @@ theorem expectedStagePayoff_succ_quittingGame_eq_rootContinuation
             ((quittingGame reward).shiftProfile profile (none, action))
             none t who := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
+  let : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
   unfold StochasticGame.expectedStagePayoff
-  rw [(quittingGame reward).histDist_succ_shift, expect_bind]
+  have hdist := (quittingGame reward).histDist_succ_shift profile none t
+  rw [hdist, expect_bind]
   apply congrArg (expect
     ((quittingGame reward).stageActionDist profile
       ((quittingGame reward).emptyHist none)))
@@ -147,19 +148,30 @@ theorem expectedStagePayoff_succ_quittingGame_eq_rootContinuation
   change ι → Bool at action
   rw [expect_bind]
   by_cases hquit : ({i | action i = true} : Finset ι).Nonempty
-  · rw [quittingGame_transition_none, dif_pos hquit]
+  · rw [quittingGame_transition_none, dite_eq_left hquit]
     rw [expect_pure, expect_map]
-    simp only [quittingQuitters, dif_pos hquit]
     have habs := expectedStagePayoff_quittingGame_some reward
       ((quittingGame reward).shiftProfile profile (none, action))
       ⟨({i | action i = true} : Finset ι), hquit⟩ t who
     unfold StochasticGame.expectedStagePayoff at habs
-    rw [← habs]
-    apply Math.ProbabilityMassFunction.expect_congr_on_support
-    intro h hh
-    simp only [stageEUAt_quittingGame_eq_stateReward,
-      (quittingGame reward).consHist_snd]
-  · rw [quittingGame_transition_none, dif_neg hquit]
+    calc
+      _ = expect
+          ((quittingGame reward).histDist
+            ((quittingGame reward).shiftProfile profile (none, action))
+            (some ⟨({i | action i = true} : Finset ι), hquit⟩) t)
+          (fun h => (quittingGame reward).stageEUAt
+            ((quittingGame reward).shiftProfile profile (none, action)) h who) := by
+        apply Math.ProbabilityMassFunction.expect_congr_on_support
+        intro h hh
+        simp only [stageEUAt_quittingGame_eq_stateReward,
+          (quittingGame reward).consHist_snd]
+      _ = reward ⟨({i | action i = true} : Finset ι), hquit⟩ who := habs
+      _ = _ := by
+        rw [dite_eq_left (show (quittingQuitters action).Nonempty from hquit)]
+        apply congrArg (fun S => reward S who)
+        apply Subtype.ext
+        rfl
+  · rw [quittingGame_transition_none, dite_eq_right hquit]
     rw [expect_pure, expect_map]
     rw [show (fun h =>
           (quittingGame reward).stageEUAt profile
@@ -185,7 +197,7 @@ theorem quittingTerminalPayoff_eq_expect_rootContinuation
           ((quittingGame reward).emptyHist none))
         (fun action =>
           quittingRootContinuationPayoff reward profile action who) := by
-  letI : ∀ i : ι, Fintype ((quittingGame reward).Act i) :=
+  let : ∀ i : ι, Fintype ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Fintype Bool)
   let rootLaw :=
     (quittingGame reward).stageActionDist profile
@@ -320,8 +332,10 @@ theorem quittingTerminalPayoff_rootThenContinuation_eq
   funext action
   by_cases hquit : (quittingQuitters action).Nonempty
   · simp [quittingRootContinuationPayoff, quittingRootPayoff, hquit]
-  · simp [quittingRootContinuationPayoff, quittingRootPayoff, hquit,
-      shiftProfile_quittingRootThenContinuationProfile]
+  · simp only [quittingRootContinuationPayoff, dite_eq_right hquit,
+      quittingRootPayoff]
+    exact congrArg (fun profile => quittingTerminalPayoff reward profile who)
+      (shiftProfile_quittingRootThenContinuationProfile reward root continuation action)
 
 /-- Shift a single behavior strategy past one completed root stage. -/
 def quittingShiftBehaviorStrategy
@@ -371,9 +385,10 @@ theorem stageActionDist_update_quittingRootThenContinuationProfile
   funext player
   by_cases hp : player = who
   · subst player
-    simp
-  · simp [Function.update_of_ne hp,
-      quittingRootThenContinuationProfile]
+    simp only [Function.update_self]
+    exact (Function.update_self who _ root).symm
+  · simp only [Function.update_of_ne hp, quittingRootThenContinuationProfile]
+    exact (Function.update_of_ne hp _ root).symm
 
 /-- **Root deviation lemma.**  Suppose `bound` dominates the terminal payoff
 of every continuation deviation against `continuation` for player `who`.
@@ -400,7 +415,7 @@ theorem quittingTerminalPayoff_update_rootThenContinuation_le
         who bound)
         (Function.update root who
           (deviation 0 ((quittingGame reward).emptyHist none))) who := by
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   rw [quittingTerminalPayoff_eq_expect_rootContinuation,
     stageActionDist_update_quittingRootThenContinuationProfile]
@@ -409,9 +424,24 @@ theorem quittingTerminalPayoff_update_rootThenContinuation_le
   intro action
   by_cases hquit : (quittingQuitters action).Nonempty
   · simp [quittingRootContinuationPayoff, quittingRootPayoff, hquit]
-  · rw [quittingRootContinuationPayoff_of_allContinue _ _ _ _ hquit,
-      shiftProfile_update_quittingRootThenContinuationProfile]
-    simpa [quittingRootPayoff, hquit] using
-      hbound (quittingShiftBehaviorStrategy reward deviation action)
+  · rw [quittingRootContinuationPayoff_of_allContinue _ _ _ _ hquit]
+    calc
+      quittingTerminalPayoff reward
+          ((quittingGame reward).shiftProfile
+            (Function.update
+              (quittingRootThenContinuationProfile reward root continuation)
+              who deviation) (none, action)) who =
+          quittingTerminalPayoff reward
+            (Function.update continuation who
+              (quittingShiftBehaviorStrategy reward deviation action)) who :=
+        congrArg (fun profile => quittingTerminalPayoff reward profile who)
+          (shiftProfile_update_quittingRootThenContinuationProfile
+            reward root continuation who deviation action)
+      _ ≤ bound := hbound (quittingShiftBehaviorStrategy reward deviation action)
+      _ = quittingRootPayoff reward
+          (Function.update
+            (fun player => quittingTerminalPayoff reward continuation player)
+            who bound) action who := by
+        simp [quittingRootPayoff, hquit]
 
 end GameTheory

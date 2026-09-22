@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set StochasticGame Math.Probability Math.PMFProduct
+open Set StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -67,7 +67,7 @@ theorem isCompact_quittingCompactContinuationAdmissiblePairs
             IsQuittingSimplexRootSupportApproxNash
               reward point.1 error point.2} by
       ext pair
-      simp only [QuittingCompactContinuationAdmissiblePairs, Set.mem_setOf_eq,
+      simp only [QuittingCompactContinuationAdmissiblePairs, Set.mem_ofPred_eq,
         Set.mem_inter_iff, Set.mem_preimage]
       tauto]
     exact hclosed

@@ -17,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open QuittingLCPClassification Math.LinearProgramming
 open scoped Topology
 
@@ -302,16 +302,16 @@ theorem exists_subsetPaidPort_of_negative_margin
     (retained : Finset ι) (payer : ι)
     (hmass : 0 < limit.subsetMass retained)
     (hrest : 0 < limit.subsetMass (retained.erase payer))
-    (hmargin : (∑ owner ∈ retained, limit.direction.val owner *
+    (hmargin : (∑ owner ∈ retained, limit.direction.weights owner *
       (quittingSoloReward reward owner payer - quittingSoloReward reward payer payer)) < 0) :
     Nonempty (StationaryOffMinimumQuitNowPort reward (limit.subsetRoot retained)) := by
-  have hsame : (∑ owner ∈ retained.erase payer, limit.direction.val owner *
+  have hsame : (∑ owner ∈ retained.erase payer, limit.direction.weights owner *
       (quittingSoloReward reward owner payer - quittingSoloReward reward payer payer)) =
-      ∑ owner ∈ retained, limit.direction.val owner *
+      ∑ owner ∈ retained, limit.direction.weights owner *
         (quittingSoloReward reward owner payer - quittingSoloReward reward payer payer) := by
     by_cases hmem : payer ∈ retained
     · have h := Finset.sum_erase_add retained
-        (fun owner ↦ limit.direction.val owner *
+        (fun owner ↦ limit.direction.weights owner *
           (quittingSoloReward reward owner payer - quittingSoloReward reward payer payer)) hmem
       simpa using h
     · simp [Finset.erase_eq_of_notMem hmem]
@@ -334,7 +334,7 @@ theorem exists_singletonSubsetPaidPort_with_blocker
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     (blockers : SingletonColumnBlockerCertificate reward)
-    {owner : ι} (hpositive : 0 < limit.direction.val owner) :
+    {owner : ι} (hpositive : 0 < limit.direction.weights owner) :
     ∃ port : StationaryOffMinimumQuitNowPort reward (limit.subsetRoot {owner}),
       port.payer = blockers.blocker owner ∧ blockers.gap / 2 ≤ port.gain := by
   have hmass : 0 < limit.subsetMass {owner} := by simpa [subsetMass] using hpositive
@@ -354,7 +354,7 @@ theorem exists_singletonSubsetPaidPort
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     (blockers : SingletonColumnBlockerCertificate reward)
-    {owner : ι} (hpositive : 0 < limit.direction.val owner) :
+    {owner : ι} (hpositive : 0 < limit.direction.weights owner) :
     Nonempty (StationaryOffMinimumQuitNowPort reward (limit.subsetRoot {owner})) := by
   obtain ⟨port, _, _⟩ := limit.exists_singletonSubsetPaidPort_with_blocker hno blockers hpositive
   exact ⟨port⟩
@@ -367,14 +367,14 @@ theorem pairSubset_paidDescent_of_positive_cross
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     (blockers : SingletonColumnBlockerCertificate reward)
     {first second : ι} (hne : first ≠ second)
-    (hfirst : 0 < limit.direction.val first) (hsecond : 0 < limit.direction.val second)
+    (hfirst : 0 < limit.direction.weights first) (hsecond : 0 < limit.direction.weights second)
     (hcross : 0 < quittingSoloReward reward second first - quittingSoloReward reward first first) :
     StationarySubsetPaidDescent limit {first, second} 2 := by
   have herase : ({first, second} : Finset ι).erase first = {second} := by simp [hne]
   have hrest : 0 < limit.subsetMass (({first, second} : Finset ι).erase first) := by
     simpa [herase, subsetMass] using hsecond
   have hmargin : 0 < ∑ owner ∈ ({first, second} : Finset ι).erase first,
-      limit.direction.val owner *
+      limit.direction.weights owner *
         (quittingSoloReward reward owner first - quittingSoloReward reward first first) := by
     simpa [herase] using mul_pos hsecond hcross
   obtain ⟨gain, hgain, hedge⟩ := limit.eventually_subsetNever_edge
@@ -391,7 +391,7 @@ theorem pairSubset_paidDescent_of_negative_cross
     (hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff)
     {first second : ι} (hne : first ≠ second)
-    (hfirst : 0 < limit.direction.val first) (hsecond : 0 < limit.direction.val second)
+    (hfirst : 0 < limit.direction.weights first) (hsecond : 0 < limit.direction.weights second)
     (hcross : quittingSoloReward reward second first - quittingSoloReward reward first first < 0) :
     StationarySubsetPaidDescent limit {first, second} 1 := by
   have herase : ({first, second} : Finset ι).erase first = {second} := by simp [hne]
@@ -399,7 +399,7 @@ theorem pairSubset_paidDescent_of_negative_cross
     simpa [subsetMass, Finset.sum_pair hne] using add_pos hfirst hsecond
   have hrest : 0 < limit.subsetMass (({first, second} : Finset ι).erase first) := by
     simpa [herase, subsetMass] using hsecond
-  have hmargin : (∑ owner ∈ ({first, second} : Finset ι), limit.direction.val owner *
+  have hmargin : (∑ owner ∈ ({first, second} : Finset ι), limit.direction.weights owner *
       (quittingSoloReward reward owner first - quittingSoloReward reward first first)) < 0 := by
     simpa [Finset.sum_pair hne] using mul_neg_of_pos_of_neg hsecond hcross
   exact .paid _ (limit.exists_subsetPaidPort_of_negative_margin
@@ -414,16 +414,16 @@ theorem exists_pairSubset_paidDescent
     (blockers : SingletonColumnBlockerCertificate reward)
     (hhom : ¬ SingletonLCPFeasible (normalizedSoloMatrix reward))
     {first second : ι} (hne : first ≠ second)
-    (hfirst : 0 < limit.direction.val first) (hsecond : 0 < limit.direction.val second) :
+    (hfirst : 0 < limit.direction.weights first) (hsecond : 0 < limit.direction.weights second) :
     ∃ steps ∈ ({1, 2} : Finset ℕ), StationarySubsetPaidDescent limit {first, second} steps := by
-  let mass := limit.direction.val first + limit.direction.val second
+  let mass := limit.direction.weights first + limit.direction.weights second
   have hmass : 0 < mass := add_pos hfirst hsecond
   have hmatrix (who owner : ι) : normalizedSoloMatrix reward who owner =
       quittingSoloReward reward owner who - quittingSoloReward reward who who := by
     rw [normalizedSoloMatrix_eq_projectiveLCPMatrix]
     rfl
   have hexit := twoPointMatrixExit_of_noHomogeneous (normalizedSoloMatrix reward) first second
-    (limit.direction.val first / mass) (limit.direction.val second / mass)
+    (limit.direction.weights first / mass) (limit.direction.weights second / mass)
     (div_nonneg hfirst.le hmass.le) (div_nonneg hsecond.le hmass.le)
     (by rw [← add_div]; exact div_self hmass.ne')
     (normalizedSoloMatrix_diagonal reward) hhom
@@ -445,8 +445,9 @@ theorem exists_pairSubset_paidDescent
         limit.pairSubset_paidDescent_of_negative_cross hno hne.symm
           hsecond hfirst (by rwa [hmatrix] at hcross)
   | outsiderNegative outsider houtside hresidual =>
-      have hres : (normalizedSoloMatrix reward outsider first * limit.direction.val first +
-          normalizedSoloMatrix reward outsider second * limit.direction.val second) / mass < 0 := by
+      have hres : (normalizedSoloMatrix reward outsider first * limit.direction.weights first +
+          normalizedSoloMatrix reward outsider second * limit.direction.weights second) /
+          mass < 0 := by
         simpa only [← mul_div_assoc, ← add_div] using hresidual
       have hnegative := (div_neg_iff.mp hres).resolve_left
         (fun h ↦ (not_lt_of_ge hmass.le) h.2) |>.1
@@ -454,7 +455,7 @@ theorem exists_pairSubset_paidDescent
         Finset.erase_eq_of_notMem houtside
       have hsubsetMass : 0 < limit.subsetMass {first, second} := by
         simpa [subsetMass, Finset.sum_pair hne] using hmass
-      have hmargin : (∑ owner ∈ ({first, second} : Finset ι), limit.direction.val owner *
+      have hmargin : (∑ owner ∈ ({first, second} : Finset ι), limit.direction.weights owner *
           (quittingSoloReward reward owner outsider -
             quittingSoloReward reward outsider outsider)) < 0 := by
         simpa only [Finset.sum_pair hne, hmatrix, mul_comm] using hnegative
@@ -482,7 +483,7 @@ theorem exists_support_paidDescent
     ∃ steps, StationarySupportDescentLength limit.positiveSupport.card steps ∧
       StationarySubsetPaidDescent limit limit.positiveSupport steps := by
   have hpositive {who : ι} (hwho : who ∈ limit.positiveSupport) :
-      0 < limit.direction.val who := (Finset.mem_filter.mp hwho).2
+      0 < limit.direction.weights who := (Finset.mem_filter.mp hwho).2
   by_cases htwo : limit.positiveSupport.card = 2
   · obtain ⟨first, hfirst, last, gain, hgain, herase, hedge⟩ :=
       limit.exists_chronological_Never_singletonDescent hminimum hcommon htwo

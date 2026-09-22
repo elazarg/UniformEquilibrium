@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -89,8 +89,8 @@ theorem continuous_quittingFixedOpponentsContinueMass_finitePath
       quittingFixedOpponentsContinueMass
         (quittingFiniteNashBellmanPathRoots cutoff path) who time) =
       fun path ↦ ∏ other ∈ (Finset.univ.erase who : Finset ι),
-        quittingFiniteNashBellmanPathSimplexRoot cutoff path time
-          other false := by
+        (quittingFiniteNashBellmanPathSimplexRoot cutoff path time
+          other).weights false := by
     funext path
     unfold quittingFixedOpponentsContinueMass
     rw [← quittingRootOfSimplex_finiteNashBellmanPathSimplexRoot]
@@ -99,10 +99,9 @@ theorem continuous_quittingFixedOpponentsContinueMass_finitePath
   rw [heq]
   apply continuous_finsetProd
   intro other _
-  exact (continuous_apply false).comp
-    (continuous_subtype_val.comp
-      ((continuous_apply other).comp
-        (continuous_quittingFiniteNashBellmanPathSimplexRoot cutoff time)))
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+    ((continuous_apply other).comp
+      (continuous_quittingFiniteNashBellmanPathSimplexRoot cutoff time))
 
 /-! ## Continuous exact Bellman recursion -/
 

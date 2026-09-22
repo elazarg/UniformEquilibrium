@@ -88,7 +88,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -362,6 +362,8 @@ theorem update_quittingStationaryProfile_alwaysContinue
     rfl
   · simp [Function.update_of_ne hplayer, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile]
+    change root player = root player
+    rfl
 
 /-- Leaving the exit set forever pays the reward of the set without the
 deviator. -/
@@ -413,7 +415,7 @@ theorem update_quittingStationaryProfile_pureSetRoot_of_erase_empty
       exact absurd this (Finset.notMem_empty player)
     simp only [Function.update_of_ne hplayer, quittingStationaryProfile,
       quittingAlwaysContinueProfile, StochasticGame.stationaryBehaviorProfile,
-      quittingPureSetRoot, quittingSetAction, hmem, if_false]
+      quittingPureSetRoot, quittingSetAction, hmem, ite_false]
     rfl
 
 /-- **No behavioral deviation beats the membership toggle.**  Against the

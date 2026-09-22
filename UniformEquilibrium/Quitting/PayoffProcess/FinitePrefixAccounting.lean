@@ -43,15 +43,15 @@ theorem QuittingPayoffProcess.integral_continueMass_conditionalContinuation_eq
         process.conditionalContinuation time nextValue ω who ∂process.μ) =
       ∫ ω, quittingStationaryContinueMass (root ω) *
         nextValue ω who ∂process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   let coefficient : process.Ω → ℝ := fun ω ↦
     quittingStationaryContinueMass (root ω)
   let continuation : process.Ω → ℝ := fun ω ↦ nextValue ω who
   have hcoefficient : StronglyMeasurable[process.filtration time] coefficient := by
     have hmeasurable : @Measurable process.Ω ℝ
         (process.filtration time) Real.measurableSpace coefficient := by
-      letI : MeasurableSpace process.Ω := process.filtration time
+      let : MeasurableSpace process.Ω := process.filtration time
       exact measurable_quittingStationaryContinueMass root hroot
     exact hmeasurable.stronglyMeasurable
   have hcoefficientAmbient : AEStronglyMeasurable coefficient process.μ :=
@@ -105,8 +105,8 @@ theorem QuittingPayoffProcess.integral_rootExpected_conditionalContinuation_eq
         ∂process.μ) =
       ∫ ω, quittingRootExpectedPayoff (process.payoff time ω)
         (nextValue ω) (root ω) who ∂process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   let absorbing : process.Ω → ℝ := fun ω ↦
     quittingRootAbsorbingContribution (process.payoff time ω) (root ω) who
   let coefficient : process.Ω → ℝ := fun ω ↦
@@ -136,7 +136,7 @@ theorem QuittingPayoffProcess.integral_rootExpected_conditionalContinuation_eq
   have hcoefficient : StronglyMeasurable[process.filtration time] coefficient := by
     have hmeasurable : @Measurable process.Ω ℝ
         (process.filtration time) Real.measurableSpace coefficient := by
-      letI : MeasurableSpace process.Ω := process.filtration time
+      let : MeasurableSpace process.Ω := process.filtration time
       exact measurable_quittingStationaryContinueMass root
         (fun player ↦ hroot player false)
     exact hmeasurable.stronglyMeasurable
@@ -179,8 +179,8 @@ theorem QuittingPayoffProcess.condExp_rootExpected_eq
         process.filtration time] =ᵐ[process.μ]
       fun ω ↦ quittingRootExpectedPayoff (process.payoff time ω)
         (process.conditionalContinuation time nextValue ω) (root ω) who := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   let absorbing : process.Ω → ℝ := fun ω ↦
     quittingRootAbsorbingContribution (process.payoff time ω) (root ω) who
   let coefficient : process.Ω → ℝ := fun ω ↦
@@ -194,7 +194,7 @@ theorem QuittingPayoffProcess.condExp_rootExpected_eq
   have habsorbingMeasurable :
       @Measurable process.Ω ℝ (process.filtration time)
         Real.measurableSpace absorbing := by
-    letI : MeasurableSpace process.Ω := process.filtration time
+    let : MeasurableSpace process.Ω := process.filtration time
     exact measurable_quittingRootAbsorbingContribution
       (process.payoff time) root
       (process.payoff_measurable_filtration time) hroot who
@@ -219,7 +219,7 @@ theorem QuittingPayoffProcess.condExp_rootExpected_eq
   have hcoefficient : StronglyMeasurable[process.filtration time] coefficient := by
     have hmeasurable : @Measurable process.Ω ℝ
         (process.filtration time) Real.measurableSpace coefficient := by
-      letI : MeasurableSpace process.Ω := process.filtration time
+      let : MeasurableSpace process.Ω := process.filtration time
       exact measurable_quittingStationaryContinueMass root
         (fun player ↦ hroot player false)
     exact hmeasurable.stronglyMeasurable
@@ -328,7 +328,7 @@ theorem QuittingPayoffProcess.finiteContinuationValue_measurable
   | zero => exact hterminal
   | succ fuel ih =>
       intro player
-      letI : MeasurableSpace process.Ω := process.measurableSpace
+      let : MeasurableSpace process.Ω := process.measurableSpace
       exact measurable_quittingRootExpectedPayoff
         (process.payoff start)
         (process.finiteContinuationValue roots terminalValue
@@ -359,7 +359,7 @@ theorem QuittingPayoffProcess.finiteContinuationValue_integrable
   | zero => exact hterminal
   | succ fuel ih =>
       intro player
-      letI : MeasurableSpace process.Ω := process.measurableSpace
+      let : MeasurableSpace process.Ω := process.measurableSpace
       obtain ⟨bound, hbound, hreward⟩ := process.integrableEnvelope
       let envelope : process.Ω → ℝ := fun ω ↦
         bound ω + ∑ nextPlayer,
@@ -414,8 +414,8 @@ theorem QuittingPayoffProcess.condExp_finiteContinuationValue_eq_backward
           start depth ω player | process.filtration start] =ᵐ[process.μ]
         fun ω ↦ process.finiteBackwardValue cutoff hδ
           (process.cutoffConditionalValue cutoff tailValue) depth ω player := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   intro start depth
   induction depth generalizing start with
   | zero =>
@@ -527,8 +527,8 @@ theorem QuittingPayoffProcess.integral_finiteContinuationValue_eq_backward
       ∫ ω, process.finiteBackwardValue cutoff hδ
         (process.cutoffConditionalValue cutoff tailValue) cutoff ω player
         ∂process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   have hconditional :=
     process.condExp_finiteContinuationValue_eq_backward cutoff hδ
       tailValue htailMeasurable htail 0 cutoff (by omega) player

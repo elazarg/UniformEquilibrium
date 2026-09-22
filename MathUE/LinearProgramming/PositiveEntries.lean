@@ -50,7 +50,9 @@ theorem isR0Matrix_of_strictQuadratic
   have hsumZero : (∑ i, z i * ∑ j, z j * B i j) = 0 := by
     apply Finset.sum_eq_zero
     intro i _
-    simpa [lcpResidual_zero] using hz.complementary i
+    have hc : z i * ((0 : I → ℝ) i + ∑ j, z j * B i j) = 0 :=
+      hz.complementary i
+    simpa only [Pi.zero_apply, zero_add] using hc
   have hzero : z = 0 := by
     by_contra hne
     have := hstrict z hz.weight_nonneg hne

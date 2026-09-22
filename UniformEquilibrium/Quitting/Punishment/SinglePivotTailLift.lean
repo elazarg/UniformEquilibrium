@@ -34,7 +34,7 @@ theorem exists_singlePivot_samePrefix_terminal_lift
     (hreach : quittingLiveMassLimit
       (quittingSinglePivotNormalizedReward reward pivot) profile < reach)
     (hslack : 0 < slack) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     ∃ cutoff : ℕ, ∃ target : ι, ∃ root : ι → PMF Bool,
       quittingStationaryUnilateralCap reward root target <
         quittingPunishmentValue reward target + slack / 2 ∧
@@ -52,7 +52,7 @@ theorem exists_singlePivot_samePrefix_terminal_lift
           quittingSoloReward reward pivot pivot •
             quittingTerminalPayoff (quittingSinglePivotNormalizedReward reward pivot) profile)‖ ≤
         2 * bound * reach := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   have hbound : 0 ≤ bound :=
     (abs_nonneg _).trans (hreward (quittingSingletonTerminal pivot) pivot)
   have hreach' : quittingLiveMassLimit reward profile < reach := by

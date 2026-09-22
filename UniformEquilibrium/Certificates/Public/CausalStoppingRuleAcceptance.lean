@@ -23,7 +23,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace CausalStoppingRuleAcceptance
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A one-player, one-state, one-action stochastic game. -/
 def game : StochasticGame Unit where

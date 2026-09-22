@@ -234,7 +234,7 @@ theorem tendsto_survival_zero_of_tendsto_sum_atTop (hazard : ScalarHazard)
     calc
       (∏ i ∈ Finset.range n, (1 - hazard.stop i)) ≤
           ∏ i ∈ Finset.range n, Real.exp (-hazard.stop i) := by
-        apply Finset.prod_le_prod
+        apply Finset.prod_le_prod₀
         · intro i hi
           exact sub_nonneg.mpr (hazard.stop_le_one i)
         · intro i hi

@@ -24,7 +24,7 @@ noncomputable section
 namespace GameTheory
 
 open Finset
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open Math.LinearProgramming.FlowCostateDuality
 open Math.ProbabilityMassFunction
 open QuittingFiniteDynamicDebtAdmissibleChronology
@@ -59,11 +59,9 @@ private theorem chargesFrom_subset_of_payoff_eq
             · rw [← hpayoff]
               exact edge.exactEdge.2 }
       refine ⟨_, .cons rerooted rest, ?_⟩
-      simp [rerooted, AdmissibleRelation,
-        quittingPunishmentFloorAdmissibleChargedRelation,
-        QuittingPunishmentFloorAdmissibleEdge.toBoxEdge,
-        QuittingPunishmentFloorBoxEdge.absorptionCharge,
-        QuittingPunishmentFloorBoxEdge.root]
+      change (AdmissibleRelation reward).charge rerooted + rest.chargeSum =
+        (AdmissibleRelation reward).charge edge + rest.chargeSum
+      congr 1
 
 /-- The full floor-admissible path potential depends only on the payoff
 coordinate, not on the product root stored alongside it.  The empty path is

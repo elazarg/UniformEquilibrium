@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -444,11 +444,11 @@ theorem sum_conditionedCoalitionMass_mul_stagePayoff_eq_conditionedValue
           apply Finset.sum_congr rfl
           intro coalition hcoalition
           have hne : coalition ≠ ∅ := Finset.ne_of_mem_erase hcoalition
-          simp only [quittingTailConditionedCoalitionMass, hne, if_false]
+          simp only [quittingTailConditionedCoalitionMass, hne, ite_false]
           ring
         _ = _ := by rw [habsorbing]
     rw [herase]
-    simp only [quittingTailConditionedCoalitionMass, if_pos,
+    simp only [quittingTailConditionedCoalitionMass, ite_eq_left,
       quittingStageCoalitionPayoff, Finset.not_nonempty_empty, dite_false]
     dsimp only [currentScale, nextScale, continueMass]
     ring

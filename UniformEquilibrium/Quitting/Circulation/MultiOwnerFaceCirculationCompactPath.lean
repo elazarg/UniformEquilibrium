@@ -40,7 +40,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Filter StochasticGame Math.Probability Math.PMFProduct
+open Finset Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -73,10 +73,10 @@ def IsQuittingSimplexRootSupportApproxNash
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) (δ : ℝ) (root : QuittingRootSimplex ι) : Prop :=
   ∀ who,
-    (root who true = 0 ∨
+    ((root who).weights true = 0 ∨
       -δ ≤ quittingRootEndpointDifference reward tail
         (quittingRootOfSimplex root) who) ∧
-    (root who false = 0 ∨
+    ((root who).weights false = 0 ∨
       quittingRootEndpointDifference reward tail
         (quittingRootOfSimplex root) who ≤ δ)
 
@@ -101,15 +101,15 @@ theorem isQuittingSimplexRootSupportApproxNash_iff
         linarith
       · exact hgap
   · intro hsupport who
-    have htrue0 : 0 ≤ root who true := (root who).property.1 true
-    have hfalse0 : 0 ≤ root who false := (root who).property.1 false
+    have htrue0 : 0 ≤ (root who).weights true := (root who).weights_nonneg true
+    have hfalse0 : 0 ≤ (root who).weights false := (root who).weights_nonneg false
     constructor
-    · by_cases hzero : root who true = 0
+    · by_cases hzero : (root who).weights true = 0
       · exact Or.inl hzero
       · refine Or.inr ((hsupport who).1 ?_)
         rw [quittingRootOfSimplex_apply_toReal]
         exact lt_of_le_of_ne htrue0 (Ne.symm hzero)
-    · by_cases hzero : root who false = 0
+    · by_cases hzero : (root who).weights false = 0
       · exact Or.inl hzero
       · refine Or.inr ((hsupport who).2 ?_)
         rw [quittingRootOfSimplex_apply_toReal]
@@ -123,17 +123,15 @@ theorem isClosed_isQuittingSimplexRootSupportApproxNash
       IsQuittingSimplexRootSupportApproxNash reward point.1 δ point.2} := by
   have hcoordinate : ∀ who : ι,
       Continuous (fun point : Payoff ι × QuittingRootSimplex ι =>
-        point.2 who true) ∧
+        (point.2 who).weights true) ∧
       Continuous (fun point : Payoff ι × QuittingRootSimplex ι =>
-        point.2 who false) := by
+        (point.2 who).weights false) := by
     intro who
     constructor
-    · exact (continuous_apply true).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply who).comp continuous_snd))
-    · exact (continuous_apply false).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply who).comp continuous_snd))
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        ((continuous_apply who).comp continuous_snd)
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+        ((continuous_apply who).comp continuous_snd)
   have hgap : ∀ who : ι, Continuous
       (fun point : Payoff ι × QuittingRootSimplex ι =>
         quittingRootEndpointDifference reward point.1
@@ -141,12 +139,12 @@ theorem isClosed_isQuittingSimplexRootSupportApproxNash
     continuous_quittingRootEndpointDifference_simplex reward
   have hclosedWho : ∀ who : ι, IsClosed
       (({point : Payoff ι × QuittingRootSimplex ι |
-          point.2 who true = 0} ∪
+          (point.2 who).weights true = 0} ∪
         {point |
           -δ ≤ quittingRootEndpointDifference reward point.1
             (quittingRootOfSimplex point.2) who}) ∩
        ({point |
-          point.2 who false = 0} ∪
+          (point.2 who).weights false = 0} ∪
         {point |
           quittingRootEndpointDifference reward point.1
             (quittingRootOfSimplex point.2) who ≤ δ})) := by
@@ -157,12 +155,12 @@ theorem isClosed_isQuittingSimplexRootSupportApproxNash
         (isClosed_le (hgap who) continuous_const))
   have hinter : IsClosed (⋂ who : ι,
       (({point : Payoff ι × QuittingRootSimplex ι |
-          point.2 who true = 0} ∪
+          (point.2 who).weights true = 0} ∪
         {point |
           -δ ≤ quittingRootEndpointDifference reward point.1
             (quittingRootOfSimplex point.2) who}) ∩
        ({point |
-          point.2 who false = 0} ∪
+          (point.2 who).weights false = 0} ∪
         {point |
           quittingRootEndpointDifference reward point.1
             (quittingRootOfSimplex point.2) who ≤ δ}))) :=
@@ -171,12 +169,12 @@ theorem isClosed_isQuittingSimplexRootSupportApproxNash
       IsQuittingSimplexRootSupportApproxNash reward point.1 δ point.2} =
       ⋂ who : ι,
         (({point : Payoff ι × QuittingRootSimplex ι |
-            point.2 who true = 0} ∪
+            (point.2 who).weights true = 0} ∪
           {point |
             -δ ≤ quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who}) ∩
          ({point |
-            point.2 who false = 0} ∪
+            (point.2 who).weights false = 0} ∪
           {point |
             quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who ≤ δ})) := by

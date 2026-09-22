@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct Set
+open Filter _root_.Math.Probability Math.PMFProduct Set
 open QuittingLCPClassification QuittingSureSetOwnerRepair
 
 namespace FinFourEventualAllContinueLocalRegression
@@ -269,6 +269,7 @@ theorem payerEndpoint_opponent_eq (other : Player) (hother : other ≠ 2) :
   | zero =>
       simp [payerEndpointProfile, pairProfile, quittingRootThenContinuationProfile,
         quittingPureSetRoot, quittingSetAction, pairTerminal, hother]
+      rfl
   | succ time =>
       simp [payerEndpointProfile, pairProfile, quittingRootThenContinuationProfile]
 

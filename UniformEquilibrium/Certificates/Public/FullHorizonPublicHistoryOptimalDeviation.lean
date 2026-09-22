@@ -34,7 +34,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -153,7 +153,7 @@ theorem worstUnilateralHistoryPotential_optimalDeviation_harmonic
     simpa [node] using time_lt
   simp only [
     boundedPublicHistoryControlledKernel,
-    dif_pos node_strict
+    dite_eq_left node_strict
   ] at harmonic
   rw [expect_bind] at harmonic
   dsimp [node] at harmonic

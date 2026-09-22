@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 open scoped BigOperators
 
 /-- Supplied normalized data for a strict incoming dropout from a triple to a

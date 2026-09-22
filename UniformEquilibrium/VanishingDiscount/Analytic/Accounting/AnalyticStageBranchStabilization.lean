@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.LinearAlgebra Set
+open Filter _root_.Math Math.LinearAlgebra Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

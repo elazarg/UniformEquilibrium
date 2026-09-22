@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -1114,7 +1114,7 @@ theorem stationarilyGenerated_of_arbitrarilySmallNormalizedMotionRows
       habsorption, hmotion⟩ := hsource upper hupper
   obtain ⟨player, _hplayer⟩ :=
     exists_quitProbability_pos_of_absorptionMass_pos root habsorption
-  letI : Nonempty ι := ⟨player⟩
+  let : Nonempty ι := ⟨player⟩
   have herrorNoSure : error ≤ noSureScale := by
     exact herrorUpper.le.trans (min_le_left _ _)
   have hnoSure : ¬QuittingRootHasSureQuitter root :=

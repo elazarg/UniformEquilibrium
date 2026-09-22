@@ -36,7 +36,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A recurrent child selected from a parent node.
 

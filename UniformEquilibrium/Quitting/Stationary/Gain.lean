@@ -86,7 +86,7 @@ theorem stationaryQuittingGain_weightedSigns_iff
 
 /-! ## Game-facing stationary quantities -/
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -123,7 +123,7 @@ theorem quittingRootAbsorptionMass_eq_one_sub_continueProbability_mul
     quittingStationaryContinueMass
   rw [pmfPi_apply, pmfPi_apply_update_family]
   simp only [quittingAllContinueAction, ENNReal.toReal_prod, PMF.pure_apply,
-    if_true, one_mul, sub_right_inj]
+    ite_true, one_mul, sub_right_inj]
   exact prod_factor_erase
     (fun player action => ((root player) action).toReal) who
     (quittingAllContinueAction : ι → Bool)

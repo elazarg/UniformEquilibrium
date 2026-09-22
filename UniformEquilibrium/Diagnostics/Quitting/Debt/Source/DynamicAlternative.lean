@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.LinearProgramming.FlowCostateDuality Math.Probability
+open Math.LinearProgramming.FlowCostateDuality _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

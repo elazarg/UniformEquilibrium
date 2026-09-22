@@ -25,7 +25,7 @@ open Finset Math.LinearProgramming
 all active coordinates and tangency at at least one active coordinate. -/
 structure PrincipalQDirection {ι : Type} (M : ι → ι → ℝ)
     (players : Finset ι) where
-  weight : stdSimplex ℝ players
+  weight : Convexity.StdSimplex ℝ players
   residual_nonneg : ∀ who : players,
     0 ≤ singletonLCPResidual (principalMatrix M players) weight who
   residual_zero : ∃ who : players,
@@ -63,16 +63,17 @@ private def normalizeProjectiveSingleton
     {κ : Type} [Fintype κ]
     {M : κ → κ → ℝ} {q : κ → ℝ}
     (solution : ProjectiveLCPSolution M q)
-    (hc : solution.cemetery < 1) : stdSimplex ℝ κ where
-  val := fun i => solution.singleton i / (1 - solution.cemetery)
-  property := by
-    constructor
-    · intro i
-      exact div_nonneg (solution.singleton_nonneg i) (sub_nonneg.mpr hc.le)
-    · rw [← Finset.sum_div]
-      have hden : 1 - solution.cemetery ≠ 0 := ne_of_gt (sub_pos.mpr hc)
-      apply (div_eq_iff hden).2
-      linarith [solution.total]
+    (hc : solution.cemetery < 1) : Convexity.StdSimplex ℝ κ where
+  weights := Finsupp.equivFunOnFinite.symm fun i =>
+    solution.singleton i / (1 - solution.cemetery)
+  nonneg := by
+    intro i
+    exact div_nonneg (solution.singleton_nonneg i) (sub_nonneg.mpr hc.le)
+  total := by
+    rw [Finsupp.equivFunOnFinite_symm_sum, ← Finset.sum_div]
+    have hden : 1 - solution.cemetery ≠ 0 := ne_of_gt (sub_pos.mpr hc)
+    apply (div_eq_iff hden).2
+    linarith [solution.total]
 
 private theorem normalizeProjectiveSingleton_residual
     {κ : Type} [Fintype κ]
@@ -125,7 +126,7 @@ theorem exists_principalQDirection
   obtain ⟨solution⟩ := hQ q
   have hc : solution.cemetery < 1 :=
     projective_cemetery_lt_one (principalMatrix M players) i0 solution
-  let weight : stdSimplex ℝ players :=
+  let weight : Convexity.StdSimplex ℝ players :=
     normalizeProjectiveSingleton solution hc
   have hresFormula (who : players) :
       singletonLCPResidual (principalMatrix M players) weight who =

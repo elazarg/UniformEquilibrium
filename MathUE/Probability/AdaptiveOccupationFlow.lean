@@ -129,7 +129,7 @@ theorem selectedMass_mul_margin_le_expect_bind_sub
       expect (selection.bind kernel) potential -
         potential current := by
   classical
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   have hcomponent_nonneg :
       ∀ i,
         0 ≤ (selection i).toReal *
@@ -252,14 +252,14 @@ theorem selectedTransitionUseCount_mul_margin_le_conditionalMeanSum
               expect (kernel chosen) potential -
                 potential (source chosen) := by
           simpa [hchosen] using hmargin
-        simp only [chosen, hchosen, if_true]
+        simp only [chosen, hchosen, ite_true]
         linarith
       · have hstep :
             0 ≤
               expect (kernel chosen) potential -
                 potential (source chosen) :=
           hdrift chosen
-        simp only [chosen, hchosen, if_false, add_zero]
+        simp only [chosen, hchosen, ite_false, add_zero]
         linarith
 
 /-- Every finite-history conditional-mean sum pays `eta` times the

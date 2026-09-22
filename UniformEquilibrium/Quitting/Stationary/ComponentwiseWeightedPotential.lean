@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.SCC
+import Maths.Multitubes.SCC
 import MathUE.FiniteBinaryWeightedPotential
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.CycleCoboundary Math.DirectedTransport MathUE
+open _root_.Math Maths MathUE
   QuittingSureSetOwnerRepair
 open scoped BigOperators
 
@@ -200,13 +200,13 @@ theorem exists_isQuittingSureExitSet_of_componentwiseWeightedPotential
   constructor
   · intro who hwho
     have hgain := hstable who
-    rw [if_pos hwho] at hgain
+    rw [ite_eq_left hwho] at hgain
     unfold payoff binaryJoinGain at hgain
     rw [Finset.insert_eq_self.mpr hwho] at hgain
     linarith
   · intro who hwho
     have hgain := hstable who
-    rw [if_neg hwho] at hgain
+    rw [ite_eq_right hwho] at hgain
     unfold payoff binaryJoinGain at hgain
     rw [Finset.erase_eq_of_notMem hwho] at hgain
     linarith

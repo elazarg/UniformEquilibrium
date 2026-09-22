@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace FixedPrefixSameTableGlobalComparison
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open FixedPrefixArbitraryTailBarrier
 
 abbrev Player := FixedPrefixArbitraryTailBarrier.Player
@@ -217,7 +217,7 @@ theorem soloRoots_opponentSurvival_one
         (soloRoots length) (soloRoots_solo length phase)
         (by norm_num : (1 : Player) ≠ 0)]
       rw [soloRoots_zero_false_toReal]
-      simp only [uniformHazard, if_pos hphaseLt]
+      simp only [uniformHazard, ite_eq_left hphaseLt]
       rw [hsubSucc, Nat.cast_sub (by omega : 1 ≤ length - phase),
         Nat.cast_one, hcastSub]
       field_simp [show (length : ℝ) ≠ 0 by exact_mod_cast ne_of_gt hlength,
@@ -286,7 +286,7 @@ theorem pureTimeValue_one_eq
   simp only [Nat.zero_add]
   rw [soloRoots_opponentSurvival_one length phase hlength hphase.le,
     soloRoots_zero_false_toReal, soloRoots_zero_true_toReal]
-  simp only [uniformHazard, if_pos hphase]
+  simp only [uniformHazard, ite_eq_left hphase]
   simp [quittingSoloReward, quittingSingletonCollisionReward, reward]
   have hlengthNe : (length : ℝ) ≠ 0 := by
     exact_mod_cast ne_of_gt hlength
@@ -458,8 +458,8 @@ theorem profile_exploitability
       2 / length
     rw [profile_debt length hlength who]
     by_cases hwho : who = 0
-    · rw [if_pos hwho, max_eq_right herror]
-    · rw [if_neg hwho]
+    · rw [ite_eq_left hwho, max_eq_right herror]
+    · rw [ite_eq_right hwho]
       simpa only [max_self] using herror
   · have hmax := QuittingBoundaryHolonomy.le_finitePlayerMax
       (fun who : Player ↦ max 0 (quittingTerminalSemanticDebt
@@ -470,7 +470,7 @@ theorem profile_exploitability
     rw [show quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward (profile length)) 0 =
           quittingTerminalDeviationDebt reward (profile length) 0 by rfl,
-      profile_debt length hlength 0, if_pos rfl, max_eq_right herror] at hmax
+      profile_debt length hlength 0, ite_eq_left rfl, max_eq_right herror] at hmax
     exact hmax
 
 /-- Exact executable exploitability of the comparison profile. -/
@@ -492,9 +492,9 @@ theorem profile_isTerminalNash
   have hdebt := profile_debt length hlength who
   unfold quittingTerminalDeviationDebt at hdebt
   by_cases hwho : who = 0
-  · rw [if_pos hwho] at hdebt
+  · rw [ite_eq_left hwho] at hdebt
     linarith
-  · rw [if_neg hwho] at hdebt
+  · rw [ite_eq_right hwho] at hdebt
     have herror : (0 : ℝ) ≤ 2 / length := by positivity
     linarith
 

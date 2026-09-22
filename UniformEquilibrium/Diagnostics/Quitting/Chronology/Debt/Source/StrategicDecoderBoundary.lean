@@ -46,7 +46,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.LinearProgramming.FlowCostateDuality
+open Filter _root_.Math.Probability Math.LinearProgramming.FlowCostateDuality
 open scoped Topology
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]

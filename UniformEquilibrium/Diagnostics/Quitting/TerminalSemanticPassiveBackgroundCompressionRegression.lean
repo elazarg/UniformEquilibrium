@@ -35,7 +35,7 @@ noncomputable section
 namespace GameTheory
 
 open Equiv
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 namespace QuittingPassiveBackgroundCompressionRegression
@@ -128,7 +128,7 @@ theorem rawReward_eq_neg_one_iff (next : ι ≃ ι) (bonus : ι → ℝ)
   by_cases hexception : terminal = punishmentPit next who ∨
       terminal = punishmentJoin next who
   · simp [hexception]
-  · rw [if_neg hexception]
+  · rw [ite_eq_right hexception]
     have hnonneg : 0 ≤
         (if next who ∈ terminal then (1 / 2 : ℝ) else 0) +
           if terminal = Finset.univ then bonus who else 0 := by
@@ -534,7 +534,7 @@ theorem deleted_punishmentValue_eq_zero (next : ι ≃ ι) (bonus : ι → ℝ)
       deletedReward_active_singleton_eq_zero next bonus who background hmove
         hbackground, max_eq_left (le_refl 0)] at hupper
     exact hupper
-  · haveI : Nonempty
+  · have : Nonempty
         ({player : ι // player ≠ background} → PMF Bool) :=
       ⟨fun _ => PMF.pure false⟩
     apply le_ciInf
@@ -582,7 +582,7 @@ theorem punishmentValue_eq_neg_one (next : ι ≃ ι) (bonus : ι → ℝ)
   · have hupper := quittingStationaryPunishmentValue_le
       (reward next bonus) who (quittingPureSetRoot (punishmentPit next who))
     rwa [punishmentPit_unilateralCap next bonus who hcard hmove] at hupper
-  · haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  · have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
     apply le_ciInf
     intro root
     exact le_quittingStationaryUnilateralCap_of_forall_le

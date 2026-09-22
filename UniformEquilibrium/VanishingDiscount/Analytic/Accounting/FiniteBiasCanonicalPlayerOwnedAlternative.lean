@@ -37,7 +37,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace FiniteBiasSeed
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

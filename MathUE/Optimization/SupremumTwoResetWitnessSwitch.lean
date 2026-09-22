@@ -8,7 +8,7 @@ import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Algebra.Order.Archimedean.Real.Basic
 import Mathlib.Data.Set.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import MathUE.Finset.CubicalResetIntegrability
@@ -392,9 +392,9 @@ theorem finiteCube_commonPassport_or_edgeWitnessSwitch
       exact le_of_not_gt (not_exists.mp hbad face)
     intro face
     by_cases hfaceEmpty : face = ∅
-    · simp only [hfaceEmpty, if_pos]
+    · simp only [hfaceEmpty, ite_eq_left]
       exact hbaseRegret Finset.univ
-    · rw [if_neg hfaceEmpty]
+    · rw [ite_eq_right hfaceEmpty]
       have hfaceNonempty : face.Nonempty := Finset.nonempty_iff_ne_empty.mpr hfaceEmpty
       have hcoordinateNonempty : Nonempty Coordinate := by
         obtain ⟨coordinate, _hcoordinate⟩ := hfaceNonempty

@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -101,7 +101,7 @@ theorem normalized_expect_Ico_sub_le_add_of_boundedBelow
             charge base (rootTime - stop base)) ≤
       error + (total : ℝ)⁻¹ * ((fuel : ℝ) * bound) := by
   classical
-  letI : Fintype Base := Fintype.ofFinite Base
+  let : Fintype Base := Fintype.ofFinite Base
   have sum_expect :
       ∑ rootTime ∈ Finset.Ico fuel total,
           expect law (fun base =>

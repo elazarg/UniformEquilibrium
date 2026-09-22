@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability FinFourQuantitativeFullSupportHardResidual
+open Filter _root_.Math.Probability FinFourQuantitativeFullSupportHardResidual
 open scoped Topology
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}

@@ -42,9 +42,9 @@ theorem continuous_idealSingletonSemanticPair_retention
     intro who
     by_cases hwho : who = owner
     · subst who
-      simp only [idealSingletonClearance, if_pos]
+      simp only [idealSingletonClearance, ite_eq_left]
       fun_prop
-    · simp only [idealSingletonClearance, if_neg hwho]
+    · simp only [idealSingletonClearance, ite_eq_right hwho]
       fun_prop
 
 /-- Retentions `1/(n+1)` approach the reset endpoint through `(0,1]`. -/

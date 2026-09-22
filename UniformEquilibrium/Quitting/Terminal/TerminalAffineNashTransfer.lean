@@ -51,9 +51,15 @@ theorem isεAsymptoticNash_playerwiseScale
       (quittingTerminalPayoff
         (quittingPlayerwiseAffineReward reward scale 0)) η profile := by
   intro who deviation
-  have h := hnash who deviation
-  rw [quittingTerminalPayoff_playerwiseAffine,
-    quittingTerminalPayoff_playerwiseAffine]
+  let transformed := quittingPlayerwiseAffineReward reward scale 0
+  let baseDeviation : (quittingGame reward).BehaviorStrategy who := deviation
+  let updated : (quittingGame reward).BehaviorProfile :=
+    Function.update profile who baseDeviation
+  have h := hnash who baseDeviation
+  change quittingTerminalPayoff transformed updated who ≤
+    quittingTerminalPayoff transformed profile who + η
+  rw [quittingTerminalPayoff_playerwiseAffine reward scale 0 updated who,
+    quittingTerminalPayoff_playerwiseAffine reward scale 0 profile who]
   simp only [Pi.zero_apply, zero_mul, add_zero]
   calc
     scale who * quittingTerminalPayoff reward
@@ -78,9 +84,15 @@ theorem IsεAsymptoticNash.of_nonnegative_terminalShift
     (quittingGame reward).IsεAsymptoticNash
       (quittingTerminalPayoff reward) (ε + shiftBound) profile := by
   intro who deviation
-  have h := hnash who deviation
-  rw [quittingTerminalPayoff_playerwiseAffine,
-    quittingTerminalPayoff_playerwiseAffine] at h
+  let transformed := quittingPlayerwiseAffineReward reward 1 shift
+  let affineDeviation : (quittingGame transformed).BehaviorStrategy who := deviation
+  let updated : (quittingGame reward).BehaviorProfile :=
+    Function.update profile who deviation
+  have h := hnash who affineDeviation
+  change quittingTerminalPayoff transformed updated who ≤
+    quittingTerminalPayoff transformed profile who + ε at h
+  rw [quittingTerminalPayoff_playerwiseAffine reward 1 shift updated who,
+    quittingTerminalPayoff_playerwiseAffine reward 1 shift profile who] at h
   simp only [Pi.one_apply, one_mul] at h
   have hplan := one_sub_quittingLiveMassLimit_mem_Icc reward profile
   have hdeviation := one_sub_quittingLiveMassLimit_mem_Icc reward

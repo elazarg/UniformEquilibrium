@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability QuittingSureSetOwnerRepair
+open _root_.Math.Probability QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 namespace QuittingCommonWitnessNoncompositionality
@@ -436,6 +436,7 @@ theorem pureTime_one_eq_rootAndContinuation :
       cases time <;>
         simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
           quittingRootAndContinuationDeviation]
+      all_goals rfl
 
 theorem pureTime_zero_continuation_payoff :
     quittingTerminalPayoff reward

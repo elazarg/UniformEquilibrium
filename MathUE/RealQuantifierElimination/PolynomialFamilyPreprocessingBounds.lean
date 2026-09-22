@@ -6,7 +6,7 @@ import MathUE.RealQuantifierElimination.PolynomialFamilyReduction
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 
 namespace CoefficientSignBranch
 

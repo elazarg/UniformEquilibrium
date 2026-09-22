@@ -40,7 +40,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 namespace QuittingCommonSuffixCurvatureRegression

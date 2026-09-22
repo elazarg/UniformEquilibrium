@@ -89,12 +89,12 @@ theorem boxComplementarityFinLabel_meshOneCornerChain
     have hindex := index.isLt
     simp only [Fin.val_rev] at hlt
     unfold boxComplementarityMeshOneCornerChain
-    rw [if_neg (by omega)]
+    rw [ite_eq_right (by omega)]
   · intro who heq
     have hindex := index.isLt
     simp only [Fin.val_rev] at heq
     unfold boxComplementarityMeshOneCornerChain
-    rw [if_pos (by omega)]
+    rw [ite_eq_left (by omega)]
 
 /-- Along a mesh-one simplex, the actual finite labels are antitone. -/
 theorem boxComplementarityFinLabel_antitone_of_meshOneSimplex
@@ -215,16 +215,17 @@ private theorem meshOneLabelOrderedMatrix_det :
     | zero => rfl
     | succ who =>
         change (if n ≤ who.val then (1 : ℤ) else 0) = 0
-        exact if_neg (Nat.not_le.mpr who.isLt)
+        exact ite_eq_right (Nat.not_le.mpr who.isLt)
   have hminor : matrix.submatrix (Fin.last n).succAbove (0 : Fin (n + 1)).succAbove =
       upper := by
+    rw [Fin.succAbove_last, Fin.succAbove_zero]
     ext row column
-    simp [matrix, upper]
+    rfl
   have htriangular : upper.BlockTriangular id := by
     intro row column hlt
-    exact if_neg (by change column.val < row.val at hlt; omega)
+    exact ite_eq_right (by change column.val < row.val at hlt; omega)
   have hdetUpper : upper.det = 1 := by
-    rw [Matrix.det_of_upperTriangular htriangular]
+    rw [Matrix.det_of_isUpperTriangular htriangular]
     simp [upper]
   change matrix.det = _
   rw [Matrix.det_succ_row matrix (Fin.last n), Fin.sum_univ_succ]
@@ -301,8 +302,9 @@ theorem BoxComplementarityProblem.rawLocalDegree_univ_eq_neg_one_pow
 theorem BoxComplementarityProblem.localDegree_univ_eq_one
     (problem : BoxComplementarityProblem (Fin n)) :
     problem.localDegree univ (by simp [IsIsolating]) = 1 := by
-  rw [localDegree, rawLocalDegree_univ_eq_neg_one_pow, ← mul_pow]
+  unfold localDegree
+  have hraw := problem.rawLocalDegree_univ_eq_neg_one_pow
+  rw [hraw, ← mul_pow]
   simp
 
 end Math
-

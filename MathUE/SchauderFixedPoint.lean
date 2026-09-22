@@ -11,6 +11,7 @@ import Mathlib.Dynamics.FixedPoints.Basic
 import Mathlib.Topology.MetricSpace.Pseudo.Basic
 import Mathlib.Topology.Sequences
 import FixedPointTheorems.brouwer
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Schauder fixed-point theorem
@@ -48,6 +49,7 @@ This file follows Mathlib conventions and is aimed at upstream contribution as
 namespace Math.Schauder
 
 open Set Metric Filter Topology
+open GameTheory.Math.Probability
 
 variable {X : Type*} [NormedAddCommGroup X] [NormedSpace ℝ X]
 
@@ -110,9 +112,10 @@ lemma continuous_bary (y : Fin m → X) : Continuous (bary y) :=
 
 /-- A convex combination of points in a convex set `K` stays in `K`. -/
 lemma bary_mem_of_simplex {K : Set X} (hK : Convex ℝ K) {y : Fin m → X}
-    (hy : ∀ i, y i ∈ K) {w : Fin m → ℝ} (hw : w ∈ stdSimplex ℝ (Fin m)) :
+    (hy : ∀ i, y i ∈ K) {w : Fin m → ℝ} (hw : w ∈ simplexWeights (Fin m)) :
     bary y w ∈ K :=
-  hK.sum_mem (fun i _ => hw.1 i) hw.2 (fun i _ => hy i)
+  hK.sum_mem (fun i _ => (mem_simplexWeights.mp hw).1 i)
+    (mem_simplexWeights.mp hw).2 (fun i _ => hy i)
 
 /-- The Schauder weight `i ↦ φᵢ(x) / S(x)`. -/
 noncomputable def weights (ε : ℝ) (y : Fin m → X) (x : X) : Fin m → ℝ :=
@@ -120,7 +123,8 @@ noncomputable def weights (ε : ℝ) (y : Fin m → X) (x : X) : Fin m → ℝ :
 
 omit [NormedSpace ℝ X] in
 lemma weights_mem_stdSimplex {ε : ℝ} {y : Fin m → X} {x : X}
-    (hpos : 0 < bumpSum ε y x) : weights ε y x ∈ stdSimplex ℝ (Fin m) := by
+    (hpos : 0 < bumpSum ε y x) : weights ε y x ∈ simplexWeights (Fin m) := by
+  rw [mem_simplexWeights]
   refine ⟨fun _ => div_nonneg (bump_nonneg _ _ _) hpos.le, ?_⟩
   rw [show (∑ i, weights ε y x i) = (∑ i, bump ε (y i) x) / bumpSum ε y x from
     (Finset.sum_div _ _ _).symm]
@@ -141,8 +145,8 @@ of its input. -/
 lemma norm_proj_sub_le (ε : ℝ) (y : Fin m → X) {x : X}
     (hpos : 0 < bumpSum ε y x) : ‖proj ε y x - x‖ ≤ ε := by
   have hw_mem := weights_mem_stdSimplex hpos
-  have hw_nn : ∀ i, 0 ≤ weights ε y x i := hw_mem.1
-  have hw_sum : ∑ i, weights ε y x i = 1 := hw_mem.2
+  have hw_nn : ∀ i, 0 ≤ weights ε y x i := (mem_simplexWeights.mp hw_mem).1
+  have hw_sum : ∑ i, weights ε y x i = 1 := (mem_simplexWeights.mp hw_mem).2
   have h_diff : proj ε y x - x = ∑ i, weights ε y x i • (y i - x) := by
     simp_rw [smul_sub, Finset.sum_sub_distrib, ← Finset.sum_smul, hw_sum, one_smul]
     rfl
@@ -170,20 +174,22 @@ section ApproxFixedPoint
 variable {K : Set X}
 
 /-- The approximate-fixed-point step: given a finite `ε`-net `y` of `K` inside `K`, produce
-`x : K` with `‖f x - x‖ ≤ ε`. The fixed point of the Brouwer map on `stdSimplex ℝ (Fin m)`
+`x : K` with `‖f x - x‖ ≤ ε`. The fixed point of the Brouwer map on
+`simplexWeights (Fin m)`
 gives the approximation; `norm_proj_sub_le` gives the bound. -/
 lemma exists_approx_fixedPoint (hK_cvx : Convex ℝ K) (f : C(K, K))
     {ε : ℝ} {m : ℕ} [Nonempty (Fin m)] (y : Fin m → X)
     (hyK : ∀ i, y i ∈ K) (hcov : ∀ x ∈ K, ∃ i, ‖x - y i‖ < ε) :
     ∃ x : K, ‖(f x : X) - (x : X)‖ ≤ ε := by
   -- Setup.
-  set Δ : Set (Fin m → ℝ) := stdSimplex ℝ (Fin m)
-  have hΔ_cvx : Convex ℝ Δ := convex_stdSimplex ℝ _
-  have hΔ_cpt : IsCompact Δ := isCompact_stdSimplex ℝ _
+  set Δ : Set (Fin m → ℝ) := simplexWeights (Fin m)
+  have hΔ_cvx : Convex ℝ Δ := convex_simplexWeights _
+  have hΔ_cpt : IsCompact Δ := isCompact_simplexWeights _
   have hΔ_ne : Δ.Nonempty := by
     obtain ⟨i₀⟩ := ‹Nonempty (Fin m)›
-    refine ⟨fun i => if i = i₀ then 1 else 0,
-      fun i => by by_cases h : i = i₀ <;> simp [h], by simp⟩
+    refine ⟨fun i => if i = i₀ then 1 else 0, ?_⟩
+    rw [mem_simplexWeights]
+    exact ⟨fun i => by by_cases h : i = i₀ <;> simp [h], by simp⟩
   have hbaryK : ∀ w ∈ Δ, bary y w ∈ K := fun _ hw => bary_mem_of_simplex hK_cvx hyK hw
   have hSpos : ∀ x ∈ K, 0 < bumpSum ε y x := fun x hx => bumpSum_pos (hcov x hx)
   -- The Brouwer self-map on the simplex.
@@ -233,7 +239,7 @@ theorem schauder_fixed_point {K : Set X}
     have hm : 0 < htfin.toFinset.card := by
       obtain ⟨c, hc⟩ := htne
       exact Finset.card_pos.2 ⟨c, htfin.mem_toFinset.2 hc⟩
-    haveI : Nonempty (Fin htfin.toFinset.card) := ⟨⟨0, hm⟩⟩
+    have : Nonempty (Fin htfin.toFinset.card) := ⟨⟨0, hm⟩⟩
     let y : Fin htfin.toFinset.card → X := fun i => (htfin.toFinset.equivFin.symm i : X)
     have hyK : ∀ i, y i ∈ K := fun i =>
       htK (htfin.mem_toFinset.1 (htfin.toFinset.equivFin.symm i).2)

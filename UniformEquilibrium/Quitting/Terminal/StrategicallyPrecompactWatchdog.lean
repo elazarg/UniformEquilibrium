@@ -113,10 +113,10 @@ theorem exists_quittingBehaviorProfile_forall_mem_finiteMenu_payoff_le
         quittingTerminalPayoff reward
             (Function.update profile who strategy) who ≤
           quittingTerminalPayoff reward profile who := by
-  letI : ∀ who,
+  let : ∀ who,
       Fintype ((quittingBehaviorMenuForm reward menu).sig.Strategy who) :=
     fun who => (hfinite who).fintype
-  letI : ∀ who,
+  let : ∀ who,
       Nonempty ((quittingBehaviorMenuForm reward menu).sig.Strategy who) :=
     fun who => (hnonempty who).to_subtype
   obtain ⟨mixed, hnash⟩ := exists_isNash_mixed

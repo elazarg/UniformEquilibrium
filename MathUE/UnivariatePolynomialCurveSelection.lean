@@ -8,7 +8,7 @@ import MathUE.AlgebraicSelection
 import MathUE.AnalyticCoordinateCurve
 import MathUE.PolynomialSignCell
 import Mathlib.Analysis.Analytic.Polynomial
-import Mathlib.Data.Sign.Defs
+import Mathlib.Basic.Sign.Defs
 
 /-!
 # Univariate polynomial curve selection

@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset QuittingLCPClassification QuittingSureSetOwnerRepair
+open _root_.Finset QuittingLCPClassification QuittingSureSetOwnerRepair
 
 namespace QuittingSupportThreeNormalityBarrier
 

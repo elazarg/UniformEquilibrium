@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -120,7 +120,7 @@ theorem hasTwoPersistentQuittingMarginals_iff_all_opponentClocks
     · exact hsecond (hall second (by simpa [hwho] using hne.symm))
     · exact hfirst (hall first hwho)
   · intro hall
-    letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+    let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
     let first : ι := Classical.choice inferInstance
     have hexistsSecond : ∃ second, second ≠ first ∧
         ¬Summable (quittingMarginalQuitHazard roots second) := by
@@ -222,7 +222,7 @@ theorem HasTwoPersistentQuittingMarginals.survival
       roots hcard).mp hpersistent
   refine ⟨hopponent, ?_⟩
   intro start
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   let who : ι := Classical.choice inferInstance
   exact tendsto_jointSurvival_zero_of_opponentSurvival_zero
     roots who start (hopponent who start)

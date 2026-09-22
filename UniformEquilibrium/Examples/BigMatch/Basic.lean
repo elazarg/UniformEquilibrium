@@ -32,7 +32,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace BigMatch
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 abbrev Player := Bool
@@ -42,7 +42,11 @@ inductive State
   | live
   | zero
   | one
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.live, .zero, .one}
+  complete state := by cases state <;> simp
 
 /-- Maximizer reward. At live state it is one exactly off the diagonal. -/
 def reward (s : State) (a : Player → Bool) : ℝ :=

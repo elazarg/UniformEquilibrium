@@ -20,7 +20,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 /-- A uniform equilibrium payoff witnessed, at every accuracy, by a profile
 depending only on calendar time and the current state. -/

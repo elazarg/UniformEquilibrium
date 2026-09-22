@@ -51,7 +51,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 

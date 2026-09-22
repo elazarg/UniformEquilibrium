@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Filter Finset Math Math.LinearProgramming Set unitInterval
+open Filter Finset _root_.Math Math.LinearProgramming Set unitInterval
 open GameTheory.QuittingAbsorptionPath
 open scoped unitInterval
 
@@ -176,11 +176,11 @@ theorem PrincipalQClockMassPath.sum_absorptionPrefixPath
 def PrincipalQClockMassPath.absorptionFillerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι) :
+    (weight : Convexity.StdSimplex ℝ ι) :
     Path (path.mass 1)
-      (path.mass 1 + initial.time • (weight : ι → ℝ)) where
+      (path.mass 1 + initial.time • weight.weights) where
   toFun parameter := path.mass 1 +
-    (parameter : ℝ) • (initial.time • (weight : ι → ℝ))
+    (parameter : ℝ) • (initial.time • weight.weights)
   continuous_toFun := by fun_prop
   source' := by simp
   target' := by simp
@@ -189,9 +189,9 @@ omit [DecidableEq ι] in
 @[simp] theorem PrincipalQClockMassPath.absorptionFillerPath_apply
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι) (parameter : unitInterval) :
+    (weight : Convexity.StdSimplex ℝ ι) (parameter : unitInterval) :
     path.absorptionFillerPath weight parameter = path.mass 1 +
-      (parameter : ℝ) • (initial.time • (weight : ι → ℝ)) :=
+      (parameter : ℝ) • (initial.time • weight.weights) :=
   rfl
 
 omit [DecidableEq ι] in
@@ -199,7 +199,7 @@ omit [DecidableEq ι] in
 theorem PrincipalQClockMassPath.monotone_absorptionFillerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι) (who : ι) :
+    (weight : Convexity.StdSimplex ℝ ι) (who : ι) :
     Monotone fun parameter => path.absorptionFillerPath weight parameter who := by
   intro first second hle
   simp only [path.absorptionFillerPath_apply, Pi.add_apply,
@@ -207,7 +207,7 @@ theorem PrincipalQClockMassPath.monotone_absorptionFillerPath
   exact add_le_add_right
     (mul_le_mul_of_nonneg_right
       (show (first : ℝ) ≤ (second : ℝ) from hle)
-      (mul_nonneg initial.time_pos.le (stdSimplex.zero_le weight who)))
+      (mul_nonneg initial.time_pos.le (weight.weights_nonneg who)))
     (path.mass 1 who)
 
 omit [DecidableEq ι] in
@@ -216,13 +216,13 @@ the initial clock mass. -/
 theorem PrincipalQClockMassPath.sum_absorptionFillerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι) (parameter : unitInterval) :
+    (weight : Convexity.StdSimplex ℝ ι) (parameter : unitInterval) :
     ∑ who, path.absorptionFillerPath weight parameter who =
       principalQClockDuration initial node +
         (parameter : ℝ) * initial.time := by
   simp only [path.absorptionFillerPath_apply, Pi.add_apply,
     Pi.smul_apply, smul_eq_mul, Finset.sum_add_distrib, path.total_mass]
-  rw [← Finset.mul_sum, ← Finset.mul_sum, stdSimplex.sum_eq_one]
+  rw [← Finset.mul_sum, ← Finset.mul_sum, weight.total_of_fintype]
   norm_num
 
 /-- Append an arbitrary simplex filler over the missing initial clock mass.
@@ -230,9 +230,9 @@ The hypotheses say that the clock path runs from `initial.time` to one. -/
 def PrincipalQClockMassPath.absorptionPlayerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) :
-    Path (0 : ι → ℝ) (path.mass 1 + initial.time • (weight : ι → ℝ)) :=
+    Path (0 : ι → ℝ) (path.mass 1 + initial.time • weight.weights) :=
   path.absorptionPrefixPath.transAt
     (path.absorptionFillerPath weight)
     (1 - initial.time) (sub_pos.mpr hinitialOne) (by linarith [initial.time_pos])
@@ -242,7 +242,7 @@ omit [DecidableEq ι] in
 theorem PrincipalQClockMassPath.monotone_absorptionPlayerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) (who : ι) :
     Monotone fun parameter =>
       path.absorptionPlayerPath weight hinitialOne parameter who := by
@@ -263,7 +263,7 @@ total player mass exactly equal to absorption time. -/
 theorem PrincipalQClockMassPath.sum_absorptionPlayerPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) (hnodeTime : node.time = 1)
     (parameter : unitInterval) :
     ∑ who, path.absorptionPlayerPath weight hinitialOne parameter who =
@@ -299,10 +299,10 @@ theorem PrincipalQClockMassPath.sum_absorptionPlayerPath
 /-- The normalized reversed player-mass path of the canonical approximation. -/
 noncomputable def principalQVanishingPlayerPath [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) (n : ℕ) :
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι) (n : ℕ) :
     Path (0 : ι → ℝ)
       ((principalQVanishingApproximation M hdiag hQ n).mass.mass 1 +
-        principalQVanishingScale n • (weight : ι → ℝ)) :=
+        principalQVanishingScale n • weight.weights) :=
   (principalQVanishingApproximation M hdiag hQ n).mass.absorptionPlayerPath
     weight (principalQVanishingApproximation M hdiag hQ n).start_lt_one
 
@@ -312,7 +312,7 @@ uniformly convergent subsequence with normalized monotone limit. -/
 theorem exists_tendsto_subsequence_principalQAbsorptionPlayerPath
     [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) :
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι) :
     ∃ limit : BoundedContinuousFunction unitInterval (ι → ℝ),
       ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
         Tendsto (fun n => boundedFunctionOfPath
@@ -323,7 +323,7 @@ theorem exists_tendsto_subsequence_principalQAbsorptionPlayerPath
         ∀ time, ∑ who, limit time who = (time : ℝ) := by
   let terminal : ℕ → ι → ℝ := fun n =>
     (principalQVanishingApproximation M hdiag hQ n).mass.mass 1 +
-      principalQVanishingScale n • (weight : ι → ℝ)
+      principalQVanishingScale n • weight.weights
   let playerPath : ∀ n, Path (0 : ι → ℝ) (terminal n) := fun n =>
     principalQVanishingPlayerPath M hdiag hQ weight n
   have hmono (n : ℕ) (who : ι) :
@@ -353,7 +353,7 @@ normalized monotone player-mass path, while retaining its constructing
 subsequence. -/
 theorem exists_principalQAbsorptionPlayerPath_limit [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι) :
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι) :
     ∃ terminal : ι → ℝ, ∃ limitPath : Path (0 : ι → ℝ) terminal,
       ∃ subsequence : ℕ → ℕ, StrictMono subsequence ∧
         Tendsto (fun n => boundedFunctionOfPath
@@ -383,7 +383,7 @@ mass remaining before the filler is coordinatewise nonnegative. -/
 theorem PrincipalQClockMassPath.principalQMassImage_remaining_nonneg
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1)
     (hscaledInitial : principalQClockScaledState initial = 0)
     (who : ι) (time : unitInterval)
@@ -425,7 +425,7 @@ error is the vanishing terminal filler. -/
 theorem principalQAbsorptionPlayerPath_limit_residual_nonneg
     [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι)
     {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
     (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
     (htendsto : Tendsto (fun n => boundedFunctionOfPath
@@ -461,8 +461,8 @@ theorem principalQAbsorptionPlayerPath_limit_residual_nonneg
     tendsto_principalQVanishingScale.comp hsubsequence.tendsto_atTop
   have hscaleError : Tendsto
       (fun n => principalQVanishingScale (subsequence n) *
-        principalQMassImage M (weight : ι → ℝ) who) atTop (nhds 0) := by
-    simpa using hscale.mul_const (principalQMassImage M (weight : ι → ℝ) who)
+        principalQMassImage M weight.weights who) atTop (nhds 0) := by
+    simpa using hscale.mul_const (principalQMassImage M weight.weights who)
   have heventuallyPrefix : ∀ᶠ n in atTop,
       (time : ℝ) ≤ 1 - principalQVanishingScale (subsequence n) := by
     have hsmall := hscale.eventually_lt_const (sub_pos.mpr htimeLt)
@@ -470,7 +470,7 @@ theorem principalQAbsorptionPlayerPath_limit_residual_nonneg
     linarith
   have heventuallyBound : ∀ᶠ n in atTop,
       principalQVanishingScale (subsequence n) *
-          principalQMassImage M (weight : ι → ℝ) who ≤
+          principalQMassImage M weight.weights who ≤
         ∑ owner,
           (principalQVanishingPlayerPath M hdiag hQ weight
               (subsequence n) 1 owner -
@@ -493,12 +493,12 @@ theorem principalQAbsorptionPlayerPath_limit_residual_nonneg
                 approximation.mass.absorptionPlayerPath weight
                   approximation.start_lt_one time) who +
             principalQVanishingScale (subsequence n) *
-              principalQMassImage M (weight : ι → ℝ) who := by
+              principalQMassImage M weight.weights who := by
       rw [(principalQVanishingPlayerPath M hdiag hQ weight
         (subsequence n)).target]
       change (∑ owner,
         ((approximation.mass.mass 1 +
-            principalQVanishingScale (subsequence n) • (weight : ι → ℝ)) owner -
+            principalQVanishingScale (subsequence n) • weight.weights) owner -
           approximation.mass.absorptionPlayerPath weight
             approximation.start_lt_one time owner) * M who owner) = _
       unfold principalQMassImage
@@ -523,7 +523,7 @@ theorem exists_continuousAbsorptionPath_sp2a_of_projectiveQBar
         reward (quittingProjectiveSingletonTerminal who) who ≤
           absorptionPathPayoff reward path t who := by
   let owner : ι := Classical.choice inferInstance
-  let weight : stdSimplex ℝ ι := stdSimplex.pure owner
+  let weight : Convexity.StdSimplex ℝ ι := Convexity.StdSimplex.pure owner
   obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
       hmono, htotal⟩ :=
     exists_principalQAbsorptionPlayerPath_limit
@@ -569,7 +569,7 @@ theorem PrincipalQClockMassPath.exists_absorptionPrefix_meshSupport_witness
     {M : ι → ι → ℝ} {stepBound : ℝ}
     {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) (hnodeTime : node.time = 1)
     (hsupported : path.IsMeshSupported stepBound)
     (who : ι) (first second : unitInterval) (hle : first ≤ second)
@@ -677,7 +677,7 @@ residual is nonpositive. -/
 theorem exists_limit_residual_nonpos_of_playerMass_increase
     [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι)
     {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
     (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
     (htendsto : Tendsto (fun n => boundedFunctionOfPath
@@ -801,13 +801,13 @@ theorem exists_limit_residual_nonpos_of_playerMass_increase
         (1 - (witness (witnessSubsequence n) : ℝ)) *
           principalQVanishingScale (subsequence (index n)) +
       principalQVanishingScale (subsequence (index n)) *
-        principalQMassImage M (weight : ι → ℝ) who
+        principalQMassImage M weight.weights who
   have herror : Tendsto error atTop (nhds 0) := by
     dsimp [error]
     convert ((tendsto_const_nhds.mul
       (tendsto_const_nhds.sub hwitnessReal)).mul hscaleIndex).add
         (hscaleIndex.mul_const
-          (principalQMassImage M (weight : ι → ℝ) who)) using 1
+          (principalQMassImage M weight.weights who)) using 1
     ring_nf
   have hbound (n : ℕ) :
       (∑ owner,
@@ -832,13 +832,13 @@ theorem exists_limit_residual_nonpos_of_playerMass_increase
                   weight (approximation (witnessSubsequence n)).start_lt_one
                   (witness (witnessSubsequence n))) who +
             principalQVanishingScale (subsequence (index n)) *
-              principalQMassImage M (weight : ι → ℝ) who := by
+              principalQMassImage M weight.weights who := by
       rw [(principalQVanishingPlayerPath M hdiag hQ weight
         (subsequence (index n))).target]
       change (∑ owner,
         (((approximation (witnessSubsequence n)).mass.mass 1 +
             principalQVanishingScale (subsequence (index n)) •
-              (weight : ι → ℝ)) owner -
+              weight.weights) owner -
           (approximation (witnessSubsequence n)).mass.absorptionPlayerPath
             weight (approximation (witnessSubsequence n)).start_lt_one
             (witness (witnessSubsequence n)) owner) * M who owner) = _
@@ -855,7 +855,7 @@ theorem exists_limit_residual_nonpos_of_playerMass_increase
             weight (approximation (witnessSubsequence n)).start_lt_one
             (witness (witnessSubsequence n))) who
     let filler := principalQVanishingScale (subsequence (index n)) *
-      principalQMassImage M (weight : ι → ℝ) who
+      principalQMassImage M weight.weights who
     have hs' :
         base ≤
           principalQMatrixSpeedBound M *
@@ -881,7 +881,7 @@ nonpositive. -/
 theorem limit_residual_nonpos_of_pathRightDerivative_pos
     [Nonempty ι]
     (M : ι → ι → ℝ) (hdiag : ∀ i, M i i = 0)
-    (hQ : IsProjectiveQBarMatrix M) (weight : stdSimplex ℝ ι)
+    (hQ : IsProjectiveQBarMatrix M) (weight : Convexity.StdSimplex ℝ ι)
     {terminal : ι → ℝ} (limitPath : Path (0 : ι → ℝ) terminal)
     (subsequence : ℕ → ℕ) (hsubsequence : StrictMono subsequence)
     (htendsto : Tendsto (fun n => boundedFunctionOfPath
@@ -984,7 +984,7 @@ theorem exists_continuousZeroPerfectSingletonPath_of_projectiveQBar
     (hQ : IsProjectiveQBarMatrix (normalizedSoloMatrix reward)) :
     Nonempty (ContinuousZeroPerfectSingletonPath reward) := by
   let owner : ι := Classical.choice inferInstance
-  let weight : stdSimplex ℝ ι := stdSimplex.pure owner
+  let weight : Convexity.StdSimplex ℝ ι := Convexity.StdSimplex.pure owner
   obtain ⟨terminal, limitPath, subsequence, hsubsequence, htendsto,
       hmono, htotal⟩ :=
     exists_principalQAbsorptionPlayerPath_limit
@@ -1065,7 +1065,7 @@ singleton absorption path. -/
 def PrincipalQClockMassPath.toContinuousAbsorptionPath
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) (hnodeTime : node.time = 1) :
     AbsorptionPath (ι := ι) :=
   singletonAbsorptionPathOfPlayerPath
@@ -1078,7 +1078,7 @@ continuous. -/
 theorem PrincipalQClockMassPath.toContinuousAbsorptionPath_continuous
     {M : ι → ι → ℝ} {initial node : PrincipalQClockNode ι}
     (path : PrincipalQClockMassPath M initial node)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hinitialOne : initial.time < 1) (hnodeTime : node.time = 1) :
     IsContinuousAbsorptionPath
       (path.toContinuousAbsorptionPath weight hinitialOne hnodeTime) :=
@@ -1092,7 +1092,7 @@ theorem exists_principalQContinuousAbsorptionPath
     (hstepBound : 0 < stepBound) (hstart : 0 < start) (hstartOne : start < 1)
     (initialState : ι → ℝ)
     (hinitialState : initialState ∈ nonnegativeBoundary)
-    (weight : stdSimplex ℝ ι) :
+    (weight : Convexity.StdSimplex ℝ ι) :
   ∃ path : AbsorptionPath (ι := ι),
       IsContinuousAbsorptionPath path := by
   have hscaledInitial : start • initialState ∈ nonnegativeBoundary := by

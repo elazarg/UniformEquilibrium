@@ -46,7 +46,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.Probability in
+open _root_.Math.Probability in
 /-- Geometric domination: a uniformly bounded sequence has a summable
 `β`-discounted series for `|β| < 1`. -/
 theorem summable_pow_mul_of_abs_le {β C : ℝ} (hβ : |β| < 1) {g : ℕ → ℝ}
@@ -60,7 +60,7 @@ theorem summable_pow_mul_of_abs_le {β C : ℝ} (hβ : |β| < 1) {g : ℕ → �
 
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type}
 

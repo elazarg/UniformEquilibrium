@@ -26,6 +26,8 @@ different dates are summed.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Filter Set
@@ -231,7 +233,7 @@ def quittingTerminalOpponentIncidenceMass
 opponent label with positive incidence in the same terminal law. -/
 theorem exists_positive_opponentIncidenceMass
     (who : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hpositive : 0 < quittingTerminalOpponentContainingMass who mass) :
     ∃ other, other ≠ who ∧
       0 < quittingTerminalOpponentIncidenceMass who other mass := by
@@ -240,7 +242,7 @@ theorem exists_positive_opponentIncidenceMass
         terminal.val ≠ {who}),
       0 ≤ mass (some terminal) := by
     intro terminal _
-    exact hmass.1 (some terminal)
+    exact (mem_simplexWeights.mp hmass).1 (some terminal)
   obtain ⟨terminal, hterminalFilter, hterminalMass⟩ :=
     (Finset.sum_pos_iff_of_nonneg htermNonneg).mp hpositive
   have hterminalNe : terminal.val ≠ {who} :=
@@ -267,7 +269,7 @@ theorem exists_positive_opponentIncidenceMass
       quittingTerminalOpponentIncidenceMass who other mass := by
     unfold quittingTerminalOpponentIncidenceMass
     exact Finset.single_le_sum
-      (fun candidate _ => hmass.1 (some candidate)) hterminalIncidence
+      (fun candidate _ => (mem_simplexWeights.mp hmass).1 (some candidate)) hterminalIncidence
   exact hterminalMass.trans_le hle
 
 /-- If the aggregate opposite-face transfer is positive, all of it can be
@@ -338,7 +340,7 @@ branch requires at least three players. -/
 theorem exists_matched_transfer_incidence_or_twoOpponent_separator
     (source target : QuittingTerminalSemanticPair ι) (who : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hdebt : 0 < quittingTerminalSemanticDebt source who)
     (htransfer : quittingTerminalSemanticDebt source who ≤
       ∑ other ∈ (Finset.univ.erase who),
@@ -403,7 +405,7 @@ transfer must meet at the unique possible opponent label. -/
 theorem exists_matched_transfer_incidence_of_card_le_two
     (source target : QuittingTerminalSemanticPair ι) (who : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hdebt : 0 < quittingTerminalSemanticDebt source who)
     (htransfer : quittingTerminalSemanticDebt source who ≤
       ∑ other ∈ (Finset.univ.erase who),
@@ -451,7 +453,7 @@ theorem exists_samePureTimeLaw_resetCluster_negativeNever_or_matched_separator
         (resetSubseq : ℕ → ℕ),
       Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
           atTop (𝓝 source) ∧
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono baseSubseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (Function.update (profiles (baseSubseq n)) who
@@ -543,7 +545,7 @@ theorem exists_samePureTimeLaw_resetCluster_negativeNever_or_matched_separator
             quittingTerminalOpponentContainingMass who mass := by
           unfold quittingTerminalOpponentContainingMass
           exact Finset.single_le_sum
-            (fun candidate _ => hmass.1 (some candidate)) hterminalMem
+            (fun candidate _ => (mem_simplexWeights.mp hmass).1 (some candidate)) hterminalMem
         have hopponentFloor := hmassFloor.trans hmassLe
         have hopponentPositive :
             0 < quittingTerminalOpponentContainingMass who mass := by
@@ -567,7 +569,7 @@ theorem exists_samePureTimeLaw_resetCluster_negativeNever_or_matched_separator
             quittingTerminalOpponentContainingMass who mass := by
           unfold quittingTerminalOpponentContainingMass
           exact Finset.single_le_sum
-            (fun candidate _ => hmass.1 (some candidate)) hterminalMem
+            (fun candidate _ => (mem_simplexWeights.mp hmass).1 (some candidate)) hterminalMem
         have hopponentFloor := hmassFloor.trans hmassLe
         have hopponentPositive :
             0 < quittingTerminalOpponentContainingMass who mass := by

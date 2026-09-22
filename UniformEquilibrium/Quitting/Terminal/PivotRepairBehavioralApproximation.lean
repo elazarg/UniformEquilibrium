@@ -17,7 +17,7 @@ with exactly the LP payoff vector and objective. -/
 theorem exists_law_payoff_eq_and_exploitability_eq_objective
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hrealizable : 0 < pivotRepairFirstAtom mass ∨ pivotRepairLate mass = 0) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -25,7 +25,7 @@ theorem exists_law_payoff_eq_and_exploitability_eq_objective
       quittingTerminalExploitability reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
         input.objective mass ∧ (law none).toReal = pivotRepairNever mass := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   have hexists : ∃ (hazard : ℝ) (hpositive : 0 < hazard) (hle : hazard ≤ 1),
       pivotRepairLate mass * hazard = pivotRepairFirstAtom mass := by
     rcases hrealizable with hpositive | hzero
@@ -51,11 +51,11 @@ not by assuming a positive hazard for a nonexistent finite tail. -/
 theorem provisional_exploitability_eq_objective_of_late_eq_zero
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hzero : pivotRepairLate mass = 0) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     quittingTerminalExploitability reward
         (quittingStoppingLawProfile reward (input.provisionalLaws mass hfeasible)) =
       input.objective mass := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   have hatom : pivotRepairFirstAtom mass = 0 := by
     have hnonneg := hfeasible.2.2.2.2.1
     have hle := hfeasible.2.2.2.2.2
@@ -78,7 +78,7 @@ theorem exists_law_boundary_approximation_of_coefficient_bound
     (hcoefficient : ∀ responder, responder ≠ input.pivot →
       |input.responderTieReward responder -
         responderLaterReward (reward := reward) responder| ≤ coefficientBound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -87,7 +87,7 @@ theorem exists_law_boundary_approximation_of_coefficient_bound
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
         input.objective mass + coefficientBound * firstAtom ∧
       (law none).toReal = pivotRepairNever mass := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   let changed := pivotRepairMassWithFirstAtom mass firstAtom
   have hchanged : IsPivotRepairMassFeasible changed :=
     isPivotRepairMassFeasible_withFirstAtom hfeasible hpositive.le hle
@@ -114,7 +114,7 @@ theorem exists_law_boundary_approximation_of_reward_bound
     (hzero : pivotRepairFirstAtom mass = 0) (firstAtom bound : ℝ)
     (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass)
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -144,7 +144,7 @@ theorem exists_law_boundary_approximation_of_reward_bound_of_later_zero
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hlater : ∀ responder, responder ≠ input.pivot →
       responderLaterReward (reward := reward) responder = 0) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -168,7 +168,7 @@ theorem exists_law_boundary_approximation
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hzero : pivotRepairFirstAtom mass = 0) (firstAtom : ℝ)
     (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -185,7 +185,7 @@ with the very same payoff vector and arbitrarily small objective error. -/
 theorem exists_law_payoff_eq_and_exploitability_le_objective_add
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (error : ℝ) (herror : 0 < error) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
@@ -193,7 +193,7 @@ theorem exists_law_payoff_eq_and_exploitability_le_objective_add
       quittingTerminalExploitability reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) ≤
         input.objective mass + error ∧ (law none).toReal = pivotRepairNever mass := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   by_cases hrealizable : 0 < pivotRepairFirstAtom mass ∨ pivotRepairLate mass = 0
   · obtain ⟨law, hpayoff, hobjective, hnone⟩ :=
       input.exists_law_payoff_eq_and_exploitability_eq_objective mass hfeasible hrealizable

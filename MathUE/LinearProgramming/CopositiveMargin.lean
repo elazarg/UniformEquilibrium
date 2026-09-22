@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearProgramming.R0Margin
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # The copositivity margin, and the openness of strict copositivity
@@ -67,6 +68,8 @@ noncomputable section
 
 namespace Math.LinearProgramming
 
+open GameTheory.Math.Probability
+
 variable {ι : Type*} [Fintype ι]
 
 /-! ## The quadratic form on the simplex -/
@@ -97,44 +100,52 @@ theorem quadratic_div (M : ι → ι → ℝ) (z : ι → ℝ) {s : ℝ} (hs : s
 /-- The copositivity margin of `M`: the least value of the quadratic form over
 the standard simplex. -/
 def copositiveMargin (M : ι → ι → ℝ) : ℝ :=
-  ⨅ p : stdSimplex ℝ ι, ∑ i, p.val i * ∑ j, p.val j * M i j
+  ⨅ p : Convexity.StdSimplex ℝ ι, ∑ i, p.weights i * ∑ j, p.weights j * M i j
 
 /-- **The margin is attained.**  The simplex is compact and the quadratic form
 is continuous. -/
 theorem exists_mem_stdSimplex_isMinOn_quadratic [Nonempty ι] (M : ι → ι → ℝ) :
-    ∃ p ∈ stdSimplex ℝ ι, ∀ y ∈ stdSimplex ℝ ι,
+    ∃ p ∈ simplexWeights ι, ∀ y ∈ simplexWeights ι,
       (∑ i, p i * ∑ j, p j * M i j) ≤ ∑ i, y i * ∑ j, y j * M i j := by
-  haveI := nonempty_coe_stdSimplex (ι := ι)
-  obtain ⟨p₀⟩ := ‹Nonempty (stdSimplex ℝ ι)›
+  have := nonempty_coe_stdSimplex (ι := ι)
+  obtain ⟨p₀⟩ := ‹Nonempty (Convexity.StdSimplex ℝ ι)›
   obtain ⟨p, hp, hmin⟩ :=
-    (isCompact_stdSimplex ℝ (ι := ι)).exists_isMinOn ⟨p₀.val, p₀.property⟩
+    (isCompact_simplexWeights ι).exists_isMinOn
+      ⟨p₀.weights,
+        mem_simplexWeights.mpr ⟨p₀.weights_nonneg, p₀.total_of_fintype⟩⟩
       (continuous_simplexQuadratic M).continuousOn
   exact ⟨p, hp, fun y hy => isMinOn_iff.mp hmin y hy⟩
 
 theorem bddBelow_range_quadratic [Nonempty ι] (M : ι → ι → ℝ) :
-    BddBelow (Set.range fun p : stdSimplex ℝ ι => ∑ i, p.val i * ∑ j, p.val j * M i j) := by
+    BddBelow (Set.range fun p : Convexity.StdSimplex ℝ ι =>
+      ∑ i, p.weights i * ∑ j, p.weights j * M i j) := by
   obtain ⟨p, hp, hmin⟩ := exists_mem_stdSimplex_isMinOn_quadratic M
   refine ⟨∑ i, p i * ∑ j, p j * M i j, ?_⟩
   rintro x ⟨y, rfl⟩
-  exact hmin y.val y.property
+  exact hmin y.weights
+    (mem_simplexWeights.mpr ⟨y.weights_nonneg, y.total_of_fintype⟩)
 
 /-- The margin is a lower bound for the quadratic form at every simplex
 point. -/
 theorem copositiveMargin_le [Nonempty ι] (M : ι → ι → ℝ) {p : ι → ℝ}
-    (hp : p ∈ stdSimplex ℝ ι) :
-    copositiveMargin M ≤ ∑ i, p i * ∑ j, p j * M i j :=
-  ciInf_le (bddBelow_range_quadratic M) (⟨p, hp⟩ : stdSimplex ℝ ι)
+    (hp : p ∈ simplexWeights ι) :
+    copositiveMargin M ≤ ∑ i, p i * ∑ j, p j * M i j := by
+  let point : Convexity.StdSimplex ℝ ι :=
+    ⟨Finsupp.equivFunOnFinite.symm p, (mem_simplexWeights.mp hp).1,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact (mem_simplexWeights.mp hp).2)⟩
+  exact ciInf_le (bddBelow_range_quadratic M) point
 
 /-- Any lower bound for the quadratic form on the simplex bounds the margin. -/
 theorem le_copositiveMargin [Nonempty ι] (M : ι → ι → ℝ) {c : ℝ}
-    (h : ∀ p ∈ stdSimplex ℝ ι, c ≤ ∑ i, p i * ∑ j, p j * M i j) :
+    (h : ∀ p ∈ simplexWeights ι, c ≤ ∑ i, p i * ∑ j, p j * M i j) :
     c ≤ copositiveMargin M := by
-  haveI := nonempty_coe_stdSimplex (ι := ι)
-  exact le_ciInf fun p => h p.val p.property
+  have := nonempty_coe_stdSimplex (ι := ι)
+  exact le_ciInf fun p => h p.weights
+    (mem_simplexWeights.mpr ⟨p.weights_nonneg, p.total_of_fintype⟩)
 
 theorem exists_mem_stdSimplex_quadratic_eq_copositiveMargin [Nonempty ι]
     (M : ι → ι → ℝ) :
-    ∃ p ∈ stdSimplex ℝ ι, (∑ i, p i * ∑ j, p j * M i j) = copositiveMargin M := by
+    ∃ p ∈ simplexWeights ι, (∑ i, p i * ∑ j, p j * M i j) = copositiveMargin M := by
   obtain ⟨p, hp, hmin⟩ := exists_mem_stdSimplex_isMinOn_quadratic M
   exact ⟨p, hp, le_antisymm (le_copositiveMargin M fun y hy => hmin y hy)
     (copositiveMargin_le M hp)⟩
@@ -143,8 +154,10 @@ theorem exists_mem_stdSimplex_quadratic_eq_copositiveMargin [Nonempty ι]
 
 /-- A nonzero nonnegative vector rescales to a simplex point. -/
 theorem mem_stdSimplex_div_sum {z : ι → ℝ} (hz : ∀ i, 0 ≤ z i)
-    (hs : 0 < ∑ i, z i) : (fun i => z i / ∑ i, z i) ∈ stdSimplex ℝ ι :=
-  ⟨fun i => div_nonneg (hz i) hs.le, by rw [← Finset.sum_div]; exact div_self hs.ne'⟩
+    (hs : 0 < ∑ i, z i) : (fun i => z i / ∑ i, z i) ∈ simplexWeights ι :=
+  mem_simplexWeights.mpr
+    ⟨fun i => div_nonneg (hz i) hs.le,
+      by rw [← Finset.sum_div]; exact div_self hs.ne'⟩
 
 /-- **Nonnegative margin is copositivity.** -/
 theorem copositiveMargin_nonneg_iff_isCopositive [Nonempty ι] (M : ι → ι → ℝ) :
@@ -164,7 +177,7 @@ theorem copositiveMargin_nonneg_iff_isCopositive [Nonempty ι] (M : ι → ι �
       rw [le_div_iff₀ hss] at hlow
       nlinarith [hlow]
   · intro hcop
-    exact le_copositiveMargin M fun p hp => hcop p hp.1
+    exact le_copositiveMargin M fun p hp => hcop p (mem_simplexWeights.mp hp).1
 
 /-- **Positive margin is strict copositivity.** -/
 theorem copositiveMargin_pos_iff_isStrictlyCopositive [Nonempty ι] (M : ι → ι → ℝ) :
@@ -186,10 +199,10 @@ theorem copositiveMargin_pos_iff_isStrictlyCopositive [Nonempty ι] (M : ι → 
     obtain ⟨i₀, hi₀⟩ : ∃ i, p i ≠ 0 := by
       by_contra hnone
       push Not at hnone
-      have := hp.2
+      have := (mem_simplexWeights.mp hp).2
       simp [hnone] at this
     rw [← hval]
-    exact hstrict p hp.1 ⟨i₀, hi₀⟩
+    exact hstrict p (mem_simplexWeights.mp hp).1 ⟨i₀, hi₀⟩
 
 /-! ## Openness of strict copositivity -/
 
@@ -277,7 +290,8 @@ readings of this inequality at the thresholds `0 ≤ ·` and `0 < ·`. -/
 theorem copositiveMargin_mono [Nonempty ι] {M N : ι → ι → ℝ}
     (h : ∀ i j, M i j ≤ N i j) : copositiveMargin M ≤ copositiveMargin N :=
   le_copositiveMargin N fun _ hp =>
-    (copositiveMargin_le M hp).trans (quadratic_le_of_entrywise_le h hp.1)
+    (copositiveMargin_le M hp).trans
+      (quadratic_le_of_entrywise_le h (mem_simplexWeights.mp hp).1)
 
 /-! ## Comparison with the `R₀` margin -/
 
@@ -311,16 +325,17 @@ even though `copositiveMargin_le_r0Margin` orders the margins themselves. -/
 
 /-- On a one-element index type the standard simplex is the single point `1`. -/
 theorem mem_stdSimplex_unit_iff {p : Unit → ℝ} :
-    p ∈ stdSimplex ℝ Unit ↔ p () = 1 := by
+    p ∈ simplexWeights Unit ↔ p () = 1 := by
   constructor
   · intro hp
-    simpa using hp.2
+    simpa using (mem_simplexWeights.mp hp).2
   · intro hp
-    exact ⟨fun i => by cases i; rw [hp]; exact zero_le_one, by simpa using hp⟩
+    exact mem_simplexWeights.mpr
+      ⟨fun i => by cases i; rw [hp]; exact zero_le_one, by simpa using hp⟩
 
 /-- The copositivity margin of a one-by-one matrix is its entry. -/
 theorem copositiveMargin_unit (x : ℝ) : copositiveMargin (fun _ _ : Unit => x) = x := by
-  have hmem : (fun _ : Unit => (1 : ℝ)) ∈ stdSimplex ℝ Unit :=
+  have hmem : (fun _ : Unit => (1 : ℝ)) ∈ simplexWeights Unit :=
     mem_stdSimplex_unit_iff.mpr rfl
   refine le_antisymm ?_ (le_copositiveMargin _ fun p hp => ?_)
   · simpa using copositiveMargin_le (fun _ _ : Unit => x) hmem
@@ -334,12 +349,12 @@ theorem r0Margin_unit (x : ℝ) : r0Margin (fun _ _ : Unit => x) = |x| := by
     rcases le_total 0 x with hx | hx
     · rw [max_eq_right hx, max_eq_left (by linarith), abs_of_nonneg hx, add_zero]
     · rw [max_eq_left hx, max_eq_right (by linarith), abs_of_nonpos hx, zero_add]
-  have hval : ∀ p ∈ stdSimplex ℝ Unit,
+  have hval : ∀ p ∈ simplexWeights Unit,
       homogeneousViolation (fun _ _ : Unit => x) p = |x| := by
     intro p hp
     rw [mem_stdSimplex_unit_iff] at hp
     simp [homogeneousViolation, hp, habs]
-  have hmem : (fun _ : Unit => (1 : ℝ)) ∈ stdSimplex ℝ Unit :=
+  have hmem : (fun _ : Unit => (1 : ℝ)) ∈ simplexWeights Unit :=
     mem_stdSimplex_unit_iff.mpr rfl
   refine le_antisymm ?_ (le_r0Margin _ fun p hp => (hval p hp).ge)
   exact (r0Margin_le (fun _ _ : Unit => x) hmem).trans (hval _ hmem).le

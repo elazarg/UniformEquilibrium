@@ -101,7 +101,7 @@ theorem stopped_iter_block_failure_le_pow
           (blocks * horizon) source target).toReal ≤
       (1 - minorization) ^ blocks := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   induction blocks with
   | zero =>
       simp [Math.PMFIter.iter_zero]
@@ -524,7 +524,7 @@ theorem exists_calendar_amplified_analytic_regeneration
                   (anytimeEpochLength k * horizon)
                   source target).toReal)
             atTop (𝓝 0) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain
     ⟨horizon, exponent, constant,
       hconstant, honeBlock⟩ :=
@@ -655,7 +655,7 @@ theorem exists_actualEpoch_amplified_analytic_regeneration
                   (anytimeEpochLength k)
                   source target).toReal)
             atTop (𝓝 0) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain
     ⟨horizon, exponent, constant,
       hconstant, honeBlock⟩ :=

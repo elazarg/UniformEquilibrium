@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -278,7 +278,8 @@ theorem quittingContinueTrembleSimplex_tendsto
       (nhds (fun who => stdSimplexEquiv (root who))) := by
   rw [tendsto_pi_nhds]
   intro who
-  rw [tendsto_subtype_rng, tendsto_pi_nhds]
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff,
+    tendsto_pi_nhds]
   intro action
   have hscaled : Tendsto (fun rank =>
       (1 - quittingContinueTrembleRate rank) * (root who true).toReal)

@@ -476,7 +476,7 @@ theorem
       (∀ᶠ i in atTop,
         ∀ j, ∃ γ ∈ branches j, (y i j : ℂ) = γ (t i)) := by
   classical
-  letI : Fintype J := Fintype.ofFinite J
+  let : Fintype J := Fintype.ofFinite J
   have hcoordinate :
       ∀ j,
         ∃ (n : ℕ) (branches : List (ℂ → ℂ))

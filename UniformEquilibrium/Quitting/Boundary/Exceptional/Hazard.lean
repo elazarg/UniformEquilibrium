@@ -55,6 +55,13 @@ theorem quittingJointContinueMass_eq_product
       ∏ player,
         ((profile player time (quittingLiveHist reward time)) false).toReal := by
   unfold quittingJointContinueMass StochasticGame.stageActionDist
+  let distribution : ι → PMF Bool := fun player =>
+    show PMF Bool from
+      profile player time (quittingLiveHist reward time)
+  with_unfolding_all
+    change ((pmfPi distribution)
+      (quittingAllContinueAction : ι → Bool)).toReal =
+        ∏ player, (distribution player false).toReal
   rw [pmfPi_apply, ENNReal.toReal_prod]
   rfl
 
@@ -74,7 +81,14 @@ theorem quittingJointContinueMass_opponentOnly_eq_product
   intro player _
   by_cases hp : player = who
   · subst player
-    simp [quittingOpponentOnlyProfile, quittingAlwaysContinueStrategy]
+    unfold quittingOpponentOnlyProfile
+    rw [Function.update_self]
+    unfold quittingAlwaysContinueStrategy
+    rw [ite_eq_left (rfl : who = who)]
+    with_unfolding_all
+      change ((PMF.pure false : PMF Bool) false).toReal = 1
+    rw [PMF.pure_apply, ite_eq_left (rfl : false = false)]
+    rfl
   · simp [quittingOpponentOnlyProfile, hp]
 
 /-- For distinct players, the product of their opponent-only continue masses
@@ -104,7 +118,7 @@ theorem quittingOpponentContinueMass_mul_le_jointContinueMass
         (∏ player, if player = second then 1 else continueProbability player) ≤
       ∏ player, continueProbability player
   rw [← Finset.prod_mul_distrib]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro player _
     positivity
   · intro player _
@@ -114,7 +128,7 @@ theorem quittingOpponentContinueMass_mul_le_jointContinueMass
     · by_cases hsecond : player = second
       · subst player
         simp [hfirst]
-      · simp only [if_neg hfirst, if_neg hsecond]
+      · simp only [ite_eq_right hfirst, ite_eq_right hsecond]
         nlinarith [hnonneg player, hleOne player]
 
 /-- Every absorbing root event is charged to the opponent hazard of at least

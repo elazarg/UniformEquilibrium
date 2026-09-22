@@ -323,7 +323,7 @@ theorem isQuittingSimplexRootSupportApproxNash_zero_of_tendsto
       (tail n) (error n) (root n)).1 (hsupport n)).mono hn
   intro who
   constructor
-  · by_cases hzero : limitRoot who true = 0
+  · by_cases hzero : (limitRoot who).weights true = 0
     · exact Or.inl hzero
     · right
       by_contra hnegative
@@ -337,7 +337,7 @@ theorem isQuittingSimplexRootSupportApproxNash_zero_of_tendsto
       have hineq := (hsupportδ who).1.resolve_left hzero
       dsimp [δ] at hineq
       linarith
-  · by_cases hzero : limitRoot who false = 0
+  · by_cases hzero : (limitRoot who).weights false = 0
     · exact Or.inl hzero
     · right
       by_contra hpositive
@@ -356,24 +356,25 @@ omit [DecidableEq ι] in
 theorem tendsto_quittingRootSimplex_apply
     {root : ℕ → QuittingRootSimplex ι} {limit : QuittingRootSimplex ι}
     (hroot : Tendsto root atTop (nhds limit)) (who : ι) (action : Bool) :
-    Tendsto (fun n ↦ root n who action) atTop (nhds (limit who action)) := by
-  exact ((continuous_apply action).comp
-    (continuous_subtype_val.comp (continuous_apply who))).continuousAt
-      |>.tendsto.comp hroot
+    Tendsto (fun n ↦ (root n who).weights action) atTop
+      (nhds ((limit who).weights action)) := by
+  exact ((Convexity.StdSimplex.continuous_weights_apply ℝ action).comp
+    (continuous_apply who)).continuousAt.tendsto.comp hroot
 
 omit [DecidableEq ι] in
 /-- A Boolean simplex point is determined by its `true` coordinate. -/
 theorem quittingRootSimplex_ext_true
     {left right : QuittingRootSimplex ι}
-    (htrue : ∀ who, left who true = right who true) : left = right := by
+    (htrue : ∀ who, (left who).weights true = (right who).weights true) :
+    left = right := by
   funext who
-  apply Subtype.ext
-  funext action
+  apply Convexity.StdSimplex.ext
+  ext action
   cases action with
   | false =>
-      have hleft := (left who).property.2
-      have hright := (right who).property.2
-      have htrue' : (left who).val true = (right who).val true := htrue who
+      have hleft := (left who).total_of_fintype
+      have hright := (right who).total_of_fintype
+      have htrue' : (left who).weights true = (right who).weights true := htrue who
       simp only [Fintype.sum_bool] at hleft hright
       rw [htrue'] at hleft
       linarith
@@ -764,17 +765,17 @@ theorem exists_quittingLowSurvivalPositiveRhoCompactLimit
     have horiginalWho := tendsto_quittingRootSimplex_apply horiginal who true
     have habs : Tendsto (fun n ↦
         |(quittingSimplexOfRoot
-              (landing.family.purifiedRoot (index n)) who true : ℝ) -
+              (landing.family.purifiedRoot (index n)) who).weights true -
           (quittingSimplexOfRoot
-              (landing.originalRoot (index n)) who true : ℝ)|) atTop
-        (nhds |(secondLimit.1 who true : ℝ) -
-          (firstLimit.1 who true : ℝ)|) :=
+              (landing.originalRoot (index n)) who).weights true|) atTop
+        (nhds |(secondLimit.1 who).weights true -
+          (firstLimit.1 who).weights true|) :=
       hpurifiedWho.sub horiginalWho |>.abs
     have hclose : ∀ᶠ n in atTop,
         |(quittingSimplexOfRoot
-              (landing.family.purifiedRoot (index n)) who true : ℝ) -
+              (landing.family.purifiedRoot (index n)) who).weights true -
           (quittingSimplexOfRoot
-              (landing.originalRoot (index n)) who true : ℝ)| ≤
+              (landing.originalRoot (index n)) who).weights true| ≤
             landing.family.radius (index n) := by
       apply Filter.Eventually.of_forall
       intro n
@@ -783,11 +784,11 @@ theorem exists_quittingLowSurvivalPositiveRhoCompactLimit
         QuittingLowSurvivalPositiveRhoLandingFamily.originalRoot,
         quittingSimplexOfRoot, Math.ProbabilityMassFunction.toVector]
         using h.le
-    have hle : |(secondLimit.1 who true : ℝ) -
-        (firstLimit.1 who true : ℝ)| ≤ 0 :=
+    have hle : |(secondLimit.1 who).weights true -
+        (firstLimit.1 who).weights true| ≤ 0 :=
       le_of_tendsto_of_tendsto habs hradius hclose
-    have hreal : (secondLimit.1 who true : ℝ) =
-        (firstLimit.1 who true : ℝ) := by
+    have hreal : (secondLimit.1 who).weights true =
+        (firstLimit.1 who).weights true := by
       exact sub_eq_zero.mp (abs_eq_zero.mp
         (le_antisymm hle (abs_nonneg _)))
     exact hreal

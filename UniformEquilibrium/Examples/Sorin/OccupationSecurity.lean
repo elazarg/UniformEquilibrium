@@ -31,7 +31,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-! ## Player 2's exact stationary security strategy -/
 
@@ -89,7 +89,7 @@ theorem expect_stagePayoff_playerTwoSecurity
         (fun a => game.stagePayoff s a true) =
       playerTwoSecurityValue s := by
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   cases s <;>
     simp [BigMatch.expect_coinPMF, playerTwoSecurityCoin, payoff,
@@ -103,7 +103,7 @@ theorem expect_next_playerTwoSecurityValue
         (fun a => expect (game.transition s a) playerTwoSecurityValue) =
       playerTwoSecurityValue s := by
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   cases s <;>
     simp [BigMatch.expect_coinPMF, playerTwoSecurityCoin, nextState,
@@ -232,7 +232,7 @@ theorem playerTwoSecurityAfterLiveDeviation_appendHist_of_live
         (prefixLength + suffixLength) (game.appendHist base suffix) =
       playerTwoSecurityCoin := by
   unfold playerTwoSecurityAfterLiveDeviation
-  simp only [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right prefixLength suffixLength)]
   rw [game.terminalPrefixLE_appendHist base suffix hstart]
   simp [hbase]
 
@@ -246,7 +246,7 @@ theorem playerTwoSecurityAfterLiveDeviation_appendHist_of_not_live
       prescribed true (prefixLength + suffixLength)
         (game.appendHist base suffix) := by
   unfold playerTwoSecurityAfterLiveDeviation
-  simp only [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right prefixLength suffixLength)]
   rw [game.terminalPrefixLE_appendHist base suffix hstart]
   simp [hbase]
 

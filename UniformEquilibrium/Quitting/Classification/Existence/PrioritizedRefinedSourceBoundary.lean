@@ -72,7 +72,7 @@ theorem
       intro who
       exact hempty.elim who
   | inr hnonempty =>
-      letI := hnonempty
+      let := hnonempty
       by_cases hstationary :
           QuittingStationaryεEquilibriumExistence table.zeroNeverReward
       · exact Or.inl hstationary

@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {Player : Type} [Fintype Player] [DecidableEq Player]
 

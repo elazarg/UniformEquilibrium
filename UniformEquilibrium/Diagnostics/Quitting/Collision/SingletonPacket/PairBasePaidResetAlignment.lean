@@ -30,8 +30,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set
-open Math.Probability Math.PMFProduct
+open _root_.Finset _root_.Set
+open _root_.Math.Probability Math.PMFProduct
 
 /-- A product root in which a genuine opponent Quits surely has unit
 first-stage opponent incidence. -/

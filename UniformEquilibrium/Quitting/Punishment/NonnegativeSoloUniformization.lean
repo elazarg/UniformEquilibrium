@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -148,11 +148,15 @@ theorem finiteAveragePayoff_update_le_terminal_add_opponentLiveTailCesaro_of_sol
               (quittingOpponentOnlyProfile reward profile who) time -
             quittingLiveMassLimit reward
               (quittingOpponentOnlyProfile reward profile who))) := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
-  rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage :=
+    (quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff
+      (Function.update profile who deviation)
+      (show (quittingGame reward).State from none) who horizon
+  rw [haverage]
   have hsum :
       (∑ time ∈ Finset.range horizon,
         (quittingGame reward).expectedStagePayoff

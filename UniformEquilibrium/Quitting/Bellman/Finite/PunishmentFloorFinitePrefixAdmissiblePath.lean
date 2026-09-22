@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -104,15 +104,21 @@ theorem chargeSum_quittingFinitePrefixAdmissiblePath
   | 0, htime => by
       simp [quittingFinitePrefixAdmissiblePath]
   | time + 1, htime => by
+      have hedgeCharge :
+          (ChargedRelation.Path.edge
+            (R := AdmissibleRelation reward)
+            (quittingFinitePrefixAdmissibleEdge cert time (by omega)) rfl rfl).chargeSum =
+            quittingRootAbsorptionMass (cert.roots time) := by
+        rw [ChargedRelation.Path.chargeSum_edge]
+        change quittingRootAbsorptionMass
+            (quittingRootOfSimplex
+              (quittingFinitePrefixStoredRoot cert (time + 1))) = _
+        rw [quittingRootOfSimplex_finitePrefixStoredRoot_succ]
       rw [Finset.sum_range_succ]
       simp only [quittingFinitePrefixAdmissiblePath,
-        ChargedRelation.Path.chargeSum_append,
-        ChargedRelation.Path.chargeSum_edge]
+        ChargedRelation.Path.chargeSum_append]
       rw [chargeSum_quittingFinitePrefixAdmissiblePath cert time]
-      change _ + quittingRootAbsorptionMass
-          (quittingRootOfSimplex
-            (quittingFinitePrefixStoredRoot cert (time + 1))) = _
-      rw [quittingRootOfSimplex_finitePrefixStoredRoot_succ]
+      congr 1
 
 /-- The full decoded prefix has exactly the certificate's charge. -/
 theorem chargeSum_quittingFinitePrefixAdmissiblePath_horizon

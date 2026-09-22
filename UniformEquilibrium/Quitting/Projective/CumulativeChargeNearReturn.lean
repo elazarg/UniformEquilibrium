@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 open QuittingPunishmentFloorAdmissibleChargedRelation
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -241,9 +241,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_cumulativePayoffNearRetu
   obtain ⟨sampleSource, sampleTarget, samplePath, hsampleCharge,
       _hsampleClose⟩ := family.nearReturn family.chargeFloor
         family.chargeFloor_pos
-  letI : Nonempty iota := by
+  let : Nonempty iota := by
     rcases isEmpty_or_nonempty iota with hempty | hnonempty
-    · letI : IsEmpty iota := hempty
+    · let : IsEmpty iota := hempty
       have hzero : samplePath.chargeSum = 0 := by
         rw [← QuittingPunishmentFloorAdmissibleChargedRelation.pathToFinitePrefix_charge]
         unfold QuittingPunishmentFloorFinitePrefix.charge

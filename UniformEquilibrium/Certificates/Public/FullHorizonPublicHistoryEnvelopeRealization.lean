@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -77,7 +77,7 @@ private theorem prescribedReachable_support_aux
           G.boundedPublicHistoryPrescribedKernel profile node next ≠ 0
           at nonzero
         simpa only [PMF.mem_support_iff] using nonzero
-      rw [boundedPublicHistoryPrescribedKernel, dif_pos strict] at member
+      rw [boundedPublicHistoryPrescribedKernel, dite_eq_left strict] at member
       simp only [PMF.mem_support_bind_iff, PMF.mem_support_pure_iff]
         at member
       obtain ⟨action, action_mem, successor, successor_mem, rfl⟩ := member
@@ -294,7 +294,7 @@ def supportedHistoryPositiveBellmanGapOfPositiveBellmanGap
             (G.boundedPublicHistoryPrescribedKernel profile gap.node)
             (model.deviationEnvelope gap.depth who) =
           _
-      rw [boundedPublicHistoryPrescribedKernel, dif_pos strict,
+      rw [boundedPublicHistoryPrescribedKernel, dite_eq_left strict,
         expect_bind]
       unfold historyContinuationEU
       apply congrArg (expect (G.stageActionDist profile gap.node.2))
@@ -332,7 +332,7 @@ def supportedHistoryPositiveBellmanGapOfPositiveBellmanGap
               profile gap.node who gap.action)
             (model.deviationEnvelope gap.depth who) =
           _
-      rw [boundedPublicHistoryControlledKernel, dif_pos strict,
+      rw [boundedPublicHistoryControlledKernel, dite_eq_left strict,
         expect_bind]
       apply congrArg
       funext jointAction

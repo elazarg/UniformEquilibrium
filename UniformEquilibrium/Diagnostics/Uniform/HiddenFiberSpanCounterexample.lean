@@ -39,7 +39,11 @@ inductive Edge
   | low
   | high
   | negative
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype Edge where
+  elems := {.low, .high, .negative}
+  complete edge := by cases edge <;> simp
 
 private theorem Edge.univ_eq :
     (Finset.univ : Finset Edge) = {Edge.low, Edge.high, Edge.negative} := by

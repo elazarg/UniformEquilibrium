@@ -70,7 +70,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -326,7 +326,7 @@ private theorem modelObstacle_eq
       terminalPayoff (G.fullHistoryOfBoundedNode node full) who := by
   change G.fullPublicHistoryObstacle terminalPayoff node who = _
   unfold fullPublicHistoryObstacle
-  rw [dif_pos full]
+  rw [dite_eq_left full]
 
 omit [Finite G.State] in
 /-- Away from the horizon the model obstacle vanishes. -/
@@ -337,7 +337,7 @@ private theorem modelObstacle_eq_zero
     (selectedModel obstacle terminalPayoff).obstacle node who = 0 := by
   change G.fullPublicHistoryObstacle terminalPayoff node who = 0
   unfold fullPublicHistoryObstacle
-  rw [dif_neg not_full]
+  rw [dite_eq_right not_full]
 
 omit [Fintype ι] [DecidableEq ι] [Finite G.State]
     [∀ who, Fintype (G.Act who)] [∀ who, Nonempty (G.Act who)] in
@@ -364,7 +364,7 @@ private theorem expect_prescribedKernel_eq
         expect (G.transition node.2.2 action) fun next =>
           value
             (G.boundedPublicHistorySuccessor node strict action next) := by
-  rw [boundedPublicHistoryPrescribedKernel, dif_pos strict, expect_bind]
+  rw [boundedPublicHistoryPrescribedKernel, dite_eq_left strict, expect_bind]
   have actions :
       G.stageActionDist (profile (G := G) obstacle) node.2 =
         pmfPi (nodeMixed (obstacle := obstacle) node) := by
@@ -397,7 +397,7 @@ private theorem expect_controlledKernel_eq
         expect (G.transition node.2.2 action) fun next =>
           value
             (G.boundedPublicHistorySuccessor node strict action next) := by
-  rw [boundedPublicHistoryControlledKernel, dif_pos strict, expect_bind]
+  rw [boundedPublicHistoryControlledKernel, dite_eq_left strict, expect_bind]
   have actions :
       (fun player => profile (G := G) obstacle player node.1.val node.2) =
         nodeMixed (obstacle := obstacle) node := by
@@ -1220,7 +1220,9 @@ private theorem expect_histDist
     (value : game.Hist 1 → ℝ) :
     expect (game.histDist behavior () 1) value =
       expect (mixed ()) (fun move => value (historyOf move)) := by
-  rw [game.histDist_succ behavior () 0, game.histDist_zero]
+  have hsucc := game.histDist_succ behavior () 0
+  have hzero := game.histDist_zero behavior ()
+  rw [hsucc, hzero]
   simp only [expect_bind, expect_pure]
   have actions :
       game.stageActionDist behavior (game.emptyHist ()) = pmfPi mixed := by

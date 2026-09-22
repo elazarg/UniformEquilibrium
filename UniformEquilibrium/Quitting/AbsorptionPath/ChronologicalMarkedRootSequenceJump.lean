@@ -131,8 +131,10 @@ theorem pathJump_chronologicalCadlagPath_eq_clockCoalitionFiber_real
     ProbabilityTheory.measure_cdf]
   unfold clockLaw chronologicalCoalitionClockLaw
   rw [← ProbabilityMeasure.ennreal_coeFn_eq_coeFn_toMeasure,
-    ProbabilityMeasure.map_apply _ _ (A := {time})
-      (measurableSet_singleton time),
+    ProbabilityMeasure.map_apply law
+      (continuous_chronologicalCoalitionClock
+        (reward := reward) coalition).measurable.aemeasurable
+      (A := {time}) (measurableSet_singleton time),
     chronologicalCoalitionClock_preimage_singleton time htime coalition]
   exact ProbabilityMeasure.measureReal_eq_coe_coeFn law _
 
@@ -247,7 +249,7 @@ theorem chronologicalLaw_openClockCoalitionWindow_real_eq_sum
                 lower upper coalition := by
           exact ⟨hclock, rfl⟩
         rw [Set.indicator_of_mem hmem,
-          certificate.chronologicalIndexPMF_toReal, if_pos hclock]
+          certificate.chronologicalIndexPMF_toReal, ite_eq_left hclock]
         rfl
       · have hnot : (stage, ⟨coalition⟩) ∉
             certificate.chronologicalEventAt reward ⁻¹'
@@ -255,7 +257,7 @@ theorem chronologicalLaw_openClockCoalitionWindow_real_eq_sum
                 lower upper coalition := by
           intro hmem
           exact hclock hmem.1
-        rw [Set.indicator_of_notMem hnot, ENNReal.toReal_zero, if_neg hclock]
+        rw [Set.indicator_of_notMem hnot, ENNReal.toReal_zero, ite_eq_right hclock]
     · intro mark hne
       have hcoalition : mark.coalition ≠ coalition := by
         intro heq
@@ -438,9 +440,9 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
         · simp [hwindow, comparison, Finset.mem_Ico, hfirstStage,
             hstageSelected]
         · rw [hlater_zero hstageRange hwindow hselectedStage]
-          simp only [if_pos hwindow]
+          simp only [ite_eq_left hwindow]
           exact hcomparison_nonneg stage
-      · rw [if_neg hwindow]
+      · rw [ite_eq_right hwindow]
         exact hcomparison_nonneg stage
     have hcomparison :
         (∑ stage ∈ (Finset.range (certificate.cutoff + 1)).erase selected,
@@ -462,12 +464,12 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
           · intro stage _ hnotIco
             change comparison stage = 0
             unfold comparison
-            rw [if_neg hnotIco]
+            rw [ite_eq_right hnotIco]
         _ = ∑ stage ∈ Finset.Ico first selected, stageTotal stage := by
           apply Finset.sum_congr rfl
           intro stage hstage
           unfold comparison
-          rw [if_pos hstage]
+          rw [ite_eq_left hstage]
     calc
       residualTotal ≤
           ∑ stage ∈ (Finset.range (certificate.cutoff + 1)).erase selected,
@@ -500,7 +502,7 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
       (fun stage ↦ if inWindow stage then
         quittingRootSequenceStageCoalitionMass roots stage coalition else 0)
       hselectedRange
-    rw [if_pos hselectedWindow] at hsplit
+    rw [ite_eq_left hselectedWindow] at hsplit
     exact hsplit.symm.trans (add_comm _ _)
   have hresidual_nonneg
       (coalition : {S : Finset ι // S.Nonempty}) :
@@ -561,7 +563,7 @@ theorem exists_dominantClockWindowStage_of_width_lt_real
                 quittingRootSequenceStageCoalitionMass roots stage coalition else 0 := by
           apply Finset.sum_congr rfl
           intro stage hstage
-          rw [if_neg (Finset.ne_of_mem_erase hstage)]
+          rw [ite_eq_right (Finset.ne_of_mem_erase hstage)]
         _ = _ := by
           apply Finset.sum_subset (Finset.erase_subset selected full)
           intro stage hstageFull hstageErase

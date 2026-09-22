@@ -316,6 +316,7 @@ theorem fixedLaw_owner_atomPlayer_incidence_pos :
     0 < quittingTerminalOpponentIncidenceMass owner atomPlayer fixedLaw := by
   have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
     (fixed, fixedLaw) fixed_mem_lawCarrier
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
   unfold quittingTerminalOpponentIncidenceMass
   have hatom : atomTerminal ∈
       Finset.univ.filter

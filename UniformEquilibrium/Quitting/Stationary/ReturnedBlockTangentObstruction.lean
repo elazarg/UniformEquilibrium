@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct Math.LinearProgramming
+open Filter _root_.Math.Probability Math.PMFProduct Math.LinearProgramming
   QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -121,11 +121,13 @@ theorem sum_cumulativeHazard :
 
 /-- Normalize cumulative owner hazards into a simplex direction. -/
 def normalizedHazard (hpositive : 0 < block.totalHazard) :
-    stdSimplex ℝ ι := by
-  refine ⟨fun who => block.cumulativeHazard who / block.totalHazard,
+    Convexity.StdSimplex ℝ ι := by
+  refine ⟨Finsupp.equivFunOnFinite.symm
+      (fun who => block.cumulativeHazard who / block.totalHazard),
     fun who => div_nonneg (block.cumulativeHazard_nonneg who)
       hpositive.le, ?_⟩
-  rw [← Finset.sum_div, block.sum_cumulativeHazard,
+  rw [Finsupp.equivFunOnFinite_symm_sum, ← Finset.sum_div,
+    block.sum_cumulativeHazard,
     div_self hpositive.ne']
 
 omit [DecidableEq ι] [Nonempty ι] in
@@ -295,16 +297,16 @@ omit [Nonempty ι] in
 singleton-reward barycenter minus the player's own singleton payoff. -/
 theorem singletonLCPResidual_normalizedSoloMatrix_eq_singletonBarycenter
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (direction : stdSimplex ℝ ι) (who : ι) :
+    (direction : Convexity.StdSimplex ℝ ι) (who : ι) :
     singletonLCPResidual (normalizedSoloMatrix reward) direction who =
-      (∑ owner, (direction : ι → ℝ) owner *
+      (∑ owner, direction.weights owner *
         reward (quittingSingletonTerminal owner) who) -
       reward (quittingSingletonTerminal who) who := by
   rw [normalizedSoloMatrix_eq_projectiveLCPMatrix]
   unfold singletonLCPResidual wsum dotProduct quittingProjectiveLCPMatrix
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
-  have hmass : ∑ owner, direction owner = 1 := direction.property.2
+  have hmass : ∑ owner, direction.weights owner = 1 := direction.total_of_fintype
   rw [hmass, one_mul]
   rfl
 
@@ -553,7 +555,7 @@ theorem abs_normalizedSingletonBarycenter_sub_anchor_le
     (hreward : ∀ S player, |reward S player| ≤ M)
     (hvalue : ∀ phase who, |block.value phase who| ≤ M)
     (hpositive : 0 < block.totalHazard) (who : ι) :
-    |∑ owner, (block.normalizedHazard hpositive : ι → ℝ) owner *
+    |∑ owner, (block.normalizedHazard hpositive).weights owner *
         (reward (quittingSingletonTerminal owner) who - block.value 0 who)| ≤
       block.bellmanError reward / block.totalHazard +
         2 * M * block.totalHazard +
@@ -640,7 +642,7 @@ theorem abs_normalizedSingletonBarycenter_sub_anchor_le
       _ ≤ _ := by
         simpa [add_comm] using add_le_add hanchorSub htail
   have hnormalized :
-      (∑ owner, (block.normalizedHazard hpositive : ι → ℝ) owner *
+      (∑ owner, (block.normalizedHazard hpositive).weights owner *
         (reward (quittingSingletonTerminal owner) who - block.value 0 who)) =
         aggregateAnchor / block.totalHazard := by
     have hnumerator : (∑ owner, block.cumulativeHazard owner *
@@ -726,7 +728,7 @@ theorem abs_endpointDifference_add_normalizedResidual_le
   let anchor := block.value 0 who
   let tail := block.value (block.next phase) who
   let barycenter := ∑ owner,
-    (block.normalizedHazard hpositive : ι → ℝ) owner *
+    (block.normalizedHazard hpositive).weights owner *
       reward (quittingSingletonTerminal owner) who
   have hbary := block.abs_normalizedSingletonBarycenter_sub_anchor_le
     reward hreward hvalue hpositive who
@@ -735,13 +737,13 @@ theorem abs_endpointDifference_add_normalizedResidual_le
         2 * M * block.totalHazard +
         (block.bellmanError reward + 2 * M * block.totalHazard) := by
     have heq : (∑ owner,
-        (block.normalizedHazard hpositive : ι → ℝ) owner *
+        (block.normalizedHazard hpositive).weights owner *
           (reward (quittingSingletonTerminal owner) who - anchor)) =
         barycenter - anchor := by
       simp_rw [mul_sub]
       rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
-      have hmass : ∑ owner, (block.normalizedHazard hpositive) owner = 1 :=
-        (block.normalizedHazard hpositive).property.2
+      have hmass : ∑ owner, (block.normalizedHazard hpositive).weights owner = 1 :=
+        (block.normalizedHazard hpositive).total_of_fintype
       rw [hmass, one_mul]
     rw [← heq]
     simpa [anchor] using hbary
@@ -792,7 +794,7 @@ theorem homogeneousViolation_normalizedHazard_le
     (hpositive : 0 < block.totalHazard)
     (hhalf : block.totalHazard ≤ 1 / 2) :
     homogeneousViolation (normalizedSoloMatrix reward)
-        (block.normalizedHazard hpositive : ι → ℝ) ≤
+        (block.normalizedHazard hpositive).weights ≤
       let η :=
         (block.bellmanError reward / block.totalHazard +
           2 * M * block.totalHazard +
@@ -931,7 +933,7 @@ theorem homogeneousViolation_normalizedHazard_le
               unfold QuittingReturnedProductBlock.hazard
               rw [neg_mul]
               exact le_add_of_nonneg_left hfirst
-  have hdirection : (∑ who, (direction : ι → ℝ) who * residual who) =
+  have hdirection : (∑ who, direction.weights who * residual who) =
       (∑ phase, ∑ who, block.hazard phase who * residual who) /
         block.totalHazard := by
     change (∑ who, (block.cumulativeHazard who / block.totalHazard) *
@@ -944,13 +946,13 @@ theorem homogeneousViolation_normalizedHazard_le
     apply Finset.sum_congr rfl
     intro phase _
     rw [Finset.sum_mul]
-  have hquadratic : ∑ who, (direction : ι → ℝ) who * residual who ≤
+  have hquadratic : ∑ who, direction.weights who * residual who ≤
       η + block.endpointRegret reward / block.totalHazard := by
     rw [hdirection]
     apply (div_le_div_of_nonneg_right hraw hpositive.le).trans_eq
     field_simp [hpositive.ne']
   unfold homogeneousViolation
-  change max 0 (∑ who, (direction : ι → ℝ) who * residual who) +
+  change max 0 (∑ who, direction.weights who * residual who) +
       ∑ who, max 0 (-residual who) ≤ _
   apply add_le_add
   · exact max_le (add_nonneg hη (div_nonneg
@@ -975,7 +977,7 @@ theorem homogeneousViolation_normalizedHazard_le_relative
     (hpositive : 0 < block.totalHazard)
     (hhalf : block.totalHazard ≤ 1 / 2) :
     homogeneousViolation (normalizedSoloMatrix reward)
-        (block.normalizedHazard hpositive : ι → ℝ) ≤
+        (block.normalizedHazard hpositive).weights ≤
       3 * ((Fintype.card ι : ℝ) + 1) *
           ((block.bellmanError reward + block.endpointRegret reward) /
             block.totalHazard) +
@@ -1018,7 +1020,7 @@ theorem homogeneousViolation_normalizedHazard_le_relative
     reward hreward hvalue hpositive hhalf
   calc
     homogeneousViolation (normalizedSoloMatrix reward)
-        (block.normalizedHazard hpositive : ι → ℝ) ≤
+        (block.normalizedHazard hpositive).weights ≤
       (d + 1) * (B / S + 2 * B + 10 * M * S) +
         E / S + 2 * d * E := by
           apply hbase.trans_eq
@@ -1074,17 +1076,19 @@ theorem relativeError_gap_of_noHomogeneous
       nlinarith [hsmallCross]
     nlinarith [hMle]
   have hmargin := r0Margin_le matrix
-    (block.normalizedHazard hpositive).property
+    (GameTheory.Math.Probability.mem_simplexWeights.mpr
+      ⟨(block.normalizedHazard hpositive).weights_nonneg,
+        (block.normalizedHazard hpositive).total_of_fintype⟩)
   have hupper := block.homogeneousViolation_normalizedHazard_le_relative
     reward hreward hvalue hpositive hhalf
   have hlower : r ≤ homogeneousViolation matrix
-      (block.normalizedHazard hpositive).val := by
+      (block.normalizedHazard hpositive).weights := by
     simpa only [r] using hmargin
   have hupper' : homogeneousViolation matrix
-      (block.normalizedHazard hpositive).val ≤
+      (block.normalizedHazard hpositive).weights ≤
         3 * D * X + 10 * D * M * S := by
     change homogeneousViolation matrix
-      (block.normalizedHazard hpositive).val ≤
+      (block.normalizedHazard hpositive).weights ≤
         3 * D * X + 10 * D * M * S at hupper
     exact hupper
   have hhalfMargin : r / 2 ≤ 3 * D * X := by

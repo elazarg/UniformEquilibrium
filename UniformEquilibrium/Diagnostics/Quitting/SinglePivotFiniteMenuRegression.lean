@@ -7,7 +7,7 @@ noncomputable section
 namespace GameTheory
 namespace SinglePivotFiniteMenuSurePivotFixture
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 open QuittingSureSetOwnerRepair
 
 abbrev Action := QuittingFiniteDeadlineTimingAction 1
@@ -141,7 +141,7 @@ theorem pureTimingPayoff (a b : Action) (who : Bool) :
 
 theorem finiteNash :
     IsQuittingFiniteDeadlineNash reward 1 0 mixed := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward 1).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -181,7 +181,7 @@ theorem finiteNash :
 theorem pivot_payoff_eq_zero :
     quittingTerminalPayoff reward
         (quittingFiniteDeadlineTimingProfile reward 1 mixed) false = 0 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward 1).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -195,7 +195,7 @@ theorem pivot_payoff_eq_zero :
 
 theorem pivot_never_payoff_eq_zero :
     quittingFiniteDeadlineNeverPayoff reward 1 mixed false = 0 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward 1).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU

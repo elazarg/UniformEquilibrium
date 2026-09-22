@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {K : ℕ} [NeZero K]
@@ -156,7 +156,7 @@ theorem quittingRootOpponentAbsorptionMass_le_card_mul_hazard
     (hm : ∀ other, (root other true).toReal ≤ m) :
     quittingRootOpponentAbsorptionMass root who ≤
       ((Fintype.card ι : ℝ) - 1) * m := by
-  letI : Nonempty ι := ⟨who⟩
+  let : Nonempty ι := ⟨who⟩
   have hunion := Math.one_sub_prod_one_sub_le_sum
     (fun other ↦ (root other true).toReal)
     (Finset.univ.erase who)
@@ -541,7 +541,7 @@ theorem exists_quittingPeriodicBehavioralGap_of_payoff_gap
         quittingPeriodicBehavioralCap reward cycle base who := by
   have hcardpos : 0 < Fintype.card ι := by
     omega
-  letI : Nonempty ι := Fintype.card_pos_iff.mp hcardpos
+  let : Nonempty ι := Fintype.card_pos_iff.mp hcardpos
   let q : Fin K → ι → ℝ := fun phase who =>
     (cycle phase who true).toReal
   let coefficient : Fin K → ι → ℝ := fun phase who =>

@@ -180,7 +180,7 @@ theorem isLocallyClosed_iInter_of_finite
     [Finite ι] {X : Type*} [TopologicalSpace X]
     (s : ι → Set X) (hs : ∀ i, IsLocallyClosed (s i)) :
     IsLocallyClosed (⋂ i, s i) := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   classical
   have hfin :
       ∀ T : Finset ι, IsLocallyClosed (⋂ i ∈ T, s i) := by

@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 namespace CausalQuitAggregationCounterexample
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 abbrev Player := Bool
 abbrev observer : Player := false
@@ -94,9 +94,9 @@ theorem fixedOpponentsQuitValue_observer_eq_zero (scale : ℝ) :
     Finset.mem_insert, Finset.mem_singleton, Bool.eq_true_or_eq_false_self,
     true_and, Bool.forall_bool, Bool.false_eq_true, iff_true, iff_false,
     Bool.not_eq_true, opponent, Pi.zero_apply, dite_eq_ite, expect_eq_sum,
-    mul_ite, mul_zero, mul_neg, Finset.sum_insert, if_true_left, and_false,
+    mul_ite, mul_zero, mul_neg, Finset.sum_insert, ite_true_left, and_false,
     and_true, quittingHazardCoin_true_toReal, Finset.sum_singleton,
-    if_false_left, quittingHazardCoin_false_toReal, PMF.pure_apply,
+    ite_false_left, quittingHazardCoin_false_toReal, PMF.pure_apply,
     ENNReal.toReal_one, implies_true, Finset.filter_true,
     Finset.insert_nonempty, one_mul, ENNReal.toReal_zero, imp_false,
     Bool.not_eq_false, ite_self, Finset.filter_false,
@@ -104,7 +104,7 @@ theorem fixedOpponentsQuitValue_observer_eq_zero (scale : ℝ) :
   have hnonempty :
       ({x ∈ ({true, false} : Finset Bool) | x = false}).Nonempty := by
     exact ⟨false, by simp⟩
-  rw [if_pos hnonempty]
+  rw [ite_eq_left hnonempty]
   ring
 
 theorem fixedOpponentsContinueReward_observer_eq_zero (scale : ℝ) :
@@ -201,7 +201,7 @@ theorem sum_quitDirectedAtoms_eq_half_scale
     fairCoin_true_toReal, one_div, Finset.insert_eq_self,
     Bool.false_eq_true, Finset.singleton_nonempty, Finset.singleton_inj]
   have hneq : ({false, true} : Finset Bool) ≠ {false} := by decide
-  rw [if_neg hneq, max_eq_right (neg_nonpos.mpr hscale)]
+  rw [ite_eq_right hneq, max_eq_right (neg_nonpos.mpr hscale)]
   have hbool : ({true, false} : Finset Bool).erase false = {true} := by decide
   rw [hbool]
   simp [fairCoin_false_toReal, max_eq_left hscale]

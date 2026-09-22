@@ -282,21 +282,21 @@ theorem exists_projectiveLCPSolution_cemetery_eq_zero_of_homogeneous
   obtain ⟨weight, hresidual, hcomplementary⟩ := homogeneous
   refine ⟨
     { cemetery := 0
-      singleton := weight.val
+      singleton := weight.weights
       cemetery_nonneg := le_rfl
-      singleton_nonneg := weight.property.1
-      total := by simpa using weight.property.2
+      singleton_nonneg := weight.weights_nonneg
+      total := by simp [weight.total_of_fintype]
       residual_nonneg := ?_
       complementary := ?_ }, rfl⟩
   · intro i
     simp only [zero_mul, zero_add]
     have h := hresidual i
-    change 0 ≤ ∑ j, weight.val j * M i j at h
+    change 0 ≤ ∑ j, weight.weights j * M i j at h
     exact h
   · intro i
     simp only [zero_mul, zero_add]
     have h := hcomplementary i
-    change weight.val i * (∑ j, weight.val j * M i j) = 0 at h
+    change weight.weights i * (∑ j, weight.weights j * M i j) = 0 at h
     exact h
 
 omit [DecidableEq ι] in
@@ -314,11 +314,12 @@ theorem hasNontrivialZeroProjectiveLCPSolution_iff_homogeneous
       dsimp [mass]
       linarith [solution.total]
     have hmass0 : mass ≠ 0 := ne_of_gt hmass
-    let weight : stdSimplex ℝ ι :=
-      ⟨fun i => solution.singleton i * mass⁻¹,
+    let weight : Convexity.StdSimplex ℝ ι :=
+      ⟨Finsupp.equivFunOnFinite.symm
+          (fun i => solution.singleton i * mass⁻¹),
         fun i => mul_nonneg (solution.singleton_nonneg i)
           (inv_nonneg.mpr hmass.le), by
-        rw [← Finset.sum_mul]
+        rw [Finsupp.equivFunOnFinite_symm_sum, ← Finset.sum_mul]
         exact mul_inv_cancel₀ hmass0⟩
     refine ⟨weight, ?_, ?_⟩
     · intro i
@@ -374,8 +375,10 @@ theorem ProjectiveLCPSolution.standard_or_homogeneous
   classical
   by_cases hzero : solution.cemetery = 0
   · right
-    let weight : stdSimplex ℝ ι :=
-      ⟨solution.singleton, solution.singleton_nonneg, by
+    let weight : Convexity.StdSimplex ℝ ι :=
+      ⟨Finsupp.equivFunOnFinite.symm solution.singleton,
+        solution.singleton_nonneg, by
+        rw [Finsupp.equivFunOnFinite_symm_sum]
         linarith [solution.total]⟩
     refine ⟨weight, ?_, ?_⟩
     · intro i

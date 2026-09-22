@@ -6,7 +6,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability
+open Maths.ChargedPathBudget _root_.Math.Probability
 
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}
@@ -62,7 +62,7 @@ theorem quittingRobustChargedPath_step {source target}
           exact edge.2
       | succ time =>
           have hrest : time < rest.length := by
-            simpa only [Math.ChargedPathBudget.ChargedRelation.Path.length_cons,
+            simpa only [Maths.ChargedPathBudget.ChargedRelation.Path.length_cons,
               Nat.add_lt_add_iff_right] using htime
           simpa only [quittingRobustChargedPathValue,
             quittingRobustChargedPathRoot, Nat.succ_eq_add_one] using ih hrest
@@ -77,8 +77,8 @@ theorem quittingRobustChargedPath_chargeSum_eq {source target}
   induction path with
   | nil state => simp [quittingRobustChargedPathRoot]
   | cons edge rest ih =>
-      rw [Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_cons,
-        Math.ChargedPathBudget.ChargedRelation.Path.length_cons,
+      rw [Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_cons,
+        Maths.ChargedPathBudget.ChargedRelation.Path.length_cons,
         Finset.sum_range_succ']
       simp only [quittingRobustChargedPathRoot]
       have hedgeCharge :

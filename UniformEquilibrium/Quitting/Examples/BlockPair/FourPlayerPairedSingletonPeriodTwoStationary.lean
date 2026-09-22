@@ -18,7 +18,7 @@ noncomputable section
 namespace GameTheory
 namespace FourPlayerPairedSingleton
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open SolanVieilleBoundary (boundaryReward)
 
 private def stationaryGainZero (y z t : ℝ) : ℝ :=

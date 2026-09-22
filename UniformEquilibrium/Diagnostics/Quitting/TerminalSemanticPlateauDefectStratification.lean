@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -124,7 +124,7 @@ theorem quittingRootCoalitionMass_eq_actionProbability_mul_routed
       (pmfPi (Function.update root who (PMF.pure action)))
         (Function.update oldAction who action) = rest := by
     rw [pmfPi_apply_update_family]
-    simp only [Function.update_self, PMF.pure_apply, if_true, one_mul]
+    simp only [Function.update_self, PMF.pure_apply, ite_true, one_mul]
     apply Finset.prod_congr rfl
     intro player hplayer
     rw [Function.update_of_ne (Finset.ne_of_mem_erase hplayer)]

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Paths
+import Maths.Multitubes.MaxAffine.Paths
 import UniformEquilibrium.Quitting.Debt.Dynamic.FiniteDynamicDebt
 
 /-!
@@ -41,7 +41,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -62,8 +62,8 @@ def quittingDynamicDebtLabel
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed : ℕ → ℝ) (time : ℕ) :
-    Math.MaxAffineTransport.Label :=
-  Math.MaxAffineTransport.reflectedLabel
+    Maths.MaxAffineTransport.Label :=
+  Maths.MaxAffineTransport.reflectedLabel
     (quittingFixedOpponentsContinueMass roots who time)
     (max 0 (quittingStageGap reward roots who prescribed time))
 
@@ -95,7 +95,7 @@ def quittingDynamicDebtLabel
     (quittingDynamicDebtLabel reward roots who prescribed time).apply debt =
       max 0 (quittingFixedOpponentsContinueMass roots who time * debt -
         max 0 (quittingStageGap reward roots who prescribed time)) := by
-  exact Math.MaxAffineTransport.apply_reflectedLabel _ _ _
+  exact Maths.MaxAffineTransport.apply_reflectedLabel _ _ _
 
 theorem quittingDynamicDebtLabel_slope_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -176,7 +176,7 @@ def quittingDynamicDebtLabelList
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed : ℕ → ℝ) (start : ℕ) : ℕ →
-    List Math.MaxAffineTransport.Label
+    List Maths.MaxAffineTransport.Label
   | 0 => []
   | fuel + 1 =>
       quittingDynamicDebtLabelList reward roots who prescribed (start + 1) fuel ++
@@ -207,7 +207,7 @@ theorem quittingDynamicDebtLabelList_pathSlope
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
     (prescribed : ℕ → ℝ) : ∀ start fuel,
-    Math.MaxAffineTransport.Label.pathSlope
+    Maths.MaxAffineTransport.Label.pathSlope
         (quittingDynamicDebtLabelList reward roots who prescribed start fuel) =
       quittingOpponentSurvivalWeight roots who start fuel := by
   intro start fuel
@@ -215,10 +215,10 @@ theorem quittingDynamicDebtLabelList_pathSlope
   | zero => simp [quittingDynamicDebtLabelList, quittingOpponentSurvivalWeight]
   | succ fuel ih =>
       rw [quittingDynamicDebtLabelList,
-        Math.MaxAffineTransport.Label.pathSlope_append,
+        Maths.MaxAffineTransport.Label.pathSlope_append,
         ih (start + 1), quittingOpponentSurvivalWeight_succ_left]
-      simp only [Math.MaxAffineTransport.Label.pathSlope_cons,
-        Math.MaxAffineTransport.Label.pathSlope_nil,
+      simp only [Maths.MaxAffineTransport.Label.pathSlope_cons,
+        Maths.MaxAffineTransport.Label.pathSlope_nil,
         quittingDynamicDebtLabel_slope, mul_one]
       ring
 
@@ -351,7 +351,7 @@ theorem quittingFiniteDynamicDebt_eq_compList_apply
       quittingPrescribedOneStepResidual reward roots who prescribed time = 0) :
     ∀ start fuel, start + fuel ≤ bound →
       quittingFiniteDynamicDebt reward roots who prescribed terminalDebt start fuel =
-        (Math.MaxAffineTransport.Label.compList
+        (Maths.MaxAffineTransport.Label.compList
           (quittingDynamicDebtLabelList reward roots who prescribed start fuel)).apply
             terminalDebt := by
   intro start fuel
@@ -368,7 +368,7 @@ theorem quittingFiniteDynamicDebt_eq_compList_apply
           (hresidual start hstart)]
       rw [ih (start + 1) htailWindow, quittingDynamicDebtLabelList]
       symm
-      apply Math.MaxAffineTransport.Label.apply_compList_append_singleton
+      apply Maths.MaxAffineTransport.Label.apply_compList_append_singleton
       exact quittingDynamicDebtLabel_slope_nonneg
         reward roots who prescribed start
 
@@ -386,17 +386,17 @@ theorem quittingFiniteDynamicDebt_eq_pathCoefficients_apply
       quittingPrescribedOneStepResidual reward roots who prescribed time = 0)
     (start fuel : ℕ) (hwindow : start + fuel ≤ bound) :
     quittingFiniteDynamicDebt reward roots who prescribed terminalDebt start fuel =
-      (⟨Math.MaxAffineTransport.Label.pathFloor
+      (⟨Maths.MaxAffineTransport.Label.pathFloor
           (quittingDynamicDebtLabelList reward roots who prescribed start fuel),
-        Math.MaxAffineTransport.Label.pathShift
+        Maths.MaxAffineTransport.Label.pathShift
           (quittingDynamicDebtLabelList reward roots who prescribed start fuel),
-        Math.MaxAffineTransport.Label.pathSlope
+        Maths.MaxAffineTransport.Label.pathSlope
           (quittingDynamicDebtLabelList reward roots who prescribed start fuel)⟩ :
-        Math.MaxAffineTransport.Label).apply terminalDebt := by
+        Maths.MaxAffineTransport.Label).apply terminalDebt := by
   rw [quittingFiniteDynamicDebt_eq_compList_apply
     reward roots who prescribed hprescribed hterminalDebt bound hresidual
       start fuel hwindow]
-  exact Math.MaxAffineTransport.Label.apply_compList_eq_pathCoefficients
+  exact Maths.MaxAffineTransport.Label.apply_compList_eq_pathCoefficients
     (fun label hlabel ↦ quittingDynamicDebtLabelList_slope_nonneg
       reward roots who prescribed start fuel label hlabel) terminalDebt
 

@@ -48,10 +48,10 @@ open CirculantTrichotomyClosure QuittingSureSetOwnerRepair
 def flatMargin : ZMod 5 → ℝ := fun d => if d = 0 then 0 else 1
 
 @[simp] theorem flatMargin_zero : flatMargin 0 = 0 := by
-  rw [flatMargin, if_pos rfl]
+  rw [flatMargin, ite_eq_left rfl]
 
 theorem flatMargin_of_ne {d : ZMod 5} (hd : d ≠ 0) : flatMargin d = 1 := by
-  rw [flatMargin, if_neg hd]
+  rw [flatMargin, ite_eq_right hd]
 
 /-- The collider completion at solo self value `1`, joint value `-2`, and the
 margin vector `flatMargin`. -/
@@ -86,9 +86,9 @@ theorem quittingSetReward_flatReward_singleton_zero :
   funext who
   rw [flatReward, quittingSetReward_singleton, flatPayoff]
   by_cases hwho : who = 0
-  · rw [if_pos hwho, hwho, sub_self, flatMargin_zero]
+  · rw [ite_eq_left hwho, hwho, sub_self, flatMargin_zero]
     norm_num
-  · rw [if_neg hwho, flatMargin_of_ne (sub_ne_zero_of_ne (Ne.symm hwho))]
+  · rw [ite_eq_right hwho, flatMargin_of_ne (sub_ne_zero_of_ne (Ne.symm hwho))]
     norm_num
 
 /-! ## The headline -/

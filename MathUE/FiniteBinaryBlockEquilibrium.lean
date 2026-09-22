@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.Data.Finset.BooleanAlgebra
 import Mathlib.Data.Finset.Max
 import Mathlib.Data.Finset.Powerset
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Pure equilibria in block-triangular binary games
@@ -110,9 +110,9 @@ private theorem exists_stable_on_block
     (Finset.mem_filter.mp hselected).2
   refine ⟨selected, hsubset, fun who hwho => ?_⟩
   by_cases hmem : who ∈ selected
-  · rw [if_pos hmem]
+  · rw [ite_eq_left hmem]
     exact (hpositive who hmem).le
-  · rw [if_neg hmem]
+  · rw [ite_eq_right hmem]
     by_contra hnot
     have hgain : 0 < binaryJoinGain payoff who (outside ∪ selected) :=
       lt_of_not_ge hnot

@@ -518,7 +518,7 @@ theorem exists_universalJoiner_or_switchingPair_of_universalJoining
         0 < β ∧ β < α ∧ α ≤ 1 ∧
           IsInitialRateBlocker (quittingJoiningGain reward owner a) α ∧
           IsTerminalRateBlocker (quittingJoiningGain reward owner b) β := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   have hcover : ∀ h : ℝ, 0 < h → h ≤ 1 →
       ∃ j ∈ Finset.univ.erase owner,
         0 < quittingJoiningGain reward owner j h := by
@@ -575,7 +575,7 @@ theorem exists_soloQuitterRate_or_universalJoiner_of_card_le_two
             quittingSoloReward reward other other ∧
           quittingSoloReward reward owner other <
             quittingSingletonCollisionReward reward owner other := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   rcases exists_soloQuitterRate_or_universalJoiner_or_switchingPair reward
     owner with hrate | hjoiner | ⟨a, hane, b, hbne, hab, _⟩
   · exact Or.inl hrate

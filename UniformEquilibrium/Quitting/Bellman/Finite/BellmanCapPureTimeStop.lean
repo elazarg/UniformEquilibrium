@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -78,8 +78,8 @@ theorem quittingRootSequencePureTimeTerminalValue_le_of_bellmanSupersolution
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman,
         quittingPureTimeHazard_some_of_ne hne]
-      simp only [PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-        ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul, one_mul]
+      simp only [PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+        ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       have hscaled := mul_le_mul_of_nonneg_left htail hmass
       linarith
 

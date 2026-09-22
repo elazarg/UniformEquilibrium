@@ -22,11 +22,12 @@ variation with a separately specified Euclidean norm.
 
 noncomputable section
 
+open scoped BigOperators Topology
+
 namespace Math
 namespace Topology
 
 open Filter Set
-open scoped BigOperators Topology
 
 /-- A correspondence is represented by its set-valued fibers. -/
 abbrev Correspondence (X Y : Type*) := X → Set Y

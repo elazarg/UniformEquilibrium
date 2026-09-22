@@ -56,7 +56,7 @@ theorem collapseLateFiniteStoppingLaw_some_of_lt
     cases source with
     | none => simp
     | some chosen =>
-        rw [if_neg]
+        rw [ite_eq_right]
         simp only [collapseLateFiniteStoppingTime, Option.some.injEq]
         have hne : chosen ≠ time := fun heq ↦ hsource (congrArg some heq)
         omega
@@ -71,7 +71,7 @@ theorem collapseLateFiniteStoppingLaw_some_of_gt
   cases source with
   | none => simp
   | some chosen =>
-      rw [if_neg]
+      rw [ite_eq_right]
       simp only [collapseLateFiniteStoppingTime, Option.some.injEq]
       omega
 

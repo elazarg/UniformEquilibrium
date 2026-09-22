@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Filter Math.Probability
+open _root_.Set Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -54,12 +54,15 @@ theorem quittingTerminalPayoff_finiteTime_playerwiseAffine
         who = scale who * quittingTerminalPayoff reward
           (Function.update profile who
             (quittingPureTimeBehaviorStrategy reward who (some time))) who + shift who := by
-  change quittingTerminalPayoff (quittingPlayerwiseAffineReward reward scale shift)
-      (Function.update profile who (quittingPureTimeBehaviorStrategy
-        (quittingPlayerwiseAffineReward reward scale shift) who (some time))) who = _
+  let transformed := quittingPlayerwiseAffineReward reward scale shift
+  let affineProfile : (quittingGame transformed).BehaviorProfile := profile
+  change quittingTerminalPayoff transformed
+      (Function.update affineProfile who
+        (quittingPureTimeBehaviorStrategy transformed who (some time))) who = _
   rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy
-    (quittingPlayerwiseAffineReward reward scale shift),
-    quittingTerminalPayoff_update_pureTimeBehaviorStrategy reward]
+      transformed affineProfile who (some time),
+    quittingTerminalPayoff_update_pureTimeBehaviorStrategy
+      reward profile who (some time)]
   change quittingTerminalPayoff (quittingPlayerwiseAffineReward reward scale shift)
       (quittingRootSequenceProfile reward
         (quittingRootSequenceUpdate (quittingProfileLiveRoot reward profile) who
@@ -113,9 +116,9 @@ theorem quittingFinitePureReplyPunishmentValue_playerwiseAffine
     quittingFinitePureReplyPunishmentValue (quittingPlayerwiseAffineReward reward scale shift)
         who = scale who * quittingFinitePureReplyPunishmentValue reward who + shift who := by
   let transformed := quittingPlayerwiseAffineReward reward scale shift
-  letI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  let : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
-  letI : Nonempty ((quittingGame transformed).BehaviorProfile) :=
+  let : Nonempty ((quittingGame transformed).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile transformed⟩
   apply le_antisymm
   · have hbound : (quittingFinitePureReplyPunishmentValue transformed who - shift who) /

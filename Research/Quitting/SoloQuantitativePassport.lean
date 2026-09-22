@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Set
+open _root_.Math.Probability Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -277,7 +277,7 @@ theorem isClosed_and_ordConnected_quittingSingletonTailSoloFeasibleRates
   constructor
   · have hrows : IsClosed {rate : ℝ | ∀ outsider, outsider ≠ owner →
         quittingSingletonTailSoloGain reward owner outsider rate ≤ 0} := by
-      simp only [Set.setOf_forall]
+      simp only [Set.ofPred_forall]
       apply isClosed_iInter
       intro outsider
       apply isClosed_iInter

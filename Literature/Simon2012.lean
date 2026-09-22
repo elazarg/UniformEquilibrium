@@ -1073,7 +1073,7 @@ private theorem hasBoundedSegmentVariation_of_finite
     intro i hitop hinot
     have htotalLe : total ≤ i := Nat.le_of_not_gt (by simpa using hinot)
     dsimp only [term]
-    rw [if_neg]
+    rw [ite_eq_right]
     intro hvalid
     have := hvalid.2 total hlength
     omega
@@ -1093,7 +1093,7 @@ private theorem not_unbounded_of_eventually_zero_segments
   have hbound : ∀ j I, extendedSegmentVariation orbit j I ≤ bound j := by
     intro j I
     by_cases hj : j < start
-    · simpa only [bound, dif_pos hj] using
+    · simpa only [bound, dite_eq_left hj] using
         (Classical.choose_spec (hbounded j hj)) I
     · rw [hzero j (Nat.le_of_not_gt hj) I]
       simp [bound, hj]
@@ -1150,7 +1150,7 @@ private theorem segmentCount_eq_none_of_all_segments_bounded
         rw [extendedSegmentVariation]
         apply Finset.sum_eq_zero
         intro i hi
-        rw [if_neg]
+        rw [ite_eq_right]
         intro hactive
         exact (Nat.not_lt_of_ge hj) (hactive.1 total hcount)
       · exact hvariation
@@ -1215,7 +1215,7 @@ private theorem finiteSegmentStepCount_unbounded
     rw [extendedSegmentVariation]
     apply Finset.sum_eq_zero
     intro i hi
-    rw [if_neg]
+    rw [ite_eq_right]
     rintro ⟨_, hindex⟩
     have := hindex (size j) (hsize j)
     rw [hsizeOne j hj] at this
@@ -1251,7 +1251,7 @@ private theorem ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix
   have hbound : ∀ j, j < start → ∀ I,
       extendedSegmentVariation orbit j I ≤ bound j := by
     intro j hj I
-    simpa only [bound, dif_pos hj] using
+    simpa only [bound, dite_eq_left hj] using
       (Classical.choose_spec (hbounded j hj)) I
   have hboundNonneg : ∀ j, 0 ≤ bound j := by
     intro j
@@ -3137,7 +3137,7 @@ theorem lemma3_2 (G : QuittingGame) (M d : ℝ)
     Function.Surjective (Phi G M d) ∧ Nonempty (PhiInverseData G M d) := by
   let hsurjective := phi_surjective G M d hM hd hd1
   refine ⟨hsurjective, ?_⟩
-  letI : Nonempty (EZeroTilde G) := ⟨(hsurjective 0).choose⟩
+  let : Nonempty (EZeroTilde G) := ⟨(hsurjective 0).choose⟩
   let inv : Payoff G.Player → EZeroTilde G := Function.invFun (Phi G M d)
   have hinjective : Function.Injective (Phi G M d) :=
     (lemma3_1 G M d hM hd hd1).1
@@ -3209,8 +3209,8 @@ private def structureHomotopy (G : QuittingGame) {M d : ℝ}
   ((t : ℝ) • (inverse.inv x).1.1 + (1 - (t : ℝ)) • x,
     fun j => ⟨(t : ℝ) * ((inverse.inv x).1.2 j : ℝ),
       mul_nonneg t.property.1 ((inverse.inv x).1.2 j).property.1,
-      (mul_le_one₀ t.property.2 ((inverse.inv x).1.2 j).property.1
-        ((inverse.inv x).1.2 j).property.2)⟩)
+      (mul_le_of_le_one_left ((inverse.inv x).1.2 j).property.1 t.property.2).trans
+        ((inverse.inv x).1.2 j).property.2⟩)
 
 @[simp] private theorem structureHomotopy_zero (G : QuittingGame) {M d : ℝ}
     (inverse : PhiInverseData G M d) (x : Payoff G.Player) :
@@ -3459,12 +3459,12 @@ private theorem quitRowMarginals_rounded_replace
   funext i
   by_cases hin : i = n
   · subst i
-    rw [if_neg (by simp)]
+    rw [ite_eq_right (by simp)]
     apply GameTheory.quittingRootOfHazardRow_apply_congr
     simp [QuitRow.replace]
   · by_cases hiA : i ∈ A
     · have hierase : i ∈ A.erase n := Finset.mem_erase.mpr ⟨hin, hiA⟩
-      rw [if_pos hierase]
+      rw [ite_eq_left hierase]
       apply Math.ProbabilityMassFunction.toVector_injective
       funext action
       cases action <;>
@@ -3472,7 +3472,7 @@ private theorem quitRowMarginals_rounded_replace
           QuitRow.replace, roundedQuitRow, hin, hiA,
           Math.ProbabilityMassFunction.toVector]
     · have hierase : i ∉ A.erase n := fun hi => hiA (Finset.mem_of_mem_erase hi)
-      rw [if_neg hierase]
+      rw [ite_eq_right hierase]
       apply GameTheory.quittingRootOfHazardRow_apply_congr
       simp [QuitRow.replace, roundedQuitRow, hin, hiA]
 
@@ -3555,7 +3555,7 @@ private theorem abs_forced_roundedQuitRow_payoff_sub_le_of_sure_quitter
   have hnewK : newRoot k = PMF.pure true := by
     apply quitRowMarginals_eq_pure_true_of_apply_eq_one
     simp only [QuitRow.replace]
-    rw [if_neg hkn]
+    rw [ite_eq_right hkn]
     by_cases hkA : k ∈ A
     · exact roundedQuitRow_apply_mem G A p hkA
     · simpa [roundedQuitRow_apply_not_mem G A p hkA] using hk
@@ -3618,7 +3618,7 @@ private theorem quittingRootPayoff_osc_le_of_common_quitter
   have hb : (GameTheory.quittingQuitters b).Nonempty := by
     refine ⟨k, ?_⟩
     simp [GameTheory.quittingQuitters, hbk]
-  simp only [GameTheory.quittingRootPayoff, ha, hb, dif_pos]
+  simp only [GameTheory.quittingRootPayoff, ha, hb, dite_eq_left]
   linarith [hM.2.2
     ⟨GameTheory.quittingQuitters a, ha⟩
     ⟨GameTheory.quittingQuitters b, hb⟩ n]
@@ -4126,7 +4126,7 @@ private theorem exists_uniform_boundedExactEquilibriumSlack
         ∏ k ∈ Finset.univ.erase j, (1 - (p k : ℝ)) ≤ 1 := by
       calc
         _ ≤ ∏ _k ∈ Finset.univ.erase j, (1 : ℝ) := by
-          apply Finset.prod_le_prod
+          apply Finset.prod_le_prod₀
           · intro k _hk
             exact sub_nonneg.mpr (p k).property.2
           · intro k _hk
@@ -4582,7 +4582,7 @@ private theorem quitProbability_apply_le (G : QuittingGame) (p : QuitRow G)
     Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k).property.2
   have hrestOne :
       (∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ))) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun k _ => sub_nonneg.mpr (p k).property.2)
       (fun k _ => by linarith [(p k).property.1])
   rw [← hprod]
@@ -4662,7 +4662,7 @@ private theorem othersQuitProbability_eq_replace_zero (G : QuittingGame)
               UnitInterval) : ℝ)) :=
       (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ n)).symm
     _ = ∏ k ∈ Finset.univ.erase n, (1 - (p k : ℝ)) := by
-      simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul]
+      simp only [ite_eq_left, Set.Icc.coe_zero, sub_zero, one_mul]
       apply Finset.prod_congr rfl
       intro k hk
       simp [Finset.ne_of_mem_erase hk]
@@ -4701,7 +4701,7 @@ private theorem maximalQuitter_opponentSurvival_lower_at
   have hcard : (Finset.univ.erase owner).card = Fintype.card G.Player - 1 := by
     simp
   rw [← hcard, ← Finset.prod_const]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro k _
     exact sub_nonneg.mpr (p m).property.2
   · intro k _
@@ -5925,9 +5925,9 @@ private theorem beta_infDist_bound (G : QuittingGame) (M : ℝ)
       have hk := beta_coordinate_bounds G M hM beta p hp hqOne k
       by_cases hkj : k = j
       · subst k
-        simpa only [Pi.sub_apply, w, lowerFaceProjection, if_pos] using hk.2 hj
+        simpa only [Pi.sub_apply, w, lowerFaceProjection, ite_eq_left] using hk.2 hj
       · rw [Pi.sub_apply]
-        simp only [w, lowerFaceProjection, hkj, if_false]
+        simp only [w, lowerFaceProjection, hkj, ite_false]
         rw [abs_sub_comm]
         by_cases hle : SoloPayoff G k ≤ beta k
         · rw [max_eq_left hle, sub_self, abs_zero]
@@ -6255,9 +6255,9 @@ private theorem phiFormula_infDist_bound (G : QuittingGame) (M d : ℝ)
       hqpos hqsmall k
     by_cases hkj : k = j
     · subst k
-      simpa only [Pi.sub_apply, a, w, lowerFaceProjection, if_pos] using hk.2 hj
+      simpa only [Pi.sub_apply, a, w, lowerFaceProjection, ite_eq_left] using hk.2 hj
     · rw [Pi.sub_apply]
-      simp only [w, lowerFaceProjection, hkj, if_false]
+      simp only [w, lowerFaceProjection, hkj, ite_false]
       rw [abs_sub_comm]
       by_cases hle : SoloPayoff G k ≤ a k
       · rw [max_eq_left hle, sub_self, abs_zero]
@@ -6533,16 +6533,16 @@ theorem corollary4_1 (G : QuittingGame)
     else 1
   have radius_pos (Q : Finset G.Player) : 0 < radius Q := by
     by_cases hQ : 2 ≤ Q.card
-    · simp only [radius, dif_pos hQ]
+    · simp only [radius, dite_eq_left hQ]
       exact (Classical.choose_spec (localRadiusExists Q hQ)).1
-    · simp only [radius, dif_neg hQ]
+    · simp only [radius, dite_eq_right hQ]
       exact zero_lt_one
   have radius_spec (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
       ∀ d : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
         (∀ i j, |d i j| ≤ radius Q) →
         |(SingletonDifferenceMatrix G Q).det| / 2 <
           |(SingletonDifferenceMatrix G Q + d).det| := by
-    simp only [radius, dif_pos hQ]
+    simp only [radius, dite_eq_left hQ]
     exact (Classical.choose_spec (localRadiusExists Q hQ)).2
   have localStrengthExists (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
       ∃ strength : ℝ, 0 < strength ∧
@@ -6560,9 +6560,9 @@ theorem corollary4_1 (G : QuittingGame)
     else 1
   have strength_pos (Q : Finset G.Player) : 0 < strength Q := by
     by_cases hQ : 2 ≤ Q.card
-    · simp only [strength, dif_pos hQ]
+    · simp only [strength, dite_eq_left hQ]
       exact (Classical.choose_spec (localStrengthExists Q hQ)).1
-    · simp only [strength, dif_neg hQ]
+    · simp only [strength, dite_eq_right hQ]
       exact zero_lt_one
   have strength_spec (Q : Finset G.Player) (hQ : 2 ≤ Q.card) :
       ∀ A : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
@@ -6571,7 +6571,7 @@ theorem corollary4_1 (G : QuittingGame)
         ∀ v : {i // i ∈ Q} → ℝ,
           strength Q * ‖WithLp.toLp 2 v‖ ≤
             ‖WithLp.toLp 2 (Matrix.mulVec A v)‖ := by
-    simp only [strength, dif_pos hQ]
+    simp only [strength, dite_eq_left hQ]
     exact (Classical.choose_spec (localStrengthExists Q hQ)).2
   let threshold (Q : Finset G.Player) : ℝ := min (radius Q) (strength Q)
   let candidates : Finset ℝ := insert 1 (eligible.image threshold)
@@ -6706,7 +6706,7 @@ theorem truncatedPiece_eq_Icc (G : QuittingGame) (R : ℝ) (j : G.Player) :
     by_cases hwho : who = j
     · subst who
       simpa [truncatedPieceUpperCorner] using le_min (hbox j).2 hsolo
-    · simpa only [truncatedPieceUpperCorner, if_neg hwho] using (hbox who).2
+    · simpa only [truncatedPieceUpperCorner, ite_eq_right hwho] using (hbox who).2
   · rintro ⟨hlower, hupper⟩
     have hj : point j ≤ min (R + 1) (SoloPayoff G j) := by
       simpa [truncatedPieceUpperCorner] using hupper j
@@ -6714,7 +6714,7 @@ theorem truncatedPiece_eq_Icc (G : QuittingGame) (R : ℝ) (j : G.Player) :
     by_cases hwho : who = j
     · subst who
       exact hj.trans (min_le_left _ _)
-    · simpa only [truncatedPieceUpperCorner, if_neg hwho] using hupper who
+    · simpa only [truncatedPieceUpperCorner, ite_eq_right hwho] using hupper who
 
 /-- Strict lower-corner slack makes the actual truncated piece full-dimensional. -/
 theorem isFullDimensionalCompactConvexPolytope_truncatedPiece
@@ -6727,9 +6727,9 @@ theorem isFullDimensionalCompactConvexPolytope_truncatedPiece
   intro who
   dsimp only [truncatedPieceUpperCorner]
   by_cases hwho : who = j
-  · simp only [if_pos hwho]
+  · simp only [ite_eq_left hwho]
     exact lt_min (by linarith) hsolo
-  · simp only [if_neg hwho]
+  · simp only [ite_eq_right hwho]
     linarith
 
 /-- The Section 3 scale bounds provide the strict slack needed by every truncated piece. -/
@@ -6772,7 +6772,7 @@ private theorem isClosed_closedCoordinateCube {N : Type} [Fintype N]
   rw [show ClosedCoordinateCube R =
       ⋂ j, {x : Payoff N | -R ≤ x j} ∩ {x : Payoff N | x j ≤ R} by
     ext x
-    simp only [ClosedCoordinateCube, Set.mem_setOf_eq, Set.mem_iInter,
+    simp only [ClosedCoordinateCube, Set.mem_ofPred_eq, Set.mem_iInter,
       Set.mem_inter_iff]]
   exact isClosed_iInter fun j =>
     (isClosed_le (continuous_const : Continuous fun _ : Payoff N => -R)
@@ -6834,7 +6834,7 @@ private theorem lowerBoundary_has_cube_coordinate (G : QuittingGame)
     have heq : boundaryCoordinates =
         ⋃ j, {x : Payoff G.Player | |x j| = R + 1} := by
       ext y
-      simp only [boundaryCoordinates, Set.mem_setOf_eq, Set.mem_iUnion]
+      simp only [boundaryCoordinates, Set.mem_ofPred_eq, Set.mem_iUnion]
     rw [heq]
     exact isClosed_iUnion_of_finite fun j =>
       isClosed_eq (continuous_abs.comp (continuous_apply j)) continuous_const
@@ -6971,11 +6971,12 @@ private theorem section4Omega_mem_Ioc (G : QuittingGame)
   have hε1 : ε ≤ 1 := by linarith
   obtain ⟨hδpos, hδ1⟩ := section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ
   have hproduct1 : d * ε * ξ * ρ * Section4Delta G M ε ≤ 1 := by
-    have hdε : d * ε ≤ 1 := mul_le_one₀ hd1 hε.le hε1
-    have hdεξ : d * ε * ξ ≤ 1 := mul_le_one₀ hdε hξ.le hξ1.le
+    have hdε : d * ε ≤ 1 := (mul_le_of_le_one_left hε.le hd1).trans hε1
+    have hdεξ : d * ε * ξ ≤ 1 :=
+      (mul_le_of_le_one_left hξ.le hdε).trans hξ1.le
     have hdεξρ : d * ε * ξ * ρ ≤ 1 :=
-      mul_le_one₀ hdεξ hmotion.2.1.le hρ1
-    exact mul_le_one₀ hdεξρ hδpos.le hδ1
+      (mul_le_of_le_one_left hmotion.2.1.le hdεξ).trans hρ1
+    exact (mul_le_of_le_one_left hδpos.le hdεξρ).trans hδ1
   have hR1 : 1 ≤ R := by
     have hNM : 3 ≤ N * M := by
       nlinarith [mul_le_mul hN hM1 (by norm_num) (by linarith : 0 ≤ N)]
@@ -7021,8 +7022,12 @@ theorem euclideanInfDist_eq_infDist_toLp {N : Type} [Fintype N]
     EuclideanInfDist point set =
       Metric.infDist (WithLp.toLp 2 point) (WithLp.toLp 2 '' set) := by
   rw [Metric.infDist_eq_iInf, ← sInf_image', Set.image_image]
-  simp only [EuclideanInfDist, EuclideanDist, euclideanNorm_eq_norm_toLp,
-    WithLp.toLp_sub, dist_eq_norm]
+  apply congrArg sInf
+  ext radius
+  simp only [Set.mem_image]
+  constructor <;> rintro ⟨a, ha, rfl⟩ <;> refine ⟨a, ha, ?_⟩ <;>
+    simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+      WithLp.toLp_sub, dist_eq_norm]
 
 /-- Euclidean distance to a fixed set is continuous, including for the empty set. -/
 theorem continuous_euclideanInfDist {N : Type} [Fintype N]
@@ -7311,7 +7316,7 @@ theorem isCompact_upperNeighborhoodFor (G : QuittingGame) (R ε : ℝ) (j : G.Pl
       Set.Icc (fun who => SoloPayoff G who - ε / 3) (fun _ => R + 1 + ε / 3) ∩
         {x | x j ≤ SoloPayoff G j + ε / 3} := by
     ext x
-    simp only [UpperNeighborhoodFor, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_Icc,
+    simp only [UpperNeighborhoodFor, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_Icc,
       Pi.le_def, forall_and]
   rw [heq]
   exact isCompact_Icc.inter_right (isClosed_le (continuous_apply j) continuous_const)
@@ -7336,7 +7341,7 @@ theorem isCompact_lowerNeighborhood (G : QuittingGame) (R ε : ℝ)
   intro point hpoint
   have hbound : Metric.infDist (WithLp.toLp 2 point)
       (WithLp.toLp 2 '' LowerBoundary G R) ≤ ε / 3 := by
-    simpa only [LowerNeighborhood, Set.mem_setOf_eq,
+    simpa only [LowerNeighborhood, Set.mem_ofPred_eq,
       euclideanInfDist_eq_infDist_toLp] using hpoint
   obtain ⟨target, htarget, hdist⟩ := hcompact.exists_infDist_eq_dist
     (hnonempty.image _) (WithLp.toLp 2 point)
@@ -7389,9 +7394,9 @@ theorem self_mem_gluedFiber (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤ δ)
     x ∈ GluedFiber G R ε δ x := by
   classical
   by_cases hlow : x ∈ LowerNeighborhood G R ε
-  · simpa only [GluedFiber, if_pos hlow] using self_mem_lowerGlueFiber G x
+  · simpa only [GluedFiber, ite_eq_left hlow] using self_mem_lowerGlueFiber G x
   · have hupp : x ∈ UpperNeighborhood G R ε := hx.resolve_right hlow
-    simpa only [GluedFiber, if_neg hlow, if_pos hupp] using
+    simpa only [GluedFiber, ite_eq_right hlow, ite_eq_left hupp] using
       self_mem_upperGlueFiber G R ε δ hδ x
 
 /-- The actual terminal homotopy image is a defining part of J. -/
@@ -7434,7 +7439,7 @@ theorem lowerGlueFiber_eq_convexJoin (G : QuittingGame) (x : Payoff G.Player) :
     LowerGlueFiber G x = convexJoin ℝ {x} {z | Feasible G z} := by
   ext y
   rw [convexJoin_singleton_left]
-  simp only [Set.mem_iUnion, Set.mem_setOf_eq, segment_eq_image, Set.mem_image]
+  simp only [Set.mem_iUnion, Set.mem_ofPred_eq, segment_eq_image, Set.mem_image]
   constructor
   · rintro ⟨z, hz, t, heq⟩
     exact ⟨z, hz, t, t.property, heq.symm⟩
@@ -7458,7 +7463,7 @@ theorem isContractibleSet_gluedFiber_of_mem_lowerNeighborhood
     (G : QuittingGame) (R ε δ : ℝ) {x : Payoff G.Player}
     (hx : x ∈ LowerNeighborhood G R ε) :
     IsContractibleSet (GluedFiber G R ε δ x) := by
-  simpa only [GluedFiber, if_pos hx] using isContractibleSet_lowerGlueFiber G x
+  simpa only [GluedFiber, ite_eq_left hx] using isContractibleSet_lowerGlueFiber G x
 
 /-- A positive distance radius puts lower-boundary points in the lower neighborhood's interior. -/
 theorem mem_interior_lowerNeighborhood_of_mem_lowerBoundary
@@ -7543,12 +7548,12 @@ theorem gluedGraph_eq_union (G : QuittingGame) (R ε δ : ℝ) :
       {z | z.1 ∈ UpperNeighborhood G R ε ∧ z.2 ∈ UpperGlueFiber G R ε δ z.1} := by
   classical
   ext z
-  simp only [correspondenceGraph, GluedFiber, Set.mem_setOf_eq]
+  simp only [correspondenceGraph, GluedFiber, Set.mem_ofPred_eq]
   by_cases hD : z.1 ∈ LowerNeighborhood G R ε
-  · simp only [hD, if_true, Set.mem_union, Set.mem_setOf_eq, true_and]
+  · simp only [hD, ite_true, Set.mem_union, Set.mem_ofPred_eq, true_and]
     exact ⟨Or.inl, fun h => h.elim id
       (fun h => upperGlueFiber_subset_lowerGlueFiber G R ε δ z.1 h.2)⟩
-  · simp only [hD, if_false, Set.mem_union, Set.mem_setOf_eq, false_and, false_or]
+  · simp only [hD, ite_false, Set.mem_union, Set.mem_ofPred_eq, false_and, false_or]
     by_cases hU : z.1 ∈ UpperNeighborhood G R ε <;> simp [hU]
 
 /-- The lower graph piece is compact when the actual lower boundary is nonempty. -/
@@ -7591,7 +7596,7 @@ theorem isCompact_upperGlueGraph (G : QuittingGame) (R ε δ : ℝ) (hδ : 0 ≤
     apply ((isCompact_upperNeighborhood G R ε).isClosed.preimage continuous_fst).inter
     change IsClosed {z : Payoff G.Player × QuitRow G | ∀ j,
       (z.2 j : ℝ) ≤ δ ∧ (z.1 ∈ UpperNeighborhoodFor G R ε j ∨ (z.2 j : ℝ) = 0)}
-    rw [Set.setOf_forall]
+    rw [Set.ofPred_forall]
     apply isClosed_iInter
     intro j
     have hp : Continuous (fun z : Payoff G.Player × QuitRow G => (z.2 j : ℝ)) := by
@@ -7748,7 +7753,7 @@ private theorem forcedQuit_singletonProbability
   classical
   simp only [CoalitionProbability, QuitProbability, QuitRow.replace]
   rw [Finset.prod_singleton]
-  simp only [if_pos, Set.Icc.coe_one, one_mul]
+  simp only [ite_eq_left, Set.Icc.coe_one, one_mul]
   ring_nf
   have hfilter : Finset.univ.filter (fun k : G.Player => k ∉ ({n} : Finset G.Player)) =
       Finset.univ.erase n := by
@@ -7758,7 +7763,7 @@ private theorem forcedQuit_singletonProbability
   have hprod := Finset.mul_prod_erase Finset.univ
     (fun k : G.Player => 1 - (((if k = n then (0 : Set.Icc (0 : ℝ) 1) else p k) :
       Set.Icc (0 : ℝ) 1) : ℝ)) (Finset.mem_univ n)
-  simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
+  simp only [ite_eq_left, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
   rw [← hprod]
   apply Finset.prod_congr rfl
   intro k hk

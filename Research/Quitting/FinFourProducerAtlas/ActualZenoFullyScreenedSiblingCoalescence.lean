@@ -26,9 +26,11 @@ near-minimality, regeneration, or a terminal consumer.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open Filter Math.Probability Set
+open Filter _root_.Math.Probability Set
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -231,11 +233,13 @@ theorem abs_sibling_terminalOutcomeMass_sub_le
     abs_of_nonneg
       (quittingLiteralRootStackJointSurvival_nonneg (zeno.newWord rank))]
   have htarget0 :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward
-      (zeno.baseProfile rank)).1 outcome
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      (zeno.baseProfile rank))).1 outcome
   have hsource0 :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward
-      (zeno.baseSourceProfile rank)).1 outcome
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      (zeno.baseSourceProfile rank))).1 outcome
   have htarget1 := terminalOutcomeMass_le_one
     (quittingTerminalOutcomeMass reward (zeno.baseProfile rank))
     (quittingTerminalOutcomeMass_mem_stdSimplex reward

@@ -25,7 +25,7 @@ namespace GameTheory
 open scoped BigOperators
 
 open Math.FiniteGroupInvariantWeights
-open Math.Probability
+open _root_.Math.Probability
 
 namespace StochasticGame
 
@@ -398,7 +398,7 @@ theorem isUniformEquilibriumPayoff_of_transitiveSecurity_of_welfareCap
         (v (g • representative)))
     (welfareCap : HasUniformWeightedWelfareCap G s₀ weight v) :
     G.IsUniformEquilibriumPayoff s₀ v := by
-  letI : Nonempty ι := ⟨representative⟩
+  let : Nonempty ι := ⟨representative⟩
   have security : ∀ i, G.IsOneSidedGuaranteeCertificate s₀ i (v i) :=
     fun i ↦ by
       obtain ⟨g, moved⟩ :=

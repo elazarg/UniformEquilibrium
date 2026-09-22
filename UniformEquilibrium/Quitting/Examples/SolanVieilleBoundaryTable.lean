@@ -127,7 +127,7 @@ theorem boundaryReward_solo_partner {owner who : Player}
     (hne : owner ≠ who) (hpair : owner.val / 2 = who.val / 2) :
     boundaryReward (quittingSingletonTerminal owner) who = 4 := by
   have h := soloReward_eval owner who
-  rw [if_neg hne, if_pos hpair] at h
+  rw [ite_eq_right hne, ite_eq_left hpair] at h
   exact h
 
 /-- A solo exit pays every member of the opposite pair `0`. -/
@@ -136,7 +136,7 @@ theorem boundaryReward_solo_cross {owner who : Player}
     boundaryReward (quittingSingletonTerminal owner) who = 0 := by
   have hne : owner ≠ who := fun h ↦ hpair (by rw [h])
   have h := soloReward_eval owner who
-  rw [if_neg hne, if_neg hpair] at h
+  rw [ite_eq_right hne, ite_eq_right hpair] at h
   exact h
 
 @[simp] theorem collisionReward_zero_two :

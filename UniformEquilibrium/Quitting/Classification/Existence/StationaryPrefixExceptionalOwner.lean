@@ -89,7 +89,7 @@ theorem stationary_or_exists_uniqueExceptionalOwner_of_prefixJointSurvival_tends
             Tendsto
               (fun n ↦ family.prefixDeletedSurvival (selected n) other)
               atTop (nhds 0) := by
-  letI : Nonempty ι := ⟨family.punished 0⟩
+  let : Nonempty ι := ⟨family.punished 0⟩
   let threshold : ℕ → ℝ := fun n ↦
     Real.sqrt (family.prefixJointSurvival (subsequence n))
   have hthreshold : Tendsto threshold atTop (nhds 0) := by

@@ -300,32 +300,40 @@ theorem normalizedCyclicMatrix_standardQ_iff {t : ℝ} (ht0 : 0 < t) :
     exact lt_of_not_ge fun ht => not_standardQ_of_ratio_le_one ht0 ht hQ
   · exact normalizedCyclicMatrix_standardQ
 
-private def uniformSimplex : stdSimplex ℝ Player :=
-  ⟨fun _ => 1 / 3, by
-    constructor
-    · intro i; norm_num
-    · norm_num [Fin.sum_univ_succ]⟩
+private def uniformSimplex : Convexity.StdSimplex ℝ Player := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (fun _ => 1 / 3), ?_, ?_⟩
+  · intro i
+    norm_num
+  · rw [Finsupp.sum_fintype _ _ (by simp)]
+    norm_num [Fin.sum_univ_succ]
 
 @[simp] private theorem uniformSimplex_apply (i : Player) :
-    uniformSimplex i = 1 / 3 := rfl
+    uniformSimplex.weights i = 1 / 3 := rfl
 
 theorem normalizedCyclicMatrix_hasHomogeneous_iff {t : ℝ} (ht0 : 0 < t) :
     HasHomogeneousSimplexSolution (normalizedCyclicMatrix t) ↔ t = 1 := by
   constructor
   · rintro ⟨weight, hresidual, hcomplementary⟩
-    let x : ℝ := weight.val 0
-    let y : ℝ := weight.val 1
-    let z : ℝ := weight.val 2
-    have hx : 0 ≤ x := weight.property.1 0
-    have hy : 0 ≤ y := weight.property.1 1
-    have hz : 0 ≤ z := weight.property.1 2
+    let x : ℝ := weight.weights 0
+    let y : ℝ := weight.weights 1
+    let z : ℝ := weight.weights 2
+    have hx : 0 ≤ x := weight.weights_nonneg 0
+    have hy : 0 ≤ y := weight.weights_nonneg 1
+    have hz : 0 ≤ z := weight.weights_nonneg 2
     have htotal : x + (y + z) = 1 := by
-      simpa [x, y, z, Fin.sum_univ_succ] using weight.property.2
+      calc
+        x + (y + z) =
+            weight.weights 0 + (weight.weights 1 + weight.weights 2) := rfl
+        _ = ∑ i, weight.weights i := by
+          rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+            Fin.sum_univ_zero, add_zero]
+          norm_num
+        _ = 1 := weight.total_of_fintype
     have hr0 : singletonLCPResidual (normalizedCyclicMatrix t) weight 0 =
         -y + t * z := by
       calc
         singletonLCPResidual (normalizedCyclicMatrix t) weight 0 =
-            -weight 1 + t * weight 2 := by
+            -weight.weights 1 + t * weight.weights 2 := by
           simp [singletonLCPResidual, wsum, dotProduct,
             normalizedCyclicMatrix, Fin.sum_univ_succ, mul_comm]
         _ = -y + t * z := rfl
@@ -333,7 +341,7 @@ theorem normalizedCyclicMatrix_hasHomogeneous_iff {t : ℝ} (ht0 : 0 < t) :
         t * x - z := by
       calc
         singletonLCPResidual (normalizedCyclicMatrix t) weight 1 =
-            t * weight 0 + -weight 2 := by
+            t * weight.weights 0 + -weight.weights 2 := by
           simp [singletonLCPResidual, wsum, dotProduct,
             normalizedCyclicMatrix, Fin.sum_univ_succ, mul_comm]
         _ = t * x + -z := rfl
@@ -342,7 +350,7 @@ theorem normalizedCyclicMatrix_hasHomogeneous_iff {t : ℝ} (ht0 : 0 < t) :
         -x + t * y := by
       calc
         singletonLCPResidual (normalizedCyclicMatrix t) weight 2 =
-            -weight 0 + t * weight 1 := by
+            -weight.weights 0 + t * weight.weights 1 := by
           simp [singletonLCPResidual, wsum, dotProduct,
             normalizedCyclicMatrix, Fin.sum_univ_succ, mul_comm,
             show (2 : Player) ≠ 0 by decide,

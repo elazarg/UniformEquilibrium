@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -179,8 +179,9 @@ theorem continuous_quittingControllerContinueMass_simplex :
   simp_rw [quittingControllerContinueMass,
     quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingRootOfSimplex_apply_toReal]
-  exact continuous_finsetProd _ fun who _ => (continuous_apply false).comp
-    (continuous_subtype_val.comp (continuous_apply who))
+  exact continuous_finsetProd _ fun who _ =>
+    (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+      (continuous_apply who)
 
 /-- Opponent all-Continue mass is continuous in simplex root coordinates. -/
 theorem continuous_quittingTesterOpponentContinueMass_simplex (who : ι) :
@@ -469,7 +470,7 @@ theorem QuittingControllerTesterLedger.IsBounded.step
     quittingStationaryContinueMass_le_one root
   constructor
   · exact mul_nonneg hledger.prescribedSurvival_nonneg hc0
-  · exact mul_le_one₀ hledger.prescribedSurvival_le_one hc0 hc1
+  · exact (mul_le_of_le_one_left hc0 hledger.prescribedSurvival_le_one).trans hc1
   · intro who
     have hg := abs_quittingControllerAbsorbingContribution_le
       reward root who
@@ -500,8 +501,9 @@ theorem QuittingControllerTesterLedger.IsBounded.step
     exact mul_nonneg (hledger.opponentSurvival_nonneg who)
       (quittingRootOpponentContinueMass_nonneg root who)
   · intro who
-    exact mul_le_one₀ (hledger.opponentSurvival_le_one who)
+    exact (mul_le_of_le_one_left
       (quittingRootOpponentContinueMass_nonneg root who)
+      (hledger.opponentSurvival_le_one who)).trans
       (quittingRootOpponentContinueMass_le_one root who)
   · intro who
     have ha := abs_quittingTesterContinueContribution_le reward root who

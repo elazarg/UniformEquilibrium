@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -72,15 +72,15 @@ theorem quittingRootContinue_add_solo_sub_quit_le
     by_cases hquit : (quittingQuitters action).Nonempty
     · have hevent : event action = 1 := by
         dsimp only [event]
-        rw [if_pos hquit]
+        rw [ite_eq_left hquit]
       rw [hevent]
       unfold advantage quittingTerminalOpponentAdvantage
-      rw [quittingRootPayoff, dif_pos hquit]
+      rw [quittingRootPayoff, dite_eq_left hquit]
       have hupdated :
           (quittingQuitters (Function.update action who true)).Nonempty := by
         rw [quittingQuitters_update_true_of_apply_false]
         exact Finset.insert_nonempty who _
-      rw [quittingRootPayoff, dif_pos hupdated]
+      rw [quittingRootPayoff, dite_eq_left hupdated]
       have hfirst := le_of_abs_le
         (hreward ⟨quittingQuitters action, hquit⟩ who)
       have hsecond := neg_le_of_abs_le
@@ -90,7 +90,7 @@ theorem quittingRootContinue_add_solo_sub_quit_le
       linarith
     · have hevent : event action = 0 := by
         dsimp only [event]
-        rw [if_neg hquit]
+        rw [ite_eq_right hquit]
       rw [hevent]
       have hempty : quittingQuitters action = ∅ :=
         Finset.not_nonempty_iff_eq_empty.mp hquit
@@ -101,7 +101,7 @@ theorem quittingRootContinue_add_solo_sub_quit_le
             exact (hquit ((quittingQuitters_nonempty_iff action).2
               ⟨who, haction⟩)).elim
       unfold advantage quittingTerminalOpponentAdvantage
-      rw [quittingRootPayoff, dif_neg hquit]
+      rw [quittingRootPayoff, dite_eq_right hquit]
       have hupdated : quittingQuitters (Function.update action who true) =
           {who} := by
         rw [quittingQuitters_update_true_of_apply_false, hempty]
@@ -110,7 +110,7 @@ theorem quittingRootContinue_add_solo_sub_quit_le
           (quittingQuitters (Function.update action who true)).Nonempty := by
         rw [hupdated]
         exact Finset.singleton_nonempty who
-      rw [quittingRootPayoff, dif_pos hupdatedNonempty]
+      rw [quittingRootPayoff, dite_eq_left hupdatedNonempty]
       rw [mul_zero]
       apply le_of_eq
       apply sub_eq_zero.mpr
@@ -133,14 +133,14 @@ theorem quittingRootContinue_add_solo_sub_quit_le
           simp at hquit
         rw [show event action = 1 by
           dsimp only [event]
-          rw [if_pos hquit], if_neg hne]
+          rw [ite_eq_left hquit], ite_eq_right hne]
         norm_num
       · have heq :=
           eq_quittingAllContinueAction_of_quittingQuitters_not_nonempty
             action hquit
         rw [show event action = 0 by
           dsimp only [event]
-          rw [if_neg hquit], if_pos heq]
+          rw [ite_eq_right hquit], ite_eq_left heq]
         norm_num
     rw [hfunction, expect_sub, expect_const,
       ← apply_toReal_eq_expect_indicator]

@@ -33,7 +33,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace FiniteBiasSeed
 
-open Filter Math Math.OnlineLearning Math.PMFProduct Math.Probability
+open Filter _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability
   Set Topology
 
 variable {ι : Type} {G : StochasticGame ι}

@@ -8,7 +8,7 @@ import MathUE.LinearAlgebra.Farkas
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.Sum
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Owner-typed dual lifting and the owner-custody obstruction
@@ -365,11 +365,11 @@ theorem ownerMask_nonneg (P : TypedCell Ω E N U Y T) (i : Ω) (u : U) :
 
 omit [Fintype Y] [Fintype T] [Fintype E] [Fintype N] [Fintype U] in
 theorem ownerMask_of_eq (P : TypedCell Ω E N U Y T) (i : Ω) {u : U}
-    (h : P.ownerOf u = i) : ownerMask P i u = 1 := if_pos h
+    (h : P.ownerOf u = i) : ownerMask P i u = 1 := ite_eq_left h
 
 omit [Fintype Y] [Fintype T] [Fintype E] [Fintype N] [Fintype U] in
 theorem ownerMask_of_ne (P : TypedCell Ω E N U Y T) (i : Ω) {u : U}
-    (h : P.ownerOf u ≠ i) : ownerMask P i u = 0 := if_neg h
+    (h : P.ownerOf u ≠ i) : ownerMask P i u = 0 := ite_eq_right h
 
 /-- Row index of the owner-`i`-visible relaxation, written as a weak
 inequality system: the two orientations of each structural equation, the
@@ -758,7 +758,7 @@ map.  Owner `i` literally cannot see it. -/
 theorem custody_escape (i : Bool) : custody system i (escape i) = 0 := by
   funext u
   rw [custody, dot_S]
-  simp [escape, ownerMask, system]
+  by_cases h : u = i <;> simp [escape, ownerMask, system, h]
 
 /-- The escape direction is a recession direction of owner `i`'s
 relaxation, with the internal direction taken to be `0`. -/

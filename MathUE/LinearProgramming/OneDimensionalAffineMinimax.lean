@@ -179,7 +179,7 @@ theorem exists_optimalAffineMajorant
     (intercept slope : Action → ℝ)
     (hbounded : ∃ anchor, 0 ≤ slope anchor) :
     ∃ c value, IsOptimalAffineMajorant intercept slope c value := by
-  letI := Fintype.ofFinite Action
+  let := Fintype.ofFinite Action
   obtain ⟨anchor, hanchor⟩ := hbounded
   let cutoff := affineCutoff intercept slope anchor
   have hcutoff : 0 ≤ cutoff :=
@@ -336,7 +336,11 @@ private inductive AffinePrimalCoordinate
   | scale
   | upperPositive
   | upperNegative
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype AffinePrimalCoordinate where
+  elems := {.scale, .upperPositive, .upperNegative}
+  complete coordinate := by cases coordinate <;> simp
 
 private theorem sum_affinePrimalCoordinate
     (f : AffinePrimalCoordinate → ℝ) :
@@ -501,7 +505,7 @@ theorem exists_affineMajorant_of_all_slope_negative
     (intercept slope : Action → ℝ)
     (hnegative : ∀ a, slope a < 0) (value : ℝ) :
     ∃ c, IsAffineMajorant intercept slope c value := by
-  letI := Fintype.ofFinite Action
+  let := Fintype.ofFinite Action
   let c : ℝ :=
     ∑ a, max 0 ((intercept a - value) / (-slope a))
   have hc : 0 ≤ c := by

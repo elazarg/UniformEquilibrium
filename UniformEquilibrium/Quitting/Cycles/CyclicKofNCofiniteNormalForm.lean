@@ -24,7 +24,7 @@ namespace GameTheory
 
 namespace CyclicKofNCofiniteNormalForm
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic CyclicKofNQuittingSchedule
 open CyclicKofNBellmanBridge CyclicKofNFiniteNashCertificate
 open CyclicKofNPhaseHazards

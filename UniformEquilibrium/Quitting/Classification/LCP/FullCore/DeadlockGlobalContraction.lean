@@ -47,7 +47,7 @@ theorem abs_idealSingletonClearance_sub_le
   · subst who
     simp [idealSingletonClearance]
   · rw [idealSingletonClearance, idealSingletonClearance,
-      if_neg hwho, if_neg hwho]
+      ite_eq_right hwho, ite_eq_right hwho]
     calc
       |max 0 (α * t who + (1 - α) * M who owner) -
           max 0 (α * s who + (1 - α) * M who owner)| ≤

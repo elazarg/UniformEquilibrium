@@ -43,7 +43,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Math.Topology
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Math.Topology
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -58,7 +58,7 @@ theorem abs_quittingPunishmentFloor_le_quittingRewardBound
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (who : ι) :
     |quittingPunishmentFloor reward who| ≤ quittingRewardBound reward := by
-  letI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  let : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   rw [abs_le]
   constructor

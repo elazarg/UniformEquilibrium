@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.Topology
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.Topology
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

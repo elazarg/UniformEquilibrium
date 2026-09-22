@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingTwoPlayerPairRepair
 
@@ -158,7 +158,7 @@ theorem terminalPayoff_pairRoot
     ring
   · rw [blocker_quitPayoff, blocker_continuePayoff]
     simp only [pairRoot_true_true, pairRoot_true_false, one_mul, zero_mul,
-      add_zero, if_true]
+      add_zero, ite_true]
 
 /-! ## Complete unilateral caps -/
 
@@ -309,7 +309,7 @@ theorem abs_terminalPayoff_pairRoot_sub_soloReward_le_pairRepairError
         quittingSoloReward reward true true)
     unfold pairRepairError
     nlinarith [mul_nonneg hp0 habs]
-  · simp only [if_true]
+  · simp only [ite_true]
     rw [show
       (1 - p) * quittingSoloReward reward true true +
             p * quittingSingletonCollisionReward reward false true -
@@ -351,7 +351,7 @@ theorem isεAsymptoticNash_pairRoot
       nlinarith [mul_nonneg hp.le habs]
     · rw [unilateralCap_pairRoot_blocker reward p hp1 hp,
         terminalPayoff_pairRoot]
-      simp only [if_true]
+      simp only [ite_true]
       apply max_le
       · exact le_add_of_nonneg_right
           (pairRepairError_nonneg reward p hp.le howner)
@@ -522,7 +522,7 @@ private theorem terminalPayoff_mirrorPairRoot
     simp only [mirrorPairRoot_false_true, mirrorPairRoot_false_false,
       one_mul, zero_mul, add_zero, Bool.false_eq_true, ↓reduceIte]
   · rw [mirror_owner_quitPayoff, mirror_owner_continuePayoff]
-    simp only [mirrorPairRoot_true_true, mirrorPairRoot_true_false, if_true]
+    simp only [mirrorPairRoot_true_true, mirrorPairRoot_true_false, ite_true]
     ring
 
 private theorem fixedOpponentsContinueMass_mirror_owner
@@ -664,7 +664,7 @@ theorem abs_terminalPayoff_mirrorPairRoot_sub_soloReward_le_pairRepairError
       abs_mul, abs_of_nonneg hp0]
     unfold mirrorPairRepairError
     nlinarith [mul_nonneg hp0 (sub_nonneg.mpr howner)]
-  · simp only [if_true]
+  · simp only [ite_true]
     rw [show
       (1 - p) * quittingSoloReward reward false true +
             p * quittingSingletonCollisionReward reward false true -
@@ -711,7 +711,7 @@ private theorem isεAsymptoticNash_mirrorPairRoot
         nlinarith [mul_nonneg hp.le (sub_nonneg.mpr howner)]
     · rw [unilateralCap_mirror_owner reward p hp.le hp1 howner,
         terminalPayoff_mirrorPairRoot]
-      simp only [if_true]
+      simp only [ite_true]
       have habs := abs_nonneg
         (quittingSingletonCollisionReward reward true false -
           quittingSoloReward reward false false)

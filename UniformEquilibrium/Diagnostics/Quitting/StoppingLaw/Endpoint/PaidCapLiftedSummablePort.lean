@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open QuittingPunishmentFloorInfiniteOrbit
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -265,10 +265,12 @@ private theorem quittingPureTimeValue_splice_shift_tail
   | none =>
       simp [quittingCapLiftPureTimeShift, quittingAbsolutePureTime,
         quittingPureTimeHazard]
+      rfl
   | some value =>
       have htime : time + 1 = 1 + value ↔ time = value := by omega
       simp [quittingCapLiftPureTimeShift, quittingAbsolutePureTime,
         quittingPureTimeHazard, htime]
+      rfl
 
 /-- Prefixing one root scales the difference between two delayed pure-time
 payoffs by the observer's opponents-only Continue mass. -/
@@ -397,7 +399,7 @@ suffix. -/
 theorem suffixReach_le_observerReach (horizon : Nat) :
     quittingCapLiftedSuffixReach reward source.profile horizon ≤
       source.observerReach horizon := by
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro time _
     exact quittingStationaryContinueMass_nonneg _
   · intro time _

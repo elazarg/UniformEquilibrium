@@ -76,7 +76,7 @@ theorem exists_finite_censor_menu_of_reward_bound
     (hcutoff : input.deadline ≤ cutoff + 1) (horizon : ℕ) (hhorizon : 1 ≤ horizon)
     (lowerDeadline : ℕ) (bound : ℝ)
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ deadline : ℕ, max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
         (∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =
@@ -93,7 +93,7 @@ theorem exists_finite_censor_menu_of_reward_bound
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
           ((law none).toReal + stoppingLawLateFiniteMass law cutoff) *
             ∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   let laws := Function.update input.opponents input.pivot law
   let censored := censorLateFiniteStoppingLaws laws cutoff
   let deadline := max (cutoff + 1 + horizon) lowerDeadline
@@ -130,7 +130,7 @@ supplied-coordinate-bound finite-censor theorem. -/
 theorem exists_finite_censor_menu (law : PMF (Option ℕ)) (cutoff : ℕ)
     (hcutoff : input.deadline ≤ cutoff + 1) (horizon : ℕ) (hhorizon : 1 ≤ horizon)
     (lowerDeadline : ℕ) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ deadline : ℕ, max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
         (∀ who, (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF =

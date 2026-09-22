@@ -78,7 +78,7 @@ def exactRebasedRhs (N : ℕ) : Unit → RationalParameterField :=
 /-- The proper elimination followed by rebase exposes precisely `t^(N+1)`. -/
 theorem exactRebasedRhs_eq (N : ℕ) :
     exactRebasedRhs N = fun _ => parameter ^ (N + 1) := by
-  letI : Invertible pivot := pivotInvertible
+  let : Invertible pivot := pivotInvertible
   funext coordinate
   cases coordinate
   simp only [exactRebasedRhs, ExactBlockElimination.reducedRhs,
@@ -102,7 +102,7 @@ def twoTermLeadingOnlyRebasedRhs : Unit → RationalParameterField :=
     ExactBlockElimination.schurComplement pivot 0 0 pivot *ᵥ (fun _ => 1)
 
 theorem twoTermLeadingOnlyRebasedRhs_eq_zero : twoTermLeadingOnlyRebasedRhs = 0 := by
-  letI : Invertible pivot := pivotInvertible
+  let : Invertible pivot := pivotInvertible
   funext coordinate
   cases coordinate
   simp [twoTermLeadingOnlyRebasedRhs, ExactBlockElimination.reducedRhs,

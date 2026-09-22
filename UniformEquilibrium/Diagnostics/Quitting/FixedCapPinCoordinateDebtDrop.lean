@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.SurvivalWeightedObstruction
+open Filter _root_.Math.Probability Math.SurvivalWeightedObstruction
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

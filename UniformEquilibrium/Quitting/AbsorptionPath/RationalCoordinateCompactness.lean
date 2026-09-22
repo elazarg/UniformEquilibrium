@@ -194,7 +194,7 @@ private theorem absorptionRationalSampleUpperEnvelope_monotone
     Monotone (absorptionRationalSampleUpperEnvelope sample coalition) := by
   intro first second htime
   obtain ⟨upperRational, hupperRational⟩ := exists_rat_gt second
-  letI : Nonempty {rational : ℚ // second < rational} :=
+  let : Nonempty {rational : ℚ // second < rational} :=
     ⟨⟨upperRational, hupperRational⟩⟩
   rw [absorptionRationalSampleUpperEnvelope,
     absorptionRationalSampleUpperEnvelope]
@@ -297,11 +297,11 @@ private theorem absorptionRationalSampleValue_continuousWithinAt_Ici
   have hright := continuousWithinAt_rightLim_Ici
     (Monotone.tendsto_rightLim
       (absorptionRationalSampleUpperEnvelope_monotone sample coalition) time)
-  rw [absorptionRationalSampleValue, if_pos htime]
+  rw [absorptionRationalSampleValue, ite_eq_left htime]
   refine Filter.Tendsto.congr' ?_ hright
   filter_upwards [self_mem_nhdsWithin] with point hpoint
   simp only [absorptionRationalSampleValue,
-    if_pos (htime.trans hpoint)]
+    ite_eq_left (htime.trans hpoint)]
 
 omit [Fintype ι] [DecidableEq ι] in
 private theorem absorptionRationalSampleValue_right_continuous
@@ -337,7 +337,7 @@ private theorem absorptionRationalSampleValue_left_limit
       · intro hpoint
         exact hpoint.elim
     simp only [hempty, nhdsWithin_empty, tendsto_bot]
-  · simp only [absorptionRationalSampleLeftValue, if_neg hzero]
+  · simp only [absorptionRationalSampleLeftValue, ite_eq_right hzero]
     apply (Monotone.tendsto_leftLim
       (absorptionRationalSampleValue_monotone sample coalition) time).mono_left
     apply nhdsWithin_mono
@@ -353,7 +353,7 @@ noncomputable def cadlagPathOfAbsorptionRationalSample
   leftValue := absorptionRationalSampleLeftValue sample
   value_mem := by
     intro time htime coalition
-    simp only [absorptionRationalSampleValue, if_pos htime.1]
+    simp only [absorptionRationalSampleValue, ite_eq_left htime.1]
     exact ⟨absorptionRationalSampleRightLim_nonneg sample coalition time,
       absorptionRationalSampleRightLim_le_one sample coalition time⟩
   monotone := by
@@ -375,7 +375,7 @@ private theorem absorptionRationalSample_le_upperEnvelope
     (sample coalition rational : ℝ) ≤
       absorptionRationalSampleUpperEnvelope sample coalition time := by
   obtain ⟨upperRational, hupperRational⟩ := exists_rat_gt time
-  letI : Nonempty {value : ℚ // time < value} :=
+  let : Nonempty {value : ℚ // time < value} :=
     ⟨⟨upperRational, hupperRational⟩⟩
   rw [absorptionRationalSampleUpperEnvelope]
   refine le_ciInf fun upperRational ↦ hsample.1 coalition ?_
@@ -411,7 +411,7 @@ theorem absorptionRationalSample_le_reconstructedValue
     (hrational : (rational : ℝ) ≤ time) :
     (sample coalition rational : ℝ) ≤
       absorptionRationalSampleValue sample time coalition := by
-  rw [absorptionRationalSampleValue, if_pos htime]
+  rw [absorptionRationalSampleValue, ite_eq_left htime]
   exact (absorptionRationalSample_le_upperEnvelope hsample coalition
       rational time hrational).trans
     (Monotone.le_rightLim
@@ -429,7 +429,7 @@ theorem reconstructedValue_le_absorptionRationalSample
     (hrational : time < (rational : ℝ)) :
     absorptionRationalSampleValue sample time coalition ≤
       (sample coalition rational : ℝ) := by
-  rw [absorptionRationalSampleValue, if_pos htime]
+  rw [absorptionRationalSampleValue, ite_eq_left htime]
   let between : ℝ := (time + (rational : ℝ)) / 2
   have htimeBetween : time < between := by
     dsimp only [between]
@@ -580,7 +580,7 @@ theorem tendsto_reconstructedValue_of_not_jump
             time =
           absorptionRationalSampleValue sample time coalition := by
         simpa only [cadlagPathOfAbsorptionRationalSample,
-          absorptionRationalSampleLeftValue, if_neg hzero] using
+          absorptionRationalSampleLeftValue, ite_eq_right hzero] using
           hvalueLeft.symm
       obtain ⟨rational, hrationalTime, hlowerRational⟩ :=
         exists_rationalSample_above_lower_of_leftContinuous

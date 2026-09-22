@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
@@ -71,7 +71,7 @@ theorem stationaryProfile_quitNow_terminalOutcomeMass_tendsto_singleton
           rfl]
         by_cases hterminal : terminal = quittingSingletonTerminal payer
         · subst terminal
-          rw [if_pos rfl]
+          rw [ite_eq_left rfl]
           simp_rw [quittingTerminalOutcomeMass_update_pureTime_some_mem_eq_at reward
             (quittingStationaryProfile reward (root _)) payer 0
             (quittingSingletonTerminal payer)
@@ -84,7 +84,7 @@ theorem stationaryProfile_quitNow_terminalOutcomeMass_tendsto_singleton
           simp_rw [quittingRootCoalitionMass_singleton_eq_opponentContinue_mul_quit]
           simpa [quittingRootOpponentContinueMass]
             using hopponent
-        · simp only [if_neg hterminal]
+        · simp only [ite_eq_right hterminal]
           simp_rw [quittingTerminalOutcomeMass_update_pureTime_some_mem_eq_at reward
             (quittingStationaryProfile reward (root _)) payer 0 terminal hpayer]
           have hother : ∃ other ∈ terminal.val, other ≠ payer := by

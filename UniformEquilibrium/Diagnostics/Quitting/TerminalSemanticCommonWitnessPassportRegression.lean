@@ -42,7 +42,11 @@ inductive Witness
   | left
   | right
   | bridge
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype Witness where
+  elems := {.left, .right, .bridge}
+  complete witness := by cases witness <;> simp
 
 /-- A moving family of affine deviation payoffs.  The bridge starts
 `lambda` below the source envelope and becomes optimal only at the joint

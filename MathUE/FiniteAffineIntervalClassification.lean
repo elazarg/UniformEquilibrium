@@ -159,7 +159,7 @@ theorem scalarAffinePropagationSlope_mem_unitInterval
   | cons index rest ih =>
       simp only [scalarAffinePropagationSlope]
       exact ⟨mul_nonneg (hslope0 index) ih.1,
-        mul_le_one₀ (hslope1 index) ih.1 ih.2⟩
+        (mul_le_mul_of_nonneg_right (hslope1 index) ih.1).trans (by simpa using ih.2)⟩
 
 /-- Reward bounds are stable under affine aggregation, with the sharp
 aggregate factor `1 - aggregateSlope`. -/
@@ -232,7 +232,11 @@ theorem abs_scalarAffinePropagation_le_bound
 inductive SymmetricAffineBoxSide
   | lower
   | upper
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype SymmetricAffineBoxSide where
+  elems := {.lower, .upper}
+  complete side := by cases side <;> simp
 
 /-- A box row for one propagated value, written in nonpositive form. -/
 def scalarAffinePropagationBoxRow
@@ -313,7 +317,11 @@ return map. -/
 inductive AffineClosingSeamSide
   | cutMinusReturn
   | returnMinusCut
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype AffineClosingSeamSide where
+  elems := {.cutMinusReturn, .returnMinusCut}
+  complete side := by cases side <;> simp
 
 /-- One of the two closing-seam rows at a scalar cut value. -/
 def affineClosingSeamRow

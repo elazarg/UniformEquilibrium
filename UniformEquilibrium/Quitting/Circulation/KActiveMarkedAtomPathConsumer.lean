@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set StochasticGame Math.Probability Math.PMFProduct
+open Finset Set StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -75,7 +75,7 @@ theorem exists_oneActiveMarkedSingletonSupportRationalDivergentPath_of_finitePre
       ∀ time, eta ≤
         quittingOpponentCoalitionMass
           (plan time) markedPlayer {clockOwner} := by
-  letI : Nonempty ι := ⟨markedPlayer⟩
+  let : Nonempty ι := ⟨markedPlayer⟩
   obtain ⟨state, hstateBox, hstateEdge⟩ :=
     exists_chronologicalKActiveMarkedAtomPath_of_finitePrefixes
       reward bound
@@ -165,7 +165,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedPrefixes
   have hnonempty : Nonempty ι := by
     obtain ⟨markedPlayer, _, _, _, _, _⟩ := hprefix 1 zero_lt_one
     exact ⟨markedPlayer⟩
-  letI : Nonempty ι := hnonempty
+  let : Nonempty ι := hnonempty
   apply quittingGame_exists_uniformEquilibriumPayoff_of_KActivePaths reward 1
   intro epsilon hepsilon
   obtain ⟨markedPlayer, clockOwner, eta, edgeCharge, heta, hpref⟩ :=

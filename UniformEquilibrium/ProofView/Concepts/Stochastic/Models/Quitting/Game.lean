@@ -83,11 +83,11 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_absorbed
     (S : {S : Finset ι // S.Nonempty}) :
     ∃ v : Payoff ι,
       (quittingGame r).IsUniformEquilibriumPayoff (some S) v := by
-  haveI : Finite (quittingGame r).State :=
+  have : Finite (quittingGame r).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  haveI : ∀ i : ι, Finite ((quittingGame r).Act i) :=
+  have : ∀ i : ι, Finite ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
-  haveI : ∀ i : ι, Nonempty ((quittingGame r).Act i) :=
+  have : ∀ i : ι, Nonempty ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Nonempty Bool)
   exact (quittingGame r).exists_uniformEquilibriumPayoff_of_isAbsorbingState
     (isAbsorbingState_quittingGame_some r S)

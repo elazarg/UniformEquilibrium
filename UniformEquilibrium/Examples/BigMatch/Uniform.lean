@@ -94,7 +94,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace BigMatch
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-! ## A biased coin as a `PMF Bool` -/
 
@@ -104,7 +104,7 @@ def coinPMF (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
   PMF.ofFintype (fun b => if b then ENNReal.ofReal p else ENNReal.ofReal (1 - p))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hp0 (by linarith)]
       norm_num)
 
@@ -234,7 +234,7 @@ theorem expectedStateValue_oneIndicator_eq_zeroIndicator
           (fun who => if who then uniformMinimizerStrategy t h else dev t h)
         have h2 := expect_next_zeroIndicator h.2
           (fun who => if who then uniformMinimizerStrategy t h else dev t h)
-        simp only [Bool.false_eq_true, if_false, reduceIte] at h1 h2
+        simp only [Bool.false_eq_true, ite_false, reduceIte] at h1 h2
         rw [uniformMinimizerStrategy_apply_true_toReal] at h1 h2
         refine ⟨by rw [h1]; ring, by rw [h2]⟩
       have honeSum :
@@ -288,7 +288,7 @@ theorem expectedStagePayoff_eq_half_of_uniformMinimizer
     rw [stageActionDist_profileUniformMinimizer]
     have hthis := expect_stagePayoff_maximizer h.2
       (fun who => if who then uniformMinimizerStrategy t h else dev t h)
-    simp only [Bool.false_eq_true, if_false, reduceIte] at hthis
+    simp only [Bool.false_eq_true, ite_false, reduceIte] at hthis
     rw [uniformMinimizerStrategy_apply_true_toReal] at hthis
     rw [hthis]; ring
   unfold expectedStagePayoff
@@ -359,7 +359,6 @@ theorem bfExcess_succ (d : ℕ → Bool) (t : ℕ) :
   unfold bfExcess
   rw [Fin.sum_univ_castSucc]
   simp only [Fin.val_castSucc, Fin.val_last]
-  rfl
 
 /-- The Blackwell–Ferguson maximizer against the fixed schedule `d`, as a
 `TimeStateMixedProfile` (state-independent, since the excess along a
@@ -428,7 +427,7 @@ theorem stageActionDist_eq_of_mem_support_bfSeqFullProfile (N : ℕ) (d : ℕ �
   cases who
   · change blackwellFergusonStrategy N t h = bfSeqProfile N d t h.2 false
     unfold blackwellFergusonStrategy bfSeqProfile
-    simp only [Bool.false_eq_true, if_false]
+    simp only [Bool.false_eq_true, ite_false]
     congr 2
     exact netRightExcess_eq_of_mem_support_bfSeqFullProfile N d t h hh
   · change minimizerSchedule d t h = bfSeqProfile N d t h.2 true
@@ -504,13 +503,13 @@ theorem bfDenom_succ_of_left (N : ℕ) (k : ℤ) (hk : 2 ≤ bfDenom N k) :
 @[simp] theorem stopProbability_bfSeqProfile (N : ℕ) (d : ℕ → Bool) (t : ℕ) :
     stopProbability (bfSeqProfile N d) t = bfStopProb N (bfExcess d t) := by
   unfold stopProbability bfSeqProfile
-  simp only [Bool.false_eq_true, if_false]
+  simp only [Bool.false_eq_true, ite_false]
   exact coinPMF_apply_true_toReal _ _ _
 
 @[simp] theorem rightProbability_bfSeqProfile (N : ℕ) (d : ℕ → Bool) (t : ℕ) :
     rightProbability (bfSeqProfile N d) t = if d t then 1 else 0 := by
   unfold rightProbability bfSeqProfile
-  simp only [if_true]
+  simp only [ite_true]
   cases d t <;> simp [PMF.pure_apply]
 
 /-- The Blackwell–Ferguson potential process:
@@ -576,12 +575,12 @@ theorem bfM_le_succ (N : ℕ) (d : ℕ → Bool) (t : ℕ) : bfM N d t ≤ bfM N
       rw [← hD1]
       norm_num
     rcases hdt : d t
-    · simp only [Bool.false_eq_true, if_false]
+    · simp only [Bool.false_eq_true, ite_false]
       rw [hp1]
       have : bfPotential (bfDenom N k) = 0 := by rw [← hD1]; exact bfPotential_one
       rw [this]
       nlinarith
-    · simp only [if_true]
+    · simp only [ite_true]
       rw [hp1]
       have : bfPotential (bfDenom N k) = 0 := by rw [← hD1]; exact bfPotential_one
       rw [this]
@@ -590,14 +589,14 @@ theorem bfM_le_succ (N : ℕ) (d : ℕ → Bool) (t : ℕ) : bfM N d t ≤ bfM N
     · have hDenom' : bfDenom N (k + -1) = bfDenom N k - 1 := by
         have : k + (-1 : ℤ) = k - 1 := by ring
         rw [this]; exact bfDenom_succ_of_left N k hD2
-      simp only [Bool.false_eq_true, if_false]
+      simp only [Bool.false_eq_true, ite_false]
       rw [hDenom']
       unfold bfStopProb
       have hid := bfPotential_left_id (D := bfDenom N k) hD2
       nlinarith [hid]
     · have hDenom' : bfDenom N (k + 1) = bfDenom N k + 1 :=
         bfDenom_succ_of_right N k hD2
-      simp only [if_true]
+      simp only [ite_true]
       rw [hDenom']
       unfold bfStopProb
       have hid := bfPotential_right_id (bfDenom N k)
@@ -976,7 +975,7 @@ theorem netRightExcess_ge_of_live_of_mem_support (N : ℕ) (dev : game.BehaviorS
     rw [PMF.mem_support_iff, stageActionDist_bfDevProfile] at ha
     rw [pmfPi_apply] at ha
     have ha' := Finset.prod_ne_zero_iff.mp ha false (Finset.mem_univ false)
-    simp only [Bool.false_eq_true, if_false, hfa] at ha'
+    simp only [Bool.false_eq_true, ite_false, hfa] at ha'
     unfold blackwellFergusonStrategy at ha'
     rw [coinPMF_apply_false] at ha'
     have hp1 : bfStopProb N (netRightExcess h) < 1 := by
@@ -1042,7 +1041,7 @@ theorem restrictHist_snoc (G : StochasticGame ι) {t T : ℕ} (htT : t ≤ T)
         ⟨t, hlt1⟩).1 = (h.1 ⟨t, hlt⟩).1 := by
       rw [hidx, Fin.snoc_castSucc]
     unfold restrictHist
-    rw [dif_pos hlt1, dif_pos hlt]
+    rw [dite_eq_left hlt1, dite_eq_left hlt]
     exact Prod.ext hrec hst
   · have hnlt : ¬ t < T := by omega
     have hlt1 : t < T + 1 := by omega
@@ -1054,7 +1053,7 @@ theorem restrictHist_snoc (G : StochasticGame ι) {t T : ℕ} (htT : t ≤ T)
         ⟨t, hlt1⟩).1 = h.2 := by
       rw [hidx, Fin.snoc_last]
     unfold restrictHist
-    rw [dif_pos hlt1, dif_neg hnlt]
+    rw [dite_eq_left hlt1, dite_eq_right hnlt]
     exact Prod.ext hrec hst
 
 /-- **Piece 1, the marginal-consistency identity.**  Prefix restriction is
@@ -1196,7 +1195,7 @@ theorem bfX_le_expect_step (N : ℕ) (dev : game.BehaviorStrategy true) {t : ℕ
   rcases hs : h.2 with _ | _ | _
   · -- h.2 = .live (the ambient goal already has `h.2` rewritten to `State.live` by `rcases`)
     rw [stageActionDist_bfDevProfile, expect_pmfPi_bool]
-    simp only [Bool.false_eq_true, if_false, if_true]
+    simp only [Bool.false_eq_true, ite_false, ite_true]
     unfold blackwellFergusonStrategy
     rw [expect_coinPMF, bfX_live N hs]
     have hGtrue : expect (dev t h)
@@ -1215,7 +1214,7 @@ theorem bfX_le_expect_step (N : ℕ) (dev : game.BehaviorStrategy true) {t : ℕ
             rfl
           rw [hns]; exact bfX_zero N rfl
       rw [hfun, expect_eq_sum, Fintype.sum_bool]
-      simp only [Bool.false_eq_true, if_true, if_false]
+      simp only [Bool.false_eq_true, ite_true, ite_false]
       rw [pmfBool_false_toReal (dev t h)]; ring
     have hGfalse : expect (dev t h)
         (fun b => bfX N ((Fin.snoc h.1 (State.live, fun who => if who then b else false),
@@ -1243,10 +1242,10 @@ theorem bfX_le_expect_step (N : ℕ) (dev : game.BehaviorStrategy true) {t : ℕ
       rw [hfun, expect_eq_sum, Fintype.sum_bool]
       have hkeyF : netRightExcess h + (if (false : Bool) then (1 : ℤ) else -1) =
           netRightExcess h - 1 := by
-        simp only [Bool.false_eq_true, if_false]; omega
+        simp only [Bool.false_eq_true, ite_false]; omega
       have hkeyT : netRightExcess h + (if (true : Bool) then (1 : ℤ) else -1) =
           netRightExcess h + 1 := by
-        simp only [if_true]
+        simp only [ite_true]
       rw [hkeyF, hkeyT]
       rw [pmfBool_false_toReal (dev t h)]
     rw [hGtrue, hGfalse]
@@ -1332,7 +1331,7 @@ theorem expect_stageActionDist_bfDevProfile_minimizer (N : ℕ) (dev : game.Beha
     expect (game.stageActionDist (bfDevProfile N dev) h) (fun a => f (a true)) =
       expect (dev t h) f := by
   rw [stageActionDist_bfDevProfile, expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   exact expect_const _ _
 
 /-- **Piece 3, the pointwise stage-reward bound.** -/
@@ -1345,7 +1344,7 @@ theorem stageEUAt_bfDevProfile_ge (N : ℕ) (dev : game.BehaviorStrategy true) {
   rw [stageActionDist_bfDevProfile]
   have heq := expect_stagePayoff_maximizer h.2
     (fun i => if i then dev t h else blackwellFergusonStrategy N t h)
-  simp only [Bool.false_eq_true, if_false, if_true] at heq
+  simp only [Bool.false_eq_true, ite_false, ite_true] at heq
   rw [heq]
   unfold blackwellFergusonStrategy
   rw [coinPMF_apply_true_toReal]
@@ -1420,7 +1419,7 @@ theorem bfLiveDeltaExpect_eq (N : ℕ) (dev : game.BehaviorStrategy true) (t : �
       rw [expect_stageActionDist_bfDevProfile_minimizer N dev h
         (fun b => if b then (1 : ℝ) else -1), expect_eq_sum, Fintype.sum_bool,
         pmfBool_false_toReal (dev t h)]
-      simp only [liveIndicator, Bool.false_eq_true, if_false, if_true]
+      simp only [liveIndicator, Bool.false_eq_true, ite_false, ite_true]
       ring
     · simp [liveIndicator]
     · simp [liveIndicator]
@@ -1605,7 +1604,7 @@ theorem bfPartialDeltaSum_succ_eq (N : ℕ) (dev : game.BehaviorStrategy true) (
       rw [expect_stageActionDist_bfDevProfile_minimizer N dev h
         (fun b => if b then (1 : ℝ) else -1), expect_eq_sum, Fintype.sum_bool,
         pmfBool_false_toReal (dev T h)]
-      simp only [liveIndicator, Bool.false_eq_true, if_false, if_true]
+      simp only [liveIndicator, Bool.false_eq_true, ite_false, ite_true]
       ring
     · simp [liveIndicator]
     · simp [liveIndicator]
@@ -1658,7 +1657,7 @@ theorem bfPLive_succ_eq (N : ℕ) (dev : game.BehaviorStrategy true) (t : ℕ) :
     rw [stageActionDist_bfDevProfile]
     have heq := expect_next_liveIndicator h.2
       (fun i => if i then dev t h else blackwellFergusonStrategy N t h)
-    simp only [Bool.false_eq_true, if_false] at heq
+    simp only [Bool.false_eq_true, ite_false] at heq
     rw [heq]
     unfold blackwellFergusonStrategy
     rw [coinPMF_apply_true_toReal]

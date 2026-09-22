@@ -10,6 +10,7 @@ proof remains in `MathUE.LinearAlgebra.MixedCompatibilityAlternative`.
 namespace Theorems.MixedObstruction
 
 open Math.LinearAlgebra
+open _root_.Maths.LinearProgramming
 
 /-- If every owner-specific subsystem is feasible, then either the coupled
 system is feasible or it has a normalized positive obstruction supported by

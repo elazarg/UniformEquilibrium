@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -602,19 +602,19 @@ theorem exists_twoDateTimingNash_terminalDebt_le_half
               (quittingTwoDateTimingProfile reward mixed) who ∧
             quittingTerminalDeviationDebt reward
                 (quittingTwoDateTimingProfile reward mixed) who ≤ bound / 2 := by
-  letI : ∀ player,
+  let : ∀ player,
       Finite ((quittingTwoDateTimingGame reward).Strategy player) := by
     intro player
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
       KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player,
+  let : ∀ player,
       Nonempty ((quittingTwoDateTimingGame reward).Strategy player) := by
     intro player
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
       KernelGame.ofPureEU
     infer_instance
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame
       KernelGame.ofPureEU
     infer_instance

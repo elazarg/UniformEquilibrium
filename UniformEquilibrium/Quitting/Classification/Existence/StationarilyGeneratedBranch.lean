@@ -59,7 +59,7 @@ omit [Fintype ι] [DecidableEq ι] in
     quittingStationaryPrefixThenRoots root horizon punishment
         (horizon + 1 + offset) =
       punishment offset := by
-  rw [quittingStationaryPrefixThenRoots, if_neg (by omega)]
+  rw [quittingStationaryPrefixThenRoots, ite_eq_right (by omega)]
   congr
   omega
 
@@ -81,7 +81,7 @@ theorem isQuittingRootSequencePunishmentWithin_iff_bestReplyValue
       quittingBestReplyValue reward
           (quittingRootSequenceProfile reward punishment 0) who ≤
         quittingPunishmentValue reward who + δ := by
-  letI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+  let : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
     ⟨fun _time _history => PMF.pure false⟩
   constructor
   · intro hpunish

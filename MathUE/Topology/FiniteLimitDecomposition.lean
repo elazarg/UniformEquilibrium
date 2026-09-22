@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Data.Fintype.BigOperators
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Analysis.Normed.Ring.Lemmas
 import Mathlib.Topology.Algebra.Order.Field
 import Mathlib.Topology.Instances.Real.Lemmas

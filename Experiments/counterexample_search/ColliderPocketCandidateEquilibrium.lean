@@ -63,17 +63,17 @@ def candidateMargin : ZMod 5 → ℝ :=
     show (0 : ZMod 5) ≠ 3 from by decide, show (0 : ZMod 5) ≠ 4 from by decide]
 
 @[simp] theorem candidateMargin_one : candidateMargin 1 = -(1 / 2) := by
-  rw [candidateMargin, if_pos rfl]
+  rw [candidateMargin, ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_two : candidateMargin 2 = 2 := by
-  rw [candidateMargin, if_neg (by decide), if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_three : candidateMargin 3 = 1 := by
-  rw [candidateMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_four : candidateMargin 4 = -2 := by
-  rw [candidateMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_left rfl]
 
 /-- The collider completion at solo self value `1`, joint value `-2`, and the
 margin vector `candidateMargin`. -/
@@ -151,21 +151,22 @@ theorem stepValue_zero_eq_candidatePayoff {q : ℝ} (hroot : candidateCubic q = 
   funext who
   rw [stepValue_zero_apply, candidatePayoff, one_mul]
   rcases zmod_five_cases who with h | h | h | h | h <;> subst h
-  · rw [stepSlack_zero, if_neg (by decide), if_neg (by decide), if_neg (by decide)]
+  · rw [stepSlack_zero, ite_eq_right (by decide),
+      ite_eq_right (by decide), ite_eq_right (by decide)]
     ring
-  · rw [stepSlack_one, if_neg (by decide), if_neg (by decide), if_neg (by decide)]
+  · rw [stepSlack_one, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide)]
     ring
-  · rw [stepSlack_two, if_pos rfl, show (2 : ZMod 5) * 4 = 3 from by decide,
+  · rw [stepSlack_two, ite_eq_left rfl, show (2 : ZMod 5) * 4 = 3 from by decide,
       show (3 : ZMod 5) * 4 = 2 from by decide,
       show (4 : ZMod 5) * 4 = 1 from by decide,
       candidateMargin_one, candidateMargin_two, candidateMargin_three]
     linear_combination ((1 : ℝ) / 2) * hroot
-  · rw [stepSlack_three, if_neg (by decide), if_pos rfl,
+  · rw [stepSlack_three, ite_eq_right (by decide), ite_eq_left rfl,
       show (3 : ZMod 5) * 4 = 2 from by decide,
       show (4 : ZMod 5) * 4 = 1 from by decide,
       candidateMargin_one, candidateMargin_two]
     ring
-  · rw [stepSlack_four, if_neg (by decide), if_neg (by decide), if_pos rfl,
+  · rw [stepSlack_four, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl,
       show (4 : ZMod 5) * 4 = 1 from by decide, candidateMargin_one]
     ring
 

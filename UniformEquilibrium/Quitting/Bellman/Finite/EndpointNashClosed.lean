@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 open scoped Topology
 
@@ -59,16 +59,15 @@ theorem isClosed_isεQuittingRootEndpointNash_simplex
       continuous_snd
   have hcoordinate : ∀ (who : ι) (action : Bool),
       Continuous (fun point : ℝ × Payoff ι × QuittingRootSimplex ι =>
-        point.2.2 who action) := fun who action =>
-    (continuous_apply action).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply who).comp (continuous_snd.comp continuous_snd)))
+        (point.2.2 who).weights action) := fun who action =>
+    (Convexity.StdSimplex.continuous_weights_apply ℝ action).comp
+      ((continuous_apply who).comp (continuous_snd.comp continuous_snd))
   have hclosed : ∀ who : ι, IsClosed
       {point : ℝ × Payoff ι × QuittingRootSimplex ι |
-        point.2.2 who false *
+        (point.2.2 who).weights false *
             quittingRootEndpointDifference reward point.2.1
               (quittingRootOfSimplex point.2.2) who ≤ point.1 ∧
-          -point.1 ≤ point.2.2 who true *
+          -point.1 ≤ (point.2.2 who).weights true *
             quittingRootEndpointDifference reward point.2.1
               (quittingRootOfSimplex point.2.2) who} := by
     intro who
@@ -81,15 +80,15 @@ theorem isClosed_isεQuittingRootEndpointNash_simplex
         (quittingRootOfSimplex point.2.2)} =
       ⋂ who : ι,
         {point : ℝ × Payoff ι × QuittingRootSimplex ι |
-          point.2.2 who false *
+          (point.2.2 who).weights false *
               quittingRootEndpointDifference reward point.2.1
                 (quittingRootOfSimplex point.2.2) who ≤ point.1 ∧
-            -point.1 ≤ point.2.2 who true *
+            -point.1 ≤ (point.2.2 who).weights true *
               quittingRootEndpointDifference reward point.2.1
                 (quittingRootOfSimplex point.2.2) who} := by
     ext point
     simp only [IsεQuittingRootEndpointNash,
-      quittingRootOfSimplex_apply_toReal, Set.mem_setOf_eq, Set.mem_iInter]
+      quittingRootOfSimplex_apply_toReal, Set.mem_ofPred_eq, Set.mem_iInter]
   rw [heq]
   exact isClosed_iInter hclosed
 
@@ -156,11 +155,11 @@ theorem exists_isZeroQuittingRootEndpointNash_simplex
       IsεQuittingRootEndpointNash reward tail 0
         (quittingRootOfSimplex root) := by
   let stageGame : KernelGame ι := quittingContinuationGame reward tail
-  haveI : ∀ who, Finite (stageGame.Strategy who) :=
+  have : ∀ who, Finite (stageGame.Strategy who) :=
     fun _ => inferInstanceAs (Finite Bool)
-  haveI : ∀ who, Nonempty (stageGame.Strategy who) :=
+  have : ∀ who, Nonempty (stageGame.Strategy who) :=
     fun _ => inferInstanceAs (Nonempty Bool)
-  haveI : Finite stageGame.Outcome :=
+  have : Finite stageGame.Outcome :=
     inferInstanceAs (Finite (ι → Bool))
   obtain ⟨root, hroot⟩ := stageGame.mixed_nash_exists
   refine ⟨fun who => stdSimplexEquiv (root who), ?_⟩

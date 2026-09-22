@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -529,9 +529,9 @@ theorem quittingStationaryContinueMass_le_continueDirectedCollector
       quittingRootEndpointDifference reward
         (quittingRootSequenceTailVector reward roots (time + 1))
         (roots time) who < 0
-  · rw [quittingContinueDirectedCollectorHazard, if_pos hselected]
+  · rw [quittingContinueDirectedCollectorHazard, ite_eq_left hselected]
     exact quittingStationaryContinueMass_le_update_pure_false (roots time) who
-  · rw [quittingContinueDirectedCollectorHazard, if_neg hselected,
+  · rw [quittingContinueDirectedCollectorHazard, ite_eq_right hselected,
       Function.update_eq_self]
 
 /-- Removing Quit probability at selected dates weakly increases every
@@ -546,7 +546,7 @@ theorem quittingJointSurvivalWeight_le_continueDirectedCollector
         start fuel := by
   rw [quittingJointSurvivalWeight_eq_prod,
     quittingJointSurvivalWeight_eq_prod]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset _
     exact quittingStationaryContinueMass_nonneg _
   · intro offset _

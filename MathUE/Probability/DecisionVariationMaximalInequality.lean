@@ -280,7 +280,7 @@ theorem readStoppedScore_dichotomy (readout : ℝ → ℝ)
       by_cases hbefore : readRunningMax readout score n (Fin.init history) < ε
       · have hgate : readStoppedScore readout score ε n (Fin.init history)
             (history (Fin.last n)) = score n (Fin.init history) (history (Fin.last n)) :=
-          if_pos hbefore
+          ite_eq_left hbefore
         have hagree :
             predictableScoreSum (readStoppedScore readout score ε) (n + 1) history =
               predictableScoreSum score (n + 1) history := by
@@ -292,7 +292,7 @@ theorem readStoppedScore_dichotomy (readout : ℝ → ℝ)
         · linarith
         · exact hle
       · have hgate : readStoppedScore readout score ε n (Fin.init history)
-            (history (Fin.last n)) = 0 := if_neg hbefore
+            (history (Fin.last n)) = 0 := ite_eq_right hbefore
         have hfrozen :
             predictableScoreSum (readStoppedScore readout score ε) (n + 1) history =
               predictableScoreSum (readStoppedScore readout score ε) n (Fin.init history) := by
@@ -347,7 +347,7 @@ theorem sq_mul_expect_indicator_le_mul_expectedDecisionVariation
         predictableScoreSum (stoppedScore score ε) T history ^ 2 := by
     intro history
     by_cases hcross : ε ≤ scoreRunningMaxAbs score T history
-    · rw [if_pos hcross, mul_one]
+    · rw [ite_eq_left hcross, mul_one]
       have hge : ε ≤ |predictableScoreSum (stoppedScore score ε) T history| :=
         (readStoppedScore_dichotomy (fun x => |x|) score hε T history).2 hcross
       calc ε ^ 2 = ε * ε := pow_two ε
@@ -356,7 +356,7 @@ theorem sq_mul_expect_indicator_le_mul_expectedDecisionVariation
             mul_self_le_mul_self hε.le hge
         _ = |predictableScoreSum (stoppedScore score ε) T history| ^ 2 := (pow_two _).symm
         _ = predictableScoreSum (stoppedScore score ε) T history ^ 2 := sq_abs _
-    · rw [if_neg hcross, mul_zero]
+    · rw [ite_eq_right hcross, mul_zero]
       exact sq_nonneg _
   calc ε ^ 2 * expect (adaptiveHistoryLaw step T)
           (fun history => if ε ≤ scoreRunningMaxAbs score T history then 1 else 0)
@@ -407,12 +407,12 @@ theorem sq_add_mul_expect_indicator_le {ι : Type*} [Finite ι] (law : PMF ι) (
   have hpointwise : ∀ i, (ε + a) ^ 2 * (if A i then (1 : ℝ) else 0) ≤ (Z i + a) ^ 2 := by
     intro i
     by_cases hA : A i
-    · rw [if_pos hA, mul_one]
+    · rw [ite_eq_left hA, mul_one]
       have hshift : ε + a ≤ Z i + a := by linarith [hge i hA]
       calc (ε + a) ^ 2 = (ε + a) * (ε + a) := pow_two _
         _ ≤ (Z i + a) * (Z i + a) := mul_self_le_mul_self (by linarith) hshift
         _ = (Z i + a) ^ 2 := (pow_two _).symm
-    · rw [if_neg hA, mul_zero]
+    · rw [ite_eq_right hA, mul_zero]
       exact sq_nonneg _
   have hexpand : ∀ i, (Z i + a) ^ 2 = Z i ^ 2 + (2 * a * Z i + a ^ 2) := fun i => by ring
   calc (ε + a) ^ 2 * expect law (fun i => if A i then (1 : ℝ) else 0)

@@ -108,7 +108,7 @@ theorem exists_cappedClockParentRewardCertificate_or_exactLPDual
         (∀ row, 0 ≤ coefficient row) ∧
         (∀ who, ∑ row, coefficient row * cappedClockExactLPDelta reward row who ≤ 0) ∧
         0 < ∑ row, coefficient row * cappedClockExactLPBase reward row := by
-  rcases Math.FiniteInequality.exists_nonnegativePotential_or_nonpositiveCertificate
+  rcases Maths.FiniteInequality.exists_nonnegativePotential_or_nonpositiveCertificate
       (cappedClockExactLPDelta reward) (cappedClockExactLPBase reward) with
     hcertificate | hdual
   · exact Or.inl
@@ -125,7 +125,7 @@ theorem not_nonempty_cappedClockParentRewardCertificate_iff_exactLPDual
         (∀ who, ∑ row, coefficient row * cappedClockExactLPDelta reward row who ≤ 0) ∧
         0 < ∑ row, coefficient row * cappedClockExactLPBase reward row := by
   rw [nonempty_cappedClockParentRewardCertificate_iff]
-  exact Math.FiniteInequality.not_exists_nonnegativePotential_iff_exists_nonpositiveCertificate
+  exact Maths.FiniteInequality.not_exists_nonnegativePotential_iff_exists_nonpositiveCertificate
     (cappedClockExactLPDelta reward) (cappedClockExactLPBase reward)
 
 /-- Rational capped-clock rows have either exact nonnegative rational weights
@@ -135,13 +135,13 @@ theorem exists_rationalCappedClockWeight_or_exactLPDual
     (∃ weight : ι → ℚ,
       (∀ who, 0 ≤ weight who) ∧
       ∀ row, cappedClockExactLPBase reward row ≤
-        Math.FiniteInequality.ratDotProduct
+        Maths.FiniteInequality.ratDotProduct
           (cappedClockExactLPDelta reward row) weight) ∨
     (∃ coefficient : CappedClockExactLPRow ι → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧
       (∀ who, ∑ row, coefficient row * cappedClockExactLPDelta reward row who ≤ 0) ∧
       0 < ∑ row, coefficient row * cappedClockExactLPBase reward row) :=
-  Math.FiniteInequality.exists_rationalNonnegativePotential_or_nonpositiveCertificate
+  Maths.FiniteInequality.exists_rationalNonnegativePotential_or_nonpositiveCertificate
     (cappedClockExactLPDelta reward) (cappedClockExactLPBase reward)
 
 /-- Rational capped-clock weights fail to exist exactly when an exact
@@ -151,13 +151,13 @@ theorem not_exists_rationalCappedClockWeight_iff_exactLPDual
     (¬∃ weight : ι → ℚ,
       (∀ who, 0 ≤ weight who) ∧
       ∀ row, cappedClockExactLPBase reward row ≤
-        Math.FiniteInequality.ratDotProduct
+        Maths.FiniteInequality.ratDotProduct
           (cappedClockExactLPDelta reward row) weight) ↔
     ∃ coefficient : CappedClockExactLPRow ι → ℚ,
       (∀ row, 0 ≤ coefficient row) ∧
       (∀ who, ∑ row, coefficient row * cappedClockExactLPDelta reward row who ≤ 0) ∧
       0 < ∑ row, coefficient row * cappedClockExactLPBase reward row :=
-  Math.FiniteInequality.not_exists_rationalNonnegativePotential_iff_exists_nonpositiveCertificate
+  Maths.FiniteInequality.not_exists_rationalNonnegativePotential_iff_exists_nonpositiveCertificate
     (cappedClockExactLPDelta reward) (cappedClockExactLPBase reward)
 
 end GameTheory

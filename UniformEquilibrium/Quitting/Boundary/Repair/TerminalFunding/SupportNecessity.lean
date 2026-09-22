@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -150,12 +150,12 @@ theorem exists_negativeCollision_of_positiveSingleton_zeroTargetLift
         (quittingQuitters_nonempty_iff action).2 ⟨owner, hself⟩
       by_cases hopponent : quittingSomeOpponentQuits owner action
       · have hreward := hno action hmass hself hopponent
-        simp only [supportedPayoff, hmass, if_false]
+        simp only [supportedPayoff, hmass, ite_false]
         exact hreward
       · have hsingleton : quittingQuitters action = {owner} :=
           quittingQuitters_eq_singleton_of_noOpponent_of_self
             owner action hopponent hself
-        simp only [supportedPayoff, hmass, if_false, hsingleton]
+        simp only [supportedPayoff, hmass, ite_false, hsingleton]
         rw [quittingSetReward_of_nonempty reward
           (Finset.singleton_nonempty owner)]
         simpa [quittingSingletonTerminal] using hpositive.le
@@ -166,7 +166,7 @@ theorem exists_negativeCollision_of_positiveSingleton_zeroTargetLift
   have hsingletonPayoff : 0 < supportedPayoff singletonAction := by
     have hquitters : quittingQuitters singletonAction = {owner} := by
       exact quittingQuitters_setAction {owner}
-    simp only [supportedPayoff, hsingletonMass, if_false, hquitters]
+    simp only [supportedPayoff, hsingletonMass, ite_false, hquitters]
     rw [quittingSetReward_of_nonempty reward
       (Finset.singleton_nonempty owner)]
     simpa [quittingSingletonTerminal] using hpositive
@@ -182,7 +182,7 @@ theorem exists_negativeCollision_of_positiveSingleton_zeroTargetLift
     intro action haction
     have hmass : distribution action ≠ 0 := by
       simpa [PMF.mem_support_iff] using haction
-    simp only [supportedPayoff, hmass, if_false]
+    simp only [supportedPayoff, hmass, ite_false]
     have hself := action_eq_true_of_mem_support_pmfPi_update_pure_true
       root owner action haction
     have hquitters : (quittingQuitters action).Nonempty :=

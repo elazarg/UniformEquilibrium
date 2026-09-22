@@ -57,7 +57,7 @@ def deviationSignalMatrix
 def IndividualFullRank
     (M : G.PublicMonitoring) [DecidableEq ι]
     (a : Profile G) (who : ι) : Prop :=
-  LinearIndependent ℝ (M.deviationSignalMatrix a who)
+  LinearIndependent ℝ (M.deviationSignalMatrix a who).row
 
 /-- The two players' deviation subspaces intersect only at zero. This is the
 linear-algebraic identifiability condition separating their unilateral signal
@@ -66,22 +66,22 @@ def PairwiseIdentifiable
     (M : G.PublicMonitoring) [DecidableEq ι]
     (a : Profile G) (i j : ι) : Prop :=
   Disjoint
-    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a i)))
-    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a j)))
+    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a i).row))
+    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a j).row))
 
 /-- Combined family of two players' unilateral deviation-signal vectors. -/
 def pairwiseDeviationSignalFamily
     (M : G.PublicMonitoring) [DecidableEq ι]
     (a : Profile G) (i j : ι) :
     Matrix (NontrivialDeviation a i ⊕ NontrivialDeviation a j) M.Signal ℝ :=
-  Sum.elim (M.deviationSignalMatrix a i) (M.deviationSignalMatrix a j)
+  Sum.elim (M.deviationSignalMatrix a i).row (M.deviationSignalMatrix a j).row
 
 /-- Pairwise full rank: the combined deviation-difference rows for two players
 are linearly independent. The intended use is for distinct players. -/
 def PairwiseFullRank
     (M : G.PublicMonitoring) [DecidableEq ι]
     (a : Profile G) (i j : ι) : Prop :=
-  LinearIndependent ℝ (M.pairwiseDeviationSignalFamily a i j)
+  LinearIndependent ℝ (M.pairwiseDeviationSignalFamily a i j).row
 
 /-- Individual deviation full rank for every player at one stage profile. -/
 def IndividualFullRankAtProfile
@@ -119,7 +119,7 @@ theorem individualFullRank_iff_individualDeviationRank_eq_card
         Fintype.card (NontrivialDeviation a who) := by
   let A : Matrix (NontrivialDeviation a who) M.Signal ℝ :=
     M.deviationSignalMatrix a who
-  change LinearIndependent ℝ A ↔ A.rank = _
+  change LinearIndependent ℝ A.row ↔ A.rank = _
   constructor
   · exact LinearIndependent.rank_matrix
   · intro h
@@ -142,7 +142,7 @@ theorem pairwiseFullRank_iff_pairwiseDeviationRank_eq_card
           Fintype.card (NontrivialDeviation a j) := by
   let A : Matrix (NontrivialDeviation a i ⊕ NontrivialDeviation a j)
       M.Signal ℝ := M.pairwiseDeviationSignalFamily a i j
-  change LinearIndependent ℝ A ↔ A.rank = _
+  change LinearIndependent ℝ A.row ↔ A.rank = _
   constructor
   · intro h
     dsimp [A] at h ⊢
@@ -288,7 +288,7 @@ theorem IndividualFullRank.of_garble
     {a : Profile G} {who : ι}
     (h : (M.garble K).IndividualFullRank a who) :
     M.IndividualFullRank a who := by
-  letI := Fintype.ofFinite M.Signal
+  let := Fintype.ofFinite M.Signal
   rw [IndividualFullRank, M.deviationSignalMatrix_garble K] at h
   exact LinearIndependent.of_comp K.pushforwardLinearMap h
 
@@ -299,7 +299,7 @@ theorem PairwiseFullRank.of_garble
     {a : Profile G} {i j : ι}
     (h : (M.garble K).PairwiseFullRank a i j) :
     M.PairwiseFullRank a i j := by
-  letI := Fintype.ofFinite M.Signal
+  let := Fintype.ofFinite M.Signal
   rw [PairwiseFullRank, M.pairwiseDeviationSignalFamily_garble K] at h
   exact LinearIndependent.of_comp K.pushforwardLinearMap h
 
@@ -319,12 +319,12 @@ theorem individualDeviationRank_garble_le
   change Module.finrank ℝ
       (Submodule.span ℝ
         (Set.range (K.pushforwardLinearMap ∘
-          M.deviationSignalMatrix a who))) ≤
+          (M.deviationSignalMatrix a who).row))) ≤
     Module.finrank ℝ
-      (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a who)))
+      (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a who).row))
   rw [Set.range_comp, ← LinearMap.map_span]
   exact Submodule.finrank_map_le K.pushforwardLinearMap
-    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a who)))
+    (Submodule.span ℝ (Set.range (M.deviationSignalMatrix a who).row))
 
 /-- Stochastic garbling cannot increase the numerical pairwise deviation
 rank when both signal spaces are finite. -/
@@ -343,14 +343,14 @@ theorem pairwiseDeviationRank_garble_le
   change Module.finrank ℝ
       (Submodule.span ℝ
         (Set.range (K.pushforwardLinearMap ∘
-          M.pairwiseDeviationSignalFamily a i j))) ≤
+          (M.pairwiseDeviationSignalFamily a i j).row))) ≤
     Module.finrank ℝ
       (Submodule.span ℝ
-        (Set.range (M.pairwiseDeviationSignalFamily a i j)))
+        (Set.range (M.pairwiseDeviationSignalFamily a i j).row))
   rw [Set.range_comp, ← LinearMap.map_span]
   exact Submodule.finrank_map_le K.pushforwardLinearMap
     (Submodule.span ℝ
-      (Set.range (M.pairwiseDeviationSignalFamily a i j)))
+      (Set.range (M.pairwiseDeviationSignalFamily a i j).row))
 
 /-- Every deviation-signal vector has coordinate sum zero because both signal
 laws are probability distributions. -/
@@ -370,11 +370,18 @@ theorem pairwiseFullRank_iff
       M.IndividualFullRank a i ∧
         M.IndividualFullRank a j ∧
           M.PairwiseIdentifiable a i j := by
-  simpa only [PairwiseFullRank, IndividualFullRank,
-    PairwiseIdentifiable, pairwiseDeviationSignalFamily,
-    Function.comp_def, Sum.elim_inl, Sum.elim_inr] using
-      (linearIndependent_sum (R := ℝ)
-        (v := M.pairwiseDeviationSignalFamily a i j))
+  let left := (M.deviationSignalMatrix a i).row
+  let right := (M.deviationSignalMatrix a j).row
+  change LinearIndependent ℝ (Sum.elim left right) ↔
+    LinearIndependent ℝ left ∧ LinearIndependent ℝ right ∧
+      Disjoint (Submodule.span ℝ (Set.range left))
+        (Submodule.span ℝ (Set.range right))
+  have hinl : (Sum.elim left right) ∘ Sum.inl = left := by
+    rfl
+  have hinr : (Sum.elim left right) ∘ Sum.inr = right := by
+    rfl
+  simpa only [hinl, hinr] using
+    (linearIndependent_sum (R := ℝ) (v := Sum.elim left right))
 
 /-- Pairwise identifiability is symmetric in the two players. -/
 theorem PairwiseIdentifiable.symm
@@ -404,7 +411,7 @@ theorem IndividualFullRank.signalKernel_update_ne
   intro heq
   apply LinearIndependent.ne_zero dev h
   funext y
-  simp only [deviationSignalMatrix, deviationSignalVector]
+  simp only [Matrix.row, deviationSignalMatrix, deviationSignalVector]
   rw [heq]
   simp
 
@@ -419,7 +426,7 @@ theorem IndividualFullRank.signalKernel_update_injective
   intro dev dev' heq
   apply h.injective
   funext y
-  simp only [deviationSignalMatrix, deviationSignalVector]
+  simp only [Matrix.row, deviationSignalMatrix, deviationSignalVector]
   change M.signalKernel (Function.update a who dev.1) =
     M.signalKernel (Function.update a who dev'.1) at heq
   rw [heq]

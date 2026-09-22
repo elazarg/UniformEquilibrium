@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 open QuittingSureSetOwnerRepair
 
 namespace FlatRecipientIncidenceRegression
@@ -83,6 +83,7 @@ theorem target_eq_update_source_never :
     simp [target, source, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, quittingPureSetRoot,
       quittingSetAction, owner, recipient]
+    rfl
 
 /-- Exact complete-stopping-law reset ray. -/
 def mixed (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :
@@ -365,6 +366,7 @@ theorem target_terminalMass_eq_zero
     quittingTerminalOutcomeMass reward target (some terminal) = 0 := by
   let mass := quittingTerminalOutcomeMass reward target
   have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward target
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
   have hsum := hsimplex.2
   have hnone : mass none = 1 := target_neverMass_eq_one
   have hterminalSum : (∑ candidate, mass (some candidate)) = 0 := by

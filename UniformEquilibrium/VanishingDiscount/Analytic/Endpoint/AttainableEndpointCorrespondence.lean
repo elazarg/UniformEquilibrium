@@ -68,7 +68,7 @@ constructor below is built alongside it.
 
 noncomputable section
 
-open Math Math.OnlineLearning Math.Probability Set
+open _root_.Math Math.OnlineLearning _root_.Math.Probability Set
 
 namespace GameTheory
 namespace StochasticGame

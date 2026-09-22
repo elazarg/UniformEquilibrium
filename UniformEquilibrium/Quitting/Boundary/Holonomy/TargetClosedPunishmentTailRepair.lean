@@ -58,7 +58,7 @@ theorem targetClosedApproxPunishmentTails_and_commonRepair_lowerBound
       gap ≤ @QuittingBoundaryHolonomy.behavioralTailRepairValue ι _ _
         hexploit.nonempty_players reward
         (quittingFiniteBoundaryHolonomy reward plan 0 (switch - 1)) := by
-  letI : Nonempty ι := hexploit.nonempty_players
+  let : Nonempty ι := hexploit.nonempty_players
   constructor
   · intro δ hδ
     exact exists_targetClosedApproxPunishmentTailFamily

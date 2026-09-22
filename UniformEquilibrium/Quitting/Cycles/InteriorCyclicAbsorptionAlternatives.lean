@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -71,7 +71,7 @@ theorem quittingCyclicPlayerAbsorptionMass_le_opponentAbsorptionMass_of_ne
   unfold quittingCyclicPlayerAbsorptionMass
     quittingCyclicOpponentAbsorptionMass
   apply sub_le_sub_left
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro phase _
     exact quittingStationaryFixedOpponentsContinueMass_nonneg
       (cycle phase) outsider

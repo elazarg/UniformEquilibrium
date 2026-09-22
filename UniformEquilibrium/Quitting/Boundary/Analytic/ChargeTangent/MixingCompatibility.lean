@@ -447,7 +447,7 @@ theorem quittingActiveCompatibilitySignFunctional_pairing_eq
   apply Finset.sum_congr rfl
   intro who _
   by_cases hmass : 0 < packet.mass who
-  · simp only [quittingActiveCompatibilitySignFunctional, hmass, if_true]
+  · simp only [quittingActiveCompatibilitySignFunctional, hmass, ite_true]
     by_cases hresidual :
         0 ≤ quittingActivePairCompatibilityResidual packet who
     · simp [hresidual, abs_of_nonneg hresidual]

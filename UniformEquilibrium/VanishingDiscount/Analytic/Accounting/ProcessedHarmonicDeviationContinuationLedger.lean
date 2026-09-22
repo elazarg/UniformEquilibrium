@@ -39,7 +39,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}
@@ -257,7 +257,7 @@ namespace ProcessedHarmonicContinuationBoundary
 
 open ActionDetectorNoAutomaticCloser
 open CredibleResponseNoAutomaticCertificate
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A constant continuation account has zero residual under every behavior
 law and at every history. -/
@@ -303,7 +303,10 @@ theorem no_deviationStage_from_zeroContinuationAccount
   rw [profile_eq] at h
   unfold stageEUAt at h
   rw [game.stageActionDist_stationaryBehaviorProfile] at h
-  rw [Math.PMFProduct.pmfPi_pure, expect_pure] at h
+  have hpure : Math.PMFProduct.pmfPi (fun _ : Player => PMF.pure true) =
+      PMF.pure (show game.JointAct from fun _ : Player => true) :=
+    Math.PMFProduct.pmfPi_pure _
+  rw [hpure, expect_pure] at h
   change (if true then (1 : ℝ) else 0) ≤ 0 at h
   norm_num at h
 

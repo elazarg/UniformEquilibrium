@@ -12,15 +12,13 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability
+open _root_.Set _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-local instance (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (deadline : ℕ) (who : ι) :
-    Fintype ((quittingFiniteDeadlineTimingGame reward deadline).Strategy who) := by
-  change Fintype (QuittingFiniteDeadlineTimingAction deadline)
-  infer_instance
+local instance (deadline : ℕ) :
+    Fintype (QuittingFiniteDeadlineTimingAction deadline) :=
+  inferInstanceAs (Fintype (Option (Fin deadline)))
 
 /-- Min-max value against the finite date-or-Never reply menu. The responder's
 coordinate in `mixed` is overwritten in every reply comparison. -/
@@ -66,7 +64,7 @@ theorem exists_quittingFiniteMenuPunishmentValue_minimizer
         quittingFiniteDeadlineReplyCap reward deadline other who := by
   let menu := QuittingFiniteDeadlineTimingAction deadline
   let profile := (quittingFiniteDeadlineTimingGame reward deadline).profileFromMixedSimplex
-  letI : Nonempty (MixedSimplex ι (fun _ ↦ menu)) :=
+  let : Nonempty (MixedSimplex ι (fun _ ↦ menu)) :=
     ⟨fun _ ↦ Math.ProbabilityMassFunction.stdSimplexEquiv (PMF.pure none)⟩
   obtain ⟨point, _, hminimum⟩ := isCompact_univ.exists_isMinOn
     (Set.univ_nonempty : (Set.univ : Set (MixedSimplex ι (fun _ ↦ menu))).Nonempty)

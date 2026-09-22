@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingBoundaryHolonomy
+open _root_.Math.Probability Math.PMFProduct QuittingBoundaryHolonomy
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -707,7 +707,7 @@ theorem minimumTerminalSemantic_exploitabilitySingletonMargin
     intro player
     by_cases hplayer : player = who
     · subst player
-      simp only [shift, if_pos]
+      simp only [shift, ite_eq_left]
       nlinarith
     · simp [shift, hplayer]
   have hshiftStrict : ∀ player,
@@ -715,7 +715,7 @@ theorem minimumTerminalSemantic_exploitabilitySingletonMargin
     intro player
     by_cases hplayer : player = who
     · subst player
-      simp only [shift, if_pos]
+      simp only [shift, ite_eq_left]
       nlinarith
     · simp [shift, hplayer, hpositive]
   obtain ⟨root, hnash⟩ := exists_isZeroQuittingRootNash

@@ -159,7 +159,7 @@ theorem isCompact_successorOutcomeDomain
         {point : ((Node × SuccessorCertificate) × Node) × (Node × Outcome) |
           point.1.2 = point.2.1} := by
     ext point
-    simp only [successorOutcomeDomain, ambient, graph, Set.mem_setOf_eq,
+    simp only [successorOutcomeDomain, ambient, graph, Set.mem_ofPred_eq,
       Set.mem_inter_iff, Set.mem_prod]
     aesop
   rw [heq]
@@ -244,15 +244,15 @@ def sum
     (first second : CompactRankedExecutionLayer Node Outcome) :
     CompactRankedExecutionLayer Node Outcome := by
   letI : TopologicalSpace first.Execution := first.executionTopology
-  letI : CompactSpace first.Execution := first.executionCompact
-  letI : FirstCountableTopology first.Execution :=
+  let : CompactSpace first.Execution := first.executionCompact
+  let : FirstCountableTopology first.Execution :=
     first.executionFirstCountable
-  letI : T2Space first.Execution := first.executionT2
+  let : T2Space first.Execution := first.executionT2
   letI : TopologicalSpace second.Execution := second.executionTopology
-  letI : CompactSpace second.Execution := second.executionCompact
-  letI : FirstCountableTopology second.Execution :=
+  let : CompactSpace second.Execution := second.executionCompact
+  let : FirstCountableTopology second.Execution :=
     second.executionFirstCountable
-  letI : T2Space second.Execution := second.executionT2
+  let : T2Space second.Execution := second.executionT2
   let sumFirstCountable :
       FirstCountableTopology (first.Execution ⊕ second.Execution) :=
     ⟨by
@@ -290,7 +290,7 @@ def terminalExecutionLayer
   let BaseExecution := adapter.terminalDomain level
   let Execution := ULift.{uSuccessor} BaseExecution
   let topology : TopologicalSpace Execution := inferInstance
-  letI : CompactSpace BaseExecution := isCompact_iff_compactSpace.mp
+  let : CompactSpace BaseExecution := isCompact_iff_compactSpace.mp
     (adapter.isCompact_terminalDomain level)
   let compact : CompactSpace Execution := inferInstance
   let firstCountable : FirstCountableTopology Execution :=
@@ -334,8 +334,8 @@ theorem isCompact_successorExecutionSet
       max uNode (max uTerminal uSuccessor)} Node Outcome) :
     letI : TopologicalSpace lower.Execution := lower.executionTopology
     IsCompact (adapter.successorExecutionSet level lower) := by
-  letI : TopologicalSpace lower.Execution := lower.executionTopology
-  letI : CompactSpace lower.Execution := lower.executionCompact
+  let : TopologicalSpace lower.Execution := lower.executionTopology
+  let : CompactSpace lower.Execution := lower.executionCompact
   let graph : Set ((Node × SuccessorCertificate) × Node) :=
     {edge |
       edge.1.1 ∈ adapter.nodeSet ∧ adapter.rank edge.1.1 = level ∧
@@ -364,7 +364,7 @@ theorem isCompact_successorExecutionSet
         {point : ((Node × SuccessorCertificate) × Node) × lower.Execution |
           point.1.2 = lower.source point.2} := by
     ext point
-    simp only [successorExecutionSet, ambient, graph, Set.mem_setOf_eq,
+    simp only [successorExecutionSet, ambient, graph, Set.mem_ofPred_eq,
       Set.mem_inter_iff, Set.mem_prod, Set.mem_univ, and_true]
     tauto
   rw [heq]
@@ -381,10 +381,10 @@ def successorExecutionLayer
     CompactRankedExecutionLayer.{uNode, uOutcome,
       max uNode (max uTerminal uSuccessor)} Node Outcome := by
   letI : TopologicalSpace lower.Execution := lower.executionTopology
-  letI : CompactSpace lower.Execution := lower.executionCompact
-  letI : FirstCountableTopology lower.Execution :=
+  let : CompactSpace lower.Execution := lower.executionCompact
+  let : FirstCountableTopology lower.Execution :=
     lower.executionFirstCountable
-  letI : T2Space lower.Execution := lower.executionT2
+  let : T2Space lower.Execution := lower.executionT2
   let Execution := adapter.successorExecutionSet level lower
   let topology : TopologicalSpace Execution := inferInstance
   let compact : CompactSpace Execution := isCompact_iff_compactSpace.mp

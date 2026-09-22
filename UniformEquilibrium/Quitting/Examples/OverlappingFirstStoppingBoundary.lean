@@ -7,8 +7,8 @@ noncomputable section
 
 namespace GameTheory.OverlappingFirstStoppingBoundary
 
-open Math.Probability.DiscreteHazard
-open Math.Probability.DiscreteHazard.StoppingLaw
+open _root_.Math.Probability.DiscreteHazard
+open _root_.Math.Probability.DiscreteHazard.StoppingLaw
 open OverlappingPairSharpProfiles
 
 /-- Three independent stationary clocks with stopping probability one half. -/

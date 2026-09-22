@@ -243,7 +243,7 @@ theorem exists_uniform_underwritingRefusalMargin
               prospectus.mass owner + δ ≤
             quittingSingletonRefusalValue club.settlement
               prospectus.mass owner owner := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   exact dossier.witness.exists_pos_uniform_normalizedSingletonPacketRefusal
 
 /-- The packet's aggregate refusal surplus is its quadratic singleton energy.
@@ -254,7 +254,7 @@ theorem underwritingRefusal_eq_quadraticEnergy
     quittingPacketWeightedRefusalSurplus dossier.underwritingProspectus =
       quittingSingletonPacketQuadraticEnergy club.settlement
         dossier.underwritingProspectus.mass := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   exact dossier.witness.packetWeightedRefusal_eq_quadraticForm
     dossier.underwritingProspectus
 
@@ -274,7 +274,7 @@ structure ReciprocalSupportPair (dossier : club.ThreeGameDossier) where
 theorem nonempty_reciprocalSupportPair
     (dossier : club.ThreeGameDossier) :
     Nonempty dossier.ReciprocalSupportPair := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   obtain ⟨first, second, hfirst, hsecond, hne, hreciprocal⟩ :=
     dossier.witness.exists_supported_pair_pos_reciprocalSoloEffect
       dossier.underwritingProspectus
@@ -291,7 +291,7 @@ win. -/
 theorem not_hasWinningUnderwriter
     (dossier : club.ThreeGameDossier) :
     ¬ club.HasWinningUnderwriter := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   rintro ⟨prospectus, haccepted⟩
   exact dossier.not_hasUniformPayoff
     (prospectus.exists_uniformPayoff_of_isAccepted haccepted)
@@ -360,7 +360,7 @@ theorem exists_uniformPayoff_of_isSuccessful
     (candidate : dossier.SupportReorganizationCandidate)
     (hsuccess : candidate.IsSuccessful) :
     club.HasUniformPayoff := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   exact candidate.returnedLedger.exists_uniformPayoff_of_isSuccessful hsuccess
 
 end SupportReorganizationCandidate
@@ -394,7 +394,7 @@ a counterexample dossier. -/
 theorem not_hasWinningReorganization
     (dossier : club.ThreeGameDossier) :
     ¬ club.HasWinningReorganization := by
-  letI : Nonempty ι := dossier.witness.nonempty_players
+  let : Nonempty ι := dossier.witness.nonempty_players
   rintro ⟨candidate, hsuccess⟩
   exact dossier.not_hasUniformPayoff
     (candidate.exists_uniformPayoff_of_isSuccessful hsuccess)

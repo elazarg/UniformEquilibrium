@@ -42,7 +42,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.Topology Set
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.Topology Set
 open QuittingSureSetOwnerRepair
 open scoped Topology
 
@@ -122,7 +122,7 @@ theorem exists_pos_exactRootOpponentAbsorptionFloor_of_no_soloExactRoot
     exact (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
       reward tail root).mpr hnash
   have hle := hminimum hmem
-  simpa only [Set.mem_setOf_eq, absorption,
+  simpa only [Set.mem_ofPred_eq, absorption,
     quittingRootOfSimplex_simplexOfRoot] using hle
 
 /-- A unique-debtor exact carrier prefix contracts total semantic debt by the
@@ -853,10 +853,9 @@ theorem isClosed_finFourUniformSoloSpineEdgeGraph
         QuittingTerminalSemanticSpinePoint (Fin 4) ↦
       (quittingRootOfSimplex edge.1.2 owner true).toReal) := by
     simp_rw [quittingRootOfSimplex_apply_toReal]
-    exact (continuous_apply true).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply owner).comp
-          (continuous_snd.comp continuous_fst)))
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+      ((continuous_apply owner).comp
+        (continuous_snd.comp continuous_fst))
   have hlower : IsClosed {edge :
       QuittingTerminalSemanticSpinePoint (Fin 4) ×
         QuittingTerminalSemanticSpinePoint (Fin 4) |
@@ -881,7 +880,7 @@ theorem isClosed_finFourUniformSoloSpineEdgeGraph
         {edge | (quittingRootOfSimplex edge.1.2 owner true).toReal ≤ beta})) := by
     ext edge
     simp only [baseGraph, IsFinFourUniformSoloSpineEdge,
-      Set.mem_inter_iff, Set.mem_setOf_eq]
+      Set.mem_inter_iff, Set.mem_ofPred_eq]
     aesop
   rw [heq]
   exact hbase.inter (hpure.inter (hlower.inter hupper))

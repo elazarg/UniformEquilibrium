@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.Finset.MonotoneChainChangeBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -224,7 +224,8 @@ theorem quittingPositiveSingletonStageSupport_subset_positiveHazardSupport
   have hquit := positive_profileLiveRoot_quit_of_positive_stageCoalitionMass
     reward profile time (quittingSingletonTerminal owner) owner
       (by simp [quittingSingletonTerminal]) hstage
-  simpa [quittingPositiveHazardSupport, hazardOfRoot] using hquit
+  rw [quittingPositiveHazardSupport, Finset.mem_filter]
+  exact ⟨Finset.mem_univ owner, hquit⟩
 
 /-- A `K`-active live root bounds the number of positive singleton terminal
 atoms at that chronological stage by the same `K`. -/

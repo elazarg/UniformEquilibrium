@@ -67,8 +67,10 @@ def boxComplementarityLocalCompleteSimplexParity
           (boxComplementaritySpernerCube problem p hp) n vertices,
         boxComplementarityCompleteSimplexAnchorPoint
           problem p hp vertices hcomplete ∈ region := by
-  simp [boxComplementarityLocalCompleteSimplices,
-    boxComplementarityCompleteSimplexAnchorIn]
+  classical
+  unfold boxComplementarityLocalCompleteSimplices
+  rw [Finset.mem_filter_univ]
+  rfl
 
 /-- Anchor membership is independent of the proof of completeness. -/
 theorem completeSimplexAnchorPoint_proof_irrel
@@ -115,28 +117,7 @@ the decidability terms in the two Finset comprehensions. -/
     simpa only [seedSC] using
       boxComplementarity_completeSimplex_card_odd problem p hp
   have hcardSeed : seedN.card = seedSC.card := by
-    apply Finset.card_nbij (fun vertices ↦ vertices)
-    · intro vertices hvertices
-      change vertices ∈ seedN at hvertices
-      dsimp only [seedN] at hvertices
-      have hcomplete := (Finset.mem_filter.mp hvertices).2
-      change vertices ∈ seedSC
-      dsimp only [seedSC]
-      apply Finset.mem_filter.mpr
-      refine ⟨Finset.mem_univ _, ?_⟩
-      simpa only [boxComplementaritySpernerCube] using hcomplete
-    · intro first _ second _ heq
-      exact heq
-    · intro vertices hvertices
-      change vertices ∈ seedSC at hvertices
-      dsimp only [seedSC] at hvertices
-      have hcomplete := (Finset.mem_filter.mp hvertices).2
-      refine ⟨vertices, ?_, rfl⟩
-      change vertices ∈ seedN
-      dsimp only [seedN]
-      apply Finset.mem_filter.mpr
-      refine ⟨Finset.mem_univ _, ?_⟩
-      simpa only [boxComplementaritySpernerCube] using hcomplete
+    congr 1
   have hcardLocal :
       (boxComplementarityLocalCompleteSimplices problem p hp Set.univ).card =
         seedN.card := by
@@ -326,7 +307,7 @@ theorem BoxComplementarityProblem.isClosed_solutionSet
       {point : UnitCube (Fin n) |
         (1 - (point who : ℝ)) * problem.gain point who ≤ 0} := by
     ext point
-    simp only [BoxComplementarityProblem.solutionSet, Set.mem_setOf_eq,
+    simp only [BoxComplementarityProblem.solutionSet, Set.mem_ofPred_eq,
       Set.mem_iInter, Set.mem_inter_iff]
     exact problem.isSolution_iff_mul_gain point
   rw [hset]

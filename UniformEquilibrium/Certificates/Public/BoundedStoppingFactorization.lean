@@ -55,7 +55,7 @@ theorem condOn_eq_of_apply_eq_mul
   rw [Math.ProbabilityMassFunction.condOn_apply
     joint proj base value hbase]
   by_cases hvalue : proj value = base
-  · rw [if_pos hvalue, hmass value hvalue]
+  · rw [ite_eq_left hvalue, hmass value hvalue]
     have hbaseTop : joint.map proj base ≠ ⊤ :=
       PMF.apply_ne_top (joint.map proj) base
     calc
@@ -67,7 +67,7 @@ theorem condOn_eq_of_apply_eq_mul
         ac_rfl
       _ = candidate value := by
         rw [ENNReal.mul_inv_cancel hbase hbaseTop, mul_one]
-  · rw [if_neg hvalue, hcandidate value hvalue]
+  · rw [ite_eq_right hvalue, hcandidate value hvalue]
 
 /-- Projecting a deterministic-horizon history law to its fixed prefix
 recovers the shorter history law. -/
@@ -483,7 +483,7 @@ theorem boundedHistoryPrefix_consHist_succ
             Fin.succ shortTime := by
         apply Fin.ext
         rfl
-      rw [dif_pos (by omega)]
+      rw [dite_eq_left (by omega)]
       rw [hindex, Fin.cons_succ]
     · have htime : time.val = fuel := by omega
       have htimeFin : time = Fin.last fuel := by

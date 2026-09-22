@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -57,8 +57,8 @@ theorem quittingRootSequencePureTimeTerminalValue_const_some
       have hne : start ≠ start + (steps + 1) := by omega
       rw [quittingPureTimeHazard_some_of_ne hne]
       simp only [PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       have htime : start + (steps + 1) = (start + 1) + steps := by omega
       change
         quittingStationaryFixedOpponentsContinueReward reward root who +

@@ -21,7 +21,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct Math.Topology
+open Filter _root_.Set _root_.Math.Probability
+open Math.ProbabilityMassFunction Math.PMFProduct Math.Topology
 open QuittingBoundaryHolonomy
 open QuittingSureSetOwnerRepair
 open scoped Topology
@@ -517,11 +518,11 @@ theorem pmfPi_pureDeviationActiveCompressedLaws_eq_reverseMap
     funext player
     by_cases hplayer : player = who
     · subst player
-      simp only [quittingPureDeviationStoppingLaws, if_pos]
+      simp only [quittingPureDeviationStoppingLaws, ite_eq_left]
       rw [PMF.pure_map]
       congr 1
       simp [quittingQuantileClockReverseCoordinate]
-    · simp only [quittingPureDeviationStoppingLaws, if_neg hplayer]
+    · simp only [quittingPureDeviationStoppingLaws, ite_eq_right hplayer]
       change (laws player).map
           (Math.Probability.finiteClockActiveQuotient marks) =
         (laws player).map

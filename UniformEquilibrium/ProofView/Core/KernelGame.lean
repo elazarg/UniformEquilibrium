@@ -24,7 +24,7 @@ Provides:
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 -- ============================================================================
 -- Kernel-based game (strategies + outcome kernel → EU)
@@ -52,8 +52,10 @@ namespace PMFGameForm
 
 variable {ι : Type}
 
-/-- Attach a utility function to a game form to get a full kernel game. -/
-def withUtility (F : PMFGameForm ι) (u : F.Outcome → Payoff ι) : KernelGame ι where
+/-- Attach a utility function to a game form to get a full kernel game. Its type
+fields remain reducible so dependent profiles retain the game form's carriers. -/
+@[reducible] def withUtility
+    (F : PMFGameForm ι) (u : F.Outcome → Payoff ι) : KernelGame ι where
   Strategy := F.Strategy
   Outcome := F.Outcome
   utility := u
@@ -112,8 +114,10 @@ namespace KernelGame
 
 open Classical in
 /-- Lift the utility-free mixed extension to a kernel game, retaining the
-original utility function. -/
-noncomputable def mixedExtension (G : KernelGame ι) [Fintype ι] : KernelGame ι :=
+original utility function. Its type fields remain reducible so tactics see the
+underlying families of probability distributions. -/
+@[reducible] noncomputable def mixedExtension
+    (G : KernelGame ι) [Fintype ι] : KernelGame ι :=
   G.toGameForm.mixedExtension.withUtility G.utility
 
 /-- The Strategy field of `G.mixedExtension` is `fun i => PMF (G.Strategy i)`.
@@ -165,8 +169,8 @@ share a single absolute bound over profiles. -/
 theorem exists_uniform_eu_abs_bound_of_finite
     (G : KernelGame ι) [Finite ι] [Finite G.Outcome] :
     ∃ C : ℝ, ∀ (σ : Profile G) (who : ι), |G.eu σ who| ≤ C := by
-  letI : Fintype ι := Fintype.ofFinite ι
-  letI : Fintype G.Outcome := Fintype.ofFinite G.Outcome
+  let : Fintype ι := Fintype.ofFinite ι
+  let : Fintype G.Outcome := Fintype.ofFinite G.Outcome
   let C : ℝ := ∑ who : ι, ∑ ω : G.Outcome, |G.utility ω who|
   refine ⟨C, ?_⟩
   intro σ who
@@ -188,8 +192,9 @@ open Classical in
 
 Unlike `KernelGame.ofEU`, this keeps the realized pure profile as the outcome.
 For finite strategy spaces this gives a finite outcome carrier, which is useful
-for mixed-extension existence theorems. -/
-noncomputable def ofPureEU
+for mixed-extension existence theorems. Its type fields remain reducible so
+dependent profiles retain the supplied strategy carriers. -/
+@[reducible] noncomputable def ofPureEU
     (Strategy : ι → Type) (u : (∀ i, Strategy i) → Payoff ι) : KernelGame ι where
   Strategy := Strategy
   Outcome := ∀ i, Strategy i

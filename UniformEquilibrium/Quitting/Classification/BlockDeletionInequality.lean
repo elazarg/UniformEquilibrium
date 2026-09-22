@@ -45,7 +45,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -176,9 +176,9 @@ theorem quittingFixedOpponentsQuitValue_le_add_mul_joinCap
       simp only [quittingTerminalOpponentAdvantage, quittingRootPayoff, hswap,
         Pi.zero_apply]
       by_cases hquitters : (quittingQuitters action).Nonempty
-      · rw [dif_pos hquitters,
-          dif_pos (Finset.insert_nonempty owner (quittingQuitters action)),
-          dif_pos hquitters]
+      · rw [dite_eq_left hquitters,
+          dite_eq_left (Finset.insert_nonempty owner (quittingQuitters action)),
+          dite_eq_left hquitters]
         have hbound := sub_le_quittingBlockJoinCap reward B owner
           (quittingQuitters action) hquitters hdisjoint
         simp only [quittingUnitReward]

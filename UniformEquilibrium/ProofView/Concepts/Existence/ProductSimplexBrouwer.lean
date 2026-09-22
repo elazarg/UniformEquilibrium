@@ -7,12 +7,13 @@ Authors: GameTheory contributors
 import Mathlib.Topology.Algebra.Module.FiniteDimension
 import Mathlib.Analysis.InnerProductSpace.PiL2
 import FixedPointTheorems.brouwer
-import MathUE.Probability
+import GameTheory.Math.Probability.Simplex
+import MathUE.Simplex
 
 /-!
 # Brouwer fixed-point theorem for products of standard simplices
 
-The product `∀ i, stdSimplex ℝ (A i)` is homeomorphic to a compact convex
+The product `∀ i, Convexity.StdSimplex ℝ (A i)` is homeomorphic to a compact convex
 subset of a finite-dimensional normed space.  Combined with Brouwer's
 fixed-point theorem this gives `brouwer_productSimplex`: every continuous
 self-map of such a product has a fixed point.
@@ -23,7 +24,7 @@ specialised to the product-simplex domain.
 
 namespace GameTheory
 
-open Math.Probability
+open GameTheory.Math.Probability
 
 open Function
 
@@ -34,7 +35,7 @@ open Function
 /-- Product of standard simplices, indexed by `ι` with fibers `A i`. -/
 abbrev MixedSimplex
     (ι : Type*) (A : ι → Type _) [Fintype ι] [∀ i, Fintype (A i)] : Type _ :=
-  ∀ i, stdSimplex ℝ (A i)
+  ∀ i, Convexity.StdSimplex ℝ (A i)
 
 section Compactness
 
@@ -117,56 +118,78 @@ variable [∀ i, Fintype (A i)]
 /-- Product of standard simplices as a `Set` in the pi normed space. -/
 def mixedSimplexAsSet (ι : Type*) (A : ι → Type*) [∀ i, Fintype (A i)] :
     Set (∀ i, A i → ℝ) :=
-  Set.pi Set.univ (fun i => stdSimplex ℝ (A i))
+  Set.pi Set.univ (fun i => simplexWeights (A i))
 
 theorem convex_mixedSimplexAsSet :
     Convex ℝ (mixedSimplexAsSet ι A) :=
-  convex_pi (fun i _ => convex_stdSimplex ℝ (A i))
+  convex_pi (fun i _ => convex_simplexWeights (A i))
 
 theorem isCompact_mixedSimplexAsSet :
     IsCompact (mixedSimplexAsSet ι A) :=
-  isCompact_univ_pi (fun i => isCompact_stdSimplex ℝ (A i))
+  isCompact_univ_pi (fun i => isCompact_simplexWeights (A i))
 
 theorem nonempty_mixedSimplexAsSet [∀ i, Nonempty (A i)] :
     (mixedSimplexAsSet ι A).Nonempty := by
+  classical
   rw [mixedSimplexAsSet, Set.univ_pi_nonempty_iff]
   intro i
-  exact ⟨fun _ => (1 : ℝ) / Fintype.card (A i),
-    fun _ => div_nonneg one_pos.le (Nat.cast_nonneg _),
-    by simp [Finset.card_univ]⟩
+  let vertex := Convexity.StdSimplex.single (R := ℝ) (Classical.arbitrary (A i))
+  exact ⟨vertex.weights, ⟨vertex, rfl⟩⟩
 
 variable [Fintype ι]
 
 /-- Forward: `MixedSimplex → ↥(mixedSimplexAsSet)`. -/
 def toMixedSet (σ : MixedSimplex ι A) : ↥(mixedSimplexAsSet ι A) :=
-  ⟨fun i => (σ i).val, fun i _ => (σ i).property⟩
+  ⟨fun i => (σ i).weights, fun i _ => ⟨σ i, rfl⟩⟩
+
+/-- The canonical simplex is homeomorphic to its coordinate image. -/
+noncomputable def simplexWeightsHomeomorph (B : Type*) [Finite B] :
+    Convexity.StdSimplex ℝ B ≃ₜ ↥(simplexWeights B) := by
+  unfold simplexWeights
+  exact (Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ B).toHomeomorph
+
+/-- One coordinate of the ambient product set, regarded as a simplex weight vector. -/
+def mixedSetCoordinate (i : ι) (x : ↥(mixedSimplexAsSet ι A)) : ↥(simplexWeights (A i)) :=
+  ⟨x.val i, x.property i (Set.mem_univ i)⟩
 
 /-- Backward: `↥(mixedSimplexAsSet) → MixedSimplex`. -/
-def fromMixedSet (x : ↥(mixedSimplexAsSet ι A)) : MixedSimplex ι A :=
-  fun i => ⟨x.val i, x.property i (Set.mem_univ i)⟩
+noncomputable def fromMixedSet (x : ↥(mixedSimplexAsSet ι A)) : MixedSimplex ι A :=
+  fun i => (simplexWeightsHomeomorph (A i)).symm (mixedSetCoordinate i x)
 
 theorem fromMixedSet_toMixedSet (σ : MixedSimplex ι A) :
     fromMixedSet (toMixedSet σ) = σ := by
-  ext i a; rfl
+  funext i
+  exact (simplexWeightsHomeomorph (A i)).symm_apply_apply (σ i)
 
 theorem toMixedSet_fromMixedSet (x : ↥(mixedSimplexAsSet ι A)) :
     toMixedSet (fromMixedSet x) = x := by
-  ext; rfl
+  apply Subtype.ext
+  funext i
+  exact congrArg Subtype.val <|
+    (simplexWeightsHomeomorph (A i)).apply_symm_apply (mixedSetCoordinate i x)
 
 theorem continuous_toMixedSet :
-    Continuous (toMixedSet (ι := ι) (A := A)) :=
-  Continuous.subtype_mk
-    (continuous_pi (fun i => continuous_subtype_val.comp (continuous_apply i))) _
+    Continuous (toMixedSet (ι := ι) (A := A)) := by
+  apply Continuous.subtype_mk
+  exact continuous_pi fun i =>
+    continuous_pi fun a =>
+      (Convexity.StdSimplex.continuous_weights_apply ℝ a).comp (continuous_apply i)
+
+omit [Fintype ι] in
+theorem continuous_mixedSetCoordinate (i : ι) :
+    Continuous (mixedSetCoordinate (A := A) i) :=
+  Continuous.subtype_mk ((continuous_apply i).comp continuous_subtype_val) _
 
 theorem continuous_fromMixedSet :
     Continuous (fromMixedSet (ι := ι) (A := A)) :=
   continuous_pi fun i =>
-    ((continuous_apply i).comp continuous_subtype_val).subtype_mk _
+    (simplexWeightsHomeomorph (A i)).symm.continuous.comp
+      (continuous_mixedSetCoordinate i)
 
 variable [∀ i, Nonempty (A i)]
 
 /-- `MixedSimplex` is homeomorphic to the product-of-simplices set. -/
-def mixedSimplexHomeomorph :
+noncomputable def mixedSimplexHomeomorph :
     MixedSimplex ι A ≃ₜ ↥(mixedSimplexAsSet ι A) where
   toEquiv := {
     toFun := toMixedSet

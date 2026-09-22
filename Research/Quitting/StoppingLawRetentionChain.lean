@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 /-- A common retained singleton label gives the constant-incidence input to
 five-cycle support rigidity. -/

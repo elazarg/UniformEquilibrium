@@ -6,6 +6,8 @@ import UniformEquilibrium.Quitting.Terminal.PairAverageSurplus
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 section FourPlayers
@@ -82,7 +84,8 @@ private theorem hasQuittingActualNonconcentratedGroupExclusion_half_of_twoPairFi
   let ν := quittingTerminalOutcomeMass reward profile none
   have hx : 0 ≤ x := quittingBehaviorExactFiniteFirstCoalitionMass_nonneg profile firstPair
   have hy : 0 ≤ y := quittingBehaviorExactFiniteFirstCoalitionMass_nonneg profile secondPair
-  have hν : 0 ≤ ν := (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 none
+  have hν : 0 ≤ ν := (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 none
   have hleftover : 2 * Real.sqrt (x * y) ≤ 1 - x - y - ν := hfiniteLeftover profile
   have hfirstBound := quittingTwoCoordinateAverageSurplus_terminalPayoff_le
     profile 0 1 firstPair secondPair (by norm_num +decide [firstPair, secondPair])

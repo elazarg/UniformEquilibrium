@@ -541,7 +541,7 @@ theorem eventually_trunc_ne_of_ne
   have hcoeffTrunc :=
     congrArg (fun p : Polynomial ℂ => p.coeff k) htrunc
   simp only [PowerSeries.coeff_trunc,
-    if_pos hn] at hcoeffTrunc
+    ite_eq_left hn] at hcoeffTrunc
   exact hk hcoeffTrunc
 
 /-- A finite duplicate-free family of formal branches admits one truncation

@@ -57,7 +57,7 @@ noncomputable section
 
 namespace GameTheory
 
-open QuittingLCPClassification Math.Probability.DiscreteHazard
+open QuittingLCPClassification _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

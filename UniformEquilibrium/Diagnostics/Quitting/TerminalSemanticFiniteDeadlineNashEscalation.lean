@@ -37,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability
+open Filter StochasticGame _root_.Math.Probability
 open TerminalSemanticGlobalDebtBarrierCertificate
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -402,7 +402,7 @@ theorem exists_floor_div_sumPositiveSingleton_le_deadlineSurvival
       delta / (∑ player, max 0
           (reward (quittingSingletonTerminal player) player)) ≤
         quittingFiniteDeadlineOpponentSurvival reward profile deadline who := by
-  letI : Nonempty ι := barrier.nonempty_of_pos hdelta
+  let : Nonempty ι := barrier.nonempty_of_pos hdelta
   let singletonBill : ℝ :=
     ∑ player, max 0 (reward (quittingSingletonTerminal player) player)
   have hbill : 0 < singletonBill := by

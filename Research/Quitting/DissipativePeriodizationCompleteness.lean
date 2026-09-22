@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingBoundaryHolonomy
+open Filter _root_.Math.Probability QuittingBoundaryHolonomy
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

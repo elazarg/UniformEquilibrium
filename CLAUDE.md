@@ -82,8 +82,8 @@ When a more precise description is needed, give it.
 - `Literature/`: one plain Lean file per paper, definitions and theorem
   statements in the paper's order and terms, unproved claims left as
   `sorry`. Only complete paper coverage lives directly under `Literature/`;
-  everything else lives under `Literature/future/` and is not built.
-  Nothing imports this lane, and it is not a `lean_lib`.
+  everything else lives under `Literature/future/`. Both areas compile through
+  the default `Literature` library. Nothing outside this lane imports it.
 - `Research/`: compileable work not yet integrated.
 - `Experiments/`: reproducible systematic searches and generated evidence.
 - `Reverse/`: backward proof-search questions and evidence.
@@ -144,18 +144,21 @@ line-pinned reference in a living document.
 
 Use narrow imports inside modules and keep coherent work reachable through the
 appropriate umbrella. Keep project-specific mathematics in `MathUE`; do not
-duplicate GameTheory foundations. `MathUE` may depend on Mathlib and
-GameTheory's generic `Math` library, but not on game-semantic `GameTheory.*`
-modules.
+duplicate GameTheory foundations. `MathUE` may depend on Mathlib, GameTheory's
+generic `Math` library, and the pinned generic `Maths` library, but not on
+game-semantic `GameTheory.*` modules.
 
 The project trust policy rejects `sorry`, `admit`, explicit axiom declarations,
 `native_decide`, `implemented_by`, unsafe declarations, partial definitions,
-and project-owned `set_option` commands. All project libraries compile with
-warnings as errors. Clean Lean checks emit no informational diagnostics either;
-replace noisy tactics with their suggested alternatives instead of suppressing
-messages. Use `lake --quiet --iofail build` so a successful build is silent and
-informational diagnostics fail the check. Global linter weakening is forbidden.
-State open claims as proposition definitions until proved.
+and project-owned `set_option` commands. Literature's source-audit files are the
+sole exception for `sorry`; its library disables only the dedicated
+`warn.sorry` diagnostic while keeping warnings as errors. All other project
+libraries reject every warning. Clean Lean checks emit no informational
+diagnostics either; replace noisy tactics with their suggested alternatives
+instead of suppressing messages. Use `lake --quiet --iofail build` so a
+successful build is silent and informational diagnostics fail the check. Global
+linter weakening is forbidden. State non-Literature open claims as proposition
+definitions until proved.
 
 For a Lean change, use the narrowest relevant checks while iterating:
 
@@ -195,7 +198,12 @@ requires dependency or manifest work.
 
 Keep non-import Lean code within 100 characters per line.
 
-Lean 4.32.2 is required. Lean 4.32.0 is excluded because of a kernel soundness
+Use one shared checkout and reuse one shared Lake cache. Do not create worktrees,
+private repository snapshots, or duplicated caches. When multiple agents are
+active, serialize all Lake and Lean commands through one declared build-queue
+owner.
+
+Lean 4.34.0 is required. Lean 4.32.0 is excluded because of a kernel soundness
 bug.
 
 Keep living documentation current and timeless. Ordinary implementation history

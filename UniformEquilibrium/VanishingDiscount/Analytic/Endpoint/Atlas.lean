@@ -44,8 +44,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.OnlineLearning Math.Probability Set
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math Math.OnlineLearning _root_.Math.Probability Set
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 open GameTheory.StochasticGame.AnalyticBellmanGerm.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}

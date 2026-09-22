@@ -5,6 +5,8 @@ import UniformEquilibrium.Quitting.Paths.FiniteCalendarRawPredicates
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 private theorem quittingTerminalPayoff_sub_le_positiveMass_sub_threeMass
@@ -29,7 +31,8 @@ private theorem quittingTerminalPayoff_sub_le_positiveMass_sub_threeMass
   let mass := quittingTerminalOutcomeMass reward profile
   let singleton := reward (quittingSingletonTerminal who) who
   have hmoment := congrFun (quittingTerminalRewardMoment_outcomeMass reward profile) who
-  have htotal := (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+  have htotal := (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
   change (∑ outcome, mass outcome) = 1 at htotal
   have hsurplus :
       quittingTerminalPayoff reward profile who - singleton =
@@ -61,18 +64,19 @@ private theorem quittingTerminalPayoff_sub_le_positiveMass_sub_threeMass
       · cases outcome with
         | none =>
           simpa only [quittingTerminalOutcomeReward, Pi.zero_apply, reduceCtorEq,
-            if_false, zero_add, mul_zero, sub_zero, zero_sub, singleton] using
+            ite_false, zero_add, mul_zero, sub_zero, zero_sub, singleton] using
               neg_nonpos.mpr hsingleton
         | some terminal =>
           simpa only [quittingTerminalOutcomeReward, Option.some.injEq] using
             hrow terminal
-      · exact (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 outcome
+      · exact (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 outcome
     _ = _ := by
       classical
       simp only [mul_sub, Finset.sum_sub_distrib, mul_add,
         Finset.sum_add_distrib]
       simp_rw [mul_ite, mul_one, mul_zero]
-      simp only [Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      simp only [Finset.sum_ite_eq', Finset.mem_univ, ite_true]
       ring
 
 /-- The literal reward inequalities in the separate-cross determinant

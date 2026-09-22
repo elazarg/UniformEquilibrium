@@ -36,7 +36,7 @@ theorem QuittingPayoffTable.stationary_or_instantPunishment_or_sequentiallyPerfe
       intro who
       exact hempty.elim who
   | inr hnonempty =>
-      letI := hnonempty
+      let := hnonempty
       rcases table.stationary_or_vanishingNeverNashFamily happrox with
         hstationary | hfamily
       · exact Or.inl hstationary

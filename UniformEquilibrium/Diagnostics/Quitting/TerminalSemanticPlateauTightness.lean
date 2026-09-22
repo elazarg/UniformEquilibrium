@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticAllContinuePlateau
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Terminal.TerminalExploitabilityWitness
 import UniformEquilibrium.Quitting.Cycles.BehaviorPureTimeExtremality
 import UniformEquilibrium.Quitting.Terminal.TailCompression.ElementaryNeverCoupling
@@ -104,7 +105,8 @@ counterexample, if one player's debt tends to zero along actual profiles,
 then one fixed different player carries the full terminal gap along a strict
 subsequence.  This is a player-label transfer, not a return of semantic
 states or terminal laws. -/
-theorem QuittingTerminalExploitabilityWitness.exists_other_terminalGap_subsequence_of_semanticDebt_reset
+theorem
+    QuittingTerminalExploitabilityWitness.exists_other_terminalGap_subsequence_of_semanticDebt_reset
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (witness : QuittingTerminalExploitabilityWitness reward)
     (profiles : ℕ → (quittingGame reward).BehaviorProfile) (who : ι)
@@ -140,7 +142,7 @@ theorem exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
         (subseq : ℕ → ℕ),
       Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
         atTop (𝓝 pair) ∧
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono subseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (Function.update (profiles (subseq n)) who
@@ -217,11 +219,12 @@ theorem exists_pureTimeDeviation_terminalLaw_tendsto_semanticEnvelope
   let masses : ℕ → QuittingTerminalOutcome ι → ℝ := fun n =>
     quittingTerminalOutcomeMass reward (deviated n)
   have hmasses : ∀ n,
-      masses n ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+      masses n ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := by
     intro n
     exact quittingTerminalOutcomeMass_mem_stdSimplex reward (deviated n)
   obtain ⟨mass, hmass, subseq, hsubseq, hmassLimit⟩ :=
-    (isCompact_stdSimplex ℝ (QuittingTerminalOutcome ι)).tendsto_subseq
+    (GameTheory.Math.Probability.isCompact_simplexWeights
+      (QuittingTerminalOutcome ι)).tendsto_subseq
       hmasses
   refine ⟨profiles, quitTime, mass, subseq, hprofiles, hmass, hsubseq, ?_, ?_⟩
   · change Tendsto (masses ∘ subseq) atTop (𝓝 mass)
@@ -254,12 +257,13 @@ theorem exists_positiveMass_profitableTerminalOutcome_of_semanticDebt
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι)
     (who : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hpositive : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ outcome : QuittingTerminalOutcome ι,
       0 < mass outcome ∧
         pair.1 who < quittingTerminalOutcomeReward reward outcome who := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   by_contra hnot
   push Not at hnot
   have hterm : ∀ outcome,
@@ -302,7 +306,7 @@ theorem exists_persistent_profitableAtom_of_allContinueSemanticPlateau
         (subseq : ℕ → ℕ) (outcome : QuittingTerminalOutcome ι),
       Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
         atTop (𝓝 pair) ∧
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono subseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (Function.update (profiles (subseq n)) who
@@ -415,6 +419,7 @@ theorem quittingLiveMassLimit_update_pureTimeBehaviorStrategy_some_eq_zero
         (PMF.pure true : PMF Bool) := by
       simp only [deviated, Function.update_self,
         quittingPureTimeBehaviorStrategy, quittingPureTimeHazard_some_self]
+      rfl
     rw [hpure]
     change ((PMF.pure true : PMF Bool) false).toReal = 0
     rw [PMF.pure_apply]
@@ -481,7 +486,7 @@ theorem exists_persistent_profitableAtom_trichotomy_of_allContinueSemanticPlatea
         (subseq : ℕ → ℕ) (outcome : QuittingTerminalOutcome ι),
       Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
           atTop (𝓝 pair) ∧
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono subseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (Function.update (profiles (subseq n)) who

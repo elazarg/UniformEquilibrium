@@ -46,7 +46,7 @@ theorem survivalProduct_le_survivalProduct (C D : ℕ → ℝ)
     (hC : ∀ time, 0 ≤ C time) (hCD : ∀ time, C time ≤ D time)
     (start fuel : ℕ) :
     survivalProduct C start fuel ≤ survivalProduct D start fuel :=
-  Finset.prod_le_prod (fun offset _ => hC (start + offset))
+  Finset.prod_le_prod₀ (fun offset _ => hC (start + offset))
     (fun offset _ => hCD (start + offset))
 
 /-- Attaching an extra per-stage factor in `[0, 1]` can only shrink a survival

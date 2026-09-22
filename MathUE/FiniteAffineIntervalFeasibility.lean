@@ -95,7 +95,7 @@ theorem finiteAffineIntervalFeasible_iff
       dsimp only [weight]
       have h := Finset.le_sup' candidate
         (Finset.mem_univ (none : Option κ))
-      simpa [candidate] using h
+      simpa only [candidate] using h
     have hweight1 : weight ≤ 1 := by
       dsimp only [weight]
       apply Finset.sup'_le
@@ -121,7 +121,7 @@ theorem finiteAffineIntervalFeasible_iff
         dsimp only [weight]
         have h := Finset.le_sup' candidate
           (Finset.mem_univ (some index))
-        simpa [candidate, hlowerPos] using h
+        simpa only [candidate, hlowerPos, ↓reduceIte] using h
       have hscaled := mul_le_mul_of_nonneg_right hlowerBound hden.le
       have hcancel :
           lower index / (lower index - upper index) *

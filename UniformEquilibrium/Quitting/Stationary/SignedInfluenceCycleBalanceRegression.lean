@@ -20,8 +20,8 @@ noncomputable section
 namespace GameTheory
 namespace SignedInfluenceCycleBalanceRegression
 
-open Math
-open Math.DirectedTransport
+open _root_.Math
+open Maths
 open MathUE
 open QuittingSureSetOwnerRepair
 
@@ -310,7 +310,7 @@ theorem no_sureExitSet : ¬∃ S, IsQuittingSureExitSet reward S := by
 theorem exists_negativeSimpleInfluenceCycle :
     ∃ (base : Player)
       (cycle : (quittingInfluenceGraph reward).Walk base base),
-      Math.AdditiveTransport.IsSimpleCycle cycle ∧
+      Maths.AdditiveTransport.IsSimpleCycle cycle ∧
         walkLabel quittingInfluenceLabel cycle = -1 :=
   exists_negativeSimpleInfluenceCycle_of_no_sureExitSet
     signConsistent no_sureExitSet

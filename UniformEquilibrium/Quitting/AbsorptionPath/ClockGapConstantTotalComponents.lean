@@ -36,7 +36,7 @@ private theorem sum_leftValue_eq_of_clockGap
   have hsubset : Ioo base time ⊆ Icc (0 : ℝ) time \ {time} := by
     intro point hpoint
     exact ⟨⟨hbase.1.trans hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-  letI : leftFilter.NeBot :=
+  let : leftFilter.NeBot :=
     (right_nhdsWithin_Ioo_neBot hbaseTime).mono
       (nhdsWithin_mono time hsubset)
   have hsumTendsto : Tendsto (fun point ↦ pathTotal path point) leftFilter
@@ -81,7 +81,7 @@ private theorem pathJump_eq_zero_of_clockGap
   have hsubset : Ioo base time ⊆ Icc (0 : ℝ) time \ {time} := by
     intro point hpoint
     exact ⟨⟨hbase.1.trans hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-  letI : leftFilter.NeBot :=
+  let : leftFilter.NeBot :=
     (right_nhdsWithin_Ioo_neBot hbaseTime).mono
       (nhdsWithin_mono time hsubset)
   have hleftLe (other : {S : Finset ι // S.Nonempty}) :

@@ -4,9 +4,9 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.Additive.Potentials
-import MathUE.DirectedTransport.MaxAffine.Additive
-import MathUE.DirectedTransport.MaxAffine.Farkas
+import Maths.Multitubes.Additive.Potentials
+import Maths.Multitubes.MaxAffine.Additive
+import Maths.Multitubes.MaxAffine.Farkas
 import UniformEquilibrium.Quitting.Classification.PreemptionCycle
 
 /-!
@@ -20,7 +20,7 @@ positive-period closed directed walk in the strict solo-preemption relation
 `r_y({x}) + gap ≤ r_y({y})`.
 
 This module reads that walk as a labelled graph in the sense of
-`Math.MaxAffineTransport`, on two different vertex sets, and the reading
+`Maths.MaxAffineTransport`, on two different vertex sets, and the reading
 depends on the choice.
 
 ## The payoff-cell reading: the forced data is unit-slope transport
@@ -119,7 +119,7 @@ them is stated.
 
 noncomputable section
 
-open Filter Math Math.MaxAffineTransport
+open Filter _root_.Math Maths.MaxAffineTransport
 
 namespace GameTheory
 
@@ -456,7 +456,7 @@ On payoff cells the preemption relation is unit-slope transport. -/
 ordered pairs of players, there is one edge per phase, and the edge of a phase
 runs from that phase's cell to the diagonal cell of its preemptor. -/
 def forcedCellGraph (cycle : QuittingSoloPreemptionCycle reward gap) :
-    EdgeGraph (player × player) (Fin cycle.period) where
+    Maths.EdgeGraph (player × player) (Fin cycle.period) where
   source edge := (cycle.vertex (edge : ℕ), cycle.vertex ((edge : ℕ) + 1))
   target edge := (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1))
 
@@ -541,23 +541,23 @@ omit [Fintype player] [DecidableEq player] in
 /-- **The forced payoff-cell system is feasible, structurally.**  Its graph has
 no closed walk carrying any weight at all, by `edges_eq_nil_of_closedWalk`, so
 the tropical duality of
-`Math.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos` produces
+`Maths.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos` produces
 a candidate.  The explicit witness is the solo table
 (`isLaxSection_forcedCellLabel`). -/
 theorem exists_isLaxSection_forcedCellLabel (cycle : QuittingSoloPreemptionCycle reward gap) :
     ∃ φ : player × player → ℝ, IsLaxSection cycle.forcedCellGraph cycle.forcedCellLabel φ := by
   have hcyc : ∀ (base : player × player) (closed : cycle.forcedCellGraph.Walk base base),
-      Math.MaxPlusPotential.walkWeight (fun _ : Fin cycle.period ↦ gap) closed ≤ 0 := by
+      Maths.MaxPlusPotential.walkWeight (fun _ : Fin cycle.period ↦ gap) closed ≤ 0 := by
     intro base closed
-    simp [Math.MaxPlusPotential.walkWeight, cycle.edges_eq_nil_of_closedWalk closed]
+    simp [Maths.MaxPlusPotential.walkWeight, cycle.edges_eq_nil_of_closedWalk closed]
   obtain ⟨φ, hφ⟩ :=
-    (Math.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos
+    (Maths.MaxPlusPotential.exists_isPotential_iff_forall_closedWalk_nonpos
       (G := cycle.forcedCellGraph) fun _ : Fin cycle.period ↦ gap).2 hcyc
   exact ⟨φ, (isLaxSection_translationLabel_iff cycle.forcedCellGraph _ φ).2 hφ⟩
 
 /-- **The forced payoff-cell system carries no obstruction.**  A lax section
 exists, so by
-`Math.MaxAffineTransport.exists_isLaxSection_iff_no_farkasCertificate` no Farkas
+`Maths.MaxAffineTransport.exists_isLaxSection_iff_no_farkasCertificate` no Farkas
 certificate does. -/
 theorem not_exists_farkasCertificate_forcedCellLabel
     (cycle : QuittingSoloPreemptionCycle reward gap) :
@@ -590,7 +590,7 @@ theorem observerSwitchCost_eq (cycle : QuittingSoloPreemptionCycle reward gap) (
 left, and on the right the within-row observer-switch edges that join each
 phase's head to the next phase's tail. -/
 def augmentedCellGraph (cycle : QuittingSoloPreemptionCycle reward gap) :
-    EdgeGraph (player × player) (Fin cycle.period ⊕ Fin cycle.period) where
+    Maths.EdgeGraph (player × player) (Fin cycle.period ⊕ Fin cycle.period) where
   source := Sum.elim
     (fun edge ↦ (cycle.vertex (edge : ℕ), cycle.vertex ((edge : ℕ) + 1)))
     fun edge ↦ (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1))
@@ -701,11 +701,11 @@ omit [Fintype player] [DecidableEq player] in
 /-- **The joined system read as a potential problem.**  Every augmented label
 is a translation, so a lax section of the labels is a potential for the edge
 weights of `augmentedCellWeight` in the sense of
-`Math.MaxPlusPotential.IsPotential`, and the weak duality of that module
+`Maths.MaxPlusPotential.IsPotential`, and the weak duality of that module
 applies to it. -/
 theorem isPotential_augmentedCellWeight (cycle : QuittingSoloPreemptionCycle reward gap)
     {cost : ℕ → ℝ} (hcost : ∀ time : ℕ, cycle.observerSwitchCost time ≤ cost time) :
-    Math.MaxPlusPotential.IsPotential cycle.augmentedCellGraph
+    Maths.MaxPlusPotential.IsPotential cycle.augmentedCellGraph
       (cycle.augmentedCellWeight cost) (quittingPayoffCellValue reward) := by
   intro edge
   have hedge := cycle.isLaxSection_augmentedCellLabel hcost edge
@@ -725,7 +725,7 @@ the diagonal cell that edge lands on. -/
 def phaseStepWalk (cycle : QuittingSoloPreemptionCycle reward gap) (edge : Fin cycle.period) :
     cycle.augmentedCellGraph.Walk (cycle.vertex (edge : ℕ), cycle.vertex ((edge : ℕ) + 1))
       (cycle.vertex ((edge : ℕ) + 1), cycle.vertex ((edge : ℕ) + 1 + 1)) :=
-  ((EdgeGraph.Walk.singleton (G := cycle.augmentedCellGraph) (Sum.inl edge)).castFinish
+  ((Maths.EdgeGraph.Walk.singleton (G := cycle.augmentedCellGraph) (Sum.inl edge)).castFinish
       (cycle.target_inl_eq_source_inr_augmentedCellGraph edge)).concat (Sum.inr edge) rfl
 
 omit [Fintype player] [DecidableEq player] in
@@ -738,9 +738,9 @@ omit [Fintype player] [DecidableEq player] in
 the charge of its observer switch. -/
 theorem walkWeight_phaseStepWalk (cycle : QuittingSoloPreemptionCycle reward gap)
     (cost : ℕ → ℝ) (edge : Fin cycle.period) :
-    Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) (cycle.phaseStepWalk edge)
+    Maths.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) (cycle.phaseStepWalk edge)
       = gap - cost (edge : ℕ) := by
-  simp only [Math.MaxPlusPotential.walkWeight, edges_phaseStepWalk, List.map_cons, List.map_nil,
+  simp only [Maths.MaxPlusPotential.walkWeight, edges_phaseStepWalk, List.map_cons, List.map_nil,
     List.sum_cons, List.sum_nil, augmentedCellWeight_inl, augmentedCellWeight_inr]
   ring
 
@@ -760,12 +760,12 @@ omit [Fintype player] [DecidableEq player] in
 forced edge and one charge per observer switch. -/
 theorem walkWeight_augmentedPrefixWalk (cycle : QuittingSoloPreemptionCycle reward gap)
     (cost : ℕ → ℝ) : ∀ (phaseCount : ℕ) (hphase : phaseCount ≤ cycle.period),
-      Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost)
+      Maths.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost)
           (cycle.augmentedPrefixWalk phaseCount hphase)
         = phaseCount * gap - ∑ time ∈ Finset.range phaseCount, cost time
   | 0, _ => by simp [augmentedPrefixWalk]
   | phaseCount + 1, hphase => by
-      rw [augmentedPrefixWalk, Math.MaxPlusPotential.walkWeight_append,
+      rw [augmentedPrefixWalk, Maths.MaxPlusPotential.walkWeight_append,
         cycle.walkWeight_augmentedPrefixWalk cost phaseCount (Nat.le_of_succ_le hphase),
         cycle.walkWeight_phaseStepWalk cost ⟨phaseCount, Nat.lt_of_succ_le hphase⟩,
         Finset.sum_range_succ]
@@ -796,9 +796,9 @@ omit [Fintype player] [DecidableEq player] in
 charge of the observer switches. -/
 theorem walkWeight_augmentedCellWalk (cycle : QuittingSoloPreemptionCycle reward gap)
     (cost : ℕ → ℝ) :
-    Math.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) cycle.augmentedCellWalk
+    Maths.MaxPlusPotential.walkWeight (cycle.augmentedCellWeight cost) cycle.augmentedCellWalk
       = (cycle.period : ℝ) * gap - ∑ time ∈ Finset.range cycle.period, cost time := by
-  rw [augmentedCellWalk, Math.MaxPlusPotential.walkWeight_castFinish,
+  rw [augmentedCellWalk, Maths.MaxPlusPotential.walkWeight_castFinish,
     cycle.walkWeight_augmentedPrefixWalk cost cycle.period le_rfl]
 
 /-! ## Layer 3: what the switch costs total
@@ -903,7 +903,7 @@ are players, there is one edge per phase, and the edge of a phase runs from
 that phase's player to its preemptor.  The fiber over every player is the
 line. -/
 def playerTransportGraph (cycle : QuittingSoloPreemptionCycle reward gap) :
-    EdgeGraph player (Fin cycle.period) where
+    Maths.EdgeGraph player (Fin cycle.period) where
   source edge := cycle.vertex (edge : ℕ)
   target edge := cycle.vertex ((edge : ℕ) + 1)
 
@@ -922,7 +922,7 @@ preemption inequality bounds the preemptor's own solo payoff from below by the
 cross value plus the gap, and on this vertex set neither side reads any value
 at the source, so the honest max-affine encoding is a constant: no floor, the
 forced bound as shift, and slope zero.  In the row encoding of
-`Math.MaxAffineTransport.rowDelta` this contributes a constant affine row, not
+`Maths.MaxAffineTransport.rowDelta` this contributes a constant affine row, not
 a floor row; the floor of the label is `⊥` and its floor row is vacuous. -/
 def forcedCrossConstantLabel (cycle : QuittingSoloPreemptionCycle reward gap)
     (edge : Fin cycle.period) : Label :=
@@ -992,9 +992,9 @@ theorem isLaxSection_forcedCrossConstantLabel
 
 /-- **The compressed forced system carries no obstruction.**  A lax section
 exists, so by
-`Math.MaxAffineTransport.exists_isLaxSection_iff_no_farkasCertificate` no Farkas
+`Maths.MaxAffineTransport.exists_isLaxSection_iff_no_farkasCertificate` no Farkas
 certificate does.  The same conclusion follows from the vanishing slopes alone,
-by `Math.MaxAffineTransport.not_exists_farkasCertificate_of_forall_slope_eq_zero`. -/
+by `Maths.MaxAffineTransport.not_exists_farkasCertificate_of_forall_slope_eq_zero`. -/
 theorem not_exists_farkasCertificate_forcedCrossConstantLabel
     (cycle : QuittingSoloPreemptionCycle reward gap) :
     ¬∃ coefficient, IsFarkasCertificate cycle.playerTransportGraph
@@ -1025,6 +1025,7 @@ theorem isFarkasCertificate_unforcedTelescopeLabel
             - (if v = cycle.vertex (edge : ℕ) then (1 : ℝ) else 0) := by
       intro edge
       simp [rowDelta]
+      rfl
     rw [Fintype.sum_sum_type]
     simp only [hterm, Sum.elim_inr, zero_mul, Finset.sum_const_zero, add_zero]
     rw [Fin.sum_univ_eq_sum_range (fun time ↦

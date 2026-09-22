@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -452,7 +452,7 @@ theorem isClosed_quittingDynamicDebtEdgeGraph
           (quittingPositiveSingletonDebtCap reward) ∩
         {edge | ∀ who, recurrence who edge = 0} := by
     ext edge
-    simp only [quittingDynamicDebtEdgeGraph, Set.mem_setOf_eq,
+    simp only [quittingDynamicDebtEdgeGraph, Set.mem_ofPred_eq,
       Set.mem_inter_iff, Set.mem_preimage, nashProjection, debtCurrent,
       debtSuccessor, recurrence, quittingDebtBox,
       IsQuittingDynamicDebtEdge, sub_eq_zero]

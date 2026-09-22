@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearProgramming.CopositiveQ
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Corollaries of the copositive `Q` theorem
@@ -320,9 +321,11 @@ theorem exists_bound_sum_of_isR0Matrix (M : ι → ι → ℝ) (hR0 : IsR0Matrix
   have hC_ge_one : (1 : ℝ) ≤ C := le_max_left _ _
   have hr : 0 < ∑ i, z i := lt_of_lt_of_le (by linarith) hlt.le
   set r : ℝ := ∑ i, z i with hrdef
-  have hmem : (fun i => z i / r) ∈ stdSimplex ℝ ι :=
-    ⟨fun i => div_nonneg (hsol.weight_nonneg i) hr.le,
-      by rw [← Finset.sum_div, ← hrdef]; exact div_self hr.ne'⟩
+  have hmem : (fun i => z i / r) ∈ GameTheory.Math.Probability.simplexWeights ι := by
+    rw [GameTheory.Math.Probability.mem_simplexWeights]
+    refine ⟨fun i => div_nonneg (hsol.weight_nonneg i) hr.le, ?_⟩
+    rw [← Finset.sum_div, ← hrdef]
+    exact div_self hr.ne'
   refine ⟨fun i => z i / r, hmem, ?_⟩
   have hviol :=
     homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound M q z hsol

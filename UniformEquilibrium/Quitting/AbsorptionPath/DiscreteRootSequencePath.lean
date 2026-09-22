@@ -276,18 +276,18 @@ private theorem tendsto_right_stage
         (𝓝 (if quittingRootSequenceClock roots stage ≤ time then
           quittingRootSequenceStageCoalitionMass roots stage coalition else 0)) := by
   by_cases hclock : quittingRootSequenceClock roots stage ≤ time
-  · rw [if_pos hclock]
+  · rw [ite_eq_left hclock]
     apply tendsto_const_nhds.congr'
     filter_upwards [self_mem_nhdsWithin] with s hs
-    rw [if_pos (hclock.trans hs.1)]
+    rw [ite_eq_left (hclock.trans hs.1)]
   · have htime : time < quittingRootSequenceClock roots stage := lt_of_not_ge hclock
-    rw [if_neg hclock]
+    rw [ite_eq_right hclock]
     apply tendsto_const_nhds.congr'
     have hevent : ∀ᶠ s in nhdsWithin time (Icc time 1),
         s < quittingRootSequenceClock roots stage :=
       (eventually_lt_nhds htime).filter_mono inf_le_left
     filter_upwards [hevent] with s hs
-    rw [if_neg (not_le_of_gt hs)]
+    rw [ite_eq_right (not_le_of_gt hs)]
 
 private theorem tendsto_left_stage
     (stage : ℕ) (time : ℝ)
@@ -299,14 +299,14 @@ private theorem tendsto_left_stage
         (𝓝 (if quittingRootSequenceClock roots stage < time then
           quittingRootSequenceStageCoalitionMass roots stage coalition else 0)) := by
   by_cases hclock : quittingRootSequenceClock roots stage < time
-  · rw [if_pos hclock]
+  · rw [ite_eq_left hclock]
     apply tendsto_const_nhds.congr'
     have hevent : ∀ᶠ s in nhdsWithin time (Icc 0 time \ {time}),
         quittingRootSequenceClock roots stage < s :=
       (lt_mem_nhds hclock).filter_mono inf_le_left
     filter_upwards [hevent] with s hs
-    rw [if_pos hs.le]
-  · rw [if_neg hclock]
+    rw [ite_eq_left hs.le]
+  · rw [ite_eq_right hclock]
     apply tendsto_const_nhds.congr'
     filter_upwards [self_mem_nhdsWithin] with s hs
     have hst : s < time := by
@@ -331,8 +331,8 @@ def cadlagPath
     apply Finset.sum_le_sum
     intro stage _
     by_cases hfirst : quittingRootSequenceClock roots stage ≤ first
-    · rw [if_pos hfirst, if_pos (hfirst.trans hle)]
-    · rw [if_neg hfirst]
+    · rw [ite_eq_left hfirst, ite_eq_left (hfirst.trans hle)]
+    · rw [ite_eq_right hfirst]
       split
       · exact quittingRootSequenceStageCoalitionMass_nonneg roots stage coalition
       · exact le_rfl
@@ -353,7 +353,7 @@ def cadlagPath
     unfold leftValue
     apply Finset.sum_eq_zero
     intro stage _
-    rw [if_neg (not_lt_of_ge (quittingRootSequenceClock_nonneg roots stage))]
+    rw [ite_eq_right (not_lt_of_ge (quittingRootSequenceClock_nonneg roots stage))]
 
 /-! ## Finite plateaus and clock domination -/
 
@@ -410,11 +410,11 @@ private theorem value_eq_cumulative_of_minimal
       have hclock : quittingRootSequenceClock roots (stage + 1) ≤
           quittingRootSequenceClock roots earlier :=
         monotone_quittingRootSequenceClock roots hearler
-      rw [if_neg (not_le_of_gt (hnext.trans_le hclock))]
+      rw [ite_eq_right (not_le_of_gt (hnext.trans_le hclock))]
     _ = ∑ earlier ∈ Finset.range (stage + 1), mass earlier := by
       apply Finset.sum_congr rfl
       intro earlier hearlier
-      rw [if_pos]
+      rw [ite_eq_left]
       rcases Nat.eq_zero_or_pos earlier with rfl | hearler0
       · exact (quittingRootSequenceClock_zero roots).le.trans hbase0 |>.trans hbase
       · obtain ⟨previous, rfl⟩ := Nat.exists_eq_succ_of_ne_zero hearler0.ne'
@@ -455,11 +455,11 @@ private theorem leftValue_eq_cumulative_of_minimal
       have hclock : quittingRootSequenceClock roots (stage + 1) ≤
           quittingRootSequenceClock roots earlier :=
         monotone_quittingRootSequenceClock roots hearler
-      rw [if_neg (not_lt_of_ge (hnext.trans hclock))]
+      rw [ite_eq_right (not_lt_of_ge (hnext.trans hclock))]
     _ = ∑ earlier ∈ Finset.range (stage + 1), mass earlier := by
       apply Finset.sum_congr rfl
       intro earlier hearlier
-      rw [if_pos]
+      rw [ite_eq_left]
       rcases Nat.eq_zero_or_pos earlier with rfl | hearler0
       · exact (quittingRootSequenceClock_zero roots).trans_lt
           (hbase0.trans_lt hbase)
@@ -490,7 +490,7 @@ private theorem pathTotal_eq_clock_of_minimal
     pathTotal certificate.cadlagPath 1 = 1 := by
   unfold pathTotal
   simp only [cadlagPath, value]
-  simp_rw [if_pos (quittingRootSequenceClock_le_one roots _)]
+  simp_rw [ite_eq_left (quittingRootSequenceClock_le_one roots _)]
   change (∑ coalition,
     quittingRootSequenceCumulativeCoalitionMass roots
       (certificate.cutoff + 1) coalition) = 1
@@ -507,7 +507,7 @@ private theorem pathTotal_eq_clock_of_minimal
   unfold value quittingRootSequenceCumulativeCoalitionMass
   apply Finset.sum_congr rfl
   intro stage _
-  rw [if_pos (quittingRootSequenceClock_le_one roots stage)]
+  rw [ite_eq_left (quittingRootSequenceClock_le_one roots stage)]
 
 /-- Before terminal time, total path mass strictly overshoots the clock. -/
 theorem lt_pathTotal_cadlagPath
@@ -533,7 +533,7 @@ theorem pathTimes_cadlagPath
     (certificate : QuittingFiniteRootSequenceAbsorption roots) :
     pathTimes certificate.cadlagPath = {1} := by
   ext time
-  simp only [pathTimes, Set.mem_setOf_eq, Set.mem_singleton_iff]
+  simp only [pathTimes, Set.mem_ofPred_eq, Set.mem_singleton_iff]
   constructor
   · rintro ⟨htime, heq⟩
     by_contra hne
@@ -752,7 +752,7 @@ theorem pathJump_cadlagPath_at_positive_stage
         monotone_quittingRootSequenceClock roots hearler.le
       by_cases hclockLt : quittingRootSequenceClock roots earlier <
           quittingRootSequenceClock roots stage
-      · rw [if_pos hclockLe, if_pos hclockLt, sub_self]
+      · rw [ite_eq_left hclockLe, ite_eq_left hclockLt, sub_self]
       · have hclockEq : quittingRootSequenceClock roots earlier =
             quittingRootSequenceClock roots stage :=
           le_antisymm hclockLe (not_lt.mp hclockLt)
@@ -763,7 +763,7 @@ theorem pathJump_cadlagPath_at_positive_stage
             quittingRootSequenceClock roots earlier := by
           exact le_antisymm (hsuccLe.trans_eq hclockEq.symm)
             (monotone_quittingRootSequenceClock roots (Nat.le_succ earlier))
-        rw [if_pos hclockLe, if_neg hclockLt,
+        rw [ite_eq_left hclockLe, ite_eq_right hclockLt,
           quittingRootSequenceStageCoalitionMass_eq_zero_of_clock_succ_eq
             roots earlier hclockSucc]
         ring
@@ -772,7 +772,7 @@ theorem pathJump_cadlagPath_at_positive_stage
         monotone_quittingRootSequenceClock roots (by omega)
       have hclockLt : quittingRootSequenceClock roots stage <
           quittingRootSequenceClock roots earlier := hpositive.trans_le hsuccLe
-      rw [if_neg (not_le_of_gt hclockLt), if_neg (not_lt_of_ge hclockLt.le)]
+      rw [ite_eq_right (not_le_of_gt hclockLt), ite_eq_right (not_lt_of_ge hclockLt.le)]
       ring
   · exact fun hnotMem => (hnotMem (by simpa using hstage)).elim
 
@@ -875,18 +875,18 @@ private theorem exists_positive_source_stage_of_jump
     by_contra hnotLe
     have hclockGt : time < quittingRootSequenceClock roots stage :=
       lt_of_not_ge hnotLe
-    rw [if_neg (not_le_of_gt hclockGt),
-      if_neg (not_lt_of_ge hclockGt.le)] at hstageTerm
+    rw [ite_eq_right (not_le_of_gt hclockGt),
+      ite_eq_right (not_lt_of_ge hclockGt.le)] at hstageTerm
     exact hstageTerm (sub_self 0)
   have hnotClockLt : ¬quittingRootSequenceClock roots stage < time := by
     intro hclockLt
-    rw [if_pos hclockLe, if_pos hclockLt] at hstageTerm
+    rw [ite_eq_left hclockLe, ite_eq_left hclockLt] at hstageTerm
     exact hstageTerm (sub_self _)
   have htimeEq : time = quittingRootSequenceClock roots stage :=
     le_antisymm (not_lt.mp hnotClockLt) hclockLe
   have hmassNe :
       quittingRootSequenceStageCoalitionMass roots stage coalition ≠ 0 := by
-    rwa [if_pos hclockLe, if_neg hnotClockLt, sub_zero] at hstageTerm
+    rwa [ite_eq_left hclockLe, ite_eq_right hnotClockLt, sub_zero] at hstageTerm
   have hmassPos : 0 <
       quittingRootSequenceStageCoalitionMass roots stage coalition :=
     lt_of_le_of_ne

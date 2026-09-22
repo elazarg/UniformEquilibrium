@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability StochasticGame
+open _root_.Math.Probability StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -269,6 +269,7 @@ theorem cyclicBehaviorProfile_tailWindow_localGlobal_eq :
     quittingCyclicRootSequence,
     quittingTailWindowCycle, localGlobalRenewalRoots,
     StochasticGame.stationaryBehaviorProfile]
+  rfl
 
 /-- The supplied local-to-global profile has cap at least every solo endpoint,
 so the all-Continue root is exact Nash against its actual unilateral cap. -/

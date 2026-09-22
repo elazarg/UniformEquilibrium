@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set StochasticGame Math.Probability Math.PMFProduct
+open Finset Set StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -43,8 +43,9 @@ coordinates. -/
 def quittingSimplexOpponentCoalitionMass
     (root : QuittingRootSimplex ι) (who : ι)
     (coalition : Finset ι) : ℝ :=
-  (∏ player ∈ coalition, root player true) *
-    ∏ player ∈ Finset.univ.erase who \ coalition, root player false
+  (∏ player ∈ coalition, (root player).weights true) *
+    ∏ player ∈ Finset.univ.erase who \ coalition,
+      (root player).weights false
 
 /-- The simplex atom coordinate agrees with the PMF-root definition. -/
 theorem quittingSimplexOpponentCoalitionMass_eq_root
@@ -64,12 +65,12 @@ theorem continuous_quittingSimplexOpponentCoalitionMass
       quittingSimplexOpponentCoalitionMass root who coalition := by
   apply Continuous.mul
   · exact continuous_finsetProd (s := coalition) fun player _ =>
-      (continuous_apply true).comp
-        (continuous_subtype_val.comp (continuous_apply player))
+      (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply player)
   · exact continuous_finsetProd
       (s := Finset.univ.erase who \ coalition) fun player _ =>
-        (continuous_apply false).comp
-          (continuous_subtype_val.comp (continuous_apply player))
+        (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+          (continuous_apply player)
 
 /-- A quantitative marked-atom floor is closed. -/
 theorem isClosed_quittingSimplexOpponentCoalitionMass_superlevel
@@ -133,7 +134,7 @@ theorem isClosed_quittingKActiveMarkedAtomCirculationPathEdgeGraph
         edge.1.2 markedPlayer markedCoalition} by
     ext edge
     simp only [IsQuittingKActiveMarkedAtomCirculationPathEdge,
-      Set.mem_setOf_eq, Set.mem_inter_iff]
+      Set.mem_ofPred_eq, Set.mem_inter_iff]
     tauto]
   exact (hbase.inter hactive).inter hmarked
 

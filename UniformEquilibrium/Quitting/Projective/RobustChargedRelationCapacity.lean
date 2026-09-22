@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {player : Type} [Fintype player] [DecidableEq player]
 

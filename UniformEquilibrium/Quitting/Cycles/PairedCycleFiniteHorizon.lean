@@ -30,21 +30,21 @@ theorem prod_cycle_opponentsContinue (schedule : Schedule ι period) (q : ι →
     by_cases hother : other = player
     · subst other
       simp
-    · simp only [Function.update_of_ne hother, if_neg hother]
+    · simp only [Function.update_of_ne hother, ite_eq_right hother]
       exact prod_cycle_ownContinue schedule q hq other
   simp_rw [hcoordinate]
   rw [← Finset.prod_erase_mul _ _ (Finset.mem_univ player)]
   simp only [ite_true, mul_one]
   apply Finset.prod_congr rfl
   intro other hother
-  rw [if_neg (Finset.mem_erase.mp hother).1]
+  rw [ite_eq_right (Finset.mem_erase.mp hother).1]
 
 theorem opponentCycleSurvival_le_geometric (q : ι → ℝ)
     (hq : ∀ player, q player ∈ Set.Icc (1 / 100 : ℝ) 1) (player : ι) :
     opponentCycleSurvival q player ≤ (99 / 100 : ℝ) ^ (Fintype.card ι - 1) := by
   calc
     _ ≤ ∏ _other ∈ Finset.univ.erase player, (99 / 100 : ℝ) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro other _
         exact sub_nonneg.mpr (hq other).2
       · intro other _

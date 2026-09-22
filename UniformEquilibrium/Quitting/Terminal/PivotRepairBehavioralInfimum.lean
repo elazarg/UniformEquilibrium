@@ -17,7 +17,7 @@ variable (input : QuittingPivotRepairLPInput reward)
 /-- The terminal exploitability values obtained by arbitrary pivot behavior
 are exactly those obtained by arbitrary complete pivot stopping laws. -/
 theorem range_pivotBehavior_exploitability_eq_range_stoppingLaw :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     Set.range (fun deviation : (quittingGame reward).BehaviorStrategy input.pivot ↦
       quittingTerminalExploitability reward
         (Function.update (quittingStoppingLawProfile reward input.opponents)
@@ -25,7 +25,7 @@ theorem range_pivotBehavior_exploitability_eq_range_stoppingLaw :
       Set.range (fun law : PMF (Option ℕ) ↦ quittingTerminalExploitability reward
         (quittingStoppingLawProfile reward
           (Function.update input.opponents input.pivot law))) := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   have hvalue (deviation : (quittingGame reward).BehaviorStrategy input.pivot) :
       quittingTerminalExploitability reward
           (Function.update (quittingStoppingLawProfile reward input.opponents)
@@ -49,11 +49,11 @@ over all actual pivot laws. Attainment in the law space is not asserted. -/
 theorem isGLB_pivotLaw_exploitability_of_objective_minimizer
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hmin : IsMinOn input.objective (pivotRepairMassFeasibleSet input.deadline) mass) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     IsGLB (Set.range (fun law : PMF (Option ℕ) ↦ quittingTerminalExploitability reward
       (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law))))
       (input.objective mass) := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   constructor
   · rintro value ⟨law, rfl⟩
     obtain ⟨other, hother, _, hobjective⟩ :=
@@ -70,7 +70,7 @@ theorem isGLB_pivotLaw_exploitability_of_objective_minimizer
 the infimum over all pivot behavioral strategies against the fixed actual
 finite opponent laws. The behavioral infimum need not be attained. -/
 theorem exists_objective_minimizer_eq_behavioral_infimum :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ mass : PivotRepairMass input.deadline, IsPivotRepairMassFeasible mass ∧
       IsMinOn input.objective (pivotRepairMassFeasibleSet input.deadline) mass ∧
       input.objective mass =
@@ -78,7 +78,7 @@ theorem exists_objective_minimizer_eq_behavioral_infimum :
           quittingTerminalExploitability reward
             (Function.update (quittingStoppingLawProfile reward input.opponents)
               input.pivot deviation))) := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   obtain ⟨mass, hfeasible, hmin⟩ := input.exists_objective_minimizer
   refine ⟨mass, hfeasible, hmin, ?_⟩
   rw [input.range_pivotBehavior_exploitability_eq_range_stoppingLaw]

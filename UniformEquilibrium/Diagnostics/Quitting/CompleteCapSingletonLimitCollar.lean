@@ -38,7 +38,7 @@ theorem exists_eventual_offMinimum_collar_of_completeCap_tendsto_singleton
         quittingTerminalSemanticDebtSum minimum + collar ≤
           quittingTerminalSemanticDebtSum
             (quittingTerminalSemanticPair reward (profile index)) := by
-  letI : Nonempty ι := ⟨who⟩
+  let : Nonempty ι := ⟨who⟩
   obtain ⟨minimum, _, hminimumMem, _, hminimum, ⟨payer, hpayer⟩, _⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff reward hno
   have hminimumPos : 0 < quittingTerminalSemanticDebtSum minimum :=

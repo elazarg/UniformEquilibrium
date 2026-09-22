@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
@@ -138,7 +138,7 @@ theorem exists_laterReceiving_paidRow_of_stationary_pureQuit_underfloor
   | true =>
       have hchronology := row.chronology
       rw [hearlier] at hchronology
-      simp only [if_true] at hchronology
+      simp only [ite_true] at hchronology
       rw [hreceiving] at hchronology
       simp at hchronology
 

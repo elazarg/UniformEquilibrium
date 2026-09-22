@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -32,7 +32,7 @@ theorem pmf_map_apply_eq_of_fiber_iff_on_support
     (hfiber : ∀ value, value ∈ law.support →
       (left value = leftValue ↔ right value = rightValue)) :
     law.map left leftValue = law.map right rightValue := by
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   classical
   simp only [PMF.map_apply, tsum_fintype]
   apply Finset.sum_congr rfl
@@ -41,10 +41,10 @@ theorem pmf_map_apply_eq_of_fiber_iff_on_support
   · by_cases hleft : left value = leftValue
     · have hright : right value = rightValue :=
         (hfiber value hsupport).mp hleft
-      rw [if_pos hleft.symm, if_pos hright.symm]
+      rw [ite_eq_left hleft.symm, ite_eq_left hright.symm]
     · have hright : ¬right value = rightValue := by
         exact fun h => hleft ((hfiber value hsupport).mpr h)
-      rw [if_neg (Ne.symm hleft), if_neg (Ne.symm hright)]
+      rw [ite_eq_right (Ne.symm hleft), ite_eq_right (Ne.symm hright)]
   · have hzero : law value = 0 := by
       simpa [PMF.mem_support_iff] using hsupport
     simp [hzero]
@@ -58,7 +58,7 @@ theorem pmf_bind_apply_eq_mul_of_map_pure
     (value : β) :
     law.bind kernel value =
       law (proj value) * kernel (proj value) value := by
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   classical
   simp only [PMF.bind_apply, tsum_fintype]
   apply Finset.sum_eq_single (proj value)
@@ -68,7 +68,7 @@ theorem pmf_bind_apply_eq_mul_of_map_pure
         (kernel base) proj (b := proj value)
       · change (kernel base).map proj (proj value) = 0
         rw [hproj, PMF.pure_apply]
-        exact if_neg (Ne.symm hne)
+        exact ite_eq_right (Ne.symm hne)
       · rfl
     simp [hzero]
   · simp
@@ -79,7 +79,7 @@ theorem pmf_map_apply_injective
     (law : PMF α) (map : α → β) (hmap : Function.Injective map)
     (value : α) :
     law.map map (map value) = law value := by
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   classical
   simp [PMF.map_apply, tsum_fintype, hmap.eq_iff]
 
@@ -195,7 +195,7 @@ theorem histDist_map_boundedHistoryPrefix
                       apply Fin.ext
                         rfl,
                     Fin.snoc_castSucc]
-                  rw [dif_pos (show previousTime.val < fuel by
+                  rw [dite_eq_left (show previousTime.val < fuel by
                     exact hbefore)]
                 · have heq : time.val = fuel := by omega
                   simp [boundedHistoryPrefix, previousTime,

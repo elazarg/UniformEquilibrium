@@ -355,8 +355,8 @@ theorem paidPure_or_paidMixed_of_actual_largeBase_gap_labels
         Finset.disjoint_left.mp hdisjoint hmem hfirst
       have hcomponent :
           quittingPersistentLargeBaseComponent reward base free point first = 0 := by
-        simp only [quittingPersistentLargeBaseComponent, hnotBase, if_false,
-          hfirst, if_pos]
+        simp only [quittingPersistentLargeBaseComponent, hnotBase, ite_false,
+          hfirst, ite_eq_left]
       rw [hcomponent]
       exact le_max_right _ _
     · subst who
@@ -364,8 +364,8 @@ theorem paidPure_or_paidMixed_of_actual_largeBase_gap_labels
         Finset.disjoint_left.mp hdisjoint hmem hsecond
       have hcomponent :
           quittingPersistentLargeBaseComponent reward base free point second = 0 := by
-        simp only [quittingPersistentLargeBaseComponent, hnotBase, if_false,
-          hsecond, if_pos]
+        simp only [quittingPersistentLargeBaseComponent, hnotBase, ite_false,
+          hsecond, ite_eq_left]
       rw [hcomponent]
       exact le_max_right _ _
   have hpaid : gamma ≤ max paidMax 0 := hactual.trans hexcessUpper
@@ -382,7 +382,7 @@ player type. -/
 def HasQuittingPersistentLargeBaseGapOfCardFour
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (base free : Finset ι) (hfour : Fintype.card ι = 4) (gamma : ℝ) : Prop :=
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   ∀ point ∈ quittingPersistentBaseNashSet reward base free,
     gamma ≤ quittingPersistentLargeBaseExcess reward base free point
 
@@ -420,7 +420,7 @@ theorem hasActualLargeBaseFiniteNashDispatch_of_card_two
     Finset.card_eq_two.mp hbaseCard
   obtain ⟨first, second, hfreeNe, hfree⟩ :=
     Finset.card_eq_two.mp hfreeCard
-  letI : Nonempty ι := ⟨baseFirst⟩
+  let : Nonempty ι := ⟨baseFirst⟩
   have hunionCard : (base ∪ free).card = 4 := by
     rw [Finset.card_union_of_disjoint hdisjoint, hbaseCard, hfreeCard]
   have hunion : base ∪ free = Finset.univ := by

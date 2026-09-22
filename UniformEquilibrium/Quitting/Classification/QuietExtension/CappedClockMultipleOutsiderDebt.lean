@@ -279,7 +279,7 @@ theorem quittingLiftDeletedProfile_outsideDebt_le_of_cappedClockPositiveSingleto
             (quittingDeleteReward reward deleted) profile pivot -
           quittingTerminalPayoff
             (quittingDeleteReward reward deleted) profile pivot) := by
-  letI : Nonempty (QuittingChildPlayer deleted) := ⟨pivot⟩
+  let : Nonempty (QuittingChildPlayer deleted) := ⟨pivot⟩
   let childReward := quittingDeleteReward reward deleted
   let jointNever := ∏ who, (quittingBehaviorStoppingLaw
     childReward (profile who) none).toReal

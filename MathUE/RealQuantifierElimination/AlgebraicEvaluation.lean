@@ -17,7 +17,7 @@ theorem isAlgebraic_evalReal (environment : Fin n → ℝ)
     IsAlgebraic ℚ (expression.evalReal environment) := by
   induction expression with
   | const value =>
-      exact isAlgebraic_rat ℚ value
+      exact isAlgebraic_ratCast ℚ value
   | var index =>
       exact henvironment index
   | neg expression ih =>

@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.Data.Finset.Insert
 import Mathlib.Data.Finset.Sum
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
@@ -114,6 +114,9 @@ theorem frozenEdgeSum_empty_toList
     frozenEdgeSum value ∅ face.toList =
       face.sum (fun coordinate ↦ value {coordinate} - value ∅) := by
   rw [frozenEdgeSum, ← List.sum_toFinset _ face.nodup_toList]
+  rw [Finset.toList_toFinset]
+  apply Finset.sum_congr rfl
+  intro coordinate _
   simp [edge]
 
 /-- A positive two-reset square appearing in the triangular decomposition of

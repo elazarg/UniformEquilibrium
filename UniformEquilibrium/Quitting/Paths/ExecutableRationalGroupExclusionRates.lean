@@ -74,7 +74,7 @@ theorem executableRationalGroupExclusionDebt_step_of_pos
   have hpositiveOld : 0 < rationalFiniteSourceDebt reward old := by
     simpa only [old, executableRationalGroupExclusionDebt] using hpositive
   unfold executableRationalGroupExclusionDebt
-  rw [executableRationalGroupExclusionWords_succ, dif_pos hpositiveOld]
+  rw [executableRationalGroupExclusionWords_succ, dite_eq_left hpositiveOld]
   exact (rationalQuittingGroupExclusionRoot_absorption_and_debt
     reward old hM hbeta hreward hexclusion hpositiveOld).2
 
@@ -89,7 +89,7 @@ theorem executableRationalGroupExclusionDebt_step_of_nonpos
   have hnonposOld : ¬ 0 < rationalFiniteSourceDebt reward old := by
     simpa only [old, executableRationalGroupExclusionDebt] using hnonpos
   unfold executableRationalGroupExclusionDebt
-  rw [executableRationalGroupExclusionWords_succ, dif_neg hnonposOld]
+  rw [executableRationalGroupExclusionWords_succ, dite_eq_right hnonposOld]
 
 theorem executableRationalGroupExclusionDebt_antitone
     (reward : RationalQuittingReward players) (beta M : ℚ)

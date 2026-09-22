@@ -129,7 +129,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 
@@ -144,8 +144,8 @@ private theorem expect_expect_comm {Ω₁ Ω₂ : Type*} [Finite Ω₁] [Finite 
     (p : PMF Ω₁) (q : PMF Ω₂) (F : Ω₁ → Ω₂ → ℝ) :
     expect p (fun a => expect q (fun b => F a b)) =
       expect q (fun b => expect p (fun a => F a b)) := by
-  letI : Fintype Ω₁ := Fintype.ofFinite Ω₁
-  letI : Fintype Ω₂ := Fintype.ofFinite Ω₂
+  let : Fintype Ω₁ := Fintype.ofFinite Ω₁
+  let : Fintype Ω₂ := Fintype.ofFinite Ω₂
   simp_rw [expect_eq_sum, Finset.mul_sum]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun b _ => Finset.sum_congr rfl fun a _ => by ring
@@ -246,7 +246,7 @@ theorem isOneSidedGuaranteeCertificate_of_isStationaryAverageGuaranteeCertificat
     (hcert : G.IsStationaryAverageGuaranteeCertificate s₀ who vwho) :
     G.IsOneSidedGuaranteeCertificate s₀ who vwho := by
   classical
-  letI : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.State := Fintype.ofFinite G.State
   obtain ⟨mwho, ρ, u, hρ0, hgain, hstep⟩ := hcert
   set C : ℝ := ∑ s : G.State, |u s| with hCdef
   have hCbound : ∀ s : G.State, |u s| ≤ C := fun s =>
@@ -394,8 +394,8 @@ theorem isStationaryAverageGuaranteeCertificate_of_isAbsorbingEverywhere
     (hAbs : G.IsAbsorbingEverywhere) (s₀ : G.State) (who : ι) :
     ∃ v : ℝ, G.IsStationaryAverageGuaranteeCertificate s₀ who v := by
   classical
-  letI : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
-  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
+  let : Fintype G.JointAct := Fintype.ofFinite G.JointAct
   have hneJ : (Finset.univ : Finset G.JointAct).Nonempty :=
     ⟨Classical.arbitrary G.JointAct, Finset.mem_univ _⟩
   have hneA : (Finset.univ : Finset (G.Act who)).Nonempty :=

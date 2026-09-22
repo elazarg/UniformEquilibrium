@@ -24,7 +24,7 @@ theorem terminalGap_le_singlePivot_linear_sqrt_error
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hpivot : 0 < quittingSoloReward reward pivot pivot)
     (hnormal : ∀ who, quittingPunishmentValue reward who ≤ quittingSoloReward reward who who) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     (∀ original : (quittingGame reward).BehaviorProfile,
       gap ≤ quittingTerminalExploitability reward original) →
     gap ≤ (quittingSoloReward reward pivot pivot + 2 * bound) *
@@ -32,7 +32,8 @@ theorem terminalGap_le_singlePivot_linear_sqrt_error
       2 * bound * Real.sqrt
         (quittingTerminalExploitability
           (quittingSinglePivotNormalizedReward reward pivot) profile) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hgap
   let error := quittingTerminalExploitability (quittingSinglePivotNormalizedReward reward pivot)
     profile
@@ -71,14 +72,15 @@ theorem quittingTerminalExploitabilityInf_le_singlePivot_error
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hpivot : 0 < quittingSoloReward reward pivot pivot)
     (hnormal : ∀ who, quittingPunishmentValue reward who ≤ quittingSoloReward reward who who) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingTerminalExploitabilityInf reward ≤
       (quittingSoloReward reward pivot pivot + 2 * bound) *
           quittingTerminalExploitability
             (quittingSinglePivotNormalizedReward reward pivot) profile +
         2 * bound * Real.sqrt (quittingTerminalExploitability
           (quittingSinglePivotNormalizedReward reward pivot) profile) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   exact terminalGap_le_singlePivot_linear_sqrt_error reward pivot profile hreward hpivot hnormal
     (quittingTerminalExploitabilityInf_le reward)
 
@@ -92,13 +94,14 @@ theorem singlePivot_terminalExploitability_ge_gap_sq_div
     (hpivot : 0 < quittingSoloReward reward pivot pivot)
     (hnormal : ∀ who, quittingPunishmentValue reward who ≤ quittingSoloReward reward who who)
     (hgap : 0 < gap) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     (∀ original : (quittingGame reward).BehaviorProfile,
       gap ≤ quittingTerminalExploitability reward original) →
     gap ^ 2 / (16 * bound ^ 2) ≤
       quittingTerminalExploitability
         (quittingSinglePivotNormalizedReward reward pivot) profile := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hglobal
   have hgapBound : gap ≤ 2 * bound := by
     apply (hglobal (quittingAlwaysContinueProfile reward)).trans
@@ -138,12 +141,13 @@ theorem hasTerminalExploitabilityGap_singlePivotNormalized
     (hpivot : 0 < quittingSoloReward reward pivot pivot)
     (hnormal : ∀ who, quittingPunishmentValue reward who ≤ quittingSoloReward reward who who)
     (hgap : 0 < gap) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     (∀ original : (quittingGame reward).BehaviorProfile,
       gap ≤ quittingTerminalExploitability reward original) →
     HasTerminalExploitabilityGap (quittingSinglePivotNormalizedReward reward pivot)
       (gap ^ 2 / (32 * bound ^ 2)) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hglobal
   have hbound : 0 < bound := hpivot.trans_le
     (le_of_abs_le (hreward (quittingSingletonTerminal pivot) pivot))

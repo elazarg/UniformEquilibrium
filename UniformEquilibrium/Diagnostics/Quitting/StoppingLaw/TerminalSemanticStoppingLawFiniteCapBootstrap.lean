@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
 
@@ -434,7 +434,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_cappedPlayers_a
             (quittingTerminalSemanticPair reward
               (quittingFiniteCapProfileAt reward current mover cutoff))
               observer| < δ := by
-  letI : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
+  let : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
   obtain ⟨cutoff, hlower, hcutoff⟩ :=
     exists_finiteCap_all_terminalSemantics_close_of_pairDeleted_after
       reward current mover (current mover)
@@ -479,7 +479,7 @@ theorem exists_allPlayersFiniteCap_terminalSemantics_close_of_two_zeroNever_afte
               (quittingTerminalSemanticPair reward profile) observer -
             quittingTerminalSemanticDebt
               (quittingTerminalSemanticPair reward capped) observer| < δ) := by
-  letI : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
+  let : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
   classical
   let η : ℝ := δ / ((Fintype.card ι : ℝ) + 1)
   have hdenom : 0 < (Fintype.card ι : ℝ) + 1 := by positivity

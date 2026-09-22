@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: UniformEquilibrium contributors
 -/
 
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.FieldSimp
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
@@ -123,36 +123,36 @@ theorem strictMatchingPenniesOrientation_of_no_pure
       by_contra h
       exact noPure ⟨true, false, by
         simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true,
-          if_false, if_true]
+          ite_false, ite_true]
         exact ⟨ha0.le, le_of_not_gt h⟩⟩
     have ha1 : alpha true < 0 := by
       by_contra h
       exact noPure ⟨true, true, by
-        simp only [IsPureBinaryDifferenceNash, if_true]
+        simp only [IsPureBinaryDifferenceNash, ite_true]
         exact ⟨le_of_not_gt h, hb1.le⟩⟩
     have hb0 : beta false < 0 := by
       by_contra h
       exact noPure ⟨false, true, by
-        simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true, if_false,
-          if_true]
+        simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true, ite_false,
+          ite_true]
         exact ⟨ha1.le, le_of_not_gt h⟩⟩
     exact Or.inl ⟨ha0, ha1, hb1, hb0⟩
   · have ha1 : 0 < alpha true := by
       by_contra h
       exact noPure ⟨false, true, by
-        simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true, if_false,
-          if_true]
+        simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true, ite_false,
+          ite_true]
         exact ⟨le_of_not_gt h, hb0.le⟩⟩
     have hb1 : beta true < 0 := by
       by_contra h
       exact noPure ⟨true, true, by
-        simp only [IsPureBinaryDifferenceNash, if_true]
+        simp only [IsPureBinaryDifferenceNash, ite_true]
         exact ⟨ha1.le, le_of_not_gt h⟩⟩
     have ha0 : alpha false < 0 := by
       by_contra h
       exact noPure ⟨true, false, by
         simp only [IsPureBinaryDifferenceNash, Bool.false_eq_true,
-          if_false, if_true]
+          ite_false, ite_true]
         exact ⟨le_of_not_gt h, hb1.le⟩⟩
     exact Or.inr ⟨ha1, ha0, hb0, hb1⟩
 

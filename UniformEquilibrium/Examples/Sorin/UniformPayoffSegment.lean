@@ -32,7 +32,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open MathUE.WeightedBlackwellFerguson
 
 private theorem expect_mono_on_support
@@ -134,7 +134,7 @@ theorem segmentIncrement_ge_neg_leftProbability
     -parameter.leftProbability ≤ segmentIncrement parameter column := by
   cases column
   · exact le_rfl
-  · simp only [segmentIncrement, if_true]
+  · simp only [segmentIncrement, ite_true]
     linarith [parameter.value_pos, parameter.leftProbability_pos]
 
 /-- The accumulated centered column increment on stages that began live. -/
@@ -336,7 +336,7 @@ theorem expect_next_segmentPlayerOneValue
           (segmentPlayerOneValue parameter)) =
       segmentPlayerOneValue parameter state := by
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   cases state <;>
     simp [BigMatch.expect_coinPMF, segmentColumnCoin, nextState,
@@ -351,7 +351,7 @@ theorem expect_next_segmentPlayerTwoValue
           (segmentPlayerTwoValue parameter)) =
       segmentPlayerTwoValue parameter state := by
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   cases state <;>
     simp [BigMatch.expect_coinPMF, segmentColumnCoin, nextState,
@@ -366,7 +366,7 @@ theorem expect_stagePayoff_segmentColumnCoin_playerOne_le
         (fun action => game.stagePayoff state action false) ≤
       segmentPlayerOneValue parameter state := by
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   cases state <;>
     simp [BigMatch.expect_coinPMF, segmentColumnCoin, payoff,
@@ -539,7 +539,7 @@ theorem stageEUAt_segmentProfile_playerOne
         weightedBlackwellFergusonStrategy parameter initial time history))
       (fun action => game.stagePayoff history.2 action false) = _
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   unfold weightedBlackwellFergusonStrategy
   rw [BigMatch.expect_coinPMF]
   cases history.2
@@ -569,7 +569,7 @@ theorem stageEUAt_segmentProfile_playerTwo
         weightedBlackwellFergusonStrategy parameter initial time history))
       (fun action => game.stagePayoff history.2 action true) = _
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   unfold weightedBlackwellFergusonStrategy
   rw [BigMatch.expect_coinPMF]
   cases history.2
@@ -601,7 +601,7 @@ theorem expect_next_liveIndicator_segmentProfile
         weightedBlackwellFergusonStrategy parameter initial time history))
       (fun action => expect (game.transition history.2 action) liveIndicator) = _
   rw [BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   unfold weightedBlackwellFergusonStrategy
   rw [BigMatch.expect_coinPMF]
   cases history.2 <;>
@@ -741,7 +741,7 @@ theorem segmentRawBalance_pos_of_live_of_mem_support
       rw [pmfPi_apply] at haction
       have hrowMass := Finset.prod_ne_zero_iff.mp haction false
         (Finset.mem_univ false)
-      simp only [Bool.false_eq_true, if_false, hrow] at hrowMass
+      simp only [Bool.false_eq_true, ite_false, hrow] at hrowMass
       unfold weightedBlackwellFergusonStrategy at hrowMass
       rw [BigMatch.coinPMF_apply_false] at hrowMass
       have hstopLt :
@@ -985,7 +985,7 @@ theorem segmentRiskPotential_le_expect_step
   | live =>
       rw [stageActionDist_segmentColumnDeviationProfile,
         BigMatch.expect_pmfPi_bool]
-      simp only [Bool.false_eq_true, if_false, if_true]
+      simp only [Bool.false_eq_true, ite_false, ite_true]
       have hpoint : ∀ column : Bool,
           segmentRiskPotential parameter initial history ≤
             expect
@@ -1143,7 +1143,7 @@ theorem stageEUAt_segmentColumnDeviation_playerTwo
   unfold StochasticGame.stageEUAt
   rw [stageActionDist_segmentColumnDeviationProfile,
     BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   unfold weightedBlackwellFergusonStrategy
   rw [BigMatch.expect_coinPMF]
   simp_rw [expect_eq_sum, Fintype.sum_bool,
@@ -1291,7 +1291,7 @@ theorem expect_stageAction_segmentIncrement
         parameter.leftProbability := by
   rw [stageActionDist_segmentColumnDeviationProfile,
     BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true, expect_const]
+  simp only [Bool.false_eq_true, ite_false, ite_true, expect_const]
   rw [expect_eq_sum, Fintype.sum_bool, BigMatch.pmfBool_false_toReal]
   simp [segmentIncrement]
   have hq := parameter.mul_value_add_leftProbability
@@ -1391,7 +1391,7 @@ theorem expect_next_liveIndicator_segmentColumnDeviation
         (1 - segmentStopProbability parameter initial history) := by
   rw [stageActionDist_segmentColumnDeviationProfile,
     BigMatch.expect_pmfPi_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   unfold weightedBlackwellFergusonStrategy
   rw [BigMatch.expect_coinPMF]
   simp_rw [expect_transition]
@@ -1599,7 +1599,7 @@ theorem expect_next_segmentLiveEnergy_le_of_mem_support
             ((Fin.snoc history.1 (.live, action),
               nextState .live action) : game.Hist (time + 1))) ≤ _
       rw [BigMatch.expect_pmfPi_bool]
-      simp only [Bool.false_eq_true, if_false, if_true]
+      simp only [Bool.false_eq_true, ite_false, ite_true]
       unfold weightedBlackwellFergusonStrategy
       rw [BigMatch.expect_coinPMF]
       set raw := segmentRawBalance parameter initial history with hraw
@@ -1986,7 +1986,7 @@ theorem tendsto_finiteAveragePayoff_segmentProfile
         parameter.value)) := by
     cases who with
     | false =>
-        simp only [Bool.false_eq_true, if_false]
+        simp only [Bool.false_eq_true, ite_false]
         rw [show
           (fun time => game.expectedStagePayoff
             (segmentProfile parameter initial) .live time false) =
@@ -1998,7 +1998,7 @@ theorem tendsto_finiteAveragePayoff_segmentProfile
         convert tendsto_const_nhds.sub (tendsto_const_nhds.mul hlive) using 1
         ring_nf
     | true =>
-        simp only [if_true]
+        simp only [ite_true]
         rw [show
           (fun time => game.expectedStagePayoff
             (segmentProfile parameter initial) .live time true) =
@@ -2076,10 +2076,10 @@ theorem isUniformEquilibriumPayoff_segment
   · intro who
     cases who with
     | false =>
-        simpa only [Bool.false_eq_true, if_false, Real.dist_eq] using
+        simpa only [Bool.false_eq_true, ite_false, Real.dist_eq] using
           (hpayoffFalseThreshold horizon hfalseThreshold).le
     | true =>
-        simpa only [if_true, Real.dist_eq] using
+        simpa only [ite_true, Real.dist_eq] using
           (hpayoffTrueThreshold horizon htrueThreshold).le
   · intro who deviation
     cases who with
@@ -2087,7 +2087,7 @@ theorem isUniformEquilibriumPayoff_segment
         rw [update_segmentProfile_false]
         have hcap := finiteAveragePayoff_segmentRowDeviation_playerOne_le
           parameter deviation hhorizonPos
-        simp only [Bool.false_eq_true, if_false]
+        simp only [Bool.false_eq_true, ite_false]
         linarith
     | true =>
         rw [update_segmentProfile_true]
@@ -2098,7 +2098,7 @@ theorem isUniformEquilibriumPayoff_segment
         rw [Real.dist_eq, sub_zero] at hremainderSmall
         have hremainderUpper : remainder / (horizon : ℝ) ≤ delta / 2 :=
           (le_abs_self _).trans hremainderSmall
-        simp only [if_true]
+        simp only [ite_true]
         dsimp [remainder] at hremainderUpper
         exact hcap.trans (by linarith)
 

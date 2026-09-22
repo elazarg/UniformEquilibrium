@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory.HostClearingBoundary
 
-open QuittingSureSetOwnerRepair Math.Probability
+open QuittingSureSetOwnerRepair _root_.Math.Probability
 
 def reward (coalition : {S : Finset (Fin 4) // S.Nonempty}) : Payoff (Fin 4) :=
   fun who ↦ if who = 1 ∧ coalition.val = {1, 2} then 1 else 0
@@ -85,12 +85,6 @@ theorem marked_coalition_mass_one : quittingRootCoalitionMass markedRoot {2} = 1
     Math.PMFProduct.coalitionMass markedRoot quittingPureSetRoot quittingSetAction
   rw [show ({2} : Finset (Fin 4))ᶜ = {0, 1, 3} by decide]
   norm_num
-  exact Finset.prod_eq_one fun who hwho ↦ by
-    have hne : who ≠ (2 : Fin 4) := by
-      intro heq
-      subst who
-      exact (by decide : (2 : Fin 4) ∉ ({0, 1, 3} : Finset (Fin 4))) hwho
-    simp [hne]
 
 /-- Clearing the host of the marked root changes no marginal, in particular
 none of the nonhost behavior at that row. -/

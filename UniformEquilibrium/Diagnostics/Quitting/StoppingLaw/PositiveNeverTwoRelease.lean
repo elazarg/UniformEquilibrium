@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability QuittingSureSetOwnerRepair
+open _root_.Math.Probability QuittingSureSetOwnerRepair
 
 /-- Literal data for two successive releases at one fresh live row. -/
 structure QuittingPositiveNeverTwoRelease

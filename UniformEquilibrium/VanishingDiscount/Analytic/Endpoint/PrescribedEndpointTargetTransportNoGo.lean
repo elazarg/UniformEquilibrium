@@ -29,7 +29,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace PrescribedEndpointTargetTransportNoGo
 
-open Filter Math Math.OnlineLearning Math.PMFProduct Math.Probability Set
+open Filter _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability Set
 open PlayerOwnedEndpointTargetTransportNoGo (weight)
 
 /-! ## Shared scaffold
@@ -247,7 +247,9 @@ theorem finkProfile_finkPointAt
     {t : ℝ} (ht : t ∈ Ioo (0 : ℝ) 1) :
     game.finkProfile (germ.finkPointAt ht) =
       profile t ht.1.le ht.2.le := by
-  rw [germ.finkProfile_finkPointAt]
+  have htGerm : t ∈ Ioo (0 : ℝ) germ.radius := by
+    simpa [germ] using ht
+  rw [germ.finkProfile_finkPointAt htGerm]
   funext state player
   apply Math.ProbabilityMassFunction.toVector_injective
   funext action

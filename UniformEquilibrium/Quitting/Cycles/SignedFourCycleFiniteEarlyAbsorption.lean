@@ -7,7 +7,7 @@ noncomputable section
 namespace GameTheory
 namespace SignedFourCycleSingletonData
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}

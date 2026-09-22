@@ -44,7 +44,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.PMFProduct Math.Probability Set
+open _root_.Math Math.PMFProduct _root_.Math.Probability Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}

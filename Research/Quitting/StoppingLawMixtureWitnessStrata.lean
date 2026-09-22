@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -571,8 +571,8 @@ theorem target_match_payoff :
   unfold quittingRootSequencePureTimeTerminalValue
   rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
   simp only [quittingPureTimeHazard_some_of_ne (by norm_num : 0 ≠ 1),
-    PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-    ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul, one_mul,
+    PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+    ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul, one_mul,
     zero_add]
   unfold quittingFixedOpponentsContinueReward
     quittingFixedOpponentsContinueMass
@@ -597,7 +597,7 @@ theorem target_match_payoff :
   rw [hab0, hsurvival0]
   simp only [zero_add, one_mul]
   rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
-  simp only [quittingPureTimeHazard_some_self, PMF.pure_apply, if_true,
+  simp only [quittingPureTimeHazard_some_self, PMF.pure_apply, ite_true,
     ENNReal.toReal_one, one_mul]
   unfold quittingFixedOpponentsQuitValue quittingRootAbsorbingContribution
     quittingRootExpectedPayoff
@@ -650,8 +650,8 @@ theorem sourcePureValue_eq_indicator (choice : Option ℕ) :
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       rw [source_continueReward_zero, source_continueMass_zero]
       simp
   | some time =>
@@ -667,8 +667,8 @@ theorem sourcePureValue_eq_indicator (choice : Option ℕ) :
           unfold quittingRootSequencePureTimeTerminalValue
           rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
           simp only [quittingPureTimeHazard_some_of_ne (by omega : 0 ≠ time + 1),
-            PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-            ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul,
+            PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+            ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul,
             one_mul]
           rw [source_continueReward_zero, source_continueMass_zero]
           norm_num
@@ -685,14 +685,14 @@ theorem targetPureValue_eq_indicator (choice : Option ℕ) :
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       rw [target_continueReward_zero, target_continueMass_one]
       simp only [zero_add, one_mul]
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       rw [target_one_continueReward_zero, target_one_continueMass_zero]
       simp
   | some time =>
@@ -721,16 +721,16 @@ theorem targetPureValue_eq_indicator (choice : Option ℕ) :
               rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
               simp only [quittingPureTimeHazard_some_of_ne
                   (by omega : 0 ≠ time + 2),
-                PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-                ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul,
+                PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+                ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul,
                 one_mul]
               rw [target_continueReward_zero, target_continueMass_one]
               simp only [zero_add, one_mul]
               rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman]
               simp only [quittingPureTimeHazard_some_of_ne
                   (by omega : 1 ≠ time + 2),
-                PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-                ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul,
+                PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+                ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul,
                 one_mul]
               rw [target_one_continueReward_zero,
                 target_one_continueMass_zero]

@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -77,7 +77,7 @@ theorem quittingJointSurvivalWeight_le_finiteRefusal
   rw [quittingJointSurvivalWeight_eq_prod,
     quittingJointSurvivalWeight_eq_prod]
   simp only [Nat.zero_add]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset _
     exact quittingStationaryContinueMass_nonneg (roots offset)
   · intro offset _
@@ -183,17 +183,17 @@ private theorem quittingFiniteRefusal_gap_step
   by_cases htime : time ∈ dates
   · rw [show quittingFiniteRefusalHazard roots who dates time = PMF.pure false
         by simp [quittingFiniteRefusalHazard, htime]] at hdeviation
-    rw [if_pos htime,
+    rw [ite_eq_left htime,
       quittingFiniteRefusalRoots_of_mem roots who dates htime]
     simp only [PMF.pure_apply,
-      if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-      if_true, ENNReal.toReal_one, zero_mul, one_mul] at hdeviation
+      ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+      ite_true, ENNReal.toReal_one, zero_mul, one_mul] at hdeviation
     rw [hdeviation, hcontinue, hcontinueMass]
     simp only [quittingRootSequenceTailVector]
     ring
   · rw [show quittingFiniteRefusalHazard roots who dates time = roots time who
         by simp [quittingFiniteRefusalHazard, htime]] at hdeviation
-    rw [if_neg htime,
+    rw [ite_eq_right htime,
       quittingFiniteRefusalRoots_of_not_mem roots who dates htime]
     rw [hplan, hsplit, hfactor, hdeviation, hcontinueMass]
     ring

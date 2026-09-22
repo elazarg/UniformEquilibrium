@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -223,8 +223,8 @@ theorem targetResponse_payoff_eq_two (n : ℕ) :
         have hne : start ≠ start + (fuel + 1) := by omega
         rw [quittingPureTimeHazard_some_of_ne hne]
         simp only [PMF.pure_apply,
-          if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-          if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+          ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+          ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
         have htime : start + (fuel + 1) = (start + 1) + fuel := by omega
         change quittingFixedOpponentsContinueReward reward
               (fun _ _ => PMF.pure false) observer start +
@@ -383,7 +383,7 @@ theorem target_singleton_mass_eq_one (n : ℕ) :
         dsimp only [roots]
         rw [targetResponse_roots]
         simp only [Nat.zero_add]
-        rw [if_neg]
+        rw [ite_eq_right]
         intro h
         omega
       _ = 1 := by

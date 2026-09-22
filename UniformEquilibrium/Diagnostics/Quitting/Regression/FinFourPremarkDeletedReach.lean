@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourPremarkDeletedReachRegression
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
   QuittingSureSetOwnerRepair
 
 abbrev Player := Fin 4
@@ -398,6 +398,7 @@ theorem twoStageProfile_eq_update_padded
           quittingAllContinuePrefixIterate,
           quittingRootThenContinuationProfile, earlyRoot, hwho,
           quittingAllContinueRoot]
+        rfl
     | succ time => rfl
 
 theorem observer_cap_eq_padded

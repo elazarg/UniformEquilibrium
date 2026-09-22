@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -942,6 +942,7 @@ theorem update_liveRoot_eq_target_of_lt
     rw [Function.update_self]
     simpa [quittingGame] using hagrees time htime
   · simp [quittingProfileLiveRoot, hplayer]
+    rfl
 
 /-- At the marked row an arbitrary restricted response differs from the
 selected target only in the mover's current marginal. -/
@@ -959,7 +960,28 @@ theorem update_liveRoot_mark_eq_update_target
   by_cases hplayer : player = source.mover
   · subst player
     simp [quittingProfileLiveRoot]
+    let row : ι → PMF Bool := Function.update
+      (quittingProfileLiveRoot reward source.sourceProfile source.mark)
+      source.mover (PMF.pure source.selectedAction)
+    let marginal : PMF Bool := show PMF Bool from
+      deviation source.mark (quittingLiveHist reward source.mark)
+    have hself : Function.update row source.mover marginal source.mover = marginal :=
+      Function.update_self _ _ _
+    exact hself.symm
   · simp [quittingProfileLiveRoot, hplayer]
+    let row : ι → PMF Bool := Function.update
+      (quittingProfileLiveRoot reward source.sourceProfile source.mark)
+      source.mover (PMF.pure source.selectedAction)
+    let marginal : PMF Bool := show PMF Bool from
+      deviation source.mark (quittingLiveHist reward source.mark)
+    have houter : Function.update row source.mover marginal player = row player :=
+      Function.update_of_ne hplayer marginal row
+    have hinner : row player =
+        quittingProfileLiveRoot reward source.sourceProfile source.mark player :=
+      Function.update_of_ne hplayer (PMF.pure source.selectedAction)
+        (quittingProfileLiveRoot reward source.sourceProfile source.mark)
+    rw [houter, hinner]
+    rfl
 
 private theorem arbitrary_marginal_absorbingContribution_le_selected
     (marginal : PMF Bool) :
@@ -1096,7 +1118,14 @@ theorem restrictedResponse_terminalPayoff_le_target
     rw [hyRoot]
     apply quittingStationaryContinueMass_of_sureQuitter
       (quitter := source.other)
-    rw [Function.update_of_ne source.other_ne_mover]
+    let row : ι → PMF Bool := x source.mark
+    let marginal : PMF Bool := show PMF Bool from
+      deviation source.mark (quittingLiveHist reward source.mark)
+    have hupdate : Function.update row source.mover marginal source.other =
+        row source.other :=
+      Function.update_of_ne source.other_ne_mover marginal row
+    dsimp only [row, marginal] at hupdate
+    rw [hupdate]
     exact source.target_other_quits
   have htail : quittingRootSequenceTerminalValue reward x source.mover
         source.mark -

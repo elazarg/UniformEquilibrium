@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import Mathlib.Data.Real.Basic
-import Mathlib.Data.NNReal.Basic
+import Mathlib.Basic.Real.Basic
+import Mathlib.Basic.NNReal.Basic
 import Mathlib.Analysis.Normed.Group.Tannery
 import Mathlib.Topology.Instances.ENNReal.Lemmas
 import Mathlib.Probability.ProbabilityMassFunction.Monad
@@ -134,7 +134,7 @@ real-valued PMF mass. -/
 theorem expect_pi_single {Ω : Type*} [Finite Ω] [DecidableEq Ω]
     (d : PMF Ω) (ω : Ω) :
     expect d (Pi.single ω 1) = (d ω).toReal := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum, Fintype.sum_eq_single ω]
   · simp
   · intro other hne
@@ -155,7 +155,7 @@ theorem expect_tendsto_of_forall_toReal_tendsto {Ω : Type*} [Finite Ω]
     (h : ∀ ω : Ω,
       Tendsto (fun n : ℕ => (μs n ω).toReal) atTop (nhds ((μ ω).toReal))) :
     Tendsto (fun n : ℕ => expect (μs n) f) atTop (nhds (expect μ f)) := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [show (fun n : ℕ => expect (μs n) f) =
       fun n : ℕ => ∑ ω : Ω, (μs n ω).toReal * f ω by
         funext n
@@ -226,7 +226,7 @@ theorem pmf_toReal_sum_one {Ω : Type*} [Fintype Ω] (d : PMF Ω) :
 theorem exists_abs_bound_of_finite {Ω : Type*} [Finite Ω] (f : Ω → ℝ) :
     ∃ C : ℝ, ∀ ω, |f ω| ≤ C := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   refine ⟨∑ ω : Ω, |f ω|, ?_⟩
   intro ω
   exact Finset.single_le_sum (fun x _ => abs_nonneg (f x)) (Finset.mem_univ ω)
@@ -516,7 +516,7 @@ them privately. -/
 /-- `expect` is additive. -/
 theorem expect_add {Ω : Type*} [Finite Ω] (d : PMF Ω) (f g : Ω → ℝ) :
     expect d (fun ω => f ω + g ω) = expect d f + expect d g := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum, expect_eq_sum, expect_eq_sum, ← Finset.sum_add_distrib]
   exact Finset.sum_congr rfl fun ω _ => by ring
 
@@ -537,7 +537,7 @@ theorem expect_add_of_summable {Ω : Type*} (d : PMF Ω) (f g : Ω → ℝ)
 theorem tsum_expect_comm {Ω : Type*} [Finite Ω] (μ : PMF Ω) (f : ℕ → Ω → ℝ)
     (hf : ∀ ω, Summable fun t => f t ω) :
     ∑' t : ℕ, expect μ (f t) = expect μ fun ω => ∑' t : ℕ, f t ω := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [tsum_congr fun t => expect_eq_sum μ (f t),
     Summable.tsum_finsetSum fun ω _ => (hf ω).mul_left ((μ ω).toReal),
     expect_eq_sum]
@@ -546,7 +546,7 @@ theorem tsum_expect_comm {Ω : Type*} [Finite Ω] (μ : PMF Ω) (f : ℕ → Ω 
 /-- `expect` commutes with subtraction. -/
 theorem expect_sub {Ω : Type*} [Finite Ω] (d : PMF Ω) (f g : Ω → ℝ) :
     expect d (fun ω => f ω - g ω) = expect d f - expect d g := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum, expect_eq_sum, expect_eq_sum, ← Finset.sum_sub_distrib]
   exact Finset.sum_congr rfl fun ω _ => by ring
 
@@ -569,7 +569,7 @@ theorem apply_toReal_eq_expect_indicator
     (distribution point).toReal =
       expect distribution (fun other => if other = point then 1 else 0) := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum]
   simp
 
@@ -577,7 +577,7 @@ theorem apply_toReal_eq_expect_indicator
 theorem pure_apply_toReal_of_ne {α : Type*} (atom point : α)
     (hne : point ≠ atom) :
     ((PMF.pure atom) point).toReal = 0 := by
-  rw [PMF.pure_apply, if_neg hne]
+  rw [PMF.pure_apply, ite_eq_right hne]
   simp
 
 /-- A nonnegative integrand has nonnegative expectation. -/
@@ -589,7 +589,7 @@ theorem expect_nonneg {Ω : Type*} (d : PMF Ω) (f : Ω → ℝ)
 /-- `expect` is monotone in the integrand. -/
 theorem expect_mono {Ω : Type*} [Finite Ω] (d : PMF Ω) (f g : Ω → ℝ)
     (h : ∀ ω, f ω ≤ g ω) : expect d f ≤ expect d g := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum, expect_eq_sum]
   exact Finset.sum_le_sum fun ω _ => mul_le_mul_of_nonneg_left (h ω) ENNReal.toReal_nonneg
 
@@ -601,7 +601,7 @@ theorem expect_lt_of_le_of_exists_lt {Ω : Type*} [Finite Ω]
     (hlt : ∃ ω, d ω ≠ 0 ∧ f ω < g ω) :
     expect d f < expect d g := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   obtain ⟨ω₀, hdω₀, hltω₀⟩ := hlt
   have hpos :
       0 < ∑ ω : Ω, (d ω).toReal * (g ω - f ω) := by
@@ -646,7 +646,7 @@ theorem expect_lt_const_of_le_of_exists_lt {Ω : Type*} [Finite Ω]
 theorem expect_sum_comm {Ω κ : Type*} [Finite Ω] [Fintype κ]
     (d : PMF Ω) (f : κ → Ω → ℝ) :
     ∑ i, expect d (fun ω => f i ω) = expect d (fun ω => ∑ i, f i ω) := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   simp only [expect_eq_sum]
   rw [Finset.sum_comm]
   exact Finset.sum_congr rfl fun ω _ =>
@@ -658,7 +658,7 @@ theorem sum_expect_range_comm {Ω : Type*} [Finite Ω]
     (∑ time ∈ Finset.range length, expect d (f time)) =
       expect d fun outcome =>
         ∑ time ∈ Finset.range length, f time outcome := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   simp only [expect_eq_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -799,7 +799,7 @@ theorem expect_le_mul_expect_iff_pmf_le_mul {Ω : Type*} [Finite Ω]
     (∀ f : Ω → ℝ, (∀ ω, 0 ≤ f ω) → expect μ f ≤ c * expect ν f) ↔
       ∀ ω, (μ ω).toReal ≤ c * (ν ω).toReal := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   constructor
   · intro h ω
     have hnonneg : ∀ x, 0 ≤ (if x = ω then (1 : ℝ) else 0) := by
@@ -1010,7 +1010,7 @@ theorem expect_map_fintype_target {α β : Type*} [Finite β]
     (p : PMF α) (f : α → β) (u : β → ℝ) :
     expect (PMF.map f p) u = expect p (fun a => u (f a)) := by
   classical
-  letI : Fintype β := Fintype.ofFinite β
+  let : Fintype β := Fintype.ofFinite β
   have hp : Summable fun a : α => (p a).toReal := by
     apply ENNReal.summable_toReal
     rw [PMF.tsum_coe]
@@ -1040,17 +1040,17 @@ theorem expect_map_fintype_target {α β : Type*} [Finite β]
         congr
         funext a
         by_cases h : b = f a
-        · rw [if_pos h, if_pos h]
-        · rw [if_neg h, if_neg h]
+        · rw [ite_eq_left h, ite_eq_left h]
+        · rw [ite_eq_right h, ite_eq_right h]
           exact ENNReal.toReal_zero]
   rw [← Summable.tsum_finsetSum (s := (Finset.univ : Finset β))]
   · congr
     funext a
     rw [Finset.sum_eq_single (f a)]
-    · rw [if_pos rfl]
+    · rw [ite_eq_left rfl]
     · intro b _ hne
       have h : ¬ b = f a := by exact hne
-      rw [if_neg h]
+      rw [ite_eq_right h]
       exact zero_mul (u b)
     · intro hnot
       exact (hnot (Finset.mem_univ (f a))).elim

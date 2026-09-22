@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology BigOperators
 
 open QuittingFiniteExactNashBellmanBlock

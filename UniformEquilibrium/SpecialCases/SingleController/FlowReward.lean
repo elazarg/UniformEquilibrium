@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.MeanErgodic
+open _root_.Math.Probability Math.MeanErgodic
 
 variable {G : StochasticGame Bool} [Finite G.State]
   [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)]
@@ -606,7 +606,7 @@ theorem exists_uniformEquilibriumPayoff_of_singleController_of_vriezePrimalOptim
     (hopt : G.IsVriezePrimalOptimal controller x g v) :
     ∃ payoff : Payoff Bool,
       G.IsUniformEquilibriumPayoff initialState payoff := by
-  letI : Nonempty G.State := ⟨initialState⟩
+  let : Nonempty G.State := ⟨initialState⟩
   obtain ⟨tau, rho, hwitness, hrho⟩ :=
     G.exists_controllerProjectionWitness_of_vriezePrimalOptimal
       hzs hSC hopt

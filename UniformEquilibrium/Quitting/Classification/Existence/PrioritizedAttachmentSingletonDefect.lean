@@ -53,7 +53,7 @@ theorem isQuittingConditionalReservation_punishmentValue
   have hstrict : quittingPunishmentValue reward who - slack <
       quittingBestReplyValue reward profile who := by
     linarith
-  letI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+  let : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
     ⟨quittingAlwaysContinueStrategy reward who⟩
   obtain ⟨deviation, hdeviation⟩ :
       ∃ deviation : (quittingGame reward).BehaviorStrategy who,

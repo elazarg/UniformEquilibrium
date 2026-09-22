@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -88,7 +88,7 @@ private theorem quittingOpponentOnly_liveMass_eq_limit_of_finiteDeadline_le
     intro player _
     by_cases hplayer : player = who
     · simp [hplayer]
-    · simp only [if_neg hplayer]
+    · simp only [ite_eq_right hplayer]
       have hroot := congrFun
         (quittingFiniteDeadlineTimingProfile_liveRoot_eq_allContinue_of_le
           reward deadline mixed hlater) player
@@ -120,11 +120,11 @@ theorem sum_liveTail_finiteDeadline_le
       apply Finset.sum_le_sum
       intro time htime
       by_cases hbefore : time < deadline
-      · rw [if_pos hbefore]
+      · rw [ite_eq_left hbefore]
         have hone := quittingLiveMass_le_one reward profile time
         have hlimit := quittingLiveMassLimit_nonneg reward profile
         linarith
-      · rw [if_neg hbefore]
+      · rw [ite_eq_right hbefore]
         have hflat := quittingLiveMass_eq_limit_of_finiteDeadline_le
           reward deadline mixed (Nat.le_of_not_gt hbefore)
         simpa only [profile, hflat, sub_self] using (le_refl (0 : ℝ))
@@ -162,11 +162,11 @@ theorem sum_opponentLiveTail_finiteDeadline_le
       apply Finset.sum_le_sum
       intro time htime
       by_cases hbefore : time < deadline
-      · rw [if_pos hbefore]
+      · rw [ite_eq_left hbefore]
         have hone := quittingLiveMass_le_one reward opponentProfile time
         have hlimit := quittingLiveMassLimit_nonneg reward opponentProfile
         linarith
-      · rw [if_neg hbefore]
+      · rw [ite_eq_right hbefore]
         have hflat := quittingOpponentOnly_liveMass_eq_limit_of_finiteDeadline_le
           reward deadline mixed who (Nat.le_of_not_gt hbefore)
         simpa only [opponentProfile, hflat, sub_self] using (le_refl (0 : ℝ))
@@ -198,10 +198,13 @@ theorem abs_finiteAveragePayoff_sub_terminal_finiteDeadline_le
   have hM : 0 ≤ M := (abs_nonneg _).trans
     (hreward (quittingSingletonTerminal who))
   let profile := quittingFiniteDeadlineTimingProfile reward deadline mixed
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
+  let initial : (quittingGame reward).State := none
+  change |(quittingGame reward).finiteAveragePayoff initial horizon profile who -
+      quittingTerminalPayoff reward profile who| ≤ M * deadline / horizon
   rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff]
   have hhorizonReal : (horizon : ℝ) ≠ 0 := by
     exact_mod_cast Nat.ne_of_gt hhorizon

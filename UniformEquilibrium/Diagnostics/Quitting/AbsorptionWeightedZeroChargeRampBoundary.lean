@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory.AbsorptionWeightedZeroChargeRampBoundary
 
-open Math.Probability
+open _root_.Math.Probability
 open QuittingSureSetOwnerRepair
 
 /-- The zero Fin4 quitting reward table. -/

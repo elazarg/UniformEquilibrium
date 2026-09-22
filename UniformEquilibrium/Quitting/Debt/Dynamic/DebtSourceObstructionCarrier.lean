@@ -93,10 +93,9 @@ private theorem continuous_quittingDebtEdgeDynamicDebtSeam (who : ι) :
   simp_rw [quittingRootOfSimplex_apply_toReal]
   have hprob : Continuous
       (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
-        edge.1.1.2 who true) :=
-    (continuous_apply true).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply who).comp (by fun_prop)))
+        (edge.1.1.2 who).weights true) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+      ((continuous_apply who).comp (by fun_prop))
   have hdebt : Continuous
       (fun edge : QuittingDebtPoint ι × QuittingDebtPoint ι ↦
         edge.1.2 who) := by

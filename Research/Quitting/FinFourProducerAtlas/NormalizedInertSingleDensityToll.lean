@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability
+open Set _root_.Math.Probability
 open QuittingSureSetOwnerRepair
 
 variable

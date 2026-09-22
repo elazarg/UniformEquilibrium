@@ -49,15 +49,16 @@ variable {I J : Type*} [Fintype I] [Fintype J] [Nonempty I] [Nonempty J]
 /-! ### Expected payoff in mixed strategies -/
 
 /-- Expected payoff of a matrix game `A : I → J → ℝ` under mixed strategies
-`x : stdSimplex ℝ I` and `y : stdSimplex ℝ J`. -/
-noncomputable def E (A : I → J → ℝ) (x : stdSimplex ℝ I) (y : stdSimplex ℝ J) : ℝ :=
+`x : Convexity.StdSimplex ℝ I` and `y : Convexity.StdSimplex ℝ J`. -/
+noncomputable def E (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I)
+    (y : Convexity.StdSimplex ℝ J) : ℝ :=
   wsum x (fun i => wsum y (A i))
 
 /-! ### Row aggregate `lam.aux` and its scalar value `lam0` -/
 
 /-- Player I's guaranteed payoff from mixed strategy `x`: the minimum over
 pure columns of the expected payoff. -/
-noncomputable def lam.aux (A : I → J → ℝ) (x : stdSimplex ℝ I) : ℝ :=
+noncomputable def lam.aux (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) : ℝ :=
   Finset.inf' Finset.univ Finset.univ_nonempty (fun j => wsum x (fun i => A i j))
 
 /-- Player I's maxmin value (the row player's best guarantee). -/
@@ -65,7 +66,8 @@ noncomputable def lam0 (A : I → J → ℝ) : ℝ := iSup (lam.aux A)
 
 omit [Nonempty I] in
 /-- `lam.aux A x > c` iff every pure-column expected payoff exceeds `c`. -/
-theorem lam.aux_gt_iff_gt (A : I → J → ℝ) (c : ℝ) (x : stdSimplex ℝ I) :
+theorem lam.aux_gt_iff_gt (A : I → J → ℝ) (c : ℝ)
+    (x : Convexity.StdSimplex ℝ I) :
     c < lam.aux A x ↔ ∀ j, c < wsum x (fun i => A i j) := by
   simp [lam.aux, Finset.lt_inf'_iff]
 
@@ -103,7 +105,7 @@ theorem lam.aux.bddAbove (A : I → J → ℝ) :
     (Finset.mem_univ j₀)).trans hcol
 
 /-- The supremum `lam0` dominates every `lam.aux` value. -/
-theorem lam.aux.le_lam0 (A : I → J → ℝ) (x : stdSimplex ℝ I) :
+theorem lam.aux.le_lam0 (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) :
     lam.aux A x ≤ lam0 A :=
   le_ciSup (bddAbove_def.2 (by
     obtain ⟨C, hC⟩ := lam.aux.bddAbove A
@@ -113,9 +115,9 @@ theorem lam.aux.le_lam0 (A : I → J → ℝ) (x : stdSimplex ℝ I) :
 `lam0 A`. Compactness + continuity gives a maximiser of `lam.aux`; that
 maximiser realises the supremum and beats every pure-column expectation. -/
 theorem exists_xx_lam0 (A : I → J → ℝ) :
-    ∃ xx : stdSimplex ℝ I, ∀ j, lam0 A ≤ wsum xx (fun i => A i j) := by
+    ∃ xx : Convexity.StdSimplex ℝ I, ∀ j, lam0 A ≤ wsum xx (fun i => A i j) := by
   obtain ⟨xx, _, hxx⟩ :=
-    isCompact_univ.exists_isMaxOn (α := ℝ) (β := stdSimplex ℝ I)
+    isCompact_univ.exists_isMaxOn (α := ℝ) (β := Convexity.StdSimplex ℝ I)
       Set.univ_nonempty (lam.aux.continuous A).continuousOn
   rw [isMaxOn_iff] at hxx
   refine ⟨xx, fun j => ?_⟩
@@ -128,7 +130,7 @@ theorem exists_xx_lam0 (A : I → J → ℝ) :
 
 /-- Player II's maximum loss against mixed strategy `y`: the maximum over
 pure rows of the expected payoff. -/
-noncomputable def mu.aux (A : I → J → ℝ) (y : stdSimplex ℝ J) : ℝ :=
+noncomputable def mu.aux (A : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) : ℝ :=
   Finset.sup' Finset.univ Finset.univ_nonempty (fun i => wsum y (fun j => A i j))
 
 /-- Player II's minmax value (the column player's best cap). -/
@@ -136,7 +138,8 @@ noncomputable def mu0 (A : I → J → ℝ) : ℝ := iInf (mu.aux A)
 
 omit [Nonempty J] in
 /-- `mu.aux A y < c` iff every pure-row expected payoff is below `c`. -/
-theorem mu.aux_lt_iff_lt (A : I → J → ℝ) (c : ℝ) (y : stdSimplex ℝ J) :
+theorem mu.aux_lt_iff_lt (A : I → J → ℝ) (c : ℝ)
+    (y : Convexity.StdSimplex ℝ J) :
     mu.aux A y < c ↔ ∀ i, wsum y (fun j => A i j) < c := by
   simp [mu.aux, Finset.sup'_lt_iff]
 
@@ -170,7 +173,7 @@ theorem mu.aux.bddBelow (A : I → J → ℝ) :
     (Finset.mem_univ i₀))
 
 /-- The infimum `mu0` is dominated by every `mu.aux` value. -/
-theorem mu.aux.ge_mu0 (A : I → J → ℝ) (y : stdSimplex ℝ J) :
+theorem mu.aux.ge_mu0 (A : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) :
     mu0 A ≤ mu.aux A y :=
   ciInf_le (bddBelow_def.2 (by
     obtain ⟨C, hC⟩ := mu.aux.bddBelow A
@@ -179,9 +182,9 @@ theorem mu.aux.ge_mu0 (A : I → J → ℝ) (y : stdSimplex ℝ J) :
 /-- There exists a mixed strategy `yy` whose row-payoffs are all dominated by
 `mu0 A`. -/
 theorem exists_yy_mu0 (A : I → J → ℝ) :
-    ∃ yy : stdSimplex ℝ J, ∀ i, wsum yy (fun j => A i j) ≤ mu0 A := by
+    ∃ yy : Convexity.StdSimplex ℝ J, ∀ i, wsum yy (fun j => A i j) ≤ mu0 A := by
   obtain ⟨yy, _, hyy⟩ :=
-    isCompact_univ.exists_isMinOn (α := ℝ) (β := stdSimplex ℝ J)
+    isCompact_univ.exists_isMinOn (α := ℝ) (β := Convexity.StdSimplex ℝ J)
       Set.univ_nonempty (mu.aux.continuous A).continuousOn
   rw [isMinOn_iff] at hyy
   refine ⟨yy, fun i => ?_⟩
@@ -244,41 +247,49 @@ theorem sum_split_at [DecidableEq J] (j₀ : J) (f : J → ℝ) :
 /-- Extend a mixed strategy on `J' = {j // j ≠ j₀}` to a mixed strategy on `J`
 by putting zero mass on `j₀`. -/
 noncomputable def extendDropColumn [DecidableEq J] (j₀ : J)
-    (y' : stdSimplex ℝ {j : J // j ≠ j₀}) :
-    stdSimplex ℝ J := by
-  refine ⟨fun j => if h : j = j₀ then 0 else y'.val ⟨j, h⟩, ?_, ?_⟩
+    (y' : Convexity.StdSimplex ℝ {j : J // j ≠ j₀}) :
+    Convexity.StdSimplex ℝ J := by
+  refine ⟨Finsupp.equivFunOnFinite.symm
+    (fun j => if h : j = j₀ then 0 else y'.weights ⟨j, h⟩), ?_, ?_⟩
   · intro j
+    change 0 ≤ if h : j = j₀ then 0 else y'.weights ⟨j, h⟩
     by_cases h : j = j₀
     · simp [h]
     · simp only [h, ↓reduceDIte]
-      exact y'.property.1 ⟨j, h⟩
-  · rw [sum_split_at j₀]
-    have h0 : (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.val ⟨j₀, h⟩) = 0 := by simp
+      exact y'.weights_nonneg ⟨j, h⟩
+  · rw [Finsupp.equivFunOnFinite_symm_sum, sum_split_at j₀]
+    have h0 :
+        (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.weights ⟨j₀, h⟩) = 0 := by
+      simp
     rw [h0, zero_add]
     have : ∀ j' : {j : J // j ≠ j₀},
-        (if h : j'.val = j₀ then (0 : ℝ) else y'.val ⟨j'.val, h⟩) = y'.val j' := by
+        (if h : j'.val = j₀ then (0 : ℝ) else y'.weights ⟨j'.val, h⟩) =
+          y'.weights j' := by
       intro j'; simp [j'.property]
     simp_rw [this]
-    exact y'.property.2
+    exact y'.total_of_fintype
 
 /-- Dual: extend a mixed strategy on `I' = {i // i ≠ i₀}` to one on `I`. -/
 noncomputable def extendDropRow [DecidableEq I] (i₀ : I)
-    (x' : stdSimplex ℝ {i : I // i ≠ i₀}) :
-    stdSimplex ℝ I :=
+    (x' : Convexity.StdSimplex ℝ {i : I // i ≠ i₀}) :
+    Convexity.StdSimplex ℝ I :=
   extendDropColumn (J := I) i₀ x'
 
 omit [Nonempty J] in
 /-- `wsum (extendDropColumn j₀ y') f` equals the `wsum` of `y'` restricted
 to the corresponding sub-function on `{j // j ≠ j₀}`. -/
 theorem wsum_extendDropColumn [DecidableEq J] (j₀ : J)
-    (y' : stdSimplex ℝ {j : J // j ≠ j₀}) (f : J → ℝ) :
+    (y' : Convexity.StdSimplex ℝ {j : J // j ≠ j₀}) (f : J → ℝ) :
     wsum (extendDropColumn j₀ y') f
-      = ∑ j' : {j : J // j ≠ j₀}, y'.val j' * f j'.val := by
-  change (∑ j, (if h : j = j₀ then (0 : ℝ) else y'.val ⟨j, h⟩) * f j)
-       = ∑ j' : {j : J // j ≠ j₀}, y'.val j' * f j'.val
+      = ∑ j' : {j : J // j ≠ j₀}, y'.weights j' * f j'.val := by
+  change (∑ j, (if h : j = j₀ then (0 : ℝ) else y'.weights ⟨j, h⟩) * f j)
+       = ∑ j' : {j : J // j ≠ j₀}, y'.weights j' * f j'.val
   rw [sum_split_at j₀]
-  have h0 : (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.val ⟨j₀, h⟩) * f j₀ = 0 := by
-    have : (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.val ⟨j₀, h⟩) = 0 := by simp
+  have h0 :
+      (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.weights ⟨j₀, h⟩) * f j₀ = 0 := by
+    have :
+        (if h : (j₀ : J) = j₀ then (0 : ℝ) else y'.weights ⟨j₀, h⟩) = 0 := by
+      simp
     rw [this, zero_mul]
   rw [h0, zero_add]
   apply Finset.sum_congr rfl
@@ -289,9 +300,9 @@ theorem wsum_extendDropColumn [DecidableEq J] (j₀ : J)
 omit [Nonempty I] in
 /-- Companion for row extension. -/
 theorem wsum_extendDropRow [DecidableEq I] (i₀ : I)
-    (x' : stdSimplex ℝ {i : I // i ≠ i₀}) (f : I → ℝ) :
+    (x' : Convexity.StdSimplex ℝ {i : I // i ≠ i₀}) (f : I → ℝ) :
     wsum (extendDropRow i₀ x') f
-      = ∑ i' : {i : I // i ≠ i₀}, x'.val i' * f i'.val :=
+      = ∑ i' : {i : I // i ≠ i₀}, x'.weights i' * f i'.val :=
   wsum_extendDropColumn (J := I) i₀ x' f
 
 /-! ### Nonexpansiveness of the value in the matrix
@@ -303,7 +314,7 @@ operator of a discounted stochastic game a contraction. -/
 omit [Nonempty I] in
 /-- One-sided perturbation bound for the row aggregate. -/
 theorem lam.aux_le_of_entrywise_le {A B : I → J → ℝ} {δ : ℝ}
-    (h : ∀ i j, A i j ≤ B i j + δ) (x : stdSimplex ℝ I) :
+    (h : ∀ i j, A i j ≤ B i j + δ) (x : Convexity.StdSimplex ℝ I) :
     lam.aux A x ≤ lam.aux B x + δ := by
   obtain ⟨j₀, -, hj₀⟩ := Finset.exists_mem_eq_inf' Finset.univ_nonempty
     (fun j => wsum x (fun i => B i j))
@@ -329,7 +340,7 @@ theorem lam0_le_of_entrywise_le {A B : I → J → ℝ} {δ : ℝ}
 
 omit [Nonempty I] in
 /-- The row aggregate of the zero matrix vanishes. -/
-theorem lam.aux_zero (x : stdSimplex ℝ I) :
+theorem lam.aux_zero (x : Convexity.StdSimplex ℝ I) :
     lam.aux (J := J) (fun _ _ => (0 : ℝ)) x = 0 := by
   unfold lam.aux
   simp
@@ -338,7 +349,7 @@ theorem lam.aux_zero (x : stdSimplex ℝ I) :
 theorem lam0_zero : lam0 (I := I) (J := J) (fun _ _ => (0 : ℝ)) = 0 := by
   unfold lam0
   rw [show lam.aux (I := I) (J := J) (fun _ _ => (0 : ℝ)) =
-      fun _ : stdSimplex ℝ I => (0 : ℝ) from funext fun x => lam.aux_zero x,
+      fun _ : Convexity.StdSimplex ℝ I => (0 : ℝ) from funext fun x => lam.aux_zero x,
     ciSup_const]
 
 /-- **The matrix-game value is nonexpansive in the payoff matrix**: an

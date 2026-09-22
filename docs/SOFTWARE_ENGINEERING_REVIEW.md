@@ -62,7 +62,7 @@ proof-maintenance cost. Representative review targets include:
 - `UniformEquilibrium/Architectures/PublicResponse/CredibilityCriterion.lean`;
 - `UniformEquilibrium/Examples/BigMatch/Uniform.lean`;
 - `MathUE/NormalizedFarkasBasis.lean`;
-- `MathUE/BoundedDiscrepancyCirculation.lean`; and
+- the pinned `Maths.Graph` bounded-discrepancy modules; and
 - `Experiments/certsearch/block_pair/K11/JacobianCache.lean`.
 
 Line count alone does not justify a split. A split is warranted when a file
@@ -171,10 +171,12 @@ not successful when it merely compresses a brittle expansion.
 
 ## Trust and reproducibility
 
-- Project source forbids `sorry`, `admit`, explicit axioms, `native_decide`,
-  `implemented_by`, unsafe declarations, partial definitions, project-owned
-  `set_option`, and warning-policy weakening.
-- `AxiomAudit.lean` is exhaustive over project-owned modules and permits only
+- Project source outside Literature forbids `sorry`; every lane forbids
+  `admit`, explicit axioms, `native_decide`, `implemented_by`, unsafe
+  declarations, partial definitions, project-owned `set_option`, and global
+  warning-policy weakening. Literature disables only `warn.sorry` in its own
+  library while retaining warnings as errors.
+- `AxiomAudit.lean` covers every `MathUE` and `UniformEquilibrium` module and permits only
   `propext`, `Quot.sound`, and `Classical.choice` from the library stack.
 - The lexical trust scan has regression coverage for Lean prime identifiers,
   comments, strings, and character literals. It supplements kernel checking;

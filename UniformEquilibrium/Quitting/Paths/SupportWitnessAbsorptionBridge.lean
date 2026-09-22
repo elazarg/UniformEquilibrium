@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -76,7 +76,7 @@ theorem exists_ownSurvival_le_of_survivalPrefix_lt_pow
           ∏ who,
             quittingHazardSurvival
               (quittingRootSequenceOwnHazard roots who) cutoff := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro who _
         exact hthreshold.le
       · intro who _

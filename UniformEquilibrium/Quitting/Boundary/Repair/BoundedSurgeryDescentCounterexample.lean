@@ -68,7 +68,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 namespace QuittingBoundedSurgeryDescentCounterexample
 
@@ -108,7 +108,7 @@ def coin (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
     (fun action => if action then ENNReal.ofReal p else ENNReal.ofReal (1 - p))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hp0 (by linarith)]
       norm_num)
 
@@ -444,7 +444,7 @@ theorem stepRoot_false_continuePayoff_eq (k : ℕ) :
         (stepRoot a ha0 ha1 k) false =
       xVal a (k + 1) := by
   rw [false_continuePayoff, stepRoot_true_true]
-  simp only [Bool.false_eq_true, if_false]
+  simp only [Bool.false_eq_true, ite_false]
   have hQ := xVal_succ_eq a ha0 ha1 k
   have hlt := xVal_lt_a a ha0 ha1 k
   have hne : a - xVal a k + 1 ≠ 0 := by linarith
@@ -653,10 +653,10 @@ theorem quittingDebtOpponentContinueMass_chainState_false
   unfold quittingDebtOpponentContinueMass
   have herase : (Finset.univ.erase false : Finset Bool) = {true} := by decide
   rw [herase, Finset.prod_singleton, hpoint]
-  change (chainState a ha0 ha1 (j + 1)).2 true false = 1 - p2Val a j
+  change ((chainState a ha0 ha1 (j + 1)).2 true).weights false = 1 - p2Val a j
   unfold chainState
   simp only [Nat.add_sub_cancel]
-  show (stepSimplexRoot a ha0 ha1 j) true false = 1 - p2Val a j
+  show ((stepSimplexRoot a ha0 ha1 j) true).weights false = 1 - p2Val a j
   rw [← quittingRootOfSimplex_apply_toReal (stepSimplexRoot a ha0 ha1 j) true false,
     quittingRootOfSimplex_stepSimplexRoot]
   simp [stepRoot]
@@ -673,7 +673,7 @@ theorem chainPath_debtPoint_false (m : ℕ) :
   | zero =>
       intro _
       unfold quittingFiniteNashBellmanPathDynamicDebtPoint
-      simp only [Nat.sub_zero, dif_pos le_rfl]
+      simp only [Nat.sub_zero, dite_eq_left le_rfl]
       show quittingFiniteNashBellmanPathDynamicDebt (reward a) m
         (chainPath a ha0 ha1 m) false m = dVal a 0
       unfold quittingFiniteNashBellmanPathDynamicDebt
@@ -699,7 +699,7 @@ theorem chainPath_debtPoint_false (m : ℕ) :
       have hcurrent1 : current.1 = chainState a ha0 ha1 (k + 1) := by
         rw [hcurrent_def]
         unfold quittingFiniteNashBellmanPathDynamicDebtPoint
-        rw [dif_pos (by omega : m - (k + 1) ≤ m)]
+        rw [dite_eq_left (by omega : m - (k + 1) ≤ m)]
         change chainPath a ha0 ha1 m ⟨m - (k + 1), Nat.lt_succ_of_le (by omega)⟩ =
           chainState a ha0 ha1 (k + 1)
         change chainState a ha0 ha1 (m - (m - (k + 1))) = chainState a ha0 ha1 (k + 1)
@@ -708,7 +708,7 @@ theorem chainPath_debtPoint_false (m : ℕ) :
       have hsuccessor1 : successor.1 = chainState a ha0 ha1 k := by
         rw [hsuccessor_def]
         unfold quittingFiniteNashBellmanPathDynamicDebtPoint
-        rw [dif_pos (by omega : m - k ≤ m)]
+        rw [dite_eq_left (by omega : m - k ≤ m)]
         change chainPath a ha0 ha1 m ⟨m - k, Nat.lt_succ_of_le (by omega)⟩ =
           chainState a ha0 ha1 k
         change chainState a ha0 ha1 (m - (m - k)) = chainState a ha0 ha1 k
@@ -730,7 +730,7 @@ theorem chainPath_debtPoint_false (m : ℕ) :
         unfold dVal
         positivity
       have hprodnn : 0 ≤ xVal a (k + 1) / a * dVal a k := by positivity
-      simp only [Bool.false_eq_true, if_false] at hmass
+      simp only [Bool.false_eq_true, ite_false] at hmass
       rw [one_sub_p2Val_eq a ha0 ha1 k] at hmass
       rw [max_eq_right (by linarith : xVal a (k + 1) ≤
         xVal a (k + 1) + xVal a (k + 1) / a * dVal a k)] at hmass
@@ -747,7 +747,7 @@ theorem chainPath_dynamicDebt_false_eq (m : ℕ) :
   have h := chainPath_debtPoint_false a ha0 ha1 m m le_rfl
   simp only [Nat.sub_self] at h
   unfold quittingFiniteNashBellmanPathDynamicDebtPoint at h
-  rw [dif_pos (Nat.zero_le m)] at h
+  rw [dite_eq_left (Nat.zero_le m)] at h
   exact h
 
 /-! ## The forced value and root sequences are shared by every admissible chain -/
@@ -905,7 +905,7 @@ theorem stationaryRoot_successor_eq (a : ℝ) :
   cases who
   · rw [false_quitPayoff, false_continuePayoff, stationaryRoot_true_true,
       stationaryRoot_false_true, stationaryRoot_false_false]
-    simp only [Bool.false_eq_true, if_false]
+    simp only [Bool.false_eq_true, ite_false]
     ring
   · rw [true_quitPayoff, true_continuePayoff, stationaryRoot_false_true]
     norm_num

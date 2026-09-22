@@ -84,7 +84,8 @@ theorem terminalOutcomeMass_none_eq_zero
         (quittingRootSequenceProfile reward roots 0) none = 0 := by
   have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward
     (quittingRootSequenceProfile reward roots 0)
-  have hsum := hsimplex.2
+  have hsum :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hsimplex).2
   rw [Fintype.sum_option] at hsum
   have hfinite : (∑ terminal,
       quittingTerminalOutcomeMass reward

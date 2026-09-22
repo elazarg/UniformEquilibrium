@@ -394,7 +394,7 @@ theorem
       intro who
       exact hempty.elim who
   | inr hnonempty =>
-      letI := hnonempty
+      let := hnonempty
       rcases table.correctedPointwiseAlternative_or_refinedSourceResidualAt
           hequilibrium δ hδ with
         hstationary | hinstant | hwellSupported | hgenerated | hresidual

@@ -25,10 +25,10 @@ theorem quittingLiveMassLimit_le_exploitability_div_singleton
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
     (hsolo : 0 < quittingSoloReward reward who who) :
-    letI : Nonempty ι := ⟨who⟩
+    let : Nonempty ι := ⟨who⟩
     quittingLiveMassLimit reward profile ≤
       quittingTerminalExploitability reward profile / quittingSoloReward reward who who := by
-  letI : Nonempty ι := ⟨who⟩
+  let : Nonempty ι := ⟨who⟩
   apply (le_div_iff₀ hsolo).mpr
   exact (quittingLiveMassLimit_mul_singleton_le_terminalDebt reward profile who).trans
     (quittingTerminalDeviationDebt_le_exploitability reward profile who)
@@ -38,11 +38,11 @@ theorem quittingLiveMassLimit_singlePivotNormalized_le_exploitability
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (profile : (quittingGame (quittingSinglePivotNormalizedReward reward pivot)).BehaviorProfile)
     (hpivot : quittingSoloReward reward pivot pivot ≠ 0) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingLiveMassLimit (quittingSinglePivotNormalizedReward reward pivot) profile ≤
       quittingTerminalExploitability
         (quittingSinglePivotNormalizedReward reward pivot) profile := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   have h := (quittingLiveMassLimit_mul_singleton_le_terminalDebt
     (quittingSinglePivotNormalizedReward reward pivot) profile pivot).trans
     (quittingTerminalDeviationDebt_le_exploitability
@@ -72,19 +72,26 @@ theorem quittingTerminalExploitability_singlePivotNormalized_le
     (profile : (quittingGame reward).BehaviorProfile) {bound : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
     (hpivot : 0 < quittingSoloReward reward pivot pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingTerminalExploitability (quittingSinglePivotNormalizedReward reward pivot) profile ≤
       (1 / quittingSoloReward reward pivot pivot +
         bound / quittingSoloReward reward pivot pivot ^ 2) *
           quittingTerminalExploitability reward profile := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
+  let normalized := quittingSinglePivotNormalizedReward reward pivot
+  let normalizedProfile : (quittingGame normalized).BehaviorProfile := profile
+  change quittingTerminalExploitability normalized normalizedProfile ≤ _
   have hbound : 0 ≤ bound :=
     (abs_nonneg _).trans (hreward (quittingSingletonTerminal pivot) pivot)
   have hreach := quittingLiveMassLimit_le_exploitability_div_singleton reward profile pivot hpivot
+  dsimp only at hreach
   rw [quittingTerminalExploitability_eq_max_debt]
   apply QuittingBoundaryHolonomy.finitePlayerMax_le
   intro who
-  rw [quittingTerminalDeviationDebt_singlePivotNormalized reward pivot who profile hpivot]
+  have hnormalized := quittingTerminalDeviationDebt_singlePivotNormalized
+    reward pivot who profile hpivot
+  rw [hnormalized]
   have hfinite := quittingFinitePureReplyValue_le_bestReplyValue reward profile who
   have hdebt := quittingTerminalDeviationDebt_le_exploitability reward profile who
   have hoffset := neg_le_of_abs_le (abs_quittingSinglePivotOffset_le reward pivot who hreward)

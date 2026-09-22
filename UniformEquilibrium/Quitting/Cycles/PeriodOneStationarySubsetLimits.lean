@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory.PeriodOneNormalizedSourceLimit
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
@@ -26,19 +26,21 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
   {error : ℕ → ℝ} {source : PeriodOneVanishingHazardSource reward error}
 
 def positiveSupport (limit : PeriodOneNormalizedSourceLimit source) : Finset ι :=
-  Finset.univ.filter fun who ↦ 0 < limit.direction.val who
+  Finset.univ.filter fun who ↦ 0 < limit.direction.weights who
 
 def subsetMass (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι) : ℝ :=
-  ∑ who ∈ retained, limit.direction.val who
+  ∑ who ∈ retained, limit.direction.weights who
 
 def subsetValue (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι) : Payoff ι :=
-  fun who ↦ (∑ owner ∈ retained, limit.direction.val owner * quittingSoloReward reward owner who) /
-    limit.subsetMass retained
+  fun who ↦
+    (∑ owner ∈ retained,
+      limit.direction.weights owner * quittingSoloReward reward owner who) /
+      limit.subsetMass retained
 
 /-- Exact retained source root. A zero-share outsider remains active. -/
 def subsetRoot (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι)
     (index : ℕ) (who : ι) : PMF Bool :=
-  if who ∈ retained ∨ limit.direction.val who = 0 then source.root (limit.select index) who
+  if who ∈ retained ∨ limit.direction.weights who = 0 then source.root (limit.select index) who
   else PMF.pure false
 
 def subsetProfile (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι)
@@ -46,16 +48,16 @@ def subsetProfile (limit : PeriodOneNormalizedSourceLimit source) (retained : Fi
   quittingStationaryProfile reward (limit.subsetRoot retained index)
 
 theorem subsetRoot_zeroShare (limit : PeriodOneNormalizedSourceLimit source)
-    (retained : Finset ι) (index : ℕ) {who : ι} (hzero : limit.direction.val who = 0) :
+    (retained : Finset ι) (index : ℕ) {who : ι} (hzero : limit.direction.weights who = 0) :
     limit.subsetRoot retained index who = source.root (limit.select index) who := by
   simp [subsetRoot, hzero]
 
 theorem subsetRoot_positiveSupport (limit : PeriodOneNormalizedSourceLimit source) (index : ℕ) :
     limit.subsetRoot limit.positiveSupport index = source.root (limit.select index) := by
   funext who
-  by_cases hpos : 0 < limit.direction.val who
+  by_cases hpos : 0 < limit.direction.weights who
   · simp [subsetRoot, positiveSupport, hpos]
-  · have hzero := le_antisymm (not_lt.mp hpos) (limit.direction.property.1 who)
+  · have hzero := le_antisymm (not_lt.mp hpos) (limit.direction.weights_nonneg who)
     simp [subsetRoot, hzero]
 
 theorem subsetProfile_positiveSupport (limit : PeriodOneNormalizedSourceLimit source) (index : ℕ) :
@@ -65,7 +67,7 @@ theorem subsetProfile_positiveSupport (limit : PeriodOneNormalizedSourceLimit so
 /-- A Never update produces the displayed child, rather than a response
 sibling at the original source. -/
 theorem subsetProfile_erase_eq_update_never (limit : PeriodOneNormalizedSourceLimit source)
-    (retained : Finset ι) (index : ℕ) {who : ι} (hwho : 0 < limit.direction.val who) :
+    (retained : Finset ι) (index : ℕ) {who : ι} (hwho : 0 < limit.direction.weights who) :
     limit.subsetProfile (retained.erase who) index =
       Function.update (limit.subsetProfile retained index) who
         (quittingPureTimeBehaviorStrategy reward who none) := by
@@ -99,7 +101,7 @@ theorem subsetRoot_totalHazard_pos (limit : PeriodOneNormalizedSourceLimit sourc
     (retained : Finset ι) (hmass : 0 < limit.subsetMass retained) (index : ℕ) :
     0 < quittingStationaryTotalHazard (limit.subsetRoot retained index) := by
   obtain ⟨who, hwho, _⟩ := (Finset.sum_pos_iff_of_nonneg
-    (fun player (_ : player ∈ retained) ↦ limit.direction.property.1 player)).mp hmass
+    (fun player (_ : player ∈ retained) ↦ limit.direction.weights_nonneg player)).mp hmass
   have hterm : 0 < (limit.subsetRoot retained index who true).toReal := by
     simpa [subsetRoot, hwho] using source.quitProbability_pos (limit.select index) who
   unfold quittingStationaryTotalHazard
@@ -111,18 +113,18 @@ theorem subsetRoot_totalHazard_pos (limit : PeriodOneNormalizedSourceLimit sourc
 private theorem selectedShare_tendsto (limit : PeriodOneNormalizedSourceLimit source) (who : ι) :
     Tendsto (fun index ↦ (source.root (limit.select index) who true).toReal /
       quittingStationaryTotalHazard (source.root (limit.select index))) atTop
-      (nhds (limit.direction.val who)) :=
-  (((continuous_apply who).comp continuous_subtype_val).tendsto limit.direction).comp
-    limit.direction_tendsto
+      (nhds (limit.direction.weights who)) :=
+  ((Convexity.StdSimplex.continuous_weights_apply ℝ who).tendsto
+    limit.direction).comp limit.direction_tendsto
 
 theorem subsetRoot_originalScale_tendsto (limit : PeriodOneNormalizedSourceLimit source)
     (retained : Finset ι) (who : ι) :
     Tendsto (fun index ↦ (limit.subsetRoot retained index who true).toReal /
       quittingStationaryTotalHazard (source.root (limit.select index))) atTop
-      (nhds (if who ∈ retained then limit.direction.val who else 0)) := by
+      (nhds (if who ∈ retained then limit.direction.weights who else 0)) := by
   by_cases hmem : who ∈ retained
   · simpa [subsetRoot, hmem] using limit.selectedShare_tendsto who
-  · by_cases hzero : limit.direction.val who = 0
+  · by_cases hzero : limit.direction.weights who = 0
     · simpa [subsetRoot, hmem, hzero] using limit.selectedShare_tendsto who
     · simp [subsetRoot, hmem, hzero]
 
@@ -139,7 +141,7 @@ theorem subsetRoot_direction_tendsto (limit : PeriodOneNormalizedSourceLimit sou
     (retained : Finset ι) (hmass : 0 < limit.subsetMass retained) (who : ι) :
     Tendsto (fun index ↦ (limit.subsetRoot retained index who true).toReal /
       quittingStationaryTotalHazard (limit.subsetRoot retained index)) atTop
-      (nhds ((if who ∈ retained then limit.direction.val who else 0) /
+      (nhds ((if who ∈ retained then limit.direction.weights who else 0) /
         limit.subsetMass retained)) := by
   have h := (limit.subsetRoot_originalScale_tendsto retained who).div
     (limit.subsetRoot_totalHazard_ratio_tendsto retained) hmass.ne'
@@ -152,14 +154,14 @@ theorem subsetRoot_testPayoff_tendsto (limit : PeriodOneNormalizedSourceLimit so
     (testReward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     Tendsto (fun index ↦ quittingTerminalPayoff testReward
       (quittingStationaryProfile testReward (limit.subsetRoot retained index)) who)
-      atTop (nhds ((∑ owner ∈ retained, limit.direction.val owner *
+      atTop (nhds ((∑ owner ∈ retained, limit.direction.weights owner *
         quittingSoloReward testReward owner who) / limit.subsetMass retained)) := by
   have hbary := tendsto_finsetSum Finset.univ fun owner _ ↦
     (limit.subsetRoot_direction_tendsto retained hmass owner).mul_const
       (quittingSoloReward testReward owner who)
   have hbary' : Tendsto (fun index ↦ quittingStationarySingletonDirectionBarycenter testReward
       (limit.subsetRoot retained index) who) atTop
-      (nhds ((∑ owner ∈ retained, limit.direction.val owner *
+      (nhds ((∑ owner ∈ retained, limit.direction.weights owner *
         quittingSoloReward testReward owner who) / limit.subsetMass retained)) := by
     simpa [quittingStationarySingletonDirectionBarycenter,
       div_mul_eq_mul_div, ← Finset.sum_div, ite_mul] using hbary
@@ -188,16 +190,16 @@ theorem subsetRoot_absorbingCoalitionLaw_tendsto
     (coalition : {S : Finset ι // S.Nonempty}) :
     Tendsto (fun index ↦ quittingRootCoalitionMass (limit.subsetRoot retained index) coalition.1 /
       quittingRootAbsorptionMass (limit.subsetRoot retained index)) atTop
-      (nhds ((∑ owner ∈ retained, limit.direction.val owner *
+      (nhds ((∑ owner ∈ retained, limit.direction.weights owner *
         if ({owner} : Finset ι) = coalition.1 then 1 else 0) /
           limit.subsetMass retained)) := by
   let testReward : {S : Finset ι // S.Nonempty} → Payoff ι :=
     fun terminal _ ↦ if terminal = coalition then 1 else 0
   obtain ⟨who⟩ := (inferInstance : Nonempty ι)
   have h := limit.subsetRoot_testPayoff_tendsto retained hmass testReward who
-  have hlimit : (∑ owner ∈ retained, limit.direction.val owner *
+  have hlimit : (∑ owner ∈ retained, limit.direction.weights owner *
       quittingSoloReward testReward owner who) =
-      ∑ owner ∈ retained, limit.direction.val owner *
+      ∑ owner ∈ retained, limit.direction.weights owner *
         if ({owner} : Finset ι) = coalition.1 then 1 else 0 := by
     apply Finset.sum_congr rfl
     intro owner _
@@ -221,7 +223,7 @@ theorem subsetProfile_actualTerminalLaw_tendsto
     (coalition : {S : Finset ι // S.Nonempty}) :
     Tendsto (fun index ↦ quittingTerminalOutcomeMass reward
       (limit.subsetProfile retained index) (some coalition)) atTop
-      (nhds ((∑ owner ∈ retained, limit.direction.val owner *
+      (nhds ((∑ owner ∈ retained, limit.direction.weights owner *
         if ({owner} : Finset ι) = coalition.1 then 1 else 0) /
           limit.subsetMass retained)) := by
   apply (limit.subsetRoot_absorbingCoalitionLaw_tendsto retained hmass coalition).congr'
@@ -236,7 +238,7 @@ theorem subsetRoot_absorbingSingletonLaw_tendsto
     (hmass : 0 < limit.subsetMass retained) (who : ι) :
     Tendsto (fun index ↦ quittingRootCoalitionMass (limit.subsetRoot retained index) {who} /
       quittingRootAbsorptionMass (limit.subsetRoot retained index)) atTop
-      (nhds ((if who ∈ retained then limit.direction.val who else 0) /
+      (nhds ((if who ∈ retained then limit.direction.weights who else 0) /
         limit.subsetMass retained)) := by
   simpa only [Finset.singleton_inj, mul_ite, mul_one, mul_zero, Finset.sum_ite_eq'] using
     limit.subsetRoot_absorbingCoalitionLaw_tendsto retained hmass
@@ -261,12 +263,12 @@ theorem subsetRoot_absorbingLaw_totalVariation_tendsto_zero
     Tendsto (fun index ↦ (1 / 2 : ℝ) * ∑ coalition : {S : Finset ι // S.Nonempty},
       |quittingRootCoalitionMass (limit.subsetRoot retained index) coalition.1 /
           quittingRootAbsorptionMass (limit.subsetRoot retained index) -
-        (∑ owner ∈ retained, limit.direction.val owner *
+        (∑ owner ∈ retained, limit.direction.weights owner *
           if ({owner} : Finset ι) = coalition.1 then 1 else 0) /
             limit.subsetMass retained|) atTop (nhds 0) := by
   have h := tendsto_finsetSum Finset.univ fun coalition _ ↦
     ((limit.subsetRoot_absorbingCoalitionLaw_tendsto retained hmass coalition).sub_const
-      ((∑ owner ∈ retained, limit.direction.val owner *
+      ((∑ owner ∈ retained, limit.direction.weights owner *
         if ({owner} : Finset ι) = coalition.1 then 1 else 0) /
           limit.subsetMass retained)).abs
   simpa using h.const_mul (1 / 2 : ℝ)
@@ -304,7 +306,7 @@ theorem subsetProfile_quitNow_tendsto (limit : PeriodOneNormalizedSourceLimit so
 
 /-- The Never endpoint is the payoff of the actual further-deleted child. -/
 theorem subsetProfile_never_tendsto (limit : PeriodOneNormalizedSourceLimit source)
-    (retained : Finset ι) {who : ι} (hwho : 0 < limit.direction.val who)
+    (retained : Finset ι) {who : ι} (hwho : 0 < limit.direction.weights who)
     (hmass : 0 < limit.subsetMass (retained.erase who)) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
       (Function.update (limit.subsetProfile retained index) who
@@ -316,7 +318,7 @@ theorem subsetProfile_never_tendsto (limit : PeriodOneNormalizedSourceLimit sour
 theorem subsetMass_erase (limit : PeriodOneNormalizedSourceLimit source)
     (retained : Finset ι) {who : ι} (hwho : who ∈ retained) :
     limit.subsetMass (retained.erase who) =
-      limit.subsetMass retained - limit.direction.val who := by
+      limit.subsetMass retained - limit.direction.weights who := by
   unfold subsetMass
   rw [← Finset.sum_erase_add _ _ hwho]
   ring
@@ -327,7 +329,7 @@ theorem subsetValue_neverGain_eq (limit : PeriodOneNormalizedSourceLimit source)
     (hmass : 0 < limit.subsetMass retained)
     (hrest : 0 < limit.subsetMass (retained.erase who)) :
     limit.subsetValue (retained.erase who) who - limit.subsetValue retained who =
-      limit.direction.val who * (∑ owner ∈ retained.erase who, limit.direction.val owner *
+      limit.direction.weights who * (∑ owner ∈ retained.erase who, limit.direction.weights owner *
         (quittingSoloReward reward owner who - quittingSoloReward reward who who)) /
         (limit.subsetMass retained * limit.subsetMass (retained.erase who)) := by
   have hmassSplit := limit.subsetMass_erase retained hwho
@@ -335,23 +337,23 @@ theorem subsetValue_neverGain_eq (limit : PeriodOneNormalizedSourceLimit source)
   rw [← Finset.sum_erase_add _ _ hwho]
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
-  change _ = limit.direction.val who * (_ - limit.subsetMass (retained.erase who) * _) / _
+  change _ = limit.direction.weights who * (_ - limit.subsetMass (retained.erase who) * _) / _
   field_simp [hmass.ne', hrest.ne']
   rw [show limit.subsetMass retained = limit.subsetMass (retained.erase who) +
-    limit.direction.val who by linarith]
+    limit.direction.weights who by linarith]
   ring
 
 theorem subsetProfile_neverGain_tendsto (limit : PeriodOneNormalizedSourceLimit source)
     (retained : Finset ι) {who : ι} (hwho : who ∈ retained)
-    (hpositive : 0 < limit.direction.val who)
+    (hpositive : 0 < limit.direction.weights who)
     (hmass : 0 < limit.subsetMass retained)
     (hrest : 0 < limit.subsetMass (retained.erase who)) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
       (Function.update (limit.subsetProfile retained index) who
         (quittingPureTimeBehaviorStrategy reward who none)) who -
       quittingTerminalPayoff reward (limit.subsetProfile retained index) who) atTop
-      (nhds (limit.direction.val who *
-        (∑ owner ∈ retained.erase who, limit.direction.val owner *
+      (nhds (limit.direction.weights who *
+        (∑ owner ∈ retained.erase who, limit.direction.weights owner *
           (quittingSoloReward reward owner who - quittingSoloReward reward who who)) /
         (limit.subsetMass retained * limit.subsetMass (retained.erase who)))) := by
   rw [← limit.subsetValue_neverGain_eq retained hwho hmass hrest]
@@ -360,15 +362,15 @@ theorem subsetProfile_neverGain_tendsto (limit : PeriodOneNormalizedSourceLimit 
 
 def subsetNeverGain (limit : PeriodOneNormalizedSourceLimit source)
     (retained : Finset ι) (who : ι) : ℝ :=
-  limit.direction.val who *
-    (∑ owner ∈ retained.erase who, limit.direction.val owner *
+  limit.direction.weights who *
+    (∑ owner ∈ retained.erase who, limit.direction.weights owner *
       (quittingSoloReward reward owner who - quittingSoloReward reward who who)) /
     (limit.subsetMass retained * limit.subsetMass (retained.erase who))
 
 theorem subsetValue_sub_solo (limit : PeriodOneNormalizedSourceLimit source)
     (retained : Finset ι) (hmass : 0 < limit.subsetMass retained) (who : ι) :
     limit.subsetValue retained who - quittingSoloReward reward who who =
-      (∑ owner ∈ retained, limit.direction.val owner *
+      (∑ owner ∈ retained, limit.direction.weights owner *
         (quittingSoloReward reward owner who - quittingSoloReward reward who who)) /
         limit.subsetMass retained := by
   unfold subsetValue
@@ -381,9 +383,9 @@ theorem subsetValue_sub_solo (limit : PeriodOneNormalizedSourceLimit source)
 actual retained source, with a fixed positive half-limit gain. -/
 theorem eventually_subsetNever_exactCap_and_gain
     (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι) {who : ι}
-    (hwho : who ∈ retained) (hpositive : 0 < limit.direction.val who)
+    (hwho : who ∈ retained) (hpositive : 0 < limit.direction.weights who)
     (hrest : 0 < limit.subsetMass (retained.erase who))
-    (hmargin : 0 < ∑ owner ∈ retained.erase who, limit.direction.val owner *
+    (hmargin : 0 < ∑ owner ∈ retained.erase who, limit.direction.weights owner *
       (quittingSoloReward reward owner who - quittingSoloReward reward who who)) :
     0 < limit.subsetNeverGain retained who ∧ ∀ᶠ index in atTop,
       quittingTerminalPayoff reward
@@ -432,12 +434,13 @@ theorem subsetMass_positiveSupport (limit : PeriodOneNormalizedSourceLimit sourc
     limit.subsetMass limit.positiveSupport = 1 := by
   unfold subsetMass
   calc
-    ∑ who ∈ limit.positiveSupport, limit.direction.val who = ∑ who, limit.direction.val who := by
+    ∑ who ∈ limit.positiveSupport, limit.direction.weights who =
+        ∑ who, limit.direction.weights who := by
       apply Finset.sum_subset (Finset.subset_univ _)
       intro who _ hnot
       exact le_antisymm (not_lt.mp (by simpa [positiveSupport] using hnot))
-        (limit.direction.property.1 who)
-    _ = 1 := limit.direction.property.2
+        (limit.direction.weights_nonneg who)
+    _ = 1 := limit.direction.total_of_fintype
 
 theorem subsetMass_pos_of_nonempty_subset_support (limit : PeriodOneNormalizedSourceLimit source)
     {retained : Finset ι} (hsubset : retained ⊆ limit.positiveSupport)
@@ -451,14 +454,14 @@ theorem subsetValue_positiveSupport (limit : PeriodOneNormalizedSourceLimit sour
   unfold quittingSingletonDirectionPayoff
   apply Finset.sum_subset (Finset.subset_univ _)
   intro owner _ hnot
-  have hzero : limit.direction.val owner = 0 :=
+  have hzero : limit.direction.weights owner = 0 :=
     le_antisymm (not_lt.mp (by simpa [positiveSupport] using hnot))
-      (limit.direction.property.1 owner)
+      (limit.direction.weights_nonneg owner)
   simp [hzero]
 
 theorem support_erased_singletonMargin (limit : PeriodOneNormalizedSourceLimit source)
     {who : ι} (hwho : who ∈ limit.positiveSupport) :
-    (∑ owner ∈ limit.positiveSupport.erase who, limit.direction.val owner *
+    (∑ owner ∈ limit.positiveSupport.erase who, limit.direction.weights owner *
       (quittingSoloReward reward owner who - quittingSoloReward reward who who)) =
       limit.limitingSingletonMargin who := by
   have h := limit.subsetValue_sub_solo limit.positiveSupport
@@ -472,7 +475,7 @@ theorem subsetNeverGain_positiveSupport (limit : PeriodOneNormalizedSourceLimit 
     {who : ι} (hwho : who ∈ limit.positiveSupport) {minimum : ℝ}
     (hcommon : limit.limitingSingletonMargin who = minimum) :
     limit.subsetNeverGain limit.positiveSupport who =
-      limit.direction.val who * minimum / (1 - limit.direction.val who) := by
+      limit.direction.weights who * minimum / (1 - limit.direction.weights who) := by
   unfold subsetNeverGain
   rw [limit.support_erased_singletonMargin hwho, hcommon,
     limit.subsetMass_erase limit.positiveSupport hwho, limit.subsetMass_positiveSupport, one_mul]
@@ -484,19 +487,19 @@ theorem subsetNeverGain_after_first (limit : PeriodOneNormalizedSourceLimit sour
     (hsecond : second ∈ limit.positiveSupport.erase first) {minimum : ℝ}
     (hcommon : limit.limitingSingletonMargin second = minimum) :
     limit.subsetNeverGain (limit.positiveSupport.erase first) second =
-      limit.direction.val second * (minimum - limit.direction.val first *
+      limit.direction.weights second * (minimum - limit.direction.weights first *
         (quittingSoloReward reward first second - quittingSoloReward reward second second)) /
-        ((1 - limit.direction.val first) *
-          (1 - limit.direction.val first - limit.direction.val second)) := by
+        ((1 - limit.direction.weights first) *
+          (1 - limit.direction.weights first - limit.direction.weights second)) := by
   have hsecondSupport := (Finset.mem_erase.mp hsecond).2
   have hfirstOther : first ∈ limit.positiveSupport.erase second :=
     Finset.mem_erase.mpr ⟨(Finset.mem_erase.mp hsecond).1.symm, hfirst⟩
   have hmargin := limit.support_erased_singletonMargin hsecondSupport
   rw [hcommon, ← Finset.sum_erase_add _ _ hfirstOther] at hmargin
   have hsum : (∑ owner ∈ (limit.positiveSupport.erase first).erase second,
-      limit.direction.val owner *
+      limit.direction.weights owner *
         (quittingSoloReward reward owner second - quittingSoloReward reward second second)) =
-      minimum - limit.direction.val first *
+      minimum - limit.direction.weights first *
         (quittingSoloReward reward first second - quittingSoloReward reward second second) := by
     rw [Finset.erase_right_comm]
     linarith
@@ -512,11 +515,11 @@ theorem exists_ordered_pair_positive_childMargin
     (hcard : 3 ≤ limit.positiveSupport.card) :
     ∃ first ∈ limit.positiveSupport, ∃ second ∈ limit.positiveSupport.erase first,
       0 < ∑ owner ∈ (limit.positiveSupport.erase first).erase second,
-        limit.direction.val owner *
+        limit.direction.weights owner *
           (quittingSoloReward reward owner second - quittingSoloReward reward second second) := by
   obtain ⟨second, hsecond⟩ := Finset.card_pos.mp (by omega : 0 < limit.positiveSupport.card)
   let rest := limit.positiveSupport.erase second
-  let term := fun owner ↦ limit.direction.val owner *
+  let term := fun owner ↦ limit.direction.weights owner *
     (quittingSoloReward reward owner second - quittingSoloReward reward second second)
   have hsum : ∑ owner ∈ rest, term owner = minimum := by
     exact (limit.support_erased_singletonMargin hsecond).trans (hcommon second hsecond)
@@ -553,9 +556,9 @@ def IsExactNeverCapEdge
 
 theorem eventually_subsetNever_edge
     (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι) {who : ι}
-    (hwho : who ∈ retained) (hpositive : 0 < limit.direction.val who)
+    (hwho : who ∈ retained) (hpositive : 0 < limit.direction.weights who)
     (hrest : 0 < limit.subsetMass (retained.erase who))
-    (hmargin : 0 < ∑ owner ∈ retained.erase who, limit.direction.val owner *
+    (hmargin : 0 < ∑ owner ∈ retained.erase who, limit.direction.weights owner *
       (quittingSoloReward reward owner who - quittingSoloReward reward who who)) :
     ∃ gain : ℝ, 0 < gain ∧ ∀ᶠ index in atTop,
       IsExactNeverCapEdge reward (limit.subsetProfile retained index)
@@ -587,9 +590,9 @@ theorem exists_chronological_twoNever_supportDescent
             second secondGain := by
   obtain ⟨first, hfirst, second, hsecond, hmarginSecond⟩ :=
     limit.exists_ordered_pair_positive_childMargin hminimum hcommon hcard
-  have hfirstPositive : 0 < limit.direction.val first := by
+  have hfirstPositive : 0 < limit.direction.weights first := by
     simpa [positiveSupport] using hfirst
-  have hsecondPositive : 0 < limit.direction.val second := by
+  have hsecondPositive : 0 < limit.direction.weights second := by
     simpa [positiveSupport] using (Finset.mem_erase.mp hsecond).2
   have hchildCard : (limit.positiveSupport.erase first).card =
       limit.positiveSupport.card - 1 := Finset.card_erase_of_mem hfirst
@@ -605,7 +608,7 @@ theorem exists_chronological_twoNever_supportDescent
       (Finset.erase_subset first limit.positiveSupport))
     (Finset.card_pos.mp (by omega : 0 < ((limit.positiveSupport.erase first).erase second).card))
   have hmarginFirst : 0 < ∑ owner ∈ limit.positiveSupport.erase first,
-      limit.direction.val owner *
+      limit.direction.weights owner *
         (quittingSoloReward reward owner first - quittingSoloReward reward first first) := by
     rw [limit.support_erased_singletonMargin hfirst, hcommon first hfirst]
     exact hminimum
@@ -623,7 +626,7 @@ but leaves the limiting singleton lottery unchanged. -/
 theorem subsetProfile_zeroShare_never_tendsto
     (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι)
     (hmass : 0 < limit.subsetMass retained) {who : ι}
-    (hzero : limit.direction.val who = 0) :
+    (hzero : limit.direction.weights who = 0) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
       (Function.update (limit.subsetProfile retained index) who
         (quittingPureTimeBehaviorStrategy reward who none)) who)
@@ -631,7 +634,7 @@ theorem subsetProfile_zeroShare_never_tendsto
   let root := fun index ↦ Function.update (limit.subsetRoot retained index) who (PMF.pure false)
   have hscale (owner : ι) : Tendsto (fun index ↦ (root index owner true).toReal /
       quittingStationaryTotalHazard (source.root (limit.select index))) atTop
-      (nhds (if owner ∈ retained then limit.direction.val owner else 0)) := by
+      (nhds (if owner ∈ retained then limit.direction.weights owner else 0)) := by
     by_cases heq : owner = who
     · subst owner
       simp [root, hzero]
@@ -659,7 +662,7 @@ theorem subsetProfile_zeroShare_never_tendsto
     (limit.subsetRoot_totalHazard_tendsto_zero retained)
   have hdirection (owner : ι) : Tendsto (fun index ↦ (root index owner true).toReal /
       quittingStationaryTotalHazard (root index)) atTop
-      (nhds ((if owner ∈ retained then limit.direction.val owner else 0) /
+      (nhds ((if owner ∈ retained then limit.direction.weights owner else 0) /
         limit.subsetMass retained)) := by
     apply ((hscale owner).div htotalScale hmass.ne').congr'
     filter_upwards [] with index
@@ -688,7 +691,7 @@ theorem subsetProfile_zeroShare_never_tendsto
 /-- Erasing a zero-share label does not change the limiting lottery. -/
 theorem subsetValue_erase_zeroShare
     (limit : PeriodOneNormalizedSourceLimit source) (retained : Finset ι) {who : ι}
-    (hzero : limit.direction.val who = 0) (receiver : ι) :
+    (hzero : limit.direction.weights who = 0) (receiver : ι) :
     limit.subsetValue (retained.erase who) receiver = limit.subsetValue retained receiver := by
   unfold subsetValue subsetMass
   congr 1
@@ -710,7 +713,7 @@ theorem subsetProfile_anyNever_tendsto
       (Function.update (limit.subsetProfile retained index) who
         (quittingPureTimeBehaviorStrategy reward who none)) who)
       atTop (nhds (limit.subsetValue (retained.erase who) who)) := by
-  by_cases hzero : limit.direction.val who = 0
+  by_cases hzero : limit.direction.weights who = 0
   · have hmassEq : limit.subsetMass (retained.erase who) = limit.subsetMass retained := by
       apply Finset.sum_subset (Finset.erase_subset who retained)
       intro owner hmem hnot
@@ -719,7 +722,7 @@ theorem subsetProfile_anyNever_tendsto
     rw [limit.subsetValue_erase_zeroShare retained hzero]
     exact limit.subsetProfile_zeroShare_never_tendsto retained (by rwa [hmassEq] at hmass) hzero
   · exact limit.subsetProfile_never_tendsto retained
-      (lt_of_le_of_ne (limit.direction.property.1 who) (Ne.symm hzero)) hmass
+      (lt_of_le_of_ne (limit.direction.weights_nonneg who) (Ne.symm hzero)) hmass
 
 /-- Every retained subset row becomes jointly live; hence so do each player's
 own and opponent Continue probabilities, with a common eventual half floor. -/
@@ -768,14 +771,14 @@ theorem subsetRoot_continueLimits (limit : PeriodOneNormalizedSourceLimit source
   exact ⟨hj.le, ho.le, hp.le⟩
 
 theorem subsetValue_singleton (limit : PeriodOneNormalizedSourceLimit source)
-    {owner : ι} (hpositive : 0 < limit.direction.val owner) (who : ι) :
+    {owner : ι} (hpositive : 0 < limit.direction.weights owner) (who : ι) :
     limit.subsetValue {owner} who = quittingSoloReward reward owner who := by
   simp [subsetValue, subsetMass, hpositive.ne']
 
 /-- The singleton descendant's prescribed and Never endpoints coincide in the
 limit for every other player, even an original zero-share outsider. -/
 theorem singletonSubset_endpointLimits (limit : PeriodOneNormalizedSourceLimit source)
-    {owner who : ι} (hpositive : 0 < limit.direction.val owner) (hne : who ≠ owner) :
+    {owner who : ι} (hpositive : 0 < limit.direction.weights owner) (hne : who ≠ owner) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
       (limit.subsetProfile {owner} index) who) atTop
       (nhds (quittingSoloReward reward owner who)) ∧
@@ -813,9 +816,9 @@ theorem exists_chronological_Never_singletonDescent
   have hmass := limit.subsetMass_pos_of_nonempty_subset_support
     (Finset.erase_subset first limit.positiveSupport)
     (Finset.card_pos.mp (by omega : 0 < (limit.positiveSupport.erase first).card))
-  have hpositive : 0 < limit.direction.val first := (Finset.mem_filter.mp hfirst).2
+  have hpositive : 0 < limit.direction.weights first := (Finset.mem_filter.mp hfirst).2
   have hmargin : 0 < ∑ owner ∈ limit.positiveSupport.erase first,
-      limit.direction.val owner *
+      limit.direction.weights owner *
         (quittingSoloReward reward owner first - quittingSoloReward reward first first) := by
     rw [limit.support_erased_singletonMargin hfirst, hcommon first hfirst]
     exact hminimum

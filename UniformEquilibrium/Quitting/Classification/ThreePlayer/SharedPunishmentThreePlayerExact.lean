@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingSharedThreePlayer
 
@@ -269,7 +269,7 @@ theorem quittingSharedPunishmentExcess_eq_three_quarters :
       (quittingStationaryProfile reward fairRoot)).trans_eq
         fairRoot_sharedPunishmentGap
   · unfold quittingSharedPunishmentExcess
-    haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+    have : Nonempty ((quittingGame reward).BehaviorProfile) :=
       ⟨quittingAlwaysContinueProfile reward⟩
     exact le_ciInf fun profile =>
       three_quarters_le_quittingSharedPunishmentGap profile
@@ -282,7 +282,7 @@ theorem quittingSharedStationaryPunishmentExcess_eq_three_quarters :
   · exact (ciInf_le bddBelow_range_quittingSharedStationaryPunishmentGap
       fairRoot).trans_eq fairRoot_sharedStationaryPunishmentGap
   · unfold quittingSharedStationaryPunishmentExcess
-    haveI : Nonempty (Player → PMF Bool) :=
+    have : Nonempty (Player → PMF Bool) :=
       ⟨fun _ => PMF.pure false⟩
     exact le_ciInf fun root =>
       three_quarters_le_quittingSharedStationaryPunishmentGap root

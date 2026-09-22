@@ -196,9 +196,9 @@ theorem isTailVariationBounded_vWitness : IsTailVariationBounded vWitness := by
       fun x _ y _ hxy => Real.sqrt_le_sqrt hxy
     have hkey : eVariationOn Real.sqrt (Set.Ioo (0 : ℝ) (ε ^ 2)) ≤ ENNReal.ofReal ε := by
       rw [eVariationOn.eq_biSup_inter_Icc]
-      simp only [Set.mem_setOf_eq, iSup_le_iff, and_imp, Prod.forall]
+      simp only [Set.mem_ofPred_eq, iSup_le_iff, and_imp, Prod.forall]
       intro a b ha hb _hab
-      refine le_trans (hmono.eVariationOn_le ha hb) (ENNReal.ofReal_le_ofReal ?_)
+      refine le_trans (hmono.eVariationOn_eq ha hb).le (ENNReal.ofReal_le_ofReal ?_)
       have hbsqrt : Real.sqrt b ≤ ε := by
         have := Real.sqrt_le_sqrt hb.2.le
         rwa [Real.sqrt_sq hε.le] at this

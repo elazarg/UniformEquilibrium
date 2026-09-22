@@ -26,7 +26,7 @@ noncomputable section
 namespace Math
 namespace OnlineLearning
 
-open Math.Probability
+open _root_.Math.Probability
 
 section Generic
 

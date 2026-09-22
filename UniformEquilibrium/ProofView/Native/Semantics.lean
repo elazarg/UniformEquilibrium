@@ -141,7 +141,7 @@ theorem nativeMixedPublicProfile_play_eq_toNativeBehaviorProfile
         (toNativeMixedPublicProfile G profile initial horizon) =
       (G.toNative.perfectMonitoring initial).runBehavioral
         (toNativeBehaviorProfile G initial profile) horizon := by
-  letI (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  let (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
   unfold toNativeMixedPublicProfile
   rw [G.toNative.kuhn_behavioral_to_mixed initial
     (toNativePublicProfile G initial profile) horizon]
@@ -164,7 +164,7 @@ theorem nativeMixed_runMixed_eq_toNativeBehaviorProfile
         (toNativeMixedProfile G profile initial horizon) horizon =
       (G.toNative.perfectMonitoring initial).runBehavioral
         (toNativeBehaviorProfile G initial profile) horizon := by
-  letI (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  let (i : ι) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
   calc
     (G.toNative.perfectMonitoring initial).runMixed
           (toNativeMixedProfile G profile initial horizon) horizon =

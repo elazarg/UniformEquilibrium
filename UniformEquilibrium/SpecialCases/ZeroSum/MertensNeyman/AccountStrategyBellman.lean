@@ -24,7 +24,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MertensNeymanAccount
 
-open Filter Math.Probability Math.PMFProduct Topology
+open Filter _root_.Math.Probability Math.PMFProduct Topology
 
 /-- Joint action and successor state under a statewise mixed profile. -/
 def stateActionOutcome
@@ -186,8 +186,8 @@ theorem outcomeKernel_eq_stateActionOutcome_selected
     C.outcomeKernel opp h m =
       stateActionOutcome G h.2
         (Function.update (fun i => opp i t h) who (x h.2 who)) := by
-  letI : Fintype (Fin 2) := inferInstance
-  letI : DecidableEq (Fin 2) := inferInstance
+  let : Fintype (Fin 2) := inferInstance
+  let : DecidableEq (Fin 2) := inferInstance
   unfold MemoryController.outcomeKernel stateActionOutcome stageActionDist
   have hprofile :
       (fun i =>
@@ -341,7 +341,7 @@ theorem row_account_bellman_ge
         expect
           (stateActionOutcome G s (Function.update (x s) 1 d))
           (fun o => G.stagePayoff s o.1 0 - V o.2 0) := by
-  letI : Fintype (Fin 2) := inferInstance
+  let : Fintype (Fin 2) := inferInstance
   have hrow :=
     hF.row_discountedAuxEU_ge hzs hVzs s d
   rw [G.discountedAuxEU_eq] at hrow
@@ -383,8 +383,8 @@ theorem outcomeKernel_eq_stateActionOutcome_row
     C.outcomeKernel opp h m =
       stateActionOutcome G h.2
         (Function.update (x h.2) 1 (opp 1 t h)) := by
-  letI : Fintype (Fin 2) := inferInstance
-  letI : DecidableEq (Fin 2) := inferInstance
+  let : Fintype (Fin 2) := inferInstance
+  let : DecidableEq (Fin 2) := inferInstance
   unfold MemoryController.outcomeKernel stateActionOutcome stageActionDist
   have hprofile :
       (fun i =>

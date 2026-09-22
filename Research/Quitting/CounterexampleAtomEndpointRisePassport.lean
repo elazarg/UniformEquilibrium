@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -474,8 +474,8 @@ theorem QuittingStoppingLawAtomEndpointRiseStackSequence.exists_prescribed_or_re
   · obtain ⟨rank, hrank, hgoodAt⟩ :=
       extraction_of_frequently_atTop hprescribed
     choose terminalAt hterminalAt using fun n => (hgoodAt n).1
-    letI : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
-    letI : DiscreteTopology {S : Finset ι // S.Nonempty} :=
+    let : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
+    let : DiscreteTopology {S : Finset ι // S.Nonempty} :=
       discreteTopology_bot _
     obtain ⟨terminal, terminalSubseq, hterminalSubseq,
       hterminalTendsto⟩ := CompactSpace.tendsto_subseq terminalAt
@@ -524,8 +524,8 @@ theorem QuittingStoppingLawAtomEndpointRiseStackSequence.exists_prescribed_or_re
       hstart (n + start) (Nat.le_add_left start n)
     choose quitTimeAt terminalAt hatomAt hdebtAt using
       fun n => (hchoice n).1
-    letI : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
-    letI : DiscreteTopology {S : Finset ι // S.Nonempty} :=
+    let : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
+    let : DiscreteTopology {S : Finset ι // S.Nonempty} :=
       discreteTopology_bot _
     obtain ⟨terminal, terminalSubseq, hterminalSubseq,
       hterminalTendsto⟩ := CompactSpace.tendsto_subseq terminalAt

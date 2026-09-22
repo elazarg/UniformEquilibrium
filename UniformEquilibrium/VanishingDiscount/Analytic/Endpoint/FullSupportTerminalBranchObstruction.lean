@@ -33,8 +33,8 @@ namespace GameTheory
 namespace StochasticGame
 namespace FullSupportTerminalBranchObstruction
 
-open Math.Probability
-open Math.Probability.EntryReachablePositiveChargedCirculation
+open _root_.Math.Probability
+open _root_.Math.Probability.EntryReachablePositiveChargedCirculation
 
 abbrev State := Unit
 abbrev Index := Unit

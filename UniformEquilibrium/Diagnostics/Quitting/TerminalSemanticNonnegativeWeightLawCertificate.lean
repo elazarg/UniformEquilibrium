@@ -45,7 +45,8 @@ theorem exists_terminalOutcome_weightedSurplusContribution_ge_minimumDebt
   have hpair := terminalSemanticLawCarrier_fst_mem_carrier point hpoint
   have hlower := minimumTerminalSemantic_nonnegativeWeight_lowerBound
     point.1 weight hpair hminimum hpositive hweight
-  have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hmoment := terminalSemanticLawCarrier_rewardMoment reward point hpoint
   let contribution : QuittingTerminalOutcome ι → ℝ := fun outcome =>
     point.2 outcome *
@@ -154,7 +155,8 @@ theorem exists_terminalLawFiniteAtom_weightedSurplus_and_mass_ge
   obtain ⟨outcome, hproduct⟩ :=
     exists_terminalOutcome_weightedSurplusContribution_ge_minimumDebt
       point weight hpoint hminimum hpositive hweight
-  have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hcardPos :
       0 < (Fintype.card (QuittingTerminalOutcome ι) : ℝ) := by
     exact_mod_cast Fintype.card_pos
@@ -388,7 +390,7 @@ theorem exists_finFourTerminalLawFiniteAtom_weightedSurplus_and_mass_ge_symmetri
   have hmassSimplex :=
     terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
   have hmassNonneg : 0 ≤ point.2 (some terminal) :=
-    hmassSimplex.1 (some terminal)
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmassSimplex).1 (some terminal)
   have hdenomStrong : 0 < 16 * R := mul_pos (by norm_num) hR
   have hdenomWeak : 0 < 32 * R := mul_pos (by norm_num) hR
   apply (div_le_iff₀ hdenomWeak).2

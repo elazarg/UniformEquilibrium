@@ -119,7 +119,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι]
@@ -155,7 +155,7 @@ theorem quittingSurvivalPrefix_nonneg (rows : ℕ → ι → PMF Bool) (N : ℕ)
 
 theorem quittingSurvivalPrefix_le_one (rows : ℕ → ι → PMF Bool) (N : ℕ) :
     quittingSurvivalPrefix rows N ≤ 1 :=
-  Finset.prod_le_one (fun t _ => quittingStationaryContinueMass_nonneg (rows t))
+  Finset.prod_le_one₀ (fun t _ => quittingStationaryContinueMass_nonneg (rows t))
     fun t _ => quittingStationaryContinueMass_le_one (rows t)
 
 theorem quittingSurvivalPrefix_antitone (rows : ℕ → ι → PMF Bool) :

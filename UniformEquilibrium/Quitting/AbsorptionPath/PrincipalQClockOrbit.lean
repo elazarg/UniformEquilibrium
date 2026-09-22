@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Filter Finset Math Math.LinearProgramming Set
+open Filter Finset _root_.Math Math.LinearProgramming Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -151,7 +151,7 @@ theorem principalQMatrixSpeedBound_nonneg (M : ι → ι → ℝ) :
 omit [DecidableEq ι] in
 /-- Every simplex-weighted matrix mixture has norm bounded solely by `M`. -/
 theorem norm_singletonLCPResidual_le_speedBound
-    (M : ι → ι → ℝ) (weight : stdSimplex ℝ ι) :
+    (M : ι → ι → ℝ) (weight : Convexity.StdSimplex ℝ ι) :
     ‖fun i => singletonLCPResidual M weight i‖ ≤
       principalQMatrixSpeedBound M := by
   apply (pi_norm_le_iff_of_nonneg (principalQMatrixSpeedBound_nonneg M)).2
@@ -159,18 +159,18 @@ theorem norm_singletonLCPResidual_le_speedBound
   rw [Real.norm_eq_abs]
   unfold singletonLCPResidual wsum dotProduct
   calc
-    |∑ j, weight j * M i j| ≤ ∑ j, |weight j * M i j| :=
+    |∑ j, weight.weights j * M i j| ≤ ∑ j, |weight.weights j * M i j| :=
       Finset.abs_sum_le_sum_abs _ _
-    _ = ∑ j, weight j * |M i j| := by
+    _ = ∑ j, weight.weights j * |M i j| := by
       apply Finset.sum_congr rfl
       intro j _
       rw [abs_mul]
       congr 1
-      exact abs_of_nonneg (weight.property.1 j)
+      exact abs_of_nonneg (weight.weights_nonneg j)
     _ ≤ ∑ j, |M i j| := by
       apply Finset.sum_le_sum
       intro j _
-      exact mul_le_of_le_one_left (abs_nonneg _) (stdSimplex.le_one weight j)
+      exact mul_le_of_le_one_left (abs_nonneg _) (weight.weights_apply_le_one j)
     _ ≤ principalQMatrixSpeedBound M := by
       exact Finset.single_le_sum
         (fun k _ => Finset.sum_nonneg fun j _ => abs_nonneg (M k j))

@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Common upward translation converts one exact support packet into a
 weighted packet in the fixed enlarged coordinate box. -/

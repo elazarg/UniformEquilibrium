@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -43,7 +43,7 @@ theorem terminalGap_le_zeroBoundaryChainAggregateDebt
       quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff) :
     witness.terminalGap ≤
       quittingFiniteNashBellmanPathAggregateDynamicDebt reward cutoff path := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact (witness.terminalGap_le_finiteMinMaxDynamicDebt cutoff).trans
     ((quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt_le
         reward cutoff path hpath).trans
@@ -169,7 +169,7 @@ theorem exists_nearMaximal_positiveDebt_smallDynamicDebtEdge
   have hcurrentRoot : quittingRootOfSimplex current.1.2 =
       quittingRootOfSimplex predecessor.2 := by
     unfold current quittingFiniteNashBellmanPathDynamicDebtPoint
-    rw [dif_pos (by omega)]
+    rw [dite_eq_left (by omega)]
     rfl
   have hsmallCurrent : quittingRootAbsorptionMass
       (quittingRootOfSimplex current.1.2) < ε := by

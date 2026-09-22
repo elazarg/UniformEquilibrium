@@ -15,7 +15,7 @@ theorem smallPivotRepairValue_of_uniformEquilibriumPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (target : Payoff ι) (huniform : (quittingGame reward).IsUniformEquilibriumPayoff none target) :
     HasQuittingSmallPivotRepairValue reward pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   intro error herror
   obtain ⟨deadline, hdeadline, mixed, hexploit, _⟩ :=
     (isUniformEquilibriumPayoff_iff_finiteMenu_fullCap_target_approximation

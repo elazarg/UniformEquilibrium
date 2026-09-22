@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The four pair coalitions in the sharp support regression. -/
 def finFourSharpPair (label : Fin 4) : Finset (Fin 4) :=
@@ -110,8 +110,7 @@ theorem finFourSharpSparseReward_pair_sum (label : Fin 4) :
         finFourSharpSparseReward
           ⟨finFourSharpPair label, finFourSharpPair_nonempty label⟩ player = 1 := by
   simp_rw [finFourSharpSparseReward_pair]
-  fin_cases label <;> norm_num [Fin.sum_univ_four] <;>
-    simp +decide <;> norm_num
+  fin_cases label <;> norm_num [Fin.sum_univ_four]
 
 /-- The uniform displayed-pair law has reward moment `1/4` in every
 coordinate. -/
@@ -124,8 +123,7 @@ theorem finFourSharpPairLaw_rewardMoment (player : Fin 4) :
   simp_rw [ite_mul, zero_mul, Fintype.sum_ite_eq']
   simp only [quittingTerminalOutcomeReward]
   simp_rw [finFourSharpSparseReward_pair]
-  fin_cases player <;> norm_num [Fin.sum_univ_four] <;>
-    simp +decide <;> norm_num
+  fin_cases player <;> norm_num [Fin.sum_univ_four]
 
 /-- Number of displayed pair labels represented by an outcome.  Injectivity
 makes this either zero or one. -/
@@ -150,7 +148,7 @@ private theorem finFourSharpDisplayedIndicator_eq_zero
   unfold finFourSharpDisplayedIndicator
   apply Finset.sum_eq_zero
   intro label _
-  rw [if_neg (hnot label)]
+  rw [ite_eq_right (hnot label)]
 
 private theorem sum_mass_mul_finFourSharpDisplayedIndicator
     (mass : QuittingTerminalOutcome (Fin 4) → ℝ) :
@@ -192,7 +190,7 @@ private theorem finFourSharp_totalReward_le_indicator
         intro player _
         simp only [quittingTerminalOutcomeReward]
         unfold finFourSharpSparseReward
-        rw [if_neg (fun heq => hdisplayed ⟨player, heq⟩)]
+        rw [ite_eq_right (fun heq => hdisplayed ⟨player, heq⟩)]
         split <;> norm_num
 
 private theorem finFourSharp_coordinate_le_indicator
@@ -206,7 +204,7 @@ private theorem finFourSharp_coordinate_le_indicator
   · subst outcome
     rw [finFourSharpDisplayedIndicator_pair]
     simp only [quittingTerminalOutcomeReward, finFourSharpSparseReward_pair,
-      if_pos]
+      ite_eq_left]
     norm_num
   · by_cases hdisplayed : ∃ other : Fin 4,
       outcome = some ⟨finFourSharpPair other,
@@ -222,14 +220,14 @@ private theorem finFourSharp_coordinate_le_indicator
         finFourSharpPair_injective.eq_iff, hne, Ne.symm hne]
     · have hindicator := finFourSharpDisplayedIndicator_eq_zero outcome
           (fun other heq => hdisplayed ⟨other, heq⟩)
-      rw [hindicator, if_neg hselected]
+      rw [hindicator, ite_eq_right hselected]
       simp only [neg_zero, zero_add, mul_zero]
       cases outcome with
       | none => simp [quittingTerminalOutcomeReward]
       | some terminal =>
           simp only [quittingTerminalOutcomeReward]
           unfold finFourSharpSparseReward
-          rw [if_neg (fun heq => hdisplayed ⟨label,
+          rw [ite_eq_right (fun heq => hdisplayed ⟨label,
             congrArg some (Subtype.ext heq)⟩)]
           split <;> norm_num
 
@@ -362,7 +360,7 @@ theorem finFourSharpPairLaw_support_card_eq_four :
       unfold finFourSharpPairLaw
       apply Finset.sum_eq_zero
       intro label _
-      rw [if_neg (hnotPair label)]
+      rw [ite_eq_right (hnotPair label)]
     exact houtcome hzero
   have hupper :
       (Finset.univ.filter fun outcome =>

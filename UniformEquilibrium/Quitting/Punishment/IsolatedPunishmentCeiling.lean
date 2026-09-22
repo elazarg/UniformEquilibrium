@@ -99,7 +99,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct Filter StochasticGame
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct Filter StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -249,7 +249,10 @@ theorem action_eq_true_of_mem_support_update_quittingAlwaysQuit
     exact ⟨action, haction, rfl⟩
   rw [pmfPi_push_coord factors other] at hcoord
   have hfactor : factors other = PMF.pure true := by
-    simp [factors, Function.update_of_ne hother]
+    with_unfolding_all
+      change Function.update (fun _ : ι => PMF.pure true) who
+        (deviation t h) other = PMF.pure true
+      exact Function.update_of_ne hother _ _
   rw [hfactor] at hcoord
   exact (PMF.mem_support_pure_iff _ _).mp (by simpa [hfactor] using hcoord)
 
@@ -273,7 +276,12 @@ theorem exists_state_containsOther_of_mem_support_update_quittingAlwaysQuit_one
       (Function.update (quittingAlwaysQuitProfile reward) who deviation) none 0 h').mp hh'
   change (ι → Bool) at action
   have hstate : h.2 = none := by
-    have heq : h = (quittingGame reward).emptyHist none := by simpa using hh
+    have hzero := (quittingGame reward).histDist_zero
+      (Function.update (quittingAlwaysQuitProfile reward) who deviation)
+      (show (quittingGame reward).State from none)
+    rw [hzero] at hh
+    have heq : h = (quittingGame reward).emptyHist none :=
+      (PMF.mem_support_pure_iff _ _).mp hh
     rw [heq]; rfl
   have hact_other : action other = true :=
     action_eq_true_of_mem_support_update_quittingAlwaysQuit reward who deviation h action
@@ -281,10 +289,10 @@ theorem exists_state_containsOther_of_mem_support_update_quittingAlwaysQuit_one
   have hmem : other ∈ ({player | action player = true} : Finset ι) := by
     simpa using hact_other
   have hnonempty : ({player | action player = true} : Finset ι).Nonempty := ⟨other, hmem⟩
-  rw [hstate, quittingGame_transition_none, dif_pos hnonempty] at hnext
+  rw [hstate, quittingGame_transition_none, dite_eq_left hnonempty] at hnext
   refine ⟨⟨_, hnonempty⟩, ?_, hmem⟩
   rw [hEq]
-  simpa using hnext
+  exact (PMF.mem_support_pure_iff _ _).mp hnext
 
 /-! ## Negative finding: no reward table makes `punishmentLevel` match the
 ceiling from below, in general
@@ -362,7 +370,7 @@ theorem expectedStagePayoff_update_quittingAlwaysQuit_one
       obtain ⟨S, hS, hne⟩ := exists_state_ne_singleton_true deviation h hh
       rw [hS]
       change reward S true = -1000
-      rw [reward_true, if_neg hne]),
+      rw [reward_true, ite_eq_right hne]),
     expect_const]
 
 /-- The expected stage payoff at epoch `0` is `0`: play has not yet left the
@@ -374,7 +382,12 @@ theorem expectedStagePayoff_update_quittingAlwaysQuit_zero
   unfold StochasticGame.expectedStagePayoff
   rw [Math.ProbabilityMassFunction.expect_congr_on_support _ _ (fun _ => (0 : ℝ))
     (fun h hh => by
-      have heq : h = (quittingGame reward).emptyHist none := by simpa using hh
+      have hzero := (quittingGame reward).histDist_zero
+        (Function.update (quittingAlwaysQuitProfile reward) true deviation)
+        (show (quittingGame reward).State from none)
+      rw [hzero] at hh
+      have heq : h = (quittingGame reward).emptyHist none :=
+        (PMF.mem_support_pure_iff _ _).mp hh
       rw [stageEUAt_quittingGame_eq_stateReward, heq]; rfl),
     expect_const]
 
@@ -385,11 +398,14 @@ theorem finiteAveragePayoff_update_quittingAlwaysQuit_two
     (deviation : (quittingGame reward).BehaviorStrategy true) :
     (quittingGame reward).finiteAveragePayoff none 2
         (Function.update (quittingAlwaysQuitProfile reward) true deviation) true = -500 := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset Bool // S.Nonempty}))
-  letI : ∀ player : Bool, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : Bool, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
-  rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff,
+  have haverage := (quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff
+    (Function.update (quittingAlwaysQuitProfile reward) true deviation)
+    (show (quittingGame reward).State from none) true 2
+  rw [haverage,
     show (2 : ℕ) = 1 + 1 from rfl, Finset.sum_range_succ, Finset.sum_range_one,
     expectedStagePayoff_update_quittingAlwaysQuit_zero,
     expectedStagePayoff_update_quittingAlwaysQuit_one]
@@ -400,8 +416,8 @@ every deviation gives the same value, so the supremum is that constant. -/
 theorem bestResponseAverageAgainstProfile_eq :
     (quittingGame reward).bestResponseAverageAgainstProfile none 2 true
         (quittingAlwaysQuitProfile reward) = -500 := by
-  haveI : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
-  haveI := (quittingGame reward).nonempty_behaviorStrategy true
+  have : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
+  have := (quittingGame reward).nonempty_behaviorStrategy true
   unfold StochasticGame.bestResponseAverageAgainstProfile
   simp only [finiteAveragePayoff_update_quittingAlwaysQuit_two]
   exact ciSup_const
@@ -415,7 +431,7 @@ does not close. -/
 theorem punishmentLevel_lt_quittingPositiveSingletonDebtCap :
     (quittingGame reward).punishmentLevel none 2 true <
       quittingPositiveSingletonDebtCap reward true := by
-  haveI : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
+  have : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
   rw [quittingPositiveSingletonDebtCap_reward_eq]
   have hbdd : BddBelow (Set.range
       ((quittingGame reward).bestResponseAverageAgainstProfile none 2 true)) :=

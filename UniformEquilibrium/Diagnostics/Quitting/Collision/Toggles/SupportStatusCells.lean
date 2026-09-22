@@ -44,9 +44,11 @@ def quittingBinarySupportStatusOf (weights : Bool → ℝ) :
 
 /-- Every Boolean simplex point satisfies its canonical status conditions. -/
 theorem isQuittingBinarySupportStatus_statusOf
-    (weights : Bool → ℝ) (hweights : weights ∈ stdSimplex ℝ Bool) :
+    (weights : Bool → ℝ)
+    (hweights : weights ∈ GameTheory.Math.Probability.simplexWeights Bool) :
     IsQuittingBinarySupportStatus (quittingBinarySupportStatusOf weights) weights := by
-  have hnonneg : ∀ action, 0 ≤ weights action := hweights.1
+  have hnonneg : ∀ action, 0 ≤ weights action :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hweights).1
   by_cases hquit : weights true = 0
   · simp [quittingBinarySupportStatusOf, IsQuittingBinarySupportStatus, hquit]
   · by_cases hcontinue : weights false = 0

@@ -114,7 +114,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 /-! ## Two elementary hazard sequences -/
@@ -215,8 +215,12 @@ theorem quittingTerminalPayoff_update_hazardStrategy
         (Function.update profile who (fun time _history => hazard time)) who =
       quittingRootSequenceHazardTerminalValue reward
         (quittingProfileLiveRoot reward profile) who hazard 0 := by
+  let deviation : (quittingGame reward).BehaviorStrategy who :=
+    fun time _history => hazard time
+  change quittingTerminalPayoff reward
+      (Function.update profile who deviation) who = _
   rw [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue]
-  rfl
+  congr
 
 /-- **Quitting at once.**  Whatever the profile prescribes afterwards, the
 deviation that quits immediately is worth the stage-zero quit value. -/
@@ -833,7 +837,7 @@ theorem quittingCollisionRepairWorks_iff
       obtain ⟨profile, hshape, hnash⟩ := hworks ε hε
       exact quittingCollisionBlockerFloor_le_of_isεAsymptoticNash hne hshape hnash
   · rintro ⟨howner, hspectator, hbalance⟩ ε hε
-    haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+    have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
     obtain ⟨punishRow, hpunishRow⟩ : ∃ punishRow : ι → PMF Bool,
         quittingStationaryUnilateralCap reward punishRow blocker <
           quittingPunishmentValue reward blocker + ε := by

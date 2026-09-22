@@ -27,7 +27,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace PrescribedEndpointTargetTransportBoundaryNoGo
 
-open Filter Math Math.OnlineLearning Math.Probability Set
+open Filter _root_.Math Math.OnlineLearning _root_.Math.Probability Set
 open AnalyticBellmanGerm
 open AnalyticBellmanGerm.FiniteBiasSeed
 open PrescribedEndpointTargetTransportNoGo
@@ -76,9 +76,12 @@ theorem prescribedPlayerOwnedFinkCalendarProfile_eq :
     AnalyticBellmanGerm.LowerValueJet.calendarFinkMixedProfile_eq_finkPointAt
       PrescribedEndpointTargetTransportNoGo.germ
       stage residualValid history.2]
+  change AnalyticBellmanGerm.LowerValueJet.residualCalendarScale stage ∈
+    Ioo (0 : ℝ) 1 at residualValid
   rw [
-    PrescribedEndpointTargetTransportNoGo.finkProfile_finkPointAt,
-    PrescribedEndpointTargetTransportNoGo.finkProfile_finkPointAt]
+    PrescribedEndpointTargetTransportNoGo.finkProfile_finkPointAt
+      (unshiftedValid (anytimeEpochIndex stage)),
+    PrescribedEndpointTargetTransportNoGo.finkProfile_finkPointAt residualValid]
   simp only [
     AnalyticBellmanGerm.LowerValueJet.residualCalendarScale,
     shiftedUniversalEpochScale, Nat.zero_add]

@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 /-- A strict sequence of literal finite handoffs whose full-gap and reached
 paid rows use one fixed observer.  At each rank both rows still come from the

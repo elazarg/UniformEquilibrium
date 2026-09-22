@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Data.Finset.BooleanAlgebra
 import Mathlib.Data.Finset.Lattice.Fold
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Maximum over a nonempty finite player type

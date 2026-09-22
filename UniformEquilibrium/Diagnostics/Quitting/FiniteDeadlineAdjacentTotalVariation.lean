@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -258,7 +258,7 @@ theorem abs_quittingFiniteDeadlineTiming_mixedEU_sub_le
           second who| ≤
       2 * bound * ∑ player,
         Math.Probability.pmfTV (first player) (second player) := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingFiniteDeadlineTimingGame reward deadline).mixedExtension_eu,
@@ -286,7 +286,7 @@ theorem quittingFiniteDeadlineTiming_mixedEU_eq_of_actionTime_map_eq
         first who =
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
         second who := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingFiniteDeadlineTimingGame reward deadline).mixedExtension_eu,
@@ -310,11 +310,11 @@ theorem quittingFiniteDeadlineTiming_mixedEU_include_eq
         (quittingFiniteDeadlineTimingProfileInclude mixed) who =
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
         mixed who := by
-  letI : Finite
+  let : Finite
       (quittingFiniteDeadlineTimingGame reward (deadline + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : Finite
+  let : Finite
       (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -427,8 +427,7 @@ theorem quittingFiniteDeadlineTiming_mixedGain_eq_of_actionTime_map_eq
   have hprescribed := quittingFiniteDeadlineTiming_mixedEU_eq_of_actionTime_map_eq
     reward deadline first second who hmarginal
   unfold KernelGame.mixedGain
-  convert congrArg₂ (fun x y : ℝ => x - y) hdeviation hprescribed using 1 <;>
-    congr 1
+  convert congrArg₂ (fun x y : ℝ => x - y) hdeviation hprescribed using 1
 
 /-- Pure-deviation gains of included old-deadline actions are exactly their
 old timing-game gains. -/
@@ -448,8 +447,7 @@ theorem quittingFiniteDeadlineTiming_mixedGain_include_eq
   have hprescribed := quittingFiniteDeadlineTiming_mixedEU_include_eq
     reward deadline mixed who
   unfold KernelGame.mixedGain
-  convert congrArg₂ (fun x y : ℝ => x - y) hdeviation hprescribed using 1 <;>
-    congr 1
+  convert congrArg₂ (fun x y : ℝ => x - y) hdeviation hprescribed using 1
 
 /-- Exact projective compatibility: if the literal inclusion of an old timing
 law is Nash in the successor game, then the old law was already Nash at its

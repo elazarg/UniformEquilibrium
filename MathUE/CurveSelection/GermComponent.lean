@@ -167,7 +167,7 @@ theorem parameterGermEval_injective_of_injective
       {n : ℕ | (p - q).eval (x n parameter) = 0}.Finite := by
     have hroots :
         {r : ℝ | (p - q).IsRoot r}.Finite :=
-      Polynomial.finite_setOf_isRoot hpoly_ne
+      Polynomial.finite_setOfPred_isRoot hpoly_ne
     have heq :
         {n : ℕ | (p - q).eval (x n parameter) = 0} =
           (fun n => x n parameter) ⁻¹'

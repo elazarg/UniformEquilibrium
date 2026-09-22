@@ -18,7 +18,7 @@ theorem exists_singlePivot_finiteMenu_errors_lt_of_weakExclusion
     (hcanonical : IsSinglePivotSingletonTable reward pivot)
     (hWE : QuittingFiniteWordWeakSingletonExclusion reward)
     {ε : ℝ} (hε : 0 < ε) (lowerDeadline : ℕ) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     ∃ deadline : ℕ, lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
         quittingFiniteDeadlineMenuExploitability reward deadline mixed < ε ∧
@@ -26,7 +26,7 @@ theorem exists_singlePivot_finiteMenu_errors_lt_of_weakExclusion
             quittingFiniteDeadlineOpponentNeverProduct deadline mixed pivot -
             quittingTerminalPayoff reward
               (quittingFiniteDeadlineTimingProfile reward deadline mixed) pivot < ε := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   have hsingleton : ∀ player,
       0 ≤ reward (quittingSingletonTerminal player) player := by
     intro player

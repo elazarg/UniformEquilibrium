@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability
+open Maths.ChargedPathBudget _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -126,7 +126,7 @@ theorem quittingPunishmentValue_le_finiteDynamicDebtPoint_of_nonpos
     quittingFiniteNashBellmanPathDynamicDebtPoint reward cutoff path point
   have hterminal : (tail cutoff).1.1 = 0 := by
     simp only [tail, quittingFiniteNashBellmanPathDynamicDebtPoint,
-      dif_pos le_rfl]
+      dite_eq_left le_rfl]
     have hindex :
         (⟨cutoff, Nat.lt_succ_self cutoff⟩ : Fin (cutoff + 1)) =
           Fin.last cutoff := by
@@ -146,7 +146,7 @@ theorem quittingPunishmentValue_le_finiteDynamicDebtPoint_of_nonpos
       (fun player ↦ by rw [hterminal]; exact hpunishment player)
       time htime who
   · unfold quittingFiniteNashBellmanPathDynamicDebtPoint
-    rw [dif_neg htime]
+    rw [dite_eq_right htime]
     rw [congrFun hpath.2.1 who]
     exact hpunishment who
 
@@ -160,7 +160,7 @@ theorem aggregateCalibratedAnchor_point_punishmentFloor_le_of_nonpos
     quittingPunishmentValue reward who ≤ (anchor.path
       ⟨time, Nat.lt_succ_of_le htime⟩).1 who := by
   simpa [quittingFiniteNashBellmanPathDynamicDebtPoint,
-    dif_pos htime] using
+    dite_eq_left htime] using
     (quittingPunishmentValue_le_finiteDynamicDebtPoint_of_nonpos
       anchor.path anchor.path_mem hpunishment time who)
 
@@ -326,7 +326,7 @@ include hpath in
 theorem terminal_payoff_eq_zero :
     (quittingFiniteNashBellmanPathDynamicDebtPoint
       reward cutoff path cutoff).1.1 = 0 := by
-  simp only [quittingFiniteNashBellmanPathDynamicDebtPoint, dif_pos le_rfl]
+  simp only [quittingFiniteNashBellmanPathDynamicDebtPoint, dite_eq_left le_rfl]
   have hindex :
       (⟨cutoff, Nat.lt_succ_self cutoff⟩ : Fin (cutoff + 1)) =
         Fin.last cutoff := by

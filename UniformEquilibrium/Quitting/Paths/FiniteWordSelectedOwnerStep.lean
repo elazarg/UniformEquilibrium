@@ -11,7 +11,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -77,7 +77,7 @@ theorem nonempty_eligibleBlockerCertificate_of_strictPreempted
       reward (quittingSingletonTerminal (blocker owner)) (blocker owner) -
         reward (quittingSingletonTerminal owner) (blocker owner) := by
     dsimp only [blocker]
-    rw [dif_pos howner]
+    rw [dite_eq_left howner]
     exact Classical.choose_spec (hpreempted owner howner)
   refine ⟨{
     blocker := blocker

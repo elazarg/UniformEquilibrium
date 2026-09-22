@@ -110,7 +110,7 @@ theorem compactSerialPrefixPath_related
   have htime0 : time ≤ horizon := htime.le
   have htime1 : time + 1 ≤ horizon := by omega
   unfold compactSerialPrefixPath
-  rw [if_pos htime0, if_pos htime1]
+  rw [ite_eq_left htime0, ite_eq_left htime1]
   have hsub : horizon - time = (horizon - (time + 1)) + 1 := by omega
   rw [hsub, compactSerialIteratedPredecessor_succ]
   exact system.predecessor_related _
@@ -180,7 +180,7 @@ theorem compactSerialPrefixSolutionSet_isClosed
           (value time, value (time + 1)) ∈ relationGraph} := by
     ext value
     simp only [compactSerialPrefixSolutionSet, ambient, relationGraph,
-      Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter]
+      Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_iInter]
     constructor
     · intro hvalue
       exact ⟨hvalue.1, fun time ↦

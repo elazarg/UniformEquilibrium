@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -245,7 +245,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -399,6 +399,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_terminalMass_pos
     pos_of_mul_pos_left hatom hreward.le
   have hcomparisonSimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
     limit.comparison limit.comparison_mem
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hcomparisonSimplex
   have hcomparisonNonneg := hcomparisonSimplex.1 (some packet.terminal)
   linarith
 
@@ -418,6 +419,7 @@ theorem QuittingStoppingLawRectangleJointAtomLimit.endpoint_opponentIncidence_po
   have hmassPos := limit.endpoint_terminalMass_pos hreward
   have hmassSimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
     dispatch.cluster dispatch.cluster_mem
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmassSimplex
   have hterminal : packet.terminal ∈
       Finset.univ.filter
         (fun terminal : {S : Finset ι // S.Nonempty} =>

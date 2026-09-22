@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 /-- Player `true` gets zero whenever they quit and one whenever only
 opponents quit. Player `false` is payoff-neutral. -/
@@ -77,10 +77,14 @@ private theorem expect_update_true_pure
       expect (root false) (fun _ => (0 : ℝ)) := by
         apply congrArg (fun f : Bool → ℝ => expect (root false) f)
         funext otherAction
-        cases otherAction <;>
-          simp [quittingRootPayoff, quittingQuitters,
-            persistentTwoLabelCounterexampleReward,
-            persistentTwoLabelAction]
+        have hmem : true ∈ quittingQuitters
+            (persistentTwoLabelAction true otherAction) := by
+          unfold quittingQuitters persistentTwoLabelAction
+          exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, rfl⟩
+        unfold quittingRootPayoff
+        rw [dite_eq_left ⟨true, hmem⟩]
+        unfold persistentTwoLabelCounterexampleReward
+        rw [ite_eq_left rfl, ite_eq_left hmem]
     _ = 0 := expect_const _ _
 
 @[simp] theorem quittingRootContinuePayoff_persistentTwoLabelCounterexample
@@ -100,10 +104,31 @@ private theorem expect_update_true_pure
         if otherAction = true then 1 else tail true) := by
           apply congrArg (fun f : Bool → ℝ => expect (root false) f)
           funext otherAction
-          cases otherAction <;>
-            simp [quittingRootPayoff, quittingQuitters,
-              persistentTwoLabelCounterexampleReward,
-              persistentTwoLabelAction]
+          cases otherAction with
+          | false =>
+              have hnone : ¬(quittingQuitters
+                  (persistentTwoLabelAction false false)).Nonempty := by
+                rintro ⟨player, hplayer⟩
+                have haction := (Finset.mem_filter.mp hplayer).2
+                cases player <;> cases haction
+              unfold quittingRootPayoff
+              rw [dite_eq_right hnone, ite_eq_right]
+              decide
+          | true =>
+              have hmem : false ∈ quittingQuitters
+                  (persistentTwoLabelAction false true) := by
+                unfold quittingQuitters persistentTwoLabelAction
+                exact Finset.mem_filter.mpr ⟨Finset.mem_univ _, rfl⟩
+              have hnotmem : true ∉ quittingQuitters
+                  (persistentTwoLabelAction false true) := by
+                intro hplayer
+                have haction := (Finset.mem_filter.mp hplayer).2
+                cases haction
+              unfold quittingRootPayoff
+              rw [dite_eq_left ⟨false, hmem⟩]
+              unfold persistentTwoLabelCounterexampleReward
+              rw [ite_eq_left rfl, ite_eq_right hnotmem]
+              rw [ite_eq_left rfl]
     _ = (root false false).toReal * tail true +
         (root false true).toReal := by
       rw [expect_eq_sum, Fintype.sum_bool]

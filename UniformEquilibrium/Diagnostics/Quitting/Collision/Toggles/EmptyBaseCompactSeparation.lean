@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
@@ -58,18 +58,18 @@ def quittingEmptyBaseSimplexDefect
 `[rho, 1-rho]` and all passive hazards zero. -/
 def quittingEmptyBaseRhoBox (active : Finset ι) (rho : ℝ) :
     Set (QuittingRootSimplex ι) :=
-  {root | (∀ who ∈ active, rho ≤ root who true ∧ root who true ≤ 1 - rho) ∧
-    ∀ who ∉ active, root who true = 0}
+  {root | (∀ who ∈ active, rho ≤ (root who).weights true ∧ (root who).weights true ≤ 1 - rho) ∧
+    ∀ who ∉ active, (root who).weights true = 0}
 
 /-- Exact strictly interior empty-base feasibility system, including the
 pure-Continue restriction on every passive coordinate. -/
 def IsQuittingEmptyBaseSimplexInteriorSolution
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (active : Finset ι) (root : QuittingRootSimplex ι) : Prop :=
-  (∀ who ∈ active, 0 < root who true ∧ root who true < 1) ∧
+  (∀ who ∈ active, 0 < (root who).weights true ∧ (root who).weights true < 1) ∧
     (∀ who ∈ active,
       quittingEmptyBaseSimplexActiveResidual reward root who = 0) ∧
-    ∀ who ∉ active, root who true = 0 ∧
+    ∀ who ∉ active, (root who).weights true = 0 ∧
       quittingEmptyBaseSimplexPassiveResidual reward root who ≤ 0
 
 omit [Nonempty ι] in
@@ -89,9 +89,9 @@ theorem continuous_quittingStationaryFixedOpponentsContinueMass_simplex
     simpa using (continuous_const : Continuous
       (fun _ : QuittingRootSimplex ι => (1 : ℝ)))
   · have hcoordinate : Continuous
-        (fun root : QuittingRootSimplex ι => root player false) :=
-      (continuous_apply false).comp
-        (continuous_subtype_val.comp (continuous_apply player))
+        (fun root : QuittingRootSimplex ι => (root player).weights false) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+        (continuous_apply player)
     convert hcoordinate using 1
     funext root
     simp [Function.update_of_ne hplayer,
@@ -105,8 +105,8 @@ theorem continuous_quittingStationaryContinueMass_simplex_local :
   simp_rw [quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingRootOfSimplex_apply_toReal]
   exact continuous_finsetProd _ fun player _ =>
-    (continuous_apply false).comp
-      (continuous_subtype_val.comp (continuous_apply player))
+    (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+      (continuous_apply player)
 
 omit [Nonempty ι] in
 /-- `H` is a continuous polynomial on the root simplex. -/
@@ -253,9 +253,9 @@ theorem isClosed_quittingEmptyBaseRhoBox (active : Finset ι) (rho : ℝ) :
   rw [show quittingEmptyBaseRhoBox active rho =
       (⋂ who, ⋂ _hwho : who ∈ active,
         {root : QuittingRootSimplex ι |
-          rho ≤ root who true ∧ root who true ≤ 1 - rho}) ∩
+          rho ≤ (root who).weights true ∧ (root who).weights true ≤ 1 - rho}) ∩
       ⋂ who, ⋂ _hwho : who ∉ active,
-        {root : QuittingRootSimplex ι | root who true = 0} by
+        {root : QuittingRootSimplex ι | (root who).weights true = 0} by
     ext root
     simp [quittingEmptyBaseRhoBox]]
   apply IsClosed.inter
@@ -264,9 +264,9 @@ theorem isClosed_quittingEmptyBaseRhoBox (active : Finset ι) (rho : ℝ) :
     apply isClosed_iInter
     intro _hwho
     have hcoordinate : Continuous
-        (fun root : QuittingRootSimplex ι => root who true) :=
-      (continuous_apply true).comp
-        (continuous_subtype_val.comp (continuous_apply who))
+        (fun root : QuittingRootSimplex ι => (root who).weights true) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply who)
     exact (isClosed_le continuous_const hcoordinate).inter
       (isClosed_le hcoordinate continuous_const)
   · apply isClosed_iInter
@@ -274,9 +274,9 @@ theorem isClosed_quittingEmptyBaseRhoBox (active : Finset ι) (rho : ℝ) :
     apply isClosed_iInter
     intro _hwho
     have hcoordinate : Continuous
-        (fun root : QuittingRootSimplex ι => root who true) :=
-      (continuous_apply true).comp
-        (continuous_subtype_val.comp (continuous_apply who))
+        (fun root : QuittingRootSimplex ι => (root who).weights true) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply who)
     exact isClosed_eq hcoordinate continuous_const
 
 omit [DecidableEq ι] [Nonempty ι] in
@@ -297,7 +297,7 @@ theorem quittingEmptyBaseRhoBox_nonempty
   refine ⟨root, ?_⟩
   constructor
   · intro who hwho
-    have hhalf : root who true = 1 / 2 := by
+    have hhalf : (root who).weights true = 1 / 2 := by
       norm_num [root, hwho, coe_stdSimplexEquiv_apply, toVector,
         PMF.uniformOfFintype_apply]
     rw [hhalf]
@@ -305,7 +305,7 @@ theorem quittingEmptyBaseRhoBox_nonempty
     · exact hrhoHalf
     · linarith
   · intro who hwho
-    simp [root, hwho, coe_stdSimplexEquiv_apply, toVector]
+    simp [root, hwho, toVector]
 
 /-- The defect `W` is nonnegative. -/
 theorem quittingEmptyBaseSimplexDefect_nonneg
@@ -383,7 +383,7 @@ theorem eventually_exists_active_boundary_of_tendsto_emptyBaseDefect_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (active : Finset ι) {index : Type} {filter : Filter index}
     (roots : index → QuittingRootSimplex ι)
-    (hface : ∀ n who, who ∉ active → roots n who true = 0)
+    (hface : ∀ n who, who ∉ active → (roots n who).weights true = 0)
     (hnoInterior : ¬ ∃ root : QuittingRootSimplex ι,
       IsQuittingEmptyBaseSimplexInteriorSolution reward active root)
     (htendsto : Filter.Tendsto
@@ -391,7 +391,7 @@ theorem eventually_exists_active_boundary_of_tendsto_emptyBaseDefect_zero
       filter (nhds 0))
     {rho : ℝ} (hrho0 : 0 < rho) (hrhoHalf : rho < 1 / 2) :
     ∀ᶠ n in filter, ∃ who ∈ active,
-      roots n who true < rho ∨ 1 - rho < roots n who true := by
+      (roots n who).weights true < rho ∨ 1 - rho < (roots n who).weights true := by
   filter_upwards [eventually_not_mem_quittingEmptyBaseRhoBox_of_tendsto_zero
     reward active roots hnoInterior htendsto hrho0 hrhoHalf] with n hn
   by_contra hboundary
@@ -456,7 +456,7 @@ theorem isQuittingEmptyBaseSimplexInteriorSolution_iff_certificate
       exact ⟨hquit, by linarith⟩
     · intro who hwho
       have hinactive := certificate.inactive_continue who hwho
-      have hzero : root who true = 0 := by
+      have hzero : (root who).weights true = 0 := by
         rw [← quittingRootOfSimplex_apply_toReal]
         simp [hinactive]
       exact ⟨hzero, certificate.passive_residual_nonpos who hwho⟩

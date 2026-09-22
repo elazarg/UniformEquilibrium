@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Simplex
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Target-mass ledgers for finite coalition laws
@@ -64,18 +65,23 @@ theorem exactCoalitionMass_nonneg
 
 theorem exactCoalitionMass_add_le_one_of_ne
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (CoalitionOutcome Player))
     {first second : Finset Player} (hne : first ≠ second) :
     exactCoalitionMass mass first + exactCoalitionMass mass second ≤ 1 := by
+  have hmass_nonneg : ∀ outcome, 0 ≤ mass outcome :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).1
+  have hmass_total : ∑ outcome, mass outcome = 1 :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).2
   unfold exactCoalitionMass coalitionEventMass
-  rw [← Finset.sum_add_distrib, ← hmass.2]
+  rw [← Finset.sum_add_distrib, ← hmass_total]
   apply Finset.sum_le_sum
   intro outcome _
   by_cases hfirst : outcome.coalition = first
-  · rw [if_pos hfirst, if_neg (fun hsecond => hne (hfirst.symm.trans hsecond))]
+  · rw [ite_eq_left hfirst, ite_eq_right (fun hsecond => hne (hfirst.symm.trans hsecond))]
     simp
-  · rw [if_neg hfirst]
-    split_ifs <;> simp [hmass.1 outcome]
+  · rw [ite_eq_right hfirst]
+    split_ifs <;> simp [hmass_nonneg outcome]
 
 omit [DecidableEq Player] in
 theorem coalitionEventMass_nonneg
@@ -95,18 +101,18 @@ private theorem target_member_count_le
     (∑ member ∈ target, if member ∈ coalition then (1 : ℝ) else 0) ≤
       (target.card : ℝ) - 1 + if target ⊆ coalition then 1 else 0 := by
   by_cases hsubset : target ⊆ coalition
-  · rw [if_pos hsubset]
+  · rw [ite_eq_left hsubset]
     calc
       (∑ member ∈ target,
           if member ∈ coalition then (1 : ℝ) else 0) =
           ∑ _member ∈ target, (1 : ℝ) := by
         apply Finset.sum_congr rfl
         intro member hmember
-        rw [if_pos (hsubset hmember)]
+        rw [ite_eq_left (hsubset hmember)]
       _ = (target.card : ℝ) := by simp
       _ = (target.card : ℝ) - 1 + 1 := by ring
       _ ≤ (target.card : ℝ) - 1 + 1 := le_rfl
-  · rw [if_neg hsubset]
+  · rw [ite_eq_right hsubset]
     rw [Finset.not_subset] at hsubset
     obtain ⟨missing, hmissingTarget, hmissingCoalition⟩ := hsubset
     have hsumErase :
@@ -134,11 +140,16 @@ private theorem target_member_count_le
 
 private theorem sum_memberMass_le_card_sub_one_add_containingMass
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (CoalitionOutcome Player))
     (target : Finset Player) (htarget : target.Nonempty) :
     (∑ member ∈ target, coalitionMemberMass mass member) ≤
       (target.card : ℝ) - 1 +
         coalitionEventMass mass (fun coalition => target ⊆ coalition) := by
+  have hmass_nonneg : ∀ outcome, 0 ≤ mass outcome :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).1
+  have hmass_total : ∑ outcome, mass outcome = 1 :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).2
   unfold coalitionMemberMass coalitionEventMass
   rw [Finset.sum_comm]
   have hpoint (outcome : CoalitionOutcome Player) :
@@ -147,7 +158,7 @@ private theorem sum_memberMass_le_card_sub_one_add_containingMass
         mass outcome * ((target.card : ℝ) - 1) +
           if target ⊆ outcome.coalition then mass outcome else 0 := by
     have hcount := target_member_count_le target outcome.coalition htarget
-    have hscaled := mul_le_mul_of_nonneg_left hcount (hmass.1 outcome)
+    have hscaled := mul_le_mul_of_nonneg_left hcount (hmass_nonneg outcome)
     calc
       (∑ member ∈ target,
           if member ∈ outcome.coalition then mass outcome else 0) =
@@ -172,16 +183,19 @@ private theorem sum_memberMass_le_card_sub_one_add_containingMass
       exact Finset.sum_le_sum fun outcome _ => hpoint outcome
     _ = (target.card : ℝ) - 1 +
         ∑ outcome, if target ⊆ outcome.coalition then mass outcome else 0 := by
-      rw [Finset.sum_add_distrib, ← Finset.sum_mul, hmass.2, one_mul]
+      rw [Finset.sum_add_distrib, ← Finset.sum_mul, hmass_total, one_mul]
 
 private theorem containingMass_le_exact_add_sum_outsiderIncidence
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (CoalitionOutcome Player))
     (target : Finset Player) :
     coalitionEventMass mass (fun coalition => target ⊆ coalition) ≤
       exactCoalitionMass mass target +
-        ∑ outsider ∈ Finset.univ \ target,
+          ∑ outsider ∈ Finset.univ \ target,
           targetOutsiderIncidenceMass mass target outsider := by
+  have hmass_nonneg : ∀ outcome, 0 ≤ mass outcome :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).1
   unfold exactCoalitionMass targetOutsiderIncidenceMass
   simp only [coalitionEventMass]
   have hswap :
@@ -197,14 +211,14 @@ private theorem containingMass_le_exact_add_sum_outsiderIncidence
   apply Finset.sum_le_sum
   intro outcome _
   by_cases hcontains : target ⊆ outcome.coalition
-  · rw [if_pos hcontains]
+  · rw [ite_eq_left hcontains]
     by_cases heq : outcome.coalition = target
-    · rw [if_pos heq]
+    · rw [ite_eq_left heq]
       exact le_add_of_nonneg_right (Finset.sum_nonneg fun outsider _ => by
         split_ifs
-        · exact hmass.1 outcome
+        · exact hmass_nonneg outcome
         · exact le_rfl)
-    · rw [if_neg heq]
+    · rw [ite_eq_right heq]
       have hproper : target ⊂ outcome.coalition :=
         Finset.ssubset_iff_subset_ne.mpr ⟨hcontains, Ne.symm heq⟩
       obtain ⟨outsider, houtCoalition, houtTarget⟩ :=
@@ -225,19 +239,19 @@ private theorem containingMass_le_exact_add_sum_outsiderIncidence
                 mass outcome else 0)
             (fun other _ => by
               split_ifs
-              · exact hmass.1 outcome
+              · exact hmass_nonneg outcome
               · exact le_rfl)
             houtComp
         _ ≤ 0 + ∑ outsider ∈ Finset.univ \ target,
             if target ⊆ outcome.coalition ∧ outsider ∈ outcome.coalition then
               mass outcome else 0 := by simp
-  · rw [if_neg hcontains]
+  · rw [ite_eq_right hcontains]
     exact add_nonneg (by
       split_ifs
-      · exact hmass.1 outcome
+      · exact hmass_nonneg outcome
       · exact le_rfl) (Finset.sum_nonneg fun outsider _ => by
         split_ifs
-        · exact hmass.1 outcome
+        · exact hmass_nonneg outcome
         · exact le_rfl)
 
 /-- Target security and uniform outsider-incidence control force exact target mass.
@@ -246,7 +260,8 @@ The law may charge the empty outcome.  No independence or realizability assumpti
 used. -/
 theorem exactCoalitionMass_ge_of_memberSecurity_of_outsiderIncidence
     {mass : CoalitionOutcome Player → ℝ}
-    (hmass : mass ∈ stdSimplex ℝ (CoalitionOutcome Player))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (CoalitionOutcome Player))
     (target : Finset Player) (htarget : target.Nonempty)
     {epsilon incidenceBound : ℝ}
     (hsecurity : ∀ member ∈ target,
@@ -256,6 +271,10 @@ theorem exactCoalitionMass_ge_of_memberSecurity_of_outsiderIncidence
     1 - (target.card : ℝ) * epsilon -
         ((Finset.univ \ target).card : ℝ) * incidenceBound ≤
       exactCoalitionMass mass target := by
+  have hmass_nonneg : ∀ outcome, 0 ≤ mass outcome :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).1
+  have hmass_total : ∑ outcome, mass outcome = 1 :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).2
   have hsecuritySum :
       (target.card : ℝ) * (1 - epsilon) ≤
         ∑ member ∈ target, coalitionMemberMass mass member := by

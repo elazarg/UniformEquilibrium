@@ -91,8 +91,8 @@ theorem measure_max_ge_le_exp_add [IsProbabilityMeasure μ]
       (fun k => X k ω)}
   have hAB : A ⊆ B := by
     intro ω hω
-    simp only [A, Set.mem_setOf_eq] at hω
-    simp only [B, Set.mem_setOf_eq]
+    simp only [A, Set.mem_ofPred_eq] at hω
+    simp only [B, Set.mem_ofPred_eq]
     rw [Finset.le_sup'_iff] at hω ⊢
     obtain ⟨k, hk, hkx⟩ := hω
     exact ⟨k, hk, by
@@ -347,7 +347,7 @@ theorem measurableSet_anytimeCrossing
         ⋃ n : positiveTime,
           {ω | stitchedBoundary c rate budget n ≤ M n ω} := by
     ext ω
-    simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
     constructor
     · rintro ⟨n, hn, hcross⟩
       exact ⟨⟨n, hn⟩, hcross⟩
@@ -368,7 +368,7 @@ theorem measurableSet_dyadicBlockCrossing
           {ω | chernoffThreshold (c (2 ^ (j + 1)))
             (rate j) (budget j) ≤ M n ω} := by
     ext ω
-    simp only [dyadicBlockCrossing, Set.mem_setOf_eq, Set.mem_iUnion]
+    simp only [dyadicBlockCrossing, Set.mem_ofPred_eq, Set.mem_iUnion]
     constructor
     · rintro ⟨n, hnleft, hnright, hn⟩
       exact ⟨⟨n, hnleft, hnright⟩, hn⟩
@@ -402,7 +402,7 @@ theorem measure_dyadicBlockCrossing_le [IsProbabilityMeasure μ]
   have hAB : A ⊆ B := by
     intro ω hω
     rcases hω with ⟨n, hnleft, hnright, hn⟩
-    simp only [B, Set.mem_setOf_eq]
+    simp only [B, Set.mem_ofPred_eq]
     rw [Finset.le_sup'_iff]
     exact ⟨n, Finset.mem_range.2 (Nat.lt_succ_of_le hnright.le), hn⟩
   have hrealB : μ.real B ≤ budget j := by
@@ -756,7 +756,7 @@ theorem ae_conditional_measure_iUnion_dyadicBlockCrossing_le
       (condExpKernel μ hreset.measurableSpace root)
           (⋃ j, dyadicBlockCrossing post c rate budget j) ≤ delta := by
   filter_upwards [hmartingale, hsubG] with root hmartingale_root hsubG_root
-  letI : IsProbabilityMeasure
+  let : IsProbabilityMeasure
       (condExpKernel μ hreset.measurableSpace root) :=
     IsMarkovKernel.isProbabilityMeasure root
   exact measure_iUnion_dyadicBlockCrossing_le
@@ -847,7 +847,7 @@ theorem ae_conditional_measure_iUnion_postResetIncrement_le_of_boundedIncrements
           (boundedIncrementVariance L n)
           (condExpKernel μ hreset.measurableSpace root) := by
     filter_upwards [hmartingale] with root hmartingale_root
-    letI : IsProbabilityMeasure
+    let : IsProbabilityMeasure
         (condExpKernel μ hreset.measurableSpace root) :=
       IsMarkovKernel.isProbabilityMeasure root
     intro n

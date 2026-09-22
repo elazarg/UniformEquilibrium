@@ -37,7 +37,7 @@ numeral modulo the period, with no case distinction at the last index, unlike
 `coe_finRotate`. -/
 theorem val_finRotate {m : ℕ} (phase : Fin m) :
     (finRotate m phase).val = (phase.val + 1) % m := by
-  letI : NeZero m := phase.neZero
+  let : NeZero m := phase.neZero
   have hone : ((1 : Fin m) : ℕ) = 1 % m := Fin.val_natCast 1 m
   rw [finRotate_apply, Fin.val_add, hone, Nat.add_mod_mod]
 
@@ -112,7 +112,7 @@ theorem eq_zero_of_eq_mul_finRotate {m : ℕ} {c : Fin m → ℝ}
       Finset.prod_nonneg fun i _ ↦ h0 _
     have hrest1 : (∏ i ∈ (Finset.range m).erase n,
         c ((finRotate m)^[i] phase)) ≤ 1 :=
-      Finset.prod_le_one (fun i _ ↦ h0 _) (fun i _ ↦ h1 _)
+      Finset.prod_le_one₀ (fun i _ ↦ h0 _) (fun i _ ↦ h1 _)
     nlinarith [hrest0, hrest1, htarget, h0 target]
   have hvanish : D phase * (1 - ∏ i ∈ Finset.range m,
       c ((finRotate m)^[i] phase)) = 0 := by linarith [hcycle]

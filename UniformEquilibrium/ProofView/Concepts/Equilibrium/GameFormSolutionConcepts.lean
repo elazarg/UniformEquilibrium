@@ -16,7 +16,7 @@ The protocol-only definitions live in `GameTheory.Core.PMFGameForm`.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Preference relation with per-player reflexivity/transitivity laws.
     Defined at the `GameTheory` level since it is a pure behavioral concept
@@ -110,18 +110,21 @@ noncomputable def constantToCoalitionHom (F : PMFGameForm ι) :
   map := fun _who s' => fun i hi => (Finset.mem_singleton.mp hi).symm ▸ s'
   deviate_eq := by
     intro μ who s'
-    simp only [coalitionConstantDeviationFamily_deviate, constantDeviationProfileFamily_deviate,
-      constDeviateDistributionFn]
+    simp only [coalitionConstantDeviationFamily_deviate]
     congr 1
     funext σ
     congr 1
     funext i
     split_ifs with hmem
     · obtain rfl := Finset.mem_singleton.mp hmem
-      rw [Function.update_self]
-    · rw [Function.update_of_ne]
-      rintro rfl
-      exact hmem (Finset.mem_singleton_self i)
+      change (show F.Strategy i from s') =
+        Function.update σ i (show F.Strategy i from s') i
+      exact (Function.update_self i (show F.Strategy i from s') σ).symm
+    · have hi : i ≠ who := by
+        rintro rfl
+        exact hmem (Finset.mem_singleton_self i)
+      change σ i = Function.update σ who (show F.Strategy who from s') i
+      exact (Function.update_of_ne hi (show F.Strategy who from s') σ).symm
 
 open Classical in
 /-- A strategy profile `σ` is a Nash equilibrium w.r.t. preference `pref` on outcome
@@ -148,8 +151,13 @@ theorem isNashFor_iff (F : PMFGameForm ι)
     simpa [IsNashFor, IsDeviationEqFor, constantDeviationProfileFamily,
       constDeviateDistributionFn_pure, correlatedOutcome_pure] using hwho s'
   · intro h who s'
-    simpa [IsNashFor, IsDeviationEqFor, constantDeviationProfileFamily,
-      constDeviateDistributionFn_pure, correlatedOutcome_pure] using h who s'
+    let strategy : F.Strategy who := s'
+    change pref who (F.correlatedOutcome (PMF.pure σ))
+      (F.correlatedOutcome
+        (F.constDeviateDistributionFn (PMF.pure σ) who strategy))
+    rw [F.correlatedOutcome_pure,
+      F.correlatedOutcome_constDeviateDistributionFn_pure]
+    exact h who strategy
 
 open Classical in
 /-- An action `s` is dominant for player `who` w.r.t. a preference if `who` weakly

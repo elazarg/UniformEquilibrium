@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Basic
+import Maths.Multitubes.MaxAffine.Basic
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 
 /-!
@@ -17,7 +17,7 @@ phase label has survival slope `1 - hazard` and hazard-weighted terminal shift.
 
 noncomputable section
 
-open Math Math.MaxAffineTransport
+open _root_.Math Maths.MaxAffineTransport
 
 namespace GameTheory
 
@@ -25,7 +25,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 
 /-- The phase graph of an anchored solo-periodic schedule: the edge of a phase
 runs from the next phase to it, in the direction the renewal law computes. -/
-def quittingAnchoredRenewalGraph (m : ℕ) : EdgeGraph (Fin m) (Fin m) where
+def quittingAnchoredRenewalGraph (m : ℕ) : Maths.EdgeGraph (Fin m) (Fin m) where
   source phase := finRotate m phase
   target phase := phase
 

@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -156,7 +156,7 @@ theorem quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
     · dsimp only [root]
       rw [quittingRootQuitPayoff_soloStationaryRoot_other reward hplayer,
         quittingRootContinuePayoff_soloStationaryRoot_other reward hplayer]
-      simp only [hcoinTrue, hcoinFalse, Function.update_self, if_neg hplayer]
+      simp only [hcoinTrue, hcoinFalse, Function.update_self, ite_eq_right hplayer]
       apply max_eq_right
       have hsingleton := hreward (quittingSingletonTerminal player) player
       have hcollision := hreward
@@ -343,7 +343,7 @@ theorem quittingSoloSemanticIterate_eq_affine_of_before_threshold
       · dsimp only
         by_cases hplayer : player = owner
         · simp [hplayer]
-        · simp only [hplayer, if_false]
+        · simp only [hplayer, ite_false]
           rw [pow_succ]
           ring
 
@@ -390,11 +390,11 @@ theorem quittingSoloSemanticIterate_debtSum_eq_of_before_threshold
               reward (quittingSingletonTerminal owner) player)) =
       (1 - θ) ^ steps * (source.2 player - source.1 player) := by
     intro player hplayer
-    rw [if_neg (Finset.ne_of_mem_erase hplayer)]
+    rw [ite_eq_right (Finset.ne_of_mem_erase hplayer)]
     ring
   rw [Finset.sum_congr rfl hother, ← Finset.mul_sum]
   rw [← hsourceSplit]
-  simp only [if_true]
+  simp only [ite_true]
   ring
 
 theorem quittingSoloSemanticIterate_debtSum_le_max_of_before_threshold
@@ -459,7 +459,7 @@ theorem two_mul_bound_mul_lt_singletonMargin_semanticPrefix_solo
     (hreward (quittingSingletonTerminal owner) owner)
   rw [quittingTerminalSemanticPrefix_solo_eq_of_above_threshold
     reward source owner hreward hsource hθ0 hθ1 habove]
-  simp only [hne, if_false]
+  simp only [hne, ite_false]
   have hpassive := hreward (quittingSingletonTerminal owner) player
   have hcap := hsource.2.2 player
   have hpassiveLower : -M ≤
@@ -555,7 +555,7 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
       reward source owner hreward hsource hθ0 hθ1 horizon hbefore
     have hcap := congrArg
       (fun pair : QuittingTerminalSemanticPair ι => pair.2 blocker) haffine
-    simp only [hne, if_false] at hcap
+    simp only [hne, ite_false] at hcap
     have hsourceBox :=
       quittingTerminalSemanticCarrier_mem_box reward source hreward hsource
     have hcapUpper : source.2 blocker ≤ M := hsourceBox.2.2 blocker
@@ -608,7 +608,7 @@ theorem exists_first_solo_capThreshold_hit_of_power_bound
       reward source owner hreward hsource hθ0 hθ1 steps hbefore
     have hownerCap := congrArg
       (fun pair : QuittingTerminalSemanticPair ι => pair.2 owner) haffine
-    simp only [if_true] at hownerCap
+    simp only [ite_true] at hownerCap
     have hcrossingOwner := hcrossing
     change (state steps).2 owner -
       reward (quittingSingletonTerminal owner) owner ≤ threshold at hcrossingOwner

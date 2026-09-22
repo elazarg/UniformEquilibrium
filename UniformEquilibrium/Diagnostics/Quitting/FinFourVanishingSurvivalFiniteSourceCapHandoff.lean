@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- One actual finite descendant retained from the full vanishing-survival branch.
 The tail, new root, prefixed source, shifted stationary cap endpoint, and child

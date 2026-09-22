@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

@@ -71,7 +71,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 -- ============================================================================
 -- Occupation bookkeeping for state-determined stage payoffs
@@ -185,7 +185,7 @@ end StochasticGame
 
 namespace PaddedLotterySeparation
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open GameTheory.StochasticGame
 
 /-- The three states: the lottery stage, the quitting stage, and the absorbing
@@ -194,7 +194,11 @@ inductive Site
   | lottery
   | decision
   | dead
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype Site where
+  elems := {.lottery, .decision, .dead}
+  complete site := by cases site <;> simp
 
 /-- The three actions: the reduced continuation label, its payoff-irrelevant
 duplicate, and the quitting action. -/
@@ -202,7 +206,11 @@ inductive Label
   | stay
   | dupe
   | quit
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype Label where
+  elems := {.stay, .dupe, .quit}
+  complete label := by cases label <;> simp
 
 /-- Indicator of "not absorbed", which is also the stage reward. -/
 def aliveVal : Site → ℝ := fun s => if s = Site.dead then 0 else 1
@@ -305,7 +313,7 @@ def padKeep (i : Bool) (l : Label) : ℝ := keepVal (padLabel i l)
 theorem padLabel_of_legal (i : Bool) (l : Label) (hl : SepLegal Site.decision i l) :
     padLabel i l = l := by
   unfold padLabel normalizeAct
-  rw [if_pos hl]
+  rw [ite_eq_left hl]
 
 /-- Continuing is legal at `decision`, so padding leaves its weight alone. -/
 @[simp] theorem padKeep_stay (i : Bool) : padKeep i Label.stay = 1 := by
@@ -355,7 +363,7 @@ theorem expect_pmfPi_mul (m : Bool → PMF Label) (w : Bool → Label → ℝ) :
   have hinner : ∀ x : Label,
       expect (m true) (fun y => w false x * w true y) =
         w false x * expect (m true) (w true) := fun x => expect_const_mul _ _ _
-  simp only [Bool.false_eq_true, if_false, if_true, hinner]
+  simp only [Bool.false_eq_true, ite_false, ite_true, hinner]
   have hcomm : (fun x => w false x * expect (m true) (w true)) =
       fun x => expect (m true) (w true) * w false x := by
     funext x; ring
@@ -447,10 +455,7 @@ theorem stepExpectation_padded_decision (σ : paddedGame.BehaviorProfile) {t : �
     split_ifs with hq
     · rcases hq with hq | hq <;> simp [padKeep, hq]
     · rw [not_or] at hq
-      change expect (PMF.pure Site.decision) aliveVal =
-        keepVal (padLabel false (a false)) * keepVal (padLabel true (a true))
-      rw [keepVal_of_ne_quit hq.1, keepVal_of_ne_quit hq.2]
-      simp
+      simp [hq.1, hq.2, padKeep, keepVal]
   unfold stepExpectation
   rw [hinner]
   exact expect_pmfPi_mul (fun i => σ i t h) padKeep
@@ -479,7 +484,10 @@ theorem stepExpectation_sep_le (σ : sepGame.BehaviorProfile) {t : ℕ}
   · rw [stepExpectation_sep_decision σ h hd]
     have h0 := expect_unitInterval (σ false t h) keepVal keepVal_mem_unitInterval
     have h1 := expect_unitInterval (σ true t h) keepVal keepVal_mem_unitInterval
-    simpa using mul_le_one₀ h0.2 h1.1 h1.2
+    calc
+      _ ≤ 1 * expect (σ true t h) keepVal :=
+        mul_le_mul_of_nonneg_right h0.2 h1.1
+      _ ≤ 1 := by simpa using h1.2
   · rw [stepExpectation_sep_dead σ h hd]; simp
 
 /-- One-step alive values never exceed the current state's alive value, in the
@@ -494,7 +502,10 @@ theorem stepExpectation_padded_le (σ : paddedGame.BehaviorProfile) {t : ℕ}
       (padKeep_mem_unitInterval false)
     have h1 := expect_unitInterval (σ true t h) (padKeep true)
       (padKeep_mem_unitInterval true)
-    simpa using mul_le_one₀ h0.2 h1.1 h1.2
+    calc
+      _ ≤ 1 * expect (σ true t h) (padKeep true) :=
+        mul_le_mul_of_nonneg_right h0.2 h1.1
+      _ ≤ 1 := by simpa using h1.2
   · rw [stepExpectation_padded_dead σ h hd]; simp
 
 -- ============================================================================
@@ -577,7 +588,7 @@ theorem forced_of_mem_support_histDist {σ : sepGame.BehaviorProfile}
         intro i hqi
         apply hs'ne
         have : s' ∈ (sepTransition Site.decision a).support := hs'
-        rw [sepTransition_decision, if_pos (by cases i <;> simp [hqi])] at this
+        rw [sepTransition_decision, ite_eq_left (by cases i <;> simp [hqi])] at this
         simpa using this
       have hstay : a = fun _ => Label.stay := by
         funext i
@@ -589,7 +600,7 @@ theorem forced_of_mem_support_histDist {σ : sepGame.BehaviorProfile}
         · exact absurd hai h2
       have hs'eq : s' = Site.decision := by
         have : s' ∈ (sepTransition Site.decision a).support := hs'
-        rw [sepTransition_decision, if_neg (by rw [hstay]; simp)] at this
+        rw [sepTransition_decision, ite_eq_right (by rw [hstay]; simp)] at this
         simpa using this
       have hht : h = forcedHist t := ih h hh (by rw [hd]; exact fun hc => Site.noConfusion hc)
       rw [hstay, hs'eq, forcedHist, ← hht, hd]

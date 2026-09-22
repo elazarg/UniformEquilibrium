@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
 
@@ -259,6 +259,7 @@ theorem quittingSingleSeedProfile_payoff_eq_neg_one (seed : ι) :
         PMF.pure true := by
     simp [quittingSingleSeedProfile, quittingPureTimeBehaviorStrategy,
       quittingPureTimeHazard]
+    rfl
   exact quittingTerminalPayoff_negative_eq_neg_one_of_liveMassLimit_zero
     (quittingSingleSeedProfile seed) seed
     (quittingLiveMassLimit_eq_zero_of_live_sureQuitter

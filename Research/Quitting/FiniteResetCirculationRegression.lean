@@ -27,9 +27,11 @@ state-matched Nash--Bellman/punishment hypothesis).
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace FiniteResetCirculationRegression
 
@@ -478,10 +480,11 @@ theorem never_p_deviation_payoff_nonpos
             rw [hterminal]
             exact hne
           unfold reward
-          rw [if_neg hnot, if_pos rfl]
+          rw [ite_eq_right hnot, ite_eq_left rfl]
         rw [quittingTerminalOutcomeReward, hreward]
         exact mul_nonpos_of_nonneg_of_nonpos
-          ((quittingTerminalOutcomeMass_mem_stdSimplex reward deviated).1
+          ((mem_simplexWeights.mp
+            (quittingTerminalOutcomeMass_mem_stdSimplex reward deviated)).1
             (some terminal)) (by norm_num)
 
 theorem never_bestResponseValue_p :

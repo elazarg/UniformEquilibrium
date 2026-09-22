@@ -137,7 +137,7 @@ theorem adaptiveHistoryLaw_succ_apply
   · rw [PMF.map_apply, tsum_eq_single (history (Fin.last n))]
     · simp
     · intro other hother
-      rw [if_neg]
+      rw [ite_eq_right]
       intro heq
       apply hother
       simpa using (congrArg (fun extended => extended (Fin.last n)) heq).symm
@@ -146,7 +146,7 @@ theorem adaptiveHistoryLaw_succ_apply
       rw [PMF.map_apply]
       rw [ENNReal.tsum_eq_zero]
       intro successor
-      rw [if_neg]
+      rw [ite_eq_right]
       intro heq
       apply hother
       have hinit := congrArg Fin.init heq

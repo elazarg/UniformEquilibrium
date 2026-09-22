@@ -56,7 +56,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι κ : Type}
 
@@ -139,12 +139,12 @@ theorem quittingGame_transition_reindex (e : ι ≃ κ)
       by_cases hne : (Finset.filter (fun i => a i = true) Finset.univ).Nonempty
       · have hmap : ((Finset.filter (fun i => a i = true) Finset.univ).map
             e.toEmbedding).Nonempty := Finset.map_nonempty.mpr hne
-        rw [dif_pos hne, dif_pos hmap]
+        rw [dite_eq_left hne, dite_eq_left hmap]
         exact (PMF.pure_map (⇑(quittingStateEquiv e)) (some ⟨_, hne⟩)).symm
       · have hmap : ¬ ((Finset.filter (fun i => a i = true) Finset.univ).map
             e.toEmbedding).Nonempty :=
           fun hcontra => hne (Finset.map_nonempty.mp hcontra)
-        rw [dif_neg hne, dif_neg hmap]
+        rw [dite_eq_right hne, dite_eq_right hmap]
         exact (PMF.pure_map (⇑(quittingStateEquiv e)) none).symm
 
 /-- **The stage payoff commutes with player reindexing.**  The reindexed game
@@ -179,11 +179,13 @@ def quittingHistEquiv (e : ι ≃ κ)
         (quittingActEquiv e).symm (h'.1 k).2),
       (quittingStateEquiv e).symm h'.2)
   left_inv h := by
-    refine Prod.ext (funext fun k => ?_) (by simp)
-    simp
+    refine Prod.ext (funext fun k => ?_) ?_
+    · exact Prod.ext (Equiv.symm_apply_apply _ _) (Equiv.symm_apply_apply _ _)
+    · exact Equiv.symm_apply_apply _ _
   right_inv h' := by
-    refine Prod.ext (funext fun k => ?_) (by simp)
-    simp
+    refine Prod.ext (funext fun k => ?_) ?_
+    · exact Prod.ext (Equiv.apply_symm_apply _ _) (Equiv.apply_symm_apply _ _)
+    · exact Equiv.apply_symm_apply _ _
 
 /-- Stage records of a transported history. -/
 @[simp] theorem quittingHistEquiv_apply_fst (e : ι ≃ κ)
@@ -228,16 +230,29 @@ theorem quittingHistEquiv_snoc (e : ι ≃ κ)
       (Fin.snoc (quittingHistEquiv e reward t h).1
           ((quittingHistEquiv e reward t h).2, quittingActEquiv e a),
         quittingStateEquiv e s') := by
+  let mapStage :
+      ((quittingGame reward).State × (quittingGame reward).JointAct) →
+        ((quittingGame (quittingRewardReindex e reward)).State ×
+          (quittingGame (quittingRewardReindex e reward)).JointAct) :=
+    fun stage =>
+      (quittingStateEquiv e stage.1, quittingActEquiv e stage.2)
+  let stages : Fin (t + 1) →
+      ((quittingGame reward).State × (quittingGame reward).JointAct) :=
+    Fin.snoc h.1 (h.2, a)
+  let mappedStages : Fin t →
+      ((quittingGame (quittingRewardReindex e reward)).State ×
+        (quittingGame (quittingRewardReindex e reward)).JointAct) :=
+    fun k => mapStage (h.1 k)
+  change
+    ((fun k => mapStage (stages k)), quittingStateEquiv e s') =
+      (Fin.snoc mappedStages (mapStage (h.2, a)),
+        quittingStateEquiv e s')
   refine Prod.ext (funext fun k => ?_) rfl
-  rw [quittingHistEquiv_apply_fst]
-  dsimp only
   cases k using Fin.lastCases with
   | last =>
-      rw [Fin.snoc_last, Fin.snoc_last]
-      rfl
+      simp only [stages, mappedStages, Fin.snoc_last]
   | cast k =>
-      rw [Fin.snoc_castSucc, Fin.snoc_castSucc]
-      rfl
+      simp only [stages, mappedStages, Fin.snoc_castSucc]
 
 /-- Pull a behavior profile of the reindexed quitting game back to the
 original player type: player `i` plays after a history what `e i` plays after
@@ -352,6 +367,14 @@ theorem histDist_quittingProfilePullback (e : ι ≃ κ)
         ((quittingGame reward).histDist
           (quittingProfilePullback e reward σ') none T) =
       (quittingGame (quittingRewardReindex e reward)).histDist σ' none T := by
+  let sourceLive : (quittingGame reward).State := none
+  let targetLive :
+      (quittingGame (quittingRewardReindex e reward)).State :=
+    quittingStateEquiv e sourceLive
+  change PMF.map (quittingHistEquiv e reward T)
+      ((quittingGame reward).histDist
+        (quittingProfilePullback e reward σ') sourceLive T) =
+    (quittingGame (quittingRewardReindex e reward)).histDist σ' targetLive T
   induction T with
   | zero =>
       simp only [histDist_zero, PMF.pure_map]
@@ -409,6 +432,10 @@ theorem quittingProfilePullback_update (e : ι ≃ κ)
     quittingProfilePullback e reward (Function.update σ' (e who) dev') =
       Function.update (quittingProfilePullback e reward σ') who
         (fun t h => dev' t (quittingHistEquiv e reward t h)) := by
+  let pulled : (quittingGame reward).BehaviorStrategy who :=
+    fun t h => dev' t (quittingHistEquiv e reward t h)
+  change quittingProfilePullback e reward (Function.update σ' (e who) dev') =
+    Function.update (quittingProfilePullback e reward σ') who pulled
   funext i
   by_cases hi : i = who
   · subst hi
@@ -448,19 +475,20 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_reindex (e : ι ≃ κ)
   obtain ⟨hNash, hclose⟩ := hσ' T hT
   constructor
   · intro who dev
-    have hdev := hNash (e who)
-      (fun t h' => dev t ((quittingHistEquiv e reward t).symm h'))
+    let dev' :
+        (quittingGame (quittingRewardReindex e reward)).BehaviorStrategy (e who) :=
+      fun t h' => dev t ((quittingHistEquiv e reward t).symm h')
+    have hdev := hNash (e who) dev'
     have hdevEq := finiteAveragePayoff_quittingProfilePullback e reward
-      (Function.update σ' (e who)
-        (fun t h' => dev t ((quittingHistEquiv e reward t).symm h'))) T who
+      (Function.update σ' (e who) dev') T who
     have hpullEq : quittingProfilePullback e reward
-        (Function.update σ' (e who)
-          (fun t h' => dev t ((quittingHistEquiv e reward t).symm h'))) =
+        (Function.update σ' (e who) dev') =
         Function.update (quittingProfilePullback e reward σ') who dev := by
       rw [quittingProfilePullback_update]
       refine congrArg
         (Function.update (quittingProfilePullback e reward σ') who) ?_
       funext t h
+      unfold dev'
       rw [Equiv.symm_apply_apply]
     rw [hpullEq] at hdevEq
     have hon := finiteAveragePayoff_quittingProfilePullback e reward σ' T who

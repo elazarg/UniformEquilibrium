@@ -212,7 +212,7 @@ theorem iter_stoppedAt_target_toReal_le_add
         (stoppedAt kernel target)
         (steps + extra) source target).toReal := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   rw [Math.PMFIter.iter_add,
     Math.ProbabilityMassFunction.bind_apply_toReal_eq_sum]
   have hterm :

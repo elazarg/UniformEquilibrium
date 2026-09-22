@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -266,7 +266,7 @@ theorem not_exists_sublinearAbsorptionReturn
     (habsorption : ∀ index, 0 < (window index).absorptionMass)
     (hdrift : Tendsto (fun index ↦ seam.normalizedEndpointDrift (window index))
       atTop (nhds 0)) : False := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let occupation : ℕ → Payoff ι := fun index owner ↦
     (window index).normalizedSingletonOccupation owner
   let occupationBox : Set (Payoff ι) :=

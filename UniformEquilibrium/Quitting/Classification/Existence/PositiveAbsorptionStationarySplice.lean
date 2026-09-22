@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -64,7 +64,7 @@ theorem quittingOpponentSurvivalWeight_const_le_pow_continue
           quittingStationaryContinueMass
             (Function.update root who (PMF.pure false))) ≤
         ∏ _offset ∈ Finset.range fuel, (root marked false).toReal := by
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro offset _
       exact quittingStationaryContinueMass_nonneg
         (Function.update root who (PMF.pure false))
@@ -89,7 +89,7 @@ theorem quittingStationaryPrefixThenRoots_eq_phaseSwitch
       quittingPhaseSwitchRoots_of_lt]
     omega
   · have hswitch : horizon + 1 ≤ time := by omega
-    rw [quittingStationaryPrefixThenRoots, if_neg htime,
+    rw [quittingStationaryPrefixThenRoots, ite_eq_right htime,
       quittingPhaseSwitchRoots_of_le _ _ hswitch]
 
 omit [DecidableEq ι] in

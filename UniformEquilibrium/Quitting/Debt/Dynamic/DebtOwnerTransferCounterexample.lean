@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 namespace QuittingDynamicDebtOwnerTransferCounterexample
 

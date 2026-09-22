@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -143,7 +143,7 @@ theorem quittingStageCoalitionMass_le_member_stoppingLaw
   have hstopNonneg : 0 ≤ ∏ player ∈ coalition.val, stop player :=
     Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg
   have htailLe : (∏ player ∈ coalition.valᶜ, tail player) ≤ 1 := by
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · exact fun player _ => quittingHazardSurvival_nonneg
         (quittingBehaviorLiveHazard reward (profile player)) (time + 1)
     · exact fun player _ => quittingHazardSurvival_le_one
@@ -151,7 +151,7 @@ theorem quittingStageCoalitionMass_le_member_stoppingLaw
   have hstopLe : (∏ player ∈ coalition.val, stop player) ≤ stop who := by
     rw [← Finset.mul_prod_erase coalition.val stop hwho]
     apply mul_le_of_le_one_right ENNReal.toReal_nonneg
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · exact fun _ _ => ENNReal.toReal_nonneg
     · exact fun player _ => ENNReal.toReal_mono ENNReal.one_ne_top
         ((quittingBehaviorStoppingLaw reward (profile player)).coe_le_one
@@ -167,7 +167,7 @@ theorem positive_profileLiveRoot_quit_of_positive_stageCoalitionMass
     (hmem : who ∈ terminal.val)
     (hpositive : 0 < quittingStageCoalitionMass reward profile time terminal) :
     0 < (quittingProfileLiveRoot reward profile time who true).toReal := by
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   have hrow : 0 < quittingLiveRowCoalitionMass reward profile time terminal := by
     have hrowNonneg :=

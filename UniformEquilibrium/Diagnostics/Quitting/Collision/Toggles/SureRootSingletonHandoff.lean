@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -51,7 +51,17 @@ theorem quittingPersistentBaseRoot_rootFreeMixedPoint_eq
     rw [quittingPersistentBaseRoot_apply_of_mem_free]
     · change ((ofPolytope (quittingBinaryForm (Finset.univ.erase owner)).sig
           _ ⟨who, hfree⟩).toPMF) = root who
-      simp [quittingRootFreeMixedPoint, FinDist.toPMF]
+      unfold quittingRootFreeMixedPoint
+      calc
+        _ = GameTheory.Math.Probability.FinDist.toPMF
+            (⟨root who, Set.toFinite _⟩ :
+              GameTheory.Math.Probability.FinDist Bool) :=
+          congrArg GameTheory.Math.Probability.FinDist.toPMF
+            (congrFun
+              (ofPolytope_probs (quittingBinaryForm
+                  (Finset.univ.erase owner)).sig
+                (fun player => ⟨root player, Set.toFinite _⟩)) ⟨who, hfree⟩)
+        _ = root who := rfl
     · exact Finset.disjoint_singleton_left.mpr (by simp)
 
 

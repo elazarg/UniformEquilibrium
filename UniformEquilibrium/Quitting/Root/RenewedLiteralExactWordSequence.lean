@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

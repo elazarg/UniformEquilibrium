@@ -126,7 +126,7 @@ theorem adaptiveHistoryLaw_map
 noncomputable def selectedLegalCoreStep
     [Fintype L]
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L) :
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L) :
     ∀ n, (Fin n → R) → PMF R :=
   fun n history =>
     legalMixture (legal n history) (weights n history)
@@ -138,7 +138,7 @@ noncomputable def predictableCoreShadowStep
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L) :
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L) :
     ∀ n, (Fin n → S × R) → PMF (S × R) :=
   fun n history =>
     maximalFiberCoupling
@@ -152,7 +152,7 @@ theorem predictableCoreShadowStep_map_fst
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (n : ℕ) (history : Fin n → S × R) :
     (predictableCoreShadowStep π controlled legal weights n history).map
         Prod.fst =
@@ -164,7 +164,7 @@ theorem predictableCoreShadowStep_map_snd
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (n : ℕ) (history : Fin n → S × R) :
     (predictableCoreShadowStep π controlled legal weights n history).map
         Prod.snd =
@@ -179,7 +179,7 @@ theorem adaptiveHistoryLaw_predictableCoreShadow_map_fst
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (T : ℕ) :
     (adaptiveHistoryLaw
         (predictableCoreShadowStep π controlled legal weights) T).map
@@ -195,7 +195,7 @@ theorem adaptiveHistoryLaw_predictableCoreShadow_map_snd
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (T : ℕ) :
     (adaptiveHistoryLaw
         (predictableCoreShadowStep π controlled legal weights) T).map
@@ -218,7 +218,7 @@ theorem expect_predictableCoreShadow_projectionMismatchScore
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (n : ℕ) (history : Fin n → S × R) :
     expect
         (predictableCoreShadowStep π controlled legal weights n history)
@@ -293,7 +293,7 @@ theorem expect_projectionMismatchSum_le
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (tolerance : ℕ → ℝ)
     (hclose :
       ∀ n history,
@@ -324,7 +324,7 @@ theorem expect_interfaceScoreSum_le
     (π : S → R)
     (controlled : ∀ n, (Fin n → S) → PMF S)
     (legal : ∀ n, (Fin n → R) → L → PMF R)
-    (weights : ∀ n, (Fin n → R) → stdSimplex ℝ L)
+    (weights : ∀ n, (Fin n → R) → Convexity.StdSimplex ℝ L)
     (tolerance implementationError : ℕ → ℝ)
     (interfaceScore :
       ∀ n, (Fin n → S × R) → S × R → ℝ)

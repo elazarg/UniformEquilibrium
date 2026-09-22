@@ -41,7 +41,7 @@ noncomputable section
 
 namespace Research.QuittingStochasticButtonUnilateralCompression
 
-open GameTheory Filter Math.Probability
+open GameTheory Filter _root_.Math.Probability
 open scoped BigOperators
 
 open Research.QuittingStochasticButtonCompression
@@ -241,7 +241,7 @@ theorem survivalPrefix_rootSequenceUpdate_le_playerDeleted
         (quittingRootSequenceUpdate roots who hazard) horizon ≤
       quittingSurvivalPrefix (playerDeletedRoots roots who) horizon := by
   unfold quittingSurvivalPrefix
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro time _
     exact quittingStationaryContinueMass_nonneg
       ((quittingRootSequenceUpdate roots who hazard) time)

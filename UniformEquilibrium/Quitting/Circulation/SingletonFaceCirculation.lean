@@ -101,11 +101,11 @@ factor `1 - h` exactly when the active coordinate belongs to the finset. -/
 theorem prod_one_sub_singletonRow (t : Finset ι) (i : ι) (h : ℝ) :
     ∏ j ∈ t, (1 - singletonRow h i j) = if i ∈ t then 1 - h else 1 := by
   by_cases hi : i ∈ t
-  · rw [if_pos hi]
+  · rw [ite_eq_left hi]
     refine (Finset.prod_eq_single i (fun j _ hj => ?_) (fun hcon => absurd hi hcon)).trans ?_
     · rw [singletonRow_of_ne h hj]; ring
     · rw [singletonRow_self]
-  · rw [if_neg hi]
+  · rw [ite_eq_right hi]
     refine Finset.prod_eq_one fun j hj => ?_
     have hne : j ≠ i := fun hcon => hi (hcon ▸ hj)
     rw [singletonRow_of_ne h hne]; ring
@@ -124,7 +124,7 @@ theorem sum_powerset_singletonRow_of_notMem (t : Finset ι) (i : ι) (h : ℝ) (
     have hjne : j ≠ i := fun hcon => hi (hcon ▸ hjt)
     rw [Finset.prod_eq_zero hj (singletonRow_of_ne h hjne)]
     ring
-  · rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, if_neg hi]
+  · rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, ite_eq_right hi]
     ring
 
 omit [Fintype ι] in
@@ -157,12 +157,12 @@ theorem sum_powerset_singletonRow_of_mem (t : Finset ι) (i : ι) (h : ℝ) (hi 
     Finset.sum_pair (by simp : (∅ : Finset ι) ≠ {i})]
   have hemp : (∏ j ∈ (∅ : Finset ι), singletonRow h i j) *
       (∏ j ∈ t \ (∅ : Finset ι), (1 - singletonRow h i j)) * g ∅ = (1 - h) * g ∅ := by
-    rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, if_pos hi]
+    rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, ite_eq_left hi]
     ring
   have hsing : (∏ j ∈ ({i} : Finset ι), singletonRow h i j) *
       (∏ j ∈ t \ ({i} : Finset ι), (1 - singletonRow h i j)) * g {i} = h * g {i} := by
     rw [Finset.prod_singleton, singletonRow_self, prod_one_sub_singletonRow,
-      if_neg (by simp)]
+      ite_eq_right (by simp)]
     ring
   rw [hemp, hsing]
 
@@ -193,7 +193,7 @@ theorem gammaValue_singletonRow_self (r : Finset ι → ι → ℝ) (h : ℝ) (i
     gammaValue r (singletonRow h i) i next = next := by
   unfold gammaValue continueMassExcl
   rw [excludedValue_singletonRow_self, prod_one_sub_singletonRow,
-    if_neg (Finset.notMem_erase i _)]
+    ite_eq_right (Finset.notMem_erase i _)]
   ring
 
 /-- **The owner's stop-minus-continue difference is the pinning gap.** -/
@@ -224,7 +224,7 @@ theorem excludedValue_singletonRow_of_ne (r : Finset ι → ι → ℝ) (h : ℝ
   have hemp : (∏ j ∈ (∅ : Finset ι), singletonRow h i j) *
       (∏ j ∈ Finset.univ.erase k \ (∅ : Finset ι), (1 - singletonRow h i j)) * r ∅ k =
       (1 - h) * r ∅ k := by
-    rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, if_pos hik]
+    rw [Finset.prod_empty, Finset.sdiff_empty, prod_one_sub_singletonRow, ite_eq_left hik]
     ring
   rw [hemp] at hfull
   unfold excludedValue
@@ -237,7 +237,7 @@ theorem gammaValue_singletonRow_of_ne (r : Finset ι → ι → ℝ) (h : ℝ) {
     gammaValue r (singletonRow h i) k next = h * r {i} k + (1 - h) * next := by
   unfold gammaValue continueMassExcl
   rw [excludedValue_singletonRow_of_ne r h hk, prod_one_sub_singletonRow,
-    if_pos (Finset.mem_erase.mpr ⟨fun hcon => hk hcon.symm, Finset.mem_univ i⟩)]
+    ite_eq_left (Finset.mem_erase.mpr ⟨fun hcon => hk hcon.symm, Finset.mem_univ i⟩)]
 
 /-- **An inactive coordinate's stop-minus-continue difference**: its own
 pinning gap, damped by survival, plus the owner-quit reward swing. -/
@@ -268,7 +268,7 @@ theorem quitMass_singletonRow (h : ℝ) (i : ι) :
     1 - continueMass (singletonRow h i) = h := by
   rw [continueMass]
   have := prod_one_sub_singletonRow (Finset.univ : Finset ι) i h
-  rw [if_pos (Finset.mem_univ i)] at this
+  rw [ite_eq_left (Finset.mem_univ i)] at this
   rw [this]
   ring
 

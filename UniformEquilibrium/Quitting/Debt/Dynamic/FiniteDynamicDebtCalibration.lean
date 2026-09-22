@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -300,7 +300,7 @@ theorem quittingFiniteNashBellmanPathRoots_prependPoint_shift
       quittingFiniteNashBellmanPathRoots cutoff path time := by
   by_cases htime : time < cutoff
   · simp only [quittingFiniteNashBellmanPathRoots,
-      dif_pos (by omega : time + 1 < cutoff + 1), dif_pos htime]
+      dite_eq_left (by omega : time + 1 < cutoff + 1), dite_eq_left htime]
     congr 1
   · rw [quittingFiniteNashBellmanPathRoots_eq_allContinue_of_cutoff_le
         (cutoff + 1)

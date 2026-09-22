@@ -21,11 +21,12 @@ unit moat is returned.
 
 noncomputable section
 
+open scoped Topology
+
 namespace Math
 namespace Topology
 
 open Filter Set
-open scoped Topology
 
 /-- Strict positivity of a jointly continuous defect on a closed subset of a
 compact fiber persists as one uniform positive moat on a neighborhood of the

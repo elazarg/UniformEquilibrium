@@ -287,7 +287,7 @@ theorem exists_entryReachableBoundedChargePotential_of_drift
     Nonempty
       (EntryReachableBoundedChargePotential
         kernel source charge entry) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain ⟨raw, hraw⟩ := h
   let bound : ℝ := ∑ state, |raw state| + 1
   have hbound : 0 < bound := by

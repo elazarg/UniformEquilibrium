@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Math.PMFProduct
+open _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 

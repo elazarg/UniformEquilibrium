@@ -53,7 +53,7 @@ has absolute value at least `1`. -/
 theorem one_le_abs_normalizedSoloMatrix_boundaryReward
     {who owner : Player} (hne : who ≠ owner) :
     1 ≤ |normalizedSoloMatrix boundaryReward who owner| := by
-  rw [normalizedSoloMatrix_boundaryReward_eval, if_neg (fun h ↦ hne h.symm)]
+  rw [normalizedSoloMatrix_boundaryReward_eval, ite_eq_right (fun h ↦ hne h.symm)]
   split_ifs <;> norm_num
 
 /-- The boundary table has normalized solo-matrix margin one. -/

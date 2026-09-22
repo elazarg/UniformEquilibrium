@@ -44,7 +44,7 @@ theorem exists_strictSupportedPreferenceEdge
         quittingSingletonRefusalValue reward packet.mass owner owner ∧
       quittingSingletonRefusalValue reward packet.mass owner owner ≤
         reward (quittingSingletonTerminal other) owner := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨owner, hownerMass, hownerLt, htarget, hrefusal⟩ :=
     witness.exists_active_strictSingletonRefusal packet
   have howner : owner ∈ packet.support :=

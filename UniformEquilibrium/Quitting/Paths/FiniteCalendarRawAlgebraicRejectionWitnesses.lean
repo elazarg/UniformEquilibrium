@@ -43,7 +43,7 @@ theorem not_hasQuittingFiniteCalendarRawStrictExclusion_iff_exists_algebraic
       ∃ profile : MixedSimplex (Fin players)
           (fun _ => QuittingFiniteDeadlineTimingAction
             (quittingRawExclusionDeadline players)),
-        (∀ who choice, IsAlgebraic ℚ (profile who choice)) ∧
+        (∀ who choice, IsAlgebraic ℚ ((profile who).weights choice)) ∧
           ∀ who,
             rationalQuittingRewardToReal reward
                 (quittingSingletonTerminal who) who ≤
@@ -110,7 +110,7 @@ theorem not_hasQuittingFiniteCalendarRawWeakSubsetExclusion_iff_exists_algebraic
       ∃ profile : MixedSimplex (Fin players)
           (fun _ => QuittingFiniteDeadlineTimingAction
             (quittingRawExclusionDeadline players)),
-        (∀ who choice, IsAlgebraic ℚ (profile who choice)) ∧
+        (∀ who choice, IsAlgebraic ℚ ((profile who).weights choice)) ∧
           ∀ who ∈ owners,
             rationalQuittingRewardToReal reward
                 (quittingSingletonTerminal who) who <

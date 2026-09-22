@@ -31,15 +31,15 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
 /-- Payoff of the singleton lottery selected by a player-simplex direction. -/
 def quittingSingletonDirectionPayoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (direction : stdSimplex ℝ ι) : Payoff ι :=
-  fun who ↦ ∑ owner, direction.val owner * quittingSoloReward reward owner who
+    (direction : Convexity.StdSimplex ℝ ι) : Payoff ι :=
+  fun who ↦ ∑ owner, direction.weights owner * quittingSoloReward reward owner who
 
 omit [Nontrivial ι] in
 /-- The singleton-matrix residual is the direction payoff minus the player's
 own singleton payoff. -/
 theorem singletonLCPResidual_normalizedSoloMatrix_eq_directionPayoff_sub_solo
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (direction : stdSimplex ℝ ι) (who : ι) :
+    (direction : Convexity.StdSimplex ℝ ι) (who : ι) :
     singletonLCPResidual (normalizedSoloMatrix reward) direction who =
       quittingSingletonDirectionPayoff reward direction who -
         quittingSoloReward reward who who := by
@@ -48,7 +48,7 @@ theorem singletonLCPResidual_normalizedSoloMatrix_eq_directionPayoff_sub_solo
     quittingSingletonDirectionPayoff
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
-  have hmass : ∑ owner, direction owner = 1 := direction.property.2
+  have hmass : ∑ owner, direction.weights owner = 1 := direction.total_of_fintype
   rw [hmass, one_mul]
   rfl
 
@@ -234,7 +234,7 @@ theorem limitValue_eq_singletonDirectionPayoff
     (limit : PeriodOneNormalizedSourceLimit source) :
     limit.limitValue = quittingSingletonDirectionPayoff reward limit.direction := by
   funext who
-  let selectedDirection : ℕ → stdSimplex ℝ ι := fun index ↦
+  let selectedDirection : ℕ → Convexity.StdSimplex ℝ ι := fun index ↦
     quittingStationaryHazardDirection
       (source.root (limit.select index))
       (source.totalHazard_pos (limit.select index))
@@ -244,13 +244,13 @@ theorem limitValue_eq_singletonDirectionPayoff
       (nhds (limit.limitValue who)) :=
     ((continuous_apply who).tendsto limit.limitValue).comp limit.value_tendsto
   have hdirectionCoordinate : ∀ owner, Tendsto
-      (fun index ↦ (selectedDirection index).val owner) atTop
-      (nhds (limit.direction.val owner)) := by
+      (fun index ↦ (selectedDirection index).weights owner) atTop
+      (nhds (limit.direction.weights owner)) := by
     intro owner
-    exact (((continuous_apply owner).comp continuous_subtype_val).tendsto
+    exact ((Convexity.StdSimplex.continuous_weights_apply ℝ owner).tendsto
       limit.direction).comp limit.direction_tendsto
   have hbarycenter : Tendsto
-      (fun index ↦ ∑ owner, (selectedDirection index).val owner *
+      (fun index ↦ ∑ owner, (selectedDirection index).weights owner *
         quittingSoloReward reward owner who) atTop
       (nhds (quittingSingletonDirectionPayoff reward limit.direction who)) := by
     unfold quittingSingletonDirectionPayoff
@@ -264,7 +264,7 @@ theorem limitValue_eq_singletonDirectionPayoff
         fun _ hlt ↦ hlt.le
   have hdifferenceBound : ∀ᶠ index in atTop,
       |selectedValue index who -
-          ∑ owner, (selectedDirection index).val owner *
+          ∑ owner, (selectedDirection index).weights owner *
             quittingSoloReward reward owner who| ≤
         6 * quittingRewardBound reward *
           quittingStationaryTotalHazard
@@ -273,7 +273,7 @@ theorem limitValue_eq_singletonDirectionPayoff
     change |source.value (limit.select index) who -
         ∑ owner, (quittingStationaryHazardDirection
           (source.root (limit.select index))
-          (source.totalHazard_pos (limit.select index))).val owner *
+          (source.totalHazard_pos (limit.select index))).weights owner *
             quittingSoloReward reward owner who| ≤ _
     rw [← source.terminalPayoff_eq_value (limit.select index),
       limit.selectedProfile_eq_stationary index]
@@ -290,7 +290,7 @@ theorem limitValue_eq_singletonDirectionPayoff
       limit.totalHazard_tendsto_zero.const_mul
         (6 * quittingRewardBound reward)
   have hdifference : Tendsto (fun index ↦ selectedValue index who -
-      ∑ owner, (selectedDirection index).val owner *
+      ∑ owner, (selectedDirection index).weights owner *
         quittingSoloReward reward owner who) atTop (nhds 0) :=
     Math.tendsto_zero_of_abs_le_of_tendsto_zero _ _ hbound hdifferenceBound
   have hlimitDifference := hvalue.sub hbarycenter
@@ -318,7 +318,7 @@ theorem selectedEndpointContinueAdvantage_tendsto_limitingSingletonMargin
       (nhds limit.limitingSingletonMargin) := by
   apply tendsto_pi_nhds.2
   intro who
-  let selectedDirection : ℕ → stdSimplex ℝ ι := fun index ↦
+  let selectedDirection : ℕ → Convexity.StdSimplex ℝ ι := fun index ↦
     quittingStationaryHazardDirection
       (source.root (limit.select index))
       (source.totalHazard_pos (limit.select index))
@@ -327,17 +327,18 @@ theorem selectedEndpointContinueAdvantage_tendsto_limitingSingletonMargin
       (selectedDirection index) who
   have hresidual : Tendsto selectedResidual atTop
       (nhds (limit.limitingSingletonMargin who)) := by
-    have hcontinuous : Continuous fun direction : stdSimplex ℝ ι ↦
+    have hcontinuous : Continuous fun direction : Convexity.StdSimplex ℝ ι ↦
         singletonLCPResidual (normalizedSoloMatrix reward) direction who := by
-      rw [show (fun direction : stdSimplex ℝ ι ↦
+      rw [show (fun direction : Convexity.StdSimplex ℝ ι ↦
           singletonLCPResidual (normalizedSoloMatrix reward) direction who) =
           fun direction ↦ quittingSingletonDirectionPayoff reward direction who -
             quittingSoloReward reward who who by
         funext direction
         exact singletonLCPResidual_normalizedSoloMatrix_eq_directionPayoff_sub_solo
           reward direction who]
+      unfold quittingSingletonDirectionPayoff
       apply (continuous_finsetSum Finset.univ fun owner _ ↦
-        (((continuous_apply owner).comp continuous_subtype_val).mul
+        ((Convexity.StdSimplex.continuous_weights_apply ℝ owner).mul
           continuous_const)).sub continuous_const
     exact (hcontinuous.tendsto limit.direction).comp limit.direction_tendsto
   have hhalf : ∀ᶠ index in atTop,
@@ -399,7 +400,7 @@ theorem limitingSingletonMargin_nonneg
     (herrorPos : ∀ index, 0 < error index)
     (herror : Tendsto error atTop (nhds 0)) (who : ι) :
     0 ≤ limit.limitingSingletonMargin who := by
-  let selectedDirection : ℕ → stdSimplex ℝ ι := fun index ↦
+  let selectedDirection : ℕ → Convexity.StdSimplex ℝ ι := fun index ↦
     quittingStationaryHazardDirection
       (source.root (limit.select index))
       (source.totalHazard_pos (limit.select index))
@@ -408,17 +409,18 @@ theorem limitingSingletonMargin_nonneg
       (selectedDirection index) who
   have hresidual : Tendsto selectedResidual atTop
       (nhds (limit.limitingSingletonMargin who)) := by
-    have hcontinuous : Continuous fun direction : stdSimplex ℝ ι ↦
+    have hcontinuous : Continuous fun direction : Convexity.StdSimplex ℝ ι ↦
         singletonLCPResidual (normalizedSoloMatrix reward) direction who := by
-      rw [show (fun direction : stdSimplex ℝ ι ↦
+      rw [show (fun direction : Convexity.StdSimplex ℝ ι ↦
           singletonLCPResidual (normalizedSoloMatrix reward) direction who) =
           fun direction ↦ quittingSingletonDirectionPayoff reward direction who -
             quittingSoloReward reward who who by
         funext direction
         exact singletonLCPResidual_normalizedSoloMatrix_eq_directionPayoff_sub_solo
           reward direction who]
+      unfold quittingSingletonDirectionPayoff
       apply (continuous_finsetSum Finset.univ fun owner _ ↦
-        (((continuous_apply owner).comp continuous_subtype_val).mul
+        ((Convexity.StdSimplex.continuous_weights_apply ℝ owner).mul
           continuous_const)).sub continuous_const
     exact (hcontinuous.tendsto limit.direction).comp limit.direction_tendsto
   let bound : ℕ → ℝ := fun index ↦
@@ -636,7 +638,7 @@ theorem limitingSingletonMargin_le_of_direction_pos
     (limit : PeriodOneNormalizedSourceLimit source)
     (herrorPos : ∀ index, 0 < error index)
     (herror : Tendsto error atTop (nhds 0)) {who : ι}
-    (hwho : 0 < limit.direction.val who) (other : ι) :
+    (hwho : 0 < limit.direction.weights who) (other : ι) :
     limit.limitingSingletonMargin who ≤
       limit.limitingSingletonMargin other := by
   by_contra hnot
@@ -645,15 +647,15 @@ theorem limitingSingletonMargin_le_of_direction_pos
   have hratio :=
     limit.selectedQuitProbability_ratio_tendsto_zero_of_limitingMargin_lt
       herrorPos herror hmargin
-  let selectedDirection : ℕ → stdSimplex ℝ ι := fun index ↦
+  let selectedDirection : ℕ → Convexity.StdSimplex ℝ ι := fun index ↦
     quittingStationaryHazardDirection
       (source.root (limit.select index))
       (source.totalHazard_pos (limit.select index))
   have hdirectionZero : Tendsto
-      (fun index ↦ (selectedDirection index).val who) atTop (nhds 0) := by
+      (fun index ↦ (selectedDirection index).weights who) atTop (nhds 0) := by
     apply squeeze_zero'
     · exact Eventually.of_forall fun index ↦
-        (selectedDirection index).property.1 who
+        (selectedDirection index).weights_nonneg who
     · exact Eventually.of_forall fun index ↦ by
         have hotherLe :
             (source.root (limit.select index) other true).toReal ≤
@@ -670,11 +672,11 @@ theorem limitingSingletonMargin_le_of_direction_pos
           (source.quitProbability_pos (limit.select index) other) hotherLe
     · exact hratio
   have hdirectionLimit : Tendsto
-      (fun index ↦ (selectedDirection index).val who) atTop
-      (nhds (limit.direction.val who)) :=
-    (((continuous_apply who).comp continuous_subtype_val).tendsto
+      (fun index ↦ (selectedDirection index).weights who) atTop
+      (nhds (limit.direction.weights who)) :=
+    ((Convexity.StdSimplex.continuous_weights_apply ℝ who).tendsto
       limit.direction).comp limit.direction_tendsto
-  have hzero : limit.direction.val who = 0 :=
+  have hzero : limit.direction.weights who = 0 :=
     tendsto_nhds_unique hdirectionLimit hdirectionZero
   linarith
 
@@ -699,17 +701,17 @@ theorem limitingSingletonMargin_pos_of_fourPlayer_noUniformPayoff
     refine ⟨limit.direction,
       fun player ↦ limit.limitingSingletonMargin_nonneg
         herrorPos herror player, fun player ↦ ?_⟩
-    by_cases hplayer : limit.direction.val player = 0
+    by_cases hplayer : limit.direction.weights player = 0
     · rw [hplayer, zero_mul]
-    · have hplayerPos : 0 < limit.direction.val player :=
-        lt_of_le_of_ne (limit.direction.property.1 player) (Ne.symm hplayer)
+    · have hplayerPos : 0 < limit.direction.weights player :=
+        lt_of_le_of_ne (limit.direction.weights_nonneg player) (Ne.symm hplayer)
       have hle := limit.limitingSingletonMargin_le_of_direction_pos
         herrorPos herror hplayerPos who
       have hmarginZero : limit.limitingSingletonMargin player = 0 := by
         apply le_antisymm
         · simpa only [hzero'] using hle
         · exact limit.limitingSingletonMargin_nonneg herrorPos herror player
-      change limit.direction.val player *
+      change limit.direction.weights player *
         limit.limitingSingletonMargin player = 0
       rw [hmarginZero, mul_zero]
   have hcore :=
@@ -734,14 +736,14 @@ theorem exists_positive_commonMinimum_limitingSingletonMargin
     (herror : Tendsto error atTop (nhds 0)) :
     ∃ minimum : ℝ, 0 < minimum ∧
       (∀ who, minimum ≤ limit.limitingSingletonMargin who) ∧
-      ∀ who, 0 < limit.direction.val who →
+      ∀ who, 0 < limit.direction.weights who →
         limit.limitingSingletonMargin who = minimum := by
-  have hsumPos : 0 < ∑ who, limit.direction.val who := by
-    rw [limit.direction.property.2]
+  have hsumPos : 0 < ∑ who, limit.direction.weights who := by
+    rw [limit.direction.total_of_fintype]
     norm_num
   obtain ⟨owner, _, howner⟩ :=
     (Finset.sum_pos_iff_of_nonneg
-      (fun player _ ↦ limit.direction.property.1 player)).mp hsumPos
+      (fun player _ ↦ limit.direction.weights_nonneg player)).mp hsumPos
   refine ⟨limit.limitingSingletonMargin owner,
     limit.limitingSingletonMargin_pos_of_fourPlayer_noUniformPayoff
       hplayers hno herrorPos herror owner,
@@ -765,37 +767,37 @@ theorem exists_two_distinct_direction_positive
     (herrorPos : ∀ index, 0 < error index)
     (herror : Tendsto error atTop (nhds 0)) :
     ∃ first second : ι, first ≠ second ∧
-      0 < limit.direction.val first ∧ 0 < limit.direction.val second := by
-  have hsumPos : 0 < ∑ who, limit.direction.val who := by
-    rw [limit.direction.property.2]
+      0 < limit.direction.weights first ∧ 0 < limit.direction.weights second := by
+  have hsumPos : 0 < ∑ who, limit.direction.weights who := by
+    rw [limit.direction.total_of_fintype]
     norm_num
   obtain ⟨first, _, hfirst⟩ :=
     (Finset.sum_pos_iff_of_nonneg
-      (fun player _ ↦ limit.direction.property.1 player)).mp hsumPos
+      (fun player _ ↦ limit.direction.weights_nonneg player)).mp hsumPos
   have hsecond : ∃ second, second ≠ first ∧
-      0 < limit.direction.val second := by
+      0 < limit.direction.weights second := by
     by_contra hnone
     push Not at hnone
     have hzero : ∀ second, second ≠ first →
-        limit.direction.val second = 0 := by
+        limit.direction.weights second = 0 := by
       intro second hne
       exact le_antisymm (hnone second hne)
-        (limit.direction.property.1 second)
-    have hsumSingle : ∑ player, limit.direction.val player =
-        limit.direction.val first := by
+        (limit.direction.weights_nonneg second)
+    have hsumSingle : ∑ player, limit.direction.weights player =
+        limit.direction.weights first := by
       exact Finset.sum_eq_single first
         (fun second _ hne ↦ hzero second hne)
         (fun hnotmem ↦ False.elim (hnotmem (Finset.mem_univ first)))
-    have hfirstOne : limit.direction.val first = 1 := by
-      rw [← hsumSingle, limit.direction.property.2]
-    have hdirection : limit.direction = stdSimplex.pure (𝕜 := ℝ) first := by
-      apply Subtype.ext
-      funext player
+    have hfirstOne : limit.direction.weights first = 1 := by
+      rw [← hsumSingle, limit.direction.total_of_fintype]
+    have hdirection : limit.direction = Convexity.StdSimplex.pure (𝕜 := ℝ) first := by
+      apply Convexity.StdSimplex.ext
+      ext player
       by_cases hplayer : player = first
       · subst player
         simp [hfirstOne]
       · rw [hzero player hplayer]
-        simp [stdSimplex.pure_apply, hplayer]
+        simp [hplayer]
     have hmarginZero : limit.limitingSingletonMargin first = 0 := by
       rw [limitingSingletonMargin, hdirection, singletonLCPResidual_def,
         wsum_pure_apply, normalizedSoloMatrix_diagonal]
@@ -849,7 +851,7 @@ theorem eventually_totalEndpointRegret_div_totalHazard_eq_directionWeightedAdvan
           quittingStationaryTotalHazard (source.root (limit.select index)) =
         ∑ who, (quittingStationaryHazardDirection
             (source.root (limit.select index))
-            (source.totalHazard_pos (limit.select index))).val who *
+            (source.totalHazard_pos (limit.select index))).weights who *
           limit.selectedEndpointContinueAdvantage index who := by
   have hallPositive : ∀ᶠ index in atTop, ∀ who,
       0 < limit.selectedEndpointContinueAdvantage index who := by
@@ -868,7 +870,7 @@ theorem eventually_totalEndpointRegret_div_totalHazard_eq_directionWeightedAdvan
   intro who _
   rw [limit.selectedCoordinateNashDefect_eq_quitProbability_mul_continueAdvantage
     index who (hpositive who).le]
-  change _ / _ = (_ / _) * _
+  change (_ : ℝ) / (_ : ℝ) = ((_ : ℝ) / (_ : ℝ)) * (_ : ℝ)
   ring
 
 /-- The aggregate endpoint-regret density converges to the same positive
@@ -882,7 +884,7 @@ theorem exists_positive_commonMinimum_and_totalEndpointRegretDensity_tendsto
     (herror : Tendsto error atTop (nhds 0)) :
     ∃ minimum : ℝ, 0 < minimum ∧
       (∀ who, minimum ≤ limit.limitingSingletonMargin who) ∧
-      (∀ who, 0 < limit.direction.val who →
+      (∀ who, 0 < limit.direction.weights who →
         limit.limitingSingletonMargin who = minimum) ∧
       Tendsto (fun index ↦ limit.selectedTotalEndpointRegret index /
         quittingStationaryTotalHazard (source.root (limit.select index)))
@@ -891,35 +893,35 @@ theorem exists_positive_commonMinimum_and_totalEndpointRegretDensity_tendsto
     limit.exists_positive_commonMinimum_limitingSingletonMargin
       hplayers hno herrorPos herror
   refine ⟨minimum, hminimumPos, hminimum, hequal, ?_⟩
-  let selectedDirection : ℕ → stdSimplex ℝ ι := fun index ↦
+  let selectedDirection : ℕ → Convexity.StdSimplex ℝ ι := fun index ↦
     quittingStationaryHazardDirection
       (source.root (limit.select index))
       (source.totalHazard_pos (limit.select index))
   have hweighted : Tendsto (fun index ↦
-      ∑ who, (selectedDirection index).val who *
+      ∑ who, (selectedDirection index).weights who *
         limit.selectedEndpointContinueAdvantage index who) atTop
-      (nhds (∑ who, limit.direction.val who *
+      (nhds (∑ who, limit.direction.weights who *
         limit.limitingSingletonMargin who)) := by
     exact tendsto_finsetSum Finset.univ fun who _ ↦
-      ((((continuous_apply who).comp continuous_subtype_val).tendsto
+      (((Convexity.StdSimplex.continuous_weights_apply ℝ who).tendsto
         limit.direction).comp limit.direction_tendsto).mul
         (((continuous_apply who).tendsto limit.limitingSingletonMargin).comp
           limit.selectedEndpointContinueAdvantage_tendsto_limitingSingletonMargin)
-  have hsum : ∑ who, limit.direction.val who *
+  have hsum : ∑ who, limit.direction.weights who *
       limit.limitingSingletonMargin who = minimum := by
     calc
-      (∑ who, limit.direction.val who *
+      (∑ who, limit.direction.weights who *
           limit.limitingSingletonMargin who) =
-          ∑ who, limit.direction.val who * minimum := by
+          ∑ who, limit.direction.weights who * minimum := by
         apply Finset.sum_congr rfl
         intro who _
-        by_cases hzero : limit.direction.val who = 0
+        by_cases hzero : limit.direction.weights who = 0
         · rw [hzero, zero_mul, zero_mul]
-        · have hpos : 0 < limit.direction.val who :=
-            lt_of_le_of_ne (limit.direction.property.1 who) (Ne.symm hzero)
+        · have hpos : 0 < limit.direction.weights who :=
+            lt_of_le_of_ne (limit.direction.weights_nonneg who) (Ne.symm hzero)
           rw [hequal who hpos]
       _ = minimum := by
-        rw [← Finset.sum_mul, limit.direction.property.2, one_mul]
+        rw [← Finset.sum_mul, limit.direction.total_of_fintype, one_mul]
   rw [← hsum]
   apply hweighted.congr'
   exact Filter.EventuallyEq.symm

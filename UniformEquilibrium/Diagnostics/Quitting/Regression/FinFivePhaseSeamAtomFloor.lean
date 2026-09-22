@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFivePhaseSeamAtomFloor
 
-open Math.Probability Set
+open _root_.Math.Probability Set
 
 abbrev Player := Fin 5
 
@@ -159,20 +159,20 @@ theorem phaseFour_playerZero_endpointDifference (x : ℝ) :
     quittingRootContinuePayoff_soloStationaryRoot_other reward hne]
   have hsoloZero : quittingSoloReward reward 0 0 = 0 := by
     change weight ({0} : Finset Player) 0 = 0
-    rw [weight, if_pos rfl]
-    simp only [if_neg (by decide : ({0} : Finset Player) ≠ {0, 1})]
+    rw [weight, ite_eq_left rfl]
+    simp only [ite_eq_right (by decide : ({0} : Finset Player) ≠ {0, 1})]
     have hpairs : ¬(({0} : Finset Player) = ({0, 2} : Finset Player) ∨
       ({0} : Finset Player) = ({0, 3} : Finset Player) ∨
       ({0} : Finset Player) = ({0, 4} : Finset Player)) := by decide
-    rw [if_neg hpairs]
+    rw [ite_eq_right hpairs]
   have hsoloOne : quittingSoloReward reward 1 0 = 0 := by
     change weight ({1} : Finset Player) 0 = 0
-    rw [weight, if_pos rfl]
-    simp only [if_neg (by decide : ({1} : Finset Player) ≠ {0, 1})]
+    rw [weight, ite_eq_left rfl]
+    simp only [ite_eq_right (by decide : ({1} : Finset Player) ≠ {0, 1})]
     have hpairs : ¬(({1} : Finset Player) = ({0, 2} : Finset Player) ∨
       ({1} : Finset Player) = ({0, 3} : Finset Player) ∨
       ({1} : Finset Player) = ({0, 4} : Finset Player)) := by decide
-    rw [if_neg hpairs]
+    rw [ite_eq_right hpairs]
   have hpair : quittingSingletonCollisionReward reward 1 0 = 1 := by
     change weight ({1, 0} : Finset Player) 0 = 1
     have hset : ({1, 0} : Finset Player) = {0, 1} := by

@@ -4,8 +4,8 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.Additive.Cycles
-import MathUE.DirectedTransport.Basic
+import Maths.Multitubes.Additive.Cycles
+import Maths.Multitubes.Basic
 
 /-!
 # Simple-cycle tests for monoid-valued directed labels
@@ -18,8 +18,7 @@ inverse operation is needed.
 
 noncomputable section
 
-namespace Math
-namespace DirectedTransport
+namespace Maths
 
 universe uV uE uM
 
@@ -84,7 +83,6 @@ theorem hasTrivialCycleLabels_of_simpleCycles
           rw [← walkLabel_eq_reverse_prod, ← walkLabel_eq_reverse_prod,
             ← walkLabel_eq_reverse_prod, hinnerLabel, one_mul, hbeforeAfter]
 
-end DirectedTransport
-end Math
+end Maths
 
 end

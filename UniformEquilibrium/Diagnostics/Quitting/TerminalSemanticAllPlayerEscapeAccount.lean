@@ -1,4 +1,5 @@
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Terminal.OpponentTightTerminalSemanticRealization
 
 /-!
@@ -16,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set StochasticGame
+open Filter _root_.Set StochasticGame
 open _root_.Math.Probability _root_.Math.ProbabilityMassFunction
 open _root_.Math.Probability.DiscreteHazard
 open scoped BigOperators ENNReal Topology
@@ -125,7 +126,9 @@ private theorem quittingStageCoalitionMass_eq_compactStoppingLawProfile_extracte
   apply congrArg₂ (fun x y : ℝ => x * y)
   · apply Finset.prod_congr rfl
     intro player hplayer
-    simp [quittingCompactStoppingLawsOfProfile]
+    rw [quittingBehaviorStoppingLaw_compactStoppingLawProfile]
+    exact congrArg (fun law : PMF (Option ℕ) => (law (some time)).toReal)
+      (CompactStoppingLaw.toPMF_ofPMF_option _).symm
   · apply Finset.prod_congr rfl
     intro player hplayer
     have hsumLeft := sum_quittingHazardStopMass
@@ -147,9 +150,11 @@ private theorem quittingStageCoalitionMass_eq_compactStoppingLawProfile_extracte
             date := by
       apply Finset.sum_congr rfl
       intro date hdate
-      rw [← quittingBehaviorStoppingLaw_some_toReal,
-        ← quittingBehaviorStoppingLaw_some_toReal]
-      simp [quittingCompactStoppingLawsOfProfile]
+      rw [← quittingBehaviorStoppingLaw_some_toReal]
+      rw [← quittingBehaviorStoppingLaw_some_toReal]
+      rw [quittingBehaviorStoppingLaw_compactStoppingLawProfile]
+      exact congrArg (fun law : PMF (Option ℕ) => (law (some date)).toReal)
+        (CompactStoppingLaw.toPMF_ofPMF_option _).symm
     rw [hfinite] at hsumLeft
     linarith
 
@@ -230,12 +235,14 @@ private theorem sum_quittingTerminalEscapeMass_eq
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (laws : ι → CompactStoppingLaw)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι)) :
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)) :
     (∑ terminal, quittingTerminalEscapeMass reward laws mass terminal) =
       quittingTerminalOutcomeMass reward
           (quittingCompactStoppingLawProfile reward laws) none - mass none := by
-  have hactual := quittingTerminalOutcomeMass_mem_stdSimplex reward
-    (quittingCompactStoppingLawProfile reward laws)
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
+  have hactual := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      (quittingCompactStoppingLawProfile reward laws))
   have hmassTotal := hmass.2
   have hactualTotal := hactual.2
   rw [Fintype.sum_option] at hmassTotal hactualTotal
@@ -272,7 +279,7 @@ structure QuittingTerminalSemanticEscapeAccount
     (selected : QuittingTerminalSemanticSelectedLawLimit reward target) where
   mass : QuittingTerminalOutcome ι → ℝ
   subseq : ℕ → ℕ
-  mass_mem : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι)
+  mass_mem : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)
   subseq_strictMono : StrictMono subseq
   outcome_tendsto : Tendsto (fun n => quittingTerminalOutcomeMass reward
       (selected.sourceProfile (selected.subseq (subseq n))))
@@ -321,7 +328,7 @@ theorem exists_quittingTerminalOutcomeMass_tendsto_refinement
     (selected : QuittingTerminalSemanticSelectedLawLimit reward target) :
     ∃ (mass : QuittingTerminalOutcome ι → ℝ)
         (subseq : ℕ → ℕ),
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono subseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (selected.sourceProfile (selected.subseq (subseq n))))
@@ -336,11 +343,12 @@ theorem exists_quittingTerminalOutcomeMass_tendsto_refinement
     quittingTerminalOutcomeMass reward
       (selected.sourceProfile (selected.subseq n))
   have hmasses : ∀ n, masses n ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) := fun n =>
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := fun n =>
     quittingTerminalOutcomeMass_mem_stdSimplex reward
       (selected.sourceProfile (selected.subseq n))
   obtain ⟨mass, hmass, subseq, hsubseq, hmassLimit⟩ :=
-    (isCompact_stdSimplex ℝ (QuittingTerminalOutcome ι)).tendsto_subseq hmasses
+    (GameTheory.Math.Probability.isCompact_simplexWeights
+      (QuittingTerminalOutcome ι)).tendsto_subseq hmasses
   refine ⟨mass, subseq, hmass, hsubseq, ?_, ?_, ?_⟩
   · simpa [masses, Function.comp_def] using hmassLimit
   · exact selected.semantic_tendsto.comp hsubseq.tendsto_atTop

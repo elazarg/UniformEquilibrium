@@ -77,7 +77,7 @@ theorem eventually_coordinate_pos_iff_puncturedSupport
           analyticPuncturedCoordinateSupport
             coordinate source destination := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have coordinateAlternative :
       ∀ source destination,
         (∀ᶠ t in nhdsWithin 0 (Ioi (0 : ℝ)),
@@ -152,7 +152,7 @@ theorem analyticPuncturedTailSupport_nonempty
     (analyticPuncturedTailSupport
       coordinate initialLaw).Nonempty := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain ⟨source, source_mem⟩ := initialLaw.support_nonempty
   refine
     ⟨source,
@@ -220,7 +220,7 @@ theorem ne_zero_law_add_imp_mem_analyticPuncturedTailSupport
           analyticPuncturedTailSupport
             coordinate (law start) := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   intro offset
   induction offset with
   | zero =>

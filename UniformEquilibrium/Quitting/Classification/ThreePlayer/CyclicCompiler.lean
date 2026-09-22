@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math _root_.Math.Probability Math.PMFProduct
 
 abbrev CyclicThreePlayer := Fin 3
 

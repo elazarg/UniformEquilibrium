@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 namespace SixPlayerOnePair
@@ -283,7 +283,7 @@ private theorem exactCoalitionMass_eq_apply_some
       exact Subtype.ext h
     · intro h
       exact congrArg Subtype.val h
-  simp only [CoalitionOutcome.coalition, hempty, if_false, zero_add, hiff]
+  simp only [CoalitionOutcome.coalition, hempty, ite_false, zero_add, hiff]
   exact Fintype.sum_ite_eq'
     (⟨target, htarget⟩ : {S : Finset SixPlayer // S.Nonempty})
     (fun terminal => mass (some terminal))

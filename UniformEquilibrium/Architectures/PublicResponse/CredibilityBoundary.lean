@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.PMFProduct Math.Probability
+open Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -101,7 +101,9 @@ theorem finiteAveragePayoff_obeyProfile_eq_feasibleTarget
   have habsorbing : game.IsAbsorbingState () := by
     intro action
     simp [game]
-  rw [game.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage := game.finiteAveragePayoff_eq_sum_expectedStagePayoff
+    obeyProfile (show game.State from ()) () total
+  rw [haverage]
   have hstage (time : ℕ) :
       game.expectedStagePayoff obeyProfile () time () = 0 := by
     change
@@ -157,7 +159,10 @@ theorem finiteAveragePayoff_update_pureTrueDeviation_eq_one
     (total : ℕ) (htotal : 0 < total) :
     game.finiteAveragePayoff () total
         (Function.update profile () pureTrueDeviation) () = 1 := by
-  rw [game.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage := game.finiteAveragePayoff_eq_sum_expectedStagePayoff
+    (Function.update profile () pureTrueDeviation)
+    (show game.State from ()) () total
+  rw [haverage]
   simp_rw [expectedStagePayoff_update_pureTrueDeviation_eq_one]
   simp [htotal.ne']
 
@@ -184,7 +189,10 @@ theorem not_isAdaptivePotentialCertificateAt_feasibleTarget :
       (deviation_supermartingale () pureTrueDeviation)
       (deviation_stage () pureTrueDeviation)
       htotal_pos
-  rw [game.expectedHistoryValue_zero] at hbound
+  have hzero := game.expectedHistoryValue_zero
+    (Function.update profile () pureTrueDeviation)
+    (show game.State from ()) (deviationPotential ())
+  rw [hzero] at hbound
   have hinitial := deviation_initial ()
   have hcharge :=
     deviation_charge_cesaro () pureTrueDeviation horizon le_rfl

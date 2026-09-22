@@ -43,7 +43,6 @@ theorem determinant_eq_sign_of_unitCoordinatePermutation
   have hdelta : delta = (1 : Matrix (Fin n) (Fin n) R).submatrix permutation id := by
     ext step coordinate
     simp only [delta, Matrix.submatrix_apply, Matrix.one_apply, id_eq]
-    rfl
   change original.det = _
   rw [hrow, Matrix.det_succ_column_zero, Fin.sum_univ_succ]
   simp only [reduced, Fin.cons_zero, Fin.cons_succ, Fin.val_zero, pow_zero, one_mul,

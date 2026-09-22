@@ -30,7 +30,7 @@ punishment credibility is asserted in the circulation branch.
 
 noncomputable section
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 namespace GameTheory
 namespace StochasticGame
@@ -55,10 +55,10 @@ def InvisibleNeutralAction
 noncomputable instance instFintypeInvisibleNeutralAction
     (germ : G.AnalyticBellmanGerm) (who : ι) :
     Fintype (germ.InvisibleNeutralAction who) := by
-  letI : Finite G.State := Finite.of_fintype G.State
-  letI : Finite (G.Act who) := Finite.of_fintype (G.Act who)
-  letI : Finite (G.State × G.Act who) := inferInstance
-  letI : Finite
+  let : Finite G.State := Finite.of_fintype G.State
+  let : Finite (G.Act who) := Finite.of_fintype (G.Act who)
+  let : Finite (G.State × G.Act who) := inferInstance
+  let : Finite
       { response : G.State × G.Act who //
         G.finkContinuationGain germ.endpointValue
             germ.endpointFinkPoint response.1 who response.2 = 0 ∧

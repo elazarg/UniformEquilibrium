@@ -48,7 +48,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -106,7 +106,7 @@ theorem isAdaptivePotentialEquilibriumCertificate_of_fixedDepthSelector
         (entry child) (target child)) :
     G.IsAdaptivePotentialEquilibriumCertificate
       initial parentTarget := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   intro error herror
   apply isAdaptivePotentialCertificateAt_of_fixedDepthSelector_allErrors
     (selector := selector) (entry := entry) (target := target)
@@ -133,7 +133,7 @@ theorem isPublicPhasePunishmentSystemAt_of_fixedDepthSelector
       G.IsAdaptivePotentialEquilibriumCertificate
         (entry child) (target child)) :
     G.IsPublicPhasePunishmentSystemAt initial parentTarget error := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   have certificate :
       G.IsAdaptivePotentialCertificateAt
         initial parentTarget (error / 2) := by
@@ -170,7 +170,7 @@ theorem isUniformEquilibriumPayoff_of_fixedDepthSelector
       G.IsAdaptivePotentialEquilibriumCertificate
         (entry child) (target child)) :
     G.IsUniformEquilibriumPayoff initial parentTarget := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   apply
     G.isUniformEquilibriumPayoff_of_isAdaptivePotentialEquilibriumCertificate
   exact isAdaptivePotentialEquilibriumCertificate_of_fixedDepthSelector

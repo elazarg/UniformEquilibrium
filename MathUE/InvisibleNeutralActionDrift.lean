@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.AlgebraicSelection
+import Mathlib.Analysis.Analytic.Order
 
 /-!
 # Analytic drift at a discount scale
@@ -320,7 +321,7 @@ theorem exists_strict_finite_range
     ∃ lower upper : ℝ,
       lower < upper ∧
       ∀ x, lower ≤ potential x ∧ potential x ≤ upper := by
-  letI := Fintype.ofFinite S
+  let := Fintype.ofFinite S
   let values : Finset ℝ := Finset.univ.image potential
   have hvalues : values.Nonempty :=
     Finset.univ_nonempty.image potential

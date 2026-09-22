@@ -244,11 +244,11 @@ theorem sum_le_coefficient_total_add_tail
     intro time htime
     have htimeHorizon := Finset.mem_range.mp htime
     by_cases hlate : cut ≤ time
-    · simp only [if_pos hlate]
+    · simp only [ite_eq_left hlate]
       exact (hsuffix time hlate htimeHorizon).trans
         (le_add_of_nonneg_left
           (mul_nonneg hcoefficient (clock.stage_nonneg time)))
-    · simp only [if_neg hlate]
+    · simp only [ite_eq_right hlate]
       simpa using hbulk time (Nat.lt_of_not_ge hlate)
   calc
     (∑ time ∈ Finset.range horizon, quantity time) ≤

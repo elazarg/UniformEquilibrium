@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.LinearAlgebra.FourierMotzkin
+import Maths.LinearProgramming.FourierMotzkin
 
 /-!
 # Approximate compatibility from playerwise certificate decomposition
@@ -27,6 +27,8 @@ open Finset BigOperators
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 
 variable {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
 variable {Facet Player : Type*} [Fintype Facet] [Fintype Player]

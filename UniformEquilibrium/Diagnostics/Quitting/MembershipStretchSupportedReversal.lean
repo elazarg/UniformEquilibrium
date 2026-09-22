@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -50,7 +50,7 @@ theorem quittingAveragedBestAction_eq_false_of_sure_and_positiveDebt
   | false => rfl
   | true =>
       have hpure := eq_pure_true_of_true_toReal_eq_one (root who) hwho
-      simp only [Bool.not_true, hpure, PMF.pure_apply, Bool.false_eq_true, if_false,
+      simp only [Bool.not_true, hpure, PMF.pure_apply, Bool.false_eq_true, ite_false,
         ENNReal.toReal_zero, zero_mul] at hdebt
       exact (ne_of_gt hpositive hdebt).elim
 

@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -121,10 +121,10 @@ theorem quittingPureTimeBehaviorStrategy_absolute_eq_continueDeviation
               by_cases htime : time = roots.length + delay
               · have htime' : time + 1 = roots.length + 1 + delay := by omega
                 simp only [quittingPureTimeHazard]
-                rw [if_pos htime', if_pos htime]
+                rw [ite_eq_left htime', ite_eq_left htime]
               · have htime' : time + 1 ≠ roots.length + 1 + delay := by omega
                 simp only [quittingPureTimeHazard]
-                rw [if_neg htime', if_neg htime]
+                rw [ite_eq_right htime', ite_eq_right htime]
 
 omit [DecidableEq ι] in
 /-- Quitting at the current date is the root Quit endpoint followed by an
@@ -136,10 +136,14 @@ theorem quittingPureTimeBehaviorStrategy_zero_eq_rootDeviation
         (quittingPureTimeBehaviorStrategy reward who none) := by
   funext time history
   cases time with
-  | zero => simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-      quittingRootAndContinuationDeviation]
-  | succ time => simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-      quittingRootAndContinuationDeviation]
+  | zero =>
+      simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+        quittingRootAndContinuationDeviation]
+      rfl
+  | succ time =>
+      simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+        quittingRootAndContinuationDeviation]
+      rfl
 
 omit [DecidableEq ι] in
 /-- Quitting one date after a splice is pure Continue at the current root and
@@ -152,14 +156,18 @@ theorem quittingPureTimeBehaviorStrategy_succ_eq_rootDeviation
         (quittingPureTimeBehaviorStrategy reward who (some time)) := by
   funext current history
   cases current with
-  | zero => simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-      quittingRootAndContinuationDeviation]
+  | zero =>
+      simp [quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+        quittingRootAndContinuationDeviation]
+      rfl
   | succ current =>
       simp only [quittingPureTimeBehaviorStrategy,
         quittingRootAndContinuationDeviation]
       by_cases hcurrent : current = time
       · simp [quittingPureTimeHazard, hcurrent]
+        rfl
       · simp [quittingPureTimeHazard, hcurrent]
+        rfl
 
 /-- A deterministic stop inside the finite word is independent of the tail
 placed after the word. -/

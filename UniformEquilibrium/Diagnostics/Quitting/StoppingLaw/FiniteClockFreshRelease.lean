@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.Probability.DiscreteHazard
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 /-- Beyond all finite support, stopping-law survival is exactly Never mass. -/
 theorem stoppingLaw_survival_eq_none_of_isFiniteClock

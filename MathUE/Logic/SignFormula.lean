@@ -1,4 +1,4 @@
-import Mathlib.Data.Sign.Defs
+import Mathlib.Basic.Sign.Defs
 
 /-!
 # Executable Boolean formulas in exact signs

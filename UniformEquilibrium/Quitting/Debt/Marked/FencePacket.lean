@@ -69,10 +69,10 @@ theorem theta_le_two_mul_packetMass_ownerLoss
           (if IsOwnerLoss θ ownerReward ω then 2 * M * weight ω else 0)
         ≤ 2 * (weight ω * ownerReward ω) := by
     by_cases hloss : IsOwnerLoss θ ownerReward ω
-    · rw [if_pos hloss]
+    · rw [ite_eq_left hloss]
       have hmul := mul_le_mul_of_nonneg_left (hreward_lower ω) (hweight ω)
       nlinarith [mul_nonneg htheta (hweight ω)]
-    · rw [if_neg hloss]
+    · rw [ite_eq_right hloss]
       have hre : -θ ≤ 2 * ownerReward ω :=
         le_of_lt (lt_of_not_ge hloss)
       have hmul := mul_le_mul_of_nonneg_right hre (hweight ω)
@@ -172,7 +172,7 @@ theorem marked_packet_dichotomy
             then weight ω else 0 := by
     by_cases hlossω : IsOwnerLoss θ ownerReward ω
     · by_cases hgoodω : IsGoodBoundary θ ownerReward quitters value ω
-      · rw [if_pos hlossω, if_pos hgoodω]
+      · rw [ite_eq_left hlossω, ite_eq_left hgoodω]
         exact le_add_of_nonneg_right (Finset.sum_nonneg fun _ _ => by
           split <;> simp [hweight ω])
       · have hnotall :
@@ -214,7 +214,7 @@ theorem marked_packet_dichotomy
     · have hnotgood :
           ¬ IsGoodBoundary θ ownerReward quitters value ω :=
         fun hgood => hlossω hgood.1
-      rw [if_neg hlossω, if_neg hnotgood]
+      rw [ite_eq_right hlossω, ite_eq_right hnotgood]
       exact add_nonneg (le_refl 0) (Finset.sum_nonneg fun _ _ => by
         split <;> simp [hweight ω])
   have hcover : lossMass ≤ goodMass + ∑ j ∈ players, badMass j := by

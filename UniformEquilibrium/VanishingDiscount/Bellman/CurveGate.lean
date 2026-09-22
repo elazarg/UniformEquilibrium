@@ -25,7 +25,7 @@ literal: an analytic arc must be selected in the one coupled Bellman cell.
 
 noncomputable section
 
-open Filter Math Math.Probability Math.PolynomialSignCell Set Topology
+open Filter _root_.Math _root_.Math.Probability Math.PolynomialSignCell Set Topology
 
 namespace GameTheory
 namespace StochasticGame

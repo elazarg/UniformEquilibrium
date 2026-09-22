@@ -124,7 +124,7 @@ def HasUniformCoreReach
 value on a finite sample space. -/
 theorem abs_expect_le_expect_abs [Finite S] (d : PMF S) (f : S → ℝ) :
     |expect d f| ≤ expect d (fun s => |f s|) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   rw [expect_eq_sum, expect_eq_sum]
   calc
     |∑ s : S, (d s).toReal * f s| ≤
@@ -277,7 +277,7 @@ theorem poissonPotential_unique_of_uniformCoreReach
     (hg : ∀ s,
       g s - expect (kernel s) g = transientCharge core s) :
     f = g := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   let f' : coreVanishingSubmodule core := ⟨f, hfcore⟩
   let g' : coreVanishingSubmodule core := ⟨g, hgcore⟩
   have hoperators :
@@ -336,7 +336,7 @@ theorem poissonPotential_nonneg
         transientCharge core s) :
     ∀ s, 0 ≤ potential s := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain ⟨smin, -, hmin⟩ :=
     Finset.exists_min_image Finset.univ potential Finset.univ_nonempty
   intro s

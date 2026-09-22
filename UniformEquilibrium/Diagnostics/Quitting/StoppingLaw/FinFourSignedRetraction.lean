@@ -17,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 private def QuittingPaidFirstDisagreementRow.castGain
     {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -101,10 +101,10 @@ theorem succ_eq_update (count : ℕ) (hcount : count < 4) :
     rw [Function.update_of_ne hwho]
     simp only [quittingFinFourCoordinateHybrid]
     by_cases hlt : who.val < count
-    · rw [if_pos hlt, if_pos (Nat.lt_succ_of_lt hlt)]
+    · rw [ite_eq_left hlt, ite_eq_left (Nat.lt_succ_of_lt hlt)]
     · have hge : count < who.val := lt_of_le_of_ne (Nat.le_of_not_gt hlt)
         (Ne.symm hval)
-      rw [if_neg hlt, if_neg (Nat.not_lt_of_ge hge)]
+      rw [ite_eq_right hlt, ite_eq_right (Nat.not_lt_of_ge hge)]
 
 theorem eq_update_succ (count : ℕ) (hcount : count < 4) :
     quittingFinFourCoordinateHybrid source target count =
@@ -123,10 +123,10 @@ theorem eq_update_succ (count : ℕ) (hcount : count < 4) :
     rw [Function.update_of_ne hwho]
     simp only [quittingFinFourCoordinateHybrid]
     by_cases hlt : who.val < count
-    · rw [if_pos hlt, if_pos (Nat.lt_succ_of_lt hlt)]
+    · rw [ite_eq_left hlt, ite_eq_left (Nat.lt_succ_of_lt hlt)]
     · have hge : count < who.val := lt_of_le_of_ne (Nat.le_of_not_gt hlt)
         (Ne.symm hval)
-      rw [if_neg hlt, if_neg (Nat.not_lt_of_ge hge)]
+      rw [ite_eq_right hlt, ite_eq_right (Nat.not_lt_of_ge hge)]
 
 end quittingFinFourCoordinateHybrid
 

@@ -541,7 +541,7 @@ theorem convex_preimage_leadingCoordinatePoint
   rw [Finset.sum_eq_single coordinate]
   · simp [piBasisVector]
   · intro other _ hother
-    rw [piBasisVector, if_neg hother.symm, mul_zero]
+    rw [piBasisVector, ite_eq_right hother.symm, mul_zero]
   · simp
 
 /-- Exact automatic-differentiation bounds in an ambient parameter box prove

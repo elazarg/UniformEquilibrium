@@ -1,4 +1,5 @@
 import Mathlib.Analysis.Normed.Group.Tannery
+import Mathlib.Analysis.Normed.Field.Basic
 import Mathlib.Topology.Instances.Real.Lemmas
 import MathUE.AffineRecurrenceFiniteUnroll
 
@@ -54,18 +55,18 @@ theorem tendsto_affineWeightedChargeSum
     filter_upwards [eventually_ge_atTop (k + 1)] with horizon hhorizon
     have hk : k < horizon := by omega
     dsimp only [finiteWeight]
-    rw [if_pos hk, prod_Ico_eq_prod_range]
+    rw [ite_eq_left hk, prod_Ico_eq_prod_range]
     rfl
   have hbound : ∀ horizon k, ‖finiteWeight horizon k‖ ≤ |b k| := by
     intro horizon k
     by_cases hk : k < horizon
     · dsimp only [finiteWeight]
-      rw [if_pos hk, norm_mul, Real.norm_eq_abs,
+      rw [ite_eq_left hk, norm_mul, Real.norm_eq_abs,
         Real.norm_eq_abs, abs_of_nonneg (prod_nonneg fun i _ => ha0 _)]
       have hp : (∏ i ∈ Ico (k + 1) horizon, a i) ≤ 1 :=
-        prod_le_one (fun i _ => ha0 i) (fun i _ => ha1 i)
+        prod_le_one₀ (fun i _ => ha0 i) (fun i _ => ha1 i)
       exact mul_le_of_le_one_left (abs_nonneg (b k)) hp
-    · simp only [finiteWeight, if_neg hk, norm_zero, abs_nonneg]
+    · simp only [finiteWeight, ite_eq_right hk, norm_zero, abs_nonneg]
   have htendsto := tendsto_tsum_of_dominated_convergence hb hpoint
     (Eventually.of_forall hbound)
   convert htendsto using 1
@@ -73,12 +74,12 @@ theorem tendsto_affineWeightedChargeSum
   rw [tsum_eq_sum' (s := range horizon)]
   · apply sum_congr rfl
     intro k hk
-    simp only [finiteWeight, mem_range.mp hk, if_true]
+    simp only [finiteWeight, mem_range.mp hk, ite_true]
   · intro k hk
     by_contra hnot
     have hnotLt : ¬ k < horizon := fun hlt => hnot (mem_range.mpr hlt)
     have hzero : finiteWeight horizon k = 0 := by
-      simp only [finiteWeight, if_neg hnotLt]
+      simp only [finiteWeight, ite_eq_right hnotLt]
     exact hk hzero
 
 /-- Unit-interval coefficients and absolutely summable charges force the

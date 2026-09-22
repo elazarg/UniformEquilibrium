@@ -465,34 +465,35 @@ theorem directedCycleMatrix_standardQ_iff
 
 private def directedKernelSimplex
     (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
-    (hd : 0 < d) : stdSimplex ℝ Player := by
+    (hd : 0 < d) : Convexity.StdSimplex ℝ Player := by
   let total := a * d + b * c + a * c
   have htotal : 0 < total := by dsimp [total]; positivity
-  refine ⟨![a * d / total, b * c / total, a * c / total], ?_, ?_⟩
+  refine ⟨Finsupp.equivFunOnFinite.symm ![a * d / total, b * c / total,
+    a * c / total], ?_, ?_⟩
   · intro i
-    fin_cases i <;> simp only [Fin.zero_eta, Fin.mk_one, Fin.reduceFinMk,
-      Fin.isValue, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val] <;> positivity
-  · simp [Fin.sum_univ_succ, total]
+    change 0 ≤ ![a * d / total, b * c / total, a * c / total] i
+    fin_cases i <;> norm_num <;> positivity
+  · rw [Finsupp.sum_fintype _ _ (by simp)]
+    simp [Fin.sum_univ_succ, total]
     field_simp [ne_of_gt htotal]
     ring
 
 @[simp] private theorem directedKernelSimplex_zero
     (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hd : 0 < d) :
-    directedKernelSimplex a b c d ha hb hc hd 0 =
+    (directedKernelSimplex a b c d ha hb hc hd).weights 0 =
       a * d / (a * d + b * c + a * c) := rfl
 
 @[simp] private theorem directedKernelSimplex_one
     (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hd : 0 < d) :
-    directedKernelSimplex a b c d ha hb hc hd 1 =
+    (directedKernelSimplex a b c d ha hb hc hd).weights 1 =
       b * c / (a * d + b * c + a * c) := rfl
 
 @[simp] private theorem directedKernelSimplex_two
     (a b c d : ℝ) (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
     (hd : 0 < d) :
-    directedKernelSimplex a b c d ha hb hc hd 2 =
+    (directedKernelSimplex a b c d ha hb hc hd).weights 2 =
       a * c / (a * d + b * c + a * c) := rfl
 
 /-- In the strict directed-cycle sign chamber, the homogeneous simplex LCP
@@ -504,15 +505,21 @@ theorem directedCycleMatrix_hasHomogeneous_iff
       cycleGap a b c d e f = 0 := by
   constructor
   · rintro ⟨weight, hresidual, hcomplementary⟩
-    let x : ℝ := weight.val 0
-    let y : ℝ := weight.val 1
-    let z : ℝ := weight.val 2
-    have hx : 0 ≤ x := weight.property.1 0
-    have hy : 0 ≤ y := weight.property.1 1
-    have hz : 0 ≤ z := weight.property.1 2
+    let x : ℝ := weight.weights 0
+    let y : ℝ := weight.weights 1
+    let z : ℝ := weight.weights 2
+    have hx : 0 ≤ x := weight.weights_nonneg 0
+    have hy : 0 ≤ y := weight.weights_nonneg 1
+    have hz : 0 ≤ z := weight.weights_nonneg 2
     have htotal : x + (y + z) = 1 := by
-      change weight.val 0 + (weight.val 1 + weight.val 2) = 1
-      simpa [Fin.sum_univ_succ] using weight.property.2
+      calc
+        x + (y + z) =
+            weight.weights 0 + (weight.weights 1 + weight.weights 2) := rfl
+        _ = ∑ i, weight.weights i := by
+          rw [Fin.sum_univ_succ, Fin.sum_univ_succ, Fin.sum_univ_succ,
+            Fin.sum_univ_zero, add_zero]
+          norm_num
+        _ = 1 := weight.total_of_fintype
     have hr0 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 0 = -a * y + b * z := by
       dsimp only [x, y, z]
@@ -521,8 +528,6 @@ theorem directedCycleMatrix_hasHomogeneous_iff
         Fin.sum_univ_succ, Fin.succ_ne_zero, Fin.succ_zero_eq_one,
         univ_unique, Fin.default_eq_zero, sum_singleton, Fin.succ_one_eq_two,
         Fin.reduceEq, zero_add, neg_mul]
-      rw [show weight 1 = weight.val 1 by rfl,
-        show weight 2 = weight.val 2 by rfl]
       ring
     have hr1 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 1 = c * x - d * z := by
@@ -532,8 +537,6 @@ theorem directedCycleMatrix_hasHomogeneous_iff
         Fin.sum_univ_succ, Fin.succ_ne_zero, Fin.succ_zero_eq_one,
         univ_unique, Fin.default_eq_zero, sum_singleton, Fin.succ_one_eq_two,
         Fin.reduceEq, zero_add]
-      rw [show weight 0 = weight.val 0 by rfl,
-        show weight 2 = weight.val 2 by rfl]
       ring
     have hr2 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 2 = -e * x + f * y := by
@@ -544,8 +547,6 @@ theorem directedCycleMatrix_hasHomogeneous_iff
         Fin.sum_univ_succ, Fin.succ_ne_zero, Fin.succ_zero_eq_one,
         univ_unique, Fin.default_eq_zero, sum_singleton, Fin.succ_one_eq_two,
         add_zero, neg_mul]
-      rw [show weight 0 = weight.val 0 by rfl,
-        show weight 1 = weight.val 1 by rfl]
       ring
     have hxpos : 0 < x := by
       by_contra hxnot
@@ -650,13 +651,13 @@ theorem directedCycleMatrix_hasHomogeneous_iff
         rw [hr2]
     · intro i
       fin_cases i
-      · change weight 0 * singletonLCPResidual
+      · change weight.weights 0 * singletonLCPResidual
           (directedCycleMatrix a b c d e f) weight 0 = 0
         rw [hr0, mul_zero]
-      · change weight 1 * singletonLCPResidual
+      · change weight.weights 1 * singletonLCPResidual
           (directedCycleMatrix a b c d e f) weight 1 = 0
         rw [hr1, mul_zero]
-      · change weight 2 * singletonLCPResidual
+      · change weight.weights 2 * singletonLCPResidual
           (directedCycleMatrix a b c d e f) weight 2 = 0
         rw [hr2, mul_zero]
 

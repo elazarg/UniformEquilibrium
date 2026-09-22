@@ -7,7 +7,7 @@ import UniformEquilibrium.Quitting.Paths.ActualPrefixPayoffLimit
 noncomputable section
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 /-- Failure of a uniform payoff and an actual nested exact-root recursion

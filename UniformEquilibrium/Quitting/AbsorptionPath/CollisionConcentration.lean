@@ -37,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.PMFProduct Math.Probability
+open Filter Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -73,7 +73,7 @@ theorem quittingRootCollisionMass_le_opponentAbsorptionMass
       (fun who _ => hrate0 who) (fun who _ => hrate1 who)
   have habsorptionRest0 :
       0 ≤ 1 - ∏ who ∈ others, (1 - rate who) := by
-    exact sub_nonneg.mpr (Finset.prod_le_one
+    exact sub_nonneg.mpr (Finset.prod_le_one₀
       (fun who _ => sub_nonneg.mpr (hrate1 who))
       (fun who _ => by linarith [hrate0 who]))
   have hcollisionRestLe : collisionMassFormulaOn rate others ≤

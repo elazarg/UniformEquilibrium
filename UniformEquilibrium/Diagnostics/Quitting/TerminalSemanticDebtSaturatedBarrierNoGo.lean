@@ -30,8 +30,8 @@ noncomputable section
 namespace GameTheory
 namespace TerminalSemanticDebtSaturatedBarrierNoGo
 
-open Math.Probability Math.PMFProduct Set
-open Math.Probability.DiscreteHazard
+open _root_.Math.Probability Math.PMFProduct Set
+open _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -270,10 +270,10 @@ theorem not_positiveDebtFloor_of_never_prefixInvariant_debtSaturated
   let total := quittingTerminalSemanticDebtSum never
   have htotalFloor : delta ≤ total := hfloor never hnever
   have htotalPos : 0 < total := hdelta.trans_le htotalFloor
-  letI : Nonempty ι := by
+  let : Nonempty ι := by
     cases isEmpty_or_nonempty ι with
     | inl hι =>
-        letI : IsEmpty ι := hι
+        let : IsEmpty ι := hι
         have htotalZero : total = 0 := by
           simp [total, quittingTerminalSemanticDebtSum]
         linarith

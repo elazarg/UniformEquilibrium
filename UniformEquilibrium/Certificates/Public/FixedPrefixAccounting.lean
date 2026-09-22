@@ -24,7 +24,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -106,7 +106,7 @@ theorem normalized_suffix_charge_le_expect
         expect prefixLaw fun base =>
           ∑ time ∈ Finset.range horizon, localCharge time base := by
     classical
-    letI : Fintype (G.Hist prefixLength) :=
+    let : Fintype (G.Hist prefixLength) :=
       Fintype.ofFinite (G.Hist prefixLength)
     simp only [expect_eq_sum]
     rw [Finset.sum_comm]

@@ -353,7 +353,7 @@ theorem countableObservation_cylinder_eq_Cylinder
       InfiniteHistory.observedPrefix n history = Cylinder history := by
   ext path
   simp only [Math.CountableObservation.cylinder, InfiniteHistory.observedPrefix,
-    Cylinder, Set.mem_setOf_eq]
+    Cylinder, Set.mem_ofPred_eq]
   constructor
   · intro heq
     have hvalue := congrArg Subtype.val heq
@@ -674,7 +674,7 @@ theorem ae_historyTransitionKernel_extension (profile : Profile G)
     (history : FiniteHistory G.toStochasticGameForm) :
     ∀ᵐ next ∂historyTransitionKernel profile history, IsHistoryExtension history next := by
   let law := historyStepPMF profile history
-  letI : IsProbabilityMeasure law.toMeasure := PMF.toMeasure.isProbabilityMeasure law
+  let : IsProbabilityMeasure law.toMeasure := PMF.toMeasure.isProbabilityMeasure law
   have hsupportMeasurable : MeasurableSet law.support := law.support_countable.measurableSet
   have halmostSupport : ∀ᵐ next ∂law.toMeasure, next ∈ law.support := by
     rw [ae_mem_iff_measure_eq hsupportMeasurable.nullMeasurableSet]
@@ -813,7 +813,7 @@ theorem CoherentHistoryStream.measurable_prependChild
     Measurable (fun stream : CoherentHistoryStream G (start.snoc action target positive) =>
       stream.prependChild start action target positive) := by
   apply Measurable.subtype_mk
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro time
   cases time with
   | zero => exact measurable_const
@@ -889,7 +889,7 @@ theorem CoherentHistoryStreamThroughChild.measurable_toChildStream
       (G := G) (start := start) (action := action)
       (target := target) (positive := positive)) := by
   apply Measurable.subtype_mk
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro time
   exact (measurable_pi_apply (time + 1)).comp
     (measurable_subtype_coe.comp measurable_subtype_coe)
@@ -996,7 +996,7 @@ theorem CoherentHistoryStream.measurable_toInfiniteHistory
     have hset : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder history =
         (fun stream : CoherentHistoryStream G start => stream.1 offset) ⁻¹' {history} := by
       ext stream
-      simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_setOf_eq]
+      simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_ofPred_eq]
       rw [← hadd, stream.toInfiniteHistory_prefix_add offset]
     rw [hset]
     exact (measurableSet_singleton history).preimage
@@ -1054,15 +1054,15 @@ def profileHistoryLaw {G : NormalStochasticGame} (profile : Profile G)
 theorem profileHistoryLaw_isProbability {G : NormalStochasticGame}
     (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
     IsProbabilityMeasure (profileHistoryLaw profile start) := by
-  letI : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
+  let : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
     coherentHistoryStreamLaw_isProbability profile start
-  exact Measure.isProbabilityMeasure_map
-    CoherentHistoryStream.measurable_toInfiniteHistory.aemeasurable
+  unfold profileHistoryLaw
+  infer_instance
 
 theorem profileHistoryLaw_supported {G : NormalStochasticGame}
     (profile : Profile G) (start : FiniteHistory G.toStochasticGameForm) :
     profileHistoryLaw profile start (Cylinder start) = 1 := by
-  letI : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
+  let : IsProbabilityMeasure (coherentHistoryStreamLaw profile start) :=
     coherentHistoryStreamLaw_isProbability profile start
   rw [profileHistoryLaw, Measure.map_apply
     CoherentHistoryStream.measurable_toInfiniteHistory
@@ -1086,7 +1086,7 @@ theorem profileHistoryLaw_oneStep {G : NormalStochasticGame}
   have hpreimage : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder child =
       (fun stream : CoherentHistoryStream G start => stream.1 1) ⁻¹' {child} := by
     ext stream
-    simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_setOf_eq]
+    simp only [Set.mem_preimage, Set.mem_singleton_iff, Cylinder, Set.mem_ofPred_eq]
     change stream.toInfiniteHistory.prefix (start.length + 1) = child ↔ _
     rw [stream.toInfiniteHistory_prefix_add 1]
   rw [hpreimage]
@@ -1107,7 +1107,7 @@ theorem profileHistoryLaw_regular {G : NormalStochasticGame}
     ∃ closed openSet, IsClosed closed ∧ IsOpen openSet ∧ closed ⊆ set ∧
       set ⊆ openSet ∧
       profileHistoryLaw profile start (openSet \ closed) ≤ ENNReal.ofReal epsilon := by
-  letI : IsProbabilityMeasure (profileHistoryLaw profile start) :=
+  let : IsProbabilityMeasure (profileHistoryLaw profile start) :=
     profileHistoryLaw_isProbability profile start
   have hregularity :=
     @Math.CountableObservation.exists_isClosed_isOpen_measure_sdiff_le
@@ -1169,7 +1169,7 @@ theorem coherentHistoryStreamLaw_restrict_child
         ℕ → FiniteHistory G.toStochasticGameForm) := by
     exact MeasurableEmbedding.subtype_coe hcarrier
   apply MeasurableEmbedding.map_injective hval
-  rw [Measure.map_smul]
+  rw [Measure.map_smul _ hval.measurable.aemeasurable]
   calc
     ((coherentHistoryStreamLaw profile start).restrict
           {stream | stream.1 1 = child}).map Subtype.val =
@@ -1221,12 +1221,13 @@ theorem profileHistoryLaw_condition {G : NormalStochasticGame}
   have hpreimage : CoherentHistoryStream.toInfiniteHistory ⁻¹' Cylinder child =
       {stream : CoherentHistoryStream G start | stream.1 1 = child} := by
     ext stream
-    simp only [Set.mem_preimage, Cylinder, Set.mem_setOf_eq]
+    simp only [Set.mem_preimage, Cylinder, Set.mem_ofPred_eq]
     change stream.toInfiniteHistory.prefix (start.length + 1) = child ↔ _
     rw [stream.toInfiniteHistory_prefix_add 1]
   rw [hpreimage]
   rw [coherentHistoryStreamLaw_restrict_child]
-  rw [Measure.map_smul]
+  rw [Measure.map_smul _
+    CoherentHistoryStream.measurable_toInfiniteHistory.aemeasurable]
   rw [Measure.map_map CoherentHistoryStream.measurable_toInfiniteHistory
     (CoherentHistoryStream.measurable_prependChild
       start action target positive)]
@@ -1629,6 +1630,12 @@ private instance DiscreteDecisionProcess.countablePaddedAction
   change Countable (Σ state, P.Y state)
   infer_instance
 
+private instance DiscreteDecisionProcess.measurableSpacePaddedState
+    (P : DiscreteDecisionProcess) : MeasurableSpace P.paddedGame.State := ⊤
+
+private instance DiscreteDecisionProcess.measurableSpacePaddedAction
+    (P : DiscreteDecisionProcess) (who : PUnit) : MeasurableSpace (P.paddedGame.Act who) := ⊤
+
 /-- At a padded-game history, sample the DDP's local action at the current state. -/
 private def DiscreteDecisionProcess.paddedPolicy
     (P : DiscreteDecisionProcess) (_ : PUnit) (t : ℕ) (history : P.paddedGame.Hist t) :
@@ -1757,7 +1764,7 @@ private theorem pmfPi_map_eval_punit {A : PUnit → Type} [∀ i, Countable (A i
   rw [tsum_eq_single (fun _ => action)]
   · simp [Math.PMFProduct.pmfPi_apply]
   · intro other hother
-    rw [if_neg]
+    rw [ite_eq_right]
     intro heval
     apply hother
     funext i
@@ -1797,7 +1804,7 @@ private theorem pmf_bind_map_pair_apply {A B : Type} (law : PMF A) (next : A →
     rw [PMF.map_apply, tsum_eq_single b]
     · simp
     · intro other hother
-      rw [if_neg]
+      rw [ite_eq_right]
       intro h
       exact hother (congrArg Prod.snd h).symm
   · intro other hother
@@ -1953,7 +1960,7 @@ private instance ddpStageMeasurableSpace (P : DiscreteDecisionProcess) :
 
 private theorem DiscreteDecisionProcess.measurable_decodePaddedPlay
     (P : DiscreteDecisionProcess) : Measurable P.decodePaddedPlay := by
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro i
   exact (measurable_of_countable P.decodePaddedStage).comp (measurable_pi_apply i)
 
@@ -2129,7 +2136,7 @@ private instance DiscreteDecisionProcess.isProbabilityMeasure_productionRawLawWi
     (P : DiscreteDecisionProcess) (initial : PMF (DDPStage P)) :
     IsProbabilityMeasure (P.productionRawLawWithInitial initial) := by
   unfold DiscreteDecisionProcess.productionRawLawWithInitial
-  exact Measure.isProbabilityMeasure_map P.measurable_decodePaddedPlay.aemeasurable
+  infer_instance
 
 /-- Every finite marginal of the arbitrary-initial decoded production law is the finite DDP
 coordinate recursion. -/
@@ -2244,7 +2251,7 @@ private theorem DiscreteDecisionProcess.productionRawLawWithInitial_exactStageCy
         Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k ⁻¹'
           {P.stagePrefixOfFin stage} := by
     ext w
-    simp only [mem_setOf_eq, mem_preimage, mem_singleton_iff]
+    simp only [mem_ofPred_eq, mem_preimage, mem_singleton_iff]
     constructor
     · intro h
       funext i
@@ -2268,7 +2275,7 @@ private theorem DiscreteDecisionProcess.initialStagePMF_apply
   rw [tsum_eq_single y]
   · simp
   · intro other hother
-    rw [if_neg]
+    rw [ite_eq_right]
     intro heq
     have : other = y := eq_of_heq (Sigma.mk.inj_iff.mp heq.symm).2
     exact hother this
@@ -2283,7 +2290,7 @@ private theorem DiscreteDecisionProcess.initialStagePMF_apply_of_ne
     _ = ∑' _action : P.Y x, (0 : ℝ≥0∞) := by
       apply tsum_congr
       intro action
-      rw [if_neg]
+      rw [ite_eq_right]
       intro heq
       exact h (Sigma.mk.inj_iff.mp heq).1.symm
     _ = 0 := tsum_zero
@@ -2454,7 +2461,7 @@ private theorem DiscreteDecisionProcess.productionRawLawWithInitial_eq_stageKern
     dsimp only [family]
     exact MeasureTheory.isProjectiveMeasureFamily_inducedFamily
       (X := fun _ : ℕ => DDPStage P) finiteLaw hprojective
-  letI : ∀ I, IsFiniteMeasure (family I) := fun I => by
+  let : ∀ I, IsFiniteMeasure (family I) := fun I => by
     dsimp only [family, finiteLaw, MeasureTheory.inducedFamily]
     infer_instance
   have hproduction : IsProjectiveLimit (P.productionRawLawWithInitial initial)
@@ -2546,7 +2553,7 @@ private theorem DiscreteDecisionProcess.integral_increment_stageKernel_eq_zero
   let current := history ⟨n, Finset.mem_Iic.mpr le_rfl⟩
   have hintegrable : Integrable (DDPStage.increment P)
       (P.stepStagePMF current).toMeasure := by
-    letI : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
+    let : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
       PMF.toMeasure.isProbabilityMeasure _
     exact Integrable.of_bound Measurable.of_discrete.aestronglyMeasurable
       P.valueDifferenceBound
@@ -2602,7 +2609,7 @@ private theorem DiscreteDecisionProcess.integral_valueY_stageKernel
       _ = _ := by ring
   have hintegrable : Integrable (fun next : DDPStage P => P.valueY next.1 next.2)
       (P.stepStagePMF current).toMeasure := by
-    letI : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
+    let : IsProbabilityMeasure (P.stepStagePMF current).toMeasure :=
       PMF.toMeasure.isProbabilityMeasure _
     exact Integrable.of_bound Measurable.of_discrete.aestronglyMeasurable
       (‖P.valueY current.1 current.2‖ + P.valueDifferenceBound)
@@ -3018,7 +3025,7 @@ private theorem DiscreteDecisionProcess.rawStageCylinder_eq_prefixPreimage
       Preorder.frestrictLe (π := fun _ : ℕ => DDPStage P) k ⁻¹'
         {P.stagePrefixOfFin stage} := by
   ext w
-  simp only [mem_setOf_eq, mem_preimage, mem_singleton_iff]
+  simp only [mem_ofPred_eq, mem_preimage, mem_singleton_iff]
   constructor
   · intro h
     funext i
@@ -3068,11 +3075,11 @@ private theorem DiscreteDecisionProcess.isPiSystem_rawStagePrefixSets
   rcases hU with ⟨k, stage, rfl⟩
   rcases hV with ⟨l, other, rfl⟩
   rcases hnonempty with ⟨w, hwStage, hwOther⟩
-  simp only [mem_setOf_eq] at hwStage hwOther
+  simp only [mem_ofPred_eq] at hwStage hwOther
   rcases le_total k l with hkl | hlk
   · refine ⟨l, other, ?_⟩
     ext u
-    simp only [mem_inter_iff, mem_setOf_eq]
+    simp only [mem_inter_iff, mem_ofPred_eq]
     constructor
     · exact fun h => h.2
     · intro huOther
@@ -3084,7 +3091,7 @@ private theorem DiscreteDecisionProcess.isPiSystem_rawStagePrefixSets
         _ = stage i := hwStage i
   · refine ⟨k, stage, ?_⟩
     ext u
-    simp only [mem_inter_iff, mem_setOf_eq]
+    simp only [mem_inter_iff, mem_ofPred_eq]
     constructor
     · exact fun h => h.1
     · intro huStage
@@ -3103,7 +3110,7 @@ private theorem DiscreteDecisionProcess.generateFrom_rawStagePrefixSets
   · have hid : @Measurable (ℕ → DDPStage P) (ℕ → DDPStage P)
         (MeasurableSpace.generateFrom P.rawStagePrefixSets)
         (MeasurableSpace.pi : MeasurableSpace (ℕ → DDPStage P)) id := by
-      refine @measurable_pi_lambda (ℕ → DDPStage P) ℕ (fun _ => DDPStage P)
+      refine @Measurable.of_eval (ℕ → DDPStage P) ℕ (fun _ => DDPStage P)
         (MeasurableSpace.generateFrom P.rawStagePrefixSets) (fun _ => inferInstance) id ?_
       intro i
       apply @measurable_to_countable' (DDPStage P) (ℕ → DDPStage P)
@@ -3115,7 +3122,7 @@ private theorem DiscreteDecisionProcess.generateFrom_rawStagePrefixSets
             {w : ℕ → DDPStage P |
               ∀ j : Fin (i + 1), w j = stage j} := by
         ext w
-        simp only [mem_preimage, mem_singleton_iff, mem_iUnion, mem_setOf_eq]
+        simp only [mem_preimage, mem_singleton_iff, mem_iUnion, mem_ofPred_eq]
         constructor
         · intro hw
           let stage : Fin (i + 1) → DDPStage P := fun j => w j
@@ -3138,7 +3145,7 @@ private def DiscreteDecisionProcess.rawShift (P : DiscreteDecisionProcess)
 
 private theorem DiscreteDecisionProcess.measurable_rawShift
     (P : DiscreteDecisionProcess) (i : ℕ) : Measurable (P.rawShift i) := by
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro j
   exact measurable_pi_apply (i + j)
 
@@ -3157,7 +3164,7 @@ private def DiscreteDecisionProcess.spliceRawStages
     P.spliceRawStages initialStages tail overlap ⟨j.1, by omega⟩ = initialStages j := by
   change (if h : j.1 ≤ i then initialStages ⟨j.1, by omega⟩
     else tail ⟨j.1 - i, by omega⟩) = initialStages j
-  rw [dif_pos (by omega)]
+  rw [dite_eq_left (by omega)]
 
 @[simp] private theorem DiscreteDecisionProcess.spliceRawStages_tail
     (P : DiscreteDecisionProcess) {i k : ℕ}
@@ -3168,7 +3175,7 @@ private def DiscreteDecisionProcess.spliceRawStages
   · subst j
     change (if h : i ≤ i then initialStages ⟨i, by omega⟩
       else tail ⟨i - i, by omega⟩) = tail 0
-    rw [dif_pos le_rfl]
+    rw [dite_eq_left le_rfl]
     calc
       initialStages ⟨i, by omega⟩ = initialStages (Fin.last i) := by congr
       _ = tail 0 := overlap
@@ -3176,7 +3183,7 @@ private def DiscreteDecisionProcess.spliceRawStages
       else tail ⟨i + j.1 - i, by omega⟩) = tail j
     have hjpos : 0 < j.1 := by
       exact Nat.pos_of_ne_zero fun hz => hj (Fin.ext hz)
-    rw [dif_neg (by omega)]
+    rw [dite_eq_right (by omega)]
     apply congrArg tail
     apply Fin.ext
     exact Nat.add_sub_cancel_left i j.1
@@ -3233,7 +3240,7 @@ private theorem DiscreteDecisionProcess.inter_shift_rawStageCylinder_eq_splice
       {w | ∀ j : Fin (i + k + 1),
         w j = P.spliceRawStages initialStages tail overlap j} := by
   ext w
-  simp only [mem_inter_iff, mem_setOf_eq, mem_preimage]
+  simp only [mem_inter_iff, mem_ofPred_eq, mem_preimage]
   constructor
   · rintro ⟨hinitial, htail⟩ j
     by_cases hj : j.1 ≤ i
@@ -3272,7 +3279,7 @@ private theorem DiscreteDecisionProcess.inter_shift_rawStageCylinder_eq_empty
     {w : ℕ → DDPStage P | ∀ j : Fin (i + 1), w j = initialStages j} ∩
         P.rawShift i ⁻¹' {w | ∀ j : Fin (k + 1), w j = tail j} = ∅ := by
   ext w
-  simp only [mem_inter_iff, mem_setOf_eq, mem_preimage, mem_empty_iff_false, iff_false,
+  simp only [mem_inter_iff, mem_ofPred_eq, mem_preimage, mem_empty_iff_false, iff_false,
     not_and]
   intro hinitial htail
   apply overlap
@@ -3452,7 +3459,7 @@ private theorem DiscreteDecisionProcess.integral_stoppedValue_hittingBtwn_eq
         stage ∈ {stage : ℕ → DDPStage P | stage 0 = (⟨x, y⟩ : DDPStage P)} :=
       (ae_mem_iff_measure_eq hset.nullMeasurableSet).2 (by
         rw [hsupport]
-        letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+        let : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
           P.isProbabilityMeasure_rawLawAfterAction x y
         rw [measure_univ])
     filter_upwards [hmem] with stage hstage
@@ -3462,7 +3469,7 @@ private theorem DiscreteDecisionProcess.integral_stoppedValue_hittingBtwn_eq
       (fun (n : ℕ) (path : ℕ → DDPStage P) => (path n).1) A 1 N stage : ℕ) : ℕ∞)) =
       tau by rfl]
   rw [hstopped, integral_congr_ae hae]
-  letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+  let : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
     P.isProbabilityMeasure_rawLawAfterAction x y
   simp
 
@@ -3485,7 +3492,7 @@ private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shiftCylinder
       P.rawLawWithInitial_exactStageCylinder]
     rw [DiscreteDecisionProcess.rawLawAfterAction,
       P.rawLawWithInitial_exactStageCylinder]
-    rw [PMF.pure_apply, if_pos hoverlap.symm, one_mul]
+    rw [PMF.pure_apply, ite_eq_left hoverlap.symm, one_mul]
     have hzero : P.spliceRawStages initialStages tail hoverlap 0 = initialStages 0 := by
       exact P.spliceRawStages_prefix initialStages tail hoverlap 0
     rw [hzero]
@@ -3496,7 +3503,7 @@ private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shiftCylinder
     right
     rw [DiscreteDecisionProcess.rawLawAfterAction,
       P.rawLawWithInitial_exactStageCylinder]
-    rw [PMF.pure_apply, if_neg (Ne.symm hoverlap), zero_mul]
+    rw [PMF.pure_apply, ite_eq_right (Ne.symm hoverlap), zero_mul]
 
 /-- Restricting to a finite raw prefix and shifting gives its mass times the restarted law. -/
 private theorem DiscreteDecisionProcess.map_rawShift_restrict_rawStageCylinder
@@ -3566,7 +3573,7 @@ private theorem DiscreteDecisionProcess.rawLawWithInitial_inter_shift_stageAt
     exact (hwStage j).symm.trans (hwOther j)
   have hunion : {w : ℕ → DDPStage P | w i = current} = ⋃ stage : Prefix, C stage := by
     ext w
-    simp only [mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_ofPred_eq, mem_iUnion, C]
     constructor
     · intro hw
       let stage : Fin (i + 1) → DDPStage P := fun j => w j
@@ -3618,7 +3625,7 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_stagesWithFinal
     have hzero : h.actionsWithFinal P last 0 = h.y 0 := by
       simpa using h.actionsWithFinal_castSucc P last (0 : Fin (k + 1))
     simpa [DDPFinitePath.stagesWithFinal, hzero] using haction
-  rw [PMF.pure_apply, if_pos hfirst, one_mul]
+  rw [PMF.pure_apply, ite_eq_left hfirst, one_mul]
   have hstep : ∀ i : Fin (k + 1),
       P.stepStagePMF (h.stagesWithFinal P last i.castSucc)
           (h.stagesWithFinal P last i.succ) =
@@ -3659,7 +3666,6 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_stagesWithFinal
       simp only [DDPFinitePath.actionsWithFinal_castSucc,
         DDPFinitePath.actionsWithFinal_last, Fin.succ_castSucc,
         Fin.succ_last, Nat.succ_eq_add_one]
-    · congr 1
   rw [DDPFinitePath.afterActionProbability]
   calc
     _ = P.move (h.x 0) (h.y 0) (h.x 1) *
@@ -3719,7 +3725,7 @@ private theorem DDPPath.preimage_ddpCylinder_eq_iUnion
         {stage | last.1 = h.x (Fin.last k) ∧ ∀ i : Fin (k + 1),
           stage i = h.extendWithFinalStage P last i} := by
   ext stage
-  simp only [mem_preimage, mem_iUnion, mem_setOf_eq]
+  simp only [mem_preimage, mem_iUnion, mem_ofPred_eq]
   constructor
   · intro hp
     change (DDPPath.ofRaw P stage).prefix P k = h at hp
@@ -3972,7 +3978,7 @@ private theorem DiscreteDecisionProcess.integral_rawStageValue_ddpCylinder
   have hevent : DDPPath.ofRaw P ⁻¹' DDPCylinder P h = ⋃ last, C last := by
     rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
     ext stage
-    simp only [mem_iUnion, mem_setOf_eq, C]
+    simp only [mem_iUnion, mem_ofPred_eq, C]
     constructor
     · rintro ⟨⟨state, last⟩, hstate, hstage⟩
       change state = h.x (Fin.last (k + 1)) at hstate
@@ -4081,7 +4087,7 @@ private theorem measurableSet_ddpInitialStateAction
   have heq : {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} =
       ⋃ z : P.X, DDPCylinder P (DDPFinitePath.firstStep P x y z) := by
     ext p
-    simp only [mem_setOf_eq, mem_iUnion]
+    simp only [mem_ofPred_eq, mem_iUnion]
     constructor
     · rintro ⟨hx, hy⟩
       refine ⟨p.x 1, ?_⟩
@@ -4162,10 +4168,10 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
   let afterAction : (x : P.X) → P.Y x → Measure (DDPPath P) := fun x y =>
     Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
   have hfromProbability (x : P.X) : IsProbabilityMeasure (fromState x) := by
-    exact Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+    infer_instance
   have hafterProbability (x : P.X) (y : P.Y x) :
       IsProbabilityMeasure (afterAction x y) := by
-    exact Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+    infer_instance
   have hfromCylinder (x : P.X) (k : ℕ) (h : DDPFinitePath P k)
       (hstart : h.x 0 = x) :
       fromState x (DDPCylinder P h) = h.probability P := by
@@ -4200,7 +4206,7 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
           {p : DDPPath P | p.x 0 = x ∧ HEq (p.y 0) y} =
         {stage : ℕ → DDPStage P | ∀ _ : Fin 1, stage 0 = (⟨x, y⟩ : DDPStage P)} := by
       ext stage
-      simp only [mem_preimage, mem_setOf_eq]
+      simp only [mem_preimage, mem_ofPred_eq]
       constructor
       · rintro ⟨hx, hy⟩ i
         exact Sigma.ext hx hy
@@ -4228,9 +4234,9 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
     have hcylinderSet : DDPCylinder P step = support ∩ successor := by
       ext p
       rw [DDPFinitePath.mem_firstStepCylinder_iff]
-      simp only [support, successor, mem_inter_iff, mem_setOf_eq]
+      simp only [support, successor, mem_inter_iff, mem_ofPred_eq]
       tauto
-    letI : IsProbabilityMeasure (afterAction x y) := hafterProbability x y
+    let : IsProbabilityMeasure (afterAction x y) := hafterProbability x y
     have hsupport : afterAction x y support = 1 := hafterSupport x y
     have hsupportMeasurable : MeasurableSet support :=
       measurableSet_ddpInitialStateAction P x y
@@ -4240,7 +4246,7 @@ theorem ddpSemantics_exists (P : DiscreteDecisionProcess) : Nonempty (DDPSemanti
       simp
     have hsupportAE : ∀ᵐ p ∂afterAction x y, p ∈ support := by
       rw [ae_iff]
-      simpa only [Set.compl_def, mem_setOf_eq] using hsupportComplement
+      simpa only [Set.compl_def, mem_ofPred_eq] using hsupportComplement
     calc
       afterAction x y {p | p.x 1 = z} = afterAction x y (support ∩ successor) := by
         apply measure_congr
@@ -4299,9 +4305,8 @@ private theorem DDPSemantics.law_eq_rawLaw (P : DiscreteDecisionProcess)
     (S : DDPSemantics P) :
     S.law = Measure.map (DDPPath.ofRaw P) (P.rawLawFrom P.initial) := by
   let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawFrom P.initial)
-  letI : IsProbabilityMeasure S.law := S.probability
-  letI : IsProbabilityMeasure canonical :=
-    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  let : IsProbabilityMeasure S.law := S.probability
+  let : IsProbabilityMeasure canonical := inferInstance
   let support : Set (DDPPath P) := {p | p.x 0 = P.initial}
   have hcanonicalSupport : canonical support = 1 := by
     have heq : support = DDPCylinder P (DDPFinitePath.atState P P.initial) := by
@@ -4328,7 +4333,7 @@ private theorem DDPSemantics.law_eq_rawLaw (P : DiscreteDecisionProcess)
       mu (DDPCylinder P h) ≤ mu supportᶜ := by
         apply measure_mono
         intro p hp
-        simp only [support, mem_compl_iff, mem_setOf_eq]
+        simp only [support, mem_compl_iff, mem_ofPred_eq]
         intro hpstart
         apply hwrong
         change p.prefix P k = h at hp
@@ -4354,9 +4359,8 @@ private theorem DDPSemantics.fromState_eq_rawLaw (P : DiscreteDecisionProcess)
     (S : DDPSemantics P) (start : P.X) :
     S.fromState start = Measure.map (DDPPath.ofRaw P) (P.rawLawFrom start) := by
   let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawFrom start)
-  letI : IsProbabilityMeasure (S.fromState start) := S.fromStateProbability start
-  letI : IsProbabilityMeasure canonical :=
-    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  let : IsProbabilityMeasure (S.fromState start) := S.fromStateProbability start
+  let : IsProbabilityMeasure canonical := inferInstance
   let support : Set (DDPPath P) := {p | p.x 0 = start}
   have hcanonicalSupport : canonical support = 1 := by
     have heq : support = DDPCylinder P (DDPFinitePath.atState P start) := by
@@ -4383,7 +4387,7 @@ private theorem DDPSemantics.fromState_eq_rawLaw (P : DiscreteDecisionProcess)
       mu (DDPCylinder P h) ≤ mu supportᶜ := by
         apply measure_mono
         intro p hp
-        simp only [support, mem_compl_iff, mem_setOf_eq]
+        simp only [support, mem_compl_iff, mem_ofPred_eq]
         intro hpstart
         apply hwrong
         change p.prefix P k = h at hp
@@ -4412,9 +4416,8 @@ private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
   classical
   let canonical := Measure.map (DDPPath.ofRaw P) (P.rawLawAfterAction x y)
   let support : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
-  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
-  letI : IsProbabilityMeasure canonical :=
-    Measure.isProbabilityMeasure_map (DDPPath.measurable_ofRaw P).aemeasurable
+  let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  let : IsProbabilityMeasure canonical := inferInstance
   have hcanonicalSupport : canonical support = 1 := by
     dsimp only [canonical, support]
     rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
@@ -4424,7 +4427,7 @@ private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
         {stage : ℕ → DDPStage P |
           ∀ _ : Fin 1, stage 0 = (⟨x, y⟩ : DDPStage P)} := by
       ext stage
-      simp only [mem_preimage, mem_setOf_eq]
+      simp only [mem_preimage, mem_ofPred_eq]
       constructor
       · rintro ⟨hx, hy⟩ i
         exact Sigma.ext hx hy
@@ -4451,7 +4454,7 @@ private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
       mu (DDPCylinder P h) ≤ mu supportᶜ := by
         apply measure_mono
         intro p hp
-        simp only [support, mem_compl_iff, mem_setOf_eq]
+        simp only [support, mem_compl_iff, mem_ofPred_eq]
         rintro ⟨hpstart, hpaction⟩
         change p.prefix P (k + 1) = h at hp
         have hx := congrArg (fun q : DDPFinitePath P (k + 1) => q.x 0) hp
@@ -4497,7 +4500,7 @@ private theorem DDPSemantics.afterAction_eq_rawLaw (P : DiscreteDecisionProcess)
         mu (DDPCylinder P h) ≤ mu supportᶜ := by
           apply measure_mono
           intro p hp
-          simp only [support, mem_compl_iff, mem_setOf_eq]
+          simp only [support, mem_compl_iff, mem_ofPred_eq]
           intro hs
           apply hstart
           rw [zeroCylinder_eq_initialState] at hp
@@ -4540,7 +4543,7 @@ private theorem DDPSemantics.afterAction_cylinder_eq_zero_of_wrong
     (hwrong : h.x 0 ≠ x ∨ ¬HEq (h.y 0) y) :
     S.afterAction x y (DDPCylinder P h) = 0 := by
   let support : Set (DDPPath P) := {p | p.x 0 = x ∧ HEq (p.y 0) y}
-  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
   have hsupportMeasurable : MeasurableSet support :=
     measurableSet_ddpInitialStateAction P x y
   have hsupportComplement : S.afterAction x y supportᶜ = 0 := by
@@ -4552,7 +4555,7 @@ private theorem DDPSemantics.afterAction_cylinder_eq_zero_of_wrong
     S.afterAction x y (DDPCylinder P h) ≤ S.afterAction x y supportᶜ := by
       apply measure_mono
       intro p hp
-      simp only [support, mem_compl_iff, mem_setOf_eq]
+      simp only [support, mem_compl_iff, mem_ofPred_eq]
       rintro ⟨hpstart, hpaction⟩
       change p.prefix P (k + 1) = h at hp
       have hx := congrArg (fun q : DDPFinitePath P (k + 1) => q.x 0) hp
@@ -4594,7 +4597,7 @@ private theorem DDPSemantics.fromState_cylinder_eq_zero_of_wrong
     (x : P.X) {k : ℕ} (h : DDPFinitePath P k) (hwrong : h.x 0 ≠ x) :
     S.fromState x (DDPCylinder P h) = 0 := by
   let support : Set (DDPPath P) := {p | p.x 0 = x}
-  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  let : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
   have hsupportMeasurable : MeasurableSet support := measurableSet_ddpInitialState P x
   have hsupportComplement : S.fromState x supportᶜ = 0 := by
     rw [measure_compl hsupportMeasurable (by rw [S.fromStateSupport]; simp)]
@@ -4605,7 +4608,7 @@ private theorem DDPSemantics.fromState_cylinder_eq_zero_of_wrong
     S.fromState x (DDPCylinder P h) ≤ S.fromState x supportᶜ := by
       apply measure_mono
       intro p hp
-      simp only [support, mem_compl_iff, mem_setOf_eq]
+      simp only [support, mem_compl_iff, mem_ofPred_eq]
       intro hpstart
       apply hwrong
       change p.prefix P k = h at hp
@@ -4646,7 +4649,7 @@ private theorem DDPSemantics.afterAction_zeroCylinder_eq_one
     (P : DiscreteDecisionProcess) (S : DDPSemantics P)
     (x : P.X) (y : P.Y x) (h : DDPFinitePath P 0) (hstart : h.x 0 = x) :
     S.afterAction x y (DDPCylinder P h) = 1 := by
-  letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
   rw [ddpCylinder_zero_eq_initialState]
   apply le_antisymm (by
     calc
@@ -4670,7 +4673,7 @@ private theorem DDPSemantics.afterAction_zeroCylinder_eq_zero
   have hsubset : {p : DDPPath P | p.x 0 = h.x 0} ⊆
       {p | p.x 0 = x ∧ HEq (p.y 0) y}ᶜ := by
     intro p hp
-    simp only [mem_setOf_eq, mem_compl_iff]
+    simp only [mem_ofPred_eq, mem_compl_iff]
     intro hs
     exact hstart (hp.symm.trans hs.1)
   apply nonpos_iff_eq_zero.mp
@@ -4681,7 +4684,7 @@ private theorem DDPSemantics.afterAction_zeroCylinder_eq_zero
     _ = 0 := by
       rw [measure_compl (measurableSet_ddpInitialStateAction P x y)
         (by rw [S.afterActionSupport]; simp)]
-      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
       rw [measure_univ, S.afterActionSupport]
       simp
 
@@ -4707,7 +4710,7 @@ theorem measurableSet_ddpAdvantage_crossing (P : DiscreteDecisionProcess) (ε : 
     if h.advantage P ≥ ε then DDPCylinder P h else ∅
   have hE : {p | ∃ l, DDPAdvantage P p l ≥ ε} = E := by
     ext p
-    simp only [E, mem_setOf_eq, mem_iUnion, mem_ite_empty_right]
+    simp only [E, mem_ofPred_eq, mem_iUnion, mem_ite_empty_right]
     constructor
     · rintro ⟨l, hl⟩
       refine ⟨l, p.prefix P (l + 1), ?_, rfl⟩
@@ -4977,7 +4980,7 @@ private theorem DiscreteDecisionProcess.ae_choose_pos_rawLawFrom
   have hbad : {stage : ℕ → DDPStage P |
       ¬0 < P.choose (stage i).1 (stage i).2} = ⋃ pref, C pref := by
     ext stage
-    simp only [mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_ofPred_eq, mem_iUnion, C]
     constructor
     · intro hstage
       let pref : Fin (i + 1) → DDPStage P := fun j => stage j
@@ -5234,7 +5237,7 @@ private theorem DiscreteDecisionProcess.rawAbsoluteCrossing_le
       {stage | ∃ l, epsilon ≤ |P.rawAdvantage stage l|} := by
     ext stage
     simp only [mem_iUnion, DiscreteDecisionProcess.rawAbsoluteCrossingUpTo,
-      mem_setOf_eq]
+      mem_ofPred_eq]
     constructor
     · rintro ⟨n, l, _hl, hcross⟩
       exact ⟨l, hcross⟩
@@ -5260,7 +5263,7 @@ theorem proposition1 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
   rw [AbsoluteCrossingProbability, S.law_eq_rawLaw]
   rw [Measure.map_apply (DDPPath.measurable_ofRaw P)
     (measurableSet_ddpAbsoluteAdvantage_crossing P ε)]
-  simpa only [Set.preimage_setOf_eq, P.advantage_ofRaw] using
+  simpa only [Set.preimage_ofPred_eq, P.advantage_ofRaw] using
     P.rawAbsoluteCrossing_le S hδ hε hρ hB hbalanced hvariation hsmall
 
 /-! ### 3.3. Rank -/
@@ -5314,7 +5317,7 @@ private theorem measurableSet_firstReturnAt (P : DiscreteDecisionProcess)
         {p | p.x k = z} ∩ ⋂ i, if 0 < i ∧ i < k then {p | p.x i ∉ A} else Set.univ
       else ∅ := by
       ext p
-      simp only [FirstReturnAt, mem_setOf_eq, mem_iUnion, mem_ite_empty_right,
+      simp only [FirstReturnAt, mem_ofPred_eq, mem_iUnion, mem_ite_empty_right,
         mem_inter_iff, mem_iInter]
       constructor
       · rintro ⟨k, hk, hx, _hz, hbefore⟩
@@ -5354,7 +5357,7 @@ private theorem measurableSet_firstReturnAtTime (P : DiscreteDecisionProcess)
     · have heq : FirstReturnAtTime P A z k =
           {p | p.x k = z} ∩ ⋂ i, if 0 < i ∧ i < k then {p | p.x i ∉ A} else Set.univ := by
         ext p
-        simp only [FirstReturnAtTime, mem_setOf_eq, mem_inter_iff, mem_iInter]
+        simp only [FirstReturnAtTime, mem_ofPred_eq, mem_inter_iff, mem_iInter]
         constructor
         · rintro ⟨_hk, hx, _hz, hbefore⟩
           refine ⟨hx, ?_⟩
@@ -5391,7 +5394,7 @@ private theorem firstReturnAt_eq_iUnion_time (P : DiscreteDecisionProcess)
     (A : Set P.X) (z : P.X) :
     FirstReturnAt P A z = ⋃ k, FirstReturnAtTime P A z k := by
   ext p
-  simp only [FirstReturnAt, FirstReturnAtTime, mem_setOf_eq, mem_iUnion]
+  simp only [FirstReturnAt, FirstReturnAtTime, mem_ofPred_eq, mem_iUnion]
 
 /-- Return to `A` at `z` strictly before the displayed horizon. -/
 private def FirstReturnBefore (P : DiscreteDecisionProcess) (A : Set P.X)
@@ -5463,7 +5466,7 @@ private theorem DiscreteDecisionProcess.integral_rawStageValue_firstReturnAtTime
     DDPPath.ofRaw P ⁻¹' DDPCylinder P h.1
   have hevent : DDPPath.ofRaw P ⁻¹' FirstReturnAtTime P A z (k + 1) = ⋃ h, C h := by
     ext stage
-    simp only [mem_preimage, FirstReturnAtTime, mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_preimage, FirstReturnAtTime, mem_ofPred_eq, mem_iUnion, C]
     constructor
     · rintro ⟨_hk, hlast, hz, hbefore⟩
       let h := (DDPPath.ofRaw P stage).prefix P (k + 1)
@@ -5691,7 +5694,7 @@ private theorem DiscreteDecisionProcess.boundedFirstReturn_decomposition
     congr 1
     rw [FirstReturnBefore, measure_iUnion]
     · exact (ENNReal.tsum_toReal_eq fun k => by
-          letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+          let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
           exact measure_ne_top _ _).symm
     · intro first second hne
       apply pairwise_disjoint_firstReturnAtTime P A z
@@ -5790,12 +5793,12 @@ private theorem DiscreteDecisionProcess.rawNotReturnsBefore_toReal
   rw [measure_compl hmeasurable (measure_ne_top _ _)]
   rw [ENNReal.toReal_sub_of_le]
   · rw [show (P.rawLawAfterAction x y Set.univ).toReal = 1 by
-      letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+      let : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
         P.isProbabilityMeasure_rawLawAfterAction x y
       simp]
     rw [← hcanonical]
   · exact measure_mono (subset_univ _)
-  · letI : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
+  · let : IsProbabilityMeasure (P.rawLawAfterAction x y) :=
       P.isProbabilityMeasure_rawLawAfterAction x y
     simp
 
@@ -5950,7 +5953,7 @@ private theorem tendsto_firstReturnBeforeProbability (P : DiscreteDecisionProces
     (μ := S.afterAction x y) (firstReturnBefore_mono P A z)
   rw [iUnion_firstReturnBefore P A z] at hmeasure
   have hfinite : FirstReturnProbability P S A x y z ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   exact (ENNReal.tendsto_toReal hfinite).comp hmeasure
 
@@ -5963,7 +5966,7 @@ private theorem tendsto_returnsBeforeProbability (P : DiscreteDecisionProcess)
     (μ := S.afterAction x y) (returnsBefore_mono P A)
   rw [iUnion_returnsBefore P A] at hmeasure
   have hfinite : ReturnProbability P S A x y ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   exact (ENNReal.tendsto_toReal hfinite).comp hmeasure
 
@@ -5980,7 +5983,7 @@ private theorem DiscreteDecisionProcess.tendsto_firstReturnBeforeValue
   let bound : P.X → ℝ := fun z =>
     (FirstReturnProbability P S A x y z).toReal * C
   have hreturnFinite : ReturnProbability P S A x y ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   have hprobabilitySummable : Summable fun z =>
       (FirstReturnProbability P S A x y z).toReal := by
@@ -6000,7 +6003,7 @@ private theorem DiscreteDecisionProcess.tendsto_firstReturnBeforeValue
         (S.afterAction x y (FirstReturnBefore P A z N)).toReal ≤
           (FirstReturnProbability P S A x y z).toReal := by
       apply ENNReal.toReal_mono
-      · letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      · let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
         exact measure_ne_top _ _
       · exact measure_mono hsubset
     have hvalue : ‖P.valueX z‖ ≤ C := by
@@ -6081,10 +6084,10 @@ private theorem DDPSemantics.fromState_eq_initialActionMixture
   let mixture := Measure.sum fun y : P.Y x =>
     (P.choose x y : ℝ≥0∞) • S.afterAction x y
   change S.fromState x = mixture
-  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  let : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
   have hmixtureUniv : mixture Set.univ = 1 := by
     have hafterUniv (y : P.Y x) : S.afterAction x y Set.univ = 1 := by
-      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
       exact measure_univ
     dsimp only [mixture]
     rw [Measure.sum_apply _ MeasurableSet.univ]
@@ -6158,7 +6161,7 @@ private theorem noReturnProbability_nonneg (P : DiscreteDecisionProcess)
 private theorem noReturnProbability_le_one (P : DiscreteDecisionProcess)
     (S : DDPSemantics P) (A : Set P.X) (x : P.X) :
     NoReturnProbability P S A x ≤ 1 := by
-  letI : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
+  let : IsProbabilityMeasure (S.fromState x) := S.fromStateProbability x
   rw [NoReturnProbability, ← ENNReal.toReal_one]
   apply ENNReal.toReal_mono (by simp)
   calc
@@ -6178,7 +6181,7 @@ private theorem noReturnProbability_eq_tsum
   simp only [Measure.smul_apply, smul_eq_mul] at hmix
   have hafter_ne_top (y : P.Y x) (E : Set (DDPPath P)) :
       S.afterAction x y E ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   rw [NoReturnProbability, hmix]
   rw [ENNReal.tsum_toReal_eq (fun y => ENNReal.mul_ne_top (PMF.apply_ne_top _ _)
@@ -6189,12 +6192,12 @@ private theorem noReturnProbability_eq_tsum
   have hcomplement : S.afterAction x y (ReturnsTo P A)ᶜ =
       1 - ReturnProbability P S A x y := by
     rw [measure_compl (measurableSet_returnsTo P A) (hafter_ne_top y _)]
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     rw [measure_univ]
     rfl
   rw [hcomplement]
   rw [ENNReal.toReal_sub_of_le (by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     change S.afterAction x y (ReturnsTo P A) ≤ 1
     calc
       S.afterAction x y (ReturnsTo P A) ≤ S.afterAction x y Set.univ :=
@@ -6222,11 +6225,11 @@ private theorem DiscreteDecisionProcess.rawLawFrom_inter_shift_noReturn_stageAt
   rw [Measure.map_apply (DDPPath.measurable_ofRaw P) hreturns.compl] at hcanonical
   rw [← hcanonical]
   rw [measure_compl hreturns]
-  · letI : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
+  · let : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
       S.afterActionProbability current.1 current.2
     rw [measure_univ]
     rfl
-  · letI : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
+  · let : IsProbabilityMeasure (S.afterAction current.1 current.2) :=
       S.afterActionProbability current.1 current.2
     exact measure_ne_top _ _
 
@@ -6245,7 +6248,7 @@ private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
       stage j = h.1.extendWithFinalStage P (⟨x, y⟩ : DDPStage P) j}
   have hstateUnion : {stage : ℕ → DDPStage P | (stage i).1 = x} = ⋃ h, C h := by
     ext stage
-    simp only [mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_ofPred_eq, mem_iUnion, C]
     constructor
     · intro hstate
       let h := (DDPPath.ofRaw P stage).prefix P i
@@ -6258,7 +6261,7 @@ private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
   have hactionUnion :
       {stage : ℕ → DDPStage P | stage i = (⟨x, y⟩ : DDPStage P)} = ⋃ h, D h := by
     ext stage
-    simp only [mem_setOf_eq, mem_iUnion, D]
+    simp only [mem_ofPred_eq, mem_iUnion, D]
     constructor
     · intro hstage
       let h := (DDPPath.ofRaw P stage).prefix P i
@@ -6312,7 +6315,7 @@ private theorem DiscreteDecisionProcess.rawLawFrom_stage_eq_state_mul_choose
       have hD : D h = {stage | ∀ j : Fin (i + 1),
           stage j = h.1.stagesWithFinal P last j} := by
         ext stage
-        simp only [D, mem_setOf_eq]
+        simp only [D, mem_ofPred_eq]
         rw [hcurrent, h.1.extendWithFinalStage_mk P last]
       rw [hD, P.rawLawFrom_stagesWithFinal start h.1 hstart last]
       rw [show P.choose (h.1.x (Fin.last i)) last = P.choose x y from
@@ -6418,7 +6421,7 @@ private theorem DiscreteDecisionProcess.rawStateVariation_eq_ofReal
     intro y
     rw [ENNReal.ofReal_mul ENNReal.toReal_nonneg]
     rw [ENNReal.ofReal_toReal (PMF.apply_ne_top _ _)]
-  · letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+  · let : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
     exact measure_ne_top _ _
 
 /-- The raw event that the displayed sampled stage is the last visit to `A`. -/
@@ -6447,7 +6450,7 @@ private theorem DiscreteDecisionProcess.rawLawFrom_state_mul_noReturn_eq_tsum
   rw [ENNReal.toReal_sub_of_le]
   · simp only [ENNReal.toReal_one]
     ring_nf
-  · letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+  · let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     change S.afterAction x y (ReturnsTo P A) ≤ 1
     calc
       S.afterAction x y (ReturnsTo P A) ≤ S.afterAction x y Set.univ :=
@@ -6496,7 +6499,7 @@ private theorem DiscreteDecisionProcess.tsum_rawLastExitAtStage_le_one_ennreal
         rw [Nat.add_sub_of_le hgt.le]
         exact hfirstStage.symm ▸ first.2.2
   rw [← measure_iUnion hpairwise hmeasurable]
-  letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+  let : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
   calc
     P.rawLawFrom start (⋃ index, L index) ≤ P.rawLawFrom start Set.univ :=
       measure_mono (subset_univ _)
@@ -6519,7 +6522,7 @@ private theorem DiscreteDecisionProcess.summable_rawLastExitAtStage_and_tsum_le_
   have hneTop : (∑' index : K, P.rawLawFrom start (L index)) ≠ ⊤ := by
     exact ne_top_of_le_ne_top (by simp) hmeasure
   have hfinite (index : K) : P.rawLawFrom start (L index) ≠ ⊤ := by
-    letI : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
+    let : IsProbabilityMeasure (P.rawLawFrom start) := P.isProbabilityMeasure_rawLawFrom start
     exact measure_ne_top _ _
   refine ⟨ENNReal.summable_toReal hneTop, ?_⟩
   have hreal := ENNReal.toReal_mono (by simp : (1 : ℝ≥0∞) ≠ ⊤) hmeasure
@@ -6601,7 +6604,7 @@ private theorem ReturnValueData.valueY_sub_value_le_of_positive
   let q := (ReturnProbability P S A x y).toReal
   let a : P.X → ℝ := fun t => (FirstReturnProbability P S A x y t).toReal
   have hqFinite : ReturnProbability P S A x y ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   have hqPos : 0 < q := ENNReal.toReal_pos (ne_of_gt hq) hqFinite
   have haSummable : Summable a := by
@@ -6610,7 +6613,7 @@ private theorem ReturnValueData.valueY_sub_value_le_of_positive
     exact hqFinite
   have hsumA : ∑' t, a t = q := by
     have hreal := ENNReal.tsum_toReal_eq fun t => by
-      letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+      let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
       exact (show FirstReturnProbability P S A x y t ≠ ⊤ from measure_ne_top _ _)
     rw [← returnProbability_eq_tsum_firstReturnProbability P S A x y] at hreal
     simpa [a, q] using hreal.symm
@@ -6695,7 +6698,7 @@ private theorem ReturnValueData.valueY_sub_value_le_noReturn
   have hcenter := P.firstReturn_centered_bound_of_uniform S A x y (R.value A x y)
     huniform
   have hqFinite : ReturnProbability P S A x y ≠ ⊤ := by
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     exact measure_ne_top _ _
   have hqReal : (ReturnProbability P S A x y).toReal ≠ 0 :=
     ne_of_gt (ENNReal.toReal_pos (ne_of_gt hq) hqFinite)
@@ -6727,7 +6730,7 @@ private theorem ReturnValueData.tsum_choose_mul_abs_increment_le
   have hqle (y : P.Y x) : (ReturnProbability P S A x y).toReal ≤ 1 := by
     rw [← ENNReal.toReal_one]
     apply ENNReal.toReal_mono (by simp)
-    letI : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
+    let : IsProbabilityMeasure (S.afterAction x y) := S.afterActionProbability x y
     calc
       ReturnProbability P S A x y ≤ S.afterAction x y Set.univ :=
         measure_mono (subset_univ _)
@@ -7030,7 +7033,7 @@ theorem proposition2 (P : DiscreteDecisionProcess) (S : DDPSemantics P)
   have hunion (index : ℕ × P.X) :
       index ∈ ⋃ cell, cellIndices cell ↔ IsVaried P index.2 := by
     rw [W.valid.1.2]
-    simp only [mem_iUnion, mem_setOf_eq, cellIndices]
+    simp only [mem_iUnion, mem_ofPred_eq, cellIndices]
   have hzero (index : ℕ × P.X) (hindex : index ∉ ⋃ cell, cellIndices cell) :
       variation index = 0 := by
     have hnotVaried : ¬ IsVaried P index.2 := by
@@ -7174,7 +7177,7 @@ theorem firstOutsideTAt_eq_firstReturnAt_compl (P : DiscreteDecisionProcess)
     (T : Set P.X) (z : P.X) :
     FirstOutsideTAt P T z = FirstReturnAt P Tᶜ z := by
   ext path
-  simp only [FirstOutsideTAt, FirstReturnAt, mem_setOf_eq, mem_compl_iff]
+  simp only [FirstOutsideTAt, FirstReturnAt, mem_ofPred_eq, mem_compl_iff]
   constructor
   · rintro ⟨k, hk, hx, hz, hbefore⟩
     exact ⟨k, hk, hx, hz, fun i hi hik hiOutside ↦ hiOutside (hbefore i hi hik)⟩
@@ -7235,7 +7238,7 @@ private theorem firstOutsideTAt_eq_of_pos_of_eq_one
   have hsubset : FirstOutsideTAt P T z ⊆ (FirstOutsideTAt P T w)ᶜ :=
     Set.disjoint_left.mp hdisjoint
   have hcomplement : PS.afterAction x y (FirstOutsideTAt P T w)ᶜ = 0 := by
-    letI : IsProbabilityMeasure (PS.afterAction x y) :=
+    let : IsProbabilityMeasure (PS.afterAction x y) :=
       PS.afterActionProbability x y
     rw [measure_compl (measurableSet_firstOutsideTAt P T w)]
     · rw [hw]
@@ -7418,7 +7421,7 @@ private theorem compositeTailPrefixMass_children_le
     have hmass : compositeTailPrefixMass P PS T first stem =
         (stem.map fun action => P.choose action.1 action.2).prod := by
       change (if List.IsChain relation (first :: stem) then _ else _) = _
-      rw [if_pos hstem]
+      rw [ite_eq_left hstem]
     rw [hmass]
     suffices hsum : (∑ action ∈ allowed, P.choose action.1 action.2) ≤ 1 by
       simpa using mul_le_mul_right hsum
@@ -7443,7 +7446,7 @@ private theorem compositeTailPrefixMass_children_le
         compositeTailPrefixMass P PS T first (stem ++ [action]) = 0 := by
       intro action
       unfold compositeTailPrefixMass
-      apply if_neg
+      apply ite_eq_right
       intro hchain
       apply hstem
       exact List.IsChain.left_of_append
@@ -7477,7 +7480,7 @@ theorem compositeActionList_tsum_tailChoiceProduct_le_one
         (first :: tail.val) := by
       rcases tail.property with ⟨initial, rest, heq, _, _, hchain, _⟩
       exact hchain
-    simp only [compositeTailPrefixMass, if_pos hchain]
+    simp only [compositeTailPrefixMass, ite_eq_left hchain]
   change (∑' tail : code,
     (tail.val.map fun action => P.choose action.1 action.2).prod) ≤ 1
   calc
@@ -7487,7 +7490,7 @@ theorem compositeActionList_tsum_tailChoiceProduct_le_one
       exact (hvalid tail).symm
     _ ≤ 1 := by
       simpa only [List.nil_append, compositeTailPrefixMass, List.isChain_singleton,
-        if_true, List.map_nil, List.prod_nil] using hbound
+        ite_true, List.map_nil, List.prod_nil] using hbound
 
 /-- The same actual composite words, including their fixed first action,
 have total product mass at most that first action's prescribed probability. -/
@@ -7628,7 +7631,7 @@ private theorem composite_root_exists_first
     ∃ first : P.Y (R.kept x), ∃ tail,
       R.composite x y = ⟨R.kept x, first⟩ :: tail := by
   have hv := R.composite_valid x y
-  simp only [IsChainReductionAction, dif_pos hx] at hv
+  simp only [IsChainReductionAction, dite_eq_left hx] at hv
   obtain ⟨⟨state, first⟩, tail, heq, hs, _⟩ := hv
   cases hs
   exact ⟨first, tail, heq⟩
@@ -7676,7 +7679,7 @@ theorem ChainReductionData.rootFirstAction_map_le
     simpa only [y.property] using R.composite_eq_rootFirstAction_cons x hx y.val
   let embed : fiber → code := fun y => ⟨(R.composite x y.val).tail, by
     rw [← hcons y]
-    simpa only [IsChainReductionAction, dif_pos hx] using R.composite_valid x y.val⟩
+    simpa only [IsChainReductionAction, dite_eq_left hx] using R.composite_valid x y.val⟩
   have hinj : Function.Injective embed := by
     intro a b hab
     apply Subtype.ext
@@ -7694,12 +7697,14 @@ theorem ChainReductionData.rootFirstAction_map_le
       rw [PMF.map_apply, tsum_subtype]
       congr 1
       funext y
-      simp only [Set.indicator_apply, Set.mem_setOf_eq, eq_comm]
+      simp only [Set.indicator_apply, Set.mem_ofPred_eq, eq_comm]
     _ = ∑' y : fiber, ((⟨R.kept x, first⟩ :: (embed y).val).map
         fun action => P.choose action.1 action.2).prod := tsum_congr hmass
     _ ≤ ∑' tail : code, ((⟨R.kept x, first⟩ :: tail.val).map
         fun action => P.choose action.1 action.2).prod :=
-      ENNReal.tsum_comp_le_tsum_of_injective hinj _
+      ENNReal.tsum_comp_le_tsum_of_injective hinj fun tail : code =>
+        ((⟨R.kept x, first⟩ :: tail.val).map
+          fun action => P.choose action.1 action.2).prod
     _ ≤ P.choose (R.kept x) first :=
       compositeActionList_tsum_choiceProduct_le_first P PS _ T _ _
 
@@ -7739,7 +7744,7 @@ theorem DDPSemantics.fromState_initialAction_inter
   have hB : MeasurableSet B := measurableSet_ddpInitialStateAction P x y
   have hterm (other : P.Y x) :
       PS.afterAction x other (B ∩ E) = if other = y then PS.afterAction x y E else 0 := by
-    letI := PS.afterActionProbability x other
+    let := PS.afterActionProbability x other
     have hae : ∀ᵐ p ∂PS.afterAction x other,
         p.x 0 = x ∧ HEq (p.y 0) other := by
       apply (ae_iff.mpr ?_)
@@ -7749,11 +7754,11 @@ theorem DDPSemantics.fromState_initialAction_inter
       simp
     by_cases heq : other = y
     · subst other
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       apply measure_congr
       filter_upwards [hae] with p hp
       exact propext (and_iff_right hp)
-    · rw [if_neg heq]
+    · rw [ite_eq_right heq]
       apply measure_mono_null (show B ∩ E ⊆ {p | p.x 0 = x ∧ HEq (p.y 0) other}ᶜ from ?_)
         (ae_iff.mp hae)
       intro p hp hother
@@ -7806,7 +7811,7 @@ theorem DDPPath.measurable_shift (P : DiscreteDecisionProcess) (n : ℕ) :
       Measurable.of_discrete
     exact hfinite.comp (DDPPath.measurable_prefix P (i + 1))
   exact (DDPPath.measurable_ofRaw P).comp
-    (measurable_pi_lambda _ fun i => hstage (n + i))
+    (Measurable.of_eval fun i => hstage (n + i))
 
 private theorem DiscreteDecisionProcess.rawLawAfterAction_cylinder_shift
     (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
@@ -7823,7 +7828,7 @@ private theorem DiscreteDecisionProcess.rawLawAfterAction_cylinder_shift
   have hevent : DDPPath.ofRaw P ⁻¹' DDPCylinder P h = ⋃ last, C last := by
     rw [DDPPath.preimage_ddpCylinder_eq_iUnion]
     ext stage
-    simp only [mem_iUnion, mem_setOf_eq, C]
+    simp only [mem_iUnion, mem_ofPred_eq, C]
     constructor
     · rintro ⟨⟨state, last⟩, hstate, hstage⟩
       change state = h.x (Fin.last (k + 1)) at hstate
@@ -7921,7 +7926,7 @@ theorem DDPSemantics.afterAction_firstReturnAtTime_shift
   have hevent : {p : DDPPath P | p.x (k + 1) = z ∧ z ∈ A ∧
       ∀ i, 0 < i → i < k + 1 → p.x i ∉ A} = ⋃ h, C h := by
     ext p
-    simp only [mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_ofPred_eq, mem_iUnion, C]
     constructor
     · rintro ⟨hlast, hz, hbefore⟩
       refine ⟨⟨p.prefix P (k + 1), hlast, hz, ?_⟩, rfl⟩
@@ -8067,7 +8072,7 @@ theorem ChainReductionData.compositeBlockEvent_probability
   classical
   have hv := R.composite_valid x y
   by_cases hx : R.kept x ∈ S
-  · simp only [IsChainReductionAction, dif_pos hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_left hx] at hv
     obtain ⟨first, tail, hword, hfirst, _, hchain, _⟩ := hv
     rw [hword] at hchain
     rw [← hfirst, hword, PS.compositeBlockEvent_probability P T _ _ first tail hchain]
@@ -8077,7 +8082,7 @@ theorem ChainReductionData.compositeBlockEvent_probability
     apply R.exitTransition x y z (first :: tail).dropLast
       ((first :: tail).getLast (List.cons_ne_nil _ _))
     exact hword.trans (List.dropLast_append_getLast (List.cons_ne_nil _ _)).symm
-  · simp only [IsChainReductionAction, dif_neg hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_right hx] at hv
     obtain ⟨first, hword⟩ := hv
     rw [hword]
     exact R.singletonCompositeBlock_probability x y z first hword
@@ -8094,7 +8099,7 @@ theorem ChainReductionData.positive_root_actionStructure
   classical
   obtain ⟨y, _, hword⟩ := R.exists_positive_composite_with_first x hx first hfirst
   have hv := R.composite_valid x y
-  simp only [IsChainReductionAction, dif_pos hx] at hv
+  simp only [IsChainReductionAction, dite_eq_left hx] at hv
   obtain ⟨head, rest, heq, _, hstates, hchain, initial, last, hlast, hcomplete⟩ := hv
   have hhead : head = ⟨R.kept x, first⟩ := (List.cons.inj (heq.symm.trans hword)).1
   subst head
@@ -8198,11 +8203,11 @@ theorem ChainReductionData.pairwise_disjoint_compositeBlockEvent
     · have hv (y : R.reduced.Y x) :
           IsCompositeActionList P PS (R.witness.chainSet (R.kept x)) T (R.kept x)
             (R.composite x y) := by
-        simpa only [IsChainReductionAction, dif_pos hx] using R.composite_valid x y
+        simpa only [IsChainReductionAction, dite_eq_left hx] using R.composite_valid x y
       exact compositeActionList_prefix_eq P PS _ T _ (hv a) (hv b) hab
     · have hlen (y : R.reduced.Y x) : (R.composite x y).length = 1 := by
         have hv := R.composite_valid x y
-        simp only [IsChainReductionAction, dif_neg hx] at hv
+        simp only [IsChainReductionAction, dite_eq_right hx] at hv
         obtain ⟨first, hword⟩ := hv
         simp only [hword, List.length_singleton]
       exact hab.eq_of_length ((hlen a).trans (hlen b).symm)
@@ -8247,7 +8252,7 @@ theorem ChainReductionData.ae_existsUnique_compositeBlock
   have hU : MeasurableSet U := MeasurableSet.iUnion fun pair =>
     measurableSet_compositeBlockEvent P T _ _ _
   have hmass : PS.fromState (R.kept x) U = 1 := R.compositeBlockEvent_union_measure x
-  letI := PS.fromStateProbability (R.kept x)
+  let := PS.fromStateProbability (R.kept x)
   have hae : ∀ᵐ p ∂PS.fromState (R.kept x), p ∈ U := by
     apply ae_iff.mpr
     change PS.fromState (R.kept x) Uᶜ = 0
@@ -8424,7 +8429,7 @@ theorem ChainReductionData.completedBlockIndex_eq_some_iff
         p ∈ CompositeBlockAt P T (ChainRetainedStates P PS R.witness)
           (R.kept i.1.2) (R.composite x i.1.1) i.2 := ⟨index, hindex⟩
     unfold completedBlockIndex
-    rw [dif_pos hex]
+    rw [dite_eq_left hex]
     exact congrArg some (timedCompositeBlock_index_unique R x hex.choose_spec hindex)
 
 /-- The decoder is measurable for the discrete sigma algebra on its countable output. -/
@@ -8433,7 +8438,7 @@ theorem ChainReductionData.measurable_completedBlockIndex
     {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
     Measurable[_, ⊤] (R.completedBlockIndex x) := by
   classical
-  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
   apply measurable_to_countable'
   intro index
   cases index with
@@ -8519,7 +8524,7 @@ theorem ChainReductionData.completedBlockIndex_firstRetained
   have hn := (R.completedBlockIndex_eq_some_iff x p index).mp hindex
   have hv := R.composite_valid x index.1.1
   by_cases hx : R.kept x ∈ S
-  · simp only [IsChainReductionAction, dif_pos hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_left hx] at hv
     obtain ⟨first, tail, hword, _, hstates, _⟩ := hv
     rw [hword] at hn
     have hTK : Disjoint T (ChainRetainedStates P PS R.witness) := by
@@ -8530,7 +8535,7 @@ theorem ChainReductionData.completedBlockIndex_firstRetained
     intro action ha hK
     exact hK (Or.inr (mem_iUnion_of_mem (R.kept x)
       (mem_iUnion_of_mem hx (hstates action ha).1)))
-  · simp only [IsChainReductionAction, dif_neg hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_right hx] at hv
     obtain ⟨first, hword⟩ := hv
     rw [hword] at hn
     exact hn.2
@@ -8716,7 +8721,7 @@ private theorem ChainReductionData.measurable_retainedUpdate
     {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedUpdate := by
   apply measurable_from_prod_countable_right
   intro x
-  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
   let update : Option ((R.reduced.Y x × R.reduced.X) × ℕ) × DDPPath P →
       R.reduced.X × DDPPath P := fun pair =>
     match pair.1 with
@@ -8737,7 +8742,7 @@ private theorem ChainReductionData.measurable_retainedStage
     {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedStage := by
   apply measurable_from_prod_countable_right
   intro x
-  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
   let stage : Option ((R.reduced.Y x × R.reduced.X) × ℕ) → DDPStage R.reduced :=
     fun index => match index with
     | none => ⟨x, R.reduced.fallbackAction x PUnit.unit.{1}⟩
@@ -8775,9 +8780,9 @@ def ChainReductionData.retainedTraceFrom
 theorem ChainReductionData.measurable_retainedTraceFrom
     {P : DiscreteDecisionProcess} {PS : DDPSemantics P}
     {S T : Set P.X} (R : ChainReductionData P PS S T)
-    (x : R.reduced.X) : Measurable (R.retainedTraceFrom x) :=
+  (x : R.reduced.X) : Measurable (R.retainedTraceFrom x) :=
   (DDPPath.measurable_ofRaw R.reduced).comp
-    (measurable_pi_lambda _ fun n =>
+    (Measurable.of_eval fun n =>
       R.measurable_retainedStage.comp (R.measurable_retainedRemainderFrom x n))
 
 theorem ChainReductionData.retainedTraceFrom_initial
@@ -8885,7 +8890,7 @@ theorem ChainReductionData.retainedTraceFrom_cylinder
           exact R.retainedTraceFrom_initial (h.x 0) p
         · intro i
           exact Fin.elim0 i
-      letI := PS.fromStateProbability (R.kept (h.x 0))
+      let := PS.fromStateProbability (R.kept (h.x 0))
       rw [hevent, measure_univ]
       simp [DDPFinitePath.probability]
   | succ k ih =>
@@ -8935,8 +8940,8 @@ theorem ChainReductionData.map_retainedTraceFrom
     {S T : Set P.X} (R : ChainReductionData P PS S T) (x : R.reduced.X) :
     Measure.map (R.retainedTraceFrom x) (PS.fromState (R.kept x)) =
       R.semantics.fromState x := by
-  letI := PS.fromStateProbability (R.kept x)
-  letI := R.semantics.fromStateProbability x
+  let := PS.fromStateProbability (R.kept x)
+  let := R.semantics.fromStateProbability x
   apply ext_of_generate_finite
     {U | ∃ k, ∃ h : DDPFinitePath R.reduced k, U = DDPCylinder R.reduced h}
     rfl (isPiSystem_ddpCylinders R.reduced)
@@ -8986,7 +8991,7 @@ private theorem ChainReductionData.measurable_retainedSuccess
     {S T : Set P.X} (R : ChainReductionData P PS S T) : Measurable R.retainedSuccess := by
   apply measurable_from_prod_countable_right
   intro x
-  letI : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
+  let : MeasurableSpace (Option ((R.reduced.Y x × R.reduced.X) × ℕ)) := ⊤
   exact (show Measurable (fun index : Option ((R.reduced.Y x × R.reduced.X) × ℕ) =>
     index.isSome) from measurable_from_top).comp (R.measurable_completedBlockIndex x)
 
@@ -9013,7 +9018,7 @@ private theorem ChainReductionData.retainedFailureAt_measure_zero
         filter_upwards [R.ae_completedBlockIndex x] with p hp
         obtain ⟨index, hindex, _⟩ := hp
         simp [retainedFailureAt, retainedRemainderFrom, retainedSuccess, hindex]
-      simpa only [not_not, Set.setOf_mem_eq] using ae_iff.mp hae
+      simpa only [not_not, Set.ofPred_mem_eq] using ae_iff.mp hae
   | succ n ih =>
       let C : R.reduced.Y x × R.reduced.X → Set (DDPPath P) := fun pair =>
         ⋃ m : ℕ, DDPPath.shift P m ⁻¹' R.retainedFailureAt pair.2 n ∩
@@ -9047,7 +9052,7 @@ theorem ChainReductionData.ae_retainedRemainderFrom_decodes
           (R.retainedRemainderFrom x p n).2 = some index := by
   have hae (n : ℕ) : ∀ᵐ p ∂PS.fromState (R.kept x), p ∉ R.retainedFailureAt x n := by
     apply ae_iff.mpr
-    simpa only [not_not, Set.setOf_mem_eq] using R.retainedFailureAt_measure_zero n x
+    simpa only [not_not, Set.ofPred_mem_eq] using R.retainedFailureAt_measure_zero n x
   filter_upwards [ae_all_iff.mpr hae] with p hp
   intro n
   cases hindex : R.completedBlockIndex (R.retainedRemainderFrom x p n).1
@@ -9173,7 +9178,7 @@ theorem ChainReductionData.ae_retainedClockFrom_alignment
       (∀ n i, R.retainedClockFrom x p n < i →
         i < R.retainedClockFrom x p (n + 1) →
         p.x i ∉ ChainRetainedStates P PS R.witness) := by
-  letI : IsProbabilityMeasure (PS.fromState (R.kept x)) := PS.fromStateProbability _
+  let : IsProbabilityMeasure (PS.fromState (R.kept x)) := PS.fromStateProbability _
   have hstart : ∀ᵐ p ∂PS.fromState (R.kept x), p.x 0 = R.kept x :=
     (mem_ae_iff_prob_eq_one (measurableSet_ddpInitialState P (R.kept x))).2
       (PS.fromStateSupport _)
@@ -9301,7 +9306,7 @@ theorem DDPSemantics.ae_prescribed_support
     ∀ᵐ p ∂PS.fromState start, p.x 0 = start ∧ ∀ i : ℕ,
       0 < P.choose (p.x i) (p.y i) ∧
       0 < P.move (p.x i) (p.y i) (p.x (i + 1)) := by
-  letI : IsProbabilityMeasure (PS.fromState start) := PS.fromStateProbability start
+  let : IsProbabilityMeasure (PS.fromState start) := PS.fromStateProbability start
   have hstart : ∀ᵐ p ∂PS.fromState start, p.x 0 = start :=
     (mem_ae_iff_prob_eq_one (measurableSet_ddpInitialState P start)).2
       (PS.fromStateSupport start)
@@ -9474,12 +9479,12 @@ theorem ChainReductionData.compositeBlockAt_advantage_eq
   have hv := R.composite_valid x y
   have hroot : p.x n = R.kept x := by
     by_cases hx : R.kept x ∈ S
-    · simp only [IsChainReductionAction, dif_pos hx] at hv
+    · simp only [IsChainReductionAction, dite_eq_left hx] at hv
       obtain ⟨first, tail, hword, hfirst, _⟩ := hv
       rw [hword] at hblock
       have hf := hblock.1.1.trans hfirst
       simpa only [DDPPath.shift, Nat.add_zero] using hf
-    · simp only [IsChainReductionAction, dif_neg hx] at hv
+    · simp only [IsChainReductionAction, dite_eq_right hx] at hv
       obtain ⟨first, hword⟩ := hv
       rw [hword] at hblock
       simpa only [DDPPath.shift, Nat.add_zero] using hblock.1.1
@@ -9487,12 +9492,12 @@ theorem ChainReductionData.compositeBlockAt_advantage_eq
       CompletingAction P PS A T last.1 last.2 := by
     intro last hlast
     by_cases hx : R.kept x ∈ S
-    · simp only [IsChainReductionAction, dif_pos hx] at hv
+    · simp only [IsChainReductionAction, dite_eq_left hx] at hv
       obtain ⟨_, _, _, _, _, _, init, final, hword, hcompletion⟩ := hv
       have heq : final = last := by simpa [hword] using hlast
       subst last
-      simpa only [A, if_pos hx] using hcompletion
-    · simp only [A, if_neg hx, CompletingAction, mem_empty_iff_false,
+      simpa only [A, ite_eq_left hx] using hcompletion
+    · simp only [A, ite_eq_right hx, CompletingAction, mem_empty_iff_false,
         iUnion_of_empty, iUnion_empty, measure_empty]
   have hreturn := R.completedBlockIndex_firstRetained x (DDPPath.shift P n p)
     ((y, z), k) ((R.completedBlockIndex_eq_some_iff x _ _).2 hblock)
@@ -9509,7 +9514,7 @@ theorem ChainReductionData.compositeBlockAt_advantage_eq
       simpa only [DDPPath.shift, Nat.add_sub_of_le hnj.le] using h
     have hchain := R.prescribed_inside_block_mem_chainSet prescribed x n (n + i)
       hroot (by omega) hno hiT
-    simpa only [A, if_pos hchain.1, DDPPath.shift] using hchain.2
+    simpa only [A, ite_eq_left hchain.1, DDPPath.shift] using hchain.2
   rw [R.telescopes]
   exact compositeBlockAt_sum_increment P PS A T _ R.witness.removable.1 _ _ hcomplete
     (fun i => hchoose (n + i))
@@ -9575,7 +9580,7 @@ theorem compositeBlockAt_length_le_visit_count
         have h := Finset.single_le_sum
           (fun i (_ : i ∈ Finset.range k) => Nat.zero_le (if p.x i ∈ B then 1 else 0))
           (Finset.mem_range.mpr hk)
-        simpa only [hfirst, if_true] using h
+        simpa only [hfirst, ite_true] using h
       cases tail with
       | nil => exact hfront n hp.2.1
       | cons next rest =>
@@ -9598,7 +9603,7 @@ private theorem firstRetainedAt_univ_eq_next_state
     have hk1 : k = 1 := by
       by_contra hne
       exact hbefore 1 (by omega) (by omega) (mem_univ _)
-    simpa only [hk1, mem_setOf_eq] using hpk
+    simpa only [hk1, mem_ofPred_eq] using hpk
   · intro hp
     exact ⟨1, by omega, hp, mem_univ _, fun i hi hik => by omega⟩
 
@@ -9638,13 +9643,11 @@ theorem deterministicActionWord_length_le_visitBound
   change (Finset.filter (fun i => p.x i ∈ A \ T) (Finset.range n)).card ≤ m at hbound
   have hcount := compositeBlockAt_length_le_visit_count P T univ (A \ T) z
     (first :: tail) hstates hn
-  simp only [Finset.card_filter] at hcount hbound
-  apply hcount.trans
+  refine hcount.trans ?_
   convert hbound using 1
-  · rfl
-  · apply Finset.sum_congr rfl
-    intro i hi
-    split_ifs <;> rfl
+  apply congrArg Finset.card
+  ext i
+  simp
 /-- A supported deterministic prefix at a retained root can be completed with
 supported actions whose additional decision increments are all nonnegative. -/
 theorem ChainReductionData.exists_nonnegative_composite_completion
@@ -9778,7 +9781,7 @@ theorem ChainReductionData.compositePrefix_sum_increment_le_of_balanced
     R.exists_nonnegative_composite_completion x hx first tail hstates hpositive hchain
   have hvalid' : IsChainReductionAction P PS R.witness (R.kept x)
       (⟨R.kept x, first⟩ :: (tail ++ suffix)) := by
-    simpa only [IsChainReductionAction, dif_pos hx] using hvalid
+    simpa only [IsChainReductionAction, dite_eq_left hx] using hvalid
   obtain ⟨y, hy, _⟩ := R.composite_complete x _ hvalid'
   have hypositive : 0 < R.reduced.choose x y := by
     rw [R.composite_probability, hy]
@@ -9897,11 +9900,11 @@ theorem ChainReductionData.compositeBlockAt_initial
       (R.kept z) (R.composite x y) k) : p.x 0 = R.kept x := by
   have hv := R.composite_valid x y
   by_cases hx : R.kept x ∈ S
-  · simp only [IsChainReductionAction, dif_pos hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_left hx] at hv
     obtain ⟨first, tail, hword, hfirst, _⟩ := hv
     rw [hword] at hp
     exact hp.1.1.trans hfirst
-  · simp only [IsChainReductionAction, dif_neg hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_right hx] at hv
     obtain ⟨first, hword⟩ := hv
     rw [hword] at hp
     exact hp.1.1
@@ -9947,7 +9950,7 @@ theorem ChainReductionData.compositeBlockAt_prefix_advantage_le_of_balanced
     exact ne_of_gt (hsupport action ha) heq
   have hv := R.composite_valid x y
   by_cases hx : R.kept x ∈ S
-  · simp only [IsChainReductionAction, dif_pos hx] at hv
+  · simp only [IsChainReductionAction, dite_eq_left hx] at hv
     obtain ⟨⟨state, first⟩, tail, hword, hfirst, hstates, hchain, hlast⟩ := hv
     dsimp only at hfirst
     subst state
@@ -10045,7 +10048,7 @@ theorem lemma1 (P : DiscreteDecisionProcess) (PS : DDPSemantics P)
     | succ n => exact ⟨n, hprior⟩
   have hmeasurable : MeasurableSet {p : DDPPath R.reduced |
       ∃ i, DDPAdvantage R.reduced p i > ε} := by
-    rw [setOf_exists]
+    rw [ofPred_exists]
     exact MeasurableSet.iUnion fun i =>
       measurableSet_lt measurable_const (DDPAdvantage.measurable R.reduced i)
   calc
@@ -10289,7 +10292,7 @@ private theorem MarkovChain.rawCylinder_eq_prefixPreimage (P : MarkovChain) (k :
     {w | ∀ i : Fin (k + 1), w i = x i} =
       Preorder.frestrictLe (π := fun _ : ℕ => P.State) k ⁻¹' {P.prefixOfFin x} := by
   ext w
-  simp only [mem_setOf_eq, mem_preimage, mem_singleton_iff]
+  simp only [mem_ofPred_eq, mem_preimage, mem_singleton_iff]
   constructor
   · intro h
     funext i
@@ -10363,7 +10366,7 @@ private theorem MarkovChain.rawLaw_cylinder (P : MarkovChain) : ∀ (k : ℕ)
               ({pref} ×ˢ {next}) =
             {w | ∀ i : Fin (k + 2), w i = x i} := by
         ext w
-        simp only [mem_preimage, mem_prod, mem_singleton_iff, mem_setOf_eq]
+        simp only [mem_preimage, mem_prod, mem_singleton_iff, mem_ofPred_eq]
         constructor
         · rintro ⟨hpref, hnext⟩ i
           by_cases hi : i.1 ≤ k
@@ -10455,7 +10458,7 @@ private theorem MarkovPath.measurable_ofRaw (P : MarkovChain) :
   apply measurable_generateFrom
   intro U hU
   rcases hU with ⟨k, x, rfl⟩
-  simpa only [MarkovPath.ofRaw, preimage_setOf_eq] using
+  simpa only [MarkovPath.ofRaw, preimage_ofPred_eq] using
     P.measurableSet_rawCylinder k x
 
 /-- Every displayed Markov cylinder is measurable in the generated path sigma algebra. -/
@@ -10467,17 +10470,17 @@ private theorem MarkovPath.measurableSet_cylinder (P : MarkovChain) (k : ℕ)
 /-- Ionescu--Tulcea extension supplies the Markov path law with these cylinder probabilities. -/
 theorem markovSemantics_exists (P : MarkovChain) : Nonempty (MarkovSemantics P) := by
   let law : Measure (MarkovPath P) := P.rawLaw.map (MarkovPath.ofRaw P)
-  haveI : IsProbabilityMeasure law :=
-    Measure.isProbabilityMeasure_map (MarkovPath.measurable_ofRaw P).aemeasurable
   refine ⟨{
     law := law
-    probability := inferInstance
+    probability := by
+      dsimp only [law]
+      infer_instance
     cylinder := ?_ }⟩
   intro k x hx
   dsimp only [law]
   rw [Measure.map_apply (MarkovPath.measurable_ofRaw P)
     (MarkovPath.measurableSet_cylinder P k x)]
-  simpa only [MarkovPath.ofRaw, preimage_setOf_eq] using P.rawLaw_cylinder k x hx
+  simpa only [MarkovPath.ofRaw, preimage_ofPred_eq] using P.rawLaw_cylinder k x hx
 
 /-- Finite coordinate restriction is measurable for the cylinder sigma
 algebra on Markov paths. -/
@@ -10530,7 +10533,7 @@ private theorem MarkovSemantics.finitePathCylinder
         Math.Probability.adaptiveHistoryLaw
           (Math.Probability.inhomogeneousMarkovStep
             P.initial P.transition) horizon history := by
-  letI : IsProbabilityMeasure S.law := S.probability
+  let : IsProbabilityMeasure S.law := S.probability
   intro horizon
   cases horizon with
   | zero =>
@@ -10601,7 +10604,7 @@ private theorem MarkovSemantics.finitePathCylinder
                   ∀ time : Fin 1, path.state time = initialHistory time}ᶜ) := by
               apply measure_mono
               intro path hpath
-              simp only [mem_compl_iff, mem_setOf_eq]
+              simp only [mem_compl_iff, mem_ofPred_eq]
               intro hinitialPath
               apply hstart
               have hzeroCoordinate := congrFun hpath 0
@@ -10795,7 +10798,7 @@ theorem quitProbability_mem_Icc (G : QuittingGame) (p : QuitRow G) :
     intro n _
     linarith [(p n).property.1]
   constructor
-  · exact sub_nonneg.mpr (Finset.prod_le_one hfactor0 hfactor1)
+  · exact sub_nonneg.mpr (Finset.prod_le_one₀ hfactor0 hfactor1)
   · have := Finset.prod_nonneg hfactor0
     simp only [QuitProbability]
     linarith
@@ -11011,7 +11014,7 @@ theorem quitProbability_replace_zero_le (G : QuittingGame) (p : QuitRow G)
     (n : G.Player) : QuitProbability G (p.replace G n 0) ≤ QuitProbability G p := by
   simp only [QuitProbability]
   apply sub_le_sub_left
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro i hi
     exact sub_nonneg.mpr (p i).property.2
   · intro i hi
@@ -11152,7 +11155,7 @@ theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
         (Finset.mul_prod_erase s
           (fun x => (↑(if x = n then a else p x) : ℝ)) hs).symm
       _ = _ := by
-        simp only [if_pos]
+        simp only [ite_eq_left]
         congr 1
         apply Finset.prod_congr rfl
         intro x hx
@@ -11176,7 +11179,7 @@ theorem coalitionProbability_replace_affine (G : QuittingGame) (p : QuitRow G)
         (Finset.mul_prod_erase s
           (fun x => 1 - (↑(if x = n then a else p x) : ℝ)) hs).symm
       _ = _ := by
-        simp only [if_pos]
+        simp only [ite_eq_left]
         congr 1
         apply Finset.prod_congr rfl
         intro x hx
@@ -12027,7 +12030,7 @@ private theorem PMF.tsum_map_toReal_mul_of_injective {A B : Type*}
     rw [PMF.map_apply, tsum_eq_single a]
     · simp
     · intro other hother
-      rw [if_neg]
+      rw [ite_eq_right]
       exact fun h => hother (hf h.symm)
   have hsupport : Function.support (fun b => ((μ.map f) b).toReal * v b) ⊆
       Set.range f := by
@@ -12039,7 +12042,7 @@ private theorem PMF.tsum_map_toReal_mul_of_injective {A B : Type*}
         (∑' a, if b = f a then μ a else 0) = ∑' _a : A, 0 := by
           apply tsum_congr
           intro a
-          rw [if_neg]
+          rw [ite_eq_right]
           exact fun h => hrange ⟨a, h.symm⟩
         _ = 0 := tsum_zero
     apply hb
@@ -12315,7 +12318,7 @@ theorem lemma3 (G : QuittingGame) (j : G.Player) (h : ¬IsNormalPlayer G j) :
         calc
           tailSurvival G deviation 0 t ≤
               ∏ l ∈ Finset.range t, (1 - av) := by
-            apply Finset.prod_le_prod
+            apply Finset.prod_le_prod₀
             · intro l hl
               exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
             · intro l hl
@@ -12480,7 +12483,7 @@ private theorem quitRow_coord_le_quitProbability (G : QuittingGame)
   classical
   have hfactor0 : 0 ≤ 1 - (p n : ℝ) := sub_nonneg.mpr (p n).property.2
   have hrest1 : (∏ j ∈ Finset.univ.erase n, (1 - (p j : ℝ))) ≤ 1 := by
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · intro j _hj
       exact sub_nonneg.mpr (p j).property.2
     · intro j _hj
@@ -12954,7 +12957,7 @@ private theorem survival_mul_eta_mul_badContinueMass_le
     tailSurvival G p 0 i * eta * badContinueMass G eta p n i ≤ alpha := by
   classical
   by_cases hbad : IsBadContinueAction G eta (QuitTailPayoff G p (i + 1)) (p i) n
-  · rw [badContinueMass, if_pos hbad]
+  · rw [badContinueMass, ite_eq_left hbad]
     have hcurrent := quittingOneStagePayoff_replace_eq_endpoints G
       (QuitTailPayoff G p (i + 1)) (p i) n (p i n)
     rw [QuitRow.replace_self] at hcurrent
@@ -12972,7 +12975,7 @@ private theorem survival_mul_eta_mul_badContinueMass_le
     simpa only [mul_assoc] using
       (mul_le_mul_of_nonneg_left hlocal hsurvival).trans
         (equilibrium_weighted_forcedQuit_regret_le G p hequilibrium i n)
-  · rw [badContinueMass, if_neg hbad, mul_zero]
+  · rw [badContinueMass, ite_eq_right hbad, mul_zero]
     exact halpha
 
 /-- Delete exactly the player's badly supported Quit probabilities. -/
@@ -13058,7 +13061,7 @@ private theorem tailSurvival_le_deleteBadQuit
     tailSurvival G p 0 i ≤
       tailSurvival G (fun j => (p j).replace G n (deleteBadQuit G eta p n j)) 0 i := by
   simp only [tailSurvival, Nat.zero_add]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro j _hj
     exact sub_nonneg.mpr (quitProbability_mem_Icc G (p j)).2
   · intro j _hj
@@ -13234,9 +13237,9 @@ private theorem continuous_quittingOneStagePayoff (G : QuittingGame) (n : G.Play
   · apply continuous_finsetSum Finset.univ.powerset
     intro A _hA
     by_cases hA : A.Nonempty
-    · simp only [dif_pos hA]
+    · simp only [dite_eq_left hA]
       fun_prop
-    · simp only [dif_neg hA]
+    · simp only [dite_eq_right hA]
       exact continuous_const
 
 /-- Replacing one fixed coordinate of a mixed row is continuous. -/
@@ -13405,17 +13408,17 @@ private theorem prod_sub_prod_le_sum_sub {N : Type} (s : Finset N)
       have hA0 : 0 ≤ ∏ j ∈ s, a j :=
         Finset.prod_nonneg fun j hj => ha0 j (Finset.mem_insert_of_mem hj)
       have hA1 : (∏ j ∈ s, a j) ≤ 1 :=
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
           (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
       have hB0 : 0 ≤ ∏ j ∈ s, b j :=
         Finset.prod_nonneg fun j hj => hb0 j (Finset.mem_insert_of_mem hj)
       have hB1 : (∏ j ∈ s, b j) ≤ 1 :=
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun j hj => hb0 j (Finset.mem_insert_of_mem hj))
           (fun j hj => hb1 j (Finset.mem_insert_of_mem hj))
       have hAB : (∏ j ∈ s, a j) ≤ ∏ j ∈ s, b j := by
-        apply Finset.prod_le_prod
+        apply Finset.prod_le_prod₀
         · intro j hj
           exact ha0 j (Finset.mem_insert_of_mem hj)
         · intro j hj
@@ -13831,7 +13834,7 @@ private theorem finiteQuittingPayoff_norm_sub_le (G : QuittingGame) (k : ℕ)
   calc
     Finset.prod (Finset.range k) (fun j => 1 - QuitProbability G (p j)) *
         |x n - y n| ≤ 1 * |x n - y n| :=
-      mul_le_mul_of_nonneg_right (Finset.prod_le_one hfactor0 hfactor1) (abs_nonneg _)
+      mul_le_mul_of_nonneg_right (Finset.prod_le_one₀ hfactor0 hfactor1) (abs_nonneg _)
     _ ≤ ‖x - y‖ := by
       simpa [Real.norm_eq_abs] using norm_le_pi_norm (x - y) n
 
@@ -13861,8 +13864,8 @@ theorem QuittingOneStagePayoff.mem_of_convex (G : QuittingGame)
   · exact coalitionProbability_sum G p
   · intro A _hA
     by_cases hA : A.Nonempty
-    · simpa only [point, dif_pos hA] using hreward ⟨A, hA⟩
-    · simpa only [point, dif_neg hA] using hr
+    · simpa only [point, dite_eq_left hA] using hreward ⟨A, hA⟩
+    · simpa only [point, dite_eq_right hA] using hr
 
 /-- A one-stage quitting payoff with a feasible continuation is feasible. -/
 theorem QuittingOneStagePayoff.feasible (G : QuittingGame)
@@ -14272,7 +14275,7 @@ def append (G : QuittingGame) {η : ℝ}
     · let iz : Fin z.length := ⟨i, h⟩
       have hsource : appendPoint z w i.castSucc = z.point iz.castSucc := by
         unfold appendPoint
-        rw [dif_pos (by simpa using h.le)]
+        rw [dite_eq_left (by simpa using h.le)]
         apply congrArg z.point
         apply Fin.ext
         rfl
@@ -14282,7 +14285,7 @@ def append (G : QuittingGame) {η : ℝ}
         by_cases hi : (i : ℕ) ≤ z.length
         · have hieq : (i : ℕ) = z.length := by omega
           unfold appendPoint
-          rw [dif_pos (by simpa using hi)]
+          rw [dite_eq_left (by simpa using hi)]
           calc
             z.point ⟨i, by omega⟩ =
                 z.point ⟨z.length, Nat.lt_succ_self z.length⟩ := by
@@ -14294,7 +14297,7 @@ def append (G : QuittingGame) {η : ℝ}
               apply Fin.ext
               simp [iw, hieq]
         · unfold appendPoint
-          rw [dif_neg (by simpa using hi)]
+          rw [dite_eq_right (by simpa using hi)]
           apply congrArg w.point
           apply Fin.ext
           rfl
@@ -14304,13 +14307,13 @@ def append (G : QuittingGame) {η : ℝ}
     · let iz : Fin z.length := ⟨i, h⟩
       have hsource : appendPoint z w i.castSucc = z.point iz.castSucc := by
         unfold appendPoint
-        rw [dif_pos (by simpa using h.le)]
+        rw [dite_eq_left (by simpa using h.le)]
         apply congrArg z.point
         apply Fin.ext
         rfl
       have htarget : appendPoint z w i.succ = z.point iz.succ := by
         unfold appendPoint
-        rw [dif_pos (by simpa using Nat.succ_le_iff.mpr h)]
+        rw [dite_eq_left (by simpa using Nat.succ_le_iff.mpr h)]
         apply congrArg z.point
         apply Fin.ext
         rfl
@@ -14321,7 +14324,7 @@ def append (G : QuittingGame) {η : ℝ}
         by_cases hi : (i : ℕ) ≤ z.length
         · have hieq : (i : ℕ) = z.length := by omega
           unfold appendPoint
-          rw [dif_pos (by simpa using hi)]
+          rw [dite_eq_left (by simpa using hi)]
           calc
             z.point ⟨i, by omega⟩ =
                 z.point ⟨z.length, Nat.lt_succ_self z.length⟩ := by
@@ -14333,7 +14336,7 @@ def append (G : QuittingGame) {η : ℝ}
               apply Fin.ext
               simp [iw, hieq]
         · unfold appendPoint
-          rw [dif_neg (by simpa using hi)]
+          rw [dite_eq_right (by simpa using hi)]
           apply congrArg w.point
           apply Fin.ext
           rfl
@@ -14342,7 +14345,7 @@ def append (G : QuittingGame) {η : ℝ}
         have hiTarget : ¬(i.succ : ℕ) ≤ z.length := by
           simp only [Fin.val_succ]
           omega
-        rw [dif_neg hiTarget]
+        rw [dite_eq_right hiTarget]
         apply congrArg w.point
         apply Fin.ext
         simp [iw]
@@ -14379,7 +14382,7 @@ theorem point_append_left {G : QuittingGame} {η : ℝ}
     (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
     (i : Fin (z.length + 1)) :
     (z.append G w hstitch).point ⟨i, by dsimp [append]; omega⟩ = z.point i := by
-  simp only [append, appendPoint, dif_pos i.is_le]
+  simp only [append, appendPoint, dite_eq_left i.is_le]
 
 theorem point_append_right {G : QuittingGame} {η : ℝ}
     (z w : ApproximateFRowPath G η)
@@ -14392,12 +14395,12 @@ theorem point_append_right {G : QuittingGame} {η : ℝ}
     subst i
     change appendPoint z w ⟨z.length + (0 : ℕ), by omega⟩ = w.point 0
     unfold appendPoint
-    rw [dif_pos (by simp)]
+    rw [dite_eq_left (by simp)]
     simpa only [Nat.add_zero] using hstitch
   · change appendPoint z w ⟨z.length + (i : ℕ), by omega⟩ = w.point i
     unfold appendPoint
     have hnot : ¬z.length + (i : ℕ) ≤ z.length := by omega
-    rw [dif_neg hnot]
+    rw [dite_eq_right hnot]
     apply congrArg w.point
     apply Fin.ext
     simp
@@ -14407,7 +14410,7 @@ theorem row_append_left {G : QuittingGame} {η : ℝ}
     (hstitch : z.point ⟨z.length, Nat.lt_succ_self z.length⟩ = w.point 0)
     (i : Fin z.length) :
     (z.append G w hstitch).row ⟨i, by dsimp [append]; omega⟩ = z.row i := by
-  simp only [append, appendRow, dif_pos i.isLt]
+  simp only [append, appendRow, dite_eq_left i.isLt]
 
 theorem row_append_right {G : QuittingGame} {η : ℝ}
     (z w : ApproximateFRowPath G η)
@@ -14418,7 +14421,7 @@ theorem row_append_right {G : QuittingGame} {η : ℝ}
   change appendRow z w ⟨z.length + (i : ℕ), by omega⟩ = w.row i
   unfold appendRow
   have hnot : ¬z.length + (i : ℕ) < z.length := by omega
-  rw [dif_neg hnot]
+  rw [dite_eq_right hnot]
   apply congrArg w.row
   apply Fin.ext
   simp
@@ -14429,7 +14432,7 @@ theorem seamError_append_left {G : QuittingGame} {η : ℝ}
     (i : Fin z.length) :
     (z.append G w hstitch).seamError
       ⟨i, by dsimp [append]; omega⟩ = z.seamError i := by
-  simp only [append, appendSeamError, dif_pos i.isLt]
+  simp only [append, appendSeamError, dite_eq_left i.isLt]
 
 theorem seamError_append_right {G : QuittingGame} {η : ℝ}
     (z w : ApproximateFRowPath G η)
@@ -14441,7 +14444,7 @@ theorem seamError_append_right {G : QuittingGame} {η : ℝ}
   change appendSeamError z w ⟨z.length + (i : ℕ), by omega⟩ = w.seamError i
   unfold appendSeamError
   have hnot : ¬z.length + (i : ℕ) < z.length := by omega
-  rw [dif_neg hnot]
+  rw [dite_eq_right hnot]
   apply congrArg w.seamError
   apply Fin.ext
   simp
@@ -14546,7 +14549,7 @@ theorem totalError_append {G : QuittingGame} {η : ℝ}
     totalError (z.append G w hstitch) = totalError z + totalError w := by
   unfold totalError
   change (∑ i : Fin (z.length + w.length),
-      (z.append G w hstitch).seamError i) =
+      appendSeamError z w i) =
     (∑ i : Fin z.length, z.seamError i) +
       ∑ i : Fin w.length, w.seamError i
   rw [Fin.sum_univ_add]
@@ -14708,7 +14711,7 @@ private theorem hasStationaryApproximateEquilibria_of_soloPayoff_nonnegative
         calc
           tailSurvival G deviation 0 t ≤
               ∏ l ∈ Finset.range t, (1 - av) := by
-            apply Finset.prod_le_prod
+            apply Finset.prod_le_prod₀
             · intro l hl
               exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
             · intro l hl
@@ -15022,7 +15025,7 @@ private theorem exists_supportPurifiedPrefixPath
                 (q (T - 1 - t))‖ := by
         apply Finset.sum_congr rfl
         intro t ht
-        rw [dif_pos (Finset.mem_range.mp ht)]
+        rw [dite_eq_left (Finset.mem_range.mp ht)]
       _ = ∑ i ∈ Finset.range T,
           ‖QuitTailPayoff G p i - QuittingOneStagePayoff G
             (QuitTailPayoff G p (i + 1)) (q i)‖ := by
@@ -15088,7 +15091,7 @@ private theorem exists_supportPurifiedPrefixPath
             (q (T - 1 - t)) - QuitTailPayoff G p (T - t)‖ by
       apply Finset.sum_congr rfl
       intro t ht
-      rw [dif_pos (Finset.mem_range.mp ht)]]
+      rw [dite_eq_left (Finset.mem_range.mp ht)]]
     calc
       (∑ i ∈ Finset.range T, ρ * QuitProbability G (q i)) ≤
           ∑ i ∈ Finset.range T,
@@ -15302,7 +15305,7 @@ theorem PrefixThenPunish.replace (G : QuittingGame) (p : QuitProfile G)
   by_cases hi : i < T
   · simp [PrefixThenPunish, QuitProfile.replace, QuitRow.replace, hi]
   · have hsplit : T + (i - T) = i := by omega
-    simp only [PrefixThenPunish, hi, if_false, QuitProfile.replace]
+    simp only [PrefixThenPunish, hi, ite_false, QuitProfile.replace]
     split_ifs with hkn
     · subst k
       rw [hsplit]
@@ -15858,7 +15861,7 @@ theorem ciSup_quitPayoff_replace_eq_quittingBestReplyValue
     refine ⟨M, ?_⟩
     rintro _ ⟨deviation, rfl⟩
     exact (le_abs_self _).trans (hpayoff _)
-  letI : Nonempty
+  let : Nonempty
       ((GameTheory.quittingGame G.reward).BehaviorStrategy who) :=
     ⟨fun _time _history ↦ PMF.pure false⟩
   apply le_antisymm
@@ -15965,7 +15968,7 @@ theorem minMaxQuit_eq_quittingPunishmentValue
       _ ≤ paperBest profile := le_ciSup (hinnerAbove profile) deviation
   have hpaperBelow : BddBelow (range paperBest) := by
     exact ⟨-M, by rintro _ ⟨profile, rfl⟩; exact hlower profile⟩
-  letI : Nonempty (GameTheory.quittingGame G.reward).BehaviorProfile :=
+  let : Nonempty (GameTheory.quittingGame G.reward).BehaviorProfile :=
     ⟨GameTheory.quittingAlwaysContinueProfile G.reward⟩
   change (⨅ profile : QuitProfile G, paperBest profile) = _
   apply le_antisymm
@@ -16137,14 +16140,14 @@ theorem productionRootsOfQuitProfile_stationaryPrefixThenPunish
         (if time ≤ horizon then productionRootOfQuitRow G row
           else productionRootsOfQuitProfile G punishment
             (time - (horizon + 1)))
-    simp only [if_pos htime]
+    simp only [ite_eq_left htime]
   · change productionRootOfQuitRow G
         (if time ≤ horizon then row
           else punishment (time - (horizon + 1))) =
         (if time ≤ horizon then productionRootOfQuitRow G row
           else productionRootsOfQuitProfile G punishment
             (time - (horizon + 1)))
-    simp only [if_neg htime]
+    simp only [ite_eq_right htime]
 
 /-- Reading a production stationary-prefix root sequence gives the paper
 stationary-prefix profile. -/
@@ -16165,14 +16168,14 @@ theorem quitProfileOfProductionRoots_stationaryPrefixThenRoots
         (if time ≤ horizon then quitRowOfProductionRoot G root
           else quitProfileOfProductionRoots G punishment
             (time - (horizon + 1)))
-    simp only [if_pos htime]
+    simp only [ite_eq_left htime]
   · change quitRowOfProductionRoot G
         (if time ≤ horizon then root
           else punishment (time - (horizon + 1))) =
         (if time ≤ horizon then quitRowOfProductionRoot G root
           else quitProfileOfProductionRoots G punishment
             (time - (horizon + 1)))
-    simp only [if_neg htime]
+    simp only [ite_eq_right htime]
 
 /-- The corrected stationarily-generated branch is identical in the paper
 and production quitting-game semantics. -/
@@ -16885,11 +16888,11 @@ private theorem continueProbabilities_mem_Icc
       OpponentContinueProbability G p n i ∈ Set.Icc (0 : ℝ) 1 := by
   constructor
   · exact ⟨Finset.prod_nonneg fun k _ => sub_nonneg.mpr (p k n).property.2,
-      Finset.prod_le_one (fun k _ => sub_nonneg.mpr (p k n).property.2)
+      Finset.prod_le_one₀ (fun k _ => sub_nonneg.mpr (p k n).property.2)
         (fun k _ => by linarith [(p k n).property.1])⟩
   · exact ⟨Finset.prod_nonneg fun k _ =>
         sub_nonneg.mpr (quitProbability_mem_Icc G _).2,
-      Finset.prod_le_one
+      Finset.prod_le_one₀
         (fun k _ => sub_nonneg.mpr (quitProbability_mem_Icc G _).2)
         (fun k _ => by linarith [(quitProbability_mem_Icc G
           ((p k).replace G n 0)).1])⟩
@@ -16919,7 +16922,7 @@ private theorem tailSurvival_replace_le_opponentContinueProbability
     exact one_sub_quitProbability_replace G (p k) n (deviation k)
   rw [hfactor]
   have hown : (∏ k ∈ Finset.range i, (1 - (deviation k : ℝ))) ≤ 1 :=
-    Finset.prod_le_one (fun k _ => sub_nonneg.mpr (deviation k).property.2)
+    Finset.prod_le_one₀ (fun k _ => sub_nonneg.mpr (deviation k).property.2)
       (fun k _ => by linarith [(deviation k).property.1])
   exact mul_le_of_le_one_left (continueProbabilities_mem_Icc G p n i).2.1 hown
 
@@ -16938,7 +16941,7 @@ private theorem one_sub_prod_one_sub_le_sum {N : Type} (s : Finset N)
         linarith [ha0 j (Finset.mem_insert_of_mem hj)]
       have hprod0 : 0 ≤ ∏ j ∈ s, (1 - a j) := Finset.prod_nonneg hfactor0
       have hprod1 : ∏ j ∈ s, (1 - a j) ≤ 1 :=
-        Finset.prod_le_one hfactor0 hfactor1
+        Finset.prod_le_one₀ hfactor0 hfactor1
       have hrest := ih (fun j hj => ha0 j (Finset.mem_insert_of_mem hj))
         (fun j hj => ha1 j (Finset.mem_insert_of_mem hj))
       have hn0 := ha0 n (Finset.mem_insert_self n s)
@@ -17181,7 +17184,7 @@ private noncomputable def quittingBernoulli (q : Set.Icc (0 : ℝ) 1) : PMF Bool
   apply PMF.ofFintype fun b =>
     if b then ENNReal.ofReal (q : ℝ) else ENNReal.ofReal (1 - (q : ℝ))
   rw [Fintype.sum_bool]
-  simp only [Bool.false_eq_true, if_pos, if_false]
+  simp only [Bool.false_eq_true, ite_eq_left, ite_false]
   rw [← ENNReal.ofReal_add q.property.1 (sub_nonneg.mpr q.property.2)]
   ring_nf
   simp
@@ -17250,14 +17253,14 @@ private theorem quittingDDPValueY_mem_coordinateInterval
   by_cases hlive : IsQuittingDDPLive T state
   · cases action with
     | false =>
-        simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false]
+        simp only [quittingDDPValueY, hlive, ite_eq_left, Bool.false_eq_true, ite_false]
         apply quittingOneStagePayoff_mem_coordinateInterval
         exact quitTailPayoff_mem_coordinateInterval G p (state.1 + 1) n
     | true =>
-        simp only [quittingDDPValueY, hlive, if_pos]
+        simp only [quittingDDPValueY, hlive, ite_eq_left]
         apply quittingOneStagePayoff_mem_coordinateInterval
         exact ⟨quittingCoordinateLower_nonpos G n, quittingCoordinateUpper_nonneg G n⟩
-  · simp only [quittingDDPValueY, hlive, if_false]
+  · simp only [quittingDDPValueY, hlive, ite_false]
     exact quittingDDPValueX_mem_coordinateInterval G p n T state
 
 private theorem abs_sub_le_of_mem_coordinateInterval
@@ -17317,13 +17320,13 @@ private theorem weighted_terminal_correction_le
 @[simp] private theorem quittingBernoulli_apply_true_toReal
     (q : Set.Icc (0 : ℝ) 1) : (quittingBernoulli q true).toReal = q := by
   rw [quittingBernoulli, PMF.ofFintype_apply]
-  simp only [if_pos]
+  simp only [ite_eq_left]
   rw [ENNReal.toReal_ofReal q.property.1]
 
 @[simp] private theorem quittingBernoulli_apply_false_toReal
     (q : Set.Icc (0 : ℝ) 1) : (quittingBernoulli q false).toReal = 1 - q := by
   rw [quittingBernoulli, PMF.ofFintype_apply]
-  simp only [Bool.false_eq_true, if_false]
+  simp only [Bool.false_eq_true, ite_false]
   rw [ENNReal.toReal_ofReal (sub_nonneg.mpr q.property.2)]
 
 private theorem quittingDDPHarmonicX
@@ -17339,11 +17342,11 @@ private theorem quittingDDPHarmonicX
       rw [hlive.2]
       exact Finset.not_nonempty_empty
     rw [tsum_fintype, Fintype.sum_bool]
-    simp only [quittingDDPChoose, hlive, if_pos, quittingDDPValueY,
+    simp only [quittingDDPChoose, hlive, ite_eq_left, quittingDDPValueY,
       quittingBernoulli_apply_true_toReal, quittingBernoulli_apply_false_toReal]
     simp only [quittingDDPValueX, hempty, dite_false, htime]
     rw [quitTailPayoff_eq_oneStage G p state.1]
-    simp only [Bool.false_eq_true, if_false]
+    simp only [Bool.false_eq_true, ite_false]
     have haffine := quittingOneStagePayoff_replace_eq_endpoints G
       (QuitTailPayoff G p (state.1 + 1)) (p state.1) n (p state.1 n)
     rw [QuitRow.replace_self] at haffine
@@ -17377,7 +17380,7 @@ private theorem quittingDDPHarmonicY
     have hadvance : Function.Injective advance := by
       intro A B h
       exact congrArg Prod.snd h
-    simp only [quittingDDPMove, hlive, if_pos]
+    simp only [quittingDDPMove, hlive, ite_eq_left]
     change quittingDDPValueY G p n T state action =
       ∑' next, (((coalitionPMF G row).map advance) next).toReal *
         quittingDDPValueX G p n T next
@@ -17401,18 +17404,18 @@ private theorem quittingDDPHarmonicY
       (QuitTailPayoff G p (state.1 + 1)) row n]
     cases action with
     | false =>
-        simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false,
+        simp only [quittingDDPValueY, hlive, ite_eq_left, Bool.false_eq_true, ite_false,
           row, ForcedContinuePayoff]
     | true =>
-        simp only [quittingDDPValueY, hlive, if_pos, row, ForcedQuitPayoff]
+        simp only [quittingDDPValueY, hlive, ite_eq_left, row, ForcedQuitPayoff]
         simp only [QuittingOneStagePayoff]
         rw [quitProbability_replace_one]
         ring
-  · simp only [quittingDDPMove, hlive, if_false]
+  · simp only [quittingDDPMove, hlive, ite_false]
     rw [tsum_eq_single state]
     · simp [quittingDDPValueY, hlive]
     · intro other hother
-      rw [PMF.pure_apply, if_neg hother]
+      rw [PMF.pure_apply, ite_eq_right hother]
       simp
 
 /-- The rank-one process generated by one player in a finite quitting prefix. -/
@@ -17463,10 +17466,10 @@ private theorem quittingDecisionProcess_balanced
     cases action with
     | false =>
         have hcontinue : (p state.1 n : ℝ) < 1 := by
-          simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli,
-            PMF.ofFintype_apply, Bool.false_eq_true, if_false] at hpositive
+          simp only [quittingDDPChoose, hlive, ite_eq_left, quittingBernoulli,
+            PMF.ofFintype_apply, Bool.false_eq_true, ite_false] at hpositive
           exact sub_pos.mp (ENNReal.ofReal_pos.mp hpositive)
-        simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false]
+        simp only [quittingDDPValueY, hlive, ite_eq_left, Bool.false_eq_true, ite_false]
         rw [abs_le]
         constructor
         · have := EpsilonRow.oneStage_sub_forcedContinuePayoff_le_of_lt_one
@@ -17475,10 +17478,10 @@ private theorem quittingDecisionProcess_balanced
         · exact EpsilonRow.forcedContinue_sub_oneStage_le G hrow hδ n
     | true =>
         have hquit : 0 < (p state.1 n : ℝ) := by
-          simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli,
+          simp only [quittingDDPChoose, hlive, ite_eq_left, quittingBernoulli,
             PMF.ofFintype_apply] at hpositive
           exact ENNReal.ofReal_pos.mp hpositive
-        simp only [quittingDDPValueY, hlive, if_pos]
+        simp only [quittingDDPValueY, hlive, ite_eq_left]
         rw [abs_le]
         constructor
         · have := EpsilonRow.oneStage_sub_forcedQuitPayoff_le_of_pos
@@ -17488,7 +17491,7 @@ private theorem quittingDecisionProcess_balanced
           linarith
   · change |quittingDDPValueY G p n T state action -
       quittingDDPValueX G p n T state| ≤ δ
-    simp only [quittingDDPValueY, hlive, if_false, sub_self, abs_zero]
+    simp only [quittingDDPValueY, hlive, ite_false, sub_self, abs_zero]
     exact hδ
 
 private theorem PMF.mem_range_of_map_ne_zero {A B : Type*}
@@ -17501,7 +17504,7 @@ private theorem PMF.mem_range_of_map_ne_zero {A B : Type*}
     (∑' a, if b = f a then μ a else 0) = ∑' _a : A, 0 := by
       apply tsum_congr
       intro a
-      rw [if_neg]
+      rw [ite_eq_right]
       exact fun h => hrange ⟨a, h.symm⟩
     _ = 0 := tsum_zero
 
@@ -17520,7 +17523,7 @@ private theorem quittingDDPMove_reachable
   · have hrange := PMF.mem_range_of_map_ne_zero
       (coalitionPMF G ((p state.1).replace G n (if action = true then 1 else 0)))
       (fun A => (state.1 + 1, A)) (by
-        simpa only [quittingDDPMove, hlive, if_pos] using hmove)
+        simpa only [quittingDDPMove, hlive, ite_eq_left] using hmove)
     rcases hrange with ⟨A, rfl⟩
     obtain ⟨_hempty, htimeMin⟩ := hstate.resolve_right fun hterminal => by
       rw [hlive.2] at hterminal
@@ -17541,7 +17544,7 @@ private theorem quittingDDPMove_reachable
       rw [htime, min_eq_left (Nat.succ_le_iff.mpr hiT)]
   · have hnext : next = state := by
       have hpure : PMF.pure state next ≠ 0 := by
-        simpa only [quittingDDPMove, hlive, if_false] using hmove
+        simpa only [quittingDDPMove, hlive, ite_false] using hmove
       rw [PMF.pure_apply] at hpure
       split at hpure
       · assumption
@@ -17568,7 +17571,7 @@ private theorem quittingDDPMove_eq_of_terminal
     rw [hlive.2] at hnonempty
     exact Finset.not_nonempty_empty hnonempty
   have hpure : PMF.pure state next ≠ 0 := by
-    simpa only [quittingDDPMove, hlive, if_false] using hmove
+    simpa only [quittingDDPMove, hlive, ite_false] using hmove
   rw [PMF.pure_apply] at hpure
   split at hpure
   · assumption
@@ -17585,18 +17588,18 @@ private theorem quittingDDPMove_true_nonempty
   have hadvance : Function.Injective advance := fun A B h => congrArg Prod.snd h
   have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨hi, rfl⟩
   have hrange := PMF.mem_range_of_map_ne_zero (coalitionPMF G row) advance (by
-    simpa only [quittingDDPMove, hlive, if_pos, row, advance] using hmove)
+    simpa only [quittingDDPMove, hlive, ite_eq_left, row, advance] using hmove)
   rcases hrange with ⟨A, rfl⟩
   have hmap : ((coalitionPMF G row).map advance) (advance A) = coalitionPMF G row A := by
     rw [PMF.map_apply, tsum_eq_single A]
     · simp
     · intro B hBA
-      rw [if_neg]
+      rw [ite_eq_right]
       exact fun h => hBA (hadvance h.symm)
   have hsource : coalitionPMF G row A ≠ 0 := by
     intro hzero
     apply hmove
-    simpa only [quittingDDPMove, hlive, if_pos, row, advance, hmap] using hzero
+    simpa only [quittingDDPMove, hlive, ite_eq_left, row, advance, hmap] using hzero
   rw [Finset.nonempty_iff_ne_empty]
   intro hempty
   change A = ∅ at hempty
@@ -17753,7 +17756,7 @@ private theorem measurableSet_quittingDDPOwnQuitEvent
   have heq : QuittingDDPOwnQuitEvent G p n T M hM i =
       {stages : ℕ → DDPStage P | stages i = ⟨(i, ∅), true⟩} := by
     ext stages
-    simp only [QuittingDDPOwnQuitEvent, mem_setOf_eq]
+    simp only [QuittingDDPOwnQuitEvent, mem_ofPred_eq]
     constructor
     · rintro ⟨hstate, haction⟩
       apply Sigma.ext hstate
@@ -17834,7 +17837,7 @@ private theorem quittingDDPOwnQuitEvent_totalMass_le_one
       (QuittingDDPOwnQuitEvent G p n T M hM i) ≤ 1 := by
   let P := quittingDecisionProcess G p n T M hM
   let μ := P.rawLawFrom (0, ∅)
-  letI : IsProbabilityMeasure μ := P.isProbabilityMeasure_rawLawFrom (0, ∅)
+  let : IsProbabilityMeasure μ := P.isProbabilityMeasure_rawLawFrom (0, ∅)
   calc
     (∑' i : Fin T, μ (QuittingDDPOwnQuitEvent G p n T M hM i)) ≤
         μ Set.univ := tsum_measure_le_measure_univ
@@ -17855,7 +17858,7 @@ private theorem quittingDDPRawLaw_ownQuitEvent
   have hevent : QuittingDDPOwnQuitEvent G p n T M hM i =
       {stages : ℕ → DDPStage P | stages i = ⟨(i, ∅), true⟩} := by
     ext stages
-    simp only [QuittingDDPOwnQuitEvent, mem_setOf_eq]
+    simp only [QuittingDDPOwnQuitEvent, mem_ofPred_eq]
     constructor
     · rintro ⟨hstate, haction⟩
       apply Sigma.ext hstate
@@ -17876,7 +17879,7 @@ private theorem quittingDDPRawStateVariation_eq_zero_of_not_live
     (state : QuittingDDPState G) (hlive : ¬IsQuittingDDPLive T state) :
     (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i state = 0 := by
   let P := quittingDecisionProcess G p n T M hM
-  rw [DiscreteDecisionProcess.rawStateVariation]
+  unfold DiscreteDecisionProcess.rawStateVariation
   apply mul_eq_zero_of_right
   calc
     (∑' action, P.choose state action *
@@ -17906,7 +17909,7 @@ private theorem quittingDDPRawLaw_state_eq_zero_of_unreachable
     DDPPath.ofRaw P ⁻¹' DDPCylinder P path.1
   have hstateUnion : {stages : ℕ → DDPStage P | (stages i).1 = state} = ⋃ path, C path := by
     ext stages
-    simp only [mem_setOf_eq, mem_iUnion, C]
+    simp only [mem_ofPred_eq, mem_iUnion, C]
     constructor
     · intro hstate
       let path := (DDPPath.ofRaw P stages).prefix P i
@@ -17953,7 +17956,7 @@ private theorem quittingDDP_live_actionVariation_le
   have haverage : x = q * a + (1 - q) * b := by
     have h := quittingDDPHarmonicX G p n T (i, ∅)
     rw [tsum_fintype, Fintype.sum_bool] at h
-    simpa only [P, q, a, b, x, quittingDDPChoose, hlive, if_pos,
+    simpa only [P, q, a, b, x, quittingDDPChoose, hlive, ite_eq_left,
       quittingBernoulli_apply_true_toReal, quittingBernoulli_apply_false_toReal]
       using h
   have habs : |a - b| ≤ M := by
@@ -17969,7 +17972,7 @@ private theorem quittingDDP_live_actionVariation_le
     |quittingDDPValueY G p n T (i, ∅) action -
       quittingDDPValueX G p n T (i, ∅)| ≤ _
   rw [tsum_fintype, Fintype.sum_bool]
-  simp only [quittingDDPChoose, hlive, if_pos, quittingBernoulli_apply_true_toReal,
+  simp only [quittingDDPChoose, hlive, ite_eq_left, quittingBernoulli_apply_true_toReal,
     quittingBernoulli_apply_false_toReal]
   change q * |a - x| + (1 - q) * |b - x| ≤ 2 * M * q
   rw [haverage]
@@ -18004,10 +18007,11 @@ private theorem quittingDDPRawStateVariation_live_le
           quittingDDPValueX G p n T (i, ∅)|) ≤ 2 * M * (p i n : ℝ)
     exact quittingDDP_live_actionVariation_le G p n T i M hM hi
   have hμtop : μ ≠ ⊤ := by
-    letI : IsProbabilityMeasure (P.rawLawFrom (0, ∅)) :=
+    let : IsProbabilityMeasure (P.rawLawFrom (0, ∅)) :=
       P.isProbabilityMeasure_rawLawFrom (0, ∅)
     exact measure_ne_top _ _
-  rw [P.rawStateVariation_eq_ofReal]
+  rw [P.rawStateVariation_eq_ofReal
+    (⟨0, ∅⟩ : QuittingDDPState G) i (⟨i, ∅⟩ : QuittingDDPState G)]
   change ENNReal.ofReal (μ.toReal * average) ≤ _
   calc
     ENNReal.ofReal (μ.toReal * average) ≤
@@ -18030,7 +18034,7 @@ private theorem quittingDDPRawStateVariation_eq_zero_of_unreachable
     (S : DDPSemantics (quittingDecisionProcess G p n T M hM))
     (state : QuittingDDPState G) (hunreachable : ¬IsQuittingDDPReachable T i state) :
     (quittingDecisionProcess G p n T M hM).rawStateVariation (0, ∅) i state = 0 := by
-  rw [DiscreteDecisionProcess.rawStateVariation]
+  unfold DiscreteDecisionProcess.rawStateVariation
   rw [quittingDDPRawLaw_state_eq_zero_of_unreachable G p n T M hM S i state
     hunreachable]
   simp
@@ -18045,8 +18049,9 @@ private theorem quittingDDP_tsum_stateVariation_le
           (quittingDecisionProcess G p n T M hM).rawLawFrom (0, ∅)
             (QuittingDDPOwnQuitEvent G p n T M hM i) else 0 := by
   let P := quittingDecisionProcess G p n T M hM
+  unfold DiscreteDecisionProcess.rawStateVariation
   by_cases hi : i < T
-  · rw [if_pos hi]
+  · rw [ite_eq_left hi]
     rw [tsum_eq_single (i, ∅)]
     · exact quittingDDPRawStateVariation_live_le G p n T i M hM S hi
     · intro state hstate
@@ -18061,7 +18066,7 @@ private theorem quittingDDP_tsum_stateVariation_le
         · rw [hlive.2] at hterminal
           exact Finset.not_nonempty_empty hterminal.1
       · exact quittingDDPRawStateVariation_eq_zero_of_not_live G p n T i M hM state hlive
-  · rw [if_neg hi]
+  · rw [ite_eq_right hi]
     calc
       (∑' state : QuittingDDPState G, P.rawStateVariation (0, ∅) i state) =
           ∑' _state : QuittingDDPState G, 0 := by
@@ -18103,10 +18108,10 @@ private theorem quittingDDP_expectedVariation_le
     _ = ∑ i ∈ Finset.range T, c * mass i := by
       rw [tsum_eq_sum (s := Finset.range T) (fun i hi => by
         rw [Finset.mem_range, not_lt] at hi
-        rw [if_neg (not_lt_of_ge hi)])]
+        rw [ite_eq_right (not_lt_of_ge hi)])]
       apply Finset.sum_congr rfl
       intro i hi
-      rw [if_pos (Finset.mem_range.mp hi)]
+      rw [ite_eq_left (Finset.mem_range.mp hi)]
     _ = ∑ i : Fin T, c * mass i := by
       exact (Fin.sum_univ_eq_sum_range (fun i : ℕ => c * mass i) T).symm
     _ = c * ∑' i : Fin T, mass i := by
@@ -18165,18 +18170,18 @@ private theorem quittingDDPLivePath_factor
     rw [PMF.map_apply, tsum_eq_single ∅]
     · simp
     · intro A hA
-      rw [if_neg]
+      rw [ite_eq_right]
       exact fun h => hA (hadvance h.symm)
   have hlive : IsQuittingDDPLive T (i, (∅ : Finset G.Player)) := ⟨i.2, rfl⟩
   change quittingDDPChoose G p n T (i, ∅) false *
       quittingDDPMove G p n T (i, ∅) false (i + 1, ∅) = _
-  simp only [quittingDDPChoose, quittingDDPMove, hlive, if_pos,
-    Bool.false_eq_true, if_false]
+  simp only [quittingDDPChoose, quittingDDPMove, hlive, ite_eq_left,
+    Bool.false_eq_true, ite_false]
   change quittingBernoulli (p i n) false *
       ((coalitionPMF G row).map advance) (advance ∅) = _
   rw [hmap]
   rw [quittingBernoulli, PMF.ofFintype_apply, coalitionPMF, PMF.ofFintype_apply]
-  simp only [Bool.false_eq_true, if_false]
+  simp only [Bool.false_eq_true, ite_false]
   rw [← ENNReal.ofReal_mul (sub_nonneg.mpr (p i n).property.2)]
   congr 1
   have hempty : CoalitionProbability G row ∅ = 1 - QuitProbability G row := by
@@ -18220,7 +18225,7 @@ private theorem quittingDDPLivePath_advantage
   have hempty : ¬(∅ : Finset G.Player).Nonempty := Finset.not_nonempty_empty
   change quittingDDPValueY G p n (k + 1) (i, ∅) false -
       quittingDDPValueX G p n (k + 1) (i, ∅) = _
-  simp only [quittingDDPValueY, hlive, if_pos, Bool.false_eq_true, if_false,
+  simp only [quittingDDPValueY, hlive, ite_eq_left, Bool.false_eq_true, ite_false,
     quittingDDPValueX, hempty, dite_false, min_eq_left (le_of_lt i.2)]
 
 /-- A ledger crossing forces the live-prefix survival probability below the DDP crossing bound. -/
@@ -18423,7 +18428,7 @@ theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
   have hb0 : 0 ≤ b := hsurvivalNonnegative p
   have hb1 : b ≤ 1 := by
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · intro i _hi
       exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
     · intro i _hi
@@ -18438,7 +18443,7 @@ theorem proposition3 (G : QuittingGame) {M ε δ : ℝ}
     · subst m
       have ha0 : 0 ≤ a := hsurvivalNonnegative (p.replace G j deviation)
       have ha1 : a ≤ 1 := by
-        apply Finset.prod_le_one
+        apply Finset.prod_le_one₀
         · intro i _hi
           exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
         · intro i _hi
@@ -19006,13 +19011,13 @@ private theorem exists_infiniteSegmentPath (G : QuittingGame) {η : ℝ}
       step_error := by
         intro i
         by_cases hlast : (i : ℕ) + 1 = I
-        · simp only [Fin.val_succ, hlast, lt_self_iff_false, if_false,
-            Fin.val_castSucc, i.isLt, if_true]
+        · simp only [Fin.val_succ, hlast, lt_self_iff_false, ite_false,
+            Fin.val_castSucc, i.isLt, ite_true]
           rw [hrowPayoff i, hlast]
           exact hclose
         · have hnext : (i : ℕ) + 1 < I := by omega
-          simp only [Fin.val_succ, hnext, if_true, Fin.val_castSucc, i.isLt]
-          rw [hrowPayoff i, sub_self, norm_zero, if_neg hlast]
+          simp only [Fin.val_succ, hnext, ite_true, Fin.val_castSucc, i.isLt]
+          rw [hrowPayoff i, sub_self, norm_zero, ite_eq_right hlast]
       rational := by
         intro i
         by_cases hi : (i : ℕ) < I
@@ -19036,7 +19041,7 @@ private theorem exists_infiniteSegmentPath (G : QuittingGame) {η : ℝ}
     · have hlastEq : (last : ℕ) + 1 = I := by
         dsimp only [last]
         omega
-      rw [if_pos hlastEq]
+      rw [ite_eq_left hlastEq]
     · intro b _hb hblast
       have hbne : (b : ℕ) + 1 ≠ I := by
         intro hb
@@ -19052,7 +19057,7 @@ private theorem exists_infiniteSegmentPath (G : QuittingGame) {η : ℝ}
     apply Finset.sum_congr rfl
     intro i hi
     have hi' : i < I := Finset.mem_range.mp hi
-    simp only [hi', dite_true, Fin.val_castSucc, if_true]
+    simp only [hi', dite_true, Fin.val_castSucc, ite_true]
     rw [hrowPayoff ⟨i, hi'⟩]
 
 /-- A finite segment's full variation dominates every rectangular prefix assigned to it. -/
@@ -19103,7 +19108,7 @@ private theorem extendedSegmentPrefixVariation_le_infinite
   have hcondition (i : ℕ) :
       ActiveSegment x.segmentCount j ∧
         SegmentIndex (x.segmentLength j) (i + 1) := ⟨hj, hvalid i⟩
-  simp_rw [if_pos (hcondition _)]
+  simp_rw [ite_eq_left (hcondition _)]
   apply Finset.sum_le_sum_of_subset_of_nonneg (Finset.range_mono hIK)
   intro i _hi _hnot
   exact norm_nonneg _
@@ -20660,7 +20665,7 @@ private theorem coalitionProbability_forcedSolo_eq_survival
   classical
   simp only [CoalitionProbability, QuitProbability, QuitRow.replace]
   rw [Finset.prod_singleton]
-  simp only [if_pos, Set.Icc.coe_one, one_mul]
+  simp only [ite_eq_left, Set.Icc.coe_one, one_mul]
   ring_nf
   have hfilter : Finset.univ.filter (fun k : G.Player => k ∉ ({n} : Finset G.Player)) =
       Finset.univ.erase n := by
@@ -20670,7 +20675,7 @@ private theorem coalitionProbability_forcedSolo_eq_survival
   have hprod := Finset.mul_prod_erase Finset.univ
     (fun k : G.Player => 1 - (((if k = n then (0 : Set.Icc (0 : ℝ) 1) else p k) :
       Set.Icc (0 : ℝ) 1) : ℝ)) (Finset.mem_univ n)
-  simp only [if_pos, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
+  simp only [ite_eq_left, Set.Icc.coe_zero, sub_zero, one_mul] at hprod
   rw [← hprod]
   apply Finset.prod_congr rfl
   intro k hk
@@ -20851,7 +20856,7 @@ theorem minMaxQuit_le_max_forcedQuit_stationaryContinue
       calc
         tailSurvival G deviated 0 t ≤
             ∏ k ∈ Finset.range t, (1 - qOther) := by
-          apply Finset.prod_le_prod
+          apply Finset.prod_le_prod₀
           · intro k hk
             exact sub_nonneg.mpr (quitProbability_mem_Icc G _).2
           · intro k hk
@@ -21448,12 +21453,12 @@ abbrev MatrixParameterSpace (D : MatrixGameForm) :=
 
 /-- `Ã = ∏_j Δ(Aʲ)` is the product of actual finite mixed-strategy simplices. -/
 abbrev MixedStrategySpace (D : MatrixGameForm) :=
-  (n : D.Player) → stdSimplex ℝ (D.Action n)
+  (n : D.Player) → Convexity.StdSimplex ℝ (D.Action n)
 
 /-- The probability of a pure action profile under a mixed-strategy profile. -/
 def PureProfileProbability (D : MatrixGameForm) (p : MixedStrategySpace D)
     (a : (n : D.Player) → D.Action n) : ℝ :=
-  ∏ n, (p n : D.Action n → ℝ) (a n)
+  ∏ n, (p n).weights (a n)
 
 /-- The expected matrix-game payoff of a mixed-strategy profile. -/
 def MatrixExpectedPayoff (D : MatrixGameForm) (x : MatrixParameterSpace D)
@@ -21463,14 +21468,14 @@ def MatrixExpectedPayoff (D : MatrixGameForm) (x : MatrixParameterSpace D)
 
 /-- Unilateral replacement in the product mixed-strategy simplex. -/
 def MixedStrategySpace.replace (D : MatrixGameForm) (p : MixedStrategySpace D)
-    (n : D.Player) (q : stdSimplex ℝ (D.Action n)) : MixedStrategySpace D := by
+    (n : D.Player) (q : Convexity.StdSimplex ℝ (D.Action n)) : MixedStrategySpace D := by
   classical
   exact fun k => if h : k = n then h ▸ q else p k
 
 /-- A mixed profile is a Nash equilibrium of the one-stage matrix game `G_x`. -/
 def IsMatrixNash (D : MatrixGameForm) (x : MatrixParameterSpace D)
     (p : MixedStrategySpace D) : Prop :=
-  ∀ n (q : stdSimplex ℝ (D.Action n)),
+  ∀ n (q : Convexity.StdSimplex ℝ (D.Action n)),
     MatrixExpectedPayoff D x (p.replace D n q) n ≤ MatrixExpectedPayoff D x p n
 
 /-- `E ⊆ X × Ã` is the equilibrium correspondence of all payoff matrices. -/
@@ -21499,9 +21504,9 @@ theorem KohlbergMertensStatement :
     IsHomotopy H ∧
     (∀ x t,
       (H x t).1 = (t : ℝ) • (H x 1).1 + (1 - (t : ℝ)) • (H x 0).1 ∧
-      ∀ n a, ((H x t).2 n : D.Action n → ℝ) a =
-        (t : ℝ) * ((H x 1).2 n : D.Action n → ℝ) a +
-        (1 - (t : ℝ)) * ((H x 0).2 n : D.Action n → ℝ) a) ∧
+      ∀ n a, ((H x t).2 n).weights a =
+        (t : ℝ) * ((H x 1).2 n).weights a +
+        (1 - (t : ℝ)) * ((H x 0).2 n).weights a) ∧
     (∀ x, (H x 0).1 = x) ∧
     range (fun x => H x 1) = MatrixEquilibriumGraph D ∧
     ∀ C : Set (MatrixParameterSpace D), IsCompact C → ∃ R : ℝ, 0 < R ∧
@@ -22271,7 +22276,7 @@ theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
       · subst k
         simp [QuitRow.replace, zeroRow]
       · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, if_false, zeroRow]
+        simp only [QuitRow.replace, hkj, ite_false, zeroRow]
         exact hp.2 k hkj
     have hpOne : p.replace G j 1 = SoloQuitRow G j := by
       funext k
@@ -22279,7 +22284,7 @@ theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
       · subst k
         simp [QuitRow.replace, SoloQuitRow]
       · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, if_false, SoloQuitRow]
+        simp only [QuitRow.replace, hkj, ite_false, SoloQuitRow]
         exact hp.2 k hkj
     have hpFromZero : p = zeroRow.replace G j (p j) := by
       funext k
@@ -22287,7 +22292,7 @@ theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
       · subst k
         simp [QuitRow.replace]
       · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, if_false, zeroRow]
+        simp only [QuitRow.replace, hkj, ite_false, zeroRow]
         exact hp.2 k hkj
     constructor
     · intro k hkpositive
@@ -22625,7 +22630,7 @@ theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
         · subst k
           simp [QuitRow.replace]
         · apply Subtype.ext
-          simp only [QuitRow.replace, hkj, if_false, zeroRow]
+          simp only [QuitRow.replace, hkj, ite_false, zeroRow]
           exact (hp.2 k hkj)
       have hzeroJ : zeroRow.replace G j 0 = zeroRow := zeroRow.replace_self G j
       intro n
@@ -22908,7 +22913,7 @@ private theorem exists_soloBoundaryOrbit (G : QuittingGame) {delta epsilon : ℝ
       _ ≤ SoloPayoff G j + epsilon := hxj
   · constructor
     · change ((soloProbabilityRow G j t) j : ℝ) ≤ delta
-      simp only [soloProbabilityRow, QuitRow.replace, if_pos]
+      simp only [soloProbabilityRow, QuitRow.replace, ite_eq_left]
       exact (q i).property.2
     · intro n hnj
       change ((soloProbabilityRow G j t) n : ℝ) = 0
@@ -22939,14 +22944,14 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
       have hsource : c i.castSucc = z iz.castSucc := by
         dsimp only [c]
         simp only [Fin.val_castSucc]
-        rw [dif_pos hik.le]
+        rw [dite_eq_left hik.le]
         apply congrArg z
         apply Fin.ext
         rfl
       have htarget : c i.succ = z iz.succ := by
         dsimp only [c]
         simp only [Fin.val_succ]
-        rw [dif_pos (Nat.succ_le_iff.mpr hik)]
+        rw [dite_eq_left (Nat.succ_le_iff.mpr hik)]
         apply congrArg z
         apply Fin.ext
         rfl
@@ -22959,13 +22964,13 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
         have hsource : c i.castSucc = z ⟨k, Nat.lt_succ_self k⟩ := by
           dsimp only [c]
           simp only [Fin.val_castSucc]
-          rw [dif_pos (hieq.le)]
+          rw [dite_eq_left (hieq.le)]
           apply congrArg z
           exact Fin.ext hieq
         have htarget : c i.succ = w iw.succ := by
           dsimp only [c]
           simp only [Fin.val_succ]
-          rw [dif_neg (by omega)]
+          rw [dite_eq_right (by omega)]
           apply congrArg w
           apply Fin.ext
           dsimp only [iw]
@@ -22978,14 +22983,14 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
         have hsource : c i.castSucc = w iw.castSucc := by
           dsimp only [c]
           simp only [Fin.val_castSucc]
-          rw [dif_neg (by omega)]
+          rw [dite_eq_right (by omega)]
           apply congrArg w
           apply Fin.ext
           rfl
         have htarget : c i.succ = w iw.succ := by
           dsimp only [c]
           simp only [Fin.val_succ]
-          rw [dif_neg (by omega)]
+          rw [dite_eq_right (by omega)]
           apply congrArg w
           apply Fin.ext
           dsimp only [iw]
@@ -22995,14 +23000,14 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
         exact hw iw
   · intro i
     by_cases hi : (i : ℕ) ≤ k
-    · simpa only [c, dif_pos hi] using hzA ⟨i, by omega⟩
-    · simpa only [c, dif_neg hi] using hwA ⟨(i : ℕ) - k, by omega⟩
+    · simpa only [c, dite_eq_left hi] using hzA ⟨i, by omega⟩
+    · simpa only [c, dite_eq_right hi] using hwA ⟨(i : ℕ) - k, by omega⟩
   · by_cases hl : l = 0
     · subst l
       simpa [c] using hstitch
     · have hl0 : 0 < l := Nat.pos_of_ne_zero hl
       dsimp only [c]
-      rw [dif_neg (by omega)]
+      rw [dite_eq_right (by omega)]
       apply congrArg w
       apply Fin.ext
       simp

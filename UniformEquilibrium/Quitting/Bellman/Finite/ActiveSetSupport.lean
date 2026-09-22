@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -720,7 +720,7 @@ theorem quittingActiveMobiusLayerAt_smul
   apply Finset.sum_congr rfl
   intro S hS
   by_cases hcard : S.card = degree
-  · simp only [hcard, if_pos]
+  · simp only [hcard, ite_eq_left]
     have hprod : (∏ i ∈ S, delta * x i) =
         delta ^ S.card * ∏ i ∈ S, x i := by
       simp_rw [Finset.prod_mul_distrib]

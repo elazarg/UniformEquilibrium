@@ -1,4 +1,4 @@
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 
 /-!
 # Finite path budgets and bounded potentials
@@ -9,7 +9,7 @@ proof remains in `MathUE.ChargedPathBudget`.
 
 namespace Theorems.ChargedPaths
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 universe u v
 

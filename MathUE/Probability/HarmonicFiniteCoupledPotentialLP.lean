@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.Probability.HarmonicTwoStateBranchingSCC
-import MathUE.LinearAlgebra.FourierMotzkin
+import Maths.LinearProgramming.FourierMotzkin
 
 /-!
 # Finite coupled variation potentials and their LP dual
@@ -35,6 +35,8 @@ exists.  The alternative does not itself establish Simon's cardinality estimate.
 open Finset BigOperators
 
 namespace Math.Probability
+
+open Maths.LinearProgramming
 
 noncomputable section
 
@@ -123,10 +125,10 @@ def coupledPotentialRhs (charge : Node → ℝ) (bound : ℝ) :
 
 private theorem rowEval_coupledPotentialMatrix_bellman
     (kernel : Node → PMF Node) (potential : Node → ℝ) (source : Node) :
-    Math.LinearAlgebra.rowEval (coupledPotentialMatrix kernel) (Sum.inl source)
+    Maths.LinearProgramming.rowEval (coupledPotentialMatrix kernel) (Sum.inl source)
         (encodeCoupledPotential potential) =
       potential source - expect (kernel source) potential := by
-  rw [Math.LinearAlgebra.rowEval]
+  rw [Maths.LinearProgramming.rowEval]
   have hreindex := (Fintype.equivFin Node).symm.sum_comp
     (fun state => ((if state = source then 1 else 0) -
       (kernel source state).toReal) * potential state)
@@ -143,10 +145,10 @@ private theorem rowEval_coupledPotentialMatrix_bellman
 
 private theorem rowEval_coupledPotentialMatrix_lower
     (kernel : Node → PMF Node) (potential : Node → ℝ) (state : Node) :
-    Math.LinearAlgebra.rowEval (coupledPotentialMatrix kernel)
+    Maths.LinearProgramming.rowEval (coupledPotentialMatrix kernel)
         (Sum.inr (Sum.inl state)) (encodeCoupledPotential potential) =
       potential state := by
-  rw [Math.LinearAlgebra.rowEval]
+  rw [Maths.LinearProgramming.rowEval]
   have hreindex := (Fintype.equivFin Node).symm.sum_comp
     (fun current => (if current = state then 1 else 0) * potential current)
   rw [show
@@ -159,10 +161,10 @@ private theorem rowEval_coupledPotentialMatrix_lower
 
 private theorem rowEval_coupledPotentialMatrix_upper
     (kernel : Node → PMF Node) (potential : Node → ℝ) (state : Node) :
-    Math.LinearAlgebra.rowEval (coupledPotentialMatrix kernel)
+    Maths.LinearProgramming.rowEval (coupledPotentialMatrix kernel)
         (Sum.inr (Sum.inr state)) (encodeCoupledPotential potential) =
       -potential state := by
-  rw [Math.LinearAlgebra.rowEval]
+  rw [Maths.LinearProgramming.rowEval]
   have hreindex := (Fintype.equivFin Node).symm.sum_comp
     (fun current => (if current = state then -1 else 0) * potential current)
   rw [show
@@ -177,7 +179,7 @@ private theorem rowEval_coupledPotentialMatrix_upper
 theorem nonempty_boundedCoupledPotential_iff_isFeasible
     (kernel : Node → PMF Node) (charge : Node → ℝ) (bound : ℝ) :
     Nonempty (BoundedCoupledPotential kernel charge bound) ↔
-      Math.LinearAlgebra.IsFeasible
+      Maths.LinearProgramming.IsFeasible
         (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound) := by
   constructor
   · rintro ⟨certificate⟩
@@ -338,7 +340,7 @@ private theorem encodeCoupledPotentialFlow_rhs_sum
 /-- Raw Farkas weights are exactly nonnegative charged-flow obstructions. -/
 theorem hasCertificate_coupledPotential_iff_exists_flowObstruction
     (kernel : Node → PMF Node) (charge : Node → ℝ) (bound : ℝ) :
-    Math.LinearAlgebra.HasCertificate
+    Maths.LinearProgramming.HasCertificate
         (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound) ↔
       ∃ alpha beta gamma,
         IsCoupledPotentialFlowObstruction kernel charge bound alpha beta gamma := by
@@ -423,10 +425,10 @@ bounded potential LP is infeasible. -/
 theorem not_nonempty_boundedCoupledPotential_iff_farkas
     (kernel : Node → PMF Node) (charge : Node → ℝ) (bound : ℝ) :
     ¬Nonempty (BoundedCoupledPotential kernel charge bound) ↔
-      Math.LinearAlgebra.HasCertificate
+      Maths.LinearProgramming.HasCertificate
         (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound) := by
   rw [nonempty_boundedCoupledPotential_iff_isFeasible]
-  exact Math.LinearAlgebra.theorem_of_alternative
+  exact Maths.LinearProgramming.theorem_of_alternative
     (coupledPotentialMatrix kernel) (coupledPotentialRhs charge bound)
 
 /-- Exact theorem of alternatives for bounded coupled potentials, stated intrinsically:
@@ -509,24 +511,32 @@ private theorem sourceLaw_source_toReal :
     (sourceLaw source).toReal = (3 / 4 : ℝ) := by
   have h := expect_sourceLaw (fun state => if state = source then 1 else 0)
   rw [expect_eq_sum] at h
+  simp_rw [mul_ite, mul_one, mul_zero] at h
+  rw [Fintype.sum_ite_eq'] at h
   simpa [source, first] using h
 
 private theorem sourceLaw_first_toReal :
     (sourceLaw first).toReal = (1 / 4 : ℝ) := by
   have h := expect_sourceLaw (fun state => if state = first then 1 else 0)
   rw [expect_eq_sum] at h
+  simp_rw [mul_ite, mul_one, mul_zero] at h
+  rw [Fintype.sum_ite_eq'] at h
   simpa [source, first] using h
 
 private theorem sourceLaw_second_toReal :
     (sourceLaw second).toReal = 0 := by
   have h := expect_sourceLaw (fun state => if state = second then 1 else 0)
   rw [expect_eq_sum] at h
+  simp_rw [mul_ite, mul_one, mul_zero] at h
+  rw [Fintype.sum_ite_eq'] at h
   simpa [source, first, second] using h
 
 private theorem sourceLaw_third_toReal :
     (sourceLaw third).toReal = 0 := by
   have h := expect_sourceLaw (fun state => if state = third then 1 else 0)
   rw [expect_eq_sum] at h
+  simp_rw [mul_ite, mul_one, mul_zero] at h
+  rw [Fintype.sum_ite_eq'] at h
   simpa [source, first, third] using h
 
 private def IsCycleState (state : State) : Prop :=

@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set StochasticGame Filter Math.Probability Math.PMFProduct
+open Finset Set StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

@@ -43,7 +43,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingNonstationaryCollisionPunishmentNoGo
 

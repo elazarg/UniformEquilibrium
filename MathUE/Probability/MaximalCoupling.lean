@@ -290,9 +290,14 @@ theorem maximalCoupling_map_fst (μ ν : PMF Ω) :
   rw [PMF.map_apply, tsum_fintype]
   rw [Fintype.sum_prod_type]
   simp only [maximalCoupling, PMF.ofFintype_apply]
-  simpa only [Finset.sum_ite_irrel, Finset.sum_const_zero,
-    Finset.sum_ite_eq, Finset.mem_univ, ↓reduceIte] using
-    maximalCouplingMass_row μ ν x
+  calc
+    (∑ x', ∑ y, if x = x' then maximalCouplingMass μ ν (x', y) else 0) =
+        ∑ x', if x = x' then ∑ y, maximalCouplingMass μ ν (x', y) else 0 := by
+      apply Finset.sum_congr rfl
+      intro x' _
+      by_cases h : x = x' <;> simp [h]
+    _ = ∑ y, maximalCouplingMass μ ν (x, y) := by simp
+    _ = μ x := maximalCouplingMass_row μ ν x
 
 theorem maximalCoupling_map_snd (μ ν : PMF Ω) :
     (maximalCoupling μ ν).map Prod.snd = ν := by

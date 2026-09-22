@@ -64,7 +64,7 @@ theorem exists_charge_threshold_for_close_pair_of_compact
     linarith
   obtain ⟨centres, _hcentresK, hcentresFinite, hcover⟩ :=
     Metric.exists_finite_isCover_of_isCompact hcoverRadius hK
-  letI : Fintype {point // point ∈ centres} := hcentresFinite.fintype
+  let _ : Fintype {point // point ∈ centres} := hcentresFinite.fintype
   have hcoverSubset :
       K ⊆ ⋃ centre ∈ centres,
         Metric.closedBall centre (coverRadius : ℝ) :=

@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -155,7 +155,7 @@ theorem positive_certifiedForcedOwnerRectanglePacket_properties
       reward tail root owner who = action := by
     by_contra hne
     unfold quittingCertifiedForcedOwnerRectanglePacket at hpositive
-    rw [if_neg hwho] at hpositive
+    rw [ite_eq_right hwho] at hpositive
     change 0 < (if quittingForcedOwnerBestEndpointAction
         reward tail root owner who ≠ action then 0 else
       if forcedDefect ≤
@@ -163,7 +163,7 @@ theorem positive_certifiedForcedOwnerRectanglePacket_properties
         quittingLiveMass reward profile time *
             quittingRootCoordinateNashDefect reward tail root who < charge
       then charge else 0) at hpositive
-    rw [if_pos hne] at hpositive
+    rw [ite_eq_left hne] at hpositive
     linarith
   have hcert : forcedDefect ≤
         quittingRootCoordinateNashDefect reward tail forcedRoot who ∧
@@ -171,7 +171,7 @@ theorem positive_certifiedForcedOwnerRectanglePacket_properties
           quittingRootCoordinateNashDefect reward tail root who < charge := by
     by_contra hnot
     unfold quittingCertifiedForcedOwnerRectanglePacket at hpositive
-    rw [if_neg hwho] at hpositive
+    rw [ite_eq_right hwho] at hpositive
     change 0 < (if quittingForcedOwnerBestEndpointAction
         reward tail root owner who ≠ action then 0 else
       if forcedDefect ≤
@@ -181,7 +181,7 @@ theorem positive_certifiedForcedOwnerRectanglePacket_properties
       then charge else 0) at hpositive
     have hnotne : ¬ quittingForcedOwnerBestEndpointAction
         reward tail root owner who ≠ action := fun hne => hne haction
-    rw [if_neg hnotne, if_neg hnot] at hpositive
+    rw [ite_eq_right hnotne, ite_eq_right hnot] at hpositive
     linarith
   have hpacket : quittingCertifiedForcedOwnerRectanglePacket
       reward profile terminal owner who action time = charge := by
@@ -195,7 +195,7 @@ theorem positive_certifiedForcedOwnerRectanglePacket_properties
         quittingLiveMass reward profile time *
             quittingRootCoordinateNashDefect reward tail root who < charge
       then charge else 0) = charge
-    rw [if_neg hwho, if_neg hnotne, if_pos hcert]
+    rw [ite_eq_right hwho, ite_eq_right hnotne, ite_eq_left hcert]
   have hchargePos : 0 < charge := by rw [← hpacket]; exact hpositive
   have hmass0 : 0 ≤ quittingStageCoalitionMass reward profile time terminal :=
     quittingStageCoalitionMass_nonneg reward profile time terminal
@@ -237,7 +237,7 @@ theorem certifiedForcedOwnerRectanglePacket_le_sameRectangle
   · have hzero : quittingCertifiedForcedOwnerRectanglePacket
           reward profile terminal owner who action time = 0 := by
       unfold quittingCertifiedForcedOwnerRectanglePacket
-      rw [if_pos hwho]
+      rw [ite_eq_left hwho]
     rw [hzero]
     exact le_max_right _ _
   · by_cases haction : quittingForcedOwnerBestEndpointAction
@@ -258,7 +258,7 @@ theorem certifiedForcedOwnerRectanglePacket_le_sameRectangle
               quittingLiveMass reward profile time *
                   quittingRootCoordinateNashDefect reward tail root who < charge
             then charge else 0) = charge
-          rw [if_neg hwho, if_neg hnotne, if_pos hcert]
+          rw [ite_eq_right hwho, ite_eq_right hnotne, ite_eq_left hcert]
         rw [hpacket]
         obtain ⟨hrealize, halt⟩ :=
           stageCoalitionMass_mul_forcedOwnerDefect_actual_or_bestRectangle
@@ -303,7 +303,7 @@ theorem certifiedForcedOwnerRectanglePacket_le_sameRectangle
               quittingLiveMass reward profile time *
                   quittingRootCoordinateNashDefect reward tail root who < charge
             then charge else 0) = 0
-          rw [if_neg hwho, if_neg hnotne, if_neg hcert]
+          rw [ite_eq_right hwho, ite_eq_right hnotne, ite_eq_right hcert]
         rw [hzero]
         exact le_max_right _ _
     · have hzero : quittingCertifiedForcedOwnerRectanglePacket
@@ -316,7 +316,7 @@ theorem certifiedForcedOwnerRectanglePacket_le_sameRectangle
             quittingLiveMass reward profile time *
                 quittingRootCoordinateNashDefect reward tail root who < charge
           then charge else 0) = 0
-        rw [if_neg hwho, if_pos haction]
+        rw [ite_eq_right hwho, ite_eq_left haction]
       rw [hzero]
       exact le_max_right _ _
 
@@ -417,8 +417,8 @@ theorem forcedOwnerHalfWallCharge_le_actualDefect_add_certifiedPackets
           reward tail root owner who ≠ action := by
         intro hne
         exact hne rfl
-      rw [if_neg hwho, if_neg hnotne,
-        if_pos ⟨hcoordinate, hactualWhoLt⟩]
+      rw [ite_eq_right hwho, ite_eq_right hnotne,
+        ite_eq_left ⟨hcoordinate, hactualWhoLt⟩]
     have hselected : charge ≤
         quittingCertifiedForcedOwnerRectangleRowTotal
           reward profile terminal owner time := by
@@ -572,7 +572,7 @@ theorem exists_fixed_finiteCertifiedForcedOwnerRectanglePacket
         (Fintype.card (ι × Bool) : ℝ) *
           quittingFiniteCertifiedForcedOwnerRectanglePacket
             reward profile terminal owner who action cutoff := by
-  letI : Nonempty (ι × Bool) := ⟨(owner, false)⟩
+  let : Nonempty (ι × Bool) := ⟨(owner, false)⟩
   let occupation : ι × Bool → ℝ := fun label =>
     quittingFiniteCertifiedForcedOwnerRectanglePacket reward profile terminal
       owner label.1 label.2 cutoff
@@ -688,7 +688,7 @@ theorem exists_continueDeviation_or_fixedQuitAtom_or_certifiedRectanglePacket
     simpa only [actual, continueCharge, quit] using
       quittingFiniteActualDefectOccupation_eq_polaritySum reward profile cutoff
   rw [hpolarity] at hlowerHalf
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   by_cases hcontinue : lower / 6 ≤ continueCharge
   · left
     obtain ⟨who, deviation, hgain⟩ :=

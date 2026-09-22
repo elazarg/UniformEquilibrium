@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -90,13 +90,13 @@ theorem quittingRootCoalitionMass_le_mul_quitProbability_of_mem
   have hrest0 : 0 ≤ ∏ who ∈ (coalition.erase first).erase second, rate who :=
     Finset.prod_nonneg fun who _ => hrate0 who
   have hrest1 : (∏ who ∈ (coalition.erase first).erase second, rate who) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun who _ => hrate0 who)
       (fun who _ => hrate1 who)
   have hout0 : 0 ≤ ∏ who ∈ coalitionᶜ, (1 - rate who) :=
     Finset.prod_nonneg fun who _ => sub_nonneg.mpr (hrate1 who)
   have hout1 : (∏ who ∈ coalitionᶜ, (1 - rate who)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun who _ => sub_nonneg.mpr (hrate1 who))
       (fun who _ => by linarith [hrate0 who])
   have hinside : (∏ who ∈ coalition, rate who) =
@@ -266,7 +266,7 @@ theorem quittingFiniteWindowOpponentAbsorptionMass_le_one
       simpa using
         (sum_quittingLiveMass_mul_rootAbsorptionMass_add_le_liveMass
           (reward := reward) profile 0 cutoff)
-    _ = 1 := by simp [quittingLiveMass]
+    _ = 1 := quittingLiveMass_zero reward profile
 
 /-- **First-large-hazard estimate.**  Suppose a fixed exact coalition is
 bounded at every row by `gate * opponentHazard`, where `gate` is itself paid
@@ -338,7 +338,9 @@ theorem quittingFiniteWindowCoalitionMass_div_opponentAbsorptionMass_lt
           simpa [live, root] using
             (sum_quittingLiveMass_mul_rootAbsorptionMass_add_le_liveMass
               (reward := reward) profile 0 length)
-        _ = 1 := by simp [live, quittingLiveMass]
+        _ = 1 := by
+          change quittingLiveMass reward profile 0 = 1
+          exact quittingLiveMass_zero reward profile
     calc
       (∑ time ∈ Finset.range length,
           quittingStageCoalitionMass reward profile time terminal) ≤
@@ -652,7 +654,7 @@ theorem sum_quittingFiniteWindowOpponentAbsorptionClock_eq_one
       apply Finset.sum_congr rfl
       intro time htime
       unfold quittingFiniteWindowOpponentAbsorptionClock
-      rw [if_pos (Finset.mem_range.mp htime)]
+      rw [ite_eq_left (Finset.mem_range.mp htime)]
     _ = quittingFiniteWindowOpponentAbsorptionMass profile owner cutoff /
         quittingFiniteWindowOpponentAbsorptionMass profile owner cutoff := by
       rw [← Finset.sum_div]

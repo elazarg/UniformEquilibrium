@@ -226,20 +226,18 @@ theorem pairedSingletonMatrix_standardQ :
 theorem pairedSingletonMatrix_noHomogeneous :
     ¬HasHomogeneousSimplexSolution pairedSingletonMatrix := by
   rintro ⟨weight, hresidual, hcomplementary⟩
-  let x : ℝ := weight 0
-  let y : ℝ := weight 1
-  let z : ℝ := weight 2
-  let t : ℝ := weight 3
-  have hx : 0 ≤ x := weight.property.1 0
-  have hy : 0 ≤ y := weight.property.1 1
-  have hz : 0 ≤ z := weight.property.1 2
-  have ht : 0 ≤ t := weight.property.1 3
+  let x : ℝ := weight.weights 0
+  let y : ℝ := weight.weights 1
+  let z : ℝ := weight.weights 2
+  let t : ℝ := weight.weights 3
+  have hx : 0 ≤ x := weight.weights_nonneg 0
+  have hy : 0 ≤ y := weight.weights_nonneg 1
+  have hz : 0 ≤ z := weight.weights_nonneg 2
+  have ht : 0 ≤ t := weight.weights_nonneg 3
   have htotal : x + y + z + t = 1 := by
-    have h := weight.property.2
-    have hsum : (∑ i : Player, weight.val i) =
-        weight.val 0 + (weight.val 1 + (weight.val 2 + weight.val 3)) := by
-      simp [Fin.sum_univ_succ]
-    rw [hsum] at h
+    have h := weight.total_of_fintype
+    rw [show (Finset.univ : Finset Player) = {0, 1, 2, 3} by decide] at h
+    norm_num at h
     change x + (y + (z + t)) = 1 at h
     linarith
   have hr0 : singletonLCPResidual pairedSingletonMatrix weight 0 =

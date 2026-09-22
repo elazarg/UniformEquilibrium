@@ -25,7 +25,7 @@ namespace Math
 namespace PMFIter
 
 open Math.ProbabilityMassFunction
-open Math.Probability
+open _root_.Math.Probability
 
 variable {B : Type*}
 
@@ -115,7 +115,7 @@ theorem iter_stable_after_terminal
 -- ============================================================================
 
 open Math.Coupling
-open Math.Probability
+open _root_.Math.Probability
 
 variable {A : Type*}
 
@@ -199,7 +199,7 @@ theorem expect_iter_of_harmonic {S : Type*} [Finite S] (κ : S → PMF S)
     (harmonic : ∀ state, expect (κ state) observable = observable state)
     (time : ℕ) (initial : S) :
     expect (iter κ time initial) observable = observable initial := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   induction time generalizing initial with
   | zero => simp [iter]
   | succ time ih =>

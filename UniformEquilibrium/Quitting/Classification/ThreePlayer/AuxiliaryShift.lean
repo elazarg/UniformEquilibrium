@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set Topology
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -223,7 +223,8 @@ theorem quittingGerm_endpoint_fixedPoint
   have hvalue := g.isDiscountedStationaryBellmanEq_endpoint.2 none
   funext who
   have hwho := hvalue who
-  rw [discountedAuxEU_quittingGame_none,
+  rw [discountedAuxEU_quittingGame_none reward 1 g.endpointValue
+      (g.endpointProfile none) who,
     quittingGerm_endpointDecodeValue_some_eq] at hwho
   simpa [quittingRootSuccessorPayoff] using hwho.symm
 
@@ -247,37 +248,29 @@ theorem quittingGerm_endpoint_endpointNash
   have hquit := hEq.1 none who (PMF.pure true)
   have hcontinue := hEq.1 none who (PMF.pure false)
   rw [hon] at hquit hcontinue
-  rw [discountedAuxEU_quittingGame_none,
-    quittingGerm_endpointDecodeValue_some_eq] at hquit hcontinue
-  simp only [quittingGerm_endpointValue_none] at hquit hcontinue
+  have hquitBridge := discountedAuxEU_quittingGame_none reward 1
+    g.endpointValue
+    (Function.update (g.endpointProfile none) who (PMF.pure true)) who
+  have hcontinueBridge := discountedAuxEU_quittingGame_none reward 1
+    g.endpointValue
+    (Function.update (g.endpointProfile none) who (PMF.pure false)) who
+  have hquit' :=
+    (congrArg (fun x : ℝ => x ≤ g.endpointValue none who) hquitBridge).mp hquit
+  have hcontinue' :=
+    (congrArg (fun x : ℝ => x ≤ g.endpointValue none who)
+      hcontinueBridge).mp hcontinue
+  rw [quittingGerm_endpointDecodeValue_some_eq] at hquit' hcontinue'
+  simp only [quittingGerm_endpointValue_none] at hquit' hcontinue'
   have heta : (fun j : ι => quittingGermValue g 0 j) =
       quittingGermValue g 0 := by
     funext j
     rfl
-  rw [heta] at hquit hcontinue
+  rw [heta] at hquit' hcontinue'
   constructor
-  · convert hquit using 1
+  · convert hquit' using 1
     · simp only [one_mul, quittingRootQuitPayoff]
-      apply congrArg (fun root : ι → PMF Bool =>
-        quittingRootExpectedPayoff reward (quittingGermValue g 0) root who)
-      funext player
-      by_cases hp : player = who
-      · subst player
-        simp only [Function.update_self]
-        with_unfolding_all
-          rfl
-      · simp [Function.update_of_ne hp]
-  · convert hcontinue using 1
+  · convert hcontinue' using 1
     · simp only [one_mul, quittingRootContinuePayoff]
-      apply congrArg (fun root : ι → PMF Bool =>
-        quittingRootExpectedPayoff reward (quittingGermValue g 0) root who)
-      funext player
-      by_cases hp : player = who
-      · subst player
-        simp only [Function.update_self]
-        with_unfolding_all
-          rfl
-      · simp [Function.update_of_ne hp]
 
 /-! ## Punishment normalization -/
 

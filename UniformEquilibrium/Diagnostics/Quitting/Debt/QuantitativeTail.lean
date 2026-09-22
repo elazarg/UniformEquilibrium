@@ -60,7 +60,7 @@ theorem terminalGap_le_maxPositiveSingletonDebtCap
     (witness : QuittingTerminalExploitabilityWitness reward) :
     witness.terminalGap ≤ @quittingMaxPositiveSingletonDebtCap ι _
       witness.nonempty_players reward := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact (witness.terminalGap_le_finiteMinMaxDynamicDebt 0).trans
     (quittingFiniteMinMaxDynamicDebt_le_maxPositiveSingletonDebtCap reward 0)
 
@@ -70,7 +70,7 @@ theorem maxPositiveSingletonDebtCap_pos
     (witness : QuittingTerminalExploitabilityWitness reward) :
     0 < @quittingMaxPositiveSingletonDebtCap ι _
       witness.nonempty_players reward := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact witness.terminalGap_pos.trans_le
     witness.terminalGap_le_maxPositiveSingletonDebtCap
 
@@ -91,7 +91,7 @@ theorem exists_terminalGapDynamicDebtTail
       witness.terminalGap ≤ (limit 0).2 who ∧
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact exists_projectiveDynamicDebtTail_of_pos_le_iInf_minMax
     reward witness.terminalGap_pos
       witness.terminalGap_le_iInf_minMaxDynamicDebt

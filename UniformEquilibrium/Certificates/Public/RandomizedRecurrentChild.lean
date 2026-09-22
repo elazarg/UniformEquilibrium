@@ -38,7 +38,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -99,7 +99,11 @@ inductive State
   | start
   | low
   | high
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.start, .low, .high}
+  complete state := by cases state <;> simp
 
 abbrev Action := Bool
 

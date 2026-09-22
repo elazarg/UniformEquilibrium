@@ -171,7 +171,7 @@ theorem exists_interior_activeResidual_zero
         Fin.sum_univ_succ] using hzero
   have hresidual : residual = 0 := by
     apply realPreconditioner_mulVec_injective
-    simpa using hpreconditioned
+    exact hpreconditioned.trans (Matrix.mulVec_zero _).symm
   refine ⟨point, hpoint, hinterior, ?_⟩
   intro coordinate
   exact congrFun hresidual coordinate

@@ -33,7 +33,7 @@ open scoped BigOperators NNReal
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 open Math.ShapleyOperator
 
 /-- Build a dependent two-player joint action from its row and column
@@ -88,7 +88,7 @@ theorem expect_pairMixedActionProfile (G : StochasticGame (Fin 2))
     (f : G.JointAct → ℝ) :
     expect (pmfPi (G.pairMixedActionProfile row col)) f =
       expect row (fun i => expect col (fun j => f (G.pairJointAct i j))) := by
-  letI (i : Fin 2) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
+  let (i : Fin 2) : Fintype (G.Act i) := Fintype.ofFinite (G.Act i)
   rw [expect_eq_sum, expect_eq_sum]
   simp_rw [expect_eq_sum]
   let e := G.jointActPairEquiv
@@ -122,7 +122,7 @@ theorem expect_pairMixedActionProfile (G : StochasticGame (Fin 2))
 /-- The `wsum`/`pmfPi` dictionary for two-player mixed actions. -/
 theorem expect_pairSimplex_eq_wsum (G : StochasticGame (Fin 2))
     [∀ i, Fintype (G.Act i)]
-    (x : stdSimplex ℝ (G.Act 0)) (y : stdSimplex ℝ (G.Act 1))
+    (x : Convexity.StdSimplex ℝ (G.Act 0)) (y : Convexity.StdSimplex ℝ (G.Act 1))
     (f : G.JointAct → ℝ) :
     expect (pmfPi (G.pairMixedActionProfile
         ((stdSimplexEquiv (α := G.Act 0)).symm x)
@@ -165,7 +165,7 @@ noncomputable def discountedShapleyValue (G : StochasticGame (Fin 2))
 noncomputable def rowShapleySimplex (G : StochasticGame (Fin 2))
     [Fintype G.State] [∀ i, Fintype (G.Act i)]
     [∀ i, Nonempty (G.Act i)] {β : ℝ≥0} (hβ : β < 1)
-    (s : G.State) : stdSimplex ℝ (G.Act 0) :=
+    (s : G.State) : Convexity.StdSimplex ℝ (G.Act 0) :=
   Classical.choose (Math.ShapleyOperator.exists_row_optimal_discountedValue
     (G.normalizedRowStagePayoff (β : ℝ)) G.pairTransition hβ s)
 
@@ -174,7 +174,7 @@ certificate. -/
 noncomputable def colShapleySimplex (G : StochasticGame (Fin 2))
     [Fintype G.State] [∀ i, Fintype (G.Act i)]
     [∀ i, Nonempty (G.Act i)] {β : ℝ≥0} (hβ : β < 1)
-    (s : G.State) : stdSimplex ℝ (G.Act 1) :=
+    (s : G.State) : Convexity.StdSimplex ℝ (G.Act 1) :=
   Classical.choose (Math.ShapleyOperator.exists_col_optimal_discountedValue
     (G.normalizedRowStagePayoff (β : ℝ)) G.pairTransition hβ s)
 

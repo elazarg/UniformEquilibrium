@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Equiv Math Math.Probability
+open Equiv _root_.Math _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

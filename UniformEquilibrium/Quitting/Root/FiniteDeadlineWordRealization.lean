@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -179,6 +179,14 @@ theorem exists_finiteDeadlineReplyCap_eq_finiteRootWordCap
         (quittingTerminalPayoff_update_pureTimeBehaviorStrategy reward _ _ _).symm
       _ = _ := hpure who action
       _ = _ := by
+        let choice : Option ℕ := quittingFiniteDeadlineTimingActionTime action
+        change quittingTerminalPayoff reward
+            (Function.update
+              (quittingRootSequenceProfile reward
+                (quittingTruncatedRoots roots deadline) 0) who
+              (quittingPureTimeBehaviorStrategy reward who choice)) who =
+          quittingRootSequencePureTimeTerminalValue reward
+            (quittingTruncatedRoots roots deadline) who choice 0
         rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy]
         simp
   rw [hvalues]

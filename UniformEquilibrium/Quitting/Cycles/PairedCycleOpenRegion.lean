@@ -69,7 +69,7 @@ theorem isOpen_strictRawRegion (schedule : Schedule ι period) :
   have hforall {α : Type} [Finite α]
       {p : α → ({S : Finset ι // S.Nonempty} → Payoff ι) → Prop}
       (h : ∀ a, IsOpen {r | p a r}) : IsOpen {r | ∀ a, p a r} := by
-    simpa only [Set.iInter_setOf] using isOpen_iInter_of_finite h
+    simpa only [Set.iInter_ofPred] using isOpen_iInter_of_finite h
   apply IsOpen.inter
   · apply hforall
     intro player

@@ -32,7 +32,11 @@ inductive State
   | b
   | recurrentZero
   | recurrentOne
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.a, .b, .recurrentZero, .recurrentOne}
+  complete state := by cases state <;> simp
 
 def aSuccessor : Bool → State
   | false => .b
@@ -289,12 +293,12 @@ theorem uncoupledBernoulliPotential_step_fails :
       expect (kernel .b) (fun successor =>
         uncoupledBernoulliPotential successor 1) := by
   rw [conditionalVariation_eq .b 0]
-  simp only [reduceCtorEq, or_true, if_true]
+  simp only [reduceCtorEq, or_true, ite_true]
   rw [expect_uncoupledBernoulliPotential_b_one,
     bernoulli_value_a_one, ← bernoulli_value_b_zero_eq_b_one]
   have hbound := bernoulliVariationPotential_le_one_of_mem_Icc
     (value_mem_Icc .b 0)
-  simp only [uncoupledBernoulliPotential, reduceCtorEq, or_true, if_true]
+  simp only [uncoupledBernoulliPotential, reduceCtorEq, or_true, ite_true]
   linarith
 
 /-- A state-coupled remaining-variation potential for the exact branching example. -/

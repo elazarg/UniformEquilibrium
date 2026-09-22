@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter MeasureTheory Math.Probability Math.ProbabilityMassFunction
+open Filter MeasureTheory _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -55,9 +55,8 @@ theorem continuous_quittingDebtOpponentContinueMass (owner : ι) :
   unfold quittingDebtOpponentContinueMass
   apply continuous_finsetProd
   intro other _
-  exact (continuous_apply false).comp
-    (continuous_subtype_val.comp
-      ((continuous_apply other).comp (continuous_snd.comp continuous_fst)))
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+    ((continuous_apply other).comp (continuous_snd.comp continuous_fst))
 
 /-- The bounded exact augmented edge graph is closed. -/
 theorem isClosed_quittingDebtEdgeGraph
@@ -130,7 +129,7 @@ theorem isClosed_quittingDebtEdgeGraph
           (quittingPositiveSingletonDebtCap reward) ∩
         {edge | ∀ who, recurrence who edge = 0} := by
     ext edge
-    simp only [quittingDebtEdgeGraph, Set.mem_setOf_eq, Set.mem_inter_iff,
+    simp only [quittingDebtEdgeGraph, Set.mem_ofPred_eq, Set.mem_inter_iff,
       Set.mem_preimage, nashProjection, debtCurrent, debtSuccessor,
       recurrence, quittingDebtBox, IsQuittingDebtEdge, sub_eq_zero]
     aesop

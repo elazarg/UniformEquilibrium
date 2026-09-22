@@ -32,7 +32,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace FiniteReachability
 
@@ -91,7 +91,7 @@ theorem canReachSetIn_reachRank {source : S}
     (hreach : CanReachSet Succ R source) :
     CanReachSetIn Succ R (reachRank Succ R source) source := by
   classical
-  simp only [reachRank, dif_pos hreach]
+  simp only [reachRank, dite_eq_left hreach]
   exact Nat.find_spec
     ((canReachSet_iff_exists_canReachSetIn Succ R).mp hreach)
 
@@ -102,7 +102,7 @@ theorem reachRank_le_of_canReachSetIn {steps : ℕ} {source : S}
   classical
   have hreach : CanReachSet Succ R source :=
     canReachSet_of_canReachSetIn Succ R path
-  simp only [reachRank, dif_pos hreach]
+  simp only [reachRank, dite_eq_left hreach]
   exact Nat.find_min'
     ((canReachSet_iff_exists_canReachSetIn Succ R).mp hreach) path
 
@@ -229,7 +229,7 @@ theorem exists_vriezeRankCompletion_of_dualFeasible
       tau state = PMF.pure (actionOf state hstate) := by
     intro state hstate
     dsimp only [tau]
-    rw [dif_neg hstate]
+    rw [dite_eq_right hstate]
   have hkernel_off : ∀ state
       (hstate : ¬ G.vriezeOccupationSupport controller z state),
       G.controllerKernel controller tau state =
@@ -296,7 +296,7 @@ theorem exists_vriezeRankCompletion_of_dualFeasible
           rw [← Finset.sum_div]
           exact div_self hstate.ne') := by
     dsimp only [tau]
-    rw [dif_pos hstate]
+    rw [dite_eq_left hstate]
   rw [htau_on]
   exact rankCompletionWeightsToPMF_apply_toReal _ _ _ action
 

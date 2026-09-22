@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -410,7 +410,7 @@ theorem StationaryQuitNowCapPinSource.firstExactRoot_dichotomy
     (root : ℕ → ι → PMF Bool)
     (hnash : ∀ index, IsεQuittingRootNash reward (source.pair index).1 0 (root index)) :
     Nonempty (FirstStationaryRootDichotomy source root) := by
-  letI : Nonempty ι := ⟨source.player⟩
+  let : Nonempty ι := ⟨source.player⟩
   obtain ⟨minimum, _, hminimumMem, _, hminimum, ⟨player, hplayer⟩, _⟩ :=
     exists_positive_minimumTerminalSemanticDebt_face_of_no_uniformPayoff reward hno
   have hminimumPos : 0 < quittingTerminalSemanticDebtSum minimum :=

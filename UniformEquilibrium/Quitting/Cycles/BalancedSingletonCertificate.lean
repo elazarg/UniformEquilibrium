@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {L : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -195,7 +195,7 @@ private theorem prod_if_owner_one_sub_hazard_lt_one
   have herase :
       (∏ other ∈ Finset.univ.erase phase,
         if who = owner other then 1 else 1 - hazard other) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun other _ => hfactor_nonneg other)
       (fun other _ => hfactor_le other)
   calc
@@ -263,8 +263,9 @@ theorem BalancedSingletonCycleCertificateWithBounds.opponentProductCap_lt_one
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     (certificate : BalancedSingletonCycleCertificateWithBounds (L := L) reward) :
     certificate.opponentProductCap < 1 := by
-  rw [BalancedSingletonCycleCertificateWithBounds.opponentProductCap,
-    Finset.sup'_lt_iff]
+  unfold BalancedSingletonCycleCertificateWithBounds.opponentProductCap
+  apply (Finset.sup'_lt_iff
+    ⟨certificate.owner certificate.initial, Finset.mem_univ _⟩).2
   intro who _
   exact certificate.opponent_product_lt_one who
 

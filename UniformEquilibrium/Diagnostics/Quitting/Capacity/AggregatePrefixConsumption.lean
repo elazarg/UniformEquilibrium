@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -44,11 +44,11 @@ open QuittingAggregateCalibratedTerminalAnchor
 canonical aggregate exact-`D` minimizer at every positive cutoff. -/
 theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
     (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     witness.terminalGap ≤
         QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue
         reward last := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let path :=
     quittingFiniteZeroBoundaryNashBellmanDynamicDebtMinimizer
       reward (last + 1)
@@ -64,7 +64,7 @@ theorem terminalGap_le_canonicalAggregateFullPrefixRepairValue
 the global terminal gap to the optimized aggregate exact-`D` objective. -/
 theorem terminalGap_le_repairValue_le_minAggregate
     (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     witness.terminalGap ≤
         QuittingAggregateCalibratedTerminalAnchor.canonicalAggregateFullPrefixRepairValue
           reward last ∧
@@ -72,7 +72,7 @@ theorem terminalGap_le_repairValue_le_minAggregate
           reward last ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
           reward (last + 1) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact ⟨witness.terminalGap_le_canonicalAggregateFullPrefixRepairValue last,
     canonicalAggregateFullPrefixRepairValue_le_minAggregate reward last⟩
 
@@ -81,13 +81,13 @@ packet of the canonical aggregate minimizer.  This is a calibrated packet
 charge, not yet an edge in the punishment-floor reachable relation. -/
 theorem exists_aggregateAnchor_terminalGap_le_packetCharge
     (witness : QuittingTerminalExploitabilityWitness reward) (last : ℕ) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     ∃ anchor : QuittingAggregateCalibratedTerminalAnchor reward,
       anchor.last = last ∧
         witness.terminalGap ≤
           2 * quittingRewardBound reward * (Fintype.card ι : ℝ) *
             (Fintype.card (ι → Bool) : ℝ) * anchor.packetMass := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact exists_packetCharge_of_pos_le_canonicalFullPrefixRepairValue
       reward (quittingRewardBound reward) witness.terminalGap last
       (abs_reward_le_quittingRewardBound reward)
@@ -116,7 +116,7 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
     (tail : ℕ → ι → PMF Bool) (cap : QuittingElementaryTailCap ι)
     (capCutoff : ℕ) (chargeScale : ℝ) (hchargeScale : 0 ≤ chargeScale)
     (hcomparison :
-      letI : Nonempty ι := witness.nonempty_players
+      let : Nonempty ι := witness.nonempty_players
       quittingTerminalExploitability reward
           (quittingPhaseSwitchProfile reward anchor.roots
             (quittingElementaryTailRoots tail capCutoff cap)
@@ -126,7 +126,7 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
           quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 2) +
           chargeScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
@@ -134,7 +134,7 @@ theorem elementaryCap_consumed_by_minAggregateDrop_or_reachableCharge
             reward (anchor.last + 2) ∨
       witness.terminalGap / 2 ≤
         chargeScale * edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hedgeAnchor : IsQuittingNashBellmanEdge reward edge.current.1.1
       (anchor.path 0) := by
     rw [← htail]
@@ -187,13 +187,13 @@ theorem immediateNever_consumed_of_prependResidual_le_charge
     (htail : edge.tail.1.1 = anchor.path 0)
     (chargeScale : ℝ) (hchargeScale : 0 ≤ chargeScale)
     (hresidual :
-      letI : Nonempty ι := witness.nonempty_players
+      let : Nonempty ι := witness.nonempty_players
       quittingFiniteNashBellmanPathAggregateDynamicDebt
           reward (anchor.last + 2)
           (quittingFiniteNashBellmanPathPrependPoint
             (anchor.last + 1) edge.current.1.1 anchor.path) ≤
         chargeScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
@@ -201,7 +201,7 @@ theorem immediateNever_consumed_of_prependResidual_le_charge
             reward (anchor.last + 2) ∨
       witness.terminalGap / 2 ≤
         chargeScale * edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hedgeAnchor : IsQuittingNashBellmanEdge reward edge.current.1.1
       (anchor.path 0) := by
     rw [← htail]
@@ -256,13 +256,13 @@ theorem immediateNever_consumed_of_carriedDebt_le_charge
     (htail : edge.tail.1.1 = anchor.path 0)
     (carriedScale : ℝ) (hcarriedScale : 0 ≤ carriedScale)
     (hcarried :
-      letI : Nonempty ι := witness.nonempty_players
+      let : Nonempty ι := witness.nonempty_players
       quittingStationaryContinueMass
           (quittingRootOfSimplex edge.current.1.1.2) *
         quittingFiniteNashBellmanPathAggregateDynamicDebt
           reward (anchor.last + 1) anchor.path ≤
         carriedScale * edge.toBoxEdge.absorptionCharge) :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     witness.terminalGap / 2 ≤
         quittingFiniteZeroBoundaryNashBellmanMinDynamicDebt
             reward (anchor.last + 1) -
@@ -272,7 +272,7 @@ theorem immediateNever_consumed_of_carriedDebt_le_charge
         (carriedScale +
             (Fintype.card ι : ℝ) * quittingRewardBound reward) *
           edge.toBoxEdge.absorptionCharge := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hscale : 0 ≤ carriedScale +
       (Fintype.card ι : ℝ) * quittingRewardBound reward :=
     add_nonneg hcarriedScale

@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -190,7 +190,7 @@ theorem exists_uniformPayoff_of_repairedExactOrbit_chargedPayoffRecurrence
           ((handoff.repairedExactInfiniteOrbit hfloor).roots start)) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := ⟨handoff.outsideDebtor⟩
+  let : Nonempty ι := ⟨handoff.outsideDebtor⟩
   apply quittingGame_exists_uniformEquilibriumPayoff_of_singleSeamProjectiveLassos
     reward
   intro error herror

@@ -7,7 +7,7 @@ import UniformEquilibrium.Quitting.Root.LateResetFixedOutsiderHalfGap
 noncomputable section
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

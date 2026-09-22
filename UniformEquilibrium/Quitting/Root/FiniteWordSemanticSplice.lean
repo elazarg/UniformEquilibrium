@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -135,7 +135,7 @@ private theorem terminalDebt_le_nashError
     quittingTerminalDeviationDebt reward tail who ≤ error := by
   have hcap : quittingContinuationBestResponseValue reward tail who ≤
       quittingTerminalPayoff reward tail who + error := by
-    letI : Nonempty ((quittingGame reward).BehaviorStrategy who) := ⟨tail who⟩
+    let : Nonempty ((quittingGame reward).BehaviorStrategy who) := ⟨tail who⟩
     apply csSup_le (Set.range_nonempty _)
     rintro _ ⟨deviation, rfl⟩
     exact hnash who deviation

@@ -16,7 +16,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -127,7 +127,7 @@ theorem quittingJointSurvivalPrefix_le_forcedContinueWindow
     quittingStationaryContinueMass (roots time))
   let laterProduct : ℝ := (∏ offset ∈ Finset.range fuel,
     quittingStationaryContinueMass (roots (start + offset)))
-  have hprefix1 : initialProduct ≤ 1 := Finset.prod_le_one
+  have hprefix1 : initialProduct ≤ 1 := Finset.prod_le_one₀
     (fun time _ => quittingStationaryContinueMass_nonneg (roots time))
     (fun time _ => quittingStationaryContinueMass_le_one (roots time))
   have hwindow0 : 0 ≤ laterProduct := Finset.prod_nonneg fun offset _ =>
@@ -135,7 +135,7 @@ theorem quittingJointSurvivalPrefix_le_forcedContinueWindow
   have hdrop : initialProduct * laterProduct ≤ laterProduct := by
     nlinarith [mul_nonneg (sub_nonneg.mpr hprefix1) hwindow0]
   rw [Finset.prod_range_add]
-  exact hdrop.trans <| Finset.prod_le_prod
+  exact hdrop.trans <| Finset.prod_le_prod₀
     (fun offset _ => quittingStationaryContinueMass_nonneg
       (roots (start + offset)))
     (fun offset _ => quittingStationaryContinueMass_le_update_pure_false

@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Finset
+open Filter _root_.Finset
 
 /-- Survival through a finite cap-prefix transports at least the corresponding
 fraction of every old opponent-incidence coordinate. -/

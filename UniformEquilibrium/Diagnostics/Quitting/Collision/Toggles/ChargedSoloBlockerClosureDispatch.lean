@@ -45,7 +45,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 namespace FinFourChargedSoloBlockerGate

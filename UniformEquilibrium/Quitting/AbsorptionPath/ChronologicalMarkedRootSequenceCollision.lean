@@ -91,12 +91,12 @@ private theorem value_sub_value_eq_sum_Ioc
   apply Finset.sum_congr rfl
   intro stage _
   by_cases hlower : quittingRootSequenceClock roots stage ≤ lower
-  · rw [if_pos hlower, if_pos (hlower.trans hlowerUpper)]
+  · rw [ite_eq_left hlower, ite_eq_left (hlower.trans hlowerUpper)]
     simp [hlower]
   · by_cases hupper : quittingRootSequenceClock roots stage ≤ upper
-    · rw [if_neg hlower, if_pos hupper]
+    · rw [ite_eq_right hlower, ite_eq_left hupper]
       simp [hlower, hupper]
-    · rw [if_neg hlower, if_neg hupper]
+    · rw [ite_eq_right hlower, ite_eq_right hupper]
       simp [hupper]
 
 omit [Nonempty ι] in
@@ -125,7 +125,7 @@ theorem chronologicalCollisionCDF_sub_eq_sum
   intro stage _
   by_cases hclock :
       quittingRootSequenceClock roots stage ∈ Ioc lower upper
-  · simp only [if_pos hclock]
+  · simp only [ite_eq_left hclock]
     exact sum_stageCoalitionMass_collision roots stage
   · simp [hclock]
 
@@ -151,7 +151,7 @@ theorem chronologicalClockCDF_sub_eq_sum
   intro stage _
   by_cases hclock :
       quittingRootSequenceClock roots stage ∈ Ioc lower upper
-  · simp only [if_pos hclock]
+  · simp only [ite_eq_left hclock]
     exact sum_stageCoalitionMass_eq_survival_mul_absorptionMass roots stage
   · simp [hclock]
 
@@ -195,7 +195,7 @@ theorem one_sub_upper_mul_collisionCDF_sub_le_choose_mul_clockCDF_sub_sq
     dsimp only [collision, total]
     by_cases hclock :
         quittingRootSequenceClock roots stage ∈ Ioc lower upper
-    · simp only [if_pos hclock]
+    · simp only [ite_eq_left hclock]
       let survival := quittingRootSequenceSurvival roots stage
       let collisionMass := quittingRootCollisionMass (roots stage)
       let absorptionMass := quittingRootAbsorptionMass (roots stage)

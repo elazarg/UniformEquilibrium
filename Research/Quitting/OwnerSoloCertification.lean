@@ -21,7 +21,7 @@ noncomputable section
 namespace GameTheory
 namespace OwnerSoloCertificationResearch
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

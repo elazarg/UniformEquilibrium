@@ -42,7 +42,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -474,7 +474,7 @@ theorem exists_deviationPotentialOn {R : A.ClosedResponseRegion}
             expect (A.nextConfigDist who z (PMF.pure act)) Φ ≤
           u z who + Φ z := by
   classical
-  letI : DecidablePred (fun p : A.Config × G.Act who =>
+  let : DecidablePred (fun p : A.Config × G.Act who =>
       R.unilateral who p.1 ∧ A.targetCharge u who p.1 p.2 = 0) :=
     Classical.decPred _
   set kernel : A.Config × G.Act who → PMF A.Config := fun p =>
@@ -492,6 +492,7 @@ theorem exists_deviationPotentialOn {R : A.ClosedResponseRegion}
     intro p hp y
     simp [actualOccupationColumn, hkernel, hsource, hp, PMF.pure_apply,
       apply_ite ENNReal.toReal]
+    ring_nf
   have halt :=
     normalizedPositiveChargedCirculation_xor_driftPotential kernel source charge
   rw [xor_def] at halt
@@ -676,7 +677,7 @@ theorem exists_deliveryPotentialOn {R : A.ClosedResponseRegion}
       u z who + Ψ z ≤ A.prescribedStagePayoff z who +
         expect (A.prescribedConfigDist z) Ψ := by
   classical
-  letI : DecidablePred R.prescribed := Classical.decPred _
+  let : DecidablePred R.prescribed := Classical.decPred _
   set kernel : A.Config → PMF A.Config := fun z =>
     if R.prescribed z then A.prescribedConfigDist z else PMF.pure z with hkernel
   set charge : A.Config → ℝ := fun z =>
@@ -688,6 +689,7 @@ theorem exists_deliveryPotentialOn {R : A.ClosedResponseRegion}
     intro z hz y
     simp [actualOccupationColumn, hkernel, hz, PMF.pure_apply,
       apply_ite ENNReal.toReal]
+    ring_nf
   have halt := normalizedPositiveChargedCirculation_xor_driftPotential
     kernel (fun z : A.Config => z) charge
   rw [xor_def] at halt

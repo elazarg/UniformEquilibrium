@@ -26,9 +26,9 @@ namespace GameTheory
 namespace EssentialAPSOccupationCancellationRegression
 
 open scoped BigOperators
-open Math.ChargedPathBudget
-open Math.Probability
-open Math.Probability.PhaseOccupationDuality
+open Maths.ChargedPathBudget
+open _root_.Math.Probability
+open _root_.Math.Probability.PhaseOccupationDuality
 
 /-- Identity dynamics on two disjoint closed recurrent classes. -/
 def kernel (_ : Unit) (current : Bool) (_ : Unit) : PMF Bool :=

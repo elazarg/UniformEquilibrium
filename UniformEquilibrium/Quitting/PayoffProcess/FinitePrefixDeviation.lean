@@ -66,7 +66,7 @@ theorem QuittingPayoffProcess.conditionalError_measurable
     (error : process.Ω → ℝ) :
     @Measurable process.Ω ℝ (process.filtration time) Real.measurableSpace
       (process.conditionalError time error) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact stronglyMeasurable_condExp.measurable
 
 /-- Conditional errors are integrable. -/
@@ -74,7 +74,7 @@ theorem QuittingPayoffProcess.conditionalError_integrable
     (process : QuittingPayoffProcess ι) (time : ℕ)
     (error : process.Ω → ℝ) :
     Integrable (process.conditionalError time error) process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact integrable_condExp
 
 /-- Every finite backward error is integrable. -/
@@ -84,8 +84,8 @@ theorem QuittingPayoffProcess.finiteBackwardError_integrable
     ∀ depth,
       Integrable (process.finiteBackwardError cutoff δ tailError depth)
         process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   intro depth
   induction depth with
   | zero => exact process.conditionalError_integrable cutoff tailError
@@ -103,7 +103,7 @@ theorem QuittingPayoffProcess.finiteBackwardError_nonneg
     (htail : 0 ≤ᵐ[process.μ] tailError) :
     ∀ depth, 0 ≤ᵐ[process.μ]
       process.finiteBackwardError cutoff δ tailError depth := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   intro depth
   induction depth with
   | zero => exact condExp_nonneg htail
@@ -119,8 +119,8 @@ theorem QuittingPayoffProcess.integral_finiteBackwardError
       (∫ ω, process.finiteBackwardError cutoff δ tailError depth ω
           ∂process.μ) =
         (∫ ω, tailError ω ∂process.μ) + depth * δ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   intro depth
   induction depth with
   | zero =>
@@ -235,8 +235,8 @@ theorem QuittingPayoffProcess.condExp_finiteContinuationValue_deviation_le
       fun ω ↦ process.finiteBackwardValue cutoff hδ
           (process.cutoffConditionalValue cutoff tailValue) depth ω who +
         process.finiteBackwardError cutoff δ tailError depth ω := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   intro start depth
   induction depth generalizing start with
   | zero =>
@@ -401,8 +401,8 @@ theorem QuittingPayoffProcess.integral_finiteContinuationValue_deviation_le
         (process.cutoffConditionalValue cutoff tailValue) cutoff ω who
         ∂process.μ) +
       (∫ ω, tailError ω ∂process.μ) + cutoff * δ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   have hconditional :=
     process.condExp_finiteContinuationValue_deviation_le cutoff hδ
       tailValue htail who deviation hdeviation deviatedTail

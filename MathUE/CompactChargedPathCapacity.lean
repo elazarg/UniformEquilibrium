@@ -12,7 +12,7 @@ Borel budget-to-go. No all-horizon semicontinuity is asserted.
 
 noncomputable section
 
-namespace Math.ChargedPathBudget.ChargedRelation
+namespace Maths.ChargedPathBudget.ChargedRelation
 
 open Set
 
@@ -66,7 +66,7 @@ variable [CompactSpace State] [CompactSpace Edge]
 theorem isCompact_compactPathCode_univ (hsrc : Continuous R.src) (htgt : Continuous R.tgt)
     (horizon : ℕ) : IsCompact (Set.univ : Set (R.CompactPathCode horizon)) := by
   have hclosed := R.isClosed_compactPathData hsrc htgt horizon
-  letI : CompactSpace (R.CompactPathCode horizon) :=
+  let _ : CompactSpace (R.CompactPathCode horizon) :=
     isCompact_iff_compactSpace.mp hclosed.isCompact
   exact isCompact_univ
 
@@ -157,4 +157,4 @@ theorem measurable_value_of_compact_edges [MeasurableSpace State] [BorelSpace St
 
 end Topology
 
-end Math.ChargedPathBudget.ChargedRelation
+end Maths.ChargedPathBudget.ChargedRelation

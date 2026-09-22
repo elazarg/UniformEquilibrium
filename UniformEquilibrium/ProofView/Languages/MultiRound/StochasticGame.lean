@@ -31,7 +31,7 @@ that future dynamic development.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A stochastic game: at each state, players choose actions simultaneously,
     receive payoffs, and the game transitions to a new state. -/
@@ -88,11 +88,29 @@ theorem isStagewiseNash_iff_all_stage_nash
       (G.stageKernelGame s).IsNash (fun i => σ i s) := by
   constructor
   · intro hMN s who a'
-    simp only [stageKernelGame, KernelGame.eu_ofEU]
-    exact hMN s who (a' )
+    have hbase :
+        (G.stageKernelGame s).eu (fun i => σ i s) who =
+          G.stagePayoff s (fun i => σ i s) who := by
+      exact KernelGame.eu_ofEU G.Act (fun a i => G.stagePayoff s a i) _ who
+    have hdev :
+        (G.stageKernelGame s).eu
+            (Function.update (fun i => σ i s) who a') who =
+          G.stagePayoff s (Function.update (fun i => σ i s) who a') who := by
+      exact KernelGame.eu_ofEU G.Act (fun a i => G.stagePayoff s a i) _ who
+    rw [hbase, hdev]
+    exact hMN s who a'
   · intro hN s who a'
     have h := hN s who a'
-    simp only [stageKernelGame, KernelGame.eu_ofEU] at h
+    have hbase :
+        (G.stageKernelGame s).eu (fun i => σ i s) who =
+          G.stagePayoff s (fun i => σ i s) who := by
+      exact KernelGame.eu_ofEU G.Act (fun a i => G.stagePayoff s a i) _ who
+    have hdev :
+        (G.stageKernelGame s).eu
+            (Function.update (fun i => σ i s) who a') who =
+          G.stagePayoff s (Function.update (fun i => σ i s) who a') who := by
+      exact KernelGame.eu_ofEU G.Act (fun a i => G.stagePayoff s a i) _ who
+    rw [hbase, hdev] at h
     exact h
 
 end StochasticGame

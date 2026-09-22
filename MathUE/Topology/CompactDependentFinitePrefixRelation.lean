@@ -94,7 +94,7 @@ theorem compactDependentFinitePrefixSolutionSet_isClosed
           (value time, value (time + 1)) ∈ relationGraph time} := by
     ext value
     simp only [compactDependentFinitePrefixSolutionSet, ambient,
-      relationGraph, Set.mem_setOf_eq, Set.mem_inter_iff, Set.mem_iInter]
+      relationGraph, Set.mem_ofPred_eq, Set.mem_inter_iff, Set.mem_iInter]
     constructor
     · intro hvalue
       exact ⟨hvalue.1, fun time ↦

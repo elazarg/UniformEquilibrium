@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.Probability.DiscreteHazard
+open Filter _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 namespace QuittingHarmonicGreenRegression
 

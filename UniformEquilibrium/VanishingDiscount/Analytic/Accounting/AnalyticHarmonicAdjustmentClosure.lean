@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Set Topology
+open Filter _root_.Math Set Topology
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -52,7 +52,7 @@ theorem rawPureDeviationProfileWeight_zero_eq_endpointProfile
     ENNReal.toReal_mul, ENNReal.toReal_prod, PMF.pure_apply]
   unfold rawPureDeviationProfileWeight endpointProfile
   by_cases had : a who = d
-  · rw [if_pos had, if_pos had]
+  · rw [ite_eq_left had, ite_eq_left had]
     simp only [ENNReal.toReal_one, one_mul]
     apply Finset.prod_congr rfl
     intro other _
@@ -60,7 +60,7 @@ theorem rawPureDeviationProfileWeight_zero_eq_endpointProfile
       (G.bellmanDecodeProfile_apply_toReal
         germ.endpoint_isPolynomialBellmanSolution
         s other (a other)).symm
-  · rw [if_neg had, if_neg had]
+  · rw [ite_eq_right had, ite_eq_right had]
     simp
 
 omit [DecidableEq G.State] in

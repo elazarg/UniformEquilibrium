@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -120,7 +120,7 @@ theorem quittingFiniteZeroBoundaryNashBellmanChainSet_isClosed
           (path (Fin.castSucc time), path (Fin.succ time)) ∈ edgeGraph} := by
     ext path
     simp only [quittingFiniteZeroBoundaryNashBellmanChainSet, ambient,
-      terminal, edgeGraph, Set.mem_setOf_eq, Set.mem_inter_iff,
+      terminal, edgeGraph, Set.mem_ofPred_eq, Set.mem_inter_iff,
       Set.mem_iInter]
     constructor
     · intro hpath
@@ -182,7 +182,7 @@ theorem quittingFiniteNashBellmanPathRoots_of_lt
     (time : ℕ) (htime : time < cutoff) :
     quittingFiniteNashBellmanPathRoots cutoff path time =
       quittingRootOfSimplex (path ⟨time, Nat.lt_succ_of_lt htime⟩).2 :=
-  dif_pos htime
+  dite_eq_left htime
 
 omit [DecidableEq ι] in
 /-- Before the cutoff, the padded displayed value reads the path's own
@@ -193,7 +193,7 @@ theorem quittingFiniteNashBellmanPathValue_of_lt
     (time : ℕ) (htime : time < cutoff) :
     quittingFiniteNashBellmanPathValue cutoff path time =
       (path ⟨time, Nat.lt_succ_of_lt htime⟩).1 :=
-  dif_pos (Nat.lt_succ_of_lt htime)
+  dite_eq_left (Nat.lt_succ_of_lt htime)
 
 omit [DecidableEq ι] in
 /-- The operational root extension is all-Continue from the cutoff onward. -/
@@ -214,7 +214,7 @@ theorem quittingFiniteNashBellmanPathValue_eq_last
     (cutoff : ℕ) (path : QuittingFiniteNashBellmanPath ι cutoff) :
     quittingFiniteNashBellmanPathValue cutoff path cutoff =
       (path (Fin.last cutoff)).1 := by
-  rw [quittingFiniteNashBellmanPathValue, dif_pos (Nat.lt_succ_self cutoff)]
+  rw [quittingFiniteNashBellmanPathValue, dite_eq_left (Nat.lt_succ_self cutoff)]
   rfl
 
 omit [DecidableEq ι] in
@@ -227,7 +227,7 @@ theorem quittingFiniteNashBellmanPathValue_eq_zero_of_cutoff_lt
     (time : ℕ) (htime : cutoff < time) :
     quittingFiniteNashBellmanPathValue cutoff path time = 0 := by
   unfold quittingFiniteNashBellmanPathValue
-  rw [dif_neg]
+  rw [dite_eq_right]
   omega
 
 /-- An admissible finite path has zero terminal value.  Specializes
@@ -327,7 +327,7 @@ def quittingFiniteNashBellmanPathOpponentContinueMass
     (who : ι) (time : ℕ) : ℝ :=
   if htime : time < cutoff then
     ∏ player ∈ Finset.univ.erase who,
-      (path ⟨time, Nat.lt_succ_of_lt htime⟩).2 player false
+      ((path ⟨time, Nat.lt_succ_of_lt htime⟩).2 player).weights false
   else
     1
 
@@ -358,7 +358,7 @@ theorem quittingFixedOpponentsContinueMass_quittingRootOfSimplex
     (root : QuittingRootSimplex ι) (who : ι) :
     quittingStationaryContinueMass
         (Function.update (quittingRootOfSimplex root) who (PMF.pure false)) =
-      ∏ player ∈ Finset.univ.erase who, root player false := by
+      ∏ player ∈ Finset.univ.erase who, (root player).weights false := by
   classical
   unfold quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
@@ -394,7 +394,7 @@ theorem quittingFixedOpponentsContinueMass_pathRoots_eq
         cutoff path who time := by
   rw [quittingFixedOpponentsContinueMass]
   simp only [quittingFiniteNashBellmanPathRoots,
-    quittingFiniteNashBellmanPathOpponentContinueMass, dif_pos htime]
+    quittingFiniteNashBellmanPathOpponentContinueMass, dite_eq_left htime]
   exact quittingFixedOpponentsContinueMass_quittingRootOfSimplex _ who
 
 /-- The polynomial survival objective is exactly the survival weight used by
@@ -438,12 +438,11 @@ theorem continuous_quittingFiniteNashBellmanPathOpponentContinueMass
   split_ifs with htime
   · apply continuous_finsetProd
     intro player _
-    exact (continuous_apply false).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply player).comp
-          (continuous_snd.comp
-            (continuous_apply
-              (⟨time, Nat.lt_succ_of_lt htime⟩ : Fin (cutoff + 1))))))
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+      ((continuous_apply player).comp
+        (continuous_snd.comp
+          (continuous_apply
+            (⟨time, Nat.lt_succ_of_lt htime⟩ : Fin (cutoff + 1)))))
   · exact continuous_const
 
 /-- Finite opponent survival is continuous in the chain. -/
@@ -489,7 +488,7 @@ theorem quittingFiniteNashBellmanPathOpponentContinueMass_nonneg
   split_ifs
   · apply Finset.prod_nonneg
     intro player _
-    exact (path _).2 player |>.property.1 false
+    exact ((path _).2 player).weights_nonneg false
   · exact zero_le_one
 
 /-- Every playerwise surviving debt is nonnegative. -/

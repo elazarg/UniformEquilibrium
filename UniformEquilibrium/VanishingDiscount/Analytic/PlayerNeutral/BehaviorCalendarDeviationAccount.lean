@@ -27,9 +27,9 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.Probability Set
+open _root_.Math _root_.Math.Probability Set
 open Math.OnlineLearning
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 open AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -131,7 +131,7 @@ theorem calendarOccupationBehaviorStrategy_shadow_eq
             (dev stage history) action).1 action_mem
         have neutral :=
           support_neutral stage history action action_ne_zero
-        simp only [endpointNeutralShadowIndex, dif_pos neutral,
+        simp only [endpointNeutralShadowIndex, dite_eq_left neutral,
           fixedOccupationActionDist]
     _ = dev stage history := PMF.bind_pure _
 

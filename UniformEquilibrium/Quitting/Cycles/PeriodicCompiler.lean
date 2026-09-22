@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 /-! ## Quantitative cyclic contraction -/
 
@@ -40,7 +40,7 @@ def quittingCyclicOrbit {K : ℕ} (phase : Fin K) (steps : ℕ) : Fin K :=
 theorem quittingCyclicOrbit_succ {K : ℕ} (phase : Fin K) (steps : ℕ) :
     quittingCyclicOrbit phase (steps + 1) =
       finRotate K (quittingCyclicOrbit phase steps) := by
-  haveI := phase.neZero
+  have := phase.neZero
   rw [finRotate_apply]
   apply Fin.ext
   change (phase.val + (steps + 1)) % K =
@@ -124,7 +124,7 @@ theorem quittingCyclicPrefixWeight_card {K : ℕ}
     (coefficient : Fin K → ℝ) (phase : Fin K) :
     quittingCyclicPrefixWeight coefficient phase K =
       ∏ cyclePhase : Fin K, coefficient cyclePhase := by
-  letI : NeZero K := phase.neZero
+  let : NeZero K := phase.neZero
   have horbit : ∀ offset : Fin K,
       quittingCyclicOrbit phase offset.val = finCycle phase offset := by
     intro offset
@@ -414,6 +414,12 @@ theorem quittingRootSequenceTerminalValue_cyclic_eq
   funext player time history
   simp only [quittingRootSequenceProfile,
     quittingCyclicRootSequence_add, zero_add]
+  change
+    quittingCyclicRootSequence cycle
+        (quittingCyclicOrbit phase start) time player =
+      quittingCyclicRootSequence cycle
+        (quittingCyclicOrbit phase start) time player
+  rfl
 
 omit [DecidableEq ι] in
 /-- Cyclic terminal values satisfy the exact root policy-evaluation

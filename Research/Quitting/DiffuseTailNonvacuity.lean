@@ -47,7 +47,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingLCPClassification
+open Filter _root_.Math.Probability QuittingLCPClassification
 open SolanVieilleBoundary SourceMatchedSnellCollapse
 
 namespace DiffuseTailNonvacuity

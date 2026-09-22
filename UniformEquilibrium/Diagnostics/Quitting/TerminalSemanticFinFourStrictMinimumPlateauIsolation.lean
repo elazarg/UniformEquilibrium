@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 /-- A hypothetical four-player counterexample has a same-table positive

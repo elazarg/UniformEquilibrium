@@ -269,7 +269,6 @@ theorem survival_tendsto_one
     have hquotient := hconstant.div
       data.chordTail_debtSum_tendsto_inf source.inf_pos.ne'
     convert hquotient using 1
-    · rfl
     · rw [div_self source.inf_pos.ne']
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le hlower tendsto_const_nhds
   · intro rank

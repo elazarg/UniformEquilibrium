@@ -36,7 +36,7 @@ noncomputable section
 
 namespace Research.QuittingHolonomyEquivalenceCompression
 
-open GameTheory Math.Probability Math.PMFProduct
+open GameTheory _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -338,7 +338,7 @@ theorem exists_finite_realized_block_codebook
   let representatives : Set (FiniteQuittingBlock ι) :=
     Set.range representative
   have hrepresentativesFinite : representatives.Finite := by
-    letI : Fintype {code // code ∈ codebook} := hfinite.fintype
+    let : Fintype {code // code ∈ codebook} := hfinite.fintype
     exact Set.finite_range representative
   refine ⟨representatives, hrepresentativesFinite, ?_⟩
   intro block
@@ -417,7 +417,7 @@ theorem exists_finite_eligible_block_codebook
   let representatives : Set (FiniteQuittingBlock ι) :=
     Set.range representative
   have hrepresentativesFinite : representatives.Finite := by
-    letI : Fintype {code // code ∈ codebook} := hcodesFinite.fintype
+    let : Fintype {code // code ∈ codebook} := hcodesFinite.fintype
     exact Set.finite_range representative
   refine ⟨representatives, hrepresentativesFinite, ?_, ?_⟩
   · rintro block ⟨code, rfl⟩

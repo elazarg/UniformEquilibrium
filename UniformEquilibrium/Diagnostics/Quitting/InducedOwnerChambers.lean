@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
 /-- An actual induced Nash row on the face where `owner` quits surely,

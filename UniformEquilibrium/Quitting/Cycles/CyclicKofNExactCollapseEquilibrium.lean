@@ -25,7 +25,7 @@ namespace GameTheory
 
 namespace CyclicKofNExactCollapseEquilibrium
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic CyclicKofNQuittingSchedule
   Math.CyclicKofNPrimitiveBlocks CyclicKofNExactCollapseSchedule
   CyclicKofNBellmanBridge

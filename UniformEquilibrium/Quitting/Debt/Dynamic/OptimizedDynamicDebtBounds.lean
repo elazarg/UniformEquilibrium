@@ -102,7 +102,7 @@ theorem terminalExploitabilityGap_le_finiteMinMaxDynamicDebt
     gap ≤
       @quittingFiniteZeroBoundaryNashBellmanMinMaxDynamicDebt ι _ _
         hexploit.nonempty_players reward cutoff := by
-  letI : Nonempty ι := hexploit.nonempty_players
+  let : Nonempty ι := hexploit.nonempty_players
   let path :=
     quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer reward cutoff
   have hpath : path ∈

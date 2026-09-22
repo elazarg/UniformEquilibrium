@@ -432,7 +432,7 @@ theorem pivotPayoff_before (N : ℕ) (hN : 1 ≤ N) {time : ℕ}
   have h10 := hbranch true false
   have h01 := hbranch false true
   have h11 := hbranch true true
-  simp only [if_true] at h11
+  simp only [ite_true] at h11
   have h00' : quittingTerminalPayoff reward (quittingStoppingLawProfile reward
       (Function.update neverLaws 0 (PMF.pure (some time)))) 0 = 1 := by
     rw [← h00]

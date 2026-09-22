@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -308,8 +308,10 @@ theorem update_quittingRootThenContinuationProfile_eq
       · subst player
         simp [quittingRootThenContinuationProfile,
           quittingRootAndContinuationDeviation]
+        rfl
       · simp [Function.update_of_ne hp,
           quittingRootThenContinuationProfile]
+        rfl
   | succ t =>
       by_cases hp : player = who
       · subst player

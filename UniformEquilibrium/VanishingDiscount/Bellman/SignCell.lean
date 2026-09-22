@@ -168,7 +168,7 @@ theorem isClosed_polynomialBellmanSolutionSet :
       {assign : BellmanVar G → ℝ |
         ∀ s i,
           MvPolynomial.eval assign (G.simplexSumPoly s i) = 0} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     exact isClosed_iInter fun s => isClosed_iInter fun i =>
       isClosed_eq (G.simplexSumPoly s i).continuous_eval continuous_const
   have hnonneg : IsClosed
@@ -176,7 +176,7 @@ theorem isClosed_polynomialBellmanSolutionSet :
         ∀ s i a,
           0 ≤ MvPolynomial.eval assign
             (G.simplexNonnegPoly s i a)} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     exact isClosed_iInter fun s => isClosed_iInter fun i =>
       isClosed_iInter fun a =>
         isClosed_le continuous_const
@@ -185,7 +185,7 @@ theorem isClosed_polynomialBellmanSolutionSet :
       {assign : BellmanVar G → ℝ |
         ∀ s i,
           MvPolynomial.eval assign (G.bellmanPoly s i) = 0} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     exact isClosed_iInter fun s => isClosed_iInter fun i =>
       isClosed_eq (G.bellmanPoly s i).continuous_eval continuous_const
   have hbest : IsClosed
@@ -193,13 +193,13 @@ theorem isClosed_polynomialBellmanSolutionSet :
         ∀ s i a,
           0 ≤ MvPolynomial.eval assign
             (G.bestResponsePoly s i a)} := by
-    simp only [setOf_forall]
+    simp only [ofPred_forall]
     exact isClosed_iInter fun s => isClosed_iInter fun i =>
       isClosed_iInter fun a =>
         isClosed_le continuous_const
           (G.bestResponsePoly s i a).continuous_eval
   simpa only [polynomialBellmanSolutionSet,
-    IsPolynomialBellmanSolution, setOf_and] using
+    IsPolynomialBellmanSolution, ofPred_and] using
     hsum.inter (hnonneg.inter (hbellman.inter hbest))
 
 /-- Bellman-solution membership is invariant on every complete sign cell of

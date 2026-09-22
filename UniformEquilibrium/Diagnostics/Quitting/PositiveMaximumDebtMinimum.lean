@@ -71,7 +71,7 @@ theorem minimumTerminalSemantic_maximumDebt_allPlayersTie
     dsimp only
     by_cases hwho : who = owner
     · subst who
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       have hpayoffUpper : pair.1 owner ≤ 1 := hbox.1.2 owner
       have hsingletonLower : -1 ≤ reward (quittingSingletonTerminal owner) owner :=
         neg_le_of_abs_le (hreward _ _)
@@ -82,7 +82,7 @@ theorem minimumTerminalSemantic_maximumDebt_allPlayersTie
         nlinarith [mul_le_mul_of_nonneg_left hgapUpper hzero.le]
       unfold quittingTerminalSemanticDebt at hslack
       nlinarith
-    · rw [if_neg hwho]
+    · rw [ite_eq_right hwho]
       have hcontract := mul_le_mul_of_nonneg_left (hdebtLe who)
         (show 0 ≤ 1 - hazard by linarith)
       have hstrictProduct : 0 < hazard * minimum := mul_pos hzero hpositive

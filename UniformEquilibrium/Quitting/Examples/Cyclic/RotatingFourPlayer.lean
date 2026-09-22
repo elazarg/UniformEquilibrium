@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace RotatingFourPlayerQuitting
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 /-- The four cyclic players. -/
 abbrev Player := Fin 4

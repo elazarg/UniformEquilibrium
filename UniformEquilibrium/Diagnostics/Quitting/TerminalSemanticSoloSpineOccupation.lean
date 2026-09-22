@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.SurvivalProduct
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumSpine
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSoloOwnerRefinement
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
@@ -40,7 +41,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -596,16 +597,16 @@ theorem exists_minimum_allContinueNash_of_soloSemanticSpine_survival_lower
       (nhds (quittingAllContinueSimplexRoot : QuittingRootSimplex ι)) := by
     rw [tendsto_pi_nhds]
     intro player
-    rw [tendsto_subtype_rng, tendsto_pi_nhds]
+    rw [((Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).isInducing
+      ).tendsto_nhds_iff, tendsto_pi_nhds]
     intro action
     have hcoordinate : ∀ time,
-        ((simplexRoot time player : stdSimplex ℝ Bool) : Bool → ℝ) action =
+        (simplexRoot time player).weights action =
           (root time player action).toReal := by
       intro time
       exact congrFun (coe_stdSimplexEquiv_apply (root time player)) action
     have hallCoordinate :
-        (((quittingAllContinueSimplexRoot : QuittingRootSimplex ι) player :
-          stdSimplex ℝ Bool) : Bool → ℝ) action =
+        (quittingAllContinueSimplexRoot player).weights action =
             (PMF.pure false action).toReal := by
       exact congrFun (coe_stdSimplexEquiv_apply (PMF.pure false)) action
     have hbase : Tendsto (fun time => (root time player action).toReal)

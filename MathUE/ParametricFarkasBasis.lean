@@ -416,7 +416,7 @@ theorem exists_fixed_eventual_maximizing_cramerBasis
               cramerBasisValue
                 (A basisMax) (b basisMax) (c basisMax) x := by
   classical
-  letI := Fintype.ofFinite Basis
+  let := Fintype.ofFinite Basis
   obtain ⟨Feasible, hfeasible⟩ :=
     finite_analytic_cramerBasis_feasibility_stabilizes
       A b hA hb hdet_ne

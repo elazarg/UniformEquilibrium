@@ -45,7 +45,7 @@ theorem isClosed_mixedNashPolytopeSet
 theorem isCompact_mixedNashPolytopeSet
     (utility : F.sig.Outcome → ι → ℝ) :
     IsCompact (mixedNashPolytopeSet utility) := by
-  letI : CompactSpace (mixedPolytope F.sig) :=
+  let : CompactSpace (mixedPolytope F.sig) :=
     isCompact_iff_compactSpace.mp (isCompact_mixedPolytope F.sig)
   exact (isClosed_mixedNashPolytopeSet utility).isCompact
 
@@ -56,7 +56,7 @@ theorem mixedNashPolytopeSet_nonempty
     (mixedNashPolytopeSet utility).Nonempty := by
   obtain ⟨profile, hnash⟩ := exists_isNash_mixed utility
   let point : mixedPolytope F.sig := ⟨probs F.sig profile,
-    fun who _ => (profile who).prob_mem_stdSimplex⟩
+    fun who _ => (profile who).prob_mem_simplexWeights⟩
   refine ⟨point, ?_⟩
   change point.1 ∈ bestReplies F utility point.1
   change probs F.sig profile ∈ bestReplies F utility (probs F.sig profile)

@@ -83,6 +83,7 @@ theorem endpoint_eq_update_source_never :
     simp [endpoint, source, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, quittingPureSetRoot,
       quittingSetAction, mover, observer]
+    rfl
 
 /-- Exact whole-stopping-law reset ray from sure Quit to Never. -/
 def mixed (lambda : ℝ) (hlambda0 : 0 ≤ lambda) (hlambda1 : lambda ≤ 1) :

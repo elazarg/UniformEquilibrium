@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {G : StochasticGame Bool} [Finite G.State]
   [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)]
@@ -200,13 +200,13 @@ theorem all_canReach_vriezeOccupationSupport_via_yGain_of_dualFeasible
       rw [hzMass_zero_of_bad state hstate] at hcoupling
       have hindicator : indicator state = 1 := by
         dsimp only [indicator]
-        rw [if_pos hstate]
+        rw [ite_eq_left hstate]
       rw [hindicator]
       dsimp only [yInflow, yMass]
       linarith
     · have hindicator : indicator state = 0 := by
         dsimp only [indicator]
-        rw [if_neg hstate]
+        rw [ite_eq_right hstate]
       rw [hindicator]
       ring
   have hyInflow_reindex :
@@ -276,11 +276,11 @@ theorem all_canReach_vriezeOccupationSupport_via_yGain_of_dualFeasible
           hindicator_expect_bad pair.1 pair.2 hsource hyPositive
         have hindicator : indicator pair.1 = 1 := by
           dsimp only [indicator]
-          rw [if_pos hsource]
+          rw [ite_eq_left hsource]
         rw [hindicator, hexpect]
     · have hindicator : indicator pair.1 = 0 := by
         dsimp only [indicator]
-        rw [if_neg hsource]
+        rw [ite_eq_right hsource]
       rw [hindicator, mul_zero]
       exact mul_nonneg hyNonneg
         (hindicator_expect_nonneg pair.1 pair.2)
@@ -311,7 +311,7 @@ theorem all_canReach_vriezeOccupationSupport_via_yGain_of_dualFeasible
     · refine ⟨badState, Finset.mem_univ badState, ?_⟩
       have hindicator_badState : indicator badState = 1 := by
         dsimp only [indicator]
-        rw [if_pos hbadState]
+        rw [ite_eq_left hbadState]
       rw [hindicator_badState]
       norm_num
   linarith
@@ -407,7 +407,7 @@ theorem exists_vriezeFlowCompletion_of_dualFeasible
         z state action / (∑ candidate, z state candidate) := by
     intro state hstate action
     dsimp only [tau]
-    rw [dif_pos hstate]
+    rw [dite_eq_left hstate]
     exact flowCompletionWeightsToPMF_apply_toReal _ _ _ action
   have htau_y : ∀ state
       (hstate : ¬ G.vriezeOccupationSupport controller z state)
@@ -417,7 +417,7 @@ theorem exists_vriezeFlowCompletion_of_dualFeasible
           (∑ candidate, yGain state candidate) := by
     intro state hstate action
     dsimp only [tau]
-    rw [dif_neg hstate]
+    rw [dite_eq_right hstate]
     exact flowCompletionWeightsToPMF_apply_toReal _ _ _ action
   have hpureKernel : ∀ (source : G.State)
       (action : G.Act controller),

@@ -189,7 +189,7 @@ theorem absorptionPathPreBoundaryPayoff_eq_jumpRootSuccessorPayoff_of_unitBounde
     ring]
   rw [habsorption]
   unfold absorptionPathPreBoundaryPayoff absorptionPathPayoff
-  rw [if_pos htime.1, if_pos htotal]
+  rw [ite_eq_left htime.1, ite_eq_left htotal]
   have htimeDenom : 1 - time ≠ 0 := ne_of_gt (sub_pos.mpr htimeOne)
   have htotalDenom : 1 - pathTotal path.1 time ≠ 0 :=
     ne_of_gt (sub_pos.mpr htotal)

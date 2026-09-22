@@ -182,15 +182,15 @@ intermediate state. -/
 def comp (first second : CompactExecutableStep State) :
     CompactExecutableStep State := by
   letI : TopologicalSpace first.Execution := first.executionTopology
-  letI : CompactSpace first.Execution := first.executionCompact
-  letI : FirstCountableTopology first.Execution :=
+  let : CompactSpace first.Execution := first.executionCompact
+  let : FirstCountableTopology first.Execution :=
     first.executionFirstCountable
-  letI : T2Space first.Execution := first.executionT2
+  let : T2Space first.Execution := first.executionT2
   letI : TopologicalSpace second.Execution := second.executionTopology
-  letI : CompactSpace second.Execution := second.executionCompact
-  letI : FirstCountableTopology second.Execution :=
+  let : CompactSpace second.Execution := second.executionCompact
+  let : FirstCountableTopology second.Execution :=
     second.executionFirstCountable
-  letI : T2Space second.Execution := second.executionT2
+  let : T2Space second.Execution := second.executionT2
   have hclosed : IsClosed (composableSet first second) := by
     exact isClosed_eq
       (first.target_continuous.comp continuous_fst)

@@ -79,7 +79,7 @@ theorem quittingDiscountedBellmanAssignment_mem_closure_positiveDiscount
   filter_upwards [hsource] with index hindex
   refine ⟨isPolynomialBellmanSolution_quittingDiscountedBellmanAssignment
     reward hindex.1 hindex.2.1 (root index) (value index) hindex.2.2.1 hindex.2.2.2, ?_⟩
-  simpa only [mem_setOf_eq, quittingDiscountedBellmanAssignment_discount] using hindex.1
+  simpa only [mem_ofPred_eq, quittingDiscountedBellmanAssignment_discount] using hindex.1
 
 /-- Every supplied full limit of actual discounted fixed points is retained as
 the endpoint of an analytic Bellman germ for the same actual reward table. -/

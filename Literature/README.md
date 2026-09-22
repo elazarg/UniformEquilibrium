@@ -15,14 +15,17 @@ theorem.
 `Literature/` (flat, directly under this directory) holds only papers whose
 Lean file is complete: every definition and theorem statement from the paper
 is present. `Literature/future/` holds every paper not yet at that bar; a
-file there may be a stub, partial, or simply not compiling. Nothing in
-`future/` is built. A paper graduates to `Literature/` by finishing its
-statements, not by proving them — `sorry` is permitted in both places.
+file there may be a stub or partial. Both areas compile through the default
+`Literature` library and its exhaustive `Literature.lean` umbrella. A paper
+graduates to `Literature/` by finishing its statements, not by proving them —
+`sorry` is permitted in both places.
 
-Nothing imports the literature lane, and the lane never imports `Research`
-or `Experiments`. It is not a `lean_lib`: no build target compiles it, and
-no paper under `Literature/` enters the compiled axiom audit. Files there
-are read, not built.
+Nothing outside Literature imports the lane, and the lane never imports
+`Research` or `Experiments`. The library keeps warnings as errors and disables
+only Lean's dedicated `warn.sorry` diagnostic for intentional open claims. No
+paper under `Literature/` enters the compiled axiom audit, so successful
+compilation checks syntax, elaboration, and proved terms without certifying
+`sorry`-backed claims.
 
 The no-PDF policy: a paper file carries its citation and public locator; no
 PDF enters the repository.

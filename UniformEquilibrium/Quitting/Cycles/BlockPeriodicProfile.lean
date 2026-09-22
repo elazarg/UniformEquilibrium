@@ -67,7 +67,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -93,10 +93,10 @@ theorem quittingRootSuccessorPayoff_eq_coalitionSum
     intro S
     by_cases hS : S = ∅
     · subst hS
-      rw [if_pos rfl, coalitionMass_empty]
+      rw [ite_eq_left rfl, coalitionMass_empty]
       simp [quittingStageCoalitionPayoff, weightOfReward]
     · have hne : S.Nonempty := Finset.nonempty_iff_ne_empty.mpr hS
-      rw [if_neg hS]
+      rw [ite_eq_right hS]
       simp [quittingStageCoalitionPayoff, weightOfReward, hne]
   rw [Finset.sum_congr rfl (fun S _ ↦ hsplit S), Finset.sum_add_distrib]
   congr 1

@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 /-- A constant repetition of one stationary root and its literal
 translated payoff is an absorption-weighted finite forward packet. -/

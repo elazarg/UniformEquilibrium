@@ -13,7 +13,7 @@ owner and initial source persist through every literal reverse prefix.
 noncomputable section
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- The original positive-survival exact recursion itself supplies the
 summable hazard clock, positive literal infinite survival, and persistent

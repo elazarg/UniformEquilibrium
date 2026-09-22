@@ -129,6 +129,7 @@ theorem resolution_le_one
     core.resolution ≤ 1 := by
   have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
     source.point source.point_mem
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
   have hmassLeOne : source.point.2 (some source.atom.terminal) ≤ 1 := by
     have hle : source.point.2 (some source.atom.terminal) ≤
         ∑ outcome, source.point.2 outcome :=

@@ -31,7 +31,7 @@ open GameTheory
 
 namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
-open Math.Probability Math.PMFProduct StochasticGame
+open _root_.Math.Probability Math.PMFProduct StochasticGame
 
 /-- The three players, also used as the three live clock phases. -/
 abbrev Player := Fin 3

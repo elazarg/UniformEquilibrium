@@ -80,7 +80,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -531,8 +531,8 @@ theorem quittingAnchoredCyclicQuitValue_eq_of_flatQuitRow
     quittingAnchoredCyclicQuitValue reward w hazard phase who = c := by
   unfold quittingAnchoredCyclicQuitValue
   by_cases hwho : who = w phase
-  · rw [if_pos hwho, hself]
-  · rw [if_neg hwho, hpair hwho, hself]
+  · rw [ite_eq_left hwho, hself]
+  · rw [ite_eq_right hwho, hpair hwho, hself]
     ring
 
 omit [Fintype ι] in
@@ -616,9 +616,9 @@ theorem quittingAnchoredCyclicQuitValue_le_onPathValue_add_of_isεExactAnchoredS
   unfold quittingAnchoredCyclicQuitValue
   by_cases hwho : who = w phase
   · subst hwho
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     linarith [anchorLowerBound_of_isεExactAnchoredSoloPeriodic hexact phase]
-  · rw [if_neg hwho]
+  · rw [ite_eq_right hwho]
     linarith [spectatorFloor_of_isεExactAnchoredSoloPeriodic hexact phase hwho]
 
 /-- **The value floor of a flat quit-now row.**  On a table whose quit-now row

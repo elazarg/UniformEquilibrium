@@ -39,14 +39,14 @@ def punishmentNormalMassExtension
     (mass : punishmentNormalPlayers reward → ℝ)
     (who : punishmentNormalPlayers reward) :
     punishmentNormalMassExtension reward mass who.1 = mass who := by
-  simp only [punishmentNormalMassExtension, dif_pos who.2]
+  simp only [punishmentNormalMassExtension, dite_eq_left who.2]
 
 @[simp] theorem punishmentNormalMassExtension_apply_not_mem
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mass : punishmentNormalPlayers reward → ℝ) {who : ι}
     (hwho : who ∉ punishmentNormalPlayers reward) :
     punishmentNormalMassExtension reward mass who = 0 := by
-  simp only [punishmentNormalMassExtension, dif_neg hwho]
+  simp only [punishmentNormalMassExtension, dite_eq_right hwho]
 
 /-- Extend a punishment-normal player-mass path to the ambient player type. -/
 def ContinuousZeroPerfectSingletonPath.ambientMass
@@ -66,16 +66,16 @@ def ContinuousZeroPerfectSingletonPath.ambientMass
     (by
       funext who
       by_cases hwho : who ∈ punishmentNormalPlayers reward
-      · simp only [punishmentNormalMassExtension, dif_pos hwho,
+      · simp only [punishmentNormalMassExtension, dite_eq_left hwho,
           witness.mass.source, Pi.zero_apply]
-      · simp only [punishmentNormalMassExtension, dif_neg hwho,
+      · simp only [punishmentNormalMassExtension, dite_eq_right hwho,
           Pi.zero_apply])
     (by
       funext who
       by_cases hwho : who ∈ punishmentNormalPlayers reward
-      · simp only [punishmentNormalMassExtension, dif_pos hwho,
+      · simp only [punishmentNormalMassExtension, dite_eq_left hwho,
           witness.mass.target]
-      · simp only [punishmentNormalMassExtension, dif_neg hwho])
+      · simp only [punishmentNormalMassExtension, dite_eq_right hwho])
 
 theorem ContinuousZeroPerfectSingletonPath.ambientMass_apply_normal
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -249,11 +249,11 @@ theorem ContinuousZeroPerfectSingletonPath.ambientPathPayoff_eq_normalResidualMi
       by_cases howner : owner ∈ punishmentNormalPlayers reward
       · simp only [witness.ambientMass_apply_normal 1 ⟨owner, howner⟩,
           witness.ambientMass_apply_normal time ⟨owner, howner⟩,
-          punishmentNormalMassExtension, dif_pos howner]
+          punishmentNormalMassExtension, dite_eq_left howner]
       · simp only [witness.ambientMass_apply_abnormal 1 howner,
           witness.ambientMass_apply_abnormal time howner,
           sub_self, zero_mul, punishmentNormalMassExtension,
-          dif_neg howner]
+          dite_eq_right howner]
     _ = ∑ owner,
         ((witness.mass 1 owner - witness.mass time owner) /
           (1 - (time : ℝ))) * quittingSoloReward reward owner.1 who := by
@@ -354,7 +354,7 @@ theorem ContinuousZeroPerfectSingletonPath.ambientPathRightDerivative_abnormal
   simp_rw [singletonCoalitionMass_singleton,
     witness.ambientMass_extend_apply_abnormal _ hwho]
   simp only [sub_self, zero_div]
-  letI : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
+  let : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
     left_nhdsWithin_Ioo_neBot htime
   exact Filter.liminf_const 0
 

@@ -132,7 +132,7 @@ theorem idealSingletonClearance_deadlock_lt
     {α B : ℝ} (hα0 : 0 ≤ α) (hα1 : α < 1)
     {t : Player → ℝ} (ht : t who ≤ B) (hB : 3 < B) :
     idealSingletonClearance deadlockMatrix owner α t who < B := by
-  rw [idealSingletonClearance, if_neg hne, max_lt_iff]
+  rw [idealSingletonClearance, ite_eq_right hne, max_lt_iff]
   refine ⟨by linarith, ?_⟩
   have hfirst : α * t who ≤ α * B :=
     mul_le_mul_of_nonneg_left ht hα0
@@ -649,7 +649,7 @@ theorem owner_transition_signs_of_debt_zero
   change lasso.clearance next nextOwner =
     idealSingletonClearance deadlockMatrix currentOwner
       (lasso.survival phase) (lasso.clearance phase) nextOwner at hstepNext
-  rw [hnextZero, idealSingletonClearance, if_neg hnextNe] at hstepNext
+  rw [hnextZero, idealSingletonClearance, ite_eq_right hnextNe] at hstepNext
   have hnoClip := lasso.noClip_of_debt_zero hzero phase
     (who := nextOwner) (by simpa only [currentOwner] using hnextNe)
   change 0 ≤ lasso.survival phase * lasso.clearance phase nextOwner +
@@ -809,7 +809,7 @@ theorem clearance_two_eq_zero_of_owner_zero
     (finRotate (K + 1)).apply_symm_apply phase
   change lasso.clearance phase 2 = 0
   rw [← hnext, hstep, idealSingletonClearance,
-    if_pos hpreviousOwner.symm, hpreviousZero]
+    ite_eq_left hpreviousOwner.symm, hpreviousZero]
 
 /-- Three forced zero-cost blocks strictly decrease the projective ratio
 `t₁ / t₃` between successive owner-`0` phases. -/

@@ -74,7 +74,7 @@ theorem setReward_le_one_of_two_le_card {S : Finset Player} (hcard : 2 ≤ S.car
 the table's only nonzero multi-player row. -/
 theorem setReward_eq_zero_of_three_le_card {S : Finset Player}
     (hcard : 3 ≤ S.card) (who : Player) : quittingSetReward reward S who = 0 := by
-  rw [setReward_of_two_le_card (by omega), if_neg]
+  rw [setReward_of_two_le_card (by omega), ite_eq_right]
   rintro ⟨rfl, -⟩
   exact absurd hcard (by decide)
 
@@ -118,7 +118,7 @@ theorem isQuittingSureExitSet_of_three_le_card {S : Finset Player}
         decide
       exact absurd hmemErase (Finset.notMem_erase 1 S)
     rw [setReward_eq_zero_of_three_le_card hcard,
-      setReward_of_two_le_card herase, if_neg hno]
+      setReward_of_two_le_card herase, ite_eq_right hno]
   · have hinsert : 3 ≤ (insert outsider S).card := by
       rw [Finset.card_insert_of_notMem hout]
       omega
@@ -154,7 +154,7 @@ theorem isQuittingSureExitSet_singleton_of_ne_zero {owner : Player}
       rcases Finset.mem_insert.mp hmemPair with hzero | hone
       · exact howner hzero
       · exact hne (Finset.mem_singleton.mp hone).symm
-    rw [setReward_of_two_le_card hcard, if_neg hno]
+    rw [setReward_of_two_le_card hcard, ite_eq_right hno]
     exact zero_le_setReward_singleton owner outsider
 
 /-! ## Which coalitions are not sure exit sets -/
@@ -177,7 +177,7 @@ theorem not_isQuittingSureExitSet_singleton_zero :
   have h := houtsider 1 (by decide)
   rw [show insert (1 : Player) ({0} : Finset Player) = ({0, 1} : Finset Player)
       from by decide,
-    setReward_of_two_le_card (by decide), if_pos ⟨rfl, rfl⟩,
+    setReward_of_two_le_card (by decide), ite_eq_left ⟨rfl, rfl⟩,
     setReward_singleton] at h
   norm_num [singletonMatrix, tournamentSkewMatrix, adjacency] at h
 

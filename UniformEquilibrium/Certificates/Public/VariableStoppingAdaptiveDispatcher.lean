@@ -35,7 +35,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -194,7 +194,7 @@ theorem expectedHistoryValue_prefixThenStoppedChild_eq
     apply congrArg (expect (G.histDist profile initial total))
     funext history
     simp only [prefixThenStoppedChildHistoryPotential,
-      rootStoppedChildHistoryPotential, dif_pos hfuel]
+      rootStoppedChildHistoryPotential, dite_eq_left hfuel]
   rw [hpotential]
   exact G.expectedHistoryValue_rootStoppedChild_eq
     profile initial selector 0 childPotential hfuel joint

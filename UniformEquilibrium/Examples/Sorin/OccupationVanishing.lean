@@ -27,7 +27,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 /-- Extending a history by one stage adds exactly that stage's bottom-right
 indicator. -/

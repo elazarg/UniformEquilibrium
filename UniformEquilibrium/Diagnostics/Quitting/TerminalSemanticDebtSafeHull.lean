@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set Math.Probability Math.ProbabilityMassFunction
+open Finset Set _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -254,7 +254,7 @@ theorem quittingTerminalSemanticDebtSafeHull_exists_small_witness
   obtain ⟨κ, inst, selectedU, selectedWeight, hselected, hindependent,
     hpositive, hselectedSum, hselectedBar⟩ :=
     eq_pos_convex_span_of_mem_convexHull hubar
-  letI : Fintype κ := inst
+  let : Fintype κ := inst
   have hcard : Fintype.card κ ≤ Fintype.card ι + 1 := by
     calc
       Fintype.card κ ≤

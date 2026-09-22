@@ -60,7 +60,7 @@ private theorem mass_order_ne_top
       ∀ᶠ t in nhdsWithin 0 (Ioi 0), C.mass t = 0 :=
     (analyticOrderAt_eq_top.mp htop).filter_mono
       nhdsWithin_le_nhds
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   obtain ⟨t, ht, hzero, htpos⟩ :=
     (C.eventual.and
@@ -107,7 +107,7 @@ private theorem endpoint_factor_nonnegative
         (nhdsWithin 0 (Ioi 0)) (nhds (factor 0 index)) :=
     (analyticAt_pi_iff.mp analytic_factor index).continuousAt.tendsto.mono_left
       nhdsWithin_le_nhds
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   exact le_of_tendsto_of_tendsto tendsto_const_nhds hlimit
     (eventual_nonnegative.mono fun t ht => ht index)
@@ -175,7 +175,7 @@ private theorem endpoint_factor_balance
       Tendsto balance (nhdsWithin 0 (Ioi 0)) (nhds 0) :=
     tendsto_const_nhds.congr'
       (balance_zero.mono fun _ ht => ht.symm)
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   exact tendsto_nhds_unique balance_limit zero_limit
 
@@ -248,7 +248,7 @@ private theorem factor_order_le_poleOrder
       Tendsto normalized (nhdsWithin 0 (Ioi 0)) (nhds 1) :=
     tendsto_const_nhds.congr'
       (normalized_eq.mono fun _ ht => ht.symm)
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   have endpoint_eq : normalized 0 = 1 :=
     tendsto_nhds_unique normalized_limit one_limit
@@ -305,7 +305,7 @@ private theorem endpoint_factor_weightedCharge
           (C.poleOrder - order)).continuousAt.tendsto.mono_left
       nhdsWithin_le_nhds).congr'
       (weighted_eq.mono fun _ ht => ht.symm)
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   have endpoint_eq :
       weighted 0 = 0 ^ (C.poleOrder - order) :=

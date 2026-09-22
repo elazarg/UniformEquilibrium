@@ -44,7 +44,7 @@ theorem exists_singletonColumnBlockerCertificate_of_fourPlayer_noUniform
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff) :
     (¬HasHomogeneousSimplexSolution (normalizedSoloMatrix reward)) ∧
       Nonempty (SingletonColumnBlockerCertificate reward) := by
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   have hside := standardQMatrixSide_of_not_exists_uniformEquilibriumPayoff reward hno
   have hcore := normalCore_eq_univ_of_fourPlayer_not_exists_uniformEquilibriumPayoff
     reward hplayers hno

@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame
-open Math.Probability Math.Probability.DiscreteHazard
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 

@@ -5,12 +5,13 @@ noncomputable section
 
 namespace Math.LinearProgramming
 
-def ZeroDiagonalFourMatrix :=
+/-- Four-by-four real matrices with zero diagonal. The carrier stays reducible
+so inherited function-space topology instances remain available. -/
+@[reducible] def ZeroDiagonalFourMatrix :=
   {M : Matrix (Fin 4) (Fin 4) ℝ // ∀ i, M i i = 0}
 
 instance : TopologicalSpace ZeroDiagonalFourMatrix :=
-  inferInstanceAs (TopologicalSpace
-    {M : Matrix (Fin 4) (Fin 4) ℝ // ∀ i, M i i = 0})
+  instTopologicalSpaceSubtype
 
 def twoRowNegativeShapeGap (M : ZeroDiagonalFourMatrix) : ℝ :=
   (M.1 0 1 + M.1 0 2) ^ 2 * ((M.1 1 2) ^ 2 + (M.1 1 3) ^ 2) -
@@ -53,7 +54,7 @@ theorem isOpen_inTwoRowNegativeShapeNeighborhood :
   rcases h with ⟨h01, h02, h03, h10, h12, h13, hgap⟩
   have centry (i j : Fin 4) :
       ContinuousAt (fun N : ZeroDiagonalFourMatrix ↦ N.1 i j) M :=
-    ((continuous_apply_apply i j).comp continuous_subtype_val).continuousAt
+    (Continuous.matrix_elem continuous_subtype_val i j).continuousAt
   have cgap : ContinuousAt twoRowNegativeShapeGap M := by
     unfold twoRowNegativeShapeGap
     exact (((centry 0 1).add (centry 0 2)).pow 2).mul

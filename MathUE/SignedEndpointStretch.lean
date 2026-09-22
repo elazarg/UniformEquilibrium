@@ -1,4 +1,4 @@
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.SplitIfs
 import Mathlib.Tactic.Ring
@@ -41,12 +41,12 @@ theorem unitEndpointStretch_sub_reverse (alpha value other : ℝ) :
       signedEndpointGapStretch alpha (value - other) := by
   rcases lt_trichotomy value other with hlt | rfl | hgt
   · have hgap : value - other < 0 := sub_neg.mpr hlt
-    simp only [unitEndpointStretch, hlt, not_lt_of_gt hlt, if_true, if_false,
+    simp only [unitEndpointStretch, hlt, not_lt_of_gt hlt, ite_true, ite_false,
       signedEndpointGapStretch, not_lt_of_gt hgap, hgap]
     ring
   · simp
   · have hgap : 0 < value - other := sub_pos.mpr hgt
-    simp only [unitEndpointStretch, hgt, not_lt_of_gt hgt, if_true, if_false,
+    simp only [unitEndpointStretch, hgt, not_lt_of_gt hgt, ite_true, ite_false,
       signedEndpointGapStretch, hgap]
     ring
 
@@ -89,7 +89,7 @@ theorem signedEndpointGapStretch_pos_iff {alpha gap : ℝ}
     0 < signedEndpointGapStretch alpha gap ↔ 0 < gap := by
   rcases lt_trichotomy gap 0 with hnegative | rfl | hpositive
   · have hvalue : signedEndpointGapStretch alpha gap < 0 := by
-      rw [signedEndpointGapStretch, if_neg (not_lt_of_gt hnegative), if_pos hnegative]
+      rw [signedEndpointGapStretch, ite_eq_right (not_lt_of_gt hnegative), ite_eq_left hnegative]
       by_cases ha : alpha = 0
       · simp [ha, hnegative]
       · have ha : 0 < alpha := lt_of_le_of_ne halpha0 (Ne.symm ha)
@@ -97,7 +97,7 @@ theorem signedEndpointGapStretch_pos_iff {alpha gap : ℝ}
     exact iff_of_false (not_lt_of_gt hvalue) (not_lt_of_gt hnegative)
   · simp
   · have hvalue : 0 < signedEndpointGapStretch alpha gap := by
-      rw [signedEndpointGapStretch, if_pos hpositive]
+      rw [signedEndpointGapStretch, ite_eq_left hpositive]
       by_cases ha : alpha = 0
       · simp [ha, hpositive]
       · have ha : 0 < alpha := lt_of_le_of_ne halpha0 (Ne.symm ha)
@@ -138,7 +138,7 @@ theorem le_signedEndpointGapStretch {alpha gap : ℝ}
   rcases eq_or_lt_of_le hgap0 with heq | hpositive
   · subst gap
     simp
-  · rw [signedEndpointGapStretch, if_pos hpositive]
+  · rw [signedEndpointGapStretch, ite_eq_left hpositive]
     nlinarith
 
 /-- A positive stretch fixes precisely zero and saturated nonnegative gaps. -/
@@ -148,7 +148,7 @@ theorem signedEndpointGapStretch_eq_self_iff_of_nonneg {alpha gap : ℝ}
   rcases eq_or_lt_of_le hgap0 with heq | hpositive
   · subst gap
     simp
-  · rw [signedEndpointGapStretch, if_pos hpositive]
+  · rw [signedEndpointGapStretch, ite_eq_left hpositive]
     constructor
     · intro heq
       right

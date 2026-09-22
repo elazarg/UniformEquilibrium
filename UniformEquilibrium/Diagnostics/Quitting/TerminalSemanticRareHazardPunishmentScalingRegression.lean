@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 namespace QuittingRareHazardPunishmentScalingRegression
@@ -132,7 +132,7 @@ theorem punishmentValue_eq_neg_one :
   · have hupper := quittingStationaryPunishmentValue_le
       reward owner collisionRoot
     rwa [collision_unilateralCap] at hupper
-  · haveI : Nonempty (Player -> PMF Bool) :=
+  · have : Nonempty (Player -> PMF Bool) :=
       ⟨fun _ => PMF.pure false⟩
     apply le_ciInf
     intro root

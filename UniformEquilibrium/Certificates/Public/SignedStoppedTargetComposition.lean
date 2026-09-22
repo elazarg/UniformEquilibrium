@@ -122,8 +122,8 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability
-open Math.Probability.SignedStoppedComposition
+open _root_.Math.Probability
+open _root_.Math.Probability.SignedStoppedComposition
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -497,8 +497,8 @@ selection. -/
 
 namespace AbsorbingAcceptance
 
-open Math.Probability
-open Math.Probability.SignedStoppedComposition
+open _root_.Math.Probability
+open _root_.Math.Probability.SignedStoppedComposition
 
 /-- The empty selection transport: one history, stopped at once, no allowed
 deviation. -/

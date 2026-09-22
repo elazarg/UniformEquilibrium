@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -54,12 +54,21 @@ omit [Fintype ι] in
   · subst player
     simp [quittingSingletonPairAction, quittingSoloAction,
       quittingQuitters, hne.symm]
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ owner, by
+      rw [Function.update_of_ne hne.symm, Function.update_self]⟩
   by_cases hpOther : player = other
   · subst player
     simp [quittingSingletonPairAction, quittingSoloAction,
       quittingQuitters]
+    exact Finset.mem_filter.mpr ⟨Finset.mem_univ other, by
+      rw [Function.update_self]⟩
   · simp [quittingSingletonPairAction, quittingSoloAction,
       quittingQuitters, hpOwner, hpOther]
+    intro hmem
+    have hvalue := (Finset.mem_filter.mp hmem).2
+    rw [Function.update_of_ne hpOther,
+      Function.update_of_ne hpOwner] at hvalue
+    simp at hvalue
 
 /-- Payoff to `other` when `owner` and `other` quit together. -/
 def quittingSingletonCollisionReward
@@ -79,7 +88,7 @@ theorem quittingRootPayoff_singletonPairAction_true
     rw [quittingQuitters_singletonPairAction_true hne]
     simp
   unfold quittingRootPayoff quittingSingletonCollisionReward
-  rw [dif_pos hnonempty]
+  rw [dite_eq_left hnonempty]
   congr
   exact quittingQuitters_singletonPairAction_true hne
 
@@ -167,7 +176,7 @@ def quittingHazardCoin (h : ℝ) (hh0 : 0 ≤ h) (hh1 : h ≤ 1) : PMF Bool :=
     (fun quit ↦ if quit then ENNReal.ofReal h else ENNReal.ofReal (1 - h))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hh0 (by linarith)]
       norm_num)
 

@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -100,7 +100,7 @@ theorem abs_quittingRootAbsorbingContribution_forcedQuit_sub_singleton_le
         simpa only [soloAction] using quittingQuitters_soloQuitAction owner]
       exact Finset.singleton_nonempty owner
     unfold quittingRootPayoff
-    rw [dif_pos hnonempty]
+    rw [dite_eq_left hnonempty]
     congr 1
     apply Subtype.ext
     change quittingQuitters (quittingSoloQuitAction owner) = {owner}
@@ -359,7 +359,7 @@ theorem abs_quittingCyclicTerminalValue_sub_ownerSingleton_le
   have hjointLeOwn :
       (∏ cyclePhase : Fin K, jointContinue cyclePhase) ≤
         ∏ cyclePhase : Fin K, (cycle cyclePhase owner false).toReal := by
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro cyclePhase _
       exact hjointNonneg cyclePhase
     · intro cyclePhase _
@@ -396,7 +396,7 @@ theorem abs_quittingCyclicTerminalValue_sub_ownerSingleton_le
         quittingCyclicPrefixWeight opponentContinue phase fuel := by
     intro fuel
     unfold quittingCyclicPrefixWeight
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro offset _
       exact hjointNonneg _
     · intro offset _
@@ -456,7 +456,7 @@ theorem abs_quittingCyclicTerminalValue_sub_ownerSingleton_le
   have hopponentAbsorptionNonneg :
       0 ≤ quittingCyclicOpponentAbsorptionMass cycle owner := by
     unfold quittingCyclicOpponentAbsorptionMass
-    exact sub_nonneg.mpr <| Finset.prod_le_one
+    exact sub_nonneg.mpr <| Finset.prod_le_one₀
       (fun cyclePhase _ => hopponentNonneg cyclePhase)
       (fun cyclePhase _ => hopponentLeOne cyclePhase)
   have hnumeratorNonneg :
@@ -522,7 +522,7 @@ theorem tendsto_quittingCyclicTerminalValue_ownerSingleton_of_absorption
       have hopponent :
           0 ≤ quittingCyclicOpponentAbsorptionMass (cycle n) owner := by
         unfold quittingCyclicOpponentAbsorptionMass
-        exact sub_nonneg.mpr <| Finset.prod_le_one
+        exact sub_nonneg.mpr <| Finset.prod_le_one₀
           (fun phase _ =>
             quittingStationaryFixedOpponentsContinueMass_nonneg _ _)
           (fun phase _ =>
@@ -600,8 +600,9 @@ theorem tendsto_quittingTerminalOutcomeMass_cyclicBehaviorProfile_singleton_of_a
               (quittingCyclicBehaviorProfile reward (cycle n) (initial n))
                 (some terminal) := by
         intro n
-        have htotal := (quittingTerminalOutcomeMass_mem_stdSimplex reward
-          (quittingCyclicBehaviorProfile reward (cycle n) (initial n))).2
+        have htotal := (GameTheory.Math.Probability.mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward
+            (quittingCyclicBehaviorProfile reward (cycle n) (initial n)))).2
         rw [Fintype.sum_option] at htotal
         linarith
       have hone : Filter.Tendsto (fun _ : ℕ => (1 : ℝ)) Filter.atTop

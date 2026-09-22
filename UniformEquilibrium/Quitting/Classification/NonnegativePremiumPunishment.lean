@@ -16,7 +16,7 @@ theorem quittingSingletonReward_le_punishmentValue_of_nonnegativePremium
     (hnonnegative : HasNonnegativeOwnQuittingPremium reward) (who : ι) :
     reward (quittingSingletonTerminal who) who ≤ quittingPunishmentValue reward who := by
   rw [quittingPunishmentValue_eq_stationaryPunishmentValue]
-  haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
   apply le_ciInf
   intro root
   apply le_trans ?_ (le_max_left _ _)

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.LinearAlgebra.FourierMotzkin
+import Maths.LinearProgramming.FourierMotzkin
 
 /-!
 # Affine equalities plus inequalities: the resolved Farkas alternative
@@ -35,6 +35,8 @@ open Finset BigOperators
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 
 variable {𝕜 : Type*} [Field 𝕜] [LinearOrder 𝕜] [IsStrictOrderedRing 𝕜]
 variable {EqRow IneqRow : Type*}

@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory.ProductLowPremiumBoundaryIdentities
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 def dualCoefficient (terminal : Finset (Fin 4)) : ℝ :=
   2 * (if terminal = {0, 1} then 1 else 0) +
@@ -185,8 +185,8 @@ private theorem dualMass_mul_premium_eq_participant_mask
         (if player ∈ terminal then
           ProductLowFinFourFamily.premium scale terminal player else 0) := by
   by_cases hplayer : player ∈ terminal
-  · rw [if_pos hplayer]
-  rw [if_neg hplayer, mul_zero]
+  · rw [ite_eq_left hplayer]
+  rw [ite_eq_right hplayer, mul_zero]
   by_cases hmass : dualMass terminal = 0
   · rw [hmass, zero_mul]
   have hsupport : terminal = {0, 1} ∨ terminal = {0, 2} ∨
@@ -218,10 +218,10 @@ theorem sum_dualMass_mul_actualParticipantPremium
       intro terminal _
       rw [dualMass_mul_premium_eq_participant_mask]
       by_cases hplayer : player ∈ terminal.val
-      · rw [if_pos hplayer, if_pos hplayer,
+      · rw [ite_eq_left hplayer, ite_eq_left hplayer,
           ProductLowFinFourFamily.reward_sub_singleton singleton scale passive
             terminal player hplayer]
-      · rw [if_neg hplayer, if_neg hplayer]
+      · rw [ite_eq_right hplayer, ite_eq_right hplayer]
     _ = ∑ terminal : Finset (Fin 4),
         dualMass terminal * ProductLowFinFourFamily.premium scale terminal player := by
       rw [← Finset.sum_subtype

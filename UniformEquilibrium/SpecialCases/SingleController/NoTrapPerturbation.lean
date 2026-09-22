@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.LinearProgramming
 
 variable {G : StochasticGame Bool} [Finite G.State]
@@ -66,13 +66,13 @@ theorem exists_vriezePrimalFeasible_strictImprovement_of_closedZeroOccupation
   obtain ⟨regionState, hregionState⟩ := hregion
   let witnessPair : G.State × G.Act controller :=
     (regionState, Classical.choice (inferInstance : Nonempty (G.Act controller)))
-  letI : Nonempty (G.State × G.Act controller) := ⟨witnessPair⟩
+  let : Nonempty (G.State × G.Act controller) := ⟨witnessPair⟩
   have hguardedSlack_pos : ∀ pair : G.State × G.Act controller,
       0 < guardedSlack pair := by
     intro pair
     by_cases hpair : region pair.1
     · dsimp only [guardedSlack]
-      rw [if_pos hpair]
+      rw [ite_eq_left hpair]
       exact
         (hstrong.minPrimalSlack_pos_iff_dual_eq_zero
           (Sum.inr (Sum.inl pair))).2
@@ -85,7 +85,7 @@ theorem exists_vriezePrimalFeasible_strictImprovement_of_closedZeroOccupation
       ε ≤ biasSlack (state, action) := by
     intro state hstate action
     have hle := hεle (state, action)
-    simpa only [guardedSlack, if_pos hstate] using hle
+    simpa only [guardedSlack, ite_eq_left hstate] using hle
   let decodedX : G.State → PMF (G.Act (!controller)) :=
     G.vriezeDecodeX controller q
   let decodedG : G.State → ℝ := G.vriezeDecodeG controller q

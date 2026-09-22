@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
@@ -42,17 +42,30 @@ theorem update_pureCoalitionOneDateNever_with_never
   by_cases hplayer : player = who
   · subst player
     rw [Function.update_self]
-    cases time <;>
-      simp [quittingPureCoalitionOneDateNeverProfile,
-        quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
-        quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-        quittingPureSetRoot, quittingSetAction, quittingAlwaysContinueProfile,
-        StochasticGame.stationaryBehaviorProfile]; rfl
+    cases time with
+    | zero =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+          quittingPureSetRoot, quittingSetAction]
+        rfl
+    | succ time =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+          quittingAlwaysContinueProfile,
+          StochasticGame.stationaryBehaviorProfile]
+        rfl
   · rw [Function.update_of_ne hplayer]
-    cases time <;>
-      simp [quittingPureCoalitionOneDateNeverProfile,
-        quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
-        quittingPureSetRoot, quittingSetAction, hplayer]
+    cases time with
+    | zero =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureSetRoot, quittingSetAction, hplayer]
+        rfl
+    | succ time =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile]
 
 /-- Replacing a coordinate by immediate Quit literally inserts it into the
 one-date coalition. -/
@@ -67,17 +80,30 @@ theorem update_pureCoalitionOneDateNever_with_quitNow
   by_cases hplayer : player = who
   · subst player
     rw [Function.update_self]
-    cases time <;>
-      simp [quittingPureCoalitionOneDateNeverProfile,
-        quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
-        quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-        quittingPureSetRoot, quittingSetAction, quittingAlwaysContinueProfile,
-        StochasticGame.stationaryBehaviorProfile]; rfl
+    cases time with
+    | zero =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+          quittingPureSetRoot, quittingSetAction]
+        rfl
+    | succ time =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
+          quittingAlwaysContinueProfile,
+          StochasticGame.stationaryBehaviorProfile]
+        rfl
   · rw [Function.update_of_ne hplayer]
-    cases time <;>
-      simp [quittingPureCoalitionOneDateNeverProfile,
-        quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
-        quittingPureSetRoot, quittingSetAction, hplayer]
+    cases time with
+    | zero =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile,
+          quittingPureSetRoot, quittingSetAction, hplayer]
+        rfl
+    | succ time =>
+        simp [quittingPureCoalitionOneDateNeverProfile,
+          quittingOneDateThenNeverProfile, quittingRootThenContinuationProfile]
 
 /-- The complete terminal semantic pair of a nonsingleton one-date coalition
 is the canonical pure-set membership-toggle pair. -/

@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -71,9 +71,9 @@ theorem abs_quittingRootQuitPayoff_sub_singletonReward_le_two_mul_opponentAbsorp
         hreward (quittingSingletonTerminal who) who
       have hflag :=
         (quittingOpponentQuitFlag_eq_true_iff who action).2 hopponentFull
-      simp only [difference, if_pos hopponentFull, quittingRootPayoff,
-        dif_pos hquit, singletonReward,
-        quittingSomeOpponentQuitsIndicator, hflag, if_true, mul_one]
+      simp only [difference, ite_eq_left hopponentFull, quittingRootPayoff,
+        dite_eq_left hquit, singletonReward,
+        quittingSomeOpponentQuitsIndicator, hflag, ite_true, mul_one]
       calc
         |reward ⟨quittingQuitters action, hquit⟩ who -
             reward (quittingSingletonTerminal who) who| ≤ M + M :=

@@ -130,7 +130,7 @@ theorem endpoint_le_of_rightContinuous_leftLimit_noUpwardJump_liminfSlope_nonpos
               f point < barrier point :=
           hcontinuous <|
             (isOpen_lt continuous_fst continuous_snd).mem_nhds hstrict
-        letI : (nhdsWithin frontier (Set.Ioo frontier stop)).NeBot :=
+        let : (nhdsWithin frontier (Set.Ioo frontier stop)).NeBot :=
           left_nhdsWithin_Ioo_neBot hfrontierStop
         obtain ⟨later, hlaterStrict, hlaterMem⟩ :=
           (heventually.and self_mem_nhdsWithin).exists

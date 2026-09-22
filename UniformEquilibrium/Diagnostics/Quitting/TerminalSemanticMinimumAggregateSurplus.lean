@@ -91,6 +91,7 @@ theorem exists_terminalOutcome_subset_singletonSurplus_ge_prescribed
   obtain ⟨mass, hmass, hmoment⟩ :=
     quittingTerminalSemanticCarrier_prescribed_mem_rewardMomentSet
       reward pair hpair
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   by_contra hnot
   push Not at hnot
   have hmassNe : mass ≠ 0 := by

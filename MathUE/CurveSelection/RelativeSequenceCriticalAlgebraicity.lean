@@ -39,7 +39,7 @@ theorem eval₂_map_parameterFractionRing_germ
         GermField) := by
   dsimp only
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective
   rw [MvPolynomial.eval₂_map]
@@ -119,10 +119,10 @@ theorem isAlgebraic_objectiveGerm_of_eventually_relativeNormalCriticality
             (Polynomial.evalRingHom (x n parameter))
             (y n) Q) : ℕ → ℝ) :
         GermField) := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   dsimp only
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective
   let yg : ι → GermField :=

@@ -37,7 +37,7 @@ namespace GameTheory
 namespace KernelGame
 namespace PrivateRecommendationTargetSeparator
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 abbrev Player := Bool
 abbrev Action (_ : Player) := Bool
@@ -271,7 +271,7 @@ noncomputable def sharpBernoulli : PMF Bool :=
       else ENNReal.ofReal (1 - sharpMix))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add sharpMix_nonneg (by linarith [sharpMix_le_one])]
       norm_num)
 

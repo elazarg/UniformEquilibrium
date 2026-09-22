@@ -185,7 +185,7 @@ theorem absorptionPathPreBoundaryPayoff_le_singletonReward_add_error_add_six_mul
         have htailBound : |absorptionPathPayoff reward path time player| ≤
             M := by
           unfold absorptionPathPayoff
-          rw [if_pos htimeMem, if_pos htimeTotal]
+          rw [ite_eq_left htimeMem, ite_eq_left htimeTotal]
           let weight := fun terminal : {S : Finset ι // S.Nonempty} ↦
             (path.1.value 1 terminal - path.1.value time terminal) /
               (1 - pathTotal path.1 time)

@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -442,7 +442,13 @@ theorem finFourDeletionNearCapData_tau_source_liveMass_eq
       rw [quittingPureTimeHazard_some_of_ne (by omega)]
     · simp [data.tau_eq, Function.update_of_ne hplayer]
   unfold quittingLiveMass
-  rw [(quittingGame reward).histDist_eq_of_profilesAgreeBefore hagree data.t le_rfl]
+  have hdist : (quittingGame reward).histDist data.sigma
+        (none : (quittingGame reward).State) data.t =
+      (quittingGame reward).histDist data.tau
+        (none : (quittingGame reward).State) data.t :=
+    (quittingGame reward).histDist_eq_of_profilesAgreeBefore
+      hagree data.t le_rfl
+  rw [hdist]
 
 theorem quittingStageCoalitionMass_singleton_le_one
     (reward : FinFourReward) (profile : (quittingGame reward).BehaviorProfile)

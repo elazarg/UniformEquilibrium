@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Data.Fintype.Pigeonhole
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Order.Filter.AtTopBot.Finite
 import Mathlib.Order.Filter.Cofinite
 import Mathlib.Tactic.Ring

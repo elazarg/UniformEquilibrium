@@ -100,11 +100,11 @@ theorem nonempty_quittingFiniteCDFCut
         have hclock : quittingRootSequenceClock roots (stage + 1) ≤
             quittingRootSequenceClock roots earlier :=
           monotone_quittingRootSequenceClock roots hearler
-        rw [if_neg (not_le_of_gt (hnext.trans_le hclock))]
+        rw [ite_eq_right (not_le_of_gt (hnext.trans_le hclock))]
       _ = ∑ earlier ∈ Finset.range (stage + 1), mass earlier := by
         apply Finset.sum_congr rfl
         intro earlier hearlier
-        rw [if_pos]
+        rw [ite_eq_left]
         rcases Nat.eq_zero_or_pos earlier with rfl | hearler0
         · exact (quittingRootSequenceClock_zero roots).le.trans htime
         · obtain ⟨previous, rfl⟩ :=
@@ -148,7 +148,7 @@ theorem nonempty_quittingFiniteCDFCut
               mass earlier else 0 := by
         apply Finset.sum_congr rfl
         intro earlier hearlier
-        rw [if_pos]
+        rw [ite_eq_left]
         have hearler : earlier ≤ stage + 1 := by
           have : earlier < stage + 2 := Finset.mem_range.mp hearlier
           omega

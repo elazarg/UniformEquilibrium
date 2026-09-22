@@ -78,14 +78,14 @@ theorem adjoin_singleton_D_ne_zero
     hx.aevalEquivField.trans
       (IntermediateField.equivOfEq
         (congrArg (IntermediateField.adjoin K) hrange))
-  letI : Algebra A S :=
+  let : Algebra A S :=
     (e.toRingHom.comp (algebraMap A F)).toAlgebra
   let eA : F ≃ₐ[A] S :=
     { e with
       commutes' := fun a => rfl }
-  letI : IsFractionRing A S :=
+  let : IsFractionRing A S :=
     IsFractionRing.of_algEquiv eA
-  haveI : IsScalarTower K A S := by
+  have : IsScalarTower K A S := by
     apply IsScalarTower.of_algebraMap_eq
     intro k
     change algebraMap K S k =
@@ -142,12 +142,12 @@ theorem isAlgebraic_of_kaehlerDifferential_eq_zero
       KaehlerDifferential.D K S qS ≠ 0 := by
     simpa [S, qS] using
       adjoin_singleton_D_ne_zero q htrans
-  letI : Algebra S L := S.toSubalgebra.toAlgebra
-  haveI : IsScalarTower K S L :=
+  let : Algebra S L := S.toSubalgebra.toAlgebra
+  have : IsScalarTower K S L :=
     IsScalarTower.of_algebraMap_eq fun _ => rfl
-  letI : Algebra.EssFiniteType S L :=
+  let : Algebra.EssFiniteType S L :=
     Algebra.EssFiniteType.of_comp K S L
-  letI : Algebra.FormallySmooth S L :=
+  let : Algebra.FormallySmooth S L :=
     Algebra.FormallySmooth.of_perfectField
   have hbaseChange :
       Function.Injective

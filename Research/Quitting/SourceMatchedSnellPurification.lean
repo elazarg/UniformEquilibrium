@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -145,7 +145,7 @@ theorem exists_sourceMatchedSnellCandidate_of_diffuse
     ∃ c : SourceMatchedSnellCandidate reward,
       Nonempty (SourceMatchedSnellSchedule c) ∧
         c.roots = quittingDynamicDebtTailRoots seam.tail := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let roots := quittingDynamicDebtTailRoots seam.tail
   let value : ℕ → Payoff ι := fun time => (seam.tail time).1.1
   obtain ⟨owner, eta, heta, hdates⟩ :=

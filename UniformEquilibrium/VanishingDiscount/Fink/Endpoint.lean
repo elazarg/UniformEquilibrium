@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 /-- The explicit error rate supplied by
 `exists_fast_approachOne_finkFixedPoint_family`. -/
@@ -93,8 +93,8 @@ theorem exists_uniformEquilibriumPayoff_of_fastFinkCorrectedCalendarSelection
       letI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
       G.HasFastFinkCorrectedCalendarSelection) :
     ∃ v : Payoff ι, G.IsUniformEquilibriumPayoff s₀ v := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   let payoffCoordinate : G.State × G.JointAct × ι → ℝ := fun p =>
     G.stagePayoff p.1 p.2.1 p.2.2
   obtain ⟨C, hC⟩ :=

@@ -172,7 +172,7 @@ theorem constantPayoff_mul_eq_stageValue {x : CyclicIndex → ℝ}
 
 theorem constantPayoff_eq_zero_of_continueMass_eq_one {x : CyclicIndex → ℝ}
     (hc : continueMass x = 1) (i : CyclicIndex) : constantPayoff x i = 0 := by
-  unfold constantPayoff; rw [if_neg (by rw [hc]; norm_num)]
+  unfold constantPayoff; rw [ite_eq_right (by rw [hc]; norm_num)]
 
 /-! ## Survival and the eventually-constant closed form -/
 
@@ -218,7 +218,7 @@ theorem hasSum_eventuallyConstantPlan (row0 π : CyclicIndex → ℝ) (i : Cycli
       have hval : continueMass row0 * stageValue π i * (1 - continueMass π)⁻¹ =
           continueMass row0 * constantPayoff π i := by
         unfold constantPayoff
-        rw [if_pos hc]
+        rw [ite_eq_left hc]
         have hne : (1 : ℝ) - continueMass π ≠ 0 := sub_ne_zero.mpr hc.ne'
         field_simp
       rwa [hval] at hgeom
@@ -320,7 +320,7 @@ theorem sigmaValue_le_constantPayoff_of_isGlobalApproxEquilibrium {x : CyclicInd
     continueMass_eq_zero_of_eq_one (apply_update_self x i 1)
   have hcp : constantPayoff (Function.update x i 1) i = sigmaValue scaledCyclicWeight x i := by
     unfold constantPayoff
-    rw [if_pos (by rw [hcm]; norm_num), hcm]
+    rw [ite_eq_left (by rw [hcm]; norm_num), hcm]
     unfold stageValue
     rw [apply_update_self, sigmaValue_scaledCyclicWeight_update_self]
     ring

@@ -18,7 +18,7 @@ bracket.  It does not assert nesting or convergence of the single shells.
 namespace Math.Topology
 
 open Filter Set
-open scoped Topology
+open scoped _root_.Topology
 
 noncomputable section
 

@@ -510,7 +510,7 @@ theorem finrank_quittingBlowupPoint_eq_eqRow_add_one
     Module.finrank ℝ (QuittingBlowupPoint ι) =
       Module.finrank ℝ (QuittingBlowupEqRow ι support → ℝ) + 1 := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   have hsubtypeLe :
       Fintype.card {who : ι // who ∈ support} ≤ Fintype.card ι :=
     Fintype.card_subtype_le _

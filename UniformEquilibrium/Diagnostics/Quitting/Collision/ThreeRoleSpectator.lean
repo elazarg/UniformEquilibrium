@@ -124,7 +124,7 @@ theorem exists_strict_owner_toggle_at_negative_gate
         minimal.witness.terminalExploitability hsolo hchi with
     htoggle | ⟨hnonempty, hgap, hcard⟩
   · exact htoggle
-  · letI : Nonempty (QuittingDeletedPlayer owner) := hnonempty
+  · let : Nonempty (QuittingDeletedPlayer owner) := hnonempty
     let reducedReward := quittingDeletePlayerReward minimal.reward owner
     have hgap' : HasTerminalExploitabilityGap reducedReward
         minimal.witness.terminalGap := hgap

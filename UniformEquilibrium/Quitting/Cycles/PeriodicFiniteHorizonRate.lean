@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -73,11 +73,14 @@ theorem abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro
     |(quittingGame reward).finiteAveragePayoff none horizon profile player -
         quittingTerminalPayoff reward profile player| ≤
       bound * quittingOpponentLiveCesaro reward profile player horizon := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
+  let : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
     fun _ ↦ inferInstanceAs (Finite Bool)
-  rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage :=
+    (quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff
+      profile (show (quittingGame reward).State from none) player horizon
+  rw [haverage]
   have hhorizonReal : (horizon : ℝ) ≠ 0 := by
     exact_mod_cast (Nat.ne_of_gt hhorizon)
   have hrewrite :

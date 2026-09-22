@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Positive absorption identifies the actual stationary terminal coalition
 law with the conditional one-row product law. -/

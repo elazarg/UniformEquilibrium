@@ -19,6 +19,8 @@ and the retained origin edge is not called renewable.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Filter
@@ -90,8 +92,10 @@ private theorem literalRootStack_outcomeMass_le_one_sub_survival_mul
       ∑ other ∈ (Finset.univ.erase outcome),
         quittingTerminalOutcomeMass reward prefixed other :=
     Finset.sum_le_sum fun other _ ↦ hlower other
-  have hp := (quittingTerminalOutcomeMass_mem_stdSimplex reward prefixed).2
-  have ht := (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+  have hp := (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward prefixed)).2
+  have ht := (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
   have hmem : outcome ∈ (Finset.univ : Finset (QuittingTerminalOutcome (Fin 4))) :=
     Finset.mem_univ outcome
   have hpSplit := Finset.sum_erase_add Finset.univ

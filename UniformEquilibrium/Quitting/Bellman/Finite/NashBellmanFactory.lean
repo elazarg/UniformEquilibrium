@@ -122,7 +122,7 @@ theorem quittingFiniteNashBellmanState_related
   have htime0 : time ≤ cutoff := htime.le
   have htime1 : time + 1 ≤ cutoff := by omega
   unfold quittingFiniteNashBellmanState
-  rw [if_pos htime0, if_pos htime1]
+  rw [ite_eq_left htime0, ite_eq_left htime1]
   have hsub : cutoff - time = (cutoff - (time + 1)) + 1 := by omega
   rw [hsub, compactSerialIteratedPredecessor_succ]
   exact (canonicalQuittingNashBellmanSerialRelation reward).predecessor_related _

@@ -100,7 +100,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -185,7 +185,7 @@ theorem quittingRootDeletedContinueMass_le_of_ne
     ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one (forced player) false)
   have hrest1 :
       (∏ player ∈ (Finset.univ.erase marked : Finset ι), continueProbability player) ≤ 1 :=
-    Finset.prod_le_one (fun player _ => hfactor0 player) (fun player _ => hfactor1 player)
+    Finset.prod_le_one₀ (fun player _ => hfactor0 player) (fun player _ => hfactor1 player)
   have hsplit :
       (∏ player, continueProbability player) =
         (∏ player ∈ (Finset.univ.erase marked : Finset ι), continueProbability player) *
@@ -215,7 +215,7 @@ theorem quittingOpponentSurvivalWeight_le_quittingHazardSurvival_ownHazard
   unfold quittingOpponentSurvivalWeight
   rw [quittingHazardSurvival_quittingRootSequenceOwnHazard]
   simp only [Nat.zero_add]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset _
     exact quittingStationaryContinueMass_nonneg _
   · intro offset _

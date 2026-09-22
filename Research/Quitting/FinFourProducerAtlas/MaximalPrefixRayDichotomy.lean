@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Set
+open Filter _root_.Math.Probability Set
 open QuittingSureSetOwnerRepair
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
@@ -425,9 +425,18 @@ def rayBaseOutcomeLaw
     PMF (QuittingTerminalOutcome (Fin 4)) :=
   (Math.ProbabilityMassFunction.stdSimplexEquiv
     (α := QuittingTerminalOutcome (Fin 4))).symm
-      ⟨quittingTerminalOutcomeMass reward (packet.rayBaseProfile index),
-        quittingTerminalOutcomeMass_mem_stdSimplex reward
-          (packet.rayBaseProfile index)⟩
+      (by
+        have hmass := quittingTerminalOutcomeMass_mem_stdSimplex reward
+          (packet.rayBaseProfile index)
+        rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
+        refine ⟨Finsupp.equivFunOnFinite.symm
+          (quittingTerminalOutcomeMass reward (packet.rayBaseProfile index)),
+          ?_, ?_⟩
+        · intro outcome
+          rw [Finsupp.equivFunOnFinite_symm_apply_apply]
+          exact hmass.1 outcome
+        · rw [Finsupp.equivFunOnFinite_symm_sum]
+          exact hmass.2)
 
 theorem rayBaseOutcomeLaw_apply_toReal
     (packet : FinFourOwnerCompressedMinimumReturnForcedPairPacket
@@ -438,7 +447,10 @@ theorem rayBaseOutcomeLaw_apply_toReal
         outcome := by
   simp [rayBaseOutcomeLaw,
     Math.ProbabilityMassFunction.stdSimplexEquiv_symm_apply]
-  rfl
+  have hmass := quittingTerminalOutcomeMass_mem_stdSimplex reward
+    (packet.rayBaseProfile index)
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
+  exact hmass.1 outcome
 
 /-- The complete outcome law of the pure pair is the point mass at its
 displayed terminal; the counterfactual continuation contributes no mass. -/

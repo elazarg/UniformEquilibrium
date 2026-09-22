@@ -104,8 +104,8 @@ theorem exists_analyticPuncturedReachableClass
           (fun t => (kernel t source destination).toReal) 0) :
     Nonempty (AnalyticPuncturedReachableClass kernel initial) := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
-  letI : DecidableEq S := Classical.decEq S
+  let : Fintype S := Fintype.ofFinite S
+  let : DecidableEq S := Classical.decEq S
   have eventuallySupport :=
     eventually_kernel_support_iff_analyticPuncturedSupport
       kernel hanalytic

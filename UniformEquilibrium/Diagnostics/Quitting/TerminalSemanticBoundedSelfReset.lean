@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Finset Math.Probability
+open Filter Finset _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -285,7 +285,7 @@ theorem exists_bounded_quittingPureTimeSelfResetChain
               · subst other
                 rw [step.target_eq, htime, Function.update_self]
               · rw [step.target_eq]
-                simp only [Function.update, dif_neg heq]
+                simp only [Function.update, dite_eq_right heq]
                 exact hnever other fun hmem =>
                   hother (Finset.mem_erase.mpr ⟨heq, hmem⟩)
             obtain ⟨length, finalProfile, finalPlayer, stop, tail, hlength⟩ :=
@@ -342,7 +342,8 @@ theorem exists_terminal_mass_ge_inv_card_of_pureTimePlayer
   have hsum : ∑ terminal : {S : Finset ι // S.Nonempty},
       quittingTerminalOutcomeMass reward profile (some terminal) = 1 := by
     have hsimplex :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+      (GameTheory.Math.Probability.mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
     rw [Fintype.sum_option] at hsimplex
     rw [quittingTerminalOutcomeMass_none_eq_zero_of_pureTimePlayer
       reward profile who stop hstrategy, zero_add] at hsimplex

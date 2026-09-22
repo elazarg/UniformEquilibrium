@@ -37,7 +37,7 @@ theorem exists_active_strictSingletonSurplus
     ∃ owner, 0 < packet.mass owner ∧
       packet.target owner <
         quittingSingletonMixture reward packet.mass owner := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   by_contra hstrict
   push Not at hstrict
   have hactive : ∀ owner, 0 < packet.mass owner →

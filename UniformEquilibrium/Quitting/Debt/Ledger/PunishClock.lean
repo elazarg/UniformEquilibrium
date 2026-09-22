@@ -101,7 +101,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -293,7 +293,7 @@ theorem le_quittingLedger_quittingLedgerStoppingIndex
     ε ≤ quittingLedger reward roots who
       (quittingLedgerStoppingIndex reward roots who ε) := by
   unfold quittingLedgerStoppingIndex
-  rw [dif_pos hexists]
+  rw [dite_eq_left hexists]
   exact Nat.find_spec hexists
 
 /-- **First crossing, unconditionally.**  Strictly before the ledger clock
@@ -431,7 +431,7 @@ theorem quittingPunishSwitchIndex_eq_plannedSurvival_quittingPunishTarget
         (quittingPunishTarget reward roots ε threshold) threshold := by
   classical
   unfold quittingPunishTarget
-  rw [dif_pos hsharp]
+  rw [dite_eq_left hsharp]
   exact hsharp.choose_spec
 
 /-- **The punish target achieves the switch stage.**  In either branch the
@@ -458,7 +458,7 @@ theorem quittingPunishSwitchIndex_eq_min_quittingPunishTarget [Nonempty ι]
           (min_le_right _ _))
     · exact (min_le_right _ _).trans hachieved.ge
   · unfold quittingPunishTarget
-    rw [dif_neg hsharp]
+    rw [dite_eq_right hsharp]
     exact (Finset.exists_mem_eq_inf' (Finset.univ_nonempty (α := ι)) fun who =>
       min (quittingLedgerStoppingIndex reward roots who ε)
         (quittingRootSequencePlannedSurvivalStoppingIndex roots who

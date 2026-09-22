@@ -62,7 +62,7 @@ noncomputable section
 namespace GameTheory
 namespace RegularTournamentFiveSeed
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-! ## The missing orbit member -/
 
@@ -235,7 +235,7 @@ theorem not_isZeroQuittingRootEndpointNash_soloMixedRoot_zero
   have hfalse : 0 ≤ (marginal false).toReal := ENNReal.toReal_nonneg
   have htrue : 0 ≤ (marginal true).toReal := ENNReal.toReal_nonneg
   rw [hpair, hsolo, hpreempt] at hcontinue
-  simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul] at hcontinue
+  simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one, one_mul] at hcontinue
   rcases le_or_gt 0 (tail 1) with hsign | hsign
   · nlinarith [hcontinue]
   · nlinarith [hcontinue]

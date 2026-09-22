@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.Probability.DiscreteHazard
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

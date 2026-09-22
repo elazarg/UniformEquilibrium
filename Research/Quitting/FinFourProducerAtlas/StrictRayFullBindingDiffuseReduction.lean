@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FinFourProducerAtlas.StrictRayTailNormalizedCapFlow
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Compact full-binding reduction for a strict Fin4 ray
@@ -26,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math Math.LinearProgramming Set
+open Filter _root_.Math Math.LinearProgramming Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -62,16 +63,22 @@ theorem sum_tailAverage
 /-- Current marginal hazards as a literal standard-simplex point. -/
 def currentHazardSimplex
     (ray : QuittingForwardExactCapTail reward) (time : ℕ) :
-    stdSimplex ℝ ι :=
-  ⟨ray.currentHazard time, ray.currentHazard_nonneg time,
-    ray.sum_currentHazard time⟩
+    Convexity.StdSimplex ℝ ι := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (ray.currentHazard time), ?_, ?_⟩
+  · intro who
+    exact ray.currentHazard_nonneg time who
+  · rw [Finsupp.sum_fintype _ _ (by simp)]
+    exact ray.sum_currentHazard time
 
 /-- The remaining-tail hazard barycenter as a literal simplex point. -/
 def tailAverageSimplex
     (ray : QuittingForwardExactCapTail reward) (time : ℕ) :
-    stdSimplex ℝ ι :=
-  ⟨ray.tailAverage time, ray.tailAverage_nonneg time,
-    ray.sum_tailAverage time⟩
+    Convexity.StdSimplex ℝ ι := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (ray.tailAverage time), ?_, ?_⟩
+  · intro who
+    exact ray.tailAverage_nonneg time who
+  · rw [Finsupp.sum_fintype _ _ (by simp)]
+    exact ray.sum_tailAverage time
 
 /-- The renewal ratio as a point of the compact unit interval. -/
 def renewalRatioPoint
@@ -83,7 +90,7 @@ def renewalRatioPoint
 /-- Compact state carrying the three normalized quantities used by the
 strict-ray first-order limit. -/
 abbrev CompactHazardState :=
-  stdSimplex ℝ ι × stdSimplex ℝ ι × Set.Icc (0 : ℝ) 1
+  Convexity.StdSimplex ℝ ι × Convexity.StdSimplex ℝ ι × Set.Icc (0 : ℝ) 1
 
 /-- The normalized compact state at one actual ray date. -/
 def compactHazardState
@@ -108,11 +115,11 @@ variable {ray : QuittingForwardExactCapTail reward}
 
 /-- Limiting current marginal-hazard direction. -/
 def currentLimit (cluster : CompactHazardCluster ray) : ι → ℝ :=
-  cluster.limit.1.val
+  cluster.limit.1.weights
 
 /-- Limiting remaining-tail hazard barycenter. -/
 def tailLimit (cluster : CompactHazardCluster ray) : ι → ℝ :=
-  cluster.limit.2.1.val
+  cluster.limit.2.1.weights
 
 /-- Limiting renewal ratio. -/
 def ratioLimit (cluster : CompactHazardCluster ray) : ℝ :=
@@ -123,8 +130,8 @@ theorem current_tendsto
     Tendsto (fun rank ↦ ray.currentHazard (cluster.subseq rank) who)
       atTop (nhds (cluster.currentLimit who)) := by
   have hcontinuous : Continuous
-      (fun state : CompactHazardState (ι := ι) ↦ state.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp continuous_fst
+      (fun state : CompactHazardState (ι := ι) ↦ state.1.weights who) :=
+    (Convexity.StdSimplex.continuous_coord who).comp continuous_fst
   simpa [compactHazardState, currentHazardSimplex, currentLimit,
     Function.comp_def] using
       hcontinuous.continuousAt.tendsto.comp cluster.state_tendsto
@@ -134,8 +141,8 @@ theorem tail_tendsto
     Tendsto (fun rank ↦ ray.tailAverage (cluster.subseq rank) who)
       atTop (nhds (cluster.tailLimit who)) := by
   have hcontinuous : Continuous
-      (fun state : CompactHazardState (ι := ι) ↦ state.2.1.val who) :=
-    ((continuous_apply who).comp continuous_subtype_val).comp
+      (fun state : CompactHazardState (ι := ι) ↦ state.2.1.weights who) :=
+    (Convexity.StdSimplex.continuous_coord who).comp
       (continuous_fst.comp continuous_snd)
   simpa [compactHazardState, tailAverageSimplex, tailLimit,
     Function.comp_def] using
@@ -154,20 +161,20 @@ theorem ratio_tendsto (cluster : CompactHazardCluster ray) :
 theorem currentLimit_nonneg
     (cluster : CompactHazardCluster ray) (who : ι) :
     0 ≤ cluster.currentLimit who :=
-  cluster.limit.1.property.1 who
+  cluster.limit.1.weights_nonneg who
 
 theorem currentLimit_sum (cluster : CompactHazardCluster ray) :
     ∑ who, cluster.currentLimit who = 1 :=
-  cluster.limit.1.property.2
+  cluster.limit.1.total_of_fintype
 
 theorem tailLimit_nonneg
     (cluster : CompactHazardCluster ray) (who : ι) :
     0 ≤ cluster.tailLimit who :=
-  cluster.limit.2.1.property.1 who
+  cluster.limit.2.1.weights_nonneg who
 
 theorem tailLimit_sum (cluster : CompactHazardCluster ray) :
     ∑ who, cluster.tailLimit who = 1 :=
-  cluster.limit.2.1.property.2
+  cluster.limit.2.1.total_of_fintype
 
 theorem ratioLimit_nonneg (cluster : CompactHazardCluster ray) :
     0 ≤ cluster.ratioLimit :=

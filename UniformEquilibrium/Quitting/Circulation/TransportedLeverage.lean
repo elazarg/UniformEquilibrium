@@ -88,7 +88,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.MaxAffineStopping
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.MaxAffineStopping
 
 /-! ## Part 0: the block deviation operator is the max-affine system
 
@@ -336,7 +336,7 @@ theorem blockSurvival_le_one (C : ℕ → ℝ) (start fuel : ℕ)
     (hC1 : ∀ offset, offset < fuel → C (start + offset) ≤ 1) :
     blockSurvival C start fuel ≤ 1 := by
   unfold blockSurvival
-  refine Finset.prod_le_one (fun offset hoffset => hC0 offset (Finset.mem_range.mp hoffset))
+  refine Finset.prod_le_one₀ (fun offset hoffset => hC0 offset (Finset.mem_range.mp hoffset))
     (fun offset hoffset => hC1 offset (Finset.mem_range.mp hoffset))
 
 /-- **The coarse absorption bound, deliverable (2).**  `L^val ≤ 2 C_P (ρ_B +

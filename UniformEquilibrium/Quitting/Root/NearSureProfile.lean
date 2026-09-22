@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -153,8 +153,8 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_other_s
     Function.update_comm (f := root) (a := changed) (b := who)
       hother (PMF.pure true)
       (deviation 0 ((quittingGame reward).emptyHist none))]
-  simpa [Function.update_of_ne hother] using
-    (abs_quittingRootExpectedPayoff_forceQuit_sub_le
+  have hbound :=
+    abs_quittingRootExpectedPayoff_forceQuit_sub_le
       reward
       (quittingRootDeviationContinuationPayoff
         reward continuation who deviation)
@@ -162,7 +162,20 @@ theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_other_s
         (deviation 0 ((quittingGame reward).emptyHist none)))
       changed who hreward
       (fun player => abs_quittingRootDeviationContinuationPayoff_le
-        reward continuation who deviation player hreward))
+        reward continuation who deviation player hreward)
+  have hroot :
+      Function.update root who
+          (deviation 0 ((quittingGame reward).emptyHist
+            (show (quittingGame reward).State from none))) changed =
+        root changed :=
+    Function.update_of_ne hother _ _
+  have hrhs :
+      2 * M * ((Function.update root who
+          (deviation 0 ((quittingGame reward).emptyHist
+            (show (quittingGame reward).State from none))) changed) false).toReal =
+        2 * M * (root changed false).toReal := by
+    rw [hroot]
+  exact hbound.trans_eq hrhs
 
 /-- For the forced quitter itself, updating by any fixed full behavior
 deviation erases the root perturbation exactly. -/
@@ -183,7 +196,13 @@ theorem quittingTerminalPayoff_update_rootThenContinuation_forceQuit_self_eq
           changed deviation) changed := by
   rw [quittingTerminalPayoff_update_rootThenContinuation_eq,
     quittingTerminalPayoff_update_rootThenContinuation_eq]
-  simp only [Function.update_idem]
+  apply congrArg (fun updatedRoot =>
+    quittingRootExpectedPayoff reward
+      (quittingRootDeviationContinuationPayoff
+        reward continuation changed deviation) updatedRoot changed)
+  exact (Function.update_idem (a := changed) (PMF.pure true)
+    (deviation 0 ((quittingGame reward).emptyHist
+      (show (quittingGame reward).State from none))) root).symm
 
 /-- Uniform deviation-payoff perturbation bound, including the forced quitter. -/
 theorem abs_quittingTerminalPayoff_update_rootThenContinuation_forceQuit_sub_le

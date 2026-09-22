@@ -142,7 +142,8 @@ theorem analyticAt_implicitFunctionOfBivariate_complex
     simpa using hinv
   have h :=
     analyticAt_implicitFunctionOfProdDomain_complex hstrict hf hinv'
-  simpa [implicitFunctionOfBivariate_def, hstrict] using h
+  change AnalyticAt ℂ (hstrict.implicitFunctionOfProdDomain _) u.1
+  exact h
 
 /-- Evaluation of a polynomial in `Y` whose coefficients are polynomials in
 the complex parameter `X`. -/
@@ -179,9 +180,9 @@ theorem coeff_complexBivDerivX
   rw [complexBivDerivX, Polynomial.finsetSum_coeff]
   by_cases hj : j < P.natDegree + 1
   · rw [Finset.sum_eq_single j]
-    · rw [Polynomial.coeff_C_mul_X_pow, if_pos rfl]
+    · rw [Polynomial.coeff_C_mul_X_pow, ite_eq_left rfl]
     · intro i _ hij
-      rw [Polynomial.coeff_C_mul_X_pow, if_neg (Ne.symm hij)]
+      rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right (Ne.symm hij)]
     · intro hj'
       exact absurd (Finset.mem_range.mpr hj) hj'
   · have hcoeff0 : P.coeff j = 0 :=
@@ -191,7 +192,7 @@ theorem coeff_complexBivDerivX
     have hij : i ≠ j := by
       simp only [Finset.mem_range] at hi
       omega
-    rw [Polynomial.coeff_C_mul_X_pow, if_neg (Ne.symm hij)]
+    rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right (Ne.symm hij)]
 
 theorem complexBivDerivX_natDegree_le
     (P : Polynomial (Polynomial ℂ)) :
@@ -800,7 +801,7 @@ theorem isRoot_of_isWeierstrassFactorization'
     (s : PowerSeries K) (hs0 : s.constantCoeff = 0)
     (hs : f.IsRoot s) :
     g.IsRoot s := by
-  letI : UniformSpace K := ⊥
+  let : UniformSpace K := ⊥
   have hsub : PowerSeries.HasSubst s :=
     PowerSeries.HasSubst.of_constantCoeff_zero' hs0
   have heval : PowerSeries.HasEval s := hsub.hasEval
@@ -828,7 +829,7 @@ theorem derivative_isRoot_of_isWeierstrassFactorization'
     (hs : f.IsRoot s)
     (hsD : f.derivative.IsRoot s) :
     g.derivative.IsRoot s := by
-  letI : UniformSpace K := ⊥
+  let : UniformSpace K := ⊥
   have hsub : PowerSeries.HasSubst s :=
     PowerSeries.HasSubst.of_constantCoeff_zero' hs0
   have heval : PowerSeries.HasEval s := hsub.hasEval
@@ -1639,7 +1640,7 @@ theorem exists_commonRamified_analyticBranches
                 (Polynomial.mapRingHom Complex.ofRealHom))
               x (γ x) = 0) := by
   classical
-  letI : Fintype J := Fintype.ofFinite J
+  let : Fintype J := Fintype.ofFinite J
   have hprimitive : ∀ j, (Q j).IsPrimitive :=
     fun j => (hQirr j).isPrimitive (hQdegree j)
   choose f u H using fun j =>

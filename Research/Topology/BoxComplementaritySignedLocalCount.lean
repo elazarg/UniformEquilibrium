@@ -41,7 +41,7 @@ theorem boxComplementarityCompleteSimplexSignedWeight_eq
     boxComplementarityCompleteSimplexSignedWeight problem p hp vertices =
       (completeSimplexEquivKuhnEndpointLabeledSimplex problem p hp
         ⟨vertices, hcomplete⟩).signedWeight := by
-  simp only [boxComplementarityCompleteSimplexSignedWeight, dif_pos hcomplete]
+  simp only [boxComplementarityCompleteSimplexSignedWeight, dite_eq_left hcomplete]
 
 /-- Disjoint local regions have additive integer counts at the same mesh. -/
 theorem boxComplementarityLocalSignedCount_union_of_disjoint
@@ -145,7 +145,7 @@ theorem boxComplementarityLocalSignedCount_eq_endpoint_anchor_sum
       simpa only [completeSet, Finset.mem_filter, Finset.mem_univ, true_and] using hnot
     have hnotAnchor : ¬boxComplementarityCompleteSimplexAnchorIn
         problem p hp region vertices := fun h => hnotComplete h.1
-    simp only [weight, if_neg hnotAnchor]
+    simp only [weight, ite_eq_right hnotAnchor]
   unfold boxComplementarityLocalSignedCount boxComplementarityLocalCompleteSimplices
   rw [Finset.sum_filter]
   change (∑ vertices, weight vertices) = _
@@ -198,6 +198,6 @@ theorem boxComplementarityLocalSignedCount_univ
       problem p hp Set.univ endpoint.1 :=
     ⟨((completeSimplexEquivKuhnEndpointLabeledSimplex problem p hp).symm endpoint).2,
       Set.mem_univ _⟩
-  exact if_pos hcomplete
+  exact ite_eq_left hcomplete
 
 end Math

@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourCounterfactualSuffixNoGo
 
-open Math Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 abbrev Player := Fin 4
 
@@ -101,7 +101,7 @@ private theorem firstStopping_payoff_of_two_active
       if (∃ other, times other ≠ none) then unitPayoff else 0 := by
   classical
   by_cases hexists : ∃ other, times other ≠ none
-  · simp only [if_pos hexists]
+  · simp only [ite_eq_left hexists]
     obtain ⟨active, hactiveTime⟩ := hexists
     have hearliestNe : quittingEarliestStoppingValue times ≠ ⊤ := by
       intro hearliest
@@ -114,7 +114,7 @@ private theorem firstStopping_payoff_of_two_active
         Finset.inf_le (Finset.mem_univ active)
       rw [hearliest, htime] at hle
       simp [quittingStoppingTimeValue] at hle
-    rw [quittingFirstStoppingOutcome, if_neg hearliestNe]
+    rw [quittingFirstStoppingOutcome, ite_eq_right hearliestNe]
     change reward _ = unitPayoff
     apply reward_eq_unitPayoff_of_subset_pair
     intro other hother
@@ -126,7 +126,7 @@ private theorem firstStopping_payoff_of_two_active
       rw [hnone, quittingStoppingTimeValue] at hvalue
       exact hearliestNe hvalue.symm
     simpa [Finset.mem_insert, Finset.mem_singleton] using hactive other hotherFinite
-  · simp only [if_neg hexists]
+  · simp only [ite_eq_right hexists]
     have hnever : times = fun _ => none := by
       funext who
       by_contra hne
@@ -167,7 +167,7 @@ private theorem support_two_active
     intro hzero
     rw [Finset.prod_eq_zero (Finset.mem_univ other) hzero] at hproduct
     exact hproduct rfl
-  rw [hmarginal, PMF.pure_apply, if_neg hother] at hfactor
+  rw [hmarginal, PMF.pure_apply, ite_eq_right hother] at hfactor
   exact hfactor rfl
 
 private theorem halfStopLaw_map_isSome (time : Nat) :

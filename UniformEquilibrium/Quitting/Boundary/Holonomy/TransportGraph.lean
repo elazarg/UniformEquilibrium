@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Slopes
+import Maths.Multitubes.MaxAffine.Slopes
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Transport
 
 /-!
@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Math.MaxAffineTransport
+open _root_.Math _root_.Math.Probability Maths.MaxAffineTransport
 
 universe uV uE
 
@@ -40,7 +40,7 @@ times respectively. -/
 structure QuittingAnchoredBoundaryTransportGraph
     (anchor : QuittingCalibratedTerminalAnchor reward)
     (V : Type uV) (E : Type uE) where
-  graph : EdgeGraph V E
+  graph : Maths.EdgeGraph V E
   time : V → ℕ
   block : E → QuittingAnchoredBoundaryBlock anchor
   source_time : ∀ edge,
@@ -128,20 +128,20 @@ theorem closedWalk_edges_eq_nil
 abbrev UnitSurvivalEdge
     (diagram : QuittingAnchoredBoundaryTransportGraph anchor V E)
     (who : ι) :=
-  Math.MaxAffineTransport.UnitSlopeEdge (diagram.bestResponseLabel who)
+  Maths.MaxAffineTransport.UnitSlopeEdge (diagram.bestResponseLabel who)
 
 /-- The subgraph of realized blocks with unit opponent survival. -/
 def unitSurvivalGraph
     (diagram : QuittingAnchoredBoundaryTransportGraph anchor V E)
-    (who : ι) : EdgeGraph V (diagram.UnitSurvivalEdge who) :=
-  Math.MaxAffineTransport.unitSlopeGraph diagram.graph
+    (who : ι) : Maths.EdgeGraph V (diagram.UnitSurvivalEdge who) :=
+  Maths.MaxAffineTransport.unitSlopeGraph diagram.graph
     (diagram.bestResponseLabel who)
 
 /-- The affine shift on a unit-survival boundary edge. -/
 def unitSurvivalShift
     (diagram : QuittingAnchoredBoundaryTransportGraph anchor V E)
     (who : ι) (edge : diagram.UnitSurvivalEdge who) : ℝ :=
-  Math.MaxAffineTransport.unitSlopeShift
+  Maths.MaxAffineTransport.unitSlopeShift
     (diagram.bestResponseLabel who) edge
 
 /-- The unit-survival subgraph is itself a literal boundary transport graph. -/
@@ -165,7 +165,7 @@ theorem exists_bestResponseLaxSection_iff_unitSurvivalCycles_nonpos
     (∃ potential : V → ℝ,
       IsLaxSection diagram.graph (diagram.bestResponseLabel who) potential) ↔
       ∀ (base : V) (cycle : (diagram.unitSurvivalGraph who).Walk base base),
-        Math.MaxPlusPotential.walkWeight
+        Maths.MaxPlusPotential.walkWeight
           (diagram.unitSurvivalShift who) cycle ≤ 0 := by
   exact exists_isLaxSection_iff_unitSlopeCycles_nonpos_of_slope_le_one
     (diagram.bestResponseLabel_slope_le_one who)
@@ -183,7 +183,7 @@ theorem exists_bestResponseLaxSection
   have hnil := (diagram.unitSurvivalDiagram who).closedWalk_edges_eq_nil
     base cycle
   change cycle.edges = [] at hnil
-  unfold Math.MaxPlusPotential.walkWeight
+  unfold Maths.MaxPlusPotential.walkWeight
   rw [hnil]
   rfl
 

@@ -22,7 +22,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {G : StochasticGame Bool} [Finite G.State]
   [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)]
@@ -48,8 +48,8 @@ theorem abs_stagePayoff_noncontroller_le_vriezeBound
     (state : G.State) (joint : G.JointAct) :
     |G.stagePayoff state joint (!controller)| ≤
       G.vriezeNoncontrollerPayoffBound controller := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.JointAct := Fintype.ofFinite G.JointAct
   calc
     |G.stagePayoff state joint (!controller)| ≤
         ∑ candidate : G.JointAct,

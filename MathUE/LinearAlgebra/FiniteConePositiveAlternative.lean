@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.FiniteInequality.Basic
+import Maths.Multitubes.FiniteInequality.Basic
 import MathUE.LinearAlgebra.FiniteConicSparseCombination
 
 /-!
@@ -175,7 +175,7 @@ theorem xor_strictPositiveNonpositiveCovector_or_sparseNonnegativeConeImprovemen
   let rowFloor : Sum Coordinate Generator → ℝ
     | .inl _ => 1
     | .inr _ => 0
-  rcases Math.exists_potential_or_nonnegative_incompatibility
+  rcases Maths.exists_potential_or_nonnegative_incompatibility
       rowVector rowFloor with hseparator | hcombination
   · left
     obtain ⟨weight, hweight⟩ := hseparator

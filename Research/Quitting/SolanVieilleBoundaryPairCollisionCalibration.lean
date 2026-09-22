@@ -58,7 +58,7 @@ theorem quittingPairCollisionNondegenerate_boundaryReward :
     QuittingPairCollisionNondegenerate boundaryReward := by
   intro who owner hne
   rw [quittingPairCollisionIncrement_boundaryReward_eval,
-    if_neg (fun h => hne h.symm)]
+    ite_eq_right (fun h => hne h.symm)]
   split_ifs <;> norm_num
 
 end SolanVieilleBoundary

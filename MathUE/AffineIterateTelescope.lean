@@ -121,8 +121,13 @@ theorem iterateWeight_le_one {f : α → α} {coefficient : α → R}
   | zero => intro a; simp
   | succ n ih =>
       intro a
-      exact mul_le_one₀ (hcoefficient1 a) (iterateWeight_nonneg hcoefficient0 n (f a))
-        (ih (f a))
+      calc
+        coefficient a * iterateWeight f coefficient (f a) n ≤
+            1 * iterateWeight f coefficient (f a) n :=
+          mul_le_mul_of_nonneg_right (hcoefficient1 a)
+            (iterateWeight_nonneg hcoefficient0 n (f a))
+        _ ≤ 1 * 1 := mul_le_mul_of_nonneg_left (ih (f a)) zero_le_one
+        _ = 1 := mul_one 1
 
 /-- Nonnegative coefficients and nonnegative increments keep the accumulation
 nonnegative. -/

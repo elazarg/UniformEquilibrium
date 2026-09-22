@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -43,7 +43,7 @@ theorem quittingRootDeletedContinueMass_mul_le_stationaryContinueMass
     quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingStationaryContinueMass_eq_prod_continueProbability,
     ← Finset.prod_mul_distrib]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro player _
     exact mul_nonneg ENNReal.toReal_nonneg ENNReal.toReal_nonneg
   · intro player _
@@ -71,7 +71,7 @@ theorem quittingOpponentSurvivalWeight_mul_le_jointSurvivalWeight
     quittingOpponentSurvivalWeight,
     quittingJointSurvivalWeight_eq_prod,
     ← Finset.prod_mul_distrib]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset _
     exact mul_nonneg
       (quittingStationaryContinueMass_nonneg

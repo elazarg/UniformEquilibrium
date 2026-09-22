@@ -68,7 +68,7 @@ namespace GameTheory
 
 namespace QuittingTwinMerging
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -180,10 +180,10 @@ theorem quittingRootPayoff_twin_true_true
   have hbase := not_mem_twinBase_left d e htwin.ne a
   have hbase' := not_mem_twinBase_right d e a
   unfold quittingRootPayoff
-  rw [dif_pos (by
+  rw [dite_eq_left (by
       rw [quittingQuitters_setTwins_true_true d e htwin.ne a]
       exact Finset.insert_nonempty _ _),
-    dif_pos (by
+    dite_eq_left (by
       rw [quittingQuitters_setTwins_true_false d e htwin.ne a]
       exact Finset.insert_nonempty _ _)]
   have hTT := quittingQuitters_setTwins_true_true d e htwin.ne a
@@ -212,10 +212,10 @@ theorem quittingRootPayoff_twin_false_true
   have hbase := not_mem_twinBase_left d e htwin.ne a
   have hbase' := not_mem_twinBase_right d e a
   unfold quittingRootPayoff
-  rw [dif_pos (by
+  rw [dite_eq_left (by
       rw [quittingQuitters_setTwins_false_true d e htwin.ne a]
       exact Finset.insert_nonempty _ _),
-    dif_pos (by
+    dite_eq_left (by
       rw [quittingQuitters_setTwins_true_false d e htwin.ne a]
       exact Finset.insert_nonempty _ _)]
   have hFT := quittingQuitters_setTwins_false_true d e htwin.ne a
@@ -245,8 +245,8 @@ theorem quittingRootExpectedPayoff_twin_step
     funext a
     unfold quittingRootPayoff
     by_cases h : (quittingQuitters a).Nonempty
-    · rw [dif_pos h, dif_pos h, ← htwin.row_eq]
-    · rw [dif_neg h, dif_neg h, htail]
+    · rw [dite_eq_left h, dite_eq_left h, ← htwin.row_eq]
+    · rw [dite_eq_right h, dite_eq_right h, htail]
   rw [hpt]
 
 /-! ## The base case: one twin quitting for sure -/
@@ -359,13 +359,19 @@ theorem quittingRootSequenceUpdate_twinCoupledDeviation
         (quittingBehaviorLiveHazard reward
           (twinCoupledDeviation reward d roots date)) =
       sureQuitAt d roots date := by
-  funext time
-  unfold quittingRootSequenceUpdate sureQuitAt quittingBehaviorLiveHazard
-    twinCoupledDeviation
-  by_cases h : time = date
-  · rw [if_pos h, if_pos h]
+  have hhazard :
+      quittingBehaviorLiveHazard reward
+          (twinCoupledDeviation reward d roots date) =
+        fun time => if time = date then PMF.pure true else roots time d := by
+    funext time
     rfl
-  · rw [if_neg h, if_neg h, Function.update_eq_self]
+  rw [hhazard]
+  funext time who
+  unfold quittingRootSequenceUpdate sureQuitAt
+  by_cases htime : time = date
+  · subst time
+    simp only [reduceIte]
+  · simp only [htime, reduceIte, Function.update_eq_self]
 
 omit [Fintype ι] in
 theorem quittingRootSequenceUpdate_pureTime_eq_sureQuitAt
@@ -379,8 +385,8 @@ theorem quittingRootSequenceUpdate_pureTime_eq_sureQuitAt
   unfold quittingRootSequenceUpdate sureQuitAt
   rw [hpt]
   by_cases h : time = date
-  · rw [if_pos h, if_pos h]
-  · rw [if_neg h, if_neg h, ← he time, Function.update_eq_self]
+  · rw [ite_eq_left h, ite_eq_left h]
+  · rw [ite_eq_right h, ite_eq_right h, ← he time, Function.update_eq_self]
 
 omit [DecidableEq ι] in
 /-- Terminal payoffs are equal on equal reward rows. -/
@@ -635,7 +641,7 @@ theorem hasTerminalExploitabilityGap_token_of_twinMergeable
     hexploit (quittingLiftDeletedProfile reward (· = e) profile)
   by_cases hp : player = e
   · subst hp
-    haveI : Nonempty ((quittingGame
+    have : Nonempty ((quittingGame
         (quittingDeletePlayerReward reward player)).BehaviorStrategy
           ⟨d, htwin.ne⟩) :=
       ⟨quittingAlwaysContinueStrategy _ _⟩

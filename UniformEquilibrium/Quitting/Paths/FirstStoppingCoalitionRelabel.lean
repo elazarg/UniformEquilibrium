@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability.DiscreteHazard.StoppingLaw
+open _root_.Math.Probability.DiscreteHazard.StoppingLaw
 
 variable {ι κ : Type} [Fintype ι] [DecidableEq ι]
   [Fintype κ] [DecidableEq κ]

@@ -73,7 +73,7 @@ theorem ContinuousZeroPerfectSingletonPath.pathRightDerivative_eq_clockRate
     pathRightDerivative witness.path.1 time
         (quittingProjectiveSingletonTerminal who) =
       witness.clockRate who time := by
-  letI : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
+  let : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
     left_nhdsWithin_Ioo_neBot htime.2
   have htendstoSlope : Tendsto
       (slope (fun second => witness.mass.extend second who) time)

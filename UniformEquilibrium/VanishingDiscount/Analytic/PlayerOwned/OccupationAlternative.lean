@@ -35,7 +35,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.Probability Set
+open _root_.Math _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

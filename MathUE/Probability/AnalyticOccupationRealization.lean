@@ -327,7 +327,7 @@ theorem occupationConditionalWeight_nonneg
     (hmass : ∀ i, 0 ≤ mass i) (s : S) (i : I) :
     0 ≤ occupationConditionalWeight source mass s i := by
   by_cases hi : source i = s
-  · simp only [occupationConditionalWeight, if_pos hi]
+  · simp only [occupationConditionalWeight, ite_eq_left hi]
     exact div_nonneg (hmass i)
       (occupationSourceMass_nonneg source hmass s)
   · simp [occupationConditionalWeight, hi]
@@ -342,8 +342,8 @@ theorem occupationSourceMass_mul_conditionalWeight
         occupationConditionalWeight source mass s i =
       if source i = s then mass i else 0 := by
   by_cases hi : source i = s
-  · rw [if_pos hi]
-    simp only [occupationConditionalWeight, if_pos hi]
+  · rw [ite_eq_left hi]
+    simp only [occupationConditionalWeight, ite_eq_left hi]
     by_cases hsource :
         occupationSourceMass source mass s = 0
     · have hi_le :

@@ -82,7 +82,7 @@ theorem quittingJointSurvivalLimit_eq_zero_of_periodic
       hmem
     have hrest : (∏ offset ∈ (Finset.range period).erase date,
         quittingStationaryContinueMass (roots (start + offset))) ≤ 1 :=
-      Finset.prod_le_one (fun offset _ => hfactor0 offset)
+      Finset.prod_le_one₀ (fun offset _ => hfactor0 offset)
         (fun offset _ =>
           quittingStationaryContinueMass_le_one (roots (start + offset)))
     have hrest0 : 0 ≤ (∏ offset ∈ (Finset.range period).erase date,

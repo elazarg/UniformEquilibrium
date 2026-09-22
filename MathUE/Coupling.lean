@@ -189,16 +189,16 @@ noncomputable def bind {R : α → β → Prop} {R' : γ → δ → Prop}
   have h_fst : ∀ p, (chooser p).map Prod.fst = k₁ p.1 := by
     intro p
     by_cases h : R p.1 p.2
-    · simp only [chooser, h, dif_pos]
+    · simp only [chooser, h, dite_eq_left]
       exact (k p.1 p.2 h).marginal_fst
-    · simp only [chooser, h, dif_neg, not_false_eq_true]
+    · simp only [chooser, h, dite_eq_right, not_false_eq_true]
       exact ProbabilityMassFunction.prod_map_fst _ _
   have h_snd : ∀ p, (chooser p).map Prod.snd = k₂ p.2 := by
     intro p
     by_cases h : R p.1 p.2
-    · simp only [chooser, h, dif_pos]
+    · simp only [chooser, h, dite_eq_left]
       exact (k p.1 p.2 h).marginal_snd
-    · simp only [chooser, h, dif_neg, not_false_eq_true]
+    · simp only [chooser, h, dite_eq_right, not_false_eq_true]
       exact ProbabilityMassFunction.prod_map_snd _ _
   refine
     { joint := c.joint.bind chooser
@@ -217,7 +217,7 @@ noncomputable def bind {R : α → β → Prop} {R' : γ → δ → Prop}
     rw [PMF.mem_support_bind_iff] at hq
     obtain ⟨p, hp, hq'⟩ := hq
     have hRp : R p.1 p.2 := c.rel_holds p hp
-    simp only [chooser, hRp, dif_pos] at hq'
+    simp only [chooser, hRp, dite_eq_left] at hq'
     exact (k p.1 p.2 hRp).rel_holds q hq'
 
 end HasCoupling

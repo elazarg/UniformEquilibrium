@@ -31,7 +31,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace DeviationSafePublicCoinSelector
 
-open Math Math.Probability Math.ProbabilityMassFunction
+open _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -164,7 +164,7 @@ theorem terminalTargetPotential_le_stageEUAt_add_selectionStageCharge
         selector.selectionStageCharge terminalTarget
           profile who fuel stage history := by
   rw [selectionStageCharge]
-  simp only [if_pos hstage]
+  simp only [ite_eq_left hstage]
   linarith [neg_le_abs
     (G.stageEUAt profile history who -
       selector.terminalTargetPotential terminalTarget who history.2)]
@@ -181,7 +181,7 @@ theorem stageEUAt_le_terminalTargetPotential_add_selectionStageCharge
         selector.selectionStageCharge terminalTarget
           profile who fuel stage history := by
   rw [selectionStageCharge]
-  simp only [if_pos hstage]
+  simp only [ite_eq_left hstage]
   linarith [le_abs_self
     (G.stageEUAt profile history who -
       selector.terminalTargetPotential terminalTarget who history.2)]

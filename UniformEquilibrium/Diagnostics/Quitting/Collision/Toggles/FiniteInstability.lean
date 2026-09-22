@@ -49,7 +49,7 @@ theorem terminalGap_le_pureToggleExploitability
     (witness : QuittingTerminalExploitabilityWitness reward) (S : Finset ι) :
     witness.terminalGap ≤ @quittingPureToggleExploitability ι _ _
       witness.nonempty_players reward S := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨who, hgain⟩ := witness.exists_exactToggle_gain S
   unfold quittingPureToggleExploitability quittingPureToggleGain
   exact (by linarith : witness.terminalGap ≤
@@ -65,7 +65,7 @@ theorem terminalGap_le_pureToggleCeiling
     (witness : QuittingTerminalExploitabilityWitness reward) :
     witness.terminalGap ≤ @quittingPureToggleCeiling ι _ _
       witness.nonempty_players reward := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   unfold quittingPureToggleCeiling
   rw [Finset.le_inf'_iff]
   exact fun S _ => witness.terminalGap_le_pureToggleExploitability S
@@ -146,7 +146,7 @@ theorem terminalGap_le_stationaryCapExploitability
     (root : ι → PMF Bool) :
     witness.terminalGap ≤ @quittingStationaryCapExploitability ι _ _
       witness.nonempty_players reward root := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨who, hgain⟩ := witness.exists_stationaryCap_gain root
   unfold quittingStationaryCapExploitability
   exact (by linarith : witness.terminalGap ≤
@@ -165,7 +165,7 @@ theorem terminalGap_le_stationaryCapCeiling
     (witness : QuittingTerminalExploitabilityWitness reward) :
     witness.terminalGap ≤ @quittingStationaryCapCeiling ι _ _
       witness.nonempty_players reward := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   unfold quittingStationaryCapCeiling
   have hnonempty :
       (Set.range (quittingStationaryCapExploitability reward)).Nonempty :=

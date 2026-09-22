@@ -69,7 +69,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -194,8 +194,8 @@ theorem quittingRootQuitPayoff_eq_sigmaValue
         · simp [hiJ, hiw]
     have hnonempty : (insert who J).Nonempty := Finset.insert_nonempty who J
     unfold quittingRootPayoff
-    rw [dif_pos (hqset ▸ hnonempty)]
-    simp only [weightOfReward, dif_pos hnonempty]
+    rw [dite_eq_left (hqset ▸ hnonempty)]
+    simp only [weightOfReward, dite_eq_left hnonempty]
     congr 1
     exact Subtype.ext hqset
   rw [haction]
@@ -232,7 +232,7 @@ theorem quittingRootContinuePayoff_eq_gammaValue
           else if i ∈ Finset.univ.erase who then false else false) = ∅ := by
       unfold quittingQuitters; ext i; simp
     unfold quittingRootPayoff continueMassExcl hazardOfRoot
-    rw [dif_neg (by rw [hqempty]; exact Finset.not_nonempty_empty)]
+    rw [dite_eq_right (by rw [hqempty]; exact Finset.not_nonempty_empty)]
     simp
   have e2 :
       ∑ J ∈ (Finset.univ.erase who).powerset.erase ∅,
@@ -265,8 +265,8 @@ theorem quittingRootContinuePayoff_eq_gammaValue
           (fun i => if i ∈ J then true else if i ∈ Finset.univ.erase who then false else false)
           ).Nonempty := by rw [hqset]; exact hnonempty
       unfold quittingRootPayoff
-      rw [dif_pos hne2]
-      simp only [weightOfReward, dif_pos hnonempty]
+      rw [dite_eq_left hne2]
+      simp only [weightOfReward, dite_eq_left hnonempty]
       congr 1
       exact Subtype.ext hqset
     rw [haction]

@@ -57,7 +57,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -75,7 +75,7 @@ omit [Fintype ι] [DecidableEq ι] in
 theorem quittingPhaseSwitchRoots_of_lt
     (plan punish : ℕ → ι → PMF Bool) {switch time : ℕ} (htime : time < switch) :
     quittingPhaseSwitchRoots plan punish switch time = plan time :=
-  if_pos htime
+  ite_eq_left htime
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- From the switch stage on the phase-switch roots are the punishment's,
@@ -83,7 +83,7 @@ re-indexed to start at its own stage zero. -/
 theorem quittingPhaseSwitchRoots_of_le
     (plan punish : ℕ → ι → PMF Bool) {switch time : ℕ} (htime : switch ≤ time) :
     quittingPhaseSwitchRoots plan punish switch time = punish (time - switch) :=
-  if_neg (Nat.not_lt.mpr htime)
+  ite_eq_right (Nat.not_lt.mpr htime)
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- The punishment phase read at its own offsets. -/
@@ -160,13 +160,13 @@ def quittingTruncatedHazard (hazard : ℕ → PMF Bool) (cutoff : ℕ) :
 theorem quittingTruncatedHazard_of_lt
     (hazard : ℕ → PMF Bool) {cutoff time : ℕ} (htime : time < cutoff) :
     quittingTruncatedHazard hazard cutoff time = hazard time :=
-  if_pos htime
+  ite_eq_left htime
 
 /-- From the cutoff on the truncated hazard continues for sure. -/
 theorem quittingTruncatedHazard_of_le
     (hazard : ℕ → PMF Bool) {cutoff time : ℕ} (htime : cutoff ≤ time) :
     quittingTruncatedHazard hazard cutoff time = PMF.pure false :=
-  if_neg (Nat.not_lt.mpr htime)
+  ite_eq_right (Nat.not_lt.mpr htime)
 
 omit [Fintype ι] in
 /-- Truncating the plan and the deviator together is the same as deviating

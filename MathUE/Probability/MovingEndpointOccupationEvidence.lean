@@ -244,7 +244,7 @@ theorem sublinear_abs_transport_of_sublinear_occupation
           (cumulativeOccupation law state)) :
     IsAsymptoticallySublinear fun horizon =>
       |cumulativeEndpointTransport law target entry horizon| := by
-  letI := Fintype.ofFinite State
+  let := Fintype.ofFinite State
   have hterm :
       ∀ state,
         IsAsymptoticallySublinear fun horizon =>
@@ -281,7 +281,7 @@ theorem exists_orientedOccupation_of_not_sublinear
       ¬IsAsymptoticallySublinear fun horizon =>
         |cumulativeEndpointTransport law target entry horizon|) :
     Nonempty (OrientedOccupation law target entry) := by
-  letI := Fintype.ofFinite State
+  let := Fintype.ofFinite State
   have hexists :
       ∃ state,
         target state ≠ target entry ∧
@@ -325,7 +325,7 @@ theorem exists_alternative
     (law : ℕ → PMF State)
     (target : State → ℝ) (entry : State) :
     Nonempty (Alternative law target entry) := by
-  letI := Fintype.ofFinite State
+  let := Fintype.ofFinite State
   by_cases htransport :
       IsAsymptoticallySublinear fun horizon =>
         |cumulativeEndpointTransport law target entry horizon|

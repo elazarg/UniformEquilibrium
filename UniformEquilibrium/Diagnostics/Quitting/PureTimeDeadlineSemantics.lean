@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -93,7 +93,7 @@ theorem quittingTerminalSemanticPair_eq_one_allContinuePrefix_of_roots_before
       rfl
   | succ deadline ih =>
       intro hbefore
-      rw [if_neg (Nat.succ_ne_zero deadline)]
+      rw [ite_eq_right (Nat.succ_ne_zero deadline)]
       rw [quittingTerminalSemanticPair_eq_prefix_allContinueContinuation]
       have hroot : quittingProfileRoot reward profile =
           quittingAllContinueRoot := by
@@ -113,7 +113,7 @@ theorem quittingTerminalSemanticPair_eq_one_allContinuePrefix_of_roots_before
       cases deadline with
       | zero => rfl
       | succ later =>
-          rw [if_neg (Nat.succ_ne_zero later)]
+          rw [ite_eq_right (Nat.succ_ne_zero later)]
           rw [quittingAllContinueProfileSpine_continuation]
           apply quittingTerminalSemanticPrefix_allContinue_idempotent
 

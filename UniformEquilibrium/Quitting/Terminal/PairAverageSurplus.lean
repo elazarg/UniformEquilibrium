@@ -46,7 +46,9 @@ theorem quittingTwoCoordinateAverageSurplus_terminalPayoff_le
   have hmoment := quittingTerminalRewardMoment_outcomeMass reward profile
   have hfirst := congrFun hmoment first
   have hsecond := congrFun hmoment second
-  have htotal := (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)
+  have htotal := hmass.2
   change (∑ outcome, mass outcome) = 1 at htotal
   have havg :
       quittingTwoCoordinateAverageSurplus reward first second
@@ -106,31 +108,31 @@ theorem quittingTwoCoordinateAverageSurplus_terminalPayoff_le
       · cases outcome with
         | none =>
           simp only [quittingTerminalOutcomeReward, reduceCtorEq,
-            if_false, if_true, Pi.zero_apply]
+            ite_false, ite_true, Pi.zero_apply]
           ring_nf
           exact le_rfl
         | some terminal =>
           by_cases hp : terminal = primary
           · subst terminal
             simp only [quittingTerminalOutcomeReward, Option.some.injEq,
-              if_pos]
+              ite_eq_left]
             dsimp only [singletonSum]
             unfold quittingTwoCoordinateAverageSurplus at hprimary
             linarith
           by_cases hs : terminal = secondary
           · subst terminal
             simp only [quittingTerminalOutcomeReward, Option.some.injEq,
-              if_neg hne.symm, if_pos]
+              ite_eq_right hne.symm, ite_eq_left]
             dsimp only [singletonSum]
             unfold quittingTwoCoordinateAverageSurplus at hsecondary
             linarith
           · simp only [quittingTerminalOutcomeReward, Option.some.injEq,
-              if_neg hp, if_neg hs, Option.some_ne_none, if_false]
+              ite_eq_right hp, ite_eq_right hs, Option.some_ne_none, ite_false]
             dsimp only [singletonSum]
             have hbound := hother terminal hp hs
             unfold quittingTwoCoordinateAverageSurplus at hbound
             linarith
-      · exact (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 outcome
+      · exact hmass.1 outcome
     _ = primaryBound * mass (some primary) + secondaryBound * mass (some secondary) +
         otherBound * (1 - mass (some primary) - mass (some secondary) - mass none) -
           (singletonSum / 2) * mass none := by
@@ -150,7 +152,7 @@ theorem quittingTwoCoordinateAverageSurplus_terminalPayoff_le
                 all_goals ring
         _ = _ := by
           simp only [Finset.sum_add_distrib, Finset.sum_ite_eq', Finset.mem_univ,
-            if_true]
+            ite_true]
           rw [← Finset.sum_mul, htotal]
           ring
 

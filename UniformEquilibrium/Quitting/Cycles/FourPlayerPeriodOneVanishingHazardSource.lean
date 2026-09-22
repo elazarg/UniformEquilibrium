@@ -128,7 +128,7 @@ structure PeriodOneNormalizedSourceLimit
     (source : PeriodOneVanishingHazardSource reward error) where
   select : ℕ → ℕ
   select_strictMono : StrictMono select
-  direction : stdSimplex ℝ ι
+  direction : Convexity.StdSimplex ℝ ι
   limitValue : Payoff ι
   direction_tendsto : Tendsto (fun index ↦
     quittingStationaryHazardDirection (source.root (select index))
@@ -219,7 +219,7 @@ theorem nonempty_periodOneNormalizedSourceLimit
     (source : PeriodOneVanishingHazardSource reward error) :
     Nonempty (PeriodOneNormalizedSourceLimit source) := by
   let sourcePoint : ℕ →
-      (stdSimplex ℝ ι) × Set.Icc
+      (Convexity.StdSimplex ℝ ι) × Set.Icc
         (fun _ ↦ -quittingRewardBound reward)
         (fun _ ↦ quittingRewardBound reward) :=
     fun index ↦

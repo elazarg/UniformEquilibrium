@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import Mathlib.Tactic
 
 /-!
@@ -33,7 +33,7 @@ noncomputable section
 
 universe u v
 
-namespace Math
+namespace Maths
 namespace ChargedPathBudget
 namespace ChargedRelation
 
@@ -568,4 +568,4 @@ theorem chargeRenewal_iff_unboundedFiniteCharge_implies_canDiverge :
 
 end ChargedRelation
 end ChargedPathBudget
-end Math
+end Maths

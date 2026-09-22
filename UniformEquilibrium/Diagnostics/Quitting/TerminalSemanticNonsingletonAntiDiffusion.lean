@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set StochasticGame Math.Probability Math.PMFProduct
+open Filter Set StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology BigOperators
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -43,7 +43,7 @@ theorem quittingStageCoalitionMass_le_stoppingLawProduct
   rw [quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct]
   apply mul_le_of_le_one_right
   · exact Finset.prod_nonneg fun _ _ => ENNReal.toReal_nonneg
-  · apply Finset.prod_le_one
+  · apply Finset.prod_le_one₀
     · exact fun who _ =>
         quittingHazardSurvival_nonneg
           (quittingBehaviorLiveHazard reward (profile who)) (time + 1)
@@ -163,7 +163,8 @@ theorem sum_quittingStageCoalitionMass_le_one
     hsummable.sum_le_tsum dates fun time _ =>
       quittingStageCoalitionMass_nonneg reward profile time terminal
   rw [tsum_quittingStageCoalitionMass] at hfinite
-  have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  have hsimplex := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)
   have hcoordinate : quittingTerminalOutcomeMass reward profile (some terminal) ≤
       ∑ outcome, quittingTerminalOutcomeMass reward profile outcome := by
     exact Finset.single_le_sum
@@ -346,7 +347,8 @@ theorem quittingStageCoalitionMass_tsum_rpow_le_sSup
         ∑' other, quittingStageCoalitionMass reward profile other terminal :=
       hsummable.le_tsum time fun other _ =>
         quittingStageCoalitionMass_nonneg reward profile other terminal
-    have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+    have hsimplex := GameTheory.Math.Probability.mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)
     have hcoordinate : quittingTerminalOutcomeMass reward profile (some terminal) ≤
         ∑ outcome, quittingTerminalOutcomeMass reward profile outcome := by
       exact Finset.single_le_sum
@@ -399,7 +401,7 @@ theorem terminal_card_eq_one
   have hlowerClock : lower <
       quittingFiniteWindowCoalitionClock
         (profiles n) terminal (cutoff n) peak := by
-    rw [quittingFiniteWindowCoalitionClock, if_pos hpeakLt]
+    rw [quittingFiniteWindowCoalitionClock, ite_eq_left hpeakLt]
     exact hwindow.trans_le hratio
   exact (not_lt_of_ge (le_of_lt hlowerClock)) (hmesh peak)
 

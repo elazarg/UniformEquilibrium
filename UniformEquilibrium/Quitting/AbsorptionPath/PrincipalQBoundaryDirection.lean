@@ -40,35 +40,25 @@ private theorem zeroCoordinates_nonempty
 
 private theorem map_subtype_val_apply
     {ι : Type} [Fintype ι] [DecidableEq ι]
-    {players : Finset ι} (weight : stdSimplex ℝ players) (i : ι) :
-    stdSimplex.map Subtype.val weight i =
-      if hi : i ∈ players then weight ⟨i, hi⟩ else 0 := by
+    {players : Finset ι} (weight : Convexity.StdSimplex ℝ players) (i : ι) :
+    (Convexity.StdSimplex.map Subtype.val weight).weights i =
+      if hi : i ∈ players then weight.weights ⟨i, hi⟩ else 0 := by
   classical
-  rw [stdSimplex.map_coe, FunOnFinite.linearMap_apply_apply]
+  change weight.weights.mapDomain Subtype.val i = _
   by_cases hi : i ∈ players
-  · rw [dif_pos hi]
-    refine Finset.sum_eq_single
-      (s := Finset.univ.filter fun player : players => player.1 = i)
-      ⟨i, hi⟩ ?_ ?_
-    · intro other hother hne
-      have heq : other = ⟨i, hi⟩ := by
-        apply Subtype.ext
-        exact (Finset.mem_filter.mp hother).2
-      exact (hne heq).elim
-    · intro hnot
-      exact (hnot (by simp)).elim
-  · rw [dif_neg hi]
-    apply Finset.sum_eq_zero
-    intro player hplayer
-    have heq : player.1 = i := (Finset.mem_filter.mp hplayer).2
-    exact (hi (heq ▸ player.property)).elim
+  · simpa [hi] using
+      (Finsupp.mapDomain_apply_of_injective Subtype.val_injective
+        weight.weights ⟨i, hi⟩)
+  · rw [dite_eq_right hi, Finsupp.mapDomain_of_notMem_range]
+    rintro ⟨player, rfl⟩
+    exact hi player.property
 
 /-- An ambient simplex direction supported on the zero face of `q`, pointing
 inward there and tangent in at least one zero coordinate. -/
 structure NonnegativeBoundaryDirection {ι : Type} [Fintype ι]
     (M : ι → ι → ℝ) (q : ι → ℝ) where
-  weight : stdSimplex ℝ ι
-  supported_on_zero : ∀ i, weight i ≠ 0 → q i = 0
+  weight : Convexity.StdSimplex ℝ ι
+  supported_on_zero : ∀ i, weight.weights i ≠ 0 → q i = 0
   residual_nonneg_on_zero : ∀ i, q i = 0 →
     0 ≤ singletonLCPResidual M weight i
   residual_zero_on_zero : ∃ i, q i = 0 ∧
@@ -86,26 +76,26 @@ theorem exists_nonnegativeBoundaryDirection
   have hplayers : players.Nonempty := zeroCoordinates_nonempty hq
   obtain ⟨direction⟩ :=
     exists_principalQDirection M hdiag players hplayers (hQ players hplayers)
-  let weight : stdSimplex ℝ ι := stdSimplex.map Subtype.val direction.weight
-  have hweight (i : ι) : weight i =
-      if hi : i ∈ players then direction.weight ⟨i, hi⟩ else 0 := by
+  let weight : Convexity.StdSimplex ℝ ι := Convexity.StdSimplex.map Subtype.val direction.weight
+  have hweight (i : ι) : weight.weights i =
+      if hi : i ∈ players then direction.weight.weights ⟨i, hi⟩ else 0 := by
     exact map_subtype_val_apply direction.weight i
   have hresidual (i : ι) (hi : i ∈ players) :
       singletonLCPResidual M weight i =
         singletonLCPResidual (principalMatrix M players)
           direction.weight ⟨i, hi⟩ := by
-    change (∑ owner, weight owner * M i owner) =
-      ∑ owner : players, direction.weight owner * M i owner
+    change (∑ owner, weight.weights owner * M i owner) =
+      ∑ owner : players, direction.weight.weights owner * M i owner
     calc
-      (∑ owner, weight owner * M i owner) =
-          ∑ owner ∈ players, weight owner * M i owner := by
+      (∑ owner, weight.weights owner * M i owner) =
+          ∑ owner ∈ players, weight.weights owner * M i owner := by
         symm
         apply Finset.sum_subset (Finset.subset_univ players)
         intro owner _ hnotmem
         rw [hweight]
         simp [hnotmem]
       _ = ∑ owner : players,
-          direction.weight owner * M i owner := by
+          direction.weight.weights owner * M i owner := by
         rw [← Finset.sum_attach players]
         apply Finset.sum_congr rfl
         intro owner _

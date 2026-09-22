@@ -1023,13 +1023,13 @@ theorem universalNonsimpleApproximateEquilibriumExistence_iff_universalApproxima
   · intro hnonsimple players _ _ table
     cases isEmpty_or_nonempty players with
     | inl hempty =>
-        letI : IsEmpty players := hempty
+        let : IsEmpty players := hempty
         intro error _herror
         refine ⟨quittingAlwaysContinueProfile table.terminal, ?_⟩
         intro who
         exact isEmptyElim who
     | inr hnonempty =>
-        letI : Nonempty players := hnonempty
+        let : Nonempty players := hnonempty
         by_cases hsimple :
           HasNoSmallSimpleApproximateEquilibria table.terminal table.never
         · exact hnonsimple players table.terminal table.never hsimple
@@ -1112,7 +1112,7 @@ theorem no_absorptionPath_on_emptyPlayerType :
     IsEmpty (AbsorptionPath (ι := Empty)) := by
   constructor
   intro path
-  letI : IsEmpty {S : Finset Empty // S.Nonempty} :=
+  let : IsEmpty {S : Finset Empty // S.Nonempty} :=
     ⟨fun coalition => by
       obtain ⟨player, _⟩ := coalition.property
       exact player.elim⟩

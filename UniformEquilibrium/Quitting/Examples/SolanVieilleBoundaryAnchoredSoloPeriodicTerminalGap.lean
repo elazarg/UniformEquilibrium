@@ -172,8 +172,8 @@ theorem exists_onPathValue_le_half_min_pairSum {m : ℕ} [NeZero m]
     (by decide) (by decide) U
   have htrue := hwho true
   have hfalse := hwho false
-  rw [if_pos rfl, Finset.sum_pair (by decide), two_nsmul] at htrue
-  rw [if_neg Bool.false_ne_true, Finset.sum_pair (by decide), two_nsmul] at hfalse
+  rw [ite_eq_left rfl, Finset.sum_pair (by decide), two_nsmul] at htrue
+  rw [ite_eq_right Bool.false_ne_true, Finset.sum_pair (by decide), two_nsmul] at hfalse
   exact ⟨who, le_min (by linarith) (by linarith)⟩
 
 /-- **The terminal gap in the unbalanced regime.**  If one of the two pairs
@@ -258,7 +258,7 @@ theorem boundaryReward_solo_eq_four_mul {owner absent partner : Player}
       boundaryReward (quittingSingletonTerminal o) k =
         if o = k then 1 else if o.val / 2 = k.val / 2 then 4 else 0 :=
     fun o k ↦ soloReward_eval o k
-  rw [heval owner absent, heval owner partner, if_neg howner]
+  rw [heval owner absent, heval owner partner, ite_eq_right howner]
   by_cases hcase : owner.val / 2 = absent.val / 2
   · have hval : owner = partner := by
       refine Fin.ext_iff.2 ?_
@@ -268,10 +268,11 @@ theorem boundaryReward_solo_eq_four_mul {owner absent partner : Player}
       have hne0 : owner.val ≠ absent.val := fun h ↦ howner (Fin.ext_iff.2 h)
       have hne1 : absent.val ≠ partner.val := fun h ↦ hne (Fin.ext_iff.2 h)
       omega
-    rw [if_pos hcase, if_pos hval]
+    rw [ite_eq_left hcase, ite_eq_left hval]
     norm_num
   · have hne2 : owner ≠ partner := fun h ↦ hcase (by rw [h, hpair])
-    rw [if_neg hcase, if_neg hne2, if_neg (fun h ↦ hcase (by rw [hpair]; exact h))]
+    rw [ite_eq_right hcase, ite_eq_right hne2,
+      ite_eq_right (fun h ↦ hcase (by rw [hpair]; exact h))]
     norm_num
 
 /-- **The value of an unscheduled player.**  If the schedule never designates
@@ -514,7 +515,7 @@ theorem refusalGain_of_eq {m : ℕ} (w : Fin m → Player) (hazard : Fin m → �
             (finRotate m phase) refuser - 1) := by
   have hzero : quittingAnchoredCyclicRefusalHazard w hazard refuser phase = 0 := by
     unfold quittingAnchoredCyclicRefusalHazard
-    rw [if_pos h]
+    rw [ite_eq_left h]
   have hR := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w
     (quittingAnchoredCyclicRefusalHazard w hazard refuser)
     (quittingAnchoredCyclicRefusalHazard_nonneg h0 w refuser)
@@ -539,7 +540,7 @@ theorem refusalGain_of_ne {m : ℕ} (w : Fin m → Player) (hazard : Fin m → �
   have hkeep : quittingAnchoredCyclicRefusalHazard w hazard refuser phase =
       hazard phase := by
     unfold quittingAnchoredCyclicRefusalHazard
-    rw [if_neg h]
+    rw [ite_eq_right h]
   have hR := quittingAnchoredCyclicOnPathValue_renewal boundaryReward w
     (quittingAnchoredCyclicRefusalHazard w hazard refuser)
     (quittingAnchoredCyclicRefusalHazard_nonneg h0 w refuser)
@@ -604,9 +605,9 @@ theorem refusalGain_step {m : ℕ} (w : Fin m → Player) (hazard : Fin m → �
           refusalGain w hazard h0 h1 refuser (finRotate m phase) := by
   unfold refusalIncrement refusalCoefficient
   by_cases h : w phase = refuser
-  · rw [if_pos h, if_pos h, refusalGain_of_eq w hazard h0 h1 h]
+  · rw [ite_eq_left h, ite_eq_left h, refusalGain_of_eq w hazard h0 h1 h]
     ring
-  · rw [if_neg h, if_neg h, refusalGain_of_ne w hazard h0 h1 h]
+  · rw [ite_eq_right h, ite_eq_right h, refusalGain_of_ne w hazard h0 h1 h]
     ring
 
 /-- **The telescoped recursion.**  Unrolling `n` steps splits the refusal gain
@@ -892,11 +893,11 @@ theorem uniformFourCycleRefusalValue {p : ℝ} (hp0 : 0 < p) (hp1 : p ≤ 1) :
     intro k hk
     unfold quittingAnchoredCyclicRefusalHazard
     simp only [id_eq]
-    rw [if_neg hk]
+    rw [ite_eq_right hk]
   have hz0 : quittingAnchoredCyclicRefusalHazard (id : Fin 4 → Player)
       (fun _ ↦ p) 0 0 = 0 := by
     unfold quittingAnchoredCyclicRefusalHazard
-    rw [if_pos (show id (0 : Fin 4) = 0 from rfl)]
+    rw [ite_eq_left (show id (0 : Fin 4) = 0 from rfl)]
   have e0 := hren 0
   have e1 := hren 1
   have e2 := hren 2

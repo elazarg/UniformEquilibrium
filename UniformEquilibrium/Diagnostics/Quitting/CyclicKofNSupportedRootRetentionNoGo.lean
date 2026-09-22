@@ -25,7 +25,7 @@ namespace GameTheory
 
 namespace CyclicKofNSupportedRootRetentionNoGo
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic CyclicKofNQuittingSchedule
 open CyclicKofNPhaseHazards
 open scoped Pointwise

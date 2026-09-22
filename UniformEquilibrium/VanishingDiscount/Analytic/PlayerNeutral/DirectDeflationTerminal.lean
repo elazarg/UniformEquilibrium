@@ -33,8 +33,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -78,7 +78,7 @@ theorem EntryReachablePositiveChargedCirculation.zeroDriftCirculation
   }
   let reachableFintype : Fintype reachableState.ActiveIndex :=
     reachableState.instFintypeActiveIndex
-  letI : Fintype reachableState.ActiveIndex := reachableFintype
+  let : Fintype reachableState.ActiveIndex := reachableFintype
   have restricted :
       HasNormalizedPositiveChargedCirculation
         (fun index : reachableState.ActiveIndex =>

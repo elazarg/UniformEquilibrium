@@ -49,7 +49,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -174,8 +174,8 @@ theorem quittingTerminalOpponentAdvantage_nonneg_of_blockJoinAntitone
   unfold quittingTerminalOpponentAdvantage quittingRootPayoff
   rw [quittingQuitters_update_true_of_apply_false]
   by_cases hquitters : (quittingQuitters action).Nonempty
-  · simp only [dif_pos hquitters,
-      dif_pos (Finset.insert_nonempty owner (quittingQuitters action))]
+  · simp only [dite_eq_left hquitters,
+      dite_eq_left (Finset.insert_nonempty owner (quittingQuitters action))]
     exact sub_nonneg.mpr (hjoin (quittingQuitters action) hquitters hdisjoint)
   · have hempty : quittingQuitters action = ∅ :=
       Finset.not_nonempty_iff_eq_empty.mp hquitters
@@ -251,10 +251,10 @@ theorem mul_continueFloor_le_quittingFixedOpponentsContinueReward
       have hfalse := fun who (hwho : who ∈ B) =>
         quittingAction_eq_false_of_mem_block hquietUpdate hmass hwho
       by_cases hquitters : (quittingQuitters action).Nonempty
-      · rw [quittingRootPayoff, dif_pos hquitters]
+      · rw [quittingRootPayoff, dite_eq_left hquitters]
         exact hfloor _ hquitters
           (disjoint_quittingQuitters_of_forall_mem_eq_false hfalse)
-      · rw [quittingRootPayoff, dif_neg hquitters]
+      · rw [quittingRootPayoff, dite_eq_right hquitters]
   have hrewrite : expect (pmfPi root) (fun action =>
         quittingRootPayoff reward (fun _ => floor) action owner - floor) =
       quittingRootExpectedPayoff reward (fun _ => floor) root owner - floor := by

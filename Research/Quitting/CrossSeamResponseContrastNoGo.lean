@@ -49,7 +49,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -101,6 +101,7 @@ theorem update_quittingStationaryProfile_alwaysQuit
     rfl
   · simp [Function.update_of_ne hplayer, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile]
+    rfl
 
 /-- At a pure sure-exit profile the response contrast is the difference of
 the two membership toggles: joining the exit set against leaving it. -/
@@ -147,7 +148,7 @@ theorem quittingFinFourPairedExitReward_singleton (who : Fin 4) :
     rintro ⟨-, hset⟩
     have hcard := congrArg Finset.card hset
     simp at hcard
-  simp only [quittingFinFourPairedExitReward, if_neg hne]
+  simp only [quittingFinFourPairedExitReward, ite_eq_right hne]
 
 /-- The paid pair is exactly the coalition player `1` joins when player `0`
 has already quit. -/

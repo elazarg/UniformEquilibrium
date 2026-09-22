@@ -88,11 +88,6 @@ def tailData : CyclicSingletonTailData reward where
     fin_cases who <;>
     norm_num [fin4_sub, tail_neg_one, envy_neg_one, tail, envy,
       finRotate_apply, Fin.sub_def, Fin.neg_def, Fin.add_def]
-    all_goals first
-      | (change tail (-1 : Fin 4) = envy (-1 : Fin 4)
-        ; rw [tail_neg_one, envy_neg_one])
-      | (change (2 : ℝ) = 1 + (1 / 2) * tail (-1 : Fin 4)
-        ; rw [tail_neg_one]; norm_num)
 
 /-- Exact balanced singleton-cycle input for the four-player table. -/
 def certificate : BalancedSingletonCycleCertificate (L := 4) reward :=
@@ -106,10 +101,6 @@ def certificate : BalancedSingletonCycleCertificate (L := 4) reward :=
       CyclicSingletonTailData.certificate,
       CyclicSingletonTailData.coarse, tailData, tail, quittingSoloReward,
       reward, envy, Fin.sub_def, Fin.neg_def, Fin.add_def]
-  all_goals
-    change 1 + (1 / 2) * tail (-1 : Fin 4) = 2
-    rw [tail_neg_one]
-    norm_num
 
 /-- The explicit payoff is a uniform-equilibrium payoff against the project's
 full behavioral deviation class. -/

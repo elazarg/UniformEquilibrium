@@ -1,4 +1,4 @@
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import Mathlib.Algebra.BigOperators.Fin
 
 /-! # Finite charged-path codes
@@ -10,13 +10,35 @@ supremum and its relation to the full budget-to-go require no topology.
 
 noncomputable section
 
-namespace Math.ChargedPathBudget.ChargedRelation
+namespace Maths.ChargedPathBudget.ChargedRelation
 
 open Set
 
 universe u v
 
 variable {State : Type u} {Edge : Type v} (R : ChargedRelation State Edge)
+
+namespace Path
+
+@[simp] theorem length_append {s t w : State} (first : R.Path s t) (second : R.Path t w) :
+    (first.append second).length = first.length + second.length := by
+  induction first with
+  | nil => simp [Path.append]
+  | cons edge rest ih =>
+      simp only [Path.append, length_cons, ih]
+      omega
+
+@[simp] theorem length_castTgt {s t w : State} (h : t = w) (path : R.Path s t) :
+    (path.castTgt h).length = path.length := by
+  cases h
+  rfl
+
+@[simp] theorem length_castSrc {s t w : State} (h : s = t) (path : R.Path s w) :
+    (path.castSrc h).length = path.length := by
+  cases h
+  rfl
+
+end Path
 
 def compactSlotSource : State ⊕ Edge → State := Sum.elim id R.src
 
@@ -98,6 +120,16 @@ def prepend (slot : State ⊕ Edge) (code : R.CompactPathCode horizon)
     (prepend slot code hmatch).charge = R.compactSlotCharge slot + code.charge := by
   simp [charge, prepend, Fin.sum_univ_succ]
 
+private theorem path_length_castSrc {s t w : State} (h : s = t)
+    (path : R.Path s w) : (path.castSrc h).length = path.length := by
+  cases h
+  rfl
+
+private theorem path_length_castTgt {s t w : State} (h : t = w)
+    (path : R.Path s t) : (path.castTgt h).length = path.length := by
+  cases h
+  rfl
+
 /-- Every padded code decodes to a literal relation path with the same endpoints and charge. -/
 theorem exists_path (code : R.CompactPathCode horizon) :
     ∃ path : R.Path code.source code.target,
@@ -115,18 +147,28 @@ theorem exists_path (code : R.CompactPathCode horizon) :
           have hsame : code.tail.source = code.source := by
             rw [hslot] at hsource htarget
             exact htarget.symm.trans hsource
-          refine ⟨rest.castSrc hsame, ?_, ?_⟩
-          · simpa using hlength.trans (Nat.le_succ _)
-          · simpa [charge_eq_first_add_tail, hslot, compactSlotCharge] using hcharge
+          let rest' := rest.castTgt code.target_tail
+          refine ⟨rest'.castSrc hsame, ?_, ?_⟩
+          · rw [path_length_castSrc, path_length_castTgt]
+            exact hlength.trans (Nat.le_succ _)
+          · rw [Path.chargeSum_castSrc, Path.chargeSum_castTgt]
+            simpa [rest', charge_eq_first_add_tail, hslot, compactSlotCharge] using hcharge
       | inr edge =>
           have hsrc : R.src edge = code.source := by
             simpa [hslot, compactSlotSource] using hsource
           have htgt : code.tail.source = R.tgt edge := by
             simpa [hslot, compactSlotTarget] using htarget.symm
-          let path := (Path.cons edge (rest.castSrc htgt)).castSrc hsrc
+          let rest' := rest.castTgt code.target_tail
+          let path := (Path.cons edge (rest'.castSrc htgt)).castSrc hsrc
           refine ⟨path, ?_, ?_⟩
-          · simpa [path] using Nat.succ_le_succ hlength
-          · simpa [path, charge_eq_first_add_tail, hslot, compactSlotCharge] using
+          · dsimp [path]
+            rw [path_length_castSrc, Path.length_cons, path_length_castSrc,
+              path_length_castTgt]
+            exact Nat.succ_le_succ hlength
+          · dsimp [path]
+            rw [Path.chargeSum_castSrc, Path.chargeSum_cons, Path.chargeSum_castSrc,
+              Path.chargeSum_castTgt]
+            simpa [rest', charge_eq_first_add_tail, hslot, compactSlotCharge] using
               congrArg (R.charge edge + ·) hcharge
 
 def decode (code : R.CompactPathCode horizon) : R.Path code.source code.target :=
@@ -156,9 +198,16 @@ theorem exists_compactPathCode_of_path {source target : State}
       | cons edge rest =>
           obtain ⟨code, hsource, htarget, hcharge⟩ :=
             ih rest (by simpa using Nat.le_of_succ_le_succ hlen)
-          refine ⟨code.prepend (.inr edge) hsource.symm, rfl, ?_, ?_⟩
-          · simpa using htarget
-          · simpa [compactSlotCharge] using congrArg (R.charge edge + ·) hcharge
+          have hmatch : R.compactSlotTarget (.inr edge) = code.source := by
+            simpa [compactSlotTarget] using hsource.symm
+          let newcode := code.prepend (.inr edge) hmatch
+          refine ⟨newcode, rfl, ?_, ?_⟩
+          · dsimp [newcode]
+            rw [CompactPathCode.target_prepend]
+            exact htarget
+          · dsimp [newcode]
+            rw [CompactPathCode.charge_prepend]
+            simpa [compactSlotCharge] using congrArg (R.charge edge + ·) hcharge
 
 /-- Charges of all literal paths with the displayed initial state and length at most the horizon. -/
 def chargesFromWithin (state : State) (horizon : ℕ) : Set ℝ :=
@@ -178,8 +227,11 @@ theorem chargesFromWithin_eq_codeCharges (state : State) (horizon : ℕ) :
     obtain ⟨code, hsource, _, hcharge⟩ := R.exists_compactPathCode_of_path path hlength
     exact ⟨code, hsource, hcharge⟩
   · rintro ⟨code, hsource, rfl⟩
-    exact ⟨code.target, code.decode.castSrc hsource,
-      by simpa using code.decode_length_le, by simpa using code.decode_charge⟩
+    refine ⟨code.target, code.decode.castSrc hsource, ?_, ?_⟩
+    · rw [CompactPathCode.path_length_castSrc]
+      exact code.decode_length_le
+    · rw [Path.chargeSum_castSrc]
+      exact code.decode_charge
 
 /-- Finite-horizon capacity. Its topological hypotheses enter the theorems, not the definition. -/
 def compactFiniteHorizonMaxCharge (state : State) (horizon : ℕ) : ℝ :=
@@ -216,4 +268,4 @@ theorem value_eq_iSup_compactFiniteHorizonMaxCharge (hbudget : R.HasFiniteBudget
   · exact ciSup_le fun horizon ↦
       R.compactFiniteHorizonMaxCharge_le_value hbudget state horizon
 
-end Math.ChargedPathBudget.ChargedRelation
+end Maths.ChargedPathBudget.ChargedRelation

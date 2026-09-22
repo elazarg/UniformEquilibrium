@@ -8,7 +8,7 @@ import Mathlib.Data.Finset.Card
 import Mathlib.Data.Finset.SDiff
 import Mathlib.Data.Fintype.Basic
 import Mathlib.Data.Fintype.EquivFin
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Order.WellFounded
 
 /-!

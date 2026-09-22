@@ -95,7 +95,7 @@ theorem cyclicSingletonTail_one_eq_balancePolynomial
     (gamma : Fin (extra + 2) → ℝ) (survival : ℝ) :
     cyclicSingletonTail gamma survival ⟨1, by omega⟩ =
       cyclicSingletonBalancePolynomial gamma survival := by
-  rw [cyclicSingletonTail, if_neg (by norm_num)]
+  rw [cyclicSingletonTail, ite_eq_right (by norm_num)]
   unfold finiteCyclicSingletonTail cyclicSingletonBalancePolynomial
     Math.finitePowerSum cyclicSingletonPowerCoefficient
   rw [show extra + 2 - 1 = extra + 1 by omega]
@@ -105,7 +105,7 @@ theorem cyclicSingletonTail_one_eq_balancePolynomial
   apply Fintype.sum_congr
   intro index
   have hlt : 1 + index.val < extra + 2 := by omega
-  simp only [cyclicSingletonGammaNat, hlt, dif_pos]
+  simp only [cyclicSingletonGammaNat, hlt, dite_eq_left]
   congr 2
   apply Fin.ext
   simp [Nat.add_comm]
@@ -135,7 +135,7 @@ theorem cyclicSingletonTail_recurrence
       apply Fin.ext
       norm_num [finRotate_apply]
     rw [hrotate, cyclicSingletonTail_one_eq_balancePolynomial, hbalance, mul_zero]
-  · rw [cyclicSingletonTail, if_neg hoffset]
+  · rw [cyclicSingletonTail, ite_eq_right hoffset]
     by_cases hlast : offset.val + 1 = extra + 2
     · have hrotateZero : finRotate (extra + 2) offset = 0 := by
         apply Fin.ext
@@ -151,7 +151,7 @@ theorem cyclicSingletonTail_recurrence
     · have hsuccLt : offset.val + 1 < extra + 2 := by omega
       have hrotateVal : (finRotate (extra + 2) offset).val = offset.val + 1 := by
         rw [Math.val_finRotate, Nat.mod_eq_of_lt hsuccLt]
-      rw [cyclicSingletonTail, if_neg (by omega :
+      rw [cyclicSingletonTail, ite_eq_right (by omega :
         (finRotate (extra + 2) offset).val ≠ 0)]
       rw [hrotateVal]
       have htail := finiteCyclicSingletonTail_recursion
@@ -338,19 +338,19 @@ private theorem tail_nonneg_at_root
     (offset : Fin (extra + 2)) :
     0 ≤ cyclicSingletonTail data.gamma survival offset := by
   by_cases hoffsetZero : offset.val = 0
-  · rw [cyclicSingletonTail, if_pos hoffsetZero]
+  · rw [cyclicSingletonTail, ite_eq_left hoffsetZero]
   by_cases hoffsetOne : offset.val = 1
   · have hoffset : offset = ⟨1, by omega⟩ := Fin.ext hoffsetOne
     rw [hoffset]
     rw [cyclicSingletonTail_one_eq_balancePolynomial, hroot]
-  · rw [cyclicSingletonTail, if_neg hoffsetZero]
+  · rw [cyclicSingletonTail, ite_eq_right hoffsetZero]
     apply Finset.sum_nonneg
     intro index hindex
     apply mul_nonneg
     · have hindexLt : offset.val + index < extra + 2 := by
         have hrange := Finset.mem_range.mp hindex
         omega
-      rw [cyclicSingletonGammaNat, dif_pos hindexLt]
+      rw [cyclicSingletonGammaNat, dite_eq_left hindexLt]
       apply data.later_nonneg
       change 2 ≤ offset.val + index
       omega
@@ -366,7 +366,7 @@ theorem tail_pos_of_two_le_of_last_pos
     (offset : Fin (extra + 2)) (hoffset : 2 ≤ offset.val) :
     0 < cyclicSingletonTail data.gamma survival offset := by
   have hoffsetZero : offset.val ≠ 0 := by omega
-  rw [cyclicSingletonTail, if_neg hoffsetZero]
+  rw [cyclicSingletonTail, ite_eq_right hoffsetZero]
   have hnonneg : ∀ index ∈ Finset.range (extra + 2 - offset.val),
       0 ≤ cyclicSingletonGammaNat data.gamma (offset.val + index) *
         survival ^ index := by
@@ -375,7 +375,7 @@ theorem tail_pos_of_two_le_of_last_pos
     · have hindexLt : offset.val + index < extra + 2 := by
         have hrange := Finset.mem_range.mp hindex
         omega
-      rw [cyclicSingletonGammaNat, dif_pos hindexLt]
+      rw [cyclicSingletonGammaNat, dite_eq_left hindexLt]
       apply data.later_nonneg
       change 2 ≤ offset.val + index
       omega
@@ -392,7 +392,7 @@ theorem tail_pos_of_two_le_of_last_pos
     dsimp [lastOffset]
     omega
   have hindexLt : offset.val + lastOffset < extra + 2 := by omega
-  rw [cyclicSingletonGammaNat, dif_pos hindexLt]
+  rw [cyclicSingletonGammaNat, dite_eq_left hindexLt]
   have hfin : (⟨offset.val + lastOffset, hindexLt⟩ : Fin (extra + 2)) =
       ⟨extra + 1, by omega⟩ := by
     apply Fin.ext

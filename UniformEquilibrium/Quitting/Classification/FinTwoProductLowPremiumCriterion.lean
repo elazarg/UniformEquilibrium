@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The arbitrary-table pair premium of a two-player quitting game. -/
 def finTwoPairPremium

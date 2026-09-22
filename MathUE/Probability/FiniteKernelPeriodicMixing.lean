@@ -223,7 +223,7 @@ theorem exists_periodicClosedCoreMixing_of_reachableClosedClass
       pmfTV (Math.PMFIter.iter kernel block pair.1.state)
         (Math.PMFIter.iter kernel block pair.2.state)
     else 0
-  letI : Nonempty Core := ⟨base⟩
+  let : Nonempty Core := ⟨base⟩
   let rho : ℕ → ℝ := fun label => finiteMax (rowDistance label)
   refine ⟨{
     phase := phase
@@ -270,7 +270,7 @@ theorem exists_periodicClosedCoreMixing_of_reachableClosedClass
     have hfirst := Math.DirectedPeriod.phaseIndex_arrow connected base firstEdge
     have hsecond := Math.DirectedPeriod.phaseIndex_arrow connected base secondEdge
     dsimp only [phase]
-    rw [dif_pos first_core, dif_pos second_core]
+    rw [dite_eq_left first_core, dite_eq_left second_core]
     exact hfirst.trans hsecond.symm
   · intro source source_mem destination destination_mem
     have positive : Math.PMFIter.iter kernel block source destination ≠ 0 := by
@@ -286,19 +286,19 @@ theorem exists_periodicClosedCoreMixing_of_reachableClosedClass
         connected base path).mpr path_mod
     refine ⟨destination_core, ?_⟩
     dsimp only [phase]
-    rw [dif_pos destination_core, dif_pos source_mem]
+    rw [dite_eq_left destination_core, dite_eq_left source_mem]
     exact same.symm
   · intro first second first_mem second_mem same
     let firstState : Core := ⟨first, first_mem⟩
     let secondState : Core := ⟨second, second_mem⟩
     have sameCore : phaseCore firstState = phaseCore secondState := by
       dsimp only [phase] at same
-      rw [dif_pos first_mem, dif_pos second_mem] at same
+      rw [dite_eq_left first_mem, dite_eq_left second_mem] at same
       exact same
     have hle := le_finiteMax (rowDistance (phase first)) (firstState, secondState)
     have label_eq : phase first = phaseCore firstState := by
       dsimp only [phase]
-      rw [dif_pos first_mem]
+      rw [dite_eq_left first_mem]
     have hcondition :
         phaseCore firstState = phase first ∧ phaseCore secondState = phase first :=
       ⟨label_eq.symm, sameCore.symm.trans label_eq.symm⟩

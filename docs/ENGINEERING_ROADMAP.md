@@ -26,15 +26,17 @@ repository gates agree.
 
 ### Trust and build surface
 
-- Project code contains no `sorry`, `admit`, explicit axioms,
-  `native_decide`, `implemented_by`, unsafe declarations, partial definitions,
-  or project-owned `set_option` commands.
+- Project code outside Literature contains no `sorry`; all lanes contain no
+  `admit`, explicit axioms, `native_decide`, `implemented_by`, unsafe
+  declarations, partial definitions, or project-owned `set_option` commands.
+- Literature keeps warnings as errors and disables only `warn.sorry` for its
+  explicit open-claim records.
 - Warnings remain errors; global linter weakening is not an implementation
   technique.
-- `AxiomAudit.lean` imports every project-owned Lean module. Only `propext`,
-  `Quot.sound`, and `Classical.choice` are permitted library axioms.
+- `AxiomAudit.lean` imports every `MathUE` and `UniformEquilibrium` module.
+  Only `propext`, `Quot.sound`, and `Classical.choice` are permitted library axioms.
 - Lean options are scoped to the smallest library that needs them.
-- Lean 4.32.2 and the committed dependency pins define the supported build.
+- Lean 4.34.0 and the committed dependency pins define the supported build.
 
 ### Ownership and dependencies
 

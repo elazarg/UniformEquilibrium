@@ -114,7 +114,7 @@ theorem exists_analytic_scaled_eventual_linearSolution
           Matrix.mulVec (A t) (scaledSolution t) =
             (t - x₀) ^ poleOrder • b t := by
   classical
-  letI := Fintype.ofFinite Row
+  let := Fintype.ofFinite Row
   let balance : ℝ → Matrix Row (Sum Col Unit) ℝ := fun t =>
     linearSolutionBalance (A t) (b t)
   let mass : ℝ → Sum Col Unit → ℝ := fun _ =>
@@ -128,8 +128,6 @@ theorem exists_analytic_scaled_eventual_linearSolution
     | inr _ =>
         change AnalyticAt ℝ (fun t => -b t i) x₀
         convert (hb i).neg using 1
-        funext t
-        rfl
   have hmass :
       ∀ j, AnalyticAt ℝ (fun t => mass t j) x₀ := by
     intro j
@@ -281,7 +279,7 @@ theorem analytic_scaled_linearSolution_factor_or_kernelJet
         (AnalyticLinearKernelJet
           A x₀ poleOrder scaledSolution) := by
   classical
-  letI := Fintype.ofFinite Row
+  let := Fintype.ofFinite Row
   by_cases horder :
       (poleOrder : ℕ∞) ≤ analyticOrderAt scaledSolution x₀
   · left

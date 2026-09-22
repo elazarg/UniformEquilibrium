@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -38,7 +38,7 @@ theorem quittingRootExpectedPayoff_simplex_eq_sum
     quittingRootExpectedPayoff reward continuation
         (quittingRootOfSimplex root) who =
       ∑ action : ι → Bool,
-        (∏ player, root player (action player)) *
+        (∏ player, (root player).weights (action player)) *
           quittingRootPayoff reward continuation action who := by
   unfold quittingRootExpectedPayoff
   rw [expect_eq_sum]
@@ -61,7 +61,7 @@ theorem continuous_quittingRootExpectedPayoff_simplex
         (quittingRootOfSimplex point.2) who) =
       (fun point =>
         ∑ action : ι → Bool,
-          (∏ player, point.2 player (action player)) *
+          (∏ player, (point.2 player).weights (action player)) *
             quittingRootPayoff reward point.1 action who) by
     funext point
     exact quittingRootExpectedPayoff_simplex_eq_sum
@@ -72,15 +72,14 @@ theorem continuous_quittingRootExpectedPayoff_simplex
   refine (continuous_finsetProd
     (s := (Finset.univ : Finset ι)) ?_).mul ?_
   · intro player _
-    exact (continuous_apply (action player)).comp
-      (continuous_subtype_val.comp
-        ((continuous_apply player).comp continuous_snd))
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ (action player)).comp
+      ((continuous_apply player).comp continuous_snd)
   · by_cases hquit : (quittingQuitters action).Nonempty
     · simpa [quittingRootPayoff, hquit] using
         (continuous_const : Continuous
           (fun _ : Payoff ι × QuittingRootSimplex ι =>
             reward ⟨quittingQuitters action, hquit⟩ who))
-    · simp only [quittingRootPayoff, dif_neg hquit]
+    · simp only [quittingRootPayoff, dite_eq_right hquit]
       exact (continuous_apply who).comp continuous_fst
 
 /-- Replace one simplex marginal by a pure Boolean action. -/
@@ -186,23 +185,21 @@ theorem isClosed_isZeroQuittingRootEndpointNash_simplex
         (quittingRootOfSimplex point.2)} := by
   have hcoordinate : ∀ who : ι,
       Continuous (fun point : Payoff ι × QuittingRootSimplex ι =>
-        point.2 who false) ∧
+        (point.2 who).weights false) ∧
       Continuous (fun point : Payoff ι × QuittingRootSimplex ι =>
-        point.2 who true) := by
+        (point.2 who).weights true) := by
     intro who
     constructor
-    · exact (continuous_apply false).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply who).comp continuous_snd))
-    · exact (continuous_apply true).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply who).comp continuous_snd))
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+        ((continuous_apply who).comp continuous_snd)
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        ((continuous_apply who).comp continuous_snd)
   have hclosed : ∀ who : ι, IsClosed
       {point : Payoff ι × QuittingRootSimplex ι |
-        point.2 who false *
+        (point.2 who).weights false *
             quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who ≤ 0 ∧
-          0 ≤ point.2 who true *
+          0 ≤ (point.2 who).weights true *
             quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who} := by
     intro who
@@ -215,10 +212,10 @@ theorem isClosed_isZeroQuittingRootEndpointNash_simplex
           (continuous_quittingRootEndpointDifference_simplex reward who)))
   have hinter : IsClosed (⋂ who : ι,
       {point : Payoff ι × QuittingRootSimplex ι |
-        point.2 who false *
+        (point.2 who).weights false *
             quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who ≤ 0 ∧
-          0 ≤ point.2 who true *
+          0 ≤ (point.2 who).weights true *
             quittingRootEndpointDifference reward point.1
               (quittingRootOfSimplex point.2) who}) :=
     isClosed_iInter hclosed
@@ -227,15 +224,15 @@ theorem isClosed_isZeroQuittingRootEndpointNash_simplex
         (quittingRootOfSimplex point.2)} =
       ⋂ who : ι,
         {point : Payoff ι × QuittingRootSimplex ι |
-          point.2 who false *
+          (point.2 who).weights false *
               quittingRootEndpointDifference reward point.1
                 (quittingRootOfSimplex point.2) who ≤ 0 ∧
-            0 ≤ point.2 who true *
+            0 ≤ (point.2 who).weights true *
               quittingRootEndpointDifference reward point.1
                 (quittingRootOfSimplex point.2) who} := by
     ext point
     simp only [IsεQuittingRootEndpointNash,
-      quittingRootOfSimplex_apply_toReal, neg_zero, Set.mem_setOf_eq,
+      quittingRootOfSimplex_apply_toReal, neg_zero, Set.mem_ofPred_eq,
       Set.mem_iInter]
   rw [heq]
   exact hinter
@@ -257,7 +254,7 @@ theorem quittingContinuationGame_mixedExtension_eu
     (quittingContinuationGame reward continuation).mixedExtension.eu
         root who =
       quittingRootExpectedPayoff reward continuation root who := by
-  letI : Finite (quittingContinuationGame reward continuation).Outcome := by
+  let : Finite (quittingContinuationGame reward continuation).Outcome := by
     change Finite (ι → Bool)
     infer_instance
   change (KernelGame.ofPureEU (fun _ : ι => Bool)
@@ -417,11 +414,11 @@ theorem exists_quittingNashBellmanPredecessor
       IsεQuittingRootNash reward tail.1 0 root := by
     let stageGame : KernelGame ι :=
       quittingContinuationGame reward tail.1
-    haveI : ∀ who, Finite (stageGame.Strategy who) :=
+    have : ∀ who, Finite (stageGame.Strategy who) :=
       fun who => inferInstanceAs (Finite Bool)
-    haveI : ∀ who, Nonempty (stageGame.Strategy who) :=
+    have : ∀ who, Nonempty (stageGame.Strategy who) :=
       fun who => inferInstanceAs (Nonempty Bool)
-    haveI : Finite stageGame.Outcome :=
+    have : Finite stageGame.Outcome :=
       inferInstanceAs (Finite (ι → Bool))
     obtain ⟨root, hroot⟩ := stageGame.mixed_nash_exists
     refine ⟨root, ?_⟩
@@ -460,13 +457,13 @@ def quittingNashBellmanSerialRelation
   relation := IsQuittingNashBellmanEdge reward
   box_nonempty := by
     rcases isEmpty_or_nonempty ι with hι | hι
-    · letI : IsEmpty ι := hι
+    · let : IsEmpty ι := hι
       let root : QuittingRootSimplex ι :=
         fun _ ↦ stdSimplexEquiv (PMF.pure false)
       refine ⟨((0 : Payoff ι), root), ?_⟩
       change (0 : Payoff ι) ∈ Set.Icc (fun _ ↦ -M) (fun _ ↦ M)
       constructor <;> intro who <;> exact isEmptyElim who
-    · letI : Nonempty ι := hι
+    · let : Nonempty ι := hι
       exact quittingNashBellmanBox_nonempty
         (quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward)
   box_compact := quittingNashBellmanBox_isCompact M

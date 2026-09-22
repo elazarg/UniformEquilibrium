@@ -156,7 +156,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} (G : StochasticGame ι)
   (Legal : G.State → ∀ i, G.Act i → Prop)

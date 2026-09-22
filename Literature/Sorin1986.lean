@@ -228,9 +228,9 @@ theorem FiniteStageGame.correlatedFeasiblePayoffs_convex
 theorem FiniteStageGame.mixedPayoff_mem_correlatedFeasiblePayoffs
     (G : FiniteStageGame) (profile : G.MixedProfile) :
     G.mixedPayoff profile ∈ G.correlatedFeasiblePayoffs := by
-  letI (who : G.Player) : Fintype (G.kernel.Strategy who) :=
+  let (who : G.Player) : Fintype (G.kernel.Strategy who) :=
     G.finiteAction who
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   have h :=
@@ -279,10 +279,10 @@ theorem FiniteStageGame.exists_pureReply_ge_individualRationalLevel
         G.kernel.mixedExtension.eu
           (G.kernel.mixedExtension.profileWithOpponent who
             (PMF.pure action) opponents) who := by
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  letI : Finite G.kernel.mixedExtension.Outcome :=
+  let : Finite G.kernel.mixedExtension.Outcome :=
     G.kernel.finite_mixedExtension_outcome
   obtain ⟨C, hC⟩ :=
     G.kernel.mixedExtension.exists_eu_abs_bound_of_finite_outcome who
@@ -322,9 +322,9 @@ theorem FiniteStageGame.exists_opponents_bestPureReplyValue_lt_add
     ∃ opponents : G.MixedOpponentProfile who,
       G.bestPureReplyValue who opponents <
         G.individualRationalLevel who + ε := by
-  letI (player : G.Player) : Nonempty (G.kernel.Strategy player) :=
+  let (player : G.Player) : Nonempty (G.kernel.Strategy player) :=
     G.nonemptyAction player
-  letI : Nonempty (G.MixedOpponentProfile who) :=
+  let : Nonempty (G.MixedOpponentProfile who) :=
     G.kernel.nonempty_mixedExtension_opponentProfile who
   have hlt : G.individualRationalLevel who <
       G.individualRationalLevel who + ε := lt_add_of_pos_right _ hε
@@ -343,10 +343,10 @@ theorem FiniteStageGame.mixedEU_profileWithOpponent_le_bestPureReplyValue
         (G.kernel.mixedExtension.profileWithOpponent who own opponents) who ≤
       G.bestPureReplyValue who opponents := by
   unfold FiniteStageGame.bestPureReplyValue
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) :=
     G.finiteAction player
   exact G.kernel.mixedExtension_eu_profileWithOpponent_le_iSup_pure
     who opponents own
@@ -514,18 +514,18 @@ structure CompactRepeatedPresentation (G : FiniteStageGame)
       t * compactPayoff (Function.update profile who x) observer +
         (1 - t) * compactPayoff (Function.update profile who y) observer
   barycenter : ∀ who (n : ℕ),
-    stdSimplex ℝ (Fin (n + 1)) →
+    Convexity.StdSimplex ℝ (Fin (n + 1)) →
       (Fin (n + 1) → Strategy who) → Strategy who
   barycenterContinuous : ∀ who (n : ℕ)
     (points : Fin (n + 1) → Strategy who),
-    Continuous fun weights : stdSimplex ℝ (Fin (n + 1)) =>
+    Continuous fun weights : Convexity.StdSimplex ℝ (Fin (n + 1)) =>
       barycenter who n weights points
   compactPayoffBarycentric : ∀ profile who (n : ℕ)
-    (weights : stdSimplex ℝ (Fin (n + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (n + 1)))
     (points : Fin (n + 1) → Strategy who),
     compactPayoff (Function.update profile who
         (barycenter who n weights points)) who =
-      ∑ a, weights a *
+      ∑ a, weights.weights a *
         compactPayoff (Function.update profile who (points a)) who
   toBehavior : (∀ who, Strategy who) → G.BehaviorProfile
   fromBehavior : G.BehaviorProfile → (∀ who, Strategy who)
@@ -679,12 +679,12 @@ private noncomputable abbrev form (G : FiniteStageGame) (n : G.Horizon) :
 carrier. -/
 private abbrev Strategy (G : FiniteStageGame) (n : G.Horizon)
     (who : G.Player) :=
-  stdSimplex ℝ (Plan G n who)
+  Convexity.StdSimplex ℝ (Plan G n who)
 
 /-- Read a simplex point as the corresponding finite-support plan law. -/
 private noncomputable def law {G : FiniteStageGame} {n : G.Horizon}
     {who : G.Player} (strategy : Strategy G n who) : FinDist (Plan G n who) :=
-  FinDist.ofSimplex strategy.2
+  FinDist.ofSimplex (Math.ProbabilityMassFunction.weights_mem_simplexWeights strategy)
 
 /-- Convert a simplex profile coordinatewise to finite plan laws. -/
 private noncomputable def laws {G : FiniteStageGame} {n : G.Horizon}
@@ -737,32 +737,38 @@ real coefficients by projection to `[0,1]`. -/
 private def mix {G : FiniteStageGame} {n : G.Horizon} (who : G.Player)
     (t : ℝ) (x y : Strategy G n who) : Strategy G n who := by
   let c := coefficient t
-  refine ⟨c • x.1 + (1 - c) • y.1, ?_⟩
-  refine ⟨fun plan => add_nonneg
-    (mul_nonneg (coefficient_nonneg t) (x.2.1 plan))
-    (mul_nonneg (sub_nonneg.mpr (coefficient_le_one t)) (y.2.1 plan)), ?_⟩
-  change (∑ plan, (c * x.1 plan + (1 - c) * y.1 plan)) = 1
-  rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
-    x.2.2, y.2.2]
-  ring
+  refine {
+    weights := Finsupp.equivFunOnFinite.symm
+      (fun plan => c * x.weights plan + (1 - c) * y.weights plan)
+    nonneg := ?_
+    total := ?_ }
+  · intro plan
+    exact add_nonneg
+      (mul_nonneg (coefficient_nonneg t) (x.weights_nonneg plan))
+      (mul_nonneg (sub_nonneg.mpr (coefficient_le_one t)) (y.weights_nonneg plan))
+  · rw [Finsupp.equivFunOnFinite_symm_sum]
+    rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
+      x.total_of_fintype, y.total_of_fintype]
+    ring
 
 private theorem mix_continuous {G : FiniteStageGame} {n : G.Horizon}
     (who : G.Player) : Continuous fun p :
       ℝ × (Strategy G n who × Strategy G n who) =>
         mix who p.1 p.2.1 p.2.2 := by
-  apply Continuous.subtype_mk
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ
+    (Plan G n who)).continuous_iff]
   apply continuous_pi
   intro plan
   let domain := ℝ × (Strategy G n who × Strategy G n who)
   have hc : Continuous fun p : domain => coefficient p.1 := by
     unfold coefficient
     exact continuous_const.max (continuous_const.min continuous_fst)
-  have hx : Continuous fun p : domain => p.2.1 plan :=
-    (continuous_apply plan).comp
-      (continuous_subtype_val.comp (continuous_fst.comp continuous_snd))
-  have hy : Continuous fun p : domain => p.2.2 plan :=
-    (continuous_apply plan).comp
-      (continuous_subtype_val.comp (continuous_snd.comp continuous_snd))
+  have hx : Continuous fun p : domain => p.2.1.weights plan :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ plan).comp
+      (continuous_fst.comp continuous_snd)
+  have hy : Continuous fun p : domain => p.2.2.weights plan :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ plan).comp
+      (continuous_snd.comp continuous_snd)
   exact (hc.mul hx).add ((continuous_const.sub hc).mul hy)
 
 private theorem mix_zero {G : FiniteStageGame} {n : G.Horizon}
@@ -777,60 +783,65 @@ private theorem mix_one {G : FiniteStageGame} {n : G.Horizon}
 
 /-- Finite barycentres of plan laws are computed coordinatewise. -/
 private def barycenter {G : FiniteStageGame} {n : G.Horizon}
-    (who : G.Player) (k : ℕ) (weights : stdSimplex ℝ (Fin (k + 1)))
+    (who : G.Player) (k : ℕ)
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G n who) : Strategy G n who := by
-  refine ⟨fun plan => ∑ a, weights a * points a plan, ?_⟩
-  constructor
+  refine {
+    weights := Finsupp.equivFunOnFinite.symm
+      (fun plan => ∑ a, weights.weights a * (points a).weights plan)
+    nonneg := ?_
+    total := ?_ }
   · intro plan
-    exact Finset.sum_nonneg fun a _ =>
-      mul_nonneg (weights.2.1 a) ((points a).2.1 plan)
-  · rw [Finset.sum_comm]
+    rw [Finsupp.equivFunOnFinite_symm_apply_apply]
+    exact Finset.sum_nonneg fun a _ => mul_nonneg
+      (weights.weights_nonneg a) ((points a).weights_nonneg plan)
+  · rw [Finsupp.equivFunOnFinite_symm_sum, Finset.sum_comm]
     simp_rw [← Finset.mul_sum]
-    simp
+    simp only [Convexity.StdSimplex.total_of_fintype, mul_one]
 
 private theorem barycenter_continuous {G : FiniteStageGame}
     {n : G.Horizon} (who : G.Player) (k : ℕ)
     (points : Fin (k + 1) → Strategy G n who) :
-    Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+    Continuous fun weights : Convexity.StdSimplex ℝ (Fin (k + 1)) =>
       barycenter who k weights points := by
-  apply Continuous.subtype_mk
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ
+    (Plan G n who)).continuous_iff]
   apply continuous_pi
   intro plan
-  apply continuous_finsetSum
-  intro a _
-  exact ((continuous_apply a).comp continuous_subtype_val).mul continuous_const
+  simp only [Function.comp_apply, barycenter,
+    Finsupp.equivFunOnFinite_symm_apply_apply]
+  exact continuous_finsetSum _ fun a _ =>
+    (Convexity.StdSimplex.continuous_weights_apply ℝ a).mul continuous_const
 
 /-- The ambient weight profile underlying a compact simplex profile. -/
 private def weights {G : FiniteStageGame} {n : G.Horizon}
-    (profile : ∀ who, Strategy G n who) :
+  (profile : ∀ who, Strategy G n who) :
     Profile (form G n).sig.weights :=
-  fun who plan => profile who plan
+  fun who plan => (profile who).weights plan
 
 private theorem probs_laws {G : FiniteStageGame} {n : G.Horizon}
     (profile : ∀ who, Strategy G n who) :
     GameTheory.probs (form G n).sig (laws profile) = weights profile := by
   funext who plan
-  exact congrFun (FinDist.prob_ofSimplex (profile who).2) plan
+  exact congrFun (FinDist.prob_ofSimplex
+    (Math.ProbabilityMassFunction.weights_mem_simplexWeights (profile who))) plan
 
 private theorem weights_update {G : FiniteStageGame} {n : G.Horizon}
     (profile : ∀ who, Strategy G n who) (who : G.Player)
     (strategy : Strategy G n who) :
     weights (Function.update profile who strategy) =
-      Profile.update (weights profile) who strategy.1 := by
+      Profile.update (weights profile) who strategy.weights := by
   funext i
   unfold weights
   by_cases hi : i = who
   · subst i
     simp only [Function.update_self, Profile.update_same]
-    apply funext
-    intro plan
-    rfl
   · simp [Function.update_of_ne, Profile.update_of_ne, hi]
 
 /-- The polynomial expected payoff of the finite mixed normal form. -/
 private def compactPayoff {G : FiniteStageGame} {n : G.Horizon}
     (profile : ∀ who, Strategy G n who) : Payoff G.Player :=
-  letI : ∀ who, Fintype ((form G n).sig.Strategy who) :=
+  let : ∀ who, Fintype ((form G n).sig.Strategy who) :=
     fun who => planFintype G n who
   fun observer => GameTheory.payoff (form G n)
       (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1) observer
@@ -840,7 +851,7 @@ private theorem compactPayoff_continuous {G : FiniteStageGame}
     {n : G.Horizon} (observer : G.Player) :
     Continuous fun profile : ∀ who, Strategy G n who =>
       compactPayoff profile observer := by
-  letI : ∀ who, Fintype ((form G n).sig.Strategy who) :=
+  let : ∀ who, Fintype ((form G n).sig.Strategy who) :=
     fun who => planFintype G n who
   apply (GameTheory.continuous_payoff
     (F := form G n)
@@ -850,8 +861,8 @@ private theorem compactPayoff_continuous {G : FiniteStageGame}
   intro who
   apply continuous_pi
   intro plan
-  exact (continuous_apply plan).comp
-    (continuous_subtype_val.comp (continuous_apply who))
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ plan).comp
+    (continuous_apply who)
 
 private theorem compactPayoff_affine {G : FiniteStageGame}
     {n : G.Horizon} (profile : ∀ who, Strategy G n who)
@@ -860,13 +871,13 @@ private theorem compactPayoff_affine {G : FiniteStageGame}
     compactPayoff (Function.update profile who (mix who t x y)) observer =
       t * compactPayoff (Function.update profile who x) observer +
         (1 - t) * compactPayoff (Function.update profile who y) observer := by
-  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+  let : ∀ i, Fintype ((form G n).sig.Strategy i) :=
     fun i => planFintype G n i
   let utility := G.repeatedGame.toNative.horizonUtility PUnit.unit n.1
   have h := GameTheory.payoff_update_mix
     (F := form G n)
     (utility := fun history _ => utility history observer)
-    (x := weights profile) who x.1 y.1 t (1 - t)
+    (x := weights profile) who x.weights y.weights t (1 - t)
   have hpay (z : Profile (form G n).sig.weights) :
       GameTheory.payoff (form G n)
           (fun history _ => utility history observer) who z =
@@ -876,23 +887,29 @@ private theorem compactPayoff_affine {G : FiniteStageGame}
     weights_update, weights_update, weights_update]
   change GameTheory.payoff (form G n) utility observer
       (Profile.update (weights profile) who
-        (mix who t x y).1) = _
-  rw [show (mix who t x y).1 = t • x.1 + (1 - t) • y.1 by
+        (mix who t x y).weights) = _
+  rw [show (mix who t x y).weights = t • x.weights + (1 - t) • y.weights by
     ext plan
     simp [mix, coefficient_eq ht₀ ht₁]]
-  rw [← hpay, ← hpay, ← hpay]
-  exact h
+  have hcoe :
+      ((t • x.weights + (1 - t) • y.weights : Plan G n who →₀ ℝ) :
+          Plan G n who → ℝ) =
+        t • (x.weights : Plan G n who → ℝ) +
+          (1 - t) • (y.weights : Plan G n who → ℝ) := by
+    rfl
+  rw [hcoe]
+  simpa only [hpay] using h
 
 private theorem compactPayoff_barycentric {G : FiniteStageGame}
     {n : G.Horizon} (profile : ∀ who, Strategy G n who)
     (who : G.Player) (k : ℕ)
-    (simplexWeights : stdSimplex ℝ (Fin (k + 1)))
+    (simplexWeights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G n who) :
     compactPayoff (Function.update profile who
         (barycenter who k simplexWeights points)) who =
-      ∑ a, simplexWeights a *
+      ∑ a, simplexWeights.weights a *
         compactPayoff (Function.update profile who (points a)) who := by
-  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+  let : ∀ i, Fintype ((form G n).sig.Strategy i) :=
     fun i => planFintype G n i
   simp only [compactPayoff, weights_update]
   rw [GameTheory.payoff_update]
@@ -903,9 +920,9 @@ private theorem compactPayoff_barycentric {G : FiniteStageGame}
         (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
         who ((form G n).play s)
   change (∑ s : Profile (form G n).sig,
-      (∑ a, simplexWeights a * points a (s who)) * c s) =
-    ∑ a, simplexWeights a *
-      ∑ s : Profile (form G n).sig, points a (s who) * c s
+      (∑ a, simplexWeights.weights a * (points a).weights (s who)) * c s) =
+    ∑ a, simplexWeights.weights a *
+      ∑ s : Profile (form G n).sig, (points a).weights (s who) * c s
   simp_rw [Finset.sum_mul, Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -921,7 +938,7 @@ private theorem compactPayoff_eq_runMixed {G : FiniteStageGame}
       expectedUtility
         (G.repeatedGame.toNative.horizonUtility PUnit.unit n.1)
         observer ((Protocol G).runMixed (mixedPolicies profile) n.1) := by
-  letI : ∀ i, Fintype ((form G n).sig.Strategy i) :=
+  let : ∀ i, Fintype ((form G n).sig.Strategy i) :=
     fun i => planFintype G n i
   calc
     compactPayoff profile observer =
@@ -942,7 +959,12 @@ private theorem compactPayoff_eq_runMixed {G : FiniteStageGame}
 private def strategyOfLaw {G : FiniteStageGame} {n : G.Horizon}
     {who : G.Player} (distribution : FinDist (Plan G n who)) :
     Strategy G n who :=
-  ⟨distribution.prob, distribution.prob_mem_stdSimplex⟩
+  {
+    weights := Finsupp.equivFunOnFinite.symm distribution.prob
+    nonneg := distribution.prob_nonneg
+    total := by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact distribution.sum_prob }
 
 private theorem law_strategyOfLaw {G : FiniteStageGame} {n : G.Horizon}
     {who : G.Player} (distribution : FinDist (Plan G n who)) :
@@ -1412,8 +1434,8 @@ private instance executionHistoryMeasurableSingletonClass
 
 private instance infoStateCountable (G : FiniteStageGame)
     (who : G.Player) : Countable ((Protocol G).InfoState who) := by
-  letI : Countable (Native G).StageRecord := inferInstance
-  letI : Countable (Native G).PublicHistory := inferInstance
+  let : Countable (Native G).StageRecord := inferInstance
+  let : Countable (Native G).PublicHistory := inferInstance
   infer_instance
 
 private noncomputable instance planInhabited (G : FiniteStageGame)
@@ -1541,8 +1563,7 @@ private theorem toFiniteMeasure_mix {G : FiniteStageGame} (who : G.Player)
   apply FiniteMeasure.toMeasure_injective
   simp only [mix, mixedFiniteMeasure, scaleFiniteMeasure,
     scaleMeasure,
-    ProbabilityMeasure.toFiniteMeasure, FiniteMeasure.toMeasure_add,
-    FiniteMeasure.toMeasure_smul]
+    ProbabilityMeasure.toFiniteMeasure, FiniteMeasure.toMeasure_add]
   unfold ProbabilityMeasure.toMeasure FiniteMeasure.toMeasure
   rfl
 
@@ -1644,19 +1665,20 @@ private theorem mix_one {G : FiniteStageGame} (who : G.Player)
 
 /-- A finite barycenter of laws on total contingent plans. -/
 private def simplexWeight {k : ℕ}
-    (weights : stdSimplex ℝ (Fin (k + 1))) (a : Fin (k + 1)) : ℝ≥0 :=
-  ⟨weights a, weights.2.1 a⟩
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
+    (a : Fin (k + 1)) : ℝ≥0 :=
+  ⟨weights.weights a, weights.weights_nonneg a⟩
 
 private def barycenterFiniteMeasure {G : FiniteStageGame}
     (who : G.Player) (k : ℕ)
-    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who) :
     FiniteMeasure (Plan G who) :=
   ∑ a, scaleFiniteMeasure (simplexWeight weights a)
     (points a).toFiniteMeasure
 
 private def barycenter {G : FiniteStageGame} (who : G.Player) (k : ℕ)
-    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who) : Strategy G who := by
   let weight : Fin (k + 1) → ℝ≥0 := simplexWeight weights
   refine ⟨∑ a, weight a • (points a : Measure (Plan G who)), ?_⟩
@@ -1673,32 +1695,31 @@ private def barycenter {G : FiniteStageGame} (who : G.Player) (k : ℕ)
   norm_cast
   apply NNReal.eq
   rw [NNReal.coe_sum]
-  change ∑ a, weights a = 1
-  exact weights.2.2
+  change ∑ a, weights.weights a = 1
+  exact weights.total_of_fintype
 
 private theorem toFiniteMeasure_barycenter {G : FiniteStageGame}
     (who : G.Player) (k : ℕ)
-    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who) :
     (barycenter who k weights points).toFiniteMeasure =
       barycenterFiniteMeasure who k weights points := by
   apply FiniteMeasure.toMeasure_injective
   simp only [barycenter, barycenterFiniteMeasure,
     scaleFiniteMeasure, ProbabilityMeasure.toFiniteMeasure,
-    FiniteMeasure.toMeasure_sum,
-    FiniteMeasure.toMeasure_smul]
+    FiniteMeasure.toMeasure_sum]
   unfold ProbabilityMeasure.toMeasure FiniteMeasure.toMeasure
   rfl
 
 private theorem barycenter_continuous {G : FiniteStageGame}
     (who : G.Player) (k : ℕ)
     (points : Fin (k + 1) → Strategy G who) :
-    Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+    Continuous fun weights : Convexity.StdSimplex ℝ (Fin (k + 1)) =>
       barycenter who k weights points := by
   apply continuous_induced_rng.2
-  change Continuous fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+  change Continuous fun weights : Convexity.StdSimplex ℝ (Fin (k + 1)) =>
     (barycenter who k weights points).toFiniteMeasure
-  rw [show (fun weights : stdSimplex ℝ (Fin (k + 1)) =>
+  rw [show (fun weights : Convexity.StdSimplex ℝ (Fin (k + 1)) =>
       (barycenter who k weights points).toFiniteMeasure) =
       fun weights => barycenterFiniteMeasure who k weights points by
     funext weights
@@ -1707,12 +1728,12 @@ private theorem barycenter_continuous {G : FiniteStageGame}
   apply continuous_finsetSum
   intro a _
   have hweight : Continuous fun weights :
-      stdSimplex ℝ (Fin (k + 1)) =>
-      (⟨weights a, weights.2.1 a⟩ : ℝ≥0) := by
+      Convexity.StdSimplex ℝ (Fin (k + 1)) =>
+      (⟨weights.weights a, weights.weights_nonneg a⟩ : ℝ≥0) := by
     apply Continuous.subtype_mk
-    exact (continuous_apply a).comp continuous_subtype_val
+    exact Convexity.StdSimplex.continuous_weights_apply ℝ a
   have hlaw : Continuous fun _weights :
-      stdSimplex ℝ (Fin (k + 1)) =>
+      Convexity.StdSimplex ℝ (Fin (k + 1)) =>
       (points a).toFiniteMeasure :=
     continuous_const
   exact scaleFiniteMeasure_continuous.comp (hweight.prodMk hlaw)
@@ -1879,7 +1900,7 @@ private theorem integratedPureStagePayoff_eq_arbitrary
         (fun who => (profile who : Measure (Plan G who))) observer time := by
   let laws : (Native G).ProtocolPolicyMeasureProfile PUnit.unit :=
     fun who => (profile who : Measure (Plan G who))
-  letI : ∀ who, IsProbabilityMeasure (laws who) := fun who => by
+  let : ∀ who, IsProbabilityMeasure (laws who) := fun who => by
     dsimp only [laws]
     infer_instance
   let sites := (Native G).boundedInformationSites PUnit.unit (time + 1)
@@ -2087,7 +2108,7 @@ private theorem mix_apply {G : FiniteStageGame} (who : G.Player)
   rfl
 
 private theorem barycenter_apply {G : FiniteStageGame} (who : G.Player)
-    (k : ℕ) (weights : stdSimplex ℝ (Fin (k + 1)))
+    (k : ℕ) (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who)
     (set : Set (Plan G who)) :
     (barycenter who k weights points : Measure (Plan G who)) set =
@@ -2131,7 +2152,7 @@ private theorem jointLaw_update_mix {G : FiniteStageGame}
 private theorem jointLaw_update_barycenter {G : FiniteStageGame}
     (profile : (who : G.Player) → Strategy G who)
     (who : G.Player) (k : ℕ)
-    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who) :
     (jointLaw (Function.update profile who
         (barycenter who k weights points)) :
@@ -2208,11 +2229,11 @@ private theorem compactPayoff_barycentric (G : FiniteStageGame)
     (lam : G.DiscountRate)
     (profile : (who : G.Player) → Strategy G who)
     (who : G.Player) (k : ℕ)
-    (weights : stdSimplex ℝ (Fin (k + 1)))
+    (weights : Convexity.StdSimplex ℝ (Fin (k + 1)))
     (points : Fin (k + 1) → Strategy G who) :
     compactPayoff G lam
         (Function.update profile who (barycenter who k weights points)) who =
-      ∑ a, weights a * compactPayoff G lam
+      ∑ a, weights.weights a * compactPayoff G lam
         (Function.update profile who (points a)) who := by
   unfold compactPayoff
   rw [jointLaw_update_barycenter]
@@ -2221,10 +2242,9 @@ private theorem compactPayoff_barycentric (G : FiniteStageGame)
     (pureDiscountedPayoff_integrable G lam who
       (jointLaw (Function.update profile who (points a)) :
         Measure ((i : G.Player) → Plan G i))).smul_measure_nnreal)]
-  simp only [integral_smul_nnreal_measure,
-    NNReal.smul_def, smul_eq_mul, simplexWeight]
   apply Finset.sum_congr rfl
   intro a _
+  rw [integral_smul_nnreal_measure]
   rfl
 
 /-- Fixed public pure-policy fallbacks used only on zero-mass cylinders. -/
@@ -2363,6 +2383,12 @@ private theorem fromBehavior_update {G : FiniteStageGame}
     toNativePublicPolicy G.repeatedGame PUnit.unit deviation
   let protocolDeviation :=
     (Native G).toBehavioralPolicy PUnit.unit publicDeviation
+  let strategyDeviation : Strategy G who :=
+    ⟨protocolDeviation.toPureMeasure,
+      GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
+        (M := Protocol G) protocolDeviation⟩
+  change fromBehavior (Function.update profile who deviation) =
+    Function.update (fromBehavior profile) who strategyDeviation
   have hcompiled :
       compiledBehavior (Function.update profile who deviation) =
         Profile.update (compiledBehavior profile) who protocolDeviation := by
@@ -2371,15 +2397,22 @@ private theorem fromBehavior_update {G : FiniteStageGame}
     rw [StochasticGame.NativeBridge.toNativePublicProfile_update,
       (Native G).toBehaviorProfile_update]
   funext i
-  apply ProbabilityMeasure.toMeasure_injective
+  apply Subtype.ext
   by_cases hi : i = who
   · subst i
     have hpoint := congrFun hcompiled who
     simp only [Profile.update_same] at hpoint
-    simp [fromBehavior, hpoint, protocolDeviation, publicDeviation]
+    change (compiledBehavior (Function.update profile who deviation) who).toPureMeasure = _
+    simpa only [Function.update_self, protocolDeviation, publicDeviation] using
+      congrArg
+        (fun policy : (Protocol G).BehavioralPolicy who => policy.toPureMeasure)
+        hpoint
   · have hpoint := congrFun hcompiled i
     simp only [Profile.update_of_ne _ _ hi] at hpoint
-    simp [fromBehavior, Function.update_of_ne, hi, hpoint]
+    simpa only [fromBehavior, Function.update_of_ne hi] using
+      congrArg
+        (fun policy : (Protocol G).BehavioralPolicy i => policy.toPureMeasure)
+        hpoint
 
 private theorem compactPayoff_eq_nativePublic {G : FiniteStageGame}
     (lam : G.DiscountRate)
@@ -2420,7 +2453,7 @@ private theorem arbitraryPayoff_fromBehavior_eq_policyMeasure
   let protocolBehavior := (Native G).toBehaviorProfile PUnit.unit
     (StochasticGame.NativeBridge.toNativePublicProfile G.repeatedGame
       PUnit.unit profile)
-  letI : ∀ who, IsProbabilityMeasure
+  let : ∀ who, IsProbabilityMeasure
       ((protocolBehavior who).toPureMeasure) := fun who =>
     GameTheory.Protocol.InformationModel.BehavioralPolicy.toPureMeasure_isProbability
       (M := Protocol G) (protocolBehavior who)
@@ -2499,7 +2532,10 @@ private theorem compactPayoff_update_behavioral {G : FiniteStageGame}
     funext i
     by_cases hi : i = who
     · subst i
-      simp [lawProfile, strategyDeviation]
+      change ((Function.update profile who strategyDeviation who : Strategy G who) :
+          Measure (Plan G who)) = _
+      simp only [Function.update_self, Profile.update_same]
+      rfl
     · simp [lawProfile, hi]
   have hkuhn :=
     kuhn_arbitraryPolicyMeasure_opponents_behavioralDeviation_discountedPayoff
@@ -2899,11 +2935,11 @@ private theorem expectedStagePayoff_mixedSequenceBehavior
     (fun who => G.repeatedGame.expectedStagePayoff
       (mixedSequenceBehavior G sequence) PUnit.unit time who) =
       G.mixedPayoff (sequence time) := by
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  letI : Finite G.kernel.Outcome := by
+  let : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   funext who
@@ -2925,10 +2961,10 @@ private theorem expectedStagePayoff_mem_correlatedFeasiblePayoffs_early
     (G : FiniteStageGame) (profile : G.BehaviorProfile) (time : ℕ) :
     (fun who ↦ G.repeatedGame.expectedStagePayoff
       profile PUnit.unit time who) ∈ G.correlatedFeasiblePayoffs := by
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
-  letI : Finite G.kernel.Outcome := by
+  let : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   let payoffAt := fun history : G.repeatedGame.Hist time ↦
@@ -2963,7 +2999,7 @@ theorem property_3_finite (G : FiniteStageGame) :
     HausdorffConvergesAtTop G.finiteFeasiblePayoffs
       G.correlatedFeasiblePayoffs := by
   let ActionProfile := ∀ who, G.Action who
-  letI : Nonempty ActionProfile := inferInstance
+  let : Nonempty ActionProfile := inferInstance
   obtain ⟨bound, hboundAbs⟩ := Math.Probability.exists_abs_bound_of_finite
     (fun action : ActionProfile => ‖G.payoff action‖)
   have hbound : ∀ action : ActionProfile, ‖G.payoff action‖ ≤ bound := by
@@ -3018,7 +3054,7 @@ theorem property_3_finite (G : FiniteStageGame) :
       rw [show behavior = mixedSequenceBehavior G stages by rfl,
         expectedStagePayoff_mixedSequenceBehavior]
       dsimp only [stages]
-      rw [dif_pos htime]
+      rw [dite_eq_left htime]
       change G.kernel.mixedExtension.payoffVector
           (G.kernel.pureMixedProfile (sample ⟨time, htime⟩)) =
         G.payoff (sample ⟨time, htime⟩)
@@ -3038,7 +3074,7 @@ theorem property_3_finite (G : FiniteStageGame) :
       apply Finset.sum_congr rfl
       intro time htime
       have htimen : time < n := Finset.mem_range.mp htime
-      rw [dif_pos htimen]
+      rw [dite_eq_left htimen]
       exact congrFun (hstage time htimen) who
     refine ⟨G.finitePayoff n behavior, ⟨behavior, rfl⟩, ?_⟩
     rw [hpayoff, dist_eq_norm]
@@ -3050,11 +3086,11 @@ theorem property_3_discounted (G : FiniteStageGame) :
     HausdorffConvergesAtZero G.discountedFeasiblePayoffs
       G.correlatedFeasiblePayoffs := by
   intro ε hε
-  letI (who : G.Player) : Fintype (G.kernel.Strategy who) :=
+  let (who : G.Player) : Fintype (G.kernel.Strategy who) :=
     G.finiteAction who
-  letI (who : G.Player) : Nonempty (G.kernel.Strategy who) :=
+  let (who : G.Player) : Nonempty (G.kernel.Strategy who) :=
     G.nonemptyAction who
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   obtain ⟨β₀, hβ₀0, hβ₀1, happrox⟩ :=
@@ -3079,9 +3115,7 @@ theorem property_3_discounted (G : FiniteStageGame) :
       intro state action
       exact subset_convexHull ℝ G.purePayoffSet ⟨action, by
         funext who
-        simp [FiniteStageGame.repeatedGame,
-          KernelGame.realizedActionStochasticGame,
-          FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
+        simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
     have hmem := G.repeatedGame.discountedPayoff_mem_of_stagePayoff_mem_convex
       G.correlatedFeasiblePayoffs G.correlatedFeasiblePayoffs_convex
       hstage profile PUnit.unit hβ0 hβ1
@@ -3139,11 +3173,11 @@ theorem property_3_discounted (G : FiniteStageGame) :
 theorem property_3_banach (G : FiniteStageGame) (L : BanachLimit) :
     G.banachFeasiblePayoffs L = G.correlatedFeasiblePayoffs := by
   let ActionProfile := ∀ who, G.Action who
-  letI : Nonempty ActionProfile := inferInstance
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let : Nonempty ActionProfile := inferInstance
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Fintype G.repeatedGame.State := inferInstanceAs (Fintype PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   apply Set.Subset.antisymm
   · rintro payoff ⟨profile, rfl⟩
     have hstage : ∀ state action,
@@ -3152,9 +3186,7 @@ theorem property_3_banach (G : FiniteStageGame) (L : BanachLimit) :
       intro state action
       exact subset_convexHull ℝ G.purePayoffSet ⟨action, by
         funext who
-        simp [FiniteStageGame.repeatedGame,
-          KernelGame.realizedActionStochasticGame,
-          FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
+        simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]⟩
     have hfinite (step : ℕ) : G.finitePayoff (step + 1) profile ∈
         G.correlatedFeasiblePayoffs := by
       unfold FiniteStageGame.finitePayoff
@@ -3277,18 +3309,18 @@ private theorem FiniteStageGame.publicTriggerStatus_eq_some_of_first
     if hk : k < time then (history.1 ⟨k, hk⟩).2 else path k
   have hmismatch' : play first ≠ path first := by
     dsimp only [play]
-    rw [dif_pos hfirst]
+    rw [dite_eq_left hfirst]
     exact hmismatch
   have hbefore' : ∀ k < first, play k = path k := by
     intro k hk
     dsimp only [play]
-    rw [dif_pos (hk.trans hfirst)]
+    rw [dite_eq_left (hk.trans hfirst)]
     exact hbefore k hk
   have hother' : ∀ other, other ≠ who →
       play first other = path first other := by
     intro other hne
     dsimp only [play]
-    rw [dif_pos hfirst]
+    rw [dite_eq_left hfirst]
     exact hother other hne
   have hstatus := G.actionMonitoringGame.triggerStatus_ofFn_eq_some_of_first
     path play who hfirst hmismatch' hbefore' hother'
@@ -3348,7 +3380,6 @@ private theorem FiniteStageGame.triggerMonitoredProfile_of_onPath
   simp only [FiniteStageGame.triggerMonitoredProfile]
   rw [show G.actionMonitoringGame.triggerStatus path (List.ofFn history) = none by
     simpa using hstatus]
-  rfl
 
 private theorem FiniteStageGame.triggerMonitoredProfile_of_culprit
     (G : FiniteStageGame) (path : ℕ → (∀ who, G.Action who))
@@ -3438,9 +3469,9 @@ private theorem FiniteStageGame.finitePayoff_triggerBehaviorProfile
     G.finitePayoff horizon (G.triggerBehaviorProfile path punishment) =
       (horizon : ℝ)⁻¹ •
         ∑ time ∈ Finset.range horizon, G.payoff (path time) := by
-  letI (player : G.Player) : Finite (G.kernel.Strategy player) :=
+  let (player : G.Player) : Finite (G.kernel.Strategy player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   funext who
@@ -3514,9 +3545,9 @@ private theorem FiniteStageGame.stageEUAt_update_trigger_le
           (G.triggerBehaviorProfile path G.vanishingPunishments)
           who deviation) history who ≤
       G.individualRationalLevel who + vanishingPunishmentError time := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) :=
     G.finiteAction player
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   let behavior := G.triggerBehaviorProfile path G.vanishingPunishments
@@ -3559,9 +3590,9 @@ private theorem stageEUAt_securityDeviation_ge
       G.repeatedGame.stageEUAt
         (Function.update profile who
           (G.individualRationalDeviation profile who)) history who := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) :=
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) :=
     G.finiteAction player
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   let current : G.MixedProfile := fun player ↦
@@ -3575,7 +3606,6 @@ private theorem stageEUAt_securityDeviation_ge
     by_cases hplayer : player = who
     · subst player
       simp [current, FiniteStageGame.individualRationalDeviation]
-      rfl
     · simp [current, KernelGame.profileWithOpponent,
         FiniteStageGame.opponentsAt, hplayer]
   have hreply := G.individualRationalReply_spec profile who history
@@ -3595,9 +3625,9 @@ private theorem expectedStagePayoff_securityDeviation_ge
         (Function.update profile who
           (G.individualRationalDeviation profile who))
         PUnit.unit time who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_const
     (G.repeatedGame.histDist
@@ -3615,9 +3645,9 @@ private theorem finiteAveragePayoff_securityDeviation_ge
       G.repeatedGame.finiteAveragePayoff PUnit.unit horizon.1
         (Function.update profile who
           (G.individualRationalDeviation profile who)) who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
   have hnonneg : 0 ≤ (horizon.1 : ℝ)⁻¹ := by positivity
   calc
@@ -3644,9 +3674,9 @@ security reply from Lemma 1(8), then apply positivity of the Banach limit. -/
 theorem banachEquilibriumPayoffs_subset_individuallyRationalPayoffs
     (G : FiniteStageGame) (L : BanachLimit) :
     G.banachEquilibriumPayoffs L ⊆ G.individuallyRationalPayoffs := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   rintro payoff ⟨profile, hnash, rfl⟩
   constructor
   · rw [← property_3_banach G L]
@@ -3743,10 +3773,10 @@ profile prescribed at the empty history. -/
 theorem finitePayoff_one_eq_mixedPayoff_initial
     (G : FiniteStageGame) (profile : G.BehaviorProfile) :
     G.finitePayoff 1 profile = G.mixedPayoff (G.initialMixedProfile profile) := by
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   funext who
@@ -3769,9 +3799,9 @@ theorem lemma_1_D1_subset_Dn (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageFeasiblePayoffs ⊆
       G.finiteFeasiblePayoffsOnHorizon n := by
-  letI (who : G.Player) : Finite (G.kernel.Strategy who) :=
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   rintro payoff ⟨profile, rfl⟩
@@ -3805,9 +3835,9 @@ theorem lemma_1_D1_subset_Dlambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.oneStageFeasiblePayoffs ⊆
       G.discountedFeasiblePayoffsOnRate lam := by
-  letI (who : G.Player) : Finite (G.kernel.Strategy who) :=
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   rintro payoff ⟨profile, rfl⟩
@@ -3837,9 +3867,9 @@ theorem monitoredStagePayoff_mem_correlatedFeasiblePayoffs
     (time : ℕ) :
     (fun who ↦ G.kernel.realizedActionMonitoring.stageEU
       profile time who) ∈ G.correlatedFeasiblePayoffs := by
-  letI (who : G.Player) : Fintype (G.kernel.Strategy who) :=
+  let (who : G.Player) : Fintype (G.kernel.Strategy who) :=
     G.finiteAction who
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   let M := G.kernel.realizedActionMonitoring
@@ -3868,9 +3898,9 @@ theorem expectedStagePayoff_mem_correlatedFeasiblePayoffs
     (G : FiniteStageGame) (profile : G.BehaviorProfile) (time : ℕ) :
     (fun who ↦ G.repeatedGame.expectedStagePayoff
       profile PUnit.unit time who) ∈ G.correlatedFeasiblePayoffs := by
-  letI (who : G.Player) : Finite (G.kernel.Strategy who) :=
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   let monitored :=
@@ -3898,7 +3928,7 @@ theorem lemma_1_Dn_subset_C (G : FiniteStageGame)
     G.finiteFeasiblePayoffsOnHorizon n ⊆
       G.correlatedFeasiblePayoffs := by
   rintro _ ⟨profile, rfl⟩
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
   change (fun who ↦ G.repeatedGame.finiteAveragePayoff
     PUnit.unit n.1 profile who) ∈ G.correlatedFeasiblePayoffs
@@ -3928,9 +3958,9 @@ theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
     G.discountedFeasiblePayoffsOnRate lam ⊆
       G.correlatedFeasiblePayoffs := by
   rintro _ ⟨profile, rfl⟩
-  letI (who : G.Player) : Fintype (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Fintype (G.repeatedGame.Act who) :=
     G.finiteAction who
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let parameter : unitInterval := ⟨lam.1, lam.2.1.le, lam.2.2⟩
   let timeLaw : PMF ℕ :=
     (ProbabilityTheory.geometricMeasure parameter).toPMF
@@ -3963,9 +3993,7 @@ theorem lemma_1_Dlambda_subset_C (G : FiniteStageGame)
       funext history
       congr 1
       funext action
-      simp [FiniteStageGame.repeatedGame,
-        KernelGame.realizedActionStochasticGame,
-        FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+      simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
     rw [show Math.Probability.expect discountedActionLaw
         (fun action ↦ G.payoff action who) =
       Math.Probability.expect timeLaw (fun time ↦
@@ -4043,12 +4071,12 @@ theorem lemma_1_E1_subset_En (G : FiniteStageGame)
     (n : G.Horizon) :
     G.oneStageEquilibriumPayoffs ⊆
       G.finiteEquilibriumPayoffsOnHorizon n := by
-  letI (who : G.Player) : Finite (G.kernel.Strategy who) :=
+  let (who : G.Player) : Finite (G.kernel.Strategy who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
-  letI : Finite G.kernel.mixedExtension.Outcome :=
+  let : Finite G.kernel.mixedExtension.Outcome :=
     G.kernel.finite_mixedExtension_outcome
   rintro payoff ⟨profile, hnash, rfl⟩
   let monitored :=
@@ -4106,12 +4134,12 @@ theorem lemma_1_E1_subset_Elambda (G : FiniteStageGame)
     (lam : G.DiscountRate) :
     G.oneStageEquilibriumPayoffs ⊆
       G.discountedEquilibriumPayoffsOnRate lam := by
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  letI : Subsingleton G.repeatedGame.State :=
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Subsingleton G.repeatedGame.State :=
     inferInstanceAs (Subsingleton PUnit)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   rintro payoff ⟨profile, hnash, rfl⟩
@@ -4194,9 +4222,9 @@ theorem discountedPayoff_individualRationalDeviation_ge
         (Function.update profile who
           (G.individualRationalDeviation profile who))
         PUnit.unit who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   obtain ⟨C, hC⟩ := Math.Probability.exists_abs_bound_of_finite
     (fun pair : G.repeatedGame.State × G.repeatedGame.JointAct ↦
       G.repeatedGame.stagePayoff pair.1 pair.2 who)
@@ -4462,8 +4490,6 @@ private theorem appendFiniteProfiles_expectedStagePayoff_add
     unfold FiniteStageGame.appendFiniteProfiles
     rw [G.repeatedGame.afterHistoryProfile_terminalChildDispatcher_canonical]
     rw [G.repeatedGame.expectedStagePayoff_canonicalTerminalChildProfile]
-    cases base.2
-    rfl
   simp_rw [hpoint]
   exact Math.Probability.expect_const _ _
 
@@ -4514,7 +4540,7 @@ private theorem sum_expect_comm_range {Ω : Type} [Finite Ω]
         Math.Probability.expect law (value time)) =
       Math.Probability.expect law fun outcome =>
         ∑ time ∈ Finset.range length, value time outcome := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   simp only [Math.Probability.expect_eq_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -4588,8 +4614,6 @@ private theorem appendFiniteProfiles_isHorizonNash
     change G.repeatedGame.afterHistoryProfile deviated base = _ at hprofile
     rw [hprofile]
     rw [G.repeatedGame.expectedStagePayoff_update_canonicalTerminalChildProfile]
-    cases base.2
-    rfl
   have hsuffixPointwise : ∀ base : G.repeatedGame.Hist prefixLength,
       (∑ time ∈ Finset.range suffixLength,
           G.repeatedGame.expectedStagePayoff
@@ -5036,7 +5060,7 @@ theorem binaryKernel_mixedEU_apply
         (1 - (profile false true).toReal) *
           ((profile true true).toReal * topRight who +
             (1 - (profile true true).toReal) * topLeft who) := by
-  letI : Finite ((KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
+  let : Finite ((KernelGame.ofPureEU (fun _ : Bool ↦ Bool)
       (binaryPayoff topLeft topRight bottomLeft bottomRight)).Outcome) := by
     unfold KernelGame.ofPureEU
     infer_instance
@@ -5151,22 +5175,21 @@ theorem example1_stageEUAt_eq_mixedPayoff
     (history : example1.repeatedGame.Hist time) (who : Bool) :
     example1.repeatedGame.stageEUAt profile history who =
       example1.mixedPayoff (fun player ↦ profile player time history) who := by
-  letI : Finite example1.kernel.Outcome := by
+  let : Finite example1.kernel.Outcome := by
     change Finite (Bool → Bool)
     exact Finite.of_fintype _
   unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
   unfold FiniteStageGame.mixedPayoff KernelGame.payoffVector
   rw [example1.kernel.mixedExtension_eu]
-  rfl
 
 /-- Example 1's expected aggregate payoff is at most one in every stage. -/
 theorem example1_expectedStageTotal_le_one
     (profile : example1.BehaviorProfile) (time : ℕ) :
     example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false +
       example1.repeatedGame.expectedStagePayoff profile PUnit.unit time true ≤ 1 := by
-  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
     @Finite.of_fintype _ (example1.finiteAction player)
-  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_add]
   rw [← Math.Probability.expect_const
@@ -5342,7 +5365,7 @@ private theorem example3_individualRationalLevel_false :
     change K.mixedExtension.eu profile false ≤ 1
     rw [binaryKernel_mixedEU_apply]
     cases action <;> simp [profile, opponents, K, pair]
-  · letI : Nonempty (K.mixedExtension.OpponentProfile false) :=
+  · let : Nonempty (K.mixedExtension.OpponentProfile false) :=
       ⟨fun _ ↦ PMF.pure false⟩
     exact le_ciInf hlower
 
@@ -5391,10 +5414,10 @@ private theorem FiniteStageGame.stageEUAt_eq_mixedEU
     G.repeatedGame.stageEUAt profile history who =
       G.kernel.mixedExtension.eu
         (fun player => profile player time history) who := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := by
     change Fintype (G.Action player)
     infer_instance
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   exact G.kernel.realizedAction_stageEUAt_eq_mixedExtension_eu
@@ -5444,10 +5467,10 @@ private theorem FiniteStageGame.mixedEU_eq_expect_update
       Math.Probability.expect (mixed who) (fun action =>
         G.kernel.mixedExtension.eu
           (Function.update mixed who (PMF.pure action)) who) := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := by
     change Fintype (G.Action player)
     infer_instance
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   exact G.kernel.mixedExtension_eu_eq_expect_pure_update mixed who
@@ -5465,10 +5488,10 @@ private theorem FiniteStageGame.expectedStagePayoff_eq_expect_pinInitialAction
           (Function.update profile who
             (G.pinInitialAction profile who action))
           PUnit.unit time who) := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := by
     change Fintype (G.Action player)
     infer_instance
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   exact G.kernel
@@ -5485,10 +5508,10 @@ private theorem FiniteStageGame.finitePayoff_eq_expect_pinInitialAction
         (fun action => G.finitePayoff horizon
           (Function.update profile who
             (G.pinInitialAction profile who action)) who) := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := by
     change Fintype (G.Action player)
     infer_instance
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   unfold FiniteStageGame.finitePayoff
@@ -5500,10 +5523,10 @@ private theorem FiniteStageGame.finitePayoff_eq_expect_pinInitialAction
 private theorem example4_mixedEU_le
     (m : ℕ) (mixed : Bool → PMF Bool) (who : Bool) :
     (example4 m).kernel.mixedExtension.eu mixed who ≤ m + 1 := by
-  letI : Finite (example4 m).kernel.Outcome := by
+  let : Finite (example4 m).kernel.Outcome := by
     change Finite (Bool → Bool)
     exact Finite.of_fintype _
-  letI : Finite (∀ player, (example4 m).kernel.Strategy player) := by
+  let : Finite (∀ player, (example4 m).kernel.Strategy player) := by
     change Finite (Bool → Bool)
     exact Finite.of_fintype _
   rw [(example4 m).kernel.mixedExtension_eu]
@@ -5568,9 +5591,9 @@ private theorem example4_expectedStagePayoff_le
     (time : ℕ) (who : Bool) :
     (example4 m).repeatedGame.expectedStagePayoff
       profile PUnit.unit time who ≤ m + 1 := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   calc
@@ -5595,9 +5618,9 @@ private theorem example4SecurityStrategy_expectedStagePayoff_ge
     (m : ℝ) ≤ (example4 m).repeatedGame.expectedStagePayoff
       (Function.update profile who (example4SecurityStrategy m who))
       PUnit.unit time who := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   calc
@@ -5612,7 +5635,6 @@ private theorem example4SecurityStrategy_expectedStagePayoff_ge
       rw [(example4 m).stageEUAt_eq_mixedEU]
       apply example4_mixedEU_ge_of_self_pure
       simp [example4SecurityStrategy]
-      rfl
 
 /-- Over a positive horizon, the Top/Right deviation guarantees average
 payoff at least `m`. -/
@@ -5621,9 +5643,9 @@ private theorem example4SecurityStrategy_finitePayoff_ge
     (profile : (example4 m).BehaviorProfile) (who : Bool) :
     (m : ℝ) ≤ (example4 m).finitePayoff horizon
       (Function.update profile who (example4SecurityStrategy m who)) who := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold FiniteStageGame.finitePayoff
   rw [(example4 m).repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
@@ -5650,7 +5672,7 @@ private theorem example4_pinWrong_expectedStagePayoff_zero
       (Function.update profile who
         ((example4 m).pinInitialAction profile who (!who)))
       PUnit.unit 0 who = 0 := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
   rw [(example4 m).repeatedGame.expectedStagePayoff_zero,
     (example4 m).stageEUAt_eq_mixedEU]
@@ -5666,9 +5688,9 @@ private theorem example4_pinWrong_finitePayoff_lt
     (example4 m).finitePayoff horizon
       (Function.update profile who
         ((example4 m).pinInitialAction profile who (!who))) who < m := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   obtain ⟨tail, rfl⟩ := Nat.exists_eq_succ_of_ne_zero (Nat.ne_of_gt hhorizon)
   unfold FiniteStageGame.finitePayoff
@@ -5801,7 +5823,6 @@ private theorem example4CriticalProfile_shift_opponent
   unfold StochasticGame.shiftProfile
   rw [Function.update_of_ne (Bool.not_ne_self who)]
   simp [example4CriticalProfile, StochasticGame.consHist]
-  rfl
 
 /-- Conditional on the first joint action, every later expected payoff of a
 deviator against the critical profile has the paper's uniform stage bound. -/
@@ -5815,9 +5836,9 @@ private theorem example4CriticalProfile_shift_expectedStagePayoff_le
           (PUnit.unit, action)) PUnit.unit time who ≤
       if action who = who then (m : ℝ) else m + 1 := by
   classical
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let shifted := (example4 m).repeatedGame.shiftProfile
     (Function.update (example4CriticalProfile m) who deviation)
@@ -5846,9 +5867,9 @@ private theorem example4CriticalProfile_shift_totalPayoff_le
             (PUnit.unit, action)) PUnit.unit m)
         (fun history => (example4 m).repeatedGame.totalPayoff who history) ≤
       (m : ℝ) * (if action who = who then (m : ℝ) else m + 1) := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   rw [(example4 m).repeatedGame.expect_totalPayoff_eq_sum_expectedStagePayoff]
   calc
@@ -5886,13 +5907,12 @@ private theorem example4CriticalProfile_root_opponent_eq_of_mem_support
       ((example4 m).repeatedGame.emptyHist PUnit.unit)
   have hmixed : mixed (!who) = PMF.pure who := by
     simp [mixed, example4CriticalProfile]
-    rfl
   change action ∈ (Math.PMFProduct.pmfPi mixed).support at hsupport
   by_contra hne
   have hzero : Math.PMFProduct.pmfPi mixed action = 0 := by
     rw [Math.PMFProduct.pmfPi_apply]
     apply Finset.prod_eq_zero (Finset.mem_univ (!who))
-    rw [hmixed, PMF.pure_apply, if_neg hne]
+    rw [hmixed, PMF.pure_apply, ite_eq_right hne]
   exact (PMF.mem_support_iff _ _).mp hsupport hzero
 
 /-- At the initial stage, a supported deviating action pays `m` precisely
@@ -5916,9 +5936,9 @@ private theorem example4CriticalProfile_deviation_bound
     (deviation : (example4 m).BehaviorStrategy who) :
     (example4 m).repeatedGame.finiteAveragePayoff PUnit.unit (m + 1)
       (Function.update (example4CriticalProfile m) who deviation) who ≤ m := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let deviated := Function.update (example4CriticalProfile m) who deviation
   let rootLaw := (example4 m).repeatedGame.stageActionDist deviated
@@ -5946,7 +5966,6 @@ private theorem example4CriticalProfile_deviation_bound
         stateValue PUnit.unit := by
       rw [← Math.Probability.expect_const (PMF.pure PUnit.unit)
         (stateValue PUnit.unit)]
-      congr 1
     rw [hstate]
     dsimp only [stateValue]
     rw [Math.Probability.expect_map]
@@ -5957,6 +5976,7 @@ private theorem example4CriticalProfile_deviation_bound
       example4CriticalProfile_root_opponent_eq_of_mem_support
         m who deviation action haction
     have hroot := example4_stagePayoff_root m who action hopponent
+    change (example4 m).kernel.eu action who = _ at hroot
     have htail := example4CriticalProfile_shift_totalPayoff_le
       m who deviation action
     change Math.Probability.expect
@@ -6019,9 +6039,9 @@ private theorem example4CriticalTailProfile_expectedStagePayoff
     (m time : ℕ) (who : Bool) :
     (example4 m).repeatedGame.expectedStagePayoff
         (example4CriticalTailProfile m) PUnit.unit time who = m + 1 := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_const
@@ -6043,9 +6063,9 @@ private theorem example4CriticalProfile_expectedStagePayoff_succ
     (m time : ℕ) (who : Bool) :
     (example4 m).repeatedGame.expectedStagePayoff
         (example4CriticalProfile m) PUnit.unit (time + 1) who = m + 1 := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   rw [(example4 m).repeatedGame.expectedStagePayoff_succ_shift]
   rw [example4CriticalProfile_rootLaw]
@@ -6071,7 +6091,7 @@ private theorem example4CriticalProfile_expectedStagePayoff_zero
     (m : ℕ) (who : Bool) :
     (example4 m).repeatedGame.expectedStagePayoff
         (example4CriticalProfile m) PUnit.unit 0 who = 0 := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
   rw [(example4 m).repeatedGame.expectedStagePayoff_zero]
   rw [(example4 m).stageEUAt_eq_mixedEU]
@@ -6088,9 +6108,9 @@ private theorem example4CriticalProfile_payoff
     (m : ℕ) :
     (example4 m).finitePayoff (m + 1) (example4CriticalProfile m) =
       pair m m := by
-  letI (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
+  let (player : Bool) : Finite ((example4 m).repeatedGame.Act player) :=
     @Finite.of_fintype _ ((example4 m).finiteAction player)
-  letI : Finite (example4 m).repeatedGame.State :=
+  let : Finite (example4 m).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   funext who
   change Bool at who
@@ -6140,16 +6160,16 @@ private theorem example5_sum_payoff (N : ℕ) [NeZero N]
       else 0) = _
   by_cases hunanimous : ∃ label, ∀ who, action who = label
   · obtain ⟨label, hlabel⟩ := hunanimous
-    rw [if_pos ⟨label, hlabel⟩]
+    rw [ite_eq_left ⟨label, hlabel⟩]
     have hconstant (who : Fin N) : ∀ i, action i = action who := by
       intro i
       rw [hlabel i, hlabel who]
-    simp_rw [dif_pos (hconstant _), hlabel]
+    simp_rw [dite_eq_left (hconstant _), hlabel]
     simp
-  · rw [if_neg hunanimous]
+  · rw [ite_eq_right hunanimous]
     apply Finset.sum_eq_zero
     intro who _
-    rw [dif_neg]
+    rw [dite_eq_right]
     intro hconstant
     exact hunanimous ⟨action who, hconstant⟩
 
@@ -6264,17 +6284,22 @@ mixed one-stage payoff at the current behavioral actions. -/
 private theorem example5_stageEUAt_eq_mixedPayoff
     (N : ℕ) [NeZero N] (profile : (example5 N).BehaviorProfile)
     {time : ℕ} (history : (example5 N).repeatedGame.Hist time)
-    (who : Fin N) :
+    (who : (example5 N).Player) :
     (example5 N).repeatedGame.stageEUAt profile history who =
       (example5 N).mixedPayoff
         (fun player => profile player time history) who := by
-  letI : Finite (example5 N).kernel.Outcome := by
+  let : Finite (example5 N).kernel.Outcome := by
     change Finite (Fin N → Fin N)
     exact Finite.of_fintype _
   unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
   unfold FiniteStageGame.mixedPayoff KernelGame.payoffVector
-  rw [(example5 N).kernel.mixedExtension_eu]
-  rfl
+  change Math.Probability.expect
+      (Math.PMFProduct.pmfPi (fun player => profile player time history))
+        (fun action => (example5 N).kernel.eu action who) =
+    (example5 N).kernel.mixedExtension.eu
+      (fun player => profile player time history) who
+  exact ((example5 N).kernel.mixedExtension_eu
+    (fun player => profile player time history) who).symm
 
 /-- Equality in Example 5's aggregate mixed-payoff bound forces all players
 to use the same pure action. -/
@@ -6283,26 +6308,33 @@ private theorem example5_mixedProfile_common_pure_of_total_eq_one
     (profile : (example5 N).MixedProfile)
     (htotal : ∑ who, (example5 N).mixedPayoff profile who = 1) :
     ∃ label, ∀ who, profile who = PMF.pure label := by
-  letI (who : (example5 N).Player) :
+  let (who : (example5 N).Player) :
       Fintype ((example5 N).kernel.Strategy who) :=
     (example5 N).finiteAction who
-  letI : Finite (example5 N).kernel.Outcome := by
+  let : Finite (example5 N).kernel.Outcome := by
     change Finite (Fin N → Fin N)
     exact Finite.of_fintype _
   let joint := Math.PMFProduct.pmfPi profile
-  have hmixed (who : Fin N) :
+  have hmixed (who : (example5 N).Player) :
       (example5 N).mixedPayoff profile who =
         Math.Probability.expect joint
           (fun action => (example5 N).payoff action who) := by
     change (example5 N).kernel.mixedExtension.eu profile who = _
-    rw [(example5 N).kernel.mixedExtension_eu]
+    rw [(example5 N).kernel.mixedExtension_eu profile who]
     congr 1
     funext action
     simp [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
   have hexpect : Math.Probability.expect joint
       (fun action => ∑ who, (example5 N).payoff action who) = 1 := by
-    rw [← Math.Probability.expect_sum_comm]
-    simpa only [hmixed] using htotal
+    calc
+      _ = ∑ who, Math.Probability.expect joint
+          (fun action => (example5 N).payoff action who) := by
+        rw [← Math.Probability.expect_sum_comm]
+      _ = ∑ who, (example5 N).mixedPayoff profile who := by
+        apply Finset.sum_congr rfl
+        intro who _
+        exact (hmixed who).symm
+      _ = 1 := htotal
   apply pmfPi_eq_common_pure_of_unanimous_support N hN profile
   intro action haction
   by_contra hnot
@@ -6315,7 +6347,7 @@ private theorem example5_mixedProfile_common_pure_of_total_eq_one
       split_ifs <;> norm_num
     · refine ⟨action, (PMF.mem_support_iff _ _).mp haction, ?_⟩
       have hsum := example5_sum_payoff N action
-      rw [hsum, if_neg hnot]
+      rw [hsum, ite_eq_right hnot]
       norm_num
   linarith
 
@@ -6328,15 +6360,15 @@ private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
       (example5 N).discountedPayoffOnRate rate profile who = 1) :
     ∑ who, (example5 N).mixedPayoff
       ((example5 N).initialMixedProfile profile) who = 1 := by
-  letI (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
+  let (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
     @Finite.of_fintype _ ((example5 N).finiteAction who)
-  letI : Finite (example5 N).repeatedGame.State :=
+  let : Finite (example5 N).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let beta := 1 - rate.1
   let empty := (example5 N).repeatedGame.emptyHist PUnit.unit
   let actionLaw := (example5 N).repeatedGame.stageActionDist profile empty
   let continuation (action : (example5 N).repeatedGame.JointAct)
-      (who : Fin N) :=
+      (who : (example5 N).Player) :=
     (example5 N).repeatedGame.discountedPayoff beta
       ((example5 N).repeatedGame.shiftProfile
         profile (PUnit.unit, action)) PUnit.unit who
@@ -6346,12 +6378,14 @@ private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
   have hbeta1 : beta < 1 := by
     dsimp only [beta]
     linarith [rate.2.1]
-  have hbound (who : Fin N) : ∀ state action,
+  classical
+  have hbound (who : (example5 N).Player) : ∀ state action,
       |(example5 N).repeatedGame.stagePayoff state action who| ≤ 1 := by
     intro state action
-    simp only [FiniteStageGame.repeatedGame,
-      KernelGame.realizedActionStochasticGame,
-      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, example5]
+    change |(example5 N).kernel.eu action who| ≤ 1
+    rw [KernelGame.eu_ofPureEU]
+    rw [abs_of_nonneg (example5_payoff_nonneg N action who)]
+    simp only [example5]
     split_ifs <;> norm_num
   have htransition (action : (example5 N).repeatedGame.JointAct) :
       (example5 N).repeatedGame.transition PUnit.unit action =
@@ -6365,14 +6399,13 @@ private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
     exact Math.Probability.expect_pure f PUnit.unit
   have hinitial : (example5 N).initialMixedProfile profile =
       fun player => profile player 0 empty := rfl
-  have hshift (who : Fin N) :
+  have hshift (who : (example5 N).Player) :
       (example5 N).discountedPayoffOnRate rate profile who =
         rate.1 * (example5 N).repeatedGame.stageEUAt profile empty who +
           beta * Math.Probability.expect actionLaw
             (fun action => continuation action who) := by
     have h := (example5 N).repeatedGame.discountedPayoff_shift
       (hbound who) profile PUnit.unit (β := beta) hbeta0 hbeta1
-    simp_rw [hexpectTransition] at h
     simpa [FiniteStageGame.discountedPayoffOnRate,
       FiniteStageGame.discountedPayoff, beta, empty, actionLaw,
       continuation] using h
@@ -6414,7 +6447,6 @@ private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
     simp_rw [hshift]
     rw [Finset.sum_add_distrib, ← Finset.mul_sum, ← Finset.mul_sum,
       Math.Probability.expect_sum_comm]
-    rfl
   have hstageEq : ∑ who,
       (example5 N).repeatedGame.stageEUAt profile empty who = 1 := by
     rw [htotal] at hsumShift
@@ -6434,7 +6466,12 @@ private theorem example5_initial_total_eq_one_of_discounted_total_eq_one
 columns. -/
 inductive FourColumn
   | c0 | c1 | c2 | c3
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype FourColumn :=
+  Fintype.ofList [.c0, .c1, .c2, .c3] (by
+    intro column
+    cases column <;> simp)
 
 /-- A sum over Example 6's four columns, in table order. -/
 lemma sum_fourColumn {M : Type*} [AddCommMonoid M] (f : FourColumn → M) :
@@ -6491,7 +6528,7 @@ theorem example6_mixedPayoff_false
       (profile true FourColumn.c1).toReal +
         2 * (profile true FourColumn.c2).toReal +
         3 * (profile true FourColumn.c3).toReal := by
-  letI : Finite example6.kernel.Outcome := by
+  let : Finite example6.kernel.Outcome := by
     change Finite (∀ who, Example6Action who)
     exact Finite.of_fintype _
   change example6.kernel.mixedExtension.eu profile false = _
@@ -6516,7 +6553,7 @@ theorem example6_mixedPayoff_true
         (profile false true).toReal *
           ((profile true FourColumn.c2).toReal +
             (profile true FourColumn.c3).toReal) := by
-  letI : Finite example6.kernel.Outcome := by
+  let : Finite example6.kernel.Outcome := by
     change Finite (∀ who, Example6Action who)
     exact Finite.of_fintype _
   change example6.kernel.mixedExtension.eu profile true = _
@@ -6542,7 +6579,9 @@ theorem example6_outerStrip_mem_D1 (x y : ℝ)
       | FourColumn.c1 => x
       | FourColumn.c2 => 0
       | FourColumn.c3 => 0
-    have hweights : weights ∈ stdSimplex ℝ FourColumn := by
+    have hweights : weights ∈
+        GameTheory.Math.Probability.simplexWeights FourColumn := by
+      rw [GameTheory.Math.Probability.mem_simplexWeights]
       constructor
       · intro column
         cases column <;> simp [weights] <;> linarith
@@ -6565,7 +6604,9 @@ theorem example6_outerStrip_mem_D1 (x y : ℝ)
       | FourColumn.c1 => 0
       | FourColumn.c2 => 3 - x
       | FourColumn.c3 => x - 2
-    have hweights : weights ∈ stdSimplex ℝ FourColumn := by
+    have hweights : weights ∈
+        GameTheory.Math.Probability.simplexWeights FourColumn := by
+      rw [GameTheory.Math.Probability.mem_simplexWeights]
       constructor
       · intro column
         cases column <;> simp [weights] <;> linarith
@@ -6623,9 +6664,9 @@ theorem example1_half_mem_E2 :
 theorem example1_half_not_mem_D3 :
     pair (1 / 2) (1 / 2) ∉ example1.finiteFeasiblePayoffs 3 := by
   rintro ⟨profile, hpayoff⟩
-  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
     @Finite.of_fintype _ (example1.finiteAction player)
-  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
   have hrow := congrFun hpayoff false
   have hcolumn := congrFun hpayoff true
   change example1.repeatedGame.finiteAveragePayoff PUnit.unit 3
@@ -6705,11 +6746,6 @@ theorem example1_half_not_mem_D3 :
     simp only [StochasticGame.histDist, PMF.pure_bind]
     rw [show example1.repeatedGame.emptyHist PUnit.unit = history0 by rfl,
       haction0, PMF.pure_bind]
-    simp only [history1, history0, StochasticGame.emptyHist]
-    change ((PMF.pure PUnit.unit : PMF PUnit).bind fun state ↦
-      PMF.pure (history1.1, state)) = PMF.pure history1
-    rw [PMF.pure_bind]
-    rfl
   have hstage1_total :
       example1.repeatedGame.stageEUAt profile history1 false +
         example1.repeatedGame.stageEUAt profile history1 true = 1 := by
@@ -6759,7 +6795,6 @@ theorem example1_half_not_mem_D3 :
     change ((PMF.pure PUnit.unit : PMF PUnit).bind fun state ↦
       PMF.pure (history2.1, state)) = PMF.pure history2
     rw [PMF.pure_bind]
-    rfl
   have hstage2_total :
       example1.repeatedGame.stageEUAt profile history2 false +
         example1.repeatedGame.stageEUAt profile history2 true = 1 := by
@@ -6997,7 +7032,7 @@ theorem example1_no_finite_convexification (n : example1.Horizon) :
       example1.repeatedGame.expectedStagePayoff profile PUnit.unit time false =
         if diagonal time then 0 else 1 := by
     intro time htime
-    simpa only [diagonal, dif_pos htime] using
+    simpa only [diagonal, dite_eq_left htime] using
       Classical.choose_spec (hbool time htime)
   have hrow := congrFun hpayoff false
   have hrowSum := congrFun
@@ -7230,7 +7265,7 @@ theorem example2_D1_eq_C :
           (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
             (pair 0 1))).mixedExtension.eu profile false = _
       rw [example2_mixedEU_false, hfirstFalse, hsecondFalse]
-      simp only [profile, Bool.false_eq_true, if_false, if_true,
+      simp only [profile, Bool.false_eq_true, ite_false, ite_true,
         Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
       change (1 - p) * (1 + q) = x
       have hxFromSY : x = 1 - s + y := by
@@ -7248,7 +7283,7 @@ theorem example2_D1_eq_C :
           (binaryPayoff (pair 1 0) (pair 2 2) (pair 0 0)
             (pair 0 1))).mixedExtension.eu profile true = _
       rw [example2_mixedEU_true, hfirstTrue, hsecondTrue]
-      simp only [profile, if_true, Bool.false_eq_true, if_false,
+      simp only [profile, ite_true, Bool.false_eq_true, ite_false,
         Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
       change q * (2 - p) = y
       rw [show 2 - p = 2 - s + q by dsimp [p]; ring]
@@ -7391,7 +7426,7 @@ private theorem example2TwoStageProfile_deviation_bound
     (who : Bool) (deviation : example2.StandardMonitoredStrategy who) :
     example2.kernel.realizedActionMonitoring.finiteAveragePayoff 2
       (Function.update example2TwoStageProfile who deviation) who ≤ 1 := by
-  letI : Finite example2.kernel.Outcome := by
+  let : Finite example2.kernel.Outcome := by
     change Finite (∀ _ : Bool, Bool)
     exact Finite.of_fintype _
   let M := example2.kernel.realizedActionMonitoring
@@ -7495,10 +7530,10 @@ private theorem example2TwoStageProfile_deviation_bound
 
 theorem example2_one_one_mem_E2 :
     pair 1 1 ∈ example2.finiteEquilibriumPayoffs 2 := by
-  letI : Finite example2.kernel.Outcome := by
+  let : Finite example2.kernel.Outcome := by
     change Finite (∀ _ : Bool, Bool)
     exact Finite.of_fintype _
-  letI (who : Bool) : Finite (example2.kernel.Strategy who) := by
+  let (who : Bool) : Finite (example2.kernel.Strategy who) := by
     change Finite Bool
     exact Finite.of_fintype _
   let behavior :=
@@ -7578,7 +7613,7 @@ theorem example3_En : ∀ n, 0 < n →
         intro who deviation
         cases who
         · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
-          simp only [profile, Bool.false_eq_true, if_false, if_true,
+          simp only [profile, Bool.false_eq_true, ite_false, ite_true,
             Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
           norm_num [pair]
         · rw [binaryKernel_mixedEU_apply, binaryKernel_mixedEU_apply]
@@ -7586,7 +7621,7 @@ theorem example3_En : ∀ n, 0 < n →
           have hdeviation0 : 0 ≤ (deviation true).toReal := ENNReal.toReal_nonneg
           have hdeviation1 : (deviation true).toReal ≤ 1 :=
             ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
-          simp only [profile, if_true, Bool.false_eq_true, if_false,
+          simp only [profile, ite_true, Bool.false_eq_true, ite_false,
             Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
           norm_num [pair]
           dsimp only [p] at *
@@ -7596,12 +7631,12 @@ theorem example3_En : ∀ n, 0 < n →
         funext who
         cases who
         · rw [binaryGame_mixedPayoff_apply]
-          simp only [profile, Bool.false_eq_true, if_false, if_true,
+          simp only [profile, Bool.false_eq_true, ite_false, ite_true,
             Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
           norm_num [pair]
           exact hvrow.symm
         · rw [binaryGame_mixedPayoff_apply]
-          simp only [profile, if_true, Bool.false_eq_true, if_false,
+          simp only [profile, ite_true, Bool.false_eq_true, ite_false,
             Math.ProbabilityMassFunction.bernoulliBool_true_toReal]
           norm_num [pair]
           dsimp only [p]
@@ -7643,7 +7678,12 @@ theorem example3_half_mem_D2_not_D1 :
       ext who
       cases who <;> norm_num [Pi.add_apply, Pi.smul_apply, pair, smul_eq_mul]
     apply smul_right_injective (Payoff Bool) (by norm_num : (2 : ℝ) ≠ 0)
-    exact hweighted.trans hpairs
+    have hpairs' :
+        (1 : ℝ) • pair 1 1 + (1 : ℝ) • pair 0 0 =
+          (2 : ℝ) • pair (1 / 2) (1 / 2) := by
+      ext who
+      cases who <;> norm_num [Pi.add_apply, Pi.smul_apply, pair, smul_eq_mul]
+    exact hweighted.trans hpairs'
   · rintro ⟨profile, hpayoff⟩
     change (Bool → PMF Bool) at profile
     have hrow := congrFun hpayoff false
@@ -7734,16 +7774,16 @@ private theorem example4_finitePayoff_eq_topRight_of_horizonNash
       omega
   | succ tail ih =>
       intro profile _hpositive hle hnash
-      letI (player : Bool) : Fintype ((example4 m).kernel.Strategy player) := by
+      let (player : Bool) : Fintype ((example4 m).kernel.Strategy player) := by
         change Fintype Bool
         infer_instance
-      letI : Finite (example4 m).kernel.Outcome := by
+      let : Finite (example4 m).kernel.Outcome := by
         change Finite (Bool → Bool)
         exact Finite.of_fintype _
-      letI (player : Bool) : Finite
+      let (player : Bool) : Finite
           ((example4 m).repeatedGame.Act player) :=
         @Finite.of_fintype _ ((example4 m).finiteAction player)
-      letI : Finite (example4 m).repeatedGame.State :=
+      let : Finite (example4 m).repeatedGame.State :=
         inferInstanceAs (Finite PUnit)
       have hcurrent : (example4 m).initialMixedProfile profile =
           fun player : Bool => PMF.pure player := by
@@ -7946,9 +7986,9 @@ theorem example1_expectedStagePayoff_diagonalSchedule
     example1.repeatedGame.expectedStagePayoff
         (example1DiagonalScheduleProfile schedule) PUnit.unit time who =
       if schedule time then pair 0 1 who else pair 1 0 who := by
-  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
     @Finite.of_fintype _ (example1.finiteAction player)
-  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_const
     (example1.repeatedGame.histDist
@@ -7993,9 +8033,9 @@ theorem example1_diagonalSchedule_isDiscountedNash
           (example1DiagonalScheduleProfile schedule)
             PUnit.unit time who := by
     intro time
-    letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+    let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
       @Finite.of_fintype _ (example1.finiteAction player)
-    letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+    let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
     rw [example1_expectedStagePayoff_diagonalSchedule]
     unfold StochasticGame.expectedStagePayoff
     rw [← Math.Probability.expect_const
@@ -8013,7 +8053,6 @@ theorem example1_diagonalSchedule_isDiscountedNash
             false deviation) true time history =
             PMF.pure (schedule time) := by
         simp [example1DiagonalScheduleProfile]
-        rfl
       rw [hother]
       have hprob0 : 0 ≤ (deviation time history true).toReal :=
         ENNReal.toReal_nonneg
@@ -8027,7 +8066,6 @@ theorem example1_diagonalSchedule_isDiscountedNash
             true deviation) false time history =
             PMF.pure (schedule time) := by
         simp [example1DiagonalScheduleProfile]
-        rfl
       rw [hother]
       have hprob0 : 0 ≤ (deviation time history true).toReal :=
         ENNReal.toReal_nonneg
@@ -8037,7 +8075,6 @@ theorem example1_diagonalSchedule_isDiscountedNash
       · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
       · norm_num [Function.update_self, hs, pair, PMF.pure_apply]
         convert hprob1 using 1
-        rfl
   have hbetaAbs : |beta| < 1 := by rwa [abs_of_nonneg hbeta0]
   have hdeviationSummable :=
     example1.repeatedGame.summable_discounted_expectedStagePayoff
@@ -8125,9 +8162,9 @@ theorem example1_discountedTotal_le_one
     (hbeta0 : 0 ≤ beta) (hbeta1 : beta < 1) :
     example1.repeatedGame.discountedPayoff beta profile PUnit.unit false +
       example1.repeatedGame.discountedPayoff beta profile PUnit.unit true ≤ 1 := by
-  letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
     @Finite.of_fintype _ (example1.finiteAction player)
-  letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
   have hbound (who : Bool) : ∀ state action,
       |example1.repeatedGame.stagePayoff state action who| ≤ 1 := by
     intro state action
@@ -8233,7 +8270,7 @@ theorem example1_discounted_nonmonotone :
           split <;> norm_num
         rw [show (1 - 7 / 8 : ℝ) = 1 / 8 by norm_num]
         rw [hsum.tsum_eq_zero_add]
-        simp only [schedule, if_true, mul_one, pow_succ']
+        simp only [schedule, ite_true, mul_one, pow_succ']
         rw [tsum_mul_left, tsum_geometric_of_lt_one (by norm_num) (by norm_num)]
         norm_num
   · constructor
@@ -8249,9 +8286,9 @@ theorem example1_discounted_nonmonotone :
       rw [binaryGame_mixedPayoff_apply, hfalse, htrue] at hrow
       cases diagonal <;> norm_num [pair, PMF.pure_apply] at hrow
     · rintro ⟨candidate, hcandidate⟩
-      letI (player : Bool) : Finite (example1.repeatedGame.Act player) :=
+      let (player : Bool) : Finite (example1.repeatedGame.Act player) :=
         @Finite.of_fintype _ (example1.finiteAction player)
-      letI : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
+      let : Finite example1.repeatedGame.State := inferInstanceAs (Finite PUnit)
       have hrow := congrFun hcandidate false
       have hcolumn := congrFun hcandidate true
       change example1.repeatedGame.discountedPayoff (1 - 3 / 4)
@@ -8326,7 +8363,6 @@ theorem example1_discounted_nonmonotone :
           example1.repeatedGame.expectedStagePayoff_zero] at hstageLe
         change example1.repeatedGame.stageEUAt candidate empty false +
           example1.repeatedGame.stageEUAt candidate empty true ≤ 1 at hstageLe
-        simp_rw [hexpectTransition] at hshiftRow hshiftColumn
         norm_num at hshiftRow hshiftColumn
         have hcontinuationRaw := hcontinuation
         dsimp only [continuation, actionLaw, empty] at hcontinuationRaw
@@ -8438,7 +8474,6 @@ theorem example1_discounted_nonmonotone :
             example1.repeatedGame.stageEUAt candidate1 empty1 true = 1 := by
         change example1.repeatedGame.stageEUAt candidate1 empty1 false +
           example1.repeatedGame.stageEUAt candidate1 empty1 true ≤ 1 at hstage1Le
-        simp_rw [hexpectTransition] at hshift1Row hshift1Column
         norm_num at hshift1Row hshift1Column
         have hcontinuation1Raw := hcontinuation1
         dsimp only [continuation1, actionLaw1, empty1] at hcontinuation1Raw
@@ -8569,7 +8604,8 @@ theorem example5_sharp (N : ℕ) [NeZero N]
   obtain ⟨label, hpure⟩ :=
     example5_mixedProfile_common_pure_of_total_eq_one
       N hN ((example5 N).initialMixedProfile profile) hinitialTotal
-  let constantAction : Fin N → Fin N := fun _ => label
+  let observer : (example5 N).Player := ⟨label.val, label.isLt⟩
+  let constantAction : (example5 N).kernel.Profile := fun _ => label
   have hinitialPure : (example5 N).initialMixedProfile profile =
       (example5 N).kernel.pureMixedProfile constantAction := by
     funext who
@@ -8578,13 +8614,13 @@ theorem example5_sharp (N : ℕ) [NeZero N]
   have hcurrent : (fun player => profile player 0 empty) =
       (example5 N).initialMixedProfile profile := rfl
   have hstage :
-      (example5 N).repeatedGame.stageEUAt profile empty label = 1 := by
-    rw [example5_stageEUAt_eq_mixedPayoff N profile empty label,
+      (example5 N).repeatedGame.stageEUAt profile empty observer = 1 := by
+    rw [example5_stageEUAt_eq_mixedPayoff N profile empty observer,
       hcurrent, hinitialPure]
     change (example5 N).kernel.mixedExtension.payoffVector
-      ((example5 N).kernel.pureMixedProfile constantAction) label = 1
+      ((example5 N).kernel.pureMixedProfile constantAction) observer = 1
     rw [(example5 N).kernel.mixedExtension_payoffVector_pureMixedProfile]
-    simp [constantAction, example5]
+    simp [constantAction, observer, example5]
   let beta := 1 - rate.1
   have hbeta0 : 0 ≤ beta := by
     dsimp only [beta]
@@ -8592,19 +8628,20 @@ theorem example5_sharp (N : ℕ) [NeZero N]
   have hbeta1 : beta < 1 := by
     dsimp only [beta]
     linarith [rate.2.1]
-  letI (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
+  let (who : Fin N) : Finite ((example5 N).repeatedGame.Act who) :=
     @Finite.of_fintype _ ((example5 N).finiteAction who)
-  letI : Finite (example5 N).repeatedGame.State :=
+  let : Finite (example5 N).repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI : Subsingleton (example5 N).repeatedGame.State := by
+  let : Subsingleton (example5 N).repeatedGame.State := by
     change Subsingleton PUnit
     infer_instance
   have hbound : ∀ state action,
-      |(example5 N).repeatedGame.stagePayoff state action label| ≤ 1 := by
+      |(example5 N).repeatedGame.stagePayoff state action observer| ≤ 1 := by
+    classical
     intro state action
-    simp only [FiniteStageGame.repeatedGame,
-      KernelGame.realizedActionStochasticGame,
-      FiniteStageGame.kernel, KernelGame.eu_ofPureEU, example5]
+    change |(example5 N).kernel.eu action observer| ≤ 1
+    rw [KernelGame.eu_ofPureEU]
+    simp only [example5]
     split_ifs <;> norm_num
   let actionLaw := (example5 N).repeatedGame.stageActionDist profile empty
   have htailNonneg : 0 ≤ Math.Probability.expect actionLaw fun action =>
@@ -8612,7 +8649,7 @@ theorem example5_sharp (N : ℕ) [NeZero N]
         ((example5 N).repeatedGame.transition PUnit.unit action) fun state =>
           (example5 N).repeatedGame.discountedPayoff beta
             ((example5 N).repeatedGame.shiftProfile
-              profile (PUnit.unit, action)) state label := by
+              profile (PUnit.unit, action)) state observer := by
     apply Math.Probability.expect_nonneg
     intro action
     apply Math.Probability.expect_nonneg
@@ -8627,12 +8664,12 @@ theorem example5_sharp (N : ℕ) [NeZero N]
       apply lemma_1_Dlambda_subset_C (example5 N) rate
       exact ⟨(example5 N).repeatedGame.shiftProfile
         profile (PUnit.unit, action), rfl⟩
-    exact (example5_correlated_bounds N hmem).1 label
+    exact (example5_correlated_bounds N hmem).1 observer
   have hshift := (example5 N).repeatedGame.discountedPayoff_shift
     hbound profile PUnit.unit (β := beta) hbeta0 hbeta1
-  have hpayoffLabel := congrFun hpayoff label
+  have hpayoffLabel := congrFun hpayoff observer
   change (example5 N).repeatedGame.discountedPayoff beta
-      profile PUnit.unit label = 1 / (N : ℝ) at hpayoffLabel
+      profile PUnit.unit observer = 1 / (N : ℝ) at hpayoffLabel
   dsimp only [empty, actionLaw] at htailNonneg
   rw [hstage] at hshift
   dsimp only [beta] at hshift hpayoffLabel htailNonneg
@@ -9101,12 +9138,12 @@ theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
   have hC : G.discountedFeasiblePayoffs lam =
       G.correlatedFeasiblePayoffs := by
     exact (lemma_1_Dlambda_convex_iff G lamRate).mp hconvex
-  letI (who : G.Player) : Finite (G.repeatedGame.Act who) :=
+  let (who : G.Player) : Finite (G.repeatedGame.Act who) :=
     @Finite.of_fintype _ (G.finiteAction who)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
-  letI : Subsingleton G.repeatedGame.State :=
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Subsingleton G.repeatedGame.State :=
     inferInstanceAs (Subsingleton PUnit)
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ who, G.Action who)
     exact Finite.of_fintype _
   obtain ⟨rawBound, hrawBound⟩ :=
@@ -9188,15 +9225,6 @@ theorem proposition_6 (G : FiniteStageGame) (lam : ℝ)
       have hshift := G.repeatedGame.discountedPayoff_shift
         (hstageBound · · who) profile PUnit.unit
         (β := 1 - lam) (by linarith) (by linarith)
-      simp_rw [show ∀ action (f : G.repeatedGame.State → ℝ),
-          Math.Probability.expect
-              (G.repeatedGame.transition PUnit.unit action) f =
-            f PUnit.unit by
-        intro action f
-        have htransition : G.repeatedGame.transition PUnit.unit action =
-            PMF.pure PUnit.unit := rfl
-        rw [htransition]
-        exact Math.Probability.expect_pure f PUnit.unit] at hshift
       have hcoordinate := congrFun hprofile who
       change G.repeatedGame.discountedPayoff (1 - lam)
         profile PUnit.unit who = payoff who at hcoordinate
@@ -9688,8 +9716,8 @@ theorem prisonersDilemma_E1_eq_singleton :
       ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
     have hq1 : q ≤ 1 :=
       ENNReal.toReal_mono ENNReal.one_ne_top (PMF.coe_le_one _ _)
-    have hrow' : 1 ≤ p := by simpa [p] using hrow
-    have hcolumn' : 1 ≤ q := by simpa [q] using hcolumn
+    have hrow' : 1 ≤ p := by dsimp only [p]; linarith
+    have hcolumn' : 1 ≤ q := by dsimp only [q]; linarith
     have hp : p = 1 := by linarith
     have hq : q = 1 := by linarith
     apply Set.mem_singleton_iff.mpr
@@ -9795,10 +9823,10 @@ theorem prisonersDilemma_individualRationalLevel (who : Bool) :
     · rw [prisonersDilemma_mixedEU_false]
       simp [profile, K, opponents]
     · rw [prisonersDilemma_mixedEU_true]
-      simp [profile, K, opponents]
+      norm_num [profile, K, opponents]
     · rw [prisonersDilemma_mixedEU_true]
       simp [profile, K, opponents]
-  · letI : Nonempty (K.mixedExtension.OpponentProfile who) :=
+  · let : Nonempty (K.mixedExtension.OpponentProfile who) :=
       ⟨fun _ ↦ PMF.pure false⟩
     exact le_ciInf hlower
 
@@ -9858,9 +9886,9 @@ private theorem expectedStagePayoff_firstThenSecurity_ge
         (Function.update profile who
           (firstThenSecurity G profile who first))
         G.repeatedInitial time who := by
-  letI (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_const
     (G.repeatedGame.histDist
@@ -9896,7 +9924,7 @@ private theorem finitePayoff_eq_of_unique_security
     ∀ k (profile : G.BehaviorProfile),
       G.repeatedGame.IsεHorizonNash G.repeatedInitial (k + 1) 0 profile →
         G.finitePayoff (k + 1) profile = a := by
-  letI (player : G.Player) : Fintype (G.kernel.Strategy player) := by
+  let (player : G.Player) : Fintype (G.kernel.Strategy player) := by
     change Fintype (G.Action player)
     infer_instance
   intro k
@@ -10142,7 +10170,7 @@ private theorem stageEUAt_eq_monitoredMixedProfileAt
     G.repeatedGame.stageEUAt profile history who =
       G.kernel.mixedExtension.eu
         (monitoredMixedProfileAt G profile history) who := by
-  letI : Finite G.kernel.Outcome := by
+  let : Finite G.kernel.Outcome := by
     change Finite (∀ player, G.Action player)
     exact Finite.of_fintype _
   let monitored :=
@@ -10200,12 +10228,12 @@ private theorem expectedStagePayoff_constantTrueFrom_ge_one
       (Function.update profile who
         (constantActionFrom prisonersDilemma profile who start true))
       prisonersDilemma.repeatedInitial time who := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI (player : Bool) : DecidableEq
+  let (player : Bool) : DecidableEq
       (prisonersDilemma.repeatedGame.Act player) :=
     prisonersDilemma.decidableAction player
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   rw [← Math.Probability.expect_const
@@ -10230,7 +10258,6 @@ private theorem expectedStagePayoff_constantTrueFrom_ge_one
       simp [deviated, current, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom,
         Nat.not_lt.mpr htime]
-      rfl
     · simp [deviated, current, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   change 1 ≤ prisonersDilemma.repeatedGame.stageEUAt deviated history who
@@ -10273,12 +10300,12 @@ private theorem prisonersDilemmaCooperationMass_eq_three_mul_deviationGain
           prisonersDilemma.repeatedInitial time true -
         prisonersDilemma.repeatedGame.expectedStagePayoff profile
           prisonersDilemma.repeatedInitial time true)) := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI (player : Bool) : DecidableEq
+  let (player : Bool) : DecidableEq
       (prisonersDilemma.repeatedGame.Act player) :=
     prisonersDilemma.decidableAction player
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let rowDeviated := Function.update profile false
     (constantActionFrom prisonersDilemma profile false time true)
@@ -10338,7 +10365,6 @@ private theorem prisonersDilemmaCooperationMass_eq_three_mul_deviationGain
     · subst player
       simp [rowDeviated, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom]
-      rfl
     · simp [rowDeviated, current, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   have hcolumn : prisonersDilemma.repeatedGame.stageEUAt
@@ -10352,7 +10378,6 @@ private theorem prisonersDilemmaCooperationMass_eq_three_mul_deviationGain
     · subst player
       simp [columnDeviated, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom]
-      rfl
     · simp [columnDeviated, current, prisonersDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   have horiginal (who : Bool) :
@@ -10371,9 +10396,9 @@ probability of Top and Left. -/
 private theorem prisonersDilemmaCooperationMass_mem_Icc
     (profile : prisonersDilemma.BehaviorProfile) (time : ℕ) :
     prisonersDilemmaCooperationMass profile time ∈ Set.Icc 0 6 := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let law := prisonersDilemma.repeatedGame.histDist profile
     prisonersDilemma.repeatedInitial time
@@ -10416,7 +10441,7 @@ private theorem prisonersDilemmaCooperationMass_mem_Icc
 /-- A root discounted Nash inequality can be cancelled through any
 deterministic prefix on which the deviation agrees with the profile. -/
 private theorem discountedTail_le_of_nash_of_agreeBefore
-    (G : FiniteStageGame) (profile : G.BehaviorProfile)
+    (G : FiniteStageGame) (profile : G.BehaviorProfile) (lam : ℝ)
     (hnash : G.repeatedGame.IsDiscountedεNash
       (1 - (lam : ℝ)) G.repeatedInitial 0 profile)
     (who : G.Player) (deviation : G.BehaviorStrategy who) (start : ℕ)
@@ -10505,7 +10530,7 @@ private theorem discountedTail_le_of_nash_of_agreeBefore
 /-- Nash's inequality against permanent defection bounds the current gain by
 the discounted future aggregate surplus above the security payoff one. -/
 private theorem prisonersDilemma_deviationGain_le_futureSurplus
-    (profile : prisonersDilemma.BehaviorProfile)
+    (profile : prisonersDilemma.BehaviorProfile) (lam : ℝ)
     (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
       (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
     (who : Bool) (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
@@ -10518,9 +10543,9 @@ private theorem prisonersDilemma_deviationGain_le_futureSurplus
       ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
         (prisonersDilemma.repeatedGame.expectedStagePayoff profile
           prisonersDilemma.repeatedInitial (start + (offset + 1)) who - 1) := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   let deviation := constantActionFrom prisonersDilemma profile who start true
@@ -10528,7 +10553,7 @@ private theorem prisonersDilemma_deviationGain_le_futureSurplus
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
   have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
   have htail := discountedTail_le_of_nash_of_agreeBefore
-    prisonersDilemma profile hnash who deviation start
+    prisonersDilemma profile lam hnash who deviation start
       (update_constantActionFrom_agreeBefore prisonersDilemma profile
         who start true) hlam hlam1
   change (∑' offset : ℕ, beta ^ offset *
@@ -10622,24 +10647,24 @@ private theorem summable_pow_succ_mul_of_abs_le
 /-- Inequality (**) after integration: one third of today's cooperation mass
 is bounded by the discounted future cooperation mass. -/
 private theorem prisonersDilemma_one_third_mass_le_futureMass
-    (profile : prisonersDilemma.BehaviorProfile)
+    (profile : prisonersDilemma.BehaviorProfile) (lam : ℝ)
     (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
       (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
     (start : ℕ) (hlam : 0 < lam) (hlam1 : lam < 1) :
     (1 / 3 : ℝ) * prisonersDilemmaCooperationMass profile start ≤
       ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
         prisonersDilemmaCooperationMass profile (start + (offset + 1)) := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
   have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
   have hrow := prisonersDilemma_deviationGain_le_futureSurplus
-    profile hnash false start hlam hlam1
+    profile lam hnash false start hlam hlam1
   have hcolumn := prisonersDilemma_deviationGain_le_futureSurplus
-    profile hnash true start hlam hlam1
+    profile lam hnash true start hlam hlam1
   let rowTerm : ℕ → ℝ := fun offset => beta ^ (offset + 1) *
     (prisonersDilemma.repeatedGame.expectedStagePayoff profile
       prisonersDilemma.repeatedInitial (start + (offset + 1)) false - 1)
@@ -10689,7 +10714,7 @@ private theorem prisonersDilemma_one_third_mass_le_futureMass
 /-- Above the critical current-stage weight `3/4`, inequality (**) forces the
 supremum of the cooperation masses to vanish. -/
 private theorem prisonersDilemmaCooperationMass_eq_zero_of_nash
-    (profile : prisonersDilemma.BehaviorProfile)
+    (profile : prisonersDilemma.BehaviorProfile) (lam : ℝ)
     (hnash : prisonersDilemma.repeatedGame.IsDiscountedεNash
       (1 - lam) prisonersDilemma.repeatedInitial 0 profile)
     (hlam : 3 / 4 < lam) (hlam1 : lam < 1) :
@@ -10745,7 +10770,7 @@ private theorem prisonersDilemmaCooperationMass_eq_zero_of_nash
   have hmassUpper (time : ℕ) :
       mass time ≤ 3 * (y * (beta / (1 - beta))) := by
     have hpaper := prisonersDilemma_one_third_mass_le_futureMass
-      profile hnash time hlam0 hlam1
+      profile lam hnash time hlam0 hlam1
     change (1 / 3 : ℝ) * mass time ≤ _ at hpaper
     change _ ≤ _
     nlinarith [hpaper.trans (hfutureBound time)]
@@ -10770,9 +10795,9 @@ private theorem prisonersDilemma_discountedPayoff_sum_eq_two_of_mass_zero
     (hmass : ∀ time, prisonersDilemmaCooperationMass profile time = 0) :
     prisonersDilemma.discountedPayoff lam profile false +
       prisonersDilemma.discountedPayoff lam profile true = 2 := by
-  letI (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (prisonersDilemma.repeatedGame.Act player) :=
     @Finite.of_fintype _ (prisonersDilemma.finiteAction player)
-  letI : Finite prisonersDilemma.repeatedGame.State :=
+  let : Finite prisonersDilemma.repeatedGame.State :=
     inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
@@ -10872,7 +10897,7 @@ theorem proposition_14 (lam : ℝ) (hlam : 3 / 4 < lam) (hlam1 : lam ≤ 1) :
           rw [discountedPayoff_one_eq_mixedPayoff_initial, hcurrent] <;> rfl
       · have hlamLt : lam < 1 := lt_of_le_of_ne hlam1 hcritical
         have hmass := prisonersDilemmaCooperationMass_eq_zero_of_nash
-          profile hnash hlam hlamLt
+          profile lam hnash hlam hlamLt
         have hsum := prisonersDilemma_discountedPayoff_sum_eq_two_of_mass_zero
           profile lam hlam0 hlamLt hmass
         let rate : prisonersDilemma.DiscountRate := ⟨lam, hlam0, hlam1⟩
@@ -11050,9 +11075,9 @@ private theorem expectedStagePayoff_symmetricDilemma_constantTrueFrom_ge
           profile who start true))
       (symmetricGeneralizedDilemma α β x).repeatedInitial time who := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   unfold StochasticGame.expectedStagePayoff
   let law := G.repeatedGame.histDist
     (Function.update profile who
@@ -11075,7 +11100,6 @@ private theorem expectedStagePayoff_symmetricDilemma_constantTrueFrom_ge
       simp [deviated, current, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom,
         Nat.not_lt.mpr htime]
-      rfl
     · simp [deviated, current, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   change α ≤ G.repeatedGame.stageEUAt deviated history who
@@ -11116,9 +11140,9 @@ private theorem symmetricDilemma_x_mul_surplus_eq_gap_mul_deviationGain
           profile (symmetricGeneralizedDilemma α β x).repeatedInitial
       time true)) := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let rowDeviated := Function.update profile false
     (constantActionFrom G profile false time true)
   let columnDeviated := Function.update profile true
@@ -11166,7 +11190,6 @@ private theorem symmetricDilemma_x_mul_surplus_eq_gap_mul_deviationGain
     · subst player
       simp [rowDeviated, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom]
-      rfl
     · simp [rowDeviated, current, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   have hcolumn : G.repeatedGame.stageEUAt columnDeviated history true =
@@ -11179,7 +11202,6 @@ private theorem symmetricDilemma_x_mul_surplus_eq_gap_mul_deviationGain
     · subst player
       simp [columnDeviated, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, constantActionFrom]
-      rfl
     · simp [columnDeviated, current, symmetricDilemmaMixedProfileAt,
         monitoredMixedProfileAt_apply, Function.update_of_ne hplayer]
   have horiginal (who : Bool) : G.repeatedGame.stageEUAt profile history who =
@@ -11199,9 +11221,9 @@ private theorem symmetricDilemmaSurplus_mem_Icc
     (time : ℕ) :
     symmetricDilemmaSurplus α β x profile time ∈ Set.Icc 0 (2 * (β - α - x)) := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let law := G.repeatedGame.histDist profile G.repeatedInitial time
   have hpointwise (history : G.repeatedGame.Hist time) :
       0 ≤ G.repeatedGame.stageEUAt profile history false +
@@ -11260,16 +11282,16 @@ private theorem symmetricDilemma_deviationGain_le_futureSurplus
           profile (symmetricGeneralizedDilemma α β x).repeatedInitial
           (start + (offset + 1)) who - α) := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   let deviation := constantActionFrom G profile who start true
   let deviated := Function.update profile who deviation
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
   have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
   have htail := discountedTail_le_of_nash_of_agreeBefore
-    G profile hnash who deviation start
+    G profile lam hnash who deviation start
       (update_constantActionFrom_agreeBefore G profile who start true) hlam hlam1
   change (∑' offset : ℕ, beta ^ offset *
       G.repeatedGame.expectedStagePayoff deviated G.repeatedInitial
@@ -11360,9 +11382,9 @@ private theorem symmetricDilemma_x_mul_surplus_le_futureSurplus
         ∑' offset : ℕ, (1 - lam) ^ (offset + 1) *
           symmetricDilemmaSurplus α β x profile (start + (offset + 1)) := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   have hαβ : α ≤ β := by linarith
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
@@ -11522,9 +11544,9 @@ private theorem symmetricDilemma_discountedPayoff_sum_eq_baseline_of_surplus_zer
       (symmetricGeneralizedDilemma α β x).discountedPayoff lam profile true =
         2 * α := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   let beta := 1 - lam
   have hbeta0 : 0 ≤ beta := by dsimp only [beta]; linarith
   have hbeta1 : beta < 1 := by dsimp only [beta]; linarith
@@ -11643,9 +11665,9 @@ theorem concluding_remark_1 (α β x lam : ℝ)
     (symmetricGeneralizedDilemma α β x).discountedEquilibriumPayoffs lam =
       {pair α α} := by
   let G := symmetricGeneralizedDilemma α β x
-  letI (player : Bool) : Finite (G.repeatedGame.Act player) :=
+  let (player : Bool) : Finite (G.repeatedGame.Act player) :=
     @Finite.of_fintype _ (G.finiteAction player)
-  letI : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
   have hd : 0 < β - α := by linarith
   have hgap0 : 0 < β - α - x := by linarith
   have hcritical0 : 0 < criticalDiscount α β x := by

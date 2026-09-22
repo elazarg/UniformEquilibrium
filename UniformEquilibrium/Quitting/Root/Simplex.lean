@@ -25,7 +25,7 @@ variable {ι : Type} [Fintype ι]
 /-- Product of Boolean mixed-action simplices used as a topological model of
 quitting roots. -/
 abbrev QuittingRootSimplex (ι : Type) [Fintype ι] :=
-  ∀ _ : ι, stdSimplex ℝ Bool
+  ∀ _ : ι, Convexity.StdSimplex ℝ Bool
 
 /-- Convert simplex coordinates to the corresponding profile of finite
 probability mass functions. -/
@@ -39,7 +39,7 @@ def quittingSimplexOfRoot (root : ι → PMF Bool) : QuittingRootSimplex ι :=
 
 @[simp] theorem quittingRootOfSimplex_apply_toReal
     (root : QuittingRootSimplex ι) (who : ι) (action : Bool) :
-    ((quittingRootOfSimplex root who) action).toReal = root who action := by
+    ((quittingRootOfSimplex root who) action).toReal = (root who).weights action := by
   simp [quittingRootOfSimplex, stdSimplexEquiv_symm_apply]
 
 @[simp] theorem quittingRootOfSimplex_simplexOfRoot (root : ι → PMF Bool) :

@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Finset Math.Probability
+open Filter Finset _root_.Math.Probability
 open scoped BigOperators Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

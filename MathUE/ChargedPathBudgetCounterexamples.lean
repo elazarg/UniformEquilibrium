@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import MathUE.PMFProduct.CoalitionMass
 import Mathlib.Algebra.BigOperators.Fin
 import Mathlib.Analysis.SpecificLimits.Basic
@@ -14,7 +14,7 @@ import Mathlib.Data.Fin.VecNotation
 /-!
 # Sharpness of the path-budget / bounded-potential duality
 
-Three explicit charged relations delimiting `Math.ChargedPathBudget`.
+Three explicit charged relations delimiting `Maths.ChargedPathBudget`.
 
 ## Towers
 
@@ -44,7 +44,7 @@ is an exact positive-charge self-loop, so the corresponding charged relation adm
 no bounded potential of any kind.
 -/
 
-namespace Math
+namespace Maths
 namespace ChargedPathBudget
 
 open ChargedRelation
@@ -136,8 +136,16 @@ theorem exists_chain (k : ℕ) :
   | succ i ih =>
       intro h
       obtain ⟨p, hp⟩ := ih (by omega)
-      refine ⟨p.append (Path.edge (R := relation) ⟨(k, i), by omega⟩ rfl rfl), ?_⟩
-      rw [Path.chargeSum_append, hp, Path.chargeSum_edge, relation_charge]
+      let e : Edge := ⟨(k, i), by omega⟩
+      have hs : relation.src e = (k, i) := rfl
+      have ht : relation.tgt e = (k, i + 1) := rfl
+      let q : relation.Path (k, i) (k, i + 1) := Path.edge e hs ht
+      refine ⟨p.append q, ?_⟩
+      rw [Path.chargeSum_append, hp]
+      have hq : q.chargeSum = 1 := by
+        change (Path.edge e hs ht).chargeSum = 1
+        rw [Path.chargeSum_edge, relation_charge]
+      rw [hq]
       push_cast
       ring
 
@@ -469,4 +477,4 @@ theorem no_boundedPotential (a : ℝ) :
 end QuitBonus
 
 end ChargedPathBudget
-end Math
+end Maths

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearAlgebra.FiniteConvexStrictSeparation
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.Conditioned.Diffuse.Closure
 import UniformEquilibrium.Diagnostics.Quitting.Chronology.AbsorptionClockBallisticity
 import UniformEquilibrium.Diagnostics.Quitting.Debt.DynamicTailTerminalGap
@@ -27,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open QuittingLCPClassification
 open Math.LinearProgramming
 
@@ -87,25 +88,29 @@ omit [Nonempty ι] in
     have hmem := owner.property
     unfold tightOwnerFinset at hmem
     exact (Finset.mem_filter.mp hmem).2
-  rw [dif_pos htight]
+  rw [dite_eq_left htight]
 
 /-- Zero extension of a tight-owner simplex remains an ambient simplex. -/
 def extendTightSimplex
-    (weight : stdSimplex ℝ seam.TightOwner) :
-    stdSimplex ℝ ι := by
+    (weight : Convexity.StdSimplex ℝ seam.TightOwner) :
+    Convexity.StdSimplex ℝ ι := by
   classical
-  refine ⟨seam.extendTightWeight weight.val, ?_, ?_⟩
+  refine {
+    weights := Finsupp.equivFunOnFinite.symm (seam.extendTightWeight weight.weights)
+    nonneg := ?_
+    total := ?_ }
   · intro owner
     by_cases htight : seam.limit.value owner =
         reward (quittingSingletonTerminal owner) owner
     · have hmem : owner ∈ seam.tightOwnerFinset := by
         simpa [tightOwnerFinset] using htight
-      simpa [extendTightWeight, htight] using weight.property.1 ⟨owner, hmem⟩
+      simp [extendTightWeight, htight]
     · simp [extendTightWeight, htight]
-  · calc
-      (∑ owner, seam.extendTightWeight weight.val owner) =
+  · rw [Finsupp.equivFunOnFinite_symm_sum]
+    calc
+      (∑ owner, seam.extendTightWeight weight.weights owner) =
           ∑ owner ∈ seam.tightOwnerFinset,
-            seam.extendTightWeight weight.val owner := by
+            seam.extendTightWeight weight.weights owner := by
         symm
         apply Finset.sum_subset (Finset.subset_univ _)
         intro owner _ howner
@@ -114,21 +119,21 @@ def extendTightSimplex
           simpa [tightOwnerFinset] using howner
         simp [extendTightWeight, hnotTight]
       _ = ∑ owner : seam.TightOwner,
-          seam.extendTightWeight weight.val owner.1 := by
+          seam.extendTightWeight weight.weights owner.1 := by
         exact Finset.sum_subtype
           seam.tightOwnerFinset
-          (fun _ ↦ Iff.rfl) (seam.extendTightWeight weight.val : ι → ℝ)
-      _ = ∑ owner : seam.TightOwner, weight.val owner := by
+          (fun _ ↦ Iff.rfl) (seam.extendTightWeight weight.weights : ι → ℝ)
+      _ = ∑ owner : seam.TightOwner, weight.weights owner := by
         apply Finset.sum_congr rfl
         intro owner _
-        exact seam.extendTightWeight_apply weight.val owner
-      _ = 1 := weight.property.2
+        exact seam.extendTightWeight_apply weight.weights owner
+      _ = 1 := weight.total_of_fintype
 
 omit [Nonempty ι] in
 @[simp] theorem extendTightSimplex_apply
-    (weight : stdSimplex ℝ seam.TightOwner)
+    (weight : Convexity.StdSimplex ℝ seam.TightOwner)
     (owner : seam.TightOwner) :
-    (seam.extendTightSimplex weight).val owner.1 = weight.val owner := by
+    (seam.extendTightSimplex weight).weights owner.1 = weight.weights owner := by
   simp [extendTightSimplex]
 
 omit [Nonempty ι] in
@@ -198,9 +203,16 @@ theorem exists_strictCovector_on_tightOwners_of_no_uniformPayoff
       (∀ owner, 0 ≤ weight owner) ∧ (∑ owner, weight owner) = 1 ∧
       ∀ who, (∑ owner, weight owner * column owner who) = 0 := by
     rintro ⟨weight, hweight, hmass, hzero⟩
-    let tightSimplex : stdSimplex ℝ seam.TightOwner := ⟨weight, hweight, hmass⟩
+    let tightSimplex : Convexity.StdSimplex ℝ seam.TightOwner := {
+      weights := Finsupp.equivFunOnFinite.symm weight
+      nonneg := hweight
+      total := by
+        rw [Finsupp.sum_fintype]
+        · exact hmass
+        · intro
+          rfl }
     let ambient := seam.extendTightSimplex tightSimplex
-    have hbary : ∀ who, (∑ owner, ambient.val owner *
+    have hbary : ∀ who, (∑ owner, ambient.weights owner *
         reward (quittingSingletonTerminal owner) who) =
         seam.limit.value who := by
       intro who
@@ -217,8 +229,6 @@ theorem exists_strictCovector_on_tightOwners_of_no_uniformPayoff
       reward ambient
     · intro who
       rw [singletonLCPResidual_normalizedSoloMatrix_eq_singletonBarycenter]
-      change 0 ≤ (∑ owner, ambient.val owner *
-        reward (quittingSingletonTerminal owner) who) - _
       rw [hbary who]
       simpa [quittingSoloReward, quittingSingletonTerminal] using
         seam.limit.soloReward_le_value who
@@ -226,17 +236,15 @@ theorem exists_strictCovector_on_tightOwners_of_no_uniformPayoff
       by_cases htight : seam.limit.value who =
           reward (quittingSingletonTerminal who) who
       · rw [singletonLCPResidual_normalizedSoloMatrix_eq_singletonBarycenter]
-        change ambient.val who * ((∑ owner, ambient.val owner *
-          reward (quittingSingletonTerminal owner) who) - _) = 0
         rw [hbary who, htight, sub_self, mul_zero]
-      · have hambient : ambient.val who = 0 := by
+      · have hambient : ambient.weights who = 0 := by
           simp [ambient, extendTightSimplex, extendTightWeight, htight]
         rw [hambient, zero_mul]
     · intro owner howner
       have htight : seam.limit.value owner =
           reward (quittingSingletonTerminal owner) owner := by
         by_contra hnotTight
-        have : ambient.val owner = 0 := by
+        have : ambient.weights owner = 0 := by
           simp [ambient, extendTightSimplex, extendTightWeight, hnotTight]
         linarith
       simpa [quittingSoloReward, quittingSingletonTerminal, htight] using
@@ -531,7 +539,7 @@ theorem exists_strictCovectorPositiveSurvivalTail
     (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ seam : QuittingPositiveDebtDynamicTailWitness witness,
       HasStrictCovectorPositiveSurvival seam := by
-  letI : Nonempty ι := witness.nonempty_players
+  let _ : Nonempty ι := witness.nonempty_players
   obtain ⟨seam⟩ := witness.nonempty_positiveDebtDynamicTailWitness
   refine ⟨seam, ?_⟩
   rcases seam.uniformPayoff_or_exists_strictCovectorPositiveSurvival with

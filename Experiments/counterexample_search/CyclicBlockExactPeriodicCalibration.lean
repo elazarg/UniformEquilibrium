@@ -56,7 +56,7 @@ noncomputable section
 namespace GameTheory
 namespace CyclicBlockExactPeriodicCalibration
 
-open Math.Probability GameTheory.QuittingLCPClassification.StandardQSideExample
+open _root_.Math.Probability GameTheory.QuittingLCPClassification.StandardQSideExample
 
 abbrev Player := Fin 3
 
@@ -80,15 +80,15 @@ theorem reward_singletonTerminal_eval (owner : Player) :
   · show (if (({0} : Finset Player) = {0}) then (![0, 2, -1] : Payoff Player)
         else if ({0} : Finset Player) = {1} then ![-1, 0, 2]
         else if ({0} : Finset Player) = {2} then ![2, -1, 0] else 0) = ![0, 2, -1]
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
   · show (if (({1} : Finset Player) = {0}) then (![0, 2, -1] : Payoff Player)
         else if ({1} : Finset Player) = {1} then ![-1, 0, 2]
         else if ({1} : Finset Player) = {2} then ![2, -1, 0] else 0) = ![-1, 0, 2]
-    rw [if_neg (by decide), if_pos rfl]
+    rw [ite_eq_right (by decide), ite_eq_left rfl]
   · show (if (({2} : Finset Player) = {0}) then (![0, 2, -1] : Payoff Player)
         else if ({2} : Finset Player) = {1} then ![-1, 0, 2]
         else if ({2} : Finset Player) = {2} then ![2, -1, 0] else 0) = ![2, -1, 0]
-    rw [if_neg (by decide), if_neg (by decide), if_pos rfl]
+    rw [ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 /-- The singleton rows are exactly `cyclicMatrix`'s rows, substantiating the
 docstring's description of this completion. -/
@@ -116,7 +116,7 @@ theorem reward_pair_eq_zero (first second : Player) (hne : first ≠ second) :
   show (if ({first, second} : Finset Player) = {0} then (![0, 2, -1] : Payoff Player)
       else if ({first, second} : Finset Player) = {1} then ![-1, 0, 2]
       else if ({first, second} : Finset Player) = {2} then ![2, -1, 0] else 0) = 0
-  rw [if_neg (hnotsingle 0), if_neg (hnotsingle 1), if_neg (hnotsingle 2)]
+  rw [ite_eq_right (hnotsingle 0), ite_eq_right (hnotsingle 1), ite_eq_right (hnotsingle 2)]
 
 /-! ## The witness schedule, hazard, and value family -/
 

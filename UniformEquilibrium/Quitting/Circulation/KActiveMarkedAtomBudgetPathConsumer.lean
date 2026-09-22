@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set StochasticGame Filter Math.Probability Math.PMFProduct
+open Finset Set StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -222,7 +222,7 @@ theorem oneActiveMarkedBudgetPath_is_supportRationalDivergent
         quittingPunishmentValue reward target - epsilon ≤
           quittingRootSequenceTerminalValue reward plan target time) ∧
       ∀ time, HasQuittingSupportCardAtMost 1 (plan time) := by
-  letI : Nonempty ι := ⟨markedPlayer⟩
+  let : Nonempty ι := ⟨markedPlayer⟩
   apply kActiveAbsorptionBudgetPath_is_supportRationalDivergent
     reward 1 bound epsilon budget hreward hbudget state hstateBox hstateEdge
   intro cutoff
@@ -266,7 +266,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_oneActiveMarkedBudgetPre
     obtain ⟨markedPlayer, clockOwner, budget, hbudget, hpref⟩ :=
       hprefix 1 zero_lt_one
     exact ⟨markedPlayer⟩
-  letI : Nonempty ι := hnonempty
+  let : Nonempty ι := hnonempty
   apply quittingGame_exists_uniformEquilibriumPayoff_of_KActivePaths reward 1
   intro epsilon hepsilon
   obtain ⟨markedPlayer, clockOwner, budget, hbudget, hpref⟩ :=

@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Basic
+import Maths.Multitubes.MaxAffine.Basic
 import MathUE.Probability.SurvivalWeightedReachedHistoryAccount
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticOwnStrategyTransport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Math.Probability
+open Finset _root_.Math.Probability
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
@@ -98,7 +98,7 @@ def survival (time : ℕ) : ℝ :=
   quittingStationaryContinueMass (chain.root time)
 
 /-- The affine edge label carrying next-period debt to current debt. -/
-def label (who : iota) (time : ℕ) : Math.MaxAffineTransport.Label :=
+def label (who : iota) (time : ℕ) : Maths.MaxAffineTransport.Label :=
   ⟨⊥, chain.defect who time, chain.survival time⟩
 
 @[simp] theorem label_floor (who : iota) (time : ℕ) :
@@ -132,17 +132,17 @@ theorem debt_account (who : iota) (time : ℕ) :
 theorem label_apply_next_debt (who : iota) (time : ℕ) :
     (chain.label who time).apply (chain.debt who (time + 1)) =
       chain.debt who time := by
-  rw [label, Math.MaxAffineTransport.Label.apply_mk_bot]
+  rw [label, Maths.MaxAffineTransport.Label.apply_mk_bot]
   exact (chain.debt_account who time).symm
 
 /-- The path graph oriented from the next time back to the current time. -/
-def backwardTimeGraph : Math.EdgeGraph ℕ ℕ where
+def backwardTimeGraph : Maths.EdgeGraph ℕ ℕ where
   source time := time + 1
   target time := time
 
 /-- The constant-fiber transport defined by the debt labels. -/
 def directedTransport (who : iota) :=
-  Math.MaxAffineTransport.toTransport backwardTimeGraph (chain.label who)
+  Maths.MaxAffineTransport.toTransport backwardTimeGraph (chain.label who)
 
 /-- Debt is an exact section of its backward-time directed transport. -/
 theorem debt_isSection (who : iota) :

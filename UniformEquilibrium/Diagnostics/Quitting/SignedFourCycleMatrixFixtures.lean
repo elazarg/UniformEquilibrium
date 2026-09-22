@@ -201,9 +201,16 @@ theorem gammaDagger_not_uniformNegativeRowShape :
     ¬HasUniformNegativeRowShape gammaDagger := by
   intro h
   have h01 := h 0 1
-  simp only [negativeRowSum_eq_sum_ite, negativeRowSquareSum_eq_sum_ite] at h01
-  norm_num [gammaDagger, Fin.sum_univ_succ, Matrix.cons_val_two,
-    Matrix.cons_val_three] at h01
+  have hn0 : negativeColumns gammaDagger 0 = {1, 2} := by
+    ext j
+    fin_cases j <;> norm_num [negativeColumns, gammaDagger,
+      Matrix.cons_val_two, Matrix.cons_val_three]
+  have hn1 : negativeColumns gammaDagger 1 = {2, 3} := by
+    ext j
+    fin_cases j <;> norm_num [negativeColumns, gammaDagger,
+      Matrix.cons_val_two, Matrix.cons_val_three]
+  simp only [negativeRowSum, negativeRowSquareSum, hn0, hn1] at h01
+  norm_num [gammaDagger, Matrix.cons_val_two, Matrix.cons_val_three] at h01
 
 /-- No simultaneous relabeling and positive row scaling makes this table circulant. -/
 theorem gammaDagger_not_positiveRowScaledRelabelingRowCirculant :

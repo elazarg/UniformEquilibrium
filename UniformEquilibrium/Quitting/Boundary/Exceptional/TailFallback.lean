@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -71,7 +71,7 @@ theorem pmfTV_self_map_le_expect_moved
       ENNReal.toReal_nonneg
     have hmapped : 0 ≤ ((distribution.map retraction) outcome).toReal :=
       ENNReal.toReal_nonneg
-    rw [if_pos hmoved, mul_one]
+    rw [ite_eq_left hmoved, mul_one]
     exact max_le (by linarith) hdistribution
 
 /-- A bounded expectation changes by at most twice its bound times the
@@ -85,7 +85,7 @@ theorem abs_expect_sub_expect_map_le_moved
         expect (distribution.map retraction) value| ≤
       2 * M * expect distribution (fun outcome =>
         if retraction outcome ≠ outcome then 1 else 0) := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   calc
     _ ≤ (2 * M) * pmfTV distribution (distribution.map retraction) :=
       abs_expect_sub_le_two_mul_pmfTV distribution
@@ -316,7 +316,7 @@ theorem map_pmfPi_update_pure_true_keepPair
       simp only [↓reduceIte, Function.update, hfirst, ↓reduceDIte]
       change PMF.map id (PMF.pure true) = PMF.pure true
       exact PMF.map_id _
-    · simp only [Bool.if_false_right, quittingSoloStationaryRoot,
+    · simp only [Bool.ite_false_right, quittingSoloStationaryRoot,
         Function.update, hfirst, hsecond, ↓reduceDIte]
       change PMF.map (fun _ => false) (root player) = PMF.pure false
       exact PMF.map_const _ _
@@ -577,7 +577,10 @@ theorem quittingNonSoloMassLimit_le_one_sub_opponentLiveMassLimit
     · simp [Function.update_of_ne hp]
   have hzero : quittingNonSoloMass reward profile owner 0 = 0 := by
     unfold quittingNonSoloMass
-    rw [(quittingGame reward).expectedStateValue_zero]
+    have hstateZero := (quittingGame reward).expectedStateValue_zero profile
+      (show (quittingGame reward).State from none)
+      (quittingNonSoloIndicator reward owner)
+    rw [hstateZero]
     simp [quittingNonSoloIndicator]
   rw [hupdate, hzero, quittingLiveMass_zero, sub_zero] at htail
   exact htail
@@ -667,7 +670,13 @@ omit [Fintype ι] in
   by_cases hp : player = owner
   · subst player
     simp [quittingSoloAction, quittingQuitters]
+    exact Finset.mem_filter.mpr
+      ⟨Finset.mem_univ owner, Function.update_self owner true (fun _ => false)⟩
   · simp [quittingSoloAction, quittingQuitters, hp]
+    intro hmem
+    have hvalue := (Finset.mem_filter.mp hmem).2
+    rw [Function.update_of_ne hp] at hvalue
+    simp at hvalue
 
 @[simp] theorem quittingStationaryContinueMass_solo
     (owner : ι) (hazard : PMF Bool) :

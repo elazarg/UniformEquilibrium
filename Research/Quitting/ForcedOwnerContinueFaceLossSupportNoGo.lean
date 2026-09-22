@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace ForcedOwnerContinueFaceLossSupportNoGo
 

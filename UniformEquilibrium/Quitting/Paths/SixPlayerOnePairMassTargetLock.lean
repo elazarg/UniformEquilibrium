@@ -26,9 +26,11 @@ equilibrium, so it does not force the second pair and is not a counterexample.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingBoundaryHolonomy
 open QuittingSureSetOwnerRepair
 
@@ -182,6 +184,7 @@ private theorem coalitionMemberMass_terminalOutcomeMass_eq_payoff
   | some terminal =>
       simp [CoalitionOutcome.coalition, quittingTerminalOutcomeReward,
         htarget terminal member hmember]
+      rfl
 
 private theorem targetOutsider_payoff_le_radius_sub_incidence
     (reward : {S : Finset Player // S.Nonempty} → Payoff Player)
@@ -196,6 +199,7 @@ private theorem targetOutsider_payoff_le_radius_sub_incidence
           (quittingTerminalOutcomeMass reward profile) target outsider := by
   let mass := quittingTerminalOutcomeMass reward profile
   have hmass := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have hmoment := congrFun
     (quittingTerminalRewardMoment_outcomeMass reward profile) outsider
   rw [← hmoment]
@@ -218,14 +222,14 @@ private theorem targetOutsider_payoff_le_radius_sub_incidence
       | some terminal =>
           by_cases hcross : target ⊆ terminal.1 ∧ outsider ∈ terminal.1
           · have hrow := hcompletion.2 terminal outsider houtside
-            rw [if_pos hcross] at hrow
+            rw [ite_eq_left hcross] at hrow
             simp only [CoalitionOutcome.coalition, quittingTerminalOutcomeReward,
-              hcross, and_self, if_true]
+              hcross, and_self, ite_true]
             exact le_of_eq hrow
           · have hbound := hcompletion.2 terminal outsider houtside
-            simp only [hcross, if_false] at hbound
+            simp only [hcross, ite_false] at hbound
             simp only [CoalitionOutcome.coalition, quittingTerminalOutcomeReward,
-              hcross, if_false]
+              hcross, ite_false]
             exact (le_abs_self _).trans hbound
     _ = radius - (penalty + radius) *
         ∑ outcome,
@@ -283,7 +287,7 @@ private theorem targetOutsider_incidence_le_of_isεAsymptoticNash
       |reward terminal outsider| ≤ radius := by
     intro terminal habsent
     have hrow := hcompletion.2 terminal outsider houtside
-    simp only [habsent, and_false, if_false] at hrow
+    simp only [habsent, and_false, ite_false] at hrow
     exact hrow
   have hneverAbs := abs_quittingTerminalPayoff_update_never_le_of_absent_bound
     reward profile outsider hradius habsent
@@ -427,14 +431,16 @@ theorem firstPairMass_nonneg
     (profile : (quittingGame reward).BehaviorProfile) :
     0 ≤ firstPairMass reward profile :=
   exactCoalitionMass_nonneg
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 targetA
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 targetA
 
 theorem secondPairMass_nonneg
     (reward : {S : Finset SixPlayer // S.Nonempty} → Payoff SixPlayer)
     (profile : (quittingGame reward).BehaviorProfile) :
     0 ≤ secondPairMass reward profile :=
   exactCoalitionMass_nonneg
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 targetB
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 targetB
 
 theorem leftoverMass_nonneg
     (reward : {S : Finset SixPlayer // S.Nonempty} → Payoff SixPlayer)
@@ -635,11 +641,11 @@ theorem robustCompletion_targetA_terminalNash_and_uniformPayoff
       have hbaseNoCross :
           ¬ (targetA ⊆ base.1 ∧ outsider ∈ base.1) := by
         simp [base, houtside]
-      rw [if_neg hbaseNoCross] at hbase
+      rw [ite_eq_right hbaseNoCross] at hbase
       have hjoined := hcompletion.2 joined outsider houtside
       have hjoinedCross : targetA ⊆ joined.1 ∧ outsider ∈ joined.1 := by
         simp [joined]
-      rw [if_pos hjoinedCross] at hjoined
+      rw [ite_eq_left hjoinedCross] at hjoined
       rw [quittingSetReward_of_nonempty reward (Finset.insert_nonempty _ _),
         quittingSetReward_of_nonempty reward (Finset.insert_nonempty _ _)]
       change reward joined outsider ≤ reward base outsider

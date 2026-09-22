@@ -84,7 +84,7 @@ private theorem exists_stable_on_block
     exact (hblock player).mp (hsubset hplayer)
   refine ⟨selected, hsubset, fun who hwho => ?_⟩
   by_cases hmem : who ∈ selected
-  · rw [if_pos hmem]
+  · rw [ite_eq_left hmem]
     by_contra hnot
     have hwhoErase : who ∉ selected.erase who := by simp
     have hlevel : certificate.level who = rank := (hblock who).mp hwho
@@ -118,7 +118,7 @@ private theorem exists_stable_on_block
     have heraseMem : selected.erase who ∈ block.powerset := by
       exact Finset.mem_powerset.mpr ((Finset.erase_subset _ _).trans hsubset)
     exact (not_lt_of_ge (hmax _ heraseMem)) hstrict
-  · rw [if_neg hmem]
+  · rw [ite_eq_right hmem]
     by_contra hnot
     have hlevel : certificate.level who = rank := (hblock who).mp hwho
     have hpotential := certificate.potential_insert

@@ -20,7 +20,7 @@ the fixed tail, or uniform-equilibrium consumer.
 
 noncomputable section
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped Topology
 
 namespace GameTheory

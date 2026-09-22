@@ -28,7 +28,7 @@ unit interval and with no division. At `rate = 1` the failure branch is
 unreachable and the comparison collapses to the sign of the cost alone.
 
 The odds transform `rate ↦ rate / (1 - rate)` is compared with the reciprocal
-coordinate in `MathUE/InverseCoordinateRecurrence.lean`.
+coordinate in `Maths.Recursion.InverseCoordinate`.
 -/
 
 namespace Math

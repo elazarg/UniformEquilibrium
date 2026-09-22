@@ -597,8 +597,8 @@ theorem stageSlack_frozen_le [Finite S] [Finite A] [DecidableEq K]
         (controlledCost (scheduledReward reward schedule) policy)
         (modeLiftedPotential bias (frozenSchedule schedule last)) stage state ≤
       frozenSwitchCharge bound schedule last stage := by
-  letI : Fintype S := Fintype.ofFinite S
-  letI : Fintype A := Fintype.ofFinite A
+  let : Fintype S := Fintype.ofFinite S
+  let : Fintype A := Fintype.ofFinite A
   have current : min stage last = stage := min_eq_left stage_le
   have charge_eq :
       frozenSwitchCharge bound schedule last stage =
@@ -609,12 +609,12 @@ theorem stageSlack_frozen_le [Finite S] [Finite A] [DecidableEq K]
         frozenSwitchCharge bound schedule last stage := by
     rw [charge_eq]
     by_cases changed : schedule (min (stage + 1) last) ≠ schedule stage
-    · rw [if_pos changed]
+    · rw [ite_eq_left changed]
       refine le_trans (directedCharge_le_oscillationCharge kernel reward bias _ _
         (all_bias (schedule stage))) ?_
       exact oscillationCharge_le_of_normalized bias bound nonneg le_bound _ _
     · rw [not_not] at changed
-      rw [if_neg (by simp [changed]), changed]
+      rw [ite_eq_right (by simp [changed]), changed]
       exact directedCharge_self_nonpos kernel reward bias (schedule stage)
         (all_bias (schedule stage))
   have pointwise :
@@ -650,7 +650,7 @@ theorem sum_expect_scheduledCost_le_switchingBill [Finite S] [Finite A] [Decidab
         expect (law (start + i))
           (controlledCost (scheduledReward reward schedule) policy (start + i))) ≤
       bound * (1 + windowSwitchCount schedule start steps) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have windowed :=
     sum_expect_cost_le_of_stageSlack_le law
       (controlledKernel (scheduledKernel kernel schedule) policy)
@@ -1001,7 +1001,7 @@ theorem isMarginalLawPath :
 theorem expect_cost (stage : ℕ) :
     expect (law stage) (controlledCost (scheduledReward reward schedule) policy stage) = 1 := by
   simp only [law, controlledCost, scheduledReward, policy, expect_pure, reward]
-  rw [if_neg (runState_ne_schedule stage)]
+  rw [ite_eq_right (runState_ne_schedule stage)]
 
 theorem sum_expect_cost (start horizon : ℕ) :
     (∑ i ∈ Finset.range horizon,
@@ -1090,17 +1090,17 @@ def phaseBias (phase : ZMod 3) (state : Bool) : ℝ :=
 @[simp] theorem word_two : word 2 = true := by decide
 
 @[simp] theorem phaseBias_zero (state : Bool) : phaseBias 0 state = 0 := by
-  rw [phaseBias, if_neg (by decide)]
+  rw [phaseBias, ite_eq_right (by decide)]
 
 @[simp] theorem phaseBias_one (state : Bool) : phaseBias 1 state = 0 := by
-  rw [phaseBias, if_neg (by decide)]
+  rw [phaseBias, ite_eq_right (by decide)]
 
 @[simp] theorem phaseBias_two (state : Bool) :
     phaseBias 2 state = if state then -1 else 1 := by
-  rw [phaseBias, if_pos rfl]
+  rw [phaseBias, ite_eq_left rfl]
 
 @[simp] theorem phaseBias_three (state : Bool) : phaseBias 3 state = 0 := by
-  rw [phaseBias, if_neg (by decide)]
+  rw [phaseBias, ite_eq_right (by decide)]
 
 /-- **The phase potentials verified.**  The three phase potentials satisfy the
 per-phase bias inequalities with slack `g = 0`. -/

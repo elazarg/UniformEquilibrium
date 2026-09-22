@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -397,8 +397,8 @@ theorem quittingPureTimeTerminalValue_le_prescribed_of_exactNash
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman,
         quittingPureTimeHazard_some_of_ne hne]
-      simp only [PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-        ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul, one_mul]
+      simp only [PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+        ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       have htail := ih (start + 1)
       have hidx : start + (fuel + 1) = start + 1 + fuel := by omega
       have htail' : quittingRootSequenceHazardTerminalValue reward roots who

@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.MaxAffineStopping
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.MaxAffineStopping
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

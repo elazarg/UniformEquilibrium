@@ -25,19 +25,19 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Math Math.LinearProgramming Set
+open _root_.Math Math.LinearProgramming Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-- The time-scaled residual dynamics in the paper's viability equation. -/
 def principalQPaperDynamics (M : ι → ι → ℝ) (time : ℝ)
-    (q : ι → ℝ) (z : stdSimplex ℝ ι) : ι → ℝ :=
+    (q : ι → ℝ) (z : Convexity.StdSimplex ℝ ι) : ι → ℝ :=
   time⁻¹ • fun i => singletonLCPResidual M z i - q i
 
 /-- The admissible controls at a paper time: simplex weights supported on the
 current zero face.  The clock does not change admissibility. -/
 def principalQPaperControls (_time : ℝ) (q : ι → ℝ) :
-    Set (stdSimplex ℝ ι) :=
+    Set (Convexity.StdSimplex ℝ ι) :=
   principalQSupportControls q
 
 /-- An integral solution of the paper's controlled viability equation on
@@ -50,7 +50,7 @@ abbrev PrincipalQControlledTrajectory
 omit [DecidableEq ι] in
 @[simp] theorem principalQPaperDynamics_apply
     (M : ι → ι → ℝ) (time : ℝ) (q : ι → ℝ)
-    (z : stdSimplex ℝ ι) (i : ι) :
+    (z : Convexity.StdSimplex ℝ ι) (i : ι) :
     principalQPaperDynamics M time q z i =
       time⁻¹ * (singletonLCPResidual M z i - q i) := by
   rfl
@@ -60,7 +60,7 @@ omit [DecidableEq ι] in
 current clock (using Lean's totalized division also at zero). -/
 theorem principalQPaperDynamics_eq_div
     (M : ι → ι → ℝ) (time : ℝ)
-    (q : ι → ℝ) (z : stdSimplex ℝ ι) :
+    (q : ι → ℝ) (z : Convexity.StdSimplex ℝ ι) :
     principalQPaperDynamics M time q z = fun i =>
       (singletonLCPResidual M z i - q i) / time := by
   funext i
@@ -71,7 +71,7 @@ omit [DecidableEq ι] in
 principal-Q velocity fiber before clock scaling. -/
 theorem principalQVelocity_mem_of_paperControl
     (M : ι → ι → ℝ) (time : ℝ) (q : ι → ℝ)
-    (z : stdSimplex ℝ ι) (hz : z ∈ principalQPaperControls time q) :
+    (z : Convexity.StdSimplex ℝ ι) (hz : z ∈ principalQPaperControls time q) :
     (fun i => singletonLCPResidual M z i - q i) ∈
       principalQVelocities M q := by
   exact ⟨z, hz, rfl⟩

@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -54,7 +54,7 @@ theorem exists_terminalGapDynamicDebtTail_summableAbsorption
       Summable (quittingOpponentClockCharge
         (quittingDynamicDebtTailRoots limit) who) ∧
       Summable (quittingDynamicDebtTailAbsorptionCharge limit) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock⟩ :=
     witness.exists_terminalGapDynamicDebtTail
   refine ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge, hdebt, hclock, ?_⟩

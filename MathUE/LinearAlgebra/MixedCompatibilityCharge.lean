@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearAlgebra.ApproximateCompatibility
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Extracting a player-owned charge from a coupled Farkas balance
@@ -30,6 +30,8 @@ open Finset BigOperators
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 
 noncomputable section
 

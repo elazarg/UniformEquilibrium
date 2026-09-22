@@ -47,7 +47,7 @@ theorem exists_analyticBellmanGerm_at_discountedFixedPoint_hazardCluster
   let value := fun index => quittingDiscountedLiveValue reward
     (discountComplement index) (root index)
   let hazardFilter := comap hazard (𝓝 (hazardOfRoot rootLimit)) ⊓ sourceFilter
-  haveI : hazardFilter.NeBot := neBot_inf_comap_iff_map'.mpr hcluster
+  have : hazardFilter.NeBot := neBot_inf_comap_iff_map'.mpr hcluster
   have hroot : Tendsto hazard hazardFilter (𝓝 (hazardOfRoot rootLimit)) :=
     tendsto_iff_comap.mpr inf_le_left
   have hsourceHazard := hsource.filter_mono
@@ -64,7 +64,7 @@ theorem exists_analyticBellmanGerm_at_discountedFixedPoint_hazardCluster
   obtain ⟨valueLimit, hvalueLimit, hvalueCluster⟩ :=
     (show IsCompact valueCube from isCompact_Icc).exists_mapClusterPt_of_frequently hmem.frequently
   let refinement := comap value (𝓝 valueLimit) ⊓ hazardFilter
-  haveI : refinement.NeBot := neBot_inf_comap_iff_map'.mpr hvalueCluster
+  have : refinement.NeBot := neBot_inf_comap_iff_map'.mpr hvalueCluster
   have hle : refinement ≤ sourceFilter := inf_le_right.trans inf_le_right
   have hrootRefined := hroot.mono_left (show refinement ≤ hazardFilter from inf_le_right)
   have hvalue : Tendsto value refinement (𝓝 valueLimit) :=

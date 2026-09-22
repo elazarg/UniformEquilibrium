@@ -34,7 +34,7 @@ namespace GameTheory
 namespace StochasticGame
 
 open Filter
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type}
@@ -90,8 +90,12 @@ theorem nonempty_finkDomain (G : StochasticGame ι)
 def finkSimplex (G : StochasticGame ι)
     [Fintype G.State] [Fintype ι] [∀ i, Fintype (G.Act i)]
     {U : ℝ} (z : G.finkDomain U) (p : G.FinkAgent) :
-    stdSimplex ℝ (G.FinkAction p) :=
-  ⟨z.1.1 p, z.2.1 p (Set.mem_univ p)⟩
+    Convexity.StdSimplex ℝ (G.FinkAction p) := by
+  have hp := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (z.2.1 p (Set.mem_univ p))
+  refine ⟨Finsupp.equivFunOnFinite.symm (z.1.1 p), hp.1, ?_⟩
+  rw [Finsupp.sum_fintype _ _ (by simp)]
+  exact hp.2
 
 /-- The mixed-action simplex at one state, extracted from a Fink-domain
 point. -/
@@ -112,7 +116,7 @@ def finkProfile (G : StochasticGame ι)
     {U : ℝ} (z : G.finkDomain U) (s : G.State) (who : ι)
     (d : G.Act who) :
     ((G.finkProfile z s who) d).toReal = z.1.1 (s, who) d := by
-  simp [finkProfile, finkSimplex, stdSimplexEquiv_symm_apply]
+  rw [finkProfile, stdSimplexEquiv_symm_apply, ofVector_toReal]
   rfl
 
 /-- Decode the continuation payoff represented by a Fink-domain point. -/
@@ -129,7 +133,9 @@ noncomputable def finkPointOfProfileValue (G : StochasticGame ι)
     (hV : ∀ s who, |V s who| ≤ U) : G.finkDomain U := by
   refine ⟨(fun p => (stdSimplexEquiv (x p.1 p.2)).1, V), ?_, ?_⟩
   · intro p _
-    exact (stdSimplexEquiv (x p.1 p.2)).2
+    exact GameTheory.Math.Probability.mem_simplexWeights.mpr
+      ⟨(stdSimplexEquiv (x p.1 p.2)).weights_nonneg,
+        (stdSimplexEquiv (x p.1 p.2)).total_of_fintype⟩
   · constructor <;> intro s who
     · exact (abs_le.mp (hV s who)).1
     · exact (abs_le.mp (hV s who)).2
@@ -203,9 +209,7 @@ theorem finkAuxEU_eq_discountedAuxEU (G : StochasticGame ι)
   refine Finset.sum_congr rfl ?_
   intro a ha
   congr 1
-  simp [pmfPi_apply, finkProfile, finkSimplex,
-    stdSimplexEquiv_symm_apply]
-  rfl
+  simp [pmfPi_apply]
 
 /-- The finite-coordinate pure-deviation payoff agrees with probabilistic
 expectation after updating the decoded mixed profile. -/
@@ -224,9 +228,7 @@ theorem finkDeviationAuxEU_eq_discountedAuxEU (G : StochasticGame ι)
   rw [pmfPi_apply_update_family]
   by_cases hsa : a who = d
   · subst hsa
-    simp [PMF.pure_apply, finkProfile, finkSimplex,
-      stdSimplexEquiv_symm_apply]
-    rfl
+    simp [PMF.pure_apply]
   · simp [PMF.pure_apply, hsa]
 
 /-- Gain from a pure action in the auxiliary game, expressed in Fink's real
@@ -265,16 +267,18 @@ def finkStrategyUpdate (G : StochasticGame ι)
     [Fintype G.State] [Fintype ι] [DecidableEq ι]
     [∀ i, Fintype (G.Act i)] (β : ℝ) {U : ℝ}
     (z : G.finkDomain U) (s : G.State) (who : ι) :
-    stdSimplex ℝ (G.Act who) := by
-  refine ⟨G.finkStrategyWeightUpdate β z s who, ?_, ?_⟩
+    Convexity.StdSimplex ℝ (G.Act who) := by
+  refine ⟨Finsupp.equivFunOnFinite.symm
+    (G.finkStrategyWeightUpdate β z s who), ?_, ?_⟩
   · intro d
     apply div_nonneg
-    · exact add_nonneg ((G.finkSimplex z (s, who)).property.1 d)
+    · exact add_nonneg ((G.finkSimplex z (s, who)).weights_nonneg d)
         (KernelGame.pospart_nonneg _)
     · linarith [G.finkGainSum_nonneg β z s who]
   · have hS := G.finkGainSum_nonneg β z s who
     have hden_pos : 0 < 1 + G.finkGainSum β z s who := by linarith
     have hden_ne : 1 + G.finkGainSum β z s who ≠ 0 := ne_of_gt hden_pos
+    rw [Finsupp.equivFunOnFinite_symm_sum]
     simp only [finkStrategyWeightUpdate]
     rw [← Finset.sum_div]
     rw [show ∑ d : G.Act who,
@@ -283,7 +287,8 @@ def finkStrategyUpdate (G : StochasticGame ι)
             ∑ d, KernelGame.pospart (G.finkGain β z s who d) from
       Finset.sum_add_distrib]
     rw [show ∑ d, z.1.1 (s, who) d = 1 by
-      simpa [finkSimplex] using (G.finkSimplex z (s, who)).property.2]
+      exact (GameTheory.Math.Probability.mem_simplexWeights.mp
+        (z.2.1 (s, who) (Set.mem_univ (s, who)))).2]
     simp only [finkGainSum]
     exact div_self hden_ne
 
@@ -422,7 +427,9 @@ theorem finkAmbientUpdate_mem (G : StochasticGame ι)
     (z : G.finkDomain U) : G.finkAmbientUpdate β z ∈ G.finkDomain U := by
   constructor
   · intro p hp
-    exact (G.finkStrategyUpdate β z p.1 p.2).property
+    exact GameTheory.Math.Probability.mem_simplexWeights.mpr
+      ⟨(G.finkStrategyUpdate β z p.1 p.2).weights_nonneg,
+        (G.finkStrategyUpdate β z p.1 p.2).total_of_fintype⟩
   · constructor <;> intro s who
     · exact (abs_le.mp (G.abs_finkValueUpdate_le β U hβ0 hβ1 hpay z s who)).1
     · exact (abs_le.mp (G.abs_finkValueUpdate_le β U hβ0 hβ1 hpay z s who)).2
@@ -496,7 +503,7 @@ theorem finkMap_fixedPoint_of_gain_nonpos_of_value_eq
     simpa only [finkValueUpdate, finkValue] using hvalue s who
 
 /-- The discounted auxiliary normal-form game at state `s`. -/
-def discountedAuxGame (G : StochasticGame ι) (β : ℝ)
+@[reducible] def discountedAuxGame (G : StochasticGame ι) (β : ℝ)
     (V : G.State → Payoff ι) (s : G.State) : KernelGame ι :=
   KernelGame.ofPureEU G.Act (G.discountedAuxPayoff β V s)
 
@@ -507,7 +514,7 @@ theorem mixedExtension_eu_discountedAuxGame
     (s : G.State) (m : ∀ i, PMF (G.Act i)) (who : ι) :
     (G.discountedAuxGame β V s).mixedExtension.eu m who =
       G.discountedAuxEU β V s m who := by
-  haveI : Finite (G.discountedAuxGame β V s).Outcome :=
+  have _ : Finite (G.discountedAuxGame β V s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   rw [KernelGame.mixedExtension_eu]
   simp [discountedAuxGame, discountedAuxEU, KernelGame.eu_ofPureEU]
@@ -521,14 +528,13 @@ theorem finkGain_eq_mixedGain (G : StochasticGame ι)
     G.finkGain β z s who d =
       (G.discountedAuxGame β (G.finkValue z) s).mixedGain
         (G.finkProfile z s) who d := by
-  haveI : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
+  have _ : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   unfold finkGain KernelGame.mixedGain
   rw [G.finkDeviationAuxEU_eq_discountedAuxEU,
     G.finkAuxEU_eq_discountedAuxEU]
   rw [← G.mixedExtension_eu_discountedAuxGame,
     ← G.mixedExtension_eu_discountedAuxGame]
-  rfl
 
 /-- Consequently, Fink's positive-gain sum is the ordinary Nash-map gain
 sum of the auxiliary game. -/
@@ -541,7 +547,7 @@ theorem finkGainSum_eq_gainSum (G : StochasticGame ι)
         (G.discountedAuxGame β (G.finkValue z) s)
         (fun i => inferInstanceAs (Fintype (G.Act i)))
         (G.finkProfile z s) who := by
-  haveI : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
+  have _ : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   simp only [finkGainSum, KernelGame.gainSum]
   exact Finset.sum_congr rfl fun d _ => congrArg KernelGame.pospart
@@ -751,9 +757,7 @@ theorem finkContinuationCoordEU_eq (G : StochasticGame ι)
   refine Finset.sum_congr rfl ?_
   intro a ha
   congr 1
-  simp [pmfPi_apply, finkProfile, finkSimplex,
-    stdSimplexEquiv_symm_apply]
-  rfl
+  simp [pmfPi_apply]
 
 theorem finkDeviationContinuationCoordEU_eq (G : StochasticGame ι)
     [Fintype G.State] [Fintype ι] [DecidableEq ι]
@@ -772,9 +776,7 @@ theorem finkDeviationContinuationCoordEU_eq (G : StochasticGame ι)
   rw [pmfPi_apply_update_family]
   by_cases hsa : a who = d
   · subst hsa
-    simp [PMF.pure_apply, finkProfile, finkSimplex,
-      stdSimplexEquiv_symm_apply]
-    rfl
+    simp [PMF.pure_apply]
   · simp [PMF.pure_apply, hsa]
 
 theorem finkContinuationCoordGain_eq (G : StochasticGame ι)
@@ -987,11 +989,11 @@ theorem exists_isDiscountedAuxNash (G : StochasticGame ι)
         G.discountedAuxEU β V s (Function.update m who d) who ≤
           G.discountedAuxEU β V s m who := by
     intro s
-    haveI : ∀ i, Finite ((G.discountedAuxGame β V s).Strategy i) :=
+    have _ : ∀ i, Finite ((G.discountedAuxGame β V s).Strategy i) :=
       fun i => inferInstanceAs (Finite (G.Act i))
-    haveI : ∀ i, Nonempty ((G.discountedAuxGame β V s).Strategy i) :=
+    have _ : ∀ i, Nonempty ((G.discountedAuxGame β V s).Strategy i) :=
       fun i => inferInstanceAs (Nonempty (G.Act i))
-    haveI : Finite (G.discountedAuxGame β V s).Outcome :=
+    have _ : Finite (G.discountedAuxGame β V s).Outcome :=
       inferInstanceAs (Finite G.JointAct)
     obtain ⟨m, hm⟩ := (G.discountedAuxGame β V s).mixed_nash_exists
     refine ⟨m, fun who d => ?_⟩
@@ -1052,13 +1054,7 @@ theorem isDiscountedStationaryBellmanEq_of_finkMap_fixedPoint
       (G.finkValue z) := by
   constructor
   · intro s who dev
-    let actFintype : ∀ i, Fintype (G.Act i) := inferInstance
-    haveI : ∀ i,
-        Fintype ((G.discountedAuxGame β (G.finkValue z) s).Strategy i) :=
-      by
-        change ∀ i, Fintype (G.Act i)
-        infer_instance
-    haveI : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
+    have _ : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
       inferInstanceAs (Finite G.JointAct)
     have hfp : ∀ (i : ι) (d : G.Act i),
         ((G.finkProfile z s i) d).toReal *
@@ -1079,13 +1075,7 @@ theorem isDiscountedStationaryBellmanEq_of_finkMap_fixedPoint
         unfold KernelGame.gainSum finkGainSum
         apply Finset.sum_congr
         · ext x
-          constructor
-          · intro hx
-            exact @Finset.mem_univ (G.Act i) (actFintype i) x
-          · intro hx
-            exact @Finset.mem_univ
-              ((G.discountedAuxGame β (G.finkValue z) s).Strategy i)
-              (inferInstance) x
+          simp only [Finset.mem_univ]
         · intro x hx
           rw [← G.finkGain_eq_mixedGain β z s i x]
       have halg : z.1.1 (s, i) d * (1 + G.finkGainSum β z s i) =
@@ -1142,7 +1132,7 @@ theorem finkGain_eq_zero_of_finkMap_fixedPoint_of_ne_zero
     (s : G.State) (who : ι) (d : G.Act who)
     (hpos : G.finkProfile z s who d ≠ 0) :
     G.finkGain β z s who d = 0 := by
-  haveI : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
+  have _ : Finite (G.discountedAuxGame β (G.finkValue z) s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   have hupper : ∀ d' : G.Act who, G.finkGain β z s who d' ≤ 0 := by
     intro d'
@@ -1227,8 +1217,8 @@ theorem exists_isDiscountedStationaryBellmanEq_bounded (G : StochasticGame ι)
     ∃ (x : G.StationaryMixedProfile) (V : G.State → Payoff ι),
       G.IsDiscountedStationaryBellmanEq β x V ∧
         ∀ s who, |V s who| ≤ U := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  let _ : Fintype G.State := Fintype.ofFinite G.State
+  let _ : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   obtain ⟨z, hz⟩ := G.exists_finkMap_fixedPoint β U hU hβ0 hβ1 hpay
   exact ⟨G.finkProfile z, G.finkValue z,
     G.isDiscountedStationaryBellmanEq_of_finkMap_fixedPoint

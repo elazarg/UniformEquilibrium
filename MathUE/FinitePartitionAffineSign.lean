@@ -180,7 +180,7 @@ theorem rationalAffine_partition_sign_chamber_isOpen
       {reward | ∀ index term,
         (negativeFunctional index term).eval reward < 0} by
     ext reward
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff]]
+    simp only [Set.mem_ofPred_eq, Set.mem_inter_iff]]
   apply IsOpen.inter
   · exact positive_rationalAffine_partition_chamber_isOpen
       positiveFunctional
@@ -189,7 +189,7 @@ theorem rationalAffine_partition_sign_chamber_isOpen
         ⋂ pair : NegativeIndex × Term,
           {reward | (negativeFunctional pair.1 pair.2).eval reward < 0} by
       ext reward
-      simp only [Set.mem_setOf_eq, Set.mem_iInter, Prod.forall]]
+      simp only [Set.mem_ofPred_eq, Set.mem_iInter, Prod.forall]]
     apply isOpen_iInter_of_finite
     intro pair
     exact isOpen_lt

@@ -34,7 +34,7 @@ theorem coe_bivEval_germRepresentative
         (Q.map
           (algebraMap (Polynomial ℝ)
             (FractionRing (Polynomial ℝ)))) := by
-  letI : Algebra (FractionRing (Polynomial ℝ)) GermField :=
+  let : Algebra (FractionRing (Polynomial ℝ)) GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective
   induction Q using Polynomial.induction_on' with
@@ -113,7 +113,7 @@ theorem exists_eventually_separable_bivariateRelation
       (∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
         bivEval Q.derivative (x n parameter)
           (germRepresentative q n) ≠ 0) := by
-  letI : Algebra
+  let : Algebra
       (FractionRing (Polynomial ℝ)) GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective

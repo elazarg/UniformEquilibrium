@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability Math.PMFProduct
+open Maths.ChargedPathBudget _root_.Math.Probability Math.PMFProduct
 open QuittingPunishmentFloorAdmissibleChargedRelation
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -402,9 +402,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_admissiblePath_payoffNea
   have hsampleError : 0 < chargeThreshold := hchargeThreshold
   obtain ⟨sampleSource, sampleTarget, samplePath, _hsampleClose,
       hsampleHigh⟩ := hproducer chargeThreshold hsampleError
-  letI : Nonempty ι := by
+  let : Nonempty ι := by
     rcases isEmpty_or_nonempty ι with hempty | hnonempty
-    · letI : IsEmpty ι := hempty
+    · let : IsEmpty ι := hempty
       obtain ⟨stage, _hstage, hstageCharge⟩ :=
         decodedPathHasChargeAtLeast_of_highChargeCount_pos
           samplePath chargeThreshold hsampleHigh

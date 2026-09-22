@@ -310,16 +310,16 @@ theorem stoppingLawCapBandPushforward_finiteMass_eq_of_lt
     (tsum_ite_eq (some time) (fun _ => source (some time))))
   by_cases houtside : stoppingLawOutsideCapBand value cap epsilon choice
   · rw [stoppingLawCapBandRedirect_of_outside _ _ _ _ _ houtside,
-      if_neg (fun h => hreceiver time htime h.symm)]
+      ite_eq_right (fun h => hreceiver time htime h.symm)]
     by_cases hchoice : choice = some time
     · subst choice
-      rw [if_pos rfl, hbadZero time htime houtside]
-    · rw [if_neg hchoice]
+      rw [ite_eq_left rfl, hbadZero time htime houtside]
+    · rw [ite_eq_right hchoice]
   · rw [stoppingLawCapBandRedirect_of_not_outside _ _ _ _ _ houtside]
     by_cases hchoice : choice = some time
     · subst choice
       simp
-    · rw [if_neg hchoice, if_neg (fun h => hchoice h.symm)]
+    · rw [ite_eq_right hchoice, ite_eq_right (fun h => hchoice h.symm)]
 
 /-- Cap-band redirection preserves stopping-law survival through the cut. -/
 theorem stoppingLawCapBandPushforward_survival_eq_of_le

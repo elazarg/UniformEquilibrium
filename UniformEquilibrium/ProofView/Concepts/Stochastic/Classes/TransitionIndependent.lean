@@ -48,7 +48,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 
@@ -90,7 +90,7 @@ theorem expect_snd_histDist_of_forall_transition_eq
     (σ : G.BehaviorProfile) (s₀ : G.State) (t : ℕ) (w : G.State → ℝ) :
     expect (G.histDist σ s₀ t) (fun h => w h.2) =
       expect (Math.PMFIter.iter κ t s₀) w := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.State := Fintype.ofFinite G.State
   rw [← G.map_snd_histDist_of_forall_transition_eq hκ σ s₀ t,
     Math.Probability.expect_map_fintype_target]
 

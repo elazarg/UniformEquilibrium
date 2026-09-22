@@ -45,7 +45,12 @@ inductive Player
   | b
   | c
   | d
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype Player :=
+  Fintype.ofList [.a, .b, .c, .d] (by
+    intro player
+    cases player <;> simp)
 
 /-- The rational terminal reward table from the obstruction. -/
 def reward : {coalition : Finset Player // coalition.Nonempty} → Payoff Player :=
@@ -157,17 +162,13 @@ private theorem bDeadlineProfile_eq_update_alwaysContinue :
 private theorem bDeadline_opponentCoalition_zero (who : Player) :
     quittingPureTimeOpponentCoalitionAt bDeadlineTimes who 0 = ∅ := by
   ext player
-  cases player <;>
-    simp [bDeadlineTimes, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt]
+  cases player <;> decide +revert
 
 private theorem bDeadline_opponentCoalition_one_of_ne_b
     {who : Player} (hwho : who ≠ .b) :
     quittingPureTimeOpponentCoalitionAt bDeadlineTimes who 1 = {.b} := by
   ext player
-  cases player <;>
-    simp [bDeadlineTimes, quittingPureTimeOpponentCoalitionAt,
-      quittingPureTimeCoalitionAt]
+  cases player <;> decide +revert
 
 private theorem terminalPayoff_update_alwaysContinue_b_some_one
     (observer : Player) :
@@ -648,7 +649,7 @@ theorem mem_exactRootRelation_iff_isZeroNash
       IsεQuittingRootNash reward (sourceCap t) 0
         (faceRoot q hq0 (hqHalf.trans (by norm_num))) := by
   rw [faceRoot_isZeroNash_iff_mul_eq_zero ht0 hq0 hqHalf]
-  simp only [exactRootRelation, mem_setOf_eq, mem_Icc, ht0, ht1, hq0,
+  simp only [exactRootRelation, mem_ofPred_eq, mem_Icc, ht0, ht1, hq0,
     hqHalf, and_self, true_and]
 
 /-- The full exact-root relation is closed. -/
@@ -772,7 +773,7 @@ theorem no_summableDecoder_exact_greatestFaceRootGraph
     Set.range (fun code : decoder.CodePoint ↦
       (decoder.decodedState code, decoder.decodedVisible code)) ≠
         greatestFaceRootGraph := by
-  letI : CompactSpace decoder.CodePoint :=
+  let : CompactSpace decoder.CodePoint :=
     isCompact_iff_compactSpace.mp decoder.code_compact
   intro heq
   apply greatestFaceRootGraph_not_isClosed
@@ -805,14 +806,12 @@ theorem no_executableTrace_exact_greatestFaceRootGraph
     (hvisible : @Continuous trace.evaluate.Execution (ℝ × ℝ)
       trace.evaluate.executionTopology inferInstance visible) :
     Set.range visible ≠ greatestFaceRootGraph := by
-  letI : TopologicalSpace trace.evaluate.Execution :=
-    trace.evaluate.executionTopology
-  letI : CompactSpace trace.evaluate.Execution :=
-    trace.evaluate.executionCompact
   intro heq
   apply greatestFaceRootGraph_not_isClosed
   rw [← heq]
-  exact (isCompact_range hvisible).isClosed
+  exact (@isCompact_range trace.evaluate.Execution (ℝ × ℝ)
+    trace.evaluate.executionTopology inferInstance
+    trace.evaluate.executionCompact visible hvisible).isClosed
 
 end ConstrainedMaximalRootNoGo
 end GameTheory

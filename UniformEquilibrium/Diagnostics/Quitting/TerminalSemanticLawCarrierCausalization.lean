@@ -176,7 +176,7 @@ theorem exists_jointRealizers_finiteWindow_positiveStage_of_lawMass_pos
           quittingStageCoalitionMass reward (profiles n) time terminal := by
     filter_upwards [hpersistent] with n hn
     dsimp only [cutoff]
-    rw [dif_pos hn]
+    rw [dite_eq_left hn]
     exact Classical.choose_spec
       (exists_finiteWindow_sum_stageCoalitionMass_gt
         (reward := reward) (profiles n) terminal hn)
@@ -259,7 +259,7 @@ theorem exists_deep_nearMinimum_capNashChronologies_with_causalSuffixAtom
     filter_upwards [hcausal] with n hn
     have hexists := hn.2
     dsimp only [mark]
-    rw [dif_pos hexists]
+    rw [dite_eq_left hexists]
     exact ⟨hn.1, (Classical.choose_spec hexists).1,
       (Classical.choose_spec hexists).2⟩
   have hrootChoice : ∀ n : ℕ,
@@ -405,7 +405,8 @@ theorem nonempty_minimumLawNeverOrCausalAtomDispatch_of_debtSumInf_pos
     Nonempty (QuittingMinimumLawNeverOrCausalAtomDispatch reward) := by
   obtain ⟨point, hpoint, hsemantic, hminimum, hdebt⟩ :=
     exists_minimum_terminalSemanticLawCarrier_of_debtSumInf_pos reward hinf
-  have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hsimplex := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   refine ⟨⟨point, hpoint, hsemantic, hminimum, hdebt, hinf, ?_⟩⟩
   by_cases hnever : 0 < point.2 none
   · exact Or.inl hnever

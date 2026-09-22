@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open QuittingNonsingletonMinimumLawTransfer
 open scoped Topology
 

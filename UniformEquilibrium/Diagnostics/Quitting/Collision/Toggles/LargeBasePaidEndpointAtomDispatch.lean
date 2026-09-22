@@ -25,6 +25,8 @@ Nash--Bellman predecessor.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Set StochasticGame
@@ -123,7 +125,8 @@ theorem exists_quittingTerminalOutcome_halfGap_atom
   let bad : Finset (QuittingTerminalOutcome ι) :=
     Finset.univ.filter fun outcome => ¬ baseline + gap / 2 ≤ value outcome who
   let goodMass := ∑ outcome ∈ good, mass outcome
-  have hmass := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)
   have hmoment := quittingTerminalRewardMoment_outcomeMass reward profile
   have hpayoffBound :
       |quittingTerminalPayoff reward profile who| ≤ bound :=
@@ -404,7 +407,8 @@ theorem quittingImmediateQuit_goodMass_le_collisionMass
       | none => False
       | some terminal => 1 < terminal.val.card
     · simpa [hgood, hcollision] using
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward receiving).1 outcome
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward receiving)).1 outcome
     · simp [hgood, hcollision]
 
 /-- **Immediate-Quit endpoint dispatch.**  Either the literal own singleton

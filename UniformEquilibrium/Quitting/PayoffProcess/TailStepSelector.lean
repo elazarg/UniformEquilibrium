@@ -241,7 +241,7 @@ theorem measurable_soloExitTailIndex [Nonempty ι] (radius : ℝ) :
           soloExitTailCloseCandidate radius reward index} =
         ⋃ index, closeSet index := by
       ext reward
-      simp only [closeSet, Set.mem_setOf_eq, Set.mem_iUnion]
+      simp only [closeSet, Set.mem_ofPred_eq, Set.mem_iUnion]
     rw [heq]
     exact MeasurableSet.iUnion hclose
   have hnone : MeasurableSet {reward :
@@ -250,7 +250,7 @@ theorem measurable_soloExitTailIndex [Nonempty ι] (radius : ℝ) :
     have hcomplement := hany.compl
     convert hcomplement using 1
     ext reward
-    simp only [Set.mem_compl_iff, Set.mem_setOf_eq, not_exists]
+    simp only [Set.mem_compl_iff, Set.mem_ofPred_eq, not_exists]
   unfold soloExitTailIndex
   apply measurable_find (exists_soloExitTailCandidate (ι := ι) radius)
   intro index
@@ -260,7 +260,7 @@ theorem measurable_soloExitTailIndex [Nonempty ι] (radius : ℝ) :
     convert hunion using 1
     ext reward
     simp only [soloExitTailCandidate, closeSet, Set.mem_union,
-      Set.mem_setOf_eq, true_and]
+      Set.mem_ofPred_eq, true_and]
   · simpa only [soloExitTailCandidate, closeSet, hindex, false_and, or_false] using
       hclose index
 

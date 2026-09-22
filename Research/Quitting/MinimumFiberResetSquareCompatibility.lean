@@ -32,7 +32,7 @@ noncomputable section
 namespace GameTheory
 namespace MinimumFiberResetSquareCompatibility
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 abbrev Player := Bool
@@ -84,7 +84,7 @@ theorem update_source_mover :
   cases who <;>
     simp [source, first, moverTarget, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, quittingPureSetRoot,
-      quittingSetAction, mover, observer]
+      quittingSetAction, mover, observer] <;> rfl
 
 theorem update_source_observer :
     Function.update source observer observerResponse = observerFirst := by
@@ -92,7 +92,7 @@ theorem update_source_observer :
   cases who <;>
     simp [source, observerFirst, observerResponse,
       quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile,
-      quittingPureSetRoot, quittingSetAction, observer]
+      quittingPureSetRoot, quittingSetAction, observer] <;> rfl
 
 theorem update_first_observer :
     Function.update first observer observerResponse = both := by
@@ -100,7 +100,7 @@ theorem update_first_observer :
   cases who <;>
     simp [first, observerFirst, both, observerResponse,
       quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile,
-      quittingPureSetRoot, quittingSetAction, mover, observer]
+      quittingPureSetRoot, quittingSetAction, mover, observer] <;> rfl
 
 theorem update_observerFirst_mover :
     Function.update observerFirst mover moverTarget = both := by
@@ -108,7 +108,7 @@ theorem update_observerFirst_mover :
   cases who <;>
     simp [first, observerFirst, both, moverTarget,
       quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile,
-      quittingPureSetRoot, quittingSetAction, mover, observer]
+      quittingPureSetRoot, quittingSetAction, mover, observer] <;> rfl
 
 theorem source_totalDebt : quittingTerminalDebtSum reward source = 1 := by
   unfold quittingTerminalDebtSum

@@ -12,7 +12,7 @@ import MathUE.Simplex
 
 For a finite index type `ι` and a matrix `B : ι → ι → ℝ`, the **normalized
 singleton linear complementarity problem** asks for `λ ∈ Δ(ι)` (the standard
-simplex, `stdSimplex ℝ ι`) whose image `q = Bλ` is componentwise nonnegative
+simplex, `Convexity.StdSimplex ℝ ι`) whose image `q = Bλ` is componentwise nonnegative
 and complementary to `λ`: `λ i * q i = 0` at every coordinate.
 
 This file develops the matrix problem independently of any game-semantic
@@ -50,32 +50,32 @@ variable {ι ι' : Type*} [Fintype ι] [Fintype ι']
 
 /-- The residual `q = Bλ` at a simplex point, coordinate `i`: `q i = ∑ⱼ B i j · λ j`.
 Definitionally `wsum λ (B i)`, the simplex-weighted row sum. -/
-def singletonLCPResidual (B : ι → ι → ℝ) (lam : stdSimplex ℝ ι) (i : ι) : ℝ :=
+def singletonLCPResidual (B : ι → ι → ℝ) (lam : Convexity.StdSimplex ℝ ι) (i : ι) : ℝ :=
   wsum lam (B i)
 
 /-- Unfolding lemma for `singletonLCPResidual`, restating it as `wsum`. -/
-@[simp] theorem singletonLCPResidual_def (B : ι → ι → ℝ) (lam : stdSimplex ℝ ι) (i : ι) :
+@[simp] theorem singletonLCPResidual_def (B : ι → ι → ℝ) (lam : Convexity.StdSimplex ℝ ι) (i : ι) :
     singletonLCPResidual B lam i = wsum lam (B i) := rfl
 
 /-- **The normalized singleton LCP.** `B` admits a normalized singleton-LCP
 solution: some `λ ∈ Δ(ι)` whose residual `q = Bλ` is componentwise
 nonnegative and complementary to `λ` at every coordinate. -/
 def SingletonLCPFeasible (B : ι → ι → ℝ) : Prop :=
-  ∃ lam : stdSimplex ℝ ι,
+  ∃ lam : Convexity.StdSimplex ℝ ι,
     (∀ i, 0 ≤ singletonLCPResidual B lam i) ∧
-    ∀ i, lam.val i * singletonLCPResidual B lam i = 0
+    ∀ i, lam.weights i * singletonLCPResidual B lam i = 0
 
 /-! ## Basic API: monotonicity, scaling, trivial instances -/
 
 /-- The residual is monotone in the matrix: entrywise `B ≤ B'` gives residual `≤`
 at every simplex point, since simplex weights are nonnegative. -/
 theorem singletonLCPResidual_mono {B B' : ι → ι → ℝ} (h : ∀ i j, B i j ≤ B' i j)
-    (lam : stdSimplex ℝ ι) (i : ι) :
+    (lam : Convexity.StdSimplex ℝ ι) (i : ι) :
     singletonLCPResidual B lam i ≤ singletonLCPResidual B' lam i :=
   wsum_le_wsum lam (h i)
 
 /-- The residual scales linearly with the matrix. -/
-theorem singletonLCPResidual_smul (c : ℝ) (B : ι → ι → ℝ) (lam : stdSimplex ℝ ι) (i : ι) :
+theorem singletonLCPResidual_smul (c : ℝ) (B : ι → ι → ℝ) (lam : Convexity.StdSimplex ℝ ι) (i : ι) :
     singletonLCPResidual (fun i j => c * B i j) lam i = c * singletonLCPResidual B lam i := by
   simp [singletonLCPResidual, wsum, dotProduct, Finset.mul_sum, mul_left_comm]
 
@@ -92,7 +92,7 @@ theorem singletonLCPFeasible_smul_iff {c : ℝ} (hc : 0 < c) (B : ι → ι → 
       exact nonneg_of_mul_nonneg_right this hc
     · have := hcomp i
       rw [singletonLCPResidual_smul] at this
-      have hc' : lam.val i * singletonLCPResidual B lam i * c = 0 := by linarith [this]
+      have hc' : lam.weights i * singletonLCPResidual B lam i * c = 0 := by linarith [this]
       rcases mul_eq_zero.mp hc' with h | h
       · exact h
       · exact absurd h hc.ne'
@@ -109,7 +109,7 @@ since the residual vanishes identically. -/
 theorem singletonLCPFeasible_zero [Nonempty ι] :
     SingletonLCPFeasible (fun _ _ : ι => (0 : ℝ)) := by
   classical
-  refine ⟨Classical.arbitrary (stdSimplex ℝ ι), fun i => ?_, fun i => ?_⟩
+  refine ⟨Classical.arbitrary (Convexity.StdSimplex ℝ ι), fun i => ?_, fun i => ?_⟩
   · simp [singletonLCPResidual, wsum, dotProduct]
   · simp [singletonLCPResidual, wsum, dotProduct]
 
@@ -122,10 +122,10 @@ theorem singletonLCPFeasible_of_diag_eq_zero {B : ι → ι → ℝ} (i₀ : ι)
     (hdiag : B i₀ i₀ = 0) (hcol : ∀ j, 0 ≤ B j i₀) :
     SingletonLCPFeasible B := by
   classical
-  refine ⟨stdSimplex.pure (𝕜 := ℝ) i₀, fun i => ?_, fun i => ?_⟩
+  refine ⟨Convexity.StdSimplex.pure (𝕜 := ℝ) i₀, fun i => ?_, fun i => ?_⟩
   · rw [singletonLCPResidual_def, wsum_pure_apply]
     exact hcol i
-  · rw [singletonLCPResidual_def, wsum_pure_apply, stdSimplex.pure_apply]
+  · rw [singletonLCPResidual_def, wsum_pure_apply, Convexity.StdSimplex.pure_apply]
     by_cases h : i = i₀
     · simp [h, hdiag]
     · simp [h]
@@ -137,23 +137,25 @@ def reindexMatrix (e : ι ≃ ι') (B : ι → ι → ℝ) : ι' → ι' → ℝ
   fun i' j' => B (e.symm i') (e.symm j')
 
 /-- Transport a simplex point along a bijection between index types. -/
-def reindexSimplex (e : ι ≃ ι') (lam : stdSimplex ℝ ι) : stdSimplex ℝ ι' :=
-  ⟨fun i' => lam.val (e.symm i'), fun i' => lam.property.1 (e.symm i'),
-    (Equiv.sum_comp e.symm lam.val).trans lam.property.2⟩
+def reindexSimplex (e : ι ≃ ι') (lam : Convexity.StdSimplex ℝ ι) : Convexity.StdSimplex ℝ ι' :=
+  lam.map e
 
+omit [Fintype ι] [Fintype ι'] in
 /-- Pointwise formula for the reindexed simplex point. -/
-@[simp] theorem reindexSimplex_apply (e : ι ≃ ι') (lam : stdSimplex ℝ ι) (i' : ι') :
-    (reindexSimplex e lam).val i' = lam.val (e.symm i') := rfl
+@[simp] theorem reindexSimplex_apply (e : ι ≃ ι') (lam : Convexity.StdSimplex ℝ ι) (i' : ι') :
+    (reindexSimplex e lam).weights i' = lam.weights (e.symm i') := by
+  simp [reindexSimplex]
 
 /-- The residual transports along the reindexing: the residual of the
 reindexed matrix at the reindexed witness, evaluated at `e i`, is the
 original residual at `i`. -/
 theorem singletonLCPResidual_reindexMatrix (e : ι ≃ ι') (B : ι → ι → ℝ)
-    (lam : stdSimplex ℝ ι) (i : ι) :
+    (lam : Convexity.StdSimplex ℝ ι) (i : ι) :
     singletonLCPResidual (reindexMatrix e B) (reindexSimplex e lam) (e i) =
       singletonLCPResidual B lam i := by
   simp only [singletonLCPResidual_def, wsum, dotProduct, reindexMatrix, Equiv.symm_apply_apply]
-  exact Equiv.sum_comp e.symm (fun j => lam.val j * B i j)
+  simp_rw [reindexSimplex_apply]
+  exact Equiv.sum_comp e.symm (fun j => lam.weights j * B i j)
 
 /-- Reindexing along a bijection preserves feasibility (one direction; the
 biconditional is `singletonLCPFeasible_reindexMatrix_iff`). -/
@@ -321,29 +323,29 @@ theorem singletonLCPFeasible_bool_iff (B : Bool → Bool → ℝ) :
         B false false * B false true + B true false * B true true ≤ 0) := by
   constructor
   · rintro ⟨lam, hnn, hcomp⟩
-    have hsum : lam.val false + lam.val true = 1 := by
-      have h2 := lam.property.2
+    have hsum : lam.weights false + lam.weights true = 1 := by
+      have h2 := lam.total_of_fintype
       rw [Fintype.sum_bool] at h2
       linarith [h2]
-    have hp0 : 0 ≤ lam.val false := lam.property.1 false
-    have hq0 : 0 ≤ lam.val true := lam.property.1 true
+    have hp0 : 0 ≤ lam.weights false := lam.weights_nonneg false
+    have hq0 : 0 ≤ lam.weights true := lam.weights_nonneg true
     have hRfalse : singletonLCPResidual B lam false
-        = lam.val false * B false false + lam.val true * B false true := by
+        = lam.weights false * B false false + lam.weights true * B false true := by
       rw [singletonLCPResidual_def, wsum]
       simp only [dotProduct, Fintype.sum_bool]
-      change lam.val true * B false true + lam.val false * B false false
-          = lam.val false * B false false + lam.val true * B false true
+      change lam.weights true * B false true + lam.weights false * B false false
+          = lam.weights false * B false false + lam.weights true * B false true
       ring
     have hRtrue : singletonLCPResidual B lam true
-        = lam.val false * B true false + lam.val true * B true true := by
+        = lam.weights false * B true false + lam.weights true * B true true := by
       rw [singletonLCPResidual_def, wsum]
       simp only [dotProduct, Fintype.sum_bool]
-      change lam.val true * B true true + lam.val false * B true false
-          = lam.val false * B true false + lam.val true * B true true
+      change lam.weights true * B true true + lam.weights false * B true false
+          = lam.weights false * B true false + lam.weights true * B true true
       ring
-    by_cases hq : lam.val true = 0
+    by_cases hq : lam.weights true = 0
     · left
-      have hp1 : lam.val false = 1 := by linarith [hsum, hq]
+      have hp1 : lam.weights false = 1 := by linarith [hsum, hq]
       have hcf := hcomp false
       rw [hRfalse, hp1, hq] at hcf
       have ha0 : B false false = 0 := by linarith [hcf]
@@ -353,13 +355,13 @@ theorem singletonLCPFeasible_bool_iff (B : Bool → Bool → ℝ) :
       exact ⟨ha0, hc0⟩
     · have hct := hcomp true
       rw [hRtrue] at hct
-      have he2 : lam.val false * B true false + lam.val true * B true true = 0 := by
+      have he2 : lam.weights false * B true false + lam.weights true * B true true = 0 := by
         rcases mul_eq_zero.mp hct with h | h
         · exact absurd h hq
         · exact h
-      by_cases hp : lam.val false = 0
+      by_cases hp : lam.weights false = 0
       · right; left
-        have hq1 : lam.val true = 1 := by linarith [hsum, hp]
+        have hq1 : lam.weights true = 1 := by linarith [hsum, hp]
         have hd0 : B true true = 0 := by rw [hp, hq1] at he2; linarith [he2]
         have hnf := hnn false
         rw [hRfalse, hp, hq1] at hnf
@@ -368,41 +370,38 @@ theorem singletonLCPFeasible_bool_iff (B : Bool → Bool → ℝ) :
       · right; right
         have hcf := hcomp false
         rw [hRfalse] at hcf
-        have he1 : lam.val false * B false false + lam.val true * B false true = 0 := by
+        have he1 : lam.weights false * B false false + lam.weights true * B false true = 0 := by
           rcases mul_eq_zero.mp hcf with h | h
           · exact absurd h hp
           · exact h
         exact cross_dot_of_exists_unitMix_eq_zero_two hp0 hq0 hsum he1 he2
   · rintro (⟨ha0, hc0⟩ | ⟨hd0, hb0⟩ | ⟨hcross, hdot⟩)
-    · refine ⟨stdSimplex.pure (𝕜 := ℝ) false, fun i => ?_, fun i => ?_⟩
+    · refine ⟨Convexity.StdSimplex.pure (𝕜 := ℝ) false, fun i => ?_, fun i => ?_⟩
       · rw [singletonLCPResidual_def, wsum_pure_apply]
         cases i
         · simp [ha0]
         · simp [hc0]
-      · rw [singletonLCPResidual_def, wsum_pure_apply, stdSimplex.pure_apply]
+      · rw [singletonLCPResidual_def, wsum_pure_apply, Convexity.StdSimplex.pure_apply]
         cases i
         · simp [ha0]
         · simp
-    · refine ⟨stdSimplex.pure (𝕜 := ℝ) true, fun i => ?_, fun i => ?_⟩
+    · refine ⟨Convexity.StdSimplex.pure (𝕜 := ℝ) true, fun i => ?_, fun i => ?_⟩
       · rw [singletonLCPResidual_def, wsum_pure_apply]
         cases i
         · simp [hb0]
         · simp [hd0]
-      · rw [singletonLCPResidual_def, wsum_pure_apply, stdSimplex.pure_apply]
+      · rw [singletonLCPResidual_def, wsum_pure_apply, Convexity.StdSimplex.pure_apply]
         cases i
         · simp
         · simp [hd0]
     · obtain ⟨t, ht0, ht1, he1, he2⟩ :=
         exists_unitMix_eq_zero_two_of_cross_dot hcross hdot
-      have hmem : (fun i => if i then t else 1 - t) ∈ stdSimplex ℝ Bool := by
-        refine ⟨fun i => ?_, ?_⟩
-        · cases i <;> simp <;> linarith
-        · rw [Fintype.sum_bool]; simp
-      set lam : stdSimplex ℝ Bool := ⟨_, hmem⟩ with hlam_def
-      have hlam_true : lam true = t := rfl
-      have hlam_false : lam false = 1 - t := rfl
-      have hlam_val_true : lam.val true = t := rfl
-      have hlam_val_false : lam.val false = 1 - t := rfl
+      let lam : Convexity.StdSimplex ℝ Bool :=
+        Convexity.StdSimplex.duple false true (sub_nonneg.mpr ht1) ht0 (by ring)
+      have hlam_true : lam.weights true = t := by simp [lam]
+      have hlam_false : lam.weights false = 1 - t := by simp [lam]
+      have hlam_val_true : lam.weights true = t := hlam_true
+      have hlam_val_false : lam.weights false = 1 - t := hlam_false
       refine ⟨lam, fun i => ?_, fun i => ?_⟩
       · rw [singletonLCPResidual_def, wsum]
         simp only [dotProduct, Fintype.sum_bool, hlam_true, hlam_false]
@@ -434,24 +433,24 @@ automatic, since off `S` the factor `λ i` vanishes and on `S` the factor
 `(Bλ) i` vanishes. -/
 theorem singletonLCPFeasible_iff_exists_supportPattern (B : ι → ι → ℝ) :
     SingletonLCPFeasible B ↔
-      ∃ (S : {S : Finset ι // S.Nonempty}) (lam : stdSimplex ℝ ι),
-        (∀ i ∉ S.1, lam.val i = 0) ∧
+      ∃ (S : {S : Finset ι // S.Nonempty}) (lam : Convexity.StdSimplex ℝ ι),
+        (∀ i ∉ S.1, lam.weights i = 0) ∧
         (∀ i ∈ S.1, singletonLCPResidual B lam i = 0) ∧
         (∀ i ∉ S.1, 0 ≤ singletonLCPResidual B lam i) := by
   classical
   constructor
   · rintro ⟨lam, hnn, hcomp⟩
-    have hSne : (Finset.univ.filter (fun i => lam.val i ≠ 0)).Nonempty := by
+    have hSne : (Finset.univ.filter (fun i => lam.weights i ≠ 0)).Nonempty := by
       by_contra hempty
       rw [Finset.not_nonempty_iff_eq_empty, Finset.filter_eq_empty_iff] at hempty
-      have hzero : ∀ i, lam.val i = 0 := by
+      have hzero : ∀ i, lam.weights i = 0 := by
         intro i
         by_contra hne
         exact hempty (Finset.mem_univ i) hne
-      have : (∑ i, lam.val i) = 0 := by simp [hzero]
-      rw [lam.property.2] at this
+      have : (∑ i, lam.weights i) = 0 := by simp [hzero]
+      rw [lam.total_of_fintype] at this
       exact one_ne_zero this
-    refine ⟨⟨Finset.univ.filter (fun i => lam.val i ≠ 0), hSne⟩, lam, ?_, ?_, ?_⟩
+    refine ⟨⟨Finset.univ.filter (fun i => lam.weights i ≠ 0), hSne⟩, lam, ?_, ?_, ?_⟩
     · intro i hi
       simp only [Finset.mem_filter, Finset.mem_univ, true_and, not_not] at hi
       exact hi

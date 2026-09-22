@@ -34,7 +34,7 @@ noncomputable section
 namespace GameTheory
 namespace CoupledCalibrationQuittingRoot
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Research.ORCoupledCalibrationGame
 open Research.QuittingORRankReduction
 
@@ -63,7 +63,7 @@ theorem rootPayoff_host_of_quit
   have hnonempty : (quittingQuitters action).Nonempty := by
     exact (quittingQuitters_nonempty_iff action).2 ⟨host, hhost⟩
   unfold quittingRootPayoff
-  rw [dif_pos hnonempty]
+  rw [dite_eq_left hnonempty]
   simp [reward, quittingQuitters, hhost]
 
 theorem rootPayoff_host_of_continue
@@ -85,7 +85,7 @@ theorem rootPayoff_clock_of_quit
   have hnonempty : (quittingQuitters action).Nonempty := by
     exact (quittingQuitters_nonempty_iff action).2 ⟨clock, hclock⟩
   unfold quittingRootPayoff
-  rw [dif_pos hnonempty]
+  rw [dite_eq_left hnonempty]
   simp [reward, quittingQuitters, hclock, Ne.symm hne]
 
 theorem rootPayoff_clock_of_continue
@@ -107,11 +107,11 @@ theorem rootPayoff_host_eq
         (if action clock = true then 1 else 0) - targetClock
       else 0 := by
   by_cases hhost : action host = true
-  · rw [if_pos hhost]
+  · rw [ite_eq_left hhost]
     exact rootPayoff_host_of_quit host clock targetHost targetClock action
       hhost
   · have hhostFalse : action host = false := Bool.eq_false_of_not_eq_true hhost
-    rw [if_neg hhost]
+    rw [ite_eq_right hhost]
     exact rootPayoff_host_of_continue host clock targetHost targetClock action
       hhostFalse
 
@@ -123,12 +123,12 @@ theorem rootPayoff_clock_eq
         targetHost - (if action host = true then 1 else 0)
       else 0 := by
   by_cases hclock : action clock = true
-  · rw [if_pos hclock]
+  · rw [ite_eq_left hclock]
     exact rootPayoff_clock_of_quit host clock hne targetHost targetClock action
       hclock
   · have hclockFalse : action clock = false :=
       Bool.eq_false_of_not_eq_true hclock
-    rw [if_neg hclock]
+    rw [ite_eq_right hclock]
     exact rootPayoff_clock_of_continue host clock hne targetHost targetClock action
       hclockFalse
 

@@ -145,10 +145,10 @@ current natural filtration. -/
 theorem QuittingPayoffProcess.payoffTable_measurable_filtration
     (process : QuittingPayoffProcess ι) (time : ℕ) :
     Measurable[process.filtration time] (process.payoff time) := by
-  letI : MeasurableSpace process.Ω := process.filtration time
-  apply measurable_pi_lambda
+  let : MeasurableSpace process.Ω := process.filtration time
+  apply Measurable.of_eval
   intro terminal
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro who
   exact process.payoff_measurable_filtration time terminal who
 
@@ -158,10 +158,10 @@ theorem QuittingPayoffProcess.payoffTable_measurable
     @Measurable process.Ω
       ({S : Finset ι // S.Nonempty} → Payoff ι)
       process.measurableSpace inferInstance (process.payoff time) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  apply measurable_pi_lambda
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  apply Measurable.of_eval
   intro terminal
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro who
   exact process.payoff_measurable time terminal who
 
@@ -171,10 +171,10 @@ theorem QuittingPayoffProcess.limitTable_measurable
     @Measurable process.Ω
       ({S : Finset ι // S.Nonempty} → Payoff ι)
       process.measurableSpace inferInstance process.limit := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  apply measurable_pi_lambda
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  apply Measurable.of_eval
   intro terminal
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro who
   exact process.limit_measurable terminal who
 

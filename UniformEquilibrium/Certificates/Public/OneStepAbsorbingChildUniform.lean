@@ -30,7 +30,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability Math.ProbabilityMassFunction
+open _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -59,7 +59,7 @@ theorem exists_isAdaptivePotentialEquilibriumCertificate_of_absorbingChildren
     ∃ parentTarget : Payoff ι,
       G.IsAdaptivePotentialEquilibriumCertificate
         data.initial parentTarget := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   have childExists :
       ∀ child : Child,
         ∃ childTarget : Payoff ι,

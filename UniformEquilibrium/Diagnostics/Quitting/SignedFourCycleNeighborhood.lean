@@ -29,11 +29,15 @@ theorem gammaDagger_mem_neighborhood : gammaDaggerZeroDiagonal ∈ neighborhood 
     gammaDagger_mem_twoRowNegativeShapeNeighborhood⟩
   have h := daggerSingletonMatrix_mem_strictOpenLocus
     (fun _ : Fin 4 ↦ 0) (fun _ _ ↦ 0)
-  convert h using 1
-  ext i j
-  simpa [gammaDaggerZeroDiagonal] using
-    congrFun (congrFun (quittingSingletonMatrix_daggerReward
-      (fun _ : Fin 4 ↦ 0) (fun _ _ ↦ 0)).symm i) j
+  have hmatrix : gammaDaggerZeroDiagonal.1 =
+      quittingSingletonMatrix (daggerReward
+        (fun _ : Fin 4 ↦ 0) (fun _ _ ↦ 0)) := by
+    funext i j
+    simpa [gammaDaggerZeroDiagonal] using
+      congrFun (congrFun (quittingSingletonMatrix_daggerReward
+        (fun _ : Fin 4 ↦ 0) (fun _ _ ↦ 0)).symm i) j
+  rw [hmatrix]
+  exact h
 
 theorem actualReward_uniformPayoff_and_finiteEarlyAbsorption
     (M : ZeroDiagonalFourMatrix) (hM : M ∈ neighborhood)

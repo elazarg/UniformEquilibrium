@@ -114,7 +114,7 @@ theorem QuittingPayoffTable.hasCorrectedPointwiseFourWayExtraction_of_noSourceRe
       intro who
       exact hempty.elim who
   | inr hnonempty =>
-      letI := hnonempty
+      let := hnonempty
       rcases table.correctedPointwiseAlternative_or_sourceResidualAt
           hequilibrium δ hδ with
         hstationary | hinstant | hwellSupported | hgenerated | hresidual

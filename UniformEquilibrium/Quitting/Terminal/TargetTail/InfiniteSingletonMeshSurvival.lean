@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -83,7 +83,7 @@ theorem quittingOpponentSurvivalWeight_uniformMesh_one_block
             apply Finset.prod_congr rfl
             intro offset hoffset
             rw [quittingEssentialAPSOpponentStageMass_uniformMesh_block_add
-              owner mass who hm (Finset.mem_range.mp hoffset), if_pos howner]
+              owner mass who hm (Finset.mem_range.mp hoffset), ite_eq_left howner]
       _ = 1 := by simp
       _ = 1 - quittingEssentialAPSOpponentStageMass
           owner mass who block := by
@@ -99,7 +99,7 @@ theorem quittingOpponentSurvivalWeight_uniformMesh_one_block
               apply Finset.prod_congr rfl
               intro offset hoffset
               rw [quittingEssentialAPSOpponentStageMass_uniformMesh_block_add
-                owner mass who hm (Finset.mem_range.mp hoffset), if_neg howner]
+                owner mass who hm (Finset.mem_range.mp hoffset), ite_eq_right howner]
       _ = (1 - quittingMeshHazard (mass block) m) ^ m := by simp
       _ = 1 - mass block :=
         one_sub_quittingMeshHazard_pow (hmass1 block) hm

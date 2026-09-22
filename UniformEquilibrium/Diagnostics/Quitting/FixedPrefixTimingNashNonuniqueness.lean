@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace FixedPrefixTimingNashNonuniqueness
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open TwoDateTimingNashSharpness
 
 abbrev Player := Fin 4
@@ -85,8 +85,8 @@ private theorem active_mem_quittingQuitters_of_dummies_never
   fin_cases who
   · exact Or.inl hwho
   · exact Or.inr hwho
-  · simp [quittingQuitters, htwo, timingActionCurrent] at hwho
-  · simp [quittingQuitters, hthree, timingActionCurrent] at hwho
+  · simp [htwo, timingActionCurrent] at hwho
+  · simp [hthree, timingActionCurrent] at hwho
 
 theorem purePayoff_eq_prefix_of_dummies_never
     (dates : ℕ) (choices : Player → Option (Fin dates))
@@ -198,8 +198,8 @@ private theorem purePayoff_prefix_of_column_now
   rw [timingPurePayoff_succ_of_current_nonempty]
   · fin_cases who <;>
       simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-        quittingQuitters, timingActionCurrent_eq_true_iff, now]
-  · exact ⟨1, by simp [quittingQuitters, timingActionCurrent, now]⟩
+        timingActionCurrent_eq_true_iff, now] <;> rfl
+  · exact ⟨1, by simp [timingActionCurrent, now]⟩
 
 private theorem purePayoff_prefix_column_deviation
     (action : Action) :
@@ -209,7 +209,7 @@ private theorem purePayoff_prefix_column_deviation
       rw [timingPurePayoff_succ_of_current_empty]
       · rw [timingPurePayoff_succ_of_current_nonempty]
         · simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-            quittingQuitters, timingChoicesTail, timingActionTail, timingActionCurrent,
+            timingChoicesTail, timingActionTail, timingActionCurrent,
             never, next]
         · exact ⟨2, by decide⟩
       · decide
@@ -220,7 +220,7 @@ private theorem purePayoff_prefix_column_deviation
       · rw [timingPurePayoff_succ_of_current_empty]
         · rw [timingPurePayoff_succ_of_current_nonempty]
           · simp [prefixReward, FixedPrefixArbitraryTailBarrier.reward,
-              quittingQuitters, timingChoicesTail, timingActionTail, timingActionCurrent,
+              timingChoicesTail, timingActionTail, timingActionCurrent,
               never, next]
           · exact ⟨1, by decide⟩
         · decide

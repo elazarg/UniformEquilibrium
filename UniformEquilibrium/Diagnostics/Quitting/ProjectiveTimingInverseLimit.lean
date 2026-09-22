@@ -154,6 +154,10 @@ theorem abs_expect_quittingTerminalPayoff_sub_capProfile_le
     (fun choices => abs_quittingTerminalPayoff_le reward _ observer hreward)
     (fun choices => abs_quittingTerminalPayoff_le reward _ observer hreward)
     (fun choices => ?_)
+  change _ ≤ 2 * bound * Set.indicator
+    (Set.ofPred fun choices : ι → CompactStoppingTime =>
+      ¬ ∀ player, compactStoppingTimeCap horizon (choices player) = choices player)
+    (fun _ => 1) choices
   rw [Set.indicator_apply]
   split_ifs with hmoves
   · rw [mul_one]
@@ -195,13 +199,13 @@ theorem tsum_compactStoppingTime (value : CompactStoppingTime → ℝ≥0∞) :
       Set.range (WithTop.some : ℕ → CompactStoppingTime) := by
     intro choice hchoice
     induction choice using WithTop.recTopCoe with
-    | top => exact absurd (if_pos rfl) hchoice
+    | top => exact absurd (ite_eq_left rfl) hchoice
     | coe date => exact ⟨date, rfl⟩
   have hreindex := (WithTop.coe_injective
     (α := ℕ)).tsum_eq (f := fun choice => if choice = ⊤ then 0 else value choice)
     hsupport
   refine Eq.trans (tsum_congr fun choice => ?_)
-    (hreindex.symm.trans (tsum_congr fun date => if_neg WithTop.coe_ne_top))
+    (hreindex.symm.trans (tsum_congr fun date => ite_eq_right WithTop.coe_ne_top))
   by_cases hchoice : choice = ⊤ <;> simp [hchoice]
 
 /-! ## Censor-compatible families of finite timing laws -/
@@ -276,10 +280,10 @@ theorem censor_some_eq (deadline : ℕ)
     (law.map quittingFiniteDeadlineTimingActionCensor) (some date) =
       law (some date.castSucc) := by
   rw [PMF.map_apply, tsum_fintype, Finset.sum_eq_single (some date.castSucc)]
-  · exact if_pos ((quittingFiniteDeadlineTimingActionCensor_eq_some_iff
+  · exact ite_eq_left ((quittingFiniteDeadlineTimingActionCensor_eq_some_iff
       (some date.castSucc) date).2 rfl).symm
   · intro other _ hother
-    exact if_neg fun hcontra => hother
+    exact ite_eq_right fun hcontra => hother
       ((quittingFiniteDeadlineTimingActionCensor_eq_some_iff other date).1
         hcontra.symm)
   · intro hmem
@@ -293,9 +297,9 @@ theorem map_actionTime_apply_top {deadline : ℕ}
     (law : PMF (QuittingFiniteDeadlineTimingAction deadline)) :
     (law.map quittingFiniteDeadlineTimingActionTime) ⊤ = law none := by
   rw [PMF.map_apply, tsum_fintype, Finset.sum_eq_single none]
-  · exact if_pos rfl
+  · exact ite_eq_left rfl
   · intro action _ haction
-    refine if_neg ?_
+    refine ite_eq_right ?_
     cases action with
     | none => exact absurd rfl haction
     | some time => simp [quittingFiniteDeadlineTimingActionTime]
@@ -311,10 +315,10 @@ theorem map_actionTime_apply_coe {deadline : ℕ}
       if hdate : date < deadline then law (some ⟨date, hdate⟩) else 0 := by
   rw [PMF.map_apply, tsum_fintype]
   by_cases hdate : date < deadline
-  · rw [dif_pos hdate, Finset.sum_eq_single (some ⟨date, hdate⟩)]
-    · exact if_pos rfl
+  · rw [dite_eq_left hdate, Finset.sum_eq_single (some ⟨date, hdate⟩)]
+    · exact ite_eq_left rfl
     · intro action _ haction
-      refine if_neg ?_
+      refine ite_eq_right ?_
       cases action with
       | none => simp [quittingFiniteDeadlineTimingActionTime]
       | some time =>
@@ -324,8 +328,8 @@ theorem map_actionTime_apply_coe {deadline : ℕ}
     · intro hmem
       exact absurd (Finset.mem_univ
         (some ⟨date, hdate⟩ : QuittingFiniteDeadlineTimingAction deadline)) hmem
-  · rw [dif_neg hdate]
-    refine Finset.sum_eq_zero fun action _ => if_neg ?_
+  · rw [dite_eq_right hdate]
+    refine Finset.sum_eq_zero fun action _ => ite_eq_right ?_
     cases action with
     | none => simp [quittingFiniteDeadlineTimingActionTime]
     | some time =>
@@ -403,9 +407,9 @@ theorem sum_range_add_tsum_tail_exposedMass (deadline : ℕ) (player : ι) :
       family.exposedMass date player else 0) =
       ∑ date ∈ Finset.range deadline, family.exposedMass date player := by
     rw [tsum_eq_sum (s := Finset.range deadline)
-      (fun date hdate => if_neg (by simpa using hdate))]
+      (fun date hdate => ite_eq_right (by simpa using hdate))]
     exact Finset.sum_congr rfl fun date hdate =>
-      if_pos (Finset.mem_range.1 hdate)
+      ite_eq_left (Finset.mem_range.1 hdate)
   rw [← hhead, ← ENNReal.tsum_add]
   refine tsum_congr fun date => ?_
   by_cases hdate : date < deadline
@@ -486,13 +490,13 @@ theorem map_cap_limitLaw_apply_top (player : ι) (horizon : ℕ) :
     by_cases hdate : date ≤ horizon
     · have hne : ¬ ((⊤ : CompactStoppingTime) = WithTop.some date) := by simp
       have hlate : ¬ (horizon + 1 ≤ date) := by omega
-      rw [compactStoppingTimeCap_coe_of_le horizon date hdate, if_neg hne,
-        if_neg hlate]
+      rw [compactStoppingTimeCap_coe_of_le horizon date hdate, ite_eq_right hne,
+        ite_eq_right hlate]
     · have hlate : horizon + 1 ≤ date := by omega
       rw [compactStoppingTimeCap_coe_of_lt horizon date (Nat.not_le.1 hdate),
-        if_pos (rfl : (⊤ : CompactStoppingTime) = ⊤), if_pos hlate]
+        ite_eq_left (rfl : (⊤ : CompactStoppingTime) = ⊤), ite_eq_left hlate]
       rfl
-  · rw [compactStoppingTimeCap_top, if_pos rfl]
+  · rw [compactStoppingTimeCap_top, ite_eq_left rfl]
     rfl
 
 /-- The capped inverse limit retains every date it still displays. -/
@@ -501,26 +505,26 @@ theorem map_cap_limitLaw_apply_coe (player : ι) (horizon date : ℕ) :
         (WithTop.some date) =
       if date ≤ horizon then family.exposedMass date player else 0 := by
   rw [PMF.map_apply, tsum_compactStoppingTime, compactStoppingTimeCap_top,
-    if_neg (by simp), zero_add]
+    ite_eq_right (by simp), zero_add]
   by_cases hdate : date ≤ horizon
-  · rw [if_pos hdate, tsum_eq_single date]
-    · rw [compactStoppingTimeCap_coe_of_le horizon date hdate, if_pos rfl,
+  · rw [ite_eq_left hdate, tsum_eq_single date]
+    · rw [compactStoppingTimeCap_coe_of_le horizon date hdate, ite_eq_left rfl,
         limitLaw_apply_coe]
     · intro other hother
       by_cases hle : other ≤ horizon
       · rw [compactStoppingTimeCap_coe_of_le horizon other hle]
-        exact if_neg fun hcontra => hother (by simpa using hcontra.symm)
+        exact ite_eq_right fun hcontra => hother (by simpa using hcontra.symm)
       · rw [compactStoppingTimeCap_coe_of_lt horizon other (Nat.not_le.1 hle)]
-        exact if_neg (by simp)
-  · rw [if_neg hdate, ENNReal.tsum_eq_zero]
+        exact ite_eq_right (by simp)
+  · rw [ite_eq_right hdate, ENNReal.tsum_eq_zero]
     intro other
     by_cases hle : other ≤ horizon
     · rw [compactStoppingTimeCap_coe_of_le horizon other hle]
-      refine if_neg fun hcontra => hdate ?_
+      refine ite_eq_right fun hcontra => hdate ?_
       have hval : date = other := by simpa using hcontra
       exact hval ▸ hle
     · rw [compactStoppingTimeCap_coe_of_lt horizon other (Nat.not_le.1 hle)]
-      exact if_neg (by simp)
+      exact ite_eq_right (by simp)
 
 /-- **Truncation identity.**  Every finite-deadline law of a compatible family
 is exactly the horizon cap of the inverse-limit law. -/
@@ -538,10 +542,10 @@ theorem map_cap_limitLaw_eq (player : ι) (horizon : ℕ) :
       rw [family.map_cap_limitLaw_apply_coe player horizon date,
         map_actionTime_apply_coe]
       by_cases hdate : date ≤ horizon
-      · rw [if_pos hdate, dif_pos (Nat.lt_succ_of_le hdate),
+      · rw [ite_eq_left hdate, dite_eq_left (Nat.lt_succ_of_le hdate),
           family.mixed_some_eq_exposedMass player (horizon + 1) date
             (Nat.lt_succ_of_le hdate)]
-      · rw [if_neg hdate, dif_neg (by omega)]
+      · rw [ite_eq_right hdate, dite_eq_right (by omega)]
 
 /-! ## Vanishing escape mass -/
 
@@ -565,8 +569,8 @@ theorem limitTailMass_antitone (player : ι) :
   refine antitone_nat_of_succ_le fun deadline => ?_
   refine ENNReal.tsum_le_tsum fun date => ?_
   by_cases hdate : deadline + 1 ≤ date
-  · rw [if_pos hdate, if_pos (by omega)]
-  · rw [if_neg hdate]
+  · rw [ite_eq_left hdate, ite_eq_left (by omega)]
+  · rw [ite_eq_right hdate]
     exact bot_le
 
 theorem iInf_limitTailMass (player : ι) :
@@ -600,12 +604,12 @@ theorem capDefect_limitLaw_eq (player : ι) (horizon : ℕ) :
     · have hfix : ¬ ¬ (compactStoppingTimeCap horizon (WithTop.some date) =
           WithTop.some date) :=
         not_not_intro (compactStoppingTimeCap_coe_of_le horizon date hdate)
-      rw [if_neg hfix, if_neg (by omega)]
+      rw [ite_eq_right hfix, ite_eq_right (by omega)]
     · have hmove : ¬ (compactStoppingTimeCap horizon (WithTop.some date) =
           WithTop.some date) := by
         rw [compactStoppingTimeCap_coe_of_lt horizon date (Nat.not_le.1 hdate)]
         simp
-      rw [if_pos hmove, if_pos (by omega)]
+      rw [ite_eq_left hmove, ite_eq_left (by omega)]
       rfl
   rw [compactStoppingLawCapDefect, hmass]
 

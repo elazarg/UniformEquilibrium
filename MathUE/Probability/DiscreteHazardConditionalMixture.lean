@@ -131,7 +131,7 @@ theorem shift_convexMix
           (posteriorTargetWeight source target lambda cutoff) time /
         mixedSurvival (source.shift cutoff) (target.shift cutoff)
           (posteriorTargetWeight source target lambda cutoff) time)
-    rw [if_neg hglobal, if_neg hlocal]
+    rw [ite_eq_right hglobal, ite_eq_right hlocal]
     rw [hmass, hdenom]
     field_simp [ne_of_gt hpositive, hglobal]
 

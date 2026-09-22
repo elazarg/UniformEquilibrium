@@ -49,16 +49,16 @@ structure CompactBarycentricGame where
   payoff : (∀ i, Strategy i) → Player → ℝ
   payoffContinuous : ∀ who, Continuous fun profile => payoff profile who
   barycenter : ∀ i (n : ℕ),
-    stdSimplex ℝ (Fin (n + 1)) → (Fin (n + 1) → Strategy i) → Strategy i
+    Convexity.StdSimplex ℝ (Fin (n + 1)) → (Fin (n + 1) → Strategy i) → Strategy i
   barycenterContinuous : ∀ i (n : ℕ) (points : Fin (n + 1) → Strategy i),
-    Continuous fun weights : stdSimplex ℝ (Fin (n + 1)) =>
+    Continuous fun weights : Convexity.StdSimplex ℝ (Fin (n + 1)) =>
       barycenter i n weights points
   payoffBarycentric : ∀ (profile : ∀ i, Strategy i) (who : Player)
-    (n : ℕ) (weights : stdSimplex ℝ (Fin (n + 1)))
+    (n : ℕ) (weights : Convexity.StdSimplex ℝ (Fin (n + 1)))
     (points : Fin (n + 1) → Strategy who),
     payoff (Function.update profile who
         (barycenter who n weights points)) who =
-      ∑ a, weights a * payoff (Function.update profile who (points a)) who
+      ∑ a, weights.weights a * payoff (Function.update profile who (points a)) who
 
 attribute [instance] CompactBarycentricGame.finitePlayer
 attribute [instance] CompactBarycentricGame.decidablePlayer
@@ -198,36 +198,39 @@ private def nashMap (selected : Finset G.Deviation) :
     G.ApproxProfile selected → G.ApproxProfile selected := by
   intro weights who
   let denominator : ℝ := 1 + G.gainSum selected weights who
-  refine ⟨fun action =>
-      (weights who action +
-        pospart (G.pointGain selected weights who action)) / denominator,
-    ?_, ?_⟩
-  · intro action
-    exact div_nonneg
-      (add_nonneg (stdSimplex.zero_le (weights who) action)
-        (pospart_nonneg _))
+  exact {
+    weights := Finsupp.equivFunOnFinite.symm (fun action =>
+      ((weights who).weights action +
+        pospart (G.pointGain selected weights who action)) / denominator)
+    nonneg action := div_nonneg
+      (add_nonneg ((weights who).weights_nonneg action) (pospart_nonneg _))
       (by
         dsimp [denominator]
         linarith [G.gainSum_nonneg selected weights who])
-  · have hden_pos : 0 < denominator := by
-      dsimp [denominator]
-      linarith [G.gainSum_nonneg selected weights who]
-    simp_rw [div_eq_mul_inv]
-    rw [← Finset.sum_mul, Finset.sum_add_distrib]
-    have hweights_sum :
-        (∑ action : G.ApproxAction selected who, weights who action) = 1 :=
-      (weights who).property.2
-    change
-      ((∑ action : G.ApproxAction selected who, weights who action) +
+    total := by
+      have hden_pos : 0 < denominator := by
+        dsimp [denominator]
+        linarith [G.gainSum_nonneg selected weights who]
+      rw [Finsupp.sum_fintype]
+      · change (∑ action : G.ApproxAction selected who,
+          ((weights who).weights action +
+            pospart (G.pointGain selected weights who action)) / denominator) = 1
+        simp_rw [div_eq_mul_inv]
+        rw [← Finset.sum_mul, Finset.sum_add_distrib]
+        have hweights_sum := (weights who).total_of_fintype
+        change
+          ((∑ action : G.ApproxAction selected who, (weights who).weights action) +
           G.gainSum selected weights who) * denominator⁻¹ = 1
-    rw [hweights_sum]
-    exact mul_inv_cancel₀ hden_pos.ne'
+        rw [hweights_sum]
+        exact mul_inv_cancel₀ hden_pos.ne'
+      · intro
+        rfl }
 
 @[simp] private theorem nashMap_apply (selected : Finset G.Deviation)
     (weights : G.ApproxProfile selected)
     (who : G.Player) (action : G.ApproxAction selected who) :
-    G.nashMap selected weights who action =
-      (weights who action +
+    (G.nashMap selected weights who).weights action =
+      ((weights who).weights action +
           pospart (G.pointGain selected weights who action)) /
         (1 + G.gainSum selected weights who) :=
   rfl
@@ -238,14 +241,14 @@ private theorem continuous_nashMap (selected : Finset G.Deviation) :
   have hcoord : ∀ who (action : G.ApproxAction selected who),
       Continuous
         (fun weights : G.ApproxProfile selected =>
-          (weights who action +
+          ((weights who).weights action +
               pospart (G.pointGain selected weights who action)) /
             (1 + G.gainSum selected weights who)) := by
     intro who action
     have hweight : Continuous
-        (fun weights : G.ApproxProfile selected => weights who action) :=
-      (continuous_apply action).comp
-        (continuous_subtype_val.comp (continuous_apply who))
+        (fun weights : G.ApproxProfile selected => (weights who).weights action) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ action).comp
+        (continuous_apply who)
     have hsum : Continuous
         (fun weights : G.ApproxProfile selected =>
           G.gainSum selected weights who) := by
@@ -262,7 +265,8 @@ private theorem continuous_nashMap (selected : Finset G.Deviation) :
         (continuous_const.add hsum) hden
   apply continuous_pi
   intro who
-  apply Continuous.subtype_mk
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ
+    (G.ApproxAction selected who)).continuous_iff]
   apply continuous_pi
   intro action
   exact hcoord who action
@@ -272,7 +276,7 @@ exactly zero. -/
 private theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
     (weights : G.ApproxProfile selected) (who : G.Player) :
     ∑ action : G.ApproxAction selected who,
-      weights who action * G.pointGain selected weights who action = 0 := by
+      (weights who).weights action * G.pointGain selected weights who action = 0 := by
   let profile := G.baryProfile selected weights
   let points := G.selectedPoint selected who
   have hcurrent :
@@ -287,7 +291,7 @@ private theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
   have hmean :
       G.payoff profile who =
         ∑ action : G.ApproxAction selected who,
-          weights who action *
+          (weights who).weights action *
             G.payoff (Function.update profile who (points action)) who := by
     have hbary := G.payoffBarycentric profile who selected.card
       (weights who) points
@@ -297,8 +301,8 @@ private theorem weighted_pointGain_sum_zero (selected : Finset G.Deviation)
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
   have hweights_sum :
-      (∑ action : G.ApproxAction selected who, weights who action) = 1 :=
-    (weights who).property.2
+      (∑ action : G.ApproxAction selected who, (weights who).weights action) = 1 :=
+    (weights who).total_of_fintype
   rw [hweights_sum, one_mul]
   exact sub_eq_zero.mpr hmean.symm
 
@@ -307,10 +311,12 @@ private theorem fixedPoint_identity (selected : Finset G.Deviation)
     (weights : G.ApproxProfile selected)
     (hfixed : G.nashMap selected weights = weights)
     (who : G.Player) (action : G.ApproxAction selected who) :
-    weights who action * (1 + G.gainSum selected weights who) =
-      weights who action + pospart (G.pointGain selected weights who action) := by
-  have hvalue : G.nashMap selected weights who action = weights who action := by
-    exact congrFun (congrArg Subtype.val (congrFun hfixed who)) action
+    (weights who).weights action * (1 + G.gainSum selected weights who) =
+      (weights who).weights action +
+        pospart (G.pointGain selected weights who action) := by
+  have hvalue : (G.nashMap selected weights who).weights action =
+      (weights who).weights action := by
+    exact congrArg (fun point => point.weights action) (congrFun hfixed who)
   rw [G.nashMap_apply] at hvalue
   have hden : 1 + G.gainSum selected weights who ≠ 0 := by
     linarith [G.gainSum_nonneg selected weights who]
@@ -322,7 +328,7 @@ private theorem pointGain_nonpos_of_fixedPoint (selected : Finset G.Deviation)
     (hfixed : G.nashMap selected weights = weights)
     (who : G.Player) (action : G.ApproxAction selected who) :
     G.pointGain selected weights who action ≤ 0 := by
-  let w : G.ApproxAction selected who → ℝ := fun a => weights who a
+  let w : G.ApproxAction selected who → ℝ := fun a => (weights who).weights a
   let g : G.ApproxAction selected who → ℝ :=
     fun a => G.pointGain selected weights who a
   have hfp : ∀ a,

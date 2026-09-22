@@ -12,7 +12,7 @@ noncomputable section
 
 namespace GameTheory.AdaptiveChildCenter
 
-open Math.Probability Math.PMFProduct Math.Probability.DiscreteHazard
+open _root_.Math.Probability Math.PMFProduct _root_.Math.Probability.DiscreteHazard
 
 /-- A signed four-player reward table with three active players and a sure-quitting anchor. -/
 def reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) :=

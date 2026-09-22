@@ -35,7 +35,8 @@ theorem exists_matched_transfer_incidence_or_twoOpponent_separator_fourPlayers
     (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair iota) (who : iota)
     (mass : QuittingTerminalOutcome iota → Real)
-    (hmass : mass ∈ stdSimplex Real (QuittingTerminalOutcome iota))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (QuittingTerminalOutcome iota))
     (hdebt : 0 < quittingTerminalSemanticDebt source who)
     (htransfer : quittingTerminalSemanticDebt source who ≤
       ∑ other ∈ (Finset.univ.erase who),

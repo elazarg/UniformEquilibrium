@@ -119,7 +119,9 @@ def unbundleCoalitionProfile (S : Finset ι)
     F.unbundleCoalitionProfile S (F.bundleCoalitionProfile S σ) = σ := by
   funext i
   by_cases hi : i ∈ S
-  · simp [unbundleCoalitionProfile, bundleCoalitionProfile, hi]
+  · simp only [unbundleCoalitionProfile, hi, dite_true]
+    change σ i = σ i
+    rfl
   · simp only [unbundleCoalitionProfile, hi, dite_false]
     rfl
 
@@ -203,8 +205,9 @@ theorem coalitionForcesLaw_iff_mergeCoalition_forcesLaw (S : Finset ι)
     change P (F.outcomeKernel (F.unbundleCoalitionProfile S
       ((F.mergeCoalition S).overrideCoalition {0} mergedτ
         (F.bundleCoalitionProfile S σ)))) at h
-    rw [F.unbundleCoalitionProfile_override S mergedτ,
-      F.unbundleCoalitionProfile_bundle S] at h
+    have hmerge := F.unbundleCoalitionProfile_override S mergedτ
+      (F.bundleCoalitionProfile S σ)
+    rw [hmerge, F.unbundleCoalitionProfile_bundle S] at h
     simpa [τ] using h
 
 /-- Sure forceability is preserved by coalition merging. -/

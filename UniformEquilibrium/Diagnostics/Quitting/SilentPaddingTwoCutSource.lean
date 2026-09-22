@@ -19,6 +19,8 @@ profile, or uniform-equilibrium payoff is constructed here.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -347,12 +349,14 @@ theorem quittingTerminalOutcomeMass_rootSequence_silentPrefix_eq
       exact quittingAbsorbedMassLimit_rootSequence_silentPrefix_eq
         reward profile terminal
   | none =>
-      have hpadded := (quittingTerminalOutcomeMass_mem_stdSimplex reward
+      have hpadded := (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward
         (quittingRootSequenceProfile reward
           (quittingSilentPrefixRoots
-            (quittingProfileLiveRoot reward profile)) 0)).2
+            (quittingProfileLiveRoot reward profile)) 0))).2
       have hsource :=
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
       rw [Fintype.sum_option] at hpadded hsource
       have hfinite :
           (∑ terminal, quittingTerminalOutcomeMass reward

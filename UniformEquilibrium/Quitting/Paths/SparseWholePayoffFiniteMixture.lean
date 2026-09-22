@@ -58,10 +58,12 @@ theorem exists_sparseFiniteStoppingLawMixture_wholePayoff_eq
     rw [show (∑ generator : Support, mixture.prob generator.1) = 1 by
       exact horiginalSum] at hnone
     simpa [vector] using hnone
-  let sparse : FinDist Support := FinDist.ofSimplex ⟨hcoefficient, hsum⟩
+  have hsimplex : coefficient ∈ simplexWeights Support :=
+    mem_simplexWeights.mpr ⟨hcoefficient, hsum⟩
+  let sparse : FinDist Support := FinDist.ofSimplex hsimplex
   refine ⟨sparse, ?_, ?_⟩
   · have hsparseProb : sparse.prob = coefficient := by
-      exact FinDist.prob_ofSimplex ⟨hcoefficient, hsum⟩
+      exact FinDist.prob_ofSimplex hsimplex
     rw [hsparseProb]
     change Fintype.card {generator : Support // coefficient generator ≠ 0} ≤
       Fintype.card Player + 1
@@ -73,7 +75,7 @@ theorem exists_sparseFiniteStoppingLawMixture_wholePayoff_eq
     rw [FinDist.expect_eq_sum, FinDist.expect_eq_sum_support]
     have hcoordinate := hreconstruct (some observer)
     have hsparseProb : sparse.prob = coefficient := by
-      exact FinDist.prob_ofSimplex ⟨hcoefficient, hsum⟩
+      exact FinDist.prob_ofSimplex hsimplex
     rw [hsparseProb]
     change (∑ generator : Support,
       coefficient generator * vector generator (some observer)) = _

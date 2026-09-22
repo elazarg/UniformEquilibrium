@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory.PureCoalitionLowProductFailureFinFour
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The three cyclic pair-premium rows, with a zero fourth coordinate. -/
 def premium (terminal : Finset (Fin 4)) : Payoff (Fin 4) :=

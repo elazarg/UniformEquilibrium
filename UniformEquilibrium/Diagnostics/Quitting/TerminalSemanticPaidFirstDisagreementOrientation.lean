@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -137,7 +137,7 @@ theorem QuittingPaidFirstDisagreementRow.liveMass_mul_forcedRefusal_le_eta
   dsimp only
   have hchronology := row.chronology
   rw [hearlier] at hchronology
-  simp only [if_true] at hchronology
+  simp only [ite_true] at hchronology
   let profile := Function.update receiving observer
     (quittingPureTimeBehaviorStrategy reward observer row.receivingWitness)
   let root := quittingProfileLiveRoot reward profile row.start
@@ -255,7 +255,7 @@ theorem QuittingPaidFirstDisagreementRow.exists_outsiderDeviation_of_receivingEa
   dsimp only
   have hchronology := row.chronology
   rw [hearlier] at hchronology
-  simp only [if_true] at hchronology
+  simp only [ite_true] at hchronology
   let profile := Function.update receiving observer
     (quittingPureTimeBehaviorStrategy reward observer row.receivingWitness)
   let root := quittingProfileLiveRoot reward profile row.start

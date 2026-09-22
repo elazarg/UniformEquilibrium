@@ -23,7 +23,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_update_eq_expect
       expect law (fun choice ↦ quittingTerminalPayoff reward
         (quittingStoppingLawProfile reward
           (Function.update laws mixer (PMF.pure choice))) observer) := by
-  letI : Nonempty ι := ⟨mixer⟩
+  let : Nonempty ι := ⟨mixer⟩
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingStoppingLawExpectedPayoff, quittingIndependentTerminalOutcomeLaw]
   rw [Math.PMFProduct.pmfPi_update_bind, PMF.map_bind, expect_bind]
@@ -91,7 +91,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add
     funext player
     change quittingStoppingLawBehaviorStrategy reward player
         (CompactStoppingLaw.ofPMF (laws player)).toPMF = _
-    rw [CompactStoppingLaw.toPMF_ofPMF]
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
     rfl
   have hlimit :=
     quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton
@@ -115,8 +115,10 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add
     apply Finset.prod_congr rfl
     intro j _
     rw [← CompactStoppingLaw.toPMF_apply_toReal]
-    simp only [compact, CompactStoppingLaw.toPMF_ofPMF]
-    rfl
+    change ((((CompactStoppingLaw.ofPMF (laws j)).toPMF :
+      PMF (Option ℕ)) none).toReal) = _
+    exact congrArg (fun law : PMF (Option ℕ) => (law none).toReal)
+      (CompactStoppingLaw.toPMF_ofPMF_option _)
   simpa only [hproduct] using heq
 
 /-- The same exact signed late-row identity holds for an arbitrary payoff
@@ -136,7 +138,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pure_observer_eq_never_ad
           reward (quittingSingletonTerminal mixer) observer := by
   have h := quittingTerminalPayoff_stoppingLawProfile_late_pure_eq_never_add
     (quittingObserverReward reward observer) laws mixer deadline hfinite htime
-  letI : Nonempty ι := ⟨mixer⟩
+  let : Nonempty ι := ⟨mixer⟩
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff] at h ⊢
   have hobs (actual : ι → PMF (Option ℕ)) :
       quittingStoppingLawExpectedPayoff (quittingObserverReward reward observer) actual mixer =
@@ -152,11 +154,12 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pure_observer_eq_never_ad
 at Never, is exactly the first quitting coalition. -/
 theorem quittingFirstStoppingOutcome_one_date
     (coalition : Finset ι) (hne : coalition.Nonempty) (time : ℕ) :
-    letI : Nonempty ι := ⟨hne.choose⟩
+    let : Nonempty ι := ⟨hne.choose⟩
     quittingFirstStoppingOutcome
         (fun player ↦ if player ∈ coalition then some time else none) =
       some ⟨coalition, hne⟩ := by
-  letI : Nonempty ι := ⟨hne.choose⟩
+  let : Nonempty ι := ⟨hne.choose⟩
+  dsimp only
   have hmin : quittingEarliestStoppingValue
       (fun player ↦ if player ∈ coalition then some time else none) = (time : WithTop ℕ) := by
     unfold quittingEarliestStoppingValue
@@ -165,7 +168,7 @@ theorem quittingFirstStoppingOutcome_one_date
         (f := fun player ↦ quittingStoppingTimeValue
           (if player ∈ coalition then some time else none))
         (Finset.mem_univ hne.choose)
-      simpa only [if_pos hne.choose_spec, quittingStoppingTimeValue] using hle
+      simpa only [ite_eq_left hne.choose_spec, quittingStoppingTimeValue] using hle
     · apply Finset.le_inf
       intro player _
       by_cases hplayer : player ∈ coalition <;> simp [hplayer, quittingStoppingTimeValue]
@@ -176,7 +179,7 @@ theorem quittingFirstStoppingOutcome_one_date
       Finset.mem_univ, true_and, hmin]
     by_cases hplayer : player ∈ coalition <;> simp [hplayer, quittingStoppingTimeValue]
   unfold quittingFirstStoppingOutcome
-  rw [hmin, if_neg (by simp)]
+  rw [hmin, ite_eq_right (by simp)]
   exact congrArg some (Subtype.ext hcoalition)
 
 /-- If all other finite times precede the deadline, a late simultaneous
@@ -187,14 +190,15 @@ theorem quittingFirstStoppingOutcome_late_pair
     (hpivot : times pivot = none) (hobserver : times observer = none)
     (hfinite : ∀ j, j ≠ pivot → j ≠ observer →
       times j = none ∨ ∃ chosen < deadline, times j = some chosen) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingFirstStoppingOutcome
         (Function.update (Function.update times pivot (some time)) observer (some time)) =
       if ∀ j, times j = none then
         some ⟨{pivot, observer}, by simp⟩ else quittingFirstStoppingOutcome times := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
+  dsimp only
   by_cases hall : ∀ j, times j = none
-  · rw [if_pos hall]
+  · rw [ite_eq_left hall]
     have htimes : Function.update (Function.update times pivot (some time)) observer
         (some time) = fun j ↦ if j ∈ ({pivot, observer} : Finset ι) then some time
           else none := by
@@ -208,7 +212,7 @@ theorem quittingFirstStoppingOutcome_late_pair
         · simp [hjp, hjo, hall j]
     rw [htimes]
     exact quittingFirstStoppingOutcome_one_date {pivot, observer} (by simp) time
-  · rw [if_neg hall]
+  · rw [ite_eq_right hall]
     obtain ⟨blocker, hblocker⟩ := not_forall.mp hall
     have hbp : blocker ≠ pivot := fun heq ↦ hblocker (heq ▸ hpivot)
     have hbo : blocker ≠ observer := fun heq ↦ hblocker (heq ▸ hobserver)
@@ -259,7 +263,7 @@ theorem quittingIndependentTerminalOutcomeLaw_none [Nonempty ι]
     tsum_eq_single (fun _ ↦ none)]
   · simp [Math.PMFProduct.pmfPi_apply]
   · intro times htimes
-    rw [if_neg]
+    rw [ite_eq_right]
     intro houtcome
     apply htimes
     exact funext (quittingFirstStoppingOutcome_eq_none_iff times |>.mp houtcome.symm)
@@ -272,13 +276,13 @@ theorem quittingIndependentTerminalOutcomeLaw_late_pair
     (hpivot : laws pivot = PMF.pure none) (hobserver : laws observer = PMF.pure none)
     (hfinite : ∀ j, j ≠ pivot → j ≠ observer →
       IsFiniteClockStoppingLaw deadline (laws j)) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingIndependentTerminalOutcomeLaw
         (Function.update (Function.update laws pivot (PMF.pure (some time)))
           observer (PMF.pure (some time))) =
       (quittingIndependentTerminalOutcomeLaw laws).map
         (fun outcome ↦ some (outcome.getD ⟨{pivot, observer}, by simp⟩)) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   unfold quittingIndependentTerminalOutcomeLaw
   rw [← Math.PMFProduct.pmfPi_bind_update_pure,
     ← Math.PMFProduct.pmfPi_bind_update_pure]
@@ -307,9 +311,9 @@ theorem quittingIndependentTerminalOutcomeLaw_late_pair
     htime htp hto (fun j hjp hjo ↦ hfinite j hjp hjo _ (hcoordinate j))]
   simp only [Function.comp_apply]
   by_cases hall : ∀ j, times j = none
-  · rw [if_pos hall, quittingFirstStoppingOutcome_eq_none_iff times |>.mpr hall]
+  · rw [ite_eq_left hall, quittingFirstStoppingOutcome_eq_none_iff times |>.mpr hall]
     rfl
-  · rw [if_neg hall]
+  · rw [ite_eq_right hall]
     have hnot : quittingFirstStoppingOutcome times ≠ none :=
       fun heq ↦ hall (quittingFirstStoppingOutcome_eq_none_iff times |>.mp heq)
     cases houtcome : quittingFirstStoppingOutcome times with
@@ -332,7 +336,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_late_pair_eq_never_add
             observer (PMF.pure (some time)))) who =
       quittingTerminalPayoff reward (quittingStoppingLawProfile reward laws) who +
         (∏ j, (laws j none).toReal) * reward ⟨{pivot, observer}, by simp⟩ who := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   classical
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingStoppingLawExpectedPayoff]

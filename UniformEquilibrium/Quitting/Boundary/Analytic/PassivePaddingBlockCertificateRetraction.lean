@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct StochasticGame
+open Filter _root_.Math.Probability Math.PMFProduct StochasticGame
 open scoped Topology
 
 variable {I J : Type} [Fintype I] [DecidableEq I]
@@ -53,10 +53,10 @@ theorem quittingRootAbsorbingContribution_le_absorption_mul
       quittingRootPayoff reward (0 : Payoff I) action who ≤ bound action := by
     intro action
     by_cases hquit : (quittingQuitters action).Nonempty
-    · simp only [quittingRootPayoff, dif_pos hquit, bound, if_pos hquit]
+    · simp only [quittingRootPayoff, dite_eq_left hquit, bound, ite_eq_left hquit]
       exact hreward _
-    · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply,
-        bound, if_neg hquit, le_refl]
+    · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply,
+        bound, ite_eq_right hquit, le_refl]
   have hexpect : quittingRootAbsorbingContribution reward root who ≤
       expect (pmfPi root) bound := by
     exact expect_mono _ _ _ hpoint

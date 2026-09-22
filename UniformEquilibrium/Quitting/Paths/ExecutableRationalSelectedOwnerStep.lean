@@ -291,7 +291,7 @@ theorem executableRationalSelectedOwnerDebtBlock_length_le
           owner (rationalQuittingFiniteWordExcludedOwnerOn_mem
             reward owners hWE roots))).1
   rw [hscale] at hblock
-  rw [executableRationalSelectedOwnerDebtBlock, dif_pos hpositive]
+  rw [executableRationalSelectedOwnerDebtBlock, dite_eq_left hpositive]
   exact hblock
 
 /-- At positive debt the selected block satisfies the packet's rational
@@ -326,7 +326,7 @@ theorem executableRationalSelectedOwnerDebtBlock_debtSum_le
           owner (rationalQuittingFiniteWordExcludedOwnerOn_mem
             reward owners hWE roots))).2
   rw [hscale] at hblock
-  rw [executableRationalSelectedOwnerDebtBlock, dif_pos hpositive]
+  rw [executableRationalSelectedOwnerDebtBlock, dite_eq_left hpositive]
   change rationalQuittingSemanticDebtSum
       (rationalQuittingFiniteWordSemanticPair reward
         (executableRationalCapThresholdBlock reward roots owner blocker M hM hreward

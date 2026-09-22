@@ -41,7 +41,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -238,7 +238,7 @@ theorem productRootDeletedLiveMass_le_one
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) (who : ι) (time : ℕ) :
     productRootDeletedLiveMass reward profile who time ≤ 1 :=
-  Finset.prod_le_one (fun _ _ => oneDateProductOppContinue_nonneg _ who)
+  Finset.prod_le_one₀ (fun _ _ => oneDateProductOppContinue_nonneg _ who)
     (fun _ _ => oneDateProductOppContinue_le_one _ who)
 
 theorem productRootDeletedLiveMass_antitone
@@ -264,7 +264,7 @@ theorem oneDateProductOppContinue_eq_prod_erase (root : ι → PMF Bool) (who : 
     ← Finset.mul_prod_erase Finset.univ
       (fun player => ((Function.update root who (PMF.pure false))
         player false).toReal) (Finset.mem_univ who), Function.update_self]
-  simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul]
+  simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one, one_mul]
   refine Finset.prod_congr rfl fun other hother => ?_
   rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]
 
@@ -692,7 +692,7 @@ theorem productRoot_coalitionMass_sureQuit_singleton (root : ι → PMF Bool) (w
   unfold coalitionMass quittingRootQuitRates
   rw [show (quittingSingletonTerminal who).val = ({who} : Finset ι) from rfl,
     Finset.prod_singleton, Function.update_self, Finset.compl_singleton]
-  simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul]
+  simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one, one_mul]
   refine Finset.prod_congr rfl fun other hother => ?_
   rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]
   have hsum := quittingRoot_continueProbability_add_quitProbability root other

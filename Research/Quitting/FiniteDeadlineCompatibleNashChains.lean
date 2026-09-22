@@ -65,13 +65,13 @@ theorem hasDeadlinewiseQuittingTimingNash
     HasDeadlinewiseQuittingTimingNash reward := by
   intro deadline
   let game := quittingFiniteDeadlineTimingGame reward deadline
-  letI (who : ι) : Finite (game.Strategy who) := by
+  let (who : ι) : Finite (game.Strategy who) := by
     dsimp only [game, quittingFiniteDeadlineTimingGame, KernelGame.ofPureEU]
     infer_instance
-  letI (who : ι) : Nonempty (game.Strategy who) := by
+  let (who : ι) : Nonempty (game.Strategy who) := by
     dsimp only [game, quittingFiniteDeadlineTimingGame, KernelGame.ofPureEU]
     infer_instance
-  letI : Finite game.Outcome := by
+  let : Finite game.Outcome := by
     dsimp only [game, quittingFiniteDeadlineTimingGame, KernelGame.ofPureEU]
     infer_instance
   exact game.mixed_nash_exists

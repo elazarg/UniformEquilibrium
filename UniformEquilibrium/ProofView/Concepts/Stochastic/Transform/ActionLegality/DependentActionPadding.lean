@@ -61,8 +61,9 @@ def decode (fallback : ∀ state i, Action state i) (state : State) (i : ι)
   simp [decode, embed]
 
 /-- The fixed-action game before legality normalization.  Its values on incorrectly tagged
-actions are immaterial: `game` below normalizes those actions first. -/
-def rawGame (fallback : ∀ state i, Action state i)
+actions are immaterial: `game` below normalizes those actions first.  Reducibility keeps its
+state and action projections transparent in dependent legality proofs. -/
+@[reducible] def rawGame (fallback : ∀ state i, Action state i)
     (stagePayoff : (state : State) → (∀ i, Action state i) → ι → ℝ)
     (transition : (state : State) → (∀ i, Action state i) → PMF State)
     (discount : ℝ) (discount_nonneg : 0 ≤ discount) (discount_lt_one : discount < 1) :
@@ -112,7 +113,7 @@ def embedJoint (state : State) (action : ∀ i, Action state i) :
         (rawGame Action fallback stagePayoff transition discount discount_nonneg
           discount_lt_one).normStagePayoff (Legal Action) (exists_legal Action fallback) from rfl]
   rw [StochasticGame.normStagePayoff_of_jointlyLegal]
-  · simp [rawGame, embedJoint]
+  · simp [embedJoint]
   · exact fun i => legal_embed Action state i (action i)
 
 /-- The padded game's transition on an embedded legal joint action is the source transition. -/
@@ -130,7 +131,7 @@ def embedJoint (state : State) (action : ∀ i, Action state i) :
         (rawGame Action fallback stagePayoff transition discount discount_nonneg
           discount_lt_one).normTransition (Legal Action) (exists_legal Action fallback) from rfl]
   rw [StochasticGame.normTransition_of_jointlyLegal]
-  · simp [rawGame, embedJoint]
+  · simp [embedJoint]
   · exact fun i => legal_embed Action state i (action i)
 
 /-- Lift local behavioral action laws to the padded game by attaching the current-state tag. -/

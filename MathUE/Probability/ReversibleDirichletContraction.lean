@@ -1,6 +1,6 @@
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic
 
 /-!
@@ -281,7 +281,7 @@ theorem reversible_of_lazy (π : S → ℝ) (P Q : S → S → ℝ)
   · subst y
     rfl
   · rw [hPQ x y, hPQ y x]
-    simp only [hxy, Ne.symm hxy, if_false, mul_zero, zero_add]
+    simp only [hxy, Ne.symm hxy, ite_false, mul_zero, zero_add]
     calc
       π x * (1 / 2 * Q x y) = (1 / 2) * (π x * Q x y) := by ring
       _ = (1 / 2) * (π y * Q y x) := by rw [hQrev x y]

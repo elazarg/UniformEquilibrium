@@ -73,7 +73,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -152,7 +152,7 @@ theorem le_quittingStationaryUnilateralCap_of_forall_le
   change B ≤ quittingRootAbsorbingContribution reward
     (Function.update root who (PMF.pure true)) who
   unfold quittingRootAbsorbingContribution quittingRootExpectedPayoff
-  haveI : Finite (ι → Bool) := inferInstanceAs (Finite (ι → Bool))
+  have : Finite (ι → Bool) := inferInstanceAs (Finite (ι → Bool))
   calc B = expect (pmfPi (Function.update root who (PMF.pure true)))
         (fun _ => B) := (expect_const _ B).symm
     _ ≤ _ := by
@@ -160,9 +160,9 @@ theorem le_quittingStationaryUnilateralCap_of_forall_le
         intro action
         unfold quittingRootPayoff
         by_cases hquit : (quittingQuitters action).Nonempty
-        · rw [dif_pos hquit]
+        · rw [dite_eq_left hquit]
           exact hreward _
-        · rw [dif_neg hquit]
+        · rw [dite_eq_right hquit]
           simpa using hB
 
 /-- Every constant-row cap is above the negated canonical reward bound. -/
@@ -216,7 +216,7 @@ theorem quittingBestReplyValue_le
       quittingTerminalPayoff reward
         (Function.update profile who deviation) who ≤ bound) :
     quittingBestReplyValue reward profile who ≤ bound := by
-  haveI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+  have : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
     ⟨quittingAlwaysContinueStrategy reward who⟩
   exact ciSup_le hbound
 
@@ -287,6 +287,7 @@ theorem update_quittingStationaryProfile_congr_of_opponents
   · subst player; simp
   · simp [Function.update_of_ne hplayer, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, hagree player hplayer]
+    rfl
 
 /-- The opponents' one-stage continue mass is a probability. -/
 theorem quittingStationaryFixedOpponentsContinueMass_le_one
@@ -433,7 +434,7 @@ theorem quittingPunishmentValue_le_stationaryPunishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     quittingPunishmentValue reward who ≤
       quittingStationaryPunishmentValue reward who := by
-  haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
   exact le_ciInf fun root =>
     quittingPunishmentValue_le_stationaryUnilateralCap reward who root
 
@@ -528,8 +529,8 @@ theorem quittingFiniteRootPayoff_never_eq_ledgerAccum
   | succ fuel ih =>
       rw [quittingFiniteRootPayoff_eq_hazardValue, quittingFiniteHazardValue]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       rw [← quittingFiniteRootPayoff_eq_hazardValue, ih (start + 1),
         quittingLiveLedgerAccum_shift]
 
@@ -571,8 +572,8 @@ theorem quittingRootSequencePureTimeTerminalValue_some_add
       have hne : start ≠ start + (fuel + 1) := by omega
       rw [quittingPureTimeHazard_some_of_ne hne]
       simp only [PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       have htime : start + (fuel + 1) = (start + 1) + fuel := by omega
       change
         quittingFixedOpponentsContinueReward reward roots who start +
@@ -660,7 +661,7 @@ theorem quittingSetReward_singleton_sub_le_fixedOpponentsQuitValue
           (1 - quittingStationaryFixedOpponentsContinueMass root who) ≤
       quittingStationaryFixedOpponentsQuitValue reward root who := by
   classical
-  haveI : Finite (ι → Bool) := inferInstanceAs (Finite (ι → Bool))
+  have : Finite (ι → Bool) := inferInstanceAs (Finite (ι → Bool))
   set bound := quittingRewardBound reward with hbound
   set solo := quittingSetReward reward ({who} : Finset ι) who with hsoloDef
   set act : ι → Bool := quittingSetAction ({who} : Finset ι) with hactDef
@@ -679,9 +680,9 @@ theorem quittingSetReward_singleton_sub_le_fixedOpponentsQuitValue
     intro action
     unfold quittingRootPayoff
     by_cases hquit : (quittingQuitters action).Nonempty
-    · rw [dif_pos hquit]
+    · rw [dite_eq_left hquit]
       exact abs_reward_le_quittingRewardBound reward _ who
-    · rw [dif_neg hquit]
+    · rw [dite_eq_right hquit]
       simpa using hbound0
   have hmass : (law act).toReal =
       quittingStationaryFixedOpponentsContinueMass root who := by
@@ -702,16 +703,16 @@ theorem quittingSetReward_singleton_sub_le_fixedOpponentsQuitValue
     intro action
     by_cases haction : action = act
     · subst action
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       have hvalue : quittingRootPayoff reward (0 : Payoff ι) act who = solo := by
         unfold quittingRootPayoff
-        rw [dif_pos hactNonempty, hsoloDef,
+        rw [dite_eq_left hactNonempty, hsoloDef,
           quittingSetReward_of_nonempty reward (Finset.singleton_nonempty who)]
         congr 1
         exact Subtype.ext hquitters
       rw [hvalue]
       simp
-    · rw [if_neg haction]
+    · rw [ite_eq_right haction]
       have h1 := abs_le.mp hsoloBound
       have h2 := abs_le.mp (hpayoffBound action)
       simp only [sub_zero, mul_one]
@@ -954,7 +955,7 @@ theorem quittingStationaryPunishmentValue_le_quittingPunishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     quittingStationaryPunishmentValue reward who ≤
       quittingPunishmentValue reward who := by
-  haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  have : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   exact le_ciInf fun profile =>
     quittingStationaryPunishmentValue_le_quittingBestReplyValue reward profile
@@ -980,7 +981,7 @@ theorem neg_quittingRewardBound_le_quittingPunishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     -quittingRewardBound reward ≤ quittingPunishmentValue reward who := by
   rw [quittingPunishmentValue_eq_stationaryPunishmentValue]
-  haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
   exact le_ciInf fun root =>
     neg_quittingRewardBound_le_quittingStationaryUnilateralCap reward who root
 
@@ -1037,10 +1038,23 @@ theorem quittingRootSequenceHazardTerminalValue_const_le_cap
     quittingRootSequenceHazardTerminalValue reward (fun _ => root) who
         hazard 0 ≤
       quittingStationaryUnilateralCap reward root who := by
+  let deviation : (quittingGame reward).BehaviorStrategy who :=
+    fun time _ => show PMF ((quittingGame reward).Act who) from hazard time
   have h := quittingTerminalPayoff_update_stationary_le_cap reward root who
-    (fun time _ => hazard time)
-  rwa [quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue,
-    quittingProfileLiveRoot_stationary] at h
+    deviation
+  have hvalue :=
+    quittingTerminalPayoff_update_eq_rootSequenceHazardTerminalValue
+      reward (quittingStationaryProfile reward root) who deviation
+  rw [quittingProfileLiveRoot_stationary] at hvalue
+  have hhazard : quittingBehaviorLiveHazard reward deviation = hazard := by
+    funext time
+    rfl
+  rw [hhazard] at hvalue
+  calc
+    _ = quittingTerminalPayoff reward
+        (Function.update (quittingStationaryProfile reward root) who
+          deviation) who := hvalue.symm
+    _ ≤ _ := h
 
 /-- **No punishment plan promises a cap below the constant-row value.**  The
 lower leg in the root-sequence shape: if a plan caps every hazard reply by
@@ -1099,7 +1113,7 @@ theorem quittingPunishmentValue_eq (who : Bool) :
   refine le_antisymm ?_ ?_
   · rw [← quittingStationaryUnilateralCap_opponentExit who]
     exact quittingStationaryPunishmentValue_le reward who _
-  · haveI : Nonempty (Bool → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  · have : Nonempty (Bool → PMF Bool) := ⟨fun _ => PMF.pure false⟩
     exact le_ciInf fun root =>
       neg_thousand_le_quittingStationaryUnilateralCap who root
 
@@ -1142,7 +1156,7 @@ theorem quittingPunishmentValue_eq (who : Bool) :
   refine le_antisymm ?_ ?_
   · rw [← quittingStationaryUnilateralCap_opponentExit who]
     exact quittingStationaryPunishmentValue_le reward who _
-  · haveI : Nonempty (Bool → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  · have : Nonempty (Bool → PMF Bool) := ⟨fun _ => PMF.pure false⟩
     refine le_ciInf fun root => ?_
     refine le_quittingStationaryUnilateralCap_of_forall_le reward who le_rfl
       (fun S => ?_) root

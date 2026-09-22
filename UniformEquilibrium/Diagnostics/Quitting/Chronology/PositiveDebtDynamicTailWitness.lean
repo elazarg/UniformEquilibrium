@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -47,7 +47,7 @@ structure QuittingPositiveDebtDynamicTailWitness
   limit : QuittingPositiveDebtSelfLoopLimit reward
   subseq_strict : StrictMono subseq
   projective_limit :
-    letI : Nonempty ι := witness.nonempty_players
+    let : Nonempty ι := witness.nonempty_players
     Tendsto
       ((fun cutoff ↦ quittingFiniteMinMaxDynamicDebtTail reward cutoff) ∘
         subseq) atTop (nhds tail)
@@ -117,7 +117,7 @@ theorem exists_cyclicWindow_finiteEvaluation_gap
           (quittingCyclicRootSequence
             (quittingDynamicDebtTailWindowCycle tail start length) phase)
           who (length + 1) := by
-  letI : NeZero (length + 1) := ⟨Nat.succ_ne_zero length⟩
+  let : NeZero (length + 1) := ⟨Nat.succ_ne_zero length⟩
   let cycle := quittingDynamicDebtTailWindowCycle tail start length
   let profile := quittingCyclicBehaviorProfile reward cycle phase
   obtain ⟨who, deviation, hgap⟩ := witness.terminalExploitability profile
@@ -152,7 +152,7 @@ all-Continue dynamic tail limit, with its provenance and convergence data. -/
 theorem nonempty_positiveDebtDynamicTailWitness
     (witness : QuittingTerminalExploitabilityWitness reward) :
     Nonempty (QuittingPositiveDebtDynamicTailWitness witness) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨tail, subseq, limit, hsubseq, hprojective, hbox, hedge,
       hinitialDebt, hlimitDebt, hvalue, hdebt, hquit, hcontinue,
       hownerClock, habsorption⟩ :=

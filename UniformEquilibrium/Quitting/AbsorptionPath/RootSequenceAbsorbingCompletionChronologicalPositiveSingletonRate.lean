@@ -32,7 +32,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Finset MeasureTheory Set
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -215,12 +215,12 @@ theorem chronologicalCoalitionCDF_sub_eq_sum_stageCoalitionMass_Ioc
   apply Finset.sum_congr rfl
   intro stage _
   by_cases hlower : quittingRootSequenceClock roots stage ≤ lower
-  · rw [if_pos hlower, if_pos (hlower.trans hlowerUpper)]
+  · rw [ite_eq_left hlower, ite_eq_left (hlower.trans hlowerUpper)]
     simp [hlower]
   · by_cases hupperClock : quittingRootSequenceClock roots stage ≤ upper
-    · rw [if_neg hlower, if_pos hupperClock]
+    · rw [ite_eq_right hlower, ite_eq_left hupperClock]
       simp [hlower, hupperClock]
-    · rw [if_neg hlower, if_neg hupperClock]
+    · rw [ite_eq_right hlower, ite_eq_right hupperClock]
       simp [hupperClock]
 
 end QuittingFiniteRootSequenceAbsorption
@@ -281,7 +281,7 @@ theorem threshold_mul_singletonStageMass_sum_le_selectedRefusal_add_collision
   intro stage _
   by_cases hgood :
       quittingRootOpponentAbsorptionMass (roots stage) who ≤ threshold
-  · rw [if_pos hgood]
+  · rw [ite_eq_left hgood]
     have hsingleton := quittingRootCoalitionMass_le_quitProbability_of_mem
       (roots stage) {who} who (by simp)
     change threshold *
@@ -291,7 +291,7 @@ theorem threshold_mul_singletonStageMass_sum_le_selectedRefusal_add_collision
     · exact mul_le_mul_of_nonneg_left hsingleton
         (QuittingAbsorptionPath.quittingRootSequenceSurvival_nonneg roots stage)
     · exact hthreshold
-  · rw [if_neg hgood]
+  · rw [ite_eq_right hgood]
     have hbad : threshold <
         quittingRootOpponentAbsorptionMass (roots stage) who :=
       lt_of_not_ge hgood
@@ -423,14 +423,14 @@ theorem threshold_mul_singletonCDFIncrement_le_selectedRefusal_add_collisionCDFI
         Ioc lower upper := Finset.mem_filter.mp hstage |>.2
   by_cases hgood :
       quittingRootOpponentAbsorptionMass (roots stage) who ≤ threshold
-  · rw [if_pos hgood]
-    simp only [hgood, if_true]
+  · rw [ite_eq_left hgood]
+    simp only [hgood, ite_true]
     exact le_add_of_nonneg_right <|
       mul_nonneg
         (QuittingAbsorptionPath.quittingRootSequenceSurvival_nonneg roots stage)
         (quittingRootCollisionMass_nonneg (roots stage))
-  · rw [if_neg hgood]
-    simp only [hgood, if_false, zero_add]
+  · rw [ite_eq_right hgood]
+    simp only [hgood, ite_false, zero_add]
     exact le_rfl
 
 omit [Nonempty ι] in

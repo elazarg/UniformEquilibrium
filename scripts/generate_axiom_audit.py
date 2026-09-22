@@ -21,7 +21,9 @@ LEAN_LIBRARY_RE = re.compile(r"^lean_lib\s+([A-Za-z0-9_'.]+)\s+where\s*$", re.MU
 
 def module_roots() -> set[str]:
     lakefile = (ROOT / "lakefile.lean").read_text(encoding="utf-8")
-    return set(LEAN_LIBRARY_RE.findall(lakefile)) - {"AxiomAudit"}
+    declared_roots = set(LEAN_LIBRARY_RE.findall(lakefile))
+    audited_roots = {directory.name for directory in AUDITED_DIRECTORIES}
+    return declared_roots & audited_roots
 
 
 def source_modules() -> list[str]:

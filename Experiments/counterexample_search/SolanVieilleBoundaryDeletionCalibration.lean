@@ -122,8 +122,10 @@ theorem zero_le_boundaryReward_of_notMem (S : Finset Player) (hS : S.Nonempty)
 /-- Every row pays each member of the quitting coalition at most `1`. -/
 theorem boundaryReward_le_one_of_mem (S : Finset Player)
     (who : Player) (hwho : who ∈ S) : boundaryReward ⟨S, ⟨who, hwho⟩⟩ who ≤ 1 := by
-  rw [boundaryReward_eq_boundaryValue]
-  exact_mod_cast boundaryValue_le_one_of_mem S who hwho
+  calc
+    boundaryReward ⟨S, ⟨who, hwho⟩⟩ who = (boundaryValue S who : ℝ) :=
+      boundaryReward_eq_boundaryValue S (⟨who, hwho⟩ : S.Nonempty) who
+    _ ≤ 1 := by exact_mod_cast boundaryValue_le_one_of_mem S who hwho
 
 /-! ## The continue floor, the punishment value and the solo premium -/
 

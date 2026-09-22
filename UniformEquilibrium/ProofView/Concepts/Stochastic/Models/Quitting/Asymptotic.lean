@@ -35,7 +35,7 @@ namespace GameTheory
 
 open StochasticGame
 open Filter
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -63,12 +63,14 @@ theorem quittingAbsorbedMass_succ_ge
     (S : {S : Finset ι // S.Nonempty}) :
     quittingAbsorbedMass r σ t S ≤ quittingAbsorbedMass r σ (t + 1) S := by
   open Classical in
-  letI : Finite (quittingGame r).State :=
+  let : Finite (quittingGame r).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ i : ι, Finite ((quittingGame r).Act i) :=
+  let : ∀ i : ι, Finite ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
-  rw [quittingAbsorbedMass, quittingAbsorbedMass,
-    (quittingGame r).expectedStateValue_succ]
+  unfold quittingAbsorbedMass
+  have hsucc := (quittingGame r).expectedStateValue_succ σ none t
+    (quittingAbsorbedIndicator r S)
+  rw [hsucc]
   unfold StochasticGame.expectedStateValue
   apply expect_mono
   intro h
@@ -78,10 +80,22 @@ theorem quittingAbsorbedMass_succ_ge
         simp [quittingAbsorbedIndicator, quittingGame]]
       exact expect_nonneg _ _ fun a =>
         expect_nonneg _ _ fun s => by
-          by_cases hs' : s = some S <;>
-            simp [quittingAbsorbedIndicator, hs']
+          unfold quittingAbsorbedIndicator
+          split_ifs <;> norm_num
   | some T =>
-      simp [quittingGame, quittingAbsorbedIndicator]
+      have hpure :
+          expect (PMF.pure (some T)) (quittingAbsorbedIndicator r S) =
+            quittingAbsorbedIndicator r S (some T) :=
+        expect_pure (quittingAbsorbedIndicator r S) (some T)
+      have hinner :
+          (fun a => expect ((quittingGame r).transition h.2 a)
+            (quittingAbsorbedIndicator r S)) =
+            (fun _ => quittingAbsorbedIndicator r S h.2) := by
+        funext a
+        rw [hs]
+        exact hpure
+      rw [← hs]
+      rw [hinner, expect_const]
 
 omit [DecidableEq ι] in
 theorem quittingAbsorbedMass_monotone
@@ -98,9 +112,9 @@ theorem quittingAbsorbedMass_le_one
     (S : {S : Finset ι // S.Nonempty}) :
     quittingAbsorbedMass r σ t S ≤ 1 := by
   classical
-  letI : Finite (quittingGame r).State :=
+  let : Finite (quittingGame r).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ i : ι, Finite ((quittingGame r).Act i) :=
+  let : ∀ i : ι, Finite ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
   unfold quittingAbsorbedMass StochasticGame.expectedStateValue
   calc
@@ -109,8 +123,8 @@ theorem quittingAbsorbedMass_le_one
         ≤ expect ((quittingGame r).histDist σ none t) (fun _ => 1) := by
           apply expect_mono
           intro h
-          by_cases hs : h.2 = some S <;>
-            simp [quittingAbsorbedIndicator, hs]
+          unfold quittingAbsorbedIndicator
+          split_ifs <;> norm_num
     _ = 1 := expect_const _ _
 
 /-- Limiting probability of absorption at `S`. -/
@@ -174,9 +188,9 @@ theorem expectedStagePayoff_quittingGame_eq_sum_mass
       ∑ S : {S : Finset ι // S.Nonempty},
         quittingAbsorbedMass r σ t S * r S who := by
   classical
-  letI : Finite (quittingGame r).State :=
+  let : Finite (quittingGame r).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ i : ι, Finite ((quittingGame r).Act i) :=
+  let : ∀ i : ι, Finite ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
   unfold StochasticGame.expectedStagePayoff
   simp_rw [stageEUAt_quittingGame_eq_stateReward]
@@ -224,11 +238,17 @@ theorem tendsto_finiteAveragePayoff_quittingGame
     Tendsto (fun T =>
       (quittingGame r).finiteAveragePayoff none T σ who) atTop
       (nhds (quittingTerminalPayoff r σ who)) := by
-  letI : Finite (quittingGame r).State :=
+  let : Finite (quittingGame r).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ i : ι, Finite ((quittingGame r).Act i) :=
+  let : ∀ i : ι, Finite ((quittingGame r).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
-  simp_rw [(quittingGame r).finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage :
+      (fun T => (quittingGame r).finiteAveragePayoff none T σ who) =
+        (fun T : ℕ => (T : ℝ)⁻¹ * ∑ t ∈ Finset.range T,
+          (quittingGame r).expectedStagePayoff σ none t who) := by
+    funext T
+    exact (quittingGame r).finiteAveragePayoff_eq_sum_expectedStagePayoff σ none who T
+  rw [haverage]
   exact (tendsto_expectedStagePayoff_quittingGame r σ who).cesaro
 
 /-- Refutation interface specialized to quitting games. -/

@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -58,7 +58,7 @@ def quittingAdjacentDeadlineSelectedBoundaryEffectGauge
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
     {gamma bound : ℝ}
     (source : QuittingAdjacentDeadlineGapSource reward gamma bound) : ℝ := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   exact max
     (finiteAbsoluteMaximum fun player =>
       (source.old player none).toReal -
@@ -75,7 +75,7 @@ theorem abs_quittingAdjacentDeadlineOldNever_sub_censoredNever_le_gauge
     |(source.old player none).toReal -
         ((quittingFiniteDeadlineTimingProfileCensor source.new) player none).toReal| ≤
       quittingAdjacentDeadlineSelectedBoundaryEffectGauge source := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   rw [quittingAdjacentDeadlineSelectedBoundaryEffectGauge]
   have hcoordinate := abs_le_finiteAbsoluteMaximum
     (fun current : ι =>
@@ -93,7 +93,7 @@ theorem abs_quittingAdjacentDeadlineOldBoundaryGain_sub_censoredGain_div_le_gaug
     |quittingAdjacentDeadlineOldBoundaryGain source -
         quittingAdjacentDeadlineCensoredBoundaryGain source| / (4 * bound) ≤
       quittingAdjacentDeadlineSelectedBoundaryEffectGauge source := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   rw [quittingAdjacentDeadlineSelectedBoundaryEffectGauge]
   exact le_max_right _ _
 
@@ -111,7 +111,7 @@ theorem quittingAdjacentDeadlineSelectedBoundaryEffectGauge_eq_zero_iff
             player none).toReal) ∧
       quittingAdjacentDeadlineOldBoundaryGain source =
         quittingAdjacentDeadlineCensoredBoundaryGain source := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   constructor
   · intro hzero
     have hneverLe :
@@ -153,6 +153,7 @@ theorem quittingAdjacentDeadlineSelectedBoundaryEffectGauge_eq_zero_iff
       ((finiteAbsoluteMaximum_eq_zero_iff _).mp hneverZero player)
   · rintro ⟨hnever, hgain⟩
     unfold quittingAdjacentDeadlineSelectedBoundaryEffectGauge
+    dsimp only
     rw [(finiteAbsoluteMaximum_eq_zero_iff _).2]
     · rw [hgain, sub_self, abs_zero, zero_div, max_self]
     · intro player
@@ -167,12 +168,12 @@ theorem quittingAdjacentDeadlineSelectedBoundaryEffectGauge_le_operationalEffect
     (source : QuittingAdjacentDeadlineGapSource reward gamma bound)
     (hbound : 0 < bound) :
     quittingAdjacentDeadlineSelectedBoundaryEffectGauge source ≤
-      letI : Nonempty ι := ⟨source.observer⟩
+      let : Nonempty ι := ⟨source.observer⟩
       quittingFiniteDeadlineOperationalEffectDistance reward bound
           (source.deadline + 1)
           (quittingAdjacentDeadlineOldIncludedTiming source)
           (quittingAdjacentDeadlineCensoredTiming source) := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   unfold quittingAdjacentDeadlineSelectedBoundaryEffectGauge
     quittingFiniteDeadlineOperationalEffectDistance
     finiteClockOperationalEffectDistance
@@ -266,7 +267,7 @@ theorem quittingAdjacentDeadlineCensoredOpponentNeverProduct_ge_selected
   have hcard : (Finset.univ.erase participant).card = Fintype.card ι - 1 := by
     rw [Finset.card_erase_of_mem (Finset.mem_univ participant), Finset.card_univ]
   rw [← hcard, ← Finset.prod_const]
-  exact Finset.prod_le_prod
+  exact Finset.prod_le_prod₀
     (fun _ _ => mul_nonneg (by norm_num) (div_nonneg hgamma.le hbound.le))
     (fun player _ =>
       quittingAdjacentDeadlineCensoredNever_ge_threeFourths
@@ -329,7 +330,7 @@ theorem quittingAdjacentDeadlineCensoredOpponentNeverProduct_ge_of_never_eq_finF
       have hrest : a ^ 2 ≤
           ∏ player ∈ rest, (source.old player none).toReal := by
         rw [← hrestCard, ← Finset.prod_const]
-        exact Finset.prod_le_prod
+        exact Finset.prod_le_prod₀
           (fun _ _ => haNonneg)
           (fun player hplayer =>
             quittingAdjacentDeadlineOldNever_ge_div_of_ne_observer
@@ -679,7 +680,7 @@ theorem quittingAdjacentDeadline_operationalEffectDistance_ge_or_paidReversePart
     (htail : ∀ player, delta / 2 ≤
       quittingTerminalPayoff reward tail player -
         reward (quittingSingletonTerminal player) player) :
-    (letI : Nonempty ι := ⟨source.observer⟩;
+    (let : Nonempty ι := ⟨source.observer⟩;
       gamma / bound / 8 ≤
         quittingFiniteDeadlineOperationalEffectDistance reward bound
           (source.deadline + 1)
@@ -688,7 +689,7 @@ theorem quittingAdjacentDeadline_operationalEffectDistance_ge_or_paidReversePart
       ∃ participant,
         QuittingAdjacentDeadlineSelectedEffectPaidReverseParticipant
           (delta := delta) source tail participant := by
-  letI : Nonempty ι := ⟨source.observer⟩
+  let : Nonempty ι := ⟨source.observer⟩
   rcases
       quittingAdjacentDeadline_selectedBoundaryEffectGauge_ge_or_paidReverseParticipant
         source tail hgamma hbound hdelta hscale hreward hpass htail with

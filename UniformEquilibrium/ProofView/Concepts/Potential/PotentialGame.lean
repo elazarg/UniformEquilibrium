@@ -21,7 +21,7 @@ Provides:
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 namespace KernelGame
 
 variable {ι : Type} [DecidableEq ι]

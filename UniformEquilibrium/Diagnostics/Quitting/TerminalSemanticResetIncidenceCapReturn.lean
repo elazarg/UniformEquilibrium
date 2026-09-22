@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.Bool
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceReturn
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.StrictOrbit
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
@@ -94,11 +95,12 @@ structure QuittingFixedLawResetDispatch
 terminal atom carrying the displayed opponent. -/
 theorem exists_positiveMass_terminal_of_opponentIncidence
     (owner other : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hincidence : 0 <
       quittingTerminalOpponentIncidenceMass owner other mass) :
     ∃ terminal : {S : Finset ι // S.Nonempty},
       other ∈ terminal.val ∧ other ≠ owner ∧ 0 < mass (some terminal) := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   let terminals := Finset.univ.filter
     (fun terminal : {S : Finset ι // S.Nonempty} =>
       other ∈ terminal.val ∧ other ≠ owner)
@@ -118,7 +120,7 @@ membership-toggle blocker. -/
 theorem QuittingTerminalExploitabilityWitness.exists_supportedStrictToggle_of_incidence
     (witness : QuittingTerminalExploitabilityWitness reward)
     (owner other : ι) (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hincidence : 0 <
       quittingTerminalOpponentIncidenceMass owner other mass) :
     ∃ terminal : {S : Finset ι // S.Nonempty},
@@ -198,7 +200,8 @@ theorem QuittingTerminalExploitabilityWitness.exists_fixedLaw_resetFace_dispatch
       hreturnedLe, _hmoment, _htransferEq, htransfer⟩ :=
     exists_fixedLaw_resetFace_minimizer
       reward source target mass owner hminimum htarget hreset
-  have hmassSimplex : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) :=
+  have hmassSimplex : mass ∈
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) :=
     terminalSemanticLawCarrier_mass_mem_stdSimplex
       (point := (returned, mass)) hjoint
   have htoggle := witness.exists_supportedStrictToggle_of_incidence
@@ -323,7 +326,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_fixedLaw_dispatch_and_sourc
 
 namespace QuittingResetIncidenceCapRegression
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- Reuse the marked two-player reward table. -/
 abbrev regressionReward :=

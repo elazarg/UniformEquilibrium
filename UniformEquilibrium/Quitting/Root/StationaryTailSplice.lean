@@ -36,6 +36,7 @@ theorem quittingStationaryTailSpliceProfile_of_le
     (who : ι) (history : (quittingGame reward).Hist time) :
     quittingStationaryTailSpliceProfile reward source cutoff root who time history = root who := by
   simp [quittingStationaryTailSpliceProfile, not_lt.mpr htime]
+  rfl
 
 omit [DecidableEq ι] in
 theorem quittingProfileLiveRoot_stationaryTailSplice
@@ -45,8 +46,10 @@ theorem quittingProfileLiveRoot_stationaryTailSplice
     quittingProfileLiveRoot reward (quittingStationaryTailSpliceProfile reward source cutoff root)
         time = if time < cutoff then quittingProfileLiveRoot reward source time else root := by
   funext who
-  by_cases htime : time < cutoff <;>
-    simp [quittingProfileLiveRoot, quittingStationaryTailSpliceProfile, htime]
+  by_cases htime : time < cutoff
+  · simp [quittingProfileLiveRoot, quittingStationaryTailSpliceProfile, htime]
+    rfl
+  · simp [quittingProfileLiveRoot, quittingStationaryTailSpliceProfile, htime]
 
 omit [DecidableEq ι] in
 theorem quittingTerminalPayoff_congr_profileLiveRoot

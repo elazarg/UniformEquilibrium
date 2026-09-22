@@ -64,7 +64,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -283,7 +283,7 @@ theorem convex_quittingSoloQuitterCriterion
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (owner : ι) :
     Convex ℝ {p : ℝ | QuittingSoloQuitterCriterion reward owner p} := by
   intro first hfirst second hsecond a b ha hb hab
-  simp only [Set.mem_setOf_eq, QuittingSoloQuitterCriterion,
+  simp only [Set.mem_ofPred_eq, QuittingSoloQuitterCriterion,
     smul_eq_mul] at hfirst hsecond ⊢
   intro other hother
   have h1 := hfirst other hother

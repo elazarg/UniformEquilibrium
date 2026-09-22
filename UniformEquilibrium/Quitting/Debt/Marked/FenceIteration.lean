@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
   Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -103,7 +103,7 @@ theorem quittingFirstOpponent_quitProbability_pos_of_rawWeight_pos
     by_contra hnot
     have hraw' := hraw
     unfold quittingFirstOpponentRawWeight at hraw'
-    rw [if_neg hnot] at hraw'
+    rw [ite_eq_right hnot] at hraw'
     simp at hraw'
   have hsurvival0 : 0 ≤
       quittingOpponentSurvivalWeight roots owner start mark.1 :=
@@ -111,7 +111,7 @@ theorem quittingFirstOpponent_quitProbability_pos_of_rawWeight_pos
   have hjoint0 : 0 ≤ (distribution mark.2).toReal := ENNReal.toReal_nonneg
   have hjoint : 0 < (distribution mark.2).toReal := by
     unfold quittingFirstOpponentRawWeight at hraw
-    rw [if_pos hflag] at hraw
+    rw [ite_eq_left hflag] at hraw
     change 0 < quittingOpponentSurvivalWeight roots owner start mark.1 *
       (distribution mark.2).toReal at hraw
     nlinarith
@@ -334,7 +334,7 @@ theorem exists_finiteLabelWalk_good_or_repeat
     if hgood : Good state then state else Classical.choose (hnext state hgood)
   have hadvance (state : State) (hnotGood : ¬Good state) :
       Next state (advance state) := by
-    simp only [advance, dif_neg hnotGood]
+    simp only [advance, dite_eq_right hnotGood]
     exact Classical.choose_spec (hnext state hnotGood)
   let walk : ℕ → State := fun n ↦ advance^[n] initial
   refine ⟨walk, ?_, ?_, ?_⟩

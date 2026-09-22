@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -147,7 +147,7 @@ theorem hasSum_quittingCyclicWeightedResidual
         residual (quittingCyclicOrbit phase time))
       (quittingCyclicResidualCharge coefficient residual phase K /
         (1 - ∏ cyclePhase : Fin K, coefficient cyclePhase)) := by
-  letI : NeZero K := phase.neZero
+  let : NeZero K := phase.neZero
   let ρ := ∏ cyclePhase : Fin K, coefficient cyclePhase
   let charge := quittingCyclicResidualCharge coefficient residual phase K
   let blocked : ℕ × Fin K → ℝ := fun pair =>
@@ -435,7 +435,7 @@ theorem abs_cyclicPolicyResidual_le_seamError
       abs_mul, abs_of_nonneg
         (quittingStationaryContinueMass_nonneg (cycle (Fin.last K)))]
     unfold quittingCyclicSeamPolicyError
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     exact mul_le_mul_of_nonneg_left (hclose who)
       (quittingStationaryContinueMass_nonneg (cycle (Fin.last K)))
   · rw [congrFun (hstep phase hlastPhase) who]

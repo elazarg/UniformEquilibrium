@@ -25,11 +25,12 @@ a stationary strategy or lift normalized state to an underlying game state.
 
 noncomputable section
 
+open scoped ENNReal Topology
+
 namespace Math
 namespace Topology
 
 open Filter MeasureTheory Set
-open scoped ENNReal Topology
 
 variable {Point : Type*} [TopologicalSpace Point] [MeasurableSpace Point]
   [BorelSpace Point] [SecondCountableTopology Point]
@@ -200,8 +201,7 @@ variable [TopologicalSpace.PseudoMetrizableSpace Point]
 /-- The source and target marginals of the occupation law are equal. -/
 theorem marginals_eq
     (occupation : CompactForwardOccupation path) :
-    occupation.law.map continuous_fst.measurable.aemeasurable =
-      occupation.law.map continuous_snd.measurable.aemeasurable := by
+    occupation.law.map Prod.fst = occupation.law.map Prod.snd := by
   apply ProbabilityMeasure.toMeasure_injective
   apply MeasureTheory.ext_of_forall_integral_eq_of_IsFiniteMeasure
   intro observable
@@ -235,7 +235,7 @@ theorem empiricalEdgeLaw_apply_edgeGraph
   have hpreimage : edgeAt ⁻¹' {pair : Point × Point |
       edge pair.1 pair.2} = Set.univ := by
     ext time
-    simp only [Set.mem_preimage, Set.mem_setOf_eq, Set.mem_univ, iff_true,
+    simp only [Set.mem_preimage, Set.mem_ofPred_eq, Set.mem_univ, iff_true,
       edgeAt]
     exact hedge time
   rw [hpreimage, measure_univ]

@@ -55,7 +55,7 @@ noncomputable section
 namespace GameTheory
 namespace CirculantConstantStepCycle
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 open SoloPeriodicBlockCompiler
 
 /-! ## Elementary arithmetic of the five-cycle -/
@@ -146,22 +146,22 @@ def stepSlack (t : ZMod 5) : ℝ :=
   else 0
 
 @[simp] theorem stepSlack_zero : stepSlack m c q 0 = 0 := by
-  rw [stepSlack, if_neg (by decide), if_neg (by decide), if_neg (by decide)]
+  rw [stepSlack, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide)]
 
 @[simp] theorem stepSlack_one : stepSlack m c q 1 = 0 := by
-  rw [stepSlack, if_neg (by decide), if_neg (by decide), if_neg (by decide)]
+  rw [stepSlack, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide)]
 
 @[simp] theorem stepSlack_two :
     stepSlack m c q 2 =
       (1 - q) * (m (2 * c) + q * m (3 * c) + q ^ 2 * m (4 * c)) := by
-  rw [stepSlack, if_pos rfl]
+  rw [stepSlack, ite_eq_left rfl]
 
 @[simp] theorem stepSlack_three :
     stepSlack m c q 3 = (1 - q) * (m (3 * c) + q * m (4 * c)) := by
-  rw [stepSlack, if_neg (by decide), if_pos rfl]
+  rw [stepSlack, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem stepSlack_four : stepSlack m c q 4 = (1 - q) * m (4 * c) := by
-  rw [stepSlack, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [stepSlack, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 /-- **The one-phase value recursion.**  At an anchor root the slack sequence
 satisfies the backward recursion of the constant-step profile at every elapsed

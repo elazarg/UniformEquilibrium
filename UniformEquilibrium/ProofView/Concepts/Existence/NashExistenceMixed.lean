@@ -34,7 +34,7 @@ noncomputable section
 open scoped BigOperators
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace KernelGame
 open Math.PMFProduct
@@ -260,13 +260,13 @@ variable [∀ i, Fintype (G.Strategy i)]
 noncomputable def profileFromMixedSimplex
     (x : MixedSimplex ι (fun i => G.Strategy i)) :
     ∀ i, PMF (G.Strategy i) := by
-  let w : ∀ j, G.Strategy j → ℝ := fun j a => x j a
+  let w : ∀ j, G.Strategy j → ℝ := fun j a => (x j).weights a
   have hw_nn : ∀ j a, 0 ≤ w j a := by
     intro j a
-    exact stdSimplex.zero_le (x j) a
+    exact (x j).weights_nonneg a
   have hw_sum : ∀ j, ∑ a, w j a = 1 := by
     intro j
-    simp [w]
+    exact (x j).total_of_fintype
   exact G.profileFromWeights w hw_nn hw_sum
 
 /-- Gain viewed on the mixed-simplex domain. -/
@@ -285,17 +285,21 @@ noncomputable def nashMapOnMixedSimplex :
     MixedSimplex ι (fun i => G.Strategy i) →
       MixedSimplex ι (fun i => G.Strategy i) := by
   intro x i
-  let w : ∀ j, G.Strategy j → ℝ := fun j a => x j a
+  let w : ∀ j, G.Strategy j → ℝ := fun j a => (x j).weights a
   have hw_nn : ∀ j a, 0 ≤ w j a := by
     intro j a
-    exact stdSimplex.zero_le (x j) a
+    exact (x j).weights_nonneg a
   have hw_sum : ∀ j, ∑ a, w j a = 1 := by
     intro j
-    simp [w]
-  refine ⟨(fun a => G.nashMap w hw_nn hw_sum i a), ?_, ?_⟩
-  · intro a
-    exact G.nashMap_nonneg w hw_nn hw_sum i a
-  · simpa using G.nashMap_sum_one w hw_nn hw_sum i
+    exact (x j).total_of_fintype
+  exact {
+    weights := Finsupp.equivFunOnFinite.symm (fun a => G.nashMap w hw_nn hw_sum i a)
+    nonneg a := G.nashMap_nonneg w hw_nn hw_sum i a
+    total := by
+      rw [Finsupp.sum_fintype]
+      · exact G.nashMap_sum_one w hw_nn hw_sum i
+      · intro
+        rfl }
 
 theorem gainSumOnMixedSimplex_nonneg
     (x : MixedSimplex ι (fun i => G.Strategy i)) (who : ι) :
@@ -305,8 +309,8 @@ theorem gainSumOnMixedSimplex_nonneg
 @[simp] theorem nashMapOnMixedSimplex_apply
     (x : MixedSimplex ι (fun i => G.Strategy i))
     (i : ι) (a : G.Strategy i) :
-    ((G.nashMapOnMixedSimplex x i : stdSimplex ℝ (G.Strategy i)) a) =
-      (x i a + pospart (G.mixedGainOnMixedSimplex x i a)) /
+    (G.nashMapOnMixedSimplex x i).weights a =
+      ((x i).weights a + pospart (G.mixedGainOnMixedSimplex x i a)) /
         (1 + G.gainSumOnMixedSimplex x i) := by
   rfl
 
@@ -335,20 +339,16 @@ theorem nashMap_weightFixedPoint_of_mixedSimplexFixedPoint
       (hw_nn : ∀ i a, 0 ≤ w i a) (hw_sum : ∀ i, ∑ a, w i a = 1),
       G.nashMap w hw_nn hw_sum = w := by
   rcases hfix with ⟨x, hfx⟩
-  let w : ∀ j, G.Strategy j → ℝ := fun j a => x j a
+  let w : ∀ j, G.Strategy j → ℝ := fun j a => (x j).weights a
   have hw_nn : ∀ j a, 0 ≤ w j a := by
     intro j a
-    exact stdSimplex.zero_le (x j) a
+    exact (x j).weights_nonneg a
   have hw_sum : ∀ j, ∑ a, w j a = 1 := by
     intro j
-    simp [w]
+    exact (x j).total_of_fintype
   have hfp_weights : G.nashMap w hw_nn hw_sum = w := by
     funext who a
-    have hwho : ((G.nashMapOnMixedSimplex x who : stdSimplex ℝ (G.Strategy who)) :
-        G.Strategy who → ℝ) = (x who : G.Strategy who → ℝ) := by
-      exact congrArg Subtype.val (congr_fun hfx who)
-    have h := congr_fun hwho a
-    exact h
+    exact congrArg (fun point => point.weights a) (congr_fun hfx who)
   exact ⟨w, hw_nn, hw_sum, hfp_weights⟩
 
 section
@@ -370,7 +370,7 @@ theorem continuous_mixedExtension_eu_profileFromMixedSimplex_of_bounded
         G.mixedExtension.eu (G.profileFromMixedSimplex x) who)
       =
       (fun x : MixedSimplex ι (fun i => G.Strategy i) =>
-        ∑ s : (∀ i, G.Strategy i), (∏ i, x i (s i)) * G.eu s who) := by
+        ∑ s : (∀ i, G.Strategy i), (∏ i, (x i).weights (s i)) * G.eu s who) := by
     funext x
     rw [G.mixedExtension_eu_of_bounded (σ := G.profileFromMixedSimplex x) who hbd]
     rw [expect_eq_sum]
@@ -378,7 +378,7 @@ theorem continuous_mixedExtension_eu_profileFromMixedSimplex_of_bounded
     intro s hs
     have hcoef :
         ((pmfPi (G.profileFromMixedSimplex x) s).toReal) =
-          ∏ i, x i (s i) := by
+          ∏ i, (x i).weights (s i) := by
       simp [pmfPi_apply, profileFromMixedSimplex, profileFromWeights, realToPmf_toReal]
     rw [hcoef]
   rw [hsum]
@@ -386,7 +386,8 @@ theorem continuous_mixedExtension_eu_profileFromMixedSimplex_of_bounded
   intro s hs
   refine (continuous_finsetProd (s := (Finset.univ : Finset ι)) ?_).mul continuous_const
   intro i hi
-  exact (continuous_apply (s i)).comp (continuous_subtype_val.comp (continuous_apply i))
+  exact (Convexity.StdSimplex.continuous_weights_apply ℝ (s i)).comp
+    (continuous_apply i)
 
 /--
 Pure-deviation mixed-EU continuity on the mixed-simplex domain.
@@ -408,7 +409,7 @@ theorem continuous_mixedExtension_eu_update_profileFromMixedSimplex_of_bounded
       (fun x : MixedSimplex ι (fun i => G.Strategy i) =>
         ∑ s : (∀ i, G.Strategy i),
           ((((PMF.pure a) (s who)).toReal) *
-            (∏ i ∈ (Finset.univ.erase who), x i (s i))) * G.eu s who) := by
+            (∏ i ∈ (Finset.univ.erase who), (x i).weights (s i))) * G.eu s who) := by
     funext x
     change expect
         ((pmfPi (Function.update (G.profileFromMixedSimplex x) who (PMF.pure a))).bind
@@ -425,7 +426,7 @@ theorem continuous_mixedExtension_eu_update_profileFromMixedSimplex_of_bounded
           (Function.update (G.profileFromMixedSimplex x) who (PMF.pure a)) s).toReal)
           =
         (((PMF.pure a) (s who)).toReal) *
-          (∏ i ∈ (Finset.univ.erase who), x i (s i)) := by
+          (∏ i ∈ (Finset.univ.erase who), (x i).weights (s i)) := by
       rw [pmfPi_apply_update_family]
       by_cases hsa : s who = a
       · subst hsa
@@ -438,10 +439,11 @@ theorem continuous_mixedExtension_eu_update_profileFromMixedSimplex_of_bounded
   intro s hs
   have hprod :
       Continuous (fun x : MixedSimplex ι (fun i => G.Strategy i) =>
-        ∏ i ∈ (Finset.univ.erase who), x i (s i)) := by
+        ∏ i ∈ (Finset.univ.erase who), (x i).weights (s i)) := by
     refine continuous_finsetProd (s := (Finset.univ.erase who)) ?_
     intro i hi
-    exact (continuous_apply (s i)).comp (continuous_subtype_val.comp (continuous_apply i))
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ (s i)).comp
+      (continuous_apply i)
   exact (continuous_const.mul hprod).mul continuous_const
 
 omit [DecidableEq ι] in
@@ -480,11 +482,12 @@ theorem continuous_nashMapOnMixedSimplex_of_continuous_mixedGainOnMixedSimplex
   have hcoord :
       ∀ i (a : G.Strategy i),
       Continuous (fun x : MixedSimplex ι (fun j => G.Strategy j) =>
-        (x i a + pospart (G.mixedGainOnMixedSimplex x i a)) /
+        ((x i).weights a + pospart (G.mixedGainOnMixedSimplex x i a)) /
           (1 + G.gainSumOnMixedSimplex x i)) := by
     intro i a
-    have hxia : Continuous (fun x : MixedSimplex ι (fun j => G.Strategy j) => x i a) := by
-      exact (continuous_apply a).comp (continuous_subtype_val.comp (continuous_apply i))
+    have hxia : Continuous
+        (fun x : MixedSimplex ι (fun j => G.Strategy j) => (x i).weights a) := by
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ a).comp (continuous_apply i)
     have hsum :
         Continuous (fun x : MixedSimplex ι (fun j => G.Strategy j) =>
           G.gainSumOnMixedSimplex x i) := by
@@ -500,11 +503,10 @@ theorem continuous_nashMapOnMixedSimplex_of_continuous_mixedGainOnMixedSimplex
       (continuous_const.add hsum) hden_nz
   -- Lift coordinate continuity to continuity into product of simplices.
   refine continuous_pi (fun i => ?_)
-  refine Continuous.subtype_mk ?_
-    (fun x => (G.nashMapOnMixedSimplex x i).property)
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ (G.Strategy i)).continuous_iff]
   change Continuous (fun x : MixedSimplex ι (fun j => G.Strategy j) =>
     fun a : G.Strategy i =>
-      (x i a + pospart (G.mixedGainOnMixedSimplex x i a)) /
+      ((x i).weights a + pospart (G.mixedGainOnMixedSimplex x i a)) /
         (1 + G.gainSumOnMixedSimplex x i))
   exact continuous_pi (fun a => hcoord i a)
 
@@ -595,20 +597,16 @@ theorem mixed_nash_exists_of_nashMapOnMixedSimplex_fixed_point_of_bounded
     (hfix : ∃ x, Function.IsFixedPt (G.nashMapOnMixedSimplex) x) :
     ∃ σ : ∀ i, PMF (G.Strategy i), G.mixedExtension.IsNash σ := by
   rcases hfix with ⟨x, hfx⟩
-  let w : ∀ j, G.Strategy j → ℝ := fun j a => x j a
+  let w : ∀ j, G.Strategy j → ℝ := fun j a => (x j).weights a
   have hw_nn : ∀ j a, 0 ≤ w j a := by
     intro j a
-    exact stdSimplex.zero_le (x j) a
+    exact (x j).weights_nonneg a
   have hw_sum : ∀ j, ∑ a, w j a = 1 := by
     intro j
-    simp [w]
+    exact (x j).total_of_fintype
   have hfp_weights : G.nashMap w hw_nn hw_sum = w := by
     funext who a
-    have hwho : ((G.nashMapOnMixedSimplex x who : stdSimplex ℝ (G.Strategy who)) :
-        G.Strategy who → ℝ) = (x who : G.Strategy who → ℝ) := by
-      exact congrArg Subtype.val (congr_fun hfx who)
-    have h := congr_fun hwho a
-    exact h
+    exact congrArg (fun point => point.weights a) (congr_fun hfx who)
   exact ⟨G.profileFromWeights w hw_nn hw_sum,
     G.nash_fp_is_nash_of_bounded _
       hbd (G.nashMap_fp_identity w hw_nn hw_sum hfp_weights)⟩

@@ -136,7 +136,7 @@ theorem exists_punishRow_stationaryUnilateralCap_le
     ∃ punishRow : ι → PMF Bool,
       quittingStationaryUnilateralCap reward punishRow who ≤
         quittingPunishmentValue reward who + ε := by
-  haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
   have hlt : quittingStationaryPunishmentValue reward who <
       quittingPunishmentValue reward who + ε := by
     rw [← quittingPunishmentValue_eq_stationaryPunishmentValue]

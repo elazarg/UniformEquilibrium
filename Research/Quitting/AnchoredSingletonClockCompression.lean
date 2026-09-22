@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -115,11 +115,11 @@ theorem quittingAnchoredSingletonExposureMass_le_one
     (profile : (quittingGame reward).BehaviorProfile) (who : ι)
     (anchor offset : ℕ) :
     quittingAnchoredSingletonExposureMass profile who anchor offset ≤ 1 := by
-  apply mul_le_one₀ (quittingHazardSurvival_le_one _ _)
+  refine (mul_le_of_le_one_left ?_ (quittingHazardSurvival_le_one _ _)).trans ?_
   · exact Finset.prod_nonneg fun other _ =>
       quittingHazardSurvival_nonneg
         (quittingBehaviorLiveHazard reward (profile other)) _
-  · exact Finset.prod_le_one
+  · exact Finset.prod_le_one₀
       (fun other _ => quittingHazardSurvival_nonneg
         (quittingBehaviorLiveHazard reward (profile other)) _)
       (fun other _ => quittingHazardSurvival_le_one
@@ -220,7 +220,7 @@ theorem antitone_quittingAnchoredSingletonExposureMass
   intro first second hfirst
   unfold quittingAnchoredSingletonExposureMass
   apply mul_le_mul_of_nonneg_left _ (quittingHazardSurvival_nonneg _ _)
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro other _
     exact quittingHazardSurvival_nonneg
       (quittingBehaviorLiveHazard reward (profile other)) _

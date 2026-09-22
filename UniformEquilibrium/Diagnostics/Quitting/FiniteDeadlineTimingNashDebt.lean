@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -938,19 +938,19 @@ theorem exists_finiteDeadlineTimingNash_terminalDebt_le
             quittingTerminalDeviationDebt reward
                 (quittingFiniteDeadlineTimingProfile reward deadline mixed) who ≤
               bound * (1 / 4 + 2 / (deadline : ℝ)) := by
-  letI : ∀ player,
+  let : ∀ player,
       Finite ((quittingFiniteDeadlineTimingGame reward deadline).Strategy
         player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player,
+  let : ∀ player,
       Nonempty ((quittingFiniteDeadlineTimingGame reward deadline).Strategy
         player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   obtain ⟨mixed, hnash⟩ :=

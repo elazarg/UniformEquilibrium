@@ -29,7 +29,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.LinearAlgebra Math.Probability Set
+open _root_.Math Math.LinearAlgebra _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -115,10 +115,10 @@ theorem analytic_rawPureDeviationProfileWeight
     AnalyticAt ℝ
       (fun t => germ.rawPureDeviationProfileWeight t s who d a) 0 := by
   by_cases had : a who = d
-  · simp only [rawPureDeviationProfileWeight, if_pos had]
+  · simp only [rawPureDeviationProfileWeight, ite_eq_left had]
     exact (Finset.univ.erase who).analyticAt_fun_prod fun other _ =>
       germ.analytic_coordinate (BellmanVar.mix s other (a other))
-  · simpa only [rawPureDeviationProfileWeight, if_neg had] using
+  · simpa only [rawPureDeviationProfileWeight, ite_eq_right had] using
       (analyticAt_const : AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
 
 omit [DecidableEq G.State] in
@@ -220,14 +220,14 @@ theorem rawPureDeviationProfileWeight_eq_pmfPi_finkPointAt
     ENNReal.toReal_mul, ENNReal.toReal_prod, PMF.pure_apply]
   unfold rawPureDeviationProfileWeight
   by_cases had : a who = d
-  · rw [if_pos had, if_pos had]
+  · rw [ite_eq_left had, ite_eq_left had]
     simp only [ENNReal.toReal_one, one_mul]
     apply Finset.prod_congr rfl
     intro other _
     exact
       (G.bellmanDecodeProfile_apply_toReal
         (germ.solution t ht) s other (a other)).symm
-  · rw [if_neg had, if_neg had]
+  · rw [ite_eq_right had, ite_eq_right had]
     simp
 
 omit [DecidableEq G.State] in
@@ -532,20 +532,20 @@ theorem analytic_rawFinkObstructionBalance
   | inl residual =>
       rcases residual with ⟨s, sourceWho⟩
       by_cases hwho : sourceWho = who
-      · simp only [rawFinkObstructionBalance, hwho, if_true]
+      · simp only [rawFinkObstructionBalance, hwho, ite_true]
         exact
           (((analyticAt_pi_iff.mp
             ((analyticAt_pi_iff.mp
               germ.analytic_rawStateKernelCurve) s)) destination).sub
             analyticAt_const)
-      · simpa only [rawFinkObstructionBalance, hwho, if_false] using
+      · simpa only [rawFinkObstructionBalance, hwho, ite_false] using
           (analyticAt_const :
             AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
   | inr e =>
       by_cases hwho : e.1 = who
       · by_cases hsupported : supported e
         · simp only [rawFinkObstructionBalance, hwho, hsupported,
-            if_true]
+            ite_true]
           exact
             (((analyticAt_pi_iff.mp
               ((analyticAt_pi_iff.mp
@@ -558,10 +558,10 @@ theorem analytic_rawFinkObstructionBalance
                   germ.analytic_rawStateKernelCurve)
                   e.2.1)) destination))
         · simpa only [rawFinkObstructionBalance, hwho, hsupported,
-            if_true, if_false, Bool.false_eq_true] using
+            ite_true, ite_false, Bool.false_eq_true] using
             (analyticAt_const :
               AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
-      · simpa only [rawFinkObstructionBalance, hwho, if_false] using
+      · simpa only [rawFinkObstructionBalance, hwho, ite_false] using
           (analyticAt_const :
             AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
 
@@ -581,7 +581,7 @@ theorem analytic_rawFinkObstructionMass
           AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
   | inr e =>
       by_cases hsupported : supported e
-      · simp only [rawFinkObstructionMass, hsupported, if_true]
+      · simp only [rawFinkObstructionMass, hsupported, ite_true]
         exact
           (((analyticAt_pi_iff.mp
             ((analyticAt_pi_iff.mp
@@ -593,7 +593,7 @@ theorem analytic_rawFinkObstructionMass
                 ((analyticAt_pi_iff.mp
                   (germ.analytic_rawPureDeviationContinuationGainCurve
                     (H - K))) e.2.1)) e.1)) e.2.2))
-      · simpa only [rawFinkObstructionMass, hsupported, if_false,
+      · simpa only [rawFinkObstructionMass, hsupported, ite_false,
           Bool.false_eq_true] using
           (analyticAt_const :
             AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
@@ -618,7 +618,7 @@ theorem rawFinkObstructionBalance_eq_finkPointAt
       rcases residual with ⟨s, sourceWho⟩
       by_cases hwho : sourceWho = who
       · simp only [rawFinkObstructionBalance,
-          finkObstructionBalance, hwho, if_true]
+          finkObstructionBalance, hwho, ite_true]
         rw [germ.rawStateKernelCurve_eq_finkStateKernel ht]
       · simp [rawFinkObstructionBalance,
           finkObstructionBalance, hwho]
@@ -630,19 +630,19 @@ theorem rawFinkObstructionBalance_eq_finkPointAt
         · have hsupported_true : supported e = true :=
             (hsupported e).2 hprofile
           simp only [rawFinkObstructionBalance, hwho,
-            hsupported_true, if_true]
+            hsupported_true, ite_true]
           rw [germ.rawPureDeviationStateKernelCurve_eq_finkPointAt ht,
             germ.rawStateKernelCurve_eq_finkStateKernel ht]
-          rw [finkObstructionBalance, if_pos hwho,
-            if_pos hprofile]
+          rw [finkObstructionBalance, ite_eq_left hwho,
+            ite_eq_left hprofile]
         · have hsupported_false : supported e = false :=
             Bool.eq_false_of_not_eq_true fun hs =>
               hprofile ((hsupported e).1 hs)
           simp only [rawFinkObstructionBalance, hwho,
-            hsupported_false, if_true, Bool.false_eq_true,
-            if_false]
-          rw [finkObstructionBalance, if_pos hwho,
-            if_neg hprofile]
+            hsupported_false, ite_true, Bool.false_eq_true,
+            ite_false]
+          rw [finkObstructionBalance, ite_eq_left hwho,
+            ite_eq_right hprofile]
       · simp [rawFinkObstructionBalance,
           finkObstructionBalance, hwho]
 
@@ -672,18 +672,18 @@ theorem rawFinkObstructionMass_eq_finkPointAt
       · have hsupported_true : supported e = true :=
           (hsupported e).2 hprofile
         simp only [rawFinkObstructionMass,
-          hsupported_true, if_true]
+          hsupported_true, ite_true]
         rw [
           germ.rawPureDeviationStageGainCurve_eq_finkPointAt ht,
           germ.rawPureDeviationContinuationGainCurve_eq_finkPointAt
             (H - K) ht]
-        rw [finkObstructionMass, if_pos hprofile]
+        rw [finkObstructionMass, ite_eq_left hprofile]
       · have hsupported_false : supported e = false :=
           Bool.eq_false_of_not_eq_true fun hs =>
             hprofile ((hsupported e).1 hs)
         simp only [rawFinkObstructionMass,
-          hsupported_false, Bool.false_eq_true, if_false]
-        rw [finkObstructionMass, if_neg hprofile]
+          hsupported_false, Bool.false_eq_true, ite_false]
+        rw [finkObstructionMass, ite_eq_right hprofile]
 
 /-- On the stabilized support, the analytic harmonic-adjustment system is
 the transpose of the raw obstruction balance with the raw target row as its
@@ -1028,7 +1028,7 @@ theorem exists_analyticOrientedFinkObstructionResponse
     Nonempty (germ.AnalyticOrientedFinkObstructionResponse H K) := by
   classical
   let E := Σ who : ι, G.State × G.Act who
-  letI : Nonempty E := by
+  let : Nonempty E := by
     let who : ι := Classical.choice (inferInstance : Nonempty ι)
     let s : G.State :=
       Classical.choice (inferInstance : Nonempty G.State)
@@ -1234,7 +1234,7 @@ theorem stageCharge_or_continuationCharge
           stage t + continuation t := by
     filter_upwards [C.eventual_charge] with t ht
     simpa only [stage, continuation, rawFinkObstructionMass,
-      C.response_supported, if_true, mul_add] using ht.2.2
+      C.response_supported, ite_true, mul_add] using ht.2.2
   simpa only [stage, continuation] using
     analytic_sum_powerCharge_left_or_right
       hstage hcontinuation htotal
@@ -1266,7 +1266,7 @@ theorem stageCharge_of_transitionInvisible
     apply Finset.sum_eq_zero
     intro destination _
     rw [hsame destination, sub_self, zero_mul]
-  simpa only [rawFinkObstructionMass, C.response_supported, if_true,
+  simpa only [rawFinkObstructionMass, C.response_supported, ite_true,
     hcontinuation, add_zero] using hevidence.2.2
 
 /-- The actual transition selected by the analytic Fink response has one

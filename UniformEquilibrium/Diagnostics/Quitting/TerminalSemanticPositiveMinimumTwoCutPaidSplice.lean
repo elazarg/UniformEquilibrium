@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -165,7 +165,7 @@ theorem quittingJointSurvivalWeight_le_exp_neg_totalMarginalHazard
           (roots (entryCut + offset)) who
         linarith
       _ ≤ ∏ who, Real.exp (-(roots (entryCut + offset) who true).toReal) := by
-        apply Finset.prod_le_prod
+        apply Finset.prod_le_prod₀
         · intro who _
           have hle : (roots (entryCut + offset) who true).toReal ≤ 1 := by
             rw [← ENNReal.toReal_one,
@@ -185,7 +185,7 @@ theorem quittingJointSurvivalWeight_le_exp_neg_totalMarginalHazard
         ∏ offset ∈ Finset.range length,
           Real.exp (-∑ who,
             (roots (entryCut + offset) who true).toReal) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro offset _
         exact quittingStationaryContinueMass_nonneg _
       · exact hrow

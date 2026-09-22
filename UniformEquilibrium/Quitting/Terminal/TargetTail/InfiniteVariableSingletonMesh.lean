@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -105,7 +105,7 @@ theorem quittingVariableMeshState_succ_of_inside
         quittingVariableMeshOffset mesh time + 1) := by
   unfold quittingVariableMeshCoarseTime quittingVariableMeshOffset at hinside ⊢
   rw [quittingVariableMeshState]
-  rw [if_pos hinside]
+  rw [ite_eq_left hinside]
 
 /-- At the final offset of a block, the clock advances to offset zero of the
 next coarse stage. -/
@@ -117,7 +117,7 @@ theorem quittingVariableMeshState_succ_of_last
       (quittingVariableMeshCoarseTime mesh time + 1, 0) := by
   unfold quittingVariableMeshCoarseTime quittingVariableMeshOffset at hlast
   rw [quittingVariableMeshState]
-  rw [if_neg (by omega)]
+  rw [ite_eq_right (by omega)]
   simp [quittingVariableMeshCoarseTime]
 
 /-- Starting from a known clock state, every strictly interior finite advance
@@ -139,7 +139,7 @@ theorem quittingVariableMeshState_add_inside
       have hih := ih hprevious
       rw [Nat.add_succ, quittingVariableMeshState, hih]
       dsimp only
-      rw [if_pos (by omega)]
+      rw [ite_eq_left (by omega)]
       simp [Nat.add_assoc]
 
 /-- A full positive-width block advances exactly once in the coarse clock. -/
@@ -161,7 +161,7 @@ theorem quittingVariableMeshState_add_mesh
     omega
   rw [htime, quittingVariableMeshState, hbefore]
   dsimp only
-  rw [if_neg (by
+  rw [ite_eq_right (by
     dsimp only [last]
     omega)]
 

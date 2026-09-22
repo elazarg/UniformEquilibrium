@@ -25,7 +25,7 @@ noncomputable section
 open scoped BigOperators
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace KernelGame
 open Math.PMFProduct
@@ -176,8 +176,14 @@ theorem weighted_gain_sum_zero_of_bounded
         G.mixedExtension.eu (Function.update σ who (PMF.pure a)) who) =
       G.mixedExtension.eu σ who := by
     have h := G.mixedExtension_eu_update_of_bounded σ who (σ who) hbd
-    simp only [Function.update_eq_self] at h
-    exact h.symm
+    have hupdate : Function.update σ who (σ who) = σ := by
+      funext i
+      by_cases hi : i = who
+      · subst i
+        exact Function.update_self who (σ who) σ
+      · exact Function.update_of_ne hi (σ who) σ
+    have heu := congrArg (fun profile => G.mixedExtension.eu profile who) hupdate
+    exact h.symm.trans heu
   -- The second piece is `eu σ who` (constant times PMF mass).
   have hconst :
       (∑' a : G.Strategy who, ((σ who) a).toReal * G.mixedExtension.eu σ who) =
@@ -208,7 +214,7 @@ theorem isNash_iff_gains_nonpos_of_bounded
     rw [hdecomp]
     conv_rhs => rw [show G.mixedExtension.eu σ who =
         expect τ (fun _ => G.mixedExtension.eu σ who) from by
-      simp [expect_const]]
+      exact (expect_const τ _).symm]
     apply Math.ProbabilityMassFunction.expect_mono_of_pointwise_bounded
       (C := |C who| + |G.mixedExtension.eu σ who|)
     · intro a
@@ -348,7 +354,9 @@ theorem mixedExtension_eu_tendsto_of_forall_pmfConvergesPointwise
       fun n : ℕ => expect (pmfPi (A := G.Strategy) (σs n))
         (fun s : Profile G => G.eu s who) by
         funext n
-        rw [G.mixedExtension_eu]]
+        change G.mixedExtension.eu (σs n) who =
+          expect (pmfPi (fun i => σs n i)) (fun s : Profile G => G.eu s who)
+        exact G.mixedExtension_eu (fun i => σs n i) who]
   rw [G.mixedExtension_eu σ who]
   exact hexpect
 
@@ -379,10 +387,18 @@ theorem mixedExtension_eu_update_pure_tendsto_of_forall_pmfConvergesPointwise
         G.mixedExtension.eu (Function.update (σs n) who (PMF.pure a)) who)
       atTop
       (nhds (G.mixedExtension.eu (Function.update σ who (PMF.pure a)) who)) := by
+  change (ℕ → (i : ι) → PMF (G.Strategy i)) at σs
+  change ((i : ι) → PMF (G.Strategy i)) at σ
   refine G.mixedExtension_eu_tendsto_of_forall_pmfConvergesPointwise
     (σs := fun n : ℕ => Function.update (σs n) who (PMF.pure a))
     (σ := Function.update σ who (PMF.pure a)) ?_ who
   intro i b
+  change Tendsto
+    (fun n : ℕ => ((@Function.update ι (fun j => PMF (G.Strategy j)) _
+      (fun j => σs n j) who (PMF.pure a)) i) b)
+    atTop
+    (nhds (((@Function.update ι (fun j => PMF (G.Strategy j)) _
+      (fun j => σ j) who (PMF.pure a)) i) b))
   by_cases hi : i = who
   · subst hi
     simp

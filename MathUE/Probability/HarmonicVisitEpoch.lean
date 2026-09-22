@@ -168,7 +168,12 @@ inductive State
   | cycleOne
   | cycleTwo
   | cycleThree
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.owner, .corridorFirst, .corridorSecond, .cycleZero, .cycleOne,
+    .cycleTwo, .cycleThree}
+  complete state := by cases state <;> simp
 
 def ownerWeights : State → ENNReal
   | .owner => ENNReal.ofReal (1 / 5 : ℝ)

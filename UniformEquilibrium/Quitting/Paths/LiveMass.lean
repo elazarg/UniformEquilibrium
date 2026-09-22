@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -77,7 +77,9 @@ theorem eq_quittingLiveHist_of_mem_support_histDist_of_snd_eq_none
       simpa using (PMF.mem_support_pure_iff _ _).mp hs
   | succ time ih =>
       intro history hs hlive
-      rw [(quittingGame reward).mem_support_histDist_succ] at hs
+      have hsucc := (quittingGame reward).mem_support_histDist_succ profile
+        (show (quittingGame reward).State from none) time history
+      rw [hsucc] at hs
       obtain ⟨previous, hprevious, action, haction,
         next, hnext, rfl⟩ := hs
       change (ι → Bool) at action
@@ -106,8 +108,9 @@ theorem eq_quittingLiveHist_of_mem_support_histDist_of_snd_eq_none
         rw [hpreviousNone] at hnext
         by_contra hquit
         rw [quittingGame_transition_none,
-          dif_pos (by simpa [quittingQuitters] using hquit)] at hnext
-        simp at hnext
+          dite_eq_left (by simpa [quittingQuitters] using hquit)] at hnext
+        have himpossible := (PMF.mem_support_pure_iff _ _).mp hnext
+        simp at himpossible
       have hactionEq :=
         eq_quittingAllContinueAction_of_quittingQuitters_not_nonempty
           action hnoQuit
@@ -128,7 +131,12 @@ omit [DecidableEq ι] in
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) :
     quittingLiveMass reward profile 0 = 1 := by
-  simp [quittingLiveMass]
+  unfold quittingLiveMass
+  have hzero := (quittingGame reward).histDist_zero profile
+    (show (quittingGame reward).State from none)
+  rw [hzero]
+  rw [quittingLiveHist_zero]
+  simp
 
 omit [DecidableEq ι] in
 theorem quittingLiveMass_nonneg

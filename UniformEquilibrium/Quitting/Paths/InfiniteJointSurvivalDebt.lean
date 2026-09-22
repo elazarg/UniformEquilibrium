@@ -6,7 +6,7 @@ import UniformEquilibrium.Quitting.Root.ExactCapClockTransport
 noncomputable section
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -84,7 +84,7 @@ theorem quittingJointSurvivalPrefix_le_opponentSurvivalPrefix
       quittingStationaryContinueMass (roots time)) ≤
       ∏ time ∈ Finset.range horizon,
         quittingRootOpponentContinueMass (roots time) owner := by
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro time _
     exact quittingStationaryContinueMass_nonneg (roots time)
   · intro time _

@@ -29,7 +29,7 @@ along such a morphism.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A **coalition** of players: a nonempty finite set. Coalitions are the
 deviating units of coalitional solution concepts (strong Nash, `t`-resilience);

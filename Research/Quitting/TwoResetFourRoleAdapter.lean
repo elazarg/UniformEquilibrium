@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 /-- **Two directed resets give a four-role window or a first-target excess
 charge.**  The returned targets are literal behavior profiles.  In the

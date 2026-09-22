@@ -43,7 +43,7 @@ theorem collisionConstraintLower_blocker_nonpos_of_mass_pos
       (⟨blocker, Ne.symm hne⟩ : QuittingCollisionConstraintPlayer owner) ≤ 0 := by
   have hfloor := packet.punishment_le_target blocker
   rw [packet.positive_mass_pins_target blocker hmass] at hfloor
-  rw [quittingCollisionConstraintLower, if_pos rfl]
+  rw [quittingCollisionConstraintLower, ite_eq_left rfl]
   change quittingPunishmentValue reward blocker -
       reward (quittingSingletonTerminal blocker) blocker ≤ 0
   linarith
@@ -90,7 +90,7 @@ theorem exists_spectator_lowerCollisionDefect_pos_of_ownerPair_lt
     rw [hsame] at hindexPos
     linarith
   refine ⟨index.1, index.2, hindexBlocker, ?_⟩
-  rw [quittingCollisionConstraintLower, if_neg hindexBlocker] at hindexPos
+  rw [quittingCollisionConstraintLower, ite_eq_right hindexBlocker] at hindexPos
   linarith
 
 /-- If the owner strictly prefers the collision to the blocker singleton and
@@ -126,10 +126,10 @@ theorem exists_spectator_upperCollisionDefect_pos_of_owner_lt
         (⟨blocker, Ne.symm hne⟩ : QuittingCollisionConstraintPlayer owner) := by
       apply Subtype.ext
       exact heq
-    rw [hsame, quittingCollisionConstraintUpper, if_pos rfl] at hindexPos
+    rw [hsame, quittingCollisionConstraintUpper, ite_eq_left rfl] at hindexPos
     linarith
   refine ⟨index.1, index.2, hindexBlocker, ?_⟩
-  rw [quittingCollisionConstraintUpper, if_neg hindexBlocker] at hindexPos
+  rw [quittingCollisionConstraintUpper, ite_eq_right hindexBlocker] at hindexPos
   linarith
 
 /-- **Generic crossed-support residual.**  For two supported owners, every

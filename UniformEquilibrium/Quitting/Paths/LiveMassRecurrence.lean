@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -66,9 +66,13 @@ theorem quittingJointContinueMass_le_one
     (profile : (quittingGame reward).BehaviorProfile) (time : ℕ) :
     quittingJointContinueMass reward profile time ≤ 1 := by
   unfold quittingJointContinueMass
-  rw [← ENNReal.toReal_one,
-    ENNReal.toReal_le_toReal (PMF.apply_ne_top _ _) (by simp)]
-  exact PMF.coe_le_one _ _
+  let distribution : PMF (ι → Bool) :=
+    (quittingGame reward).stageActionDist profile
+      (quittingLiveHist reward time)
+  with_unfolding_all
+    change (distribution quittingAllContinueAction).toReal ≤ 1
+  exact ENNReal.toReal_mono ENNReal.one_ne_top
+    (PMF.coe_le_one distribution quittingAllContinueAction)
 
 omit [DecidableEq ι] in
 /-- The live-history coordinate is exactly the expected indicator of the
@@ -80,11 +84,11 @@ theorem quittingLiveMass_eq_expectedStateValue
       (quittingGame reward).expectedStateValue profile none time
         (quittingLiveIndicator reward) := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
+  let : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
     fun _ => inferInstanceAs (Finite Bool)
-  letI : Fintype ((quittingGame reward).Hist time) :=
+  let : Fintype ((quittingGame reward).Hist time) :=
     Fintype.ofFinite _
   unfold quittingLiveMass StochasticGame.expectedStateValue
   rw [expect_eq_sum]
@@ -147,8 +151,8 @@ theorem expect_quittingGame_transition_liveIndicator
       intro heq
       subst action
       simp at hquit
-    rw [quittingGame_transition_none, dif_pos hraw]
-    simp [hne, quittingLiveIndicator]
+    rw [quittingGame_transition_none, dite_eq_left hraw, expect_pure,
+      quittingLiveIndicator_some, ite_eq_right hne]
   · have heq :=
       eq_quittingAllContinueAction_of_quittingQuitters_not_nonempty
         action hquit
@@ -157,8 +161,9 @@ theorem expect_quittingGame_transition_liveIndicator
         ¬({who | (quittingAllContinueAction : ι → Bool) who = true} :
           Finset ι).Nonempty := by
       simp [quittingAllContinueAction]
-    rw [quittingGame_transition_none, dif_neg hraw]
-    simp [quittingLiveIndicator]
+    rw [quittingGame_transition_none, dite_eq_right hraw, expect_pure,
+      quittingLiveIndicator_none]
+    simp
 
 omit [DecidableEq ι] in
 /-- Conditional on a live current history, the expected next live indicator
@@ -190,7 +195,21 @@ theorem expect_stageAction_transition_quittingLiveIndicator
       funext action
       exact expect_quittingGame_transition_liveIndicator reward action
   | some S =>
-      simp [quittingGame, quittingLiveIndicator]
+      calc
+        expect ((quittingGame reward).stageActionDist profile history)
+              (fun action => expect
+                ((quittingGame reward).transition (some S) action)
+                  (quittingLiveIndicator reward)) =
+            expect ((quittingGame reward).stageActionDist profile history)
+              (fun _ => 0) := by
+          apply congrArg (expect
+            ((quittingGame reward).stageActionDist profile history))
+          funext action
+          change ι → Bool at action
+          have htrans : (quittingGame reward).transition (some S) action =
+              PMF.pure (show (quittingGame reward).State from some S) := rfl
+          rw [htrans, expect_pure, quittingLiveIndicator_some]
+        _ = 0 := expect_const _ _
 
 omit [DecidableEq ι] in
 /-- The stopping recurrence: current live mass times the conditional
@@ -202,12 +221,15 @@ theorem quittingLiveMass_succ
       quittingLiveMass reward profile time *
         quittingJointContinueMass reward profile time := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
+  let : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
     fun _ => inferInstanceAs (Finite Bool)
-  rw [quittingLiveMass_eq_expectedStateValue,
-    (quittingGame reward).expectedStateValue_succ]
+  rw [quittingLiveMass_eq_expectedStateValue]
+  have hsucc := (quittingGame reward).expectedStateValue_succ profile
+    (show (quittingGame reward).State from none) time
+    (quittingLiveIndicator reward)
+  rw [hsucc]
   calc
     expect ((quittingGame reward).histDist profile none time) (fun history =>
         expect ((quittingGame reward).stageActionDist profile history)

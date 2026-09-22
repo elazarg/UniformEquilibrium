@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -133,7 +133,7 @@ theorem quittingFiniteNashBellmanPathRoots_prepend_succ
         (time + 1) =
       quittingFiniteNashBellmanPathRoots cutoff path time := by
   simp only [quittingFiniteNashBellmanPathRoots,
-    dif_pos (by omega : time + 1 < cutoff + 1), dif_pos htime]
+    dite_eq_left (by omega : time + 1 < cutoff + 1), dite_eq_left htime]
   congr 1
 
 /-- The time-one survival tail of the prepended path is exactly the old

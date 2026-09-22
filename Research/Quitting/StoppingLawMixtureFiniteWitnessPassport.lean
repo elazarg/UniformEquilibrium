@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

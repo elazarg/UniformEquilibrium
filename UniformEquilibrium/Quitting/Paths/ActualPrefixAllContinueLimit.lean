@@ -6,7 +6,7 @@ import UniformEquilibrium.Quitting.Paths.ActualExactPrefixBlock
 noncomputable section
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -24,7 +24,7 @@ theorem tendsto_quittingSimplexOfRoot_allContinue_of_summable_marginalHazard
   have htotal := hhazard.tendsto_atTop_zero
   apply tendsto_pi_nhds.2
   intro player
-  apply tendsto_subtype_rng.2
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff]
   apply tendsto_pi_nhds.2
   intro action
   cases action with
@@ -49,9 +49,9 @@ theorem tendsto_quittingSimplexOfRoot_allContinue_of_summable_marginalHazard
         · funext time
           linarith [hsum time]
         · norm_num
-      convert hfalse' using 1 <;> simp [quittingSimplexOfRoot,
-        Math.ProbabilityMassFunction.stdSimplexEquiv,
-        Math.ProbabilityMassFunction.toVector, quittingAllContinueRoot]
+      convert hfalse' using 1 <;>
+        simp [quittingSimplexOfRoot, Math.ProbabilityMassFunction.toVector,
+          quittingAllContinueRoot]
   | true =>
       have hquit : Tendsto (fun time => (roots time player true).toReal)
           atTop (nhds 0) := by
@@ -62,9 +62,9 @@ theorem tendsto_quittingSimplexOfRoot_allContinue_of_summable_marginalHazard
             (f := fun other => (roots time other true).toReal)
             (fun other _ => ENNReal.toReal_nonneg) (Finset.mem_univ player)
         · exact htotal
-      convert hquit using 1 <;> simp [quittingSimplexOfRoot,
-        Math.ProbabilityMassFunction.stdSimplexEquiv,
-        Math.ProbabilityMassFunction.toVector, quittingAllContinueRoot]
+      convert hquit using 1 <;>
+        simp [quittingSimplexOfRoot, Math.ProbabilityMassFunction.toVector,
+          quittingAllContinueRoot]
 
 omit [DecidableEq ι] in
 /-- Every fixed front position of reverse prefixes converges to all Continue.

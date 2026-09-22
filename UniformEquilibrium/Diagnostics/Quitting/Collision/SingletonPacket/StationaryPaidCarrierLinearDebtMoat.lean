@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 namespace FinFourCarrierSourceChargeDebtErrorGate
 

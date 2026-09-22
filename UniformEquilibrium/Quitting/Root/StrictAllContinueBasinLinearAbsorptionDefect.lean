@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -142,10 +142,10 @@ theorem quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption
     delta / 4 * quittingRootAbsorptionMass root ≤
       quittingRootTotalNashDefect reward tail root := by
   rcases isEmpty_or_nonempty ι with hempty | hnonempty
-  · letI := hempty
+  · let := hempty
     simp [quittingRootAbsorptionMass, quittingStationaryContinueMass,
       quittingRootTotalNashDefect]
-  · letI := hnonempty
+  · let := hnonempty
     exact
       quarterGap_mul_absorptionMass_le_totalNashDefect_of_smallAbsorption_of_nonempty
         reward tail root hdelta hreward hgap hsmall
@@ -184,7 +184,7 @@ theorem exists_open_linearAbsorptionDefect_of_compact_strictAllContinue
         delta / 2 < tail who -
           reward (quittingSingletonTerminal who) who} by
       ext tail
-      simp only [gapNeighborhood, mem_iInter, mem_setOf_eq]]
+      simp only [gapNeighborhood, mem_iInter, mem_ofPred_eq]]
     apply isOpen_iInter_of_finite
     intro who
     exact isOpen_lt continuous_const ((continuous_apply who).sub continuous_const)

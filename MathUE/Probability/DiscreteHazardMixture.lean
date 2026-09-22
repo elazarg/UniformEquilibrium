@@ -21,7 +21,7 @@ open scoped BigOperators
 
 namespace Math.Probability.DiscreteHazard
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 namespace ScalarHazard
 
@@ -382,7 +382,7 @@ theorem not_exists_uniform_posteriorTargetWeight_linear_bound :
         (tendsto_id.mono_left nhdsWithin_le_nhds) :
           Tendsto (fun lambda : ℝ => K * lambda)
             (nhdsWithin 0 (Set.Ioi 0)) (nhds (K * 0)))
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Set.Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Set.Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   have : (1 : ℝ) ≤ 0 :=
     le_of_tendsto_of_tendsto
@@ -416,7 +416,7 @@ def booleanCoin (probability : ℝ) (hprobability0 : 0 ≤ probability)
       else ENNReal.ofReal (1 - probability))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hprobability0 (sub_nonneg.mpr hprobability1)]
       norm_num)
 

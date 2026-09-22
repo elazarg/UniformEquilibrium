@@ -60,8 +60,15 @@ theorem exists_finiteDeadlineTimingProfile_cyclicFinite_exact
       (quittingCyclicFiniteProfile reward roots initial deadline)]
     simp only [quittingFiniteDeadlineTimingProfile, hcompact]
   · intro who choice
-    rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile reward
-      (quittingCyclicFiniteProfile reward roots initial deadline)]
+    let compactChoice : _root_.Math.Probability.CompactStoppingTime := choice
+    change quittingTerminalPayoff reward
+        (Function.update (quittingFiniteDeadlineTimingProfile reward deadline mixed) who
+          (quittingPureTimeBehaviorStrategy reward who compactChoice)) who =
+      quittingTerminalPayoff reward
+        (Function.update (quittingCyclicFiniteProfile reward roots initial deadline) who
+          (quittingPureTimeBehaviorStrategy reward who compactChoice)) who
+    rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile
+      reward (quittingCyclicFiniteProfile reward roots initial deadline) who compactChoice]
     simp only [quittingFiniteDeadlineTimingProfile, hcompact]
 
 end GameTheory

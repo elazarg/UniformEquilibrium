@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -88,7 +88,7 @@ theorem eq_pure_false_of_quittingStationaryContinueMass_eq_one
     (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ player)).symm
   have hrest : ∏ index ∈ Finset.univ.erase player,
       (root index false).toReal ≤ 1 :=
-    Finset.prod_le_one (fun index _ => hnonneg index)
+    Finset.prod_le_one₀ (fun index _ => hnonneg index)
       (fun index _ => hle index)
   have hfalse : (root player false).toReal = 1 := by
     nlinarith [hnonneg player, hle player,
@@ -175,7 +175,7 @@ theorem quittingStationaryContinueMass_le_ownContinueProbability
       (fun player ↦ (root player false).toReal) (Finset.mem_univ who)]
   have hprod :
       (∏ player ∈ Finset.univ.erase who, (root player false).toReal) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun _ _ ↦ ENNReal.toReal_nonneg)
       (fun player _ ↦ ENNReal.toReal_mono ENNReal.one_ne_top
         ((root player).coe_le_one false))
@@ -190,7 +190,7 @@ theorem quittingStationaryContinueMass_le_update_pure_false
         (Function.update root who (PMF.pure false)) := by
   rw [quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingStationaryContinueMass_eq_prod_continueProbability]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro player _
     exact ENNReal.toReal_nonneg
   · intro player _
@@ -257,7 +257,7 @@ theorem quittingRootOpponentAbsorptionMass_eq_one_sub_prod
         (Function.update root who (PMF.pure false) player false).toReal)
       (Finset.mem_univ who)]
     rw [Function.update_self]
-    simp only [PMF.pure_apply, if_true, ENNReal.toReal_one, one_mul]
+    simp only [PMF.pure_apply, ite_true, ENNReal.toReal_one, one_mul]
     apply Finset.prod_congr rfl
     intro other hother
     rw [Function.update_of_ne (Finset.ne_of_mem_erase hother)]

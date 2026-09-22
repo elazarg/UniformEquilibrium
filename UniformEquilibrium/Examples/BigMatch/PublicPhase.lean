@@ -25,7 +25,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace BigMatch
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The fair continuation value of the maximizer at a Big Match state. -/
 def fairMaxValue (s : State) : ℝ :=
@@ -44,7 +44,7 @@ theorem stageEUAt_profileUniformMinimizer_eq_fairMaxValue
   rw [stageActionDist_profileUniformMinimizer]
   have hthis := expect_stagePayoff_maximizer h.2
     (fun who => if who then uniformMinimizerStrategy t h else dev t h)
-  simp only [Bool.false_eq_true, if_false, reduceIte] at hthis
+  simp only [Bool.false_eq_true, ite_false, reduceIte] at hthis
   rw [uniformMinimizerStrategy_apply_true_toReal] at hthis
   rw [hthis]
   unfold fairMaxValue
@@ -63,7 +63,7 @@ theorem expect_next_fairMaxValue_uniformMinimizer
   have hone := expect_next_oneIndicator s m
   have hlive := expect_next_liveIndicator s m
   have hmtrue : (m true true).toReal = 1 / 2 := by
-    simp only [m, if_true]
+    simp only [m, ite_true]
     exact coinPMF_apply_true_toReal (1 / 2) (by norm_num) (by norm_num)
   change expect (pmfPi m)
       (fun a => expect (game.transition s a) fairMaxValue) = fairMaxValue s
@@ -366,9 +366,9 @@ theorem isPublicPhasePunishmentSystemAt_fairPayoff
     · have hD0 : bfDenom N 0 = N + 1 := by
         unfold bfDenom
         omega
-      simp only [bfDeviationPhasePayoff, fairPayoff, if_true]
+      simp only [bfDeviationPhasePayoff, fairPayoff, ite_true]
       simp only [bfPhaseValue, reduceIte]
-      rw [if_neg (by decide : State.live ≠ State.one), zero_add]
+      rw [ite_eq_right (by decide : State.live ≠ State.one), zero_add]
       rw [hD0, bfPotential_succ_eq_half_sub]
       have heq :
           -(1 / 2 - 1 / (2 * ((N : ℝ) + 1))) - (-(1 / 2)) =

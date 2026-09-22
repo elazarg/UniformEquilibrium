@@ -479,13 +479,13 @@ theorem tailVector_tendsto_absorptionPathPayoff_of_cumulativeSubsequenceCuts
     rw [htime.2]
     exact lt_of_le_of_ne htime.1.2 htime_ne_one
   congr 1
-  rw [QuittingAbsorptionPath.absorptionPathPayoff, if_pos htime.1]
+  rw [QuittingAbsorptionPath.absorptionPathPayoff, ite_eq_left htime.1]
   change (if QuittingAbsorptionPath.pathTotal limit.path time < 1 then
     fun player ↦ (∑ coalition,
       (limit.path.value 1 coalition - limit.path.value time coalition) *
         reward coalition player) /
       (1 - QuittingAbsorptionPath.pathTotal limit.path time) else 0) who = _
-  rw [if_pos htotal]
+  rw [ite_eq_left htotal]
   have hendpoint : limit.payoff who =
       ∑ coalition, limit.path.value 1 coalition * reward coalition who := rfl
   have hdenom : 1 - QuittingAbsorptionPath.pathTotal limit.path time =

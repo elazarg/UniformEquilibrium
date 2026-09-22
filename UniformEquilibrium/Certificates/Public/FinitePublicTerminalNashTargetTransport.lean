@@ -27,7 +27,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace FinitePublicTerminalNashSystem
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype ι] [DecidableEq ι]

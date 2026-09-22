@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -128,9 +128,9 @@ theorem quittingFiniteMinMaxDynamicDebtReverseTail_edge [Nonempty ι]
     rw [show distance + 1 + remaining = distance + (remaining + 1) by omega,
       Nat.add_sub_cancel_left]
   rw [quittingFiniteMinMaxDynamicDebtReverseTail,
-    dif_pos (by omega : distance + 1 ≤ distance + 1 + remaining),
+    dite_eq_left (by omega : distance + 1 ≤ distance + 1 + remaining),
     quittingFiniteMinMaxDynamicDebtReverseTail,
-    dif_pos (by omega : distance ≤ distance + 1 + remaining), hfar, hnear]
+    dite_eq_left (by omega : distance ≤ distance + 1 + remaining), hfar, hnear]
   exact quittingFiniteMinMaxDynamicDebtTail_edge reward
     (distance + 1 + remaining) remaining (by omega)
 
@@ -140,10 +140,10 @@ theorem quittingFiniteMinMaxDynamicDebtReverseTail_zero_payoff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (cutoff : ℕ) :
     (quittingFiniteMinMaxDynamicDebtReverseTail reward cutoff 0).1.1 = 0 := by
-  rw [quittingFiniteMinMaxDynamicDebtReverseTail, dif_pos (Nat.zero_le cutoff)]
+  rw [quittingFiniteMinMaxDynamicDebtReverseTail, dite_eq_left (Nat.zero_le cutoff)]
   unfold quittingFiniteMinMaxDynamicDebtTail
   simp only [Nat.sub_zero, quittingFiniteNashBellmanPathDynamicDebtPoint,
-    dif_pos le_rfl]
+    dite_eq_left le_rfl]
   simpa [Fin.last] using
     (quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer_mem
       reward cutoff).2.1
@@ -155,10 +155,10 @@ theorem quittingFiniteMinMaxDynamicDebtReverseTail_zero_debt
     (cutoff : ℕ) :
     (quittingFiniteMinMaxDynamicDebtReverseTail reward cutoff 0).2 =
       quittingPositiveSingletonDebtCap reward := by
-  rw [quittingFiniteMinMaxDynamicDebtReverseTail, dif_pos (Nat.zero_le cutoff)]
+  rw [quittingFiniteMinMaxDynamicDebtReverseTail, dite_eq_left (Nat.zero_le cutoff)]
   unfold quittingFiniteMinMaxDynamicDebtTail
   simp only [Nat.sub_zero, quittingFiniteNashBellmanPathDynamicDebtPoint,
-    dif_pos le_rfl]
+    dite_eq_left le_rfl]
   funext who
   simp [quittingFiniteNashBellmanPathDynamicDebt]
 

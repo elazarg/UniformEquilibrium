@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
@@ -130,7 +130,7 @@ theorem quittingOpponentSurvivalWeight_le_pow_of_absorption_gt
     (∏ offset ∈ Finset.range length,
         quittingFixedOpponentsContinueMass roots who (start + offset)) ≤
         ∏ _offset ∈ Finset.range length, (1 - c) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro offset hoffset
         exact quittingStationaryContinueMass_nonneg
           (Function.update (roots (start + offset)) who (PMF.pure false))

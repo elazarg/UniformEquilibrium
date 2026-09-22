@@ -77,7 +77,7 @@ namespace StochasticGame
 
 namespace PureExternalityCycle
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The two players: `false` is player 1, `true` is player 2. -/
 abbrev Player := Bool

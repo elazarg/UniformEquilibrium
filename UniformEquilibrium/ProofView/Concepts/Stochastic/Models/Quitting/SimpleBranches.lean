@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -71,8 +71,9 @@ omit [DecidableEq ι] in
   change (quittingGame reward).stageActionDist
       ((quittingGame reward).stationaryBehaviorProfile
         fun _ : ι => PMF.pure false) h = _
-  rw [(quittingGame reward).stageActionDist_stationaryBehaviorProfile,
-    pmfPi_pure]
+  rw [(quittingGame reward).stageActionDist_stationaryBehaviorProfile]
+  change pmfPi (fun _ : ι => PMF.pure false) = PMF.pure (fun _ : ι => false)
+  exact pmfPi_pure _
 
 /-- The singleton terminal state of one quitter. -/
 def quittingSingletonTerminal (who : ι) :
@@ -104,7 +105,7 @@ theorem action_eq_false_of_mem_support_update_quittingAlwaysContinue
     exact ⟨action, haction, rfl⟩
   rw [pmfPi_push_coord factors other] at hcoord
   have hfactor : factors other = PMF.pure false := by
-    simp [factors, Function.update_of_ne hother]
+    exact Function.update_of_ne hother _ _
   rw [hfactor] at hcoord
   exact (PMF.mem_support_pure_iff _ _).mp (by simpa [hfactor] using hcoord)
 
@@ -125,12 +126,19 @@ theorem state_eq_none_or_singleton_of_mem_support_update_quittingAlwaysContinue
       intro h hh
       left
       have heq : h = (quittingGame reward).emptyHist none := by
-        simpa using hh
+        have hzero := (quittingGame reward).histDist_zero
+          (Function.update (quittingAlwaysContinueProfile reward) who deviation)
+          (show (quittingGame reward).State from none)
+        rw [hzero] at hh
+        exact (PMF.mem_support_pure_iff _ _).mp hh
       rw [heq]
       rfl
   | succ t ih =>
       intro h' hh'
-      rw [(quittingGame reward).mem_support_histDist_succ] at hh'
+      have hsucc := (quittingGame reward).mem_support_histDist_succ
+        (Function.update (quittingAlwaysContinueProfile reward) who deviation)
+        (show (quittingGame reward).State from none) t h'
+      rw [hsucc] at hh'
       obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ := hh'
       change (ι → Bool) at action
       rcases ih h hh with hactive | habsorbed
@@ -149,10 +157,11 @@ theorem state_eq_none_or_singleton_of_mem_support_update_quittingAlwaysContinue
               ({player | action player = true} : Finset ι).Nonempty := by
             rw [hset]
             exact Finset.singleton_nonempty who
-          rw [quittingGame_transition_none, dif_pos hnonempty] at hnext
+          rw [quittingGame_transition_none, dite_eq_left hnonempty] at hnext
           right
           have hstate : next = some (quittingSingletonTerminal who) := by
-            simpa [quittingSingletonTerminal, hset] using hnext
+            have hstate' := (PMF.mem_support_pure_iff _ _).mp hnext
+            simpa [quittingSingletonTerminal, hset] using hstate'
           exact hstate
         · have hfalseWho : action who = false := by
             cases h : action who <;> simp_all
@@ -169,9 +178,9 @@ theorem state_eq_none_or_singleton_of_mem_support_update_quittingAlwaysContinue
               ¬({player | action player = true} : Finset ι).Nonempty := by
             rw [hset]
             simp
-          rw [quittingGame_transition_none, dif_neg hempty] at hnext
+          rw [quittingGame_transition_none, dite_eq_right hempty] at hnext
           left
-          simpa using hnext
+          exact (PMF.mem_support_pure_iff _ _).mp hnext
       · rw [habsorbed, show (quittingGame reward).transition
             (some (quittingSingletonTerminal who)) action =
             PMF.pure (some (quittingSingletonTerminal who)) by rfl] at hnext
@@ -187,9 +196,9 @@ theorem quittingTerminalPayoff_update_quittingAlwaysContinue_le_max
         (Function.update (quittingAlwaysContinueProfile reward) who deviation)
         who ≤
       max 0 (reward (quittingSingletonTerminal who) who) := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   let profile :=
     Function.update (quittingAlwaysContinueProfile reward) who deviation
@@ -223,12 +232,19 @@ theorem state_eq_none_of_mem_support_quittingAlwaysContinue
   | zero =>
       intro h hh
       have heq : h = (quittingGame reward).emptyHist none := by
-        simpa using hh
+        have hzero := (quittingGame reward).histDist_zero
+          (quittingAlwaysContinueProfile reward)
+          (show (quittingGame reward).State from none)
+        rw [hzero] at hh
+        exact (PMF.mem_support_pure_iff _ _).mp hh
       rw [heq]
       rfl
   | succ t ih =>
       intro h' hh'
-      rw [(quittingGame reward).mem_support_histDist_succ] at hh'
+      have hsucc := (quittingGame reward).mem_support_histDist_succ
+        (quittingAlwaysContinueProfile reward)
+        (show (quittingGame reward).State from none) t h'
+      rw [hsucc] at hh'
       obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ := hh'
       change (ι → Bool) at action
       have hstate := ih h hh
@@ -241,9 +257,11 @@ theorem state_eq_none_of_mem_support_quittingAlwaysContinue
       have hactionEq : action = (fun _ : ι => false) :=
         (PMF.mem_support_pure_iff _ _).mp haction
       subst action
-      rw [hstate, quittingGame_transition_none] at hnext
-      simp at hnext
-      simpa using hnext
+      have hempty :
+          ¬({player | (fun _ : ι => false) player = true} : Finset ι).Nonempty := by
+        simp
+      rw [hstate, quittingGame_transition_none, dite_eq_right hempty] at hnext
+      exact (PMF.mem_support_pure_iff _ _).mp hnext
 
 omit [DecidableEq ι] in
 /-- The all-continue profile has terminal payoff zero. -/
@@ -290,16 +308,19 @@ theorem quittingTerminalPayoff_update_quittingAlwaysQuitStrategy
   have hfamily :
       Function.update (fun _ : ι => PMF.pure false) who
           ((quittingAlwaysQuitStrategy reward who) 0
-            ((quittingGame reward).emptyHist none)) =
+            ((quittingGame reward).emptyHist
+              (show (quittingGame reward).State from none))) =
         fun player => PMF.pure (quitAction player) := by
     funext player
+    change Function.update (fun _ : ι => PMF.pure false) who
+        (PMF.pure true) player = PMF.pure (quitAction player)
     by_cases hp : player = who
     · subst player
       rw [Function.update_self]
-      change PMF.pure true = PMF.pure (quitAction who)
       congr
       simp [quitAction]
-    · simp [Function.update_of_ne hp, quittingAlwaysQuitStrategy, quitAction]
+    · rw [Function.update_of_ne hp]
+      simp [quitAction, hp]
   rw [hfamily, pmfPi_pure]
   with_unfolding_all
     change expect (PMF.pure quitAction)

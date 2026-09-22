@@ -742,7 +742,7 @@ theorem QuittingTerminalExploitabilityWitness.hasActualPaidMixedDeletionResidual
         {first, second} baseFirst baseSecond first second)) :
     HasActualPaidMixedDeletionResidual reward baseFirst baseSecond first second
       gamma := by
-  letI : Nonempty ι := ⟨baseFirst⟩
+  let : Nonempty ι := ⟨baseFirst⟩
   let base : Finset ι := {baseFirst, baseSecond}
   let free : Finset ι := {first, second}
   let alpha := quittingLargeBaseFirstRow reward base free first second

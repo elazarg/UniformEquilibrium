@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -237,7 +237,7 @@ namespace QuittingChargeTangentData
 be nonempty. -/
 theorem nonempty_players (data : QuittingChargeTangentData reward) : Nonempty ι := by
   rcases isEmpty_or_nonempty ι with hempty | hnonempty
-  · letI := hempty
+  · let _ := hempty
     have hmass := data.mass_sum
     simp at hmass
   · exact hnonempty
@@ -281,7 +281,7 @@ theorem uniformPayoff_or_minimalFloor_underfunded_or_active_funded
         (data.boundary who - quittingPunishmentValue reward who)) ∨
     ∃ owner, 0 < data.mass owner ∧ 0 < data.tangent owner := by
   classical
-  letI : Nonempty ι := data.nonempty_players
+  let : Nonempty ι := data.nonempty_players
   by_cases hunderfunded : ∃ who, data.tangent who <
       -min
         (data.boundary who -
@@ -467,10 +467,13 @@ theorem eventually_allContinue_or_exists_oneStage_chargeTangentPacket :
           (quittingRootAbsorptionMass_nonneg
             (quittingDynamicDebtTailRoots seam.tail (start index)))
           (Ne.symm hmassNe)
-      simpa [window, finiteRootWindow,
-        QuittingFiniteRootWindow.absorptionMass,
-        QuittingFiniteRootWindow.survivalWeight,
-        QuittingFiniteRootWindow.rootAt] using hmassPos
+      change 0 < ∑ phase : Fin 1,
+        quittingJointSurvivalWeight
+            (quittingDynamicDebtTailRoots seam.tail) (start index) phase.val *
+          quittingRootAbsorptionMass
+            (quittingDynamicDebtTailRoots seam.tail (start index + phase.val))
+      rw [Fintype.sum_unique]
+      simpa using hmassPos
     obtain ⟨data, subseq, hsubseq, hoccupation, htangent⟩ :=
       seam.exists_chargeTangentData_of_windows window hstartTendsto habsorption
     let selectedWindow : ℕ → QuittingFiniteRootWindow

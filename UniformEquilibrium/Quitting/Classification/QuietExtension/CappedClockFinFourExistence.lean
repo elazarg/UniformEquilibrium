@@ -34,7 +34,7 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockCerti
   let childReward := quittingDeleteReward parentReward (· = none)
   have hsurvivorCard : Fintype.card (QuittingDeletedPlayer owner) = 3 :=
     card_quittingDeletedPlayer_eq_three_of_card_eq_four owner rfl
-  letI : Nonempty (QuittingDeletedPlayer owner) :=
+  let : Nonempty (QuittingDeletedPlayer owner) :=
     Fintype.card_pos_iff.mp (by rw [hsurvivorCard]; norm_num)
   have hparentCard : Fintype.card (Option (QuittingDeletedPlayer owner)) = 4 := by
     rw [Fintype.card_option, hsurvivorCard]

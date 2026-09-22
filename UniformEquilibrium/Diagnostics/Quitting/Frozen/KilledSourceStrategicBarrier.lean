@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability DiscreteHazard
+open Filter _root_.Math.Probability DiscreteHazard
 open scoped BigOperators Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]

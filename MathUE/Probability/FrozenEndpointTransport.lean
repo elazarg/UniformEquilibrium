@@ -36,7 +36,7 @@ namespace Math
 namespace Probability
 namespace FrozenEndpointTransport
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {State : Type*} [Fintype State] [DecidableEq State]
 

@@ -28,7 +28,7 @@ finite-horizon maximization.
 
 universe u v
 
-namespace Math
+namespace Maths
 namespace ChargedPathBudget
 namespace ChargedRelation
 namespace OneStepTower
@@ -76,7 +76,10 @@ private theorem path_from_leaf {source target : State}
           have hmn : m = n := by simpa [relation] using hsource
           subst n
           have hrest := ih rfl
-          exact ⟨by simpa [relation] using hrest.1, hrest.2⟩
+          constructor
+          · change relation.charge (Edge.leafLoop m) + rest.chargeSum = 0
+            simpa [relation] using hrest.1
+          · exact hrest.2
 
 private theorem chargeSum_eq_zero_from_leaf (n : ℕ) {target : State}
     (path : relation.Path (some n) target) : path.chargeSum = 0 :=
@@ -188,7 +191,9 @@ def descentPath : ∀ delay : ℕ, relation.Path delay 0
     (descentPath delay).chargeSum = 0 := by
   induction delay with
   | zero => rfl
-  | succ delay ih => simpa [descentPath, relation] using ih
+  | succ delay ih =>
+      change relation.charge (Edge.descend delay) + (descentPath delay).chargeSum = 0
+      simpa [relation] using ih
 
 @[simp] theorem descentPath_length (delay : ℕ) :
     (descentPath delay).length = delay := by
@@ -200,19 +205,31 @@ def descentPath : ∀ delay : ℕ, relation.Path delay 0
 
 /-- One selected unit block may contain an arbitrarily long initial zero-charge
 delay before its final positive loop. -/
+private theorem path_length_append {s t w : ℕ} (p : relation.Path s t)
+    (q : relation.Path t w) : (p.append q).length = p.length + q.length := by
+  induction p with
+  | nil => simp [Path.append, Path.length]
+  | cons edge rest ih =>
+      simp [Path.append, Path.length, ih, Nat.add_comm, Nat.add_left_comm]
+
+private def liveLoopPath : relation.Path 0 0 :=
+  (Path.cons Edge.liveLoop (Path.nil (relation.tgt Edge.liveLoop))).castTgt
+      (by change 0 = 0; rfl) |>.castSrc (by change 0 = 0; rfl)
+
 def firstUnitBlock (delay : ℕ) : relation.Path delay 0 :=
-  (descentPath delay).append (Path.single Edge.liveLoop)
+  (descentPath delay).append liveLoopPath
 
 @[simp] theorem firstUnitBlock_chargeSum (delay : ℕ) :
     (firstUnitBlock delay).chargeSum = 1 := by
-  rw [firstUnitBlock, Path.chargeSum_append, descentPath_chargeSum]
-  change 0 + (relation.charge Edge.liveLoop + 0) = 1
+  rw [firstUnitBlock, Path.chargeSum_append, descentPath_chargeSum,
+    liveLoopPath, Path.chargeSum_castSrc, Path.chargeSum_castTgt,
+    Path.chargeSum_cons]
   norm_num [relation]
 
 @[simp] theorem firstUnitBlock_length (delay : ℕ) :
     (firstUnitBlock delay).length = delay + 1 := by
-  rw [firstUnitBlock, Path.length_append, descentPath_length]
-  rfl
+  rw [firstUnitBlock, path_length_append, descentPath_length]
+  norm_num [liveLoopPath, Path.castSrc, Path.castTgt, Path.length]
 
 theorem firstUnitBlock_length_pos (delay : ℕ) :
     0 < (firstUnitBlock delay).length := by
@@ -287,7 +304,9 @@ private theorem chargeSum_eq_zero_from_trap {source target : State}
       cases edge with
       | greedy => simp [relation] at hsource
       | patient => simp [relation] at hsource
-      | trapLoop => simpa [relation] using ih rfl
+      | trapLoop =>
+          rw [Path.chargeSum_cons]
+          simpa [relation] using ih rfl
       | liveLoop => simp [relation] at hsource
 
 /-- The immediate reward from the greedy edge is strictly larger. -/
@@ -357,7 +376,11 @@ inductive Edge
   | invest
   | trapLoop
   | liveLoop
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype Edge where
+  elems := {.immediate, .invest, .trapLoop, .liveLoop}
+  complete := by intro edge; cases edge <;> simp
 
 /-- The immediate branch pays one and then stops earning.  The investment
 branch pays zero initially and then earns `3/5` per step. -/
@@ -392,18 +415,15 @@ def investPathThree : relation.Path .start .live :=
 @[simp] theorem finiteHorizonCandidates_start :
     relation.finiteHorizonCandidates .start =
       {Edge.immediate, Edge.invest} := by
-  ext edge
-  cases edge <;> simp [finiteHorizonCandidates, relation]
+  decide
 
 @[simp] theorem finiteHorizonCandidates_trap :
     relation.finiteHorizonCandidates .trap = {Edge.trapLoop} := by
-  ext edge
-  cases edge <;> simp [finiteHorizonCandidates, relation]
+  decide
 
 @[simp] theorem finiteHorizonCandidates_live :
     relation.finiteHorizonCandidates .live = {Edge.liveLoop} := by
-  ext edge
-  cases edge <;> simp [finiteHorizonCandidates, relation]
+  decide
 
 @[simp] theorem finiteHorizonMaxCharge_trap : ∀ horizon : ℕ,
     relation.finiteHorizonMaxCharge .trap horizon = 0
@@ -493,4 +513,4 @@ end IncompatibleHorizonOptima
 
 end ChargedRelation
 end ChargedPathBudget
-end Math
+end Maths

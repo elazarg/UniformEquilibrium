@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -85,7 +85,7 @@ theorem quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
         (quittingFiniteDeadlineTimingProfile reward deadline mixed) who =
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.eu
         mixed who := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [quittingFiniteDeadlineTimingProfile,
@@ -110,7 +110,6 @@ theorem quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU
         (fun _ => quittingFiniteDeadlineTimingActionTime)).symm
     _ = _ := by
       rw [Math.Probability.expect_map]
-      rfl
 
 /-- Replacing one timing coordinate by a pure date or Never has the same
 payoff as the corresponding pure-time behavioral deviation. -/
@@ -136,12 +135,12 @@ theorem quittingFiniteDeadlineTimingProfile_update_pureTime_eq_mixedEU
   funext player
   by_cases hplayer : player = who
   · subst player
-    rw [quittingPureDeviationCompactLaws, if_pos rfl,
+    rw [quittingPureDeviationCompactLaws, ite_eq_left rfl,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
       Function.update_self, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     exact (PMF.pure_map quittingFiniteDeadlineTimingActionTime action).symm
-  · rw [quittingPureDeviationCompactLaws, if_neg hplayer,
+  · rw [quittingPureDeviationCompactLaws, ite_eq_right hplayer,
       quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF,
       Function.update_of_ne hplayer, quittingFiniteDeadlineTimingLaw,

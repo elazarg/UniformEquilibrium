@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -40,7 +40,7 @@ theorem quittingCompanionComposite_eq_compList_apply
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι) : ∀ start fuel continuation,
     quittingCompanionComposite reward roots who start fuel continuation =
-      (Math.MaxAffineTransport.Label.compList
+      (Maths.MaxAffineTransport.Label.compList
         (quittingCompanionLabelList reward roots who start fuel)).apply
           continuation := by
   intro start fuel
@@ -51,7 +51,7 @@ theorem quittingCompanionComposite_eq_compList_apply
       rw [quittingCompanionComposite_succ, ih (start + 1),
         quittingCompanionLabelList]
       symm
-      rw [Math.MaxAffineTransport.Label.apply_compList_append_singleton
+      rw [Maths.MaxAffineTransport.Label.apply_compList_append_singleton
         _ _ (quittingCompanionLabel_slope_nonneg reward roots who start)]
       exact quittingCompanionLabel_apply reward roots who start _
 

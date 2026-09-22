@@ -25,8 +25,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -96,7 +96,7 @@ theorem card_zeroDriftIndex_lt
   let strictPredicate :
       germ.PlayerNeutralOccupationIndex who → Prop :=
     fun index => index ∈ C.strictIndexSet
-  letI : DecidablePred strictPredicate := Classical.decPred _
+  let : DecidablePred strictPredicate := Classical.decPred _
   have strict_nonempty : Nonempty {index // strictPredicate index} :=
     ⟨⟨C.index, C.index_mem_strictIndexSet⟩⟩
   have strict_card_pos :
@@ -133,7 +133,7 @@ theorem exists_zeroDrift_normalizedPositiveChargedCirculation
   let strictPredicate :
       germ.PlayerNeutralOccupationIndex who → Prop :=
     fun index => index ∈ C.strictIndexSet
-  letI : DecidablePred strictPredicate := Classical.decPred _
+  let : DecidablePred strictPredicate := Classical.decPred _
   have mass_zero_of_strict :
       ∀ index, strictPredicate index → mass index = 0 := by
     intro index index_strict

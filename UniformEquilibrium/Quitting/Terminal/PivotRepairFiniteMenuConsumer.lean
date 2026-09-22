@@ -34,7 +34,7 @@ private theorem exists_cutoff_lateFiniteMass_lt (law : PMF (Option ℕ))
 
 private theorem opponentNeverProduct_le_one :
     (∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal) ≤ 1 := by
-  apply Finset.prod_le_one
+  apply Finset.prod_le_one₀
   · intro who _
     exact ENNReal.toReal_nonneg
   · intro who _
@@ -49,7 +49,7 @@ theorem exists_finite_menu_of_feasible_mass_signed_of_reward_bound
     (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
     (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ)
     (bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
       input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
@@ -67,7 +67,7 @@ theorem exists_finite_menu_of_feasible_mass_signed_of_reward_bound
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) =
           (pivotRepairNever mass + stoppingLawLateFiniteMass law cutoff) *
             ∏ who ∈ Finset.univ.erase input.pivot, (input.opponents who none).toReal := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   obtain ⟨law, _, hlawError, hnone⟩ :=
     input.exists_law_payoff_eq_and_exploitability_le_objective_add mass hfeasible error herror
   obtain ⟨cutoff, hcutoff, htail⟩ := input.exists_cutoff_lateFiniteMass_lt law tolerance htolerance
@@ -84,7 +84,7 @@ theorem exists_finite_menu_of_feasible_mass_signed
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
     (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
       input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
@@ -114,7 +114,7 @@ theorem exists_finite_menu_of_feasible_mass_of_reward_bound
     (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
     (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ)
     (bound : ℝ) (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
       input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
@@ -132,7 +132,7 @@ theorem exists_finite_menu_of_feasible_mass_of_reward_bound
               (quittingFiniteDeadlineTimingProfile reward deadline mixed)) 0 (deadline - horizon) ≤
           input.objective mass / reward (quittingSingletonTerminal input.pivot) input.pivot +
             stoppingLawLateFiniteMass law cutoff := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   obtain ⟨law, cutoff, deadline, hcutoff, hdeadline, mixed, hnone, htail, hmixed,
       hexploit, hsurvival⟩ :=
     input.exists_finite_menu_of_feasible_mass_signed_of_reward_bound
@@ -155,7 +155,7 @@ theorem exists_finite_menu_of_feasible_mass
     (hpositive : 0 < reward (quittingSingletonTerminal input.pivot) input.pivot)
     (error : ℝ) (herror : 0 < error) (tolerance : ℝ) (htolerance : 0 < tolerance)
     (horizon : ℕ) (hhorizon : 1 ≤ horizon) (lowerDeadline : ℕ) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ (law : PMF (Option ℕ)) (cutoff deadline : ℕ),
       input.deadline ≤ cutoff + 1 ∧ max horizon lowerDeadline ≤ deadline ∧
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),

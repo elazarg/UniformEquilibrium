@@ -42,7 +42,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability _root_.Math.PMFProduct
 
 variable {ι : Type}
 
@@ -57,6 +57,19 @@ def stageGame (G : StochasticGame ι) (s : G.State) : KernelGame ι :=
 def mixedStageEU (G : StochasticGame ι) [Fintype ι] (s : G.State)
     (m : ∀ i, PMF (G.Act i)) (who : ι) : ℝ :=
   expect (pmfPi m) fun a => G.stagePayoff s a who
+
+/-- The mixed extension of a stage game computes the corresponding mixed
+stage payoff. -/
+theorem mixedExtension_stageGame_eu (G : StochasticGame ι) [Fintype ι]
+    [Finite G.JointAct] (s : G.State) (m : ∀ i, PMF (G.Act i)) (who : ι) :
+    (G.stageGame s).mixedExtension.eu m who = G.mixedStageEU s m who := by
+  unfold KernelGame.eu KernelGame.mixedExtension PMFGameForm.mixedExtension
+    PMFGameForm.withUtility KernelGame.toGameForm stageGame KernelGame.ofPureEU
+    mixedStageEU
+  change expect ((pmfPi (A := G.Act) m).bind PMF.pure)
+      (fun a => G.stagePayoff s a who) =
+    expect (pmfPi (A := G.Act) m) (fun a => G.stagePayoff s a who)
+  rw [PMF.bind_pure]
 
 /-- The Markov behavior profile that plays the mixed action `x s i` whenever
 the current state is `s`, regardless of the rest of the history. -/
@@ -92,7 +105,8 @@ theorem stageEUAt_markovBehaviorProfile (G : StochasticGame ι) [Fintype ι]
     (who : ι) :
     G.stageEUAt (G.markovBehaviorProfile x) h who =
       G.mixedStageEU h.2 (x h.2) who :=
-  rfl
+  congrArg (fun law => expect law (fun a => G.stagePayoff h.2 a who))
+    (G.stageActionDist_markovBehaviorProfile x h)
 
 /-- `x` plays a mixed stage-game Nash equilibrium at every state: no player
 can improve any state's expected stage payoff by a unilateral mixed
@@ -114,17 +128,25 @@ theorem exists_isMixedStageNash (G : StochasticGame ι)
         G.mixedStageEU s (Function.update m who d) who ≤
           G.mixedStageEU s m who := by
     intro s
-    haveI : ∀ i, Finite ((G.stageGame s).Strategy i) :=
+    have : ∀ i, Finite ((G.stageGame s).Strategy i) :=
       fun i => inferInstanceAs (Finite (G.Act i))
-    haveI : ∀ i, Nonempty ((G.stageGame s).Strategy i) :=
+    have : ∀ i, Nonempty ((G.stageGame s).Strategy i) :=
       fun i => inferInstanceAs (Nonempty (G.Act i))
-    haveI : Finite (G.stageGame s).Outcome :=
+    have : Finite (G.stageGame s).Outcome :=
       inferInstanceAs (Finite G.JointAct)
     obtain ⟨m, hm⟩ := (G.stageGame s).mixed_nash_exists
     refine ⟨m, fun who d => ?_⟩
     have h1 := hm who d
-    rw [KernelGame.mixedExtension_eu, KernelGame.mixedExtension_eu] at h1
-    simpa [mixedStageEU, stageGame] using h1
+    have hbase :
+        (G.stageGame s).mixedExtension.eu m who =
+          G.mixedStageEU s m who := by
+      exact G.mixedExtension_stageGame_eu s m who
+    have hdev :
+        (G.stageGame s).mixedExtension.eu (Function.update m who d) who =
+          G.mixedStageEU s (Function.update m who d) who := by
+      exact G.mixedExtension_stageGame_eu s (Function.update m who d) who
+    rw [hbase, hdev] at h1
+    exact h1
   choose x hx using hex
   exact ⟨x, hx⟩
 

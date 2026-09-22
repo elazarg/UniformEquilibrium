@@ -31,7 +31,9 @@ theorem quittingGerm_endpointProfile_eq_of_discountedAssignment
   funext who
   apply Math.ProbabilityMassFunction.toVector_injective
   funext action
-  change ((germ.endpointProfile none who) action).toReal = (rootLimit who action).toReal
+  let live : (quittingGame reward).State := none
+  change ((germ.endpointProfile live who) action).toReal =
+    (rootLimit who action).toReal
   rw [AnalyticBellmanGerm.endpointProfile,
     (quittingGame reward).bellmanDecodeProfile_apply_toReal, hendpoint]
   rfl

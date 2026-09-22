@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -263,10 +263,10 @@ theorem exists_literal_certifiedBackgroundHost_of_positive_occupation
         reward profile terminal owner who action time := by
       simpa only [packet] using hnot
     unfold quittingCertifiedPacketBackgroundCharge at hrowPos
-    rw [if_neg hnotPos] at hrowPos
+    rw [ite_eq_right hnotPos] at hrowPos
     linarith
   unfold quittingCertifiedPacketBackgroundCharge at hrowPos
-  rw [if_pos (by simpa only [packet] using hpacketPos)] at hrowPos
+  rw [ite_eq_left (by simpa only [packet] using hpacketPos)] at hrowPos
   change 0 < quittingStageCoalitionMass reward profile time terminal *
       (root owner false).toReal *
         quittingPositiveOrientedBackgroundCharge

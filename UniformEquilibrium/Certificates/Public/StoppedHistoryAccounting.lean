@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -235,7 +235,7 @@ theorem normalized_stopped_suffix_charge_le_expect
         expect stoppedLaw fun base =>
           ∑ time ∈ Finset.range horizon, localCharge time base := by
     classical
-    letI : Fintype (G.BoundedStoppedHistory fuel) :=
+    let : Fintype (G.BoundedStoppedHistory fuel) :=
       Fintype.ofFinite (G.BoundedStoppedHistory fuel)
     simp only [expect_eq_sum]
     rw [Finset.sum_comm]

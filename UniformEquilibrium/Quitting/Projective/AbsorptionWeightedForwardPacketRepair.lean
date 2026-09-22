@@ -10,7 +10,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- The coordinate box used by the exact repaired packet. -/
 def quittingForwardPacketCoordinateBox (B : ℝ) : Set (Payoff (Fin 4)) :=

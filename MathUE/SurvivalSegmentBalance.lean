@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.CyclicMaxAffineBound
+import Maths.Recursion.CyclicMaxAffine
 
 /-!
 # Balance across a segment whose two ends carry the same value
 
 Fix per-step acting probabilities `p` and survival factors `β` with
 `p t + β t = 1`, and a value sequence obeying the one-step recursion
-`V t = p t * a t + β t * V (t + 1)`.  `MathUE/CyclicMaxAffineBound.lean`
+`V t = p t * a t + β t * V (t + 1)`.  `Maths.Recursion.CyclicMaxAffine`
 unrolls that recursion: `V 0` is the survival-weighted accumulation of the
 `a`'s over the segment plus the surviving remainder times `V L`.
 
@@ -39,7 +39,7 @@ noncomputable section
 
 namespace Math
 
-open Finset CyclicMaxAffine
+open Finset Maths.CyclicMaxAffine
 
 /-! ## The weights of a segment -/
 

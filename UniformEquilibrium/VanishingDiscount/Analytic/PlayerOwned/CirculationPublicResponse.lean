@@ -32,7 +32,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -138,7 +138,7 @@ theorem
       rw [zero] at hcirculation
       exact False.elim ((ne_of_gt positive) hcirculation.2.2.symm)
   | inr nonempty =>
-    letI : Nonempty (OwnerOccupationIndex G who) := nonempty
+    let : Nonempty (OwnerOccupationIndex G who) := nonempty
     let term : OwnerOccupationIndex G who → ℝ → ℝ := fun index t =>
       C.mass t index *
         germ.rawPlayerOwnedOccupationCharge B who t index
@@ -222,7 +222,7 @@ theorem
             (.inr (selected.source, selected.action)) := by
     intro t
     simp only [charge, AnalyticBellmanGerm.rawFinkObstructionMass,
-      supported, if_true, forward,
+      supported, ite_true, forward,
       EventuallyPositiveOwnedActionCharge.forwardResponse,
       rawPlayerOwnedOccupationCharge, sub_zero]
   have charge_analytic : AnalyticAt ℝ charge 0 := by

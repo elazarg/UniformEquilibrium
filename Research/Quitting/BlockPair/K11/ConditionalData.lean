@@ -149,12 +149,12 @@ theorem evalReal_actionFactor
       BlockPairCharts.actionFactor (hazard x phase) mask omitted who := by
   unfold actionFactor BlockPairCharts.actionFactor
   by_cases homitted : omitted = some who
-  · rw [if_pos homitted, if_pos homitted]
+  · rw [ite_eq_left homitted, ite_eq_left homitted]
     norm_num [RationalPolynomial.evalReal]
   · by_cases hmask : maskHasPlayer mask who = true
-    · rw [if_neg homitted, if_neg homitted, if_pos hmask, if_pos hmask]
+    · rw [ite_eq_right homitted, ite_eq_right homitted, ite_eq_left hmask, ite_eq_left hmask]
       exact evalReal_hazardExpression x phase who
-    · rw [if_neg homitted, if_neg homitted, if_neg hmask, if_neg hmask,
+    · rw [ite_eq_right homitted, ite_eq_right homitted, ite_eq_right hmask, ite_eq_right hmask,
         evalReal_sub]
       simpa only [RationalPolynomial.evalReal, Rat.cast_one] using
         congrArg (fun value : ℝ ↦ 1 - value)

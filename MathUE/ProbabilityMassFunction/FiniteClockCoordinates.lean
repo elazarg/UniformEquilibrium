@@ -26,6 +26,7 @@ namespace Math
 namespace ProbabilityMassFunction
 
 open Set
+open GameTheory.Math.Probability
 
 /-- Finite clock coordinates: dates through the auxiliary after-support date,
 plus a separate Never atom. -/
@@ -87,13 +88,13 @@ def finiteClockLawCoordinates (clockBound : ℕ)
 theorem finiteClockLawCoordinates_mem_stdSimplex
     (clockBound : ℕ) (law : PMF (Option ℕ)) :
     finiteClockLawCoordinates clockBound law ∈
-      stdSimplex ℝ (FiniteClockAtom clockBound) :=
+      simplexWeights (FiniteClockAtom clockBound) :=
   toVector_mem_stdSimplex _
 
 /-- Decode real simplex weights to a complete stopping law. -/
 def finiteClockDecodeLaw (clockBound : ℕ)
     (weight : FiniteClockAtom clockBound → ℝ)
-    (hweight : weight ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+    (hweight : weight ∈ simplexWeights (FiniteClockAtom clockBound)) :
     PMF (Option ℕ) :=
   (ofVector weight hweight).map (finiteClockAtomToStoppingTime clockBound)
 
@@ -101,7 +102,7 @@ def finiteClockDecodeLaw (clockBound : ℕ)
 before the clock bound, with Never retained. -/
 theorem finiteClockDecodeLaw_support
     (clockBound : ℕ) (weight : FiniteClockAtom clockBound → ℝ)
-    (hweight : weight ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+    (hweight : weight ∈ simplexWeights (FiniteClockAtom clockBound))
     (haux : weight (finiteClockAuxAtom clockBound) = 0)
     (choice : Option ℕ) (hchoice : finiteClockDecodeLaw clockBound
       weight hweight choice ≠ 0) :
@@ -177,7 +178,7 @@ clock bound. -/
 theorem exists_finiteClockCoordinates_iff
     (clockBound : ℕ) (law : PMF (Option ℕ)) :
     (∃ weight : FiniteClockAtom clockBound → ℝ,
-      ∃ hweight : weight ∈ stdSimplex ℝ (FiniteClockAtom clockBound),
+      ∃ hweight : weight ∈ simplexWeights (FiniteClockAtom clockBound),
         weight (finiteClockAuxAtom clockBound) = 0 ∧
           finiteClockDecodeLaw clockBound weight hweight = law) ↔
       (∀ choice, law choice ≠ 0 →

@@ -185,7 +185,7 @@ private theorem rankedPotential_le_selfPotential_add_rank
     simp [rankedTransientBernoulliPotential, source_transient,
       singleTransientBernoulliPotential, bernoulliVariationPotential]
   · rw [singleTransientBernoulliPotential]
-    simp only [if_neg destination_eq, zero_add]
+    simp only [ite_eq_right destination_eq, zero_add]
     rw [rankedTransientBernoulliPotential]
     split_ifs with destination_transient
     · have hrank := certificate.descends source_transient destination_support
@@ -225,7 +225,7 @@ theorem conditionalVariation_add_rankedTransientPotential_le
       expect_singleTransientBernoulliPotential] at hpotential
     have hpeeling := pivotLocalVariation_add_selfPotential_le
       kernel source value harmonic time
-    rw [rankedTransientBernoulliPotential, if_pos source_transient]
+    rw [rankedTransientBernoulliPotential, ite_eq_left source_transient]
     simp only [pivotLocalVariation, bernoulliVariationPotential] at hpeeling
     simp only [bernoulliVariationPotential]
     linarith
@@ -433,7 +433,7 @@ theorem conditionalVariation_add_transientBernoulliPotential_le
     · obtain ⟨pivot, pivot_support, pivot_transient⟩ := hasTransientSuccessor
       rw [expect_transientBernoulliPotential_eq_atom kernel value unique
         pivot_support pivot_transient]
-      rw [transientBernoulliPotential, if_pos source_transient]
+      rw [transientBernoulliPotential, ite_eq_left source_transient]
       have hpeeling := expect_abs_sub_expect_add_atom_bernoulliPotential_le
         (kernel source) pivot (fun successor ↦ value successor (time + 1))
         (fun successor ↦ harmonic.1 successor (time + 1))
@@ -442,7 +442,7 @@ theorem conditionalVariation_add_transientBernoulliPotential_le
         using hpeeling
     · rw [expect_transientBernoulliPotential_eq_zero_of_no_successor
         kernel value source hasTransientSuccessor]
-      rw [transientBernoulliPotential, if_pos source_transient, add_zero]
+      rw [transientBernoulliPotential, ite_eq_left source_transient, add_zero]
       have hpeeling := pivotLocalVariation_add_selfPotential_le
         kernel source value harmonic time
       have hselfPotential :
@@ -580,8 +580,8 @@ private theorem functionalLayerPotential_le_sameLayerAtom_add_rank
         intro destination_eq
         subst destination
         omega
-      simp only [functionalLayerPotential, if_pos destination_transient,
-        singleTransientBernoulliPotential, if_neg destination_ne, zero_add]
+      simp only [functionalLayerPotential, ite_eq_left destination_transient,
+        singleTransientBernoulliPotential, ite_eq_right destination_ne, zero_add]
       linarith
   · have destination_ne : destination ≠ pivot := by
       intro destination_eq
@@ -616,7 +616,7 @@ private theorem functionalLayerPotential_le_rank_of_no_sameLayerSuccessor
     have hcast : (certificate.rank destination : ℝ) + 1 ≤
         (certificate.rank source : ℝ) := by
       exact_mod_cast (Nat.succ_le_iff.mpr destination_lower)
-    simp only [functionalLayerPotential, if_pos destination_transient]
+    simp only [functionalLayerPotential, ite_eq_left destination_transient]
     linarith
   · simp [functionalLayerPotential, destination_transient, Nat.cast_nonneg]
 
@@ -657,7 +657,7 @@ theorem conditionalVariation_add_functionalLayerPotential_le
         (kernel source) pivot (fun successor ↦ value successor (time + 1))
         (fun successor ↦ harmonic.1 successor (time + 1))
       rw [← harmonic.2 source time] at hpeeling
-      rw [functionalLayerPotential, if_pos source_transient]
+      rw [functionalLayerPotential, ite_eq_left source_transient]
       simp only [bernoulliVariationPotential] at hpeeling hpotential ⊢
       linarith
     · have hpotential :
@@ -675,7 +675,7 @@ theorem conditionalVariation_add_functionalLayerPotential_le
           0 ≤ (kernel source source).toReal *
             bernoulliVariationPotential (value source (time + 1)) :=
         mul_nonneg ENNReal.toReal_nonneg (bernoulliVariationPotential_nonneg _)
-      rw [functionalLayerPotential, if_pos source_transient]
+      rw [functionalLayerPotential, ite_eq_left source_transient]
       simp only [pivotLocalVariation] at hpeeling
       linarith
   · have source_recurrent : source ∈ finiteRecurrentCore kernel := by

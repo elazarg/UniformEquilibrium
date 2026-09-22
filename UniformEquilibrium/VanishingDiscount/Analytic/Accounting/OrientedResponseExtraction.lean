@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set Topology
+open Filter _root_.Math _root_.Math.Probability Set Topology
 
 /-- The real sign encoded by the Boolean orientation used by the public
 coordinate-monitor family. -/
@@ -402,7 +402,7 @@ theorem exists_pmfCoordinateTestScore_pos_for_orientation
     ∃ x,
       0 < expect comparison
         (pmfCoordinateTestScore baseline x positive) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   let difference : S → ℝ := fun x =>
     (comparison x).toReal - (baseline x).toReal
   have hsum : ∑ x, difference x = 0 := by

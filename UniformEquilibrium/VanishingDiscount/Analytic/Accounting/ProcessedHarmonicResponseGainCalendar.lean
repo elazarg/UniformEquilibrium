@@ -41,7 +41,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Filter Math Math.Probability Set Topology
+open Filter _root_.Math _root_.Math.Probability Set Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}

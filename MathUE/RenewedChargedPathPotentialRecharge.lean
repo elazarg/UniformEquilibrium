@@ -24,7 +24,7 @@ mechanism.
 
 open scoped BigOperators
 
-namespace Math
+namespace Maths
 namespace ChargedPathBudget
 namespace ChargedRelation
 
@@ -155,4 +155,4 @@ theorem card_mul_minimumCharge_sub_budget_le_sum_valueRecharge
 end RenewedPathSequence
 end ChargedRelation
 end ChargedPathBudget
-end Math
+end Maths

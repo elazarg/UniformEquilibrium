@@ -95,8 +95,8 @@ theorem hasAnalyticPowerCurveAt_of_eventually_finite_complexAnalytic_branches
       ∀ᶠ n in atTop,
         ∀ v, ∃ k, (branch v k (t n)).re = x n v) :
     HasAnalyticPowerCurveAt (signCell P τ) coordinate x₀ := by
-  letI : Fintype I := Fintype.ofFinite I
-  letI (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
+  let : Fintype I := Fintype.ofFinite I
+  let (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
   rw [Filter.eventually_atTop] at hcovered
   obtain ⟨N, hN⟩ := hcovered
   apply
@@ -146,7 +146,7 @@ theorem
         ∀ v, ∃ γ ∈ branches v,
           (γ (t n : ℂ)).re = x n v) :
     HasAnalyticPowerCurveAt (signCell P τ) coordinate x₀ := by
-  letI : Fintype I := Fintype.ofFinite I
+  let : Fintype I := Fintype.ofFinite I
   let branch :
       ∀ v, Fin (branches v).length → ℂ → ℂ :=
     fun v k => (branches v).get k
@@ -201,7 +201,7 @@ theorem hasAnalyticPowerCurveAt_signCell_of_algebraic_approach
       (signCell P τ)
       (ContinuousLinearMap.proj parameter) x₀ := by
   classical
-  letI : Fintype I := Fintype.ofFinite I
+  let : Fintype I := Fintype.ofFinite I
   have hxparameter :
       Tendsto (fun i => x i parameter) atTop (𝓝 0) := by
     simpa [hparameter] using
@@ -352,7 +352,7 @@ theorem hasAnalyticPowerCurveAt_signCell_of_algebraic_approach
     · obtain ⟨γ, hγ, hγeq⟩ := hi ⟨v, hv⟩
       refine
         ⟨fun z => (x₀ v : ℂ) + γ z, ?_, ?_⟩
-      · simp only [allBranches, dif_neg hv, List.mem_map]
+      · simp only [allBranches, dite_eq_right hv, List.mem_map]
         exact ⟨γ, hγ, rfl⟩
       · have hγeqRe := congrArg Complex.re hγeq
         simp only [Complex.ofReal_re] at hγeqRe

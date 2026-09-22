@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame
+open Filter _root_.Math.Probability StochasticGame
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -47,7 +47,7 @@ theorem minimumTerminalSemantic_strictSingleton_of_punishmentNormal
   have hdebtNonneg : ∀ who, 0 ≤ quittingTerminalSemanticDebt pair who :=
     quittingTerminalSemanticDebt_nonneg_of_mem_carrier reward hpair
   intro who
-  letI : Nonempty ι := ⟨who⟩
+  let : Nonempty ι := ⟨who⟩
   have hdebtLe : quittingTerminalSemanticDebt pair who ≤
       quittingTerminalSemanticDebtSum pair := by
     unfold quittingTerminalSemanticDebtSum
@@ -162,7 +162,8 @@ theorem minimumTerminalSemanticLaw_pureNever_strictSingleton_exactNash_zeroUnifo
         (quittingTerminalPayoff reward) 0
         (quittingAlwaysContinueProfile reward) ∧
       (quittingGame reward).IsUniformEquilibriumPayoff none 0 := by
-  have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hfiniteSum : (∑ terminal, point.2 (some terminal)) = 0 := by
     have hsum := hmass.2
     rw [Fintype.sum_option, hpureNever] at hsum
@@ -230,7 +231,8 @@ theorem exists_positive_finiteLawAtom_of_punishmentNormal_minimum_of_not_uniform
     exact hinf
   by_contra hnone
   push Not at hnone
-  have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hfiniteZero : ∀ terminal, point.2 (some terminal) = 0 := by
     intro terminal
     exact le_antisymm (hnone terminal) (hmass.1 (some terminal))

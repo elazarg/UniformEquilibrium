@@ -62,7 +62,7 @@ theorem cumulativeExpectedScheduledCost_witnessIndicatorCost
         (witnessIndicatorCost witness) horizon =
       MovingEndpointOccupationEvidence.cumulativeOccupation
         law witness horizon := by
-  letI := Fintype.ofFinite S
+  let := Fintype.ofFinite S
   unfold cumulativeExpectedScheduledCost witnessIndicatorCost
     MovingEndpointOccupationEvidence.cumulativeOccupation
   apply Finset.sum_congr rfl

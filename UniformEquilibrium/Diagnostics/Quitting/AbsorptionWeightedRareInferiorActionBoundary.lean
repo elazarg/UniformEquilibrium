@@ -11,7 +11,7 @@ noncomputable section
 
 namespace GameTheory.AbsorptionWeightedRareInferiorActionBoundary
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 /-- Player zero earns one exactly when player one is the sole quitter. -/
@@ -296,7 +296,7 @@ def rareRoot_weightedPacket
     by_cases hzero : time = 0
     · simp [hzero]
     · have hone : time = 1 := by omega
-      simp only [hone, Nat.one_ne_zero, if_false, rareSuccessorValue]
+      simp only [hone, Nat.one_ne_zero, ite_false, rareSuccessorValue]
       split
       · rw [abs_of_nonneg (by linarith)]
         linarith
@@ -329,7 +329,7 @@ def rareRoot_weightedPacket
       rareRoot_zero_and_successor_floor hε.le hε1.le target
     by_cases hzero : time = 0
     · simpa [hzero] using hzeroFloor
-    · simp only [hzero, if_false]
+    · simp only [hzero, ite_false]
       rw [← rareRoot_successor_eq hε.le hε1.le]
       exact hsuccessorFloor
   chargeTarget_le := by simp }

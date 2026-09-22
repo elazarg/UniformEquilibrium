@@ -30,7 +30,7 @@ uniform payoff of the limit game.
 noncomputable section
 
 open Filter
-open Math.Probability
+open _root_.Math.Probability
 open scoped NNReal
 
 namespace GameTheory
@@ -49,7 +49,7 @@ def rareTransitionCoin (p : ℝ≥0) (hp : p ≤ 1) : PMF Bool :=
     (by
       have hpReal : (p : ℝ) ≤ 1 := by exact_mod_cast hp
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add (NNReal.coe_nonneg p)
         (sub_nonneg.mpr hpReal)]
       norm_num)

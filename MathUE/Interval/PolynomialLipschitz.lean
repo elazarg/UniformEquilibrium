@@ -396,7 +396,7 @@ theorem differential_piBasisVector
   rw [differential_apply, Finset.sum_eq_single coordinate]
   · simp [piBasisVector]
   · intro other _ hne
-    rw [piBasisVector, if_neg hne.symm]
+    rw [piBasisVector, ite_eq_right hne.symm]
     simp
   · simp
 

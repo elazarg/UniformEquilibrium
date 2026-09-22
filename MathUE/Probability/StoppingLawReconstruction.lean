@@ -22,7 +22,7 @@ open scoped BigOperators
 
 namespace Math.Probability.DiscreteHazard
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- The coding of `Never` by zero and finite time `n` by `n + 1`. -/
 def optionNatEquivNat : Option ℕ ≃ ℕ where

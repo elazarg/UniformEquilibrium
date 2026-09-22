@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.Probability.DiscreteHazard
+open StochasticGame _root_.Math.Probability _root_.Math.Probability.DiscreteHazard
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -99,7 +99,7 @@ theorem abs_quittingPairDeletedSurvivalWeight_resetCube_profile_sub_source_le
       rw [hzero]
       split <;> simp_all [data.scale_nonneg]
     · by_cases hface : player ∈ face
-      · rw [if_pos hface]
+      · rw [ite_eq_left hface]
         simp only [faceTail, sourceTail, quittingRootSequenceUpdate]
         simp only [Function.update_of_ne hobserver]
         change |quittingHazardSurvival
@@ -114,7 +114,7 @@ theorem abs_quittingPairDeletedSurvivalWeight_resetCube_profile_sub_source_le
           (quittingBehaviorLiveHazard reward (data.target player))
           (data.scale player) (data.scale_nonneg player)
             (data.scale_le_one player) cutoff
-      · rw [if_neg hface]
+      · rw [ite_eq_right hface]
         simp [faceTail, sourceTail, quittingRootSequenceUpdate, hobserver,
           quittingProfileLiveRoot, QuittingStoppingLawResetCubeData.profile,
           hface]

@@ -23,10 +23,12 @@ equilibrium conclusion.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 namespace FinFourCensoredClockNullDirection
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 abbrev Player := Fin 4
 
@@ -402,7 +404,7 @@ theorem pmfTV_old_reshuffled
   by_cases hwho : who = 2
   · subst who
     simpa using pmfTV_old_reshuffled_two N c hN hc0 hc1
-  · rw [if_neg hwho, reshuffledLaw_eq_oldLaw_of_ne_two N c hN hc0 hc1 who hwho,
+  · rw [ite_eq_right hwho, reshuffledLaw_eq_oldLaw_of_ne_two N c hN hc0 hc1 who hwho,
       Math.Probability.pmfTV_self]
 
 /-- The summed old-clock total variation after censoring is exactly `c`. -/
@@ -487,7 +489,12 @@ private theorem timingPurePayoff_zero_of_playerZero_never
       split_ifs with hcurrent
       · have hzeroMem : 0 ∉ quittingQuitters
             (fun player ↦ timingActionCurrent (choices player)) := by
-          simp [quittingQuitters, hzero, timingActionCurrent]
+          intro hmem
+          have hcurrentZero : timingActionCurrent (choices 0) = true := by
+            simpa only [quittingQuitters, Finset.mem_filter,
+              Finset.mem_univ, true_and] using hmem
+          rw [hzero] at hcurrentZero
+          simp [timingActionCurrent] at hcurrentZero
         have hterminal : quittingQuitters
             (fun player ↦ timingActionCurrent (choices player)) ≠ {0, 3} := by
           intro heq
@@ -1618,7 +1625,7 @@ private theorem terminalOutcomeMass_some_eq_indicatorPayoff
       (terminalCoalitionIndicatorReward terminal) profile other *
         terminalCoalitionIndicatorReward terminal other 0
   rw [Finset.sum_eq_single terminal]
-  · simp only [terminalCoalitionIndicatorReward, if_pos, mul_one]
+  · simp only [terminalCoalitionIndicatorReward, ite_eq_left, mul_one]
     exact QuittingLCPClassification.quittingAbsorbedMassLimit_congr_reward
       reward (terminalCoalitionIndicatorReward terminal) profile terminal
   · intro other _ hother
@@ -1770,10 +1777,12 @@ theorem quittingTerminalOutcomeMass_old_eq_reshuffled
   cases outcome with
   | some terminal => exact hsome terminal
   | none =>
-      have hold := (quittingTerminalOutcomeMass_mem_stdSimplex
-        reward oldProfile).2
-      have hreshuffled := (quittingTerminalOutcomeMass_mem_stdSimplex
-        reward reshuffledProfile).2
+      have hold := (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex
+        reward oldProfile)).2
+      have hreshuffled := (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex
+        reward reshuffledProfile)).2
       rw [Fintype.sum_option] at hold hreshuffled
       have hfinite :
           (∑ terminal, quittingTerminalOutcomeMass reward oldProfile

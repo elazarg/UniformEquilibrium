@@ -1,7 +1,7 @@
 import Mathlib.RingTheory.Algebraic.Integral
 import Mathlib.RingTheory.Polynomial.Subring
 import Mathlib.Algebra.Algebra.Rat
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-! # Algebraic roots of polynomials with algebraic coefficients -/
 

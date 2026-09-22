@@ -13,6 +13,8 @@ laws.  The suffix and word may both vary with the sequence index.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Filter
@@ -59,7 +61,8 @@ theorem abs_quittingTerminalOutcomeMass_literalRootStack_sub_le
       have hword1 : wordContinue ≤ 1 :=
         quittingLiteralRootStackJointSurvival_le_one roots
       have htail0 : 0 ≤ tailMass :=
-        (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 outcome
+        (mem_simplexWeights.mp
+          (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 outcome
       have htail1 : tailMass ≤ 1 := terminalOutcomeMass_le_one
         (quittingTerminalOutcomeMass reward profile)
         (quittingTerminalOutcomeMass_mem_stdSimplex reward profile) outcome

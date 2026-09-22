@@ -33,9 +33,9 @@ def censorLateFiniteStoppingLaw (law : PMF (Option ℕ)) (horizon : ℕ) :
             intro heq
             subst other
             exact hchoice rfl
-          rw [if_neg]
+          rw [ite_eq_right]
           intro heq
-          rw [censorLateFiniteStoppingOutcome, if_pos hother] at heq
+          rw [censorLateFiniteStoppingOutcome, ite_eq_left hother] at heq
           exact hotherNe (Option.some.inj heq).symm
         · simp [censorLateFiniteStoppingOutcome, hother]
 

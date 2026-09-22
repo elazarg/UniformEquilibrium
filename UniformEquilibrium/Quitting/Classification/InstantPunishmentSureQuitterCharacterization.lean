@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -87,7 +87,7 @@ theorem hasQuittingPunishmentVectorNashRootWithSureQuitter_of_instantPunishment�
       hbranch (error n) (herrorPos n)
     exact ⟨quitter, root, punishRow, hquit, hnash⟩
   choose quitter root punishRow hquit hnash using hwitness
-  letI : Nonempty ι := ⟨quitter 0⟩
+  let : Nonempty ι := ⟨quitter 0⟩
   let punishment : Payoff ι :=
     fun who => quittingPunishmentValue reward who
   have hrootNash : ∀ n,

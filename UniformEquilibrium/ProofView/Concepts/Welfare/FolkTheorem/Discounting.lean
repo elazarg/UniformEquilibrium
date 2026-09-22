@@ -89,9 +89,9 @@ positive slack. -/
 theorem exists_pos_margin_of_mem_strictReservationSet [Finite ι]
     {r v : Payoff ι} (hv : v ∈ strictReservationSet r) :
     ∃ η : ℝ, 0 < η ∧ ∀ i, r i + η ≤ v i := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   by_cases hι : Nonempty ι
-  · letI : Nonempty ι := hι
+  · let : Nonempty ι := hι
     let m : ℝ := Finset.univ.inf' Finset.univ_nonempty (fun i : ι => v i - r i)
     have hmpos : 0 < m := by
       rw [Finset.lt_inf'_iff]

@@ -1,5 +1,5 @@
 import MathUE.Polynomial.RealSignCell
-import Mathlib.Data.Sign.Defs
+import Mathlib.Basic.Sign.Defs
 import Mathlib.Data.List.Forall2
 import Mathlib.Topology.Instances.Sign
 

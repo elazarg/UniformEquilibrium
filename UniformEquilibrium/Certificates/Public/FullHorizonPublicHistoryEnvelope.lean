@@ -42,7 +42,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -199,7 +199,7 @@ omit [Finite G.State] [∀ who, Fintype (G.Act who)]
           G.IsFullHorizonNode
             (G.boundedPublicHistoryNode history (le_refl fuel)) :=
         rfl
-      rw [dif_pos full]
+      rw [dite_eq_left full]
       have proof_eq : full = rfl := Subsingleton.elim _ _
       rw [proof_eq]
       rfl
@@ -231,7 +231,7 @@ omit [Finite G.State] in
           G.IsFullHorizonNode
             (G.boundedPublicHistoryNode history (le_refl fuel)) :=
         rfl
-      rw [dif_pos full]
+      rw [dite_eq_left full]
       have proof_eq : full = rfl := Subsingleton.elim _ _
       rw [proof_eq]
       rfl
@@ -295,7 +295,7 @@ theorem prescribedHistoryPotential_harmonic
     G.historyContinuationEU profile
         (prescribedHistoryPotential profile obstacle who) history =
       prescribedHistoryPotential profile obstacle who time history := by
-  letI : ∀ who, Fintype (G.Act who) :=
+  let : ∀ who, Fintype (G.Act who) :=
     fun _ => Fintype.ofFinite _
   let node :=
     G.boundedPublicHistoryNode history (Nat.le_of_lt time_lt)
@@ -307,7 +307,7 @@ theorem prescribedHistoryPotential_harmonic
   dsimp [node] at harmonic
   rw [
     boundedPublicHistoryPrescribedKernel,
-    dif_pos (by simpa using time_lt),
+    dite_eq_left (by simpa using time_lt),
     expect_bind
   ] at harmonic
   unfold historyContinuationEU
@@ -371,7 +371,7 @@ theorem worstUnilateralHistoryPotential_mixed_superharmonic
   funext deviation
   rw [
     boundedPublicHistoryControlledKernel,
-    dif_pos (by simpa using time_lt),
+    dite_eq_left (by simpa using time_lt),
     expect_bind
   ]
   apply congrArg

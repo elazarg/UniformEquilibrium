@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -97,7 +97,7 @@ theorem isQuittingIsolatedRoot_of_not_cycleContracts
   have hle : ∀ p, coefficient p ≤ 1 := fun p =>
     quittingStationaryFixedOpponentsContinueMass_le_one (cycle p) who
   have hprodLe : (∏ p : Fin K, coefficient p) ≤ 1 :=
-    Finset.prod_le_one (fun p _ => hnonneg p) (fun p _ => hle p)
+    Finset.prod_le_one₀ (fun p _ => hnonneg p) (fun p _ => hle p)
   have hprodEq : (∏ p : Fin K, coefficient p) = 1 :=
     le_antisymm hprodLe (not_lt.mp hnot)
   have hfactor : coefficient phase = 1 :=
@@ -312,7 +312,7 @@ end GameTheory
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]

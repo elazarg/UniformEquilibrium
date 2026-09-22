@@ -38,7 +38,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type}
 
@@ -219,8 +219,8 @@ def toAccuracyPolymorphicAdaptiveLocalResponseRecursion
   legalCoreHistoryEntryInterface := data.legalCoreHistoryEntryInterface
   closeLocalResponse :=
     fun node error error_pos childCertificates _ _ => by
-      letI : Finite (data.Child node) := data.child_finite node
-      letI : Fintype (data.Child node) :=
+      let : Finite (data.Child node) := data.child_finite node
+      let : Fintype (data.Child node) :=
         Fintype.ofFinite (data.Child node)
       apply
         isAdaptivePotentialCertificateAt_of_fixedDepthSelector_allErrors

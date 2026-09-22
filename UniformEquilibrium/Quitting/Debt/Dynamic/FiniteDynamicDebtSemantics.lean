@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -268,8 +268,8 @@ theorem quittingFiniteTerminalPureTimeValue_castSucc_eq_hazard
           simp [Fin.val_succ, Nat.add_comm, Nat.add_left_comm]
         rw [quittingPureTimeHazard_some_of_ne hne]
         simp only [PMF.pure_apply,
-          if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-          if_true, ENNReal.toReal_one, zero_mul, one_mul]
+          ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+          ite_true, ENNReal.toReal_one, zero_mul, one_mul]
         rw [ih (start + 1) later]
         rw [htime]
         simp only [zero_add]
@@ -292,8 +292,8 @@ theorem quittingFiniteTerminalPureTimeValue_last_eq_neverHazard
       rw [quittingFiniteTerminalPureTimeValue,
         quittingFiniteTerminalHazardValue]
       simp only [Fin.cases_succ, quittingPureTimeHazard_none,
-        PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-        ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+        ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       rw [ih (start + 1)]
       simp only [zero_add]
 

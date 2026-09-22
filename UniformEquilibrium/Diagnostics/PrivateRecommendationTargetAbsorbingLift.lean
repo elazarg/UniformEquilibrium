@@ -34,7 +34,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace PrivateRecommendationTargetAbsorbingLift
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 abbrev Player := Bool
 abbrev Action (_ : Player) := Bool
@@ -49,7 +49,11 @@ inductive State
   | z0
   | z1
   | z2
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.decision, .z0, .z1, .z2}
+  complete state := by cases state <;> simp
 
 private theorem sum_state {M : Type} [AddCommMonoid M] (f : State → M) :
     ∑ state, f state =

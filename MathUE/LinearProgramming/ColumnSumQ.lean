@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.LinearAlgebra.Matrix.Circulant
 import MathUE.LinearProgramming.CopositiveQ
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Column sums, row sums, and the standard `Q` property
@@ -104,18 +105,26 @@ theorem singletonLCPFeasible_of_forall_row_sum_eq_zero [Nonempty ι]
   classical
   have hcard : (0 : ℝ) < (Fintype.card ι : ℝ) := by
     exact_mod_cast Fintype.card_pos
-  have hmem : (fun _ : ι => (Fintype.card ι : ℝ)⁻¹) ∈ stdSimplex ℝ ι := by
+  have hmem : (fun _ : ι => (Fintype.card ι : ℝ)⁻¹) ∈
+      GameTheory.Math.Probability.simplexWeights ι := by
+    rw [GameTheory.Math.Probability.mem_simplexWeights]
     refine ⟨fun _ => inv_nonneg.mpr hcard.le, ?_⟩
     rw [Finset.sum_const, Finset.card_univ, nsmul_eq_mul]
     exact mul_inv_cancel₀ hcard.ne'
-  refine ⟨⟨_, hmem⟩, fun i => ?_, fun i => ?_⟩
-  · have hzero : singletonLCPResidual M ⟨_, hmem⟩ i = 0 := by
-      show (∑ j, (Fintype.card ι : ℝ)⁻¹ * M i j) = 0
+  obtain ⟨lam, hlam⟩ := hmem
+  have hlam_apply (j : ι) : lam.weights j = (Fintype.card ι : ℝ)⁻¹ :=
+    congrFun hlam j
+  refine ⟨lam, fun i => ?_, fun i => ?_⟩
+  · have hzero : singletonLCPResidual M lam i = 0 := by
+      change (∑ j, lam.weights j * M i j) = 0
+      simp_rw [hlam_apply]
       rw [← Finset.mul_sum, hrow i, mul_zero]
     rw [hzero]
-  · have hzero : singletonLCPResidual M ⟨_, hmem⟩ i = 0 := by
-      show (∑ j, (Fintype.card ι : ℝ)⁻¹ * M i j) = 0
+  · have hzero : singletonLCPResidual M lam i = 0 := by
+      change (∑ j, lam.weights j * M i j) = 0
+      simp_rw [hlam_apply]
       rw [← Finset.mul_sum, hrow i, mul_zero]
+    change lam.weights i * singletonLCPResidual M lam i = 0
     rw [hzero, mul_zero]
 
 /-! ## Circulant matrices of a margin vector -/

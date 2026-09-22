@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
@@ -29,16 +29,16 @@ namespace PeriodOneNormalizedSourceLimit
 
 /-- The limiting payoff after one owner uses literal Never. -/
 def neverLimit (limit : PeriodOneNormalizedSourceLimit source) (who : ι) : ℝ :=
-  (limit.limitValue who - limit.direction.val who * quittingSoloReward reward who who) /
-    (1 - limit.direction.val who)
+  (limit.limitValue who - limit.direction.weights who * quittingSoloReward reward who who) /
+    (1 - limit.direction.weights who)
 
 /-- The Never limit is exactly the singleton lottery on all other players. -/
 theorem neverLimit_eq_opponentSingletonLottery
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι) :
     limit.neverLimit who =
       (∑ other ∈ Finset.univ.erase who,
-        limit.direction.val other * quittingSoloReward reward other who) /
-          (1 - limit.direction.val who) := by
+        limit.direction.weights other * quittingSoloReward reward other who) /
+          (1 - limit.direction.weights who) := by
   rw [neverLimit, limit.limitValue_eq_singletonDirectionPayoff]
   unfold quittingSingletonDirectionPayoff
   rw [← Finset.sum_erase_add _ _ (Finset.mem_univ who)]
@@ -78,8 +78,8 @@ private theorem selectedDirection_tendsto (limit : PeriodOneNormalizedSourceLimi
     (who : ι) :
     Tendsto (fun index ↦ (source.root (limit.select index) who true).toReal /
       quittingStationaryTotalHazard (source.root (limit.select index)))
-      atTop (nhds (limit.direction.val who)) :=
-  (((continuous_apply who).comp continuous_subtype_val).tendsto
+      atTop (nhds (limit.direction.weights who)) :=
+  ((Convexity.StdSimplex.continuous_weights_apply ℝ who).tendsto
     limit.direction).comp limit.direction_tendsto
 
 /-- Immediate Quit converges to the owner's singleton payoff. -/
@@ -117,7 +117,7 @@ theorem selectedQuitNowPayoff_tendsto
 The excluded direction-one boundary is retained explicitly. -/
 theorem selectedNeverPayoff_tendsto
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1) :
+    (hshare : limit.direction.weights who < 1) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
       (Function.update (source.profile (limit.select index)) who
         (quittingPureTimeBehaviorStrategy reward who none)) who)
@@ -133,19 +133,19 @@ theorem selectedNeverPayoff_tendsto
     simpa using limit.totalHazard_tendsto_zero.sub
       (limit.selectedQuitProbability_tendsto_zero who)
   have hrate : ∀ player, Tendsto (fun index ↦ rate index player)
-      atTop (nhds (limit.direction.val player)) := limit.selectedDirection_tendsto
+      atTop (nhds (limit.direction.weights player)) := limit.selectedDirection_tendsto
   have hweights : ∀ player, Tendsto (fun index ↦
       (limit.deletedRoot index who player true).toReal /
         quittingStationaryTotalHazard (limit.deletedRoot index who)) atTop
       (nhds (if player = who then 0 else
-        limit.direction.val player / (1 - limit.direction.val who))) := by
+        limit.direction.weights player / (1 - limit.direction.weights who))) := by
     intro player
     by_cases heq : player = who
     · subst player
       simp [deletedRoot]
     · have hratio := (hrate player).div
         (tendsto_const_nhds.sub (hrate who)) (sub_pos.mpr hshare).ne'
-      rw [if_neg heq]
+      rw [ite_eq_right heq]
       apply hratio.congr'
       filter_upwards [] with index
       rw [deleted_totalHazard]
@@ -157,7 +157,7 @@ theorem selectedNeverPayoff_tendsto
   have hbary := tendsto_finsetSum Finset.univ fun player _ ↦
     (hweights player).mul_const (quittingSoloReward reward player who)
   have htarget : (∑ player, (if player = who then 0 else
-      limit.direction.val player / (1 - limit.direction.val who)) *
+      limit.direction.weights player / (1 - limit.direction.weights who)) *
         quittingSoloReward reward player who) = limit.neverLimit who := by
     rw [neverLimit, limit.limitValue_eq_singletonDirectionPayoff]
     unfold quittingSingletonDirectionPayoff
@@ -167,7 +167,7 @@ theorem selectedNeverPayoff_tendsto
     rw [Finset.sum_div]
     apply Finset.sum_congr rfl
     intro player hplayer
-    rw [if_neg (Finset.ne_of_mem_erase hplayer)]
+    rw [ite_eq_right (Finset.ne_of_mem_erase hplayer)]
     ring
   rw [htarget] at hbary
   have hhalf : ∀ᶠ index in atTop,
@@ -193,19 +193,19 @@ theorem selectedNeverPayoff_tendsto
 theorem direction_lt_one_of_two_positive
     (limit : PeriodOneNormalizedSourceLimit source)
     (htwo : ∃ first second : ι, first ≠ second ∧
-      0 < limit.direction.val first ∧ 0 < limit.direction.val second)
-    (who : ι) : limit.direction.val who < 1 := by
+      0 < limit.direction.weights first ∧ 0 < limit.direction.weights second)
+    (who : ι) : limit.direction.weights who < 1 := by
   obtain ⟨first, second, hne, hfirst, hsecond⟩ := htwo
-  have hother : ∃ other : ι, other ≠ who ∧ 0 < limit.direction.val other := by
+  have hother : ∃ other : ι, other ≠ who ∧ 0 < limit.direction.weights other := by
     by_cases hfirstWho : first = who
     · exact ⟨second, by simpa [hfirstWho] using hne.symm, hsecond⟩
     · exact ⟨first, hfirstWho, hfirst⟩
   obtain ⟨other, hne, hother⟩ := hother
-  have hsingle : limit.direction.val other ≤
-      ∑ player ∈ Finset.univ.erase who, limit.direction.val player :=
-    Finset.single_le_sum (fun player _ ↦ limit.direction.property.1 player)
+  have hsingle : limit.direction.weights other ≤
+      ∑ player ∈ Finset.univ.erase who, limit.direction.weights player :=
+    Finset.single_le_sum (fun player _ ↦ limit.direction.weights_nonneg player)
       (by simp [hne])
-  have hsum := limit.direction.property.2
+  have hsum := limit.direction.total_of_fintype
   rw [← Finset.sum_erase_add _ _ (Finset.mem_univ who)] at hsum
   linarith
 
@@ -215,28 +215,28 @@ theorem positiveDirectionSupport_card
     (limit : PeriodOneNormalizedSourceLimit source)
     (hplayers : Fintype.card ι = 4)
     (htwo : ∃ first second : ι, first ≠ second ∧
-      0 < limit.direction.val first ∧ 0 < limit.direction.val second) :
-    (Finset.univ.filter fun who ↦ 0 < limit.direction.val who).card ∈
+      0 < limit.direction.weights first ∧ 0 < limit.direction.weights second) :
+    (Finset.univ.filter fun who ↦ 0 < limit.direction.weights who).card ∈
       ({2, 3, 4} : Finset ℕ) := by
   classical
   obtain ⟨first, second, hne, hfirst, hsecond⟩ := htwo
   have hsubset : ({first, second} : Finset ι) ⊆
-      Finset.univ.filter (fun who ↦ 0 < limit.direction.val who) := by
+      Finset.univ.filter (fun who ↦ 0 < limit.direction.weights who) := by
     intro who hwho
     simp only [Finset.mem_insert, Finset.mem_singleton] at hwho
     rcases hwho with rfl | rfl <;> simp [hfirst, hsecond]
   have hlower := Finset.card_le_card hsubset
   have hupper := Finset.card_le_card
-    (Finset.filter_subset (fun who ↦ 0 < limit.direction.val who) Finset.univ)
+    (Finset.filter_subset (fun who ↦ 0 < limit.direction.weights who) Finset.univ)
   simp [hne, hplayers] at hlower hupper ⊢
   omega
 
 /-- The Never limit exceeds the singleton by the normalized singleton margin. -/
 theorem neverLimit_sub_singleton
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1) :
+    (hshare : limit.direction.weights who < 1) :
     limit.neverLimit who - quittingSoloReward reward who who =
-      limit.limitingSingletonMargin who / (1 - limit.direction.val who) := by
+      limit.limitingSingletonMargin who / (1 - limit.direction.weights who) := by
   rw [limit.limitingSingletonMargin_eq_limitValue_sub_solo]
   unfold neverLimit
   field_simp [(sub_pos.mpr hshare).ne']
@@ -245,10 +245,10 @@ theorem neverLimit_sub_singleton
 /-- The exact limiting gain of the literal Never deviation. -/
 theorem neverLimit_sub_value
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1) :
+    (hshare : limit.direction.weights who < 1) :
     limit.neverLimit who - limit.limitValue who =
-      limit.direction.val who * limit.limitingSingletonMargin who /
-        (1 - limit.direction.val who) := by
+      limit.direction.weights who * limit.limitingSingletonMargin who /
+        (1 - limit.direction.weights who) := by
   rw [limit.limitingSingletonMargin_eq_limitValue_sub_solo]
   unfold neverLimit
   field_simp [(sub_pos.mpr hshare).ne']
@@ -258,7 +258,7 @@ theorem neverLimit_sub_value
 behavioral cap at every sufficiently late finite source. -/
 theorem eventually_selectedNever_attains_completeCap
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1)
+    (hshare : limit.direction.weights who < 1)
     (hmargin : 0 < limit.limitingSingletonMargin who) :
     ∀ᶠ index in atTop,
       quittingContinuationBestResponseValue reward
@@ -279,7 +279,7 @@ theorem eventually_selectedNever_attains_completeCap
 /-- Complete unrestricted caps converge to the literal Never limit. -/
 theorem selectedCompleteCap_tendsto_neverLimit
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1)
+    (hshare : limit.direction.weights who < 1)
     (hmargin : 0 < limit.limitingSingletonMargin who) :
     Tendsto (fun index ↦ quittingContinuationBestResponseValue reward
       (source.profile (limit.select index)) who) atTop (nhds (limit.neverLimit who)) :=
@@ -290,12 +290,12 @@ theorem selectedCompleteCap_tendsto_neverLimit
 /-- Complete behavioral debt converges to the direction-weighted margin. -/
 theorem selectedCompleteDebt_tendsto
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1)
+    (hshare : limit.direction.weights who < 1)
     (hmargin : 0 < limit.limitingSingletonMargin who) :
     Tendsto (fun index ↦ quittingTerminalDeviationDebt reward
       (source.profile (limit.select index)) who) atTop
-      (nhds (limit.direction.val who * limit.limitingSingletonMargin who /
-        (1 - limit.direction.val who))) := by
+      (nhds (limit.direction.weights who * limit.limitingSingletonMargin who /
+        (1 - limit.direction.weights who))) := by
   have hvalue : Tendsto (fun index ↦ quittingTerminalPayoff reward
       (source.profile (limit.select index)) who) atTop (nhds (limit.limitValue who)) := by
     simp_rw [limit.selectedTerminalPayoff_eq_value]
@@ -307,7 +307,7 @@ theorem selectedCompleteDebt_tendsto
 /-- Every zero-share outsider has vanishing complete behavioral debt. -/
 theorem selectedOutsiderDebt_tendsto_zero
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hzero : limit.direction.val who = 0)
+    (hzero : limit.direction.weights who = 0)
     (hmargin : 0 < limit.limitingSingletonMargin who) :
     Tendsto (fun index ↦ quittingTerminalDeviationDebt reward
       (source.profile (limit.select index)) who) atTop (nhds 0) := by
@@ -317,13 +317,13 @@ theorem selectedOutsiderDebt_tendsto_zero
 /-- The actual Never gain has the same limiting value as complete debt. -/
 theorem selectedNeverGain_tendsto
     (limit : PeriodOneNormalizedSourceLimit source) (who : ι)
-    (hshare : limit.direction.val who < 1) :
+    (hshare : limit.direction.weights who < 1) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward
         (Function.update (source.profile (limit.select index)) who
           (quittingPureTimeBehaviorStrategy reward who none)) who -
       quittingTerminalPayoff reward (source.profile (limit.select index)) who)
-      atTop (nhds (limit.direction.val who * limit.limitingSingletonMargin who /
-        (1 - limit.direction.val who))) := by
+      atTop (nhds (limit.direction.weights who * limit.limitingSingletonMargin who /
+        (1 - limit.direction.weights who))) := by
   have hvalue : Tendsto (fun index ↦ quittingTerminalPayoff reward
       (source.profile (limit.select index)) who) atTop (nhds (limit.limitValue who)) := by
     simp_rw [limit.selectedTerminalPayoff_eq_value]
@@ -342,7 +342,7 @@ theorem exists_two_fixed_neverDebtors
     (herrorPos : ∀ index, 0 < error index)
     (herror : Tendsto error atTop (nhds 0)) :
     ∃ first second : ι, first ≠ second ∧
-      0 < limit.direction.val first ∧ 0 < limit.direction.val second ∧
+      0 < limit.direction.weights first ∧ 0 < limit.direction.weights second ∧
       ∃ gain : ℝ, 0 < gain ∧ ∀ᶠ index in atTop,
         ∀ who ∈ ({first, second} : Finset ι), gain ≤
           quittingTerminalPayoff reward
@@ -351,9 +351,9 @@ theorem exists_two_fixed_neverDebtors
             quittingTerminalPayoff reward (source.profile (limit.select index)) who := by
   have htwo := limit.exists_two_distinct_direction_positive hplayers hno herrorPos herror
   obtain ⟨first, second, hne, hfirst, hsecond⟩ := htwo
-  let gain := fun who ↦ limit.direction.val who * limit.limitingSingletonMargin who /
-    (1 - limit.direction.val who)
-  have hgain : ∀ who, 0 < limit.direction.val who → 0 < gain who := by
+  let gain := fun who ↦ limit.direction.weights who * limit.limitingSingletonMargin who /
+    (1 - limit.direction.weights who)
+  have hgain : ∀ who, 0 < limit.direction.weights who → 0 < gain who := by
     intro who hwho
     exact div_pos (mul_pos hwho
       (limit.limitingSingletonMargin_pos_of_fourPlayer_noUniformPayoff
@@ -398,13 +398,13 @@ theorem exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff
       ∃ limit : PeriodOneNormalizedSourceLimit source,
         ∃ minimum : ℝ, 0 < minimum ∧
           (∀ who, minimum ≤ limit.limitingSingletonMargin who) ∧
-          (∀ who, 0 < limit.direction.val who →
+          (∀ who, 0 < limit.direction.weights who →
             limit.limitingSingletonMargin who = minimum) ∧
           Tendsto (fun index ↦ limit.selectedTotalEndpointRegret index /
             quittingStationaryTotalHazard (source.root (limit.select index)))
             atTop (nhds minimum) ∧
           (∀ who,
-            limit.direction.val who < 1 ∧
+            limit.direction.weights who < 1 ∧
             Tendsto (fun index ↦ quittingTerminalPayoff reward
               (Function.update (source.profile (limit.select index)) who
                 (quittingPureTimeBehaviorStrategy reward who (some 0))) who)
@@ -418,7 +418,7 @@ theorem exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff
               atTop (nhds (limit.neverLimit who)) ∧
             Tendsto (fun index ↦ quittingTerminalDeviationDebt reward
               (source.profile (limit.select index)) who) atTop
-              (nhds (limit.direction.val who * minimum / (1 - limit.direction.val who))) ∧
+              (nhds (limit.direction.weights who * minimum / (1 - limit.direction.weights who))) ∧
             ∀ᶠ index in atTop,
               quittingContinuationBestResponseValue reward
                   (source.profile (limit.select index)) who =
@@ -426,7 +426,7 @@ theorem exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff
                   (Function.update (source.profile (limit.select index)) who
                     (quittingPureTimeBehaviorStrategy reward who none)) who) ∧
           ∃ first second : ι, first ≠ second ∧
-            0 < limit.direction.val first ∧ 0 < limit.direction.val second ∧
+            0 < limit.direction.weights first ∧ 0 < limit.direction.weights second ∧
             ∃ gain : ℝ, 0 < gain ∧ ∀ᶠ index in atTop,
               ∀ who ∈ ({first, second} : Finset ι), gain ≤
                 quittingTerminalPayoff reward
@@ -446,11 +446,11 @@ theorem exists_periodOne_tropical_twoNever_escape_of_fourPlayer_noUniformPayoff
     (limit.exists_two_distinct_direction_positive hplayers hno herrorPos herror) who
   have hmargin : 0 < limit.limitingSingletonMargin who :=
     hminimum.trans_le (hlower who)
-  have hproduct : limit.direction.val who * limit.limitingSingletonMargin who =
-      limit.direction.val who * minimum := by
-    by_cases hzero : limit.direction.val who = 0
+  have hproduct : limit.direction.weights who * limit.limitingSingletonMargin who =
+      limit.direction.weights who * minimum := by
+    by_cases hzero : limit.direction.weights who = 0
     · simp [hzero]
-    · rw [hequal who (lt_of_le_of_ne (limit.direction.property.1 who) (Ne.symm hzero))]
+    · rw [hequal who (lt_of_le_of_ne (limit.direction.weights_nonneg who) (Ne.symm hzero))]
   refine ⟨hshare, limit.selectedQuitNowPayoff_tendsto who,
     limit.selectedNeverPayoff_tendsto who hshare,
     limit.selectedCompleteCap_tendsto_neverLimit who hshare hmargin, ?_,

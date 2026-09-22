@@ -190,7 +190,7 @@ theorem secondReach_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, reachIntermediate,
       chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem returnFirst_clearance :
     idealSingletonClearance deadlockMatrix 1 (8 / 9) chargedBase =
@@ -208,7 +208,7 @@ theorem returnSecond_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnFirst,
       returnSecond, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem returnThird_clearance :
     idealSingletonClearance deadlockMatrix 0 (2 / 3) returnSecond =
@@ -226,7 +226,7 @@ theorem returnBase_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, returnThird,
       chargedBase, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 /-! ## Exact debt accounting -/
 

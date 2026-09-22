@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.VanishingDiscount.Fink.ConstraintPublicResponse
-import MathUE.DirectedTransport.FiniteInequality.Sparse
+import Maths.Multitubes.FiniteInequality.Sparse
 
 /-!
 # Rectangular mixed-player continuation compatibility
@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.LinearAlgebra
+open _root_.Math Math.LinearAlgebra
 
 variable {State Player : Type*}
   [Fintype State] [Fintype Player]
@@ -145,15 +145,15 @@ theorem exists_player_positiveCircuit_of_not_simultaneouslyFeasible
     (hunrestricted : S.HasUnrestrictedCoordinates)
     (hinfeasible : ¬S.SimultaneouslyFeasible) :
     ∃ (player : Player) (coefficient : Constraint player → ℝ),
-      Math.FiniteInequality.IsPositiveCircuit
+      Maths.FiniteInequality.IsPositiveCircuit
           (S.delta player) coefficient ∧
-        0 < Math.FiniteInequality.certificateValue
+        0 < Maths.FiniteInequality.certificateValue
           (S.rhs player) coefficient := by
   obtain ⟨player, hplayer⟩ :=
     S.exists_infeasiblePlayer_of_not_simultaneouslyFeasible
       hunrestricted hinfeasible
   obtain ⟨coefficient, hcircuit, hpositive⟩ :=
-    Math.FiniteInequality.exists_positiveCircuit_of_infeasible
+    Maths.FiniteInequality.exists_positiveCircuit_of_infeasible
       (S.delta player) (S.rhs player) hplayer
   exact ⟨player, coefficient, hcircuit, hpositive⟩
 
@@ -165,9 +165,9 @@ theorem exists_player_rankSparseCertificate_of_not_simultaneouslyFeasible
     (hunrestricted : S.HasUnrestrictedCoordinates)
     (hinfeasible : ¬S.SimultaneouslyFeasible) :
     ∃ (player : Player) (coefficient : Constraint player → ℝ),
-      Math.FiniteInequality.IsNormalizedCertificate
+      Maths.FiniteInequality.IsNormalizedCertificate
           (S.delta player) coefficient ∧
-        0 < Math.FiniteInequality.certificateValue
+        0 < Maths.FiniteInequality.certificateValue
           (S.rhs player) coefficient ∧
         Fintype.card {constraint : Constraint player //
           coefficient constraint ≠ 0} ≤
@@ -176,7 +176,7 @@ theorem exists_player_rankSparseCertificate_of_not_simultaneouslyFeasible
     S.exists_infeasiblePlayer_of_not_simultaneouslyFeasible
       hunrestricted hinfeasible
   obtain ⟨coefficient, hcertificate, hpositive, hcard⟩ :=
-    Math.FiniteInequality.exists_positive_normalizedCertificate_support_card_le_rank_add_one
+    Maths.FiniteInequality.exists_positive_normalizedCertificate_support_card_le_rank_add_one
       (S.delta player) (S.rhs player) hplayer
   exact ⟨player, coefficient, hcertificate, hpositive, hcard⟩
 

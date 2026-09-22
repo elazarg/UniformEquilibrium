@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FinFourExactScaleResolution
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.FinFourRationalFiniteClockProfileCompleteness
 import Research.Quitting.FiniteClockDoubleFullGapCosource
 
@@ -207,7 +208,7 @@ private theorem cast_rationalCode_payoff_eq_realPayoff
     (hclock : 0 < clockBound)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (level : ℕ) (player : Fin 4) :
@@ -241,8 +242,6 @@ private theorem cast_rationalCode_payoff_eq_realPayoff
     _ = realPayoff reward clockBound
         (rationalApproximant source level) player := by
       dsimp only [code]
-      change realPayoff reward clockBound
-        (rationalCode weight level).realMass player = _
       rw [rationalCode_realMass]
       rfl
 
@@ -251,7 +250,7 @@ private theorem cast_rationalCode_deviationPayoff_eq_realDeviationPayoff
     (hclock : 0 < clockBound)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (level : ℕ) (player : Fin 4)
@@ -292,8 +291,6 @@ private theorem cast_rationalCode_deviationPayoff_eq_realDeviationPayoff
     _ = realDeviationPayoff reward clockBound
         (rationalApproximant source level) player candidate := by
       dsimp only [code]
-      change realDeviationPayoff reward clockBound
-        (rationalCode weight level).realMass player candidate = _
       rw [rationalCode_realMass]
       rfl
 

@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Independent min-pushforward of two complete finite-or-Never clock laws. -/
 def cappedClockStoppingLaw (source deadline : PMF (Option ℕ)) :

@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Set
+open Filter _root_.Math.Probability Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

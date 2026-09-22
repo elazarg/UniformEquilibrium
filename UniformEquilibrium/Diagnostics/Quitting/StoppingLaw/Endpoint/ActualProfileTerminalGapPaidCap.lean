@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- Retain both the profitable behavioral deviation and its supported pure-time witnesses. -/
 theorem HasTerminalExploitabilityGap.exists_supported_pureTimePayoff_sub_at_with_gain

@@ -45,7 +45,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.LinearAlgebra.OwnerLabeledFlowHolonomy
 
 variable {ι : Type} {G : StochasticGame ι}

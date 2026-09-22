@@ -77,7 +77,7 @@ def combine
       have hfirstLe : 1 - (first : ℝ) ≤ 1 := by linarith [first.property.1]
       have hsecondLe : 1 - (second : ℝ) ≤ 1 := by linarith [second.property.1]
       nlinarith [mul_nonneg hfirst hsecond,
-        mul_le_one₀ hfirstLe hsecond hsecondLe]
+        (mul_le_of_le_one_left hsecond hfirstLe).trans hsecondLe]
     · nlinarith [mul_nonneg
         (by linarith [first.property.2] : 0 ≤ 1 - (first : ℝ))
         (by linarith [second.property.2] : 0 ≤ 1 - (second : ℝ))]⟩
@@ -175,7 +175,7 @@ theorem rootDefect_eq_zero_iff
 /-- The compact scalar carrier. -/
 theorem isCompact_univ :
     IsCompact (Set.univ : Set (NormalizedPassportZenoPoint massBound)) := by
-  letI : CompactSpace (NormalizedPassportZenoPoint massBound) :=
+  let : CompactSpace (NormalizedPassportZenoPoint massBound) :=
     isCompact_iff_compactSpace.mp isCompact_Icc
   exact CompactSpace.isCompact_univ
 

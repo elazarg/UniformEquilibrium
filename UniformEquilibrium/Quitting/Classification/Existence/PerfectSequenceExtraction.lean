@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -87,6 +87,7 @@ theorem isεAsymptoticNash_quittingRootSequenceProfile_of_active
         quittingRootSequenceProfile reward roots (start + s) := by
       funext player time history
       simp [quittingRootSequenceProfile, shifted, Nat.add_assoc]
+      rfl
     funext who
     unfold quittingRootSequenceTailVector quittingRootSequenceTerminalValue
     rw [hprofile]
@@ -153,6 +154,7 @@ theorem isεAsymptoticNash_quittingRootSequenceProfile_of_active_of_tendsto
         quittingRootSequenceProfile reward roots (start + s) := by
       funext player time history
       simp [quittingRootSequenceProfile, shifted, Nat.add_assoc]
+      rfl
     funext who
     unfold quittingRootSequenceTailVector quittingRootSequenceTerminalValue
     rw [hprofile]
@@ -500,14 +502,14 @@ theorem exists_quittingPerfectSequenceSubgameDichotomy_of_soloExitPreference
   classical
   cases isEmpty_or_nonempty ι with
   | inl hempty =>
-      letI : IsEmpty ι := hempty
+      let _ : IsEmpty ι := hempty
       refine ⟨1, by norm_num, ?_⟩
       intro roots ε _ _ _ _
       left
       intro start who
       exact isEmptyElim who
   | inr hnonempty =>
-      letI : Nonempty ι := hnonempty
+      let _ : Nonempty ι := hnonempty
       let M := quittingRewardBound reward
       have hM : 0 ≤ M := quittingRewardBound_nonneg reward
       let k := min (1 / 2 : ℝ) (1 / (48 * M + 1))

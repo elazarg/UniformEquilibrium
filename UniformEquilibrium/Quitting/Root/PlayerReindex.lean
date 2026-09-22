@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι κ : Type}
 
@@ -112,7 +112,11 @@ theorem quittingQuitters_reindex (e : ι ≃ κ) (action : ι → Bool) :
     quittingQuitters (quittingActEquiv e action) =
       (quittingQuitters action).map e.toEmbedding := by
   refine Finset.ext fun who => ?_
-  simp [quittingQuitters, Finset.mem_map_equiv]
+  simp only [quittingQuitters, quittingActEquiv_apply, Finset.mem_map_equiv,
+    Finset.mem_filter, Finset.mem_univ, true_and]
+  constructor
+  · exact fun h => (Finset.mem_filter.mp h).2
+  · exact fun h => Finset.mem_filter.mpr ⟨Finset.mem_univ _, h⟩
 
 omit [DecidableEq ι] [DecidableEq κ] in
 /-- Compatibility name used by the behavioral player-reindex layer. -/
@@ -142,7 +146,7 @@ private theorem quittingRootPayoff_reindex_at_apply
   by_cases hquit : (quittingQuitters action).Nonempty
   · have hmap : ((quittingQuitters action).map e.toEmbedding).Nonempty :=
       Finset.map_nonempty.mpr hquit
-    rw [dif_pos hquit, dif_pos hmap]
+    rw [dite_eq_left hquit, dite_eq_left hmap]
     simp only [quittingRewardReindex_apply, Equiv.symm_apply_apply]
     congr 1
     apply Subtype.ext
@@ -150,7 +154,7 @@ private theorem quittingRootPayoff_reindex_at_apply
     simp [Finset.mem_map_equiv]
   · have hmap : ¬ ((quittingQuitters action).map e.toEmbedding).Nonempty :=
       fun h => hquit (Finset.map_nonempty.mp h)
-    rw [dif_neg hquit, dif_neg hmap]
+    rw [dite_eq_right hquit, dite_eq_right hmap]
     simp
 
 omit [DecidableEq ι] [DecidableEq κ] in

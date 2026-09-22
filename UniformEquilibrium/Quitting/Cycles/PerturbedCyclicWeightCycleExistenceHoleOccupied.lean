@@ -62,7 +62,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open GameTheory.CyclicThreePlayerQuitting.Minimality
 open GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle (reward)
 open GameTheory.CyclicThreePlayerQuitting.PerturbedCycleExclusion (perturbedReward)
@@ -199,7 +199,7 @@ theorem prod_quittingStationaryContinueMass_zmod_lt_one_of_absorbing
     (fun t ↦ quittingStationaryContinueMass (roots t)) hmem
   have hle : (∏ t ∈ (Finset.univ : Finset (ZMod m)).erase t0,
       quittingStationaryContinueMass (roots t)) ≤ 1 :=
-    Finset.prod_le_one (fun t _ ↦ quittingStationaryContinueMass_nonneg (roots t))
+    Finset.prod_le_one₀ (fun t _ ↦ quittingStationaryContinueMass_nonneg (roots t))
       (fun t _ ↦ quittingStationaryContinueMass_le_one (roots t))
   have hnonneg : 0 ≤ quittingStationaryContinueMass (roots t0) :=
     quittingStationaryContinueMass_nonneg (roots t0)

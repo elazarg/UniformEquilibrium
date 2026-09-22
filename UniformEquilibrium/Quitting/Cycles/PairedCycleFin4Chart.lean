@@ -33,9 +33,9 @@ theorem continuous_fin4CanonicalReward : Continuous fin4CanonicalReward := by
   intro player
   unfold fin4CanonicalReward
   by_cases h : terminal = quittingSingletonTerminal player
-  · simp only [dif_pos h]
+  · simp only [dite_eq_left h]
     exact continuous_const
-  · simp only [dif_neg h]
+  · simp only [dite_eq_right h]
     exact (continuous_apply (⟨(terminal, player), h⟩ : Fin4FreeRewardCoordinate) :
       Continuous (fun coordinates : Fin4FreeRewardCoordinate → ℝ =>
         coordinates ⟨(terminal, player), h⟩))
@@ -48,7 +48,7 @@ def fin4CanonicalChart : (Fin4FreeRewardCoordinate → ℝ) ≃ₜ
   invFun reward coordinate := reward.1 coordinate.1.1 coordinate.1.2
   left_inv coordinates := by
     funext coordinate
-    exact dif_neg coordinate.2
+    exact dite_eq_right coordinate.2
   right_inv reward := by
     apply Subtype.ext
     funext terminal player
@@ -57,9 +57,9 @@ def fin4CanonicalChart : (Fin4FreeRewardCoordinate → ℝ) ≃ₜ
     unfold fin4CanonicalReward
     by_cases h : terminal = quittingSingletonTerminal player
     · subst terminal
-      rw [dif_pos rfl]
+      rw [dite_eq_left rfl]
       exact (reward.2 player).symm
-    · exact dif_neg h
+    · exact dite_eq_right h
   continuous_toFun := continuous_fin4CanonicalReward.subtype_mk _
   continuous_invFun := by
     apply continuous_pi

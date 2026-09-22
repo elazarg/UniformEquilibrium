@@ -41,7 +41,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Child Rank : Type} {G : StochasticGame ι}
 

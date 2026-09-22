@@ -22,7 +22,7 @@ producer obligations.
 
 noncomputable section
 
-namespace Math.ChargedPathBudget.ChargedRelation
+namespace Maths.ChargedPathBudget.ChargedRelation
 
 open Set
 
@@ -143,4 +143,4 @@ theorem not_finite_path_capacity_of_uniform_tube_packet
       homega hc packet C
   exact (not_lt_of_ge (capacity path)) hpath
 
-end Math.ChargedPathBudget.ChargedRelation
+end Maths.ChargedPathBudget.ChargedRelation

@@ -30,8 +30,8 @@ open scoped Topology
 
 /-- The control correspondence used in the principal-Q viability argument. -/
 def principalQViabilityControls {ι : Type} [Fintype ι]
-    (M : ι → ι → ℝ) (q : ι → ℝ) : Set (stdSimplex ℝ ι) :=
-  {weight | (∀ i, weight i ≠ 0 → q i = 0) ∧
+    (M : ι → ι → ℝ) (q : ι → ℝ) : Set (Convexity.StdSimplex ℝ ι) :=
+  {weight | (∀ i, weight.weights i ≠ 0 → q i = 0) ∧
     ∀ i, q i = 0 → 0 ≤ singletonLCPResidual M weight i}
 
 private def upperHemicontinuityCounterexampleMatrix : Bool → Bool → ℝ :=
@@ -43,8 +43,8 @@ private def upperHemicontinuityCounterexamplePoint (n : ℕ) : Bool → ℝ :=
 private def upperHemicontinuityCounterexampleLimit : Bool → ℝ := 0
 
 private noncomputable def upperHemicontinuityCounterexampleWeight :
-    stdSimplex ℝ Bool :=
-  stdSimplex.vertex true
+    Convexity.StdSimplex ℝ Bool :=
+  Convexity.StdSimplex.pure true
 
 private theorem upperHemicontinuityCounterexampleMatrix_projectiveQBar :
     IsProjectiveQBarMatrix upperHemicontinuityCounterexampleMatrix := by
@@ -127,7 +127,7 @@ private theorem counterexampleWeight_mem (n : ℕ) :
         simpa [upperHemicontinuityCounterexamplePoint] using hzero
       exact (this hdenominator).elim
     · simp [singletonLCPResidual, upperHemicontinuityCounterexampleWeight,
-        upperHemicontinuityCounterexampleMatrix, dotProduct]
+        upperHemicontinuityCounterexampleMatrix]
 
 private theorem counterexampleWeight_not_mem :
     upperHemicontinuityCounterexampleWeight ∉
@@ -151,7 +151,8 @@ private theorem isClosed_principalQViabilityControls_at_zero
     unfold singletonLCPResidual wsum dotProduct
     apply continuous_finsetSum
     intro owner _
-    exact ((continuous_apply owner).comp continuous_subtype_val).mul continuous_const)
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ owner).mul
+      continuous_const)
 
 /-- Even for a projective-Q-bar zero-diagonal matrix, the principal-Q
 viability correspondence need not be upper hemicontinuous. -/
@@ -181,7 +182,7 @@ even for a projective-Q-bar zero-diagonal matrix: the controls are admissible
 along a convergent boundary sequence but not at its limit. -/
 theorem principalQViabilityControls_not_sequentially_closed :
     ∃ (M : Bool → Bool → ℝ) (q : ℕ → Bool → ℝ) (limit : Bool → ℝ)
-        (weight : stdSimplex ℝ Bool),
+        (weight : Convexity.StdSimplex ℝ Bool),
       IsProjectiveQBarMatrix M ∧
         (∀ player, M player player = 0) ∧
         Tendsto q atTop (𝓝 limit) ∧

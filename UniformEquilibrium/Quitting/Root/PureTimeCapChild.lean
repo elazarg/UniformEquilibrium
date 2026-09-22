@@ -9,7 +9,7 @@ opponents and exposes the consequences of actual best-response cap attainment.
 noncomputable section
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

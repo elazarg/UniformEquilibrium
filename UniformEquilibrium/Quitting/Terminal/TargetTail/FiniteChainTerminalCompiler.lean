@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -146,10 +146,9 @@ theorem quittingRootSequenceHazardTerminalValue_le_singletonSnell_of_allContinue
           shiftedDeviation := by
     funext player time history
     unfold quittingRootSequenceProfile quittingRootSequenceUpdate
-      quittingAlwaysContinueProfile StochasticGame.stationaryBehaviorProfile
     by_cases hplayer : player = who
     · subst player
-      simp [shiftedDeviation]
+      rw [Function.update_self, Function.update_self]
     · rw [Function.update_of_ne hplayer,
         Function.update_of_ne hplayer]
       rw [htail (cutoff + time) (Nat.le_add_right cutoff time)]

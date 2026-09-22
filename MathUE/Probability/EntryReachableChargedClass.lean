@@ -204,7 +204,7 @@ theorem exists_positiveCommunicatingClass
   classical
   let communication :=
     pmfCommunicatesSetoid C.activeKernel
-  letI :
+  let :
       DecidableRel
         ((communication : Setoid (ActiveState C)).r) :=
     Classical.decRel _

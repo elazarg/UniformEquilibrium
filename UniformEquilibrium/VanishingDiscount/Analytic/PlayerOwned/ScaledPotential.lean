@@ -24,7 +24,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -74,7 +74,7 @@ theorem playerOwnedContinuationGain_add_residual_eq_deviationDriftAt
   rw [G.finkContinuationGain_eq_expect_stateKernels]
   unfold finkContinuationResidual finkContinuationEU
   rw [← G.expect_finkStateKernel_eq]
-  simp only [if_pos]
+  simp only [ite_eq_left]
   change
     (expect
           (G.finkPureDeviationStateKernel
@@ -116,7 +116,7 @@ theorem chargedOccupationPotential_iff_playerOwnedBiasCorrectionAt
             (germ.finkPointAt ht) source) C - C source at hsource
       unfold finkContinuationResidual finkContinuationEU
       rw [← G.expect_finkStateKernel_eq]
-      simp only [if_pos]
+      simp only [ite_eq_left]
       exact hsource
     · intro source action
       have hresponse := h (.inr (source, action))
@@ -147,7 +147,7 @@ theorem chargedOccupationPotential_iff_playerOwnedBiasCorrectionAt
         have hsource := hbaseline source
         unfold finkContinuationResidual finkContinuationEU at hsource
         rw [← G.expect_finkStateKernel_eq] at hsource
-        simp only [if_pos] at hsource
+        simp only [ite_eq_left] at hsource
         exact hsource
     | inr response =>
         rw [germ.potential_pair_rawOwnerAnalyticOccupationColumn_eq

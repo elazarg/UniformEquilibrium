@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 /-- The largest absolute terminal reward coordinate, enlarged to be at least
@@ -43,7 +43,7 @@ cap, rather than the larger canonical sum bound. -/
 def finFourOffMinimumRewardBound
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) : ℝ :=
   by
-    letI : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
+    let : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
       ⟨quittingSingletonTerminal 0⟩
     exact max 1 <| Finset.univ.sup' Finset.univ_nonempty fun terminal ↦
       Finset.univ.sup' Finset.univ_nonempty fun who ↦ |reward terminal who|
@@ -51,7 +51,7 @@ def finFourOffMinimumRewardBound
 theorem finFourOffMinimumRewardBound_pos
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
     0 < finFourOffMinimumRewardBound reward := by
-  letI : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
+  let : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
     ⟨quittingSingletonTerminal 0⟩
   unfold finFourOffMinimumRewardBound
   exact lt_of_lt_of_le zero_lt_one (le_max_left _ _)
@@ -60,7 +60,7 @@ theorem abs_reward_le_finFourOffMinimumRewardBound
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) (who : Fin 4) :
     |reward terminal who| ≤ finFourOffMinimumRewardBound reward := by
-  letI : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
+  let : Nonempty {S : Finset (Fin 4) // S.Nonempty} :=
     ⟨quittingSingletonTerminal 0⟩
   unfold finFourOffMinimumRewardBound
   calc

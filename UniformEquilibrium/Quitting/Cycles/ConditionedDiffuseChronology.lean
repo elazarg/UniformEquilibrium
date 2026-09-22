@@ -37,7 +37,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

@@ -53,7 +53,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 namespace AnalyticBellmanGerm
 
@@ -314,7 +314,7 @@ theorem setOf_invtSubmodule_le_eq_setOf_le
         N ≤ V ∧ N ∈ Module.End.invtSubmodule germ.endpointTransitionEnd} =
       {N : Submodule ℝ (G.State → Payoff ι) | N ≤ V} := by
   ext N
-  simp only [Set.mem_setOf_eq, and_iff_left_iff_imp]
+  simp only [Set.mem_ofPred_eq, and_iff_left_iff_imp]
   intro hN
   exact germ.mem_invtSubmodule_endpointTransitionEnd (hN.trans hV)
 
@@ -331,7 +331,7 @@ theorem setOf_algebraInvariant_le_eq_setOf_le
           ∀ W ∈ N, f W ∈ N} =
       {N : Submodule ℝ (G.State → Payoff ι) | N ≤ V} := by
   ext N
-  simp only [Set.mem_setOf_eq, and_iff_left_iff_imp]
+  simp only [Set.mem_ofPred_eq, and_iff_left_iff_imp]
   intro hN f hf W hW
   exact germ.mapsTo_of_mem_adjoin_endpointTransitionEnd (hN.trans hV) hf hW
 

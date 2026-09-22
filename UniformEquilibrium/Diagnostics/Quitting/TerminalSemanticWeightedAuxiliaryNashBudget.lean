@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -311,7 +311,7 @@ theorem minimumTerminalSemantic_weightedSingletonMargin
     intro player
     by_cases hplayer : player = who
     · subst player
-      simp only [shift, if_pos]
+      simp only [shift, ite_eq_left]
       have hquotientPos : 0 <
           quittingTerminalSemanticWeightedDebtSum theta pair / theta who :=
         div_pos hpositive (htheta who)

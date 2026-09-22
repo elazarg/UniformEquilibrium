@@ -406,10 +406,10 @@ theorem weakPreferenceSuccessor_mem
     (hsupport : packet.support.Nontrivial) (owner : ι) :
     packet.weakPreferenceSuccessor hsupport owner ∈ packet.support := by
   by_cases howner : owner ∈ packet.support
-  · simp only [weakPreferenceSuccessor, dif_pos howner]
+  · simp only [weakPreferenceSuccessor, dite_eq_left howner]
     exact (Classical.choose_spec
       (packet.exists_nonnegative_offDiagonal_on_support hsupport howner)).1
-  · simp only [weakPreferenceSuccessor, dif_neg howner]
+  · simp only [weakPreferenceSuccessor, dite_eq_right howner]
     exact packet.support_nonempty.choose_spec
 
 theorem weakPreferenceSuccessor_ne
@@ -417,7 +417,7 @@ theorem weakPreferenceSuccessor_ne
     (hsupport : packet.support.Nontrivial)
     {owner : ι} (howner : owner ∈ packet.support) :
     packet.weakPreferenceSuccessor hsupport owner ≠ owner := by
-  simp only [weakPreferenceSuccessor, dif_pos howner]
+  simp only [weakPreferenceSuccessor, dite_eq_left howner]
   exact (Classical.choose_spec
     (packet.exists_nonnegative_offDiagonal_on_support hsupport howner)).2.1
 
@@ -428,7 +428,7 @@ theorem target_le_weakPreferenceSuccessor_reward
     packet.target owner ≤ reward
       (quittingSingletonTerminal
         (packet.weakPreferenceSuccessor hsupport owner)) owner := by
-  simp only [weakPreferenceSuccessor, dif_pos howner]
+  simp only [weakPreferenceSuccessor, dite_eq_left howner]
   exact (Classical.choose_spec
     (packet.exists_nonnegative_offDiagonal_on_support hsupport howner)).2.2
 

@@ -21,7 +21,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -224,7 +224,7 @@ theorem expectedHistoryValue_rootStoppedChild_eq
           (G.afterHistoryProfile profile base.2) base.2.2
           (childPotential base) (total - base.1.val) := by
   unfold expectedHistoryValue rootStoppedChildHistoryPotential
-  simp only [dif_pos hfuel]
+  simp only [dite_eq_left hfuel]
   let pathValue : G.RootHorizonStoppedSuffix fuel total → ℝ :=
     fun path =>
       childPotential path.1 (total - path.1.1.val) path.2
@@ -404,7 +404,7 @@ theorem normalized_expect_Ico_sub_le_of_nonneg
             charge base (rootTime - stop base)) ≤
       error := by
   classical
-  letI : Fintype Base := Fintype.ofFinite Base
+  let : Fintype Base := Fintype.ofFinite Base
   have sum_expect :
       ∑ rootTime ∈ Finset.Ico fuel total,
           expect law (fun base =>

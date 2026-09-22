@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -118,8 +118,10 @@ theorem quittingFiniteRootPayoff_profileSpine_eq_expectedStagePayoff
   | zero =>
       rw [quittingFiniteRootPayoff]
       unfold StochasticGame.expectedStagePayoff
-      rw [(quittingGame reward).histDist_zero, expect_pure,
-        stageEUAt_quittingGame_eq_stateReward]
+      have hzero := (quittingGame reward).histDist_zero
+        (quittingAllContinueProfileSpine reward profile start)
+        (show (quittingGame reward).State from none)
+      rw [hzero, expect_pure, stageEUAt_quittingGame_eq_stateReward]
       rfl
   | succ fuel ih =>
       rw [quittingFiniteRootPayoff,
@@ -214,8 +216,16 @@ theorem quittingProfileLiveRoot_update_eq_rootSequenceUpdate
     quittingBehaviorLiveHazard
   by_cases hp : player = who
   · subst player
-    simp
-  · simp [Function.update_of_ne hp]
+    rw [Function.update_self]
+    exact (Function.update_self who
+      (deviation time (quittingLiveHist reward time))
+      (fun player => profile player time
+        (quittingLiveHist reward time))).symm
+  · rw [Function.update_of_ne hp]
+    exact (Function.update_of_ne hp
+      (deviation time (quittingLiveHist reward time))
+      (fun player => profile player time
+        (quittingLiveHist reward time))).symm
 
 /-- Every unilateral behavioral deviation has exactly the terminal payoff of
 its induced live-path hazard against the original opponents' live roots. -/

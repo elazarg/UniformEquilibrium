@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -50,7 +50,7 @@ theorem quittingRootQuitPayoff_eq_sum_opponentCoalitionMass
   have hnonempty : (insert who coalition).Nonempty :=
     Finset.insert_nonempty who coalition
   simp only [hazardOfRoot, weightOfReward,
-    quittingStageCoalitionPayoff, hnonempty, dif_pos]
+    quittingStageCoalitionPayoff, hnonempty, dite_eq_left]
   simp_rw [pmfBool_false_toReal]
 
 /-- Pure Continue is the same opponent-coalition average without inserting
@@ -92,7 +92,7 @@ theorem quittingRootContinuePayoff_eq_sum_opponentCoalitionMass
     have hnonempty : coalition.Nonempty :=
       Finset.nonempty_iff_ne_empty.mpr hcoalition.1
     simp only [weightOfReward,
-      quittingStageCoalitionPayoff, hnonempty, dif_pos, summand]
+      quittingStageCoalitionPayoff, hnonempty, dite_eq_left, summand]
     simp_rw [pmfBool_false_toReal]
 
 /-- Quit-minus-Continue is the opponent-coalition average of the state-matched

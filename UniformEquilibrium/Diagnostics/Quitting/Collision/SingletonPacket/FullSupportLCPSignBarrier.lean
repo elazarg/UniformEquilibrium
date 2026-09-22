@@ -50,11 +50,11 @@ theorem matrix_copositive : IsCopositive matrix := by
 /-- The full-support sign barrier has no homogeneous simplex-LCP solution. -/
 theorem matrix_noHomogeneous : ¬SingletonLCPFeasible matrix := by
   rintro ⟨lam, hres, hcomp⟩
-  have h0 := lam.property.1 0
-  have h1 := lam.property.1 1
-  have h2 := lam.property.1 2
-  have h3 := lam.property.1 3
-  have hsum := lam.property.2
+  have h0 := lam.weights_nonneg 0
+  have h1 := lam.weights_nonneg 1
+  have h2 := lam.weights_nonneg 2
+  have h3 := lam.weights_nonneg 3
+  have hsum := lam.total_of_fintype
   have hr0 := hres 0
   have hr1 := hres 1
   have hr2 := hres 2
@@ -63,12 +63,13 @@ theorem matrix_noHomogeneous : ¬SingletonLCPFeasible matrix := by
   have hc1 := hcomp 1
   have hc2 := hcomp 2
   have hc3 := hcomp 3
+  simp only [Fin.sum_univ_succ, Fin.sum_univ_zero, add_zero] at hsum
   simp [singletonLCPResidual, wsum, dotProduct, Fin.sum_univ_succ,
-    matrix] at hr0 hr1 hr2 hr3 hc0 hc1 hc2 hc3 hsum
-  let a : Real := lam.val 0
-  let b : Real := lam.val 1
-  let c : Real := lam.val 2
-  let d : Real := lam.val 3
+    matrix] at hr0 hr1 hr2 hr3 hc0 hc1 hc2 hc3
+  let a : Real := lam.weights 0
+  let b : Real := lam.weights 1
+  let c : Real := lam.weights 2
+  let d : Real := lam.weights 3
   change 0 ≤ a at h0
   change 0 ≤ b at h1
   change 0 ≤ c at h2
@@ -174,27 +175,28 @@ theorem fullCoreMatrix_copositive : IsCopositive fullCoreMatrix := by
 theorem fullCoreMatrix_noHomogeneous :
     ¬SingletonLCPFeasible fullCoreMatrix := by
   rintro ⟨lam, hres, hcomp⟩
-  have h0 := lam.property.1 0
-  have h1 := lam.property.1 1
-  have h2 := lam.property.1 2
-  have h3 := lam.property.1 3
-  have hsum := lam.property.2
+  have h0 := lam.weights_nonneg 0
+  have h1 := lam.weights_nonneg 1
+  have h2 := lam.weights_nonneg 2
+  have h3 := lam.weights_nonneg 3
+  have hsum := lam.total_of_fintype
   have hr0 := hres 0
   have hr1 := hres 1
   have hr2 := hres 2
   have henergy :
-      (∑ i, lam.val i * singletonLCPResidual fullCoreMatrix lam i) = 0 := by
+      (∑ i, lam.weights i * singletonLCPResidual fullCoreMatrix lam i) = 0 := by
     exact Finset.sum_eq_zero fun i _ => hcomp i
   have henergy' :
-      2 * (lam.val 1 * lam.val 2 + lam.val 1 * lam.val 3) = 0 := by
-    rw [← fullCoreMatrix_quadratic_eq lam.val]
+      2 * (lam.weights 1 * lam.weights 2 + lam.weights 1 * lam.weights 3) = 0 := by
+    rw [← fullCoreMatrix_quadratic_eq lam.weights]
     exact henergy
+  simp only [Fin.sum_univ_succ, Fin.sum_univ_zero, add_zero] at hsum
   simp [singletonLCPResidual, wsum, dotProduct, Fin.sum_univ_succ,
-    fullCoreMatrix, matrix] at hr0 hr1 hr2 hsum
-  let a : Real := lam.val 0
-  let b : Real := lam.val 1
-  let c : Real := lam.val 2
-  let d : Real := lam.val 3
+    fullCoreMatrix, matrix] at hr0 hr1 hr2
+  let a : Real := lam.weights 0
+  let b : Real := lam.weights 1
+  let c : Real := lam.weights 2
+  let d : Real := lam.weights 3
   change 0 ≤ a at h0
   change 0 ≤ b at h1
   change 0 ≤ c at h2

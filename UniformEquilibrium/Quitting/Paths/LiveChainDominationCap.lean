@@ -83,7 +83,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -148,7 +148,7 @@ probabilities. -/
 theorem quittingOpponentSurvivalWeight_le_one_of_mass
     (roots : ℕ → ι → PMF Bool) (who : ι) (start fuel : ℕ) :
     quittingOpponentSurvivalWeight roots who start fuel ≤ 1 := by
-  refine Finset.prod_le_one (fun offset _ => ?_) (fun offset _ => ?_)
+  refine Finset.prod_le_one₀ (fun offset _ => ?_) (fun offset _ => ?_)
   · exact quittingStationaryContinueMass_nonneg
       (Function.update (roots (start + offset)) who (PMF.pure false))
   · exact quittingStationaryContinueMass_le_one

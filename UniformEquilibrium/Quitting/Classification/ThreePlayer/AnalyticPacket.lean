@@ -38,7 +38,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set Topology
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -249,7 +249,7 @@ theorem quittingGermPureQuitCoalitionValue_tendsto_singleton_of_rates_tendsto_ze
       by_cases hother : other = owner <;>
         simp [quittingQuitters, hother]
     unfold quittingRootPayoff
-    rw [dif_pos (by simp)]
+    rw [dite_eq_left (by simp)]
     apply congrArg (fun terminal => reward terminal who)
     exact Subtype.ext hquitters
   unfold quittingGermPureQuitCoalitionValue
@@ -577,8 +577,6 @@ theorem cemeteryFirstEventWeight_tendsto_zero
             quittingGermAbsorption g t))
       (𝓝[>] (0 : ℝ)) (𝓝 0) := by
     convert hratio using 1
-    · funext t
-      rfl
     · norm_num
   have hdenomPos : ∀ᶠ t in 𝓝[>] (0 : ℝ),
       0 < quittingGermFirstEventDenominator g t /
@@ -621,8 +619,6 @@ theorem singletonFirstEventWeight_tendsto
       (𝓝[>] (0 : ℝ))
       (𝓝 (data.normalizedMass owner)) := by
     convert hraw using 1
-    · funext t
-      rfl
     · norm_num
   have hdenomPos : ∀ᶠ t in 𝓝[>] (0 : ℝ),
       0 < quittingGermFirstEventDenominator g t /
@@ -657,8 +653,6 @@ theorem realAbsorptionFirstEventWeight_tendsto_one
           quittingGermAbsorption g t))
       (𝓝[>] (0 : ℝ)) (𝓝 1) := by
     convert hraw using 1
-    · funext t
-      rfl
     · norm_num
   have hdenomPos : ∀ᶠ t in 𝓝[>] (0 : ℝ),
       0 < quittingGermFirstEventDenominator g t /
@@ -908,8 +902,6 @@ theorem quittingGermRealAbsorptionFirstEventWeight_tendsto_zero_of_discount_domi
           (quittingGermFirstEventDenominator g t / t ^ g.ramification))
       (𝓝[>] (0 : ℝ)) (𝓝 0) := by
     convert hraw using 1
-    · funext t
-      rfl
     · norm_num
   have hdenomPos : ∀ᶠ t in 𝓝[>] (0 : ℝ),
       0 < quittingGermFirstEventDenominator g t / t ^ g.ramification :=

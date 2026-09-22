@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.ProbabilityMassFunction.FiniteClockCoordinates
+import GameTheory.Math.Probability.Simplex
 import MathUE.ProbabilityMassFunction.Coupling
 import Research.Quitting.EscapeAwareQuantileClockTransport
 import Mathlib.Algebra.MvPolynomial.Eval
@@ -37,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -269,14 +270,14 @@ theorem eval₂_finiteClockDeviationPayoffPoly
 def finiteClockAtomLaws (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)) :
     ι → PMF (FiniteClockAtom clockBound) :=
   fun player => ofVector (weight player) (hweight player)
 
 def finiteClockDecodedLaws (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)) :
     ι → PMF (Option ℕ) :=
   fun player => finiteClockDecodeLaw clockBound
     (weight player) (hweight player)
@@ -286,7 +287,7 @@ def finiteClockDecodedProfile
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)) :
     (quittingGame reward).BehaviorProfile :=
   quittingStoppingLawProfile reward
     (finiteClockDecodedLaws clockBound weight hweight)
@@ -296,7 +297,7 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_eq_sum
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (observer : ι) :
     quittingTerminalPayoff reward
         (finiteClockDecodedProfile reward clockBound weight hweight) observer =
@@ -344,7 +345,7 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_update_eq_sum
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (player : ι) (candidate : FiniteClockAtom clockBound) :
     quittingTerminalPayoff reward
         (Function.update
@@ -371,7 +372,7 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_update_eq_sum
     by_cases hwho : who = player
     · subst who
       simp only [decodedModified, quittingPureDeviationStoppingLaws,
-        atomModified, Function.update_self, if_pos]
+        atomModified, Function.update_self, ite_eq_left]
       exact (PMF.pure_map
         (finiteClockAtomToStoppingTime clockBound) candidate).symm
     · simp [decodedModified, quittingPureDeviationStoppingLaws,
@@ -431,10 +432,10 @@ theorem pmfPi_quittingPureDeviation_eq_map
     funext who
     by_cases hwho : who = player
     · subst who
-      simp only [quittingPureDeviationStoppingLaws, if_pos]
+      simp only [quittingPureDeviationStoppingLaws, ite_eq_left]
       rw [PMF.pure_map]
       simp [coordinateMap]
-    · simp only [quittingPureDeviationStoppingLaws, if_neg hwho]
+    · simp only [quittingPureDeviationStoppingLaws, ite_eq_right hwho]
       have hmap : coordinateMap who = id := by
         funext choice
         simp [coordinateMap, hwho]
@@ -535,7 +536,7 @@ theorem quittingTerminalPayoff_finiteClockDecodedProfile_update_eq_candidate
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (player : ι) (choice : Option ℕ) :
@@ -574,7 +575,7 @@ theorem quittingContinuationBestResponseValue_finiteClockDecodedProfile_eq_of_ma
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (player : ι) (cap : ℝ)
@@ -624,7 +625,8 @@ theorem finiteClockCenterWeight_mem_stdSimplex
     (hsolution : SatisfiesFiniteClockCenterPolynomials
       coeff reward clockBound assign) (player : ι) :
     finiteClockCenterWeight clockBound assign player ∈
-      stdSimplex ℝ (FiniteClockAtom clockBound) := by
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound) := by
+  apply GameTheory.Math.Probability.mem_simplexWeights.mpr
   constructor
   · intro atom
     have hnonneg := hsolution.2.1 player atom
@@ -666,7 +668,7 @@ theorem finiteClockCenterPair_eq_terminalSemanticPair_of_satisfies
     fun terminal player => coeff (reward terminal player)
   let weight := finiteClockCenterWeight clockBound assign
   have hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound) :=
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound) :=
     finiteClockCenterWeight_mem_stdSimplex
       coeff reward clockBound assign hsolution
   have haux : ∀ player,
@@ -757,7 +759,7 @@ def finiteClockSemanticAssignment
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)) :
     FiniteClockCenterVar ι clockBound → ℝ
   | .mass player atom => weight player atom
   | .payoff player => quittingTerminalPayoff reward
@@ -791,7 +793,7 @@ theorem exists_finiteClockCandidate_payoff_eq_continuationBestResponseValue
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (player : ι) :
@@ -825,7 +827,7 @@ theorem satisfiesFiniteClockCenterPolynomials_semanticAssignment
     (clockBound : ℕ)
     (weight : ι → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0) :
     SatisfiesFiniteClockCenterPolynomials coeff reward clockBound
@@ -840,10 +842,10 @@ theorem satisfiesFiniteClockCenterPolynomials_semanticAssignment
   · intro player
     rw [eval₂_finiteClockSimplexSumPoly]
     change (∑ atom, weight player atom) - 1 = 0
-    exact sub_eq_zero.mpr (hweight player).2
+    exact sub_eq_zero.mpr (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).2
   · intro player atom
     simpa [finiteClockMassPoly, finiteClockSemanticAssignment] using
-      (hweight player).1 atom
+      (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).1 atom
   · intro player
     simpa [finiteClockMassPoly, finiteClockSemanticAssignment] using
       haux player
@@ -914,7 +916,7 @@ theorem finiteClockPolynomialSemanticImage_eq_reachable
   · rintro ⟨assign, hsolution, rfl⟩
     let weight := finiteClockCenterWeight clockBound assign
     have hweight : ∀ player,
-        weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound) :=
+        weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound) :=
       finiteClockCenterWeight_mem_stdSimplex
         coeff reward clockBound assign hsolution
     have haux : ∀ player,
@@ -933,7 +935,7 @@ theorem finiteClockPolynomialSemanticImage_eq_reachable
     let weight : ι → FiniteClockAtom clockBound → ℝ := fun player =>
       finiteClockLawCoordinates clockBound (laws player)
     have hweight : ∀ player,
-        weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound) :=
+        weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound) :=
       fun player => finiteClockLawCoordinates_mem_stdSimplex
         clockBound (laws player)
     have haux : ∀ player,

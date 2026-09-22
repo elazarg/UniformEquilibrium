@@ -217,14 +217,14 @@ theorem soloReward_prev (time : ℕ) :
 /-! ## The prescribed value -/
 
 theorem value_self (time : ℕ) : value time (owner time) = 1 := by
-  rw [value, if_neg (Ne.symm (owner_succ_ne time))]
+  rw [value, ite_eq_right (Ne.symm (owner_succ_ne time))]
 
 theorem value_next (time : ℕ) :
     value time (owner (time + 1)) = 1 - 2 * hazardValue time := by
-  rw [value, if_pos rfl]
+  rw [value, ite_eq_left rfl]
 
 theorem value_prev (time : ℕ) : value time (owner (time + 2)) = 1 := by
-  rw [value, if_neg (owner_succ_ne (time + 1))]
+  rw [value, ite_eq_right (owner_succ_ne (time + 1))]
 
 theorem value_succ_of_owner (time : ℕ) : value (time + 1) (owner time) = 1 := by
   have howner : owner time = owner (time + 1 + 2) := by

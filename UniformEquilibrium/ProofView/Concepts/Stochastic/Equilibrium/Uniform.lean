@@ -127,11 +127,27 @@ theorem isεHorizonNash_iff_horizonGame (G : StochasticGame ι) [Fintype ι]
     G.IsεHorizonNash s₀ T ε σ ↔ (G.horizonGame s₀ T).IsεNash ε σ := by
   constructor
   · intro hN who dev
-    rw [eu_horizonGame, eu_horizonGame]
+    have hbase :
+        (G.horizonGame s₀ T).eu σ who =
+          G.finiteAveragePayoff s₀ T σ who :=
+      G.eu_horizonGame s₀ T σ who
+    have hdev :
+        (G.horizonGame s₀ T).eu (Function.update σ who dev) who =
+          G.finiteAveragePayoff s₀ T (Function.update σ who dev) who :=
+      G.eu_horizonGame s₀ T (Function.update σ who dev) who
+    rw [hbase, hdev]
     exact hN who dev
   · intro hN who dev
     have h := hN who dev
-    rw [eu_horizonGame, eu_horizonGame] at h
+    have hbase :
+        (G.horizonGame s₀ T).eu σ who =
+          G.finiteAveragePayoff s₀ T σ who :=
+      G.eu_horizonGame s₀ T σ who
+    have hdev :
+        (G.horizonGame s₀ T).eu (Function.update σ who dev) who =
+          G.finiteAveragePayoff s₀ T (Function.update σ who dev) who :=
+      G.eu_horizonGame s₀ T (Function.update σ who dev) who
+    rw [hbase, hdev] at h
     exact h
 
 /-- A proof-facing certificate for uniform equilibrium payoffs.  It is enough
@@ -210,8 +226,9 @@ theorem hasUniformDeviationCapConstructor_iff
 /-- Replace the stage-payoff table while retaining the state space, actions,
 transition kernel, and discount parameter definitionally.  This fixed-skeleton
 operation lets one reuse a behavior profile without transporting histories or
-strategies. -/
-def withStagePayoff (G : StochasticGame ι)
+strategies.  Reducibility keeps those shared dependent carriers transparent to
+the type checker. -/
+@[reducible] def withStagePayoff (G : StochasticGame ι)
     (reward : G.State → G.JointAct → ι → ℝ) : StochasticGame ι where
   State := G.State
   Act := G.Act
@@ -246,8 +263,9 @@ def withStagePayoff (G : StochasticGame ι)
   induction T with
   | zero => rfl
   | succ T ih =>
-      simp only [histDist_succ, ih, stageActionDist_withStagePayoff,
-        transition_withStagePayoff]
+      have hleft := (G.withStagePayoff reward).histDist_succ σ s₀ T
+      have hright := G.histDist_succ σ s₀ T
+      rw [hleft, hright, ih]
       rfl
 
 /-- A pointwise `ρ` perturbation of one player's stage payoff changes that
@@ -293,6 +311,9 @@ theorem abs_finiteAveragePayoff_withStagePayoff_sub_le
         G.finiteAveragePayoff s₀ T σ who| ≤ ρ := by
   rcases Nat.eq_zero_or_pos T with hT | hT
   · subst T
+    have hleft := (G.withStagePayoff reward).finiteAveragePayoff_zero s₀ σ who
+    have hright := G.finiteAveragePayoff_zero s₀ σ who
+    rw [hleft, hright]
     simpa using hρ0
   · have hTreal : (0 : ℝ) < T := by
       exact_mod_cast hT

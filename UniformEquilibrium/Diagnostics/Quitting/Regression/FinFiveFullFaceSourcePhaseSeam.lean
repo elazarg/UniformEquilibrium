@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFiveFullFaceSourcePhaseSeam
 
-open Math.Probability Set QuittingSureSetOwnerRepair
+open _root_.Math.Probability Set QuittingSureSetOwnerRepair
 
 abbrev Player := FinFivePhaseSeamAtomFloor.Player
 abbrev phaseQuitter := FinFivePhaseSeamAtomFloor.phaseQuitter
@@ -630,7 +630,7 @@ theorem liftedSourceProfile_liveRoot_zero (phase : Player) :
   · let survivor : Survivor phase := ⟨player, hplayer⟩
     rw [show player = survivor.1 by rfl,
       liftedSourceRoots, quittingExtendDeletedRoots_apply]
-    simp only [sourceRoots, if_pos, sourceFirstRoot, phaseRoot,
+    simp only [sourceRoots, ite_eq_left, sourceFirstRoot, phaseRoot,
       FinFivePhaseSeamAtomFloor.phaseRoot]
     by_cases hquitter : player = phaseQuitter phase
     · have hsurvivor : survivor = sourceQuitter phase := by
@@ -764,7 +764,7 @@ theorem liftedSource_singletonQuitterReward_owner_eq_zero (phase : Player) :
 /-- The omitted player receives zero on the lifted source path. -/
 theorem liftedSourceValue_owner_eq_zero (phase : Player) :
     liftedSourceValue phase 0 phase = 0 := by
-  simp only [liftedSourceValue, if_pos]
+  simp only [liftedSourceValue, ite_eq_left]
   rw [liftedSourceRoots_zero]
   change quittingRootSuccessorPayoff reward
       (quittingRootSuccessorPayoff reward 0 (liftedSourceRoots phase 1))

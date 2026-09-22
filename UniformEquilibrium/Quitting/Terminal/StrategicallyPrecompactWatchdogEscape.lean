@@ -69,7 +69,7 @@ theorem isQuittingStrategicallyTotallyBounded_of_stoppingLaws
   obtain ⟨lawNet, hlawNetFinite, hlawNetSubset, hlawNetCover⟩ :=
     hbounded (error / (2 * bound)) ((div_pos herror hscale))
   let lawNetType := {law // law ∈ lawNet}
-  letI : Fintype lawNetType := hlawNetFinite.fintype
+  let : Fintype lawNetType := hlawNetFinite.fintype
   have hpreimage : ∀ law : lawNetType,
       ∃ strategy ∈ family,
         quittingBehaviorStoppingLaw reward strategy = law := by

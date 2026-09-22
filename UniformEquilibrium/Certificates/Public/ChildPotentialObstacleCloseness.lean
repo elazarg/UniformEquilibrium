@@ -69,7 +69,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
@@ -97,7 +97,7 @@ theorem firstHitOnlineView_never_persistent_last
           suffix) := by
   have hle : fuel ≤ fuel + suffixLength := Nat.le_add_right _ _
   unfold firstHitOnlineView
-  rw [dif_pos hle]
+  rw [dite_eq_left hle]
   refine congrArg some ?_
   refine OnlineStoppedPath.eq_of_base_eq_of_reconstructs
     (G.appendHist base suffix) ?_

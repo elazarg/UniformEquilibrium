@@ -138,7 +138,7 @@ theorem restrictedPoint_of_le
           (CofinalExecutionSequence.depth sequence index) hle
           (CofinalExecutionSequence.execution sequence index)
           (CofinalExecutionSequence.execution_mem sequence index)⟩ := by
-  simp only [restrictedPoint, dif_pos hle]
+  simp only [restrictedPoint, dite_eq_left hle]
 
 omit [∀ depth, FirstCountableTopology (Execution depth)]
   [∀ depth, T2Space (Execution depth)] in
@@ -186,7 +186,7 @@ The same `subsequence` occurs in every coordinate conclusion. -/
 theorem exists_projectiveSubsequenceLimit
     (sequence : system.CofinalExecutionSequence) :
     Nonempty (system.ProjectiveSubsequenceLimit sequence) := by
-  letI (depth : ℕ) : CompactSpace (system.ExecutionPoint depth) :=
+  let (depth : ℕ) : CompactSpace (system.ExecutionPoint depth) :=
     isCompact_iff_compactSpace.mp (system.execution_compact depth)
   obtain ⟨limitPoint, subsequence, hmono, htendsto⟩ :=
     CompactSpace.tendsto_subseq

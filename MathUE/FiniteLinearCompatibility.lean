@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.LinearAlgebra.Dual.Lemmas
 import Mathlib.LinearAlgebra.Pi
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Compatibility of a finite family of linear equations

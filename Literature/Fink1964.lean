@@ -28,7 +28,7 @@ namespace Literature.Fink1964
 open GameTheory
 open GameTheory.StochasticGame
 open Filter Set
-open Math.Probability
+open _root_.Math.Probability
 open Math.PMFProduct
 open Math.ProbabilityMassFunction
 open scoped NNReal Topology
@@ -81,8 +81,8 @@ def actionPMF (P : Game ι) [Fintype P.State] [Fintype ι]
     (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (i : ι) (a : P.Act s i) :
-    ((P.actionPMF x s i) a).toReal = x (s, i) a := by
-  simp [actionPMF, stdSimplexEquiv_symm_apply]
+    ((P.actionPMF x s i) a).toReal = (x (s, i)).weights a := by
+  rw [actionPMF, stdSimplexEquiv_symm_apply, ofVector_toReal]
 
 /-- Equation (3)'s one-stage cost plus discounted continuation cost. -/
 def oneStepCost (P : Game ι)
@@ -94,7 +94,7 @@ def oneStepCost (P : Game ι)
 def fCoord (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
     (x : P.X) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) (e : P.R) : ℝ :=
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) (e : P.R) : ℝ :=
   expect (pmfPi (Function.update (fun i => P.actionPMF x s i) who
     ((stdSimplexEquiv (α := P.Act s who)).symm y)))
     (fun a => P.oneStepCost e s a who)
@@ -117,7 +117,7 @@ def IsEquilibriumPoint (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)] [DecidableEq ι]
     (x : P.X) (e : P.R) : Prop :=
   P.IsValueVector x e ∧
-    ∀ s who (y : stdSimplex ℝ (P.Act s who)),
+    ∀ s who (y : Convexity.StdSimplex ℝ (P.Act s who)),
       P.fCoord x s who (x (s, who)) e ≤ P.fCoord x s who y e
 
 /-- The largest player discount, Fink's common contraction coefficient
@@ -159,11 +159,11 @@ theorem fCoord_eq_sum
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) (e : P.R) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) (e : P.R) :
     P.fCoord x s who y e =
       ∑ a : P.JointActionAt s,
-        (y (a who) *
-          ∏ i ∈ Finset.univ.erase who, x (s, i) (a i)) *
+        (y.weights (a who) *
+          ∏ i ∈ Finset.univ.erase who, (x (s, i)).weights (a i)) *
             P.oneStepCost e s a who := by
   classical
   unfold fCoord
@@ -194,15 +194,13 @@ theorem property_a_continuous
   intro a _
   apply Continuous.mul
   · apply Continuous.mul
-    · exact (continuous_apply (a who)).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply (s, who)).comp
-            (continuous_fst.comp continuous_snd)))
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ (a who)).comp
+        ((continuous_apply (s, who)).comp
+          (continuous_fst.comp continuous_snd))
     · apply continuous_finsetProd (Finset.univ.erase who)
       intro i _
-      exact (continuous_apply (a i)).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply (s, i)).comp continuous_fst))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ (a i)).comp
+        ((continuous_apply (s, i)).comp continuous_fst)
   · apply Continuous.add
     · exact continuous_const
     · apply Continuous.mul
@@ -220,7 +218,7 @@ continuation vector when the deviating mixed action is fixed. -/
 theorem continuous_fCoord
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)]
-    (s : P.State) (who : ι) (y : stdSimplex ℝ (P.Act s who)) :
+    (s : P.State) (who : ι) (y : Convexity.StdSimplex ℝ (P.Act s who)) :
     Continuous (fun q : P.X × P.R => P.fCoord q.1 s who y q.2) := by
   classical
   simp_rw [P.fCoord_eq_sum]
@@ -233,9 +231,8 @@ theorem continuous_fCoord
     · exact continuous_const
     · apply continuous_finsetProd (Finset.univ.erase who)
       intro i _
-      exact (continuous_apply (a i)).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply (s, i)).comp continuous_fst))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ (a i)).comp
+        ((continuous_apply (s, i)).comp continuous_fst)
   · apply Continuous.add
     · exact continuous_const
     · apply Continuous.mul
@@ -253,7 +250,7 @@ theorem continuous_fCoord_deviation
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (who : ι) (e : P.R) :
-    Continuous (fun y : stdSimplex ℝ (P.Act s who) =>
+    Continuous (fun y : Convexity.StdSimplex ℝ (P.Act s who) =>
       P.fCoord x s who y e) := by
   classical
   simp_rw [P.fCoord_eq_sum]
@@ -261,7 +258,7 @@ theorem continuous_fCoord_deviation
   intro a _
   apply Continuous.mul
   · apply Continuous.mul
-    · exact (continuous_apply (a who)).comp continuous_subtype_val
+    · exact Convexity.StdSimplex.continuous_weights_apply ℝ (a who)
     · exact continuous_const
   · exact continuous_const
 
@@ -272,7 +269,7 @@ theorem continuous_fCoord_all
     [∀ s i, Fintype (P.Act s i)]
     (s : P.State) (who : ι) :
     Continuous (fun q :
-        P.X × stdSimplex ℝ (P.Act s who) × P.R =>
+        P.X × Convexity.StdSimplex ℝ (P.Act s who) × P.R =>
       P.fCoord q.1 s who q.2.1 q.2.2) := by
   classical
   simp_rw [P.fCoord_eq_sum]
@@ -282,14 +279,12 @@ theorem continuous_fCoord_all
   intro a _
   apply Continuous.mul
   · apply Continuous.mul
-    · exact (continuous_apply (a who)).comp
-        (continuous_subtype_val.comp
-          (continuous_fst.comp continuous_snd))
+    · exact (Convexity.StdSimplex.continuous_weights_apply ℝ (a who)).comp
+        (continuous_fst.comp continuous_snd)
     · apply continuous_finsetProd (Finset.univ.erase who)
       intro i _
-      exact (continuous_apply (a i)).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply (s, i)).comp continuous_fst))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ (a i)).comp
+        ((continuous_apply (s, i)).comp continuous_fst)
   · apply Continuous.add
     · exact continuous_const
     · apply Continuous.mul
@@ -308,7 +303,7 @@ theorem property_b
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) (v u : P.R) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) (v u : P.R) :
     |P.fCoord x s who y v - P.fCoord x s who y u| ≤
       P.discount who * dist v u := by
   unfold fCoord oneStepCost
@@ -327,7 +322,7 @@ theorem property_b
 def pureAction (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)]
     {s : P.State} {who : ι} (a : P.Act s who) :
-    stdSimplex ℝ (P.Act s who) :=
+    Convexity.StdSimplex ℝ (P.Act s who) :=
   stdSimplexEquiv (PMF.pure a)
 
 /-- Property (c): `f` is linear in the deviating mixed action. -/
@@ -335,13 +330,17 @@ theorem property_c
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) (v : P.R) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) (v : P.R) :
     P.fCoord x s who y v =
       wsum y (fun a => P.fCoord x s who (P.pureAction a) v) := by
   unfold fCoord
   rw [pmfPi_update_bind, expect_bind,
     expect_stdSimplexEquiv_symm_eq_wsum]
-  simp [pureAction]
+  apply congrArg (wsum y)
+  funext a
+  rw [show (stdSimplexEquiv (α := P.Act s who)).symm (P.pureAction a) =
+      PMF.pure a by
+    exact (stdSimplexEquiv (α := P.Act s who)).symm_apply_apply (PMF.pure a)]
 
 /-- The fixed-profile evaluation operator used in Lemma 1. -/
 def valueOperator
@@ -405,7 +404,7 @@ theorem T_le_fCoord
     (P : Game ι) [Fintype P.State] [Fintype ι] [DecidableEq ι]
     [∀ s i, Fintype (P.Act s i)] [∀ s i, Nonempty (P.Act s i)]
     (x : P.X) (v : P.R) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) :
     P.T x v s who ≤ P.fCoord x s who y v := by
   rw [P.property_c]
   calc
@@ -580,7 +579,7 @@ theorem phi_segment
     [∀ s i, Nonempty (P.Act s i)]
     (x y z : P.X) (hy : y ∈ P.phi x) (hz : z ∈ P.phi x)
     (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
-    (fun p => stdSimplex.mix t ht0 ht1 (y p) (z p)) ∈ P.phi x := by
+    (fun p => Convexity.StdSimplex.mix t ht0 ht1 (y p) (z p)) ∈ P.phi x := by
   unfold phi at hy hz ⊢
   funext s who
   have hyc := congrFun (congrFun hy s) who
@@ -590,13 +589,13 @@ theorem phi_segment
   change P.fCoord x s who (z (s, who)) (P.beta x) =
     P.beta x s who at hzc
   change P.fCoord x s who
-      (stdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
+      (Convexity.StdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
       (P.beta x) = P.beta x s who
   calc
     P.fCoord x s who
-        (stdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
+        (Convexity.StdSimplex.mix t ht0 ht1 (y (s, who)) (z (s, who)))
         (P.beta x)
-        = wsum (stdSimplex.mix t ht0 ht1
+        = wsum (Convexity.StdSimplex.mix t ht0 ht1
             (y (s, who)) (z (s, who)))
             (fun a => P.fCoord x s who (P.pureAction a) (P.beta x)) :=
           P.property_c x s who _ (P.beta x)
@@ -645,7 +644,7 @@ theorem phi_isClosed
 def costBound
     (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)] : ℝ := by
-  letI : ∀ s, Fintype (P.JointActionAt s) :=
+  let _ : ∀ s, Fintype (P.JointActionAt s) :=
     fun s => Fintype.ofFinite (P.JointActionAt s)
   exact ∑ s : P.State, ∑ a : P.JointActionAt s, ∑ who : ι,
     |P.cost s a who|
@@ -653,7 +652,7 @@ def costBound
 theorem costBound_nonneg
     (P : Game ι) [Fintype P.State] [Fintype ι]
     [∀ s i, Fintype (P.Act s i)] : 0 ≤ P.costBound := by
-  letI : ∀ s, Fintype (P.JointActionAt s) :=
+  let _ : ∀ s, Fintype (P.JointActionAt s) :=
     fun s => Fintype.ofFinite (P.JointActionAt s)
   unfold costBound
   exact Finset.sum_nonneg fun _ _ =>
@@ -666,7 +665,7 @@ theorem abs_cost_le_costBound
     (s : P.State) (a : P.JointActionAt s) (who : ι) :
     |P.cost s a who| ≤ P.costBound := by
   classical
-  letI : ∀ s, Fintype (P.JointActionAt s) :=
+  let _ : ∀ s, Fintype (P.JointActionAt s) :=
     fun s => Fintype.ofFinite (P.JointActionAt s)
   unfold costBound
   calc
@@ -694,7 +693,7 @@ theorem abs_fCoord_zero_le_costBound
     (P : Game ι) [Fintype P.State] [Fintype ι]
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)]
     (x : P.X) (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) :
     |P.fCoord x s who y (0 : P.R)| ≤ P.costBound := by
   unfold fCoord
   refine abs_expect_le_of_abs_le _ _ (fun a => ?_)
@@ -801,7 +800,7 @@ theorem lemma_3_equicontinuous
   change TendstoUniformly
     (fun x' (v : {v : P.R // v ∈ P.valueCube B}) => P.T x' v.1)
     (fun v => P.T x v.1) (𝓝 x)
-  letI : CompactSpace {v : P.R // v ∈ P.valueCube B} :=
+  let _ : CompactSpace {v : P.R // v ∈ P.valueCube B} :=
     isCompact_iff_compactSpace.mp (P.valueCube_isCompact B)
   let F : P.X → {v : P.R // v ∈ P.valueCube B} → P.R :=
     fun x' v => P.T x' v.1
@@ -1103,7 +1102,7 @@ theorem reward_discountedAuxEU_lift_eq_fCoord
     [∀ s i, Fintype (P.Act s i)]
     (x : P.rewardGame.StationaryMixedProfile) (e : P.R)
     (s : P.State) (who : ι)
-    (y : stdSimplex ℝ (P.Act s who)) :
+    (y : Convexity.StdSimplex ℝ (P.Act s who)) :
     P.rewardGame.discountedAuxEU (P.discount who)
         (P.normalizedRewardValue e) s
         (Function.update (x s) who
@@ -1160,12 +1159,12 @@ theorem theorem_2
     (P : Game ι) [Fintype P.State] [Fintype ι] [Nonempty ι]
     [DecidableEq ι] [∀ s i, Fintype (P.Act s i)] :
     ∃ (x : P.X) (e : P.R), P.IsEquilibriumPoint x e := by
-  letI : ∀ i, Fintype (P.AmbientAct i) :=
+  let _ : ∀ i, Fintype (P.AmbientAct i) :=
     fun i => Fintype.ofFinite (P.AmbientAct i)
-  letI : Finite P.rewardGame.State := inferInstanceAs (Finite P.State)
-  letI : ∀ i, Finite (P.rewardGame.Act i) :=
+  let _ : Finite P.rewardGame.State := inferInstanceAs (Finite P.State)
+  let _ : ∀ i, Finite (P.rewardGame.Act i) :=
     fun i => inferInstanceAs (Finite (P.AmbientAct i))
-  letI : ∀ i, Nonempty (P.rewardGame.Act i) :=
+  let _ : ∀ i, Nonempty (P.rewardGame.Act i) :=
     fun i => inferInstanceAs (Nonempty (P.AmbientAct i))
   obtain ⟨m, V, hcert⟩ :=
     P.rewardGame.exists_isPlayerDiscountedStationaryBellmanEq

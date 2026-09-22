@@ -66,7 +66,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-! ## Two elementary ingredients -/
 
@@ -78,7 +78,7 @@ theorem eq_one_of_prod_eq_one_of_mem {α : Type*} {s : Finset α} {f : α → �
   classical
   have hsplit := Finset.mul_prod_erase s f ha
   have hrestLe : (∏ b ∈ s.erase a, f b) ≤ 1 :=
-    Finset.prod_le_one (fun b hb ↦ hnonneg b (Finset.mem_of_mem_erase hb))
+    Finset.prod_le_one₀ (fun b hb ↦ hnonneg b (Finset.mem_of_mem_erase hb))
       (fun b hb ↦ hle b (Finset.mem_of_mem_erase hb))
   have hkey : f a * (∏ b ∈ s.erase a, f b) ≤ f a * 1 :=
     mul_le_mul_of_nonneg_left hrestLe (hnonneg a ha)
@@ -378,7 +378,7 @@ theorem prod_range_quittingStationaryContinueMass_lt_one_of_absorbing
     (Finset.mem_range.mpr hstage)
   have hrestLe : (∏ offset ∈ (Finset.range bound).erase stage,
       quittingStationaryContinueMass (roots offset)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun offset _ ↦ quittingStationaryContinueMass_nonneg (roots offset))
       (fun offset _ ↦ quittingStationaryContinueMass_le_one (roots offset))
   have hkey : quittingStationaryContinueMass (roots stage) *

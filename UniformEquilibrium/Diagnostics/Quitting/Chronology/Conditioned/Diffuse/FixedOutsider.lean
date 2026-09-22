@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -64,7 +64,7 @@ theorem exists_fixed_inactive_rescaledQuitDefect_of_diffuse
     quittingTailConditionedValue roots value boundary time who
   let defect : ℕ → ι → ℝ := fun time who ↦
     max 0 (quitValue time who - conditionedValue time who)
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) := by
     intro time
@@ -304,7 +304,7 @@ theorem exists_cofinal_fixed_inactive_rescaledEndpointGap_of_diffuse
   let boundary := seam.limit.value
   let alpha : ℕ → ℝ := fun time ↦
     quittingTailConditionedAbsorptionWeight roots time
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hpolicy : ∀ time, value time =
       quittingRootSuccessorPayoff reward (value (time + 1)) (roots time) := by
     intro time

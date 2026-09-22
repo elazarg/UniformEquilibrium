@@ -94,7 +94,7 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
     (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward) :
     ∃ mass : QuittingTerminalOutcome ι → ℝ,
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
         quittingTerminalRewardMoment reward mass = pair.1 ∧
         ∃ outcome : QuittingTerminalOutcome ι,
           0 < mass outcome ∧
@@ -107,15 +107,17 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
   obtain ⟨mass, hmass, hmoment⟩ :=
     quittingTerminalSemanticCarrier_prescribed_mem_rewardMomentSet
       reward pair hpair
+  have hmassProperties :=
+    GameTheory.Math.Probability.mem_simplexWeights.mp hmass
   refine ⟨mass, hmass, hmoment, ?_⟩
   have hmassNe : mass ≠ 0 := by
     intro hzero
-    have := hmass.2
+    have := hmassProperties.2
     simp [hzero] at this
   obtain ⟨positiveOutcome, hpositiveOutcome⟩ :=
     Function.ne_iff.mp hmassNe
   have hpositiveMass : 0 < mass positiveOutcome :=
-    lt_of_le_of_ne (hmass.1 positiveOutcome)
+    lt_of_le_of_ne (hmassProperties.1 positiveOutcome)
       (Ne.symm hpositiveOutcome)
   by_contra hnot
   have hstrict : ∀ outcome, 0 < mass outcome →
@@ -139,9 +141,9 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
     intro outcome
     by_cases hzero : mass outcome = 0
     · simp [hzero]
-    · apply mul_le_mul_of_nonneg_left _ (hmass.1 outcome)
+    · apply mul_le_mul_of_nonneg_left _ (hmassProperties.1 outcome)
       exact (hstrict outcome
-        (lt_of_le_of_ne (hmass.1 outcome) (Ne.symm hzero))).le
+        (lt_of_le_of_ne (hmassProperties.1 outcome) (Ne.symm hzero))).le
   have hstrictPositive :
       mass positiveOutcome *
           (∑ who ∈ players,
@@ -178,7 +180,8 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
     rw [Finset.sum_comm]
     apply Finset.sum_congr rfl
     intro who hwho
-    rw [Finset.sum_sub_distrib, ← Finset.sum_mul, hmass.2, one_mul]
+    rw [Finset.sum_sub_distrib, ← Finset.sum_mul,
+      hmassProperties.2, one_mul]
     have hcoordinate := congrFun hmoment who
     unfold quittingTerminalRewardMoment at hcoordinate
     rw [hcoordinate]
@@ -190,7 +193,7 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_prescribed
       ∑ who ∈ players,
         (pair.1 who -
           reward (quittingSingletonTerminal who) who) := by
-    rw [← Finset.sum_mul, hmass.2, one_mul]
+    rw [← Finset.sum_mul, hmassProperties.2, one_mul]
   rw [hleft, hright] at hsumLt
   exact lt_irrefl _ hsumLt
 
@@ -203,7 +206,7 @@ theorem exists_rewardMoment_supportOutcome_subset_singletonSurplus_ge_exactMinim
         quittingTerminalSemanticDebtSum candidate)
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair) :
     ∃ mass : QuittingTerminalOutcome ι → ℝ,
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
         quittingTerminalRewardMoment reward mass = pair.1 ∧
         ∃ outcome : QuittingTerminalOutcome ι,
           0 < mass outcome ∧
@@ -300,7 +303,8 @@ theorem QuittingTerminalExploitabilityWitness.exists_neverBudget_or_blockedCoali
 /-- Support-retaining form of the finite counterexample alternative.  The
 Never or coalition witness has positive mass in one explicit reward-moment
 representation of the prescribed minimum value. -/
-theorem QuittingTerminalExploitabilityWitness.exists_supportedNever_or_supportedBlockedCoalition_exact
+theorem
+    QuittingTerminalExploitabilityWitness.exists_supportedNever_or_supportedBlockedCoalition_exact
     (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (players : Finset ι)
     (hpair : pair ∈ quittingTerminalSemanticCarrier reward)
@@ -309,7 +313,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_supportedNever_or_supported
         quittingTerminalSemanticDebtSum candidate)
     (hpositive : 0 < quittingTerminalSemanticDebtSum pair) :
     ∃ mass : QuittingTerminalOutcome ι → ℝ,
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
         quittingTerminalRewardMoment reward mass = pair.1 ∧
         ((0 < mass none ∧
             (∑ who ∈ players,
@@ -518,11 +522,13 @@ theorem QuittingTerminalExploitabilityWitness.exists_neverBudget_or_blockedCoali
       refine ⟨terminal, ?_, witness.terminalCoalition_has_strictToggle terminal⟩
       simpa [quittingTerminalOutcomeReward] using houtcome
 
+namespace QuittingTerminalExploitabilityWitness
+
 /-- In the first unresolved dimension and above, a tight critical owner
 leaves at least three units of minimum debt in one common outsider aggregate.
 The same outcome is either Never or an absorbing coalition with a strict
 toggle blocker. -/
-theorem QuittingTerminalExploitabilityWitness.exists_threeDebt_neverBudget_or_blockedCoalition_of_tightOwner
+theorem exists_threeDebt_neverBudget_or_blockedCoalition_of_tightOwner
     (witness : QuittingTerminalExploitabilityWitness reward)
     (pair : QuittingTerminalSemanticPair ι) (owner : ι)
     (hcard : 4 ≤ Fintype.card ι)
@@ -562,5 +568,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_threeDebt_neverBudget_or_bl
     hnever | ⟨terminal, hterminal, htoggle⟩
   · exact Or.inl (hthree.trans hnever)
   · exact Or.inr ⟨terminal, hthree.trans hterminal, htoggle⟩
+
+end QuittingTerminalExploitabilityWitness
 
 end GameTheory

@@ -16,7 +16,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -266,7 +266,7 @@ theorem exists_strict_preemptor_of_positive_minimum_nonnegative_singleton
     ∃ blocker, 0 <
       reward (quittingSingletonTerminal blocker) blocker -
         reward (quittingSingletonTerminal owner) blocker := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   by_contra hnone
   push Not at hnone
   have huniform := isUniformEquilibriumPayoff_soloReward_of_nonnegative_noPreemptor
@@ -321,7 +321,7 @@ theorem positive_minimum_fourPlayer_allOwner_quadraticMargins
           d + d ^ 2 / (8 * M) ∧
         pair.1 owner - reward (quittingSingletonTerminal owner) owner ≥
           d - quittingTerminalSemanticDebt pair owner + d ^ 2 / (8 * M) := by
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   have hno : ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
     intro hexists

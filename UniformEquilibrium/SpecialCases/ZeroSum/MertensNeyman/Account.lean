@@ -39,7 +39,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MertensNeymanAccount
 
-open Asymptotics Filter Math.Probability Topology
+open Asymptotics Filter _root_.Math.Probability Topology
 
 /-- The slow discount schedule used by the stochastic account
 construction. -/
@@ -869,7 +869,11 @@ inductive AccountMove
   | up
   | stay
   | down
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype AccountMove where
+  elems := {.up, .stay, .down}
+  complete move := by cases move <;> simp
 
 /-- Probability of moving from `s` to `γs`. -/
 def upProbability (γ s y : ℝ) : ℝ :=
@@ -1323,14 +1327,14 @@ theorem expect_abs_nextAccount_sub_le_abs
     abs_of_neg h.downDenom_neg]
   unfold upProbability downProbability
   by_cases hMs : M < s
-  · rw [if_pos hMs, mul_neg,
+  · rw [ite_eq_left hMs, mul_neg,
       div_mul_cancel₀ _ h.upDenom_pos.ne',
       div_mul_cancel₀ _ h.downDenom_neg.ne]
     by_cases hy : 0 ≤ y
     · simp [max_eq_left hy, min_eq_right hy, abs_of_nonneg hy]
     · have hy' : y ≤ 0 := le_of_not_ge hy
       simp [max_eq_right hy', min_eq_left hy', abs_of_nonpos hy']
-  · rw [if_neg hMs, zero_mul, add_zero,
+  · rw [ite_eq_right hMs, zero_mul, add_zero,
       div_mul_cancel₀ _ h.upDenom_pos.ne']
     exact max_le (le_abs_self y) (abs_nonneg y)
 
@@ -1453,7 +1457,7 @@ theorem downProbability_le_one_div
   have hdenPos : 0 < s * (1 - γ⁻¹) :=
     lt_of_lt_of_le zero_lt_one h.2.2.2
   by_cases hMs : M < s
-  · rw [downProbability, if_pos hMs]
+  · rw [downProbability, ite_eq_left hMs]
     have hrewrite :
         min y 0 / (s * (γ⁻¹ - 1)) =
           (-min y 0) / (s * (1 - γ⁻¹)) := by
@@ -1466,7 +1470,7 @@ theorem downProbability_le_one_div
         le_min hyLower (by norm_num)
       linarith
     · exact hdenPos.le
-  · rw [downProbability, if_neg hMs]
+  · rw [downProbability, ite_eq_right hMs]
     exact div_nonneg zero_le_one hdenPos.le
 
 /-- The probability of changing the account is at most
@@ -1746,7 +1750,7 @@ theorem exists_floor_forall_switchBudget_le_of_puiseux_deriv_bound
       switchBudget (1 + ε / 9) M s y
           (fun u => W k (discountRate u)) ≤
         ε * discountRate s / 16 := by
-  letI : Fintype κ := Fintype.ofFinite κ
+  let : Fintype κ := Fintype.ofFinite κ
   have hcoordinate : ∀ k : κ, ∃ S : ℝ, ∀ s : ℝ, S ≤ s →
       ∀ M y : ℝ, IsValidScale (1 + ε / 9) s →
         -1 ≤ y → y ≤ 2 →
@@ -2056,7 +2060,7 @@ theorem expectedChange_eq_of_floor_lt
   have hdown :
       γ⁻¹ * s - s = s * (γ⁻¹ - 1) := by ring
   unfold expectedChange upProbability downProbability
-  rw [if_pos hMs, hup, hdown,
+  rw [ite_eq_left hMs, hup, hdown,
     div_mul_cancel₀ _ h.upDenom_pos.ne',
     div_mul_cancel₀ _ h.downDenom_neg.ne]
   linarith [max_add_min y 0]
@@ -2069,7 +2073,7 @@ theorem expectedChange_eq_of_le_floor
   have hup :
       γ * s - s = s * (γ - 1) := by ring
   unfold expectedChange upProbability downProbability
-  rw [if_neg (not_lt.mpr hsM), hup, zero_mul, add_zero,
+  rw [ite_eq_right (not_lt.mpr hsM), hup, zero_mul, add_zero,
     div_mul_cancel₀ _ h.upDenom_pos.ne']
 
 /-- The account update never has less expected growth than its input gap.
@@ -2102,10 +2106,10 @@ theorem expectedChange_sub_floorIndicator_le
     (hyLower : -1 ≤ y) :
     expectedChange γ M s y - (if s = M then 1 else 0) ≤ y := by
   by_cases hstrict : M < s
-  · rw [expectedChange_eq_of_floor_lt h hstrict, if_neg (ne_of_gt hstrict)]
+  · rw [expectedChange_eq_of_floor_lt h hstrict, ite_eq_right (ne_of_gt hstrict)]
     linarith
   · have hsM : s = M := le_antisymm (not_lt.mp hstrict) hMs
-    rw [expectedChange_eq_of_le_floor h (not_lt.mp hstrict), if_pos hsM]
+    rw [expectedChange_eq_of_le_floor h (not_lt.mp hstrict), ite_eq_left hsM]
     by_cases hy : 0 ≤ y
     · rw [max_eq_left hy]
       linarith

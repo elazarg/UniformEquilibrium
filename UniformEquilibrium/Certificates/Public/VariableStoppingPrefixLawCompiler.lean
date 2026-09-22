@@ -32,7 +32,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -95,11 +95,11 @@ theorem prefixThenStoppedChild_onlineSwitch_eq
       G.onlineSwitchHistoryPotential rule selecting child := by
   funext time history
   by_cases htime : fuel ≤ time
-  · simp only [prefixThenStoppedChildHistoryPotential, dif_pos htime,
+  · simp only [prefixThenStoppedChildHistoryPotential, dite_eq_left htime,
       onlineSwitchHistoryPotential,
       rule.isRootStoppedPathViewCompatible time htime history]
     rfl
-  · simp only [prefixThenStoppedChildHistoryPotential, dif_neg htime]
+  · simp only [prefixThenStoppedChildHistoryPotential, dite_eq_right htime]
 
 /-- Turn a historywise charge into the scalar charge consumed by an adaptive
 potential system. -/

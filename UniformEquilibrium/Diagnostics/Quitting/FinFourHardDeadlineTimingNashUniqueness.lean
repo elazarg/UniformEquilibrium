@@ -24,7 +24,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourHardDeadlineTimingNashBarrier
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 /-! ## Table-specific elimination of current boundary actions -/
 
@@ -300,11 +300,11 @@ theorem dummyTwo_current_eq_zero
     (hnash : (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).mixedExtension.IsNash mixed) :
     mixed 2 (some (0 : Fin (dates + 1))) = 0 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI (who : Player) : Finite
+  let (who : Player) : Finite
       ((quittingFiniteDeadlineTimingGame reward
         (dates + 1)).Strategy who) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -331,11 +331,11 @@ theorem dummyThree_current_eq_zero
     (hnash : (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).mixedExtension.IsNash mixed) :
     mixed 3 (some (0 : Fin (dates + 1))) = 0 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI (who : Player) : Finite
+  let (who : Player) : Finite
       ((quittingFiniteDeadlineTimingGame reward
         (dates + 1)).Strategy who) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -530,7 +530,7 @@ theorem zero_currentMass_lt_one
     (hnash : (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).mixedExtension.IsNash mixed) :
     (mixed 0 (some (0 : Fin (dates + 1)))).toReal < 1 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -631,11 +631,11 @@ theorem timingPurePayoff_one_eq_zero_or_neg_one :
           (quittingQuitters (fun player ↦
             timingActionCurrent (choices player))).Nonempty
       · unfold quittingRootPayoff
-        simp only [dif_pos hquit]
+        simp only [dite_eq_left hquit]
         simp only [reward_one]
         split_ifs <;> simp
       · unfold quittingRootPayoff
-        simp only [dif_neg hquit]
+        simp only [dite_eq_right hquit]
         exact ih (timingChoicesTail choices)
 
 /-- If the two active players select the same timing action, player `1`'s
@@ -663,12 +663,12 @@ theorem timingPurePayoff_one_eq_zero_of_active_eq :
           (quittingQuitters (fun player ↦
             timingActionCurrent (choices player))).Nonempty
       · unfold quittingRootPayoff
-        simp only [dif_pos hquit]
+        simp only [dite_eq_left hquit]
         simp only [reward_one]
-        rw [if_pos]
+        rw [ite_eq_left]
         simp [quittingQuitters, hcurrent]
       · unfold quittingRootPayoff
-        simp only [dif_neg hquit]
+        simp only [dite_eq_right hquit]
         exact ih (timingChoicesTail choices) htail
 
 /-- A pure deviation by player `1` to an action used by player `0` improves
@@ -681,10 +681,10 @@ theorem timingPurePayoff_one_ge_matching_floor
     (if choices 0 = action then 0 else -1) ≤
       timingPurePayoff reward dates choices 1 := by
   by_cases hzero : choices 0 = action
-  · rw [if_pos hzero,
+  · rw [ite_eq_left hzero,
       timingPurePayoff_one_eq_zero_of_active_eq dates choices
         (hzero.trans hone.symm)]
-  · rw [if_neg hzero]
+  · rw [ite_eq_right hzero]
     rcases timingPurePayoff_one_eq_zero_or_neg_one dates choices with
       hpayoff | hpayoff
     · rw [hpayoff]
@@ -789,7 +789,7 @@ theorem one_currentMass_lt_one
     (hnash : (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).mixedExtension.IsNash mixed) :
     (mixed 1 (some (0 : Fin (dates + 1)))).toReal < 1 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -916,7 +916,7 @@ theorem currentRoot_endpointDifference_nonpos
     (who : Player) :
     quittingRootEndpointDifference reward (valueAfter dates)
       (fun player ↦ pushforward (mixed player) timingActionCurrent) who ≤ 0 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -962,11 +962,11 @@ theorem currentRoot_endpointDifference_eq_zero_of_current_ne_zero
     (hcurrent : mixed who (some (0 : Fin (dates + 1))) ≠ 0) :
     quittingRootEndpointDifference reward (valueAfter dates)
       (fun player ↦ pushforward (mixed player) timingActionCurrent) who = 0 := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward
+  let : Finite (quittingFiniteDeadlineTimingGame reward
       (dates + 1)).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI (player : Player) : Finite
+  let (player : Player) : Finite
       ((quittingFiniteDeadlineTimingGame reward
         (dates + 1)).Strategy player) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -1228,15 +1228,15 @@ theorem existsUnique_finiteDeadlineTimingNash (deadline : ℕ) :
         PMF (QuittingFiniteDeadlineTimingAction deadline),
       (quittingFiniteDeadlineTimingGame reward
         deadline).mixedExtension.IsNash mixed := by
-  letI (who : Player) : Finite
+  let (who : Player) : Finite
       ((quittingFiniteDeadlineTimingGame reward deadline).Strategy who) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI (who : Player) : Nonempty
+  let (who : Player) : Nonempty
       ((quittingFiniteDeadlineTimingGame reward deadline).Strategy who) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : Finite
+  let : Finite
       (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -1268,6 +1268,7 @@ theorem hardDeadlineProfile_succ (dates : ℕ) :
   | zero =>
       simp [hardDeadlineProfile, quittingInfinitePathProfile,
         quittingRootSequenceProfile, hardDeadlineRoots]
+      rfl
   | succ time =>
       simp only [hardDeadlineProfile, quittingInfinitePathProfile,
         quittingRootSequenceProfile,

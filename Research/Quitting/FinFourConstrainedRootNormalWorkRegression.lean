@@ -30,7 +30,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourConstrainedRootNormalWorkRegression
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 abbrev Player := Fin 4
@@ -184,7 +184,7 @@ theorem update_profile_phaseMover (phase : Phase) :
     simp [profile, root, phaseCoalition, phaseMover, nextPhase,
       quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile,
       quittingPureSetRoot, quittingSetAction, hostFirst, hostSecond,
-      strategicFirst, strategicSecond]
+      strategicFirst, strategicSecond] <;> rfl
 
 /-- Every unilateral cyclic reset raises the mover's actual payoff by one. -/
 theorem phaseMover_payoffGain_eq_one (phase : Phase) :

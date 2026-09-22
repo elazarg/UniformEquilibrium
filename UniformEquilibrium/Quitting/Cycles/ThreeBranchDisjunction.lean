@@ -91,7 +91,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -264,7 +264,7 @@ theorem isQuittingCycleAdmissible_or_isolated_negative
     have hle : (∏ stage : Fin (period + 1),
         quittingStationaryFixedOpponentsContinueMass
           (quittingCyclicContinuationBlockCycle period block stage) who) ≤ 1 :=
-      Finset.prod_le_one
+      Finset.prod_le_one₀
         (fun stage _ ↦ quittingRootDeletedContinueMass_nonneg _ who)
         (fun stage _ ↦ quittingRootDeletedContinueMass_le_one _ who)
     have hprod : (∏ stage : Fin (period + 1),

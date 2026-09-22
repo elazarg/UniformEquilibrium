@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type}
@@ -60,8 +60,8 @@ theorem isUniformEquilibriumPayoff_of_stationaryAverageRewardSeparateBias
             expect (G.transition s a) (fun s' => Hhi s' who)) ≤
         W s who + Hhi s who) :
     G.IsUniformEquilibriumPayoff s₀ (W s₀) := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   apply G.isUniformEquilibriumPayoff_of_deviation_caps s₀ (W s₀)
   intro δ hδ
   let xConst : ℕ → G.StationaryMixedProfile := fun _ => x

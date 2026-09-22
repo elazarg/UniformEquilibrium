@@ -1,6 +1,6 @@
 /- Function-field infrastructure for the algebraic curve-selection step. -/
 import Mathlib.FieldTheory.IntermediateField.Adjoin.Algebra
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.RingTheory.Ideal.Quotient.Operations
 import Mathlib.RingTheory.Localization.FractionRing
 import Mathlib.RingTheory.MvPolynomial.Ideal
@@ -147,7 +147,7 @@ theorem adjoin_range_quotientCoordinate_eq_top
         (FractionRing (Polynomial ℝ))
         (Set.range (quotientCoordinate J)) =
       ⊤ := by
-  letI : Algebra
+  let : Algebra
       (FractionRing (Polynomial ℝ))
       (FractionRing (MvPolynomial σ ℝ ⧸ J)) :=
     parameterFractionRingAlgebra J parameter hparameter
@@ -215,7 +215,7 @@ theorem essFiniteType_parameterFunctionField
     Algebra.EssFiniteType
       (FractionRing (Polynomial ℝ))
       (FractionRing (MvPolynomial σ ℝ ⧸ J)) := by
-  letI : Algebra
+  let : Algebra
       (FractionRing (Polynomial ℝ))
       (FractionRing (MvPolynomial σ ℝ ⧸ J)) :=
     parameterFractionRingAlgebra J parameter hparameter

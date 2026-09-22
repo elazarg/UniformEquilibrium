@@ -56,7 +56,7 @@ theorem abs_reward_le_quittingPassiveMagnitude
     (show (terminal, who) ∈
       ((Finset.univ ×ˢ Finset.univ) :
         Finset ({S : Finset ι // S.Nonempty} × ι)) by simp)
-  rw [if_pos habsent] at hbound
+  rw [ite_eq_left habsent] at hbound
   simpa only [quittingPassiveMagnitude] using hbound
 
 /-- The participant projection retains rewards of coalition members and

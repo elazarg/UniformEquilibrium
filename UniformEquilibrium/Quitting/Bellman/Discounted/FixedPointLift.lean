@@ -92,7 +92,18 @@ theorem isDiscountedStationaryBellmanEq_of_quittingClippedMap_eq_self
   · intro state who deviation
     cases state with
     | none =>
-        rw [discountedAuxEU_quittingGame_none, discountedAuxEU_quittingGame_none]
+        change PMF Bool at deviation
+        let V : (quittingGame reward).State → Payoff ι := quittingDiscountedLiftValue reward
+          (quittingDiscountedLiveValue reward discountComplement root)
+        let deviated : ι → PMF Bool := Function.update root who deviation
+        have hdeviated := discountedAuxEU_quittingGame_none reward
+          (1 - discountComplement) V deviated who
+        have hroot := discountedAuxEU_quittingGame_none reward
+          (1 - discountComplement) V root who
+        change (quittingGame reward).discountedAuxEU (1 - discountComplement) V none
+          deviated who ≤
+            (quittingGame reward).discountedAuxEU (1 - discountComplement) V none root who
+        rw [hdeviated, hroot]
         change (1 - discountComplement) * quittingRootExpectedPayoff reward
           (quittingDiscountedLiveValue reward discountComplement root)
           (Function.update root who deviation) who ≤
@@ -102,15 +113,34 @@ theorem isDiscountedStationaryBellmanEq_of_quittingClippedMap_eq_self
         rw [add_zero] at hdeviation
         exact mul_le_mul_of_nonneg_left hdeviation (sub_nonneg.mpr hdiscount)
     | some terminal =>
-        rw [discountedAuxEU_quittingGame_some, discountedAuxEU_quittingGame_some]
+        change PMF Bool at deviation
+        let V : (quittingGame reward).State → Payoff ι := quittingDiscountedLiftValue reward
+          (quittingDiscountedLiveValue reward discountComplement root)
+        let profile : ι → PMF Bool := fun _ => PMF.pure false
+        let deviated : ι → PMF Bool := Function.update profile who deviation
+        have hdeviated := discountedAuxEU_quittingGame_some reward
+          (1 - discountComplement) V terminal deviated who
+        have hprofile := discountedAuxEU_quittingGame_some reward
+          (1 - discountComplement) V terminal profile who
+        change (quittingGame reward).discountedAuxEU (1 - discountComplement) V
+          (some terminal) deviated who ≤
+            (quittingGame reward).discountedAuxEU (1 - discountComplement) V
+              (some terminal) profile who
+        rw [hdeviated, hprofile]
   · intro state who
     cases state with
     | none =>
-        rw [discountedAuxEU_quittingGame_none]
+        rw [discountedAuxEU_quittingGame_none reward (1 - discountComplement)
+          (quittingDiscountedLiftValue reward
+            (quittingDiscountedLiveValue reward discountComplement root))
+          (quittingDiscountedLiftProfile reward root none) who]
         exact (quittingDiscountedLiveValue_eq_rootPayoff
           reward hpositive hdiscount root who).symm
     | some terminal =>
-        rw [discountedAuxEU_quittingGame_some]
+        rw [discountedAuxEU_quittingGame_some reward (1 - discountComplement)
+          (quittingDiscountedLiftValue reward
+            (quittingDiscountedLiveValue reward discountComplement root)) terminal
+          (quittingDiscountedLiftProfile reward root (some terminal)) who]
         simp only [quittingDiscountedLiftValue]
         ring
 

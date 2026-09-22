@@ -171,7 +171,7 @@ private theorem rawStrictFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice) :
+        (profile who).weights choice) :
     (quittingFiniteCalendarRawStrictFormulaWithTerms rawExclusionRewardTerm
       rawExclusionCalendarTerm).HoldsAt
         (PolynomialFormula.blockEnvironment calendar parameters) ↔
@@ -196,7 +196,7 @@ private theorem evalReal_rawExclusionSingletonSurplusTerm_profile
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice)
+        (profile who).weights choice)
     (observer : Fin players) :
     (quittingFiniteCalendarSingletonSurplusExpressionWithTerms
       rawExclusionRewardTerm rawExclusionCalendarTerm observer).evalReal
@@ -221,7 +221,7 @@ private theorem rawWeakFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice)
+        (profile who).weights choice)
     (owners : Finset (Fin players)) :
     (quittingFiniteCalendarRawWeakSubsetFormulaWithTerms rawExclusionRewardTerm
       rawExclusionCalendarTerm owners).HoldsAt
@@ -242,10 +242,10 @@ private theorem rawWeakFormula_holdsAt_profile_iff
     constructor
     · intro who choice
       rw [evalReal_rawExclusionCalendarTerm, hcalendar]
-      exact (profile who).property.1 choice
+      exact (profile who).weights_nonneg choice
     · intro who
       simp only [evalReal_rawExclusionCalendarTerm, hcalendar]
-      have htotal := (profile who).property.2
+      have htotal := (profile who).total_of_fintype
       rw [Fintype.sum_option] at htotal
       exact htotal
   simp only [evalReal_rawExclusionRewardTerm, hsimplex, not_true_eq_false, false_or,
@@ -265,7 +265,7 @@ theorem rawStrictExclusionParameterFormula_holdsAt_iff
   constructor
   · intro hformula profile
     apply (rawStrictFormula_holdsAt_profile_iff parameters
-      (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) profile
+      (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) profile
       (fun who choice => by rw [quittingFiniteCalendarFromParameters_encode])).mp
     exact hformula _
   · intro hraw calendar
@@ -307,7 +307,7 @@ theorem rawWeakSubsetExclusionParameterFormula_holdsAt_iff
     refine ⟨?_, fun profile => ?_⟩
     · simpa only [evalReal_rawExclusionRewardTerm] using hzero.1
     · have hresult := (rawWeakFormula_holdsAt_profile_iff parameters
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) profile
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) profile
         (fun who choice => by rw [quittingFiniteCalendarFromParameters_encode])
         owners).mp
         (hformula _)
@@ -341,7 +341,7 @@ private theorem evalReal_rawGroupSingletonSurplusTerm_profile
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice)
+        (profile who).weights choice)
     (observer : Fin players) :
     (quittingFiniteCalendarSingletonSurplusExpressionWithTerms rawGroupRewardTerm
       rawGroupCalendarTerm observer).evalReal
@@ -366,7 +366,7 @@ private theorem rawGroupFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice) :
+        (profile who).weights choice) :
     (quittingFiniteCalendarRawOrderedPairFormulaWithTerms rawGroupRewardTerm
       rawGroupCalendarTerm rawGroupLambdaTerm).HoldsAt
         (rawGroupEnvironment calendar lambda parameters) ↔
@@ -389,10 +389,10 @@ private theorem rawGroupFormula_holdsAt_profile_iff
     constructor
     · intro who choice
       rw [evalReal_rawGroupCalendarTerm, hcalendar]
-      exact (profile who).property.1 choice
+      exact (profile who).weights_nonneg choice
     · intro who
       simp only [evalReal_rawGroupCalendarTerm, hcalendar]
-      have htotal := (profile who).property.2
+      have htotal := (profile who).total_of_fintype
       rw [Fintype.sum_option] at htotal
       exact htotal
   simp only [hsimplex, not_true_eq_false, false_or]
@@ -421,7 +421,7 @@ private theorem rawGroupFormula_forall_iff
   constructor
   · intro hformula profile
     apply (rawGroupFormula_holdsAt_profile_iff parameters
-      (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) lambda
+      (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) lambda
       profile (fun who choice => by
         rw [quittingFiniteCalendarFromParameters_encode])).mp
     exact hformula _

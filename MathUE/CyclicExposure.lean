@@ -132,7 +132,7 @@ theorem eq_fair_of_forall_quarter_le_exposure [Finite ι] [Nonempty ι]
       rw [exposure, C.prev_next i] at h
       exact h
     linarith
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   have hsumperm : (∑ i, x (C.next (C.next i))) = ∑ i, x i := by
     simpa [nextEquiv] using (C.nextEquiv.trans C.nextEquiv).sum_comp x
   have hsumzero : ∑ i, (x (C.next (C.next i)) - x i) = 0 := by

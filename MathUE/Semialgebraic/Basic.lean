@@ -1,6 +1,6 @@
 import MathUE.Logic.SignFormulaMap
 import Mathlib.Algebra.MvPolynomial.Rename
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-! Semialgebraic sets as finite Boolean combinations of real polynomial sign sets. -/
 
@@ -68,11 +68,11 @@ theorem compl {n : ℕ} {set : Set (Fin n → ℝ)} (h : IsSemialgebraic set) :
 
 theorem polynomial_nonneg {n : ℕ} (polynomial : MvPolynomial (Fin n) ℝ) :
     IsSemialgebraic {environment | 0 ≤ MvPolynomial.eval environment polynomial} := by
-  simpa only [Set.compl_setOf, not_lt] using (polynomial_neg polynomial).compl
+  simpa only [Set.compl_ofPred, not_lt] using (polynomial_neg polynomial).compl
 
 theorem polynomial_nonpos {n : ℕ} (polynomial : MvPolynomial (Fin n) ℝ) :
     IsSemialgebraic {environment | MvPolynomial.eval environment polynomial ≤ 0} := by
-  simpa only [Set.compl_setOf, not_lt] using (polynomial_pos polynomial).compl
+  simpa only [Set.compl_ofPred, not_lt] using (polynomial_pos polynomial).compl
 
 /-- Pulling back along any finite coordinate map preserves semialgebraicity. -/
 theorem preimage_coordinates {n m : ℕ} {set : Set (Fin n → ℝ)}

@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -75,7 +75,7 @@ theorem exists_analyticForwardFinkPublicResponse_of_neutralActionCharge_pos
   have hchargeZero :
       charge 0 = germ.neutralActionCharge B who response := by
     simp only [charge, AnalyticBellmanGerm.rawFinkObstructionMass,
-      supported, if_true, forward, ContinuationNeutralAction.forwardResponse]
+      supported, ite_true, forward, ContinuationNeutralAction.forwardResponse]
     rw [germ.rawPureDeviationStageGainCurve_zero_eq_endpointFinkPoint]
     rw [germ.rawPureDeviationContinuationGainCurve_zero_eq_endpointFinkPoint]
     simp only [sub_zero, neutralActionCharge]

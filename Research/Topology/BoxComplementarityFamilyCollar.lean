@@ -29,7 +29,7 @@ theorem IsContinuousBoxComplementarityFamily.isClosed_solutionGraph
         {pair | 0 ≤ (pair.2 who : ℝ) * (family pair.1).gain pair.2 who} ∩
         {pair | (1 - (pair.2 who : ℝ)) * (family pair.1).gain pair.2 who ≤ 0} := by
     ext pair
-    simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_inter_iff]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter, Set.mem_inter_iff]
     exact (family pair.1).isSolution_iff_mul_gain pair.2
   rw [hset]
   apply isClosed_iInter
@@ -49,7 +49,7 @@ theorem IsContinuousBoxComplementarityFamily.isClosed_exists_solution
       Prod.snd '' {pair : Set.Icc (0 : ℝ) 1 × UnitCube (Fin n) |
         (family pair.1).IsSolution pair.2} := by
     ext point
-    simp only [Set.mem_setOf_eq, Set.mem_image, Prod.exists, exists_eq_right]
+    simp only [Set.mem_ofPred_eq, Set.mem_image, Prod.exists, exists_eq_right]
   rw [himage]
   exact isClosedMap_snd_of_compactSpace _ hcontinuous.isClosed_solutionGraph
 

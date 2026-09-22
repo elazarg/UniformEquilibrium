@@ -43,10 +43,10 @@ theorem exists_uniformGap_of_positive_on_zeroSlice
       ∀ profile, gap ≤ audit profile + calibration profile := by
   cases isEmpty_or_nonempty Profile with
   | inl hProfile =>
-      letI : IsEmpty Profile := hProfile
+      let : IsEmpty Profile := hProfile
       exact ⟨1, zero_lt_one, fun profile ↦ isEmptyElim profile⟩
   | inr hProfile =>
-      letI : Nonempty Profile := hProfile
+      let : Nonempty Profile := hProfile
       let total : Profile → ℝ := fun profile ↦
         audit profile + calibration profile
       have htotalContinuous : Continuous total :=

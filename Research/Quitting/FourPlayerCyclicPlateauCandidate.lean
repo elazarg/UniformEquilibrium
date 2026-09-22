@@ -44,7 +44,7 @@ noncomputable section
 namespace GameTheory
 namespace FourPlayerCyclicPlateauCandidate
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 abbrev Player := Fin 4
@@ -231,7 +231,7 @@ theorem update_profile_phaseMover (phase : Phase) :
   fin_cases phase <;> fin_cases who <;>
     simp [profile, root, phaseCoalition, phaseMover, nextPhase,
       quittingStationaryProfile, StochasticGame.stationaryBehaviorProfile,
-      quittingPureSetRoot, quittingSetAction, first, second, host]
+      quittingPureSetRoot, quittingSetAction, first, second, host] <;> rfl
 
 /-- Every reset mover gains exactly one unit. -/
 theorem phaseMover_payoff_gain (phase : Phase) :

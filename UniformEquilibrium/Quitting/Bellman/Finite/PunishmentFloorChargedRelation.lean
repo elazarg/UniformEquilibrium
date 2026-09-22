@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorForward
 
 /-!
@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

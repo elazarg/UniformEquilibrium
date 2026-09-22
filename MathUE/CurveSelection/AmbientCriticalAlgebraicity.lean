@@ -36,7 +36,7 @@ theorem isAlgebraic_of_equations_and_normalCriticality_in_ambient
     IsAlgebraic K
       (MvPolynomial.eval₂ (algebraMap K H) x Q) := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let generator : σ ⊕ I → H :=
     Sum.elim x Λ
   let E : IntermediateField K H :=
@@ -53,7 +53,7 @@ theorem isAlgebraic_of_equations_and_normalCriticality_in_ambient
         IntermediateField.subset_adjoin K
           (Set.range generator)
           ⟨Sum.inr i, rfl⟩⟩
-  letI : Algebra.EssFiniteType K E :=
+  let : Algebra.EssFiniteType K E :=
     IntermediateField.essFiniteType_iff.mpr
       (IntermediateField.fg_adjoin_of_finite
         (Set.finite_range generator))

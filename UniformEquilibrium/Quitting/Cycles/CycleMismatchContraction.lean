@@ -78,7 +78,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-! ## A sign-free contraction estimate for real self-maps
 
@@ -661,7 +661,7 @@ theorem quittingAnchoredPathValue_at_cutoff
     (hpath : path ∈
       quittingFiniteAnchoredNashBellmanChainSet reward terminal cutoff) :
     quittingFiniteNashBellmanPathValue cutoff path cutoff = terminal := by
-  rw [quittingFiniteNashBellmanPathValue, dif_pos (Nat.lt_succ_self cutoff)]
+  rw [quittingFiniteNashBellmanPathValue, dite_eq_left (Nat.lt_succ_self cutoff)]
   exact hpath.2.1
 
 /-- The displayed value at the origin of a cyclic continuation block is the
@@ -672,7 +672,7 @@ theorem quittingCyclicBlockValue_at_zero
     (block : QuittingFiniteNashBellmanPath ι period)
     (hblock : IsQuittingCyclicContinuationBlock reward terminal period block) :
     quittingFiniteNashBellmanPathValue period block 0 = terminal := by
-  rw [quittingFiniteNashBellmanPathValue, dif_pos (Nat.succ_pos period)]
+  rw [quittingFiniteNashBellmanPathValue, dite_eq_left (Nat.succ_pos period)]
   exact hblock.2.1
 
 /-- **The cycle's own value is a fixed point of the cyclic composite.**  This

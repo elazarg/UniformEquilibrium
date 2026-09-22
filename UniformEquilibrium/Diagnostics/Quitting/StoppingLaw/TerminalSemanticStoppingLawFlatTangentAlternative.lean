@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Move : Type} [Fintype ι] [Fintype Move]
 
@@ -187,7 +187,7 @@ theorem stoppingLawFlatTangent_supportEntry_or_chargedCirculation_or_potentialCo
     unfold quittingTerminalSemanticDebtSum at hpositive
     simp only [hdebtZero, Finset.sum_const_zero] at hpositive
     exact (lt_irrefl 0) hpositive
-  letI : Nonempty ι := ⟨hactiveNonempty.choose⟩
+  let : Nonempty ι := ⟨hactiveNonempty.choose⟩
   by_cases hentry : ∃ mover ∈ active, ∃ recipient,
       quittingTerminalSemanticDebt base recipient = 0 ∧
         0 < column mover recipient

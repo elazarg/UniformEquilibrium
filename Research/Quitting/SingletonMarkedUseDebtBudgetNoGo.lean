@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 namespace SingletonMarkedUseDebtBudgetNoGo
 
-open Math.Probability Math.SurvivalWeightedObstruction
+open _root_.Math.Probability Math.SurvivalWeightedObstruction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

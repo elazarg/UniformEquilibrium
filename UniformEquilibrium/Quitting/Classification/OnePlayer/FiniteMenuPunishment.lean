@@ -43,7 +43,7 @@ theorem finiteRootWordCap_singleton_eq (solo value : ℝ)
     have hall : quittingAllContinueAction = fun _ : PUnit => false := by
       funext who
       rfl
-    rw [if_pos hall]
+    rw [ite_eq_left hall]
     simp
 
 theorem punishmentOperator_eq (solo value : ℝ) :

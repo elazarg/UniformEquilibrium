@@ -35,7 +35,7 @@ game-theoretic invariant.
 
 noncomputable section
 
-open Filter Math.Probability Set Topology
+open Filter _root_.Math.Probability Set Topology
 
 namespace GameTheory
 namespace StochasticGame
@@ -54,7 +54,7 @@ theorem endpoint_isPolynomialBellmanSolution
     (germ : G.AnalyticBellmanGerm) :
     G.IsPolynomialBellmanSolution germ.endpoint := by
   let source := 𝓝[Set.Ioo (0 : ℝ) germ.radius] 0
-  haveI : NeBot source :=
+  have : NeBot source :=
     left_nhdsWithin_Ioo_neBot germ.radius_pos
   have htend :
       Tendsto germ.assignment source (𝓝 germ.endpoint) := by
@@ -74,7 +74,7 @@ theorem endpoint_discountCoordinate_eq_zero
     (germ : G.AnalyticBellmanGerm) :
     germ.endpoint BellmanVar.disc = 0 := by
   let source := 𝓝[Set.Ioo (0 : ℝ) germ.radius] 0
-  haveI : NeBot source :=
+  have : NeBot source :=
     left_nhdsWithin_Ioo_neBot germ.radius_pos
   have hcoordinate :
       Tendsto (fun t => germ.assignment t BellmanVar.disc) source
@@ -413,7 +413,7 @@ theorem mul_sub_regret_le_expect_causalMonitorScore
             G.State _ ⟨charge.source⟩ _
             (G.finkStateKernel
               germ.endpointFinkPoint charge.source)) T) := by
-  letI : Nonempty G.State := ⟨charge.source⟩
+  let : Nonempty G.State := ⟨charge.source⟩
   let baseline :=
     G.finkStateKernel germ.endpointFinkPoint charge.source
   let comparison :=
@@ -1355,7 +1355,7 @@ theorem exists_fixed_oriented_stateKernelDrift_powerCharge
           germ.analytic_rawStateKernelDriftCurve) index.1)) index.2
   obtain ⟨index₀, hindex₀⟩ :=
     jet.exists_rawStateKernelDrift_not_eventually_zero hnonharmonic
-  letI : Nonempty (G.State × G.State) := ⟨index₀⟩
+  let : Nonempty (G.State × G.State) := ⟨index₀⟩
   obtain ⟨index, σ, hσ, hmax⟩ :=
     Math.finite_analytic_family_eventually_fixed_oriented_abs_maximizer
       f hf ⟨index₀, hindex₀⟩

@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct Set
+open Filter _root_.Math.Probability Math.PMFProduct Set
 open QuittingSureSetOwnerRepair
 
 namespace FinFourMaximalRayZeroMinimumRegressions
@@ -1076,6 +1076,7 @@ theorem pairProfile_eq_forcedUpdate
         simp [quittingLiteralOneDateProfile,
           quittingRootThenContinuationProfile, quittingPureSetRoot,
           quittingSetAction, hplayer]
+        rfl
     | succ time =>
         simp [quittingLiteralOneDateProfile,
           quittingRootThenContinuationProfile, hplayer]
@@ -1439,7 +1440,7 @@ theorem fullBindingSurvivalProduct_pos (time : ℕ) :
 
 theorem fullBindingSurvivalProduct_le_one (time : ℕ) :
     fullBindingSurvivalProduct time ≤ 1 := by
-  exact Finset.prod_le_one
+  exact Finset.prod_le_one₀
     (fun date _ ↦ (activeRowSurvival_pos date).le)
     (fun date _ ↦ activeRowSurvival_le_one date)
 

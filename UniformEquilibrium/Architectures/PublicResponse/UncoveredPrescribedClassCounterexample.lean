@@ -39,7 +39,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 namespace UncoveredPrescribedClass
 
@@ -200,7 +200,7 @@ theorem pure_toReal_eq_indicator (z y : State) :
   by_cases h : y = z
   · subst y
     simp
-  · rw [PMF.pure_apply, if_neg]
+  · rw [PMF.pure_apply, ite_eq_right]
     · simp [h]
     · exact fun hzy => h hzy
 
@@ -280,8 +280,11 @@ theorem unilateralReachable_playerTwo (z : State) :
   | false => exact Relation.ReflTransGen.refl
   | true =>
       apply Relation.ReflTransGen.tail Relation.ReflTransGen.refl
-      refine ⟨true, ?_⟩
-      rw [nextConfigDist_playerTwo_eq]
+      let move : game.Act true := true
+      refine ⟨move, ?_⟩
+      change true ∈
+        (architecture.nextConfigDist true false (PMF.pure move)).support
+      rw [nextConfigDist_playerTwo_eq false move]
       exact PMF.mem_support_pure_iff _ _ |>.mpr rfl
 
 /-- (T0) actually holds globally, hence in particular on the prescribed

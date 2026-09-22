@@ -42,7 +42,7 @@ theorem exists_pos_principalReturnedBlock_relativeError_gap
       c * block.totalHazard ≤
         block.bellmanError (quittingPrincipalReward reward players) +
           block.endpointRegret (quittingPrincipalReward reward players) := by
-  letI : Nonempty players := hplayers.to_subtype
+  let : Nonempty players := hplayers.to_subtype
   apply exists_pos_relativeError_gap_of_noHomogeneous_of_valueBound
   rwa [normalizedSoloMatrix_quittingPrincipalReward]
 
@@ -83,7 +83,7 @@ theorem hasHomogeneousSimplexSolution_principal_of_vanishing_returnedBlocks
         (blocks n).totalHazard) atTop (nhds 0)) :
     HasHomogeneousSimplexSolution
       (principalMatrix (normalizedSoloMatrix reward) players) := by
-  letI : Nonempty players := hplayers.to_subtype
+  let : Nonempty players := hplayers.to_subtype
   rw [← normalizedSoloMatrix_quittingPrincipalReward]
   exact hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks
     (quittingPrincipalReward reward players) blocks hvalue hpositive

@@ -46,7 +46,7 @@ the utility-bearing structure.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 -- ============================================================================
 -- PMFGameForm structure
@@ -157,8 +157,10 @@ end UpdateOps
 open Classical in
 /-- The utility-free mixed extension of a game form. Each player's strategy is
 lifted to a probability distribution, independently sampled, and then evaluated
-by the original outcome kernel. -/
-noncomputable def mixedExtension (F : PMFGameForm ι) [Fintype ι] : PMFGameForm ι where
+by the original outcome kernel. Its type fields remain reducible so dependent
+profiles elaborate as the corresponding families of probability distributions. -/
+@[reducible] noncomputable def mixedExtension
+    (F : PMFGameForm ι) [Fintype ι] : PMFGameForm ι where
   Strategy := fun i => PMF (F.Strategy i)
   Outcome := F.Outcome
   outcomeKernel := fun σ => (Math.PMFProduct.pmfPi σ).bind F.outcomeKernel

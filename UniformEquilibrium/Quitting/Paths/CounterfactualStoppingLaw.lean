@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Probability
+open _root_.Math Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -629,7 +629,7 @@ theorem quittingFirstStoppingOutcome_eq_of_earlier_stopper
       apply htop
       rw [hmin]
       exact heq
-    rw [if_neg htop, if_neg htopSecond]
+    rw [ite_eq_right htop, ite_eq_right htopSecond]
     apply congrArg some
     exact Subtype.ext hcoalition
 
@@ -725,7 +725,7 @@ private theorem quittingFirstStoppingOutcome_hidden_one_other_two
         quittingStoppingTimeValue]
   change quittingFirstStoppingOutcome times = _
   unfold quittingFirstStoppingOutcome
-  rw [if_neg (by simp [hmin])]
+  rw [ite_eq_right (by simp [hmin])]
   apply congrArg some
   exact Subtype.ext hcoalition
 
@@ -750,7 +750,7 @@ private theorem quittingFirstStoppingOutcome_all_two
       quittingStoppingTimeValue]
   change quittingFirstStoppingOutcome times = _
   unfold quittingFirstStoppingOutcome
-  rw [if_neg (by simp [hmin])]
+  rw [ite_eq_right (by simp [hmin])]
   apply congrArg some
   exact Subtype.ext hcoalition
 

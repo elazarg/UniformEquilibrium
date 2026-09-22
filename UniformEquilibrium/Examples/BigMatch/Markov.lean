@@ -61,7 +61,7 @@ theorem liveProbability_le_one (p : ℕ → ℝ)
     (hp0 : ∀ t, 0 ≤ p t) (hp1 : ∀ t, p t ≤ 1) (t : ℕ) :
     liveProbability p t ≤ 1 := by
   unfold liveProbability
-  apply Finset.prod_le_one
+  apply Finset.prod_le_one₀
   · intro k hk
     exact sub_nonneg.mpr (hp1 k)
   · intro k hk
@@ -124,7 +124,7 @@ theorem cutoffStagePayoff_le_tail (p : ℕ → ℝ)
     (hp0 : ∀ t, 0 ≤ p t) (hp1 : ∀ t, p t ≤ 1)
     (hsum : Summable p) {N t : ℕ} (hNt : N ≤ t) :
     cutoffStagePayoff p N t ≤ ∑' k : ℕ, p (k + N) := by
-  rw [cutoffStagePayoff, if_neg (not_lt.mpr hNt),
+  rw [cutoffStagePayoff, ite_eq_right (not_lt.mpr hNt),
     ← sum_liveProbability_mul_eq_sub p
       (show N ≤ t + 1 by omega)]
   calc
@@ -468,7 +468,7 @@ theorem stateOneProbability_cutoffProfile_eq_sub_of_le
       ring
   | succ t hNt ih =>
       rw [stateOneProbability_succ, ih,
-        rightProbability_cutoffProfile, if_neg (not_lt.mpr hNt),
+        rightProbability_cutoffProfile, ite_eq_right (not_lt.mpr hNt),
         stopProbability_cutoffProfile,
         stateLiveProbability_cutoffProfile,
         MarkovScalar.liveProbability_succ]
@@ -495,16 +495,16 @@ theorem expectedStagePayoff_cutoffProfile
     stateLiveProbability_cutoffProfile]
   unfold liveStageReward MarkovScalar.cutoffStagePayoff
   by_cases ht : t < N
-  · rw [if_pos ht,
+  · rw [ite_eq_left ht,
       stateOneProbability_cutoffProfile_eq_zero_of_le m N t (by omega),
-      rightProbability_cutoffProfile, if_pos ht,
+      rightProbability_cutoffProfile, ite_eq_left ht,
       stopProbability_cutoffProfile,
       MarkovScalar.liveProbability_succ]
     ring
   · have hNt : N ≤ t := not_lt.mp ht
-    rw [if_neg ht,
+    rw [ite_eq_right ht,
       stateOneProbability_cutoffProfile_eq_sub_of_le m N t hNt,
-      rightProbability_cutoffProfile, if_neg ht,
+      rightProbability_cutoffProfile, ite_eq_right ht,
       stopProbability_cutoffProfile,
       MarkovScalar.liveProbability_succ]
     ring

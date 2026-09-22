@@ -183,7 +183,7 @@ private lemma weight_with_blocker (who : Player) (subset : Finset Player) :
     have hle := Finset.card_le_card hsubset
     omega
   rw [weight]
-  simp only [if_neg hcard]
+  simp only [ite_eq_right hcard]
   simp
 
 private lemma without_blocker_average (hazard : Player → ℝ) (who : Player) :
@@ -279,13 +279,13 @@ private lemma backgroundQuitMass_bounds
       _ = ∏ _other ∈ background who, (1 / 4 : ℝ) := by
         rw [Finset.prod_const]
       _ ≤ ∏ other ∈ background who, (1 - hazard other) := by
-        exact Finset.prod_le_prod (fun _ _ => by norm_num)
+        exact Finset.prod_le_prod₀ (fun _ _ => by norm_num)
           (fun other _ => (hfactor other).1)
   have hproductUpper :
       (∏ other ∈ background who, (1 - hazard other)) ≤ 343 / 512 := by
     calc
       _ ≤ ∏ _other ∈ background who, (7 / 8 : ℝ) := by
-        exact Finset.prod_le_prod
+        exact Finset.prod_le_prod₀
           (fun other _ => by linarith [(hfactor other).1])
           (fun other _ => (hfactor other).2)
       _ = (7 / 8 : ℝ) ^ (background who).card := by
@@ -378,7 +378,7 @@ private lemma continueMassExcl_lt_one
   have hrestLe :
       (∏ other ∈ (Finset.univ.erase who).erase (blocker who),
         (1 - hazard other)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun other _ => sub_nonneg.mpr (hhazard.2 other))
       (fun other _ => by linarith [hhazard.1 other])
   have hfactorNonneg : 0 ≤ 1 - hazard (blocker who) :=

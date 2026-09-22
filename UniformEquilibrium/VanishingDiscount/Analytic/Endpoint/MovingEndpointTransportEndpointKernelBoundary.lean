@@ -30,7 +30,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MovingEndpointTransportEndpointKernelBoundary
 
-open Filter Math Math.PMFProduct Math.Probability Set
+open Filter _root_.Math Math.PMFProduct _root_.Math.Probability Set
 open AnalyticBellmanGerm.FiniteBiasSeed
 open PrescribedEndpointTargetTransportBoundaryNoGo
 

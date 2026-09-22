@@ -49,7 +49,7 @@ theorem eval₂_optionEquivRight_optionLocalizedCoordinate
         (Localization.Away
           (Ideal.Quotient.mk J g))
         (Ideal.Quotient.mk J Q) := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial (Option ν) ℝ ⧸ J) :=
     parameterPolynomialAlgebra J none
   induction Q using MvPolynomial.induction_on with
@@ -120,7 +120,7 @@ theorem eval₂_optionEquivRight_optionLocalizedCoordinate_eq_zero
         (optionLocalizedCoordinate J g)
         (MvPolynomial.optionEquivRight ℝ ν Q) =
       0 := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial (Option ν) ℝ ⧸ J) :=
     parameterPolynomialAlgebra J none
   rw [eval₂_optionEquivRight_optionLocalizedCoordinate
@@ -172,7 +172,7 @@ theorem eventually_optionPresentationSectionMap_eq
           (optionLocalizedCoordinate J g)
           (a n) =
         fun v => x n (some v) := by
-  letI : Fintype ν := Fintype.ofFinite ν
+  let : Fintype ν := Fintype.ofFinite ν
   have hfull :
       ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
         presentationSectionMap P
@@ -225,12 +225,12 @@ theorem eventually_optionPresentationSectionMap_eq_sequenceGerm
             (a n) =
           fun v => x n (some v) := by
   dsimp only
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial (Option ν) ℝ ⧸
         sequenceGermIdeal x) :=
     parameterPolynomialAlgebra
       (sequenceGermIdeal x) none
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra x none
   intro P a hsection
   exact eventually_optionPresentationSectionMap_eq

@@ -144,11 +144,11 @@ def colliderJoin (s low : ℝ) : ZMod 5 → ℝ :=
   fun d => if d = 4 then 0 else low - s
 
 @[simp] theorem colliderJoin_four (s low : ℝ) : colliderJoin s low 4 = 0 := by
-  rw [colliderJoin, if_pos rfl]
+  rw [colliderJoin, ite_eq_left rfl]
 
 theorem colliderJoin_of_ne (s low : ℝ) {d : ZMod 5} (hd : d ≠ 4) :
     colliderJoin s low d = low - s := by
-  rw [colliderJoin, if_neg hd]
+  rw [colliderJoin, ite_eq_right hd]
 
 variable (s low : ℝ) (m : ZMod 5 → ℝ)
 
@@ -156,14 +156,14 @@ variable (s low : ℝ) (m : ZMod 5 → ℝ)
 @[simp] theorem colliderReward_singleton (owner who : ZMod 5) :
     colliderReward s low m (quittingSingletonTerminal owner) who =
       s + m (owner - who) := by
-  rw [colliderReward, if_pos (by simp [quittingSingletonTerminal])]
+  rw [colliderReward, ite_eq_left (by simp [quittingSingletonTerminal])]
   simp [quittingSingletonTerminal]
 
 /-- An outsider of a joint exit is paid zero. -/
 theorem colliderReward_of_notMem (S : {S : Finset (ZMod 5) // S.Nonempty})
     (hcard : S.1.card ≠ 1) (who : ZMod 5) (hwho : who ∉ S.1) :
     colliderReward s low m S who = 0 := by
-  rw [colliderReward, if_neg hcard, if_pos hwho]
+  rw [colliderReward, ite_eq_right hcard, ite_eq_left hwho]
 
 /-- A member of a joint exit other than its own collider pair is paid
 `low`. -/
@@ -171,7 +171,8 @@ theorem colliderReward_of_mem (S : {S : Finset (ZMod 5) // S.Nonempty})
     (hcard : S.1.card ≠ 1) (who : ZMod 5) (hwho : who ∈ S.1)
     (hcollider : S.1 ≠ ({who - 1, who} : Finset (ZMod 5))) :
     colliderReward s low m S who = low := by
-  rw [colliderReward, if_neg hcard, if_neg (by simpa using hwho), if_neg hcollider]
+  rw [colliderReward, ite_eq_right hcard,
+    ite_eq_right (by simpa using hwho), ite_eq_right hcollider]
 
 /-- The collider row: a player quitting together with exactly its predecessor
 keeps its solo self value. -/
@@ -181,7 +182,7 @@ theorem colliderReward_collider (who : ZMod 5) :
   have hcard : ¬ (({who - 1, who} : Finset (ZMod 5)).card = 1) := by
     revert who
     decide
-  rw [colliderReward, if_neg hcard, if_neg (by simp), if_pos rfl]
+  rw [colliderReward, ite_eq_right hcard, ite_eq_right (by simp), ite_eq_left rfl]
 
 /-- The two-element rows are the circulant rows of the join margin vector. -/
 theorem colliderReward_pair {owner who : ZMod 5} (hne : owner ≠ who) :
@@ -197,10 +198,10 @@ theorem colliderReward_pair {owner who : ZMod 5} (hne : owner ≠ who) :
     revert hne
     revert owner who
     decide
-  rw [colliderReward, if_neg hcard, if_neg (by simp)]
+  rw [colliderReward, ite_eq_right hcard, ite_eq_right (by simp)]
   by_cases hcollider : owner - who = 4
-  · rw [if_pos (hkey.mpr hcollider), hcollider, colliderJoin_four, add_zero]
-  · rw [if_neg (fun hcontra ↦ hcollider (hkey.mp hcontra)),
+  · rw [ite_eq_left (hkey.mpr hcollider), hcollider, colliderJoin_four, add_zero]
+  · rw [ite_eq_right (fun hcontra ↦ hcollider (hkey.mp hcontra)),
       colliderJoin_of_ne s low hcollider]
     ring
 
@@ -228,8 +229,8 @@ theorem quittingSetReward_adjacent_owner (y : ZMod 5) :
 theorem quittingSetReward_adjacent_collider (y : ZMod 5) :
     quittingSetReward (colliderReward s low m) {y, y + 1} (y + 1) = s := by
   rw [quittingSetReward_of_nonempty _ (Finset.insert_nonempty y {y + 1}),
-    colliderReward, if_neg (by rw [card_adjacent]; decide), if_neg (by simp),
-    if_pos (adjacent_eq_collider_right y)]
+    colliderReward, ite_eq_right (by rw [card_adjacent]; decide), ite_eq_right (by simp),
+    ite_eq_left (adjacent_eq_collider_right y)]
 
 theorem quittingSetReward_adjacent_outsider {y j : ZMod 5}
     (hj : j ∉ ({y, y + 1} : Finset (ZMod 5))) :
@@ -335,21 +336,21 @@ def neighbourFaceMargin : ZMod 5 → ℝ :=
   fun d => if d = 2 then 1 else if d = 3 then 1 else if d = 4 then -1 else 0
 
 @[simp] theorem neighbourFaceMargin_zero : neighbourFaceMargin 0 = 0 := by
-  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide),
-    if_neg (by decide)]
+  rw [neighbourFaceMargin, ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_right (by decide)]
 
 @[simp] theorem neighbourFaceMargin_one : neighbourFaceMargin 1 = 0 := by
-  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide),
-    if_neg (by decide)]
+  rw [neighbourFaceMargin, ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_right (by decide)]
 
 @[simp] theorem neighbourFaceMargin_two : neighbourFaceMargin 2 = 1 := by
-  rw [neighbourFaceMargin, if_pos rfl]
+  rw [neighbourFaceMargin, ite_eq_left rfl]
 
 @[simp] theorem neighbourFaceMargin_three : neighbourFaceMargin 3 = 1 := by
-  rw [neighbourFaceMargin, if_neg (by decide), if_pos rfl]
+  rw [neighbourFaceMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem neighbourFaceMargin_four : neighbourFaceMargin 4 = -1 := by
-  rw [neighbourFaceMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [neighbourFaceMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 /-! ## The solo-exit preference screen
 
@@ -384,8 +385,8 @@ theorem colliderReward_cappedJointExit (hm0 : m 0 = 0) (hs : s ≤ 1)
     rw [colliderReward_singleton, sub_self, hm0, add_zero]
     exact hs
   · by_cases hcollider : S.1 = ({who - 1, who} : Finset (ZMod 5))
-    · rw [colliderReward, if_neg hcard, if_neg (by simpa using hmem),
-        if_pos hcollider]
+    · rw [colliderReward, ite_eq_right hcard, ite_eq_right (by simpa using hmem),
+        ite_eq_left hcollider]
       exact hs
     · rw [colliderReward_of_mem s low m S hcard who hmem hcollider]
       exact hlow

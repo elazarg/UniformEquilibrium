@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open Math.ProbabilityMassFunction
 open scoped Topology
 

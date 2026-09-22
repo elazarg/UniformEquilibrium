@@ -37,18 +37,18 @@ variable {S R L : Type*} [Finite S] [Finite R] [Fintype L]
 exact coupling on the full and core state spaces. -/
 theorem exists_legalMixture_coupling_or_separator [Nonempty L]
     (q : PMF S) (π : S → R) (legal : L → PMF R) (ε : ℝ) :
-    (∃ (y : stdSimplex ℝ L) (ζ : PMF (S × R)),
+    (∃ (y : Convexity.StdSimplex ℝ L) (ζ : PMF (S × R)),
         ζ.map Prod.fst = q ∧
         ζ.map Prod.snd = legalMixture legal y ∧
         projectionMismatchProbability π ζ ≤ ε) ∨
       ∃ v : R → ℝ,
         (∀ r, 0 ≤ v r) ∧
         (∀ r, v r ≤ 1) ∧
-        ∀ y : stdSimplex ℝ L,
+        ∀ y : Convexity.StdSimplex ℝ L,
           ε <
             expect (q.map π) v -
               expect (legalMixture legal y) v := by
-  letI := Fintype.ofFinite R
+  let _ := Fintype.ofFinite R
   rcases exists_legalMixture_close_or_separator (q.map π) legal ε with
     ⟨y, hy⟩ | ⟨v, hv0, hv1, hvsep⟩
   · left
@@ -69,21 +69,21 @@ versus baseline drift greater than `ε` on the original state space. -/
 theorem exists_legalMixture_coupling_or_separator_from_baseline [Nonempty L]
     (q p : PMF S) (π : S → R) (legal : L → PMF R) (ε : ℝ)
     (hbaseline :
-      ∃ y : stdSimplex ℝ L, legalMixture legal y = p.map π) :
-    (∃ (y : stdSimplex ℝ L) (ζ : PMF (S × R)),
+      ∃ y : Convexity.StdSimplex ℝ L, legalMixture legal y = p.map π) :
+    (∃ (y : Convexity.StdSimplex ℝ L) (ζ : PMF (S × R)),
         ζ.map Prod.fst = q ∧
         ζ.map Prod.snd = legalMixture legal y ∧
         projectionMismatchProbability π ζ ≤ ε) ∨
       ∃ v : R → ℝ,
         (∀ r, 0 ≤ v r) ∧
         (∀ r, v r ≤ 1) ∧
-        (∀ y : stdSimplex ℝ L,
+        (∀ y : Convexity.StdSimplex ℝ L,
           ε <
             expect (q.map π) v -
               expect (legalMixture legal y) v) ∧
         ε < expect (q.map π) v - expect (p.map π) v ∧
         ε < expect q (v ∘ π) - expect p (v ∘ π) := by
-  letI := Fintype.ofFinite R
+  let _ := Fintype.ofFinite R
   rcases exists_legalMixture_close_or_separator_from_baseline
       (q.map π) (p.map π) legal ε hbaseline with
     ⟨y, hy⟩ | ⟨v, hv0, hv1, hvlegal, hvbase⟩

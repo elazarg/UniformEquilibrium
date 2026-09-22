@@ -225,9 +225,8 @@ theorem hasStrictFDerivAt_eval
       have hadd := hP.add hQ
       rw [← evalGradient_add] at hadd
       convert hadd using 1
-      · rfl
-      · funext y
-        simp
+      funext y
+      simp
   | mul_X P j hP =>
       have hX :
           HasStrictFDerivAt

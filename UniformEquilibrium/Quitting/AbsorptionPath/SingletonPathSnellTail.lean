@@ -380,7 +380,7 @@ theorem ContinuousZeroPerfectSingletonPath.tendsto_logResidualWeight
   intro who
   by_cases hwho : who = owner
   · subst who
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     have heq : ∀ T : ℝ, 0 ≤ T →
         witness.logResidualWeight owner T =
           1 - witness.deletedResidualWeight owner T := by
@@ -396,7 +396,7 @@ theorem ContinuousZeroPerfectSingletonPath.tendsto_logResidualWeight
     apply Tendsto.congr' _ hsub
     filter_upwards [eventually_ge_atTop (0 : ℝ)] with T hT
     exact (heq T hT).symm
-  · rw [if_neg hwho]
+  · rw [ite_eq_right hwho]
     refine squeeze_zero' ?_ ?_ hdeleted
     · filter_upwards [eventually_ge_atTop (0 : ℝ)] with T hT
       exact witness.logResidualWeight_nonneg who hT
@@ -429,7 +429,7 @@ theorem ContinuousZeroPerfectSingletonPath.tendsto_logPayoff_of_positive_surviva
       (quittingSoloReward reward other who))
   convert hsum using 1
   simp only [ite_mul, one_mul, zero_mul, Finset.sum_ite_eq',
-    Finset.mem_univ, if_pos]
+    Finset.mem_univ, ite_eq_left]
 
 /-- The terminal residual product in the deleted Snell identity has its exact
 positive-survival limit. -/

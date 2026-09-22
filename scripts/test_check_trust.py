@@ -45,6 +45,17 @@ def sorryAxName := 0
 '''
         self.assertEqual(self.labels(source), [])
 
+    def test_literature_allows_sorry_but_rejects_admit(self) -> None:
+        source = "theorem openClaim : True := by sorry\n" \
+            "theorem hiddenClaim : True := by admit\n"
+        failures = check_trust.token_failures(
+            pathlib.Path("Literature/Paper.lean"), source
+        )
+        self.assertEqual(
+            failures,
+            ["Literature/Paper.lean:2: forbidden proof placeholder"],
+        )
+
     def test_only_scans_canonical_roots_and_finds_untracked_lane_source(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)
@@ -176,6 +187,33 @@ lean_lib Research where
             sum("synthInstance.maxSize" in failure for failure in failures),
             2,
         )
+
+    def test_only_literature_may_disable_the_sorry_warning(self) -> None:
+        accepted = """
+abbrev common := #[⟨`warningAsError, true⟩]
+lean_lib MathUE where
+  leanOptions := common
+lean_lib Literature where
+  leanOptions := common ++ #[⟨`warn.sorry, false⟩]
+"""
+        self.assertEqual(check_trust.warning_option_failures(accepted), [])
+
+        rejected = """
+abbrev common := #[
+  ⟨`warningAsError, true⟩,
+  ⟨`warn.sorry, false⟩
+]
+lean_lib Literature where
+  leanOptions := common
+lean_lib Research where
+  leanOptions := common ++ #[⟨`warn.unusedVariables, false⟩]
+"""
+        failures = check_trust.warning_option_failures(rejected)
+        self.assertEqual(len(failures), 3)
+        self.assertTrue(any("shared/global options" in failure for failure in failures))
+        self.assertTrue(any("Research" in failure for failure in failures))
+        self.assertTrue(any("Literature must disable exactly" in failure
+            for failure in failures))
 
 
 if __name__ == "__main__":

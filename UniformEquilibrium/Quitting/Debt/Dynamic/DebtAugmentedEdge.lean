@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -62,7 +62,7 @@ coordinates. -/
 def quittingDebtOpponentContinueMass
     (state : QuittingDebtPoint ι) (owner : ι) : ℝ :=
   ∏ other ∈ (Finset.univ.erase owner : Finset ι),
-    state.1.2 other false
+    (state.1.2 other).weights false
 
 /-- The simplex costate factor is the operational fixed-opponents Continue
 mass of the displayed product root. -/
@@ -82,16 +82,16 @@ theorem quittingDebtOpponentContinueMass_nonneg
     0 ≤ quittingDebtOpponentContinueMass state owner := by
   unfold quittingDebtOpponentContinueMass
   exact Finset.prod_nonneg fun other _ ↦
-    (state.1.2 other).property.1 false
+    (state.1.2 other).weights_nonneg false
 
 /-- Every debt costate factor is at most one. -/
 theorem quittingDebtOpponentContinueMass_le_one
     (state : QuittingDebtPoint ι) (owner : ι) :
     quittingDebtOpponentContinueMass state owner ≤ 1 := by
   unfold quittingDebtOpponentContinueMass
-  apply Finset.prod_le_one
+  apply Finset.prod_le_one₀
   · intro other _
-    exact (state.1.2 other).property.1 false
+    exact (state.1.2 other).weights_nonneg false
   · intro other _
     rw [← quittingRootOfSimplex_apply_toReal]
     exact ENNReal.toReal_mono ENNReal.one_ne_top

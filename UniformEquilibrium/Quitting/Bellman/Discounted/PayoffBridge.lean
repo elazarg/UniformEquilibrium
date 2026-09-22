@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -56,7 +56,8 @@ theorem discountedAuxEU_quittingGame_some (β : ℝ)
         PMF.pure (show (quittingGame reward).State from some S) := rfl
     have hstage : (quittingGame reward).stagePayoff (some S) a who =
         reward S who := rfl
-    rw [StochasticGame.discountedAuxPayoff, htrans, hstage, expect_pure]
+    unfold StochasticGame.discountedAuxPayoff
+    rw [htrans, hstage, expect_pure]
   calc (quittingGame reward).discountedAuxEU β V (some S) m who
       = expect (pmfPi m)
           (fun a => (quittingGame reward).discountedAuxPayoff β V (some S) a who) := rfl
@@ -74,8 +75,8 @@ theorem expect_transition_quittingGame_none
   rw [quittingGame_transition_none]
   unfold quittingRootPayoff quittingQuitters
   by_cases h : ({j | action j = true} : Finset ι).Nonempty
-  · rw [dif_pos h, dif_pos h, expect_pure]
-  · rw [dif_neg h, dif_neg h, expect_pure]
+  · rw [dite_eq_left h, dite_eq_left h, expect_pure]
+  · rw [dite_eq_right h, dite_eq_right h, expect_pure]
 
 omit [DecidableEq ι] in
 /-- **The active state carries no stage payoff.**  Hence the auxiliary
@@ -90,8 +91,8 @@ theorem discountedAuxEU_quittingGame_none (β : ℝ)
         β * quittingRootPayoff (fun S => V (some S)) (fun j => V none j) a who := by
     intro a
     have hstage : (quittingGame reward).stagePayoff none a who = 0 := rfl
-    rw [StochasticGame.discountedAuxPayoff, hstage,
-      expect_transition_quittingGame_none reward V a who]
+    unfold StochasticGame.discountedAuxPayoff
+    rw [hstage, expect_transition_quittingGame_none reward V a who]
     ring
   calc (quittingGame reward).discountedAuxEU β V none m who
       = expect (pmfPi m)

@@ -59,7 +59,7 @@ theorem quittingForcedOwnerOutsiderCoordinateDefect_instantRoot
   unfold quittingInstantRoot
   rw [← quittingPureSetRoot_singleton]
   unfold quittingForcedOwnerOutsiderCoordinateDefect
-  rw [if_neg hne,
+  rw [ite_eq_right hne,
     quittingStationaryFixedOpponentsQuitValue_pureSetRoot,
     quittingStationaryFixedOpponentsContinueReward_pureSetRoot,
     quittingRootAbsorbingContribution_pureSetRoot]

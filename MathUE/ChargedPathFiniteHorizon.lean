@@ -20,7 +20,7 @@ only for the finite edge-type dynamic programme and its at-most-horizon paths.
 
 universe u v
 
-namespace Math
+namespace Maths
 namespace ChargedPathBudget
 namespace ChargedRelation
 
@@ -175,4 +175,4 @@ theorem hasUnboundedFiniteCharge_iff_hasUnboundedHorizonCharge (s : State) :
 
 end ChargedRelation
 end ChargedPathBudget
-end Math
+end Maths

@@ -104,6 +104,7 @@ theorem isOneSidedGuaranteeCertificateAt_reindex (e : ι ≃ κ)
       (Function.update (quittingProfilePullback e reward opp) who) ?_
     funext t h
     simp only [σwho', Equiv.symm_apply_apply]
+    rfl
   have hpayoff := finiteAveragePayoff_quittingProfilePullback e reward
     (Function.update opp (e who) σwho') T who
   rw [hpull] at hpayoff
@@ -144,19 +145,20 @@ theorem isUniformEquilibriumPayoff_of_reindex (e : ι ≃ κ)
   obtain ⟨hNash, hclose⟩ := hσ' T hT
   constructor
   · intro who dev
-    have hdev := hNash (e who)
-      (fun t h' ↦ dev t ((quittingHistEquiv e reward t).symm h'))
+    let dev' :
+        (quittingGame (quittingRewardReindex e reward)).BehaviorStrategy (e who) :=
+      fun t h' => dev t ((quittingHistEquiv e reward t).symm h')
+    have hdev := hNash (e who) dev'
     have hdevEq := finiteAveragePayoff_quittingProfilePullback e reward
-      (Function.update σ' (e who)
-        (fun t h' ↦ dev t ((quittingHistEquiv e reward t).symm h'))) T who
+      (Function.update σ' (e who) dev') T who
     have hpullEq : quittingProfilePullback e reward
-        (Function.update σ' (e who)
-          (fun t h' ↦ dev t ((quittingHistEquiv e reward t).symm h'))) =
+        (Function.update σ' (e who) dev') =
         Function.update (quittingProfilePullback e reward σ') who dev := by
       rw [quittingProfilePullback_update]
       refine congrArg
         (Function.update (quittingProfilePullback e reward σ') who) ?_
       funext t h
+      unfold dev'
       rw [Equiv.symm_apply_apply]
     rw [hpullEq] at hdevEq
     have hon := finiteAveragePayoff_quittingProfilePullback e reward σ' T who
@@ -337,6 +339,7 @@ theorem quittingProfilePushforward_update (e : ι ≃ κ)
       simpa using congrArg e heq
     simp [quittingProfilePushforward,
       Function.update_of_ne hplayer, Function.update_of_ne hpreimage]
+    rfl
 
 /-- The unrestricted behavioral deviation cap commutes with pushforward. -/
 theorem quittingBehaviorDeviationPayoffCap_profilePushforward (e : ι ≃ κ)

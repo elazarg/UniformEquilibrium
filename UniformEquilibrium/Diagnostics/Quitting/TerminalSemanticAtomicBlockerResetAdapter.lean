@@ -47,7 +47,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -361,7 +361,7 @@ theorem exists_outsider_coordinateNashDefect_ge_of_forcedOwnerDefect_ge
     (hdefect : η ≤ quittingForcedOwnerOutsiderDefect reward root owner) :
     ∃ who, who ≠ owner ∧
       η ≤ quittingRootCoordinateNashDefect reward tail root who := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   obtain ⟨who, _hwhoMem, hsup⟩ :=
     Finset.exists_mem_eq_sup' Finset.univ_nonempty
       (quittingForcedOwnerOutsiderCoordinateDefect reward root owner)

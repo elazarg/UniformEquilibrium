@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import MathUE.PMFProduct.CollisionMass
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.Quitting.Classification.LCP.NormalCorePunishmentNormal
 import UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.NormalTerminalGapFullSupportCompactLimit
@@ -37,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open ThreeCoreAmbientCarrierElimination
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -45,7 +46,7 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- A finite simplex barycenter of points in `[epsilon, 1]` stays in that
 interval. -/
 def constrainedRateBarycenter (epsilon : ℝ) (hepsilon : epsilon ≤ 1)
-    (n : ℕ) (weight : stdSimplex ℝ (Fin (n + 1)))
+    (n : ℕ) (weight : Convexity.StdSimplex ℝ (Fin (n + 1)))
     (point : Fin (n + 1) → Set.Icc epsilon 1) : Set.Icc epsilon 1 :=
   heterogeneousRateBarycenter epsilon hepsilon n weight point
 
@@ -53,7 +54,7 @@ def constrainedRateBarycenter (epsilon : ℝ) (hepsilon : epsilon ≤ 1)
 theorem continuous_constrainedRateBarycenter
     (epsilon : ℝ) (hepsilon : epsilon ≤ 1) (n : ℕ)
     (point : Fin (n + 1) → Set.Icc epsilon 1) :
-    Continuous fun weight : stdSimplex ℝ (Fin (n + 1)) =>
+    Continuous fun weight : Convexity.StdSimplex ℝ (Fin (n + 1)) =>
       constrainedRateBarycenter epsilon hepsilon n weight point :=
   continuous_heterogeneousRateBarycenter epsilon hepsilon n point
 

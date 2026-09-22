@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter _root_.Set _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 open scoped Topology
 
@@ -61,8 +61,13 @@ private theorem quittingCompactStoppingLaw_finiteMass_literal_allContinue_eq_zer
         player).realMass
           {(time : _root_.Math.Probability.CompactStoppingTime)} = 0 := by
   rw [← _root_.Math.Probability.CompactStoppingLaw.toPMF_apply_toReal]
-  simp only [quittingCompactStoppingLawsOfProfile,
-    _root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
+  change ((((_root_.Math.Probability.CompactStoppingLaw.ofPMF
+    (quittingBehaviorStoppingLaw reward
+      ((quittingLiteralRootStackProfile reward
+        (List.replicate depth
+          (quittingAllContinueRoot : iota → PMF Bool)) terminal) player))).toPMF :
+      PMF (Option ℕ)) (some time)).toReal) = 0
+  rw [_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF_option]
   have hroot :=
     quittingProfileLiveRoot_literal_replicate_allContinue_of_lt
       reward terminal depth time htime

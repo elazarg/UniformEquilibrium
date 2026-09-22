@@ -98,6 +98,7 @@ theorem exists_finiteMenu_samePrefix_completion
       simp only [quittingRootSequenceProfile, Nat.zero_add, roots, source,
         quittingProfileLiveRoot, quittingFiniteDeadlineTimingProfile,
         quittingCompactStoppingLawProfile, quittingStoppingLawBehaviorStrategy]
+      rfl
     rw [hcanonical]
     simpa only [Nat.zero_add] using
       quittingRootSequenceProfile_eq_literalRootStack reward roots 0 cutoff

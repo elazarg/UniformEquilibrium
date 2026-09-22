@@ -208,12 +208,12 @@ theorem quittingSingletonCycle_opponentContracts_of_ownerChanges
       have hnext : who ≠ owner (finRotate L initial) := by
         intro h
         exact hownerChanges initial (hwho.symm.trans h)
-      simp only [factor, if_neg hnext]
+      simp only [factor, ite_eq_right hnext]
       linarith [hmassPos (finRotate L initial)]
     · refine ⟨initial, Finset.mem_univ _, ?_⟩
-      simp only [factor, if_neg hwho]
+      simp only [factor, ite_eq_right hwho]
       linarith [hmassPos initial]
-  have hproduct := Finset.prod_lt_prod hpositive hle hstrict
+  have hproduct := Finset.prod_lt_prod₀ hpositive hle hstrict
   simpa only [Finset.prod_const_one, Finset.card_univ, one_pow,
     factor] using hproduct
 

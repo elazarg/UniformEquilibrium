@@ -118,10 +118,10 @@ theorem measurable_quittingStageUtility {Ω : Type*} {m : MeasurableSpace Ω}
         (fun ω ↦ continuation ω who)) :
     @Measurable Ω ((ι → Bool) → ι → ℝ) m inferInstance
       (fun ω ↦ quittingStageUtility (reward ω) (continuation ω)) := by
-  letI : MeasurableSpace Ω := m
-  apply measurable_pi_lambda
+  let : MeasurableSpace Ω := m
+  apply Measurable.of_eval
   intro action
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro who
   by_cases hquit : (quittingQuitters action).Nonempty
   · simpa [quittingStageUtility, quittingRootPayoff, hquit] using
@@ -185,10 +185,10 @@ theorem abs_quittingRootExpectedPayoff_le_envelopeSum
   apply _root_.Math.Probability.abs_expect_le_of_abs_le
   intro jointAction
   by_cases hquit : (quittingQuitters jointAction).Nonempty
-  · rw [quittingRootPayoff, dif_pos hquit]
+  · rw [quittingRootPayoff, dite_eq_left hquit]
     exact (hreward ⟨quittingQuitters jointAction, hquit⟩ who).trans
       (le_add_of_nonneg_right (Finset.sum_nonneg fun _ _ ↦ abs_nonneg _))
-  · rw [quittingRootPayoff, dif_neg hquit]
+  · rw [quittingRootPayoff, dite_eq_right hquit]
     exact (Finset.single_le_sum (fun player _ ↦ abs_nonneg (continuation player))
       (Finset.mem_univ who)).trans (le_add_of_nonneg_left
         (le_trans (abs_nonneg (reward ⟨{who}, by simp⟩ who))

@@ -129,7 +129,7 @@ theorem sum_weighted_parameterFaceWeight_left_eq_right
         cellMultiplier cell * signedIncidence hdimension label cell face := by
     by_cases hincident : Incident cell face
     · rw [hcompatible cell face hincident]
-    · simp only [signedIncidence, dif_neg hincident, mul_zero]
+    · simp only [signedIncidence, dite_eq_right hincident, mul_zero]
   have htotal : (∑ face : CompleteFace cube dimension label,
       faceMultiplier face * ∑ cell : Cell cube,
         signedIncidence hdimension label cell face) = 0 := by
@@ -145,14 +145,14 @@ theorem sum_weighted_parameterFaceWeight_left_eq_right
         (faceMultiplier face * parameterFaceWeight hdimension label face) else 0) := by
     by_cases hleft : leftEnd face
     · have hright : ¬ rightEnd face := hdisjoint face hleft
-      simp only [if_pos hleft, if_neg hright, add_zero]
+      simp only [ite_eq_left hleft, ite_eq_right hright, add_zero]
       rw [sum_signedIncidence_cells_eq_leftParameterEnd_weight hdimension label face hleft]
       ring
     · by_cases hright : rightEnd face
-      · simp only [if_neg hleft, if_pos hright, zero_add]
+      · simp only [ite_eq_right hleft, ite_eq_left hright, zero_add]
         rw [sum_signedIncidence_cells_eq_rightParameterEnd_weight hdimension label face hright]
         ring
-      · simp only [if_neg hleft, if_neg hright, zero_add]
+      · simp only [ite_eq_right hleft, ite_eq_right hright, zero_add]
         have hnotBoundary : ¬ is_boundary_face cube face.1 := by
           intro hface
           exact (hboundary face hface).elim hleft hright

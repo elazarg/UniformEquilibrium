@@ -57,7 +57,7 @@ end Topology
 
 namespace BoxComplementarityProblem
 
-open Topology
+open Math.Topology
 
 variable (lower upper : ι → ℝ) (hwidth : ∀ who, lower who < upper who)
   (field : (ι → ℝ) → ι → ℝ) (hfield : ContinuousOn field (Icc lower upper))

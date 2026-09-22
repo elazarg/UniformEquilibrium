@@ -50,7 +50,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 /-- At a total-debt minimum, a balanced nonnegative combination can use only
@@ -299,6 +299,7 @@ theorem quittingFinThreePassiveShearEndpoint_eq_update_source
       quittingFinThreePassiveShearSource, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile,
       quittingPureSetRoot, quittingSetAction, hplayer]
+    rfl
 
 /-- The literal complete stopping-law mixture generating one passive-shear
 ray.  It is Quit-now/always-Quit with probability `lambda` and Never with
@@ -547,7 +548,7 @@ theorem quittingFinThreePassiveShearMixedProfile_semanticDebt
       mover observer lambda hlambda0 hlambda1
     dsimp only [deviation] at hdeviation
     rw [hquit] at hdeviation
-    rw [if_neg hsame] at hpayoff
+    rw [ite_eq_right hsame] at hpayoff
     apply le_antisymm hupper
     unfold quittingTerminalSemanticDebt quittingTerminalSemanticPair
     change quittingFinThreeResetRayDebt mover observer lambda ≤

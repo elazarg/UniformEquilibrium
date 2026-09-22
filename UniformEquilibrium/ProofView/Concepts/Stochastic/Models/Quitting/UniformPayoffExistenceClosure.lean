@@ -50,9 +50,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_uniform_reward_limit
       (quittingGame (approximation n)).IsUniformEquilibriumPayoff none w) :
     ∃ v : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none v := by
-  haveI : Finite (quittingGame reward).State :=
+  have : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  haveI : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
   apply StochasticGame.exists_uniformEquilibriumPayoff_of_uniform_stagePayoff_limit
     (quittingGame reward) none
@@ -79,9 +79,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward
           (quittingGame nearby).IsUniformEquilibriumPayoff none w) :
     ∃ v : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none v := by
-  haveI : Finite (quittingGame reward).State :=
+  have : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  haveI : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
   apply StochasticGame.exists_uniformEquilibriumPayoff_of_arbitrarily_close_stagePayoffs
     (quittingGame reward) none

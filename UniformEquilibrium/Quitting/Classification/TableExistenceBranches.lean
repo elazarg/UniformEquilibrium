@@ -270,13 +270,16 @@ conservative extensions of the zero-never ones rather than variants. -/
     (profile : (quittingGame reward).BehaviorProfile) (who : ι) :
     (repositoryQuittingPayoffTable reward).terminalPayoff profile who =
       quittingTerminalPayoff reward profile who := by
-  rw [QuittingPayoffTable.terminalPayoff_eq_add_never]
-  have hnever : (repositoryQuittingPayoffTable reward).never who = 0 := rfl
-  have hzero : (repositoryQuittingPayoffTable reward).zeroNeverReward =
-      reward := by
+  let table := repositoryQuittingPayoffTable reward
+  let converted := quittingBehaviorProfileCongrReward reward table.terminal profile
+  have hpay := table.terminalPayoff_eq_add_never converted who
+  have hzero : table.zeroNeverReward = reward := by
     funext S player
-    simp [QuittingPayoffTable.zeroNeverReward, repositoryQuittingPayoffTable]
-  rw [hnever, hzero, add_zero]
+    simp [table, QuittingPayoffTable.zeroNeverReward,
+      repositoryQuittingPayoffTable]
+  rw [hzero] at hpay
+  simpa [table, converted, quittingBehaviorProfileCongrReward,
+    repositoryQuittingPayoffTable] using hpay
 
 /-- Approximate Nash inequalities transfer at the same error, because the
 translation adds the same playerwise constant to both sides. -/
@@ -341,9 +344,9 @@ theorem QuittingPayoffTable.bestReplyValue_eq_add_never
     table.bestReplyValue profile who =
       quittingBestReplyValue table.zeroNeverReward profile who +
         table.never who := by
-  haveI : Nonempty ((quittingGame table.terminal).BehaviorStrategy who) :=
+  have : Nonempty ((quittingGame table.terminal).BehaviorStrategy who) :=
     ⟨fun _ _ => PMF.pure false⟩
-  haveI : Nonempty ((quittingGame table.zeroNeverReward).BehaviorStrategy who) :=
+  have : Nonempty ((quittingGame table.zeroNeverReward).BehaviorStrategy who) :=
     ⟨fun _ _ => PMF.pure false⟩
   have hbddZero :=
     bddAbove_range_quittingTerminalPayoff_update table.zeroNeverReward profile
@@ -392,9 +395,9 @@ theorem QuittingPayoffTable.punishmentValue_eq_add_never
     (table : QuittingPayoffTable ι) (who : ι) :
     table.punishmentValue who =
       quittingPunishmentValue table.zeroNeverReward who + table.never who := by
-  haveI : Nonempty ((quittingGame table.terminal).BehaviorProfile) :=
+  have : Nonempty ((quittingGame table.terminal).BehaviorProfile) :=
     ⟨fun _ _ _ => PMF.pure false⟩
-  haveI : Nonempty ((quittingGame table.zeroNeverReward).BehaviorProfile) :=
+  have : Nonempty ((quittingGame table.zeroNeverReward).BehaviorProfile) :=
     ⟨fun _ _ _ => PMF.pure false⟩
   have hbddZero :=
     bddBelow_range_quittingBestReplyValue table.zeroNeverReward who
@@ -504,7 +507,12 @@ theorem QuittingPayoffTable.instantPunishmentεEquilibriumExistence_iff
       (table.isεAsymptoticNash_iff ε
         (quittingRootThenContinuationProfile table.terminal root punish)).2
         hnash⟩
+    let converted := quittingBehaviorProfileCongrReward
+      table.zeroNeverReward table.terminal punish
+    change table.bestReplyValue converted quitter ≤
+      table.punishmentValue quitter + ε
     rw [table.bestReplyValue_eq_add_never, table.punishmentValue_eq_add_never]
+    unfold converted quittingBehaviorProfileCongrReward
     linarith
 
 /-- The table's continuation vector is the translated one, shifted by the

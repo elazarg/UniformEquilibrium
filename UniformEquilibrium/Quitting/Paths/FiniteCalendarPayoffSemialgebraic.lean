@@ -24,20 +24,28 @@ def quittingFiniteCalendarCoordinateSimplex
     ∀ who : Fin n, ∑ choice : Option (Fin deadline), point (coordinates (who, choice)) = 1}
 
 /-- Flat simplex coordinates define genuine independent finite-calendar marginals. -/
-def quittingFiniteCalendarSimplexFromCoordinates
+noncomputable def quittingFiniteCalendarSimplexFromCoordinates
     (coordinates : QuittingFiniteCalendarVariable (Fin n) deadline ≃ Fin dimensions)
     (point : Fin dimensions → ℝ) (hpoint : point ∈ quittingFiniteCalendarCoordinateSimplex
       coordinates) : MixedSimplex (Fin n)
         (fun _ => QuittingFiniteDeadlineTimingAction deadline) :=
-  fun who => ⟨fun choice => point (coordinates (who, choice)),
-    ⟨fun choice => hpoint.1 (coordinates (who, choice)), hpoint.2 who⟩⟩
+  fun who => ⟨Finsupp.equivFunOnFinite.symm
+      (fun choice => point (coordinates (who, choice))),
+    by
+      intro choice
+      rw [Finsupp.equivFunOnFinite_symm_apply_apply]
+      exact hpoint.1 (coordinates (who, choice)),
+    by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      exact hpoint.2 who⟩
 
 /-- Encode a genuine finite-calendar profile in the chosen flat coordinate order. -/
 def quittingFiniteCalendarCoordinates
     (coordinates : QuittingFiniteCalendarVariable (Fin n) deadline ≃ Fin dimensions)
     (profile : MixedSimplex (Fin n)
       (fun _ => QuittingFiniteDeadlineTimingAction deadline)) : Fin dimensions → ℝ :=
-  fun index => profile (coordinates.symm index).1 (coordinates.symm index).2
+  fun index =>
+    (profile (coordinates.symm index).1).weights (coordinates.symm index).2
 
 theorem quittingFiniteCalendarCoordinates_mem_simplex
     (coordinates : QuittingFiniteCalendarVariable (Fin n) deadline ≃ Fin dimensions)
@@ -47,16 +55,18 @@ theorem quittingFiniteCalendarCoordinates_mem_simplex
       quittingFiniteCalendarCoordinateSimplex coordinates := by
   constructor
   · intro index
-    exact (profile (coordinates.symm index).1).property.1 (coordinates.symm index).2
+    exact (profile (coordinates.symm index).1).weights_nonneg
+      (coordinates.symm index).2
   · intro who
     calc
-      _ = ∑ choice, profile who choice := by
+      _ = ∑ choice, (profile who).weights choice := by
         apply Finset.sum_congr rfl
         intro choice _
-        change profile (coordinates.symm (coordinates (who, choice))).1
-          (coordinates.symm (coordinates (who, choice))).2 = profile who choice
+        change (profile (coordinates.symm (coordinates (who, choice))).1).weights
+          (coordinates.symm (coordinates (who, choice))).2 =
+            (profile who).weights choice
         rw [coordinates.symm_apply_apply]
-      _ = 1 := (profile who).property.2
+      _ = 1 := (profile who).total_of_fintype
 
 /-- The source simplex is a finite conjunction of polynomial nonnegativity and row sums. -/
 theorem isSemialgebraic_quittingFiniteCalendarCoordinateSimplex
@@ -70,7 +80,7 @@ theorem isSemialgebraic_quittingFiniteCalendarCoordinateSimplex
     (Math.PolynomialSignCell.SignFormula.conjunction (List.ofFn
       (fun who : Fin n => .atom (sums who) 0))), ?_⟩
   intro point
-  simp only [quittingFiniteCalendarCoordinateSimplex, Set.mem_setOf_eq,
+  simp only [quittingFiniteCalendarCoordinateSimplex, Set.mem_ofPred_eq,
     MathUE.RealPolynomialSignFormula.HoldsAt, Math.PolynomialSignCell.SignFormula.Holds,
     Math.PolynomialSignCell.SignFormula.holds_conjunction_iff,
     List.mem_ofFn, forall_exists_index, forall_apply_eq_imp_iff,
@@ -112,10 +122,10 @@ theorem evaluate_quittingFiniteCalendarCoordinates
   rw [MathUE.evaluatePolynomialMap, quittingFiniteCalendarCoordinatePayoffPolynomials,
     MvPolynomial.eval_rename]
   have heq : quittingFiniteCalendarCoordinates coordinates profile ∘ coordinates =
-      fun pair => profile pair.1 pair.2 := by
+      fun pair => (profile pair.1).weights pair.2 := by
     funext pair
-    change profile (coordinates.symm (coordinates pair)).1
-      (coordinates.symm (coordinates pair)).2 = profile pair.1 pair.2
+    change (profile (coordinates.symm (coordinates pair)).1).weights
+      (coordinates.symm (coordinates pair)).2 = (profile pair.1).weights pair.2
     rw [coordinates.symm_apply_apply]
   rw [heq]
   exact eval_quittingFiniteCalendarRawPayoffPolynomial reward deadline observer profile

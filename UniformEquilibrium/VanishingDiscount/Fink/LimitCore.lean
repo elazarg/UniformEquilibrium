@@ -23,7 +23,7 @@ namespace GameTheory
 namespace StochasticGame
 
 open Filter
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type}
@@ -70,7 +70,7 @@ theorem exists_convergent_finkFixedPoint_subsequence
       G.finkMap (β n) U (hβ0 n) (hβ1 n) hpay z = z :=
     fun n => G.exists_finkMap_fixedPoint (β n) U hU (hβ0 n) (hβ1 n) hpay
   choose z hz using hex
-  letI : CompactSpace (G.finkDomain U) :=
+  let : CompactSpace (G.finkDomain U) :=
     isCompact_iff_compactSpace.mp (G.isCompact_finkDomain U)
   obtain ⟨zlim, φ, hφ, hlim⟩ := CompactSpace.tendsto_subseq z
   exact ⟨z, zlim, φ, hz, hφ, hlim⟩
@@ -616,16 +616,16 @@ theorem pmf_apply_toReal_mul_gap_le_two_error
     by_cases hba : b = a
     · subst b
       dsimp [g]
-      simp only [if_true]
+      simp only [ite_true]
       linarith
     · dsimp [g]
-      simp only [if_false, hba, sub_zero]
+      simp only [ite_false, hba, sub_zero]
       exact hupper b
   have hE : expect μ f ≤ expect μ g := expect_mono μ f g hfg
   have hindicator :
       expect μ (fun b => if b = a then δ + r else 0) =
         (μ a).toReal * (δ + r) := by
-    letI : Fintype α := Fintype.ofFinite α
+    let : Fintype α := Fintype.ofFinite α
     rw [expect_eq_sum]
     simp
   have hg : expect μ g = c + r - (μ a).toReal * (δ + r) := by
@@ -642,7 +642,7 @@ theorem exists_pos_le_of_finite
     (hpos : ∀ a, P a → 0 < f a) :
     ∃ δ : ℝ, 0 < δ ∧ ∀ a, P a → δ ≤ f a := by
   classical
-  letI : Fintype α := Fintype.ofFinite α
+  let : Fintype α := Fintype.ofFinite α
   let S : Finset ℝ := (Finset.univ.filter P).image f
   by_cases hS : S.Nonempty
   · let δ := S.min' hS
@@ -944,9 +944,9 @@ noncomputable def finkSupportTangentOperator
           (if G.finkProfile z s who d ≠ 0 then
             G.finkContinuationGain B z s who d else 0)
         by_cases hd : G.finkProfile z s who d ≠ 0
-        · rw [if_pos hd, if_pos hd, if_pos hd]
+        · rw [ite_eq_left hd, ite_eq_left hd, ite_eq_left hd]
           exact G.finkContinuationGain_add A B z s who d
-        · rw [if_neg hd, if_neg hd, if_neg hd, add_zero]
+        · rw [ite_eq_right hd, ite_eq_right hd, ite_eq_right hd, add_zero]
     map_smul' := by
       intro c A
       apply Prod.ext
@@ -957,9 +957,9 @@ noncomputable def finkSupportTangentOperator
           c * (if G.finkProfile z s who d ≠ 0 then
             G.finkContinuationGain A z s who d else 0)
         by_cases hd : G.finkProfile z s who d ≠ 0
-        · rw [if_pos hd, if_pos hd]
+        · rw [ite_eq_left hd, ite_eq_left hd]
           exact G.finkContinuationGain_smul c A z s who d
-        · rw [if_neg hd, if_neg hd, mul_zero] }
+        · rw [ite_eq_right hd, ite_eq_right hd, mul_zero] }
 
 /-- Right-hand side of the finite supported tangent system. -/
 noncomputable def finkSupportTangentTarget
@@ -1000,7 +1000,7 @@ theorem finkSupportTangentOperator_eq_target_iff
         (if G.finkProfile z s who d ≠ 0 then
           G.finkStageGain z s who d +
             G.finkContinuationGain (H - K) z s who d else 0) at hcoord
-    rwa [if_pos hd, if_pos hd] at hcoord
+    rwa [ite_eq_left hd, ite_eq_left hd] at hcoord
   · rintro ⟨hharmonic, htangent⟩
     apply Prod.ext
     · change G.finkContinuationResidualVector A z = 0
@@ -1012,14 +1012,14 @@ theorem finkSupportTangentOperator_eq_target_iff
             (if G.finkProfile z s who d ≠ 0 then
               G.finkStageGain z s who d +
                 G.finkContinuationGain (H - K) z s who d else 0)
-        rw [if_pos hd, if_pos hd]
+        rw [ite_eq_left hd, ite_eq_left hd]
         exact htangent s who d hd
       · change (if G.finkProfile z s who d ≠ 0 then
             G.finkContinuationGain A z s who d else 0) =
           (if G.finkProfile z s who d ≠ 0 then
             G.finkStageGain z s who d +
               G.finkContinuationGain (H - K) z s who d else 0)
-        rw [if_neg hd, if_neg hd]
+        rw [ite_eq_right hd, ite_eq_right hd]
 
 /-- Fredholm/Farkas form of supported tangent feasibility.  A harmonic
 adjustment exists exactly when every linear functional annihilating the

@@ -12,7 +12,7 @@ noncomputable section
 
 namespace GameTheory.AllMinusOneLiveBoundary
 
-open GameTheory StochasticGame Math.Probability
+open GameTheory StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 

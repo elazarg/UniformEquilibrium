@@ -44,7 +44,19 @@ theorem quittingJointContinueMass_update_le_opponentOnly
         (quittingOpponentOnlyProfile reward profile who) time := by
   unfold quittingOpponentOnlyProfile quittingJointContinueMass
     StochasticGame.stageActionDist
-  simp only [pmfPi_apply]
+  with_unfolding_all
+    change
+      ((pmfPi (fun player : ι =>
+          (show PMF Bool from
+            Function.update profile who deviation player time
+              (quittingLiveHist reward time))) : PMF (ι → Bool))
+        (quittingAllContinueAction : ι → Bool)).toReal ≤
+      ((pmfPi (fun player : ι =>
+          (show PMF Bool from
+            Function.update profile who
+              (quittingAlwaysContinueStrategy reward who) player time
+              (quittingLiveHist reward time))) : PMF (ι → Bool))
+        (quittingAllContinueAction : ι → Bool)).toReal
   let leftFactor : ι → ENNReal := fun player =>
     (Function.update profile who deviation player time
       (quittingLiveHist reward time)) false
@@ -59,14 +71,19 @@ theorem quittingJointContinueMass_update_le_opponentOnly
   have hright : (∏ player, rightFactor player) ≠ ⊤ :=
     ENNReal.prod_ne_top fun player _ => PMF.apply_ne_top _ _
   rw [ENNReal.toReal_le_toReal hleft hright]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro player _
     exact bot_le
   · intro player _
     by_cases hp : player = who
     · subst player
       simp only [leftFactor, rightFactor, Function.update_self,
-        quittingAlwaysContinueStrategy, PMF.pure_apply]
+        quittingAlwaysContinueStrategy]
+      with_unfolding_all
+        change (deviation time (quittingLiveHist reward time) false) ≤
+          (PMF.pure false : PMF Bool) false
+      rw [PMF.pure_apply]
+      rw [ite_eq_left (rfl : false = false)]
       exact PMF.coe_le_one _ _
     · simp [leftFactor, rightFactor, Function.update_of_ne hp]
 

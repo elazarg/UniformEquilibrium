@@ -19,13 +19,13 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
 /-- One-stage absorption, written polynomially in simplex coordinates. -/
 def quittingSimplexAbsorptionMass (root : QuittingRootSimplex ι) : ℝ :=
-  1 - ∏ who, root who false
+  1 - ∏ who, (root who).weights false
 
 omit [DecidableEq ι] in
 /-- Simplex-coordinate absorption agrees with the PMF-root definition. -/
@@ -47,8 +47,8 @@ theorem continuous_quittingSimplexAbsorptionMass :
   unfold quittingSimplexAbsorptionMass
   exact continuous_const.sub
     (continuous_finsetProd (s := (Finset.univ : Finset ι)) fun who _ =>
-      (continuous_apply false).comp
-        (continuous_subtype_val.comp (continuous_apply who)))
+      (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+        (continuous_apply who))
 
 /-- Root coalition mass is continuous in simplex coordinates. -/
 theorem continuous_quittingRootCoalitionMass_simplex
@@ -60,15 +60,12 @@ theorem continuous_quittingRootCoalitionMass_simplex
   apply (continuous_finsetProd _ fun player _ => ?_).mul
     (continuous_finsetProd _ fun player _ => ?_)
   · simp only [quittingRootOfSimplex_apply_toReal]
-    have hplayer : Continuous (fun root : QuittingRootSimplex ι =>
-        (root player : Bool → ℝ)) :=
-      continuous_subtype_val.comp (continuous_apply player)
-    exact (continuous_apply true).comp hplayer
+    exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+      (continuous_apply player)
   · simp only [quittingRootOfSimplex_apply_toReal]
-    have hplayer : Continuous (fun root : QuittingRootSimplex ι =>
-        (root player : Bool → ℝ)) :=
-      continuous_subtype_val.comp (continuous_apply player)
-    exact continuous_const.sub ((continuous_apply true).comp hplayer)
+    exact continuous_const.sub
+      ((Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply player))
 
 /-- Total opponent incidence of a root is continuous in simplex coordinates. -/
 theorem continuous_quittingRootTotalOpponentIncidenceMass_simplex

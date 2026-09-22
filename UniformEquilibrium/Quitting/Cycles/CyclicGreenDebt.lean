@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
@@ -129,7 +129,7 @@ theorem QuittingCyclicOpponentAtomCover.prod_continueMass_le_one_sub_maxFloor
     (Finset.mem_univ marked)
   have hrest : (∏ phase ∈ Finset.univ.erase marked,
       quittingStationaryContinueMass (cycle phase)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun phase _ ↦ quittingStationaryContinueMass_nonneg (cycle phase))
       (fun phase _ ↦ quittingStationaryContinueMass_le_one (cycle phase))
   have hmarked0 : 0 ≤ quittingStationaryContinueMass (cycle marked) :=
@@ -167,7 +167,7 @@ theorem QuittingCyclicOpponentAtomCover.prod_opponentContinueMass_le_one_sub_flo
     (Finset.mem_univ marked)
   have hrest : (∏ phase ∈ Finset.univ.erase marked,
       coefficient phase) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun phase _ ↦
         quittingStationaryFixedOpponentsContinueMass_nonneg
           (cycle phase) who)

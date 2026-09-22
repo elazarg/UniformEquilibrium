@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
@@ -38,9 +38,9 @@ theorem exists_uniformEquilibriumPayoff_of_not_summable_absorption
       quittingRootAbsorptionMass (orbit.roots time))) :
     ∃ payoff : Payoff iota,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty iota := by
+  let : Nonempty iota := by
     rcases isEmpty_or_nonempty iota with hempty | hnonempty
-    · letI : IsEmpty iota := hempty
+    · let : IsEmpty iota := hempty
       exfalso
       apply hdiverges
       have hzero : (fun time =>

@@ -64,9 +64,9 @@ theorem abs_pmfCoordinateTestScore_le_one {Ω : Type}
     cases positive <;> norm_num
   rw [horientation, one_mul, Pi.single_apply]
   by_cases hx : x = t
-  · rw [if_pos hx, abs_of_nonneg (sub_nonneg.mpr hmass_le_one)]
+  · rw [ite_eq_left hx, abs_of_nonneg (sub_nonneg.mpr hmass_le_one)]
     linarith
-  · rw [if_neg hx, zero_sub, abs_neg, abs_of_nonneg hmass_nonneg]
+  · rw [ite_eq_right hx, zero_sub, abs_neg, abs_of_nonneg hmass_nonneg]
     exact hmass_le_one
 
 /-- Affine shifting puts every coordinate-test score in the unit interval
@@ -137,9 +137,9 @@ theorem expect_signedPMFCoordinateScore_comparison_pos {Ω : Type}
   unfold signedPMFCoordinateScore
   rw [expect_const_mul, expect_sub, expect_pi_single, expect_const]
   by_cases hlt : (baseline t).toReal < (comparison t).toReal
-  · rw [if_pos hlt]
+  · rw [ite_eq_left hlt]
     linarith
-  · rw [if_neg hlt]
+  · rw [ite_eq_right hlt]
     have hreverse : (comparison t).toReal < (baseline t).toReal :=
       lt_of_le_of_ne (le_of_not_gt hlt) (Ne.symm hne)
     linarith
@@ -164,9 +164,9 @@ theorem abs_signedPMFCoordinateScore_le_one {Ω : Type}
     split <;> norm_num
   rw [horientation, one_mul, Pi.single_apply]
   by_cases hx : x = t
-  · rw [if_pos hx, abs_of_nonneg (sub_nonneg.mpr hmass_le_one)]
+  · rw [ite_eq_left hx, abs_of_nonneg (sub_nonneg.mpr hmass_le_one)]
     linarith
-  · rw [if_neg hx, zero_sub, abs_neg, abs_of_nonneg hmass_nonneg]
+  · rw [ite_eq_right hx, zero_sub, abs_neg, abs_of_nonneg hmass_nonneg]
     exact hmass_le_one
 
 end Probability

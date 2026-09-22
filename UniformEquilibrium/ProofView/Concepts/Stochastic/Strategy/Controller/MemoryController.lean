@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type}
 
@@ -38,8 +38,8 @@ theorem bind_tag_apply {A B : Type*} [Finite A] [Finite B]
       (q a').bind (fun b' => PMF.pure (a', b')))) (a, b) =
       p a * q a b := by
   classical
-  letI : Fintype A := Fintype.ofFinite A
-  letI : Fintype B := Fintype.ofFinite B
+  let : Fintype A := Fintype.ofFinite A
+  let : Fintype B := Fintype.ofFinite B
   simp only [PMF.bind_apply, tsum_fintype, PMF.pure_apply]
   calc
     _ = ∑ a' : A, if a = a' then p a' * q a' b else 0 := by
@@ -297,9 +297,9 @@ theorem MemoryController.outcomeKernel_apply
       ((∏ i ∈ Finset.univ.erase who, opp i t h (a i)) *
           G.transition h.2 a s') *
         C.select t h m (a who) := by
-  letI : ∀ i, Fintype (G.Act i) :=
+  let : ∀ i, Fintype (G.Act i) :=
     fun i => Fintype.ofFinite (G.Act i)
-  letI : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.State := Fintype.ofFinite G.State
   rw [MemoryController.outcomeKernel, bind_tag_apply]
   unfold stageActionDist
   have hprofile :
@@ -325,9 +325,9 @@ theorem MemoryController.bind_belief_outcomeKernel
     {t : ℕ} (h : G.Hist t) :
     (C.belief t h).bind (C.outcomeKernel opp h) =
       C.behaviorOutcomeKernel opp h := by
-  letI : ∀ i, Fintype (G.Act i) :=
+  let : ∀ i, Fintype (G.Act i) :=
     fun i => Fintype.ofFinite (G.Act i)
-  letI : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.State := Fintype.ofFinite G.State
   let k : G.Act who → PMF (G.JointAct × G.State) := fun ai =>
     (pmfPi
       (Function.update (fun i => opp i t h) who (PMF.pure ai))).bind
@@ -418,11 +418,11 @@ theorem MemoryController.belief_outcome_update_tagged
         (C.belief (t + 1)
           (Fin.snoc h.1 (h.2, o.1), o.2)).bind
             (fun m' => PMF.pure (o, m'))) := by
-  letI : ∀ i, Fintype (G.Act i) :=
+  let : ∀ i, Fintype (G.Act i) :=
     fun i => Fintype.ofFinite (G.Act i)
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : Fintype (C.Mem t) := C.finiteMem t
-  letI : Fintype (C.Mem (t + 1)) := C.finiteMem (t + 1)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype (C.Mem t) := C.finiteMem t
+  let : Fintype (C.Mem (t + 1)) := C.finiteMem (t + 1)
   let personal : C.Mem t → (G.JointAct × G.State) → ENNReal :=
     fun m o => C.select t h m (o.1 who)
   let common : (G.JointAct × G.State) → ENNReal :=
@@ -489,11 +489,11 @@ theorem MemoryController.historyContinuationEU_beliefPotential
         expect (C.outcomeKernel opp h m) (fun o =>
           expect (C.update t h o.1 o.2 m) (fun m' =>
             φ (t + 1) (Fin.snoc h.1 (h.2, o.1), o.2) m'))) := by
-  letI : ∀ i, Fintype (G.Act i) :=
+  let : ∀ i, Fintype (G.Act i) :=
     fun i => Fintype.ofFinite (G.Act i)
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : Fintype (C.Mem t) := C.finiteMem t
-  letI : Fintype (C.Mem (t + 1)) := C.finiteMem (t + 1)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype (C.Mem t) := C.finiteMem t
+  let : Fintype (C.Mem (t + 1)) := C.finiteMem (t + 1)
   let F : (G.JointAct × G.State) × C.Mem (t + 1) → ℝ :=
     fun z => φ (t + 1)
       (Fin.snoc h.1 (h.2, z.1.1), z.1.2) z.2
@@ -526,7 +526,7 @@ theorem MemoryController.beliefPotential_drift_ge
           (Function.update opp who C.behaviorStrategy)
           (C.beliefPotential φ) h -
         C.beliefPotential φ t h := by
-  letI : Fintype (C.Mem t) := C.finiteMem t
+  let : Fintype (C.Mem t) := C.finiteMem t
   rw [C.historyContinuationEU_beliefPotential opp φ h]
   unfold MemoryController.beliefPotential
   rw [← expect_sub]

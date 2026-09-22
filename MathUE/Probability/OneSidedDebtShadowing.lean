@@ -143,7 +143,7 @@ theorem tendsto_survivalProduct_zero_of_le
       survivalProduct_nonneg coefficient hcoefficient0 start length
   · exact Eventually.of_forall fun length ↦ by
       unfold survivalProduct
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun offset _ ↦ hcoefficient0 (start + offset))
         (fun offset _ ↦ hle (start + offset))
   · exact hsurvival

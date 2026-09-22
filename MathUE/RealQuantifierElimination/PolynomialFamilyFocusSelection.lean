@@ -9,7 +9,7 @@ equality, and the resulting zipper retains the exact original order.
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 
 /-- Select the first family member of maximal formal length and return its
 exact list zipper. -/

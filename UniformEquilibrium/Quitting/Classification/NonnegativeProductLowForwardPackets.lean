@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ChargedPathBudget
+open _root_.Math.Probability Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 

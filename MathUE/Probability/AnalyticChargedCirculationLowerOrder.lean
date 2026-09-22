@@ -197,7 +197,7 @@ def delayedChargeCirculation (poleOrder : ℕ) :
     rw [analyticAt_pi_iff]
     intro index
     cases index
-    · simpa only [delayedChargeMass, Bool.false_eq_true, if_false] using
+    · simpa only [delayedChargeMass, Bool.false_eq_true, ite_false] using
         (analyticAt_const : AnalyticAt ℝ (fun _ : ℝ => (1 : ℝ)) 0)
     · change AnalyticAt ℝ (fun x : ℝ => x ^ poleOrder) 0
       exact
@@ -226,7 +226,7 @@ def delayedChargeLeadingMassJet
     rw [analyticAt_pi_iff]
     intro index
     cases index
-    · simpa only [delayedChargeMass, Bool.false_eq_true, if_false] using
+    · simpa only [delayedChargeMass, Bool.false_eq_true, ite_false] using
         (analyticAt_const : AnalyticAt ℝ (fun _ : ℝ => (1 : ℝ)) 0)
     · change AnalyticAt ℝ (fun x : ℝ => x ^ poleOrder) 0
       exact
@@ -253,7 +253,7 @@ def delayedChargeLeadingMassJet
         delayedChargeMass poleOrder 0 index *
           delayedCharge 0 index) =
         if 0 = poleOrder then 1 else 0
-    rw [if_neg (Nat.ne_of_lt poleOrder_pos)]
+    rw [ite_eq_right (Nat.ne_of_lt poleOrder_pos)]
     simp [delayedChargeMass, delayedCharge, hpole_ne]
 
 /-- In the explicit example, positivity-preserving residualization leaves

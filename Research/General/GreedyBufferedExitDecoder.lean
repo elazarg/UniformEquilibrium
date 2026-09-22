@@ -78,13 +78,13 @@ theorem greedyBufferedStep_mem_and_rel
       relation point (greedyBufferedStep relation K buffer point) := by
   unfold greedyBufferedStep
   by_cases h : ∃ next, next ∈ K ∧ relation point next ∧ next ∈ buffer
-  · rw [dif_pos h]
+  · rw [dite_eq_left h]
     exact ⟨h.choose_spec.1, h.choose_spec.2.1⟩
-  · rw [dif_neg h]
+  · rw [dite_eq_right h]
     have h' : ∃ next, next ∈ K ∧ relation point next := by
       obtain ⟨next, hnextK, hnextR⟩ := hserial point hpoint
       exact ⟨next, hnextK, hnextR⟩
-    rw [dif_pos h']
+    rw [dite_eq_left h']
     exact ⟨h'.choose_spec.1, h'.choose_spec.2⟩
 
 /-- Buffer preference: if some admissible successor stays in the buffer,
@@ -95,7 +95,7 @@ theorem greedyBufferedStep_mem_buffer
     (h : ∃ next, next ∈ K ∧ relation point next ∧ next ∈ buffer) :
     greedyBufferedStep relation K buffer point ∈ buffer := by
   unfold greedyBufferedStep
-  rw [dif_pos h]
+  rw [dite_eq_left h]
   exact h.choose_spec.2.2
 
 /-- **Exit decoder hook.**  If the greedy step leaves the buffer, then no
@@ -229,9 +229,9 @@ theorem greedyBufferedStep_mem_and_rel_of_not_deadEnd
   rw [RelationDeadEnd, not_not] at hnot
   unfold greedyBufferedStep
   by_cases h : ∃ next, next ∈ K ∧ relation point next ∧ next ∈ buffer
-  · rw [dif_pos h]
+  · rw [dite_eq_left h]
     exact ⟨h.choose_spec.1, h.choose_spec.2.1⟩
-  · rw [dif_neg h, dif_pos hnot]
+  · rw [dite_eq_right h, dite_eq_left hnot]
     exact ⟨hnot.choose_spec.1, hnot.choose_spec.2⟩
 
 /-- Membership along a prefix with no dead end. -/

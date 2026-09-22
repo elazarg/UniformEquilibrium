@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -74,6 +74,7 @@ theorem quittingRootSequenceProfile_finiteWord_eq_literalRootStack
         quittingRootSequenceProfile reward (quittingFiniteWordRootSequence roots) 0 := by
         funext player time history
         simp [quittingRootSequenceProfile, Nat.add_comm]
+        rfl
       rw [hshift, ih]
 
 omit [Fintype ι] [DecidableEq ι] in

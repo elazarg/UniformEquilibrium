@@ -156,8 +156,9 @@ theorem boxComplementarityReducedLabel_le_of_eq_last
   exact Or.inr (boxComplementarityGridPoint_eq_one p hp vertex who htop)
 
 /-- The concrete cubical Sperner instance associated with one box
-complementarity problem and one positive grid resolution. -/
-def boxComplementaritySpernerCube
+complementarity problem and one positive grid resolution. Reducibility keeps
+its dimension and grid-carrier projections transparent to dependent proofs. -/
+@[reducible] def boxComplementaritySpernerCube
     (problem : BoxComplementarityProblem (Fin n))
     (p : ℕ) (hp : 0 < p) : SpernerCube where
   n := n

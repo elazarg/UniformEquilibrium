@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame QuittingLCPClassification
+open Filter _root_.Math.Probability StochasticGame QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

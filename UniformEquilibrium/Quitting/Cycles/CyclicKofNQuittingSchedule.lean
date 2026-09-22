@@ -31,7 +31,7 @@ namespace GameTheory
 
 namespace CyclicKofNQuittingSchedule
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic
 open scoped BigOperators Pointwise
 
@@ -177,11 +177,12 @@ theorem quittingPositiveHazardSupport_uniformActiveRoot
     quittingPositiveHazardSupport (uniformActiveRoot active β hβpos.le hβ1) =
       active := by
   ext who
+  unfold quittingPositiveHazardSupport
+  rw [Finset.mem_filter]
   by_cases hwho : who ∈ active
-  · simp [quittingPositiveHazardSupport, uniformActiveRoot,
-      hwho, hazardOfRoot,
+  · simp [uniformActiveRoot, hwho, hazardOfRoot,
       quittingHazardCoin_true_toReal, hβpos]
-  · simp [quittingPositiveHazardSupport, uniformActiveRoot,
+  · simp [uniformActiveRoot,
       hazardOfRoot_quittingActiveRoot, hwho]
 
 /-- Put the uniform positive hazard on the current cyclic block. -/

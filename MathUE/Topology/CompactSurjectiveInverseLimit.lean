@@ -70,7 +70,7 @@ theorem isClosed_compatibleCodeSet
       ⋂ depth, {code : ∀ current, Stage current |
         tower.restriction depth (code (depth + 1)) = code depth} by
     ext code
-    simp only [Set.mem_setOf_eq, Set.mem_iInter]]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter]]
   exact isClosed_iInter fun depth ↦
     isClosed_eq
       ((tower.restriction_continuous depth).comp

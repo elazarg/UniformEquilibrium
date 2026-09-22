@@ -151,7 +151,7 @@ theorem boxComplementarity_completeSimplex_iff_finLabel_injective
       ((Fintype.bijective_iff_injective_and_card _).2
         ⟨hinjective, rfl⟩).2
     ext label
-    simp only [Set.mem_range, Set.mem_setOf_eq]
+    simp only [Set.mem_range, Set.mem_ofPred_eq]
     constructor
     · rintro ⟨index, rfl⟩
       exact (boxComplementarityReducedLabel_properties
@@ -394,7 +394,7 @@ theorem kuhnStarSubdivision_completeFacetParity_eq
         (kuhnStarSubdivisionCompleteFacets labels stellarLabel).card := by
       refine ⟨half - 1, ?_⟩
       omega
-    simp only [hinjective, if_true]
+    simp only [hinjective, ite_true]
     obtain ⟨count, hcount⟩ := hfacetOdd
     rw [hcount, Nat.cast_add, Nat.cast_mul]
     change (2 : ZMod 2) * (count : ZMod 2) + 1 = 1
@@ -410,7 +410,7 @@ theorem kuhnStarSubdivision_completeFacetParity_eq
     have hfacets :
         kuhnStarSubdivisionCompleteFacets labels stellarLabel = allFaces := by
       simp [kuhnStarSubdivisionCompleteFacets, allFaces, hlast]
-    simp only [hinjective, if_false, hfacets]
+    simp only [hinjective, ite_false, hfacets]
     obtain ⟨half, hhalf⟩ := hallEven
     rw [hhalf, Nat.cast_add]
     change (half : ZMod 2) + half = 0
@@ -430,8 +430,10 @@ def zeroBoxComplementarityProblem (dimension : ℕ) :
     fun_prop
 
 /-- Pinned ordered-Kuhn geometry in one dimension more than the endpoint
-problem. -/
-def kuhnPrismGeometryCube (n resolution : ℕ) (hresolution : 0 < resolution) :
+problem. Reducibility keeps its carrier and dimension projections transparent
+to the dependent incidence lemmas below. -/
+@[reducible] def kuhnPrismGeometryCube
+    (n resolution : ℕ) (hresolution : 0 < resolution) :
     SpernerCube :=
   boxComplementaritySpernerCube
     (zeroBoxComplementarityProblem (n + 1)) resolution hresolution
@@ -677,18 +679,22 @@ theorem KuhnPrismFace.incidentCell_card_eq_parent_card
   exact KuhnSimplex.CompleteFace.incidentCell_card_eq_parent_card face
 
 /-- A concrete face lies on the left parameter end. -/
-def KuhnPrismFace.IsLeftEnd
+@[reducible] def KuhnPrismFace.IsLeftEnd
     {resolution : ℕ} {hresolution : 0 < resolution}
     {label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)}
     (face : KuhnPrismFace n resolution hresolution label) : Prop :=
-  ∀ index, face.1 index (Fin.last n) = 0
+  ∀ index, face.1 index (Fin.cast
+    (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
+    (Fin.last n)) = 0
 
 /-- A concrete face lies on the right parameter end. -/
-def KuhnPrismFace.IsRightEnd
+@[reducible] def KuhnPrismFace.IsRightEnd
     {resolution : ℕ} {hresolution : 0 < resolution}
     {label : (kuhnPrismGeometryCube n resolution hresolution).G → Fin (n + 1)}
     (face : KuhnPrismFace n resolution hresolution label) : Prop :=
-  ∀ index, (face.1 index (Fin.last n)).1 = resolution
+  ∀ index, (face.1 index (Fin.cast
+    (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
+    (Fin.last n))).1 = resolution
 
 /-- A concrete face lies on a spatial side of the parameter-times-cube. -/
 def KuhnPrismFace.IsLateral
@@ -728,11 +734,10 @@ theorem KuhnPrismFace.odd_incidentCellDegree_iff_isGeometricBoundary
       (kuhnPrismGeometryCube n resolution hresolution)
         n rfl face.1 face.2.1
     change parents.card ∈ {count | count = 1 ∨ count = 2} at hparents
-    simpa only [Set.mem_setOf_eq] using hparents
+    simpa only [Set.mem_ofPred_eq] using hparents
   have hboundary : face.IsGeometricBoundary ↔ parents.card = 1 := by
     rw [KuhnPrismFace.IsGeometricBoundary, is_boundary_face,
       Fintype.existsUnique_iff_card_one]
-    rfl
   rw [hboundary]
   constructor
   · intro hodd
@@ -1033,14 +1038,14 @@ theorem KuhnPrismSpatialBoundaryLabeling.externalEndpointWeightedSum_eq
     rfl
   rw [← hleftSum, ← hrightSum]
   have h := KuhnSimplex.sum_weighted_parameterFaceWeight_left_eq_right
+    (cube := kuhnPrismGeometryCube n resolution hresolution) (dimension := n)
     rfl boundary.label (fun cell ↦ selection (Fin.init (cell.1 0)))
     (fun face ↦ selection (Fin.init (face.1 0))) hcompatible
     (fun face hface ↦ (boundary.isGeometricBoundary_iff face).mp hface)
   have hcast : Fin.cast
       (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
       (Fin.last n) = Fin.last n := Fin.ext rfl
-  have hp : (kuhnPrismGeometryCube n resolution hresolution).p = resolution := rfl
-  simpa only [hcast, hp, KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd,
+  simpa only [KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd,
     faceWeight] using h
 
 /-- The external endpoint labeling carried by one box-complementarity cube. -/
@@ -1092,6 +1097,12 @@ theorem KuhnPrismSpatialBoundaryLabeling.leftEndParity_eq_rightEndParity
       ((Finset.univ.filter fun face :
         KuhnPrismFace n resolution hresolution boundary.label ↦
           face.IsRightEnd).card : ZMod 2) := by
+  rw [← Finset.filter_congr_decidable Finset.univ
+      (fun face : KuhnPrismFace n resolution hresolution boundary.label ↦
+        face.IsLeftEnd) (fun _ ↦ Classical.propDecidable _),
+    ← Finset.filter_congr_decidable Finset.univ
+      (fun face : KuhnPrismFace n resolution hresolution boundary.label ↦
+        face.IsRightEnd) (fun _ ↦ Classical.propDecidable _)]
   apply relativeCubicalPrism_boundaryParity_eq
     (fun cell face ↦ kuhnPrismIncident cell face)
     KuhnPrismFace.IsLeftEnd KuhnPrismFace.IsRightEnd
@@ -1329,12 +1340,13 @@ theorem KuhnPrismSpatialBoundaryLabeling.leftEndSignedWeight_eq_rightEndSignedWe
   have hcast : Fin.cast
       (show n + 1 = (kuhnPrismGeometryCube n resolution hresolution).n from rfl)
       (Fin.last n) = Fin.last n := Fin.ext rfl
-  have h := KuhnSimplex.sum_parameterFaceWeight_left_eq_right rfl boundary.label (by
+  have h := KuhnSimplex.sum_parameterFaceWeight_left_eq_right
+    (cube := kuhnPrismGeometryCube n resolution hresolution) (dimension := n)
+    rfl boundary.label (by
     intro face hface
     rw [hcast]
     exact (boundary.isGeometricBoundary_iff face).mp hface)
-  have hp : (kuhnPrismGeometryCube n resolution hresolution).p = resolution := rfl
-  simpa only [hcast, hp, KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd] using h
+  simpa only [KuhnPrismFace.IsLeftEnd, KuhnPrismFace.IsRightEnd] using h
 
 /-- Literal geometric and label orientation of an endpoint simplex. -/
 def KuhnEndpointLabeledSimplex.signedWeight

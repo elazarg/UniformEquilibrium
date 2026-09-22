@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourHardDeadlineTimingNashBarrier
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 /-- Exploitabilities realized by exact mixed timing Nash laws of normalized Fin4 tables. -/

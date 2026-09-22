@@ -31,9 +31,11 @@ an exact deletion/punishment certificate.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -208,10 +210,12 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
       exact_mod_cast Fintype.card_pos
     have hMpos : 0 < M := packet.rewardBound_pos
     have htargetNonneg : 0 ≤ targetMass :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile)).1
         (some packet.terminal)
     have hsourceNonneg : 0 ≤ sourceMass :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile)).1
         (some packet.terminal)
     have hrewardLe : reward packet.terminal packet.observer ≤ M :=
       (le_abs_self _).trans
@@ -236,7 +240,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
     have htotal : packet.charge / 4 ≤ card * (targetMass * M) :=
       hbound.trans (mul_le_mul_of_nonneg_left hproductLe hcard.le)
     unfold quittingStoppingLawObserverAbsentMassLower
-    rw [quittingStoppingLawObserverAbsentCarrierProfile, if_pos hpositive]
+    rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_left hpositive]
     apply (div_le_iff₀ (mul_pos hcard hMpos)).2
     change packet.charge / 4 ≤ targetMass * (card * M)
     calc
@@ -245,7 +249,7 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
   · have hnegative : reward packet.terminal packet.observer < 0 := by
       exact lt_of_le_of_ne (le_of_not_gt hpositive)
         packet.reward_ne_zero
-    rw [quittingStoppingLawObserverAbsentCarrierProfile, if_neg hpositive]
+    rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_right hpositive]
     exact packet.negativeTarget_sourceMassLower hnegative n
 
 /-- Exact pre-observer-stop accounting for the selected endpoint. -/
@@ -273,13 +277,13 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
         (some packet.terminal)
   | some stop =>
       by_cases hpositive : 0 < reward packet.terminal packet.observer
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_pos hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_left hpositive,
           quittingStoppingLawRectangleTargetObserverProfile]
         simpa only [htime] using
           quittingTerminalOutcomeMass_update_pureTime_some_notMem_eq_before
             reward (quittingStoppingLawRectangleTargetProfile packet n)
               packet.observer stop packet.terminal habsent
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_neg hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_right hpositive,
           quittingStoppingLawRectangleSourceProfile]
         simpa only [htime] using
           quittingTerminalOutcomeMass_update_pureTime_some_notMem_eq_before
@@ -302,24 +306,24 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.observerAbsent_carrier
   cases htime : packet.quitTime n with
   | none =>
       by_cases hpositive : 0 < reward packet.terminal packet.observer
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_pos hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_left hpositive,
           quittingStoppingLawRectangleTargetObserverProfile,
           quittingProfileLiveRoot_update_pureTime_self, htime,
           quittingPureTimeHazard_none]
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_neg hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_right hpositive,
           quittingStoppingLawRectangleSourceProfile,
           quittingProfileLiveRoot_update_pureTime_self, htime,
           quittingPureTimeHazard_none]
   | some stop =>
       have hlt : time < stop := by simpa only [htime] using hbefore
       by_cases hpositive : 0 < reward packet.terminal packet.observer
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_pos hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_left hpositive,
           quittingStoppingLawRectangleTargetObserverProfile]
         simpa only [htime] using
           quittingProfileLiveRoot_update_pureTime_some_eq_pureContinue_of_lt
             reward (quittingStoppingLawRectangleTargetProfile packet n)
               packet.observer hlt
-      · rw [quittingStoppingLawObserverAbsentCarrierProfile, if_neg hpositive,
+      · rw [quittingStoppingLawObserverAbsentCarrierProfile, ite_eq_right hpositive,
           quittingStoppingLawRectangleSourceProfile]
         simpa only [htime] using
           quittingProfileLiveRoot_update_pureTime_some_eq_pureContinue_of_lt
@@ -340,14 +344,27 @@ theorem quittingProfileLiveRoot_observerAbsentForcedOwnerProfile
         (quittingProfileLiveRoot reward
           (quittingStoppingLawObserverAbsentCarrierProfile packet n) time)
         (quittingStoppingLawObserverAbsentOwner packet) (PMF.pure true) := by
+  let carrierRoot : ι → PMF Bool := quittingProfileLiveRoot reward
+    (quittingStoppingLawObserverAbsentCarrierProfile packet n) time
+  let forcedRoot : ι → PMF Bool := quittingProfileLiveRoot reward
+    (quittingStoppingLawObserverAbsentForcedOwnerProfile packet n time) time
+  change forcedRoot = Function.update carrierRoot
+    (quittingStoppingLawObserverAbsentOwner packet) (PMF.pure true)
   funext player
-  unfold quittingStoppingLawObserverAbsentForcedOwnerProfile
-    quittingProfileLiveRoot
   by_cases hplayer : player = quittingStoppingLawObserverAbsentOwner packet
   · subst player
+    rw [Function.update_self]
+    dsimp only [forcedRoot]
+    unfold quittingStoppingLawObserverAbsentForcedOwnerProfile
+      quittingProfileLiveRoot
     simp [quittingStagePureEndpointBehaviorDeviation,
       quittingStageDeviationHazard_self]
-  · simp [Function.update_of_ne hplayer]
+  · rw [Function.update_of_ne hplayer]
+    dsimp only [forcedRoot, carrierRoot]
+    unfold quittingStoppingLawObserverAbsentForcedOwnerProfile
+      quittingProfileLiveRoot
+    simp [Function.update_of_ne hplayer]
+    rfl
 
 /-- Forcing a fixed member of the selected terminal coalition to Quit cannot
 decrease that coalition's actual stage cylinder. -/

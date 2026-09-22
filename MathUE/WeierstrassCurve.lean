@@ -84,7 +84,7 @@ theorem exists_weierstrassFactorization_bivPolynomial
     ∃ f h,
       (bivPolynomialToIteratedPowerSeries P).IsWeierstrassFactorization
         f h := by
-  letI : IsAdicComplete
+  let : IsAdicComplete
       (IsLocalRing.maximalIdeal (PowerSeries K)) (PowerSeries K) := by
     rw [PowerSeries.maximalIdeal_eq_span_X]
     infer_instance
@@ -169,7 +169,7 @@ theorem exists_interval_content_eval_ne_zero
   have hcontent : P.content ≠ 0 :=
     fun h => hP (Polynomial.content_eq_zero_iff.mp h)
   let S : Set ℝ := {lam | P.content.IsRoot lam}
-  have hSfinite : S.Finite := Polynomial.finite_setOf_isRoot hcontent
+  have hSfinite : S.Finite := Polynomial.finite_setOfPred_isRoot hcontent
   have hopen : IsOpen ((S \ {0})ᶜ) :=
     hSfinite.sdiff.isClosed.isOpen_compl
   have hzero : (0 : ℝ) ∈ (S \ {0})ᶜ := by simp

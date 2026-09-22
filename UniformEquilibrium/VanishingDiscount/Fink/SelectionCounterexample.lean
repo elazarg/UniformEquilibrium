@@ -24,7 +24,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace FinkSelectionCounterexample
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 namespace Base
@@ -67,8 +67,14 @@ the same as in the tangent counterexample. -/
 def profile (n : ℕ) : game.StationaryMixedProfile :=
   fun s who =>
     (stdSimplexEquiv (α := Bool)).symm
-      ⟨FinkTangentCounterexample.weight n (s, who),
-        FinkTangentCounterexample.weight_mem_simplex n (s, who)⟩
+      ⟨Finsupp.equivFunOnFinite.symm
+          (FinkTangentCounterexample.weight n (s, who)),
+        (GameTheory.Math.Probability.mem_simplexWeights.mp
+          (FinkTangentCounterexample.weight_mem_simplex n (s, who))).1,
+        (by
+          rw [Finsupp.equivFunOnFinite_symm_sum]
+          exact (GameTheory.Math.Probability.mem_simplexWeights.mp
+            (FinkTangentCounterexample.weight_mem_simplex n (s, who))).2)⟩
 
 def value (s : game.State) (who : Player) : ℝ :=
   FinkTangentCounterexample.value s who
@@ -92,7 +98,10 @@ def value (s : game.State) (who : Player) : ℝ :=
 
 lemma profile_eq_base (n : ℕ) :
     profile n = FinkTangentCounterexample.profile n := by
-  rfl
+  funext s who
+  apply eq_of_forall_toReal_eq
+  intro d
+  rw [profile_apply_toReal, FinkTangentCounterexample.profile_apply_toReal]
 
 lemma abs_value_le_one (s : CState) (who : Player) : |value s who| ≤ 1 :=
   FinkTangentCounterexample.abs_value_le_one s who
@@ -131,7 +140,7 @@ lemma playerTwo_pure_discountedAuxEU_eq (n : ℕ) (s : CState) (d : Bool) :
       expect_eq_sum,
       Fintype.sum_bool, Function.update_self, ne_eq,
       Bool.false_eq_true, not_false_eq_true,
-      Function.update_of_ne, Bool.if_false_right, Bool.if_true_right]
+      Function.update_of_ne, Bool.ite_false_right, Bool.ite_true_right]
   all_goals
     rw [profile_apply_toReal]
     norm_num [FinkTangentCounterexample.weight]
@@ -185,7 +194,7 @@ lemma isDiscountedStationaryBellmanEq (n : ℕ) :
 lemma abs_payoff_le_one (s : CState) (a : Player → Bool) (who : Player) :
     |game.stagePayoff s a who| ≤ 1 := by
   cases s <;> cases who <;>
-    simp only [payoff, Bool.false_eq_true, if_false, if_true,
+    simp only [payoff, Bool.false_eq_true, ite_false, ite_true,
       FinkTangentCounterexample.payoff]
   all_goals try split <;> norm_num
   all_goals norm_num
@@ -381,7 +390,7 @@ namespace StochasticGame
 namespace FinkSelectionCounterexample
 namespace Base
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 /-! ## Semantic uniqueness of the live Bellman equilibrium -/
@@ -458,8 +467,8 @@ lemma playerOne_live_pure_values
   rw [FinkTangentCounterexample.expect_pmfPi_bool,
     FinkTangentCounterexample.expect_pmfPi_bool]
   simp only [Function.update_self, ne_eq, Bool.true_eq_false, not_false_eq_true,
-    Function.update_of_ne, expect_pure, Bool.if_false_right, Bool.decide_eq_true, mul_neg,
-    mul_one, neg_sub, Bool.if_true_right, discountedAuxPayoff, payoff,
+    Function.update_of_ne, expect_pure, Bool.ite_false_right, Bool.decide_eq_true, mul_neg,
+    mul_one, neg_sub, Bool.ite_true_right, discountedAuxPayoff, payoff,
     FinkTangentCounterexample.payoff,
     FinkTangentCounterexample.expect_transition,
     FinkTangentCounterexample.nextState]
@@ -487,8 +496,8 @@ lemma playerTwo_live_pure_values
   rw [FinkTangentCounterexample.expect_pmfPi_bool,
     FinkTangentCounterexample.expect_pmfPi_bool]
   simp only [ne_eq, Bool.false_eq_true, not_false_eq_true, Function.update_of_ne,
-    Function.update_self, expect_pure, Bool.if_false_left, Bool.decide_eq_true,
-    Bool.if_true_left, discountedAuxPayoff, payoff,
+    Function.update_self, expect_pure, Bool.ite_false_left, Bool.decide_eq_true,
+    Bool.ite_true_left, discountedAuxPayoff, payoff,
     FinkTangentCounterexample.expect_transition,
     FinkTangentCounterexample.nextState]
   rw [expect_eq_sum, expect_eq_sum, Fintype.sum_bool, Fintype.sum_bool]

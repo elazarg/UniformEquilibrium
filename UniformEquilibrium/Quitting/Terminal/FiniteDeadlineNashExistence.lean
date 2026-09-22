@@ -6,7 +6,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -27,17 +27,17 @@ theorem exists_exactFiniteDeadlineTimingNash
     ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
       (quittingFiniteDeadlineTimingGame reward deadline).mixedExtension.IsNash mixed ∧
       IsQuittingFiniteDeadlineNash reward deadline 0 mixed := by
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingFiniteDeadlineTimingGame reward deadline).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Nonempty
+  let : ∀ player, Nonempty
       ((quittingFiniteDeadlineTimingGame reward deadline).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   obtain ⟨mixed, hnash⟩ :=

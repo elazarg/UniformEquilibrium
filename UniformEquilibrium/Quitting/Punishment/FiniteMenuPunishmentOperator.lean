@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -75,7 +75,7 @@ theorem exists_quittingFiniteMenuPunishmentOperator_minimizer
       ∀ other : ι → PMF Bool,
         quittingFiniteMenuPunishmentOperator reward who value ≤
           quittingFiniteRootWordCap reward [other] who value := by
-  letI : Nonempty (QuittingRootSimplex ι) :=
+  let : Nonempty (QuittingRootSimplex ι) :=
     ⟨quittingSimplexOfRoot quittingAllContinueRoot⟩
   obtain ⟨root, _, hminimum⟩ := isCompact_univ.exists_isMinOn
     (Set.univ_nonempty : (Set.univ : Set (QuittingRootSimplex ι)).Nonempty)

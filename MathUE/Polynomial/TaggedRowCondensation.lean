@@ -1,5 +1,5 @@
 import Mathlib.Data.List.Basic
-import Mathlib.Data.Sign.Defs
+import Mathlib.Basic.Sign.Defs
 
 /-!
 # Tagged alternating-row condensation

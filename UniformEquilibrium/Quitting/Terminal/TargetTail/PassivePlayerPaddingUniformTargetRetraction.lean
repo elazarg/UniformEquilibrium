@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {I J : Type} [Fintype I] [DecidableEq I]
   [Fintype J] [DecidableEq J]
@@ -219,7 +219,7 @@ theorem uniformEquilibriumPayoffSet_passivePadding_eq_image
         {target : Payoff I |
           (quittingGame reward).IsUniformEquilibriumPayoff none target} := by
   ext target
-  rw [Set.mem_setOf_eq, isUniformEquilibriumPayoff_passivePadding_iff
+  rw [Set.mem_ofPred_eq, isUniformEquilibriumPayoff_passivePadding_iff
     (J := J) reward hpenalty, Set.mem_image]
   constructor
   · rintro ⟨hold, hfresh⟩

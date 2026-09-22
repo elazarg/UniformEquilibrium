@@ -61,7 +61,7 @@ theorem norm_sub_le_sum_norm_finRotate {n : ℕ} {E : Type*}
     [SeminormedAddCommGroup E] (v : Fin n → E) (source target : Fin n) :
     ‖v source - v target‖ ≤
       ∑ phase : Fin n, ‖v (finRotate n phase) - v phase‖ := by
-  haveI : NeZero n := source.neZero
+  have : NeZero n := source.neZero
   obtain ⟨steps, hsteps, hreach⟩ := exists_iterate_finRotate_eq target source
   let orbit : ℕ → Fin n := fun offset => (finRotate n)^[offset] target
   let edge : Fin n → ℝ := fun phase => ‖v (finRotate n phase) - v phase‖

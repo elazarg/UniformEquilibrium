@@ -57,21 +57,21 @@ def mirrorMargin : ZMod 5 → ℝ :=
     else 0
 
 @[simp] theorem mirrorMargin_zero : mirrorMargin 0 = 0 := by
-  rw [mirrorMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_neg (by decide)]
+  rw [mirrorMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_right (by decide)]
 
 @[simp] theorem mirrorMargin_one : mirrorMargin 1 = 10 := by
-  rw [mirrorMargin, if_pos rfl]
+  rw [mirrorMargin, ite_eq_left rfl]
 
 @[simp] theorem mirrorMargin_two : mirrorMargin 2 = -1 := by
-  rw [mirrorMargin, if_neg (by decide), if_pos rfl]
+  rw [mirrorMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem mirrorMargin_three : mirrorMargin 3 = -4 := by
-  rw [mirrorMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [mirrorMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem mirrorMargin_four : mirrorMargin 4 = 3 / 10 := by
-  rw [mirrorMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_pos rfl]
+  rw [mirrorMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_left rfl]
 
 /-- The collider completion at solo self value `1`, joint value `-2`, and the
 margin vector `mirrorMargin`. -/

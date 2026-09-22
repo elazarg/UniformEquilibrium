@@ -32,7 +32,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Filter Math Math.PMFProduct Math.Probability Set Topology
+open Filter _root_.Math Math.PMFProduct _root_.Math.Probability Set Topology
 open Math.OnlineLearning
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -343,12 +343,12 @@ theorem rawMovingGain_le_error_sub_strictGap
   by_cases strict :
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action < 0
-  · rw [if_pos strict, mul_one]
+  · rw [ite_eq_left strict, mul_one]
     have gap :=
       germ.endpointContinuationGain_le_neg_strictGap
         who source action strict
     linarith
-  · rw [if_neg strict, mul_zero, sub_zero]
+  · rw [ite_eq_right strict, mul_zero, sub_zero]
     have endpoint_nonpos :=
       germ.finkContinuationGain_endpointValue_nonpos
         source who action
@@ -385,7 +385,7 @@ theorem eventually_rawMovingGain_le_neg_half_strictGap
   have bound :=
     germ.rawMovingGain_le_error_sub_strictGap
       who t source action
-  rw [if_pos strict, mul_one] at bound
+  rw [ite_eq_left strict, mul_one] at bound
   linarith
 
 omit [DecidableEq G.State] in

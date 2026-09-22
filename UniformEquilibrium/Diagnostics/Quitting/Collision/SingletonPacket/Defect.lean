@@ -36,7 +36,7 @@ theorem quittingNormalizedSingletonPacketDefect_pos
     (hdata : data ∈ quittingNormalizedSingletonPacketDataSet reward) :
     0 < @quittingNormalizedSingletonPacketDefect ι _
       witness.nonempty_players reward data := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let packet := quittingNormalizedSingletonSourcePacketOfData data hdata
   obtain ⟨owner, hmass, hsurplus⟩ :=
     witness.exists_active_strictSingletonSurplus packet
@@ -58,7 +58,7 @@ theorem exists_pos_uniform_normalizedSingletonPacketDefect
       ∀ packet : QuittingNormalizedSingletonSourcePacket reward,
         δ ≤ @quittingNormalizedSingletonPacketDefect ι _
           witness.nonempty_players reward (packet.mass, packet.target) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨packet⟩ := witness.nonempty_normalizedSingletonSourcePacket
   have hnonempty :
       (quittingNormalizedSingletonPacketDataSet reward).Nonempty :=
@@ -83,7 +83,7 @@ theorem exists_pos_uniform_normalizedSingletonPacketRefusal
             quittingSingletonMixture reward packet.mass owner ∧
           quittingSingletonMixture reward packet.mass owner + δ ≤
             quittingSingletonRefusalValue reward packet.mass owner owner := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨δ, hδ, hdefect⟩ :=
     witness.exists_pos_uniform_normalizedSingletonPacketDefect
   refine ⟨δ, hδ, fun packet ↦ ?_⟩

@@ -76,9 +76,9 @@ theorem moduleFinite_quotient_finset_inf
       exact moduleFinite_quotient_top
   | @insert i S hi ih =>
       rw [Finset.inf_insert]
-      letI : Module.Finite K (A ⧸ I i) :=
+      let : Module.Finite K (A ⧸ I i) :=
         hI i (Finset.mem_insert_self i S)
-      letI : Module.Finite K (A ⧸ S.inf I) :=
+      let : Module.Finite K (A ⧸ S.inf I) :=
         ih fun j hj => hI j (Finset.mem_insert_of_mem hj)
       exact moduleFinite_quotient_inf (I i) (S.inf I)
 
@@ -95,7 +95,7 @@ theorem moduleFinite_quotient_span_range_prod_of_branches
     Module.Finite K
       (A ⧸ Ideal.span (Set.range fun s => ∏ k, f s k)) := by
   classical
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let B : (σ → τ) → Ideal A :=
     fun c => Ideal.span (Set.range fun s => f s (c s))
   let J : Ideal A :=
@@ -105,7 +105,7 @@ theorem moduleFinite_quotient_span_range_prod_of_branches
     apply moduleFinite_quotient_finset_inf Finset.univ B
     intro c _
     exact hbranch c
-  letI := hQfinite
+  let := hQfinite
   have hJQ : J ≤ Q := by
     change Ideal.span (Set.range fun s => ∏ k, f s k) ≤ Q
     rw [Ideal.span_le]
@@ -123,7 +123,7 @@ theorem moduleFinite_quotient_span_range_prod_of_branches
     rw [Ideal.radical_eq_sInf]
     apply le_sInf
     intro P hP
-    letI : P.IsPrime := hP.2
+    let : P.IsPrime := hP.2
     have hexists : ∀ s : σ, ∃ k : τ, f s k ∈ P := by
       intro s
       have hprod : ∏ k, f s k ∈ P := by

@@ -176,7 +176,7 @@ theorem isQuittingActiveRoot_quittingPreemptionRoot
   have hpredecessor : who ≠ predecessor := by
     simpa using fun h => hwho (by simp [h])
   unfold quittingPreemptionRoot rootOfHazard
-  simp only [quittingPreemptionHazard, hcurrent, hpredecessor, if_false]
+  simp only [quittingPreemptionHazard, hcurrent, hpredecessor, ite_false]
   apply PMF.ext
   intro action
   cases action <;> simp [quittingHazardCoin, PMF.ofFintype_apply]

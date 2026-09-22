@@ -82,6 +82,14 @@ abbrev QuittingChronologicalEvent
       (QuittingChronologicalTailBox reward ×
         QuittingChronologicalCoalitionMark ι))
 
+instance instMeasurableSpaceChronologicalEvent
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    MeasurableSpace (QuittingChronologicalEvent reward) := borel _
+
+instance instBorelSpaceChronologicalEvent
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
+    BorelSpace (QuittingChronologicalEvent reward) := ⟨rfl⟩
+
 /-- The clock carried by a chronological event. -/
 def chronologicalEventClock
     {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -317,8 +325,7 @@ theorem continuous_chronologicalEventClock :
 def chronologicalClockLaw
     (law : ProbabilityMeasure (QuittingChronologicalEvent reward)) :
     ProbabilityMeasure ℝ :=
-  law.map (continuous_chronologicalEventClock
-    (reward := reward)).measurable.aemeasurable
+  law.map chronologicalEventClock
 
 /-- The total clock CDF of a chronological marked law. -/
 def chronologicalClockCDF
@@ -337,7 +344,9 @@ theorem chronologicalClockCDF_eq_clockEvent_real
   rw [chronologicalClockCDF, ProbabilityTheory.cdf_eq_real,
     ProbabilityMeasure.measureReal_eq_coe_coeFn]
   unfold chronologicalClockLaw
-  rw [ProbabilityMeasure.map_apply _ _ measurableSet_Iic,
+  rw [ProbabilityMeasure.map_apply law
+      (continuous_chronologicalEventClock
+        (reward := reward)).measurable.aemeasurable measurableSet_Iic,
     ← ProbabilityMeasure.measureReal_eq_coe_coeFn]
   rfl
 
@@ -356,7 +365,7 @@ theorem hasClockGap_chronologicalClockCDF_of_tendsto
   apply MathUE.HasClockGap.cdf_of_tendsto
     (limitFilter := limitFilter)
   · exact ProbabilityMeasure.tendsto_map_of_tendsto_of_continuous
-      laws law hlaw continuous_chronologicalEventClock
+      laws law hlaw (continuous_chronologicalEventClock (reward := reward))
   · exact hsource
 
 omit [DecidableEq ι] [Nonempty ι] in
@@ -417,8 +426,7 @@ theorem continuous_chronologicalCoalitionClock
 def chronologicalCoalitionClockLaw
     (law : ProbabilityMeasure (QuittingChronologicalEvent reward))
     (coalition : {S : Finset ι // S.Nonempty}) : ProbabilityMeasure ℝ :=
-  law.map (continuous_chronologicalCoalitionClock
-    (reward := reward) coalition).measurable.aemeasurable
+  law.map (chronologicalCoalitionClock coalition)
 
 /-- The CDF coordinate decoded from a chronological law. -/
 def chronologicalCoalitionCDF
@@ -439,7 +447,9 @@ theorem chronologicalCoalitionCDF_eq_clockCoalitionEvent_real
   rw [chronologicalCoalitionCDF, ProbabilityTheory.cdf_eq_real,
     ProbabilityMeasure.measureReal_eq_coe_coeFn]
   unfold chronologicalCoalitionClockLaw
-  rw [ProbabilityMeasure.map_apply _ _ measurableSet_Iic,
+  rw [ProbabilityMeasure.map_apply law
+      (continuous_chronologicalCoalitionClock
+        (reward := reward) coalition).measurable.aemeasurable measurableSet_Iic,
     ← ProbabilityMeasure.measureReal_eq_coe_coeFn]
   congr 1
   ext event
@@ -668,7 +678,7 @@ theorem pathTotal_eq_of_le_of_lt_pathTotal
   apply Finset.sum_congr rfl
   intro stage hstage
   by_cases htimeClock : quittingRootSequenceClock roots stage ≤ time
-  · rw [if_pos htimeClock, if_pos (htimeClock.trans htimeLater)]
+  · rw [ite_eq_left htimeClock, ite_eq_left (htimeClock.trans htimeLater)]
   · have hlaterClock : ¬quittingRootSequenceClock roots stage ≤ later := by
       intro hclock
       have hstageLt : stage < certificate.cutoff + 1 :=
@@ -678,7 +688,7 @@ theorem pathTotal_eq_of_le_of_lt_pathTotal
       have htotalLe := certificate.pathTotal_le_clock_of_lt hstageLe
         (lt_of_not_ge htimeClock)
       linarith
-    rw [if_neg htimeClock, if_neg hlaterClock]
+    rw [ite_eq_right htimeClock, ite_eq_right hlaterClock]
 
 omit [Nonempty ι] in
 /-- The same canonical clock-gap law stated directly for the total CDF of

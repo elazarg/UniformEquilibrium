@@ -228,7 +228,7 @@ theorem quittingIndependentTerminalOutcomeLaw_geometric_pivot_eq
     (opponents : ι → PMF (Option ℕ)) (pivot : ι) (deadline : ℕ)
     (hfinite : ∀ j, j ≠ pivot → IsFiniteClockStoppingLaw deadline (opponents j))
     (law : PMF (Option ℕ)) (hazard : ℝ) (hpositive : 0 < hazard) (hle : hazard ≤ 1) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingIndependentTerminalOutcomeLaw
         (Function.update opponents pivot
           (geometricPivotStoppingLaw law deadline hazard hpositive hle)) =
@@ -323,7 +323,7 @@ theorem exists_geometric_pivot_payoff_eq_and_exploitability_le
     (deadline : ℕ) (hdeadline : 0 < deadline)
     (hfinite : ∀ j, j ≠ pivot → IsFiniteClockStoppingLaw deadline (opponents j))
     (law : PMF (Option ℕ)) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     ∃ (hazard : ℝ) (hpositive : 0 < hazard) (hle : hazard ≤ 1),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward
@@ -337,7 +337,7 @@ theorem exists_geometric_pivot_payoff_eq_and_exploitability_le
               (geometricPivotStoppingLaw law deadline hazard hpositive hle))) ≤
         quittingTerminalExploitability reward
           (quittingStoppingLawProfile reward (Function.update opponents pivot law)) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   obtain ⟨hazard, hpositive, hle, hpayoff, hcaps⟩ :=
     exists_geometric_pivot_payoff_eq_and_caps_le
       reward opponents pivot deadline hdeadline hfinite law

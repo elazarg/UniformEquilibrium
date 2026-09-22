@@ -44,7 +44,12 @@ variable {roots : ℕ → ι → PMF Bool}
 inductive QuittingObstructionGrade where
   | charge
   | coboundary
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype QuittingObstructionGrade :=
+  Fintype.ofList [.charge, .coboundary] (by
+    intro grade
+    cases grade <;> simp)
 
 /-- A finite carrier shared by the charge and endpoint grades. -/
 abbrev QuittingObstructionCoordinate (ι : Type*) :=

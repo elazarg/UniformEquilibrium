@@ -40,8 +40,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset
-open Math.Probability Math.PMFProduct
+open _root_.Finset
+open _root_.Math.Probability Math.PMFProduct
 
 /-- One actual pair-base stationary source, its actual positive semantic
 minimum, and the cap-lifted summable port obtained from the same literal paid

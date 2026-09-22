@@ -62,13 +62,13 @@ theorem hasFiniteCoalitionPlayerRanking_of_supportPeeling
             by_contra hsecondChosen
             have hsecondNe : second ≠ chosen := fun heq =>
               hsecondChosen heq.symm
-            simp only [rank, if_pos rfl, if_neg hsecondNe] at hrank
+            simp only [rank, ite_eq_left rfl, ite_eq_right hsecondNe] at hrank
             omega
           · by_cases hsecondChosen : second = chosen
             · subst second
               simp [rank, hfirstChosen] at hrank
-            · simp only [rank, if_neg hfirstChosen,
-                if_neg hsecondChosen] at hrank
+            · simp only [rank, ite_eq_right hfirstChosen,
+                ite_eq_right hsecondChosen] at hrank
               apply holdInjective first
                 (Finset.mem_erase.mpr ⟨hfirstChosen, hfirst⟩) second
                 (Finset.mem_erase.mpr ⟨hsecondChosen, hsecond⟩)
@@ -76,12 +76,12 @@ theorem hasFiniteCoalitionPlayerRanking_of_supportPeeling
         · intro player hplayer
           by_cases hplayerChosen : player = chosen
           · subst player
-            simp only [rank, if_pos]
+            simp only [rank, ite_eq_left]
             exact Finset.card_pos.mpr hactive
           · have hold := holdBound player
               (Finset.mem_erase.mpr ⟨hplayerChosen, hplayer⟩)
             have hcard := Finset.card_erase_of_mem hchosen
-            simp only [rank, if_neg hplayerChosen]
+            simp only [rank, ite_eq_right hplayerChosen]
             dsimp only [remaining] at hold
             omega
         · intro player hplayer coalition hsubset hplayerCoalition hpositive
@@ -103,8 +103,8 @@ theorem hasFiniteCoalitionPlayerRanking_of_supportPeeling
               refine ⟨earlier, hearlier, ?_⟩
               have hearlierChosen : earlier ≠ chosen := fun heq =>
                 hchosenCoalition (heq ▸ hearlier)
-              simp only [rank, if_neg hearlierChosen,
-                if_neg hplayerChosen]
+              simp only [rank, ite_eq_right hearlierChosen,
+                ite_eq_right hplayerChosen]
               omega
       · have hempty : active = ∅ := Finset.not_nonempty_iff_eq_empty.mp hactive
         subst active

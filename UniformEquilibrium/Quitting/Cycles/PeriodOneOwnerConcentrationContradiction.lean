@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingLCPClassification
+open Filter _root_.Math.Probability QuittingLCPClassification
 open ThreeCoreAmbientCarrierElimination
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
@@ -63,16 +63,15 @@ theorem false_of_periodOne_ownerConcentration_of_finFour_noUniformPayoff
       ((selectedBlock (limit.select n)).cycle 0 owner true).toReal)
       atTop (nhds ((root owner true).toReal)) := by
     let quitCoordinate : QuittingNashBellmanPoint ι → ℝ :=
-      fun point ↦ point.2 owner true
+      fun point ↦ (point.2 owner).weights true
     have hcontinuous : Continuous quitCoordinate := by
       dsimp only [quitCoordinate]
-      exact (continuous_apply true).comp
-        (continuous_subtype_val.comp
-          ((continuous_apply owner).comp continuous_snd))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        ((continuous_apply owner).comp continuous_snd)
     have hcoordinate := (hcontinuous.tendsto (limit.point 0)).comp hpointPhase
     change Tendsto (fun n ↦
-      ((selectedBlock (limit.select n)).point 0).2 owner true)
-      atTop (nhds ((limit.point 0).2 owner true)) at hcoordinate
+      (((selectedBlock (limit.select n)).point 0).2 owner).weights true)
+      atTop (nhds (((limit.point 0).2 owner).weights true)) at hcoordinate
     rw [quittingRootOfSimplex_apply_toReal]
     simpa only [InteriorApproximateNashCyclicBlock.point,
       quittingSimplexOfRoot,

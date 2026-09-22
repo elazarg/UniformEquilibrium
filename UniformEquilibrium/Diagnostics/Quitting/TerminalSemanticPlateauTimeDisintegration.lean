@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -49,18 +49,20 @@ theorem quittingLiveRowCoalitionMass_update_pureTime_eq_zero_of_self_zero
           (quittingPureTimeBehaviorStrategy reward who quitTime))
         time terminal = 0 := by
   unfold quittingLiveRowCoalitionMass StochasticGame.stageActionDist
-  change ((pmfPi (fun player =>
+  let distribution : ι → PMF Bool := fun player =>
+    show PMF Bool from
       (Function.update profile who
         (quittingPureTimeBehaviorStrategy reward who quitTime)) player time
-          (quittingLiveHist reward time)))
-      (quittingTerminalCoalitionAction terminal)).toReal = 0
+          (quittingLiveHist reward time)
+  with_unfolding_all
+    change ((pmfPi distribution)
+      (quittingTerminalCoalitionAction terminal : ι → Bool)).toReal = 0
   rw [pmfPi_apply]
   have hproduct :
-      (∏ player, (Function.update profile who
-        (quittingPureTimeBehaviorStrategy reward who quitTime)) player time
-          (quittingLiveHist reward time)
+      (∏ player, distribution player
           (quittingTerminalCoalitionAction terminal player)) = 0 := by
     apply Finset.prod_eq_zero (Finset.mem_univ who)
+    dsimp only [distribution]
     rw [Function.update_self]
     change quittingPureTimeHazard quitTime time
       (quittingTerminalCoalitionAction terminal who) = 0
@@ -96,18 +98,22 @@ theorem quittingLiveMass_update_pureTime_some_eq_zero_of_stop_lt
     (quittingPureTimeBehaviorStrategy reward who (some quitTime))
   have hcontinue : quittingJointContinueMass reward deviated quitTime = 0 := by
     unfold quittingJointContinueMass StochasticGame.stageActionDist
-    change ((pmfPi (fun player => deviated player quitTime
-        (quittingLiveHist reward quitTime)))
-      (quittingAllContinueAction : ι → Bool)).toReal = 0
+    let distribution : ι → PMF Bool := fun player =>
+      show PMF Bool from
+        deviated player quitTime (quittingLiveHist reward quitTime)
+    with_unfolding_all
+      change ((pmfPi distribution)
+        (quittingAllContinueAction : ι → Bool)).toReal = 0
     rw [pmfPi_apply]
     have hproduct :
-        (∏ player, deviated player quitTime
-          (quittingLiveHist reward quitTime)
+        (∏ player, distribution player
           (quittingAllContinueAction player)) = 0 := by
       apply Finset.prod_eq_zero (Finset.mem_univ who)
+      dsimp only [distribution]
       rw [show deviated who quitTime (quittingLiveHist reward quitTime) =
           PMF.pure true by
-        simp [deviated, quittingPureTimeBehaviorStrategy]]
+        simp [deviated, quittingPureTimeBehaviorStrategy]
+        rfl]
       change (PMF.pure true) false = 0
       rw [PMF.pure_apply]
       norm_num
@@ -269,7 +275,7 @@ theorem positive_base_liveQuit_of_positive_pureTime_stageCoalitionMass
         (quittingPureTimeBehaviorStrategy reward who quitTime))
       time terminal) :
     0 < (profile other time (quittingLiveHist reward time) true).toReal := by
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let _ : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   let deviated := Function.update profile who
     (quittingPureTimeBehaviorStrategy reward who quitTime)

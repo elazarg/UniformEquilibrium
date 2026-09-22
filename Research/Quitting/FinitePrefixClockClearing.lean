@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -148,7 +148,7 @@ theorem quittingLiteralRootStackClear_univ
   induction roots with
   | nil => rfl
   | cons root roots ih =>
-      simp only [quittingLiteralRootStackClear_cons, Finset.mem_univ, if_true,
+      simp only [quittingLiteralRootStackClear_cons, Finset.mem_univ, ite_true,
         List.map_cons, ih]
 
 /-- Two unilateral hazards which agree through a sure-Quit date have the same
@@ -252,6 +252,7 @@ theorem quittingPureTimeDeviationPayoff_eq_literalOneDate_continuePrefix
     rw [hpass]
     unfold quittingProfileLiveRoot
     simp only [Function.update_of_ne hplayer]
+    rfl
   have hpassContinue : ∀ stage, stage < roots.length →
       quittingProfileLiveRoot reward pass stage who = PMF.pure false := by
     intro stage hstage
@@ -260,7 +261,8 @@ theorem quittingPureTimeDeviationPayoff_eq_literalOneDate_continuePrefix
       (quittingProfileLiveRoot_literalRootStackProfile_eq_getElem reward
         (quittingLiteralRootStackForceContinue roots who) tail stage
           (by simpa [quittingLiteralRootStackForceContinue] using hstage)) who]
-    simp [quittingLiteralRootStackForceContinue]
+    unfold quittingLiteralRootStackForceContinue
+    rw [List.getElem_map, Function.update_self]
   unfold quittingPureTimeDeviationPayoff
   rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
     quittingTerminalPayoff_literalOneDateProfile_eq_canonical,
@@ -351,7 +353,8 @@ theorem passProfile_liveRoot_self_eq_pureContinue
       (quittingLiteralRootStackForceContinue roots atom.who) tail atom.time
         (by simpa [quittingLiteralRootStackForceContinue] using atom.time_lt))
     atom.who]
-  simp [quittingLiteralRootStackForceContinue]
+  unfold quittingLiteralRootStackForceContinue
+  rw [List.getElem_map, Function.update_self]
 
 /-- The strict premark gain and a common reward bound force live mass strictly
 above `gap / (8 R)` at the marked date. -/

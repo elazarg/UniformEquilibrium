@@ -27,8 +27,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open Filter _root_.Math _root_.Math.Probability Set
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -139,7 +139,7 @@ theorem playerNeutralPotentialJet_leading_anchor_eq_zero
       Tendsto (fun _ : ℝ => (0 : ℝ))
         (nhdsWithin 0 (Ioi 0)) (nhds (0 : ℝ)) :=
     tendsto_const_nhds
-  haveI : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
+  have : NeBot (nhdsWithin (0 : ℝ) (Ioi 0)) :=
     nhdsWithin_Ioi_neBot le_rfl
   exact tendsto_nhds_unique_of_eventuallyEq
     factor_tendsto zero_tendsto factor_eventually_zero

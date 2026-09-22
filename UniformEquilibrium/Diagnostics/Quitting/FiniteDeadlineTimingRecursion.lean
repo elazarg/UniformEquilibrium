@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
@@ -163,8 +163,9 @@ theorem finiteDeadlineTimingProfile_root_true
     Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
     Math.Probability.DiscreteHazard.booleanCoin_true_toReal]
   unfold Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
-  simp only [Math.Probability.DiscreteHazard.StoppingLaw.survival_zero,
-    one_ne_zero, if_false, div_one]
+  simp only [Math.Probability.DiscreteHazard.StoppingLaw.survival,
+    Finset.range_zero, Finset.sum_empty, sub_zero, one_ne_zero, ite_false,
+    div_one]
   unfold Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
   change (((mixed who).map quittingFiniteDeadlineTimingActionTime
       (WithTop.some 0)).toReal) = _
@@ -178,9 +179,10 @@ theorem finiteDeadlineTimingProfile_root_true
         by_cases htime : time.val = 0
         · have heq : time = ⟨0, Nat.zero_lt_succ dates⟩ := Fin.ext htime
           exact (haction (congrArg some heq)).elim
-        · simp only [quittingFiniteDeadlineTimingActionTime]
-          split_ifs with heq
-          · exfalso
+        · split
+          · rename_i heq
+            simp only [quittingFiniteDeadlineTimingActionTime] at heq
+            exfalso
             apply htime
             exact_mod_cast heq.symm
           · rfl
@@ -245,7 +247,7 @@ theorem timingLawTail_apply_some {dates : ℕ}
   · have htail : timingActionTail (some time.succ) = some time := by
       simpa only [timingActionLift] using
         (timingActionTail_lift (some time))
-    rw [htail, if_pos rfl,
+    rw [htail, ite_eq_left rfl,
       condOn_apply law timingActionCurrent false
         (some time.succ) hcontinue]
     simp [timingActionCurrent]
@@ -266,7 +268,7 @@ theorem timingLawTail_apply_some {dates : ℕ}
             by_cases heq : sourceTail = time
             · subst sourceTail
               exact (haction rfl).elim
-            · rw [if_neg]
+            · rw [ite_eq_right]
               exact fun h ↦ heq (Option.some.inj h.symm)
 
 /-- Replace only the conditional tail of a timing law, preserving its
@@ -350,11 +352,11 @@ private theorem condOn_map_project_apply_other_eq_zero
   rw [ENNReal.tsum_eq_zero]
   intro action
   by_cases haction : other = project action
-  · rw [if_pos haction,
+  · rw [ite_eq_left haction,
       condOn_apply law project value action hvalue]
-    rw [if_neg]
+    rw [ite_eq_right]
     exact fun heq ↦ hother (haction.trans heq)
-  · rw [if_neg haction]
+  · rw [ite_eq_right haction]
 
 /-- Conditioning a finite law on a positive projection fibre makes the
 projected conditional law deterministic. -/
@@ -392,7 +394,7 @@ theorem timingLawWithTail_map_current {dates : ℕ}
         intro now hnow
         cases now with
         | false =>
-            simp only [Bool.false_eq_true, if_false]
+            simp only [Bool.false_eq_true, ite_false]
             unfold pushforward
             rw [PMF.map_comp]
             convert PMF.map_const tail false using 1
@@ -402,7 +404,7 @@ theorem timingLawWithTail_map_current {dates : ℕ}
             funext action
             exact timingActionCurrent_lift action
         | true =>
-            simp only [if_true]
+            simp only [ite_true]
             apply condOn_map_timingActionCurrent_eq_pure
             simpa only [current, PMF.mem_support_iff] using hnow
     _ = current := PMF.bind_pure current
@@ -415,7 +417,7 @@ theorem map_timingActionLift_apply_eq_zero_of_current
     tail.map timingActionLift action = 0 := by
   rw [PMF.map_apply, ENNReal.tsum_eq_zero]
   intro tailAction
-  rw [if_neg]
+  rw [ite_eq_right]
   intro heq
   have hfalse := timingActionCurrent_lift tailAction
   rw [← heq, haction] at hfalse
@@ -431,7 +433,7 @@ private theorem timingLawWithTail_apply_of_continue {dates : ℕ}
         tail.map timingActionLift action := by
   unfold timingLawWithTail
   rw [PMF.bind_apply, tsum_fintype, Fintype.sum_bool]
-  simp only [Bool.false_eq_true, if_false, if_true]
+  simp only [Bool.false_eq_true, ite_false, ite_true]
   have htrueTerm :
       pushforward law timingActionCurrent true *
         condOn law timingActionCurrent true action = 0 := by
@@ -458,7 +460,7 @@ theorem condOn_timingLawWithTail_false {dates : ℕ}
   rw [condOn_apply (timingLawWithTail law tail)
     timingActionCurrent false action hsourceContinue]
   by_cases haction : timingActionCurrent action = false
-  · rw [if_pos haction,
+  · rw [ite_eq_left haction,
       timingLawWithTail_apply_of_continue law tail action haction]
     rw [timingLawWithTail_map_current]
     rw [mul_comm]
@@ -466,7 +468,7 @@ theorem condOn_timingLawWithTail_false {dates : ℕ}
       (PMF.apply_ne_top (pushforward law timingActionCurrent) false)
   · have htrue : timingActionCurrent action = true := by
       cases hvalue : timingActionCurrent action <;> simp_all
-    rw [if_neg haction,
+    rw [ite_eq_right haction,
       map_timingActionLift_apply_eq_zero_of_current tail action htrue]
 
 /-- Extracting the conditional tail after replacement returns the supplied
@@ -531,11 +533,11 @@ theorem pureTimingProfile_succ_eq_rootThen
         quittingRootThenContinuationProfile
       cases hchoice : choices who with
       | none => simp [hchoice, quittingFiniteDeadlineTimingActionTime,
-          timingActionCurrent, quittingPureTimeHazard]
+          timingActionCurrent, quittingPureTimeHazard]; rfl
       | some finiteTime =>
           cases finiteTime using Fin.cases with
           | zero => simp [hchoice, quittingFiniteDeadlineTimingActionTime,
-              timingActionCurrent, quittingPureTimeHazard]
+              timingActionCurrent, quittingPureTimeHazard]; rfl
           | succ tailTime =>
               simp [hchoice, quittingFiniteDeadlineTimingActionTime,
                 timingActionCurrent, quittingPureTimeHazard]
@@ -548,12 +550,13 @@ theorem pureTimingProfile_succ_eq_rootThen
         quittingRootThenContinuationProfile
       cases hchoice : choices who with
       | none => simp [hchoice, quittingFiniteDeadlineTimingActionTime,
-          timingActionTail, quittingPureTimeHazard]
+          timingActionTail, quittingPureTimeHazard]; rfl
       | some finiteTime =>
           cases finiteTime using Fin.cases with
           | zero =>
               simp [hchoice, quittingFiniteDeadlineTimingActionTime,
                 timingActionTail, quittingPureTimeHazard]
+              rfl
           | succ tailTime =>
               simp [hchoice, quittingFiniteDeadlineTimingActionTime,
                 timingActionTail, quittingPureTimeHazard]
@@ -602,7 +605,7 @@ theorem timingPurePayoff_succ_of_current_nonempty
       reward
         ⟨quittingQuitters (fun player ↦
           timingActionCurrent (choices player)), hcurrent⟩ who := by
-  rw [timingPurePayoff_succ reward, quittingRootPayoff, dif_pos hcurrent]
+  rw [timingPurePayoff_succ reward, quittingRootPayoff, dite_eq_left hcurrent]
 
 omit [DecidableEq ι] in
 /-- If every player continues at the current date, the pure timing payoff is
@@ -615,7 +618,7 @@ theorem timingPurePayoff_succ_of_current_empty
       timingActionCurrent (choices player)).Nonempty) :
     timingPurePayoff reward (dates + 1) choices who =
       timingPurePayoff reward dates (timingChoicesTail choices) who := by
-  rw [timingPurePayoff_succ reward, quittingRootPayoff, dif_neg hcurrent]
+  rw [timingPurePayoff_succ reward, quittingRootPayoff, dite_eq_right hcurrent]
 
 omit [DecidableEq ι] in
 /-- A zero-date pure timing profile never quits and has zero terminal payoff. -/
@@ -785,14 +788,13 @@ theorem finiteDeadlineTimingGame_mixedEU_eq_timingMixedPayoff
     (who : ι) :
     (quittingFiniteDeadlineTimingGame reward dates).mixedExtension.eu
         mixed who = timingMixedPayoff reward dates mixed who := by
-  letI : Finite (quittingFiniteDeadlineTimingGame reward dates).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward dates).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingFiniteDeadlineTimingGame reward dates).mixedExtension_eu]
   unfold timingMixedPayoff timingPurePayoff
     quittingFiniteDeadlineTimingGame
   simp only [KernelGame.eu_ofPureEU]
-  rfl
 
 /-- Pure-deviation gain in the finite timing game, expressed through the
 recursive timing-payoff evaluator. -/
@@ -807,7 +809,7 @@ theorem finiteDeadlineTimingGame_mixedGain_eq_timingMixedPayoff_sub
           (Function.update mixed who (PMF.pure action)) who -
         timingMixedPayoff reward dates mixed who := by
   unfold KernelGame.mixedGain
-  letI : Finite (quittingFiniteDeadlineTimingGame reward dates).Outcome := by
+  let : Finite (quittingFiniteDeadlineTimingGame reward dates).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingFiniteDeadlineTimingGame reward dates).mixedExtension_eu,
@@ -815,7 +817,6 @@ theorem finiteDeadlineTimingGame_mixedGain_eq_timingMixedPayoff_sub
   unfold timingMixedPayoff timingPurePayoff
     quittingFiniteDeadlineTimingGame
   simp only [KernelGame.eu_ofPureEU]
-  rfl
 
 /-! ## Positive-reach tail splicing -/
 
@@ -1052,9 +1053,19 @@ theorem finiteDeadlineTimingLaw_survival_succ
             (timingLawTail law)).toPMF cutoff := by
   induction cutoff with
   | zero =>
-      rw [Math.Probability.DiscreteHazard.StoppingLaw.survival_succ,
-        Math.Probability.DiscreteHazard.StoppingLaw.survival_zero,
-        Math.Probability.DiscreteHazard.StoppingLaw.survival_zero]
+      have hsourceZero :
+          Math.Probability.DiscreteHazard.StoppingLaw.survival
+            (quittingFiniteDeadlineTimingLaw law).toPMF 0 = 1 := by
+        change 1 - 0 = 1
+        norm_num
+      have htailZero :
+          Math.Probability.DiscreteHazard.StoppingLaw.survival
+            (quittingFiniteDeadlineTimingLaw (timingLawTail law)).toPMF 0 = 1 := by
+        change 1 - 0 = 1
+        norm_num
+      rw [Math.Probability.DiscreteHazard.StoppingLaw.survival_succ
+          (quittingFiniteDeadlineTimingLaw law).toPMF 0,
+        hsourceZero, htailZero]
       unfold Math.Probability.DiscreteHazard.StoppingLaw.finiteMass
       change 1 - ((quittingFiniteDeadlineTimingLaw law).toPMF
         (WithTop.some 0)).toReal =
@@ -1130,8 +1141,8 @@ theorem finiteDeadlineTimingLaw_toScalarHazard_succ
     by_cases htailSurvival :
         Math.Probability.DiscreteHazard.StoppingLaw.survival tail time = 0
     · simp [htailSurvival]
-    · rw [if_neg (mul_ne_zero hcontinueReal htailSurvival),
-        if_neg htailSurvival]
+    · rw [ite_eq_right (mul_ne_zero hcontinueReal htailSurvival),
+        ite_eq_right htailSurvival]
       field_simp
   · have hdates : dates ≤ time := Nat.le_of_not_gt htime
     have hsourceMass :
@@ -1275,10 +1286,10 @@ continuation recovers the original tail law exactly. -/
     intro action
     rw [condOn_apply law timingActionCurrent false action hcontinue]
     by_cases haction : timingActionCurrent action = false
-    · rw [if_pos haction, hden, div_one]
+    · rw [ite_eq_left haction, hden, div_one]
     · have htrue : timingActionCurrent action = true := by
         simpa using haction
-      rw [if_neg haction]
+      rw [ite_eq_right haction]
       exact (map_timingActionLift_apply_eq_zero_of_current
         tail action htrue).symm
   have hlift := timingLawTail_map_lift law hcontinue

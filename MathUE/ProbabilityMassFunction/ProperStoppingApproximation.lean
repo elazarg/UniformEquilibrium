@@ -156,7 +156,7 @@ theorem truncateStoppingLaw_apply_of_le
   · intro choice hchoice
     cases choice with
     | none =>
-        rw [if_neg]
+        rw [ite_eq_right]
         intro heq
         change some time = some (horizon + 1) at heq
         have := Option.some.inj heq
@@ -167,13 +167,13 @@ theorem truncateStoppingLaw_apply_of_le
             intro heq
             subst other
             exact hchoice rfl
-          rw [if_neg]
+          rw [ite_eq_right]
           intro heq
-          rw [truncateStoppingOutcome, if_pos hother] at heq
+          rw [truncateStoppingOutcome, ite_eq_left hother] at heq
           exact hotherNe (Option.some.inj heq).symm
-        · rw [if_neg]
+        · rw [ite_eq_right]
           intro heq
-          rw [truncateStoppingOutcome, if_neg hother] at heq
+          rw [truncateStoppingOutcome, ite_eq_right hother] at heq
           have := Option.some.inj heq
           omega
 

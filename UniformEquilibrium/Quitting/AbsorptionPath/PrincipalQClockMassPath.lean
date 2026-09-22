@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory.QuittingLCPClassification
 
-open Filter Finset Math Math.LinearProgramming Set unitInterval
+open Filter Finset _root_.Math Math.LinearProgramming Set unitInterval
 open scoped unitInterval
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -64,8 +64,8 @@ omit [DecidableEq ι] in
 /-- A scalar multiple of a simplex control maps to the corresponding scalar
 multiple of its singleton-LCP residual. -/
 theorem principalQMassImage_smul_simplex (M : ι → ι → ℝ)
-    (scale : ℝ) (weight : stdSimplex ℝ ι) :
-    principalQMassImage M (scale • (weight : ι → ℝ)) =
+    (scale : ℝ) (weight : Convexity.StdSimplex ℝ ι) :
+    principalQMassImage M (scale • (weight.weights : ι → ℝ)) =
       scale • fun who => singletonLCPResidual M weight who := by
   funext who
   simp only [principalQMassImage, Pi.smul_apply, smul_eq_mul,
@@ -241,7 +241,7 @@ omit [DecidableEq ι] in
 def principalQClockStepMass
     {M : ι → ι → ℝ} {stepBound : ℝ} {node : PrincipalQClockNode ι}
     (step : PrincipalQClockStep M stepBound node.time node.state) : ι → ℝ :=
-  (step.endTime - node.time) • (step.direction.weight : ι → ℝ)
+  (step.endTime - node.time) • (step.direction.weight.weights : ι → ℝ)
 
 omit [DecidableEq ι] in
 /-- A local step contributes nonnegative mass in every coordinate. -/
@@ -250,7 +250,7 @@ theorem principalQClockStepMass_nonneg
     (step : PrincipalQClockStep M stepBound node.time node.state) (who : ι) :
     0 ≤ principalQClockStepMass step who := by
   exact mul_nonneg (sub_nonneg.mpr step.start_lt_endTime.le)
-    (step.direction.weight.property.1 who)
+    (step.direction.weight.weights_nonneg who)
 
 omit [DecidableEq ι] in
 /-- The total mass of a local step equals its elapsed clock time. -/
@@ -400,7 +400,7 @@ theorem PrincipalQClockMassPath.scaledState_stepSegment_le_mesh
     (path : PrincipalQClockMassPath M initial node)
     (step : PrincipalQClockStep M stepBound node.time node.state)
     (parameter : unitInterval) (who : ι)
-    (hweight : step.direction.weight who ≠ 0) :
+    (hweight : step.direction.weight.weights who ≠ 0) :
     (principalQClockScaledState initial +
         principalQMassImage M (path.stepSegment step parameter)) who ≤
       principalQMatrixSpeedBound M *
@@ -480,7 +480,7 @@ theorem PrincipalQClockMassPath.exists_stepSegment_meshSupport_witness
         principalQMatrixSpeedBound M *
           (node.time + (witness : ℝ) * (step.endTime - node.time)) *
             stepBound := by
-  have hweight : step.direction.weight who ≠ 0 := by
+  have hweight : step.direction.weight.weights who ≠ 0 := by
     intro hzero
     have hstepMass : principalQClockStepMass step who = 0 := by
       simp [principalQClockStepMass, hzero]
@@ -538,7 +538,7 @@ theorem PrincipalQClockMassPath.monotone_appendMass
       (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
     unfold appendMass
     dsimp only
-    rw [dif_pos hold]
+    rw [dite_eq_left hold]
     change Monotone fun parameter =>
       (path.toPath.transAt (path.stepSegment step) split hsplitPos hsplitOne)
         parameter who
@@ -558,7 +558,7 @@ theorem PrincipalQClockMassPath.monotone_appendMass
         hfirst hsecond hle who
   · unfold appendMass
     dsimp only
-    rw [dif_neg hold]
+    rw [dite_eq_right hold]
     change Monotone fun parameter =>
       Path.segment (0 : ι → ℝ) (principalQClockStepMass step) parameter who
     intro first second hle
@@ -595,7 +595,7 @@ theorem PrincipalQClockMassPath.sum_appendMass
       (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
     unfold appendMass
     dsimp only
-    rw [dif_pos hold]
+    rw [dite_eq_left hold]
     change (∑ who,
       (path.toPath.transAt (path.stepSegment step) split hsplitPos hsplitOne
         parameter) who) = _
@@ -617,7 +617,7 @@ theorem PrincipalQClockMassPath.sum_appendMass
       le_antisymm (le_of_not_gt hold) path.duration_nonneg
     unfold appendMass
     dsimp only
-    rw [dif_neg hold]
+    rw [dite_eq_right hold]
     change (∑ who,
       Path.segment (0 : ι → ℝ) (principalQClockStepMass step) parameter who) = _
     rw [sum_principalQClockStepMass_segment, hduration, hzero, zero_add]
@@ -641,7 +641,7 @@ omit [DecidableEq ι] in
       (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
     unfold appendMass
     dsimp only
-    rw [dif_pos hold]
+    rw [dite_eq_left hold]
     change path.toPath.transAt (path.stepSegment step) split hsplitPos hsplitOne 0 = 0
     rw [Path.transAt_apply_leftParameter path.toPath (path.stepSegment step)
       hsplitPos hsplitOne 0 (by simpa using hsplitPos.le)]
@@ -652,7 +652,7 @@ omit [DecidableEq ι] in
     rw [hparameter, path.toPath_apply, path.mass_zero]
   · unfold appendMass
     dsimp only
-    rw [dif_neg hold]
+    rw [dite_eq_right hold]
     exact (Path.segment (0 : ι → ℝ) (principalQClockStepMass step)).source
 
 omit [DecidableEq ι] in
@@ -674,7 +674,7 @@ omit [DecidableEq ι] in
       (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
     unfold appendMass
     dsimp only
-    rw [dif_pos hold]
+    rw [dite_eq_left hold]
     change path.toPath.transAt (path.stepSegment step) split hsplitPos hsplitOne 1 = _
     rw [Path.transAt_apply_rightParameter path.toPath (path.stepSegment step)
       hsplitPos hsplitOne 1 (by simpa using hsplitOne)]
@@ -690,7 +690,7 @@ omit [DecidableEq ι] in
     have hmassZero := path.mass_one_eq_zero_of_duration_eq_zero hzero
     unfold appendMass
     dsimp only
-    rw [dif_neg hold]
+    rw [dite_eq_right hold]
     change Path.segment (0 : ι → ℝ) (principalQClockStepMass step) 1 = _
     rw [(Path.segment (0 : ι → ℝ) (principalQClockStepMass step)).target,
       hmassZero, zero_add]
@@ -719,7 +719,7 @@ theorem PrincipalQClockMassPath.scaledState_appendMass_mem
       (div_lt_one htotal).2 (lt_add_of_pos_right _ hstep)
     unfold appendMass
     dsimp only
-    rw [dif_pos hold]
+    rw [dite_eq_left hold]
     change principalQClockScaledState initial +
         principalQMassImage M
           (path.toPath.transAt (path.stepSegment step) split hsplitPos
@@ -737,7 +737,7 @@ theorem PrincipalQClockMassPath.scaledState_appendMass_mem
     have hmassZero := path.mass_one_eq_zero_of_duration_eq_zero hzero
     unfold appendMass
     dsimp only
-    rw [dif_neg hold]
+    rw [dite_eq_right hold]
     have hsegment :
         Path.segment (0 : ι → ℝ) (principalQClockStepMass step) parameter =
           path.stepSegment step parameter := by
@@ -824,7 +824,7 @@ theorem PrincipalQClockMassPath.isMeshSupported_append
       change path.appendMass step parameter = _
       unfold appendMass
       dsimp only
-      rw [dif_pos hold]
+      rw [dite_eq_left hold]
       dsimp only [split, oldDuration, stepDuration]
       simp only [BoundedContinuousFunction.mkOfCompact_apply]
       rfl
@@ -1012,7 +1012,7 @@ theorem PrincipalQClockMassPath.isMeshSupported_append
             nlinarith [w.property.1, hsplitOne.le]
           by_cases hwzero : w = 0
           · subst w
-            have hweight : step.direction.weight who ≠ 0 := by
+            have hweight : step.direction.weight.weights who ≠ 0 := by
               intro hweightZero
               have hstepMass : principalQClockStepMass step who = 0 := by
                 simp [principalQClockStepMass, hweightZero]
@@ -1079,7 +1079,7 @@ theorem PrincipalQClockMassPath.isMeshSupported_append
       change path.appendMass step parameter = _
       unfold appendMass
       dsimp only
-      rw [dif_neg hold]
+      rw [dite_eq_right hold]
       simp [PrincipalQClockMassPath.stepSegment, hmassZero]
     rw [hsegment first, hsegment second] at hincrease
     obtain ⟨witness, hw, hwbound⟩ :=
@@ -1206,14 +1206,18 @@ theorem PrincipalQClockMassPath.isMeshSupported_initialSegment
       ⟨(first : ℝ) * (cut : ℝ), by
         constructor
         · exact mul_nonneg first.property.1 cut.property.1
-        · exact mul_le_one₀ first.property.2 cut.property.1
-            cut.property.2⟩
+        · calc
+            (first : ℝ) * (cut : ℝ) ≤ 1 * (cut : ℝ) :=
+              mul_le_mul_of_nonneg_right first.property.2 cut.property.1
+            _ ≤ 1 := by simpa using cut.property.2⟩
     let second' : unitInterval :=
       ⟨(second : ℝ) * (cut : ℝ), by
         constructor
         · exact mul_nonneg second.property.1 cut.property.1
-        · exact mul_le_one₀ second.property.2 cut.property.1
-            cut.property.2⟩
+        · calc
+            (second : ℝ) * (cut : ℝ) ≤ 1 * (cut : ℝ) :=
+              mul_le_mul_of_nonneg_right second.property.2 cut.property.1
+            _ ≤ 1 := by simpa using cut.property.2⟩
     have hle' : first' ≤ second' := by
       exact mul_le_mul_of_nonneg_right
         (show (first : ℝ) ≤ (second : ℝ) from hle) cut.property.1
@@ -1238,8 +1242,10 @@ theorem PrincipalQClockMassPath.isMeshSupported_initialSegment
         (⟨(witness' : ℝ) * (cut : ℝ), by
           constructor
           · exact mul_nonneg witness'.property.1 cut.property.1
-          · exact mul_le_one₀ witness'.property.2 cut.property.1
-              cut.property.2⟩ : unitInterval) = witness := by
+          · calc
+              (witness' : ℝ) * (cut : ℝ) ≤ 1 * (cut : ℝ) :=
+                mul_le_mul_of_nonneg_right witness'.property.2 cut.property.1
+              _ ≤ 1 := by simpa using cut.property.2⟩ : unitInterval) = witness := by
       apply Subtype.ext
       dsimp [witness']
       exact div_mul_cancel₀ _ hcutPos.ne'

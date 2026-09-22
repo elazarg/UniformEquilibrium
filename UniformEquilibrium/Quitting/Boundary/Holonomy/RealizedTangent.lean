@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Boundary.Holonomy.SelfSimilarity
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Tangent
 import UniformEquilibrium.Quitting.Boundary.Holonomy.WeightedBounds
-import Mathlib.Data.ENNReal.Inv
+import Mathlib.Basic.ENNReal.Inv
 import Mathlib.Topology.Order.Real
 
 /-!
@@ -25,7 +25,7 @@ open Filter
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -230,7 +230,7 @@ theorem abs_quittingFiniteBoundaryHolonomy_bestResponse_normalizedTailResidual_l
 
 
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -348,7 +348,7 @@ theorem quittingFiniteBoundaryHolonomy_isSelfSimilarAt_iff_of_survival_eq_one
 
 
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -573,7 +573,7 @@ theorem isCompact_quittingBoundaryExtendedTangentBox
     IsCompact (quittingBoundaryExtendedTangentBox ι M) := by
   exact (isCompact_quittingBoundaryTangentCoreBox ι M).prod isCompact_univ
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -802,7 +802,7 @@ theorem normalized_expect_charge_le
           expect law (fun a => charge a time) ≤
       error := by
   classical
-  letI : Fintype A := Fintype.ofFinite A
+  let : Fintype A := Fintype.ofFinite A
   have hsum :
       ∑ time ∈ Finset.range length,
           expect law (fun a => charge a time) =
@@ -1225,7 +1225,7 @@ theorem lower_stage_of_lt
         splice.lowerCharge bounds who time := by
   rw [splice.expectedHistoryValue_lower_eq_selection_of_lt
     who time htime]
-  rw [lowerCharge, if_pos htime]
+  rw [lowerCharge, ite_eq_left htime]
   unfold expectedHistoryValue expectedStagePayoff
   simpa only [lowerSelectionSystem,
     DeviationSafePublicCoinSelector.toSelectionPhaseSystemAt,
@@ -1253,7 +1253,7 @@ theorem upper_stage_of_lt
         splice.upperCharge bounds who time := by
   rw [splice.expectedHistoryValue_upper_eq_selection_of_lt
     who time htime]
-  rw [upperCharge, if_pos htime]
+  rw [upperCharge, ite_eq_left htime]
   unfold expectedHistoryValue expectedStagePayoff
   simpa only [upperSelectionSystem,
     DeviationSafePublicCoinSelector.toSelectionPhaseSystemAt,
@@ -1285,7 +1285,7 @@ theorem deviation_stage_of_lt
         splice.deviationCharge bounds who deviation time := by
   rw [splice.expectedHistoryValue_deviation_eq_selection_of_lt
     who deviation time htime]
-  rw [deviationCharge, if_pos htime]
+  rw [deviationCharge, ite_eq_left htime]
   unfold expectedHistoryValue expectedStagePayoff
   simpa only [deviationSelectionSystem,
     DeviationSafePublicCoinSelector.toSelectionPhaseSystemAt,

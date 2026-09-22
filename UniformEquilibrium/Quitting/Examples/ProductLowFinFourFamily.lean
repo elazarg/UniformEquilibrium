@@ -12,7 +12,7 @@ noncomputable section
 
 namespace GameTheory.ProductLowFinFourFamily
 
-open GameTheory Math.Probability Math.PMFProduct
+open GameTheory _root_.Math.Probability Math.PMFProduct
 
 def premium (scale : Payoff (Fin 4)) (terminal : Finset (Fin 4)) :
     Payoff (Fin 4) := fun player =>
@@ -201,7 +201,7 @@ private theorem coreTriple_hasSupportwiseCertificateAt
     · exact le_rfl
   · intro player hout
     dsimp only [weight]
-    rw [if_neg hout]
+    rw [ite_eq_right hout]
   · calc
       _ = (scale 0)⁻¹ / total + (scale 1)⁻¹ / total +
           (scale 2)⁻¹ / total := by
@@ -277,10 +277,10 @@ theorem properSupport_hasSupportwiseCertificateAt
       · apply hpoint 3 h3
         intro terminal hsubset hmem
         have ht0 : (0 : Fin 4) ∉ terminal := fun h => h0 (hsubset h)
-        simp only [premium, if_neg (by decide : (3 : Fin 4) ≠ 0),
-          if_neg (by decide : (3 : Fin 4) ≠ 1),
-          if_neg (by decide : (3 : Fin 4) ≠ 2)]
-        rw [if_neg (fun hall => ht0 (hall (by simp)))]
+        simp only [premium, ite_eq_right (by decide : (3 : Fin 4) ≠ 0),
+          ite_eq_right (by decide : (3 : Fin 4) ≠ 1),
+          ite_eq_right (by decide : (3 : Fin 4) ≠ 2)]
+        rw [ite_eq_right (fun hall => ht0 (hall (by simp)))]
         norm_num
   · by_cases h0 : (0 : Fin 4) ∈ active
     · by_cases h1 : (1 : Fin 4) ∈ active

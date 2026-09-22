@@ -325,7 +325,7 @@ theorem iter_stoppedPrescribedKernel_of_terminal
   | succ depth ih =>
       rw [Math.PMFIter.iter_succ]
       unfold stoppedPrescribedKernel
-      rw [if_pos terminal, PMF.pure_bind]
+      rw [ite_eq_left terminal, PMF.pure_bind]
       exact ih
 
 omit [∀ who, Fintype (Action who)]
@@ -357,7 +357,7 @@ theorem prescribedValue_eq_expect_iter
             depth who node terminal,
           Math.PMFIter.iter_succ,
           stoppedPrescribedKernel,
-          if_neg terminal,
+          ite_eq_right terminal,
           expect_bind
         ]
         apply congrArg (expect (model.prescribedKernel node))

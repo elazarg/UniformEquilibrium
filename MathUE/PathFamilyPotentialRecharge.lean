@@ -1,4 +1,4 @@
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Tactic.Linarith
@@ -12,7 +12,7 @@ noncomputable section
 
 open scoped BigOperators
 
-namespace Math.ChargedPathBudget.ChargedRelation
+namespace Maths.ChargedPathBudget.ChargedRelation
 
 variable {State Edge : Type*} {relation : ChargedRelation State Edge}
 
@@ -46,4 +46,4 @@ theorem sum_pathFamily_charge_sub_initialValue_le_sum_valueRecharge
   have hterminal := relation.value_nonneg hbudget (source horizon)
   linarith
 
-end Math.ChargedPathBudget.ChargedRelation
+end Maths.ChargedPathBudget.ChargedRelation

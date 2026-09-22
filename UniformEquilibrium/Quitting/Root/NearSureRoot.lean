@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -47,7 +47,7 @@ theorem exists_continueProbability_le_of_allContinue_mass_le_pow
   push Not at hnone
   have hprod : d ^ Fintype.card ι <
       ∏ player, (root player false).toReal := by
-    simpa using Finset.prod_lt_prod_of_nonempty
+    simpa using Finset.prod_lt_prod_of_nonempty₀
       (s := Finset.univ) (fun _ _ => hd)
       (fun player _ => hnone player) Finset.univ_nonempty
   have hmass : ((pmfPi root) quittingAllContinueAction).toReal =

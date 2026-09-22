@@ -44,7 +44,7 @@ theorem QuittingPayoffProcess.tailClose_mono_cutoff
 theorem QuittingPayoffProcess.measurableSet_tailClose
     (process : QuittingPayoffProcess ι) (cutoff : ℕ) (ε : ℝ) :
     MeasurableSet[process.measurableSpace] (process.TailClose cutoff ε) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   have hdistance (time : ℕ) : Measurable fun ω =>
       dist (process.payoff time ω) (process.limit ω) :=
     (process.payoffTable_measurable time).dist process.limitTable_measurable
@@ -54,7 +54,7 @@ theorem QuittingPayoffProcess.measurableSet_tailClose
     by_cases htime : cutoff ≤ time
     · simpa only [htime, true_implies] using
         measurableSet_lt (hdistance time) measurable_const
-    · simp only [htime, false_implies, setOf_true, MeasurableSet.univ]
+    · simp only [htime, false_implies, ofPred_true, MeasurableSet.univ]
   have hintersection : MeasurableSet (⋂ time, {ω | cutoff ≤ time →
       dist (process.payoff time ω) (process.limit ω) < ε}) :=
     MeasurableSet.iInter hstage
@@ -62,7 +62,7 @@ theorem QuittingPayoffProcess.measurableSet_tailClose
       ⋂ time, {ω | cutoff ≤ time →
         dist (process.payoff time ω) (process.limit ω) < ε} := by
     ext ω
-    simp only [QuittingPayoffProcess.TailClose, mem_setOf_eq, mem_iInter]
+    simp only [QuittingPayoffProcess.TailClose, mem_ofPred_eq, mem_iInter]
   rw [heq]
   exact hintersection
 
@@ -87,7 +87,7 @@ theorem QuittingPayoffProcess.tendsto_integral_badTailEnvelope
     Tendsto (fun cutoff =>
       ∫ ω, process.badTailEnvelope bound cutoff ε ω ∂process.μ)
       atTop (nhds 0) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   let bad : ℕ → process.Ω → ℝ := fun cutoff =>
     process.badTailEnvelope bound cutoff ε
   have hmeasurable (cutoff : ℕ) : AEStronglyMeasurable (bad cutoff) process.μ := by

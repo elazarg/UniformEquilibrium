@@ -1,6 +1,6 @@
 import Mathlib.Data.Finset.Lattice.Fold
 import Mathlib.Data.Fintype.Option
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-! # Supremum identities for finite date-or-Never menus -/
 
@@ -22,14 +22,14 @@ theorem sup'_option_fin_succ_eq_max
     cases action with
     | none =>
         apply le_max_of_le_right
-        simpa using Finset.le_sup'
+        simpa only [Option.map_none] using Finset.le_sup'
           (fun action : Option (Fin deadline) => value (action.map Fin.succ))
           (Finset.mem_univ (none : Option (Fin deadline)))
     | some time =>
         refine Fin.cases ?_ (fun earlier => ?_) time
         · exact le_max_left _ _
         · apply le_max_of_le_right
-          simpa using Finset.le_sup'
+          simpa only [Option.map_some] using Finset.le_sup'
             (fun action : Option (Fin deadline) => value (action.map Fin.succ))
             (Finset.mem_univ (some earlier))
   · apply max_le

@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -46,7 +46,7 @@ theorem terminalGap_le_periodOne_behavioralTailRepairValue (index : ℕ) :
         (quittingFiniteBoundaryHolonomy reward
           (quittingPeriodOneRootSequence
             (seam.periodOneReadoutRoot readout.start index)) 0 0) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact terminalExploitabilityGap_le_behavioralTailRepairValue reward
     (quittingPeriodOneRootSequence
       (seam.periodOneReadoutRoot readout.start index)) 1 (by omega)
@@ -65,7 +65,7 @@ theorem exists_elementaryTailCap_periodOne_terminalObstruction (index : ℕ) :
           (quittingElementaryTailRoots
             (seam.periodOneReadoutActualSuffix readout.start index)
             cutoff cap) 1) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hhalf : 0 < witness.terminalGap / 2 := by
     linarith [witness.terminalGap_pos]
   obtain ⟨cap, cutoff, hcap⟩ :=

@@ -41,7 +41,7 @@ values (Mertens–Neyman 1981) build on this.
 namespace Math
 namespace ShapleyOperator
 
-open Math.Probability MinimaxLoomis
+open _root_.Math.Probability MinimaxLoomis
 open scoped NNReal
 
 variable {S I J : Type*} [Fintype S] [Fintype I] [Fintype J]
@@ -98,7 +98,7 @@ theorem existsUnique_fixedPoint_shapleyOperator [Finite S]
     (u : S → I → J → ℝ)
     (q : S → I → J → PMF S) {β : ℝ≥0} (hβ : β < 1) :
     ∃! v : S → ℝ, shapleyOperator u q (β : ℝ) v = v := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have hc := contractingWith_shapleyOperator u q hβ
   exact ⟨ContractingWith.fixedPoint (shapleyOperator u q (β : ℝ)) hc,
     hc.fixedPoint_isFixedPt,
@@ -131,7 +131,7 @@ a mixed action guaranteeing the value against every column of the
 auxiliary game. -/
 theorem exists_row_optimal_discountedValue (u : S → I → J → ℝ)
     (q : S → I → J → PMF S) {β : ℝ≥0} (hβ : β < 1) (s : S) :
-    ∃ xx : stdSimplex ℝ I, ∀ j : J,
+    ∃ xx : Convexity.StdSimplex ℝ I, ∀ j : J,
       discountedValue u q hβ s ≤
         wsum xx (fun i =>
           u s i j + (β : ℝ) * expect (q s i j) (discountedValue u q hβ)) := by
@@ -146,7 +146,7 @@ value: a mixed action capping the payoff by the value against every row of
 the auxiliary game. -/
 theorem exists_col_optimal_discountedValue (u : S → I → J → ℝ)
     (q : S → I → J → PMF S) {β : ℝ≥0} (hβ : β < 1) (s : S) :
-    ∃ yy : stdSimplex ℝ J, ∀ i : I,
+    ∃ yy : Convexity.StdSimplex ℝ J, ∀ i : I,
       wsum yy (fun j =>
         u s i j + (β : ℝ) * expect (q s i j) (discountedValue u q hβ)) ≤
         discountedValue u q hβ s := by

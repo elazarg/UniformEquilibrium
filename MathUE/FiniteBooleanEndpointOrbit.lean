@@ -278,7 +278,7 @@ theorem exists_dispatchedOrbit_terminal_or_closedSegment
   have hsuccessor : ∀ state, ¬terminal state → edge state (successor state) := by
     intro state hterminal
     dsimp only [successor]
-    rw [dif_neg hterminal]
+    rw [dite_eq_right hterminal]
     exact Classical.choose_spec ((dispatch state).resolve_left hterminal)
   let orbit : ℕ → State := fun time => (successor^[time]) start
   have horbit_zero : orbit 0 = start := by

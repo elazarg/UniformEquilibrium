@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -345,7 +345,7 @@ theorem quittingOpponentSurvivalWeight_le_pairDeleted
     quittingOpponentSurvivalWeight roots mover start fuel ≤
       quittingPairDeletedSurvivalWeight roots mover observer start fuel := by
   unfold quittingOpponentSurvivalWeight quittingPairDeletedSurvivalWeight
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset hoffset
     exact quittingStationaryContinueMass_nonneg
       (Function.update (roots (start + offset)) mover (PMF.pure false))

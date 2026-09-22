@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type}
 

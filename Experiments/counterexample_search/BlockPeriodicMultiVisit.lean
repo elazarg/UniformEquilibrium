@@ -54,20 +54,20 @@ theorem multiVisitReward_singleton_zero (who : Player) :
     multiVisitReward (quittingSingletonTerminal 0) who = if who = 0 then 1 else 0 := by
   rw [multiVisitReward]
   by_cases hwho : who = 0
-  · rw [if_pos ⟨hwho, Or.inl rfl⟩, if_pos hwho]
-  · rw [if_neg (fun hcontra ↦ hwho hcontra.1), if_neg hwho]
+  · rw [ite_eq_left ⟨hwho, Or.inl rfl⟩, ite_eq_left hwho]
+  · rw [ite_eq_right (fun hcontra ↦ hwho hcontra.1), ite_eq_right hwho]
 
 theorem multiVisitReward_singleton_one (who : Player) :
     multiVisitReward (quittingSingletonTerminal 1) who = if who = 0 then 1 else 0 := by
   rw [multiVisitReward]
   by_cases hwho : who = 0
-  · rw [if_pos ⟨hwho, Or.inr rfl⟩, if_pos hwho]
-  · rw [if_neg (fun hcontra ↦ hwho hcontra.1), if_neg hwho]
+  · rw [ite_eq_left ⟨hwho, Or.inr rfl⟩, ite_eq_left hwho]
+  · rw [ite_eq_right (fun hcontra ↦ hwho hcontra.1), ite_eq_right hwho]
 
 theorem multiVisitReward_singleton_two (who : Player) :
     multiVisitReward (quittingSingletonTerminal 2) who = 0 := by
   rw [multiVisitReward]
-  refine if_neg ?_
+  refine ite_eq_right ?_
   revert who
   decide
 
@@ -75,7 +75,7 @@ theorem multiVisitReward_singleton_two (who : Player) :
 theorem multiVisitReward_pair {owner who : Player} (hne : owner ≠ who) :
     multiVisitReward ⟨{owner, who}, Finset.insert_nonempty owner {who}⟩ who = 0 := by
   rw [multiVisitReward]
-  refine if_neg ?_
+  refine ite_eq_right ?_
   revert hne
   revert owner who
   decide
@@ -84,7 +84,7 @@ theorem one_le_multiVisitRewardBound :
     (1 : ℝ) ≤ quittingRewardBound multiVisitReward := by
   have hentry := abs_reward_le_quittingRewardBound multiVisitReward
     (quittingSingletonTerminal 0) 0
-  rw [multiVisitReward_singleton_zero, if_pos rfl] at hentry
+  rw [multiVisitReward_singleton_zero, ite_eq_left rfl] at hentry
   simpa using hentry
 
 /-! ## The schedule -/
@@ -110,17 +110,17 @@ theorem multiVisitHazard_nonneg : ∀ k who, 0 ≤ multiVisitHazard k who := by
   intro k who
   rw [multiVisitHazard]
   by_cases hwho : who = multiVisitOwner k
-  · rw [if_pos hwho]
+  · rw [ite_eq_left hwho]
     exact multiVisitRate_nonneg k
-  · rw [if_neg hwho]
+  · rw [ite_eq_right hwho]
 
 theorem multiVisitHazard_le_one : ∀ k who, multiVisitHazard k who ≤ 1 := by
   intro k who
   rw [multiVisitHazard]
   by_cases hwho : who = multiVisitOwner k
-  · rw [if_pos hwho]
+  · rw [ite_eq_left hwho]
     exact multiVisitRate_le_one k
-  · rw [if_neg hwho]
+  · rw [ite_eq_right hwho]
     norm_num
 
 /-- Each phase of the schedule is the single-quitter row of its scheduled
@@ -138,11 +138,11 @@ theorem quittingBlockCycle_multiVisitHazard (k : Fin 3) :
       (multiVisitHazard_le_one k (multiVisitOwner k)) (multiVisitRate_nonneg k)
       (multiVisitRate_le_one k)
       (by rw [quittingHazardCoin_true_toReal, quittingHazardCoin_true_toReal,
-            multiVisitHazard, if_pos rfl])
+            multiVisitHazard, ite_eq_left rfl])
   · rw [quittingSoloMixedRoot_of_ne hwho]
     exact quittingHazardCoin_eq_pure_false_of_quitMass_zero (multiVisitHazard_nonneg k who)
       (multiVisitHazard_le_one k who)
-      (by rw [quittingHazardCoin_true_toReal, multiVisitHazard, if_neg hwho])
+      (by rw [quittingHazardCoin_true_toReal, multiVisitHazard, ite_eq_right hwho])
 
 /-! ## The displayed value -/
 

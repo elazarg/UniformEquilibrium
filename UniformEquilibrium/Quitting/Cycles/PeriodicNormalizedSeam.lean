@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -61,8 +61,8 @@ theorem quittingFiniteTerminalHazardValue_never_eq_continueToBoundary
       rw [quittingFiniteTerminalHazardValue,
         quittingFiniteContinueToBoundaryValue, ih (start + 1)]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
 
 /-- The Continue-through-boundary branch is one of the alternatives in the
 finite all-behavior Bellman envelope. -/

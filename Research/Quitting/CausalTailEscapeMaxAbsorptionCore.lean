@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticStrictTailEscapeReturn
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Boundary.Repair.ComplementarityClosed
 import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Quitting.Circulation.MultiOwnerFaceCirculationCompactPath
@@ -52,7 +53,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open Set _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
@@ -194,7 +195,7 @@ end GameTheory
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 open scoped Topology
 
@@ -747,16 +748,17 @@ theorem exists_offMinimum_retainedLaw_allContinue_or_supportEntry
       (nhds (quittingAllContinueSimplexRoot : QuittingRootSimplex iota)) := by
     rw [tendsto_pi_nhds]
     intro who
-    rw [tendsto_subtype_rng, tendsto_pi_nhds]
+    rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff,
+      tendsto_pi_nhds]
     intro action
     have hcoordinate : ∀ n,
-        ((simplexRoot n who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+        (simplexRoot n who : Convexity.StdSimplex ℝ Bool).weights action =
           (root n who action).toReal := by
       intro n
       exact congrFun (coe_stdSimplexEquiv_apply (root n who)) action
     have hallCoordinate :
-        (((quittingAllContinueSimplexRoot : QuittingRootSimplex iota) who :
-          stdSimplex ℝ Bool) : Bool → ℝ) action =
+        ((quittingAllContinueSimplexRoot : QuittingRootSimplex iota) who :
+          Convexity.StdSimplex ℝ Bool).weights action =
             (PMF.pure false action).toReal := by
       exact congrFun (coe_stdSimplexEquiv_apply (PMF.pure false)) action
     have hbase : Tendsto (fun n ↦ (root n who action).toReal)

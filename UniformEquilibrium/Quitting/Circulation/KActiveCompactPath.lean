@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set StochasticGame Math.Probability Math.PMFProduct
+open Finset Set StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -40,7 +40,7 @@ def IsQuittingHazardKActive (K : ℕ) (x : ι → ℝ) : Prop :=
 /-- Polynomial support-card condition in simplex coordinates. -/
 def IsQuittingSimplexKActive (K : ℕ) (root : QuittingRootSimplex ι) : Prop :=
   ∀ coalition : Finset ι, K < coalition.card →
-    (∏ who ∈ coalition, root who true) = 0
+    (∏ who ∈ coalition, (root who).weights true) = 0
 
 omit [DecidableEq ι] in
 /-- The simplex `K`-active locus is closed. -/
@@ -49,17 +49,17 @@ theorem isClosed_isQuittingSimplexKActive (K : ℕ) :
       IsQuittingSimplexKActive K root} := by
   have hclosed : ∀ coalition : Finset ι,
       IsClosed {root : QuittingRootSimplex ι |
-        (∏ who ∈ coalition, root who true) = 0} := by
+        (∏ who ∈ coalition, (root who).weights true) = 0} := by
     intro coalition
     apply isClosed_eq
     · exact continuous_finsetProd (s := coalition) fun who _ =>
-        (continuous_apply true).comp
-          (continuous_subtype_val.comp (continuous_apply who))
+        (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+          (continuous_apply who)
     · exact continuous_const
   rw [show {root : QuittingRootSimplex ι |
         IsQuittingSimplexKActive K root} =
       ⋂ coalition : Finset ι, ⋂ (_h : K < coalition.card),
-        {root | (∏ who ∈ coalition, root who true) = 0} by
+        {root | (∏ who ∈ coalition, (root who).weights true) = 0} by
     ext root
     simp [IsQuittingSimplexKActive]]
   exact isClosed_iInter fun coalition =>
@@ -74,7 +74,7 @@ theorem isQuittingSimplexKActive_quittingRootSimplexOfHazard
       (quittingRootSimplexOfHazard x hx0 hx1) := by
   intro coalition hlarge
   have hcoordinate : ∀ who,
-      quittingRootSimplexOfHazard x hx0 hx1 who true = x who := by
+      (quittingRootSimplexOfHazard x hx0 hx1 who).weights true = x who := by
     intro who
     rw [← quittingRootOfSimplex_apply_toReal,
       quittingRootOfSimplex_quittingRootSimplexOfHazard]
@@ -97,7 +97,7 @@ theorem hasQuittingSupportCardAtMost_quittingRootOfSimplex
     (quittingPositiveHazardSupport (quittingRootOfSimplex root)) hlarge
   have hpos : 0 < ∏ who ∈
       quittingPositiveHazardSupport (quittingRootOfSimplex root),
-        root who true := by
+        (root who).weights true := by
     apply Finset.prod_pos
     intro who hwho
     have hhazard : 0 < hazardOfRoot (quittingRootOfSimplex root) who :=
@@ -325,7 +325,7 @@ theorem exists_oneActiveSupportRationalDivergentPath_of_multiCirculation
           quittingRootSequenceTerminalValue
             (rewardOfWeight r) plan target time) ∧
       ∀ time, HasQuittingSupportCardAtMost 1 (plan time) := by
-  letI : Nonempty ι :=
+  let _ : Nonempty ι :=
     ⟨(mixSupport_nonempty (C.mixWeight 0) (C.mixWeight_nonneg 0)
       (C.mixWeight_sum 0)).choose⟩
   let M : ℝ := ‖r‖
@@ -574,9 +574,9 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_KActivePaths
     (hpaths : HasQuittingKActiveSupportRationalDivergentPaths reward K) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := by
+  let _ : Nonempty ι := by
     by_contra hnonempty
-    letI : IsEmpty ι := ⟨fun who => hnonempty ⟨who⟩⟩
+    let _ : IsEmpty ι := ⟨fun who => hnonempty ⟨who⟩⟩
     obtain ⟨plan, _hsupport, hdiverges, _hir, _hK⟩ :=
       hpaths 1 (by norm_num)
     apply hdiverges

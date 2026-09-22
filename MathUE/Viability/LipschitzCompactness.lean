@@ -55,7 +55,7 @@ theorem isClosed_compactRangeLipschitzFamily
             constant * dist first second}) ∩
           ⋂ time, {path | path time ∈ rangeSet} by
     ext path
-    simp only [compactRangeLipschitzFamily, mem_setOf_eq, mem_inter_iff,
+    simp only [compactRangeLipschitzFamily, mem_ofPred_eq, mem_inter_iff,
       mem_iInter, lipschitzWith_iff_dist_le_mul]
     ]
   exact (isClosed_iInter fun first => isClosed_iInter (hlipschitz first)).inter

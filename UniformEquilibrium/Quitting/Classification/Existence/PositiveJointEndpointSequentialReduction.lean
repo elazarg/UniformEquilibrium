@@ -174,7 +174,7 @@ theorem
       Nonempty
         (QuittingPunishmentFloorInfiniteOrbit.SummableChargeAllContinuePort
           endpoint.exactPrefixOrbit) := by
-  letI : Nonempty iota := ⟨endpoint.punished⟩
+  let : Nonempty iota := ⟨endpoint.punished⟩
   by_cases hsummable : Summable (fun time ↦ quittingRootAbsorptionMass
       (endpoint.exactPrefixOrbit.roots time))
   · exact Or.inr

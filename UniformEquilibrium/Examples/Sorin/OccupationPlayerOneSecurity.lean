@@ -29,7 +29,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-! ## State and history renaming -/
 
@@ -343,7 +343,7 @@ theorem playerOneSecurityAfterLiveDeviation_appendHist_of_live
         (prefixLength + suffixLength) (game.appendHist base suffix) =
       playerOneSecurityStrategy parameter suffixLength suffix := by
   unfold playerOneSecurityAfterLiveDeviation
-  simp only [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right prefixLength suffixLength)]
   rw [game.terminalPrefixLE_appendHist base suffix hstart]
   simp only [hbase, ↓reduceIte]
   let packagedSuffix : Σ length, game.Hist length :=
@@ -371,7 +371,7 @@ theorem playerOneSecurityAfterLiveDeviation_appendHist_of_not_live
       prescribed false (prefixLength + suffixLength)
         (game.appendHist base suffix) := by
   unfold playerOneSecurityAfterLiveDeviation
-  simp only [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right prefixLength suffixLength)]
   rw [game.terminalPrefixLE_appendHist base suffix hstart]
   simp [hbase]
 

@@ -24,15 +24,18 @@ The lanes may share mathematics, but evidence does not become a theorem by
 proximity. Integrated Lean remains the trusted boundary.
 
 Literature has a strict final boundary: it does not import Research or
-Experiments, nothing imports Literature, and it is not a `lean_lib` — no
-build target compiles it. A paper's file states its definitions and theorems
-in the paper's own order and terms; an unproved theorem ends in `sorry`,
-which is the open-claim marker, a proof is the settled record, and a proof
-of the negation is the refutation. There is no separate status metadata.
+Experiments, and nothing outside the lane imports Literature. The default
+`Literature` library compiles every paper file. It keeps warnings as errors and
+disables only Lean's dedicated `warn.sorry` diagnostic. A paper's file states
+its definitions and theorems in the paper's own order and terms; an unproved
+theorem ends in `sorry`, which is the open-claim marker, a proof is the settled
+record, and a proof of the negation is the refutation. There is no separate
+status metadata.
 
 Only papers with complete Lean coverage live directly under `Literature/`;
-every other paper lives under `Literature/future/` and is not built. A paper
-graduates by finishing its statements, not by proving them.
+every other paper lives under `Literature/future/`. Both areas compile; the
+directory distinction records coverage. A paper graduates by finishing its
+statements, not by proving them.
 
 A paper's file may import production modules to state or discharge a claim.
 Reusable mathematics is developed in `MathUE` or `UniformEquilibrium`; a
@@ -110,8 +113,10 @@ trust-scanner regression tests, the exhaustive lexical trust scan, and a full
 `lake --quiet --iofail build`. Project warnings are errors, and informational
 diagnostics also fail the build. Successful builds are silent. The build includes
 the generated `AxiomAudit` target, which imports every `MathUE` and
-`UniformEquilibrium` module and checks their declarations transitively. A changed-file build is
-useful for local iteration but is not the CI trust boundary.
+`UniformEquilibrium` module and checks their declarations transitively. The
+Literature library also builds, but remains outside that audit because its
+explicit `sorry` declarations record open paper claims. A changed-file build
+is useful for local iteration but is not the CI trust boundary.
 
 Search scripts may use numerical solvers, randomized exploration, or external
 tools. Their outputs are evidence until a small, deterministic checker or a

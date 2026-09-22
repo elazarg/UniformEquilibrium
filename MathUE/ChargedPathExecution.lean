@@ -20,7 +20,7 @@ theorems are immediately available.
 
 open scoped BigOperators
 
-namespace Math.ChargedPathBudget.ChargedRelation
+namespace Maths.ChargedPathBudget.ChargedRelation
 
 universe u v
 
@@ -32,7 +32,9 @@ namespace Path
 theorem length_edge {R : ChargedRelation State Edge} (edge : Edge)
     {s t : State} (hsrc : R.src edge = s) (htgt : R.tgt edge = t) :
     (Path.edge edge hsrc htgt).length = 1 := by
-  simp [Path.edge, Path.single]
+  cases hsrc
+  cases htgt
+  rfl
 
 end Path
 
@@ -135,4 +137,4 @@ theorem hasChronologicalExecution_of_reachable_progress
       simp only [orbit]
       rfl
 
-end Math.ChargedPathBudget.ChargedRelation
+end Maths.ChargedPathBudget.ChargedRelation

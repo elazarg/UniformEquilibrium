@@ -132,7 +132,7 @@ theorem sq_finiteExpectedSpaceTimeMarkovVariation_le_mul_quadraticVariation
     finiteExpectedSpaceTimeMarkovVariation initial kernel value horizon ^ 2 ≤
       (horizon : ℝ) *
         finiteExpectedSpaceTimeMarkovQuadraticVariation initial kernel value horizon := by
-  letI : Fintype Omega := Fintype.ofFinite Omega
+  let : Fintype Omega := Fintype.ofFinite Omega
   let absoluteAt : ℕ → ℝ := fun time =>
     expect (Math.PMFIter.iter kernel time initial) (fun source ↦
       expect (kernel source) (fun successor ↦

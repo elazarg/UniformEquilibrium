@@ -38,28 +38,28 @@ theorem exists_parameter_standardSmooth_basicOpen_of_prime
         parameterPolynomialAlgebra J parameter
       Algebra.IsStandardSmooth (Polynomial ℝ)
         (Localization.Away (Ideal.Quotient.mk J g)) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let R := Polynomial ℝ
   let A := MvPolynomial σ ℝ ⧸ J
   let K := FractionRing R
   let L := FractionRing A
-  letI : Algebra R A :=
+  let : Algebra R A :=
     parameterPolynomialAlgebra J parameter
-  letI : IsScalarTower ℝ R A :=
+  let : IsScalarTower ℝ R A :=
     IsScalarTower.of_algebraMap_eq fun r => by
       change Ideal.Quotient.mk J (MvPolynomial.C r) =
         parameterPolynomialHom J parameter (Polynomial.C r)
       simp [parameterPolynomialHom]
-  letI : Algebra.FiniteType R A :=
+  let : Algebra.FiniteType R A :=
     Algebra.FiniteType.of_restrictScalars_finiteType ℝ R A
-  letI : Algebra.FinitePresentation R A :=
+  let : Algebra.FinitePresentation R A :=
     Algebra.FinitePresentation.of_finiteType.mp inferInstance
-  letI : Algebra K L :=
+  let : Algebra K L :=
     parameterFractionRingAlgebra J parameter hparameter
-  letI algRL : Algebra R L :=
+  let algRL : Algebra R L :=
     (parameterToFunctionFieldHom J parameter).toAlgebra
-  letI : SMul R L := algRL.toSMul
-  letI : IsScalarTower R K L :=
+  let : SMul R L := algRL.toSMul
+  let : IsScalarTower R K L :=
     IsScalarTower.of_algebraMap_eq (R := R) (S := K) (A := L)
       fun r => by
         rw [show
@@ -69,41 +69,41 @@ theorem exists_parameter_standardSmooth_basicOpen_of_prime
         rw [parameterFractionRingHom,
           IsFractionRing.lift_algebraMap]
         rfl
-  letI : IsScalarTower R A L :=
+  let : IsScalarTower R A L :=
     IsScalarTower.of_algebraMap_eq (R := R) (S := A) (A := L)
       fun _ => rfl
-  letI : Algebra.FormallySmooth R K :=
+  let : Algebra.FormallySmooth R K :=
     Algebra.FormallySmooth.of_isLocalization
       (nonZeroDivisors R)
-  letI : Algebra.EssFiniteType K L :=
+  let : Algebra.EssFiniteType K L :=
     essFiniteType_parameterFunctionField J parameter hparameter
-  letI : Algebra.FormallySmooth K L :=
+  let : Algebra.FormallySmooth K L :=
     Algebra.FormallySmooth.of_perfectField
-  letI : Algebra.FormallySmooth R L :=
+  let : Algebra.FormallySmooth R L :=
     Algebra.FormallySmooth.comp R K L
   have hminimal :
       (⊥ : Ideal A) ∈ minimalPrimes A := by
     rw [IsDomain.minimalPrimes_eq_singleton_bot]
     exact Set.mem_singleton _
   let L' := Localization.AtPrime (⊥ : Ideal A)
-  haveI : Ring.KrullDimLE 0 L' :=
+  have : Ring.KrullDimLE 0 L' :=
     Ring.KrullDimLE.of_isLocalization
       (⊥ : Ideal A) hminimal L'
-  letI : Field L' :=
+  let : Field L' :=
     Ring.KrullDimLE.isField_of_isReduced.toField
-  letI : IsLocalization (⊥ : Ideal A).primeCompl L := by
+  let : IsLocalization (⊥ : Ideal A).primeCompl L := by
     simpa only [Ideal.primeCompl_bot] using
       (inferInstance : IsLocalization (nonZeroDivisors A) L)
   let e : L' ≃ₐ[A] L :=
     IsLocalization.algEquiv (⊥ : Ideal A).primeCompl L' L
-  letI : IsScalarTower R A L' :=
+  let : IsScalarTower R A L' :=
     IsScalarTower.of_algebraMap_eq (R := R) (S := A) (A := L')
       fun _ => rfl
   let eR : L ≃ₐ[R] L' :=
     (e.restrictScalars R).symm
-  letI : Algebra.FormallySmooth R L' :=
+  let : Algebra.FormallySmooth R L' :=
     Algebra.FormallySmooth.of_equiv eR
-  letI : Algebra.IsSmoothAt R (⊥ : Ideal A) :=
+  let : Algebra.IsSmoothAt R (⊥ : Ideal A) :=
     inferInstance
   obtain ⟨f, hf, hstandard⟩ :=
     Algebra.IsSmoothAt.exists_notMem_isStandardSmooth
@@ -140,7 +140,7 @@ theorem exists_eventually_parameter_standardSmooth_basicOpen
         parameterPolynomialAlgebra J parameter
       Algebra.IsStandardSmooth (Polynomial ℝ)
         (Localization.Away (Ideal.Quotient.mk J g)) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   obtain ⟨g, hgJ, hstandard⟩ :=
     exists_parameter_standardSmooth_basicOpen_of_prime
       J parameter hparameter

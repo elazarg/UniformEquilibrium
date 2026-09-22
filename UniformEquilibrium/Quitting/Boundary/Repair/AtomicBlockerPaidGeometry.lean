@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -53,7 +53,7 @@ uses the hypothesis `root owner = PMF.pure true`. -/
 def quittingForcedOwnerOutsiderDefect
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (owner : ι) : ℝ := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   exact Finset.univ.sup' Finset.univ_nonempty fun who =>
     quittingForcedOwnerOutsiderCoordinateDefect reward root owner who
 
@@ -71,7 +71,7 @@ theorem quittingForcedOwnerOutsiderCoordinateDefect_le
     (root : ι → PMF Bool) (owner who : ι) :
     quittingForcedOwnerOutsiderCoordinateDefect reward root owner who ≤
       quittingForcedOwnerOutsiderDefect reward root owner := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   unfold quittingForcedOwnerOutsiderDefect
   exact Finset.le_sup'
     (quittingForcedOwnerOutsiderCoordinateDefect reward root owner)
@@ -81,7 +81,7 @@ theorem quittingForcedOwnerOutsiderDefect_nonneg
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (root : ι → PMF Bool) (owner : ι) :
     0 ≤ quittingForcedOwnerOutsiderDefect reward root owner := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   exact (quittingForcedOwnerOutsiderCoordinateDefect_nonneg
       reward root owner owner).trans
     (quittingForcedOwnerOutsiderCoordinateDefect_le
@@ -345,7 +345,7 @@ theorem exists_outsider_pureEndpoint_gain_ge_of_le_forcedOwnerOutsiderDefect
       quittingRootExpectedPayoff reward 0 root who + lower ≤
         quittingRootExpectedPayoff reward 0
           (Function.update root who (PMF.pure action)) who := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   obtain ⟨who, _hwhoMem, hsup⟩ :=
     Finset.exists_mem_eq_sup' Finset.univ_nonempty
       (quittingForcedOwnerOutsiderCoordinateDefect reward root owner)

@@ -12,7 +12,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace CoalGame
 
@@ -29,7 +29,7 @@ a linear combination of unanimity games (Shapley 1953). -/
 def unanimityGame (S : Finset ι) (hS : S.Nonempty) : CoalGame ι where
   v := fun T => if S ⊆ T then 1 else 0
   v_empty := by
-    rw [if_neg]
+    rw [ite_eq_right]
     intro hsub
     obtain ⟨i, hi⟩ := hS
     exact Finset.notMem_empty i (hsub hi)
@@ -171,13 +171,13 @@ theorem unanimity_decomposition (G : CoalGame ι) (T : Finset ι) :
         exact Finset.Subset.antisymm hR (Finset.sdiff_eq_empty_iff_subset.mp h)
       · rintro rfl; exact Finset.sdiff_self _
     by_cases hRT : R = T
-    · rw [if_pos hRT, if_pos (hempty_iff.mpr hRT)]
-    · rw [if_neg hRT, if_neg (fun h => hRT (hempty_iff.mp h))]
+    · rw [ite_eq_left hRT, ite_eq_left (hempty_iff.mpr hRT)]
+    · rw [ite_eq_right hRT, ite_eq_right (fun h => hRT (hempty_iff.mp h))]
   rw [Finset.sum_congr rfl hinner]
   -- Only R = T contributes; collapse via `Finset.sum_ite_eq'`.
   simp_rw [mul_ite, mul_one, mul_zero]
   rw [Finset.sum_ite_eq' T.powerset T G.v,
-    if_pos (Finset.mem_powerset.mpr Finset.Subset.rfl)]
+    ite_eq_left (Finset.mem_powerset.mpr Finset.Subset.rfl)]
 
 section FinitePlayers
 
@@ -232,9 +232,9 @@ theorem allocation_on_unanimityGame
     have hc_val : c = 1 / S.card := by
       field_simp at heff ⊢
       linarith
-    rw [if_pos hiS, hc i hiS, hc_val]
+    rw [ite_eq_left hiS, hc i hiS, hc_val]
   · -- i ∉ S: null axiom gives φ = 0.
-    rw [if_neg hiS]
+    rw [ite_eq_right hiS]
     exact h_null G (unanimityGame_isNull_of_notMem S hS hiS)
 
 /-- Allocation on a scaled unanimity game `c · u_S`: members split `c`, others
@@ -279,8 +279,8 @@ theorem allocation_on_scalar_unanimityGame
     have hd_val : d = c / S.card := by
       field_simp at heff ⊢
       linarith
-    rw [if_pos hiS, hc i hiS, hd_val]
-  · rw [if_neg hiS]
+    rw [ite_eq_left hiS, hc i hiS, hd_val]
+  · rw [ite_eq_right hiS]
     exact h_null G (gameScalar_isNull (unanimityGame_isNull_of_notMem S hS hiS))
 
 end FinitePlayers
@@ -409,8 +409,8 @@ theorem eq_gameSum_decompTerm (G : CoalGame ι) :
     intro S
     simp only [decompTerm]
     by_cases hS : S.Nonempty
-    · simp only [hS, dif_pos, gameScalar, unanimityGame]
-    · simp only [hS, dif_neg, zeroGame, not_false_iff]
+    · simp only [hS, dite_eq_left, gameScalar, unanimityGame]
+    · simp only [hS, dite_eq_right, zeroGame, not_false_iff]
       have hSe : S = ∅ := Finset.not_nonempty_iff_eq_empty.mp hS
       have h_coeff : G.unanimityCoeff S = 0 := by
         subst hSe
@@ -457,12 +457,12 @@ theorem shapleyValue_unique
   simp only [decompTerm]
   by_cases hS : S.Nonempty
   · -- Nonempty S: both sides equal c_S · (1/|S| if i ∈ S else 0).
-    simp only [hS, dif_pos]
+    simp only [hS, dite_eq_left]
     rw [allocation_on_scalar_unanimityGame φ h_eff h_sym h_null S hS _ i,
       allocation_on_scalar_unanimityGame shapleyValue
         shapleyValue_efficient shapleyValue_symmetric shapleyValue_null S hS _ i]
   · -- Empty S: both sides are zero (zero game).
-    simp only [hS, dif_neg, not_false_iff]
+    simp only [hS, dite_eq_right, not_false_iff]
     have hnull_all : (zeroGame (ι := ι)).IsNull i := by
       intro T _
       simp [marginalContribution, zeroGame]

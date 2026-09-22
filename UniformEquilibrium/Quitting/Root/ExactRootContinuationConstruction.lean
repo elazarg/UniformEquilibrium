@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -69,7 +69,7 @@ theorem exactRootNash_of_indifferenceContinuation
       unfold quittingRootEndpointDifference
       rw [quittingRootQuitPayoff_continuation_invariant reward _ 0 root player]
       rw [quittingRootContinuePayoff_eq_zero_add_emptyMass_mul]
-      simp only [hmem, if_true]
+      simp only [hmem, ite_true]
       field_simp [ne_of_gt (hempty player hmem)]
       ring
     rw [hendpoint]

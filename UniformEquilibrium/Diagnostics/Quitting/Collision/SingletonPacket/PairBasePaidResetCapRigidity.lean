@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset
+open _root_.Finset
 
 namespace FinFourPairBasePaidResetTarget
 

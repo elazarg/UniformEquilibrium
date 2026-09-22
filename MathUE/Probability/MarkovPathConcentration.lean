@@ -166,7 +166,7 @@ theorem ae_startsAt
       Preorder.frestrictLe 0 ⁻¹'
         ({initialPrefix start} : Set ((i : Finset.Iic 0) → State)) := by
     ext path
-    simp only [Set.mem_setOf_eq, Set.mem_preimage, Set.mem_singleton_iff, StartsAt]
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage, Set.mem_singleton_iff, StartsAt]
     constructor
     · intro hstart
       funext index

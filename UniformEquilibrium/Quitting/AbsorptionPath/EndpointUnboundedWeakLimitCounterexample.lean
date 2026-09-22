@@ -21,7 +21,8 @@ open Filter Set
 open scoped Topology
 open GameTheory
 
-private def baseWeight : stdSimplex ℝ Bool := stdSimplex.pure false
+private def baseWeight : Convexity.StdSimplex ℝ Bool :=
+  Convexity.StdSimplex.pure false
 
 private def baseCadlagPath : CadlagPath (ι := Bool) :=
   linearSingletonCadlagPath baseWeight
@@ -31,11 +32,10 @@ private def addedCoalition : {S : Finset Bool // S.Nonempty} :=
 
 @[simp] private theorem baseCadlagPath_value_addedCoalition (time : ℝ) :
     baseCadlagPath.value time addedCoalition = 0 := by
-  change time * singletonCoalitionDistribution baseWeight addedCoalition = 0
+  change time * (singletonCoalitionDistribution baseWeight).weights addedCoalition = 0
   rw [show addedCoalition = quittingProjectiveSingletonTerminal true by rfl,
     singletonCoalitionDistribution_singleton]
-  have hweight : baseWeight true = 0 := by
-    rfl
+  have hweight : baseWeight.weights true = 0 := by simp [baseWeight]
   rw [hweight, mul_zero]
 
 private def endpointSpikeCadlagPath : CadlagPath (ι := Bool) where
@@ -69,11 +69,11 @@ private def endpointSpikeCadlagPath : CadlagPath (ι := Bool) where
         have hsecondOne : second = 1 := le_antisymm hsecond.2 hle
         subst second
         simp
-      · rw [if_neg hfirstOne]
+      · rw [ite_eq_right hfirstOne]
         by_cases hsecondOne : second = 1
-        · rw [if_pos hsecondOne]
+        · rw [ite_eq_left hsecondOne]
           norm_num
-        · rw [if_neg hsecondOne]
+        · rw [ite_eq_right hsecondOne]
     · simp only [hcoalition, and_false, ↓reduceIte, add_zero]
       exact baseCadlagPath.monotone coalition hfirst hsecond hle
   right_continuous := by
@@ -244,7 +244,7 @@ private theorem absorptionPathPayoff_base_false
     (absorptionPathPayoff_linearSingletonAbsorptionPath
       baseWeight reward htime htimeOne) false
   rw [hpayoff]
-  have hweightTrue : baseWeight true = 0 := by rfl
+  have hweightTrue : baseWeight.weights true = 0 := by simp [baseWeight]
   simp [reward, addedCoalition, quittingProjectiveSingletonTerminal,
     hweightTrue]
 
@@ -291,31 +291,31 @@ private theorem pathRightDerivative_endpointSpike_false_zero :
     pathRightDerivative endpointSpikeCadlagPath 0
         (quittingProjectiveSingletonTerminal false) = 1 := by
   rw [pathRightDerivative_endpointSpike_eq_base (by norm_num)]
-  letI : NeBot (nhdsWithin (0 : ℝ) (Ioo 0 1)) :=
+  let _ : NeBot (nhdsWithin (0 : ℝ) (Ioo 0 1)) :=
     left_nhdsWithin_Ioo_neBot (by norm_num)
   unfold pathRightDerivative baseCadlagPath linearSingletonCadlagPath
   have hquotient : ∀ᶠ later in nhdsWithin (0 : ℝ) (Ioo 0 1),
-      (later * singletonCoalitionDistribution baseWeight
+      (later * (singletonCoalitionDistribution baseWeight).weights
             (quittingProjectiveSingletonTerminal false) -
-          0 * singletonCoalitionDistribution baseWeight
+          0 * (singletonCoalitionDistribution baseWeight).weights
             (quittingProjectiveSingletonTerminal false)) /
           (later - 0) = 1 := by
     filter_upwards [self_mem_nhdsWithin] with later hlater
     rw [singletonCoalitionDistribution_singleton]
-    have hweight : baseWeight false = 1 := by rfl
+    have hweight : baseWeight.weights false = 1 := by simp [baseWeight]
     rw [hweight]
     field_simp [ne_of_gt hlater.1]
   rw [Filter.liminf_congr hquotient, Filter.liminf_const]
 
 private theorem absorptionPathPayoff_endpointSpike_zero_false :
     absorptionPathPayoff reward endpointSpikeAbsorptionPath 0 false = 1 := by
-  rw [absorptionPathPayoff, if_pos (by norm_num : (0 : ℝ) ∈ Icc 0 1)]
+  rw [absorptionPathPayoff, ite_eq_left (by norm_num : (0 : ℝ) ∈ Icc 0 1)]
   change (if pathTotal endpointSpikeCadlagPath 0 < 1 then fun who =>
       (∑ coalition,
         (endpointSpikeCadlagPath.value 1 coalition -
           endpointSpikeCadlagPath.value 0 coalition) * reward coalition who) /
             (1 - pathTotal endpointSpikeCadlagPath 0) else 0) false = 1
-  rw [if_pos (by simp : pathTotal endpointSpikeCadlagPath 0 < 1)]
+  rw [ite_eq_left (by simp : pathTotal endpointSpikeCadlagPath 0 < 1)]
   rw [pathTotal_endpointSpikeCadlagPath]
   norm_num
   simp [endpointSpikeCadlagPath, reward]

@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 open Math.PMFProduct
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -153,7 +153,7 @@ theorem continuationGain_add_residual_eq_deviationDriftAt
   rw [G.finkContinuationGain_eq_expect_stateKernels]
   unfold finkContinuationResidual finkContinuationEU
   rw [← G.expect_finkStateKernel_eq]
-  simp only [if_pos]
+  simp only [ite_eq_left]
   change
     (expect
           (G.finkPureDeviationStateKernel
@@ -214,7 +214,7 @@ theorem chargedOccupationPotential_iff_playerNeutralBiasCorrectionAt
             (germ.finkPointAt ht) source) C - C source at hsource
       unfold finkContinuationResidual finkContinuationEU
       rw [← G.expect_finkStateKernel_eq]
-      simp only [if_pos]
+      simp only [ite_eq_left]
       exact hsource
     · intro response
       have hresponse := h (.inr response)
@@ -246,7 +246,7 @@ theorem chargedOccupationPotential_iff_playerNeutralBiasCorrectionAt
         have hsource := hbaseline source
         unfold finkContinuationResidual finkContinuationEU at hsource
         rw [← G.expect_finkStateKernel_eq] at hsource
-        simp only [if_pos] at hsource
+        simp only [ite_eq_left] at hsource
         exact hsource
     | inr response =>
         rw [germ.potential_pair_rawPlayerNeutralOccupationColumn_eq

@@ -92,7 +92,7 @@ theorem expect_transientCharge_le_one_sub_apply_toReal
     (htarget : target ∈ core) :
     expect distribution (transientCharge core) ≤
       1 - (distribution target).toReal := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have hcomplement_nonneg : ∀ state,
       0 ≤ 1 - transientCharge core state := by
     intro state
@@ -134,7 +134,7 @@ theorem exists_uniformCoreReach_of_closed_of_reachable
       0 < minorization ∧ minorization ≤ 1 ∧
         HasUniformCoreReach kernel core horizon minorization := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have hexists : ∀ source,
       ∃ (target : S) (steps : ℕ),
         target ∈ core ∧

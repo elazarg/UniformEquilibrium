@@ -19,7 +19,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MertensNeymanAccount
 
-open Filter Math.Probability Math.PMFProduct Topology
+open Filter _root_.Math.Probability Math.PMFProduct Topology
 
 def rowAccountValueMemoryPotential
     {G : StochasticGame (Fin 2)}
@@ -524,7 +524,7 @@ theorem row_accountMemoryController_history_payoff_step
       row_accountMemoryController_payoff_step
         hfloor hε hε2 hpayLower hpayUpper
         hvalueLower hvalueUpper hrateUpper hbudget opp h k
-  letI : Fintype (C.Mem t) := C.finiteMem t
+  let : Fintype (C.Mem t) := C.finiteMem t
   have hmean := expect_mono (C.belief t h) _ _ hfixed
   have hA :=
     C.historyContinuationEU_beliefPotential opp A h
@@ -626,7 +626,7 @@ theorem accountMemoryControllerOnUnitInterval_history_payoff_step
       accountMemoryControllerOnUnitInterval_payoff_step
         hfloor hε hε2 hpayLower hpayUpper
         hvalueLower hvalueUpper hrateUpper hbudget opp h k
-  letI : Fintype (C.Mem t) := C.finiteMem t
+  let : Fintype (C.Mem t) := C.finiteMem t
   have hmean := expect_mono (C.belief t h) _ _ hfixed
   have hA :=
     C.historyContinuationEU_beliefPotential opp A h
@@ -1295,7 +1295,7 @@ theorem sum_expected_belief_floorOccupation_le_on_interval
           C.beliefPotential floorMemory t h ≤
         C.beliefPotential rateMemory t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     rw [← expect_const_mul]
     exact expect_mono _ _ _ fun m =>

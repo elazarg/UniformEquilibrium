@@ -39,7 +39,7 @@ theorem
     QuittingPositiveJointPrefixReachPunishmentEndpoint.isUniformEquilibriumPayoff
     (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward) :
     (quittingGame reward).IsUniformEquilibriumPayoff none endpoint.endpoint.1 := by
-  letI : Nonempty iota := ⟨endpoint.punished⟩
+  let : Nonempty iota := ⟨endpoint.punished⟩
   apply isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier
   have hdiagonal : endpoint.endpoint =
       (endpoint.endpoint.1, endpoint.endpoint.1) := by

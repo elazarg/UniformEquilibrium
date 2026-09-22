@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Set
+open Filter _root_.Math.Probability Set
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {bound : ℝ}

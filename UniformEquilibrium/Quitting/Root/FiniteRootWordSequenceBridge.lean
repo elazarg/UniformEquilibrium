@@ -91,7 +91,7 @@ theorem quittingLiteralRootStackProfile_ofFn_apply_of_lt
             (List.ofFn fun offset : Fin length ↦ roots (start + offset.succ.val))
             tail player time (Fin.tail history.1, history.2) = _
           have h := ih (start + 1) time (Fin.tail history.1, history.2) (by omega)
-          convert h using 1 <;> simp only [Fin.val_succ, Nat.add_assoc, Nat.add_comm 1]
+          (convert h using 1; simp only [Fin.val_succ, Nat.add_assoc, Nat.add_comm 1])
 
 omit [DecidableEq ι] in
 theorem quittingProfileLiveRoot_literalRootStack_ofFn_of_lt

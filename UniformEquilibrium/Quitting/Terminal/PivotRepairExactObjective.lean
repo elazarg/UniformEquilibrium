@@ -70,11 +70,11 @@ theorem geometric_exploitability_eq_objective
     (mass : PivotRepairMass input.deadline) (hfeasible : IsPivotRepairMassFeasible mass)
     (hazard : ℝ) (hpositive : 0 < hazard) (hle : hazard ≤ 1)
     (hmatch : pivotRepairLate mass * hazard = pivotRepairFirstAtom mass) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     quittingTerminalExploitability reward
         (quittingStoppingLawProfile reward
           (input.geometricLaws mass hfeasible hazard hpositive hle)) = input.objective mass := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   let profile := quittingStoppingLawProfile reward
     (input.geometricLaws mass hfeasible hazard hpositive hle)
   have hpayoff (who : ι) : quittingTerminalPayoff reward profile who =

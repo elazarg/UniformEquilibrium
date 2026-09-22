@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Paths.LiveTail
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Root.TerminalOutcome
 import UniformEquilibrium.Quitting.Root.TerminalSemanticPair
 
@@ -57,8 +58,8 @@ theorem quittingAbsorbedMass_nonneg_terminalMoment
   unfold quittingAbsorbedMass StochasticGame.expectedStateValue
   apply Math.Probability.expect_nonneg
   intro history
-  by_cases hs : history.2 = some terminal <;>
-    simp [quittingAbsorbedIndicator, hs]
+  unfold quittingAbsorbedIndicator
+  split <;> norm_num
 
 omit [DecidableEq ι] in
 /-- Every executable terminal outcome law belongs to the standard simplex. -/
@@ -66,7 +67,8 @@ theorem quittingTerminalOutcomeMass_mem_stdSimplex
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (profile : (quittingGame reward).BehaviorProfile) :
     quittingTerminalOutcomeMass reward profile ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights]
   constructor
   · intro outcome
     cases outcome with
@@ -89,7 +91,7 @@ def quittingTerminalRewardMoment
 def quittingTerminalRewardMomentSet
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) : Set (Payoff ι) :=
   quittingTerminalRewardMoment reward ''
-    stdSimplex ℝ (QuittingTerminalOutcome ι)
+    GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)
 
 omit [DecidableEq ι] in
 /-- Barycentric reward evaluation is continuous in the finite outcome law. -/
@@ -107,7 +109,8 @@ omit [DecidableEq ι] in
 theorem quittingTerminalRewardMomentSet_isCompact
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     IsCompact (quittingTerminalRewardMomentSet reward) := by
-  exact (isCompact_stdSimplex ℝ (QuittingTerminalOutcome ι)).image
+  exact (GameTheory.Math.Probability.isCompact_simplexWeights
+    (QuittingTerminalOutcome ι)).image
     (continuous_quittingTerminalRewardMoment reward)
 
 omit [DecidableEq ι] in

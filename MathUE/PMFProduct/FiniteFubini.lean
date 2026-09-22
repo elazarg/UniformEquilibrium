@@ -17,7 +17,7 @@ the displayed-vector corollaries use one homogeneous coordinate type.
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- Split the expectation of a `Fin (n + 1)`-indexed independent product into
 the first marginal and the independent product of the remaining marginals. -/

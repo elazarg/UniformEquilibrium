@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -238,7 +238,7 @@ theorem scale_eq_one_of_conditionedProductPurification_two_active
       have hremainderNonneg : 0 ≤ remainder :=
         Finset.prod_nonneg fun _ _ ↦ ENNReal.toReal_nonneg
       have hremainderLe : remainder ≤ 1 :=
-        Finset.prod_le_one (fun _ _ ↦ ENNReal.toReal_nonneg) fun player _ ↦ by
+        Finset.prod_le_one₀ (fun _ _ ↦ ENNReal.toReal_nonneg) fun player _ ↦ by
           simpa using ENNReal.toReal_mono ENNReal.one_ne_top
             (PMF.coe_le_one (source player) false)
       have hfactor : quittingStationaryContinueMass source =

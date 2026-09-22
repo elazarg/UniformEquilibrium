@@ -17,14 +17,14 @@ variable (input : QuittingPivotRepairLPInput reward)
 the same prescribed payoff vector and no larger objective. The producer
 uses actual geometric cap domination, not supplied response coefficients. -/
 theorem exists_feasible_mass_payoff_eq_and_objective_le (law : PMF (Option ℕ)) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ mass : PivotRepairMass input.deadline, IsPivotRepairMassFeasible mass ∧
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) =
         input.prescribedPayoff mass ∧
       input.objective mass ≤ quittingTerminalExploitability reward
         (quittingStoppingLawProfile reward (Function.update input.opponents input.pivot law)) := by
-  letI : Nonempty ι := ⟨input.pivot⟩
+  let : Nonempty ι := ⟨input.pivot⟩
   obtain ⟨hazard, hpositive, hle, hpayoff, hexploitability⟩ :=
     exists_geometric_pivot_payoff_eq_and_exploitability_le reward input.opponents input.pivot
       input.deadline input.deadline_pos input.opponents_finite law

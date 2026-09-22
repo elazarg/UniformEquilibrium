@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 namespace QuittingSharedThreePlayer
@@ -37,7 +37,12 @@ inductive Player
   | a
   | b
   | c
-  deriving DecidableEq, Fintype, Inhabited
+  deriving DecidableEq, Inhabited
+
+instance : Fintype Player :=
+  Fintype.ofList [.a, .b, .c] (by
+    intro player
+    cases player <;> simp)
 
 /-- The next player in the cycle `a -> b -> c -> a`. -/
 def next : Player → Player
@@ -177,30 +182,30 @@ theorem quittingRootPayoff_eq_badEvent
       if action (next who) = true ∧ action (other who) = false
         then -1 else 0 := by
   by_cases hbad : action (next who) = true ∧ action (other who) = false
-  · rw [if_pos hbad]
+  · rw [ite_eq_left hbad]
     have hquit : (quittingQuitters action).Nonempty := by
       refine ⟨next who, ?_⟩
       simpa [quittingQuitters] using hbad.1
     unfold quittingRootPayoff
-    rw [dif_pos hquit]
+    rw [dite_eq_left hquit]
     unfold reward
-    rw [if_pos]
+    rw [ite_eq_left]
     constructor
     · simpa [quittingQuitters] using hbad.1
     · simpa [quittingQuitters] using hbad.2
-  · rw [if_neg hbad]
+  · rw [ite_eq_right hbad]
     by_cases hquit : (quittingQuitters action).Nonempty
     · unfold quittingRootPayoff
-      rw [dif_pos hquit]
+      rw [dite_eq_left hquit]
       unfold reward
-      rw [if_neg]
+      rw [ite_eq_right]
       intro hreward
       apply hbad
       constructor
       · simpa [quittingQuitters] using hreward.1
       · simpa [quittingQuitters] using hreward.2
     · unfold quittingRootPayoff
-      rw [dif_neg hquit]
+      rw [dite_eq_right hquit]
       simp
 
 /-- Quitting now has value `-x_next * (1-x_other)`. -/
@@ -242,7 +247,7 @@ theorem quittingPunishmentValue_eq_neg_one (who : Player) :
     rw [quittingStationaryUnilateralCap_pureSetRoot] at h
     cases who <;> simpa [reward, next, other] using h
   · rw [quittingPunishmentValue_eq_stationaryPunishmentValue]
-    haveI : Nonempty (Player → PMF Bool) :=
+    have : Nonempty (Player → PMF Bool) :=
       ⟨fun _ => PMF.pure false⟩
     exact le_ciInf fun root =>
       le_quittingStationaryUnilateralCap_of_forall_le reward who

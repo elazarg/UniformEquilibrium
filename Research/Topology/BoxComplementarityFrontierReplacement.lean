@@ -55,7 +55,7 @@ theorem isIsolating_of_gain_eqOn_frontier
   refine ⟨hisolating.1, Set.eq_empty_iff_forall_notMem.mpr ?_⟩
   rintro point ⟨hsolution, hfrontier⟩
   have hfirst : first.IsSolution point := by
-    simpa only [solutionSet, mem_setOf_eq, IsSolution, ← hequal hfrontier] using hsolution
+    simpa only [solutionSet, mem_ofPred_eq, IsSolution, ← hequal hfrontier] using hsolution
   have hmem : point ∈ first.solutionSet ∩ frontier region := ⟨hfirst, hfrontier⟩
   rw [hisolating.2] at hmem
   exact hmem

@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -208,7 +208,7 @@ theorem normalized_rootHorizon_suffix_charge_le_expect
   apply expect_mono
   intro base
   by_cases hbase : base ∈ stoppedLaw.support
-  · simp only [hbase, if_true]
+  · simp only [hbase, ite_true]
     have hstopFuel : base.1.val ≤ fuel :=
       Nat.lt_succ_iff.mp base.1.isLt
     have hstopTotal : base.1.val < total :=

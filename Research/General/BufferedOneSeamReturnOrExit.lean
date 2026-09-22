@@ -331,7 +331,7 @@ theorem exists_bufferedPath_close_or_rank_exit
 
 section Quitting
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

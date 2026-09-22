@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 namespace TwoDateTimingNashSharpness
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 theorem equilibriumProfile_terminalPayoff_zero :
     quittingTerminalPayoff reward
@@ -94,7 +94,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
   funext player
   fin_cases player
   · have hplayer : (⟨0, by omega⟩ : Player) = 0 := by decide
-    rw [quittingPureDeviationCompactLaws, if_pos hplayer,
+    rw [quittingPureDeviationCompactLaws, ite_eq_left hplayer,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨0, by omega⟩ : Player) =
         Function.const Action (WithTop.some 2) := by
@@ -102,7 +102,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
       simp [lateCoordinateTime]
     rw [htime, PMF.map_const]
   · have hplayer : (⟨1, by omega⟩ : Player) ≠ 0 := by decide
-    rw [quittingPureDeviationCompactLaws, if_neg hplayer,
+    rw [quittingPureDeviationCompactLaws, ite_eq_right hplayer,
       quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨1, by omega⟩ : Player) =
@@ -111,7 +111,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
       simp [lateCoordinateTime]
     rw [htime]
   · have hplayer : (⟨2, by omega⟩ : Player) ≠ 0 := by decide
-    rw [quittingPureDeviationCompactLaws, if_neg hplayer,
+    rw [quittingPureDeviationCompactLaws, ite_eq_right hplayer,
       quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨2, by omega⟩ : Player) =
@@ -120,7 +120,7 @@ private theorem pureDeviationLaws_eq_map_lateCoordinateTime :
       simp [lateCoordinateTime]
     rw [htime]
   · have hplayer : (⟨3, by omega⟩ : Player) ≠ 0 := by decide
-    rw [quittingPureDeviationCompactLaws, if_neg hplayer,
+    rw [quittingPureDeviationCompactLaws, ite_eq_right hplayer,
       quittingTwoDateTimingLaw, quittingFiniteDeadlineTimingLaw,
       Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
     have htime : lateCoordinateTime (⟨3, by omega⟩ : Player) =

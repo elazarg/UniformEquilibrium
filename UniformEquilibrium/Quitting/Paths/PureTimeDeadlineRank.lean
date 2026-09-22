@@ -48,7 +48,7 @@ theorem quittingPureTimeCoalitionAt_update_none_eq_erase
     (times : QuittingPureTimeProfile ι) (who : ι) (time : ℕ) :
     quittingPureTimeCoalitionAt (Function.update times who none) time =
       (quittingPureTimeCoalitionAt times time).erase who := by
-  rw [quittingPureTimeCoalitionAt_update, if_neg (by simp)]
+  rw [quittingPureTimeCoalitionAt_update, ite_eq_right (by simp)]
 
 /-- A distinct retained anchor survives one neutral anchored erasure. -/
 theorem mem_quittingPureTimeCoalitionAt_update_none_of_ne

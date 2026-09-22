@@ -61,7 +61,7 @@ theorem essentialAPSTerminal_eq (owner : ι) :
     quittingEssentialAPSTerminal first owner =
       quittingEssentialAPSTerminal second owner := by
   ext value
-  simp only [quittingEssentialAPSTerminal, Set.mem_setOf_eq]
+  simp only [quittingEssentialAPSTerminal, Set.mem_ofPred_eq]
   rw [hsame owner, hsame.essentialAPSViable_iff]
 
 theorem essentialAPSPrefix_eq
@@ -69,7 +69,7 @@ theorem essentialAPSPrefix_eq
     quittingEssentialAPSPrefix first owner family =
       quittingEssentialAPSPrefix second owner family := by
   ext value
-  simp only [quittingEssentialAPSPrefix, Set.mem_setOf_eq]
+  simp only [quittingEssentialAPSPrefix, Set.mem_ofPred_eq]
   rw [hsame.essentialAPSViable_iff, hsame owner]
 
 theorem segmentEssentialAPSPrefix_eq
@@ -77,7 +77,7 @@ theorem segmentEssentialAPSPrefix_eq
     quittingSegmentEssentialAPSPrefix first owner family =
       quittingSegmentEssentialAPSPrefix second owner family := by
   ext value
-  simp only [quittingSegmentEssentialAPSPrefix, Set.mem_setOf_eq]
+  simp only [quittingSegmentEssentialAPSPrefix, Set.mem_ofPred_eq]
   rw [hsame.essentialAPSViable_iff, hsame owner]
 
 theorem essentialAPSSuccessorSet_eq
@@ -127,7 +127,7 @@ theorem essentialAPSGreatestFamily_eq (carrier : ι → Set (Payoff ι)) :
       quittingEssentialAPSGreatestFamily second carrier := by
   funext owner
   ext value
-  simp only [quittingEssentialAPSGreatestFamily, Set.mem_setOf_eq]
+  simp only [quittingEssentialAPSGreatestFamily, Set.mem_ofPred_eq]
   constructor
   · rintro ⟨family, hfamily, hvalue⟩
     exact ⟨family,

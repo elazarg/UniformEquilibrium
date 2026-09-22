@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory.PairedCycle
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -59,13 +59,16 @@ theorem quitters_action {first second : ι} (hne : first ≠ second)
     quittingQuitters (action first second a b) =
       (if a then {first} else ∅) ∪ (if b then {second} else ∅) := by
   ext who
+  unfold quittingQuitters action
+  rw [Finset.mem_filter]
+  simp only [Finset.mem_univ, true_and, Finset.mem_union]
   by_cases hf : who = first
   · subst who
-    cases a <;> cases b <;> simp [quittingQuitters, action, hne]
+    cases a <;> cases b <;> simp [hne]
   by_cases hs : who = second
   · subst who
-    cases a <;> cases b <;> simp [quittingQuitters, action, hne.symm]
-  · cases a <;> cases b <;> simp [quittingQuitters, action, hf, hs]
+    cases a <;> cases b <;> simp [hne.symm]
+  · cases a <;> cases b <;> simp [hf, hs]
 
 theorem payoff_action (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (tail : Payoff ι) {first second : ι} (hne : first ≠ second)
@@ -90,7 +93,7 @@ theorem rootSuccessor_eq_bellman
         (firstLaw true).toReal (secondLaw true).toReal (tail who) := by
   unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
   rw [expect_root]
-  simp only [payoff_action reward tail hne, Bool.false_eq_true, if_false, if_true]
+  simp only [payoff_action reward tail hne, Bool.false_eq_true, ite_false, ite_true]
   unfold Math.PairedAffine.bellman Math.PairedAffine.contribution
   ring
 
@@ -199,7 +202,7 @@ theorem rootQuit_eq_bellman (reward : {S : Finset ι // S.Nonempty} → Payoff �
   rw [← pmfPi_bind_update_pure, expect_bind]
   simp only [expect_pure]
   rw [expect_root]
-  simp only [payoff_action_quit reward tail hne, Bool.false_eq_true, if_false, if_true]
+  simp only [payoff_action_quit reward tail hne, Bool.false_eq_true, ite_false, ite_true]
   unfold Math.PairedAffine.bellman Math.PairedAffine.contribution
   ring
 

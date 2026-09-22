@@ -29,8 +29,8 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.OnlineLearning Math.PMFProduct Math.Probability Set
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability Set
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 open GameTheory.StochasticGame.AnalyticBellmanGerm.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}

@@ -30,7 +30,7 @@ namespace Topology
 namespace SimonViability
 
 open Filter Set
-open scoped BigOperators Topology
+open scoped BigOperators _root_.Topology
 
 /-- The finite-dimensional real space used in Simon's question. -/
 abbrev EuclideanSpace (Coordinate : Type*) := Coordinate → ℝ

@@ -169,11 +169,17 @@ theorem kuhnFloorSimplexLift_determinant_eq
   have hsecond := congrArg (fun vertex ↦ (vertex coordinate).1)
     (congrFun hrounded step.succ)
   have hmemCoarse : coordinate ∈ spernerChainStepSet vertices step := by
-    rw [mem_spernerChainStepSet]
+    unfold spernerChainStepSet
+    simp only [Finset.mem_filter, Finset.mem_univ, true_and]
     exact hfirst.symm.trans_lt (hltRounded.trans_eq hsecond)
   have hcoordinate :=
     (mem_spernerChainStepSet_iff hs rfl step coordinate).1 hmemCoarse
+  have hcoordinateVal := congrArg Fin.val hcoordinate
+  have hcast : coordinate.val = fineCoordinate.val := by
+    dsimp only [coordinate]
+    exact Fin.val_cast rfl fineCoordinate
+  rw [hcast] at hcoordinateVal
   apply Fin.ext
-  simpa [coordinate, fineCoordinate] using congrArg Fin.val hcoordinate
+  exact hcoordinateVal
 
 end Math

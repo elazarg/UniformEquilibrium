@@ -99,7 +99,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type}
 
@@ -489,7 +489,7 @@ theorem exists_uniformEquilibriumPayoff_of_subsingleton_state_of_certificate
     (G : StochasticGame ι) [Fintype ι] [DecidableEq ι] [Subsingleton G.State]
     [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)] (s₀ : G.State) :
     ∃ v : Payoff ι, G.IsUniformEquilibriumPayoff s₀ v := by
-  haveI : Finite G.State := Finite.of_subsingleton
+  have : Finite G.State := Finite.of_subsingleton
   exact G.exists_uniformEquilibriumPayoff_of_isAbsorbingState_of_certificate
     (G.isAbsorbingState_of_subsingleton s₀)
 

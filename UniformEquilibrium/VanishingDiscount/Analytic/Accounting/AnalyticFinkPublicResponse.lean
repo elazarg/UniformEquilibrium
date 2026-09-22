@@ -34,7 +34,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set
+open Filter _root_.Math _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -239,7 +239,7 @@ theorem eventual_charge_eq_actualBellmanGain
   filter_upwards [C.eventual_charge] with t hcharge
   intro ht
   simp only [AnalyticBellmanGerm.rawFinkObstructionMass,
-    hcharge.2.1, if_true]
+    hcharge.2.1, ite_true]
   rw [germ.rawPureDeviationStageGainCurve_eq_finkPointAt ht]
   rw [germ.rawPureDeviationContinuationGainCurve_eq_finkPointAt
     (H - K) ht]
@@ -297,7 +297,7 @@ theorem exists_analyticForwardFinkPublicResponse
     Nonempty (AnalyticForwardFinkPublicResponse germ H K) := by
   classical
   let E := Σ who : ι, G.State × G.Act who
-  letI : Nonempty E := by
+  let : Nonempty E := by
     let owner : ι := Classical.choice (inferInstance : Nonempty ι)
     let source : G.State :=
       Classical.choice (inferInstance : Nonempty G.State)
@@ -411,7 +411,7 @@ theorem exists_analyticForwardFinkPublicResponse
     filter_upwards [heventualCharge] with t ht
     simpa only [stage, continuation,
       AnalyticBellmanGerm.rawFinkObstructionMass,
-      ht.2.1, if_true] using ht.2.2.1
+      ht.2.1, ite_true] using ht.2.2.1
   rcases analytic_sum_powerCharge_left_or_right
       hstage hcontinuation htotal with hstagePower | hcontinuationPower
   · have hstageEventual :

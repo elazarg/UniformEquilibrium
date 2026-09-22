@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame
+open Filter _root_.Math.Probability StochasticGame
 open scoped Topology
 
 /-- Every globally minimizing joint law in the four-player hard residual has a positive finite

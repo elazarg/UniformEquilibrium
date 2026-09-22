@@ -172,8 +172,9 @@ theorem continuous_quittingStationaryContinueMass_simplex :
       quittingStationaryContinueMass (quittingRootOfSimplex root)) := by
   simp_rw [quittingStationaryContinueMass_eq_prod_continueProbability,
     quittingRootOfSimplex_apply_toReal]
-  exact continuous_finsetProd _ fun who _ => (continuous_apply false).comp
-    (continuous_subtype_val.comp (continuous_apply who))
+  exact continuous_finsetProd _ fun who _ =>
+    (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+      (continuous_apply who)
 
 /-- The structured closed cell at fixed prefix length and punished player.
 `liveFloor` is non-strict so the cell remains closed; a positive floor records
@@ -259,7 +260,7 @@ theorem exists_uniformEquilibriumPayoff_of_mem_exact_stationaryPrefixSemanticCel
       punished 0 0 liveFloor) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := ⟨punished⟩
+  let : Nonempty ι := ⟨punished⟩
   let full := quittingTerminalSemanticPrefixFoldSimplex reward steps data
   have hfullCarrier : full ∈ quittingTerminalSemanticCarrier reward := by
     exact quittingTerminalSemanticPrefixFold_mem_carrier reward
@@ -365,7 +366,7 @@ theorem quittingTerminalSemanticDebt_pair_le_of_isεAsymptoticNash
       (quittingTerminalPayoff reward) ε profile) (who : ι) :
     quittingTerminalSemanticDebt
       (quittingTerminalSemanticPair reward profile) who ≤ ε := by
-  letI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+  let : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
     ⟨fun _time _history => PMF.pure false⟩
   change quittingContinuationBestResponseValue reward profile who -
     quittingTerminalPayoff reward profile who ≤ ε
@@ -413,7 +414,7 @@ theorem quittingRootSequenceProfile_stationaryPrefixThenRoots_succ
         else punishment (1 + time - (horizon + 1 + 1))) player =
       (if time ≤ horizon then root
         else punishment (time - (horizon + 1))) player
-    rw [if_neg (by omega), if_neg htime]
+    rw [ite_eq_right (by omega), ite_eq_right htime]
     rw [show 1 + time - (horizon + 1 + 1) = time - (horizon + 1) by omega]
 
 omit [DecidableEq ι] in

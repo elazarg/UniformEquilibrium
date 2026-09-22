@@ -33,7 +33,7 @@ theorem singlePivot_exactMenuNash_scalar_and_deletedNever_ge
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hcanonical : IsSinglePivotSingletonTable reward pivot) {gap : ℝ}
     (hgap : 0 < gap) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     (∀ profile, gap ≤ quittingTerminalExploitability reward profile) →
     ∀ deadline (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)),
       IsQuittingFiniteDeadlineNash reward deadline 0 mixed →
@@ -42,7 +42,8 @@ theorem singlePivot_exactMenuNash_scalar_and_deletedNever_ge
           quittingTerminalPayoff reward
             (quittingFiniteDeadlineTimingProfile reward deadline mixed) pivot ∧
         gap ≤ quittingFiniteDeadlineOpponentNeverProduct deadline mixed pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hfloor deadline mixed hnash
   let profile := quittingFiniteDeadlineTimingProfile reward deadline mixed
   have hdebt : gap ≤ quittingTerminalDeviationDebt reward profile pivot := by

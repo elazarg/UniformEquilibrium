@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math Math.Probability Math.PMFProduct Set
+open Filter _root_.Math _root_.Math.Probability Math.PMFProduct Set
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {bound : ℝ}

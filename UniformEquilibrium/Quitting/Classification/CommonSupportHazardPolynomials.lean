@@ -6,7 +6,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -34,9 +34,9 @@ theorem continuous_commonSupportHazard
     (active : Finset ι) (player : ι) :
     Continuous (fun t => commonSupportHazard active t player) := by
   by_cases hmem : player ∈ active
-  · simpa only [commonSupportHazard, hmem, if_true] using
+  · simpa only [commonSupportHazard, hmem, ite_true] using
       (continuous_id' : Continuous fun t : ℝ => t)
-  · simpa only [commonSupportHazard, hmem, if_false] using
+  · simpa only [commonSupportHazard, hmem, ite_false] using
       (continuous_const : Continuous fun _ : ℝ => (0 : ℝ))
 
 theorem continuous_hazardOpponentContinueMass

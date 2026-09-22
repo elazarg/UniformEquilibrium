@@ -479,7 +479,7 @@ theorem absorptionPathPreBoundaryPayoff_eq_jumpRootSuccessorPayoff
     ring]
   rw [habsorption]
   unfold absorptionPathPreBoundaryPayoff absorptionPathPayoff
-  rw [if_pos htime.1, if_pos htotalOne]
+  rw [ite_eq_left htime.1, ite_eq_left htotalOne]
   have htimeDenom : 1 - time ≠ 0 := ne_of_gt (sub_pos.mpr htimeOne)
   have htotalDenom : 1 - pathTotal path.1 time ≠ 0 :=
     ne_of_gt (sub_pos.mpr htotalOne)
@@ -516,7 +516,7 @@ theorem absorptionPathPreBoundaryPayoff_eq_absorptionPathPayoff_of_pathTime_not_
     unfold pathJump at hjumpZero
     linarith
   unfold absorptionPathPreBoundaryPayoff absorptionPathPayoff
-  rw [if_pos htime.1, if_pos htotalOne, htime.2]
+  rw [ite_eq_left htime.1, ite_eq_left htotalOne, htime.2]
   funext player
   congr 1
   apply Finset.sum_congr rfl
@@ -1008,10 +1008,10 @@ theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
         with later hlater
       simp only [Set.mem_Iio] at hlater
       simp only [cellValue, singletonCoordinateCellValue,
-        if_neg (ne_of_lt hlater)]
+        ite_eq_right (ne_of_lt hlater)]
     have htarget : cellValue point = path.1.value point singleton := by
       simp only [cellValue, singletonCoordinateCellValue,
-        if_neg hpointNeStop]
+        ite_eq_right hpointNeStop]
     rw [htarget]
     exact hraw.congr' (Filter.EventuallyEq.symm heq)
   have hleft (point : ℝ) (hpoint : point ∈ Set.Ioc start stop) :
@@ -1029,7 +1029,7 @@ theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
         cellValue earlier = path.1.value earlier singleton := by
       filter_upwards [self_mem_nhdsWithin] with earlier hearler
       simp only [cellValue, singletonCoordinateCellValue,
-        if_neg (ne_of_lt (hearler.2.trans_le hpoint.2))]
+        ite_eq_right (ne_of_lt (hearler.2.trans_le hpoint.2))]
     exact hraw.congr' (Filter.EventuallyEq.symm heq)
   have hjump (point : ℝ) (hpoint : point ∈ Set.Ioc start stop) :
       cellValue point ≤ path.1.leftValue point singleton := by
@@ -1039,14 +1039,14 @@ theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
         ⟨hpoint.1.le, hpointStop⟩
       have hbound := hnoJump point hpointIco
       simp only [cellValue, singletonCoordinateCellValue,
-        if_neg (ne_of_lt hpointStop)]
+        ite_eq_right (ne_of_lt hpointStop)]
       unfold pathJump at hbound
       linarith
   have hstartLe : cellValue start ≤
       path.1.leftValue start singleton := by
     have hbound := hnoJump start ⟨le_rfl, hstartStop⟩
     simp only [cellValue, singletonCoordinateCellValue,
-      if_neg (ne_of_lt hstartStop)]
+      ite_eq_right (ne_of_lt hstartStop)]
     unfold pathJump at hbound
     linarith
   have hslope (point : ℝ) (hpoint : point ∈ Set.Ico start stop)
@@ -1088,17 +1088,17 @@ theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
       have hlaterMem : later ∈ Set.Ioo point stop := hlater.2
       have hcellPoint : cellValue point = path.1.value point singleton := by
         simp only [cellValue, singletonCoordinateCellValue,
-          if_neg hpointNeStop]
+          ite_eq_right hpointNeStop]
       have hcellLater : cellValue later = path.1.value later singleton := by
         simp only [cellValue, singletonCoordinateCellValue,
-          if_neg (ne_of_lt hlaterMem.2)]
+          ite_eq_right (ne_of_lt hlaterMem.2)]
       rw [slope_def_field, hcellPoint, hcellLater]
       exact hlater.1
     · have hpointLtTotal : point < pathTotal path.1 point :=
         lt_of_le_of_ne (path.property.1 point hpointIcc) <| by
           intro heq
           exact hclock ⟨hpointIcc, heq.symm⟩
-      letI : (nhdsWithin point (Set.Ioo point stop)).NeBot :=
+      let : (nhdsWithin point (Set.Ioo point stop)).NeBot :=
         left_nhdsWithin_Ioo_neBot hpoint.2
       have heventually : ∀ᶠ later in nhdsWithin point (Set.Ioo point stop),
           later < pathTotal path.1 point :=
@@ -1117,7 +1117,7 @@ theorem exists_positiveSingletonJump_or_pathTimeRightDerivative_pos
           hlaterMem.1.le htotalEq singleton
         rw [slope_def_field]
         simp only [cellValue, singletonCoordinateCellValue,
-          if_neg hpointNeStop, if_neg (ne_of_lt hlaterMem.2),
+          ite_eq_right hpointNeStop, ite_eq_right (ne_of_lt hlaterMem.2),
           hcoordinateEq, sub_self, zero_div]
       exact (hzero.mono fun later heq => heq.symm ▸ hrate).frequently
   have hend :=
@@ -1515,7 +1515,7 @@ theorem hasPartitionPositiveSingletonReverseEntranceEstimate
             M := by
           have htimeTotal := hnoTerminalJump time htimeJump
           unfold absorptionPathPayoff
-          rw [if_pos htimeMem, if_pos htimeTotal]
+          rw [ite_eq_left htimeMem, ite_eq_left htimeTotal]
           let weight := fun terminal : {S : Finset ι // S.Nonempty} =>
             (path.1.value 1 terminal - path.1.value time terminal) /
               (1 - pathTotal path.1 time)

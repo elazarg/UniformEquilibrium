@@ -26,8 +26,8 @@ noncomputable section
 namespace GameTheory
 namespace FinFourCapSwitchAllProper
 
-open Filter Math Math.Probability Math.ProbabilityMassFunction
-open Math.Probability.DiscreteHazard
+open Filter _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability.DiscreteHazard
 
 abbrev Player := Fin 4
 

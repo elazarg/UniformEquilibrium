@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -53,18 +53,19 @@ theorem quittingNonSoloIndicator_eq_sum_absorbedIndicator
         by_cases hS : S = quittingSingletonTerminal who
         · simp [hS]
         · simp only [hS, ↓reduceIte, quittingAbsorbedIndicator]
-          rw [if_neg]
+          rw [ite_eq_right]
           intro heq
           exact hS (Option.some.inj heq).symm
       · rw [show quittingNonSoloIndicator reward who (some terminal) = 1 by
           simp [quittingNonSoloIndicator, hterminal]]
         rw [Finset.sum_eq_single terminal]
         · simp [quittingAbsorbedIndicator, hterminal]
+          rfl
         · intro S _ hS
           by_cases hsingleton : S = quittingSingletonTerminal who
           · simp [hsingleton]
           · simp only [hsingleton, ↓reduceIte, quittingAbsorbedIndicator]
-            rw [if_neg]
+            rw [ite_eq_right]
             intro heq
             exact hS (Option.some.inj heq).symm
         · simp
@@ -78,9 +79,9 @@ theorem quittingNonSoloMass_eq_sum_absorbedMass
       ∑ S, if S = quittingSingletonTerminal who then 0 else
         quittingAbsorbedMass reward profile time S := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   let historyLaw := (quittingGame reward).histDist profile none time
   calc

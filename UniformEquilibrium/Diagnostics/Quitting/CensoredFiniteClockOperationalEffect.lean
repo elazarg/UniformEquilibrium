@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -181,7 +181,7 @@ private theorem pmfTV_le_couplingMismatch
       intro pair
       by_cases heq : pair.1 = pair.2
       · simp [heq]
-      · rw [if_pos heq]
+      · rw [ite_eq_left heq]
         have hleft := Math.Probability.pmfPositiveVariationWitness_le
           first second zero_le_one pair.1
         have hright := Math.Probability.pmfPositiveVariationWitness_nonneg

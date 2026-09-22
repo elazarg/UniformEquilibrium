@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math
+open _root_.Math
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

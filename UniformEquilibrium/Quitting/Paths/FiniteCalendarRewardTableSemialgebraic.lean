@@ -110,7 +110,7 @@ theorem isSemialgebraic_forall_quittingFiniteCalendarSurplusSigns
   have hresult := (hadmissible.compl.union hformula).forall_last_coordinates
   convert hresult using 1
   ext table
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   rw [← forall_quittingFiniteCalendarCoordinates_iff
     (quittingRewardTableFromCoordinates table) deadline
       (fun value => formula.Holds (fun observer => SignType.sign
@@ -118,7 +118,7 @@ theorem isSemialgebraic_forall_quittingFiniteCalendarSurplusSigns
           (quittingSingletonTerminal observer) observer)))]
   apply forall_congr'
   intro calendar
-  simp only [Set.mem_setOf_eq, Set.mem_union, Set.mem_compl_iff,
+  simp only [Set.mem_ofPred_eq, Set.mem_union, Set.mem_compl_iff,
     jointFormula, SignFormula.holds_mapAtoms, Function.comp_def,
     eval_quittingFiniteCalendarCoordinateSingletonSurplusPolynomial,
     Fin.append_right]

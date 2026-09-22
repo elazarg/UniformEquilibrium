@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.LinearAlgebra
+open _root_.Math Math.LinearAlgebra
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -194,7 +194,7 @@ theorem finkObstructionTranspose_mulVec_adjustment_action
       else 0 := by
   classical
   by_cases hsupported : G.finkProfile z s who d ≠ 0
-  · rw [if_pos hsupported,
+  · rw [ite_eq_left hsupported,
       G.finkContinuationGain_eq_expect_stateKernels,
       Math.Probability.expect_eq_sum,
       Math.Probability.expect_eq_sum]
@@ -203,10 +203,10 @@ theorem finkObstructionTranspose_mulVec_adjustment_action
       Fintype.sum_prod_type]
     rw [← Finset.sum_sub_distrib]
     rw [Fintype.sum_eq_single who]
-    · simp only [if_pos hsupported]
+    · simp only [ite_eq_left hsupported]
       apply Finset.sum_congr rfl
       intro destination _
-      simp only [if_true]
+      simp only [ite_true]
       ring
     · intro other hother
       simp [Ne.symm hother]
@@ -245,7 +245,7 @@ theorem exists_finkHarmonicAdjustment_iff_transpose_mulVec
         rw [finkObstructionTranspose_mulVec_adjustment_action
           (G := G)]
         by_cases hsupported : G.finkProfile z s who d ≠ 0
-        · rw [if_pos hsupported]
+        · rw [ite_eq_left hsupported]
           simpa [finkObstructionMass, hsupported] using
             haction s who d hsupported
         · simp [finkObstructionMass, hsupported]

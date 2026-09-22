@@ -22,7 +22,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace BigMatch
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 theorem expect_next_value_live (V : State → Payoff Player)
     (m : Player → PMF Bool) (who : Player) :

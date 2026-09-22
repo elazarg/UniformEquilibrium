@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
 

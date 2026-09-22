@@ -33,27 +33,27 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 floors produces a uniform-equilibrium payoff. -/
 theorem exists_uniformEquilibriumPayoff_of_homogeneous_supported_normal
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (weight : stdSimplex ℝ ι)
+    (weight : Convexity.StdSimplex ℝ ι)
     (hresidual : ∀ who,
       0 ≤ singletonLCPResidual (normalizedSoloMatrix reward) weight who)
     (hcomplementary : ∀ who,
-      weight.val who *
+      weight.weights who *
         singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0)
-    (hnormal : ∀ owner, 0 < weight.val owner →
+    (hnormal : ∀ owner, 0 < weight.weights owner →
       quittingPunishmentValue reward owner ≤
         quittingSoloReward reward owner owner) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  by_cases hnonvertex : ∀ who, weight.val who < 1
+  by_cases hnonvertex : ∀ who, weight.weights who < 1
   · exact exists_uniformEquilibriumPayoff_of_nonvertexHomogeneousWitness
       reward weight hresidual hcomplementary hnonvertex
   · push Not at hnonvertex
     obtain ⟨owner, hownerLower⟩ := hnonvertex
-    have hownerUpper : weight.val owner ≤ 1 := by
-      exact (Finset.single_le_sum (fun who _ ↦ weight.property.1 who)
-        (Finset.mem_univ owner)).trans_eq weight.property.2
-    have howner : weight.val owner = 1 := le_antisymm hownerUpper hownerLower
-    have hownerPos : 0 < weight.val owner := by rw [howner]; norm_num
+    have hownerUpper : weight.weights owner ≤ 1 := by
+      exact (Finset.single_le_sum (fun who _ ↦ weight.weights_nonneg who)
+        (Finset.mem_univ owner)).trans_eq weight.total_of_fintype
+    have howner : weight.weights owner = 1 := le_antisymm hownerUpper hownerLower
+    have hownerPos : 0 < weight.weights owner := by rw [howner]; norm_num
     have hcolumn : ∀ who, 0 ≤ normalizedSoloMatrix reward who owner := by
       intro who
       rw [← singletonLCPResidual_eq_column_of_weight_eq_one
@@ -74,10 +74,10 @@ support already solves the game.  This is the exact zero-exclusion statement
 needed before strict separation of the late drift simplex. -/
 theorem exists_uniformEquilibriumPayoff_of_zero_boundaryDrift
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (boundary : Payoff ι) (weight : stdSimplex ℝ ι)
+    (boundary : Payoff ι) (weight : Convexity.StdSimplex ℝ ι)
     (hsolo : ∀ who,
       reward (quittingSingletonTerminal who) who ≤ boundary who)
-    (hsupport : ∀ owner, 0 < weight.val owner →
+    (hsupport : ∀ owner, 0 < weight.weights owner →
       boundary owner = reward (quittingSingletonTerminal owner) owner)
     (hnormal : ∀ owner,
       boundary owner = reward (quittingSingletonTerminal owner) owner →
@@ -93,13 +93,13 @@ theorem exists_uniformEquilibriumPayoff_of_zero_boundaryDrift
     intro who
     linarith [hsolo who, hzero who]
   have hcomplementary : ∀ who,
-      weight.val who *
+      weight.weights who *
         singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0 := by
     intro who
-    by_cases hweight : weight.val who = 0
+    by_cases hweight : weight.weights who = 0
     · simp [hweight]
-    · have hweightPos : 0 < weight.val who :=
-        lt_of_le_of_ne (weight.property.1 who) (Ne.symm hweight)
+    · have hweightPos : 0 < weight.weights who :=
+        lt_of_le_of_ne (weight.weights_nonneg who) (Ne.symm hweight)
       have htight := hsupport who hweightPos
       have hresidualZero :
           singletonLCPResidual (normalizedSoloMatrix reward) weight who = 0 := by

@@ -4,11 +4,11 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.LinearAlgebra.FourierMotzkin
+import Maths.LinearProgramming.FourierMotzkin
 import Mathlib.Algebra.BigOperators.Field
 import Mathlib.Data.Fintype.BigOperators
 import Mathlib.Data.Fintype.EquivFin
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Owner-labeled flow systems and the zero-holonomy gluing condition
@@ -60,6 +60,8 @@ open Finset BigOperators
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 namespace OwnerLabeledFlowHolonomy
 
 noncomputable section
@@ -107,8 +109,8 @@ theorem incidence_eq_sum_mul (src : R → V) (P : R → V → ℝ) (x : R → �
   refine Finset.sum_congr rfl fun r _ => ?_
   rw [incidenceEntry]
   by_cases hr : src r = v
-  · rw [if_pos hr, if_pos hr]; ring
-  · rw [if_neg hr, if_neg hr]; ring
+  · rw [ite_eq_left hr, ite_eq_left hr]; ring
+  · rw [ite_eq_right hr, ite_eq_right hr]; ring
 
 omit [Fintype R] in
 /-- Pairing a potential against a row of the incidence matrix returns the
@@ -121,8 +123,8 @@ theorem sum_incidenceEntry_mul (src : R → V) (P : R → V → ℝ) (r : R)
     intro v
     rw [incidenceEntry]
     by_cases hv : src r = v
-    · rw [if_pos hv, if_pos hv]; ring
-    · rw [if_neg hv, if_neg hv]; ring
+    · rw [ite_eq_left hv, ite_eq_left hv]; ring
+    · rw [ite_eq_right hv, ite_eq_right hv]; ring
   simp only [hsplit]
   rw [Finset.sum_sub_distrib, Finset.sum_ite_eq]
   simp

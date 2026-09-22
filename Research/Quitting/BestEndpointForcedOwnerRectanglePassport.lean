@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -412,7 +412,7 @@ theorem quittingFiniteForcedOwnerBestRectanglePassport_nonneg
   unfold quittingFiniteForcedOwnerBestRectanglePassport
   by_cases hwho : who = owner
   · simp [hwho]
-  · simp only [if_neg hwho]
+  · simp only [ite_eq_right hwho]
     apply Finset.sum_nonneg
     intro time _
     let root := quittingProfileLiveRoot reward profile time
@@ -457,7 +457,7 @@ theorem quittingFiniteForcedOwnerBestRectangleTotal_eq_sum_passports
   intro time htime
   by_cases hwho : who = owner
   · simp [hwho]
-  · simp only [if_neg hwho]
+  · simp only [ite_eq_right hwho]
     let root := quittingProfileLiveRoot reward profile time
     let tail := (quittingTerminalSemanticPair reward
       (quittingAllContinueProfileSpine reward profile (time + 1))).1
@@ -529,7 +529,7 @@ theorem exists_fixed_forcedOwnerBestRectanglePassport
         (Fintype.card (ι × Bool) : ℝ) *
           quittingFiniteForcedOwnerBestRectanglePassport
             reward profile terminal owner who action cutoff := by
-  letI : Nonempty (ι × Bool) := ⟨(owner, false)⟩
+  let : Nonempty (ι × Bool) := ⟨(owner, false)⟩
   let occupation : ι × Bool → ℝ := fun label =>
     quittingFiniteForcedOwnerBestRectanglePassport reward profile terminal
       owner label.1 label.2 cutoff
@@ -623,7 +623,7 @@ theorem exists_continueDeviation_or_fixedQuitAtom_or_fixedBestRectanglePassport
     simpa only [actual, continueCharge, quit] using
       quittingFiniteActualDefectOccupation_eq_polaritySum reward profile cutoff
   rw [hpolarity] at hlowerHalf
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   by_cases hcontinue : lower / 6 ≤ continueCharge
   · left
     obtain ⟨who, deviation, hgain⟩ :=
@@ -694,7 +694,7 @@ theorem exists_row_of_positive_forcedOwnerBestRectanglePassport
     intro time htime
     by_cases hwho : who = owner
     · simp [hwho]
-    · simp only [if_neg hwho]
+    · simp only [ite_eq_right hwho]
       let root := quittingProfileLiveRoot reward profile time
       let tail := (quittingTerminalSemanticPair reward
         (quittingAllContinueProfileSpine reward profile (time + 1))).1

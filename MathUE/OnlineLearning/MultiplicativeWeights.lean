@@ -34,7 +34,7 @@ not formalized here (every result below takes `η` as a fixed parameter).
 
 namespace Math.OnlineLearning
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {A : Type*}
 

@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter MeasureTheory Set StochasticGame
+open Filter MeasureTheory _root_.Set StochasticGame
 open _root_.Math.Probability _root_.Math.ProbabilityMassFunction
 open _root_.Math.Probability.DiscreteHazard
 open scoped BigOperators ENNReal Topology
@@ -105,7 +105,7 @@ theorem quittingOpponentSurvivalWeight_eq_prod_hazardSurvival
         (fun player =>
           (Function.update (roots stage) who (PMF.pure false) player false).toReal)
         (Finset.mem_univ who)]
-    simp only [Function.update_self, PMF.pure_apply, if_pos,
+    simp only [Function.update_self, PMF.pure_apply, ite_eq_left,
       ENNReal.toReal_one, one_mul]
     apply Finset.prod_congr rfl
     intro opponent hopponent
@@ -314,7 +314,7 @@ theorem compactStoppingTimeCutoff_preimage_none (horizon : Nat) :
   | top => simp
   | coe time =>
       simp only [Set.mem_preimage, Set.mem_singleton_iff,
-        Set.mem_setOf_eq, WithTop.coe_lt_coe]
+        Set.mem_ofPred_eq, WithTop.coe_lt_coe]
       by_cases htime : time ≤ horizon
       · rw [compactStoppingTimeCutoff, WithTop.recTopCoe_coe]
         simp [htime]
@@ -608,12 +608,12 @@ theorem abs_expect_quittingTerminalPayoff_pureStoppingTime_sub_cap_le
       (fun choices => by
         by_cases hlate : ∀ who, WithTop.some horizon < choices who
         · have h := hlocal choices
-          rw [if_pos hlate] at h
+          rw [ite_eq_left hlate] at h
           have hmem : choices ∈ lateEvent := by simpa [lateEvent] using hlate
           rw [Set.indicator_of_mem hmem]
           exact h
         · have h := hlocal choices
-          rw [if_neg hlate] at h
+          rw [ite_eq_right hlate] at h
           have hmem : choices ∉ lateEvent := by simpa [lateEvent] using hlate
           rw [Set.indicator_of_notMem hmem]
           exact h)
@@ -624,12 +624,12 @@ theorem abs_expect_quittingTerminalPayoff_pureStoppingTime_sub_cap_le
         {choice | WithTop.some horizon < choice} := by
     rw [show productLaw =
       Math.PMFProduct.pmfPi (fun who => (laws who).toPMF) by rfl]
-    simp only [lateEvent, Set.mem_setOf_eq]
+    simp only [lateEvent, Set.mem_ofPred_eq]
     rw [Math.PMFProduct.pmfMass_pmfPi_forall, ENNReal.toReal_prod]
     apply Finset.prod_congr rfl
     intro who _
     symm
-    simpa only [Set.mem_setOf_eq] using
+    simpa only [Set.mem_ofPred_eq] using
       (laws who).realMass_eq_pmfMass_toReal
         (compactStoppingTime_tail_isClopen horizon).1.measurableSet
   rw [hmass] at hestimate
@@ -1568,7 +1568,7 @@ theorem quittingOpponentTailProduct_le_tailMass_of_ne
     (Finset.univ.erase owner) factor hopponent
   have hrest : ∏ player ∈ (Finset.univ.erase owner).erase opponent,
       factor player ≤ 1 := by
-    exact Finset.prod_le_one
+    exact Finset.prod_le_one₀
       (fun player _ => CompactStoppingLaw.realMass_nonneg (laws player) _)
       (fun player _ => CompactStoppingLaw.realMass_le_one (laws player) _)
   have hfactor : 0 ≤ factor opponent :=
@@ -1931,8 +1931,9 @@ theorem quittingCompactStoppingLawProfile_hazardSurvival_tendsto
     rw [← quittingHazardStoppingLaw_none_toReal]
     have hstopping : quittingHazardStoppingLaw hazard = (laws player).toPMF := by
       unfold hazard quittingHazardStoppingLaw
-      rw [ScalarHazard.toScalar_toBoolean,
-        StoppingLaw.stoppingLaw_toScalarHazard]
+      rw [ScalarHazard.toScalar_toBoolean]
+      exact StoppingLaw.stoppingLaw_toScalarHazard
+        ((laws player).toPMF : PMF (Option ℕ))
     rw [hstopping]
     exact CompactStoppingLaw.toPMF_apply_toReal (laws player) ⊤
   rw [hnever] at hsurvival
@@ -2016,7 +2017,7 @@ theorem quittingFixedOpponentsContinueMass_compactStoppingLawProfile_tendsto_one
         (fun player =>
           (Function.update (roots time) who (PMF.pure false) player false).toReal)
         (Finset.mem_univ who)]
-    simp only [Function.update_self, PMF.pure_apply, if_pos,
+    simp only [Function.update_self, PMF.pure_apply, ite_eq_left,
       ENNReal.toReal_one, one_mul]
     apply Finset.prod_congr rfl
     intro opponent hopponent
@@ -2419,7 +2420,7 @@ theorem exists_commonLateOpponentTail_of_proper_owner_unique
   have hproductLower : limitLower ≤
       quittingOpponentTailProduct laws owner horizon := by
     unfold quittingOpponentTailProduct limitLower
-    exact Finset.prod_le_prod
+    exact Finset.prod_le_prod₀
       (fun opponent _ => CompactStoppingLaw.realMass_nonneg (laws opponent) _)
       (fun opponent _ =>
         compactStoppingLaw_realMass_top_le_tailMass (laws opponent) horizon)

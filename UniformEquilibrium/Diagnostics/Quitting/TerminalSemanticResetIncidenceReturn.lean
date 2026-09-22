@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetExcursionReturn
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauIncidence
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 
@@ -66,10 +67,11 @@ theorem quittingTerminalSemanticLawCarrier_isCompact
   obtain ⟨M, -, hreward⟩ := exists_quittingRewardBound reward
   let ambient : Set (QuittingTerminalSemanticLawPoint ι) :=
     quittingTerminalSemanticBox ι M ×ˢ
-      stdSimplex ℝ (QuittingTerminalOutcome ι)
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)
   have hambient : IsCompact ambient :=
     (quittingTerminalSemanticBox_isCompact (ι := ι) M).prod
-      (isCompact_stdSimplex ℝ (QuittingTerminalOutcome ι))
+      (GameTheory.Math.Probability.isCompact_simplexWeights
+        (QuittingTerminalOutcome ι))
   apply hambient.of_isClosed_subset isClosed_closure
   · apply closure_minimal
     · rintro point ⟨profile, rfl⟩
@@ -730,11 +732,12 @@ probability vector. -/
 theorem terminalSemanticLawCarrier_mass_mem_stdSimplex
     (point : QuittingTerminalSemanticLawPoint ι)
     (hpoint : point ∈ quittingTerminalSemanticLawCarrier reward) :
-    point.2 ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+    point.2 ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := by
   let lawSimplex : Set (QuittingTerminalSemanticLawPoint ι) :=
-    Set.univ ×ˢ stdSimplex ℝ (QuittingTerminalOutcome ι)
+    Set.univ ×ˢ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)
   have hclosed : IsClosed lawSimplex :=
-    isClosed_univ.prod (isClosed_stdSimplex ℝ (QuittingTerminalOutcome ι))
+    isClosed_univ.prod (GameTheory.Math.Probability.isClosed_simplexWeights
+      (QuittingTerminalOutcome ι))
   have hsubset : quittingAttainableTerminalSemanticLawPoints reward ⊆
       lawSimplex := by
     rintro point ⟨profile, rfl⟩

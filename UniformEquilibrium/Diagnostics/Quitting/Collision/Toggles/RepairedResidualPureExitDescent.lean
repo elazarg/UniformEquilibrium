@@ -560,7 +560,7 @@ theorem RepairedResidualPureExitSource.ownerFloor_descent
             quittingSoloReward reward owner owner := by
       unfold repairedResidualOwnerFloorExcess
       change (if coalition.Nonempty then _ else _) = _
-      rw [if_neg hcoalition]
+      rw [ite_eq_right hcoalition]
       change quittingPunishmentValue reward owner -
         quittingSetReward reward (insert owner coalition) owner = _
       rw [hempty]

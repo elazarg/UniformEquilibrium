@@ -57,7 +57,7 @@ theorem hasPositiveCoordinateAnalyticArcAt_signCell
       (signCell P τ)
       (ContinuousLinearMap.proj coordinate) x₀ := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   let Ppos :=
     withPositiveCoordinatePolynomial P coordinate
   let τpos :=
@@ -76,11 +76,11 @@ theorem hasPositiveCoordinateAnalyticArcAt_signCell
     exists_eventually_regular_parameterChart_of_strictAnti
       source none hsourceAnti
   let J := sequenceGermIdeal source
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial
           (Option (σ ⊕ Option ι)) ℝ ⧸ J) :=
     parameterPolynomialAlgebra J none
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra source none
   let S :=
     Localization.Away
@@ -334,7 +334,7 @@ theorem hasPositiveCoordinateAnalyticArcAt_signCell
         φ chart hbase objectiveValue hchartLex
         hseparable
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       source none hsourceAnti.injective
   have hcoordinateAlgebraic :

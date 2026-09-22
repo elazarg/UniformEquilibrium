@@ -28,7 +28,7 @@ re-exported here as `KernelGame.*For` via delegation.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 open Classical in
 /-- Build a KernelGame from a direct expected-utility function (no stochastic kernel).

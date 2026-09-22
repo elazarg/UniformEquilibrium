@@ -77,7 +77,7 @@ theorem isCompact_quittingForwardPacketCoordinateBox (B : ℝ) :
     (fun _ ↦ (isCompact_Icc : IsCompact (Set.Icc (-B) B : Set ℝ)))
   convert hcompact using 1
   ext value
-  simp only [quittingForwardPacketCoordinateBox, Set.mem_setOf_eq,
+  simp only [quittingForwardPacketCoordinateBox, Set.mem_ofPred_eq,
     Set.mem_pi, Set.mem_univ, Set.mem_Icc, true_implies, abs_le]
 
 /-- The existing finite charged-closing consumer turns the weighted producer

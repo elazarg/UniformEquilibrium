@@ -31,7 +31,7 @@ is fundamental in computational game theory and convergence arguments.
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace KernelGame
 

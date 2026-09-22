@@ -63,7 +63,7 @@ noncomputable section
 namespace GameTheory
 namespace QuittingLCPClassification
 
-open Math Math.LinearProgramming
+open _root_.Math Math.LinearProgramming
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [AddCommGroup ι]
   {reward : {S : Finset ι // S.Nonempty} → Payoff ι} {margin : ι → ℝ}

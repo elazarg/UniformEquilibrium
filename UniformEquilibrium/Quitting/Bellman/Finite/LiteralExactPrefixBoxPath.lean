@@ -1,3 +1,4 @@
+import MathUE.ChargedPathCode
 import UniformEquilibrium.Quitting.Bellman.Finite.PunishmentFloorChargedRelation
 import UniformEquilibrium.Quitting.Root.LiteralExactPrefixStack
 
@@ -14,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -132,8 +133,9 @@ def quittingLiteralExactWordEndpointDecoration
   | [] => sourceDecoration
   | root :: _ => quittingSimplexOfRoot root
 
-/-- Canonical full-box endpoint of a literal root word over an actual source. -/
-def quittingLiteralExactWordEndpointState
+/-- Canonical full-box endpoint of a literal root word over an actual source.
+It is reducible so dependent path endpoints retain the displayed state. -/
+@[reducible] def quittingLiteralExactWordEndpointState
     (roots : List (ι → PMF Bool))
     (terminal : (quittingGame reward).BehaviorProfile)
     (sourceDecoration : QuittingRootSimplex ι) :
@@ -247,4 +249,3 @@ theorem quittingLiteralExactWordBoxPath_length
       rfl
 
 end GameTheory
-

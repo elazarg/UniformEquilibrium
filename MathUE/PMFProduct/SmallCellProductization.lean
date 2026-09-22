@@ -67,7 +67,7 @@ private theorem akrsCoalitionMass_le_absorption_sq
     · exact hsecond
   have hinside :
       (∏ player ∈ coalition, root player) ≤ root first * root second := by
-    have h := Finset.prod_le_prod_of_subset_of_le_one hpair
+    have h := Finset.prod_le_prod_of_subset_of_le_one₀ hpair
       (fun player _ => hroot_nonneg player)
       (fun player _ _ => hroot_le_one player)
     simpa [hne, mul_comm] using h
@@ -76,7 +76,7 @@ private theorem akrsCoalitionMass_le_absorption_sq
     Finset.prod_nonneg fun player _ => sub_nonneg.mpr (hroot_le_one player)
   have houtside_le_one :
       (∏ player ∈ coalitionᶜ, (1 - root player)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun player _ => sub_nonneg.mpr (hroot_le_one player))
       (fun player _ => by linarith [hroot_nonneg player])
   have hfirst_le := Math.PMFProduct.coordinate_le_one_sub_prod_one_sub
@@ -916,7 +916,7 @@ private theorem akrsSmallCellProductization
       · intro coalition hcoalition
         exact hcollisions_zero coalition
           (Finset.mem_filter.mp hcoalition).2
-    letI : Nonempty players := Finset.nonempty_coe_sort.mpr hplayers_nonempty
+    let : Nonempty players := Finset.nonempty_coe_sort.mpr hplayers_nonempty
     let activeLaw : Finset players → ℝ := fun coalition =>
       law (akrsLiftCoalition players coalition)
     have hactiveLaw_nonneg (coalition : Finset players) :

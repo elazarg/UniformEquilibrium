@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.ConcentratedCollisionFourRoleMonodromy
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.MaximalCapSemanticPrefixOrbit
 import UniformEquilibrium.Quitting.Boundary.Exceptional.TailProfileAdapter
 
@@ -24,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set
+open Filter _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -698,15 +699,16 @@ theorem quittingMaximalCapSemanticPrefixLawPoint_cluster_facts
       (nhds (quittingAllContinueSimplexRoot : QuittingRootSimplex ι)) := by
     rw [tendsto_pi_nhds]
     intro who
-    rw [tendsto_subtype_rng, tendsto_pi_nhds]
+    rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).tendsto_nhds_iff,
+      tendsto_pi_nhds]
     intro action
     have hcoordinate : ∀ time,
-        ((simplexRoot time who : stdSimplex ℝ Bool) : Bool → ℝ) action =
+        (simplexRoot time who : Convexity.StdSimplex ℝ Bool).weights action =
           (root time who action).toReal := fun time ↦
       congrFun (coe_stdSimplexEquiv_apply (root time who)) action
     have hallCoordinate :
-        (((quittingAllContinueSimplexRoot : QuittingRootSimplex ι) who :
-          stdSimplex ℝ Bool) : Bool → ℝ) action =
+        ((quittingAllContinueSimplexRoot : QuittingRootSimplex ι) who :
+          Convexity.StdSimplex ℝ Bool).weights action =
             (PMF.pure false action).toReal :=
       congrFun (coe_stdSimplexEquiv_apply (PMF.pure false)) action
     have hbase : Tendsto (fun time ↦ (root time who action).toReal)

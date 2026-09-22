@@ -109,7 +109,7 @@ theorem fin4PivotValue_bounds
         (hinterior (fin4Schedule.partner 0)).2.le hgap
       unfold activeValue
       nlinarith [hown.joint_upper]
-  · simp only [fin4PivotScale, fin4PivotShift, if_neg hplayer, one_mul]
+  · simp only [fin4PivotScale, fin4PivotShift, ite_eq_right hplayer, one_mul]
     constructor <;> linarith
 
 end GameTheory.PairedCycle

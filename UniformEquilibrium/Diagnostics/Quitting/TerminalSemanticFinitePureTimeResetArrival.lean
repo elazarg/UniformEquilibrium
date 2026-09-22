@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticBoundedSelfReset
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauPartialResetTransfer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticSelfTailClosure
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticOwnStrategyTransport
@@ -30,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open Finset _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -153,6 +154,7 @@ theorem quittingProfileLiveRoot_firstStageAdapter
   | zero =>
       simp [quittingProfileLiveRoot, quittingFirstStageAdapter,
         quittingProfileRoot, quittingRootThenContinuationProfile]
+      rfl
   | succ time =>
       change (quittingProfileAllContinueContinuation reward profile) player time
           (Fin.tail (quittingLiveHist reward (time + 1)).1,
@@ -262,8 +264,9 @@ theorem quittingTerminalPayoff_eq_singleton_of_finitePureTimePlayer_of_no_incide
     quittingTerminalPayoff reward profile who =
       reward (quittingSingletonTerminal who) who := by
   let mass := quittingTerminalOutcomeMass reward profile
-  have hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) :=
+  have hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) :=
     quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have hnone : mass none = 0 := by
     exact quittingTerminalOutcomeMass_none_eq_zero_of_pureTimePlayer
       reward profile finitePlayer stop hfinite
@@ -341,7 +344,8 @@ theorem quittingTerminalPayoff_update_pureTime_zero_eq_singleton
         quittingPureSetRoot, quittingSetAction]
     · rw [show quittingProfileRoot reward target player =
           quittingProfileRoot reward profile player by
-        simp [target, quittingProfileRoot, Function.update_of_ne hplayer]]
+        simp [target, quittingProfileRoot, Function.update_of_ne hplayer]
+        rfl]
       rw [hopponents player hplayer]
       simp [quittingPureSetRoot, quittingSetAction, hplayer]
   change quittingTerminalPayoff reward target who = _
@@ -436,10 +440,11 @@ coalition with several opponents is counted several times, so the inequality
 is the exact robust statement needed by deadline recursion. -/
 theorem one_le_totalOpponentIncidence_of_none_zero_singleton_zero
     (mass : QuittingTerminalOutcome ι → ℝ) (owner : ι)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hnone : mass none = 0)
     (hsingleton : mass (some (quittingSingletonTerminal owner)) = 0) :
     1 ≤ quittingTerminalTotalOpponentIncidenceMass owner mass := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have htotalMass :
       ∑ terminal : {S : Finset ι // S.Nonempty}, mass (some terminal) = 1 := by
     have hsum := hmass.2
@@ -1308,7 +1313,7 @@ theorem exists_bounded_quittingPureTimeSelfResetChain_of_literalNever_outside
               · subst other
                 rw [step.target_eq, htime, Function.update_self]
               · rw [step.target_eq]
-                simp only [Function.update, dif_neg heq]
+                simp only [Function.update, dite_eq_right heq]
                 exact hcertified other fun hmem =>
                   hother (Finset.mem_erase.mpr ⟨heq, hmem⟩)
             obtain ⟨length, finalProfile, finalPlayer, stop,

@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set StochasticGame Math.Probability Math.ProbabilityMassFunction
+open Filter Set StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
 open Math.PMFProduct
 open scoped Topology
 
@@ -50,7 +50,7 @@ fixed. -/
 theorem dynamicDebtSemanticPair_tail_mem_carrier (time : ℕ) :
     quittingDynamicDebtSemanticPair (tailWitness.tail time) ∈
       quittingTerminalSemanticCarrier reward := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hpoint : Tendsto (fun family ↦
       quittingFiniteMinMaxDynamicDebtTail reward (tailWitness.subseq family) time)
       atTop (nhds (tailWitness.tail time)) := by

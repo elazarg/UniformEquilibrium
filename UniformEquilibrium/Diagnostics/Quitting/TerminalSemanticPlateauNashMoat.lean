@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -172,7 +172,7 @@ theorem exists_eventually_totalNashDefect_moat_of_uniqueAllContinue_of_continuou
     change eta ≤ measure root at hrootHigh
     rw [hmeasureZero] at hrootHigh
     linarith
-  simpa only [high, Set.mem_setOf_eq] using
+  simpa only [high, Set.mem_ofPred_eq] using
     (Math.Topology.exists_eventually_uniform_pos_on_closed_of_compactSpace
       (fun nearbyCap root => quittingRootTotalNashDefect reward nearbyCap
         (quittingRootOfSimplex root))
@@ -265,8 +265,8 @@ theorem continuous_quittingRootOpponentAbsorptionMass_simplex
   exact continuous_const.sub
     (continuous_finsetProd _ fun other _ =>
       continuous_const.sub
-        ((continuous_apply true).comp
-          (continuous_subtype_val.comp (continuous_apply other))))
+        ((Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+          (continuous_apply other)))
 
 /-- The robust Nash-defect moat specialized to one owner's ordinary opponent
 absorption hazard. -/

@@ -8,6 +8,7 @@ import Mathlib.Analysis.Normed.Module.FiniteDimension
 import Mathlib.Topology.Order.Compact
 import FixedPointTheorems.brouwer
 import MathUE.LinearProgramming.Tournament
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # Copositive plus `R₀` implies standard `Q`
@@ -54,6 +55,8 @@ explicit perturbations.
 noncomputable section
 
 namespace Math.LinearProgramming
+
+open GameTheory.Math.Probability
 
 variable {ι : Type*} [Fintype ι]
 
@@ -103,8 +106,8 @@ theorem lcpResidual_zero (M : ι → ι → ℝ) (z : ι → ℝ) (i : ι) :
 
 /-- The normalized singleton residual is the plain matrix action at the
 underlying weight vector. -/
-theorem singletonLCPResidual_eq (M : ι → ι → ℝ) (lam : stdSimplex ℝ ι) (i : ι) :
-    singletonLCPResidual M lam i = ∑ j, lam.val j * M i j := rfl
+theorem singletonLCPResidual_eq (M : ι → ι → ℝ) (lam : Convexity.StdSimplex ℝ ι) (i : ι) :
+    singletonLCPResidual M lam i = ∑ j, lam.weights j * M i j := rfl
 
 /-- **`R₀` versus the homogeneous simplex branch.** A nonzero nonnegative
 solution of `LCP(M, 0)` rescales to a simplex point and conversely, so the
@@ -115,29 +118,35 @@ theorem isR0Matrix_iff_not_singletonLCPFeasible (M : ι → ι → ℝ) :
   classical
   constructor
   · rintro hR0 ⟨lam, hnn, hcomp⟩
-    have hsol : IsStandardLCPSolution M 0 lam.val := by
-      refine ⟨lam.property.1, fun i => ?_, fun i => ?_⟩
+    have hsol : IsStandardLCPSolution M 0 lam.weights := by
+      refine ⟨lam.weights_nonneg, fun i => ?_, fun i => ?_⟩
       · rw [lcpResidual_zero, ← singletonLCPResidual_eq]
         exact hnn i
       · rw [lcpResidual_zero, ← singletonLCPResidual_eq]
         exact hcomp i
-    have hzero : ∀ i, lam.val i = 0 := hR0 lam.val hsol
-    have hone := lam.property.2
+    have hzero : ∀ i, lam.weights i = 0 := hR0 lam.weights hsol
+    have hone := lam.total_of_fintype
     simp [hzero] at hone
   · intro hno z hsol i
     by_contra hi
     have hpos : 0 < z i := lt_of_le_of_ne (hsol.weight_nonneg i) (Ne.symm hi)
     have hsum_pos : 0 < ∑ j, z j :=
       Finset.sum_pos' (fun j _ => hsol.weight_nonneg j) ⟨i, Finset.mem_univ i, hpos⟩
-    have hmem : (fun j => z j / ∑ k, z k) ∈ stdSimplex ℝ ι :=
-      ⟨fun j => div_nonneg (hsol.weight_nonneg j) hsum_pos.le,
-        by rw [← Finset.sum_div]; exact div_self hsum_pos.ne'⟩
-    set lam : stdSimplex ℝ ι := ⟨_, hmem⟩ with hlam
+    have hmem : (fun j => z j / ∑ k, z k) ∈ simplexWeights ι :=
+      mem_simplexWeights.mpr
+        ⟨fun j => div_nonneg (hsol.weight_nonneg j) hsum_pos.le,
+          by rw [← Finset.sum_div]; exact div_self hsum_pos.ne'⟩
+    set lam : Convexity.StdSimplex ℝ ι :=
+      ⟨Finsupp.equivFunOnFinite.symm (fun j => z j / ∑ k, z k),
+        (mem_simplexWeights.mp hmem).1,
+        (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact (mem_simplexWeights.mp hmem).2)⟩
+      with hlam
     have hres : ∀ j, singletonLCPResidual M lam j = (∑ k, z k * M j k) / ∑ k, z k := by
       intro j
       rw [singletonLCPResidual_eq]
+      change (∑ k, (z k / ∑ l, z l) * M j k) = _
       rw [Finset.sum_div]
-      exact Finset.sum_congr rfl fun k _ => by rw [hlam]; ring
+      exact Finset.sum_congr rfl fun k _ => by ring
     refine hno ⟨lam, fun j => ?_, fun j => ?_⟩
     · rw [hres j]
       have hnn := hsol.residual_nonneg j
@@ -146,7 +155,7 @@ theorem isR0Matrix_iff_not_singletonLCPFeasible (M : ι → ι → ℝ) :
     · rw [hres j]
       have hc := hsol.complementary j
       rw [lcpResidual_zero] at hc
-      have hval : lam.val j = z j / ∑ k, z k := rfl
+      have hval : lam.weights j = z j / ∑ k, z k := rfl
       rw [hval, div_mul_div_comm, hc]
       simp
 
@@ -196,7 +205,8 @@ private theorem continuous_nashExcessMap {G : (κ → ℝ) → κ → ℝ} (hG :
   linarith
 
 private theorem nashExcessMap_mem {G : (κ → ℝ) → κ → ℝ} {u : κ → ℝ}
-    (hu : u ∈ stdSimplex ℝ κ) : nashExcessMap G u ∈ stdSimplex ℝ κ := by
+    (hu : u ∈ simplexWeights κ) : nashExcessMap G u ∈ simplexWeights κ := by
+  rw [mem_simplexWeights] at hu ⊢
   have hC := viExcess_sum_nonneg G u
   have hden : (0 : ℝ) < 1 + ∑ l, viExcess G u l := by linarith
   refine ⟨fun k => div_nonneg (by linarith [hu.1 k, viExcess_nonneg G u k]) hden.le, ?_⟩
@@ -215,20 +225,22 @@ the weighted average `⟨G u, u⟩` is a lower bound for every coordinate of
 The sole topological ingredient is `brouwer_fixed_point`. -/
 theorem exists_simplex_variationalInequality [Nonempty κ]
     (G : (κ → ℝ) → κ → ℝ) (hG : Continuous G) :
-    ∃ u ∈ stdSimplex ℝ κ, ∀ k, (∑ l, u l * G u l) ≤ G u k := by
+    ∃ u ∈ simplexWeights κ, ∀ k, (∑ l, u l * G u l) ≤ G u k := by
   classical
-  set Δ : Set (κ → ℝ) := stdSimplex ℝ κ with hΔ
-  have hcvx : Convex ℝ Δ := convex_stdSimplex ℝ _
-  have hcpt : IsCompact Δ := isCompact_stdSimplex ℝ _
+  set Δ : Set (κ → ℝ) := simplexWeights κ with hΔ
+  have hcvx : Convex ℝ Δ := convex_simplexWeights _
+  have hcpt : IsCompact Δ := isCompact_simplexWeights _
   have hne : Δ.Nonempty := by
     obtain ⟨k₀⟩ := ‹Nonempty κ›
-    exact ⟨fun k => if k = k₀ then 1 else 0,
-      fun k => by by_cases h : k = k₀ <;> simp [h], by simp⟩
+    refine ⟨fun k => if k = k₀ then 1 else 0, ?_⟩
+    rw [mem_simplexWeights]
+    exact ⟨fun k => by by_cases h : k = k₀ <;> simp [h], by simp⟩
   let Φ : Δ → Δ := fun u => ⟨nashExcessMap G u.1, nashExcessMap_mem u.2⟩
   have hΦ : Continuous Φ :=
     continuous_induced_rng.2 ((continuous_nashExcessMap hG).comp continuous_subtype_val)
   obtain ⟨u, hufix⟩ := brouwer_fixed_point Δ hcvx hcpt hne ⟨Φ, hΦ⟩
-  have hmem : u.1 ∈ stdSimplex ℝ κ := u.2
+  have hmem : u.1 ∈ simplexWeights κ := u.2
+  have hmem' := mem_simplexWeights.mp hmem
   have heq : nashExcessMap G u.1 = u.1 := congrArg Subtype.val hufix
   set C : ℝ := ∑ l, viExcess G u.1 l with hCdef
   have hCnn : 0 ≤ C := viExcess_sum_nonneg G u.1
@@ -246,8 +258,8 @@ theorem exists_simplex_variationalInequality [Nonempty κ]
     obtain ⟨k₀, hk₀⟩ : ∃ k, 0 < u.1 k := by
       by_contra hnone
       have hzero : ∀ k, u.1 k = 0 := fun k =>
-        le_antisymm (le_of_not_gt fun h => hnone ⟨k, h⟩) (hmem.1 k)
-      have := hmem.2
+        le_antisymm (le_of_not_gt fun h => hnone ⟨k, h⟩) (hmem'.1 k)
+      have := hmem'.2
       simp [hzero] at this
     have hstrict : ∀ k, 0 < u.1 k → G u.1 k < ∑ l, u.1 l * G u.1 l := by
       intro k hk
@@ -259,11 +271,11 @@ theorem exists_simplex_variationalInequality [Nonempty κ]
       · linarith
     have hlt : (∑ k, u.1 k * G u.1 k) < ∑ k, u.1 k * (∑ l, u.1 l * G u.1 l) := by
       refine Finset.sum_lt_sum (fun k _ => ?_) ⟨k₀, Finset.mem_univ k₀, ?_⟩
-      · rcases eq_or_lt_of_le (hmem.1 k) with h | h
+      · rcases eq_or_lt_of_le (hmem'.1 k) with h | h
         · simp [← h]
         · exact le_of_lt (mul_lt_mul_of_pos_left (hstrict k h) h)
       · exact mul_lt_mul_of_pos_left (hstrict k₀ hk₀) hk₀
-    rw [← Finset.sum_mul, hmem.2, one_mul] at hlt
+    rw [← Finset.sum_mul, hmem'.2, one_mul] at hlt
     exact absurd hlt (lt_irrefl _)
   refine ⟨u.1, hmem, fun k => ?_⟩
   have hzero : max 0 ((∑ l, u.1 l * G u.1 l) - G u.1 k) = 0 := by
@@ -275,8 +287,9 @@ theorem exists_simplex_variationalInequality [Nonempty κ]
 /-- The coordinatewise form of the variational inequality implies the pairing
 form against every simplex point. -/
 theorem simplex_variationalInequality_of_le {G : (κ → ℝ) → κ → ℝ} {u : κ → ℝ}
-    (h : ∀ k, (∑ l, u l * G u l) ≤ G u k) {v : κ → ℝ} (hv : v ∈ stdSimplex ℝ κ) :
+    (h : ∀ k, (∑ l, u l * G u l) ≤ G u k) {v : κ → ℝ} (hv : v ∈ simplexWeights κ) :
     (∑ l, u l * G u l) ≤ ∑ k, v k * G u k := by
+  rw [mem_simplexWeights] at hv
   have hge : (∑ k, v k * (∑ l, u l * G u l)) ≤ ∑ k, v k * G u k :=
     Finset.sum_le_sum fun k _ => mul_le_mul_of_nonneg_left (h k) (hv.1 k)
   rwa [← Finset.sum_mul, hv.2, one_mul] at hge
@@ -332,6 +345,7 @@ theorem exists_truncated_variationalInequality (M : ι → ι → ℝ) (q : ι �
   obtain ⟨u, hu, hvi⟩ :=
     exists_simplex_variationalInequality (κ := Option ι) (truncField M q r)
       (continuous_truncField M q r)
+  rw [mem_simplexWeights] at hu
   have hrne : r ≠ 0 := hr.ne'
   set z : ι → ℝ := fun i => r * u (some i) with hz
   have hres : ∀ i, truncField M q r u (some i) = lcpResidual M q z i := fun _ => rfl
@@ -348,7 +362,8 @@ theorem exists_truncated_variationalInequality (M : ι → ι → ℝ) (q : ι �
       _ ≤ r * 1 := by exact mul_le_mul_of_nonneg_left hle hr.le
       _ = r := mul_one r
   · intro y hy hybudget
-    have hvmem : truncSimplexPoint r y ∈ stdSimplex ℝ (Option ι) := by
+    have hvmem : truncSimplexPoint r y ∈ simplexWeights (Option ι) := by
+      rw [mem_simplexWeights]
       constructor
       · intro k
         cases k with
@@ -402,8 +417,8 @@ theorem isStandardLCPSolution_of_truncated_of_lt (M : ι → ι → ℝ) (q : ι
     have hynn : ∀ j, 0 ≤ z j + if j = i then c else 0 := by
       intro j
       by_cases h : j = i
-      · rw [if_pos h]; linarith [hznn j, hslack]
-      · rw [if_neg h]; linarith [hznn j]
+      · rw [ite_eq_left h]; linarith [hznn j, hslack]
+      · rw [ite_eq_right h]; linarith [hznn j]
     have hy := hvi (fun j => z j + if j = i then c else 0) hynn
       (by rw [Finset.sum_add_distrib]; simp [hc])
     have hsimp : (∑ j, ((z j + if j = i then c else 0) - z j) * lcpResidual M q z j) =
@@ -417,12 +432,12 @@ theorem isStandardLCPSolution_of_truncated_of_lt (M : ι → ι → ℝ) (q : ι
   have hynn : ∀ j, 0 ≤ z j - if j = i then z i else 0 := by
     intro j
     by_cases h : j = i
-    · rw [if_pos h, h]; linarith
-    · rw [if_neg h]; linarith [hznn j]
+    · rw [ite_eq_left h, h]; linarith
+    · rw [ite_eq_right h]; linarith [hznn j]
   have hy := hvi (fun j => z j - if j = i then z i else 0) hynn
     (by
       rw [Finset.sum_sub_distrib]
-      simp only [Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      simp only [Finset.sum_ite_eq', Finset.mem_univ, ite_true]
       linarith [hznn i])
   have hsimp : (∑ j, ((z j - if j = i then z i else 0) - z j) * lcpResidual M q z j) =
       -(z i * lcpResidual M q z i) := by
@@ -460,9 +475,10 @@ theorem continuous_homogeneousViolation (M : ι → ι → ℝ) :
 /-- A simplex point of zero homogeneous violation is a witness for the
 homogeneous simplex branch. -/
 theorem singletonLCPFeasible_of_violation_nonpos (M : ι → ι → ℝ) {p : ι → ℝ}
-    (hp : p ∈ stdSimplex ℝ ι) (hviol : homogeneousViolation M p ≤ 0) :
+    (hp : p ∈ simplexWeights ι) (hviol : homogeneousViolation M p ≤ 0) :
     SingletonLCPFeasible M := by
   classical
+  rw [mem_simplexWeights] at hp
   have hsplit : max 0 (∑ i, p i * ∑ j, p j * M i j) = 0 ∧
       (∑ i, max 0 (-(∑ j, p j * M i j))) = 0 := by
     have h1 : (0 : ℝ) ≤ max 0 (∑ i, p i * ∑ j, p j * M i j) := le_max_left _ _
@@ -482,28 +498,30 @@ theorem singletonLCPFeasible_of_violation_nonpos (M : ι → ι → ℝ) {p : ι
   have hquad_ge : 0 ≤ ∑ i, p i * ∑ j, p j * M i j :=
     Finset.sum_nonneg fun i _ => mul_nonneg (hp.1 i) (hrow i)
   have hquad : (∑ i, p i * ∑ j, p j * M i j) = 0 := le_antisymm hquad_le hquad_ge
-  refine ⟨⟨p, hp⟩, fun i => hrow i, fun i => ?_⟩
-  exact (Finset.sum_eq_zero_iff_of_nonneg
-    (fun i _ => mul_nonneg (hp.1 i) (hrow i))).mp hquad i (Finset.mem_univ i)
+  refine ⟨⟨Finsupp.equivFunOnFinite.symm p, hp.1, ?_⟩, fun i => hrow i, fun i => ?_⟩
+  · rw [Finsupp.equivFunOnFinite_symm_sum]
+    exact hp.2
+  · exact (Finset.sum_eq_zero_iff_of_nonneg
+      (fun i _ => mul_nonneg (hp.1 i) (hrow i))).mp hquad i (Finset.mem_univ i)
 
 /-- **Compactness limit.** If the homogeneous violation can be made
 arbitrarily small on the standard simplex then it is actually attained at
 zero, so the homogeneous simplex branch is nonempty.  The extreme value
 theorem on the compact simplex is the only topological input. -/
 theorem singletonLCPFeasible_of_approximate (M : ι → ι → ℝ)
-    (h : ∀ ε : ℝ, 0 < ε → ∃ p ∈ stdSimplex ℝ ι, homogeneousViolation M p ≤ ε) :
+    (h : ∀ ε : ℝ, 0 < ε → ∃ p ∈ simplexWeights ι, homogeneousViolation M p ≤ ε) :
     SingletonLCPFeasible M := by
   classical
   obtain ⟨p₁, hp₁, _⟩ := h 1 one_pos
   obtain ⟨p, hp, hmin⟩ :=
-    (isCompact_stdSimplex ℝ (ι := ι)).exists_isMinOn ⟨p₁, hp₁⟩
+    (isCompact_simplexWeights ι).exists_isMinOn ⟨p₁, hp₁⟩
       (continuous_homogeneousViolation M).continuousOn
   refine singletonLCPFeasible_of_violation_nonpos M hp ?_
   by_contra hpos
   push Not at hpos
   obtain ⟨p', hp', hle⟩ := h (homogeneousViolation M p / 2) (by linarith)
   have := hmin hp'
-  simp only [Set.mem_setOf_eq] at this
+  simp only [Set.mem_ofPred_eq] at this
   linarith
 
 /-- **The boundary case.** A truncated variational-inequality point that
@@ -556,8 +574,8 @@ theorem homogeneousViolation_normalized_le_of_bound (M : ι → ι → ℝ) (q :
     have hynn : ∀ k, 0 ≤ if k = j then r else (0 : ℝ) := by
       intro k
       by_cases hk : k = j
-      · rw [if_pos hk]; exact hr.le
-      · rw [if_neg hk]
+      · rw [ite_eq_left hk]; exact hr.le
+      · rw [ite_eq_right hk]
     have h := hvi (fun k => if k = j then r else 0) hynn (by simp)
     have hsplit : (∑ k, ((if k = j then r else 0) - z k) * lcpResidual M q z k) =
         (∑ k, (if k = j then r else 0) * lcpResidual M q z k) -
@@ -567,7 +585,7 @@ theorem homogeneousViolation_normalized_le_of_bound (M : ι → ι → ℝ) (q :
     have hsingle : (∑ k, (if k = j then r else 0) * lcpResidual M q z k) =
         r * lcpResidual M q z j := by
       refine (Finset.sum_eq_single j ?_ ?_).trans (by simp)
-      · intro k _ hk; rw [if_neg hk]; ring
+      · intro k _ hk; rw [ite_eq_right hk]; ring
       · intro hk; exact absurd (Finset.mem_univ j) hk
     rw [hsplit, hsingle] at h
     have hrj : -(r * Bq) ≤ r * lcpResidual M q z j := by linarith
@@ -662,8 +680,10 @@ theorem standardLCPSolvable_of_copositive_of_isR0Matrix (M : ι → ι → ℝ)
     rcases lt_or_eq_of_le hzle with hlt | heq
     · exact absurd ⟨z, isStandardLCPSolution_of_truncated_of_lt M q hznn hlt hvi⟩ hno
     · exact heq
-  have hmem : (fun i => z i / r) ∈ stdSimplex ℝ ι :=
-    ⟨fun i => div_nonneg (hznn i) hr.le, by rw [← Finset.sum_div, hsum]; exact div_self hr.ne'⟩
+  have hmem : (fun i => z i / r) ∈ simplexWeights ι :=
+    mem_simplexWeights.mpr
+      ⟨fun i => div_nonneg (hznn i) hr.le,
+        by rw [← Finset.sum_div, hsum]; exact div_self hr.ne'⟩
   refine ⟨fun i => z i / r, hmem, ?_⟩
   have hbound := homogeneousViolation_normalized_le M q hcop hr hznn hsum hvi
   have hDr : D / r ≤ ε := by

@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Remaining harmonic dimension followed by active-support cardinality. -/
 abbrev AnalyticEndpointLexRank := ℕ × ℕ

@@ -90,7 +90,7 @@ theorem sigmaValue_eq_of_agree_visible
   apply Finset.sum_congr rfl
   intro row _
   by_cases hmember : who ∈ coalitionOfRow row
-  · simp only [if_pos hmember]
+  · simp only [ite_eq_left hmember]
     by_cases hrow : row ∈ pureQuitRows phase who
     · rw [weightOfReward_rewardOfCoordinates_coalitionOfRow,
         weightOfReward_rewardOfCoordinates_coalitionOfRow,
@@ -116,7 +116,7 @@ theorem excludedValue_eq_of_agree_visible
   apply Finset.sum_congr rfl
   intro row _
   by_cases hnotMember : who ∉ coalitionOfRow row
-  · simp only [if_pos hnotMember]
+  · simp only [ite_eq_left hnotMember]
     by_cases hrow : row ∈ excludedRows phase who
     · rw [weightOfReward_rewardOfCoordinates_coalitionOfRow,
         weightOfReward_rewardOfCoordinates_coalitionOfRow,
@@ -124,7 +124,7 @@ theorem excludedValue_eq_of_agree_visible
     · rw [opponentCoalitionMass_eq_zero_of_excludedRow_not_supported
         point phase who row hnotMember hrow]
       simp
-  · simp only [if_neg hnotMember]
+  · simp only [ite_eq_right hnotMember]
 
 /-- Every three-phase immediate reward window is unchanged by overwriting the
 four invisible coordinates. -/

@@ -172,7 +172,7 @@ theorem ContinuousZeroPerfectSingletonPath.logOpponentBlockMass_lower
       logarithmicOpponentBlockHazard
         (witness.logBlockHazard h) who time := by
     exact witness.deletedHazard_blockIncrement who hh time
-  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, if_neg hne,
+  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, ite_eq_right hne,
     ContinuousZeroPerfectSingletonPath.logBlockHazard,
     ← intervalIntegral.integral_const_mul]
   apply intervalIntegral.integral_mono_on hle
@@ -197,7 +197,7 @@ theorem ContinuousZeroPerfectSingletonPath.logOpponentBlockMass_upper
   let second := logarithmicBlockEnd h time
   have hfirst : 0 ≤ first := logarithmicBlockStart_nonneg hh.le time
   have hle : first ≤ second := logarithmicBlockStart_le_end hh.le time
-  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, if_neg hne,
+  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, ite_eq_right hne,
     ContinuousZeroPerfectSingletonPath.logBlockHazard]
   apply intervalIntegral.integral_mono_on hle
   · exact (witness.logRate_intervalIntegrable owner hfirst hle).continuousOn_mul
@@ -437,7 +437,7 @@ theorem ContinuousZeroPerfectSingletonPath.sum_logOpponentBlockMass_mul_reward
   apply Finset.sum_congr rfl
   intro owner howner
   have hne : owner ≠ who := Finset.ne_of_mem_erase howner
-  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, if_neg hne,
+  rw [ContinuousZeroPerfectSingletonPath.logOpponentBlockMass, ite_eq_right hne,
     ← intervalIntegral.integral_mul_const]
   apply intervalIntegral.integral_congr
   intro tau _
@@ -584,7 +584,7 @@ private theorem ContinuousZeroPerfectSingletonPath.index_nonempty
     (witness : ContinuousZeroPerfectSingletonPath reward) :
     Nonempty ι := by
   by_contra hempty
-  letI : IsEmpty ι := not_nonempty_iff.mp hempty
+  let : IsEmpty ι := not_nonempty_iff.mp hempty
   have htotal := witness.total 1
   simp at htotal
 
@@ -597,7 +597,7 @@ def ContinuousZeroPerfectSingletonPath.logarithmicRateSnellCertificate
     (M h : ℝ) (hh : 0 < h)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     LogarithmicRateSnellCertificate reward M h := by
-  letI : Nonempty ι := witness.index_nonempty
+  let : Nonempty ι := witness.index_nonempty
   have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   exact {
   h_pos := hh
@@ -676,7 +676,7 @@ theorem ContinuousZeroPerfectSingletonPath.logarithmicRateSnellFamilyCertificate
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     LogarithmicRateSnellFamilyCertificate reward
       (witness.logPayoff reward 0) M := by
-  letI : Nonempty ι := witness.index_nonempty
+  let : Nonempty ι := witness.index_nonempty
   have hM := quittingRewardCoordinateBound_nonneg_of_nonempty reward hreward
   exact {
   cofinal := by

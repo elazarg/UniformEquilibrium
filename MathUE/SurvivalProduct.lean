@@ -93,7 +93,7 @@ theorem survivalProduct_nonneg (C : ℕ → ℝ) (hC : ∀ time, 0 ≤ C time)
 theorem survivalProduct_le_one (C : ℕ → ℝ) (hC0 : ∀ time, 0 ≤ C time)
     (hC1 : ∀ time, C time ≤ 1) (start fuel : ℕ) :
     survivalProduct C start fuel ≤ 1 :=
-  Finset.prod_le_one (fun offset _ => hC0 (start + offset))
+  Finset.prod_le_one₀ (fun offset _ => hC0 (start + offset))
     (fun offset _ => hC1 (start + offset))
 
 /-- Increasing finitely many factors in `[0,1]` changes their product by at
@@ -125,10 +125,10 @@ theorem prod_sub_prod_le_sum_sub_of_le
       have hprodSecond0 : 0 ≤ ∏ other ∈ s, second other :=
         Finset.prod_nonneg hsecond0s
       have hprodSecond1 : (∏ other ∈ s, second other) ≤ 1 :=
-        Finset.prod_le_one hsecond0s hsecond1s
+        Finset.prod_le_one₀ hsecond0s hsecond1s
       have hprodLe : (∏ other ∈ s, first other) ≤
           ∏ other ∈ s, second other :=
-        Finset.prod_le_prod hfirst0s hles
+        Finset.prod_le_prod₀ hfirst0s hles
       have hcoordinate0 : 0 ≤ second index - first index :=
         sub_nonneg.mpr (hle index (Finset.mem_cons_self index s))
       have hfirstIndex1 := hfirst1 index (Finset.mem_cons_self index s)
@@ -170,16 +170,16 @@ theorem abs_prod_sub_prod_le_sum_abs
     exact min_le_max
   have hlowerFirst : (∏ index ∈ s, lower index) ≤
       ∏ index ∈ s, first index :=
-    Finset.prod_le_prod hlower0 fun index _ ↦ min_le_left _ _
+    Finset.prod_le_prod₀ hlower0 fun index _ ↦ min_le_left _ _
   have hlowerSecond : (∏ index ∈ s, lower index) ≤
       ∏ index ∈ s, second index :=
-    Finset.prod_le_prod hlower0 fun index _ ↦ min_le_right _ _
+    Finset.prod_le_prod₀ hlower0 fun index _ ↦ min_le_right _ _
   have hfirstUpper : (∏ index ∈ s, first index) ≤
       ∏ index ∈ s, upper index :=
-    Finset.prod_le_prod hfirst0 fun index _ ↦ le_max_left _ _
+    Finset.prod_le_prod₀ hfirst0 fun index _ ↦ le_max_left _ _
   have hsecondUpper : (∏ index ∈ s, second index) ≤
       ∏ index ∈ s, upper index :=
-    Finset.prod_le_prod hsecond0 fun index _ ↦ le_max_right _ _
+    Finset.prod_le_prod₀ hsecond0 fun index _ ↦ le_max_right _ _
   have hspan := prod_sub_prod_le_sum_sub_of_le s lower upper hlower0
     hlower1 hupper0 hupper1 hlowerUpper
   rw [abs_le]

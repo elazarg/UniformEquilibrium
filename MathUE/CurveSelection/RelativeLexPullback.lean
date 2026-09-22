@@ -92,7 +92,7 @@ theorem isLocalExtrOn_presentationFiber_previous_relative
                 (P.σ (objectiveValue l))))
           x j)
       x := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   let fiber : Set (ι → ℝ) :=
     {z |
       ∀ k : κ,

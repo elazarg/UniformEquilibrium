@@ -99,7 +99,7 @@ theorem quittingFixedOpponentsContinueMass_logarithmicProductRoot
       exp (-(∑ other ∈ Finset.univ.erase who, A other)) := by
   rw [quittingStationaryContinueMass_eq_prod_continueProbability]
   rw [← Finset.prod_erase_mul _ _ (Finset.mem_univ who)]
-  simp only [Function.update_self, PMF.pure_apply, if_true,
+  simp only [Function.update_self, PMF.pure_apply, ite_true,
     ENNReal.toReal_one, mul_one]
   have hproduct :
       (∏ other ∈ Finset.univ.erase who,

@@ -63,7 +63,7 @@ theorem quotientBlock_quotientBlock
         Matrix.fromBlocks₁₁Invertible A B D E
       quotientBlock (Matrix.fromBlocks A B D E)
         (Matrix.fromCols P Q) (Matrix.fromRows C L) T := by
-  letI : Invertible (Matrix.fromBlocks A B D E) :=
+  let : Invertible (Matrix.fromBlocks A B D E) :=
     Matrix.fromBlocks₁₁Invertible A B D E
   simp only [quotientBlock]
   rw [Matrix.invOf_fromBlocks₁₁_eq]

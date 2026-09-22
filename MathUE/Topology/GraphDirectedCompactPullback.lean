@@ -175,7 +175,7 @@ theorem graphDirectedPrefixPath_compatible
   have htime0 : time ≤ horizon := htime.le
   have htime1 : time + 1 ≤ horizon := by omega
   unfold graphDirectedPrefixPath
-  rw [if_pos htime0, if_pos htime1]
+  rw [ite_eq_left htime0, ite_eq_left htime1]
   have hsub : horizon - time = (horizon - (time + 1)) + 1 := by omega
   rw [hsub, graphDirectedIteratedPullback_succ]
 
@@ -261,7 +261,7 @@ theorem graphDirectedPrefixSolutionSet_isClosed
       isClosed_eq continuous_fst continuous_snd
     have hpreimage := hpair.preimage_isClosed_of_isClosed
       hambientClosed hdiagonal
-    simpa only [pairMap, Set.preimage_setOf_eq] using hpreimage
+    simpa only [pairMap, Set.preimage_ofPred_eq] using hpreimage
   have hclosed : IsClosed
       (ambient ∩ ⋂ time : Fin horizon,
         (ambient ∩
@@ -274,7 +274,7 @@ theorem graphDirectedPrefixSolutionSet_isClosed
           {value : ℕ → Point |
             value time = system.branch (edge time) (value (time + 1))}) := by
     ext value
-    simp only [graphDirectedPrefixSolutionSet, ambient, Set.mem_setOf_eq,
+    simp only [graphDirectedPrefixSolutionSet, ambient, Set.mem_ofPred_eq,
       Set.mem_inter_iff, Set.mem_iInter]
     aesop
   rw [heq]
@@ -437,7 +437,7 @@ theorem GraphDirectedCompactSystem.compatiblePullbackPath_unique
     (hvalue₁ : system.IsCompatiblePullbackPath vertex edge value₁)
     (hvalue₂ : system.IsCompatiblePullbackPath vertex edge value₂) :
     value₁ = value₂ := by
-  letI := Fintype.ofFinite Vertex
+  let := Fintype.ofFinite Vertex
   funext time
   have hiterate := dist_compatiblePullbackPath_le_pow_mul
     system vertex edge hpath hcontraction0 hcontract hvalue₁ hvalue₂
@@ -474,7 +474,7 @@ theorem GraphDirectedCompactSystem.existsUnique_compatiblePullbackPath
     (hcontract : system.IsUniformContraction contraction) :
     ∃! value : ℕ → MetricPoint,
       system.IsCompatiblePullbackPath vertex edge value := by
-  letI := Fintype.ofFinite Vertex
+  let := Fintype.ofFinite Vertex
   obtain ⟨value, hvalue⟩ := system.exists_compatiblePullbackPath
     vertex edge hpath
   exact ⟨value, hvalue, fun other hother ↦

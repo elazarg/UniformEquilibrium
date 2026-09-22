@@ -14,6 +14,8 @@ Closed-law product base for zero-Never, zero-singleton behavioral limits.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Filter
@@ -60,17 +62,17 @@ theorem zeroSingletonProductBase_boxCoalition_le_boxAbsorption {w : ι → ℝ} 
   have hinside : (∏ i ∈ S, w i) ≤ w p := by
     rw [← Finset.prod_erase_mul S w hp]
     have hrest : (∏ i ∈ S.erase p, w i) ≤ 1 :=
-      Finset.prod_le_one (fun i _ => h0 i) (fun i _ => h1 i)
+      Finset.prod_le_one₀ (fun i _ => h0 i) (fun i _ => h1 i)
     nlinarith [Finset.prod_nonneg (fun i (_ : i ∈ S.erase p) => h0 i), h0 p]
   have houtside : (∏ i ∈ Sᶜ, (1 - w i)) ≤ 1 :=
-    Finset.prod_le_one (fun i _ => by linarith [h1 i]) (fun i _ => by linarith [h0 i])
+    Finset.prod_le_one₀ (fun i _ => by linarith [h1 i]) (fun i _ => by linarith [h0 i])
   have houtsideNonneg : 0 ≤ ∏ i ∈ Sᶜ, (1 - w i) :=
     Finset.prod_nonneg fun i _ => by linarith [h1 i]
   have hinsideNonneg : 0 ≤ ∏ i ∈ S, w i := Finset.prod_nonneg fun i _ => h0 i
   have hsplit : (∏ i, (1 - w i)) = (1 - w p) * ∏ i ∈ (Finset.univ.erase p), (1 - w i) :=
     (Finset.mul_prod_erase Finset.univ _ (Finset.mem_univ p)).symm
   have herase : (∏ i ∈ (Finset.univ.erase p), (1 - w i)) ≤ 1 :=
-    Finset.prod_le_one (fun i _ => by linarith [h1 i]) (fun i _ => by linarith [h0 i])
+    Finset.prod_le_one₀ (fun i _ => by linarith [h1 i]) (fun i _ => by linarith [h0 i])
   have heraseNonneg : 0 ≤ ∏ i ∈ (Finset.univ.erase p), (1 - w i) :=
     Finset.prod_nonneg fun i _ => by linarith [h1 i]
   have habs : w p ≤ zeroSingletonProductBaseBoxAbsorption w := by
@@ -95,7 +97,7 @@ theorem zeroSingletonProductBase_pairProduct_le_boxAbsorption {w : ι → ℝ} (
   have hpair : (∏ k ∈ ({i, j} : Finset ι), (1 - w k)) = (1 - w i) * (1 - w j) :=
     Finset.prod_pair hij
   have hrest : (∏ k ∈ ({i, j} : Finset ι)ᶜ, (1 - w k)) ≤ 1 :=
-    Finset.prod_le_one (fun k _ => by linarith [h1 k]) (fun k _ => by linarith [h0 k])
+    Finset.prod_le_one₀ (fun k _ => by linarith [h1 k]) (fun k _ => by linarith [h0 k])
   have hrestNonneg : 0 ≤ ∏ k ∈ ({i, j} : Finset ι)ᶜ, (1 - w k) :=
     Finset.prod_nonneg fun k _ => by linarith [h1 k]
   have hpairNonneg : 0 ≤ (1 - w i) * (1 - w j) := by
@@ -432,11 +434,13 @@ theorem zeroSingletonProductBase_zeroNever_zeroSingleton_exists_selectionData
     intro n
     rw [hsig]
     exact Finset.sum_nonneg fun who _ =>
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward (profiles n)).1 _
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward (profiles n))).1 _
   have hzetNonneg : ∀ n, 0 ≤ zet n := by
     intro n
     rw [hzet]
-    exact (quittingTerminalOutcomeMass_mem_stdSimplex reward (profiles n)).1 _
+    exact (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward (profiles n))).1 _
   have hsigLim : Tendsto sig atTop (nhds 0) := by
     have hterms : Tendsto (fun n => ∑ who : ι,
         quittingTerminalOutcomeMass reward (profiles n)

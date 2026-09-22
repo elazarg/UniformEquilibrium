@@ -30,7 +30,7 @@ namespace Probability
 
 namespace SignedStoppedComposition
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-! ## Layer 1: elementary calculus of the stopped expectation -/
 
@@ -528,8 +528,8 @@ the phenomenon). -/
 namespace SignedStoppedComposition
 namespace TwoChildFence
 
-open Math.Probability
-open Math.Probability.TwoBranchProbe
+open _root_.Math.Probability
+open _root_.Math.Probability.TwoBranchProbe
 
 /-- The fence has a single player. -/
 abbrev Seat : Type := Unit

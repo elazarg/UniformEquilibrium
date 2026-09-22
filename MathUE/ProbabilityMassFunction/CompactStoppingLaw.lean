@@ -62,6 +62,14 @@ def CompactStoppingLaw.ofPMF (law : PMF CompactStoppingTime) :
     (CompactStoppingLaw.ofPMF law).toPMF = law := by
   exact PMF.toMeasure_toPMF law
 
+/-- The compact-law roundtrip stated at the `Option Nat` spelling used by
+discrete stopping laws. -/
+theorem CompactStoppingLaw.toPMF_ofPMF_option (law : PMF (Option ℕ)) :
+    ((CompactStoppingLaw.ofPMF
+      (show PMF CompactStoppingTime from law)).toPMF : PMF (Option ℕ)) = law :=
+  CompactStoppingLaw.toPMF_ofPMF
+    (show PMF CompactStoppingTime from law)
+
 @[simp] theorem CompactStoppingLaw.ofPMF_toPMF (law : CompactStoppingLaw) :
     CompactStoppingLaw.ofPMF law.toPMF = law := by
   apply ProbabilityMeasure.toMeasure_injective
@@ -98,53 +106,53 @@ theorem CompactStoppingLaw.realMass_le_one (law : CompactStoppingLaw)
 
 /-- A finite barycentre of compact stopping laws. -/
 def compactStoppingLawBarycenter (n : Nat)
-    (weights : stdSimplex Real (Fin (n + 1)))
+    (weights : Convexity.StdSimplex Real (Fin (n + 1)))
     (points : Fin (n + 1) -> CompactStoppingLaw) : CompactStoppingLaw := by
   let measure : Measure CompactStoppingTime :=
     ∑ index : Fin (n + 1),
-      ENNReal.ofReal (weights index) • (points index : Measure CompactStoppingTime)
+      ENNReal.ofReal (weights.weights index) • (points index : Measure CompactStoppingTime)
   refine ⟨measure, ?_⟩
   rw [MeasureTheory.isProbabilityMeasure_iff]
   simp only [measure, Measure.coe_finsetSum, Finset.sum_apply,
     Measure.smul_apply, measure_univ, smul_eq_mul, mul_one]
   have hsum := ENNReal.ofReal_sum_of_nonneg (s := Finset.univ)
-    (f := fun index : Fin (n + 1) => weights index)
-    (fun index _ => weights.property.1 index)
-  have hweights : (∑ index, weights index) = 1 := weights.property.2
+    (f := fun index : Fin (n + 1) => weights.weights index)
+    (fun index _ => weights.weights_nonneg index)
+  have hweights : (∑ index, weights.weights index) = 1 := weights.total_of_fintype
   rw [hweights] at hsum
   simpa using hsum.symm
 
 @[simp] theorem compactStoppingLawBarycenter_toMeasure (n : Nat)
-    (weights : stdSimplex Real (Fin (n + 1)))
+    (weights : Convexity.StdSimplex Real (Fin (n + 1)))
     (points : Fin (n + 1) -> CompactStoppingLaw) :
     (compactStoppingLawBarycenter n weights points :
       Measure CompactStoppingTime) =
-      ∑ index, ENNReal.ofReal (weights index) •
+      ∑ index, ENNReal.ofReal (weights.weights index) •
         (points index : Measure CompactStoppingTime) :=
   rfl
 
 theorem CompactStoppingLaw.realMass_barycenter (n : Nat)
-    (weights : stdSimplex Real (Fin (n + 1)))
+    (weights : Convexity.StdSimplex Real (Fin (n + 1)))
     (points : Fin (n + 1) -> CompactStoppingLaw)
     (event : Set CompactStoppingTime) (_hevent : MeasurableSet event) :
     (compactStoppingLawBarycenter n weights points).realMass event =
-      ∑ index, weights index * (points index).realMass event := by
+      ∑ index, weights.weights index * (points index).realMass event := by
   unfold CompactStoppingLaw.realMass compactStoppingLawBarycenter
-  change ((∑ index, ENNReal.ofReal (weights index) •
+  change ((∑ index, ENNReal.ofReal (weights.weights index) •
       (points index : Measure CompactStoppingTime)) event).toReal = _
   rw [Measure.coe_finsetSum, Finset.sum_apply, ENNReal.toReal_sum]
   · apply Finset.sum_congr rfl
     intro index _
     rw [Measure.smul_apply, smul_eq_mul, ENNReal.toReal_mul]
     congr 1
-    exact ENNReal.toReal_ofReal (weights.property.1 index)
+    exact ENNReal.toReal_ofReal (weights.weights_nonneg index)
   · intro index _
     exact ENNReal.mul_ne_top ENNReal.ofReal_ne_top (measure_ne_top _ _)
 
 /-- Finite barycentres depend continuously on their simplex weights. -/
 theorem continuous_compactStoppingLawBarycenter (n : Nat)
     (points : Fin (n + 1) -> CompactStoppingLaw) :
-    Continuous fun weights : stdSimplex Real (Fin (n + 1)) =>
+    Continuous fun weights : Convexity.StdSimplex Real (Fin (n + 1)) =>
       compactStoppingLawBarycenter n weights points := by
   rw [ProbabilityMeasure.continuous_iff_forall_continuous_integral]
   intro observable
@@ -153,21 +161,21 @@ theorem continuous_compactStoppingLawBarycenter (n : Nat)
         (points index : Measure CompactStoppingTime) :=
     fun index => BoundedContinuousFunction.integrable
       (points index : Measure CompactStoppingTime) observable
-  have hintegral (weights : stdSimplex Real (Fin (n + 1))) :
+  have hintegral (weights : Convexity.StdSimplex Real (Fin (n + 1))) :
       (∫ choice, observable choice ∂
           (compactStoppingLawBarycenter n weights points :
             Measure CompactStoppingTime)) =
-        ∑ index, weights index *
+        ∑ index, weights.weights index *
           ∫ choice, observable choice ∂
             (points index : Measure CompactStoppingTime) := by
     rw [compactStoppingLawBarycenter_toMeasure]
     rw [integral_finsetSum_measure (fun index _ =>
       (hintegrable index).smul_measure ENNReal.ofReal_ne_top)]
     simp only [integral_smul_measure, ENNReal.toReal_ofReal,
-      stdSimplex.zero_le, smul_eq_mul]
+      Convexity.StdSimplex.weights_nonneg, smul_eq_mul]
   simp_rw [hintegral]
   exact continuous_finsetSum _ fun index _ => by
-    exact ((continuous_apply index).comp continuous_subtype_val).mul
+    exact (Convexity.StdSimplex.continuous_weights_apply Real index).mul
       continuous_const
 
 theorem CompactStoppingLaw.toPMF_apply_toReal
@@ -192,11 +200,11 @@ theorem CompactStoppingLaw.realMass_eq_pmfMass_toReal
 
 /-- Barycentring compact laws is exactly barycentring their discrete laws. -/
 theorem CompactStoppingLaw.toPMF_barycenter_apply_toReal (n : Nat)
-    (weights : stdSimplex Real (Fin (n + 1)))
+    (weights : Convexity.StdSimplex Real (Fin (n + 1)))
     (points : Fin (n + 1) -> CompactStoppingLaw)
     (choice : CompactStoppingTime) :
     ((compactStoppingLawBarycenter n weights points).toPMF choice).toReal =
-      ∑ index, weights index * ((points index).toPMF choice).toReal := by
+      ∑ index, weights.weights index * ((points index).toPMF choice).toReal := by
   let event : Set CompactStoppingTime := {choice}
   have hevent : MeasurableSet event := MeasurableSet.singleton choice
   have hmass := CompactStoppingLaw.realMass_barycenter n weights points event hevent
@@ -219,7 +227,7 @@ theorem compactStoppingTime_tail_eq_Ici (horizon : Nat) :
         WithTop.some horizon < choice} =
       Set.Ici (WithTop.some (horizon + 1)) := by
   ext choice
-  simp only [Set.mem_setOf_eq, Set.mem_Ici]
+  simp only [Set.mem_ofPred_eq, Set.mem_Ici]
   induction choice using WithTop.recTopCoe with
   | top => simp
   | coe time =>

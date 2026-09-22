@@ -35,7 +35,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set
-open Math.Probability
+open _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -82,7 +82,7 @@ theorem exists_commonVanishingResetScale
       Tendsto (fun n ↦ error n / scale n) atTop (nhds 0) ∧
       ∀ label, Tendsto (fun n ↦ vanishing label n / scale n)
         atTop (nhds 0) := by
-  letI := Fintype.ofFinite κ
+  let := Fintype.ofFinite κ
   let tail : ℕ → ℝ := fun n ↦ ((n : ℝ) + 1)⁻¹
   let total : ℕ → ℝ := fun n ↦
     error n + ∑ label, vanishing label n + tail n

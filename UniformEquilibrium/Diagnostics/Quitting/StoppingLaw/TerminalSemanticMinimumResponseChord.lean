@@ -371,7 +371,8 @@ theorem theta_mul_le_chord_terminalMass
   rw [law.chord_law_eq_affine]
   have hendpointSimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
     law.endpoint law.endpoint_mem
-  have hendpointNonneg := hendpointSimplex.1 (some terminal)
+  have hendpointNonneg :=
+    (GameTheory.Math.Probability.mem_simplexWeights.mp hendpointSimplex).1 (some terminal)
   have hweightNonneg : 0 ≤ 1 - law.theta :=
     sub_nonneg.mpr law.theta_lt_one.le
   nlinarith [mul_nonneg hweightNonneg hendpointNonneg,

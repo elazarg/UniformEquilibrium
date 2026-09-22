@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.PMFProduct Math.Probability
+open Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -121,6 +121,7 @@ theorem forceContinueWindow_singletonMass_eq
   unfold singletonMass
   apply Finset.sum_congr rfl
   intro phase _
+  change Fin window.fuel at phase
   rw [forceContinueWindow_survivalWeight,
     forceContinueWindow_rootAt]
 
@@ -135,6 +136,7 @@ theorem forceContinueWindow_absorptionMass_eq
   unfold absorptionMass
   apply Finset.sum_congr rfl
   intro phase _
+  change Fin window.fuel at phase
   rw [forceContinueWindow_survivalWeight,
     forceContinueWindow_rootAt]
 
@@ -292,7 +294,7 @@ theorem opponentSurvivalWeight_sub_survivalWeight_le
     quittingOpponentSurvivalWeight_le_one roots refusing window.start phase.val
   have hown1 : window.ownContinueWeight refusing phase ≤ 1 := by
     unfold ownContinueWeight
-    exact Finset.prod_le_one
+    exact Finset.prod_le_one₀
       (fun _ _ => ENNReal.toReal_nonneg)
       (fun offset _ => ENNReal.toReal_mono ENNReal.one_ne_top
         (PMF.coe_le_one _ _))

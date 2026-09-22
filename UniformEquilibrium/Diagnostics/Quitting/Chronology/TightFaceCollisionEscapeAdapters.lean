@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -47,7 +47,7 @@ theorem exists_tightFaceSeparatorData_of_no_uniformPayoff
   obtain ⟨covector, margin, hmargin, _hunit, hseparated⟩ :=
     seam.exists_strictCovector_on_tightOwners_of_no_uniformPayoff hnoUE
   have howners : seam.tightOwnerFinset.Nonempty := by
-    letI := seam.tightOwner_nonempty_of_arbitrarilyLateAbsorption hpositive
+    let := seam.tightOwner_nonempty_of_arbitrarilyLateAbsorption hpositive
     let owner : seam.TightOwner := Classical.choice inferInstance
     exact ⟨owner.1, owner.2⟩
   let data : TightFaceSeparatorData reward :=

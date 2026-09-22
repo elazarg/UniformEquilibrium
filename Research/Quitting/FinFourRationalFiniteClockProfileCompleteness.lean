@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import MathUE.SimplexApproximation
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.FinFourRationalFiniteClockProfile
 
 /-!
@@ -41,7 +42,7 @@ structure RealFiniteClockProfile
   clockBound_pos : 0 < clockBound
   weight : Fin 4 → FiniteClockAtom clockBound → ℝ
   weight_simplex : ∀ player,
-    weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)
+    weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)
   auxiliary_eq_zero : ∀ player,
     weight player (finiteClockAuxAtom clockBound) = 0
 
@@ -68,8 +69,9 @@ def rationalMass
       (level + 1) atom : ℚ) /
     (level + 1)
 
-/-- Proof-free rational code obtained from the residual-floor approximant. -/
-def rationalCode
+/-- Proof-free rational code obtained from the residual-floor approximant.
+Reducibility exposes its clock bound to dependent atom arguments. -/
+@[reducible] def rationalCode
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (level : ℕ) : RationalFinFourFiniteClockProfileCode where
   clockBound := clockBound
@@ -116,7 +118,7 @@ theorem rationalCode_mass
   change ((List.ofFn fun index : Fin (clockBound + 2) ↦
     rationalMass weight level player (finSuccEquivLast index))[
       (rationalCode weight level).atomIndex atom]?).getD 0 = _
-  rw [List.getElem?_ofFn, dif_pos hindex', Option.getD_some]
+  rw [List.getElem?_ofFn, dite_eq_left hindex', Option.getD_some]
   congr 1
   exact finSuccEquivLast_atomIndex (rationalCode weight level) atom
 
@@ -130,7 +132,7 @@ theorem rationalMass_nonneg
 theorem rationalMass_sum_eq_one
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (level : ℕ) (player : Fin 4) :
     ∑ atom : FiniteClockAtom clockBound,
       rationalMass weight level player atom = 1 := by
@@ -139,7 +141,9 @@ theorem rationalMass_sum_eq_one
           Math.SimplexApproximation.residualFloorCounts none
             (weight player) (level + 1) atom = level + 1 :=
     Math.SimplexApproximation.sum_residualFloorCounts none
-      (hweight player).1 (hweight player).2 (level + 1)
+      (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).1
+        (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).2
+        (level + 1)
   have hsumRat :
       ∑ atom : FiniteClockAtom clockBound,
           (Math.SimplexApproximation.residualFloorCounts none
@@ -165,13 +169,13 @@ theorem rationalCode_valid
     (hclock : 0 < clockBound)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (level : ℕ) :
     (rationalCode weight level).Valid := by
   refine ⟨hclock, fun player ↦ ⟨?_, ?_, ?_, ?_⟩⟩
-  · simp [rationalCode]
+  · simp
   · intro atom
     rw [rationalCode_mass]
     exact rationalMass_nonneg weight level player atom
@@ -183,7 +187,7 @@ theorem rationalCode_valid
 theorem rationalMass_abs_sub_le
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (level : ℕ) (player : Fin 4) (atom : FiniteClockAtom clockBound) :
     |(rationalMass weight level player atom : ℝ) - weight player atom| ≤
       (Fintype.card (FiniteClockAtom clockBound) : ℝ) / (level + 1) := by
@@ -195,7 +199,9 @@ theorem rationalMass_abs_sub_le
     by
       simpa only [Nat.cast_add, Nat.cast_one] using
         Math.SimplexApproximation.residualFloorCounts_abs_error_le_card none
-          (hweight player).1 (hweight player).2 (level + 1) atom
+          (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).1
+            (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).2
+            (level + 1) atom
   have hdenom : (0 : ℝ) < level + 1 := by positivity
   change |((count : ℚ) / (level + 1) : ℚ) -
     weight player atom| ≤ _
@@ -213,7 +219,7 @@ theorem rationalMass_abs_sub_le
 theorem rationalMass_tendsto
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (player : Fin 4) (atom : FiniteClockAtom clockBound) :
     Filter.Tendsto
       (fun level ↦ (rationalMass weight level player atom : ℝ))
@@ -242,7 +248,7 @@ theorem rationalMass_tendsto
 theorem rationalMass_family_tendsto
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)) :
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)) :
     Filter.Tendsto
       (fun level player atom ↦
         (rationalMass weight level player atom : ℝ))
@@ -343,7 +349,7 @@ theorem realPayoff_eq_terminalPayoff
     (reward : RationalFinFourRewardCode) (clockBound : ℕ)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (observer : Fin 4) :
     realPayoff reward clockBound weight observer =
       quittingTerminalPayoff reward.realReward
@@ -356,7 +362,7 @@ theorem realDeviationPayoff_eq_terminalPayoff_update
     (reward : RationalFinFourRewardCode) (clockBound : ℕ)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (player : Fin 4) (candidate : FiniteClockAtom clockBound) :
     realDeviationPayoff reward clockBound weight player candidate =
       quittingTerminalPayoff reward.realReward
@@ -372,7 +378,7 @@ theorem realCap_eq_continuationBestResponseValue
     (reward : RationalFinFourRewardCode) (clockBound : ℕ)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (player : Fin 4) :
@@ -402,7 +408,7 @@ theorem realExploitability_eq_terminalExploitability
     (reward : RationalFinFourRewardCode) (clockBound : ℕ)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0) :
     realExploitability reward clockBound weight =
@@ -421,13 +427,12 @@ theorem realExploitability_eq_terminalExploitability
 theorem real_rationalMass_mem_stdSimplex
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (level : ℕ) (player : Fin 4) :
     (fun atom ↦ (rationalMass weight level player atom : ℝ)) ∈
-      stdSimplex ℝ (FiniteClockAtom clockBound) := by
-  constructor
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound) := by
+  refine GameTheory.Math.Probability.mem_simplexWeights.mpr ⟨?_, ?_⟩
   · intro atom
-    change (0 : ℝ) ≤ (rationalMass weight level player atom : ℝ)
     norm_cast
     exact rationalMass_nonneg weight level player atom
   · change ∑ atom : FiniteClockAtom clockBound,
@@ -511,7 +516,7 @@ theorem cast_rationalCode_exploitability_eq_realExploitability
     (reward : RationalFinFourRewardCode) (hclock : 0 < clockBound)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (level : ℕ) :
@@ -540,7 +545,7 @@ theorem rationalCode_verifiesUpper_of_realExploitability_lt
     (hclock : 0 < clockBound)
     (weight : Fin 4 → FiniteClockAtom clockBound → ℝ)
     (hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound))
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound))
     (haux : ∀ player,
       weight player (finiteClockAuxAtom clockBound) = 0)
     (level : ℕ)

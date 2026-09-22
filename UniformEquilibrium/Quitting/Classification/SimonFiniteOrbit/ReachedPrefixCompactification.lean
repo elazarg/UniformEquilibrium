@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.Topology
+open _root_.Math.Probability Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -210,7 +210,7 @@ theorem
           0 ≤ (2 * M) * ((Fintype.card ι : ℝ) * displacement) := by
         by_cases hcard : Fintype.card ι = 0
         · simp [hcard]
-        · letI : Nonempty ι :=
+        · let : Nonempty ι :=
             Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
           let player : ι := Classical.choice inferInstance
           have hM : 0 ≤ M :=
@@ -454,7 +454,7 @@ theorem
   have hMcard : 0 ≤ M * (Fintype.card ι : ℝ) := by
     by_cases hcard : Fintype.card ι = 0
     · simp [hcard]
-    · letI : Nonempty ι :=
+    · let : Nonempty ι :=
           Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
       let player : ι := Classical.choice inferInstance
       have hM : 0 ≤ M :=

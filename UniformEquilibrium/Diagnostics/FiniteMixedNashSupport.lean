@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 namespace KernelGame
 
-open Math.Probability
+open _root_.GameTheory.Math.Probability
 
 /-- Every supported pure action in a finite mixed Nash equilibrium has zero
 mixed gain. -/
@@ -32,7 +32,7 @@ theorem mixedGain_eq_zero_of_mem_support
     (who : I) (action : G.Strategy who)
     (haction : mixed who action ≠ 0) :
     G.mixedGain mixed who action = 0 := by
-  letI : Fintype (G.Strategy who) := Fintype.ofFinite _
+  let : Fintype (G.Strategy who) := Fintype.ofFinite _
   have hgain : ∀ choice : G.Strategy who,
       G.mixedGain mixed who choice ≤ 0 :=
     fun choice ↦ (G.isNash_iff_gains_nonpos mixed).mp hnash who choice

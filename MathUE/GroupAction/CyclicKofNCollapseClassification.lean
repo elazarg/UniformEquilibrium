@@ -60,9 +60,9 @@ def CollapseWitness.period {K N d : ℕ} (w : CollapseWitness K N d) : ℕ :=
 /-- Every witness period is positive. -/
 theorem CollapseWitness.period_pos {K N d : ℕ}
     (w : CollapseWitness K N d) : 0 < w.period := by
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   unfold CollapseWitness.period
   exact Fintype.card_pos_iff.mpr inferInstance
 
@@ -71,9 +71,9 @@ collapse witness. -/
 theorem CollapseWitness.reducedPopulation_dvd_period
     {K N d : ℕ} (w : CollapseWitness K N d) :
     N / K.gcd N ∣ w.period := by
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   have hdvd := reducedPopulation_dvd_card_translationPhase w.block
   rw [w.populationCard, w.blockCard] at hdvd
   simpa [CollapseWitness.period] using hdvd
@@ -89,9 +89,9 @@ theorem CollapseWitness.reducedPopulation_le_period
 theorem IsCyclicCollapseFactor.positive
     {K N d : ℕ} (h : IsCyclicCollapseFactor K N d) : 0 < d := by
   obtain ⟨w⟩ := h
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   have hpos : 0 < Fintype.card
       (AddAction.stabilizer w.Player w.block) :=
     Fintype.card_pos_iff.mpr inferInstance
@@ -103,9 +103,9 @@ theorem IsCyclicCollapseFactor.positive
 theorem IsCyclicCollapseFactor.dvd_active
     {K N d : ℕ} (h : IsCyclicCollapseFactor K N d) : d ∣ K := by
   obtain ⟨w⟩ := h
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   have hdvd := card_translationStabilizer_dvd_card_block w.block
   rw [w.stabilizerCard, w.blockCard] at hdvd
   exact hdvd
@@ -114,9 +114,9 @@ theorem IsCyclicCollapseFactor.dvd_active
 theorem IsCyclicCollapseFactor.dvd_population
     {K N d : ℕ} (h : IsCyclicCollapseFactor K N d) : d ∣ N := by
   obtain ⟨w⟩ := h
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   refine ⟨Fintype.card (TranslationPhase w.block), ?_⟩
   have horbit := translationOrbit_mul_stabilizer w.block
   rw [w.stabilizerCard, w.populationCard] at horbit
@@ -132,9 +132,9 @@ theorem IsCyclicCollapseFactor.period_eq_div
       Fintype.card (TranslationPhase w.block) = N / d := by
   obtain ⟨w⟩ := h
   refine ⟨w, ?_⟩
-  letI : AddGroup w.Player := w.addGroup
-  letI : Fintype w.Player := w.fintype
-  letI : DecidableEq w.Player := w.decidableEq
+  let : AddGroup w.Player := w.addGroup
+  let : Fintype w.Player := w.fintype
+  let : DecidableEq w.Player := w.decidableEq
   rw [card_translationPhase_eq_div_stabilizer,
     w.stabilizerCard, w.populationCard]
 
@@ -154,8 +154,8 @@ theorem isCyclicCollapseFactor_of_commonDivisor
   have hdpos : 0 < d := Nat.pos_of_dvd_of_pos hdK hKpos
   have hdleN : d ≤ N := Nat.le_of_dvd (hKpos.trans hKN) hdN
   have hnpos : 0 < N / d := Nat.div_pos hdleN hdpos
-  letI : NeZero (N / d) := ⟨hnpos.ne'⟩
-  letI : NeZero d := ⟨hdpos.ne'⟩
+  let : NeZero (N / d) := ⟨hnpos.ne'⟩
+  let : NeZero d := ⟨hdpos.ne'⟩
   obtain ⟨A, hcard, hpopulation, _hperiod, hstabilizer⟩ :=
     exists_block_with_exact_admissible_collapse
       (K := K) (N := N) (d := d) hKpos hKN hdK hdN

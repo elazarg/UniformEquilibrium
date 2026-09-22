@@ -86,7 +86,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -105,7 +105,7 @@ theorem prod_quittingStationaryContinueMass_univ_lt_one_of_absorbing
     (Finset.mem_univ stage)
   have hle : (∏ cyclePhase ∈ Finset.univ.erase stage,
       quittingStationaryContinueMass (cycle cyclePhase)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun cyclePhase _ ↦ quittingStationaryContinueMass_nonneg (cycle cyclePhase))
       (fun cyclePhase _ ↦ quittingStationaryContinueMass_le_one (cycle cyclePhase))
   have hnonneg : 0 ≤ quittingStationaryContinueMass (cycle stage) :=
@@ -263,7 +263,7 @@ theorem quittingOpponentSurvivalWeight_cyclicRootSequence_eq_one_of_not_contract
     have hsplit := Finset.mul_prod_erase Finset.univ coefficient
       (Finset.mem_univ cyclePhase)
     have herase : (∏ other ∈ Finset.univ.erase cyclePhase, coefficient other) ≤ 1 :=
-      Finset.prod_le_one (fun other _ ↦ hnonneg other) (fun other _ ↦ hle other)
+      Finset.prod_le_one₀ (fun other _ ↦ hnonneg other) (fun other _ ↦ hle other)
     have hprod : (∏ other : Fin K, coefficient other) < 1 := by
       calc (∏ other : Fin K, coefficient other) =
           coefficient cyclePhase *

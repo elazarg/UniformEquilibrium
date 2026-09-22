@@ -82,7 +82,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
   Math.ProbabilityMassFunction
 
 namespace QuittingPositiveDebtPlateauTable
@@ -344,7 +344,7 @@ theorem plateauState_mem_box (cutoff time : ℕ) :
     plateauState cutoff time ∈ quittingNashBellmanBox (quittingRewardBound reward) := by
   have hbound := one_le_quittingRewardBound
   have hbound0 : (0 : ℝ) ≤ quittingRewardBound reward := by linarith
-  rw [quittingNashBellmanBox, Set.mem_setOf_eq, plateauState_fst]
+  rw [quittingNashBellmanBox, Set.mem_ofPred_eq, plateauState_fst]
   split_ifs with htime
   · refine ⟨fun who => ?_, fun who => ?_⟩ <;>
       (cases who <;> simp [terminalValue] <;> linarith)
@@ -356,7 +356,7 @@ theorem plateauPath_mem (cutoff : ℕ) :
     plateauPath cutoff ∈ quittingFiniteZeroBoundaryNashBellmanChainSet reward cutoff := by
   refine ⟨fun time => plateauState_mem_box cutoff time, ?_, ?_⟩
   · change (plateauState cutoff cutoff).1 = 0
-    rw [plateauState_fst, if_neg (lt_irrefl cutoff)]
+    rw [plateauState_fst, ite_eq_right (lt_irrefl cutoff)]
   · intro t
     change IsQuittingNashBellmanEdge reward
       (plateauState cutoff t.val) (plateauState cutoff (t.val + 1))
@@ -366,14 +366,14 @@ theorem plateauPath_mem (cutoff : ℕ) :
         simp [plateauState, terminalCurrent, hlt, hlast]
       rw [hcurrent]
       apply terminal_edge
-      rw [plateauState_fst, if_neg (show ¬ t.val + 1 < cutoff by omega)]
+      rw [plateauState_fst, ite_eq_right (show ¬ t.val + 1 < cutoff by omega)]
     · have hlt : t.val < cutoff := t.isLt
       have hcurrent : plateauState cutoff t.val =
           (terminalValue, quittingAllContinueSimplexRoot) := by
         simp [plateauState, hlt, hlast]
       rw [hcurrent]
       apply allContinue_edge
-      rw [plateauState_fst, if_pos (show t.val + 1 < cutoff by omega)]
+      rw [plateauState_fst, ite_eq_left (show t.val + 1 < cutoff by omega)]
 
 /-- The operational value extension of the explicit chain agrees with
 `plateauState`'s displayed payoff at every `ℕ` time, including padding. -/
@@ -383,7 +383,7 @@ theorem plateauPathValue_eq (cutoff time : ℕ) :
   unfold quittingFiniteNashBellmanPathValue plateauPath
   split_ifs with h
   · rfl
-  · rw [plateauState_fst, if_neg (show ¬ time < cutoff by omega)]
+  · rw [plateauState_fst, ite_eq_right (show ¬ time < cutoff by omega)]
 
 /-- The operational root extension of the explicit chain agrees with
 `plateauState`'s root at every `ℕ` time, including padding. -/
@@ -392,9 +392,9 @@ theorem plateauPathRoots_eq (cutoff time : ℕ) :
       if time + 1 = cutoff then terminalRoot else quittingAllContinueRoot := by
   unfold quittingFiniteNashBellmanPathRoots
   by_cases hlt : time < cutoff
-  · rw [dif_pos hlt]
+  · rw [dite_eq_left hlt]
     simpa [plateauPath] using plateauState_snd cutoff time
-  · rw [dif_neg hlt, if_neg (show ¬ time + 1 = cutoff by omega)]
+  · rw [dite_eq_right hlt, ite_eq_right (show ¬ time + 1 = cutoff by omega)]
 
 /-- **Absorption-mass structure of the explicit chain.**  Every row before
 the last carries zero absorption mass; the last row, `cutoff - 1`, carries
@@ -419,7 +419,7 @@ theorem quittingFixedOpponentsQuitValue_terminalRow (cutoff : ℕ) (who : Bool)
       quittingRootQuitPayoff reward (0 : Payoff Bool) terminalRoot who := by
   rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue reward
     (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who
-    (0 : Payoff Bool) time, plateauPathRoots_eq, if_pos htime]
+    (0 : Payoff Bool) time, plateauPathRoots_eq, ite_eq_left htime]
 
 /-- Player `who`'s one-stage Continue reward at the terminal row
 `cutoff - 1`. -/
@@ -431,7 +431,7 @@ theorem quittingFixedOpponentsContinueReward_terminalRow (cutoff : ℕ) (who : B
   have h := quittingRootContinuePayoff_eq_fixedOpponents reward
     (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who
     (0 : Payoff Bool) time
-  rw [plateauPathRoots_eq, if_pos htime] at h
+  rw [plateauPathRoots_eq, ite_eq_left htime] at h
   simpa using h.symm
 
 /-- The one-stage opponent-Continue mass at the terminal row `cutoff - 1`
@@ -442,7 +442,7 @@ theorem quittingFixedOpponentsContinueMass_terminalRow (cutoff : ℕ) (who : Boo
         (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who time =
       1 / 2 := by
   unfold quittingFixedOpponentsContinueMass
-  rw [plateauPathRoots_eq, if_pos htime]
+  rw [plateauPathRoots_eq, ite_eq_left htime]
   unfold quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
   cases who <;>
@@ -458,7 +458,7 @@ theorem quittingFixedOpponentsQuitValue_allContinueRow (cutoff : ℕ) (who : Boo
       reward (quittingSingletonTerminal who) who := by
   rw [← quittingRootQuitPayoff_eq_fixedOpponentsQuitValue reward
     (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who
-    (0 : Payoff Bool) time, plateauPathRoots_eq, if_neg htime, quitPayoff_allContinue]
+    (0 : Payoff Bool) time, plateauPathRoots_eq, ite_eq_right htime, quitPayoff_allContinue]
 
 /-- Player `who`'s one-stage Continue reward at an all-Continue row
 vanishes. -/
@@ -470,7 +470,7 @@ theorem quittingFixedOpponentsContinueReward_allContinueRow (cutoff : ℕ) (who 
   have h := quittingRootContinuePayoff_eq_fixedOpponents reward
     (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who
     (0 : Payoff Bool) time
-  rw [plateauPathRoots_eq, if_neg htime, continuePayoff_allContinue] at h
+  rw [plateauPathRoots_eq, ite_eq_right htime, continuePayoff_allContinue] at h
   simpa using h.symm
 
 /-- The one-stage opponent-Continue mass at an all-Continue row is `1`. -/
@@ -480,7 +480,7 @@ theorem quittingFixedOpponentsContinueMass_allContinueRow (cutoff : ℕ) (who : 
         (quittingFiniteNashBellmanPathRoots cutoff (plateauPath cutoff)) who time =
       1 := by
   unfold quittingFixedOpponentsContinueMass
-  rw [plateauPathRoots_eq, if_neg htime]
+  rw [plateauPathRoots_eq, ite_eq_right htime]
   unfold quittingStationaryContinueMass
   rw [pmfPi_apply, ENNReal.toReal_prod]
   cases who <;>
@@ -509,8 +509,8 @@ theorem plateauDebt_core (cutoff : ℕ) (who : Bool) :
       have htlast : t + 1 = cutoff := by omega
       rw [quittingFiniteDynamicDebt_succ, quittingFiniteDynamicDebt_zero]
       simp only [plateauPathValue_eq]
-      rw [plateauState_fst cutoff t, if_pos (show t < cutoff by omega),
-        plateauState_fst cutoff (t + 1), if_neg (show ¬ t + 1 < cutoff by omega),
+      rw [plateauState_fst cutoff t, ite_eq_left (show t < cutoff by omega),
+        plateauState_fst cutoff (t + 1), ite_eq_right (show ¬ t + 1 < cutoff by omega),
         quittingFixedOpponentsQuitValue_terminalRow cutoff who t htlast,
         quittingFixedOpponentsContinueReward_terminalRow cutoff who t htlast,
         quittingFixedOpponentsContinueMass_terminalRow cutoff who t htlast]
@@ -525,8 +525,8 @@ theorem plateauDebt_core (cutoff : ℕ) (who : Bool) :
       have hnext : (t + 1) + steps + 1 = cutoff := by omega
       rw [quittingFiniteDynamicDebt_succ, ih (t + 1) hnext]
       simp only [plateauPathValue_eq]
-      rw [plateauState_fst cutoff t, if_pos (show t < cutoff by omega),
-        plateauState_fst cutoff (t + 1), if_pos (show t + 1 < cutoff by omega),
+      rw [plateauState_fst cutoff t, ite_eq_left (show t < cutoff by omega),
+        plateauState_fst cutoff (t + 1), ite_eq_left (show t + 1 < cutoff by omega),
         quittingFixedOpponentsQuitValue_allContinueRow cutoff who t htnotlast,
         quittingFixedOpponentsContinueReward_allContinueRow cutoff who t htnotlast,
         quittingFixedOpponentsContinueMass_allContinueRow cutoff who t htnotlast]

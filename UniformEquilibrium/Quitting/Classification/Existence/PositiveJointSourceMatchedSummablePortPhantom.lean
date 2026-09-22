@@ -183,7 +183,7 @@ theorem wellSupported_or_stationary_or_sourceMatchedUniformAllContinuePhantom
     hwellSupported | hport
   · exact Or.inl hwellSupported
   · obtain ⟨port⟩ := hport
-    letI : Nonempty iota := ⟨endpoint.punished⟩
+    let : Nonempty iota := ⟨endpoint.punished⟩
     rcases port.stationaryExistence_or_uniformAllContinuePhantom_of_endpoint
         endpoint with hstationary | ⟨phantom, hvalue, huniform⟩
     · exact Or.inr (Or.inl hstationary)

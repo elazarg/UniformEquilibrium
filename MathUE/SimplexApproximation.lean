@@ -39,7 +39,7 @@ def residualFloorCounts (k₀ : κ) (w : κ → ℝ) (N : ℕ) : κ → ℕ :=
 
 theorem residualFloorCounts_ne {k₀ k : κ} (hk : k ≠ k₀) (w : κ → ℝ) (N : ℕ) :
     residualFloorCounts k₀ w N k = ⌊(N : ℝ) * w k⌋₊ := by
-  rw [residualFloorCounts, if_neg hk]
+  rw [residualFloorCounts, ite_eq_right hk]
 
 /-- The non-residual floored mass is at most the denominator. -/
 theorem sum_floor_erase_le_denominator (k₀ : κ) {w : κ → ℝ}

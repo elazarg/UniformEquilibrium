@@ -100,7 +100,7 @@ theorem reflectedCoefficient_eq_coeff
       simp [reflectedCoefficient, toMvPolynomial, MvPolynomial.coeff_X,
         eq_comm]
   | add first second hfirst hsecond =>
-      simp [reflectedCoefficient, toMvPolynomial, MvPolynomial.coeff_add,
+      simp [reflectedCoefficient, toMvPolynomial, AddMonoidAlgebra.coeff_add,
         hfirst, hsecond]
   | neg expression hexpression =>
       simp [reflectedCoefficient, toMvPolynomial, hexpression]
@@ -137,9 +137,12 @@ theorem mem_boundedMonomials_iff
   constructor
   · intro hmonomial coordinate
     rcases Finset.mem_map.mp hmonomial with
-      ⟨exponent, hexponent, rfl⟩
+      ⟨exponent, hexponent, heq⟩
     have hcoordinate := Fintype.mem_piFinset.mp hexponent coordinate
-    simpa [Nat.lt_succ_iff] using hcoordinate
+    have happly : exponentMonomial exponent coordinate = monomial coordinate := by
+      exact congrArg (fun item : Fin variableCount →₀ ℕ ↦ item coordinate) heq
+    rw [← happly]
+    exact Nat.le_of_lt_succ (Finset.mem_range.mp hcoordinate)
   · intro hmonomial
     apply Finset.mem_map.mpr
     refine ⟨fun coordinate ↦ monomial coordinate, ?_, ?_⟩
@@ -147,7 +150,7 @@ theorem mem_boundedMonomials_iff
       intro coordinate
       simpa [Nat.lt_succ_iff] using hmonomial coordinate
     · ext coordinate
-      simp
+      exact exponentMonomial_apply _ coordinate
 
 /-- Coordinatewise syntactic degree bound.  Unlike normalized support, this
 function is small and executable on a reflected expression tree. -/
@@ -249,7 +252,7 @@ theorem abs_evalReal_le_coefficientL1
       rw [abs_mul, Finset.abs_prod]
       have hmonomial :
           ∏ coordinate, |point coordinate ^ monomial coordinate| ≤ 1 := by
-        apply Finset.prod_le_one
+        apply Finset.prod_le_one₀
         · intro coordinate _
           positivity
         · intro coordinate _

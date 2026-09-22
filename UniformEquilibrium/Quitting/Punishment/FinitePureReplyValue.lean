@@ -11,7 +11,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Filter Math.Probability
+open _root_.Set Filter _root_.Math.Probability
 open QuittingSureSetOwnerRepair
 open scoped Topology
 
@@ -87,7 +87,7 @@ theorem quittingFinitePureReplyPunishmentValue_le
 theorem quittingFinitePureReplyPunishmentValue_le_punishmentValue
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (who : ι) :
     quittingFinitePureReplyPunishmentValue reward who ≤ quittingPunishmentValue reward who := by
-  letI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  let : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   apply le_ciInf
   intro profile
@@ -101,7 +101,7 @@ theorem exists_profile_finitePureReplyValue_lt
     (hvalue : quittingFinitePureReplyPunishmentValue reward who < value) :
     ∃ profile : (quittingGame reward).BehaviorProfile,
       quittingFinitePureReplyValue reward profile who < value := by
-  letI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  let : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   exact exists_lt_of_ciInf_lt hvalue
 
@@ -168,7 +168,8 @@ theorem neverPayoff_add_opponentNever_mul_solo_le_finitePureReplyValue
       quittingOpponentNeverProduct (quittingCompactStoppingLawsOfProfile reward profile) who *
         reward (quittingSingletonTerminal who) who ≤
       quittingFinitePureReplyValue reward profile who := by
-  rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile,
+  rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile
+      reward profile who (none : CompactStoppingTime),
     quittingFinitePureReplyValue_eq_compactStoppingLawsOfProfile]
   apply le_of_tendsto
     (quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton

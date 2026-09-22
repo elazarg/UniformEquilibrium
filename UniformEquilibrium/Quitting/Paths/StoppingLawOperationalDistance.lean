@@ -152,7 +152,7 @@ def delayStoppingTime : Option Nat -> Option Nat
     cases choice with
     | none => simp [delayStoppingTime]
     | some other =>
-        rw [if_neg]
+        rw [ite_eq_right]
         intro heq
         apply hchoice
         simp only [delayStoppingTime, Option.some.injEq] at heq
@@ -905,7 +905,7 @@ theorem quittingTerminalPayoff_pureTimeProfileBehavior_eq_firstStoppingOutcome
           | some time => simp [quittingStoppingTimeValue]
         have houtcome : quittingFirstStoppingOutcome times =
             some ⟨quittingPureTimeCoalitionAt times deadline, hnonempty⟩ := by
-          rw [quittingFirstStoppingOutcome, if_neg hearliestNe]
+          rw [quittingFirstStoppingOutcome, ite_eq_right hearliestNe]
           congr 2
         rw [houtcome]
         exact congrFun
@@ -1375,7 +1375,7 @@ theorem quittingTerminalPayoff_eq_of_behaviorStoppingLaws_eq
       quittingBehaviorStoppingLaws reward second) (who : κ) :
     quittingTerminalPayoff reward first who =
       quittingTerminalPayoff reward second who := by
-  letI : Nonempty κ := ⟨who⟩
+  let : Nonempty κ := ⟨who⟩
   rw [← quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff,
     ← quittingStoppingLawExpectedPayoff_behaviorStoppingLaws_eq_terminalPayoff,
     hlaws]
@@ -1389,7 +1389,7 @@ theorem quittingBehaviorDeviationPayoffCap_eq_of_behaviorStoppingLaws_eq
       quittingBehaviorStoppingLaws reward second) (who : κ) :
     quittingBehaviorDeviationPayoffCap reward first who =
       quittingBehaviorDeviationPayoffCap reward second who := by
-  letI : Nonempty κ := ⟨who⟩
+  let : Nonempty κ := ⟨who⟩
   unfold quittingBehaviorDeviationPayoffCap
   congr 2
   funext deviation

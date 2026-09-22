@@ -208,8 +208,6 @@ theorem ratio_fixedPoint_equations {x : Fin 4 → ℝ}
   have hc := congrFun hfix (2 : Fin 4)
   have hd := congrFun hfix (3 : Fin 4)
   norm_num [ratioMap] at ha hb hc hd
-  simp only [vec4_apply_two] at hc
-  simp only [vec4_apply_three] at hd
   field_simp [ne_of_gt hden.1] at ha
   field_simp [ne_of_gt hden.2.1] at hb
   field_simp [ne_of_gt hden.2.2.1] at hc

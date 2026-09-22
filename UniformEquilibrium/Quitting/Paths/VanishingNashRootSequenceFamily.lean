@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability
+open Filter StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

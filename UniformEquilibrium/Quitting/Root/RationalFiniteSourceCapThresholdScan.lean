@@ -91,8 +91,8 @@ theorem quittingTerminalSemanticPrefix_rational_eq_cast
       · subst player
         simp
       · simp [hplayer]
-    simp only [if_true] at hquit
-    simp only [Bool.false_eq_true, if_false] at hcontinue
+    simp only [ite_true] at hquit
+    simp only [Bool.false_eq_true, ite_false] at hcontinue
     change max
         (quittingRootQuitPayoff (rationalQuittingRewardToReal reward)
           (fun player => (pair.1 player : ℝ)) root.toPMF who)

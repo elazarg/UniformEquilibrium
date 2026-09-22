@@ -131,10 +131,6 @@ private def fullSolution (q : CorePlayer → ℝ)
         show (2 : CorePlayer) ≠ 0 by decide,
         show (2 : CorePlayer) ≠ 1 by decide]
       right
-      have hq : ∀ h : 2 < 3, q ⟨2, h⟩ = q 2 := by
-        intro h
-        congr 1
-      rw [hq]
       ring
 
 /-- The cyclic block is a textbook standard Q-matrix. -/
@@ -178,17 +174,18 @@ theorem cyclicMatrix_standardQ : IsStandardQMatrix cyclicMatrix := by
 theorem cyclicMatrix_noHomogeneous :
     ¬HasHomogeneousSimplexSolution cyclicMatrix := by
   rintro ⟨weight, hresidual, hcomplementary⟩
-  let x : ℝ := weight 0
-  let y : ℝ := weight 1
-  let z : ℝ := weight 2
-  have hx : 0 ≤ x := weight.property.1 0
-  have hy : 0 ≤ y := weight.property.1 1
-  have hz : 0 ≤ z := weight.property.1 2
+  let x : ℝ := weight.weights 0
+  let y : ℝ := weight.weights 1
+  let z : ℝ := weight.weights 2
+  have hx : 0 ≤ x := weight.weights_nonneg 0
+  have hy : 0 ≤ y := weight.weights_nonneg 1
+  have hz : 0 ≤ z := weight.weights_nonneg 2
   have htotal : x + (y + z) = 1 := by
-    have h := weight.property.2
-    have hsum : (∑ i : CorePlayer, weight.val i) =
-        weight.val 0 + (weight.val 1 + weight.val 2) := by
-      simp [Fin.sum_univ_succ]
+    have h := weight.total_of_fintype
+    have hsum : (∑ i : CorePlayer, weight.weights i) =
+        weight.weights 0 + (weight.weights 1 + weight.weights 2) := by
+      rw [Fin.sum_univ_three]
+      ring
     rw [hsum] at h
     change x + (y + z) = 1 at h
     exact h
@@ -580,37 +577,35 @@ theorem duplicatedCyclicMatrix_standardQ :
   · obtain ⟨solution⟩ := cyclicMatrix_standardQ (fun i => q (some i))
     exact ⟨duplicateSomeZeroSolution q (le_of_not_ge horder) solution⟩
 
-private def collapseDuplicatedSimplex (weight : stdSimplex ℝ Player) :
-    stdSimplex ℝ CorePlayer where
-  val := fun i => if i = 0 then weight.val none + weight.val (some 0)
-    else weight.val (some i)
-  property := by
-    constructor
-    · intro i
-      by_cases hi : i = 0
-      · simp [hi, add_nonneg (weight.property.1 none)
-            (weight.property.1 (some 0))]
-      · simp [hi, weight.property.1 (some i)]
-    · have htotal := weight.property.2
-      rw [Fintype.sum_option] at htotal
-      simp [Fin.sum_univ_succ]
+private def collapseDuplicatedSimplex (weight : Convexity.StdSimplex ℝ Player) :
+    Convexity.StdSimplex ℝ CorePlayer where
+  weights := Finsupp.equivFunOnFinite.symm
+    (fun i => if i = 0 then weight.weights none + weight.weights (some 0)
+      else weight.weights (some i))
+  nonneg := by
+    intro i
+    by_cases hi : i = 0
+    · simp [hi, add_nonneg (weight.weights_nonneg none)
+          (weight.weights_nonneg (some 0))]
+    · simp [hi, weight.weights_nonneg (some i)]
+  total := by
+    have htotal := weight.total_of_fintype
+    rw [Fintype.sum_option] at htotal
+    rw [Finsupp.sum_fintype]
+    · simp [Fin.sum_univ_succ]
       simp [Fin.sum_univ_succ] at htotal
       linarith
+    · intro
+      rfl
 
 @[simp] private theorem collapseDuplicatedSimplex_apply
-    (weight : stdSimplex ℝ Player) (i : CorePlayer) :
-    (collapseDuplicatedSimplex weight).val i =
-      if i = 0 then weight.val none + weight.val (some 0)
-      else weight.val (some i) := rfl
-
-@[simp] private theorem collapseDuplicatedSimplex_coe_apply
-    (weight : stdSimplex ℝ Player) (i : CorePlayer) :
-    collapseDuplicatedSimplex weight i =
-      if i = 0 then weight none + weight (some 0)
-      else weight (some i) := rfl
+    (weight : Convexity.StdSimplex ℝ Player) (i : CorePlayer) :
+    (collapseDuplicatedSimplex weight).weights i =
+      if i = 0 then weight.weights none + weight.weights (some 0)
+      else weight.weights (some i) := rfl
 
 private theorem collapseDuplicatedSimplex_residual
-    (weight : stdSimplex ℝ Player) (i : CorePlayer) :
+    (weight : Convexity.StdSimplex ℝ Player) (i : CorePlayer) :
     singletonLCPResidual cyclicMatrix (collapseDuplicatedSimplex weight) i =
       singletonLCPResidual duplicatedCyclicMatrix weight (some i) := by
   fin_cases i <;>
@@ -642,7 +637,7 @@ theorem duplicatedCyclicMatrix_noHomogeneous :
           duplicatedCyclicMatrix, duplicateCollapse]
       rw [hres] at hnone
       rw [collapseDuplicatedSimplex_residual]
-      change (weight.val none + weight.val (some 0)) *
+      change (weight.weights none + weight.weights (some 0)) *
         singletonLCPResidual duplicatedCyclicMatrix weight (some 0) = 0
       nlinarith
     · rw [collapseDuplicatedSimplex_residual]
@@ -694,8 +689,16 @@ theorem duplicatedNormalPlayerMatrix_eq_reindex :
     normalPlayerMatrix duplicatedCyclicMatrix =
       reindexMatrix duplicatedCoreEquiv duplicatedCyclicMatrix := by
   funext receiver owner
-  simp [normalPlayerMatrix, principalMatrix, reindexMatrix,
-    duplicatedCoreEquiv]
+  have hreceiver := congrArg Subtype.val
+    (duplicatedCoreEquiv.apply_symm_apply receiver)
+  have howner := congrArg Subtype.val
+    (duplicatedCoreEquiv.apply_symm_apply owner)
+  change duplicatedCyclicMatrix receiver.1 owner.1 =
+    duplicatedCyclicMatrix (duplicatedCoreEquiv.symm receiver)
+      (duplicatedCoreEquiv.symm owner)
+  change duplicatedCoreEquiv.symm receiver = receiver.1 at hreceiver
+  change duplicatedCoreEquiv.symm owner = owner.1 at howner
+  rw [hreceiver, howner]
 
 theorem duplicatedCyclicMatrix_normal_standardQ :
     IsStandardQMatrix (normalPlayerMatrix duplicatedCyclicMatrix) := by

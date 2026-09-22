@@ -293,7 +293,7 @@ theorem combinedFinFour_weightCertificate
     split <;> positivity
   · intro player hout
     unfold combinedFinFourWeight
-    rw [if_neg (fun hmem => hout (hcarrierSubset hmem))]
+    rw [ite_eq_right (fun hmem => hout (hcarrierSubset hmem))]
   · unfold combinedFinFourWeight
     rw [← Finset.sum_filter]
     have hfilter : active.filter (fun player =>
@@ -344,7 +344,7 @@ theorem combinedFinFour_weightedPremium_nonpos
           (by decide : (0 : Fin 4) ∉ ({1} : Finset (Fin 4))),
           Finset.sum_singleton]
         unfold combinedFinFourWeight combinedFinFourCarrier
-        rw [if_pos hcore]
+        rw [ite_eq_left hcore]
         simp [combinedFinFourCore, combinedFinFourPremium, h0, h1]
       by_cases h12 : terminal = {1, 2}
       · subst terminal
@@ -356,7 +356,7 @@ theorem combinedFinFour_weightedPremium_nonpos
           (by decide : (1 : Fin 4) ∉ ({2} : Finset (Fin 4))),
           Finset.sum_singleton]
         unfold combinedFinFourWeight combinedFinFourCarrier
-        rw [if_pos hcore]
+        rw [ite_eq_left hcore]
         simp [combinedFinFourCore, combinedFinFourPremium, h1, h2, h01]
       by_cases h02 : terminal = {0, 2}
       · subst terminal
@@ -368,7 +368,7 @@ theorem combinedFinFour_weightedPremium_nonpos
           (by decide : (0 : Fin 4) ∉ ({2} : Finset (Fin 4))),
           Finset.sum_singleton]
         unfold combinedFinFourWeight combinedFinFourCarrier
-        rw [if_pos hcore]
+        rw [ite_eq_left hcore]
         simp [combinedFinFourCore, combinedFinFourPremium, h0, h2,
           h01, h12]
       by_cases h03 : terminal = {0, 3}
@@ -381,7 +381,7 @@ theorem combinedFinFour_weightedPremium_nonpos
           (by decide : (0 : Fin 4) ∉ ({3} : Finset (Fin 4))),
           Finset.sum_singleton]
         unfold combinedFinFourWeight combinedFinFourCarrier
-        rw [if_pos hcore]
+        rw [ite_eq_left hcore]
         simp [combinedFinFourCore, combinedFinFourPremium, h0, h3,
           h01, h12, h02]
       simp [combinedFinFourPremium, h01, h12, h02, h03]

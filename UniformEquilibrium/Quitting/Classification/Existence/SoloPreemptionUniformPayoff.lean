@@ -6,7 +6,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -21,7 +21,7 @@ theorem isUniformEquilibriumPayoff_soloReward_of_nonnegative_noPreemptor
         reward (quittingSingletonTerminal owner) other) :
     (quittingGame reward).IsUniformEquilibriumPayoff none
       (quittingSoloReward reward owner) := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   apply quittingGame_isUniformEquilibriumPayoff_of_terminalNash_all_errors_fixedTarget
   intro ε hε
   let premium := quittingSoloPairPremium reward owner

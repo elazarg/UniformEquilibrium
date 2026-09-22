@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -269,11 +269,11 @@ theorem finiteDeadline_supportNever_boundaryGain_eq
       (∏ other ∈ Finset.univ.erase source.observer,
           (source.old other none).toReal) *
         reward (quittingSingletonTerminal source.observer) source.observer := by
-  letI : Finite
+  let : Finite
       (quittingFiniteDeadlineTimingGame reward source.deadline).Outcome := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI (who : ι) : Finite
+  let (who : ι) : Finite
       ((quittingFiniteDeadlineTimingGame reward source.deadline).Strategy who) := by
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance

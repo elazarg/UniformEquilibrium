@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability Set
+open _root_.Math Math.PMFProduct _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -229,10 +229,10 @@ theorem actionRepairScale_nonneg
   apply Finset.sum_nonneg
   intro d _
   by_cases hsupported : G.finkProfile z s who d ≠ 0
-  · rw [if_pos hsupported]
+  · rw [ite_eq_left hsupported]
     exact div_nonneg (abs_nonneg _)
       (ENNReal.toReal_nonneg)
-  · rw [if_neg hsupported]
+  · rw [ite_eq_right hsupported]
 
 omit [DecidableEq G.State] [∀ i, DecidableEq (G.Act i)] in
 theorem actionWeight_add_profile_nonneg
@@ -269,10 +269,10 @@ theorem actionWeight_add_profile_nonneg
         (s := Finset.univ) ?_ (Finset.mem_univ d)
       intro d' _
       by_cases hsupported' : G.finkProfile z s who d' ≠ 0
-      · rw [if_pos hsupported']
+      · rw [ite_eq_left hsupported']
         exact div_nonneg (abs_nonneg _) ENNReal.toReal_nonneg
-      · rw [if_neg hsupported']
-    simpa only [actionRepairScale, if_pos hsupported] using hterm_if
+      · rw [ite_eq_right hsupported']
+    simpa only [actionRepairScale, ite_eq_left hsupported] using hterm_if
   have habs :
       |F.actionWeight s who d| ≤
         actionRepairScale z H K F s who *
@@ -316,8 +316,8 @@ noncomputable def repairActionWeight
                 intro d _
                 by_cases hsupported :
                     G.finkProfile z s who d ≠ 0
-                · rw [if_pos hsupported]
-                · rw [if_neg hsupported]
+                · rw [ite_eq_left hsupported]
+                · rw [ite_eq_right hsupported]
                   have hzero :
                       (G.finkProfile z s who d).toReal = 0 := by
                     rw [ENNReal.toReal_eq_zero_iff]
@@ -363,8 +363,8 @@ noncomputable def repairActionWeight
                 intro d _
                 by_cases hsupported :
                     G.finkProfile z s who d ≠ 0
-                · rw [if_pos hsupported]
-                · rw [if_neg hsupported]
+                · rw [ite_eq_left hsupported]
+                · rw [ite_eq_right hsupported]
                   have hzero :
                       (G.finkProfile z s who d).toReal = 0 := by
                     rw [ENNReal.toReal_eq_zero_iff]
@@ -892,7 +892,7 @@ theorem analytic_rawFinkSupportFactor
     AnalyticAt ℝ
       (fun t => germ.rawFinkSupportFactor supported t e) 0 := by
   by_cases hsupported : supported e
-  · simpa only [rawFinkSupportFactor, hsupported, if_true] using
+  · simpa only [rawFinkSupportFactor, hsupported, ite_true] using
       germ.analytic_rawFinkActionCoordinate e
   · simpa [rawFinkSupportFactor, hsupported] using
       (analyticAt_const : AnalyticAt ℝ (fun _ : ℝ => (1 : ℝ)) 0)
@@ -926,7 +926,7 @@ theorem rawFinkSupportProduct_pos
         G.finkProfile (germ.finkPointAt ht)
           e.2.1 e.1 e.2.2 ≠ 0 :=
       (hsupported e).1 he
-    simp only [rawFinkSupportFactor, he, if_true]
+    simp only [rawFinkSupportFactor, he, ite_true]
     rw [germ.rawFinkActionCoordinate_eq_finkPointAt ht]
     exact ENNReal.toReal_pos hprofile (PMF.apply_ne_top _ _)
   · have hfalse : supported e = false :=
@@ -952,7 +952,7 @@ theorem analytic_rawFinkActionRepairShift
   apply Finset.univ.analyticAt_fun_sum
   intro e _
   by_cases hsupported : supported e = true
-  · simp only [hsupported, if_true]
+  · simp only [hsupported, ite_true]
     exact
       (((analyticAt_pi_iff.mp hsigned (Sum.inr e)).pow 2).add
         analyticAt_const).mul
@@ -1021,7 +1021,7 @@ theorem rawActionRepairedFinkObstructionWeight_action_pos
         0 ≤ germ.rawFinkSupportFactor supported t f := by
     intro f
     by_cases hf : supported f = true
-    · simp only [rawFinkSupportFactor, hf, if_true]
+    · simp only [rawFinkSupportFactor, hf, ite_true]
       rw [germ.rawFinkActionCoordinate_eq_finkPointAt ht]
       exact ENNReal.toReal_nonneg
     · have hfalse : supported f = false :=
@@ -1036,7 +1036,7 @@ theorem rawActionRepairedFinkObstructionWeight_action_pos
           G.finkProfile (germ.finkPointAt ht)
             f.2.1 f.1 f.2.2 ≠ 0 :=
         (hsupported f).1 hf
-      simp only [rawFinkSupportFactor, hf, if_true]
+      simp only [rawFinkSupportFactor, hf, ite_true]
       rw [germ.rawFinkActionCoordinate_eq_finkPointAt ht]
       exact ENNReal.toReal_pos hprofile_f (PMF.apply_ne_top _ _)
     · have hfalse : supported f = false :=
@@ -1059,7 +1059,7 @@ theorem rawActionRepairedFinkObstructionWeight_action_pos
         (f := fun f =>
           germ.rawFinkSupportFactor supported t f)
         (a := e) (Finset.mem_univ e)
-    simpa only [rawFinkSupportFactor, he, if_true] using h
+    simpa only [rawFinkSupportFactor, he, ite_true] using h
   have hterm_nonneg :
       ∀ f : Σ who : ι, G.State × G.Act who,
         0 ≤
@@ -1069,7 +1069,7 @@ theorem rawActionRepairedFinkObstructionWeight_action_pos
           else 0 := by
     intro f
     by_cases hf : supported f = true
-    · simp only [hf, if_true]
+    · simp only [hf, ite_true]
       exact mul_nonneg (by positivity)
         (Finset.prod_nonneg fun g _ => hfactor_nonneg g)
     · have hfalse : supported f = false :=
@@ -1089,7 +1089,7 @@ theorem rawActionRepairedFinkObstructionWeight_action_pos
           else 0)
         (fun f _ => hterm_nonneg f)
         (Finset.mem_univ e)
-    simpa only [weight, cofactor, he, if_true] using hsingle
+    simpa only [weight, cofactor, he, ite_true] using hsingle
   have hshift_bound :
       product * (weight ^ 2 + 1) ≤
         shift * probability := by

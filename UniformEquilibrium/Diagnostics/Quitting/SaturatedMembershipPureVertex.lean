@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -154,8 +154,8 @@ theorem exists_supported_pureRoot_zeroDebt_of_saturatedGaps
       (quittingRoot_supported_action_eq_true_of_sure root opponent hsure action hsupport)
       (hnonneg who action hsupport)]
   by_cases haction : action who = preferred who
-  · rw [if_pos haction]
-  · rw [if_neg haction]
+  · rw [ite_eq_left haction]
+  · rw [ite_eq_right haction]
     rcases hsaturated who action hsupport with hzero | htwo
     · exact hzero
     · have hmem : who ∈ Finset.univ.filter (fun player => action player ≠ preferred player ∧

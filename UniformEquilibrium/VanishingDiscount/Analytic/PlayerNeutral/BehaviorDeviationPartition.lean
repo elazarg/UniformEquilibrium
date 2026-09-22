@@ -42,8 +42,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability Math.PMFProduct
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math _root_.Math.Probability Math.PMFProduct
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 open AnalyticBellmanGerm.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -91,7 +91,7 @@ theorem endpointNeutralShadowIndex_eq_neutral
         germ.endpointFinkPoint source who action = 0) :
     germ.endpointNeutralShadowIndex source who action =
       .inr ⟨(source, action), neutral⟩ := by
-  simp only [endpointNeutralShadowIndex, dif_pos neutral]
+  simp only [endpointNeutralShadowIndex, dite_eq_left neutral]
 
 omit [DecidableEq G.State] in
 /-- Every nonneutral endpoint action is represented by the prescribed
@@ -103,7 +103,7 @@ theorem endpointNeutralShadowIndex_eq_baseline
         germ.endpointFinkPoint source who action ≠ 0) :
     germ.endpointNeutralShadowIndex source who action =
       .inl source := by
-  simp only [endpointNeutralShadowIndex, dif_neg strict]
+  simp only [endpointNeutralShadowIndex, dite_eq_right strict]
 
 omit [DecidableEq G.State] in
 /-- Endpoint excessiveness makes the two branches exhaustive in the
@@ -277,14 +277,14 @@ theorem finkPlayerNeutralOccupationKernelAt_endpointNeutralShadowIndex
   by_cases neutral :
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action = 0
-  · simp only [endpointNeutralShadowIndex, dif_pos neutral,
-      endpointNeutralShadowStateKernelAt, if_pos neutral,
+  · simp only [endpointNeutralShadowIndex, dite_eq_left neutral,
+      endpointNeutralShadowStateKernelAt, ite_eq_left neutral,
       finkPlayerNeutralOccupationKernelAt,
       finkActualOccupationKernelAt, occupationKernel,
       playerNeutralOccupationIndexEmbedding,
       ContinuationNeutralAction.source]
-  · simp only [endpointNeutralShadowIndex, dif_neg neutral,
-      endpointNeutralShadowStateKernelAt, if_neg neutral,
+  · simp only [endpointNeutralShadowIndex, dite_eq_right neutral,
+      endpointNeutralShadowStateKernelAt, ite_eq_right neutral,
       finkPlayerNeutralOccupationKernelAt,
       finkActualOccupationKernelAt, occupationKernel,
       playerNeutralOccupationIndexEmbedding]
@@ -353,9 +353,9 @@ theorem expect_fullEndpointNeutralShadowSelection_charge
   by_cases neutral :
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action = 0
-  · simp only [endpointNeutralMovingCharge, dif_pos neutral,
+  · simp only [endpointNeutralMovingCharge, dite_eq_left neutral,
       endpointNeutralShadowIndex, rawPlayerNeutralOccupationCharge]
-  · simp only [endpointNeutralMovingCharge, dif_neg neutral,
+  · simp only [endpointNeutralMovingCharge, dite_eq_right neutral,
       endpointNeutralShadowIndex, rawPlayerNeutralOccupationCharge]
 
 /-- Endpoint continuation loss assigned to the strict branch.  It is zero
@@ -379,7 +379,7 @@ theorem endpointStrictContinuationLoss_nonneg
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action = 0
   · simp [endpointStrictContinuationLoss, neutral]
-  · simp only [endpointStrictContinuationLoss, if_neg neutral,
+  · simp only [endpointStrictContinuationLoss, ite_eq_right neutral,
       neg_nonneg]
     exact
       germ.finkContinuationGain_endpointValue_nonpos
@@ -393,7 +393,7 @@ theorem endpointStrictContinuationLoss_pos
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action ≠ 0) :
     0 < germ.endpointStrictContinuationLoss source who action := by
-  simp only [endpointStrictContinuationLoss, if_neg strict, neg_pos]
+  simp only [endpointStrictContinuationLoss, ite_eq_right strict, neg_pos]
   exact
     (germ.endpointContinuationGain_eq_zero_or_neg
       source who action).resolve_left strict
@@ -416,16 +416,16 @@ theorem endpointNeutralShadowKernel_value_sub_actual
   by_cases neutral :
       G.finkContinuationGain germ.endpointValue
         germ.endpointFinkPoint source who action = 0
-  · simp only [endpointNeutralShadowIndex, dif_pos neutral,
+  · simp only [endpointNeutralShadowIndex, dite_eq_left neutral,
       playerNeutralOccupationKernel, ContinuationNeutralAction.kernel,
       ContinuationNeutralAction.source,
-      endpointStrictContinuationLoss, if_pos neutral, sub_self]
+      endpointStrictContinuationLoss, ite_eq_left neutral, sub_self]
   · have gain_identity :=
       G.finkContinuationGain_eq_expect_stateKernels
         germ.endpointValue germ.endpointFinkPoint source who action
-    simp only [endpointNeutralShadowIndex, dif_neg neutral,
+    simp only [endpointNeutralShadowIndex, dite_eq_right neutral,
       playerNeutralOccupationKernel, endpointStrictContinuationLoss,
-      if_neg neutral]
+      ite_eq_right neutral]
     linarith
 
 omit [DecidableEq G.State] in
@@ -516,7 +516,7 @@ theorem endpointStrictMass_mul_gap_le_expectedLoss
         germ.endpointFinkPoint source who action = 0
   · simp [endpointStrictContinuationLoss, neutral]
   · simpa only [endpointStrictContinuationLoss,
-      if_neg neutral, mul_one] using
+      ite_eq_right neutral, mul_one] using
       gap source who action neutral
 
 /-- Actual moving state kernel induced by a unilateral behavior
@@ -573,7 +573,7 @@ theorem mixedTransitionComparison_eq_behaviorDeviationStateKernelAt
   have action_ne_zero : deviation action ≠ 0 :=
     (PMF.mem_support_iff deviation action).1 action_mem
   have neutral := support_neutral action action_ne_zero
-  simp only [endpointNeutralShadowStateKernelAt, if_pos neutral]
+  simp only [endpointNeutralShadowStateKernelAt, ite_eq_left neutral]
 
 omit [DecidableEq G.State] in
 /-- Under predictable support-neutrality, the full neutral shadow comparison

@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math Math.Probability MeasureTheory Set
+open Filter _root_.Math _root_.Math.Probability MeasureTheory Set
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {bound : ℝ}
@@ -28,6 +28,12 @@ variable {source : FinFourMinimumAtomProducer reward bound}
 variable {returnSource :
   FinFourOwnerCompressedMinimumReturnForcedPairSource source}
 variable {lambda : ℝ}
+
+local instance : MeasurableSpace (Convexity.StdSimplex ℝ (Fin 4)) :=
+  borel _
+
+local instance : BorelSpace (Convexity.StdSimplex ℝ (Fin 4)) :=
+  ⟨rfl⟩
 
 namespace FinFourOwnerCompressedMinimumReturnForcedPairPacket
 
@@ -45,13 +51,13 @@ theorem continuous_work (who : Fin 4) :
       data.work state who) := by
   have htail (owner : Fin 4) : Continuous
       (fun state : FinFourBallisticNormalizedState data.eta ↦
-        state.2.1.val owner) :=
-    ((continuous_apply owner).comp continuous_subtype_val).comp
+        state.2.1.weights owner) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ owner).comp
       (continuous_fst.comp continuous_snd)
   have hcurrent (owner : Fin 4) : Continuous
       (fun state : FinFourBallisticNormalizedState data.eta ↦
-        state.1.val owner) :=
-    ((continuous_apply owner).comp continuous_subtype_val).comp continuous_fst
+        state.1.weights owner) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ owner).comp continuous_fst
   have hratio : Continuous
       (fun state : FinFourBallisticNormalizedState data.eta ↦
         (state.2.2 : ℝ)) :=
@@ -78,7 +84,7 @@ theorem isClosed_ballisticEdgeGraph :
     {edge | ∀ who, data.work edge.1 who ≤ 0}
   let complementary : Set (FinFourBallisticNormalizedState data.eta ×
       FinFourBallisticNormalizedState data.eta) :=
-    {edge | ∀ who, edge.1.1.val who * data.work edge.1 who = 0}
+    {edge | ∀ who, edge.1.1.weights who * data.work edge.1 who = 0}
   have hrenewal : IsClosed renewal := data.isClosed_renewalEdgeGraph
   have hfeasible : IsClosed feasible := by
     rw [show feasible = ⋂ who, {edge :
@@ -95,7 +101,7 @@ theorem isClosed_ballisticEdgeGraph :
     rw [show complementary = ⋂ who,
         {edge : FinFourBallisticNormalizedState data.eta ×
             FinFourBallisticNormalizedState data.eta |
-          edge.1.1.val who * data.work edge.1 who = 0} by
+          edge.1.1.weights who * data.work edge.1 who = 0} by
       ext edge
       simp [complementary]]
     apply isClosed_iInter
@@ -103,8 +109,8 @@ theorem isClosed_ballisticEdgeGraph :
     have hcurrent : Continuous (fun edge :
         FinFourBallisticNormalizedState data.eta ×
           FinFourBallisticNormalizedState data.eta ↦
-        edge.1.1.val who) :=
-      ((continuous_apply who).comp continuous_subtype_val).comp
+        edge.1.1.weights who) :=
+      (Convexity.StdSimplex.continuous_weights_apply ℝ who).comp
         (continuous_fst.comp continuous_fst)
     exact isClosed_eq
       (hcurrent.mul ((data.continuous_work who).comp continuous_fst))
@@ -114,7 +120,7 @@ theorem isClosed_ballisticEdgeGraph :
       data.IsBallisticEdge edge.1 edge.2} =
       renewal ∩ feasible ∩ complementary := by
     ext edge
-    simp only [Set.mem_setOf_eq, Set.mem_inter_iff, renewal, feasible,
+    simp only [Set.mem_ofPred_eq, Set.mem_inter_iff, renewal, feasible,
       complementary, IsBallisticEdge]
     aesop
   rw [heq]
@@ -164,8 +170,7 @@ theorem empirical_tendsto :
 
 /-- Exact stationarity of the normalized state marginal. -/
 theorem marginals_eq :
-    occupation.law.map continuous_fst.measurable.aemeasurable =
-      occupation.law.map continuous_snd.measurable.aemeasurable :=
+    occupation.law.map Prod.fst = occupation.law.map Prod.snd :=
   occupation.occupation.marginals_eq
 
 /-- The occupation law is supported on the exact ballistic relation. -/

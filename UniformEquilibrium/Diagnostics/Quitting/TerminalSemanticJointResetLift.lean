@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open GameTheory.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -175,9 +175,11 @@ omit [DecidableEq ι] in
 @[simp]
 theorem QuittingJointResetMode.resetSupport_identity :
     (quittingJointResetIdentity : QuittingJointResetMode ι).resetSupport = ∅ := by
+  classical
   ext coordinate
-  cases coordinate <;>
-    simp [QuittingJointResetMode.resetSupport, quittingJointResetIdentity]
+  unfold QuittingJointResetMode.resetSupport quittingJointResetIdentity
+  rw [Finset.mem_filter]
+  cases coordinate <;> simp
 
 /-- Outer composition resets exactly the union of the coordinates reset by
 either factor. -/
@@ -185,16 +187,25 @@ theorem QuittingJointResetMode.resetSupport_comp
     (outer inner : QuittingJointResetMode ι) :
     (outer.comp inner).resetSupport =
       outer.resetSupport ∪ inner.resetSupport := by
+  classical
   ext coordinate
+  unfold QuittingJointResetMode.resetSupport QuittingJointResetMode.comp
+  rw [Finset.mem_filter, Finset.mem_union, Finset.mem_filter,
+    Finset.mem_filter]
+  simp only [Finset.mem_univ, true_and]
   cases coordinate with
   | none =>
+      change
+        (outer.payoff.orElse fun _ => inner.payoff).isSome = true ↔
+          outer.payoff.isSome = true ∨ inner.payoff.isSome = true
       cases houter : outer.payoff <;>
-        simp [QuittingJointResetMode.resetSupport,
-          QuittingJointResetMode.comp, houter]
+        simp
   | some who =>
+      change
+        ((outer.cap who).orElse fun _ => inner.cap who).isSome = true ↔
+          (outer.cap who).isSome = true ∨ (inner.cap who).isSome = true
       cases houter : outer.cap who <;>
-        simp [QuittingJointResetMode.resetSupport,
-          QuittingJointResetMode.comp, houter]
+        simp
 
 omit [DecidableEq ι] in
 @[simp]
@@ -254,7 +265,7 @@ private theorem quittingJointActionLaw_toPMF
   rw [← FinDist.prob_def]
   unfold quittingJointActionLaw
   rw [FinDist.prob_pi]
-  simp only [_root_.Math.Probability.finDistOfPMF, FinDist.prob_def]
+  simp only [_root_.Math.Probability.finDistOfPMF]
   rw [pmfPi_apply, ENNReal.toReal_prod]
   exact Finset.prod_congr rfl fun _ _ => rfl
 
@@ -328,12 +339,12 @@ theorem quittingTerminalLabel_eq_none_iff
       action = (quittingAllContinueAction : ι → Bool) := by
   unfold quittingTerminalLabel
   by_cases hnonempty : (quittingQuitters action).Nonempty
-  · rw [dif_pos hnonempty]
+  · rw [dite_eq_left hnonempty]
     simp only [Option.some_ne_none, false_iff]
     intro hcontinue
     subst action
     simp [quittingQuitters, quittingAllContinueAction] at hnonempty
-  · rw [dif_neg hnonempty]
+  · rw [dite_eq_right hnonempty]
     constructor
     · intro _
       funext who
@@ -360,7 +371,7 @@ theorem quittingJointActionLaw_prob_terminalLabel_none
       {action : ι → Bool | quittingTerminalLabel action = none} =
         {quittingAllContinueAction} := by
     ext action
-    simp only [Set.mem_setOf_eq, Set.mem_singleton_iff,
+    simp only [Set.mem_ofPred_eq, Set.mem_singleton_iff,
       quittingTerminalLabel_eq_none_iff]
   rw [hevent, FinDist.probOf_singleton, FinDist.prob_def,
     quittingJointActionLaw_toPMF]
@@ -393,12 +404,12 @@ theorem quittingJointActionLaw_prob_capLabel_none
     _ = if selector who then 0 else
         quittingRootOpponentContinueMass root who := by
       by_cases hselector : selector who
-      · rw [if_pos hselector, hselector]
+      · rw [ite_eq_left hselector, hselector]
         unfold quittingStationaryContinueMass
         rw [pmfPi_apply, ENNReal.toReal_prod,
           Finset.prod_eq_zero (Finset.mem_univ who)]
         simp [quittingAllContinueAction]
-      · rw [if_neg hselector]
+      · rw [ite_eq_right hselector]
         have hfalse : selector who = false := Bool.eq_false_of_not_eq_true hselector
         rw [hfalse]
         rfl
@@ -461,7 +472,7 @@ private theorem quittingJointResetStep_cap
           (Function.update action who (selector who))) who) = _
   rw [quittingJointActionLaw_expect]
   by_cases hselector : selector who
-  · rw [if_pos hselector]
+  · rw [ite_eq_left hselector]
     rw [hselector]
     rw [← expect_pmfPi_update_pure root who true
       (fun action => quittingTerminalLabelValue reward pair.2
@@ -469,7 +480,7 @@ private theorem quittingJointResetStep_cap
     simp only [quittingTerminalLabelValue_label]
     exact quittingRootQuitPayoff_tail_irrel reward pair.2
       (Function.update pair.1 who (pair.2 who)) root who
-  · rw [if_neg hselector]
+  · rw [ite_eq_right hselector]
     have hfalse : selector who = false := Bool.eq_false_of_not_eq_true hselector
     rw [hfalse]
     rw [← expect_pmfPi_update_pure root who false
@@ -540,13 +551,13 @@ theorem quittingJointResetStep_eq_semanticPrefix
     unfold quittingTerminalSemanticPrefix
     dsimp only
     by_cases hchoice : selector who
-    · rw [if_pos hchoice]
+    · rw [ite_eq_left hchoice]
       rw [quittingRootQuitPayoff_tail_irrel reward
         (Function.update pair.1 who (pair.2 who)) pair.1]
       have hmax := hselector who
       simp [hchoice] at hmax
       exact (max_eq_left hmax).symm
-    · rw [if_neg hchoice]
+    · rw [ite_eq_right hchoice]
       have hmax := hselector who
       simp [hchoice] at hmax
       exact (max_eq_right hmax).symm

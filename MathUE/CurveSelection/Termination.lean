@@ -36,7 +36,7 @@ theorem X_pow_mul_divByXPow
     (n : ℕ) (a : PowerSeries K)
     (h : (PowerSeries.X : PowerSeries K) ^ n ∣ a) :
     PowerSeries.X ^ n * divByXPow n a = a := by
-  rw [divByXPow, dif_pos h]
+  rw [divByXPow, dite_eq_left h]
   exact (Classical.choose_spec h).symm
 
 /-- Every power below the order of a series divides it. -/
@@ -536,7 +536,7 @@ theorem polynomial_X_pow_mul_divByXPow
     (m : ℕ) (a : Polynomial K)
     (h : (Polynomial.X : Polynomial K) ^ m ∣ a) :
     Polynomial.X ^ m * polynomialDivByXPow m a = a := by
-  rw [polynomialDivByXPow, dif_pos h]
+  rw [polynomialDivByXPow, dite_eq_left h]
   exact (Classical.choose_spec h).symm
 
 /-- The honest bivariate polynomial obtained by coefficientwise exact
@@ -835,7 +835,7 @@ theorem normalizedBivPolynomialTaylorTransform_has_simple_specialFiber
   have hA0 : A.eval 0 = s.constantCoeff := by
     rw [← Polynomial.coeff_zero_eq_eval_zero,
       show A = s.trunc n by rfl,
-      PowerSeries.coeff_trunc, if_pos (by simp [n]),
+      PowerSeries.coeff_trunc, ite_eq_left (by simp [n]),
       PowerSeries.coeff_zero_eq_constantCoeff]
   have htransform :
       ∀ x z : K,
@@ -914,7 +914,7 @@ theorem
   have hA0 : A.eval 0 = s.constantCoeff := by
     rw [← Polynomial.coeff_zero_eq_eval_zero,
       show A = s.trunc n by rfl,
-      PowerSeries.coeff_trunc, if_pos (Nat.zero_lt_of_lt hkn),
+      PowerSeries.coeff_trunc, ite_eq_left (Nat.zero_lt_of_lt hkn),
       PowerSeries.coeff_zero_eq_constantCoeff]
   have htransform :
       ∀ x z : K,

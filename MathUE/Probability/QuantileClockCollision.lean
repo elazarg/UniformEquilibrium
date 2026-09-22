@@ -21,7 +21,7 @@ noncomputable section
 
 namespace Math.PMFProduct
 
-open Set Math.Probability Math.ProbabilityMassFunction
+open Set _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι α : Type*} [Fintype ι]
 
@@ -84,7 +84,7 @@ end Math.PMFProduct
 
 namespace Math.PMFProduct
 
-open Set Math.Probability Math.ProbabilityMassFunction
+open Set _root_.Math.Probability Math.ProbabilityMassFunction
 
 open Classical in
 private theorem pmfMass_eq_apply {α : Type*} (law : PMF α) (value : α) :
@@ -131,7 +131,7 @@ theorem pairRawEvenSomeCollisionMass_le
       choices first = some cell ∧ choices second = some cell} =
       ⋃ cell, cellEvent cell := by
     ext choices
-    simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
     rfl
   have houter : joint.toOuterMeasure (⋃ cell, cellEvent cell) ≤
       ∑' cell, joint.toOuterMeasure (cellEvent cell) :=
@@ -144,7 +144,7 @@ theorem pairRawEvenSomeCollisionMass_le
     intro cell
     rw [← pmfMass_eq_toOuterMeasure]
     by_cases heven : Even cell
-    · rw [if_pos heven]
+    · rw [ite_eq_left heven]
       rw [show pmfMass joint (fun choices =>
           Even cell ∧ choices first = some cell ∧ choices second = some cell) =
           pmfMass joint (fun choices =>
@@ -160,7 +160,7 @@ theorem pairRawEvenSomeCollisionMass_le
         (fun choice => choice = some cell)
       rw [pmfMass_eq_apply, pmfMass_eq_apply] at hpair
       exact hpair
-    · rw [if_neg heven]
+    · rw [ite_eq_right heven]
       have hempty : pmfMass joint (fun choices => choices ∈ cellEvent cell) = 0 := by
         rw [show (fun choices => choices ∈ cellEvent cell) =
             (fun _ => False) by
@@ -182,9 +182,9 @@ theorem pairRawEvenSomeCollisionMass_le
         apply ENNReal.tsum_le_tsum
         intro cell
         by_cases heven : Even cell
-        · rw [if_pos heven]
+        · rw [ite_eq_left heven]
           exact mul_le_mul_left (hfirst cell heven) _
-        · rw [if_neg heven]
+        · rw [ite_eq_right heven]
           exact bot_le
       _ = bound * ∑' cell, laws second (some cell) :=
         ENNReal.tsum_mul_left
@@ -296,7 +296,7 @@ end Math.Probability
 
 namespace Math.PMFProduct
 
-open Set Math.Probability Math.ProbabilityMassFunction
+open Set _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- An even-raw-cell collision among some unordered pair of coordinates. -/
 def hasRawEvenSomeCollision {ι : Type*} [Fintype ι]
@@ -324,7 +324,7 @@ theorem rawEvenSomeCollisionMass_le_choose_mul
   have hunion : {choices | hasRawEvenSomeCollision choices} =
       ⋃ pair ∈ pairs, pairEvent pair := by
     ext choices
-    simp only [Set.mem_setOf_eq, Set.mem_iUnion]
+    simp only [Set.mem_ofPred_eq, Set.mem_iUnion]
     constructor
     · rintro ⟨first, second, hne, cell, heven, hfirst, hsecond⟩
       let pair : Finset ι := {first, second}
@@ -357,7 +357,7 @@ theorem rawEvenSomeCollisionMass_le_choose_mul
       congr 1
       funext choices
       apply propext
-      simp only [pairEvent, Set.mem_setOf_eq, Finset.mem_insert,
+      simp only [pairEvent, Set.mem_ofPred_eq, Finset.mem_insert,
         Finset.mem_singleton]
       constructor
       · rintro ⟨cell, heven, hall⟩

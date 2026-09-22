@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -53,8 +53,8 @@ theorem quittingTerminalOpponentAdvantage_nonneg_of_ownerJoinAntitone
   unfold quittingTerminalOpponentAdvantage quittingRootPayoff
   rw [quittingQuitters_update_true_of_apply_false]
   by_cases hquitters : (quittingQuitters action).Nonempty
-  · simp only [dif_pos hquitters,
-      dif_pos (Finset.insert_nonempty owner (quittingQuitters action))]
+  · simp only [dite_eq_left hquitters,
+      dite_eq_left (Finset.insert_nonempty owner (quittingQuitters action))]
     apply sub_nonneg.mpr
     apply hjoin (quittingQuitters action) hquitters
     simp [quittingQuitters, howner]

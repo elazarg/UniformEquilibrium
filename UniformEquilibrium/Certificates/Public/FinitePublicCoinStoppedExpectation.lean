@@ -38,7 +38,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace FinitePublicCoinStoppingRegion
 
-open Math Math.OutcomeClosure Math.Probability
+open _root_.Math Math.OutcomeClosure _root_.Math.Probability
   Math.ProbabilityMassFunction
 
 variable {ι Child : Type} {G : StochasticGame ι}
@@ -386,7 +386,7 @@ theorem potential_le_stageEUAt_add_activeStageCharge
     boundary.potential who history.2 ≤
       G.stageEUAt profile history who +
         boundary.activeStageCharge profile who stage history := by
-  simp only [activeStageCharge, if_neg hnonterminal]
+  simp only [activeStageCharge, ite_eq_right hnonterminal]
   linarith [neg_le_abs
     (G.stageEUAt profile history who -
       boundary.potential who history.2)]
@@ -401,7 +401,7 @@ theorem stageEUAt_le_potential_add_activeStageCharge
     G.stageEUAt profile history who ≤
       boundary.potential who history.2 +
         boundary.activeStageCharge profile who stage history := by
-  simp only [activeStageCharge, if_neg hnonterminal]
+  simp only [activeStageCharge, ite_eq_right hnonterminal]
   linarith [le_abs_self
     (G.stageEUAt profile history who -
       boundary.potential who history.2)]
@@ -427,7 +427,7 @@ theorem abs_potential_le
       ∀ child player, |terminalTarget child player| ≤ targetBound)
     (who : ι) (state : G.State) :
     |boundary.potential who state| ≤ targetBound := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   rw [← boundary.expect_terminalChildLaw_eq_initial
     profile state (region.rank state) (le_refl _) who]
   exact abs_expect_le_of_abs_le _ _

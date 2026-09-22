@@ -17,7 +17,7 @@ theorem forall_finset {n : ℕ} {ι : Type*} (indices : Finset ι)
       have hs := ih (fun other hother => h other (Finset.mem_insert_of_mem hother))
       convert hi.inter hs using 1
       ext point
-      simp only [Set.mem_setOf_eq, Finset.forall_mem_insert, Set.mem_inter_iff]
+      simp only [Set.mem_ofPred_eq, Finset.forall_mem_insert, Set.mem_inter_iff]
 
 theorem exists_finset {n : ℕ} {ι : Type*} (indices : Finset ι)
     (predicate : ι → (Fin n → ℝ) → Prop)

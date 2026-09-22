@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -56,11 +56,10 @@ path. -/
 theorem continuous_quittingFiniteNashBellmanPathSimplexRoot_apply
     (cutoff time : ℕ) (who : ι) (action : Bool) :
     Continuous (fun path : QuittingFiniteNashBellmanPath ι cutoff ↦
-      quittingFiniteNashBellmanPathSimplexRoot cutoff path time who action) :=
-  (continuous_apply action).comp
-    (continuous_subtype_val.comp
-      ((continuous_apply who).comp
-        (continuous_quittingFiniteNashBellmanPathSimplexRoot cutoff time)))
+      (quittingFiniteNashBellmanPathSimplexRoot cutoff path time who).weights action) :=
+  (Convexity.StdSimplex.continuous_weights_apply ℝ action).comp
+    ((continuous_apply who).comp
+      (continuous_quittingFiniteNashBellmanPathSimplexRoot cutoff time))
 
 /-- At a fixed time, the pure-Quit endpoint against the displayed opponents
 is continuous in the finite path. -/
@@ -138,8 +137,8 @@ theorem continuous_quittingFiniteNashBellmanPathRoot_toReal
       ((quittingFiniteNashBellmanPathRoots cutoff path time who) action).toReal) := by
   have heq : (fun path : QuittingFiniteNashBellmanPath ι cutoff ↦
       ((quittingFiniteNashBellmanPathRoots cutoff path time who) action).toReal) =
-      fun path ↦ quittingFiniteNashBellmanPathSimplexRoot
-        cutoff path time who action := by
+      fun path ↦ (quittingFiniteNashBellmanPathSimplexRoot
+        cutoff path time who).weights action := by
     funext path
     rw [← quittingRootOfSimplex_finiteNashBellmanPathSimplexRoot
       cutoff path time]
@@ -392,7 +391,7 @@ theorem QuittingAnchoredBoundaryBlock.path_coordinates_mem_fixedCutoffLift
           start.val extra.val
       else ∅
   refine Set.mem_iUnion.2 ⟨start, Set.mem_iUnion.2 ⟨extra, ?_⟩⟩
-  rw [if_pos block.within]
+  rw [ite_eq_left block.within]
   refine ⟨quittingFiniteZeroBoundaryNashBellmanMaxDynamicDebtMinimizer_mem
     reward (anchor.last + 1), ?_⟩
   rfl

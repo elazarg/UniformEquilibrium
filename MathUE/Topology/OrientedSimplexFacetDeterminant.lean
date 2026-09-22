@@ -37,9 +37,16 @@ theorem facetDeterminant_delete
         fun vertex => Fin.cons (1 : R) (vertices vertex)).submatrix
         omitted.cycleRange.symm id := by
     ext vertex coordinate
-    induction vertex using Fin.cases with
-    | zero => simp
-    | succ kept => simp
+    rw [Matrix.submatrix_apply, id_eq]
+    have hrow :
+        ((Fin.cons (vertices omitted)
+          (fun kept => vertices (omitted.succAbove kept)) :
+            Fin (n + 1) → Fin n → R) vertex) =
+        vertices (omitted.cycleRange.symm vertex) := by
+      induction vertex using Fin.cases with
+      | zero => rw [Fin.cons_zero, Fin.cycleRange_symm_zero]
+      | succ kept => rw [Fin.cons_succ, Fin.cycleRange_symm_succ]
+    rw [hrow]
   unfold facetDeterminant determinant
   rw [hmatrix, Matrix.det_permute]
   simp
@@ -66,15 +73,18 @@ theorem facetDeterminant_add_eq_zero_of_reflection
   have hfirst : matrix.updateRow 0 (Fin.cons 1 first) = matrix := by
     ext vertex coordinate
     induction vertex using Fin.cases with
-    | zero => simp [matrix]
-    | succ vertex => simp [matrix]
+    | zero => rw [Matrix.updateRow_self]; rfl
+    | succ vertex =>
+      rw [Matrix.updateRow_ne (Fin.succ_ne_zero vertex)]
   have hsecond : matrix.updateRow 0 (Fin.cons 1 second) =
       (fun vertex => Fin.cons (1 : R)
         ((Fin.cons second face : Fin (n + 1) → Fin n → R) vertex)) := by
     ext vertex coordinate
     induction vertex using Fin.cases with
-    | zero => simp [matrix]
-    | succ vertex => simp [matrix]
+    | zero => rw [Matrix.updateRow_self]; rfl
+    | succ vertex =>
+      rw [Matrix.updateRow_ne (Fin.succ_ne_zero vertex)]
+      simp only [matrix, Fin.cons_succ]
   rw [hfirst, hsecond] at hdet
   exact hdet
 
@@ -98,9 +108,11 @@ theorem facetDeterminant_eq_lastCoordinate_displacement
   have hdet : shifted.det = matrix.det :=
     Matrix.det_updateCol_add_smul_self matrix hlast (-parameter)
   have hzero : shifted 0 (Fin.last (n + 1)) = apex (Fin.last n) - parameter := by
-    simp [shifted, matrix, sub_eq_add_neg]
+    simp only [shifted, Matrix.updateCol_self]
+    simp [matrix, sub_eq_add_neg]
   have hsucc (vertex : Fin (n + 1)) : shifted vertex.succ (Fin.last (n + 1)) = 0 := by
-    simp [shifted, matrix, hface]
+    simp only [shifted, Matrix.updateCol_self]
+    simp [matrix, hface]
   have hminor : shifted.submatrix (0 : Fin (n + 2)).succAbove
       (Fin.last (n + 1)).succAbove =
       (fun vertex => Fin.cons (1 : R) (Fin.init (face vertex))) := by

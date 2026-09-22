@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Interval Math.Interval.RationalPolynomial Math.ChargedPathBudget
+open Math.Interval Math.Interval.RationalPolynomial Maths.ChargedPathBudget
 
 variable {dimension : ℕ}
 variable {reward : {coalition : Finset (Fin dimension) // coalition.Nonempty} →
@@ -37,7 +37,7 @@ theorem quittingRobustPath_chargeSum_le_rationalPotential_oscillation
       (fun state ↦ evalReal state.1 expression))
     {source target : QuittingRobustChargedState (Fin dimension) bound}
     (path : (quittingFloorFreeRobustChargedRelation reward tolerance bound).Path source target) :
-    path.chargeSum ≤ Math.ChargedPathBudget.oscillation
+    path.chargeSum ≤ Maths.ChargedPathBudget.oscillation
       (fun state : QuittingRobustChargedState (Fin dimension) bound ↦
         evalReal state.1 expression) :=
   (quittingRobustChargedRelation_isBoundedPotential_of_rationalPotential expression

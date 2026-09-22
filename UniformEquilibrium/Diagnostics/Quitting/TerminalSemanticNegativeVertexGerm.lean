@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -253,7 +253,8 @@ theorem QuittingTerminalExploitabilityWitness.exists_joiner_or_punishmentMoat_sa
             (subseq : ℕ → ℕ),
           Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
               atTop (nhds pair) ∧
-          mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+          mass ∈ GameTheory.Math.Probability.simplexWeights
+            (QuittingTerminalOutcome ι) ∧
           StrictMono subseq ∧
           Tendsto (fun n => quittingTerminalOutcomeMass reward
               (Function.update (profiles (subseq n)) owner

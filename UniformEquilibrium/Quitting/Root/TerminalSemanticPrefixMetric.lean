@@ -25,7 +25,7 @@ or its tube is semialgebraic, nor does it address finite barrier completeness.
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

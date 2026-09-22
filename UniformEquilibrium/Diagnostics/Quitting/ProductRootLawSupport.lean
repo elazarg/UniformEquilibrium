@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -39,15 +39,19 @@ theorem quittingProductRootCoalitionSupport_card_eq_one_or_two_or_four
   let flexible := productCoalitionFlexibleCoordinates
     (quittingRootQuitRates root)
   have hfirstNot : first ∉ flexible := by
-    simp only [flexible, productCoalitionFlexibleCoordinates,
-      Finset.mem_filter, Finset.mem_univ, true_and, quittingRootQuitRates]
     intro h
-    exact h.2 (by rw [hfirst]; norm_num)
+    change first ∈ Finset.univ.filter (fun who ↦
+      quittingRootQuitRates root who ≠ 0 ∧
+        1 - quittingRootQuitRates root who ≠ 0) at h
+    have hcontinue := (Finset.mem_filter.mp h).2.2
+    exact hcontinue (by simp [quittingRootQuitRates, hfirst])
   have hsecondNot : second ∉ flexible := by
-    simp only [flexible, productCoalitionFlexibleCoordinates,
-      Finset.mem_filter, Finset.mem_univ, true_and, quittingRootQuitRates]
     intro h
-    exact h.2 (by rw [hsecond]; norm_num)
+    change second ∈ Finset.univ.filter (fun who ↦
+      quittingRootQuitRates root who ≠ 0 ∧
+        1 - quittingRootQuitRates root who ≠ 0) at h
+    have hcontinue := (Finset.mem_filter.mp h).2.2
+    exact hcontinue (by simp [quittingRootQuitRates, hsecond])
   have hcardFlexible : flexible.card ≤ 2 := by
     have hpairSubset : ({first, second} : Finset (Fin 4)) ⊆ flexibleᶜ := by
       intro who hwho

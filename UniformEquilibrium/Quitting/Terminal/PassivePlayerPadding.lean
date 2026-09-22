@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct StochasticGame
+open _root_.Math.Probability Math.PMFProduct StochasticGame
 
 variable {I J : Type} [Fintype I] [DecidableEq I]
   [Fintype J] [DecidableEq J]
@@ -171,8 +171,8 @@ theorem quittingRootAbsorbingContribution_passivePadding_old
             (quittingQuitters (Sum.elim oldAction freshAction)).Nonempty := by
           obtain ⟨owner, howner⟩ := hold
           exact ⟨.inl owner, by simpa [quittingQuitters] using howner⟩
-        rw [quittingRootPayoff, dif_pos hcombined,
-          quittingRootPayoff, dif_pos hold]
+        rw [quittingRootPayoff, dite_eq_left hcombined,
+          quittingRootPayoff, dite_eq_left hold]
         exact quittingPassivePaddingReward_old_of_old_quits
           reward upper penalty oldAction freshAction hold who
       rw [hpoint, expect_const]
@@ -190,10 +190,10 @@ theorem quittingRootAbsorbingContribution_passivePadding_old
               (quittingQuitters (Sum.elim oldAction freshAction)).Nonempty := by
             obtain ⟨owner, howner⟩ := hfresh
             exact ⟨.inr owner, by simpa [quittingQuitters] using howner⟩
-          rw [quittingRootPayoff, dif_pos hcombined,
+          rw [quittingRootPayoff, dite_eq_left hcombined,
             quittingPassivePaddingReward_old_of_fresh_only
               reward upper penalty oldAction freshAction hold hfresh who]
-          simp only [if_pos hfresh, mul_one]
+          simp only [ite_eq_left hfresh, mul_one]
         · have hcombined :
               ¬(quittingQuitters (Sum.elim oldAction freshAction)).Nonempty := by
             intro hnonempty
@@ -288,7 +288,7 @@ theorem quittingRootAbsorbingContribution_passivePadding_fresh
             (quittingQuitters (Sum.elim oldAction freshAction)).Nonempty := by
           obtain ⟨owner, howner⟩ := hold
           exact ⟨.inl owner, by simpa [quittingQuitters] using howner⟩
-        rw [quittingRootPayoff, dif_pos hcombined]
+        rw [quittingRootPayoff, dite_eq_left hcombined]
         simp [quittingPassivePaddingReward, hold]
       rw [hpoint, expect_const]
       simp [hold]
@@ -307,7 +307,7 @@ theorem quittingRootAbsorbingContribution_passivePadding_fresh
           have hmem : Sum.inr who ∈
               quittingQuitters (Sum.elim oldAction freshAction) := by
             simpa [quittingQuitters] using hwho
-          rw [quittingRootPayoff, dif_pos hcombined]
+          rw [quittingRootPayoff, dite_eq_left hcombined]
           simp [quittingPassivePaddingReward, hold, hwho, hmem]
         · by_cases hfresh : (quittingQuitters freshAction).Nonempty
           · have hcombined :
@@ -317,7 +317,7 @@ theorem quittingRootAbsorbingContribution_passivePadding_fresh
             have hnotmem : Sum.inr who ∉
                 quittingQuitters (Sum.elim oldAction freshAction) := by
               simpa [quittingQuitters] using hwho
-            rw [quittingRootPayoff, dif_pos hcombined]
+            rw [quittingRootPayoff, dite_eq_left hcombined]
             simp [quittingPassivePaddingReward, hold, hwho, hnotmem]
           · have hcombined :
                 ¬(quittingQuitters
@@ -332,7 +332,7 @@ theorem quittingRootAbsorbingContribution_passivePadding_fresh
                   apply hfresh
                   exact ⟨owner, by simpa [quittingQuitters] using hplayer⟩
             simp [quittingRootPayoff, hcombined, hwho]
-      rw [hpoint, if_neg hold]
+      rw [hpoint, ite_eq_right hold]
       calc
         expect (pmfPi fresh)
               (fun freshAction =>

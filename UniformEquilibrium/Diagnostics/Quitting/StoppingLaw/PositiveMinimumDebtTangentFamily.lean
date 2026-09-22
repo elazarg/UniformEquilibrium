@@ -53,7 +53,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -326,7 +326,7 @@ theorem QuittingPositiveMinimumDebtTangentFamily.exhaustiveAlternative
     simpa only [active,
       QuittingPositiveMinimumDebtTangentFamily.positiveDebtSupport] using
         family.positiveDebtSupport_nonempty
-  letI : Nonempty ι := ⟨hactiveNonempty.choose⟩
+  let : Nonempty ι := ⟨hactiveNonempty.choose⟩
   have hgain : ∀ mover ∈ active, 0 < gain mover := by
     intro mover hmover
     have hdiag := family.tangent_diagonal ⟨mover, hmover⟩
@@ -481,7 +481,7 @@ theorem exists_positiveMinimumDebtTangentFamily_of_pair
     intro who
     dsimp only [inactiveDebt]
     by_cases hzero : quittingTerminalSemanticDebt base who = 0
-    · simp only [hzero, if_pos]
+    · simp only [hzero, ite_eq_left]
       have hcoordinate : Tendsto (fun n ↦ quittingTerminalSemanticDebt
           (quittingTerminalSemanticPair reward (profiles n)) who)
           atTop (nhds (quittingTerminalSemanticDebt base who)) := by
@@ -509,7 +509,7 @@ theorem exists_positiveMinimumDebtTangentFamily_of_pair
             (quittingTerminalSemanticPair reward (profiles n)) who /
           lambda n) atTop (nhds 0) := by
     intro who hzero
-    simpa only [inactiveDebt, hzero, if_pos] using hinactiveRate who
+    simpa only [inactiveDebt, hzero, ite_eq_left] using hinactiveRate who
   obtain ⟨bestResponse, subseq, tangent, hsubseq, hlambdaSubseq,
       htangent, hendpointDebtLeTolerance, _hendpointDebtZero, _hdiagonalEq,
       htangentInactive, _hsumNonneg, _hslopeAlternative⟩ :=

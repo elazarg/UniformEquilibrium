@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 namespace FourPlayerPairedSingleton
 
-open Filter Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
   StochasticGame
 open SolanVieilleBoundary (boundaryReward)
 

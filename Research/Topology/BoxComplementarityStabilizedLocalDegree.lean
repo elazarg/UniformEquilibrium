@@ -127,6 +127,8 @@ theorem BoxComplementarityProblem.localDegree_univ_eq_resolution_one
     (problem : BoxComplementarityProblem (Fin n)) :
     problem.localDegree univ (by simp [IsIsolating]) =
       (-1 : ℤ) ^ n * boxComplementarityLocalSignedCount problem 1 (by omega) univ := by
-  rw [localDegree, rawLocalDegree_univ_eq_resolution_one]
+  unfold localDegree
+  apply congrArg (fun value : ℤ => (-1 : ℤ) ^ n * value)
+  exact problem.rawLocalDegree_univ_eq_resolution_one
 
 end Math

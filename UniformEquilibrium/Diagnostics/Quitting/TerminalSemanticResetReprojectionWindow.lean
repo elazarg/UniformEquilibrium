@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {X : Type} [TopologicalSpace X] [FirstCountableTopology X]
@@ -563,7 +563,8 @@ theorem exists_sameProfile_finiteWindow_defectPacket
       0 ≤ quittingTerminalOpponentIncidenceMass owner other contact.2 := by
     intro other _
     unfold quittingTerminalOpponentIncidenceMass
-    exact Finset.sum_nonneg fun terminal _ => hmass.1 (some terminal)
+    exact Finset.sum_nonneg fun terminal _ =>
+      (GameTheory.Math.Probability.mem_simplexWeights.mp hmass).1 (some terminal)
   obtain ⟨other, hotherMem, hotherIncidence⟩ :=
     (Finset.sum_pos_iff_of_nonneg hcoordinateNonneg).mp hincidence
   have hotherNe : other ≠ owner := (Finset.mem_erase.mp hotherMem).1
@@ -597,7 +598,7 @@ theorem exists_sameProfile_finiteWindow_defectPacket
         quittingStageCoalitionMass reward (profiles n) time terminal := by
     filter_upwards [hpersistent] with n hn
     dsimp only [cutoff]
-    rw [dif_pos hn]
+    rw [dite_eq_left hn]
     exact Classical.choose_spec
       (exists_finiteWindow_sum_stageCoalitionMass_gt
         (reward := reward) (profiles n) terminal hn)

@@ -139,7 +139,7 @@ theorem diagonal_mem_terminalSemanticCarrier_of_isUniformEquilibriumPayoff
       have hdebt := quittingTerminalDeviationDebt_nonneg reward (profiles n) who
       dsimp only [quittingTerminalDeviationDebt] at hdebt
       exact sub_nonneg.mp hdebt
-    letI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+    let : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
       ⟨profiles n who⟩
     have hupper : envelope ≤ prescribed + error n := by
       dsimp only [envelope, prescribed]

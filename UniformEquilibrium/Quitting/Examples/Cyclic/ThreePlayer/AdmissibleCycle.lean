@@ -77,7 +77,7 @@ open GameTheory
 
 namespace GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 open GameTheory.CyclicThreePlayerQuitting.Minimality
 open GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket
@@ -118,9 +118,9 @@ theorem quittingRootPayoff_eq (tail : Payoff Player) (action : Player → Bool)
       else tail who := by
   unfold quittingRootPayoff
   by_cases h : (quittingQuitters action).Nonempty
-  · rw [dif_pos h, if_pos h]
+  · rw [dite_eq_left h, ite_eq_left h]
     exact congrFun (reward_quitters action h) who
-  · rw [dif_neg h, if_neg h]
+  · rw [dite_eq_right h, ite_eq_right h]
 
 /-- A displayed three-coordinate action row has a quitter exactly when one of
 its coordinates is `true`. -/

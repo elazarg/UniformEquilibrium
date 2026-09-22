@@ -32,7 +32,6 @@ theorem marked_outsider_capDefect :
     quittingRootAbsorbingContribution_pureSetRoot]
   norm_num [quittingSetReward, reward,
     show ({2} : Finset (Fin 4)) ≠ {1, 2} by decide]
-  split_ifs <;> norm_num
 
 theorem marked_outsider_capLedger :
     quittingFiniteWordPlayerCapDefectLedger reward [markedRoot] tail 1 = 1 := by

@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- First sure-quitting label cyclically following a prescribed `Fin 4`
 owner. -/

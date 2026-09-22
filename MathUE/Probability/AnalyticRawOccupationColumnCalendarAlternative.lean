@@ -285,7 +285,7 @@ theorem expected_epochCost_le_eventualBill
       eventualMovingKernelEpochBill
         cost potential firstGoodEpoch epoch := by
   by_cases hearly : epoch < firstGoodEpoch
-  · rw [eventualMovingKernelEpochBill, if_pos hearly]
+  · rw [eventualMovingKernelEpochBill, ite_eq_left hearly]
     calc
       (∑ offset ∈ Finset.range horizon,
           expect
@@ -310,7 +310,7 @@ theorem expected_epochCost_le_eventualBill
         · exact_mod_cast horizon_le
         · unfold finiteStatePotentialBound
           positivity
-  · rw [eventualMovingKernelEpochBill, if_neg hearly]
+  · rw [eventualMovingKernelEpochBill, ite_eq_right hearly]
     let lateCost : ℕ → S → ℝ :=
       fun other =>
         if firstGoodEpoch ≤ other then cost other else fun _ => 0
@@ -326,9 +326,9 @@ theorem expected_epochCost_le_eventualBill
               latePotential other state := by
       intro other state
       by_cases hother : firstGoodEpoch ≤ other
-      · simp only [lateCost, latePotential, if_pos hother]
+      · simp only [lateCost, latePotential, ite_eq_left hother]
         exact cost_le_drift other hother state
-      · simp only [lateCost, latePotential, if_neg hother,
+      · simp only [lateCost, latePotential, ite_eq_right hother,
           expect_const, sub_self]
         exact le_rfl
     have hbound :=
@@ -336,7 +336,7 @@ theorem expected_epochCost_le_eventualBill
         law kernel lateCost latePotential law_step
         lateCost_le_drift epoch horizon horizon_le
     simpa only [lateCost, latePotential,
-      if_pos (Nat.le_of_not_gt hearly),
+      ite_eq_left (Nat.le_of_not_gt hearly),
       epochPotentialBill] using hbound
 
 /-- Completed epochs obey the sum of their eventual epoch bills. -/
@@ -500,7 +500,7 @@ theorem tendsto_eventualMovingKernelEpochBill_div_length
   apply potential_ratio.congr'
   filter_upwards [eventually_ge_atTop firstGoodEpoch] with epoch hepoch
   simp only [eventualMovingKernelEpochBill,
-    if_neg (Nat.not_lt.mpr hepoch)]
+    ite_eq_right (Nat.not_lt.mpr hepoch)]
 
 /-- Eventual drift control on one fixed calendar yields an all-horizon
 sublinear account; the finitely many pre-stabilization epochs are explicit

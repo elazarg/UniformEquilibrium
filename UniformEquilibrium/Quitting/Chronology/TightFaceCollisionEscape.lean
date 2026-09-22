@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -186,7 +186,7 @@ theorem singletonContribution_eq_mass_mul_mixture
       data.singletonMass root * data.singletonRewardMixture root who := by
   by_cases hmass : 0 < data.singletonMass root
   · unfold singletonRewardMixture singletonWeight
-    simp only [dif_pos hmass]
+    simp only [dite_eq_left hmass]
     rw [Finset.mul_sum]
     apply Finset.sum_congr rfl
     intro owner _

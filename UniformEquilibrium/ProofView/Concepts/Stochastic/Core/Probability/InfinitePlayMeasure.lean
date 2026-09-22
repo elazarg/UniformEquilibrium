@@ -294,7 +294,7 @@ theorem stepKernel_partialTraj_succ_self (σ : G.BehaviorProfile) (n : ℕ)
     · have hi2 : i.1 ≤ n + 1 := Finset.mem_Iic.mp i.2
       have hi : (i : ℕ) = n + 1 := by omega
       have hi' : i = ⟨n + 1, Finset.mem_Iic.mpr (le_refl (n + 1))⟩ := Subtype.ext hi
-      simp only [h, dif_neg, not_false_eq_true]
+      simp only [h, dite_eq_right, not_false_eq_true]
       subst hi'
       rfl
   have step := partialTraj_succ_self_apply (X := fun _ : ℕ => G.StageOutcome)
@@ -449,7 +449,7 @@ theorem extendCoords_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct)
       have := Fin.snoc_castSucc (α := fun _ : Fin (t + 1) => G.StageOutcome) (p := h.1)
         (x := (h.2, a)) (i := (⟨k.1, hlt⟩ : Fin t))
       simpa [Fin.castSucc, Fin.castAdd, Fin.castLE] using this
-    rw [dif_pos hlt.le, dif_pos hlt, dif_pos (show k.1 < t + 1 by omega), hcast]
+    rw [dite_eq_left hlt.le, dite_eq_left hlt, dite_eq_left (show k.1 < t + 1 by omega), hcast]
   · have hcast : Fin.snoc (α := fun _ : Fin (t + 1) => G.StageOutcome) h.1 (h.2, a)
         (⟨k.1, by omega⟩ : Fin (t + 1)) = (h.2, a) := by
       have hlast : (⟨k.1, by omega⟩ : Fin (t + 1)) = Fin.last t := by
@@ -459,8 +459,8 @@ theorem extendCoords_reconstructCoords (t : ℕ) (h : G.Hist t) (a : G.JointAct)
     have hle : k.1 ≤ t := heq.le
     have hnlt : ¬ k.1 < t := by omega
     have hlt1 : k.1 < t + 1 := by omega
-    rw [dif_pos hle, dif_neg hnlt, dif_pos hlt1, hcast]
-  · rw [dif_neg (by omega), dif_neg (by omega)]
+    rw [dite_eq_left hle, dite_eq_right hnlt, dite_eq_left hlt1, hcast]
+  · rw [dite_eq_right (by omega), dite_eq_right (by omega)]
 
 omit [DecidableEq ι] [Countable G.State] [∀ i, Countable (G.Act i)] in
 /-- **`coordsDist` unfolds through `histDist` plus one fresh action draw.** The recursive

@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -132,8 +132,8 @@ theorem quittingFiniteTerminalNeverHazardValue_eq_prescribed_add_dynamicDebt_of_
       have htail := ih (start + 1) (by omega) hnext
       rw [quittingFiniteTerminalHazardValue]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       rw [show start + (fuel + 1) = start + 1 + fuel by omega, htail]
       rw [quittingFiniteDynamicDebt_succ]
       change augmented = prescribed start +

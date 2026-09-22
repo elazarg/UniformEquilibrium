@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import MathUE.Interval.RationalLowerBoxSearch
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.EscapeAwareQuantileClockPolynomialLower
 import Research.Quitting.FinFourSingleShellOuter
 import Research.Quitting.FiniteClockPolynomialCenter
@@ -393,8 +394,7 @@ private theorem finFourSingleShellEqualityExpression_index
       | 1 => finFourSingleShellAuxiliaryExpression level player
       | 2 => finFourSingleShellPayoffConsistencyExpression reward level player
       | _ => finFourSingleShellCapTightExpression reward level player := by
-  simp [finFourSingleShellEqualityExpression,
-    finFourSingleShellEqualityIndex]
+  fin_cases kind <;> fin_cases player <;> rfl
 
 private theorem finFourSingleShellNonnegativeExpression_massIndex
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Fin 4 → ℚ)
@@ -558,7 +558,7 @@ def finFourSingleShellAssignmentOfData (level : ℕ)
     (atom : FiniteClockAtom (finFourSingleShellClock level)) :
     finFourSingleShellAssignmentOfData level point center weight
         (finFourSingleShellMassIndex level player atom) = weight player atom := by
-  rw [finFourSingleShellMassIndex, finFourShellOffset]
+  unfold finFourSingleShellMassIndex finFourShellOffset
   simp only [finFourSingleShellAssignmentOfData]
   split
   · omega
@@ -614,14 +614,16 @@ theorem finFourSingleShellSubstitutedWeight_mem_stdSimplex
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (mover : Fin 4)
     (candidate : FiniteClockAtom (finFourSingleShellClock level))
     (player : Fin 4) :
     finFourSingleShellSubstitutedWeight level weight mover candidate player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)) := by
+      GameTheory.Math.Probability.simplexWeights
+        (FiniteClockAtom (finFourSingleShellClock level)) := by
   by_cases hplayer : player = mover
   · subst player
+    apply GameTheory.Math.Probability.mem_simplexWeights.mpr
     constructor
     · intro atom
       simp only [finFourSingleShellSubstitutedWeight, ↓reduceIte]
@@ -831,13 +833,13 @@ private theorem finiteClockAtomToStoppingTime_injective (clock : ℕ) :
 
 private theorem finiteClockDecodeLaw_apply_toReal
     (clock : ℕ) (weight : FiniteClockAtom clock → ℝ)
-    (hweight : weight ∈ stdSimplex ℝ (FiniteClockAtom clock))
+    (hweight : weight ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clock))
     (atom : FiniteClockAtom clock) :
     (finiteClockDecodeLaw clock weight hweight
       (finiteClockAtomToStoppingTime clock atom)).toReal = weight atom := by
   unfold finiteClockDecodeLaw
   rw [PMF.map_apply, tsum_eq_single atom]
-  · simp only [if_pos]
+  · simp only [ite_eq_left]
     exact ofVector_toReal hweight atom
   · intro other hother
     have hne : finiteClockAtomToStoppingTime clock other ≠
@@ -850,7 +852,7 @@ private theorem sum_fin_eq_sum_range
     (∑ index, value index) =
       ∑ index ∈ Finset.range count,
         if hindex : index < count then value ⟨index, hindex⟩ else 0 := by
-  simpa only [Finset.mem_range, Fin.isLt, dif_pos] using
+  simpa only [Finset.mem_range, Fin.isLt, dite_eq_left] using
     (Fin.sum_univ_eq_sum_range
       (fun index ↦ if hindex : index < count then value ⟨index, hindex⟩ else 0)
       count)
@@ -871,7 +873,7 @@ private theorem sum_fin_eq_castLE_add_sum_gt
     simp only [Finset.mem_range] at hindex
     have hcount : index < count :=
       lt_of_lt_of_le hindex time.isLt
-    simp only [dif_pos hcount, dif_pos hindex]
+    simp only [dite_eq_left hcount, dite_eq_left hindex]
     congr 1
   · have hset : Finset.Ico (time.1 + 1) count =
         (Finset.range count).filter (fun index ↦ time.1 < index) := by
@@ -882,7 +884,7 @@ private theorem sum_fin_eq_castLE_add_sum_gt
     apply Finset.sum_congr rfl
     intro index hindex
     simp only [Finset.mem_range] at hindex
-    simp only [dif_pos hindex]
+    simp only [dite_eq_left hindex]
     change (if time.1 < index then value ⟨index, hindex⟩ else 0) =
       if time.1 < index then value ⟨index, hindex⟩ else 0
     rfl
@@ -892,7 +894,7 @@ private theorem finiteClockDecoded_survival_eq_tailMass
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (player : Fin 4)
     (time : Fin (finFourSingleShellClock level + 1)) :
     quittingHazardSurvival
@@ -919,7 +921,8 @@ private theorem finiteClockDecoded_survival_eq_tailMass
   have htotal : weight player none +
       ∑ later : Fin (finFourSingleShellClock level + 1),
         weight player (some later) = 1 := by
-    simpa only [Fintype.sum_option] using (hweight player).2
+    simpa only [Fintype.sum_option] using
+      (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player)).2
   calc
     quittingHazardSurvival hazard (time.1 + 1) =
         1 - ∑ date ∈ Finset.range (time.1 + 1),
@@ -941,7 +944,7 @@ private theorem finiteClockDecoded_survival_eq_tailMass
 private theorem finiteClockDecodeLaw_apply_eq_zero_of_clock_lt
     (clock date : ℕ) (hclock : clock < date)
     (weight : FiniteClockAtom clock → ℝ)
-    (hweight : weight ∈ stdSimplex ℝ (FiniteClockAtom clock)) :
+    (hweight : weight ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clock)) :
     finiteClockDecodeLaw clock weight hweight (some date) = 0 := by
   apply Classical.byContradiction
   intro hne
@@ -962,7 +965,7 @@ private theorem finiteClockDecodeLaw_oneHot
     (clock : ℕ) (candidate : FiniteClockAtom clock)
     (oneHot : FiniteClockAtom clock → ℝ)
     (honeHot : oneHot = fun atom ↦ if atom = candidate then 1 else 0)
-    (hsimplex : oneHot ∈ stdSimplex ℝ (FiniteClockAtom clock)) :
+    (hsimplex : oneHot ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clock)) :
     finiteClockDecodeLaw clock oneHot hsimplex =
       PMF.pure (finiteClockAtomToStoppingTime clock candidate) := by
   have hvector : ofVector oneHot hsimplex = PMF.pure candidate := by
@@ -980,7 +983,7 @@ private theorem finiteClockDecodedLaws_substitutedWeight
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (mover : Fin 4)
     (candidate : FiniteClockAtom (finFourSingleShellClock level)) :
     finiteClockDecodedLaws (finFourSingleShellClock level)
@@ -995,12 +998,12 @@ private theorem finiteClockDecodedLaws_substitutedWeight
   by_cases hplayer : player = mover
   · subst player
     simp only [finiteClockDecodedLaws,
-      quittingPureDeviationStoppingLaws, if_pos]
+      quittingPureDeviationStoppingLaws, ite_eq_left]
     apply finiteClockDecodeLaw_oneHot
     funext atom
     simp [finFourSingleShellSubstitutedWeight]
   · simp only [finiteClockDecodedLaws,
-      quittingPureDeviationStoppingLaws, if_neg hplayer]
+      quittingPureDeviationStoppingLaws, ite_eq_right hplayer]
     congr 2
     funext atom
     simp [finFourSingleShellSubstitutedWeight, hplayer]
@@ -1010,7 +1013,7 @@ private theorem quittingStageCoalitionMass_finiteClockDecodedProfile_eq
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (time : Fin (finFourSingleShellClock level + 1))
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) :
     quittingStageCoalitionMass reward
@@ -1050,7 +1053,7 @@ private theorem quittingStageCoalitionMass_finiteClockDecodedProfile_eq_zero
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (date : ℕ) (hdate : finFourSingleShellClock level < date)
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) :
     quittingStageCoalitionMass reward
@@ -1073,7 +1076,7 @@ private theorem quittingTerminalOutcomeMass_finiteClockDecodedProfile_eq_sum
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) :
     quittingTerminalOutcomeMass reward
         (finiteClockDecodedProfile reward (finFourSingleShellClock level)
@@ -1116,7 +1119,7 @@ theorem finFourSingleShellPayoff_eq_quittingTerminalPayoff
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (observer : Fin 4) :
     finFourSingleShellPayoff reward level weight observer =
       quittingTerminalPayoff
@@ -1163,7 +1166,7 @@ theorem evalReal_finFourSingleShellOnProfilePayoffExpression
     (level : ℕ)
     (assign : Fin (finFourSingleShellVariableCount level) → ℝ)
     (hweight : ∀ player, finFourSingleShellWeight level assign player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (observer : Fin 4) :
     RationalMaxExpression.evalReal assign
         (finFourSingleShellOnProfilePayoffExpression reward level observer) =
@@ -1187,7 +1190,7 @@ theorem finFourSingleShellPayoff_substitutedWeight_eq_update
     (level : ℕ)
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (mover : Fin 4)
     (candidate : FiniteClockAtom (finFourSingleShellClock level)) :
     finFourSingleShellPayoff reward level
@@ -1244,7 +1247,7 @@ theorem evalReal_finFourSingleShellDeviationPayoffExpression
     (level : ℕ)
     (assign : Fin (finFourSingleShellVariableCount level) → ℝ)
     (hweight : ∀ player, finFourSingleShellWeight level assign player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (mover : Fin 4)
     (candidate : FiniteClockAtom (finFourSingleShellClock level)) :
     RationalMaxExpression.evalReal assign
@@ -1325,7 +1328,7 @@ private theorem evalReal_finFourSingleShellPayoffConsistencyExpression
     (level : ℕ)
     (assign : Fin (finFourSingleShellVariableCount level) → ℝ)
     (hweight : ∀ player, finFourSingleShellWeight level assign player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (player : Fin 4) :
     RationalMaxExpression.evalReal assign
         (finFourSingleShellPayoffConsistencyExpression reward level player) =
@@ -1350,7 +1353,9 @@ theorem finFourSingleShellWeight_mem_stdSimplex_of_feasible
     (hfeasible : (finFourRationalSingleShellLowerProblem reward level).Feasible
       assign) (player : Fin 4) :
     finFourSingleShellWeight level assign player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)) := by
+      GameTheory.Math.Probability.simplexWeights
+        (FiniteClockAtom (finFourSingleShellClock level)) := by
+  apply GameTheory.Math.Probability.mem_simplexWeights.mpr
   constructor
   · intro atom
     have hrow := hfeasible.2.2
@@ -1395,7 +1400,7 @@ theorem finFourSingleShellCenterCap_eq_continuationBestResponseValue
     (level : ℕ)
     (assign : Fin (finFourSingleShellVariableCount level) → ℝ)
     (hweight : ∀ player, finFourSingleShellWeight level assign player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (haux : ∀ player, finFourSingleShellWeight level assign player
       (finiteClockAuxAtom (finFourSingleShellClock level)) = 0)
     (player : Fin 4)
@@ -1698,7 +1703,7 @@ theorem finFourSingleShellAssignmentOfData_equalityRows
     (point center : QuittingTerminalSemanticPair (Fin 4))
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (haux : ∀ player, weight player
       (finiteClockAuxAtom (finFourSingleShellClock level)) = 0)
     (hcenter : center = quittingTerminalSemanticPair
@@ -1716,7 +1721,8 @@ theorem finFourSingleShellAssignmentOfData_equalityRows
   have hflatWeight : ∀ player,
       finFourSingleShellWeight level
           (finFourSingleShellAssignmentOfData level point center weight) player ∈
-        stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)) := by
+        GameTheory.Math.Probability.simplexWeights
+          (FiniteClockAtom (finFourSingleShellClock level)) := by
     simpa only [finFourSingleShellWeight_assignmentOfData] using hweight
   fin_cases kind
   · change RationalMaxExpression.evalReal _
@@ -1724,7 +1730,7 @@ theorem finFourSingleShellAssignmentOfData_equalityRows
     rw [evalReal_finFourSingleShellSimplexExpression]
     simp only [finFourSingleShellWeight,
       finFourSingleShellAssignmentOfData_mass]
-    linarith [hweight player |>.2]
+    linarith [GameTheory.Math.Probability.mem_simplexWeights.mp (hweight player) |>.2]
   · change RationalMaxExpression.evalReal _
         (finFourSingleShellAuxiliaryExpression level player) = 0
     rw [evalReal_finFourSingleShellAuxiliaryExpression]
@@ -1795,7 +1801,7 @@ theorem finFourSingleShellAssignmentOfData_nonnegativeRows
     (point center : QuittingTerminalSemanticPair (Fin 4))
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (hcenter : center = quittingTerminalSemanticPair
       (fun terminal who ↦ (reward terminal who : ℝ))
       (finiteClockDecodedProfile
@@ -1823,7 +1829,9 @@ theorem finFourSingleShellAssignmentOfData_nonnegativeRows
         rw [evalReal_finFourSingleShellMassExpression]
         simp only [finFourSingleShellWeight,
           finFourSingleShellAssignmentOfData_mass]
-        exact (hweight coordinate.1).1 coordinate.2
+        exact
+          (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight coordinate.1)).1
+            coordinate.2
       · change 0 ≤ RationalMaxExpression.evalReal _
           (finFourSingleShellCapUpperExpression reward level
             (finFourSingleShellMassCoordinate level massIndex).1
@@ -1904,7 +1912,7 @@ theorem finFourSingleShellRootBox_contains_assignmentOfData
     (point center : QuittingTerminalSemanticPair (Fin 4))
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (hcenter : center = quittingTerminalSemanticPair
       (fun terminal who ↦ (reward terminal who : ℝ))
       (finiteClockDecodedProfile
@@ -1993,12 +2001,16 @@ theorem finFourSingleShellRootBox_contains_assignmentOfData
           let coordinate := finProdFinEquiv.symm massIndex
           let atom := finSuccEquiv
             (finFourSingleShellClock level + 1) coordinate.2
-          have hnonneg := (hweight coordinate.1).1 atom
-          have hsum := (hweight coordinate.1).2
+          have hnonneg :=
+            (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight coordinate.1)).1 atom
+          have hsum :=
+            (GameTheory.Math.Probability.mem_simplexWeights.mp (hweight coordinate.1)).2
           have hle : weight coordinate.1 atom ≤ 1 := by
             rw [← hsum]
             exact Finset.single_le_sum
-              (fun other _ ↦ (hweight coordinate.1).1 other)
+              (fun other _ ↦
+                (GameTheory.Math.Probability.mem_simplexWeights.mp
+                  (hweight coordinate.1)).1 other)
               (Finset.mem_univ atom)
           simp only [finFourSingleShellRootBox, h8, h16, ↓reduceIte,
             finFourSingleShellAssignmentOfData, h4, h12,
@@ -2014,7 +2026,7 @@ theorem finFourSingleShellAssignmentOfData_feasible
     (point center : QuittingTerminalSemanticPair (Fin 4))
     (weight : Fin 4 → FiniteClockAtom (finFourSingleShellClock level) → ℝ)
     (hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)))
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom (finFourSingleShellClock level)))
     (haux : ∀ player, weight player
       (finiteClockAuxAtom (finFourSingleShellClock level)) = 0)
     (hcenter : center = quittingTerminalSemanticPair
@@ -2119,7 +2131,8 @@ theorem exists_finFourSingleShellFeasibleAssignment_of_mem_outerNeighborhood
   let weight := finiteClockCenterWeight
     (finFourSingleShellClock level) centerAssign
   have hweight : ∀ player, weight player ∈
-      stdSimplex ℝ (FiniteClockAtom (finFourSingleShellClock level)) :=
+      GameTheory.Math.Probability.simplexWeights
+        (FiniteClockAtom (finFourSingleShellClock level)) :=
     finiteClockCenterWeight_mem_stdSimplex
       (Rat.castHom ℝ) reward (finFourSingleShellClock level)
         centerAssign hsolution

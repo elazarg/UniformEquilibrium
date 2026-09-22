@@ -21,7 +21,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace InvisibleResponseCompatibilityCounterexample
 
-open Filter Math Math.Probability Set Topology
+open Filter _root_.Math _root_.Math.Probability Set Topology
 
 abbrev State := Fin 3
 

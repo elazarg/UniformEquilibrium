@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open MeasureTheory StochasticGame Math.Probability Math.PMFProduct
+open MeasureTheory StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι Ω : Type} [Fintype ι] [DecidableEq ι] [MeasurableSpace Ω]
 

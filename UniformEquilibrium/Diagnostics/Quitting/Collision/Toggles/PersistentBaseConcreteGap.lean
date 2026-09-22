@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.PersistentBaseNashSemanticAdapter
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.SingletonBaseSemanticDispatch
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 
@@ -22,9 +23,27 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction GameTheory.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
+
+/-- Build the canonical finite simplex element represented by a coordinate vector. -/
+private def stdSimplexOfWeights {α : Type*} [Fintype α]
+    (w : α → ℝ) (hw : w ∈ simplexWeights α) : Convexity.StdSimplex ℝ α := {
+  weights := Finsupp.equivFunOnFinite.symm w
+  nonneg := by
+    intro a
+    exact (mem_simplexWeights.mp hw).1 a
+  total := by
+    rw [Finsupp.sum_fintype]
+    · exact (mem_simplexWeights.mp hw).2
+    · intro
+      rfl }
+
+@[simp] private theorem stdSimplexOfWeights_weights {α : Type*} [Fintype α]
+    (w : α → ℝ) (hw : w ∈ simplexWeights α) :
+    (stdSimplexOfWeights w hw).weights = Finsupp.equivFunOnFinite.symm w :=
+  rfl
 
 /-- Simplex presentation of the actual ambient persistent-base root. -/
 def quittingPersistentBaseSimplexRoot
@@ -33,9 +52,9 @@ def quittingPersistentBaseSimplexRoot
     QuittingRootSimplex ι :=
   fun who => if _hbase : who ∈ base then stdSimplexEquiv (PMF.pure true)
     else if hfree : who ∈ free then
-      ⟨point.1 ⟨who, hfree⟩,
-        (mem_mixedPolytope (quittingBinaryForm free).sig).1 point.2
-          ⟨who, hfree⟩⟩
+      stdSimplexOfWeights (point.1 ⟨who, hfree⟩)
+        ((mem_mixedPolytope (quittingBinaryForm free).sig).1 point.2
+          ⟨who, hfree⟩)
     else stdSimplexEquiv (PMF.pure false)
 
 omit [Nonempty ι] in
@@ -52,7 +71,7 @@ theorem quittingRootOfSimplex_persistentBaseSimplexRoot
   rw [quittingRootOfSimplex_apply_toReal]
   by_cases hbase : who ∈ base
   · simp [quittingPersistentBaseSimplexRoot, quittingPersistentBaseRoot,
-      quittingPersistentBaseRootOfProfile, hbase, coe_stdSimplexEquiv_apply,
+      quittingPersistentBaseRootOfProfile, hbase,
       toVector]
   · by_cases hfree : who ∈ free
     · simp only [quittingPersistentBaseSimplexRoot, hbase, hfree,
@@ -65,7 +84,7 @@ theorem quittingRootOfSimplex_persistentBaseSimplexRoot
         ⟨who, hfree⟩) action).symm
     · simp [quittingPersistentBaseSimplexRoot, quittingPersistentBaseRoot,
         quittingPersistentBaseRootOfProfile, hbase, hfree,
-        coe_stdSimplexEquiv_apply, toVector]
+        toVector]
 
 omit [Nonempty ι] in
 /-- The ambient simplex root depends continuously on the induced mixed point. -/
@@ -87,10 +106,15 @@ theorem continuous_quittingPersistentBaseSimplexRoot
         (continuous_apply freeWho).comp continuous_subtype_val
       have hsimplex : Continuous fun point :
           mixedPolytope (quittingBinaryForm free).sig =>
-            (⟨point.1 freeWho,
-              (mem_mixedPolytope (quittingBinaryForm free).sig).1 point.2
-                freeWho⟩ : stdSimplex ℝ Bool) :=
-        hcoordinate.subtype_mk _
+            stdSimplexOfWeights (point.1 freeWho)
+              ((mem_mixedPolytope (quittingBinaryForm free).sig).1 point.2
+                freeWho) := by
+        rw [((Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).isInducing
+          ).continuous_iff]
+        rw [continuous_pi_iff]
+        intro action
+        convert (continuous_apply action).comp hcoordinate using 1
+        rfl
       simpa [quittingPersistentBaseSimplexRoot, hbase, hfree] using hsimplex
     · simpa [quittingPersistentBaseSimplexRoot, hbase, hfree] using
         (continuous_const : Continuous fun _ :
@@ -143,7 +167,7 @@ theorem continuous_quittingPersistentLargeBaseComponent
       rw [quittingRootOfSimplex_persistentBaseSimplexRoot]]
     exact h
   by_cases hbase : who ∈ base
-  · simp only [quittingPersistentLargeBaseComponent, hbase, if_pos]
+  · simp only [quittingPersistentLargeBaseComponent, hbase, ite_eq_left]
     convert (continuous_const.mul hendpoint : Continuous fun point =>
       (-1 : ℝ) * quittingRootEndpointDifference reward 0
         (quittingPersistentBaseRoot base free point) who) using 1

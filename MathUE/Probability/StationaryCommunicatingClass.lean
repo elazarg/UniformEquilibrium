@@ -188,7 +188,7 @@ theorem supportStep_returns_of_stationary_nonnegative
       by_cases hstate : state ∈ reachable <;>
         simp [indicator, hstate]
     · refine ⟨destination, Finset.mem_univ _, ?_⟩
-      simp only [indicator, if_pos hdestination, mul_one]
+      simp only [indicator, ite_eq_left hdestination, mul_one]
       exact ENNReal.toReal_pos hstep
         (PMF.apply_ne_top (kernel source) destination)
   have hdiffPos :

@@ -8,7 +8,7 @@ noncomputable section
 namespace GameTheory
 namespace DuplicatedCyclicReactivationRegression
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open QuittingLCPClassification
 open scoped Topology
 
@@ -167,7 +167,6 @@ theorem firstChildAt_previous_payoff_tendsto (first : Fin 3) :
       Option.some_ne_none,
       StandardQSideExample.duplicatedCyclicMatrix,
       StandardQSideExample.duplicateCollapse, StandardQSideExample.cyclicMatrix]
-  all_goals rfl
 
 theorem singletonChildAt_previous_payoff_tendsto (first : Fin 3) :
     Tendsto (fun index ↦ quittingTerminalPayoff reward (singletonChildProfileAt first index)
@@ -181,7 +180,7 @@ theorem singletonChildAt_previous_payoff_tendsto (first : Fin 3) :
   congr 1
   fin_cases first <;>
     simp [singletonDirectionAt, previousOwner, nextOwner, Fintype.sum_option,
-      Fin.sum_univ_succ, StandardQSideExample.duplicatedCyclicMatrix,
+      StandardQSideExample.duplicatedCyclicMatrix,
       StandardQSideExample.duplicateCollapse, StandardQSideExample.cyclicMatrix]
 
 theorem singletonChildAt_first_payoff_tendsto (first : Fin 3) :
@@ -194,7 +193,7 @@ theorem singletonChildAt_first_payoff_tendsto (first : Fin 3) :
   convert h using 1
   congr 1
   fin_cases first <;>
-    simp [singletonDirectionAt, nextOwner, Fintype.sum_option, Fin.sum_univ_succ,
+    simp [singletonDirectionAt, nextOwner, Fintype.sum_option,
       StandardQSideExample.duplicatedCyclicMatrix,
       StandardQSideExample.duplicateCollapse, StandardQSideExample.cyclicMatrix]
 
@@ -372,7 +371,7 @@ theorem otherSecondChildAt_next_payoff_tendsto (first : Fin 3) :
   congr 1
   fin_cases first <;>
     simp [otherSingletonDirectionAt, previousOwner, nextOwner, Fintype.sum_option,
-      Fin.sum_univ_succ, StandardQSideExample.duplicatedCyclicMatrix,
+      StandardQSideExample.duplicatedCyclicMatrix,
       StandardQSideExample.duplicateCollapse, StandardQSideExample.cyclicMatrix]
 
 /-- The other remaining leading-core owner has limiting Never gain `-1/2`.

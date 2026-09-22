@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -132,8 +132,8 @@ theorem quittingFinitePureTimePayoff_castSucc_eq_terminal
             start + (Fin.succ later).val = (start + 1) + later.val := by
           simp [Fin.val_succ, Nat.add_comm, Nat.add_left_comm]
         rw [quittingPureTimeHazard_some_of_ne hne]
-        simp only [PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-          ENNReal.toReal_zero, if_true,
+        simp only [PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+          ENNReal.toReal_zero, ite_true,
           ENNReal.toReal_one, zero_mul, one_mul]
         change _ + _ * quittingFinitePureTimePayoff reward roots who
           (start + 1) fuel later.castSucc = _
@@ -164,8 +164,8 @@ theorem quittingFinitePureTimePayoff_last_eq_neverFinite
         quittingRootQuitPayoff_eq_fixedOpponentsQuitValue,
         quittingRootContinuePayoff_eq_fixedOpponents]
       simp only [quittingPureTimeHazard_none, PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       change _ + _ * quittingFinitePureTimePayoff reward roots who
         (start + 1) fuel (Fin.last fuel) = _
       rw [ih (start + 1)]

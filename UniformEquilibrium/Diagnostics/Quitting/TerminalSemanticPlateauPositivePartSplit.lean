@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set
+open Filter Set GameTheory.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -68,7 +68,7 @@ theorem quittingTerminalSemanticDebt_le_positiveHarmonic_add_finite
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (who : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who) :
     quittingTerminalSemanticDebt pair who ≤
       quittingTerminalPositiveHarmonicContribution pair who mass +
@@ -79,7 +79,7 @@ theorem quittingTerminalSemanticDebt_le_positiveHarmonic_add_finite
       quittingTerminalSemanticDebt pair who := by
     dsimp only [gain]
     simp only [mul_sub, Finset.sum_sub_distrib]
-    rw [← Finset.sum_mul, hmass.2, one_mul]
+    rw [← Finset.sum_mul, (mem_simplexWeights.mp hmass).2, one_mul]
     unfold quittingTerminalRewardMoment at hmoment
     unfold quittingTerminalSemanticDebt
     linarith
@@ -88,7 +88,7 @@ theorem quittingTerminalSemanticDebt_le_positiveHarmonic_add_finite
     apply Finset.sum_le_sum
     intro outcome _houtcome
     exact mul_le_mul_of_nonneg_left (le_max_right 0 (gain outcome))
-      (hmass.1 outcome)
+      ((mem_simplexWeights.mp hmass).1 outcome)
   rw [hsigned] at hpositive
   calc
     quittingTerminalSemanticDebt pair who ≤
@@ -107,7 +107,7 @@ theorem positiveHarmonic_or_finiteContribution
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (who : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (theta : ℝ) :
     theta * quittingTerminalSemanticDebt pair who ≤
@@ -126,14 +126,15 @@ omit [DecidableEq ι] in
 /-- A coordinate of a finite probability vector is at most one. -/
 theorem terminalOutcomeMass_le_one
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (outcome : QuittingTerminalOutcome ι) :
     mass outcome ≤ 1 := by
   calc
     mass outcome ≤ ∑ candidate, mass candidate := by
-      exact Finset.single_le_sum (fun candidate _ => hmass.1 candidate)
+      exact Finset.single_le_sum
+        (fun candidate _ => (mem_simplexWeights.mp hmass).1 candidate)
         (Finset.mem_univ outcome)
-    _ = 1 := hmass.2
+    _ = 1 := (mem_simplexWeights.mp hmass).2
 
 /-- All positive finite contribution is charged to coalitions containing at
 least one quitting opponent.  The factor `2*M` is the largest possible gain
@@ -147,7 +148,7 @@ theorem positiveFiniteContribution_le_two_mul_opponentContainingMass
     {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι)) :
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)) :
     quittingTerminalPositiveFiniteContribution reward pair who mass ≤
       2 * M * quittingTerminalOpponentContainingMass who mass := by
   have hsingleton :=
@@ -162,7 +163,7 @@ theorem positiveFiniteContribution_le_two_mul_opponentContainingMass
       apply Finset.sum_le_sum
       intro terminal _hterminal
       by_cases hother : terminal.val ≠ {who}
-      · rw [if_pos hother]
+      · rw [ite_eq_left hother]
         have hrewardUpper := (abs_le.mp (hreward terminal who)).2
         have hprescribedLower := (abs_le.mp hprescribed).1
         have hgainUpper : reward terminal who - pair.1 who ≤ 2 * M := by
@@ -175,9 +176,10 @@ theorem positiveFiniteContribution_le_two_mul_opponentContainingMass
           mass (some terminal) *
               max 0 (reward terminal who - pair.1 who) ≤
               mass (some terminal) * (2 * M) :=
-            mul_le_mul_of_nonneg_left hpositiveUpper (hmass.1 (some terminal))
+            mul_le_mul_of_nonneg_left hpositiveUpper
+              ((mem_simplexWeights.mp hmass).1 (some terminal))
           _ = 2 * M * mass (some terminal) := by ring
-      · rw [if_neg hother]
+      · rw [ite_eq_right hother]
         have hterminal : terminal = quittingSingletonTerminal who := by
           apply Subtype.ext
           simpa [quittingSingletonTerminal] using not_ne_iff.mp hother
@@ -199,14 +201,14 @@ theorem harmonicContribution_quantitative_bounds
     (mass : QuittingTerminalOutcome ι → ℝ)
     {M theta : ℝ} (hM : 0 < M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hdebt : 0 < quittingTerminalSemanticDebt pair who)
     (htheta : 0 < theta)
     (hharmonic : theta * quittingTerminalSemanticDebt pair who ≤
       quittingTerminalPositiveHarmonicContribution pair who mass) :
     pair.1 who ≤ -theta * quittingTerminalSemanticDebt pair who ∧
       theta * quittingTerminalSemanticDebt pair who / M ≤ mass none := by
-  have hmassNonneg := hmass.1 none
+  have hmassNonneg := (mem_simplexWeights.mp hmass).1 none
   have hmassOne := terminalOutcomeMass_le_one mass hmass none
   have hpositiveNonneg : 0 ≤ max 0 (-pair.1 who) := le_max_left _ _
   have hthresholdPos : 0 < theta * quittingTerminalSemanticDebt pair who :=
@@ -258,7 +260,7 @@ theorem finiteContribution_opponentContainingMass_lower_bound
     {M charge : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hfinite : charge ≤
       quittingTerminalPositiveFiniteContribution reward pair who mass) :
     charge / (2 * M) ≤ quittingTerminalOpponentContainingMass who mass := by
@@ -278,7 +280,7 @@ theorem negativeNever_or_opponentContainingMass
     {M theta : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hdebt : 0 < quittingTerminalSemanticDebt pair who)
     (htheta : 0 < theta) (_hthetaOne : theta < 1) :
@@ -304,7 +306,7 @@ theorem opponentContainingMass_lower_bound_of_prescribed_nonneg
     {M : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hprescribedNonneg : 0 ≤ pair.1 who) :
     quittingTerminalSemanticDebt pair who / (2 * M) ≤
@@ -361,7 +363,7 @@ theorem exists_samePureTimeLaw_negativeNever_or_chronologicalOpponentCharge
         (subseq : ℕ → ℕ),
       Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
           atTop (𝓝 pair) ∧
-      mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+      mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
       StrictMono subseq ∧
       Tendsto (fun n => quittingTerminalOutcomeMass reward
           (Function.update (profiles (subseq n)) who

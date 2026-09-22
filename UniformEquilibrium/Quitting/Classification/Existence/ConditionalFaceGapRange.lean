@@ -346,7 +346,7 @@ private lemma continueMassExcl_lt_one_of_blocker_positive
   have hrestLe :
       (∏ other ∈ (Finset.univ.erase who).erase blocker,
         (1 - hazard other)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun other _ => sub_nonneg.mpr (hhazard.2 other))
       (fun other _ => by linarith [hhazard.1 other])
   have hfactorNonneg : 0 ≤ 1 - hazard blocker :=
@@ -433,7 +433,7 @@ theorem conditionalFaceSigns_of_rewardRange
     have hmass : 0 ≤ 1 - continueMassExcl hazard who := by
       unfold continueMassExcl
       apply sub_nonneg.mpr
-      exact Finset.prod_le_one
+      exact Finset.prod_le_one₀
         (fun other _ => sub_nonneg.mpr (hcube.2 other))
         (fun other _ => by linarith [hcube.1 other])
     nlinarith [mul_nonneg hmass (sub_nonneg.mpr hmix)]

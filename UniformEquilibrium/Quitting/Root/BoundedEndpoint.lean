@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -38,22 +38,22 @@ theorem abs_quittingRootAbsorbingContribution_le
         absorbingBound action := by
     by_cases hquit : (quittingQuitters action).Nonempty
     · have h := hreward ⟨quittingQuitters action, hquit⟩ who
-      simp only [quittingRootPayoff, dif_pos hquit, absorbingBound,
-        if_pos hquit]
+      simp only [quittingRootPayoff, dite_eq_left hquit, absorbingBound,
+        ite_eq_left hquit]
       exact (le_abs_self _).trans h
-    · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply,
-        absorbingBound, if_neg hquit]
+    · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply,
+        absorbingBound, ite_eq_right hquit]
       norm_num
   have hpointLower (action : ι → Bool) :
       -absorbingBound action ≤
         quittingRootPayoff reward (0 : Payoff ι) action who := by
     by_cases hquit : (quittingQuitters action).Nonempty
     · have h := hreward ⟨quittingQuitters action, hquit⟩ who
-      simp only [quittingRootPayoff, dif_pos hquit, absorbingBound,
-        if_pos hquit]
+      simp only [quittingRootPayoff, dite_eq_left hquit, absorbingBound,
+        ite_eq_left hquit]
       exact neg_le_of_abs_le h
-    · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply,
-        absorbingBound, if_neg hquit]
+    · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply,
+        absorbingBound, ite_eq_right hquit]
       norm_num
   have hupper :
       quittingRootAbsorbingContribution reward root who ≤

@@ -217,14 +217,23 @@ theorem overlappingFirstStopping_squareRoot_step_eq_one_of_commonContinue_pos
       have hcOne : c = 1 := by
         nlinarith [Real.sq_sqrt hc.le]
       have hbc : (1 - second) * (1 - third) ≤ 1 := by
-        exact mul_le_one₀ (sub_le_self 1 hsecond.1)
-          (sub_nonneg.mpr hthird.2) (sub_le_self 1 hthird.1)
+        calc
+          (1 - second) * (1 - third) ≤ 1 * (1 - third) :=
+            mul_le_mul_of_nonneg_right (sub_le_self 1 hsecond.1)
+              (sub_nonneg.mpr hthird.2)
+          _ ≤ 1 := by simpa using sub_le_self 1 hthird.1
       have hca : (1 - first) * (1 - third) ≤ 1 := by
-        exact mul_le_one₀ (sub_le_self 1 hfirst.1)
-          (sub_nonneg.mpr hthird.2) (sub_le_self 1 hthird.1)
+        calc
+          (1 - first) * (1 - third) ≤ 1 * (1 - third) :=
+            mul_le_mul_of_nonneg_right (sub_le_self 1 hfirst.1)
+              (sub_nonneg.mpr hthird.2)
+          _ ≤ 1 := by simpa using sub_le_self 1 hthird.1
       have hab : (1 - first) * (1 - second) ≤ 1 := by
-        exact mul_le_one₀ (sub_le_self 1 hfirst.1)
-          (sub_nonneg.mpr hsecond.2) (sub_le_self 1 hsecond.1)
+        calc
+          (1 - first) * (1 - second) ≤ 1 * (1 - second) :=
+            mul_le_mul_of_nonneg_right (sub_le_self 1 hfirst.1)
+              (sub_nonneg.mpr hsecond.2)
+          _ ≤ 1 := by simpa using sub_le_self 1 hsecond.1
       have hcFirst : c ≤ 1 - first := by
         dsimp only [c]
         calc

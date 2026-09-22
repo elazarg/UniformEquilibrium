@@ -353,7 +353,7 @@ theorem QuittingPositiveJointPrefixReachPunishmentEndpoint.instantPunishment
     (hprefix : endpoint.HasSureExitNashPrefix) :
     QuittingInstantPunishmentεEquilibriumExistence reward := by
   obtain ⟨quitter, root, hquit, hnash⟩ := hprefix
-  letI : Nonempty ι := ⟨quitter⟩
+  let : Nonempty ι := ⟨quitter⟩
   have hdiagonal : endpoint.endpoint =
       (endpoint.endpoint.1, endpoint.endpoint.1) := by
     apply Prod.ext

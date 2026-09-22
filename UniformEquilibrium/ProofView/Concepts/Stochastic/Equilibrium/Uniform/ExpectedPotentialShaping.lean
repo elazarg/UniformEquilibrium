@@ -26,7 +26,7 @@ obstruction must be invariant under bounded expected coboundaries.
 noncomputable section
 
 open Filter
-open Math.Probability
+open _root_.Math.Probability
 
 namespace GameTheory
 namespace StochasticGame
@@ -82,7 +82,6 @@ theorem stageEUAt_withExpectedPotentialShaping
   simp only [expectedPotentialShapedReward]
   unfold stageEUAt
   rw [expect_sub, expect_add, expect_const]
-  rfl
 
 /-- Expected payoff of stage `t` after shaping. -/
 theorem expectedStagePayoff_withExpectedPotentialShaping

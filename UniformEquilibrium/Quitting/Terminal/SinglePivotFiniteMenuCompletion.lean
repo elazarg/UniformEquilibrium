@@ -16,7 +16,7 @@ required. -/
 theorem exists_uniformEquilibriumPayoff_of_singlePivot_finiteMenu_scalar_source
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hcanonical : IsSinglePivotSingletonTable reward pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     (∀ ε : ℝ, 0 < ε →
       ∃ deadline : ℕ,
       ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
@@ -27,7 +27,8 @@ theorem exists_uniformEquilibriumPayoff_of_singlePivot_finiteMenu_scalar_source
               (quittingFiniteDeadlineTimingProfile reward deadline mixed) pivot ≤ ε) →
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hproducer
   apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors
   intro ε hε

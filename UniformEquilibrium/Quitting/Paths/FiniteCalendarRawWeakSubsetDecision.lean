@@ -37,7 +37,7 @@ private theorem rationalRawWeakSubsetFormula_holdsAt_profile_iff
     (profile : MixedSimplex (Fin players)
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players))) :
     (rationalQuittingFiniteCalendarRawWeakSubsetFormula reward owners).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) ↔
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) ↔
       (∀ observer ∈ owners,
         0 ≤ rationalQuittingRewardToReal reward
           (quittingSingletonTerminal observer) observer) ∧
@@ -54,7 +54,7 @@ private theorem rationalRawWeakSubsetFormula_holdsAt_profile_iff
       (quittingFiniteCalendarSimplexFormulaWithTerms
         (quittingFiniteCalendarVariableTerm (players := players)
           (deadline := rawDeadline players))).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) := by
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) := by
     simpa [quittingFiniteCalendarSimplexFormula] using hsimplex
   simp only [hsimplexWithTerms, not_true_eq_false, false_or,
     RingExpression.evalReal_const]
@@ -116,7 +116,9 @@ private theorem rationalRawWeakSubsetFormula_forall_iff
     refine ⟨?_, fun profile => ?_⟩
     · simpa only [RingExpression.evalReal_const, rationalQuittingRewardToReal] using hzero.1
     · exact (rationalRawWeakSubsetFormula_holdsAt_profile_iff reward owners profile).mp
-        (hformula (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2)) |>.2
+        (hformula
+          (quittingFiniteCalendarParameters fun pair =>
+            (profile pair.1).weights pair.2)) |>.2
   · rintro ⟨hsingleton, hraw⟩ environment
     rw [rationalQuittingFiniteCalendarRawWeakSubsetFormula,
       quittingFiniteCalendarRawWeakSubsetFormulaWithTerms_holdsAt_iff]

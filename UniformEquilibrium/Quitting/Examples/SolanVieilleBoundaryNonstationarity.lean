@@ -35,7 +35,7 @@ namespace GameTheory
 namespace SolanVieilleBoundary
 
 open StochasticGame Filter Set
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- A time-indexed root sequence conditional on continued play. -/
 abbrev BoundaryRootSequence {ι : Type} := ℕ → ι → PMF Bool

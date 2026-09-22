@@ -9,7 +9,7 @@ proof remains in `MathUE.ChargedPathSelection`.
 
 namespace Theorems.ChargedSelection
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 universe u v
 

@@ -116,7 +116,7 @@ namespace StochasticGame
 
 namespace PureExternalityCycle
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-! ## The constant stationary profiles and the one-stage identity -/
 

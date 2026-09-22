@@ -94,7 +94,7 @@ theorem expect_weightedPMFCoordinateMonitorScore_baseline
     {Ω : Type} [Finite Ω] [DecidableEq Ω]
     (baseline : PMF Ω) (monitorDist : PMF (PMFCoordinateMonitor Ω)) :
     expect baseline (weightedPMFCoordinateMonitorScore baseline monitorDist) = 0 := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [show weightedPMFCoordinateMonitorScore baseline monitorDist = fun x =>
       ∑ monitor, (monitorDist monitor).toReal *
         pmfCoordinateTestScore baseline monitor.1 monitor.2 x by
@@ -114,7 +114,7 @@ theorem expect_weightedPMFCoordinateMonitorScore
       expect monitorDist (fun monitor =>
         expect comparison
           (pmfCoordinateTestScore baseline monitor.1 monitor.2)) := by
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [show weightedPMFCoordinateMonitorScore baseline monitorDist = fun x =>
       ∑ monitor, (monitorDist monitor).toReal *
         pmfCoordinateTestScore baseline monitor.1 monitor.2 x by

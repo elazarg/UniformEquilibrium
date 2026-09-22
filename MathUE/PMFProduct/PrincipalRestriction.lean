@@ -19,7 +19,7 @@ noncomputable section
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 universe uι uA uβ
 
@@ -76,7 +76,7 @@ theorem pmfPi_eq_map_principal
       · simp [principalExtend, restricted, hi]
       · simp [principalExtend, hi, hcompatible i hi]
     rw [tsum_eq_single restricted]
-    · rw [if_pos hextend.symm, pmfPi_apply]
+    · rw [ite_eq_left hextend.symm, pmfPi_apply]
       have hoff : ∀ i ∈ playersᶜ,
           sigma i (assignment i) = 1 := by
         intro i hi
@@ -93,7 +93,7 @@ theorem pmfPi_eq_map_principal
         _ = ∏ i : players, sigma i.1 (restricted i) := by
           rw [Finset.prod_subtype players (fun _ => Iff.rfl)]
     · intro other hother
-      rw [if_neg (fun heq => hother (principalExtend_injective players outside
+      rw [ite_eq_right (fun heq => hother (principalExtend_injective players outside
         (heq.symm.trans hextend.symm)))]
   · push Not at hcompatible
     obtain ⟨i, hi, hne⟩ := hcompatible
@@ -106,7 +106,7 @@ theorem pmfPi_eq_map_principal
     symm
     rw [ENNReal.tsum_eq_zero]
     intro restricted
-    rw [if_neg]
+    rw [ite_eq_right]
     intro heq
     have := congrFun heq i
     rw [principalExtend_apply_not_mem players outside restricted hi] at this

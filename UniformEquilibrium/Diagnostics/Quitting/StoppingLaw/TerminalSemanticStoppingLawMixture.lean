@@ -23,8 +23,8 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
-open Math.Probability.DiscreteHazard
+open StochasticGame _root_.Math.Probability Math.PMFProduct
+open _root_.Math.Probability.DiscreteHazard
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
@@ -134,10 +134,10 @@ theorem quittingStageCoalitionMass_update_eq_opponentFactor_mul
   rw [quittingRootCoalitionMass_update_eq_actionProbability_mul_forced]
   unfold quittingStageCoalitionOpponentFactor
   by_cases hwho : who ∈ terminal.val
-  · simp only [hwho, decide_true, if_true]
+  · simp only [hwho, decide_true, ite_true]
     rw [quittingHazardStopMass_eq_survival_mul_stop]
     ring
-  · simp only [hwho, decide_false, if_false]
+  · simp only [hwho, decide_false, ite_false]
     rw [quittingHazardSurvival_succ]
     ring
 
@@ -165,12 +165,12 @@ theorem quittingStageCoalitionMass_stoppingLawMixture_eq
   let targetHazard := quittingBehaviorLiveHazard reward target
   simp only [quittingBehaviorLiveHazard_stoppingLawMixture]
   by_cases hwho : who ∈ terminal.val
-  · simp only [hwho, if_true, quittingHazardStopMass]
+  · simp only [hwho, ite_true, quittingHazardStopMass]
     rw [BooleanHazard.toScalar_convexMix,
       ScalarHazard.convexMix_stopMass]
     unfold ScalarHazard.mixedStopMass
     ring
-  · simp only [hwho, if_false]
+  · simp only [hwho, ite_false]
     rw [quittingHazardSurvival_convexMix]
     ring
 

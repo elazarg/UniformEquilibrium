@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- An exact finite forward packet with only its punishment-floor field
 removed. -/

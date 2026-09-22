@@ -2,7 +2,7 @@ import Mathlib.Algebra.Order.BigOperators.Group.Finset
 import Mathlib.Algebra.BigOperators.Group.Finset.Piecewise
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Data.Finset.Max
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
@@ -44,7 +44,7 @@ theorem exists_cappedWeight_weightedSum_nonpositive_iff_exists_pair
       have hsumZero : ∑ index, weight index = 0 := by
         exact Finset.sum_eq_zero fun index _ => hzero index
       linarith
-    letI : Nonempty ι := ⟨hexists.choose⟩
+    let _ : Nonempty ι := ⟨hexists.choose⟩
     obtain ⟨first, -, hfirst⟩ :=
       Finset.exists_min_image (Finset.univ : Finset ι) a Finset.univ_nonempty
     have hotherExists : ∃ other, other ≠ first := by
@@ -113,7 +113,7 @@ theorem exists_cappedWeight_weightedSum_nonpositive_iff_exists_pair
           linarith
         · simp [weight, hfirst, hsecond]
     · simp only [weight, Finset.sum_add_distrib, Finset.sum_pi_single',
-        Finset.mem_univ, if_true]
+        Finset.mem_univ, ite_true]
       ring
     · intro index
       by_cases hfirst : index = first
@@ -127,7 +127,7 @@ theorem exists_cappedWeight_weightedSum_nonpositive_iff_exists_pair
           exact le_trans (by linarith : 0 ≤ (1 : ℝ) / 2) hhalf
     · simp_rw [weight, add_mul]
       simp only [Finset.sum_add_distrib, Pi.single_apply, ite_mul, zero_mul,
-        Finset.sum_ite_eq', Finset.mem_univ, if_true]
+        Finset.sum_ite_eq', Finset.mem_univ, ite_true]
       exact hpair
 
 end Math

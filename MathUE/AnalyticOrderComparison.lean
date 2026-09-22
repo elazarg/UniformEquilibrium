@@ -585,7 +585,7 @@ Nonnegativity is *not* needed here; it is needed only for the positivity stateme
 theorem exists_leadingOrderJet [Finite ι] {f : ι → ℝ → ℝ} (hf : ∀ i, AnalyticAt ℝ (f i) 0)
     (hne : ∃ i, ¬∀ᶠ t in 𝓝[>] (0 : ℝ), f i t = 0) : Nonempty (LeadingOrderJet f) := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   obtain ⟨i₁, hi₁⟩ := hne
   obtain ⟨i₀, -, hi₀⟩ := Finset.exists_min_image (Finset.univ : Finset ι)
     (fun i => analyticOrderAt (f i) 0) ⟨i₁, Finset.mem_univ i₁⟩

@@ -22,7 +22,7 @@ local time without knowing the evaluation horizon.
 
 namespace Math.OnlineLearning
 
-open Math.Probability
+open _root_.Math.Probability
 
 noncomputable section
 

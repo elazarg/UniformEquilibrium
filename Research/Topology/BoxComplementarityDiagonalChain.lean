@@ -46,12 +46,12 @@ theorem diagonalCoordinateOrder_injective (negative : Finset (Fin n)) :
     rw [← diagonalCoordinateOrder_mem_iff, ← diagonalCoordinateOrder_mem_iff, heq]
   unfold diagonalCoordinateOrder at heq
   by_cases hfirst : first.val < negative.card
-  · rw [dif_pos hfirst, dif_pos (hmem.mp hfirst)] at heq
+  · rw [dite_eq_left hfirst, dite_eq_left (hmem.mp hfirst)] at heq
     have hval := congrArg (fun i : Fin negative.card => i.val)
       ((negative.orderEmbOfFin rfl).injective heq)
     exact Fin.ext hval
   · have hsecond : ¬second.val < negative.card := fun h => hfirst (hmem.mpr h)
-    rw [dif_neg hfirst, dif_neg hsecond] at heq
+    rw [dite_eq_right hfirst, dite_eq_right hsecond] at heq
     have hsub := congrArg Fin.val (Fin.rev_injective
       ((negativeᶜ.orderEmbOfFin rfl).injective heq))
     exact Fin.ext (by dsimp at hsub; omega)
@@ -72,7 +72,7 @@ theorem diagonalCoordinatePermutation_mono_negative (negative : Finset (Fin n))
     diagonalCoordinatePermutation negative first ≤
       diagonalCoordinatePermutation negative second := by
   change diagonalCoordinateOrder negative first ≤ diagonalCoordinateOrder negative second
-  simp only [diagonalCoordinateOrder, dif_pos hfirst, dif_pos hsecond]
+  simp only [diagonalCoordinateOrder, dite_eq_left hfirst, dite_eq_left hsecond]
   exact (negative.orderEmbOfFin rfl).monotone hle
 
 theorem diagonalCoordinatePermutation_anti_positive (negative : Finset (Fin n))
@@ -81,8 +81,8 @@ theorem diagonalCoordinatePermutation_anti_positive (negative : Finset (Fin n))
     diagonalCoordinatePermutation negative second ≤
       diagonalCoordinatePermutation negative first := by
   change diagonalCoordinateOrder negative second ≤ diagonalCoordinateOrder negative first
-  simp only [diagonalCoordinateOrder, dif_neg (not_lt.mpr hfirst),
-    dif_neg (not_lt.mpr hsecond)]
+  simp only [diagonalCoordinateOrder, dite_eq_right (not_lt.mpr hfirst),
+    dite_eq_right (not_lt.mpr hsecond)]
   apply (negativeᶜ.orderEmbOfFin rfl).monotone
   apply Fin.rev_strictAnti.antitone
   change first.val - negative.card ≤ second.val - negative.card
@@ -118,7 +118,7 @@ theorem diagonalCentralChain_injective (permutation : Equiv.Perm (Fin n)) (k : �
   simp only [diagonalCentralChain, Equiv.symm_apply_apply] at hcoord
   have hfirst : ¬step.val < first.val := by dsimp [step]; omega
   have hsecond : step.val < second.val := hlt
-  rw [if_neg hfirst, if_pos hsecond] at hcoord
+  rw [ite_eq_right hfirst, ite_eq_left hsecond] at hcoord
   omega
 
 theorem simplex_diagonalCentralChain (entries : Fin n → ℝ)
@@ -181,14 +181,14 @@ theorem isGridViolation_diagonalCentralChain_iff (entries : Fin n → ℝ)
       (2 * k + 1 : ℕ) - 1 / 2) < 0 ↔ _
   simp only [Nat.cast_add, Nat.cast_mul, Nat.cast_ofNat]
   by_cases hraised : (permutation.symm who).val < index.val
-  · rw [if_pos hraised]
+  · rw [ite_eq_left hraised]
     have hpositive : (0 : ℝ) < ((k : ℝ) + 1) / (2 * k + 1) - 1 / 2 := by
       apply sub_pos.mpr
       apply (lt_div_iff₀ hden).mpr
       linarith
     simp only [Nat.cast_one, hraised, not_le.mpr hraised, and_false, false_or, and_true]
     constructor <;> intro h <;> nlinarith
-  · rw [if_neg hraised, Nat.cast_zero, add_zero]
+  · rw [ite_eq_right hraised, Nat.cast_zero, add_zero]
     have hnegative : (k : ℝ) / (2 * k + 1) - 1 / 2 < 0 := by
       apply sub_neg.mpr
       apply (div_lt_iff₀ hden).mpr

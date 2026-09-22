@@ -41,7 +41,7 @@ noncomputable section
 namespace GameTheory
 namespace QuittingLocalMechanismResidueWitness
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 /-- The three players. -/
@@ -570,10 +570,10 @@ theorem isExactTerminalNash_doubleSureMixerProfile (L : ℝ) :
       decide
     rw [herase]
     have hnontrivial : ({0, 2} : Finset Player).Nontrivial := by decide
-    simp only [if_pos hnontrivial]
-    change max ((5 / 7 : ℝ) * 0 + (2 / 7) * 1)
-        ((5 / 7 : ℝ) * (2 / 5) + (2 / 7) * 0) ≤
-      (5 / 7 : ℝ) * 0 + (2 / 7) * 1
+    simp only [ite_eq_left hnontrivial]
+    have hsingleton : quittingSetReward (gameReward L) {0} 2 = 2 / 5 := by
+      norm_num [quittingSetReward, gameReward, reward]
+    rw [hsingleton]
     norm_num
 
 /-- The double-sure mixer cashes out the entire parametric residue family:

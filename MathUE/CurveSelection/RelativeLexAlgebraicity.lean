@@ -175,7 +175,7 @@ theorem eventually_isLocalExtrOn_presentationFiber_of_lex
             P (t n) (objective j))
           (presentationFiber P (t n) (a n))
           (a n) := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   intro j
   have hderivAll :
       ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -304,7 +304,7 @@ theorem exists_eventually_relativeNormalMultipliers_of_lex
           P.toPresentation (t n) (a n)
           objective (Λ n) := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   have hlocal :
       ∀ j : Fin d,
         ∀ᶠ n in (sequenceUltrafilter : Filter ℕ),
@@ -474,10 +474,10 @@ theorem exists_eventually_relativeNormalMultipliers_and_isAlgebraic_of_lex
       ∀ j : Fin d,
         IsAlgebraic K (φ (objective j)) := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   dsimp only
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       source parameter hinjective
   let t : ℕ → ℝ := fun n => source n parameter

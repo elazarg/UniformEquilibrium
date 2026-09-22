@@ -92,7 +92,7 @@ theorem exists_two_selectorRanges_not_strategicallyTotallyBounded
       · change (if (quittingBehaviorSelectorRange reward selector who).Nonempty
             then quittingBehaviorSelectorRange reward selector who
             else {fallback who}).Nonempty
-        rw [if_pos hrange]
+        rw [ite_eq_left hrange]
         exact hrange
       · simp [padded, hrange]
     have hpaddedBoundedAway : ∀ who, who ≠ first ->

@@ -45,7 +45,7 @@ noncomputable section
 namespace GameTheory
 namespace QuittingSwitchingResidueExactRoot
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 open QuittingSwitchingResidueRegression
 open QuittingSwitchingResidueRegressionBridge
@@ -114,9 +114,9 @@ theorem quittingRootPayoff_gameReward
       else tail who := by
   unfold quittingRootPayoff
   by_cases h : (quittingQuitters action).Nonempty
-  · rw [dif_pos h, if_pos h]
+  · rw [dite_eq_left h, ite_eq_left h]
     rfl
-  · rw [dif_neg h, if_neg h]
+  · rw [dite_eq_right h, ite_eq_right h]
 
 /-- A displayed three-coordinate action row has a quitter exactly when one of
 its coordinates is `true`. -/

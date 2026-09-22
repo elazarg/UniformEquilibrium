@@ -395,7 +395,7 @@ theorem markovReturnPotential_drift
   by_cases hstate : state = owner
   · subst state
     simp [markovReturnEscape]
-  · rw [if_neg hstate]
+  · rw [ite_eq_right hstate]
     linarith [markovReturnPotential_harmonic_of_ne
       kernel owner state hstate]
 

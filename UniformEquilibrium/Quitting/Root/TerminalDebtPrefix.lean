@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -150,7 +150,9 @@ theorem quittingContinuationBestResponseValue_rootThenContinuation_eq_max
         quittingTerminalPayoff_update_le_continuationBestResponseValue
           reward continuation who candidate)
       deviation
-    let marginal := deviation 0 ((quittingGame reward).emptyHist none)
+    let marginal : PMF Bool :=
+      deviation 0 ((quittingGame reward).emptyHist
+        (show (quittingGame reward).State from none))
     have hmix := quittingRootExpectedPayoff_update_eq_endpointMix
       reward (Function.update base who best) root who marginal
     have hquitInvariant := quittingRootQuitPayoff_continuation_invariant

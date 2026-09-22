@@ -108,7 +108,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -581,7 +581,7 @@ theorem edge_forced_of_shape (a : ℝ) (ha0 : 0 < a) (ha1 : a < 1) (t : ℝ)
     rw [quittingRootSuccessorPayoff_eq_endpointMix]
     cases who
     · rw [false_quitPayoff, false_continuePayoff, hp, hpfalse, hq]
-      simp only [Bool.false_eq_true, if_false]
+      simp only [Bool.false_eq_true, ite_false]
       field_simp
       ring
     · rw [true_quitPayoff, true_continuePayoff, hp]
@@ -639,7 +639,7 @@ theorem shape_ne_origin_of_anchoredChain (a : ℝ) (ha0 : 0 < a) (ha1 : a < 1)
     apply Fin.ext; simp
   rw [hindex, hcontra] at hval
   have hcoord := congrFun hval false
-  simp only [Bool.false_eq_true, if_false] at hcoord
+  simp only [Bool.false_eq_true, ite_false] at hcoord
   exact absurd hcoord (ne_of_lt (hlt (by omega)))
 
 /-- **The zero pin is not a self-consistent continuation.**  For the surgery

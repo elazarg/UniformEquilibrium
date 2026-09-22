@@ -41,7 +41,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -160,7 +160,7 @@ theorem exists_positive_minimalSoloRate_tight_outsider
       (reward := reward) tail owner anchor who hne
   have hrowsClosed : IsClosed {rate : ℝ |
       ∀ who, who ≠ owner → gain rate who ≤ 0} := by
-    simp only [Set.setOf_forall]
+    simp only [Set.ofPred_forall]
     apply isClosed_iInter
     intro who
     apply isClosed_iInter

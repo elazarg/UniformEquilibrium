@@ -76,7 +76,7 @@ theorem BoxComplementarityProblem.localDegree_scaleGain
   have hdegree := hcontinuous.localDegree_endpoints_eq region hisolatingFamily
   simpa only [straightLine_zero, straightLine_one] using hdegree.symm
 
-open Topology in
+open _root_.Math.Topology in
 /-- The actual normalized pullback degrees agree under positive ambient dilation,
 inverse field scaling, and the displayed transformed chart and region. -/
 theorem BoxComplementarityProblem.localDegree_ofAmbientMap_dilation

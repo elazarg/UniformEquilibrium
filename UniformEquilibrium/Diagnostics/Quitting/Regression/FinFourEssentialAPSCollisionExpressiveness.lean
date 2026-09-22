@@ -345,8 +345,10 @@ theorem pmfBool_eq_of_quitProbability_eq {first second : PMF Bool}
   apply Math.ProbabilityMassFunction.toVector_injective
   funext value
   cases value
-  · have hfirst := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex first).2
-    have hsecond := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex second).2
+  · have hfirst := (GameTheory.Math.Probability.mem_simplexWeights.mp
+      (Math.ProbabilityMassFunction.toVector_mem_stdSimplex first)).2
+    have hsecond := (GameTheory.Math.Probability.mem_simplexWeights.mp
+      (Math.ProbabilityMassFunction.toVector_mem_stdSimplex second)).2
     rw [Fintype.sum_bool] at hfirst hsecond
     have htrue : Math.ProbabilityMassFunction.toVector first true =
       Math.ProbabilityMassFunction.toVector second true := hquit
@@ -504,9 +506,12 @@ theorem completionB_executionRoots_not_nashAgainstBaseline {initial : ℝ}
   intro hnash
   have heq := eq_allContinueRoot_of_completionB_isNash _ hnash
   have habs := congrArg quittingRootAbsorptionMass heq
-  rw [executionRoots_absorptionMass] at habs
+  have habs' : executionMass initial time =
+      quittingRootAbsorptionMass quittingAllContinueRoot :=
+    (executionRoots_absorptionMass
+      ⟨hinitial.1.le, hinitial.2⟩ time).symm.trans habs
   have hpositive := executionMass_positive hinitial time
-  rw [quittingRootAbsorptionMass_allContinueRoot] at habs
+  rw [quittingRootAbsorptionMass_allContinueRoot] at habs'
   linarith
 
 /-- Literal collision-expressiveness capstone: identical singleton APS data

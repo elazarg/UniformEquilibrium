@@ -48,7 +48,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -300,7 +300,7 @@ theorem
         hledgerCap hthreshold hscale hsupport hcross
   unfold quittingRootSequencePlannedSurvivalStoppingIndex
   unfold quittingPlannedSurvivalStoppingIndex
-  rw [dif_pos hsurvivalExists]
+  rw [dite_eq_left hsurvivalExists]
   exact Nat.find_min' hsurvivalExists hsurvival
 
 /-- The first stage at which at least one player's own planned survival is at
@@ -329,7 +329,7 @@ theorem exists_ownSurvival_le_quittingSupportSurvivalSwitchIndex
       quittingHazardSurvival (quittingRootSequenceOwnHazard roots who)
           (quittingSupportSurvivalSwitchIndex roots threshold) ≤ threshold := by
   unfold quittingSupportSurvivalSwitchIndex
-  rw [dif_pos hexists]
+  rw [dite_eq_left hexists]
   exact Nat.find_spec hexists
 
 omit [DecidableEq ι] in
@@ -345,7 +345,7 @@ theorem threshold_lt_ownSurvival_of_lt_quittingSupportSurvivalSwitchIndex
     threshold <
       quittingHazardSurvival (quittingRootSequenceOwnHazard roots who) stage := by
   unfold quittingSupportSurvivalSwitchIndex at hstage
-  rw [dif_pos hexists] at hstage
+  rw [dite_eq_left hexists] at hstage
   by_contra hnot
   have hle :
       quittingHazardSurvival (quittingRootSequenceOwnHazard roots who) stage ≤

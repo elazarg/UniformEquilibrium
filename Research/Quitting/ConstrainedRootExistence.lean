@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.ConstrainedRootNormalWork
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.ProofView.Concepts.Existence.CompactNash
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanSpine
 import UniformEquilibrium.Quitting.Stationary.HeterogeneousConstrainedFaceNash
@@ -23,20 +24,20 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Set _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 
 /-- Boolean simplex coordinate whose Quit mass is the supplied interval
 point. -/
 def quittingConstrainedRateSimplex {lower : ℝ}
-    (hlower0 : 0 ≤ lower) (rate : Set.Icc lower 1) : stdSimplex ℝ Bool := by
-  refine ⟨fun action => if action then rate.1 else 1 - rate.1, ?_⟩
-  constructor
+    (hlower0 : 0 ≤ lower) (rate : Set.Icc lower 1) : Convexity.StdSimplex ℝ Bool := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (fun action =>
+    if action then rate.1 else 1 - rate.1), ?_, ?_⟩
   · intro action
     cases action <;> simp <;>
       linarith [hlower0, rate.property.1, rate.property.2]
-  · rw [Fintype.sum_bool]
+  · rw [Finsupp.sum_fintype _ _ (by simp), Fintype.sum_bool]
     simp
 
 /-- PMF presentation of one constrained rate. -/
@@ -105,8 +106,8 @@ theorem quittingConstrainedRoot_update
 theorem continuous_quittingConstrainedRateSimplex
     (lower : ℝ) (hlower0 : 0 ≤ lower) :
     Continuous (quittingConstrainedRateSimplex hlower0 :
-      Set.Icc lower 1 → stdSimplex ℝ Bool) := by
-  apply Continuous.subtype_mk
+      Set.Icc lower 1 → Convexity.StdSimplex ℝ Bool) := by
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).continuous_iff]
   apply continuous_pi
   intro action
   cases action
@@ -171,29 +172,29 @@ def quittingLowerBoundTailGame
       quittingConstrainedRateMarginal_false_toReal]
     unfold heterogeneousRateBarycenter
     change
-      (∑ action, weight action * (point action).1) *
+      (∑ action, weight.weights action * (point action).1) *
             quittingRootQuitPayoff reward tail
               (quittingConstrainedRoot lower hlower0 profile) who +
-          (1 - ∑ action, weight action * (point action).1) *
+          (1 - ∑ action, weight.weights action * (point action).1) *
             quittingRootContinuePayoff reward tail
               (quittingConstrainedRoot lower hlower0 profile) who =
-        ∑ action, weight action *
+        ∑ action, weight.weights action *
           ((point action).1 * quittingRootQuitPayoff reward tail
               (quittingConstrainedRoot lower hlower0 profile) who +
             (1 - (point action).1) *
               quittingRootContinuePayoff reward tail
                 (quittingConstrainedRoot lower hlower0 profile) who)
     have hpoint : ∀ action,
-        weight action *
+        weight.weights action *
             ((point action).1 * quittingRootQuitPayoff reward tail
                 (quittingConstrainedRoot lower hlower0 profile) who +
               (1 - (point action).1) *
                 quittingRootContinuePayoff reward tail
                   (quittingConstrainedRoot lower hlower0 profile) who) =
-          (weight action * (point action).1) *
+          (weight.weights action * (point action).1) *
               quittingRootQuitPayoff reward tail
                 (quittingConstrainedRoot lower hlower0 profile) who +
-            (weight action * (1 - (point action).1)) *
+            (weight.weights action * (1 - (point action).1)) *
               quittingRootContinuePayoff reward tail
                 (quittingConstrainedRoot lower hlower0 profile) who := by
       intro action
@@ -201,11 +202,12 @@ def quittingLowerBoundTailGame
     rw [Finset.sum_congr rfl (fun action _ => hpoint action),
       Finset.sum_add_distrib, ← Finset.sum_mul, ← Finset.sum_mul]
     have hcomplement :
-        (∑ action, weight action * (1 - (point action).1)) =
-          1 - ∑ action, weight action * (point action).1 := by
+        (∑ action, weight.weights action * (1 - (point action).1)) =
+          1 - ∑ action, weight.weights action * (point action).1 := by
       simp_rw [mul_sub, mul_one]
       rw [Finset.sum_sub_distrib]
-      have hweight : (∑ action, weight action) = 1 := weight.property.2
+      have hweight : (∑ action, weight.weights action) = 1 :=
+        weight.total_of_fintype
       linarith
     rw [hcomplement]
 
@@ -223,7 +225,10 @@ theorem exists_quittingLowerBoundConstrainedRoot
   let root := quittingConstrainedRoot lower hlower0 profile
   refine ⟨root, ?_, ?_⟩
   · intro who
-    simpa [root] using (profile who).property.1
+    dsimp only [root, quittingConstrainedRoot]
+    rw [quittingConstrainedRateMarginal_true_toReal
+      (lower := lower who) (hlower0 who) (profile who)]
+    exact (profile who).property.1
   · intro who
     let upper : Set.Icc (lower who) 1 := ⟨1, hlower1 who, le_rfl⟩
     let lowerPoint : Set.Icc (lower who) 1 :=
@@ -231,15 +236,28 @@ theorem exists_quittingLowerBoundConstrainedRoot
     have htoUpper := sub_nonpos.mpr (hnash who upper)
     have htoLower := sub_nonpos.mpr (hnash who lowerPoint)
     dsimp only [quittingLowerBoundTailGame] at htoUpper htoLower
-    rw [quittingConstrainedRoot_update] at htoUpper htoLower
+    have hupdateUpper := quittingConstrainedRoot_update
+      lower hlower0 profile who upper
+    have hupdateLower := quittingConstrainedRoot_update
+      lower hlower0 profile who lowerPoint
+    have htoUpper' := (congrArg (fun candidate =>
+      quittingRootExpectedPayoff reward tail candidate who -
+        quittingRootExpectedPayoff reward tail
+          (quittingConstrainedRoot lower hlower0 profile) who ≤ 0)
+      hupdateUpper).mp htoUpper
+    have htoLower' := (congrArg (fun candidate =>
+      quittingRootExpectedPayoff reward tail candidate who -
+        quittingRootExpectedPayoff reward tail
+          (quittingConstrainedRoot lower hlower0 profile) who ≤ 0)
+      hupdateLower).mp htoLower
     change quittingRootExpectedPayoff reward tail
           (Function.update root who
             (quittingConstrainedRateMarginal (hlower0 who) upper)) who -
-        quittingRootExpectedPayoff reward tail root who ≤ 0 at htoUpper
+        quittingRootExpectedPayoff reward tail root who ≤ 0 at htoUpper'
     change quittingRootExpectedPayoff reward tail
           (Function.update root who
             (quittingConstrainedRateMarginal (hlower0 who) lowerPoint)) who -
-        quittingRootExpectedPayoff reward tail root who ≤ 0 at htoLower
+        quittingRootExpectedPayoff reward tail root who ≤ 0 at htoLower'
     have hupperDifference := quittingRootExpectedPayoff_update_sub_successorPayoff
       reward tail root who
         (quittingConstrainedRateMarginal (hlower0 who) upper)
@@ -247,20 +265,27 @@ theorem exists_quittingLowerBoundConstrainedRoot
       reward tail root who
         (quittingConstrainedRateMarginal (hlower0 who) lowerPoint)
     unfold quittingRootSuccessorPayoff at hupperDifference hlowerDifference
-    rw [hupperDifference] at htoUpper
-    rw [hlowerDifference] at htoLower
+    rw [hupperDifference] at htoUpper'
+    rw [hlowerDifference] at htoLower'
     have hrootTrue : (root who true).toReal = (profile who).1 := by
-      simp [root]
-    rw [hrootTrue] at htoUpper htoLower
-    dsimp only [upper, lowerPoint] at htoUpper htoLower
-    simp only [quittingConstrainedRateMarginal_true_toReal] at htoUpper
-    simp only [quittingConstrainedRateMarginal_true_toReal] at htoLower
+      dsimp only [root, quittingConstrainedRoot]
+      rw [quittingConstrainedRateMarginal_true_toReal
+        (lower := lower who) (hlower0 who) (profile who)]
+    have hrootFalse : (root who false).toReal = 1 - (profile who).1 := by
+      dsimp only [root, quittingConstrainedRoot]
+      rw [quittingConstrainedRateMarginal_false_toReal
+        (lower := lower who) (hlower0 who) (profile who)]
+    rw [hrootTrue] at htoUpper' htoLower'
+    dsimp only [upper, lowerPoint] at htoUpper' htoLower'
+    simp only [quittingConstrainedRateMarginal_true_toReal] at htoUpper'
+    simp only [quittingConstrainedRateMarginal_true_toReal] at htoLower'
     have hcomplementarity := Math.lowerBoundComplementarity_of_endpoint_bounds
       (lower who) (profile who).1
         (quittingRootEndpointDifference reward tail root who)
         (profile who).property.1 (profile who).property.2
-        htoUpper htoLower
-    simpa [root] using hcomplementarity
+        htoUpper' htoLower'
+    rw [hrootFalse, hrootTrue]
+    exact hcomplementarity
 
 /-- Source-faithful form: the constrained root prefixes the supplied actual
 tail, and its semantic pair is literally the semantic prefix used by the

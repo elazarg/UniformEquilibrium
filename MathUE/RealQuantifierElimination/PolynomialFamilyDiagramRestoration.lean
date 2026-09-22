@@ -11,7 +11,7 @@ satisfy the reduced root-cut invariant for the original family.
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 open MathUE.OrderedRealSignDiagram
 
 /-- Specialize every symbolic coefficient list to a real polynomial. -/

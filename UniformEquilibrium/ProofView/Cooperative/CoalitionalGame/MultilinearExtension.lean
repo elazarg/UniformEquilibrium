@@ -214,7 +214,7 @@ theorem CoalGame.multilinearValue_update_one_sub_update_zero
           apply Finset.prod_congr rfl
           intro i hi
           simp [Finset.ne_of_mem_erase hi]
-    rw [if_pos hwho, hprod, hprod]
+    rw [ite_eq_left hwho, hprod, hprod]
     ring
   · have hprod : ∀ a : ℝ,
         (∏ i ∈ S, Function.update x who a i) = ∏ i ∈ S, x i := by
@@ -222,7 +222,7 @@ theorem CoalGame.multilinearValue_update_one_sub_update_zero
       apply Finset.prod_congr rfl
       intro i hi
       simp [ne_of_mem_of_not_mem hi hwho]
-    rw [if_neg hwho, hprod, hprod]
+    rw [ite_eq_right hwho, hprod, hprod]
     ring
 
 end GameTheory

@@ -16,7 +16,7 @@ noncomputable section
 
 namespace GameTheory.KernelGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.ProbabilityMassFunction
 open scoped BigOperators
 
@@ -56,10 +56,8 @@ private theorem realizedActionHist_startsAt
   cases suffixLength with
   | zero =>
       simp only [StochasticGame.Hist.StartsAt]
-      rfl
   | succ suffixLength =>
       simp only [StochasticGame.Hist.StartsAt]
-      rfl
 
 private theorem realizedAction_afterHistoryProfile_update_deviation
     (G : KernelGame ι) [DecidableEq ι]
@@ -84,7 +82,7 @@ private theorem realizedAction_afterHistoryProfile_update_deviation
     rw [G.realizedActionStochasticGame.afterHistoryProfile_apply]
     rw [Function.update_self]
     unfold realizedActionDeviationAfterHistory
-    rw [dif_pos (Nat.le_add_right prefixLength suffixLength)]
+    rw [dite_eq_left (Nat.le_add_right prefixLength suffixLength)]
     have hstart := realizedActionHist_startsAt G base suffix
     rw [G.realizedActionStochasticGame.terminalPrefixLE_appendHist
       base suffix hstart]
@@ -129,9 +127,9 @@ private theorem realizedAction_expectedStagePayoff_eq_of_agreeBefore
         left PUnit.unit time who =
       G.realizedActionStochasticGame.expectedStagePayoff
         right PUnit.unit time who := by
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
   unfold StochasticGame.expectedStagePayoff
@@ -155,9 +153,9 @@ private theorem realizedAction_expectedStagePayoff_add_eq_expect_afterHistory
           G.realizedActionStochasticGame.expectedStagePayoff
             (G.realizedActionStochasticGame.afterHistoryProfile profile base)
             base.2 suffixLength who := by
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
   unfold StochasticGame.expectedStagePayoff
@@ -181,9 +179,9 @@ private theorem realizedAction_cast_mul_finiteAveragePayoff_eq_sum
       ∑ time ∈ Finset.range horizon,
         G.realizedActionStochasticGame.expectedStagePayoff
           profile PUnit.unit time who := by
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
   rw [G.realizedActionStochasticGame
@@ -208,9 +206,9 @@ theorem realizedAction_afterHistoryProfile_isHorizonNash_of_mem_support
     G.realizedActionStochasticGame.IsεHorizonNash
       base.2 suffixLength 0
       (G.realizedActionStochasticGame.afterHistoryProfile profile base) := by
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
   intro who deviation

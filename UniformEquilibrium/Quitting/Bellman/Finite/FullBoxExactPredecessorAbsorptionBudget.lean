@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -71,7 +71,7 @@ def reversedState : {source target : BoxState reward} →
   induction path with
   | nil state => rfl
   | cons edge rest ih =>
-      simpa only [reversedState_cons, Nat.zero_le, if_true] using ih
+      simpa only [reversedState_cons, Nat.zero_le, ite_true] using ih
 
 /-- The reversed block ends at the source of the charged path. -/
 @[simp] theorem reversedState_length
@@ -82,7 +82,7 @@ def reversedState : {source target : BoxState reward} →
   | nil state => rfl
   | cons edge rest ih =>
       simp only [ChargedRelation.Path.length_cons, reversedState_cons]
-      rw [if_neg (Nat.not_succ_le_self _)]
+      rw [ite_eq_right (Nat.not_succ_le_self _)]
       rfl
 
 /-- Adjacent reversed states are literal exact Nash--Bellman edges. -/
@@ -100,12 +100,12 @@ theorem exactEdge
       by_cases hbefore : time < rest.length
       · have htimeLe : time ≤ rest.length := hbefore.le
         have hnextLe : time + 1 ≤ rest.length := hbefore
-        simpa only [reversedState_cons, if_pos htimeLe, if_pos hnextLe]
+        simpa only [reversedState_cons, ite_eq_left htimeLe, ite_eq_left hnextLe]
           using ih time hbefore
       · have htimeEq : time = rest.length := by omega
         subst time
-        simp only [reversedState_cons, if_pos le_rfl,
-          if_neg (Nat.not_succ_le_self _)]
+        simp only [reversedState_cons, ite_eq_left le_rfl,
+          ite_eq_right (Nat.not_succ_le_self _)]
         rw [reversedState_length]
         exact edge.exactEdge
 
@@ -151,14 +151,14 @@ theorem chargeSum_le_reversedMarginalHazardCharge
         rw [reversedMarginalHazardCharge]
         apply Finset.sum_congr rfl
         intro time htime
-        rw [reversedState_cons, if_pos (Finset.mem_range.mp htime).le]
+        rw [reversedState_cons, ite_eq_left (Finset.mem_range.mp htime).le]
       have hlast :
           (∑ who,
             ((quittingRootOfSimplex
               (reversedState (ChargedRelation.Path.cons edge rest)
                 rest.length).1.2) who true).toReal) =
             ∑ who, (edge.root who true).toReal := by
-        rw [reversedState_cons, if_pos le_rfl, reversedState_length]
+        rw [reversedState_cons, ite_eq_left le_rfl, reversedState_length]
         rfl
       rw [reversedMarginalHazardCharge,
         ChargedRelation.Path.length_cons, Finset.sum_range_succ, hprefix, hlast]

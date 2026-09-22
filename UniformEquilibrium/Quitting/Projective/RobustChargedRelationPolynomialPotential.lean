@@ -31,7 +31,7 @@ theorem exists_quittingRobustChargedRelation_rationalPotential_of_contDiff
   let domain : Set (Fin dimension → ℝ) := {point | ∀ coordinate, |point coordinate| ≤ bound}
   have hdomain : domain = Set.Icc (fun _ ↦ -bound) (fun _ ↦ bound) := by
     ext point
-    simp only [domain, Set.mem_setOf_eq, Set.mem_Icc, Pi.le_def, abs_le, forall_and]
+    simp only [domain, Set.mem_ofPred_eq, Set.mem_Icc, Pi.le_def, abs_le, forall_and]
   have hconvex : Convex ℝ domain := by rw [hdomain]; exact convex_Icc _ _
   let displacementBound := max 1 (rewardBound + bound + tolerance)
   have hdisplacementBound : 0 < displacementBound := lt_of_lt_of_le zero_lt_one (le_max_left _ _)

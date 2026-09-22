@@ -161,9 +161,9 @@ theorem quittingRootPayoff_principalExtend_persistentBase
         (principalExtend free (fun player => decide (player ∈ base)) action)).Nonempty := by
     rw [hcoalition]
     exact hbase.mono (Finset.subset_union_left)
-  simp only [quittingRootPayoff, hnonempty, dif_pos,
+  simp only [quittingRootPayoff, hnonempty, dite_eq_left,
     quittingPersistentBaseUtility, quittingSetReward]
-  rw [dif_pos (hbase.mono Finset.subset_union_left)]
+  rw [dite_eq_left (hbase.mono Finset.subset_union_left)]
   apply congrArg (fun terminal => reward terminal who.1)
   exact Subtype.ext hcoalition
 

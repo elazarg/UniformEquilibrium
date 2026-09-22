@@ -20,18 +20,18 @@ noncomputable section
 namespace GameTheory
 namespace TwoDateTimingNashSharpness
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 private theorem pure_dummy_now_general (choices : Player → Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     timingPurePayoff reward 2 (Function.update choices dummy now) dummy = -1 := by
   have hcurrent : (quittingQuitters fun player => timingActionCurrent
       (Function.update choices dummy now player)).Nonempty :=
-    ⟨dummy, by simp [quittingQuitters, timingActionCurrent, now]⟩
+    ⟨dummy, by simp [mem_quittingQuitters_iff, timingActionCurrent, now]⟩
   rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ dummy hcurrent]
-  simp only [reward, if_neg hzero, if_neg hone]
-  rw [if_pos]
-  simp [quittingQuitters, timingActionCurrent, now]
+  simp only [reward, ite_eq_right hzero, ite_eq_right hone]
+  rw [ite_eq_left]
+  simp [mem_quittingQuitters_iff, timingActionCurrent, now]
 
 private theorem pure_dummy_never_general (choices : Player → Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
@@ -40,9 +40,9 @@ private theorem pure_dummy_never_general (choices : Player → Action)
   unfold quittingRootPayoff
   split
   case isTrue hcurrent =>
-    simp only [reward, if_neg hzero, if_neg hone]
-    rw [if_neg]
-    simp [quittingQuitters, timingActionCurrent, never]
+    simp only [reward, ite_eq_right hzero, ite_eq_right hone]
+    rw [ite_eq_right]
+    simp [mem_quittingQuitters_iff, timingActionCurrent, never]
   case isFalse hcurrent =>
     change timingPurePayoff reward 1
       (timingChoicesTail (Function.update choices dummy never)) dummy = 0
@@ -50,9 +50,9 @@ private theorem pure_dummy_never_general (choices : Player → Action)
     unfold quittingRootPayoff
     split
     case isTrue htail =>
-      simp only [reward, if_neg hzero, if_neg hone]
-      rw [if_neg]
-      simp [quittingQuitters, timingChoicesTail, timingActionTail,
+      simp only [reward, ite_eq_right hzero, ite_eq_right hone]
+      rw [ite_eq_right]
+      simp [mem_quittingQuitters_iff, timingChoicesTail, timingActionTail,
         timingActionCurrent, never]
     case isFalse htail => exact timingPurePayoff_zero reward _ dummy
 
@@ -60,7 +60,7 @@ theorem dummy_now_payoff (mixed : Player → PMF Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed dummy (PMF.pure now)) dummy = -1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -90,7 +90,7 @@ theorem dummy_never_payoff (mixed : Player → PMF Action)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed dummy (PMF.pure never)) dummy = 0 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -120,10 +120,10 @@ theorem dummy_now_mass_eq_zero (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
     (dummy : Player) (hzero : dummy ≠ 0) (hone : dummy ≠ 1) :
     mixed dummy now = 0 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ who, Finite ((quittingTwoDateTimingGame reward).Strategy who) :=
+  let : ∀ who, Finite ((quittingTwoDateTimingGame reward).Strategy who) :=
     fun _ => by
       unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
       infer_instance
@@ -164,32 +164,33 @@ private theorem pure_column_value_of_row_now
       if choices 1 = now then 1 else -1 := by
   have hnonempty : (quittingQuitters fun player =>
       timingActionCurrent (choices player)).Nonempty :=
-    ⟨0, by simp [quittingQuitters, hrow, timingActionCurrent, now]⟩
+    ⟨0, by simp [mem_quittingQuitters_iff, hrow, timingActionCurrent, now]⟩
   rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ 1 hnonempty]
   have hrowCurrent : timingActionCurrent (choices 0) = true := by
     rw [hrow]
     rfl
   by_cases hcolumn : choices 1 = now
-  · rw [if_pos hcolumn]
+  · rw [ite_eq_left hcolumn]
     have hcolumnCurrent : timingActionCurrent (choices 1) = true := by
       rw [hcolumn]
       rfl
     have hzeroMem : 0 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hrowCurrent
+      simpa only [mem_quittingQuitters_iff] using hrowCurrent
     have honeMem : 1 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hcolumnCurrent
+      simpa [mem_quittingQuitters_iff] using hcolumnCurrent
     simp [reward, hzeroMem, honeMem]
-  · rw [if_neg hcolumn]
+  · rw [ite_eq_right hcolumn]
     have hcolumnCurrent : timingActionCurrent (choices 1) = false :=
       actionCurrent_eq_false_of_ne_now _ hcolumn
     have hzeroMem : 0 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hrowCurrent
+      simpa [mem_quittingQuitters_iff] using hrowCurrent
     have honeMem : 1 ∉ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hcolumnCurrent
+      rw [mem_quittingQuitters_iff, hcolumnCurrent]
+      decide
     simp [reward, hzeroMem, honeMem]
 
 private theorem eq_of_mem_support_pmfPi_of_marginal_eq_pure
@@ -213,7 +214,7 @@ theorem column_deviation_value_of_row_pure_now
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 1 (PMF.pure action)) 1 =
       if action = now then 1 else -1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -244,32 +245,33 @@ private theorem pure_row_value_of_column_now
       if choices 0 = now then -1 else 1 := by
   have hnonempty : (quittingQuitters fun player =>
       timingActionCurrent (choices player)).Nonempty :=
-    ⟨1, by simp [quittingQuitters, hcolumn, timingActionCurrent, now]⟩
+    ⟨1, by simp [mem_quittingQuitters_iff, hcolumn, timingActionCurrent, now]⟩
   rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ 0 hnonempty]
   have hcolumnCurrent : timingActionCurrent (choices 1) = true := by
     rw [hcolumn]
     rfl
   by_cases hrow : choices 0 = now
-  · rw [if_pos hrow]
+  · rw [ite_eq_left hrow]
     have hrowCurrent : timingActionCurrent (choices 0) = true := by
       rw [hrow]
       rfl
     have hzeroMem : 0 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hrowCurrent
+      simpa only [mem_quittingQuitters_iff] using hrowCurrent
     have honeMem : 1 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hcolumnCurrent
+      simpa only [mem_quittingQuitters_iff] using hcolumnCurrent
     simp [reward, hzeroMem, honeMem]
-  · rw [if_neg hrow]
+  · rw [ite_eq_right hrow]
     have hrowCurrent : timingActionCurrent (choices 0) = false :=
       actionCurrent_eq_false_of_ne_now _ hrow
     have hzeroMem : 0 ∉ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hrowCurrent
+      rw [mem_quittingQuitters_iff, hrowCurrent]
+      decide
     have honeMem : 1 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hcolumnCurrent
+      simpa only [mem_quittingQuitters_iff] using hcolumnCurrent
     simp [reward, hzeroMem, honeMem]
 
 theorem row_deviation_value_of_column_pure_now
@@ -278,7 +280,7 @@ theorem row_deviation_value_of_column_pure_now
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 0 (PMF.pure action)) 0 =
       if action = now then -1 else 1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -310,10 +312,10 @@ theorem reward_bound (terminal : {S : Finset Player // S.Nonempty})
 theorem mixed_payoff_le_one (mixed : Player → PMF Action)
     (who : Player) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu mixed who ≤ 1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -329,10 +331,10 @@ theorem column_eq_pure_now_of_row_pure_now
     (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
     (hrow : mixed 0 = PMF.pure now) : mixed 1 = PMF.pure now := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -340,7 +342,7 @@ theorem column_eq_pure_now_of_row_pure_now
     mixed).mp hnash 1 now
   unfold KernelGame.mixedGain at hgainNow
   rw [column_deviation_value_of_row_pure_now mixed hrow now,
-    if_pos rfl] at hgainNow
+    ite_eq_left rfl] at hgainNow
   have hpayoffLe := mixed_payoff_le_one mixed 1
   have hpayoff :
       (quittingTwoDateTimingGame reward).mixedExtension.eu mixed 1 = 1 := by
@@ -356,7 +358,7 @@ theorem column_eq_pure_now_of_row_pure_now
         (quittingTwoDateTimingGame reward) mixed hnash 1 action hmass
       unfold KernelGame.mixedGain at hsupport
       rw [column_deviation_value_of_row_pure_now mixed hrow action,
-        if_neg hneNow, hpayoff] at hsupport
+        ite_eq_right hneNow, hpayoff] at hsupport
       norm_num at hsupport
     · intro action haction
       rw [Set.mem_singleton_iff.mp haction]
@@ -369,7 +371,7 @@ theorem column_eq_pure_now_of_row_pure_now
           (quittingTwoDateTimingGame reward) mixed hnash 1 supported hmass
         unfold KernelGame.mixedGain at hsupport
         rw [column_deviation_value_of_row_pure_now mixed hrow supported,
-          if_neg hne, hpayoff] at hsupport
+          ite_eq_right hne, hpayoff] at hsupport
         norm_num at hsupport
       simpa [hsupportedNow] using hsupported
   have hmassOne : mixed 1 now = 1 :=
@@ -383,7 +385,7 @@ theorem column_eq_pure_now_of_row_pure_now
       (PMF.apply_eq_zero_iff (mixed 1) action).mpr (by
         rw [hsupportSet]
         simpa using haction)
-    rw [hzero, PMF.pure_apply, if_neg haction]
+    rw [hzero, PMF.pure_apply, ite_eq_right haction]
 
 theorem row_not_pure_now
     (mixed : Player → PMF Action)
@@ -400,13 +402,13 @@ theorem row_not_pure_now
   have hprescribed :
       (quittingTwoDateTimingGame reward).mixedExtension.eu mixed 0 = -1 := by
     have hdeviation := row_deviation_value_of_column_pure_now mixed hcolumn now
-    rw [if_pos rfl] at hdeviation
+    rw [ite_eq_left rfl] at hdeviation
     have heq := congrArg (fun profile : Player → PMF Action =>
       (quittingTwoDateTimingGame reward).mixedExtension.eu profile 0) hupdate
     exact heq.symm.trans hdeviation
   have hgain := hnash 0 (PMF.pure next)
   rw [row_deviation_value_of_column_pure_now mixed hcolumn next,
-    if_neg (by decide : next ≠ now), hprescribed] at hgain
+    ite_eq_right (by decide : next ≠ now), hprescribed] at hgain
   norm_num at hgain
 
 private theorem pure_column_now_value (choices : Player → Action)
@@ -415,29 +417,29 @@ private theorem pure_column_now_value (choices : Player → Action)
       if choices 0 = now then 1 else -1 := by
   have hnonempty : (quittingQuitters fun player =>
       timingActionCurrent (choices player)).Nonempty :=
-    ⟨1, by simp [quittingQuitters, hcolumn, timingActionCurrent, now]⟩
+    ⟨1, by simp [mem_quittingQuitters_iff, hcolumn, timingActionCurrent, now]⟩
   rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ 1 hnonempty]
   have honeMem : 1 ∈ quittingQuitters (fun player =>
       timingActionCurrent (choices player)) := by
-    simp [quittingQuitters, hcolumn, timingActionCurrent, now]
+    simp [mem_quittingQuitters_iff, hcolumn, timingActionCurrent, now]
   by_cases hrow : choices 0 = now
-  · rw [if_pos hrow]
+  · rw [ite_eq_left hrow]
     have hzeroMem : 0 ∈ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simp [quittingQuitters, hrow, timingActionCurrent, now]
+      simp [mem_quittingQuitters_iff, hrow, timingActionCurrent, now]
     simp [reward, hzeroMem, honeMem]
-  · rw [if_neg hrow]
+  · rw [ite_eq_right hrow]
     have hzeroCurrent := actionCurrent_eq_false_of_ne_now _ hrow
     have hzeroMem : 0 ∉ quittingQuitters (fun player =>
         timingActionCurrent (choices player)) := by
-      simpa [quittingQuitters] using hzeroCurrent
+      simpa [mem_quittingQuitters_iff] using hzeroCurrent
     simp [reward, hzeroMem, honeMem]
 
 theorem column_now_value_of_row_now_mass_zero
     (mixed : Player → PMF Action) (hrow : mixed 0 now = 0) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 1 (PMF.pure now)) 1 = -1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -458,17 +460,17 @@ theorem column_now_value_of_row_now_mass_zero
           Function.update_of_ne (by decide : (0 : Player) ≠ 1), hrow]
       have hrowChoice := ne_of_mem_support_pmfPi_of_marginal_eq_zero
         deviated choices hchoices 0 now hrowMass
-      rw [pure_column_now_value choices hcolumnChoice, if_neg hrowChoice]
+      rw [pure_column_now_value choices hcolumnChoice, ite_eq_right hrowChoice]
     _ = -1 := Math.Probability.expect_const _ _
 
 theorem row_now_mass_eq_zero_of_column_pure_now
     (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed)
     (hcolumn : mixed 1 = PMF.pure now) : mixed 0 now = 0 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -476,7 +478,7 @@ theorem row_now_mass_eq_zero_of_column_pure_now
     mixed).mp hnash 0 next
   unfold KernelGame.mixedGain at hgainNext
   rw [row_deviation_value_of_column_pure_now mixed hcolumn next,
-    if_neg (by decide : next ≠ now)] at hgainNext
+    ite_eq_right (by decide : next ≠ now)] at hgainNext
   have hpayoffLe := mixed_payoff_le_one mixed 0
   have hpayoff :
       (quittingTwoDateTimingGame reward).mixedExtension.eu mixed 0 = 1 := by
@@ -486,7 +488,7 @@ theorem row_now_mass_eq_zero_of_column_pure_now
     (quittingTwoDateTimingGame reward) mixed hnash 0 now hmass
   unfold KernelGame.mixedGain at hsupport
   rw [row_deviation_value_of_column_pure_now mixed hcolumn now,
-    if_pos rfl, hpayoff] at hsupport
+    ite_eq_left rfl, hpayoff] at hsupport
   norm_num at hsupport
 
 theorem column_payoff_eq_neg_one_of_column_pure_now
@@ -523,7 +525,7 @@ private theorem pure_column_next_value_of_no_dummy_now
   | none =>
       change timingPurePayoff reward 2 ![never, next, dummyTwo, dummyThree] 1 =
         (if never = next then 1 else -1)
-      rw [if_neg (by decide : never ≠ next)]
+      rw [ite_eq_right (by decide : never ≠ next)]
       have hcurrent := current_empty_of_all_ne_now
         ![never, next, dummyTwo, dummyThree] (by
           intro player
@@ -553,14 +555,14 @@ private theorem pure_column_next_value_of_no_dummy_now
       fin_cases rowTime
       · change timingPurePayoff reward 2 ![now, next, dummyTwo, dummyThree] 1 =
           (if now = next then 1 else -1)
-        rw [if_neg (by decide : now ≠ next)]
+        rw [ite_eq_right (by decide : now ≠ next)]
         have hcurrent : (quittingQuitters fun player =>
             timingActionCurrent (![now, next, dummyTwo, dummyThree] player)).Nonempty :=
-          ⟨0, by simp [quittingQuitters, timingActionCurrent, now]⟩
+          ⟨0, by simp [mem_quittingQuitters_iff, timingActionCurrent, now]⟩
         rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ 1 hcurrent]
         have hzero : 0 ∈ quittingQuitters (fun player =>
             timingActionCurrent (![now, next, dummyTwo, dummyThree] player)) := by
-          simp [quittingQuitters, timingActionCurrent, now]
+          simp [mem_quittingQuitters_iff, timingActionCurrent, now]
         have hone : 1 ∉ quittingQuitters (fun player =>
             timingActionCurrent (![now, next, dummyTwo, dummyThree] player)) := by
           simp only [quittingQuitters, Finset.mem_filter, Finset.mem_univ,
@@ -570,7 +572,7 @@ private theorem pure_column_next_value_of_no_dummy_now
         simp [reward, hzero, hone]
       · change timingPurePayoff reward 2 ![next, next, dummyTwo, dummyThree] 1 =
           (if next = next then 1 else -1)
-        rw [if_pos rfl]
+        rw [ite_eq_left rfl]
         have hcurrent := current_empty_of_all_ne_now
           ![next, next, dummyTwo, dummyThree] (by
             intro player
@@ -606,7 +608,7 @@ private theorem pure_column_never_value_of_no_dummy_now
   | none =>
       change timingPurePayoff reward 2 ![never, never, dummyTwo, dummyThree] 1 =
         (if never = never then 0 else -1)
-      rw [if_pos rfl]
+      rw [ite_eq_left rfl]
       have hcurrent := current_empty_of_all_ne_now
         ![never, never, dummyTwo, dummyThree] (by
           intro player
@@ -640,21 +642,21 @@ private theorem pure_column_never_value_of_no_dummy_now
       fin_cases rowTime
       · change timingPurePayoff reward 2 ![now, never, dummyTwo, dummyThree] 1 =
           (if now = never then 0 else -1)
-        rw [if_neg (by decide : now ≠ never)]
+        rw [ite_eq_right (by decide : now ≠ never)]
         have hcurrent : (quittingQuitters fun player =>
             timingActionCurrent (![now, never, dummyTwo, dummyThree] player)).Nonempty :=
-          ⟨0, by simp [quittingQuitters, timingActionCurrent, now]⟩
+          ⟨0, by simp [mem_quittingQuitters_iff, timingActionCurrent, now]⟩
         rw [timingPurePayoff_succ_of_current_nonempty reward 1 _ 1 hcurrent]
         have hzero : 0 ∈ quittingQuitters (fun player =>
             timingActionCurrent (![now, never, dummyTwo, dummyThree] player)) := by
-          simp [quittingQuitters, timingActionCurrent, now]
+          simp [mem_quittingQuitters_iff, timingActionCurrent, now]
         have hone : 1 ∉ quittingQuitters (fun player =>
             timingActionCurrent (![now, never, dummyTwo, dummyThree] player)) := by
-          simp [quittingQuitters, timingActionCurrent, never]
+          simp [mem_quittingQuitters_iff, timingActionCurrent, never]
         simp [reward, hzero, hone]
       · change timingPurePayoff reward 2 ![next, never, dummyTwo, dummyThree] 1 =
           (if next = never then 0 else -1)
-        rw [if_neg (by decide : next ≠ never)]
+        rw [ite_eq_right (by decide : next ≠ never)]
         have hcurrent := current_empty_of_all_ne_now
           ![next, never, dummyTwo, dummyThree] (by
             intro player
@@ -688,7 +690,7 @@ theorem column_next_value_of_no_current_mass
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 1 (PMF.pure next)) 1 =
       2 * mass (mixed 0) next - 1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -743,7 +745,7 @@ theorem column_never_value_of_no_current_mass
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 1 (PMF.pure never)) 1 =
       mass (mixed 0) never - 1 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -854,11 +856,11 @@ private theorem pure_dummy_two_next_value_of_other_ne_now
   unfold quittingRootPayoff
   split
   case isTrue hcurrent =>
-    rw [if_pos ((dummy_two_current_nonempty_iff_of_other_ne_now
+    rw [ite_eq_left ((dummy_two_current_nonempty_iff_of_other_ne_now
       rowAction columnAction otherAction hother).mp hcurrent)]
-    simp only [reward, if_neg (by decide : (2 : Player) ≠ 0),
-      if_neg (by decide : (2 : Player) ≠ 1)]
-    rw [if_neg]
+    simp only [reward, ite_eq_right (by decide : (2 : Player) ≠ 0),
+      ite_eq_right (by decide : (2 : Player) ≠ 1)]
+    rw [ite_eq_right]
     have hfun : (fun player => timingActionCurrent
         (![rowAction, columnAction, next, otherAction] player)) =
         ![timingActionCurrent rowAction, timingActionCurrent columnAction,
@@ -873,7 +875,7 @@ private theorem pure_dummy_two_next_value_of_other_ne_now
       cases hcolumn : timingActionCurrent columnAction <;>
         simp [quittingQuitters_vec4]
   case isFalse hcurrent =>
-    rw [if_neg (not_congr (dummy_two_current_nonempty_iff_of_other_ne_now
+    rw [ite_eq_right (not_congr (dummy_two_current_nonempty_iff_of_other_ne_now
       rowAction columnAction otherAction hother) |>.mp hcurrent)]
     change timingPurePayoff reward 1
       (timingChoicesTail ![rowAction, columnAction, next, otherAction]) 2 = -1
@@ -884,15 +886,15 @@ private theorem pure_dummy_two_next_value_of_other_ne_now
       change timingActionCurrent (timingActionTail next) = true
       decide
     rw [timingPurePayoff_succ_of_current_nonempty reward 0 _ 2 ⟨2, htwo⟩]
-    simp only [reward, if_neg (by decide : (2 : Player) ≠ 0),
-      if_neg (by decide : (2 : Player) ≠ 1), if_pos htwo]
+    simp only [reward, ite_eq_right (by decide : (2 : Player) ≠ 0),
+      ite_eq_right (by decide : (2 : Player) ≠ 1), ite_eq_left htwo]
 
 theorem dummy_two_next_payoff
     (mixed : Player → PMF Action) (hother : mixed 3 now = 0) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 2 (PMF.pure next)) 2 =
       -(1 - mass (mixed 0) now) * (1 - mass (mixed 1) now) := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -981,11 +983,11 @@ private theorem pure_dummy_three_next_value_of_other_ne_now
   unfold quittingRootPayoff
   split
   case isTrue hcurrent =>
-    rw [if_pos ((dummy_three_current_nonempty_iff_of_other_ne_now
+    rw [ite_eq_left ((dummy_three_current_nonempty_iff_of_other_ne_now
       rowAction columnAction otherAction hother).mp hcurrent)]
-    simp only [reward, if_neg (by decide : (3 : Player) ≠ 0),
-      if_neg (by decide : (3 : Player) ≠ 1)]
-    rw [if_neg]
+    simp only [reward, ite_eq_right (by decide : (3 : Player) ≠ 0),
+      ite_eq_right (by decide : (3 : Player) ≠ 1)]
+    rw [ite_eq_right]
     have hfun : (fun player => timingActionCurrent
         (![rowAction, columnAction, otherAction, next] player)) =
         ![timingActionCurrent rowAction, timingActionCurrent columnAction,
@@ -1000,7 +1002,7 @@ private theorem pure_dummy_three_next_value_of_other_ne_now
       cases hcolumn : timingActionCurrent columnAction <;>
         simp [quittingQuitters_vec4]
   case isFalse hcurrent =>
-    rw [if_neg (not_congr (dummy_three_current_nonempty_iff_of_other_ne_now
+    rw [ite_eq_right (not_congr (dummy_three_current_nonempty_iff_of_other_ne_now
       rowAction columnAction otherAction hother) |>.mp hcurrent)]
     change timingPurePayoff reward 1
       (timingChoicesTail ![rowAction, columnAction, otherAction, next]) 3 = -1
@@ -1011,15 +1013,15 @@ private theorem pure_dummy_three_next_value_of_other_ne_now
       change timingActionCurrent (timingActionTail next) = true
       decide
     rw [timingPurePayoff_succ_of_current_nonempty reward 0 _ 3 ⟨3, hthree⟩]
-    simp only [reward, if_neg (by decide : (3 : Player) ≠ 0),
-      if_neg (by decide : (3 : Player) ≠ 1), if_pos hthree]
+    simp only [reward, ite_eq_right (by decide : (3 : Player) ≠ 0),
+      ite_eq_right (by decide : (3 : Player) ≠ 1), ite_eq_left hthree]
 
 theorem dummy_three_next_payoff
     (mixed : Player → PMF Action) (hother : mixed 2 now = 0) :
     (quittingTwoDateTimingGame reward).mixedExtension.eu
         (Function.update mixed 3 (PMF.pure next)) 3 =
       -(1 - mass (mixed 0) now) * (1 - mass (mixed 1) now) := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
   rw [(quittingTwoDateTimingGame reward).mixedExtension_eu]
@@ -1088,7 +1090,7 @@ private theorem pmf_eq_pure_of_apply_eq_one (law : PMF Action)
       (PMF.apply_eq_zero_iff law choice).mpr (by
         rw [hsupport]
         simpa using hchoice)
-    rw [hzero, PMF.pure_apply, if_neg hchoice]
+    rw [hzero, PMF.pure_apply, ite_eq_right hchoice]
 
 private theorem mass_lt_one_of_ne_pure (law : PMF Action)
     (action : Action) (hne : law ≠ PMF.pure action) :
@@ -1106,10 +1108,10 @@ theorem dummy_two_next_mass_eq_zero
     (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed) :
     mixed 2 next = 0 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
@@ -1139,10 +1141,10 @@ theorem dummy_three_next_mass_eq_zero
     (mixed : Player → PMF Action)
     (hnash : (quittingTwoDateTimingGame reward).mixedExtension.IsNash mixed) :
     mixed 3 next = 0 := by
-  letI : Finite (quittingTwoDateTimingGame reward).Outcome := by
+  let : Finite (quittingTwoDateTimingGame reward).Outcome := by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance
-  letI : ∀ player, Finite
+  let : ∀ player, Finite
       ((quittingTwoDateTimingGame reward).Strategy player) := fun _ => by
     unfold quittingTwoDateTimingGame quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
     infer_instance

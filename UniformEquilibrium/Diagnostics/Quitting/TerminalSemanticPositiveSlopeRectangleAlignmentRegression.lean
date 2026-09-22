@@ -45,7 +45,12 @@ inductive Outcome
   | moverSolo
   | observerSolo
   | collision
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype Outcome :=
+  Fintype.ofList [.moverSolo, .observerSolo, .collision] (by
+    intro outcome
+    cases outcome <;> simp)
 
 /-- Uniform source law on dates `0,1,2`, with zero mass at date `3`. -/
 def sourceStopMass : Fin 4 → ℝ := fun time =>

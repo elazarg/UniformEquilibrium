@@ -21,7 +21,7 @@ private theorem quittingTerminalPayoff_rational_of_finite_rational_laws
     (hreward : ∀ terminal player, IsRationalReal (reward terminal player)) :
     IsRationalReal
       (quittingTerminalPayoff reward (quittingStoppingLawProfile reward laws) observer) := by
-  letI : Nonempty ι := ⟨observer⟩
+  let : Nonempty ι := ⟨observer⟩
   rw [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff]
   unfold quittingStoppingLawExpectedPayoff quittingIndependentTerminalOutcomeLaw
   rw [expect_map]

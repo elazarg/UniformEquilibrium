@@ -41,7 +41,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set Topology
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingProjectiveTargetMismatch
 
@@ -133,6 +133,31 @@ private theorem expect_pmfPi_bool
       (1 - p) * f false + p * f true :=
   GameTheory.expect_quittingHazardCoin p hp0 hp1 f
 
+private theorem discountedAuxEU_none_typed
+    (β : ℝ) (V : (quittingGame reward).State → Payoff Player)
+    (m : ∀ who, PMF ((quittingGame reward).Act who)) (who : Player) :
+    (quittingGame reward).discountedAuxEU β V
+        (show (quittingGame reward).State from none) m who =
+      β * quittingRootExpectedPayoff
+        (fun terminal => V
+          (show (quittingGame reward).State from some terminal))
+        (fun player => V
+          (show (quittingGame reward).State from none) player)
+        (fun player => show PMF Bool from m player) who := by
+  change Player → PMF Bool at m
+  exact discountedAuxEU_quittingGame_none reward β V m who
+
+private theorem discountedAuxEU_some_typed
+    (β : ℝ) (V : (quittingGame reward).State → Payoff Player)
+    (terminal : Terminal)
+    (m : ∀ who, PMF ((quittingGame reward).Act who)) (who : Player) :
+    (quittingGame reward).discountedAuxEU β V
+        (show (quittingGame reward).State from some terminal) m who =
+      (1 - β) * reward terminal who +
+        β * V (show (quittingGame reward).State from some terminal) who := by
+  change Player → PMF Bool at m
+  exact discountedAuxEU_quittingGame_some reward β V terminal m who
+
 private theorem pureDeviationAuxEU_eq
     (t : ℝ) (ht0 : 0 ≤ t) (hthalf : t ≤ 1 / 2)
     (state : (quittingGame reward).State) (who : Player)
@@ -143,16 +168,36 @@ private theorem pureDeviationAuxEU_eq
         (profile t ht0 hthalf state) who := by
   have hden : 1 - t ≠ 0 := by linarith
   rcases state with _ | terminal
-  · rw [discountedAuxEU_quittingGame_none,
-      discountedAuxEU_quittingGame_none]
+  · let liveState : (quittingGame reward).State :=
+      show (quittingGame reward).State from none
+    with_unfolding_all
+      change (quittingGame reward).discountedAuxEU (1 - t) value liveState
+          (Function.update (profile t ht0 hthalf liveState) who
+            (PMF.pure action)) who =
+        (quittingGame reward).discountedAuxEU (1 - t) value liveState
+          (profile t ht0 hthalf liveState) who
+    dsimp only [liveState]
+    with_unfolding_all
+      rw [discountedAuxEU_none_typed,
+        discountedAuxEU_none_typed]
     unfold quittingRootExpectedPayoff
     rw [expect_pmfPi_bool, expect_pmfPi_bool]
     cases who <;> cases action <;>
       simp [profile, value, quittingGame, quittingRootPayoff, reward,
         hazard, expect_hazardCoin, Function.update, Finset.ext_iff] <;>
       field_simp [hden] <;> ring_nf <;> simp_all
-  · rw [discountedAuxEU_quittingGame_some,
-      discountedAuxEU_quittingGame_some]
+  · let terminalState : (quittingGame reward).State :=
+      show (quittingGame reward).State from some terminal
+    with_unfolding_all
+      change (quittingGame reward).discountedAuxEU (1 - t) value terminalState
+          (Function.update (profile t ht0 hthalf terminalState) who
+            (PMF.pure action)) who =
+        (quittingGame reward).discountedAuxEU (1 - t) value terminalState
+          (profile t ht0 hthalf terminalState) who
+    dsimp only [terminalState]
+    with_unfolding_all
+      rw [discountedAuxEU_some_typed,
+        discountedAuxEU_some_typed]
 
 /-- For `0 ≤ t ≤ 1/2`, the explicit stationary profile and value solve
 the exact discounted Bellman system at discount factor `1 - t`. -/
@@ -180,14 +225,28 @@ theorem equilibrium
   · intro state who
     have hden : 1 - t ≠ 0 := by linarith
     rcases state with _ | terminal
-    · rw [discountedAuxEU_quittingGame_none]
+    · let liveState : (quittingGame reward).State :=
+        show (quittingGame reward).State from none
+      with_unfolding_all
+        change (quittingGame reward).discountedAuxEU (1 - t) value liveState
+            (profile t ht0 hthalf liveState) who = value liveState who
+      dsimp only [liveState]
+      with_unfolding_all
+        rw [discountedAuxEU_none_typed]
       unfold quittingRootExpectedPayoff
       rw [expect_pmfPi_bool]
       cases who <;>
         simp [profile, value, quittingRootPayoff, reward,
           hazard, expect_hazardCoin, Finset.ext_iff] <;>
         field_simp [hden] <;> ring_nf
-    · rw [discountedAuxEU_quittingGame_some]
+    · let terminalState : (quittingGame reward).State :=
+        show (quittingGame reward).State from some terminal
+      with_unfolding_all
+        change (quittingGame reward).discountedAuxEU (1 - t) value terminalState
+            (profile t ht0 hthalf terminalState) who = value terminalState who
+      dsimp only [terminalState]
+      with_unfolding_all
+        rw [discountedAuxEU_some_typed]
       simp only [value]
       ring
 
@@ -221,8 +280,17 @@ private theorem assignment_eq_bellmanAssignment
               (hazard_le_one ht0 hthalf)) true).toReal
           symm
           exact quittingHazardCoin_true_toReal _ _ _
-      · cases action <;>
-          simp [assignment, StochasticGame.bellmanAssignment, profile]
+      · cases action with
+        | false =>
+            with_unfolding_all
+              change 1 = ((PMF.pure false : PMF Bool) false).toReal
+            rw [PMF.pure_apply]
+            norm_num
+        | true =>
+            with_unfolding_all
+              change 0 = ((PMF.pure false : PMF Bool) true).toReal
+            rw [PMF.pure_apply]
+            norm_num
   | val state who => rfl
   | disc => simp [assignment, StochasticGame.bellmanAssignment]
 

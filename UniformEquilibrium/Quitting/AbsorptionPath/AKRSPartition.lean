@@ -115,7 +115,7 @@ theorem CadlagPath.leftValue_le_value
         Set.Icc (0 : ℝ) time \ {time} := by
       intro point hpoint
       exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-    letI : leftFilter.NeBot :=
+    let : leftFilter.NeBot :=
       (right_nhdsWithin_Ioo_neBot htime_pos).mono
         (nhdsWithin_mono time hsubset)
     apply le_of_tendsto (path.left_limit coalition time htime)
@@ -139,7 +139,7 @@ theorem CadlagPath.leftValue_mono
         Set.Icc (0 : ℝ) stop \ {stop} := by
       intro point hpoint
       exact ⟨⟨hstart.1.trans hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-    letI : leftFilter.NeBot :=
+    let : leftFilter.NeBot :=
       (right_nhdsWithin_Ioo_neBot hlt).mono
         (nhdsWithin_mono stop hsubset)
     apply ge_of_tendsto (path.left_limit coalition stop hstop)
@@ -172,7 +172,7 @@ theorem CadlagPath.value_le_leftValue_of_lt
     intro point hpoint
     exact ⟨⟨hearler.1.trans hpoint.1.le, hpoint.2.le⟩,
       hpoint.2.ne⟩
-  letI : leftFilter.NeBot :=
+  let : leftFilter.NeBot :=
     (right_nhdsWithin_Ioo_neBot hearlerLater).mono
       (nhdsWithin_mono later hsubset)
   apply ge_of_tendsto (path.left_limit coalition later hlater)
@@ -250,7 +250,7 @@ theorem le_pathLeftTotal
         Set.Icc (0 : ℝ) time \ {time} := by
       intro point hpoint
       exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-    letI : leftFilter.NeBot :=
+    let : leftFilter.NeBot :=
       (right_nhdsWithin_Ioo_neBot htimePos).mono
         (nhdsWithin_mono time hsubset)
     have htimeTendsto : Tendsto (fun point : ℝ ↦ point) leftFilter
@@ -409,7 +409,7 @@ theorem countable_pathJumps (path : CadlagPath (ι := ι)) :
         Set.Icc (0 : ℝ) time \ {time} := by
       intro point hpoint
       exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-    letI : leftFilter.NeBot :=
+    let : leftFilter.NeBot :=
       (right_nhdsWithin_Ioo_neBot htimePos).mono
         (nhdsWithin_mono time hIooSubset)
     have hvalueTendsto : Tendsto
@@ -875,11 +875,11 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
       change incidentCorrectedCellValue path.1 ε terminal player stop later =
         incidentCorrectedValue path.1 ε terminal player later
       simp only [incidentCorrectedCellValue,
-        if_neg (ne_of_lt (show later < stop from hlater))]
+        ite_eq_right (ne_of_lt (show later < stop from hlater))]
     have htarget : cellValue point = corrected point := by
       change incidentCorrectedCellValue path.1 ε terminal player stop point =
         incidentCorrectedValue path.1 ε terminal player point
-      simp only [incidentCorrectedCellValue, if_neg hpointNeStop]
+      simp only [incidentCorrectedCellValue, ite_eq_right hpointNeStop]
     rw [htarget]
     exact hcorrectedTendsto.congr' (Filter.EventuallyEq.symm heq)
   have hleftTendsto (point : ℝ) (hpoint : point ∈ Set.Ioc start stop) :
@@ -908,7 +908,7 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
       change incidentCorrectedCellValue path.1 ε terminal player stop earlier =
         incidentCorrectedValue path.1 ε terminal player earlier
       simp only [incidentCorrectedCellValue,
-        if_neg (ne_of_lt (hearler.2.trans_le hpoint.2))]
+        ite_eq_right (ne_of_lt (hearler.2.trans_le hpoint.2))]
     exact hcorrectedTendsto.congr' (Filter.EventuallyEq.symm heq)
   have hjump (point : ℝ) (hpoint : point ∈ Set.Ioc start stop) :
       cellValue point ≤ correctedLeft point := by
@@ -920,13 +920,13 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
         ⟨hpoint.1.le, hpointStop⟩
       have hpointNeStop : point ≠ stop := ne_of_lt hpointStop
       simpa only [cellValue, incidentCorrectedCellValue,
-        if_neg hpointNeStop] using hnoUpward point hpointIco
+        ite_eq_right hpointNeStop] using hnoUpward point hpointIco
   have hstartLe : cellValue start ≤ correctedLeft start := by
     have hstartIco : start ∈ Set.Ico start stop :=
       ⟨le_rfl, hstartStop⟩
     have hstartNeStop : start ≠ stop := ne_of_lt hstartStop
     simpa only [cellValue, incidentCorrectedCellValue,
-      if_neg hstartNeStop] using hnoUpward start hstartIco
+      ite_eq_right hstartNeStop] using hnoUpward start hstartIco
   have hslope (point : ℝ) (hpoint : point ∈ Set.Ico start stop)
       (rate : ℝ) (hrate : 0 < rate) :
       ∃ᶠ later in nhdsWithin point (Set.Ioo point stop),
@@ -984,7 +984,7 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
           coalitionSlope later := by
         rw [slope_def_field]
         simp only [cellValue, incidentCorrectedCellValue,
-          if_neg hpointNeStop, if_neg (ne_of_lt hlaterMem.2)]
+          ite_eq_right hpointNeStop, ite_eq_right (ne_of_lt hlaterMem.2)]
         unfold incidentCorrectedValue coalitionSlope
         apply (div_le_div_iff_of_pos_right (sub_pos.mpr hlaterMem.1)).2
         nlinarith
@@ -993,7 +993,7 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
         lt_of_le_of_ne (path.property.1 point hpointIcc) <| by
           intro heq
           exact hclock ⟨hpointIcc, heq.symm⟩
-      letI : (nhdsWithin point (Set.Ioo point stop)).NeBot :=
+      let : (nhdsWithin point (Set.Ioo point stop)).NeBot :=
         left_nhdsWithin_Ioo_neBot hpoint.2
       have heventually : ∀ᶠ later in nhdsWithin point (Set.Ioo point stop),
           later < pathTotal path.1 point :=
@@ -1016,7 +1016,7 @@ theorem leftValue_incidentCoalitionIncrement_le_of_pathJump_bounds
           hlaterMem.1.le htotalEq singleton
         rw [slope_def_field]
         simp only [cellValue, incidentCorrectedCellValue,
-          if_neg hpointNeStop, if_neg (ne_of_lt hlaterMem.2)]
+          ite_eq_right hpointNeStop, ite_eq_right (ne_of_lt hlaterMem.2)]
         unfold incidentCorrectedValue
         rw [hcoalitionEq, hsingletonEq, sub_self, zero_div]
       exact (hzeroSlope.mono fun later heq ↦ heq.symm ▸ hrate).frequently
@@ -1052,7 +1052,7 @@ theorem pathLeftTotal_eq_of_mem_pathJumps
           Set.Icc (0 : ℝ) time \ {time} := by
         intro point hpoint
         exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-      letI : leftFilter.NeBot :=
+      let : leftFilter.NeBot :=
         (right_nhdsWithin_Ioo_neBot htimePos).mono
           (nhdsWithin_mono time hIooSubset)
       have htotalTendsto : Tendsto
@@ -1110,7 +1110,7 @@ theorem pathLeftTotal_pathTotal_eq_at_currentTotal
     intro point hpoint
     exact ⟨⟨hbase.1.trans hpoint.1.le, hpoint.2.le⟩,
       hpoint.2.ne⟩
-  letI : leftFilter.NeBot :=
+  let : leftFilter.NeBot :=
     (right_nhdsWithin_Ioo_neBot hbaseTotal).mono
       (nhdsWithin_mono boundary hIooSubset)
   have htotalTendsto : Tendsto (fun point ↦ pathTotal path.1 point)
@@ -1851,7 +1851,7 @@ theorem clock_le_pathLeftTotal_of_clock_le_pathTotal
         Icc (0 : ℝ) time \ {time} := by
       intro point hpoint
       exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-    letI : leftFilter.NeBot :=
+    let : leftFilter.NeBot :=
       (right_nhdsWithin_Ioo_neBot htimePos).mono
         (nhdsWithin_mono time hsubset)
     have htimeTendsto : Tendsto id leftFilter (nhds time) :=

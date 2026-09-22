@@ -129,7 +129,7 @@ def absorptionPathJumpRoot
 theorem absorptionPathJumpRoot_relation
     (path : AbsorptionPath (ι := ι)) {t : ℝ} (ht : t ∈ pathJumps path.1) :
     AbsorptionPathJumpRelation path t (absorptionPathJumpRoot path t) := by
-  simp only [absorptionPathJumpRoot, dif_pos ht]
+  simp only [absorptionPathJumpRoot, dite_eq_left ht]
   exact Classical.choose_spec (path.property.2.2.1 t ht)
 
 /-- Sequential `ε`-perfection for one player along an absorption path. -/

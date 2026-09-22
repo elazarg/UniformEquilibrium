@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -49,7 +49,7 @@ theorem quittingRootBestEndpointAction_eq_not_of_pureGain_neg
           quittingRootContinuePayoff reward tail root who := by linarith
       unfold quittingRootBestEndpointAction
       simp only [Bool.not_false]
-      rw [if_neg hnot]
+      rw [ite_eq_right hnot]
   | true =>
       rw [quittingRootDeviationGain_pure_true_eq] at hneg
       have hp0 : 0 ≤ (root who false).toReal := ENNReal.toReal_nonneg
@@ -60,7 +60,7 @@ theorem quittingRootBestEndpointAction_eq_not_of_pureGain_neg
           quittingRootContinuePayoff reward tail root who := by linarith
       unfold quittingRootBestEndpointAction
       simp only [Bool.not_true]
-      rw [if_pos hle]
+      rw [ite_eq_left hle]
 
 /-- **Local endpoint-flip passport.**  The certified action is strictly best
 on the owner-Quit face; if it is strictly bad on the owner-Continue face,
@@ -180,7 +180,7 @@ theorem certifiedPacket_le_supportedSourceGain_add_continueFaceLoss
       reward profile terminal owner who hne howner action time
     unfold quittingCertifiedPacketSourceGain
       quittingCertifiedPacketContinueFaceLoss
-    rw [if_pos hpacket, if_pos hpacket]
+    rw [ite_eq_left hpacket, ite_eq_left hpacket]
     exact hpacketRectangle.trans (by
       simpa only [root, tail, mass, coefficient] using hrow)
   · have hzero : quittingCertifiedForcedOwnerRectanglePacket
@@ -191,9 +191,9 @@ theorem certifiedPacket_le_supportedSourceGain_add_continueFaceLoss
     rw [hzero]
     exact add_nonneg (by
       unfold quittingCertifiedPacketSourceGain
-      rw [if_neg hpacket]) (by
+      rw [ite_eq_right hpacket]) (by
       unfold quittingCertifiedPacketContinueFaceLoss
-      rw [if_neg hpacket])
+      rw [ite_eq_right hpacket])
 
 /-- Same-support source occupation on a finite clock. -/
 def quittingFiniteCertifiedPacketSourceGain
@@ -255,9 +255,9 @@ theorem finiteCertifiedPacketSourceGain_le_unrestricted
   by_cases hpacket : 0 < quittingCertifiedForcedOwnerRectanglePacket
       reward profile terminal owner who action time
   · unfold quittingCertifiedPacketSourceGain
-    rw [if_pos hpacket]
+    rw [ite_eq_left hpacket]
   · unfold quittingCertifiedPacketSourceGain
-    rw [if_neg hpacket]
+    rw [ite_eq_right hpacket]
     exact mul_nonneg (quittingLiveMass_nonneg reward profile time)
       (le_max_right _ 0)
 
@@ -373,7 +373,7 @@ theorem exists_literal_endpointFlip_of_positive_supportedLoss
         reward profile terminal owner who action time := by
       simpa only [packet] using hnot
     unfold quittingCertifiedPacketContinueFaceLoss at hlossPos
-    rw [if_neg hnotPos] at hlossPos
+    rw [ite_eq_right hnotPos] at hlossPos
     linarith
   have hprops := positive_certifiedForcedOwnerRectanglePacket_properties
     reward profile terminal owner who action time
@@ -382,7 +382,7 @@ theorem exists_literal_endpointFlip_of_positive_supportedLoss
       (Function.update root owner (PMF.pure false)) who
         (PMF.pure action) < 0 := by
     unfold quittingCertifiedPacketContinueFaceLoss at hlossPos
-    rw [if_pos (by simpa only [packet] using hpacketPos)] at hlossPos
+    rw [ite_eq_left (by simpa only [packet] using hpacketPos)] at hlossPos
     by_contra hnot
     have hgain0 : 0 ≤ quittingRootDeviationGain reward tail
         (Function.update root owner (PMF.pure false)) who

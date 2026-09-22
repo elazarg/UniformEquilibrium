@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.LinearAlgebra Set
+open Filter _root_.Math Math.LinearAlgebra Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -89,7 +89,7 @@ theorem rawFinkObstructionTranspose_mulVec_adjustment_residual
     rawFinkObstructionBalance, finkAdjustmentCoefficient,
     Fintype.sum_prod_type]
   rw [Fintype.sum_eq_single who]
-  · simp only [if_true]
+  · simp only [ite_true]
     calc
       (∑ destination,
           (germ.rawStateKernelCurve t s destination -
@@ -385,7 +385,7 @@ theorem adjustmentCurveOfRow_realizes_stage
       congrFun hsemantic (Sum.inr ⟨who, s, d⟩)
     rw [← hcoefficient,
       G.finkObstructionTranspose_mulVec_adjustment_action,
-      if_pos hsupport]
+      ite_eq_left hsupport]
       at hcoordinate
     have hmassCoordinate :
         G.finkObstructionMass
@@ -396,7 +396,7 @@ theorem adjustmentCurveOfRow_realizes_stage
       rw [← germ.rawFinkObstructionMass_eq_finkPointAt
           supported H H ht hsupported,
         germ.rawFinkObstructionMass_sameContinuation_action,
-        if_pos ((hsupported ⟨who, s, d⟩).2 hsupport),
+        ite_eq_left ((hsupported ⟨who, s, d⟩).2 hsupport),
         germ.rawPureDeviationStageGainCurve_eq_finkPointAt ht]
     exact hcoordinate.trans hmassCoordinate
 

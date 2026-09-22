@@ -80,7 +80,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -238,7 +238,11 @@ theorem expectedStagePayoff_quittingGame_none_zero
   unfold StochasticGame.expectedStagePayoff
   rw [Math.ProbabilityMassFunction.expect_congr_on_support _ _ (fun _ => (0 : ℝ))
     (fun h hh => by
-      have heq : h = (quittingGame reward).emptyHist none := by simpa using hh
+      have hzero := (quittingGame reward).histDist_zero σ
+        (show (quittingGame reward).State from none)
+      rw [hzero] at hh
+      have heq : h = (quittingGame reward).emptyHist none :=
+        (PMF.mem_support_pure_iff _ _).mp hh
       rw [stageEUAt_quittingGame_eq_stateReward, heq]
       rfl),
     expect_const]
@@ -256,17 +260,24 @@ theorem exists_state_mem_of_mem_support_update_quittingAlwaysQuitStrategy
         none (t + 1)).support →
       ∃ S : {S : Finset ι // S.Nonempty}, h.2 = some S ∧ who ∈ (S : Finset ι) := by
   classical
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   intro t
   induction t with
   | zero =>
       intro h' hh'
-      rw [(quittingGame reward).mem_support_histDist_succ] at hh'
-      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ := hh'
+      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ :=
+        ((quittingGame reward).mem_support_histDist_succ
+          (Function.update τ who (quittingAlwaysQuitStrategy reward who))
+          (show (quittingGame reward).State from none) 0 h').mp hh'
       change (ι → Bool) at action
       have hstate : h.2 = none := by
-        have heq : h = (quittingGame reward).emptyHist none := by simpa using hh
+        have hzero := (quittingGame reward).histDist_zero
+          (Function.update τ who (quittingAlwaysQuitStrategy reward who))
+          (show (quittingGame reward).State from none)
+        rw [hzero] at hh
+        have heq : h = (quittingGame reward).emptyHist none :=
+          (PMF.mem_support_pure_iff _ _).mp hh
         rw [heq]; rfl
       have hwho : action who = true := by
         have hcoord := (quittingGame reward).coord_mem_support_stageActionDist
@@ -277,17 +288,19 @@ theorem exists_state_mem_of_mem_support_update_quittingAlwaysQuitStrategy
         simpa using hwho
       have hnonempty : ({player | action player = true} : Finset ι).Nonempty :=
         ⟨who, hmem⟩
-      rw [hstate, quittingGame_transition_none, dif_pos hnonempty] at hnext
-      exact ⟨⟨_, hnonempty⟩, by simpa using hnext, hmem⟩
+      rw [hstate, quittingGame_transition_none, dite_eq_left hnonempty] at hnext
+      exact ⟨⟨_, hnonempty⟩, (PMF.mem_support_pure_iff _ _).mp hnext, hmem⟩
   | succ t ih =>
       intro h' hh'
-      rw [(quittingGame reward).mem_support_histDist_succ] at hh'
-      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ := hh'
+      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ :=
+        ((quittingGame reward).mem_support_histDist_succ
+          (Function.update τ who (quittingAlwaysQuitStrategy reward who))
+          (show (quittingGame reward).State from none) (t + 1) h').mp hh'
       change (ι → Bool) at action
       obtain ⟨S, hS, hmem⟩ := ih h hh
       rw [hS, show (quittingGame reward).transition (some S) action =
         PMF.pure (show (quittingGame reward).State from some S) from rfl] at hnext
-      exact ⟨S, by simpa using hnext, hmem⟩
+      exact ⟨S, (PMF.mem_support_pure_iff _ _).mp hnext, hmem⟩
 
 /-- **Never quitting keeps the quitter out of every terminal set.**  Whatever
 the opponents do, once `who` continues at every history every supported
@@ -302,19 +315,26 @@ theorem state_eq_none_or_notMem_of_mem_support_update_quittingAlwaysContinueStra
       h.2 = none ∨
         ∃ S : {S : Finset ι // S.Nonempty}, h.2 = some S ∧ who ∉ (S : Finset ι) := by
   classical
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   intro t
   induction t with
   | zero =>
       intro h hh
       left
-      have heq : h = (quittingGame reward).emptyHist none := by simpa using hh
+      have hzero := (quittingGame reward).histDist_zero
+        (Function.update τ who (quittingAlwaysContinueStrategy reward who))
+        (show (quittingGame reward).State from none)
+      rw [hzero] at hh
+      have heq : h = (quittingGame reward).emptyHist none :=
+        (PMF.mem_support_pure_iff _ _).mp hh
       rw [heq]; rfl
   | succ t ih =>
       intro h' hh'
-      rw [(quittingGame reward).mem_support_histDist_succ] at hh'
-      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ := hh'
+      obtain ⟨h, hh, action, haction, next, hnext, rfl⟩ :=
+        ((quittingGame reward).mem_support_histDist_succ
+          (Function.update τ who (quittingAlwaysContinueStrategy reward who))
+          (show (quittingGame reward).State from none) t h').mp hh'
       change (ι → Bool) at action
       rcases ih h hh with hnone | ⟨S, hS, hnot⟩
       · have hwho : action who = false := by
@@ -324,13 +344,14 @@ theorem state_eq_none_or_notMem_of_mem_support_update_quittingAlwaysContinueStra
           rw [Function.update_self] at hcoord
           exact (PMF.mem_support_pure_iff _ _).mp hcoord
         by_cases hne : ({player | action player = true} : Finset ι).Nonempty
-        · rw [hnone, quittingGame_transition_none, dif_pos hne] at hnext
-          exact Or.inr ⟨⟨_, hne⟩, by simpa using hnext, by simp [hwho]⟩
-        · rw [hnone, quittingGame_transition_none, dif_neg hne] at hnext
-          exact Or.inl (by simpa using hnext)
+        · rw [hnone, quittingGame_transition_none, dite_eq_left hne] at hnext
+          exact Or.inr ⟨⟨_, hne⟩, (PMF.mem_support_pure_iff _ _).mp hnext,
+            by simp [hwho]⟩
+        · rw [hnone, quittingGame_transition_none, dite_eq_right hne] at hnext
+          exact Or.inl ((PMF.mem_support_pure_iff _ _).mp hnext)
       · rw [hS, show (quittingGame reward).transition (some S) action =
           PMF.pure (show (quittingGame reward).State from some S) from rfl] at hnext
-        exact Or.inr ⟨S, by simpa using hnext, hnot⟩
+        exact Or.inr ⟨S, (PMF.mem_support_pure_iff _ _).mp hnext, hnot⟩
 
 /-! ## The two punishment floors -/
 
@@ -344,9 +365,9 @@ theorem horizonTailWeight_mul_le_finiteAveragePayoff_update_quittingAlwaysQuitSt
     horizonTailWeight T * m ≤
       (quittingGame reward).finiteAveragePayoff none T
         (Function.update τ who (quittingAlwaysQuitStrategy reward who)) who := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   refine (quittingGame reward).horizonTailWeight_mul_le_finiteAveragePayoff _ none who T
     (le_of_eq (expectedStagePayoff_quittingGame_none_zero reward _ who).symm) ?_
@@ -371,9 +392,9 @@ theorem le_finiteAveragePayoff_update_quittingAlwaysContinueStrategy
       m ≤ reward S who) :
     m ≤ (quittingGame reward).finiteAveragePayoff none T
       (Function.update τ who (quittingAlwaysContinueStrategy reward who)) who := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   refine (quittingGame reward).le_finiteAveragePayoff_of_forall_le_expectedStagePayoff
     _ none who T hm0 ?_
@@ -411,9 +432,9 @@ theorem horizonTailWeight_mul_le_punishmentLevel_quittingGame
     (hm : ∀ S : {S : Finset ι // S.Nonempty}, who ∈ (S : Finset ι) →
       m ≤ reward S who) :
     horizonTailWeight T * m ≤ (quittingGame reward).punishmentLevel none T who := by
-  haveI : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Nonempty Bool)
-  haveI : Nonempty (quittingGame reward).BehaviorProfile :=
+  have : Nonempty (quittingGame reward).BehaviorProfile :=
     (quittingGame reward).nonempty_behaviorProfile
   unfold StochasticGame.punishmentLevel StochasticGame.bestResponseAverageAgainstProfile
   refine le_ciInf fun τ => ?_
@@ -436,9 +457,9 @@ theorem le_punishmentLevel_quittingGame_of_forall_notMem
     (hout : ∀ S : {S : Finset ι // S.Nonempty}, who ∉ (S : Finset ι) →
       m ≤ reward S who) :
     m ≤ (quittingGame reward).punishmentLevel none T who := by
-  haveI : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Nonempty Bool)
-  haveI : Nonempty (quittingGame reward).BehaviorProfile :=
+  have : Nonempty (quittingGame reward).BehaviorProfile :=
     (quittingGame reward).nonempty_behaviorProfile
   unfold StochasticGame.punishmentLevel StochasticGame.bestResponseAverageAgainstProfile
   refine le_ciInf fun τ => ?_
@@ -571,7 +592,7 @@ level is computed outright, so the gap to the ceiling is exactly `500`, and
 theorem punishmentLevel_quittingGame_alwaysQuitCounterexample_eq :
     (quittingGame reward).punishmentLevel none 2 true = -500 := by
   classical
-  haveI : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
+  have : Nonempty ((quittingGame reward).Act true) := inferInstanceAs (Nonempty Bool)
   have hbdd : BddBelow
       (Set.range ((quittingGame reward).bestResponseAverageAgainstProfile none 2 true)) :=
     ⟨-1000, by
@@ -647,7 +668,7 @@ the individual-rationality no-go generator
 theorem not_isUniformEquilibriumPayoff_zero (who : ι) :
     ¬ (quittingGame (quitBonusReward (ι := ι))).IsUniformEquilibriumPayoff none
       (fun _ => 0) := by
-  haveI : Nonempty ((quittingGame (quitBonusReward (ι := ι))).Act who) :=
+  have : Nonempty ((quittingGame (quitBonusReward (ι := ι))).Act who) :=
     inferInstanceAs (Nonempty Bool)
   refine StochasticGame.not_isUniformEquilibriumPayoff_of_punishmentLevel_gt
     (quittingGame (quitBonusReward (ι := ι))) none (fun _ => 0) who

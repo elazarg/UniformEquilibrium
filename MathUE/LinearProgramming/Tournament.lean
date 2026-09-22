@@ -210,35 +210,35 @@ theorem not_singletonLCPFeasible_tournamentSkewMatrix
   classical
   rintro ⟨lam, hresidual, hcomp⟩
   have henergy :
-      ∑ i, (lam i) * ∑ j, (lam j) * tournamentSkewMatrix t A i j = 0 := by
-    have hsum : ∑ i, (lam i) *
+      ∑ i, lam.weights i * ∑ j, lam.weights j * tournamentSkewMatrix t A i j = 0 := by
+    have hsum : ∑ i, lam.weights i *
         singletonLCPResidual (tournamentSkewMatrix t A) lam i = 0 := by
       apply Finset.sum_eq_zero
       intro i hi
       have hc := hcomp i
-      change lam.val i * singletonLCPResidual
+      change lam.weights i * singletonLCPResidual
         (tournamentSkewMatrix t A) lam i = 0 at hc
       exact hc
     simpa [singletonLCPResidual, wsum, dotProduct] using hsum
   have hsupport := tournamentSkewMatrix_support_le_one_of_quadratic_eq_zero
-    t A hA ht (fun i => lam i) lam.property.1 henergy
-  have hnonempty : ∃ i, lam i ≠ 0 := by
+    t A hA ht (fun i => lam.weights i) lam.weights_nonneg henergy
+  have hnonempty : ∃ i, lam.weights i ≠ 0 := by
     by_contra hnone
-    have hzero : ∀ i, lam.val i = 0 := by
+    have hzero : ∀ i, lam.weights i = 0 := by
       intro i
       exact Classical.byContradiction fun hi => hnone ⟨i, hi⟩
-    have := lam.property.2
+    have := lam.total_of_fintype
     simp [hzero] at this
   obtain ⟨i, hi⟩ := hnonempty
   obtain ⟨j, hij, hout⟩ := hunit i
   have hres := hresidual j
-  have hsingle : ∀ k, k ≠ i → lam k = 0 := by
+  have hsingle : ∀ k, k ≠ i → lam.weights k = 0 := by
     intro k hki
     by_contra hk
     exact hki (hsupport i k hi hk).symm
-  change 0 ≤ ∑ k, lam k * tournamentSkewMatrix t A j k at hres
-  have hsum : (∑ k, lam k * tournamentSkewMatrix t A j k) =
-      lam i * tournamentSkewMatrix t A j i := by
+  change 0 ≤ ∑ k, lam.weights k * tournamentSkewMatrix t A j k at hres
+  have hsum : (∑ k, lam.weights k * tournamentSkewMatrix t A j k) =
+      lam.weights i * tournamentSkewMatrix t A j i := by
     refine Finset.sum_eq_single i ?_ ?_
     · intro k hk hki
       rw [hsingle k hki, zero_mul]
@@ -250,7 +250,8 @@ theorem not_singletonLCPFeasible_tournamentSkewMatrix
   rw [tournamentSkewMatrix, hzero] at hres
   rw [hout] at hres
   norm_num at hres
-  have hpos : 0 < lam i := lt_of_le_of_ne (lam.property.1 i) (Ne.symm hi)
+  have hpos : 0 < lam.weights i :=
+    lt_of_le_of_ne (lam.weights_nonneg i) (Ne.symm hi)
   linarith
 
 end Math.LinearProgramming

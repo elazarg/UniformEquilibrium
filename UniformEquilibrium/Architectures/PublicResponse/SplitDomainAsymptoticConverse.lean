@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -116,7 +116,7 @@ private theorem tendsto_expect_of_tendsto_on_support
       atTop (nhds (g s))) :
     Tendsto (fun T : ℕ => expect μ (f T)) atTop (nhds (expect μ g)) := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   simp_rw [expect_eq_sum]
   apply tendsto_finsetSum (s := Finset.univ)
   intro s _

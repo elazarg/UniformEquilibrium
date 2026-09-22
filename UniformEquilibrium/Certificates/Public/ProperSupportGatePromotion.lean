@@ -142,7 +142,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace ProperSupportGatePromotion
 
-open Math Math.PMFProduct Math.Probability Set
+open _root_.Math Math.PMFProduct _root_.Math.Probability Set
 
 /-! ## Gate 1: common support realization -/
 
@@ -615,7 +615,7 @@ theorem neutralOccupation_charge_nonpos
             actualOccupationColumn gate.devKernel gate.devSource d z = 0)
     (neutral : ∑ d : gate.DevRow, mass d * gate.slack d = 0) :
     ∑ d : gate.DevRow, mass d * gate.devCharge d ≤ 0 := by
-  letI : Fintype gate.Arena := Fintype.ofFinite gate.Arena
+  let : Fintype gate.Arena := Fintype.ofFinite gate.Arena
   have drift_zero :
       ∑ d : gate.DevRow,
         mass d *

@@ -104,7 +104,7 @@ theorem roots_eq_truncated (n : ℕ) :
       omega
   · rw [quittingTruncatedRoots_of_le]
     · unfold roots quittingStationaryPrefixThenRoots
-      rw [if_neg htime]
+      rw [ite_eq_right htime]
       rfl
     · unfold meshSize
       omega

@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
   Math.Topology
 open QuittingBoundaryHolonomy
 
@@ -255,8 +255,8 @@ theorem quantileClockOuter_semanticPairWithin
     have hforward := row player false false
     have hreverse := row player false true
     simp only [quantileClockOuterInequalityPolynomial,
-      quantileClockOuterNeighborhoodPoly, Bool.false_eq_true, if_false,
-      if_true, MvPolynomial.eval₂_add,
+      quantileClockOuterNeighborhoodPoly, Bool.false_eq_true, ite_false,
+      ite_true, MvPolynomial.eval₂_add,
       MvPolynomial.eval₂_C, MvPolynomial.eval₂_neg,
       MvPolynomial.eval₂_sub, MvPolynomial.eval₂_X] at hforward hreverse
     have hradius : (Rat.castHom ℝ)
@@ -271,8 +271,8 @@ theorem quantileClockOuter_semanticPairWithin
     have hforward := row player true false
     have hreverse := row player true true
     simp only [quantileClockOuterInequalityPolynomial,
-      quantileClockOuterNeighborhoodPoly, Bool.false_eq_true, if_false,
-      if_true, MvPolynomial.eval₂_add,
+      quantileClockOuterNeighborhoodPoly, Bool.false_eq_true, ite_false,
+      ite_true, MvPolynomial.eval₂_add,
       MvPolynomial.eval₂_C, MvPolynomial.eval₂_neg,
       MvPolynomial.eval₂_sub, MvPolynomial.eval₂_X] at hforward hreverse
     have hradius : (Rat.castHom ℝ)
@@ -584,7 +584,7 @@ theorem eval₂_quantileClockOuterNeighborhoodPoly_semanticAssignment_nonneg
   cases capCoordinate <;> cases reverse
   all_goals
     simp only [quantileClockOuterNeighborhoodPoly, Bool.false_eq_true,
-      if_false, if_true, MvPolynomial.eval₂_add, MvPolynomial.eval₂_C,
+      ite_false, ite_true, MvPolynomial.eval₂_add, MvPolynomial.eval₂_C,
       MvPolynomial.eval₂_neg, MvPolynomial.eval₂_sub,
       MvPolynomial.eval₂_X]
     rw [hradius]

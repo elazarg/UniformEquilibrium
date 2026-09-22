@@ -472,7 +472,7 @@ theorem finiteClockRawCellIndex_mono (marks : Finset ℕ) :
           simp [hfirst, hlt]
         rw [← hsets] at hmem
         simp at hmem
-      simp only [if_pos hfirst]
+      simp only [ite_eq_left hfirst]
       split_ifs <;> omega
   · have hsub : marks.filter (fun mark => mark < first) ⊆
         marks.filter (fun mark => mark < second) := by
@@ -480,7 +480,7 @@ theorem finiteClockRawCellIndex_mono (marks : Finset ℕ) :
       simp only [Finset.mem_filter] at hmark ⊢
       exact ⟨hmark.1, hmark.2.trans_le hle⟩
     have hcard := Finset.card_le_card hsub
-    simp only [if_neg hfirst]
+    simp only [ite_eq_right hfirst]
     split_ifs <;> omega
 
 theorem finiteClockActiveCellIndex_mono (marks : Finset ℕ) :
@@ -496,7 +496,7 @@ theorem finiteClockRawCellIndex_lt_of_lt_of_mem_left
     (hfirst : first ∈ marks) :
     finiteClockRawCellIndex marks first < finiteClockRawCellIndex marks second := by
   unfold finiteClockRawCellIndex
-  rw [if_pos hfirst]
+  rw [ite_eq_left hfirst]
   have hsub : marks.filter (fun mark => mark < first) ⊆
       marks.filter (fun mark => mark < second) := by
     intro mark hmark
@@ -527,7 +527,7 @@ theorem finiteClockRawCellIndex_even_of_activeCellIndex_eq_last
     by_contra hnotMem
     apply hnotEven
     unfold finiteClockRawCellIndex
-    rw [if_neg hnotMem]
+    rw [ite_eq_right hnotMem]
     exact even_two_mul _
   have hrawLt : finiteClockRawCellIndex marks time <
       finiteClockRawCellIndex marks (time + 1) :=
@@ -558,13 +558,13 @@ theorem finiteClockRawCellIndex_eq_implies_eq_or_even
       · have hsecond : second ∈ marks := by
           by_contra hsecond
           unfold finiteClockRawCellIndex at heq
-          rw [if_pos hmem, if_neg hsecond] at heq
+          rw [ite_eq_left hmem, ite_eq_right hsecond] at heq
           omega
         have hlt := finiteClockRawCellIndex_lt_of_lt_of_mem_left
           marks hgt hsecond
         exact (ne_of_gt hlt) heq
     unfold finiteClockRawCellIndex
-    rw [if_neg hnotMem]
+    rw [ite_eq_right hnotMem]
     exact even_two_mul _
 
 theorem finiteClockRawCellIndex_eq_of_between {marks : Finset ℕ}
@@ -582,7 +582,7 @@ theorem finiteClockRawCellIndex_not_mem_of_even {marks : Finset ℕ}
     (heven : Even cell) : time ∉ marks := by
   intro hmem
   unfold finiteClockRawCellIndex at hindex
-  rw [if_pos hmem] at hindex
+  rw [ite_eq_left hmem] at hindex
   rcases heven with ⟨k, hk⟩
   omega
 
@@ -772,7 +772,7 @@ theorem stoppingLawFiniteClockRawCellMass_le_one_div
     have hcrossEq :
         stoppingLawFirstCrossing? law threshold = some cutoff := by
       unfold stoppingLawFirstCrossing?
-      rw [dif_pos hcross]
+      rw [dite_eq_left hcross]
     have hspec := stoppingLawFirstCrossing?_spec law threshold hcrossEq
     have hcutoffCross := hspec.1
     have hcutoffLeLast : cutoff ≤ last :=

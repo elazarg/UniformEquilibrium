@@ -98,7 +98,6 @@ private theorem playerOne_pivot_two_pure_payoff (pivotChoice : Option ℕ)
         fin_cases player <;> rfl,
         quittingFirstStoppingOutcome_one_date {2} (by simp)]
       norm_num [quittingTerminalOutcomeReward, reward, Fin.ext_iff]
-      simp
   · rcases twoTime with _ | twoTime
     · rw [show pivotTwoTimes (some pivotTime) none = fun player ↦
           if player ∈ ({0} : Finset (Fin 4)) then some pivotTime else none by
@@ -106,7 +105,6 @@ private theorem playerOne_pivot_two_pure_payoff (pivotChoice : Option ℕ)
         fin_cases player <;> rfl,
         quittingFirstStoppingOutcome_one_date {0} (by simp)]
       norm_num [quittingTerminalOutcomeReward, reward, Fin.ext_iff]
-      simp
     · by_cases hpivot : pivotTime < twoTime
       · have hout : quittingFirstStoppingOutcome
             (pivotTwoTimes (some pivotTime) (some twoTime)) =
@@ -130,7 +128,6 @@ private theorem playerOne_pivot_two_pure_payoff (pivotChoice : Option ℕ)
                 quittingFirstStoppingOutcome_one_date {0} (by simp)]
         rw [hout]
         norm_num [quittingTerminalOutcomeReward, reward, Fin.ext_iff]
-        simp
       · by_cases htwo : twoTime < pivotTime
         · have hout : quittingFirstStoppingOutcome
               (pivotTwoTimes (some pivotTime) (some twoTime)) =
@@ -153,7 +150,6 @@ private theorem playerOne_pivot_two_pure_payoff (pivotChoice : Option ℕ)
                   quittingFirstStoppingOutcome_one_date {2} (by simp)]
           rw [hout]
           norm_num [quittingTerminalOutcomeReward, reward, Fin.ext_iff]
-          simp
         · have heq : pivotTime = twoTime := by omega
           subst twoTime
           rw [show pivotTwoTimes (some pivotTime) (some pivotTime) = fun player ↦
@@ -162,7 +158,6 @@ private theorem playerOne_pivot_two_pure_payoff (pivotChoice : Option ℕ)
             fin_cases player <;> rfl,
             quittingFirstStoppingOutcome_one_date {0, 2} (by simp)]
           norm_num [quittingTerminalOutcomeReward, reward, Fin.ext_iff]
-          simp
 
 private def pivotTwoBase (N : ℕ) : Fin 4 → PMF (Option ℕ) :=
   Function.update (fun _ ↦ PMF.pure none) 2
@@ -198,7 +193,6 @@ private theorem playerOne_given_pivot_choice (N : ℕ) (choice : Option ℕ) :
     playerOne_pivot_two_pure_payoff]
   rcases choice with _ | time
   · norm_num
-    exact Option.some_ne_none _
   · simp
     ring
 

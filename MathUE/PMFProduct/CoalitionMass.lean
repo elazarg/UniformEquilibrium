@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.BigOperators.Group.Finset.Basic
 import Mathlib.Data.Finset.BooleanAlgebra
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 import MathUE.Finset.ProdLtOne
@@ -61,7 +61,7 @@ omit [DecidableEq ι] in
 /-- Continuation mass is at most one for a family of probabilities. -/
 theorem continueMass_le_one {x : ι → ℝ} (h0 : ∀ i, 0 ≤ x i) (h1 : ∀ i, x i ≤ 1) :
     continueMass x ≤ 1 :=
-  Finset.prod_le_one (fun i _ ↦ by linarith [h1 i]) (fun i _ ↦ by linarith [h0 i])
+  Finset.prod_le_one₀ (fun i _ ↦ by linarith [h1 i]) (fun i _ ↦ by linarith [h0 i])
 
 omit [DecidableEq ι] in
 /-- A coordinate acting for sure annihilates the continuation mass. No bounds
@@ -124,13 +124,13 @@ theorem coalitionMass_le_coordinate_of_mem (x : ι → ℝ)
   have hinsideRestNonneg : 0 ≤ ∏ j ∈ J.erase i, x j :=
     Finset.prod_nonneg fun j _ => h0 j
   have hinsideRestLeOne : (∏ j ∈ J.erase i, x j) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun j _ => h0 j)
       (fun j _ => h1 j)
   have houtsideNonneg : 0 ≤ ∏ j ∈ Jᶜ, (1 - x j) :=
     Finset.prod_nonneg fun j _ => sub_nonneg.mpr (h1 j)
   have houtsideLeOne : (∏ j ∈ Jᶜ, (1 - x j)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun j _ => sub_nonneg.mpr (h1 j))
       (fun j _ => by linarith [h0 j])
   have hrest :
@@ -161,13 +161,13 @@ theorem coalitionMass_le_one_sub_coordinate_of_not_mem (x : ι → ℝ)
   have hinsideNonneg : 0 ≤ ∏ j ∈ J, x j :=
     Finset.prod_nonneg fun j _ => h0 j
   have hinsideLeOne : (∏ j ∈ J, x j) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun j _ => h0 j)
       (fun j _ => h1 j)
   have houtsideRestNonneg : 0 ≤ ∏ j ∈ Jᶜ.erase i, (1 - x j) :=
     Finset.prod_nonneg fun j _ => sub_nonneg.mpr (h1 j)
   have houtsideRestLeOne : (∏ j ∈ Jᶜ.erase i, (1 - x j)) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun j _ => sub_nonneg.mpr (h1 j))
       (fun j _ => by linarith [h0 j])
   have hrest :

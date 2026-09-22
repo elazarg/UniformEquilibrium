@@ -27,7 +27,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourEssentialAPSSummableThirdMode
 
-open Filter Math.Probability Set StochasticGame
+open Filter _root_.Math.Probability Set StochasticGame
 open FinFourEssentialAPSCarrier
 
 /-- Total displacement from the common singleton baseline on a carrier fiber. -/
@@ -160,7 +160,7 @@ theorem fleschFaithful_run_forced_step
     right
     right
     norm_num at hz ⊢
-    exact ⟨Fin.ext rfl, z, hz, hvalue.symm, hmass, hnextOwner, hvalueNext⟩
+    exact ⟨z, hz, hvalue.symm, hmass, hnextOwner, hvalueNext⟩
   · have hcurrentThree : value time ∈ carrier 3 := by exact hcurrent
     simp only [carrier_three, Set.mem_empty_iff_false] at hcurrentThree
 

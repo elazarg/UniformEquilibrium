@@ -79,7 +79,7 @@ theorem reachableSourceMass_balance
           reachableSourceMass kernel source entry mass index *
             actualOccupationColumn kernel source index destination =
         0 := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   classical
   let reachable : S → Prop :=
     AvailableReachable kernel source entry

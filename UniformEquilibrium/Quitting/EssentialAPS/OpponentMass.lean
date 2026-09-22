@@ -258,7 +258,7 @@ theorem gap_mul_quittingEssentialAPSOwnerWindowMass_le_endpoint_add_opponentMass
       have htime : start + fuel.succ = start + fuel + 1 := by omega
       rw [htime]
       by_cases howner : owner (start + fuel) = who
-      · simp only [if_pos howner, add_zero]
+      · simp only [ite_eq_left howner, add_zero]
         have hstep :=
           gap_mul_mass_le_quittingEssentialAPS_step_of_owner
             reward successor owner mass value hmass harc hactive
@@ -282,7 +282,7 @@ theorem gap_mul_quittingEssentialAPSOwnerWindowMass_le_endpoint_add_opponentMass
               (2 * bound) *
                 quittingEssentialAPSOpponentWindowMass owner mass who
                   start fuel := by ring
-      · simp only [if_neg howner, add_zero]
+      · simp only [ite_eq_right howner, add_zero]
         have hstep :=
           quittingEssentialAPS_step_add_mass_bound_nonneg_of_not_owner
             reward successor owner mass value hmass harc hrootBound

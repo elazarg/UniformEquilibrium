@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 namespace FixedPrefixArbitraryTailBarrier
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 abbrev Player := Fin 4
 
@@ -197,8 +197,8 @@ theorem pureTimeValue_zero_eq_one_sub_two_mul
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman,
         quittingPureTimeHazard_some_of_ne hne]
       simp only [PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       rw [fixedOpponentsContinueReward_zero]
       have hindex : start + (fuel + 1) = start + 1 + fuel := by omega
       have htail := ih (start + 1)
@@ -226,7 +226,7 @@ theorem tendsto_collisionAtom_zero
     intro time
     unfold quittingOpponentSurvivalWeight
     rw [quittingHazardSurvival_eq_prod]
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro offset _
       simpa only [Nat.zero_add] using
         quittingFixedOpponentsContinueMass_nonneg roots 0 offset
@@ -244,7 +244,7 @@ theorem tendsto_collisionAtom_zero
       have hone0 := quittingHazard_continue_nonneg oneHazard offset
       have htwothree : (roots offset 2 false).toReal *
           (roots offset 3 false).toReal ≤ 1 :=
-        mul_le_one₀ htwo1 hthree0 hthree1
+        (mul_le_of_le_one_left hthree0 htwo1).trans hthree1
       change (oneHazard offset false).toReal *
           (roots offset 2 false).toReal * (roots offset 3 false).toReal ≤
         (oneHazard offset false).toReal

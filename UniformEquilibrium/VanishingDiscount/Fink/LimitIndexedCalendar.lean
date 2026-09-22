@@ -19,7 +19,7 @@ namespace GameTheory
 namespace StochasticGame
 
 open Filter
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 variable {ι : Type}

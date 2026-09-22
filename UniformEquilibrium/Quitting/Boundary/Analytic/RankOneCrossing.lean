@@ -43,7 +43,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -84,8 +84,8 @@ theorem quittingSurvivalPrefix_le_of_crossingMaximalInequality
       apply expect_mono
       intro history
       by_cases hlive : live history
-      · rw [if_pos hlive, if_pos (hliveCrosses history hlive)]
-      · rw [if_neg hlive]
+      · rw [ite_eq_left hlive, ite_eq_left (hliveCrosses history hlive)]
+      · rw [ite_eq_right hlive]
         split_ifs <;> norm_num
     _ ≤ δ * B / ε ^ 2 :=
       expect_indicator_le_div_of_expectedDecisionVariation_le

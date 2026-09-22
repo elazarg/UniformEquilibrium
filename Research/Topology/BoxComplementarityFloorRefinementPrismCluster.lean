@@ -31,7 +31,7 @@ theorem boxComplementarityFloorRefinementPrism_label_of_parameter_eq_zero
       boxComplementarityFinLabel problem p
         (fun who ↦ kuhnFloorCoordinate p k (vertex who.castSucc)) := by
   rw [boxComplementarityFloorRefinementPrism, externalCubeLabelPrism]
-  simp only [hparameter, if_pos]
+  simp only [hparameter, ite_eq_left]
   exact boxComplementarityFloorPullbackBoundaryLabeling_label problem p k hp hk _
 
 theorem boxComplementarityFloorRefinementPrism_label_of_parameter_ne_zero
@@ -42,7 +42,7 @@ theorem boxComplementarityFloorRefinementPrism_label_of_parameter_ne_zero
     (boxComplementarityFloorRefinementPrism problem p k hp hk).label vertex =
       boxComplementarityFinLabel problem (p * k) (Fin.init vertex) := by
   rw [boxComplementarityFloorRefinementPrism, externalCubeLabelPrism]
-  simp only [hparameter, if_false]
+  simp only [hparameter, ite_false]
   rfl
 
 /-- Every mixed label sample is within one coarse mesh width of its literal
@@ -147,7 +147,7 @@ theorem mul_gain_nonneg_of_floorRefinementPrism_label_eq_dimension
     have hsample : boxComplementarityFloorRefinementLabelSamplePoint p k vertex =
         boxComplementarityGridPoint p
           (fun index ↦ kuhnFloorCoordinate p k (vertex index.castSucc)) := by
-      exact if_pos hparameter
+      exact ite_eq_left hparameter
     rw [hsample]
     exact mul_gain_nonneg_of_reducedLabel_eq_dimension problem p _ hlabelValue who
   · rw [boxComplementarityFloorRefinementPrism_label_of_parameter_ne_zero
@@ -156,7 +156,7 @@ theorem mul_gain_nonneg_of_floorRefinementPrism_label_eq_dimension
     simp only [boxComplementarityFinLabel_val, Fin.val_last] at hlabelValue
     have hsample : boxComplementarityFloorRefinementLabelSamplePoint p k vertex =
         boxComplementarityGridPoint (p * k) (Fin.init vertex) := by
-      exact if_neg hparameter
+      exact ite_eq_right hparameter
     rw [hsample]
     exact mul_gain_nonneg_of_reducedLabel_eq_dimension
       problem (p * k) _ hlabelValue who
@@ -181,7 +181,7 @@ theorem one_sub_mul_gain_nonpos_of_floorRefinementPrism_label_eq_coordinate
     have hsample : boxComplementarityFloorRefinementLabelSamplePoint p k vertex =
         boxComplementarityGridPoint p
           (fun index ↦ kuhnFloorCoordinate p k (vertex index.castSucc)) := by
-      exact if_pos hparameter
+      exact ite_eq_left hparameter
     rw [hsample]
     exact one_sub_mul_gain_nonpos_of_reducedLabel_eq_coordinate
       problem p _ who hlabelValue
@@ -191,7 +191,7 @@ theorem one_sub_mul_gain_nonpos_of_floorRefinementPrism_label_eq_coordinate
     simp only [boxComplementarityFinLabel_val, Fin.val_castSucc] at hlabelValue
     have hsample : boxComplementarityFloorRefinementLabelSamplePoint p k vertex =
         boxComplementarityGridPoint (p * k) (Fin.init vertex) := by
-      exact if_neg hparameter
+      exact ite_eq_right hparameter
     rw [hsample]
     exact one_sub_mul_gain_nonpos_of_reducedLabel_eq_coordinate
       problem (p * k) _ who hlabelValue

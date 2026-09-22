@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Filter Math.Probability
+open _root_.Set Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -33,9 +33,10 @@ theorem quittingOpponentSurvivalWeight_profileLiveRoot_tendsto_neverProduct
     unfold quittingOpponentNeverProduct quittingCompactStoppingLawsOfProfile
     apply Finset.prod_congr rfl
     intro opponent _
-    change (((_root_.Math.Probability.CompactStoppingLaw.ofPMF
-      (quittingBehaviorStoppingLaw reward (profile opponent))).toPMF ⊤)).toReal = _
-    rw [_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
+    change ((((_root_.Math.Probability.CompactStoppingLaw.ofPMF
+      (quittingBehaviorStoppingLaw reward (profile opponent))).toPMF :
+        PMF (Option ℕ)) none)).toReal = _
+    rw [_root_.Math.Probability.CompactStoppingLaw.toPMF_ofPMF_option]
     exact quittingBehaviorStoppingLaw_none_toReal reward (profile opponent)
   rw [hproduct]
   have h := tendsto_finsetProd (Finset.univ.erase who) fun opponent _ ↦

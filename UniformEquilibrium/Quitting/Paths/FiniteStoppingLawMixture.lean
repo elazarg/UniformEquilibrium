@@ -23,8 +23,8 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
-open Math.Probability.DiscreteHazard
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability.DiscreteHazard
 open GameTheory.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -70,10 +70,33 @@ theorem quittingTerminalPayoff_update_stoppingLawMixture_observer_eq
   let observerReward := quittingObserverReward reward observer
   have haffine := quittingTerminalPayoff_update_stoppingLawMixture_eq
     observerReward profile mixer source target lambda hlambda0 hlambda1
-  rw [quittingTerminalPayoff_observerReward reward _ observer mixer,
-    quittingTerminalPayoff_observerReward reward _ observer mixer,
-    quittingTerminalPayoff_observerReward reward _ observer mixer] at haffine
-  exact haffine
+  change quittingTerminalPayoff observerReward
+      (Function.update profile mixer
+        (quittingStoppingLawMixtureBehaviorStrategy reward mixer source target
+          lambda hlambda0 hlambda1)) mixer =
+    (1 - lambda) * quittingTerminalPayoff observerReward
+      (Function.update profile mixer source) mixer +
+    lambda * quittingTerminalPayoff observerReward
+      (Function.update profile mixer target) mixer at haffine
+  have hleft := quittingTerminalPayoff_observerReward reward
+    (Function.update profile mixer
+      (quittingStoppingLawMixtureBehaviorStrategy reward mixer source target
+        lambda hlambda0 hlambda1)) observer mixer
+  have hsource := quittingTerminalPayoff_observerReward reward
+    (Function.update profile mixer source) observer mixer
+  have htarget := quittingTerminalPayoff_observerReward reward
+    (Function.update profile mixer target) observer mixer
+  calc
+    _ = quittingTerminalPayoff observerReward
+        (Function.update profile mixer
+          (quittingStoppingLawMixtureBehaviorStrategy reward mixer source target
+            lambda hlambda0 hlambda1)) mixer := hleft.symm
+    _ = (1 - lambda) * quittingTerminalPayoff observerReward
+          (Function.update profile mixer source) mixer +
+        lambda * quittingTerminalPayoff observerReward
+          (Function.update profile mixer target) mixer := haffine
+    _ = _ := congrArg₂ (fun first second : ℝ =>
+      (1 - lambda) * first + lambda * second) hsource htarget
 
 /-- The mixture of the complete stopping laws in a finite strategy law. -/
 def quittingFiniteStrategyStoppingLaw
@@ -147,12 +170,30 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
   have hmixture := quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
     observerReward profile mixer
       (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture)
-  rw [quittingTerminalPayoff_observerReward reward _ observer mixer] at hmixture
+  change quittingTerminalPayoff observerReward
+      (Function.update profile mixer
+        (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
+      mixer =
+    Math.Probability.expect
+      (quittingBehaviorStoppingLaw observerReward
+        (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
+      (fun choice => quittingTerminalPayoff observerReward
+        (Function.update profile mixer
+          (quittingPureTimeBehaviorStrategy observerReward mixer choice)) mixer)
+      at hmixture
+  have hleft := quittingTerminalPayoff_observerReward reward
+    (Function.update profile mixer
+      (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
+    observer mixer
   calc
     quittingTerminalPayoff reward
         (Function.update profile mixer
           (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
-        observer =
+        observer = quittingTerminalPayoff observerReward
+          (Function.update profile mixer
+            (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
+          mixer := hleft.symm
+    _ =
       Math.Probability.expect
         (quittingBehaviorStoppingLaw observerReward
           (quittingFiniteStoppingLawMixtureBehaviorStrategy reward mixer mixture))
@@ -175,8 +216,13 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
               (quittingPureTimeBehaviorStrategy observerReward mixer choice))
             mixer) = value := by
         funext choice
-        rw [quittingTerminalPayoff_observerReward reward _ observer mixer]
-        rfl
+        change quittingTerminalPayoff observerReward
+            (Function.update profile mixer
+              (quittingPureTimeBehaviorStrategy reward mixer choice)) mixer =
+          value choice
+        exact quittingTerminalPayoff_observerReward reward
+          (Function.update profile mixer
+            (quittingPureTimeBehaviorStrategy reward mixer choice)) observer mixer
       rw [hvalueEq]
       change Math.Probability.expect
           (quittingBehaviorStoppingLaw reward
@@ -192,7 +238,6 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
       have hcomponent :=
         quittingTerminalPayoff_update_eq_expect_stoppingLaw_pureTime
           observerReward profile mixer strategy
-      rw [quittingTerminalPayoff_observerReward reward _ observer mixer] at hcomponent
       rw [← hvalueEq]
       change Math.Probability.expect
           (quittingBehaviorStoppingLaw observerReward (who := mixer) strategy)
@@ -201,6 +246,8 @@ theorem quittingTerminalPayoff_update_finiteStoppingLawMixture_eq_expect
               (Function.update profile mixer
                 (quittingPureTimeBehaviorStrategy observerReward mixer choice))
               mixer) = _
-      exact hcomponent.symm
+      exact hcomponent.symm.trans
+        (quittingTerminalPayoff_observerReward reward
+          (Function.update profile mixer strategy) observer mixer)
 
 end GameTheory

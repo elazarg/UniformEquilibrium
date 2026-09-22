@@ -45,7 +45,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -169,7 +169,7 @@ theorem pmfPi_quittingExtendDeletedRoot (deleted : ι → Prop)
           exact heq.symm.trans hext.symm
         simp [hneq]
       · simp
-    rw [if_pos hext.symm] at hsum
+    rw [ite_eq_left hext.symm] at hsum
     convert hsum using 1
     congr 1
     funext other
@@ -255,8 +255,8 @@ theorem quittingRootPayoff_extendDeletedAction_of_apply_eq
           (quittingExtendDeletedAction deleted action)).Nonempty := by
       rw [quittingQuitters_extendDeletedAction]
       exact Finset.map_nonempty.mpr hquit
-    rw [quittingRootPayoff, dif_pos hextQuit,
-      quittingRootPayoff, dif_pos hquit]
+    rw [quittingRootPayoff, dite_eq_left hextQuit,
+      quittingRootPayoff, dite_eq_left hquit]
     unfold quittingDeleteReward quittingExtendDeletedCoalition
     congr 2
     exact quittingQuitters_extendDeletedAction deleted action
@@ -265,8 +265,8 @@ theorem quittingRootPayoff_extendDeletedAction_of_apply_eq
           (quittingExtendDeletedAction deleted action)).Nonempty := by
       rw [quittingQuitters_extendDeletedAction]
       exact fun h => hquit (Finset.map_nonempty.mp h)
-    rw [quittingRootPayoff, dif_neg hextQuit,
-      quittingRootPayoff, dif_neg hquit]
+    rw [quittingRootPayoff, dite_eq_right hextQuit,
+      quittingRootPayoff, dite_eq_right hquit]
     exact hcontinuation
 
 omit [DecidableEq ι] in
@@ -340,11 +340,11 @@ theorem Function.update_quittingExtendDeletedRoot (deleted : ι → Prop)
       simp [ho]
     · rw [Function.update_of_ne hp]
       unfold quittingExtendDeletedRoot
-      rw [dif_neg ho]
+      rw [dite_eq_right ho]
       have hsub : (⟨player, ho⟩ : {w : ι // ¬ deleted w}) ≠ who := by
         intro heq
         exact hp (congrArg Subtype.val heq)
-      rw [dif_neg ho]
+      rw [dite_eq_right ho]
       simp [Function.update_of_ne hsub]
 
 /-! ## Naturality along a chronology -/
@@ -638,6 +638,7 @@ theorem Function.update_liftDeletedProfile_never
     simp [quittingPureTimeBehaviorStrategy, quittingLiftDeletedProfile,
       quittingInfinitePathProfile,
       quittingRootSequenceProfile, quittingExtendDeletedRoots, howner]
+    rfl
   · simp [Function.update_of_ne hp]
 
 /-! ## Deleting a single universally Never owner -/

@@ -50,7 +50,7 @@ theorem geometricFiniteStoppingLaw_some_of_lt
   rw [geometricFiniteStoppingLaw, PMF.map_apply]
   apply ENNReal.tsum_eq_zero.mpr
   intro offset
-  rw [if_neg]
+  rw [ite_eq_right]
   simp only [Option.some.injEq]
   omega
 
@@ -125,7 +125,7 @@ theorem censorLateFiniteStoppingLaw_geometricPivotStoppingLaw
   | some chosen =>
       by_cases hchosen : chosen < deadline
       · simp [geometricPivotStoppingKernel, hchosen, PMF.pure_map]
-      · simp only [geometricPivotStoppingKernel, if_neg hchosen,
+      · simp only [geometricPivotStoppingKernel, ite_eq_right hchosen,
           geometricFiniteStoppingLaw, PMF.map_comp]
         have hmap : censorLateFiniteStoppingOutcome (deadline - 1) ∘
             (fun offset ↦ some (deadline + offset)) = fun _ : ℕ ↦ none := by

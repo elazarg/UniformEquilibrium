@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.Topology
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -44,6 +44,7 @@ private theorem semanticPair_oneDateThenNever_mem_reachable_one
         simp [quittingFiniteClockWordProfile, quittingRootSequenceProfile,
           quittingFiniteClockRoots, word, quittingOneDateThenNeverProfile,
           quittingRootOfSimplex]
+        rfl
     | succ time =>
         simp [quittingFiniteClockWordProfile, quittingRootSequenceProfile,
           quittingFiniteClockRoots, quittingOneDateThenNeverProfile,

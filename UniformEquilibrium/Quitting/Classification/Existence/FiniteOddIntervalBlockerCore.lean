@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math Math.Probability Math.PMFProduct
+open Filter Set _root_.Math _root_.Math.Probability Math.PMFProduct
 open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -92,7 +92,7 @@ theorem exists_stationaryCertificate_of_strictFiniteOddIntervalBlockerCore
   have hn : 3 ≤ n := hcore.three_le
   let phase0 : Fin n := ⟨0, by omega⟩
   let phase1 : Fin n := ⟨1, by omega⟩
-  letI : Nonempty ι := ⟨core phase0⟩
+  let : Nonempty ι := ⟨core phase0⟩
   have hphase01 : phase0 ≠ phase1 := by
     intro heq
     have := congrArg Fin.val heq

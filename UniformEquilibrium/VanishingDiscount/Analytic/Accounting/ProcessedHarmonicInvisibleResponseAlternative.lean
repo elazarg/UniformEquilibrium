@@ -37,7 +37,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Filter Math Math.Probability Set Topology
+open Filter _root_.Math _root_.Math.Probability Set Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}
@@ -749,7 +749,7 @@ end AnalyticBellmanGerm
 
 namespace InvisibleQuotientCorrectionAccountCounterexample
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- The smallest state space on which comparison-versus-baseline drift can
 differ from the actual state-account increment. -/

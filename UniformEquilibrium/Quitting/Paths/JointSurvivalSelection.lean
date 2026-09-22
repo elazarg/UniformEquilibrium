@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι]
 
@@ -108,7 +108,7 @@ theorem tendsto_zero_quittingJointSurvivalWeight_of_absorption_lower
       (∏ offset ∈ Finset.range fuel,
           quittingStationaryContinueMass (roots (start + offset))) ≤
         ∏ _offset ∈ Finset.range fuel, (1 - charge) := by
-          apply Finset.prod_le_prod
+          apply Finset.prod_le_prod₀
           · intro offset _
             exact quittingStationaryContinueMass_nonneg
               (roots (start + offset))

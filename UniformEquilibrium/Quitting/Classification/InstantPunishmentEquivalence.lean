@@ -293,7 +293,7 @@ theorem quittingProfilePunishmentεEquilibriumExistence_of_constantRow
     QuittingProfilePunishmentεEquilibriumExistence reward := by
   intro ε hε
   obtain ⟨quitter, root, punishRow, hquit, hcap, hnash⟩ := hbranch ε hε
-  haveI : Nonempty ((quittingGame reward).BehaviorStrategy quitter) :=
+  have : Nonempty ((quittingGame reward).BehaviorStrategy quitter) :=
     ⟨fun _ _ => PMF.pure false⟩
   refine ⟨quitter, root, quittingStationaryProfile reward punishRow, hquit,
     ?_, ?_⟩

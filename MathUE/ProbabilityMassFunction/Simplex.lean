@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import MathUE.Probability
 import MathUE.Simplex
-import Mathlib.Analysis.Convex.StdSimplex
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # PMFs and finite simplices
@@ -22,6 +22,8 @@ open scoped BigOperators
 namespace Math
 namespace ProbabilityMassFunction
 
+open GameTheory.Math.Probability
+
 variable {α : Type*}
 
 /-- The real coordinate vector associated to a finite probability mass
@@ -29,11 +31,18 @@ function. -/
 def toVector [Fintype α] (μ : PMF α) : α → ℝ :=
   fun a => (μ a).toReal
 
-/-- The coordinate vector of a finite `PMF` belongs to the standard simplex. -/
+/-- The coordinate vector of a finite `PMF` belongs to the canonical
+coordinate image of the standard simplex. -/
 theorem toVector_mem_stdSimplex [Fintype α] (μ : PMF α) :
-    toVector μ ∈ stdSimplex ℝ α := by
-  refine ⟨fun a => ENNReal.toReal_nonneg, ?_⟩
-  exact Math.Probability.pmf_toReal_sum_one μ
+    toVector μ ∈ simplexWeights α := by
+  rw [mem_simplexWeights]
+  exact ⟨fun _ => ENNReal.toReal_nonneg, Math.Probability.pmf_toReal_sum_one μ⟩
+
+/-- The weights of a canonical simplex element lie in its coordinate image. -/
+theorem weights_mem_simplexWeights (x : Convexity.StdSimplex ℝ α) :
+    (x.weights : α → ℝ) ∈ simplexWeights α := by
+  unfold simplexWeights
+  exact ⟨x, rfl⟩
 
 /-- The coordinate-vector map from finite `PMF`s is injective. -/
 theorem toVector_injective [Fintype α] :
@@ -53,27 +62,28 @@ theorem toVector_pos_iff_ne_zero [Fintype α] (μ : PMF α) (a : α) :
   · intro h
     exact ENNReal.toReal_pos h (PMF.apply_ne_top μ a)
 
-/-- Turn a point of the finite standard simplex into a `PMF`. -/
-def ofVector [Fintype α] (w : α → ℝ) (hw : w ∈ stdSimplex ℝ α) : PMF α :=
+/-- Turn a point of the finite simplex's coordinate image into a `PMF`. -/
+def ofVector [Fintype α] (w : α → ℝ) (hw : w ∈ simplexWeights α) : PMF α :=
   ⟨fun a => ENNReal.ofReal (w a), by
+    rw [mem_simplexWeights] at hw
     have hsum : ∑ a : α, ENNReal.ofReal (w a) = 1 := by
       rw [← ENNReal.ofReal_sum_of_nonneg (fun a _ => hw.1 a), hw.2]
       norm_num
     simpa [tsum_fintype, hsum] using (hasSum_fintype (fun a : α => ENNReal.ofReal (w a)))⟩
 
 @[simp]
-theorem ofVector_apply [Fintype α] {w : α → ℝ} (hw : w ∈ stdSimplex ℝ α) (a : α) :
+theorem ofVector_apply [Fintype α] {w : α → ℝ} (hw : w ∈ simplexWeights α) (a : α) :
     ofVector w hw a = ENNReal.ofReal (w a) :=
   rfl
 
 @[simp]
-theorem ofVector_toReal [Fintype α] {w : α → ℝ} (hw : w ∈ stdSimplex ℝ α) (a : α) :
+theorem ofVector_toReal [Fintype α] {w : α → ℝ} (hw : w ∈ simplexWeights α) (a : α) :
     ((ofVector w hw) a).toReal = w a := by
   rw [ofVector_apply]
-  exact ENNReal.toReal_ofReal (hw.1 a)
+  exact ENNReal.toReal_ofReal ((mem_simplexWeights.mp hw).1 a)
 
 @[simp]
-theorem ofVector_ne_zero_iff [Fintype α] {w : α → ℝ} (hw : w ∈ stdSimplex ℝ α)
+theorem ofVector_ne_zero_iff [Fintype α] {w : α → ℝ} (hw : w ∈ simplexWeights α)
     (a : α) :
     ofVector w hw a ≠ 0 ↔ 0 < w a := by
   constructor
@@ -86,7 +96,7 @@ theorem ofVector_ne_zero_iff [Fintype α] {w : α → ℝ} (hw : w ∈ stdSimple
     linarith
 
 /-- Converting a simplex vector to a `PMF` and back recovers the vector. -/
-theorem toVector_ofVector [Fintype α] {w : α → ℝ} (hw : w ∈ stdSimplex ℝ α) :
+theorem toVector_ofVector [Fintype α] {w : α → ℝ} (hw : w ∈ simplexWeights α) :
     toVector (ofVector w hw) = w := by
   funext a
   exact ofVector_toReal hw a
@@ -99,34 +109,50 @@ theorem ofVector_toVector [Fintype α] (μ : PMF α) :
 
 /-- Finite probability mass functions are equivalent to points of the real
 standard simplex. -/
-def stdSimplexEquiv [Fintype α] : PMF α ≃ stdSimplex ℝ α where
-  toFun μ := ⟨toVector μ, toVector_mem_stdSimplex μ⟩
-  invFun x := ofVector x x.property
+def stdSimplexEquiv [Fintype α] : PMF α ≃ Convexity.StdSimplex ℝ α where
+  toFun μ := {
+    weights := Finsupp.equivFunOnFinite.symm (toVector μ)
+    nonneg a := ENNReal.toReal_nonneg
+    total := by
+      rw [Finsupp.sum_fintype]
+      · exact Math.Probability.pmf_toReal_sum_one μ
+      · intro
+        rfl }
+  invFun x := ofVector x.weights (weights_mem_simplexWeights x)
   left_inv := ofVector_toVector
   right_inv x := by
-    apply Subtype.ext
-    exact toVector_ofVector x.property
+    apply Convexity.StdSimplex.ext
+    ext a
+    exact ofVector_toReal (weights_mem_simplexWeights x) a
 
 @[simp]
-theorem coe_stdSimplexEquiv_apply [Fintype α] (μ : PMF α) :
-    ((stdSimplexEquiv μ : stdSimplex ℝ α) : α → ℝ) = toVector μ :=
+theorem simplexEquiv_apply_weights [Fintype α] (μ : PMF α) :
+    (stdSimplexEquiv μ).weights = Finsupp.equivFunOnFinite.symm (toVector μ) :=
   rfl
 
 @[simp]
-theorem stdSimplexEquiv_symm_apply [Fintype α] (x : stdSimplex ℝ α) :
-    (stdSimplexEquiv (α := α)).symm x = ofVector x x.property :=
+theorem coe_stdSimplexEquiv_apply [Fintype α] (μ : PMF α) :
+    ((stdSimplexEquiv μ).weights : α → ℝ) = toVector μ :=
+  rfl
+
+@[simp]
+theorem stdSimplexEquiv_symm_apply [Fintype α] (x : Convexity.StdSimplex ℝ α) :
+    (stdSimplexEquiv (α := α)).symm x =
+      ofVector x.weights (weights_mem_simplexWeights x) :=
   rfl
 
 /-- Expectation under the PMF represented by a simplex point is the simplex
 weighted sum.  This is the basic dictionary between the probabilistic and
 finite-dimensional presentations of mixed strategies. -/
 theorem expect_stdSimplexEquiv_symm_eq_wsum [Fintype α]
-    (x : stdSimplex ℝ α) (f : α → ℝ) :
-    Math.Probability.expect ((stdSimplexEquiv (α := α)).symm x) f =
-      wsum x f := by
+    (x : Convexity.StdSimplex ℝ α) (f : α → ℝ) :
+    Math.Probability.expect ((stdSimplexEquiv (α := α)).symm x) f = wsum x f := by
   rw [Math.Probability.expect_eq_sum]
-  simp only [stdSimplexEquiv_symm_apply, ofVector_toReal]
-  rfl
+  change (∑ a, ((ofVector x.weights (weights_mem_simplexWeights x)) a).toReal * f a) =
+    ∑ a, x.weights a * f a
+  apply Finset.sum_congr rfl
+  intro a _
+  rw [ofVector_toReal]
 
 /-- The coordinatewise expectation of vectors lies in the convex hull of
 their range. -/
@@ -145,17 +171,17 @@ theorem coordinateExpectation_mem_convexHull_range [Fintype α]
 /-- A simplex point represents a given finite `PMF` exactly when its coordinate
 vector is that PMF's coordinate vector. -/
 theorem ofVector_eq_iff_eq_toVector [Fintype α]
-    (x : stdSimplex ℝ α) (μ : PMF α) :
-    ofVector (x : α → ℝ) x.property = μ ↔
-      x = ⟨toVector μ, toVector_mem_stdSimplex μ⟩ := by
+    (x : Convexity.StdSimplex ℝ α) (μ : PMF α) :
+    ofVector x.weights (weights_mem_simplexWeights x) = μ ↔ x = stdSimplexEquiv μ := by
   constructor
   · intro h
-    apply Subtype.ext
+    apply Convexity.StdSimplex.ext
     have hx :
-        toVector (ofVector (x : α → ℝ) x.property) = toVector μ :=
+        toVector (ofVector x.weights (weights_mem_simplexWeights x)) = toVector μ :=
       congrArg toVector h
-    change (x : α → ℝ) = toVector μ
-    simpa [toVector_ofVector] using hx
+    ext a
+    change x.weights a = toVector μ a
+    exact (ofVector_toReal (weights_mem_simplexWeights x) a).symm.trans (congrFun hx a)
   · intro h
     subst h
     exact ofVector_toVector μ
@@ -165,6 +191,7 @@ theorem ofVector_eq_iff_eq_toVector [Fintype α]
 /-- The Boolean PMF assigning real probability `p` to `true`. -/
 def bernoulliBool (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
   ofVector (fun value ↦ if value then p else 1 - p) <| by
+    rw [mem_simplexWeights]
     constructor
     · intro value
       cases value <;> simp_all

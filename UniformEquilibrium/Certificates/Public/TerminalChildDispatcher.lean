@@ -231,7 +231,7 @@ theorem terminalChildDispatcher_appendHist {fuel suffixLength : ℕ}
         (fuel + suffixLength) (G.appendHist base suffix) =
       child base who suffixLength suffix := by
   rw [terminalChildDispatcher]
-  simp only [dif_pos (Nat.le_add_right fuel suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right fuel suffixLength)]
   congr 3
   · exact G.terminalPrefixLE_appendHist base suffix hstart
   · exact Nat.add_sub_cancel_left fuel suffixLength
@@ -270,7 +270,7 @@ theorem afterHistoryProfile_terminalChildDispatcher
       child base := by
   funext who suffixLength suffix
   rw [afterHistoryProfile_apply, terminalChildDispatcher]
-  simp only [dif_pos (Nat.le_add_right fuel suffixLength)]
+  simp only [dite_eq_left (Nat.le_add_right fuel suffixLength)]
   exact hcompatible who suffixLength suffix
 
 /-- Rebasing an arbitrary unilateral deviation from the global dispatcher

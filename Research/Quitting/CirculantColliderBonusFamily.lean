@@ -88,11 +88,11 @@ def colliderBonusJoin : ZMod 5 → ℝ :=
 
 @[simp] theorem colliderBonusJoin_four :
     colliderBonusJoin s low bonus 4 = bonus := by
-  rw [colliderBonusJoin, if_pos rfl]
+  rw [colliderBonusJoin, ite_eq_left rfl]
 
 theorem colliderBonusJoin_of_ne {d : ZMod 5} (hd : d ≠ 4) :
     colliderBonusJoin s low bonus d = low - s := by
-  rw [colliderBonusJoin, if_neg hd]
+  rw [colliderBonusJoin, ite_eq_right hd]
 
 /-- The raised-collider completion is the collider completion at zero bonus. -/
 theorem colliderBonusReward_zero :
@@ -112,7 +112,7 @@ theorem singletonTerminal_ne_collider (owner who : ZMod 5) :
     colliderBonusReward s low bonus m (quittingSingletonTerminal owner) who =
       s + m (owner - who) := by
   rw [colliderBonusReward, colliderReward_singleton,
-    if_neg (singletonTerminal_ne_collider owner who), add_zero]
+    ite_eq_right (singletonTerminal_ne_collider owner who), add_zero]
 
 /-- The two-element rows are the circulant rows of the raised join margin
 vector. -/
@@ -127,9 +127,9 @@ theorem colliderBonusReward_pair {owner who : ZMod 5} (hne : owner ≠ who) :
     decide
   rw [colliderBonusReward, colliderReward_pair s low m hne, colliderBonusJoin]
   by_cases h : owner - who = 4
-  · rw [if_pos (hkey.mpr h), if_pos h, h, colliderJoin_four]
+  · rw [ite_eq_left (hkey.mpr h), ite_eq_left h, h, colliderJoin_four]
     ring
-  · rw [if_neg (fun hcontra ↦ h (hkey.mp hcontra)), if_neg h,
+  · rw [ite_eq_right (fun hcontra ↦ h (hkey.mp hcontra)), ite_eq_right h,
       colliderJoin_of_ne s low h]
     ring
 
@@ -151,21 +151,21 @@ def candidateMargin : ZMod 5 → ℝ :=
     else if d = 4 then -2 else 0
 
 @[simp] theorem candidateMargin_zero : candidateMargin 0 = 0 := by
-  rw [candidateMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_neg (by decide)]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_right (by decide)]
 
 @[simp] theorem candidateMargin_one : candidateMargin 1 = -1 / 2 := by
-  rw [candidateMargin, if_pos rfl]
+  rw [candidateMargin, ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_two : candidateMargin 2 = 2 := by
-  rw [candidateMargin, if_neg (by decide), if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_three : candidateMargin 3 = 1 := by
-  rw [candidateMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem candidateMargin_four : candidateMargin 4 = -2 := by
-  rw [candidateMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_pos rfl]
+  rw [candidateMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_left rfl]
 
 theorem sum_candidateMargin : (∑ e : ZMod 5, candidateMargin e) = 1 / 2 := by
   rw [show (∑ e : ZMod 5, candidateMargin e) =

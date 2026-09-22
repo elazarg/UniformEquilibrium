@@ -28,7 +28,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Filter Math Math.OnlineLearning Math.PMFProduct Math.Probability Set
+open Filter _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

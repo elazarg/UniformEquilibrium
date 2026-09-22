@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Research.Quitting.FiniteClockPolynomialCenter
+import GameTheory.Math.Probability.Simplex
 import Research.Quitting.FiniteClockTerminalSemantics
 import UniformEquilibrium.Diagnostics.Quitting.PureTimeDeadlineSemantics
 import UniformEquilibrium.Quitting.Terminal.ExploitabilityGap
@@ -29,8 +30,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Function Set
-open Math.Probability Math.ProbabilityMassFunction
+open Function _root_.Set
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -43,7 +44,7 @@ structure QuittingFiniteClockDoubleFullGapCosource
   clockBound_pos : 0 < clockBound
   weight : ι → FiniteClockAtom clockBound → ℝ
   weight_simplex : ∀ player,
-    weight player ∈ stdSimplex ℝ (FiniteClockAtom clockBound)
+    weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom clockBound)
   auxiliary_eq_zero : ∀ player,
     weight player (finiteClockAuxAtom clockBound) = 0
   first : ι
@@ -224,11 +225,13 @@ private theorem quittingFiniteClockWordProfile_clockOneSureQuit
         quittingClockOneSureQuitRoot, quittingClockOneSureQuitTimes,
         quittingPureTimeProfileBehavior, quittingPureTimeBehaviorStrategy,
         quittingPureTimeHazard]
+      rfl
     · simp [quittingFiniteClockWordProfile, quittingRootSequenceProfile,
         quittingFiniteClockRoots, quittingClockOneSureQuitWord,
         quittingClockOneSureQuitRoot, quittingClockOneSureQuitTimes,
         quittingPureTimeProfileBehavior, quittingPureTimeBehaviorStrategy,
         quittingPureTimeHazard, hwho, quittingAllContinueRoot]
+      rfl
   · have htimeZero : time ≠ 0 := by omega
     by_cases hwho : who = player
     · subst who
@@ -236,10 +239,12 @@ private theorem quittingFiniteClockWordProfile_clockOneSureQuit
         quittingFiniteClockRoots, htime, quittingClockOneSureQuitTimes,
         quittingPureTimeProfileBehavior, quittingPureTimeBehaviorStrategy,
         quittingPureTimeHazard, htimeZero, quittingAllContinueRoot]
+      rfl
     · simp [quittingFiniteClockWordProfile, quittingRootSequenceProfile,
         quittingFiniteClockRoots, htime, quittingClockOneSureQuitTimes,
         quittingPureTimeProfileBehavior, quittingPureTimeBehaviorStrategy,
         quittingPureTimeHazard, hwho, quittingAllContinueRoot]
+      rfl
 
 private theorem quittingClockOneSureQuit_debt_eq_zero
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (player : ι)
@@ -399,7 +404,7 @@ theorem exists_pair_mem_quittingFiniteClockSemanticReachable_one_and_two_debts
     rw [hcompl]
     exact isClosed_iUnion_of_finite fun player ↦
       (hregionClosed player.1).preimage continuous_subtype_val
-  letI : ConnectedSpace subtypeCarrier :=
+  let : ConnectedSpace subtypeCarrier :=
     Subtype.connectedSpace
       (quittingFiniteClockSemanticReachable_isConnected reward 1)
   have hanchorUniv : anchorRegion = Set.univ :=
@@ -427,7 +432,7 @@ theorem exists_quittingFiniteClockDoubleFullGapCosource
   let weight : ι → FiniteClockAtom 1 → ℝ := fun player ↦
     finiteClockLawCoordinates 1 (laws player)
   have hweight : ∀ player,
-      weight player ∈ stdSimplex ℝ (FiniteClockAtom 1) := fun player ↦
+      weight player ∈ GameTheory.Math.Probability.simplexWeights (FiniteClockAtom 1) := fun player ↦
     finiteClockLawCoordinates_mem_stdSimplex 1 (laws player)
   have haux : ∀ player,
       weight player (finiteClockAuxAtom 1) = 0 := fun player ↦

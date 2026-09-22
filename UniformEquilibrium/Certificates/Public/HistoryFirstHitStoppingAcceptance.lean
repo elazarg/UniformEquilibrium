@@ -21,7 +21,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace PublicHistoryFirstHitStoppingAcceptance
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A one-player, one-state game with a public Boolean action. -/
 def game : StochasticGame Unit where

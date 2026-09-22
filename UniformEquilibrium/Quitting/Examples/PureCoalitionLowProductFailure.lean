@@ -9,7 +9,7 @@ noncomputable section
 
 namespace GameTheory.PureCoalitionLowProductFailure
 
-open GameTheory Math.Probability Math.PMFProduct
+open GameTheory _root_.Math.Probability Math.PMFProduct
 
 def premium (terminal : Finset (Fin 3)) : Payoff (Fin 3) :=
   if terminal = {0, 1} then ![2, -1, 0]

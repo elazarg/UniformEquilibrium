@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Finset Math.Probability
+open Filter Finset _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -102,7 +102,7 @@ theorem quittingBoundedSelfResetTerminalMassFloor_pos
   unfold quittingBoundedSelfResetTerminalMassFloor
   have hnonempty : Nonempty {S : Finset ι // S.Nonempty} :=
     ⟨⟨{who}, Finset.singleton_nonempty who⟩⟩
-  letI := hnonempty
+  let := hnonempty
   positivity
 
 /-- A fixed-label subsequence of bounded self-reset endpoints.  Every endpoint
@@ -195,7 +195,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_boundedSelfResetTerminalSeq
     (witness : QuittingTerminalExploitabilityWitness reward)
     (starts : ℕ → (quittingGame reward).BehaviorProfile) :
     Nonempty (QuittingBoundedSelfResetTerminalSequence witness starts) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hexit : ∀ rank, ∃ (length : ℕ)
       (profile : (quittingGame reward).BehaviorProfile)
       (observer : ι) (stop : ℕ),
@@ -400,14 +400,31 @@ theorem quittingProfileLiveRoot_boundedSelfResetForcedOwnerProfile
         (quittingProfileLiveRoot reward (sequence.profile rank) time)
         (quittingBoundedSelfResetObserverAbsentOwner sequence)
         (PMF.pure true) := by
+  let owner := quittingBoundedSelfResetObserverAbsentOwner sequence
+  let baseRoot : ι → PMF Bool :=
+    quittingProfileLiveRoot reward (sequence.profile rank) time
+  change quittingProfileLiveRoot reward
+      (quittingBoundedSelfResetForcedOwnerProfile sequence rank time) time =
+    Function.update baseRoot owner (PMF.pure true)
   funext player
-  unfold quittingBoundedSelfResetForcedOwnerProfile quittingProfileLiveRoot
-  by_cases hplayer :
-      player = quittingBoundedSelfResetObserverAbsentOwner sequence
+  by_cases hplayer : player = owner
   · subst player
-    simp [quittingStagePureEndpointBehaviorDeviation,
-      quittingStageDeviationHazard_self]
-  · simp [Function.update, hplayer]
+    calc
+      _ = PMF.pure true := by
+        unfold quittingBoundedSelfResetForcedOwnerProfile
+          quittingProfileLiveRoot
+        simp [owner, quittingStagePureEndpointBehaviorDeviation,
+          quittingStageDeviationHazard_self]
+      _ = Function.update baseRoot owner (PMF.pure true) owner := by
+        simp only [Function.update_apply, reduceIte]
+  · calc
+      _ = baseRoot player := by
+        unfold quittingBoundedSelfResetForcedOwnerProfile
+          quittingProfileLiveRoot
+        simp [owner, hplayer]
+        rfl
+      _ = Function.update baseRoot owner (PMF.pure true) player := by
+        simp only [Function.update_apply, hplayer, reduceIte]
 
 /-- Forcing a member of the selected terminal coalition to Quit cannot
 decrease that coalition's stage cylinder. -/

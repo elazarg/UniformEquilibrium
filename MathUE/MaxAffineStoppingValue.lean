@@ -71,7 +71,7 @@ failure at `P = 1` (`naiveClosedForm_eq_anchoredValue_iff_of_P_eq_one_of_T_eq_ze
 
 ## Relation to `CyclicMaxAffineBound`
 
-`Math.CyclicMaxAffine.CyclicSolution` solves a *genuinely cyclic* system,
+`Maths.CyclicMaxAffine.CyclicSolution` solves a *genuinely cyclic* system,
 composing `L` **different** phase maps `w ↦ max {1 - p k, q k * w + p k}`
 around a wraparound; the single-phase system here is one such map applied
 repeatedly, and only its `L = 1` instance is a `System.Φ` fixed-point
@@ -206,7 +206,7 @@ theorem tendsto_iterate_anchoredValue_of_le_isFixedPt {b y : ℝ}
     rintro _ ⟨n, rfl⟩
     calc s.Φ^[n] b ≤ s.Φ^[n] y := s.monotone_Φ.iterate n hby
       _ = y := Function.iterate_fixed hy n
-  have hval : s.anchoredValue b = ⨆ n : ℕ, s.Φ^[n] b := if_pos hsub
+  have hval : s.anchoredValue b = ⨆ n : ℕ, s.Φ^[n] b := ite_eq_left hsub
   rw [hval]
   exact tendsto_atTop_ciSup hmono hbdd
 
@@ -230,7 +230,7 @@ theorem isFixedPt_anchoredValue_of_le_isFixedPt {b y : ℝ}
 theorem le_anchoredValue_of_le_isFixedPt {b y : ℝ}
     (hy : Function.IsFixedPt s.Φ y) (hby : b ≤ y) : b ≤ s.anchoredValue b := by
   have hval : s.anchoredValue b = ⨆ n : ℕ, s.Φ^[n] b :=
-    if_pos (s.le_Φ_of_le_isFixedPt hy hby)
+    ite_eq_left (s.le_Φ_of_le_isFixedPt hy hby)
   rw [hval]
   have hbdd : BddAbove (Set.range (fun n : ℕ => s.Φ^[n] b)) := by
     refine ⟨y, ?_⟩
@@ -245,7 +245,7 @@ used to prove convergence. -/
 theorem anchoredValue_le_of_le_isFixedPt {b y : ℝ}
     (hy : Function.IsFixedPt s.Φ y) (hby : b ≤ y) : s.anchoredValue b ≤ y := by
   have hval : s.anchoredValue b = ⨆ n : ℕ, s.Φ^[n] b :=
-    if_pos (s.le_Φ_of_le_isFixedPt hy hby)
+    ite_eq_left (s.le_Φ_of_le_isFixedPt hy hby)
   rw [hval]
   refine ciSup_le fun n => ?_
   calc s.Φ^[n] b ≤ s.Φ^[n] y := s.monotone_Φ.iterate n hby
@@ -266,7 +266,7 @@ theorem tendsto_iterate_anchoredValue_of_isFixedPt_le {b y : ℝ}
     have hfun : (fun n : ℕ => s.Φ^[n] b) = fun _ : ℕ => b := funext hconst
     have hval : s.anchoredValue b = b := by
       unfold anchoredValue
-      rw [if_pos hle, hfun]
+      rw [ite_eq_left hle, hfun]
       exact ciSup_const
     rw [hval, hfun]
     exact tendsto_const_nhds
@@ -277,7 +277,7 @@ theorem tendsto_iterate_anchoredValue_of_isFixedPt_le {b y : ℝ}
       rintro _ ⟨n, rfl⟩
       calc y = s.Φ^[n] y := (Function.iterate_fixed hy n).symm
         _ ≤ s.Φ^[n] b := s.monotone_Φ.iterate n hyb
-    have hval : s.anchoredValue b = ⨅ n : ℕ, s.Φ^[n] b := if_neg hle
+    have hval : s.anchoredValue b = ⨅ n : ℕ, s.Φ^[n] b := ite_eq_right hle
     rw [hval]
     exact tendsto_atTop_ciInf hanti hbdd
 

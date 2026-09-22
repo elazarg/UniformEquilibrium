@@ -29,7 +29,7 @@ namespace GameTheory
 namespace QuittingLCPClassification
 
 open Filter Set Topology
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -311,11 +311,11 @@ theorem analyticAt_quittingGermOpponentClock
       · subst owner
         change AnalyticAt ℝ
           (fun t => quittingGermOpponentClock g who (some who) t) 0
-        simpa only [quittingGermOpponentClock_some, if_pos] using
+        simpa only [quittingGermOpponentClock_some, ite_eq_left] using
           (analyticAt_const : AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) 0)
       · change AnalyticAt ℝ
           (fun t => quittingGermOpponentClock g who (some owner) t) 0
-        simpa only [quittingGermOpponentClock_some, if_neg howner] using
+        simpa only [quittingGermOpponentClock_some, ite_eq_right howner] using
           analyticAt_quittingGermQuitRate g owner
 
 theorem eventually_quittingGermOpponentClock_nonneg
@@ -822,13 +822,13 @@ theorem tendsto_sum_quittingGermOpponentClock_zero
           change Tendsto
             (fun t => quittingGermOpponentClock g who (some who) t)
             (nhdsWithin (0 : ℝ) (Ioi 0)) (nhds 0)
-          simpa only [quittingGermOpponentClock_some, if_pos] using
+          simpa only [quittingGermOpponentClock_some, ite_eq_left] using
             (tendsto_const_nhds : Tendsto (fun _ : ℝ => (0 : ℝ))
               (nhdsWithin (0 : ℝ) (Ioi 0)) (nhds 0))
         · change Tendsto
             (fun t => quittingGermOpponentClock g who (some owner) t)
             (nhdsWithin (0 : ℝ) (Ioi 0)) (nhds 0)
-          simpa only [quittingGermOpponentClock_some, if_neg howner] using
+          simpa only [quittingGermOpponentClock_some, ite_eq_right howner] using
             quittingGermQuitRate_tendsto_zero_of_endpoint_fixedOpponents
               g who hfixed owner howner
   have hsum := tendsto_finsetSum (Finset.univ : Finset (Option ι))
@@ -891,13 +891,13 @@ theorem eventually_abs_opponentAbsorption_sub_quitSum_le
     intro owner
     by_cases howner : owner = who
     · simp [rates, howner]
-    · simp only [rates, if_neg howner]
+    · simp only [rates, ite_eq_right howner]
       exact quittingGermQuitRate_nonneg g ht owner
   have h1 : ∀ owner, rates owner ≤ 1 := by
     intro owner
     by_cases howner : owner = who
     · simp [rates, howner]
-    · simp only [rates, if_neg howner]
+    · simp only [rates, ite_eq_right howner]
       exact quittingGermQuitRate_le_one g ht owner
   have hmass : quittingRootAbsorptionMass
         (quittingGermForcedContinueRoot g who t) =
@@ -977,7 +977,7 @@ theorem eventually_quittingGermOpponentQuitSum_nonneg
   intro owner _
   by_cases howner : owner = who
   · simp [howner]
-  · simp only [if_neg howner]
+  · simp only [ite_eq_right howner]
     exact quittingGermQuitRate_nonneg g ht owner
 
 namespace QuittingGermOpponentLeadingData

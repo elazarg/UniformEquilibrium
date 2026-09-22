@@ -62,7 +62,7 @@ theorem finiteClock_canonicalized_deadlineBounded_and_semantic_eq
   constructor
   · intro who time htime
     unfold quittingProfileLiveRoot quittingStoppingLawCanonicalizeOn
-    simp only [Finset.mem_univ, if_true]
+    simp only [Finset.mem_univ, ite_true]
     unfold quittingStoppingLawBehaviorStrategy
     apply stoppingLaw_toScalarHazard_toBoolean_eq_pure_false_of_mass_zero
     by_contra hmass

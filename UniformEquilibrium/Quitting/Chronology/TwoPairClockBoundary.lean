@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -332,7 +332,12 @@ inductive PurePort
   | firstGate
   | secondGate
   | never
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype PurePort :=
+  Fintype.ofList [.firstGate, .secondGate, .never] (by
+    intro port
+    cases port <;> simp)
 
 instance : Nonempty PurePort := ⟨.never⟩
 

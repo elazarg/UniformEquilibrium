@@ -24,11 +24,11 @@ theorem rewardOfOwnPremium_sub_singleton {ι : Type} [DecidableEq ι]
           (quittingSingletonTerminal player) player =
       premium terminal.val player := by
   unfold rewardOfOwnPremium
-  rw [if_pos hplayer]
+  rw [ite_eq_left hplayer]
   have hself : player ∈ (quittingSingletonTerminal player).val := by
     change player ∈ ({player} : Finset ι)
     simp
-  rw [if_pos hself]
+  rw [ite_eq_left hself]
   change singleton player + premium terminal.val player -
       (singleton player + premium {player} player) = premium terminal.val player
   rw [hsingleton]

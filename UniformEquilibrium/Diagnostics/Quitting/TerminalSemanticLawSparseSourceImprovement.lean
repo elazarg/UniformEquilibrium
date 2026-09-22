@@ -64,7 +64,8 @@ theorem nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum
   let initial : support → ℝ := fun outcome ↦ point.2 outcome.1
   let target : ι → ℝ := fun who ↦
     point.1.1 who - reward (quittingSingletonTerminal who) who
-  have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmass := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hmoment := terminalSemanticLawCarrier_rewardMoment reward point hpoint
   have hinitialNonnegative : ∀ outcome, 0 ≤ initial outcome :=
     fun outcome ↦ hmass.1 outcome.1
@@ -141,7 +142,7 @@ theorem nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum
     intro outcome hzero
     have hnot : outcome ∉ support := by
       simp [support, Math.LinearAlgebra.positiveSupport, hzero]
-    simp only [law, dif_neg hnot]
+    simp only [law, dite_eq_right hnot]
   have hlawSum : ∑ outcome, law outcome = 1 := by
     calc
       ∑ outcome, law outcome = ∑ outcome : support, law outcome.1 :=
@@ -149,7 +150,7 @@ theorem nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum
       _ = ∑ outcome : support, normalized.weight outcome := by
         apply Finset.sum_congr rfl
         intro outcome _
-        simp only [law, dif_pos outcome.2]
+        simp only [law, dite_eq_left outcome.2]
       _ = 1 := normalized.weight_sum_eq_one
   have hlawValue : ∀ who,
       (∑ outcome, law outcome *
@@ -167,7 +168,7 @@ theorem nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum
       _ = _ := by
         apply Finset.sum_congr rfl
         intro outcome _
-        simp only [law, dif_pos outcome.2]
+        simp only [law, dite_eq_left outcome.2]
         rfl
   have hlawSupportCard : Fintype.card {outcome // law outcome ≠ 0} ≤
       Fintype.card ι := by
@@ -180,7 +181,7 @@ theorem nonempty_terminalSemanticLawSparseSourceImprovement_of_positiveMinimum
         have hmem : outcome.1 ∈ support := by
           simpa [support, Math.LinearAlgebra.positiveSupport] using hsource
         refine ⟨⟨outcome.1, hmem⟩, ?_⟩
-        simpa only [law, dif_pos hmem] using outcome.2
+        simpa only [law, dite_eq_left hmem] using outcome.2
     have hinjective : Function.Injective embed := by
       intro left right heq
       apply Subtype.ext

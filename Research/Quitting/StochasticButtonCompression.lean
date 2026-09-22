@@ -40,7 +40,7 @@ noncomputable section
 
 namespace Research.QuittingStochasticButtonCompression
 
-open GameTheory Filter Math.Probability
+open GameTheory Filter _root_.Math.Probability
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

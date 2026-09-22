@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
+import GameTheory.Math.Probability.Simplex
 import MathUE.PMFProduct.FixedCardinalityRigidity
 
 /-! # Pair-only actual terminal-law rigidity -/
@@ -38,6 +39,7 @@ private theorem terminalOutcomeMass_eq_zero_of_not_pair_of_pairMass_eq_one
   classical
   let mass := quittingTerminalOutcomeMass reward profile
   have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
   have hsplit := Finset.sum_filter_add_sum_filter_not Finset.univ
     IsQuittingPairOutcome mass
   have hpair' : ∑ outcome ∈ Finset.univ.filter IsQuittingPairOutcome,
@@ -193,6 +195,7 @@ theorem exists_pair_terminalOutcomeMass_eq_one_of_terminalPairMass_eq_one
       reward profile first terminal
     rw [hstageOne] at hlower
     have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+    rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
     have hupper : quittingTerminalOutcomeMass reward profile (some terminal) ≤ 1 := by
       rw [← hsimplex.2]
       exact Finset.single_le_sum (fun outcome _ => hsimplex.1 outcome)
@@ -211,6 +214,7 @@ theorem no_finFour_profile_with_uniform_six_pair_terminalLaw
   rintro ⟨profile, huniform⟩
   have hpair : quittingTerminalPairMass profile = 1 := by
     have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+    rw [GameTheory.Math.Probability.mem_simplexWeights] at hsimplex
     rw [← hsimplex.2]
     unfold quittingTerminalPairMass
     apply Finset.sum_congr rfl
@@ -221,7 +225,7 @@ theorem no_finFour_profile_with_uniform_six_pair_terminalLaw
     exists_pair_terminalOutcomeMass_eq_one_of_terminalPairMass_eq_one
       profile hpair
   have huniformTerminal := huniform (some terminal)
-  rw [if_pos (by simpa [IsQuittingPairOutcome] using hterminalCard)] at huniformTerminal
+  rw [ite_eq_left (by simpa [IsQuittingPairOutcome] using hterminalCard)] at huniformTerminal
   rw [hterminalOne] at huniformTerminal
   norm_num at huniformTerminal
 
@@ -257,8 +261,9 @@ theorem uniformSixPairTerminalLaw_sum_eq_one :
 
 theorem uniformSixPairTerminalLaw_mem_stdSimplex :
     uniformSixPairTerminalLaw ∈
-      stdSimplex ℝ (QuittingTerminalOutcome (Fin 4)) :=
-  ⟨uniformSixPairTerminalLaw_nonneg, uniformSixPairTerminalLaw_sum_eq_one⟩
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome (Fin 4)) :=
+  GameTheory.Math.Probability.mem_simplexWeights.mpr
+    ⟨uniformSixPairTerminalLaw_nonneg, uniformSixPairTerminalLaw_sum_eq_one⟩
 
 theorem uniformSixPairTerminalLaw_pair_sqrt
     (first second : QuittingTerminalOutcome (Fin 4))
@@ -266,8 +271,8 @@ theorem uniformSixPairTerminalLaw_pair_sqrt
     (hsecond : IsQuittingPairOutcome second) :
     Real.sqrt (uniformSixPairTerminalLaw first) +
         Real.sqrt (uniformSixPairTerminalLaw second) ≤ 1 := by
-  rw [uniformSixPairTerminalLaw, if_pos hfirst,
-    uniformSixPairTerminalLaw, if_pos hsecond]
+  rw [uniformSixPairTerminalLaw, ite_eq_left hfirst,
+    uniformSixPairTerminalLaw, ite_eq_left hsecond]
   exact uniformSixPairCoordinates_sqrt_add_sqrt_le_one
 
 /-- The uniform six-pair vector is a probability law satisfying every
@@ -276,7 +281,7 @@ terminal law. -/
 theorem uniformSixPairTerminalLaw_noncharacterization
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
     uniformSixPairTerminalLaw ∈
-        stdSimplex ℝ (QuittingTerminalOutcome (Fin 4)) ∧
+        GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome (Fin 4)) ∧
       (∀ first second,
         IsQuittingPairOutcome first → IsQuittingPairOutcome second →
           Real.sqrt (uniformSixPairTerminalLaw first) +

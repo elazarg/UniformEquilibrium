@@ -11,7 +11,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Filter Math.Probability QuittingSureSetOwnerRepair
+open _root_.Set Filter _root_.Math.Probability QuittingSureSetOwnerRepair
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -112,7 +112,8 @@ theorem quittingPunishmentValue_le_finitePureReplyValue_of_lt_solo
   apply (div_le_iff₀ (by linarith : 0 < 1 - survival)).mpr
   have hlate := neverPayoff_add_opponentNever_mul_solo_le_finitePureReplyValue
     reward profile who
-  rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile,
+  rw [quittingTerminalPayoff_update_pureTime_eq_compactStoppingLawsOfProfile
+      reward profile who (none : CompactStoppingTime),
     quittingTerminalPayoff_update_pureTimeBehaviorStrategy] at hlate
   change quittingRootSequencePureTimeTerminalValue reward roots who none 0 +
     survival * quittingSoloReward reward who who ≤
@@ -128,7 +129,7 @@ theorem quittingFinitePureReplyPunishmentValue_eq_min
   apply le_antisymm
   · exact le_min (quittingFinitePureReplyPunishmentValue_le_punishmentValue reward who)
       (quittingFinitePureReplyPunishmentValue_le_solo reward who)
-  · letI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  · let : Nonempty ((quittingGame reward).BehaviorProfile) :=
       ⟨quittingAlwaysContinueProfile reward⟩
     apply le_ciInf
     intro profile

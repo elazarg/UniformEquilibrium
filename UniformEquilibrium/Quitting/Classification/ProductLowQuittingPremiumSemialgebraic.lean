@@ -35,7 +35,7 @@ theorem isSemialgebraic_hasProductLowQuittingPremium_rewardTables :
           MathUE.IsSemialgebraic.polynomial_nonpos (hazardVariable player - 1)
         convert hnonpos using 1
         ext point
-        simp only [Set.mem_setOf_eq, map_sub, map_one, sub_nonpos])
+        simp only [Set.mem_ofPred_eq, map_sub, map_one, sub_nonpos])
     simpa only [Finset.mem_univ, forall_const] using hall
   have hactive : MathUE.IsSemialgebraic {point |
       ∃ player : Fin n, 0 < MvPolynomial.eval point (hazardVariable player)} := by
@@ -46,7 +46,7 @@ theorem isSemialgebraic_hasProductLowQuittingPremium_rewardTables :
         (hazardVariable player))
     convert hexists using 1
     ext point
-    simp only [Set.mem_setOf_eq, Finset.mem_univ, true_and]
+    simp only [Set.mem_ofPred_eq, Finset.mem_univ, true_and]
   have hlow : MathUE.IsSemialgebraic {point |
       ∃ player : Fin n,
         0 < MvPolynomial.eval point (hazardVariable player) ∧
@@ -62,7 +62,7 @@ theorem isSemialgebraic_hasProductLowQuittingPremium_rewardTables :
             (quittingProductLowPremiumPolynomial player)))
     convert hexists using 1
     ext point
-    simp only [Set.mem_setOf_eq, Finset.mem_univ, true_and]
+    simp only [Set.mem_ofPred_eq, Finset.mem_univ, true_and]
   have hjoint : MathUE.IsSemialgebraic {point |
       ((∀ player : Fin n, 0 ≤ MvPolynomial.eval point (hazardVariable player)) ∧
           (∀ player : Fin n, MvPolynomial.eval point (hazardVariable player) ≤ 1) ∧
@@ -75,7 +75,7 @@ theorem isSemialgebraic_hasProductLowQuittingPremium_rewardTables :
     convert himp using 1
     ext point
     simp only [Set.mem_union, Set.mem_compl_iff, Set.mem_inter_iff,
-      Set.mem_setOf_eq]
+      Set.mem_ofPred_eq]
     constructor
     · intro himp
       by_cases habc :
@@ -94,7 +94,7 @@ theorem isSemialgebraic_hasProductLowQuittingPremium_rewardTables :
   have hforall := hjoint.forall_last_coordinates
   convert hforall using 1
   ext table
-  simp only [Set.mem_setOf_eq]
+  simp only [Set.mem_ofPred_eq]
   rw [hasProductLowQuittingPremium_iff_hazard]
   constructor
   · intro hlowProduct hazard

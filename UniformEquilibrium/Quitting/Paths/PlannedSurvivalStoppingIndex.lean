@@ -77,7 +77,7 @@ theorem quittingHazardSurvival_stoppingIndex_le
         (quittingPlannedSurvivalStoppingIndex hazard threshold) ≤
       threshold := by
   unfold quittingPlannedSurvivalStoppingIndex
-  rw [dif_pos hexists]
+  rw [dite_eq_left hexists]
   exact Nat.find_spec hexists
 
 /-- Before the stopping index, planned survival is still strictly above the
@@ -89,7 +89,7 @@ theorem threshold_lt_quittingHazardSurvival_of_lt_stoppingIndex
     (hstage : stage < quittingPlannedSurvivalStoppingIndex hazard threshold) :
     threshold < quittingHazardSurvival hazard stage := by
   unfold quittingPlannedSurvivalStoppingIndex at hstage
-  rw [dif_pos hexists] at hstage
+  rw [dite_eq_left hexists] at hstage
   exact not_le.mp (Nat.find_min hexists hstage)
 
 /-- Planned survival is antitone, so once the trigger has fired it stays

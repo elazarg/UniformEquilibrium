@@ -52,8 +52,8 @@ theorem quittingFirstStoppingOutcome_eq_of_order_and_never
     exact forall_congr' hnever
   unfold quittingFirstStoppingOutcome
   by_cases hfirst : quittingEarliestStoppingValue first = ⊤
-  · rw [if_pos hfirst, if_pos (htopIff.mp hfirst)]
-  · rw [if_neg hfirst, if_neg (fun h ↦ hfirst (htopIff.mpr h))]
+  · rw [ite_eq_left hfirst, ite_eq_left (htopIff.mp hfirst)]
+  · rw [ite_eq_right hfirst, ite_eq_right (fun h ↦ hfirst (htopIff.mpr h))]
     exact congrArg some (Subtype.ext hcoalition)
 
 private theorem stoppingValue_collapse_le_early_iff
@@ -87,11 +87,11 @@ theorem quittingFirstStoppingOutcome_collapse_pivot
     (times : ι → Option ℕ) (pivot : ι) (deadline : ℕ)
     (hfinite : ∀ j, j ≠ pivot →
       times j = none ∨ ∃ time < deadline, times j = some time) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingFirstStoppingOutcome
         (Function.update times pivot (collapseLateFiniteStoppingTime deadline (times pivot))) =
       quittingFirstStoppingOutcome times := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   apply quittingFirstStoppingOutcome_eq_of_order_and_never
   · intro i j
     by_cases hi : i = pivot
@@ -127,11 +127,12 @@ is unchanged when the actual pivot law's finite tail is collapsed. -/
 theorem quittingIndependentTerminalOutcomeLaw_collapse_pivot
     (laws : ι → PMF (Option ℕ)) (pivot : ι) (deadline : ℕ)
     (hfinite : ∀ j, j ≠ pivot → IsFiniteClockStoppingLaw deadline (laws j)) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingIndependentTerminalOutcomeLaw
         (Function.update laws pivot (collapseLateFiniteStoppingLaw (laws pivot) deadline)) =
       quittingIndependentTerminalOutcomeLaw laws := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
+  dsimp only
   unfold quittingIndependentTerminalOutcomeLaw collapseLateFiniteStoppingLaw
   rw [← Math.PMFProduct.pmfPi_bind_update_map, PMF.map_bind]
   simp only [PMF.pure_map]
@@ -157,10 +158,11 @@ theorem quittingIndependentTerminalOutcomeLaw_pivot_eq_of_head_and_never
     (first second : PMF (Option ℕ))
     (hhead : ∀ time < deadline, first (some time) = second (some time))
     (hnever : first none = second none) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingIndependentTerminalOutcomeLaw (Function.update opponents pivot first) =
       quittingIndependentTerminalOutcomeLaw (Function.update opponents pivot second) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
+  dsimp only
   have hfinite' (law : PMF (Option ℕ)) :
       ∀ j, j ≠ pivot → IsFiniteClockStoppingLaw deadline
         (Function.update opponents pivot law j) := by
@@ -187,7 +189,7 @@ theorem quittingTerminalPayoff_pivot_eq_of_head_and_never
         (quittingStoppingLawProfile reward (Function.update opponents pivot first)) =
       quittingTerminalPayoff reward
         (quittingStoppingLawProfile reward (Function.update opponents pivot second)) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   funext observer
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingStoppingLawExpectedPayoff]
@@ -206,12 +208,12 @@ theorem quittingIndependentTerminalOutcomeLaw_pivot_finiteReplacement_eq
     (hnever : first none = second none)
     (observer : ι) (hne : observer ≠ pivot) (replacement : PMF (Option ℕ))
     (hreplacement : IsFiniteClockStoppingLaw deadline replacement) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     quittingIndependentTerminalOutcomeLaw
         (Function.update (Function.update opponents pivot first) observer replacement) =
       quittingIndependentTerminalOutcomeLaw
         (Function.update (Function.update opponents pivot second) observer replacement) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   rw [Function.update_comm hne.symm, Function.update_comm hne.symm]
   apply quittingIndependentTerminalOutcomeLaw_pivot_eq_of_head_and_never
     (Function.update opponents observer replacement) pivot deadline _ first second hhead hnever
@@ -240,7 +242,7 @@ theorem quittingTerminalPayoff_pivot_finiteReplacement_eq
       quittingTerminalPayoff reward
         (quittingStoppingLawProfile reward
           (Function.update (Function.update opponents pivot second) observer replacement)) who := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff,
     quittingStoppingLawExpectedPayoff]
   rw [quittingIndependentTerminalOutcomeLaw_pivot_finiteReplacement_eq
@@ -258,7 +260,7 @@ theorem quittingContinuationBestResponseValue_stoppingLawProfile_update_self
         (quittingStoppingLawProfile reward (Function.update opponents pivot first)) pivot =
       quittingContinuationBestResponseValue reward
         (quittingStoppingLawProfile reward (Function.update opponents pivot second)) pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   rw [← quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile,
     ← quittingStoppingLawCap_eq_continuationBestResponseValue_stoppingLawProfile]
   simp only [quittingStoppingLawReplacementPayoffCap, Function.update_idem]

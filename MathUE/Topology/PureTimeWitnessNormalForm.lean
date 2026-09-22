@@ -107,7 +107,7 @@ theorem exists_common_strictMono_hasNormalForm
     ∃ φ : ℕ → ℕ, StrictMono φ ∧
       ∀ index, HasNormalForm (q index ∘ φ) := by
   classical
-  letI := Fintype.ofFinite Index
+  let := Fintype.ofFinite Index
   rcases exists_common_strictMono_hasNormalForm_finset (univ : Finset Index) q with
     ⟨φ, hφ, hqφ⟩
   exact ⟨φ, hφ, fun index ↦ hqφ index (mem_univ index)⟩

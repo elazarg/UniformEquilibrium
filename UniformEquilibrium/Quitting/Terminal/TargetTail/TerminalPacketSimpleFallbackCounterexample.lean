@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
   Math.ProbabilityMassFunction
 
 namespace QuittingTerminalPacketSimpleFallbackCounterexample
@@ -523,7 +523,7 @@ def coin (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
       else ENNReal.ofReal (1 - p))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hp0 (by linarith)]
       norm_num)
 
@@ -644,7 +644,7 @@ theorem terminalPayoff_approximateRoot
     apply (div_eq_iff hscaledDen).2
     ring
   · rw [rootAbsorbingContribution_approximateRoot_true]
-    simp only [if_true]
+    simp only [ite_true]
     field_simp [hden, hden', hscaledDen]
 
 theorem unilateralCap_approximateRoot_false
@@ -708,7 +708,7 @@ theorem isεAsymptoticNash_approximateRoot
       exact le_add_of_nonneg_right (approximationError_nonneg a hapositive.le)
     · rw [unilateralCap_approximateRoot_true a ha1 hapositive,
         terminalPayoff_approximateRoot]
-      simp only [if_true]
+      simp only [ite_true]
       unfold approximationError
       have hden : a + 2 ≠ 0 := by nlinarith
       field_simp [hden]

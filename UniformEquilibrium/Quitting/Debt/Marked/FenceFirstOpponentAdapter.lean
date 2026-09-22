@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -148,9 +148,9 @@ theorem quittingFirstOpponentRawWeight_nonneg
   apply mul_nonneg
   · exact quittingOpponentSurvivalWeight_nonneg roots owner start mark.1
   · by_cases hflag : quittingOpponentQuitFlag owner mark.2 = true
-    · rw [if_pos hflag]
+    · rw [ite_eq_left hflag]
       exact ENNReal.toReal_nonneg
-    · rw [if_neg hflag]
+    · rw [ite_eq_right hflag]
 
 /-- The finite opponent-fence mass lies in `[0,1]`. -/
 theorem quittingFirstOpponentMass_nonneg
@@ -181,8 +181,8 @@ theorem opponentEventMass_mul_ownerReward
         quittingRootPayoff reward (0 : Payoff ι) action owner := by
   let distribution := pmfPi (Function.update root owner (PMF.pure false))
   by_cases hflag : quittingOpponentQuitFlag owner action = true
-  · rw [if_pos hflag]
-  · rw [if_neg hflag]
+  · rw [ite_eq_left hflag]
+  · rw [ite_eq_right hflag]
     by_cases hmass : (distribution action).toReal = 0
     · change 0 * quittingRootPayoff reward (0 : Payoff ι) action owner =
         (distribution action).toReal *
@@ -425,9 +425,9 @@ theorem quittingFirstOpponentOwnerReward_lower
   have hM := quittingRewardCoordinateBound_nonneg_of_player reward owner hreward
   unfold quittingFirstOpponentOwnerReward
   by_cases hquit : (quittingQuitters mark.2).Nonempty
-  · simp only [quittingRootPayoff, dif_pos hquit]
+  · simp only [quittingRootPayoff, dite_eq_left hquit]
     exact (abs_le.mp (hreward ⟨quittingQuitters mark.2, hquit⟩ owner)).1
-  · simp only [quittingRootPayoff, dif_neg hquit, Pi.zero_apply]
+  · simp only [quittingRootPayoff, dite_eq_right hquit, Pi.zero_apply]
     linarith
 
 /-- The raw owner moment is bounded below by `-M` times the actual fence

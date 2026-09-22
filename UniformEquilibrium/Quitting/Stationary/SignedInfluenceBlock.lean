@@ -122,7 +122,7 @@ private theorem isQuittingSureExitSet_of_switched_stable
         · exact (hmembership.2 hswitch).elim
         · exact hmembership.2
       have hg := hstable member
-      rw [if_neg hnotAction] at hg
+      rw [ite_eq_right hnotAction] at hg
       unfold binaryJoinGain quittingSwitchedSetPayoff at hg
       rw [quittingPolaritySwitch_insert_of_mem hswitch,
         quittingPolaritySwitch_erase_of_mem hswitch] at hg
@@ -132,7 +132,7 @@ private theorem isQuittingSureExitSet_of_switched_stable
         · exact hmembership.1
         · exact (hswitch hmembership.1).elim
       have hg := hstable member
-      rw [if_pos haction] at hg
+      rw [ite_eq_left haction] at hg
       unfold binaryJoinGain quittingSwitchedSetPayoff at hg
       rw [quittingPolaritySwitch_insert_of_notMem hswitch,
         quittingPolaritySwitch_erase_of_notMem hswitch] at hg
@@ -147,7 +147,7 @@ private theorem isQuittingSureExitSet_of_switched_stable
           ((mem_quittingPolaritySwitch (switched := switched)
             (actionOne := actionOne)).mpr (Or.inr ⟨hswitch, hnotAction⟩))
       have hg := hstable outsider
-      rw [if_pos haction] at hg
+      rw [ite_eq_left haction] at hg
       unfold binaryJoinGain quittingSwitchedSetPayoff at hg
       rw [quittingPolaritySwitch_insert_of_mem hswitch,
         quittingPolaritySwitch_erase_of_mem hswitch] at hg
@@ -158,7 +158,7 @@ private theorem isQuittingSureExitSet_of_switched_stable
           ((mem_quittingPolaritySwitch (switched := switched)
             (actionOne := actionOne)).mpr (Or.inl ⟨haction, hswitch⟩))
       have hg := hstable outsider
-      rw [if_neg hnotAction] at hg
+      rw [ite_eq_right hnotAction] at hg
       unfold binaryJoinGain quittingSwitchedSetPayoff at hg
       rw [quittingPolaritySwitch_insert_of_notMem hswitch,
         quittingPolaritySwitch_erase_of_notMem hswitch] at hg

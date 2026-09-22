@@ -66,21 +66,21 @@ def flatMargin : ZMod 5 → ℝ :=
     else 0
 
 @[simp] theorem flatMargin_zero : flatMargin 0 = 0 := by
-  rw [flatMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_neg (by decide)]
+  rw [flatMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_right (by decide)]
 
 @[simp] theorem flatMargin_one : flatMargin 1 = -1 := by
-  rw [flatMargin, if_pos rfl]
+  rw [flatMargin, ite_eq_left rfl]
 
 @[simp] theorem flatMargin_two : flatMargin 2 = 3 := by
-  rw [flatMargin, if_neg (by decide), if_pos rfl]
+  rw [flatMargin, ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem flatMargin_three : flatMargin 3 = 2 := by
-  rw [flatMargin, if_neg (by decide), if_neg (by decide), if_pos rfl]
+  rw [flatMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_left rfl]
 
 @[simp] theorem flatMargin_four : flatMargin 4 = -3 := by
-  rw [flatMargin, if_neg (by decide), if_neg (by decide), if_neg (by decide),
-    if_pos rfl]
+  rw [flatMargin, ite_eq_right (by decide), ite_eq_right (by decide), ite_eq_right (by decide),
+    ite_eq_left rfl]
 
 theorem sum_flatMargin : (∑ e : ZMod 5, flatMargin e) = 1 := by
   rw [show (∑ e : ZMod 5, flatMargin e) =
@@ -101,7 +101,7 @@ def flatJoin : ZMod 5 → ℝ := fun _ => -2
 
 @[simp] theorem flatReward_singleton (owner who : ZMod 5) :
     flatReward (quittingSingletonTerminal owner) who = 1 + flatMargin (owner - who) := by
-  rw [flatReward, if_pos (by simp [quittingSingletonTerminal])]
+  rw [flatReward, ite_eq_left (by simp [quittingSingletonTerminal])]
   simp [quittingSingletonTerminal]
 
 theorem flatReward_pair {owner who : ZMod 5} (hne : owner ≠ who) :
@@ -111,7 +111,7 @@ theorem flatReward_pair {owner who : ZMod 5} (hne : owner ≠ who) :
     revert hne
     revert owner who
     decide
-  rw [flatReward, if_neg hcard, if_pos (by simp), flatJoin]
+  rw [flatReward, ite_eq_right hcard, ite_eq_left (by simp), flatJoin]
   norm_num
 
 theorem isCirculantPairTable_flatReward :
@@ -146,7 +146,7 @@ theorem flatReward_ne_colliderReward :
   rw [← hcontra] at hcollider
   have hflat : flatReward ⟨{(0 : ZMod 5) - 1, 0},
       Finset.insert_nonempty ((0 : ZMod 5) - 1) {0}⟩ 0 = -1 := by
-    rw [flatReward, if_neg (by decide), if_pos (by decide)]
+    rw [flatReward, ite_eq_right (by decide), ite_eq_left (by decide)]
   rw [hflat] at hcollider
   norm_num at hcollider
 

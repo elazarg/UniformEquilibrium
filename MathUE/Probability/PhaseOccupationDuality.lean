@@ -37,7 +37,7 @@ namespace Math
 namespace Probability
 namespace PhaseOccupationDuality
 
-open Math Probability
+open _root_.Math Probability
 
 variable {S A K : Type*} [Fintype S] [Fintype A] {P : ℕ} [NeZero P]
 

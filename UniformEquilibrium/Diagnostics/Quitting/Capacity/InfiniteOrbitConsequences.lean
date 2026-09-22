@@ -46,7 +46,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

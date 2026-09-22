@@ -28,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourMaximalRootNegativeOrientation
 
-open Math.Probability QuittingSureSetOwnerRepair
+open _root_.Math.Probability QuittingSureSetOwnerRepair
 
 abbrev Player := Fin 4
 
@@ -161,7 +161,7 @@ private theorem terminalOutcomeMass_profile_some (quitters : Finset Player)
       have hnonempty := terminal.property
       rw [← heq] at hnonempty
       exact Finset.not_nonempty_empty hnonempty
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
     simpa [indicator, quittingSetReward] using hmoment
 
 def moverTerminal : {S : Finset Player // S.Nonempty} :=
@@ -206,7 +206,7 @@ theorem totalOpponentIncidence_R_observer_eq_zero :
   intro terminal _
   rw [show R = profile ∅ by rfl,
     terminalOutcomeMass_profile_some]
-  rw [if_neg]
+  rw [ite_eq_right]
   intro heq
   have hnonempty := terminal.property
   rw [← heq] at hnonempty

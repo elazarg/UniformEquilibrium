@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -134,7 +134,7 @@ theorem quittingPunishmentValue_le_finiteMinMaxDynamicDebtTail_of_nonpos
   have hterminal :
       (quittingFiniteMinMaxDynamicDebtTail reward cutoff cutoff).1.1 = 0 := by
     simp only [quittingFiniteMinMaxDynamicDebtTail,
-      quittingFiniteNashBellmanPathDynamicDebtPoint, dif_pos le_rfl]
+      quittingFiniteNashBellmanPathDynamicDebtPoint, dite_eq_left le_rfl]
     have hindex :
         (⟨cutoff, Nat.lt_succ_self cutoff⟩ : Fin (cutoff + 1)) =
           Fin.last cutoff := by
@@ -155,7 +155,7 @@ theorem quittingPunishmentValue_le_finiteMinMaxDynamicDebtTail_of_nonpos
         time htime who
   · unfold quittingFiniteMinMaxDynamicDebtTail
       quittingFiniteNashBellmanPathDynamicDebtPoint
-    rw [dif_neg htime]
+    rw [dite_eq_right htime]
     change quittingPunishmentValue reward who ≤
       (path (Fin.last cutoff)).1 who
     rw [congrFun hpath.2.1 who]

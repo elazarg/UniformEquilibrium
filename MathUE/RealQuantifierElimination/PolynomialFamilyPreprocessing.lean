@@ -13,7 +13,7 @@ geometry, and can reconstruct full sign rows in the original order.
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 
 /-- The specialized role of one polynomial column after coefficient trimming. -/
 inductive PolynomialClassification (n : Nat)

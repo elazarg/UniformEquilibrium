@@ -99,10 +99,10 @@ theorem alternatingValue_succ (time : ℕ) :
     alternatingValue (time + 1) = 1 - alternatingValue time := by
   unfold alternatingValue
   by_cases even : Even time
-  · rw [if_pos even, if_neg]
+  · rw [ite_eq_left even, ite_eq_right]
     · norm_num
     · exact Nat.not_even_iff_odd.mpr even.add_one
-  · rw [if_neg even, if_pos]
+  · rw [ite_eq_right even, ite_eq_left]
     · norm_num
     · exact Nat.even_add_one.mpr even
 
@@ -154,7 +154,12 @@ theorem value_mem_Icc (state : Fin 4) (time : ℕ) :
 theorem backwardHarmonic (state : Fin 4) (time : ℕ) :
     value state time = ∑ successor, matrix state successor * value successor (time + 1) := by
   have hsucc := alternatingValue_succ time
-  fin_cases state <;> simp [matrix, nextState, value] <;> linarith
+  have hsum (source : Fin 4) :
+      (∑ successor, matrix source successor * value successor (time + 1)) =
+        value (nextState source) (time + 1) := by
+    simp only [matrix, ite_mul, one_mul, zero_mul, Fintype.sum_ite_eq']
+  rw [hsum]
+  fin_cases state <;> simp [nextState, value] <;> linarith
 
 theorem pivot_exit_pos : 0 < 1 - matrix 0 0 := by
   simp [matrix, nextState, show (0 : Fin 4) ≠ 2 by decide]

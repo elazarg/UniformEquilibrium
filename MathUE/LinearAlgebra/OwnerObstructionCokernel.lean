@@ -128,6 +128,8 @@ open Math.LinearAlgebra.OwnerTypedDualLifting
 
 namespace Math
 namespace LinearAlgebra
+
+open Maths.LinearProgramming
 namespace OwnerObstructionCokernel
 
 noncomputable section

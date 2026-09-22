@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame
+open Filter _root_.Math.Probability StochasticGame
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

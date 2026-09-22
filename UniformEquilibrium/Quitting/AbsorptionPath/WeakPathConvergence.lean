@@ -241,14 +241,14 @@ theorem absorptionPathPayoff_tendsto_of_value_tendsto
       (nhds (1 - pathTotal limit.1 time)) :=
     tendsto_const_nhds.sub hcurrentTotal
   have hquotient := hnumerator.div hdenominator (by linarith)
-  rw [absorptionPathPayoff, if_pos htime, if_pos htotal]
+  rw [absorptionPathPayoff, ite_eq_left htime, ite_eq_left htotal]
   apply hquotient.congr'
   have heventualTotal : ∀ᶠ index in atTop,
       pathTotal (paths index).1 (times index) < 1 :=
     hcurrentTotal.eventually (Iio_mem_nhds htotal)
   filter_upwards [heventualTotal] with index hsourceTotal
-  simp only [absorptionPathPayoff, if_pos (htimes index),
-    if_pos hsourceTotal]
+  simp only [absorptionPathPayoff, ite_eq_left (htimes index),
+    ite_eq_left hsourceTotal]
   rfl
 
 /-- At every nonjump, nonterminal clock time, weak convergence of paths to a

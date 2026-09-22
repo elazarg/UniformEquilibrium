@@ -63,7 +63,7 @@ theorem IsCorePredecessorStep.isValid
   refine ⟨hcore.1, fun who ↦ ?_⟩
   by_cases hsupport : maskHasPlayer support who = true
   · have hcoreWho := hcore.2 who
-    simp only [hsupport, if_true] at hcoreWho ⊢
+    simp only [hsupport, ite_true] at hcoreWho ⊢
     exact ⟨(hactive who hsupport).1, (hactive who hsupport).2,
       hcoreWho⟩
   · have hsupportFalse : maskHasPlayer support who = false := by
@@ -176,7 +176,7 @@ theorem validAt_coreAt {chart : SelectedPredecessorChart}
   refine ⟨hvalid.1, fun who ↦ ?_⟩
   by_cases hsupport : maskHasPlayer chart.support who = true
   · have hvalidWho := hvalid.2 who
-    simp only [hsupport, if_true] at hvalidWho ⊢
+    simp only [hsupport, ite_true] at hvalidWho ⊢
     exact hvalidWho.2.2
   · have hvalidWho := hvalid.2 who
     simp only [hsupport] at hvalidWho ⊢

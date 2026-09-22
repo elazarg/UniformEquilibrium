@@ -19,7 +19,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MertensNeymanAccount
 
-open Filter Math.Probability Math.PMFProduct Topology
+open Filter _root_.Math.Probability Math.PMFProduct Topology
 
 theorem exists_accountControllerOnUnitInterval_bounded_beliefPotential_drift_of_puiseux
     {G : StochasticGame (Fin 2)}
@@ -165,7 +165,7 @@ theorem exists_accountControllerOnUnitInterval_bounded_beliefPotential_drift_of_
   have hpotentialLower : ∀ t (h : G.Hist t),
       lower - ε / 8 ≤ C.beliefPotential φ t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       lower - ε / 8 =
@@ -180,7 +180,7 @@ theorem exists_accountControllerOnUnitInterval_bounded_beliefPotential_drift_of_
   have hpotentialUpper : ∀ t (h : G.Hist t),
       C.beliefPotential φ t h ≤ lower + 1 := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       expect (C.belief t h) (φ t h) ≤
@@ -388,7 +388,7 @@ theorem exists_rowAccountController_bounded_beliefPotential_drift_of_puiseux
   have hpotentialLower : ∀ t (h : G.Hist t),
       -ε / 8 ≤ C.beliefPotential φ t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       -ε / 8 =
@@ -403,7 +403,7 @@ theorem exists_rowAccountController_bounded_beliefPotential_drift_of_puiseux
   have hpotentialUpper : ∀ t (h : G.Hist t),
       C.beliefPotential φ t h ≤ 1 := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       expect (C.belief t h) (φ t h) ≤
@@ -596,7 +596,7 @@ theorem exists_accountControllerOnUnitInterval_finiteAveragePayoff_ge_of_puiseux
   have haccountLower : ∀ t (h : G.Hist t),
       M ≤ C.beliefPotential A t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       M = expect (C.belief t h) (fun _ => M) := by
@@ -626,7 +626,7 @@ theorem exists_accountControllerOnUnitInterval_finiteAveragePayoff_ge_of_puiseux
         G.historyContinuationEU σ (C.beliefPotential φ) h -
           C.beliefPotential φ t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     have hrate :
         0 ≤ expect (C.belief t h) (fun k =>
           discountRate (accountAtLevel (1 + ε / 9) M
@@ -657,7 +657,7 @@ theorem exists_accountControllerOnUnitInterval_finiteAveragePayoff_ge_of_puiseux
   have hcorrected_le_value : ∀ t (h : G.Hist t),
       C.beliefPotential φ t h ≤ C.beliefPotential V t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     apply expect_mono
     intro k
@@ -869,7 +869,7 @@ theorem exists_rowAccountController_finiteAveragePayoff_ge_of_puiseux
   have haccountLower : ∀ t (h : G.Hist t),
       M ≤ C.beliefPotential A t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     calc
       M = expect (C.belief t h) (fun _ => M) := by
@@ -884,7 +884,8 @@ theorem exists_rowAccountController_finiteAveragePayoff_ge_of_puiseux
     unfold account expectedHistoryValue MemoryController.beliefPotential
     rw [G.histDist_zero, expect_pure]
     simp [C, A, MemoryController.belief,
-      accountMemoryController, accountLevelMemoryPotential]
+      accountMemoryController, accountMemoryControllerOnUnitInterval,
+      accountLevelMemoryPotential]
   have haccountT : M ≤ account T := by
     unfold account expectedHistoryValue
     calc
@@ -898,7 +899,7 @@ theorem exists_rowAccountController_finiteAveragePayoff_ge_of_puiseux
         G.historyContinuationEU σ (C.beliefPotential φ) h -
           C.beliefPotential φ t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     have hrate :
         0 ≤ expect (C.belief t h) (fun k =>
           discountRate (accountAtLevel (1 + ε / 9) M
@@ -929,7 +930,7 @@ theorem exists_rowAccountController_finiteAveragePayoff_ge_of_puiseux
   have hcorrected_le_value : ∀ t (h : G.Hist t),
       C.beliefPotential φ t h ≤ C.beliefPotential V t h := by
     intro t h
-    letI : Fintype (C.Mem t) := C.finiteMem t
+    let : Fintype (C.Mem t) := C.finiteMem t
     unfold MemoryController.beliefPotential
     apply expect_mono
     intro k
@@ -947,7 +948,8 @@ theorem exists_rowAccountController_finiteAveragePayoff_ge_of_puiseux
     unfold expectedHistoryValue MemoryController.beliefPotential
     rw [G.histDist_zero, expect_pure]
     simp [C, φ, MemoryController.belief,
-      accountMemoryController, rowAccountCorrectedMemoryPotential]
+      accountMemoryController, accountMemoryControllerOnUnitInterval,
+      rowAccountCorrectedMemoryPotential]
     simpa [emptyHist] using htarget s₀ M hSM
   have hnextValueLower : ∀ t,
       target s₀ - ε / 8 ≤ nextValue t := by

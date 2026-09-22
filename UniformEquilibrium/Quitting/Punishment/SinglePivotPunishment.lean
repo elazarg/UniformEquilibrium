@@ -115,10 +115,10 @@ theorem quittingSoloReward_sub_punishmentValue_singlePivotNormalized
   rw [quittingSoloReward_singlePivotNormalized reward pivot who hpivot.ne']
   by_cases hwho : who = pivot
   · subst who
-    rw [if_pos rfl, quittingSinglePivotOffset_self]
+    rw [ite_eq_left rfl, quittingSinglePivotOffset_self]
     field_simp [hpivot.ne']
     ring_nf
-  · rw [if_neg hwho, quittingSinglePivotOffset_of_ne reward hwho]
+  · rw [ite_eq_right hwho, quittingSinglePivotOffset_of_ne reward hwho]
     change 0 -
         (quittingPunishmentValue reward who - quittingSoloReward reward who who) /
           quittingSoloReward reward pivot pivot = _

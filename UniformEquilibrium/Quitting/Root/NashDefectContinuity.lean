@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -35,8 +35,8 @@ theorem continuous_quittingRootAbsorptionMass_simplex :
     quittingRootOfSimplex_apply_toReal]
   exact continuous_const.sub
     (continuous_finsetProd _ fun who _ =>
-      (continuous_apply false).comp
-        (continuous_subtype_val.comp (continuous_apply who)))
+      (Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+        (continuous_apply who))
 
 /-- One-coordinate Nash defect is jointly continuous in the tail and root. -/
 theorem continuous_quittingRootCoordinateNashDefect_simplex

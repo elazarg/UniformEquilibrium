@@ -40,7 +40,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Indicator of the unique stage cell at which `2 * g₁ + g₂` is below `2`:
 the state is live and the action is `(Bottom, Right)`. -/
@@ -77,7 +77,7 @@ theorem weightedStagePayoff_eq_two_sub_bottomRightIndicator
   have hrow := Bool.eq_false_or_eq_true (a false)
   have hcol := Bool.eq_false_or_eq_true (a true)
   cases s <;> rcases hrow with hrow | hrow <;> rcases hcol with hcol | hcol <;>
-    norm_num [bottomRightIndicator, payoff, pair, hrow, hcol] <;> simp
+    norm_num [bottomRightIndicator, payoff, pair, hrow, hcol]
 
 /-- The pathwise version of the accounting identity. -/
 theorem weightedTotalPayoff_eq_two_mul_sub_bottomRightCount

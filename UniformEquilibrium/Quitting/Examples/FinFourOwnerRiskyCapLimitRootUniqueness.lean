@@ -572,12 +572,9 @@ theorem pmfBool_eq_of_quitProbability_eq {first second : PMF Bool}
   apply Math.ProbabilityMassFunction.toVector_injective
   funext value
   cases value
-  · have hfirst := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex first).2
-    have hsecond := (Math.ProbabilityMassFunction.toVector_mem_stdSimplex second).2
-    rw [Fintype.sum_bool] at hfirst hsecond
-    have htrue : Math.ProbabilityMassFunction.toVector first true =
-      Math.ProbabilityMassFunction.toVector second true := hquit
-    linarith
+  · change (first false).toReal = (second false).toReal
+    rw [Math.PMFProduct.pmfBool_false_toReal,
+      Math.PMFProduct.pmfBool_false_toReal, hquit]
   · exact hquit
 
 /-- Every root is the product root of its own Quit rates. -/

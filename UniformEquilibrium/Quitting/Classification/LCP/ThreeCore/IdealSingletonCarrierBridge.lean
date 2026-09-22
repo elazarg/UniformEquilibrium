@@ -26,7 +26,7 @@ noncomputable section
 namespace GameTheory
 namespace IdealSingletonCarrierBridge
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair QuittingLCPClassification
 open IdealSingletonBlockApproximation
 open scoped Topology
@@ -334,7 +334,7 @@ theorem idealSingletonSemanticPair_debt_other
     idealSingletonClearance capClearance ownSingleton
     quittingProjectiveLCPMatrix
   dsimp only
-  rw [if_neg hne]
+  rw [ite_eq_right hne]
   rw [normalizedSoloMatrix_eq_projectiveLCPMatrix]
   unfold quittingProjectiveLCPMatrix
   by_cases hy : 0 ≤

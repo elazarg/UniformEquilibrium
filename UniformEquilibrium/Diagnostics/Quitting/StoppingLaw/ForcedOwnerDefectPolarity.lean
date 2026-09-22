@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -239,7 +239,7 @@ theorem exists_fixed_forcedOwnerRectangleOccupation
         (Fintype.card (ι × Bool) : ℝ) *
           quittingFiniteForcedOwnerRectangleOccupation reward profile terminal
             owner who action cutoff := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   let occupation : ι × Bool → ℝ := fun label =>
     quittingFiniteForcedOwnerRectangleOccupation reward profile terminal
       owner label.1 label.2 cutoff
@@ -484,7 +484,7 @@ theorem exists_continueDeviation_or_fixedQuitAtom_or_fixedRectangle_of_forcedOwn
       quittingFiniteActualDefectOccupation_eq_polaritySum reward profile cutoff
   rw [hpolarity] at hlowerHalf
   have hnonempty : Nonempty ι := ⟨owner⟩
-  letI : Nonempty ι := hnonempty
+  let : Nonempty ι := hnonempty
   by_cases hcontinue : lower / 6 ≤ continueCharge
   · left
     obtain ⟨who, deviation, hgain⟩ :=

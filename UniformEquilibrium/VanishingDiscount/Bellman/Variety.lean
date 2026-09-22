@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Equilibrium.Discounted.Fink
 import Mathlib.Algebra.MvPolynomial.Eval
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # The Bellman Variety: A Polynomial Presentation of Discounted Stationary Equilibria
@@ -107,7 +108,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} (G : StochasticGame ι)
   [Fintype G.State] [Fintype ι] [DecidableEq ι] [∀ i, Fintype (G.Act i)]
@@ -295,13 +296,13 @@ theorem eval_devContPoly {assign : BellmanVar G → ℝ} {x : G.StationaryMixedP
   rw [devContPoly, expect_eq_sum, map_sum]
   refine Finset.sum_congr rfl fun a _ => ?_
   by_cases hab : a i = b
-  · simp only [hab, if_true]
+  · simp only [hab, ite_true]
     rw [map_mul, MvPolynomial.eval_prod]
     simp only [MvPolynomial.eval_X, hx]
     rw [map_sum]
     simp only [MvPolynomial.eval_mul, MvPolynomial.eval_C, MvPolynomial.eval_X, hV]
     rw [pmfPi_apply_update_family]
-    simp only [PMF.pure_apply, hab, if_true, one_mul, ENNReal.toReal_prod]
+    simp only [PMF.pure_apply, hab, ite_true, one_mul, ENNReal.toReal_prod]
     rw [expect_eq_sum]
   · have hzero : pmfPi (Function.update (x s) i (PMF.pure b)) a = 0 := by
       rw [pmfPi_apply]
@@ -367,7 +368,9 @@ form a genuine point of the standard simplex, so `Math.
 ProbabilityMassFunction.ofVector` can turn them into a `PMF`. -/
 theorem mem_stdSimplex_of_isPolynomialBellmanSolution {assign : BellmanVar G → ℝ}
     (hSol : G.IsPolynomialBellmanSolution assign) (s : G.State) (i : ι) :
-    (fun a => assign (BellmanVar.mix s i a)) ∈ stdSimplex ℝ (G.Act i) := by
+    (fun a => assign (BellmanVar.mix s i a)) ∈
+      GameTheory.Math.Probability.simplexWeights (G.Act i) := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights]
   refine ⟨fun a => ?_, ?_⟩
   · have := hSol.2.1 s i a
     simpa [simplexNonnegPoly] using this
@@ -412,7 +415,7 @@ theorem discountedAuxEU_update_eq_expect_pure [Finite G.State] [∀ i, Finite (G
     (x : G.StationaryMixedProfile) (s : G.State) (who : ι) (d : PMF (G.Act who)) :
     G.discountedAuxEU β V s (Function.update (x s) who d) who =
       expect d (fun b => G.discountedAuxEU β V s (Function.update (x s) who (PMF.pure b)) who) := by
-  haveI : Finite (G.discountedAuxGame β V s).Outcome := inferInstanceAs (Finite G.JointAct)
+  have : Finite (G.discountedAuxGame β V s).Outcome := inferInstanceAs (Finite G.JointAct)
   have hstep := (G.discountedAuxGame β V s).mixedExtension_eu_update (x s) who d
   simp only [G.mixedExtension_eu_discountedAuxGame] at hstep
   exact hstep

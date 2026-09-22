@@ -46,7 +46,7 @@ open scoped NNReal
 namespace Math
 namespace ShapleyOperator
 
-open Math.Probability MinimaxLoomis
+open _root_.Math.Probability MinimaxLoomis
 
 /-- **`1`-Lipschitz dependence on the reward.**  Holding the transition
 kernel `q` fixed, the discounted value is `1`-Lipschitz in the payoff matrix

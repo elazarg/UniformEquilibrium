@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -167,6 +167,7 @@ theorem exists_negativeObserver_targetCompensation
     quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile
   have hsourceSimplex :=
     quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at htargetSimplex hsourceSimplex
   obtain ⟨outcome, houtcome, hcompensation⟩ :=
     exists_compensating_probability_coordinate
       targetMass sourceMass selected none (by simp)

@@ -42,7 +42,7 @@ def externalCubeLabelPrism
   rw [hinit]
   change (if (0 : Fin (resolution + 1)) = 0 then left.label vertex
     else right.label vertex) = left.label vertex
-  rw [if_pos rfl]
+  rw [ite_eq_left rfl]
 
 @[simp] theorem externalCubeLabelPrism_right_end
     {n resolution : ℕ} (hresolution : 0 < resolution)
@@ -66,7 +66,7 @@ def externalCubeLabelPrism
     omega
   change (if Fin.last resolution = 0 then left.label vertex
     else right.label vertex) = right.label vertex
-  rw [if_neg hlast]
+  rw [ite_eq_right hlast]
 
 /-- The generic finite prism immediately compares the signed endpoint face
 sums of the two external proper cube labels. -/

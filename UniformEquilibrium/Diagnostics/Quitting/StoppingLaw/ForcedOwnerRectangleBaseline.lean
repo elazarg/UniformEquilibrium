@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -198,7 +198,7 @@ theorem quittingFiniteForcedOwnerRectangleOccupation_le_sourceGain_add_faceLoss
   unfold quittingFiniteForcedOwnerRectangleOccupation
     quittingFinitePureActionSourceGainOccupation
     quittingFiniteForcedOwnerContinueFaceLossOccupation
-  simp only [if_neg hne.symm]
+  simp only [ite_eq_right hne.symm]
   rw [← Finset.sum_add_distrib]
   exact Finset.sum_le_sum fun time _ =>
     stageRectangleCharge_le_sourceGain_add_continueFaceLoss reward profile

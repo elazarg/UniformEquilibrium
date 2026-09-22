@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -55,19 +55,22 @@ def quittingStationaryTotalHazard (root : ι → PMF Bool) : ℝ :=
 /-- The normalized direction of a positive stationary hazard vector. -/
 def quittingStationaryHazardDirection (root : ι → PMF Bool)
     (hpositive : 0 < quittingStationaryTotalHazard root) :
-    stdSimplex ℝ ι := by
-  refine ⟨fun who ↦ (root who true).toReal /
-    quittingStationaryTotalHazard root, ?_, ?_⟩
+    Convexity.StdSimplex ℝ ι := by
+  refine ⟨Finsupp.equivFunOnFinite.symm (fun who ↦ (root who true).toReal /
+    quittingStationaryTotalHazard root), ?_, ?_⟩
   · intro who
-    positivity
-  · rw [← Finset.sum_div]
+    exact div_nonneg ENNReal.toReal_nonneg hpositive.le
+  · rw [Finsupp.sum_fintype _ _ (by simp)]
+    change (∑ who, (root who true).toReal /
+      quittingStationaryTotalHazard root) = 1
+    rw [← Finset.sum_div]
     exact div_self hpositive.ne'
 
 omit [DecidableEq ι] in
 @[simp] theorem quittingStationaryHazardDirection_apply
     (root : ι → PMF Bool)
     (hpositive : 0 < quittingStationaryTotalHazard root) (who : ι) :
-    (quittingStationaryHazardDirection root hpositive).val who =
+    (quittingStationaryHazardDirection root hpositive).weights who =
       (root who true).toReal / quittingStationaryTotalHazard root :=
   rfl
 
@@ -190,7 +193,7 @@ theorem abs_stationaryValue_sub_directionBarycenter_le
     intro i
     rw [hPsolo i]
     exact mul_le_of_le_one_right (hz0 i)
-      (Finset.prod_le_one (fun j hj ↦ by linarith [hz1 j])
+      (Finset.prod_le_one₀ (fun j hj ↦ by linarith [hz1 j])
         (fun j hj ↦ by linarith [hz0 j]))
   have hPsoloLow : ∀ i, hazard i * (1 - H) ≤ P (quittingSoloAction i true) := by
     intro i
@@ -272,7 +275,7 @@ theorem abs_stationaryValue_sub_directionBarycenter_le
     change quittingRootPayoff reward (0 : Payoff ι)
       quittingAllContinueAction who = 0
     unfold quittingRootPayoff
-    rw [dif_neg]
+    rw [dite_eq_right]
     · rfl
     · simp [quittingQuitters, quittingAllContinueAction]
   set A : ℝ := quittingRootAbsorbingContribution reward root who with hAdef

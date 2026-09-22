@@ -35,7 +35,7 @@ noncomputable section
 
 namespace Research.QuittingSingletonOccupationOrderObstruction
 
-open GameTheory Math.Probability Math.PMFProduct
+open GameTheory _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 abbrev Player := Fin 3

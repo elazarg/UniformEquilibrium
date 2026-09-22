@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -414,8 +414,8 @@ theorem quittingTesterFlowHazard_false
         flow.carry time / flow.live time := by
   by_cases hy : flow.live time = 0
   · simp [quittingTesterFlowHazard, hy]
-  · simp only [if_neg hy]
-    rw [quittingTesterFlowHazard, dif_neg hy,
+  · simp only [ite_eq_right hy]
+    rw [quittingTesterFlowHazard, dite_eq_right hy,
       Math.ProbabilityMassFunction.bernoulliBool_false_toReal]
     have hsplit := hflow.2.2.2.2.1 time
     field_simp [hy]
@@ -455,7 +455,7 @@ theorem quittingTesterHazardFlow_flowHazard
             have hk0 := hflow.2.2.2.1 time
             linarith
           simp [hy, hk]
-        · simp only [if_neg hy]
+        · simp only [ite_eq_right hy]
           field_simp
   apply QuittingTesterFlow.ext
   · funext time
@@ -475,7 +475,7 @@ theorem quittingTesterHazardFlow_flowHazard
         have hk0 := hflow.2.2.2.1 time
         linarith
       simp [hy, hs]
-    · simp only [if_neg hy]
+    · simp only [ite_eq_right hy]
       field_simp
   · funext time
     change
@@ -492,7 +492,7 @@ theorem quittingTesterHazardFlow_flowHazard
         have hk0 := hflow.2.2.2.1 time
         linarith
       simp [hy, hk]
-    · simp only [if_neg hy]
+    · simp only [ite_eq_right hy]
       field_simp
 
 theorem quittingFiniteRootPayoff_eq_sum_testerTerms

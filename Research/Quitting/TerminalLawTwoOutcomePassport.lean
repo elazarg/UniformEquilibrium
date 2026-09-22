@@ -29,6 +29,8 @@ behavior laws may still differ.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
 open Set StochasticGame
@@ -64,9 +66,11 @@ theorem sum_quittingTerminalCrossLawAtom
   let r := fun outcome : QuittingTerminalOutcome ι =>
     quittingTerminalOutcomeReward reward outcome observer
   have hp : ∑ outcome, p outcome = 1 :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward first).2
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward first)).2
   have hq : ∑ outcome, q outcome = 1 :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward second).2
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward second)).2
   rw [← quittingTerminalRewardMoment_outcomeMass reward first,
     ← quittingTerminalRewardMoment_outcomeMass reward second]
   change (∑ high, ∑ low, p high * q low * (r high - r low)) =
@@ -162,9 +166,11 @@ theorem positive_quittingTerminalCrossLawAtom_iff
   constructor
   · intro h
     have hp : 0 ≤ quittingTerminalOutcomeMass reward first high :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward first).1 high
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward first)).1 high
     have hq : 0 ≤ quittingTerminalOutcomeMass reward second low :=
-      (quittingTerminalOutcomeMass_mem_stdSimplex reward second).1 low
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex reward second)).1 low
     rcases h with h | h
     · exact ⟨pos_of_mul_pos_left h.1 hq, pos_of_mul_pos_right h.1 hp,
         sub_pos.mp h.2⟩
@@ -219,9 +225,11 @@ theorem quittingTerminalCrossLawAtom_le_two_mul_rewardBound_mul_mass
   let highReward := quittingTerminalOutcomeReward reward high observer
   let lowReward := quittingTerminalOutcomeReward reward low observer
   have hp : 0 ≤ p :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward first).1 high
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward first)).1 high
   have hq : 0 ≤ q :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward second).1 low
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward second)).1 low
   have hM : 0 ≤ quittingRewardBound reward :=
     quittingRewardBound_nonneg reward
   have hhigh : highReward ≤ quittingRewardBound reward := by

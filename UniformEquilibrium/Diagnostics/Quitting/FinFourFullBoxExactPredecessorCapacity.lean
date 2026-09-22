@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open scoped BigOperators
 
 /-- In a Fin4 game without a uniform-equilibrium payoff, every finite path in

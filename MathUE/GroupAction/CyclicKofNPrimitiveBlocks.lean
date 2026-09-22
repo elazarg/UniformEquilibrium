@@ -83,7 +83,7 @@ theorem initialBlock_entry_iff {n k : ℕ} [NeZero n]
     x ∈ initialBlock n k ∧ x - 1 ∉ initialBlock n k ↔ x = 0 := by
   have hnTwo : 1 < n := by omega
   have hk : k ≤ n := hkproper.le
-  letI : Fact (1 < n) := ⟨hnTwo⟩
+  let : Fact (1 < n) := ⟨hnTwo⟩
   constructor
   · rintro ⟨hx, hxprev⟩
     have hxval : x.val < k := (mem_initialBlock_iff hk x).mp hx
@@ -107,7 +107,7 @@ theorem initialBlock_entry_iff {n k : ℕ} [NeZero n]
       simpa using hkpos
     · intro hneg
       have hnegval : ((-1 : ZMod n).val) = n - 1 := by
-        letI : NeZero (1 : ZMod n) := ⟨one_ne_zero⟩
+        let : NeZero (1 : ZMod n) := ⟨one_ne_zero⟩
         rw [ZMod.val_neg_of_ne_zero, ZMod.val_one n]
       have hlt : (-1 : ZMod n).val < k :=
         (mem_initialBlock_iff hk (-1)).mp (by simpa using hneg)
@@ -183,10 +183,10 @@ exactly `N/d` and whose stabilizer size is exactly `d`. -/
 theorem exists_block_with_exact_admissible_collapse
     {K N d : ℕ} (hKpos : 0 < K) (hKN : K < N)
     (hdK : d ∣ K) (hdN : d ∣ N) :
-    letI : NeZero (N / d) :=
+    let : NeZero (N / d) :=
       ⟨(Nat.div_pos (Nat.le_of_dvd (hKpos.trans hKN) hdN)
         (Nat.pos_of_dvd_of_pos hdK hKpos)).ne'⟩
-    letI : NeZero d := ⟨(Nat.pos_of_dvd_of_pos hdK hKpos).ne'⟩
+    let : NeZero d := ⟨(Nat.pos_of_dvd_of_pos hdK hKpos).ne'⟩
     ∃ A : Finset (ZMod (N / d) × ZMod d),
       A.card = K ∧
       Fintype.card (ZMod (N / d) × ZMod d) = N ∧
@@ -204,8 +204,8 @@ theorem exists_block_with_exact_admissible_collapse
     have hmul := Nat.mul_le_mul_right d hle
     rw [Nat.div_mul_cancel hdN, Nat.div_mul_cancel hdK] at hmul
     exact (Nat.not_le_of_lt hKN) hmul
-  letI : NeZero (N / d) := ⟨hnpos.ne'⟩
-  letI : NeZero d := ⟨hdpos.ne'⟩
+  let : NeZero (N / d) := ⟨hnpos.ne'⟩
+  let : NeZero d := ⟨hdpos.ne'⟩
   obtain ⟨A, hcard, hpopulation, hperiod, hstabilizer⟩ :=
     exists_factored_block_with_exact_collapse
       (n := N / d) (k := K / d) (d := d) hkpos hkproper

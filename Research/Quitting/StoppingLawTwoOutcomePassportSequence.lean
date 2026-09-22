@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -370,9 +370,9 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
     let pairAt : ℕ →
         QuittingTerminalOutcome ι × QuittingTerminalOutcome ι :=
       fun n => (highAt n, lowAt n)
-    letI : TopologicalSpace
+    let : TopologicalSpace
         (QuittingTerminalOutcome ι × QuittingTerminalOutcome ι) := ⊥
-    letI : DiscreteTopology
+    let : DiscreteTopology
         (QuittingTerminalOutcome ι × QuittingTerminalOutcome ι) :=
       discreteTopology_bot _
     obtain ⟨pair, pairSubseq, hpairSubseq, hpairTendsto⟩ :=
@@ -422,9 +422,9 @@ theorem exists_prescribedPassportSequence_or_vanishingDebtPassportSequence
     let pairAt : ℕ →
         QuittingTerminalOutcome ι × QuittingTerminalOutcome ι :=
       fun n => (highAt n, lowAt n)
-    letI : TopologicalSpace
+    let : TopologicalSpace
         (QuittingTerminalOutcome ι × QuittingTerminalOutcome ι) := ⊥
-    letI : DiscreteTopology
+    let : DiscreteTopology
         (QuittingTerminalOutcome ι × QuittingTerminalOutcome ι) :=
       discreteTopology_bot _
     obtain ⟨pair, pairSubseq, hpairSubseq, hpairTendsto⟩ :=

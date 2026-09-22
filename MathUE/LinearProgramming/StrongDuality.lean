@@ -246,7 +246,7 @@ theorem exists_minPrimalOptimal_of_feasible_of_bounded [Finite Row]
     ∃ x, MinPrimalFeasible A b x ∧
       ∀ z, MinPrimalFeasible A b z →
         minPrimalValue c x ≤ minPrimalValue c z := by
-  letI := Fintype.ofFinite Row
+  let := Fintype.ofFinite Row
   let values : Set ℝ :=
     {value | ∃ x, MinPrimalFeasible A b x ∧
       minPrimalValue c x = value}

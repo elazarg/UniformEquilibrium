@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set Topology
+open Filter _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 

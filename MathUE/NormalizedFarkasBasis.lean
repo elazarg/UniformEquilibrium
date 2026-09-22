@@ -194,7 +194,7 @@ theorem exists_fixed_eventual_feasible_analytic_quotient_eq
   obtain ⟨x, hxGood, i₀, hi₀⟩ := (hgood.and hcover).exists
   have hGoodNonempty : Nonempty {i : I // Good i} := by
     refine ⟨⟨i₀, (hxGood i₀).mp ⟨hi₀.1, hi₀.2.1⟩⟩⟩
-  letI : Nonempty {i : I // Good i} := hGoodNonempty
+  let : Nonempty {i : I // Good i} := hGoodNonempty
   have hcoverGood :
       ∀ᶠ y in nhdsWithin x₀ (Set.Ioi x₀),
         ∃ i : {i : I // Good i},
@@ -251,7 +251,7 @@ theorem isClosed_standardFeasibleSet
       (⋂ j, {z : Col → ℝ | 0 ≤ z j}) ∩
         ⋂ i, {z : Col → ℝ | Matrix.mulVec A z i = rhs i} by
     ext z
-    simp only [standardFeasibleSet, Set.mem_setOf_eq, Set.mem_inter_iff,
+    simp only [standardFeasibleSet, Set.mem_ofPred_eq, Set.mem_inter_iff,
       Set.mem_iInter]
     constructor
     · rintro ⟨hz, heq⟩
@@ -417,9 +417,9 @@ theorem eq_zero_of_extreme_standardFeasible
   by_contra hd_ne
   have hCol : Nonempty Col := by
     by_contra h
-    haveI : IsEmpty Col := not_nonempty_iff.mp h
+    have : IsEmpty Col := not_nonempty_iff.mp h
     exact hd_ne (Subsingleton.elim d 0)
-  letI := hCol
+  let := hCol
   obtain ⟨hz_nonnegative, hz_equation⟩ := extremePoints_subset hz
   have hbound_pos :
       ∀ j : Col,
@@ -453,7 +453,7 @@ theorem eq_zero_of_extreme_standardFeasible
     · rw [hzj, hd_supp j hzj]
       simp
     · have hbound := hε_le j
-      simp only [hzj, if_false] at hbound
+      simp only [hzj, ite_false] at hbound
       have hdenom_pos : (0 : ℝ) < |d j| + 1 := by positivity
       have hfull :
           ε * (|d j| + 1) ≤ z j :=
@@ -531,7 +531,7 @@ theorem linearIndependent_supportColumns_of_extreme_standardFeasible
       apply i.property
       rw [← hki]
       exact hk
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
     simp
   have hd_kernel : Matrix.mulVec A d = 0 := by
     have hcombination :
@@ -571,7 +571,7 @@ theorem linearIndependent_supportColumns_of_extreme_standardFeasible
         intro heq
         apply hkj
         exact Subtype.ext heq.symm
-      rw [if_neg hne]
+      rw [ite_eq_right hne]
       simp
     · simp
   rw [hd_eval] at hj
@@ -781,9 +781,9 @@ theorem supportCramerVector_eq_of_extreme
     supportCramerVector A rhs (positiveSupport z) = z := by
   funext j
   by_cases hj : j ∈ positiveSupport z
-  · rw [supportCramerVector, dif_pos hj]
+  · rw [supportCramerVector, dite_eq_left hj]
     exact supportCramerCoordinate_eq_of_extreme A rhs hz ⟨j, hj⟩
-  · rw [supportCramerVector, dif_neg hj]
+  · rw [supportCramerVector, dite_eq_right hj]
     have hzj : z j = 0 := by
       simpa [positiveSupport] using hj
     exact hzj.symm
@@ -1099,9 +1099,9 @@ theorem supportCramer_feasible_iff_atoms
     · intro j
       by_cases hj : j ∈ support
       · have hcoord := hnonnegative j
-        simp only [supportCramerVector, dif_pos hj,
+        simp only [supportCramerVector, dite_eq_left hj,
           supportCramerCoordinate] at hcoord
-        rw [supportCoordinateNumerator, dif_pos hj]
+        rw [supportCoordinateNumerator, dite_eq_left hj]
         exact (cramerBasisCoordinate_nonneg_iff
           (fun _ => supportGram A support)
           (fun _ => supportGramRhs A rhs support)
@@ -1141,8 +1141,8 @@ theorem supportCramer_feasible_iff_atoms
     · intro j
       by_cases hj : j ∈ support
       · have hcoord := hnonnegative j
-        rw [supportCoordinateNumerator, dif_pos hj] at hcoord
-        simp only [supportCramerVector, dif_pos hj,
+        rw [supportCoordinateNumerator, dite_eq_left hj] at hcoord
+        simp only [supportCramerVector, dite_eq_left hj,
           supportCramerCoordinate]
         exact (cramerBasisCoordinate_nonneg_iff
           (fun _ => supportGram A support)
@@ -1310,7 +1310,7 @@ theorem analyticAt_parametricSupportCoordinateNumerator
             (supportGram (A x) support).det
         else 0) x₀
   by_cases hj : j ∈ support
-  · simp only [dif_pos hj]
+  · simp only [dite_eq_left hj]
     exact
       (analyticAt_matrix_cramer_apply
         (fun x => supportGram (A x) support)
@@ -1320,7 +1320,7 @@ theorem analyticAt_parametricSupportCoordinateNumerator
           A rhs support hA hrhs) ⟨j, hj⟩).mul
         (analyticAt_parametricSupportDeterminant
           A support hA)
-  · simp only [dif_neg hj]
+  · simp only [dite_eq_right hj]
     exact
         (analyticAt_const :
           AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) x₀)
@@ -1383,7 +1383,7 @@ theorem analytic_normalizedFarkas_feasibility_eventually_stabilizes
         ¬(normalizedFarkasCertificateSet
           (balance x) (mass x)).Nonempty := by
   classical
-  letI : Fintype Row := Fintype.ofFinite Row
+  let : Fintype Row := Fintype.ofFinite Row
   let A : ℝ → Matrix (Sum Row Unit) Col ℝ := fun x =>
     normalizedFarkasMatrix (balance x) (mass x)
   let rhs : ℝ → Sum Row Unit → ℝ := fun _ =>
@@ -1985,8 +1985,8 @@ theorem exists_analytic_scaled_supportCramerVector
           (analyticAt_parametricSupportGram_entry A support hA)
           (analyticAt_parametricSupportGramRhs
             A rhs support hA hrhs) ⟨j, hj⟩
-      simpa only [dif_pos hj] using hcoordinate
-    · simpa only [dif_neg hj] using
+      simpa only [dite_eq_left hj] using hcoordinate
+    · simpa only [dite_eq_right hj] using
         (analyticAt_const :
           AnalyticAt ℝ (fun _ : ℝ => (0 : ℝ)) x₀)
   have hscaled : AnalyticAt ℝ scaled x₀ := by
@@ -2011,7 +2011,7 @@ theorem exists_analytic_scaled_supportCramerVector
             (x - x₀) ^ poleOrder * denFactor x := by
         simpa [den, poleOrder, smul_eq_mul] using hxfactor
       rw [hdetEq, hxpow, zero_mul]
-    simp only [Pi.smul_apply, supportCramerVector, dif_pos hj,
+    simp only [Pi.smul_apply, supportCramerVector, dite_eq_left hj,
       supportCramerCoordinate, scaled, numerator, smul_eq_mul]
     rw [show (supportGram (A x) support).det =
         (x - x₀) ^ poleOrder * denFactor x by

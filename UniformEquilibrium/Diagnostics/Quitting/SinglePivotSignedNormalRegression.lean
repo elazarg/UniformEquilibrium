@@ -6,7 +6,7 @@ noncomputable section
 namespace GameTheory
 namespace SinglePivotSignedNormalRegression
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 def reward : {S : Finset Bool // S.Nonempty} → Payoff Bool := fun terminal who =>
   if who then
@@ -50,7 +50,7 @@ theorem pivot_punishment_eq_one : quittingPunishmentValue reward false = 1 := by
           · rfl
         have hquit : (quittingQuitters action).Nonempty :=
           (quittingQuitters_nonempty_iff action).2 ⟨false, hfalse⟩
-        rw [quittingRootPayoff, dif_pos hquit]
+        rw [quittingRootPayoff, dite_eq_left hquit]
         simp [reward, quittingQuitters, hfalse]
 
 theorem other_joinAntitone : QuittingOwnerJoinAntitone reward true := by

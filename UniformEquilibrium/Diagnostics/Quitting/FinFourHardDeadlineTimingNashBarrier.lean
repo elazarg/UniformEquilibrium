@@ -23,7 +23,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourHardDeadlineTimingNashBarrier
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 abbrev Player := Fin 4
 
@@ -436,7 +436,7 @@ theorem valueAfter_succ_eq_successor (dates : ℕ) :
           quittingRootQuitPayoff reward (valueAfter dates)
             (rootBefore dates) 0 by linarith]
     rw [max_self, rootBefore_quitPayoff_zero]
-    simp only [valueAfter, if_pos]
+    simp only [valueAfter, ite_eq_left]
     rw [oneHazard_eq_indifference, zeroValue_succ]
     have hden : 0 < 3 / 2 - zeroValue dates := by
       have := zeroValue_lt_half dates
@@ -515,8 +515,8 @@ theorem hardDeadlineValue_policy (deadline time : ℕ)
   have hnext : time + 1 ≤ deadline := by omega
   have hsub : deadline - time = (deadline - time - 1) + 1 := by omega
   have hnextSub : deadline - (time + 1) = deadline - time - 1 := by omega
-  simp only [hardDeadlineValue, if_pos htime.le, if_pos hnext,
-    hardDeadlineRoots, if_pos htime]
+  simp only [hardDeadlineValue, ite_eq_left htime.le, ite_eq_left hnext,
+    hardDeadlineRoots, ite_eq_left htime]
   rw [hsub, hnextSub]
   exact valueAfter_succ_eq_successor (deadline - time - 1)
 
@@ -526,7 +526,7 @@ theorem hardDeadlineRoots_isZeroNash (deadline time : ℕ)
       (hardDeadlineRoots deadline time) := by
   have hnext : time + 1 ≤ deadline := by omega
   have hnextSub : deadline - (time + 1) = deadline - time - 1 := by omega
-  simp only [hardDeadlineValue, if_pos hnext, hardDeadlineRoots, if_pos htime]
+  simp only [hardDeadlineValue, ite_eq_left hnext, hardDeadlineRoots, ite_eq_left htime]
   rw [hnextSub]
   exact rootBefore_isZeroNash (deadline - time - 1)
 
@@ -571,8 +571,8 @@ private theorem finiteExactNash_some_le_value
       unfold quittingRootSequencePureTimeTerminalValue
       rw [quittingRootSequenceHazardTerminalValue_eq_hazardBellman,
         quittingPureTimeHazard_some_of_ne hne]
-      simp only [PMF.pure_apply, if_neg (by decide : (true : Bool) ≠ false),
-        ENNReal.toReal_zero, if_true, ENNReal.toReal_one, zero_mul, one_mul]
+      simp only [PMF.pure_apply, ite_eq_right (by decide : (true : Bool) ≠ false),
+        ENNReal.toReal_zero, ite_true, ENNReal.toReal_one, zero_mul, one_mul]
       have htail := ih (start + 1) (by omega)
       have hidx : start + (fuel + 1) = start + 1 + fuel := by omega
       have htail' : quittingRootSequenceHazardTerminalValue reward roots who
@@ -690,11 +690,11 @@ theorem hardDeadlineRoots_succ_shift (deadline time : ℕ) :
       hardDeadlineRoots deadline time := by
   unfold hardDeadlineRoots
   by_cases htime : time < deadline
-  · simp only [if_pos (by omega : time + 1 < deadline + 1), if_pos htime]
+  · simp only [ite_eq_left (by omega : time + 1 < deadline + 1), ite_eq_left htime]
     apply congrArg rootBefore
     omega
   · have hle : deadline ≤ time := Nat.le_of_not_gt htime
-    simp only [if_neg (by omega : ¬ time + 1 < deadline + 1), if_neg htime]
+    simp only [ite_eq_right (by omega : ¬ time + 1 < deadline + 1), ite_eq_right htime]
 
 theorem hardDeadlineOpponentSurvival_zero (deadline : ℕ) :
     quittingOpponentSurvivalWeight (hardDeadlineRoots deadline) 0 0 deadline =
@@ -743,8 +743,8 @@ theorem hardDeadlineRoot_continuePayoff_zero_eq_value
   have hnext : time + 1 ≤ deadline := by omega
   have hsub : deadline - time = (deadline - time - 1) + 1 := by omega
   have hnextSub : deadline - (time + 1) = deadline - time - 1 := by omega
-  simp only [hardDeadlineValue, if_pos hnext, if_pos htime.le,
-    hardDeadlineRoots, if_pos htime]
+  simp only [hardDeadlineValue, ite_eq_left hnext, ite_eq_left htime.le,
+    hardDeadlineRoots, ite_eq_left htime]
   rw [hnextSub]
   conv_rhs => rw [hsub]
   have hdiff := rootBefore_endpointDifference_zero (deadline - time - 1)
@@ -958,7 +958,6 @@ theorem tendsto_hardDeadlineDebt_succ_quarter :
       Filter.atTop (nhds (1 / 4 : ℝ)) := tendsto_const_nhds
   have hlimit := hconst.div hden (by norm_num : (1 : ℝ) ≠ 0)
   convert hlimit using 1
-  · rfl
   · norm_num
 
 /-- Consequently the semantic exploitability of the explicit Nash family
@@ -1053,7 +1052,7 @@ theorem uniformSoloTailRoots_opponentSurvival_one
         (uniformSoloTailRoots length)
         (uniformSoloTailRoots_solo length phase) (by norm_num : (1 : Player) ≠ 0)]
       rw [uniformSoloTailRoots_zero_false_toReal]
-      simp only [uniformFiniteHazard, if_pos hphaseLt]
+      simp only [uniformFiniteHazard, ite_eq_left hphaseLt]
       rw [hsubSucc, Nat.cast_sub (by omega : 1 ≤ length - phase), Nat.cast_one,
         hcastSub]
       field_simp [show (length : ℝ) ≠ 0 by exact_mod_cast ne_of_gt hlength,
@@ -1134,7 +1133,7 @@ theorem uniformSoloTailPureTimeValue_one_eq
   rw [uniformSoloTailRoots_opponentSurvival_one length phase hlength hphase.le,
     uniformSoloTailRoots_zero_false_toReal,
     uniformSoloTailRoots_zero_true_toReal]
-  simp only [uniformFiniteHazard, if_pos hphase]
+  simp only [uniformFiniteHazard, ite_eq_left hphase]
   simp [quittingSoloReward, quittingSingletonCollisionReward, reward]
   have hlengthNe : (length : ℝ) ≠ 0 := by
     exact_mod_cast ne_of_gt hlength
@@ -1319,7 +1318,7 @@ theorem comparisonProfile_bestResponse
       comparisonRoot_continuePayoff_one]
     simp only [Function.update_self,
       uniformSoloTailProfile_bestResponse_one length hlength,
-      if_pos]
+      ite_eq_left]
     have herror : (0 : ℝ) ≤ 1 / length := by positivity
     rw [max_eq_right]
     linarith
@@ -1360,8 +1359,8 @@ theorem comparisonProfile_exploitability
         (1 : ℝ) / length
     rw [comparisonProfile_debt length hlength who]
     by_cases hwho : who = 1
-    · rw [if_pos hwho, max_eq_right herror]
-    · rw [if_neg hwho]
+    · rw [ite_eq_left hwho, max_eq_right herror]
+    · rw [ite_eq_right hwho]
       simpa only [max_self] using herror
   · have hmax := QuittingBoundaryHolonomy.le_finitePlayerMax
       (fun who : Player ↦ max 0 (quittingTerminalSemanticDebt
@@ -1373,7 +1372,7 @@ theorem comparisonProfile_exploitability
     rw [show quittingTerminalSemanticDebt
         (quittingTerminalSemanticPair reward (comparisonProfile length)) 1 =
           quittingTerminalDeviationDebt reward (comparisonProfile length) 1 by rfl,
-      comparisonProfile_debt length hlength 1, if_pos rfl,
+      comparisonProfile_debt length hlength 1, ite_eq_left rfl,
       max_eq_right herror] at hmax
     exact hmax
 
@@ -1418,9 +1417,9 @@ theorem comparisonProfile_isTerminalNash
   have hdebt := comparisonProfile_debt length hlength who
   unfold quittingTerminalDeviationDebt at hdebt
   by_cases hwho : who = 1
-  · rw [if_pos hwho] at hdebt
+  · rw [ite_eq_left hwho] at hdebt
     linarith
-  · rw [if_neg hwho] at hdebt
+  · rw [ite_eq_right hwho] at hdebt
     have herror : (0 : ℝ) ≤ 1 / length := by positivity
     linarith
 

@@ -44,15 +44,20 @@ theorem exists_negative_residual_outside_pair_of_noHomogeneous
   have hweightSum : ∑ who, weight who = 1 := by
     simp only [weight, Finset.sum_add_distrib, Fintype.sum_pi_single']
     exact hweight
-  let simplex : stdSimplex ℝ ι :=
-    ⟨weight, hweightNonneg, hweightSum⟩
+  let simplex : Convexity.StdSimplex ℝ ι := by
+    refine ⟨Finsupp.equivFunOnFinite.symm weight, ?_, ?_⟩
+    · intro who
+      exact hweightNonneg who
+    · rw [Finsupp.sum_fintype _ _ (by simp)]
+      change ∑ who, weight who = 1
+      exact hweightSum
   have hresidual (who : ι) : singletonLCPResidual matrix simplex who =
       matrix who first * firstWeight + matrix who second * secondWeight := by
     change (∑ x, weight x * matrix who x) = _
     dsimp only [weight]
     simp_rw [add_mul]
     simp only [Finset.sum_add_distrib, Pi.single_apply, ite_mul, zero_mul,
-      Finset.sum_ite_eq', Finset.mem_univ, if_true]
+      Finset.sum_ite_eq', Finset.mem_univ, ite_true]
     ring
   refine ⟨simplex, ?_, ?_⟩
   · intro who

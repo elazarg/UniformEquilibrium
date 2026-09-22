@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.PMFProduct Math.Probability
+open Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -73,7 +73,7 @@ theorem pow_card_sub_one_le_one_sub_opponentAbsorptionMass
       ∏ player ∈ others, (root player false).toReal := by
     have hproduct' : (∏ _player ∈ others, d) ≤
         ∏ player ∈ others, (root player false).toReal :=
-      Finset.prod_le_prod (fun _ _ ↦ hd) fun player _ ↦ hcontinue player
+      Finset.prod_le_prod₀ (fun _ _ ↦ hd) fun player _ ↦ hcontinue player
     simpa using hproduct'
   rw [quittingRootOpponentAbsorptionMass_eq_one_sub_prod]
   have hcoordinate : ∀ player,

@@ -8,27 +8,27 @@ namespace Math.LinearProgramming
 
 variable {I : Type} [Fintype I] [DecidableEq I]
 
-def negativeColumns (M : Matrix I I ℝ) (i : I) : Finset I :=
+def negativeColumns (M : I → I → ℝ) (i : I) : Finset I :=
   Finset.univ.filter fun j ↦ M i j < 0
 
-def negativeRowSum (M : Matrix I I ℝ) (i : I) : ℝ :=
+def negativeRowSum (M : I → I → ℝ) (i : I) : ℝ :=
   ∑ j ∈ negativeColumns M i, M i j
 
-def negativeRowSquareSum (M : Matrix I I ℝ) (i : I) : ℝ :=
+def negativeRowSquareSum (M : I → I → ℝ) (i : I) : ℝ :=
   ∑ j ∈ negativeColumns M i, (M i j) ^ 2
 
 /-- The squared sum divided by the sum of squares of negative entries is
 the same in every row, expressed without division to include zero rows. -/
-def HasUniformNegativeRowShape (M : Matrix I I ℝ) : Prop :=
+def HasUniformNegativeRowShape (M : I → I → ℝ) : Prop :=
   ∀ i k, (negativeRowSum M i) ^ 2 * negativeRowSquareSum M k =
     (negativeRowSum M k) ^ 2 * negativeRowSquareSum M i
 
-def positiveRowScale (scale : I → ℝ) (M : Matrix I I ℝ) : Matrix I I ℝ :=
+def positiveRowScale (scale : I → ℝ) (M : I → I → ℝ) : I → I → ℝ :=
   fun i j ↦ scale i * M i j
 
 omit [DecidableEq I] in
 theorem negativeColumns_positiveRowScale (scale : I → ℝ)
-    (M : Matrix I I ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
+    (M : I → I → ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
     negativeColumns (positiveRowScale scale M) i = negativeColumns M i := by
   ext j
   simp [negativeColumns, positiveRowScale, mul_neg_iff, hscale i,
@@ -36,7 +36,7 @@ theorem negativeColumns_positiveRowScale (scale : I → ℝ)
 
 omit [DecidableEq I] in
 theorem negativeRowSum_positiveRowScale (scale : I → ℝ)
-    (M : Matrix I I ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
+    (M : I → I → ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
     negativeRowSum (positiveRowScale scale M) i =
       scale i * negativeRowSum M i := by
   rw [negativeRowSum, negativeColumns_positiveRowScale scale M hscale]
@@ -44,7 +44,7 @@ theorem negativeRowSum_positiveRowScale (scale : I → ℝ)
 
 omit [DecidableEq I] in
 theorem negativeRowSquareSum_positiveRowScale (scale : I → ℝ)
-    (M : Matrix I I ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
+    (M : I → I → ℝ) (hscale : ∀ i, 0 < scale i) (i : I) :
     negativeRowSquareSum (positiveRowScale scale M) i =
       (scale i) ^ 2 * negativeRowSquareSum M i := by
   rw [negativeRowSquareSum, negativeColumns_positiveRowScale scale M hscale]
@@ -55,7 +55,7 @@ theorem negativeRowSquareSum_positiveRowScale (scale : I → ℝ)
 
 omit [DecidableEq I] in
 theorem hasUniformNegativeRowShape_positiveRowScale_iff
-    (scale : I → ℝ) (M : Matrix I I ℝ) (hscale : ∀ i, 0 < scale i) :
+    (scale : I → ℝ) (M : I → I → ℝ) (hscale : ∀ i, 0 < scale i) :
     HasUniformNegativeRowShape (positiveRowScale scale M) ↔
       HasUniformNegativeRowShape M := by
   simp only [HasUniformNegativeRowShape,
@@ -80,19 +80,19 @@ theorem hasUniformNegativeRowShape_positiveRowScale_iff
           ((scale i) ^ 2 * negativeRowSquareSum M i) := by ring
 
 omit [DecidableEq I] in
-theorem negativeRowSum_eq_sum_ite (M : Matrix I I ℝ) (i : I) :
+theorem negativeRowSum_eq_sum_ite (M : I → I → ℝ) (i : I) :
     negativeRowSum M i = ∑ j, if M i j < 0 then M i j else 0 := by
   simp [negativeRowSum, negativeColumns, Finset.sum_filter]
 
 omit [DecidableEq I] in
-theorem negativeRowSquareSum_eq_sum_ite (M : Matrix I I ℝ) (i : I) :
+theorem negativeRowSquareSum_eq_sum_ite (M : I → I → ℝ) (i : I) :
     negativeRowSquareSum M i = ∑ j, if M i j < 0 then (M i j) ^ 2 else 0 := by
   simp [negativeRowSquareSum, negativeColumns, Finset.sum_filter]
 
 variable {K : Type} [Fintype K]
 
 omit [DecidableEq I] in
-theorem negativeRowSum_reindexMatrix (e : I ≃ K) (M : Matrix I I ℝ) (i : K) :
+theorem negativeRowSum_reindexMatrix (e : I ≃ K) (M : I → I → ℝ) (i : K) :
     negativeRowSum (reindexMatrix e M) i = negativeRowSum M (e.symm i) := by
   rw [negativeRowSum_eq_sum_ite, negativeRowSum_eq_sum_ite]
   change (∑ j : K, if M (e.symm i) (e.symm j) < 0 then
@@ -102,7 +102,7 @@ theorem negativeRowSum_reindexMatrix (e : I ≃ K) (M : Matrix I I ℝ) (i : K) 
 
 omit [DecidableEq I] in
 theorem negativeRowSquareSum_reindexMatrix
-    (e : I ≃ K) (M : Matrix I I ℝ) (i : K) :
+    (e : I ≃ K) (M : I → I → ℝ) (i : K) :
     negativeRowSquareSum (reindexMatrix e M) i =
       negativeRowSquareSum M (e.symm i) := by
   rw [negativeRowSquareSum_eq_sum_ite, negativeRowSquareSum_eq_sum_ite]
@@ -113,7 +113,7 @@ theorem negativeRowSquareSum_reindexMatrix
 
 omit [DecidableEq I] in
 theorem hasUniformNegativeRowShape_reindexMatrix_iff
-    (e : I ≃ K) (M : Matrix I I ℝ) :
+    (e : I ≃ K) (M : I → I → ℝ) :
     HasUniformNegativeRowShape (reindexMatrix e M) ↔
       HasUniformNegativeRowShape M := by
   constructor
@@ -135,6 +135,7 @@ theorem negativeRowSum_rowCirculant (m : I → ℝ) (i : I) :
   apply Fintype.sum_equiv (Equiv.subRight i)
   intro j
   simp [rowCirculant]
+  by_cases h : m (j - i) < 0 <;> simp only [h]
 
 omit [DecidableEq I] in
 theorem negativeRowSquareSum_rowCirculant (m : I → ℝ) (i : I) :
@@ -144,6 +145,7 @@ theorem negativeRowSquareSum_rowCirculant (m : I → ℝ) (i : I) :
   apply Fintype.sum_equiv (Equiv.subRight i)
   intro j
   simp [rowCirculant]
+  by_cases h : m (j - i) < 0 <;> simp only [h]
 
 omit [DecidableEq I] in
 theorem hasUniformNegativeRowShape_rowCirculant (m : I → ℝ) :
@@ -155,13 +157,13 @@ theorem hasUniformNegativeRowShape_rowCirculant (m : I → ℝ) :
 
 /-- A simultaneous row/column relabeling followed by positive row scaling
 makes the matrix circulant with respect to the given additive indexing. -/
-def IsPositiveRowScaledRelabelingRowCirculant (M : Matrix I I ℝ) : Prop :=
+def IsPositiveRowScaledRelabelingRowCirculant (M : I → I → ℝ) : Prop :=
   ∃ (e : I ≃ I) (scale margin : I → ℝ), (∀ i, 0 < scale i) ∧
     positiveRowScale scale (reindexMatrix e M) = rowCirculant margin
 
 omit [DecidableEq I] in
 theorem hasUniformNegativeRowShape_of_positiveRowScaledRelabelingRowCirculant
-    {M : Matrix I I ℝ} (h : IsPositiveRowScaledRelabelingRowCirculant M) :
+    {M : I → I → ℝ} (h : IsPositiveRowScaledRelabelingRowCirculant M) :
     HasUniformNegativeRowShape M := by
   obtain ⟨e, scale, margin, hscale, heq⟩ := h
   have hcirc : HasUniformNegativeRowShape

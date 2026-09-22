@@ -24,9 +24,11 @@ whose globally minimum debt is positive.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability Math.PMFProduct
+open Filter StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 namespace PositiveDebtTerminalSemanticNonattainment
@@ -108,13 +110,15 @@ theorem terminalPayoff_clock_le_zero
     quittingTerminalPayoff reward profile clock ≤ 0 := by
   rw [terminalPayoff_clock_eq_neg_clockMass]
   exact neg_nonpos.mpr
-    ((quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 _)
+    ((mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 _)
 
 theorem terminalPayoff_atom_nonneg
     (profile : (quittingGame reward).BehaviorProfile) :
     0 ≤ quittingTerminalPayoff reward profile atom := by
   rw [terminalPayoff_atom_eq_jointMass]
-  exact (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 _
+  exact (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 _
 
 theorem terminalPayoff_atom_le_one
     (profile : (quittingGame reward).BehaviorProfile) :
@@ -122,6 +126,7 @@ theorem terminalPayoff_atom_le_one
   rw [terminalPayoff_atom_eq_jointMass]
   let mass := quittingTerminalOutcomeMass reward profile
   have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [mem_simplexWeights] at hsimplex
   have hle : mass (some jointTerminal) ≤ ∑ outcome, mass outcome :=
     Finset.single_le_sum (fun outcome _ => hsimplex.1 outcome)
       (Finset.mem_univ (some jointTerminal))
@@ -584,6 +589,7 @@ theorem jointMass_eq_zero_of_clockMass_eq_one
     quittingTerminalOutcomeMass reward profile (some jointTerminal) = 0 := by
   let mass := quittingTerminalOutcomeMass reward profile
   have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [mem_simplexWeights] at hsimplex
   have hsubset : ({some clockTerminal, some jointTerminal} :
       Finset (QuittingTerminalOutcome Player)) ⊆ Finset.univ :=
     Finset.subset_univ _
@@ -779,7 +785,7 @@ theorem geometricClockLaw_some_toReal
     exact halphaPos.ne' (congrArg Subtype.val heq)
   change (((geometricNatLaw probability).map some) (some time)).toReal = _
   rw [PMF.map_apply, tsum_eq_single time]
-  · rw [if_pos rfl, geometricNatLaw_apply probability hprobability]
+  · rw [ite_eq_left rfl, geometricNatLaw_apply probability hprobability]
     rw [ENNReal.toReal_ofReal]
     exact mul_nonneg (pow_nonneg (sub_nonneg.mpr halphaLe) time)
       halphaPos.le
@@ -997,9 +1003,17 @@ theorem mass_mem_Icc
     (reward : {S : Finset Unit // S.Nonempty} → Payoff Unit)
     (profile : (quittingGame reward).BehaviorProfile) :
     quittingTerminalOutcomeMass reward profile (some terminal) ∈
-      Set.Icc (0 : ℝ) 1 :=
-  mem_Icc_of_mem_stdSimplex
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile) _
+      Set.Icc (0 : ℝ) 1 := by
+  have hsimplex := quittingTerminalOutcomeMass_mem_stdSimplex reward profile
+  rw [mem_simplexWeights] at hsimplex
+  constructor
+  · exact hsimplex.1 _
+  · calc
+      quittingTerminalOutcomeMass reward profile (some terminal) ≤
+          ∑ outcome, quittingTerminalOutcomeMass reward profile outcome := by
+        exact Finset.single_le_sum (fun outcome _ => hsimplex.1 outcome)
+          (Finset.mem_univ (some terminal))
+      _ = 1 := hsimplex.2
 
 /-- The closed semantic segment parametrized by eventual quitting
 probability. -/

@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import Mathlib.Algebra.BigOperators.Ring.Finset
 import Mathlib.Algebra.Order.Ring.Abs
 import Mathlib.Algebra.Order.BigOperators.Group.Finset
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Ring
 
@@ -139,7 +139,7 @@ theorem weightPositiveVariationOn_le_controlledError_add_exceptionalMass
           · rw [abs_sub_comm]
             exact le_abs_self _
           · exact abs_nonneg _
-        simp only [hc, if_true]
+        simp only [hc, ite_true]
         exact hvariation.trans
           (le_add_of_nonneg_right (by split <;> simp_all))
       · by_cases he : x ∈ exceptional

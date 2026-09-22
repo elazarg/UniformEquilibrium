@@ -131,7 +131,8 @@ theorem eventually_weight_mem_Icc
       filter_upwards [ih, hunit middle target] with t hinitial hstep
       constructor
       · exact mul_nonneg hinitial.1 hstep.1
-      · exact mul_le_one₀ hinitial.2 hstep.1 hstep.2
+      · exact (mul_le_mul_of_nonneg_right hinitial.2 hstep.1).trans
+          (by simpa using hstep.2)
 
 /-- Freeze the parameter of a path-coordinate family. -/
 theorem weight_freeze
@@ -171,7 +172,7 @@ theorem eventually_kernel_support_iff_analyticPuncturedSupport
       0 < (kernel t source destination).toReal ↔
         analyticPuncturedSupport kernel source destination := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   have coordinateAlternative :
       ∀ source destination,
         (∀ᶠ t in nhdsWithin 0 (Set.Ioi 0),
@@ -310,7 +311,7 @@ theorem exists_analyticPathMinorization
         ({source} : Finset S) ⊆ Finset.univ :=
       Finset.subset_univ _
     have hproduct :=
-      Finset.prod_le_prod_of_subset_of_le_one
+      Finset.prod_le_prod_of_subset_of_le_one₀
         (f := fun state =>
           (path state).weight coordinate t)
         hsubset
@@ -335,7 +336,7 @@ theorem FrozenSupportPath.weight_le_iter_toReal
       (Math.PMFIter.iter
         kernel path.length source target).toReal := by
   classical
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   induction path with
   | refl =>
       simp [FrozenSupportPath.weight,
@@ -448,7 +449,7 @@ theorem exists_analytic_finiteHittingMinorization
             (Math.PMFIter.iter
               (stoppedAt (kernel t) target)
               horizon source target).toReal := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   let coordinate : ℝ → S → S → ℝ :=
     fun t source destination =>
       (stoppedAt

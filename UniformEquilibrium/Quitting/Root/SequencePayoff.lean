@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -61,6 +61,9 @@ theorem shiftProfile_quittingRootSequenceProfile
   funext player time history
   simp [StochasticGame.shiftProfile, quittingRootSequenceProfile,
     Nat.add_comm, Nat.add_left_comm]
+  change roots (start + (time + 1)) player =
+    roots (start + (time + 1)) player
+  rfl
 
 /-- The finite root recursion equals the cutoff expected stage payoff of
 the corresponding history-independent profile. -/
@@ -79,8 +82,11 @@ theorem quittingFiniteRootPayoff_eq_expectedStagePayoff_rootSequence
   | zero =>
       rw [quittingFiniteRootPayoff]
       unfold StochasticGame.expectedStagePayoff
-      rw [(quittingGame reward).histDist_zero, expect_pure,
-        stageEUAt_quittingGame_eq_stateReward]
+      have hzero := (quittingGame reward).histDist_zero
+        (quittingRootSequenceProfile reward
+          (quittingRootSequenceUpdate roots who hazard) start)
+        (show (quittingGame reward).State from none)
+      rw [hzero, expect_pure, stageEUAt_quittingGame_eq_stateReward]
       rfl
   | succ fuel ih =>
       rw [quittingFiniteRootPayoff,
@@ -106,7 +112,7 @@ theorem quittingFiniteRootPayoff_eq_expectedStagePayoff_rootSequence
       funext action
       by_cases hquit : (quittingQuitters action).Nonempty
       · simp [quittingRootPayoff, hquit]
-      · rw [dif_neg hquit, quittingRootPayoff]
+      · rw [dite_eq_right hquit, quittingRootPayoff]
         simp only [hquit, ↓reduceDIte]
         rw [shiftProfile_quittingRootSequenceProfile]
         simpa [quittingRootSequenceUpdate] using ih (start + 1)

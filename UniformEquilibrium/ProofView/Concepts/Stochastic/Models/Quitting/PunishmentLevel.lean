@@ -39,7 +39,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -84,9 +84,9 @@ theorem finiteAveragePayoff_update_quittingAlwaysContinue_le_max
     (quittingGame reward).finiteAveragePayoff none T
         (Function.update (quittingAlwaysContinueProfile reward) who deviation) who ≤
       max 0 (reward (quittingSingletonTerminal who) who) := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   let profile :=
     Function.update (quittingAlwaysContinueProfile reward) who deviation
@@ -119,7 +119,7 @@ theorem punishmentLevel_quittingGame_le_max
     {C : ℝ} (hC : ∀ S, |reward S who| ≤ C) (T : ℕ) :
     (quittingGame reward).punishmentLevel none T who ≤
       max 0 (reward (quittingSingletonTerminal who) who) := by
-  haveI : Nonempty ((quittingGame reward).Act who) :=
+  have : Nonempty ((quittingGame reward).Act who) :=
     inferInstanceAs (Nonempty Bool)
   have hCstage : ∀ s a, |(quittingGame reward).stagePayoff s a who| ≤ max 0 C := by
     intro s a
@@ -143,7 +143,7 @@ theorem punishmentLevel_quittingGame_le_max
         exact ciInf_le hbdd (quittingAlwaysContinueProfile reward)
     _ ≤ max 0 (reward (quittingSingletonTerminal who) who) := by
         unfold StochasticGame.bestResponseAverageAgainstProfile
-        haveI := (quittingGame reward).nonempty_behaviorStrategy who
+        have := (quittingGame reward).nonempty_behaviorStrategy who
         exact ciSup_le fun dev =>
           finiteAveragePayoff_update_quittingAlwaysContinue_le_max reward who dev T
 

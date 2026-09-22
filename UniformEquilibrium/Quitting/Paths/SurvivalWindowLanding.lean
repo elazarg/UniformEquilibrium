@@ -73,7 +73,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 /-! ## The pure sequence lemma -/
 
@@ -193,7 +193,7 @@ theorem quittingStageDeviationHazard_of_lt
     (roots : ℕ → ι → PMF Bool) (who : ι) {stage time : ℕ}
     (dev : PMF Bool) (tail : ℕ → PMF Bool) (htime : time < stage) :
     quittingStageDeviationHazard roots who stage dev tail time = roots time who :=
-  if_pos htime
+  ite_eq_left htime
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- At the deviation stage the hazard is the supplied action. -/
@@ -201,7 +201,7 @@ omit [Fintype ι] [DecidableEq ι] in
     (roots : ℕ → ι → PMF Bool) (who : ι) (stage : ℕ)
     (dev : PMF Bool) (tail : ℕ → PMF Bool) :
     quittingStageDeviationHazard roots who stage dev tail stage = dev := by
-  rw [quittingStageDeviationHazard, if_neg (lt_irrefl stage), if_pos rfl]
+  rw [quittingStageDeviationHazard, ite_eq_right (lt_irrefl stage), ite_eq_left rfl]
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- After the deviation stage the hazard is the supplied tail, read at its
@@ -213,7 +213,7 @@ own offsets. -/
       tail offset := by
   have hlt : ¬ stage + 1 + offset < stage := by omega
   have heq : ¬ stage + 1 + offset = stage := by omega
-  rw [quittingStageDeviationHazard, if_neg hlt, if_neg heq]
+  rw [quittingStageDeviationHazard, ite_eq_right hlt, ite_eq_right heq]
   congr 1
   omega
 

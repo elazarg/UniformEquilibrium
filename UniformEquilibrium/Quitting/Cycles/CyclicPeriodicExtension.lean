@@ -99,7 +99,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -157,26 +157,26 @@ omit [DecidableEq ι] in
 theorem quittingCyclicPeriodicValue_of_lt (time : ℕ) (htime : time < cutoff) :
     quittingCyclicPeriodicValue cutoff path period block time =
       (path ⟨time, Nat.lt_succ_of_lt htime⟩).1 :=
-  dif_pos htime
+  dite_eq_left htime
 
 omit [DecidableEq ι] in
 theorem quittingCyclicPeriodicValue_of_le (time : ℕ) (htime : cutoff ≤ time) :
     quittingCyclicPeriodicValue cutoff path period block time =
       (block (Fin.castSucc (quittingCyclicPeriodicStage cutoff period time))).1 :=
-  dif_neg (not_lt.mpr htime)
+  dite_eq_right (not_lt.mpr htime)
 
 omit [DecidableEq ι] in
 theorem quittingCyclicPeriodicRoots_of_lt (time : ℕ) (htime : time < cutoff) :
     quittingCyclicPeriodicRoots cutoff path period block time =
       quittingRootOfSimplex (path ⟨time, Nat.lt_succ_of_lt htime⟩).2 :=
-  dif_pos htime
+  dite_eq_left htime
 
 omit [DecidableEq ι] in
 theorem quittingCyclicPeriodicRoots_of_le (time : ℕ) (htime : cutoff ≤ time) :
     quittingCyclicPeriodicRoots cutoff path period block time =
       quittingRootOfSimplex
         (block (Fin.castSucc (quittingCyclicPeriodicStage cutoff period time))).2 :=
-  dif_neg (not_lt.mpr htime)
+  dite_eq_right (not_lt.mpr htime)
 
 omit [DecidableEq ι] in
 /-- At the seam the extension displays the block's origin value. -/
@@ -303,7 +303,7 @@ theorem quittingCyclicPeriodicRoots_eq_pathRoots (time : ℕ) (htime : time < cu
       quittingFiniteNashBellmanPathRoots cutoff path time := by
   rw [quittingCyclicPeriodicRoots_of_lt cutoff path period block time htime]
   unfold quittingFiniteNashBellmanPathRoots
-  rw [dif_pos htime]
+  rw [dite_eq_left htime]
 
 omit [DecidableEq ι] in
 /-- The extension agrees with the padded chain value on the closed window
@@ -317,13 +317,13 @@ theorem quittingCyclicPeriodicValue_eq_pathValue
   rcases lt_or_eq_of_le htime with hlt | heq
   · rw [quittingCyclicPeriodicValue_of_lt cutoff path period block time hlt]
     unfold quittingFiniteNashBellmanPathValue
-    rw [dif_pos (Nat.lt_succ_of_lt hlt)]
+    rw [dite_eq_left (Nat.lt_succ_of_lt hlt)]
   · subst heq
     have hlast : (Fin.last time) =
         (⟨time, Nat.lt_succ_self time⟩ : Fin (time + 1)) := rfl
     rw [quittingCyclicPeriodicValue_at_cutoff time path period block, hjoin, hlast]
     unfold quittingFiniteNashBellmanPathValue
-    rw [dif_pos (Nat.lt_succ_self time)]
+    rw [dite_eq_left (Nat.lt_succ_self time)]
 
 /-! ## Nonnegativity of the cycle-pinned dynamic debt -/
 
@@ -485,7 +485,7 @@ theorem prod_quittingStationaryContinueMass_lt_one_of_absorbing
     (fun k ↦ quittingStationaryContinueMass (roots k)) hmem
   have hle : (∏ k ∈ (Finset.range steps).erase stage,
       quittingStationaryContinueMass (roots k)) ≤ 1 :=
-    Finset.prod_le_one (fun i _ ↦ quittingStationaryContinueMass_nonneg (roots i))
+    Finset.prod_le_one₀ (fun i _ ↦ quittingStationaryContinueMass_nonneg (roots i))
       (fun i _ ↦ quittingStationaryContinueMass_le_one (roots i))
   have hnonneg : 0 ≤ quittingStationaryContinueMass (roots stage) :=
     quittingStationaryContinueMass_nonneg (roots stage)
@@ -559,7 +559,7 @@ theorem quittingFiniteAnchoredChain_value_eq_backwardPayoff
       subst hcut
       rw [quittingRootSequenceBackwardPayoff_zero]
       unfold quittingFiniteNashBellmanPathValue
-      rw [dif_pos (Nat.lt_succ_self cutoff)]
+      rw [dite_eq_left (Nat.lt_succ_self cutoff)]
       exact hpath.2.1
   | succ steps ih =>
       intro time hsum
@@ -581,7 +581,7 @@ theorem quittingCyclicContinuationBlock_fixed
     (period + 1) block hblock.1 (period + 1) 0 (by omega)
   rw [← hstep]
   unfold quittingFiniteNashBellmanPathValue
-  rw [dif_pos (Nat.succ_pos (period + 1))]
+  rw [dite_eq_left (Nat.succ_pos (period + 1))]
   exact hblock.2.1.symm
 
 /-- **The realized continuation is a function of the block's rows.**  Two
@@ -608,14 +608,14 @@ theorem quittingCyclicContinuation_unique_of_absorbing
     funext time
     unfold quittingFiniteNashBellmanPathRoots
     by_cases htime : time < period + 1
-    · rw [dif_pos htime, dif_pos htime]
+    · rw [dite_eq_left htime, dite_eq_left htime]
       exact hrows ⟨time, htime⟩
-    · rw [dif_neg htime, dif_neg htime]
+    · rw [dite_eq_right htime, dite_eq_right htime]
   obtain ⟨stage, habsorb⟩ := hblock.2.2
   have hstageRoot : quittingFiniteNashBellmanPathRoots (period + 1) block stage.val =
       quittingRootOfSimplex (block (Fin.castSucc stage)).2 := by
     unfold quittingFiniteNashBellmanPathRoots
-    rw [dif_pos stage.isLt]
+    rw [dite_eq_left stage.isLt]
     rfl
   have hcontract := prod_quittingStationaryContinueMass_lt_one_of_absorbing
     (quittingFiniteNashBellmanPathRoots (period + 1) block) (period + 1) stage.val

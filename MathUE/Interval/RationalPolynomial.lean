@@ -175,10 +175,10 @@ theorem evalDualInterval_sound
       · intro coordinate
         by_cases hcoordinate : coordinate = index
         · simpa only [evalDualInterval, IntervalDual.ofVariable,
-            formalPartial, evalReal, if_pos hcoordinate] using
+            formalPartial, evalReal, ite_eq_left hcoordinate] using
             RationalInterval.contains_point (1 : ℚ)
         · simpa only [evalDualInterval, IntervalDual.ofVariable,
-            formalPartial, evalReal, if_neg hcoordinate] using
+            formalPartial, evalReal, ite_eq_right hcoordinate] using
             RationalInterval.contains_point (0 : ℚ)
   | add first second hfirst hsecond =>
       obtain ⟨hfirstValue, hfirstDerivative⟩ := hfirst

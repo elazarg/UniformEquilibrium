@@ -68,7 +68,7 @@ open GameTheory
 
 namespace GameTheory.CyclicThreePlayerQuitting.PerturbedCycleExclusion
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 open GameTheory.CyclicThreePlayerQuitting.Minimality
 open GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket (standardPromise)
 open GameTheory.CyclicThreePlayerQuitting.AdmissibleCycle
@@ -118,7 +118,7 @@ theorem perturbedReward_singletonTerminal (ε : ℝ) (who : Player) :
     perturbedReward ε (quittingSingletonTerminal who) who = 1 := by
   have hbonus : ¬ (({who} : Finset Player) = {who, nextThree who}) := by
     fin_cases who <;> decide
-  simp only [perturbedReward, quittingSingletonTerminal, hbonus, if_false, add_zero]
+  simp only [perturbedReward, quittingSingletonTerminal, hbonus, ite_false, add_zero]
   rw [show (⟨{who}, Finset.singleton_nonempty who⟩ :
       {S : Finset Player // S.Nonempty}) = quittingSingletonTerminal who from rfl,
     reward_singletonTerminal]
@@ -161,7 +161,7 @@ theorem perturbedReward_collision_prevThree (ε : ℝ) (i : Player) :
   unfold quittingSingletonCollisionReward at hbase ⊢
   unfold perturbedReward
   dsimp only
-  rw [if_pos hcond]
+  rw [ite_eq_left hcond]
   linarith [hbase]
 
 /-- The unperturbed solo reward `r_j({i})` at `j = prevThree i` is `0`, for
@@ -179,7 +179,7 @@ theorem perturbedReward_soloOther_prevThree (ε : ℝ) (i : Player) :
     rw [nextThree_prevThree]
     fin_cases i <;> decide
   change perturbedReward ε (quittingSingletonTerminal i) (prevThree i) = 0
-  simp only [perturbedReward, quittingSingletonTerminal, hbonus, if_false, add_zero]
+  simp only [perturbedReward, quittingSingletonTerminal, hbonus, ite_false, add_zero]
   rw [show (⟨{i}, Finset.singleton_nonempty i⟩ :
       {S : Finset Player // S.Nonempty}) = quittingSingletonTerminal i from rfl,
     reward_singletonTerminal]

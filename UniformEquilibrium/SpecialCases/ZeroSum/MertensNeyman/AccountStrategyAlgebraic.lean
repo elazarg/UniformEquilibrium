@@ -23,7 +23,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace MertensNeymanAccount
 
-open Filter Math.Probability Math.PMFProduct Topology
+open Filter _root_.Math.Probability Math.PMFProduct Topology
 
 theorem isUniformEquilibriumPayoff_of_puiseux_discountedValue_of_value_zeroSum
     {G : StochasticGame (Fin 2)}

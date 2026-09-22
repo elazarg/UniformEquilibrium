@@ -24,8 +24,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset
-open Math.Probability Math.PMFProduct
+open _root_.Finset
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The two labels complementary to a pair base on `Fin 4`. -/
 def finFourPairBaseComplement (base : Finset (Fin 4)) : Finset (Fin 4) :=

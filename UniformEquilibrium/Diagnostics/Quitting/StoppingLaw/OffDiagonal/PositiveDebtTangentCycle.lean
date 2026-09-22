@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -124,7 +124,7 @@ theorem QuittingPositiveMinimumDebtTangentFamily.nonempty_positiveDebtTangentCyc
     (hnoEntry : ¬HasQuittingStoppingLawFlatSupportEntry
       frontier.base frontier.positiveDebtSupport frontier.tangent) :
     Nonempty (QuittingStoppingLawPositiveDebtTangentCycle frontier) := by
-  letI : Nonempty {who // who ∈ frontier.positiveDebtSupport} := by
+  let : Nonempty {who // who ∈ frontier.positiveDebtSupport} := by
     obtain ⟨who, hwho⟩ := frontier.active_nonempty
     exact ⟨⟨who, hwho⟩⟩
   apply Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial

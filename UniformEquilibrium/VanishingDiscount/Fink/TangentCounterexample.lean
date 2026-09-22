@@ -24,7 +24,7 @@ namespace StochasticGame
 namespace FinkTangentCounterexample
 
 open Filter
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 
 /-- The live state and two absorbing states of the counterexample. -/
@@ -32,7 +32,11 @@ inductive State
   | live
   | high
   | low
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.live, .high, .low}
+  complete state := by cases state <;> simp
 
 /-- `false` is player 1 and `true` is player 2.  Both have two actions.
 At the live state, player 1's `false/true` actions are `A/B`, and player 2's
@@ -150,7 +154,8 @@ lemma discount_mul_rareProbability (n : ℕ) :
   ring
 
 lemma weight_mem_simplex (n : ℕ) (p : State × Player) :
-    weight n p ∈ stdSimplex ℝ Bool := by
+    weight n p ∈ GameTheory.Math.Probability.simplexWeights Bool := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights]
   constructor
   · intro d
     cases p with
@@ -166,7 +171,13 @@ lemma weight_mem_simplex (n : ℕ) (p : State × Player) :
 /-- The stationary profile represented by `weight`. -/
 def profile (n : ℕ) : game.StationaryMixedProfile := fun s who =>
   (stdSimplexEquiv (α := Bool)).symm
-    ⟨weight n (s, who), weight_mem_simplex n (s, who)⟩
+    ⟨Finsupp.equivFunOnFinite.symm (weight n (s, who)),
+      (GameTheory.Math.Probability.mem_simplexWeights.mp
+        (weight_mem_simplex n (s, who))).1,
+      (by
+        rw [Finsupp.equivFunOnFinite_symm_sum]
+        exact (GameTheory.Math.Probability.mem_simplexWeights.mp
+          (weight_mem_simplex n (s, who))).2)⟩
 
 @[simp] lemma profile_apply_toReal (n : ℕ) (s : State) (who : Player)
     (d : Bool) : ((profile n s who) d).toReal = weight n (s, who) d := by
@@ -254,7 +265,7 @@ lemma pure_discountedAuxEU_eq (n : ℕ) (s : State) (who : Player) (d : Bool) :
     simp only [payoff, value, continuationValue, expect_eq_sum,
       Fintype.sum_bool, Function.update_self, ne_eq,
       Bool.true_eq_false, Bool.false_eq_true, not_false_eq_true,
-      Function.update_of_ne, Bool.if_false_right, Bool.if_true_right]
+      Function.update_of_ne, Bool.ite_false_right, Bool.ite_true_right]
   all_goals
     rw [profile_apply_toReal, profile_apply_toReal]
     simp [weight]
@@ -311,7 +322,8 @@ def limitWeight (p : State × Player) (d : Bool) : ℝ :=
   | .high | .low => if d then 0 else 1
 
 lemma limitWeight_mem_simplex (p : State × Player) :
-    limitWeight p ∈ stdSimplex ℝ Bool := by
+    limitWeight p ∈ GameTheory.Math.Probability.simplexWeights Bool := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights]
   constructor
   · intro d
     cases p with
@@ -322,7 +334,13 @@ lemma limitWeight_mem_simplex (p : State × Player) :
 
 def limitProfile : game.StationaryMixedProfile := fun s who =>
   (stdSimplexEquiv (α := Bool)).symm
-    ⟨limitWeight (s, who), limitWeight_mem_simplex (s, who)⟩
+    ⟨Finsupp.equivFunOnFinite.symm (limitWeight (s, who)),
+      (GameTheory.Math.Probability.mem_simplexWeights.mp
+        (limitWeight_mem_simplex (s, who))).1,
+      (by
+        rw [Finsupp.equivFunOnFinite_symm_sum]
+        exact (GameTheory.Math.Probability.mem_simplexWeights.mp
+          (limitWeight_mem_simplex (s, who))).2)⟩
 
 @[simp] lemma limitProfile_apply_toReal (s : State) (who : Player) (d : Bool) :
     ((limitProfile s who) d).toReal = limitWeight (s, who) d := by
@@ -358,7 +376,7 @@ lemma tendsto_weight (p : State × Player) (d : Bool) :
   cases p with
   | mk s who =>
     cases s <;> cases who <;> cases d
-    all_goals simp only [weight, limitWeight, if_true, if_false,
+    all_goals simp only [weight, limitWeight, ite_true, ite_false,
       Bool.false_eq_true, tendsto_const_nhds]
     · simpa using tendsto_rareProbability_zero.const_sub 1
     · exact tendsto_rareProbability_zero
@@ -445,7 +463,7 @@ lemma finkStageGain_limit_live_playerOne_actionA :
   simp only [payoff, expect_eq_sum, Fintype.sum_bool,
     Function.update_self, ne_eq, Bool.true_eq_false,
     not_false_eq_true, Function.update_of_ne,
-    Bool.if_false_right, Bool.decide_eq_true]
+    Bool.ite_false_right, Bool.decide_eq_true]
   rw [limitProfile_apply_toReal]
   norm_num [limitWeight]
   rw [limitProfile_apply_toReal]
@@ -490,8 +508,8 @@ lemma finkStageEU_limitPoint (s : State) (who : Player) :
   unfold finkStageEU
   rw [finkProfile_limitPoint_eq, expect_pmfPi_bool]
   cases s <;> cases who <;> simp only [payoff, value, expect_eq_sum,
-    Fintype.sum_bool, Bool.false_eq_true, Bool.if_false_right,
-    Bool.if_true_right]
+    Fintype.sum_bool, Bool.false_eq_true, Bool.ite_false_right,
+    Bool.ite_true_right]
   all_goals
     rw [limitProfile_apply_toReal]
     norm_num [limitWeight]

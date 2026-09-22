@@ -314,7 +314,7 @@ theorem exists_row_strict_pair
         simp [Finset.sum_neg_distrib, neg_mul]
       linarith [hsum_neg]
     -- Apply Farkas. First, feasibility of the augmented system:
-    have hAug_feas : Math.LinearAlgebra.IsFeasible (optAugA A c) (optAugB b v) :=
+    have hAug_feas : Maths.LinearProgramming.IsFeasible (optAugA A c) (optAugB b v) :=
       ⟨x₀, (optAug_feasible_iff A b c v x₀).mpr ⟨hx₀A, hx₀nn, hx₀_val.le⟩⟩
     -- Farkas yields the certificate.
     have hCert :=
@@ -578,7 +578,7 @@ theorem exists_col_strict_pair
       have hsel : (∑ j, (if j = j₀ then (-1 : ℝ) else 0) * x j) = -x j₀ := by
         simp [ite_mul, neg_mul, one_mul, zero_mul]
       linarith [hsel]
-    have hAug_feas : Math.LinearAlgebra.IsFeasible (optAugA A c) (optAugB b v) :=
+    have hAug_feas : Maths.LinearProgramming.IsFeasible (optAugA A c) (optAugB b v) :=
       ⟨x₀, (optAug_feasible_iff A b c v x₀).mpr ⟨hx₀A, hx₀nn, hx₀_val.le⟩⟩
     have hCert :=
       (Math.LinearAlgebra.farkas_lemma (optAugA A c) (optAugB b v)

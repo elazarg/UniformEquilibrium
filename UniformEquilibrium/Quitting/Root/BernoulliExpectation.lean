@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -35,7 +35,7 @@ theorem quittingRootExpectedPayoff_eq_smallHazardExpectation_weightOfReward
     rw [expect_pmfPi_boolFamily_eq_sum_powerset'
       (t := Finset.univ) (q := root) (rest := fun _ => false)
       (k := fun action => quittingRootPayoff reward tail action who)]
-    simp only [Finset.mem_univ, if_true, Finset.powerset_univ]
+    simp only [Finset.mem_univ, ite_true, Finset.powerset_univ]
     apply Finset.sum_congr rfl
     intro coalition _
     have hquitters : quittingQuitters (fun i => decide (i ∈ coalition)) = coalition := by
@@ -50,22 +50,22 @@ theorem quittingRootExpectedPayoff_eq_smallHazardExpectation_weightOfReward
     · have hreward : quittingRootPayoff reward tail
           (fun i => decide (i ∈ coalition)) who = weightOfReward reward coalition who := by
         unfold quittingRootPayoff weightOfReward
-        rw [dif_pos (hquitters.symm ▸ hcoalition), dif_pos hcoalition]
+        rw [dite_eq_left (hquitters.symm ▸ hcoalition), dite_eq_left hcoalition]
         apply congrArg (fun terminal => reward terminal who)
         exact Subtype.ext hquitters
-      rw [hreward, if_pos hcoalition]
+      rw [hreward, ite_eq_left hcoalition]
       rfl
     · have hempty := Finset.not_nonempty_iff_eq_empty.mp hcoalition
       subst coalition
       simp [quittingRootPayoff, coalitionMass, hazardOfRoot]
   rw [hsum, ← Finset.add_sum_erase Finset.univ _ (Finset.mem_univ (∅ : Finset ι))]
-  simp only [Finset.not_nonempty_empty, if_false]
+  simp only [Finset.not_nonempty_empty, ite_false]
   unfold smallHazardExpectation
   congr 1
   · simp [coalitionMass, continueMass]
   · apply Finset.sum_congr rfl
     intro coalition hcoalition
-    rw [if_pos (Finset.nonempty_iff_ne_empty.mpr (Finset.ne_of_mem_erase hcoalition))]
+    rw [ite_eq_left (Finset.nonempty_iff_ne_empty.mpr (Finset.ne_of_mem_erase hcoalition))]
 
 /-- Uniform singleton expansion of the actual root, with separate box constants. -/
 theorem abs_quittingRootExpectedPayoff_sub_singletonExpansion_le

@@ -21,9 +21,9 @@ private theorem continuous_rootFreeMixedPoint (free : Finset ι) :
   apply continuous_pi
   intro action
   have hcoordinate : Continuous (fun simplex : QuittingRootSimplex ι ↦
-      simplex (who : ι) action) :=
-    (continuous_apply action).comp
-      (continuous_subtype_val.comp (continuous_apply (who : ι)))
+      (simplex (who : ι)).weights action) :=
+    (Convexity.StdSimplex.continuous_weights_apply ℝ action).comp
+      (continuous_apply (who : ι))
   convert hcoordinate using 1
   funext simplex
   exact quittingRootOfSimplex_apply_toReal simplex (who : ι) action

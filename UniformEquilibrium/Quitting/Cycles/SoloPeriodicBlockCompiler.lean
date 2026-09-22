@@ -49,7 +49,7 @@ noncomputable section
 namespace GameTheory
 namespace SoloPeriodicBlockCompiler
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {n : ℕ}
 

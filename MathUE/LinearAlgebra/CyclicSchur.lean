@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.LinearAlgebra.FiniteDimensional.Basic
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Cyclic Schur elimination for block-pair predecessor charts
@@ -296,7 +296,7 @@ def returnKernelToFullKernel (data : LocalLinearization K H E) :
 the kernel of `I` minus the ordered return derivative. -/
 def fullJacobianKernelEquiv (data : LocalLinearization K H E) :
     (fullJacobian data).ker ≃ₗ[ℝ] (returnDefect data).ker :=
-  LinearEquiv.ofLinear
+  LinearEquiv.ofLinearMap
     (fullKernelToReturnKernel data) (returnKernelToFullKernel data)
     (by
       apply LinearMap.ext

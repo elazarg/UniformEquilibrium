@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourQuantitativeFullSupportHardResidual
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A zero-debt owner at any supplied global-minimum joint-law point in the
 Fin4 hard residual has positive total opponent incidence. -/
@@ -51,13 +51,14 @@ theorem totalOpponentIncidence_pos_of_minimumLaw_of_debt_eq_zero
     exists_positive_finiteLawAtom_of_finFourHardResidual_minimum
       reward bound residual point hpoint hminimum
   have hmass := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hmassProps := GameTheory.Math.Probability.mem_simplexWeights.mp hmass
   by_contra hnotPositive
   have hincidenceNonneg :
       0 ≤ quittingTerminalTotalOpponentIncidenceMass owner point.2 := by
     unfold quittingTerminalTotalOpponentIncidenceMass
     exact Finset.sum_nonneg fun _ _ => by
       unfold quittingTerminalOpponentIncidenceMass
-      exact Finset.sum_nonneg fun candidate _ => hmass.1 (some candidate)
+      exact Finset.sum_nonneg fun candidate _ => hmassProps.1 (some candidate)
   have hincidenceZero :
       quittingTerminalTotalOpponentIncidenceMass owner point.2 = 0 :=
     le_antisymm (le_of_not_gt hnotPositive) hincidenceNonneg
@@ -74,21 +75,21 @@ theorem totalOpponentIncidence_pos_of_minimumLaw_of_debt_eq_zero
         if candidate.val = {owner} then p else 0 := by
     intro candidate
     by_cases hcandidate : candidate.val = {owner}
-    · rw [if_pos hcandidate]
+    · rw [ite_eq_left hcandidate]
       have hcandidateEq : candidate = quittingSingletonTerminal owner :=
         Subtype.ext hcandidate
       exact congrArg (fun selected => point.2 (some selected)) hcandidateEq
-    · rw [if_neg hcandidate]
+    · rw [ite_eq_right hcandidate]
       by_cases hzero : point.2 (some candidate) = 0
       · exact hzero
       · have hcandidatePositive : 0 < point.2 (some candidate) :=
-          lt_of_le_of_ne (hmass.1 (some candidate)) (Ne.symm hzero)
+          lt_of_le_of_ne (hmassProps.1 (some candidate)) (Ne.symm hzero)
         exact (hcandidate
           (terminal_eq_singleton_of_totalOpponentIncidence_eq_zero_of_mass_pos
             owner point.2 hmass hincidenceZero candidate
               hcandidatePositive)).elim
   have hnever : point.2 none = 1 - p := by
-    have hsum := hmass.2
+    have hsum := hmassProps.2
     rw [Fintype.sum_option] at hsum
     have hfiniteSum :
         ∑ candidate : {S : Finset (Fin 4) // S.Nonempty},

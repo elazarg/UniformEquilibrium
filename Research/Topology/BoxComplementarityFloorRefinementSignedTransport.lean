@@ -99,12 +99,24 @@ theorem boxComplementarityEndpointEquivFloorPullbackExternal_signedWeight
   apply congrArg₂ (fun geometric labels : ℤ ↦ geometric * labels)
   · convert kuhnFloorSimplexLift_determinant_eq
       (boxComplementaritySpernerCube problem p hp) k hk
-        endpoint.1 endpoint.2.1 using 1 <;>
-      apply congrArg OrientedSimplexFacet.determinant <;>
-      funext vertex coordinate <;> rfl
+        endpoint.1 endpoint.2.1 using 1
+    all_goals
+      apply congrArg OrientedSimplexFacet.determinant
+      funext vertex coordinate
+      rfl
   · apply congrArg SignedSimplexLabel.orientation
     funext vertex
-    rw [boxComplementarityFloorPullbackBoundaryLabeling_label]
+    change boxComplementarityFinLabel problem p
+        (kuhnFloorVertex
+          (floorPullbackSpernerCube
+            (boxComplementaritySpernerCube problem p hp) k hk)
+          (boxComplementaritySpernerCube problem p hp) k rfl rfl
+          (kuhnFloorSimplexLift
+            (floorPullbackSpernerCube
+              (boxComplementaritySpernerCube problem p hp) k hk)
+            (boxComplementaritySpernerCube problem p hp) k rfl rfl hk
+            endpoint.1 endpoint.2.1 vertex)) =
+      boxComplementarityFinLabel problem p (endpoint.1 vertex)
     apply congrArg (boxComplementarityFinLabel problem p)
     exact kuhnFloorVertex_kuhnFloorSimplexLift
       (floorPullbackSpernerCube
@@ -458,7 +470,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
           problem p k hp hk face first second).trans hmesh)
     convert hnear using 1
     all_goals first | rfl |
-      (simp only [face, boxComplementarityFloorRefinementLeftFace_sample]; rfl)
+      simp only [face, boxComplementarityFloorRefinementLeftFace_sample]
   have hfineAgrees
       (endpoint : KuhnEndpointLabeledSimplex
         problem (p * k) (Nat.mul_pos hp hk))
@@ -475,7 +487,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
           problem p k hp hk face first second).trans hmesh)
     convert hnear using 1
     all_goals first | rfl |
-      (simp only [face, boxComplementarityFloorRefinementRightFace_sample]; rfl)
+      simp only [face, boxComplementarityFloorRefinementRightFace_sample]
   have hleftSelection
       (endpoint : KuhnEndpointLabeledSimplex problem p hp) :
       boxComplementarityGridPoint p (endpoint.1 0) ∈ region ↔
@@ -499,7 +511,7 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
       problem p k hp hk region hopen radius hcleared face 0 _ hdistance'
     convert hnear using 1
     all_goals first | rfl |
-      (simp only [face, boxComplementarityFloorRefinementLeftFace_sample]; rfl)
+      simp only [face, boxComplementarityFloorRefinementLeftFace_sample]
   rw [boxComplementarityLocalSignedCount_eq_endpoint_base_sum
       problem p hp region hcoarseAgrees,
     boxComplementarityLocalSignedCount_eq_endpoint_base_sum
@@ -550,14 +562,13 @@ theorem boxComplementarityLocalSignedCount_floorRefinement_eq_of_cleared
           ((kuhnEndpointLabeledSimplexEquivExternal
             problem (p * k) (Nat.mul_pos hp hk) endpoint).1 0) ∈ region := by
       rw [hpoint]
-      exact Iff.rfl
     by_cases hexternal : boxComplementarityGridPoint (p * k)
         ((kuhnEndpointLabeledSimplexEquivExternal
           problem (p * k) (Nat.mul_pos hp hk) endpoint).1 0) ∈ region
-    · rw [if_pos (hmembership.mpr hexternal), if_pos hexternal, one_mul]
+    · rw [ite_eq_left (hmembership.mpr hexternal), ite_eq_left hexternal, one_mul]
     · have hbase : boxComplementarityGridPoint (p * k)
           (endpoint.1 0) ∉ region := fun h ↦ hexternal (hmembership.mp h)
-      rw [if_neg hbase, if_neg hexternal, zero_mul]
+      rw [ite_eq_right hbase, ite_eq_right hexternal, zero_mul]
   exact hleft.trans
     ((boxComplementarityFloorRefinementPrism_endpointWeightedSum_eq_of_cleared
       problem p k hp hk region hopen radius htwoMesh hcleared).trans hright.symm)

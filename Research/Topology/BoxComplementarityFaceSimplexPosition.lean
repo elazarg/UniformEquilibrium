@@ -277,17 +277,17 @@ theorem boxComplementarityFaceChain_leading_eq
   constructor
   · intro index
     by_cases hle : (index : ℕ) ≤ 3
-    · rw [if_pos hle]
+    · rw [ite_eq_left hle]
       rw [(hraise (0 : Fin 4) index).2 (by omega)]
       exact hbase (0 : Fin 4) (by omega)
-    · rw [if_neg hle]
+    · rw [ite_eq_right hle]
       rw [hraiseLt (0 : Fin 4) index (by omega), hbase (0 : Fin 4) (by omega)]
   · intro index
     by_cases hle : (index : ℕ) ≤ 2
-    · rw [if_pos hle]
+    · rw [ite_eq_left hle]
       rw [(hraise (1 : Fin 4) index).2 (by omega)]
       exact hbase (1 : Fin 4) (by omega)
-    · rw [if_neg hle]
+    · rw [ite_eq_right hle]
       rw [hraiseLt (1 : Fin 4) index (by omega), hbase (1 : Fin 4) (by omega)]
 
 /-! ## The forced chain position -/
@@ -370,16 +370,16 @@ theorem boxComplementarityFaceChainPosition_of_mem
       (vertices index (0 : Fin 4)).1 = 0 ∧ (vertices index (1 : Fin 4)).1 = 0 := by
     intro index hle
     refine ⟨?_, ?_⟩
-    · rw [hcoordZero index, if_pos (by omega)]
-    · rw [hcoordOne index, if_pos (by omega)]
+    · rw [hcoordZero index, ite_eq_left (by omega)]
+    · rw [hcoordOne index, ite_eq_left (by omega)]
   have hthreeZero : (vertices 3 (0 : Fin 4)).1 = 0 := by
-    rw [hcoordZero 3, if_pos (by omega)]
+    rw [hcoordZero 3, ite_eq_left (by omega)]
   have hthreeOne : (vertices 3 (1 : Fin 4)).1 = 1 := by
-    rw [hcoordOne 3, if_neg (by omega)]
+    rw [hcoordOne 3, ite_eq_right (by omega)]
   have hfourZero : (vertices 4 (0 : Fin 4)).1 = 1 := by
-    rw [hcoordZero 4, if_neg (by omega)]
+    rw [hcoordZero 4, ite_eq_right (by omega)]
   have hfourOne : (vertices 4 (1 : Fin 4)).1 = 1 := by
-    rw [hcoordOne 4, if_neg (by omega)]
+    rw [hcoordOne 4, ite_eq_right (by omega)]
   -- labels of the last two chain positions
   have hlabelFour : boxComplementarityReducedLabel problem p (vertices 4) = 0 := by
     have hle := boxComplementarityReducedLabel_le_of_leading_ne_zero

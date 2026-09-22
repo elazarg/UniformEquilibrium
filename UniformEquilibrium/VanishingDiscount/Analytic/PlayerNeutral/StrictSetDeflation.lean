@@ -27,8 +27,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open Filter _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

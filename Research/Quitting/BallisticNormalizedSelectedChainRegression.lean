@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors.
 -/
 
 import MathUE.Topology.ThreeFourFifthsRotation
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonResidualHard
 
 /-!
@@ -27,7 +28,7 @@ noncomputable section
 namespace GameTheory
 namespace BallisticNormalizedSelectedChainRegression
 
-open Math Math.Topology Set
+open _root_.Math Math.Topology Set
 open FourPlayerPairedSingleton
 
 abbrev Player := Fin 4
@@ -94,30 +95,38 @@ theorem tailVector_nonneg {phase : ℂ} (hnorm : ‖phase‖ = 1)
       neg_abs_le phase.im, le_abs_self phase.im]
 
 def currentSimplex (phase : ℂ) (hnorm : ‖phase‖ = 1) :
-    stdSimplex ℝ Player :=
-  ⟨currentVector phase, currentVector_nonneg hnorm, currentVector_sum phase⟩
+    Convexity.StdSimplex ℝ Player where
+  weights := Finsupp.equivFunOnFinite.symm (currentVector phase)
+  nonneg := currentVector_nonneg hnorm
+  total := by
+    rw [Finsupp.equivFunOnFinite_symm_sum]
+    exact currentVector_sum phase
 
 def tailSimplex (phase : ℂ) (hnorm : ‖phase‖ = 1) :
-    stdSimplex ℝ Player :=
-  ⟨tailVector phase, tailVector_nonneg hnorm, tailVector_sum phase⟩
+    Convexity.StdSimplex ℝ Player where
+  weights := Finsupp.equivFunOnFinite.symm (tailVector phase)
+  nonneg := tailVector_nonneg hnorm
+  total := by
+    rw [Finsupp.equivFunOnFinite_symm_sum]
+    exact tailVector_sum phase
 
 /-- Standalone normalized state space for the regression. -/
 abbrev State :=
-  stdSimplex ℝ Player × stdSimplex ℝ Player × Set.Icc (1 / 2 : ℝ) 1
+  Convexity.StdSimplex ℝ Player × Convexity.StdSimplex ℝ Player × Set.Icc (1 / 2 : ℝ) 1
 
 /-- Normalized singleton-plus-collision work. -/
 def work (state : State) (who : Player) : ℝ :=
-  (∑ owner, pairedSingletonMatrix who owner * state.2.1.val owner) +
+  (∑ owner, pairedSingletonMatrix who owner * state.2.1.weights owner) +
     (state.2.2 : ℝ) *
-      ∑ owner, collisionMatrix who owner * state.1.val owner
+      ∑ owner, collisionMatrix who owner * state.1.weights owner
 
 /-- The exact standalone ballistic relation used by the diagnostic. -/
 def IsEdge (current next : State) : Prop :=
-  (∀ who, current.2.1.val who =
-    (current.2.2 : ℝ) * current.1.val who +
-      (1 - (current.2.2 : ℝ)) * next.2.1.val who) ∧
+  (∀ who, current.2.1.weights who =
+    (current.2.2 : ℝ) * current.1.weights who +
+      (1 - (current.2.2 : ℝ)) * next.2.1.weights who) ∧
   (∀ who, work current who ≤ 0) ∧
-    ∀ who, current.1.val who * work current who = 0
+    ∀ who, current.1.weights who * work current who = 0
 
 /-- Rotation phase at an actual selected-chain index. -/
 def phaseAt (time : ℕ) : ℂ :=
@@ -137,10 +146,12 @@ def stateAt (time : ℕ) : State :=
     ⟨1 / 2, by norm_num⟩)
 
 @[simp] theorem stateAt_current (time : ℕ) (who : Player) :
-    (stateAt time).1.val who = currentVector (phaseAt time) who := rfl
+    (stateAt time).1.weights who = currentVector (phaseAt time) who := by
+  simp [stateAt, currentSimplex]
 
 @[simp] theorem stateAt_tail (time : ℕ) (who : Player) :
-    (stateAt time).2.1.val who = tailVector (phaseAt time) who := rfl
+    (stateAt time).2.1.weights who = tailVector (phaseAt time) who := by
+  simp [stateAt, tailSimplex]
 
 @[simp] theorem stateAt_ratio (time : ℕ) :
     ((stateAt time).2.2 : ℝ) = 1 / 2 := rfl
@@ -180,8 +191,8 @@ theorem stateAt_edge (time : ℕ) : IsEdge (stateAt time) (stateAt (time + 1)) :
     simp
 
 theorem stateAt_current_ge_one_eighth (time : ℕ) (who : Player) :
-    1 / 8 ≤ (stateAt time).1.val who :=
-  currentVector_ge_one_eighth (phaseAt_norm time) who
+    1 / 8 ≤ (stateAt time).1.weights who :=
+  stateAt_current time who ▸ currentVector_ge_one_eighth (phaseAt_norm time) who
 
 theorem currentVector_injective_on_unit
     {first second : ℂ} (_hfirst : ‖first‖ = 1)
@@ -204,7 +215,8 @@ theorem stateAt_not_periodic (start period : ℕ) (hperiod : 0 < period) :
   intro hstate
   have hcurrent : currentVector (phaseAt (start + period)) =
       currentVector (phaseAt start) := by
-    exact congrArg (fun state : State ↦ state.1.val) hstate
+    funext who
+    simpa using congrArg (fun state : State ↦ state.1.weights who) hstate
   have hphase : phaseAt (start + period) = phaseAt start :=
     currentVector_injective_on_unit (phaseAt_norm (start + period))
       (phaseAt_norm start) hcurrent
@@ -216,12 +228,14 @@ theorem stateAt_not_periodic (start period : ℕ) (hperiod : 0 < period) :
     (phaseAt_ne_zero start) hphase
 
 /-- Uniform barycenter used by the stationary state in the same relation. -/
-def uniformSimplex : stdSimplex ℝ Player :=
-  ⟨fun _ ↦ 1 / 4, by
-    constructor
-    · intro who
-      positivity
-    · norm_num [Fin.sum_univ_succ]⟩
+def uniformSimplex : Convexity.StdSimplex ℝ Player :=
+  { weights := Finsupp.equivFunOnFinite.symm (fun _ ↦ (1 / 4 : ℝ))
+    nonneg := by
+      intro who
+      norm_num
+    total := by
+      rw [Finsupp.equivFunOnFinite_symm_sum]
+      norm_num [Fin.sum_univ_succ] }
 
 /-- The ambient normalized relation also has an explicit fixed state. -/
 def fixedState : State :=

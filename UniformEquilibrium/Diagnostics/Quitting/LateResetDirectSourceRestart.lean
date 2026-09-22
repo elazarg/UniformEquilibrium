@@ -6,7 +6,7 @@ import UniformEquilibrium.Quitting.Root.NestedImmediateQuitCapExactPrefixExit
 noncomputable section
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A literal reset child recursively produces an actual exact-prefix ray.
 If every selected root survives, the reset owner's profitable `Quit0` cap

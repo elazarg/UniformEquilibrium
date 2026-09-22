@@ -36,8 +36,8 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.Probability
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]
@@ -188,7 +188,7 @@ theorem ZeroDriftAnalyticPotentialJet.negativeDriftCost_isSublinear
           (fun history =>
             |selectedTransitionCostSum choice
               next.negativeDriftCost T history|)) := by
-  letI := strictSetOccupationIndexDecidableEq germ who
+  let := strictSetOccupationIndexDecidableEq germ who
   apply exceptionalTransitionCost_isAsymptoticallySublinear
     initial (germ.playerNeutralOccupationKernel who)
     choice next.negativeDriftCost C.strictIndexSet

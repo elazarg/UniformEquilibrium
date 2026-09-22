@@ -35,8 +35,9 @@ variable {I : Type} [Fintype I] [DecidableEq I]
 theorem normalCore_eq_univ_of_fixed_blocker
     (M : Matrix I I ℝ) (next : I → I)
     (hne : ∀ i, next i ≠ i) (hentry : ∀ i, M i (next i) ≤ 0) :
-    normalCore M = Finset.univ := by
-  have hlayer : ∀ n : ℕ, normalLayer M n = Finset.univ := by
+    normalCore (fun i j => M i j) = Finset.univ := by
+  have hlayer : ∀ n : ℕ,
+      normalLayer (fun i j => M i j) n = Finset.univ := by
     intro n
     induction n with
     | zero => rfl

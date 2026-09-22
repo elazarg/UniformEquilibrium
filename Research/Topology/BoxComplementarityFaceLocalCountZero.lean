@@ -72,7 +72,7 @@ theorem not_completeSimplex_of_face_gain_nonneg
       (1 : Fin 4) : Set.Icc (0 : ℝ) 1) : ℝ) = 0 :=
     boxComplementarityGridPoint_eq_zero (n := 4) p (vertices carrier) 1
       (Fin.val_injective hleadingOne)
-  rw [BoxComplementarityProblem.IsGridViolation] at hcarrierViolation
+  unfold BoxComplementarityProblem.IsGridViolation at hcarrierViolation
   rcases hcarrierViolation with ⟨-, hnegative⟩ | htop
   · exact absurd (hface _ hmem hzeroReal honeReal) (not_le.2 hnegative)
   · exact absurd htop (ne_of_lt (hregion.lt_one _ hmem who))
@@ -235,7 +235,7 @@ theorem constantLeadingNegativeProblem_isLeadingNegativeRegion :
     constantLeadingNegativeProblem.IsLeadingNegativeRegion unitCubeBelowTop where
   lt_one := fun _ hmem who ↦ hmem who
   gain_neg := fun _ _ _ hwho ↦ by
-    simp only [constantLeadingNegativeProblem, if_pos hwho]
+    simp only [constantLeadingNegativeProblem, ite_eq_left hwho]
     norm_num
 
 theorem constantLeadingNegativeProblem_hasAffineFaceGain :

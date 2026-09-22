@@ -62,7 +62,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability QuittingSureSetOwnerRepair
+open StochasticGame _root_.Math.Probability QuittingSureSetOwnerRepair
 
 namespace QuittingTwoPlayerExistence
 
@@ -172,14 +172,14 @@ theorem quittingSureSetOwnerExactCap_bothQuit_le
   unfold quittingSureSetOwnerExactCap
   by_cases hwho : who = owner
   · subst who
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     refine max_le le_rfl ?_
     rw [quittingSetReward_blocker, quittingSetReward_jointExit_owner]
     exact howner
   · obtain rfl : who = !owner := Bool.eq_not_of_ne hwho
     have hempty : ¬ ((({!owner} : Finset Bool).erase (!owner)).Nonempty) := by
       simp
-    rw [if_neg hwho, if_neg hempty, Finset.pair_eq_singleton,
+    rw [ite_eq_right hwho, ite_eq_right hempty, Finset.pair_eq_singleton,
       quittingSureSetOwnerValue_bothQuit]
     refine max_le le_rfl ?_
     rw [quittingSetReward_owner, quittingSetReward_jointExit_blocker]

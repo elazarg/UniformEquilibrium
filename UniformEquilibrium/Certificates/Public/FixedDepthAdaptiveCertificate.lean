@@ -24,7 +24,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι Child : Type} {G : StochasticGame ι}
 
@@ -55,8 +55,8 @@ theorem abs_stagePayoff_le_finiteStagePayoffBound
     |G.stagePayoff state action who| ≤
       G.finiteStagePayoffBound := by
   classical
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.JointAct := Fintype.ofFinite G.JointAct
   unfold finiteStagePayoffBound
   calc
     |G.stagePayoff state action who| ≤
@@ -287,7 +287,7 @@ theorem isAdaptivePotentialCertificateAt_of_fixedDepthSelector
       G.IsAdaptivePotentialCertificateAt
         (entry child) (target child) (error / 2)) :
     G.IsAdaptivePotentialCertificateAt initial parentTarget error := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   let family :
       G.FiniteChildAdaptivePotentialFamily entry target (error / 2) :=
     FiniteChildAdaptivePotentialFamily.ofCertificates childCertificates

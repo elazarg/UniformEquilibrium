@@ -10,9 +10,9 @@ theorem quittingFirstStoppingOutcome_eq_coalition_of_strictly_later
     (time : ℕ) (hinside : ∀ player ∈ coalition, times player = some time)
     (houtside : ∀ player ∉ coalition,
       quittingStoppingTimeValue (some time) < quittingStoppingTimeValue (times player)) :
-    letI : Nonempty ι := ⟨hne.choose⟩
+    let : Nonempty ι := ⟨hne.choose⟩
     quittingFirstStoppingOutcome times = some ⟨coalition, hne⟩ := by
-  letI : Nonempty ι := ⟨hne.choose⟩
+  let : Nonempty ι := ⟨hne.choose⟩
   have hmin : quittingEarliestStoppingValue times = (time : WithTop ℕ) := by
     unfold quittingEarliestStoppingValue
     apply le_antisymm
@@ -39,8 +39,9 @@ theorem quittingFirstStoppingOutcome_eq_coalition_of_strictly_later
     · intro hplayer
       rw [hinside player hplayer]
       rfl
+  dsimp only
   unfold quittingFirstStoppingOutcome
-  rw [hmin, if_neg (by simp)]
+  rw [hmin, ite_eq_right (by simp)]
   exact congrArg some (Subtype.ext hcoalition)
 
 end GameTheory

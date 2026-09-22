@@ -389,8 +389,12 @@ theorem quittingNonSoloMass_update_eq_opponentHazardSum
   intro horizon
   induction horizon with
   | zero =>
-      simp [quittingNonSoloMass, StochasticGame.expectedStateValue,
-        quittingNonSoloIndicator, StochasticGame.emptyHist]
+      unfold quittingNonSoloMass StochasticGame.expectedStateValue
+      have hzero := (quittingGame reward).histDist_zero
+        (Function.update profile who deviation)
+        (show (quittingGame reward).State from none)
+      rw [hzero, Math.Probability.expect_pure]
+      rfl
   | succ horizon ih =>
       rw [quittingNonSoloMass_update_succ, Finset.sum_range_succ, ih]
 
@@ -410,8 +414,15 @@ theorem quittingNonSoloMass_update_le_one_sub_opponentLiveMass
   intro horizon
   induction horizon with
   | zero =>
-      simp [quittingNonSoloMass, StochasticGame.expectedStateValue,
-        quittingNonSoloIndicator, StochasticGame.emptyHist]
+      unfold quittingNonSoloMass StochasticGame.expectedStateValue
+      have hzero := (quittingGame reward).histDist_zero
+        (Function.update profile who deviation)
+        (show (quittingGame reward).State from none)
+      rw [hzero, Math.Probability.expect_pure]
+      rw [quittingLiveMass_zero]
+      with_unfolding_all
+        change (0 : ℝ) ≤ 1 - 1
+      norm_num
   | succ horizon ih =>
       rw [quittingNonSoloMass_update_succ, quittingLiveMass_succ]
       have hlive := quittingLiveMass_update_le_opponentOnly
@@ -503,9 +514,9 @@ theorem abs_finiteAveragePayoff_update_sub_terminal_le_opponentLiveAverage
           quittingLiveMass reward
             (quittingOpponentOnlyProfile reward profile who) time) := by
   let deviated := Function.update profile who deviation
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   have havg := abs_finiteAveragePayoff_sub_target_le
     (quittingGame reward) none deviated who

@@ -609,7 +609,7 @@ theorem punishmentValue_eq_one :
     simpa [reward, QuittingSureSetOwnerRepair.quittingSetReward_of_nonempty]
       using hupper
   · unfold quittingPunishmentValue
-    letI : Nonempty (quittingGame reward).BehaviorProfile :=
+    let : Nonempty (quittingGame reward).BehaviorProfile :=
       ⟨quittingAlwaysContinueProfile reward⟩
     apply le_ciInf
     intro profile

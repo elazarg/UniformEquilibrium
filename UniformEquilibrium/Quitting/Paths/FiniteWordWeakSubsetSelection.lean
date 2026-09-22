@@ -16,7 +16,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -206,7 +206,7 @@ theorem exists_literalRootStack_isEpsilonAsymptoticNash_of_rawWeakSubsetExclusio
     (MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction
       (Fintype.card ι * (Fintype.card ι + 1)))))
   obtain ⟨owner, -, -⟩ := hexclusion.2 rawPoint
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   exact
     exists_literalRootStack_isEpsilonAsymptoticNash_of_actualWeakSubsetExclusion
       reward owners
@@ -258,7 +258,7 @@ theorem exists_uniformEquilibriumPayoff_of_finiteCalendarRawWeakSubsetExclusion
       (fun _ => QuittingFiniteDeadlineTimingAction deadline) := fun _ =>
     Math.ProbabilityMassFunction.stdSimplexEquiv (PMF.pure none)
   obtain ⟨inhabitant, -, -⟩ := hexclusion.2 allNever
-  letI : Nonempty ι := ⟨inhabitant⟩
+  let : Nonempty ι := ⟨inhabitant⟩
   apply exists_uniformEquilibriumPayoff_of_actualWeakSubsetExclusion
     reward owners
   exact (hasQuittingFiniteCalendarRawWeakSubsetExclusion_iff_actual

@@ -128,7 +128,7 @@ theorem one_sub_prod_le_sum_one_sub {α : Type*} (s : Finset α) (f : α → ℝ
     have h1' : ∀ b ∈ s, f b ≤ 1 := fun b hb => h1 b (Finset.mem_cons_of_mem hb)
     have iha := ih h0' h1'
     have ha1 : f a ≤ 1 := h1 a (Finset.mem_cons_self a s)
-    have hP1 : ∏ b ∈ s, f b ≤ 1 := Finset.prod_le_one h0' h1'
+    have hP1 : ∏ b ∈ s, f b ≤ 1 := Finset.prod_le_one₀ h0' h1'
     nlinarith [mul_nonneg (sub_nonneg.mpr ha1) (sub_nonneg.mpr hP1)]
 
 /-- **The finite-dimensional Hellinger/total-variation estimate** (Cauchy–Schwarz): two
@@ -250,7 +250,7 @@ theorem productLaw_cylinder (f : ℕ → I → ℝ) (hf0 : ∀ t i, 0 ≤ f t i)
     (hf1 : ∀ t, ∑ i, f t i = 1) (F : Finset ℕ) (S : Finset ((t : F) → I)) :
     productLaw f (cylinder F (↑S : Set ((t : F) → I))) =
       ENNReal.ofReal (∑ y ∈ S, ∏ t : F, f t (y t)) := by
-  haveI : ∀ t, IsProbabilityMeasure (stepMeasure (f t)) := fun t =>
+  have : ∀ t, IsProbabilityMeasure (stepMeasure (f t)) := fun t =>
     isProbabilityMeasure_stepMeasure (hf0 t) (hf1 t)
   calc productLaw f (cylinder F (↑S : Set ((t : F) → I)))
       = Measure.pi (fun t : F => stepMeasure (f t)) ↑S :=
@@ -280,7 +280,7 @@ theorem lintegral_infinitePi_prod [Finite I]
     (μ : ℕ → Measure I) [∀ t, IsProbabilityMeasure (μ t)]
     (F : Finset ℕ) (g : ℕ → I → ℝ≥0∞) :
     ∫⁻ ω, ∏ t ∈ F, g t (ω t) ∂Measure.infinitePi μ = ∏ t ∈ F, ∫⁻ x, g t x ∂μ t := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   have key : ∫⁻ y, (∏ t : F, g t (y t)) ∂Measure.pi (fun t : F => μ t) =
       ∏ t : F, ∫⁻ x, g t x ∂μ t := by
     rw [lintegral_fintype]
@@ -316,11 +316,11 @@ def hybrid (p q : ℕ → I → ℝ) (N t : ℕ) : I → ℝ := if t < N then q 
 
 omit [Fintype I] [MeasurableSpace I] [DiscreteMeasurableSpace I] in
 theorem hybrid_of_lt {p q : ℕ → I → ℝ} {N t : ℕ} (h : t < N) : hybrid p q N t = q t :=
-  if_pos h
+  ite_eq_left h
 
 omit [Fintype I] [MeasurableSpace I] [DiscreteMeasurableSpace I] in
 theorem hybrid_of_le {p q : ℕ → I → ℝ} {N t : ℕ} (h : N ≤ t) : hybrid p q N t = p t :=
-  if_neg (not_lt.mpr h)
+  ite_eq_right (not_lt.mpr h)
 
 omit [Fintype I] [MeasurableSpace I] [DiscreteMeasurableSpace I] in
 theorem hybrid_nonneg {p q : ℕ → I → ℝ} (hp0 : ∀ t i, 0 ≤ p t i) (hq0 : ∀ t i, 0 ≤ q t i)
@@ -349,9 +349,9 @@ theorem productLaw_hybrid_eq_withDensity (p q : ℕ → I → ℝ)
     productLaw (hybrid p q N) =
       (productLaw p).withDensity (partialDensity p q N) := by
   classical
-  haveI : ∀ t, IsProbabilityMeasure (stepMeasure (p t)) := fun t =>
+  have : ∀ t, IsProbabilityMeasure (stepMeasure (p t)) := fun t =>
     isProbabilityMeasure_stepMeasure (hp0 t) (hp1 t)
-  haveI : ∀ t, IsProbabilityMeasure (stepMeasure (hybrid p q N t)) := fun t =>
+  have : ∀ t, IsProbabilityMeasure (stepMeasure (hybrid p q N t)) := fun t =>
     isProbabilityMeasure_stepMeasure (fun i => hybrid_nonneg hp0 hq0 N t i)
       (hybrid_sum_one hp1 hq1 N t)
   refine (Measure.eq_infinitePi _ fun s T hT => ?_).symm
@@ -376,46 +376,46 @@ theorem productLaw_hybrid_eq_withDensity (p q : ℕ → I → ℝ)
         intro t _
         simp only [hG]
         by_cases hts : t ∈ s
-        · rw [if_pos hts,
+        · rw [ite_eq_left hts,
             Set.indicator_of_mem (Set.mem_pi.mp hω t (Finset.mem_coe.mpr hts)), one_mul]
-        · rw [if_neg hts, one_mul]
+        · rw [ite_eq_right hts, one_mul]
       rw [Finset.prod_congr rfl hfac,
         ← Finset.prod_subset Finset.subset_union_right
-          (fun x _ hx => if_neg (by simpa using hx))]
-      exact Finset.prod_congr rfl fun t ht => (if_pos (Finset.mem_range.mp ht)).symm
+          (fun x _ hx => ite_eq_right (by simpa using hx))]
+      exact Finset.prod_congr rfl fun t ht => (ite_eq_left (Finset.mem_range.mp ht)).symm
     · rw [Set.indicator_of_notMem hω]
       rw [Set.mem_pi] at hω
       push Not at hω
       obtain ⟨i, his, hiT⟩ := hω
       refine (Finset.prod_eq_zero (Finset.mem_union_left _ (Finset.mem_coe.mp his)) ?_).symm
       simp only [hG]
-      rw [if_pos (Finset.mem_coe.mp his), Set.indicator_of_notMem hiT, zero_mul]
+      rw [ite_eq_left (Finset.mem_coe.mp his), Set.indicator_of_notMem hiT, zero_mul]
   have hval : ∀ t, ∫⁻ x, G t x ∂stepMeasure (p t) =
       if t ∈ s then stepMeasure (hybrid p q N t) (T t) else 1 := by
     intro t
     rw [lintegral_stepMeasure]
     by_cases hts : t ∈ s
-    · rw [if_pos hts]
+    · rw [ite_eq_left hts]
       by_cases htN : t < N
       · rw [hybrid_of_lt htN, stepMeasure_apply]
         refine Finset.sum_congr rfl fun i _ => ?_
-        simp only [hG, if_pos hts, if_pos htN]
+        simp only [hG, ite_eq_left hts, ite_eq_left htN]
         rw [mul_assoc, hcancel t i]
         by_cases hiT : i ∈ T t
         · rw [Set.indicator_of_mem hiT, Set.indicator_of_mem hiT, one_mul]
         · rw [Set.indicator_of_notMem hiT, Set.indicator_of_notMem hiT, zero_mul]
       · rw [hybrid_of_le (not_lt.mp htN), stepMeasure_apply]
         refine Finset.sum_congr rfl fun i _ => ?_
-        simp only [hG, if_pos hts, if_neg htN, mul_one]
+        simp only [hG, ite_eq_left hts, ite_eq_right htN, mul_one]
         by_cases hiT : i ∈ T t
         · rw [Set.indicator_of_mem hiT, Set.indicator_of_mem hiT, one_mul]
         · rw [Set.indicator_of_notMem hiT, Set.indicator_of_notMem hiT, zero_mul]
-    · rw [if_neg hts]
+    · rw [ite_eq_right hts]
       by_cases htN : t < N
       · calc ∑ i, G t i * ENNReal.ofReal (p t i)
             = ∑ i, ENNReal.ofReal (q t i) := by
               refine Finset.sum_congr rfl fun i _ => ?_
-              simp only [hG, if_neg hts, if_pos htN, one_mul]
+              simp only [hG, ite_eq_right hts, ite_eq_left htN, one_mul]
               exact hcancel t i
           _ = 1 := by
               rw [← ENNReal.ofReal_sum_of_nonneg fun i _ => hq0 t i, hq1 t,
@@ -423,7 +423,7 @@ theorem productLaw_hybrid_eq_withDensity (p q : ℕ → I → ℝ)
       · calc ∑ i, G t i * ENNReal.ofReal (p t i)
             = ∑ i, ENNReal.ofReal (p t i) := by
               refine Finset.sum_congr rfl fun i _ => ?_
-              simp only [hG, if_neg hts, if_neg htN, one_mul]
+              simp only [hG, ite_eq_right hts, ite_eq_right htN, one_mul]
           _ = 1 := by
               rw [← ENNReal.ofReal_sum_of_nonneg fun i _ => hp0 t i, hp1 t,
                 ENNReal.ofReal_one]
@@ -437,9 +437,9 @@ theorem productLaw_hybrid_eq_withDensity (p q : ℕ → I → ℝ)
           (if t ∈ s then stepMeasure (hybrid p q N t) (T t) else 1) :=
         Finset.prod_congr rfl fun t _ => hval t
     _ = ∏ i ∈ s, (if i ∈ s then stepMeasure (hybrid p q N i) (T i) else 1) :=
-        (Finset.prod_subset Finset.subset_union_left fun x _ hxs => if_neg hxs).symm
+        (Finset.prod_subset Finset.subset_union_left fun x _ hxs => ite_eq_right hxs).symm
     _ = ∏ i ∈ s, stepMeasure (hybrid p q N i) (T i) :=
-        Finset.prod_congr rfl fun i hi => if_pos hi
+        Finset.prod_congr rfl fun i hi => ite_eq_left hi
 
 /-- Every `P`-null set is null for every finite-horizon hybrid law. -/
 theorem productLaw_hybrid_absolutelyContinuous (p q : ℕ → I → ℝ)
@@ -572,19 +572,19 @@ theorem productLaw_absolutelyContinuous (p q : ℕ → I → ℝ)
     (hρ : Summable fun t => 1 - affinity (p t) (q t)) :
     productLaw q ≪ productLaw p := by
   classical
-  haveI : ∀ t, IsProbabilityMeasure (stepMeasure (p t)) := fun t =>
+  have : ∀ t, IsProbabilityMeasure (stepMeasure (p t)) := fun t =>
     isProbabilityMeasure_stepMeasure (hp0 t) (hp1 t)
-  haveI : ∀ t, IsProbabilityMeasure (stepMeasure (q t)) := fun t =>
+  have : ∀ t, IsProbabilityMeasure (stepMeasure (q t)) := fun t =>
     isProbabilityMeasure_stepMeasure (hq0 t) (hq1 t)
-  haveI hPq : IsProbabilityMeasure (productLaw q) := by unfold productLaw; infer_instance
+  have hPq : IsProbabilityMeasure (productLaw q) := by unfold productLaw; infer_instance
   refine Measure.AbsolutelyContinuous.mk fun A hA hPA => ?_
   have key : ∀ N : ℕ, (productLaw q A).toReal ≤
       2 * Real.sqrt (2 * tailSum p q N) + (1 / ((N : ℝ) + 1) + 1 / ((N : ℝ) + 1)) := by
     intro N
-    haveI : ∀ t, IsProbabilityMeasure (stepMeasure (hybrid p q N t)) := fun t =>
+    have : ∀ t, IsProbabilityMeasure (stepMeasure (hybrid p q N t)) := fun t =>
       isProbabilityMeasure_stepMeasure (fun i => hybrid_nonneg hp0 hq0 N t i)
         (hybrid_sum_one hp1 hq1 N t)
-    haveI : IsProbabilityMeasure (productLaw (hybrid p q N)) := by
+    have : IsProbabilityMeasure (productLaw (hybrid p q N)) := by
       unfold productLaw; infer_instance
     set R := productLaw (hybrid p q N) with hR
     have hRA : R A = 0 :=

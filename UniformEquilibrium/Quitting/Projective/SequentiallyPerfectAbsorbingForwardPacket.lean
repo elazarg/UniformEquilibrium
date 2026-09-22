@@ -12,7 +12,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame QuittingLCPClassification
+open Filter _root_.Math.Probability StochasticGame QuittingLCPClassification
 
 /-- Reverse one literal S.3 prefix into a floor-free exact finite forward
 packet. -/

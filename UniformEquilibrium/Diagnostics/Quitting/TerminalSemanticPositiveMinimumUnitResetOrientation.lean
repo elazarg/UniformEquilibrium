@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
 variable {reward : {S : Finset iota // S.Nonempty} → Payoff iota}
@@ -325,7 +325,7 @@ theorem sum_quittingDebtTransport_recipient
   by_cases hzero : quittingDebtTransportTotalLoss before after = 0
   · simp [quittingDebtTransport, hzero]
   · have hgain := sum_quittingDebtTransportGain_eq_totalLoss before after hsum
-    simp only [quittingDebtTransport, hzero, if_false,
+    simp only [quittingDebtTransport, hzero, ite_false,
       Finset.sum_add_distrib]
     rw [show (∑ recipient,
         if sender = recipient then
@@ -353,7 +353,7 @@ theorem sum_quittingDebtTransport_sender
     simp [quittingDebtTransport, hzero, hsame]
   · have hlossGain :=
       sum_quittingDebtTransportGain_eq_totalLoss before after hsum
-    simp only [quittingDebtTransport, hzero, if_false,
+    simp only [quittingDebtTransport, hzero, ite_false,
       Finset.sum_add_distrib]
     rw [show (∑ sender,
         if sender = recipient then
@@ -380,7 +380,7 @@ theorem quittingDebtTransport_nonneg
     (sender recipient : iota) :
     0 ≤ quittingDebtTransport before after sender recipient := by
   by_cases hzero : quittingDebtTransportTotalLoss before after = 0
-  · rw [quittingDebtTransport, if_pos hzero]
+  · rw [quittingDebtTransport, ite_eq_left hzero]
     split_ifs <;> simp [hbefore]
   · have htotalNonneg : 0 ≤
         quittingDebtTransportTotalLoss before after := by
@@ -388,7 +388,7 @@ theorem quittingDebtTransport_nonneg
       exact Finset.sum_nonneg fun who _ ↦ le_max_right _ _
     have htotalPos : 0 < quittingDebtTransportTotalLoss before after :=
       lt_of_le_of_ne htotalNonneg (Ne.symm hzero)
-    simp only [quittingDebtTransport, hzero, if_false]
+    simp only [quittingDebtTransport, hzero, ite_false]
     exact add_nonneg
       (by split_ifs <;>
         simp [quittingDebtTransportStorage, hbefore, hafter])
@@ -429,8 +429,8 @@ theorem exists_quittingDebtTransport_pos_of_fullReset
         max_eq_right (neg_nonpos.mpr hsource.le)]
     linarith
   refine ⟨recipient, hrecipientNe, ?_⟩
-  rw [quittingDebtTransport, if_neg htotalPos.ne',
-    if_neg (Ne.symm hrecipientNe), zero_add, hlossWho]
+  rw [quittingDebtTransport, ite_eq_right htotalPos.ne',
+    ite_eq_right (Ne.symm hrecipientNe), zero_add, hlossWho]
   exact div_pos (mul_pos hsource hgainRecipient) htotalPos
 
 /-- **Game-facing nonnegative lift of a full reset edge.**

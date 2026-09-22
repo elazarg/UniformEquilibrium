@@ -30,9 +30,11 @@ the refusal certificate persists along a strict subsequence.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open Filter StochasticGame Math.Probability
+open Filter StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -135,10 +137,12 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.negativeTarget_sourceM
     exact_mod_cast Fintype.card_pos
   have hMpos : 0 < M := packet.rewardBound_pos
   have htargetNonneg : 0 ≤ targetMass :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile)).1
       (some packet.terminal)
   have hsourceNonneg : 0 ≤ sourceMass :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile)).1
       (some packet.terminal)
   have hbound := packet.atom_bound n
   have hsourceUpdate : Function.update

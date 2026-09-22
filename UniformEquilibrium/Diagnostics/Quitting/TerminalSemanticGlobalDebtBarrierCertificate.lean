@@ -40,7 +40,7 @@ noncomputable section
 namespace GameTheory
 namespace TerminalSemanticGlobalDebtBarrierCertificate
 
-open Filter Math.Probability Set
+open Filter _root_.Math.Probability Set
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -171,7 +171,7 @@ theorem Certificate.nonempty_of_pos
     (certificate : Certificate reward δ) (hδ : 0 < δ) : Nonempty ι := by
   cases isEmpty_or_nonempty ι with
   | inl hι =>
-      letI : IsEmpty ι := hι
+      let : IsEmpty ι := hι
       have hfloor := certificate.debt_floor _ certificate.neverBoundary_mem
       simp [quittingTerminalSemanticDebtSum] at hfloor
       linarith
@@ -451,7 +451,7 @@ theorem hasTerminalExploitabilityGap_of_certificate
     (hδ : 0 < δ) (certificate : Certificate reward δ) {gap : ℝ}
     (hgap : gap < δ / (Fintype.card ι : ℝ)) :
     HasTerminalExploitabilityGap reward gap := by
-  letI : Nonempty ι := certificate.nonempty_of_pos hδ
+  let : Nonempty ι := certificate.nonempty_of_pos hδ
   intro profile
   let playerCount : ℝ := Fintype.card ι
   have hplayerCount : 0 < playerCount := by
@@ -502,7 +502,7 @@ theorem not_exists_uniformEquilibriumPayoff_of_certificate
     (hδ : 0 < δ) (certificate : Certificate reward δ) :
     ¬ ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := certificate.nonempty_of_pos hδ
+  let : Nonempty ι := certificate.nonempty_of_pos hδ
   have hplayerCount : 0 < (Fintype.card ι : ℝ) := by
     exact_mod_cast (Fintype.card_pos : 0 < Fintype.card ι)
   have hfixedGap :

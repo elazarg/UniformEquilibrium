@@ -119,7 +119,7 @@ theorem exists_gaugeFixed_centeredPoisson_of_communicates
           (stationaryPoissonMatrix kernel anchor) potential =
         stationaryPoissonRhs
           (scaledStationaryCenteredCharge weight observable) := by
-  letI : Nonempty S := ⟨anchor⟩
+  let : Nonempty S := ⟨anchor⟩
   let C : ReachableClosedClass kernel anchor := {
     states := Finset.univ
     states_nonempty := Finset.univ_nonempty

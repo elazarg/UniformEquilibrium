@@ -118,13 +118,13 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 
 namespace SorinAbsorbingGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-! ## The game -/
 
@@ -141,7 +141,11 @@ inductive State
   | live
   | absTL
   | absTR
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.live, .absTL, .absTR}
+  complete state := by cases state <;> simp
 
 /-- The payoff vector paying `u₁` to player 1 and `u₂` to player 2. -/
 def pair (u₁ u₂ : ℝ) : Payoff Player := fun who => if who then u₂ else u₁

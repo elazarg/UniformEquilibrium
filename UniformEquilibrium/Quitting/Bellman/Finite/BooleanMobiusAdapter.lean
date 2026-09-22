@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -115,7 +115,7 @@ theorem quittingRootExpectedPayoff_eq_sum_coalitionMass
     simp [quittingQuitters]
   rw [quittingRootPayoff_eq_stageCoalitionPayoff, hquitters]
   simp only [coalitionMass, hazardOfRoot, Finset.compl_eq_univ_sdiff]
-  simp only [Finset.mem_univ, if_true]
+  simp only [Finset.mem_univ, ite_true]
 
 /-- The absorbing contribution is the exact sum of the nonempty coalition
 masses weighted by their terminal rewards. -/

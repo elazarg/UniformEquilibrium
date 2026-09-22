@@ -21,7 +21,7 @@ open scoped BigOperators
 
 namespace Math.Probability.DiscreteHazard
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace StoppingLaw
 
@@ -360,7 +360,7 @@ private theorem exactFiniteFirstStoppingCoalitionMass_le_firstDisjointPairMass
     have hquit :
         (∏ who ∈ coalition.1, finiteMass (laws who) time) ≤
           finiteMass (laws first) time * finiteMass (laws second) time := by
-      have h := Finset.prod_le_prod_of_subset_of_le_one hpairSubset
+      have h := Finset.prod_le_prod_of_subset_of_le_one₀ hpairSubset
         (fun who _ => (finiteMass_mem_Icc (laws who) time).1)
         (fun who _ _ => (finiteMass_mem_Icc (laws who) time).2)
       simpa [hfirstSecond, mul_comm] using h
@@ -368,7 +368,7 @@ private theorem exactFiniteFirstStoppingCoalitionMass_le_firstDisjointPairMass
         (∏ who ∈ coalition.1ᶜ, survival (laws who) (time + 1)) ≤
           survival (laws third) (time + 1) *
             survival (laws fourth) (time + 1) := by
-      have h := Finset.prod_le_prod_of_subset_of_le_one hotherPairSubset
+      have h := Finset.prod_le_prod_of_subset_of_le_one₀ hotherPairSubset
         (fun who _ => (survival_mem_Icc (laws who) (time + 1)).1)
         (fun who _ _ => (survival_mem_Icc (laws who) (time + 1)).2)
       simpa [hthirdFourth, mul_comm] using h

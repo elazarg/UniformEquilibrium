@@ -35,6 +35,8 @@ open Finset BigOperators
 namespace Math
 namespace LinearAlgebra
 
+open Maths.LinearProgramming
+
 noncomputable section
 
 variable {Facet Player : Type*}
@@ -114,7 +116,7 @@ theorem exists_playerConstraintDeficit_ge_value
     ⟨O.firstOwner, O.firstConstraint⟩
   let nonemptyEdges : Nonempty (Σ player, Constraint player) :=
     ⟨edge⟩
-  letI := nonemptyEdges
+  let := nonemptyEdges
   exact exists_playerConstraintDeficit_ge_coupledWeightedRhs
     facetNormal facetRhs playerNormal playerRhs
     O.multiplier O.isNonnegativeBalance O.playerMass_eq_one x hfacet

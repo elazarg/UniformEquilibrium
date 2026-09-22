@@ -191,7 +191,7 @@ theorem wellSupported_or_stationary_or_uniformAllContinuePhantom
   rcases residual.wellSupported_or_summableExactPrefixPort with
     hwellSupported | ⟨endpoint, hnoSureExit, ⟨port⟩⟩
   · exact Or.inl hwellSupported
-  · letI : Nonempty iota := ⟨endpoint.punished⟩
+  · let : Nonempty iota := ⟨endpoint.punished⟩
     rcases port.stationaryExistence_or_uniformAllContinuePhantom_of_endpoint
         endpoint with hstationary | ⟨phantom, hvalue, huniform⟩
     · exact Or.inr (Or.inl hstationary)
@@ -216,7 +216,7 @@ theorem wellSupported_or_stationary_or_allContinuePhantom
   rcases residual.wellSupported_or_summableExactPrefixPort with
     hwellSupported | ⟨endpoint, _hnoSureExit, ⟨port⟩⟩
   · exact Or.inl hwellSupported
-  · letI : Nonempty iota := ⟨endpoint.punished⟩
+  · let : Nonempty iota := ⟨endpoint.punished⟩
     rcases port.stationaryExistence_or_allContinuePhantom with
       hstationary | hphantom
     · exact Or.inr (Or.inl hstationary)
@@ -238,7 +238,7 @@ theorem wellSupported_or_stationary_or_singletonDefect
   rcases residual.wellSupported_or_summableExactPrefixPort with
     hwellSupported | ⟨endpoint, _hnoSureExit, ⟨port⟩⟩
   · exact Or.inl hwellSupported
-  · letI : Nonempty iota := ⟨endpoint.punished⟩
+  · let : Nonempty iota := ⟨endpoint.punished⟩
     rcases port.stationaryExistence_or_positiveSingletonDefectResidual
         hdelta with hstationary | hdefect
     · exact Or.inr (Or.inl hstationary)

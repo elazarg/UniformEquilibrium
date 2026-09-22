@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -112,7 +112,7 @@ theorem opponentNever_ge
   have hrest : (∏ player ∈
       (Finset.univ.erase collision.escapeOwner).erase other,
         (collision.source.new player none).toReal) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun player hplayer => hfactor0 player
         (Finset.mem_of_mem_erase hplayer))
       (fun player hplayer => hfactor1 player
@@ -162,7 +162,7 @@ theorem behavioralStagePairMass_eq_cylinderMass
   rw [Finset.prod_insert (by simp [collision.responder_ne_participant]),
     Finset.prod_singleton, Function.update_self,
     Function.update_of_ne collision.responder_ne_participant.symm]
-  simp only [PMF.pure_apply, if_pos, ENNReal.toReal_one, one_mul]
+  simp only [PMF.pure_apply, ite_eq_left, ENNReal.toReal_one, one_mul]
   have hcomplement :
       ({collision.responder, collision.participant} : Finset ι)ᶜ =
         (Finset.univ.erase collision.responder).erase
@@ -194,10 +194,10 @@ private theorem exists_boundaryParticipant_ge_average
     ∃ participant, gamma / (8 * bound * (Fintype.card ι : ℝ)) ≤
       quittingFiniteDeadlineBoundaryParticipation source.deadline
         source.new participant := by
-  haveI : Nonempty ι := Fintype.card_pos_iff.mp <| by
+  have : Nonempty ι := Fintype.card_pos_iff.mp <| by
     by_contra hzero
     have hcard : Fintype.card ι = 0 := Nat.eq_zero_of_not_pos hzero
-    letI : IsEmpty ι := Fintype.card_eq_zero_iff.mp hcard
+    let : IsEmpty ι := Fintype.card_eq_zero_iff.mp hcard
     have hemptySum : source.boundaryParticipationMass = 0 := by
       unfold QuittingAdjacentDeadlineGapSource.boundaryParticipationMass
       simp
@@ -280,7 +280,7 @@ noncomputable def of_boundaryParticipation
     have hmem : other ∈ Finset.univ.erase escapeOwner := by simp [hother]
     have hrest : (∏ player ∈ (Finset.univ.erase escapeOwner).erase other,
         (source.new player none).toReal) ≤ 1 :=
-      Finset.prod_le_one
+      Finset.prod_le_one₀
         (fun player hplayer => hfactor0 player
           (Finset.mem_of_mem_erase hplayer))
         (fun player hplayer => hfactor1 player
@@ -322,7 +322,7 @@ noncomputable def of_boundaryParticipation
       ∏ other ∈ (Finset.univ.erase responder).erase participant,
         (source.new other none).toReal := by
     -- The helper is deadline-polymorphic after elaboration of its mixed law.
-    have hprod := Finset.prod_le_prod
+    have hprod := Finset.prod_le_prod₀
       (s := (Finset.univ.erase responder).erase participant)
       (fun _ _ => hfloor0)
       (fun other hother => hneverFloor other (hremainingNe other hother))

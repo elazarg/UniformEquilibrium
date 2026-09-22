@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingBoundaryHolonomy
+open Filter _root_.Math.Probability QuittingBoundaryHolonomy
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -46,9 +46,9 @@ omit [Fintype ι] in
 theorem quittingDebtAxisCostate_pos (owner : ι) (index : ℕ) (who : ι) :
     0 < quittingDebtAxisCostate owner index who := by
   by_cases hwho : who = owner
-  · rw [quittingDebtAxisCostate, if_pos hwho]
+  · rw [quittingDebtAxisCostate, ite_eq_left hwho]
     positivity
-  · rw [quittingDebtAxisCostate, if_neg hwho]
+  · rw [quittingDebtAxisCostate, ite_eq_right hwho]
     norm_num
 
 omit [Fintype ι] in
@@ -351,7 +351,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_terminalSemanticDebtAxis
         (quittingAllContinueRoot : ι → PMF Bool) := by
   obtain ⟨M, -, hreward⟩ :=
     exists_quittingRewardBound reward
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   let theta : ℕ → Payoff ι := quittingDebtAxisCostate owner
   have hcompact := quittingTerminalSemanticCarrier_isCompact reward
   have hnonempty := quittingTerminalSemanticCarrier_nonempty reward
@@ -543,7 +543,7 @@ theorem QuittingTerminalExploitabilityWitness.exists_debtAxes_and_sourceMatchedI
       quittingRootEndpointDifference reward pair.1
           (quittingSoloStationaryRoot owner
             (quittingHazardCoin rate hrate0 hrate1)) other = gain / 2 := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have haxes : ∀ owner, ∃ pair : QuittingTerminalSemanticPair ι,
       pair ∈ quittingTerminalSemanticCarrier reward ∧
       witness.terminalGap ≤ quittingTerminalSemanticDebt pair owner ∧

@@ -61,7 +61,7 @@ private theorem preconditionerNumeratorMod_mul_inverse :
 /-- The modular numerator determinant is nonzero. -/
 private theorem preconditionerNumeratorMod_det_ne_zero :
     Matrix.det preconditionerNumeratorMod ≠ 0 := by
-  letI : Fact (1 < preconditionerWitnessPrime) := ⟨by
+  let : Fact (1 < preconditionerWitnessPrime) := ⟨by
     norm_num [preconditionerWitnessPrime]⟩
   exact Matrix.det_ne_zero_of_right_inverse
     preconditionerNumeratorMod_mul_inverse
@@ -79,12 +79,14 @@ theorem preconditionerNumerator_det_ne_zero :
 /-- The rational preconditioner is the scalar rescaling of its displayed
 integer numerator. -/
 theorem preconditioner_eq_scaledNumerator :
-    (fun row column => preconditioner row column) =
+    ((fun row column => preconditioner row column) :
+      Matrix HazardCoordinate HazardCoordinate ℚ) =
       (1 / (10 ^ 12 : ℚ)) •
         preconditionerNumerator.map (Int.castRingHom ℚ) := by
   ext row column
   fin_cases row <;> fin_cases column <;>
-    norm_num [preconditioner, preconditionerNumerator]
+    simp only [Matrix.smul_apply, Matrix.map_apply, smul_eq_mul] <;>
+      norm_num [preconditioner, preconditionerNumerator]
 
 /-- The rational preconditioning matrix is nonsingular. -/
 theorem preconditioner_det_ne_zero :
@@ -112,11 +114,15 @@ theorem preconditioner_mulVec_injective :
 entries into the reals. -/
 theorem realPreconditioner_mulVec_injective :
     Function.Injective
-      (Matrix.mulVec fun row column => (preconditioner row column : ℝ)) := by
+      (Matrix.mulVec ((fun row column => (preconditioner row column : ℝ)) :
+        Matrix HazardCoordinate HazardCoordinate ℝ)) := by
   let rationalMatrix : Matrix HazardCoordinate HazardCoordinate ℚ :=
     fun row column => preconditioner row column
+  let realMatrix : Matrix HazardCoordinate HazardCoordinate ℝ :=
+    fun row column => (preconditioner row column : ℝ)
+  change Function.Injective (Matrix.mulVec realMatrix)
   apply Matrix.mulVec_injective_iff_isUnit.mpr
-  rw [Matrix.isUnit_iff_isUnit_det]
+  apply (Matrix.isUnit_iff_isUnit_det realMatrix).mpr
   apply isUnit_iff_ne_zero.mpr
   change Matrix.det (rationalMatrix.map fun value => (value : ℝ)) ≠ 0
   rw [← Rat.cast_det]

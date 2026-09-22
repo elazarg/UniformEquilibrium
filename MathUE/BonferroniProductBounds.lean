@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import Mathlib.Algebra.Order.BigOperators.Ring.Finset
 import Mathlib.Data.Finset.Prod
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 import Mathlib.Tactic.Linarith
 import Mathlib.Tactic.Positivity
 
@@ -125,7 +125,7 @@ theorem one_sub_prod_one_sub_le_sum (w : ι → ℝ) (s : Finset ι)
   have h1' : ∀ j ∈ s, w j ≤ 1 := fun j hj =>
     h1 j (Finset.mem_insert_of_mem hj)
   have hprod : ∏ j ∈ s, (1 - w j) ≤ 1 :=
-    Finset.prod_le_one (fun j hj => by linarith [h1' j hj])
+    Finset.prod_le_one₀ (fun j hj => by linarith [h1' j hj])
       (fun j hj => by linarith [h0' j hj])
   have hih := ih h0' h1'
   rw [Finset.prod_insert ha, Finset.sum_insert ha]

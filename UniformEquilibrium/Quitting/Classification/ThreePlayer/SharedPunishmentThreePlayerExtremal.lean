@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingSharedThreePlayer
 
@@ -33,8 +33,8 @@ theorem quittingAbsorbedMass_nonneg
   unfold quittingAbsorbedMass StochasticGame.expectedStateValue
   apply expect_nonneg
   intro history
-  by_cases hs : history.2 = some S <;>
-    simp [quittingAbsorbedIndicator, hs]
+  unfold quittingAbsorbedIndicator
+  positivity
 
 /-- Every limiting absorbed-state mass is nonnegative. -/
 theorem quittingAbsorbedMassLimit_nonneg

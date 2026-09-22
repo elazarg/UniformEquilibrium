@@ -227,10 +227,12 @@ theorem pathRightDerivative_eq_zero_of_nonsingleton_of_unitBoundedWeakLimit
     have hratio := hcellAbsorption.div
       (tendsto_const_nhds.sub hcellAbsorption)
         (by norm_num : (1 : ℝ) - 0 ≠ 0)
-    convert hratio using 1
-    · funext rank
-      simp only [odds, Pi.div_apply]
-    · norm_num
+    have hoddsEq : odds = cellAbsorption / fun x ↦ 1 - cellAbsorption x := by
+      funext rank
+      rfl
+    rw [hoddsEq]
+    norm_num at hratio ⊢
+    exact hratio
   have hboundTendsto : Tendsto (fun rank ↦ 2 * odds rank) atTop
       (nhds 0) := by
     simpa using tendsto_const_nhds.mul hodds
@@ -275,7 +277,7 @@ theorem pathRightDerivative_eq_zero_of_nonsingleton_of_unitBoundedWeakLimit
     · exact hslopeLe
     · exact hboundTendsto
   let rightFilter := nhdsWithin time (Ioo time 1)
-  letI : rightFilter.NeBot := left_nhdsWithin_Ioo_neBot htimeLtOne
+  let _ : rightFilter.NeBot := left_nhdsWithin_Ioo_neBot htimeLtOne
   have hcontrolledRight : Tendsto controlled.point atTop rightFilter := by
     rw [tendsto_nhdsWithin_iff]
     exact ⟨controlled.tendsto,

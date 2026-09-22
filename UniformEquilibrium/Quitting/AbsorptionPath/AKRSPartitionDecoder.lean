@@ -830,7 +830,7 @@ theorem absorptionPathPreBoundaryPayoff_eq_of_copiedJumpCell
     path.1.value_eq_leftValue_of_lt_of_total_eq hstart hstop hstartStop
       hleftTotal terminal
   unfold absorptionPathPreBoundaryPayoff absorptionPathPayoff
-  rw [if_pos hstart, if_pos htotalOne]
+  rw [ite_eq_left hstart, ite_eq_left htotalOne]
   funext player
   have hnumerator :
       (∑ terminal : {S : Finset ι // S.Nonempty},

@@ -60,7 +60,7 @@ theorem pathLeftTotal_eq_time_of_jump_of_clockGap
           Icc (0 : ℝ) time \ {time} := by
         intro point hpoint
         exact ⟨⟨hpoint.1.le, hpoint.2.le⟩, hpoint.2.ne⟩
-      letI : leftFilter.NeBot :=
+      let : leftFilter.NeBot :=
         (right_nhdsWithin_Ioo_neBot htimePos).mono
           (nhdsWithin_mono time hsubset)
       have htotalTendsto : Tendsto (fun point ↦ pathTotal path point)

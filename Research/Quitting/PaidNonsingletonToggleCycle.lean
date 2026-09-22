@@ -1124,7 +1124,7 @@ theorem exists_spectator_debtRise
     ∃ offset : Fin cycle.period, ∃ observer : Fin 4,
       observer ≠ cycle.mover offset ∧
         gainFloor / 3 ≤ cycle.debtChange offset observer := by
-  letI : Nonempty (Fin cycle.period) := ⟨⟨0, cycle.period_pos⟩⟩
+  let : Nonempty (Fin cycle.period) := ⟨⟨0, cycle.period_pos⟩⟩
   have htotal : ∑ offset : Fin cycle.period,
       ∑ observer ∈ Finset.univ.erase (cycle.mover offset),
         cycle.debtChange offset observer =
@@ -1282,7 +1282,13 @@ theorem exists_spectatorDebtRise
         hlambda hlive)
   obtain ⟨offset, observer, hobserver, hrise⟩ := hdispatch
   exact ⟨offset, observer, hobserver, by
-    rw [toLiteralSiblingCycle_debtChange] at hrise
+    change lambda * quittingTerminalSemanticDebtSum minimum / 4 / 3 ≤
+      quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (profileAt trace profile stage (offset + 1))) observer -
+        quittingTerminalSemanticDebt
+          (quittingTerminalSemanticPair reward
+            (profileAt trace profile stage offset)) observer at hrise
     nlinarith⟩
 
 /-- The checked stopping-law atom alternative attached to one selected

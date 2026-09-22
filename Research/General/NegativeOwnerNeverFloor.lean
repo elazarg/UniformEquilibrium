@@ -31,7 +31,7 @@ noncomputable section
 namespace GameTheory
 namespace NegativeOwnerNeverFloor
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

@@ -24,7 +24,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter MeasureTheory Set StochasticGame
+open Filter MeasureTheory _root_.Set StochasticGame
 open _root_.Math.Probability _root_.Math.ProbabilityMassFunction
 open _root_.Math.Probability.DiscreteHazard
 open scoped BigOperators ENNReal Topology

@@ -1,7 +1,7 @@
 import Mathlib.Algebra.Order.Ring.Basic
 import Mathlib.Algebra.Polynomial.Derivative
 import Mathlib.Algebra.Polynomial.Degree.Lemmas
-import Mathlib.Data.Sign.Basic
+import Mathlib.Basic.Sign.Basic
 import Mathlib.Tactic.Abel
 import Mathlib.Tactic.Push
 import Mathlib.Tactic.Ring
@@ -604,14 +604,14 @@ theorem pseudoDivideRaw_identity [Zero A] [One A] [Add A] [Neg A] [Mul A]
   by_cases hdivisor : divisor = []
   · subst divisor
     simp [PseudoDivisionIdentity, pseudoDivideRaw, evalMap]
-  · rw [pseudoDivideRaw, if_neg hdivisor]
+  · rw [pseudoDivideRaw, ite_eq_right hdivisor]
     apply pseudoDivideLoop_identity e hdivisor x
     simp [evalMap]
 
 theorem pseudoDivideRaw_remainder_length_lt [Zero A] [Add A] [Neg A] [Mul A]
     (dividend : DensePolynomial A) {divisor : DensePolynomial A} (hdivisor : divisor ≠ []) :
     (pseudoDivideRaw dividend divisor).remainder.length < divisor.length := by
-  rw [pseudoDivideRaw, if_neg hdivisor]
+  rw [pseudoDivideRaw, ite_eq_right hdivisor]
   exact pseudoDivideLoop_remainder_length_lt hdivisor (le_refl dividend.length)
 
 theorem evenizePseudoDivision_identity [Zero A] [One A] [Add A] [Neg A] [Mul A]

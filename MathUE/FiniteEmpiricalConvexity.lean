@@ -184,7 +184,7 @@ theorem balancedChoice_spec {weight : κ → ℝ}
     rw [← Finset.mul_sum, hweightSum, mul_one, hcountCast] at hsum
     norm_num at hsum
   unfold balancedSample balancedChoice
-  rw [dif_pos hex]
+  rw [dite_eq_left hex]
   exact Classical.choose_spec hex
 
 /-- Every weighted round-robin count stays less than one above its real-valued
@@ -203,7 +203,7 @@ theorem balancedCounts_sub_target_lt_one {weight : κ → ℝ}
         have hsame : balancedSample weight step =
             balancedChoice weight (balancedCounts weight step) step := rfl
         dsimp only
-        rw [hsame, if_pos rfl]
+        rw [hsame, ite_eq_left rfl]
         norm_num only [Nat.cast_add, Nat.cast_one]
         have hselected := balancedChoice_spec hweight0 hweightSum step
         rw [hsame, Nat.cast_add, Nat.cast_one] at hselected
@@ -212,7 +212,7 @@ theorem balancedCounts_sub_target_lt_one {weight : κ → ℝ}
             balancedChoice weight (balancedCounts weight step) step := by
           simpa only [balancedSample] using hk
         dsimp only
-        rw [if_neg hk']
+        rw [ite_eq_right hk']
         norm_num only [add_zero, Nat.cast_add, Nat.cast_one]
         have hw := hweight0 k
         nlinarith

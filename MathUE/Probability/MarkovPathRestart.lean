@@ -85,7 +85,7 @@ def dropPrefix (time : ℕ) :
 
 theorem measurable_dropPrefix (time : ℕ) :
     Measurable (dropPrefix (State := State) time) := by
-  exact measurable_pi_lambda _ fun index => measurable_pi_apply _
+  exact Measurable.of_eval fun index => measurable_pi_apply _
 
 private theorem partialTraj_succ_apply {Y : ℕ → Type*} [∀ time, MeasurableSpace (Y time)]
     {transition : (time : ℕ) →
@@ -173,7 +173,7 @@ theorem trajectoryKernel_partialTraj_dropPrefix
 def dropFirst (path : ℕ → State) (time : ℕ) : State := path (time + 1)
 
 theorem measurable_dropFirst : Measurable (dropFirst (State := State)) := by
-  exact measurable_pi_lambda _ fun time => measurable_pi_apply (time + 1)
+  exact Measurable.of_eval fun time => measurable_pi_apply (time + 1)
 
 def prependInitialPrefix (start : State) :
     ((index : Finset.Iic 0) → State) → ((index : Finset.Iic 1) → State) :=
@@ -182,7 +182,7 @@ def prependInitialPrefix (start : State) :
 
 theorem measurable_prependInitialPrefix (start : State) :
     Measurable (prependInitialPrefix (State := State) start) := by
-  apply measurable_pi_lambda
+  apply Measurable.of_eval
   intro index
   by_cases hindex : index.1 ≤ 0
   · simp [prependInitialPrefix, Kernel.extendPrefix, _root_.IicProdIoc, hindex]
@@ -269,7 +269,7 @@ def prependFirst (start : State) (path : ℕ → State) : ℕ → State
 
 theorem measurable_prependFirst (start : State) :
     Measurable (prependFirst (State := State) start) := by
-  exact measurable_pi_lambda _ fun time => by
+  exact Measurable.of_eval fun time => by
     cases time with
     | zero => exact measurable_const
     | succ time => exact measurable_pi_apply time

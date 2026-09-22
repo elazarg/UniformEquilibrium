@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -212,24 +212,29 @@ omit [Nonempty ι] in
   have htight : tail.boundary owner.1 =
       reward (quittingSingletonTerminal owner.1) owner.1 :=
     (Finset.mem_filter.1 owner.property).2
-  rw [dif_pos htight]
+  rw [dite_eq_left htight]
 
 /-- Zero extension of a tight-owner simplex remains an ambient simplex. -/
-def extendTightSimplex (weight : stdSimplex ℝ tail.TightOwner) :
-    stdSimplex ℝ ι := by
+def extendTightSimplex (weight : Convexity.StdSimplex ℝ tail.TightOwner) :
+    Convexity.StdSimplex ℝ ι := by
   classical
-  refine ⟨tail.extendTightWeight weight.val, ?_, ?_⟩
+  refine {
+    weights := Finsupp.equivFunOnFinite.symm
+      (tail.extendTightWeight weight.weights)
+    nonneg := ?_
+    total := ?_ }
   · intro owner
     by_cases htight : tail.boundary owner =
         reward (quittingSingletonTerminal owner) owner
     · have hmem : owner ∈ tail.tightOwnerFinset := by
         simpa [tightOwnerFinset] using htight
-      simpa [extendTightWeight, htight] using weight.property.1 ⟨owner, hmem⟩
+      simp [extendTightWeight, htight]
     · simp [extendTightWeight, htight]
-  · calc
-      (∑ owner, tail.extendTightWeight weight.val owner) =
+  · rw [Finsupp.equivFunOnFinite_symm_sum]
+    calc
+      (∑ owner, tail.extendTightWeight weight.weights owner) =
           ∑ owner ∈ tail.tightOwnerFinset,
-            tail.extendTightWeight weight.val owner := by
+            tail.extendTightWeight weight.weights owner := by
         symm
         apply Finset.sum_subset (Finset.subset_univ _)
         intro owner _ howner
@@ -238,14 +243,14 @@ def extendTightSimplex (weight : stdSimplex ℝ tail.TightOwner) :
           simpa [tightOwnerFinset] using howner
         simp [extendTightWeight, hnotTight]
       _ = ∑ owner : tail.TightOwner,
-          tail.extendTightWeight weight.val owner.1 := by
+          tail.extendTightWeight weight.weights owner.1 := by
         exact Finset.sum_subtype tail.tightOwnerFinset
-          (fun _ ↦ Iff.rfl) (tail.extendTightWeight weight.val : ι → ℝ)
-      _ = ∑ owner : tail.TightOwner, weight.val owner := by
+          (fun _ ↦ Iff.rfl) (tail.extendTightWeight weight.weights : ι → ℝ)
+      _ = ∑ owner : tail.TightOwner, weight.weights owner := by
         apply Finset.sum_congr rfl
         intro owner _
-        exact tail.extendTightWeight_apply weight.val owner
-      _ = 1 := weight.property.2
+        exact tail.extendTightWeight_apply weight.weights owner
+      _ = 1 := weight.total_of_fintype
 
 omit [Nonempty ι] in
 /-- Zero extension preserves weighted finite sums. -/
@@ -291,9 +296,16 @@ theorem exists_strictCovector_on_tightOwners_of_no_uniformPayoff
       (∀ owner, 0 ≤ weight owner) ∧ (∑ owner, weight owner) = 1 ∧
       ∀ who, (∑ owner, weight owner * column owner who) = 0 := by
     rintro ⟨weight, hweight, hmass, hzero⟩
-    let tightSimplex : stdSimplex ℝ tail.TightOwner := ⟨weight, hweight, hmass⟩
+    let tightSimplex : Convexity.StdSimplex ℝ tail.TightOwner := {
+      weights := Finsupp.equivFunOnFinite.symm weight
+      nonneg := hweight
+      total := by
+        rw [Finsupp.sum_fintype]
+        · exact hmass
+        · intro
+          rfl }
     let ambient := tail.extendTightSimplex tightSimplex
-    have hbary : ∀ who, (∑ owner, ambient.val owner *
+    have hbary : ∀ who, (∑ owner, ambient.weights owner *
         reward (quittingSingletonTerminal owner) who) = tail.boundary who := by
       intro who
       change (∑ owner, tail.extendTightWeight weight owner *
@@ -309,25 +321,21 @@ theorem exists_strictCovector_on_tightOwners_of_no_uniformPayoff
       reward ambient
     · intro who
       rw [singletonLCPResidual_normalizedSoloMatrix_eq_singletonBarycenter]
-      change 0 ≤ (∑ owner, ambient.val owner *
-        reward (quittingSingletonTerminal owner) who) - _
       rw [hbary who]
       exact sub_nonneg.mpr (tail.solo_le_boundary who)
     · intro who
       by_cases htight : tail.boundary who =
           reward (quittingSingletonTerminal who) who
       · rw [singletonLCPResidual_normalizedSoloMatrix_eq_singletonBarycenter]
-        change ambient.val who * ((∑ owner, ambient.val owner *
-          reward (quittingSingletonTerminal owner) who) - _) = 0
         rw [hbary who, htight, sub_self, mul_zero]
-      · have hambient : ambient.val who = 0 := by
+      · have hambient : ambient.weights who = 0 := by
           simp [ambient, extendTightSimplex, extendTightWeight, htight]
         rw [hambient, zero_mul]
     · intro owner howner
       have htight : tail.boundary owner =
           reward (quittingSingletonTerminal owner) owner := by
         by_contra hnotTight
-        have : ambient.val owner = 0 := by
+        have : ambient.weights owner = 0 := by
           simp [ambient, extendTightSimplex, extendTightWeight, hnotTight]
         linarith
       exact tail.punishmentValue_le_boundary owner |>.trans_eq htight

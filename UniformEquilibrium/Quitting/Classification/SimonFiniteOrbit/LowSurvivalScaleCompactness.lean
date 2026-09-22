@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability StochasticGame
+open Filter _root_.Math.Probability StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -108,6 +108,7 @@ theorem QuittingLowSurvivalFirstCrossingSourceAt.floorClippedPurifiedCore
       funext player time history
       simp [quittingRootSequenceProfile,
         QuittingLowSurvivalFirstCrossingSourceAt.predecessorProfile]
+      rfl
     rwa [hprofile] at hbehavior
   have hadapter :=
     (isεAsymptoticNash_firstStageAdapter_iff reward

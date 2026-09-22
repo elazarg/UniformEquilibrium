@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Math.Probability Math.PMFProduct
+open Finset _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 /-- A positive exact opponent-coalition atom can only use active Quit

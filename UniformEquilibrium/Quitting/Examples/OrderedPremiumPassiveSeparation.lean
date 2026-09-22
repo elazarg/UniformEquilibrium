@@ -93,10 +93,10 @@ theorem lowerPassiveSingletons_not_acyclic
   · intro time
     by_cases heven : time % 2 = 0
     · have hnext : (time + 1) % 2 ≠ 0 := by omega
-      simp only [heven, hnext, if_true, if_false]
+      simp only [heven, hnext, ite_true, ite_false]
       exact lowerPassiveSingletons_preemption_edge reward (by decide)
     · have hnext : (time + 1) % 2 = 0 := by omega
-      simp only [heven, hnext, if_true, if_false]
+      simp only [heven, hnext, ite_true, ite_false]
       exact lowerPassiveSingletons_preemption_edge reward (by decide)
 
 /-- The zero-own-premium family keeps every passive coalition entry free. -/

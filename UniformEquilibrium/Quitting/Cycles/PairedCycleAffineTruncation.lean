@@ -70,7 +70,11 @@ theorem affine_finiteProfile_firstActiveTime_attains
         (cycle schedule q hq) initial (turns * period) =
       quittingCyclicFiniteProfile reward (cycle schedule q hq) initial (turns * period) := by
     funext who time history
-    rw [quittingCyclicFiniteProfile_apply, quittingCyclicFiniteProfile_apply]
+    rw [quittingCyclicFiniteProfile_apply]
+    change _ = quittingCyclicFiniteProfile reward (cycle schedule q hq) initial
+      (turns * period) who time
+        (show (quittingGame reward).Hist time from history)
+    rw [quittingCyclicFiniteProfile_apply]
   rw [hprofile]
   change quittingTerminalPayoff (quittingPlayerwiseAffineReward reward scale shift)
     (Function.update (quittingCyclicFiniteProfile reward (cycle schedule q hq) initial

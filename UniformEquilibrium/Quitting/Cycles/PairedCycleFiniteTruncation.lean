@@ -160,7 +160,7 @@ theorem jointCycleSurvival_le_geometric (q : ι → ℝ)
     jointCycleSurvival q ≤ (99 / 100 : ℝ) ^ Fintype.card ι := by
   calc
     _ ≤ ∏ _player : ι, (99 / 100 : ℝ) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro player _
         exact sub_nonneg.mpr (hq player).2
       · intro player _

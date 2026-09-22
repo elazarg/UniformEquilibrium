@@ -571,7 +571,12 @@ inductive FinFourCompletionMode
   | cofinalSingleton
   | uniformEscape
   | minimumReturn
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+instance : Fintype FinFourCompletionMode :=
+  Fintype.ofList [.cofinalSingleton, .uniformEscape, .minimumReturn] (by
+    intro mode
+    cases mode <;> simp)
 
 namespace FinFourCompletionMode
 

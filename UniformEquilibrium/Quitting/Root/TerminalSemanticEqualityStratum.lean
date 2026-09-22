@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.SurvivalWeightedObstruction
+open Filter _root_.Math.Probability Math.SurvivalWeightedObstruction
   QuittingBoundaryHolonomy
 open scoped Topology
 

@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset
+open _root_.Finset
 
 /-- The `Fin 4` source profile is definitionally the generic singleton-base
 profile at the same induced Nash point. -/

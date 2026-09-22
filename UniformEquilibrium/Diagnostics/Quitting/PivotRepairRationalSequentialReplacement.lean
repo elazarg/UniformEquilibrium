@@ -439,9 +439,10 @@ theorem afterTwo_prescribedPayoff (N : ℕ) (hN : 1 ≤ N) (who : Fin 4) :
 
 theorem afterTwo_payoff (N : ℕ) (hN : 1 ≤ N) (who : Fin 4) :
     quittingTerminalPayoff reward (afterTwoProfile N hN) who = ![1, 7, 7, 0] who := by
-  rw [afterTwoProfile, afterTwoLaws_eq_geometric,
-    (afterTwoInput N hN).geometric_payoff_eq_prescribedPayoff,
-    afterTwo_prescribedPayoff]
+  have hpayoff := (afterTwoInput N hN).geometric_payoff_eq_prescribedPayoff
+    (optimizerMass N hN) (optimizerMass_feasible N hN)
+    (1 / 2) (by norm_num) (by norm_num) who
+  rw [afterTwoProfile, afterTwoLaws_eq_geometric, hpayoff, afterTwo_prescribedPayoff]
 
 private theorem afterTwo_otherNeverProduct (N : ℕ) (hN : 1 ≤ N)
     (responder : Fin 4) (hne : responder ≠ 0) :

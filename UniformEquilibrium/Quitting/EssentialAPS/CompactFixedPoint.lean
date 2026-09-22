@@ -150,7 +150,7 @@ theorem isClosed_quittingEssentialAPSActiveSet
         (fun value : Payoff ι ↦ value owner) ⁻¹'
           ({quittingSoloReward reward owner owner} : Set ℝ) := by
     ext value
-    simp only [Set.mem_setOf_eq, Set.mem_preimage,
+    simp only [Set.mem_ofPred_eq, Set.mem_preimage,
       Set.mem_singleton_iff]
   rw [hsetEq]
   exact isClosed_singleton.preimage (continuous_apply owner)

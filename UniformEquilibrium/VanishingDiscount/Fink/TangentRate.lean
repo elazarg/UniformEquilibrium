@@ -134,7 +134,7 @@ theorem exists_finkSupportHarmonicAdjustment_of_frozenSupportDrift_zero
         change (β n / (1 - β n)) *
             (if G.finkProfile zlim s who d ≠ 0 then
               G.finkContinuationGain W (z n) s who d else 0) = _
-        rw [if_pos hd]
+        rw [ite_eq_left hd]
       rw [heq] at hdcoord
       simpa only [a] using hdcoord
     have hfixedAction :=

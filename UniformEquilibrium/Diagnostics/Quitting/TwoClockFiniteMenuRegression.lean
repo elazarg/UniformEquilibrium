@@ -77,7 +77,7 @@ end GameTheory.TwoClockOrderedPureTimePayoff
 
 namespace GameTheory.TwoClockFiniteMenuRegression
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 open TwoClockOrderedPureTimePayoff
 
 variable (N : ℕ) (hN : 2 ≤ N)
@@ -126,7 +126,8 @@ theorem pureTimingPayoff (a b : Action N) :
     cases player <;> cases a <;> cases b <;>
       simp [quittingPureStoppingTimeProfile, quittingPureTimeProfileBehavior,
         quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-        quittingFiniteDeadlineTimingActionTime, decode]]
+        quittingFiniteDeadlineTimingActionTime, decode]
+    all_goals rfl]
   exact pureTime_payoff_false (decode N a) (decode N b)
 
 theorem pureTimingPayoff_true (a b : Action N) :
@@ -140,7 +141,8 @@ theorem pureTimingPayoff_true (a b : Action N) :
     cases player <;> cases a <;> cases b <;>
       simp [quittingPureStoppingTimeProfile, quittingPureTimeProfileBehavior,
         quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
-        quittingFiniteDeadlineTimingActionTime, decode]]
+        quittingFiniteDeadlineTimingActionTime, decode]
+    all_goals rfl]
   exact TwoClockOrderedPureTimePayoff.pureTime_payoff_true _ _
 
 theorem expect_halfLastNever (first : Option ℕ) :
@@ -153,7 +155,7 @@ theorem expect_halfLastNever (first : Option ℕ) :
   norm_num
 
 theorem finiteNash : IsQuittingFiniteDeadlineNash reward N 0 (mixed N hN) := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -198,7 +200,7 @@ theorem finiteNash : IsQuittingFiniteDeadlineNash reward N 0 (mixed N hN) := by
 theorem prescribed_payoff_false :
     quittingTerminalPayoff reward
         (quittingFiniteDeadlineTimingProfile reward N (mixed N hN)) false = 1 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -216,7 +218,7 @@ theorem prescribed_payoff_false :
 
 theorem never_reply_payoff_false :
     quittingFiniteDeadlineNeverPayoff reward N (mixed N hN) false = 1 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -332,13 +334,32 @@ theorem actual_joint_survival_eq_zero {time : ℕ}
       rw [← stoppingLawSurvival_quittingBehaviorStoppingLaw]
       simp only [quittingFiniteDeadlineTimingProfile,
         quittingBehaviorStoppingLaw_compactStoppingLawProfile]
-      rw [Math.Probability.DiscreteHazard.StoppingLaw.survival_succ,
-        Math.Probability.DiscreteHazard.StoppingLaw.survival_zero]
-      change 1 - ((quittingFiniteDeadlineTimingLaw (mixed N hN false)).toPMF
-        (WithTop.some 0)).toReal = 0
-      rw [show 0 = (⟨0, by omega⟩ : Fin N).val by rfl,
-        quittingFiniteDeadlineTimingLaw_apply_some]
-      simp [mixed, quit0]
+      let finiteLaw : PMF (Option ℕ) :=
+        (quittingFiniteDeadlineTimingLaw (mixed N hN false)).toPMF
+      let sourceLaw : PMF Math.Probability.CompactStoppingTime :=
+        (mixed N hN false).map quittingFiniteDeadlineTimingActionTime
+      let decodedLaw : PMF (Option ℕ) :=
+        (mixed N hN false).map (Math.Probability.finiteStoppingTimeDecode N)
+      have hsource : sourceLaw =
+          (show PMF Math.Probability.CompactStoppingTime from decodedLaw) := by
+        unfold sourceLaw decodedLaw
+        congr 1
+        funext action
+        cases action <;> rfl
+      have hfiniteLaw : finiteLaw = decodedLaw := by
+        unfold finiteLaw quittingFiniteDeadlineTimingLaw
+        change (((Math.Probability.CompactStoppingLaw.ofPMF sourceLaw).toPMF :
+          PMF (Option ℕ))) = decodedLaw
+        rw [hsource]
+        exact Math.Probability.CompactStoppingLaw.toPMF_ofPMF_option decodedLaw
+      have hdecodedLaw : decodedLaw = PMF.pure (some 0) := by
+        unfold decodedLaw mixed quit0
+        rw [PMF.pure_map]
+        rfl
+      change Math.Probability.DiscreteHazard.StoppingLaw.survival finiteLaw 1 = 0
+      rw [hfiniteLaw, hdecodedLaw]
+      simp [Math.Probability.DiscreteHazard.StoppingLaw.survival,
+        Math.Probability.DiscreteHazard.StoppingLaw.finiteMass]
     change (quittingBehaviorLiveHazard reward
       ((quittingFiniteDeadlineTimingProfile reward N (mixed N hN)) false) 0 false).toReal = 0
     simpa [quittingHazardSurvival, Math.survivalProduct] using hs
@@ -382,7 +403,7 @@ def completedMixed : Bool → PMF (Action N)
 theorem completed_payoff_false :
     quittingTerminalPayoff reward
         (quittingFiniteDeadlineTimingProfile reward N (completedMixed N hN)) false = 1 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -397,7 +418,7 @@ theorem completed_finiteNash :
     IsQuittingFiniteDeadlineNash reward N 0 (completedMixed N hN) := by
   rw [isQuittingFiniteDeadlineNash_iff_pure]
   intro who action
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -417,7 +438,7 @@ theorem completed_finiteNash :
 
 theorem completed_never_payoff_false :
     quittingFiniteDeadlineNeverPayoff reward N (completedMixed N hN) false = 0 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -458,7 +479,7 @@ theorem completed_fullCap_false :
             (quittingFiniteDeadlineTimingProfile reward N (completedMixed N hN)) false
             (quittingPureTimeBehaviorStrategy reward false
               (quittingFiniteDeadlineTimingActionTime (quit0 N hN)))) false = 1 := by
-        letI : ∀ player, Fintype
+        let : ∀ player, Fintype
             ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
           intro player
           unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU
@@ -475,7 +496,7 @@ theorem completed_fullCap_false :
 theorem full_debt_false :
     quittingTerminalDeviationDebt reward
         (quittingFiniteDeadlineTimingProfile reward N (mixed N hN)) false = 1 / 2 := by
-  letI : ∀ player, Fintype
+  let : ∀ player, Fintype
       ((quittingFiniteDeadlineTimingGame reward N).Strategy player) := by
     intro player
     unfold quittingFiniteDeadlineTimingGame KernelGame.ofPureEU

@@ -27,7 +27,7 @@ open GameTheory
 
 namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
-open Math.Probability StochasticGame
+open _root_.Math.Probability StochasticGame
 
 /-- The Poisson bias for prescribed delivery.  It is zero after absorption;
 on the three live phases its rows are cyclic permutations of

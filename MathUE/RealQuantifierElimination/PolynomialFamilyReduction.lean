@@ -10,7 +10,7 @@ the first two recursion-measure components and strictly lowers total size.
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 
 /-- Count columns having one specified formal list length. -/
 def familyCountLength {A : Type*}

@@ -121,7 +121,7 @@ private noncomputable def terminalAtRow (row : Fin 15) :
 private theorem terminalAtRow_terminalRow
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) :
     terminalAtRow (terminalRow terminal) = terminal := by
-  rw [terminalAtRow, dif_pos ⟨terminal, rfl⟩]
+  rw [terminalAtRow, dite_eq_left ⟨terminal, rfl⟩]
   apply terminalRow_injective
   exact Classical.choose_spec
     (show ∃ candidate, terminalRow candidate = terminalRow terminal from
@@ -176,8 +176,8 @@ theorem nonempty_finFourRationalRewardApproximation
     reward terminal observer| < delta
   rw [show code.value terminal observer = coordinate terminal observer by
     simp only [RationalFinFourRewardCode.value, code]
-    rw [List.getElem?_ofFn, dif_pos hrow, Option.bind_some,
-      List.getElem?_ofFn, dif_pos hobserver, Option.getD_some,
+    rw [List.getElem?_ofFn, dite_eq_left hrow, Option.bind_some,
+      List.getElem?_ofFn, dite_eq_left hobserver, Option.getD_some,
       hindex, hobserverIndex, terminalAtRow_terminalRow]]
   exact (hcoordinate terminal observer).2
 

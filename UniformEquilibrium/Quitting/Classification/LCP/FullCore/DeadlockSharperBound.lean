@@ -55,7 +55,7 @@ theorem sharperFirst_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, sharperBase,
       sharperAfterThree, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem sharperSecond_clearance :
     idealSingletonClearance deadlockMatrix 1 (15 / 16) sharperAfterThree =
@@ -73,7 +73,7 @@ theorem sharperThird_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix, sharperAfterOne,
       sharperAfterTwo, Matrix.cons_val_zero, Matrix.cons_val_one,
-      Matrix.cons_val_two, Matrix.cons_val_three] <;> decide
+      Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem sharperFourth_clearance :
     idealSingletonClearance deadlockMatrix 0 (19 / 24) sharperAfterTwo =
@@ -551,8 +551,7 @@ theorem sharperEndpoint_clearance :
   fin_cases who <;>
     norm_num [idealSingletonClearance, deadlockMatrix,
       sharperAfterZeroOwner, sharperEndpoint, Matrix.cons_val_zero,
-      Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three] <;>
-    decide
+      Matrix.cons_val_one, Matrix.cons_val_two, Matrix.cons_val_three]
 
 theorem sharperZeroOwner_debt (D : ℝ) :
     idealSingletonDebt deadlockMatrix 0 (84 / 95) sharperBase D =

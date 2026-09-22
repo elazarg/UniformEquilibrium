@@ -277,7 +277,7 @@ theorem countP_length_eq_zero_of_forall_ne
       have hhead := hne polynomial (by simp)
       have hdecide : decide (polynomial.length = length) ≠ true := by
         simp [hhead]
-      rw [if_neg hdecide, ih]
+      rw [ite_eq_right hdecide, ih]
       intro member hmember
       exact hne member (by simp [hmember])
 
@@ -290,7 +290,7 @@ theorem PolynomialFamilyFocus.original_maximalCount_eq_retained_add_one
   rw [familyMaximalCount, hmaximum]
   simp only [PolynomialFamilyFocus.original, PolynomialFamilyFocus.retained,
     List.countP_append, List.countP_cons]
-  rw [if_pos (by simp)]
+  rw [ite_eq_left (by simp)]
   omega
 
 theorem PolynomialFamilyFocus.replacement_maximalCount_eq_retained
@@ -308,7 +308,7 @@ theorem PolynomialFamilyFocus.replacement_maximalCount_eq_retained
   have hderivative :
       decide ((derivative focus.selected).length = focus.selected.length) ≠ true := by
     simp [ne_of_lt (focus.derivative_length_lt_selected hnonconstant)]
-  rw [if_neg hderivative]
+  rw [ite_eq_right hderivative]
   have hremainders :
       focus.replacementRemainders.countP
           (fun polynomial => polynomial.length = focus.selected.length) = 0 := by

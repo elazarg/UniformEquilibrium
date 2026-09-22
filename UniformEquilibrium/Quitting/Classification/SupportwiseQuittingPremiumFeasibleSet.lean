@@ -1,4 +1,4 @@
-import Mathlib.Analysis.Convex.StdSimplex
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Classification.SupportwiseQuittingPremiumBalanceAt
 
 /-! # Compact supportwise premium feasibility sets -/
@@ -92,9 +92,11 @@ theorem isCompact_supportwiseQuittingPremiumFeasibleSet
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (active : Finset ι) :
     IsCompact (supportwiseQuittingPremiumFeasibleSet reward active) := by
-  apply IsCompact.of_isClosed_subset (isCompact_stdSimplex ℝ ι)
+  apply IsCompact.of_isClosed_subset
+    (GameTheory.Math.Probability.isCompact_simplexWeights ι)
     (isClosed_supportwiseQuittingPremiumFeasibleSet reward active)
   intro weight hweight
+  apply GameTheory.Math.Probability.mem_simplexWeights.mpr
   refine ⟨hweight.1, ?_⟩
   calc
     (∑ player, weight player) = ∑ player ∈ active, weight player := by

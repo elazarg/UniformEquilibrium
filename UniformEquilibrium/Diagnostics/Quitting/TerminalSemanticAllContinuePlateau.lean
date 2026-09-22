@@ -50,8 +50,10 @@ theorem quittingContinuationBestResponseValue_le_of_terminalOutcomeReward_le
   · rintro value ⟨deviation, rfl⟩
     let deviated := Function.update profile who deviation
     let mass := quittingTerminalOutcomeMass reward deviated
-    have hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) :=
+    have hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+        (QuittingTerminalOutcome ι) :=
       quittingTerminalOutcomeMass_mem_stdSimplex reward deviated
+    have hweights := GameTheory.Math.Probability.mem_simplexWeights.mp hmass
     change quittingTerminalPayoff reward deviated who ≤ bound
     rw [← quittingTerminalRewardMoment_outcomeMass reward deviated]
     change (∑ outcome, mass outcome *
@@ -60,10 +62,10 @@ theorem quittingContinuationBestResponseValue_le_of_terminalOutcomeReward_le
       _ ≤ ∑ outcome, mass outcome * bound := by
         apply Finset.sum_le_sum
         intro outcome _
-        exact mul_le_mul_of_nonneg_left (hbound outcome) (hmass.1 outcome)
+        exact mul_le_mul_of_nonneg_left (hbound outcome) (hweights.1 outcome)
       _ = (∑ outcome, mass outcome) * bound := by
         rw [Finset.sum_mul]
-      _ = bound := by rw [hmass.2, one_mul]
+      _ = bound := by rw [hweights.2, one_mul]
 
 /-- The same terminal-atom bound passes to every point of the attainable
 semantic closure. -/

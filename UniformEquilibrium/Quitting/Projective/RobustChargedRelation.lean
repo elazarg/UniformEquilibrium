@@ -1,4 +1,4 @@
-import MathUE.ChargedPathBudget
+import Maths.Graph.ChargedRelation
 import UniformEquilibrium.Quitting.Root.NashDefectContinuity
 
 /-! # Floor-free robust charged relation
@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability Math.PMFProduct Set
+open Maths.ChargedPathBudget _root_.Math.Probability Math.PMFProduct Set
 
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {bound : ℝ}
@@ -29,7 +29,7 @@ theorem isCompact_quittingRobustChargedState (bound : ℝ) :
     (isCompact_Icc : IsCompact (Set.Icc (-bound) bound : Set ℝ)))
   convert hcompact using 1
   ext value
-  simp only [Set.mem_setOf_eq, Set.mem_pi, Set.mem_univ, Set.mem_Icc,
+  simp only [Set.mem_ofPred_eq, Set.mem_pi, Set.mem_univ, Set.mem_Icc,
     true_implies, abs_le]
 
 instance (bound : ℝ) : CompactSpace (QuittingRobustChargedState player bound) :=
@@ -181,7 +181,7 @@ theorem isClosed_isQuittingFloorFreeRobustEdge
         {data | quittingRobustChargedEdgeRegret reward data who ≤
           tolerance * quittingRobustChargedEdgeAbsorption data} by
     ext data
-    simp only [Set.mem_setOf_eq, Set.mem_iInter, Set.mem_inter_iff]
+    simp only [Set.mem_ofPred_eq, Set.mem_iInter, Set.mem_inter_iff]
     simp only [IsQuittingFloorFreeRobustEdge]]
   apply isClosed_iInter
   intro who

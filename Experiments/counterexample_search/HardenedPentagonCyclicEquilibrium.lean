@@ -63,7 +63,7 @@ noncomputable section
 namespace GameTheory
 namespace HardenedPentagonCyclicEquilibrium
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 open RegularTournamentFiveSeed (Player singletonMatrix)
 
 /-! ## The hardened completion -/
@@ -102,17 +102,17 @@ theorem hardenedReward_pair (owner who : Player) (hne : who ≠ owner) :
     revert owner who
     decide
   show (if _ then _ else if _ then (2 : ℝ) else if _ then 1 else 0) = _
-  rw [if_neg hcard, if_neg hmem]
+  rw [ite_eq_right hcard, ite_eq_right hmem]
   by_cases hadj : who = owner + 1
-  · rw [if_pos (hkey.mpr hadj), if_pos hadj]
-  · rw [if_neg (fun h ↦ hadj (hkey.mp h)), if_neg hadj]
+  · rw [ite_eq_left (hkey.mpr hadj), ite_eq_left hadj]
+  · rw [ite_eq_right (fun h ↦ hadj (hkey.mp h)), ite_eq_right hadj]
 
 /-- Outsiders of a coalition of size at least two are paid two. -/
 theorem hardenedReward_of_notMem (S : {S : Finset Player // S.Nonempty})
     (hcard : S.1.card ≠ 1) (who : Player) (hwho : who ∉ S.1) :
     hardenedReward S who = 2 := by
   show (if _ then _ else if _ then (2 : ℝ) else if _ then 1 else 0) = _
-  rw [if_neg hcard, if_pos hwho]
+  rw [ite_eq_right hcard, ite_eq_left hwho]
 
 /-- A member of a coalition of size at least two is paid zero unless that
 coalition is the adjacent pair in which it is the beaten player. -/
@@ -121,7 +121,7 @@ theorem hardenedReward_of_mem (S : {S : Finset Player // S.Nonempty})
     (hnotBeaten : S.1 ≠ ({who - 1, who} : Finset Player)) :
     hardenedReward S who = 0 := by
   show (if _ then _ else if _ then (2 : ℝ) else if _ then 1 else 0) = _
-  rw [if_neg hcard, if_neg (by simpa using hwho), if_neg hnotBeaten]
+  rw [ite_eq_right hcard, ite_eq_right (by simpa using hwho), ite_eq_right hnotBeaten]
 
 /-- The grand coalition pays the zero vector. -/
 theorem hardenedReward_univ (who : Player) :

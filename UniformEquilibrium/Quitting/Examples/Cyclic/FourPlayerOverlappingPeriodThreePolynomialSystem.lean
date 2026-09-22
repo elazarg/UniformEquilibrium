@@ -13,7 +13,7 @@ namespace FourPlayerOverlappingPeriodThree
 open Function Metric Set
 open Math.Interval
 open Math.Interval.RationalPolynomial
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 open scoped NNReal
 
 /-- The exact hazard-box center. -/

@@ -5,6 +5,7 @@ Released under the MIT license as described in the file LICENSE.
 
 import MathUE.Minimax.MinimaxLoomis
 import MathUE.Minimax.Loomis
+import GameTheory.Math.Probability.Simplex
 import Mathlib.LinearAlgebra.Matrix.Adjugate
 import Mathlib.Algebra.Polynomial.Eval.Defs
 import Mathlib.Algebra.Polynomial.Div
@@ -91,6 +92,7 @@ Shapley, L. S. and Snow, R. N., "Basic solutions of discrete games", 1950.
 -/
 
 open Finset BigOperators Matrix Polynomial
+open GameTheory.Math.Probability
 
 namespace ShapleySnow
 
@@ -154,24 +156,28 @@ theorem exists_kernel_of_saddlePoint {m n : ℕ} [Nonempty (Fin m)] [Nonempty (F
           = (A.submatrix rows cols).det := by
   classical
   have hVeq : MinimaxLoomis.lam0 A = A i₀ j₀ := by
-    have hlamaux : MinimaxLoomis.lam.aux A (stdSimplex.pure i₀) = A i₀ j₀ := by
+    have hlamaux : MinimaxLoomis.lam.aux A (Convexity.StdSimplex.pure i₀) = A i₀ j₀ := by
       unfold MinimaxLoomis.lam.aux
-      have hfun : (fun j => wsum (stdSimplex.pure i₀) (fun i => A i j)) = fun j => A i₀ j :=
+      have hfun :
+          (fun j => wsum (Convexity.StdSimplex.pure i₀) (fun i => A i j)) =
+            fun j => A i₀ j :=
         funext fun j => wsum_pure_apply i₀ (fun i => A i j)
       rw [hfun]
       exact le_antisymm (Finset.inf'_le _ (Finset.mem_univ j₀))
         (Finset.le_inf' _ _ fun j _ => hrow j)
-    have hmuaux : MinimaxLoomis.mu.aux A (stdSimplex.pure j₀) = A i₀ j₀ := by
+    have hmuaux : MinimaxLoomis.mu.aux A (Convexity.StdSimplex.pure j₀) = A i₀ j₀ := by
       unfold MinimaxLoomis.mu.aux
-      have hfun : (fun i => wsum (stdSimplex.pure j₀) (fun j => A i j)) = fun i => A i j₀ :=
+      have hfun :
+          (fun i => wsum (Convexity.StdSimplex.pure j₀) (fun j => A i j)) =
+            fun i => A i j₀ :=
         funext fun i => wsum_pure_apply j₀ (fun j => A i j)
       rw [hfun]
       exact le_antisymm (Finset.sup'_le _ _ fun i _ => hcol i)
         (Finset.le_sup' (fun i => A i j₀) (Finset.mem_univ i₀))
     have hVlam0 : A i₀ j₀ ≤ MinimaxLoomis.lam0 A :=
-      hlamaux ▸ MinimaxLoomis.lam.aux.le_lam0 A (stdSimplex.pure i₀)
+      hlamaux ▸ MinimaxLoomis.lam.aux.le_lam0 A (Convexity.StdSimplex.pure i₀)
     have hmu0V : MinimaxLoomis.mu0 A ≤ A i₀ j₀ :=
-      hmuaux ▸ MinimaxLoomis.mu.aux.ge_mu0 A (stdSimplex.pure j₀)
+      hmuaux ▸ MinimaxLoomis.mu.aux.ge_mu0 A (Convexity.StdSimplex.pure j₀)
     exact le_antisymm ((MinimaxLoomis.lam0_le_mu0 A).trans hmu0V) hVlam0
   set rows : Fin 1 ↪ Fin m := ⟨fun _ => i₀, fun _ _ _ => Subsingleton.elim _ _⟩ with hrows
   set cols : Fin 1 ↪ Fin n := ⟨fun _ => j₀, fun _ _ _ => Subsingleton.elim _ _⟩ with hcols
@@ -188,41 +194,41 @@ The matrix need not be nonsingular, and no optimality hypothesis is used. -/
 theorem kernelIdentity_of_right_equalizing
     {n : ℕ} [Nonempty (Fin n)]
     (A : Matrix (Fin n) (Fin n) ℝ)
-    (y : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (y : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hy : ∀ i, wsum y (fun j => A i j) = V) :
     V * (∑ i, ∑ j, A.adjugate i j) = A.det := by
   classical
-  have hmulVec : A *ᵥ y.val = V • (1 : Fin n → ℝ) := by
+  have hmulVec : A *ᵥ y.weights = V • (1 : Fin n → ℝ) := by
     funext i
     have hrow :
-        (A *ᵥ y.val) i = wsum y (fun j => A i j) :=
-      dotProduct_comm (A i) y.val
+        (A *ᵥ y.weights) i = wsum y (fun j => A i j) :=
+      dotProduct_comm (A i) y.weights
     rw [hrow, hy i]
     simp
   have hadj :
-      Matrix.adjugate A *ᵥ (A *ᵥ y.val) =
-        A.det • y.val := by
+      Matrix.adjugate A *ᵥ (A *ᵥ y.weights) =
+        A.det • y.weights := by
     rw [Matrix.mulVec_mulVec, Matrix.adjugate_mul,
       Matrix.smul_mulVec, Matrix.one_mulVec]
   have hadj' :
-      Matrix.adjugate A *ᵥ (A *ᵥ y.val) =
+      Matrix.adjugate A *ᵥ (A *ᵥ y.weights) =
         V • (fun i => ∑ j, Matrix.adjugate A i j) := by
     rw [hmulVec, Matrix.mulVec_smul]
     congr 1
     funext i
     simp [Matrix.mulVec, dotProduct]
   have hkey :
-      A.det • y.val =
+      A.det • y.weights =
         V • (fun i => ∑ j, Matrix.adjugate A i j) :=
     hadj.symm.trans hadj'
   have hsum :
-      A.det * (∑ i, y.val i) =
+      A.det * (∑ i, y.weights i) =
         V * (∑ i, ∑ j, Matrix.adjugate A i j) := by
     have hcongr :=
       congrArg (fun f : Fin n → ℝ => ∑ i, f i) hkey
-    simpa [Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
+    simpa only [Pi.smul_apply, smul_eq_mul, Finset.mul_sum]
       using hcongr
-  rw [y.property.2, mul_one] at hsum
+  rw [y.total_of_fintype, mul_one] at hsum
   exact hsum.symm
 
 /-- A left equalizing strategy gives the Shapley--Snow determinant identity.
@@ -230,7 +236,7 @@ This is the transpose of `kernelIdentity_of_right_equalizing`. -/
 theorem kernelIdentity_of_left_equalizing
     {n : ℕ} [Nonempty (Fin n)]
     (A : Matrix (Fin n) (Fin n) ℝ)
-    (x : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (x : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hx : ∀ j, wsum x (fun i => A i j) = V) :
     V * (∑ i, ∑ j, A.adjugate i j) = A.det := by
   have hxT :
@@ -253,8 +259,9 @@ For a vector `(d, t)`, its `Fin n` coordinates are
 def borderedMatrix {ι R : Type*} [Fintype ι] [CommRing R]
     (B : Matrix ι ι R) :
     Matrix (Sum ι Unit) (Sum ι Unit) R :=
-  Matrix.fromBlocks B.transpose
-    (fun _ _ => -1) (fun _ _ => 1) 0
+  Sum.elim
+    (fun row => Sum.elim (fun column => B column row) (fun _ => -1))
+    (fun _ => Sum.elim (fun _ => 1) (fun _ => 0))
 
 theorem map_borderedMatrix
     {ι R S : Type*} [Fintype ι] [CommRing R] [CommRing S]
@@ -262,13 +269,17 @@ theorem map_borderedMatrix
     (borderedMatrix B).map f = borderedMatrix (B.map f) := by
   ext i j
   rcases i with i | i <;> rcases j with j | j
-  · simp [borderedMatrix]
+  · rw [Matrix.map_apply]
+    simp [borderedMatrix]
   · cases j
+    rw [Matrix.map_apply]
     simp [borderedMatrix]
   · cases i
+    rw [Matrix.map_apply]
     simp [borderedMatrix]
   · cases i
     cases j
+    rw [Matrix.map_apply]
     simp [borderedMatrix]
 
 /-- Scaling a positive-size payoff matrix by a nonzero scalar scales its
@@ -326,11 +337,9 @@ theorem borderedMatrix_mulVec_inl
       (∑ i, d i * B i j) - t := by
   classical
   simp only [mulVec, dotProduct, borderedMatrix,
-    Fintype.sum_sum_type, fromBlocks_apply₁₁,
-    transpose_apply, Sum.elim_inl, univ_unique,
-    PUnit.default_eq_unit, fromBlocks_apply₁₂,
-    Sum.elim_inr, neg_mul, one_mul, sum_neg_distrib,
-    sum_const, card_singleton, one_smul]
+    Fintype.sum_sum_type, Sum.elim_inl, univ_unique,
+    PUnit.default_eq_unit, Sum.elim_inr]
+  simp only [Finset.sum_singleton]
   simp_rw [mul_comm]
   ring
 
@@ -351,7 +360,7 @@ for a separate adjugate-sum argument. -/
 theorem borderedKernelIdentity
     {n : ℕ} [Nonempty (Fin n)]
     (B : Matrix (Fin n) (Fin n) ℝ)
-    (x : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (x : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hx : ∀ j, wsum x (fun i => B i j) = V)
     (hborder : ∀ (d : Fin n → ℝ) (t : ℝ),
       (∑ i, d i = 0) →
@@ -406,7 +415,7 @@ theorem borderedKernelIdentity
     hCmatrixUnit.map Matrix.detMonoidHom
   have hCne : C.det ≠ 0 := hCunit.ne_zero
   let z : Sum (Fin n) Unit → ℝ :=
-    Sum.elim x.val (fun _ => V)
+    Sum.elim x.weights (fun _ => V)
   let e : Sum (Fin n) Unit → ℝ :=
     Pi.single (Sum.inr ()) 1
   have hCz : C *ᵥ z = e := by
@@ -414,12 +423,12 @@ theorem borderedKernelIdentity
     cases k with
     | inl j =>
         have hxj := hx j
-        change (∑ i, x.val i * B i j) = V at hxj
+        change (∑ i, x.weights i * B i j) = V at hxj
         simp [C, z, e, borderedMatrix_mulVec_inl, hxj]
     | inr u =>
         cases u
         simp [C, z, e, borderedMatrix_mulVec_inr,
-          x.property.2]
+          x.total_of_fintype]
   have hsame : Matrix.cramer C e = C.det • z := by
     apply hinj
     change
@@ -428,18 +437,24 @@ theorem borderedKernelIdentity
   have hcomponent := congrFun hsame (Sum.inr ())
   have hupdate :
       C.updateCol (Sum.inr ()) e =
-        Matrix.fromBlocks B.transpose 0
-          (fun _ _ => 1) 1 := by
+        Matrix.fromBlocks B.transpose
+          (0 : Matrix (Fin n) Unit ℝ)
+          (Matrix.of fun _ _ => 1)
+          (1 : Matrix Unit Unit ℝ) := by
     ext i j
     rcases i with i | i <;> rcases j with j | j
     · rfl
     · cases j
-      simp [C, e, borderedMatrix]
+      rw [Matrix.updateCol_self]
+      change Pi.single (Sum.inr ()) 1 (Sum.inl i) = 0
+      simp
     · cases i
       rfl
     · cases i
       cases j
-      simp [C, e, borderedMatrix]
+      rw [Matrix.updateCol_self]
+      change Pi.single (Sum.inr ()) 1 (Sum.inr ()) = 1
+      simp
   have hdetUpdate :
       (C.updateCol (Sum.inr ()) e).det = B.det := by
     rw [hupdate, Matrix.det_fromBlocks_zero₁₂,
@@ -457,7 +472,7 @@ the identity: multiplying `A *ᵥ y = V • 1` by `adjugate A` works for singula
 matrices as well. -/
 theorem value_and_kernelIdentity_of_equalizing {n : ℕ} [Nonempty (Fin n)]
     (A : Matrix (Fin n) (Fin n) ℝ)
-    (x y : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (x y : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hxT : ∀ j, wsum x (fun i => A i j) = V)
     (hy : ∀ i, wsum y (fun j => A i j) = V) :
     MinimaxLoomis.lam0 A = V ∧
@@ -480,35 +495,35 @@ theorem value_and_kernelIdentity_of_equalizing {n : ℕ} [Nonempty (Fin n)]
       hmuaux ▸ MinimaxLoomis.mu.aux.ge_mu0 A y
     exact le_antisymm
       ((MinimaxLoomis.lam0_le_mu0 A).trans hmu0V) hVlam0
-  have hmulVec : A *ᵥ y.val = V • (1 : Fin n → ℝ) := by
+  have hmulVec : A *ᵥ y.weights = V • (1 : Fin n → ℝ) := by
     funext i
-    have hrow : (A *ᵥ y.val) i =
+    have hrow : (A *ᵥ y.weights) i =
         wsum y (fun j => A i j) :=
-      dotProduct_comm (A i) y.val
+      dotProduct_comm (A i) y.weights
     rw [hrow, hy i]
     simp
   have hadj :
-      Matrix.adjugate A *ᵥ (A *ᵥ y.val) =
-        A.det • y.val := by
+      Matrix.adjugate A *ᵥ (A *ᵥ y.weights) =
+        A.det • y.weights := by
     rw [Matrix.mulVec_mulVec, Matrix.adjugate_mul,
       Matrix.smul_mulVec, Matrix.one_mulVec]
   have hadj' :
-      Matrix.adjugate A *ᵥ (A *ᵥ y.val) =
+      Matrix.adjugate A *ᵥ (A *ᵥ y.weights) =
         V • (fun i => ∑ j, Matrix.adjugate A i j) := by
     rw [hmulVec, Matrix.mulVec_smul]
     congr 1
     funext i
     simp [Matrix.mulVec, dotProduct]
   have hkey :
-      A.det • y.val =
+      A.det • y.weights =
         V • (fun i => ∑ j, Matrix.adjugate A i j) :=
     hadj.symm.trans hadj'
   have hsum :
-      A.det * (∑ i, y.val i) =
+      A.det * (∑ i, y.weights i) =
         V * (∑ i, ∑ j, Matrix.adjugate A i j) := by
     have hcongr := congrArg (fun f : Fin n → ℝ => ∑ i, f i) hkey
-    simpa [Pi.smul_apply, smul_eq_mul, Finset.mul_sum] using hcongr
-  rw [y.property.2, mul_one] at hsum
+    simpa only [Pi.smul_apply, smul_eq_mul, Finset.mul_sum] using hcongr
+  rw [y.total_of_fintype, mul_one] at hsum
   exact ⟨hVeq, hVeq ▸ hsum.symm⟩
 
 /-- **Completely-mixed kernel with the correct bordered-system condition.**
@@ -518,7 +533,7 @@ zero. -/
 theorem exists_kernel_of_equalizing_of_adjugateSum_ne
     {n : ℕ} [Nonempty (Fin n)]
     (A : Matrix (Fin n) (Fin n) ℝ)
-    (x y : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (x y : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hxT : ∀ j, wsum x (fun i => A i j) = V)
     (hy : ∀ i, wsum y (fun j => A i j) = V)
     (hSne : (∑ i, ∑ j, A.adjugate i j) ≠ 0) :
@@ -545,18 +560,18 @@ theorem singular_equalizing_kernel_example :
       MinimaxLoomis.lam0 A *
         (∑ i, ∑ j, A.adjugate i j) = A.det := by
   let A : Matrix (Fin 2) (Fin 2) ℝ := !![-1, 2; 1, -2]
-  let x : stdSimplex ℝ (Fin 2) :=
-    ⟨![1 / 2, 1 / 2],
+  let x : Convexity.StdSimplex ℝ (Fin 2) :=
+    ⟨Finsupp.equivFunOnFinite.symm ![1 / 2, 1 / 2],
       (by intro i; fin_cases i <;> norm_num),
-      (by norm_num)⟩
-  let y : stdSimplex ℝ (Fin 2) :=
-    ⟨![2 / 3, 1 / 3],
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; norm_num)⟩
+  let y : Convexity.StdSimplex ℝ (Fin 2) :=
+    ⟨Finsupp.equivFunOnFinite.symm ![2 / 3, 1 / 3],
       (by intro j; fin_cases j <;> norm_num),
-      (by norm_num)⟩
-  have hx0 : x 0 = 1 / 2 := by rfl
-  have hx1 : x 1 = 1 / 2 := by rfl
-  have hy0 : y 0 = 2 / 3 := by rfl
-  have hy1 : y 1 = 1 / 3 := by rfl
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; norm_num)⟩
+  have hx0 : x.weights 0 = 1 / 2 := by rfl
+  have hx1 : x.weights 1 = 1 / 2 := by rfl
+  have hy0 : y.weights 0 = 2 / 3 := by rfl
+  have hy1 : y.weights 1 = 1 / 3 := by rfl
   have hx : ∀ j, wsum x (fun i => A i j) = 0 := by
     intro j
     fin_cases j
@@ -590,7 +605,7 @@ gives `det A = V * (∑ i j, adjugate A i j)`, and `det A ≠ 0` (nonsingularity
 adjugate sum to be nonzero. -/
 theorem exists_kernel_of_completelyMixed {n : ℕ} [Nonempty (Fin n)]
     (A : Matrix (Fin n) (Fin n) ℝ) (hA : IsUnit A.det)
-    (x y : stdSimplex ℝ (Fin n)) (V : ℝ)
+    (x y : Convexity.StdSimplex ℝ (Fin n)) (V : ℝ)
     (hxT : ∀ j, wsum x (fun i => A i j) = V) (hy : ∀ i, wsum y (fun j => A i j) = V) :
     MinimaxLoomis.lam0 A = V ∧ (∑ i, ∑ j, A.adjugate i j) ≠ 0 ∧
       MinimaxLoomis.lam0 A * (∑ i, ∑ j, A.adjugate i j) = A.det := by
@@ -608,7 +623,7 @@ Building blocks for the classical Shapley–Snow reduction (`x`, `y` "extreme
 optimal mixed strategies" in the proof architecture above). `optimalRowStrategies A V`
 and `optimalColStrategies A V` are the sets of row- / column-player mixed strategies
 that are optimal *at value `V`* — phrased as subsets of the ambient vector space
-`I → ℝ` / `J → ℝ` (rather than the `stdSimplex ℝ I` subtype used elsewhere) so
+`I → ℝ` / `J → ℝ` (rather than the `Convexity.StdSimplex ℝ I` type used elsewhere) so
 that Mathlib's `Set.extremePoints` / Krein–Milman API, which is stated for subsets of a
 topological vector space, applies to them directly.
 
@@ -629,20 +644,20 @@ variable {I J : Type*} [Fintype I] [Fintype J] [Nonempty I] [Nonempty J]
 /-- The row player's mixed strategies that are optimal *at value `V`*: simplex points
 whose expected payoff against every pure column is at least `V`. -/
 def optimalRowStrategies (A : I → J → ℝ) (V : ℝ) : Set (I → ℝ) :=
-  stdSimplex ℝ I ∩ ⋂ j, {x : I → ℝ | V ≤ ∑ i, x i * A i j}
+  simplexWeights I ∩ ⋂ j, {x : I → ℝ | V ≤ ∑ i, x i * A i j}
 
 /-- The column player's mixed strategies that are optimal *at value `V`*: simplex points
 whose expected payoff against every pure row is at most `V`. The sum order `y j * A i j`
 matches `MinimaxLoomis.mu.aux`'s `wsum y (fun j => A i j)`. -/
 def optimalColStrategies (A : I → J → ℝ) (V : ℝ) : Set (J → ℝ) :=
-  stdSimplex ℝ J ∩ ⋂ i, {y : J → ℝ | ∑ j, y j * A i j ≤ V}
+  simplexWeights J ∩ ⋂ i, {y : J → ℝ | ∑ j, y j * A i j ≤ V}
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- Each "beats `V` against pure column `j`" cut is a closed halfspace, hence convex. -/
 theorem convex_rowHalfspace (A : I → J → ℝ) (V : ℝ) (j : J) :
     Convex ℝ {x : I → ℝ | V ≤ ∑ i, x i * A i j} := by
   intro x hx y hy a b ha hb _hab
-  simp only [Set.mem_setOf_eq] at hx hy ⊢
+  simp only [Set.mem_ofPred_eq] at hx hy ⊢
   have hcomb : ∑ i, (a • x + b • y) i * A i j
       = a * (∑ i, x i * A i j) + b * (∑ i, y i * A i j) := by
     rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib]
@@ -660,7 +675,7 @@ omit [Fintype I] [Nonempty I] [Nonempty J] in
 theorem convex_colHalfspace (A : I → J → ℝ) (V : ℝ) (i : I) :
     Convex ℝ {y : J → ℝ | ∑ j, y j * A i j ≤ V} := by
   intro x hx y hy a b ha hb _hab
-  simp only [Set.mem_setOf_eq] at hx hy ⊢
+  simp only [Set.mem_ofPred_eq] at hx hy ⊢
   have hcomb : ∑ j, (a • x + b • y) j * A i j
       = a * (∑ j, x j * A i j) + b * (∑ j, y j * A i j) := by
     rw [Finset.mul_sum, Finset.mul_sum, ← Finset.sum_add_distrib]
@@ -678,13 +693,13 @@ omit [Fintype J] [Nonempty I] [Nonempty J] in
 countably many convex halfspace cuts. -/
 theorem convex_optimalRowStrategies (A : I → J → ℝ) (V : ℝ) :
     Convex ℝ (optimalRowStrategies A V) :=
-  (convex_stdSimplex ℝ I).inter (convex_iInter fun j => convex_rowHalfspace A V j)
+  (convex_simplexWeights I).inter (convex_iInter fun j => convex_rowHalfspace A V j)
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- `optimalColStrategies A V` is convex. -/
 theorem convex_optimalColStrategies (A : I → J → ℝ) (V : ℝ) :
     Convex ℝ (optimalColStrategies A V) :=
-  (convex_stdSimplex ℝ J).inter (convex_iInter fun i => convex_colHalfspace A V i)
+  (convex_simplexWeights J).inter (convex_iInter fun i => convex_colHalfspace A V i)
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 theorem isClosed_rowHalfspace (A : I → J → ℝ) (V : ℝ) (j : J) :
@@ -709,28 +724,30 @@ omit [Fintype J] [Nonempty I] [Nonempty J] in
 compact-hence-closed in a `T2Space`, and each halfspace cut is closed. -/
 theorem isClosed_optimalRowStrategies (A : I → J → ℝ) (V : ℝ) :
     IsClosed (optimalRowStrategies A V) :=
-  (isCompact_stdSimplex ℝ I).isClosed.inter
+  (isCompact_simplexWeights I).isClosed.inter
     (isClosed_iInter fun j => isClosed_rowHalfspace A V j)
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- `optimalColStrategies A V` is closed. -/
 theorem isClosed_optimalColStrategies (A : I → J → ℝ) (V : ℝ) :
     IsClosed (optimalColStrategies A V) :=
-  (isCompact_stdSimplex ℝ J).isClosed.inter
+  (isCompact_simplexWeights J).isClosed.inter
     (isClosed_iInter fun i => isClosed_colHalfspace A V i)
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- `optimalRowStrategies A V` is compact: a closed subset of the compact simplex. -/
 theorem isCompact_optimalRowStrategies (A : I → J → ℝ) (V : ℝ) :
     IsCompact (optimalRowStrategies A V) :=
-  IsCompact.of_isClosed_subset (isCompact_stdSimplex ℝ I) (isClosed_optimalRowStrategies A V)
+  IsCompact.of_isClosed_subset (isCompact_simplexWeights I)
+    (isClosed_optimalRowStrategies A V)
     Set.inter_subset_left
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- `optimalColStrategies A V` is compact. -/
 theorem isCompact_optimalColStrategies (A : I → J → ℝ) (V : ℝ) :
     IsCompact (optimalColStrategies A V) :=
-  IsCompact.of_isClosed_subset (isCompact_stdSimplex ℝ J) (isClosed_optimalColStrategies A V)
+  IsCompact.of_isClosed_subset (isCompact_simplexWeights J)
+    (isClosed_optimalColStrategies A V)
     Set.inter_subset_left
 
 /-- At `V := lam0 A`, `optimalRowStrategies` is nonempty: `exists_xx_lam0` supplies a
@@ -738,7 +755,8 @@ mixed strategy whose column-payoffs all dominate `lam0 A`. -/
 theorem optimalRowStrategies_lam0_nonempty (A : I → J → ℝ) :
     (optimalRowStrategies A (MinimaxLoomis.lam0 A)).Nonempty := by
   obtain ⟨xx, hxx⟩ := MinimaxLoomis.exists_xx_lam0 A
-  exact ⟨xx.val, xx.property, Set.mem_iInter.2 fun j => hxx j⟩
+  exact ⟨xx.weights, mem_simplexWeights.mpr
+    ⟨xx.weights_nonneg, xx.total_of_fintype⟩, Set.mem_iInter.2 fun j => hxx j⟩
 
 /-- At `V := lam0 A`, `optimalColStrategies` is nonempty: `exists_yy_mu0` supplies a
 mixed strategy whose row-payoffs are all dominated by `mu0 A`, and `mu0 A = lam0 A` by
@@ -747,7 +765,8 @@ theorem optimalColStrategies_lam0_nonempty (A : I → J → ℝ) :
     (optimalColStrategies A (MinimaxLoomis.lam0 A)).Nonempty := by
   rw [Loomis.minmax_from_general A]
   obtain ⟨yy, hyy⟩ := MinimaxLoomis.exists_yy_mu0 A
-  exact ⟨yy.val, yy.property, Set.mem_iInter.2 fun i => hyy i⟩
+  exact ⟨yy.weights, mem_simplexWeights.mpr
+    ⟨yy.weights_nonneg, yy.total_of_fintype⟩, Set.mem_iInter.2 fun i => hyy i⟩
 
 /-- **Krein–Milman for the row player's optimal strategies.** A nonempty compact convex
 set in a locally convex space has an extreme point (`IsCompact.extremePoints_nonempty`);
@@ -777,8 +796,9 @@ theorem expectedPayoff_eq_of_optimal {A : I → J → ℝ} {V : ℝ}
     ∑ i, ∑ j, x i * A i j * y j = V := by
   obtain ⟨hxs, hxge⟩ := hx
   obtain ⟨hys, hyle⟩ := hy
+  rw [mem_simplexWeights] at hxs hys
   rw [Set.mem_iInter] at hxge hyle
-  simp only [Set.mem_setOf_eq] at hxge hyle
+  simp only [Set.mem_ofPred_eq] at hxge hyle
   have hswapR : ∑ i, ∑ j, x i * A i j * y j = ∑ j, y j * (∑ i, x i * A i j) := by
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun j _ => ?_
@@ -812,8 +832,9 @@ theorem tight_of_optimal_col_support {A : I → J → ℝ} {V : ℝ}
   have hEV := expectedPayoff_eq_of_optimal hx hy
   obtain ⟨-, hxge⟩ := hx
   rw [Set.mem_iInter] at hxge
-  simp only [Set.mem_setOf_eq] at hxge
+  simp only [Set.mem_ofPred_eq] at hxge
   obtain ⟨hys, -⟩ := hy
+  rw [mem_simplexWeights] at hys
   have hswap : ∑ i, ∑ j, x i * A i j * y j = ∑ j, y j * (∑ i, x i * A i j) := by
     rw [Finset.sum_comm]
     refine Finset.sum_congr rfl fun j _ => ?_
@@ -843,8 +864,9 @@ theorem tight_of_optimal_row_support {A : I → J → ℝ} {V : ℝ}
   have hEV := expectedPayoff_eq_of_optimal hx hy
   obtain ⟨-, hyle⟩ := hy
   rw [Set.mem_iInter] at hyle
-  simp only [Set.mem_setOf_eq] at hyle
+  simp only [Set.mem_ofPred_eq] at hyle
   obtain ⟨hxs, -⟩ := hx
+  rw [mem_simplexWeights] at hxs
   have hswap : ∑ i, ∑ j, x i * A i j * y j = ∑ i, x i * (∑ j, y j * A i j) := by
     refine Finset.sum_congr rfl fun i _ => ?_
     rw [Finset.mul_sum]
@@ -881,11 +903,12 @@ theorem eq_zero_of_extreme_optimalRow [Finite J] {A : I → J → ℝ} {V : ℝ}
     {d : I → ℝ} (hd_supp : ∀ i, x i = 0 → d i = 0) (hd_sum : ∑ i, d i = 0)
     (hd_tight : ∀ j, ∑ i, x i * A i j = V → ∑ i, d i * A i j = 0) : d = 0 := by
   classical
-  haveI : Fintype J := Fintype.ofFinite J
+  have : Fintype J := Fintype.ofFinite J
   by_contra hd0
   obtain ⟨hxs, hxge⟩ := extremePoints_subset hx
+  rw [mem_simplexWeights] at hxs
   rw [Set.mem_iInter] at hxge
-  simp only [Set.mem_setOf_eq] at hxge
+  simp only [Set.mem_ofPred_eq] at hxge
   have hboundI_pos : ∀ i : I, (0:ℝ) < if x i = 0 then 1 else x i / (|d i| + 1) := by
     intro i; split_ifs with h
     · norm_num
@@ -927,7 +950,7 @@ theorem eq_zero_of_extreme_optimalRow [Finite J] {A : I → J → ℝ} {V : ℝ}
     by_cases hxi : x i = 0
     · rw [hxi, hd_supp i hxi]; simp
     · have hb := hεI' i
-      simp only [hxi, if_false] at hb
+      simp only [hxi, ite_false] at hb
       have hpos : (0:ℝ) < |d i| + 1 := by positivity
       have h1 : ε * (|d i| + 1) ≤ x i := (le_div_iff₀ hpos).mp hb
       nlinarith
@@ -935,7 +958,7 @@ theorem eq_zero_of_extreme_optimalRow [Finite J] {A : I → J → ℝ} {V : ℝ}
       ε * |∑ i, d i * A i j| ≤ ∑ i, x i * A i j - V := by
     intro j hj
     have hb := hεJ' j
-    simp only [hj, if_false] at hb
+    simp only [hj, ite_false] at hb
     have hpos : (0:ℝ) < |∑ i, d i * A i j| + 1 := by positivity
     have h1 : ε * (|∑ i, d i * A i j| + 1) ≤ ∑ i, x i * A i j - V := (le_div_iff₀ hpos).mp hb
     nlinarith
@@ -950,14 +973,14 @@ theorem eq_zero_of_extreme_optimalRow [Finite J] {A : I → J → ℝ} {V : ℝ}
   have hmem : ∀ σ : ℝ, σ = 1 ∨ σ = -1 →
       (fun i => x i + σ * (ε * d i)) ∈ optimalRowStrategies A V := by
     intro σ hσ
-    refine ⟨⟨fun i => ?_, ?_⟩, ?_⟩
+    refine ⟨mem_simplexWeights.mpr ⟨fun i => ?_, ?_⟩, ?_⟩
     · linarith [(abs_le.mp (habs (d i) (x i) (hbdI i) σ hσ)).1]
     · have hpt : ∀ i, x i + σ * (ε * d i) = x i + (σ * ε) * d i := fun i => by ring
       simp_rw [hpt, Finset.sum_add_distrib, ← Finset.mul_sum]
       rw [hxs.2, hd_sum]; ring
     · rw [Set.mem_iInter]
       intro j
-      simp only [Set.mem_setOf_eq]
+      simp only [Set.mem_ofPred_eq]
       have hswap : ∑ i, (x i + σ * (ε * d i)) * A i j
           = ∑ i, x i * A i j + σ * (ε * ∑ i, d i * A i j) := by
         have hpt : ∀ i, (x i + σ * (ε * d i)) * A i j
@@ -1012,7 +1035,7 @@ theorem eq_zero_of_extreme_optimalRow_bordered
   have ht : t = 0 := by
     calc
       t = ∑ j, y j * t := by
-        rw [← Finset.sum_mul, hy.1.2, one_mul]
+        rw [← Finset.sum_mul, (mem_simplexWeights.mp hy.1).2, one_mul]
       _ = ∑ j, y j * (∑ i, d i * A i j) := by
         apply Finset.sum_congr rfl
         intro j _
@@ -1051,11 +1074,12 @@ theorem eq_zero_of_extreme_optimalCol [Finite I] {A : I → J → ℝ} {V : ℝ}
     {e : J → ℝ} (he_supp : ∀ j, y j = 0 → e j = 0) (he_sum : ∑ j, e j = 0)
     (he_tight : ∀ i, ∑ j, y j * A i j = V → ∑ j, e j * A i j = 0) : e = 0 := by
   classical
-  haveI : Fintype I := Fintype.ofFinite I
+  have : Fintype I := Fintype.ofFinite I
   by_contra he0
   obtain ⟨hys, hyle⟩ := extremePoints_subset hy
+  rw [mem_simplexWeights] at hys
   rw [Set.mem_iInter] at hyle
-  simp only [Set.mem_setOf_eq] at hyle
+  simp only [Set.mem_ofPred_eq] at hyle
   have hboundJ_pos : ∀ j : J, (0:ℝ) < if y j = 0 then 1 else y j / (|e j| + 1) := by
     intro j; split_ifs with h
     · norm_num
@@ -1096,14 +1120,14 @@ theorem eq_zero_of_extreme_optimalCol [Finite I] {A : I → J → ℝ} {V : ℝ}
     by_cases hyj : y j = 0
     · rw [hyj, he_supp j hyj]; simp
     · have hb := hεJ' j
-      simp only [hyj, if_false] at hb
+      simp only [hyj, ite_false] at hb
       have hpos : (0:ℝ) < |e j| + 1 := by positivity
       have h1 : ε * (|e j| + 1) ≤ y j := (le_div_iff₀ hpos).mp hb
       nlinarith
   have hbdI : ∀ i, ∑ j, y j * A i j ≠ V → ε * |∑ j, e j * A i j| ≤ V - ∑ j, y j * A i j := by
     intro i hi
     have hb := hεI' i
-    simp only [hi, if_false] at hb
+    simp only [hi, ite_false] at hb
     have hpos : (0:ℝ) < |∑ j, e j * A i j| + 1 := by positivity
     have h1 : ε * (|∑ j, e j * A i j| + 1) ≤ V - ∑ j, y j * A i j := (le_div_iff₀ hpos).mp hb
     nlinarith
@@ -1116,14 +1140,14 @@ theorem eq_zero_of_extreme_optimalCol [Finite I] {A : I → J → ℝ} {V : ℝ}
   have hmem : ∀ σ : ℝ, σ = 1 ∨ σ = -1 →
       (fun j => y j + σ * (ε * e j)) ∈ optimalColStrategies A V := by
     intro σ hσ
-    refine ⟨⟨fun j => ?_, ?_⟩, ?_⟩
+    refine ⟨mem_simplexWeights.mpr ⟨fun j => ?_, ?_⟩, ?_⟩
     · linarith [(abs_le.mp (habs (e j) (y j) (hbdJ j) σ hσ)).1]
     · have hpt : ∀ j, y j + σ * (ε * e j) = y j + (σ * ε) * e j := fun j => by ring
       simp_rw [hpt, Finset.sum_add_distrib, ← Finset.mul_sum]
       rw [hys.2, he_sum]; ring
     · rw [Set.mem_iInter]
       intro i
-      simp only [Set.mem_setOf_eq]
+      simp only [Set.mem_ofPred_eq]
       have hswap : ∑ j, (y j + σ * (ε * e j)) * A i j
           = ∑ j, y j * A i j + σ * (ε * ∑ j, e j * A i j) := by
         have hpt : ∀ j, (y j + σ * (ε * e j)) * A i j
@@ -1161,7 +1185,7 @@ theorem sum_eq_sum_support {ι : Type*} [Fintype ι] {x : ι → ℝ} (f : ι �
   classical
   refine Finset.sum_congr_set {i : ι | x i ≠ 0} f (fun i => f i.val) (fun _ _ => rfl) ?_
   intro i hi
-  simp only [Set.mem_setOf_eq, not_not] at hi
+  simp only [Set.mem_ofPred_eq, not_not] at hi
   exact hf i hi
 
 /-- **Cardinality bound (row side).** If `x` is an extreme
@@ -1198,9 +1222,9 @@ theorem card_support_le_card_tightCol_of_extreme {A : I → J → ℝ} {V : ℝ}
       congrFun (congrArg Prod.snd hz) j
     set extendR : I → ℝ := fun i => if h : x i ≠ 0 then e ⟨i, h⟩ else 0 with hextendRdef
     have hval : ∀ i : {i : I // x i ≠ 0}, extendR i.val = e i := fun i => by
-      simp only [hextendRdef]; rw [dif_pos i.property]
+      simp only [hextendRdef]; rw [dite_eq_left i.property]
     have hd_supp : ∀ i, x i = 0 → extendR i = 0 := by
-      intro i hi; simp only [hextendRdef]; rw [dif_neg (by rw [hi]; simp)]
+      intro i hi; simp only [hextendRdef]; rw [dite_eq_right (by rw [hi]; simp)]
     have hd_sum : ∑ i, extendR i = 0 := by
       rw [sum_eq_sum_support extendR hd_supp]
       exact (Finset.sum_congr rfl fun i _ => hval i).trans hz1
@@ -1247,9 +1271,9 @@ theorem card_support_le_card_tightRow_of_extreme {A : I → J → ℝ} {V : ℝ}
       congrFun (congrArg Prod.snd hz) i
     set extendC : J → ℝ := fun j => if h : y j ≠ 0 then d ⟨j, h⟩ else 0 with hextendCdef
     have hval : ∀ j : {j : J // y j ≠ 0}, extendC j.val = d j := fun j => by
-      simp only [hextendCdef]; rw [dif_pos j.property]
+      simp only [hextendCdef]; rw [dite_eq_left j.property]
     have hd_supp : ∀ j, y j = 0 → extendC j = 0 := by
-      intro j hj; simp only [hextendCdef]; rw [dif_neg (by rw [hj]; simp)]
+      intro j hj; simp only [hextendCdef]; rw [dite_eq_right (by rw [hj]; simp)]
     have hd_sum : ∑ j, extendC j = 0 := by
       rw [sum_eq_sum_support extendC hd_supp]
       exact (Finset.sum_congr rfl fun j _ => hval j).trans hz1
@@ -1288,7 +1312,7 @@ theorem exists_bordered_subfamily
     ∃ e : Fin n ↪ T,
       ∀ z, f0 z = 0 → (∀ k, f (e k) z = 0) → z = 0 := by
   classical
-  letI : Fintype T := Fintype.ofFinite T
+  let : Fintype T := Fintype.ofFinite T
   let family : Option T → Module.Dual ℝ H
     | none => f0
     | some j => f j
@@ -1315,8 +1339,8 @@ theorem exists_bordered_subfamily
   have hnoneb : none ∈ b := hnone (Set.mem_singleton none)
   let B := {k : Option T // k ∈ b}
   let S := {j : T // (some j : Option T) ∈ b}
-  letI : Fintype B := Fintype.ofFinite B
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype B := Fintype.ofFinite B
+  let : Fintype S := Fintype.ofFinite S
   have himage :
       family '' b = Set.range (fun k : B => family k.val) := by
     ext g
@@ -1440,7 +1464,7 @@ theorem exists_extreme_tight_bordered_submatrix
       funext i
       by_contra hi
       exact h ⟨⟨i, hi⟩⟩
-    have hxsum := hxopt.1.2
+    have hxsum := (mem_simplexWeights.mp hxopt.1).2
     rw [hxzero] at hxsum
     simp at hxsum
   let r := Fintype.card R
@@ -1631,15 +1655,16 @@ theorem borderedKernel_of_tight_support
       V * (borderedMatrix B).det = B.det := by
   classical
   let B := (Matrix.of A).submatrix rows cols
-  haveI : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
+  have : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
   have hnonneg : ∀ i : Fin r, 0 ≤ x (rows i) :=
-    fun i => hx.1.1 (rows i)
+    fun i => (mem_simplexWeights.mp hx.1).1 (rows i)
   have hsum : ∑ i : Fin r, x (rows i) = 1 := by
     rw [sum_embedding_eq_sum_of_range_eq_support rows
       (fun i hi => (hrows i).mp hi) x (fun _ hk => hk)]
-    exact hx.1.2
-  let xr : stdSimplex ℝ (Fin r) :=
-    ⟨fun i => x (rows i), hnonneg, hsum⟩
+    exact (mem_simplexWeights.mp hx.1).2
+  let xr : Convexity.StdSimplex ℝ (Fin r) :=
+    ⟨Finsupp.equivFunOnFinite.symm (fun i => x (rows i)), hnonneg,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact hsum)⟩
   have hequal :
       ∀ j : Fin r, wsum xr (fun i => B i j) = V := by
     intro j
@@ -1699,15 +1724,16 @@ theorem kernel_of_tight_support_of_adjugateSum_ne
           ((Matrix.of A).submatrix rows cols).det := by
   classical
   let B := (Matrix.of A).submatrix rows cols
-  haveI : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
+  have : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
   have hnonneg : ∀ i : Fin r, 0 ≤ x (rows i) :=
-    fun i => hx.1.1 (rows i)
+    fun i => (mem_simplexWeights.mp hx.1).1 (rows i)
   have hsum : ∑ i : Fin r, x (rows i) = 1 := by
     rw [sum_embedding_eq_sum_of_range_eq_support rows
       (fun i hi => (hrows i).mp hi) x (fun _ hk => hk)]
-    exact hx.1.2
-  let xr : stdSimplex ℝ (Fin r) :=
-    ⟨fun i => x (rows i), hnonneg, hsum⟩
+    exact (mem_simplexWeights.mp hx.1).2
+  let xr : Convexity.StdSimplex ℝ (Fin r) :=
+    ⟨Finsupp.equivFunOnFinite.symm (fun i => x (rows i)), hnonneg,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact hsum)⟩
   have hequal :
       ∀ j : Fin r, wsum xr (fun i => B i j) = V := by
     intro j
@@ -1759,6 +1785,7 @@ theorem exists_kernel_of_extreme_matching_support {A : I → J → ℝ}
   have hymem : y ∈ optimalColStrategies A V := extremePoints_subset hy
   have hxs := hxmem.1
   have hys := hymem.1
+  rw [mem_simplexWeights] at hxs hys
   have hxne : ∃ i, x i ≠ 0 := by
     by_contra hcon
     push Not at hcon
@@ -1773,7 +1800,7 @@ theorem exists_kernel_of_extreme_matching_support {A : I → J → ℝ}
       obtain ⟨i', -⟩ := (hrows i0).mp hi0
       exact i'.elim0
     · exact hr0
-  haveI : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
+  have : Nonempty (Fin r) := ⟨⟨0, hr⟩⟩
   have hx'nonneg : ∀ i' : Fin r, 0 ≤ x (rows i') := fun i' => hxs.1 (rows i')
   have hy'nonneg : ∀ j' : Fin r, 0 ≤ y (cols j') := fun j' => hys.1 (cols j')
   have hx'sum : ∑ i' : Fin r, x (rows i') = 1 := by
@@ -1784,8 +1811,12 @@ theorem exists_kernel_of_extreme_matching_support {A : I → J → ℝ}
     rw [sum_embedding_eq_sum_of_range_eq_support cols (fun j hj => (hcols j).mp hj) y
       (fun k hk => hk)]
     exact hys.2
-  let xr : stdSimplex ℝ (Fin r) := ⟨fun i' => x (rows i'), hx'nonneg, hx'sum⟩
-  let yr : stdSimplex ℝ (Fin r) := ⟨fun j' => y (cols j'), hy'nonneg, hy'sum⟩
+  let xr : Convexity.StdSimplex ℝ (Fin r) :=
+    ⟨Finsupp.equivFunOnFinite.symm (fun i' => x (rows i')), hx'nonneg,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact hx'sum)⟩
+  let yr : Convexity.StdSimplex ℝ (Fin r) :=
+    ⟨Finsupp.equivFunOnFinite.symm (fun j' => y (cols j')), hy'nonneg,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact hy'sum)⟩
   have hxr_tight : ∀ j' : Fin r, wsum xr (fun i' => B i' j') = V := by
     intro j'
     have hyj' : y (cols j') ≠ 0 := (hcols (cols j')).mpr ⟨j', rfl⟩
@@ -1913,7 +1944,7 @@ theorem exists_nonzero_poly_of_forall_mem_exists {ι : Type*} [Finite ι]
     (hcov : ∀ l ∈ S, ∃ k, F k ≠ 0 ∧ bivEval l (val l) (F k) = 0) :
     ∃ P : Polynomial (Polynomial ℝ), P ≠ 0 ∧ ∀ l ∈ S, bivEval l (val l) P = 0 := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   refine ⟨∏ k, (if F k ≠ 0 then F k else 1), ?_, fun l hl => ?_⟩
   · rw [Finset.prod_ne_zero_iff]
     intro k _
@@ -1923,7 +1954,7 @@ theorem exists_nonzero_poly_of_forall_mem_exists {ι : Type*} [Finite ι]
   · obtain ⟨k, hk0, hkeval⟩ := hcov l hl
     rw [map_prod]
     apply Finset.prod_eq_zero (Finset.mem_univ k)
-    rw [if_pos hk0]
+    rw [ite_eq_left hk0]
     exact hkeval
 
 /-! ### `bivEval` commutes with determinant, bordered determinant, and adjugate
@@ -2238,7 +2269,7 @@ theorem discounted_borderedKernelPoly_ne_zero
   let D : Polynomial (Polynomial ℝ) :=
     (borderedMatrix
       ((Matrix.of (discountedEntry r P)).submatrix rows cols)).det
-  haveI : Nonempty (Fin sz) := ⟨⟨0, hr⟩⟩
+  have : Nonempty (Fin sz) := ⟨⟨0, hr⟩⟩
   intro hzero
   have heval_matrix (l v : ℝ) (hl : 1 - l ≠ 0) :
       ((Matrix.of (discountedEntry r P)).submatrix rows cols).map

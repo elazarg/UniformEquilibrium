@@ -20,7 +20,7 @@ namespace GameTheory
 
 namespace CyclicKofNPhaseHazards
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic CyclicKofNQuittingSchedule
 open CyclicKofNBellmanBridge
 open scoped BigOperators Pointwise
@@ -82,7 +82,7 @@ theorem cyclicPhaseHazardRoots_opponentContracts
     intro phase _
     dsimp only [factor]
     rw [quittingStationaryFixedOpponentsContinueMass_phaseHazard]
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · intro _player _
       exact sub_nonneg.mpr (hβ1 phase)
     · intro _player _

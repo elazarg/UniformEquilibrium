@@ -5,6 +5,7 @@ Authors: GameTheory contributors.
 -/
 
 import Research.Quitting.FiniteClockPolynomialCenter
+import GameTheory.Math.Probability.Simplex
 import Mathlib.Data.Rat.Encodable
 
 /-!
@@ -183,7 +184,7 @@ theorem min_activeTime_val_eq_natFind
             some time)
         (fun _ ↦ Fintype.decidableExistsFintype)
         ((code.activeTimes_nonempty_iff choices).mp htimes) := by
-  letI : DecidablePred (fun time : ℕ ↦ ∃ player : Fin 4,
+  let : DecidablePred (fun time : ℕ ↦ ∃ player : Fin 4,
       finiteClockJointStoppingTimes code.clockBound choices player =
         some time) :=
     fun _ ↦ Fintype.decidableExistsFintype
@@ -231,7 +232,7 @@ theorem outcomeValue_eq_finiteStoppingTimesOutcomeValue
       finiteStoppingTimesOutcomeValue reward.value
         (finiteClockJointStoppingTimes code.clockBound choices) observer := by
   classical
-  letI : DecidablePred (fun time : ℕ ↦ ∃ player : Fin 4,
+  let : DecidablePred (fun time : ℕ ↦ ∃ player : Fin 4,
       finiteClockJointStoppingTimes code.clockBound choices player =
         some time) :=
     fun _ ↦ Fintype.decidableExistsFintype
@@ -276,8 +277,8 @@ theorem outcomeValue_eq_finiteStoppingTimesOutcomeValue
         (Finset.univ.filter fun who ↦ choices who =
           some ((code.activeTimes choices).min' htimes)).Nonempty := by
       simpa only [first] using hterminal
-    simp only [outcomeValue, htimes, hterminalRaw, dif_pos]
-    simp only [finiteStoppingTimesOutcomeValue, hfinite, dif_pos]
+    simp only [outcomeValue, htimes, hterminalRaw, dite_eq_left]
+    simp only [finiteStoppingTimesOutcomeValue, hfinite, dite_eq_left]
     apply congrArg (fun terminal : {S : Finset (Fin 4) // S.Nonempty} ↦
       reward.value terminal observer)
     apply Subtype.ext
@@ -448,8 +449,10 @@ theorem realMass_sum_eq_one (code : RationalFinFourFiniteClockProfileCode)
 theorem realMass_mem_stdSimplex
     (code : RationalFinFourFiniteClockProfileCode) (hvalid : code.Valid)
     (player : Fin 4) :
-    code.realMass player ∈ stdSimplex ℝ (FiniteClockAtom code.clockBound) := by
-  exact ⟨code.realMass_nonneg hvalid player,
+    code.realMass player ∈
+      GameTheory.Math.Probability.simplexWeights (FiniteClockAtom code.clockBound) := by
+  apply GameTheory.Math.Probability.mem_simplexWeights.mpr
+  exact ⟨fun atom => code.realMass_nonneg hvalid player atom,
     code.realMass_sum_eq_one hvalid player⟩
 
 theorem realMass_aux_eq_zero
@@ -522,7 +525,7 @@ theorem cast_deviationPayoff_eq_quittingTerminalPayoff_update
   push_cast
   refine Finset.sum_congr rfl fun choices _ ↦ ?_
   by_cases hchoice : choices player = candidate
-  · simp only [hchoice, if_pos]
+  · simp only [hchoice, ite_eq_left]
     rw [code.cast_outcomeValue_eq_finiteStoppingTimesOutcomeValue]
     simp [realMass]
   · simp [hchoice]

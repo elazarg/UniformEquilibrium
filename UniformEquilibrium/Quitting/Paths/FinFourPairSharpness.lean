@@ -7,7 +7,7 @@ import UniformEquilibrium.Quitting.Paths.OverlappingPairSharpProfiles
 
 namespace GameTheory
 
-open Math Math.Probability.DiscreteHazard.StoppingLaw
+open _root_.Math _root_.Math.Probability.DiscreteHazard.StoppingLaw
 open OverlappingPairSharpProfiles
 
 /-- Every ordered pair of distinct `K₄` edges has an actual behavioral

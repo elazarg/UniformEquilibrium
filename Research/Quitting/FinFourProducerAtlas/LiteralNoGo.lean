@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open MathUE.FiniteBooleanEndpointOrbit
 
 /-- A checked same-stage positive edge gives the literal packet consumed by

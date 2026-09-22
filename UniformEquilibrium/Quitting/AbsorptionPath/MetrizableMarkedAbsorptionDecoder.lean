@@ -78,7 +78,7 @@ private theorem clampEReal_mem {lower upper : ℝ} (h : lower ≤ upper) (x : ER
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

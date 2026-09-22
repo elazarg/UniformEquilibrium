@@ -35,7 +35,7 @@ open Filter Set Topology
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.OnlineLearning Math.Probability
+open _root_.Math Math.OnlineLearning _root_.Math.Probability
 open Math.PMFProduct
 
 variable {ι : Type} {G : StochasticGame ι}

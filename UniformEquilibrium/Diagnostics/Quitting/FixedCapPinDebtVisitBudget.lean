@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -93,11 +93,11 @@ theorem approximateRoot_prefixDebt_add_capPinExpenditure_le
           min (gamma / 2) (gamma ^ 2 / (16 * M)) else 0) ≤
       quittingTerminalSemanticDebt pair player + error := by
   by_cases hpin : IsFixedCapPinAt reward pair player gamma
-  · rw [if_pos hpin]
+  · rw [ite_eq_left hpin]
     have hdrop := fixedCapPin_approximateRoot_coordinateDebtDrop
       reward pair root player hM hgamma hreward hvalue hpin.1 hpin.2 hnash
     linarith
-  · rw [if_neg hpin, add_zero]
+  · rw [ite_eq_right hpin, add_zero]
     exact approximateRoot_prefixDebt_le_debt_add_error
       reward pair root player error hdebt hnash
 
@@ -332,7 +332,7 @@ private theorem finite_visitSet_and_ncard_le_floor
     have hcut := hcutoff index (Nat.le_of_not_gt (by simpa using hout))
     change visit index at hvisit
     unfold charged at hcut
-    rw [if_pos hvisit] at hcut
+    rw [ite_eq_left hvisit] at hcut
     exact (lt_irrefl drop) hcut
   have hfinite : Set.Finite {index | visit index} :=
     (Finset.finite_toSet (Finset.range cutoff)).subset hvisits_subset
@@ -347,7 +347,7 @@ private theorem finite_visitSet_and_ncard_le_floor
         Finset.filter visit (Finset.range steps) = hfinite.toFinset := by
       ext index
       simp only [Finset.mem_filter, Finset.mem_range, Set.Finite.mem_toFinset,
-        Set.mem_setOf_eq]
+        Set.mem_ofPred_eq]
       constructor
       · exact fun h => h.2
       · intro hvisit

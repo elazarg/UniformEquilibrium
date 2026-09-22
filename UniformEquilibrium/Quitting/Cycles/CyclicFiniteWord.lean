@@ -218,7 +218,9 @@ theorem quittingCyclicFiniteProfile_apply
   | zero => rfl
   | succ fuel ih =>
       cases time with
-      | zero => simp [quittingCyclicFiniteProfile, quittingCyclicRootWord]
+      | zero =>
+          simp [quittingCyclicFiniteProfile, quittingCyclicRootWord]
+          rfl
       | succ time =>
           change quittingCyclicFiniteProfile reward roots (finRotate period phase) fuel who time
             (Fin.tail history.1, history.2) = _
@@ -228,5 +230,6 @@ theorem quittingCyclicFiniteProfile_apply
             rw [show time + 1 = 1 + time by omega, quittingCyclicOrbit_add]
             simp [quittingCyclicOrbit_succ]
           simp only [Nat.succ_lt_succ_iff, horbit]
+          rfl
 
 end GameTheory

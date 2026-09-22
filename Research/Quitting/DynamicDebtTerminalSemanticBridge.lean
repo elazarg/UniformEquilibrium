@@ -40,7 +40,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -246,7 +246,7 @@ theorem quittingBehaviorTerminalPort_suffix_eq_dynamicDebtPointRawPort
         reward cutoff path hpath observer time htime).symm
   unfold quittingRawTerminalPort quittingDebtPointRawTerminalPort
     quittingFiniteNashBellmanPathDynamicDebtPoint
-  rw [dif_pos htime.le]
+  rw [dite_eq_left htime.le]
   dsimp only
   rw [hpayoff, hroot, hdebt]
 

@@ -92,7 +92,7 @@ theorem internalParents_missingVertex_reflection
         ((upper after.succ secondAxis).val : ℤ) := by exact_mod_cast hmono
     rw [← hleft] at h2
     rw [← hright] at hmonoInt
-    simp only [Ne.symm haxes, Ne.symm hne, if_false, if_true, add_zero] at h1 h2 h3
+    simp only [Ne.symm haxes, Ne.symm hne, ite_false, ite_true, add_zero] at h1 h2 h3
     omega
   funext coordinate
   have h1 := hfirst coordinate

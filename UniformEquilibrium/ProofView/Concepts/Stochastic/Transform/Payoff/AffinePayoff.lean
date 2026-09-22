@@ -249,7 +249,7 @@ theorem normalizedZeroSumPayoff_isZeroSum
     (hzs : G.IsZeroSum) :
     (G.normalizedZeroSumPayoff C).IsZeroSum := by
   intro s a
-  simp only [show (1 : Fin 2) ≠ 0 by decide, if_false, if_pos]
+  simp only [show (1 : Fin 2) ≠ 0 by decide, ite_false, ite_eq_left]
   rw [hzs s a]
   ring
 

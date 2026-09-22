@@ -45,7 +45,7 @@ theorem QuittingPayoffProcess.conditionalContinuation_measurable_filtration
     @Measurable process.Ω ℝ (process.filtration time)
       Real.measurableSpace
       (fun ω ↦ process.conditionalContinuation time nextValue ω who) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact stronglyMeasurable_condExp.measurable
 
 /-- Conditional continuation remains integrable whenever its input
@@ -56,7 +56,7 @@ theorem QuittingPayoffProcess.conditionalContinuation_integrable
     Integrable
       (fun ω ↦ process.conditionalContinuation time nextValue ω who)
       process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact integrable_condExp
 
 /-- The random finite-game utility table used at one backward-induction
@@ -121,7 +121,7 @@ theorem QuittingPayoffProcess.finiteStageValue_measurable_filtration
     @Measurable process.Ω ℝ (process.filtration time)
       Real.measurableSpace
       (fun ω ↦ process.finiteStageValue time hδ nextValue ω who) := by
-  letI : MeasurableSpace process.Ω := process.filtration time
+  let : MeasurableSpace process.Ω := process.filtration time
   exact measurable_quittingRootExpectedPayoff
     (process.payoff time)
     (process.conditionalContinuation time nextValue)
@@ -173,7 +173,7 @@ theorem QuittingPayoffProcess.finiteStageValue_integrable
     Integrable
       (fun ω ↦ process.finiteStageValue time hδ nextValue ω who)
       process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   obtain ⟨bound, hbound, hreward⟩ := process.integrableEnvelope
   let envelope : process.Ω → ℝ := fun ω ↦
     bound ω + ∑ player,

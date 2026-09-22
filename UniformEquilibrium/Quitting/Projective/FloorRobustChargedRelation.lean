@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.ChargedPathBudget
+open Set Maths.ChargedPathBudget
 
 variable {player : Type} [Fintype player] [DecidableEq player]
 
@@ -30,7 +30,7 @@ theorem isCompact_quittingFloorRobustChargedState
       ∀ who, |value who| ≤ bound ∧ floor who - tolerance ≤ value who} =
       Icc (fun who ↦ max (-bound) (floor who - tolerance)) (fun _ ↦ bound) := by
     ext value
-    simp only [mem_setOf_eq, mem_Icc, Pi.le_def, max_le_iff, abs_le, forall_and]
+    simp only [mem_ofPred_eq, mem_Icc, Pi.le_def, max_le_iff, abs_le, forall_and]
     tauto
   rw [hdomain]
   exact isCompact_Icc
@@ -65,7 +65,7 @@ theorem isClosed_quittingFloorRobustChargedEdge
     IsClosed {edge : QuittingRobustChargedEdge reward tolerance bound |
       ∀ who, floor who - tolerance ≤ edge.1.1.1.1 who ∧
         floor who - tolerance ≤ edge.1.2.1 who} := by
-  simp only [setOf_forall]
+  simp only [ofPred_forall]
   apply isClosed_iInter
   intro who
   apply IsClosed.inter

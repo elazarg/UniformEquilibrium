@@ -17,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -79,7 +79,7 @@ theorem quittingRootIncidentCoalitionMass_le_absorptionOdds_mul_singleton
   have hrestComparison :
       (∏ who ∈ others.erase other, x who) ≤
         ∏ who ∈ others.erase other, (1 - x who) :=
-    Finset.prod_le_prod
+    Finset.prod_le_prod₀
       (fun who _ ↦ hxnonneg who)
       (fun who _ ↦ hxlecontinue who)
   have hcontinueRestNonneg :

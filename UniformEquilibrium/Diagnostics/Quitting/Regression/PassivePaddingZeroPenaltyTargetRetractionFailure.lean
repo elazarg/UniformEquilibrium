@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct StochasticGame
+open _root_.Math.Probability Math.PMFProduct StochasticGame
 
 /-- The old two-player table pays one exactly to a unique quitter. -/
 def passivePaddingZeroPenaltyOldReward
@@ -60,10 +60,11 @@ private theorem passivePaddingZeroPenaltyAction_quitters :
     quittingQuitters passivePaddingZeroPenaltyAction = {.inr ()} := by
   ext player
   cases player with
-  | inl old => simp [quittingQuitters, passivePaddingZeroPenaltyAction]
+  | inl old =>
+      decide +revert
   | inr fresh =>
       cases fresh
-      simp [quittingQuitters, passivePaddingZeroPenaltyAction]
+      decide
 
 /-- The padded zero-penalty boundary table. -/
 def passivePaddingZeroPenaltyReward :
@@ -166,9 +167,11 @@ private theorem passivePaddingZeroPenaltyOldReward_sum_le_one
 /-- Every old terminal reward moment has coordinate sum at most one. -/
 theorem sum_passivePaddingZeroPenaltyOldRewardMoment_le_one
     (mass : QuittingTerminalOutcome (Fin 2) → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome (Fin 2))) :
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights
+      (QuittingTerminalOutcome (Fin 2))) :
     (∑ who, quittingTerminalRewardMoment
       passivePaddingZeroPenaltyOldReward mass who) ≤ 1 := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   rw [show (∑ who, quittingTerminalRewardMoment
       passivePaddingZeroPenaltyOldReward mass who) =
       ∑ outcome, mass outcome *

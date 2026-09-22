@@ -67,7 +67,7 @@ theorem exists_finite_realized_range_codebook
     Classical.choose_spec (hcodesRealized code.2)
   let representatives : Set Source := Set.range representative
   have hrepresentativesFinite : representatives.Finite := by
-    letI : Fintype {code // code ∈ codebook} := hcodesFinite.fintype
+    let : Fintype {code // code ∈ codebook} := hcodesFinite.fintype
     exact Set.finite_range representative
   refine ⟨representatives, hrepresentativesFinite, ?_⟩
   intro source

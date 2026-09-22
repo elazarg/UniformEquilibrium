@@ -16,7 +16,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 /-- Selection of a bad source choice together with a survival floor valid at
 every start date the selected source does not strictly precede, and with the
@@ -53,8 +53,8 @@ private theorem quittingStoppingLaw_positiveGap_sourceSupport
         intro t
         by_cases ht : Δ / 2 ≤ C - value (some t)
         · rw [hzero t ht]; ring
-        · rw [if_neg ht]; ring
-      rw [if_neg hnone, tsum_congr hterm, tsum_zero] at hexp
+        · rw [ite_eq_right ht]; ring
+      rw [ite_eq_right hnone, tsum_congr hterm, tsum_zero] at hexp
       rw [hexp] at hbad
       simp only [mul_zero, add_zero] at hbad
       linarith
@@ -153,7 +153,7 @@ theorem positiveDebt_exists_actualReach_paidRow_withSupport
     have hsw : row.sourceWitness = some n := hrow.trans hn
     have hchr := row.chronology
     by_cases hre : row.receivingEarlier = true
-    · rw [if_pos hre] at hchr
+    · rw [ite_eq_left hre] at hchr
       have h2 := hchr.2
       rw [hsw] at h2
       cases hlater : row.later with
@@ -164,7 +164,7 @@ theorem positiveDebt_exists_actualReach_paidRow_withSupport
           rw [hlater] at h2
           simp [quittingAbsolutePureTime] at h2
           omega
-    · rw [if_neg hre] at hchr
+    · rw [ite_eq_right hre] at hchr
       have h1 := hchr.1
       rw [hsw] at h1
       simp only [Option.some.injEq] at h1

@@ -176,13 +176,13 @@ theorem continuous_stateTrack
     (decoder : SummableExecutableDecoder Code State Visible Certificate)
     (depth : ℕ) :
     Continuous fun code : decoder.CodePoint ↦ decoder.stateTrack code depth :=
-  (decoder.state_continuousOn depth).restrict
+  (decoder.state_continuousOn depth).domRestrict
 
 theorem continuous_visibleTrack
     (decoder : SummableExecutableDecoder Code State Visible Certificate)
     (depth : ℕ) :
     Continuous fun code : decoder.CodePoint ↦ decoder.visibleTrack code depth :=
-  (decoder.visible_continuousOn depth).restrict
+  (decoder.visible_continuousOn depth).domRestrict
 
 theorem tendstoUniformly_stateTrack
     (decoder : SummableExecutableDecoder Code State Visible Certificate) :
@@ -270,7 +270,7 @@ theorem continuous_ancestryRecord
   · exact continuous_pi fun depth ↦ decoder.continuous_stateTrack depth
   apply Continuous.prodMk
   · exact continuous_pi fun depth ↦
-      (decoder.certificate_continuousOn depth).restrict
+      (decoder.certificate_continuousOn depth).domRestrict
   · exact decoder.continuous_decodedState
 
 /-- Compact inverse-limit code produces a compact full ancestry relation,
@@ -278,7 +278,7 @@ including every finite certificate coordinate. -/
 theorem isCompact_range_ancestryRecord
     (decoder : SummableExecutableDecoder Code State Visible Certificate) :
     IsCompact (Set.range decoder.ancestryRecord) := by
-  letI : CompactSpace decoder.CodePoint :=
+  let : CompactSpace decoder.CodePoint :=
     isCompact_iff_compactSpace.mp decoder.code_compact
   exact isCompact_range decoder.continuous_ancestryRecord
 

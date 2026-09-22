@@ -26,7 +26,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.ProbabilityMassFunction Math.PMFProduct Math.Topology
+open Filter _root_.Set _root_.Math.Probability
+open Math.ProbabilityMassFunction Math.PMFProduct Math.Topology
 open QuittingBoundaryHolonomy
 open QuittingSureSetOwnerRepair
 open scoped Topology

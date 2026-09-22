@@ -26,9 +26,11 @@ consumer with no extra debt-reset hypothesis.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open Filter Set Math.Probability
+open Filter Set _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -265,8 +267,8 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
   · obtain ⟨rank, hrank, hatom⟩ :=
       extraction_of_frequently_atTop hprescribed
     choose terminalAt hterminalAt using hatom
-    letI : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
-    letI : DiscreteTopology {S : Finset ι // S.Nonempty} :=
+    let : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
+    let : DiscreteTopology {S : Finset ι // S.Nonempty} :=
       discreteTopology_bot _
     obtain ⟨terminal, terminalSubseq, hterminalSubseq,
       hterminalTendsto⟩ := CompactSpace.tendsto_subseq terminalAt
@@ -313,8 +315,8 @@ theorem exists_prescribedAtomSequence_or_vanishingDebtRectangleSequence
       intro n
       exact hstart (n + start) (Nat.le_add_left start n)
     choose quitTimeAt terminalAt hatomAt hdebtAt using hchoice
-    letI : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
-    letI : DiscreteTopology {S : Finset ι // S.Nonempty} :=
+    let : TopologicalSpace {S : Finset ι // S.Nonempty} := ⊥
+    let : DiscreteTopology {S : Finset ι // S.Nonempty} :=
       discreteTopology_bot _
     obtain ⟨terminal, terminalSubseq, hterminalSubseq,
       hterminalTendsto⟩ := CompactSpace.tendsto_subseq terminalAt
@@ -495,10 +497,12 @@ theorem QuittingStoppingLawVanishingDebtRectangleSequence.positiveTarget_massLow
       (abs_reward_le_quittingRewardBound reward packet.terminal packet.observer)
   have hMpos : 0 < M := hrewardPositive.trans_le hrewardLe
   have htargetNonneg : 0 ≤ targetMass :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile).1
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward targetProfile)).1
       (some packet.terminal)
   have hsourceNonneg : 0 ≤ sourceMass :=
-    (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile).1
+    (mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward sourceProfile)).1
       (some packet.terminal)
   have hbound := packet.atom_bound n
   have hsourceUpdate : Function.update

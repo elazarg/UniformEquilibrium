@@ -194,11 +194,11 @@ theorem Schedule.deletedSurvival_add_sum_deletedMass
   | succ time ih =>
       rw [Finset.sum_range_succ, Schedule.deletedSurvival]
       by_cases howner : schedule.owner time = who
-      · rw [if_pos howner,
+      · rw [ite_eq_left howner,
           show schedule.deletedMass who time = 0 by
             simp [Schedule.deletedMass, howner], add_zero]
         simpa using ih
-      · rw [if_neg howner,
+      · rw [ite_eq_right howner,
           show schedule.deletedMass who time =
               schedule.deletedSurvival who time * schedule.hazard time by
             simp [Schedule.deletedMass, howner]]
@@ -327,12 +327,12 @@ theorem Schedule.fixedOpponentsContinueReward_eq
         quittingSoloReward boundaryReward (schedule.owner time) who := by
   by_cases howner : schedule.owner time = who
   · subst who
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     unfold quittingFixedOpponentsContinueReward
     rw [update_scheduleRoot_owner,
       quittingRootAbsorbingContribution_solo]
     simp
-  · rw [if_neg howner,
+  · rw [ite_eq_right howner,
       quittingFixedOpponentsContinueReward_eq_of_soloRoot boundaryReward
         schedule.roots (schedule.roots_isolated time) (Ne.symm howner)]
     simp [Schedule.roots]
@@ -859,7 +859,7 @@ theorem Schedule.chargeTerm_le_ownerFriction
   have hcoefficient := schedule.tailCoefficientAt_le_gap
     (schedule.owner time) time
   unfold Schedule.chargeTerm Schedule.frictionTerm frictionStep Schedule.atom
-  simp only [if_pos]
+  simp only [ite_eq_left]
   by_cases hcoefficient0 :
       0 ≤ schedule.tailCoefficientAt (schedule.owner time) time
   · calc

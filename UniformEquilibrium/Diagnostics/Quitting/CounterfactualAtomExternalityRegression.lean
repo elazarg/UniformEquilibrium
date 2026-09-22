@@ -37,9 +37,11 @@ observer-side strategic sign); exact-prefix chronology alone cannot do so.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 namespace CounterfactualAtomExternalityRegression
 
@@ -100,7 +102,8 @@ theorem terminalPayoff_observer_nonpos
   apply Finset.sum_nonpos
   intro outcome _
   exact mul_nonpos_of_nonneg_of_nonpos
-    ((quittingTerminalOutcomeMass_mem_stdSimplex reward profile).1 outcome)
+    ((mem_simplexWeights.mp
+      (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).1 outcome)
     (by cases outcome with
       | none => simp [quittingTerminalOutcomeReward]
       | some terminal =>

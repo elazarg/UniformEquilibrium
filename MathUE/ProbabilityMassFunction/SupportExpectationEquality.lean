@@ -16,7 +16,7 @@ theorem expect_eq_iff_eq_on_support_of_le_on_support
     Math.Probability.expect mass lower = Math.Probability.expect mass upper ↔
       ∀ point ∈ mass.support, lower point = upper point := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   constructor
   · intro hequal
     have hnonneg (point : Ω) :

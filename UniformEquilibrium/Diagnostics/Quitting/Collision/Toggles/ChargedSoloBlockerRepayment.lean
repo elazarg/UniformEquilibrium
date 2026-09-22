@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
 
 private theorem finFour_outsiders_nonempty (owner : Fin 4) :
     (Finset.univ.erase owner).Nonempty := by

@@ -5,6 +5,7 @@ Authors: UniformEquilibrium contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPureTimeRectangleDisintegration
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.RewardBound
 
 /-!
@@ -21,9 +22,11 @@ full behavioral envelope by a stationary cap.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -57,7 +60,7 @@ def quittingTerminalWithAnchorEquivErasurePair
   left_inv terminal := by
     apply Subtype.ext
     by_cases hmover : mover ∈ terminal.1.val
-    · simp [hmover, quittingInsertTerminal, Finset.insert_erase]
+    · simp [hmover, quittingInsertTerminal]
     · simp [hmover, Finset.erase_eq_of_notMem]
   right_inv pair := by
     rcases pair with ⟨quit, terminal⟩
@@ -161,10 +164,11 @@ theorem quittingTerminalAnchorMass_eq_sum_erasurePairs
 terminal law. -/
 theorem quittingTerminalAnchorMass_add_failureMass
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (anchor : ι) :
     quittingTerminalAnchorMass mass anchor +
         quittingTerminalErasureFailureMass mass anchor = 1 := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have hanchor : quittingTerminalAnchorMass mass anchor =
       ∑ terminal ∈ Finset.univ.filter
           (fun terminal : {S : Finset ι // S.Nonempty} =>
@@ -226,11 +230,12 @@ including the zero-reward Never atom. -/
 theorem neg_mul_terminalErasureFailureMass_le_failureRewardMoment
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (who anchor : ι) {M : ℝ}
     (hreward : ∀ terminal player, |reward terminal player| ≤ M) :
     -M * quittingTerminalErasureFailureMass mass anchor ≤
       quittingTerminalErasureFailureRewardMoment reward mass who anchor := by
+  rw [GameTheory.Math.Probability.mem_simplexWeights] at hmass
   have hM : 0 ≤ M :=
     quittingRewardCoordinateBound_nonneg_of_player reward who hreward
   let failures := Finset.univ.filter
@@ -300,7 +305,7 @@ theorem quittingTerminalOutcomeMass_pair_le_update_never
     simp only [Function.update_eq_self] at hpair
     rw [← hpair]
     rw [hdeleted]
-    simp only [hmover, if_false,
+    simp only [hmover, ite_false,
       quittingBehaviorLiveHazard_pureTimeBehaviorStrategy]
     have hfactor := quittingStageCoalitionOpponentFactor_nonneg
       (quittingProfileLiveRoot reward profile) mover time terminal
@@ -440,10 +445,10 @@ theorem quittingTerminalErasureMoment_sub_failure_le_update_never_payoff
   let sourceMass := quittingTerminalOutcomeMass reward profile
   let deletedMass := quittingTerminalOutcomeMass reward deleted
   have hsourceSimplex : sourceMass ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := by
     exact quittingTerminalOutcomeMass_mem_stdSimplex reward profile
   have hdeletedSimplex : deletedMass ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) := by
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) := by
     exact quittingTerminalOutcomeMass_mem_stdSimplex reward deleted
   have herasure :=
     quittingTerminalErasureMoment_le_update_never_anchorMoment_add
@@ -503,10 +508,10 @@ theorem quittingTerminalErasureMoment_eq_update_never_payoff_of_failure_eq_zero
   let deletedAt : QuittingTerminalErasureBase mover anchor → ℝ :=
     fun terminal => deletedMass (some terminal.1)
   have hsourceSimplex : sourceMass ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) :=
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) :=
     quittingTerminalOutcomeMass_mem_stdSimplex reward profile
   have hdeletedSimplex : deletedMass ∈
-      stdSimplex ℝ (QuittingTerminalOutcome ι) :=
+      GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) :=
     quittingTerminalOutcomeMass_mem_stdSimplex reward deleted
   have hpair : ∀ terminal, paired terminal ≤ deletedAt terminal := by
     intro terminal
@@ -521,9 +526,9 @@ theorem quittingTerminalErasureMoment_eq_update_never_payoff_of_failure_eq_zero
   have hdeletedFailureNonneg :
       0 ≤ quittingTerminalErasureFailureMass deletedMass anchor := by
     unfold quittingTerminalErasureFailureMass
-    exact add_nonneg (hdeletedSimplex.1 none)
+    exact add_nonneg ((mem_simplexWeights.mp hdeletedSimplex).1 none)
       (Finset.sum_nonneg fun terminal _ =>
-        hdeletedSimplex.1 (some terminal))
+        (mem_simplexWeights.mp hdeletedSimplex).1 (some terminal))
   have hsourceSum : ∑ terminal, paired terminal = 1 := by
     rw [← hsourceAnchor,
       quittingTerminalAnchorMass_eq_sum_erasurePairs
@@ -557,19 +562,19 @@ theorem quittingTerminalErasureMoment_eq_update_never_payoff_of_failure_eq_zero
           (fun terminal : {S : Finset ι // S.Nonempty} =>
             anchor ∉ terminal.val),
         deletedMass (some terminal) :=
-    Finset.sum_nonneg fun terminal _ => hdeletedSimplex.1 (some terminal)
+    Finset.sum_nonneg fun terminal _ => (mem_simplexWeights.mp hdeletedSimplex).1 (some terminal)
   have hfilteredZero :
       ∑ terminal ∈ Finset.univ.filter
           (fun terminal : {S : Finset ι // S.Nonempty} =>
             anchor ∉ terminal.val),
         deletedMass (some terminal) = 0 := by
     unfold quittingTerminalErasureFailureMass at hdeletedFailure
-    nlinarith [hdeletedSimplex.1 none]
+    nlinarith [(mem_simplexWeights.mp hdeletedSimplex).1 none]
   have homit : ∀ terminal : {S : Finset ι // S.Nonempty},
       anchor ∉ terminal.val → deletedMass (some terminal) = 0 := by
     intro terminal hterminal
     exact (Finset.sum_eq_zero_iff_of_nonneg
-      (fun candidate _ => hdeletedSimplex.1 (some candidate))).mp
+      (fun candidate _ => (mem_simplexWeights.mp hdeletedSimplex).1 (some candidate))).mp
         hfilteredZero terminal (Finset.mem_filter.mpr
           ⟨Finset.mem_univ terminal, hterminal⟩)
   have hfailureReward :

@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set Topology
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -110,7 +110,7 @@ theorem quittingRootAbsorbingContribution_eq_sum_coalitionMass
     (t := Finset.univ) (q := root)
     (rest := fun _ => false)
     (k := fun action => quittingRootPayoff reward 0 action who)]
-  simp only [Finset.mem_univ, if_true, Finset.powerset_univ]
+  simp only [Finset.mem_univ, ite_true, Finset.powerset_univ]
   apply Finset.sum_congr rfl
   intro S _
   have hquitters :
@@ -122,7 +122,7 @@ theorem quittingRootAbsorbingContribution_eq_sum_coalitionMass
         quittingRootPayoff reward 0 (fun i => decide (i ∈ S)) who =
           quittingProjectiveCoalitionReward reward S who := by
       unfold quittingRootPayoff quittingProjectiveCoalitionReward
-      rw [dif_pos (hquitters.symm ▸ hS), dif_pos hS]
+      rw [dite_eq_left (hquitters.symm ▸ hS), dite_eq_left hS]
       apply congrArg (fun terminal => reward terminal who)
       exact Subtype.ext hquitters
     have haction :
@@ -424,7 +424,7 @@ theorem quittingGermPureQuitCoalitionValue_tendsto_singleton
       by_cases hother : other = owner <;>
         simp [quittingQuitters, hother]
     unfold quittingRootPayoff
-    rw [dif_pos (by simp)]
+    rw [dite_eq_left (by simp)]
     apply congrArg (fun terminal => reward terminal who)
     exact Subtype.ext hquitters
   unfold quittingGermPureQuitCoalitionValue

@@ -79,7 +79,7 @@ theorem pivotRepairProvisionalStoppingLaw_apply_decode {deadline : ℕ}
   rw [pivotRepairProvisionalStoppingLaw, PMF.map_apply, tsum_eq_single choice]
   · simp [pivotRepairFiniteClockLaw]
   · intro source hsource
-    rw [if_neg]
+    rw [ite_eq_right]
     intro heq
     exact hsource ((finiteStoppingTimeDecode_injective (deadline + 1) heq).symm)
 
@@ -119,7 +119,7 @@ theorem pivotRepairProvisionalStoppingLaw_some_of_gt {deadline : ℕ}
   rw [pivotRepairProvisionalStoppingLaw, PMF.map_apply]
   apply ENNReal.tsum_eq_zero.mpr
   intro choice
-  rw [if_neg]
+  rw [ite_eq_right]
   cases choice with
   | none => simp [finiteStoppingTimeDecode]
   | some chosen =>
@@ -174,7 +174,7 @@ theorem expect_censor_pivotRepairProvisionalStoppingLaw {deadline : ℕ}
     simp [censorLateFiniteStoppingOutcome, show time.val ≤ deadline - 1 by omega]
   simp only [hhead]
   simp only [censorLateFiniteStoppingOutcome,
-    show ¬ deadline ≤ deadline - 1 by omega, if_false]
+    show ¬ deadline ≤ deadline - 1 by omega, ite_false]
   ring
 
 private theorem first_atom_div_late_positive {deadline : ℕ}

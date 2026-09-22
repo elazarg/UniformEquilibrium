@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open Math.ProbabilityMassFunction
 open scoped Topology
 
@@ -287,12 +287,12 @@ theorem exists_fixedLabelLimit_of_concentrated_otherDefect
     have hgoodEventually : ∀ᶠ rank in atTop,
         (selectedTail rank, selectedRoot rank) ∈ good := by
       filter_upwards with rank
-      simpa only [good, selectedTail, selectedRoot, Set.mem_setOf_eq,
+      simpa only [good, selectedTail, selectedRoot, Set.mem_ofPred_eq,
         quittingRootOfSimplex_simplexOfRoot] using
         hdefectFinal rank
     have hmem : (cluster.1, rootLimit) ∈ good :=
       hgoodClosed.mem_of_tendsto hpair hgoodEventually
-    simpa only [good, Set.mem_setOf_eq] using hmem
+    simpa only [good, Set.mem_ofPred_eq] using hmem
   have hlimitCoalition : charge ≤
       quittingRootCoalitionMass (quittingRootOfSimplex rootLimit) terminal.val := by
     let good : Set (QuittingRootSimplex iota) := {root | charge ≤
@@ -306,11 +306,11 @@ theorem exists_fixedLabelLimit_of_concentrated_otherDefect
             (profiles (packet.subseq (markedSubseq (selector rank))))
             (packet.mark (markedSubseq (selector rank)))) ∈ good := by
       filter_upwards with rank
-      simpa only [good, Set.mem_setOf_eq,
+      simpa only [good, Set.mem_ofPred_eq,
         quittingRootOfSimplex_simplexOfRoot] using hcoalitionFinal rank
     have hmem : rootLimit ∈ good := hgoodClosed.mem_of_tendsto hrootFinal
       hgoodEventually
-    simpa only [good, Set.mem_setOf_eq] using hmem
+    simpa only [good, Set.mem_ofPred_eq] using hmem
   refine ⟨{
     player := player
     player_ne_owner := hplayerNe

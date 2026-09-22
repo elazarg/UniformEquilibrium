@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 namespace QuittingFixedTableCapDefectRegression
@@ -106,7 +106,7 @@ theorem cap_coordinateNashDefect (n : ℕ) (who : Player) :
       if who = debtor then 2 * q n - (q n) ^ 2 else 0 := by
   by_cases hwho : who = debtor
   · subst who
-    rw [if_pos rfl]
+    rw [ite_eq_left rfl]
     unfold quittingRootCoordinateNashDefect
     rw [cap_quitPayoff_debtor, cap_continuePayoff_debtor,
       cap_successorPayoff_debtor]
@@ -115,7 +115,7 @@ theorem cap_coordinateNashDefect (n : ℕ) (who : Player) :
     rw [max_eq_right]
     · ring
     · nlinarith
-  · rw [if_neg hwho]
+  · rw [ite_eq_right hwho]
     have hcoordinate : (pair n).2 who = (fun _ : Player => 0) who := by
       rw [(pair_coordinates n).2]
       fin_cases who <;> simp [debtor] at hwho ⊢

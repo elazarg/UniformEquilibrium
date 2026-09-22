@@ -73,8 +73,11 @@ instance neverPublicStop_decidable (time : ℕ) :
 @[simp] theorem publicHitTimes_never
     {time : ℕ} (history : G.Hist time) :
     G.publicHitTimes (neverPublicStop G) history = ∅ := by
-  ext stage
-  simp [publicHitTimes, neverPublicStop]
+  unfold publicHitTimes
+  rw [Finset.filter_eq_empty_iff]
+  intro stage _
+  change ¬False
+  exact not_false
 
 @[simp] theorem firstPublicHit?_never
     {time : ℕ} (history : G.Hist time) :

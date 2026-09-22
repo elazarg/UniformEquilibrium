@@ -540,7 +540,7 @@ theorem exists_nonzero_bivariate_discountedShapleyRateValue_of_activeBranches
         Polynomial.eval
           (G.discountedShapleyRateValue l target)
           (Polynomial.map (Polynomial.evalRingHom l) R) = 0 := by
-  letI : Module.Finite (FractionRing (Polynomial ℝ))
+  let : Module.Finite (FractionRing (Polynomial ℝ))
       (MvPolynomial G.State (FractionRing (Polynomial ℝ)) ⧸
         (ShapleySnow.discountedShapleyActiveSystemIdeal
           G.rowStagePayoff

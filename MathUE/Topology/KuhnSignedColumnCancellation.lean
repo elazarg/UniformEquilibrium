@@ -48,7 +48,7 @@ theorem sum_signedIncidence_cells_eq_incident_sum
   intro cell _ hnot
   have hincident : ¬ Incident cell face := by simpa only [Finset.mem_filter,
     Finset.mem_univ, true_and] using hnot
-  simp only [signedIncidence, dif_neg hincident]
+  simp only [signedIncidence, dite_eq_right hincident]
 
 /-- Every actual nonboundary face has zero integer incidence column. -/
 theorem sum_signedIncidence_cells_eq_zero_of_not_boundary

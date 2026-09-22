@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability.DiscreteHazard.StoppingLaw
+open _root_.Math.Probability.DiscreteHazard.StoppingLaw
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -140,8 +140,6 @@ theorem quittingBehaviorTwoDisjointPairMasses_sqrt_sum_add_never_le_one
           (laws 2 none).toReal * (laws 3 none).toReal := by
     change (∏ who, (laws who none).toReal) = _
     norm_num [Fin.prod_univ_succ, laws]
-    have hthree : Fin.succ (2 : Fin 3) = (3 : Fin 4) := by decide
-    rw [hthree]
     ring
   rw [quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none profile, hproduct]
   exact h
@@ -178,8 +176,6 @@ theorem quittingBehaviorTwoDisjointPairMasses_finiteLeftover_ge_two_sqrt_mul
           (laws 2 none).toReal * (laws 3 none).toReal := by
     change (∏ who, (laws who none).toReal) = _
     norm_num [Fin.prod_univ_succ, laws]
-    have hthree : Fin.succ (2 : Fin 3) = (3 : Fin 4) := by decide
-    rw [hthree]
     ring
   rw [quittingTerminalOutcomeMass_none_eq_prod_stoppingLaw_none profile, hproduct]
   exact h

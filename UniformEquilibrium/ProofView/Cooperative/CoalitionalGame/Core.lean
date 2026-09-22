@@ -11,7 +11,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- A transferable-utility coalitional game: `v S` is the value of coalition `S`. -/
 structure CoalGame (ι : Type) [DecidableEq ι] where
@@ -279,7 +279,7 @@ theorem shapleyValue_efficient (G : CoalGame ι) :
   classical
   -- Handle the degenerate empty-type case first.
   rcases isEmpty_or_nonempty ι with hempty | hnonempty
-  · haveI := hempty
+  · have := hempty
     simp only [Finset.univ_eq_empty, Finset.sum_empty, G.v_empty]
   set n := Fintype.card ι with hn_def
   have hn_pos : 0 < n := by rw [hn_def]; exact Fintype.card_pos

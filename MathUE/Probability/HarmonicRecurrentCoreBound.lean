@@ -42,10 +42,10 @@ theorem exists_finiteExpectedVariation_bound_of_all_reach_closedClass
         ∀ horizon,
           finiteExpectedSpaceTimeMarkovVariation
               initial kernel value horizon ≤ bound := by
-  letI : Nonempty Omega := ⟨anchor⟩
+  let : Nonempty Omega := ⟨anchor⟩
   obtain ⟨package⟩ :=
     finiteClosedClassPeriodicMixingPrinciple Omega kernel anchor closedClass
-  letI : DecidableEq package.Phase := package.instDecidableEqPhase
+  let : DecidableEq package.Phase := package.instDecidableEqPhase
   obtain ⟨certificate⟩ := exists_closedCoreTransienceCertificate
     kernel (closedClass.states : Set Omega) package.mixing.closed reachable
   let bound : ℝ :=
@@ -149,7 +149,7 @@ theorem expect_abs_increment_eq_zero_of_mem_finiteRecurrentCore
     reachableClosedClassOfMemFiniteRecurrentCore kernel source hsource
   obtain ⟨package⟩ :=
     finiteClosedClassPeriodicMixingPrinciple Omega kernel source closedClass
-  letI : DecidableEq package.Phase := package.instDecidableEqPhase
+  let : DecidableEq package.Phase := package.instDecidableEqPhase
   rw [expect_eq_sum]
   apply Finset.sum_eq_zero
   intro successor _

@@ -12,7 +12,7 @@ import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Cycles.PeriodicPureTimeBellman
 import UniformEquilibrium.Quitting.Terminal.TargetTail.FiniteChainTerminalCompiler
 import UniformEquilibrium.Quitting.Cycles.CompanionTransport
-import MathUE.DirectedTransport.MaxAffine.Scalar
+import Maths.Multitubes.MaxAffine.Scalar
 
 /-!
 # The max-linear response system of a periodic root cycle
@@ -69,7 +69,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {K : ℕ}
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -225,7 +225,7 @@ by the composite of its one-stage companion labels. -/
 theorem quittingCompanionLabelList_apply_of_isQuittingCyclicResponseSolution
     (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin K)
     (who : ι) (start fuel : ℕ) :
-    (Math.MaxAffineTransport.Label.compList
+    (Maths.MaxAffineTransport.Label.compList
       (quittingCompanionLabelList reward
         (quittingCyclicRootSequence cycle phase) who start fuel)).apply
           (W (quittingCyclicOrbit phase (start + fuel)) who) =
@@ -239,7 +239,7 @@ one-turn max-affine holonomy. -/
 theorem quittingCompanionLabelCycle_fixed_of_isQuittingCyclicResponseSolution
     (hW : IsQuittingCyclicResponseSolution reward cycle W) (phase : Fin K)
     (who : ι) :
-    (Math.MaxAffineTransport.Label.compList
+    (Maths.MaxAffineTransport.Label.compList
       (quittingCompanionLabelList reward
         (quittingCyclicRootSequence cycle phase) who 0 K)).apply
           (W phase who) = W phase who := by
@@ -254,25 +254,25 @@ theorem quittingCyclicResponseSolution_eq_companionLabel_fixedPoint
     (who : ι)
     (hcontract : (∏ cyclePhase : Fin K,
       quittingStationaryFixedOpponentsContinueMass (cycle cyclePhase) who) < 1) :
-    let label := Math.MaxAffineTransport.Label.compList
+    let label := Maths.MaxAffineTransport.Label.compList
       (quittingCompanionLabelList reward
         (quittingCyclicRootSequence cycle phase) who 0 K)
     W phase who =
       max (label.floor.unbotD (label.shift / (1 - label.slope)))
         (label.shift / (1 - label.slope)) := by
   dsimp only
-  let label := Math.MaxAffineTransport.Label.compList
+  let label := Maths.MaxAffineTransport.Label.compList
     (quittingCompanionLabelList reward
       (quittingCyclicRootSequence cycle phase) who 0 K)
   have hfixed : label.apply (W phase who) = W phase who :=
     quittingCompanionLabelCycle_fixed_of_isQuittingCyclicResponseSolution
       hW phase who
   have hslope : label.slope < 1 := by
-    rw [Math.MaxAffineTransport.Label.slope_compList_eq_pathSlope,
+    rw [Maths.MaxAffineTransport.Label.slope_compList_eq_pathSlope,
       quittingCompanionLabelList_pathSlope,
       quittingOpponentSurvivalWeight_cyclic_period]
     exact hcontract
-  exact (Math.MaxAffineTransport.Label.apply_eq_self_iff_of_slope_lt_one
+  exact (Maths.MaxAffineTransport.Label.apply_eq_self_iff_of_slope_lt_one
     label hslope (W phase who)).mp hfixed
 
 /-- **Never quitting is capped by a response solution.**  The hypothesis is

@@ -172,8 +172,8 @@ theorem sum_tensorBernsteinWeight_mul_coordinate (degree : Fin dimension → ℕ
       apply Finset.prod_congr rfl
       intro axis _
       by_cases haxis : axis = coordinate
-      · simp only [haxis, if_true]
-      · simp only [haxis, if_false, one_mul, hmass]
+      · simp only [haxis, ite_true]
+      · simp only [haxis, ite_false, one_mul, hmass]
     _ = _ := Fintype.prod_ite_eq' coordinate _
 
 /-- Each tensor coordinate has the ordinary Bernstein squared-distance moment. -/

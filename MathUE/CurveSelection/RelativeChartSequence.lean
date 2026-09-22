@@ -82,9 +82,9 @@ theorem exists_eventually_regular_parameterChart_of_strictAnti
                   (x n parameter))
                 (a n) (P.σ s) =
               germRepresentative (φ s) n) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let J := sequenceGermIdeal x
-  letI : J.IsPrime :=
+  let : J.IsPrime :=
     sequenceGermIdeal_isPrime x
   have hparameter :
       ∀ p : Polynomial ℝ,
@@ -106,10 +106,10 @@ theorem exists_eventually_regular_parameterChart_of_strictAnti
     exists_eventually_parameter_standardSmooth_basicOpen
       x J parameter hparameter hJmem
   refine ⟨g, hg, hgeventually, ?_⟩
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     parameterPolynomialAlgebra J parameter
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra x parameter
   let S :=
     Localization.Away (Ideal.Quotient.mk J g)
@@ -121,10 +121,10 @@ theorem exists_eventually_regular_parameterChart_of_strictAnti
     hstandard
   obtain ⟨ι, κ, hκ, hι, ⟨P⟩⟩ :=
     hstandard'.out
-  letI : Finite κ := hκ
-  letI : Finite ι := hι
-  letI : Fintype κ := Fintype.ofFinite κ
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Finite κ := hκ
+  let : Finite ι := hι
+  let : Fintype κ := Fintype.ofFinite κ
+  let : Fintype ι := Fintype.ofFinite ι
   let Pfin :
       Algebra.SubmersivePresentation
         (Polynomial ℝ) S

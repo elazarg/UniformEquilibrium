@@ -17,7 +17,7 @@ open Function Set
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {n period : ℕ}
 variable {Player : Type} [Fintype Player] [DecidableEq Player]

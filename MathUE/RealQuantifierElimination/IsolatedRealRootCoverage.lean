@@ -115,7 +115,7 @@ theorem exists_rational_isolating_interval
     (Polynomial.map_ne_zero_iff (FaithfulSMul.algebraMap_injective ℚ ℝ)).mpr hnonzero
   let bad : Set ℝ := {other | realPolynomial.IsRoot other} \ {value}
   have hfinite : bad.Finite :=
-    (Polynomial.finite_setOf_isRoot hrealNonzero).subset Set.sdiff_subset
+    (Polynomial.finite_setOfPred_isRoot hrealNonzero).subset Set.sdiff_subset
   have hvalue : value ∈ badᶜ := by simp [bad]
   have hneighborhood : badᶜ ∈ nhds value := hfinite.isClosed.isOpen_compl.mem_nhds hvalue
   obtain ⟨left, right, hinterval, hsubset⟩ :=

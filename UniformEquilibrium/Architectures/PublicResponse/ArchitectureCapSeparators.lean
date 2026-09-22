@@ -37,7 +37,7 @@ open scoped BigOperators
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct Filter
+open _root_.Math.Probability Math.PMFProduct Filter
 
 namespace ArchitectureCapVsMinmax
 
@@ -51,8 +51,9 @@ abbrev Action := Bool
 def payoff (a : Player → Action) (_who : Player) : ℝ :=
   if a false = false ∧ a true = false then 1 else 0
 
-/-- The one-state repeated stochastic game used by the separator. -/
-def game : StochasticGame Player where
+/-- The one-state repeated stochastic game used by the separator. Its
+concrete state and action carriers remain visible in the separator proofs. -/
+@[reducible] def game : StochasticGame Player where
   State := Unit
   Act := fun _ => Action
   stagePayoff := fun _ a => payoff a
@@ -97,8 +98,7 @@ def architecture : game.FiniteResponseArchitecture () where
     rw [show (fun i => architecture.phaseProfile.behaviorProfile i t h) =
         (fun i => PMF.pure (prescribedAction i)) by
           funext i
-          rw [architecture_behavior]
-          rfl]
+          rw [architecture_behavior]]
     exact Math.PMFProduct.pmfPi_pure prescribedAction
   unfold StochasticGame.stageEUAt
   rw [hdist]
@@ -106,7 +106,7 @@ def architecture : game.FiniteResponseArchitecture () where
     expect (PMF.pure prescribedAction)
         (fun a => game.stagePayoff h.2 a who) =
         game.stagePayoff h.2 prescribedAction who := expect_pure _ _
-    _ = 1 := by simp [game, payoff, prescribedAction]
+    _ = 1 := by simp [payoff, prescribedAction]
 
 @[simp] theorem prescribed_expectedStagePayoff (t : ℕ) (who : Player) :
     game.expectedStagePayoff architecture.phaseProfile.behaviorProfile () t who = 1 := by
@@ -130,7 +130,7 @@ theorem unilateral_finiteAveragePayoff_le_one (who : Player)
   have hbound : ∀ (s : game.State) (a : game.JointAct),
       |game.stagePayoff s a who| ≤ 1 := by
     intro s a
-    simp only [game, payoff]
+    simp only [payoff]
     split <;> norm_num
   exact (le_abs_self _).trans
     (game.abs_finiteAveragePayoff_le (by norm_num) hbound () T _)
@@ -147,18 +147,21 @@ theorem exact_architecture_cap (who : Player) :
     unilateral_finiteAveragePayoff_le_one who⟩
 
 /-- The one-shot game at the unique state, used for the static minmax test. -/
-abbrev rowStageGame : KernelGame Player := game.stageGame ()
+abbrev rowStageGame : KernelGame Player :=
+  KernelGame.ofPureEU (fun _ : Player => Action) payoff
 
 private lemma rowStageGame_eu_nonneg (ρ : KernelGame.Profile rowStageGame) :
     0 ≤ rowStageGame.eu ρ false := by
-  simp only [rowStageGame, StochasticGame.stageGame, KernelGame.eu_ofPureEU,
-    game, payoff]
+  unfold rowStageGame
+  rw [KernelGame.eu_ofPureEU]
+  simp only [payoff]
   split <;> norm_num
 
 private lemma rowStageGame_eu_le_one (ρ : KernelGame.Profile rowStageGame) :
     rowStageGame.eu ρ false ≤ 1 := by
-  simp only [rowStageGame, StochasticGame.stageGame, KernelGame.eu_ofPureEU,
-    game, payoff]
+  unfold rowStageGame
+  rw [KernelGame.eu_ofPureEU]
+  simp only [payoff]
   split <;> norm_num
 
 /-- The column player's pure punishment plays the non-`L` column. -/
@@ -193,7 +196,7 @@ private lemma bestResponse_otherColumn_eq_zero :
   apply le_antisymm
   · unfold KernelGame.bestResponseValueAgainstOpponents
     refine ciSup_le fun own => ?_
-    simp [rowStageGame, StochasticGame.stageGame, game, payoff, otherColumn,
+    simp [rowStageGame, payoff, otherColumn,
       KernelGame.profileWithOpponent]
   · exact bestResponse_nonneg otherColumn
 
@@ -226,7 +229,11 @@ inductive State
   | x
   | y
   | absorbed
-  deriving DecidableEq, Fintype
+  deriving DecidableEq
+
+private instance : Fintype State where
+  elems := {.x, .y, .absorbed}
+  complete state := by cases state <;> simp
 
 /-- State-dependent action interpretation:
 `false = Stay/Back`, `true = Go/Exploit`. -/
@@ -246,8 +253,9 @@ def reward : State → ℝ
   | _ => 0
 
 /-- A one-player stochastic game is sufficient to separate a single
-deviation followed by obedience from an unrestricted unilateral strategy. -/
-def game : StochasticGame Unit where
+deviation followed by obedience from an unrestricted unilateral strategy.
+Its concrete state and action carriers remain visible in the path proofs. -/
+@[reducible] def game : StochasticGame Unit where
   State := State
   Act := fun _ => Action
   stagePayoff := fun s _ _ => reward s
@@ -304,8 +312,7 @@ theorem expectedStateValue_scheduled (action : ℕ → Action) (t : ℕ)
               v (nextState h.2 (action t)) := by
         intro h
         simp only [StochasticGame.stageActionDist, scheduledProfile,
-          Math.PMFProduct.pmfPi_pure, expect_pure, transition_eq]
-        exact expect_pure _ _
+          Math.PMFProduct.pmfPi_pure, expect_pure]
       simp_rw [hstep]
       have h := ih (fun s => v (nextState s (action t)))
       unfold expectedStateValue at h

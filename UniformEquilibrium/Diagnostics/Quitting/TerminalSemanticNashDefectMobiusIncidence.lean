@@ -38,7 +38,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -629,7 +629,7 @@ theorem exists_playedMobiusIncidenceLabel_of_coordinateNashDefect_pos
   · have hnegativeZero : quittingPlayedNegativeMobiusIncidenceTerm
         reward tail root who coalition = 0 := by
       unfold quittingPlayedNegativeMobiusIncidenceTerm
-      rw [if_pos hwho, max_eq_right (neg_nonpos.mpr hcoeff)]
+      rw [ite_eq_left hwho, max_eq_right (neg_nonpos.mpr hcoeff)]
       ring
     have htermEq : term coalition =
         quittingPlayedPositiveMobiusIncidenceTerm
@@ -641,7 +641,7 @@ theorem exists_playedMobiusIncidenceLabel_of_coordinateNashDefect_pos
   · have hpositiveZero : quittingPlayedPositiveMobiusIncidenceTerm
         reward tail root who coalition = 0 := by
       unfold quittingPlayedPositiveMobiusIncidenceTerm
-      rw [if_pos hwho, max_eq_right (le_of_not_ge hcoeff)]
+      rw [ite_eq_left hwho, max_eq_right (le_of_not_ge hcoeff)]
       ring
     have htermEq : term coalition =
         quittingPlayedNegativeMobiusIncidenceTerm

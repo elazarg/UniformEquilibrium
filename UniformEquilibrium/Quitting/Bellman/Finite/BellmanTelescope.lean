@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -58,7 +58,7 @@ def quittingBellmanCapGap
 /-- A supplied value sequence dominates its own one-step pure-action Bellman
 value at every live stage.  This is the Snell supersolution condition for the
 live path; compare
-`Math.ChargedPathBudget.ChargedRelation.IsSupersolution`. -/
+`Maths.ChargedPathBudget.ChargedRelation.IsSupersolution`. -/
 def IsQuittingLiveBellmanSupersolution
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (who : ι)
@@ -314,9 +314,9 @@ theorem quittingOpponentSurvivalWeight_le_one
   | succ fuel ih =>
       rw [show fuel + 1 = fuel.succ by omega,
         quittingOpponentSurvivalWeight_succ]
-      exact mul_le_one₀ ih
-        (quittingStationaryContinueMass_nonneg
-          (Function.update (roots (start + fuel)) who (PMF.pure false)))
+      exact (mul_le_of_le_one_left
+          (quittingStationaryContinueMass_nonneg
+            (Function.update (roots (start + fuel)) who (PMF.pure false))) ih).trans
         (quittingStationaryContinueMass_le_one
           (Function.update (roots (start + fuel)) who (PMF.pure false)))
 
@@ -550,8 +550,13 @@ theorem quittingFixedOpponentsContinueMass_profileLiveRoot
   by_cases hp : player = who
   · subst player
     simp only [Function.update_self, quittingAlwaysContinueStrategy]
-    rfl
-  · simp [Function.update_of_ne hp]
+    exact Function.update_self
+      (β := fun player : ι => PMF ((quittingGame reward).Act player))
+      who (PMF.pure false) _
+  · simp only [Function.update_of_ne hp]
+    exact Function.update_of_ne
+      (β := fun player : ι => PMF ((quittingGame reward).Act player))
+      hp (PMF.pure false) _
 
 /-- Starting from time zero, the finite survival weights used by the
 Bellman telescope are exactly the existing opponent-only live masses. -/

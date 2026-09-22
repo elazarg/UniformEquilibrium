@@ -36,8 +36,8 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Math Math.Probability
-open Math.Probability.AnalyticScaledChargedOccupationPotential
+open _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticScaledChargedOccupationPotential
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}

@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -125,7 +125,7 @@ theorem exists_positiveDynamicDebtTail_with_absorptionAlternative
         ∃ start, ∀ horizon, start ≤ horizon →
           ∃ player, (limit horizon).1.1 player <
             quittingPunishmentValue reward player) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge,
       hdebt, hclock⟩ := witness.exists_terminalGapDynamicDebtTail
   have halternative :=
@@ -158,7 +158,7 @@ theorem exists_terminalGapDynamicDebtTail_with_summableAbsorption_of_nonpos
       (∀ time player, quittingPunishmentValue reward player ≤
         (limit time).1.1 player) ∧
       Summable (quittingDynamicDebtTailAbsorptionCharge limit) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨limit, subseq, who, hsubseq, hlimit, hbox, hedge,
       hdebt, hclock⟩ := witness.exists_terminalGapDynamicDebtTail
   have hfloor : ∀ time player, quittingPunishmentValue reward player ≤

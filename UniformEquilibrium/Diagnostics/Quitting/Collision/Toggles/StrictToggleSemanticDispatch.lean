@@ -126,7 +126,7 @@ omit [Nonempty ι] in
 def HasQuittingStrictToggleSemanticDispatchOfCardFour
     (cycle : witness.ReachableStrictToggleSimpleCycle seed)
     (hfour : Fintype.card ι = 4) : Prop :=
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   cycle.HasQuittingStrictToggleSemanticDispatch
 
 omit [Nonempty ι] in
@@ -136,7 +136,7 @@ theorem hasQuittingStrictToggleSemanticDispatch_of_card_four
     (cycle : witness.ReachableStrictToggleSimpleCycle seed)
     (hfour : Fintype.card ι = 4) :
     cycle.HasQuittingStrictToggleSemanticDispatchOfCardFour hfour := by
-  letI : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
+  let : Nonempty ι := Fintype.card_pos_iff.mp (by omega)
   change cycle.HasQuittingStrictToggleSemanticDispatch
   exact cycle.hasQuittingStrictToggleSemanticDispatch
 

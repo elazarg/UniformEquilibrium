@@ -60,7 +60,7 @@ theorem exists_fintype_weighted_profiles_of_mem_feasibleSet
   rcases (mem_convexHull_iff_exists_fintype (R := ℝ)
       (s := G.purePayoffSet) (x := v)).1 hv with
     ⟨κ, hκ, w, z, hw_nonneg, hw_sum, hz, hz_sum⟩
-  letI : Fintype κ := hκ
+  let _ : Fintype κ := hκ
   choose σ hσ using fun k => (G.mem_purePayoffSet (z k)).1 (hz k)
   refine ⟨κ, hκ, w, σ, hw_nonneg, hw_sum, ?_⟩
   calc
@@ -79,7 +79,7 @@ theorem exists_fintype_weighted_profiles_apply_of_mem_feasibleSet
       (∀ i, ∑ k, w k * G.eu (σ k) i = v i) := by
   rcases G.exists_fintype_weighted_profiles_of_mem_feasibleSet hv with
     ⟨κ, hκ, w, σ, hw_nonneg, hw_sum, hsum⟩
-  letI : Fintype κ := hκ
+  let _ : Fintype κ := hκ
   refine ⟨κ, hκ, w, σ, hw_nonneg, hw_sum, ?_⟩
   intro i
   have happly := congrArg (fun u : Payoff ι => u i) hsum
@@ -248,24 +248,25 @@ theorem mixedExtension_eu_profileWithOpponent_le_iSup_pure
     G.mixedExtension.eu
           (G.mixedExtension.profileWithOpponent who
             (PMF.pure action) opponents) who := by
-  letI : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
+  let _ : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
   let fallback : G.Strategy who := Classical.choose own.support_nonempty
-  let base : ∀ player, PMF (G.Strategy player) := fun player ↦
+  let base : Profile G.mixedExtension := fun player ↦
     G.mixedExtension.profileWithOpponent who
       (PMF.pure fallback) opponents player
-  have hprofile : G.mixedExtension.profileWithOpponent who own opponents =
-      Function.update base who own := by
+  have hprofile (candidate : G.mixedExtension.Strategy who) :
+      G.mixedExtension.profileWithOpponent who candidate opponents =
+        Function.update base who candidate := by
     funext player
     by_cases hplayer : player = who
     · subst player
-      simp [base]
-    · simp [base, profileWithOpponent, hplayer]
+      simp [profileWithOpponent]
+    · simp [profileWithOpponent, base, hplayer]
   have hbdd : BddAbove (Set.range fun action : G.Strategy who ↦
       G.mixedExtension.eu
         (G.mixedExtension.profileWithOpponent who
           (PMF.pure action) opponents) who) :=
     Finite.bddAbove_range _
-  rw [hprofile, G.mixedExtension_eu]
+  rw [hprofile own, G.mixedExtension_eu]
   rw [Math.PMFProduct.pmfPi_update_bind]
   rw [Math.Probability.expect_bind]
   calc
@@ -289,13 +290,7 @@ theorem mixedExtension_eu_profileWithOpponent_le_iSup_pure
           G.mixedExtension.eu
             (G.mixedExtension.profileWithOpponent who
               (PMF.pure action) opponents) who := by
-            rw [G.mixedExtension_eu]
-            congr 2
-            funext player
-            by_cases hplayer : player = who
-            · subst player
-              simp [base]
-            · simp [base, profileWithOpponent, hplayer]
+            rw [hprofile (PMF.pure action), G.mixedExtension_eu]
         _ ≤ ⨆ candidate : G.Strategy who,
             G.mixedExtension.eu
               (G.mixedExtension.profileWithOpponent who
@@ -348,11 +343,11 @@ theorem mixedSecurityVector_le_opponentMinmaxVector (G : KernelGame ι)
     [Fintype ι] [Finite G.Outcome] [∀ i, Nonempty (G.Strategy i)] :
     G.mixedSecurityVector ≤ G.mixedExtension.opponentMinmaxVector := by
   intro who
-  letI : Nonempty (G.mixedExtension.Strategy who) :=
+  let _ : Nonempty (G.mixedExtension.Strategy who) :=
     G.nonempty_mixedExtension_strategy who
-  letI : Nonempty (G.mixedExtension.OpponentProfile who) :=
+  let _ : Nonempty (G.mixedExtension.OpponentProfile who) :=
     G.nonempty_mixedExtension_opponentProfile who
-  letI : Finite G.mixedExtension.Outcome := G.finite_mixedExtension_outcome
+  let _ : Finite G.mixedExtension.Outcome := G.finite_mixedExtension_outcome
   obtain ⟨C, hC⟩ := G.mixedExtension.exists_eu_abs_bound_of_finite_outcome who
   exact G.mixedExtension.securityLevelSup_le_opponentMinmaxLevel who hC
 

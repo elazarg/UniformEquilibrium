@@ -56,7 +56,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type}
 
@@ -123,7 +123,7 @@ been played yet. -/
 @[simp] theorem finiteFeasibleSet_zero (G : StochasticGame ι) [Fintype ι]
     [∀ i, Nonempty (G.Act i)] (s₀ : G.State) :
     G.finiteFeasibleSet s₀ 0 = {(0 : Payoff ι)} := by
-  haveI := G.nonempty_behaviorProfile
+  have := G.nonempty_behaviorProfile
   have hconst : (fun σ : G.BehaviorProfile => G.finiteAveragePayoff s₀ 0 σ) =
       fun _ => (0 : Payoff ι) := by
     funext σ
@@ -167,10 +167,10 @@ theorem expectedStagePayoff_mem_of_stagePayoff_mem_convex
       (fun who ↦ G.stagePayoff state action who) ∈ target)
     (profile : G.BehaviorProfile) (initial : G.State) (time : ℕ) :
     (fun who ↦ G.expectedStagePayoff profile initial time who) ∈ target := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
-  letI : Finite G.JointAct := inferInstance
-  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
+  let : Finite G.JointAct := inferInstance
+  let : Fintype G.JointAct := Fintype.ofFinite G.JointAct
   let realizedLaw : PMF (G.State × G.JointAct) :=
     (G.histDist profile initial time).bind fun history ↦
       (G.stageActionDist profile history).map fun action ↦
@@ -235,10 +235,10 @@ theorem discountedPayoff_mem_of_stagePayoff_mem_convex
     (profile : G.BehaviorProfile) (initial : G.State)
     {β : ℝ} (hβ0 : 0 ≤ β) (hβ1 : β < 1) :
     (fun who ↦ G.discountedPayoff β profile initial who) ∈ target := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
-  letI : Finite G.JointAct := inferInstance
-  letI : Fintype G.JointAct := Fintype.ofFinite G.JointAct
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let (who : ι) : Fintype (G.Act who) := Fintype.ofFinite (G.Act who)
+  let : Finite G.JointAct := inferInstance
+  let : Fintype G.JointAct := Fintype.ofFinite G.JointAct
   let parameter : unitInterval :=
     ⟨1 - β, sub_nonneg.mpr hβ1.le, by linarith⟩
   let timeLaw : PMF ℕ :=
@@ -355,7 +355,7 @@ theorem isAsymptoticFeasible_and_eventually_isεIndividuallyRational_of_isUnifor
 
 end StochasticGame
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι]
 
@@ -453,14 +453,14 @@ theorem finiteFeasibleSet_quittingGame_subset_convexHull
       exact (quittingGame reward).finiteAveragePayoff_zero s₀ σ who
     rw [h0]
     exact subset_convexHull ℝ _ (by simp)
-  · haveI : Finite (quittingGame reward).State :=
+  · have : Finite (quittingGame reward).State :=
       inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-    haveI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+    have : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
       fun _ => inferInstanceAs (Finite Bool)
-    haveI : Finite ((quittingGame reward).Hist T) := by
+    have : Finite ((quittingGame reward).Hist T) := by
       unfold StochasticGame.Hist StochasticGame.StageRecord StochasticGame.JointAct
       infer_instance
-    haveI : Fintype ((quittingGame reward).Hist T) := Fintype.ofFinite _
+    have : Fintype ((quittingGame reward).Hist T) := Fintype.ofFinite _
     rintro v ⟨σ, rfl⟩
     dsimp only
     have hstep : (quittingGame reward).finiteAveragePayoff s₀ T σ =
@@ -501,8 +501,10 @@ open Math.PMFProduct
 /-- **A battle-of-the-sexes stage game, embedded as a single-state
 stochastic game.**  Player `true` is the row player, `false` the column
 player; coordinating on `true` pays `(2, 1)`, coordinating on `false` pays
-`(1, 2)`, and miscoordination pays `(0, 0)`. -/
-def battleOfSexes : StochasticGame Bool where
+`(1, 2)`, and miscoordination pays `(0, 0)`. Its type fields remain reducible
+so the singleton state and Boolean actions elaborate uniformly in dependent
+proofs. -/
+@[reducible] def battleOfSexes : StochasticGame Bool where
   State := Unit
   Act := fun _ => Bool
   stagePayoff := fun _ a i => if a true = a false then (if a true = i then 2 else 1) else 0
@@ -524,8 +526,8 @@ def alwaysFalse : battleOfSexes.BehaviorProfile :=
 /-- Under `alwaysTrue`, the row player earns `2` and the column player `1`. -/
 theorem finiteAveragePayoff_alwaysTrue (who : Bool) :
     battleOfSexes.finiteAveragePayoff () 1 alwaysTrue who = if who then 2 else 1 := by
-  haveI : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
-  haveI : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
+  have : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
+  have : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
   rw [battleOfSexes.finiteAveragePayoff_one, alwaysTrue,
     battleOfSexes.stageEUAt_stationaryBehaviorProfile]
   unfold StochasticGame.mixedStageEU
@@ -536,8 +538,8 @@ theorem finiteAveragePayoff_alwaysTrue (who : Bool) :
 /-- Under `alwaysFalse`, the row player earns `1` and the column player `2`. -/
 theorem finiteAveragePayoff_alwaysFalse (who : Bool) :
     battleOfSexes.finiteAveragePayoff () 1 alwaysFalse who = if who then 1 else 2 := by
-  haveI : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
-  haveI : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
+  have : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
+  have : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
   rw [battleOfSexes.finiteAveragePayoff_one, alwaysFalse,
     battleOfSexes.stageEUAt_stationaryBehaviorProfile]
   unfold StochasticGame.mixedStageEU
@@ -567,7 +569,7 @@ theorem mixedStageEU_battleOfSexes (m : Bool → PMF Bool) (who : Bool) :
   have hunfold : battleOfSexes.mixedStageEU () m who =
       expect (pmfPi m) (fun a => battleOfSexes.stagePayoff () a who) := rfl
   rw [hunfold, expect_pmfPi_bool]
-  simp only [expect_eq_sum, Fintype.sum_bool, stagePayoff_battleOfSexes]
+  simp only [expect_eq_sum, Fintype.sum_bool]
   rw [pmfBool_false_toReal (m true), pmfBool_false_toReal (m false)]
   cases who <;> simp <;> ring
 
@@ -576,8 +578,8 @@ payoff of its mixed action at the empty history. -/
 theorem finiteAveragePayoff_eq_mixedStageEU (σ : battleOfSexes.BehaviorProfile) (who : Bool) :
     battleOfSexes.finiteAveragePayoff () 1 σ who =
       battleOfSexes.mixedStageEU () (fun i => σ i 0 (battleOfSexes.emptyHist ())) who := by
-  haveI : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
-  haveI : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
+  have : Finite battleOfSexes.State := inferInstanceAs (Finite Unit)
+  have : ∀ i, Finite (battleOfSexes.Act i) := fun _ => inferInstanceAs (Finite Bool)
   rw [battleOfSexes.finiteAveragePayoff_one]
   rfl
 

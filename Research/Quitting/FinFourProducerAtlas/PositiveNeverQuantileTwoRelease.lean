@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingSureSetOwnerRepair
+open Filter _root_.Math.Probability QuittingSureSetOwnerRepair
 open scoped Topology
 
 /-- Supplied data for two profitable releases from one positive-Never profile. -/
@@ -230,7 +230,6 @@ theorem survival_tendsto_one
     have hquotient := hconstant.div data.compressedDebt_tendsto_inf
       data.debtInf_pos.ne'
     convert hquotient using 1
-    · rfl
     · rw [div_self data.debtInf_pos.ne']
   apply tendsto_of_tendsto_of_tendsto_of_le_of_le hlower tendsto_const_nhds
   · intro rank

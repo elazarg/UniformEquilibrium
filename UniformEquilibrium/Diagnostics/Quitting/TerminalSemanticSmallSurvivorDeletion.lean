@@ -53,13 +53,13 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_card_le_three
     ∃ payoff : Payoff κ,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
   interval_cases hcase : Fintype.card κ
-  · letI : IsEmpty κ := Fintype.card_eq_zero_iff.mp hcase
+  · let : IsEmpty κ := Fintype.card_eq_zero_iff.mp hcase
     by_contra hno
     obtain ⟨witness⟩ :=
       (not_exists_uniformEquilibriumPayoff_iff_nonempty_terminalExploitabilityWitness
         reward).1 hno
     exact QuittingTerminalExploitabilityWitness.elim_isEmpty witness
-  · letI : Unique κ := (Fintype.card_eq_one_iff_nonempty_unique.mp hcase).some
+  · let : Unique κ := (Fintype.card_eq_one_iff_nonempty_unique.mp hcase).some
     exact quittingGame_exists_uniformEquilibriumPayoff_onePlayer reward
   · exact quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_two hcase reward
   · exact quittingGame_exists_uniformEquilibriumPayoff_of_card_eq_three hcase reward

@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability
+open Maths.ChargedPathBudget _root_.Math.Probability
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {oldTolerance newTolerance bound chargeTarget : ℝ}

@@ -233,7 +233,7 @@ theorem exists_evalReal_fderiv_close_on_cube
       (fun _ ↦ (isCompact_Icc : IsCompact (Icc (-radius) radius)))
     convert hproduct using 1
     ext point
-    simp only [mem_setOf_eq, mem_pi, mem_univ, true_implies, mem_Icc, abs_le]
+    simp only [mem_ofPred_eq, mem_pi, mem_univ, true_implies, mem_Icc, abs_le]
   exact exists_evalReal_fderiv_close_on_compact polynomial _ hcompact herror
 
 end Math.Interval.RationalPolynomial

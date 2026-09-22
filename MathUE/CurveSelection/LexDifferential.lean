@@ -85,7 +85,7 @@ theorem derivation_eval₂_eq_sum_of_gradientCombination
         Λ i •
           D (MvPolynomial.eval₂
             (algebraMap K L) x (P i)) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   rw [derivation_eval₂ D x Q]
   conv_lhs =>
     enter [2, k]
@@ -132,7 +132,7 @@ theorem derivation_eval₂_eq_sum_add_sum_of_gradientCombination
         Μ j •
           D (MvPolynomial.eval₂
             (algebraMap K L) x (R j)) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let S : I ⊕ J → MvPolynomial σ K :=
     Sum.elim P R
   let C : I ⊕ J → L :=
@@ -286,7 +286,7 @@ theorem moduleFinite_of_vanishingDifferentials_on_fieldGenerators
       ∀ i,
         KaehlerDifferential.D K L (x i) = 0) :
     Module.Finite K L := by
-  letI : Algebra.FormallyUnramified K L :=
+  let : Algebra.FormallyUnramified K L :=
     ⟨subsingleton_kaehlerDifferential_of_fieldGenerators
       x hgenerate hD⟩
   exact Algebra.FormallyUnramified.finite_of_free K L
@@ -310,7 +310,7 @@ theorem moduleFinite_of_vanishingDifferentials_on_finite_fieldGenerators
     rw [← hgenerate]
     exact IntermediateField.fg_adjoin_of_finite
       (Set.finite_range x)
-  letI : Algebra.EssFiniteType K L :=
+  let : Algebra.EssFiniteType K L :=
     IntermediateField.fg_top_iff.mp hfg
   exact
     moduleFinite_of_vanishingDifferentials_on_fieldGenerators
@@ -373,7 +373,7 @@ theorem moduleFinite_of_equations_and_gradientSpanning
               MvPolynomial.eval₂ (algebraMap K L) x
                 (MvPolynomial.pderiv k (P i))) :
     Module.Finite K L := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   apply
     moduleFinite_of_vanishingDifferentials_on_finite_fieldGenerators
       x hgenerate
@@ -468,7 +468,7 @@ theorem moduleFinite_of_triangularLexCriticality
     (hcoordinate :
       ∀ k, Q (objective k) = MvPolynomial.X k) :
     Module.Finite K L := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   apply
     moduleFinite_of_vanishingDifferentials_on_finite_fieldGenerators
       x hgenerate
@@ -531,7 +531,7 @@ theorem isAlgebraic_of_equations_and_normalCriticality
                 (MvPolynomial.pderiv k (P i))) :
     IsAlgebraic K
       (MvPolynomial.eval₂ (algebraMap K L) x Q) := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   let D : Derivation K L Ω[L⁄K] :=
     KaehlerDifferential.D K L
   have hP :

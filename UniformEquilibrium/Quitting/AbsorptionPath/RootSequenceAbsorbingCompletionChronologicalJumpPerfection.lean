@@ -179,13 +179,13 @@ theorem ChronologicalJumpRootTailLimit.tail_eq_absorptionPathPayoff
     rfl
   have hdenom : 0 < 1 - QuittingAbsorptionPath.pathTotal limit.path time :=
     sub_pos.mpr htotal
-  rw [QuittingAbsorptionPath.absorptionPathPayoff, if_pos htime.1]
+  rw [QuittingAbsorptionPath.absorptionPathPayoff, ite_eq_left htime.1]
   change approximation.tail.1 who =
     (if QuittingAbsorptionPath.pathTotal limit.path time < 1 then
       fun who ↦ (∑ a, (limit.path.value 1 a - limit.path.value time a) *
         reward a who) / (1 - QuittingAbsorptionPath.pathTotal limit.path time)
     else 0) who
-  rw [if_pos htotal]
+  rw [ite_eq_left htotal]
   apply (eq_div_iff hdenom.ne').2
   simp_rw [sub_mul]
   rw [Finset.sum_sub_distrib]

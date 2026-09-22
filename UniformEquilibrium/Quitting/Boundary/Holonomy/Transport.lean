@@ -4,14 +4,14 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.MaxAffine.Paths
+import Maths.Multitubes.MaxAffine.Paths
 import UniformEquilibrium.Quitting.Boundary.Holonomy.Basic
 
 /-!
 # Directed-transport labels of realized quitting boundary blocks
 
 The affine prescribed-payoff and max-affine best-response summaries of a
-quitting block embed exactly into `Math.MaxAffineTransport.Label`. Evaluation
+quitting block embed exactly into `Maths.MaxAffineTransport.Label`. Evaluation
 and chronological block composition are preserved coefficient by coefficient.
 
 A boundary summary transports a terminal value at the block's exit back to a
@@ -25,19 +25,19 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingAffineSummary
 
 /-- The generic affine summary underlying a quitting prescribed-payoff map. -/
 def toTransferSummary (summary : QuittingAffineSummary) :
-    Math.TransferSummary.AffineSummary :=
+    Maths.TransferSummary.AffineSummary :=
   ⟨summary.intercept, summary.survival⟩
 
 /-- A prescribed-payoff summary as a floorless max-affine label. -/
 def toLabel (summary : QuittingAffineSummary) :
-    Math.MaxAffineTransport.Label :=
-  Math.MaxAffineTransport.Label.ofAffine summary.toTransferSummary
+    Maths.MaxAffineTransport.Label :=
+  Maths.MaxAffineTransport.Label.ofAffine summary.toTransferSummary
 
 @[simp] theorem toTransferSummary_apply
     (summary : QuittingAffineSummary) (point : ℝ) :
@@ -65,7 +65,7 @@ theorem toTransferSummary_compose
 theorem toLabel_compose (outer inner : QuittingAffineSummary) :
     (outer.compose inner).toLabel = outer.toLabel.comp inner.toLabel := by
   rw [toLabel, toLabel, toLabel, toTransferSummary_compose]
-  exact Math.MaxAffineTransport.Label.ofAffine_comp _ _
+  exact Maths.MaxAffineTransport.Label.ofAffine_comp _ _
 
 @[simp] theorem toLabel_mul (outer inner : QuittingAffineSummary) :
     (outer * inner).toLabel = outer.toLabel.comp inner.toLabel :=
@@ -77,13 +77,13 @@ namespace QuittingMaxAffineSummary
 
 /-- The generic finite-floor summary underlying a quitting best-response map. -/
 def toTransferSummary (summary : QuittingMaxAffineSummary) :
-    Math.TransferSummary.MaxAffineSummary :=
+    Maths.TransferSummary.MaxAffineSummary :=
   ⟨summary.early, summary.tail, summary.survival⟩
 
 /-- A quitting best-response summary as a generic max-affine label. -/
 def toLabel (summary : QuittingMaxAffineSummary) :
-    Math.MaxAffineTransport.Label :=
-  Math.MaxAffineTransport.Label.ofMaxAffine summary.toTransferSummary
+    Maths.MaxAffineTransport.Label :=
+  Maths.MaxAffineTransport.Label.ofMaxAffine summary.toTransferSummary
 
 @[simp] theorem toTransferSummary_apply
     (summary : QuittingMaxAffineSummary) (point : ℝ) :
@@ -111,7 +111,7 @@ theorem toTransferSummary_compose
 theorem toLabel_compose (outer inner : QuittingMaxAffineSummary) :
     (outer.compose inner).toLabel = outer.toLabel.comp inner.toLabel := by
   rw [toLabel, toLabel, toLabel, toTransferSummary_compose]
-  exact Math.MaxAffineTransport.Label.ofMaxAffine_comp _ _
+  exact Maths.MaxAffineTransport.Label.ofMaxAffine_comp _ _
 
 @[simp] theorem toLabel_mul (outer inner : QuittingMaxAffineSummary) :
     (outer * inner).toLabel = outer.toLabel.comp inner.toLabel :=
@@ -123,12 +123,12 @@ namespace QuittingBoundaryHolonomy
 
 /-- The generic floorless label for one player's prescribed-payoff map. -/
 def prescribedLabel (holonomy : QuittingBoundaryHolonomy ι) (who : ι) :
-    Math.MaxAffineTransport.Label :=
+    Maths.MaxAffineTransport.Label :=
   (holonomy.prescribed who).toLabel
 
 /-- The generic label for one player's unilateral best-response map. -/
 def bestResponseLabel (holonomy : QuittingBoundaryHolonomy ι) (who : ι) :
-    Math.MaxAffineTransport.Label :=
+    Maths.MaxAffineTransport.Label :=
   (holonomy.bestResponse who).toLabel
 
 @[simp] theorem prescribedLabel_apply
@@ -175,7 +175,7 @@ variable {iota : Type} [Fintype iota] [DecidableEq iota]
 def quittingCompanionLabel
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (roots : ℕ → iota → PMF Bool) (who : iota) (time : ℕ) :
-    Math.MaxAffineTransport.Label :=
+    Maths.MaxAffineTransport.Label :=
   (quittingBoundaryStageHolonomy reward roots time).bestResponseLabel who
 
 @[simp] theorem quittingCompanionLabel_floor
@@ -216,7 +216,7 @@ theorem quittingCompanionLabel_slope_le_one
 def quittingCompanionLabelList
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (roots : ℕ → iota → PMF Bool) (who : iota) (start : ℕ) : ℕ →
-    List Math.MaxAffineTransport.Label
+    List Maths.MaxAffineTransport.Label
   | 0 => []
   | fuel + 1 =>
       quittingCompanionLabelList reward roots who (start + 1) fuel ++
@@ -243,7 +243,7 @@ theorem quittingCompanionLabelList_slope_nonneg
 theorem quittingCompanionLabelList_pathSlope
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (roots : ℕ → iota → PMF Bool) (who : iota) : ∀ start fuel,
-    Math.MaxAffineTransport.Label.pathSlope
+    Maths.MaxAffineTransport.Label.pathSlope
         (quittingCompanionLabelList reward roots who start fuel) =
       quittingOpponentSurvivalWeight roots who start fuel := by
   intro start fuel
@@ -251,10 +251,10 @@ theorem quittingCompanionLabelList_pathSlope
   | zero => simp [quittingCompanionLabelList, quittingOpponentSurvivalWeight]
   | succ fuel ih =>
       rw [quittingCompanionLabelList,
-        Math.MaxAffineTransport.Label.pathSlope_append,
+        Maths.MaxAffineTransport.Label.pathSlope_append,
         ih (start + 1), quittingOpponentSurvivalWeight_succ_left]
-      simp only [Math.MaxAffineTransport.Label.pathSlope_cons,
-        Math.MaxAffineTransport.Label.pathSlope_nil,
+      simp only [Maths.MaxAffineTransport.Label.pathSlope_cons,
+        Maths.MaxAffineTransport.Label.pathSlope_nil,
         quittingCompanionLabel_slope, mul_one]
       ring
 
@@ -264,24 +264,24 @@ theorem quittingFiniteBoundaryHolonomy_bestResponseLabel_eq_compList
     (reward : {S : Finset iota // S.Nonempty} → Payoff iota)
     (roots : ℕ → iota → PMF Bool) (who : iota) : ∀ start extra,
     (quittingFiniteBoundaryHolonomy reward roots start extra).bestResponseLabel who =
-      Math.MaxAffineTransport.Label.compList
+      Maths.MaxAffineTransport.Label.compList
         (quittingCompanionLabelList reward roots who start (extra + 1)) := by
   intro start extra
   induction extra generalizing start with
   | zero =>
       change (quittingCompanionLabel reward roots who start) =
-        Math.MaxAffineTransport.Label.compList
+        Maths.MaxAffineTransport.Label.compList
           [quittingCompanionLabel reward roots who start]
       rw [show [quittingCompanionLabel reward roots who start] =
           [] ++ [quittingCompanionLabel reward roots who start] by rfl,
-        Math.MaxAffineTransport.Label.compList_append_singleton,
-        Math.MaxAffineTransport.Label.compList_nil,
-        Math.MaxAffineTransport.Label.comp_id]
+        Maths.MaxAffineTransport.Label.compList_append_singleton,
+        Maths.MaxAffineTransport.Label.compList_nil,
+        Maths.MaxAffineTransport.Label.comp_id]
   | succ extra ih =>
       rw [quittingFiniteBoundaryHolonomy_succ,
         QuittingBoundaryHolonomy.bestResponseLabel_mul,
         quittingCompanionLabelList,
-        Math.MaxAffineTransport.Label.compList_append_singleton,
+        Maths.MaxAffineTransport.Label.compList_append_singleton,
         ← ih (start + 1)]
       rfl
 
@@ -295,14 +295,14 @@ variable [Nonempty ι]
 def prescribedLabel
     {anchor : QuittingCalibratedTerminalAnchor reward}
     (block : QuittingAnchoredBoundaryBlock anchor) (who : ι) :
-    Math.MaxAffineTransport.Label :=
+    Maths.MaxAffineTransport.Label :=
   block.holonomy.prescribedLabel who
 
 /-- The backward best-response transport label of a realized block. -/
 def bestResponseLabel
     {anchor : QuittingCalibratedTerminalAnchor reward}
     (block : QuittingAnchoredBoundaryBlock anchor) (who : ι) :
-    Math.MaxAffineTransport.Label :=
+    Maths.MaxAffineTransport.Label :=
   block.holonomy.bestResponseLabel who
 
 @[simp] theorem prescribedLabel_apply
@@ -353,7 +353,7 @@ theorem bestResponseLabel_eq_compList
     {anchor : QuittingCalibratedTerminalAnchor reward}
     (block : QuittingAnchoredBoundaryBlock anchor) (who : ι) :
     block.bestResponseLabel who =
-      Math.MaxAffineTransport.Label.compList
+      Maths.MaxAffineTransport.Label.compList
         (quittingCompanionLabelList reward anchor.roots who
           block.start block.length) := by
   exact quittingFiniteBoundaryHolonomy_bestResponseLabel_eq_compList

@@ -6,7 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Quitting.Cycles.CompanionTransport
 import UniformEquilibrium.Quitting.Bellman.Finite.BellmanTelescope
-import MathUE.DirectedTransport.MaxAffine.Paths
+import Maths.Multitubes.MaxAffine.Paths
 
 /-!
 # Signed max-affine transport of relaxed cycle gain
@@ -45,7 +45,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -74,7 +74,7 @@ prescribed path. -/
 def quittingSignedCompanionLabel
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
-    (who : ι) (time : ℕ) : Math.MaxAffineTransport.Label :=
+    (who : ι) (time : ℕ) : Maths.MaxAffineTransport.Label :=
   ⟨(quittingSignedStopWeight reward roots prescribed who time : WithBot ℝ),
     quittingSignedContinueWeight reward roots prescribed who time,
     quittingRootDeletedContinueMass (roots time) who⟩
@@ -99,7 +99,7 @@ theorem quittingSignedCompanionLabel_slope_nonneg
 def quittingSignedCompanionLabelList
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
-    (who : ι) (start : ℕ) : ℕ → List Math.MaxAffineTransport.Label
+    (who : ι) (start : ℕ) : ℕ → List Maths.MaxAffineTransport.Label
   | 0 => []
   | fuel + 1 =>
       quittingSignedCompanionLabelList reward roots prescribed who (start + 1) fuel ++
@@ -137,7 +137,7 @@ theorem quittingSignedCompanionLabelList_compList
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (prescribed : ℕ → ℝ)
     (who : ι) : ∀ (m k : ℕ),
-    Math.MaxAffineTransport.Label.compList
+    Maths.MaxAffineTransport.Label.compList
         (quittingSignedCompanionLabelList reward roots prescribed who k (m + 1)) =
       ⟨(quittingSignedStopGap reward roots prescribed who k m : WithBot ℝ),
         quittingSignedContinueGap reward roots prescribed who k m,
@@ -148,26 +148,26 @@ theorem quittingSignedCompanionLabelList_compList
       intro k
       simp only [quittingSignedCompanionLabelList]
       rw [
-        Math.MaxAffineTransport.Label.compList_append_singleton,
-        Math.MaxAffineTransport.Label.compList_nil,
-        Math.MaxAffineTransport.Label.comp_id]
-      apply Math.MaxAffineTransport.Label.ext <;>
+        Maths.MaxAffineTransport.Label.compList_append_singleton,
+        Maths.MaxAffineTransport.Label.compList_nil,
+        Maths.MaxAffineTransport.Label.comp_id]
+      apply Maths.MaxAffineTransport.Label.ext <;>
         simp [quittingSignedCompanionLabel, quittingSignedStopGap,
           quittingSignedContinueGap, quittingOpponentSurvivalWeight,
           quittingRootDeletedContinueMass_eq_fixedOpponents]
   | succ m ih =>
       intro k
       rw [quittingSignedCompanionLabelList,
-        Math.MaxAffineTransport.Label.compList_append_singleton,
+        Maths.MaxAffineTransport.Label.compList_append_singleton,
         ih (k + 1)]
-      apply Math.MaxAffineTransport.Label.ext
-      · simp only [Math.MaxAffineTransport.Label.floor_comp,
-          quittingSignedCompanionLabel, Math.MaxAffineTransport.Label.pushFloor_coe,
+      apply Maths.MaxAffineTransport.Label.ext
+      · simp only [Maths.MaxAffineTransport.Label.floor_comp,
+          quittingSignedCompanionLabel, Maths.MaxAffineTransport.Label.pushFloor_coe,
           quittingSignedStopGap]
         rw [← WithBot.coe_sup]
-      · simp only [Math.MaxAffineTransport.Label.shift_comp,
+      · simp only [Maths.MaxAffineTransport.Label.shift_comp,
           quittingSignedCompanionLabel, quittingSignedContinueGap]
-      · simp only [Math.MaxAffineTransport.Label.slope_comp,
+      · simp only [Maths.MaxAffineTransport.Label.slope_comp,
           quittingSignedCompanionLabel]
         rw [quittingRootDeletedContinueMass_eq_fixedOpponents]
         exact (quittingOpponentSurvivalWeight_succ_left
@@ -297,7 +297,7 @@ theorem quittingCompanionComposite_sub_prescribed_eq_compList_apply
     (m k : ℕ) (continuation : ℝ) :
     quittingCompanionComposite reward roots who k (m + 1) continuation -
         prescribed k =
-      (Math.MaxAffineTransport.Label.compList
+      (Maths.MaxAffineTransport.Label.compList
         (quittingSignedCompanionLabelList reward roots prescribed who k (m + 1))).apply
           (continuation - prescribed (k + (m + 1))) := by
   rw [quittingCompanionComposite_sub_prescribed_eq

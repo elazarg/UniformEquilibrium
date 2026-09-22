@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -223,7 +223,7 @@ theorem exists_weak_preemptor_of_universalJoining
     ∃ other, other ≠ owner ∧
       quittingSoloReward reward owner other ≤
         quittingSoloReward reward other other := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   by_contra hnot
   push Not at hnot
   obtain ⟨witness, hwitnessNe, _⟩ := hobstruction 1 one_pos le_rfl

@@ -8,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -257,7 +257,7 @@ theorem quittingFiniteForwardPacket_survival_le_exp_neg_charge
       ring
     _ ≤ ∏ offset ∈ Finset.range time,
         Real.exp (-quittingRootAbsorptionMass (packet.roots offset)) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro offset _
         unfold quittingRootAbsorptionMass
         linarith [quittingStationaryContinueMass_nonneg (packet.roots offset)]

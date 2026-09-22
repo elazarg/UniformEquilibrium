@@ -60,7 +60,7 @@ pairs. -/
 theorem isOpen_isStrictApproximateNashWeights (ε : ℝ) :
     IsOpen {data : (F.sig.Outcome → ι → ℝ) × mixedPolytope F.sig |
       IsStrictApproximateNashWeights data.1 ε data.2} := by
-  simp only [IsStrictApproximateNashWeights, setOf_forall]
+  simp only [IsStrictApproximateNashWeights, ofPred_forall]
   apply isOpen_iInter_of_finite
   intro who
   apply isOpen_iInter_of_finite
@@ -104,9 +104,9 @@ theorem exists_measurable_isStrictApproximateNashWeights
       Measurable selector ∧ ∀ utility,
         IsStrictApproximateNashWeights utility ε (selector utility) := by
   classical
-  letI : CompactSpace (mixedPolytope F.sig) :=
+  let : CompactSpace (mixedPolytope F.sig) :=
     isCompact_iff_compactSpace.mp (isCompact_mixedPolytope F.sig)
-  letI : Nonempty (mixedPolytope F.sig) :=
+  let : Nonempty (mixedPolytope F.sig) :=
     (mixedPolytope_nonempty F.sig).to_subtype
   let dense : ℕ → mixedPolytope F.sig := denseSeq _
   let candidate : (F.sig.Outcome → ι → ℝ) → ℕ → Prop :=

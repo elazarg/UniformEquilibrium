@@ -29,7 +29,7 @@ namespace Topology
 namespace SimonViability
 
 open Filter Set
-open scoped BigOperators Topology
+open scoped BigOperators _root_.Topology
 
 /-- The compact box containing both coordinates of a graph. -/
 def graphCoordinateBox {X : Type*} (graph : Set (X × X)) : Set X :=

@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.PMFProduct Math.Probability Set
+open Filter _root_.Math Math.PMFProduct _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -137,7 +137,7 @@ theorem sub_expect_le_two_mul_one_sub_apply
       expect distribution
           (fun action => if action = selected then (1 : ℝ) else 0) =
         (distribution selected).toReal := by
-    letI : Fintype Ω := Fintype.ofFinite Ω
+    let : Fintype Ω := Fintype.ofFinite Ω
     rw [expect_eq_sum]
     simp
   calc
@@ -179,7 +179,7 @@ theorem finkStageGain_le_two_mul_one_sub_actionMass
       |purePayoff action| ≤ U := by
     exact abs_expect_le_of_abs_le _ _ fun jointAction =>
       hpay s jointAction owner
-  haveI : Finite (G.stageGame s).Outcome :=
+  have : Finite (G.stageGame s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   have hdecompose :
       G.mixedStageEU s profile owner =
@@ -356,8 +356,9 @@ abbrev State := Unit
 abbrev Action := Bool
 
 /-- A one-state decision problem with payoff one for action `true` and zero
-for action `false`. -/
-def game : StochasticGame Player where
+for action `false`. Reducibility keeps its concrete state and action types
+transparent in the downstream falsifier probes. -/
+@[reducible] def game : StochasticGame Player where
   State := State
   Act := fun _ => Action
   stagePayoff := fun _ action _ => if action () then 1 else 0
@@ -430,14 +431,16 @@ theorem not_isPublicPhasePunishmentSystemAt_impossibleTarget :
     game.finiteAveragePayoff_ge_of_expectedHistoryValue_submartingale_le
       profile () () (lowerPotential ()) (lowerError ())
       (hlowerMono ()) (hlowerStage ()) hhorizonPos
-  rw [game.expectedHistoryValue_zero] at hlower
+  have hzero := game.expectedHistoryValue_zero
+    profile () (lowerPotential ())
+  rw [hzero] at hlower
   have hinitial := hlowerInitial ()
   have hcesaro := hlowerCesaro () horizon le_rfl
   have hpayoffBound :
       |game.finiteAveragePayoff () horizon profile ()| ≤ 1 := by
     apply game.abs_finiteAveragePayoff_le (by norm_num)
     intro state action
-    simp only [game]
+    change |if action () then (1 : ℝ) else 0| ≤ 1
     split <;> norm_num
   rw [abs_le] at hinitial hpayoffBound
   simp only [impossibleTarget] at hinitial

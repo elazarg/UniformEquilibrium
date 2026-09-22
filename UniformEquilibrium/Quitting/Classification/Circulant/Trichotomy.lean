@@ -166,7 +166,7 @@ theorem HasCirculantSoloMatrix.not_isStandardQMatrix [Nontrivial ι]
     ¬IsStandardQMatrix (normalizedNormalPlayerMatrix reward) := by
   classical
   have hcore := h.normalCore_eq_univ hσ
-  haveI := h.nonempty_normalCore hσ
+  have := h.nonempty_normalCore hσ
   rw [← isStandardQ_iff_isStandardQMatrix]
   refine not_isStandardQ_of_forall_column_sum_nonpos _ fun j => ?_
   have hsum := sum_coe_normalCore_of_eq_univ hcore
@@ -184,7 +184,7 @@ theorem HasCirculantSoloMatrix.hasHomogeneousSimplexSolution [Nontrivial ι]
     HasHomogeneousSimplexSolution (normalizedNormalPlayerMatrix reward) := by
   classical
   have hcore := h.normalCore_eq_univ hσ.le
-  haveI := h.nonempty_normalCore hσ.le
+  have := h.nonempty_normalCore hσ.le
   refine singletonLCPFeasible_of_forall_row_sum_eq_zero _ fun i => ?_
   have hsum := sum_coe_normalCore_of_eq_univ hcore
     (fun j => normalizedSoloMatrix reward i.1 j)
@@ -280,7 +280,7 @@ theorem sum_stepMargins_zmod_five (margin : ZMod 5 → ℝ) (hm0 : margin 0 = 0)
     {d : ZMod 5} (hd : d ≠ 0) :
     margin d + margin (2 • d) + margin (3 • d) + margin (4 • d) =
       ∑ e, margin e := by
-  haveI : Fact (Nat.Prime 5) := ⟨by decide⟩
+  have : Fact (Nat.Prime 5) := ⟨by decide⟩
   have hbij : (∑ e : ZMod 5, margin (d * e)) = ∑ e, margin e :=
     Fintype.sum_equiv (Equiv.mulLeft₀ d hd) _ _ fun _ => rfl
   have henum : (∑ e : ZMod 5, margin (d * e)) =
@@ -319,7 +319,7 @@ theorem exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_nonpos
     (hσ : (∑ d, margin d) ≤ 0) :
     ∃ payoff : Payoff (ZMod 5),
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  haveI : Nontrivial (ZMod 5) := ⟨⟨0, 1, by decide⟩⟩
+  have : Nontrivial (ZMod 5) := ⟨⟨0, 1, by decide⟩⟩
   exact exists_uniformEquilibriumPayoff_of_circulant_surplus_nonpos h hσ
 
 /-- **Vanishing surplus, five players.**  The same conclusion for vanishing
@@ -330,7 +330,7 @@ theorem exists_uniformEquilibriumPayoff_of_pentagonCirculant_surplus_eq_zero
     (hσ : (∑ d, margin d) = 0) :
     ∃ payoff : Payoff (ZMod 5),
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  haveI : Nontrivial (ZMod 5) := ⟨⟨0, 1, by decide⟩⟩
+  have : Nontrivial (ZMod 5) := ⟨⟨0, 1, by decide⟩⟩
   exact exists_uniformEquilibriumPayoff_of_circulant_surplus_eq_zero h hσ
 
 end FivePlayers

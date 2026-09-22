@@ -29,7 +29,7 @@ noncomputable section
 namespace GameTheory
 namespace CyclicFourPlayerQuitting
 
-open Filter Math.Probability Math.PMFProduct StochasticGame
+open Filter _root_.Math.Probability Math.PMFProduct StochasticGame
 
 /-- The four cyclic players. -/
 abbrev Player := Fin 4
@@ -219,7 +219,7 @@ def quitCoin (p : ℝ) (hp0 : 0 ≤ p) (hp1 : p ≤ 1) : PMF Bool :=
     (fun quit => if quit then ENNReal.ofReal p else ENNReal.ofReal (1 - p))
     (by
       rw [Fintype.sum_bool]
-      simp only [if_true, if_false, Bool.false_eq_true]
+      simp only [ite_true, ite_false, Bool.false_eq_true]
       rw [← ENNReal.ofReal_add hp0 (by linarith)]
       norm_num)
 
@@ -371,13 +371,13 @@ theorem expect_transition_deviationPotential_eq_rootPayoff
   by_cases hquit : (quittingQuitters action).Nonempty
   · have hraw : ({who | action who = true} : Finset Player).Nonempty := by
       simpa [quittingQuitters] using hquit
-    rw [quittingGame_transition_none, dif_pos hraw, expect_pure,
-      quittingRootPayoff, dif_pos hquit]
+    rw [quittingGame_transition_none, dite_eq_left hraw, expect_pure,
+      quittingRootPayoff, dite_eq_left hquit]
     rfl
   · have hraw : ¬({who | action who = true} : Finset Player).Nonempty := by
       simpa [quittingQuitters] using hquit
-    rw [quittingGame_transition_none, dif_neg hraw, expect_pure,
-      quittingRootPayoff, dif_neg hquit]
+    rw [quittingGame_transition_none, dite_eq_right hraw, expect_pure,
+      quittingRootPayoff, dite_eq_right hquit]
     rfl
 
 /-- Against the three prescribed stationary opponents, the deviation
@@ -410,21 +410,30 @@ theorem deviationPotential_harmonic
       rfl
   | none =>
       simp only [hstate]
+      let root : ∀ player, PMF (game.Act player) := stationaryRoot
+      let active : game.State := none
       change expect (game.stageActionDist
-          (Function.update (game.stationaryBehaviorProfile stationaryRoot)
+          (Function.update (game.stationaryBehaviorProfile root)
             who deviation) history)
-          (fun action ↦ expect (game.transition none action)
-            (deviationPotential who)) = deviationPotential who none
-      rw [game.stageActionDist_update_stationaryBehaviorProfile]
+          (fun action ↦ expect (game.transition active action)
+            (deviationPotential who)) = deviationPotential who active
+      rw [game.stageActionDist_update_stationaryBehaviorProfile root]
       rw [deviationPotential]
-      simp_rw [expect_transition_deviationPotential_eq_rootPayoff]
+      have htransition : ∀ action : game.JointAct,
+          expect (game.transition active action) (deviationPotential who) =
+            quittingRootPayoff terminalReward stationaryTail action who := by
+        intro action
+        simpa only [active] using
+          (expect_transition_deviationPotential_eq_rootPayoff who action)
+      simp_rw [htransition]
+      let marginal : PMF Bool := deviation time history
       change quittingRootExpectedPayoff terminalReward stationaryTail
-          (Function.update stationaryRoot who (deviation time history)) who =
+          (Function.update stationaryRoot who marginal) who =
         stationaryPayoff
       rw [quittingRootExpectedPayoff_update_eq_endpointMix,
         stationaryRoot_quitPayoff, stationaryRoot_continuePayoff]
       have hsum := quittingRoot_continueProbability_add_quitProbability
-        (Function.update stationaryRoot who (deviation time history)) who
+        (Function.update stationaryRoot who marginal) who
       simp only [Function.update_self] at hsum
       rw [← add_mul, add_comm, hsum, one_mul]
 
@@ -440,29 +449,28 @@ theorem expectedStateValue_deviationPotential
             (quittingStationaryProfile terminalReward stationaryRoot)
             who deviation) none time (deviationPotential who) =
         stationaryPayoff := by
+  let profile : game.BehaviorProfile := Function.update
+    (quittingStationaryProfile terminalReward stationaryRoot) who deviation
+  let active : game.State := none
+  change ∀ time, game.expectedStateValue profile active time
+    (deviationPotential who) = stationaryPayoff
   intro time
   induction time with
-  | zero => simp [deviationPotential]
+  | zero =>
+      rw [game.expectedStateValue_zero profile active]
+      rfl
   | succ time ih =>
-      rw [(quittingGame terminalReward).expectedStateValue_succ]
+      rw [game.expectedStateValue_succ profile active]
       calc
-        expect ((quittingGame terminalReward).histDist
-            (Function.update
-              (quittingStationaryProfile terminalReward stationaryRoot)
-              who deviation) none time) (fun history ↦
-          expect ((quittingGame terminalReward).stageActionDist
-              (Function.update
-                (quittingStationaryProfile terminalReward stationaryRoot)
-                who deviation) history) (fun action ↦
-            expect ((quittingGame terminalReward).transition history.2 action)
+        expect (game.histDist profile active time) (fun history ↦
+          expect (game.stageActionDist profile history) (fun action ↦
+            expect (game.transition history.2 action)
               (deviationPotential who))) =
-          expect ((quittingGame terminalReward).histDist
-            (Function.update
-              (quittingStationaryProfile terminalReward stationaryRoot)
-              who deviation) none time) (fun history ↦
+          expect (game.histDist profile active time) (fun history ↦
                 deviationPotential who history.2) := by
             apply Math.ProbabilityMassFunction.expect_congr_on_support
             intro history _
+            dsimp only [profile]
             exact deviationPotential_harmonic who deviation history
         _ = stationaryPayoff := ih
 
@@ -500,6 +508,7 @@ theorem opponentOnlyProfile_stationary (who : Player) :
     rfl
   · simp [quittingOpponentOnlyProfile, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, Function.update_of_ne hplayer]
+    rfl
 
 /-- The three stationary opponents absorb almost surely. -/
 theorem tendsto_stationaryOpponentLiveMass_zero (who : Player) :

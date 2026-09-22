@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- An antitone value sequence with a payoff lower bound and charge upper
 bound cannot fall below the target minus the two errors.

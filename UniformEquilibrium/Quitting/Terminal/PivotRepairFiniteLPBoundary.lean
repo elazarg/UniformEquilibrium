@@ -129,7 +129,7 @@ private theorem otherNeverProduct_nonneg (responder : ι) :
 private theorem otherNeverProduct_le_one (responder : ι) :
     input.otherNeverProduct responder ≤ 1 := by
   unfold otherNeverProduct
-  exact Finset.prod_le_one (fun j _ ↦ ENNReal.toReal_nonneg)
+  exact Finset.prod_le_one₀ (fun j _ ↦ ENNReal.toReal_nonneg)
     (fun j _ ↦ ENNReal.toReal_mono ENNReal.one_ne_top
       (PMF.coe_le_one (input.opponents j) none))
 

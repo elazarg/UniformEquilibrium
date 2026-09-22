@@ -41,7 +41,7 @@ theorem isUniformEquilibriumPayoff_singlePivotNormalized_of_original
     (quittingGame (quittingSinglePivotNormalizedReward reward pivot)).IsUniformEquilibriumPayoff
       none (fun who ↦ (target who - quittingSinglePivotOffset reward pivot who) /
         quittingSoloReward reward pivot pivot) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   obtain ⟨profiles, htarget, herror⟩ :=
     exists_terminalProfile_sequence_exploitability_tendsto_zero_of_uniformPayoff
       reward target huniform
@@ -82,7 +82,7 @@ theorem isUniformEquilibriumPayoff_original_of_singlePivotNormalized
     (quittingGame reward).IsUniformEquilibriumPayoff none
       (quittingSinglePivotOffset reward pivot +
         quittingSoloReward reward pivot pivot • target) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   let transformed := quittingSinglePivotNormalizedReward reward pivot
   obtain ⟨profiles, htarget, herror⟩ :=
     exists_terminalProfile_sequence_exploitability_tendsto_zero_of_uniformPayoff

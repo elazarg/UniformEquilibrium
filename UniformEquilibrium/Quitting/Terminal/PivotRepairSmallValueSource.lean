@@ -24,7 +24,7 @@ def ofNonpivotLaws (pivot : ι) (deadline : ℕ) (hdeadline : 0 < deadline)
   pivot := pivot
   deadline := deadline
   deadline_pos := hdeadline
-  opponents_finite who hwho := by simpa only [dif_neg hwho] using hfinite ⟨who, hwho⟩
+  opponents_finite who hwho := by simpa only [dite_eq_right hwho] using hfinite ⟨who, hwho⟩
 
 end QuittingPivotRepairLPInput
 
@@ -59,7 +59,7 @@ theorem exists_pivotRepairMass_objective_le_finiteMenu_exploitability
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (deadline : ℕ) (hdeadline : 0 < deadline)
     (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     let opponents := fun who : {who : ι // who ≠ pivot} ↦
       (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF
     let hfinite := fun who : {who : ι // who ≠ pivot} ↦
@@ -69,7 +69,7 @@ theorem exists_pivotRepairMass_objective_le_finiteMenu_exploitability
         pivot deadline hdeadline opponents hfinite).objective mass ≤
         quittingTerminalExploitability reward
           (quittingFiniteDeadlineTimingProfile reward deadline mixed) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   dsimp only
   let input := QuittingPivotRepairLPInput.ofNonpivotLaws (reward := reward)
     pivot deadline hdeadline
@@ -78,27 +78,35 @@ theorem exists_pivotRepairMass_objective_le_finiteMenu_exploitability
   obtain ⟨mass, hmass, _, hobjective⟩ :=
     input.exists_feasible_mass_payoff_eq_and_objective_le
       (quittingFiniteDeadlineTimingLaw (mixed pivot)).toPMF
+  let laws : ι → PMF (Option ℕ) := fun who ↦
+    (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF
   refine ⟨mass, hmass, ?_⟩
   have hlaws : Function.update input.opponents input.pivot
       (quittingFiniteDeadlineTimingLaw (mixed pivot)).toPMF =
-      fun who ↦ (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF := by
+      laws := by
+    change Function.update
+      (fun who ↦ if hwho : who = pivot then PMF.pure none else laws who)
+      pivot (laws pivot) = laws
     funext who
     by_cases hwho : who = pivot
     · subst who
-      simp [input, QuittingPivotRepairLPInput.ofNonpivotLaws]
-    · simp [input, QuittingPivotRepairLPInput.ofNonpivotLaws, hwho]
+      simp
+    · simp [hwho]
   rw [hlaws] at hobjective
   have hprofile := finiteDeadlineTimingProfile_eq_stoppingLawProfile_of_laws reward deadline mixed
-    (fun who ↦ (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF) (fun _ ↦ rfl)
+    laws (fun _ ↦ rfl)
   rwa [← hprofile] at hobjective
 
 /-- The full finite-menu early-absorption source in particular produces
 arbitrarily small values of the actual nonpivot-law inner LP. -/
 theorem smallPivotRepairValue_of_finiteMenuFullEarlyAbsorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι) :
-    letI : Nonempty ι := ⟨pivot⟩
-    HasQuittingFiniteMenuFullEarlyAbsorption reward → HasQuittingSmallPivotRepairValue reward pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
+    HasQuittingFiniteMenuFullEarlyAbsorption reward →
+      HasQuittingSmallPivotRepairValue reward pivot :=
+    by
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hsource error herror
   obtain ⟨deadline, hdeadline, mixed, hexploit, _⟩ :=
     hsource error herror 1 le_rfl 1 zero_lt_one 1
@@ -119,7 +127,7 @@ theorem exists_pivotRepairMinimizer_objective_le_finiteMenu_exploitability
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (deadline : ℕ) (hdeadline : 0 < deadline)
     (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     let input := QuittingPivotRepairLPInput.ofNonpivotLaws (reward := reward)
       pivot deadline hdeadline
       (fun who : {who : ι // who ≠ pivot} =>
@@ -129,7 +137,7 @@ theorem exists_pivotRepairMinimizer_objective_le_finiteMenu_exploitability
       IsMinOn input.objective (pivotRepairMassFeasibleSet deadline) mass ∧
       input.objective mass ≤ quittingTerminalExploitability reward
         (quittingFiniteDeadlineTimingProfile reward deadline mixed) := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   dsimp only
   let input := QuittingPivotRepairLPInput.ofNonpivotLaws (reward := reward)
     pivot deadline hdeadline

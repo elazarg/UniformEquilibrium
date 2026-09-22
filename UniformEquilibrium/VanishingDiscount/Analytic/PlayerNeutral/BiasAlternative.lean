@@ -32,7 +32,7 @@ The circulation branch still makes no entry or punishment claim.
 
 noncomputable section
 
-open Math Math.Probability
+open _root_.Math _root_.Math.Probability
 
 namespace GameTheory
 namespace StochasticGame
@@ -45,8 +45,9 @@ variable {ι : Type} {G : StochasticGame ι}
 namespace AnalyticBellmanGerm
 
 /-- A state/action pair for one player whose pure-deviation continuation
-preserves the analytic endpoint target. -/
-def ContinuationNeutralAction
+preserves the analytic endpoint target. Reducibility keeps the underlying
+subtype visible to finite-sum lemmas. -/
+@[reducible] def ContinuationNeutralAction
     (germ : G.AnalyticBellmanGerm) (who : ι) :=
   { response : G.State × G.Act who //
     G.finkContinuationGain germ.endpointValue
@@ -55,10 +56,10 @@ def ContinuationNeutralAction
 noncomputable instance instFintypeContinuationNeutralAction
     (germ : G.AnalyticBellmanGerm) (who : ι) :
     Fintype (germ.ContinuationNeutralAction who) := by
-  letI : Finite G.State := Finite.of_fintype G.State
-  letI : Finite (G.Act who) := Finite.of_fintype (G.Act who)
-  letI : Finite (G.State × G.Act who) := inferInstance
-  letI : Finite
+  let : Finite G.State := Finite.of_fintype G.State
+  let : Finite (G.Act who) := Finite.of_fintype (G.Act who)
+  let : Finite (G.State × G.Act who) := inferInstance
+  let : Finite
       { response : G.State × G.Act who //
         G.finkContinuationGain germ.endpointValue
           germ.endpointFinkPoint response.1 who response.2 = 0 } :=

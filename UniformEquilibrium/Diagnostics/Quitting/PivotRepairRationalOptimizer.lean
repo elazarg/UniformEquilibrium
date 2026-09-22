@@ -518,8 +518,10 @@ def optimizerGeometricProfile (N : ℕ) (hN : 1 ≤ N) :
 theorem optimizerGeometric_payoff (N : ℕ) (hN : 1 ≤ N) (who : Fin 4) :
     quittingTerminalPayoff reward (optimizerGeometricProfile N hN) who =
       ![23561 / 5243, 35117 / 5243, 35498 / 5243, 31 / 49] who := by
-  rw [optimizerGeometricProfile, optimizerGeometricLaws,
-    (input N hN).geometric_payoff_eq_prescribedPayoff]
+  have hpayoff := (input N hN).geometric_payoff_eq_prescribedPayoff
+    (optimizerMass N hN) (optimizerMass_feasible N hN)
+    (1 / 2) (by norm_num) (by norm_num) who
+  rw [optimizerGeometricProfile, optimizerGeometricLaws, hpayoff]
   fin_cases who
   · exact optimizerMass_pivotPayoff N hN
   · exact optimizerMass_playerOnePayoff N hN

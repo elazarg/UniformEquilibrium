@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- The two supplied examples differ only in these preferred directions and active pairs. -/
 def membershipCountExamplePreferred (critical : Bool) : Fin 4 → Bool :=

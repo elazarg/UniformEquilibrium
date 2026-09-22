@@ -13,7 +13,7 @@ noncomputable section
 
 namespace GameTheory.KernelGame
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type}
 
@@ -46,7 +46,6 @@ theorem realizedAction_stageEUAt_eq_mixedExtension_eu
         (fun player => profile player time history) who := by
   unfold StochasticGame.stageEUAt StochasticGame.stageActionDist
   rw [G.mixedExtension_eu]
-  rfl
 
 /-- Once the initial joint action is fixed, pinning its selected coordinate
 does not alter the continuation profile. -/
@@ -86,7 +85,6 @@ theorem realizedAction_stageActionDist_update_pinInitialAction
   by_cases hplayer : player = who
   · subst player
     simp [pinRealizedActionInitialAction]
-    rfl
   · simp [Function.update_of_ne hplayer,
       realizedActionInitialMixedProfile]
 
@@ -117,11 +115,11 @@ theorem realizedAction_expectedStagePayoff_eq_expect_pinInitialAction
             (Function.update profile who
               (G.pinRealizedActionInitialAction profile who action))
             PUnit.unit time who) := by
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
-  letI : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
   let root := G.realizedActionInitialMixedProfile profile
   change G.realizedActionStochasticGame.expectedStagePayoff
@@ -150,7 +148,6 @@ theorem realizedAction_expectedStagePayoff_eq_expect_pinInitialAction
         by_cases hplayer : player = who
         · subst player
           simp [pinRealizedActionInitialAction]
-          rfl
         · simp [Function.update_of_ne hplayer]
           rfl
       rw [hroot]
@@ -163,7 +160,6 @@ theorem realizedAction_expectedStagePayoff_eq_expect_pinInitialAction
           (G.realizedActionStochasticGame.emptyHist PUnit.unit) =
           Math.PMFProduct.pmfPi root by rfl]
       simp_rw [G.realizedAction_stageActionDist_update_pinInitialAction]
-      simp_rw [realizedActionStochasticGame_transition]
       change expect (Math.PMFProduct.pmfPi root)
           (fun joint : Profile G => expect
             (PMF.pure PUnit.unit : PMF PUnit) (fun state =>
@@ -214,12 +210,12 @@ theorem realizedAction_finiteAveragePayoff_eq_expect_pinInitialAction
             PUnit.unit horizon
             (Function.update profile who
               (G.pinRealizedActionInitialAction profile who action)) who) := by
-  letI (player : ι) : Finite
+  let (player : ι) : Finite
       (G.realizedActionStochasticGame.Act player) :=
     @Finite.of_fintype _ (inferInstanceAs (Fintype (G.Strategy player)))
-  letI : Finite (G.Strategy who) := Finite.of_fintype _
-  letI : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite (G.Strategy who) := Finite.of_fintype _
+  let : Finite (∀ player, G.Strategy player) := Finite.of_fintype _
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
   rw [G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
   simp_rw [G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]

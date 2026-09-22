@@ -173,11 +173,11 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_of_general
       ∃ v : Payoff ι, G.IsUniformEquilibriumPayoff s₀ v) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  haveI : Finite (quittingGame reward).State :=
+  have : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  haveI : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Finite ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Finite Bool)
-  haveI : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
+  have : ∀ i : ι, Nonempty ((quittingGame reward).Act i) :=
     fun _ => inferInstanceAs (Nonempty Bool)
   exact hgeneral (quittingGame reward) none
 

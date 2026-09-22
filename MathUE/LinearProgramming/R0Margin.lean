@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import MathUE.LinearProgramming.CopositiveQCorollaries
+import GameTheory.Math.Probability.Simplex
 
 /-!
 # The `R₀` margin, and the openness of `R₀`
@@ -60,40 +61,48 @@ noncomputable section
 
 namespace Math.LinearProgramming
 
+open GameTheory.Math.Probability
+
 variable {ι : Type*} [Fintype ι]
 
 /-! ## The standard simplex is inhabited -/
 
 /-- With at least one coordinate the standard simplex has a vertex. -/
-theorem nonempty_coe_stdSimplex [Nonempty ι] : Nonempty (stdSimplex ℝ ι) := by
+theorem nonempty_coe_stdSimplex [Nonempty ι] :
+    Nonempty (Convexity.StdSimplex ℝ ι) := by
   classical
   obtain ⟨i₀⟩ := ‹Nonempty ι›
-  exact ⟨⟨fun k => if k = i₀ then 1 else 0,
-    fun k => by by_cases h : k = i₀ <;> simp [h], by simp⟩⟩
+  exact ⟨⟨Finsupp.equivFunOnFinite.symm (fun k => if k = i₀ then 1 else 0),
+    (fun k => by by_cases h : k = i₀ <;> simp [h]),
+    (by rw [Finsupp.equivFunOnFinite_symm_sum]; simp)⟩⟩
 
 /-! ## The margin -/
 
 /-- The `R₀` margin of `M`: the least homogeneous violation over the standard
 simplex. -/
 def r0Margin (M : ι → ι → ℝ) : ℝ :=
-  ⨅ p : stdSimplex ℝ ι, homogeneousViolation M p.val
+  ⨅ p : Convexity.StdSimplex ℝ ι, homogeneousViolation M p.weights
 
 theorem bddBelow_range_homogeneousViolation (M : ι → ι → ℝ) :
-    BddBelow (Set.range fun p : stdSimplex ℝ ι => homogeneousViolation M p.val) := by
+    BddBelow (Set.range fun p : Convexity.StdSimplex ℝ ι => homogeneousViolation M p.weights) := by
   refine ⟨0, ?_⟩
   rintro x ⟨p, rfl⟩
-  exact homogeneousViolation_nonneg M p.val
+  exact homogeneousViolation_nonneg M p.weights
 
 /-- The margin is a lower bound for the violation at every simplex point. -/
-theorem r0Margin_le (M : ι → ι → ℝ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) :
-    r0Margin M ≤ homogeneousViolation M p :=
-  ciInf_le (bddBelow_range_homogeneousViolation M) (⟨p, hp⟩ : stdSimplex ℝ ι)
+theorem r0Margin_le (M : ι → ι → ℝ) {p : ι → ℝ} (hp : p ∈ simplexWeights ι) :
+    r0Margin M ≤ homogeneousViolation M p := by
+  let point : Convexity.StdSimplex ℝ ι :=
+    ⟨Finsupp.equivFunOnFinite.symm p, (mem_simplexWeights.mp hp).1,
+      (by rw [Finsupp.equivFunOnFinite_symm_sum]; exact (mem_simplexWeights.mp hp).2)⟩
+  exact ciInf_le (bddBelow_range_homogeneousViolation M) point
 
 /-- Any lower bound for the violation on the simplex bounds the margin. -/
 theorem le_r0Margin [Nonempty ι] (M : ι → ι → ℝ) {c : ℝ}
-    (h : ∀ p ∈ stdSimplex ℝ ι, c ≤ homogeneousViolation M p) : c ≤ r0Margin M := by
-  haveI := nonempty_coe_stdSimplex (ι := ι)
-  exact le_ciInf fun p => h p.val p.property
+    (h : ∀ p ∈ simplexWeights ι, c ≤ homogeneousViolation M p) : c ≤ r0Margin M := by
+  have := nonempty_coe_stdSimplex (ι := ι)
+  exact le_ciInf fun p => h p.weights
+    (mem_simplexWeights.mpr ⟨p.weights_nonneg, p.total_of_fintype⟩)
 
 theorem r0Margin_nonneg [Nonempty ι] (M : ι → ι → ℝ) : 0 ≤ r0Margin M :=
   le_r0Margin M fun p _ => homogeneousViolation_nonneg M p
@@ -102,12 +111,14 @@ theorem r0Margin_nonneg [Nonempty ι] (M : ι → ι → ℝ) : 0 ≤ r0Margin M
 continuous, so some simplex point realizes the least violation. -/
 theorem exists_mem_stdSimplex_homogeneousViolation_eq_r0Margin [Nonempty ι]
     (M : ι → ι → ℝ) :
-    ∃ p ∈ stdSimplex ℝ ι, homogeneousViolation M p = r0Margin M := by
+    ∃ p ∈ simplexWeights ι, homogeneousViolation M p = r0Margin M := by
   classical
-  haveI := nonempty_coe_stdSimplex (ι := ι)
-  obtain ⟨p₀⟩ := ‹Nonempty (stdSimplex ℝ ι)›
+  have := nonempty_coe_stdSimplex (ι := ι)
+  obtain ⟨p₀⟩ := ‹Nonempty (Convexity.StdSimplex ℝ ι)›
   obtain ⟨p, hp, hmin⟩ :=
-    (isCompact_stdSimplex ℝ (ι := ι)).exists_isMinOn ⟨p₀.val, p₀.property⟩
+    (isCompact_simplexWeights ι).exists_isMinOn
+      ⟨p₀.weights,
+        mem_simplexWeights.mpr ⟨p₀.weights_nonneg, p₀.total_of_fintype⟩⟩
       (continuous_homogeneousViolation M).continuousOn
   refine ⟨p, hp, le_antisymm ?_ (r0Margin_le M hp)⟩
   exact le_r0Margin M fun y hy => isMinOn_iff.mp hmin y hy
@@ -118,16 +129,17 @@ theorem exists_mem_stdSimplex_homogeneousViolation_eq_r0Margin [Nonempty ι]
 the quadratic form and the residual sign condition kills the negative parts. -/
 theorem homogeneousViolation_eq_zero_of_singletonLCPFeasible {M : ι → ι → ℝ}
     (h : SingletonLCPFeasible M) :
-    ∃ p ∈ stdSimplex ℝ ι, homogeneousViolation M p = 0 := by
+    ∃ p ∈ simplexWeights ι, homogeneousViolation M p = 0 := by
   obtain ⟨lam, hres, hcomp⟩ := h
-  refine ⟨lam.val, lam.property, ?_⟩
-  have hrow : ∀ i, (∑ j, lam.val j * M i j) = singletonLCPResidual M lam i :=
+  refine ⟨lam.weights,
+    mem_simplexWeights.mpr ⟨lam.weights_nonneg, lam.total_of_fintype⟩, ?_⟩
+  have hrow : ∀ i, (∑ j, lam.weights j * M i j) = singletonLCPResidual M lam i :=
     fun i => rfl
-  have hquad : (∑ i, lam.val i * ∑ j, lam.val j * M i j) = 0 := by
+  have hquad : (∑ i, lam.weights i * ∑ j, lam.weights j * M i j) = 0 := by
     refine Finset.sum_eq_zero fun i _ => ?_
     rw [hrow i]
     exact hcomp i
-  have hneg : ∀ i, max 0 (-(∑ j, lam.val j * M i j)) = 0 := by
+  have hneg : ∀ i, max 0 (-(∑ j, lam.weights j * M i j)) = 0 := by
     intro i
     rw [hrow i]
     exact max_eq_left (by linarith [hres i])
@@ -172,9 +184,10 @@ theorem sum_le_of_isStandardLCPSolution [Nonempty ι] (M : ι → ι → ℝ)
   · have hviol :=
       homogeneousViolation_normalized_le_of_isStandardLCPSolution_of_bound M q z hsol
         hr hB hq rfl
-    have hmem : (fun i => z i / ∑ i, z i) ∈ stdSimplex ℝ ι :=
-      ⟨fun i => div_nonneg (hsol.weight_nonneg i) hr.le,
-        by rw [← Finset.sum_div]; exact div_self hr.ne'⟩
+    have hmem : (fun i => z i / ∑ i, z i) ∈ simplexWeights ι :=
+      mem_simplexWeights.mpr
+        ⟨fun i => div_nonneg (hsol.weight_nonneg i) hr.le,
+          by rw [← Finset.sum_div]; exact div_self hr.ne'⟩
     have hlow := (r0Margin_le M hmem).trans hviol
     rw [le_div_iff₀ hr] at hlow
     rw [le_div_iff₀ hmargin]
@@ -190,8 +203,9 @@ exceeds the largest of them. -/
 /-- **The matrix action is Lipschitz in the matrix.**  At a simplex point the
 rows of `M` and of `N` differ by at most the largest entrywise deviation. -/
 theorem abs_matrixAction_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
-    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) (i : ι) :
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ simplexWeights ι) (i : ι) :
     |(∑ j, p j * M i j) - ∑ j, p j * N i j| ≤ δ := by
+  rw [mem_simplexWeights] at hp
   have hsplit : (∑ j, p j * M i j) - (∑ j, p j * N i j) =
       ∑ j, p j * (M i j - N i j) := by
     rw [← Finset.sum_sub_distrib]
@@ -208,8 +222,9 @@ theorem abs_matrixAction_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
 /-- **The quadratic form is Lipschitz in the matrix**, with constant one: at a
 simplex point it moves by at most the largest entrywise deviation. -/
 theorem abs_quadratic_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
-    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) :
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ simplexWeights ι) :
     |(∑ i, p i * ∑ j, p j * M i j) - ∑ i, p i * ∑ j, p j * N i j| ≤ δ := by
+  have hp' := mem_simplexWeights.mp hp
   have hsplit : (∑ i, p i * ∑ j, p j * M i j) - (∑ i, p i * ∑ j, p j * N i j) =
       ∑ i, p i * ((∑ j, p j * M i j) - ∑ j, p j * N i j) := by
     rw [← Finset.sum_sub_distrib]
@@ -220,15 +235,15 @@ theorem abs_quadratic_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
         Finset.abs_sum_le_sum_abs _ _
     _ ≤ ∑ i, p i * δ := by
         refine Finset.sum_le_sum fun i _ => ?_
-        rw [abs_mul, abs_of_nonneg (hp.1 i)]
-        exact mul_le_mul_of_nonneg_left (abs_matrixAction_sub_le M N hδ hp i) (hp.1 i)
-    _ = δ := by rw [← Finset.sum_mul, hp.2, one_mul]
+        rw [abs_mul, abs_of_nonneg (hp'.1 i)]
+        exact mul_le_mul_of_nonneg_left (abs_matrixAction_sub_le M N hδ hp i) (hp'.1 i)
+    _ = δ := by rw [← Finset.sum_mul, hp'.2, one_mul]
 
 /-- **The violation is Lipschitz in the matrix.**  On the standard simplex the
 homogeneous violation of `M` and of `N` differ by at most `card ι + 1` times the
 largest entrywise deviation. -/
 theorem abs_homogeneousViolation_sub_le (M N : ι → ι → ℝ) {δ : ℝ}
-    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ stdSimplex ℝ ι) :
+    (hδ : ∀ i j, |M i j - N i j| ≤ δ) {p : ι → ℝ} (hp : p ∈ simplexWeights ι) :
     |homogeneousViolation M p - homogeneousViolation N p| ≤
       ((Fintype.card ι : ℝ) + 1) * δ := by
   classical

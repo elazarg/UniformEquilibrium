@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -501,9 +501,9 @@ theorem abs_quittingRootAbsorbingContribution_le_mul_absorptionMass
     intro action
     unfold quittingRootPayoff
     by_cases hquit : (quittingQuitters action).Nonempty
-    · rw [dif_pos hquit, if_pos hquit]
+    · rw [dite_eq_left hquit, ite_eq_left hquit]
       exact hreward _ who
-    · rw [dif_neg hquit, if_neg hquit]
+    · rw [dite_eq_right hquit, ite_eq_right hquit]
       simp
   have hcapSplit : (fun action : ι → Bool =>
       if (quittingQuitters action).Nonempty then M else 0) =
@@ -519,11 +519,11 @@ theorem abs_quittingRootAbsorbingContribution_le_mul_absorptionMass
     by_cases heq : action = (quittingAllContinueAction : ι → Bool)
     · have hempty : ¬ (quittingQuitters action).Nonempty := fun hnonempty =>
         (quittingQuitters_nonempty_iff_ne_allContinue action).1 hnonempty heq
-      rw [if_neg hempty, if_pos heq]
+      rw [ite_eq_right hempty, ite_eq_left heq]
       norm_num
     · have hnonempty :=
         (quittingQuitters_nonempty_iff_ne_allContinue action).2 heq
-      rw [if_pos hnonempty, if_neg heq]
+      rw [ite_eq_left hnonempty, ite_eq_right heq]
       norm_num
   have hpoint := expect_allContinueIndicator_eq_continueMass root
   have hindicatorExpect : expect (pmfPi root) (fun action =>

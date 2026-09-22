@@ -39,7 +39,7 @@ private theorem rationalQuittingFiniteCalendarRawStrictFormula_holdsAt_profile_i
       (fun _ => QuittingFiniteDeadlineTimingAction
         (quittingRawExclusionDeadline players))) :
     (rationalQuittingFiniteCalendarRawStrictFormula reward).HoldsAt
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) ↔
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) ↔
       ∃ observer,
         quittingFiniteCalendarRawPayoff (rationalQuittingRewardToReal reward)
             (quittingRawExclusionDeadline players) profile observer <
@@ -51,7 +51,7 @@ private theorem rationalQuittingFiniteCalendarRawStrictFormula_holdsAt_profile_i
       (players := players) (deadline := quittingRawExclusionDeadline players)
       (fun terminal observer => RingExpression.const (reward terminal observer))
       quittingFiniteCalendarVariableTerm
-      (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2)
+      (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2)
       profile (fun who choice =>
         evalReal_quittingFiniteCalendarVariableTerm_parameters profile (who, choice))
   change _ ↔ ∃ observer,
@@ -72,7 +72,7 @@ private theorem rationalQuittingFiniteCalendarRawStrictFormula_forall_iff
   · intro hformula profile
     exact (rationalQuittingFiniteCalendarRawStrictFormula_holdsAt_profile_iff
       reward profile).mp
-        (hformula (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2))
+        (hformula (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2))
   · intro hraw environment
     by_cases hsimplex :
         (quittingFiniteCalendarSimplexFormula players
@@ -80,7 +80,7 @@ private theorem rationalQuittingFiniteCalendarRawStrictFormula_forall_iff
     · let profile := quittingFiniteCalendarProfileOfParameters environment hsimplex
       have hcalendar : ∀ who choice,
           (quittingFiniteCalendarVariableTerm (who, choice)).evalReal environment =
-            profile who choice := by
+            (profile who).weights choice := by
         intro who choice
         rfl
       have hprofile := hraw profile

@@ -302,7 +302,7 @@ theorem abs_expect_sub_le_pairwise_on_common_support_mul_pmfTV
     · simp [hx]
     · simp [g, hν x hx]
   rw [hμeq, hνeq]
-  letI : Nonempty Ω := ⟨base⟩
+  let : Nonempty Ω := ⟨base⟩
   apply abs_expect_sub_le_pairwise_mul_pmfTV
   intro x y
   by_cases hx : P x

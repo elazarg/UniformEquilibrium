@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
 
@@ -37,6 +37,10 @@ omit [DecidableEq ι] [Nontrivial ι] in
     quittingBehaviorStoppingLaw reward
         (quittingCompactStoppingLawProfile reward laws who) =
       (laws who).toPMF := by
-  simp [quittingCompactStoppingLawProfile]
+  change quittingBehaviorStoppingLaw reward
+      (quittingStoppingLawBehaviorStrategy reward who (laws who).toPMF) =
+    (laws who).toPMF
+  exact quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
+    reward who (laws who).toPMF
 
 end GameTheory

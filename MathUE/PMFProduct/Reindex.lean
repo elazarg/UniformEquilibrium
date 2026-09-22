@@ -17,7 +17,7 @@ definitionally coordinate precomposition.
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- Push an independent product forward through a reindexing equivalence. -/
 theorem pmfPi_map_precompEquiv {ι κ B : Type*} [Fintype ι] [Fintype κ]

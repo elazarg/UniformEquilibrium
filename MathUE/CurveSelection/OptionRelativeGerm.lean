@@ -67,10 +67,10 @@ theorem localizedGermParameterAlgHom_eval₂_optionEquivRight
           (MvPolynomial.optionEquivRight ℝ ν Q)) =
       ((fun n => MvPolynomial.eval (x n) Q) :
         GermField) := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial (Option ν) ℝ ⧸ J) :=
     parameterPolynomialAlgebra J none
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra x none
   rw [eval₂_optionEquivRight_optionLocalizedCoordinate
     J g Q]

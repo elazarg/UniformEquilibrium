@@ -25,7 +25,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_pure_tendsto_never_add
         (quittingStoppingLawProfile reward (Function.update laws mixer (PMF.pure none))) observer +
         (∏ j ∈ Finset.univ.erase mixer, (laws j none).toReal) *
           reward (quittingSingletonTerminal mixer) observer)) := by
-  letI : Nonempty ι := ⟨mixer⟩
+  let : Nonempty ι := ⟨mixer⟩
   let observed := quittingObserverReward reward observer
   let compact := fun j ↦ CompactStoppingLaw.ofPMF (laws j)
   have hprofile : quittingCompactStoppingLawProfile observed compact =
@@ -33,7 +33,7 @@ theorem quittingTerminalPayoff_stoppingLawProfile_pure_tendsto_never_add
     funext player
     change quittingStoppingLawBehaviorStrategy observed player
         (CompactStoppingLaw.ofPMF (laws player)).toPMF = _
-    rw [CompactStoppingLaw.toPMF_ofPMF]
+    rw [CompactStoppingLaw.toPMF_ofPMF_option]
     rfl
   have hlimit :=
     quittingTerminalPayoff_update_finiteTime_tendsto_never_add_opponentNever_mul_singleton
@@ -55,8 +55,10 @@ theorem quittingTerminalPayoff_stoppingLawProfile_pure_tendsto_never_add
     apply Finset.prod_congr rfl
     intro j _
     rw [← CompactStoppingLaw.toPMF_apply_toReal]
-    simp only [compact, CompactStoppingLaw.toPMF_ofPMF]
-    rfl
+    change ((((CompactStoppingLaw.ofPMF (laws j)).toPMF :
+      PMF (Option ℕ)) none).toReal) = _
+    exact congrArg (fun law : PMF (Option ℕ) => (law none).toReal)
+      (CompactStoppingLaw.toPMF_ofPMF_option _)
   simp only [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff]
   simpa only [hproduct, observed, quittingObserverReward] using hlimit
 

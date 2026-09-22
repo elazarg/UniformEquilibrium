@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set StochasticGame Math.Probability Math.ProbabilityMassFunction
+open Filter Set StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
 open Math.PMFProduct
 open scoped Topology
 
@@ -299,7 +299,7 @@ theorem quittingFiniteNashBellmanPathDynamicDebtSemanticPair_eq_completion
       reward cutoff path hpath observer time htime
   unfold quittingDynamicDebtSemanticPair
     quittingFiniteNashBellmanPathDynamicDebtPoint
-  rw [dif_pos htime.le]
+  rw [dite_eq_left htime.le]
   apply Prod.ext
   · exact hpayoff.symm
   · funext observer

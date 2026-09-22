@@ -217,7 +217,7 @@ theorem reward_cappedJointExit : QuittingCappedJointExit reward := by
     (fun quitters who _ hcard ↦ ?_)
   · exact le_of_eq (reward_unitSoloExit who)
   · show (if quitters.1.card = 1 then _ else _) ≤ (1 : ℝ)
-    rw [if_neg hcard]
+    rw [ite_eq_right hcard]
     split
     · split <;> norm_num
     · norm_num

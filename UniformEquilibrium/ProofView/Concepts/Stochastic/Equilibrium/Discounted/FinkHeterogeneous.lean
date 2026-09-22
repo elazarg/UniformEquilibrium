@@ -24,7 +24,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type}
@@ -46,8 +46,10 @@ def IsPlayerDiscountedStationaryBellmanEq
     ∀ (s : G.State) (who : ι),
       G.discountedAuxEU (α who) V s (x s) who = V s who
 
-/-- The auxiliary normal-form game whose player `i` uses discount `α i`. -/
-def playerDiscountedAuxGame (G : StochasticGame ι) (α : ι → ℝ)
+/-- The auxiliary normal-form game whose player `i` uses discount `α i`.
+Its type fields remain reducible so dependent mixed profiles retain the original
+action carriers. -/
+@[reducible] def playerDiscountedAuxGame (G : StochasticGame ι) (α : ι → ℝ)
     (V : G.State → Payoff ι) (s : G.State) : KernelGame ι :=
   KernelGame.ofPureEU G.Act
     (fun a who => G.discountedAuxPayoff (α who) V s a who)
@@ -61,7 +63,7 @@ theorem mixedExtension_eu_playerDiscountedAuxGame
     (m : ∀ i, PMF (G.Act i)) (who : ι) :
     (G.playerDiscountedAuxGame α V s).mixedExtension.eu m who =
       G.discountedAuxEU (α who) V s m who := by
-  haveI : Finite (G.playerDiscountedAuxGame α V s).Outcome :=
+  have : Finite (G.playerDiscountedAuxGame α V s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   rw [KernelGame.mixedExtension_eu]
   simp [playerDiscountedAuxGame, discountedAuxEU, KernelGame.eu_ofPureEU]
@@ -76,14 +78,13 @@ theorem finkGain_eq_playerMixedGain
     G.finkGain (α who) z s who d =
       (G.playerDiscountedAuxGame α (G.finkValue z) s).mixedGain
         (G.finkProfile z s) who d := by
-  haveI : Finite (G.playerDiscountedAuxGame α (G.finkValue z) s).Outcome :=
+  have : Finite (G.playerDiscountedAuxGame α (G.finkValue z) s).Outcome :=
     inferInstanceAs (Finite G.JointAct)
   unfold finkGain KernelGame.mixedGain
   rw [G.finkDeviationAuxEU_eq_discountedAuxEU,
     G.finkAuxEU_eq_discountedAuxEU]
   rw [← G.mixedExtension_eu_playerDiscountedAuxGame,
     ← G.mixedExtension_eu_playerDiscountedAuxGame]
-  rfl
 
 /-- Ambient-coordinate formula for the player-dependent Fink map. -/
 def playerFinkAmbientUpdate (G : StochasticGame ι)
@@ -103,7 +104,9 @@ theorem playerFinkAmbientUpdate_mem (G : StochasticGame ι)
     G.playerFinkAmbientUpdate α z ∈ G.finkDomain U := by
   constructor
   · intro p hp
-    exact (G.finkStrategyUpdate (α p.2) z p.1 p.2).property
+    exact GameTheory.Math.Probability.mem_simplexWeights.mpr
+      ⟨(G.finkStrategyUpdate (α p.2) z p.1 p.2).weights_nonneg,
+        (G.finkStrategyUpdate (α p.2) z p.1 p.2).total_of_fintype⟩
   · constructor <;> intro s who
     · exact (abs_le.mp
         (G.abs_finkValueUpdate_le (α who) U (hα0 who) (hα1 who)
@@ -185,12 +188,7 @@ theorem isPlayerDiscountedStationaryBellmanEq_of_playerFinkMap_fixedPoint
       (G.finkProfile z) (G.finkValue z) := by
   constructor
   · intro s who dev
-    let actFintype : ∀ i, Fintype (G.Act i) := inferInstance
-    haveI : ∀ i,
-        Fintype ((G.playerDiscountedAuxGame α (G.finkValue z) s).Strategy i) := by
-      change ∀ i, Fintype (G.Act i)
-      infer_instance
-    haveI : Finite
+    have : Finite
         (G.playerDiscountedAuxGame α (G.finkValue z) s).Outcome :=
       inferInstanceAs (Finite G.JointAct)
     have hfp : ∀ (i : ι) (d : G.Act i),
@@ -212,13 +210,7 @@ theorem isPlayerDiscountedStationaryBellmanEq_of_playerFinkMap_fixedPoint
         unfold KernelGame.gainSum finkGainSum
         apply Finset.sum_congr
         · ext x
-          constructor
-          · intro hx
-            exact @Finset.mem_univ (G.Act i) (actFintype i) x
-          · intro hx
-            exact @Finset.mem_univ
-              ((G.playerDiscountedAuxGame α (G.finkValue z) s).Strategy i)
-              (inferInstance) x
+          simp only [Finset.mem_univ]
         · intro x hx
           rw [← G.finkGain_eq_playerMixedGain α z s i x]
       have halg :
@@ -259,8 +251,8 @@ theorem exists_isPlayerDiscountedStationaryBellmanEq_bounded
     ∃ (x : G.StationaryMixedProfile) (V : G.State → Payoff ι),
       G.IsPlayerDiscountedStationaryBellmanEq α x V ∧
         ∀ s who, |V s who| ≤ U := by
-  letI : Fintype G.State := Fintype.ofFinite G.State
-  letI : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
+  let : Fintype G.State := Fintype.ofFinite G.State
+  let : ∀ i, Fintype (G.Act i) := fun i => Fintype.ofFinite (G.Act i)
   obtain ⟨z, hz⟩ :=
     G.exists_playerFinkMap_fixedPoint α U hU hα0 hα1 hpay
   exact ⟨G.finkProfile z, G.finkValue z,

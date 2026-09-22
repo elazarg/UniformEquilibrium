@@ -17,7 +17,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -220,14 +220,14 @@ theorem exists_exactRoot_strictSingletonInterior_of_not_weakPeeling
   have htestContinuous : ∀ player, ContinuousAt (test player) 0 := by
     intro player
     by_cases hplayer : player ∈ active
-    · simp only [test, hplayer, if_true]
+    · simp only [test, hplayer, ite_true]
       apply ContinuousAt.div
       · exact (hquitContinuous player).continuousAt.sub
           (hcontinueContinuous player).continuousAt
       · exact (hemptyContinuous player).continuousAt
       · rw [hemptyZero player]
         norm_num
-    · simp only [test, hplayer, if_false]
+    · simp only [test, hplayer, ite_false]
       exact ((hcontinueContinuous player).add
         ((hemptyContinuous player).mul continuous_const)).sub
           (hquitContinuous player) |>.continuousAt
@@ -236,11 +236,11 @@ theorem exists_exactRoot_strictSingletonInterior_of_not_weakPeeling
     by_cases hplayer : player ∈ active
     · have hsingletonBound := hreward (quittingSingletonTerminal player) player
       have hsingletonSides := abs_le.mp hsingletonBound
-      simp only [test, lower, upper, hplayer, if_true, hactiveTailZero]
+      simp only [test, lower, upper, hplayer, ite_true, hactiveTailZero]
       constructor <;> linarith
     · have hsingletonBound := hreward (quittingSingletonTerminal player) player
       have hsingletonSides := abs_le.mp hsingletonBound
-      simp only [test, lower, upper, hplayer, if_false, houtsideSlackZero]
+      simp only [test, lower, upper, hplayer, ite_false, houtsideSlackZero]
       constructor <;> linarith
   obtain ⟨t, ht0, ht1, htest⟩ :=
     Math.exists_pos_lt_one_forall_mem_Ioo_of_continuousAt
@@ -320,11 +320,11 @@ theorem exists_exactRoot_strictSingletonInterior_of_not_weakPeeling
     intro player
     by_cases hplayer : player ∈ active
     · have hinside := htest player
-      simp only [test, lower, upper, hplayer, if_true] at hinside
+      simp only [test, lower, upper, hplayer, ite_true] at hinside
       dsimp only [activeTail] at hinside
       rw [hquitValue player, hcontinueValue player,
         hemptyValue player] at hinside
-      simp only [tail, hplayer, if_true]
+      simp only [tail, hplayer, ite_true]
       exact ⟨le_of_lt hinside.1, le_of_lt hinside.2⟩
     · have hBnonnegative : 0 ≤ B := lt_of_le_of_lt hM hMB |>.le
       simp [tail, cap, hplayer, hBnonnegative]
@@ -373,7 +373,7 @@ theorem exists_exactRoot_strictSingletonInterior_of_not_weakPeeling
           hnonnegative tail root player)
         (lt_of_not_ge (not_le_of_gt (by
           have hstrict := (htest player).1
-          simp only [test, lower, hplayer, if_false] at hstrict
+          simp only [test, lower, hplayer, ite_false] at hstrict
           dsimp only [outsiderSlack] at hstrict
           rw [hquitValue player, hcontinueValue player,
             hemptyValue player] at hstrict

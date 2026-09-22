@@ -1,3 +1,4 @@
+import MathUE.ChargedPathCode
 import UniformEquilibrium.Quitting.Projective.RobustChargedPath
 import UniformEquilibrium.Quitting.Projective.FloorFreeForwardPacketInputRemoval
 
@@ -7,7 +8,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability
+open Maths.ChargedPathBudget _root_.Math.Probability
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {tolerance bound chargeTarget : ℝ}
@@ -187,17 +188,17 @@ def QuittingFloorFreeAbsorptionWeightedForwardPacket.robustPath
   | zero => rfl
   | succ length ih =>
       simp only [robustPathFrom]
-      rw [Math.ChargedPathBudget.ChargedRelation.Path.length_castSrc,
-        Math.ChargedPathBudget.ChargedRelation.Path.length_cons,
-        Math.ChargedPathBudget.ChargedRelation.Path.length_castSrc,
-        Math.ChargedPathBudget.ChargedRelation.Path.length_castTgt, ih]
+      rw [Maths.ChargedPathBudget.ChargedRelation.Path.length_castSrc,
+        Maths.ChargedPathBudget.ChargedRelation.Path.length_cons,
+        Maths.ChargedPathBudget.ChargedRelation.Path.length_castSrc,
+        Maths.ChargedPathBudget.ChargedRelation.Path.length_castTgt, ih]
 
 @[simp] theorem QuittingFloorFreeAbsorptionWeightedForwardPacket.robustPath_length
     (packet : QuittingFloorFreeAbsorptionWeightedForwardPacket reward
       (quittingForwardPacketCoordinateBox bound) tolerance chargeTarget) :
     packet.robustPath.length = packet.horizon := by
   unfold robustPath
-  rw [Math.ChargedPathBudget.ChargedRelation.Path.length_castTgt,
+  rw [Maths.ChargedPathBudget.ChargedRelation.Path.length_castTgt,
     packet.robustPathFrom_length]
 
 theorem QuittingFloorFreeAbsorptionWeightedForwardPacket.robustPathFrom_value
@@ -293,10 +294,10 @@ theorem QuittingFloorFreeAbsorptionWeightedForwardPacket.robustPathFrom_charge_e
   | zero => rfl
   | succ length ih =>
       simp only [robustPathFrom]
-      rw [Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_castSrc,
-        Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_cons,
-        Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_castSrc,
-        Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_castTgt,
+      rw [Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_castSrc,
+        Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_cons,
+        Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_castSrc,
+        Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_castTgt,
         packet.robustEdgeAt_charge, ih, Finset.sum_range_succ']
       have hshift :
           (∑ time ∈ Finset.range length,
@@ -317,7 +318,7 @@ theorem QuittingFloorFreeAbsorptionWeightedForwardPacket.robustPath_charge_eq
       ∑ time ∈ Finset.range packet.horizon,
         quittingRootAbsorptionMass (packet.roots time) := by
   unfold robustPath
-  rw [Math.ChargedPathBudget.ChargedRelation.Path.chargeSum_castTgt,
+  rw [Maths.ChargedPathBudget.ChargedRelation.Path.chargeSum_castTgt,
     packet.robustPathFrom_charge_eq]
   simp only [zero_add]
 

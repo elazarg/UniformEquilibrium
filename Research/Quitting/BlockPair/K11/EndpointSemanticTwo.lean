@@ -5,7 +5,7 @@ noncomputable section
 
 namespace GameTheory.BlockPairK11.ConditionalData
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 theorem endpointDifference_two_eq_expanded
     (h : Player → ℝ) (h0 : ∀ who, 0 ≤ h who)

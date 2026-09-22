@@ -19,7 +19,7 @@ noncomputable section
 namespace GameTheory
 namespace DuplicatedCyclicReactivationRegression
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open QuittingLCPClassification
 open scoped Topology
 
@@ -153,8 +153,6 @@ theorem duplicate_normalizedHazard_tendsto_zero :
   have hlim : Tendsto (fun index : ℕ ↦ hazard index / (3 + hazard index))
       atTop (nhds 0) := by
     convert hazard_tendsto_zero.div hden (by norm_num : (3 : ℝ) ≠ 0) using 1
-    · funext index
-      rfl
     · norm_num
   exact hlim.congr' (hevent.mono fun index hne ↦ by
     field_simp)
@@ -252,8 +250,6 @@ theorem hazardSquare_div_linearSquare_tendsto (c : ℝ) (hc : c ≠ 0) :
   have hlim : Tendsto (fun index ↦ hazard index / (c + hazard index))
       atTop (nhds 0) := by
     convert hazard_tendsto_zero.div hden hc using 1
-    · funext index
-      rfl
     · simp
   exact hlim.congr' (Filter.Eventually.of_forall fun index ↦ by
     field_simp [(hazard_pos index).ne'])
@@ -373,9 +369,6 @@ theorem firstChild_playerTwo_payoff_tendsto :
     Fintype.sum_option, Fin.sum_univ_succ,
     StandardQSideExample.duplicatedCyclicMatrix,
     StandardQSideExample.duplicateCollapse, StandardQSideExample.cyclicMatrix]
-  have hcard : ({x : Fin 2 | x.succ = (1 : Fin 3)} : Finset (Fin 2)).card = 1 := by decide
-  rw [hcard]
-  norm_num
 
 theorem singletonChild_playerTwo_payoff_tendsto :
     Tendsto (fun index ↦ quittingTerminalPayoff reward (singletonChildProfile index) (some 2))

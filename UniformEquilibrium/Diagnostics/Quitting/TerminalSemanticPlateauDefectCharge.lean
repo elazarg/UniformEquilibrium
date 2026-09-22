@@ -35,7 +35,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -363,11 +363,12 @@ displayed deterministic pure-time hazard. -/
     (profile : (quittingGame reward).BehaviorProfile)
     (who : ι) (choice : Option ℕ) (time : ℕ) :
     quittingProfileLiveRoot reward
-        (Function.update profile who
+      (Function.update profile who
           (quittingPureTimeBehaviorStrategy reward who choice)) time who =
       quittingPureTimeHazard choice time := by
-  unfold quittingProfileLiveRoot quittingPureTimeBehaviorStrategy
-  simp
+  unfold quittingProfileLiveRoot
+  rw [Function.update_self]
+  rfl
 
 /-- Before a selected finite pure quit time, the deviator Continues purely. -/
 theorem quittingProfileLiveRoot_update_pureTime_some_eq_pureContinue_of_lt

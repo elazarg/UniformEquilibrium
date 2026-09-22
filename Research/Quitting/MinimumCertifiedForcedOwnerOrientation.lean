@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -61,7 +61,8 @@ theorem minimumExactNash_positiveCoalition_outsider_isPureContinue
       (quittingRootCoalitionMass_le_quitProbability_of_mem
         root terminal.val owner howner)
   have hownerSupport : owner ∈ quittingPositiveHazardSupport root := by
-    simp [quittingPositiveHazardSupport, hazardOfRoot, hownerQuit]
+    apply Finset.mem_filter.mpr
+    exact ⟨Finset.mem_univ owner, by simpa [hazardOfRoot] using hownerQuit⟩
   have hwhoNotSupport : who ∉ quittingPositiveHazardSupport root := by
     intro hwhoSupport
     have hpairSubset : ({owner, who} : Finset ι) ⊆

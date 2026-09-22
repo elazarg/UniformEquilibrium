@@ -10,7 +10,7 @@ a positive additive family size.
 
 namespace MathUE.RealQuantifierElimination
 
-open Math
+open _root_.Math
 
 /-- Largest formal list length, with zero for the empty family. -/
 def familyMaximumLength {A : Type*} (family : List (DensePolynomial A)) : Nat :=

@@ -317,8 +317,8 @@ theorem BalancedSingletonCycleCertificate.exists_escortCycle
     ∃ cycle : QuittingSingletonEscortCycle reward, 2 ≤ cycle.period := by
   let R : certificate.PositiveOwner → certificate.PositiveOwner → Prop :=
     fun source target ↦ IsQuittingSingletonEscortEdge reward source.val target.val
-  letI : Nonempty certificate.PositiveOwner := certificate.positiveOwner_nonempty
-  letI : Finite certificate.PositiveOwner :=
+  let : Nonempty certificate.PositiveOwner := certificate.positiveOwner_nonempty
+  let : Finite certificate.PositiveOwner :=
     Finite.of_injective Subtype.val Subtype.val_injective
   obtain ⟨subtypeCycle⟩ :=
     Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial R

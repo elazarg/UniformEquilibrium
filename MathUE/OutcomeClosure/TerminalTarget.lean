@@ -22,7 +22,7 @@ namespace Math
 namespace OutcomeClosure
 namespace ValueProcess
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {S Ω Player : Type*}
 

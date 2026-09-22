@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -116,9 +116,17 @@ theorem expect_transition_quittingNonSoloIndicator
           {S : Finset ι // S.Nonempty}) ≠
             quittingSingletonTerminal who := by
       simpa [quittingQuitters] using hne
-    rw [quittingGame_transition_none, dif_pos hraw]
-    simp [quittingNonSoloIndicator, hneRaw,
-      quittingSomeOpponentQuitsIndicator, hflag]
+    rw [quittingGame_transition_none, dite_eq_left hraw, expect_pure]
+    have hindicator : quittingNonSoloIndicator reward who
+        (show (quittingGame reward).State from
+          some ⟨({player | action player = true} : Finset ι), hraw⟩) = 1 := by
+      change (if (⟨({player | action player = true} : Finset ι), hraw⟩ :
+        {S : Finset ι // S.Nonempty}) = quittingSingletonTerminal who then 0 else 1) = 1
+      rw [ite_eq_right hneRaw]
+    rw [hindicator]
+    unfold quittingSomeOpponentQuitsIndicator
+    rw [hflag]
+    rfl
   · have hflag : quittingOpponentQuitFlag who action ≠ true :=
       fun h => hopponent
         ((quittingOpponentQuitFlag_eq_true_iff who action).1 h)
@@ -137,9 +145,13 @@ theorem expect_transition_quittingNonSoloIndicator
               ({player | action player = true} : Finset ι) = ∅ := by
             simpa [quittingQuitters] using hempty
           simp [hrawEmpty]
-        rw [quittingGame_transition_none, dif_neg hraw]
-        simp [quittingNonSoloIndicator,
-          quittingSomeOpponentQuitsIndicator, hflagFalse]
+        rw [quittingGame_transition_none, dite_eq_right hraw, expect_pure]
+        have hindicator : quittingNonSoloIndicator reward who
+            (show (quittingGame reward).State from none) = 0 := rfl
+        rw [hindicator]
+        unfold quittingSomeOpponentQuitsIndicator
+        rw [hflagFalse]
+        rfl
     | true =>
         have hsingleton :=
           quittingQuitters_eq_singleton_of_noOpponent_of_self
@@ -147,7 +159,7 @@ theorem expect_transition_quittingNonSoloIndicator
         have hraw :
             ({player | action player = true} : Finset ι).Nonempty := by
           exact ⟨who, by simp [hself]⟩
-        rw [quittingGame_transition_none, dif_pos hraw]
+        rw [quittingGame_transition_none, dite_eq_left hraw]
         have hterminalRaw :
             (⟨({player | action player = true} : Finset ι), hraw⟩ :
                 {S : Finset ι // S.Nonempty}) =
@@ -155,8 +167,18 @@ theorem expect_transition_quittingNonSoloIndicator
           apply Subtype.ext
           change ({player | action player = true} : Finset ι) = {who}
           simpa [quittingQuitters] using hsingleton
-        simp [quittingNonSoloIndicator, hterminalRaw,
-          quittingSomeOpponentQuitsIndicator, hflagFalse]
+        rw [hterminalRaw, expect_pure]
+        have hindicator : quittingNonSoloIndicator reward who
+            (show (quittingGame reward).State from
+              some (quittingSingletonTerminal who)) = 0 := by
+          change (if quittingSingletonTerminal who =
+            quittingSingletonTerminal who then 0 else 1) = 0
+          rw [ite_eq_left (rfl : quittingSingletonTerminal who =
+            quittingSingletonTerminal who)]
+        rw [hindicator]
+        unfold quittingSomeOpponentQuitsIndicator
+        rw [hflagFalse]
+        rfl
 
 /-- At the canonical live history under a unilateral deviation, conditional
 next non-solo mass is one minus the opponents' all-continue probability. -/
@@ -174,19 +196,26 @@ theorem expect_stageAction_transition_nonSolo_live_update
         (quittingOpponentOnlyProfile reward profile who) time := by
   let root : ι → PMF Bool := fun player =>
     profile player time (quittingLiveHist reward time)
+  let deviationLaw : PMF Bool :=
+    show PMF Bool from deviation time (quittingLiveHist reward time)
   have haction :
       (quittingGame reward).stageActionDist
           (Function.update profile who deviation)
           (quittingLiveHist reward time) =
-        pmfPi (Function.update root who
-          (deviation time (quittingLiveHist reward time))) := by
+        pmfPi (Function.update root who deviationLaw) := by
     unfold StochasticGame.stageActionDist
     congr 1
     funext player
     by_cases hp : player = who
     · subst player
-      simp [root]
-    · simp [root, Function.update_of_ne hp]
+      rw [Function.update_self]
+      with_unfolding_all
+        change deviationLaw = Function.update root who deviationLaw who
+      exact (Function.update_self who deviationLaw root).symm
+    · rw [Function.update_of_ne hp]
+      with_unfolding_all
+        change root player = Function.update root who deviationLaw player
+      exact (Function.update_of_ne hp deviationLaw root).symm
   have hcontinue :
       quittingJointContinueMass reward
           (quittingOpponentOnlyProfile reward profile who) time =
@@ -198,13 +227,28 @@ theorem expect_stageAction_transition_nonSolo_live_update
     funext player
     by_cases hp : player = who
     · subst player
-      simp [root, quittingAlwaysContinueStrategy]
-      rfl
-    · simp [root, Function.update_of_ne hp]
+      rw [Function.update_self]
+      unfold quittingAlwaysContinueStrategy
+      with_unfolding_all
+        change (PMF.pure false : PMF Bool) =
+          Function.update root who (PMF.pure false) who
+      exact (Function.update_self who (PMF.pure false) root).symm
+    · rw [Function.update_of_ne hp]
+      with_unfolding_all
+        change root player = Function.update root who (PMF.pure false) player
+      exact (Function.update_of_ne hp (PMF.pure false) root).symm
   rw [haction, hcontinue]
+  with_unfolding_all
+    change expect (pmfPi (Function.update root who deviationLaw))
+        (fun action : ι → Bool => expect
+          ((quittingGame reward).transition
+            (show (quittingGame reward).State from none) action)
+          (quittingNonSoloIndicator reward who)) =
+      1 - ((pmfPi (Function.update root who (PMF.pure false)))
+        (quittingAllContinueAction : ι → Bool)).toReal
   simp_rw [expect_transition_quittingNonSoloIndicator]
   exact expect_pmfPi_someOpponentQuits_eq_one_sub_continueMass
-    root who (deviation time (quittingLiveHist reward time))
+    root who deviationLaw
 
 /-- Exact one-step recurrence for non-solo absorption mass under a unilateral
 deviation. -/
@@ -222,12 +266,16 @@ theorem quittingNonSoloMass_update_succ
           (1 - quittingJointContinueMass reward
             (quittingOpponentOnlyProfile reward profile who) time) := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   unfold quittingNonSoloMass
-  rw [(quittingGame reward).expectedStateValue_succ]
+  have hsucc := (quittingGame reward).expectedStateValue_succ
+    (Function.update profile who deviation)
+    (show (quittingGame reward).State from none) time
+    (quittingNonSoloIndicator reward who)
+  rw [hsucc]
   let deviationProfile := Function.update profile who deviation
   let opponentContinue := quittingJointContinueMass reward
     (quittingOpponentOnlyProfile reward profile who) time
@@ -255,7 +303,34 @@ theorem quittingNonSoloMass_update_succ
             simp [quittingNonSoloIndicator, quittingLiveIndicator,
               opponentContinue]
         | some S =>
-            simp [quittingGame, quittingLiveIndicator]
+            with_unfolding_all
+              change expect
+                  ((quittingGame reward).stageActionDist deviationProfile history)
+                  (fun action => expect
+                    ((quittingGame reward).transition
+                      (show (quittingGame reward).State from some S) action)
+                    (quittingNonSoloIndicator reward who)) =
+                quittingNonSoloIndicator reward who
+                    (show (quittingGame reward).State from some S) +
+                  (1 - opponentContinue) * quittingLiveIndicator reward
+                    (show (quittingGame reward).State from some S)
+            calc
+              _ = expect
+                  ((quittingGame reward).stageActionDist deviationProfile history)
+                  (fun _ => quittingNonSoloIndicator reward who
+                    (show (quittingGame reward).State from some S)) := by
+                apply congrArg (expect
+                  ((quittingGame reward).stageActionDist deviationProfile history))
+                funext action
+                change ι → Bool at action
+                have htrans : (quittingGame reward).transition (some S) action =
+                    PMF.pure
+                      (show (quittingGame reward).State from some S) := rfl
+                rw [htrans, expect_pure]
+              _ = quittingNonSoloIndicator reward who
+                    (show (quittingGame reward).State from some S) :=
+                expect_const _ _
+              _ = _ := by rw [quittingLiveIndicator_some, mul_zero, add_zero]
     _ = quittingNonSoloMass reward deviationProfile who time +
         (1 - opponentContinue) *
           quittingLiveMass reward deviationProfile time := by

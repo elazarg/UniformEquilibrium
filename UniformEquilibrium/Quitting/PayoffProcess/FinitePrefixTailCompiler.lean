@@ -318,8 +318,8 @@ theorem QuittingPayoffProcess.finitePrefixSoloExitProfile_isεEquilibrium
         cutoff * δ ≤ ε) :
     process.IsεEquilibrium
       (process.finitePrefixSoloExitProfile cutoff hδ hη) ε := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   intro who deviation hadapted
   let profile := process.finitePrefixSoloExitProfile cutoff hδ hη
   let tailValue := process.soloExitTailValue cutoff η hη

@@ -211,7 +211,7 @@ theorem pathRightDerivative_chronologicalCadlagPath_eq_zero_of_not_singleton
       (fun rank ↦ slope (controlled.point rank)) atTop (nhds 0) := by
     exact squeeze_zero hslope_nonneg hslope_le hbound_tendsto
   let rightFilter := nhdsWithin time (Ioo time 1)
-  letI : rightFilter.NeBot := left_nhdsWithin_Ioo_neBot htime_lt_one
+  let : rightFilter.NeBot := left_nhdsWithin_Ioo_neBot htime_lt_one
   have hcontrolled_right : Tendsto controlled.point atTop rightFilter := by
     rw [tendsto_nhdsWithin_iff]
     exact ⟨controlled.tendsto,

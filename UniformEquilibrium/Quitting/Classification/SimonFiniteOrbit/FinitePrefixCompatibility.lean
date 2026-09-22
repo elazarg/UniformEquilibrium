@@ -33,7 +33,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -129,7 +129,7 @@ theorem abs_quittingRootSequenceBackwardPayoff_sub_tailVector_le
         dsimp only [charge]
         by_cases hcard : Fintype.card ι = 0
         · simp [hcard]
-        · letI : Nonempty ι :=
+        · let : Nonempty ι :=
             Fintype.card_pos_iff.mp (Nat.pos_of_ne_zero hcard)
           let player : ι := Classical.choice inferInstance
           have hM : 0 ≤ M :=

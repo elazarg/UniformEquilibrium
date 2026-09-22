@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -1526,12 +1526,16 @@ theorem ofRealized_hasExactObstacleCap [Nonempty ι]
       exists_finitePrefixQuitValue_eq_early
         (reward := reward) anchor.roots who
           realized.block.start realized.block.extra
-    refine ⟨stageOfRealized realized offset,
-      stageOfRealized_mem realized offset, ?_⟩
+    let stageOffset : Fin realized.block.length :=
+      ⟨offset.val, by
+        change offset.val < realized.block.extra + 1
+        exact offset.isLt⟩
+    refine ⟨stageOfRealized realized stageOffset,
+      stageOfRealized_mem realized stageOffset, ?_⟩
     rw [stageOfRealized_pureQuitPayoff]
     change
       finitePrefixQuitValue (reward := reward) anchor.roots who
-          realized.block.start offset.val =
+          realized.block.start stageOffset.val =
         ((quittingFiniteBoundaryHolonomy reward anchor.roots
           realized.block.start realized.block.extra).bestResponse who).early
     rw [quittingFiniteBoundaryHolonomy_bestResponse_early]
@@ -2039,7 +2043,7 @@ theorem IsSemanticallyCoherent.sExit_le_one [Nonempty ι]
     {cylinder : MarkedAbsorptionCylinder ι}
     (h : cylinder.IsSemanticallyCoherent reward) :
     cylinder.sExit ≤ 1 :=
-  Finset.prod_le_one
+  Finset.prod_le_one₀
     (fun who _ => h.exitFactor_nonneg who)
     (fun who _ => h.exitFactor_le_one who)
 

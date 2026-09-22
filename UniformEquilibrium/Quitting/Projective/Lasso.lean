@@ -50,7 +50,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {K : ℕ} {ι : Type} [Fintype ι] [DecidableEq ι]
 

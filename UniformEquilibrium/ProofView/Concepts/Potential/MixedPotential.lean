@@ -25,7 +25,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.PMFProduct
 
 namespace KernelGame
@@ -56,7 +56,7 @@ theorem mixedPotential_update [DecidableEq ι] [Fintype ι]
     (σ : ∀ i, PMF (G.Strategy i)) (who : ι) (τ : PMF (G.Strategy who)) :
     G.mixedPotential Φ (Function.update σ who τ) =
       expect τ (fun a => G.mixedPotential Φ (Function.update σ who (PMF.pure a))) := by
-  letI (i : ι) : Fintype (G.Strategy i) := Fintype.ofFinite (G.Strategy i)
+  let (i : ι) : Fintype (G.Strategy i) := Fintype.ofFinite (G.Strategy i)
   unfold mixedPotential
   rw [pmfPi_update_bind]
   rw [expect_bind]
@@ -112,6 +112,7 @@ theorem IsExactPotential.mixedExtension_isExactPotential
   have heu := G.mixedExtension_eu_update σ who τ
   have hpot := G.mixedPotential_update Φ σ who τ
   rw [heu, hpot]
+  change PMF (G.Strategy who) at τ
   calc
     expect τ
         (fun a =>
@@ -256,7 +257,7 @@ theorem finitePotentialTeamGame_mixedExtension_eu [Fintype ι] (G : KernelGame �
     (σ : ∀ i, PMF (G.Strategy i)) (who : ι) :
     (G.finitePotentialTeamGame Φ).mixedExtension.eu σ who =
       G.mixedPotential Φ σ := by
-  letI (i : ι) : Fintype (G.Strategy i) := Fintype.ofFinite (G.Strategy i)
+  let (i : ι) : Fintype (G.Strategy i) := Fintype.ofFinite (G.Strategy i)
   unfold KernelGame.eu KernelGame.mixedExtension mixedPotential finitePotentialTeamGame
   change expect ((pmfPi (A := G.Strategy) σ).bind PMF.pure) Φ =
     expect (pmfPi (A := G.Strategy) σ) Φ
@@ -279,7 +280,14 @@ theorem finitePotentialTeamGame_isExactPotential [DecidableEq ι] (G : KernelGam
     (Φ : Profile G → ℝ) :
     (G.finitePotentialTeamGame Φ).IsExactPotential Φ := by
   intro who σ s'
-  simp [finitePotentialTeamGame_eu]
+  have hbase : (G.finitePotentialTeamGame Φ).eu σ who = Φ σ :=
+    G.finitePotentialTeamGame_eu Φ σ who
+  have hdev :
+      (G.finitePotentialTeamGame Φ).eu (Function.update σ who s') who =
+        Φ (Function.update σ who s') :=
+    G.finitePotentialTeamGame_eu Φ (Function.update σ who s') who
+  rw [hbase, hdev]
+  rfl
 
 open Classical in
 /-- Weighted exact potentials preserve unilateral mixed-deviation comparisons

@@ -56,7 +56,7 @@ theorem boxComplementarityLocalSignedCount_sampled_endpoints_eq_of_cleared
         radius hmesh hcleared face cell hincident 0
       exact if_congr h rfl rfl)
   convert htransport using 1 <;> apply Finset.sum_congr rfl <;> intro endpoint _ <;>
-    simp only [ite_mul, one_mul, zero_mul] <;> congr 1
+    simp only [ite_mul, one_mul, zero_mul]
 
 /-- The original continuous family's local signed counts agree at its actual endpoints
 at every common sufficiently fine positive resolution. Cross-resolution independence is separate. -/

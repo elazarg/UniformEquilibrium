@@ -56,7 +56,7 @@ theorem polynomialMap_graph {n m : ℕ}
   refine ⟨Math.PolynomialSignCell.SignFormula.conjunction
     (List.ofFn (fun index : Fin m => .atom (equations index) 0)), ?_⟩
   intro point
-  simp only [RealPolynomialSignFormula.HoldsAt, Set.mem_setOf_eq,
+  simp only [RealPolynomialSignFormula.HoldsAt, Set.mem_ofPred_eq,
     Math.PolynomialSignCell.SignFormula.holds_conjunction_iff,
     List.mem_ofFn, forall_exists_index, forall_apply_eq_imp_iff,
     Math.PolynomialSignCell.SignFormula.Holds, sign_eq_zero_iff,
@@ -77,8 +77,8 @@ theorem image_polynomialMap {n m : ℕ} {set : Set (Fin n → ℝ)}
   · rintro ⟨input, hinput, rfl⟩
     refine ⟨Fin.append input (evaluatePolynomialMap polynomials input), ?_, ?_⟩
     · constructor
-      · simpa only [Set.mem_setOf_eq, Function.comp_def, Fin.append_left] using hinput
-      · simp only [Set.mem_setOf_eq, Fin.append_left, Fin.append_right]
+      · simpa only [Set.mem_ofPred_eq, Function.comp_def, Fin.append_left] using hinput
+      · simp only [Set.mem_ofPred_eq, Fin.append_left, Fin.append_right]
     · funext index
       exact Fin.append_right input (evaluatePolynomialMap polynomials input) index
   · rintro ⟨point, ⟨hinput, hgraphPoint⟩, rfl⟩

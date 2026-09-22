@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math Math.Probability Set Topology
+open Filter _root_.Math _root_.Math.Probability Set Topology
 
 /-- Endpoint transition difference of one response from its source
 baseline. -/

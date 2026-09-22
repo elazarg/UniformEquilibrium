@@ -84,12 +84,12 @@ def transAt (first : Path x y) (second : Path y z) (split : ℝ)
   source' := by
     have hzero : (((0 : unitInterval) : ℝ) ≤ split) := by
       simpa using hsplitPos.le
-    rw [if_pos hzero]
+    rw [ite_eq_left hzero]
     simp
   target' := by
     have hone : ¬(((1 : unitInterval) : ℝ) ≤ split) := by
       simpa using not_le_of_gt hsplitOne
-    rw [if_neg hone]
+    rw [ite_eq_right hone]
     change second.extend ((1 - split) / (1 - split)) = z
     have hdenom : 1 - split ≠ 0 := sub_ne_zero.mpr (ne_of_gt hsplitOne)
     rw [div_self hdenom]
@@ -112,7 +112,7 @@ def transAt (first : Path x y) (second : Path y z) (split : ℝ)
   change (if (time : ℝ) ≤ split then
       first.extend ((time : ℝ) / split)
     else second.extend (((time : ℝ) - split) / (1 - split))) = _
-  rw [if_neg (not_le_of_gt htime)]
+  rw [ite_eq_right (not_le_of_gt htime)]
 
 /-- The normalized parameter in the first path before the prescribed split. -/
 def transAtLeftParameter {split : ℝ} (hsplitPos : 0 < split)

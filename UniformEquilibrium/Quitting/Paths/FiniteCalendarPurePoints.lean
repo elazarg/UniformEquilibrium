@@ -22,15 +22,15 @@ player. -/
 def quittingFiniteCalendarPurePoint {deadline : ℕ}
     (action : ι → QuittingFiniteDeadlineTimingAction deadline) :
     MixedSimplex ι (fun _ ↦ QuittingFiniteDeadlineTimingAction deadline) :=
-  fun who ↦ stdSimplex.pure (action who)
+  fun who ↦ Convexity.StdSimplex.pure (action who)
 
 omit [DecidableEq ι] in
 @[simp] theorem quittingFiniteCalendarPurePoint_apply {deadline : ℕ}
     (action : ι → QuittingFiniteDeadlineTimingAction deadline)
     (who : ι) (choice : QuittingFiniteDeadlineTimingAction deadline) :
-    quittingFiniteCalendarPurePoint action who choice =
+    (quittingFiniteCalendarPurePoint action who).weights choice =
       if choice = action who then 1 else 0 := by
-  rfl
+  simp [quittingFiniteCalendarPurePoint, Finsupp.single_apply, eq_comm]
 
 /-- The literal all-Never point on any finite calendar. -/
 def quittingFiniteCalendarAllNeverPoint (deadline : ℕ) :
@@ -49,16 +49,16 @@ omit [DecidableEq ι] in
 @[simp] theorem quittingFiniteCalendarAllNeverPoint_apply
     (deadline : ℕ) (who : ι)
     (choice : QuittingFiniteDeadlineTimingAction deadline) :
-    quittingFiniteCalendarAllNeverPoint deadline who choice =
+    (quittingFiniteCalendarAllNeverPoint deadline who).weights choice =
       if choice = none then 1 else 0 := by
-  rfl
+  simp [quittingFiniteCalendarAllNeverPoint]
 
 @[simp] theorem quittingFiniteCalendarPureCoalitionPoint_apply
     {deadline : ℕ} (coalition : Finset ι) (date : Fin deadline)
     (who : ι) (choice : QuittingFiniteDeadlineTimingAction deadline) :
-    quittingFiniteCalendarPureCoalitionPoint coalition date who choice =
+    (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights choice =
       if choice = (if who ∈ coalition then some date else none) then 1 else 0 := by
-  rfl
+  simp [quittingFiniteCalendarPureCoalitionPoint]
 
 theorem quittingFiniteCalendarPureCoalitionPoint_empty {deadline : ℕ}
     (date : Fin deadline) :
@@ -86,7 +86,8 @@ omit [DecidableEq ι] in
   obtain ⟨who, hwho⟩ := terminal.property
   have hproduct :
       ∏ member ∈ terminal.val,
-          quittingFiniteCalendarAllNeverPoint deadline member (some time) = 0 := by
+          (quittingFiniteCalendarAllNeverPoint deadline member).weights
+            (some time) = 0 := by
     apply Finset.prod_eq_zero hwho
     simp
   rw [hproduct, zero_mul]
@@ -134,7 +135,7 @@ mass exactly one. -/
   classical
   change (∑ time : Fin deadline,
     (∏ who ∈ coalition,
-      quittingFiniteCalendarPureCoalitionPoint coalition date who (some time)) *
+      (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights (some time)) *
       ∏ who ∈ coalitionᶜ,
         quittingFiniteCalendarStrictTail
           (quittingFiniteCalendarPureCoalitionPoint coalition date) who time) = 1
@@ -144,10 +145,10 @@ mass exactly one. -/
       intro time _
       by_cases htime : time = date
       · subst time
-        simp only [if_pos]
+        simp only [ite_eq_left]
         have hmembers :
             ∏ who ∈ coalition,
-              quittingFiniteCalendarPureCoalitionPoint coalition date who
+              (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights
                 (some date) = 1 := by
           apply Finset.prod_eq_one
           intro who hwho
@@ -162,15 +163,15 @@ mass exactly one. -/
           exact strictTail_pureCoalition_of_notMem coalition date date who
             (by simpa using hwho)
         rw [hmembers, houtsiders, one_mul]
-      · rw [if_neg htime]
+      · rw [ite_eq_right htime]
         obtain ⟨who, hwho⟩ := hcoalition
         have hzero :
-            quittingFiniteCalendarPureCoalitionPoint coalition date who
+            (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights
               (some time) = 0 := by
           simp [hwho, htime]
         have hproduct :
             ∏ member ∈ coalition,
-              quittingFiniteCalendarPureCoalitionPoint coalition date member
+              (quittingFiniteCalendarPureCoalitionPoint coalition date member).weights
                 (some time) = 0 := by
           exact Finset.prod_eq_zero hwho hzero
         rw [hproduct, zero_mul]
@@ -206,26 +207,26 @@ theorem quittingFiniteCalendarCoalitionMass_pureCoalition_of_ne
       rw [hproduct, mul_zero]
     · obtain ⟨who, hwhoTerminal, hwhoCoalition⟩ := Set.not_subset.mp hsubset
       have hpoint :
-          quittingFiniteCalendarPureCoalitionPoint coalition date who
+          (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights
             (some date) = 0 := by
         have hnotMem : who ∉ coalition := hwhoCoalition
         simp [hnotMem]
       have hproduct :
           ∏ member ∈ terminal.val,
-            quittingFiniteCalendarPureCoalitionPoint coalition date member
+            (quittingFiniteCalendarPureCoalitionPoint coalition date member).weights
               (some date) = 0 :=
         Finset.prod_eq_zero hwhoTerminal hpoint
       rw [hproduct, zero_mul]
   · obtain ⟨who, hwho⟩ := terminal.property
     have hpoint :
-        quittingFiniteCalendarPureCoalitionPoint coalition date who
+        (quittingFiniteCalendarPureCoalitionPoint coalition date who).weights
           (some time) = 0 := by
       by_cases hwhoCoalition : who ∈ coalition
       · simp [hwhoCoalition, htime]
       · simp [hwhoCoalition]
     have hproduct :
         ∏ member ∈ terminal.val,
-          quittingFiniteCalendarPureCoalitionPoint coalition date member
+          (quittingFiniteCalendarPureCoalitionPoint coalition date member).weights
             (some time) = 0 :=
       Finset.prod_eq_zero hwho hpoint
     rw [hproduct, zero_mul]

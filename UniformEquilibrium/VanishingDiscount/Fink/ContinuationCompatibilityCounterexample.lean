@@ -34,7 +34,8 @@ namespace GameTheory
 namespace StochasticGame
 namespace FinkContinuationCompatibilityCounterexample
 
-open Math.LinearAlgebra Math.Probability
+open Math.LinearAlgebra _root_.Math.Probability
+open _root_.Maths.LinearProgramming
 
 abbrev Player := Bool
 abbrev State := Bool

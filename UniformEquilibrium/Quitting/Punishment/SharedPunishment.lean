@@ -32,7 +32,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability
+open StochasticGame _root_.Math.Probability
 
 /-! ## Opponent-coordinate congruence -/
 
@@ -148,7 +148,7 @@ theorem exists_quittingTwoPlayerSharedPunishmentProfile_lt_add
     ∃ profile : (quittingGame reward).BehaviorProfile, ∀ who,
       quittingBestReplyValue reward profile who <
         quittingPunishmentValue reward who + ε := by
-  haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  have : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   have hseparate : ∀ who : Bool,
       ∃ profile : (quittingGame reward).BehaviorProfile,
@@ -255,7 +255,7 @@ private theorem bddBelow_range_quittingTwoPlayerSharedStationaryGap
 theorem quittingTwoPlayerSharedPunishmentExcess_eq_zero
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) :
     quittingTwoPlayerSharedPunishmentExcess reward = 0 := by
-  haveI : Nonempty ((quittingGame reward).BehaviorProfile) :=
+  have : Nonempty ((quittingGame reward).BehaviorProfile) :=
     ⟨quittingAlwaysContinueProfile reward⟩
   apply le_antisymm
   · refine le_of_forall_pos_le_add fun ε hε => ?_
@@ -287,7 +287,7 @@ theorem quittingTwoPlayerSharedPunishmentExcess_eq_zero
 theorem quittingTwoPlayerSharedStationaryPunishmentExcess_eq_zero
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) :
     quittingTwoPlayerSharedStationaryPunishmentExcess reward = 0 := by
-  haveI : Nonempty (Bool → PMF Bool) :=
+  have : Nonempty (Bool → PMF Bool) :=
     ⟨fun _ => PMF.pure false⟩
   apply le_antisymm
   · refine le_of_forall_pos_le_add fun ε hε => ?_

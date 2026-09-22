@@ -6,6 +6,7 @@ Released under the MIT license as described in the file LICENSE.
 import MathUE.Minimax.ShapleySnow
 import MathUE.CofiniteIdeal
 import MathUE.MultivariateElimination
+import Mathlib.Algebra.MvPolynomial.CommRing
 import Mathlib.Algebra.MvPolynomial.Funext
 
 /-!
@@ -125,15 +126,18 @@ theorem discountedStochastic_borderedKernelPoly_ne_zero
       (discountedStochasticEntry r T)).submatrix rows cols
   let D : MvPolynomial (Option κ) ℝ :=
     (borderedMatrix B).det
-  haveI : Nonempty (Fin sz) := ⟨⟨0, hr⟩⟩
+  have _ : Nonempty (Fin sz) := ⟨⟨0, hr⟩⟩
   intro hzero
   have heval_matrix (a : Option κ → ℝ) :
       B.map (MvPolynomial.eval a) =
         a none • R + (1 - a none) •
           L (fun z => a (some z)) := by
     ext i j
-    simp [B, R, L, Matrix.map_apply,
-      Matrix.submatrix_apply, Finset.mul_sum]
+    simp only [B, Matrix.map_apply, Matrix.submatrix_apply,
+      Matrix.of_apply, Matrix.add_apply, Matrix.smul_apply,
+      smul_eq_mul]
+    simpa only [R, L, Matrix.submatrix_apply, Matrix.of_apply] using
+      eval_discountedStochasticEntry r T (rows i) (cols j) a
   have hhalf (u : κ → ℝ) :
       (1 / 2 : ℝ) * (M u).det -
           u target * (borderedMatrix (M u)).det = 0 := by
@@ -293,7 +297,7 @@ theorem exists_nonzero_mvPolynomial_of_forall_mem_exists
     ∃ Q : MvPolynomial σ ℝ, Q ≠ 0 ∧
       ∀ t ∈ S, MvPolynomial.eval (assign t) Q = 0 := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
+  let _ : Fintype ι := Fintype.ofFinite ι
   refine ⟨∏ k, (if F k ≠ 0 then F k else 1), ?_,
     fun t ht => ?_⟩
   · rw [Finset.prod_ne_zero_iff]
@@ -304,7 +308,7 @@ theorem exists_nonzero_mvPolynomial_of_forall_mem_exists
   · obtain ⟨k, hk0, hkeval⟩ := hcov t ht
     rw [map_prod]
     apply Finset.prod_eq_zero (Finset.mem_univ k)
-    rw [if_pos hk0]
+    rw [ite_eq_left hk0]
     exact hkeval
 
 /-- A square kernel size, bounded by the row cardinality, together with its
@@ -368,7 +372,7 @@ def finOneSumUnitEquivFinTwo : Sum (Fin 1) Unit ≃ Fin 2 where
 noncomputable instance instFiniteActionKernelShape
     (I J : Type*) [Fintype I] [Finite J] :
     Finite (ActionKernelShape I J) := by
-  letI : Fintype J := Fintype.ofFinite J
+  let _ : Fintype J := Fintype.ofFinite J
   unfold ActionKernelShape
   infer_instance
 
@@ -406,7 +410,8 @@ theorem mvBorderedKernelDenominator_pureActionKernelShape
         (fun _ : Fin 1 => i) (fun _ : Fin 1 => j))).det = 1
   rw [← Matrix.det_reindex_self finOneSumUnitEquivFinTwo]
   rw [Matrix.det_fin_two]
-  simp [finOneSumUnitEquivFinTwo, borderedMatrix, Matrix.reindex_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  simp [finOneSumUnitEquivFinTwo, borderedMatrix]
 
 /-- The bordered-kernel equation of a pure `1 × 1` kernel is its selected
 entry minus the target value coordinate. -/
@@ -428,7 +433,8 @@ theorem mvBorderedKernelPoly_pureActionKernelShape
   rw [Matrix.det_eq_elem_of_subsingleton _ 0]
   rw [← Matrix.det_reindex_self finOneSumUnitEquivFinTwo]
   rw [Matrix.det_fin_two]
-  simp [finOneSumUnitEquivFinTwo, borderedMatrix, Matrix.reindex_apply]
+  simp only [Matrix.reindex_apply, Matrix.submatrix_apply]
+  simp [finOneSumUnitEquivFinTwo, borderedMatrix]
 
 /-- A positive-size kernel shape whose bordered determinant is a nonzero
 formal polynomial. -/
@@ -498,7 +504,9 @@ theorem exists_active_mvBorderedKernelPoly_eval_zero_of_discountedShapleySystem
           (MvPolynomial.eval a) =
         A.submatrix rows cols := by
     ext i j
-    simp [a, A, Matrix.map_apply, Matrix.submatrix_apply]
+    simp only [Matrix.map_apply, Matrix.submatrix_apply,
+      Matrix.of_apply, eval_discountedStochasticEntry]
+    rfl
   let k : ActionKernelShape I J :=
     ⟨⟨sz, by omega⟩, rows, cols⟩
   have hden :
@@ -664,7 +672,7 @@ noncomputable def discountedShapleyActiveCoordinatePoly
     (target : κ) :
     MvPolynomial (Option κ) ℝ := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   exact
     ∏ k,
@@ -682,7 +690,7 @@ theorem discountedShapleyActiveCoordinatePoly_ne_zero
     (target : κ) :
     discountedShapleyActiveCoordinatePoly r T target ≠ 0 := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   rw [discountedShapleyActiveCoordinatePoly,
     Finset.prod_ne_zero_iff]
@@ -722,7 +730,7 @@ theorem discountedShapleyActiveKernelPoly_ne_zero_of_active
     (hk : IsActiveKernelShape
       (discountedStochasticEntry (r target) (T target)) k) :
     discountedShapleyActiveKernelPoly r T target k ≠ 0 := by
-  rw [discountedShapleyActiveKernelPoly, if_pos hk]
+  rw [discountedShapleyActiveKernelPoly, ite_eq_left hk]
   rcases k with ⟨sz, rows, cols⟩
   unfold mvBorderedKernelPoly
   have hp := discountedStochastic_borderedKernelPoly_ne_zero
@@ -743,7 +751,7 @@ theorem prod_discountedShapleyActiveKernelPoly
       MvPolynomial.optionEquivRight ℝ κ
         (discountedShapleyActiveCoordinatePoly r T target) := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   rw [discountedShapleyActiveCoordinatePoly, map_prod]
   apply Finset.prod_congr rfl
@@ -912,7 +920,7 @@ theorem localizedDiscountedShapleyActiveKernelPoly_pure
   classical
   rw [localizedDiscountedShapleyActiveKernelPoly,
     discountedShapleyActiveKernelPoly,
-    if_pos (isActiveKernelShape_pureActionKernelShape
+    ite_eq_left (isActiveKernelShape_pureActionKernelShape
       (discountedStochasticEntry (r s) (T s)) (row s) (col s)),
     mvBorderedKernelPoly_pureActionKernelShape]
   simp only [Math.MultivariateElimination.affineLinearSystemPoly,
@@ -1140,7 +1148,7 @@ theorem moduleFinite_discountedShapleyNonvanishingBranchIdeal_of_pure
               (algebraMap (Polynomial ℝ)
                 (FractionRing (Polynomial ℝ))))) := by
   classical
-  letI :
+  let _ :
       Module.Finite (FractionRing (Polynomial ℝ))
         (MvPolynomial κ (FractionRing (Polynomial ℝ)) ⧸
           discountedShapleyActiveBranchIdeal r T
@@ -1400,7 +1408,7 @@ theorem exists_activeBranch_eval_zero_denominator_ne_zero_of_discountedShapleySy
   choose branch hactive hdenominator _hpoly hkernel using hexists
   refine ⟨branch, hactive, ?_, ?_⟩
   · intro s
-    rw [discountedShapleyActiveKernelPoly, if_pos (hactive s)]
+    rw [discountedShapleyActiveKernelPoly, ite_eq_left (hactive s)]
     calc
       MvPolynomial.eval₂ (Polynomial.evalRingHom l) (w l)
           (MvPolynomial.optionEquivRight ℝ κ
@@ -1498,14 +1506,14 @@ theorem eval_discountedShapleyActiveCoordinatePoly_eq_zero
         (fun x => Option.casesOn x l (w l))
         (discountedShapleyActiveCoordinatePoly r T target) = 0 := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   obtain ⟨k, hk, _hkdenominator, _hkpoly, hkeval⟩ :=
     exists_active_mvBorderedKernelPoly_eval_zero_of_discountedShapleySystem
       r T w S hw target hl
   rw [discountedShapleyActiveCoordinatePoly, map_prod]
   apply Finset.prod_eq_zero (Finset.mem_univ k)
-  rw [if_pos hk]
+  rw [ite_eq_left hk]
   exact hkeval
 
 /-- The product of all nonzero local bordered-kernel candidates for one
@@ -1517,7 +1525,7 @@ noncomputable def discountedShapleyCoordinatePoly
     (target : κ) :
     MvPolynomial (Option κ) ℝ := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   exact
     ∏ k,
@@ -1536,7 +1544,7 @@ theorem discountedShapleyCoordinatePoly_ne_zero
     (target : κ) :
     discountedShapleyCoordinatePoly r T target ≠ 0 := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   rw [discountedShapleyCoordinatePoly, Finset.prod_ne_zero_iff]
   intro k _
@@ -1559,7 +1567,7 @@ theorem mvBorderedKernelPoly_dvd_discountedShapleyCoordinatePoly
         (some target) k ∣
       discountedShapleyCoordinatePoly r T target := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   let F : ActionKernelShape I J →
       MvPolynomial (Option κ) ℝ :=
@@ -1592,14 +1600,14 @@ theorem eval_discountedShapleyCoordinatePoly_eq_zero
         (fun x => Option.casesOn x l (w l))
         (discountedShapleyCoordinatePoly r T target) = 0 := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   obtain ⟨k, hk, hkeval⟩ :=
     exists_nonzero_mvBorderedKernelPoly_eval_zero_of_discountedShapleySystem
       r T w S hw target hl
   rw [discountedShapleyCoordinatePoly, map_prod]
   apply Finset.prod_eq_zero (Finset.mem_univ k)
-  rw [if_pos hk]
+  rw [ite_eq_left hk]
   exact hkeval
 
 /-- The coupled ideal generated only by denominator-active local kernel
@@ -1628,7 +1636,7 @@ theorem map_discountedShapleyActiveSystemIdeal
         (Set.range fun s =>
           ∏ k, localizedDiscountedShapleyActiveKernelPoly r T s k) := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   rw [discountedShapleyActiveSystemIdeal, Ideal.map_span]
   apply congrArg Ideal.span
@@ -1841,7 +1849,7 @@ theorem exists_nonzero_bivariateRelation_of_nonvanishingActiveBranches_moduleFin
           discountedShapleyNonvanishingBranchIdeal r T branch := by
     by_cases hactive : ∀ s, IsActiveKernelShape
         (discountedStochasticEntry (r s) (T s)) (branch s)
-    · letI : Module.Finite (FractionRing (Polynomial ℝ))
+    · let _ : Module.Finite (FractionRing (Polynomial ℝ))
           (MvPolynomial (Option κ) (FractionRing (Polynomial ℝ)) ⧸
             (discountedShapleyNonvanishingBranchIdeal r T branch).map
               (MvPolynomial.map
@@ -1852,7 +1860,7 @@ theorem exists_nonzero_bivariateRelation_of_nonvanishingActiveBranches_moduleFin
         exists_nonzero_coordinateRelation_mem_of_nonvanishingBranch_moduleFinite
           r T branch target
     · obtain ⟨s, hs⟩ := Classical.not_forall.mp hactive
-      letI : Module.Finite (FractionRing (Polynomial ℝ))
+      let _ : Module.Finite (FractionRing (Polynomial ℝ))
           (MvPolynomial (Option κ) (FractionRing (Polynomial ℝ)) ⧸
             (discountedShapleyNonvanishingBranchIdeal r T branch).map
               (MvPolynomial.map
@@ -1928,7 +1936,7 @@ theorem exists_nonzero_bivariateRelation_of_activeBranches_finite_or_denominator
       r T w S hw
   intro branch hactive
   rcases hbranch branch hactive with hfinite | hnilpotent
-  · letI : Module.Finite (FractionRing (Polynomial ℝ))
+  · let _ : Module.Finite (FractionRing (Polynomial ℝ))
         (MvPolynomial κ (FractionRing (Polynomial ℝ)) ⧸
           discountedShapleyActiveBranchIdeal r T branch) :=
       hfinite
@@ -2361,7 +2369,7 @@ theorem discountedShapleySystem_twoState_kernelPair_elimination_dichotomy
           Polynomial.eval (w l target)
             (Polynomial.map (Polynomial.evalRingHom l) R) = 0 := by
   classical
-  letI : Fintype (ActionKernelShape I J) :=
+  let _ : Fintype (ActionKernelShape I J) :=
     Fintype.ofFinite (ActionKernelShape I J)
   let Pt : ActionKernelShape I J →
       MvPolynomial (Option κ) ℝ :=

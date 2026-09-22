@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -706,11 +706,11 @@ theorem quittingElementaryTailRoots_succ_shift
   unfold quittingElementaryTailRoots quittingPhaseSwitchRoots
   by_cases htime : time < cutoff
   · have hsucc : 1 + time < cutoff + 1 := by omega
-    rw [if_pos hsucc, if_pos htime]
+    rw [ite_eq_left hsucc, ite_eq_left htime]
     congr 1
     omega
   · have hsucc : ¬1 + time < cutoff + 1 := by omega
-    rw [if_neg hsucc, if_neg htime]
+    rw [ite_eq_right hsucc, ite_eq_right htime]
     congr 1
     omega
 
@@ -819,9 +819,9 @@ theorem quittingElementaryTailRoots_add_shift
   by_cases htime : time < tailCutoff
   · have habsolute : mark + time < mark + tailCutoff :=
       Nat.add_lt_add_left htime mark
-    rw [if_pos habsolute, if_pos htime]
+    rw [ite_eq_left habsolute, ite_eq_left htime]
   · have habsolute : ¬mark + time < mark + tailCutoff := by omega
-    rw [if_neg habsolute, if_neg htime]
+    rw [ite_eq_right habsolute, ite_eq_right htime]
     congr 1
     omega
 

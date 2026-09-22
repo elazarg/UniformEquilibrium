@@ -119,7 +119,7 @@ theorem exists_minimalFinQuittingCounterexample
     (hcounterexample : Nonempty (QuittingTerminalExploitabilityWitness reward)) :
     Nonempty MinimalFinQuittingCounterexample := by
   classical
-  letI : Nonempty ι := hcounterexample.some.nonempty_players
+  let : Nonempty ι := hcounterexample.some.nonempty_players
   have hcanonical : Nonempty (QuittingTerminalExploitabilityWitness
       (quittingRewardReindex (Fintype.equivFin ι) reward)) :=
     (nonempty_terminalExploitabilityWitness_reindex_fin_iff reward).2 hcounterexample
@@ -172,7 +172,7 @@ theorem properRestriction_exists_uniformEquilibriumPayoff
       (quittingGame
         (quittingRewardRestrict minimal.reward players)).IsUniformEquilibriumPayoff
           none payoff := by
-  letI : Nonempty {i // i ∈ players} := hplayers.to_subtype
+  let : Nonempty {i // i ∈ players} := hplayers.to_subtype
   apply minimal.exists_uniformEquilibriumPayoff_of_card_lt
   simpa using (Finset.card_lt_iff_ne_univ players).2 hproper
 
@@ -186,7 +186,7 @@ theorem not_hasQuittingExactPlayerDeletionAtGap
     ¬ HasQuittingExactPlayerDeletionAtGap minimal.reward owner
       minimal.witness.terminalGap := by
   rintro ⟨hdeletedNonempty, hdeletedGap⟩
-  letI : Nonempty (QuittingDeletedPlayer owner) := hdeletedNonempty
+  let : Nonempty (QuittingDeletedPlayer owner) := hdeletedNonempty
   have hcard' : Fintype.card (QuittingDeletedPlayer owner) <
       minimal.playerCount := by
     simpa using card_quittingDeletedPlayer_lt owner

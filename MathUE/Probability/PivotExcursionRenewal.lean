@@ -303,7 +303,7 @@ theorem expect_pivotEliminatedRenewalKernel_value
         value successor (time + 1) := by
     by_cases successor_eq : successor = pivot
     · subst successor
-      rw [dif_pos rfl, expect_map]
+      rw [dite_eq_left rfl, expect_map]
       have hpivot := expect_pivotExcursionRenewalLaw_value
         kernel pivot value harmonic exit_pos (time + 1)
       change expect (pivotExcursionRenewalLaw kernel pivot exit_pos)
@@ -316,7 +316,7 @@ theorem expect_pivotEliminatedRenewalKernel_value
         apply congrArg (value outcome.1.1)
         omega]
       exact hpivot
-    · rw [dif_neg successor_eq, expect_pure]
+    · rw [dite_eq_right successor_eq, expect_pure]
   simp_rw [hinner]
   exact (harmonic.2 source.1 time).symm
 

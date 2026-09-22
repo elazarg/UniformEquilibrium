@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -121,7 +121,7 @@ theorem quittingSingleAnchor_continueReward_le
         simp [quittingRootPayoff, hquit]]
       rw [show absorbingBound action = bound by
         dsimp [absorbingBound]
-        rw [if_pos hquit]
+        rw [ite_eq_left hquit]
         simp]
       exact hface ⟨quittingQuitters action, hquit⟩ (by
         simp [quittingQuitters, hanchor])
@@ -129,7 +129,7 @@ theorem quittingSingleAnchor_continueReward_le
           simp [quittingRootPayoff, hquit]]
       rw [show absorbingBound action = 0 by
         dsimp [absorbingBound]
-        rw [if_neg hquit]
+        rw [ite_eq_right hquit]
         simp]
   have hupper : quittingRootAbsorbingContribution reward opponentRoot anchor ≤
       Math.Probability.expect (pmfPi opponentRoot) absorbingBound := by
@@ -207,7 +207,7 @@ theorem quittingSingleAnchorQuitValue_eq_one_of_membership
       rw [show quittingRootPayoff reward (0 : Payoff ι) action anchor =
           reward ⟨quittingQuitters action, hquit⟩ anchor by
         simp [quittingRootPayoff, hquit]]
-      rw [hmembership ⟨quittingQuitters action, hquit⟩, if_pos hmem]
+      rw [hmembership ⟨quittingQuitters action, hquit⟩, ite_eq_left hmem]
     _ = 1 := Math.Probability.expect_const _ _
 
 /-- Literal anchor membership implies the full singleton-anchor dominance
@@ -225,7 +225,7 @@ theorem QuittingSingleAnchorMembershipReward.inducedDominance
   · rw [hvalue]
     norm_num
   · intro terminal hnot
-    rw [hmembership terminal, if_neg hnot, hvalue]
+    rw [hmembership terminal, ite_eq_right hnot, hvalue]
     norm_num
 
 /-- The induced singleton-anchor row is exact terminal Nash against every

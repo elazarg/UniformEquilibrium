@@ -181,10 +181,10 @@ theorem exists_finite_exceptionalEvaluationNet
                 quittingExceptionalEvaluation reward menu exception center profile| <
               error := by
   classical
-  letI : ∀ who : {who : iota // who ≠ exception},
+  let : ∀ who : {who : iota // who ≠ exception},
       Fintype {strategy // strategy ∈ menu who.1} :=
     fun who => (hmenuFinite who.1 who.2).fintype
-  letI : ∀ who : {who : iota // who ≠ exception},
+  let : ∀ who : {who : iota // who ≠ exception},
       Nonempty {strategy // strategy ∈ menu who.1} :=
     fun who => (_hmenuNonempty who.1 who.2).to_subtype
   let bound : Real := max 1 (quittingRewardBound reward)
@@ -216,8 +216,8 @@ theorem exists_finite_exceptionalEvaluationNet
   choose center hcenterMem hcenterClose using hcenterExists
   have hfamilySubtype : Nonempty {strategy // strategy ∈ family} :=
     hfamilyNonempty.to_subtype
-  letI : Nonempty {strategy // strategy ∈ family} := hfamilySubtype
-  letI : Fintype {point // point ∈ centers} := hcentersFinite.fintype
+  let : Nonempty {strategy // strategy ∈ family} := hfamilySubtype
+  let : Fintype {point // point ∈ centers} := hcentersFinite.fintype
   let indexedCenter : {strategy // strategy ∈ family} ->
       {point // point ∈ centers} := fun strategy =>
     ⟨center strategy strategy.property, hcenterMem strategy strategy.property⟩
@@ -386,10 +386,10 @@ theorem exists_quittingBehaviorProfile_forall_mem_oneException_payoff_le_add
       obtain ⟨center, hcenter, _hclose⟩ :=
         hordinaryCover ⟨who, Ne.symm hwho⟩ strategy hstrategy
       exact ⟨center, by simpa [menu, hwho] using hcenter⟩
-  letI : ∀ who,
+  let : ∀ who,
       Fintype ((quittingBehaviorMenuForm reward menu).sig.Strategy who) :=
     fun who => (hmenuFinite who).fintype
-  letI : ∀ who,
+  let : ∀ who,
       Nonempty ((quittingBehaviorMenuForm reward menu).sig.Strategy who) :=
     fun who => (hmenuNonempty who).to_subtype
   obtain ⟨mixed, hnash⟩ := exists_isNash_mixed

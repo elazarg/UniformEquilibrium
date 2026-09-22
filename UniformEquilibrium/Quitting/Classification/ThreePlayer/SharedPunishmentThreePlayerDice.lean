@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSharedThreePlayer
 
 namespace QuittingSharedThreePlayerDice
@@ -64,25 +64,25 @@ theorem quittingRootPayoff_eq_exposureEvent
         then -1 else 0 := by
   by_cases hevent : action who = true ∨
       (action (next who) = true ∧ action (other who) = false)
-  · rw [if_pos hevent]
+  · rw [ite_eq_left hevent]
     have hquit : (quittingQuitters action).Nonempty := by
       rcases hevent with hself | hbad
       · exact ⟨who, by simpa [quittingQuitters] using hself⟩
       · exact ⟨next who, by simpa [quittingQuitters] using hbad.1⟩
     unfold quittingRootPayoff
-    rw [dif_pos hquit]
+    rw [dite_eq_left hquit]
     unfold reward
-    rw [if_pos]
+    rw [ite_eq_left]
     rcases hevent with hself | hbad
     · exact Or.inl (by simpa [quittingQuitters] using hself)
     · exact Or.inr ⟨by simpa [quittingQuitters] using hbad.1,
         by simpa [quittingQuitters] using hbad.2⟩
-  · rw [if_neg hevent]
+  · rw [ite_eq_right hevent]
     by_cases hquit : (quittingQuitters action).Nonempty
     · unfold quittingRootPayoff
-      rw [dif_pos hquit]
+      rw [dite_eq_left hquit]
       unfold reward
-      rw [if_neg]
+      rw [ite_eq_right]
       intro hreward
       apply hevent
       rcases hreward with hself | hbad
@@ -90,7 +90,7 @@ theorem quittingRootPayoff_eq_exposureEvent
       · exact Or.inr ⟨by simpa [quittingQuitters] using hbad.1,
           by simpa [quittingQuitters] using hbad.2⟩
     · unfold quittingRootPayoff
-      rw [dif_neg hquit]
+      rw [dite_eq_right hquit]
       simp
 
 private theorem expect_pmfPi_update_pure_congr
@@ -126,7 +126,7 @@ theorem quittingStationaryFixedOpponentsQuitValue_eq_neg_one
         (fun _ => (-1 : ℝ)) := by
           apply expect_pmfPi_update_pure_congr root who true
           intro action haction
-          rw [quittingRootPayoff_eq_exposureEvent, if_pos (Or.inl haction)]
+          rw [quittingRootPayoff_eq_exposureEvent, ite_eq_left (Or.inl haction)]
     _ = -1 := expect_const _ _
 
 @[simp] theorem quittingFixedOpponentsQuitValue_eq_neg_one
@@ -201,7 +201,7 @@ theorem quittingPunishmentValue_eq_neg_one (who : Player) :
     rw [quittingStationaryUnilateralCap_pureSetRoot] at h
     cases who <;> simpa [reward, next, other] using h
   · rw [quittingPunishmentValue_eq_stationaryPunishmentValue]
-    haveI : Nonempty (Player → PMF Bool) :=
+    have : Nonempty (Player → PMF Bool) :=
       ⟨fun _ => PMF.pure false⟩
     exact le_ciInf fun root =>
       le_quittingStationaryUnilateralCap_of_forall_le reward who
@@ -250,8 +250,8 @@ theorem quittingRootSequencePureTimeTerminalValue_some_le_none
       rw [quittingPureTimeHazard_some_of_ne hne,
         quittingPureTimeHazard_none]
       simp only [PMF.pure_apply,
-        if_neg (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
-        if_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
+        ite_eq_right (by decide : (true : Bool) ≠ false), ENNReal.toReal_zero,
+        ite_true, ENNReal.toReal_one, zero_mul, one_mul, zero_add]
       have htime : start + (fuel + 1) = start + 1 + fuel := by omega
       rw [htime]
       change

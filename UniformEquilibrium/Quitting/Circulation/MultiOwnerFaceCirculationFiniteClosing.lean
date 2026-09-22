@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set Math.PMFProduct Math.Probability
+open Finset Set Math.PMFProduct _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {r : Finset ι → ι → ℝ} {floor : ι → ℝ} {L : ℕ} [NeZero L]

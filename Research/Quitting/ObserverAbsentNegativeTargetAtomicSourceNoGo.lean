@@ -37,7 +37,7 @@ noncomputable section
 namespace GameTheory
 namespace ObserverAbsentNegativeTargetAtomicSourceNoGo
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingDynamicDebtOwnerTransferCounterexample
 open ForcedOwnerContinueFaceLossSupportNoGo
 
@@ -66,7 +66,7 @@ theorem half_le_forcedOwnerOutsiderDefect :
       quittingForcedOwnerOutsiderCoordinateDefect reward ownerQuitRoot owner
         outsider := by
     unfold quittingForcedOwnerOutsiderCoordinateDefect
-    rw [if_neg hne]
+    rw [ite_eq_right hne]
     exact hraw.trans (le_max_right 0 _)
   exact hcoordinateLower.trans hcoordinate
 

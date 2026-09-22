@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
@@ -75,6 +75,7 @@ theorem quittingFiniteDeadlineTimingProfile_eq_literalRootStack
     simp only [quittingRootSequenceProfile, Nat.zero_add, roots, profile,
       quittingProfileLiveRoot, quittingFiniteDeadlineTimingProfile,
       quittingCompactStoppingLawProfile, quittingStoppingLawBehaviorStrategy]
+    rfl
   have htail : quittingRootSequenceProfile reward roots deadline =
       quittingAlwaysContinueProfile reward := by
     funext who time history

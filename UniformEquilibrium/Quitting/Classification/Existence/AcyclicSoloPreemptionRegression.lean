@@ -18,7 +18,7 @@ noncomputable section
 
 namespace GameTheory.AcyclicSoloPreemptionRegression
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-! ## The weak sink and sharp `q J` factor -/
 

@@ -22,9 +22,11 @@ is asserted.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -134,14 +136,14 @@ theorem quittingTerminalOutcomeEventMass_eq_rootSequenceTerminalValue
   simp only [eventReward, Pi.zero_apply, mul_zero, zero_add,
     quittingTerminalOutcomeEventReward]
   simp_rw [mul_ite, mul_one, mul_zero]
-  rw [if_neg hnone]
+  rw [ite_eq_right hnone]
   simp only [zero_add]
   apply Finset.sum_congr rfl
   intro terminal _
   by_cases hmem : some terminal ∈ event
-  · simp only [hmem, if_true]
+  · simp only [hmem, ite_true]
     simpa only [eventReward] using hlaw (some terminal)
-  · simp only [hmem, if_false]
+  · simp only [hmem, ite_false]
 
 /-- Event masses of a complete terminal law and its complement add to one.
 -/
@@ -153,7 +155,8 @@ theorem quittingTerminalOutcomeEventMass_add_compl
       quittingTerminalOutcomeEventMass reward profile eventᶜ = 1 := by
   unfold quittingTerminalOutcomeEventMass
   rw [← Finset.sum_union]
-  · simpa using (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+  · simpa using (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
   · exact Finset.disjoint_left.2 fun outcome houtcome hcompl =>
       (Finset.mem_compl.mp hcompl) houtcome
 

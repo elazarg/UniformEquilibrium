@@ -26,7 +26,7 @@ namespace GameTheory
 namespace MetrizableMarkedAbsorptionCompletion
 
 open Filter Set StochasticGame
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 open TopologicalSpace
 open scoped Topology
 

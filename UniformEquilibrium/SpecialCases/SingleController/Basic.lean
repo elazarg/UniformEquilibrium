@@ -176,7 +176,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.MeanErgodic
+open _root_.Math.Probability Math.MeanErgodic
 
 -- ============================================================================
 -- Single-controller games
@@ -820,7 +820,7 @@ theorem vriezeDecodeX_apply_toReal (G : StochasticGame Bool) [Finite G.State]
     (hsum : ∑ i, G.vriezeDecodeXVal controller z s i = 1) (i : G.Act (!controller)) :
     ((G.vriezeDecodeX controller z s) i).toReal = G.vriezeDecodeXVal controller z s i := by
   unfold vriezeDecodeX
-  rw [dif_pos ⟨hnn, hsum⟩]
+  rw [dite_eq_left ⟨hnn, hsum⟩]
   exact weightsToPMF_apply_toReal _ hnn hsum i
 
 private theorem max_sub_max_neg (a : ℝ) : max a 0 - max (-a) 0 = a := by
@@ -1500,8 +1500,8 @@ private theorem sum_prod_ite_eq_left (G : StochasticGame Bool) [Finite G.State]
       ∑ p : G.State × β, (if p.1 = t then f p.1 p.2 else 0) from
     Finset.sum_congr rfl fun p _ => by
       by_cases h : p.1 = t
-      · rw [if_pos h.symm, if_pos h]
-      · rw [if_neg (fun heq => h heq.symm), if_neg h]]
+      · rw [ite_eq_left h.symm, ite_eq_left h]
+      · rw [ite_eq_right (fun heq => h heq.symm), ite_eq_right h]]
   exact sum_prod_ite_eq G t f
 
 open Classical in
@@ -1515,8 +1515,8 @@ private theorem sum_prod_mul_ite_left_one (G : StochasticGame Bool) [Finite G.St
       ∑ p : G.State × β, (if t = p.1 then h p.1 p.2 else 0) from
     Finset.sum_congr rfl fun p _ => by
       by_cases hh : t = p.1
-      · rw [if_pos hh, if_pos hh, mul_one]
-      · rw [if_neg hh, if_neg hh, mul_zero]]
+      · rw [ite_eq_left hh, ite_eq_left hh, mul_one]
+      · rw [ite_eq_right hh, ite_eq_right hh, mul_zero]]
   exact sum_prod_ite_eq_left G t h
 
 open Classical in
@@ -2074,11 +2074,11 @@ theorem exists_completedPolicy_of_vriezeDualFeasible
     have : τ s = weightsToPMF (fun j => z s j / (∑ j', z s j'))
         (fun j => div_nonneg (hdual.z_nonneg s j) hs.le)
         (by rw [← Finset.sum_div]; exact div_self hs.ne') := by
-      rw [hτdef]; exact dif_pos hs
+      rw [hτdef]; exact dite_eq_left hs
     rw [this]
     exact weightsToPMF_apply_toReal _ _ _ j
   · intro s hs
-    have hτs : τ s = PMF.pure (jOf s hs) := by rw [hτdef]; exact dif_neg hs
+    have hτs : τ s = PMF.pure (jOf s hs) := by rw [hτdef]; exact dite_eq_right hs
     obtain ⟨t, ht, hor⟩ := hjOf s hs
     refine ⟨t, ?_, hor⟩
     have hker : G.controllerKernel controller τ s =
@@ -2117,7 +2117,7 @@ is already absorbing). -/
 
 namespace SingleControllerExample
 
-open GameTheory Math.Probability
+open GameTheory _root_.Math.Probability
 
 /-- Player `false` is the controller (a single, inert action); player `true`
 is the noncontroller (two actions, affecting the payoff at the transient
@@ -2260,7 +2260,7 @@ theorem transientProjectionWitness :
   harmonic := by
     intro s
     rw [controllerKernel_τ_eq]
-    simp
+    exact expect_const _ _
   le_ergodicProjectionWorstReward := by
     intro s
     rw [ergodicProjection_worstReward_τ]

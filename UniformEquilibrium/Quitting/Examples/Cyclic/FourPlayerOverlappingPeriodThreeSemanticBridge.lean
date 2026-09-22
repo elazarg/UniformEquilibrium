@@ -15,7 +15,7 @@ noncomputable section
 namespace GameTheory.FourPlayerOverlappingPeriodThree
 
 open Math.Interval Math.Interval.RationalPolynomial
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 /-- Flatten a reward row and player into its normalized reward coordinate. -/
 def rewardParameterIndex (row : RewardRow) (who : Player) : Fin 60 :=
@@ -639,9 +639,58 @@ theorem excludedValue_eq_excludedEndpointRowSum
           (rewardCoordinatesOfNormalizedParameter parameter)))
         (hazardOfNormalized point phase) who := by
   rw [sigmaValue_eq_pureQuitEndpointRowSum]
-  fin_cases phase <;> fin_cases who <;>
-    simp [supportedPureQuitExpression, pureQuitRows,
-      pureQuitEndpointRowSum, rowContains, Fin.sum_univ_succ]
+  unfold supportedPureQuitExpression
+  rw [evalReal_polynomialListSum]
+  simp only [List.map_map]
+  let term : RewardRow → ℝ := fun row =>
+    opponentCoalitionMass (hazardOfNormalized point phase) who
+        (coalitionOfRow row) *
+      rewardCoordinatesOfNormalizedParameter parameter row who
+  have heval : List.map
+      (evalReal (leadingCoordinatePoint point parameter) ∘
+        fun row => supportedEndpointTerm phase who row)
+        (pureQuitRows phase who) =
+      List.map term (pureQuitRows phase who) := by
+    apply List.map_congr_left
+    intro row _
+    exact evalReal_leadingCoordinatePoint_supportedEndpointTerm
+      point parameter phase who row
+  rw [heval]
+  change ((pureQuitRows phase who).map term).sum = _
+  have hnodup : (pureQuitRows phase who).Nodup := by
+    fin_cases phase <;> fin_cases who <;> decide
+  rw [← List.sum_toFinset term hnodup]
+  unfold pureQuitEndpointRowSum
+  simp_rw [weightOfReward_rewardOfCoordinates_coalitionOfRow]
+  have hmembers : ∀ row ∈ pureQuitRows phase who,
+      who ∈ coalitionOfRow row := by
+    fin_cases phase <;> fin_cases who <;> intro row <;>
+      fin_cases row <;> decide
+  let fullTerm : RewardRow → ℝ := fun row =>
+    if who ∈ coalitionOfRow row then term row else 0
+  change (∑ row ∈ (pureQuitRows phase who).toFinset, term row) =
+    ∑ row, fullTerm row
+  calc
+    (∑ row ∈ (pureQuitRows phase who).toFinset, term row) =
+        ∑ row ∈ (pureQuitRows phase who).toFinset, fullTerm row := by
+      apply Finset.sum_congr rfl
+      intro row hrow
+      have hmember := hmembers row (by simpa using hrow)
+      dsimp only [fullTerm]
+      rw [ite_eq_left hmember]
+    _ = ∑ row, fullTerm row := by
+      apply Finset.sum_subset (Finset.subset_univ _)
+      intro row _ hnot
+      by_cases hmember : who ∈ coalitionOfRow row
+      · have hunsupported : row ∉ pureQuitRows phase who := by
+          simpa using hnot
+        dsimp only [fullTerm]
+        rw [ite_eq_left hmember]
+        unfold term
+        rw [opponentCoalitionMass_eq_zero_of_pureQuitRow_not_supported
+          point phase who row hmember hunsupported, zero_mul]
+      · dsimp only [fullTerm]
+        rw [ite_eq_right hmember]
 
 @[simp] theorem evalReal_leadingCoordinatePoint_supportedExcludedExpression
     (point : HazardCoordinate → ℝ) (parameter : Fin 60 → ℝ)

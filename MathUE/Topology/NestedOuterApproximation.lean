@@ -110,7 +110,7 @@ theorem nestedOuter_isClosed (horizon : ℕ) :
       ⋂ level : Fin (horizon + 1),
         if 0 < level.1 then system.outerNeighborhood level.1 else Set.univ by
     ext point
-    simp only [nestedOuter, mem_setOf_eq, mem_iInter,
+    simp only [nestedOuter, mem_ofPred_eq, mem_iInter,
       mem_ite_univ_right]
     constructor
     · intro h level hlevel

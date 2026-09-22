@@ -24,7 +24,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace SorinAbsorbingGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 /-! ## Live-state mass -/
 

@@ -120,7 +120,7 @@ theorem abs_bestResponseAverageAgainstProfile_le
     (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
     (s₀ : G.State) (T : ℕ) (τ : G.BehaviorProfile) :
     |G.bestResponseAverageAgainstProfile s₀ T who τ| ≤ C := by
-  haveI := G.nonempty_behaviorStrategy who
+  have := G.nonempty_behaviorStrategy who
   have hpt : ∀ dev : G.BehaviorStrategy who,
       |G.finiteAveragePayoff s₀ T (Function.update τ who dev) who| ≤ C :=
     fun dev => G.abs_finiteAveragePayoff_le hC0 hC s₀ T _
@@ -174,7 +174,7 @@ theorem punishmentLevel_le_add_of_isUniformEquilibriumPayoff
     {C : ℝ} (hC0 : 0 ≤ C) (hC : ∀ s a, |G.stagePayoff s a who| ≤ C)
     (hv : G.IsUniformEquilibriumPayoff s₀ v) {ε : ℝ} (hε : 0 < ε) :
     ∃ T₀ : ℕ, ∀ T, T₀ ≤ T → G.punishmentLevel s₀ T who ≤ v who + ε := by
-  haveI := G.nonempty_behaviorStrategy who
+  have := G.nonempty_behaviorStrategy who
   obtain ⟨σ, T₀, hσ⟩ := hv (ε / 2) (half_pos hε)
   refine ⟨T₀, fun T hT => ?_⟩
   obtain ⟨hNash, hOnPath⟩ := hσ T hT

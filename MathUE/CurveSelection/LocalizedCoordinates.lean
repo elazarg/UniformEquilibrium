@@ -57,7 +57,7 @@ theorem eval₂_overParameter_localizedCoordinate
         (Localization.Away
           (Ideal.Quotient.mk J g))
         (Ideal.Quotient.mk J Q) := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     parameterPolynomialAlgebra J parameter
   induction Q using MvPolynomial.induction_on with
@@ -105,7 +105,7 @@ theorem eval₂_overParameter_localizedCoordinate_eq_zero
             (Ideal.Quotient.mk J g)))
         (localizedCoordinate J g)
         (overParameter Q) = 0 := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     parameterPolynomialAlgebra J parameter
   rw [eval₂_overParameter_localizedCoordinate
@@ -137,10 +137,10 @@ theorem localizedGermParameterAlgHom_localizedCoordinate
         x J parameter g hg hJmem
         (localizedCoordinate J g i) =
       ((fun n => x n i) : GermField) := by
-  letI : Algebra (Polynomial ℝ)
+  let : Algebra (Polynomial ℝ)
       (MvPolynomial σ ℝ ⧸ J) :=
     parameterPolynomialAlgebra J parameter
-  letI : Algebra (Polynomial ℝ) GermField :=
+  let : Algebra (Polynomial ℝ) GermField :=
     parameterGermAlgebra x parameter
   change
     localizedGermParameterAlgHom
@@ -209,7 +209,7 @@ theorem eventually_presentationSectionMap_eq
           (localizedCoordinate J g)
           (a n) =
         x n := by
-  letI : Fintype σ := Fintype.ofFinite σ
+  let : Fintype σ := Fintype.ofFinite σ
   have hcoordinate :
       ∀ i : σ,
         ∀ᶠ n in

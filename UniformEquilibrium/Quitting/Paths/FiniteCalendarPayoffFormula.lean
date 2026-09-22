@@ -206,7 +206,8 @@ theorem evalReal_quittingFiniteCalendarRawPayoffExpressionWithTerms_eq_rawPayoff
     (profile : MixedSimplex (Fin players)
       (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (hcalendar : ∀ who choice,
-      (calendarTerm (who, choice)).evalReal environment = profile who choice) :
+      (calendarTerm (who, choice)).evalReal environment =
+        (profile who).weights choice) :
     (quittingFiniteCalendarRawPayoffExpressionWithTerms rewardTerm calendarTerm
         observer).evalReal environment =
       quittingFiniteCalendarRawPayoff
@@ -356,7 +357,8 @@ theorem quittingFiniteCalendarRawStrictFormulaWithTerms_holdsAt_profile_iff
     (profile : MixedSimplex (Fin players)
       (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (hcalendar : ∀ who choice,
-      (calendarTerm (who, choice)).evalReal environment = profile who choice) :
+      (calendarTerm (who, choice)).evalReal environment =
+        (profile who).weights choice) :
     (quittingFiniteCalendarRawStrictFormulaWithTerms rewardTerm calendarTerm).HoldsAt
         environment ↔
       ∃ observer,
@@ -373,12 +375,13 @@ theorem quittingFiniteCalendarRawStrictFormulaWithTerms_holdsAt_profile_iff
     constructor
     · intro who choice
       rw [hcalendar]
-      exact (profile who).property.1 choice
+      exact (profile who).weights_nonneg choice
     · intro who
-      have htotal := (profile who).property.2
+      have htotal := (profile who).total_of_fintype
       rw [Fintype.sum_option] at htotal
       calc
-        _ = profile who none + ∑ time : Fin deadline, profile who (some time) := by
+        _ = (profile who).weights none +
+            ∑ time : Fin deadline, (profile who).weights (some time) := by
           congr 1
           · exact hcalendar who none
           · apply Finset.sum_congr rfl

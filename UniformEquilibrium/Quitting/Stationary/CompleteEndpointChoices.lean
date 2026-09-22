@@ -14,7 +14,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -59,7 +59,7 @@ theorem quittingCompleteCap_stationary_eq_unilateralCap
     (root : ι → PMF Bool) (who : ι) :
     quittingContinuationBestResponseValue reward (quittingStationaryProfile reward root) who =
       quittingStationaryUnilateralCap reward root who := by
-  letI : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
+  let : Nonempty ((quittingGame reward).BehaviorStrategy who) :=
     ⟨(quittingStationaryProfile reward root) who⟩
   apply le_antisymm
   · unfold quittingContinuationBestResponseValue

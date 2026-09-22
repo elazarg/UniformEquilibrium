@@ -15,7 +15,7 @@ Elementary rigidity facts for probability mass functions on `Bool`.
 
 namespace Math.ProbabilityMassFunction
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Expectation of a real-valued function under the uniform Boolean PMF. -/
 @[simp] theorem expect_uniformOfFintype_bool (f : Bool → ℝ) :

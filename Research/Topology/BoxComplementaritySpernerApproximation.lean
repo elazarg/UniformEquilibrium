@@ -244,7 +244,7 @@ theorem completeSimplexCoordinate_gain_neg_of_lt_one
       problem p hp vertices hcomplete who) who < 0 := by
   have hviolation := isGridViolation_completeSimplexCoordinate
     problem p hp vertices hcomplete who
-  rw [BoxComplementarityProblem.IsGridViolation] at hviolation
+  unfold BoxComplementarityProblem.IsGridViolation at hviolation
   rcases hviolation with hnegative | hupp
   · exact hnegative.2
   · change (boxComplementarityCompleteSimplexCoordinatePoint

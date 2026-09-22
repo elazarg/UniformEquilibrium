@@ -15,7 +15,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [DecidableEq ι]
 
@@ -169,7 +169,7 @@ theorem quittingDirectedMembershipGap_eq_stretch_of_quittingOpponent
     directedMembershipGap_pairDifference original who preferred action hnonempty]
   change (if preferred then _ - _ else _ - _) = _
   change final ⟨opponents, hnonempty⟩ who = _ at hfalse
-  cases preferred <;> simp only [Bool.false_eq_true, if_false, if_true]
+  cases preferred <;> simp only [Bool.false_eq_true, ite_false, ite_true]
   · rw [hfalse, htrue]
     exact Math.unitEndpointStretch_sub_reverse alpha _ _
   · rw [hfalse, htrue]

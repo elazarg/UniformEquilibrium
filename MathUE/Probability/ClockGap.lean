@@ -152,7 +152,7 @@ theorem nonempty_controlledRightSequence
       obtain ⟨point, hpointContinuous, hpoint⟩ :=
         hdense.exists_mem_open isOpen_Ioo (nonempty_Ioo.mpr hlower_lt)
       have hcontinuous : ContinuousAt distribution point := by
-        simpa only [discontinuities, mem_compl_iff, mem_setOf_eq, not_not] using
+        simpa only [discontinuities, mem_compl_iff, mem_ofPred_eq, not_not] using
           hpointContinuous
       have hprobe_point : probe rank < point :=
         (le_max_left _ _).trans_lt hpoint.1
@@ -238,7 +238,7 @@ theorem cdf_of_tendsto
   obtain ⟨upper, hupperContinuous, hupper⟩ :=
     hdense.exists_between hlaterGap
   have hupperContinuous' : ContinuousAt distribution upper := by
-    simpa only [discontinuities, mem_compl_iff, mem_setOf_eq, not_not] using
+    simpa only [discontinuities, mem_compl_iff, mem_ofPred_eq, not_not] using
       hupperContinuous
   have htimeUpper : time < upper := htimeLater.trans hupper.1
   obtain ⟨approach, _happroachStrictAnti, happroachMem,
@@ -246,7 +246,7 @@ theorem cdf_of_tendsto
     hdense.exists_seq_strictAnti_tendsto_of_lt htimeUpper
   have heq (stage : ℕ) : distribution upper = distribution (approach stage) := by
     have happroachContinuous : ContinuousAt distribution (approach stage) := by
-      simpa only [discontinuities, mem_compl_iff, mem_setOf_eq, not_not] using
+      simpa only [discontinuities, mem_compl_iff, mem_ofPred_eq, not_not] using
         (happroachMem stage).2
     have hlower := cdf_tendsto_of_tendsto_of_continuousAt
       hlaw happroachContinuous

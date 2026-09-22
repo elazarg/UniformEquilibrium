@@ -85,7 +85,7 @@ theorem collisionMassFormulaOn_nonneg (x : ι → ℝ) (s : Finset ι)
       have h1s : ∀ i ∈ s, x i ≤ 1 :=
         fun i hi => h1 i (Finset.mem_insert_of_mem hi)
       have hprod1 : ∏ i ∈ s, (1 - x i) ≤ 1 :=
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun i hi => sub_nonneg.mpr (h1s i hi))
           (fun i hi => by linarith [h0s i hi])
       rw [collisionMassFormulaOn_insert x ha]
@@ -138,7 +138,7 @@ theorem coordinate_le_one_sub_prod_one_sub (x : ι → ℝ) (s : Finset ι)
     Finset.prod_nonneg fun i hi =>
       sub_nonneg.mpr (h1 i (Finset.mem_of_mem_erase hi))
   have hprod1 : ∏ i ∈ s.erase a, (1 - x i) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun i hi => sub_nonneg.mpr (h1 i (Finset.mem_of_mem_erase hi)))
       (fun i hi => by linarith [h0 i (Finset.mem_of_mem_erase hi)])
   rw [hfactor]
@@ -158,7 +158,7 @@ theorem pairMulSum_le_choose_mul_one_sub_prod_sq
     simp
   let absorption := 1 - ∏ i ∈ s, (1 - x i)
   have hprod1 : ∏ i ∈ s, (1 - x i) ≤ 1 :=
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun i hi => sub_nonneg.mpr (h1 i hi))
       (fun i hi => by linarith [h0 i hi])
   have habsorption0 : 0 ≤ absorption := sub_nonneg.mpr hprod1

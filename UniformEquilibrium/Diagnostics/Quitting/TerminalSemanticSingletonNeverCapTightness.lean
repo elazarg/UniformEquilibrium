@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set StochasticGame Math.Probability Math.PMFProduct
+open Filter Set StochasticGame _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -83,7 +83,7 @@ theorem one_sub_neverMass_mul_opponentNeverProduct_le_singletonOutcomeMass
         simp
       simpa [opponentNever, quittingBehaviorOpponentNeverProduct,
         quittingSingletonTerminal, hcompl] using
-        (Finset.prod_le_prod
+        (Finset.prod_le_prod₀
           (s := (Finset.univ : Finset ι).erase owner)
           (fun other _ => quittingHazardNeverMass_nonneg
             (quittingBehaviorLiveHazard reward (profile other)))
@@ -148,6 +148,7 @@ theorem quittingLiveMassLimit_opponentOnly_eq_opponentNeverProduct
   funext time
   simp [quittingOpponentOnlyProfile, quittingBehaviorLiveHazard,
     Finset.ne_of_mem_erase hother]
+  rfl
 
 omit [DecidableEq ι] in
 theorem quittingBehaviorFiniteStoppingMass_nonneg
@@ -189,7 +190,7 @@ theorem quittingRootOpponentAbsorptionMass_profileLiveRoot_le_sum_finiteStopping
   have hprod : (∏ other ∈ opponents, never other) ≤
       ∏ other ∈ opponents,
         (quittingProfileLiveRoot reward profile 0 other false).toReal := by
-    exact Finset.prod_le_prod
+    exact Finset.prod_le_prod₀
       (fun other _ => quittingHazardNeverMass_nonneg _)
       hneverContinue
   rw [quittingRootOpponentAbsorptionMass_eq_one_sub_prod]
@@ -305,7 +306,7 @@ theorem terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward
     (hnever : point.2 none = 1 - p)
     (hdebt : quittingTerminalSemanticDebt point.1 owner = 0) :
     point.1.2 owner = reward (quittingSingletonTerminal owner) owner := by
-  letI : Nonempty ι := ⟨owner⟩
+  let : Nonempty ι := ⟨owner⟩
   rw [quittingTerminalSemanticLawCarrier, mem_closure_iff_seq_limit] at hpoint
   obtain ⟨points, hpoints, hpointsTendsto⟩ := hpoint
   choose profiles hprofiles using hpoints
@@ -353,7 +354,8 @@ theorem terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward
           (reward := reward) point
           (mem_terminalSemanticLawCarrier_of_joint_tendsto
             reward profiles point hprofilesTendsto)
-        have := hmassSimplex.1 none
+        have := (GameTheory.Math.Probability.mem_simplexWeights.mp
+          hmassSimplex).1 none
         rw [hnever] at this
         have hpLe : p ≤ 1 := by linarith
         exact lt_of_le_of_ne hpLe hpone
@@ -434,7 +436,8 @@ theorem terminalSemanticLaw_singletonNever_zeroDebt_cap_eq_singletonReward
   have hpLt : p < 1 := by
     have hmassSimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex
       (reward := reward) point hcarrier
-    have := hmassSimplex.1 none
+    have := (GameTheory.Math.Probability.mem_simplexWeights.mp
+      hmassSimplex).1 none
     rw [hnever] at this
     have hpLe : p ≤ 1 := by linarith
     exact lt_of_le_of_ne hpLe hpone

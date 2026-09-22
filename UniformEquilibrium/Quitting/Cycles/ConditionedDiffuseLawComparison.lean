@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -165,7 +165,7 @@ theorem coalitionMass_singleton_le_scaled_div
       (∏ player ∈ ({who} : Finset ι)ᶜ, (1 - x player)) ≤
         ∏ player ∈ ({who} : Finset ι)ᶜ,
           (1 - scale * x player) := by
-    apply Finset.prod_le_prod hnonneg
+    apply Finset.prod_le_prod₀ hnonneg
     intro player hplayer
     exact hfactor player hplayer
   unfold coalitionMass
@@ -265,7 +265,7 @@ theorem sum_quittingTailConditionedCoalitionMass_eq_one
         unfold quittingRootAbsorptionMass
         rfl
   rw [herase]
-  simp only [quittingTailConditionedCoalitionMass, if_pos]
+  simp only [quittingTailConditionedCoalitionMass, ite_eq_left]
   rw [← add_div]
   have hnumerator :
       quittingStationaryContinueMass (roots time) *
@@ -356,7 +356,7 @@ theorem quittingRootCoalitionMass_rescaled_le_conditioned_singleton
       quittingTailConditionedCoalitionMass roots time {who} =
         coalitionMass (fun player => scale * x player) {who} / scale := by
     simp only [quittingTailConditionedCoalitionMass,
-      show ({who} : Finset ι) ≠ ∅ by simp, if_false]
+      show ({who} : Finset ι) ≠ ∅ by simp, ite_false]
     unfold quittingRootCoalitionMass
     rw [hsourceRates]
   rw [hsource]
@@ -402,7 +402,7 @@ theorem conditionedCoalitionCollisionMass_le_rescaledTotal_sq_div_two
         have hne : coalition ≠ ∅ := by
           intro hempty
           simp [hempty] at hcard
-        simp only [quittingTailConditionedCoalitionMass, hne, if_false]
+        simp only [quittingTailConditionedCoalitionMass, hne, ite_false]
         rfl
       _ = collisionMass (fun player => scale * x player) / scale := by
         change collisionMass (quittingRootQuitRates (roots time)) / scale =
@@ -449,7 +449,7 @@ theorem abs_conditionedCoalitionMass_empty_sub_rescaled_empty_le
       quittingTailDiffuseRescaledTotal roots time ^ 2 / 2 := by
   have hsource : quittingTailConditionedCoalitionMass roots time ∅ =
       1 - quittingTailConditionedAbsorptionWeight roots time := by
-    simp only [quittingTailConditionedCoalitionMass, if_pos]
+    simp only [quittingTailConditionedCoalitionMass, ite_eq_left]
     rw [← quittingTailConditionedContinuationWeight]
     exact quittingTailConditionedContinuationWeight_eq_one_sub
       roots time hpositive

@@ -35,7 +35,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.PMFProduct Math.Probability
+open _root_.Math Math.PMFProduct _root_.Math.Probability
 open Math.ProbabilityMassFunction
 
 variable {ι : Type} {G : StochasticGame ι}
@@ -69,7 +69,7 @@ private def mixedNashProfile
     fun who => inferInstanceAs (Finite (G.Act who))
   haveI : ∀ who, Nonempty (stageGame.Strategy who) :=
     fun who => inferInstanceAs (Nonempty (G.Act who))
-  haveI : Finite stageGame.Outcome :=
+  have : Finite stageGame.Outcome :=
     inferInstanceAs (Finite G.JointAct)
   exact Classical.choose stageGame.mixed_nash_exists
 
@@ -80,11 +80,11 @@ private theorem mixedNashProfile_isNash
       (mixedNashProfile (G := G) payoff) := by
   let stageGame : KernelGame ι :=
     KernelGame.ofPureEU G.Act payoff
-  haveI : ∀ who, Finite (stageGame.Strategy who) :=
+  have : ∀ who, Finite (stageGame.Strategy who) :=
     fun who => inferInstanceAs (Finite (G.Act who))
-  haveI : ∀ who, Nonempty (stageGame.Strategy who) :=
+  have : ∀ who, Nonempty (stageGame.Strategy who) :=
     fun who => inferInstanceAs (Nonempty (G.Act who))
-  haveI : Finite stageGame.Outcome :=
+  have : Finite stageGame.Outcome :=
     inferInstanceAs (Finite G.JointAct)
   exact Classical.choose_spec stageGame.mixed_nash_exists
 
@@ -278,7 +278,7 @@ theorem unilateralContinuation_le_nodeValue
       (G := G) continuationPayoff
   have best_response :=
     nash who deviation
-  haveI :
+  have :
       Finite
         (KernelGame.ofPureEU G.Act continuationPayoff).Outcome :=
     inferInstanceAs (Finite G.JointAct)

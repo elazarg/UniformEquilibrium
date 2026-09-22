@@ -65,16 +65,16 @@ private theorem expect_le_expect_of_le_on_support
       apply ProbabilityMassFunction.expect_congr_on_support
       intro state state_mem
       dsimp only [supportedLeft]
-      rw [if_pos state_mem]
+      rw [ite_eq_left state_mem]
     _ ≤ expect law right := by
       apply expect_mono
       intro state
       by_cases state_mem : state ∈ law.support
       · dsimp only [supportedLeft]
-        rw [if_pos state_mem]
+        rw [ite_eq_left state_mem]
         exact le_on_support state state_mem
       · dsimp only [supportedLeft]
-        rw [if_neg state_mem]
+        rw [ite_eq_right state_mem]
 
 omit [Fintype S] in
 private theorem sum_expected_cost_le_telescope_of_expected_drift
@@ -187,7 +187,7 @@ theorem expected_epochCost_le_supportedBill_of_expectedDrift
         law cost potential startEpoch epoch := by
   by_cases early : epoch < startEpoch
   · unfold supportedMovingKernelEpochBill
-    rw [if_pos early]
+    rw [ite_eq_left early]
     unfold earlyEpochExpectedCostBill
     calc
       (∑ offset ∈ Finset.range horizon,
@@ -212,7 +212,7 @@ theorem expected_epochCost_le_supportedBill_of_expectedDrift
           exact abs_nonneg _
   · have tail : startEpoch ≤ epoch := Nat.le_of_not_gt early
     unfold supportedMovingKernelEpochBill
-    rw [if_neg early]
+    rw [ite_eq_right early]
     have telescope :=
       sum_expected_cost_le_telescope_of_expected_drift
         law (cost epoch) (potential epoch)
@@ -443,7 +443,7 @@ private theorem tendsto_supportedMovingKernelEpochBill_ratio
   refine Filter.Tendsto.congr' ?_ bill_ratio
   filter_upwards [eventually_ge_atTop startEpoch] with epoch epoch_ge
   unfold supportedMovingKernelEpochBill
-  rw [if_neg (Nat.not_lt.mpr epoch_ge)]
+  rw [ite_eq_right (Nat.not_lt.mpr epoch_ge)]
 
 /-- The expected one-step drift premise by itself yields a sublinear
 all-horizon account.  This is the most general form of the construction; it

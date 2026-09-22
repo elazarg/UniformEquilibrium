@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory.UniqueSureNeverReactivationRegression
 
-open GameTheory Math.Probability Math.ProbabilityMassFunction
+open GameTheory _root_.Math.Probability Math.ProbabilityMassFunction
 
 abbrev Player := Fin 4
 
@@ -394,7 +394,6 @@ theorem second_completeCap_eq_sourcePayoff :
     reward root second hcontracts, second_quitNow_source_payoff,
     second_never_source_payoff, source_payoff]
   norm_num [owner, first, second]
-  simp
 
 def dummy : Player := 3
 

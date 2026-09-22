@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 /-- The two-player reward table `(1,3)`, `(3,1)`, `(2,2)` on the two
 singletons and the pair. -/

@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -232,7 +232,7 @@ private theorem nonempty_of_positive_punishmentFloorReachable_cycle
       state state)
     (hpositive : 0 < cycle.chargeSum) : Nonempty ι := by
   rcases isEmpty_or_nonempty ι with hempty | hnonempty
-  · letI : IsEmpty ι := hempty
+  · let : IsEmpty ι := hempty
     exfalso
     have hedgeZero : ∀ edge : QuittingPunishmentFloorReachableEdge reward,
         edge.toBoxEdge.absorptionCharge = 0 := by
@@ -267,7 +267,7 @@ theorem quittingGame_exists_uniformPayoff_of_positive_reachable_cycle
     (hpositive : 0 < cycle.chargeSum) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι :=
+  let : Nonempty ι :=
     nonempty_of_positive_punishmentFloorReachable_cycle reward cycle hpositive
   rcases quittingGame_uniformPayoff_or_punishmentFloorReachable_hasFiniteBudget
     reward with hpayoff | hbudget

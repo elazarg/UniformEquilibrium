@@ -266,7 +266,7 @@ theorem exists_uniform_quittingEssentialAPSHazardCeiling
     ∃ pStar : ℝ, 0 ≤ pStar ∧ pStar < 1 ∧
       ∀ time, mass time ≤ pStar := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   obtain ⟨delta, hdeltaPos, hdelta⟩ :=
     exists_uniform_quittingEssentialAPSSoloGap_all_players
       reward carrier hgreatestCompact hterminalFree (owner 0)

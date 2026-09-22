@@ -203,8 +203,8 @@ theorem hasAnalyticPowerCurveAt_of_finite_analytic_branches
       ∀ n v, ∃ k, branch v k (t n) = x n v) :
     HasAnalyticPowerCurveAt (signCell P τ) coordinate x₀ := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
-  letI (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
+  let : Fintype ι := Fintype.ofFinite ι
+  let (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
   choose selected hselected using hcovered
   let choiceTuple : ℕ → (∀ v, κ v) := fun n v => selected n v
   have hsome :
@@ -280,8 +280,8 @@ theorem hasAnalyticPowerCurveAt_of_finite_complexAnalytic_branches
       ∀ n v, ∃ k, (branch v k (t n)).re = x n v) :
     HasAnalyticPowerCurveAt (signCell P τ) coordinate x₀ := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
-  letI (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
+  let : Fintype ι := Fintype.ofFinite ι
+  let (v : σ) : Fintype (κ v) := Fintype.ofFinite (κ v)
   choose selected hselected using hcovered
   let choiceTuple : ℕ → (∀ v, κ v) := fun n v => selected n v
   have hsome :

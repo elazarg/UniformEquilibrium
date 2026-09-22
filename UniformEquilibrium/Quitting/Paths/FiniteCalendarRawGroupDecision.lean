@@ -90,7 +90,7 @@ private theorem rationalRawOrderedPairFormula_holdsAt_profile_iff
       (fun _ => QuittingFiniteDeadlineTimingAction (rawDeadline players)))
     (hcalendar : ∀ who choice,
       quittingFiniteCalendarFromParameters calendar (who, choice) =
-        profile who choice) :
+        (profile who).weights choice) :
     (rationalQuittingFiniteCalendarRawOrderedPairFormula reward).HoldsAt
         (groupEnvironment calendar lambda) ↔
       ∃ first second, first ≠ second ∧
@@ -114,10 +114,10 @@ private theorem rationalRawOrderedPairFormula_holdsAt_profile_iff
     constructor
     · intro who choice
       rw [evalReal_groupCalendarTerm, hcalendar]
-      exact (profile who).property.1 choice
+      exact (profile who).weights_nonneg choice
     · intro who
       simp only [evalReal_groupCalendarTerm, hcalendar]
-      have htotal := (profile who).property.2
+      have htotal := (profile who).total_of_fintype
       rw [Fintype.sum_option] at htotal
       exact htotal
   simp only [hsimplex, not_true_eq_false, false_or]
@@ -160,10 +160,10 @@ private theorem rationalRawOrderedPairFormula_forall_iff
   · intro hformula profile
     have hresult :=
       (rationalRawOrderedPairFormula_holdsAt_profile_iff reward lambda
-        (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2) profile
+        (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2) profile
         (fun who choice => by
           rw [quittingFiniteCalendarFromParameters_encode])).mp
-        (hformula (quittingFiniteCalendarParameters fun pair => profile pair.1 pair.2))
+        (hformula (quittingFiniteCalendarParameters fun pair => (profile pair.1).weights pair.2))
     exact hresult
   · intro hraw calendar
     by_cases hsimplex :

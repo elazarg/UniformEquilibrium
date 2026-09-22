@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -321,9 +321,9 @@ theorem finiteAveragePayoff_update_le_cutoffTerminal_add_prefix_add_tail_of_solo
               (quittingOpponentOnlyProfile reward profile who) cutoff -
             quittingLiveMassLimit reward
               (quittingOpponentOnlyProfile reward profile who))) := by
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
+  let : ∀ player : ι, Finite ((quittingGame reward).Act player) :=
     fun _ => inferInstanceAs (Finite Bool)
   let cutoffTerminal := quittingTerminalPayoff reward
     (Function.update profile who
@@ -363,7 +363,11 @@ theorem finiteAveragePayoff_update_le_cutoffTerminal_add_prefix_add_tail_of_solo
         reward profile who deviation cutoff time hcutoffTime bound hbound
           (fun S => hreward S who) hsolo
     simpa [cutoffTerminal, opponentTail] using hlate
-  rw [(quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  have haverage :=
+    (quittingGame reward).finiteAveragePayoff_eq_sum_expectedStagePayoff
+      (Function.update profile who deviation)
+      (show (quittingGame reward).State from none) who horizon
+  rw [haverage]
   have hsum :
       (∑ time ∈ Finset.range horizon,
         (quittingGame reward).expectedStagePayoff

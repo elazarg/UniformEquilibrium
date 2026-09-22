@@ -1,6 +1,6 @@
 import MathUE.Polynomial.RealSignCell
 import Mathlib.Analysis.Polynomial.Basic
-import Mathlib.Data.Sign.Basic
+import Mathlib.Basic.Sign.Basic
 
 /-!
 # Polynomial signs at infinity and root-free cells

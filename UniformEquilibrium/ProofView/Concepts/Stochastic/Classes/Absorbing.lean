@@ -42,7 +42,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 
@@ -267,7 +267,7 @@ theorem exists_uniformEquilibriumPayoff_of_subsingleton_state
     [Subsingleton G.State] [∀ i, Finite (G.Act i)] [∀ i, Nonempty (G.Act i)]
     (s₀ : G.State) :
     ∃ v : Payoff ι, G.IsUniformEquilibriumPayoff s₀ v := by
-  haveI : Finite G.State := Finite.of_subsingleton
+  have _ : Finite G.State := Finite.of_subsingleton
   exact G.exists_uniformEquilibriumPayoff_of_isAbsorbingState
     (G.isAbsorbingState_of_subsingleton s₀)
 

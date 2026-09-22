@@ -91,7 +91,7 @@ theorem limit_isUniformEquilibriumPayoff_of_endpoint
     (endpoint : QuittingPositiveJointPrefixReachPunishmentEndpoint reward)
     (port : endpoint.exactPrefixOrbit.SummableChargeAllContinuePort) :
     (quittingGame reward).IsUniformEquilibriumPayoff none port.limit := by
-  letI : Nonempty iota := ⟨endpoint.punished⟩
+  let : Nonempty iota := ⟨endpoint.punished⟩
   exact isUniformEquilibriumPayoff_of_diagonal_mem_terminalSemanticCarrier
     port.limit (port.limit_mem_diagonal_of_endpoint endpoint)
 

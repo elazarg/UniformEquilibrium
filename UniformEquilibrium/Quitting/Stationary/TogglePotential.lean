@@ -107,7 +107,7 @@ theorem exists_sureExitSet_of_toggleOrdinalPotential
     [Finite ι]
     (hpotential : HasQuittingToggleOrdinalPotential reward) :
     ∃ S, IsQuittingSureExitSet reward S := by
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   obtain ⟨potential, hpotential⟩ := hpotential
   obtain ⟨S, -, hS⟩ :=
     Finset.exists_mem_eq_sup' Finset.univ_nonempty potential

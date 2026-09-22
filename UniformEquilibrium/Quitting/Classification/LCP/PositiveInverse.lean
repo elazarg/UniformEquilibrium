@@ -72,6 +72,7 @@ theorem isStandardQMatrix_of_positive_rightInverse
 theorem noHomogeneousSimplexSolution_of_positive_leftInverse
     (M B : Matrix I I ℝ) (hBM : B * M = 1)
     (hB : HasStrictlyPositiveEntries B) : ¬HasHomogeneousSimplexSolution M := by
+  change ¬SingletonLCPFeasible (fun i j => M i j)
   rw [← isR0Matrix_iff_not_singletonLCPFeasible]
   intro z hz
   let w := M.mulVec z

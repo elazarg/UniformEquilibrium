@@ -59,7 +59,7 @@ theorem exists_pos_le_prod_one_sub_of_summable
       have htailLeOne :
           (∏ offset ∈ Finset.range fuel,
             (1 - charge (horizon + offset))) <= 1 :=
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun offset _ => sub_nonneg.mpr
             (hcharge1 (horizon + offset)).le)
           (fun offset _ => by linarith [hcharge0 (horizon + offset)])

@@ -42,7 +42,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct QuittingLCPClassification
+open _root_.Math.Probability Math.PMFProduct QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

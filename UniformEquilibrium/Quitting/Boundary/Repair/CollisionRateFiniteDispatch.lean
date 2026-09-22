@@ -75,25 +75,25 @@ theorem quittingCollisionConstraints_iff
     · intro spectator hspectatorOwner hspectatorBlocker
       have h := hconstraints ⟨spectator, hspectatorOwner⟩
       simp only [quittingCollisionConstraintLower,
-        quittingCollisionConstraintUpper, if_neg hspectatorBlocker] at h
+        quittingCollisionConstraintUpper, ite_eq_right hspectatorBlocker] at h
       rw [quittingCollisionRepairValue_apply]
       linarith
     · rw [quittingCollisionBlockerBalance_iff]
       have h := hconstraints
         (⟨blocker, Ne.symm hne⟩ : QuittingCollisionConstraintPlayer owner)
       rw [quittingCollisionConstraintLower,
-        quittingCollisionConstraintUpper, if_pos rfl, if_pos rfl] at h
+        quittingCollisionConstraintUpper, ite_eq_left rfl, ite_eq_left rfl] at h
       linarith
   · rintro ⟨hspectators, hblocker⟩ index
     by_cases hindex : index.1 = blocker
     · rw [quittingCollisionBlockerBalance_iff] at hblocker
       rw [quittingCollisionConstraintLower,
-        quittingCollisionConstraintUpper, if_pos hindex, if_pos hindex]
+        quittingCollisionConstraintUpper, ite_eq_left hindex, ite_eq_left hindex]
       linarith
     · have h := hspectators index.1 index.2 hindex
       rw [quittingCollisionRepairValue_apply] at h
       simp only [quittingCollisionConstraintLower,
-        quittingCollisionConstraintUpper, if_neg hindex]
+        quittingCollisionConstraintUpper, ite_eq_right hindex]
       linarith
 
 /-- When the pair is strictly worse for the owner than the blocker singleton,

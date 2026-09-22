@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 namespace CounterfactualAtomExternalityRegression
 

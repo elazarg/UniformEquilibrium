@@ -53,7 +53,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 /-! ## A general real-analysis lemma -/
 
@@ -187,7 +187,7 @@ theorem quittingJointSurvivalWeight_le_quittingOpponentSurvivalWeight
       quittingOpponentSurvivalWeight x who start fuel := by
   rw [quittingJointSurvivalWeight_eq_prod]
   unfold quittingOpponentSurvivalWeight
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro i _
     exact quittingStationaryContinueMass_nonneg _
   · intro i _

@@ -12,7 +12,7 @@ noncomputable section
 
 namespace Theorems.PhaseOccupationDuality
 
-open Math.Probability Math.Probability.PhaseOccupationDuality
+open _root_.Math.Probability _root_.Math.Probability.PhaseOccupationDuality
 
 variable {S A K : Type*} [Fintype S] [Fintype A] {P : ℕ} [NeZero P]
 

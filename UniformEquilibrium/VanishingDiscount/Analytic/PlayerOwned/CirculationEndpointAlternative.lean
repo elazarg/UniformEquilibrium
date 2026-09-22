@@ -36,8 +36,8 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.Probability
-open Math.Probability.AnalyticPositiveChargedCirculation
+open _root_.Math _root_.Math.Probability
+open _root_.Math.Probability.AnalyticPositiveChargedCirculation
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

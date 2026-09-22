@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -38,16 +38,19 @@ theorem quittingPureTimeBehaviorStrategy_optionMap_succ_eq
       funext time history
       cases time <;>
         simp [quittingPureTimeBehaviorStrategy,
-          quittingRootAndContinuationDeviation, quittingPureTimeHazard]
+          quittingRootAndContinuationDeviation, quittingPureTimeHazard] <;>
+        rfl
   | some choice =>
       funext time history
       cases time with
       | zero =>
           simp [quittingPureTimeBehaviorStrategy,
             quittingRootAndContinuationDeviation, quittingPureTimeHazard]
+          rfl
       | succ time =>
           simp [quittingPureTimeBehaviorStrategy,
             quittingRootAndContinuationDeviation, quittingPureTimeHazard]
+          rfl
 
 omit [DecidableEq ι] in
 /-- Quitting at the new root is immediate Quit followed by the irrelevant
@@ -61,7 +64,8 @@ theorem quittingPureTimeBehaviorStrategy_zero_eq_rootAndNever
   funext time history
   cases time <;>
     simp [quittingPureTimeBehaviorStrategy,
-      quittingRootAndContinuationDeviation, quittingPureTimeHazard]
+      quittingRootAndContinuationDeviation, quittingPureTimeHazard] <;>
+    rfl
 
 /-- The pure-time payoff after shifting a suffix response through one root is
 the pure-Continue endpoint evaluated at that suffix response's payoff. -/

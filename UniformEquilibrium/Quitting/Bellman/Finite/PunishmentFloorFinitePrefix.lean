@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -259,9 +259,9 @@ theorem quittingGame_exists_uniformPayoff_of_unbounded_highAbsorptionCount
         countTarget ≤ cert.highAbsorptionStageCount threshold}) :
     ∃ payoff : Payoff ι,
       (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  letI : Nonempty ι := by
+  let : Nonempty ι := by
     rcases isEmpty_or_nonempty ι with hempty | hnonempty
-    · letI : IsEmpty ι := hempty
+    · let : IsEmpty ι := hempty
       obtain ⟨⟨cert, hcount⟩⟩ := hprefix 1
       have hzero : cert.highAbsorptionStageCount threshold = 0 := by
         unfold QuittingPunishmentFloorFinitePrefix.highAbsorptionStageCount

@@ -32,12 +32,12 @@ theorem exists_common_of_nonempty_of_upwardClosed
     (upward : ∀ i, IsUpwardClosed (feasible i)) :
     ∃ common, ∀ i, common ∈ feasible i := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   cases isEmpty_or_nonempty ι with
   | inl hempty =>
       exact ⟨Classical.arbitrary α, fun i => isEmptyElim i⟩
   | inr hindex =>
-      letI := hindex
+      let := hindex
       choose witness witness_mem using nonempty
       let common : α := Finset.univ.sup' Finset.univ_nonempty witness
       refine ⟨common, fun i => upward i (witness_mem i) ?_⟩
@@ -52,12 +52,12 @@ theorem exists_common_of_nonempty_of_downwardClosed
     (downward : ∀ i, IsDownwardClosed (feasible i)) :
     ∃ common, ∀ i, common ∈ feasible i := by
   classical
-  letI := Fintype.ofFinite ι
+  let := Fintype.ofFinite ι
   cases isEmpty_or_nonempty ι with
   | inl hempty =>
       exact ⟨Classical.arbitrary α, fun i => isEmptyElim i⟩
   | inr hindex =>
-      letI := hindex
+      let := hindex
       choose witness witness_mem using nonempty
       let common : α := Finset.univ.inf' Finset.univ_nonempty witness
       refine ⟨common, fun i => downward i (witness_mem i) ?_⟩

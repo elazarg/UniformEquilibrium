@@ -101,8 +101,18 @@ private theorem pairedNormalPlayerMatrix_eq_reindex :
     normalPlayerMatrix pairedSingletonMatrix =
       reindexMatrix pairedCoreEquiv pairedSingletonMatrix := by
   funext receiver owner
-  simp [normalPlayerMatrix, principalMatrix, reindexMatrix,
-    pairedCoreEquiv]
+  change pairedSingletonMatrix receiver.1 owner.1 =
+    pairedSingletonMatrix (pairedCoreEquiv.symm receiver)
+      (pairedCoreEquiv.symm owner)
+  have hreceiver : pairedCoreEquiv.symm receiver = receiver.1 := by
+    have h := congrArg Subtype.val (pairedCoreEquiv.apply_symm_apply receiver)
+    change pairedCoreEquiv.symm receiver = receiver.1 at h
+    exact h
+  have howner : pairedCoreEquiv.symm owner = owner.1 := by
+    have h := congrArg Subtype.val (pairedCoreEquiv.apply_symm_apply owner)
+    change pairedCoreEquiv.symm owner = owner.1 at h
+    exact h
+  rw [hreceiver, howner]
 
 private theorem pairedSingletonMatrix_normal_standardQ :
     IsStandardQMatrix (normalPlayerMatrix pairedSingletonMatrix) := by

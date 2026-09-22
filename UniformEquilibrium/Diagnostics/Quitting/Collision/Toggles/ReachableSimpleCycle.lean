@@ -4,7 +4,7 @@ Released under the MIT license as described in the file LICENSE.
 Authors: GameTheory contributors
 -/
 
-import MathUE.DirectedTransport.Additive.CirculationDecomposition
+import Maths.Multitubes.Additive.CirculationDecomposition
 import MathUE.FiniteSerialRelation
 import UniformEquilibrium.Diagnostics.Quitting.Collision.Toggles.StrictOrbit
 
@@ -119,7 +119,7 @@ coalition subtype.  An edge identity is its source vertex. -/
 def strictToggleReachableGraph
     (witness : QuittingTerminalExploitabilityWitness reward)
     (seed : Finset iota) :
-    Math.EdgeGraph
+    Maths.EdgeGraph
       (witness.StrictToggleReachableCoalition seed)
       (witness.StrictToggleReachableCoalition seed) where
   source := id
@@ -153,7 +153,11 @@ private def periodicCycleWalk
     (periodicCycleWalk witness seed hR periodic time).length = time := by
   induction time with
   | zero => rfl
-  | succ time ih => simp [periodicCycleWalk, ih]
+  | succ time ih =>
+      unfold periodicCycleWalk
+      exact (Maths.EdgeGraph.Walk.length_castFinish _ _).trans
+        ((Maths.EdgeGraph.Walk.length_concat _ _ _).trans
+          (congrArg (fun length => length + 1) ih))
 
 private theorem strictToggleReachableWalk_card_mod_two
     (witness : QuittingTerminalExploitabilityWitness reward)
@@ -210,7 +214,7 @@ structure ReachableStrictToggleSimpleCycle
     (seed : Finset iota) where
   base : witness.StrictToggleReachableCoalition seed
   cycle : (witness.strictToggleReachableGraph seed).Walk base base
-  simple : Math.AdditiveTransport.IsSimpleCycle cycle
+  simple : Maths.AdditiveTransport.IsSimpleCycle cycle
   length_even : Even cycle.length
   four_le_length : 4 ≤ cycle.length
   length_le_sixteen : cycle.length ≤ 16
@@ -228,10 +232,10 @@ theorem exists_reachableStrictToggleSimpleCycle
   let Reachable := witness.StrictToggleReachableCoalition seed
   let next : Reachable → Reachable := witness.strictToggleReachableNext seed
   let R : Reachable → Reachable → Prop := fun source target => next source = target
-  letI : Finite Reachable :=
+  let : Finite Reachable :=
     Finite.of_injective Subtype.val Subtype.val_injective
-  letI : Fintype Reachable := Fintype.ofFinite Reachable
-  letI : Nonempty Reachable :=
+  let : Fintype Reachable := Fintype.ofFinite Reachable
+  let : Nonempty Reachable :=
     ⟨⟨seed, ⟨0, rfl⟩⟩⟩
   obtain ⟨periodic⟩ :=
     Math.FiniteSerialRelation.nonempty_periodicCycle_of_serial R
@@ -246,7 +250,7 @@ theorem exists_reachableStrictToggleSimpleCycle
   have hclosedPos : 0 < closed.length := by
     simpa [closed] using periodic.period_pos
   obtain ⟨base, cycle, hsimple, _hmean⟩ :=
-    Math.AdditiveTransport.exists_simpleCycle_cycleMeanDominates
+    Maths.AdditiveTransport.exists_simpleCycle_cycleMeanDominates
       (G := witness.strictToggleReachableGraph seed)
       (fun _ => (0 : ℝ)) closed hclosedPos
   have hlengthLeCard : cycle.length ≤ Fintype.card Reachable :=

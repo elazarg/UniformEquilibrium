@@ -12,7 +12,7 @@ open scoped ContDiff Convolution Topology
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.OneSidedCapacitySmoothing Math.Probability
+open Maths.ChargedPathBudget Math.OneSidedCapacitySmoothing _root_.Math.Probability
 
 variable {player : Type} [Fintype player] [DecidableEq player]
 variable {reward : {S : Finset player // S.Nonempty} → Payoff player}

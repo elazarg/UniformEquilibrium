@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
@@ -375,7 +375,8 @@ theorem SelectedRows.eventually_stageMass_gt_square_div_eight
   let exponent : ℝ := (atom.terminal.val.card : ℝ) /
     ((atom.terminal.val.card : ℝ) - 1)
   have hmassPos : 0 < mass := atom.terminalMass_pos
-  have hsimplex := terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint
+  have hsimplex := GameTheory.Math.Probability.mem_simplexWeights.mp
+    (terminalSemanticLawCarrier_mass_mem_stdSimplex point hpoint)
   have hmassLeOne : mass ≤ 1 := by
     have hle : point.2 (some atom.terminal) ≤ ∑ outcome, point.2 outcome := by
       exact Finset.single_le_sum

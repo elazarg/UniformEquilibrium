@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nontrivial ι]
 
@@ -152,7 +152,7 @@ private theorem
     exact mul_nonneg (mul_nonneg (by norm_num) hM)
       (quittingHazardLateFiniteMass_nonneg
         (quittingBehaviorLiveHazard reward strategy) cutoff)
-  · letI : Nontrivial ι := nontrivial_of_ne mover observer hsame
+  · let : Nontrivial ι := nontrivial_of_ne mover observer hsame
     simpa [quittingFiniteSpliceError, hnever] using
       (abs_quittingContinuationBestResponseValue_finiteCap_sub_le
         reward profile mover observer strategy cutoff hreward)
@@ -405,7 +405,7 @@ theorem exists_quittingFiniteCapProfileAt_semantics_close_of_two_zeroNeverOppone
             (quittingTerminalSemanticPair reward
               (quittingFiniteCapProfileAt reward profile mover cutoff))
               observer| < δ := by
-  letI : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
+  let : Nontrivial ι := nontrivial_of_ne first second hfirstSecond
   have hneverFirstRoot : quittingHazardNeverMass
       (quittingRootSequenceOwnHazard
         (quittingProfileLiveRoot reward profile) first) = 0 := by

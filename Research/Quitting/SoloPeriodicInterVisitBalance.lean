@@ -33,7 +33,7 @@ length one is the special case that a gap-two revisit forces a zero margin.
 
 The balance and the sign screen themselves are game-independent and live in
 `MathUE/SurvivalSegmentBalance.lean`, over the unrolling of
-`MathUE/CyclicMaxAffineBound.lean`.  What this module supplies is the reading:
+`Maths.Recursion.CyclicMaxAffine`. What this module supplies is the reading:
 which certificate obligations make a segment of a periodic schedule satisfy
 their hypotheses.
 
@@ -58,7 +58,7 @@ noncomputable section
 namespace GameTheory
 namespace SoloPeriodicInterVisitBalance
 
-open Math.Probability Math.CyclicMaxAffine SoloPeriodicBlockCompiler
+open _root_.Math.Probability Maths.CyclicMaxAffine SoloPeriodicBlockCompiler
 
 /-! ## Reading a segment off a periodic certificate -/
 

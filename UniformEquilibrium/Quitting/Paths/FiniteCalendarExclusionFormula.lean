@@ -188,7 +188,7 @@ theorem quittingFiniteCalendarRawOrderedPairFormulaWithTerms_holdsAt_iff
     by_cases hequal : first = second
     · simp [hequal, Holds] at hholds
     · refine ⟨first, second, hequal, ?_⟩
-      simp only [if_neg hequal] at hholds
+      simp only [ite_eq_right hequal] at hholds
       exact (QuantifierFreeFormula.holdsAt_nonpositive_iff _ environment).mp hholds
   · rintro ⟨first, second, hne, hsurplus⟩
     refine ⟨QuantifierFreeFormula.nonpositive
@@ -198,7 +198,7 @@ theorem quittingFiniteCalendarRawOrderedPairFormulaWithTerms_holdsAt_iff
       refine ⟨first, List.mem_ofFn.mpr ⟨first, rfl⟩, ?_⟩
       rw [List.mem_map]
       refine ⟨second, List.mem_ofFn.mpr ⟨second, rfl⟩, ?_⟩
-      simp only [if_neg hne]
+      simp only [ite_eq_right hne]
     · exact (QuantifierFreeFormula.holdsAt_nonpositive_iff _ environment).mpr hsurplus
 
 end GameTheory

@@ -33,13 +33,15 @@ theorem exists_terminalOutcome_mass_mul_gain_ge_debt_div_card
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (pair : QuittingTerminalSemanticPair ι) (who : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who) :
     ∃ outcome : QuittingTerminalOutcome ι,
       quittingTerminalSemanticDebt pair who /
           Fintype.card (QuittingTerminalOutcome ι) ≤
         mass outcome *
           (quittingTerminalOutcomeReward reward outcome who - pair.1 who) := by
+  have hmassProperties :=
+    GameTheory.Math.Probability.mem_simplexWeights.mp hmass
   let contribution : QuittingTerminalOutcome ι → ℝ := fun outcome =>
     mass outcome *
       (quittingTerminalOutcomeReward reward outcome who - pair.1 who)
@@ -47,7 +49,7 @@ theorem exists_terminalOutcome_mass_mul_gain_ge_debt_div_card
       quittingTerminalSemanticDebt pair who := by
     dsimp only [contribution]
     simp only [mul_sub, Finset.sum_sub_distrib]
-    rw [← Finset.sum_mul, hmass.2, one_mul]
+    rw [← Finset.sum_mul, hmassProperties.2, one_mul]
     unfold quittingTerminalRewardMoment at hmoment
     unfold quittingTerminalSemanticDebt
     linarith
@@ -84,7 +86,7 @@ theorem exists_terminalOutcome_quantitative_profitableAtom
     {M : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
     (hprescribed : |pair.1 who| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hdebt : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ outcome : QuittingTerminalOutcome ι,
@@ -98,6 +100,8 @@ theorem exists_terminalOutcome_quantitative_profitableAtom
       quittingTerminalSemanticDebt pair who /
           (2 * M * Fintype.card (QuittingTerminalOutcome ι)) ≤
         mass outcome := by
+  have hmassProperties :=
+    GameTheory.Math.Probability.mem_simplexWeights.mp hmass
   obtain ⟨outcome, hproduct⟩ :=
     exists_terminalOutcome_mass_mul_gain_ge_debt_div_card
       reward pair who mass hmass hmoment
@@ -106,7 +110,7 @@ theorem exists_terminalOutcome_quantitative_profitableAtom
     exact_mod_cast Fintype.card_pos
   have haveragePos : 0 < quittingTerminalSemanticDebt pair who /
       Fintype.card (QuittingTerminalOutcome ι) := div_pos hdebt hcardPos
-  have hmassNonneg : 0 ≤ mass outcome := hmass.1 outcome
+  have hmassNonneg : 0 ≤ mass outcome := hmassProperties.1 outcome
   have hproductPos : 0 < mass outcome * gain :=
     haveragePos.trans_le hproduct
   have hmassPos : 0 < mass outcome := by
@@ -118,9 +122,10 @@ theorem exists_terminalOutcome_quantitative_profitableAtom
   have hmassLeOne : mass outcome ≤ 1 := by
     calc
       mass outcome ≤ ∑ candidate, mass candidate := by
-        exact Finset.single_le_sum (fun candidate _ => hmass.1 candidate)
+        exact Finset.single_le_sum
+          (fun candidate _ => hmassProperties.1 candidate)
           (Finset.mem_univ outcome)
-      _ = 1 := hmass.2
+      _ = 1 := hmassProperties.2
   have houtcomeBound :
       |quittingTerminalOutcomeReward reward outcome who| ≤ M := by
     cases outcome with
@@ -154,7 +159,7 @@ theorem exists_terminalOutcome_quantitative_profitableAtom_of_mem_carrier
     (who : ι) (mass : QuittingTerminalOutcome ι → ℝ)
     {M : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hdebt : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ outcome : QuittingTerminalOutcome ι,
@@ -188,7 +193,7 @@ theorem exists_terminalOutcome_quantitative_trichotomy_of_allContinuePlateau
     (who : ι) (mass : QuittingTerminalOutcome ι → ℝ)
     {M : ℝ} (hM : 0 < M)
     (hreward : ∀ terminal player, |reward terminal player| ≤ M)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hmoment : quittingTerminalRewardMoment reward mass who = pair.2 who)
     (hdebt : 0 < quittingTerminalSemanticDebt pair who) :
     ∃ outcome : QuittingTerminalOutcome ι,

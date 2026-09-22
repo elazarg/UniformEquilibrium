@@ -1,4 +1,4 @@
-import MathUE.DirectedTransport.FiniteInequality.Arithmetic
+import Maths.Multitubes.FiniteInequality.Arithmetic
 
 /-!
 # Finite inequalities with nonnegative potentials
@@ -10,7 +10,7 @@ the exact dual condition with nonpositive weighted columns.
 
 noncomputable section
 
-namespace Math
+namespace Maths
 namespace FiniteInequality
 
 open scoped BigOperators
@@ -96,7 +96,7 @@ theorem exists_nonnegativePotential_or_nonpositiveCertificate
       (∀ state, ∑ row, coefficient row * delta row state ≤ 0) ∧
       0 < ∑ row, coefficient row * base row) := by
   classical
-  rcases Math.exists_potential_or_nonnegative_incompatibility
+  rcases Maths.exists_potential_or_nonnegative_incompatibility
       (nonnegativePotentialDelta delta) (nonnegativePotentialBase base) with
     hpotential | ⟨coefficient, hnonnegative, hbalance, hpositive⟩
   · left
@@ -311,6 +311,6 @@ theorem not_exists_rationalNonnegativePotential_iff_exists_nonpositiveCertificat
       hpotentialNonnegative hpotential hnonnegative hcolumns)) hpositive
 
 end FiniteInequality
-end Math
+end Maths
 
 end

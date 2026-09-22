@@ -41,8 +41,10 @@ theorem negativeOne_finiteDeadline_payoff
       (mixed PUnit.unit none).toReal - 1 := by
   let laws : PUnit → PMF (Option ℕ) := fun who =>
     (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF
-  rw [finiteProfile_eq_stoppingLawProfile negativeOneReward mixed,
-    quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff]
+  rw [finiteProfile_eq_stoppingLawProfile negativeOneReward mixed]
+  change quittingTerminalPayoff negativeOneReward
+    (quittingStoppingLawProfile negativeOneReward laws) PUnit.unit = _
+  rw [quittingTerminalPayoff_stoppingLawProfile_eq_expectedPayoff]
   unfold quittingStoppingLawExpectedPayoff
   let terminalLaw := quittingIndependentTerminalOutcomeLaw laws
   calc
@@ -65,14 +67,24 @@ theorem negativeOne_finiteDeadline_payoff
       rw [PMF.map_apply, tsum_eq_single (fun _ => none)]
       · have hmap : laws PUnit.unit none = mixed PUnit.unit none := by
           unfold laws quittingFiniteDeadlineTimingLaw
-          rw [Math.Probability.CompactStoppingLaw.toPMF_ofPMF]
           have hmaps : (mixed PUnit.unit).map quittingFiniteDeadlineTimingActionTime =
               (mixed PUnit.unit).map
                 (Math.Probability.finiteStoppingTimeDecode deadline) := by
             congr 1
             funext action
             cases action <;> rfl
-          rw [hmaps, PMF.map_apply, tsum_eq_single none]
+          let decodedLaw : PMF (Option ℕ) :=
+            (mixed PUnit.unit).map (Math.Probability.finiteStoppingTimeDecode deadline)
+          change ((((Math.Probability.CompactStoppingLaw.ofPMF
+            ((mixed PUnit.unit).map quittingFiniteDeadlineTimingActionTime)).toPMF :
+              PMF (Option ℕ)) none)) = _
+          rw [show (mixed PUnit.unit).map quittingFiniteDeadlineTimingActionTime =
+              (show PMF Math.Probability.CompactStoppingTime from decodedLaw) by
+                exact hmaps,
+            Math.Probability.CompactStoppingLaw.toPMF_ofPMF_option]
+          change decodedLaw none = _
+          unfold decodedLaw
+          rw [PMF.map_apply, tsum_eq_single none]
           · simp [Math.Probability.finiteStoppingTimeDecode]
           · intro action haction
             cases action with
@@ -104,16 +116,21 @@ theorem negativeOne_finiteDeadline_quitMass_le_error
       (Function.update
         (quittingFiniteDeadlineTimingProfile negativeOneReward deadline mixed) PUnit.unit
         (quittingPureTimeBehaviorStrategy negativeOneReward PUnit.unit
-          (quittingFiniteDeadlineTimingActionTime
+      (quittingFiniteDeadlineTimingActionTime
             (none : QuittingFiniteDeadlineTimingAction deadline))))
       PUnit.unit = 0 := by
+    change quittingTerminalPayoff negativeOneReward
+      (Function.update
+        (quittingFiniteDeadlineTimingProfile negativeOneReward deadline mixed) PUnit.unit
+        (quittingPureTimeBehaviorStrategy negativeOneReward PUnit.unit
+          (none : Option ℕ))) PUnit.unit = 0
     rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy]
     unfold quittingRootSequencePureTimeTerminalValue
     apply quittingRootSequenceTerminalValue_eq_zero_of_allContinue_from
     intro time _
     funext player
     simp [quittingRootSequenceUpdate, quittingPureTimeHazard,
-      quittingFiniteDeadlineTimingActionTime, Subsingleton.elim player PUnit.unit]
+      Subsingleton.elim player PUnit.unit]
     change PMF.pure false = PMF.pure false
     rfl
   rw [hzero, negativeOne_finiteDeadline_payoff] at hnever

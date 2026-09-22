@@ -20,7 +20,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 /-- Literal supplied data at the reset-rigid product escape origin. -/
 structure FinFourEscapeProductRestart

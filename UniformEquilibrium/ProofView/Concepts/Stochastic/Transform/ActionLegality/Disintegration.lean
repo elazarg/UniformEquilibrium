@@ -148,7 +148,7 @@ namespace GameTheory
 
 namespace StochasticGame
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} (G : StochasticGame ι)
   (Legal : G.State → ∀ i, G.Act i → Prop)
@@ -186,7 +186,7 @@ open Classical in
 theorem legalizeAct_of_legal {s : G.State} {i : ι} {a : G.Act i} (h : Legal s i a) :
     G.legalizeAct Legal hLegal s i a = a := by
   unfold legalizeAct
-  rw [if_pos h]
+  rw [ite_eq_left h]
 
 /-- `legalizeAct` is idempotent: its own output is already legal
 (`legal_legalizeAct`), so legalizing it again changes nothing. -/

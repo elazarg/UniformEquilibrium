@@ -30,8 +30,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset Set
-open Math.Probability Math.PMFProduct
+open _root_.Finset Set
+open _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 /-- The three labels complementary to a prescribed singleton owner. -/

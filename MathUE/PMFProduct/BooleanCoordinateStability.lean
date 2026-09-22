@@ -6,7 +6,7 @@ noncomputable section
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- Coordinatewise closeness of probabilities of the Boolean value `true` controls total
 variation of their finite product law by cardinality times the common bound. -/

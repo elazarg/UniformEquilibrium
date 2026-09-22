@@ -179,11 +179,11 @@ theorem spernerSimplex_step_value (hs : simplex SC m I) (i : Fin m) (who : Fin S
     (I i.succ who).1 =
       (I i.castSucc who).1 + (if who ∈ spernerChainStepSet I i then 1 else 0) := by
   by_cases hmem : who ∈ spernerChainStepSet I i
-  · rw [if_pos hmem]
+  · rw [ite_eq_left hmem]
     have hlt := mem_spernerChainStepSet.1 hmem
     have hle := spernerSimplex_step_le_add_one hs i who
     omega
-  · rw [if_neg hmem]
+  · rw [ite_eq_right hmem]
     rw [mem_spernerChainStepSet] at hmem
     have hle := spernerSimplex_step_le hs i who
     omega
@@ -244,7 +244,7 @@ theorem spernerChainStep_eq_of_ne (hs : simplex SC m I) (hm : m = SC.n) (i : Fin
     rw [mem_spernerChainStepSet_iff hs hm]
     exact hne
   have hvalue := spernerSimplex_step_value hs i who
-  rw [if_neg hnotMem] at hvalue
+  rw [ite_eq_right hnotMem] at hvalue
   exact Fin.val_injective (by omega)
 
 /-! ## The step map is a bijection onto the coordinates -/

@@ -283,7 +283,7 @@ theorem HasNormalizedPositiveChargedCirculation.exists_positiveChargedClass
       destination
   let communication :=
     pmfCommunicatesSetoid activeKernel
-  letI :
+  let :
       DecidableRel
         ((communication :
           Setoid (occupationActiveStates source mass)).r) :=

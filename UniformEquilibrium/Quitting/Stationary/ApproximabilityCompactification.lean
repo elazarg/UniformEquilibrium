@@ -28,7 +28,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 open Math.LinearProgramming Math.ProbabilityMassFunction Math.Topology
 open QuittingLCPClassification
 
@@ -77,8 +77,8 @@ theorem singletonLCPResidual_normalizedSoloMatrix_hazardDirection
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib]
   have hmass :
-      ∑ owner, quittingStationaryHazardDirection root hpositive owner = 1 :=
-    (quittingStationaryHazardDirection root hpositive).property.2
+      ∑ owner, (quittingStationaryHazardDirection root hpositive).weights owner = 1 :=
+    (quittingStationaryHazardDirection root hpositive).total_of_fintype
   rw [← Finset.sum_mul, hmass, one_mul]
   congr 1
 
@@ -254,7 +254,7 @@ theorem sum_hazardDirection_mul_singletonLCPResidual_le
       (fun player ↦ quittingTerminalPayoff reward
         (quittingStationaryProfile reward root) player)
       epsilon root) :
-    (∑ who, (quittingStationaryHazardDirection root hpositive).val who *
+    (∑ who, (quittingStationaryHazardDirection root hpositive).weights who *
         singletonLCPResidual (normalizedSoloMatrix reward)
           (quittingStationaryHazardDirection root hpositive) who) ≤
       10 * M * quittingStationaryTotalHazard root +
@@ -267,18 +267,18 @@ theorem sum_hazardDirection_mul_singletonLCPResidual_le
   let residual := fun who ↦ singletonLCPResidual (normalizedSoloMatrix reward)
     direction who
   have hterm : ∀ who,
-      direction.val who * residual who ≤
-        direction.val who * (10 * M * H) + epsilon / H := by
+      direction.weights who * residual who ≤
+        direction.weights who * (10 * M * H) + epsilon / H := by
     intro who
     have hclose := abs_quittingRootEndpointDifference_add_singletonLCPResidual_le
       reward hreward root who hpositive hhalf
     change |difference who + residual who| ≤ 10 * M * H at hclose
     have hupper := (abs_le.mp hclose).2
-    have hdirection0 : 0 ≤ direction.val who := direction.property.1 who
+    have hdirection0 : 0 ≤ direction.weights who := direction.weights_nonneg who
     have hweighted := mul_le_mul_of_nonneg_left hupper hdirection0
     have hnash := (hendpoint who).2
     change -epsilon ≤ (root who true).toReal * difference who at hnash
-    have hcoordinate : direction.val who = (root who true).toReal / H := rfl
+    have hcoordinate : direction.weights who = (root who true).toReal / H := rfl
     rw [hcoordinate] at hweighted
     have hraw : (root who true).toReal *
           (difference who + residual who) ≤
@@ -296,11 +296,11 @@ theorem sum_hazardDirection_mul_singletonLCPResidual_le
       _ ≤ ((root who true).toReal * (10 * M * H) + epsilon) / H := hdiv
       _ = (root who true).toReal / H * (10 * M * H) + epsilon / H := by ring
   calc
-    (∑ who, direction.val who * residual who) ≤
-        ∑ who, (direction.val who * (10 * M * H) + epsilon / H) :=
+    (∑ who, direction.weights who * residual who) ≤
+        ∑ who, (direction.weights who * (10 * M * H) + epsilon / H) :=
       Finset.sum_le_sum (fun who _ ↦ hterm who)
     _ = 10 * M * H + Fintype.card iota * epsilon / H := by
-      rw [Finset.sum_add_distrib, ← Finset.sum_mul, direction.property.2,
+      rw [Finset.sum_add_distrib, ← Finset.sum_mul, direction.total_of_fintype,
         one_mul, Finset.sum_const, nsmul_eq_mul, Finset.card_univ]
       ring
 
@@ -317,7 +317,7 @@ theorem homogeneousViolation_hazardDirection_le
         (quittingStationaryProfile reward root) player)
       epsilon root) :
     homogeneousViolation (normalizedSoloMatrix reward)
-        (quittingStationaryHazardDirection root hpositive).val ≤
+        (quittingStationaryHazardDirection root hpositive).weights ≤
       (Fintype.card iota + 1) *
           (10 * M * quittingStationaryTotalHazard root) +
         2 * Fintype.card iota * epsilon +
@@ -327,7 +327,7 @@ theorem homogeneousViolation_hazardDirection_le
   let residual := fun who ↦ singletonLCPResidual (normalizedSoloMatrix reward)
     direction who
   have hquadratic :
-      max 0 (∑ who, direction.val who * residual who) ≤
+      max 0 (∑ who, direction.weights who * residual who) ≤
         10 * M * H + Fintype.card iota * epsilon / H := by
     apply max_le
     · have hM : 0 ≤ M := by
@@ -352,10 +352,10 @@ theorem homogeneousViolation_hazardDirection_le
         (neg_singletonLCPResidual_hazardDirection_le
           reward hreward hepsilon root hpositive hhalf hendpoint who)
   unfold homogeneousViolation
-  change max 0 (∑ who, direction.val who * residual who) +
+  change max 0 (∑ who, direction.weights who * residual who) +
       ∑ who, max 0 (-residual who) ≤ _
   calc
-    max 0 (∑ who, direction.val who * residual who) +
+    max 0 (∑ who, direction.weights who * residual who) +
         ∑ who, max 0 (-residual who) ≤
       (10 * M * H + Fintype.card iota * epsilon / H) +
         ∑ who, (10 * M * H + 2 * epsilon) :=
@@ -383,7 +383,9 @@ theorem r0Margin_normalizedSoloMatrix_le_of_stationaryEndpointNash
         2 * Fintype.card iota * epsilon +
         Fintype.card iota * epsilon / quittingStationaryTotalHazard root := by
   exact (r0Margin_le (normalizedSoloMatrix reward)
-    (quittingStationaryHazardDirection root hpositive).property).trans
+    (GameTheory.Math.Probability.mem_simplexWeights.mpr
+      ⟨(quittingStationaryHazardDirection root hpositive).weights_nonneg,
+        (quittingStationaryHazardDirection root hpositive).total_of_fintype⟩)).trans
       (homogeneousViolation_hazardDirection_le
         reward hreward hepsilon root hpositive hhalf hendpoint)
 
@@ -553,11 +555,11 @@ theorem exists_exactStationaryEndpoint_of_hazard_floor
       (nhds (quittingStationaryTotalHazard
         (quittingRootOfSimplex point.2))) := by
     have hcontinuous : Continuous (fun root : QuittingRootSimplex iota ↦
-        ∑ who, root who true) := by
+        ∑ who, (root who).weights true) := by
       apply continuous_finsetSum
       intro who _
-      exact (continuous_apply true).comp
-        (continuous_subtype_val.comp (continuous_apply who))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply who)
     have ht := hcontinuous.continuousAt.tendsto.comp hrootLimit
     convert ht using 1
     · funext n

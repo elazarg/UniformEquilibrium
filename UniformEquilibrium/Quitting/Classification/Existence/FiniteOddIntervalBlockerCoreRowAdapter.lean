@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math Math.Probability Math.Finset
+open Set _root_.Math _root_.Math.Probability Math.Finset
 open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

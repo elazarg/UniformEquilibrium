@@ -40,7 +40,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace LowerValueJet
 
-open Math Math.PMFProduct Math.Probability Set
+open _root_.Math Math.PMFProduct _root_.Math.Probability Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
   {G : StochasticGame ι}
@@ -165,7 +165,7 @@ theorem calendarInvisibleResponseKernel_eq_endpoint
         response.source who response.1.2 := by
   unfold calendarInvisibleResponseKernel
     calendarFinkMixedProfile finkPureDeviationStateKernel
-  rw [dif_neg invalid]
+  rw [dite_eq_right invalid]
   rw [germ.finkProfile_endpointFinkPoint]
 
 /-- Actual behavior strategy obtained by pushing a predictable response

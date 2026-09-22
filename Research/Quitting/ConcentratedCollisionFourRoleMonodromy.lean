@@ -11,7 +11,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota] [Nonempty iota]
@@ -486,7 +486,12 @@ def packetTransferRoles
 inductive RecipientAtomMode where
   | prescribed
   | rectangle
-deriving DecidableEq, Fintype
+deriving DecidableEq
+
+instance : Fintype RecipientAtomMode :=
+  Fintype.ofList [.prescribed, .rectangle] (by
+    intro mode
+    cases mode <;> simp)
 
 def packetTransferAtomLabel
     {reward : {S : Finset iota // S.Nonempty} → Payoff iota}

@@ -123,7 +123,7 @@ theorem exists_punishmentNormal_singletonPath_of_projectiveQBar
       (normalizedPunishmentNormalPlayerMatrix reward)) :
     Nonempty (ContinuousZeroPerfectSingletonPath
       (quittingPunishmentNormalReward reward)) := by
-  letI : Nonempty (punishmentNormalPlayers reward) :=
+  let : Nonempty (punishmentNormalPlayers reward) :=
     (punishmentNormalPlayers_nonempty_of_not_zeroSolo reward hnotZero).to_subtype
   apply exists_continuousZeroPerfectSingletonPath_of_projectiveQBar
     (quittingPunishmentNormalReward reward)

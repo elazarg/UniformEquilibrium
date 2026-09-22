@@ -111,13 +111,13 @@ theorem twoOwnerHazardAt_le_one
   by_cases hfirst : owner = first
   · subst owner
     simp only [twoOwnerHazardAt, quittingTwoOwnerHazard_first]
-    exact mul_le_one₀ ht1 (packet.mass_nonneg first)
+    exact (mul_le_of_le_one_left (packet.mass_nonneg first) ht1).trans
       (packet.twoOwner_mass_le_one first)
   · by_cases hsecond : owner = second
     · subst owner
       simp only [twoOwnerHazardAt]
       rw [quittingTwoOwnerHazard_second first second _ _ (Ne.symm hfirst)]
-      exact mul_le_one₀ ht1 (packet.mass_nonneg second)
+      exact (mul_le_of_le_one_left (packet.mass_nonneg second) ht1).trans
         (packet.twoOwner_mass_le_one second)
     · rw [twoOwnerHazardAt,
         quittingTwoOwnerHazard_eq_zero_of_ne first second owner _ _ hfirst hsecond]

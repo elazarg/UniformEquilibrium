@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability
+open StochasticGame Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -35,7 +35,11 @@ theorem histDist_quittingGame_reward_irrelevant
   induction time with
   | zero => rfl
   | succ time ih =>
-      rw [StochasticGame.histDist_succ, StochasticGame.histDist_succ, ih]
+      have hfirst := (quittingGame first).histDist_succ profile
+        (show (quittingGame first).State from state) time
+      have hsecond := (quittingGame second).histDist_succ profile
+        (show (quittingGame second).State from state) time
+      rw [hfirst, hsecond, ih]
       rfl
 
 omit [DecidableEq ι] in
@@ -103,9 +107,9 @@ theorem quittingLiveMass_add_sum_absorbedMass
     quittingLiveMass reward profile time +
       ∑ S, quittingAbsorbedMass reward profile time S = 1 := by
   classical
-  letI : Finite (quittingGame reward).State :=
+  let : Finite (quittingGame reward).State :=
     inferInstanceAs (Finite (Option {S : Finset ι // S.Nonempty}))
-  letI : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
+  let : ∀ who : ι, Finite ((quittingGame reward).Act who) :=
     fun _ => inferInstanceAs (Finite Bool)
   rw [quittingLiveMass_eq_expectedStateValue]
   unfold quittingAbsorbedMass StochasticGame.expectedStateValue

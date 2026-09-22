@@ -301,7 +301,7 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_transitive_phaseTargetSymmetr
     (phaseBias : HasPhaseWeightedWelfareBias (P := P)
       (quittingGame reward) weight (target 0)) :
     (quittingGame reward).IsUniformEquilibriumPayoff none (target 0) := by
-  letI : Nonempty Player := ⟨representative⟩
+  let : Nonempty Player := ⟨representative⟩
   have security : ∀ player,
       (quittingGame reward).IsOneSidedGuaranteeCertificate none player
         (target 0 player) := fun player ↦

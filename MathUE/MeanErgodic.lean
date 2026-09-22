@@ -42,7 +42,7 @@ games whose state process is autonomous (see
 namespace Math
 namespace MeanErgodic
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped BigOperators
 
 -- ============================================================================
@@ -521,7 +521,7 @@ theorem harmonic_eq_of_add_poisson_eq
     (ho₂ : ∀ s, expect (κ s) o₂ = o₂ s)
     (hdecomp₂ : ∀ s, f s = o₂ s + (expect (κ s) u₂ - u₂ s)) :
     o₁ = o₂ := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   exact tendsto_nhds_unique
     (tendsto_cesaro_of_harmonic_add_poisson κ f o₁ u₁ ho₁ hdecomp₁)
     (tendsto_cesaro_of_harmonic_add_poisson κ f o₂ u₂ ho₂ hdecomp₂)
@@ -635,7 +635,7 @@ theorem tendsto_cesaro_expect_iter (κ : S → PMF S) (w : S → ℝ) (s₀ : S)
       (fun T : ℕ => (T : ℝ)⁻¹ *
         ∑ t ∈ Finset.range T, expect (Math.PMFIter.iter κ t s₀) w)
       atTop (nhds v) := by
-  letI : Fintype S := Fintype.ofFinite S
+  let : Fintype S := Fintype.ofFinite S
   obtain ⟨z, -, hlim⟩ := tendsto_cesaro_of_pow_norm_le (markovOperator κ)
     (fun t x => norm_markovOperator_pow_apply_le κ t x) w
   refine ⟨z s₀, ?_⟩

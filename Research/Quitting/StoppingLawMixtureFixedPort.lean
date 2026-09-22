@@ -31,8 +31,8 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.ProbabilityMassFunction
-open Math.Probability.DiscreteHazard
+open StochasticGame _root_.Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability.DiscreteHazard
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -177,6 +177,7 @@ theorem quittingProfileLiveRoot_zero_stoppingLawMixture_eq_of_endpoint_eq
       (quittingBehaviorLiveHazard reward target)
       lambda hlambda0 hlambda1 hroot
   · simp only [Function.update_of_ne hplayer]
+    rfl
 
 /-- **Fixed minimum-fiber terminal port.**
 

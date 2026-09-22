@@ -100,7 +100,7 @@ theorem coe_bivEval_eq_aeval_map
         (Q.map (algebraMap (Polynomial ℝ) K)) := by
   dsimp only
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective
   rw [coe_bivEval]
@@ -138,7 +138,7 @@ theorem exists_bivariateRelation_eventually
         bivEval Q.derivative
           (x n parameter) (value n) ≠ 0) := by
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       x parameter hinjective
   obtain ⟨Q, hQne, hroot, hderiv⟩ :=

@@ -357,7 +357,7 @@ theorem abs_selectedTransitionCostSum_le_exceptionalUse
       bound *
         ∑ index : {index // index ∈ exceptional},
           selectedTransitionUseCount choice index.1 T history := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   rw [selectedTransitionCostSum_eq_sum_useCount]
   calc
     |∑ index,
@@ -425,7 +425,7 @@ theorem exceptionalTransitionCost_isAsymptoticallySublinear
           (fun history =>
             |selectedTransitionCostSum
               choice cost T history|)) := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   exact transitionSetUseContribution_isAsymptoticallySublinear
     initial kernel choice exceptional
     (fun T history =>
@@ -557,7 +557,7 @@ theorem expect_transitionPotentialDrift_eq_mixedDrift
         (transitionPotentialDrift kernel source potential) =
       expect (selection.bind kernel) potential - potential current := by
   classical
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   rw [expect_bind]
   unfold transitionPotentialDrift
   calc
@@ -753,7 +753,7 @@ theorem abs_mixedTransitionCostSum_le_exceptionalMass
         ∑ index : {index // index ∈ exceptional},
           selectedTransitionMassSum selection index.1 T history := by
   classical
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   rw [mixedTransitionCostSum_eq_sum_mass]
   calc
     |∑ index,

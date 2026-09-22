@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set
+open _root_.Math _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction Set
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -29,13 +29,17 @@ variable {ι : Type} [Fintype ι] [DecidableEq ι]
 coordinate. -/
 private def quittingUnitCubeRootSimplex (point : UnitCube ι) :
     QuittingRootSimplex ι :=
-  fun who => ⟨fun action => if action then point who else 1 - point who, by
-    constructor
+  fun who => by
+    refine ⟨Finsupp.equivFunOnFinite.symm
+      (fun action => if action then point who else 1 - point who), ?_, ?_⟩
     · intro action
-      cases action <;> simp only [Bool.false_eq_true, ↓reduceIte, eq_self]
-      · exact sub_nonneg.mpr (point who).property.2
-      · exact (point who).property.1
-    · simp⟩
+      cases action
+      · change 0 ≤ 1 - (point who : ℝ)
+        exact sub_nonneg.mpr (point who).property.2
+      · change 0 ≤ (point who : ℝ)
+        exact (point who).property.1
+    · rw [Finsupp.sum_fintype _ _ (by simp), Fintype.sum_bool]
+      simp
 
 /-- Canonical Boolean product root represented by a unit-cube point. -/
 private def quittingUnitCubeRoot (point : UnitCube ι) : ι → PMF Bool :=
@@ -71,11 +75,13 @@ private theorem quittingUnitCubeRoot_eq_rootOfSimplex
       ((quittingRootOfSimplex (quittingUnitCubeRootSimplex point) who) false).toReal
     rw [quittingUnitCubeRoot_false_toReal,
       quittingRootOfSimplex_apply_toReal]
+    change 1 - (point who : ℝ) = 1 - (point who : ℝ)
     rfl
   · change ((quittingUnitCubeRoot point who) true).toReal =
       ((quittingRootOfSimplex (quittingUnitCubeRootSimplex point) who) true).toReal
     rw [quittingUnitCubeRoot_true_toReal,
       quittingRootOfSimplex_apply_toReal]
+    change (point who : ℝ) = (point who : ℝ)
     rfl
 
 private theorem continuous_quittingUnitCubeRootEndpointDifference
@@ -87,7 +93,7 @@ private theorem continuous_quittingUnitCubeRootEndpointDifference
       quittingUnitCubeRootSimplex point) := by
     apply continuous_pi
     intro player
-    apply Continuous.subtype_mk
+    rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).continuous_iff]
     apply continuous_pi
     intro action
     have hcoordinate : Continuous (fun point : UnitCube ι =>

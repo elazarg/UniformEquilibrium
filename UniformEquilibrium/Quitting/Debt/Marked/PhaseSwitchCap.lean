@@ -39,7 +39,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -495,7 +495,7 @@ theorem quittingJointSurvivalWeight_le_quittingHazardSurvival_ownHazard
   rw [quittingJointSurvivalWeight_eq_prod,
     quittingHazardSurvival_quittingRootSequenceOwnHazard]
   simp only [Nat.zero_add]
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro offset _
     exact quittingStationaryContinueMass_nonneg (plan offset)
   · intro offset _

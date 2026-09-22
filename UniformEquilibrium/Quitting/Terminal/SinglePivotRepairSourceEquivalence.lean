@@ -22,7 +22,7 @@ theorem responderLaterReward_eq_zero_of_singlePivot
     (responder : ι) (hne : responder ≠ input.pivot) :
     responderLaterReward (reward := reward) responder = 0 := by
   unfold responderLaterReward
-  rw [hcanonical responder, if_neg hne]
+  rw [hcanonical responder, ite_eq_right hne]
 
 /-- In a canonical single-pivot table the nonpivot limit endpoint is
 literally the Never endpoint, so the third signed endpoint is redundant. -/
@@ -72,7 +72,7 @@ theorem exists_law_boundary_approximation_of_singlePivot_reward_bound
     (hzero : pivotRepairFirstAtom mass = 0) (firstAtom bound : ℝ)
     (hpositive : 0 < firstAtom) (hle : firstAtom ≤ pivotRepairLate mass)
     (hreward : ∀ terminal player, |reward terminal player| ≤ bound) :
-    letI : Nonempty ι := ⟨input.pivot⟩
+    let : Nonempty ι := ⟨input.pivot⟩
     ∃ law : PMF (Option ℕ),
       quittingTerminalPayoff reward
           (quittingStoppingLawProfile reward
@@ -95,7 +95,7 @@ both menu exploitability and the exceptional pivot late-response scalar.
 The displayed deadline may be zero; no exact menu Nash premise is imposed. -/
 def HasSinglePivotFiniteMenuScalarSource
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι) : Prop :=
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   ∀ error : ℝ, 0 < error →
     ∃ deadline : ℕ, ∃ mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline),
       quittingFiniteDeadlineMenuExploitability reward deadline mixed ≤ error ∧
@@ -109,10 +109,11 @@ on the very same actual menu profile. -/
 theorem singlePivotFiniteMenuScalarSource_of_fullEarlyAbsorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hcanonical : IsSinglePivotSingletonTable reward pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     HasQuittingFiniteMenuFullEarlyAbsorption reward →
       HasSinglePivotFiniteMenuScalarSource reward pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+  dsimp only
+  let : Nonempty ι := ⟨pivot⟩
   intro hsource error herror
   obtain ⟨deadline, _, mixed, hexploit, _⟩ := hsource error herror 1 le_rfl 1 zero_lt_one 1
   refine ⟨deadline, mixed, ?_, ?_⟩
@@ -133,7 +134,7 @@ theorem singlePivotFiniteMenuScalarSource_iff_smallPivotRepairValue
     (hcanonical : IsSinglePivotSingletonTable reward pivot) :
     HasSinglePivotFiniteMenuScalarSource reward pivot ↔
       HasQuittingSmallPivotRepairValue reward pivot := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   constructor
   · intro hsource
     obtain ⟨target, huniform⟩ :=
@@ -142,7 +143,7 @@ theorem singlePivotFiniteMenuScalarSource_iff_smallPivotRepairValue
     exact smallPivotRepairValue_of_uniformEquilibriumPayoff reward pivot target huniform
   · intro hsource
     have hpositive : 0 < reward (quittingSingletonTerminal pivot) pivot := by
-      rw [hcanonical pivot, if_pos rfl]
+      rw [hcanonical pivot, ite_eq_left rfl]
       exact zero_lt_one
     exact singlePivotFiniteMenuScalarSource_of_fullEarlyAbsorption reward pivot hcanonical
       (finiteMenuFullEarlyAbsorption_of_smallPivotRepairValue reward pivot hpositive hsource)
@@ -152,12 +153,12 @@ absorption source are equivalent, without selecting either source universally. -
 theorem singlePivotFiniteMenuScalarSource_iff_fullEarlyAbsorption
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (pivot : ι)
     (hcanonical : IsSinglePivotSingletonTable reward pivot) :
-    letI : Nonempty ι := ⟨pivot⟩
+    let : Nonempty ι := ⟨pivot⟩
     HasSinglePivotFiniteMenuScalarSource reward pivot ↔
       HasQuittingFiniteMenuFullEarlyAbsorption reward := by
-  letI : Nonempty ι := ⟨pivot⟩
+  let : Nonempty ι := ⟨pivot⟩
   have hpositive : 0 < reward (quittingSingletonTerminal pivot) pivot := by
-    rw [hcanonical pivot, if_pos rfl]
+    rw [hcanonical pivot, ite_eq_left rfl]
     exact zero_lt_one
   exact (singlePivotFiniteMenuScalarSource_iff_smallPivotRepairValue reward pivot hcanonical).trans
     (smallPivotRepairValue_iff_finiteMenuFullEarlyAbsorption reward pivot hpositive)

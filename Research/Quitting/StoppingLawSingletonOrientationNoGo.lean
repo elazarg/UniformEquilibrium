@@ -34,7 +34,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open QuittingSureSetOwnerRepair
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -125,6 +125,7 @@ theorem base_update_mover_eq_singleton :
     simp [base, replacement, quittingStationaryProfile,
       StochasticGame.stationaryBehaviorProfile, quittingPureSetRoot,
       quittingSetAction, mover]
+  all_goals rfl
 
 theorem terminalPayoff_eq_rootAbsorbing_of_sure
     (profile : (quittingGame reward).BehaviorProfile) (who : Player)
@@ -199,6 +200,13 @@ theorem source_mover_deviation_payoff_le_zero
     quittingPureTimeBehaviorStrategy, quittingPureTimeHazard,
     quittingPureSetRoot, quittingSetAction, reward, quittingRootPayoff,
     quittingQuitters, mover, observer, Finset.ext_iff]
+  calc
+    _ ≤ expect (deviation 0 ((quittingGame reward).emptyHist none))
+        (fun _ => 0) := by
+      apply expect_mono
+      intro action
+      by_cases haction : action = false <;> simp [haction]
+    _ = 0 := expect_const _ _
 
 theorem base_bestResponse_observer :
     quittingContinuationBestResponseValue reward base observer = 0 := by

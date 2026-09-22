@@ -288,11 +288,11 @@ theorem toHist_ofHist {t : ℕ} (h : Hist S A t) : toHist (ofHist h) = h := by
     change stateAt (ofHist h) i.castSucc = (h.1 i).1
     rw [stateAt_ofHist]
     change (if hlt : (i : ℕ) < t then (h.1 ⟨i, hlt⟩).1 else h.2) = (h.1 i).1
-    rw [dif_pos i.isLt]
+    rw [dite_eq_left i.isLt]
   · show current (ofHist h) = h.2
     change stateAt (ofHist h) (Fin.last t) = h.2
     rw [stateAt_ofHist]
     change (if hlt : t < t then (h.1 ⟨t, hlt⟩).1 else h.2) = h.2
-    rw [dif_neg (lt_irrefl t)]
+    rw [dite_eq_right (lt_irrefl t)]
 
 end PathCarrierPrototype

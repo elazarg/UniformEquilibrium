@@ -16,7 +16,7 @@ coordinate values and real expectations.
 
 namespace Math.PMFProduct
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 /-- Split the expectation of a finite product indexed by `I ⊕ J` into the
 iterated expectations over the two coordinate blocks. -/

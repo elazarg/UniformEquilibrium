@@ -21,7 +21,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 /-- Removing one distinguished atom from a finite expectation costs at most
 the payoff bound times the complementary probability mass. -/
@@ -35,7 +35,7 @@ theorem abs_expect_sub_singletonContribution_le
         (distribution point).toReal * pointValue| ≤
       bound * (1 - (distribution point).toReal) := by
   classical
-  letI : Fintype Ω := Fintype.ofFinite Ω
+  let : Fintype Ω := Fintype.ofFinite Ω
   rw [expect_eq_sum]
   have hmass : ∑ outcome : Ω, (distribution outcome).toReal = 1 :=
     pmf_toReal_sum_one distribution
@@ -86,12 +86,21 @@ def quittingSoloQuitAction (who : ι) : ι → Bool :=
 /-- Exactly `who` quits in the solo-quit action. -/
 @[simp] theorem quittingQuitters_soloQuitAction (who : ι) :
     quittingQuitters (quittingSoloQuitAction who) = {who} := by
-  ext player
+  apply Finset.ext
+  intro player
+  rw [Finset.mem_singleton]
+  have hmem : player ∈ quittingQuitters (quittingSoloQuitAction who) ↔
+      quittingSoloQuitAction who player = true := by
+    unfold quittingQuitters
+    simp
+  rw [hmem]
+  unfold quittingSoloQuitAction
   by_cases hp : player = who
   · subst player
-    simp [quittingQuitters, quittingSoloQuitAction]
-  · simp [quittingQuitters, quittingSoloQuitAction,
-      quittingAllContinueAction, hp]
+    rw [Function.update_self]
+    simp
+  · rw [Function.update_of_ne hp]
+    simp [quittingAllContinueAction, hp]
 
 /-- The payoff at the solo-quit action is the singleton terminal reward. -/
 @[simp] theorem quittingRootPayoff_soloQuitAction
@@ -104,7 +113,7 @@ def quittingSoloQuitAction (who : ι) : ι → Bool :=
     rw [quittingQuitters_soloQuitAction]
     exact Finset.singleton_nonempty who
   unfold quittingRootPayoff
-  rw [dif_pos hnonempty]
+  rw [dite_eq_left hnonempty]
   congr
   exact quittingQuitters_soloQuitAction who
 

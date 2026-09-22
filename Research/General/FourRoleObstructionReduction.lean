@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPlateauDebtTransfer
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticMinimumAggregateSurplusConsumer
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticNegativeVertexGerm
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticResetIncidenceCapReturn
@@ -144,7 +145,7 @@ structure SameLawResetCluster
   profiles_tendsto : Tendsto
     (fun n => quittingTerminalSemanticPair reward (profiles n))
       atTop (𝓝 source)
-  mass_simplex : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι)
+  mass_simplex : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι)
   baseSubseq_strictMono : StrictMono baseSubseq
   mass_tendsto : Tendsto (fun n => quittingTerminalOutcomeMass reward
     (Function.update (profiles (baseSubseq n)) owner
@@ -224,7 +225,7 @@ theorem exists_matched_transfer_incidence_or_separatedToggle
     (witness : QuittingTerminalExploitabilityWitness reward)
     (source target : QuittingTerminalSemanticPair ι) (owner : ι)
     (mass : QuittingTerminalOutcome ι → ℝ)
-    (hmass : mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι))
+    (hmass : mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι))
     (hdebt : 0 < quittingTerminalSemanticDebt source owner)
     (htransfer : quittingTerminalSemanticDebt source owner ≤
       ∑ other ∈ Finset.univ.erase owner,
@@ -576,7 +577,7 @@ theorem exists_counterexampleLocalFourRoleCertificate
     (witness : QuittingTerminalExploitabilityWitness reward) :
     ∃ certificate : CounterexampleLocalFourRoleCertificate witness,
       certificate.branch.roleSupport.card ≤ 4 := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨source, hsource, hminimum, ⟨owner, howner⟩,
       hnash, _hfixed⟩ :=
     noUniformPayoff_implies_positiveMinimumSemanticPlateau witness
@@ -641,7 +642,7 @@ theorem debtGate_joiner_or_punishmentMoat_sameLaw
             (subseq : ℕ → ℕ),
           Tendsto (fun n => quittingTerminalSemanticPair reward (profiles n))
               atTop (nhds source) ∧
-          mass ∈ stdSimplex ℝ (QuittingTerminalOutcome ι) ∧
+          mass ∈ GameTheory.Math.Probability.simplexWeights (QuittingTerminalOutcome ι) ∧
           StrictMono subseq ∧
           Tendsto (fun n => quittingTerminalOutcomeMass reward
               (Function.update (profiles (subseq n)) owner

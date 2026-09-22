@@ -70,7 +70,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability Math.PMFProduct
+open Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type}
 
@@ -119,7 +119,7 @@ theorem isAdaptiveDecoupledEquilibriumCertificate_of_isActionIndependent
     (hAI : G.IsActionIndependent) (s₀ : G.State) :
     ∃ v : Payoff ι, G.IsAdaptiveDecoupledEquilibriumCertificate s₀ v := by
   classical
-  letI : Fintype G.State := Fintype.ofFinite G.State
+  let : Fintype G.State := Fintype.ofFinite G.State
   obtain ⟨x, hx⟩ := G.exists_isMixedStageNash
   set κ : G.State → PMF G.State :=
     fun s' => G.transition s' (Classical.arbitrary G.JointAct) with hκdef

@@ -47,9 +47,9 @@ of the comparison matrix, spelled out in full. -/
 theorem quittingSingletonLCPFeasible_iff
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι) :
     quittingSingletonLCPFeasible reward ↔
-      ∃ lam : stdSimplex ℝ ι,
+      ∃ lam : Convexity.StdSimplex ℝ ι,
         (∀ i, 0 ≤ singletonLCPResidual (quittingSingletonMatrix reward) lam i) ∧
-        ∀ i, lam.val i * singletonLCPResidual (quittingSingletonMatrix reward) lam i = 0 :=
+        ∀ i, lam.weights i * singletonLCPResidual (quittingSingletonMatrix reward) lam i = 0 :=
   Iff.rfl
 
 omit [Fintype ι] in

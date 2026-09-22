@@ -105,7 +105,7 @@ theorem executableRationalStrictDeficitDebt_step_of_pos
   have hpositiveOld : 0 < rationalFiniteSourceDebt reward old := by
     simpa only [old, executableRationalStrictDeficitDebt] using hpositive
   unfold executableRationalStrictDeficitDebt
-  rw [executableRationalStrictDeficitWords_succ, dif_pos hpositiveOld]
+  rw [executableRationalStrictDeficitWords_succ, dite_eq_left hpositiveOld]
   exact (rationalQuittingStrictDeficitRoot_absorption_and_debt
     reward _ hM hgap hdeficit hreward hpositive).2
 
@@ -126,7 +126,7 @@ theorem executableRationalStrictDeficitDebt_step_of_nonpos
   have hnonposOld : ¬ 0 < rationalFiniteSourceDebt reward old := by
     simpa only [old, executableRationalStrictDeficitDebt] using hnonpos
   unfold executableRationalStrictDeficitDebt
-  rw [executableRationalStrictDeficitWords_succ, dif_neg hnonposOld]
+  rw [executableRationalStrictDeficitWords_succ, dite_eq_right hnonposOld]
 
 theorem executableRationalStrictDeficitDebt_antitone
     (reward : RationalQuittingReward players) (gap : ℚ)

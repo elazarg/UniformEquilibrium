@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import Mathlib.Algebra.Order.BigOperators.GroupWithZero.Finset
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Strict upper bounds for finite products
@@ -39,7 +39,7 @@ theorem prod_lt_one_of_mem
       (Finset.ne_of_mem_erase hindex)
   have hrest_le_one :
       (∏ index ∈ indices.erase witness, factor index) ≤ 1 := by
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · intro index hindex
       exact hfactor_nonneg index (Finset.mem_of_mem_erase hindex)
         (Finset.ne_of_mem_erase hindex)

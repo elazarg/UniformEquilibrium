@@ -25,7 +25,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open Math.ProbabilityMassFunction
 open scoped Topology
 
@@ -245,7 +245,7 @@ theorem finiteAveragePayoff_purePrefix_eq_configCesaro
         ∑ t ∈ Finset.range T,
           expect (Math.PMFIter.iter A.prescribedConfigDist t y)
             (fun w => A.prescribedStagePayoff w who)) := by
-    letI : Fintype A.Config := A.configFintype
+    let : Fintype A.Config := A.configFintype
     simp only [expect_eq_sum, Finset.mul_sum]
     rw [Finset.sum_comm]
   rw [hcomm]

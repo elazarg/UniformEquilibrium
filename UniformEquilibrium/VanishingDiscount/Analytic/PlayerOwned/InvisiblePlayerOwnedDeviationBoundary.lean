@@ -27,7 +27,7 @@ namespace GameTheory
 namespace StochasticGame
 namespace AnalyticBellmanGerm
 
-open Math Math.OnlineLearning Math.PMFProduct Math.Probability
+open _root_.Math Math.OnlineLearning Math.PMFProduct _root_.Math.Probability
   Math.ProbabilityMassFunction Set
 
 variable {ι : Type} {G : StochasticGame ι}

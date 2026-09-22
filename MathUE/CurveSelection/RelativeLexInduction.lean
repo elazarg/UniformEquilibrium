@@ -93,11 +93,11 @@ theorem all_isAlgebraic_of_lex_and_separable_step
     ∀ j : Fin d,
       IsAlgebraic K (φ (objective j)) := by
   classical
-  letI : Fintype ι := Fintype.ofFinite ι
-  letI : Fintype κ := Fintype.ofFinite κ
+  let : Fintype ι := Fintype.ofFinite ι
+  let : Fintype κ := Fintype.ofFinite κ
   dsimp only
   let K := FractionRing (Polynomial ℝ)
-  letI : Algebra K GermField :=
+  let : Algebra K GermField :=
     parameterFractionRingGermAlgebra
       source parameter hinjective
   let P₁ :=

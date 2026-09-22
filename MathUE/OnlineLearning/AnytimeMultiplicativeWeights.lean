@@ -18,7 +18,7 @@ at the start of that epoch is cubic in `K`.
 namespace Math.OnlineLearning
 
 open Filter Topology
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Epoch `k` contains `(k + 1)²` rounds. -/
 def anytimeEpochLength (k : ℕ) : ℕ := (k + 1) ^ 2

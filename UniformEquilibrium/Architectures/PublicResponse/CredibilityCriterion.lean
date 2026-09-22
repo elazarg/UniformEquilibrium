@@ -117,7 +117,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} {G : StochasticGame ι}
 
@@ -696,7 +696,7 @@ theorem exists_deviationPotential {u : A.Config → Payoff ι}
           expect (A.nextConfigDist who z (PMF.pure act)) Φ ≤
         u z who + Φ z := by
   classical
-  letI : DecidablePred
+  let : DecidablePred
       (fun p : A.Config × G.Act who => A.targetCharge u who p.1 p.2 = 0) :=
     Classical.decPred _
   set kernel : A.Config × G.Act who → PMF A.Config := fun p =>
@@ -715,6 +715,7 @@ theorem exists_deviationPotential {u : A.Config → Payoff ι}
     intro p hp y
     simp [actualOccupationColumn, hkernel, hsource, hp, PMF.pure_apply,
       apply_ite ENNReal.toReal]
+    ring_nf
   have halt :=
     normalizedPositiveChargedCirculation_xor_driftPotential
       kernel source charge
@@ -1653,8 +1654,9 @@ open CredibleResponseNoAutomaticCertificate
 
 /-- A two-configuration architecture over the one-state detector example.
 The configuration records the last public action; the prescribed row is the
-constant `row`. -/
-def stationaryArchitecture (row : Bool) :
+constant `row`. Reducibility exposes the concrete Boolean configuration to
+the probe proofs below. -/
+@[reducible] def stationaryArchitecture (row : Bool) :
     game.FiniteResponseArchitecture () where
   Config := Bool
   start := false
@@ -1698,7 +1700,6 @@ theorem stagePayoffAt_eq (row z act : Bool) :
       if act then 1 else 0 := by
   unfold StochasticGame.FiniteResponseArchitecture.stagePayoffAt
   rw [actionDist_eq, expect_pure]
-  simp [game, stationaryArchitecture]
 
 theorem prescribedStagePayoff_eq (row z : Bool) :
     (stationaryArchitecture row).prescribedStagePayoff z () =
@@ -1779,9 +1780,9 @@ theorem not_isNeutralOccupationNonpositive_obey :
       mass_nonneg := by
         intro p
         rcases eq_or_ne p (true, true) with hp | hp
-        · rw [show responseMass p = 1 from if_pos hp]
+        · rw [show responseMass p = 1 from ite_eq_left hp]
           norm_num
-        · rw [show responseMass p = 0 from if_neg hp]
+        · rw [show responseMass p = 0 from ite_eq_right hp]
       neutral_support := by
         intro p _
         exact targetCharge_constTarget false 0 p.1 p.2
@@ -1791,19 +1792,20 @@ theorem not_isNeutralOccupationNonpositive_obey :
         rcases eq_or_ne p (true, true) with hp | hp
         · rw [hp, show responseMass ((true, true) :
             (stationaryArchitecture false).Config × game.Act ()) = 1 from
-              if_pos rfl, one_mul, nextConfigDist_eq]
+              ite_eq_left rfl, one_mul, nextConfigDist_eq]
           rcases eq_or_ne y (true : Bool) with hy | hy
           · rw [hy]
             norm_num
-          · rw [if_neg hy, Math.Probability.pure_apply_toReal_of_ne _ _ hy,
+          · rw [ite_eq_right hy, Math.Probability.pure_apply_toReal_of_ne _ _ hy,
               sub_zero]
-        · rw [show responseMass p = 0 from if_neg hp, zero_mul]
+        · rw [show responseMass p = 0 from ite_eq_right hp, zero_mul]
       total := by
         change ∑ p : Bool × Bool, responseMass p = 1
         rw [sum_bool_prod]
         norm_num [responseMass] }
   rw [sum_bool_prod] at hle
-  simp only [stagePayoffAt_eq, responseMass, constTarget] at hle
+  simp only [responseMass, constTarget] at hle
+  rw [stagePayoffAt_eq false true true] at hle
   norm_num at hle
 
 /-- The exact placement of the boundary counterexample: it satisfies (T0),
@@ -1833,24 +1835,26 @@ theorem not_isPrescribedDelivery_obey_one :
       mass_nonneg := by
         intro z
         rcases eq_or_ne z (true : Bool) with hz | hz
-        · rw [show obeyStationaryMass z = 0 from if_pos hz]
-        · rw [show obeyStationaryMass z = 1 from if_neg hz]
+        · rw [show obeyStationaryMass z = 0 from ite_eq_left hz]
+        · rw [show obeyStationaryMass z = 1 from ite_eq_right hz]
           norm_num
       balance := by
         intro y
         refine Finset.sum_eq_zero fun z _ => ?_
         rcases eq_or_ne z (true : Bool) with hz | hz
-        · rw [show obeyStationaryMass z = 0 from if_pos hz, zero_mul]
-        · rw [show obeyStationaryMass z = 1 from if_neg hz, one_mul]
+        · rw [show obeyStationaryMass z = 0 from ite_eq_left hz, zero_mul]
+        · rw [show obeyStationaryMass z = 1 from ite_eq_right hz, one_mul]
           have hz' : z = false := by
             rcases eq_or_ne z (false : Bool) with h' | h'
             · exact h'
-            · exact absurd (by cases z <;> simp_all) hz
+            · cases z
+              · rfl
+              · exact (hz rfl).elim
           rw [hz', prescribedConfigDist_eq]
           rcases eq_or_ne y (false : Bool) with hy | hy
           · rw [hy]
             norm_num
-          · rw [if_neg hy, Math.Probability.pure_apply_toReal_of_ne _ _ hy,
+          · rw [ite_eq_right hy, Math.Probability.pure_apply_toReal_of_ne _ _ hy,
               sub_zero]
       total := by
         change ∑ z : Bool, obeyStationaryMass z = 1

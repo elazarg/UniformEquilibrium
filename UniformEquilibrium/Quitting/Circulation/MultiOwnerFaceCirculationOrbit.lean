@@ -211,14 +211,14 @@ theorem mixDeficit_invariant [Nonempty ι] (lam : ι → ℝ) (hlam0 : ∀ i, 0 
       · intro i hi
         have hne : i ≠ balancedWord lam n := fun hcon => by
           rw [hcon] at hi; exact absurd hi (ne_of_gt hppos)
-        rw [mixDeficit_succ, if_neg hne, hoff i hi, hi]
+        rw [mixDeficit_succ, ite_eq_right hne, hoff i hi, hi]
         ring
       · intro i
         rw [mixDeficit_succ]
         by_cases hi : i = balancedWord lam n
-        · rw [if_pos hi, hi]
+        · rw [ite_eq_left hi, hi]
           linarith [hlam0 (balancedWord lam n)]
-        · rw [if_neg hi]
+        · rw [ite_eq_right hi]
           linarith [hlam0 i, hlow i]
 
 /-- **Every letter of the greedy word lies in the support**, so the word is
@@ -308,8 +308,8 @@ theorem wordDrift_balancedWord [Nonempty ι] (r : Finset ι → ι → ℝ) (lam
         intro i _
         rw [mixDeficit_succ]
         by_cases hi : i = balancedWord lam T
-        · rw [if_pos hi, if_pos hi]; ring
-        · rw [if_neg hi, if_neg hi]; ring
+        · rw [ite_eq_left hi, ite_eq_left hi]; ring
+        · rw [ite_eq_right hi, ite_eq_right hi]; ring
       rw [wordDrift_succ, ih, Finset.sum_congr rfl hexp, Finset.sum_sub_distrib,
         Finset.sum_add_distrib,
         Finset.sum_ite_eq' Finset.univ (balancedWord lam T) (fun i => r {i} j)]
@@ -395,7 +395,7 @@ def chainStep (L : ℕ) [NeZero L] (N n : ℕ) : ℕ := (phaseSchedule L N n).2
 theorem chain_succ_of_lt (L : ℕ) [NeZero L] (N n : ℕ) (hlt : chainStep L N n + 1 < N) :
     chainPhase L N (n + 1) = chainPhase L N n ∧ chainStep L N (n + 1) = chainStep L N n + 1 := by
   unfold chainPhase chainStep at *
-  rw [phaseSchedule_succ, if_pos hlt]
+  rw [phaseSchedule_succ, ite_eq_left hlt]
   exact ⟨rfl, rfl⟩
 
 /-- At a phase boundary the schedule advances the phase and resets the
@@ -403,7 +403,7 @@ counter. -/
 theorem chain_succ_of_boundary (L : ℕ) [NeZero L] (N n : ℕ) (hlt : ¬ chainStep L N n + 1 < N) :
     chainPhase L N (n + 1) = chainPhase L N n + 1 ∧ chainStep L N (n + 1) = 0 := by
   unfold chainPhase chainStep at *
-  rw [phaseSchedule_succ, if_neg hlt]
+  rw [phaseSchedule_succ, ite_eq_right hlt]
   exact ⟨rfl, rfl⟩
 
 /-- The microstep row at chain position `n`: the current phase's owner word

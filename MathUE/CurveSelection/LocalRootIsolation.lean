@@ -28,7 +28,7 @@ theorem eventually_eq_of_bivEval_eq_zero
   let bad : Set ℝ := {y | p.IsRoot y} \ {y₀}
   have hbadFinite : bad.Finite := by
     exact
-      (Polynomial.finite_setOf_isRoot hp).subset
+      (Polynomial.finite_setOfPred_isRoot hp).subset
         Set.sdiff_subset
   have hy₀ : y₀ ∈ badᶜ := by
     simp [bad]

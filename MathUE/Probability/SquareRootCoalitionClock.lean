@@ -905,14 +905,14 @@ theorem coalitionContinueAmplitude_add_quitAmplitude_le_one
     · exact second_mem
   have hquit_prod :
       (∏ player ∈ coalition, hazard player) ≤ hazard first * hazard second := by
-    have h := Finset.prod_le_prod_of_subset_of_le_one hpair_subset
+    have h := Finset.prod_le_prod_of_subset_of_le_one₀ hpair_subset
       (fun player hplayer => (hazard_mem player hplayer).1)
       (fun player hplayer _ => (hazard_mem player hplayer).2)
     simpa [distinct, mul_comm] using h
   have hcontinue_prod :
       (∏ player ∈ coalition, (1 - hazard player)) ≤
         (1 - hazard first) * (1 - hazard second) := by
-    have h := Finset.prod_le_prod_of_subset_of_le_one hpair_subset
+    have h := Finset.prod_le_prod_of_subset_of_le_one₀ hpair_subset
       (fun player hplayer => sub_nonneg.mpr (hazard_mem player hplayer).2)
       (fun player hplayer _ => by linarith [(hazard_mem player hplayer).1])
     simpa [distinct, mul_comm] using h
@@ -999,7 +999,7 @@ theorem zeroOrOneActivationAmplitude_le_prod_add
             (mul_le_mul_of_nonneg_left
               (show (∏ index ∈ indices, stay index) ≤
                   ∏ index ∈ indices, (stay index + fire index) by
-                apply Finset.prod_le_prod
+                apply Finset.prod_le_prod₀
                 · exact fun index hindex =>
                     stay_nonneg index (Finset.mem_insert_of_mem hindex)
                 · intro index hindex
@@ -1024,7 +1024,7 @@ theorem zeroOrOneActivationAmplitude_le_one
       zeroOrOneActivationAmplitude_le_prod_add
         indices stay fire stay_nonneg fire_nonneg
     _ ≤ ∏ _index ∈ indices, (1 : ℝ) := by
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · exact fun index hindex => add_nonneg
           (stay_nonneg index hindex) (fire_nonneg index hindex)
       · exact pair_bound
@@ -1100,12 +1100,12 @@ theorem finiteDeletedContinueClock_le_one
     (hazard_mem : ∀ time ∈ dates, ∀ player ∈ players,
       hazard time player ∈ Set.Icc (0 : ℝ) 1) :
     finiteDeletedContinueClock dates players hazard who ≤ 1 := by
-  apply Finset.prod_le_one
+  apply Finset.prod_le_one₀
   · intro time htime
     exact Finset.prod_nonneg fun player hplayer => sub_nonneg.mpr
       (hazard_mem time htime player (Finset.mem_of_mem_erase hplayer)).2
   · intro time htime
-    apply Finset.prod_le_one
+    apply Finset.prod_le_one₀
     · intro player hplayer
       exact sub_nonneg.mpr
         (hazard_mem time htime player (Finset.mem_of_mem_erase hplayer)).2
@@ -1122,7 +1122,7 @@ theorem finiteJointContinueClock_le_deleted
       hazard time player ∈ Set.Icc (0 : ℝ) 1) :
     finiteJointContinueClock dates players hazard ≤
       finiteDeletedContinueClock dates players hazard who := by
-  apply Finset.prod_le_prod
+  apply Finset.prod_le_prod₀
   · intro time htime
     exact Finset.prod_nonneg fun player hplayer =>
       sub_nonneg.mpr (hazard_mem time htime player hplayer).2

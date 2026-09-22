@@ -67,7 +67,7 @@ theorem eval_quittingFiniteCalendarRawPayoffPolynomial
     (deadline : ℕ) (observer : ι)
     (x : MixedSimplex ι
       (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
-    MvPolynomial.eval (fun pair => x pair.1 pair.2)
+    MvPolynomial.eval (fun pair => (x pair.1).weights pair.2)
         (quittingFiniteCalendarRawPayoffPolynomial reward deadline observer) =
       quittingFiniteCalendarRawPayoff reward deadline x observer := by
   simp [quittingFiniteCalendarRawPayoffPolynomial,

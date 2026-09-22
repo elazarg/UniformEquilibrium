@@ -1,3 +1,4 @@
+import MathUE.ChargedPathCode
 import UniformEquilibrium.Quitting.Projective.RobustChargedRelation
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 import UniformEquilibrium.Quitting.Punishment.ContinueFloor
@@ -8,7 +9,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.ChargedPathBudget Math.Probability QuittingSureSetOwnerRepair
+open Maths.ChargedPathBudget _root_.Math.Probability QuittingSureSetOwnerRepair
 
 namespace ZeroRewardEntryFloor
 
@@ -225,9 +226,12 @@ def repeatedChargedLoopPath (count : ℕ) (bound tolerance : ℝ)
     count
   have hloop :
       (chargedLoopPath bound tolerance hbound htolerance).length = 1 := by
-    unfold chargedLoopPath
-    rw [ChargedRelation.Path.length_castTgt]
-    rfl
+    exact (ChargedRelation.Path.length_castTgt
+      (R := quittingFloorFreeRobustChargedRelation reward tolerance bound)
+      (chargedLoopEdge_source_eq_target bound tolerance hbound htolerance).symm
+      (ChargedRelation.Path.single
+        (R := quittingFloorFreeRobustChargedRelation reward tolerance bound)
+        (chargedLoopEdge bound tolerance hbound htolerance))).trans rfl
   induction count with
   | zero => simp [ChargedRelation.Path.iterate]
   | succ count ih =>

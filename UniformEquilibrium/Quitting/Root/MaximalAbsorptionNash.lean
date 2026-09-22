@@ -19,7 +19,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Set Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open Set _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 

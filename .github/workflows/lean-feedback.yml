@@ -60,16 +60,7 @@ jobs:
               mapfile -t targets < <(
                 python3 scripts/ci_changed_lean_targets.py --targets "$BASE_SHA" "$HEAD_SHA"
               )
-              focused_lakefile="$RUNNER_TEMP/lakefile.focused.lean"
-              cp lakefile.lean "$focused_lakefile"
-              cat >> "$focused_lakefile" <<'EOF'
-
-          lean_lib Literature where
-            srcDir := "."
-            leanOptions := uniformEquilibriumLeanOptions
-          EOF
-              lake --quiet --iofail --dir "$GITHUB_WORKSPACE" --file "$focused_lakefile" \
-                build "${targets[@]}"
+              lake --quiet --iofail build "${targets[@]}"
               ;;
             full)
               lake --quiet --iofail build

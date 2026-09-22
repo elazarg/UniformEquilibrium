@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory.BlockPairK11.ConditionalData
 
-open Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.PMFProduct Math.ProbabilityMassFunction
 
 theorem rootAbsorbingContribution_three_eq_chart
     (h : Player → ℝ) (h0 : ∀ who, 0 ≤ h who)

@@ -63,8 +63,8 @@ theorem quittingRootCoordinateNashDefect_rationalQuitting_eq_cast
     reward tail root who false
   have hprescribed := quittingRootExpectedPayoff_rationalQuitting_eq_cast
     reward tail root who
-  simp only [if_true] at hquit
-  simp only [Bool.false_eq_true, if_false] at hcontinue
+  simp only [ite_true] at hquit
+  simp only [Bool.false_eq_true, ite_false] at hcontinue
   rw [quittingRootCoordinateNashDefect, quittingRootSuccessorPayoff,
     hquit, hcontinue, hprescribed]
   simp only [rationalBooleanNashRegret, Rat.cast_sub, Rat.cast_max]

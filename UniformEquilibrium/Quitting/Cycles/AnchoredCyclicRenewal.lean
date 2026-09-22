@@ -71,7 +71,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {m : ℕ}
 
@@ -371,7 +371,7 @@ theorem quittingAnchoredCyclicRefusalHazard_of_ne
     (w : Fin m → ι) (hazard : Fin m → ℝ) {who : ι} {k : Fin m}
     (hk : w k ≠ who) :
     quittingAnchoredCyclicRefusalHazard w hazard who k = hazard k := by
-  rw [quittingAnchoredCyclicRefusalHazard, if_neg hk]
+  rw [quittingAnchoredCyclicRefusalHazard, ite_eq_right hk]
 
 omit [Fintype ι] in
 /-- At a phase the refuser owns, the zeroed hazard is zero. -/
@@ -379,7 +379,7 @@ theorem quittingAnchoredCyclicRefusalHazard_self
     (w : Fin m → ι) (hazard : Fin m → ℝ) {who : ι} {k : Fin m}
     (hk : w k = who) :
     quittingAnchoredCyclicRefusalHazard w hazard who k = 0 := by
-  rw [quittingAnchoredCyclicRefusalHazard, if_pos hk]
+  rw [quittingAnchoredCyclicRefusalHazard, ite_eq_left hk]
 
 omit [Fintype ι] in
 /-- The one-phase Continue value against an anchored cyclic root, written with
@@ -394,9 +394,9 @@ theorem quittingAnchoredCyclicContinueValue_eq_refusalHazard
         (1 - quittingAnchoredCyclicRefusalHazard w hazard who phase) * next := by
   unfold quittingAnchoredCyclicContinueValue quittingAnchoredCyclicRefusalHazard
   by_cases hwho : who = w phase
-  · rw [if_pos hwho, if_pos hwho.symm]
+  · rw [ite_eq_left hwho, ite_eq_left hwho.symm]
     ring
-  · rw [if_neg hwho, if_neg (fun hcontra ↦ hwho hcontra.symm)]
+  · rw [ite_eq_right hwho, ite_eq_right (fun hcontra ↦ hwho hcontra.symm)]
 
 omit [Fintype ι] in
 /-- **Deleting the refuser zeroes its own phases.**  Forcing `who` to continue
@@ -650,7 +650,7 @@ theorem prod_one_sub_refusalHazard_lt_one
   refine Math.PMFProduct.continueMass_lt_one_of_pos
     (quittingAnchoredCyclicRefusalHazard_nonneg h0 w who)
     (quittingAnchoredCyclicRefusalHazard_le_one h1 w who) (i₀ := k₀) ?_
-  rwa [quittingAnchoredCyclicRefusalHazard, if_neg hne]
+  rwa [quittingAnchoredCyclicRefusalHazard, ite_eq_right hne]
 
 /-- **The response cap bound with no residual.**  When every player is a
 spectator at some phase carrying positive hazard, the max-linear solution caps

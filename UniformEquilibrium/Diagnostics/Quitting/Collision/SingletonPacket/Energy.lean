@@ -74,7 +74,7 @@ theorem exists_supported_pair_pos_reciprocalSoloEffect
       0 < packet.mass who ∧ 0 < packet.mass owner ∧ who ≠ owner ∧
         0 < quittingSingletonSoloEffect reward who owner +
           quittingSingletonSoloEffect reward owner who := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact exists_supported_pair_pos_reciprocalSoloEffect_of_packetDefect_pos
     packet
     (quittingNormalizedSingletonPacketDefect_pos witness

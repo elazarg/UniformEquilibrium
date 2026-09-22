@@ -45,7 +45,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -75,7 +75,7 @@ theorem quittingRootQuitPayoff_le_one_of_cappedJointExit
             (quittingQuitters (Function.update sample who true)).Nonempty :=
           ⟨who, hmem⟩
         unfold quittingRootPayoff
-        rw [dif_pos hnonempty]
+        rw [dite_eq_left hnonempty]
         exact hcap ⟨_, hnonempty⟩ who hmem
     _ = 1 := expect_const _ _
 

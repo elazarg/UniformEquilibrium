@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 open Math.SurvivalWeightedObstruction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

@@ -120,7 +120,7 @@ theorem one_le_or_exists_consecutiveHazardBound_of_isεExactAnchoredSoloPeriodic
   · left
     have hmpos : 0 < m := Nat.pos_of_ne_zero (NeZero.ne m)
     let origin : Fin m := ⟨0, hmpos⟩
-    haveI : Nonempty (Fin m) := ⟨origin⟩
+    have : Nonempty (Fin m) := ⟨origin⟩
     have hsucc : ∀ k : Fin m, w (k + 1) = w k := fun k ↦ by simpa using hconst k
     obtain ⟨designated, hdesignated⟩ := Math.exists_const_of_cyclic_succ_eq hsucc
     have hzero : ∀ phase : Fin m,

@@ -23,7 +23,7 @@ noncomputable section
 namespace GameTheory.QuittingAbsorptionPath
 
 open Filter Finset Set unitInterval
-open GameTheory Math
+open GameTheory _root_.Math
 open scoped Topology unitInterval
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -309,7 +309,7 @@ theorem pathTimes_singletonCadlagPathOfPlayerPath
     pathTimes (singletonCadlagPathOfPlayerPath mass hmono htotal) =
       Set.Icc 0 1 := by
   ext time
-  simp only [pathTimes, Set.mem_setOf_eq]
+  simp only [pathTimes, Set.mem_ofPred_eq]
   constructor
   · exact fun h => h.1
   · intro htime
@@ -334,7 +334,7 @@ private theorem pathRightDerivative_singletonCadlagPathOfPlayerPath_eq_zero
     pathRightDerivative
         (singletonCadlagPathOfPlayerPath mass hmono htotal)
         time coalition = 0 := by
-  letI : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
+  let : NeBot (nhdsWithin time (Set.Ioo time 1)) :=
     left_nhdsWithin_Ioo_neBot htime
   unfold pathRightDerivative
   have hzero (s : ℝ) :
@@ -409,7 +409,7 @@ theorem absorptionPathPayoff_singletonAbsorptionPathOfPlayerPath
   have htime : (time : ℝ) ∈ Icc (0 : ℝ) 1 := time.property
   have htimeLt : (time : ℝ) < 1 :=
     lt_of_le_of_ne time.property.2 fun heq => htimeOne (Subtype.ext heq)
-  rw [absorptionPathPayoff, if_pos htime]
+  rw [absorptionPathPayoff, ite_eq_left htime]
   change (if pathTotal
       (singletonCadlagPathOfPlayerPath mass hmono htotal) (time : ℝ) < 1 then
       fun owner => (∑ coalition,
@@ -420,7 +420,7 @@ theorem absorptionPathPayoff_singletonAbsorptionPathOfPlayerPath
                 (singletonCadlagPathOfPlayerPath mass hmono htotal)
                   (time : ℝ)) else 0) who = _
   rw [pathTotal_singletonCadlagPathOfPlayerPath mass hmono htotal htime,
-    if_pos htimeLt]
+    ite_eq_left htimeLt]
   change (∑ coalition,
       (singletonCoalitionMass (mass.extend 1) coalition -
         singletonCoalitionMass (mass.extend time) coalition) *
@@ -480,7 +480,7 @@ theorem exists_playerMass_increase_of_pathRightDerivative_pos
     ∃ second : unitInterval, time < (second : ℝ) ∧
       (second : ℝ) < upper ∧
       mass ⟨time, htime⟩ who < mass second who := by
-  letI : NeBot (nhdsWithin time (Ioo time 1)) :=
+  let : NeBot (nhdsWithin time (Ioo time 1)) :=
     left_nhdsWithin_Ioo_neBot htimeOne
   let clock : unitInterval := ⟨time, htime⟩
   let quotient : ℝ → ℝ := fun s =>

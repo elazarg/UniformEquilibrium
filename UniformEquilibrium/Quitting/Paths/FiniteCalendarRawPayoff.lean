@@ -1,10 +1,13 @@
 import UniformEquilibrium.Quitting.Paths.FiniteCalendarPayoffClosure
+import GameTheory.Math.Probability.Simplex
 import UniformEquilibrium.Quitting.Paths.ProfileNeverMass
 import UniformEquilibrium.Quitting.Paths.StageCoalitionStoppingLaw
 
 /-! # Literal finite-calendar terminal masses and payoffs -/
 
 noncomputable section
+
+open GameTheory.Math.Probability
 
 namespace GameTheory
 
@@ -17,7 +20,8 @@ including its Never atom. -/
 def quittingFiniteCalendarStrictTail {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) (time : Fin deadline) : ℝ :=
-  x who none + ∑ later : Fin deadline, if time < later then x who (some later) else 0
+  (x who).weights none + ∑ later : Fin deadline,
+    if time < later then (x who).weights (some later) else 0
 
 /-- Literal polynomial mass of a nonempty first-quitter coalition on a
 finite calendar. -/
@@ -25,13 +29,13 @@ def quittingFiniteCalendarCoalitionMass {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (terminal : {S : Finset ι // S.Nonempty}) : ℝ :=
   ∑ time : Fin deadline,
-    (∏ who ∈ terminal.val, x who (some time)) *
+    (∏ who ∈ terminal.val, (x who).weights (some time)) *
       ∏ who ∈ terminal.valᶜ, quittingFiniteCalendarStrictTail x who time
 
 /-- Literal all-Never mass on a finite calendar. -/
 def quittingFiniteCalendarNeverMass {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) : ℝ :=
-  ∏ who, x who none
+  ∏ who, (x who).weights none
 
 /-- Whole prescribed payoff polynomial induced by the finite-calendar first
 coalition masses. -/
@@ -48,8 +52,9 @@ theorem finiteCalendarSimplexPMF_toReal {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) (choice : Option (Fin deadline)) :
     ((Math.ProbabilityMassFunction.stdSimplexEquiv.symm (x who)) choice).toReal =
-      x who choice := by
-  exact Math.ProbabilityMassFunction.ofVector_toReal (x who).property choice
+      (x who).weights choice := by
+  exact Math.ProbabilityMassFunction.ofVector_toReal
+    (Math.ProbabilityMassFunction.weights_mem_simplexWeights (x who)) choice
 
 def quittingFiniteCalendarDecodedLaws {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
@@ -63,19 +68,19 @@ theorem quittingFiniteCalendarDecodedLaws_some_toReal {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) (time : Fin deadline) :
     (quittingFiniteCalendarDecodedLaws x who (some time.val)).toReal =
-      x who (some time) := by
+      (x who).weights (some time) := by
   classical
   unfold quittingFiniteCalendarDecodedLaws
   rw [PMF.map_apply, tsum_eq_single (some time)]
   · simp [_root_.Math.Probability.finiteStoppingTimeDecode,
-      ENNReal.toReal_ofReal (stdSimplex.zero_le (x who) (some time))]
+      ENNReal.toReal_ofReal ((x who).weights_nonneg (some time))]
   · intro choice hchoice
     cases choice with
     | none => simp [_root_.Math.Probability.finiteStoppingTimeDecode]
     | some other =>
         simp only [_root_.Math.Probability.finiteStoppingTimeDecode,
           Option.map_some, Option.some.injEq]
-        rw [if_neg]
+        rw [ite_eq_right]
         intro heq
         apply hchoice
         exact congrArg some (Fin.ext heq.symm)
@@ -85,12 +90,12 @@ omit [DecidableEq ι] in
 theorem quittingFiniteCalendarDecodedLaws_none_toReal {deadline : ℕ}
     (x : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (who : ι) :
-    (quittingFiniteCalendarDecodedLaws x who none).toReal = x who none := by
+    (quittingFiniteCalendarDecodedLaws x who none).toReal = (x who).weights none := by
   classical
   unfold quittingFiniteCalendarDecodedLaws
   rw [PMF.map_apply, tsum_eq_single none]
   · simp [_root_.Math.Probability.finiteStoppingTimeDecode,
-      ENNReal.toReal_ofReal (stdSimplex.zero_le (x who) none)]
+      ENNReal.toReal_ofReal ((x who).weights_nonneg none)]
   · intro choice hchoice
     cases choice with
     | none => exact (hchoice rfl).elim
@@ -107,7 +112,7 @@ theorem quittingFiniteCalendarDecodedLaws_some_eq_zero_of_le {deadline : ℕ}
   rw [PMF.map_apply]
   apply ENNReal.tsum_eq_zero.mpr
   intro choice
-  rw [if_neg]
+  rw [ite_eq_right]
   cases choice with
   | none => simp [_root_.Math.Probability.finiteStoppingTimeDecode]
   | some bounded =>
@@ -121,16 +126,16 @@ theorem quittingFiniteCalendarStrictTail_eq_one_sub_head {deadline : ℕ}
     (who : ι) (time : Fin deadline) :
     quittingFiniteCalendarStrictTail x who time =
       1 - ∑ earlier : Fin deadline,
-        if earlier ≤ time then x who (some earlier) else 0 := by
+        if earlier ≤ time then (x who).weights (some earlier) else 0 := by
   classical
-  have htotal := (x who).property.2
+  have htotal := (x who).total_of_fintype
   have hsplit := Finset.sum_filter_add_sum_filter_not Finset.univ
-    (fun later : Fin deadline => later ≤ time) (fun later => x who (some later))
+    (fun later : Fin deadline => later ≤ time) (fun later => (x who).weights (some later))
   simp only [Finset.sum_filter, not_le] at hsplit
   unfold quittingFiniteCalendarStrictTail
   -- The standard-simplex total is the Never coordinate plus all finite dates.
   rw [Fintype.sum_option] at htotal
-  change x who none + ∑ later : Fin deadline, x who (some later) = 1 at htotal
+  change (x who).weights none + ∑ later : Fin deadline, (x who).weights (some later) = 1 at htotal
   linarith
 
 omit [DecidableEq ι] in
@@ -170,10 +175,10 @@ theorem quittingStageCoalitionMass_finiteCalendar_eq {deadline : ℕ}
     quittingStageCoalitionMass reward
         (quittingStoppingLawProfile reward
           (quittingFiniteCalendarDecodedLaws x)) time.val terminal =
-      (∏ who ∈ terminal.val, x who (some time)) *
+      (∏ who ∈ terminal.val, (x who).weights (some time)) *
         ∏ who ∈ terminal.valᶜ,
           quittingFiniteCalendarStrictTail x who time := by
-  letI : Nonempty ι := ⟨terminal.property.choose⟩
+  let : Nonempty ι := ⟨terminal.property.choose⟩
   rw [quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct]
   apply congrArg₂ (· * ·)
   · apply Finset.prod_congr rfl
@@ -194,7 +199,7 @@ theorem quittingStageCoalitionMass_finiteCalendar_eq_zero_of_le {deadline : ℕ}
     quittingStageCoalitionMass reward
         (quittingStoppingLawProfile reward
           (quittingFiniteCalendarDecodedLaws x)) time terminal = 0 := by
-  letI : Nonempty ι := ⟨terminal.property.choose⟩
+  let : Nonempty ι := ⟨terminal.property.choose⟩
   rw [quittingStageCoalitionMass_eq_stoppingLawProduct_mul_tailProduct]
   have hproduct : (∏ who ∈ terminal.val,
       (quittingBehaviorStoppingLaw reward
@@ -215,7 +220,7 @@ theorem quittingTerminalOutcomeMass_finiteCalendar_eq {deadline : ℕ}
         (quittingStoppingLawProfile reward
           (quittingFiniteCalendarDecodedLaws x)) (some terminal) =
       quittingFiniteCalendarCoalitionMass x terminal := by
-  letI : Nonempty ι := ⟨terminal.property.choose⟩
+  let : Nonempty ι := ⟨terminal.property.choose⟩
   rw [quittingTerminalOutcomeMass_eq_timeDisintegration]
   change (∑' time : ℕ, quittingStageCoalitionMass reward
       (quittingStoppingLawProfile reward
@@ -256,7 +261,8 @@ theorem quittingFiniteCalendarNeverMass_add_sum_coalitionMass {deadline : ℕ}
   let reward : {S : Finset ι // S.Nonempty} → Payoff ι := fun _ _ => 0
   let profile := quittingStoppingLawProfile reward
     (quittingFiniteCalendarDecodedLaws x)
-  have htotal := (quittingTerminalOutcomeMass_mem_stdSimplex reward profile).2
+  have htotal := (mem_simplexWeights.mp
+    (quittingTerminalOutcomeMass_mem_stdSimplex reward profile)).2
   rw [Fintype.sum_option] at htotal
   change quittingTerminalOutcomeMass reward profile none +
       ∑ terminal, quittingTerminalOutcomeMass reward profile (some terminal) = 1 at htotal

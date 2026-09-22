@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 /-- Failure of a Fin4 uniform payoff bounds every actual nested exact-prefix
 marginal-hazard partial sum by one common constant. -/

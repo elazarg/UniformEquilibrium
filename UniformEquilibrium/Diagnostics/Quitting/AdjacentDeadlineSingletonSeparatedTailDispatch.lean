@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -55,7 +55,7 @@ private theorem product_erase_le_factor
   have hmem : other ∈ Finset.univ.erase owner := by simp [hother]
   rw [← Finset.mul_prod_erase (Finset.univ.erase owner) f hmem]
   exact mul_le_of_le_one_right (hzero other) <|
-    Finset.prod_le_one
+    Finset.prod_le_one₀
       (fun player _ => hzero player)
       (fun player _ => hone player)
 
@@ -271,7 +271,7 @@ private theorem distinguished_product_erase_ge
         (∏ player ∈ Finset.univ.erase owner,
             (7 / 8 : ℝ) * old player) ≤
           ∏ player ∈ Finset.univ.erase owner, censored player := by
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun player _ => mul_nonneg (by norm_num) (holdNonneg player))
         (fun player hplayer => hothers player (Finset.ne_of_mem_erase hplayer))
     have hcoefficient :
@@ -316,7 +316,7 @@ private theorem distinguished_product_erase_ge
     have hprodRest :
         (∏ player ∈ rest, (7 / 8 : ℝ) * old player) ≤
           ∏ player ∈ rest, censored player := by
-      exact Finset.prod_le_prod
+      exact Finset.prod_le_prod₀
         (fun player _ => mul_nonneg (by norm_num) (holdNonneg player))
         (fun player hplayer => by
           apply hothers
@@ -374,7 +374,7 @@ private theorem censoredOpponentNeverProduct_ge_of_small_pass_and_error
   have holdProductLeOne :
       quittingAdjacentDeadlineOldOpponentNeverProduct source ≤ 1 := by
     unfold quittingAdjacentDeadlineOldOpponentNeverProduct
-    exact Finset.prod_le_one
+    exact Finset.prod_le_one₀
       (fun player _ => ENNReal.toReal_nonneg)
       (fun player _ => ENNReal.toReal_mono ENNReal.one_ne_top
         ((source.old player).coe_le_one none))

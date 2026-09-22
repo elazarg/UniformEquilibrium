@@ -31,7 +31,7 @@ noncomputable section
 
 namespace GameTheory
 
-open StochasticGame Filter Math.Probability Math.PMFProduct
+open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -89,7 +89,7 @@ theorem exists_quittingStationaryPunishmentRoot_lt_add
     ∃ root : ι → PMF Bool,
       quittingStationaryUnilateralCap reward root who <
         quittingPunishmentValue reward who + ε := by
-  haveI : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
+  have : Nonempty (ι → PMF Bool) := ⟨fun _ => PMF.pure false⟩
   refine exists_lt_of_ciInf_lt
     (f := fun root : ι → PMF Bool =>
       quittingStationaryUnilateralCap reward root who) ?_
@@ -139,8 +139,8 @@ theorem isεAsymptoticNash_quittingInstantPunishmentProfile
         reward hwho (PMF.pure true),
       quittingStationaryFixedOpponentsContinueMass_solo_other
         hwho (PMF.pure true)]
-    simp only [PMF.pure_apply, if_true,
-      if_neg (by decide : (false : Bool) ≠ true), ENNReal.toReal_one,
+    simp only [PMF.pure_apply, ite_true,
+      ite_eq_right (by decide : (false : Bool) ≠ true), ENNReal.toReal_one,
       ENNReal.toReal_zero, zero_mul, one_mul, zero_add, add_zero]
     exact max_le (by
       exact (hnoJoin who hwho).trans (le_add_of_nonneg_right hε))

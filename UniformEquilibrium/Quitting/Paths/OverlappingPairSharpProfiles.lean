@@ -7,7 +7,7 @@ noncomputable section
 
 namespace GameTheory.OverlappingPairSharpProfiles
 
-open Math.Probability Math.Probability.DiscreteHazard.StoppingLaw
+open _root_.Math.Probability _root_.Math.Probability.DiscreteHazard.StoppingLaw
 
 /-- A complete clock stopping at `time` with probability `weight` and Never
 otherwise. -/

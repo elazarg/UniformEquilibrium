@@ -15,8 +15,10 @@ except ModuleNotFoundError:  # Direct execution: ``python scripts/check_trust.py
 
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
+SORRY_PATTERN = re.compile(r"\bsorry\b")
 TOKEN_PATTERNS = (
-    (re.compile(r"\b(?:sorry|admit)\b"), "proof placeholder"),
+    (SORRY_PATTERN, "proof placeholder"),
+    (re.compile(r"\badmit\b"), "proof placeholder"),
     (
         re.compile(r"^\s*axioms?\s+", re.MULTILINE),
         "axiom declaration",
@@ -54,6 +56,9 @@ LEAN_LIBRARY_RE = re.compile(
 RESOURCE_OPTION_RE = re.compile(
     r"⟨\s*`(maxRecDepth|maxSynthPendingDepth|synthInstance\.maxSize)\s*,"
     r"\s*\.ofNat\s+(\d+)\s*⟩"
+)
+DISABLED_WARNING_RE = re.compile(
+    r"⟨\s*`(warn\.[A-Za-z0-9_.]+)\s*,\s*false\s*⟩"
 )
 
 
@@ -166,10 +171,10 @@ def token_failures(path: pathlib.Path, text: str) -> list[str]:
     failures: list[str] = []
     # The literature lane records genuinely unproved source claims with
     # `sorry`; nothing imports that lane, so this is the only trust
-    # exception. Every other rule still applies to it.
+    # exception. `admit` and every other rule still apply to it.
     in_literature = path.parts[0] == "Literature" if path.parts else False
     for pattern, label in TOKEN_PATTERNS:
-        if in_literature and label == "proof placeholder":
+        if in_literature and pattern is SORRY_PATTERN:
             continue
         for match in pattern.finditer(clean):
             line = clean.count("\n", 0, match.start()) + 1
@@ -215,6 +220,42 @@ def resource_option_failures(lakefile: str) -> list[str]:
     return failures
 
 
+def warning_option_failures(lakefile: str) -> list[str]:
+    """Allow only the Literature lane's explicit-sorry diagnostic exception."""
+
+    clean = strip_comments_and_strings(lakefile)
+    libraries = list(LEAN_LIBRARY_RE.finditer(clean))
+    failures: list[str] = []
+    allowed_count = 0
+    for option in DISABLED_WARNING_RE.finditer(clean):
+        name = option.group(1)
+        owner = None
+        for index, library in enumerate(libraries):
+            end = (
+                libraries[index + 1].start()
+                if index + 1 < len(libraries)
+                else len(clean)
+            )
+            if library.end() <= option.start() < end:
+                owner = library.group(1)
+                break
+        if owner == "Literature" and name == "warn.sorry":
+            allowed_count += 1
+        else:
+            location = owner if owner is not None else "shared/global options"
+            failures.append(
+                f"disabled warning {name} is forbidden in {location}; only "
+                "Literature may disable warn.sorry"
+            )
+
+    if "Literature" in library_roots(clean) and allowed_count != 1:
+        failures.append(
+            "lean_lib Literature must disable exactly warn.sorry so intentional "
+            "open paper claims compile while warningAsError remains enabled"
+        )
+    return failures
+
+
 def check_global_configuration(failures: list[str]) -> None:
     paths = [ROOT / "lakefile.lean"]
     workflows = ROOT / ".github" / "workflows"
@@ -233,6 +274,10 @@ def check_global_configuration(failures: list[str]) -> None:
     failures.extend(
         f"lakefile.lean: {failure}"
         for failure in resource_option_failures(lakefile)
+    )
+    failures.extend(
+        f"lakefile.lean: {failure}"
+        for failure in warning_option_failures(lakefile)
     )
     if not WARNING_AS_ERROR.search(strip_comments_and_strings(lakefile)):
         failures.append(
@@ -258,11 +303,6 @@ def check_lean_ownership(files: list[pathlib.Path], failures: list[str]) -> None
         if relative in exceptions:
             continue
         root = relative.parts[0].removesuffix(".lean")
-        # The literature lane is deliberately not a lean_lib: nothing imports
-        # it, nothing builds it by default, and no source there enters the
-        # compiled axiom audit.
-        if root == "Literature":
-            continue
         if root not in roots:
             failures.append(
                 f"{relative}: project Lean source is not owned by a lean_lib and "
@@ -302,8 +342,16 @@ def main() -> int:
         print(*failures, sep="\n", file=sys.stderr)
         return 1
 
+    literature_sorries = sum(
+        len(SORRY_PATTERN.findall(strip_comments_and_strings(
+            path.read_text(encoding="utf-8")
+        )))
+        for path in files
+        if path.relative_to(ROOT).parts[0] == "Literature"
+    )
     print(
         f"Lean trust check passed ({len(files)} project-owned Lean files; "
+        f"{literature_sorries} intentional Literature sorry placeholders; "
         "warnings-as-errors and exhaustive axiom audit configured)."
     )
     return 0

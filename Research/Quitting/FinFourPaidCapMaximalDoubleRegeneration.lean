@@ -30,8 +30,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Finset
-open Math.Probability Math.PMFProduct
+open _root_.Finset
+open _root_.Math.Probability Math.PMFProduct
 
 namespace QuittingPaidCapLiftedSource
 

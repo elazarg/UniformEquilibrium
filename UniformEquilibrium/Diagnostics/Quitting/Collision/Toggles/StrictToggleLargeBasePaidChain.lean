@@ -238,7 +238,7 @@ theorem QuittingTerminalExploitabilityWitness.hasPurePaidNormalChainFiniteResidu
           quittingPunishmentValue reward owner := by
         unfold purePaidOwnerFloorExcess at hfloor
         dsimp only at hfloor
-        rw [if_neg hempty, hdeleted,
+        rw [ite_eq_right hempty, hdeleted,
           quittingSetReward_singleton_eq_soloReward] at hfloor
         linarith
       have hnormal' : quittingPunishmentValue reward owner ≤

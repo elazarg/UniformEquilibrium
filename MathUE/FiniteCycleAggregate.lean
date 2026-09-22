@@ -67,7 +67,7 @@ theorem prefixWeight_le_one (coefficient : Fin K → ℝ)
     (hcoefficient1 : ∀ phase, coefficient phase ≤ 1)
     (phase : Fin K) (fuel : ℕ) :
     prefixWeight coefficient phase fuel ≤ 1 := by
-  exact Finset.prod_le_one (fun offset _ => hcoefficient0 _)
+  exact Finset.prod_le_one₀ (fun offset _ => hcoefficient0 _)
     (fun offset _ => hcoefficient1 _)
 
 omit [NeZero K] in
@@ -198,7 +198,7 @@ theorem exists_player_base_ge_eta_div_two_card
     intro offset hoffset
     apply mul_le_mul_of_nonneg_right
     · unfold prefixWeight
-      apply Finset.prod_le_prod
+      apply Finset.prod_le_prod₀
       · intro index hindex
         exact hbeta0 _
       · intro index hindex
@@ -208,7 +208,7 @@ theorem exists_player_base_ge_eta_div_two_card
   have hbeta_prod_le : ∀ player,
       ∏ phase : Fin K, beta phase ≤ ∏ phase : Fin K, coefficient phase player := by
     intro player
-    apply Finset.prod_le_prod
+    apply Finset.prod_le_prod₀
     · intro phase hphase
       exact hbeta0 phase
     · intro phase hphase

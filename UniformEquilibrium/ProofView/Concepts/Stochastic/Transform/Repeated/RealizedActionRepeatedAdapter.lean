@@ -40,8 +40,9 @@ variable {ι : Type}
 
 /-- The one-state stochastic presentation of repeated play of `G`.  A pure
 action is a pure stage strategy of `G`; the stochastic game's behavioral
-randomization is therefore exactly a mixed stage action. -/
-def realizedActionStochasticGame (G : KernelGame ι) : StochasticGame ι where
+randomization is therefore exactly a mixed stage action. Its type fields remain
+reducible so dependent histories and profiles retain their stated carriers. -/
+@[reducible] def realizedActionStochasticGame (G : KernelGame ι) : StochasticGame ι where
   State := PUnit
   Act := G.Strategy
   stagePayoff := fun _ action who => G.eu action who
@@ -96,7 +97,7 @@ theorem IsUniformEquilibrium.isUniformEquilibriumPayoff_of_hasLongRunAveragePayo
     (hequilibrium : M.IsUniformEquilibrium profile)
     (hpayoff : M.HasLongRunAveragePayoff profile target) :
     M.IsUniformEquilibriumPayoff target := by
-  letI : Fintype ι := Fintype.ofFinite ι
+  let : Fintype ι := Fintype.ofFinite ι
   intro ε hε
   obtain ⟨nashThreshold, hnash⟩ := hequilibrium.2 ε hε
   have hclose : ∀ᶠ T in Filter.atTop,
@@ -161,10 +162,6 @@ def stochasticHistory {t : ℕ}
   apply Prod.ext
   · funext stage
     simp only [stochasticHistory, actionHistory]
-    rcases record stage with ⟨pastState, action⟩
-    change (PUnit.unit, action) = (pastState, action)
-    cases pastState
-    rfl
   · change PUnit.unit = state
     cases state
     rfl
@@ -404,7 +401,7 @@ theorem expectedStagePayoff_toBehaviorProfile
     G.realizedActionStochasticGame.expectedStagePayoff
         (toBehaviorProfile G profile) PUnit.unit t who =
       G.realizedActionMonitoring.stageEU profile t who := by
-  letI : Finite G.mixedExtension.Outcome := ‹Finite G.Outcome›
+  let : Finite G.mixedExtension.Outcome := ‹Finite G.Outcome›
   obtain ⟨C, hC⟩ :=
     G.mixedExtension.exists_eu_abs_bound_of_finite_outcome who
   unfold StochasticGame.expectedStagePayoff
@@ -430,9 +427,9 @@ theorem finiteAveragePayoff_toBehaviorProfile
     G.realizedActionStochasticGame.finiteAveragePayoff PUnit.unit T
         (toBehaviorProfile G profile) who =
       G.realizedActionMonitoring.finiteAveragePayoff T profile who := by
-  letI : Finite G.realizedActionStochasticGame.State :=
+  let : Finite G.realizedActionStochasticGame.State :=
     inferInstanceAs (Finite PUnit)
-  letI (player : ι) :
+  let (player : ι) :
       Finite (G.realizedActionStochasticGame.Act player) :=
     ‹∀ who, Finite (G.Strategy who)› player
   rw [G.realizedActionStochasticGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]

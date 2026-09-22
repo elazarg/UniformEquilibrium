@@ -138,7 +138,7 @@ noncomputable section
 namespace GameTheory
 
 open Filter Set Topology
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -255,7 +255,7 @@ theorem le_one_sub_prod_one_sub (w : ι → ℝ) (h0 : ∀ j, 0 ≤ w j)
       ∏ j, (1 - w j) :=
     Finset.mul_prod_erase Finset.univ (fun j => 1 - w j) (Finset.mem_univ k)
   have hrest : ∏ j ∈ Finset.univ.erase k, (1 - w j) ≤ 1 :=
-    Finset.prod_le_one (fun j _ => by linarith [h1 j]) (fun j _ => by linarith [h0 j])
+    Finset.prod_le_one₀ (fun j _ => by linarith [h1 j]) (fun j _ => by linarith [h0 j])
   have hnonneg : (0 : ℝ) ≤ 1 - w k := by linarith [h1 k]
   have hle : ∏ j, (1 - w j) ≤ 1 - w k := by
     rw [← hsplit]
@@ -362,7 +362,10 @@ theorem quittingGerm_assignment_val_some
     g.assignment t (BellmanVar.val (some S) i) = reward S i := by
   have hEq := quittingGerm_isDiscountedStationaryBellmanEq g ht
   have hval := hEq.2 (some S) i
-  rw [discountedAuxEU_quittingGame_some] at hval
+  rw [discountedAuxEU_quittingGame_some reward
+    (1 - t ^ g.ramification)
+    ((quittingGame reward).bellmanDecodeValue (g.assignment t)) S
+    ((quittingGame reward).bellmanDecodeProfile (g.solution t ht) (some S)) i] at hval
   have hpow : t ^ g.ramification ≠ 0 := ne_of_gt (pow_pos ht.1 _)
   have hmul : t ^ g.ramification *
       (reward S i - g.assignment t (BellmanVar.val (some S) i)) = 0 := by
@@ -395,7 +398,11 @@ theorem quittingGermValue_eq_smul_rootSuccessorPayoff
           (quittingGermRoot g ht) who := by
   have hEq := quittingGerm_isDiscountedStationaryBellmanEq g ht
   have hval := hEq.2 none who
-  rw [discountedAuxEU_quittingGame_none, quittingGerm_decodeValue_some_eq g ht] at hval
+  rw [discountedAuxEU_quittingGame_none reward
+    (1 - t ^ g.ramification)
+    ((quittingGame reward).bellmanDecodeValue (g.assignment t))
+    ((quittingGame reward).bellmanDecodeProfile (g.solution t ht) none) who,
+    quittingGerm_decodeValue_some_eq g ht] at hval
   exact hval.symm
 
 /-- The active-state recursion in absorbing-contribution form:
@@ -427,7 +434,16 @@ theorem quittingGerm_bestResponse_quit
   have hdev := hEq.1 none who (PMF.pure true)
   have hon := hEq.2 none who
   rw [hon] at hdev
-  rw [discountedAuxEU_quittingGame_none, quittingGerm_decodeValue_some_eq g ht] at hdev
+  let V : (quittingGame reward).State → Payoff ι :=
+    (quittingGame reward).bellmanDecodeValue (g.assignment t)
+  let m : ι → PMF Bool := Function.update
+    ((quittingGame reward).bellmanDecodeProfile (g.solution t ht) none)
+    who (PMF.pure true)
+  have hbridge := discountedAuxEU_quittingGame_none reward
+    (1 - t ^ g.ramification) V m who
+  change (quittingGame reward).discountedAuxEU
+    (1 - t ^ g.ramification) V none m who ≤ V none who at hdev
+  rw [hbridge, quittingGerm_decodeValue_some_eq g ht] at hdev
   exact hdev
 
 /-- The pure-Continue best response at the active state. -/
@@ -442,7 +458,16 @@ theorem quittingGerm_bestResponse_continue
   have hdev := hEq.1 none who (PMF.pure false)
   have hon := hEq.2 none who
   rw [hon] at hdev
-  rw [discountedAuxEU_quittingGame_none, quittingGerm_decodeValue_some_eq g ht] at hdev
+  let V : (quittingGame reward).State → Payoff ι :=
+    (quittingGame reward).bellmanDecodeValue (g.assignment t)
+  let m : ι → PMF Bool := Function.update
+    ((quittingGame reward).bellmanDecodeProfile (g.solution t ht) none)
+    who (PMF.pure false)
+  have hbridge := discountedAuxEU_quittingGame_none reward
+    (1 - t ^ g.ramification) V m who
+  change (quittingGame reward).discountedAuxEU
+    (1 - t ^ g.ramification) V none m who ≤ V none who at hdev
+  rw [hbridge, quittingGerm_decodeValue_some_eq g ht] at hdev
   exact hdev
 
 /-- The germ's endpoint gap in the quitting layer's deleted coordinates:
@@ -552,7 +577,8 @@ theorem quittingGermQuitRate_nonneg
     (ht : t ∈ Ioo (0 : ℝ) g.radius) (i : ι) :
     0 ≤ quittingGermQuitRate g i t := by
   have h := (g.solution t ht).2.1 none i true
-  rwa [StochasticGame.simplexNonnegPoly, MvPolynomial.eval_X] at h
+  unfold StochasticGame.simplexNonnegPoly at h
+  rwa [MvPolynomial.eval_X] at h
 
 /-- Quit rates are at most `1`. -/
 theorem quittingGermQuitRate_le_one
@@ -560,7 +586,8 @@ theorem quittingGermQuitRate_le_one
     (ht : t ∈ Ioo (0 : ℝ) g.radius) (i : ι) :
     quittingGermQuitRate g i t ≤ 1 := by
   have h := (g.solution t ht).2.1 none i false
-  rw [StochasticGame.simplexNonnegPoly, MvPolynomial.eval_X] at h
+  unfold StochasticGame.simplexNonnegPoly at h
+  rw [MvPolynomial.eval_X] at h
   have hfalse : g.assignment t (BellmanVar.mix none i false) =
       1 - quittingGermQuitRate g i t := by
     rw [← quittingGermRoot_apply_toReal g ht i false]
@@ -836,7 +863,7 @@ theorem tendsto_pow_div_sum_quittingGermQuitRate_atTop
       (𝓝[>] (0 : ℝ)) atTop) :
     Tendsto (fun t : ℝ => t ^ q / ∑ j, quittingGermQuitRate g j t)
       (𝓝[>] (0 : ℝ)) atTop := by
-  haveI := nonempty_of_eventually_sum_quittingGermQuitRate_pos g hsum
+  have := nonempty_of_eventually_sum_quittingGermQuitRate_pos g hsum
   have hcard : (0 : ℝ) < (Fintype.card ι : ℝ) := by
     exact_mod_cast Fintype.card_pos
   have hlim : Tendsto (fun t : ℝ =>

@@ -30,7 +30,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]

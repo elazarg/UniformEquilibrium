@@ -54,9 +54,9 @@ polynomial's root set.
   root" restated directly (over a general field the correct statement is in terms of `IsCoprime`,
   since roots may not exist in the base field); the common-root direction we need is supplied by
   `Polynomial.aeval_ne_zero_of_isCoprime`.
-* `Polynomial.finite_setOf_isRoot : p ≠ 0 → {x | p.IsRoot x}.Finite` (`Mathlib/Algebra/Polynomial/
-  Roots.lean`) gives finiteness of a nonzero real polynomial's zero set directly as a `Set`
-  statement (no need to go through `Polynomial.roots : Multiset`).
+* `Polynomial.finite_setOfPred_isRoot : p ≠ 0 → {x | p.IsRoot x}.Finite`
+  (`Mathlib/Algebra/Polynomial/Roots.lean`) gives finiteness of a nonzero real polynomial's zero
+  set directly as a `Set` statement (no need to go through `Polynomial.roots : Multiset`).
 * No `Squarefree`-specific API was needed: working with `resultant P Q ≠ 0` as a hypothesis
   (rather than "`P` squarefree in `v`") is both what the resultant machinery naturally produces
   and matches the file's design rule of preferring "∃ nonzero univariate polynomial containing the
@@ -241,7 +241,7 @@ theorem finite_analytic_family_eventually_fixed_maximizer
     (hf : ∀ i, AnalyticAt ℝ (f i) x₀) :
     ∃ i, ∀ᶠ x in nhdsWithin x₀ (Set.Ioi x₀), ∀ j,
       f j x ≤ f i x := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   obtain ⟨R, hstable⟩ :=
     finite_analytic_family_eventually_stable f hf
   obtain ⟨x, hxstable⟩ := hstable.exists
@@ -264,7 +264,7 @@ theorem finite_analytic_family_eventually_fixed_abs_maximizer
     (hf : ∀ i, AnalyticAt ℝ (f i) x₀) :
     ∃ i, ∀ᶠ x in nhdsWithin x₀ (Set.Ioi x₀), ∀ j,
       |f j x| ≤ |f i x| := by
-  letI := Fintype.ofFinite I
+  let := Fintype.ofFinite I
   let square : I → ℝ → ℝ := fun i x => (f i x) ^ 2
   have hsquare : ∀ i, AnalyticAt ℝ (square i) x₀ := by
     intro i
@@ -555,16 +555,16 @@ theorem coeff_bivDerivLam (P : Polynomial (Polynomial ℝ)) (j : ℕ) :
   rw [bivDerivLam, Polynomial.finsetSum_coeff]
   by_cases hj : j < P.natDegree + 1
   · rw [Finset.sum_eq_single j]
-    · rw [Polynomial.coeff_C_mul_X_pow, if_pos rfl]
+    · rw [Polynomial.coeff_C_mul_X_pow, ite_eq_left rfl]
     · intro i _ hij
-      rw [Polynomial.coeff_C_mul_X_pow, if_neg (Ne.symm hij)]
+      rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right (Ne.symm hij)]
     · intro hj'
       exact absurd (Finset.mem_range.mpr hj) hj'
   · have hcoeff0 : P.coeff j = 0 := Polynomial.coeff_eq_zero_of_natDegree_lt (by omega)
     rw [hcoeff0, Polynomial.derivative_zero]
     refine Finset.sum_eq_zero fun i hi => ?_
     have hij : i ≠ j := by simp only [Finset.mem_range] at hi; omega
-    rw [Polynomial.coeff_C_mul_X_pow, if_neg (Ne.symm hij)]
+    rw [Polynomial.coeff_C_mul_X_pow, ite_eq_right (Ne.symm hij)]
 
 theorem bivDerivLam_natDegree_le (P : Polynomial (Polynomial ℝ)) :
     (bivDerivLam P).natDegree ≤ P.natDegree := by
@@ -684,7 +684,7 @@ theorem finite_bivEval_common_zero {P Q : Polynomial (Polynomial ℝ)}
     rintro lam ⟨y, hP0, hQ0⟩
     rcases resultant_eval_eq_zero_or_leadingCoeff_eval_eq_zero hP0 hQ0 with h | h <;>
       simp [Polynomial.IsRoot, h]
-  exact (Polynomial.finite_setOf_isRoot hS).subset hsub
+  exact (Polynomial.finite_setOfPred_isRoot hS).subset hsub
 
 /-- A continuous, nowhere-zero real function on a preconnected set has a single, fixed strict
 sign throughout the set. -/

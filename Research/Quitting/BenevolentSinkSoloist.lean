@@ -136,7 +136,7 @@ theorem exists_rate_quittingSoloQuitterCriterion_of_benevolentSink
   have hweak := hsink.2.1 other hother
   by_cases htempt : 0 < quittingSingletonCollisionReward reward owner other -
       quittingSoloReward reward other other
-  · rw [benevolentSinkThreshold, if_pos htempt, le_div_iff₀ htempt] at hbound
+  · rw [benevolentSinkThreshold, ite_eq_left htempt, le_div_iff₀ htempt] at hbound
     linarith
   · have hrate : 0 < min 1 floor := lt_min one_pos hfloorPos
     nlinarith [hrate, not_lt.mp htempt]

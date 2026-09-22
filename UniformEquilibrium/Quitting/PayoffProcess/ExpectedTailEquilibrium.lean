@@ -32,7 +32,7 @@ theorem QuittingPayoffProcess.measurable_soloExitTailRoots_toReal
     @Measurable process.Ω ℝ process.measurableSpace Real.measurableSpace
       (fun ω =>
         (process.soloExitTailRoots cutoff η hη ω time who action).toReal) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   unfold QuittingPayoffProcess.soloExitTailRoots quittingProfileLiveRoot
   exact (measurable_soloExitTailStepProfile_apply
     (ι := ι) η hη who time
@@ -81,7 +81,7 @@ theorem QuittingPayoffProcess.soloExitTailValue_measurable
     (η : ℝ) (hη : 0 < η) (who : ι) :
     @Measurable process.Ω ℝ process.measurableSpace Real.measurableSpace
       (fun ω ↦ process.soloExitTailValue cutoff η hη ω who) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact measurable_quittingVariableTailValue
     (fun time ω ↦ process.payoff (cutoff + time) ω)
     (fun time ω ↦ process.soloExitTailRoots cutoff η hη ω time)
@@ -100,7 +100,7 @@ theorem QuittingPayoffProcess.soloExitTailValue_integrable
     (who : ι) :
     Integrable (fun ω ↦ process.soloExitTailValue cutoff η hη ω who)
       process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact integrable_quittingVariableTailValue process.μ
     (fun time ω ↦ process.payoff (cutoff + time) ω)
     (fun time ω ↦ process.soloExitTailRoots cutoff η hη ω time)
@@ -135,7 +135,7 @@ theorem QuittingPayoffProcess.deviatedSoloExitTailValue_measurable
     @Measurable process.Ω ℝ process.measurableSpace Real.measurableSpace
       (fun ω ↦ process.deviatedSoloExitTailValue cutoff η hη who
         deviation ω recipient) := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact measurable_quittingVariableTailValue
     (fun time ω ↦ process.payoff (cutoff + time) ω)
     (fun time ω ↦ quittingRootSequenceUpdate
@@ -161,7 +161,7 @@ theorem QuittingPayoffProcess.deviatedSoloExitTailValue_integrable
         (fun ω ↦ (deviation time ω action).toReal)) (recipient : ι) :
     Integrable (fun ω ↦ process.deviatedSoloExitTailValue cutoff η hη
       who deviation ω recipient) process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
+  let : MeasurableSpace process.Ω := process.measurableSpace
   exact integrable_quittingVariableTailValue process.μ
     (fun time ω ↦ process.payoff (cutoff + time) ω)
     (fun time ω ↦ quittingRootSequenceUpdate
@@ -270,8 +270,8 @@ theorem QuittingPayoffProcess.integral_soloExitTail_deviation_le
         (quittingRootSequenceUpdate
           (process.soloExitTailRoots cutoff η hη ω) who
           (fun time => deviation time ω)) who 0 ∂process.μ := by
-  letI : MeasurableSpace process.Ω := process.measurableSpace
-  letI : IsProbabilityMeasure process.μ := process.probability
+  let : MeasurableSpace process.Ω := process.measurableSpace
+  let : IsProbabilityMeasure process.μ := process.probability
   let prescribed : process.Ω → ℝ := fun ω =>
     quittingVariableTailValue (process.shiftedPayoff cutoff ω)
       (process.soloExitTailRoots cutoff η hη ω) who 0

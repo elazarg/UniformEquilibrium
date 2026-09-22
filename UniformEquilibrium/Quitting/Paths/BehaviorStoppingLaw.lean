@@ -18,8 +18,8 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability Math.ProbabilityMassFunction
-open Math.Probability.DiscreteHazard
+open Filter _root_.Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability.DiscreteHazard
 
 def quittingHazardSurvival (hazard : ℕ → PMF Bool) (cutoff : ℕ) : ℝ :=
   Math.survivalProduct (fun time => (hazard time false).toReal) 0 cutoff

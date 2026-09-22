@@ -107,8 +107,8 @@ theorem pmfPi_bind_indep [Fintype ι] [∀ i, Finite (A i)]
     (pmfPi σ).bind (fun s => (f s).bind (fun b =>
       (pmfPi σ).bind (fun t => g b t))) := by
   classical
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
-  letI : Fintype β := Fintype.ofFinite β
+  let (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
+  let : Fintype β := Fintype.ofFinite β
   ext y
   simp only [PMF.bind_apply, pmfPi_apply, tsum_fintype]
   let P : (∀ i, A i) → ENNReal := fun s => ∏ i, σ i (s i)
@@ -379,8 +379,8 @@ theorem pmfPi_bind_pmfPi_of_disjoint_coords
     (pmfPi σ).bind (fun a => pmfPi (G a)) =
       pmfPi (fun k => (pmfPi σ).bind (fun a => G a k)) := by
   classical
-  letI (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
-  letI (k : κ) : Fintype (B k) := Fintype.ofFinite (B k)
+  let (i : ι) : Fintype (A i) := Fintype.ofFinite (A i)
+  let (k : κ) : Fintype (B k) := Fintype.ofFinite (B k)
   ext vals
   simp only [PMF.bind_apply, pmfPi_apply, tsum_fintype]
   -- Helper: Ignores on PMFs implies Ignores on pointwise values

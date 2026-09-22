@@ -43,7 +43,7 @@ packet. -/
 theorem nonempty_strictSingletonRefusalSourceWitness
     (witness : QuittingTerminalExploitabilityWitness reward) :
     Nonempty (QuittingStrictSingletonRefusalSourceWitness witness) := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   obtain ⟨packet⟩ := witness.nonempty_normalizedSingletonSourcePacket
   obtain ⟨packetOwner, hpacketPos, hpacketLtOne, htargetLt, hrefusal⟩ :=
     witness.exists_active_strictSingletonRefusal packet

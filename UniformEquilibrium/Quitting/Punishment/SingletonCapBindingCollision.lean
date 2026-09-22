@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction
+open _root_.Math.Probability Math.ProbabilityMassFunction
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -177,10 +177,10 @@ theorem exists_quittingSingletonCollisionGain_pos_of_unique_allContinue
     intro who
     by_cases hcase :
         0 < quittingSingletonCollisionGain reward owner who ∧ who ≠ owner
-    · rw [show safe who = _ from if_pos hcase]
+    · rw [show safe who = _ from ite_eq_left hcase]
       exact div_pos (hdefectPos who hcase.2 hcase.1)
         (by linarith [hdefectPos who hcase.2 hcase.1, hcase.1])
-    · rw [show safe who = _ from if_neg hcase]
+    · rw [show safe who = _ from ite_eq_right hcase]
       norm_num
   have hnonempty : (Finset.univ : Finset ι).Nonempty :=
     ⟨owner, Finset.mem_univ owner⟩
@@ -190,7 +190,7 @@ theorem exists_quittingSingletonCollisionGain_pos_of_unique_allContinue
     exact fun who _ => hsafePos who
   have hfloorLe : ∀ who, floor ≤ safe who :=
     fun who => Finset.inf'_le safe (Finset.mem_univ who)
-  have hsafeOwner : safe owner = 1 := if_neg (by simp)
+  have hsafeOwner : safe owner = 1 := ite_eq_right (by simp)
   have hfloorOne : floor ≤ 1 := hsafeOwner ▸ hfloorLe owner
   set rate : ℝ := floor / 2 with hrate
   have hrate0 : 0 ≤ rate := by positivity
@@ -213,7 +213,7 @@ theorem exists_quittingSingletonCollisionGain_pos_of_unique_allContinue
           quittingSingletonCapDefect reward cap other /
             (quittingSingletonCapDefect reward cap other +
               quittingSingletonCollisionGain reward owner other) :=
-        if_pos hcase
+        ite_eq_left hcase
       have hle : rate ≤ quittingSingletonCapDefect reward cap other /
           (quittingSingletonCapDefect reward cap other +
             quittingSingletonCollisionGain reward owner other) := by
@@ -240,7 +240,7 @@ theorem exists_quittingSingletonCollisionGain_pos_of_unique_allContinue
   have hmass := congrArg
     (fun marginal : PMF Bool => (marginal true).toReal) hcoordinate
   simp only [bernoulliBool_true_toReal, quittingAllContinueRoot,
-    PMF.pure_apply, if_neg (by decide : ¬(true = false)),
+    PMF.pure_apply, ite_eq_right (by decide : ¬(true = false)),
     ENNReal.toReal_zero] at hmass
   linarith
 

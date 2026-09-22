@@ -1,6 +1,6 @@
 import Research.Topology.BoxComplementarityDiagonalChain
 import Research.Topology.BoxComplementarityStabilizedLocalDegree
-import Mathlib.Data.Sign.Basic
+import Mathlib.Basic.Sign.Basic
 
 /-!
 # Actual local signed count and index of a centered diagonal field
@@ -540,7 +540,7 @@ theorem isOpen_diagonalCentralRegion : IsOpen (diagonalCentralRegion n) := by
       (continuous_apply who).subtype_val
     exact (isOpen_lt continuous_const hcontinuous).inter
       (isOpen_lt hcontinuous continuous_const)
-  simpa only [diagonalCentralRegion, setOf_forall] using isOpen_iInter_of_finite hopen
+  simpa only [diagonalCentralRegion, ofPred_forall] using isOpen_iInter_of_finite hopen
 
 theorem coordinate_bounds_of_mem_closure_diagonalCentralRegion
     {point : UnitCube (Fin n)} (hpoint : point ∈ closure (diagonalCentralRegion n))

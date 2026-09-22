@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 namespace StochasticGame
 
-open Math Math.OutcomeClosure Math.Probability
+open _root_.Math Math.OutcomeClosure _root_.Math.Probability
   Math.ProbabilityMassFunction
 open FixedDepthAdaptivePotentialSplice
 
@@ -123,7 +123,7 @@ def process : OutcomeClosure.ValueProcess G.State Child := by
         (if data.terminal data.initial then
             PMF.pure (data.observe data.initial)
           else PMF.map data.observe data.kernel)
-    rw [if_neg data.initial_nonterminal]
+    rw [ite_eq_right data.initial_nonterminal]
     rw [← PMF.bind_pure_comp]
     apply bind_congr_on_support
     intro successor successor_mem
@@ -250,7 +250,7 @@ theorem isAdaptivePotentialCertificateAt_of_exactExpectedTarget
           (entry child) (target child) childError) :
     G.IsAdaptivePotentialCertificateAt
       data.initial parentTarget error := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   apply
     isAdaptivePotentialCertificateAt_of_fixedDepthSelector_allErrors
       (selector := data.selector)
@@ -288,7 +288,7 @@ theorem isAdaptivePotentialCertificateAt_of_approximateExpectedTarget
           (entry child) (target child) childError) :
     G.IsAdaptivePotentialCertificateAt
       data.initial parentTarget error := by
-  letI : Fintype Child := Fintype.ofFinite Child
+  let : Fintype Child := Fintype.ofFinite Child
   apply
     FixedDepthAdaptivePotentialSplice.isAdaptivePotentialCertificateAt_of_approximateTarget
       (selector := data.selector)

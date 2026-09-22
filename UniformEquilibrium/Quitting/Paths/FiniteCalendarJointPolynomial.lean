@@ -66,7 +66,7 @@ theorem eval_quittingFiniteCalendarNeverMassPolynomial (deadline : ℕ)
 omit [DecidableEq ι] in
 theorem eval_quittingFiniteCalendarNeverMassPolynomial_simplex {deadline : ℕ}
     (profile : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline)) :
-    MvPolynomial.eval (fun pair => profile pair.1 pair.2)
+    MvPolynomial.eval (fun pair => (profile pair.1).weights pair.2)
       (quittingFiniteCalendarNeverMassPolynomial deadline) =
         quittingFiniteCalendarNeverMass profile := by
   exact eval_quittingFiniteCalendarNeverMassPolynomial deadline _
@@ -136,7 +136,7 @@ theorem eval_quittingFiniteCalendarJointPayoffPolynomial_simplex
     (profile : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (observer : ι) :
     MvPolynomial.eval (quittingFiniteCalendarJointValues reward
-      (fun pair => profile pair.1 pair.2))
+      (fun pair => (profile pair.1).weights pair.2))
       (quittingFiniteCalendarJointPayoffPolynomial deadline observer) =
         quittingFiniteCalendarRawPayoff reward deadline profile observer := by
   rw [eval_quittingFiniteCalendarJointPayoffPolynomial]
@@ -159,7 +159,7 @@ theorem eval_quittingFiniteCalendarJointSingletonSurplusPolynomial_simplex
     (profile : MixedSimplex ι (fun _ => QuittingFiniteDeadlineTimingAction deadline))
     (observer : ι) :
     MvPolynomial.eval (quittingFiniteCalendarJointValues reward
-      (fun pair => profile pair.1 pair.2))
+      (fun pair => (profile pair.1).weights pair.2))
       (quittingFiniteCalendarJointSingletonSurplusPolynomial deadline observer) =
         quittingFiniteCalendarRawPayoff reward deadline profile observer -
           reward ⟨{observer}, Finset.singleton_nonempty observer⟩ observer := by

@@ -33,7 +33,7 @@ noncomputable section
 namespace GameTheory
 
 open Finset
-open Math.ChargedPathBudget
+open Maths.ChargedPathBudget
 open Math.LinearProgramming.FlowCostateDuality
 open Math.ProbabilityMassFunction
 open QuittingFiniteDynamicDebtAdmissibleChronology
@@ -465,7 +465,7 @@ theorem strict_terminalDebt_fundingEdge_or_farkas
     by_contra hnot
     have hzero : Fintype.card ι = 0 := by omega
     simp [scale, hzero] at hscale
-  letI : Nonempty ι := Fintype.card_pos_iff.mp hcard
+  let : Nonempty ι := Fintype.card_pos_iff.mp hcard
   let owner : ι := Classical.choice inferInstance
   let p := terminalDebt / scale
   have hp0 : 0 < p := div_pos (by simpa [terminalDebt] using hpositive) hscale

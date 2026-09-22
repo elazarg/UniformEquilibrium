@@ -29,7 +29,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -272,7 +272,7 @@ theorem exists_stationaryCertificate_of_strictThreeBlockerCore
     (hcore : IsStrictThreeBlockerCore reward baseline first second third) :
     Nonempty (ThreeBlockerCoreStationaryCertificate
       reward baseline first second third) := by
-  letI : Nonempty ι := ⟨first⟩
+  let : Nonempty ι := ⟨first⟩
   let lower : ℕ → ι → ℝ := fun n =>
     threeCoreLower first second third (oddCoreEpsilon n)
   have hlower0 : ∀ n who, 0 ≤ lower n who := fun n who =>

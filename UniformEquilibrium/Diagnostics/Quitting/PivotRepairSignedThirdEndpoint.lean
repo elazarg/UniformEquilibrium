@@ -72,10 +72,10 @@ theorem signed_endpoints :
     input.responderFirstEndpoint mass true = 0 ∧
       input.responderNeverEndpoint mass true = 0 ∧
       input.responderLimitEndpoint mass true = 1 / 2 := by
-  rw [QuittingPivotRepairLPInput.responderFirstEndpoint,
-    QuittingPivotRepairLPInput.responderNeverEndpoint,
-    QuittingPivotRepairLPInput.responderLimitEndpoint,
-    earlyContribution_eq_zero]
+  unfold QuittingPivotRepairLPInput.responderFirstEndpoint
+    QuittingPivotRepairLPInput.responderNeverEndpoint
+    QuittingPivotRepairLPInput.responderLimitEndpoint
+  rw [earlyContribution_eq_zero]
   norm_num [QuittingPivotRepairLPInput.otherNeverProduct,
     QuittingPivotRepairLPInput.responderEarlierReward,
     QuittingPivotRepairLPInput.responderTieReward,

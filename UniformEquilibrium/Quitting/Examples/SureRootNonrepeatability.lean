@@ -10,7 +10,7 @@ noncomputable section
 
 namespace GameTheory.SureRootNonrepeatability
 
-open Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
+open _root_.Math.Probability Math.PMFProduct QuittingSureSetOwnerRepair
 
 def reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) :=
   fun terminal who ↦
@@ -39,7 +39,7 @@ theorem one_le_stationaryFixedOpponentsQuitValue
       apply expect_mono
       intro action
       unfold quittingRootPayoff
-      rw [dif_pos]
+      rw [dite_eq_left]
       · simp [reward, quittingQuitters, Function.update]
         split_ifs <;> norm_num
       · exact ⟨0, by simp [quittingQuitters, Function.update]⟩

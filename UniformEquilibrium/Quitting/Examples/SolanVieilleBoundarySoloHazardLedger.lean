@@ -29,7 +29,7 @@ namespace GameTheory
 namespace SolanVieilleBoundary
 namespace SoloHazardLedger
 
-open Math.Probability
+open _root_.Math.Probability
 
 abbrev Player := Fin 4
 

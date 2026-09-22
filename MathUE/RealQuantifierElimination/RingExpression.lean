@@ -1,5 +1,5 @@
 import Mathlib.Data.Rat.Cast.CharZero
-import Mathlib.Data.Real.Basic
+import Mathlib.Basic.Real.Basic
 
 /-!
 # Rational ring expressions

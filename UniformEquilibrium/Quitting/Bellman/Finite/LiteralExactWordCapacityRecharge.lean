@@ -13,7 +13,7 @@ open scoped BigOperators
 
 namespace GameTheory
 
-open Math.ChargedPathBudget.ChargedRelation
+open Maths.ChargedPathBudget.ChargedRelation
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}

@@ -25,7 +25,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set Math.Probability Math.PMFProduct
+open Filter Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]
@@ -77,7 +77,7 @@ theorem sum_quittingFiniteWindowCoalitionClock_eq_one
       apply Finset.sum_congr rfl
       intro time htime
       unfold quittingFiniteWindowCoalitionClock
-      rw [if_pos (Finset.mem_range.mp htime)]
+      rw [ite_eq_left (Finset.mem_range.mp htime)]
     _ = quittingFiniteWindowCoalitionMass profile terminal cutoff /
         quittingFiniteWindowCoalitionMass profile terminal cutoff := by
       rw [← Finset.sum_div]

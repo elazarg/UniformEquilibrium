@@ -70,7 +70,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability QuittingLCPClassification
+open Filter _root_.Math.Probability QuittingLCPClassification
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 variable {reward : {S : Finset ι // S.Nonempty} → Payoff ι}
@@ -170,7 +170,7 @@ theorem quittingTailConditionedSurvivalProduct_mem_unitInterval
       (start + offset) (hpositive (start + offset + 1)).le
       (hpositive (start + offset))).1
     linarith [hweight.2]
-  · refine Finset.prod_le_one (fun offset _ => ?_) fun offset _ => ?_
+  · refine Finset.prod_le_one₀ (fun offset _ => ?_) fun offset _ => ?_
     · have hweight := (quittingTailConditionedWeights_mem_unitInterval roots
         (start + offset) (hpositive (start + offset + 1)).le
         (hpositive (start + offset))).1
@@ -392,7 +392,7 @@ theorem survivalGap_mul_abs_normalizedSoloMatrix_le_of_soloWindow
       2 * M * returnWeight := by
     have hcoefficient : |(1 - weight) * survival| ≤ 1 := by
       rw [abs_of_nonneg (mul_nonneg (by linarith) hsurvival0)]
-      exact mul_le_one₀ (by linarith) hsurvival0 hsurvival1
+      exact (mul_le_of_le_one_left hsurvival0 (by linarith)).trans hsurvival1
     calc |(1 - weight) * survival * right| =
           |(1 - weight) * survival| * |right| := abs_mul _ _
       _ ≤ 1 * |right| :=

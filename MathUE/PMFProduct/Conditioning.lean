@@ -62,7 +62,7 @@ theorem pmfMass_pmfPi_forall
   intro s
   by_cases hs : ∀ i, E i (s i)
   · simp [hs]
-  · rw [if_neg hs]
+  · rw [ite_eq_right hs]
     symm
     push Not at hs
     rcases hs with ⟨i, hi⟩
@@ -146,8 +146,8 @@ theorem pmf_bind_disintegrate
     μ.bind g =
     (pushforward μ proj).bindOnSupport (fun b hb =>
       (μ.filter {a | proj a = b} (pushforward_support_fibre μ proj b hb)).bind g) := by
-  letI : Fintype α := Fintype.ofFinite α
-  letI : Fintype β := Fintype.ofFinite β
+  let : Fintype α := Fintype.ofFinite α
+  let : Fintype β := Fintype.ofFinite β
   classical
   ext y
   let Z : β → ENNReal := fun b => ∑ a : α, if b = proj a then μ a else 0

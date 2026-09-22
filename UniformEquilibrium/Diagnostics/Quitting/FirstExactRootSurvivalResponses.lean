@@ -23,7 +23,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -52,8 +52,8 @@ theorem uniqueSureLimit_ownerQuit_and_opponentReach
     have h : Continuous (fun simplex : QuittingRootSimplex ι =>
         ((quittingRootOfSimplex simplex owner) true).toReal) := by
       simp only [quittingRootOfSimplex_apply_toReal]
-      exact (continuous_apply true).comp
-        (continuous_subtype_val.comp (continuous_apply owner))
+      exact (Convexity.StdSimplex.continuous_weights_apply ℝ true).comp
+        (continuous_apply owner)
     have ht := h.tendsto (quittingSimplexOfRoot limitRoot) |>.comp hroot
     change Tendsto (fun index =>
       ((quittingRootOfSimplex (quittingSimplexOfRoot (root index)) owner)
@@ -91,10 +91,9 @@ theorem uniqueSureLimit_ownerQuit_and_opponentReach
       simp
       exact continuous_const
     · simp only [Function.update_of_ne hne]
-      have hother : Continuous (fun root : QuittingRootSimplex ι =>
-          (root other : Bool → ℝ)) :=
-        continuous_subtype_val.comp (continuous_apply other)
-      apply Continuous.congr ((continuous_apply false).comp hother)
+      apply Continuous.congr
+        ((Convexity.StdSimplex.continuous_weights_apply ℝ false).comp
+          (continuous_apply other))
       intro simplex
       exact (quittingRootOfSimplex_apply_toReal simplex other false).symm
   have hopponentTendsto : Tendsto

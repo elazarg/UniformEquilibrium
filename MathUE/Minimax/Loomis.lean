@@ -67,58 +67,58 @@ The generic positivity lemma `wsum_pos` lives in `Math.Simplex`; the
 Loomis-flavored aggregates below are one-line applications of it. -/
 
 /-- Row-vector product `(xA)_j = ∑ᵢ xᵢ Aᵢⱼ`. -/
-noncomputable def xA (A : I → J → ℝ) (x : stdSimplex ℝ I) (j : J) : ℝ :=
+noncomputable def xA (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) (j : J) : ℝ :=
   wsum x (fun i => A i j)
 
 /-- Row-vector product `(xB)_j = ∑ᵢ xᵢ Bᵢⱼ`. -/
-noncomputable def xB (B : I → J → ℝ) (x : stdSimplex ℝ I) (j : J) : ℝ :=
+noncomputable def xB (B : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) (j : J) : ℝ :=
   wsum x (fun i => B i j)
 
 /-- Column-vector product `(Ay)_i = ∑ⱼ Aᵢⱼ yⱼ`. -/
-noncomputable def Ay (A : I → J → ℝ) (y : stdSimplex ℝ J) (i : I) : ℝ :=
+noncomputable def Ay (A : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) (i : I) : ℝ :=
   wsum y (fun j => A i j)
 
 /-- Column-vector product `(By)_i = ∑ⱼ Bᵢⱼ yⱼ`. -/
-noncomputable def By (B : I → J → ℝ) (y : stdSimplex ℝ J) (i : I) : ℝ :=
+noncomputable def By (B : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) (i : I) : ℝ :=
   wsum y (fun j => B i j)
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- Positivity of the row aggregate when `B` is entrywise positive. -/
 theorem xB_pos {B : I → J → ℝ} (hB : IsPositive B)
-    (x : stdSimplex ℝ I) (j : J) : 0 < xB B x j :=
+    (x : Convexity.StdSimplex ℝ I) (j : J) : 0 < xB B x j :=
   wsum_pos x (fun i => hB i j)
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- Positivity of the column aggregate when `B` is entrywise positive. -/
 theorem By_pos {B : I → J → ℝ} (hB : IsPositive B)
-    (y : stdSimplex ℝ J) (i : I) : 0 < By B y i :=
+    (y : Convexity.StdSimplex ℝ J) (i : I) : 0 < By B y i :=
   wsum_pos y (fun j => hB i j)
 
 omit [Nonempty I] [Nonempty J] in
 /-- Positivity of the bilinear pairing `xBy = ∑ᵢⱼ xᵢ Bᵢⱼ yⱼ`. -/
 theorem xBy_pos {B : I → J → ℝ} (hB : IsPositive B)
-    (x : stdSimplex ℝ I) (y : stdSimplex ℝ J) :
+    (x : Convexity.StdSimplex ℝ I) (y : Convexity.StdSimplex ℝ J) :
     0 < wsum x (fun i => By B y i) :=
   wsum_pos x (fun i => By_pos hB y i)
 
 /-! ### Loomis ratios and the scalars `lamB0`, `muB0` -/
 
 /-- Row player's per-column Loomis ratio `(xA)_j / (xB)_j`. -/
-noncomputable def colRatio (A B : I → J → ℝ) (x : stdSimplex ℝ I) (j : J) : ℝ :=
+noncomputable def colRatio (A B : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) (j : J) : ℝ :=
   xA A x j / xB B x j
 
 /-- Column player's per-row Loomis ratio `(Ay)_i / (By)_i`. -/
-noncomputable def rowRatio (A B : I → J → ℝ) (y : stdSimplex ℝ J) (i : I) : ℝ :=
+noncomputable def rowRatio (A B : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) (i : I) : ℝ :=
   Ay A y i / By B y i
 
 /-- Player I's guaranteed Loomis ratio under mixed strategy `x`: infimum over
 pure columns. -/
-noncomputable def lamB.aux (A B : I → J → ℝ) (x : stdSimplex ℝ I) : ℝ :=
+noncomputable def lamB.aux (A B : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) : ℝ :=
   Finset.inf' Finset.univ Finset.univ_nonempty (fun j => colRatio A B x j)
 
 /-- Player II's Loomis-ratio cap under mixed strategy `y`: supremum over
 pure rows. -/
-noncomputable def muB.aux (A B : I → J → ℝ) (y : stdSimplex ℝ J) : ℝ :=
+noncomputable def muB.aux (A B : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) : ℝ :=
   Finset.sup' Finset.univ Finset.univ_nonempty (fun i => rowRatio A B y i)
 
 /-- Maxmin Loomis scalar `λ₀ = sup_x λ_aux(x)`. -/
@@ -129,13 +129,13 @@ noncomputable def muB0 (A B : I → J → ℝ) : ℝ := iInf (muB.aux A B)
 
 omit [Nonempty I] in
 /-- Characterisation: `lamB.aux A B x > c` iff every column ratio exceeds `c`. -/
-theorem lamB.aux_gt_iff_gt (A B : I → J → ℝ) (c : ℝ) (x : stdSimplex ℝ I) :
+theorem lamB.aux_gt_iff_gt (A B : I → J → ℝ) (c : ℝ) (x : Convexity.StdSimplex ℝ I) :
     c < lamB.aux A B x ↔ ∀ j, c < colRatio A B x j := by
   simp [lamB.aux, Finset.lt_inf'_iff]
 
 omit [Nonempty J] in
 /-- Characterisation: `muB.aux A B y < c` iff every row ratio is below `c`. -/
-theorem muB.aux_lt_iff_lt (A B : I → J → ℝ) (c : ℝ) (y : stdSimplex ℝ J) :
+theorem muB.aux_lt_iff_lt (A B : I → J → ℝ) (c : ℝ) (y : Convexity.StdSimplex ℝ J) :
     muB.aux A B y < c ↔ ∀ i, rowRatio A B y i < c := by
   simp [muB.aux, Finset.sup'_lt_iff]
 
@@ -148,7 +148,7 @@ their extrema `lamB0` / `muB0` are attained. -/
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- Each column ratio `(xA)_j / (xB)_j` is continuous on `Δ(I)`. -/
 theorem colRatio.continuous {A B : I → J → ℝ} (hB : IsPositive B) (j : J) :
-    Continuous (fun x : stdSimplex ℝ I => colRatio A B x j) := by
+    Continuous (fun x : Convexity.StdSimplex ℝ I => colRatio A B x j) := by
   unfold colRatio xA xB
   exact (wsum_continuous (fun i => A i j)).div
     (wsum_continuous (fun i => B i j))
@@ -157,7 +157,7 @@ theorem colRatio.continuous {A B : I → J → ℝ} (hB : IsPositive B) (j : J) 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- Each row ratio `(Ay)_i / (By)_i` is continuous on `Δ(J)`. -/
 theorem rowRatio.continuous {A B : I → J → ℝ} (hB : IsPositive B) (i : I) :
-    Continuous (fun y : stdSimplex ℝ J => rowRatio A B y i) := by
+    Continuous (fun y : Convexity.StdSimplex ℝ J => rowRatio A B y i) := by
   unfold rowRatio Ay By
   exact (wsum_continuous (fun j => A i j)).div
     (wsum_continuous (fun j => B i j))
@@ -199,7 +199,7 @@ theorem muB.aux.bddBelow {A B : I → J → ℝ} (hB : IsPositive B) :
 omit [Nonempty I] in
 /-- Every `lamB.aux` value is bounded by the supremum `lamB0`. -/
 theorem lamB.aux.le_lamB0 {A B : I → J → ℝ} (hB : IsPositive B)
-    (x : stdSimplex ℝ I) :
+    (x : Convexity.StdSimplex ℝ I) :
     lamB.aux A B x ≤ lamB0 A B :=
   le_ciSup (bddAbove_def.2 (by
     obtain ⟨C, hC⟩ := lamB.aux.bddAbove hB
@@ -208,7 +208,7 @@ theorem lamB.aux.le_lamB0 {A B : I → J → ℝ} (hB : IsPositive B)
 omit [Nonempty J] in
 /-- Every `muB.aux` value dominates the infimum `muB0`. -/
 theorem muB.aux.ge_muB0 {A B : I → J → ℝ} (hB : IsPositive B)
-    (y : stdSimplex ℝ J) :
+    (y : Convexity.StdSimplex ℝ J) :
     muB0 A B ≤ muB.aux A B y :=
   ciInf_le (bddBelow_def.2 (by
     obtain ⟨C, hC⟩ := muB.aux.bddBelow hB
@@ -217,9 +217,9 @@ theorem muB.aux.ge_muB0 {A B : I → J → ℝ} (hB : IsPositive B)
 /-- Attainment of `lamB0`: there exists a mixed strategy `xx` with
 `(xA xx)_j ≥ lamB0 · (xB xx)_j` for every column. -/
 theorem exists_xx_lamB0 (A B : I → J → ℝ) (hB : IsPositive B) :
-    ∃ xx : stdSimplex ℝ I, ∀ j, lamB0 A B * xB B xx j ≤ xA A xx j := by
+    ∃ xx : Convexity.StdSimplex ℝ I, ∀ j, lamB0 A B * xB B xx j ≤ xA A xx j := by
   obtain ⟨xx, _, hxx⟩ :=
-    isCompact_univ.exists_isMaxOn (α := ℝ) (β := stdSimplex ℝ I)
+    isCompact_univ.exists_isMaxOn (α := ℝ) (β := Convexity.StdSimplex ℝ I)
       Set.univ_nonempty (lamB.aux.continuous hB).continuousOn
   rw [isMaxOn_iff] at hxx
   refine ⟨xx, fun j => ?_⟩
@@ -236,9 +236,9 @@ theorem exists_xx_lamB0 (A B : I → J → ℝ) (hB : IsPositive B) :
 /-- Attainment of `muB0`: there exists a mixed strategy `yy` with
 `(Ay yy)_i ≤ muB0 · (By yy)_i` for every row. -/
 theorem exists_yy_muB0 (A B : I → J → ℝ) (hB : IsPositive B) :
-    ∃ yy : stdSimplex ℝ J, ∀ i, Ay A yy i ≤ muB0 A B * By B yy i := by
+    ∃ yy : Convexity.StdSimplex ℝ J, ∀ i, Ay A yy i ≤ muB0 A B * By B yy i := by
   obtain ⟨yy, _, hyy⟩ :=
-    isCompact_univ.exists_isMinOn (α := ℝ) (β := stdSimplex ℝ J)
+    isCompact_univ.exists_isMinOn (α := ℝ) (β := Convexity.StdSimplex ℝ J)
       Set.univ_nonempty (muB.aux.continuous hB).continuousOn
   rw [isMinOn_iff] at hyy
   refine ⟨yy, fun i => ?_⟩
@@ -256,7 +256,7 @@ theorem exists_yy_muB0 (A B : I → J → ℝ) (hB : IsPositive B) :
 omit [Nonempty I] [Nonempty J] in
 /-- The bilinear pairing `xBy` and its symmetric variants. -/
 private theorem xBy_swap (B : I → J → ℝ)
-    (x : stdSimplex ℝ I) (y : stdSimplex ℝ J) :
+    (x : Convexity.StdSimplex ℝ I) (y : Convexity.StdSimplex ℝ J) :
     wsum x (fun i => By B y i) = wsum y (fun j => xB B x j) := by
   unfold xB By
   exact wsum_wsum_comm x y B
@@ -264,10 +264,10 @@ private theorem xBy_swap (B : I → J → ℝ)
 /-- Weight a constant multiple under `wsum`: `wsum z (c · f) = c · wsum z f`.
 A direct unfold of `wsum_smul`, restated here so chained rewrites match the
 shape used in the weak-duality proof. -/
-private theorem wsum_const_mul {K : Type*} [Fintype K] (z : stdSimplex ℝ K)
+private theorem wsum_const_mul {K : Type*} [Fintype K] (z : Convexity.StdSimplex ℝ K)
     (c : ℝ) (f : K → ℝ) :
     wsum z (fun a => c * f a) = c * wsum z f := by
-  change (∑ a, z.val a * (c * f a)) = c * (∑ a, z.val a * f a)
+  change (∑ a, z.weights a * (c * f a)) = c * (∑ a, z.weights a * f a)
   rw [Finset.mul_sum]
   refine Finset.sum_congr rfl ?_
   intro a _
@@ -324,16 +324,16 @@ theorem loomis_value_IJ_2 (Hn : 2 = Fintype.card I + Fintype.card J)
   obtain ⟨i0, hi⟩ := MinimaxLoomis.singleton_of_card_one HSI
   obtain ⟨j0, hj⟩ := MinimaxLoomis.singleton_of_card_one HSJ
   -- On a singleton simplex every distribution puts mass 1 at the single point.
-  have Hxx0 : ∀ x : stdSimplex ℝ I, x.val i0 = 1 := by
+  have Hxx0 : ∀ x : Convexity.StdSimplex ℝ I, x.weights i0 = 1 := by
     intro x
-    have hsum : (∑ i : I, x.val i) = 1 := x.property.2
-    have hcol : (∑ i : I, x.val i) = x.val i0 := by
+    have hsum : (∑ i : I, x.weights i) = 1 := x.total_of_fintype
+    have hcol : (∑ i : I, x.weights i) = x.weights i0 := by
       rw [show (Finset.univ : Finset I) = {i0} from hi, Finset.sum_singleton]
     linarith
-  have Hyy0 : ∀ y : stdSimplex ℝ J, y.val j0 = 1 := by
+  have Hyy0 : ∀ y : Convexity.StdSimplex ℝ J, y.weights j0 = 1 := by
     intro y
-    have hsum : (∑ j : J, y.val j) = 1 := y.property.2
-    have hrow : (∑ j : J, y.val j) = y.val j0 := by
+    have hsum : (∑ j : J, y.weights j) = 1 := y.total_of_fintype
+    have hrow : (∑ j : J, y.weights j) = y.weights j0 := by
       rw [show (Finset.univ : Finset J) = {j0} from hj, Finset.sum_singleton]
     linarith
   -- Both ratios reduce to A i0 j0 / B i0 j0 regardless of the strategy.
@@ -343,11 +343,11 @@ theorem loomis_value_IJ_2 (Hn : 2 = Fintype.card I + Fintype.card J)
     show colRatio A B x j0 = A i0 j0 / B i0 j0
     unfold colRatio xA xB
     have hxA : wsum x (fun i => A i j0) = A i0 j0 := by
-      change (∑ i, x.val i * A i j0) = A i0 j0
+      change (∑ i, x.weights i * A i j0) = A i0 j0
       rw [show (Finset.univ : Finset I) = {i0} from hi, Finset.sum_singleton,
           Hxx0 x, one_mul]
     have hxB : wsum x (fun i => B i j0) = B i0 j0 := by
-      change (∑ i, x.val i * B i j0) = B i0 j0
+      change (∑ i, x.weights i * B i j0) = B i0 j0
       rw [show (Finset.univ : Finset I) = {i0} from hi, Finset.sum_singleton,
           Hxx0 x, one_mul]
     rw [hxA, hxB]
@@ -357,11 +357,11 @@ theorem loomis_value_IJ_2 (Hn : 2 = Fintype.card I + Fintype.card J)
     show rowRatio A B y i0 = A i0 j0 / B i0 j0
     unfold rowRatio Ay By
     have hAy : wsum y (fun j => A i0 j) = A i0 j0 := by
-      change (∑ j, y.val j * A i0 j) = A i0 j0
+      change (∑ j, y.weights j * A i0 j) = A i0 j0
       rw [show (Finset.univ : Finset J) = {j0} from hj, Finset.sum_singleton,
           Hyy0 y, one_mul]
     have hBy : wsum y (fun j => B i0 j) = B i0 j0 := by
-      change (∑ j, y.val j * B i0 j) = B i0 j0
+      change (∑ j, y.weights j * B i0 j) = B i0 j0
       rw [show (Finset.univ : Finset J) = {j0} from hj, Finset.sum_singleton,
           Hyy0 y, one_mul]
     rw [hAy, hBy]
@@ -380,22 +380,22 @@ combinations then reduce to the constant-`c = 0` `linear_comb_*` and
 Note that `colOffset A B λ x j = wsum x (fun i => A i j - λ * B i j)` is
 linear in `x`. -/
 private noncomputable def colOffset (A B : I → J → ℝ) (lam : ℝ)
-    (x : stdSimplex ℝ I) (j : J) : ℝ :=
+    (x : Convexity.StdSimplex ℝ I) (j : J) : ℝ :=
   xA A x j - lam * xB B x j
 
 /-- Linearised row constraint: `rowOffset A B μ y i = μ · (By)_i - (Ay)_i`. -/
 private noncomputable def rowOffset (A B : I → J → ℝ) (mu : ℝ)
-    (y : stdSimplex ℝ J) (i : I) : ℝ :=
+    (y : Convexity.StdSimplex ℝ J) (i : I) : ℝ :=
   mu * By B y i - Ay A y i
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- `colOffset` is a `wsum` of `A i j - λ B i j` over `i`. -/
 private theorem colOffset_eq_wsum (A B : I → J → ℝ) (lam : ℝ)
-    (x : stdSimplex ℝ I) (j : J) :
+    (x : Convexity.StdSimplex ℝ I) (j : J) :
     colOffset A B lam x j = wsum x (fun i => A i j - lam * B i j) := by
   unfold colOffset xA xB
-  change (∑ i, x.val i * A i j) - lam * (∑ i, x.val i * B i j)
-      = ∑ i, x.val i * (A i j - lam * B i j)
+  change (∑ i, x.weights i * A i j) - lam * (∑ i, x.weights i * B i j)
+      = ∑ i, x.weights i * (A i j - lam * B i j)
   rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl ?_
   intro i _
@@ -404,11 +404,11 @@ private theorem colOffset_eq_wsum (A B : I → J → ℝ) (lam : ℝ)
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- `rowOffset` is a `wsum` of `μ B i j - A i j` over `j`. -/
 private theorem rowOffset_eq_wsum (A B : I → J → ℝ) (mu : ℝ)
-    (y : stdSimplex ℝ J) (i : I) :
+    (y : Convexity.StdSimplex ℝ J) (i : I) :
     rowOffset A B mu y i = wsum y (fun j => mu * B i j - A i j) := by
   unfold rowOffset Ay By
-  change mu * (∑ j, y.val j * B i j) - (∑ j, y.val j * A i j)
-      = ∑ j, y.val j * (mu * B i j - A i j)
+  change mu * (∑ j, y.weights j * B i j) - (∑ j, y.weights j * A i j)
+      = ∑ j, y.weights j * (mu * B i j - A i j)
   rw [Finset.mul_sum, ← Finset.sum_sub_distrib]
   refine Finset.sum_congr rfl ?_
   intro j _
@@ -417,8 +417,8 @@ private theorem rowOffset_eq_wsum (A B : I → J → ℝ) (mu : ℝ)
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 /-- Convex combination linearity for `colOffset` in the simplex argument. -/
 private theorem colOffset_mix (A B : I → J → ℝ) (lam : ℝ)
-    (x y : stdSimplex ℝ I) (t : ℝ) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (j : J) :
-    colOffset A B lam (stdSimplex.mix t ht₀ ht₁ x y) j
+    (x y : Convexity.StdSimplex ℝ I) (t : ℝ) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (j : J) :
+    colOffset A B lam (Convexity.StdSimplex.mix t ht₀ ht₁ x y) j
       = t * colOffset A B lam x j + (1 - t) * colOffset A B lam y j := by
   simp only [colOffset_eq_wsum]
   exact wsum_mix t ht₀ ht₁ x y _
@@ -426,8 +426,8 @@ private theorem colOffset_mix (A B : I → J → ℝ) (lam : ℝ)
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- Convex combination linearity for `rowOffset` in the simplex argument. -/
 private theorem rowOffset_mix (A B : I → J → ℝ) (mu : ℝ)
-    (x y : stdSimplex ℝ J) (t : ℝ) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (i : I) :
-    rowOffset A B mu (stdSimplex.mix t ht₀ ht₁ x y) i
+    (x y : Convexity.StdSimplex ℝ J) (t : ℝ) (ht₀ : 0 ≤ t) (ht₁ : t ≤ 1) (i : I) :
+    rowOffset A B mu (Convexity.StdSimplex.mix t ht₀ ht₁ x y) i
       = t * rowOffset A B mu x i + (1 - t) * rowOffset A B mu y i := by
   simp only [rowOffset_eq_wsum]
   exact wsum_mix t ht₀ ht₁ x y _
@@ -438,7 +438,7 @@ omit [Nonempty I] in
 /-- `lamB.aux A B x` strictly exceeds `lam` iff every offset `colOffset` is
 strictly positive at `x`. -/
 private theorem lamB.aux_gt_of_colOffset_pos {A B : I → J → ℝ}
-    (hB : IsPositive B) {lam : ℝ} {x : stdSimplex ℝ I}
+    (hB : IsPositive B) {lam : ℝ} {x : Convexity.StdSimplex ℝ I}
     (H : ∀ j, 0 < colOffset A B lam x j) :
     lam < lamB.aux A B x := by
   rw [lamB.aux_gt_iff_gt]
@@ -454,7 +454,7 @@ omit [Nonempty J] in
 /-- `muB.aux A B y` is strictly below `mu` iff every offset `rowOffset` is
 strictly positive at `y`. -/
 private theorem muB.aux_lt_of_rowOffset_pos {A B : I → J → ℝ}
-    (hB : IsPositive B) {mu : ℝ} {y : stdSimplex ℝ J}
+    (hB : IsPositive B) {mu : ℝ} {y : Convexity.StdSimplex ℝ J}
     (H : ∀ i, 0 < rowOffset A B mu y i) :
     muB.aux A B y < mu := by
   rw [muB.aux_lt_iff_lt]
@@ -493,7 +493,7 @@ omit [Fintype I] [Nonempty I] [Nonempty J] in
 /-- Extending `y' ∈ Δ(J')` to `Δ(J)` by zero at `j₀` recovers the same row
 aggregates from `A` (and `B`). -/
 private theorem Ay_extendDropColumn [DecidableEq J] (i : I) (A : I → J → ℝ)
-    (j₀ : J) (y' : stdSimplex ℝ {j : J // j ≠ j₀}) :
+    (j₀ : J) (y' : Convexity.StdSimplex ℝ {j : J // j ≠ j₀}) :
     Ay A (MinimaxLoomis.extendDropColumn j₀ y') i = Ay (dropCol A j₀) y' i := by
   unfold Ay
   rw [MinimaxLoomis.wsum_extendDropColumn]
@@ -501,7 +501,7 @@ private theorem Ay_extendDropColumn [DecidableEq J] (i : I) (A : I → J → ℝ
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
 private theorem By_extendDropColumn [DecidableEq J] (i : I) (B : I → J → ℝ)
-    (j₀ : J) (y' : stdSimplex ℝ {j : J // j ≠ j₀}) :
+    (j₀ : J) (y' : Convexity.StdSimplex ℝ {j : J // j ≠ j₀}) :
     By B (MinimaxLoomis.extendDropColumn j₀ y') i = By (dropCol B j₀) y' i := by
   unfold By
   rw [MinimaxLoomis.wsum_extendDropColumn]
@@ -509,7 +509,7 @@ private theorem By_extendDropColumn [DecidableEq J] (i : I) (B : I → J → ℝ
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 private theorem xA_extendDropRow [DecidableEq I] (j : J) (A : I → J → ℝ)
-    (i₀ : I) (x' : stdSimplex ℝ {i : I // i ≠ i₀}) :
+    (i₀ : I) (x' : Convexity.StdSimplex ℝ {i : I // i ≠ i₀}) :
     xA A (MinimaxLoomis.extendDropRow i₀ x') j = xA (dropRow A i₀) x' j := by
   unfold xA
   rw [MinimaxLoomis.wsum_extendDropRow]
@@ -517,7 +517,7 @@ private theorem xA_extendDropRow [DecidableEq I] (j : J) (A : I → J → ℝ)
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
 private theorem xB_extendDropRow [DecidableEq I] (j : J) (B : I → J → ℝ)
-    (i₀ : I) (x' : stdSimplex ℝ {i : I // i ≠ i₀}) :
+    (i₀ : I) (x' : Convexity.StdSimplex ℝ {i : I // i ≠ i₀}) :
     xB B (MinimaxLoomis.extendDropRow i₀ x') j = xB (dropRow B i₀) x' j := by
   unfold xB
   rw [MinimaxLoomis.wsum_extendDropRow]
@@ -637,7 +637,7 @@ private theorem loomis_value_eq_aux :
               simp [← Finset.card_univ, hsingle]
             omega
           exact ⟨⟨j, hj⟩⟩
-        haveI : Nonempty {j : J // j ≠ j₀} := nonempty_J'
+        have : Nonempty {j : J // j ≠ j₀} := nonempty_J'
         have cardn : n = Fintype.card I + Fintype.card {j : J // j ≠ j₀} := by
           have hJ' : Fintype.card {j : J // j ≠ j₀} = Fintype.card J - 1 := by
             simp [Fintype.card_subtype_compl]
@@ -700,12 +700,12 @@ private theorem loomis_value_eq_aux :
         have ht₁ : t ≤ 1 := le_of_lt ht1lt
         have hstrict_j0 :
             0 < colOffset A B (lamB0 A B)
-                  (stdSimplex.mix t ht₀ ht₁ xx xx') j₀ := by
+                  (Convexity.StdSimplex.mix t ht₀ ht₁ xx xx') j₀ := by
           rw [colOffset_mix]; exact hstrict_j0_raw
         -- Assemble strict on every j.
         have hAll : ∀ j,
             0 < colOffset A B (lamB0 A B)
-                  (stdSimplex.mix t ht₀ ht₁ xx xx') j := by
+                  (Convexity.StdSimplex.mix t ht₀ ht₁ xx xx') j := by
           intro j
           by_cases hj : j = j₀
           · rw [hj]; exact hstrict_j0
@@ -716,9 +716,9 @@ private theorem loomis_value_eq_aux :
               (HxxOff j) (HxxOff' j hj) ht₀ ht1lt
         -- Hence lamB.aux at the combination strictly exceeds lamB0, contradiction.
         have hgt : lamB0 A B
-            < lamB.aux A B (stdSimplex.mix t ht₀ ht₁ xx xx') :=
+            < lamB.aux A B (Convexity.StdSimplex.mix t ht₀ ht₁ xx xx') :=
           lamB.aux_gt_of_colOffset_pos hB hAll
-        have hle : lamB.aux A B (stdSimplex.mix t ht₀ ht₁ xx xx') ≤ lamB0 A B :=
+        have hle : lamB.aux A B (Convexity.StdSimplex.mix t ht₀ ht₁ xx xx') ≤ lamB0 A B :=
           lamB.aux.le_lamB0 hB _
         linarith
       · -------------------- Row-drop case --------------------
@@ -753,7 +753,7 @@ private theorem loomis_value_eq_aux :
               simp [← Finset.card_univ, hsingle]
             omega
           exact ⟨⟨i, hi⟩⟩
-        haveI : Nonempty {i : I // i ≠ i₀} := nonempty_I'
+        have : Nonempty {i : I // i ≠ i₀} := nonempty_I'
         have cardn : n = Fintype.card {i : I // i ≠ i₀} + Fintype.card J := by
           have hI' : Fintype.card {i : I // i ≠ i₀} = Fintype.card I - 1 := by
             simp [Fintype.card_subtype_compl]
@@ -811,11 +811,11 @@ private theorem loomis_value_eq_aux :
         have ht₁ : t ≤ 1 := le_of_lt ht1lt
         have hstrict_i0 :
             0 < rowOffset A B (muB0 A B)
-                  (stdSimplex.mix t ht₀ ht₁ yy yy') i₀ := by
+                  (Convexity.StdSimplex.mix t ht₀ ht₁ yy yy') i₀ := by
           rw [rowOffset_mix]; exact hstrict_i0_raw
         have hAll : ∀ i,
             0 < rowOffset A B (muB0 A B)
-                  (stdSimplex.mix t ht₀ ht₁ yy yy') i := by
+                  (Convexity.StdSimplex.mix t ht₀ ht₁ yy yy') i := by
           intro i
           by_cases hi : i = i₀
           · rw [hi]; exact hstrict_i0
@@ -824,9 +824,9 @@ private theorem loomis_value_eq_aux :
               (rowOffset A B (muB0 A B) yy i)
               (rowOffset A B (muB0 A B) yy' i) 0
               (HyyOff i) (HyyOff' i hi) ht₀ ht1lt
-        have hlt' : muB.aux A B (stdSimplex.mix t ht₀ ht₁ yy yy') < muB0 A B :=
+        have hlt' : muB.aux A B (Convexity.StdSimplex.mix t ht₀ ht₁ yy yy') < muB0 A B :=
           muB.aux_lt_of_rowOffset_pos hB hAll
-        have hge : muB0 A B ≤ muB.aux A B (stdSimplex.mix t ht₀ ht₁ yy yy') :=
+        have hge : muB0 A B ≤ muB.aux A B (Convexity.StdSimplex.mix t ht₀ ht₁ yy yy') :=
           muB.aux.ge_muB0 hB _
         linarith
 
@@ -853,7 +853,7 @@ $$
 $$
 The common value `v = lamB0 A B = muB0 A B`. -/
 theorem loomis_theorem (A B : I → J → ℝ) (hB : IsPositive B) :
-    ∃ (x : stdSimplex ℝ I) (y : stdSimplex ℝ J) (v : ℝ),
+    ∃ (x : Convexity.StdSimplex ℝ I) (y : Convexity.StdSimplex ℝ J) (v : ℝ),
       (∀ j, v * xB B x j ≤ xA A x j) ∧
       (∀ i, Ay A y i ≤ v * By B y i) := by
   obtain ⟨x, Hx⟩ := exists_xx_lamB0 A B hB
@@ -871,19 +871,19 @@ positive-`B` Loomis theorem above, validating the all-ones specialization.
 -/
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
-private theorem xB_one (x : stdSimplex ℝ I) (j : J) :
+private theorem xB_one (x : Convexity.StdSimplex ℝ I) (j : J) :
     xB (fun (_ : I) (_ : J) => (1 : ℝ)) x j = 1 := by
   unfold xB
   exact wsum_const x 1
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
-private theorem By_one (y : stdSimplex ℝ J) (i : I) :
+private theorem By_one (y : Convexity.StdSimplex ℝ J) (i : I) :
     By (fun (_ : I) (_ : J) => (1 : ℝ)) y i = 1 := by
   unfold By
   exact wsum_const y 1
 
 omit [Fintype J] [Nonempty I] [Nonempty J] in
-private theorem colRatio_one (A : I → J → ℝ) (x : stdSimplex ℝ I) (j : J) :
+private theorem colRatio_one (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) (j : J) :
     colRatio A (fun _ _ => 1) x j = wsum x (fun i => A i j) := by
   unfold colRatio
   rw [xB_one]
@@ -891,7 +891,7 @@ private theorem colRatio_one (A : I → J → ℝ) (x : stdSimplex ℝ I) (j : J
   exact div_one _
 
 omit [Fintype I] [Nonempty I] [Nonempty J] in
-private theorem rowRatio_one (A : I → J → ℝ) (y : stdSimplex ℝ J) (i : I) :
+private theorem rowRatio_one (A : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) (i : I) :
     rowRatio A (fun _ _ => 1) y i = wsum y (fun j => A i j) := by
   unfold rowRatio
   rw [By_one]
@@ -899,14 +899,14 @@ private theorem rowRatio_one (A : I → J → ℝ) (y : stdSimplex ℝ J) (i : I
   exact div_one _
 
 omit [Nonempty I] in
-private theorem lamB.aux_one (A : I → J → ℝ) (x : stdSimplex ℝ I) :
+private theorem lamB.aux_one (A : I → J → ℝ) (x : Convexity.StdSimplex ℝ I) :
     lamB.aux A (fun _ _ => 1) x = MinimaxLoomis.lam.aux A x := by
   unfold lamB.aux MinimaxLoomis.lam.aux
   congr 1; ext j
   exact colRatio_one A x j
 
 omit [Nonempty J] in
-private theorem muB.aux_one (A : I → J → ℝ) (y : stdSimplex ℝ J) :
+private theorem muB.aux_one (A : I → J → ℝ) (y : Convexity.StdSimplex ℝ J) :
     muB.aux A (fun _ _ => 1) y = MinimaxLoomis.mu.aux A y := by
   unfold muB.aux MinimaxLoomis.mu.aux
   congr 1; ext i

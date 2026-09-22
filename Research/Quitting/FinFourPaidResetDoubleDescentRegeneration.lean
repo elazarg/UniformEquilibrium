@@ -29,10 +29,12 @@ and does not consume the double-inert arm.
 
 noncomputable section
 
+open GameTheory.Math.Probability
+
 namespace GameTheory
 
-open Finset
-open Math.Probability Math.PMFProduct
+open _root_.Finset
+open _root_.Math.Probability Math.PMFProduct
 
 namespace FinFourSingletonBaseResetRepairPaidCapDoublePort
 
@@ -144,8 +146,9 @@ theorem exists_repairedOwner_positiveIncidence
       quittingTerminalOpponentIncidenceMass owner other repairedMass := by
     unfold quittingTerminalOpponentIncidenceMass
     exact Finset.sum_nonneg fun candidate _ =>
-      (quittingTerminalOutcomeMass_mem_stdSimplex
-        reward repairedProfile).1 (some candidate)
+      (mem_simplexWeights.mp
+        (quittingTerminalOutcomeMass_mem_stdSimplex
+        reward repairedProfile)).1 (some candidate)
   have hterminalIncidencePos : 0 <
       quittingTerminalOpponentIncidenceMass owner other repairedMass := by
     rw [hlaw, quittingTerminalOpponentIncidenceMass_lawPrefix]

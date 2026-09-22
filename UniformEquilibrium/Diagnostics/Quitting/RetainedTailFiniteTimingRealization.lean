@@ -36,7 +36,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
+open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -365,7 +365,7 @@ theorem quittingRetainedTailPureTimingRootStack_ownSurvival_eq_indicator
   cases hchoice : choices who with
   | none => simp [hchoice]
   | some chosen =>
-      rw [if_neg (by simp)]
+      rw [ite_eq_right (by simp)]
       apply Finset.prod_eq_zero (Finset.mem_univ chosen)
       simp [hchoice]
 
@@ -383,7 +383,7 @@ theorem quittingRetainedTailPureTimingRootStack_jointSurvival_eq_indicator
   by_cases hall : choices = fun _ ↦ none
   · subst choices
     simp
-  · rw [if_neg hall]
+  · rw [ite_eq_right hall]
     have hexists : ∃ who, choices who ≠ none := by
       by_contra hnone
       push Not at hnone
@@ -547,14 +547,13 @@ theorem quittingRetainedTailFiniteTimingGame_mixedEU_eq_mixedPayoff
     (quittingRetainedTailFiniteTimingGame reward deadline tail).mixedExtension.eu
         mixed who =
       quittingRetainedTailTimingMixedPayoff reward tail deadline mixed who := by
-  letI : Finite
+  let : Finite
       (quittingRetainedTailFiniteTimingGame reward deadline tail).Outcome :=
     quittingRetainedTailFiniteTimingGame_finiteOutcome reward deadline tail
   rw [(quittingRetainedTailFiniteTimingGame reward deadline tail).mixedExtension_eu]
   unfold quittingRetainedTailTimingMixedPayoff
     quittingRetainedTailTimingPurePayoff quittingRetainedTailFiniteTimingGame
   simp only [KernelGame.eu_ofPureEU]
-  rfl
 
 omit [Fintype ι] [DecidableEq ι] in
 /-- The current root and shifted choices split the literal pure root word. -/

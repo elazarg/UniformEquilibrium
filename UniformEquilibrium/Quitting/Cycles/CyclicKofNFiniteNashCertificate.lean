@@ -26,7 +26,7 @@ namespace GameTheory
 
 namespace CyclicKofNFiniteNashCertificate
 
-open StochasticGame Math.Probability Math.PMFProduct
+open StochasticGame _root_.Math.Probability Math.PMFProduct
 open Math.CyclicKofNArithmetic CyclicKofNQuittingSchedule
 open CyclicKofNBellmanBridge
 open scoped BigOperators Pointwise

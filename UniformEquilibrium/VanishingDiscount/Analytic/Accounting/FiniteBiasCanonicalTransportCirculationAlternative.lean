@@ -35,7 +35,7 @@ namespace StochasticGame
 namespace AnalyticBellmanGerm
 namespace FiniteBiasSeed
 
-open Filter Math Math.OnlineLearning Math.Probability Set
+open Filter _root_.Math Math.OnlineLearning _root_.Math.Probability Set
 
 variable {ι : Type} {G : StochasticGame ι}
   [Fintype G.State] [DecidableEq G.State]

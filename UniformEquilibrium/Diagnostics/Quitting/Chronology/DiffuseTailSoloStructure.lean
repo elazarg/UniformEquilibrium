@@ -160,7 +160,7 @@ theorem soloWindows_negativeOwnerDelivery_or_phaseStop
   · refine Or.inl (hrefusal.mono fun window hwindow => ?_)
     have hzero := quittingPeriodicWindowRefusalValue_eq_zero_of_soloRoots reward
       (seam.canonicalPeriodicTailWindowFamily.roots window) owner (hsolo window)
-    simp only [Set.mem_setOf_eq, hzero] at hwindow ⊢
+    simp only [Set.mem_ofPred_eq, hzero] at hwindow ⊢
     linarith
   · exact Or.inr hphase
 

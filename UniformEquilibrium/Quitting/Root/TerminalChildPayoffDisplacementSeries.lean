@@ -8,7 +8,7 @@ import UniformEquilibrium.Quitting.Root.TerminalChildPayoffDisplacementSequence
 noncomputable section
 namespace GameTheory
 
-open Filter Math.Probability
+open Filter _root_.Math.Probability
 open scoped Topology
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
@@ -164,7 +164,7 @@ theorem exists_terminalCapChildDisplacement_limit_series
     · exact ge_of_tendsto htendsto (Eventually.of_forall fun horizon =>
         Finset.prod_nonneg fun _ _ => quittingStationaryContinueMass_nonneg _)
     · exact le_of_tendsto htendsto (Eventually.of_forall fun horizon =>
-        Finset.prod_le_one
+        Finset.prod_le_one₀
           (fun _ _ => quittingStationaryContinueMass_nonneg _)
           (fun _ _ => quittingStationaryContinueMass_le_one _))
   have hweighted : Summable (fun offset =>

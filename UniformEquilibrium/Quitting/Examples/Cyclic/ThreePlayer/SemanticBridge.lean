@@ -33,7 +33,7 @@ open GameTheory
 
 namespace GameTheory.CyclicThreePlayerQuitting.Credibility
 
-open Math.Probability StochasticGame
+open _root_.Math.Probability StochasticGame
 open GameTheory.CyclicThreePlayerQuitting.Minimality.ExactCyclicPacket
   (nextPhase_three standardPacket)
 

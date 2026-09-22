@@ -7,6 +7,7 @@ Authors: UniformEquilibrium contributors
 import
   UniformEquilibrium.Diagnostics.Quitting.Collision.SingletonPacket.FullSupportHardPrincipalSize
 import UniformEquilibrium.Quitting.Stationary.ReturnedBlockTangentObstruction
+import GameTheory.Math.Probability.Simplex
 import MathUE.LocalPeriodicAnchor
 
 /-!
@@ -70,8 +71,12 @@ theorem hasHomogeneousSimplexSolution_of_finFourNormalizedKernel
     (M : Fin 4 → Fin 4 → ℝ)
     (kernel : FinFourNormalizedKernel M) :
     HasHomogeneousSimplexSolution M := by
-  let direction : stdSimplex ℝ (Fin 4) :=
-    ⟨kernel.value, kernel.nonneg, kernel.sum_eq_one⟩
+  let direction : Convexity.StdSimplex ℝ (Fin 4) := by
+    refine ⟨Finsupp.equivFunOnFinite.symm kernel.value, ?_, ?_⟩
+    · intro owner
+      exact kernel.nonneg owner
+    · rw [Finsupp.sum_fintype _ _ (by simp)]
+      exact kernel.sum_eq_one
   refine ⟨direction, ?_, ?_⟩
   · intro player
     rw [singletonLCPResidual_def, wsum, dotProduct]

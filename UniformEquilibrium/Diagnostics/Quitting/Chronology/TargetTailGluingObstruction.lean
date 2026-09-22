@@ -61,7 +61,7 @@ theorem targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
           witness.nonempty_players reward packet first second t ht0 ht1 ∧
       0 < @QuittingChargeTangentPacket.twoOwnerCommonWordRepairValue ι _ _
         witness.nonempty_players reward packet first second t ht0 ht1 := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   have hregression :=
     targetClosedApproxPunishmentTails_and_commonRepair_lowerBound
       (reward := reward)
@@ -81,7 +81,7 @@ theorem not_twoOwnerCommonWordRepairValue_eq_zero
     (first second : ι) (t : ℝ) (ht0 : 0 ≤ t) (ht1 : t ≤ 1) :
     @QuittingChargeTangentPacket.twoOwnerCommonWordRepairValue ι _ _
       witness.nonempty_players reward packet first second t ht0 ht1 ≠ 0 := by
-  letI : Nonempty ι := witness.nonempty_players
+  let : Nonempty ι := witness.nonempty_players
   exact ne_of_gt
     (targetClosedApproxPunishmentTails_and_twoOwnerCommonRepair_pos
       witness packet first second t ht0 ht1).2.2

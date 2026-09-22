@@ -9,7 +9,7 @@ noncomputable section
 namespace GameTheory
 namespace FinFourFiniteSourceCapHandoff
 
-open Math.Probability
+open _root_.Math.Probability
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}
 variable {source : StationaryQuitNowCapPinSource reward}

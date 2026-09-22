@@ -44,7 +44,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Math.Probability Math.PMFProduct
+open _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
@@ -289,7 +289,7 @@ theorem exists_positive_matched_successor
       0 < packet.weight (time + 1) target ∧
       0 < transfer time source target ∧
         0 < incidence time source target := by
-  letI : Nonempty ι := ⟨source⟩
+  let : Nonempty ι := ⟨source⟩
   have hsumPositive : 0 < ∑ target, packet.flow time source target := by
     rw [packet.row_sum time htime source]
     exact hsource

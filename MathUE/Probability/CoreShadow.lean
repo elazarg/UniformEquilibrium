@@ -87,12 +87,12 @@ theorem pmfTV_eq_sup_boolPotential (μ ν : PMF R) :
 
 /-- The PMF obtained by randomizing among a finite family of laws with simplex
 weights. -/
-def legalMixture (legal : L → PMF R) (y : stdSimplex ℝ L) : PMF R :=
+def legalMixture (legal : L → PMF R) (y : Convexity.StdSimplex ℝ L) : PMF R :=
   ((ProbabilityMassFunction.stdSimplexEquiv (α := L)).symm y).bind legal
 
 omit [Fintype R] in
 theorem expect_legalMixture [Finite R]
-    (legal : L → PMF R) (y : stdSimplex ℝ L)
+    (legal : L → PMF R) (y : Convexity.StdSimplex ℝ L)
     (v : R → ℝ) :
     expect (legalMixture legal y) v =
       wsum y (fun l => expect (legal l) v) := by
@@ -108,24 +108,24 @@ def shadowMatrix (q : PMF R) (legal : L → PMF R) :
 omit [Fintype R] in
 theorem wsum_shadowMatrix_eq [Finite R]
     (q : PMF R) (legal : L → PMF R)
-    (y : stdSimplex ℝ L) (a : R → Bool) :
+    (y : Convexity.StdSimplex ℝ L) (a : R → Bool) :
     wsum y (fun l => shadowMatrix q legal a l) =
       expect q (boolPotential a) -
         expect (legalMixture legal y) (boolPotential a) := by
   rw [expect_legalMixture]
   simp only [shadowMatrix]
   change
-    (∑ l, y.val l *
+    (∑ l, y.weights l *
       (expect q (boolPotential a) - expect (legal l) (boolPotential a))) =
       expect q (boolPotential a) -
-        ∑ l, y.val l * expect (legal l) (boolPotential a)
+        ∑ l, y.weights l * expect (legal l) (boolPotential a)
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib, ← Finset.sum_mul]
-  rw [y.property.2]
+  rw [y.total_of_fintype]
   ring
 
 theorem mu_aux_shadowMatrix_eq_pmfTV (q : PMF R) (legal : L → PMF R)
-    (y : stdSimplex ℝ L) :
+    (y : Convexity.StdSimplex ℝ L) :
     MinimaxLoomis.mu.aux (shadowMatrix q legal) y =
       pmfTV q (legalMixture legal y) := by
   rw [MinimaxLoomis.mu.aux, pmfTV_eq_sup_boolPotential]
@@ -135,14 +135,14 @@ theorem mu_aux_shadowMatrix_eq_pmfTV (q : PMF R) (legal : L → PMF R)
 
 /-- A simplex mixture of Boolean tests is a potential taking values in
 `[0,1]`. -/
-def mixedPotential (x : stdSimplex ℝ (R → Bool)) : R → ℝ :=
+def mixedPotential (x : Convexity.StdSimplex ℝ (R → Bool)) : R → ℝ :=
   fun r => wsum x (fun a => boolPotential a r)
 
-theorem mixedPotential_nonneg (x : stdSimplex ℝ (R → Bool)) (r : R) :
+theorem mixedPotential_nonneg (x : Convexity.StdSimplex ℝ (R → Bool)) (r : R) :
     0 ≤ mixedPotential x r :=
   wsum_nonneg x fun a => boolPotential_nonneg a r
 
-theorem mixedPotential_le_one (x : stdSimplex ℝ (R → Bool)) (r : R) :
+theorem mixedPotential_le_one (x : Convexity.StdSimplex ℝ (R → Bool)) (r : R) :
     mixedPotential x r ≤ 1 := by
   calc
     mixedPotential x r ≤ wsum x (fun _ => (1 : ℝ)) :=
@@ -150,13 +150,13 @@ theorem mixedPotential_le_one (x : stdSimplex ℝ (R → Bool)) (r : R) :
     _ = 1 := wsum_const x 1
 
 theorem expect_mixedPotential (μ : PMF R)
-    (x : stdSimplex ℝ (R → Bool)) :
+    (x : Convexity.StdSimplex ℝ (R → Bool)) :
     expect μ (mixedPotential x) =
       wsum x (fun a => expect μ (boolPotential a)) := by
   rw [expect_eq_sum]
   change
-    (∑ r, (μ r).toReal * ∑ a, x.val a * boolPotential a r) =
-      ∑ a, x.val a * expect μ (boolPotential a)
+    (∑ r, (μ r).toReal * ∑ a, x.weights a * boolPotential a r) =
+      ∑ a, x.weights a * expect μ (boolPotential a)
   simp_rw [Finset.mul_sum]
   rw [Finset.sum_comm]
   apply Finset.sum_congr rfl
@@ -169,32 +169,32 @@ theorem expect_mixedPotential (μ : PMF R)
 omit [Fintype L] in
 theorem wsum_shadowMatrix_eq_expect_mixedPotential
     (q : PMF R) (legal : L → PMF R)
-    (x : stdSimplex ℝ (R → Bool)) (l : L) :
+    (x : Convexity.StdSimplex ℝ (R → Bool)) (l : L) :
     wsum x (fun a => shadowMatrix q legal a l) =
       expect q (mixedPotential x) -
         expect (legal l) (mixedPotential x) := by
   rw [expect_mixedPotential, expect_mixedPotential]
   simp only [shadowMatrix]
   change
-    (∑ a, x.val a *
+    (∑ a, x.weights a *
       (expect q (boolPotential a) - expect (legal l) (boolPotential a))) =
-      (∑ a, x.val a * expect q (boolPotential a)) -
-        ∑ a, x.val a * expect (legal l) (boolPotential a)
+      (∑ a, x.weights a * expect q (boolPotential a)) -
+        ∑ a, x.weights a * expect (legal l) (boolPotential a)
   simp_rw [mul_sub]
   rw [Finset.sum_sub_distrib]
 
 omit [Fintype R] in
 theorem expect_sub_legalMixture_eq_wsum [Finite R]
-    (q : PMF R) (legal : L → PMF R) (y : stdSimplex ℝ L)
+    (q : PMF R) (legal : L → PMF R) (y : Convexity.StdSimplex ℝ L)
     (v : R → ℝ) :
     expect q v - expect (legalMixture legal y) v =
       wsum y (fun l => expect q v - expect (legal l) v) := by
   rw [expect_legalMixture]
   change
-    expect q v - ∑ l, y.val l * expect (legal l) v =
-      ∑ l, y.val l * (expect q v - expect (legal l) v)
+    expect q v - ∑ l, y.weights l * expect (legal l) v =
+      ∑ l, y.weights l * (expect q v - expect (legal l) v)
   simp_rw [mul_sub]
-  rw [Finset.sum_sub_distrib, ← Finset.sum_mul, y.property.2]
+  rw [Finset.sum_sub_distrib, ← Finset.sum_mul, y.total_of_fintype]
   ring
 
 /-- **Finite core-shadow alternative.**
@@ -204,15 +204,15 @@ mixture is within total-variation tolerance `ε` of `q`, or a single bounded
 potential separates `q` by more than `ε` from every legal mixture. -/
 theorem exists_legalMixture_close_or_separator [Nonempty L]
     (q : PMF R) (legal : L → PMF R) (ε : ℝ) :
-    (∃ y : stdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε) ∨
+    (∃ y : Convexity.StdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε) ∨
       ∃ v : R → ℝ,
         (∀ r, 0 ≤ v r) ∧
         (∀ r, v r ≤ 1) ∧
-        ∀ y : stdSimplex ℝ L,
+        ∀ y : Convexity.StdSimplex ℝ L,
           ε < expect q v - expect (legalMixture legal y) v := by
   classical
   by_cases hclose :
-      ∃ y : stdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε
+      ∃ y : Convexity.StdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε
   · exact Or.inl hclose
   · right
     push Not at hclose
@@ -265,10 +265,10 @@ theorem exists_legalMixture_close_or_separator [Nonempty L]
         ring
       rw [hterm]
       change
-        (∑ l, y.val l * (gap l + ε)) =
-          (∑ l, y.val l * gap l) + ε
+        (∑ l, y.weights l * (gap l + ε)) =
+          (∑ l, y.weights l * gap l) + ε
       simp_rw [mul_add]
-      rw [Finset.sum_add_distrib, ← Finset.sum_mul, y.property.2]
+      rw [Finset.sum_add_distrib, ← Finset.sum_mul, y.total_of_fintype]
       ring
     rw [hrewrite]
     linarith
@@ -279,12 +279,12 @@ drift. -/
 theorem exists_legalMixture_close_or_separator_from_baseline [Nonempty L]
     (q p : PMF R) (legal : L → PMF R) (ε : ℝ)
     (hbaseline :
-      ∃ y : stdSimplex ℝ L, legalMixture legal y = p) :
-    (∃ y : stdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε) ∨
+      ∃ y : Convexity.StdSimplex ℝ L, legalMixture legal y = p) :
+    (∃ y : Convexity.StdSimplex ℝ L, pmfTV q (legalMixture legal y) ≤ ε) ∨
       ∃ v : R → ℝ,
         (∀ r, 0 ≤ v r) ∧
         (∀ r, v r ≤ 1) ∧
-        (∀ y : stdSimplex ℝ L,
+        (∀ y : Convexity.StdSimplex ℝ L,
           ε < expect q v - expect (legalMixture legal y) v) ∧
         ε < expect q v - expect p v := by
   rcases exists_legalMixture_close_or_separator q legal ε with h | ⟨v, hv0, hv1, hvsep⟩

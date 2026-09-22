@@ -52,7 +52,7 @@ theorem frozenSourceReplacement_active
     frontier.frozenSourceReplacement rank mover.1 =
       frontier.replacement mover rank := by
   unfold frozenSourceReplacement
-  rw [dif_pos mover.property]
+  rw [dite_eq_left mover.property]
   congr
 
 /-- The common-source, common-scale reset cube underlying one actual frontier
