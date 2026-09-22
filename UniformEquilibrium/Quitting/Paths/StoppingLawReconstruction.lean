@@ -67,6 +67,25 @@ omit [DecidableEq iota] in
     reward who (laws who)
 
 omit [DecidableEq iota] in
+/-- The literal pure-time Never strategy induces the point mass at Never. -/
+@[simp] theorem quittingBehaviorStoppingLaw_pureTime_never
+    (reward : {S : Finset iota // S.Nonempty} → Payoff iota) (who : iota) :
+    quittingBehaviorStoppingLaw reward
+        (quittingPureTimeBehaviorStrategy reward who none) = PMF.pure none := by
+  have hpure : quittingPureTimeBehaviorStrategy reward who none =
+      quittingStoppingLawBehaviorStrategy reward who (PMF.pure none) := by
+    funext time history
+    change (PMF.pure false : PMF Bool) = _
+    ext action
+    simp [quittingStoppingLawBehaviorStrategy,
+      StoppingLaw.toScalarHazard, StoppingLaw.survival,
+      StoppingLaw.finiteMass, ScalarHazard.toBoolean, booleanCoin]
+    cases action <;> simp
+  rw [hpure]
+  exact quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
+    reward who (PMF.pure none)
+
+omit [DecidableEq iota] in
 /-- A reconstructed finite clock is literally all Continue at every date at
 or after its finite support bound. -/
 theorem quittingStoppingLawProfile_liveHazard_eq_allContinue_of_le

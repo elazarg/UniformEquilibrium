@@ -208,8 +208,10 @@ supply the remaining orbit construction in that case.
 lower-glue exclusion used in Theorem 4.1. Their input places every coordinate
 of the actual point between minus half and plus half of the payoff bound.
 The second theorem then puts the actual glued fiber inside the paper's
-quitting correspondence. Constructing an unbounded extended orbit that
-satisfies those bounds remains formalization work.
+quitting correspondence. The preceding extended-orbit localization and
+half-payoff-box invariant supply those bounds from an unbounded extended
+orbit in the compact Section 4 graph. The conversion of the joined graph's
+remaining terminal-image edges is not yet complete.
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,
@@ -279,17 +281,33 @@ neighborhood force a terminal step larger than the common radius.
 `section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep`
 states the resulting small-step containment directly. Neither theorem needs
 a lower bound on quitting probability or the global part of Lemma 4.4.
-The remaining positive-quitting branches and their assembly remain to be
+The remaining positive-cutoff branches and their assembly remain to be
 formalized.
 
-For the zero-cutoff, positive-quitting branch, the upper-neighborhood
-coordinate cap still depends on the global part of Lemma 4.4. The large-
-quitting zero-cutoff case also needs the continuation vector in the exact
-box required by `IsStructureMotionParameter`; the broader bounds asserted
-by Lemma 4.4 alone do not supply that premise. This is a remaining source
-alignment obligation, not a counterexample to the paper's result. The
-bounded-continuation, positive-cutoff case is proved by the declarations
-above, using the supported-coordinate bound and coordinate drift.
+`section4_terminal_mem_fRow_of_cutoff_eq_zero` in the same file puts every
+zero-cutoff terminal endpoint in the ordinary one-stage payoff correspondence.
+`section4Omega_lt_terminalStep_of_zero_cutoff_large_quit` proves that zero
+cutoff and quitting at least the paper's threshold force a terminal step
+larger than the common radius. No continuation-box assumption or global
+part of Lemma 4.4 is used. Inside the motion box the proof uses the existing
+uniform motion estimate; above it the reward bound suffices; below it the
+quantitative form of Simon (2007), Lemma 6, gives the required displacement.
+Both declarations passed a silent named build; the large-quitting theorem
+also passed an independent declaration-level review. Separate transitive
+axiom checks for these declarations and the shared threshold estimate
+found only the standard three permitted axioms.
+
+`section4_terminal_mem_gluedGraph_of_zero_cutoff_positive_small_quit`
+in the same file proves the remaining small-positive-quitting branch at zero
+cutoff. The common-radius small-step premise and the local structure-map
+correction estimate give the actual upper-neighborhood coordinate bounds;
+the same product row satisfies its support and cap constraints. The theorem
+handles the lower-neighborhood priority in the definition of the glued
+fiber. It passed a silent named build, independent declaration-level
+review, and a separate transitive standard-axiom check. It does not use the
+global upper bound in Lemma 4.4, which remains
+unproved. The bounded-continuation, positive-cutoff case above instead uses
+the supported-coordinate bound and coordinate drift.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved.
@@ -304,10 +322,10 @@ not by itself establish a δ version of `lemma4_5`.
 
 For `theorem4_1`, `exists_nonsingularPerturbation` in the same file already
 constructs the perturbation and preserves normality. The standalone
-extended-orbit-to-equilibrium direction is also proved. The actual joined-
-graph orbit localization, lower-glue and cutoff elimination, payoff/error
-transfer from the perturbation, and final assembly remain incomplete;
-generic orbit-tail machinery should be reused, not rebuilt.
+extended-orbit-to-equilibrium direction, reward transfer, and the preceding
+joined-graph localization and half-box results are also proved. The remaining
+work is the source-required cutoff elimination and assembly through
+Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
 
 ## Markov variation
 

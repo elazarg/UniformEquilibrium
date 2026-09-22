@@ -31,6 +31,8 @@ import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
 import MathUE.LinearProgramming.PositiveInverseR0
+import MathUE.LinearProgramming.ThreeCycleInverseFormulas
+import MathUE.LinearProgramming.ThreeCyclePathRigidity
 import MathUE.LinearProgramming.NonnegativeInverseApproximation
 import MathUE.LinearProgramming.PivotRepairMassPolytope
 import MathUE.LinearProgramming.PivotRepairMassPerturbation

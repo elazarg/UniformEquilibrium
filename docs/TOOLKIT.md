@@ -963,6 +963,15 @@ and nonsingleton rewards, and bounds every reward change by the parameter's
 absolute value. The matrix identity and the common positive threshold are
 literal conclusions, not supplied compatibility assumptions.
 
+`directedCycleMatrix_inverse`, `columnWeight_balances`, and
+`prod_survivalFraction`
+(`MathUE/LinearProgramming/ThreeCycleInverseFormulas.lean`) give the
+canonical three-cycle inverse, its column-weight identities, and the product
+of the three normalized survival fractions. The same module proves that
+the fractions lie strictly between zero and one in the strict product-gap
+chamber. These are finite algebraic identities, not a theorem about the
+blocks of an arbitrary infinite quitting schedule.
+
 `PositiveInverseFourMatrixComparisons.not_projectiveQBar`
 (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`)
 separates the strict-inverse criterion from the projective-Q-bar criterion
@@ -2111,6 +2120,12 @@ Never-row slack; the exact certificate specializes it to zero. For general
 nonincreasing evaluations the correction includes the evaluation drop, so
 the terminal relaxation does not assert the same bound for all evaluations.
 A decision procedure for these raw classes remains to be supplied.
+
+`CappedClockMissingNeverFixture.liftedProfile_outsiderDebt_eq_one`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMissingNeverFixture.lean`)
+shows why some Never protection is needed: a zero-reward child has an exact
+all-Never equilibrium and a zero-weight future/join certificate, but its
+actual quiet lift gives the outsider unrestricted terminal debt one.
 
 `not_nonempty_cappedClockParentRewardCertificate_iff_exactLPDual`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockExactLPAlternative.lean`)

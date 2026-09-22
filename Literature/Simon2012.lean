@@ -7363,6 +7363,63 @@ private theorem section4Omega_lt_quadratic_drift (G : QuittingGame)
   dsimp only [N] at hnumScaled hfactorScaled
   nlinarith
 
+/-- The common Section 4 step is smaller than `ρ` times the quitting
+threshold used in Property (6). -/
+private theorem section4Omega_lt_rho_mul_quitThreshold
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    Section4Omega G M d ρ ξ R ε <
+      ρ * (ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M)) := by
+  let N : ℝ := Fintype.card G.Player
+  obtain ⟨hξ, hξ1, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  obtain ⟨hδpos, hδ1⟩ := section4Delta_mem_Ioc
+    G M ρ ε hplayers hM hmotion hε hερ
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hRpos : 0 < R := by
+    have hNMpos : 0 < N * M := mul_pos hNpos hMpos
+    dsimp only [N] at hR hNMpos
+    nlinarith
+  let threshold : ℝ := ε * d / (40 * N ^ 2 * M)
+  let factor : ℝ := ξ * Section4Delta G M ε / (5 * R)
+  have hthreshold : 0 < threshold := by
+    dsimp only [threshold]
+    positivity
+  have hfactorNonneg : 0 ≤ factor := by
+    dsimp only [factor]
+    positivity
+  have hfactorLt : factor < 1 := by
+    have hnumerator : ξ * Section4Delta G M ε ≤ 1 :=
+      (mul_le_of_le_one_left hδpos.le hξ1.le).trans hδ1
+    have hdenominator : 1 < 5 * R := by
+      have hNM : 3 ≤ N * M := by
+        nlinarith [mul_le_mul hN hM.1 (by norm_num) hNpos.le]
+      dsimp only [N] at hR hNM
+      nlinarith
+    dsimp only [factor]
+    rw [div_lt_one (by positivity : 0 < 5 * R)]
+    exact hnumerator.trans_lt hdenominator
+  have homega : Section4Omega G M d ρ ξ R ε = ρ * threshold * factor := by
+    dsimp only [Section4Omega, threshold, factor, N]
+    field_simp
+    ring
+  rw [homega]
+  calc
+    ρ * threshold * factor < ρ * threshold * 1 :=
+      mul_lt_mul_of_pos_left hfactorLt (mul_pos hρpos hthreshold)
+    _ = ρ * (ε * d /
+        (40 * (Fintype.card G.Player : ℝ) ^ 2 * M)) := by
+      simp only [threshold, N, mul_one]
+
 /-- At a sufficiently small-quitting exact row, the singular correction in
 `Phi` is uniformly small, including the zero-quitting edge case. -/
 private theorem euclideanNorm_phi_sub_oneStagePayoff_le
@@ -11805,6 +11862,322 @@ private theorem mem_frontier_truncatedW_of_mem_closure_compl_WSet
 private theorem lowerBoundary_subset_frontier (G : QuittingGame) (R : ℝ) :
     LowerBoundary G R ⊆ frontier (TruncatedW G R) := by
   exact closure_minimal (fun _ h => h.1) isClosed_frontier
+
+/-- In Property (6)'s zero-cutoff branch, the terminal endpoint belongs to the
+ordinary one-stage payoff correspondence. -/
+theorem section4_terminal_mem_fRow_of_cutoff_eq_zero
+    (G : QuittingGame) {M d : ℝ}
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    {ε : ℝ} (hε : 0 ≤ ε)
+    (a : Payoff G.Player) (hcutoffZero : (cutoff a : ℝ) = 0) :
+    Section4Y G inverse cutoff a ∈
+      FRow G ε (Section4X G inverse cutoff a) := by
+  let z : EZeroTilde G := inverse.inv a
+  have hx : Section4X G inverse cutoff a = z.1.1 := by
+    dsimp only [Section4X, z]
+    rw [hcutoffZero]
+    simp
+  have hy : Section4Y G inverse cutoff a =
+      QuittingOneStagePayoff G z.1.1 z.1.2 := by
+    dsimp only [Section4Y, Section4Z]
+    rw [hcutoffZero]
+    simp only [zero_smul, sub_zero, one_smul, zero_add]
+    rw [hx]
+  rw [hx, hy]
+  exact ⟨z.1.2, EpsilonRow.mono G hε z.1.1 z.2.1, rfl⟩
+
+/-- Property (6), Case 2: at zero cutoff, quitting above the paper's
+threshold forces a terminal step larger than the common Section 4 radius. -/
+theorem section4Omega_lt_terminalStep_of_zero_cutoff_large_quit
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (hcutoffZero : (cutoff a : ℝ) = 0)
+    (hqLarge :
+      ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M) ≤
+        QuitProbability G (inverse.inv a).1.2) :
+    Section4Omega G M d ρ ξ R ε <
+      EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) := by
+  let N : ℝ := Fintype.card G.Player
+  let z : EZeroTilde G := inverse.inv a
+  let beta : Payoff G.Player := z.1.1
+  let p : QuitRow G := z.1.2
+  let q : ℝ := QuitProbability G p
+  let stage : Payoff G.Player := QuittingOneStagePayoff G beta p
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hqNonneg : 0 ≤ q := quitProbability_mem_Icc G p |>.1
+  have hx : Section4X G inverse cutoff a = beta := by
+    dsimp only [Section4X, beta, z]
+    rw [hcutoffZero]
+    simp
+  have hy : Section4Y G inverse cutoff a = stage := by
+    dsimp only [Section4Y, Section4Z, stage, p, beta, z]
+    rw [hcutoffZero]
+    simp only [zero_smul, sub_zero, one_smul, zero_add]
+    rw [hx]
+  have homegaThreshold :
+      Section4Omega G M d ρ ξ R ε < ρ * q := by
+    have hbase := section4Omega_lt_rho_mul_quitThreshold
+      G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+    have hscaled := mul_le_mul_of_nonneg_left hqLarge hρpos.le
+    exact hbase.trans_le (by simpa only [q, p, z] using hscaled)
+  rw [hx, hy]
+  by_cases hlower : ∀ k, MinMaxQuit G k - ρ ≤ beta k
+  · by_cases hupper : ∀ k, beta k ≤ 2 * N * M
+    · have hrow : p ∈ EpsilonRow G ρ beta :=
+        EpsilonRow.mono G hρpos.le beta z.2.1
+      have hmotionStep := hmotion.2.2.2.1 beta
+        (fun k => ⟨hlower k, by simpa only [N] using hupper k⟩) p hrow
+      exact homegaThreshold.trans_le (by
+        simpa only [q, stage, p, beta] using hmotionStep)
+    · push Not at hupper
+      obtain ⟨k, hk⟩ := hupper
+      have hreward := abs_quittingRewardPart_le G p k
+        (fun A => hM.2.1 A k)
+      have hrewardUpper :
+          quittingRewardPart G p k ≤ M / 3 * q := by
+        exact (le_abs_self _).trans (by simpa only [q] using hreward)
+      have hcoordinate :
+          beta k - stage k = q * beta k - quittingRewardPart G p k := by
+        change beta k -
+          ((1 - QuitProbability G p) * beta k + quittingRewardPart G p k) = _
+        dsimp only [q]
+        ring
+      have hcoefficient : ρ ≤ 2 * N * M - M / 3 := by
+        nlinarith [hmotion.2.2.1, hM.1]
+      have hgap : ρ * q ≤ beta k - stage k := by
+        rw [hcoordinate]
+        have hbetaScaled := mul_le_mul_of_nonneg_left hk.le hqNonneg
+        have hcoefficientScaled :=
+          mul_le_mul_of_nonneg_right hcoefficient hqNonneg
+        nlinarith
+      have hcoordinateNorm := abs_apply_le_euclideanNorm (beta - stage) k
+      exact homegaThreshold.trans_le (hgap.trans ((le_abs_self _).trans (by
+        simpa only [Pi.sub_apply, EuclideanDist, EuclideanNorm] using
+          hcoordinateNorm)))
+  · push Not at hlower
+    obtain ⟨k, hk⟩ := hlower
+    let eta : ℝ := ρ / 3
+    let B : ℝ := 2 * M / 5
+    let tolerance : ℝ := eta ^ 2 / (2 * B)
+    have hB : IsPositiveQuittingPayoffDifferenceBound G B := by
+      simpa only [B] using simonPayoffScale_twoFifthsPositiveBound G hM
+    have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+    have hBpos : 0 < B := hB.1
+    have hetaPos : 0 < eta := by dsimp only [eta]; positivity
+    have hetaB : eta ≤ B := by
+      dsimp only [eta, B]
+      nlinarith [hmotion.2.2.1, hM.1]
+    have htoleranceNonneg : 0 ≤ tolerance := by
+      dsimp only [tolerance]
+      exact (div_pos (sq_pos_of_pos hetaPos) (mul_pos (by norm_num) hBpos)).le
+    have hstageRow : stage ∈ FRow G tolerance beta := by
+      refine ⟨p, EpsilonRow.mono G htoleranceNonneg beta z.2.1, rfl⟩
+    have hdrift :=
+      (Literature.Simon2007.lemma6_quantitative_of_positiveBound
+        G hB hnormal hetaPos hetaB hstageRow k).2
+        (by dsimp only [eta] at hk ⊢; nlinarith)
+    have homegaQuadratic := section4Omega_lt_quadratic_drift
+      G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+    have hquadraticTolerance : ρ ^ 2 / (1000 * M) < tolerance := by
+      have hscale : 0 < ρ ^ 2 / M := div_pos (sq_pos_of_pos hρpos) hMpos
+      calc
+        ρ ^ 2 / (1000 * M) = (1 / 1000 : ℝ) * (ρ ^ 2 / M) := by ring
+        _ < (5 / 36 : ℝ) * (ρ ^ 2 / M) :=
+          mul_lt_mul_of_pos_right (by norm_num) hscale
+        _ = tolerance := by
+          dsimp only [tolerance, eta, B]
+          field_simp [ne_of_gt hMpos]
+          ring
+    have hstageGap : tolerance ≤ stage k - beta k := by
+      linarith
+    have hcoordinateNorm := abs_apply_le_euclideanNorm (beta - stage) k
+    have habs : tolerance ≤ |beta k - stage k| := by
+      rw [abs_of_nonpos (by linarith : beta k - stage k ≤ 0)]
+      linarith
+    exact (homegaQuadratic.trans hquadraticTolerance).trans_le
+      (habs.trans (by
+        simpa only [Pi.sub_apply, EuclideanDist, EuclideanNorm] using
+          hcoordinateNorm))
+
+/-- In Property (6)'s zero-cutoff, positive small-quitting branch, a small
+terminal step belongs to the literal glued graph at the Section 4 cap. -/
+theorem section4_terminal_mem_gluedGraph_of_zero_cutoff_positive_small_quit
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hcutoffZero : (cutoff a : ℝ) = 0)
+    (hqPos : 0 < QuitProbability G (inverse.inv a).1.2)
+    (hqSmall : QuitProbability G (inverse.inv a).1.2 <
+      ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M))
+    (hstep : EuclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) <
+        Section4Omega G M d ρ ξ R ε) :
+    (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+      correspondenceGraph
+        (GluedFiber G R ε (Section4Delta G M ε)) := by
+  classical
+  let N : ℝ := Fintype.card G.Player
+  let z : EZeroTilde G := inverse.inv a
+  let beta : Payoff G.Player := z.1.1
+  let p : QuitRow G := z.1.2
+  let q : ℝ := QuitProbability G p
+  let stage : Payoff G.Player := QuittingOneStagePayoff G beta p
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hNpow : 9 ≤ N ^ 2 := by nlinarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hqNonneg : 0 ≤ q := quitProbability_mem_Icc G p |>.1
+  have hqPos' : 0 < q := by simpa only [q, p, z] using hqPos
+  have hx : Section4X G inverse cutoff a = beta := by
+    dsimp only [Section4X, beta, z]
+    rw [hcutoffZero]
+    simp
+  have hy : Section4Y G inverse cutoff a = stage := by
+    dsimp only [Section4Y, Section4Z, stage, p, beta, z]
+    rw [hcutoffZero]
+    simp only [zero_smul, sub_zero, one_smul, zero_add]
+    rw [hx]
+  have hstep' : EuclideanDist beta stage <
+      Section4Omega G M d ρ ξ R ε := by
+    simpa only [hx, hy] using hstep
+  have hden : 0 < 40 * N ^ 2 * M := by positivity
+  have hqScaled : q * (40 * N ^ 2 * M) < ε * d := by
+    rw [lt_div_iff₀ hden] at hqSmall
+    simpa only [q, p, z, N, mul_comm] using hqSmall
+  have hεd : ε * d ≤ ε := by
+    simpa only [mul_one] using mul_le_mul_of_nonneg_left hd1 hε.le
+  have hεOne : ε < 1 := by
+    nlinarith [hερ, hmotion.2.2.1]
+  have hqHalf : q < 1 / (2 * N) := by
+    have hfactor : 2 * N ≤ 40 * N ^ 2 * M := by
+      nlinarith [mul_nonneg (by linarith : 0 ≤ N - 1)
+        (by linarith [hM.1] : 0 ≤ M - 1)]
+    rw [lt_div_iff₀ (by positivity : 0 < 2 * N)]
+    have hscaled := mul_le_mul_of_nonneg_left hfactor hqNonneg
+    nlinarith [hqScaled, hεd, hεOne]
+  have homega := section4Omega_le_epsilon_div_thousand
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+  have hstageError : 2 * (M / 3) * q +
+      Section4Omega G M d ρ ξ R ε < ε / 3 := by
+    have hfactor : 360 * M * q ≤ 40 * N ^ 2 * M * q := by
+      have h40Mq : 0 ≤ (40 : ℝ) * M * q := by positivity
+      have hscaled := mul_le_mul_of_nonneg_right hNpow h40Mq
+      nlinarith
+    have hsmall : 360 * M * q < ε := by
+      nlinarith [hqScaled, hεd]
+    nlinarith
+  have hphi : Phi G M d z = a := inverse.rightInverse a
+  have hcorrection : EuclideanNorm (a - stage) < 11 * ε / 40 := by
+    have hbound := euclideanNorm_phi_sub_oneStagePayoff_le
+      G M d hM hd hd1 z (by simpa only [q, N] using hqHalf)
+    have hscale : 11 * N ^ 2 * M * q / d < 11 * ε / 40 := by
+      rw [div_lt_iff₀ hd]
+      nlinarith [hqScaled]
+    have hreorder : a - stage =
+        Phi G M d z - QuittingOneStagePayoff G z.1.1 z.1.2 := by
+      rw [hphi]
+    rw [hreorder]
+    exact hbound.trans_lt (by simpa only [N, q] using hscale)
+  have htotalError : Section4Omega G M d ρ ξ R ε + 11 * ε / 40 < ε / 3 := by
+    nlinarith
+  have hstepCoordinate : ∀ k, |beta k - stage k| <
+      Section4Omega G M d ρ ξ R ε := by
+    intro k
+    exact (abs_coordinate_sub_le_euclideanDist beta stage k).trans_lt hstep'
+  have hcorrectionCoordinate : ∀ k, |a k - stage k| < 11 * ε / 40 := by
+    intro k
+    simpa only [Pi.sub_apply] using
+      (abs_apply_le_euclideanNorm (a - stage) k).trans_lt hcorrection
+  have hglobalBounds : ∀ k,
+      SoloPayoff G k - ε / 3 ≤ beta k ∧ beta k ≤ R + 1 + ε / 3 := by
+    intro k
+    have hstageBounds := oneStage_coordinate_bounds G M hM beta p z.2.1 z.2.2 k
+    have hstepK := abs_lt.mp (hstepCoordinate k)
+    have hcorrectionK := abs_lt.mp (hcorrectionCoordinate k)
+    have haUpper := (ha.2 k).2
+    constructor
+    · nlinarith [hstageError]
+    · nlinarith [htotalError]
+  have hactive : ∀ k, 0 < (p k : ℝ) →
+      beta ∈ UpperNeighborhoodFor G R ε k := by
+    intro k hpk
+    have hstageBounds := oneStage_coordinate_bounds G M hM beta p z.2.1 z.2.2 k
+    have hstepK := abs_lt.mp (hstepCoordinate k)
+    refine ⟨hglobalBounds, ?_⟩
+    have hsupported := abs_le.mp (hstageBounds.2 hpk)
+    nlinarith [hstageError]
+  have hcap :
+      ε * d / (40 * N ^ 2 * M) ≤ Section4Delta G M ε := by
+    have hdenSmall : 0 < 2 * N * M := by positivity
+    have hfactor : 2 * N * M ≤ 40 * N ^ 2 * M := by
+      nlinarith [mul_nonneg (by linarith : 0 ≤ N - 1)
+        (by linarith [hM.1] : 0 ≤ M - 1)]
+    calc
+      ε * d / (40 * N ^ 2 * M) ≤ ε / (40 * N ^ 2 * M) := by
+        exact div_le_div_of_nonneg_right
+          (mul_le_of_le_one_right hε.le hd1) hden.le
+      _ ≤ ε / (2 * N * M) :=
+        div_le_div_of_nonneg_left hε.le hdenSmall hfactor
+      _ = Section4Delta G M ε := by simp only [Section4Delta, N]
+  have hconstraints : ∀ k, if beta ∈ UpperNeighborhoodFor G R ε k
+      then (p k : ℝ) ≤ Section4Delta G M ε else (p k : ℝ) = 0 := by
+    have hqBound : q ≤ ε * d / (40 * N ^ 2 * M) := by
+      simpa only [q, N, p, z] using hqSmall.le
+    intro k
+    split_ifs with hk
+    · exact (quitProbability_apply_le G p k).trans
+        (hqBound.trans hcap)
+    · by_contra hpk
+      have hpkPos : 0 < (p k : ℝ) := lt_of_le_of_ne (p k).property.1
+        (Ne.symm hpk)
+      exact hk (hactive k hpkPos)
+  have hxUpper : beta ∈ UpperNeighborhood G R ε := by
+    have hpNotZero : p ≠ zeroQuitRow G := by
+      intro hpZero
+      have : q = 0 := by simp [q, p, hpZero, zeroQuitRow, QuitProbability]
+      linarith [hqPos']
+    obtain ⟨k, hpk⟩ : ∃ k, 0 < (p k : ℝ) := by
+      by_contra hnone
+      push Not at hnone
+      apply hpNotZero
+      funext k
+      apply Subtype.ext
+      simp only [zeroQuitRow, Set.Icc.coe_zero]
+      exact le_antisymm (hnone k) (p k).property.1
+    exact Set.mem_iUnion.mpr ⟨k, hactive k hpk⟩
+  have hstageUpper : stage ∈
+      UpperGlueFiber G R ε (Section4Delta G M ε) beta :=
+    ⟨p, rfl, hconstraints⟩
+  change Section4Y G inverse cutoff a ∈
+    GluedFiber G R ε (Section4Delta G M ε) (Section4X G inverse cutoff a)
+  rw [hx, hy]
+  by_cases hxLower : beta ∈ LowerNeighborhood G R ε
+  · have hstageLower : stage ∈ LowerGlueFiber G beta :=
+      quittingOneStagePayoff_mem_lowerGlueFiber G beta p
+    simpa only [GluedFiber, hxLower, ↓reduceIte] using hstageLower
+  · simpa only [GluedFiber, hxLower, hxUpper, ↓reduceIte] using hstageUpper
 
 /-- In Property (6)'s zero-quitting branch, the terminal endpoint is the
 diagonal frontier point and hence belongs to the literal glued graph. -/

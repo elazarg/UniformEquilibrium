@@ -821,21 +821,7 @@ theorem quittingBehaviorStoppingLaw_liftDeletedProfile_of_deleted
     (Function.update_liftDeletedProfile_never reward deleted profile howner) owner
   simp only [Function.update_self] at hprofile
   rw [← hprofile]
-  have hpure : quittingPureTimeBehaviorStrategy reward owner none =
-      quittingStoppingLawBehaviorStrategy reward owner (PMF.pure none) := by
-    funext time history
-    change (PMF.pure false : PMF Bool) = _
-    ext action
-    simp [quittingStoppingLawBehaviorStrategy,
-      Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard,
-      Math.Probability.DiscreteHazard.StoppingLaw.survival,
-      Math.Probability.DiscreteHazard.StoppingLaw.finiteMass,
-      Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
-      Math.Probability.DiscreteHazard.booleanCoin]
-    cases action <;> simp
-  rw [hpure]
-  exact quittingBehaviorStoppingLaw_stoppingLawBehaviorStrategy
-    reward owner (PMF.pure none)
+  exact quittingBehaviorStoppingLaw_pureTime_never reward owner
 
 end StoppingLawAndDeviationCap
 

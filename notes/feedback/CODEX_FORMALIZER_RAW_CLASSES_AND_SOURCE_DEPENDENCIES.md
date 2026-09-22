@@ -166,8 +166,16 @@ of one and the sum of certificate weights plus excess divided by that singleton.
 `quittingGame_exists_uniformEquilibriumPayoff_of_finFour_cappedClockPositiveSingleton`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonFinFourExistence.lean`)
 then supplies the raw Fin4 consumer using actual three-player child existence.
-The criterion and target-preserving lift are proved; arbitrary proper children
-with multiple outsiders and the withdrawal criteria below are separate work.
+The criterion and target-preserving lift are proved.
+`exists_uniformEquilibriumPayoff_eq_on_child_of_cappedClockCertificateFamily`
+and
+`exists_uniformEquilibriumPayoff_eq_on_child_of_cappedClockPositiveSingletonFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMultipleOutsiderFamily.lean`)
+also cover arbitrary proper nonempty children and multiple outsiders. They
+require one reward certificate for each outsider and retain every coordinate
+of the supplied child target. In the relaxed version the positive child
+singleton may be chosen separately for each outsider. The withdrawal
+criteria below remain separate work.
 
 The advancing-only theorem is an all-evaluation specialization of both
 withdrawal criteria. The patient and deadline criteria themselves are
@@ -217,6 +225,17 @@ Its cycle should extend `BalancedSingletonCycleCertificate`
 (`UniformEquilibrium/Quitting/Cycles/BalancedSingletonCertificate.lean`), not
 duplicate the cycle compiler. Nonnegative outside coefficients need not sum
 to one. The example's integer-degree calculation is a separate conclusion.
+
+The weak-inverse matrix approximation is already proved by
+`exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes`
+(`MathUE/LinearProgramming/NonnegativeInverseApproximation.lean`). The
+triple-row packet still needs its own literal reward adapter: keep the
+outside coefficients fixed, perturb the child matrix, and reconstruct each
+outside singleton row from those coefficients. The full-matrix negative
+determinant criterion does not replace this adapter or its degree-one
+examples. The strict three-cycle classification is also already available
+through `ThreeCoreCyclicLabelAdapter.exists_directedCycle_labeling`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicLabelAdapter.lean`).
 
 The checked topology endpoint is
 `IsContinuousBoxComplementarityFamily.eventually_localSignedCount_endpoints_eq`

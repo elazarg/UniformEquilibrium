@@ -122,6 +122,52 @@ certificate also fails for every deletion. The proof reuses
 payoff do not need a second construction. This module passed a silent named
 build and independent declaration-level review.
 
+`CappedClockMissingNeverFixture.futureJoinCertificate`,
+`CappedClockMissingNeverFixture.childProfile_exactTerminalNash`, and
+`CappedClockMissingNeverFixture.liftedProfile_outsiderDebt_eq_one`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMissingNeverFixture.lean`)
+give the packet's one-child counterexample without Never protection. The
+child's rewards are zero, the future/join weights are zero, and the actual
+quiet lift has outsider debt exactly one. `neverExcess_eq_one` identifies
+the omitted row's positive residual. The literal fixture passed a silent
+named build. Its Never-law identity is shared with the deletion machinery
+through `quittingBehaviorStoppingLaw_pureTime_never`
+(`UniformEquilibrium/Quitting/Paths/StoppingLawReconstruction.lean`).
+
+`SparseCalendarReplyGap.replyValue_eq`
+(`UniformEquilibrium/Quitting/Examples/SparseCalendarReplyGap.lean`) proves
+the complete pure-date reply formula for the literal sparse stopping-law
+profile: date one gives one half, date two gives minus one half, and every
+other finite date and Never give zero. `displayed_replyValues` recovers the
+five entries in the packet. The proof passed a silent named build and uses
+the existing product-of-pure-laws mixture identity. The full behavioral-cap
+comparison and the third Never-player extension remain to be assembled.
+
+The strict three-cycle algebra is proved in
+`MathUE/LinearProgramming/ThreeCycleInverseFormulas.lean`.
+`directedCycleMatrix_inverse` gives the actual inverse, including the
+singular zero-inverse convention. `columnWeight_vecMul` and
+`columnWeight_balances` give its column-sum identities.
+`fractions_pos_lt_one_add_eq_one`, `prod_survivalFraction`, and
+`cycle_productRatio_mem_Ioo` prove the algebraic absorption/survival
+fractions and their strict product contraction. The existing three-player
+Q classification uses the same matrix definition. These formulas passed a
+silent named build. Their identification with the blocks of an arbitrary
+actual infinite schedule remains part of the work below.
+
+`NormalizedSingletonPath.exists_active_owner_ne` and
+`NormalizedSingletonPath.exists_first_owner_change`
+(`MathUE/LinearProgramming/ThreeCyclePathRigidity.lean`) rule out a final
+single-owner block and construct the first finite owner change for arbitrary
+finite player sets. Their data are a normalized nonnegative recurrence,
+hazards strictly below one, exact active-coordinate equalities, and vanishing
+tail survival. Zero-hazard gaps are unrestricted; finite blocks are not a
+premise. `exists_first_cyclic_owner_change` in the same file proves the
+forced cyclic direction for the strict three-cycle matrix and the two zero
+coordinates at the switching boundary. These declarations passed a silent
+named build; the generic path proofs also passed an independent
+declaration-level review. The actual stopping-law adapter remains to be implemented.
+
 ## Work still needed
 
 The terminating child-first rational search and its original-parent consumer
@@ -130,8 +176,8 @@ amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 The remaining packet work is:
 
-1. Formalize the missing-Never example with zero child singleton and the
-   sparse-calendar missed response with its consecutive repair.
+1. Finish the sparse-calendar missed-response cap comparison, its third-player
+   extension, and the consecutive repair.
 2. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.
@@ -140,9 +186,9 @@ The remaining packet work is:
 
 The strict inverse-row work can reuse the existing three-cycle labeling,
 periodic escort transitions, singleton-versus-quit payoff estimate, and
-survival-weighted deviation transport. What remains includes the universal
-infinite schedule's finite owner blocks, forced vertex visits, and uniform
-survival lower bound. A theorem assuming the vertex visits or restricting
+survival-weighted deviation transport. What remains includes identifying the
+actual infinite schedule with the checked recurrence, forced vertex visits,
+and the uniform survival lower bound. A theorem assuming the vertex visits or restricting
 the schedule to a finite period would not cover the packet's statement.
 
 These are known results supplied by the packet. This record does not assert

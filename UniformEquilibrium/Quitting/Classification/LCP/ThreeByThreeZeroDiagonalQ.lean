@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Classification.LCP.CyclicParametricQ
+import MathUE.LinearProgramming.ThreeCycleInverseFormulas
 
 /-!
 # Exact three-dimensional zero-diagonal Q classification
@@ -359,18 +360,7 @@ theorem isStandardQMatrix_posDiagonalScale_iff
     rwa [heq] at hback
   · exact isStandardQMatrix_posDiagonalScale row col hrow hcol
 
-/-- Six positive magnitudes in one directed-cycle orientation. -/
-def directedCycleMatrix (a b c d e f : ℝ) : Player → Player → ℝ :=
-  fun who owner =>
-    if who = 0 then
-      if owner = 0 then 0 else if owner = 1 then -a else b
-    else if who = 1 then
-      if owner = 0 then c else if owner = 1 then 0 else -d
-    else
-      if owner = 0 then -e else if owner = 1 then f else 0
-
-/-- The oriented cyclic determinant. -/
-def cycleGap (a b c d e f : ℝ) : ℝ := b * c * f - a * d * e
+export Math.LinearProgramming.ThreeCycleInverseFormulas (directedCycleMatrix cycleGap)
 
 private theorem directedCycleMatrix_standardQ_of_gap_pos
     {a b c d e f : ℝ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -619,21 +609,20 @@ theorem directedCycleMatrix_hasHomogeneous_iff
     have htotal : 0 < a * d + b * c + a * c := by positivity
     have hr0 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 0 = 0 := by
-      simp [weight, wsum, dotProduct, directedCycleMatrix,
-        Fin.sum_univ_succ]
+      change (∑ j : Player, weight.weights j * directedCycleMatrix a b c d e f 0 j) = 0
+      simp [weight, directedCycleMatrix, Fin.sum_univ_succ]
       field_simp [ne_of_gt htotal]
       ring
     have hr1 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 1 = 0 := by
-      simp [weight, wsum, dotProduct, directedCycleMatrix,
-        Fin.sum_univ_succ]
+      change (∑ j : Player, weight.weights j * directedCycleMatrix a b c d e f 1 j) = 0
+      simp [weight, directedCycleMatrix, Fin.sum_univ_succ]
       field_simp [ne_of_gt htotal]
       ring
     have hr2 : singletonLCPResidual (directedCycleMatrix a b c d e f)
         weight 2 = 0 := by
-      simp [weight, wsum, dotProduct, directedCycleMatrix,
-        Fin.sum_univ_succ, show (2 : Player) ≠ 0 by decide,
-        show (2 : Player) ≠ 1 by decide]
+      change (∑ j : Player, weight.weights j * directedCycleMatrix a b c d e f 2 j) = 0
+      simp [weight, directedCycleMatrix, Fin.sum_univ_succ]
       field_simp [ne_of_gt htotal]
       dsimp [cycleGap] at hgap
       nlinarith
