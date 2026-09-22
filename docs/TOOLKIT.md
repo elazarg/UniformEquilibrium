@@ -1127,14 +1127,43 @@ for arbitrary signed four-player rewards, deriving normality under a
 same-table no-UE assumption and discharging that assumption. No punishment
 plan is supplied to the raw-table theorem.
 
+`IsPairedCenteredCompletion` and
+`exists_uniformEquilibriumPayoff_of_pairedCenteredCompletion`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientClass.lean`)
+give a raw paired-row class whose literal centered symmetry produces response
+invariance. Its quotient matrix has R0 degree minus one, while the full
+singleton matrix has degree plus one
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientMatrix.lean`).
+The class theorem permits signed nonsingleton rewards and supplies no strategy
+as an input. An explicit member and the packet's dimension and fixture claims
+are not yet formalized. The reusable permutation covariance of the stationary
+residual is in
+`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPermutation.lean`.
+
 `quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with
 `quittingCrossedClippedMap_eq_self_iff`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseFaces.lean`),
 define the different full-player swapped-response map with its selected-player
-ceiling, derivative, and exact fixed-point face signs. They do not yet compute
-its local degree or prove an absorbing root from the exported guard conditions;
-the quotient RI result does not apply to this map.
+ceiling, derivative, and exact fixed-point face signs. The local-degree and
+global-escape lemmas
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseDegree.lean`,
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseEscape.lean`)
+produce a nonzero crossed root from R0 and degree not equal to one for the
+permuted singleton matrix. Under the strict full-box guards, reciprocal
+singleton signs, and the same degree assumptions,
+`exists_guardedCrossed_stationaryTerminalNash_uniformPayoff`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseStrategic.lean`)
+turns that root into an original-game exact stationary behavioral terminal
+Nash profile and a fixed uniform-equilibrium payoff. The full-box guards
+are stated in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseGuards.lean`;
+`quittingCrossedSourceGuards_iff_fullBoxGuards` in that file identifies them
+with the packet's literal two-face guards. The strategic module also states
+`exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
+under those source conditions. The packet's annular total-degree identity
+and its finite raw-test, weak-boundary, and matrix-free Fin4 producers are
+not yet formalized. The quotient RI route does not apply to the crossed map.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2164,8 +2193,18 @@ and `exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineWithdrawalFamily`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFixedTarget.lean`).
 The latter takes raw certificates for every outsider and an actual child
 uniform-equilibrium target; it adds no favorable child profile or root.
-All-evaluation family max/sum corollaries, terminal pathwise necessity, and
-the packet's stationary-security and Fin4 applications remain separate.
+`quittingBehaviorEvaluatedMaxDebt_liftDeletedProfile_le_of_deadlineWithdrawal`
+and `quittingBehaviorEvaluatedTotalDebt_liftDeletedProfile_le_of_deadlineWithdrawal`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFamilyDebtBounds.lean`)
+give all-evaluation family max and accumulated-sum bounds with explicit
+coefficients. `deadlineWithdrawal_terminalPointwise_iff_certificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalPointwiseNecessity.lean`)
+identifies the D-N/F/J rows with universal deterministic terminal pointwise
+domination for the same fixed nonnegative weight arrays. This is not a
+necessity theorem for an arbitrary behavioral-debt bound. The packet's
+stationary-security and Fin4 applications still need, respectively, a
+post-deadline security producer and actual finite-table certificate/child-target
+producers.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.

@@ -14,6 +14,8 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.K11LocalValue
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11OpponentLocalValue
 import UniformEquilibrium.Quitting.Examples.BlockPair.K11ActiveEquationInterval
 import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorComposition
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientMatrix
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientClass
 
 /-!
 # Four-player block-pair examples
