@@ -1812,7 +1812,12 @@ same compactness theorem under their respective hypotheses.
 `CappedClockParentRewardCertificate`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
 contains nonnegative weights and finite Never, future, and joining reward
-inequalities for one outsider and a nonempty child. It allows signed rewards.
+inequalities for one outsider and a finite child set. It allows signed rewards.
+`exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
+identifies the zero-weight case with the exact singleton deletion gate.
+This algebraic equivalence also permits an empty child; the equilibrium
+extension consumer uses the child nonemptiness assumption.
 `cappedClockActualGain_le_iff_rewardRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseNecessity.lean`)
 characterizes these rows by universal deterministic terminal-gain domination
@@ -1832,6 +1837,17 @@ changing its coordinates.
 supplies a four-player uniform payoff from the reward certificate alone,
 using the three-player existence theorem for the child. It does not assume
 a child profile, a strategic source, or a dispensability gate.
+
+`CappedClockPairedFamily.exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedFamily.lean`)
+applies this criterion to tables with the paired singleton columns and explicit
+future and joining inequalities. The certificate uses weight two on one
+surviving player. `exampleReward_exists_uniformEquilibriumPayoff` supplies a
+concrete rational table, and `not_blockDispensable` proves that every member
+fails exact singleton block deletion for every player. The
+family theorem assumes only reward-table conditions, not an equilibrium source.
+Together with the zero-weight equivalence, its example shows that weighted
+certificates admit tables beyond exact singleton deletion.
 
 `CappedClockParentFutureJoinCertificate` and
 `exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`

@@ -7,11 +7,14 @@ not historical gap lists, govern reuse.
 
 ## Outcome
 
-No integer-valued topological degree, signed local fixed-point index, or proved
-degree package with homotopy/excision/affine-normalization laws was found in
-the selected pinned Mathlib topology, analysis, and algebraic-topology trees,
-the fixed-point dependency, MathUE, or the relevant Research topology files.
-This is a bounded negative search, not a statement about external projects.
+No ready-made integer-degree package with the required laws was found in
+the selected pinned Mathlib topology, analysis, and algebraic-topology trees
+or the fixed-point dependency. The project-owned construction now supplies
+local integer degree, homotopy invariance, and root-centered affine and strict
+LCP index calculations. Its current theorem surface and remaining chart
+comparisons are recorded in
+[the signed local degree specification](CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md).
+The dependency search is bounded, not a statement about external projects.
 
 There is substantial reusable geometry. In particular the concrete Research
 Kuhn-prism construction must not be rebuilt merely because its current
@@ -116,10 +119,12 @@ root-owned coherent promotion, not a production import of Research.
   (pinned `Mathlib/LinearAlgebra/Matrix/Determinant/Basic.lean`) provide the
   simultaneous coordinate reorder and active-block determinant calculation.
 
-Consequently, the regular LCP sample does not need a new block determinant
-proof or general differentiable local-degree theorem. Strict active/slack
-inequalities make its min-map locally affine; after an actual affine-degree
-theorem exists, these existing determinant identities suffice.
+The regular LCP calculation reuses these determinant identities, without a
+general differentiable local-degree theorem.
+`IsStandardLCPSolution.exists_box_localDegree_eq_sign_det`
+(`Research/Topology/LinearComplementarityLocalIndex.lean`) now constructs
+the affine neighborhood and computes the local index in a root-centered
+chart. Comparing those indices in one common chart remains separate.
 
 ### Topology that does not yet produce an integer
 

@@ -239,7 +239,7 @@ multiplied by `(-1)^n`, with a separate calibrated stabilization theorem.
 `IsContinuousBoxComplementarityFamily.localDegree_endpoints_eq` in the same
 file proves homotopy invariance on a common isolating region by comparing
 both normalized values on one sufficiently fine common mesh. Ambient
-identification, affine comparison, and approximation independence remain
+identification, arbitrary-chart comparison, and approximation independence remain
 further obligations.
 
 `BoxComplementarityProblem.localDegree_union_of_disjoint`
@@ -321,14 +321,11 @@ The remaining geometric adapters are:
 1. Prove chart independence and the orientation conversion against the
    constructed count. The literal positive-dilation result above does not
    establish arbitrary chart independence.
-2. Compute the local degree of an invertible affine root as the sign of its
-   determinant under the conventional orientation. Existing prism
-   cancellation does not supply that affine comparison.
-3. At a strictly complementary LCP root, the minimum map is locally affine:
-   active rows select slack and inactive rows select coordinates. This
-   application needs affine comparison and a block-determinant calculation,
-   not a general differentiability theorem.
-4. General regular-Jacobian comparison can then use the derivative's small
+2. Compare the individual root-centered calculations below in a common chart
+   so their local indices can be summed. The affine and strict-LCP calculations
+   are proved in their displayed charts; a global sum does not follow from
+   those calculations alone.
+3. General regular-Jacobian comparison can then use the derivative's small
    remainder and the inverse linear map's lower bound to construct a
    boundary-free straight homotopy. It is not a premise to put into the
    degree definition.
@@ -388,6 +385,35 @@ field on the same central region. Joint continuity follows from the matrix
 path; pointwise injectivity supplies common isolation. No uniform inverse
 bound or supplied solution identity is required. Arbitrary affine-chart
 comparison remains a separate obligation.
+`localDegree_affineRootProblem_eq_sign_det`
+(`Research/Topology/BoxComplementarityAffineLocalIndex.lean`) gives the
+affine-root calculation in a displayed scalar box centered at an arbitrary
+root. The inner ambient box pulls back to the actual central counting
+region, and the pulled-back gain is the centered matrix gain multiplied by
+twice the positive radius. Isolation and the index are derived from these
+identities, including dimension zero. This does not identify degrees
+computed in unrelated ambient charts.
+
+`IsStandardLCPSolution.exists_box_lcpMinMap_eq_selectedMatrix` and
+`det_lcpSelectedMatrix` (`MathUE/LinearProgramming/LocalAffine.lean`)
+construct a closed affine neighborhood of an existing standard LCP solution
+from strict inactive slacks and identify the selected-row determinant with
+the active principal determinant. The same file identifies ambient zeros
+of the literal minimum map with the existing LCP solution predicate.
+`IsStandardLCPSolution.exists_box_localDegree_eq_sign_det`
+(`Research/Topology/LinearComplementarityLocalIndex.lean`) uses these facts
+to construct an isolating box and compute the actual local integer degree
+when the active principal matrix is nonsingular. Empty active support and
+dimension zero are included; nonsingularity of the full matrix is not needed.
+This remains a root-centered calculation, not a common-chart sum of indices.
+
+`BoxComplementarityProblem.localDegree_eq_of_solutionsIn_eq`
+(`Research/Topology/BoxComplementaritySolutionExcision.lean`) derives excision
+for two isolating regions of the same problem from equality of their actual
+solution sets. Compactness supplies the finite-mesh clearance used by the
+existing count theorem. No clearance witness is assumed, but the problems
+must be identical; this does not compare different ambient charts.
+
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
 later local-linearization step.

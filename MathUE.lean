@@ -240,6 +240,7 @@ import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FinFourIntegralTournament
 import MathUE.LinearProgramming.FlowCostateDuality
+import MathUE.LinearProgramming.LocalAffine
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
 import MathUE.LinearProgramming.R0Margin
 import MathUE.LinearProgramming.SingletonLCP
