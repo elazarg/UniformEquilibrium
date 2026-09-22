@@ -95,7 +95,7 @@ theorem outsideStoppingLawGain_le_weighted_behaviorDeviationDebt_add_slack
           cappedClockTerminalEvaluation cappedClockTerminalEvaluation_nonneg
             cappedClockTerminalEvaluation_antitone (f clocks) who
         rw [quittingPureClockEvaluatedPayoff_terminalEvaluation] at hb
-        simpa [cappedClockTerminalEvaluation] using hb)
+        simpa using hb)
   have hexpectSub (who : Option ι)
       (f g : (Option ι → Option ℕ) → (Option ι → Option ℕ)) :
       Math.Probability.expect source (fun clocks => quittingPureClockTerminalPayoff reward

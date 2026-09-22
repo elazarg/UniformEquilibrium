@@ -14,6 +14,7 @@ open _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
+omit [DecidableEq ι] in
 private theorem quittingStoppingLawExpectedPayoff_eq_expect_pmfPi
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (laws : Option ι → PMF (Option ℕ)) (who : Option ι) :
@@ -28,6 +29,7 @@ private theorem quittingStoppingLawExpectedPayoff_eq_expect_pmfPi
   cases h : quittingFirstStoppingOutcome clocks <;>
     simp [quittingTerminalOutcomeReward]
 
+omit [DecidableEq ι] in
 /-- The source coupling's literal outsider outcome is the canonical expected
 payoff of the parent law in which the outsider uses `outsideLaw`. -/
 theorem expect_parentSource_outside_eq_stoppingLawExpectedPayoff
@@ -47,6 +49,7 @@ theorem expect_parentSource_outside_eq_stoppingLawExpectedPayoff
   funext player
   cases player <;> rfl
 
+omit [DecidableEq ι] in
 /-- The literal quiet baseline in the source coupling is the canonical parent
 stopping-law payoff of the quiet lift. -/
 theorem expect_parentSource_quiet_eq_stoppingLawExpectedPayoff

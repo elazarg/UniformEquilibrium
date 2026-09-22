@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Paths.FirstStoppingOutcomeCoalition
+import UniformEquilibrium.Quitting.Paths.StoppingLawEvaluatedPayoff
 
 /-!
 # Raw capped-clock rows and deterministic pointwise domination
@@ -39,16 +40,6 @@ omit [Fintype ι] [Nonempty ι] in
 theorem cappedClockJoinedCoalition_nonempty (A : Finset ι) :
     (cappedClockJoinedCoalition A).Nonempty := by
   exact ⟨none, Finset.mem_insert_self none _⟩
-
-/-- Literal terminal payoff of a deterministic clock tuple, evaluated through
-the repository's labelled first-stopping outcome. -/
-def quittingPureClockTerminalPayoff
-    {κ : Type} [Fintype κ] [DecidableEq κ] [Nonempty κ]
-    (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
-    (times : κ → Option ℕ) (who : κ) : ℝ :=
-  match quittingFirstStoppingOutcome times with
-  | none => 0
-  | some A => reward A who
 
 /-- Quietly embed child clocks into the literal parent: the outsider is
 deterministically Never. -/
@@ -631,18 +622,6 @@ def cappedClockActualChildGain
       (cappedChildParentClocks times deadline i) (some i) -
     quittingPureClockTerminalPayoff reward (quietParentClocks times) (some i)
 
-/-- Literal evaluated payoff of a deterministic clock tuple.  The evaluation
-is applied to the actual earliest clock retained alongside the labelled
-terminal outcome. -/
-def quittingPureClockEvaluatedPayoff
-    {κ : Type} [Fintype κ] [DecidableEq κ] [Nonempty κ]
-    (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
-    (evaluation : WithTop ℕ → ℝ)
-    (times : κ → Option ℕ) (who : κ) : ℝ :=
-  match quittingFirstStoppingOutcome times with
-  | none => 0
-  | some A => evaluation (quittingEarliestStoppingValue times) * reward A who
-
 /-- Literal evaluated outsider gain from replacing quiet Never. -/
 def cappedClockActualEvaluatedOutsideGain
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
@@ -954,9 +933,8 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain
       reward certificate.withZeroSlack evaluation evaluation_nonneg
         evaluation_antitone times deadline
 
-/-- Terminal evaluation is one on finite clocks and zero at Never. -/
-def cappedClockTerminalEvaluation (clock : WithTop ℕ) : ℝ :=
-  if clock = ⊤ then 0 else 1
+/-- Capped-clock name for the canonical terminal evaluation. -/
+abbrev cappedClockTerminalEvaluation := quittingTerminalEvaluation
 
 /-- Indicator of the literal joint-Never child tuple. -/
 def cappedClockJointNeverIndicator (times : ι → Option ℕ) : ℝ :=
@@ -976,34 +954,11 @@ theorem abs_cappedClockJointNeverIndicator_le_one (times : ι → Option ℕ) :
 
 theorem cappedClockTerminalEvaluation_nonneg (clock : WithTop ℕ) :
     0 ≤ cappedClockTerminalEvaluation clock := by
-  unfold cappedClockTerminalEvaluation
-  split_ifs <;> norm_num
+  exact quittingTerminalEvaluation_nonneg clock
 
 theorem cappedClockTerminalEvaluation_antitone :
     Antitone cappedClockTerminalEvaluation := by
-  intro first second hle
-  by_cases hfirst : first = ⊤
-  · have hsecond : second = ⊤ := top_unique (hfirst ▸ hle)
-    simp [cappedClockTerminalEvaluation, hfirst, hsecond]
-  · unfold cappedClockTerminalEvaluation
-    split_ifs <;> norm_num
-
-theorem quittingPureClockEvaluatedPayoff_terminalEvaluation
-    {κ : Type} [Fintype κ] [DecidableEq κ] [Nonempty κ]
-    (reward : {A : Finset κ // A.Nonempty} → κ → ℝ)
-    (times : κ → Option ℕ) (who : κ) :
-    quittingPureClockEvaluatedPayoff reward cappedClockTerminalEvaluation
-        times who =
-      quittingPureClockTerminalPayoff reward times who := by
-  unfold quittingPureClockEvaluatedPayoff quittingPureClockTerminalPayoff
-  cases hOutcome : quittingFirstStoppingOutcome times with
-  | none => rfl
-  | some A =>
-      have hfinite : quittingEarliestStoppingValue times ≠ ⊤ := by
-        intro htop
-        rw [quittingFirstStoppingOutcome, ite_eq_left htop] at hOutcome
-        contradiction
-      simp [cappedClockTerminalEvaluation, hfinite]
+  exact quittingTerminalEvaluation_antitone
 
 omit [DecidableEq ι] [Nonempty ι] in
 theorem cappedClockEvaluatedNeverSlackFactor_terminal_le_jointNeverIndicator
@@ -1019,7 +974,7 @@ theorem cappedClockEvaluatedNeverSlackFactor_terminal_le_jointNeverIndicator
       by_cases htop : quittingEarliestStoppingValue times = ⊤
       · have hall := all_never_of_earliest_eq_top times htop
         simp [cappedClockEvaluatedNeverSlackFactor,
-          cappedClockJointNeverIndicator, cappedClockTerminalEvaluation,
+          cappedClockJointNeverIndicator,
           hall, quittingEarliestStoppingValue, quittingStoppingTimeValue]
       · have hnotNever : times ≠ fun _ => none := by
           intro hall
@@ -1027,7 +982,7 @@ theorem cappedClockEvaluatedNeverSlackFactor_terminal_le_jointNeverIndicator
           rw [hall]
           simp [quittingEarliestStoppingValue, quittingStoppingTimeValue]
         simp [cappedClockEvaluatedNeverSlackFactor,
-          cappedClockJointNeverIndicator, cappedClockTerminalEvaluation,
+          cappedClockJointNeverIndicator, quittingTerminalEvaluation,
           htop, hnotNever]
 
 /-- Terminal pointwise domination for a slack certificate, with the slack

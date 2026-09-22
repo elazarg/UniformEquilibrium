@@ -1824,6 +1824,17 @@ characterizes these rows by universal deterministic terminal-gain domination
 with the same fixed nonnegative weights. Necessity uses explicit all-Never,
 future-coalition, and tied-coalition clock tuples. This is not a necessity
 claim for arbitrary behavioral debt bounds.
+
+`quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap`
+(`UniformEquilibrium/Quitting/Paths/StoppingLawEvaluatedPayoff.lean`) identifies
+complete-law replacement caps with unrestricted behavioral replacement caps
+for clock-evaluated payoffs. Reconstruction preserves these payoffs, and
+nonnegative nonincreasing evaluations give finite bounds from the reward table.
+The terminal specializations are proved equal to the existing terminal payoff
+and deviation cap. This interface does not by itself identify an evaluation
+with the existing finite-horizon stage-payoff semantics or prove the evaluated
+quiet-extension comparison.
+
 `quietLift_outsideBehaviorDeviationDebt_le_weighted_childDebt`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockChildDeletionAdapter.lean`)
 bounds the outsider's unrestricted terminal debt at the actual Never lift of

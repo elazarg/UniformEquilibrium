@@ -103,25 +103,29 @@ when at least two players are active. Under the uniform matrix estimate of
 and the literal upper-glue cap and support conditions, the payoff distance
 bounds the row distance from below. An exact finite coordinate telescope
 constructs the secant matrix, and the proof bounds its entries against the
-singleton-difference matrix. Injectivity, inverse continuity, and upper-fiber
-contractibility still need to be assembled from this estimate.
+singleton-difference matrix.
+
+`isContractibleSet_upperGlueFiber` in the same file proves contractibility of
+every actual upper fiber at this scale. For at least two active players the
+payoff map is an injective continuous map from the compact admissible row
+domain, giving a homeomorphism onto the fiber. For one active player the fiber
+is the affine image of the interval from zero to the minimum of the cap and
+one; no extra upper bound on the cap is assumed. `isContractibleSet_gluedFiber`
+combines this with the existing lower-fiber theorem using the literal branch
+definition. These are pointwise contractibility statements, not a continuous
+choice of contractions across base points.
 
 ## Remaining Section 4 assembly
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,
-initial diagonal, frontier fixing, and terminal-diagonal exclusion have
-component proofs. `truncatedW_eq_iUnion_fin` in the same file supplies the
+initial diagonal, frontier fixing, terminal-diagonal exclusion, and actual
+fiber contractibility have component proofs. `truncatedW_eq_iUnion_fin` in the same file supplies the
 finite-index union; positive piece count follows from the player-count
-hypothesis. These components still need assembly into the full statement. The
-remaining substantive fields of `QuestionOneHypotheses`
-(`MathUE/Topology/SimonViabilityQuestion.lean`) are:
-
-- contractibility of the actual upper fibers, using the payoff-separation
-  estimate for at least two active players and a line-segment argument for
-  one active player; and
-- one common positive scale for both small-step containment and all
-  boundary-piece escape clauses.
+hypothesis. These components still need assembly into the full statement.
+The remaining substantive requirement of `QuestionOneHypotheses`
+(`MathUE/Topology/SimonViabilityQuestion.lean`) is one common positive scale
+for both small-step containment and all boundary-piece escape clauses.
 
 `isCompact_gluedNeighborhood_of_section3Constants`
 (`Literature/Simon2012.lean`) proves compactness of the actual neighborhood.
@@ -135,8 +139,7 @@ accuracy when its boundary is empty.
 proves the required frontier inclusion for every positive neighborhood
 radius and arbitrary truncation parameter. `isContractibleSet_lowerGlueFiber`
 proves contractibility of every actual lower fiber: it is the convex join
-of its base point and the feasible payoff set. These results do not supply
-the upper-fiber inverse argument.
+of its base point and the feasible payoff set.
 
 The graph's first-coordinate containment, base-point fiber membership, and
 both defining inclusions into the joined graph are proved by the direct

@@ -212,6 +212,7 @@ import MathUE.LinearProgramming.CopositiveMargin
 import MathUE.LinearProgramming.CopositiveQ
 import MathUE.LinearProgramming.CopositiveQCorollaries
 import MathUE.LinearProgramming.FinFourIntegralTournament
+import MathUE.LinearProgramming.FiniteSolutions
 import MathUE.LinearProgramming.FlowCostateDuality
 import MathUE.LinearProgramming.LocalAffine
 import MathUE.LinearProgramming.OneDimensionalAffineMinimax
@@ -2373,6 +2374,7 @@ import UniformEquilibrium.Quitting.Paths.SparseWholePayoffFiniteStoppingProfile
 import UniformEquilibrium.Quitting.Paths.StageCoalitionMass
 import UniformEquilibrium.Quitting.Paths.StageCoalitionStoppingLaw
 import UniformEquilibrium.Quitting.Paths.StoppingLawBadMassSelection
+import UniformEquilibrium.Quitting.Paths.StoppingLawEvaluatedPayoff
 import UniformEquilibrium.Quitting.Paths.StoppingLawExposure
 import UniformEquilibrium.Quitting.Paths.StoppingLawFiniteTail
 import UniformEquilibrium.Quitting.Paths.StoppingLawMixture

@@ -322,9 +322,9 @@ The remaining geometric adapters are:
    constructed count. The literal positive-dilation result above does not
    establish arbitrary chart independence.
 2. Assemble the individual common-chart calculations below into a finite sum
-   over all actual roots. The local balls and their singleton solution sets
-   are constructed; a global sum still needs disjoint neighborhoods and an
-   exhaustive root set.
+   for the packet's explicit LCP witness. The common-chart root-sum theorem
+   below supplies the generic calculation; the witness's root enumeration
+   and its connection to the matrix degree remain to be instantiated.
 3. General regular-Jacobian comparison can then use the derivative's small
    remainder and the inverse linear map's lower bound to construct a
    boundary-free straight homotopy. It is not a premise to put into the
@@ -433,6 +433,37 @@ isolating ball. The theorem also proves that the actual solutions in that
 ball form the singleton containing the root. Different roots use the same
 problem and may use different balls. No local affine identity, isolation,
 singleton identity, or degree formula is supplied as a premise.
+
+`IsStandardLCPSolution.eq_of_positive_support_eq`,
+`finite_nonsingularStandardLCPSolutions`,
+`finite_standardLCPSolutions_of_nonsingular_active_principals`, and
+`ncard_standardLCPSolutions_le_two_pow`
+(`MathUE/LinearProgramming/FiniteSolutions.lean`) provide the exhaustive-root
+finiteness input. Two solutions with the same positive support coincide when
+its principal matrix is nonsingular. The set of roots with nonsingular active
+principal is finite, without any condition on other roots, and has at most one
+member per coordinate subset. This gives finiteness of the complete solution
+set when all its roots qualify. Strict complementarity is not needed, although
+the local-index formula above still requires it. Empty support and dimension
+zero are included.
+
+`BoxComplementarityProblem.localDegree_finsetUnion_of_pairwiseDisjoint` and
+`BoxComplementarityProblem.localDegree_iUnion_of_pairwiseDisjoint`
+(`Research/Topology/BoxComplementarityFiniteAdditivity.lean`) prove additivity
+on finite disjoint families of isolating regions, including the empty family.
+`exists_finset_lcpMinBoxProblem_localDegree_eq_sum_sign_det`
+(`Research/Topology/LinearComplementarityRootSum.lean`) constructs an exact
+finite enumeration of the selected solutions and computes their total index
+as the sum of active determinant signs. It requires an isolating region and
+centrality, strict complementarity, and active nonsingularity only for the
+actual solutions in that region. Finiteness, disjoint neighborhoods, and their
+singleton solution sets are derived. Other roots may be singular or lie on the
+box boundary; those boundary solutions are not identified with ambient LCP roots.
+
+This finite-root calculation serves the regular witness computation in the
+integer-LCP packet. Its main degree comparison concerns the complete root set
+and must also handle degenerate or nonisolated roots; regularity must not
+become a hypothesis of that game-semantic criterion.
 
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the

@@ -28,28 +28,7 @@ def cappedClockIndependentSample
   (pmfPi childLaws).bind fun times =>
     outsideLaw.map fun deadline => (times, deadline)
 
-/-- A nonnegative antitone clock evaluation bounds every literal evaluated
-payoff by its value at time zero times the finite reward-table bound. -/
-theorem abs_quittingPureClockEvaluatedPayoff_le
-    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
-    (evaluation : WithTop ℕ → ℝ)
-    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
-    (evaluation_antitone : Antitone evaluation)
-    (times : Option ι → Option ℕ) (who : Option ι) :
-    |quittingPureClockEvaluatedPayoff reward evaluation times who| ≤
-      evaluation 0 * quittingRewardBound reward := by
-  unfold quittingPureClockEvaluatedPayoff
-  cases quittingFirstStoppingOutcome times with
-  | none =>
-      simp only [abs_zero]
-      exact mul_nonneg (evaluation_nonneg 0) (quittingRewardBound_nonneg reward)
-  | some outcome =>
-      rw [abs_mul, abs_of_nonneg (evaluation_nonneg _)]
-      exact mul_le_mul
-        (evaluation_antitone bot_le)
-        (abs_reward_le_quittingRewardBound reward outcome who)
-        (abs_nonneg _) (evaluation_nonneg _)
-
+omit [DecidableEq ι] in
 private theorem abs_actualEvaluatedGain_le
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (evaluation : WithTop ℕ → ℝ)

@@ -1,6 +1,7 @@
 import Literature.Simon2007
 import MathUE.BonferroniProductBounds
 import MathUE.LinearAlgebra.UniformNonsingularity
+import MathUE.PMFProduct.Independence
 import MathUE.PMFProduct.TotalVariation
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.Topology.SimonViabilityQuestion
@@ -7998,39 +7999,147 @@ noncomputable def UpperActivePlayers (G : QuittingGame) (R ε : ℝ)
   classical
   exact Finset.univ.filter fun j => x ∈ UpperNeighborhoodFor G R ε j
 
-/-- Replace the coordinates in `s` by the corresponding coordinates of the
-second row.  This local version is used to telescope the upper-glue cube. -/
-private noncomputable def section4ReplaceOn (G : QuittingGame)
-    (first second : QuitRow G) (s : Finset G.Player) : QuitRow G := by
+/-- The literal capped and supported row domain whose payoff image is the
+upper-glue fiber above `x`. -/
+noncomputable def UpperGlueRows (G : QuittingGame) (R ε δ : ℝ)
+    (x : Payoff G.Player) : Set (QuitRow G) := by
   classical
-  exact fun j => if j ∈ s then second j else first j
+  exact {p | ∀ j, if x ∈ UpperNeighborhoodFor G R ε j
+    then (p j : ℝ) ≤ δ else (p j : ℝ) = 0}
 
-private theorem section4ReplaceOn_empty (G : QuittingGame)
-    (first second : QuitRow G) :
-    section4ReplaceOn G first second ∅ = first := by
-  funext j
-  simp [section4ReplaceOn]
+/-- The literal upper-glue fiber is the one-stage payoff image of its
+admissible row domain. -/
+theorem upperGlueFiber_eq_image_upperGlueRows
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) :
+    UpperGlueFiber G R ε δ x =
+      (fun p => QuittingOneStagePayoff G x p) '' UpperGlueRows G R ε δ x := by
+  classical
+  ext y
+  constructor
+  · rintro ⟨p, hy, hp⟩
+    exact ⟨p, hp, hy.symm⟩
+  · rintro ⟨p, hp, rfl⟩
+    exact ⟨p, rfl, hp⟩
 
-private theorem section4ReplaceOn_insert (G : QuittingGame) [DecidableEq G.Player]
-    (first second : QuitRow G) (s : Finset G.Player) (j : G.Player) :
-    section4ReplaceOn G first second (insert j s) =
-      (section4ReplaceOn G first second s).replace G j (second j) := by
+/-- The admissible upper-glue row domain is compact. -/
+theorem isCompact_upperGlueRows
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) :
+    IsCompact (UpperGlueRows G R ε δ x) := by
+  classical
+  have hclosed : IsClosed (UpperGlueRows G R ε δ x) := by
+    change IsClosed {p : QuitRow G | ∀ j,
+      if x ∈ UpperNeighborhoodFor G R ε j
+        then (p j : ℝ) ≤ δ else (p j : ℝ) = 0}
+    rw [Set.ofPred_forall]
+    apply isClosed_iInter
+    intro j
+    have hcoordinate : Continuous (fun p : QuitRow G => (p j : ℝ)) := by
+      fun_prop
+    by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+    · simpa only [hj, ↓reduceIte] using
+        isClosed_le hcoordinate continuous_const
+    · simpa only [hj, ↓reduceIte] using
+        isClosed_eq hcoordinate continuous_const
+  exact (isCompact_univ : IsCompact (Set.univ : Set (QuitRow G))).of_isClosed_subset
+    hclosed (Set.subset_univ _)
+
+/-- Scale every quitting coordinate toward the all-Continue row. -/
+private def scaleQuitRow (G : QuittingGame) (p : QuitRow G)
+    (t : UnitInterval) : QuitRow G :=
+  fun j => ⟨(1 - (t : ℝ)) * (p j : ℝ), by
+    constructor
+    · exact mul_nonneg (sub_nonneg.mpr t.property.2) (p j).property.1
+    · calc
+        (1 - (t : ℝ)) * (p j : ℝ) ≤ 1 * (p j : ℝ) := by
+          exact mul_le_mul_of_nonneg_right (by linarith [t.property.1])
+            (p j).property.1
+        _ ≤ 1 := by simpa using (p j).property.2⟩
+
+private theorem continuous_scaleQuitRow (G : QuittingGame) :
+    Continuous (fun z : QuitRow G × UnitInterval => scaleQuitRow G z.1 z.2) := by
+  apply continuous_pi
+  intro j
+  apply Continuous.subtype_mk
+  · exact (continuous_const.sub (continuous_subtype_val.comp continuous_snd)).mul
+      (continuous_subtype_val.comp ((continuous_apply j).comp continuous_fst))
+
+private theorem scaleQuitRow_mem_upperGlueRows
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player)
+    {p : QuitRow G} (hp : p ∈ UpperGlueRows G R ε δ x) (t : UnitInterval) :
+    scaleQuitRow G p t ∈ UpperGlueRows G R ε δ x := by
+  classical
+  change ∀ j, if x ∈ UpperNeighborhoodFor G R ε j
+    then (p j : ℝ) ≤ δ else (p j : ℝ) = 0 at hp
+  change ∀ j, if x ∈ UpperNeighborhoodFor G R ε j
+    then ((scaleQuitRow G p t) j : ℝ) ≤ δ
+    else ((scaleQuitRow G p t) j : ℝ) = 0
+  intro j
+  by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+  · have hpj : (p j : ℝ) ≤ δ := by simpa only [hj, ↓reduceIte] using hp j
+    simp only [hj, ↓reduceIte]
+    calc
+      ((scaleQuitRow G p t) j : ℝ) ≤ (p j : ℝ) := by
+        dsimp only [scaleQuitRow]
+        exact mul_le_of_le_one_left (p j).property.1 (by linarith [t.property.1])
+      _ ≤ δ := hpj
+  · have hpj : (p j : ℝ) = 0 := by simpa only [hj, ↓reduceIte] using hp j
+    simp only [hj, ↓reduceIte]
+    dsimp only [scaleQuitRow]
+    rw [hpj, mul_zero]
+
+/-- The admissible upper-glue rows contract to the all-Continue row by
+coordinatewise scaling. -/
+theorem isContractibleSet_upperGlueRows
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) (hδ : 0 ≤ δ) :
+    IsContractibleSet (UpperGlueRows G R ε δ x) := by
+  classical
+  let center : UpperGlueRows G R ε δ x := ⟨zeroQuitRow G, by
+    change ∀ j, if x ∈ UpperNeighborhoodFor G R ε j
+      then ((zeroQuitRow G) j : ℝ) ≤ δ else ((zeroQuitRow G) j : ℝ) = 0
+    intro j
+    by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+    · simpa only [hj, ↓reduceIte, zeroQuitRow, Set.Icc.coe_zero] using hδ
+    · simp only [hj, ↓reduceIte, zeroQuitRow, Set.Icc.coe_zero]⟩
+  let homotopy : UpperGlueRows G R ε δ x → UnitInterval →
+      UpperGlueRows G R ε δ x :=
+    fun p t => ⟨scaleQuitRow G p.1 t,
+      scaleQuitRow_mem_upperGlueRows G R ε δ x p.2 t⟩
+  refine ⟨center, homotopy, ?_, ?_, ?_⟩
+  · have hinput : Continuous (fun z : UpperGlueRows G R ε δ x × UnitInterval =>
+        ((z.1 : QuitRow G), z.2)) :=
+      (continuous_subtype_val.comp continuous_fst).prodMk continuous_snd
+    exact Continuous.subtype_mk ((continuous_scaleQuitRow G).comp hinput) _
+  · intro p
+    apply Subtype.ext
+    funext j
+    simp [homotopy, scaleQuitRow]
+  · intro p
+    apply Subtype.ext
+    funext j
+    simp [homotopy, center, scaleQuitRow, zeroQuitRow]
+
+private theorem quitRow_replaceOn_insert (G : QuittingGame) [DecidableEq G.Player]
+    (first second : QuitRow G) (s : Finset G.Player) (j : G.Player)
+    (hj : j ∉ s) :
+    Math.PMFProduct.replaceOn (insert j s) first second =
+      QuitRow.replace G (Math.PMFProduct.replaceOn s first second) j (second j) := by
+  rw [Math.PMFProduct.replaceOn_insert s j hj]
   funext k
   by_cases hkj : k = j
   · subst k
-    simp [section4ReplaceOn, QuitRow.replace]
-  · by_cases hks : k ∈ s <;>
-      simp [section4ReplaceOn, QuitRow.replace, hkj, hks]
+    simp [QuitRow.replace]
+  · simp [QuitRow.replace, hkj]
 
-private theorem section4ReplaceOn_replace_first (G : QuittingGame) [DecidableEq G.Player]
+private theorem quitRow_replaceOn_replace_first
+    (G : QuittingGame) [DecidableEq G.Player]
     (first second : QuitRow G) (s : Finset G.Player) (j : G.Player)
     (hj : j ∉ s) :
-    (section4ReplaceOn G first second s).replace G j (first j) =
-      section4ReplaceOn G first second s := by
-  have hjvalue : section4ReplaceOn G first second s j = first j := by
-    simp [section4ReplaceOn, hj]
+    QuitRow.replace G (Math.PMFProduct.replaceOn s first second) j (first j) =
+      Math.PMFProduct.replaceOn s first second := by
+  have hjvalue : Math.PMFProduct.replaceOn s first second j = first j := by
+    simp [hj]
   simpa only [hjvalue] using
-    QuitRow.replace_self G (section4ReplaceOn G first second s) j
+    QuitRow.replace_self G (Math.PMFProduct.replaceOn s first second) j
 
 /-- A cross-coordinate endpoint slope is the ordinary endpoint difference
 for the reward table obtained by copying the observed coordinate. -/
@@ -8204,7 +8313,8 @@ private theorem exists_upper_secantMatrix
           |columns j i -
             (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i)| ≤ η) ∧
         ∀ i,
-          QuittingOneStagePayoff G x (section4ReplaceOn G first second s) i -
+          QuittingOneStagePayoff G x
+              (Math.PMFProduct.replaceOn s first second) i -
               QuittingOneStagePayoff G x first i =
             ∑ j ∈ s, ((second j : ℝ) - first j) * columns j i := by
     intro s hsQ
@@ -8216,23 +8326,23 @@ private theorem exists_upper_secantMatrix
         · intro j _hj i _hi
           simpa only [sub_self, abs_zero] using hηpos.le
         · intro i
-          rw [section4ReplaceOn_empty]
+          rw [Math.PMFProduct.replaceOn_empty]
           simp
     | @insert j s hjs ih =>
         have hsSubset : s ⊆ Q := fun k hk => hsQ (Finset.mem_insert_of_mem hk)
         obtain ⟨columns, hcolumns, hsum⟩ := ih hsSubset
-        let row := section4ReplaceOn G first second s
+        let row : QuitRow G := Math.PMFProduct.replaceOn s first second
         let slope : Payoff G.Player := fun i =>
-          QuittingOneStagePayoff G x (row.replace G j 1) i -
-            QuittingOneStagePayoff G x (row.replace G j 0) i
+          QuittingOneStagePayoff G x (QuitRow.replace G row j 1) i -
+            QuittingOneStagePayoff G x (QuitRow.replace G row j 0) i
         let columns' : G.Player → Payoff G.Player :=
           Function.update columns j slope
         have hjQ : j ∈ Q := hsQ (by simp)
         have hrowCap : ∀ k, (row k : ℝ) ≤ Section4Delta G M ε := by
           intro k
           by_cases hks : k ∈ s
-          · simpa [row, section4ReplaceOn, hks] using hsecondCap k
-          · simpa [row, section4ReplaceOn, hks] using hfirstCap k
+          · simpa [row, hks] using hsecondCap k
+          · simpa [row, hks] using hfirstCap k
         have hslope : ∀ i ∈ Q,
             |slope i -
               (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i)| ≤ η := by
@@ -8250,24 +8360,24 @@ private theorem exists_upper_secantMatrix
             quittingOneStagePayoff_row_replace_affine G x row j (second j)
           have haffineFirst :=
             quittingOneStagePayoff_row_replace_affine G x row j (first j)
-          have hrowFirst : row.replace G j (first j) = row := by
-            change (section4ReplaceOn G first second s).replace G j (first j) =
-              section4ReplaceOn G first second s
-            exact section4ReplaceOn_replace_first G first second s j hjs
+          have hrowFirst : QuitRow.replace G row j (first j) = row := by
+            change QuitRow.replace G (Math.PMFProduct.replaceOn s first second)
+              j (first j) = Math.PMFProduct.replaceOn s first second
+            exact quitRow_replaceOn_replace_first G first second s j hjs
           rw [hrowFirst] at haffineFirst
           have hstep :
-              QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+              QuittingOneStagePayoff G x (QuitRow.replace G row j (second j)) i -
                   QuittingOneStagePayoff G x row i =
                 ((second j : ℝ) - first j) * slope i := by
             rw [haffineSecond, haffineFirst]
             simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, slope]
             ring
-          rw [section4ReplaceOn_insert G first second s j,
+          rw [quitRow_replaceOn_insert G first second s j hjs,
             Finset.sum_insert hjs]
           calc
-            QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+            QuittingOneStagePayoff G x (QuitRow.replace G row j (second j)) i -
                 QuittingOneStagePayoff G x first i =
-              (QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+              (QuittingOneStagePayoff G x (QuitRow.replace G row j (second j)) i -
                   QuittingOneStagePayoff G x row i) +
                 (QuittingOneStagePayoff G x row i -
                   QuittingOneStagePayoff G x first i) := by ring
@@ -8286,11 +8396,11 @@ private theorem exists_upper_secantMatrix
                   exact hjs hk
                 simp only [columns', Function.update_of_ne hkj]
   obtain ⟨columns, hcolumns, hsum⟩ := htelescope Q Subset.rfl
-  have hreplaceQ : section4ReplaceOn G first second Q = second := by
+  have hreplaceQ : Math.PMFProduct.replaceOn Q first second = second := by
     funext j
     by_cases hj : j ∈ Q
-    · simp [section4ReplaceOn, hj]
-    · simp [section4ReplaceOn, hj, houtside j hj]
+    · simp [hj]
+    · simp [hj, houtside j hj]
   let D : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ :=
     fun i j => columns j.1 i.1
   refine ⟨D, ?_, ?_⟩
@@ -8410,6 +8520,272 @@ theorem upperGlueRow_payoff_separation
   rw [← hrestricted] at hlower
   exact hlower.trans (euclideanNorm_restrict_le Q
     (QuittingOneStagePayoff G x second - QuittingOneStagePayoff G x first))
+
+/-- When at least two upper coordinates are active, the admissible row cube
+is homeomorphic to its literal one-stage payoff fiber and hence that fiber is
+contractible. -/
+theorem isContractibleSet_upperGlueFiber_of_two_le_activePlayers
+    (G : QuittingGame) (M R η ε : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hη : Corollary4_1Statement G η)
+    (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (hx : x ∈ UpperNeighborhood G R ε)
+    (hcard : 2 ≤ (UpperActivePlayers G R ε x).card) :
+    IsContractibleSet
+      (UpperGlueFiber G R ε (Section4Delta G M ε) x) := by
+  classical
+  let rows := UpperGlueRows G R ε (Section4Delta G M ε) x
+  have hdelta : 0 ≤ Section4Delta G M ε := by
+    rw [Section4Delta]
+    have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+    positivity
+  let _ : CompactSpace rows :=
+    isCompact_iff_compactSpace.mp
+      (isCompact_upperGlueRows G R ε (Section4Delta G M ε) x)
+  let _ : ContractibleSpace rows :=
+    (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace rows).mp
+      (isContractibleSet_upperGlueRows
+        G R ε (Section4Delta G M ε) x hdelta)
+  let payoffMap : rows → UpperGlueFiber G R ε (Section4Delta G M ε) x :=
+    fun p => ⟨QuittingOneStagePayoff G x p.1, p.1, rfl, p.2⟩
+  have hcontinuous : Continuous payoffMap := by
+    apply Continuous.subtype_mk
+    apply continuous_pi
+    intro j
+    exact continuous_quittingOneStagePayoff_comp G (fun _ : rows => x)
+      (fun p : rows => p.1) continuous_const continuous_subtype_val j
+  have hinjective : Function.Injective payoffMap := by
+    intro first second hequal
+    have hpayoff : QuittingOneStagePayoff G x first.1 =
+        QuittingOneStagePayoff G x second.1 :=
+      congrArg Subtype.val hequal
+    have hseparation := upperGlueRow_payoff_separation
+      G M R η ε hM hη hε hεη x hx first.1 second.1
+      (fun j hj => by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hj, ↓reduceIte]
+          using first.2 j)
+      (fun j hj => by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hj, ↓reduceIte]
+          using first.2 j)
+      (fun j hj => by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hj, ↓reduceIte]
+          using second.2 j)
+      (fun j hj => by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hj, ↓reduceIte]
+          using second.2 j)
+      hcard
+    have hpayoffNorm : EuclideanNorm
+        (QuittingOneStagePayoff G x second.1 -
+          QuittingOneStagePayoff G x first.1) = 0 := by
+      rw [hpayoff]
+      simp [EuclideanNorm]
+    rw [hpayoffNorm] at hseparation
+    let difference : {j // j ∈ UpperActivePlayers G R ε x} → ℝ :=
+      fun j => (second.1 j.1 : ℝ) - first.1 j.1
+    have hdifferenceNorm : EuclideanNorm difference = 0 := by
+      have hnormNonnegative : 0 ≤ EuclideanNorm difference := Real.sqrt_nonneg _
+      have hηpositive : 0 < η := hη.1
+      change η * EuclideanNorm difference ≤ 0 at hseparation
+      nlinarith
+    have hdifference : difference = 0 := by
+      have hlpNorm : ‖WithLp.toLp 2 difference‖ = 0 := by
+        simpa only [← euclideanNorm_eq_norm_toLp] using hdifferenceNorm
+      apply WithLp.toLp_injective 2
+      simpa using norm_eq_zero.mp hlpNorm
+    apply Subtype.ext
+    funext j
+    by_cases hj : j ∈ UpperActivePlayers G R ε x
+    · have hjzero := congrFun hdifference ⟨j, hj⟩
+      apply Subtype.ext
+      dsimp only [difference] at hjzero
+      simp only [Pi.zero_apply] at hjzero
+      linarith
+    · have hjInactive : x ∉ UpperNeighborhoodFor G R ε j := by
+        simpa only [UpperActivePlayers, Finset.mem_filter, Finset.mem_univ,
+          true_and] using hj
+      have hfirstZero : (first.1 j : ℝ) = 0 := by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hjInactive,
+          ↓reduceIte] using first.2 j
+      have hsecondZero : (second.1 j : ℝ) = 0 := by
+        simpa only [rows, UpperGlueRows, Set.mem_ofPred_eq, hjInactive,
+          ↓reduceIte] using second.2 j
+      apply Subtype.ext
+      linarith
+  have hsurjective : Function.Surjective payoffMap := by
+    intro y
+    obtain ⟨p, hy, hp⟩ := y.2
+    refine ⟨⟨p, hp⟩, ?_⟩
+    apply Subtype.ext
+    exact hy.symm
+  let equivalence : rows ≃ₜ UpperGlueFiber G R ε (Section4Delta G M ε) x :=
+    (hcontinuous.isClosedEmbedding hinjective).toIsEmbedding.toHomeomorphOfSurjective
+      hsurjective
+  apply (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
+  exact equivalence.contractibleSpace_iff.mp inferInstance
+
+/-- With exactly one active upper coordinate, the literal upper-glue fiber is
+the affine image of its capped quitting interval. -/
+theorem upperGlueFiber_eq_affineImage_Icc_of_activePlayers_eq_singleton
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) (j : G.Player)
+    (hactive : UpperActivePlayers G R ε x = {j}) :
+    UpperGlueFiber G R ε δ x =
+      (AffineMap.lineMap x
+        (QuittingOneStagePayoff G x
+          (QuitRow.replace G (zeroQuitRow G) j 1))) ''
+        Set.Icc 0 (min δ 1) := by
+  classical
+  have hactiveIff (k : G.Player) :
+      x ∈ UpperNeighborhoodFor G R ε k ↔ k = j := by
+    have hmem : k ∈ UpperActivePlayers G R ε x ↔ k = j := by
+      rw [hactive]
+      simp only [Finset.mem_singleton]
+    simpa only [UpperActivePlayers, Finset.mem_filter, Finset.mem_univ,
+      true_and] using hmem
+  ext y
+  constructor
+  · rintro ⟨p, hy, hp⟩
+    have hjActive : x ∈ UpperNeighborhoodFor G R ε j := (hactiveIff j).mpr rfl
+    have hpCap : (p j : ℝ) ≤ δ := by
+      simpa only [hjActive, ↓reduceIte] using hp j
+    have hrow : p = QuitRow.replace G (zeroQuitRow G) j (p j) := by
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [QuitRow.replace]
+      · have hkInactive : x ∉ UpperNeighborhoodFor G R ε k := by
+          intro hk
+          exact hkj ((hactiveIff k).mp hk)
+        have hpk : (p k : ℝ) = 0 := by
+          simpa only [hkInactive, ↓reduceIte] using hp k
+        apply Subtype.ext
+        simp [QuitRow.replace, hkj, zeroQuitRow, hpk]
+    have hq : (p j : ℝ) ∈ Set.Icc 0 (min δ 1) :=
+      ⟨(p j).property.1, le_min hpCap (p j).property.2⟩
+    refine ⟨(p j : ℝ), hq, ?_⟩
+    have hzeroReplace :
+        QuitRow.replace G (zeroQuitRow G) j 0 = zeroQuitRow G :=
+      QuitRow.replace_self G (zeroQuitRow G) j
+    have hzeroPayoff : QuittingOneStagePayoff G x (zeroQuitRow G) = x := by
+      exact quittingOneStagePayoff_zero G x
+    have haffine :=
+      quittingOneStagePayoff_row_replace_affine G x (zeroQuitRow G) j (p j)
+    rw [hzeroReplace, hzeroPayoff] at haffine
+    have hpayoff :
+        QuittingOneStagePayoff G x p =
+          AffineMap.lineMap x
+            (QuittingOneStagePayoff G x
+              (QuitRow.replace G (zeroQuitRow G) j 1)) (p j : ℝ) := by
+      calc
+        QuittingOneStagePayoff G x p =
+            QuittingOneStagePayoff G x
+              (QuitRow.replace G (zeroQuitRow G) j (p j)) :=
+          congrArg (QuittingOneStagePayoff G x) hrow
+        _ = (p j : ℝ) • QuittingOneStagePayoff G x
+              (QuitRow.replace G (zeroQuitRow G) j 1) +
+            (1 - (p j : ℝ)) • x := haffine
+        _ = AffineMap.lineMap x
+            (QuittingOneStagePayoff G x
+              (QuitRow.replace G (zeroQuitRow G) j 1)) (p j : ℝ) := by
+          simp only [AffineMap.lineMap_apply_module, add_comm]
+    exact (hy.trans hpayoff).symm
+  · rintro ⟨q, hq, rfl⟩
+    let qRow : Set.Icc (0 : ℝ) 1 :=
+      ⟨q, hq.1, hq.2.trans (min_le_right δ 1)⟩
+    let p : QuitRow G := QuitRow.replace G (zeroQuitRow G) j qRow
+    refine ⟨p, ?_, ?_⟩
+    · have hzeroReplace :
+          QuitRow.replace G (zeroQuitRow G) j 0 = zeroQuitRow G :=
+        QuitRow.replace_self G (zeroQuitRow G) j
+      have hzeroPayoff : QuittingOneStagePayoff G x (zeroQuitRow G) = x := by
+        exact quittingOneStagePayoff_zero G x
+      have haffine :=
+        quittingOneStagePayoff_row_replace_affine G x (zeroQuitRow G) j qRow
+      rw [hzeroReplace, hzeroPayoff] at haffine
+      dsimp only [p]
+      simpa only [qRow, AffineMap.lineMap_apply_module, add_comm] using haffine.symm
+    · intro k
+      by_cases hkActive : x ∈ UpperNeighborhoodFor G R ε k
+      · have hkj : k = j := (hactiveIff k).mp hkActive
+        subst k
+        simp only [hkActive, ↓reduceIte, p, QuitRow.replace]
+        exact hq.2.trans (min_le_left δ 1)
+      · have hkj : k ≠ j := by
+          intro h
+          subst k
+          exact hkActive ((hactiveIff j).mpr rfl)
+        simp [hkActive, p, QuitRow.replace, hkj, zeroQuitRow]
+
+/-- A singleton-active upper-glue fiber is the line segment described in the
+proof of Lemma 4.5, and is therefore convex. -/
+theorem convex_upperGlueFiber_of_activePlayers_eq_singleton
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) (j : G.Player)
+    (hactive : UpperActivePlayers G R ε x = {j}) :
+    Convex ℝ (UpperGlueFiber G R ε δ x) := by
+  rw [upperGlueFiber_eq_affineImage_Icc_of_activePlayers_eq_singleton
+    G R ε δ x j hactive]
+  exact (convex_Icc 0 (min δ 1)).affine_image _
+
+/-- A singleton-active upper-glue fiber is intrinsically contractible. -/
+theorem isContractibleSet_upperGlueFiber_of_activePlayers_eq_singleton
+    (G : QuittingGame) (R ε δ : ℝ) (x : Payoff G.Player) (j : G.Player)
+    (hδ : 0 ≤ δ) (hactive : UpperActivePlayers G R ε x = {j}) :
+    IsContractibleSet (UpperGlueFiber G R ε δ x) :=
+  (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
+    ((convex_upperGlueFiber_of_activePlayers_eq_singleton
+      G R ε δ x j hactive).contractibleSpace
+        ⟨x, self_mem_upperGlueFiber G R ε δ hδ x⟩)
+
+/-- Every literal upper-glue fiber over the upper neighborhood is
+contractible under the Section 4 separation scale. -/
+theorem isContractibleSet_upperGlueFiber
+    (G : QuittingGame) (M R η ε : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hη : Corollary4_1Statement G η)
+    (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (hx : x ∈ UpperNeighborhood G R ε) :
+    IsContractibleSet
+      (UpperGlueFiber G R ε (Section4Delta G M ε) x) := by
+  classical
+  let active := UpperActivePlayers G R ε x
+  have hdelta : 0 ≤ Section4Delta G M ε := by
+    rw [Section4Delta]
+    have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+    positivity
+  have hactiveNonempty : active.Nonempty := by
+    rw [UpperNeighborhood] at hx
+    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx
+    refine ⟨j, ?_⟩
+    simpa only [active, UpperActivePlayers, Finset.mem_filter, Finset.mem_univ,
+      true_and] using hj
+  by_cases hcard : 2 ≤ active.card
+  · exact isContractibleSet_upperGlueFiber_of_two_le_activePlayers
+      G M R η ε hM hη hε hεη x hx (by simpa only [active] using hcard)
+  · have hcardOne : active.card = 1 := by
+      have hcardPositive : 0 < active.card := Finset.card_pos.mpr hactiveNonempty
+      omega
+    obtain ⟨j, hactive⟩ := Finset.card_eq_one.mp hcardOne
+    exact isContractibleSet_upperGlueFiber_of_activePlayers_eq_singleton
+      G R ε (Section4Delta G M ε) x j hdelta (by
+        simpa only [active] using hactive)
+
+/-- At the canonical Section 4 quitting cap, every actual glued fiber over
+the glued neighborhood is contractible. -/
+theorem isContractibleSet_gluedFiber
+    (G : QuittingGame) (M R η ε : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hη : Corollary4_1Statement G η)
+    (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (hx : x ∈ GluedNeighborhood G R ε) :
+    IsContractibleSet
+      (GluedFiber G R ε (Section4Delta G M ε) x) := by
+  classical
+  by_cases hlower : x ∈ LowerNeighborhood G R ε
+  · simpa only [GluedFiber, hlower, ↓reduceIte] using
+      isContractibleSet_gluedFiber_of_mem_lowerNeighborhood
+        G R ε (Section4Delta G M ε) hlower
+  · have hupper : x ∈ UpperNeighborhood G R ε := hx.resolve_right hlower
+    simpa only [GluedFiber, hlower, hupper, ↓reduceIte] using
+      isContractibleSet_upperGlueFiber G M R η ε hM hη hε hεη x hupper
 
 /-- The one-stage value differs from the terminal reward conditional on
 absorption only through the all-Continue branch. -/
