@@ -972,6 +972,27 @@ the fractions lie strictly between zero and one in the strict product-gap
 chamber. These are finite algebraic identities, not a theorem about the
 blocks of an arbitrary infinite quitting schedule.
 
+`normalizedSingletonPathOfRootSequence`
+(`UniformEquilibrium/Quitting/Paths/NormalizedSingletonPath.lean`) derives a
+normalized singleton path from actual terminal continuation payoffs on an
+arbitrary finite embedded child. Its inputs are absorbing solo play with
+hazards below one, positive balancing weights, singleton floors, and exact
+active-owner ties. It assumes neither periodicity nor finite owner blocks.
+`quittingRootSequenceSingletonSurplus_eq_of_row_span` in the same file
+transports signed linear relations among child singleton rows to actual
+parent surpluses, without floor or tie hypotheses. The inverse-row
+specialization uses the actual nonsingular child matrix.
+`NormalizedSingletonPath.exists_first_owner_change`
+(`MathUE/LinearProgramming/ThreeCyclePathRigidity.lean`) constructs a finite
+owner change whenever every column has a negative coordinate. Its strict
+three-cycle specialization forces cyclic changes.
+`ThreeCycleInverseFormulas.exists_vertex_after` in the same file constructs
+visits to every weighted simplex vertex after any starting date;
+`dotProduct_nonneg_on_tail_iff` characterizes a signed row's nonnegativity
+along a whole tail by nonnegativity of its coefficients. Uniform survival
+bounds and the resulting outside-player debt estimate are not supplied by
+these statements.
+
 `PositiveInverseFourMatrixComparisons.not_projectiveQBar`
 (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`)
 separates the strict-inverse criterion from the projective-Q-bar criterion

@@ -2416,6 +2416,7 @@ import UniformEquilibrium.Quitting.Paths.LiveRootSurvival
 import UniformEquilibrium.Quitting.Paths.LiveTail
 import UniformEquilibrium.Quitting.Paths.NonSoloMass
 import UniformEquilibrium.Quitting.Paths.NonSoloTail
+import UniformEquilibrium.Quitting.Paths.NormalizedSingletonPath
 import UniformEquilibrium.Quitting.Paths.OneOwnerPersistentLabelObstruction
 import UniformEquilibrium.Quitting.Paths.OpponentActionMass
 import UniformEquilibrium.Quitting.Paths.OpponentClockDichotomy

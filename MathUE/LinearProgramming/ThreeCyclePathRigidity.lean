@@ -56,6 +56,27 @@ theorem value_le (path : NormalizedSingletonPath T weight) (time : ℕ) (i : ι)
   apply (le_div_iff₀ (path.weight_pos i)).mpr
   simpa only [mul_comm] using hterm
 
+/-- If all other coordinates vanish, normalization identifies the remaining
+coordinate with its weighted probability-simplex vertex. -/
+theorem value_eq_single_of_zero_off [DecidableEq ι]
+    (path : NormalizedSingletonPath T weight) (time : ℕ) (j : ι)
+    (hzero : ∀ i, i ≠ j → path.value time i = 0) :
+    path.value time = Pi.single j (1 / weight j) := by
+  have hsum : (∑ i, weight i * path.value time i) =
+      weight j * path.value time j := by
+    apply Finset.sum_eq_single j
+    · intro i _ hij
+      rw [hzero i hij, mul_zero]
+    · simp
+  have hj : path.value time j = 1 / weight j := by
+    apply (eq_div_iff (path.weight_pos j).ne').mpr
+    rw [mul_comm, ← hsum, path.normalized]
+  ext i
+  by_cases hij : i = j
+  · subst i
+    simpa using hj
+  · simp [hij, hzero i hij]
+
 /-- A zero-hazard row leaves every continuation coordinate unchanged. -/
 theorem value_eq_next_of_hazard_zero (path : NormalizedSingletonPath T weight)
     (time : ℕ) (hzero : path.hazard time = 0) :
@@ -89,15 +110,6 @@ theorem exists_active_owner_ne (path : NormalizedSingletonPath T weight)
       rw [hmono (start + offset) (by omega) hpositive] at hstep
       dsimp only [difference]
       linarith
-  have hfinite (length : ℕ) :
-      difference start = survivalProduct (fun time => 1 - path.hazard time) start length *
-        difference (start + length) := by
-    have h := backwardRecursion_eq_weighted_sum_add_terminal
-      (fun offset => difference (start + offset)) (fun _ => 0)
-      (fun offset => 1 - path.hazard (start + offset)) 0 length
-      (fun offset => by simpa only [Nat.add_assoc] using hrec offset)
-    simpa only [survivalProduct, Nat.zero_add, Nat.add_zero, mul_zero,
-      Finset.sum_const_zero, zero_add] using h
   have hbound : ∃ bound : ℝ, ∀ time, |difference time| ≤ bound := by
     refine ⟨1 / weight i + |T i owner|, fun time => ?_⟩
     calc
@@ -106,11 +118,27 @@ theorem exists_active_owner_ne (path : NormalizedSingletonPath T weight)
       _ ≤ 1 / weight i + |T i owner| := by
         rw [abs_of_nonneg (path.value_nonneg time i)]
         linarith [path.value_le time i]
-  have hlimit := tendsto_survivalProduct_mul_bounded_zero
-    (fun time => 1 - path.hazard time) difference start (path.absorbs start) hbound
-  have hconstant : Tendsto (fun _ : ℕ => difference start) atTop (nhds 0) :=
-    hlimit.congr' (Eventually.of_forall fun length => (hfinite length).symm)
-  have hzero : difference start = 0 := tendsto_nhds_unique tendsto_const_nhds hconstant
+  have habs := abs_prescribedError_le_of_suffixDiscrepancy
+    (fun offset => difference (start + offset)) (fun _ => 0)
+    (fun offset => 1 - path.hazard (start + offset)) 0
+    (fun offset => (sub_pos.mpr (path.hazard_lt_one _)).le)
+    (fun offset => by linarith [path.hazard_nonneg (start + offset)])
+    (fun offset => by simpa only [zero_add, sub_zero, Nat.add_assoc] using hrec offset)
+    (by intro first length; simp)
+    (fun first => by
+      have hshift :
+          Math.survivalProduct (fun offset => 1 - path.hazard (start + offset)) first =
+            Math.survivalProduct (fun time => 1 - path.hazard time) (start + first) := by
+        funext length
+        unfold Math.survivalProduct
+        apply Finset.prod_congr rfl
+        intro offset _
+        rw [Nat.add_assoc]
+      rw [hshift]
+      exact path.absorbs (start + first))
+    ⟨hbound.choose, fun offset => hbound.choose_spec (start + offset)⟩ 0
+  have hzero : difference start = 0 :=
+    abs_eq_zero.mp (le_antisymm (by simpa only [Nat.add_zero] using habs) (abs_nonneg _))
   dsimp only [difference] at hzero
   linarith [path.value_nonneg start i]
 
@@ -223,6 +251,78 @@ theorem exists_first_cyclic_owner_change
     exact nonpos_of_mul_nonpos_right (by linarith) hpositive
   exact ⟨finish, hlt, hpositive,
     next_eq_finRotate_of_entry_nonpos hb hc hf _ _ hne hentry, hblock, hzero, hnewzero⟩
+
+/-- Every tail visits every weighted probability-simplex vertex. The three
+finite owner changes are derived from absorption, not supplied as data. -/
+theorem exists_vertex_after
+    {a b c d e f : ℝ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hd : 0 < d) (he : 0 < e) (hf : 0 < f) {weight : Fin 3 → ℝ}
+    (path : NormalizedSingletonPath (directedCycleMatrix a b c d e f) weight)
+    (start : ℕ) (j : Fin 3) :
+    ∃ time, start ≤ time ∧ path.value time = Pi.single j (1 / weight j) := by
+  obtain ⟨first, hstart, hactive, _hne⟩ :=
+    path.exists_active_owner_ne start 0
+      ⟨2, by simpa [directedCycleMatrix] using neg_neg_of_pos he⟩
+  obtain ⟨second, hfirst, hsecondActive, hsecondOwner, _, hzeroFirst, hzeroSecond⟩ :=
+    exists_first_cyclic_owner_change ha hb hc hd he hf path first hactive
+  obtain ⟨third, hsecond, hthirdActive, hthirdOwner, _, hzeroSecond', hzeroThird⟩ :=
+    exists_first_cyclic_owner_change ha hb hc hd he hf path second hsecondActive
+  obtain ⟨fourth, hthird, _, hfourthOwner, _, hzeroThird', hzeroFourth⟩ :=
+    exists_first_cyclic_owner_change ha hb hc hd he hf path third hthirdActive
+  have hvertex (time : ℕ) (old next : Fin 3)
+      (hne : old ≠ next) (hjOld : j ≠ old) (hjNext : j ≠ next)
+      (hold : path.value time old = 0) (hnext : path.value time next = 0) :
+      path.value time = Pi.single j (1 / weight j) := by
+    apply path.value_eq_single_of_zero_off
+    intro i hij
+    have hthree : ∀ x y z k : Fin 3,
+        x ≠ y → z ≠ x → z ≠ y → k ≠ z → k = x ∨ k = y := by decide
+    rcases hthree old next j i hne hjOld hjNext hij with hi | hi
+    · simpa only [hi] using hold
+    · simpa only [hi] using hnext
+  have hrotateNe : ∀ i : Fin 3, i ≠ finRotate 3 i := by decide
+  have hcover :
+      (j ≠ path.owner first ∧ j ≠ path.owner second) ∨
+      (j ≠ path.owner second ∧ j ≠ path.owner third) ∨
+      (j ≠ path.owner third ∧ j ≠ path.owner fourth) := by
+    rw [hfourthOwner, hthirdOwner, hsecondOwner]
+    have hfinite : ∀ i k : Fin 3,
+        (k ≠ i ∧ k ≠ finRotate 3 i) ∨
+        (k ≠ finRotate 3 i ∧ k ≠ finRotate 3 (finRotate 3 i)) ∨
+        (k ≠ finRotate 3 (finRotate 3 i) ∧
+          k ≠ finRotate 3 (finRotate 3 (finRotate 3 i))) := by decide
+    exact hfinite (path.owner first) j
+  rcases hcover with hj | hj | hj
+  · refine ⟨second, by omega, hvertex second _ _ ?_ hj.1 hj.2 hzeroFirst hzeroSecond⟩
+    rw [hsecondOwner]
+    exact hrotateNe _
+  · refine ⟨third, by omega, hvertex third _ _ ?_ hj.1 hj.2 hzeroSecond' hzeroThird⟩
+    rw [hthirdOwner]
+    exact hrotateNe _
+  · refine ⟨fourth, by omega, hvertex fourth _ _ ?_ hj.1 hj.2 hzeroThird' hzeroFourth⟩
+    rw [hfourthOwner]
+    exact hrotateNe _
+
+/-- An affine singleton-row surplus is nonnegative along any whole tail
+exactly when its three vertex coefficients are nonnegative. -/
+theorem dotProduct_nonneg_on_tail_iff
+    {a b c d e f : ℝ} (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hd : 0 < d) (he : 0 < e) (hf : 0 < f) {weight : Fin 3 → ℝ}
+    (path : NormalizedSingletonPath (directedCycleMatrix a b c d e f) weight)
+    (coefficient : Fin 3 → ℝ) (start : ℕ) :
+    (∀ time, start ≤ time → 0 ≤ dotProduct coefficient (path.value time)) ↔
+      ∀ j, 0 ≤ coefficient j := by
+  constructor
+  · intro hfloor j
+    obtain ⟨time, htime, hvertex⟩ :=
+      exists_vertex_after ha hb hc hd he hf path start j
+    have h := hfloor time htime
+    rw [hvertex, dotProduct_single] at h
+    exact nonneg_of_mul_nonneg_right (by simpa only [mul_comm] using h)
+      (one_div_pos.mpr (path.weight_pos j))
+  · intro hcoefficient time _
+    exact Finset.sum_nonneg fun j _ =>
+      mul_nonneg (hcoefficient j) (path.value_nonneg time j)
 
 end ThreeCycleInverseFormulas
 end Math.LinearProgramming

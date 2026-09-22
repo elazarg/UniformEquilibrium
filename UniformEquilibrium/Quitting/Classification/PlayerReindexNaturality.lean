@@ -436,6 +436,20 @@ omit [DecidableEq ι] in
   subst second
   rfl
 
+@[simp] theorem quittingTerminalPayoff_update_pureTime_profileOfRewardEq
+    {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
+    (hreward : first = second)
+    (profile : (quittingGame second).BehaviorProfile) (who : ι)
+    (choice : Option ℕ) :
+    quittingTerminalPayoff first
+        (Function.update (quittingProfileOfRewardEq hreward profile) who
+          (quittingPureTimeBehaviorStrategy first who choice)) who =
+      quittingTerminalPayoff second
+        (Function.update profile who
+          (quittingPureTimeBehaviorStrategy second who choice)) who := by
+  subst second
+  rfl
+
 @[simp] theorem quittingBehaviorDeviationPayoffCap_profileOfRewardEq
     {first second : {S : Finset ι // S.Nonempty} → Payoff ι}
     (hreward : first = second)

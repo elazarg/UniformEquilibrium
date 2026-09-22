@@ -139,9 +139,34 @@ through `quittingBehaviorStoppingLaw_pureTime_never`
 the complete pure-date reply formula for the literal sparse stopping-law
 profile: date one gives one half, date two gives minus one half, and every
 other finite date and Never give zero. `displayed_replyValues` recovers the
-five entries in the packet. The proof passed a silent named build and uses
-the existing product-of-pure-laws mixture identity. The full behavioral-cap
-comparison and the third Never-player extension remain to be assembled.
+five entries in the packet. `profile_payoff_false_eq_zero` and
+`behaviorDeviationPayoffCap_false_eq_half` in the same file give the actual
+prescribed payoff and unrestricted behavioral cap. `sparseTestedReplyCap_eq_zero`
+and `behaviorCap_sub_sparseTestedReplyCap_eq_half` show that testing only
+Never and dates zero, two, and three misses a gain of exactly one half.
+These proofs passed a silent named build and reuse the existing
+product-of-pure-laws mixture identity and pure-time extremality theorem.
+The literal third-player extension is also proved there:
+`extendedReplyValue_eq_replyValue` preserves every deterministic reply,
+`extendedProfile_child_behaviorCap` preserves both old players' unrestricted
+behavioral caps, and `extendedBehaviorCap_sub_sparseTestedReplyCap_eq_half`
+retains the same half-unit gap in the extended game.
+`extendedProfile_fresh_stoppingLaw` identifies the fresh player's actual law
+with Never. These declarations passed a silent named build and independent
+declaration-level review. Equal-reward transport of pure-time reply payoffs
+is shared through `quittingTerminalPayoff_update_pureTime_profileOfRewardEq`
+(`UniformEquilibrium/Quitting/Classification/PlayerReindexNaturality.lean`).
+
+The consecutive-calendar repair is already proved by
+`quittingContinuationBestResponseValue_finiteDeadlineTimingProfile_eq_max`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineFullReplyCap.lean`).
+It identifies the unrestricted behavioral cap with the maximum over all
+dates below the deadline and Never, together with the one late-row value.
+`quittingFiniteDeadlineTimingProfile_pureTime_eq_never_add_of_le` in the
+same file shows that every finite date at or after the deadline realizes
+that late row. Thus the deadline itself completes the consecutive menu,
+including when the deadline is zero. The separate sparse-calendar rule
+using opponent atoms and one representative per gap remains to be proved.
 
 The strict three-cycle algebra is proved in
 `MathUE/LinearProgramming/ThreeCycleInverseFormulas.lean`.
@@ -166,7 +191,38 @@ premise. `exists_first_cyclic_owner_change` in the same file proves the
 forced cyclic direction for the strict three-cycle matrix and the two zero
 coordinates at the switching boundary. These declarations passed a silent
 named build; the generic path proofs also passed an independent
-declaration-level review. The actual stopping-law adapter remains to be implemented.
+declaration-level review.
+
+`ThreeCycleInverseFormulas.exists_vertex_after` in the same file proves that
+each of the three weighted simplex vertices is reached at a finite date
+after every starting date. It constructs the visits from three finite cyclic
+owner changes. `dotProduct_nonneg_on_tail_iff` consequently characterizes
+nonnegativity of an arbitrary signed row on the entire tail by nonnegativity
+of all three coefficients. These declarations passed a silent named build
+and independent declaration-level review.
+
+`normalizedSingletonPathOfRootSequence`
+(`UniformEquilibrium/Quitting/Paths/NormalizedSingletonPath.lean`) constructs
+that path from the actual terminal payoffs of an arbitrary finite embedded
+child in the parent game. Initial absorption and hazards below one give
+absorption at every suffix. The actual singleton recurrence and column
+balance give weighted surplus one; singleton floors and exact active ties
+then supply the normalized nonnegative path. No periodicity or vertex visits
+are assumed. `quittingRootSequenceSingletonSurplus_weightedSum_eq_one`
+in the same file proves the normalization identity even for signed weights,
+without singleton floors or active ties.
+`quittingRootSequenceSingletonSurplus_eq_of_row_span` transports any signed
+linear relation among the child singleton rows to actual parent surpluses;
+`quittingRootSequenceSingletonSurplus_eq_inverseRow` specializes it to the
+actual inverse. Both apply to every parent coordinate and require neither
+singleton floors nor active ties. The row-span theorem also applies to
+singular child matrices when the stated row relation holds; invertibility
+is needed only for the inverse formula. These adapters passed silent named builds
+and independent declaration-level review.
+Their combination into the actual outside-floor equivalence, and the
+quantitative block conclusions, remain to be assembled. The generic
+solo-root recognizer has one canonical owner in
+`UniformEquilibrium/Quitting/Stationary/SingletonStationaryRoot.lean`.
 
 ## Work still needed
 
@@ -176,8 +232,8 @@ amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
 The remaining packet work is:
 
-1. Finish the sparse-calendar missed-response cap comparison, its third-player
-   extension, and the consecutive repair.
+1. Prove the general sparse-calendar atom-and-gap representative rule.
+   Reuse the existing consecutive-calendar completeness theorem.
 2. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
    inverse classification, forced vertex visits and block survival, the
    continuation-floor equivalence, and the quantitative response-debt bound.
@@ -187,8 +243,8 @@ The remaining packet work is:
 The strict inverse-row work can reuse the existing three-cycle labeling,
 periodic escort transitions, singleton-versus-quit payoff estimate, and
 survival-weighted deviation transport. What remains includes identifying the
-actual infinite schedule with the checked recurrence, forced vertex visits,
-and the uniform survival lower bound. A theorem assuming the vertex visits or restricting
+the actual outside-floor consumer and the uniform survival lower bound. A theorem assuming
+the vertex visits or restricting
 the schedule to a finite period would not cover the packet's statement.
 
 These are known results supplied by the packet. This record does not assert

@@ -281,6 +281,15 @@ neighborhood force a terminal step larger than the common radius.
 `section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep`
 states the resulting small-step containment directly. Neither theorem needs
 a lower bound on quitting probability or the global part of Lemma 4.4.
+The proof's low-coordinate drift is now a separate private theorem in the
+same file: under the stated bounded positive-cutoff hypotheses, some
+coordinate is below its min-max value by more than half the motion parameter
+and rises by at least the squared motion parameter divided by one thousand
+times the payoff scale. The public distance bound consumes this stronger
+coordinate statement. This refactoring passed a silent named build,
+independent declaration-level review, and a separate transitive standard-axiom
+check. It prepares the paper's recurrent-coordinate argument; that orbit
+argument is not yet proved.
 The remaining positive-cutoff branches and their assembly remain to be
 formalized.
 
@@ -309,6 +318,24 @@ global upper bound in Lemma 4.4, which remains
 unproved. The bounded-continuation, positive-cutoff case above instead uses
 the supported-coordinate bound and coordinate drift.
 
+`section4_terminal_mem_gluedGraph_of_zero_cutoff_smallStep` in the same
+file combines the zero-quitting, small-positive-quitting, and large-quitting
+cases into the complete zero-cutoff containment theorem at the common
+Section 4 scale. It passed a silent named build and a separate transitive
+standard-axiom check. The remaining containment case has positive cutoff,
+large quitting probability, and a first endpoint outside both the lower
+neighborhood and the payoff box.
+
+The three quantitative ingredients for that remaining case are checked:
+positive cutoff and exclusion from the lower neighborhood give base-point
+separation greater than one quarter of the accuracy; outside the payoff box,
+the one-stage displacement is at least two thirds of the payoff scale times
+the quitting probability; terminal interpolation multiplies this lower bound
+by one minus the cutoff. Their private proofs in the same file passed a
+silent named build and a separate transitive standard-axiom check. The
+remaining coefficient estimate and the common-scale contradiction are not
+yet proved.
+
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved.
 `continuationCoordinate_ge_neg_half_radius_of_mem_truncatedW` also proves
@@ -316,7 +343,16 @@ the lower bound for every continuation coordinate under the full Section 3
 assumptions, by the published maximal-quitter argument. The global upper
 bound remains unproved. The checked
 counterexamples refute the isolated zero-quitter inference and a formulation
-without the standing assumptions, not the full lemma. The current
+without the standing assumptions, not the full lemma. Independent source
+review confirms the distinction: the sentence on printed page 192 infers
+that the structure-map coordinate dominates the continuation coordinate
+when the player does not quit. Expanding the definition leaves a term
+minus the total quitting probability times that continuation coordinate,
+so the asserted sign does not follow from the definition and one-stage
+equilibrium alone. The remaining claim is that every zero-quitting player's
+continuation coordinate is at most the truncation radius plus one, under
+all the standing Section 3 hypotheses. Neither the global lower bound nor
+the supported-coordinate estimate proves it. The current
 `lemma4_5` assumes an ω cutoff; the corrected δ statement of `lemma4_3` does
 not by itself establish a δ version of `lemma4_5`.
 

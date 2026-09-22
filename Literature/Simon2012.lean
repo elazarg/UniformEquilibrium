@@ -12232,6 +12232,182 @@ theorem section4_terminal_mem_gluedGraph_of_quitProbability_eq_zero
   rw [hx, hy]
   exact self_mem_gluedFiber G R ε δ hδ hneighborhood
 
+/-- Property (6)'s complete zero-cutoff branch at the common Section 4
+scale: every sufficiently short terminal edge belongs to the glued graph. -/
+theorem section4_terminal_mem_gluedGraph_of_zero_cutoff_smallStep
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hcutoffZero : (cutoff a : ℝ) = 0)
+    (hstep : EuclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) <
+        Section4Omega G M d ρ ξ R ε) :
+    (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+      correspondenceGraph
+        (GluedFiber G R ε (Section4Delta G M ε)) := by
+  let q : ℝ := QuitProbability G (inverse.inv a).1.2
+  have hdeltaNonneg : 0 ≤ Section4Delta G M ε :=
+    (section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ).1.le
+  by_cases hqZero : q = 0
+  · exact section4_terminal_mem_gluedGraph_of_quitProbability_eq_zero
+      G M d R ε (Section4Delta G M ε) hM hd hd1 inverse cutoff hε
+        hdeltaNonneg a ha (by simpa only [q] using hqZero)
+  · have hqPos : 0 < q := lt_of_le_of_ne
+      (quitProbability_mem_Icc G (inverse.inv a).1.2).1 (Ne.symm hqZero)
+    by_cases hqSmall : q <
+        ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M)
+    · exact section4_terminal_mem_gluedGraph_of_zero_cutoff_positive_small_quit
+        G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants inverse cutoff
+          hε hερ a ha hcutoffZero (by simpa only [q] using hqPos)
+            (by simpa only [q] using hqSmall) hstep
+    · have hqLarge :
+          ε * d / (40 * (Fintype.card G.Player : ℝ) ^ 2 * M) ≤ q :=
+        le_of_not_gt hqSmall
+      have hobstruction :=
+        section4Omega_lt_terminalStep_of_zero_cutoff_large_quit
+          G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants
+            inverse cutoff hε hερ a hcutoffZero
+              (by simpa only [q] using hqLarge)
+      exact (not_lt_of_ge hobstruction.le hstep).elim
+
+/-- In Property (6), Case 4, positive cutoff and failure of the lower
+neighborhood keep the first endpoint a definite distance from its base. -/
+private theorem epsilon_div_four_lt_section4X_baseDistance
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (hcutoffPos : 0 < (cutoff a : ℝ))
+    (hxNotLower :
+      Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε) :
+    ε / 4 < EuclideanDist (Section4X G inverse cutoff a) a := by
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  have haDistance : EuclideanInfDist a (LowerBoundary G R) <
+      Section4Omega G M d ρ ξ R ε := by
+    by_contra hnot
+    have hzero := hcutoff.2.2.1 a (le_of_not_gt hnot)
+    linarith
+  have htransport : EuclideanInfDist x (LowerBoundary G R) ≤
+      EuclideanInfDist a (LowerBoundary G R) + EuclideanDist x a := by
+    rw [euclideanInfDist_eq_infDist_toLp,
+      euclideanInfDist_eq_infDist_toLp]
+    simpa only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+      WithLp.toLp_sub, dist_eq_norm] using
+      (Metric.infDist_le_infDist_add_dist :
+        Metric.infDist (WithLp.toLp 2 x)
+            (WithLp.toLp 2 '' LowerBoundary G R) ≤
+          Metric.infDist (WithLp.toLp 2 a)
+              (WithLp.toLp 2 '' LowerBoundary G R) +
+            dist (WithLp.toLp 2 x) (WithLp.toLp 2 a))
+  have homega := section4Omega_le_epsilon_div_thousand
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+  by_contra hnot
+  have hxa : EuclideanDist x a ≤ ε / 4 := le_of_not_gt hnot
+  apply hxNotLower
+  change EuclideanInfDist x (LowerBoundary G R) ≤ ε / 3
+  exact (htransport.trans_lt (add_lt_add_of_lt_of_le haDistance hxa)).le.trans (by
+    nlinarith)
+
+/-- Outside the closed payoff box, every one-stage row moves by at least its
+quitting mass times two thirds of the payoff scale. -/
+private theorem two_thirds_scale_mul_quitProbability_le_oneStageDistance
+    (G : QuittingGame) (M : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (x : Payoff G.Player) (p : QuitRow G)
+    (hxNotBox : ¬InClosedPayoffBox M x) :
+    2 * M / 3 * QuitProbability G p ≤
+      EuclideanDist x (QuittingOneStagePayoff G x p) := by
+  let q : ℝ := QuitProbability G p
+  let stage : Payoff G.Player := QuittingOneStagePayoff G x p
+  have hqNonneg : 0 ≤ q := quitProbability_mem_Icc G p |>.1
+  unfold InClosedPayoffBox at hxNotBox
+  push Not at hxNotBox
+  obtain ⟨k, hk⟩ := hxNotBox
+  have hkOutside : x k < -M ∨ M < x k := by
+    by_cases hkLower : -M ≤ x k
+    · exact Or.inr (hk hkLower)
+    · exact Or.inl (lt_of_not_ge hkLower)
+  rcases hkOutside with hk | hk
+  · have hreward := abs_quittingRewardPart_le G p k
+      (fun A => hM.2.1 A k)
+    have hrewardLower : -(M / 3 * q) ≤ quittingRewardPart G p k := by
+      exact (neg_le_of_abs_le (by simpa only [q] using hreward))
+    have hcoordinate :
+        stage k - x k = quittingRewardPart G p k - q * x k := by
+      change (1 - QuitProbability G p) * x k + quittingRewardPart G p k -
+        x k = _
+      dsimp only [q]
+      ring
+    have hgap : 2 * M / 3 * q ≤ stage k - x k := by
+      rw [hcoordinate]
+      have hxScaled := mul_le_mul_of_nonneg_left hk.le hqNonneg
+      nlinarith
+    have hcoordinateNorm := abs_apply_le_euclideanNorm (x - stage) k
+    exact hgap.trans ((le_abs_self (stage k - x k)).trans (by
+      rw [abs_sub_comm]
+      simpa only [Pi.sub_apply, EuclideanDist, EuclideanNorm] using
+        hcoordinateNorm))
+  · have hreward := abs_quittingRewardPart_le G p k
+      (fun A => hM.2.1 A k)
+    have hrewardUpper : quittingRewardPart G p k ≤ M / 3 * q := by
+      exact (le_abs_self _).trans (by simpa only [q] using hreward)
+    have hcoordinate :
+        x k - stage k = q * x k - quittingRewardPart G p k := by
+      change x k -
+        ((1 - QuitProbability G p) * x k + quittingRewardPart G p k) = _
+      dsimp only [q]
+      ring
+    have hgap : 2 * M / 3 * q ≤ x k - stage k := by
+      rw [hcoordinate]
+      have hxScaled := mul_le_mul_of_nonneg_left hk.le hqNonneg
+      nlinarith
+    have hcoordinateNorm := abs_apply_le_euclideanNorm (x - stage) k
+    exact hgap.trans ((le_abs_self (x k - stage k)).trans (by
+      simpa only [Pi.sub_apply, EuclideanDist, EuclideanNorm] using
+        hcoordinateNorm))
+
+/-- Property (6), Case 4's payoff-separation estimate transported through
+the terminal interpolation. -/
+private theorem one_sub_cutoff_mul_two_thirds_scale_mul_quitProbability_le_terminalStep
+    (G : QuittingGame) {M d : ℝ}
+    (hM : IsSimonPayoffScale G M)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (a : Payoff G.Player)
+    (hxNotBox : ¬InClosedPayoffBox M (Section4X G inverse cutoff a)) :
+    (1 - (cutoff a : ℝ)) *
+        (2 * M / 3 * QuitProbability G (inverse.inv a).1.2) ≤
+      EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) := by
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  let stage : Payoff G.Player := Section4Z G inverse cutoff a
+  have hstage : 2 * M / 3 * QuitProbability G (inverse.inv a).1.2 ≤
+      EuclideanDist x stage := by
+    exact two_thirds_scale_mul_quitProbability_le_oneStageDistance
+      G M hM x (inverse.inv a).1.2 (by simpa only [x] using hxNotBox)
+  have hparameter : 0 ≤ 1 - (cutoff a : ℝ) :=
+    sub_nonneg.mpr (cutoff a).property.2
+  have hy : Section4Y G inverse cutoff a =
+      AffineMap.lineMap x stage (1 - (cutoff a : ℝ)) := by
+    dsimp only [Section4Y, x, stage]
+    simp only [AffineMap.lineMap_apply_module, sub_sub_cancel]
+  rw [hy, euclideanDist_lineMap_eq_mul x stage hparameter]
+  exact mul_le_mul_of_nonneg_left hstage hparameter
+
 /-- Property (3) of Question 1 for the actual Section 4 homotopy: a diagonal
 point in the terminal image lies on the frontier of the truncated domain. -/
 theorem section4H_terminal_diagonal_mem_frontier
@@ -13000,9 +13176,10 @@ private theorem supportedContinuation_abs_le_half_radius
       _ < -(R + 1) := by linarith
   exact (not_lt_of_ge hphiLower hstrictUpper).elim
 
-/-- Property (6), Case 5: inside the reward box and outside the lower
-neighborhood, a positive cutoff forces a terminal step larger than `ω`. -/
-theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
+/-- Inside the reward box and outside the lower neighborhood, a positive
+cutoff produces the coordinatewise upward drift used both in Property (6),
+Case 5, and in the orbit-localization argument of Theorem 4.1. -/
+private theorem exists_coordinate_terminal_drift_of_bounded_positive_cutoff
     (G : QuittingGame) (M d ρ ξ R ε : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
@@ -13020,9 +13197,11 @@ theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
     (hcutoffPos : 0 < (cutoff a : ℝ))
     (hxNotLower : Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε)
     (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a)) :
-    Section4Omega G M d ρ ξ R ε <
-      EuclideanDist (Section4X G inverse cutoff a)
-        (Section4Y G inverse cutoff a) := by
+    ∃ low,
+      Section4X G inverse cutoff a low < MinMaxQuit G low - ρ / 2 ∧
+        ρ ^ 2 / (1000 * M) ≤
+          Section4Y G inverse cutoff a low -
+            Section4X G inverse cutoff a low := by
   let N : ℝ := Fintype.card G.Player
   let z : EZeroTilde G := inverse.inv a
   let alpha : ℝ := cutoff a
@@ -13168,16 +13347,56 @@ theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
     rfl
   have hyx : ρ ^ 2 / (1000 * M) ≤ y low - x low := by
     nlinarith
-  have hcoordinate : |x low - y low| ≤ EuclideanDist x y :=
-    abs_coordinate_sub_le_euclideanDist x y low
-  have hstepLower : ρ ^ 2 / (1000 * M) ≤ EuclideanDist x y := by
-    have hyxNonneg : 0 ≤ y low - x low :=
+  exact ⟨low, by simpa only [x] using hlow, by simpa only [x, y] using hyx⟩
+
+/-- Property (6), Case 5: inside the reward box and outside the lower
+neighborhood, a positive cutoff forces a terminal step larger than `ω`. -/
+theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hcutoffPos : 0 < (cutoff a : ℝ))
+    (hxNotLower : Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε)
+    (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a)) :
+    Section4Omega G M d ρ ξ R ε <
+      EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) := by
+  obtain ⟨low, _hlow, hyx⟩ :=
+    exists_coordinate_terminal_drift_of_bounded_positive_cutoff
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ a ha hcutoffPos
+          hxNotLower hxbox
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hcoordinate :
+      |Section4X G inverse cutoff a low - Section4Y G inverse cutoff a low| ≤
+        EuclideanDist (Section4X G inverse cutoff a)
+          (Section4Y G inverse cutoff a) :=
+    abs_coordinate_sub_le_euclideanDist
+      (Section4X G inverse cutoff a) (Section4Y G inverse cutoff a) low
+  have hstepLower : ρ ^ 2 / (1000 * M) ≤
+      EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) := by
+    have hyxNonneg : 0 ≤
+        Section4Y G inverse cutoff a low - Section4X G inverse cutoff a low :=
       (by positivity : 0 ≤ ρ ^ 2 / (1000 * M)).trans hyx
-    rw [abs_of_nonpos (by linarith : x low - y low ≤ 0)] at hcoordinate
+    rw [abs_of_nonpos (by linarith :
+      Section4X G inverse cutoff a low -
+        Section4Y G inverse cutoff a low ≤ 0)] at hcoordinate
     linarith
   exact (section4Omega_lt_quadratic_drift G M d ρ ξ R ε
     hplayers hM hd hd1 hmotion hconstants hε hερ).trans_le (by
-      simpa only [x, y] using hstepLower)
+      exact hstepLower)
 
 /-- In the bounded positive-cutoff branch of Property (6), a terminal step
 smaller than `ω` lies in the actual glued graph. -/

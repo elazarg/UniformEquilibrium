@@ -152,6 +152,20 @@ theorem quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
 
 /-! ## Prescribed singleton Bellman mixture -/
 
+omit [Fintype ι] in
+/-- A row at which every coordinate other than `owner` continues surely *is*
+the solo stationary row carrying the owner's own marginal. -/
+theorem eq_quittingSoloStationaryRoot_of_others_continue
+    {root : ι → PMF Bool} {owner : ι}
+    (hother : ∀ other, other ≠ owner → root other = PMF.pure false) :
+    root = quittingSoloStationaryRoot owner (root owner) := by
+  funext player
+  by_cases hp : player = owner
+  · subst player
+    simp [quittingSoloStationaryRoot]
+  · rw [hother player hp]
+    simp [quittingSoloStationaryRoot, hp]
+
 /-- A singleton stationary root mixes its singleton reward and its declared
 all-continue successor with the owner's two action probabilities. -/
 theorem quittingRootSuccessorPayoff_solo

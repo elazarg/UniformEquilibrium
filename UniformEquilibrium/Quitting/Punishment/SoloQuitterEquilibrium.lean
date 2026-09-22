@@ -89,21 +89,6 @@ theorem quittingSoloStationaryRoot_apply_other
     quittingSoloStationaryRoot owner hazard other = PMF.pure false := by
   simp [quittingSoloStationaryRoot, hne]
 
-omit [Fintype ι] in
-/-- A row at which every coordinate other than `owner` continues surely *is*
-the solo stationary row carrying the owner's own marginal.  This is the
-recognizer used to specialize the certificates below to concrete tables. -/
-theorem eq_quittingSoloStationaryRoot_of_others_continue
-    {root : ι → PMF Bool} {owner : ι}
-    (hother : ∀ other, other ≠ owner → root other = PMF.pure false) :
-    root = quittingSoloStationaryRoot owner (root owner) := by
-  funext player
-  by_cases hp : player = owner
-  · subst player
-    simp [quittingSoloStationaryRoot]
-  · rw [hother player hp]
-    simp [quittingSoloStationaryRoot, hp]
-
 /-! ## Exact endpoint formulas at a solo-quitter row -/
 
 /-- The owner's pure-Quit endpoint at its own solo row is its singleton
