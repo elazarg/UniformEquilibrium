@@ -166,7 +166,22 @@ dates below the deadline and Never, together with the one late-row value.
 same file shows that every finite date at or after the deadline realizes
 that late row. Thus the deadline itself completes the consecutive menu,
 including when the deadline is zero. The separate sparse-calendar rule
-using opponent atoms and one representative per gap remains to be proved.
+is proved by
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq` and
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq_cap`
+(`UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`).
+The concrete menu consists of Never, zero, the opponent atoms, and their
+immediate successors. Every deterministic reply has an equal-payoff menu
+representative, and the unrestricted behavioral cap is attained in the menu.
+The calendar need cover only opponents' finite atoms; the responder's
+original law is unrestricted. These declarations passed a silent named build.
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_actual_payoff_eq_cap`
+in the same file states attainment for any actual behavioral profile whose
+opponents' stopping laws satisfy the calendar condition. It passed a silent
+named build and reuses canonical stopping-law reconstruction. The law-level
+menu proofs also passed independent static review. These are terminal-payoff
+statements; moving a reply within a gap need not preserve a time-weighted
+evaluation.
 
 The strict three-cycle algebra is proved in
 `MathUE/LinearProgramming/ThreeCycleInverseFormulas.lean`.
@@ -178,7 +193,18 @@ singular zero-inverse convention. `columnWeight_vecMul` and
 fractions and their strict product contraction. The existing three-player
 Q classification uses the same matrix definition. These formulas passed a
 silent named build. Their identification with the blocks of an arbitrary
-actual infinite schedule remains part of the work below.
+actual infinite schedule is supplied by the path results below.
+
+`weight_le_inverseRow_of_singletonFutureRows` and
+`inverseRow_nonneg_of_singletonFutureRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
+prove the inverse-row obstruction from singleton future inequalities alone.
+The child may have any finite cardinality; its inverse need only be
+nonnegative, not strictly positive. The weight comparison even permits
+signed weights, while nonnegativity is used for the inverse-row sign
+conclusion. Both existing capped-clock certificate types have direct
+corollaries. Neither joining nor Never protection is needed by the core
+result. The module passed a silent named build and independent static review.
 
 `NormalizedSingletonPath.exists_active_owner_ne` and
 `NormalizedSingletonPath.exists_first_owner_change`
@@ -201,6 +227,19 @@ nonnegativity of an arbitrary signed row on the entire tail by nonnegativity
 of all three coefficients. These declarations passed a silent named build
 and independent declaration-level review.
 
+`NormalizedSingletonPath.value_eq_survival_affine_of_same_owner` in the same
+file merges any finite same-positive-owner window into its exact affine
+recurrence, allowing zero-hazard gaps and zero-length windows.
+`ThreeCycleInverseFormulas.survivalFraction_le_window_survival` gives the
+partial-block survival lower bound, and `window_survival_eq_survivalFraction`
+gives equality at the complete-block endpoints.
+`exists_vertex_after_with_survival_ge` constructs a visit to every requested
+vertex from every starting date with survival at least the product of the
+three canonical fractions. The initial positive date is chosen minimally,
+so its preceding zero-hazard gap costs no survival. These declarations
+passed silent named builds. The finite recurrence and block bounds also
+passed independent static review.
+
 `normalizedSingletonPathOfRootSequence`
 (`UniformEquilibrium/Quitting/Paths/NormalizedSingletonPath.lean`) constructs
 that path from the actual terminal payoffs of an arbitrary finite embedded
@@ -219,10 +258,26 @@ singleton floors nor active ties. The row-span theorem also applies to
 singular child matrices when the stated row relation holds; invertibility
 is needed only for the inverse formula. These adapters passed silent named builds
 and independent declaration-level review.
-Their combination into the actual outside-floor equivalence, and the
-quantitative block conclusions, remain to be assembled. The generic
+`quittingRootSequence_singletonFloor_on_tail_iff_inverseRow_nonneg_of_strictThreeCycle`
+(`UniformEquilibrium/Quitting/Paths/StrictThreeCycleSingletonFloor.lean`)
+combines these results for an actual embedded strict three-cycle child.
+For every parent player and every starting date, its continuation stays
+above its own singleton payoff on the entire tail exactly when all entries
+of its actual inverse row are nonnegative. The player need not be outside
+the child. The theorem passed a silent named build and independent static
+review. The generic
 solo-root recognizer has one canonical owner in
 `UniformEquilibrium/Quitting/Stationary/SingletonStationaryRoot.lean`.
+
+`quittingBehaviorDeviationDebt_ge_of_strictThreeCycle`
+(`UniformEquilibrium/Quitting/Terminal/StrictThreeCycleDeadlineResponseDebt.lean`)
+gives the actual outside player's unrestricted behavioral response-debt
+bound at the initial profile. The lower bound is the canonical survival
+product times the positive part of its inverse-row deficit minus twice
+the reward bound times the hazard bound. The proof uses an actual
+deterministic deadline on this same schedule. It passed a silent named
+build and independent static semantic review. Public deadline-witness
+and arbitrary-start statements remain to be exposed.
 
 ## Work still needed
 
@@ -230,22 +285,41 @@ The terminating child-first rational search and its original-parent consumer
 are proved in Research, including exact Never preservation and rational
 amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
-The remaining packet work is:
+The response-debt bound is proved at the initial profile. Its positive
+deterministic-deadline witness and its arbitrary-start version on the same
+fixed schedule still need public statements.
+The matrix algebra, forced vertex visits, and actual continuation-floor
+equivalence are proved as described above. Its hypotheses concern an exact
+balanced singleton schedule, not all child equilibria or approximate ties.
 
-1. Prove the general sparse-calendar atom-and-gap representative rule.
-   Reuse the existing consecutive-calendar completeness theorem.
-2. Formalize the auxiliary strict inverse-row sharpness theorem: the positive
-   inverse classification, forced vertex visits and block survival, the
-   continuation-floor equivalence, and the quantitative response-debt bound.
-   Its hypotheses concern an exact balanced singleton schedule, not all child
-   equilibria or approximate ties.
+A declaration-level audit also identified three useful source conclusions
+that still need explicit adapters:
 
-The strict inverse-row work can reuse the existing three-cycle labeling,
-periodic escort transitions, singleton-versus-quit payoff estimate, and
-survival-weighted deviation transport. What remains includes identifying the
-the actual outside-floor consumer and the uniform survival lower bound. A theorem assuming
-the vertex visits or restricting
-the schedule to a finite period would not cover the packet's statement.
+- Compose the existing three-player cyclic labeling theorem with strict
+  inverse positivity, rather than asking callers for standard-Q and
+  homogeneous-solution exclusions separately. The matrix classification
+  itself is already proved in
+  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicLabelAdapter.lean`;
+  the inverse-positive implications are in
+  `UniformEquilibrium/Quitting/Classification/LCP/PositiveInverse.lean`.
+- Apply the actual path results to a periodic balanced certificate on the
+  **child** reward and its parent Never lift. Actual-value uniqueness and
+  periodic absorption are already available in the cycle machinery. A
+  certificate on the full parent would assume the outsider floor being tested.
+- Expose the full-child joining obstruction and construct a reward change
+  at the outsider's full-parent collision coordinate that violates it while
+  preserving singleton entries. This is separate from the paired-family
+  obstruction to balanced cycles.
+
+These are missing Lean compositions or finite-table constructions from the
+packet, not missing source mathematics. They must not be replaced by an
+implicit appeal to the reader to assemble the required conclusion.
+
+The strict inverse-row work uses the existing three-cycle labeling,
+singleton-versus-quit payoff estimate, and survival-weighted deviation
+transport. Both the survival lower bound and its initial-profile full-debt
+consumer are proved without supplied vertex visits or periodicity. The
+remaining adapters must retain that scope.
 
 These are known results supplied by the packet. This record does not assert
 that the weighted criterion covers every four-player game, that its weights

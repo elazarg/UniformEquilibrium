@@ -288,8 +288,18 @@ and rises by at least the squared motion parameter divided by one thousand
 times the payoff scale. The public distance bound consumes this stronger
 coordinate statement. This refactoring passed a silent named build,
 independent declaration-level review, and a separate transitive standard-axiom
-check. It prepares the paper's recurrent-coordinate argument; that orbit
-argument is not yet proved.
+check.
+`section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox` in the same file
+now supplies the corresponding estimate for every coordinate of every actual
+Section 4 graph edge whose source lies in the half-payoff box. It preserves
+the min-max floor minus one third of the motion parameter, and raises a
+coordinate below that floor by at least the squared motion parameter divided
+by one thousand times the payoff scale. The terminal and glued branches are
+both covered. The proof uses the checked positive-bound form of the earlier
+coordinate-drift lemma, not Lemma 4.4's unfinished global upper bound. It
+passed a silent named build and a separate transitive standard-axiom check.
+The subsequent recurrent-coordinate argument for extended orbits remains
+formalization work.
 The remaining positive-cutoff branches and their assembly remain to be
 formalized.
 

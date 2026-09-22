@@ -13197,11 +13197,12 @@ private theorem exists_coordinate_terminal_drift_of_bounded_positive_cutoff
     (hcutoffPos : 0 < (cutoff a : ℝ))
     (hxNotLower : Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε)
     (hxbox : InClosedPayoffBox M (Section4X G inverse cutoff a)) :
-    ∃ low,
-      Section4X G inverse cutoff a low < MinMaxQuit G low - ρ / 2 ∧
-        ρ ^ 2 / (1000 * M) ≤
-          Section4Y G inverse cutoff a low -
-            Section4X G inverse cutoff a low := by
+    (cutoff a : ℝ) < 1 / 2 ∧
+      ∃ low,
+        Section4X G inverse cutoff a low < MinMaxQuit G low - ρ / 2 ∧
+          ρ ^ 2 / (1000 * M) ≤
+            Section4Y G inverse cutoff a low -
+              Section4X G inverse cutoff a low := by
   let N : ℝ := Fintype.card G.Player
   let z : EZeroTilde G := inverse.inv a
   let alpha : ℝ := cutoff a
@@ -13347,7 +13348,8 @@ private theorem exists_coordinate_terminal_drift_of_bounded_positive_cutoff
     rfl
   have hyx : ρ ^ 2 / (1000 * M) ≤ y low - x low := by
     nlinarith
-  exact ⟨low, by simpa only [x] using hlow, by simpa only [x, y] using hyx⟩
+  exact ⟨by simpa only [alpha] using halphaHalf, low,
+    by simpa only [x] using hlow, by simpa only [x, y] using hyx⟩
 
 /-- Property (6), Case 5: inside the reward box and outside the lower
 neighborhood, a positive cutoff forces a terminal step larger than `ω`. -/
@@ -13372,7 +13374,7 @@ theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
     Section4Omega G M d ρ ξ R ε <
       EuclideanDist (Section4X G inverse cutoff a)
         (Section4Y G inverse cutoff a) := by
-  obtain ⟨low, _hlow, hyx⟩ :=
+  obtain ⟨_hcutoffHalf, low, _hlow, hyx⟩ :=
     exists_coordinate_terminal_drift_of_bounded_positive_cutoff
       G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
         hmotion hconstants inverse cutoff hcutoff hε hερ a ha hcutoffPos
@@ -13397,6 +13399,194 @@ theorem section4Omega_lt_terminalStep_of_bounded_positive_cutoff
   exact (section4Omega_lt_quadratic_drift G M d ρ ξ R ε
     hplayers hM hd hd1 hmotion hconstants hε hερ).trans_le (by
       exact hstepLower)
+
+/-- Every actual Section 4 graph edge whose source lies in the half-payoff
+box preserves the paper's rationality floor in each coordinate and has a
+uniform upward drift whenever the source is below that floor. -/
+theorem section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    {x y : Payoff G.Player}
+    (hxy : (x, y) ∈ Section4J G inverse cutoff R ε δ)
+    (hxbox : InClosedPayoffBox (M / 2) x) (j : G.Player) :
+    (MinMaxQuit G j - ρ / 3 ≤ x j →
+        MinMaxQuit G j - ρ / 3 ≤ y j) ∧
+      (x j < MinMaxQuit G j - ρ / 3 →
+        x j + ρ ^ 2 / (1000 * M) ≤ y j) := by
+  classical
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hxbox' : ∀ k, -M / 2 ≤ x k ∧ x k ≤ M / 2 := by
+    intro k
+    simpa only [neg_div] using hxbox k
+  have hxNotLower : x ∉ LowerNeighborhood G R ε :=
+    not_mem_lowerNeighborhood_of_mem_halfPayoffBox
+      G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hερ x hxbox'
+  rcases hxy with hterminal | hglue
+  · rcases hterminal with ⟨a, ha, hpair⟩
+    rw [section4H_one] at hpair
+    have hx : Section4X G inverse cutoff a = x := congrArg Prod.fst hpair
+    have hy : Section4Y G inverse cutoff a = y := congrArg Prod.snd hpair
+    rw [← hx] at hxbox hxNotLower ⊢
+    rw [← hy]
+    by_cases hcutoffZero : (cutoff a : ℝ) = 0
+    · let z : EZeroTilde G := inverse.inv a
+      let eta : ℝ := ρ / 18
+      let B : ℝ := 2 * M / 5
+      have hB : IsPositiveQuittingPayoffDifferenceBound G B := by
+        simpa only [B] using simonPayoffScale_twoFifthsPositiveBound G hM
+      have hetaPos : 0 < eta := by dsimp only [eta]; positivity
+      have hetaB : eta ≤ B := by
+        simpa only [eta, B] using
+          section4_eta_le_twoFifths_scale hM.1 hmotion.2.2.1
+      have htoleranceNonneg : 0 ≤ eta ^ 2 / (2 * B) :=
+        quadraticStep_nonneg hB.1
+      have hxBeta : Section4X G inverse cutoff a = z.1.1 := by
+        dsimp only [Section4X, z]
+        simp only [hcutoffZero, zero_smul, sub_zero, one_smul, zero_add]
+      have hyStage : Section4Y G inverse cutoff a =
+          QuittingOneStagePayoff G z.1.1 z.1.2 := by
+        dsimp only [Section4Y, Section4Z, z]
+        simp only [hcutoffZero, zero_smul, sub_zero, one_smul, zero_add, hxBeta]
+        rfl
+      have hstep : Section4Y G inverse cutoff a ∈
+          FRow G (eta ^ 2 / (2 * B)) (Section4X G inverse cutoff a) := by
+        rw [hxBeta, hyStage]
+        exact ⟨z.1.2, EpsilonRow.mono G htoleranceNonneg z.1.1 z.2.1, rfl⟩
+      have hdrift := Literature.Simon2007.lemma6_quantitative_of_positiveBound
+        G hB hnormal hetaPos hetaB hstep j
+      have hthreshold : 3 * eta = ρ / 6 := by
+        dsimp only [eta]
+        ring
+      have htargetDrift : ρ ^ 2 / (1000 * M) ≤ eta ^ 2 / (2 * B) := by
+        have hstrong := section4_quadratic_drift_le (M := M) (ρ := ρ) hMpos
+        have hnonneg : 0 ≤ ρ ^ 2 / (1000 * M) := by positivity
+        have hdouble : ρ ^ 2 / (500 * M) =
+            2 * (ρ ^ 2 / (1000 * M)) := by ring
+        calc
+          ρ ^ 2 / (1000 * M) ≤ ρ ^ 2 / (500 * M) := by
+            rw [hdouble]
+            nlinarith
+          _ ≤ eta ^ 2 / (2 * B) := by simpa only [eta, B] using hstrong
+      constructor
+      · intro hxFloor
+        by_cases hxHigher : MinMaxQuit G j - 3 * eta ≤
+            Section4X G inverse cutoff a j
+        · calc
+            MinMaxQuit G j - ρ / 3 ≤ MinMaxQuit G j - 3 * eta := by
+              rw [hthreshold]
+              nlinarith
+            _ ≤ Section4Y G inverse cutoff a j := hdrift.1 hxHigher
+        · have hraise := hdrift.2 (lt_of_not_ge hxHigher)
+          have hnonneg : 0 ≤ eta ^ 2 / (2 * B) := htoleranceNonneg
+          exact (hxFloor.trans (le_add_of_nonneg_right hnonneg)).trans hraise
+      · intro hxLow
+        have hxHigher : Section4X G inverse cutoff a j <
+            MinMaxQuit G j - 3 * eta := by
+          rw [hthreshold]
+          nlinarith
+        have hsum : Section4X G inverse cutoff a j + ρ ^ 2 / (1000 * M) ≤
+            Section4X G inverse cutoff a j + eta ^ 2 / (2 * B) := by
+          nlinarith
+        exact hsum.trans (hdrift.2 hxHigher)
+    · have hcutoffPos : 0 < (cutoff a : ℝ) :=
+        lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hcutoffZero)
+      have hxboxM : InClosedPayoffBox M (Section4X G inverse cutoff a) := by
+        intro k
+        have hk := hxbox k
+        constructor <;> nlinarith [hM.1]
+      obtain ⟨hcutoffHalf, _low, _hlow, _hraise⟩ :=
+        exists_coordinate_terminal_drift_of_bounded_positive_cutoff
+          G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
+            hmotion hconstants inverse cutoff hcutoff hε hερ a ha hcutoffPos
+              hxNotLower hxboxM
+      have hcutoffLt : (cutoff a : ℝ) < 1 := hcutoffHalf.trans (by norm_num)
+      have hdrift := lemma4_3_omega G M d ρ ξ R ε hplayers hM hd hd1
+        hnormal hmotion hconstants inverse cutoff hcutoff hε hερ a
+          hcutoffPos hcutoffLt hxboxM j
+      have hparameterNonneg : 0 ≤ 1 - (cutoff a : ℝ) := by
+        linarith [(cutoff a).property.2]
+      have hparameterHalf : 1 / 2 < 1 - (cutoff a : ℝ) := by linarith
+      have hycoord : Section4Y G inverse cutoff a j =
+          (cutoff a : ℝ) * Section4X G inverse cutoff a j +
+            (1 - (cutoff a : ℝ)) * Section4Z G inverse cutoff a j := by
+        rfl
+      constructor
+      · intro hxFloor
+        have hzFloor := hdrift.1 hxFloor
+        have hcutoffNonneg := (cutoff a).property.1
+        nlinarith [(cutoff a).property.2]
+      · intro hxLow
+        have hzRaise := hdrift.2 hxLow
+        have hstageDifference : ρ ^ 2 / (500 * M) ≤
+            Section4Z G inverse cutoff a j -
+              Section4X G inverse cutoff a j := by
+          linarith
+        have hscaled := mul_le_mul hparameterHalf.le hstageDifference
+          (by positivity : 0 ≤ ρ ^ 2 / (500 * M)) hparameterNonneg
+        have hhalf : ρ ^ 2 / (1000 * M) =
+            (1 / 2) * (ρ ^ 2 / (500 * M)) := by ring
+        rw [← hhalf] at hscaled
+        rw [hycoord]
+        nlinarith
+  · change y ∈ GluedFiber G R ε δ x at hglue
+    have hxUpper : x ∈ UpperNeighborhood G R ε := by
+      by_contra hnot
+      simp only [GluedFiber, hxNotLower, hnot, ↓reduceIte,
+        Set.mem_empty_iff_false] at hglue
+    have hyUpper : y ∈ UpperGlueFiber G R ε δ x := by
+      simpa only [GluedFiber, hxNotLower, hxUpper, ↓reduceIte] using hglue
+    obtain ⟨owner, howner⟩ := Set.mem_iUnion.mp hxUpper
+    have hxSolo : SoloPayoff G j - ε / 3 ≤ x j := (howner.1 j).1
+    have hjNormal : MinMaxQuit G j ≤ SoloPayoff G j := hnormal j
+    have hxFloor : MinMaxQuit G j - ρ / 3 ≤ x j := by
+      nlinarith
+    refine ⟨fun _ => ?_, fun hxLow => (not_lt_of_ge hxFloor hxLow).elim⟩
+    obtain ⟨p, rfl, hp⟩ := hyUpper
+    have hdeltaPos : 0 < δ := by
+      rw [hδ, Section4Delta]
+      positivity
+    have hpCap : ∀ k, (p k : ℝ) ≤ δ := by
+      intro k
+      by_cases hk : x ∈ UpperNeighborhoodFor G R ε k
+      · simpa only [hk, ↓reduceIte] using hp k
+      · have hkZero : (p k : ℝ) = 0 := by
+          simpa only [hk, ↓reduceIte] using hp k
+        linarith
+    let q : ℝ := QuitProbability G p
+    have hqNonneg : 0 ≤ q := by
+      exact (quitProbability_mem_Icc G p).1
+    have hqBound : q ≤ (Fintype.card G.Player : ℝ) * δ := by
+      exact quitProbability_le_card_mul G p hpCap
+    have hqScale : M * q ≤ ε / 2 := by
+      have hscaled := mul_le_mul_of_nonneg_left hqBound hMpos.le
+      calc
+        M * q ≤ M * ((Fintype.card G.Player : ℝ) * δ) := hscaled
+        _ = ε / 2 := by
+          rw [hδ, Section4Delta]
+          field_simp
+    have hreward := abs_quittingRewardPart_le G p j
+      (fun A => hM.2.1 A j)
+    have hrewardLower : -(M / 3 * q) ≤ quittingRewardPart G p j := by
+      exact neg_le_of_abs_le (by simpa only [q] using hreward)
+    have hxScaled : q * x j ≤ q * (M / 2) :=
+      mul_le_mul_of_nonneg_left (hxbox j).2 hqNonneg
+    change MinMaxQuit G j - ρ / 3 ≤
+      (1 - QuitProbability G p) * x j + quittingRewardPart G p j
+    dsimp only [q] at hqScale hrewardLower hxScaled ⊢
+    nlinarith
 
 /-- In the bounded positive-cutoff branch of Property (6), a terminal step
 smaller than `ω` lies in the actual glued graph. -/

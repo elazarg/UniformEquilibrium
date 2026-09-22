@@ -537,6 +537,17 @@ payoff predicates are allowed; response caps are not being compressed.
 gives two actual four-player chronological profiles with the same zero
 payoff vector but player-zero response caps one and zero. The caps range
 over unrestricted behavioral responses.
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_payoff_eq_cap`
+(`UniformEquilibrium/Quitting/Terminal/FiniteOpponentAtomGapReplyMenu.lean`)
+attains the full behavioral cap against opponents supported on an arbitrary
+finite calendar. Its concrete menu contains Never, zero, the calendar's
+atoms, and their immediate successors. The responder's original law is
+unrestricted. This is a complete reply scan for the fixed opponents, not a
+claim that compressing their payoff preserves their response caps.
+`exists_mem_quittingFiniteOpponentAtomGapReplyMenu_actual_payoff_eq_cap`
+in the same file gives the corresponding actual-profile theorem through
+canonical stopping-law reconstruction. The menu preserves terminal payoffs,
+not arbitrary clock evaluations.
 `image_fst_quittingTerminalSemanticCarrier_eq_actualPayoffSet`
 (`UniformEquilibrium/Quitting/Paths/TerminalSemanticPayoffProjection.lean`)
 identifies the prescribed-payoff projection of the full semantic carrier
@@ -989,9 +1000,33 @@ three-cycle specialization forces cyclic changes.
 `ThreeCycleInverseFormulas.exists_vertex_after` in the same file constructs
 visits to every weighted simplex vertex after any starting date;
 `dotProduct_nonneg_on_tail_iff` characterizes a signed row's nonnegativity
-along a whole tail by nonnegativity of its coefficients. Uniform survival
-bounds and the resulting outside-player debt estimate are not supplied by
-these statements.
+along a whole tail by nonnegativity of its coefficients.
+`exists_vertex_after_with_survival_ge` in the same file gives these visits
+with survival at least the product of the three canonical block fractions.
+Finite owner blocks and the preceding zero-hazard gap are derived from the
+path, not assumed. The finite merged recurrence and the partial/complete
+block survival identities are also explicit there.
+`quittingRootSequence_singletonFloor_on_tail_iff_inverseRow_nonneg_of_strictThreeCycle`
+(`UniformEquilibrium/Quitting/Paths/StrictThreeCycleSingletonFloor.lean`)
+combines these results for actual terminal continuation payoffs. For every
+parent player and every starting date, the singleton floor holds along the
+whole tail exactly when its actual inverse-row coefficients are nonnegative.
+`quittingBehaviorDeviationDebt_ge_of_strictThreeCycle`
+(`UniformEquilibrium/Quitting/Terminal/StrictThreeCycleDeadlineResponseDebt.lean`)
+then bounds an outside player's unrestricted behavioral response debt at
+the initial profile by the canonical survival product times the positive
+part of its inverse-row deficit minus twice the reward bound times the
+hazard bound. Its proof constructs an actual deterministic deadline;
+separate public deadline-witness and arbitrary-start statements remain
+to be exposed. The schedule need not be periodic.
+
+`weight_le_inverseRow_of_singletonFutureRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
+derives the inverse-row obstruction from only the singleton future rows.
+It permits any finite embedded child and an entrywise nonnegative inverse.
+The comparison permits signed weights; nonnegative weights imply a
+nonnegative inverse row. Both exact and Never-relaxed capped-clock
+certificates have direct corollaries in the same file.
 
 `PositiveInverseFourMatrixComparisons.not_projectiveQBar`
 (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`)

@@ -192,6 +192,62 @@ Reuse `prod_stoppingLaw_none_mul_singleton_le_terminalDebt`
 terminal relaxation. Low-cardinality child existence and target-preserving
 terminal uniformization are existing consumers, not new premises to assume.
 
+### Withdrawal-specific obligations
+
+The withdrawal packet's remaining arguments are supplied mathematics to
+formalize, not requests for new results. The advancing-only specialization
+does not close either withdrawal criterion. The implementation dependencies
+are:
+
+- finite patient and cancellation floors, literal withdrawal gains, and
+  the two fixed-weight reward-row predicates;
+- private patient reset, cancellation, and single-atom withdrawal laws,
+  with the pointwise comparisons and their stated fixed-operation converses;
+- bounded convergence of patient **payoffs**, and the randomized
+  disjoint-event replacement giving the deadline coefficient `max(a,b)`;
+- the two-variable security optimization and actual stationary guarantee,
+  including a zero-hazard optimizer and the separate nonpositive evaluated
+  floor;
+- full behavioral-debt bounds, multiple-outsider amplification, Never-row
+  errors, and the specified-target consumer; and
+- the new literal tables, separating examples, full reward neighborhoods,
+  collision completions, and response-invariant partition exclusions.
+
+The specified-target conclusion also requires an explicit witness retaining
+Never for outsiders in every selected uniform profile. The existing generic
+target-lift theorem supplies target existence; the profile-preserving
+terminal uniformization theorem supplies the additional witness once the
+withdrawal debt bound is available. No second compactness construction is
+needed.
+
+The clock-evaluation interface in
+`UniformEquilibrium/Quitting/Paths/StoppingLawEvaluatedPayoff.lean` defines
+behavioral evaluated payoff through complete stopping laws. It explicitly
+leaves identification with the game's finite-horizon stage payoff to a
+separate bridge. Such a bridge was not located in the declaration audit.
+It is needed for the withdrawal packet's literal horizon and discount
+specializations, including its patient-bound counterexample. The terminal
+fixed-target route does not depend on this additional identification.
+
+Several boundary components already have canonical owners. The missing-Never
+and sparse-calendar examples are respectively
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockMissingNeverFixture.lean`
+and `UniformEquilibrium/Quitting/Examples/SparseCalendarReplyGap.lean`.
+The matrix shared by both new center tables, its inverse, and its degree
+are already treated in
+`MathUE/LinearProgramming/Examples/PositiveInverseFourMatrices.lean` and
+`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`.
+Identifying the new reward tables with that matrix is still required;
+the center calculation does not supply their neighborhoods or partition
+obstructions.
+
+The child-first rational search is already present in Research, as recorded
+in [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
+The withdrawal multiplier and arbitrary-child composition remain to be
+connected to it. Rational security optimization is separate. Do not create
+another finite-law language or replace the requested table-uniform claims
+in the payoff-exclusion packets by this target-free terminating enumeration.
+
 ## Stationary residual and degree
 
 Sources:
