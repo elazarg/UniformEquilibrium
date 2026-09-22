@@ -87,19 +87,26 @@ from the paper's scale bounds. The generic
 (`MathUE/Topology/SimonViabilityQuestion.lean`) supplies the literal finite
 corner convex hull, compactness, and nonempty ambient interior. Weak slack
 is sufficient for the contractibility result above but not for this
-full-dimensionality result. Terminal-diagonal exclusion is not supplied;
-Question 1 and Lemma 4.5 remain incomplete.
+full-dimensionality result.
+
+`section4H_terminal_diagonal_mem_frontier` (`Literature/Simon2012.lean`)
+proves terminal-diagonal exclusion for the actual homotopy under the standing
+Section 4 hypotheses. Zero quitting gives a frontier point. Positive quitting
+at a fixed one-stage payoff bounds that payoff by the terminal rewards;
+Lemma 3.4 and the coordinate drift then exclude an interior diagonal point.
+This does not discharge the other fields of Lemma 4.5.
 
 ## Remaining Section 4 assembly
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,
-initial diagonal, and frontier fixing have component proofs. Positive piece
-count and the finite-index reindexing still need routine assembly. The
+initial diagonal, frontier fixing, and terminal-diagonal exclusion have
+component proofs. `truncatedW_eq_iUnion_fin` in the same file supplies the
+finite-index union; positive piece count follows from the player-count
+hypothesis. These components still need assembly into the full statement. The
 remaining substantive fields of `QuestionOneHypotheses`
 (`MathUE/Topology/SimonViabilityQuestion.lean`) are:
 
-- terminal diagonal points of the actual homotopy lie on the frontier;
 - contractibility of the actual upper fibers, using their injectivity and
   inverse-continuity estimates; and
 - one common positive scale for both small-step containment and all

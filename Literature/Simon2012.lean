@@ -6660,6 +6660,21 @@ theorem truncatedW_eq_iUnion (G : QuittingGame) (R : ℝ) :
   rw [TruncatedW, wSet_eq_iUnion, Set.iUnion_inter]
   rfl
 
+/-- Reindex the displayed coordinate pieces by the finite index type used in Question 1. -/
+theorem truncatedW_eq_iUnion_fin (G : QuittingGame) (R : ℝ) :
+    TruncatedW G R =
+      ⋃ j : Fin (Fintype.card G.Player),
+        TruncatedPiece G R ((Fintype.equivFin G.Player).symm j) := by
+  rw [truncatedW_eq_iUnion]
+  ext x
+  constructor
+  · intro hx
+    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx
+    exact Set.mem_iUnion.mpr ⟨Fintype.equivFin G.Player j, by simpa⟩
+  · intro hx
+    obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx
+    exact Set.mem_iUnion.mpr ⟨(Fintype.equivFin G.Player).symm j, hj⟩
+
 /-- The common lower cube corner belongs to every truncated coordinate piece. -/
 theorem lowerCorner_mem_truncatedPiece (G : QuittingGame) (R : ℝ)
     (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) (j : G.Player) :
@@ -8692,6 +8707,198 @@ theorem lemma4_3_omega (G : QuittingGame) (M d ρ ξ R ε : ℝ)
     hplayers hM hd hd1 hnormal hmotion hconstants inverse cutoff hcutoff
     (section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
       hmotion hconstants hε hερ).2 a hcutoff0 hcutoff1 hxbox
+
+private theorem quitRow_eq_zeroQuitRow_of_quitProbability_eq_zero
+    (G : QuittingGame) (p : QuitRow G) (hp : QuitProbability G p = 0) :
+    p = zeroQuitRow G := by
+  funext j
+  apply Subtype.ext
+  have hj := quitProbability_apply_le G p j
+  simp only [zeroQuitRow, Set.Icc.coe_zero]
+  linarith [(p j).property.1]
+
+private theorem mem_frontier_truncatedW_of_mem_closure_compl_WSet
+    (G : QuittingGame) (R : ℝ) {a : Payoff G.Player}
+    (ha : a ∈ TruncatedW G R) (hclosure : a ∈ closure ((WSet G)ᶜ)) :
+    a ∈ frontier (TruncatedW G R) := by
+  rw [frontier_eq_closure_inter_closure]
+  refine ⟨subset_closure ha, closure_mono ?_ hclosure⟩
+  intro x hx htruncated
+  exact hx htruncated.1
+
+private theorem lowerBoundary_subset_frontier (G : QuittingGame) (R : ℝ) :
+    LowerBoundary G R ⊆ frontier (TruncatedW G R) := by
+  exact closure_minimal (fun _ h => h.1) isClosed_frontier
+
+/-- Property (3) of Question 1 for the actual Section 4 homotopy: a diagonal
+point in the terminal image lies on the frontier of the truncated domain. -/
+theorem section4H_terminal_diagonal_mem_frontier
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3) :
+    ∀ point,
+      (point, point) ∈
+          HomotopyTerminalImage (TruncatedW G R) (Section4H G inverse cutoff) →
+        point ∈ frontier (TruncatedW G R) := by
+  classical
+  intro point hpoint
+  obtain ⟨a, ha, hterminal⟩ := hpoint
+  rw [section4H_one] at hterminal
+  let z : EZeroTilde G := inverse.inv a
+  let x : Payoff G.Player := Section4X G inverse cutoff a
+  have hphi : Phi G M d z = a := inverse.rightInverse a
+  have hxPoint : x = point := congrArg Prod.fst hterminal
+  have hyPoint : Section4Y G inverse cutoff a = point :=
+    congrArg Prod.snd hterminal
+  have hxy : x = Section4Y G inverse cutoff a := hxPoint.trans hyPoint.symm
+  have zeroQuitCase
+      (hqzero : QuitProbability G z.1.2 = 0) :
+      point ∈ frontier (TruncatedW G R) := by
+    have hpzero : z.1.2 = zeroQuitRow G :=
+      quitRow_eq_zeroQuitRow_of_quitProbability_eq_zero G z.1.2 hqzero
+    have hzZero : (z.1.1, zeroQuitRow G) ∈ EZeroTilde G := by
+      have hzProperty := z.2
+      change z.1.2 ∈ EpsilonRow G 0 z.1.1 ∧
+        QuitProbability G z.1.2 < 1 at hzProperty
+      change zeroQuitRow G ∈ EpsilonRow G 0 z.1.1 ∧
+        QuitProbability G (zeroQuitRow G) < 1
+      simpa only [hpzero] using hzProperty
+    have hzEq : z = ⟨(z.1.1, zeroQuitRow G), hzZero⟩ := by
+      apply Subtype.ext
+      exact Prod.ext rfl hpzero
+    have hsolo : ∀ j, SoloPayoff G j ≤ z.1.1 j :=
+      ((lemma3_1 G M d hM hd hd1).2.1 z.1.1).mp hzZero
+    have hclosure : z.1.1 ∈ closure ((WSet G)ᶜ) :=
+      mem_closure_compl_WSet_of_soloPayoff_le G hsolo
+    have hphiZero := (lemma3_1 G M d hM hd hd1).2.2 z.1.1 hzZero
+    have haBeta : a = z.1.1 := by
+      rw [hzEq, hphiZero] at hphi
+      exact hphi.symm
+    have hxA : x = a := by
+      dsimp only [x, Section4X]
+      rw [← haBeta, ← add_smul]
+      simp
+    have hpointA : point = a := hxPoint.symm.trans hxA
+    rw [hpointA]
+    exact mem_frontier_truncatedW_of_mem_closure_compl_WSet G R ha
+      (haBeta.symm ▸ hclosure)
+  by_cases hcutoffOne : (cutoff a : ℝ) = 1
+  · have haLower : a ∈ LowerBoundary G R := by
+      by_contra haNotLower
+      have hlt := hcutoff.2.2.2 a ⟨ha, haNotLower⟩
+      linarith
+    have hxA : x = a := by
+      dsimp only [x, Section4X]
+      simp [hcutoffOne]
+    have hpointA : point = a := hxPoint.symm.trans hxA
+    rw [hpointA]
+    exact lowerBoundary_subset_frontier G R haLower
+  · have hcutoffLt : (cutoff a : ℝ) < 1 :=
+      lt_of_le_of_ne (cutoff a).property.2 hcutoffOne
+    have hxz : x = Section4Z G inverse cutoff a := by
+      funext j
+      have hcoordinate := congrFun hxy j
+      change x j = (cutoff a : ℝ) * x j +
+        (1 - (cutoff a : ℝ)) * Section4Z G inverse cutoff a j at hcoordinate
+      have hmul : (1 - (cutoff a : ℝ)) * x j =
+          (1 - (cutoff a : ℝ)) * Section4Z G inverse cutoff a j := by
+        linear_combination hcoordinate
+      exact mul_left_cancel₀
+        (sub_ne_zero.mpr (ne_of_gt hcutoffLt)) hmul
+    by_cases hcutoffZero : (cutoff a : ℝ) = 0
+    · have hxBeta : x = z.1.1 := by
+        dsimp only [x, z, Section4X]
+        simp [hcutoffZero]
+      have hstage : QuittingOneStagePayoff G z.1.1 z.1.2 = z.1.1 := by
+        calc
+          QuittingOneStagePayoff G z.1.1 z.1.2 =
+              Section4Z G inverse cutoff a := by rw [← hxBeta]; rfl
+          _ = x := hxz.symm
+          _ = z.1.1 := hxBeta
+      obtain ⟨κ, hκ, _hκ1, hκmotion⟩ :=
+        lemma2_3 G M hM hnormal hgenerated hinstant z.1.1
+      have hrowκ : z.1.2 ∈ EpsilonRow G κ z.1.1 :=
+        EpsilonRow.mono G hκ.le z.1.1 z.2.1
+      have hbound := hκmotion z.1.2 hrowκ
+      have hdistance :
+          EuclideanDist z.1.1 (QuittingOneStagePayoff G z.1.1 z.1.2) = 0 := by
+        rw [hstage]
+        simp [EuclideanDist, EuclideanNorm]
+      rw [hdistance] at hbound
+      have hqzero : QuitProbability G z.1.2 = 0 := by
+        have hqnonneg := (quitProbability_mem_Icc G z.1.2).1
+        nlinarith
+      exact zeroQuitCase hqzero
+    · have hcutoffPos : 0 < (cutoff a : ℝ) :=
+        lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hcutoffZero)
+      by_cases hqzero : QuitProbability G z.1.2 = 0
+      · exact zeroQuitCase hqzero
+      · have hqpos : 0 < QuitProbability G z.1.2 :=
+          lt_of_le_of_ne (quitProbability_mem_Icc G z.1.2).1 (Ne.symm hqzero)
+        have hxbox : ∀ j, -M ≤ x j ∧ x j ≤ M := by
+          intro j
+          have hfixed := (congrFun hxz j).symm
+          change QuittingOneStagePayoff G x z.1.2 j = x j at hfixed
+          change (1 - QuitProbability G z.1.2) * x j +
+            quittingRewardPart G z.1.2 j = x j at hfixed
+          have hreward := abs_quittingRewardPart_le G z.1.2 j
+            (fun A => hM.2.1 A j)
+          have heq : QuitProbability G z.1.2 * x j =
+              quittingRewardPart G z.1.2 j := by
+            linarith
+          rw [← heq, abs_mul, abs_of_pos hqpos] at hreward
+          have habs : |x j| ≤ M / 3 := by nlinarith
+          have hj := abs_le.mp habs
+          constructor <;> nlinarith [hM.1]
+        obtain ⟨hRpos, hsolo⟩ :=
+          truncatedPiece_strict_slack_of_section3Constants G M d ρ ξ R
+            hplayers hM hd hd1 hmotion hconstants
+        have hLowerNonempty : (LowerBoundary G R).Nonempty :=
+          ⟨lowerCubeCorner G R,
+            lowerCubeCorner_mem_lowerBoundary G R hRpos.le hsolo⟩
+        have hω1 : Section4Omega G M d ρ ξ R ε ≤ 1 :=
+          (section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
+            hmotion hconstants hε hερ).2
+        obtain ⟨large, hlarge⟩ := exists_large_coordinate_of_cutoff_pos G
+          hRpos hω1 hLowerNonempty cutoff hcutoff.2.2.1 a hcutoffPos
+        have hxFormula : x =
+            (1 - (cutoff a : ℝ)) • z.1.1 + (cutoff a : ℝ) • a := by
+          dsimp only [x, z, Section4X]
+          abel
+        have hnotTarget : ¬StructureTargetBox G M ρ x :=
+          (lemma3_4 G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+            hgenerated hinstant hnormal z (cutoff a) hcutoffPos hcutoffLt
+              a hphi.symm x hxFormula).1 ⟨large, hlarge⟩
+        have hlow : ∃ j, x j < MinMaxQuit G j - ρ / 2 := by
+          by_contra hnone
+          apply hnotTarget
+          intro j
+          refine ⟨?_, (hxbox j).2⟩
+          exact le_of_not_gt (fun hj => hnone ⟨j, hj⟩)
+        obtain ⟨j, hj⟩ := hlow
+        have hjThird : x j < MinMaxQuit G j - ρ / 3 := by
+          nlinarith [hmotion.2.1]
+        have hdrift :=
+          (lemma4_3_omega G M d ρ ξ R ε hplayers hM hd hd1 hnormal
+            hmotion hconstants inverse cutoff hcutoff hε hερ a
+              hcutoffPos hcutoffLt (by simpa only [x] using hxbox) j).2 hjThird
+        have hstep : 0 < ρ ^ 2 / (500 * M) := by
+          have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+          have hρpos : 0 < ρ := hmotion.2.1
+          positivity
+        have hfixed := congrFun hxz j
+        change x j = Section4Z G inverse cutoff a j at hfixed
+        nlinarith
 
 /-- Lemma 4.3's coordinate drift for the printed cutoff radius `δ`. -/
 theorem lemma4_3 (G : QuittingGame) (M d ρ ξ R ε : ℝ)
