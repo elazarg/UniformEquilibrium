@@ -8936,6 +8936,103 @@ theorem isContractibleSet_gluedFiber
     simpa only [GluedFiber, hlower, hupper, ↓reduceIte] using
       isContractibleSet_upperGlueFiber G M R η ε hM hη hε hεη x hupper
 
+private theorem quitProbability_zero_replace (G : QuittingGame)
+    (j : G.Player) (q : Set.Icc (0 : ℝ) 1) :
+    QuitProbability G (QuitRow.replace G (zeroQuitRow G) j q) = q := by
+  classical
+  let row := QuitRow.replace G (zeroQuitRow G) j q
+  have hother :
+      ∏ k ∈ (Finset.univ : Finset G.Player).erase j,
+          (1 - (row k : ℝ)) = 1 := by
+    apply Finset.prod_eq_one
+    intro k hk
+    have hkj : k ≠ j := (Finset.mem_erase.mp hk).1
+    simp [row, QuitRow.replace, zeroQuitRow, hkj]
+  rw [QuitProbability, ← Finset.mul_prod_erase Finset.univ
+    (fun k => 1 - (row k : ℝ)) (Finset.mem_univ j), hother]
+  simp [row, QuitRow.replace]
+
+private theorem quittingOneStagePayoff_zero_replace_eq_lineMap_singleton
+    (G : QuittingGame) (x : Payoff G.Player) (j : G.Player)
+    (q : Set.Icc (0 : ℝ) 1) :
+    QuittingOneStagePayoff G x (QuitRow.replace G (zeroQuitRow G) j q) =
+      AffineMap.lineMap x
+        (G.reward ⟨{j}, Finset.singleton_nonempty j⟩) (q : ℝ) := by
+  have hone :
+      QuitRow.replace G (zeroQuitRow G) j 1 = SoloQuitRow G j := by
+    change QuitRow.replace G (fun _ => 0) j 1 = SoloQuitRow G j
+    exact QuitRow.zero_replace_one G j
+  have hzero :
+      QuitRow.replace G (zeroQuitRow G) j 0 = zeroQuitRow G :=
+    QuitRow.replace_self G (zeroQuitRow G) j
+  have hzeroPayoff : QuittingOneStagePayoff G x (zeroQuitRow G) = x := by
+    exact quittingOneStagePayoff_zero G x
+  have haffine :=
+    quittingOneStagePayoff_row_replace_affine G x (zeroQuitRow G) j q
+  rw [hone, hzero, quittingOneStagePayoff_soloQuitRow,
+    hzeroPayoff] at haffine
+  simpa only [AffineMap.lineMap_apply_module, add_comm] using haffine
+
+private theorem singletonReward_mem_truncatedPiece_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) (j : G.Player) :
+    G.reward ⟨{j}, Finset.singleton_nonempty j⟩ ∈ TruncatedPiece G R j := by
+  obtain ⟨_, _, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by
+    exact_mod_cast hplayers
+  have hNM : 3 * M ≤ (Fintype.card G.Player : ℝ) * M :=
+    mul_le_mul_of_nonneg_right hN (by linarith [hM.1])
+  have hRM : 30 * M ≤ R := by nlinarith
+  refine ⟨?_, fun k => ?_⟩
+  · simp only [Wj, Set.mem_ofPred_eq, SoloPayoff]
+    exact le_rfl
+  · have hk := hM.2.1 ⟨{j}, Finset.singleton_nonempty j⟩ k
+    obtain ⟨hkLower, hkUpper⟩ := abs_le.mp hk
+    constructor <;> nlinarith [hM.1]
+
+private theorem euclideanInfDist_lineMap_le_of_mem_compact_convex
+    {N : Type} [Fintype N] (S : Set (Payoff N))
+    (hcompact : IsCompact S) (hconvex : Convex ℝ S)
+    (x z : Payoff N) (hz : z ∈ S) {t : ℝ} (ht : t ∈ Set.Icc 0 1) :
+    EuclideanInfDist (AffineMap.lineMap x z t) S ≤ EuclideanInfDist x S := by
+  have himageCompact : IsCompact (WithLp.toLp 2 '' S) :=
+    hcompact.image (PiLp.continuous_toLp 2 _)
+  obtain ⟨a', ha', hdist⟩ := himageCompact.exists_infDist_eq_dist
+    ((show S.Nonempty from ⟨z, hz⟩).image _) (WithLp.toLp 2 x)
+  obtain ⟨a, ha, rfl⟩ := ha'
+  have hlineMem : AffineMap.lineMap a z t ∈ S :=
+    hconvex.lineMap_mem ha hz ht
+  have hdiff :
+      AffineMap.lineMap x z t - AffineMap.lineMap a z t =
+        (1 - t) • (x - a) := by
+    funext k
+    simp only [AffineMap.lineMap_apply_module, Pi.sub_apply, Pi.add_apply,
+      Pi.smul_apply, smul_eq_mul]
+    ring
+  have hdistance :
+      EuclideanDist (AffineMap.lineMap x z t) (AffineMap.lineMap a z t) ≤
+        EuclideanDist x a := by
+    rw [EuclideanDist, hdiff, euclideanNorm_eq_norm_toLp,
+      WithLp.toLp_smul, norm_smul, Real.norm_eq_abs,
+      abs_of_nonneg (by linarith [ht.2])]
+    simpa only [one_mul, EuclideanDist, euclideanNorm_eq_norm_toLp] using
+      mul_le_mul_of_nonneg_right (by linarith [ht.1] : 1 - t ≤ 1)
+        (norm_nonneg (WithLp.toLp 2 (x - a)))
+  calc
+    EuclideanInfDist (AffineMap.lineMap x z t) S ≤
+        EuclideanDist (AffineMap.lineMap x z t) (AffineMap.lineMap a z t) :=
+      euclideanInfDist_le_dist_of_mem _ _ hlineMem
+    _ ≤ EuclideanDist x a := hdistance
+    _ = Metric.infDist (WithLp.toLp 2 x) (WithLp.toLp 2 '' S) := by
+      rw [hdist]
+      simp only [EuclideanDist, euclideanNorm_eq_norm_toLp,
+        WithLp.toLp_sub, dist_eq_norm]
+    _ = EuclideanInfDist x S :=
+      (euclideanInfDist_eq_infDist_toLp x S).symm
+
 /-- In the lower-glue branch of Property (7), the singleton terminal reward
 in the requested truncated piece is already a full escape target. -/
 theorem lowerGlueFiber_piece_escape_at_section4Omega
@@ -8978,12 +9075,8 @@ theorem lowerGlueFiber_piece_escape_at_section4Omega
     intro k
     exact hM.2.1 coalition k
   have htargetPiece : target ∈ TruncatedPiece G R j := by
-    refine ⟨?_, fun k => ?_⟩
-    · simp only [Wj, Set.mem_ofPred_eq, target, coalition, SoloPayoff]
-      exact le_rfl
-    · have hk := htargetBound k
-      obtain ⟨hkLower, hkUpper⟩ := abs_le.mp hk
-      constructor <;> nlinarith [hM.1]
+    exact singletonReward_mem_truncatedPiece_of_section3Constants
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants j
   have htargetInfDist :
       EuclideanInfDist target (TruncatedPiece G R j) = 0 := by
     rw [euclideanInfDist_eq_infDist_toLp]
@@ -9043,6 +9136,253 @@ theorem lowerGlueFiber_piece_escape_at_section4Omega
   · rw [htargetInfDist]
     exact hxInfDistNonneg
   · simpa only [GluedFiber, hx, ↓reduceIte] using hsegmentLower
+
+/-- In the upper-priority branch of Property (7), letting the requested
+player quit alone at the Section 4 cap gives the required escape segment. -/
+theorem upperGlueFiber_piece_escape_at_section4Omega
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (x : Payoff G.Player) (hxUpper : x ∈ UpperNeighborhood G R ε)
+    (hxNotLower : x ∉ LowerNeighborhood G R ε) (j : G.Player)
+    (hpiece :
+      (frontier (TruncatedW G R) ∩ TruncatedPiece G R j).Nonempty)
+    (hdistance :
+      EuclideanInfDist x
+          (frontier (TruncatedW G R) ∩ TruncatedPiece G R j) ≤
+        Section4Omega G M d ρ ξ R ε) :
+    ∃ target ∈ GluedFiber G R ε (Section4Delta G M ε) x,
+      EuclideanInfDist target (TruncatedPiece G R j) ≤
+          EuclideanInfDist x (TruncatedPiece G R j) ∧
+        Section4Omega G M d ρ ξ R ε ≤ EuclideanDist x target ∧
+        segment ℝ x target ⊆
+          GluedFiber G R ε (Section4Delta G M ε) x := by
+  classical
+  obtain ⟨hxActive, hxClose⟩ := upper_piece_distance_gives_active_coordinate
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+      x hxUpper hxNotLower j hpiece hdistance
+  obtain ⟨hdeltaPos, hdeltaOne⟩ := section4Delta_mem_Ioc
+    G M ρ ε hplayers hM hmotion hε hερ
+  let delta := Section4Delta G M ε
+  let q : Set.Icc (0 : ℝ) 1 := ⟨delta, hdeltaPos.le, hdeltaOne⟩
+  let row : QuitRow G := QuitRow.replace G (zeroQuitRow G) j q
+  let reward : Payoff G.Player :=
+    G.reward ⟨{j}, Finset.singleton_nonempty j⟩
+  let target : Payoff G.Player := QuittingOneStagePayoff G x row
+  have hrowCap : ∀ k, x ∈ UpperNeighborhoodFor G R ε k →
+      (row k : ℝ) ≤ Section4Delta G M ε := by
+    intro k _hk
+    by_cases hkj : k = j
+    · subst k
+      simp [row, QuitRow.replace, q, delta]
+    · simp only [row, QuitRow.replace, hkj, zeroQuitRow]
+      exact hdeltaPos.le
+  have hrowSupport : ∀ k, x ∉ UpperNeighborhoodFor G R ε k →
+      (row k : ℝ) = 0 := by
+    intro k hk
+    have hkj : k ≠ j := by
+      intro h
+      subst k
+      exact hk hxActive
+    simp [row, QuitRow.replace, zeroQuitRow, hkj]
+  have htargetUpper :
+      target ∈ UpperGlueFiber G R ε (Section4Delta G M ε) x := by
+    refine ⟨row, rfl, ?_⟩
+    intro k
+    by_cases hk : x ∈ UpperNeighborhoodFor G R ε k
+    · simpa only [hk, ↓reduceIte] using hrowCap k hk
+    · simpa only [hk, ↓reduceIte] using hrowSupport k hk
+  have htargetGlued :
+      target ∈ GluedFiber G R ε (Section4Delta G M ε) x := by
+    simpa only [GluedFiber, hxNotLower, hxUpper, ↓reduceIte] using htargetUpper
+  have htargetFormula : target = AffineMap.lineMap x reward delta := by
+    exact quittingOneStagePayoff_zero_replace_eq_lineMap_singleton G x j q
+  have hrewardPiece : reward ∈ TruncatedPiece G R j := by
+    exact singletonReward_mem_truncatedPiece_of_section3Constants
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants j
+  have hpieceDistance :
+      EuclideanInfDist target (TruncatedPiece G R j) ≤
+        EuclideanInfDist x (TruncatedPiece G R j) := by
+    rw [htargetFormula]
+    exact euclideanInfDist_lineMap_le_of_mem_compact_convex
+      (TruncatedPiece G R j) (isCompact_truncatedPiece G R j)
+        (convex_truncatedPiece G R j) x reward hrewardPiece q.property
+  have hrowEpsilon : row ∈ EpsilonRow G ε x :=
+    upperGlueRow_mem_epsilonRow G M R ε (Section4Delta G M ε)
+      hM hε rfl x hxUpper row hrowCap hrowSupport
+  have hrowRho : row ∈ EpsilonRow G ρ x :=
+    EpsilonRow.mono G (by linarith [hmotion.2.1]) x hrowEpsilon
+  have hquit : QuitProbability G row = delta := by
+    exact quitProbability_zero_replace G j q
+  have hxUpper' := hxUpper
+  rw [UpperNeighborhood] at hxUpper'
+  obtain ⟨_witness, hxWitness⟩ := Set.mem_iUnion.mp hxUpper'
+  have hxBounds := hxWitness.1
+  have hxLower : ∀ k, MinMaxQuit G k - ρ ≤ x k := by
+    intro k
+    have hnormalK : MinMaxQuit G k ≤ SoloPayoff G k := hnormal k
+    linarith [hnormalK, (hxBounds k).1, hερ, hmotion.2.1]
+  have hstep : ρ * delta ≤ EuclideanDist x target := by
+    by_cases hxUpperBox :
+        ∀ k, x k ≤ 2 * (Fintype.card G.Player : ℝ) * M
+    · have hmotionStep := hmotion.2.2.2.1 x
+        (fun k => ⟨hxLower k, hxUpperBox k⟩) row hrowRho
+      rw [hquit] at hmotionStep
+      exact hmotionStep
+    · push Not at hxUpperBox
+      obtain ⟨k, hk⟩ := hxUpperBox
+      have hN : 3 ≤ (Fintype.card G.Player : ℝ) := by
+        exact_mod_cast hplayers
+      have hrewardBound := hM.2.1 ⟨{j}, Finset.singleton_nonempty j⟩ k
+      have hrewardUpper := le_of_abs_le hrewardBound
+      have hgap : ρ ≤ x k - reward k := by
+        dsimp only [reward]
+        nlinarith [hM.1, hmotion.2.2.1]
+      have hgapNonneg : 0 ≤ x k - reward k :=
+        hmotion.2.1.le.trans hgap
+      have hcoordinate : x k - target k = delta * (x k - reward k) := by
+        rw [htargetFormula]
+        simp only [AffineMap.lineMap_apply_module, Pi.add_apply,
+          Pi.smul_apply, smul_eq_mul]
+        ring
+      have hcoordinateStep : ρ * delta ≤ |x k - target k| := by
+        rw [hcoordinate, abs_mul, abs_of_nonneg hdeltaPos.le,
+          abs_of_nonneg hgapNonneg]
+        simpa only [mul_comm] using
+          mul_le_mul_of_nonneg_right hgap hdeltaPos.le
+      have hcoordinateNorm := abs_apply_le_euclideanNorm (x - target) k
+      exact hcoordinateStep.trans (by
+        simpa only [Pi.sub_apply, EuclideanDist, EuclideanNorm] using
+          hcoordinateNorm)
+  have homegaStep :
+      Section4Omega G M d ρ ξ R ε ≤ EuclideanDist x target := by
+    have hfactor :
+        d * ε * ξ /
+            (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M) ≤ 1 := by
+      let N : ℝ := Fintype.card G.Player
+      obtain ⟨hxi, hxiOne, hR⟩ := section3Constants_radius_bound
+        G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+      have hN : 3 ≤ N := by
+        dsimp only [N]
+        exact_mod_cast hplayers
+      have hepsilonOne : ε ≤ 1 := by
+        nlinarith [hmotion.2.2.1]
+      have hdepsilon : d * ε ≤ 1 :=
+        (mul_le_of_le_one_left hε.le hd1).trans hepsilonOne
+      have hnumerator : d * ε * ξ ≤ 1 :=
+        (mul_le_of_le_one_left hxi.le hdepsilon).trans hxiOne.le
+      have hNM : 3 ≤ N * M := by
+        nlinarith [mul_le_mul hN hM.1 (by norm_num)
+          (by linarith : 0 ≤ N)]
+      have hROne : 1 ≤ R := by
+        have hR' : 10 * N * M ≤ R := by simpa only [N] using hR
+        nlinarith
+      have hNpow : 1 ≤ N ^ 2 := by
+        nlinarith [mul_nonneg (by linarith : 0 ≤ N - 1)
+          (by linarith : 0 ≤ N + 1)]
+      have hdenominator : 1 ≤ 200 * R * N ^ 2 * M := by
+        have hfirst : 1 ≤ 200 * R := by nlinarith
+        have hsecond : 200 * R ≤ 200 * R * N ^ 2 := by
+          nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R)
+            (by linarith : 0 ≤ N ^ 2 - 1)]
+        have hthird : 200 * R * N ^ 2 ≤ 200 * R * N ^ 2 * M := by
+          nlinarith [mul_nonneg (by positivity : 0 ≤ 200 * R * N ^ 2)
+            (by linarith [hM.1] : 0 ≤ M - 1)]
+        exact hfirst.trans (hsecond.trans hthird)
+      rw [div_le_one]
+      · simpa only [N] using hnumerator.trans hdenominator
+      · simpa only [N] using zero_lt_one.trans_le hdenominator
+    rw [Section4Omega]
+    calc
+      d * ε * ξ * ρ * Section4Delta G M ε /
+          (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M) =
+          (ρ * delta) *
+            (d * ε * ξ /
+              (200 * R * (Fintype.card G.Player : ℝ) ^ 2 * M)) := by
+            dsimp only [delta]
+            ring
+      _ ≤ ρ * delta := mul_le_of_le_one_right
+        (mul_nonneg hmotion.2.1.le hdeltaPos.le) hfactor
+      _ ≤ EuclideanDist x target := hstep
+  have hsegment : segment ℝ x target ⊆
+      GluedFiber G R ε (Section4Delta G M ε) x := by
+    rw [segment_eq_image]
+    rintro y ⟨t, ht, rfl⟩
+    let tq : Set.Icc (0 : ℝ) 1 :=
+      ⟨t * delta, mul_nonneg ht.1 hdeltaPos.le,
+        (mul_le_of_le_one_left hdeltaPos.le ht.2).trans hdeltaOne⟩
+    let pathRow : QuitRow G := QuitRow.replace G (zeroQuitRow G) j tq
+    have hpathFormula :
+        QuittingOneStagePayoff G x pathRow =
+          AffineMap.lineMap x reward (t * delta) :=
+      quittingOneStagePayoff_zero_replace_eq_lineMap_singleton G x j tq
+    have hline :
+        AffineMap.lineMap x target t =
+          AffineMap.lineMap x reward (t * delta) := by
+      rw [htargetFormula]
+      funext k
+      simp only [AffineMap.lineMap_apply_module, Pi.add_apply,
+        Pi.smul_apply, smul_eq_mul]
+      ring
+    have hpathUpper : AffineMap.lineMap x target t ∈
+        UpperGlueFiber G R ε (Section4Delta G M ε) x := by
+      refine ⟨pathRow, hline.trans hpathFormula.symm, ?_⟩
+      intro k
+      by_cases hk : x ∈ UpperNeighborhoodFor G R ε k
+      · simp only [hk, ↓reduceIte]
+        by_cases hkj : k = j
+        · subst k
+          simpa [pathRow, QuitRow.replace, tq] using
+            (mul_le_of_le_one_left hdeltaPos.le ht.2)
+        · simp only [pathRow, QuitRow.replace, hkj, zeroQuitRow]
+          exact hdeltaPos.le
+      · simp only [hk, ↓reduceIte]
+        have hkj : k ≠ j := by
+          intro h
+          subst k
+          exact hk hxActive
+        simp [pathRow, QuitRow.replace, zeroQuitRow, hkj]
+    simpa only [GluedFiber, hxNotLower, hxUpper, ↓reduceIte,
+      AffineMap.lineMap_apply_module, add_comm] using hpathUpper
+  exact ⟨target, htargetGlued, hpieceDistance, homegaStep, hsegment⟩
+
+/-- Property (7)'s escape conclusion for the literal glued correspondence,
+combining the lower-priority and upper-priority constructions. -/
+theorem gluedFiber_piece_escape_at_section4Omega
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (x : Payoff G.Player) (hx : x ∈ GluedNeighborhood G R ε)
+    (j : G.Player)
+    (hpiece :
+      (frontier (TruncatedW G R) ∩ TruncatedPiece G R j).Nonempty)
+    (hdistance :
+      EuclideanInfDist x
+          (frontier (TruncatedW G R) ∩ TruncatedPiece G R j) ≤
+        Section4Omega G M d ρ ξ R ε) :
+    ∃ target ∈ GluedFiber G R ε (Section4Delta G M ε) x,
+      EuclideanInfDist target (TruncatedPiece G R j) ≤
+          EuclideanInfDist x (TruncatedPiece G R j) ∧
+        Section4Omega G M d ρ ξ R ε ≤ EuclideanDist x target ∧
+        segment ℝ x target ⊆
+          GluedFiber G R ε (Section4Delta G M ε) x := by
+  by_cases hxLower : x ∈ LowerNeighborhood G R ε
+  · exact lowerGlueFiber_piece_escape_at_section4Omega
+      G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hε hερ
+        x hxLower j
+  · exact upperGlueFiber_piece_escape_at_section4Omega
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants
+        hε hερ x (hx.resolve_right hxLower) hxLower j hpiece hdistance
 
 /-- The one-stage value differs from the terminal reward conditional on
 absorption only through the all-Continue branch. -/
@@ -10301,10 +10641,11 @@ theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
   sorry
 
 /--
-Lemma 4.5.  This statement retains all seven conditions rather than replacing
-them by a vague “viability” predicate.  Its proof contains the paper's long
-contractibility/Jacobian and lower-boundary case analysis; no corresponding
-production theorem exists.  In Property (6), Case 5, the printed final phrase
+Lemma 4.5. The statement retains all seven conditions. Standalone proofs supply
+the terminal-diagonal condition, contractibility of every glued fiber, and both
+branches of Property (7) at the common Section 4 scale. The remaining assembly
+requires Property (6)'s small-step inclusion, including the global part of
+Lemma 4.4 used by its argument. In Property (6), Case 5, the printed final phrase
 “`λ ≥ 1/2`” must be read as “`1-λ ≥ 1/2`”: the preceding sentence proves
 `λ ≤ 1/2`, and `y = λx + (1-λ)f(x,p)` needs the latter coefficient on the
 strict drift.

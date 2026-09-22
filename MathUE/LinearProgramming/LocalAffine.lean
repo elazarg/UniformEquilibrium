@@ -30,6 +30,38 @@ theorem lcpResidual_eq_add_mulVec (matrix : Matrix ι ι ℝ) (offset point : ι
   funext who
   simp only [lcpResidual, Pi.add_apply, Matrix.mulVec, dotProduct, mul_comm]
 
+/-- Simultaneously scaling the offset and point scales the literal residual. -/
+theorem lcpResidual_smul (matrix : Matrix ι ι ℝ) (scalar : ℝ) (offset point : ι → ℝ) :
+    lcpResidual matrix (scalar • offset) (scalar • point) =
+      scalar • lcpResidual matrix offset point := by
+  funext who
+  simp only [lcpResidual, Pi.smul_apply, smul_eq_mul]
+  have hsum : (∑ coordinate, (scalar * point coordinate) * matrix who coordinate) =
+      scalar * ∑ coordinate, point coordinate * matrix who coordinate := by
+    rw [Finset.mul_sum]
+    apply Finset.sum_congr rfl
+    intro coordinate _
+    ring
+  rw [hsum, mul_add]
+
+/-- The minimum map is positively homogeneous in its offset and point together. -/
+theorem lcpMinMap_smul (matrix : Matrix ι ι ℝ) (scalar : ℝ) (hscalar : 0 ≤ scalar)
+    (offset point : ι → ℝ) :
+    lcpMinMap matrix (scalar • offset) (scalar • point) =
+      scalar • lcpMinMap matrix offset point := by
+  funext who
+  change min (scalar * point who)
+    (lcpResidual matrix (scalar • offset) (scalar • point) who) =
+      scalar * min (point who) (lcpResidual matrix offset point who)
+  rw [lcpResidual_smul]
+  exact (mul_min_of_nonneg _ _ hscalar).symm
+
+/-- At zero offset the homogeneous scaling acts only on the point. -/
+theorem lcpMinMap_zero_smul
+    (matrix : Matrix ι ι ℝ) (scalar : ℝ) (hscalar : 0 ≤ scalar) (point : ι → ℝ) :
+    lcpMinMap matrix 0 (scalar • point) = scalar • lcpMinMap matrix 0 point := by
+  simpa only [smul_zero] using lcpMinMap_smul matrix scalar hscalar 0 point
+
 theorem continuous_lcpResidual (matrix : Matrix ι ι ℝ) (offset : ι → ℝ) :
     Continuous (lcpResidual matrix offset) := by
   have hequal : lcpResidual matrix offset = fun point => offset + matrix.mulVec point :=
@@ -64,6 +96,16 @@ theorem lcpMinMap_eq_zero_iff (matrix : Matrix ι ι ℝ) (offset point : ι →
     rcases mul_eq_zero.mp (hsolution.complementary who) with hpoint | hresidual
     · rw [hpoint, min_eq_left (hsolution.residual_nonneg who)]
     · rw [hresidual, min_eq_right (hsolution.weight_nonneg who)]
+
+/-- Positive simultaneous scaling preserves and reflects actual standard LCP solutions,
+without strict-complementarity, nonsingularity, or nonempty-coordinate assumptions. -/
+theorem isStandardLCPSolution_smul_iff
+    (matrix : Matrix ι ι ℝ) (scalar : ℝ) (hscalar : 0 < scalar) (offset point : ι → ℝ) :
+    IsStandardLCPSolution matrix (scalar • offset) (scalar • point) ↔
+      IsStandardLCPSolution matrix offset point := by
+  rw [← lcpMinMap_eq_zero_iff, lcpMinMap_smul matrix scalar hscalar.le,
+    ← lcpMinMap_eq_zero_iff]
+  simp only [smul_eq_zero, ne_of_gt hscalar, false_or]
 
 variable [DecidableEq ι]
 

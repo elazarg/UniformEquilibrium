@@ -53,7 +53,7 @@ x0 ∈ closure (signCell P signs ∩ {x | 0 < x coordinate})
 ```
 
 There is no regular-point, algebraic-input, supplied-curve, Puiseux-selection,
-or sign-cell nonsingularity premise. The 378-line capstone proof was read in
+or sign-cell nonsingularity premise. The capstone proof was read in
 full. It constructs its lex-selected source, a regular localized chart,
 algebraic coordinate relations, and the final arc. It does not merely unpack
 a field asserting the desired selection theorem.

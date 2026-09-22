@@ -187,6 +187,34 @@ theorem quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap
     refine ⟨quittingBehaviorStoppingLaw reward deviation, ?_⟩
     rw [quittingBehaviorEvaluatedPayoff_update]
 
+omit [DecidableEq ι] in
+/-- Evaluated payoff depends only on the complete live-spine stopping laws. -/
+theorem quittingBehaviorEvaluatedPayoff_eq_of_behaviorStoppingLaws_eq
+    (reward : {A : Finset ι // A.Nonempty} → ι → ℝ)
+    (evaluation : WithTop ℕ → ℝ)
+    (first second : (quittingGame reward).BehaviorProfile)
+    (hlaws : quittingBehaviorStoppingLaws reward first =
+      quittingBehaviorStoppingLaws reward second) (who : ι) :
+    quittingBehaviorEvaluatedPayoff reward evaluation first who =
+      quittingBehaviorEvaluatedPayoff reward evaluation second who := by
+  unfold quittingBehaviorEvaluatedPayoff
+  rw [hlaws]
+
+/-- The unrestricted evaluated deviation cap depends only on the complete
+live-spine stopping laws. -/
+theorem
+    quittingBehaviorEvaluatedDeviationPayoffCap_eq_of_behaviorStoppingLaws_eq
+    (reward : {A : Finset ι // A.Nonempty} → ι → ℝ)
+    (evaluation : WithTop ℕ → ℝ)
+    (first second : (quittingGame reward).BehaviorProfile)
+    (hlaws : quittingBehaviorStoppingLaws reward first =
+      quittingBehaviorStoppingLaws reward second) (who : ι) :
+    quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation first who =
+      quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation second who := by
+  rw [← quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap,
+    ← quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap,
+    hlaws]
+
 /-- Terminal evaluation is one at finite clocks and zero at Never. -/
 def quittingTerminalEvaluation (clock : WithTop ℕ) : ℝ :=
   if clock = ⊤ then 0 else 1

@@ -76,10 +76,21 @@ The actual polynomial's ambient differentiability and uniqueness of the
 derivative within the full-dimensional cube justify this comparison; the
 probabilistic remainder inequality is not asserted outside the cube.
 
-The remaining construction is integer degree with the required invariance
-and excision laws. The existing parity
-machinery is not a substitute for integer degree. See the bounded discovery
-map in [CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md](CODEX_FORMALIZER_SIGNED_DEGREE_DISCOVERY_MAP.md).
+`quittingDiscountedClippedMap_scaled_uniform_bound`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedScaling.lean`)
+derives uniform upper-clip inactivity and convergence of the rescaled actual
+fixed-point field to the canonical LCP minimum map on every bounded signed
+set. The lower clip is retained exactly, using
+`quittingDiscountedClippedMap_scaled_sub_eq_min` in the same module. These
+source statements do not assume fixed-point selection or localization.
+
+The project-owned integer degree now supplies homotopy invariance, excision,
+R0 right-hand-side independence, and fixed-point normalization in Research.
+The remaining degree comparison must apply the source estimate on shrinking
+domains, retaining every root. Its perturbation and scaling requirements are
+recorded in
+[the signed local degree specification](CODEX_FORMALIZER_SIGNED_LOCAL_DEGREE_SPEC.md).
+Research is not imported by the production source modules above.
 
 ## Verification scope
 

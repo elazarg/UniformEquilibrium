@@ -203,6 +203,85 @@ theorem expect_cappedClock_weighted_childGain_eq_sum_expect_of_weight
       exact mul_le_mul_of_nonneg_left (hgain i sample) (abs_nonneg _)
   simpa using hcomm Finset.univ
 
+/-- A pointwise capped-clock comparison with one constant allowance integrates
+to the separately exposed child expectations with the same allowance. -/
+theorem
+    expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations_add_const
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
+    (weight : ι → ℝ) (weight_nonneg : ∀ i, 0 ≤ weight i)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (law : PMF ((ι → Option ℕ) × Option ℕ)) (allowance : ℝ)
+    (hpointwise : ∀ sample : (ι → Option ℕ) × Option ℕ,
+      cappedClockActualEvaluatedOutsideGain reward evaluation
+          sample.1 sample.2 ≤
+        (∑ i, weight i *
+          cappedClockActualEvaluatedChildGain reward evaluation
+            sample.1 sample.2 i) + allowance) :
+    expect law (fun sample =>
+        cappedClockActualEvaluatedOutsideGain reward evaluation
+          sample.1 sample.2) ≤
+      (∑ i, weight i *
+        expect law (fun sample =>
+          cappedClockActualEvaluatedChildGain reward evaluation
+            sample.1 sample.2 i)) + allowance := by
+  let gainBound := 2 * (evaluation 0 * quittingRewardBound reward)
+  let weightSum := ∑ i, weight i
+  have hGainBound : 0 ≤ gainBound := by
+    dsimp [gainBound]
+    exact mul_nonneg (by norm_num)
+      (mul_nonneg (evaluation_nonneg 0) (quittingRewardBound_nonneg reward))
+  have hWeightSum : 0 ≤ weightSum := by
+    dsimp [weightSum]
+    exact Finset.sum_nonneg fun i _ => weight_nonneg i
+  have hWeightedGainBound : 0 ≤ weightSum * gainBound :=
+    mul_nonneg hWeightSum hGainBound
+  have houtside (sample : (ι → Option ℕ) × Option ℕ) :
+      |cappedClockActualEvaluatedOutsideGain reward evaluation
+          sample.1 sample.2| ≤ gainBound := by
+    exact abs_actualEvaluatedGain_le reward evaluation
+      evaluation_nonneg evaluation_antitone
+      (outsideDeadlineClocks sample.1 sample.2)
+      (quietParentClocks sample.1) none
+  have hchildren (sample : (ι → Option ℕ) × Option ℕ) :
+      |∑ i, weight i *
+          cappedClockActualEvaluatedChildGain reward evaluation
+            sample.1 sample.2 i| ≤ weightSum * gainBound := by
+    calc
+      |_| ≤ ∑ i, |weight i *
+          cappedClockActualEvaluatedChildGain reward evaluation
+            sample.1 sample.2 i| := Finset.abs_sum_le_sum_abs _ _
+      _ ≤ ∑ i, weight i * gainBound := by
+        apply Finset.sum_le_sum
+        intro i _
+        rw [abs_mul, abs_of_nonneg (weight_nonneg i)]
+        exact mul_le_mul_of_nonneg_left
+          (abs_actualEvaluatedGain_le reward evaluation
+            evaluation_nonneg evaluation_antitone
+            (cappedChildParentClocks sample.1 sample.2 i)
+            (quietParentClocks sample.1) (some i))
+          (weight_nonneg i)
+      _ = weightSum * gainBound := by rw [Finset.sum_mul]
+  have h :=
+    Math.ProbabilityMassFunction.expect_le_expect_add_const_of_pointwise_bounded
+      (C := gainBound + weightSum * gainBound)
+      law
+      (fun sample => cappedClockActualEvaluatedOutsideGain reward evaluation
+        sample.1 sample.2)
+      (fun sample => ∑ i, weight i *
+        cappedClockActualEvaluatedChildGain reward evaluation
+          sample.1 sample.2 i)
+      allowance
+      (fun sample => (houtside sample).trans
+        (le_add_of_nonneg_right hWeightedGainBound))
+      (fun sample => (hchildren sample).trans
+        (le_add_of_nonneg_left hGainBound))
+      hpointwise
+  rw [expect_cappedClock_weighted_childGain_eq_sum_expect_of_weight
+    reward weight evaluation evaluation_nonneg evaluation_antitone law] at h
+  exact h
+
 /-- Certificate-facing wrapper for the arbitrary-weight integration identity. -/
 theorem expect_cappedClock_weighted_childGain_eq_sum_expect
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)

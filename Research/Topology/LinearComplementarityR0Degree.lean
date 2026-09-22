@@ -100,21 +100,6 @@ theorem r0Degree_fin_zero (matrix : Matrix (Fin 0) (Fin 0) ℝ)
   simpa only [r0Degree, hregion] using
     (lcpMinBoxProblem matrix 0 0 2 (by norm_num)).localDegree_univ_eq_one
 
-private theorem lcpMinMap_zero_smul
-    (matrix : Matrix (Fin n) (Fin n) ℝ) (scalar : ℝ) (hscalar : 0 ≤ scalar)
-    (point : Fin n → ℝ) :
-    lcpMinMap matrix 0 (scalar • point) = scalar • lcpMinMap matrix 0 point := by
-  funext who
-  simp only [lcpMinMap, lcpResidual, Pi.zero_apply, zero_add, Pi.smul_apply, smul_eq_mul]
-  have hsum : (∑ coordinate, (scalar * point coordinate) * matrix who coordinate) =
-      scalar * ∑ coordinate, point coordinate * matrix who coordinate := by
-    rw [Finset.mul_sum]
-    apply Finset.sum_congr rfl
-    intro coordinate _
-    ring
-  rw [hsum]
-  exact (mul_min_of_nonneg _ _ hscalar).symm
-
 /-- Changing the radius of the homogeneous scalar chart preserves its
 central degree by literal positive scaling of the gain field. -/
 theorem localDegree_lcpMinBoxProblem_zero_eq_r0Degree
@@ -144,12 +129,14 @@ theorem localDegree_lcpMinBoxProblem_zero_eq_r0Degree
       (half_pos hradius) (diagonalCentralRegion n)
       (isIsolating_lcpMinBoxProblem_zero_of_isR0Matrix matrix hR0 2 (by norm_num))
 
-/-- R0 supplies one actual common scalar chart and isolating central region
-for every coordinatewise-bounded offset. Every total degree is the canonical
-R0 integer, regardless of degeneracy or infinitude of the selected roots. -/
-theorem exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree
-    (matrix : Matrix (Fin n) (Fin n) ℝ) (hR0 : IsR0Matrix matrix) (bound : ℝ) :
-    ∃ (radius : ℝ) (hradius : 0 < radius), ∀ offset : Fin n → ℝ,
+/-- R0 supplies one common scalar chart above any requested radius floor,
+before all bounded offsets and their roots are considered. Every total degree
+is the canonical R0 integer, with no root-regularity or finiteness restriction. -/
+theorem exists_radius_above_lcpMinBoxProblem_localDegree_eq_r0Degree
+    (matrix : Matrix (Fin n) (Fin n) ℝ) (hR0 : IsR0Matrix matrix)
+    (bound minimumRadius : ℝ) :
+    ∃ (radius : ℝ) (hradius : 0 < radius), minimumRadius < radius ∧
+      ∀ offset : Fin n → ℝ,
       (∀ who, |offset who| ≤ bound) →
       ∃ hisolating : (lcpMinBoxProblem matrix offset 0 radius hradius).IsIsolating
           (diagonalCentralRegion n),
@@ -158,10 +145,15 @@ theorem exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree
         (lcpMinBoxProblem matrix offset 0 radius hradius).localDegree
           (diagonalCentralRegion n) hisolating = r0Degree matrix hR0 := by
   obtain ⟨totalBound, htotalBound⟩ := exists_bound_sum_of_isR0Matrix matrix hR0 bound
-  let radius := 2 * (max 0 totalBound + 1)
+  let radius := 2 * (max (max 0 totalBound) minimumRadius + 1)
+  have hnonneg : 0 ≤ max (max 0 totalBound) minimumRadius :=
+    (le_max_left 0 totalBound).trans (le_max_left _ _)
   have hradius : 0 < radius := by
     dsimp only [radius]
-    have h := le_max_left 0 totalBound
+    linarith
+  have habove : minimumRadius < radius := by
+    have hfloor := le_max_right (max 0 totalBound) minimumRadius
+    dsimp only [radius]
     linarith
   have hbound (offset root : Fin n → ℝ) (hoffset : ∀ who, |offset who| ≤ bound)
       (hroot : IsStandardLCPSolution matrix offset root) (who : Fin n) :
@@ -169,10 +161,11 @@ theorem exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree
     have hcoordinate : root who ≤ ∑ next, root next :=
       Finset.single_le_sum (fun next _ => hroot.weight_nonneg next) (Finset.mem_univ who)
     have hsum := htotalBound offset root hoffset hroot
-    have hmax := le_max_right 0 totalBound
+    have hmax := (le_max_right 0 totalBound).trans
+      (le_max_left (max 0 totalBound) minimumRadius)
     dsimp only [radius]
     linarith
-  refine ⟨radius, hradius, ?_⟩
+  refine ⟨radius, hradius, habove, ?_⟩
   intro offset hoffset
   let family (parameter : Set.Icc (0 : ℝ) 1) :=
     lcpMinBoxProblem matrix ((parameter : ℝ) • offset) 0 radius hradius
@@ -211,6 +204,21 @@ theorem exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree
       hdegree.symm
   exact hcomparison.trans
     (localDegree_lcpMinBoxProblem_zero_eq_r0Degree matrix hR0 radius hradius)
+
+/-- The unrestricted-radius form of the common-chart total-degree theorem. -/
+theorem exists_radius_lcpMinBoxProblem_localDegree_eq_r0Degree
+    (matrix : Matrix (Fin n) (Fin n) ℝ) (hR0 : IsR0Matrix matrix) (bound : ℝ) :
+    ∃ (radius : ℝ) (hradius : 0 < radius), ∀ offset : Fin n → ℝ,
+      (∀ who, |offset who| ≤ bound) →
+      ∃ hisolating : (lcpMinBoxProblem matrix offset 0 radius hradius).IsIsolating
+          (diagonalCentralRegion n),
+        (∀ root, IsStandardLCPSolution matrix offset root →
+          ∀ who, root who < radius / 2) ∧
+        (lcpMinBoxProblem matrix offset 0 radius hradius).localDegree
+          (diagonalCentralRegion n) hisolating = r0Degree matrix hR0 := by
+  obtain ⟨radius, hradius, _habove, hfamily⟩ :=
+    exists_radius_above_lcpMinBoxProblem_localDegree_eq_r0Degree matrix hR0 bound 0
+  exact ⟨radius, hradius, hfamily⟩
 
 /-- Nonzero total R0 degree gives a standard LCP solution for every offset. -/
 theorem isStandardQ_of_r0Degree_ne_zero

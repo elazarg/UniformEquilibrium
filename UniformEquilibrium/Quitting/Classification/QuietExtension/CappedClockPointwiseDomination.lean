@@ -592,6 +592,45 @@ structure CappedClockParentRewardSlackCertificate
           reward ⟨cappedClockChildCoalition A,
             cappedClockChildCoalition_nonempty hA⟩ (some i))
 
+/-- Capped-clock rows with separate nonnegative allowances for the Never,
+future, and joining rows.  This is the common deterministic proof interface;
+public certificate classes below specialize its three allowances. -/
+structure CappedClockParentRewardRowErrorCertificate
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) where
+  weight : ι → ℝ
+  weight_nonneg : ∀ i, 0 ≤ weight i
+  neverError : ℝ
+  neverError_nonneg : 0 ≤ neverError
+  futureError : ℝ
+  futureError_nonneg : 0 ≤ futureError
+  joinError : ℝ
+  joinError_nonneg : 0 ≤ joinError
+  never_row :
+    reward ⟨{none}, Finset.singleton_nonempty none⟩ none ≤
+      (∑ i, weight i *
+        reward ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i)) +
+        neverError
+  future_row : ∀ A (hA : A.Nonempty),
+    reward ⟨{none}, Finset.singleton_nonempty none⟩ none -
+        reward ⟨cappedClockChildCoalition A,
+          cappedClockChildCoalition_nonempty hA⟩ none ≤
+      (∑ i, weight i *
+        (reward ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i) -
+          reward ⟨cappedClockChildCoalition A,
+            cappedClockChildCoalition_nonempty hA⟩ (some i))) +
+        futureError
+  join_row : ∀ A (hA : A.Nonempty),
+    reward ⟨cappedClockJoinedCoalition A,
+          cappedClockJoinedCoalition_nonempty A⟩ none -
+        reward ⟨cappedClockChildCoalition A,
+          cappedClockChildCoalition_nonempty hA⟩ none ≤
+      (∑ i, weight i *
+        (reward ⟨cappedClockChildCoalition (insert i A),
+            cappedClockChildCoalition_nonempty (Finset.insert_nonempty i A)⟩ (some i) -
+          reward ⟨cappedClockChildCoalition A,
+            cappedClockChildCoalition_nonempty hA⟩ (some i))) +
+        joinError
+
 /-- An exact capped-clock certificate is a slack certificate with zero
 joint-Never allowance. -/
 def CappedClockParentRewardCertificate.withZeroSlack
@@ -605,6 +644,27 @@ def CappedClockParentRewardCertificate.withZeroSlack
   never_row := by simpa using certificate.never_row
   future_row := certificate.future_row
   join_row := certificate.join_row
+
+/-- A Never-only slack certificate as the common three-row error interface. -/
+def CappedClockParentRewardSlackCertificate.toRowErrorCertificate
+    {reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ}
+    (certificate : CappedClockParentRewardSlackCertificate reward) :
+    CappedClockParentRewardRowErrorCertificate reward where
+  weight := certificate.weight
+  weight_nonneg := certificate.weight_nonneg
+  neverError := certificate.neverSlack
+  neverError_nonneg := certificate.neverSlack_nonneg
+  futureError := 0
+  futureError_nonneg := le_rfl
+  joinError := 0
+  joinError_nonneg := le_rfl
+  never_row := certificate.never_row
+  future_row := by
+    intro A hA
+    simpa using certificate.future_row A hA
+  join_row := by
+    intro A hA
+    simpa using certificate.join_row A hA
 
 /-- Literal outsider payoff gain from replacing quiet Never by `deadline`. -/
 def cappedClockActualOutsideGain
@@ -655,6 +715,24 @@ def cappedClockEvaluatedNeverSlackFactor
       else if (time : WithTop ℕ) < first then evaluation time - evaluation first
       else 0
 
+/-- State-dependent charge for separate Never, future, and joining row
+allowances.  In the future case the coefficients are the two pieces of the
+same early evaluation weight. -/
+def cappedClockEvaluatedRowErrorCharge
+    (evaluation : WithTop ℕ → ℝ)
+    (times : ι → Option ℕ) (deadline : Option ℕ)
+    (neverError futureError joinError : ℝ) : ℝ :=
+  match deadline with
+  | none => 0
+  | some time =>
+      let first := quittingEarliestStoppingValue times
+      if first = ⊤ then evaluation time * neverError
+      else if (time : WithTop ℕ) < first then
+        (evaluation time - evaluation first) * neverError +
+          evaluation first * futureError
+      else if first = (time : WithTop ℕ) then evaluation first * joinError
+      else 0
+
 omit [DecidableEq ι] [Nonempty ι] in
 theorem cappedClockEvaluatedNeverSlackFactor_nonneg
     (evaluation : WithTop ℕ → ℝ)
@@ -702,25 +780,29 @@ theorem abs_cappedClockEvaluatedNeverSlackFactor_le
             evaluation_nonneg 0
 
 omit [DecidableEq ι] [Nonempty ι] in
-private theorem actual_evaluated_future_row
+private theorem actual_evaluated_future_row_add_errors
     (weight singleton childReward : ι → ℝ)
-    (outsideSingleton outsideReward earlyWeight lateWeight slack : ℝ)
+    (outsideSingleton outsideReward earlyWeight lateWeight : ℝ)
+    (neverError futureError : ℝ)
     (hLateNonneg : 0 ≤ lateWeight) (hWeight : lateWeight ≤ earlyWeight)
-    (hNever : outsideSingleton ≤ (∑ i, weight i * singleton i) + slack)
+    (hNever : outsideSingleton ≤
+      (∑ i, weight i * singleton i) + neverError)
     (hFuture : outsideSingleton - outsideReward ≤
-      ∑ i, weight i * (singleton i - childReward i)) :
+      (∑ i, weight i * (singleton i - childReward i)) + futureError) :
     earlyWeight * outsideSingleton - lateWeight * outsideReward ≤
       (∑ i, weight i *
         (earlyWeight * singleton i - lateWeight * childReward i)) +
-      (earlyWeight - lateWeight) * slack := by
+      ((earlyWeight - lateWeight) * neverError +
+        lateWeight * futureError) := by
   have hNeverResidual :
-      outsideSingleton - ∑ i, weight i * singleton i ≤ slack := by
+      outsideSingleton - ∑ i, weight i * singleton i ≤ neverError := by
     linarith
   have hFutureResidual : outsideSingleton - outsideReward -
-      ∑ i, weight i * (singleton i - childReward i) ≤ 0 := sub_nonpos.mpr hFuture
+      ∑ i, weight i * (singleton i - childReward i) ≤ futureError := by
+    linarith
   have hFirst := mul_le_mul_of_nonneg_left hNeverResidual
     (sub_nonneg.mpr hWeight)
-  have hSecond := mul_nonpos_of_nonneg_of_nonpos hLateNonneg hFutureResidual
+  have hSecond := mul_le_mul_of_nonneg_left hFutureResidual hLateNonneg
   have sum_weight_mul (factor : ℝ) (value : ι → ℝ) :
       (∑ i, weight i * (factor * value i)) =
         factor * ∑ i, weight i * value i := by
@@ -752,17 +834,16 @@ private theorem actual_evaluated_future_row
       ring
     _ ≤ (earlyWeight * (∑ i, weight i * singleton i) -
           lateWeight * ∑ i, weight i * childReward i) +
-        ((earlyWeight - lateWeight) * slack + 0) :=
+        ((earlyWeight - lateWeight) * neverError +
+          lateWeight * futureError) :=
       add_le_add_right (add_le_add hFirst hSecond) _
-    _ = (earlyWeight * (∑ i, weight i * singleton i) -
-          lateWeight * ∑ i, weight i * childReward i) +
-        (earlyWeight - lateWeight) * slack := by ring
 
-/-- Literal evaluated pointwise domination with an explicit joint-Never-row
-slack charge. -/
-theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_slack
+/-- Literal evaluated pointwise domination with separate state-dependent
+charges for the Never, future, and joining row allowances. -/
+theorem
+    cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_rowErrors
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
-    (certificate : CappedClockParentRewardSlackCertificate reward)
+    (certificate : CappedClockParentRewardRowErrorCertificate reward)
     (evaluation : WithTop ℕ → ℝ)
     (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
     (evaluation_antitone : Antitone evaluation)
@@ -770,8 +851,9 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
     cappedClockActualEvaluatedOutsideGain reward evaluation times deadline ≤
       (∑ i, certificate.weight i *
         cappedClockActualEvaluatedChildGain reward evaluation times deadline i) +
-      certificate.neverSlack *
-        cappedClockEvaluatedNeverSlackFactor evaluation times deadline := by
+      cappedClockEvaluatedRowErrorCharge evaluation times deadline
+        certificate.neverError certificate.futureError
+          certificate.joinError := by
   cases deadline with
   | none =>
       have houtside : outsideDeadlineClocks times none = quietParentClocks times := by
@@ -790,7 +872,7 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
             · simp [cappedChildParentClocks, quietParentClocks, hji]
       simp [cappedClockActualEvaluatedOutsideGain,
         cappedClockActualEvaluatedChildGain, houtside, hchild,
-        cappedClockEvaluatedNeverSlackFactor]
+        cappedClockEvaluatedRowErrorCharge]
   | some deadline =>
       let first := quittingEarliestStoppingValue times
       have hquietFirst := quittingEarliestStoppingValue_quietParentClocks times
@@ -821,8 +903,12 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
               quittingPureClockEvaluatedPayoff, houtcome, hquiet, hcap,
               hquietFirst, houtsideFirst, hcapFirst, first, hfirst,
               quittingStoppingTimeValue, min_eq_left hafter'.le,
-              cappedClockEvaluatedNeverSlackFactor,
+              cappedClockEvaluatedRowErrorCharge,
               not_lt_of_ge hafter'.le]
+            split_ifs
+            · exact mul_nonneg (evaluation_nonneg _)
+                certificate.joinError_nonneg
+            · exact le_rfl
       · by_cases htie : first = (deadline : WithTop ℕ)
         · have hfirst' : quittingEarliestStoppingValue times =
               (deadline : WithTop ℕ) := by simpa [first] using htie
@@ -838,13 +924,13 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
             (certificate.join_row (quittingEarliestStoppingCoalition times)
               (quittingEarliestStoppingCoalition_nonempty times))
             (evaluation_nonneg first)
-          rw [Finset.mul_sum] at hrow
+          rw [mul_add, Finset.mul_sum] at hrow
           simpa [cappedClockActualEvaluatedOutsideGain,
             cappedClockActualEvaluatedChildGain,
             quittingPureClockEvaluatedPayoff, hquiet, houtcome, hcap,
             hquietFirst, houtsideFirst, hcapFirst, first, htie,
             quittingStoppingTimeValue, mul_sub, mul_assoc, mul_left_comm,
-            cappedClockEvaluatedNeverSlackFactor] using hrow
+            cappedClockEvaluatedRowErrorCharge] using hrow
         · have hdeadline_lt : (deadline : WithTop ℕ) < first :=
             lt_of_le_of_ne (le_of_not_gt hafter) (fun h => htie h.symm)
           induction hfirst : first using WithTop.recTopCoe with
@@ -869,7 +955,7 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
                 hquietFirst, houtsideFirst, hcapFirst, first, hfirst,
                 quittingStoppingTimeValue,
                 mul_assoc, mul_left_comm, mul_comm,
-                cappedClockEvaluatedNeverSlackFactor] using hrow
+                cappedClockEvaluatedRowErrorCharge] using hrow
           | coe firstTime =>
               have hfirst' : quittingEarliestStoppingValue times =
                   (firstTime : WithTop ℕ) := by simpa [first] using hfirst
@@ -890,9 +976,9 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
                 quittingPureClockEvaluatedPayoff, hquiet, houtcome, hcap,
                 hquietFirst, houtsideFirst, hcapFirst, first, hfirst,
                 quittingStoppingTimeValue, min_eq_right hdeadline_lt'.le,
-                cappedClockEvaluatedNeverSlackFactor, hdeadline_lt',
+                cappedClockEvaluatedRowErrorCharge, hdeadline_lt',
                 mul_comm] using
-                  (actual_evaluated_future_row certificate.weight
+                  (actual_evaluated_future_row_add_errors certificate.weight
                     (fun i => reward
                       ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i))
                     (fun i => reward
@@ -908,13 +994,58 @@ theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_sl
                         cappedClockChildCoalition_nonempty
                           (quittingEarliestStoppingCoalition_nonempty times)⟩ none)
                     (evaluation deadline) (evaluation first)
-                    certificate.neverSlack
+                    certificate.neverError certificate.futureError
                     (evaluation_nonneg first)
                     (evaluation_antitone hdeadline_lt.le)
                     certificate.never_row
                     (certificate.future_row
                       (quittingEarliestStoppingCoalition times)
                       (quittingEarliestStoppingCoalition_nonempty times)))
+
+omit [DecidableEq ι] [Nonempty ι] in
+private theorem cappedClockEvaluatedRowErrorCharge_neverOnly
+    (evaluation : WithTop ℕ → ℝ)
+    (times : ι → Option ℕ) (deadline : Option ℕ) (neverError : ℝ) :
+    cappedClockEvaluatedRowErrorCharge evaluation times deadline
+        neverError 0 0 =
+      neverError *
+        cappedClockEvaluatedNeverSlackFactor evaluation times deadline := by
+  cases deadline with
+  | none =>
+      simp [cappedClockEvaluatedRowErrorCharge,
+        cappedClockEvaluatedNeverSlackFactor]
+  | some deadline =>
+      by_cases htop : quittingEarliestStoppingValue times = ⊤
+      · simp [cappedClockEvaluatedRowErrorCharge,
+          cappedClockEvaluatedNeverSlackFactor, htop, mul_comm]
+      · by_cases hbefore : (deadline : WithTop ℕ) <
+            quittingEarliestStoppingValue times
+        · simp [cappedClockEvaluatedRowErrorCharge,
+            cappedClockEvaluatedNeverSlackFactor, htop, hbefore, mul_comm]
+        · simp [cappedClockEvaluatedRowErrorCharge,
+            cappedClockEvaluatedNeverSlackFactor, htop, hbefore]
+
+/-- Literal evaluated pointwise domination with an explicit joint-Never-row
+slack charge. -/
+theorem cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_slack
+    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
+    (certificate : CappedClockParentRewardSlackCertificate reward)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (times : ι → Option ℕ) (deadline : Option ℕ) :
+    cappedClockActualEvaluatedOutsideGain reward evaluation times deadline ≤
+      (∑ i, certificate.weight i *
+        cappedClockActualEvaluatedChildGain reward evaluation times deadline i) +
+      certificate.neverSlack *
+        cappedClockEvaluatedNeverSlackFactor evaluation times deadline := by
+  have h :=
+    cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_rowErrors
+      reward certificate.toRowErrorCertificate evaluation evaluation_nonneg
+        evaluation_antitone times deadline
+  simp only [CappedClockParentRewardSlackCertificate.toRowErrorCertificate] at h
+  rw [cappedClockEvaluatedRowErrorCharge_neverOnly] at h
+  exact h
 
 /-- Exact N/F/J domination is the zero-slack specialization of the common
 evaluated pointwise theorem. -/

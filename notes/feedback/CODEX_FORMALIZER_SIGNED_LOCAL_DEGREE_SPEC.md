@@ -473,9 +473,19 @@ proves independence of its positive radius by exact homogeneous gain scaling.
 radius for every offset in a coordinatewise bounded family, returns a bound
 on every actual LCP root, and proves isolation and equality with the canonical
 integer. It imposes no regularity or finiteness condition on those roots.
+`exists_radius_above_lcpMinBoxProblem_localDegree_eq_r0Degree` in the same
+file additionally lets the caller prescribe a lower bound for the radius,
+before offsets and roots are considered. This permits one chart large enough
+for both the LCP root bound and the independent discounted-source bound.
 `isStandardQ_of_r0Degree_ne_zero` derives solvability for every offset, and
 `r0Degree_fin_zero` gives the dimension-zero normalization. These are
 Research results, not yet the quitting-game degree comparison.
+
+`lcpMinMap_smul` and `isStandardLCPSolution_smul_iff`
+(`MathUE/LinearProgramming/LocalAffine.lean`) give simultaneous offset/point
+homogeneity and actual-root equivalence. The minimum-map identity allows
+zero scaling; the equivalence requires a strictly positive scalar. No
+regularity, strict complementarity, or nonempty-coordinate premise is used.
 
 `BoxComplementarityProblem.localDegree_of_selfMap_preimage_eq_one`
 (`Research/Topology/BoxComplementaritySelfMapNormalization.lean`) proves
@@ -488,11 +498,51 @@ boundary exclusion when the map is strictly inward. These statements use
 the box-complementarity degree; they do not assert an ambient degree at a
 boundary zero.
 
-For the integer-LCP packet's main criterion, stability under the actual
-uniform frontier perturbation remains to be supplied. The fixed common-chart
-route can use the R0 comparison and normalization above; arbitrary
+`BoxComplementarityProblem.exists_pos_localDegree_eq_of_norm_sub_lt`
+(`Research/Topology/BoxComplementarityFrontierPerturbation.lean`) constructs
+one positive frontier-gain tolerance from isolation, derives isolation of
+every sufficiently close second problem, and equates their degrees. It
+allows frontiers meeting cube faces. The proof separates the compact gain
+graph from the closed complementarity relation, not just from the zero vector.
+`localDegree_eq_of_norm_sub_lt_norm` in the same file gives an explicit
+relative-norm criterion when the frontier is coordinate-interior; it derives
+both endpoint isolations. This quantitative form supports shrinking domains
+without relying on a tolerance that may shrink with the domain.
+
+`quittingDiscountedClippedMap_scaled_uniform_bound`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedClippedScaling.lean`)
+derives upper-clip inactivity and the minimum-map approximation from the actual
+displacement convergence, on every fixed bounded signed set. The same file's
+`quittingDiscountedClippedMap_scaled_sub_eq_min` retains the lower clip in an
+exact rescaling identity. These production source results have no degree,
+fixed-point, or localization premise.
+
+The integer-LCP packet still needs the combined degree comparison: choose one
+large chart, select its shrinking source regions, obtain their frontier margin,
+and use the actual all-fixed-point localization, approximation, and LCP root
+scaling to compare degrees without discarding roots. R0 comparison and
+self-map normalization supply the two resulting integers. Arbitrary
 affine-chart independence and a general regular-Jacobian theorem need not
-precede it.
+precede this composition.
+
+The proposed generic consumer takes the actual reward table on `Fin n`,
+R0 of its full singleton matrix, and the following localization hypothesis:
+there exist positive constants `R` and `δ` such that, for every
+`0 < discount ≤ δ` and every ambient fixed point `q` of the actual
+`quittingDiscountedClippedMap`, every coordinate of `q / discount` is less
+than `R`. Cube membership is derived from clipping, not supplied. The desired
+conclusion is equality of the canonical `r0Degree` to one. This is a remaining
+theorem contract, not a checked declaration.
+
+One requested-radius chart contains both the LCP roots and the localization
+bound. Use preimages of shrinking sup-norm balls within that chart; continuity
+transfers frontier membership to their spheres. A positive minimum-map margin
+on the fixed sphere and the source estimate supply the relative-norm bound.
+Actual root scaling and same-problem excision then compare the selected LCP
+solutions without changing charts. The empty-sphere case must be retained.
+The four-player specialization must discharge localization and R0 from the
+existing original-game no-uniform-payoff hypothesis, not assume absence of
+an auxiliary-game uniform payoff.
 
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the
@@ -535,6 +585,7 @@ All remaining interfaces above concern standard finite-dimensional topology
 and combinatorics. They introduce no new uniform-equilibrium argument.
 Local homotopy invariance of the mesh-dependent count is proved above.
 The local integer degree and its homotopy invariance are proved above.
-Approximation independence and regular-Jacobian comparison remain to be
-constructed. Signed
+Frontier-small gain perturbations are covered by the stability theorem above;
+comparison with other discretization schemes and general regular-Jacobian
+comparison are not claimed. Signed
 integer information must not be replaced by parity in the integer-LCP criterion.

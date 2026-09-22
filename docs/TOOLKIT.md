@@ -1825,6 +1825,22 @@ with the same fixed nonnegative weights. Necessity uses explicit all-Never,
 future-coalition, and tied-coalition clock tuples. This is not a necessity
 claim for arbitrary behavioral debt bounds.
 
+`CappedClockParentRewardRowErrorCertificate` and
+`cappedClockActualEvaluatedOutsideGain_le_weighted_actualChildGain_add_rowErrors`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
+allow separate nonnegative errors in the Never, future, and joining rows.
+The deterministic correction retains the actual clock regime: an early
+deadline uses the decrease in evaluation weight for the Never error and the
+later evaluation weight for the future error. A tied deadline uses only the
+joining error. The existing Never-only slack theorem is an exact specialization.
+`CappedClockParentRewardAdditiveCertificate` and
+`expect_cappedClockActualEvaluatedOutsideGain_le_sum_childExpectations_add_error`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockAdditiveDomination.lean`)
+bound a common row error by that error times the evaluation at time zero,
+both pointwise and in expectation. The two early-deadline coefficients add
+to one evaluation weight; no factor of two is charged. Its unrestricted
+behavioral-cap adapter remains separate.
+
 `quittingStoppingLawEvaluatedCap_behaviorStoppingLaws_eq_behaviorCap`
 (`UniformEquilibrium/Quitting/Paths/StoppingLawEvaluatedPayoff.lean`) identifies
 complete-law replacement caps with unrestricted behavioral replacement caps
@@ -1840,8 +1856,13 @@ bounds the outsider's unrestricted evaluated debt by weighted survivor debts
 at the reconstructed quiet parent profile, for every nonnegative nonincreasing
 evaluation and every complete tuple of child stopping laws. The proof realizes
 each capped-child law as an actual deviation before taking the outsider's
-supremum. Its right side still uses survivor debts in the parent game;
-transport to the literal deleted child game is a separate adapter.
+supremum. Its right side uses survivor debts in the parent game.
+`quietLift_outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedChildDeletionAdapter.lean`)
+transports this bound to the actual Never lift of every child behavioral
+profile, with literal deleted-child debts on the right. Equality of complete
+profile stopping laws preserves both evaluated payoff and unrestricted cap;
+no equality of off-path behavioral profiles is claimed.
 
 `quittingBehaviorEvaluatedPayoff_liftDeletedProfile` and
 `quittingBehaviorEvaluatedDeviationPayoffCap_liftDeletedProfile`

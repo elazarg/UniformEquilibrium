@@ -122,17 +122,25 @@ a constructed feasible target in that piece. The theorem supplies the step
 length, nonincreasing distance to the piece, and the entire segment in the
 literal glued fiber. It does not use the unfinished Lemma 4.4.
 
+`upperGlueFiber_piece_escape_at_section4Omega` proves the upper branch under
+the same Section 4 constants and normality assumptions. Its target is the
+payoff of the requested player quitting alone at the stated cap; scaling
+that one row gives the entire segment in the same fiber.
+`gluedFiber_piece_escape_at_section4Omega` combines both branches, proving
+Property (7) for the actual correspondence at the common Section 4 scale.
+
 ## Remaining Section 4 assembly
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,
 initial diagonal, frontier fixing, terminal-diagonal exclusion, and actual
-fiber contractibility have component proofs. `truncatedW_eq_iUnion_fin` in the same file supplies the
+fiber contractibility, and boundary-piece escape have component proofs.
+`truncatedW_eq_iUnion_fin` in the same file supplies the
 finite-index union; positive piece count follows from the player-count
 hypothesis. These components still need assembly into the full statement.
 The remaining substantive requirement of `QuestionOneHypotheses`
-(`MathUE/Topology/SimonViabilityQuestion.lean`) is one common positive scale
-for both small-step containment and all boundary-piece escape clauses.
+(`MathUE/Topology/SimonViabilityQuestion.lean`) is small-step containment at
+the same scale already used for boundary-piece escape.
 
 `isCompact_gluedNeighborhood_of_section3Constants`
 (`Literature/Simon2012.lean`) proves compactness of the actual neighborhood.
@@ -167,25 +175,17 @@ the compact terminal image of the continuous homotopy.
 The upper-fiber estimates are not conclusions of `corollary4_1` alone.
 Separate unrelated scale choices would not prove the final common-scale field.
 
-Two source-level reductions guide the remaining implementation. They are
-ordinary mathematical arguments, not additional checked declarations:
-
-- For the upper part of Property (7), the sole-quitter row admits the paper's
-  common motion bound without choosing a new parameter. If all continuation
-  coordinates are at most twice the player count times the payoff scale,
-  the existing bounded-region motion estimate applies. Otherwise one larger
-  coordinate and the exact affine payoff of the sole-quitter row give the
-  bound directly. This avoids a new compactness parameter depending on the
-  truncation radius.
-- For Property (6), Case 1, contractibility of the upper payoff image does
-  not justify membership of a straight segment. Instead, a zero cutoff
-  leaves the actual payoff endpoint. For positive cutoff, the small-step
-  premise and the small-quitting bound control the distance from the
-  homotopy's first coordinate to its original base point, using the exact
-  one-stage payoff identity and the bound on the structure-map correction.
-  Under the current small-step-radius cutoff, this puts the first coordinate
-  in the lower neighborhood, where the required segment belongs to the
-  convex lower fiber. No star-convexity of the upper image is needed.
+For Property (6), Case 1, contractibility of the upper payoff image does
+not justify membership of a straight segment. A source-level reduction
+remains to be implemented: a zero cutoff leaves the actual payoff endpoint.
+For positive cutoff, the small-step premise and the small-quitting bound
+control the distance from the homotopy's first coordinate to its original
+base point, using the exact one-stage payoff identity and the bound on the
+structure-map correction. Under the current small-step-radius cutoff, this
+puts the first coordinate in the lower neighborhood, where the required
+segment belongs to the convex lower fiber. This ordinary mathematical
+argument is not yet a checked declaration; it uses no star-convexity of the
+upper image.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved. The checked
