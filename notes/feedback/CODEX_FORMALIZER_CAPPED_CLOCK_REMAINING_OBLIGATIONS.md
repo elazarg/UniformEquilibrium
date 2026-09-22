@@ -276,8 +276,45 @@ bound at the initial profile. The lower bound is the canonical survival
 product times the positive part of its inverse-row deficit minus twice
 the reward bound times the hazard bound. The proof uses an actual
 deterministic deadline on this same schedule. It passed a silent named
-build and independent static semantic review. Public deadline-witness
-and arbitrary-start statements remain to be exposed.
+build and independent static semantic review.
+`exists_pureTimeDeviationGain_ge_of_strictThreeCycle` in the same file
+exposes the actual deterministic date, its survival lower bound, and the
+positive quantitative payoff gain; it passed a silent named build.
+The public `exists_pureTimeDeviationGain_ge_of_strictThreeCycle_from_start`
+and `quittingBehaviorDeviationDebt_ge_of_strictThreeCycle_from_start`
+give both conclusions at every starting date of the same fixed schedule.
+The witness gives an absolute date at or after the start and the actual
+relative pure-time strategy in the suffix profile. These declarations
+passed a silent named check; the original zero-start statements delegate
+to them.
+
+`ThreeCoreCyclicLabelAdapter.exists_directedCycle_labeling_of_strictlyPositiveInverse`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PositiveInverseCyclicLabelAdapter.lean`)
+constructs the canonical strict-cycle labeling from only cardinality three,
+zero diagonal, and strictly positive inverse. It reuses the existing
+classification rather than proving it again.
+`fullChild_join_le_of_joinRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFullChildJoinObstruction.lean`)
+extracts the full-child obstruction from just the joining rows, allowing
+signed weights. `cappedClockFullChildJoinModification_singletonMatrix`,
+`cappedClockFullChildJoinModification_deleteReward`, and
+`cappedClockFullChildJoinModification_not_futureJoinCertificate` in the
+same file give the collision-only modification, its preserved singleton
+and child data, and its exclusion of every future/join certificate for a
+positive chosen gap. Both modules passed silent named checks.
+
+`BalancedSingletonCycleCertificate.rootSequence_terminalValue_eq`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonActualPath.lean`)
+identifies actual child continuation values at every date and initial mesh
+phase. The same module derives solo roots, hazards below one, absorption,
+singleton floors, and exact owner ties from the child certificate.
+`BalancedSingletonCycleCertificate.deletedRootSequence_terminalValue_eq`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonDeletedPath.lean`)
+transports these values to the parent with every player in an arbitrary
+deletion block at Never. The parent schedule's absorption, solo roots,
+child floors, and owner ties are explicit. Both modules passed silent named
+checks; the child value and time quantifiers also passed independent review.
+No parent floor is assumed.
 
 ## Work still needed
 
@@ -285,33 +322,27 @@ The terminating child-first rational search and its original-parent consumer
 are proved in Research, including exact Never preservation and rational
 amplification selection. Their scope is recorded in
 [the rational producer note](CODEX_FORMALIZER_CAPPED_CLOCK_RATIONAL_PRODUCER.md).
-The response-debt bound is proved at the initial profile. Its positive
-deterministic-deadline witness and its arbitrary-start version on the same
-fixed schedule still need public statements.
+The response-debt bound and its positive deterministic-deadline witness are
+proved at every starting date of the same fixed schedule.
 The matrix algebra, forced vertex visits, and actual continuation-floor
 equivalence are proved as described above. Its hypotheses concern an exact
 balanced singleton schedule, not all child equilibria or approximate ties.
 
-A declaration-level audit also identified three useful source conclusions
-that still need explicit adapters:
+The periodic application still needs a public composition of the checked
+child-certificate parent lift with the strict-cycle floor/deadline/debt
+consumers. Its actual-value, absorption, and child-floor premises are now
+produced, but the final certificate-level conclusion is not yet stated.
+A certificate on the full parent would assume the outsider floor being tested.
 
-- Compose the existing three-player cyclic labeling theorem with strict
-  inverse positivity, rather than asking callers for standard-Q and
-  homogeneous-solution exclusions separately. The matrix classification
-  itself is already proved in
-  `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/CyclicLabelAdapter.lean`;
-  the inverse-positive implications are in
-  `UniformEquilibrium/Quitting/Classification/LCP/PositiveInverse.lean`.
-- Apply the actual path results to a periodic balanced certificate on the
-  **child** reward and its parent Never lift. Actual-value uniqueness and
-  periodic absorption are already available in the cycle machinery. A
-  certificate on the full parent would assume the outsider floor being tested.
-- Expose the full-child joining obstruction and construct a reward change
-  at the outsider's full-parent collision coordinate that violates it while
-  preserving singleton entries. This is separate from the paired-family
-  obstruction to balanced cycles.
+Source equation (6) also states simultaneous multi-outsider maximum and
+sum debt bounds for every nonnegative nonincreasing evaluation. The
+evaluated one-outsider comparison and the terminal multi-outsider family
+theorems are proved; the simultaneous evaluated family and both aggregate
+bounds still need literal declarations. This is a composition of the
+existing evaluated child-deletion comparison and survivor identities, not
+a missing mathematical argument.
 
-These are missing Lean compositions or finite-table constructions from the
+These are missing Lean compositions from the
 packet, not missing source mathematics. They must not be replaced by an
 implicit appeal to the reader to assemble the required conclusion.
 

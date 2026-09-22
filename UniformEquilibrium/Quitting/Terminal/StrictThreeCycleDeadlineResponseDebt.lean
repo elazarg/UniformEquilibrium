@@ -50,44 +50,6 @@ private theorem exists_inverseRowDeficit_vertex
           columnWeight a b c d e f j) 0) Finset.univ_nonempty
   exact ⟨j, hj.symm⟩
 
-private theorem pureTimeDebt_ge_survival_mul_max
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : ℕ → ι → PMF Bool) (who : ι) (date : ℕ)
-    {C gain : ℝ}
-    (hsurvival : C ≤ quittingOpponentSurvivalWeight roots who 0 date)
-    (hgain : gain ≤ quittingFixedOpponentsQuitValue reward roots who date -
-      quittingRootSequencePureTimeTerminalValue reward roots who none date) :
-    C * max gain 0 ≤
-      quittingPureTimeBestResponseCap reward roots who 0 -
-        quittingRootSequencePureTimeTerminalValue reward roots who none 0 := by
-  have hnever : quittingRootSequencePureTimeTerminalValue reward roots who none 0 ≤
-      quittingPureTimeBestResponseCap reward roots who 0 := by
-    unfold quittingPureTimeBestResponseCap
-    apply le_csSup
-    · exact bddAbove_range_quittingRootSequenceRelativePureTimeTerminalValue
-        reward roots who 0
-    · exact ⟨none, by simp [quittingRootSequenceRelativePureTimeTerminalValue]⟩
-  by_cases hpositive : 0 < gain
-  · have hexact :=
-      quittingPureTimeFirstDisagreementValue_sub_eq_opponentSurvival_mul
-        reward roots who date none
-    simp only [quittingAbsolutePureTime,
-      quittingRootSequenceRelativePureTimeTerminalValue] at hexact
-    have hquit : quittingRootSequencePureTimeTerminalValue reward roots who
-        (some date) 0 ≤ quittingPureTimeBestResponseCap reward roots who 0 := by
-      unfold quittingPureTimeBestResponseCap
-      apply le_csSup
-      · exact bddAbove_range_quittingRootSequenceRelativePureTimeTerminalValue
-          reward roots who 0
-      · exact ⟨some date, by
-          simp [quittingRootSequenceRelativePureTimeTerminalValue]⟩
-    have hweight := quittingOpponentSurvivalWeight_nonneg roots who 0 date
-    have hscaled := mul_le_mul hsurvival hgain hpositive.le hweight
-    rw [max_eq_left hpositive.le]
-    linarith
-  · rw [max_eq_right (le_of_not_gt hpositive), mul_zero]
-    linarith
-
 /-- On a solo child row, a spectator who quits now loses at most twice the
 reward bound times the active child's hazard relative to quitting alone. -/
 private theorem fixedOpponentsQuitValue_ge_singleton_sub_two_mul_hazard
@@ -133,11 +95,68 @@ private theorem fixedOpponentsQuitValue_ge_singleton_sub_two_mul_hazard
     mul_le_mul_of_nonneg_left hhazard (by positivity : 0 ≤ 2 * M)
   nlinarith
 
-/-- An actual absorbing strict-cycle solo schedule forces the outsider's full
-behavioral response debt to obey the canonical deterministic-deadline bound. -/
-theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
+/-- Rebase a pure-time reply on the fixed root schedule to the profile
+started at a later live date. -/
+private theorem pureTimeTerminalValue_eq_shift
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start : ℕ)
+    (choice : Option ℕ) :
+    quittingRootSequencePureTimeTerminalValue reward roots who
+        (quittingAbsolutePureTime start choice) start =
+      quittingRootSequencePureTimeTerminalValue reward
+        (fun time => roots (start + time)) who choice 0 := by
+  have hh : ∀ time,
+      quittingPureTimeHazard (quittingAbsolutePureTime start choice)
+          (start + time) = quittingPureTimeHazard choice time := by
+    intro time
+    cases choice with
+    | none => rfl
+    | some delay =>
+        simp [quittingAbsolutePureTime, quittingPureTimeHazard]
+  unfold quittingRootSequencePureTimeTerminalValue
+    quittingRootSequenceHazardTerminalValue
+  rw [quittingRootSequenceTerminalValue_eq_shift]
+  congr 1
+  funext time player
+  simp only [quittingRootSequenceUpdate]
+  rw [hh]
+
+/-- First-disagreement identity when the source profile starts at an
+arbitrary live date. -/
+private theorem pureTimeGain_eq_survival_mul_at
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (who : ι) (start fuel : ℕ) :
+    quittingRootSequencePureTimeTerminalValue reward roots who
+        (some (start + fuel)) start -
+      quittingRootSequencePureTimeTerminalValue reward roots who none start =
+    quittingOpponentSurvivalWeight roots who start fuel *
+      (quittingFixedOpponentsQuitValue reward roots who (start + fuel) -
+        quittingRootSequencePureTimeTerminalValue reward roots who none
+          (start + fuel)) := by
+  have hnever : ∀ start fuel,
+      quittingRootSequencePureTimeTerminalValue reward roots who none start =
+        quittingLiveLedgerAccum reward roots who start fuel +
+          quittingOpponentSurvivalWeight roots who start fuel *
+            quittingRootSequencePureTimeTerminalValue reward roots who none
+              (start + fuel) := by
+    intro start fuel
+    induction fuel generalizing start with
+    | zero => simp [quittingOpponentSurvivalWeight, quittingLiveLedgerAccum]
+    | succ fuel ih =>
+        rw [quittingRootSequencePureTimeTerminalValue_none_succ_eq_fixedOpponents,
+          ih (start + 1), quittingLiveLedgerAccum_shift,
+          quittingOpponentSurvivalWeight_shift]
+        rw [show start + (fuel + 1) = start + 1 + fuel by omega]
+        ring
+  rw [quittingRootSequencePureTimeTerminalValue_some_add, hnever]
+  ring
+
+/-- A positive strict-cycle response gap is realized by an actual finite
+pure-time quit date, with the quantitative vertex-survival bound. -/
+theorem exists_pureTimeDeviationGain_ge_of_strictThreeCycle_from_start
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (roots : ℕ → ι → PMF Bool) (child : Fin 3 ↪ ι) (owner : ℕ → Fin 3)
+    (start : ℕ)
     (outside : ι) (houtside : ∀ i, outside ≠ child i)
     (a b c d e f M delta : ℝ)
     (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
@@ -157,14 +176,21 @@ theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
     (htie : ∀ time, 0 < (roots time (child (owner time)) true).toReal →
       quittingRootSequenceTerminalValue reward roots (child (owner time)) time =
         quittingSoloReward reward (child (owner time)) (child (owner time)))
-    (hreward : ∀ S player, |reward S player| ≤ M) :
-    a * d * e / (b * c * f) *
-        max (quittingStrictThreeCycleInverseRowDeficit
-          reward child a b c d e f outside - 2 * M * delta) 0 ≤
-      quittingBehaviorDeviationPayoffCap reward
-          (quittingRootSequenceProfile reward roots 0) outside -
+    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hpositive : 0 < quittingStrictThreeCycleInverseRowDeficit
+      reward child a b c d e f outside - 2 * M * delta) :
+    ∃ date : ℕ, start ≤ date ∧
+      a * d * e / (b * c * f) ≤
+        quittingOpponentSurvivalWeight roots outside start (date - start) ∧
+      a * d * e / (b * c * f) *
+          (quittingStrictThreeCycleInverseRowDeficit
+            reward child a b c d e f outside - 2 * M * delta) ≤
         quittingTerminalPayoff reward
-          (quittingRootSequenceProfile reward roots 0) outside := by
+            (Function.update (quittingRootSequenceProfile reward roots start) outside
+              (quittingPureTimeBehaviorStrategy reward outside
+                (some (date - start)))) outside -
+          quittingTerminalPayoff reward
+            (quittingRootSequenceProfile reward roots start) outside := by
   let weight := columnWeight a b c d e f
   have hweight : ∀ i, 0 < weight i :=
     columnWeight_pos ha hb hc hd he hf hgap
@@ -176,20 +202,20 @@ theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
     hsolo hquit habsorb weight hweight hbalance hfloor htie
   let deficit := quittingStrictThreeCycleInverseRowDeficit
     reward child a b c d e f outside
-  have hdeficit : 0 ≤ deficit := by
-    unfold deficit quittingStrictThreeCycleInverseRowDeficit
-    exact (le_max_right _ _).trans <| Finset.le_sup'
-      (fun j : Fin 3 => max
-        (-Matrix.vecMul
-          (fun i => quittingSingletonMatrix reward outside (child i))
-          ((quittingSingletonMatrix reward).submatrix child child)⁻¹ j /
-            columnWeight a b c d e f j) 0) (Finset.mem_univ 0)
-  by_cases hdeficitPositive : 0 < deficit
+  have hdeficitPositive : 0 < deficit := by
+    have hdelta : 0 ≤ delta :=
+      ENNReal.toReal_nonneg.trans (hhazard 0)
+    have hM : 0 ≤ M := (abs_nonneg _).trans
+      (hreward (quittingSingletonTerminal outside) outside)
+    have hcost : 0 ≤ 2 * M * delta :=
+      mul_nonneg (mul_nonneg (by norm_num) hM) hdelta
+    change 0 < deficit - 2 * M * delta at hpositive
+    linarith
   · obtain ⟨j, hj⟩ := exists_inverseRowDeficit_vertex
       reward child a b c d e f outside
     have hvisits := exists_vertex_after_with_survival_ge ha hb hc hd he hf hgap
     rw [← hmatrix] at hvisits
-    obtain ⟨date, _, hvertex, hsurvival⟩ := hvisits path 0 j
+    obtain ⟨date, hdate, hvertex, hsurvival⟩ := hvisits path start j
     have hdet : ((quittingSingletonMatrix reward).submatrix child child).det ≠ 0 := by
       rw [hmatrix, directedCycleMatrix_det]
       exact hgap.ne'
@@ -242,10 +268,12 @@ theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
           quittingRootSequencePureTimeTerminalValue reward roots outside none date := by
       rw [hnever]
       linarith
-    have hsurvivalEq : quittingOpponentSurvivalWeight roots outside 0 date =
-        Math.survivalProduct (fun time => 1 - path.hazard time) 0 date := by
+    have hsurvivalEq :
+        quittingOpponentSurvivalWeight roots outside start (date - start) =
+          Math.survivalProduct (fun time => 1 - path.hazard time)
+            start (date - start) := by
       rw [quittingOpponentSurvivalWeight_eq_survivalProduct]
-      apply congrArg (Math.survivalProduct · 0 date)
+      apply congrArg (Math.survivalProduct · start (date - start))
       funext time
       have hmass := quittingFixedOpponentsContinueMass_eq_of_soloRoot roots
         (hsolo time) (houtside (owner time))
@@ -254,47 +282,193 @@ theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
       dsimp only [path, normalizedSingletonPathOfRootSequence]
       rw [hmass]
       linarith
-    have hcore := pureTimeDebt_ge_survival_mul_max
-      (C := a * d * e / (b * c * f)) reward roots outside date
-      (by rw [hsurvivalEq]; simpa using hsurvival) hgain
-    rw [quittingBehaviorDeviationPayoffCap_eq_pureTime]
-    unfold quittingBehaviorPureTimePayoffCap quittingBehaviorPureTimePayoff
-    rw [show sSup (Set.range fun choice : Option ℕ =>
+    have hsurvivalBound : a * d * e / (b * c * f) ≤
+        quittingOpponentSurvivalWeight roots outside start (date - start) := by
+      rw [hsurvivalEq]
+      simpa using hsurvival
+    have hexact := pureTimeGain_eq_survival_mul_at
+      reward roots outside start (date - start)
+    rw [Nat.add_sub_of_le hdate] at hexact
+    have hscaled := mul_le_mul hsurvivalBound hgain
+      (le_of_lt hpositive)
+      (quittingOpponentSurvivalWeight_nonneg roots outside start (date - start))
+    have hpureTime : a * d * e / (b * c * f) * (deficit - 2 * M * delta) ≤
+        quittingRootSequencePureTimeTerminalValue reward roots outside
+            (some date) start -
+          quittingRootSequencePureTimeTerminalValue reward roots outside none start := by
+      calc
+        _ ≤ quittingOpponentSurvivalWeight roots outside start (date - start) *
+            (quittingFixedOpponentsQuitValue reward roots outside date -
+              quittingRootSequencePureTimeTerminalValue reward roots outside none date) :=
+          hscaled
+        _ = _ := hexact.symm
+    have hprescribed : quittingTerminalPayoff reward
+        (quittingRootSequenceProfile reward roots start) outside =
+        quittingRootSequencePureTimeTerminalValue reward roots outside none start := by
+      unfold quittingRootSequencePureTimeTerminalValue
+        quittingRootSequenceHazardTerminalValue quittingRootSequenceTerminalValue
+      rw [hupdate]
+    have hdeviation : quittingTerminalPayoff reward
+        (Function.update (quittingRootSequenceProfile reward roots start) outside
+          (quittingPureTimeBehaviorStrategy reward outside
+            (some (date - start)))) outside =
+        quittingRootSequencePureTimeTerminalValue reward roots outside
+          (some date) start := by
+      rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy,
+        quittingRootSequenceProfile_eq_shift,
+        quittingProfileLiveRoot_quittingRootSequenceProfile_zero]
+      rw [← pureTimeTerminalValue_eq_shift reward roots outside start
+        (some (date - start))]
+      simp only [quittingAbsolutePureTime, Nat.add_sub_of_le hdate]
+    refine ⟨date, hdate, hsurvivalBound, ?_⟩
+    simpa only [hdeviation, hprescribed] using hpureTime
+
+/-- Zero-start specialization of the arbitrary-start deterministic reply. -/
+theorem exists_pureTimeDeviationGain_ge_of_strictThreeCycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (child : Fin 3 ↪ ι) (owner : ℕ → Fin 3)
+    (outside : ι) (houtside : ∀ i, outside ≠ child i)
+    (a b c d e f M delta : ℝ)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hd : 0 < d) (he : 0 < e) (hf : 0 < f)
+    (hgap : 0 < cycleGap a b c d e f)
+    (hmatrix : (quittingSingletonMatrix reward).submatrix child child =
+      directedCycleMatrix a b c d e f)
+    (hsolo : ∀ time other, other ≠ child (owner time) →
+      roots time other = PMF.pure false)
+    (hquit : ∀ time, (roots time (child (owner time)) true).toReal < 1)
+    (hhazard : ∀ time,
+      (roots time (child (owner time)) true).toReal ≤ delta)
+    (habsorb : quittingLiveMassLimit reward
+      (quittingRootSequenceProfile reward roots 0) = 0)
+    (hfloor : ∀ time i, quittingSoloReward reward (child i) (child i) ≤
+      quittingRootSequenceTerminalValue reward roots (child i) time)
+    (htie : ∀ time, 0 < (roots time (child (owner time)) true).toReal →
+      quittingRootSequenceTerminalValue reward roots (child (owner time)) time =
+        quittingSoloReward reward (child (owner time)) (child (owner time)))
+    (hreward : ∀ S player, |reward S player| ≤ M)
+    (hpositive : 0 < quittingStrictThreeCycleInverseRowDeficit
+      reward child a b c d e f outside - 2 * M * delta) :
+    ∃ date : ℕ,
+      a * d * e / (b * c * f) ≤
+        quittingOpponentSurvivalWeight roots outside 0 date ∧
+      a * d * e / (b * c * f) *
+          (quittingStrictThreeCycleInverseRowDeficit
+            reward child a b c d e f outside - 2 * M * delta) ≤
         quittingTerminalPayoff reward
-          (Function.update (quittingRootSequenceProfile reward roots 0) outside
-            (quittingPureTimeBehaviorStrategy reward outside choice)) outside) =
-        quittingPureTimeBestResponseCap reward roots outside 0 by
-      unfold quittingPureTimeBestResponseCap
-      apply congrArg sSup
-      apply congrArg Set.range
-      funext choice
-      rw [quittingTerminalPayoff_update_pureTimeBehaviorStrategy]
-      simp only [quittingProfileLiveRoot_quittingRootSequenceProfile_zero,
-        quittingRootSequenceRelativePureTimeTerminalValue,
-        quittingAbsolutePureTime_zero]]
-    simpa [deficit, quittingRootSequencePureTimeTerminalValue,
-      quittingRootSequenceHazardTerminalValue, quittingRootSequenceTerminalValue,
-      hupdate] using hcore
-  · have hzero : deficit = 0 := le_antisymm (le_of_not_gt hdeficitPositive) hdeficit
-    have hdelta : 0 ≤ delta := by
-      exact (show 0 ≤ (roots 0 (child (owner 0)) true).toReal from
-        ENNReal.toReal_nonneg).trans (hhazard 0)
-    have hM : 0 ≤ M := (abs_nonneg _).trans
-      (hreward (quittingSingletonTerminal outside) outside)
-    change a * d * e / (b * c * f) * max (deficit - 2 * M * delta) 0 ≤ _
-    rw [hzero, zero_sub, max_eq_right (neg_nonpos.mpr (mul_nonneg
-      (mul_nonneg (by norm_num) hM) hdelta)), mul_zero]
-    have hnever : quittingTerminalPayoff reward
-        (quittingRootSequenceProfile reward roots 0) outside ≤
+            (Function.update (quittingRootSequenceProfile reward roots 0) outside
+              (quittingPureTimeBehaviorStrategy reward outside (some date))) outside -
+          quittingTerminalPayoff reward
+            (quittingRootSequenceProfile reward roots 0) outside := by
+  obtain ⟨date, _, hsurvival, hgain⟩ :=
+    exists_pureTimeDeviationGain_ge_of_strictThreeCycle_from_start
+      reward roots child owner 0 outside houtside a b c d e f M delta
+      ha hb hc hd he hf hgap hmatrix hsolo hquit hhazard habsorb
+      hfloor htie hreward hpositive
+  exact ⟨date, by simpa using hsurvival, by simpa using hgain⟩
+
+/-- The concrete relative pure-time reply bounds full behavioral response debt
+at any live start on the same absorbing strict-cycle solo schedule. -/
+theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle_from_start
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (child : Fin 3 ↪ ι) (owner : ℕ → Fin 3)
+    (start : ℕ)
+    (outside : ι) (houtside : ∀ i, outside ≠ child i)
+    (a b c d e f M delta : ℝ)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hd : 0 < d) (he : 0 < e) (hf : 0 < f)
+    (hgap : 0 < cycleGap a b c d e f)
+    (hmatrix : (quittingSingletonMatrix reward).submatrix child child =
+      directedCycleMatrix a b c d e f)
+    (hsolo : ∀ time other, other ≠ child (owner time) →
+      roots time other = PMF.pure false)
+    (hquit : ∀ time, (roots time (child (owner time)) true).toReal < 1)
+    (hhazard : ∀ time,
+      (roots time (child (owner time)) true).toReal ≤ delta)
+    (habsorb : quittingLiveMassLimit reward
+      (quittingRootSequenceProfile reward roots 0) = 0)
+    (hfloor : ∀ time i, quittingSoloReward reward (child i) (child i) ≤
+      quittingRootSequenceTerminalValue reward roots (child i) time)
+    (htie : ∀ time, 0 < (roots time (child (owner time)) true).toReal →
+      quittingRootSequenceTerminalValue reward roots (child (owner time)) time =
+        quittingSoloReward reward (child (owner time)) (child (owner time)))
+    (hreward : ∀ S player, |reward S player| ≤ M) :
+    a * d * e / (b * c * f) *
+        max (quittingStrictThreeCycleInverseRowDeficit
+          reward child a b c d e f outside - 2 * M * delta) 0 ≤
+      quittingBehaviorDeviationPayoffCap reward
+          (quittingRootSequenceProfile reward roots start) outside -
+        quittingTerminalPayoff reward
+          (quittingRootSequenceProfile reward roots start) outside := by
+  have hbaseline : quittingTerminalPayoff reward
+      (quittingRootSequenceProfile reward roots start) outside ≤
+      quittingBehaviorDeviationPayoffCap reward
+        (quittingRootSequenceProfile reward roots start) outside := by
+    unfold quittingBehaviorDeviationPayoffCap
+    apply le_csSup
+    · exact bddAbove_range_quittingTerminalPayoff_update reward
+        (quittingRootSequenceProfile reward roots start) outside
+    · exact ⟨(quittingRootSequenceProfile reward roots start) outside, by
+        simp only [Function.update_eq_self]⟩
+  by_cases hpositive : 0 < quittingStrictThreeCycleInverseRowDeficit
+      reward child a b c d e f outside - 2 * M * delta
+  · obtain ⟨date, _, _, hgain⟩ :=
+      exists_pureTimeDeviationGain_ge_of_strictThreeCycle_from_start
+        reward roots child owner start outside houtside a b c d e f M delta
+        ha hb hc hd he hf hgap hmatrix hsolo hquit hhazard habsorb
+        hfloor htie hreward hpositive
+    have hcap : quittingTerminalPayoff reward
+        (Function.update (quittingRootSequenceProfile reward roots start) outside
+          (quittingPureTimeBehaviorStrategy reward outside
+            (some (date - start)))) outside ≤
         quittingBehaviorDeviationPayoffCap reward
-          (quittingRootSequenceProfile reward roots 0) outside := by
+          (quittingRootSequenceProfile reward roots start) outside := by
       unfold quittingBehaviorDeviationPayoffCap
       apply le_csSup
       · exact bddAbove_range_quittingTerminalPayoff_update reward
-          (quittingRootSequenceProfile reward roots 0) outside
-      · exact ⟨(quittingRootSequenceProfile reward roots 0) outside, by
-          simp only [Function.update_eq_self]
-        ⟩
+          (quittingRootSequenceProfile reward roots start) outside
+      · exact ⟨quittingPureTimeBehaviorStrategy reward outside
+          (some (date - start)), rfl⟩
+    rw [max_eq_left hpositive.le]
     linarith
+  · rw [max_eq_right (le_of_not_gt hpositive), mul_zero]
+    linarith
+
+/-- An actual absorbing strict-cycle solo schedule forces the outsider's full
+behavioral response debt to obey the canonical deterministic-deadline bound. -/
+theorem quittingBehaviorDeviationDebt_ge_of_strictThreeCycle
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : ℕ → ι → PMF Bool) (child : Fin 3 ↪ ι) (owner : ℕ → Fin 3)
+    (outside : ι) (houtside : ∀ i, outside ≠ child i)
+    (a b c d e f M delta : ℝ)
+    (ha : 0 < a) (hb : 0 < b) (hc : 0 < c)
+    (hd : 0 < d) (he : 0 < e) (hf : 0 < f)
+    (hgap : 0 < cycleGap a b c d e f)
+    (hmatrix : (quittingSingletonMatrix reward).submatrix child child =
+      directedCycleMatrix a b c d e f)
+    (hsolo : ∀ time other, other ≠ child (owner time) →
+      roots time other = PMF.pure false)
+    (hquit : ∀ time, (roots time (child (owner time)) true).toReal < 1)
+    (hhazard : ∀ time,
+      (roots time (child (owner time)) true).toReal ≤ delta)
+    (habsorb : quittingLiveMassLimit reward
+      (quittingRootSequenceProfile reward roots 0) = 0)
+    (hfloor : ∀ time i, quittingSoloReward reward (child i) (child i) ≤
+      quittingRootSequenceTerminalValue reward roots (child i) time)
+    (htie : ∀ time, 0 < (roots time (child (owner time)) true).toReal →
+      quittingRootSequenceTerminalValue reward roots (child (owner time)) time =
+        quittingSoloReward reward (child (owner time)) (child (owner time)))
+    (hreward : ∀ S player, |reward S player| ≤ M) :
+    a * d * e / (b * c * f) *
+        max (quittingStrictThreeCycleInverseRowDeficit
+          reward child a b c d e f outside - 2 * M * delta) 0 ≤
+      quittingBehaviorDeviationPayoffCap reward
+          (quittingRootSequenceProfile reward roots 0) outside -
+        quittingTerminalPayoff reward
+          (quittingRootSequenceProfile reward roots 0) outside := by
+  exact quittingBehaviorDeviationDebt_ge_of_strictThreeCycle_from_start
+    reward roots child owner 0 outside houtside a b c d e f M delta
+    ha hb hc hd he hf hgap hmatrix hsolo hquit hhazard habsorb
+    hfloor htie hreward
 
 end GameTheory

@@ -86,6 +86,19 @@ segments. Simon's paper-specific orbit record is explicitly mapped to this
 generic interface. The Euclidean segment-variation estimate and removal of
 bounded predecessors before an unbounded segment are also checked in
 `Literature/Simon2012.lean`.
+
+`ExtendedOrbitData.IsProgressiveClusterPoint.potential_le_point`
+(`MathUE/Topology/ExtendedOrbit.lean`) compares a continuous decreasing
+potential at a progressive cluster with every earlier valid orbit point.
+`ExtendedOrbitData.not_hasUnboundedExtendedVariationWith_of_potential`
+in the same file rules out unbounded extended variation when a continuous
+lower-bounded decreasing potential pays a fixed positive multiple of each
+valid edge cost. Its finite-segment case includes the final segment; its
+infinite-segment case telescopes through finite and infinite stitches.
+These generic declarations passed a silent named build. The coordinate
+floor/drift corollary and its application to Simon's actual graph remain
+Lean work; these generic results alone do not complete that application.
+
 `exists_nearFeasible_unbounded_section4J_tail` in that file covers both
 an unbounded segment and infinitely many bounded-variation segments. From
 an unbounded extended orbit in the compact actual Section 4 graph, it

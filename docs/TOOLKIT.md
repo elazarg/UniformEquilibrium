@@ -1011,14 +1011,30 @@ block survival identities are also explicit there.
 combines these results for actual terminal continuation payoffs. For every
 parent player and every starting date, the singleton floor holds along the
 whole tail exactly when its actual inverse-row coefficients are nonnegative.
-`quittingBehaviorDeviationDebt_ge_of_strictThreeCycle`
+`quittingBehaviorDeviationDebt_ge_of_strictThreeCycle_from_start`
 (`UniformEquilibrium/Quitting/Terminal/StrictThreeCycleDeadlineResponseDebt.lean`)
 then bounds an outside player's unrestricted behavioral response debt at
-the initial profile by the canonical survival product times the positive
-part of its inverse-row deficit minus twice the reward bound times the
-hazard bound. Its proof constructs an actual deterministic deadline;
-separate public deadline-witness and arbitrary-start statements remain
-to be exposed. The schedule need not be periodic.
+every starting date of the same schedule by the canonical survival product
+times the positive part of the inverse-row deficit after subtracting twice
+the reward bound times the hazard bound.
+`exists_pureTimeDeviationGain_ge_of_strictThreeCycle_from_start` in the
+same file exposes an actual deterministic deadline realizing the positive
+bound, together with its survival lower bound and an absolute date no
+earlier than the start. The schedule need not be periodic.
+
+`BalancedSingletonCycleCertificate.rootSequence_terminalValue_eq` and
+`rootSequence_liveMassLimit_eq_zero`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonActualPath.lean`)
+identify the actual values and absorption of the certificate's subdivided
+periodic schedule for every initial mesh phase. Its solo roots, hazard bound,
+singleton floors, and exact owner ties are also explicit.
+`BalancedSingletonCycleCertificate.deletedRootSequence_terminalValue_eq`
+(`UniformEquilibrium/Quitting/Cycles/BalancedSingletonDeletedPath.lean`)
+preserves those child values in the actual parent root sequence with every
+deleted player at Never. The same file supplies its absorption, child floors,
+and owner ties for arbitrary deletion blocks. It does not assume parent
+singleton floors. A public composition with the strict-cycle floor/debt
+theorems remains to be supplied.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -1027,6 +1043,18 @@ It permits any finite embedded child and an entrywise nonnegative inverse.
 The comparison permits signed weights; nonnegative weights imply a
 nonnegative inverse row. Both exact and Never-relaxed capped-clock
 certificates have direct corollaries in the same file.
+
+`ThreeCoreCyclicLabelAdapter.exists_directedCycle_labeling_of_strictlyPositiveInverse`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PositiveInverseCyclicLabelAdapter.lean`)
+supplies the canonical strict-cycle labeling from a zero-diagonal matrix
+with three coordinates and strictly positive inverse. It composes the
+existing classification and inverse-positive implications.
+`fullChild_join_le_of_joinRows`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockFullChildJoinObstruction.lean`)
+extracts the full-child joining obstruction from only the joining rows,
+even with signed weights. The same file constructs a change to the
+outsider's full-parent collision payoff that violates this obstruction
+while preserving the singleton matrix and the deleted child reward.
 
 `PositiveInverseFourMatrixComparisons.not_projectiveQBar`
 (`UniformEquilibrium/Quitting/Classification/LCP/PositiveInverseFourMatrixComparisons.lean`)
