@@ -21596,6 +21596,35 @@ theorem CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion
   rw [(quitTailPayoff_eq_oneStage G profile i).symm] at hbound
   exact hbound
 
+/-- The corrected five-way theorem follows from the remaining first-crossing
+path extraction. All other implications use the compact-carrier motion bound
+and the checked orbit compilers. -/
+theorem theorem3_corrected_of_firstCrossingExtraction (G : QuittingGame)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hextraction : HasCorrectedFirstCrossingPathExtraction G) :
+    EquivalentFive (HasQuitApproximateEquilibria G) (CyclicOrbitCondition G)
+      (FiniteNearOrbitCondition G) (InfiniteOrbitCondition G)
+      (ExtendedOrbitCondition G) := by
+  obtain ⟨ρ, hρ⟩ :=
+    exists_correctedUniformMotionAt_of_not_branches G hgenerated hinstant
+  have hcyclicInfinite : CyclicOrbitCondition G → InfiniteOrbitCondition G :=
+    fun hcycle => hcycle.toInfiniteOrbitCondition_of_corrected_motion G hρ
+  have hequilibriumCyclic : HasQuitApproximateEquilibria G → CyclicOrbitCondition G :=
+    hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction
+      G hinstant hextraction hρ
+  have hfiniteCyclic : FiniteNearOrbitCondition G → CyclicOrbitCondition G :=
+    fun hfinite => hfinite.toCyclicOrbitCondition G hinstant
+  have hextendedCyclic : ExtendedOrbitCondition G → CyclicOrbitCondition G :=
+    fun hextended => hextended.toCyclicOrbitCondition G hinstant
+  exact ⟨
+    ⟨hequilibriumCyclic, CyclicOrbitCondition.hasQuitApproximateEquilibria G⟩,
+    ⟨fun hcycle => hcyclicInfinite hcycle |>.toFiniteNearOrbitCondition G, hfiniteCyclic⟩,
+    ⟨fun hfinite => hcyclicInfinite (hfiniteCyclic hfinite),
+      InfiniteOrbitCondition.toFiniteNearOrbitCondition G⟩,
+    ⟨InfiniteOrbitCondition.toExtendedOrbitCondition G,
+      fun hextended => hcyclicInfinite (hextendedCyclic hextended)⟩⟩
+
 /-- The total probability of nonempty quitting coalitions lies in `[0,1]`. -/
 theorem nonemptyCoalitionProbability_sum_mem_Icc (G : QuittingGame) (p : QuitRow G) :
     (∑ A ∈ Finset.univ.powerset, if A.Nonempty then CoalitionProbability G p A else 0) ∈

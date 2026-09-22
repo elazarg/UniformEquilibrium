@@ -1161,9 +1161,20 @@ are stated in
 `quittingCrossedSourceGuards_iff_fullBoxGuards` in that file identifies them
 with the packet's literal two-face guards. The strategic module also states
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
-under those source conditions. The packet's annular total-degree identity
-and its finite raw-test, weak-boundary, and matrix-free Fin4 producers are
-not yet formalized. The quotient RI route does not apply to the crossed map.
+under those source conditions.
+`exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_strictRawUnit`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawProducer.lean`)
+closes the strict unit-ceiling reward-table branch: the literal lower ranking
+and joining comparisons for both selected recipients, together with positive
+determinant and entrywise positive inverse of the full singleton matrix,
+produce the guards, crossed R0 degree minus one, and the exact stationary
+Nash/uniform-payoff conclusion. The full unswapped singleton matrix has R0
+degree plus one by
+`quittingSingletonMatrix_r0_degree_one_of_positiveInverse`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawMatrix.lean`).
+The packet's half-ceiling Bernstein branch, weak-boundary and matrix-free
+Fin4 producers, and annular total-degree identity remain separate. The
+quotient RI route does not apply to the crossed map.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2201,10 +2212,22 @@ coefficients. `deadlineWithdrawal_terminalPointwise_iff_certificate`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalPointwiseNecessity.lean`)
 identifies the D-N/F/J rows with universal deterministic terminal pointwise
 domination for the same fixed nonnegative weight arrays. This is not a
-necessity theorem for an arbitrary behavioral-debt bound. The packet's
-stationary-security and Fin4 applications still need, respectively, a
-post-deadline security producer and actual finite-table certificate/child-target
-producers.
+necessity theorem for an arbitrary behavioral-debt bound.
+`exists_deadlineWithdrawalSecurity_optimizer` and
+`exists_deadlineWithdrawalSecurity_positive_approximation`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityLP.lean`)
+construct the finite reward-table LP value and approximate it with a positive
+hazard, including when the optimizer is zero. The same module selects a
+positive-hazard or Never witness for the nonpositive security floor.
+`deadlineWithdrawalSecurityRestartLaw_terminal_floor`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityPayoff.lean`)
+proves the actual post-deadline geometric private law's terminal payoff floor
+against every deterministic future opponent clock tuple; the law and legal
+independent replacement are in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityRestart.lean`.
+The all-evaluation nonpositive-floor comparison and its mixed atom-restart
+debt consumer remain separate. A Fin4 application still needs finite-table
+certificate and child-target producers.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.
