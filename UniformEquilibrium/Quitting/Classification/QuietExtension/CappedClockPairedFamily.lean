@@ -45,9 +45,6 @@ abbrev boundarySingletonSource :=
 /-- The nonzero row `2e₂` of the paired-family certificate. -/
 def weight (child : Child) : ℝ := if child = childTwo then 2 else 0
 
-private def childEmbedding : Child ↪ Player :=
-  Function.Embedding.subtype _
-
 private def optionEmbedding : Child ↪ Option Child where
   toFun := some
   inj' := Option.some_injective Child
@@ -55,7 +52,7 @@ private def optionEmbedding : Child ↪ Option Child where
 private theorem mapped_childCoalition (A : Finset Child) :
     (cappedClockChildCoalition A).map
         (Equiv.optionSubtypeNe (3 : Player)).toEmbedding =
-      A.map childEmbedding := by
+      A.map (Function.Embedding.subtype _) := by
   change (A.map optionEmbedding).map
       (Equiv.optionSubtypeNe (3 : Player)).toEmbedding = _
   rw [Finset.map_map]
@@ -64,11 +61,11 @@ private theorem mapped_childCoalition (A : Finset Child) :
 private theorem mapped_joinedCoalition (A : Finset Child) :
     (cappedClockJoinedCoalition A).map
         (Equiv.optionSubtypeNe (3 : Player)).toEmbedding =
-      insert 3 (A.map childEmbedding) := by
+      insert 3 (A.map (Function.Embedding.subtype _)) := by
   rw [cappedClockJoinedCoalition, Finset.map_insert, mapped_childCoalition]
   rfl
 
-@[simp] private theorem parentReward_singleton
+@[simp] theorem parentReward_singleton
     (reward : {S : Finset Player // S.Nonempty} → Payoff Player)
     (owner who : Option Child) :
     parentReward reward (quittingSingletonTerminal owner) who =
@@ -82,13 +79,14 @@ private theorem mapped_joinedCoalition (A : Finset Child) :
       (Equiv.optionSubtypeNe (3 : Player) who) = _
   congr 1
 
-@[simp] private theorem parentReward_childCoalition
+@[simp] theorem parentReward_childCoalition
     (reward : {S : Finset Player // S.Nonempty} → Payoff Player)
     (A : Finset Child) (hA : A.Nonempty) (who : Option Child) :
     parentReward reward
         ⟨cappedClockChildCoalition A,
           cappedClockChildCoalition_nonempty hA⟩ who =
-      reward ⟨A.map childEmbedding, Finset.map_nonempty.mpr hA⟩
+      reward
+        ⟨A.map (Function.Embedding.subtype _), Finset.map_nonempty.mpr hA⟩
         (Equiv.optionSubtypeNe (3 : Player) who) := by
   change reward
       ((quittingCoalitionEquiv
@@ -99,14 +97,15 @@ private theorem mapped_joinedCoalition (A : Finset Child) :
   congr 1
   exact Subtype.ext (mapped_childCoalition A)
 
-@[simp] private theorem parentReward_joinedCoalition
+@[simp] theorem parentReward_joinedCoalition
     (reward : {S : Finset Player // S.Nonempty} → Payoff Player)
     (A : Finset Child) (who : Option Child) :
     parentReward reward
         ⟨cappedClockJoinedCoalition A,
           cappedClockJoinedCoalition_nonempty A⟩ who =
       reward
-        ⟨insert 3 (A.map childEmbedding), Finset.insert_nonempty 3 _⟩
+        ⟨insert 3 (A.map (Function.Embedding.subtype _)),
+          Finset.insert_nonempty 3 _⟩
         (Equiv.optionSubtypeNe (3 : Player) who) := by
   change reward
       ((quittingCoalitionEquiv
@@ -234,10 +233,10 @@ theorem exampleReward_conditions : Conditions exampleReward := by
     fin_cases owner <;> fin_cases who <;> rfl
   · intro A
     fin_cases A <;>
-      norm_num [childEmbedding, childTwo, exampleReward]
+      norm_num [childTwo, exampleReward]
   · intro A
     fin_cases A <;>
-      norm_num [childEmbedding, childTwo, exampleReward]
+      norm_num [childTwo, exampleReward]
 
 /-- The concrete fixture has a uniform-equilibrium payoff through the
 raw capped-clock route. -/
@@ -246,17 +245,29 @@ theorem exampleReward_exists_uniformEquilibriumPayoff :
       (quittingGame exampleReward).IsUniformEquilibriumPayoff none payoff :=
   exists_uniformEquilibriumPayoff exampleReward_conditions
 
+/-- Every singleton coordinate is the corresponding boundary-table entry. -/
+theorem singleton_rows_eq_boundaryReward
+    {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
+    (conditions : Conditions reward) (owner who : Player) :
+    reward (quittingSingletonTerminal owner) who =
+      SolanVieilleBoundary.boundaryReward
+        (quittingSingletonTerminal owner) who := by
+  let owner' : Option Child :=
+    (Equiv.optionSubtypeNe (3 : Player)).symm owner
+  let who' : Option Child :=
+    (Equiv.optionSubtypeNe (3 : Player)).symm who
+  have hsource := conditions.singleton_rows owner' who'
+  dsimp only [boundarySingletonSource] at hsource
+  rw [parentReward_singleton, parentReward_singleton] at hsource
+  simpa only [owner', who', Equiv.apply_symm_apply] using hsource
+
 /-- Every player's own singleton reward is one throughout the paired family. -/
 theorem singleton_self_eq_one
     {reward : {S : Finset Player // S.Nonempty} → Payoff Player}
     (conditions : Conditions reward) (owner : Player) :
     reward (quittingSingletonTerminal owner) owner = 1 := by
-  let encoded : Option Child :=
-    (Equiv.optionSubtypeNe (3 : Player)).symm owner
-  have hsource := (conditions.singleton_rows encoded encoded).trans
-    (boundarySingletonSource_self encoded)
-  dsimp only [encoded] at hsource
-  simpa only [parentReward_singleton, Equiv.apply_symm_apply] using hsource
+  rw [singleton_rows_eq_boundaryReward conditions]
+  exact SolanVieilleBoundary.soloReward_self owner
 
 /-- Every paired-family table fails the exact block-deletion gate for every
 singleton block. -/

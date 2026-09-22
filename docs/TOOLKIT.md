@@ -1849,6 +1849,23 @@ family theorem assumes only reward-table conditions, not an equilibrium source.
 Together with the zero-weight equivalence, its example shows that weighted
 certificates admit tables beyond exact singleton deletion.
 
+`CappedClockPairedCompletion.completedReward`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedCompletion.lean`)
+constructs a member of this family from an arbitrary four-player reward table.
+It preserves all nonsingleton coordinates of the three surviving players,
+fixes the paired singleton rows, and fills the remaining quiet-player entries.
+The same file proves those preservation statements, the raw family conditions,
+and uniform-equilibrium payoff existence for every completed table. Thus these
+free coordinates are inputs to a proved constructor, not feasibility hypotheses.
+
+`not_nonempty_balancedSingletonCycleCertificate` and
+`not_nonempty_balancedSingletonCycleCertificate_deleteThree`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPairedCycleExclusion.lean`)
+exclude balanced singleton cycles of every period in every member of the
+paired family and its deletion-3 child. The fixed singleton columns exclude
+every escort edge, so the proof uses the existing escort necessity theorem;
+it is not restricted to the displayed rational example.
+
 `CappedClockParentFutureJoinCertificate` and
 `exists_uniformEquilibriumPayoff_eq_some_of_cappedClockPositiveSingleton`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPositiveSingletonQuietExtension.lean`)

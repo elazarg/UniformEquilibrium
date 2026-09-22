@@ -68,6 +68,21 @@ def quittingDeleteReward
   fun terminal who =>
     reward (quittingExtendDeletedCoalition deleted terminal) who.1
 
+omit [Fintype ι] [DecidableEq ι] in
+/-- The restricted table's singleton rows are the original table's singleton
+rows at the corresponding surviving players. -/
+@[simp] theorem quittingDeleteReward_singletonTerminal
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop)
+    (owner who : {who : ι // ¬deleted who}) :
+    quittingDeleteReward reward deleted
+        (quittingSingletonTerminal owner) who =
+      reward (quittingSingletonTerminal owner.1) who.1 := by
+  change reward
+      (quittingExtendDeletedCoalition deleted
+        (quittingSingletonTerminal owner)) who.1 = _
+  congr 1
+
 /-- Restriction of a quitting reward table to the players other than
 `owner`. -/
 abbrev quittingDeletePlayerReward

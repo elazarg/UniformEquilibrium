@@ -8,6 +8,7 @@ import Mathlib.Analysis.Convex.Contractible
 import Mathlib.Analysis.Convex.Join
 import Mathlib.Topology.MetricSpace.Thickening
 import UniformEquilibrium.Quitting.Root.HazardProfileBridge
+import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
 
@@ -7989,6 +7990,426 @@ theorem lemma4_2 (G : QuittingGame) (M R ε δ : ℝ)
     linarith [hforced n |>.1, hcontinueUpper n hxUpper]
   · intro n _hnContinue
     linarith [hcontinueLower n, hforced n |>.2]
+
+/-- The players whose quitting coordinates are allowed to vary in the upper
+glue above `x`. -/
+noncomputable def UpperActivePlayers (G : QuittingGame) (R ε : ℝ)
+    (x : Payoff G.Player) : Finset G.Player := by
+  classical
+  exact Finset.univ.filter fun j => x ∈ UpperNeighborhoodFor G R ε j
+
+/-- Replace the coordinates in `s` by the corresponding coordinates of the
+second row.  This local version is used to telescope the upper-glue cube. -/
+private noncomputable def section4ReplaceOn (G : QuittingGame)
+    (first second : QuitRow G) (s : Finset G.Player) : QuitRow G := by
+  classical
+  exact fun j => if j ∈ s then second j else first j
+
+private theorem section4ReplaceOn_empty (G : QuittingGame)
+    (first second : QuitRow G) :
+    section4ReplaceOn G first second ∅ = first := by
+  funext j
+  simp [section4ReplaceOn]
+
+private theorem section4ReplaceOn_insert (G : QuittingGame) [DecidableEq G.Player]
+    (first second : QuitRow G) (s : Finset G.Player) (j : G.Player) :
+    section4ReplaceOn G first second (insert j s) =
+      (section4ReplaceOn G first second s).replace G j (second j) := by
+  funext k
+  by_cases hkj : k = j
+  · subst k
+    simp [section4ReplaceOn, QuitRow.replace]
+  · by_cases hks : k ∈ s <;>
+      simp [section4ReplaceOn, QuitRow.replace, hkj, hks]
+
+private theorem section4ReplaceOn_replace_first (G : QuittingGame) [DecidableEq G.Player]
+    (first second : QuitRow G) (s : Finset G.Player) (j : G.Player)
+    (hj : j ∉ s) :
+    (section4ReplaceOn G first second s).replace G j (first j) =
+      section4ReplaceOn G first second s := by
+  have hjvalue : section4ReplaceOn G first second s j = first j := by
+    simp [section4ReplaceOn, hj]
+  simpa only [hjvalue] using
+    QuitRow.replace_self G (section4ReplaceOn G first second s) j
+
+/-- A cross-coordinate endpoint slope is the ordinary endpoint difference
+for the reward table obtained by copying the observed coordinate. -/
+private theorem oneStage_endpointSlope_eq_coordinateEndpointDifference
+    (G : QuittingGame) [DecidableEq G.Player]
+    (x : Payoff G.Player) (p : QuitRow G)
+    (i j : G.Player) :
+    let rewardCoord : {A : Finset G.Player // A.Nonempty} → Payoff G.Player :=
+      fun A _ => G.reward A i
+    let tailCoord : Payoff G.Player := fun _ => x i
+    QuittingOneStagePayoff G x (p.replace G j 1) i -
+        QuittingOneStagePayoff G x (p.replace G j 0) i =
+      GameTheory.quittingRootEndpointDifference rewardCoord tailCoord
+        (quitRowMarginals G p) j := by
+  classical
+  dsimp only
+  have hcoordinate (row : QuitRow G) :
+      QuittingOneStagePayoff G x row i =
+        GameTheory.quittingRootExpectedPayoff (fun A _ => G.reward A i)
+          (fun _ => x i) (quitRowMarginals G row) j := by
+    rw [quittingOneStagePayoff_eq_rootExpectedPayoff,
+      GameTheory.quittingRootExpectedPayoff_eq_sum_coalitionMass,
+      GameTheory.quittingRootExpectedPayoff_eq_sum_coalitionMass]
+    apply Finset.sum_congr rfl
+    intro A _hA
+    congr 1
+    by_cases hA : A.Nonempty <;>
+      simp [GameTheory.quittingStageCoalitionPayoff, hA]
+  rw [hcoordinate, hcoordinate, quitRowMarginals_replace_one,
+    quitRowMarginals_replace_zero]
+  rfl
+
+/-- The endpoint slope used in the finite telescope is an entrywise-small
+perturbation of the singleton-difference matrix. -/
+private theorem upper_endpointSlope_sub_singletonDifference_le
+    (G : QuittingGame) [DecidableEq G.Player] (M η ε : ℝ)
+    (hM : IsSimonPayoffScale G M) (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (p : QuitRow G)
+    (hp : ∀ k, (p k : ℝ) ≤ Section4Delta G M ε)
+    (i j : G.Player) (hxi : |x i - SoloPayoff G i| ≤ ε / 3) :
+    |(QuittingOneStagePayoff G x (p.replace G j 1) i -
+          QuittingOneStagePayoff G x (p.replace G j 0) i) -
+        (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i)| ≤ η := by
+  classical
+  let rewardCoord : {A : Finset G.Player // A.Nonempty} → Payoff G.Player :=
+    fun A _ => G.reward A i
+  let tailCoord : Payoff G.Player := fun _ => x i
+  let root := quitRowMarginals G p
+  let q := GameTheory.quittingRootOpponentAbsorptionMass root j
+  let joining := GameTheory.quittingOutsiderJoiningContribution rewardCoord root j
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hdeltaPos : 0 < Section4Delta G M ε := by
+    rw [Section4Delta]
+    positivity
+  have hreplaceCap : ∀ k, ((p.replace G j 0) k : ℝ) ≤ Section4Delta G M ε := by
+    intro k
+    by_cases hkj : k = j
+    · subst k
+      simp [QuitRow.replace, hdeltaPos.le]
+    · simpa [QuitRow.replace, hkj] using hp k
+  have hqEq : q = QuitProbability G (p.replace G j 0) := by
+    rw [← othersQuitProbability_eq_replace_zero]
+    dsimp only [q, root]
+    rw [GameTheory.quittingRootOpponentAbsorptionMass_eq_one_sub_prod]
+    simp only [quitRowMarginals_true_toReal, OthersQuitProbability]
+    congr 1
+    apply Finset.prod_congr
+    · ext k
+      simp
+    · intro k _hk
+      rfl
+  have hqNonneg : 0 ≤ q := by
+    rw [hqEq]
+    exact (quitProbability_mem_Icc G (p.replace G j 0)).1
+  have hqOne : q ≤ 1 := by
+    rw [hqEq]
+    exact (quitProbability_mem_Icc G (p.replace G j 0)).2
+  have hqBound : q ≤
+      (Fintype.card G.Player : ℝ) * Section4Delta G M ε := by
+    rw [hqEq]
+    exact quitProbability_le_card_mul G (p.replace G j 0) hreplaceCap
+  have hqScale : M * q ≤ ε / 2 := by
+    have hmul := mul_le_mul_of_nonneg_left hqBound hMpos.le
+    calc
+      M * q ≤ M * ((Fintype.card G.Player : ℝ) * Section4Delta G M ε) := hmul
+      _ = ε / 2 := by
+        rw [Section4Delta]
+        field_simp
+  have hbase :
+      |G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i| ≤ M / 3 := by
+    have hraw := hM.2.2 ⟨{j}, Finset.singleton_nonempty j⟩
+      ⟨{i}, Finset.singleton_nonempty i⟩ i
+    simpa only [SoloPayoff] using (show
+      |G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i -
+          G.reward ⟨{i}, Finset.singleton_nonempty i⟩ i| ≤ M / 3 by
+        nlinarith)
+  have hjoining : |joining| ≤ 2 * (M / 3) * q := by
+    have hbound :=
+      GameTheory.abs_quittingOutsiderJoiningContribution_le_two_mul_absorptionMass
+        rewardCoord root j (M := M / 3) (fun A _ => hM.2.1 A i)
+    simpa only [joining, q] using hbound
+  have hdecomp :
+      GameTheory.quittingRootEndpointDifference rewardCoord tailCoord root j =
+        (1 - q) *
+          (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - x i) + joining := by
+    have hraw := GameTheory.quittingRootEndpointDifference_eq_outsiderNever
+      rewardCoord tailCoord root j
+    simpa only [rewardCoord, tailCoord, q, joining,
+      GameTheory.quittingSingletonTerminal,
+      GameTheory.quittingRootOpponentAbsorptionMass] using hraw
+  rw [oneStage_endpointSlope_eq_coordinateEndpointDifference]
+  let base := G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i
+  have hdifference :
+      GameTheory.quittingRootEndpointDifference rewardCoord tailCoord root j - base =
+        (1 - q) * (SoloPayoff G i - x i) - q * base + joining := by
+    rw [hdecomp]
+    dsimp only [base]
+    ring
+  rw [hdifference]
+  have hfirst : |(1 - q) * (SoloPayoff G i - x i)| ≤ ε / 3 := by
+    rw [abs_mul, abs_of_nonneg (by linarith : 0 ≤ 1 - q), abs_sub_comm]
+    calc
+      (1 - q) * |x i - SoloPayoff G i| ≤ 1 * |x i - SoloPayoff G i| := by
+        exact mul_le_mul_of_nonneg_right (by linarith) (abs_nonneg _)
+      _ ≤ 1 * (ε / 3) := mul_le_mul_of_nonneg_left hxi (by norm_num)
+      _ = ε / 3 := one_mul _
+  have hsecond : |-q * base| ≤ q * (M / 3) := by
+    rw [abs_mul, abs_neg, abs_of_nonneg hqNonneg]
+    exact mul_le_mul_of_nonneg_left (by simpa only [base] using hbase) hqNonneg
+  calc
+    |(1 - q) * (SoloPayoff G i - x i) - q * base + joining| ≤
+        |(1 - q) * (SoloPayoff G i - x i) - q * base| + |joining| :=
+      abs_add_le _ _
+    _ ≤ (|(1 - q) * (SoloPayoff G i - x i)| + |-q * base|) + |joining| :=
+      by
+        have htriangle :
+            |(1 - q) * (SoloPayoff G i - x i) - q * base| ≤
+              |(1 - q) * (SoloPayoff G i - x i)| + |-q * base| := by
+          simpa only [sub_eq_add_neg, neg_mul] using
+            abs_add_le ((1 - q) * (SoloPayoff G i - x i)) (-q * base)
+        exact add_le_add_left htriangle |joining|
+    _ ≤ ε / 3 + q * (M / 3) + 2 * (M / 3) * q := by
+      gcongr
+    _ = ε / 3 + M * q := by ring
+    _ ≤ ε / 3 + ε / 2 := by linarith
+    _ ≤ η := by linarith
+
+/-- A finite coordinate telescope realizes the difference of two upper-glue
+rows as a matrix, every entry of which is within `η` of the corresponding
+singleton-difference entry. -/
+private theorem exists_upper_secantMatrix
+    (G : QuittingGame) [DecidableEq G.Player] (M η ε : ℝ)
+    (hM : IsSimonPayoffScale G M) (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (Q : Finset G.Player)
+    (hx : ∀ i ∈ Q, |x i - SoloPayoff G i| ≤ ε / 3)
+    (first second : QuitRow G)
+    (hfirstCap : ∀ j, (first j : ℝ) ≤ Section4Delta G M ε)
+    (hsecondCap : ∀ j, (second j : ℝ) ≤ Section4Delta G M ε)
+    (houtside : ∀ j, j ∉ Q → first j = second j) :
+    ∃ D : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ,
+      (∀ i j, |D i j - SingletonDifferenceMatrix G Q i j| ≤ η) ∧
+      ∀ i,
+        QuittingOneStagePayoff G x second i.1 -
+            QuittingOneStagePayoff G x first i.1 =
+          D.mulVec (fun j => (second j.1 : ℝ) - first j.1) i := by
+  classical
+  have hηpos : 0 < η := by linarith
+  have htelescope : ∀ s : Finset G.Player, s ⊆ Q →
+      ∃ columns : G.Player → Payoff G.Player,
+        (∀ j ∈ Q, ∀ i ∈ Q,
+          |columns j i -
+            (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i)| ≤ η) ∧
+        ∀ i,
+          QuittingOneStagePayoff G x (section4ReplaceOn G first second s) i -
+              QuittingOneStagePayoff G x first i =
+            ∑ j ∈ s, ((second j : ℝ) - first j) * columns j i := by
+    intro s hsQ
+    induction s using Finset.induction_on with
+    | empty =>
+        refine ⟨fun j i =>
+          G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i,
+          ?_, ?_⟩
+        · intro j _hj i _hi
+          simpa only [sub_self, abs_zero] using hηpos.le
+        · intro i
+          rw [section4ReplaceOn_empty]
+          simp
+    | @insert j s hjs ih =>
+        have hsSubset : s ⊆ Q := fun k hk => hsQ (Finset.mem_insert_of_mem hk)
+        obtain ⟨columns, hcolumns, hsum⟩ := ih hsSubset
+        let row := section4ReplaceOn G first second s
+        let slope : Payoff G.Player := fun i =>
+          QuittingOneStagePayoff G x (row.replace G j 1) i -
+            QuittingOneStagePayoff G x (row.replace G j 0) i
+        let columns' : G.Player → Payoff G.Player :=
+          Function.update columns j slope
+        have hjQ : j ∈ Q := hsQ (by simp)
+        have hrowCap : ∀ k, (row k : ℝ) ≤ Section4Delta G M ε := by
+          intro k
+          by_cases hks : k ∈ s
+          · simpa [row, section4ReplaceOn, hks] using hsecondCap k
+          · simpa [row, section4ReplaceOn, hks] using hfirstCap k
+        have hslope : ∀ i ∈ Q,
+            |slope i -
+              (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i - SoloPayoff G i)| ≤ η := by
+          intro i hi
+          exact upper_endpointSlope_sub_singletonDifference_le
+            G M η ε hM hε hεη x row hrowCap i j (hx i hi)
+        refine ⟨columns', ?_, ?_⟩
+        · intro k hkQ i hiQ
+          by_cases hkj : k = j
+          · subst k
+            simpa [columns'] using hslope i hiQ
+          · simpa [columns', Function.update_of_ne hkj] using hcolumns k hkQ i hiQ
+        · intro i
+          have haffineSecond :=
+            quittingOneStagePayoff_row_replace_affine G x row j (second j)
+          have haffineFirst :=
+            quittingOneStagePayoff_row_replace_affine G x row j (first j)
+          have hrowFirst : row.replace G j (first j) = row := by
+            change (section4ReplaceOn G first second s).replace G j (first j) =
+              section4ReplaceOn G first second s
+            exact section4ReplaceOn_replace_first G first second s j hjs
+          rw [hrowFirst] at haffineFirst
+          have hstep :
+              QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+                  QuittingOneStagePayoff G x row i =
+                ((second j : ℝ) - first j) * slope i := by
+            rw [haffineSecond, haffineFirst]
+            simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul, slope]
+            ring
+          rw [section4ReplaceOn_insert G first second s j,
+            Finset.sum_insert hjs]
+          calc
+            QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+                QuittingOneStagePayoff G x first i =
+              (QuittingOneStagePayoff G x (row.replace G j (second j)) i -
+                  QuittingOneStagePayoff G x row i) +
+                (QuittingOneStagePayoff G x row i -
+                  QuittingOneStagePayoff G x first i) := by ring
+            _ = ((second j : ℝ) - first j) * slope i +
+                ∑ k ∈ s, ((second k : ℝ) - first k) * columns k i := by
+              rw [hstep, hsum]
+            _ = ((second j : ℝ) - first j) * columns' j i +
+                ∑ k ∈ s, ((second k : ℝ) - first k) * columns' k i := by
+              congr 1
+              · simp [columns']
+              · apply Finset.sum_congr rfl
+                intro k hk
+                have hkj : k ≠ j := by
+                  intro h
+                  subst k
+                  exact hjs hk
+                simp only [columns', Function.update_of_ne hkj]
+  obtain ⟨columns, hcolumns, hsum⟩ := htelescope Q Subset.rfl
+  have hreplaceQ : section4ReplaceOn G first second Q = second := by
+    funext j
+    by_cases hj : j ∈ Q
+    · simp [section4ReplaceOn, hj]
+    · simp [section4ReplaceOn, hj, houtside j hj]
+  let D : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ :=
+    fun i j => columns j.1 i.1
+  refine ⟨D, ?_, ?_⟩
+  · intro i j
+    exact hcolumns j.1 j.2 i.1 i.2
+  · intro i
+    rw [hreplaceQ] at hsum
+    rw [Matrix.mulVec, dotProduct]
+    rw [hsum]
+    calc
+      (∑ j ∈ Q, ((second j : ℝ) - first j) * columns j i.1) =
+          ∑ j : {j // j ∈ Q},
+            ((second j.1 : ℝ) - first j.1) * columns j.1 i.1 :=
+        Finset.sum_subtype Q (fun _ => Iff.rfl) _
+      _ = ∑ j : {j // j ∈ Q},
+          D i j * ((second j.1 : ℝ) - first j.1) := by
+        apply Finset.sum_congr rfl
+        intro j _hj
+        dsimp only [D]
+        ring
+
+private theorem euclideanNorm_restrict_le {N : Type} [Fintype N]
+    (Q : Finset N) (v : Payoff N) :
+    EuclideanNorm (fun i : {i // i ∈ Q} => v i.1) ≤ EuclideanNorm v := by
+  classical
+  rw [EuclideanNorm, EuclideanNorm]
+  apply Real.sqrt_le_sqrt
+  calc
+    (∑ i : {i // i ∈ Q}, (v i.1) ^ 2) = ∑ i ∈ Q, (v i) ^ 2 :=
+      (Finset.sum_subtype Q (fun _ => Iff.rfl)
+        (fun i : N => (v i) ^ 2)).symm
+    _ ≤ ∑ i ∈ (Finset.univ : Finset N), (v i) ^ 2 :=
+      Finset.sum_le_sum_of_subset_of_nonneg (Finset.subset_univ Q)
+        (fun i _hi _hiQ => sq_nonneg (v i))
+    _ = ∑ i, (v i) ^ 2 := rfl
+
+/-- The quantitative separation estimate in the upper-fiber argument of
+Lemma 4.5, Property (4).  It is obtained from a finite coordinate telescope,
+not from an assumed Jacobian or secant estimate. -/
+theorem upperGlueRow_payoff_separation
+    (G : QuittingGame) (M R η ε : ℝ)
+    (hM : IsSimonPayoffScale G M)
+    (hη : Corollary4_1Statement G η)
+    (hε : 0 < ε) (hεη : ε < η / 3)
+    (x : Payoff G.Player) (hx : x ∈ UpperNeighborhood G R ε)
+    (first second : QuitRow G)
+    (hfirstCap : ∀ j, x ∈ UpperNeighborhoodFor G R ε j →
+      (first j : ℝ) ≤ Section4Delta G M ε)
+    (hfirstSupport : ∀ j, x ∉ UpperNeighborhoodFor G R ε j →
+      (first j : ℝ) = 0)
+    (hsecondCap : ∀ j, x ∈ UpperNeighborhoodFor G R ε j →
+      (second j : ℝ) ≤ Section4Delta G M ε)
+    (hsecondSupport : ∀ j, x ∉ UpperNeighborhoodFor G R ε j →
+      (second j : ℝ) = 0)
+    (hcard : 2 ≤ (UpperActivePlayers G R ε x).card) :
+    η * EuclideanNorm (fun j : {j // j ∈ UpperActivePlayers G R ε x} =>
+        (second j.1 : ℝ) - first j.1) ≤
+      EuclideanNorm
+        (QuittingOneStagePayoff G x second - QuittingOneStagePayoff G x first) := by
+  classical
+  let Q := UpperActivePlayers G R ε x
+  have hdeltaPos : 0 < Section4Delta G M ε := by
+    rw [Section4Delta]
+    have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+    positivity
+  rw [UpperNeighborhood] at hx
+  obtain ⟨witness, hxWitness⟩ := Set.mem_iUnion.mp hx
+  have hxClose : ∀ i ∈ Q, |x i - SoloPayoff G i| ≤ ε / 3 := by
+    intro i hi
+    have hiActive : x ∈ UpperNeighborhoodFor G R ε i := by
+      simpa only [Q, UpperActivePlayers, Finset.mem_filter, Finset.mem_univ,
+        true_and] using hi
+    rw [abs_le]
+    exact ⟨by linarith [(hxWitness.1 i).1], by linarith [hiActive.2]⟩
+  have hfirstAllCap : ∀ j, (first j : ℝ) ≤ Section4Delta G M ε := by
+    intro j
+    by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+    · exact hfirstCap j hj
+    · have hzero : (first j : ℝ) = 0 := hfirstSupport j hj
+      linarith
+  have hsecondAllCap : ∀ j, (second j : ℝ) ≤ Section4Delta G M ε := by
+    intro j
+    by_cases hj : x ∈ UpperNeighborhoodFor G R ε j
+    · exact hsecondCap j hj
+    · have hzero : (second j : ℝ) = 0 := hsecondSupport j hj
+      linarith
+  have houtside : ∀ j, j ∉ Q → first j = second j := by
+    intro j hj
+    have hjInactive : x ∉ UpperNeighborhoodFor G R ε j := by
+      simpa only [Q, UpperActivePlayers, Finset.mem_filter, Finset.mem_univ,
+        true_and] using hj
+    apply Subtype.ext
+    have hfirstZero : (first j : ℝ) = 0 := hfirstSupport j hjInactive
+    have hsecondZero : (second j : ℝ) = 0 := hsecondSupport j hjInactive
+    linarith
+  obtain ⟨D, hD, htelescope⟩ := exists_upper_secantMatrix
+    G M η ε hM hε hεη x Q hxClose first second
+      hfirstAllCap hsecondAllCap houtside
+  let perturb : Matrix {i // i ∈ Q} {j // j ∈ Q} ℝ :=
+    D - SingletonDifferenceMatrix G Q
+  have hperturb : ∀ i j, |perturb i j| ≤ η := by
+    intro i j
+    simpa only [perturb, Matrix.sub_apply] using hD i j
+  have hmatrix : SingletonDifferenceMatrix G Q + perturb = D := by
+    ext i j
+    simp [perturb]
+  let rowDifference : {j // j ∈ Q} → ℝ :=
+    fun j => (second j.1 : ℝ) - first j.1
+  have hlower := hη.2 Q hcard perturb hperturb rowDifference
+  rw [hmatrix] at hlower
+  have hrestricted :
+      (fun i : {i // i ∈ Q} =>
+        (QuittingOneStagePayoff G x second -
+          QuittingOneStagePayoff G x first) i.1) = D.mulVec rowDifference := by
+    funext i
+    exact htelescope i
+  rw [← hrestricted] at hlower
+  exact hlower.trans (euclideanNorm_restrict_le Q
+    (QuittingOneStagePayoff G x second - QuittingOneStagePayoff G x first))
 
 /-- The one-stage value differs from the terminal reward conditional on
 absorption only through the all-Continue branch. -/

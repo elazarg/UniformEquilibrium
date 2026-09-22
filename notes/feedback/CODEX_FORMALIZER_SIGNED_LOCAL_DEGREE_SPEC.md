@@ -321,10 +321,10 @@ The remaining geometric adapters are:
 1. Prove chart independence and the orientation conversion against the
    constructed count. The literal positive-dilation result above does not
    establish arbitrary chart independence.
-2. Compare the individual root-centered calculations below in a common chart
-   so their local indices can be summed. The affine and strict-LCP calculations
-   are proved in their displayed charts; a global sum does not follow from
-   those calculations alone.
+2. Assemble the individual common-chart calculations below into a finite sum
+   over all actual roots. The local balls and their singleton solution sets
+   are constructed; a global sum still needs disjoint neighborhoods and an
+   exhaustive root set.
 3. General regular-Jacobian comparison can then use the derivative's small
    remainder and the inverse linear map's lower bound to construct a
    boundary-free straight homotopy. It is not a premise to put into the
@@ -413,6 +413,26 @@ for two isolating regions of the same problem from equality of their actual
 solution sets. Compactness supplies the finite-mesh clearance used by the
 existing count theorem. No clearance witness is assumed, but the problems
 must be identical; this does not compare different ambient charts.
+
+`localDegree_offCenterMatrix_eq_sign_det` and
+`localDegree_offCenterMatrix_region_eq_sign_det`
+(`Research/Topology/BoxComplementarityOffCenterMatrixLocalIndex.lean`)
+compute a nonsingular affine root's index in the fixed reference cube when
+the root lies in its central region. Moving that root to the center supplies
+the common-region homotopy. Excision then gives the same index on any open
+root neighborhood whose closure lies in the coordinate interior, even if
+that neighborhood is not contained in the central region. Isolation and
+equality of the selected solution sets are derived.
+
+`exists_ball_lcpMinBoxProblem_localDegree_eq_sign_det`
+(`Research/Topology/LinearComplementarityCommonChartLocalIndex.lean`)
+transfers that calculation to the literal LCP minimum map in one fixed scalar
+chart. An actual strictly complementary root in its central region, with
+nonsingular active principal matrix, gives a constructed positive-radius
+isolating ball. The theorem also proves that the actual solutions in that
+ball form the singleton containing the root. Different roots use the same
+problem and may use different balls. No local affine identity, isolation,
+singleton identity, or degree formula is supplied as a premise.
 
 `MathUE/LinearAlgebra/UniformNonsingularity.lean` supplies determinant
 perturbation and uniform lower bounds for matrix multiplication for the

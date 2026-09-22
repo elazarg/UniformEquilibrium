@@ -474,8 +474,7 @@ omit [Fintype ι] [DecidableEq ι] in
     (quitter who : QuittingBlockSurvivor B) :
     quittingDeleteBlockReward reward B (quittingSingletonTerminal quitter) who =
       reward (quittingSingletonTerminal quitter.1) who.1 := by
-  refine congrArg (fun T => reward T who.1) (Subtype.ext ?_)
-  simp [quittingExtendDeletedCoalition, quittingSingletonTerminal]
+  exact quittingDeleteReward_singletonTerminal reward (· ∈ B) quitter who
 
 omit [Fintype ι] in
 /-- The survivor game's two-player collision rows are the original table's

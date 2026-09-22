@@ -96,6 +96,16 @@ at a fixed one-stage payoff bounds that payoff by the terminal rewards;
 Lemma 3.4 and the coordinate drift then exclude an interior diagonal point.
 This does not discharge the other fields of Lemma 4.5.
 
+`upperGlueRow_payoff_separation` (`Literature/Simon2012.lean`) proves the
+quantitative payoff-separation estimate on the actual active-player cube
+when at least two players are active. Under the uniform matrix estimate of
+`Corollary4_1Statement`, positive accuracy less than one third of its constant,
+and the literal upper-glue cap and support conditions, the payoff distance
+bounds the row distance from below. An exact finite coordinate telescope
+constructs the secant matrix, and the proof bounds its entries against the
+singleton-difference matrix. Injectivity, inverse continuity, and upper-fiber
+contractibility still need to be assembled from this estimate.
+
 ## Remaining Section 4 assembly
 
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
@@ -107,8 +117,9 @@ hypothesis. These components still need assembly into the full statement. The
 remaining substantive fields of `QuestionOneHypotheses`
 (`MathUE/Topology/SimonViabilityQuestion.lean`) are:
 
-- contractibility of the actual upper fibers, using their injectivity and
-  inverse-continuity estimates; and
+- contractibility of the actual upper fibers, using the payoff-separation
+  estimate for at least two active players and a line-segment argument for
+  one active player; and
 - one common positive scale for both small-step containment and all
   boundary-piece escape clauses.
 
