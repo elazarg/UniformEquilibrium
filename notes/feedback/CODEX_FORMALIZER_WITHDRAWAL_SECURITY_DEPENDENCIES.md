@@ -3,11 +3,13 @@
 Scope: Section 5 of `math/exports/WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`.
 The security LP, actual restart law, all-evaluation nonpositive floor, mixed
 atom-restart response, and full behavioral-debt comparison are checked. The
-remaining Fin4 dependency is a raw reward-table certificate for each selected
-outsider and a fixed child uniform-equilibrium target. A positive terminal
-security value requires a separate error-to-zero cap argument: the checked
-all-evaluation theorem uses only `min(gamma,0)`. LP attainment must not be
-reported as attainment of the terminal security guarantee by a stopping law.
+ordinary and all-evaluation security Fin4 class implications now construct
+the child uniform-equilibrium target from the literal deletion table. Their
+hypotheses are raw reward-table certificates for each selected outsider, not
+supplied strategies or cap bounds. A positive terminal-security value uses a
+separate error-to-zero cap argument; the all-evaluation theorem uses only
+`min(gamma,0)`. LP attainment must not be reported as attainment of the
+terminal-security guarantee by a stopping law.
 
 ## Finite optimization and actual clocks
 
@@ -145,11 +147,26 @@ all-evaluation min(gamma,0) floor, the selected law attains the necessary
 nonpositive floor, so no terminal-limit argument is needed. Both retain the
 original Never and future rows and coefficient max(a,b).
 
-The fixed-target consumer already exists for the ordinary deadline certificate
-(`exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineWithdrawalFamily` in
-`DeadlineWithdrawalFixedTarget.lean`). Applying the security-enhanced rows to
-Fin4 still requires literal raw-table certificates and child UE targets, or
-an explicitly checked adapter to that consumer. The security chain itself
-does not produce those inputs. For positive terminal `gamma`, the response
-hazard may depend on an error; proving a cap bound before sending that error
-to zero is a separate, stronger bridge.
+This terminal error-removal step is proved by
+`deadlineSecurityTerminal_outsideBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalDebt.lean`).
+Its literal untruncated-gamma certificate produces the approximate raw rows;
+the theorem constructs the restart plans and removes their error only after
+the unrestricted behavioral-cap comparison. It does not assert that one
+law attains gamma. The generic plan, row-error domination, and complete-cap
+interfaces are shared with the evaluated chain.
+
+`exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineSecurityFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityFixedTarget.lean`)
+preserves every specified child uniform-equilibrium target under the raw
+security-enhanced rows. It reuses the canonical terminal-Nash lift consumer.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_deadlineWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFinFourExistence.lean`)
+and `quittingGame_exists_uniformEquilibriumPayoff_of_finFour_deadlineSecurityFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityFinFourExistence.lean`)
+construct the child target and prove four-player existence for every nonempty
+proper child under the respective raw certificate family. The certificates
+are finite inequalities defining these classes; no theorem asserts their
+existence for every reward table. Positive terminal `gamma` remains distinct
+from the all-evaluation floor and needs its own family and fixed-target
+extension consumers.

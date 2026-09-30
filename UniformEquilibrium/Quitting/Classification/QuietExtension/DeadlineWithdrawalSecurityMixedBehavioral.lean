@@ -1,24 +1,16 @@
-import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalSecurityMixedLaw
-import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockEvaluatedActualPayoffAdapter
+import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalMixedRestartCore
 
-/-!
-# Actual private security-mixture responses
-
-The fresh plan is chosen from the raw reward table. This module identifies
-the exact one-site evaluated gain and transports its independent replacement
-law to the unrestricted behavioral cap.
--/
+/-! # Evaluated security specialization of the shared private mixed-restart core -/
 
 noncomputable section
 
 namespace GameTheory
 
-open _root_.Math.Probability
+open _root_.Math _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] [Nonempty ι]
 
-/-- Actual averaged gain from withdrawing just the deadline atom into the
-reward-table security plan. -/
+/-- Evaluated security specialization of the shared mixed-restart interface. -/
 def deadlineSecurityActualEvaluatedChildGain
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (evaluation : WithTop ℕ → ℝ)
@@ -29,8 +21,7 @@ def deadlineSecurityActualEvaluatedChildGain
       (deadlinePrivateChildClocks times i clock) (some i)) -
     quittingPureClockEvaluatedPayoff reward evaluation (quietParentClocks times) (some i)
 
-/-- The exact max-weight identity applied to the actual evaluated quitting
-payoff; the restart term is averaged over the fresh private plan. -/
+/-- The reward-selected evaluated restart delegates to the shared private-law core. -/
 theorem deadlineSecurityMixedPrivateClockLaw_evaluatedGain_identity
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (evaluation : WithTop ℕ → ℝ)
@@ -48,30 +39,12 @@ theorem deadlineSecurityMixedPrivateClockLaw_evaluatedGain_identity
       advanceWeight * cappedClockActualEvaluatedChildGain reward evaluation times deadline i +
         withdrawalWeight * deadlineSecurityActualEvaluatedChildGain
           reward evaluation times deadline i := by
-  have hbase : deadlinePrivateChildClocks times i (times i) = quietParentClocks times := by
-    funext player
-    cases player with
-    | none => rfl
-    | some j => by_cases h : j = i <;> simp [deadlinePrivateChildClocks, quietParentClocks, h]
-  have hcap : deadlinePrivateChildClocks times i (cappedStoppingClock (times i) deadline) =
-      cappedChildParentClocks times deadline i := by
-    funext player
-    cases player with
-    | none => rfl
-    | some j => by_cases h : j = i <;>
-        simp [deadlinePrivateChildClocks, cappedChildParentClocks, h]
-  simpa only [hbase, hcap, cappedClockActualEvaluatedChildGain,
-    deadlineSecurityActualEvaluatedChildGain] using
-    deadlineSecurityMixedPrivateClockLaw_gain_identity
-      (deadlineSecurityEvaluatedRestartFamily reward i) (times i) deadline
+  exact deadlineSecurityMixedPrivateClockLaw_evaluatedGain_identityWithRestart reward
+    (deadlineSecurityEvaluatedRestartFamily reward i)
+      evaluation hnonneg hantitone times deadline i
       advanceWeight withdrawalWeight hadvance hwithdrawal
-      (fun clock => quittingPureClockEvaluatedPayoff reward evaluation
-        (deadlinePrivateChildClocks times i clock) (some i))
-      (fun clock => abs_quittingPureClockEvaluatedPayoff_le
-        reward evaluation hnonneg hantitone _ _)
 
-/-- Quiet independent laws with one child replaced by its actual
-reward-table-selected security mixture. -/
+/-- Evaluated security specialization of the shared mixed-restart interface. -/
 def deadlineSecurityMixedChildParentStoppingLaws
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (childLaws : ι → PMF (Option ℕ)) (outsideLaw : PMF (Option ℕ))
@@ -83,8 +56,7 @@ def deadlineSecurityMixedChildParentStoppingLaws
       (deadlineSecurityEvaluatedRestartFamily reward i) (childLaws i) outsideLaw
       advanceWeight withdrawalWeight hadvance hwithdrawal)
 
-/-- The actual private mixture is a legal complete behavioral replacement,
-so its evaluated payoff is below the unrestricted behavioral cap. -/
+/-- The reward-selected evaluated restart delegates to the shared private-law core. -/
 theorem deadlineSecurityMixedChild_payoff_le_behaviorDeviationCap
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (evaluation : WithTop ℕ → ℝ)
@@ -97,28 +69,9 @@ theorem deadlineSecurityMixedChild_payoff_le_behaviorDeviationCap
           advanceWeight withdrawalWeight hadvance hwithdrawal) (some i) ≤
       quittingBehaviorEvaluatedDeviationPayoffCap reward evaluation
         (quittingStoppingLawProfile reward (quietParentStoppingLaws childLaws)) (some i) := by
-  rw [← quittingBehaviorEvaluatedPayoff_stoppingLawProfile]
-  let quietProfile := quittingStoppingLawProfile reward (quietParentStoppingLaws childLaws)
-  let deviation := quittingStoppingLawBehaviorStrategy reward (some i)
-    (deadlineSecurityMixedPrivateReplacementLaw
-      (deadlineSecurityEvaluatedRestartFamily reward i) (childLaws i) outsideLaw
-      advanceWeight withdrawalWeight hadvance hwithdrawal)
-  have hprofile : quittingStoppingLawProfile reward
-      (deadlineSecurityMixedChildParentStoppingLaws reward childLaws outsideLaw i
-        advanceWeight withdrawalWeight hadvance hwithdrawal) =
-      Function.update quietProfile (some i) deviation := by
-    funext player
-    by_cases hp : player = some i
-    · subst player
-      simp [deadlineSecurityMixedChildParentStoppingLaws, quietProfile, deviation,
-        quittingStoppingLawProfile]
-    · simp [deadlineSecurityMixedChildParentStoppingLaws, quietProfile, deviation,
-        quittingStoppingLawProfile, hp]
-  rw [hprofile]
-  unfold quittingBehaviorEvaluatedDeviationPayoffCap
-  apply le_csSup
-    (bddAbove_range_quittingBehaviorEvaluatedPayoff_update reward evaluation
-      hnonneg hantitone quietProfile (some i))
-  exact ⟨deviation, rfl⟩
+  exact deadlineSecurityMixedChild_payoff_le_behaviorDeviationCapWithRestart reward
+    (deadlineSecurityEvaluatedRestartFamily reward i)
+      evaluation hnonneg hantitone childLaws outsideLaw i
+      advanceWeight withdrawalWeight hadvance hwithdrawal
 
 end GameTheory

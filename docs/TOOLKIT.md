@@ -1179,15 +1179,23 @@ and inverse conditions, two lower ranking comparisons, and nine strictly
 negative tensor Bernstein coefficients for each selected residual. The
 coefficient reconstruction applies to the actual reward-table residuals
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseHalfCeilingCoefficients.lean`),
-not a supplied polynomial. The packet's weak-boundary and matrix-free Fin4
-producers, worked example, and annular total-degree identity remain separate.
-For the weak boundary, `quittingCrossedWeakHalfPerturb` and
-`quittingCrossed_strictLowerRanking_of_weakHalfPerturb`
-(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakHalfPerturbation.lean`,
-`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakHalfLower.lean`)
-give the literal nearby reward table, its singleton-matrix identity, and
-strict lower comparisons. Strict upper residual coefficients and the
-fixed-original-payoff limit are not yet connected in this branch.
+not a supplied polynomial.
+`exists_stationary_uniformPayoff_targetApproximation_of_weakHalfRaw` and
+`exists_stationary_uniformPayoff_targetApproximation_of_strictRawUnit_nonnegativeInverse`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryTarget.lean`)
+close both nonnegative-inverse boundary branches: the four-player weak
+half-ceiling class and the strict unit-ceiling class in every dimension at
+least three. Each conclusion selects one fixed original-game uniform-equilibrium
+payoff and, at every positive accuracy, a contracting stationary profile
+whose complete terminal regret and payoff distance to that target are bounded
+by the accuracy. The residual perturbation, strict coefficients, and raw
+matrix/lower-guard approximations are derived from the literal reward table.
+`exists_uniformPayoff_stationaryTargetAcceptance_of_terminalApproximations`
+(`UniformEquilibrium/Quitting/Stationary/StationaryTerminalPayoffSelection.lean`)
+provides the reusable stationary fixed-target selection step. Generic affine
+Bernoulli and quadratic tensor Bernstein algebra resides in `MathUE`.
+The matrix-free Fin4 producer, worked examples, and annular total-degree
+identity remain separate.
 The quotient RI route does not apply to the crossed map.
 
 `weight_le_inverseRow_of_singletonFutureRows`
@@ -2254,9 +2262,28 @@ the intervening `DeadlineWithdrawalSecurityMixed*` modules.
 then bound full behavioral debt of the actual Never lift, for every
 nonnegative antitone evaluation, by child debt with coefficients
 `max(a_i,b_i)` and `1 + max(a_i,b_i)`. This all-evaluation result uses the
-truncated floor `min(gamma,0)`; transferring a positive terminal security
-value remains separate. A Fin4 application still needs finite-table
-certificate and child-target producers.
+truncated floor `min(gamma,0)`.
+`exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineSecurityFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityFixedTarget.lean`)
+extends every specified child uniform-equilibrium target under these raw rows.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_deadlineWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalFinFourExistence.lean`)
+and `quittingGame_exists_uniformEquilibriumPayoff_of_finFour_deadlineSecurityFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityFinFourExistence.lean`)
+give four-player existence from ordinary or security-enhanced finite-table
+certificates for all quiet outsiders and any nonempty proper child. Both
+produce the child target using the existing one-, two-, and three-player
+existence results; neither assumes a favorable child strategy, target, or cap.
+The raw certificates remain hypotheses, not certificates supplied for every
+four-player game.
+`deadlineSecurityTerminal_outsideBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalDebt.lean`)
+proves the full terminal debt comparison from literal untruncated `gamma`
+rows. It constructs an actual private restart for every positive error,
+compares each response with the unrestricted behavioral cap, and then removes
+the error. The security value need not be attained by one restart law.
+The positive-terminal-security family and fixed-target extension consumers
+remain separate.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.

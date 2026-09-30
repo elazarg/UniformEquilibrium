@@ -1,3 +1,4 @@
+import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseRawProducer
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseHalfCeilingAdapter
 
 /-! # The four-player strict half-ceiling raw-table producer -/

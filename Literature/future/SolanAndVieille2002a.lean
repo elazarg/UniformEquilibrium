@@ -1,6 +1,9 @@
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
+import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
+import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 
 /-!
 # Literature audit
@@ -102,6 +105,316 @@ theorem noSmallStationaryApproximateEquilibriumClaim :
     NoSmallStationaryApproximateEquilibriumClaim :=
   SolanVieilleBoundary.no_stationary_terminalApproximateEquilibrium
 
+/-! ## Section 3.1.2: the fully mixed stationary indifference polynomials
+
+In this calculation `x,y,z,t` are Continue probabilities, as the factor
+`yzt` in the printed Continue payoff shows. The root-sequence probabilities
+in Section 3.2 instead record Quit. We spell out the printed polynomial
+before relating it to the canonical stationary gain polynomial.
+-/
+
+/-- The printed payoff from Continue now and continuation payoff `v` tomorrow. -/
+def a (v y z t : ℝ) : ℝ :=
+  y * z * t * (v - 2) - 2 * y * z + 3 * z * t - y * t + y + z
+
+/-- The printed payoff from Quit now. -/
+def b (y z t : ℝ) : ℝ := t + (1 - t) * (y + z - 1)
+
+/-- The paper's player-1 indifference polynomial. -/
+def D1 (y z t : ℝ) : ℝ := a (b y z t) y z t - b y z t
+
+/-- Player 2's polynomial, obtained by the table symmetry. -/
+def D2 (x z t : ℝ) : ℝ := D1 x t z
+
+/-- Player 3's polynomial, obtained by the table symmetry. -/
+def D3 (x y t : ℝ) : ℝ := D1 t y x
+
+/-- Player 4's polynomial, obtained by the table symmetry. -/
+def D4 (x y z : ℝ) : ℝ := D1 z x y
+
+/-- Exact identification with the canonical gain polynomial; the signs are opposite. -/
+theorem D1_eq_neg_stationaryGainZero (y z t : ℝ) :
+    D1 y z t = -FourPlayerPairedSingleton.stationaryGainZero y z t := by
+  unfold D1 a b FourPlayerPairedSingleton.stationaryGainZero
+  ring
+
+theorem D2_eq_neg_stationaryGainOne (x z t : ℝ) :
+    D2 x z t = -FourPlayerPairedSingleton.stationaryGainOne x z t := by
+  unfold D2 D1 a b FourPlayerPairedSingleton.stationaryGainOne
+  ring
+
+theorem D3_eq_neg_stationaryGainTwo (x y t : ℝ) :
+    D3 x y t = -FourPlayerPairedSingleton.stationaryGainTwo x y t := by
+  unfold D3 D1 a b FourPlayerPairedSingleton.stationaryGainTwo
+  ring
+
+theorem D4_eq_neg_stationaryGainThree (x y z : ℝ) :
+    D4 x y z = -FourPlayerPairedSingleton.stationaryGainThree x y z := by
+  unfold D4 D1 a b FourPlayerPairedSingleton.stationaryGainThree
+  ring
+
+/-- **Lemma 4**, in root coordinates. This adapter eliminates the impossible
+exact stationary-equilibrium antecedent using the canonical Proposition 2
+proof. It does not reconstruct the paper's forward indifference derivation. -/
+theorem lemma4 (root : Fin 4 → PMF Bool)
+    (_hfullyMixed : ∀ who, 0 < (root who false).toReal ∧ (root who false).toReal < 1)
+    (hequilibrium : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward 0
+      (SolanVieilleBoundary.boundaryStationaryProfile
+        SolanVieilleBoundary.boundaryReward root)) :
+    D1 (root 1 false).toReal (root 2 false).toReal (root 3 false).toReal = 0 ∧
+    D2 (root 0 false).toReal (root 2 false).toReal (root 3 false).toReal = 0 ∧
+    D3 (root 0 false).toReal (root 1 false).toReal (root 3 false).toReal = 0 ∧
+    D4 (root 0 false).toReal (root 1 false).toReal (root 2 false).toReal = 0 ∧
+    ∀ who, quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward
+      (fun _ => root) who 0 ∈ Set.Icc 0 1 := by
+  exact False.elim (noStationaryEquilibriumClaim root hequilibrium)
+
+/-- The literal closed-interval assertion of **Lemma 5**, journal page 373. -/
+def PrintedLemma5Claim : Prop := ∀ t ∈ Set.Icc (0 : ℝ) 1, 0 < D1 t t t
+
+/-- The printed closed-interval endpoint is false: `D₁(1,1,1)=0`. This concerns
+only Lemma 5's endpoint wording, not the no-stationary-equilibrium theorem. -/
+theorem not_printedLemma5Claim : ¬ PrintedLemma5Claim := by
+  intro h
+  have hendpoint := h 1 (by simp)
+  norm_num [D1, a, b] at hendpoint
+
+/-- **Lemma 5**, with the endpoint corrected to `t < 1`. This is the region
+needed for the fully mixed argument; the proof delegates to the canonical algebra. -/
+theorem lemma5 {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t < 1) : 0 < D1 t t t := by
+  rw [D1_eq_neg_stationaryGainZero]
+  exact neg_pos.mpr (FourPlayerPairedSingleton.stationaryGainZero_diagonal_neg ht0 ht1)
+
+/-- **Fact 1**: increasing one coordinate of `b` inside the probability cube
+cannot decrease `b`. This makes the printed separate-monotonicity assertion precise. -/
+theorem fact1_y {y y' z t : ℝ} (hyy' : y ≤ y') (ht1 : t ≤ 1) :
+    b y z t ≤ b y' z t := by
+  have hprod := mul_nonneg (sub_nonneg.mpr ht1) (sub_nonneg.mpr hyy')
+  unfold b
+  nlinarith
+
+theorem fact1_z {y z z' t : ℝ} (hzz' : z ≤ z') (ht1 : t ≤ 1) :
+    b y z t ≤ b y z' t := by
+  have hprod := mul_nonneg (sub_nonneg.mpr ht1) (sub_nonneg.mpr hzz')
+  unfold b
+  nlinarith
+
+theorem fact1_t {y z t t' : ℝ} (hy1 : y ≤ 1) (hz1 : z ≤ 1) (htt' : t ≤ t') :
+    b y z t ≤ b y z t' := by
+  have hprod := mul_nonneg (show 0 ≤ 2 - y - z by linarith)
+    (sub_nonneg.mpr htt')
+  unfold b
+  nlinarith
+
+/-- **Fact 2**, first assertion, on its stated ordered probability domain. -/
+theorem fact2_y {y y' z t : ℝ} (hy0 : 0 ≤ y) (hyy' : y ≤ y')
+    (hy'z : y' ≤ z) (hy't : y' ≤ t) (hz1 : z ≤ 1) (ht1 : t ≤ 1) :
+    D1 y' z t ≤ D1 y z t := by
+  rw [D1_eq_neg_stationaryGainZero, D1_eq_neg_stationaryGainZero]
+  exact neg_le_neg (FourPlayerPairedSingleton.stationaryGainZero_mono_y
+    hy0 hyy' hy'z hy't hz1 ht1)
+
+/-- **Fact 2**, second assertion, on its stated ordered probability domain. -/
+theorem fact2_z {y z z' t : ℝ} (hy0 : 0 ≤ y) (hyz : y ≤ z)
+    (hyt : y ≤ t) (hzz' : z ≤ z') (hz'1 : z' ≤ 1) (ht1 : t ≤ 1) :
+    D1 y z t ≤ D1 y z' t := by
+  rw [D1_eq_neg_stationaryGainZero, D1_eq_neg_stationaryGainZero]
+  exact neg_le_neg (FourPlayerPairedSingleton.stationaryGainZero_antitone_z
+    hy0 hyz hyt hzz' hz'1 ht1)
+
+/-- **Lemma 6**, in the fully mixed domain in which the paper uses it. -/
+theorem lemma6 {y z t : ℝ} (hy : 0 < y) (hyt : y ≤ t) (htz : t ≤ z)
+    (hz1 : z < 1) : 0 < D1 y z t := by
+  rw [D1_eq_neg_stationaryGainZero]
+  exact neg_pos.mpr (FourPlayerPairedSingleton.stationaryGainZero_neg_of_lowest_le_t_le_z
+    hy hyt htz hz1.le (lt_of_le_of_lt htz hz1))
+
+/-- **Lemma 7**, where `b(z,x,y)` is the fourth player's equilibrium payoff
+in the indifference calculation. The printed proof uses its nonnegativity. -/
+theorem lemma7 {x y z : ℝ} (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y)
+    (hyz : y ≤ z) (hzhalf : z ≤ 1 / 2) (hpayoff : 0 ≤ b z x y) :
+    0 < D4 x y z := by
+  rw [D4_eq_neg_stationaryGainThree]
+  exact neg_pos.mpr (FourPlayerPairedSingleton.stationaryGainThree_neg_of_quitValue_nonneg
+    hx hx1 hy hyz hzhalf hpayoff)
+
+/-- A canonical adapter for **Lemma 7** under the ambient minimal-coordinate
+assumption of the fully mixed proof. It does not use any unproved source lemma. -/
+theorem lemma7_of_second_coordinate_minimal {x y z : ℝ} (hy : 0 < y)
+    (hyx : y ≤ x) (hyz : y ≤ z) (hzhalf : z ≤ 1 / 2) (hx1 : x < 1) :
+    0 < D4 x y z := by
+  rw [D4_eq_neg_stationaryGainThree]
+  exact neg_pos.mpr (FourPlayerPairedSingleton.stationaryGainThree_neg_of_lowest_le_half
+    hy hyx hyz hzhalf hx1)
+
+/-- **Lemma 8**, in the fully mixed domain in which the paper uses it. -/
+theorem lemma8 {y z t : ℝ} (hy : 0 < y) (hyz : y ≤ z) (hzhalf : 1 / 2 ≤ z)
+    (hzt : z ≤ t) (ht1 : t < 1) : 0 < D1 y z t := by
+  rw [D1_eq_neg_stationaryGainZero]
+  exact neg_pos.mpr (FourPlayerPairedSingleton.stationaryGainZero_neg_of_lowest_le_z_le_t
+    hy hyz hzhalf hzt ht1)
+
+/-! ## Section 3.2: the finite deviation estimate
+
+The paper numbers stages from one. Our cutoff `fuel` denotes the first
+`fuel` stages, so the finite singleton mass is its `pⁱ_n` at `n = fuel + 1`.
+The source proof considers one possible quitter at each date. The canonical
+ledger proves the same lower gain bound even when simultaneous quitting is
+possible, because this table has capped joint exit.
+-/
+
+/-- The four substages in the proof of **Lemma 9**: only player `phase`
+uses its original mixed action from `stage`; all other players Continue. -/
+noncomputable def serializedStage
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4))
+    (stage : ℕ) (phase : Fin 4) : Fin 4 → PMF Bool :=
+  Function.update (fun _ => PMF.pure false) phase (roots stage phase)
+
+/-- The paper's four-substage schedule, with stages numbered from zero. -/
+noncomputable def serializedRoots
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)) :
+    SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4) :=
+  fun time => serializedStage roots (time / 4) ⟨time % 4, Nat.mod_lt _ (by norm_num)⟩
+
+/-- Each substage has at most one possible quitter, as required by Lemma 9. -/
+theorem serializedStage_atMostOne
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4))
+    (stage : ℕ) (phase first second : Fin 4)
+    (hfirst : 0 < (serializedStage roots stage phase first true).toReal)
+    (hsecond : 0 < (serializedStage roots stage phase second true).toReal) :
+    first = second := by
+  have howner : ∀ who, 0 < (serializedStage roots stage phase who true).toReal →
+      who = phase := by
+    intro who hpositive
+    by_contra hne
+    simp [serializedStage, Function.update_of_ne hne] at hpositive
+  exact (howner first hfirst).trans (howner second hsecond).symm
+
+/-- The source's one-quitter condition also means exact zero collision mass. -/
+theorem serializedRoots_collisionMass_eq_zero
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)) (time : ℕ) :
+    quittingRootCollisionMass (serializedRoots roots time) = 0 := by
+  apply (quittingRootCollisionMass_eq_zero_iff_atMostOne_quitProbability_pos _).2
+  exact serializedStage_atMostOne roots (time / 4) _
+
+/-- Splitting a stage preserves its near-Continue coordinate bound. -/
+theorem serializedRoots_nearContinue
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε : 0 < ε)
+    (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε) :
+    ∀ time who, |(serializedRoots roots time who false).toReal - 1| < ε := by
+  intro time who
+  unfold serializedRoots serializedStage
+  by_cases howner : who = (⟨time % 4, Nat.mod_lt _ (by norm_num)⟩ : Fin 4)
+  · subst who
+    simpa using hclose (time / 4) ⟨time % 4, Nat.mod_lt _ (by norm_num)⟩
+  · simpa [Function.update_of_ne howner] using hε
+
+/-- One serialized substage has exactly its owner's Continue mass. -/
+theorem serializedStage_continueMass
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4))
+    (stage : ℕ) (phase : Fin 4) :
+    quittingStationaryContinueMass (serializedStage roots stage phase) =
+      (roots stage phase false).toReal := by
+  exact quittingStationaryContinueMass_soloMixedRoot phase (roots stage phase)
+
+/-- The source's exact survival identity for one block of four substages.
+This delegates to the canonical product-law evaluator. -/
+theorem serializedStage_blockSurvival
+    (roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)) (stage : ℕ) :
+    (∏ phase : Fin 4, quittingStationaryContinueMass (serializedStage roots stage phase)) =
+      quittingStationaryContinueMass (roots stage) := by
+  simp_rw [serializedStage_continueMass]
+  exact (quittingStationaryContinueMass_eq_prod_continueProbability (roots stage)).symm
+
+/-- **Lemma 9**, with the exact constant `12Nr = 12·4·8 = 384`.
+The explicit substage construction and its structural/survival properties
+are checked above. The uniform payoff and unilateral-deviation comparison
+needed to transfer the equilibrium bound has not yet been formalized. -/
+theorem lemma9
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε : 0 < ε) (hεsmall : ε ≤ 1 / 8)
+    (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots)) :
+    ∃ ys : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4),
+      SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+        SolanVieilleBoundary.boundaryReward (384 * ε)
+        (SolanVieilleBoundary.boundaryRootSequenceProfile
+          SolanVieilleBoundary.boundaryReward ys) ∧
+      (∀ time who, |(ys time who false).toReal - 1| < ε) ∧
+      ∀ time first second,
+        0 < (ys time first true).toReal → 0 < (ys time second true).toReal →
+        first = second := by
+  sorry
+
+/-- **Lemma 11**, the gain assertion in the near-Continue domain used by
+Section 3.2. All source constants are retained. The stronger canonical ledger
+removes the need for the at-most-one-quitter assumption. -/
+theorem lemma11_gain_of_nearContinue
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hεsmall : ε < 1)
+    (hclose : ∀ time player, |(roots time player false).toReal - 1| < ε)
+    (who : Fin 4) (fuel : ℕ)
+    (hfloor : ∀ time, time < fuel →
+      1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who time) :
+    quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward
+        (quittingContinueUntilRoots roots who fuel) who 0 ≥
+      quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward roots who 0 +
+        Real.sqrt ε * (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who := by
+  have hcontinue : ∀ time, time < fuel → 0 < (roots time who false).toReal := by
+    intro time _
+    have hlower := (abs_lt.mp (hclose time who)).1
+    linarith
+  have hgain :=
+    delta_mul_sum_jointSurvivalWeight_mul_quitProbability_le_continueUntil_gain
+      SolanVieilleBoundary.boundaryReward_cappedJointExit roots who 0 fuel
+      (Real.sqrt_nonneg ε)
+      (fun time htime => by simpa using hcontinue time htime)
+      (fun time htime => by simpa using hfloor time htime)
+  have hclock : (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤
+      ∑ time ∈ Finset.range fuel,
+        quittingJointSurvivalWeight roots 0 time * (roots time who true).toReal := by
+    rw [← Fin.sum_univ_eq_sum_range]
+    simp only [QuittingFiniteRootWindow.singletonMass, QuittingFiniteRootWindow.survivalWeight,
+      QuittingFiniteRootWindow.rootAt, Nat.zero_add]
+    apply Finset.sum_le_sum
+    intro phase _
+    exact mul_le_mul_of_nonneg_left
+      (quittingRootCoalitionMass_le_quitProbability_of_mem
+        (roots phase.val) {who} who (by simp))
+      (quittingJointSurvivalWeight_nonneg roots 0 phase.val)
+  have hscaled := mul_le_mul_of_nonneg_left hclock (Real.sqrt_nonneg ε)
+  simp only [Nat.zero_add] at hgain
+  linarith
+
+/-- **Lemma 11**, its `pⁱ_n ≤ √ε` consequence in the same source domain.
+This delegates to the canonical finite deviation bound and does not depend
+on the unfinished paper-order lemmas. -/
+theorem lemma11_singletonMass_le_sqrt
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε : 0 < ε) (hεsmall : ε < 1)
+    (hclose : ∀ time player, |(roots time player false).toReal - 1| < ε)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) (fuel : ℕ)
+    (hfloor : ∀ time, time < fuel →
+      1 + Real.sqrt ε ≤ quittingRootSequenceTerminalValue
+        SolanVieilleBoundary.boundaryReward roots who time) :
+    (⟨0, fuel⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤ Real.sqrt ε := by
+  have hbound := SolanVieilleBoundary.boundary_delta_mul_finiteSingletonMass_le_epsilon
+    hεsmall (Real.sqrt_nonneg ε) hclose hnash who fuel hfloor
+  have hsqrt := Real.sqrt_pos.2 hε
+  have hsquare := Real.sq_sqrt hε.le
+  nlinarith
+
+
 /-- The introduction's solo-hull exclusion, stated for the fixed payoff
 target of a uniform equilibrium. This remains open in this audit. -/
 def NoSoloHullUniformEquilibriumPayoffClaim : Prop :=
@@ -127,16 +440,25 @@ The named-statement inventory of the author-hosted journal PDF is:
 - Section 2: Proposition 1 (the stationary-or-small-quit dichotomy for games
   with at most three players) is not stated here; its five geometric cases
   are likewise not formalized in this paper's terms.
-- Section 3.1: Proposition 2 is stated above. Its named intermediate claims
-  are Lemmas 4--8 and Facts 1--2, involving the fully mixed stationary
-  indifference polynomials and their sign regions. The production stationary
-  proof uses a related gain-polynomial argument, but its private lemmas are
-  not paper-order statements or direct adapters of these printed claims.
+- Section 3.1: Proposition 2 and Lemma 4 are proved above; Lemma 4 delegates
+  to the impossible exact-stationary antecedent, rather than the paper's
+  forward indifference derivation. The printed indifference polynomials are identified
+  exactly with the negatives of the canonical gain polynomials. Lemmas 6--8
+  and the three coordinate assertions of Fact 1 are proved by adapters or
+  elementary algebra. Lemma 5's literal closed-interval assertion is refuted
+  at `t = 1`; its corrected `t < 1` version is proved. Both assertions of Fact 2
+  are proved by exact finite-difference polynomial inequalities.
 - Section 3.2: Proposition 3 is stated above. Its named intermediate claims
   are Lemmas 9--12 and Corollary 13: stage splitting, absorption and singleton
   mass bounds, a pure-deviation bound, first-crossing extraction, and the
-  partner-high exclusion. Production proves related root-sequence estimates
-  with different constants and hypotheses; these are not exact paper adapters.
+  partner-high exclusion. Lemma 11's gain and singleton-mass assertions are
+  proved above in the near-Continue domain, with the printed `√ε` constants;
+  the canonical ledger also allows simultaneous quitting. Lemma 9 is stated
+  with its exact `384ε` constant. Its explicit stage splitting, near-Continue,
+  one-quitter and block-survival properties are proved; its equilibrium
+  transfer remains unproved. Lemmas 10, 12 and Corollary 13 still lack exact
+  paper-order adapters. The corresponding production estimates use different
+  constants and hypotheses.
 
 The journal PDF numbers its first lemma in Section 3 as Lemma 4; it contains
 no separately labeled Lemmas 1--3. The solo-hull sentence occurs in the

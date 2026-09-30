@@ -21,25 +21,29 @@ namespace FourPlayerPairedSingleton
 open StochasticGame _root_.Math.Probability Math.PMFProduct
 open SolanVieilleBoundary (boundaryReward)
 
-private def stationaryGainZero (y z t : ℝ) : ℝ :=
+/-- Player `0`'s stationary gain polynomial in opponents' Continue probabilities. -/
+def stationaryGainZero (y z t : ℝ) : ℝ :=
   y ^ 2 * z * t ^ 2 - y ^ 2 * z * t +
     y * z ^ 2 * t ^ 2 - y * z ^ 2 * t -
     2 * y * z * t ^ 2 + 3 * y * z * t +
     2 * y * z - 4 * z * t + 2 * t - 1
 
-private def stationaryGainOne (x z t : ℝ) : ℝ :=
+/-- Player `1`'s stationary gain polynomial in opponents' Continue probabilities. -/
+def stationaryGainOne (x z t : ℝ) : ℝ :=
   x ^ 2 * z ^ 2 * t - x ^ 2 * z * t +
     x * z ^ 2 * t ^ 2 - 2 * x * z ^ 2 * t -
     x * z * t ^ 2 + 3 * x * z * t +
     2 * x * t - 4 * z * t + 2 * z - 1
 
-private def stationaryGainTwo (x y t : ℝ) : ℝ :=
+/-- Player `2`'s stationary gain polynomial in opponents' Continue probabilities. -/
+def stationaryGainTwo (x y t : ℝ) : ℝ :=
   x ^ 2 * y ^ 2 * t + x ^ 2 * y * t ^ 2 -
     2 * x ^ 2 * y * t - x * y ^ 2 * t -
     x * y * t ^ 2 + 3 * x * y * t -
     4 * x * y + 2 * x + 2 * y * t - 1
 
-private def stationaryGainThree (x y z : ℝ) : ℝ :=
+/-- Player `3`'s stationary gain polynomial in opponents' Continue probabilities. -/
+def stationaryGainThree (x y z : ℝ) : ℝ :=
   x ^ 2 * y ^ 2 * z - x ^ 2 * y * z +
     x * y ^ 2 * z ^ 2 - 2 * x * y ^ 2 * z -
     x * y * z ^ 2 + 3 * x * y * z -
@@ -88,7 +92,8 @@ private lemma gain_eq_zero_of_interior {x gain : ℝ}
     gain = 0 := by
   nlinarith [mul_pos hx0 (sub_pos.mpr hx1)]
 
-private lemma stationaryGainZero_neg_of_lowest_le_t_le_z
+/-- Negativity in the ordered region used in Solan--Vieille 2002, Lemma 6. -/
+theorem stationaryGainZero_neg_of_lowest_le_t_le_z
     {y z t : ℝ} (hy : 0 < y) (hyt : y ≤ t) (htz : t ≤ z)
     (hz1 : z ≤ 1) (ht1 : t < 1) :
     stationaryGainZero y z t < 0 := by
@@ -157,7 +162,8 @@ private lemma stationaryGainZero_neg_of_lowest_le_t_le_z
     nlinarith
   linarith
 
-private lemma stationaryGainZero_neg_of_lowest_le_z_le_t
+/-- Negativity in the half-box region used in Solan--Vieille 2002, Lemma 8. -/
+theorem stationaryGainZero_neg_of_lowest_le_z_le_t
     {y z t : ℝ} (hy : 0 < y) (hyz : y ≤ z) (hhalf : 1 / 2 ≤ z)
     (hzt : z ≤ t) (ht1 : t < 1) :
     stationaryGainZero y z t < 0 := by
@@ -237,7 +243,8 @@ private lemma stationaryGainZero_neg_of_lowest_le_z_le_t
       dsimp [E] at hcompare
       linarith
 
-private lemma stationaryGainThree_neg_of_lowest_le_half
+/-- The low-half region is excluded when the second coordinate is minimal. -/
+theorem stationaryGainThree_neg_of_lowest_le_half
     {x y z : ℝ} (hy : 0 < y) (hyx : y ≤ x) (hyz : y ≤ z)
     (hzhalf : z ≤ 1 / 2) (hx1 : x < 1) :
     stationaryGainThree x y z < 0 := by
@@ -285,6 +292,115 @@ private lemma stationaryGainThree_neg_of_lowest_le_half
       nlinarith [mul_pos hy hsum]
     rw [hrepr]
     linarith
+
+/-- The diagonal polynomial is negative up to, but excluding, the all-Continue apex. -/
+theorem stationaryGainZero_diagonal_neg {t : ℝ} (ht0 : 0 ≤ t) (ht1 : t < 1) :
+    stationaryGainZero t t t < 0 := by
+  rcases eq_or_lt_of_le ht0 with hzero | hpositive
+  · rw [← hzero]
+    norm_num [stationaryGainZero]
+  · exact stationaryGainZero_neg_of_lowest_le_t_le_z
+      hpositive (le_refl t) (le_refl t) ht1.le ht1
+
+/-- Solan--Vieille 2002, Fact 2: the gain polynomial is increasing in `y`
+on the ordered probability domain. -/
+theorem stationaryGainZero_mono_y
+    {y y' z t : ℝ} (hy0 : 0 ≤ y) (hyy' : y ≤ y')
+    (hy'z : y' ≤ z) (hy't : y' ≤ t) (hz1 : z ≤ 1) (ht1 : t ≤ 1) :
+    stationaryGainZero y z t ≤ stationaryGainZero y' z t := by
+  have hz0 : 0 ≤ z := hy0.trans (hyy'.trans hy'z)
+  have ht0 : 0 ≤ t := hy0.trans (hyy'.trans hy't)
+  have hy'1 : y' ≤ 1 := hy'z.trans hz1
+  have hy1 : y ≤ 1 := hyy'.trans hy'1
+  have hk : t ^ 2 - t ≤ 0 := by
+    nlinarith [mul_nonneg ht0 (sub_nonneg.mpr ht1)]
+  let P : ℝ := (t ^ 2 - t) * (y' + y + z) - 2 * t ^ 2 + 3 * t + 2
+  have hbound := mul_le_mul_of_nonpos_left
+    (show y' + y + z ≤ 3 by linarith) hk
+  have hP : 0 ≤ P := by dsimp [P]; nlinarith [sq_nonneg t]
+  have hproduct : 0 ≤ (y' - y) * z * P :=
+    mul_nonneg (mul_nonneg (sub_nonneg.mpr hyy') hz0) hP
+  have hidentity : stationaryGainZero y' z t - stationaryGainZero y z t =
+      (y' - y) * z * P := by
+    dsimp [P, stationaryGainZero]
+    ring
+  linarith
+
+/-- Solan--Vieille 2002, Fact 2: the gain polynomial is decreasing in `z`
+on the ordered probability domain. -/
+theorem stationaryGainZero_antitone_z
+    {y z z' t : ℝ} (hy0 : 0 ≤ y) (hyz : y ≤ z) (hyt : y ≤ t)
+    (hzz' : z ≤ z') (hz'1 : z' ≤ 1) (ht1 : t ≤ 1) :
+    stationaryGainZero y z' t ≤ stationaryGainZero y z t := by
+  have hz0 : 0 ≤ z := hy0.trans hyz
+  have hz'0 : 0 ≤ z' := hz0.trans hzz'
+  have ht0 : 0 ≤ t := hy0.trans hyt
+  have hz1 : z ≤ 1 := hzz'.trans hz'1
+  have hy1 : y ≤ 1 := hyz.trans hz1
+  have hk : t ^ 2 - t ≤ 0 := by
+    nlinarith [mul_nonneg ht0 (sub_nonneg.mpr ht1)]
+  let P : ℝ := (t ^ 2 - t) * (z' + t + y + z) - 2 * t ^ 2 + 3 * t + 2
+  let Q : ℝ := -(t ^ 2 - t) * y * (z' + y + z) +
+    2 * t ^ 2 * y - 3 * t * y + 4 * t - 2 * y
+  let Qt : ℝ := t * (t * (1 - t) * (z' + t + z) + 2 * t ^ 2 - 3 * t + 2)
+  have hbound := mul_le_mul_of_nonpos_left
+    (show z' + t + y + z ≤ 4 by linarith) hk
+  have hP : 0 ≤ P := by
+    dsimp [P]
+    nlinarith [sq_nonneg (t - 1 / 4)]
+  have hquad : 0 ≤ 2 * t ^ 2 - 3 * t + 2 := by
+    nlinarith [sq_nonneg (t - 3 / 4)]
+  have hterm : 0 ≤ t * (1 - t) * (z' + t + z) :=
+    mul_nonneg (mul_nonneg ht0 (sub_nonneg.mpr ht1)) (by positivity)
+  have hQt : 0 ≤ Qt := by
+    dsimp [Qt]
+    apply mul_nonneg ht0
+    linarith
+  have hcompare : Q - Qt = (t - y) * P := by
+    dsimp [Q, Qt, P]
+    ring
+  have hproduct := mul_nonneg (sub_nonneg.mpr hyt) hP
+  have hQ : 0 ≤ Q := by linarith
+  have hscaled := mul_nonneg (sub_nonneg.mpr hzz') hQ
+  have hidentity : stationaryGainZero y z t - stationaryGainZero y z' t =
+      (z' - z) * Q := by
+    dsimp [Q, stationaryGainZero]
+    ring
+  linarith
+
+/-- Solan--Vieille 2002, Lemma 7: in the low-half region the fourth player's
+nonnegative Quit value forces strict negativity of its gain polynomial. -/
+theorem stationaryGainThree_neg_of_quitValue_nonneg
+    {x y z : ℝ} (hx : 0 < x) (hx1 : x < 1) (hy : 0 < y)
+    (hyz : y ≤ z) (hzhalf : z ≤ 1 / 2)
+    (hquit : 0 ≤ y + (1 - y) * (z + x - 1)) :
+    stationaryGainThree x y z < 0 := by
+  have hz : 0 < z := lt_of_lt_of_le hy hyz
+  have hz1 : z < 1 := by linarith
+  let f0 : ℝ := 1 - 2 * x * z
+  let fz : ℝ := 1 - 2 * z + 2 * x * z * (1 - z)
+  let fy : ℝ := y * (-2 * x * z + 4 * x - 2) + 1 - 2 * x * z
+  have hxz : x * z < z := by
+    nlinarith [mul_pos (sub_pos.mpr hx1) hz]
+  have hf0 : 0 < f0 := by dsimp [f0]; nlinarith
+  have hfz : 0 < fz := by
+    have hpositive : 0 < 2 * x * z * (1 - z) := by positivity
+    dsimp [fz]
+    linarith
+  have hinterpolate : z * fy = (z - y) * f0 + y * fz := by
+    dsimp [fy, f0, fz]
+    ring
+  have hfy : 0 < fy := by
+    have hleft := mul_nonneg (sub_nonneg.mpr hyz) hf0.le
+    have hright := mul_pos hy hfz
+    nlinarith
+  have hnonneg : 0 ≤ x * y * z * (y + (1 - y) * (z + x - 1)) :=
+    mul_nonneg (by positivity) hquit
+  have hidentity : -stationaryGainThree x y z =
+      fy + x * y * z * (y + (1 - y) * (z + x - 1)) := by
+    dsimp [fy, stationaryGainThree]
+    ring
+  linarith
 
 private lemma no_gain_zeros_of_second_coordinate_minimal
     {x y z t : ℝ}

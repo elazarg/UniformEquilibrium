@@ -13,8 +13,8 @@ theorem quittingHalfFirstResidual_eq_tensorBernstein
     (x y : ℝ) :
     quittingHalfFirstResidual reward x y =
       ∑ first : Fin 3, ∑ second : Fin 3,
-        quittingHalfTensorCoefficient (quittingHalfFirstResidual reward) first second *
-          quittingHalfBernsteinBasis first x * quittingHalfBernsteinBasis second y := by
+        Math.quadraticTensorBernsteinCoefficient (quittingHalfFirstResidual reward) first second *
+          Math.quadraticBernsteinBasis first x * Math.quadraticBernsteinBasis second y := by
   have hfunction : quittingHalfFirstResidual reward =
       quittingHalfCanonicalResidual
         (fun x y => sigmaValue (weightOfReward reward) (halfFirstRow x y) 0)
@@ -30,8 +30,8 @@ theorem quittingHalfSecondResidual_eq_tensorBernstein
     (x y : ℝ) :
     quittingHalfSecondResidual reward x y =
       ∑ first : Fin 3, ∑ second : Fin 3,
-        quittingHalfTensorCoefficient (quittingHalfSecondResidual reward) first second *
-          quittingHalfBernsteinBasis first x * quittingHalfBernsteinBasis second y := by
+        Math.quadraticTensorBernsteinCoefficient (quittingHalfSecondResidual reward) first second *
+          Math.quadraticBernsteinBasis first x * Math.quadraticBernsteinBasis second y := by
   have hfunction : quittingHalfSecondResidual reward =
       quittingHalfCanonicalResidual
         (fun x y => sigmaValue (weightOfReward reward) (halfSecondRow x y) 1)
@@ -46,9 +46,9 @@ root or polynomial expansion supplied as a hypothesis. -/
 structure QuittingHalfStrictBernsteinUpper
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) : Prop where
   first : ∀ indexX indexY : Fin 3,
-    quittingHalfTensorCoefficient (quittingHalfFirstResidual reward) indexX indexY < 0
+    Math.quadraticTensorBernsteinCoefficient (quittingHalfFirstResidual reward) indexX indexY < 0
   second : ∀ indexX indexY : Fin 3,
-    quittingHalfTensorCoefficient (quittingHalfSecondResidual reward) indexX indexY < 0
+    Math.quadraticTensorBernsteinCoefficient (quittingHalfSecondResidual reward) indexX indexY < 0
 
 /-- Strict first-row coefficient negativity gives the full closed-square guard. -/
 theorem quittingHalfFirstResidual_neg_of_coefficients
@@ -57,7 +57,7 @@ theorem quittingHalfFirstResidual_neg_of_coefficients
     (x y : ℝ) (hx : 0 ≤ x ∧ x ≤ 1) (hy : 0 ≤ y ∧ y ≤ 1) :
     quittingHalfFirstResidual reward x y < 0 := by
   rw [quittingHalfFirstResidual_eq_tensorBernstein]
-  exact quittingHalfTensor_sum_neg_of_coefficients_neg
+  exact Math.quadraticTensorBernstein_sum_neg_of_coefficients_neg
     _ x y hx hy hcoeff.first
 
 /-- Strict second-row coefficient negativity gives the full closed-square guard. -/
@@ -67,7 +67,7 @@ theorem quittingHalfSecondResidual_neg_of_coefficients
     (x y : ℝ) (hx : 0 ≤ x ∧ x ≤ 1) (hy : 0 ≤ y ∧ y ≤ 1) :
     quittingHalfSecondResidual reward x y < 0 := by
   rw [quittingHalfSecondResidual_eq_tensorBernstein]
-  exact quittingHalfTensor_sum_neg_of_coefficients_neg
+  exact Math.quadraticTensorBernstein_sum_neg_of_coefficients_neg
     _ x y hx hy hcoeff.second
 
 end GameTheory

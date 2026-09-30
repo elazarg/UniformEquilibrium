@@ -153,7 +153,8 @@ theorem quittingHalfFirst_displacement_eq_canonical
         x y := by
   rw [quittingDiscountedDisplacement, first_continueMassExcl]
   rw [quittingHalfFirst_sigmaValue_bilinear, quittingHalfFirst_excludedValue_bilinear]
-  unfold quittingHalfCanonicalResidual quittingHalfBilinearInterpolation
+  unfold quittingHalfCanonicalResidual Math.bilinearSurvivalDifference
+    quittingHalfBilinearInterpolation
   ring
 
 /-- The actual second selected residual has the same biquadratic shape. -/
@@ -166,7 +167,8 @@ theorem quittingHalfSecond_displacement_eq_canonical
         x y := by
   rw [quittingDiscountedDisplacement, second_continueMassExcl]
   rw [quittingHalfSecond_sigmaValue_bilinear, quittingHalfSecond_excludedValue_bilinear]
-  unfold quittingHalfCanonicalResidual quittingHalfBilinearInterpolation
+  unfold quittingHalfCanonicalResidual Math.bilinearSurvivalDifference
+    quittingHalfBilinearInterpolation
   ring
 
 end GameTheory

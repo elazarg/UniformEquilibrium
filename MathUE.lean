@@ -175,6 +175,7 @@ import MathUE.Finset.InsertExtremum
 import MathUE.Finset.MinimalMemberSum
 import MathUE.Finset.MonotoneChainChangeBudget
 import MathUE.Finset.PowersetBernoulliWeight
+import MathUE.Finset.BernoulliAffine
 import MathUE.Finset.ProdLtOne
 import MathUE.Finset.RetainedRoleClockArithmetic
 import MathUE.Finset.SupNonexpansive
@@ -304,6 +305,7 @@ import MathUE.PMFProduct.ProductCoalitionSupportCard
 import MathUE.PMFProduct.SingletonRatioPairConcentration
 import MathUE.PMFProduct.SmallHazardBounds
 import MathUE.PMFProduct.SmallHazardExpectation
+import MathUE.PMFProduct.SequentialSingletonMass
 import MathUE.PMFProduct.SumFubini
 import MathUE.PMFProduct.NormalizedSmallHazardExpectation
 import MathUE.PMFProduct.TotalVariation
@@ -365,6 +367,8 @@ import MathUE.Polynomial.GlobalSignReconstruction
 import MathUE.Polynomial.SignDiagramReconstruction
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
+import MathUE.Polynomial.TensorBernsteinQuadratic
+import MathUE.Polynomial.TensorBernsteinQuadraticSign
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.TensorBernsteinDifferences
 import MathUE.Polynomial.TensorBernsteinGridEstimates
