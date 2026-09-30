@@ -1352,6 +1352,12 @@ constructs a bounded open ambient annulus whose actual zero fiber is precisely
 the entire nonzero crossed fixed-point set and whose ambient degree is
 one minus the crossed R0 degree. Frontier avoidance and strict chart enclosure
 are derived from actual confinement and origin isolation.
+`exists_quittingCrossedOmegaAnnulus_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseOmegaDegree.lean`)
+gives the same intrinsic degree on the source's literal box `(-1,2)^n` with
+a small closed ball removed. Excision through the intersection with the
+radial annulus retains the entire nonzero fiber. Neither finite roots nor
+enclosure of the literal box's closure in the old chart is assumed.
 Under the strict full-box guards, reciprocal
 singleton signs, and the same degree assumptions,
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff`
@@ -1364,6 +1370,16 @@ are stated in
 with the packet's literal two-face guards. The strategic module also states
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
 under those source conditions.
+`exists_isAlgebraic_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAlgebraicStrategic.lean`)
+adds algebraic hazards and algebraic actual payoff for rational rewards and
+rational selected-player ceiling. It derives the algebraic witness from the
+same R0/nonunit-degree source, without a supplied root or regularity assumption.
+The original-game endpoint, full-rate cap, complete behavioral cap and uniform
+payoff all refer to that same selected root and value; zero and upper hazard
+faces are retained. The finite sign-formula encoding is in
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRationalFormula.lean`.
+This is algebraic existence, not executable root isolation or rational search.
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_strictRawUnit`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawProducer.lean`)
 closes the strict unit-ceiling reward-table branch: the literal lower ranking
@@ -1425,9 +1441,29 @@ every relabeling of that test.
 `unitCeiling_block_injective_of_responseInvariant`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePartitionSeparation.lean`)
 use distinct all-half residuals to exclude every nondiscrete block map.
-The source's neighborhood, child-LP, censored-law, and annular total-degree
-claims remain separate.
+The source's full reward neighborhoods, child-LP comparisons, and rational
+algebraic-root and accuracy-only search adapters remain separate.
 The quotient RI route does not apply to the crossed map.
+
+`halfCeiling_every_proper_child_raw_test_fails` and
+`unitCeiling_three_player_child_no_certificates`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseChildLP.lean`)
+evaluate the literal source reward restrictions. The half table excludes
+every proper-child universal raw certificate, including the positive-singleton
+license for omitting Never. The unit table has four strict three-player-child
+dual certificates. These do not exclude extension of a particular child
+equilibrium. Sampled rows and quantitative perturbation consumers reuse
+the exact finite LP alternative in
+`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockSampledLPDual.lean`
+and the game-independent weighted-error estimate in
+`MathUE/DirectedTransport/FiniteInequality/Perturbation.lean`.
+`unitCeiling_three_player_child_no_certificates_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseChildLPRobust.lean`)
+extends both unit-table exclusions to every actual reward table at entrywise
+distance below `1 / 1000`. The exact weighted-error factors are `36`, `4`,
+`254`, and `28`. This is a full reward-coordinate perturbation, not a
+fixed-singleton or symmetric subspace. The half table's zero-column duals
+do not assert robust exclusion.
 
 `isHorizonNash_stationary_of_terminalNash_and_opponentGap`
 (`UniformEquilibrium/Quitting/Stationary/FiniteHorizonRate.lean`)
@@ -1438,6 +1474,29 @@ prescribed profile and every positive horizon.
 `halfCeilingRoot_isHorizonNash`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`)
 instantiates the packet's literal `4776 / (35 * H)` bound.
+
+`exists_stationaryFiniteCensorTimingProfile`
+(`UniformEquilibrium/Quitting/Stationary/FiniteCensor.lean`) retains one actual
+independent finite-clock family obtained by censoring a stationary terminal
+Nash profile after `N` dates. It derives the full behavioral cap internally,
+preserves the exact censored marginals and semantic pair, and gives terminal
+regret at most `3 * M * rho^N`, delivery error at most `M * rho^N`, and signed
+horizon errors with additional `2 * M * (N + 1) / H` and
+`M * (N + 1) / H`, respectively. Here `rho` is the maximum deleted-opponent
+survival, not a sum of marginal tails. The empty-player case is included.
+`exists_halfCeilingFiniteCensorTimingProfile`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteCensor.lean`)
+constructs these laws from the actual half-ceiling root, with
+`rho = 7 / 12`, reward bound `199 / 7`, and regret coefficient `597 / 7`.
+`exists_stationaryFiniteCensorTimingProfile_logCutoff`
+(`UniformEquilibrium/Quitting/Stationary/FiniteCensorCutoff.lean`) retains that
+same family with an explicit logarithmic date bound. The survival rate and
+logarithmic scale are fixed before accuracy, not uniformly over boundary roots.
+`exists_stationaryFiniteCensor_oneDate_exact` in the same file preserves
+payoff and full cap exactly when the maximum deleted-opponent survival is zero.
+`exists_unitCeiling_oneDateFiniteCensor_exact`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseOneDateCensor.lean`)
+applies this to the actual unit-ceiling root, with no supplied root or cap.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)

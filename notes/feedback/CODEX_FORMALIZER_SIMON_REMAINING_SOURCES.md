@@ -231,6 +231,20 @@ half-payoff-box invariant supply those bounds from an unbounded extended
 orbit in the compact Section 4 graph. The conversion of the joined graph's
 remaining terminal-image edges is not yet complete.
 
+`section4J_smallStep_mem_fRow_of_mem_halfPayoffBox`
+(`Literature/Simon2012.lean`) now converts every actual small-step Section 4
+edge whose source lies in the half-payoff box into an ordinary quitting
+correspondence edge. It uses the checked local containment branches, not the
+missing global upper bound in Lemma 4.4.
+`exists_samePoints_fRow_extendedOrbit_of_section4J_smallSteps` in the same
+file retains the chosen orbit's points, segment counts and lengths, both
+stitch clauses, and Euclidean variation. Its named build is silent and a
+separate transitive axiom check reports only the three standard axioms.
+The all-edge small-step premise remains explicit: Question 1 supplies an
+unrestricted Section 4 orbit, not an orbit in its small-step subgraph.
+The half-box producer chooses a localized tail; the transport preserves that
+chosen tail, not every point of the original orbit.
+
 For the literal data in `lemma4_5` (`Literature/Simon2012.lean`), the domain
 contractibility, polytope pieces, union decomposition, homotopy straightness,
 initial diagonal, frontier fixing, terminal-diagonal exclusion, and actual
@@ -321,7 +335,8 @@ coordinate-drift lemma, not Lemma 4.4's unfinished global upper bound. It
 passed a silent named build and a separate transitive standard-axiom check.
 The recurrent-coordinate consequence for an unbounded extended orbit
 staying in the half-payoff box is the theorem above. Producing or retaining
-that box for the orbit remains separate formalization work.
+that box is supplied by the checked near-feasible tail and invariant above;
+it does not supply the all-edge small-step premise.
 The remaining positive-cutoff branches and their assembly remain to be
 formalized.
 
@@ -423,9 +438,16 @@ Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
   interfaces; it also depends on the open `lemma4_5` field.
 - `question1_affirmative_implies_all_quitting_games`
   (`Literature/Simon2012.lean`): `lemma5_1`, `minimumAbnormalGap_pos`,
-  `exists_section5Accuracy`, and `Section5ModifiedC` supply only the Section 5
-  setup. The paper sketches, but does not verify, the modified boundary
-  homotopy and glue or their seven Question 1 hypotheses. The all-normal
+  `exists_section5Accuracy`, and the actual `Section5ModifiedC` supply the
+  Section 5 setup. Its compactness and contractibility are checked, and
+  `exists_section5ModifiedC_fullDimensionalPolytopeCover_of_section3Constants`
+  in that file constructs a positive finite cover by literal normal-player
+  pieces and distinct abnormal-pair intersections. Every piece is a
+  full-dimensional compact convex polytope under the standing Section 3
+  constants. These declarations pass a silent named build and a separate
+  transitive audit with only the three permitted axioms. The paper sketches,
+  but does not verify, the modified boundary homotopy and glue or their seven
+  Question 1 hypotheses. Those source constructions remain; the all-normal
   `theorem4_1` does not cover this abnormal-player branch.
 
 No remaining `sorry` has a source-complete proof obtainable solely by

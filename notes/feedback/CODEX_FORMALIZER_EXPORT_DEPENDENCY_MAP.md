@@ -14,6 +14,14 @@ wave pass the full silent default build, including the regenerated exhaustive
 axiom audit, and all repository CI script gates. This records local checks;
 the corresponding remote CI run has not yet completed.
 A packet remains pending where its claim inventory lists unimplemented conclusions.
+The literal crossed-domain degree, sharp stationary finite-censor family and
+cutoff, sampled child-LP exclusions and unit reward-ball robustness, algebraic
+original-game source, and Simon small-step orbit and modified-domain geometry
+also pass the full silent default build and repository script gates.
+The Simon declarations additionally pass separate transitive standard-axiom
+checks. Full crossed reward neighborhoods and successful rational enumeration
+remain separate completion obligations; no further packet is retired by these
+partial conclusions.
 The paired-collision packet has complete coverage and is retired to
 `math/formalized/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md`.
 The passive-row cycle packet also passes its complete-claim review, full silent
@@ -23,7 +31,7 @@ build and exhaustive axiom audit. It is retired unchanged to
 
 | First missing theorem or adapter | Packets grouped at that boundary | Checked production foothold |
 | --- | --- | --- |
-| Remaining example refinements and literal-domain degree adapter | `GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE`; quotient producer in `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` is checked | The strict unit and half-ceiling raw producers construct actual stationary terminal Nash and UE from finite reward comparisons, including reconstruction of the half-ceiling residual coefficients. Both nonnegative-inverse boundary branches select one fixed original-game target (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryTarget.lean`). `exists_uniformPayoff_of_oneSidedWeakUnitRawGuards` (`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`) supplies the matrix-free sixteen-comparison Fin4 class, including signed sole-owner completion. Both literal table roots, exact full caps, and specified UE targets are checked (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`), together with pure-clock, raw-class, and partition separations. `halfCeilingRoot_isHorizonNash` (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`) supplies the literal horizon bound. The fixed-chart normalized total nonzero-set degree is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseTotalDegree.lean`; its ambient counterpart is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientDegree.lean`. The literal printed-domain adapter, full reward neighborhoods, child-LP certificates and censored-law estimates remain. The arbitrary signed quotient criterion is independent: `exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`). |
+| Full reward neighborhoods and rational-source refinements | `GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE`; quotient producer in `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` is checked | The strict unit and half-ceiling raw producers construct actual stationary terminal Nash and UE from finite reward comparisons, including reconstruction of the half-ceiling residual coefficients. Both nonnegative-inverse boundary branches select one fixed original-game target (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryTarget.lean`). `exists_uniformPayoff_of_oneSidedWeakUnitRawGuards` (`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`) supplies the matrix-free sixteen-comparison Fin4 class, including signed sole-owner completion. Both literal table roots, exact full caps, and specified UE targets are checked (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`), together with pure-clock, raw-class, and partition separations. `halfCeilingRoot_isHorizonNash` (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`) supplies the literal horizon bound. The fixed-chart normalized total nonzero-set degree is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseTotalDegree.lean`; its ambient counterpart is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientDegree.lean`. The literal printed-domain adapter now passes its named check (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseOmegaDegree.lean`). The actual stationary finite-censor family, sharp signed horizon estimates, logarithmic cutoff, and zero-survival one-date specialization pass their named checks (`UniformEquilibrium/Quitting/Stationary/FiniteCensor.lean`, `UniformEquilibrium/Quitting/Stationary/FiniteCensorCutoff.lean`). The literal half/unit child-LP exclusions and unit reward-ball certificate exclusion also pass their named checks (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseChildLP.lean`, `UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseChildLPRobust.lean`). The algebraic original-game producer also passes its named check (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAlgebraicStrategic.lean`), retaining one root and payoff with exact complete caps. Full reward neighborhoods and accuracy-only rational search remain. The arbitrary signed quotient criterion is independent: `exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`). |
 | Quotient-wide consequences and literal fixtures | `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` | The signed paired centered-row UE class and paired/full matrix degree calculations are checked. The entire nonzero-set normalized degree theorem and `exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`) pass targeted checks. The latter retains the produced Bellman value as the fixed target, requiring normality only for negative singleton-block owners. Ambient degree identification, quotient counterexample consequences, quantitative conclusions, coordinate freedom, and algebraic and boundary fixtures remain. |
 | Evaluated cancellation and packet refinements | `WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS` | Ordinary deadline, evaluated-security deadline, terminal-security deadline and patient fixed-target extensions are checked. Patient terminal necessity and the shared-witness deadline refactor pass targeted checks. The patient full-debt comparison uses the sum of its two response weights, and the terminal patient Never floor is not the evaluated zero-based floor. All four extensions consume raw reward certificates and preserve the actual quiet lift; none supplies certificates for arbitrary Fin4 tables. Evaluated cancellation, Never relaxations, rational enumeration, and strict examples/neighborhoods remain. |
 | Actual quantile rigidity and robust unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. The center data and capped-clock certificate infeasibility are also integrated. The packet's universal positive parent-plus-child exploitability floor still needs its actual quantile-rigidity sequence, all four restriction estimates including the adjacent-date atom move, and the reward-neighborhood transfer. Capped-clock infeasibility does not prove this stronger unchanged-child obstruction. |
@@ -33,12 +41,21 @@ build and exhaustive axiom audit. It is retired unchanged to
 
 ## Next source-complete Lean tasks with broad reuse
 
-1. Complete the crossed-response literal-domain degree adapter, neighborhood and
-   child-LP certificates, and censored-law estimates. Its matrix-free Fin4
+1. Complete the crossed-response full reward neighborhoods and rational search.
+   The algebraic original-game stationary-root producer passes its named check
+   (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAlgebraicStrategic.lean`).
+   It retains one root with algebraic hazards and actual payoff, complete caps
+   equal to that payoff, and UE at that payoff. This does not implement
+   executable root isolation or the accuracy-only rational search.
+   Its matrix-free Fin4
    producer, both nonnegative-inverse boundary branches, literal roots and
    caps, horizon bound, separation results, and fixed-chart total nonzero-set
-   degree and bounded-annulus ambient counterpart are checked. The degree
-   identity does not require isolated or finitely many nonzero roots.
+   degree and bounded-annulus ambient counterpart are checked. The literal
+   source-domain and sharp finite-censor adapters pass their targeted checks.
+   The literal child-LP exclusions and unit-table robust certificate exclusion
+   also pass their targeted checks; these do not exclude actual child-equilibrium
+   extensions.
+   The degree identity does not require isolated or finitely many nonzero roots.
 2. Complete the separate evaluated cancellation variant, Never-row relaxations,
    rational calendar enumeration, and strict
    separating examples. Ordinary, all-evaluation truncated-security,
@@ -53,6 +70,37 @@ build and exhaustive axiom audit. It is retired unchanged to
    cases. The strict-deficit infinite all-suffix theorem is now checked and
    does not need to be reproved. The single-pivot source remains a different
    counterexample-side task.
+
+## Proof-mining connections not yet formalized
+
+These are proposed follow-ups, not new checked conclusions or packet seals.
+
+- The ambient homotopy and R0 margin APIs should give degree constancy along
+  any continuous path of R0 matrices and local constancy on the whole R0
+  locus. No zero-diagonal, strict-support, or nonsingular-principal-minor
+  restriction is needed for that degree claim. Exact support inventories
+  still retain their own stronger hypotheses.
+- Compact target selection can retain cofinal actual-family indices and
+  arbitrary eventual constraints, rather than discarding them at the final
+  existential selection. This would preserve independently shrinking hazard
+  caps at one fixed target. Finite quiet-law conversion also needs the actual
+  cyclic certificate and contraction data, not just a small-hazard existence
+  statement. No uniform weak-boundary calendar bound follows.
+- The paired quotient class can be enlarged to a relative-open class of
+  response-invariant centered tables with nearby quotient matrices, instead
+  of fixing its singleton matrix exactly. This is relative openness within
+  the centered response-invariant class, not openness under arbitrary
+  symmetry-breaking perturbations.
+
+The crossed packet's rational-source claims need adapters, not new generic
+existence mathematics. The checked rational sign-formula algebraic-witness
+library permits nonisolated roots. Encode the literal bounded nonzero crossed
+fixed-point conditions, then use the original-game endpoint consumer.
+For accuracy-only rational search, retain all-deleted-clock contraction and
+evaluate the actual stationary payoff and complete behavioral cap. Continuity
+is needed relative to the cube, including zero and sure hazards. A one-stage
+rational grid selector against a supplied tail is not this stationary search.
+No practical complexity bound or search for a prescribed target is claimed.
 
 ## Reusable serialization result beyond the literal paper instance
 
@@ -298,6 +346,12 @@ crossed fixed-point set and whose degree is one minus the crossed R0 degree.
 Frontier avoidance and strict chart enclosure are derived. The quotient
 family still needs its own actual-source adapter; the shared foundation
 need not be rebuilt.
+
+`exists_quittingCrossedOmegaAnnulus_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseOmegaDegree.lean`)
+passes its targeted silent build on the literal `(-1,2)^n` source. Excision
+through the actual intersection with the radial annulus keeps the entire
+nonzero fiber. This is not a finiteness or regularity statement about roots.
 
 ## Complete-claim audit: withdrawal and deadline packet
 

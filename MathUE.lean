@@ -149,6 +149,7 @@ import MathUE.DivergentChargeRecurrence
 import MathUE.SummableChargeSurvival
 import Maths.Graph.EdgeGraph
 import MathUE.DirectedTransport.FiniteInequality.Nonnegative
+import MathUE.DirectedTransport.FiniteInequality.Perturbation
 import MathUE.DirectedTransport.SimpleCycleBalance
 import MathUE.FiniteAffineIntervalClassification
 import MathUE.FiniteAffineIntervalFeasibility

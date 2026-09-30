@@ -13840,6 +13840,113 @@ theorem section4_terminal_mem_gluedGraph_of_halfPayoffBox_smallStep
         hmotion hconstants inverse cutoff hcutoff hε hερ a ha hpositive
           hxbox hstep
 
+/-- Every actual small-step Section 4 edge starting in the half-payoff box
+is an ordinary quitting-correspondence edge. This uses only the checked
+local containment branches, not Lemma 4.4's global continuation upper bound. -/
+theorem section4J_smallStep_mem_fRow_of_mem_halfPayoffBox
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    {x y : Payoff G.Player}
+    (hxy : (x, y) ∈ SmallStepGraph (Section4J G inverse cutoff R ε δ)
+      (Section4Omega G M d ρ ξ R ε))
+    (hxbox : InClosedPayoffBox (M / 2) x) :
+    y ∈ FRow G ε x := by
+  have hxhalf : ∀ j, -M / 2 ≤ x j ∧ x j ≤ M / 2 := by
+    intro j
+    simpa only [neg_div] using hxbox j
+  have hxfull : InClosedPayoffBox M x := by
+    intro j
+    constructor <;> nlinarith [hM.1, (hxbox j).1, (hxbox j).2]
+  have hglue : (x, y) ∈ correspondenceGraph (GluedFiber G R ε δ) := by
+    rcases hxy with ⟨hgraph, hstep⟩
+    rcases hgraph with hterminal | hglue
+    · obtain ⟨a, ha, hpair⟩ := hterminal
+      rw [section4H_one] at hpair
+      have hx : Section4X G inverse cutoff a = x := congrArg Prod.fst hpair
+      have hy : Section4Y G inverse cutoff a = y := congrArg Prod.snd hpair
+      have hxfull' : InClosedPayoffBox M (Section4X G inverse cutoff a) := by
+        rw [hx]
+        exact hxfull
+      have hstep' : EuclideanDist (Section4X G inverse cutoff a)
+          (Section4Y G inverse cutoff a) < Section4Omega G M d ρ ξ R ε := by
+        rw [hx, hy]
+        exact hstep
+      have hlocal := section4_terminal_mem_gluedGraph_of_halfPayoffBox_smallStep
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant hmotion
+          hconstants inverse cutoff hcutoff hε hερ hδ a ha hxfull' hstep'
+      simpa only [hx, hy] using hlocal
+    · exact hglue
+  exact gluedFiber_subset_fRow_of_mem_halfPayoffBox
+    G M d ρ ξ R ε δ hplayers hM hd hd1 hmotion hconstants hε hερ hδ x hxhalf hglue
+
+/-- Transport the same actual extended orbit, replacing only its edge
+membership proofs. Counts, lengths, all points, and both kinds of stitch
+are retained literally, so its Euclidean unbounded variation is unchanged.
+
+The half-box condition can be supplied by
+exists_unbounded_section4J_tail_in_halfPayoffBox. The small-step condition
+is explicit: neither that tail theorem nor Question1Conclusion supplies
+it for an arbitrary Section 4 orbit. -/
+theorem exists_samePoints_fRow_extendedOrbit_of_section4J_smallSteps
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hbox : ExtendedOrbitStaysIn orbit (ClosedCoordinateCube (M / 2)))
+    (hsteps : ∀ segment, ActiveSegment orbit.segmentCount segment → ∀ index,
+      SegmentIndex (orbit.segmentLength segment) (index + 1) →
+        EuclideanDist (orbit.point segment index) (orbit.point segment (index + 1)) <
+          Section4Omega G M d ρ ξ R ε) :
+    ∃ transported : ExtendedOrbitData (FRow G ε),
+      transported.segmentCount = orbit.segmentCount ∧
+      transported.segmentLength = orbit.segmentLength ∧
+      transported.point = orbit.point ∧
+      (HasUnboundedExtendedVariation transported ↔ HasUnboundedExtendedVariation orbit) := by
+  let transported : ExtendedOrbitData (FRow G ε) := {
+    segmentCount := orbit.segmentCount
+    segmentCountPositive := orbit.segmentCountPositive
+    segmentLength := orbit.segmentLength
+    segmentLengthPositive := orbit.segmentLengthPositive
+    point := orbit.point
+    step := by
+      intro segment hactive index hnext
+      have hindex : SegmentIndex (orbit.segmentLength segment) index := by
+        intro length hlength
+        exact lt_trans (Nat.lt_succ_self index) (hnext length hlength)
+      exact section4J_smallStep_mem_fRow_of_mem_halfPayoffBox
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant hmotion
+          hconstants inverse cutoff hcutoff hε hερ hδ
+          ⟨orbit.step segment hactive index hnext, hsteps segment hactive index hnext⟩
+          (hbox segment hactive index hindex)
+    finiteStitch := orbit.finiteStitch
+    infiniteStitch := orbit.infiniteStitch
+  }
+  exact ⟨transported, rfl, rfl, rfl, Iff.rfl⟩
+
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the
 standing Section 3 assumptions and the `d,ρ,ξ,R` relations made explicit.
@@ -14222,6 +14329,213 @@ def Section5ModifiedC (G : QuittingGame) (R : ℝ) :
     (∃ j, IsNormalPlayer G j ∧ x ∈ TruncatedPiece G R j) ∨
     ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
       x ∈ TruncatedPiece G R k ∩ TruncatedPiece G R l}
+
+/-- The modified Section 5 domain is the literal finite union of retained
+normal-player pieces and abnormal-pair intersections. -/
+theorem section5ModifiedC_eq_retainedPieces (G : QuittingGame) (R : ℝ) :
+    Section5ModifiedC G R =
+      (⋃ j : {j : G.Player // IsNormalPlayer G j}, TruncatedPiece G R j.val) ∪
+      ⋃ pair : {pair : G.Player × G.Player //
+          pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2},
+        TruncatedPiece G R pair.val.1 ∩ TruncatedPiece G R pair.val.2 := by
+  ext x
+  constructor
+  · rintro (⟨j, hj, hx⟩ | ⟨k, l, hne, hk, hl, hx⟩)
+    · exact Or.inl (Set.mem_iUnion.mpr ⟨⟨j, hj⟩, hx⟩)
+    · exact Or.inr (Set.mem_iUnion.mpr ⟨⟨(k, l), hne, hk, hl⟩, hx⟩)
+  · rintro (hx | hx)
+    · obtain ⟨j, hj⟩ := Set.mem_iUnion.mp hx
+      exact Or.inl ⟨j.val, j.property, hj⟩
+    · obtain ⟨pair, hpair⟩ := Set.mem_iUnion.mp hx
+      exact Or.inr ⟨pair.val.1, pair.val.2, pair.property.1,
+        pair.property.2.1, pair.property.2.2, hpair⟩
+
+/-- The actual Section 5 modified domain is compact, with no normal-player
+or geometric slack assumptions needed for compactness. -/
+theorem isCompact_section5ModifiedC (G : QuittingGame) (R : ℝ) :
+    IsCompact (Section5ModifiedC G R) := by
+  classical
+  rw [section5ModifiedC_eq_retainedPieces]
+  apply IsCompact.union
+  · exact isCompact_iUnion fun j : {j : G.Player // IsNormalPlayer G j} =>
+      isCompact_truncatedPiece G R j.val
+  · exact isCompact_iUnion fun pair : {pair : G.Player × G.Player //
+        pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2} =>
+      (isCompact_truncatedPiece G R pair.val.1).inter
+        (isCompact_truncatedPiece G R pair.val.2)
+
+/-- Removing the abnormal singleton pieces leaves a star-convex domain
+because every retained piece and pair intersection has the same lower corner. -/
+theorem starConvex_section5ModifiedC (G : QuittingGame) (R : ℝ)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) :
+    StarConvex ℝ (fun _ => -(R + 1)) (Section5ModifiedC G R) := by
+  rw [section5ModifiedC_eq_retainedPieces]
+  have hpiece (j : G.Player) :
+      StarConvex ℝ (fun _ => -(R + 1)) (TruncatedPiece G R j) :=
+    (convex_truncatedPiece G R j).starConvex
+      (lowerCorner_mem_truncatedPiece G R hR hsolo j)
+  exact (starConvex_iUnion fun j : {j : G.Player // IsNormalPlayer G j} =>
+    hpiece j.val).union
+    (starConvex_iUnion fun pair : {pair : G.Player × G.Player //
+        pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2} =>
+      (hpiece pair.val.1).inter (hpiece pair.val.2))
+
+/-- Under the paper's player-count assumption the common corner is retained:
+either a normal piece survives, or two abnormal pieces supply an intersection. -/
+theorem lowerCorner_mem_section5ModifiedC (G : QuittingGame) (R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) :
+    (fun _ => -(R + 1)) ∈ Section5ModifiedC G R := by
+  classical
+  by_cases hnormal : ∃ j, IsNormalPlayer G j
+  · obtain ⟨j, hj⟩ := hnormal
+    exact Or.inl ⟨j, hj, lowerCorner_mem_truncatedPiece G R hR hsolo j⟩
+  · have hcard : 1 < (Finset.univ : Finset G.Player).card := by
+      simpa only [Finset.card_univ] using
+        lt_of_lt_of_le (by norm_num : 1 < 3) hplayers
+    obtain ⟨k, l, _, _, hne⟩ := Finset.one_lt_card_iff.mp hcard
+    have hk : IsAbnormalPlayer G k := fun hk => hnormal ⟨k, hk⟩
+    have hl : IsAbnormalPlayer G l := fun hl => hnormal ⟨l, hl⟩
+    exact Or.inr ⟨k, l, hne, hk, hl,
+      lowerCorner_mem_truncatedPiece G R hR hsolo k,
+      lowerCorner_mem_truncatedPiece G R hR hsolo l⟩
+
+/-- The actual modified Section 5 domain is intrinsically contractible under
+the same weak corner slack as the Section 4 domain. -/
+theorem isContractibleSet_section5ModifiedC (G : QuittingGame) (R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hR : 0 ≤ R + 1) (hsolo : ∀ j, -(R + 1) ≤ SoloPayoff G j) :
+    IsContractibleSet (Section5ModifiedC G R) :=
+  (Math.Topology.SimonViability.isContractibleSet_iff_contractibleSpace _).mpr
+    ((starConvex_section5ModifiedC G R hR hsolo).contractibleSpace
+      ⟨_, lowerCorner_mem_section5ModifiedC G R hplayers hR hsolo⟩)
+
+/-- The actual standing Section 3 constants supply all geometric slack for
+compactness and contractibility of the modified Section 5 domain. This does not
+construct the abnormal-player boundary homotopy or its seven conditions. -/
+theorem section5ModifiedC_compact_contractible_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    IsCompact (Section5ModifiedC G R) ∧ IsContractibleSet (Section5ModifiedC G R) := by
+  obtain ⟨hR, hsolo⟩ := truncatedPiece_strict_slack_of_section3Constants
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  exact ⟨isCompact_section5ModifiedC G R,
+    isContractibleSet_section5ModifiedC G R hplayers hR.le (fun j => (hsolo j).le)⟩
+
+/-- Every retained abnormal-pair piece is the literal common-lower-corner
+rectangle, with the coordinatewise minimum of the two clipped upper corners. -/
+theorem truncatedPiece_inter_eq_Icc (G : QuittingGame) (R : ℝ) (k l : G.Player) :
+    TruncatedPiece G R k ∩ TruncatedPiece G R l =
+      Set.Icc (fun _ => -(R + 1))
+        (truncatedPieceUpperCorner G R k ⊓ truncatedPieceUpperCorner G R l) := by
+  rw [truncatedPiece_eq_Icc, truncatedPiece_eq_Icc, Set.Icc_inter_Icc, sup_idem]
+
+/-- The same strict corner slack makes every pair intersection a
+full-dimensional compact convex polytope; abnormality is not needed for this geometry. -/
+theorem isFullDimensionalCompactConvexPolytope_truncatedPair
+    (G : QuittingGame) (R : ℝ) (k l : G.Player)
+    (hR : 0 < R + 1)
+    (hk : -(R + 1) < SoloPayoff G k) (hl : -(R + 1) < SoloPayoff G l) :
+    IsFullDimensionalCompactConvexPolytope
+      (TruncatedPiece G R k ∩ TruncatedPiece G R l) := by
+  classical
+  rw [truncatedPiece_inter_eq_Icc]
+  apply Math.Topology.SimonViability.isFullDimensionalCompactConvexPolytope_Icc
+  have hupper (j : G.Player) (hj : -(R + 1) < SoloPayoff G j) (who : G.Player) :
+      -(R + 1) < truncatedPieceUpperCorner G R j who := by
+    dsimp only [truncatedPieceUpperCorner]
+    split_ifs
+    · exact lt_min (by linarith) hj
+    · linarith
+  intro who
+  exact lt_min (hupper k hk who) (hupper l hl who)
+
+/-- The actual Section 5 domain has a positive finite cover by
+full-dimensional compact convex polytopes under the standing source constants.
+Every indexed piece is literally a retained normal piece or abnormal-pair
+intersection. These are the domain/cover fields of Question 1 only: no artificial
+homotopy or correspondence is constructed by this theorem. -/
+theorem exists_section5ModifiedC_fullDimensionalPolytopeCover_of_section3Constants
+    (G : QuittingGame) (M d ρ ξ R : ℝ)
+    (hplayers : HasAtLeastThreePlayers G) (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1) (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R) :
+    ∃ count : ℕ, 0 < count ∧
+      ∃ piece : Fin count → Set (Payoff G.Player),
+        IsContractibleSet (Section5ModifiedC G R) ∧
+        (∀ index, IsFullDimensionalCompactConvexPolytope (piece index)) ∧
+        Section5ModifiedC G R = ⋃ index, piece index ∧
+        ∀ index,
+          (∃ j, IsNormalPlayer G j ∧ piece index = TruncatedPiece G R j) ∨
+          ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+            piece index = TruncatedPiece G R k ∩ TruncatedPiece G R l := by
+  classical
+  obtain ⟨hR, hsolo⟩ := truncatedPiece_strict_slack_of_section3Constants
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  let Index := Sum {j : G.Player // IsNormalPlayer G j}
+    {pair : G.Player × G.Player //
+      pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2}
+  let retained : Index → Set (Payoff G.Player) :=
+    Sum.elim (fun j : {j : G.Player // IsNormalPlayer G j} =>
+      TruncatedPiece G R j.val)
+      (fun pair : {pair : G.Player × G.Player //
+          pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2} =>
+        TruncatedPiece G R pair.val.1 ∩ TruncatedPiece G R pair.val.2)
+  have hcover : Section5ModifiedC G R = ⋃ index, retained index := by
+    rw [Set.iUnion_sum]
+    exact section5ModifiedC_eq_retainedPieces G R
+  have hcorner := lowerCorner_mem_section5ModifiedC G R hplayers hR.le
+    (fun j => (hsolo j).le)
+  rw [hcover] at hcorner
+  obtain ⟨index, _⟩ := Set.mem_iUnion.mp hcorner
+  let : Nonempty Index := ⟨index⟩
+  let equiv := Fintype.equivFin Index
+  let piece : Fin (Fintype.card Index) → Set (Payoff G.Player) :=
+    fun index => retained (equiv.symm index)
+  have hpolytopes (index : Index) : IsFullDimensionalCompactConvexPolytope
+      (retained index) := by
+    cases index with
+    | inl j =>
+        exact isFullDimensionalCompactConvexPolytope_truncatedPiece G R j.val
+          hR (hsolo j.val)
+    | inr pair =>
+        exact isFullDimensionalCompactConvexPolytope_truncatedPair G R pair.val.1 pair.val.2
+          hR (hsolo pair.val.1) (hsolo pair.val.2)
+  refine ⟨Fintype.card Index, Fintype.card_pos, piece,
+    isContractibleSet_section5ModifiedC G R hplayers hR.le (fun j => (hsolo j).le),
+    (fun index => hpolytopes (equiv.symm index)), ?_, ?_⟩
+  · rw [hcover]
+    ext point
+    constructor
+    · intro hpoint
+      obtain ⟨sourceIndex, hsource⟩ : ∃ sourceIndex : Index, point ∈ retained sourceIndex :=
+        Set.mem_iUnion.mp hpoint
+      apply Set.mem_iUnion.mpr
+      refine ⟨equiv sourceIndex, ?_⟩
+      change point ∈ retained (equiv.symm (equiv sourceIndex))
+      rw [equiv.symm_apply_apply]
+      exact hsource
+    · intro hpoint
+      obtain ⟨targetIndex, htarget⟩ :
+          ∃ targetIndex : Fin (Fintype.card Index), point ∈ piece targetIndex :=
+        Set.mem_iUnion.mp hpoint
+      exact Set.mem_iUnion.mpr ⟨equiv.symm targetIndex, htarget⟩
+  · intro index
+    cases hindex : equiv.symm index with
+    | inl j =>
+        refine Or.inl ⟨j.val, j.property, ?_⟩
+        change retained (equiv.symm index) = TruncatedPiece G R j.val
+        rw [hindex]
+        rfl
+    | inr pair =>
+        refine Or.inr ⟨pair.val.1, pair.val.2, pair.property.1,
+          pair.property.2.1, pair.property.2.2, ?_⟩
+        change retained (equiv.symm index) =
+          TruncatedPiece G R pair.val.1 ∩ TruncatedPiece G R pair.val.2
+        rw [hindex]
+        rfl
 
 /-- Lemma 5.1 is Simon 2007, Lemma 4 (numbered Lemma 3 there): an abnormal
 player has negative solo payoff, and every other player's solo exit gives her
