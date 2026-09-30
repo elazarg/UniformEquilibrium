@@ -61,6 +61,38 @@ theorem isεAsymptoticNash_liftDeletedProfile_of_deadlineSecurityTerminalFamily
 /-- Every specified child UE payoff extends to one fixed parent UE payoff
 agreeing at every child coordinate, from literal gamma rows alone. The child
 target is fixed before the accuracy-dependent profiles are selected. -/
+theorem exists_uniformPayoffWitnesses_eq_on_child_of_deadlineSecurityTerminalFamily
+    (deleted : α → Prop) [DecidablePred deleted]
+    [Nonempty (QuittingChildPlayer deleted)]
+    [Nonempty {who : α // deleted who}]
+    (reward : {S : Finset α // S.Nonempty} → Payoff α)
+    (certificate : ∀ outside : {who : α // deleted who},
+      DeadlineSecurityTerminalRewardCertificate
+        (quittingChildWithOutsiderReward reward deleted outside))
+    (target : Payoff (QuittingChildPlayer deleted))
+    (htarget : (quittingGame
+      (quittingDeleteReward reward deleted)).IsUniformEquilibriumPayoff none target) :
+    ∃ payoff : Payoff α,
+      (∀ who : QuittingChildPlayer deleted, payoff who.1 = target who) ∧
+        ∀ ε : ℝ, 0 < ε →
+          ∃ (profile : (quittingGame
+              (quittingDeleteReward reward deleted)).BehaviorProfile) (threshold : ℕ),
+            ∀ horizon, threshold ≤ horizon →
+              (quittingGame reward).IsεHorizonNash none horizon ε
+                  (quittingLiftDeletedProfile reward deleted profile) ∧
+                ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
+                  (quittingLiftDeletedProfile reward deleted profile) who - payoff who| ≤ ε := by
+  exact exists_uniformPayoffWitnesses_eq_on_image_of_terminalNash_lift
+    reward (quittingDeleteReward reward deleted) (fun who => who.1)
+    (quittingLiftDeletedProfile reward deleted)
+    (deadlineSecurityTerminalOutsiderMaxWeight deleted reward certificate)
+    (fun profile who => quittingTerminalPayoff_liftDeletedProfile reward deleted profile who)
+    (fun herror profile hnash =>
+      isεAsymptoticNash_liftDeletedProfile_of_deadlineSecurityTerminalFamily
+        deleted reward certificate herror profile hnash)
+    target htarget
+
+/-- Project the actual quiet witnesses to the usual fixed-target UE conclusion. -/
 theorem exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineSecurityTerminalFamily
     (deleted : α → Prop) [DecidablePred deleted]
     [Nonempty (QuittingChildPlayer deleted)]
@@ -75,14 +107,11 @@ theorem exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineSecurityTerminalF
     ∃ payoff : Payoff α,
       (∀ who : QuittingChildPlayer deleted, payoff who.1 = target who) ∧
         (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
-  exact exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
-    reward (quittingDeleteReward reward deleted) (fun who => who.1)
-    (quittingLiftDeletedProfile reward deleted)
-    (deadlineSecurityTerminalOutsiderMaxWeight deleted reward certificate)
-    (fun profile who => quittingTerminalPayoff_liftDeletedProfile reward deleted profile who)
-    (fun herror profile hnash =>
-      isεAsymptoticNash_liftDeletedProfile_of_deadlineSecurityTerminalFamily
-        deleted reward certificate herror profile hnash)
-    target htarget
+  obtain ⟨payoff, hcoordinates, hwitnesses⟩ :=
+    exists_uniformPayoffWitnesses_eq_on_child_of_deadlineSecurityTerminalFamily
+      deleted reward certificate target htarget
+  refine ⟨payoff, hcoordinates, fun ε hε => ?_⟩
+  obtain ⟨profile, threshold, hwitness⟩ := hwitnesses ε hε
+  exact ⟨quittingLiftDeletedProfile reward deleted profile, threshold, hwitness⟩
 
 end GameTheory

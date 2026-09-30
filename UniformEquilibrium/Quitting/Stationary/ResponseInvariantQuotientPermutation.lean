@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Stationary.ResponseInvariantQuotient
+import MathUE.Finset.BernoulliBounds
 import UniformEquilibrium.Quitting.Root.PlayerReindex
 import MathUE.Finset.PowersetBernoulliWeight
 
@@ -86,16 +87,8 @@ theorem sum_nonempty_bernoulliWeight
     (hazard : ι → ℝ) (opponents : Finset ι) :
     (∑ coalition ∈ opponents.powerset.erase ∅,
       bernoulliWeight hazard opponents coalition) =
-      1 - ∏ who ∈ opponents, (1 - hazard who) := by
-  have hempty : (∅ : Finset ι) ∈ opponents.powerset := by simp
-  have hsplit := Finset.add_sum_erase opponents.powerset
-    (bernoulliWeight hazard opponents) hempty
-  rw [sum_bernoulliWeight] at hsplit
-  have hemptyValue : bernoulliWeight hazard opponents ∅ =
-      ∏ who ∈ opponents, (1 - hazard who) := by
-    simp [bernoulliWeight]
-  rw [hemptyValue] at hsplit
-  linarith
+      1 - ∏ who ∈ opponents, (1 - hazard who) :=
+  sum_bernoulliWeight_erase_empty hazard opponents
 
 omit [Fintype ι] in
 /-- The affine payoff correction on nonempty opponent coalitions is the

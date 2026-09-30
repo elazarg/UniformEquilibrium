@@ -11,9 +11,9 @@ open Filter StochasticGame
 variable {ι κ : Type} [Fintype ι] [DecidableEq ι]
   [Fintype κ] [DecidableEq κ]
 
-/-- A fixed-multiplier lift of terminal approximate equilibria transports every
-specified child uniform-equilibrium payoff while preserving its displayed coordinates. -/
-theorem exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
+/-- A fixed-multiplier terminal Nash lift transports each specified child
+target with actual lifted child profiles as its uniform witnesses. -/
+theorem exists_uniformPayoffWitnesses_eq_on_image_of_terminalNash_lift
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (childReward : {S : Finset κ // S.Nonempty} → Payoff κ)
     (playerMap : κ → ι)
@@ -33,7 +33,12 @@ theorem exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
     (htarget : (quittingGame childReward).IsUniformEquilibriumPayoff none target) :
     ∃ payoff : Payoff ι,
       (∀ who, payoff (playerMap who) = target who) ∧
-        (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+        ∀ ε : ℝ, 0 < ε →
+          ∃ (profile : (quittingGame childReward).BehaviorProfile) (threshold : ℕ),
+            ∀ horizon, threshold ≤ horizon →
+              (quittingGame reward).IsεHorizonNash none horizon ε (lift profile) ∧
+                ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
+                  (lift profile) who - payoff who| ≤ ε := by
   classical
   let error : ℕ → ℝ := fun step => 1 / ((step : ℝ) + 1)
   have herrorPos : ∀ step, 0 < error step := by
@@ -79,12 +84,49 @@ theorem exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
       refine le_of_tendsto_of_tendsto' ((hcoord.sub tendsto_const_nhds).abs)
         hsubError hbound
     exact sub_eq_zero.mp (abs_nonpos_iff.mp hzero)
-  · refine quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
-      (filter := atTop) reward payoff
-      (fun step => factor * (error ∘ subsequence) step)
-      (fun step => lift (profiles (subsequence step))) hparentError ?_ hlimit
-    refine Frequently.of_forall fun step => ?_
-    exact hnash (herrorPos (subsequence step)).le (profiles (subsequence step))
-      (hchildNash (subsequence step))
+  · have hparentNash : ∃ᶠ step in atTop,
+        (quittingGame reward).IsεAsymptoticNash
+          (quittingTerminalPayoff reward) (factor * (error ∘ subsequence) step)
+          (lift (profiles (subsequence step))) :=
+      Frequently.of_forall fun step => hnash (herrorPos (subsequence step)).le
+        (profiles (subsequence step)) (hchildNash (subsequence step))
+    intro ε hε
+    obtain ⟨step, threshold, hwitness⟩ :=
+      quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto
+        (filter := atTop) reward payoff
+        (fun step => factor * (error ∘ subsequence) step)
+        (fun step => lift (profiles (subsequence step)))
+        hparentError hparentNash hlimit ε hε
+    exact ⟨profiles (subsequence step), threshold, hwitness⟩
+
+/-- Projecting retained lifted witnesses transports the specified child
+uniform-equilibrium payoff while preserving its displayed coordinates. -/
+theorem exists_uniformEquilibriumPayoff_eq_on_image_of_terminalNash_lift
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (childReward : {S : Finset κ // S.Nonempty} → Payoff κ)
+    (playerMap : κ → ι)
+    (lift : (quittingGame childReward).BehaviorProfile →
+      (quittingGame reward).BehaviorProfile)
+    (factor : ℝ)
+    (hpayoff : ∀ profile who,
+      quittingTerminalPayoff reward (lift profile) (playerMap who) =
+        quittingTerminalPayoff childReward profile who)
+    (hnash : ∀ {error : ℝ}, 0 ≤ error →
+      ∀ profile : (quittingGame childReward).BehaviorProfile,
+        (quittingGame childReward).IsεAsymptoticNash
+            (quittingTerminalPayoff childReward) error profile →
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) (factor * error) (lift profile))
+    (target : Payoff κ)
+    (htarget : (quittingGame childReward).IsUniformEquilibriumPayoff none target) :
+    ∃ payoff : Payoff ι,
+      (∀ who, payoff (playerMap who) = target who) ∧
+        (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  obtain ⟨payoff, hcoordinates, hwitnesses⟩ :=
+    exists_uniformPayoffWitnesses_eq_on_image_of_terminalNash_lift
+      reward childReward playerMap lift factor hpayoff hnash target htarget
+  refine ⟨payoff, hcoordinates, fun ε hε => ?_⟩
+  obtain ⟨profile, threshold, hwitness⟩ := hwitnesses ε hε
+  exact ⟨lift profile, threshold, hwitness⟩
 
 end GameTheory

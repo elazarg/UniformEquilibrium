@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseRawResidual
+import MathUE.Finset.BernoulliBounds
 import MathUE.Finset.ProdLtOne
 
 /-! # Finite strict reward-table tests for crossed source guards -/
@@ -35,13 +36,8 @@ private theorem rawBernoulliWeight_nonneg
     (hazard : Fin n → ℝ) (carrier subset : Finset (Fin n))
     (hsubset : subset ⊆ carrier)
     (hbox : ∀ coordinate ∈ carrier, 0 ≤ hazard coordinate ∧ hazard coordinate ≤ 1) :
-    0 ≤ bernoulliWeight hazard carrier subset := by
-  unfold bernoulliWeight
-  apply mul_nonneg
-  · exact Finset.prod_nonneg fun coordinate hcoordinate =>
-      (hbox coordinate (hsubset hcoordinate)).1
-  · exact Finset.prod_nonneg fun coordinate hcoordinate =>
-      sub_nonneg.mpr (hbox coordinate (Finset.mem_sdiff.mp hcoordinate).1).2
+    0 ≤ bernoulliWeight hazard carrier subset :=
+  bernoulliWeight_nonneg_of_bounds hazard carrier subset hsubset hbox
 
 private theorem exists_rawBernoulliWeight_pos
     (hazard : Fin n → ℝ) (carrier : Finset (Fin n))

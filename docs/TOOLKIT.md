@@ -1150,7 +1150,16 @@ global-escape lemmas
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseDegree.lean`,
 `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseEscape.lean`)
 produce a nonzero crossed root from R0 and degree not equal to one for the
-permuted singleton matrix. Under the strict full-box guards, reciprocal
+permuted singleton matrix.
+`exists_globalCrossed_entireNonzeroSet_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseTotalDegree.lean`)
+uses one radius to isolate the origin and identifies the exterior's selected
+solutions with the entire nonzero fixed-point set, including its exact image
+under the global chart. Its normalized integer degree is one minus the crossed
+R0 degree; the positive-inverse specialization gives two. No finiteness or
+regularity of the nonzero roots is required. These degree statements use the
+explicit `[-2,2]` chart; identification with ambient Brouwer degree or arbitrary
+chart independence is not asserted. Under the strict full-box guards, reciprocal
 singleton signs, and the same degree assumptions,
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseStrategic.lean`)
@@ -2223,6 +2232,15 @@ preserving profile lift whose terminal Nash errors have a fixed multiplier.
 One compact selection produces a parent target agreeing at every mapped
 child coordinate. Block deletion and capped-clock quiet extension use this
 same compactness theorem under their respective hypotheses.
+`exists_uniformPayoffWitnesses_eq_on_image_of_terminalNash_lift`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalNashLift.lean`)
+strengthens that conclusion: after selecting one parent target, every positive
+accuracy has an actual child profile whose literal lift satisfies the Nash and
+delivery bounds at every sufficiently long horizon. The indexed-family
+acceptance and convergence compilers in
+`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`
+retain the selected family member; the payoff-existence theorems project these
+witnesses rather than making a second selection.
 
 `CappedClockParentRewardCertificate`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockPointwiseDomination.lean`)
@@ -2379,6 +2397,13 @@ extends each specified child target to one fixed parent payoff.
 constructs the child target from low-cardinality existence. These are raw
 reward-certificate classes, not a theorem that every Fin4 table passes.
 They make no finite-evaluation claim for the favorable patient Never floor.
+`exists_uniformPayoffWitnesses_eq_on_child_of_patientWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFixedTarget.lean`)
+and the corresponding ordinary, truncated-security, and terminal-security
+wrappers retain the literal quiet lifts as uniform witnesses. Their Fin4
+consumers also retain this constraint while obtaining the child target from
+low-cardinality existence. Outsiders therefore prescribe Never in each selected
+uniform profile, not merely in a sequence of terminal approximants.
 `quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/TerminalOneOutsiderTransport.lean`)
 owns the common exact deletion/reindex transport. This internal consumer

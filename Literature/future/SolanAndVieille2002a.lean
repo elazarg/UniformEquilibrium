@@ -5,6 +5,7 @@ import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Root.SequentialSerializationEquilibrium
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryPerturbedEstimates
 
 /-!
 # Literature audit
@@ -373,6 +374,59 @@ theorem lemma9
   · intro time first second hfirst hsecond
     exact serializedStage_atMostOne roots (time / 4) _ first second hfirst hsecond
 
+/-- **Lemma 10**, first assertion and its explicit unperturbed extension:
+every behavioral `ε`-equilibrium absorbs with probability at least `1 - ε`.
+Never is kept in the canonical terminal semantics. -/
+theorem lemma10_termination
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε : 0 ≤ ε)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots)) :
+    1 - ε ≤ 1 - quittingJointSurvivalLimit roots 0 := by
+  have hnever := SolanVieilleBoundary.boundary_survivalLimit_le_nashError hε hnash
+  linarith
+
+/-- **Lemma 10**, all three assertions for a perturbed `ε`-equilibrium,
+with the printed constants `r = 8` and `N = 4`. The hypotheses use the
+paper's one-quitter condition and near-Continue coordinates. The Nash cap
+quantifies over every behavioral deviation; absorption is not assumed. -/
+theorem lemma10
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
+    (hε : 0 < ε)
+    (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε)
+    (hone : ∀ time first second,
+      0 < (roots time first true).toReal → 0 < (roots time second true).toReal →
+      first = second)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots)) :
+    (1 - ε ≤ 1 - quittingJointSurvivalLimit roots 0) ∧
+      ((∀ who : Fin 4, 1 - 8 * ε - ε ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who 0) ∧
+        ∃ who : Fin 4, 5 / 4 - 2 * ε ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who 0) ∧
+      ∀ who : Fin 4, 2 / 15 - 8 * ε ≤ quittingRootSequenceSingletonMass roots 0 who := by
+  have hsmall : ∀ time who, (roots time who true).toReal ≤ ε := by
+    intro time who
+    have hsum := quittingRoot_continueProbability_add_quitProbability (roots time) who
+    have hlower := (abs_lt.mp (hclose time who)).1
+    linarith
+  refine ⟨lemma10_termination hε.le hnash, ⟨?_, ?_⟩, ?_⟩
+  · intro who
+    have hvalue :=
+      SolanVieilleBoundary.boundary_terminalValue_ge_one_sub_nine_mul_of_atMostOne
+        hε.le hsmall hone hnash who
+    linarith
+  · exact
+      SolanVieilleBoundary.boundary_exists_player_value_ge_five_fourths_sub_two_mul_of_atMostOne
+        hε.le hone hnash
+  · exact
+      SolanVieilleBoundary.boundary_singletonMass_ge_two_fifteenths_sub_eight_mul_of_atMostOne
+        hε.le hsmall hone hnash
+
 /-- **Lemma 11**, the gain assertion in the near-Continue domain used by
 Section 3.2. All source constants are retained. The stronger canonical ledger
 removes the need for the at-most-one-quitter assumption. -/
@@ -478,9 +532,11 @@ The named-statement inventory of the author-hosted journal PDF is:
   the canonical ledger also allows simultaneous quitting. Lemma 9 is stated
   with its exact `384ε` constant. Its explicit stage splitting, near-Continue,
   one-quitter, block-survival and full behavioral equilibrium-transfer properties
-  are proved by adapters. Lemmas 10, 12 and Corollary 13 still lack exact
-  paper-order adapters. The corresponding production estimates use different
-  constants and hypotheses.
+  are proved by adapters. Lemma 10's absorption, coordinate-payoff and singleton-mass
+  estimates are stated with their exact printed constants and proved from the full
+  behavioral Nash cap. Its absorption bound also holds without perturbation.
+  Lemma 12 and Corollary 13 still lack exact paper-order adapters. Their existing
+  production estimates use different constants and hypotheses.
 
 The journal PDF numbers its first lemma in Section 3 as Lemma 4; it contains
 no separately labeled Lemmas 1--3. The solo-hull sentence occurs in the

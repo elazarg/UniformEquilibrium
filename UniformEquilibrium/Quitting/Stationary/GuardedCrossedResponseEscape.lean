@@ -10,8 +10,12 @@ open Set _root_.Math _root_.Math.Topology _root_.Math.LinearProgramming
 
 variable {n : ℕ}
 
-private abbrev crossedGlobalChart (point : UnitCube (Fin n)) : Fin n → ℝ :=
+/-- The explicit signed ambient chart used for the normalized cube degree:
+each unit-cube coordinate is sent affinely to the interval `[-2,2]`. -/
+abbrev quittingCrossedGlobalChart (point : UnitCube (Fin n)) : Fin n → ℝ :=
   rectangularCubePoint (fun _ => (-2 : ℝ)) (fun _ => (2 : ℝ)) point
+
+private abbrev crossedGlobalChart := @quittingCrossedGlobalChart
 
 /-- The genuine crossed clipped field in a global chart containing the whole
 auxiliary strategy box strictly in its interior. -/
@@ -70,18 +74,20 @@ private theorem crossedGlobalChart_zero_mem_ball
   change dist (crossedGlobalChart point) 0 < radius
   simpa only [hzero, dist_self] using hradius
 
-/-- The literal height-capped crossed map has local degree `κ(PΓ)` at zero
-in the same ambient chart as its global degree-one self-map argument. -/
-theorem exists_globalCrossed_localDegree_eq_r0Degree
+/-- One radius both isolates the actual ambient origin on its closed ball
+and identifies its local degree as `κ(PΓ)` in the explicit `[-2,2]` chart. -/
+theorem exists_globalCrossed_originIsolation_localDegree_eq_r0Degree
     (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
     (first second : Fin n) (height : ℝ) (hheight : 0 < height)
     (hR0 : IsR0Matrix (quittingCrossedSingletonMatrix reward first second)) :
     ∃ radius : ℝ, 0 < radius ∧ radius < 1 ∧
+      (∀ source : Fin n → ℝ, ‖source‖ ≤ radius →
+        quittingCrossedClippedMap reward first second height source = source → source = 0) ∧
       ∃ hisolating :
         (quittingCrossedGlobalProblem reward first second height).IsIsolating
-          (crossedGlobalChart ⁻¹' Metric.ball 0 radius),
+          (quittingCrossedGlobalChart ⁻¹' Metric.ball 0 radius),
         (quittingCrossedGlobalProblem reward first second height).localDegree
-            (crossedGlobalChart ⁻¹' Metric.ball 0 radius) hisolating =
+            (quittingCrossedGlobalChart ⁻¹' Metric.ball 0 radius) hisolating =
           r0Degree (quittingCrossedSingletonMatrix reward first second) hR0 := by
   let A := quittingCrossedSingletonMatrix reward first second
   let base := lcpMinBoxProblem A 0 0 2 (by norm_num)
@@ -119,55 +125,71 @@ theorem exists_globalCrossed_localDegree_eq_r0Degree
     have hnorm : ‖crossedGlobalChart point‖ = radius :=
       crossedGlobalChart_norm_of_frontier_ball radius point hfrontier
     exact crossedGlobalChart_coordinateInterior_of_norm_lt_two point (by linarith)
-  have hclose (point : UnitCube (Fin n)) (hfrontier : point ∈ frontier region) :
-      ‖actual.gain point - base.gain point‖ < ‖base.gain point‖ := by
-    let source := crossedGlobalChart point
-    let scaled := radius⁻¹ • source
-    have hnorm : ‖source‖ = radius :=
-      crossedGlobalChart_norm_of_frontier_ball radius point hfrontier
+  have herror (source : Fin n → ℝ) (hnonzero : source ≠ 0) (hsmall : ‖source‖ ≤ radius) :
+      ‖quittingCrossedFixedPointField reward first second height source -
+        lcpMinMap A 0 source‖ < ‖lcpMinMap A 0 source‖ := by
+    let scalar := ‖source‖
+    let scaled := scalar⁻¹ • source
+    have hscalar : 0 < scalar := norm_pos_iff.mpr hnonzero
+    have hscalarApprox : scalar ≤ δ := hsmall.trans hradiusApprox
     have hscaledNorm : ‖scaled‖ = 1 := by
-      rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hradius), hnorm]
-      field_simp [hradius.ne']
+      rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hscalar)]
+      change scalar⁻¹ * scalar = 1
+      exact inv_mul_cancel₀ hscalar.ne'
     have hscaledSphere : scaled ∈ Metric.sphere (0 : Fin n → ℝ) 1 := by
       simpa only [Metric.mem_sphere, dist_zero_right] using hscaledNorm
     have hscaledBall : scaled ∈ Metric.closedBall (0 : Fin n → ℝ) 1 := by
       rw [Metric.mem_closedBall, dist_zero_right, hscaledNorm]
-    have hfieldApprox := happrox radius hradius hradiusApprox scaled hscaledBall
-    have hsourceScaled : radius • scaled = source := by
+    have hfieldApprox := happrox scalar hscalar hscalarApprox scaled hscaledBall
+    have hsourceScaled : scalar • scaled = source := by
       dsimp only [scaled]
-      exact smul_inv_smul₀ hradius.ne' source
+      exact smul_inv_smul₀ hscalar.ne' source
     have hupper : ∀ coordinate,
         source coordinate + quittingCrossedResponse reward first second source coordinate ≤
           quittingCrossedCeiling first second height coordinate := by
       intro coordinate
-      exact (hupperLocal (by rw [dist_zero_right, hnorm]; exact hradiusUpper)
+      exact (hupperLocal (by rw [dist_zero_right]; exact hsmall.trans_lt hradiusUpper)
         coordinate).le
     have hfield : quittingCrossedFixedPointField reward first second height source =
         quittingCrossedMinField reward first second source :=
       quittingCrossedFixedPointField_eq_minField
         reward first second height hheight source hupper
-    have hmodel : lcpMinMap A 0 source = radius • lcpMinMap A 0 scaled := by
+    have hmodel : lcpMinMap A 0 source = scalar • lcpMinMap A 0 scaled := by
       rw [← hsourceScaled]
-      exact lcpMinMap_zero_smul A radius hradius.le scaled
-    have herror :
-        ‖quittingCrossedFixedPointField reward first second height source -
-          lcpMinMap A 0 source‖ < ‖lcpMinMap A 0 source‖ := by
-      rw [hfield, hmodel]
-      have hscaledField : quittingCrossedMinFieldScaled reward first second
-          radius scaled = radius⁻¹ •
-            quittingCrossedMinField reward first second source := by
-        simp only [quittingCrossedMinFieldScaled, hsourceScaled]
-      rw [hscaledField] at hfieldApprox
-      have hmarginBound := hmarginSphere scaled hscaledSphere
-      have hstrict := hfieldApprox.trans_le hmarginBound
-      have hequal :
-          quittingCrossedMinField reward first second source -
-            radius • lcpMinMap A 0 scaled =
-          radius • (radius⁻¹ • quittingCrossedMinField reward first second source -
-            lcpMinMap A 0 scaled) := by
-        rw [smul_sub, smul_inv_smul₀ hradius.ne']
-      rw [hequal, norm_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hradius]
-      exact mul_lt_mul_of_pos_left hstrict hradius
+      exact lcpMinMap_zero_smul A scalar hscalar.le scaled
+    rw [hfield, hmodel]
+    have hscaledField : quittingCrossedMinFieldScaled reward first second
+        scalar scaled = scalar⁻¹ • quittingCrossedMinField reward first second source := by
+      simp only [quittingCrossedMinFieldScaled, hsourceScaled]
+    rw [hscaledField] at hfieldApprox
+    have hstrict := hfieldApprox.trans_le (hmarginSphere scaled hscaledSphere)
+    have hequal :
+        quittingCrossedMinField reward first second source -
+          scalar • lcpMinMap A 0 scaled =
+        scalar • (scalar⁻¹ • quittingCrossedMinField reward first second source -
+          lcpMinMap A 0 scaled) := by
+      rw [smul_sub, smul_inv_smul₀ hscalar.ne']
+    rw [hequal, norm_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hscalar]
+    exact mul_lt_mul_of_pos_left hstrict hscalar
+  have hisolation (source : Fin n → ℝ) (hsmall : ‖source‖ ≤ radius)
+      (hfixed : quittingCrossedClippedMap reward first second height source = source) :
+      source = 0 := by
+    by_contra hnonzero
+    have hstrict := herror source hnonzero hsmall
+    have hfieldZero : quittingCrossedFixedPointField reward first second height source = 0 := by
+      simp only [quittingCrossedFixedPointField, hfixed, sub_self]
+    rw [hfieldZero, zero_sub, norm_neg] at hstrict
+    exact (lt_irrefl _) hstrict
+  have hclose (point : UnitCube (Fin n)) (hfrontier : point ∈ frontier region) :
+      ‖actual.gain point - base.gain point‖ < ‖base.gain point‖ := by
+    let source := crossedGlobalChart point
+    have hnorm : ‖source‖ = radius :=
+      crossedGlobalChart_norm_of_frontier_ball radius point hfrontier
+    have hnonzero : source ≠ 0 := by
+      intro hzero
+      rw [hzero, norm_zero] at hnorm
+      exact hradius.ne' hnorm.symm
+    have hstrict := herror source hnonzero hnorm.le
     simp only [actual, base, quittingCrossedGlobalProblem,
       lcpMinBoxProblem, BoxComplementarityProblem.ofAmbientMap,
       Pi.zero_apply, zero_sub, zero_add]
@@ -180,7 +202,7 @@ theorem exists_globalCrossed_localDegree_eq_r0Degree
             lcpMinMap A 0 source)‖ := by congr 1; abel
       _ = ‖quittingCrossedFixedPointField reward first second height source -
           lcpMinMap A 0 source‖ := norm_neg _
-      _ < ‖lcpMinMap A 0 source‖ := herror
+      _ < ‖lcpMinMap A 0 source‖ := hstrict
       _ = ‖-lcpMinMap A 0 source‖ := (norm_neg _).symm
   obtain ⟨hbaseRegion, hactualRegion, heqDegree⟩ :=
     base.localDegree_eq_of_norm_sub_lt_norm actual region hopen hinterior hclose
@@ -190,7 +212,8 @@ theorem exists_globalCrossed_localDegree_eq_r0Degree
       simpa only [region, mem_preimage, Metric.mem_ball, dist_zero_right] using hpoint
     have hcoord := (norm_le_pi_norm (crossedGlobalChart point) coordinate).trans_lt hnorm
     rw [Real.norm_eq_abs, abs_lt] at hcoord
-    dsimp [crossedGlobalChart, rectangularCubePoint, rectangularPoint] at hcoord
+    dsimp [crossedGlobalChart, quittingCrossedGlobalChart,
+      rectangularCubePoint, rectangularPoint] at hcoord
     constructor <;> nlinarith [hcoord.1, hcoord.2, hradiusOne]
   have hsolutions : base.solutionsIn region =
       base.solutionsIn (diagonalCentralRegion n) := by
@@ -217,10 +240,57 @@ theorem exists_globalCrossed_localDegree_eq_r0Degree
       exact ⟨hpoint.1, crossedGlobalChart_zero_mem_ball hradius point hchartZero⟩
   have hbaseDegree := base.localDegree_eq_of_solutionsIn_eq region
     (diagonalCentralRegion n) hbaseRegion hbase hsolutions
-  refine ⟨radius, hradius, hradiusOne, hactualRegion, ?_⟩
+  refine ⟨radius, hradius, hradiusOne, hisolation, hactualRegion, ?_⟩
   exact heqDegree.symm.trans
     (hbaseDegree.trans (localDegree_lcpMinBoxProblem_zero_eq_r0Degree A hR0 2
       (by norm_num)))
+
+/-- The literal height-capped crossed map has local degree `κ(PΓ)` at zero
+in the same explicit chart as its global degree-one self-map argument. -/
+theorem exists_globalCrossed_localDegree_eq_r0Degree
+    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
+    (first second : Fin n) (height : ℝ) (hheight : 0 < height)
+    (hR0 : IsR0Matrix (quittingCrossedSingletonMatrix reward first second)) :
+    ∃ radius : ℝ, 0 < radius ∧ radius < 1 ∧
+      ∃ hisolating :
+        (quittingCrossedGlobalProblem reward first second height).IsIsolating
+          (crossedGlobalChart ⁻¹' Metric.ball 0 radius),
+        (quittingCrossedGlobalProblem reward first second height).localDegree
+            (crossedGlobalChart ⁻¹' Metric.ball 0 radius) hisolating =
+          r0Degree (quittingCrossedSingletonMatrix reward first second) hR0 := by
+  obtain ⟨radius, hradius, hsmall, -, hisolating, hdegree⟩ :=
+    exists_globalCrossed_originIsolation_localDegree_eq_r0Degree
+      reward first second height hheight hR0
+  exact ⟨radius, hradius, hsmall, hisolating, hdegree⟩
+
+/-- Unit-bounded nonnegative ceilings make the literal crossed map a
+self-map of the explicit signed rectangle `[-2,2]` in every coordinate. -/
+theorem quittingCrossedClippedMap_mapsTo_globalRectangle
+    (reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n))
+    (first second : Fin n) (height : ℝ)
+    (hheight : 0 ≤ height) (hheightOne : height ≤ 1) :
+    MapsTo (quittingCrossedClippedMap reward first second height)
+      (Icc (fun _ => (-2 : ℝ)) (fun _ => 2))
+      (Icc (fun _ => (-2 : ℝ)) (fun _ => 2)) := by
+  let map := quittingCrossedClippedMap reward first second height
+  change MapsTo map _ _
+  intro source _
+  constructor <;> intro coordinate
+  · have hzero : 0 ≤ map source coordinate := by
+      change 0 ≤ min (quittingCrossedCeiling first second height coordinate)
+        (max 0 (source coordinate +
+          quittingCrossedResponse reward first second source coordinate))
+      apply le_min
+      · unfold quittingCrossedCeiling
+        split_ifs <;> linarith
+      · exact le_max_left _ _
+    linarith
+  · have hceiling : map source coordinate ≤
+        quittingCrossedCeiling first second height coordinate := min_le_left _ _
+    have hupper : quittingCrossedCeiling first second height coordinate ≤ 1 := by
+      unfold quittingCrossedCeiling
+      split_ifs <;> linarith
+    linarith
 
 /-- A nonunit local index forces an actual nonzero fixed point of the
 crossed auxiliary response map. No root is supplied as a hypothesis. -/
@@ -246,26 +316,8 @@ theorem exists_nonzero_quittingCrossedClippedMap_fixedPoint
   let map := quittingCrossedClippedMap reward first second height
   have hmap : ContinuousOn map (Icc (fun _ : Fin n => -2) (fun _ => 2)) :=
     (continuous_quittingCrossedClippedMap reward first second height).continuousOn
-  have hself : MapsTo map (Icc (fun _ : Fin n => -2) (fun _ => 2))
-      (Icc (fun _ => -2) (fun _ => 2)) := by
-    intro source _
-    constructor <;> intro coordinate
-    · have hzero : 0 ≤ map source coordinate := by
-        change 0 ≤ min (quittingCrossedCeiling first second height coordinate)
-          (max 0 (source coordinate +
-            quittingCrossedResponse reward first second source coordinate))
-        apply le_min
-        · unfold quittingCrossedCeiling
-          split_ifs <;> linarith
-        · exact le_max_left _ _
-      linarith
-    · have hceiling : map source coordinate ≤
-          quittingCrossedCeiling first second height coordinate := by
-        exact min_le_left _ _
-      have hupper : quittingCrossedCeiling first second height coordinate ≤ 1 := by
-        unfold quittingCrossedCeiling
-        split_ifs <;> linarith
-      linarith
+  have hself := quittingCrossedClippedMap_mapsTo_globalRectangle
+    reward first second height hheight.le hheightOne
   have hfixed : crossedGlobalChart cubePoint = map (crossedGlobalChart cubePoint) := by
     apply (BoxComplementarityProblem.isSolution_of_selfMap_iff
       (fun _ : Fin n => -2) (fun _ => 2) (by intro; norm_num)
