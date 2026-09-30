@@ -1086,6 +1086,24 @@ invertible three-player child matrix `T` with `T⁻¹ ≥ 0` and, for every
 outside receiver, `ΓₖS T⁻¹ ≥ 0`. It then returns a fixed parent uniform
 payoff, without a supplied cycle, row factorization, or strategy. This is
 the full raw-table sufficient class; it is not a universal existence theorem.
+`PassiveRowInverseCriterion.exists_rationalClocks_of_raw_strictInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalRawPassiveRowClocks.lean`)
+constructs rational coarse hazards from rational singleton rewards and the
+strict inverse/outside-row tests. One certificate and target precede all
+rational accuracies. Its actual independent finite clocks preserve the same
+calendar's full terminal semantic pair, satisfy the terminal regret and
+delivery bounds, and put every deleted player at Never. Nonsingleton rewards
+may be arbitrary real numbers within a rational reward bound. The rate
+arithmetic is executable; labeling is selected existentially. This does not
+assert a canonical executable raw-table search or bit complexity.
+`PassiveRowInverseCriterion.exists_rationalClocks_log_bound_of_raw_strictInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalPassiveRowCalendarBound.lean`)
+retains those clock laws and fixes a calendar constant before accuracy.
+For each fixed strict input, the date count is at most a constant times
+`accuracy⁻¹ * log(accuracy⁻¹)` at every sufficiently small positive rational
+accuracy. The exact rational power search remains the executable cutoff;
+logarithms are used only in its bound. No constant uniform across weak-inverse
+boundary inputs is asserted.
 `PassiveRowFourFixture.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourFixture.lean`)
 checks the packet's rational four-player singleton matrix, its selected
@@ -1164,8 +1182,33 @@ retain the actual independent periodic profile, its unrestricted behavioral
 cap including Never, every live suffix, and that same profile's uniform
 finite-horizon witnesses. The rates and target depend only on the table
 parameter, not the accuracy. This solves the displayed family, not arbitrary
-collision rewards. Its exact censored full-cap and finite-law refinements
-remain separate obligations.
+collision rewards.
+`exists_one_periodicRates_all_finiteCalendar_accuracies`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardFiniteCalendar.lean`)
+chooses one rate pair before all accuracies and constructs actual independent
+finite-date-or-Never witnesses. `PeriodicRates.finiteProfile_completeCap`
+identifies the full behavioral cap exactly with the infinite target; the
+same module exposes geometric marginal masses, exact debts and the complete
+terminal semantic pair. Its delivery and deviation boundary charges are
+`8 * cycles / horizon`, and its regret charge is `16 * cycles / horizon`.
+The reconstructed timing laws themselves satisfy the uniform-payoff
+inequalities at the fixed target for every horizon at least
+`max 1 (ceil (32 * cycles / accuracy))`. Positive Never masses remain in
+the witnesses and in the response comparison.
+
+`PeriodicRates.profile_at_one` and `primary_mem_sharpInterval`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardCalibration.lean`)
+identify the parameter-one construction with the existing period-two profile,
+its exact rates and phase values. The sharper rate brackets are
+`373/500 < primary < 747/1000` and `73/100 < secondary < 74/100`.
+`PeriodicRates.profile_horizonDeviation_absolute_uniform` and
+`allSuffix_horizonDeviation_absolute`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardHorizon.lean`)
+bound the absolute terminal-to-average error by `8000 / (271 * horizon)`
+for every behavioral deviation, phase and live suffix. The same delivery
+constant and the regret constant `16000/271` are uniform over the periodic
+parameter interval. These infinite-profile estimates are separate from the
+finite-calendar boundary charges.
 
 `QuittingThreePlayerStrategyClass.of_normalizedThreePlayer`
 (`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`)
@@ -1176,9 +1219,20 @@ accuracy. Deviations are unrestricted behavioral replacements. Weak and
 degenerate singleton supports are included. The infeasible-mixture branch
 produces an exact stationary terminal equilibrium; the feasible branch reuses
 the singleton alternative and explicit cyclic arcs. This source conclusion
-does not quantify a fixed payoff target or prove the unrestricted all-sign,
-coordinate-scaling, or player-cardinality transports. Literature wrappers
-delegate to this production proof, not conversely.
+does not quantify a fixed payoff target or prove the unrestricted all-sign
+three-player source. Positive scaling and player-cardinality
+transports are supplied by
+`QuittingThreePlayerStrategyClass.of_card_le_three_of_positiveSolo_when_three`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`).
+This retains the actual selected roots or root sequences for every finite
+player type of cardinality at most three, requiring positive own-singleton
+rewards only at cardinality three. At cardinalities zero, one and two,
+`exists_stationaryTerminalNash_of_card_le_two` retains actual stationary roots
+for arbitrary reward signs. Multiplicative coordinate scaling preserves zero
+Never payoff; no terminal-only additive translation is used. The generic
+terminal-payoff and Nash pullback lemmas reside in
+`UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`.
+Literature wrappers delegate to these production proofs, not conversely.
 
 `quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with

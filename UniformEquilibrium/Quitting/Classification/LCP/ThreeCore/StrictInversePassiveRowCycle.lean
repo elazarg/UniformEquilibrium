@@ -166,17 +166,17 @@ def RightSingletonCycle.toBalancedCertificate_reindex
       apply hne
       simpa using congrArg label heq, hpos⟩
 
-/-- Strictly positive inverse of the literal induced three-player matrix
-constructs the child balanced certificate, with no cycle premise. -/
-theorem exists_balancedCertificate_of_strictlyPositiveInverse_child
+/-- Strictly positive inverse constructs the labeled right-cycle data. -/
+theorem exists_rightSingletonCycle_of_strictlyPositiveInverse
     {ι : Type} [Fintype ι] [DecidableEq ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (deleted : ι → Prop) [DecidablePred deleted]
     (hcard : Fintype.card {who : ι // ¬ deleted who} = 3)
     (hpositive : HasStrictlyPositiveInverse
       (normalizedSoloMatrix (quittingDeleteReward reward deleted))) :
-    Nonempty (BalancedSingletonCycleCertificate (L := 3)
-      (quittingDeleteReward reward deleted)) := by
+    ∃ label : {who : ι // ¬ deleted who} ≃ Fin 3,
+      Nonempty (RightSingletonCycle
+        (quittingRewardReindex label (quittingDeleteReward reward deleted))) := by
   let childReward := quittingDeleteReward reward deleted
   let matrix := normalizedSoloMatrix childReward
   obtain ⟨label, a, b, c, d, e, f, ha, hb, hc, hd, he, hf, hgap, hmatrix⟩ :=
@@ -192,6 +192,22 @@ theorem exists_balancedCertificate_of_strictlyPositiveInverse_child
       directedCycleMatrix a b c d e f := hsolo.trans hmatrix
   let cycle := rightSingletonCycle_of_directedSoloMatrix reward3 a b c d e f
     ha hb hc hd he hf hgap hmatrix3
+  exact ⟨label, ⟨cycle⟩⟩
+
+/-- Strictly positive inverse of the literal induced three-player matrix
+constructs the child balanced certificate, with no cycle premise. -/
+theorem exists_balancedCertificate_of_strictlyPositiveInverse_child
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (hcard : Fintype.card {who : ι // ¬ deleted who} = 3)
+    (hpositive : HasStrictlyPositiveInverse
+      (normalizedSoloMatrix (quittingDeleteReward reward deleted))) :
+    Nonempty (BalancedSingletonCycleCertificate (L := 3)
+      (quittingDeleteReward reward deleted)) := by
+  obtain ⟨label, ⟨cycle⟩⟩ := exists_rightSingletonCycle_of_strictlyPositiveInverse
+    reward deleted hcard hpositive
+  let childReward := quittingDeleteReward reward deleted
   exact ⟨RightSingletonCycle.toBalancedCertificate_reindex childReward label cycle⟩
 
 /-- Raw strict inverse and passive singleton rows yield a fixed parent

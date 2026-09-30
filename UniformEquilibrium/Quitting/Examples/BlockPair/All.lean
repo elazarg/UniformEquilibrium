@@ -18,6 +18,9 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientMatr
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientClass
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardExistence
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardBoundary
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardFiniteCalendar
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardCalibration
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardHorizon
 
 /-!
 # Four-player block-pair examples

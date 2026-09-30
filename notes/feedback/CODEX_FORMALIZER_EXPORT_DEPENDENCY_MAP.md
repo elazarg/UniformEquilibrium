@@ -1,6 +1,6 @@
 # Export packet dependencies and completion obligations
 
-This is a static dependency audit of the fifteen packets in `math/exports/`,
+This is a dependency audit of the packets in `math/exports/`,
 not a packet ranking or a new mathematical proof. “Checked” below refers to
 the named production declarations, not to the packet in full. Packet count
 is a poor priority proxy: several packets share one interface, while some
@@ -8,11 +8,13 @@ already have their main conclusion in production. The table identifies first
 dependencies, not complete packet coverage. The claim inventories below
 record broader retirement obligations after reading those packets in full.
 
-The new production declarations below pass both their targeted checks and the
-full silent default build, including the regenerated exhaustive axiom audit.
-Trust, umbrella/import boundaries, proof duplicates, telescope redundancy and
-documentation checks pass. A packet remains pending where its claim inventory
-lists unimplemented conclusions.
+The new production declarations below pass their targeted checks and the full
+silent default build, including the regenerated exhaustive axiom audit. Trust,
+import boundaries, duplicates, reward bounds, both redundancy checks,
+documentation, all script tests and registered experiments pass. A packet
+remains pending where its claim inventory lists unimplemented conclusions.
+The paired-collision packet has complete coverage and is retired to
+`math/formalized/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md`.
 
 | First missing theorem or adapter | Packets grouped at that boundary | Checked production foothold |
 | --- | --- | --- |
@@ -22,7 +24,7 @@ lists unimplemented conclusions.
 | Actual quantile rigidity and robust unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. The center data and capped-clock certificate infeasibility are also integrated. The packet's universal positive parent-plus-child exploitability floor still needs its actual quantile-rigidity sequence, all four restriction estimates including the adjacent-date atom move, and the reward-neighborhood transfer. Capped-clock infeasibility does not prove this stronger unchanged-child obstruction. |
 | Full two-branch rational weak-subset selector and single-pivot secant source | `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS`, `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS`, `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION`, `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | `exists_strictDeficitExactSuffix_allTerminalNash` (`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixNash.lean`) closes the single common-depth infinite all-suffix exact Nash conclusion under nonnegative singleton rewards. The existing executable rational weak-subset selector assumes strict preemption of all designated owners; its full stationary-exit/charged-step two-branch selector remains separate. The single-pivot secant/tilted common-calendar source is also separate; finite-calendar payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
-| Exact finite laws and remaining raw-class refinements | `THREE_PLAYER_CYCLE_PASSIVE_ROW_EXTENSION`, `PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION` | The passive raw inverse UE class and its open full-matrix degree-one fixture are checked. Variable-phase calendar values, full-response bounds, censor estimates, date counts and arbitrary-signed finite-horizon bounds pass targeted checks. Executable rational clocks still need their adapter check, and rational coarse-hazard production remains separate. `exists_uniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardExistence.lean`) now constructs the parameter-specific periodic/stationary/pure alternatives for every real parameter; no rate or strategy is supplied. Exact censored cap equality, explicit finite laws/horizon constants and class exclusions remain separate claims. |
+| Quiet weak-boundary witnesses and remaining raw-class refinements | `THREE_PLAYER_CYCLE_PASSIVE_ROW_EXTENSION` | The passive raw inverse UE class and its open full-matrix degree-one fixture are checked. Variable-phase calendar values, full-response bounds, censor estimates, date counts, arbitrary-signed finite-horizon bounds and independent rational clock laws are checked. `exists_rationalClocks_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalRawPassiveRowClocks.lean`) produces rational coarse hazards and actual laws from rational singleton data. `exists_rationalClocks_log_bound_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalPassiveRowCalendarBound.lean`) supplies the fixed-input logarithmic calendar bound. Retaining quiet profiles through weak-boundary selection, class comparisons and falsifier fixtures remain. The separate paired-collision packet has complete claim coverage below. |
 | Full exact-root potential restriction and shape arguments | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential` (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`) and the robust charged relation supply the existing conditional certificate interface. The first missing reusable step is the full-exact-edge restriction with collision-adjusted singleton probes; reflection, quasiconvexity, curvature, and degree exclusions then diverge. These are necessary-shape reductions, not a polynomial producer or a solved-game class. |
 
 ## Next source-complete Lean tasks with broad reuse
@@ -110,10 +112,17 @@ use zero collision, exact boundary payoff identities, and singleton mass sums
 in `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryPerturbedEstimates.lean`.
 The literal `lemma12` and `corollary13`
 (`Literature/future/SolanAndVieille2002a.lean`) pass their targeted build and
-separate axiom check, with the paper's domain and constants. Proposition 1
-still needs its literal
-stationary-or-small-hazard strategy dichotomy; small-player UE existence
-alone does not establish that source statement.
+separate axiom check, with the paper's domain and constants.
+`of_normalizedThreePlayer`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`)
+constructs the stationary-or-small-hazard strategy alternative for three
+players with unit own singleton payoffs. Positive scaling and arbitrary
+player-type transports are checked in
+`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`:
+cardinality at most two permits all reward signs; cardinality three requires
+positive own singleton rewards. The paper's unrestricted
+Proposition 1 still needs the remaining three-player sign cases;
+small-player UE existence alone does not establish that source statement.
 
 ## Shared stationary-witness follow-up
 
@@ -174,7 +183,7 @@ neighborhood are matched. The packet is not complete.
 | Theorem 1, quiet strategies | Retain outside players' Never actions in the selected uniform witnesses. The weak reward-perturbation proof currently forgets this profile restriction at payoff selection. |
 | Strict target and Proof Sections 2-3 | Identify the displayed odds/rates/singleton-only target with the existing cyclic compiler and expose the outside-floor iff for this three-axis cycle. |
 | Proof Section 4 | Variable phase subdivision, exact survival products and conditional values, owner equality and full behavioral cap pass targeted checks in `UniformEquilibrium/Quitting/Cycles/RationalSingletonCalendar.lean`. Its hazards are rational functions of the coarse hazards, not necessarily rational numbers for arbitrary real coarse input. |
-| Proof Section 5 | Exact censor payoff factor, full-cap/debt estimates including Never, and the date-count bound pass targeted checks in `UniformEquilibrium/Quitting/Cycles/RationalSingletonFiniteCalendar.lean`. Exact rational clock masses pass their law check. The executable calendar-to-law adapter, rational coarse-hazard production and fixed-input asymptotic calendar bound remain. |
+| Proof Section 5 | Exact censor payoff factor, full-cap/debt estimates including Never, and the date-count bound are checked in `UniformEquilibrium/Quitting/Cycles/RationalSingletonFiniteCalendar.lean`. Exact rational clock masses and the executable calendar-to-law adapter are checked. `exists_rationalClocks_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalRawPassiveRowClocks.lean`) supplies the raw-table rational coarse-hazard producer. `exists_rationalClocks_log_bound_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalPassiveRowCalendarBound.lean`) supplies the fixed-input asymptotic calendar bound. Rationality is required only for singleton rewards; labels are existential, not a canonical executable raw-table selector. |
 | Proof Section 6 | Matched by the targeted-checked arbitrary-signed full-cap and regret bounds in `UniformEquilibrium/Quitting/Terminal/FiniteDeadlineSignedHorizonError.lean`. These do not compare a late negative deviation with its own terminal payoff. |
 | Proof Section 7 | Carry quiet actual families through literal weak-inverse reward perturbation, compact fixed-target selection and uniformization. No uniform weak-boundary calendar complexity is asserted. |
 | Fin4 counterexample consequence | Expose the raw criterion's contrapositive for every admissible triple and its remaining row. |
@@ -220,13 +229,13 @@ interfaces. The following declarations supply its semantic consumers:
   stopping laws, the full semantic pair and every pure-date response payoff.
   Its public conclusion does not certify rational masses.
 
-The remaining construction uses the exact rational hazards
+The checked construction uses the exact rational hazards
 `q / (n - l * q)`, variable phase lengths, and their ordered cyclic succession.
 The existing equal-length geometric subdivision is not that construction.
 Mathlib's `finSigmaFinEquiv` already implements ordered prefix-sum flattening;
 only the required successor and product adapters need to be supplied.
-Rational stopping masses, the verified cutoff selection, the explicit date
-bound and its fixed-input asymptotic estimate remain producer obligations.
+Rational stopping masses, verified cutoff selection, the explicit date
+bound and its fixed-input asymptotic estimate now have actual-data producers.
 The cap, censor-payoff and independent-law foundations above should be reused.
 
 ## Complete-claim audit: withdrawal and deadline packet
@@ -279,24 +288,22 @@ existence are matched foundations, not further proof tasks.
 ## Complete-claim audit: paired collision reward packet
 
 This inventory follows the complete packet, including its exact finite-law
-conclusions. The parameterized table, low-parameter and pure exits, scalar
-rate construction, stationary and periodic branches, all-parameter consumer,
-and class comparisons have implementation drafts. The parameterized source
-table, scalar rates, stationary and periodic branches, all-real-parameter
-existence consumer, and class exclusions pass their targeted checks. Exact
-finite-law claims and a literal normality corollary remain. The packet is not
-complete.
+conclusions. All claims below pass their targeted checks. Independent
+read-only review found no remaining claim-level obligation. The full integration
+gate passed; the packet is retired to `math/formalized/` without content changes.
 
 | Source claim | Completion obligation |
 | --- | --- |
 | Sections 1-2, literal source and exits | Targeted checks pass for the fifteen reward vectors, twelve varying pair-member coordinates, constant singleton matrix, signed `c ≤ 1` and pure `c ≥ 4` consumers. |
 | Sections 3-4, produced rates | Both scalar intermediate-value constructions, positive denominators and interior-rate bounds pass targeted checks. The final existence theorem constructs its rates from `1 ≤ c ≤ 2`, rather than accepting them as a hypothesis. |
 | Section 5, infinite equilibrium | Phase/owner endpoints, prescribed recursions, strict quiet joins, actual payoff identification, every suffix's unrestricted behavioral cap and the same profile's uniform payoff pass targeted checks. |
-| Section 5, exact finite laws | Construct the independent finite-date-or-Never marginals with the displayed rational-in-the-rates masses. Prove the exact prescribed payoff factor, the full cap equality `B_i^K = v_i`, and maximum debt `C^K max_i v_i`. A generic censor cap estimate is weaker than this equality. |
-| Section 5, finite horizons | Prove the literal `8K/N` delivery and deviation comparison, `16K/N` regret charge, and accuracy-dependent finite-law witnesses at one fixed target. The censored opponents have positive Never mass; they are not geometrically absorbing. |
+| Section 5, infinite horizon rate | `PeriodicRates.profile_horizonDeviation_absolute_uniform`, `allSuffix_horizonDeviation_absolute`, and the delivery/Nash consumers pass the targeted check in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardHorizon.lean`. Absolute terminal-to-average error is at most `(8000/271)/N` for every complete deviation and suffix; regret is at most `(16000/271)/N`. |
+| Section 5, exact finite laws | `PeriodicRates.finiteProfile_payoff_eq`, `finiteProfile_completeCap`, `finiteProfile_exploitability_eq`, `finiteProfile_exploitability_le_geometric`, the three `finiteStoppingLaw` mass lemmas, `finiteStoppingLaw_eq_censor`, and `exists_finiteTimingLaws_exact` pass the targeted check in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardFiniteCalendar.lean`. The cap is the full behavioral supremum, and a retained first-active date attains it. |
+| Section 5, finite horizons | The literal `8K/N` delivery and deviation comparison, `16K/N` regret charge, `max 1 ceil(32K/ε)` threshold, and actual finite-law witnesses at one fixed target pass the targeted finite-calendar check. `exists_one_periodicRates_all_finiteCalendar_accuracies` selects rates before every accuracy. The censored opponents retain positive Never mass. |
 | Section 6, stationary branch | Targeted checks pass for actual Quit and Continue sums, interval endpoint signs, produced common hazard, full behavioral cap, Bellman value and fixed uniform payoff for `2 ≤ c ≤ 4`. |
-| Sections 2 and 7, exclusions | Targeted checks pass for pure-clock obstruction, the punishment-value bound, all-rate solo joining, capped-joint and low-active failures, every relabeling's raw-region failure, and weak singleton payoff-exclusion failure in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardBoundary.lean`. Package the value bound and unit own singleton as a literal normality corollary. |
+| Sections 2 and 7, exclusions | Targeted checks pass for pure-clock obstruction, the punishment-value bound, all-rate solo joining, capped-joint and low-active failures, every relabeling's raw-region failure, and weak singleton payoff-exclusion failure in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardBoundary.lean`. `normalPlayer` in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardFiniteCalendar.lean` supplies the literal normality corollary. |
 | Sections 1 and 8-9, assembled conclusion | Targeted check passes for the four actual exits for every real input parameter on the same table, retaining overlapping endpoints and arbitrarily negative parameters. This does not cover arbitrary collision rewards. |
+| Section 8, parameter-one calibration | `PeriodicRates.profile_at_one`, both rate and phase-value identifications, and the sharper isolation intervals pass the targeted check in `UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardCalibration.lean`. The result identifies actual profiles, not only matching tables or equations. |
 
 The existing periodic compiler, complete stationary cap, finite cyclic-word
 payoff identity, independent finite-clock realization, and finite-deadline

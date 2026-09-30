@@ -452,6 +452,56 @@ theorem quittingProfilePullback_update (e : ι ≃ κ)
       σ' (e i) t (quittingHistEquiv e reward t h)
     rw [Function.update_of_ne (fun heq => hi (e.injective heq))]
 
+omit [DecidableEq ι] [DecidableEq κ] in
+/-- Terminal payoff is preserved by the existing behavioral player pullback. -/
+theorem quittingTerminalPayoff_quittingProfilePullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame (quittingRewardReindex e reward)).BehaviorProfile)
+    (who : ι) :
+    quittingTerminalPayoff reward (quittingProfilePullback e reward profile) who =
+      quittingTerminalPayoff (quittingRewardReindex e reward) profile (e who) := by
+  have horiginal := tendsto_finiteAveragePayoff_quittingGame reward
+    (quittingProfilePullback e reward profile) who
+  have hreindexed := tendsto_finiteAveragePayoff_quittingGame
+    (quittingRewardReindex e reward) profile (e who)
+  have hfinite : (fun horizon => (quittingGame reward).finiteAveragePayoff none horizon
+      (quittingProfilePullback e reward profile) who) =
+      fun horizon => (quittingGame (quittingRewardReindex e reward)).finiteAveragePayoff
+        none horizon profile (e who) := by
+    funext horizon
+    exact (finiteAveragePayoff_quittingProfilePullback e reward profile horizon who).symm
+  rw [hfinite] at horiginal
+  exact tendsto_nhds_unique horiginal hreindexed
+
+/-- Every complete unilateral behavioral replacement transports with the
+same terminal Nash error, not merely the selected stationary deviations. -/
+theorem isεAsymptoticNash_quittingProfilePullback (e : ι ≃ κ)
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame (quittingRewardReindex e reward)).BehaviorProfile)
+    {ε : ℝ}
+    (hnash : (quittingGame (quittingRewardReindex e reward)).IsεAsymptoticNash
+      (quittingTerminalPayoff (quittingRewardReindex e reward)) ε profile) :
+    (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
+      (quittingProfilePullback e reward profile) := by
+  intro who deviation
+  let transported : (quittingGame (quittingRewardReindex e reward)).BehaviorStrategy
+      (e who) := fun time history => deviation time ((quittingHistEquiv e reward time).symm
+        history)
+  have hdev := hnash (e who) transported
+  have hpull : quittingProfilePullback e reward
+      (Function.update profile (e who) transported) =
+      Function.update (quittingProfilePullback e reward profile) who deviation := by
+    rw [quittingProfilePullback_update]
+    refine congrArg (Function.update (quittingProfilePullback e reward profile) who) ?_
+    funext time history
+    simp only [transported, Equiv.symm_apply_apply]
+    rfl
+  have hpay := quittingTerminalPayoff_quittingProfilePullback e reward
+    (Function.update profile (e who) transported) who
+  rw [hpull] at hpay
+  rw [← hpay, ← quittingTerminalPayoff_quittingProfilePullback e reward profile who] at hdev
+  exact hdev
+
 /-- **Player-reindexing transport for the quitting conjecture.**  If the
 quitting game of the transported reward table has a uniform-equilibrium
 payoff from the active state, then so does the quitting game of the original

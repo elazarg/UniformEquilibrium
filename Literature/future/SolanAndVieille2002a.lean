@@ -11,6 +11,7 @@ import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazard
+import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazardTransport
 
 /-!
 # Literature audit
@@ -41,7 +42,9 @@ abbrev StationaryOrSmallQuitEquilibrium
 /-- Literal **Proposition 1**: every quitting game with at most three players
 has a terminal `ε`-equilibrium in one of the two source strategy classes.
 All reward signs are retained. The complete strategy-class producer remains
-unformalized; ordinary uniform-payoff existence does not supply this claim. -/
+unformalized; ordinary uniform-payoff existence does not supply this claim.
+The paper imposes no global positivity or normalization assumption here:
+its positive-own-singleton restriction appears later in Section 2.2 only. -/
 def Proposition1Claim : Prop :=
   ∀ n : ℕ, n ≤ 3 →
     ∀ reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n),
@@ -69,6 +72,15 @@ theorem proposition1_twoPlayer
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) {ε : ℝ}
     (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
   Or.inl (quittingGame_exists_stationary_terminalApproximateEquilibrium_twoPlayer reward ε hε)
+
+/-- Section 2.1 extends to any player type of cardinality at most two.
+All reward signs are retained, and the actual stationary root is transported. -/
+theorem proposition1_atMostTwoPlayers
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (hcard : Fintype.card ι ≤ 2)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  Or.inl (QuittingThreePlayerStrategyClass.exists_stationaryTerminalNash_of_card_le_two
+    reward hcard hε)
 
 /-- The source's Case 1 solo branch is covered whenever its actual positive
 rate satisfies the full inactive-player inequalities. This does not assert
@@ -207,6 +219,23 @@ theorem proposition1_normalizedThreePlayer
     {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
   QuittingThreePlayerStrategyClass.of_normalizedThreePlayer
     reward hsolo hε
+
+/-- Section 2.2 before normalization: strictly positive own-singletons are
+scaled multiplicatively, so Never payoff remains zero and the roots are unchanged. -/
+theorem proposition1_positiveSoloThreePlayer
+    (reward : QuittingReward3)
+    (hpositive : ∀ who, 0 < reward (quittingSingletonTerminal who) who)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_positiveSoloThreePlayer reward hpositive hε
+
+/-- The positive-own-singleton source discussion transports to every finite
+player type with at most three players. This is not the unrestricted Proposition 1. -/
+theorem proposition1_positiveSolo
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (hcard : Fintype.card ι ≤ 3)
+    (hpositive : ∀ who, 0 < reward (quittingSingletonTerminal who) who)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_card_le_three_of_positiveSolo reward hcard hpositive hε
 
 /-- The numerical parameter assertion in the normalized transcription of the
 printed period-two packet: its continuation probability `1 / √2` is the
@@ -758,8 +787,10 @@ The named-statement inventory of the author-hosted journal PDF is:
   germ. Infeasible Case 2 yields an exact stationary endpoint. Feasible mixtures
   give a stationary complementary root or a concrete subdivided cyclic root.
   This does not formalize the source's constrained-map proof of Case 0 or its
-  triangle description. The unrestricted all-sign producer and the required
-  player-type and positive-payoff-scaling transports remain unformalized here.
+  triangle description. The three-player nonpositive/mixed-sign own-singleton
+  producer needed for the unrestricted Proposition 1 remains unformalized here.
+  Positive coordinate scaling and player/cardinality transports retain the actual
+  selected roots and preserve zero Never payoff; no additive terminal translation is used.
 - Section 3.1: Proposition 2 and Lemma 4 are proved above; Lemma 4 delegates
   to the impossible exact-stationary antecedent, rather than the paper's
   forward indifference derivation. The printed indifference polynomials are identified
