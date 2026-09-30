@@ -151,6 +151,20 @@ nonpositive own-singleton reward.
 
 ### Source reconstruction still needed
 
+The raw nonnegative-inverse/passive-row subclass now supplies actual small-hazard
+terminal approximants without an own-singleton sign restriction.
+`exists_quiet_smallHazard_terminalNash_of_raw_nonnegativeInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowSmallHazard.lean`)
+accepts independent positive accuracy and hazard cap. Its selected roots obey
+the cap at every date, and deleted players use Always Continue at every history.
+The same roots are transported from the constructed nearby strict table to
+the original reward table. Taking the cap equal to the accuracy supplies
+`proposition1_of_raw_nonnegativeInverse_triple`
+(`Literature/future/SolanAndVieille2002a.lean`). The targeted and full silent
+builds pass; a separate axiom check of the producer and Literature wrapper
+reports only the three permitted axioms. This is a sufficient raw-table branch,
+not coverage of every remaining mixed-sign standard-Q game.
+
 The targeted-checked normalized producer uses an existing analytic-germ and finite-alternative
 route to the strategy-class conclusion. It does not formalize the source's
 constrained-map proof of Case 0, the compact separation gap reducing Case 2 to

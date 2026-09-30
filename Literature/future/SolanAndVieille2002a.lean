@@ -12,6 +12,7 @@ import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazard
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazardTransport
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.WeakInversePassiveRowSmallHazard
 
 /-!
 # Literature audit
@@ -274,6 +275,24 @@ theorem proposition1_positiveSolo
     (hpositive : ∀ who, 0 < reward (quittingSingletonTerminal who) who)
     {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
   QuittingThreePlayerStrategyClass.of_card_le_three_of_positiveSolo reward hcard hpositive hε
+
+/-- A literal raw inverse triple supplies the small-hazard Proposition 1
+branch, including mixed own-singleton signs. These sufficient matrix tests
+are not asserted for every three-player reward table. -/
+theorem proposition1_of_raw_nonnegativeInverse_triple
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (hcard : Fintype.card {who : ι // ¬ deleted who} = 3)
+    (hdet : (PassiveRowInverseCriterion.childMatrix reward deleted).det ≠ 0)
+    (hinverse : ∀ row column : {who : ι // ¬ deleted who},
+      0 ≤ (PassiveRowInverseCriterion.childMatrix reward deleted)⁻¹ row column)
+    (houtside : ∀ outside, deleted outside →
+      ∀ inside : {who : ι // ¬ deleted who},
+        0 ≤ PassiveRowInverseCriterion.inverseWeight reward deleted outside inside)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_raw_nonnegativeInverse_triple
+    reward deleted hcard hdet hinverse houtside hε
 
 /-- The numerical parameter assertion in the normalized transcription of the
 printed period-two packet: its continuation probability `1 / √2` is the

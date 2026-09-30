@@ -838,6 +838,27 @@ These are chart-level statements, not chart independence or an identification
 with ambient Brouwer degree. The generic problem and continuous-family
 definitions reside in `MathUE/Topology/BoxComplementarityProblem.lean`.
 
+`ambientDegree` and `ambientDegree_eq_of_extension`
+(`MathUE/Topology/AmbientDegree.lean`) construct degree for an actual field
+continuous on the closure of a bounded open region, at any target excluded
+from the frontier image. The enclosing positive rectangle and continuous
+extension are constructed internally; independence of both choices is proved.
+Empty regions, zero dimension and nonisolated fibers are allowed.
+`ambientDegree_homotopy`
+(`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`) uses one jointly
+continuous extension of the time-space field.
+`ambientDegree_congr`, `ambientDegree_excision`, `ambientDegree_additive`
+and `ambientDegree_id_eq_one` (`MathUE/Topology/AmbientDegreeProperties.lean`)
+give closure extensionality, excision, root-cover additivity and identity
+normalization on arbitrary admissible regions. These are the standard defining
+properties of Brouwer degree; uniqueness against another implementation is
+not proved. No finite-fiber or regular-value hypothesis is imposed.
+`ambientDegree_lcpMinMap_zero_eq_r0Degree`
+(`MathUE/LinearProgramming/R0AmbientDegree.lean`) identifies the canonical R0
+integer with this ambient construction on every bounded open neighborhood
+of the origin. The bounded-offset total-degree comparison, including the
+literal offset minus one, is in `MathUE/LinearProgramming/R0AmbientOffsetDegree.lean`.
+
 The construction
 `BoxComplementarityProblem.localDegree`
 (`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an
@@ -1173,7 +1194,11 @@ which the literal singleton matrix has canonical chart R0 degree one and every g
 uniform-equilibrium payoff. The degree calculation uses a finite support
 inventory; the payoff conclusion uses the raw inverse-weight criterion.
 Identification of this chart integer with ambient Brouwer degree remains
-unproved here. The payoff conclusion does not depend on that identification.
+separate from the strategy proof and is supplied by
+`ambientDegree_eq_one` and `exists_open_ambient_degree_one_uniformPayoff_class`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourAmbientDegreeNeighborhood.lean`).
+These apply on every bounded open neighborhood of the origin. The payoff
+conclusion uses the inverse/passive-row criterion, not degree one alone.
 
 `QuittingResponseInvariantOnUnitCube` and
 `quittingSingletonMatrix_mulVec_blockLift_eq_quotient`
@@ -1320,7 +1345,14 @@ under the global chart. Its normalized integer degree is one minus the crossed
 R0 degree; the positive-inverse specialization gives two. No finiteness or
 regularity of the nonzero roots is required. These degree statements use the
 explicit `[-2,2]` chart; identification with ambient Brouwer degree or arbitrary
-chart independence is not asserted. Under the strict full-box guards, reciprocal
+chart independence is not asserted by those modules.
+`exists_quittingCrossedAmbientAnnulus_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientDegree.lean`)
+constructs a bounded open ambient annulus whose actual zero fiber is precisely
+the entire nonzero crossed fixed-point set and whose ambient degree is
+one minus the crossed R0 degree. Frontier avoidance and strict chart enclosure
+are derived from actual confinement and origin isolation.
+Under the strict full-box guards, reciprocal
 singleton signs, and the same degree assumptions,
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseStrategic.lean`)

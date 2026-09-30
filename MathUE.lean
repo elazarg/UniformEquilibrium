@@ -609,6 +609,11 @@ import MathUE.Topology.PoincareMirandaCube
 import MathUE.Topology.RectangularPoincareMiranda
 import MathUE.Topology.BoxComplementarityProblem
 import MathUE.Topology.BoxComplementarityAmbientMapAdapter
+import MathUE.Topology.BoxComplementarityAmbientExtension
+import MathUE.Topology.BoxComplementarityRectangularChartIndependence
+import MathUE.Topology.AmbientDegree
+import MathUE.Topology.AmbientDegreeHomotopyNormalization
+import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex
 import MathUE.Topology.BoxComplementarityCubicalSperner
@@ -641,6 +646,8 @@ import MathUE.Topology.KuhnPrismBoundaryCollar
 import MathUE.LinearProgramming.LocalDegree
 import MathUE.LinearProgramming.CommonChartLocalDegree
 import MathUE.LinearProgramming.R0Degree
+import MathUE.LinearProgramming.R0AmbientDegree
+import MathUE.LinearProgramming.R0AmbientOffsetDegree
 import MathUE.LinearProgramming.R0DegreeSum
 import MathUE.LinearProgramming.RootDegreeSum
 import MathUE.Topology.SignedSimplexLabelBoundary

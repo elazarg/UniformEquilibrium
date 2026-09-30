@@ -236,6 +236,8 @@ import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
 import MathUE.LinearProgramming.PositiveInverseR0
+import MathUE.LinearProgramming.R0AmbientDegree
+import MathUE.LinearProgramming.R0AmbientOffsetDegree
 import MathUE.LinearProgramming.R0Degree
 import MathUE.LinearProgramming.R0DegreeSum
 import MathUE.LinearProgramming.R0Margin
@@ -572,7 +574,11 @@ import MathUE.SurvivalProductComparison
 import MathUE.SurvivalSegmentBalance
 import MathUE.SurvivalWeightedObstruction
 import MathUE.SurvivalWeightedObstructionAction
+import MathUE.Topology.AmbientDegree
+import MathUE.Topology.AmbientDegreeHomotopyNormalization
+import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
+import MathUE.Topology.BoxComplementarityAmbientExtension
 import MathUE.Topology.BoxComplementarityAmbientMapAdapter
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex
 import MathUE.Topology.BoxComplementarityCubicalSperner
@@ -594,6 +600,7 @@ import MathUE.Topology.BoxComplementarityOffCenterMatrixLocalIndex
 import MathUE.Topology.BoxComplementarityPositiveRescalingDegree
 import MathUE.Topology.BoxComplementarityPrismCluster
 import MathUE.Topology.BoxComplementarityProblem
+import MathUE.Topology.BoxComplementarityRectangularChartIndependence
 import MathUE.Topology.BoxComplementaritySelfMapNormalization
 import MathUE.Topology.BoxComplementaritySignedLocalCount
 import MathUE.Topology.BoxComplementaritySolutionExcision
@@ -1907,6 +1914,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonBl
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCapDebtLasso
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonCarrierBridge
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.IdealSingletonZeroRetentionCarrier
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.PassiveRowFourAmbientDegreeNeighborhood
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.PassiveRowFourDegreeNeighborhood
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.PassiveRowFourFixture
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.PassiveRowFourMatrixComparisons
@@ -1919,6 +1927,7 @@ import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.RawPassiveRowInv
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.StrictInversePassiveRowCycle
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.WeakInversePassiveRowCycle
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.WeakInversePassiveRowQuietWitnesses
+import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.WeakInversePassiveRowSmallHazard
 import UniformEquilibrium.Quitting.Classification.LCP.ZeroSoloGeneratedStandardQ
 import UniformEquilibrium.Quitting.Classification.NonnegativePremiumBoxBoundary
 import UniformEquilibrium.Quitting.Classification.NonnegativePremiumForwardPacketConsumer
@@ -2840,6 +2849,7 @@ import UniformEquilibrium.Quitting.Stationary.FiniteHorizonRate
 import UniformEquilibrium.Quitting.Stationary.FullRateStationaryVerifier
 import UniformEquilibrium.Quitting.Stationary.Gain
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponse
+import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseAmbientDegree
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseDegree
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseEscape
 import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseFaces

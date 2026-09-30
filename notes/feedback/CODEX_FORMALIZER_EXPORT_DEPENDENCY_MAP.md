@@ -16,26 +16,29 @@ the corresponding remote CI run has not yet completed.
 A packet remains pending where its claim inventory lists unimplemented conclusions.
 The paired-collision packet has complete coverage and is retired to
 `math/formalized/PAIRED_COLLISION_REWARD_EQUILIBRIUM_DISJUNCTION.md`.
+The passive-row cycle packet also passes its complete-claim review, full silent
+build and exhaustive axiom audit. It is retired unchanged to
+`math/formalized/THREE_PLAYER_CYCLE_PASSIVE_ROW_EXTENSION.md`, with SHA-256
+`c98745d49e7aa6516ebb297f067970b9d9c29a599b05952f71768b15c66bef85`.
 
 | First missing theorem or adapter | Packets grouped at that boundary | Checked production foothold |
 | --- | --- | --- |
-| Ambient-degree identification and remaining example refinements | `GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE`; quotient producer in `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` is checked | The strict unit and half-ceiling raw producers construct actual stationary terminal Nash and UE from finite reward comparisons, including reconstruction of the half-ceiling residual coefficients. Both nonnegative-inverse boundary branches select one fixed original-game target (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryTarget.lean`). `exists_uniformPayoff_of_oneSidedWeakUnitRawGuards` (`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`) supplies the matrix-free sixteen-comparison Fin4 class, including signed sole-owner completion. Both literal table roots, exact full caps, and specified UE targets are checked (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`), together with pure-clock, raw-class, and partition separations. `halfCeilingRoot_isHorizonNash` (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`) supplies the literal horizon bound. The fixed-chart normalized total nonzero-set degree is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseTotalDegree.lean`; ambient Brouwer identification, full reward neighborhoods, child-LP certificates, and censored-law estimates remain. The arbitrary signed quotient criterion is independent: `exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`). |
+| Remaining example refinements and literal-domain degree adapter | `GUARDED_CROSSED_RESPONSE_DEGREE_ESCAPE`; quotient producer in `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` is checked | The strict unit and half-ceiling raw producers construct actual stationary terminal Nash and UE from finite reward comparisons, including reconstruction of the half-ceiling residual coefficients. Both nonnegative-inverse boundary branches select one fixed original-game target (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakBoundaryTarget.lean`). `exists_uniformPayoff_of_oneSidedWeakUnitRawGuards` (`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`) supplies the matrix-free sixteen-comparison Fin4 class, including signed sole-owner completion. Both literal table roots, exact full caps, and specified UE targets are checked (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`), together with pure-clock, raw-class, and partition separations. `halfCeilingRoot_isHorizonNash` (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`) supplies the literal horizon bound. The fixed-chart normalized total nonzero-set degree is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseTotalDegree.lean`; its ambient counterpart is checked in `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientDegree.lean`. The literal printed-domain adapter, full reward neighborhoods, child-LP certificates and censored-law estimates remain. The arbitrary signed quotient criterion is independent: `exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`). |
 | Quotient-wide consequences and literal fixtures | `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` | The signed paired centered-row UE class and paired/full matrix degree calculations are checked. The entire nonzero-set normalized degree theorem and `exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`) pass targeted checks. The latter retains the produced Bellman value as the fixed target, requiring normality only for negative singleton-block owners. Ambient degree identification, quotient counterexample consequences, quantitative conclusions, coordinate freedom, and algebraic and boundary fixtures remain. |
 | Evaluated cancellation and packet refinements | `WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS` | Ordinary deadline, evaluated-security deadline, terminal-security deadline and patient fixed-target extensions are checked. Patient terminal necessity and the shared-witness deadline refactor pass targeted checks. The patient full-debt comparison uses the sum of its two response weights, and the terminal patient Never floor is not the evaluated zero-based floor. All four extensions consume raw reward certificates and preserve the actual quiet lift; none supplies certificates for arbitrary Fin4 tables. Evaluated cancellation, Never relaxations, rational enumeration, and strict examples/neighborhoods remain. |
 | Actual quantile rigidity and robust unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. The center data and capped-clock certificate infeasibility are also integrated. The packet's universal positive parent-plus-child exploitability floor still needs its actual quantile-rigidity sequence, all four restriction estimates including the adjacent-date atom move, and the reward-neighborhood transfer. Capped-clock infeasibility does not prove this stronger unchanged-child obstruction. |
 | Full two-branch rational weak-subset selector and single-pivot secant source | `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS`, `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS`, `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION`, `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | `exists_strictDeficitExactSuffix_allTerminalNash` (`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixNash.lean`) closes the single common-depth infinite all-suffix exact Nash conclusion under nonnegative singleton rewards. The existing executable rational weak-subset selector assumes strict preemption of all designated owners; its full stationary-exit/charged-step two-branch selector remains separate. The single-pivot secant/tilted common-calendar source is also separate; finite-calendar payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
-| Shared ambient Brouwer-degree identification | `THREE_PLAYER_CYCLE_PASSIVE_ROW_EXTENSION` | The passive raw inverse UE class and its open full-matrix degree-one fixture are checked. Variable-phase calendar values, full-response bounds, censor estimates, date counts, arbitrary-signed finite-horizon bounds and independent rational clock laws are checked. `exists_rationalClocks_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalRawPassiveRowClocks.lean`) produces rational coarse hazards and actual laws from rational singleton data. `exists_rationalClocks_log_bound_of_raw_strictInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalPassiveRowCalendarBound.lean`) supplies the fixed-input logarithmic calendar bound. `exists_quietFiniteTimingUniformWitnesses_of_raw_nonnegativeInverse_triple` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowQuietWitnesses.lean`) retains quiet finite laws through weak-boundary selection and provides the printed horizon cutoff at one fixed target. The raw no-UE contrapositive is checked. The class comparisons and all four falsifier families pass targeted checks. The packet's ambient Brouwer-degree identification remains; the separate paired-collision packet is complete. |
 | Full exact-root potential restriction and shape arguments | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential` (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`) and the robust charged relation supply the existing conditional certificate interface. The first missing reusable step is the full-exact-edge restriction with collision-adjusted singleton probes; reflection, quasiconvexity, curvature, and degree exclusions then diverge. These are necessary-shape reductions, not a polynomial producer or a solved-game class. |
 
 ## Next source-complete Lean tasks with broad reuse
 
-1. Complete the crossed-response ambient-degree identification, neighborhood and
+1. Complete the crossed-response literal-domain degree adapter, neighborhood and
    child-LP certificates, and censored-law estimates. Its matrix-free Fin4
    producer, both nonnegative-inverse boundary branches, literal roots and
    caps, horizon bound, separation results, and fixed-chart total nonzero-set
-   degree are checked. The degree identity does not require isolated or finitely
-   many nonzero roots; ambient Brouwer identification remains separate.
+   degree and bounded-annulus ambient counterpart are checked. The degree
+   identity does not require isolated or finitely many nonzero roots.
 2. Complete the separate evaluated cancellation variant, Never-row relaxations,
    rational calendar enumeration, and strict
    separating examples. Ordinary, all-evaluation truncated-security,
@@ -176,11 +179,10 @@ reproved. Source-correspondence prose and nonclaims require no extra theorem.
 
 This is static declaration matching, not additional compiler evidence.
 The raw strict/weak inverse class, arbitrary-child nonnegative row inheritance,
-strict cyclic labeling, canonical chart-degree-one fixture and its full open
-reward neighborhood are matched. All strategy, calendar, comparison and
-falsifier conclusions pass their targeted checks. The packet is not complete:
-its identification of the canonical integer with ambient Brouwer degree
-remains a shared foundational dependency.
+strict cyclic labeling, degree-one fixture and its full open reward
+neighborhood are matched. All strategy, calendar, comparison, falsifier
+and ambient-degree conclusions pass their targeted and full silent checks.
+The complete packet is retired unchanged to `math/formalized/`.
 
 | Source claim | Remaining obligation |
 | --- | --- |
@@ -192,6 +194,7 @@ remains a shared foundational dependency.
 | Proof Section 7 | Matched by the same quiet-witness producer: literal nearby strict tables, original-game Nash transfer on the same profiles, and retained-family compact target selection. The selected laws precede every valid reward bound and horizon; the shared signed consumer supplies `max 1 (ceil (4 * M * (deadline + 1) / accuracy))`. No uniform weak-boundary calendar complexity is asserted. |
 | Fin4 counterexample consequence | Matched by `raw_inverse_test_failure_of_no_uniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`), for every selected triple in any finite parent player type. |
 | Named class comparisons | Matched in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourMatrixComparisons.lean`: full determinant and inverse, projective Q-bar failure, absence of negative Hamiltonian cycles and signed four-cycle data under every relabeling. Tournament exclusion is stronger than the packet: fractional tournaments with parameter at least one are excluded. |
+| Ambient degree and open class | Matched by `ambientDegree_lcpMinMap_zero_eq_r0Degree` (`MathUE/LinearProgramming/R0AmbientDegree.lean`), the bounded-offset comparison in `MathUE/LinearProgramming/R0AmbientOffsetDegree.lean`, and `exists_open_ambient_degree_one_uniformPayoff_class` (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourAmbientDegreeNeighborhood.lean`). One full reward-table open class has both the literal ambient degree-one property and a uniform-equilibrium payoff. Degree one alone is not the equilibrium criterion. |
 | Four attempted falsifiers | Matched in `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowJoiningBoundary.lean`, `UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PermutationInverseClockBoundary.lean`, and `UniformEquilibrium/Quitting/Examples/BlockPair/FourPlayerPairedSingletonTripleInverse.lean`. Joining gains use actual values for every positive phase-length vector and the exact tolerance-selected calendars; the coarse gain is explicitly positive. Every paired-matrix principal triple has the stated negative inverse entry. |
 
 The signed horizon task has a reusable starting point:
@@ -202,11 +205,10 @@ by the same full terminal cap; the finite opponent-tail sum then supplies
 the horizon error. This avoids an invalid comparison with a late negative
 deviation's own terminal payoff.
 
-The existing eleven-support degree-one fixture inventory and open-neighborhood
-proof need no duplicate construction. As above, the ambient degree interpretation
-is separate and required for retirement: the packet explicitly defines its
-degree using the ambient map, not the fixed-chart signed count. The packet's
-exclusions and limitations must remain explicit.
+The eleven-support inventory and open-neighborhood proof are reused, not
+duplicated. The ambient comparison supplies the packet's literal minimum-map
+interpretation. Rational labels remain existential; no uniform weak-boundary
+calendar complexity or degree-one-only equilibrium criterion is asserted.
 
 `exists_realFiniteCalendar_log_bound`
 (`UniformEquilibrium/Quitting/Cycles/RealSingletonCalendarLogBound.lean`)
@@ -254,56 +256,48 @@ Rational stopping masses, verified cutoff selection, the explicit date
 bound and its fixed-input asymptotic estimate now have actual-data producers.
 The cap, censor-payoff and independent-law foundations above should be reused.
 
-## Shared ambient-degree formalization dependency
+## Shared ambient-degree library
 
-This is a specification, not a checked ambient-degree API. The current
-`r0Degree` (`MathUE/LinearProgramming/R0Degree.lean`) is the normalized
-signed-count degree in a fixed central chart. The inspected pinned libraries
-do not supply an ambient Brouwer-degree implementation. The cubical Sperner
-parity and fixed-point results do not supply signed degree. This is known
-foundational mathematics to formalize, not a new quitting-game conjecture.
+The shared construction is checked by targeted and full silent builds.
+`ambientDegree` and `ambientDegree_eq_of_extension`
+(`MathUE/Topology/AmbientDegree.lean`) accept an open bounded region,
+a field continuous on its closure, and a target excluded from the frontier
+image. The enclosing rectangle and extension are constructed internally.
+Empty regions, zero dimension and nonisolated fibers are included.
 
-The ambient API must accept an open bounded region in finite-dimensional
-coordinate space, a field continuous on its closure, and a target excluded
-from the frontier image. It must permit empty regions, zero dimension,
-degenerate or nonisolated zeros, and arbitrary continuous fields. No
-differentiability, finite-root, regular-value or supplied degree-equality
-hypothesis is allowed. Required properties are normalization with the usual
-orientation, admissible-homotopy invariance, additivity and excision.
+`localDegree_ofAmbientMap_chart_independent`
+(`MathUE/Topology/BoxComplementarityRectangularChartIndependence.lean`)
+compares the unchanged actual field in arbitrary positive rectangles.
+Its compact-tube argument controls moving source preimages; fixed-region
+homotopy invariance alone would not suffice.
+`localDegree_ofAmbientMap_eq_of_extensions`
+(`MathUE/Topology/BoxComplementarityAmbientExtension.lean`)
+proves extension independence from agreement on the source closure.
 
-The comparison must identify the existing local degree of
-`BoxComplementarityProblem.ofAmbientMap`
-(`MathUE/Topology/BoxComplementarityAmbientMapAdapter.lean`) with ambient
-degree at zero on the same source region. A positive rectangular chart
-containing that region's closure suffices. The existing normalization
-already accounts for the negated pulled-back field; no extra
-dimension-dependent sign is introduced.
+`ambientDegree_homotopy`
+(`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`) uses one
+joint time-space extension. Closure extensionality, excision, disjoint
+root-cover additivity and arbitrary-domain identity normalization are
+proved in `MathUE/Topology/AmbientDegreeProperties.lean`. These supply the
+standard defining properties of Brouwer degree. Uniqueness against another
+implementation is not proved. No finite-fiber, regularity, differentiability
+or supplied degree-equality hypothesis is added.
 
-Implementation dependencies are:
+`ambientDegree_lcpMinMap_zero_eq_r0Degree`
+(`MathUE/LinearProgramming/R0AmbientDegree.lean`) identifies the canonical
+R0 integer on every bounded open neighborhood of the origin.
+`exists_radius_above_ambientDegree_lcpMinMap_eq_r0Degree`
+(`MathUE/LinearProgramming/R0AmbientOffsetDegree.lean`) supplies one actual
+source containing every zero for every bounded offset. Its literal
+offset-minus-one corollary covers the passive packet's degree calculation.
 
-1. Choose an enclosing rectangle and extend a locally continuous source
-   field, using existing boundedness and Tietze results. Prove that the chart
-   degree is independent of the chosen extension via
-   `localDegree_eq_of_gain_eqOn_frontier`
-   (`MathUE/Topology/BoxComplementarityFrontierReplacement.lean`).
-2. Prove independence of positive rectangles for the unchanged ambient
-   field. The existing dilation theorem transforms the field as well and
-   does not discharge this step. The pulled-back region moves with the
-   chart; fixed-region homotopy invariance alone is insufficient.
-3. Construct ambient degree and establish the stated degree properties.
-   A renamed chart count or a structure assuming the desired properties
-   does not complete this step.
-4. Identify canonical R0 degree with the ambient degree of the zero-offset
-   minimum-complementarity map under `IsR0Matrix` alone, then restate the
-   passive fixture and open-neighborhood consequences.
-5. Apply the same comparison to the crossed-response origin and entire
-   nonzero fixed-point set. Use genuine domain excision or a larger chart:
-   the packet's region has closure meeting the present chart boundary.
-
-The existing support inventory, normalized degree sums, R0 bounds, actual
-zero-set pullbacks and fixed-point confinement remain reusable. Neither
-packet should lose its literal ambient-degree conclusion to avoid this
-dependency.
+`exists_quittingCrossedAmbientAnnulus_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientDegree.lean`)
+constructs an actual bounded annulus whose zero fiber is the entire nonzero
+crossed fixed-point set and whose degree is one minus the crossed R0 degree.
+Frontier avoidance and strict chart enclosure are derived. The quotient
+family still needs its own actual-source adapter; the shared foundation
+need not be rebuilt.
 
 ## Complete-claim audit: withdrawal and deadline packet
 
