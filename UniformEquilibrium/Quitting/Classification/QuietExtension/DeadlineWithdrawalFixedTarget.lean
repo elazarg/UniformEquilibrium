@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalMultipleOutsiderFamily
 import UniformEquilibrium.Quitting.Terminal.TargetTail.TerminalNashLift
+import UniformEquilibrium.Quitting.Classification.QuietExtension.TerminalWeightedDebtLift
 
 /-!
 # Fixed-target quiet extension from deadline-withdrawal rows
@@ -56,89 +57,21 @@ theorem isεAsymptoticNash_liftDeletedProfile_of_deadlineWithdrawalFamily
       (quittingTerminalPayoff reward)
       (deadlineWithdrawalOutsiderMaxWeight deleted reward certificate * error)
       (quittingLiftDeletedProfile reward deleted profile) := by
-  let factor := deadlineWithdrawalOutsiderMaxWeight deleted reward certificate
-  let lifted := quittingLiftDeletedProfile reward deleted profile
-  have hchildDebt (who : QuittingChildPlayer deleted) :
-      quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward reward deleted) profile who -
-          quittingTerminalPayoff
-            (quittingDeleteReward reward deleted) profile who ≤ error := by
-    rw [quittingBehaviorDeviationPayoffCap_eq_bestReplyValue]
-    apply sub_le_iff_le_add.mpr
-    apply quittingBestReplyValue_le
-    intro deviation
-    have h := hnash who deviation
-    linarith
-  have hfamilyEval :=
-    quittingLiftDeletedProfile_evaluatedDebt_of_deadlineWithdrawalFamily
-      deleted reward certificate quittingTerminalEvaluation
-      quittingTerminalEvaluation_nonneg quittingTerminalEvaluation_antitone
-      profile
-  have hfamily :
-      (∀ who : QuittingChildPlayer deleted,
-        quittingBehaviorDeviationPayoffCap reward lifted who.1 -
-          quittingTerminalPayoff reward lifted who.1 =
-        quittingBehaviorDeviationPayoffCap
-            (quittingDeleteReward reward deleted) profile who -
-          quittingTerminalPayoff
-            (quittingDeleteReward reward deleted) profile who) ∧
-      ∀ outside : {who : α // deleted who},
-        quittingBehaviorDeviationPayoffCap reward lifted outside.1 -
-          quittingTerminalPayoff reward lifted outside.1 ≤
-        ∑ who, (certificate outside).debtWeight who *
-          (quittingBehaviorDeviationPayoffCap
-              (quittingDeleteReward reward deleted) profile who -
-            quittingTerminalPayoff
-              (quittingDeleteReward reward deleted) profile who) := by
-    simpa only [lifted,
-      quittingBehaviorEvaluatedDeviationPayoffCap_terminalEvaluation,
-      quittingBehaviorEvaluatedPayoff_terminalEvaluation] using hfamilyEval
-  have hdebt (who : α) :
-      quittingBehaviorDeviationPayoffCap reward lifted who -
-        quittingTerminalPayoff reward lifted who ≤ factor * error := by
-    by_cases hdeleted : deleted who
-    · let outside : {who : α // deleted who} := ⟨who, hdeleted⟩
-      calc
-        quittingBehaviorDeviationPayoffCap reward lifted who -
-            quittingTerminalPayoff reward lifted who ≤
-          ∑ child, (certificate outside).debtWeight child *
-            (quittingBehaviorDeviationPayoffCap
-                (quittingDeleteReward reward deleted) profile child -
-              quittingTerminalPayoff
-                (quittingDeleteReward reward deleted) profile child) :=
-          hfamily.2 outside
-        _ ≤ ∑ child, (certificate outside).debtWeight child * error := by
-          apply Finset.sum_le_sum
-          intro child _
-          exact mul_le_mul_of_nonneg_left (hchildDebt child)
-            ((certificate outside).debtWeight_nonneg child)
-        _ = deadlineWithdrawalOutsiderWeight deleted reward certificate outside *
-            error := by
-          rw [← Finset.sum_mul]
-          rfl
-        _ ≤ factor * error :=
-          mul_le_mul_of_nonneg_right
-            (deadlineWithdrawalOutsiderWeight_le_maxWeight
-              deleted reward certificate outside) herror
-    · let child : QuittingChildPlayer deleted := ⟨who, hdeleted⟩
-      calc
-        quittingBehaviorDeviationPayoffCap reward lifted who -
-            quittingTerminalPayoff reward lifted who =
-          quittingBehaviorDeviationPayoffCap
-              (quittingDeleteReward reward deleted) profile child -
-            quittingTerminalPayoff
-              (quittingDeleteReward reward deleted) profile child :=
-          hfamily.1 child
-        _ ≤ error := hchildDebt child
-        _ ≤ factor * error := by
-          have hone : 1 ≤ factor := le_max_left _ _
-          simpa only [one_mul] using
-            mul_le_mul_of_nonneg_right hone herror
-  intro who deviation
-  have hdeviation := le_quittingBestReplyValue reward lifted who deviation
-  rw [← quittingBehaviorDeviationPayoffCap_eq_bestReplyValue] at hdeviation
-  change quittingTerminalPayoff reward lifted who + factor * error ≥ _
-  linarith [hdebt who]
+  exact isεAsymptoticNash_quietLift_of_outsideTerminalDebtBounds
+    deleted reward (fun outside => (certificate outside).debtWeight)
+    (fun outside child => (certificate outside).debtWeight_nonneg child)
+    (deadlineWithdrawalOutsiderMaxWeight deleted reward certificate)
+    (le_max_left _ _)
+    (fun outside => deadlineWithdrawalOutsiderWeight_le_maxWeight
+      deleted reward certificate outside)
+    herror profile
+    (fun outside => by
+      have h := quittingLiftDeletedProfile_outsideEvaluatedDebt_le_of_deadlineWithdrawal
+        deleted reward outside (certificate outside) quittingTerminalEvaluation
+        quittingTerminalEvaluation_nonneg quittingTerminalEvaluation_antitone profile
+      simpa only [quittingBehaviorEvaluatedDeviationPayoffCap_terminalEvaluation,
+        quittingBehaviorEvaluatedPayoff_terminalEvaluation] using h)
+    hnash
 
 /-- Every specified child uniform-equilibrium target extends under raw
 deadline-withdrawal certificates for all outsiders, with no favorable child

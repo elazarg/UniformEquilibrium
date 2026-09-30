@@ -1,3 +1,4 @@
+import MathUE.Finset.FinFourNonemptyCoalitions
 import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.Game
 
 /-!
@@ -14,38 +15,10 @@ abbrev HazardCoordinate := Fin 8
 abbrev RewardRow := Fin 15
 abbrev NormalizedCoordinate := Fin 68
 
-/-- Binary-mask enumeration of the fifteen nonempty coalitions. -/
-def coalitionOfRow (row : RewardRow) : Finset Player :=
-  match row.val with
-  | 0 => {0}
-  | 1 => {1}
-  | 2 => {0, 1}
-  | 3 => {2}
-  | 4 => {0, 2}
-  | 5 => {1, 2}
-  | 6 => {0, 1, 2}
-  | 7 => {3}
-  | 8 => {0, 3}
-  | 9 => {1, 3}
-  | 10 => {0, 1, 3}
-  | 11 => {2, 3}
-  | 12 => {0, 2, 3}
-  | 13 => {1, 2, 3}
-  | _ => {0, 1, 2, 3}
-
-theorem coalitionOfRow_nonempty (row : RewardRow) :
-    (coalitionOfRow row).Nonempty := by
-  fin_cases row <;> simp [coalitionOfRow]
-
-/-- The row enumeration as an equivalence with nonempty coalitions. -/
-def coalitionRowEquiv : RewardRow ≃
-    {coalition : Finset Player // coalition.Nonempty} :=
-  Equiv.ofBijective (fun row ↦ ⟨coalitionOfRow row, coalitionOfRow_nonempty row⟩) <| by
-    rw [Fintype.bijective_iff_injective_and_card]
-    constructor
-    · decide
-    · change 15 = Fintype.card {coalition : Finset Player // coalition.Nonempty}
-      decide
+/-- The chart uses the canonical binary-mask coalition enumeration. -/
+abbrev coalitionOfRow := Math.Finset.finFourCoalitionOfRow
+abbrev coalitionOfRow_nonempty := Math.Finset.finFourCoalitionOfRow_nonempty
+abbrev coalitionRowEquiv := Math.Finset.finFourCoalitionRowEquiv
 
 /-- Sixty independent reward coordinates, indexed by coalition row and
 player. -/

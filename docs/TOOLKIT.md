@@ -1194,9 +1194,48 @@ matrix/lower-guard approximations are derived from the literal reward table.
 (`UniformEquilibrium/Quitting/Stationary/StationaryTerminalPayoffSelection.lean`)
 provides the reusable stationary fixed-target selection step. Generic affine
 Bernoulli and quadratic tensor Bernstein algebra resides in `MathUE`.
-The matrix-free Fin4 producer, worked examples, and annular total-degree
-identity remain separate.
+`exists_uniformPayoff_of_oneSidedWeakUnitRawGuards`
+(`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`)
+proves a matrix-free Fin4 class from twelve weak owner lower comparisons
+and four weak joining comparisons for the passive player. It constructs
+the outsiders' joining-game root with one sure owner and one passive player.
+An active outsider yields an exact contracting stationary terminal Nash
+profile. With no active outsider, all no-join inequalities hold; the checked
+Fin4 punishment-normality reduction supplies UE existence for arbitrary
+singleton signs. This latter branch does not assert stationary attainment
+or prescribe the UE target. The polynomial-face variant is
+`exists_uniformPayoff_of_oneSidedWeakUnitGuards` in the same file.
+`halfCeilingValue_uniformPayoff` and `unitCeilingValue_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`)
+check both literal tables' displayed roots, Bellman values, exact unrestricted
+caps, and fixed UE targets. The raw class consumers independently produce
+UE from the tables' finite comparisons
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseClassConsumers.lean`).
+`halfCeiling_exists_behaviorDeviation_gain_one`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePureClockSeparation.lean`)
+excludes every deterministic stopping-clock profile, including all Never.
+`halfCeiling_not_oneSidedWeakRawGuards`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseRawClassSeparation.lean`)
+excludes every relabeled ordered pair for the matrix-free raw test; that file
+also excludes the unit table's selected-pair weak half-ceiling test, not
+every relabeling of that test.
+`halfCeiling_block_injective_of_responseInvariant` and
+`unitCeiling_block_injective_of_responseInvariant`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePartitionSeparation.lean`)
+use distinct all-half residuals to exclude every nondiscrete block map.
+The source's neighborhood, child-LP, censored-law, and annular total-degree
+claims remain separate.
 The quotient RI route does not apply to the crossed map.
+
+`isHorizonNash_stationary_of_terminalNash_and_opponentGap`
+(`UniformEquilibrium/Quitting/Stationary/FiniteHorizonRate.lean`)
+specializes the existing periodic rate to any finite-player stationary root.
+Absolute reward bound `M`, deleted-clock gap `g > 0`, and exact terminal Nash
+give full behavioral horizon regret at most `2 * M / (g * H)` for the same
+prescribed profile and every positive horizon.
+`halfCeilingRoot_isHorizonNash`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteHorizon.lean`)
+instantiates the packet's literal `4776 / (35 * H)` bound.
 
 `weight_le_inverseRow_of_singletonFutureRows`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockInverseRowObstruction.lean`)
@@ -2050,6 +2089,7 @@ compression and preservation of both masses exactly are not asserted.
 | Four-profile descendant-slice neutralization | `UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticFourProfileDescendantSlice.lean` and `UniformEquilibrium/Diagnostics/Quitting/StoppingLaw/Endpoint/FinFourProfileDescendantSliceLanding.lean` | `QuittingFourProfileResponseFamily.exists_minimum_normalizedDescendantSlice_eq_or_strict_inert` minimizes response debt on a closed common-prefix orbit while retaining separate response/sibling signed-atom and source/replacement actual-gain densities. Exact cap--Nash prefix closure makes all Continue the unique exact root at the positive-debt minimizer. For a supplied Fin4 rectangle joint-law limit and hard residual, `QuittingStoppingLawRectangleJointAtomLimit.exists_fourProfileDescendantSliceLanding` selects one common four-profile subsequence and positive densities, then returns a minimum-debt point with positive opponent incidence and a reset-rigid chamber, or a strictly off-minimum point; both passports and zero observer debt remain literal fields. The generic layer has `M` and `L`, and the Fin4 attachment adds branch-local `A` from the supplied rectangle. There is no `C`: closed-descendant provenance supplies no finite ancestry, marked date, stopping law, chronology, renewal, arm consumer, or uniform-equilibrium result. |
 | Exact repair certificates | `UniformEquilibrium/Diagnostics/Quitting/ExactRepairCertificate.lean` | Proof-carrying cutoff-one, stationary, and cyclic certificate checkers. `UniformEquilibrium/Diagnostics/Quitting/CutoffOneMixedActual.lean` instantiates the cutoff-one checker for an exact rational table and names its zero payoff. |
 | Solan--Vieille boundary table | `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryEquilibrium.lean`, `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundaryNonstationarity.lean` | An exact period-two equilibrium and its uniform payoff coexist with quantitative exclusion of all sufficiently accurate stationary or uniformly near-all-Continue terminal approximate equilibria. |
+| Small-hazard sequential serialization | `UniformEquilibrium/Quitting/Root/SequentialSerializationEquilibrium.lean` | `isAsymptoticNash_quittingSerializedRoots` splits each stage into four actual one-owner substages. For any bounded Fin4 table with unit own singleton rewards, it transfers an actual terminal approximate equilibrium with error `error` and hazard bound `h` to error `error + 32 * M * h`, against unrestricted behavioral deviations, including Never. It does not require certain absorption or construct a small-hazard source. |
 | Solan--Vieille solo-hazard obstruction | `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloHazardLedger.lean`, `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloHazardFloor.lean`, and `UniformEquilibrium/Quitting/Examples/SolanVieilleBoundarySoloHazardSemantic.lean` | `Schedule.one_over_sixtyEight_lt_literal_exploitability` checks the literal all-behavior bound `1 / 68 < E` for every arbitrary finite or infinite at-most-one-owner calendar, via the stronger inequality `1 <= 14 * E^2 + 67 * E`. No periodicity or positive-hazard assumption is used. This rules out universal single-owner derandomization on the boundary table; it does not concern multi-owner rows. The packet's rational upper schedule and the exact optimal floor remain unformalized. |
 | Returned-block homogeneous tangent obstruction | `UniformEquilibrium/Quitting/Stationary/ReturnedBlockTangentObstruction.lean`, `UniformEquilibrium/Quitting/Stationary/ReturnedBlockPrincipalRestriction.lean`, and `UniformEquilibrium/Quitting/Classification/LCP/ReturnedBlockTangentGap.lean` | `hasHomogeneousSimplexSolution_of_vanishing_returnedBlocks` consumes arbitrary-varying-horizon returned product blocks whose total hazard vanishes and whose aggregate Bellman and probability-weighted endpoint regrets are little-o of that hazard. `relativeError_gap_of_noHomogeneous` strengthens the converse to an explicit `R0`-margin scale and relative-error gap. `ResidualHardClass.exists_pos_ambientNormalCoreReturnedBlock_relativeError_gap` uses the exact pure-Continue coordinate-deletion law to transfer the gap to ambient blocks supported on the recursive normal core. No block, chronology, or unrestricted-behavior strategy is produced. |
 | Strict-covector positive-survival terminal cost | `UniformEquilibrium/Quitting/Chronology/ConvergentDiffuseExactFloorTail.lean`, `UniformEquilibrium/Quitting/Chronology/SummableExactTailTerminalGap.lean`, and `UniformEquilibrium/Diagnostics/Quitting/Chronology/StrictCovectorDynamicTail.lean` | Every supplied convergent diffuse exact floor tail either enters a checked uniform-payoff dispatch or admits one common normalized strict covector controlling all sufficiently late finite and infinite horizons. Finite absorption charge, survival tending to one, and eventual positive Never mass are conclusions. For any summable exact tail, the unrestricted behavioral suffix gain converges coordinatewise to the positive part of the solo payoff; the canonical dynamic-tail adapter and positive-solo no-uniform-payoff corollary are checked. This prices the surviving atom but does not attach a punishment or paid return. |
@@ -2282,8 +2322,68 @@ proves the full terminal debt comparison from literal untruncated `gamma`
 rows. It constructs an actual private restart for every positive error,
 compares each response with the unrestricted behavioral cap, and then removes
 the error. The security value need not be attained by one restart law.
-The positive-terminal-security family and fixed-target extension consumers
-remain separate.
+`quittingLiftDeletedProfile_debt_of_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFamily.lean`)
+transfers the comparison through exact deletion and reindexing for every
+outsider simultaneously, with unchanged child debts.
+`exists_uniformEquilibriumPayoff_eq_on_child_of_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFixedTarget.lean`)
+extends every specified child target to one fixed parent UE payoff agreeing
+at all child coordinates. Its finite amplification is the maximum of one
+and the outsiders' total debt weights.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFinFourExistence.lean`)
+supplies the actual child target from low-cardinality existence. Thus literal
+untruncated security rows suffice for Fin4 existence, without a selected
+strategy or target as input. These terminal results do not assert the
+positive-security bound for arbitrary horizon evaluations or that every
+table has such rows.
+`isεAsymptoticNash_quietLift_of_outsideTerminalDebtBounds`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/TerminalWeightedDebtLift.lean`)
+is the shared approximate-Nash assembly for ordinary, truncated-security,
+untruncated-security, and patient extensions. It also permits empty child or outsider
+sets; the raw security producers impose their own child requirements.
+`PatientWithdrawalRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalRaw.lean`)
+records the separate patient-withdrawal rows with the favorable late-own-quit
+alternative on all-Never opponents. Its response coefficients add, rather
+than taking their maximum.
+`patientWithdrawalPrivateReplacement_childProduct`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalLaw.lean`)
+constructs the actual independent private replacement: it retains earlier
+own clocks, otherwise uses a finite late date for a nonnegative singleton
+and Never for a negative singleton. The actual patient payoff-limit and
+full-debt comparison use separate steps.
+`patientWithdrawal_expectedTerminalPayoff_tendsto`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalExpectedLimit.lean`)
+proves convergence on the fixed original-clock and outsider-replica sample.
+The limit retains the favorable own singleton payoff on opponent Never;
+weak convergence of the late-date laws to Never is not their payoff limit.
+`patientWithdrawal_expectedTerminalPayoffLimit_le_behaviorDeviationCap`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFullCap.lean`)
+bounds every actual finite-delay payoff by the unrestricted behavioral cap
+before passing to the limit.
+`patientWithdrawal_outsideBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFullBehavioralDebt.lean`)
+integrates the actual pointwise comparison and bounds unrestricted outsider
+debt with the sum of the two response weights. No attained response or
+favorable cap is assumed.
+`quittingLiftDeletedProfile_debt_of_patientWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFamily.lean`)
+controls every quiet outsider simultaneously and preserves every child debt.
+`exists_uniformEquilibriumPayoff_eq_on_child_of_patientWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFixedTarget.lean`)
+extends each specified child target to one fixed parent payoff.
+`quittingGame_exists_uniformEquilibriumPayoff_of_finFour_patientWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFinFourExistence.lean`)
+constructs the child target from low-cardinality existence. These are raw
+reward-certificate classes, not a theorem that every Fin4 table passes.
+They make no finite-evaluation claim for the favorable patient Never floor.
+`quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/TerminalOneOutsiderTransport.lean`)
+owns the common exact deletion/reindex transport. This internal consumer
+assumes its one-outsider debt bound; the untruncated-security and patient
+producers supply that bound from their literal reward rows.
 `exists_cappedClockParentRewardCertificate_zero_weight_iff_blockDispensable`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockBlockDeletion.lean`)
 identifies the zero-weight case with the exact singleton deletion gate.

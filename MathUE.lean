@@ -169,6 +169,7 @@ import MathUE.FixedRatioConvexity
 import MathUE.Finset.CubicalResetIntegrability
 import MathUE.Finset.EscrowDrawdown
 import MathUE.Finset.FinThree
+import MathUE.Finset.FinFourNonemptyCoalitions
 import MathUE.Finset.FiniteMenuSupremum
 import MathUE.Finset.FreshSquareExtraction
 import MathUE.Finset.InsertExtremum
@@ -176,6 +177,7 @@ import MathUE.Finset.MinimalMemberSum
 import MathUE.Finset.MonotoneChainChangeBudget
 import MathUE.Finset.PowersetBernoulliWeight
 import MathUE.Finset.BernoulliAffine
+import MathUE.Finset.BernoulliBounds
 import MathUE.Finset.ProdLtOne
 import MathUE.Finset.RetainedRoleClockArithmetic
 import MathUE.Finset.SupNonexpansive

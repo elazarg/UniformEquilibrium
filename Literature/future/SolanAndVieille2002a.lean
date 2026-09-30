@@ -4,6 +4,7 @@ import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryEquilibrium
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryNonstationarity
 import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
+import UniformEquilibrium.Quitting.Root.SequentialSerializationEquilibrium
 
 /-!
 # Literature audit
@@ -329,12 +330,16 @@ theorem serializedStage_blockSurvival
   exact (quittingStationaryContinueMass_eq_prod_continueProbability (roots stage)).symm
 
 /-- **Lemma 9**, with the exact constant `12Nr = 12·4·8 = 384`.
-The explicit substage construction and its structural/survival properties
-are checked above. The uniform payoff and unilateral-deviation comparison
-needed to transfer the equilibrium bound has not yet been formalized. -/
+The reusable serialization theorem compares actual terminal payoffs and
+every pure quit deadline (including Never), then invokes canonical full
+behavioral pure-time extremality. Its stronger bound is weakened to the
+printed constant. The source's denominator slip is avoided by the checked
+division-free collision defect; no certain-absorption hypothesis is added.
+The printed upper bound `ε ≤ 1/8` is retained in the source statement,
+although the reusable division-free transfer does not require it. -/
 theorem lemma9
     {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε : ℝ}
-    (hε : 0 < ε) (hεsmall : ε ≤ 1 / 8)
+    (hε : 0 < ε) (_hεsmall : ε ≤ 1 / 8)
     (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε)
     (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
       SolanVieilleBoundary.boundaryReward ε
@@ -349,7 +354,24 @@ theorem lemma9
       ∀ time first second,
         0 < (ys time first true).toReal → 0 < (ys time second true).toReal →
         first = second := by
-  sorry
+  have hsmall : ∀ time who, (roots time who true).toReal ≤ ε := by
+    intro time who
+    have hsum := quittingRoot_continueProbability_add_quitProbability (roots time) who
+    have hlower := (abs_lt.mp (hclose time who)).1
+    linarith
+  have hserialize : serializedRoots roots = quittingSerializedRoots roots := rfl
+  have htransfer := isAsymptoticNash_quittingSerializedRoots
+    (M := 4) (hazardBound := ε) (error := ε)
+    SolanVieilleBoundary.boundaryReward_unitSoloExit roots
+    SolanVieilleBoundary.boundaryReward_abs_le_four hsmall hnash
+  refine ⟨serializedRoots roots, ?_, serializedRoots_nearContinue hε hclose, ?_⟩
+  · unfold SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryRootSequenceProfile
+    rw [hserialize]
+    have herror : ε + 32 * 4 * ε ≤ 384 * ε := by nlinarith [hε]
+    exact GameTheory.StochasticGame.IsεAsymptoticNash.mono htransfer herror
+  · intro time first second hfirst hsecond
+    exact serializedStage_atMostOne roots (time / 4) _ first second hfirst hsecond
 
 /-- **Lemma 11**, the gain assertion in the near-Continue domain used by
 Section 3.2. All source constants are retained. The stronger canonical ledger
@@ -438,7 +460,7 @@ profiles does not constrain the payoff targets of all other profiles.
 The named-statement inventory of the author-hosted journal PDF is:
 
 - Section 2: Proposition 1 (the stationary-or-small-quit dichotomy for games
-  with at most three players) is not stated here; its five geometric cases
+  with at most three players) is not stated here; its six geometric cases
   are likewise not formalized in this paper's terms.
 - Section 3.1: Proposition 2 and Lemma 4 are proved above; Lemma 4 delegates
   to the impossible exact-stationary antecedent, rather than the paper's
@@ -455,8 +477,8 @@ The named-statement inventory of the author-hosted journal PDF is:
   proved above in the near-Continue domain, with the printed `√ε` constants;
   the canonical ledger also allows simultaneous quitting. Lemma 9 is stated
   with its exact `384ε` constant. Its explicit stage splitting, near-Continue,
-  one-quitter and block-survival properties are proved; its equilibrium
-  transfer remains unproved. Lemmas 10, 12 and Corollary 13 still lack exact
+  one-quitter, block-survival and full behavioral equilibrium-transfer properties
+  are proved by adapters. Lemmas 10, 12 and Corollary 13 still lack exact
   paper-order adapters. The corresponding production estimates use different
   constants and hypotheses.
 

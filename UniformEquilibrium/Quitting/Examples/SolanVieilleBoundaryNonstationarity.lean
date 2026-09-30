@@ -62,7 +62,7 @@ def IsBoundaryTerminalApproxNash
     (candidate : (quittingGame reward).BehaviorProfile) : Prop :=
   (quittingGame reward).IsεAsymptoticNash
     (quittingTerminalPayoff reward) epsilon candidate
-private theorem boundaryReward_abs_le_four
+theorem boundaryReward_abs_le_four
     (terminal : {S : Finset (Fin 4) // S.Nonempty}) (player : Fin 4) :
     |SolanVieilleBoundary.boundaryReward terminal player| ≤ 4 := by
   fin_cases terminal <;> fin_cases player <;>

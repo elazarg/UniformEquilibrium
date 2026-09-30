@@ -12,6 +12,8 @@ noncomputable section
 
 namespace GameTheory.FourPlayerOverlappingPeriodThree
 
+open QuittingFinFourEndpointRows
+
 /-- The four player/coalition coordinates absent from every on-path or
 one-player-deviation endpoint of the overlapping support word. -/
 def IsInvisibleRewardCoordinate (row : RewardRow) (who : Player) : Prop :=
