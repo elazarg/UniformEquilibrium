@@ -13864,6 +13864,238 @@ theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     hplayers hM hd hd1 hmotion hconstants z ha⟩
   sorry
 
+/-- Conditional completion of Lemma 4.5. The only additional source premise
+is Lemma 4.4's upper bound for a zero-quitting continuation coordinate.
+All supported-coordinate and lower bounds, the other containment branches,
+and every remaining Question 1 property use independent checked proofs. -/
+theorem lemma4_5_of_zeroQuitterContinuationUpperBound
+    (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hη : Corollary4_1Statement G η)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (hzeroUpper : ∀ z : EZeroTilde G, Phi G M d z ∈ TruncatedW G R →
+      ∀ j, (z.1.2 j : ℝ) = 0 → z.1.1 j ≤ R + 1) :
+    Question1Hypotheses
+      (TruncatedW G R)
+      (fun j : Fin (Fintype.card G.Player) =>
+        TruncatedPiece G R ((Fintype.equivFin G.Player).symm j))
+      (Section4H G inverse cutoff)
+      (GluedNeighborhood G R ε)
+      (correspondenceGraph (GluedFiber G R ε δ))
+      (Section4J G inverse cutoff R ε δ) := by
+  classical
+  subst δ
+  let N : ℝ := Fintype.card G.Player
+  have hN : 3 ≤ N := by
+    dsimp only [N]
+    exact_mod_cast hplayers
+  have hNpos : 0 < N := by linarith
+  have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+  have hρpos : 0 < ρ := hmotion.2.1
+  have hNM : 3 ≤ N * M := by
+    nlinarith [mul_le_mul hN hM.1 (by norm_num) hNpos.le]
+  obtain ⟨hξpos, _, hR⟩ := section3Constants_radius_bound
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hR1 : 1 ≤ R := by
+    change 10 * N * M ≤ R at hR
+    nlinarith
+  have hRpos : 0 < R := zero_lt_one.trans_le hR1
+  have hratioPos : 0 ≤ ρ / (2 * N * M) := by positivity
+  have hratioOne : ρ / (2 * N * M) ≤ 1 := by
+    rw [div_le_one (by positivity : 0 < 2 * N * M)]
+    nlinarith [hmotion.2.2.1, hNM]
+  have hpowOne : (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤ 1 :=
+    pow_le_one₀ hratioPos hratioOne
+  have hξSmall : ξ ≤ 1 / 20 := by
+    have hbound := hconstants.2.1
+    change ξ ≤ (1 / 20 : ℝ) *
+      (ρ / (2 * N * M)) ^ Fintype.card G.Player at hbound
+    linarith
+  have hδpositive :=
+    (section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ).1
+  have hωpositive :=
+    (section4Omega_mem_Ioc G M d ρ ξ R ε hplayers hM hd hd1
+      hmotion hconstants hε hερ).1
+  have hboundary : (LowerBoundary G R).Nonempty :=
+    lowerBoundary_nonempty_of_section3Constants
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  have hbetaBounds (a : Payoff G.Player) (ha : a ∈ TruncatedW G R) :
+      ∀ j, |(inverse.inv a).1.1 j| ≤ R + 1 := by
+    have hphi : Phi G M d (inverse.inv a) ∈ TruncatedW G R := by
+      rw [inverse.rightInverse a]
+      exact ha
+    have hlower := continuationCoordinate_ge_neg_half_radius_of_mem_truncatedW
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants (inverse.inv a) hphi
+    have hsupported := supportedContinuation_abs_le_half_radius
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants (inverse.inv a) hphi
+    intro j
+    by_cases hzero : ((inverse.inv a).1.2 j : ℝ) = 0
+    · apply abs_le.mpr
+      exact ⟨by linarith [hlower j], hzeroUpper (inverse.inv a) hphi j hzero⟩
+    · have hpositive : 0 < ((inverse.inv a).1.2 j : ℝ) :=
+        lt_of_le_of_ne ((inverse.inv a).1.2 j).property.1 (Ne.symm hzero)
+      exact (hsupported j hpositive).trans (by linarith)
+  have houtsideStep
+      (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+      (hcutoffPos : 0 < (cutoff a : ℝ))
+      (hxNotLower : Section4X G inverse cutoff a ∉ LowerNeighborhood G R ε)
+      (hxNotBox : ¬InClosedPayoffBox M (Section4X G inverse cutoff a))
+      (hqLarge : ε * d / (40 * N ^ 2 * M) ≤
+        QuitProbability G (inverse.inv a).1.2) :
+      Section4Omega G M d ρ ξ R ε <
+        EuclideanDist (Section4X G inverse cutoff a)
+          (Section4Y G inverse cutoff a) := by
+    let t : ℝ := 1 - (cutoff a : ℝ)
+    let coefficient : ℝ := ε / (16 * R * N)
+    let threshold : ℝ := ε * d / (40 * N ^ 2 * M)
+    let lower : ℝ := coefficient * (2 * M / 3 * threshold)
+    let factor : ℝ := 12 * ξ * ρ / (5 * M ^ 2)
+    have ht : 0 ≤ t := sub_nonneg.mpr (cutoff a).property.2
+    have hdistance : EuclideanDist a (inverse.inv a).1.1 ≤ 4 * R * N := by
+      calc
+        EuclideanDist a (inverse.inv a).1.1 ≤
+            ∑ j, |a j - (inverse.inv a).1.1 j| := euclideanDist_le_sum_abs _ _
+        _ ≤ ∑ _j : G.Player, 4 * R := by
+          apply Finset.sum_le_sum
+          intro j _
+          have haAbs : |a j| ≤ R + 1 := abs_le.mpr (ha.2 j)
+          have hbAbs := hbetaBounds a ha j
+          exact (abs_sub _ _).trans (by linarith)
+        _ = 4 * R * N := by
+          simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, N]
+            using mul_comm (Fintype.card G.Player : ℝ) (4 * R)
+    have hxMap : Section4X G inverse cutoff a =
+        AffineMap.lineMap a (inverse.inv a).1.1 t := by
+      simp only [Section4X, AffineMap.lineMap_apply_module, t, sub_sub_cancel]
+    have hbaseDistance : EuclideanDist (Section4X G inverse cutoff a) a ≤
+        t * (4 * R * N) := by
+      calc
+        EuclideanDist (Section4X G inverse cutoff a) a =
+            EuclideanDist a (Section4X G inverse cutoff a) := euclideanDist_comm _ _
+        _ = t * EuclideanDist a (inverse.inv a).1.1 := by
+          rw [hxMap]
+          exact euclideanDist_lineMap_eq_mul _ _ ht
+        _ ≤ t * (4 * R * N) := mul_le_mul_of_nonneg_left hdistance ht
+    have hseparation := epsilon_div_four_lt_section4X_baseDistance
+      G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants inverse cutoff
+        hcutoff hε hερ a hcutoffPos hxNotLower
+    have hcoefficient : coefficient < t := by
+      dsimp only [coefficient]
+      rw [div_lt_iff₀ (by positivity : 0 < 16 * R * N)]
+      nlinarith [hseparation.trans_le hbaseDistance]
+    have hthresholdPos : 0 < threshold := by dsimp only [threshold]; positivity
+    have hqNonneg : 0 ≤ QuitProbability G (inverse.inv a).1.2 :=
+      (quitProbability_mem_Icc G (inverse.inv a).1.2).1
+    have hlowerPos : 0 < lower := by
+      dsimp only [lower, coefficient]
+      positivity
+    have hξρ : ξ * ρ ≤ 1 / 20 :=
+      (mul_le_of_le_one_right hξpos.le hmotion.2.2.1).trans hξSmall
+    have hfactorLt : factor < 1 := by
+      dsimp only [factor]
+      rw [div_lt_one (by positivity : 0 < 5 * M ^ 2)]
+      nlinarith [hM.1, sq_nonneg (M - 1)]
+    have hωfactor : Section4Omega G M d ρ ξ R ε = lower * factor := by
+      dsimp only [Section4Omega, Section4Delta, lower, coefficient, threshold, factor, N]
+      field_simp [ne_of_gt hMpos, ne_of_gt hNpos, ne_of_gt hRpos]
+      ring
+    have hωlower : Section4Omega G M d ρ ξ R ε < lower := by
+      rw [hωfactor]
+      exact (mul_lt_mul_of_pos_left hfactorLt hlowerPos).trans_eq (mul_one lower)
+    have hscaled : lower ≤ t *
+        (2 * M / 3 * QuitProbability G (inverse.inv a).1.2) := by
+      have hcoefficientNonneg : 0 ≤ coefficient := by
+        dsimp only [coefficient]
+        positivity
+      have hthresholdScaled := mul_le_mul_of_nonneg_left hqLarge
+        (by positivity : 0 ≤ 2 * M / 3)
+      have hfirst := mul_le_mul_of_nonneg_left hthresholdScaled hcoefficientNonneg
+      have hsecond := mul_le_mul_of_nonneg_right hcoefficient.le
+        (by positivity : 0 ≤ 2 * M / 3 *
+          QuitProbability G (inverse.inv a).1.2)
+      exact hfirst.trans hsecond
+    exact hωlower.trans_le (hscaled.trans
+      (one_sub_cutoff_mul_two_thirds_scale_mul_quitProbability_le_terminalStep
+        G hM inverse cutoff a hxNotBox))
+  have hterminalStep
+      (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+      (hstep : EuclideanDist (Section4X G inverse cutoff a)
+        (Section4Y G inverse cutoff a) < Section4Omega G M d ρ ξ R ε) :
+      (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
+        correspondenceGraph (GluedFiber G R ε (Section4Delta G M ε)) := by
+    by_cases hzero : (cutoff a : ℝ) = 0
+    · exact section4_terminal_mem_gluedGraph_of_zero_cutoff_smallStep
+        G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants
+          inverse cutoff hε hερ a ha hzero hstep
+    · have hpositive : 0 < (cutoff a : ℝ) :=
+        lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hzero)
+      by_cases hsmall : QuitProbability G (inverse.inv a).1.2 <
+          ε * d / (40 * N ^ 2 * M)
+      · exact section4_terminal_mem_gluedGraph_of_positive_cutoff_small_quit
+          G M d ρ ξ R ε (Section4Delta G M ε) hplayers hM hd hd1 hmotion
+            hconstants inverse cutoff hcutoff hε hερ a hpositive hsmall hstep
+      · by_cases hbox : InClosedPayoffBox M (Section4X G inverse cutoff a)
+        · exact section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep
+            G M d ρ ξ R ε (Section4Delta G M ε) hplayers hM hd hd1 hnormal
+              hgenerated hinstant hmotion hconstants inverse cutoff hcutoff
+                hε hερ a ha hpositive hbox hstep
+        · by_cases hlower : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε
+          · exact section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
+              G inverse cutoff R ε (Section4Delta G M ε) a hlower
+          · exact (not_lt_of_ge (houtsideStep a ha hpositive hlower hbox
+              (le_of_not_gt hsmall)).le hstep).elim
+  obtain ⟨hRslack, hsoloSlack⟩ := truncatedPiece_strict_slack_of_section3Constants
+    G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  change Math.Topology.SimonViability.QuestionOneHypotheses _ _ _ _ _ _
+  refine ⟨lt_of_lt_of_le (by norm_num : 0 < (3 : ℕ)) hplayers,
+    isContractibleSet_truncatedW G R hRslack.le (fun j => (hsoloSlack j).le),
+    ?_, truncatedW_eq_iUnion_fin G R,
+    section4H_isStraightLineOn G inverse cutoff hcutoff.1 _,
+    (fun a _ => section4H_zero G inverse cutoff a),
+    section4H_eq_diagonal_on_frontier G hM hd hd1 inverse cutoff hcutoff,
+    section4H_terminal_diagonal_mem_frontier G M d ρ ξ R ε hplayers hM hd hd1
+      hnormal hgenerated hinstant hmotion hconstants inverse cutoff hcutoff hε hερ,
+    isCompact_gluedNeighborhood_of_section3Constants G M d ρ ξ R ε
+      hplayers hM hd hd1 hmotion hconstants,
+    frontier_truncatedW_subset_interior_gluedNeighborhood G R ε hε,
+    isCompact_gluedGraph G R ε (Section4Delta G M ε) hδpositive.le hboundary,
+    ?_, ?_,
+    isCompact_section4J G inverse cutoff hcutoff.1 R ε
+      (Section4Delta G M ε) hδpositive.le hboundary,
+    homotopyTerminalImage_subset_section4J G inverse cutoff R ε (Section4Delta G M ε),
+    gluedGraph_subset_section4J G inverse cutoff R ε (Section4Delta G M ε),
+    Section4Omega G M d ρ ξ R ε, hωpositive, ?_, ?_⟩
+  · intro j
+    exact truncatedPieces_areFullDimensionalCompactConvexPolytopes
+      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants _
+  · intro pair hpair
+    exact mem_gluedNeighborhood_of_mem_gluedFiber G R ε (Section4Delta G M ε) hpair
+  · intro point hpoint
+    exact ⟨isContractibleSet_gluedFiber G M R η ε hM hη hε hεη point hpoint,
+      self_mem_gluedFiber G R ε (Section4Delta G M ε) hδpositive.le hpoint⟩
+  · rintro pair ⟨hpair, hstep⟩
+    rcases hpair with hterminal | hglued
+    · obtain ⟨a, ha, heq⟩ := hterminal
+      rw [section4H_one] at heq
+      subst pair
+      exact hterminalStep a ha hstep
+    · exact hglued
+  · intro point hpoint j hpiece hdistance
+    exact gluedFiber_piece_escape_at_section4Omega
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants hε hερ
+        point hpoint ((Fintype.equivFin G.Player).symm j) hpiece hdistance
+
 /--
 Lemma 4.5. The statement retains all seven conditions. Standalone proofs supply
 the terminal-diagonal condition, contractibility of every glued fiber, and both

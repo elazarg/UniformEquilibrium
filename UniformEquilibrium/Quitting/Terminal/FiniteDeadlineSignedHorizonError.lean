@@ -248,4 +248,58 @@ theorem isHorizonNash_finiteDeadline_of_terminalNash_add_one_signed
   exact mul_le_mul_of_nonneg_left (by norm_num : (deadline : ℝ) ≤ deadline + 1)
     (by positivity : 0 ≤ 2 * M)
 
+/-- Finite date-or-Never laws with terminal regret and target delivery at half
+accuracy satisfy the printed signed horizon cutoff for every reward
+bound. The same laws are used at every sufficiently long horizon. -/
+theorem finiteDeadlineTiming_uniformPayoffWitness_of_terminal_bounds
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (target : Payoff ι) (deadline : ℕ)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline))
+    {accuracy : ℝ} (haccuracy : 0 < accuracy)
+    (hnash : (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward)
+      (accuracy / 2) (quittingFiniteDeadlineTimingProfile reward deadline mixed))
+    (htarget : ∀ who, |quittingTerminalPayoff reward
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) who - target who| ≤
+      accuracy / 2)
+    {M : ℝ}
+    (hreward : ∀ terminal who, |reward terminal who| ≤ M) :
+    ∀ horizon : ℕ,
+      max 1 (Nat.ceil (4 * M * (deadline + 1) / accuracy)) ≤ horizon →
+      (quittingGame reward).IsεHorizonNash none horizon accuracy
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) ∧
+      ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) who - target who| ≤
+          accuracy := by
+  intro horizon hhorizon
+  have hpositive : 0 < horizon := lt_of_lt_of_le Nat.zero_lt_one
+    ((Nat.le_max_left _ _).trans hhorizon)
+  have hreal : (0 : ℝ) < horizon := by exact_mod_cast hpositive
+  have hceil : Nat.ceil (4 * M * (deadline + 1) / accuracy) ≤ horizon :=
+    (Nat.le_max_right _ _).trans hhorizon
+  have hcast : (Nat.ceil (4 * M * (deadline + 1) / accuracy) : ℝ) ≤ horizon := by
+    exact_mod_cast hceil
+  have hquotient := (Nat.le_ceil (4 * M * (deadline + 1) / accuracy)).trans hcast
+  have hmul := (div_le_iff₀ haccuracy).mp hquotient
+  have hboundary : 2 * M * (deadline + 1) / horizon ≤ accuracy / 2 := by
+    apply (div_le_iff₀ hreal).mpr
+    nlinarith
+  constructor
+  · exact (isHorizonNash_finiteDeadline_of_terminalNash_add_one_signed
+      reward deadline horizon mixed hnash hreward hpositive).mono (by linarith)
+  · intro who
+    have hM : 0 ≤ M :=
+      (abs_nonneg _).trans (hreward (quittingSingletonTerminal who) who)
+    have hon := abs_finiteAveragePayoff_sub_terminal_finiteDeadline_le
+      reward deadline horizon mixed who (fun terminal => hreward terminal who) hpositive
+    have hsmall : M * deadline / horizon ≤ 2 * M * (deadline + 1) / horizon := by
+      apply div_le_div_of_nonneg_right _ hreal.le
+      have hdate : (0 : ℝ) ≤ deadline := Nat.cast_nonneg deadline
+      nlinarith
+    have htriangle := abs_sub_le
+      ((quittingGame reward).finiteAveragePayoff none horizon
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) who)
+      (quittingTerminalPayoff reward
+        (quittingFiniteDeadlineTimingProfile reward deadline mixed) who) (target who)
+    linarith [htarget who]
+
 end GameTheory

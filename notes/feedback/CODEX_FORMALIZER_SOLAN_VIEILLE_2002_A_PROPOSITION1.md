@@ -124,6 +124,33 @@ wrappers retain this distinction; the unrestricted `proposition1` remains
 
 ## Remaining source adapters
 
+### Existing all-sign stationary branches
+
+`QuittingThreePlayerStrategyClass.of_stationaryApproximateEquilibria`,
+`of_homogeneousMatrixBranch`, `stationaryAlternative_or_standardQMatrixSide`,
+and `of_not_standardQMatrixSide`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`)
+retain actual stationary roots from the existing producers for arbitrary
+finite player types and reward signs. Their four thin Literature consumers
+pass the targeted Literature build and a separate declaration-existence and
+axiom audit. Only the allowed three axioms occur. The full silent default
+build, exhaustive production axiom audit and repository CI script gates pass
+for this adapter wave.
+
+The unconditional matrix alternative is supplied by
+`hasQuittingStationaryApproximateEquilibria_or_standardQMatrixSide`
+(`UniformEquilibrium/Quitting/Classification/LCP/StationaryExistence.lean`).
+The remaining side has a nonempty normal core, no homogeneous simplex
+solution and a standard-Q normal-core matrix. Neither reward signs alone
+nor ordinary UE existence supplies its source strategies. The all-nonpositive
+own-singleton case already has the literal all-Continue branch. Together
+with the checked positive-singleton and low-cardinality transports, these
+results restrict unfinished unrestricted Proposition 1 coverage to
+three-player source cases on that matrix side with both a positive and a
+nonpositive own-singleton reward.
+
+### Source reconstruction still needed
+
 The targeted-checked normalized producer uses an existing analytic-germ and finite-alternative
 route to the strategy-class conclusion. It does not formalize the source's
 constrained-map proof of Case 0, the compact separation gap reducing Case 2 to

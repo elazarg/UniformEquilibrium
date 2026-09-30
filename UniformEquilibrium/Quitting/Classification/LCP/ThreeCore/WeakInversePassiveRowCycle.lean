@@ -258,11 +258,9 @@ theorem abs_perturb_sub_le
 
 end PassiveSingletonRowFactorization
 
-/-- An invertible three-player child matrix with nonnegative inverse, together
-with nonnegative factorizations of all outside singleton rows, gives an
-original-table uniform-equilibrium payoff. The target is selected after
-passing through arbitrarily close literal reward tables. -/
-theorem exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows
+/-- The weak raw criterion produces arbitrarily close literal strict tables
+and ambient balanced certificates whose owners all remain in the child. -/
+theorem exists_strictPerturb_balancedCertificate_of_nonnegativeInverse_passiveRows
     {ι : Type} [Fintype ι] [DecidableEq ι]
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (deleted : ι → Prop) [DecidablePred deleted]
@@ -272,15 +270,18 @@ theorem exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows
     (hinverse : ∀ row column : {who : ι // ¬ deleted who},
       0 ≤ (Matrix.of
         (normalizedSoloMatrix (quittingDeleteReward reward deleted)))⁻¹ row column)
-    (rows : PassiveSingletonRowFactorization reward deleted) :
-    ∃ target, (quittingGame reward).IsUniformEquilibriumPayoff none target := by
+    (rows : PassiveSingletonRowFactorization reward deleted)
+    (delta : ℝ) (hdelta : 0 < delta) :
+    ∃ epsilon : ℝ, 0 < epsilon ∧
+      (∀ terminal player,
+        |rows.perturb epsilon terminal player - reward terminal player| ≤ delta) ∧
+      ∃ certificate : BalancedSingletonCycleCertificate (L := 3) (rows.perturb epsilon),
+        ∀ phase, ¬ deleted (certificate.owner phase) := by
   let matrix : Matrix {who : ι // ¬ deleted who} {who : ι // ¬ deleted who} ℝ :=
     Matrix.of (normalizedSoloMatrix (quittingDeleteReward reward deleted))
   obtain ⟨threshold, hthreshold, hstrict⟩ :=
     exists_pos_strictlyPositiveInverse_sub_offDiagonalOnes matrix
       (by simp [hcard]) hdet hinverse
-  apply exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables reward
-  intro delta hdelta
   let cap := rows.coefficientBound
   have hcap : 0 < cap := rows.coefficientBound_pos
   let epsilon := min threshold (delta / cap) / 2
@@ -308,10 +309,37 @@ theorem exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows
       (Matrix.of (normalizedSoloMatrix (quittingDeleteReward nearby deleted))) := by
     rw [hmatrix]
     exact (hstrict epsilon hepsilon hthreshold').1
-  refine ⟨nearby, ?_, ?_⟩
+  obtain ⟨child⟩ := exists_balancedCertificate_of_strictlyPositiveInverse_child
+    nearby deleted hcard hpositive
+  let certificate := (rows.perturbRows epsilon).certificate child
+  refine ⟨epsilon, hepsilon, ?_, certificate, ?_⟩
   · intro terminal player
     exact (rows.abs_perturb_sub_le epsilon hepsilon.le terminal player).trans hdelta'
-  · exact exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows
-      nearby deleted hcard hpositive (rows.perturbRows epsilon)
+  · intro phase
+    exact (child.owner phase).2
+
+/-- An invertible three-player child matrix with nonnegative inverse, together
+with nonnegative factorizations of all outside singleton rows, gives an
+original-table uniform-equilibrium payoff. The target is selected after
+passing through arbitrarily close literal reward tables. -/
+theorem exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (hcard : Fintype.card {who : ι // ¬ deleted who} = 3)
+    (hdet : Matrix.det
+      (Matrix.of (normalizedSoloMatrix (quittingDeleteReward reward deleted))) ≠ 0)
+    (hinverse : ∀ row column : {who : ι // ¬ deleted who},
+      0 ≤ (Matrix.of
+        (normalizedSoloMatrix (quittingDeleteReward reward deleted)))⁻¹ row column)
+    (rows : PassiveSingletonRowFactorization reward deleted) :
+    ∃ target, (quittingGame reward).IsUniformEquilibriumPayoff none target := by
+  apply exists_uniformEquilibriumPayoff_of_arbitrarily_close_reward_tables reward
+  intro delta hdelta
+  obtain ⟨epsilon, _, hclose, certificate, _⟩ :=
+    exists_strictPerturb_balancedCertificate_of_nonnegativeInverse_passiveRows
+      reward deleted hcard hdet hinverse rows delta hdelta
+  exact ⟨rows.perturb epsilon, hclose, certificate.coarse certificate.initial,
+    certificate.isUniformEquilibriumPayoff⟩
 
 end GameTheory

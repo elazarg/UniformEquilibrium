@@ -189,7 +189,7 @@ theorem rationalClockData_length_eq (δ : ℚ) :
 
 theorem rationalClockData_period_eq (δ : ℚ) :
     (certificate.rationalClockData q hq).period δ = certificate.rationalPeriod (δ : ℝ) := by
-  unfold RationalSingletonCalendarData.period rationalPeriod
+  unfold RationalSingletonCalendarData.period rationalPeriod variablePeriod
   rw [certificate.rationalClockData_length_eq q hq δ]
 
 theorem rationalClockData_phase_cast (δ : ℚ) (phase : Fin phases)

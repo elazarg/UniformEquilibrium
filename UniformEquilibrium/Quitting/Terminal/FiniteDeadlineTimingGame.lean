@@ -74,6 +74,45 @@ def quittingFiniteDeadlineTimingProfile
   quittingCompactStoppingLawProfile reward fun who =>
     quittingFiniteDeadlineTimingLaw (mixed who)
 
+/-- Mapping a finite timing law preserves its literal Never atom. -/
+theorem quittingFiniteDeadlineTimingLaw_none {deadline : ℕ}
+    (mixed : PMF (QuittingFiniteDeadlineTimingAction deadline)) :
+    (quittingFiniteDeadlineTimingLaw mixed).toPMF none = mixed none := by
+  have hmap : (quittingFiniteDeadlineTimingLaw mixed).toPMF =
+      mixed.map quittingFiniteDeadlineTimingActionTime :=
+    CompactStoppingLaw.toPMF_ofPMF _
+  have hnever : (mixed.map quittingFiniteDeadlineTimingActionTime)
+      (⊤ : CompactStoppingTime) = mixed none := by
+    rw [PMF.map_apply, tsum_eq_single none]
+    · simp [quittingFiniteDeadlineTimingActionTime]
+    · intro action hne
+      cases action with
+      | none => exact (hne rfl).elim
+      | some time => simp [quittingFiniteDeadlineTimingActionTime]
+  exact (congrArg (fun law : PMF CompactStoppingTime => law ⊤) hmap).trans hnever
+
+omit [DecidableEq ι] in
+/-- A literal Never coordinate realizes AlwaysContinue at every history,
+including histories that have zero probability under the profile. -/
+theorem quittingFiniteDeadlineTimingProfile_eq_alwaysContinue_of_pure_none
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (deadline : ℕ)
+    (mixed : ι → PMF (QuittingFiniteDeadlineTimingAction deadline)) (who : ι)
+    (hwho : mixed who = PMF.pure none) :
+    quittingFiniteDeadlineTimingProfile reward deadline mixed who =
+      quittingAlwaysContinueStrategy reward who := by
+  funext time history
+  change (Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
+    (quittingFiniteDeadlineTimingLaw (mixed who)).toPMF).toBoolean time = PMF.pure false
+  rw [hwho]
+  simp only [quittingFiniteDeadlineTimingLaw,
+    Math.Probability.CompactStoppingLaw.toPMF_ofPMF, PMF.pure_map]
+  change (Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
+    (PMF.pure (none : Option ℕ))).toBoolean time = PMF.pure false
+  apply Math.ProbabilityMassFunction.eq_pure_false_of_apply_true_toReal_eq_zero
+  simp [Math.Probability.DiscreteHazard.ScalarHazard.toBoolean,
+    Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard,
+    Math.Probability.DiscreteHazard.StoppingLaw.finiteMass]
+
 /-- The behavioral realization has the same prescribed payoff as the mixed
 extension of the finite timing game. -/
 theorem quittingTerminalPayoff_finiteDeadlineTimingProfile_eq_mixedEU

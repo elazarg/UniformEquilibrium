@@ -237,10 +237,13 @@ initial diagonal, frontier fixing, terminal-diagonal exclusion, and actual
 fiber contractibility, and boundary-piece escape have component proofs.
 `truncatedW_eq_iUnion_fin` in the same file supplies the
 finite-index union; positive piece count follows from the player-count
-hypothesis. These components still need assembly into the full statement.
-The remaining field to prove in `QuestionOneHypotheses`
-(`MathUE/Topology/SimonViabilityQuestion.lean`) is small-step containment at
-the same scale already used for boundary-piece escape.
+hypothesis. `lemma4_5_of_zeroQuitterContinuationUpperBound` in the same
+Literature file assembles all seven conditions, including small-step
+containment at the scale used for boundary-piece escape. It explicitly
+assumes the missing zero-quitting upper-coordinate bound from Lemma 4.4.
+Its targeted and full default builds are silent, and its separate axiom check reports only
+`propext`, `Classical.choice`, and `Quot.sound`. The unconditional literal
+`lemma4_5` remains open.
 
 `isCompact_gluedNeighborhood_of_section3Constants`
 (`Literature/Simon2012.lean`) proves compactness of the actual neighborhood.
@@ -362,8 +365,10 @@ the one-stage displacement is at least two thirds of the payoff scale times
 the quitting probability; terminal interpolation multiplies this lower bound
 by one minus the cutoff. Their private proofs in the same file passed a
 silent named build and a separate transitive standard-axiom check. The
-remaining coefficient estimate and the common-scale contradiction are not
-yet proved.
+coefficient estimate and common-scale contradiction are proved inside
+`lemma4_5_of_zeroQuitterContinuationUpperBound`, under its explicit
+zero-quitting upper-coordinate premise. The distance bound used there is
+`4 * R * card G.Player`, sufficient for the paper's common scale.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved.
@@ -400,14 +405,13 @@ Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
   supplies both bounds when the player quits with positive probability. The
   missing premise is the upper bound `z.1.1 j ≤ R + 1` for a zero-quitting
   player under the theorem's full standing hypotheses.
-- `lemma4_5` (`Literature/Simon2012.lean`): the checked Section 4 component
-  declarations supply every field of `Question1Hypotheses` except the
-  common-scale `smallStepGraph` containment. The zero-cutoff,
-  positive-cutoff small-quitting, and bounded positive-cutoff branches have
-  terminal-image adapters. The remaining positive-cutoff, large-quitting,
-  outside-box branch needs a cutoff-coefficient bound sufficient to make its
-  checked terminal displacement exceed `Section4Omega`; no such bound is
-  established without the open upper-coordinate conclusion of `lemma4_4`.
+- `lemma4_5` (`Literature/Simon2012.lean`):
+  `lemma4_5_of_zeroQuitterContinuationUpperBound` proves all seven
+  `Question1Hypotheses` conditions at the same `Section4Omega`, including
+  the positive-cutoff, large-quitting, outside-box branch. Its only added
+  source premise is the zero-quitting upper-coordinate bound above;
+  it does not use the unfinished `lemma4_4` or `lemma4_5` proofs.
+  Supplying that bound remains necessary for the literal unconditional lemma.
 - `theorem4_1` (`Literature/Simon2012.lean`): a completed `lemma4_5` would let
   `Question1Affirmative` supply unbounded `Section4J` orbits. The checked
   `exists_unbounded_section4J_tail_in_halfPayoffBox`,

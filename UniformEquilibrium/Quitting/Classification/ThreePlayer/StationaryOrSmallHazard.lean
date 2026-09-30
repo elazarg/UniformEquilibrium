@@ -7,10 +7,11 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.SingletonDispatch
 import UniformEquilibrium.Quitting.Classification.LCP.HomogeneousProducer
 import UniformEquilibrium.Quitting.Classification.LCP.OrdinaryNonQProducer
+import UniformEquilibrium.Quitting.Classification.LCP.StationaryExistence
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 
 /-!
-# Normalized three-player stationary-or-small-hazard terminal equilibria
+# Stationary-or-small-hazard terminal equilibria
 
 The strategy-class producer retains actual stationary roots or explicit
 root sequences with every player's Quit hazard small at every live date.
@@ -18,8 +19,11 @@ The singleton alternative covers weak comparisons and degenerate supports.
 When no feasible singleton mixture exists, the original-game analytic germ
 has an absorbing endpoint that compiles to an exact stationary equilibrium.
 
-Every own-singleton reward is exactly one. No all-sign, coordinate-scaling,
-player-cardinality transport, or claim about a printed subdivision rate is made.
+The complete three-player producer assumes every own-singleton reward is one.
+Generic stationary projections retain arbitrary reward signs on the supplied
+homogeneous branch and outside the nonhomogeneous standard-Q matrix side.
+No coordinate-scaling, player-cardinality transport, or claim about a printed
+subdivision rate is made here.
 -/
 
 noncomputable section
@@ -40,6 +44,49 @@ def StationaryOrSmallHazardTerminalEquilibrium
     (∀ time who, (roots time who true).toReal ≤ ε) ∧
     (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
       (quittingRootSequenceProfile reward roots 0)
+
+/-- A supplied family of actual stationary roots retains the stationary
+branch of the strategy-class conclusion. -/
+theorem of_stationaryApproximateEquilibria
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hstationary : HasQuittingStationaryApproximateEquilibria reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallHazardTerminalEquilibrium reward ε :=
+  Or.inl (hstationary ε hε)
+
+/-- The existing homogeneous normal-core producer supplies stationary roots
+for arbitrary reward signs, including its owner/blocker vertex repair. -/
+theorem of_homogeneousMatrixBranch
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (branch : HomogeneousMatrixBranch reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallHazardTerminalEquilibrium reward ε := by
+  obtain ⟨_, hstationary⟩ :=
+    exists_stationaryUniformEquilibriumPayoff_of_homogeneousMatrixBranch reward branch
+  exact of_stationaryApproximateEquilibria reward hstationary.hasApproximateEquilibria hε
+
+/-- The existing stationary matrix gate retains actual roots on its three
+producing branches. The nonhomogeneous standard-Q side remains an alternative. -/
+theorem stationaryAlternative_or_standardQMatrixSide
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {ε : ℝ} (hε : 0 < ε) :
+    StationaryOrSmallHazardTerminalEquilibrium reward ε ∨ StandardQMatrixSide reward := by
+  rcases hasQuittingStationaryApproximateEquilibria_or_standardQMatrixSide reward with
+    hstationary | hstandard
+  · exact Or.inl (of_stationaryApproximateEquilibria reward hstationary hε)
+  · exact Or.inr hstandard
+
+/-- Excluding the residual matrix side supplies the strategy-class conclusion.
+No reward-sign condition is asserted to exclude that side. -/
+theorem of_not_standardQMatrixSide
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnot : ¬StandardQMatrixSide reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallHazardTerminalEquilibrium reward ε := by
+  rcases stationaryAlternative_or_standardQMatrixSide reward hε with hclass | hstandard
+  · exact hclass
+  · exact False.elim (hnot hstandard)
 
 /-- A normalized solo column with weak inactive-player comparisons supplies
 stationary terminal approximate equilibria, including equality cases. -/

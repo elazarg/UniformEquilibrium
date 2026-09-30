@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingleton
+import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonTripleInverse
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwo
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonBlockCertificate
 import UniformEquilibrium.Quitting.Examples.BlockPair.FourPlayerPairedSingletonPeriodTwoStationary

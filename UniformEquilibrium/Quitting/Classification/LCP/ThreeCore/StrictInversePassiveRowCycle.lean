@@ -210,6 +210,30 @@ theorem exists_balancedCertificate_of_strictlyPositiveInverse_child
   let childReward := quittingDeleteReward reward deleted
   exact ⟨RightSingletonCycle.toBalancedCertificate_reindex childReward label cycle⟩
 
+/-- The selected label and right-cycle data determine one canonical ambient
+certificate and its fixed phase-zero uniform payoff. Label selection is
+existential; no executable canonical labeling search is asserted. -/
+theorem exists_labeledCycle_uniformPayoff_of_strictInverse_passiveRows
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (deleted : ι → Prop) [DecidablePred deleted]
+    (hcard : Fintype.card {who : ι // ¬ deleted who} = 3)
+    (hpositive : HasStrictlyPositiveInverse
+      (normalizedSoloMatrix (quittingDeleteReward reward deleted)))
+    (rows : PassiveSingletonRowFactorization reward deleted) :
+    ∃ label : {who : ι // ¬ deleted who} ≃ Fin 3,
+      ∃ cycle : RightSingletonCycle
+          (quittingRewardReindex label (quittingDeleteReward reward deleted)),
+        let child := RightSingletonCycle.toBalancedCertificate_reindex
+          (quittingDeleteReward reward deleted) label cycle
+        let certificate := rows.certificate child
+        (quittingGame reward).IsUniformEquilibriumPayoff none (certificate.coarse 0) := by
+  obtain ⟨label, ⟨cycle⟩⟩ := exists_rightSingletonCycle_of_strictlyPositiveInverse
+    reward deleted hcard hpositive
+  refine ⟨label, cycle, ?_⟩
+  exact (rows.certificate (RightSingletonCycle.toBalancedCertificate_reindex
+    (quittingDeleteReward reward deleted) label cycle)).isUniformEquilibriumPayoff
+
 /-- Raw strict inverse and passive singleton rows yield a fixed parent
 uniform-equilibrium payoff. The rows are literal reward-table equalities. -/
 theorem exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows
@@ -221,8 +245,12 @@ theorem exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows
       (normalizedSoloMatrix (quittingDeleteReward reward deleted)))
     (rows : PassiveSingletonRowFactorization reward deleted) :
     ∃ target, (quittingGame reward).IsUniformEquilibriumPayoff none target := by
-  obtain ⟨child⟩ := exists_balancedCertificate_of_strictlyPositiveInverse_child
-    reward deleted hcard hpositive
-  exact ⟨rows.coarse child child.initial, rows.isUniformEquilibriumPayoff child⟩
+  obtain ⟨label, cycle, htarget⟩ :=
+    exists_labeledCycle_uniformPayoff_of_strictInverse_passiveRows
+      reward deleted hcard hpositive rows
+  let child := RightSingletonCycle.toBalancedCertificate_reindex
+    (quittingDeleteReward reward deleted) label cycle
+  let certificate := rows.certificate child
+  exact ⟨certificate.coarse 0, htarget⟩
 
 end GameTheory

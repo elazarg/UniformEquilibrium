@@ -182,6 +182,48 @@ evidence, and the full integration gate also passed.
 These are consequences available by composing existing proofs, not newly
 checked declarations from this audit and not additional research claims.
 
+### Post-completion connections
+
+The rational raw-clock producer and its logarithmic calendar bound already
+retain actual independent laws, terminal Nash error, terminal delivery and
+passive Never marginals. The signed
+`isHorizonNash_finiteDeadline_of_terminalNash_signed`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineSignedHorizonError.lean`)
+and the delivery theorem
+`abs_finiteAveragePayoff_sub_terminal_finiteDeadline_le`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineHorizonError.lean`)
+can turn those same laws into explicit fixed-target horizon witnesses.
+No singleton-sign hypothesis or new late-negative-singleton argument is
+needed. The shared composition is now named
+`finiteDeadlineTiming_uniformPayoffWitness_of_terminal_bounds`
+in the signed horizon module. It retains the supplied laws and any valid
+reward bound, including zero; a separate rational raw-source wrapper remains
+available to add without another horizon proof.
+
+`quittingTerminalSemanticPair_rationalFiniteWord_eq_cast`
+(`UniformEquilibrium/Quitting/Root/RationalFiniteWordSemantics.lean`)
+already connects the executable finite-word evaluator to actual payoff and
+the full behavioral cap, including Never and late dates. Identifying the
+produced rational calendar word with that input would expose exact computed
+caps without another response-cap engine. This requires the entire reward
+table to be rational, unlike clock production, which needs only rational
+singletons. It does not establish density or termination of arbitrary
+enumeration.
+
+`IsεAsymptoticNash.of_reward_close`
+(`UniformEquilibrium/Quitting/PayoffProcess/TailStepSelector.lean`)
+transfers Nash with error `error + 2 * rewardDistance` on the literal same
+behavioral profile. Combined with retained-family payoff selection, every
+member's finite support and literal Continue coordinates survive without
+strategy convergence or closedness arguments. This is the reuse boundary
+for the checked weak-inverse quiet-witness implementation in
+`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowQuietWitnesses.lean`.
+Its raw theorem fixes the target before accuracy and the finite laws before
+every valid reward bound and horizon. It does not provide a computable
+weak-boundary target or uniform boundary calendar complexity.
+
+### Additional example consumers
+
 - The checked exact calibration at `c=1` uses
   `secondaryRate_eq_of_secondaryResidual_zero`
   (`MathUE/PairedPhasePolynomialRoots.lean`), followed by

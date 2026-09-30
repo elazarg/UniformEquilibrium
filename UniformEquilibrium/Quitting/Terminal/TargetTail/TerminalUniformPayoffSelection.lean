@@ -205,7 +205,7 @@ positive accuracy is used, and terminal Nash is required only frequently.
 
 Payoff convergence is convergence in the finite product topology on
 `Payoff ι = ι → ℝ`. -/
-theorem quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto
+theorem quittingGame_terminalTargetAcceptance_of_terminalNash_tendsto
     {index : Type*} {filter : Filter index}
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (target : Payoff ι)
@@ -218,13 +218,10 @@ theorem quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto
     (htarget : Tendsto
       (fun n ↦ quittingTerminalPayoff reward (profiles n))
       filter (nhds target)) :
-    ∀ ε : ℝ, 0 < ε → ∃ (n : index) (threshold : ℕ),
-      ∀ horizon, threshold ≤ horizon →
-        (quittingGame reward).IsεHorizonNash none horizon ε (profiles n) ∧
-          ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
-            (profiles n) who - target who| ≤ ε := by
-  apply quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family
-    reward target profiles
+    ∀ ε : ℝ, 0 < ε → ∃ n : index,
+      (quittingGame reward).IsεAsymptoticNash
+        (quittingTerminalPayoff reward) ε (profiles n) ∧
+      ∀ who, |quittingTerminalPayoff reward (profiles n) who - target who| ≤ ε := by
   intro ε hε
   have heventuallyError : ∀ᶠ n in filter, error n < ε :=
     (tendsto_order.1 herror).2 ε hε
@@ -245,6 +242,31 @@ theorem quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto
       (heventuallyError.and heventuallyPayoff)).exists
   exact ⟨selectedIndex, hselectedNash.mono hselectedError.le,
     fun who ↦ (hselectedPayoff who).le⟩
+
+/-- Convergent terminal Nash families retain their actual members as uniform
+witnesses, by projecting the terminal acceptance selection. -/
+theorem quittingGame_uniformPayoffWitnesses_of_terminalNash_tendsto
+    {index : Type*} {filter : Filter index}
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (target : Payoff ι)
+    (error : index → ℝ)
+    (profiles : index → (quittingGame reward).BehaviorProfile)
+    (herror : Tendsto error filter (nhds 0))
+    (hnash : ∃ᶠ n in filter,
+      (quittingGame reward).IsεAsymptoticNash
+        (quittingTerminalPayoff reward) (error n) (profiles n))
+    (htarget : Tendsto
+      (fun n ↦ quittingTerminalPayoff reward (profiles n))
+      filter (nhds target)) :
+    ∀ ε : ℝ, 0 < ε → ∃ (n : index) (threshold : ℕ),
+      ∀ horizon, threshold ≤ horizon →
+        (quittingGame reward).IsεHorizonNash none horizon ε (profiles n) ∧
+          ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
+            (profiles n) who - target who| ≤ ε := by
+  exact quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family
+    reward target profiles
+      (quittingGame_terminalTargetAcceptance_of_terminalNash_tendsto
+        reward target error profiles herror hnash htarget)
 
 /-- Convergent terminal Nash families produce a uniform-equilibrium payoff
 by projecting their retained actual profile witnesses. -/
@@ -268,6 +290,65 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
       reward target error profiles herror hnash htarget ε hε
   exact ⟨profiles n, threshold, hwitness⟩
 
+/-- Compact payoff selection retains actual members of the supplied terminal
+Nash family. Any property of every family member remains available for the
+selected uniform witnesses; no convergence of the profiles is needed. -/
+theorem quittingGame_exists_terminalTargetAcceptance_of_terminalNash_family
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (error : ℕ → ℝ) (profiles : ℕ → (quittingGame reward).BehaviorProfile)
+    (herror : Tendsto error atTop (nhds 0))
+    (hnash : ∀ n, (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) (error n) (profiles n)) :
+    ∃ payoff : Payoff ι,
+      payoff ∈ Set.Icc (fun _ => -quittingRewardBound reward)
+          (fun _ => quittingRewardBound reward) ∧
+        ∀ ε : ℝ, 0 < ε → ∃ n : ℕ,
+          (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) ε (profiles n) ∧
+          ∀ who, |quittingTerminalPayoff reward (profiles n) who - payoff who| ≤ ε := by
+  let terminalPayoffs : ℕ → Payoff ι := fun n =>
+    quittingTerminalPayoff reward (profiles n)
+  have hmem : ∀ n, terminalPayoffs n ∈
+      Set.Icc (fun _ => -quittingRewardBound reward)
+        (fun _ => quittingRewardBound reward) := by
+    intro n
+    exact quittingTerminalPayoff_mem_rewardCube reward (profiles n)
+  obtain ⟨payoff, hpayoffMem, subsequence, hsubsequence, hpayoffLimit⟩ :=
+    (isCompact_Icc : IsCompact
+      (Set.Icc (fun _ : ι => -quittingRewardBound reward)
+        (fun _ : ι => quittingRewardBound reward))).tendsto_subseq hmem
+  refine ⟨payoff, hpayoffMem, ?_⟩
+  intro ε hε
+  obtain ⟨n, hwitness⟩ :=
+    quittingGame_terminalTargetAcceptance_of_terminalNash_tendsto
+      (filter := atTop) reward payoff (error ∘ subsequence) (profiles ∘ subsequence)
+      (herror.comp hsubsequence.tendsto_atTop)
+      (Filter.Frequently.of_forall fun n ↦ hnash (subsequence n)) hpayoffLimit ε hε
+  exact ⟨subsequence n, hwitness⟩
+
+/-- Compact selection of one target retains actual indexed uniform witnesses.
+The canonical selection first retains their terminal Nash and delivery bounds. -/
+theorem quittingGame_exists_uniformPayoffWitnesses_of_terminalNash_family
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (error : ℕ → ℝ) (profiles : ℕ → (quittingGame reward).BehaviorProfile)
+    (herror : Tendsto error atTop (nhds 0))
+    (hnash : ∀ n, (quittingGame reward).IsεAsymptoticNash
+      (quittingTerminalPayoff reward) (error n) (profiles n)) :
+    ∃ payoff : Payoff ι,
+      payoff ∈ Set.Icc (fun _ => -quittingRewardBound reward)
+          (fun _ => quittingRewardBound reward) ∧
+        ∀ ε : ℝ, 0 < ε → ∃ (n : ℕ) (threshold : ℕ),
+          ∀ horizon, threshold ≤ horizon →
+            (quittingGame reward).IsεHorizonNash none horizon ε (profiles n) ∧
+              ∀ who, |(quittingGame reward).finiteAveragePayoff none horizon
+                (profiles n) who - payoff who| ≤ ε := by
+  obtain ⟨payoff, hmem, haccept⟩ :=
+    quittingGame_exists_terminalTargetAcceptance_of_terminalNash_family
+      reward error profiles herror hnash
+  exact ⟨payoff, hmem,
+    quittingGame_uniformPayoffWitnesses_of_terminalTargetAcceptance_family
+      reward payoff profiles haccept⟩
+
 /-- Terminal approximate equilibria at every positive accuracy select one
 fixed uniform-equilibrium payoff inside the canonical reward cube. -/
 theorem quittingGame_exists_uniformEquilibriumPayoff_mem_rewardCube_of_terminalNash_all_errors
@@ -290,29 +371,16 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_mem_rewardCube_of_terminalN
         (quittingTerminalPayoff reward) (approximationError n) profile :=
     fun n => hterminal (approximationError n) (herrorPositive n)
   choose profiles hprofiles using hexists
-  let terminalPayoffs : ℕ → Payoff ι := fun n =>
-    quittingTerminalPayoff reward (profiles n)
-  have hmem : ∀ n, terminalPayoffs n ∈
-      Set.Icc (fun _ => -quittingRewardBound reward)
-        (fun _ => quittingRewardBound reward) := by
-    intro n
-    exact quittingTerminalPayoff_mem_rewardCube reward (profiles n)
-  obtain ⟨payoff, hpayoffMem, subsequence, hsubsequence, hpayoffLimit⟩ :=
-    (isCompact_Icc : IsCompact
-      (Set.Icc (fun _ : ι => -quittingRewardBound reward)
-        (fun _ : ι => quittingRewardBound reward))).tendsto_subseq hmem
   have herrorLimit : Tendsto approximationError atTop (nhds 0) := by
     simpa [approximationError] using
       (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ))
-  refine ⟨payoff, hpayoffMem,
-    quittingGame_isUniformEquilibriumPayoff_of_terminalNash_tendsto
-      (filter := atTop)
-      reward payoff (approximationError ∘ subsequence)
-        (profiles ∘ subsequence) ?_ ?_ ?_⟩
-  · exact herrorLimit.comp hsubsequence.tendsto_atTop
-  · exact Filter.Frequently.of_forall fun n ↦ hprofiles (subsequence n)
-  · change Tendsto (terminalPayoffs ∘ subsequence) atTop (nhds payoff)
-    exact hpayoffLimit
+  obtain ⟨payoff, hpayoffMem, hwitnesses⟩ :=
+    quittingGame_exists_uniformPayoffWitnesses_of_terminalNash_family
+      reward approximationError profiles herrorLimit hprofiles
+  refine ⟨payoff, hpayoffMem, ?_⟩
+  intro ε hε
+  obtain ⟨n, threshold, hwitness⟩ := hwitnesses ε hε
+  exact ⟨profiles n, threshold, hwitness⟩
 
 /-- Terminal approximate equilibria at every positive accuracy select one
 fixed uniform equilibrium payoff. -/

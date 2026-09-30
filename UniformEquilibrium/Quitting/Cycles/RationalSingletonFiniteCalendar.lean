@@ -167,8 +167,7 @@ theorem rationalFiniteProfile_outside_continue (δ : ℝ) (turns : ℕ) (who : �
     certificate.rationalFiniteProfile δ turns who time history = PMF.pure false := by
   apply quittingCyclicFiniteProfile_apply_eq_continue_of_roots
   intro phase
-  unfold rationalRoot quittingSoloStationaryRoot
-  exact Function.update_of_ne (houtside _) _ _
+  exact certificate.variableRoot_solo (certificate.rationalLength δ) phase who (houtside _)
 
 end BalancedSingletonCycleCertificate
 

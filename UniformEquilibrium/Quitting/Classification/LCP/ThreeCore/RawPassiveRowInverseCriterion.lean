@@ -70,6 +70,26 @@ def factorization
   simpa only [childMatrix, Matrix.of_apply,
     normalizedSoloMatrix_eq_soloReward_sub] using hentry.symm
 
+/-- The strict raw inverse and outside-row tests retain the selected labeling,
+the actual right-cycle data and the canonical ambient phase-zero payoff.
+Outside weights are the literal computed inverse weights, not supplied rows. -/
+theorem exists_labeledCycle_uniformPayoff_of_raw_strictInverse_triple
+    (hcard : Fintype.card Child = 3)
+    (hpositive : HasStrictlyPositiveInverse (childMatrix reward deleted))
+    (houtside : ∀ outside, deleted outside →
+      ∀ inside : Child, 0 ≤ inverseWeight reward deleted outside inside) :
+    ∃ label : Child ≃ Fin 3,
+      ∃ cycle : RightSingletonCycle
+          (quittingRewardReindex label (quittingDeleteReward reward deleted)),
+        let rows := factorization reward deleted hpositive.1 houtside
+        let child := RightSingletonCycle.toBalancedCertificate_reindex
+          (quittingDeleteReward reward deleted) label cycle
+        let certificate := rows.certificate child
+        (quittingGame reward).IsUniformEquilibriumPayoff none (certificate.coarse 0) := by
+  exact exists_labeledCycle_uniformPayoff_of_strictInverse_passiveRows
+    reward deleted hcard hpositive
+      (factorization reward deleted hpositive.1 houtside)
+
 /-- The packet's literal inverse test, with a selected three-player child,
 gives a fixed uniform-equilibrium payoff for the original parent game. -/
 theorem exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple
@@ -83,5 +103,33 @@ theorem exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple
   exact exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows
     reward deleted hcard hdet hinverse
       (factorization reward deleted hdet houtside)
+
+/-- If the parent game has no uniform-equilibrium payoff, then a selected
+three-player child's literal raw inverse test must fail. -/
+theorem raw_inverse_test_failure_of_no_uniformEquilibriumPayoff
+    (hcard : Fintype.card Child = 3)
+    (hno : ¬ ∃ target,
+      (quittingGame reward).IsUniformEquilibriumPayoff none target) :
+    (childMatrix reward deleted).det = 0 ∨
+      (∃ row column : Child,
+        (childMatrix reward deleted)⁻¹ row column < 0) ∨
+      (∃ outside, deleted outside ∧ ∃ inside : Child,
+        inverseWeight reward deleted outside inside < 0) := by
+  by_cases hdet : (childMatrix reward deleted).det = 0
+  · exact Or.inl hdet
+  · right
+    by_cases hinverse : ∀ row column : Child,
+        0 ≤ (childMatrix reward deleted)⁻¹ row column
+    · right
+      by_cases houtside : ∀ outside, deleted outside →
+          ∀ inside : Child, 0 ≤ inverseWeight reward deleted outside inside
+      · exact False.elim (hno
+          (exists_uniformEquilibriumPayoff_of_raw_nonnegativeInverse_triple
+            reward deleted hcard hdet hinverse houtside))
+      · push Not at houtside
+        exact houtside
+    · push Not at hinverse
+      obtain ⟨row, column, hnegative⟩ := hinverse
+      exact Or.inl ⟨row, column, hnegative⟩
 
 end GameTheory.PassiveRowInverseCriterion

@@ -9,6 +9,7 @@ import MathUE.FiniteContinuousIntervalSelection
 import MathUE.FinVariableCycle
 import MathUE.RationalArcSubdivision
 import MathUE.RationalCalendarSearch
+import MathUE.PowerCutoffLogBound
 import MathUE.RationalPowerCutoffLogBound
 import MathUE.EventuallyPositiveLastZero
 import MathUE.DisplacementSeamScalarBoundaries

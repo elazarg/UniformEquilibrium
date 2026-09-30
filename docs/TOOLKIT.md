@@ -1072,6 +1072,14 @@ Together with the literal passive rows,
 `exists_uniformEquilibriumPayoff_of_strictInverse_passiveRows` gives a fixed
 uniform payoff for the parent game. This is an actual child-cycle producer,
 not a theorem conditional on a supplied cycle.
+`exists_labeledCycle_uniformPayoff_of_strictInverse_passiveRows` in the same
+file retains one actual cyclic labeling and its strict child cycle. Its
+produced ambient certificate has the stated uniform payoff at its own
+phase-zero target. The raw-table counterpart is
+`PassiveRowInverseCriterion.exists_labeledCycle_uniformPayoff_of_raw_strictInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RawPassiveRowInverseCriterion.lean`).
+These interfaces keep labeling, certificate and target correlated before
+accuracy; they do not select unrelated certificates at successive accuracies.
 `exists_uniformEquilibriumPayoff_of_nonnegativeInverse_passiveRows`
 (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowCycle.lean`)
 extends this to an invertible three-player child matrix with entrywise
@@ -1086,6 +1094,30 @@ invertible three-player child matrix `T` with `T⁻¹ ≥ 0` and, for every
 outside receiver, `ΓₖS T⁻¹ ≥ 0`. It then returns a fixed parent uniform
 payoff, without a supplied cycle, row factorization, or strategy. This is
 the full raw-table sufficient class; it is not a universal existence theorem.
+`PassiveRowInverseCriterion.raw_inverse_test_failure_of_no_uniformEquilibriumPayoff`
+in the same file gives its contrapositive for every selected three-player
+child: if the parent game has no uniform-equilibrium payoff, the child matrix
+is singular, some child inverse entry is negative, or some deleted receiver's
+inverse weight is negative. No counterexample game is constructed.
+`PassiveRowInverseCriterion.exists_quietFiniteTimingUniformWitnesses_of_raw_nonnegativeInverse_triple`
+(`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/WeakInversePassiveRowQuietWitnesses.lean`)
+retains actual independent finite-date-or-Never laws under the same raw weak
+inverse tests. One target in the original reward cube precedes every accuracy;
+the selected laws have terminal Nash error and target error at most half that
+accuracy, and every deleted player is literally Always Continue at every
+history. The same laws work for every valid real reward bound `M`: all horizons
+at least `max 1 (ceil (4 * M * (deadline + 1) / accuracy))` have the requested
+Nash and delivery errors. The proof selects members of the actual family of
+nearby strict-table witnesses, transfers those profiles to the original table,
+and uses retained-family payoff selection. It requires neither rational
+rewards nor strategy convergence. The finite law masses may be real; no
+executable weak-boundary target or uniform boundary calendar complexity is
+asserted.
+`finiteDeadlineTiming_uniformPayoffWitness_of_terminal_bounds`
+(`UniformEquilibrium/Quitting/Terminal/FiniteDeadlineSignedHorizonError.lean`)
+is the shared signed-reward consumer for that explicit horizon cutoff. It
+accepts any actual finite timing laws with the two half-accuracy terminal
+bounds, without a separate nonnegativity assumption on the valid reward bound.
 `PassiveRowInverseCriterion.exists_rationalClocks_of_raw_strictInverse_triple`
 (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/RationalRawPassiveRowClocks.lean`)
 constructs rational coarse hazards from rational singleton rewards and the
@@ -1104,6 +1136,29 @@ For each fixed strict input, the date count is at most a constant times
 accuracy. The exact rational power search remains the executable cutoff;
 logarithms are used only in its bound. No constant uniform across weak-inverse
 boundary inputs is asserted.
+`BalancedSingletonCycleCertificate.variable_rootSequence_terminalValue_eq`
+(`UniformEquilibrium/Quitting/Cycles/VariableSingletonCalendar.lean`)
+identifies every actual suffix value when each coarse phase is subdivided
+into an independently chosen positive integer number of dates. Its micro-hazard
+is `q / (n - l * q)`. Joint and opponent survival products retain their coarse
+values, and deleted players Continue at every history. Positivity is required
+for the semantic and boundary arguments, not for the pure index or value
+definitions. The tolerance-selected calendar delegates to this construction
+in `UniformEquilibrium/Quitting/Cycles/RationalSingletonCalendar.lean`;
+there is one chronological compiler proof, not separate proofs for the
+generic and selected-length cases.
+`BalancedSingletonCycleCertificate.exists_realFiniteCalendar_log_bound`
+(`UniformEquilibrium/Quitting/Cycles/RealSingletonCalendarLogBound.lean`)
+supplies the fixed-input date-count bound for real singleton data and real
+accuracies. One fixed certificate and positive real reward bound select the
+constant and threshold before accuracy. The same positive cutoff satisfies
+every opponent's survival bound and gives terminal Nash, target delivery,
+the printed operational date count, and the logarithmic date count for the
+same finite profile. The target is the certificate's original phase-zero
+value. This is a consumer of a produced certificate, not another raw-table
+producer or an executable real-logarithm algorithm. Exact rational searches
+remain unchanged and delegate only their estimates to
+`powerLogCutoff_spec_and_bound` (`MathUE/PowerCutoffLogBound.lean`).
 `PassiveRowFourFixture.target_isUniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourFixture.lean`)
 checks the packet's rational four-player singleton matrix, its selected
@@ -1114,9 +1169,11 @@ neighborhood result; those are proved in
 `PassiveRowFourDegreeNeighborhood.exists_open_degree_one_uniformPayoff_class`
 (`UniformEquilibrium/Quitting/Classification/LCP/ThreeCore/PassiveRowFourDegreeNeighborhood.lean`).
 It gives a nonempty open set in the full four-player reward-table space on
-which the literal singleton matrix has R0 degree one and every game has a
+which the literal singleton matrix has canonical chart R0 degree one and every game has a
 uniform-equilibrium payoff. The degree calculation uses a finite support
 inventory; the payoff conclusion uses the raw inverse-weight criterion.
+Identification of this chart integer with ambient Brouwer degree remains
+unproved here. The payoff conclusion does not depend on that identification.
 
 `QuittingResponseInvariantOnUnitCube` and
 `quittingSingletonMatrix_mulVec_blockLift_eq_quotient`
@@ -1233,6 +1290,16 @@ Never payoff; no terminal-only additive translation is used. The generic
 terminal-payoff and Nash pullback lemmas reside in
 `UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`.
 Literature wrappers delegate to these production proofs, not conversely.
+
+`QuittingThreePlayerStrategyClass.of_homogeneousMatrixBranch` and
+`of_not_standardQMatrixSide`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`)
+reuse the actual stationary-root families from the existing LCP producers.
+They allow arbitrary finite player types and reward signs under their explicit
+matrix hypotheses. `stationaryAlternative_or_standardQMatrixSide` retains the
+remaining nonhomogeneous standard-Q side as an alternative; it does not claim
+that signs alone exclude that side or that unrestricted Literature
+Proposition 1 is complete.
 
 `quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with
@@ -2242,6 +2309,16 @@ equilibria available at every positive accuracy.  Compact target selection is
 not a substitute for an exact or convergent target already supplied by the
 producer.  Terminal verification, target selection, and uniformization remain
 separate steps in lower-level proofs.
+
+`quittingGame_exists_terminalTargetAcceptance_of_terminalNash_family` and
+`quittingGame_exists_uniformPayoffWitnesses_of_terminalNash_family`
+(`UniformEquilibrium/Quitting/Terminal/TargetTail/TerminalUniformPayoffSelection.lean`)
+select one target from a supplied vanishing-error family and retain actual
+family indices at every accuracy. The first exposes the same member's
+terminal Nash and delivery bounds; the second supplies all sufficiently long
+horizons. There is one compact payoff selection proof. Quiet coordinates or
+finite support of every family member therefore remain available without
+assuming convergence of strategies.
 
 `UniformEquilibrium/Certificates/Adaptive/PotentialSystemTools.lean` is the transformation facade for the
 proof-facing adaptive-potential waist. It deliberately reuses the one

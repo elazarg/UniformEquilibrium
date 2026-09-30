@@ -82,6 +82,44 @@ theorem proposition1_atMostTwoPlayers
   Or.inl (QuittingThreePlayerStrategyClass.exists_stationaryTerminalNash_of_card_le_two
     reward hcard hε)
 
+/-- A supplied stationary-root family implies the Proposition 1 strategy
+class at every positive accuracy, for any finite player type. -/
+theorem proposition1_of_stationaryApproximateEquilibria
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hstationary : HasQuittingStationaryApproximateEquilibria reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_stationaryApproximateEquilibria reward hstationary hε
+
+/-- The supplied homogeneous normal-core branch covers arbitrary reward signs.
+It includes vertices through the existing stationary owner/blocker repair;
+no sign condition alone is asserted to supply this branch. -/
+theorem proposition1_of_homogeneousMatrixBranch
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (branch : HomogeneousMatrixBranch reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_homogeneousMatrixBranch reward branch hε
+
+/-- The existing stationary producers cover three matrix regimes, with the
+nonhomogeneous standard-Q side retained as an explicit unresolved alternative.
+This is a scoped strategy-class gate, not unrestricted Proposition 1. -/
+theorem proposition1_stationaryAlternative_or_standardQMatrixSide
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {ε : ℝ} (hε : 0 < ε) :
+    StationaryOrSmallQuitEquilibrium reward ε ∨ StandardQMatrixSide reward :=
+  QuittingThreePlayerStrategyClass.stationaryAlternative_or_standardQMatrixSide reward hε
+
+/-- Excluding the nonhomogeneous standard-Q side gives the Proposition 1
+strategy class, with every reward sign retained. -/
+theorem proposition1_of_not_standardQMatrixSide
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (hnot : ¬StandardQMatrixSide reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_not_standardQMatrixSide reward hnot hε
+
 /-- The source's Case 1 solo branch is covered whenever its actual positive
 rate satisfies the full inactive-player inequalities. This does not assert
 that every table supplies such a rate. -/
