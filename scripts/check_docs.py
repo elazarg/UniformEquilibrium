@@ -116,6 +116,10 @@ PRUNED_DIRECTORIES = {
     "overleaf",
 }
 ROOT_PRUNED_DIRECTORIES = {ROOT / "math"}
+PRIVATE_LINK_ROOTS = ROOT_PRUNED_DIRECTORIES | {
+    ROOT / directory
+    for directory in (".agents", ".codex", ".lake", "ephemeral", "literature", "overleaf")
+}
 
 
 def relative(path: pathlib.Path) -> str:
@@ -530,23 +534,35 @@ def check_living_document_sources(errors: list[str]) -> None:
             errors.append(f"{relative(document)}: {issue}")
 
 
+def local_link_issues(
+    text: str,
+    document: pathlib.Path,
+    private_roots: set[pathlib.Path] = PRIVATE_LINK_ROOTS,
+) -> list[str]:
+    """Private-workspace files cannot make a repository link valid locally."""
+    issues: list[str] = []
+    for raw_target in LINK_RE.findall(text):
+        target = raw_target.strip().split()[0].strip("<>")
+        if target.startswith(("http://", "https://", "mailto:", "#")):
+            continue
+        path_text = unquote(target.split("#", 1)[0])
+        if not path_text:
+            continue
+        resolved = (document.parent / path_text).resolve()
+        if any(root == resolved or root in resolved.parents for root in private_roots):
+            issues.append(f"local link into private workspace {raw_target}")
+        elif not resolved.exists():
+            issues.append(f"broken local link {raw_target}")
+    return issues
+
+
 def check_links(errors: list[str]) -> None:
     for document in project_markdown_files():
         if "audits" in document.relative_to(ROOT).parts:
             continue
         text = document.read_text(encoding="utf-8")
-        for raw_target in LINK_RE.findall(text):
-            target = raw_target.strip().split()[0].strip("<>")
-            if target.startswith(("http://", "https://", "mailto:", "#")):
-                continue
-            path_text = unquote(target.split("#", 1)[0])
-            if not path_text:
-                continue
-            resolved = (document.parent / path_text).resolve()
-            if not resolved.exists():
-                errors.append(
-                    f"{relative(document)}: broken local link {raw_target}"
-                )
+        for issue in local_link_issues(text, document):
+            errors.append(f"{relative(document)}: {issue}")
 
 
 def check_live_docs(errors: list[str]) -> None:

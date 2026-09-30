@@ -13,6 +13,7 @@ from scripts.check_docs import (
     ROOT,
     TIMELESS_DOCS,
     is_dedicated_history_or_evidence,
+    local_link_issues,
     named_source_reference_issues,
     project_markdown_files,
     source_reference_issues,
@@ -25,6 +26,35 @@ from scripts.normalize_markdown_names import (
 
 
 class TimelessDocumentTests(unittest.TestCase):
+    def test_private_workspace_link_is_rejected_even_when_target_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            private = root / "math"
+            private.mkdir()
+            (private / "QUESTION.md").write_text("# Question\n", encoding="utf-8")
+            text = "[question](math/QUESTION.md)"
+            self.assertEqual(
+                local_link_issues(text, root / "README.md", {private}),
+                ["local link into private workspace math/QUESTION.md"],
+            )
+
+    def test_owned_and_external_links_are_allowed(self) -> None:
+        with tempfile.TemporaryDirectory() as temporary:
+            root = pathlib.Path(temporary)
+            (root / "Owner.md").write_text("# Owner\n", encoding="utf-8")
+            self.assertEqual(
+                local_link_issues(
+                    "[owner](Owner.md#result) [web](https://example.org) [here](#result)",
+                    root / "README.md",
+                    {root / "math"},
+                ),
+                [],
+            )
+            self.assertEqual(
+                local_link_issues("[missing](Missing.md)", root / "README.md", set()),
+                ["broken local link Missing.md"],
+            )
+
     def test_named_source_reference_validation(self) -> None:
         with tempfile.TemporaryDirectory() as temporary:
             root = pathlib.Path(temporary)

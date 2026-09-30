@@ -433,8 +433,8 @@ assembling the currently checked declarations.
 (`Literature/Simon2007.lean`) reduces Lemma 2 to a finite-horizon global bound
 by the number of states. The same file proves qualitative finiteness under
 time homogeneity and supplies the actual cylinder-law adapters.
-The remaining mathematical statement is self-contained in
-[the finite homogeneous Markov variation question](../../math/questions/FINITE_HOMOGENEOUS_MARKOV_MARTINGALE_VARIATION.md):
+The separate math workspace records the self-contained question in
+`math/questions/FINITE_HOMOGENEOUS_MARKOV_MARTINGALE_VARIATION.md`:
 for every finite homogeneous kernel, horizon, and unit-interval
 backward-harmonic value, the expected total absolute martingale increment
 is at most the state count. The exact state-owned decomposition is already
