@@ -133,16 +133,18 @@ theorem commonRoot_opponentMass (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
   rw [quittingStationaryContinueMass_eq_prod_continueProbability]
   fin_cases who <;> simp [commonRoot, Fin.prod_univ_succ, stationaryOpponentMass] <;> ring
 
-theorem commonRoot_absorbs (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1) (hq : 0 < q) :
-    quittingStationaryContinueMass (commonRoot q hq0 hq1) < 1 := by
+theorem commonRoot_absorbs (q : ℝ) (hq1 : q ≤ 1) (hq : 0 < q) :
+    quittingStationaryContinueMass (commonRoot q (le_of_lt hq) hq1) < 1 := by
   apply lt_of_le_of_lt
-    (quittingStationaryContinueMass_le_ownContinueProbability (commonRoot q hq0 hq1) 0)
+    (quittingStationaryContinueMass_le_ownContinueProbability
+      (commonRoot q (le_of_lt hq) hq1) 0)
   simp only [commonRoot, commonCoin_false]
   linarith
 
-theorem commonRoot_contracts (q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+theorem commonRoot_contracts (q : ℝ) (hq1 : q ≤ 1)
     (hq : 0 < q) (who : Player) :
-    quittingStationaryFixedOpponentsContinueMass (commonRoot q hq0 hq1) who < 1 := by
+    quittingStationaryFixedOpponentsContinueMass
+      (commonRoot q (le_of_lt hq) hq1) who < 1 := by
   rw [commonRoot_opponentMass]
   unfold stationaryOpponentMass
   exact pow_lt_one₀ (sub_nonneg.mpr hq1) (by linarith : 1 - q < 1) (by decide)
@@ -166,15 +168,15 @@ theorem commonRoot_fixedContinueReward (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 
   simpa [quittingStationaryFixedOpponentsContinueReward] using h.symm
 
 /-- Before selecting a zero, the exact cap is the maximum of Quit and literal Never. -/
-theorem commonProfile_completeCap_eq_max (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+theorem commonProfile_completeCap_eq_max (c q : ℝ) (hq1 : q ≤ 1)
     (hq : 0 < q) (who : Player) :
     quittingContinuationBestResponseValue (reward c)
-      (quittingStationaryProfile (reward c) (commonRoot q hq0 hq1)) who =
+      (quittingStationaryProfile (reward c) (commonRoot q (le_of_lt hq) hq1)) who =
         max (stationaryQuitValue c q)
           (stationaryContinueReward q / (1 - stationaryOpponentMass q)) := by
   rw [quittingContinuationBestResponseValue_stationary_eq_fullRateUnilateralCap,
-    quittingStationaryFullRateUnilateralCap_of_lt (reward c) (commonRoot q hq0 hq1)
-      who (commonRoot_contracts q hq0 hq1 hq who)]
+    quittingStationaryFullRateUnilateralCap_of_lt (reward c)
+      (commonRoot q (le_of_lt hq) hq1) who (commonRoot_contracts q hq1 hq who)]
   unfold quittingStationaryUnilateralCap quittingStationarySelectedCap
     quittingStationaryNeverValue
   rw [commonRoot_fixedQuitValue, commonRoot_fixedContinueReward, commonRoot_opponentMass]
@@ -208,47 +210,48 @@ theorem commonRoot_endpointNash (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
   simp [hdiff]
 
 /-- The terminal payoff is the constant vector of the actual Quit expectation. -/
-theorem commonProfile_terminalPayoff (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+theorem commonProfile_terminalPayoff (c q : ℝ) (hq1 : q ≤ 1)
     (hq : 0 < q) (hroot : stationaryResidual c q = 0) :
     quittingTerminalPayoff (reward c)
-      (quittingStationaryProfile (reward c) (commonRoot q hq0 hq1)) =
+      (quittingStationaryProfile (reward c) (commonRoot q (le_of_lt hq) hq1)) =
         fun _ => stationaryQuitValue c q :=
-  quittingTerminalPayoff_stationary_eq_of_fixedPoint (reward c) (commonRoot q hq0 hq1)
-    (fun _ => stationaryQuitValue c q) (commonRoot_absorbs q hq0 hq1 hq)
-    (commonRoot_fixedPoint c q hq0 hq1 hroot)
+  quittingTerminalPayoff_stationary_eq_of_fixedPoint (reward c)
+    (commonRoot q (le_of_lt hq) hq1)
+    (fun _ => stationaryQuitValue c q) (commonRoot_absorbs q hq1 hq)
+    (commonRoot_fixedPoint c q (le_of_lt hq) hq1 hroot)
 
 /-- The exact complete behavioral cap includes every stopping date and literal Never. -/
-theorem commonProfile_completeCap (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+theorem commonProfile_completeCap (c q : ℝ) (hq1 : q ≤ 1)
     (hq : 0 < q) (hroot : stationaryResidual c q = 0) (who : Player) :
     quittingContinuationBestResponseValue (reward c)
-      (quittingStationaryProfile (reward c) (commonRoot q hq0 hq1)) who =
+      (quittingStationaryProfile (reward c) (commonRoot q (le_of_lt hq) hq1)) who =
         stationaryQuitValue c q := by
   rw [quittingContinuationBestResponseValue_stationary_eq_fullRateUnilateralCap]
   exact quittingStationaryFullRateUnilateralCap_eq_of_fixedPoint_endpointNash
-    (reward c) (commonRoot q hq0 hq1) (fun _ => stationaryQuitValue c q)
-    (commonRoot_absorbs q hq0 hq1 hq) (commonRoot_fixedPoint c q hq0 hq1 hroot)
-    (commonRoot_endpointNash c q hq0 hq1 hroot)
+    (reward c) (commonRoot q (le_of_lt hq) hq1) (fun _ => stationaryQuitValue c q)
+    (commonRoot_absorbs q hq1 hq) (commonRoot_fixedPoint c q (le_of_lt hq) hq1 hroot)
+    (commonRoot_endpointNash c q (le_of_lt hq) hq1 hroot)
     (isQuittingStationaryBoundaryAdmissible_of_contracts (reward c)
-      (commonRoot q hq0 hq1) (fun _ => stationaryQuitValue c q)
-      (commonRoot_contracts q hq0 hq1 hq)) who
+      (commonRoot q (le_of_lt hq) hq1) (fun _ => stationaryQuitValue c q)
+      (commonRoot_contracts q hq1 hq)) who
 
-theorem commonProfile_isExactTerminalNash (c q : ℝ) (hq0 : 0 ≤ q) (hq1 : q ≤ 1)
+theorem commonProfile_isExactTerminalNash (c q : ℝ) (hq1 : q ≤ 1)
     (hq : 0 < q) (hroot : stationaryResidual c q = 0) :
     (quittingGame (reward c)).IsεAsymptoticNash (quittingTerminalPayoff (reward c)) 0
-      (quittingStationaryProfile (reward c) (commonRoot q hq0 hq1)) :=
+      (quittingStationaryProfile (reward c) (commonRoot q (le_of_lt hq) hq1)) :=
   isZeroAsymptoticNash_stationary_of_fixedPoint_endpointNash_contracts
-    (reward c) (commonRoot q hq0 hq1) (fun _ => stationaryQuitValue c q)
-    (commonRoot_absorbs q hq0 hq1 hq) (commonRoot_fixedPoint c q hq0 hq1 hroot)
-    (commonRoot_endpointNash c q hq0 hq1 hroot) (commonRoot_contracts q hq0 hq1 hq)
+    (reward c) (commonRoot q (le_of_lt hq) hq1) (fun _ => stationaryQuitValue c q)
+    (commonRoot_absorbs q hq1 hq) (commonRoot_fixedPoint c q (le_of_lt hq) hq1 hroot)
+    (commonRoot_endpointNash c q (le_of_lt hq) hq1 hroot) (commonRoot_contracts q hq1 hq)
 
 theorem commonProfile_isUniformEquilibriumPayoff (c q : ℝ)
-    (hq0 : 0 ≤ q) (hq1 : q ≤ 1) (hq : 0 < q) (hroot : stationaryResidual c q = 0) :
+    (hq1 : q ≤ 1) (hq : 0 < q) (hroot : stationaryResidual c q = 0) :
     (quittingGame (reward c)).IsUniformEquilibriumPayoff none
       (fun _ => stationaryQuitValue c q) :=
   isUniformEquilibriumPayoff_of_stationaryEndpointCertificate_contracts
-    (reward c) (commonRoot q hq0 hq1) (fun _ => stationaryQuitValue c q)
-    (commonRoot_absorbs q hq0 hq1 hq) (commonRoot_fixedPoint c q hq0 hq1 hroot)
-    (commonRoot_endpointNash c q hq0 hq1 hroot) (commonRoot_contracts q hq0 hq1 hq)
+    (reward c) (commonRoot q (le_of_lt hq) hq1) (fun _ => stationaryQuitValue c q)
+    (commonRoot_absorbs q hq1 hq) (commonRoot_fixedPoint c q (le_of_lt hq) hq1 hroot)
+    (commonRoot_endpointNash c q (le_of_lt hq) hq1 hroot) (commonRoot_contracts q hq1 hq)
 
 /-- Internally selected common hazard and its fixed uniform payoff on `2 ≤ c ≤ 4`. -/
 theorem exists_stationaryUniformPayoff {c : ℝ} (hc2 : 2 ≤ c) (hc4 : c ≤ 4) :
@@ -256,9 +259,8 @@ theorem exists_stationaryUniformPayoff {c : ℝ} (hc2 : 2 ≤ c) (hc4 : c ≤ 4)
       (quittingGame (reward c)).IsUniformEquilibriumPayoff none
         (fun _ => stationaryQuitValue c q) := by
   obtain ⟨q, hq, hroot⟩ := exists_stationaryHazard hc2 hc4
-  have hq0 : 0 ≤ q := by linarith [hq.1]
   have hq1 : q ≤ 1 := by linarith [hq.2]
   have hqpos : 0 < q := by linarith [hq.1]
-  exact ⟨q, hq, commonProfile_isUniformEquilibriumPayoff c q hq0 hq1 hqpos hroot⟩
+  exact ⟨q, hq, commonProfile_isUniformEquilibriumPayoff c q hq1 hqpos hroot⟩
 
 end GameTheory.PairedCollisionReward
