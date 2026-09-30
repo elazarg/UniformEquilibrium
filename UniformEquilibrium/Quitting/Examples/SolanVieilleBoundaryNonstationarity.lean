@@ -340,7 +340,9 @@ private theorem singletonReward_sum_eq_pairMass
   rw [Fin.sum_univ_four]
   fin_cases who <;> simp [boundaryPartner] <;> ring
 
-private theorem finiteWindow_singletonRewardContribution_eq_pairMass
+/-- In a finite window, singleton exits pay a player its own singleton mass
+plus four times its partner's singleton mass. -/
+theorem finiteWindow_singletonRewardContribution_eq_pairMass
     {roots : BoundaryRootSequence (ι := Fin 4)}
     (window : QuittingFiniteRootWindow roots) (who : Fin 4) :
     window.singletonRewardContribution

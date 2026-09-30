@@ -1,5 +1,4 @@
-import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseWeakBoundaryProducer
-import UniformEquilibrium.Quitting.Stationary.StationaryTerminalPayoffSelection
+import UniformEquilibrium.Quitting.Stationary.GuardedCrossedResponseWeakBoundaryWitnesses
 
 /-! # Theorem C with one fixed target carried by the stationary approximating profiles -/
 
@@ -25,8 +24,12 @@ theorem exists_stationary_uniformPayoff_targetApproximation_of_weakHalfRaw
             (quittingStationaryProfile reward root) ∧
           ∀ who, |quittingTerminalPayoff reward (quittingStationaryProfile reward root) who -
             target who| ≤ accuracy := by
-  exact exists_uniformPayoff_stationaryTargetAcceptance_of_terminalApproximations reward
-    (exists_stationary_terminalApproximation_of_weakHalfRaw reward hdet hinverse hraw)
+  obtain ⟨target, huniform, hwitnesses⟩ :=
+    exists_stationary_uniformPayoff_witnesses_of_weakHalfRaw reward hdet hinverse hraw
+  refine ⟨target, huniform, ?_⟩
+  intro accuracy haccuracy
+  obtain ⟨root, hcontracts, hnash, hclose, -⟩ := hwitnesses accuracy haccuracy
+  exact ⟨root, hcontracts, hnash, hclose⟩
 
 /-- Theorem C's strict unit-ceiling/nonnegative-inverse branch, with the same
 fixed-target stationary approximation conclusion for every dimension at least three. -/
@@ -45,8 +48,12 @@ theorem exists_stationary_uniformPayoff_targetApproximation_of_strictRawUnit_non
             (quittingStationaryProfile reward root) ∧
           ∀ who, |quittingTerminalPayoff reward (quittingStationaryProfile reward root) who -
             target who| ≤ accuracy := by
-  exact exists_uniformPayoff_stationaryTargetAcceptance_of_terminalApproximations reward
-    (exists_stationary_terminalApproximation_of_strictRawUnit_nonnegativeInverse
-      reward hcard first second hdistinct hdet hinverse hraw)
+  obtain ⟨target, huniform, hwitnesses⟩ :=
+    exists_stationary_uniformPayoff_witnesses_of_strictRawUnit_nonnegativeInverse
+      reward hcard first second hdistinct hdet hinverse hraw
+  refine ⟨target, huniform, ?_⟩
+  intro accuracy haccuracy
+  obtain ⟨root, hcontracts, hnash, hclose, -⟩ := hwitnesses accuracy haccuracy
+  exact ⟨root, hcontracts, hnash, hclose⟩
 
 end GameTheory

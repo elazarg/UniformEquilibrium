@@ -1,5 +1,6 @@
 import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalFamilyDebtBounds
 import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockPointwiseNecessity
+import UniformEquilibrium.Quitting.Classification.QuietExtension.DeterministicResponseWitnesses
 
 /-!
 # Raw-row necessity from deterministic deadline witnesses
@@ -32,73 +33,26 @@ theorem deadlineWithdrawal_neverRow_of_terminalPointwise
     reward ⟨{none}, Finset.singleton_nonempty none⟩ none ≤
       ∑ i, advanceWeight i *
         reward ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i) := by
-  let times : ι → Option ℕ := cappedClockAllNeverTimes
+  let times : ι → Option ℕ := fun _ => none
   have h := hdom times (some 0)
-  have hquiet : quietParentClocks times = fun _ : Option ι => none := by
-    funext player
-    cases player <;> rfl
-  have houtside : quittingFirstStoppingOutcome
-      (outsideDeadlineClocks times (some 0)) =
-      some ⟨{none}, Finset.singleton_nonempty none⟩ := by
-    apply quittingFirstStoppingOutcome_eq_coalition_of_strictly_later
-      (time := 0)
-    · intro player hplayer
-      have hp : player = none := by simpa using hplayer
-      subst player
-      rfl
-    · intro player hplayer
-      cases player with
-      | none => simp at hplayer
-      | some i =>
-          simp [outsideDeadlineClocks, times, cappedClockAllNeverTimes,
-            quittingStoppingTimeValue]
-  have hchild (i : ι) : quittingFirstStoppingOutcome
-      (cappedChildParentClocks times (some 0) i) =
-      some ⟨{some i}, Finset.singleton_nonempty (some i)⟩ := by
-    apply quittingFirstStoppingOutcome_eq_coalition_of_strictly_later
-      (time := 0)
-    · intro player hplayer
-      have hp : player = some i := by simpa using hplayer
-      subst player
-      simp [cappedChildParentClocks, cappedStoppingClock,
-        times, cappedClockAllNeverTimes, quittingStoppingTimeValue]
-    · intro player hplayer
-      cases player with
-      | none => simp [cappedChildParentClocks, quittingStoppingTimeValue]
-      | some j =>
-          have hne : j ≠ i := by
-            intro heq
-            subst j
-            exact hplayer (Finset.mem_singleton_self (some i))
-          simp [cappedChildParentClocks, times, cappedClockAllNeverTimes,
-            hne, quittingStoppingTimeValue]
+  have hgains := quietExtension_allNeverGains (ι := ι) reward 0
   have hwithdraw (i : ι) :
       deadlineWithdrawalActualEvaluatedChildGain reward
         quittingTerminalEvaluation times (some 0) i = 0 := by
     apply deadlineWithdrawalActualEvaluatedChildGain_some_of_ne
-    simp [times, cappedClockAllNeverTimes]
+    simp [times]
   simp only [cappedClockActualEvaluatedOutsideGain,
-    cappedClockActualEvaluatedChildGain] at h
-  simp_rw [hwithdraw] at h
-  rw [hquiet] at h
-  unfold quittingPureClockEvaluatedPayoff at h
-  rw [quittingFirstStoppingOutcome_all_never, houtside] at h
-  simp_rw [hchild] at h
-  have houtsideFinite :
-      quittingEarliestStoppingValue (outsideDeadlineClocks times (some 0)) ≠
-        ⊤ := by
-    intro htop
-    rw [quittingFirstStoppingOutcome, ite_eq_left htop] at houtside
-    contradiction
-  have hchildFinite (i : ι) :
-      quittingEarliestStoppingValue
-        (cappedChildParentClocks times (some 0) i) ≠ ⊤ := by
-    intro htop
-    have hci := hchild i
-    rw [quittingFirstStoppingOutcome, ite_eq_left htop] at hci
-    contradiction
-  simp only [quittingTerminalEvaluation, houtsideFinite,
-    hchildFinite, ↓reduceIte, one_mul, sub_zero] at h
+    cappedClockActualEvaluatedChildGain,
+    quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
+  change cappedClockActualOutsideGain reward (fun _ : ι => none) (some 0) ≤
+    ∑ i, (advanceWeight i *
+        cappedClockActualChildGain reward (fun _ : ι => none) (some 0) i +
+      withdrawalWeight i * deadlineWithdrawalActualEvaluatedChildGain reward
+        quittingTerminalEvaluation (fun _ : ι => none) (some 0) i) at h
+  change ∀ i, deadlineWithdrawalActualEvaluatedChildGain reward
+    quittingTerminalEvaluation (fun _ : ι => none) (some 0) i = 0 at hwithdraw
+  rw [hgains.1] at h
+  simp_rw [hgains.2, hwithdraw] at h
   simpa using h
 
 omit [Nonempty ι] in
@@ -107,32 +61,14 @@ specified first coalition. -/
 private theorem deadlineWithdrawal_futureWitness_first
     (A : Finset ι) (hA : A.Nonempty) :
     quittingEarliestStoppingValue (cappedClockFutureTimes A) =
-      (1 : WithTop ℕ) := by
-  apply le_antisymm
-  · obtain ⟨i, hi⟩ := hA
-    have hle := Finset.inf_le (f := fun j =>
-      quittingStoppingTimeValue (cappedClockFutureTimes A j))
-      (Finset.mem_univ i)
-    simpa [quittingEarliestStoppingValue, cappedClockFutureTimes, hi,
-      quittingStoppingTimeValue] using hle
-  · unfold quittingEarliestStoppingValue
-    apply Finset.le_inf
-    intro i _
-    by_cases hi : i ∈ A <;>
-      simp [cappedClockFutureTimes, hi, quittingStoppingTimeValue]
+      (1 : WithTop ℕ) :=
+  quietExtensionCoalitionTimes_first A hA 1
 
 omit [Nonempty ι] in
 private theorem deadlineWithdrawal_futureWitness_coalition
     (A : Finset ι) (hA : A.Nonempty) :
-    quittingEarliestStoppingCoalition (cappedClockFutureTimes A) = A := by
-  ext i
-  by_cases hi : i ∈ A
-  · simp [quittingEarliestStoppingCoalition,
-      deadlineWithdrawal_futureWitness_first A hA,
-      cappedClockFutureTimes, quittingStoppingTimeValue, hi]
-  · simp [quittingEarliestStoppingCoalition,
-      deadlineWithdrawal_futureWitness_first A hA,
-      cappedClockFutureTimes, quittingStoppingTimeValue, hi]
+    quittingEarliestStoppingCoalition (cappedClockFutureTimes A) = A :=
+  quietExtensionCoalitionTimes_coalition A hA 1
 
 /-- Universal terminal pathwise comparison forces D-F for every nonempty
 child coalition: at date zero the outsider precedes its date-one stop. -/
@@ -160,72 +96,36 @@ theorem deadlineWithdrawal_futureRow_of_terminalPointwise
   have h := hdom times (some 0)
   have hfirst := deadlineWithdrawal_futureWitness_first A hA
   have hcoalition := deadlineWithdrawal_futureWitness_coalition A hA
-  have hquiet : quittingFirstStoppingOutcome (quietParentClocks times) =
-      some ⟨cappedClockChildCoalition A,
-        cappedClockChildCoalition_nonempty hA⟩ := by
-    have hsubtype :
-        (⟨cappedClockChildCoalition (quittingEarliestStoppingCoalition times),
-          cappedClockChildCoalition_nonempty
-            (quittingEarliestStoppingCoalition_nonempty times)⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockChildCoalition A,
-            cappedClockChildCoalition_nonempty hA⟩ := by
-      apply Subtype.ext
-      exact congrArg cappedClockChildCoalition hcoalition
-    exact (quittingFirstStoppingOutcome_quietParentClocks_of_first_eq
-      times 1 hfirst).trans (congrArg Option.some hsubtype)
-  have hbefore : (0 : WithTop ℕ) < quittingEarliestStoppingValue times := by
-    rw [hfirst]
-    norm_num
-  have houtside := quittingFirstStoppingOutcome_outsideDeadlineClocks_of_lt_first
-    times 0 hbefore
-  have hchild (i : ι) :=
-    quittingFirstStoppingOutcome_cappedChildParentClocks_of_lt_first
-      times 0 i hbefore
   have hwithdraw (i : ι) :
       deadlineWithdrawalActualEvaluatedChildGain reward
         quittingTerminalEvaluation times (some 0) i = 0 := by
     apply deadlineWithdrawalActualEvaluatedChildGain_some_of_ne
     simp [times, cappedClockFutureTimes]
   simp only [cappedClockActualEvaluatedOutsideGain,
-    cappedClockActualEvaluatedChildGain] at h
-  simp_rw [hwithdraw] at h
-  simp_rw [quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
-  unfold quittingPureClockTerminalPayoff at h
-  rw [hquiet, houtside] at h
-  simp_rw [hchild] at h
-  simpa [quittingPureClockTerminalPayoff] using h
+    cappedClockActualEvaluatedChildGain,
+    quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
+  change cappedClockActualOutsideGain reward times (some 0) ≤
+    ∑ i, (advanceWeight i * cappedClockActualChildGain reward times (some 0) i +
+      withdrawalWeight i * deadlineWithdrawalActualEvaluatedChildGain reward
+        quittingTerminalEvaluation times (some 0) i) at h
+  rw [quietExtension_outsideGain_of_before reward times 0 1 A hA hfirst hcoalition
+    (by omega)] at h
+  simp_rw [quietExtension_childGain_of_before reward times 0 1 A hA hfirst hcoalition
+    (by omega), hwithdraw] at h
+  simpa using h
 
 omit [Nonempty ι] in
 private theorem deadlineWithdrawal_joinWitness_first
     (A : Finset ι) (hA : A.Nonempty) :
     quittingEarliestStoppingValue (cappedClockJoiningTimes A) =
-      (0 : WithTop ℕ) := by
-  apply le_antisymm
-  · obtain ⟨i, hi⟩ := hA
-    have hle := Finset.inf_le (f := fun j =>
-      quittingStoppingTimeValue (cappedClockJoiningTimes A j))
-      (Finset.mem_univ i)
-    simpa [quittingEarliestStoppingValue, cappedClockJoiningTimes, hi,
-      quittingStoppingTimeValue] using hle
-  · unfold quittingEarliestStoppingValue
-    apply Finset.le_inf
-    intro i _
-    by_cases hi : i ∈ A <;>
-      simp [cappedClockJoiningTimes, hi, quittingStoppingTimeValue]
+      (0 : WithTop ℕ) :=
+  quietExtensionCoalitionTimes_first A hA 0
 
 omit [Nonempty ι] in
 private theorem deadlineWithdrawal_joinWitness_coalition
     (A : Finset ι) (hA : A.Nonempty) :
-    quittingEarliestStoppingCoalition (cappedClockJoiningTimes A) = A := by
-  ext i
-  by_cases hi : i ∈ A
-  · simp [quittingEarliestStoppingCoalition,
-      deadlineWithdrawal_joinWitness_first A hA,
-      cappedClockJoiningTimes, quittingStoppingTimeValue, hi]
-  · simp [quittingEarliestStoppingCoalition,
-      deadlineWithdrawal_joinWitness_first A hA,
-      cappedClockJoiningTimes, quittingStoppingTimeValue, hi]
+    quittingEarliestStoppingCoalition (cappedClockJoiningTimes A) = A :=
+  quietExtensionCoalitionTimes_coalition A hA 0
 
 /-- D-J is forced on every nonsingleton first coalition by the date-zero
 joining witness: every withdrawal gain equals its raw erased-coalition row. -/
@@ -258,50 +158,6 @@ theorem deadlineWithdrawal_joinRow_of_terminalPointwise_of_erase_nonempty
   have h := hdom times (some 0)
   have hfirst := deadlineWithdrawal_joinWitness_first A hA
   have hcoalition := deadlineWithdrawal_joinWitness_coalition A hA
-  have hquiet : quittingFirstStoppingOutcome (quietParentClocks times) =
-      some ⟨cappedClockChildCoalition A,
-        cappedClockChildCoalition_nonempty hA⟩ := by
-    have hsubtype :
-        (⟨cappedClockChildCoalition (quittingEarliestStoppingCoalition times),
-          cappedClockChildCoalition_nonempty
-            (quittingEarliestStoppingCoalition_nonempty times)⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockChildCoalition A,
-            cappedClockChildCoalition_nonempty hA⟩ := by
-      apply Subtype.ext
-      exact congrArg cappedClockChildCoalition hcoalition
-    exact (quittingFirstStoppingOutcome_quietParentClocks_of_first_eq
-      times 0 hfirst).trans (congrArg Option.some hsubtype)
-  have houtside :
-      quittingFirstStoppingOutcome (outsideDeadlineClocks times (some 0)) =
-        some ⟨cappedClockJoinedCoalition A,
-          cappedClockJoinedCoalition_nonempty A⟩ := by
-    have hsubtype :
-        (⟨cappedClockJoinedCoalition (quittingEarliestStoppingCoalition times),
-          cappedClockJoinedCoalition_nonempty _⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockJoinedCoalition A,
-            cappedClockJoinedCoalition_nonempty A⟩ := by
-      apply Subtype.ext
-      exact congrArg cappedClockJoinedCoalition hcoalition
-    exact (quittingFirstStoppingOutcome_outsideDeadlineClocks_of_eq_first
-      times 0 hfirst).trans (congrArg Option.some hsubtype)
-  have hchild (i : ι) :
-      quittingFirstStoppingOutcome (cappedChildParentClocks times (some 0) i) =
-        some ⟨cappedClockChildCoalition (insert i A),
-          cappedClockChildCoalition_nonempty (Finset.insert_nonempty i A)⟩ := by
-    have hsubtype :
-        (⟨cappedClockChildCoalition
-            (insert i (quittingEarliestStoppingCoalition times)),
-          cappedClockChildCoalition_nonempty (Finset.insert_nonempty _ _)⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockChildCoalition (insert i A),
-            cappedClockChildCoalition_nonempty
-              (Finset.insert_nonempty i A)⟩ := by
-      apply Subtype.ext
-      exact congrArg (fun S => cappedClockChildCoalition (insert i S)) hcoalition
-    exact (quittingFirstStoppingOutcome_cappedChildParentClocks_of_eq_first
-      times 0 i hfirst).trans (congrArg Option.some hsubtype)
   have hwithdraw (i : ι) :
       deadlineWithdrawalActualEvaluatedChildGain reward
           quittingTerminalEvaluation times (some 0) i =
@@ -333,13 +189,16 @@ theorem deadlineWithdrawal_joinRow_of_terminalPointwise_of_erase_nonempty
         reward quittingTerminalEvaluation times 0 i hclock]
       exact (deadlineWithdrawalGainFloor_of_not_mem reward i A hA hi).symm
   simp only [cappedClockActualEvaluatedOutsideGain,
-    cappedClockActualEvaluatedChildGain] at h
-  simp_rw [hwithdraw] at h
-  simp_rw [quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
-  unfold quittingPureClockTerminalPayoff at h
-  rw [hquiet, houtside] at h
-  simp_rw [hchild] at h
-  simpa [quittingPureClockTerminalPayoff] using h
+    cappedClockActualEvaluatedChildGain,
+    quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
+  change cappedClockActualOutsideGain reward times (some 0) ≤
+    ∑ i, (advanceWeight i * cappedClockActualChildGain reward times (some 0) i +
+      withdrawalWeight i * deadlineWithdrawalActualEvaluatedChildGain reward
+        quittingTerminalEvaluation times (some 0) i) at h
+  rw [quietExtension_outsideGain_of_tie reward times 0 A hA hfirst hcoalition] at h
+  simp_rw [quietExtension_childGain_of_tie reward times 0 A hA hfirst hcoalition,
+    hwithdraw] at h
+  exact h
 
 omit [Nonempty ι] in
 /-- The finite zero-or-passive floor has an attained witness: either Never
@@ -371,51 +230,28 @@ private theorem deadlineWithdrawalZeroFloor_attained
 coalition at date one. -/
 private def deadlineWithdrawalSingletonTimes
     (i : ι) (B : Finset ι) (j : ι) : Option ℕ :=
-  if j = i then some 0 else if j ∈ B then some 1 else none
+  quietExtensionSingletonTimes i B 0 j
 
 omit [Nonempty ι] in
 private theorem deadlineWithdrawal_singletonWitness_first
     (i : ι) (B : Finset ι) :
     quittingEarliestStoppingValue (deadlineWithdrawalSingletonTimes i B) =
-      (0 : WithTop ℕ) := by
-  apply le_antisymm
-  · have hle := Finset.inf_le (f := fun j =>
-      quittingStoppingTimeValue (deadlineWithdrawalSingletonTimes i B j))
-      (Finset.mem_univ i)
-    simpa [quittingEarliestStoppingValue,
-      deadlineWithdrawalSingletonTimes, quittingStoppingTimeValue] using hle
-  · unfold quittingEarliestStoppingValue
-    apply Finset.le_inf
-    intro j _
-    by_cases hj : j = i <;>
-      simp [deadlineWithdrawalSingletonTimes, hj, quittingStoppingTimeValue]
+      (0 : WithTop ℕ) :=
+  quietExtensionSingletonTimes_first i B 0
 
 omit [Nonempty ι] in
 private theorem deadlineWithdrawal_singletonWitness_coalition
     (i : ι) (B : Finset ι) :
     quittingEarliestStoppingCoalition
-        (deadlineWithdrawalSingletonTimes i B) = {i} := by
-  ext j
-  by_cases hj : j = i
-  · subst j
-    simp [quittingEarliestStoppingCoalition,
-      deadlineWithdrawal_singletonWitness_first,
-      deadlineWithdrawalSingletonTimes, quittingStoppingTimeValue]
-  · by_cases hB : j ∈ B <;>
-      simp [quittingEarliestStoppingCoalition,
-        deadlineWithdrawal_singletonWitness_first,
-        deadlineWithdrawalSingletonTimes, quittingStoppingTimeValue, hj, hB]
+        (deadlineWithdrawalSingletonTimes i B) = {i} :=
+  quietExtensionSingletonTimes_coalition i B 0
 
 omit [Fintype ι] [Nonempty ι] in
 private theorem deadlineWithdrawal_singletonWitness_update
     (i : ι) (B : Finset ι) (hiB : i ∉ B) :
     Function.update (deadlineWithdrawalSingletonTimes i B) i none =
-      cappedClockFutureTimes B := by
-  funext j
-  by_cases hj : j = i
-  · subst j
-    simp [cappedClockFutureTimes, hiB]
-  · simp [deadlineWithdrawalSingletonTimes, cappedClockFutureTimes, hj]
+      cappedClockFutureTimes B :=
+  quietExtensionSingletonTimes_update i B 0 hiB
 
 private theorem deadlineWithdrawal_singletonWitness_withdrawn_of_nonempty
     (i : ι) (B : Finset ι) (hB : B.Nonempty) (hiB : i ∉ B) :
@@ -425,25 +261,13 @@ private theorem deadlineWithdrawal_singletonWitness_withdrawn_of_nonempty
       some ⟨cappedClockChildCoalition B,
         cappedClockChildCoalition_nonempty hB⟩ := by
   have hclock : deadlineWithdrawalSingletonTimes i B i = some 0 := by
-    simp [deadlineWithdrawalSingletonTimes]
+    simp [deadlineWithdrawalSingletonTimes, quietExtensionSingletonTimes]
   rw [withdrawnChildParentClocks_eq_quiet_update_none
       (deadlineWithdrawalSingletonTimes i B) 0 i hclock,
     deadlineWithdrawal_singletonWitness_update i B hiB]
-  have hfirst := deadlineWithdrawal_futureWitness_first B hB
-  have hcoalition := deadlineWithdrawal_futureWitness_coalition B hB
-  have hsubtype :
-      (⟨cappedClockChildCoalition
-          (quittingEarliestStoppingCoalition (cappedClockFutureTimes B)),
-        cappedClockChildCoalition_nonempty
-          (quittingEarliestStoppingCoalition_nonempty
-            (cappedClockFutureTimes B))⟩ :
-          {S : Finset (Option ι) // S.Nonempty}) =
-        ⟨cappedClockChildCoalition B,
-          cappedClockChildCoalition_nonempty hB⟩ := by
-    apply Subtype.ext
-    exact congrArg cappedClockChildCoalition hcoalition
-  exact (quittingFirstStoppingOutcome_quietParentClocks_of_first_eq
-    (cappedClockFutureTimes B) 1 hfirst).trans (congrArg Option.some hsubtype)
+  exact quietExtension_outcome_of_first (cappedClockFutureTimes B) 1 B hB
+    (deadlineWithdrawal_futureWitness_first B hB)
+    (deadlineWithdrawal_futureWitness_coalition B hB)
 
 private theorem deadlineWithdrawal_singletonWitness_withdrawn_of_empty
     (i : ι) :
@@ -451,7 +275,7 @@ private theorem deadlineWithdrawal_singletonWitness_withdrawn_of_empty
         (withdrawnChildParentClocks
           (deadlineWithdrawalSingletonTimes i ∅) (some 0) i) = none := by
   have hclock : deadlineWithdrawalSingletonTimes i ∅ i = some 0 := by
-    simp [deadlineWithdrawalSingletonTimes]
+    simp [deadlineWithdrawalSingletonTimes, quietExtensionSingletonTimes]
   rw [withdrawnChildParentClocks_eq_quiet_update_none
       (deadlineWithdrawalSingletonTimes i ∅) 0 i hclock,
     deadlineWithdrawal_singletonWitness_update i ∅ (by simp)]
@@ -491,7 +315,7 @@ theorem deadlineWithdrawal_joinRow_singleton_of_terminalPointwise
               (some j)) +
         withdrawalWeight j * deadlineWithdrawalGainFloor reward j {i}
           (Finset.singleton_nonempty i)) := by
-  obtain ⟨B, hiB, hafter⟩ : ∃ B : Finset ι, i ∉ B ∧
+  obtain ⟨B, _, hafter⟩ : ∃ B : Finset ι, i ∉ B ∧
       quittingPureClockTerminalPayoff reward
           (withdrawnChildParentClocks
             (deadlineWithdrawalSingletonTimes i B) (some 0) i) (some i) =
@@ -509,51 +333,8 @@ theorem deadlineWithdrawal_joinRow_singleton_of_terminalPointwise
   have h := hdom times (some 0)
   have hfirst := deadlineWithdrawal_singletonWitness_first i B
   have hcoalition := deadlineWithdrawal_singletonWitness_coalition i B
-  have hquiet : quittingFirstStoppingOutcome (quietParentClocks times) =
-      some ⟨cappedClockChildCoalition {i},
-        cappedClockChildCoalition_nonempty (Finset.singleton_nonempty i)⟩ := by
-    have hsubtype :
-        (⟨cappedClockChildCoalition (quittingEarliestStoppingCoalition times),
-          cappedClockChildCoalition_nonempty
-            (quittingEarliestStoppingCoalition_nonempty times)⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockChildCoalition {i},
-            cappedClockChildCoalition_nonempty
-              (Finset.singleton_nonempty i)⟩ := by
-      apply Subtype.ext
-      exact congrArg cappedClockChildCoalition hcoalition
-    exact (quittingFirstStoppingOutcome_quietParentClocks_of_first_eq
-      times 0 hfirst).trans (congrArg Option.some hsubtype)
-  have houtside :
-      quittingFirstStoppingOutcome (outsideDeadlineClocks times (some 0)) =
-        some ⟨cappedClockJoinedCoalition {i},
-          cappedClockJoinedCoalition_nonempty {i}⟩ := by
-    have hsubtype :
-        (⟨cappedClockJoinedCoalition (quittingEarliestStoppingCoalition times),
-          cappedClockJoinedCoalition_nonempty _⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockJoinedCoalition {i},
-            cappedClockJoinedCoalition_nonempty {i}⟩ := by
-      apply Subtype.ext
-      exact congrArg cappedClockJoinedCoalition hcoalition
-    exact (quittingFirstStoppingOutcome_outsideDeadlineClocks_of_eq_first
-      times 0 hfirst).trans (congrArg Option.some hsubtype)
-  have hchild (j : ι) :
-      quittingFirstStoppingOutcome (cappedChildParentClocks times (some 0) j) =
-        some ⟨cappedClockChildCoalition (insert j {i}),
-          cappedClockChildCoalition_nonempty (Finset.insert_nonempty j {i})⟩ := by
-    have hsubtype :
-        (⟨cappedClockChildCoalition
-            (insert j (quittingEarliestStoppingCoalition times)),
-          cappedClockChildCoalition_nonempty (Finset.insert_nonempty _ _)⟩ :
-            {S : Finset (Option ι) // S.Nonempty}) =
-          ⟨cappedClockChildCoalition (insert j {i}),
-            cappedClockChildCoalition_nonempty
-              (Finset.insert_nonempty j {i})⟩ := by
-      apply Subtype.ext
-      exact congrArg (fun S => cappedClockChildCoalition (insert j S)) hcoalition
-    exact (quittingFirstStoppingOutcome_cappedChildParentClocks_of_eq_first
-      times 0 j hfirst).trans (congrArg Option.some hsubtype)
+  have hquiet := quietExtension_outcome_of_first times 0 {i}
+    (Finset.singleton_nonempty i) hfirst hcoalition
   have hwithdraw (j : ι) :
       deadlineWithdrawalActualEvaluatedChildGain reward
           quittingTerminalEvaluation times (some 0) j =
@@ -565,32 +346,27 @@ theorem deadlineWithdrawal_joinRow_singleton_of_terminalPointwise
         quittingPureClockEvaluatedPayoff_terminalEvaluation,
         quittingPureClockEvaluatedPayoff_terminalEvaluation]
       rw [hafter]
-      rw [quittingPureClockTerminalPayoff, hquiet]
-      have hsingleton :
-          (⟨cappedClockChildCoalition {i},
-            cappedClockChildCoalition_nonempty
-              (Finset.singleton_nonempty i)⟩ :
-              {S : Finset (Option ι) // S.Nonempty}) =
-            ⟨{some i}, Finset.singleton_nonempty (some i)⟩ := by
-        apply Subtype.ext
-        simp [cappedClockChildCoalition]
-        rfl
-      rw [hsingleton, deadlineWithdrawalGainFloor_singleton]
+      rw [quittingPureClockTerminalPayoff, hquiet, deadlineWithdrawalGainFloor_singleton]
+      simp only [quietExtension_childCoalition_singleton]
     · have hclock : times j ≠ some 0 := by
-        simp [times, deadlineWithdrawalSingletonTimes, hji]
+        simp [times, deadlineWithdrawalSingletonTimes, quietExtensionSingletonTimes, hji]
       rw [deadlineWithdrawalActualEvaluatedChildGain_some_of_ne
         reward quittingTerminalEvaluation times 0 j hclock]
       have hj : j ∉ ({i} : Finset ι) := by simpa using hji
       exact (deadlineWithdrawalGainFloor_of_not_mem reward j {i}
         (Finset.singleton_nonempty i) hj).symm
   simp only [cappedClockActualEvaluatedOutsideGain,
-    cappedClockActualEvaluatedChildGain] at h
-  simp_rw [hwithdraw] at h
-  simp_rw [quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
-  unfold quittingPureClockTerminalPayoff at h
-  rw [hquiet, houtside] at h
-  simp_rw [hchild] at h
-  simpa [quittingPureClockTerminalPayoff] using h
+    cappedClockActualEvaluatedChildGain,
+    quittingPureClockEvaluatedPayoff_terminalEvaluation] at h
+  change cappedClockActualOutsideGain reward times (some 0) ≤
+    ∑ j, (advanceWeight j * cappedClockActualChildGain reward times (some 0) j +
+      withdrawalWeight j * deadlineWithdrawalActualEvaluatedChildGain reward
+        quittingTerminalEvaluation times (some 0) j) at h
+  rw [quietExtension_outsideGain_of_tie reward times 0 {i}
+    (Finset.singleton_nonempty i) hfirst hcoalition] at h
+  simp_rw [quietExtension_childGain_of_tie reward times 0 {i}
+    (Finset.singleton_nonempty i) hfirst hcoalition, hwithdraw] at h
+  exact h
 
 /-- Universal deterministic terminal domination reconstructs the literal
 D-N, D-F, and D-J raw rows with the *same* two nonnegative weight arrays.

@@ -364,18 +364,18 @@ theorem isεAsymptoticNash_pairRoot
 
 /-- The pair-repair hypotheses give terminal approximate equilibria at every
 positive accuracy whose payoffs approach the sure blocker's solo payoff. -/
-theorem exists_terminalNash_approxTarget_all_errors_of_pairRepair
+theorem exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_pairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward true false ≤
       quittingSoloReward reward true false)
     (hblocker : quittingSoloReward reward false true ≤
       quittingSoloReward reward true true) :
     ∀ ε : ℝ, 0 < ε →
-      ∃ profile : (quittingGame reward).BehaviorProfile,
+      ∃ root : Bool → PMF Bool,
         (quittingGame reward).IsεAsymptoticNash
-            (quittingTerminalPayoff reward) ε profile ∧
+            (quittingTerminalPayoff reward) ε (quittingStationaryProfile reward root) ∧
           ∀ who,
-            |quittingTerminalPayoff reward profile who -
+            |quittingTerminalPayoff reward (quittingStationaryProfile reward root) who -
               quittingSoloReward reward true who| ≤ ε := by
   intro ε hε
   let scale :=
@@ -395,13 +395,32 @@ theorem exists_terminalNash_approxTarget_all_errors_of_pairRepair
     rw [show p = ε / (scale + ε) by rfl]
     rw [div_mul_eq_mul_div, div_lt_iff₀ hden]
     nlinarith
-  refine ⟨quittingStationaryProfile reward
-      (pairRoot p hp.le hp1),
+  refine ⟨pairRoot p hp.le hp1,
     (isεAsymptoticNash_pairRoot reward p hp1 hp
       howner hblocker).mono herror.le, ?_⟩
   intro who
   exact (abs_terminalPayoff_pairRoot_sub_soloReward_le_pairRepairError
     reward p hp.le hp1 howner who).trans herror.le
+
+/-- The stationary-root producer also supplies the original behavioral
+profile interface, preserving its fixed solo payoff target. -/
+theorem exists_terminalNash_approxTarget_all_errors_of_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward true false ≤
+      quittingSoloReward reward true false)
+    (hblocker : quittingSoloReward reward false true ≤
+      quittingSoloReward reward true true) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) ε profile ∧
+          ∀ who, |quittingTerminalPayoff reward profile who -
+            quittingSoloReward reward true who| ≤ ε := by
+  intro ε hε
+  obtain ⟨root, hnash, hclose⟩ :=
+    exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_pairRepair
+      reward howner hblocker ε hε
+  exact ⟨quittingStationaryProfile reward root, hnash, hclose⟩
 
 /-- The fixed payoff delivered by pair repair is the sure blocker's solo
 reward vector. -/
@@ -720,18 +739,18 @@ private theorem isεAsymptoticNash_mirrorPairRoot
 
 /-- The role-reversed pair repair gives terminal approximate equilibria whose
 payoffs approach the sure blocker's solo payoff. -/
-theorem exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+theorem exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (howner : quittingSingletonCollisionReward reward false true ≤
       quittingSoloReward reward false true)
     (hblocker : quittingSoloReward reward true false ≤
       quittingSoloReward reward false false) :
     ∀ ε : ℝ, 0 < ε →
-      ∃ profile : (quittingGame reward).BehaviorProfile,
+      ∃ root : Bool → PMF Bool,
         (quittingGame reward).IsεAsymptoticNash
-            (quittingTerminalPayoff reward) ε profile ∧
+            (quittingTerminalPayoff reward) ε (quittingStationaryProfile reward root) ∧
           ∀ who,
-            |quittingTerminalPayoff reward profile who -
+            |quittingTerminalPayoff reward (quittingStationaryProfile reward root) who -
               quittingSoloReward reward false who| ≤ ε := by
   intro ε hε
   let scale :=
@@ -751,14 +770,33 @@ theorem exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
     rw [show p = ε / (scale + ε) by rfl]
     rw [div_mul_eq_mul_div, div_lt_iff₀ hden]
     nlinarith
-  refine ⟨quittingStationaryProfile reward
-      (mirrorPairRoot p hp.le hp1),
+  refine ⟨mirrorPairRoot p hp.le hp1,
     (isεAsymptoticNash_mirrorPairRoot reward p hp1 hp
       howner hblocker).mono herror.le, ?_⟩
   intro who
   exact
     (abs_terminalPayoff_mirrorPairRoot_sub_soloReward_le_pairRepairError
       reward p hp.le hp1 howner who).trans herror.le
+
+/-- Behavioral-profile projection of the role-reversed stationary-root
+producer at the same fixed solo payoff target. -/
+theorem exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (howner : quittingSingletonCollisionReward reward false true ≤
+      quittingSoloReward reward false true)
+    (hblocker : quittingSoloReward reward true false ≤
+      quittingSoloReward reward false false) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ profile : (quittingGame reward).BehaviorProfile,
+        (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) ε profile ∧
+          ∀ who, |quittingTerminalPayoff reward profile who -
+            quittingSoloReward reward false who| ≤ ε := by
+  intro ε hε
+  obtain ⟨root, hnash, hclose⟩ :=
+    exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+      reward howner hblocker ε hε
+  exact ⟨quittingStationaryProfile reward root, hnash, hclose⟩
 
 /-- The fixed payoff delivered by role-reversed pair repair is the sure
 blocker's solo reward vector. -/
@@ -777,6 +815,34 @@ theorem quittingGame_isUniformEquilibriumPayoff_of_mirrorPairRepair
 /-- Role-parametric quantitative pair repair.  At every positive accuracy,
 one terminal approximate equilibrium is coordinatewise close to the sure
 blocker's solo reward vector. -/
+theorem exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_bool_pairRepair
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
+    (owner : Bool)
+    (howner : quittingSingletonCollisionReward reward (!owner) owner ≤
+      quittingSoloReward reward (!owner) owner)
+    (hblocker : quittingSoloReward reward owner (!owner) ≤
+      quittingSoloReward reward (!owner) (!owner)) :
+    ∀ ε : ℝ, 0 < ε →
+      ∃ root : Bool → PMF Bool,
+        (quittingGame reward).IsεAsymptoticNash
+            (quittingTerminalPayoff reward) ε (quittingStationaryProfile reward root) ∧
+          ∀ who,
+            |quittingTerminalPayoff reward (quittingStationaryProfile reward root) who -
+              quittingSoloReward reward (!owner) who| ≤ ε := by
+  cases owner
+  · intro ε hε
+    obtain ⟨root, hnash, hclose⟩ :=
+      exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_pairRepair
+        reward howner hblocker ε hε
+    exact ⟨root, hnash, fun who ↦ by simpa using hclose who⟩
+  · intro ε hε
+    obtain ⟨root, hnash, hclose⟩ :=
+      exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
+        reward howner hblocker ε hε
+    exact ⟨root, hnash, fun who ↦ by simpa using hclose who⟩
+
+/-- Original role-parametric behavioral-profile interface, projected from
+the actual stationary-root producer. -/
 theorem exists_terminalNash_approxTarget_all_errors_of_bool_pairRepair
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool)
     (owner : Bool)
@@ -788,20 +854,13 @@ theorem exists_terminalNash_approxTarget_all_errors_of_bool_pairRepair
       ∃ profile : (quittingGame reward).BehaviorProfile,
         (quittingGame reward).IsεAsymptoticNash
             (quittingTerminalPayoff reward) ε profile ∧
-          ∀ who,
-            |quittingTerminalPayoff reward profile who -
-              quittingSoloReward reward (!owner) who| ≤ ε := by
-  cases owner
-  · intro ε hε
-    obtain ⟨profile, hnash, hclose⟩ :=
-      exists_terminalNash_approxTarget_all_errors_of_pairRepair
-        reward howner hblocker ε hε
-    exact ⟨profile, hnash, fun who ↦ by simpa using hclose who⟩
-  · intro ε hε
-    obtain ⟨profile, hnash, hclose⟩ :=
-      exists_terminalNash_approxTarget_all_errors_of_mirrorPairRepair
-        reward howner hblocker ε hε
-    exact ⟨profile, hnash, fun who ↦ by simpa using hclose who⟩
+          ∀ who, |quittingTerminalPayoff reward profile who -
+            quittingSoloReward reward (!owner) who| ≤ ε := by
+  intro ε hε
+  obtain ⟨root, hnash, hclose⟩ :=
+    exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_bool_pairRepair
+      reward owner howner hblocker ε hε
+  exact ⟨quittingStationaryProfile reward root, hnash, hclose⟩
 
 /-- Role-parametric fixed-target two-player pair repair.  The owner uses a
 vanishing hazard, `!owner` quits surely, and the latter's solo reward vector

@@ -63,6 +63,7 @@ noncomputable section
 namespace GameTheory
 
 open StochasticGame _root_.Math.Probability QuittingSureSetOwnerRepair
+open QuittingTwoPlayerPairRepair
 
 namespace QuittingTwoPlayerExistence
 
@@ -283,12 +284,17 @@ Three or more players are not covered.  The pair-repair branch is two-player
 by construction: making a terminal set of three or more players quit surely
 creates leaver deviations inside that set, which its two inequalities do not
 control. -/
-theorem quittingGame_exists_uniformEquilibriumPayoff_twoPlayer
+theorem quittingGame_exists_stationary_terminalApproximateEquilibrium_twoPlayer
     (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) :
-    ∃ payoff : Payoff Bool,
-      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+    ∀ ε : ℝ, 0 < ε → ∃ root : Bool → PMF Bool,
+      (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
+        (quittingStationaryProfile reward root) := by
+  intro ε hε
   by_cases hzero : IsQuittingZeroSolo reward
-  · exact exists_uniformEquilibriumPayoff_of_zeroSolo reward hzero
+  · refine ⟨fun _ => PMF.pure false, ?_⟩
+    change (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
+      (quittingAlwaysContinueProfile reward)
+    exact (isZeroAsymptoticNash_quittingAlwaysContinue_of_zeroSolo reward hzero).mono hε.le
   · unfold IsQuittingZeroSolo at hzero
     push Not at hzero
     obtain ⟨owner, hpos⟩ := hzero
@@ -298,20 +304,44 @@ theorem quittingGame_exists_uniformEquilibriumPayoff_twoPlayer
             p * quittingSingletonCollisionReward reward owner (!owner) ≤
           quittingSoloReward reward owner (!owner)
     · obtain ⟨p, hp0, hp1, hle⟩ := hrate
-      exact ⟨_, quittingGame_isUniformEquilibriumPayoff_soloRate reward owner
-        hsolo hp0 hp1 hle⟩
+      refine ⟨quittingSoloStationaryRoot owner (quittingHazardCoin p hp0.le hp1), ?_⟩
+      refine (isεAsymptoticNash_soloStationary_exact reward owner
+        (quittingHazardCoin p hp0.le hp1) ?_ hsolo ?_).mono hε.le
+      · rw [quittingHazardCoin_true_toReal]
+        exact hp0
+      · intro other hother
+        obtain rfl : other = !owner := Bool.eq_not_of_ne hother
+        rw [quittingHazardCoin_true_toReal, quittingHazardCoin_false_toReal]
+        exact hle
     · push Not at hrate
       obtain ⟨hblockerSolo, hjoin⟩ :=
         endpoints_of_soloRate_infeasible reward owner hrate
       by_cases hpair :
           quittingSingletonCollisionReward reward (!owner) owner ≤
             quittingSoloReward reward (!owner) owner
-      · exact ⟨quittingSoloReward reward (!owner),
-          QuittingTwoPlayerPairRepair.quittingGame_isUniformEquilibriumPayoff_of_bool_pairRepair
-            reward owner hpair hblockerSolo⟩
+      · obtain ⟨root, hnash, -⟩ :=
+          exists_stationaryRoot_terminalNash_approxTarget_all_errors_of_bool_pairRepair
+            reward owner hpair hblockerSolo ε hε
+        exact ⟨root, hnash⟩
       · push Not at hpair
-        exact ⟨_, quittingGame_isUniformEquilibriumPayoff_jointExit reward
-          owner hpair.le hjoin.le⟩
+        refine ⟨quittingSureSetOwnerRoot ({!owner} : Finset Bool) owner
+          1 zero_le_one le_rfl, ?_⟩
+        exact (isεAsymptoticNash_sureSetOwnerRoot_of_exactCap_le reward
+          (Finset.singleton_nonempty _) (owner_notMem_blocker owner)
+          1 le_rfl one_pos 0
+          (quittingSureSetOwnerExactCap_bothQuit_le reward owner hpair.le hjoin.le)).mono hε.le
+
+/-- Every two-player quitting game has a fixed uniform-equilibrium payoff,
+selected from its actual stationary terminal approximate equilibria. -/
+theorem quittingGame_exists_uniformEquilibriumPayoff_twoPlayer
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) :
+    ∃ payoff : Payoff Bool,
+      (quittingGame reward).IsUniformEquilibriumPayoff none payoff := by
+  apply quittingGame_exists_uniformEquilibriumPayoff_of_terminalNash_all_errors reward
+  intro ε hε
+  obtain ⟨root, hnash⟩ :=
+    quittingGame_exists_stationary_terminalApproximateEquilibrium_twoPlayer reward ε hε
+  exact ⟨quittingStationaryProfile reward root, hnash⟩
 
 end QuittingTwoPlayerExistence
 

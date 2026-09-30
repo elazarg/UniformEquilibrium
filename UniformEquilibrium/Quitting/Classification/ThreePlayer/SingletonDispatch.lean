@@ -74,7 +74,7 @@ theorem singletonExcess_active_diagonal
   rw [← hpin who hwho]
   ring
 
-private theorem rightCycle_of_excess
+theorem rightCycle_of_excess
     (reward : QuittingReward3) (target : Payoff ThreePlayer)
     (c : ThreeRightStrictCycle
       (singletonExcess (threeSingletonTable reward) target)) :
@@ -135,7 +135,7 @@ private theorem rightCycle_of_excess
   · rw [hq, hs, hu, hp, hr, ht]
     linarith [c.determinant]
 
-private theorem leftCycle_of_excess
+theorem leftCycle_of_excess
     (reward : QuittingReward3) (target : Payoff ThreePlayer)
     (c : ThreeLeftStrictCycle
       (singletonExcess (threeSingletonTable reward) target)) :

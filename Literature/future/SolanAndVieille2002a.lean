@@ -6,6 +6,11 @@ import UniformEquilibrium.Quitting.Root.OpponentCoalitionMass
 import UniformEquilibrium.Quitting.Cycles.AnchoredSoloPeriodic
 import UniformEquilibrium.Quitting.Root.SequentialSerializationEquilibrium
 import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryPerturbedEstimates
+import UniformEquilibrium.Quitting.Examples.SolanVieilleBoundaryPerturbedCrossing
+import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
+import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazard
 
 /-!
 # Literature audit
@@ -23,7 +28,185 @@ are recorded separately.
 
 namespace Literature.SolanAndVieille2002a
 
-open GameTheory
+open GameTheory GameTheory.QuittingTwoPlayerExistence GameTheory.QuittingLCPClassification
+
+/-! ## Section 2: stationary or uniformly small Quit probabilities -/
+
+/-- The source strategy-class disjunction, using the production predicate. -/
+abbrev StationaryOrSmallQuitEquilibrium
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) (ε : ℝ) : Prop :=
+  QuittingThreePlayerStrategyClass.StationaryOrSmallHazardTerminalEquilibrium reward ε
+
+/-- Literal **Proposition 1**: every quitting game with at most three players
+has a terminal `ε`-equilibrium in one of the two source strategy classes.
+All reward signs are retained. The complete strategy-class producer remains
+unformalized; ordinary uniform-payoff existence does not supply this claim. -/
+def Proposition1Claim : Prop :=
+  ∀ n : ℕ, n ≤ 3 →
+    ∀ reward : {S : Finset (Fin n) // S.Nonempty} → Payoff (Fin n),
+    ∀ ε : ℝ, 0 < ε → StationaryOrSmallQuitEquilibrium reward ε
+
+theorem proposition1 : Proposition1Claim := by
+  sorry
+
+/-- The all-Continue branch is covered for arbitrary player counts when
+every own-singleton reward is nonpositive. -/
+theorem proposition1_zeroSolo
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι) {ε : ℝ}
+    (hε : 0 < ε) (hzero : IsQuittingZeroSolo reward) :
+    StationaryOrSmallQuitEquilibrium reward ε := by
+  left
+  refine ⟨fun _ => PMF.pure false, ?_⟩
+  change (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) ε
+    (quittingAlwaysContinueProfile reward)
+  exact (isZeroAsymptoticNash_quittingAlwaysContinue_of_zeroSolo reward hzero).mono hε.le
+
+/-- Section 2.1 is covered by the actual stationary-root producer for every
+two-player reward table and every positive terminal accuracy. -/
+theorem proposition1_twoPlayer
+    (reward : {S : Finset Bool // S.Nonempty} → Payoff Bool) {ε : ℝ}
+    (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  Or.inl (quittingGame_exists_stationary_terminalApproximateEquilibrium_twoPlayer reward ε hε)
+
+/-- The source's Case 1 solo branch is covered whenever its actual positive
+rate satisfies the full inactive-player inequalities. This does not assert
+that every table supplies such a rate. -/
+theorem proposition1_of_soloStationaryCertification
+    {ι : Type} [Fintype ι] [DecidableEq ι]
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) (hazard : PMF Bool) {ε : ℝ}
+    (hε : 0 < ε) (hpositive : 0 < (hazard true).toReal)
+    (howner : 0 ≤ quittingSoloReward reward owner owner)
+    (hinactive : ∀ other, other ≠ owner →
+      (hazard false).toReal * quittingSoloReward reward other other +
+        (hazard true).toReal * quittingSingletonCollisionReward reward owner other ≤
+          quittingSoloReward reward owner other) :
+    StationaryOrSmallQuitEquilibrium reward ε := by
+  exact Or.inl ⟨quittingSoloStationaryRoot owner hazard,
+    (isεAsymptoticNash_soloStationary_exact
+      reward owner hazard hpositive howner hinactive).mono hε.le⟩
+
+/-- Section 2.2, **Case 1**, including equality in the two inactive players'
+singleton comparisons. A small solo rate gives the requested terminal
+accuracy even when no positive rate is exactly Nash. -/
+theorem proposition1_case1
+    (reward : {S : Finset (Fin 3) // S.Nonempty} → Payoff (Fin 3))
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    (owner : Fin 3)
+    (hcross : ∀ other, other ≠ owner →
+      1 ≤ reward (quittingSingletonTerminal owner) other)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_normalizedSoloColumn
+    reward hsolo owner hcross hε
+
+/-- The normalized complementary branch, including simplex vertices.
+The nonvertex branch reuses the homogeneous stationary-root producer. -/
+theorem proposition1_of_homogeneousSingletonWitness
+    (reward : {S : Finset (Fin 3) // S.Nonempty} → Payoff (Fin 3))
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    (weight : Convexity.StdSimplex ℝ (Fin 3))
+    (hresidual : ∀ who, 0 ≤ _root_.Math.LinearProgramming.singletonLCPResidual
+      (normalizedSoloMatrix reward) weight who)
+    (hcomplementary : ∀ who, weight.weights who *
+      _root_.Math.LinearProgramming.singletonLCPResidual
+        (normalizedSoloMatrix reward) weight who = 0)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_normalizedHomogeneousWitness
+    reward hsolo weight hresidual hcomplementary hε
+
+/-- Section 2.2, **Case 4**: a singleton mixture equal to the normalized
+own-singleton vector supplies stationary approximate equilibria. Vertices
+are retained by the preceding complementary-branch adapter. -/
+theorem proposition1_case4
+    (reward : {S : Finset (Fin 3) // S.Nonempty} → Payoff (Fin 3))
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    (weight : Convexity.StdSimplex ℝ (Fin 3))
+    (hbalance : ∀ who, quittingSingletonMixture reward weight.weights who = 1)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_normalizedBalancedSingletonMixture
+    reward hsolo weight hbalance hε
+
+/-- The source's Case 5 cyclic subdivision, once the geometric coarse arc
+certificate is supplied. The existing terminal compiler gives small error;
+its explicit root also bounds every player's Quit hazard at every date.
+The rate is the exact subdivision `1 - (1 - p)^(1/m)`, not the paper's
+printed `p/m`. No assertion about that printed rate is proved here. -/
+theorem proposition1_of_singletonArcCycle
+    {ι : Type} [Fintype ι] [DecidableEq ι] {L : ℕ}
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : Fin L → ι) (p : Fin L → ℝ)
+    (coarse : Fin L → Payoff ι) (initial : Fin L) {aStar D ε : ℝ}
+    (hp0 : ∀ block, 0 ≤ p block) (hp1 : ∀ block, p block < 1)
+    (ha : ∀ block, quittingMeshIntensity (p block) ≤ aStar)
+    (hD : 0 ≤ D)
+    (harc : ∀ block,
+      coarse block = quittingSingletonArcPayoff (p block)
+        (quittingSoloReward reward (owner block)) (coarse (finRotate L block)))
+    (hactive : ∀ block,
+      coarse block (owner block) = quittingSoloReward reward (owner block) (owner block))
+    (hcoarseSolo : ∀ block who, quittingSoloReward reward who who ≤ coarse block who)
+    (hcollision : ∀ block other, other ≠ owner block →
+      max (quittingSingletonCollisionReward reward (owner block) other -
+        quittingSoloReward reward other other) 0 ≤ D)
+    (hcoarseContracts : ∀ who,
+      (∏ block : Fin L, if who = owner block then 1 else 1 - p block) < 1)
+    (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_singletonArcCycle
+    reward owner p coarse initial hp0 hp1 ha hD harc hactive
+    hcoarseSolo hcollision hcoarseContracts hε
+
+/-- The existing strict right-cycle certificate supplies actual coarse arcs
+and a small-hazard terminal approximate equilibrium. -/
+theorem proposition1_of_rightSingletonCycle
+    (reward : QuittingReward3) (d : RightSingletonCycle reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_rightSingletonCycle
+    reward d hε
+
+/-- The existing strict left-cycle certificate supplies the other oriented
+small-hazard terminal approximate equilibrium. -/
+theorem proposition1_of_leftSingletonCycle
+    (reward : QuittingReward3) (d : LeftSingletonCycle reward)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_leftSingletonCycle
+    reward d hε
+
+/-- Every feasible normalized singleton mixture gives the source strategy
+disjunction. The existing finite alternative retains degenerate supports;
+its complementary branch is stationary and its strict cycles have small hazards. -/
+theorem proposition1_of_normalizedFeasibleSingletonMixture
+    (reward : QuittingReward3)
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    (weight : Convexity.StdSimplex ℝ (Fin 3))
+    (hfeasible : ∀ who, 1 ≤ quittingSingletonMixture reward weight.weights who)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_normalizedFeasibleSingletonMixture
+    reward hsolo weight hfeasible hε
+
+/-- Section 2.2, **Case 2**, with an actual exact stationary root.
+The original analytic-germ packet would supply the excluded feasible mixture;
+therefore its endpoint absorbs and the nonnegative solo boundary compiles it. -/
+theorem proposition1_case2
+    (reward : QuittingReward3)
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    (hinfeasible : ¬ ∃ weight : Convexity.StdSimplex ℝ (Fin 3),
+      ∀ who, 1 ≤ quittingSingletonMixture reward weight.weights who) :
+    ∃ root : Fin 3 → PMF Bool,
+      (quittingGame reward).IsεAsymptoticNash (quittingTerminalPayoff reward) 0
+        (quittingStationaryProfile reward root) :=
+  QuittingThreePlayerStrategyClass.exists_exactStationaryTerminalNash_of_normalizedInfeasibleMixture
+    reward hsolo hinfeasible
+
+/-- The complete normalized positive-own-singleton three-player strategy
+disjunction, assembled from existing stationary and cyclic root producers. -/
+theorem proposition1_normalizedThreePlayer
+    (reward : QuittingReward3)
+    (hsolo : ∀ who, reward (quittingSingletonTerminal who) who = 1)
+    {ε : ℝ} (hε : 0 < ε) : StationaryOrSmallQuitEquilibrium reward ε :=
+  QuittingThreePlayerStrategyClass.of_normalizedThreePlayer
+    reward hsolo hε
 
 /-- The numerical parameter assertion in the normalized transcription of the
 printed period-two packet: its continuation probability `1 / √2` is the
@@ -491,6 +674,60 @@ theorem lemma11_singletonMass_le_sqrt
   nlinarith
 
 
+/-- **Lemma 12**, with the printed domain and constants. The paper's date
+`n₁ > 1` is `cutoff + 1`, so the continuation value and prefix mass use
+`n₁ - 1` in the repository's zero-based clock. Choosing the first positive
+cutoff retains the initial atom even when `α ≤ √ε`, without strengthening
+the printed hypothesis `α > 0`. -/
+theorem lemma12
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hα : 0 < α) (hε : 0 < ε) (hεsmall : ε < 1 / 900)
+    (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε)
+    (hone : ∀ time first second,
+      0 < (roots time first true).toReal → 0 < (roots time second true).toReal →
+      first = second)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4)
+    (hinitial : 1 + α ≤ quittingRootSequenceTerminalValue
+      SolanVieilleBoundary.boundaryReward roots who 0) :
+    ∃ n₁ : ℕ, 1 < n₁ ∧
+      quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward roots who (n₁ - 1) <
+        1 + Real.sqrt ε ∧
+      (⟨0, n₁ - 1⟩ : QuittingFiniteRootWindow roots).singletonMass who ≤ 2 * Real.sqrt ε ∧
+      α - Real.sqrt ε ≤ 3 * (⟨0, n₁ - 1⟩ : QuittingFiniteRootWindow roots).singletonMass
+        (SolanVieilleBoundary.boundaryPartner who) := by
+  obtain ⟨cutoff, hpositive, hdrop, _, _, hown, hpartner⟩ :=
+    SolanVieilleBoundary.boundary_exists_positiveFirstDrop_with_partnerMass
+      hα hε hεsmall hclose hone hnash who hinitial
+  refine ⟨cutoff + 1, by omega, ?_, ?_, ?_⟩
+  · simpa using hdrop
+  · simpa using hown
+  · simpa using hpartner
+
+/-- **Corollary 13**, with `ε < 1/900` and the exact printed threshold
+`α > 7√ε`: a perturbed equilibrium cannot give both partners `1 + α`. -/
+theorem corollary13
+    {roots : SolanVieilleBoundary.BoundaryRootSequence (ι := Fin 4)} {ε α : ℝ}
+    (hε : 0 < ε) (hεsmall : ε < 1 / 900)
+    (hclose : ∀ time who, |(roots time who false).toReal - 1| < ε)
+    (hone : ∀ time first second,
+      0 < (roots time first true).toReal → 0 < (roots time second true).toReal →
+      first = second)
+    (hnash : SolanVieilleBoundary.IsBoundaryTerminalApproxNash
+      SolanVieilleBoundary.boundaryReward ε
+      (SolanVieilleBoundary.boundaryRootSequenceProfile
+        SolanVieilleBoundary.boundaryReward roots))
+    (who : Fin 4) (hα : 7 * Real.sqrt ε < α) :
+    ¬ (1 + α ≤ quittingRootSequenceTerminalValue
+          SolanVieilleBoundary.boundaryReward roots who 0 ∧
+      1 + α ≤ quittingRootSequenceTerminalValue SolanVieilleBoundary.boundaryReward roots
+        (SolanVieilleBoundary.boundaryPartner who) 0) :=
+  SolanVieilleBoundary.boundary_not_both_partners_high_of_atMostOne
+    hε hεsmall hclose hone hnash who hα
+
 /-- The introduction's solo-hull exclusion, stated for the fixed payoff
 target of a uniform equilibrium. This remains open in this audit. -/
 def NoSoloHullUniformEquilibriumPayoffClaim : Prop :=
@@ -513,9 +750,16 @@ profiles does not constrain the payoff targets of all other profiles.
 
 The named-statement inventory of the author-hosted journal PDF is:
 
-- Section 2: Proposition 1 (the stationary-or-small-quit dichotomy for games
-  with at most three players) is not stated here; its six geometric cases
-  are likewise not formalized in this paper's terms.
+- Section 2: Proposition 1 is stated with the literal strategy-class
+  disjunction and left as `sorry`. The two-player, zero-solo, supplied-rate solo,
+  normalized Case 1 and balanced Case 4 adapters retain actual stationary roots.
+  The complete normalized three-player disjunction assembles the existing finite
+  singleton alternative, including degenerate supports, and the original analytic
+  germ. Infeasible Case 2 yields an exact stationary endpoint. Feasible mixtures
+  give a stationary complementary root or a concrete subdivided cyclic root.
+  This does not formalize the source's constrained-map proof of Case 0 or its
+  triangle description. The unrestricted all-sign producer and the required
+  player-type and positive-payoff-scaling transports remain unformalized here.
 - Section 3.1: Proposition 2 and Lemma 4 are proved above; Lemma 4 delegates
   to the impossible exact-stationary antecedent, rather than the paper's
   forward indifference derivation. The printed indifference polynomials are identified
@@ -535,8 +779,10 @@ The named-statement inventory of the author-hosted journal PDF is:
   are proved by adapters. Lemma 10's absorption, coordinate-payoff and singleton-mass
   estimates are stated with their exact printed constants and proved from the full
   behavioral Nash cap. Its absorption bound also holds without perturbation.
-  Lemma 12 and Corollary 13 still lack exact paper-order adapters. Their existing
-  production estimates use different constants and hypotheses.
+  Lemma 12 and Corollary 13 are stated with the printed `ε < 1/900` domain,
+  positive one-based crossing date, and exact prefix and partner-high constants.
+  Their adapters use a first positive-time crossing to retain the source's
+  `α > 0` hypothesis, including when the initial value is below `1 + √ε`.
 
 The journal PDF numbers its first lemma in Section 3 as Lemma 4; it contains
 no separately labeled Lemmas 1--3. The solo-hull sentence occurs in the
@@ -545,6 +791,11 @@ Introduction rather than as a numbered Section 3 proposition.
 The published journal PDF has Section 3.1 and Section 3.2, not Section 3.3.
 The printed primary continuation probability is separately stated and refuted
 above; that refutation does not concern period-two existence.
+
+The Case 5 strategy-class adapters use exact arc subdivision, whose block
+survival is `1 - beta`. The paper prints the different rate `beta/M`; for fixed
+`beta`, its block survival tends to `exp(-beta)`. No literal assertion about
+the printed rate construction is proved by the exact-subdivision adapter.
 -/
 
 end Literature.SolanAndVieille2002a

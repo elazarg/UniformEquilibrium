@@ -18,8 +18,11 @@ open Set _root_.Math _root_.Math.Topology _root_.Math.LinearProgramming
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι] {k : ℕ}
 
-private abbrev quotientChart (point : UnitCube (Fin k)) : Fin k → ℝ :=
+/-- The fixed signed chart used for the normalized quotient degree. -/
+abbrev quittingQuotientGlobalChart (point : UnitCube (Fin k)) : Fin k → ℝ :=
   rectangularCubePoint (fun _ => (-2 : ℝ)) (fun _ => (2 : ℝ)) point
+
+private abbrev quotientChart := @quittingQuotientGlobalChart
 
 /-- The actual quotient self-map field in one global symmetric chart. -/
 def quittingQuotientGlobalProblem
@@ -80,20 +83,23 @@ private theorem quotientChart_zero_mem_ball
   change dist (quotientChart point) 0 < radius
   simpa only [hzero, dist_self] using hradius
 
-/-- The actual quotient clipped map has the canonical R0 local degree on a
-derived small ball in the global self-map chart. -/
-theorem exists_globalQuotient_localDegree_eq_r0Degree
+/-- One radius isolates the actual origin on its closed ball and identifies
+its canonical R0 local degree in the fixed global self-map chart. -/
+theorem exists_globalQuotient_originIsolation_localDegree_eq_r0Degree
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (block : ι → Fin k) (representative : Fin k → ι)
     (hrepresentative : ∀ coordinate, block (representative coordinate) = coordinate)
     (hR0 : IsR0Matrix
       (quittingResponseQuotientMatrix reward block representative)) :
     ∃ radius : ℝ, 0 < radius ∧ radius < 1 ∧
+      (∀ source : Fin k → ℝ, ‖source‖ ≤ radius →
+        quittingQuotientStationaryClippedMap reward block representative source = source →
+          source = 0) ∧
       ∃ hisolating :
         (quittingQuotientGlobalProblem reward block representative).IsIsolating
-          (quotientChart ⁻¹' Metric.ball 0 radius),
+          (quittingQuotientGlobalChart ⁻¹' Metric.ball 0 radius),
         (quittingQuotientGlobalProblem reward block representative).localDegree
-            (quotientChart ⁻¹' Metric.ball 0 radius) hisolating =
+            (quittingQuotientGlobalChart ⁻¹' Metric.ball 0 radius) hisolating =
           r0Degree (quittingResponseQuotientMatrix reward block representative) hR0 := by
   let A := quittingResponseQuotientMatrix reward block representative
   let base := lcpMinBoxProblem A 0 0 2 (by norm_num)
@@ -131,56 +137,74 @@ theorem exists_globalQuotient_localDegree_eq_r0Degree
     have hnorm : ‖quotientChart point‖ = radius :=
       quotientChart_norm_of_frontier_ball radius point hfrontier
     exact quotientChart_coordinateInterior_of_norm_lt_two point (by linarith)
-  have hclose (point : UnitCube (Fin k)) (hfrontier : point ∈ frontier region) :
-      ‖actual.gain point - base.gain point‖ < ‖base.gain point‖ := by
-    let source := quotientChart point
-    let scaled := radius⁻¹ • source
-    have hnorm : ‖source‖ = radius :=
-      quotientChart_norm_of_frontier_ball radius point hfrontier
+  have herror (source : Fin k → ℝ) (hnonzero : source ≠ 0) (hsmall : ‖source‖ ≤ radius) :
+      ‖quittingQuotientFixedPointField reward block representative source -
+        lcpMinMap A 0 source‖ < ‖lcpMinMap A 0 source‖ := by
+    let scalar := ‖source‖
+    let scaled := scalar⁻¹ • source
+    have hscalar : 0 < scalar := norm_pos_iff.mpr hnonzero
+    have hscalarApprox : scalar ≤ δ := hsmall.trans hradiusApprox
     have hscaledNorm : ‖scaled‖ = 1 := by
-      rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hradius), hnorm]
-      field_simp [hradius.ne']
+      rw [norm_smul, Real.norm_eq_abs, abs_of_pos (inv_pos.mpr hscalar)]
+      change scalar⁻¹ * scalar = 1
+      exact inv_mul_cancel₀ hscalar.ne'
     have hscaledSphere : scaled ∈ Metric.sphere (0 : Fin k → ℝ) 1 := by
       simpa only [Metric.mem_sphere, dist_zero_right] using hscaledNorm
     have hscaledBall : scaled ∈ Metric.closedBall (0 : Fin k → ℝ) 1 := by
       rw [Metric.mem_closedBall, dist_zero_right, hscaledNorm]
-    have hfieldApprox := happrox radius hradius hradiusApprox scaled hscaledBall
-    have hsourceScaled : radius • scaled = source := by
+    have hfieldApprox := happrox scalar hscalar hscalarApprox scaled hscaledBall
+    have hsourceScaled : scalar • scaled = source := by
       dsimp only [scaled]
-      exact smul_inv_smul₀ hradius.ne' source
+      exact smul_inv_smul₀ hscalar.ne' source
     have hupper : ∀ coordinate,
         source coordinate + quittingQuotientResponse reward block representative
           source coordinate ≤ 1 := by
       intro coordinate
-      exact (hupperLocal (by rw [dist_zero_right, hnorm]; exact hradiusUpper)
+      exact (hupperLocal (by rw [dist_zero_right]; exact hsmall.trans_lt hradiusUpper)
         coordinate).le
     have hfield : quittingQuotientFixedPointField reward block representative source =
         quittingQuotientMinField reward block representative source :=
       quittingQuotientFixedPointField_eq_minField
         reward block representative hrepresentative source hupper
-    have hmodel : lcpMinMap A 0 source = radius • lcpMinMap A 0 scaled := by
+    have hmodel : lcpMinMap A 0 source = scalar • lcpMinMap A 0 scaled := by
       rw [← hsourceScaled]
-      exact lcpMinMap_zero_smul A radius hradius.le scaled
-    have herror :
-        ‖quittingQuotientFixedPointField reward block representative source -
-          lcpMinMap A 0 source‖ < ‖lcpMinMap A 0 source‖ := by
-      rw [hfield, hmodel]
-      have hscaledField : quittingQuotientMinFieldScaled reward block representative
-          radius scaled = radius⁻¹ •
-            quittingQuotientMinField reward block representative source := by
-        simp only [quittingQuotientMinFieldScaled, hsourceScaled]
-      rw [hscaledField] at hfieldApprox
-      have hmarginBound := hmarginSphere scaled hscaledSphere
-      have hstrict := hfieldApprox.trans_le hmarginBound
-      have hequal :
+      exact lcpMinMap_zero_smul A scalar hscalar.le scaled
+    rw [hfield, hmodel]
+    have hscaledField : quittingQuotientMinFieldScaled reward block representative
+        scalar scaled = scalar⁻¹ •
+          quittingQuotientMinField reward block representative source := by
+      simp only [quittingQuotientMinFieldScaled, hsourceScaled]
+    rw [hscaledField] at hfieldApprox
+    have hstrict := hfieldApprox.trans_le (hmarginSphere scaled hscaledSphere)
+    have hequal :
+        quittingQuotientMinField reward block representative source -
+          scalar • lcpMinMap A 0 scaled =
+        scalar • (scalar⁻¹ •
           quittingQuotientMinField reward block representative source -
-            radius • lcpMinMap A 0 scaled =
-          radius • (radius⁻¹ •
-            quittingQuotientMinField reward block representative source -
-              lcpMinMap A 0 scaled) := by
-        rw [smul_sub, smul_inv_smul₀ hradius.ne']
-      rw [hequal, norm_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hradius]
-      exact mul_lt_mul_of_pos_left hstrict hradius
+            lcpMinMap A 0 scaled) := by
+      rw [smul_sub, smul_inv_smul₀ hscalar.ne']
+    rw [hequal, norm_smul, norm_smul, Real.norm_eq_abs, abs_of_pos hscalar]
+    exact mul_lt_mul_of_pos_left hstrict hscalar
+  have hisolation (source : Fin k → ℝ) (hsmall : ‖source‖ ≤ radius)
+      (hfixed : quittingQuotientStationaryClippedMap reward block representative source =
+        source) : source = 0 := by
+    by_contra hnonzero
+    have hstrict := herror source hnonzero hsmall
+    have hfieldZero : quittingQuotientFixedPointField reward block representative source =
+        0 := by
+      simp only [quittingQuotientFixedPointField, hfixed, sub_self]
+    rw [hfieldZero, zero_sub, norm_neg] at hstrict
+    exact (lt_irrefl _) hstrict
+  have hclose (point : UnitCube (Fin k)) (hfrontier : point ∈ frontier region) :
+      ‖actual.gain point - base.gain point‖ < ‖base.gain point‖ := by
+    let source := quotientChart point
+    have hnorm : ‖source‖ = radius :=
+      quotientChart_norm_of_frontier_ball radius point hfrontier
+    have hnonzero : source ≠ 0 := by
+      intro hzero
+      rw [hzero, norm_zero] at hnorm
+      exact hradius.ne' hnorm.symm
+    have hstrict := herror source hnonzero hnorm.le
     simp only [actual, base, quittingQuotientGlobalProblem,
       lcpMinBoxProblem, BoxComplementarityProblem.ofAmbientMap,
       Pi.zero_apply, zero_sub, zero_add]
@@ -193,7 +217,7 @@ theorem exists_globalQuotient_localDegree_eq_r0Degree
             lcpMinMap A 0 source)‖ := by congr 1; abel
       _ = ‖quittingQuotientFixedPointField reward block representative source -
           lcpMinMap A 0 source‖ := norm_neg _
-      _ < ‖lcpMinMap A 0 source‖ := herror
+      _ < ‖lcpMinMap A 0 source‖ := hstrict
       _ = ‖-lcpMinMap A 0 source‖ := (norm_neg _).symm
   obtain ⟨hbaseRegion, hactualRegion, heqDegree⟩ :=
     base.localDegree_eq_of_norm_sub_lt_norm actual region hopen hinterior hclose
@@ -203,7 +227,8 @@ theorem exists_globalQuotient_localDegree_eq_r0Degree
       simpa only [region, mem_preimage, Metric.mem_ball, dist_zero_right] using hpoint
     have hcoord := (norm_le_pi_norm (quotientChart point) coordinate).trans_lt hnorm
     rw [Real.norm_eq_abs, abs_lt] at hcoord
-    dsimp [quotientChart, rectangularCubePoint, rectangularPoint] at hcoord
+    dsimp [quotientChart, quittingQuotientGlobalChart,
+      rectangularCubePoint, rectangularPoint] at hcoord
     constructor <;> nlinarith [hcoord.1, hcoord.2, hradiusOne]
   have hsolutions : base.solutionsIn region =
       base.solutionsIn (diagonalCentralRegion k) := by
@@ -230,10 +255,30 @@ theorem exists_globalQuotient_localDegree_eq_r0Degree
       exact ⟨hpoint.1, quotientChart_zero_mem_ball hradius point hchartZero⟩
   have hbaseDegree := base.localDegree_eq_of_solutionsIn_eq region
     (diagonalCentralRegion k) hbaseRegion hbase hsolutions
-  refine ⟨radius, hradius, hradiusOne, hactualRegion, ?_⟩
+  refine ⟨radius, hradius, hradiusOne, hisolation, hactualRegion, ?_⟩
   exact heqDegree.symm.trans
     (hbaseDegree.trans (localDegree_lcpMinBoxProblem_zero_eq_r0Degree A hR0 2
       (by norm_num)))
+
+/-- The actual quotient clipped map has canonical R0 local degree on a
+derived small ball in the fixed global self-map chart. -/
+theorem exists_globalQuotient_localDegree_eq_r0Degree
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (representative : Fin k → ι)
+    (hrepresentative : ∀ coordinate, block (representative coordinate) = coordinate)
+    (hR0 : IsR0Matrix
+      (quittingResponseQuotientMatrix reward block representative)) :
+    ∃ radius : ℝ, 0 < radius ∧ radius < 1 ∧
+      ∃ hisolating :
+        (quittingQuotientGlobalProblem reward block representative).IsIsolating
+          (quittingQuotientGlobalChart ⁻¹' Metric.ball 0 radius),
+        (quittingQuotientGlobalProblem reward block representative).localDegree
+            (quittingQuotientGlobalChart ⁻¹' Metric.ball 0 radius) hisolating =
+          r0Degree (quittingResponseQuotientMatrix reward block representative) hR0 := by
+  obtain ⟨radius, hradius, hsmall, -, hisolating, hdegree⟩ :=
+    exists_globalQuotient_originIsolation_localDegree_eq_r0Degree
+      reward block representative hrepresentative hR0
+  exact ⟨radius, hradius, hsmall, hisolating, hdegree⟩
 
 /-- A quotient degree different from one forces a nonzero fixed point of
 the literal block-coordinate stationary clipped map. -/

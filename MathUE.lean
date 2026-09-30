@@ -1,10 +1,14 @@
 import MathUE.AbelCesaro
 import MathUE.PairedAffineIntervalEstimates
 import MathUE.PairedAffineClearedField
+import MathUE.PairedPhasePolynomialRoots
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.FiniteContinuousIntervalSelection
+import MathUE.FinVariableCycle
+import MathUE.RationalArcSubdivision
+import MathUE.RationalCalendarSearch
 import MathUE.EventuallyPositiveLastZero
 import MathUE.DisplacementSeamScalarBoundaries
 import MathUE.ExponentialExcessScale
@@ -609,6 +613,7 @@ import MathUE.Topology.BoxComplementarityCubicalSperner
 import MathUE.Topology.BoxComplementarityDiagonalChain
 import MathUE.Topology.BoxComplementarityDiagonalLocalIndex
 import MathUE.Topology.BoxComplementarityDegreeEscape
+import MathUE.Topology.BoxComplementarityNonzeroSetDegree
 import MathUE.Topology.BoxComplementarityFamilyCollar
 import MathUE.Topology.BoxComplementarityFiniteAdditivity
 import MathUE.Topology.BoxComplementarityFloorRefinementPrism

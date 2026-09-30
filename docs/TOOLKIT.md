@@ -1111,6 +1111,12 @@ coordinatewise fixed-point sign conditions.
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientDegreeEscape.lean`)
 computes the actual quotient map's local degree from the raw R0 quotient
 matrix and produces a nonzero fixed point when that degree is not one.
+`exists_globalQuotient_entireNonzeroSet_degree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientTotalDegree.lean`)
+selects the entire nonzero fixed-point set and computes its total normalized
+degree in the explicit global chart. The statement includes closed-ball
+origin isolation and does not assume finitely many, regular, or isolated
+nonzero roots. It does not identify this integer with ambient Brouwer degree.
 `exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientBellman.lean`)
 decodes positive absorption and the original players' Nash–Bellman equations.
@@ -1119,9 +1125,12 @@ decodes positive absorption and the original players' Nash–Bellman equations.
 consumes this root when singleton-block owners have nonnegative singleton
 rewards; the same module has a no-singleton-block corollary. Normal-negative
 singleton owners are handled by
-`exists_uniformEquilibriumPayoff_of_responseInvariant_normality`
+`exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`),
-which reuses the existing solo punishment compiler. The same module proves
+which needs normality only for negative singleton-block owners and retains
+the produced root's actual Bellman value as the fixed uniform payoff target.
+The all-player-normality theorem is a specialization; only its negative
+sole-owner branch uses the existing solo punishment compiler. The same module proves
 `exists_uniformEquilibriumPayoff_finFour_of_responseInvariant_degree_ne_one`
 for arbitrary signed four-player rewards, deriving normality under a
 same-table no-UE assumption and discharging that assumption. No punishment
@@ -1139,6 +1148,37 @@ as an input. An explicit member and the packet's dimension and fixture claims
 are not yet formalized. The reusable permutation covariance of the stationary
 residual is in
 `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPermutation.lean`.
+
+`PairedCollisionReward.exists_uniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardExistence.lean`)
+constructs a uniform-equilibrium payoff for every real collision parameter of
+its literal fifteen-row reward table. It combines the signed low-parameter
+branch, a produced exact two-phase equilibrium for parameters between one and
+two, a produced stationary equilibrium between two and four, and the pure exit
+at parameters at least four. Both shared endpoints are retained. No rate,
+strategy, or Nash certificate is supplied to this theorem.
+`PeriodicRates.profile_completeCap`, `allSuffix_isExactTerminalNash`, and
+`profile_uniformPayoffWitness`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardPeriodic.lean`)
+retain the actual independent periodic profile, its unrestricted behavioral
+cap including Never, every live suffix, and that same profile's uniform
+finite-horizon witnesses. The rates and target depend only on the table
+parameter, not the accuracy. This solves the displayed family, not arbitrary
+collision rewards. Its exact censored full-cap and finite-law refinements
+remain separate obligations.
+
+`QuittingThreePlayerStrategyClass.of_normalizedThreePlayer`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazard.lean`)
+constructs, for every three-player table with unit own-singleton rewards and
+every positive accuracy, a stationary terminal approximate equilibrium or an
+actual root sequence whose every date/player Quit hazard is at most that
+accuracy. Deviations are unrestricted behavioral replacements. Weak and
+degenerate singleton supports are included. The infeasible-mixture branch
+produces an exact stationary terminal equilibrium; the feasible branch reuses
+the singleton alternative and explicit cyclic arcs. This source conclusion
+does not quantify a fixed payoff target or prove the unrestricted all-sign,
+coordinate-scaling, or player-cardinality transports. Literature wrappers
+delegate to this production proof, not conversely.
 
 `quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with
