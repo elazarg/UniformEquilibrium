@@ -29,6 +29,30 @@ No general conversion between those two notions is proved by this work.
 This records a remaining source obligation, not a counterexample to the
 corrected lemma.
 
+## Fixed-start compactness and the nonconvergent-orbit case
+
+`exists_infinite_fRow_orbit_of_finite_orbits` (`Literature/Simon2007.lean`)
+constructs one infinite actual orbit from finite actual orbits of every length
+in one compact carrier, all starting at the same point. The closed graph is
+proved for the paper's support-local one-stage equilibrium rows and actual
+payoff map; it is not a supplied graph certificate. Simon (2012) reuses that
+owner rather than maintaining a second support-closedness proof.
+
+`EscapeWitness.isCompact_caseCarrier` in the same file derives compactness
+of the literal escape carrier from the witness's closedness and distance-one
+feasibility condition. The finite-length alternative retains the same start.
+It does not equate confined paths with an unrestricted iterate fiber.
+
+`hasQuitApproximateEquilibria_of_nonconvergent_exact_orbit`
+(`Literature/Simon2007.lean`) proves Theorem 4's nonconvergent-orbit implication
+for all-normal games. One actual nonconvergent exact orbit supplies every
+positive-error orbit family; the existing rational-tail, finite-return and
+cyclic-profile producers give actual approximate equilibria. No escape carrier,
+equilibrium component, five-way equivalence, or unfinished Lemma 5 is used.
+The full Theorem 4 still needs the remaining alternatives and their source
+construction. Both Simon modules pass silent named checks; separate transitive
+axiom checks of the new declarations use only the three standard axioms.
+
 ## Extended orbits
 
 `ExtendedOrbitCondition.hasQuitApproximateEquilibria`

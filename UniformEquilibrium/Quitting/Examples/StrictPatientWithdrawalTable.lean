@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Examples.GuardedCrossedResponseTables
+import UniformEquilibrium.Quitting.Examples.FinFourLastPlayerChild
 import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockSampledLPDual
 import UniformEquilibrium.Quitting.Classification.QuietExtension.PatientWithdrawalRaw
 
@@ -35,65 +36,41 @@ def reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4) :=
     | 15 => ![1, 0, -1, 1 / 2]
     | _ => 0
 
-abbrev Child := QuittingChildPlayer (fun who : Fin 4 => who = 3)
+abbrev Child := FinFourLastPlayerChild.Child
+abbrev child := FinFourLastPlayerChild.child
+abbrev outside := FinFourLastPlayerChild.outside
+abbrev childReward := FinFourLastPlayerChild.childReward
 
-def child (index : Fin 3) : Child := ⟨index.castSucc, by
-  change index.castSucc ≠ (3 : Fin 4)
-  intro hequal
-  have hvalue : index.val = 3 := congrArg Fin.val hequal
-  exact (Nat.ne_of_lt index.isLt) hvalue⟩
-
-instance : Nonempty Child := ⟨child 0⟩
-
-def outside : {who : Fin 4 // who = 3} := ⟨3, rfl⟩
-
-instance : Nonempty {who : Fin 4 // who = 3} := ⟨outside⟩
-
-/-- The actual child-plus-outsider restriction in the canonical source coordinates. -/
-abbrev childReward (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :=
-  quittingChildWithOutsiderReward table (· = 3) outside
-
-/-- The actual displayed child coalition is evaluated at its original player set. -/
 theorem childReward_childCoalition
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (A : Finset Child) (hA : A.Nonempty) (who : Child) :
     childReward table
         ⟨cappedClockChildCoalition A, cappedClockChildCoalition_nonempty hA⟩ (some who) =
       table ⟨A.map (Function.Embedding.subtype (p := fun who : Fin 4 => who ≠ 3)),
-        Finset.map_nonempty.mpr hA⟩ who.1 := by
-  simp only [childReward, quittingChildWithOutsiderReward_apply_original,
-    quittingChildWithOutsiderOriginalEmbedding_childCoalition,
-    quittingChildWithOutsiderOriginalEmbedding_some]
+        Finset.map_nonempty.mpr hA⟩ who.1 :=
+  FinFourLastPlayerChild.childReward_childCoalition table A hA who
 
-/-- An image by the literal subtype value removes embedding coercions from finite tables. -/
 theorem childReward_childCoalition_image
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (A : Finset Child) (hA : A.Nonempty) (who : Child) :
     childReward table
         ⟨cappedClockChildCoalition A, cappedClockChildCoalition_nonempty hA⟩ (some who) =
       table ⟨A.image (fun player : Child => player.1), hA.image (fun player => player.1)⟩
-        who.1 := by
-  have hmap : A.map (Function.Embedding.subtype (p := fun who : Fin 4 => who ≠ 3)) =
-      A.image (fun player : Child => player.1) := by
-    exact Finset.map_eq_image
-      (Function.Embedding.subtype (p := fun who : Fin 4 => who ≠ 3)) A
-  simpa only [hmap] using childReward_childCoalition table A hA who
+        who.1 :=
+  FinFourLastPlayerChild.childReward_childCoalition_image table A hA who
 
 theorem sum_child (function : Child → ℝ) :
-    ∑ who, function who = function (child 0) + function (child 1) + function (child 2) := by
-  rw [show (Finset.univ : Finset Child) = {child 0, child 1, child 2} by decide]
-  simp [child, add_assoc]
+    ∑ who, function who = function (child 0) + function (child 1) + function (child 2) :=
+  FinFourLastPlayerChild.sum_child function
 
-def coalition : Fin 7 → Finset Child :=
-  ![{child 0}, {child 1}, {child 0, child 1}, {child 2},
-    {child 0, child 2}, {child 1, child 2}, {child 0, child 1, child 2}]
+abbrev coalition := FinFourLastPlayerChild.coalition
 
-theorem coalition_nonempty (index : Fin 7) : (coalition index).Nonempty := by
-  fin_cases index <;> decide
+theorem coalition_nonempty (index : Fin 7) : (coalition index).Nonempty :=
+  FinFourLastPlayerChild.coalition_nonempty index
 
 theorem exists_coalition_index (A : Finset Child) (hA : A.Nonempty) :
-    ∃ index, A = coalition index := by
-  exact (by decide : ∀ A : Finset Child, A.Nonempty → ∃ index, A = coalition index) A hA
+    ∃ index, A = coalition index :=
+  FinFourLastPlayerChild.exists_coalition_index A hA
 
 def advanceWeight (who : Child) : ℝ := if who = child 2 then 3 else 0
 def withdrawalWeight (who : Child) : ℝ := if who = child 0 then 1 / 2 else 0

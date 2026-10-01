@@ -1,4 +1,5 @@
 import UniformEquilibrium.Quitting.Examples.StrictPatientWithdrawalTable
+import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockOriginalCoalitionRows
 
 /-! # All fifteen literal patient reward rows and their exact margins -/
 
@@ -33,8 +34,9 @@ private theorem childSoloImage
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) (who : Child) :
     childReward table ⟨{some who}, Finset.singleton_nonempty (some who)⟩ (some who) =
       table ⟨{who.1}, Finset.singleton_nonempty who.1⟩ who.1 := by
-  simp only [childReward, quittingChildWithOutsiderReward_apply_original,
-    Finset.map_singleton, quittingChildWithOutsiderOriginalEmbedding_some]
+  simpa only [quittingChildWithOutsiderOriginalEmbedding_some] using
+    quittingChildWithOutsiderReward_singleton_original table (· = 3) outside
+      (some who) (some who)
 
 private theorem childOutsideImage
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -42,14 +44,8 @@ private theorem childOutsideImage
     childReward table ⟨cappedClockChildCoalition A,
         cappedClockChildCoalition_nonempty hA⟩ none =
       table ⟨A.image (fun who : Child => who.1), hA.image (fun who => who.1)⟩ 3 := by
-  have hmap : (cappedClockChildCoalition A).map
-      (quittingChildWithOutsiderOriginalEmbedding (· = 3) outside) =
-      A.image (fun who : Child => who.1) :=
-    (quittingChildWithOutsiderOriginalEmbedding_childCoalition (· = 3) outside A).trans
-      (Finset.map_eq_image _ A)
-  simp only [childReward, quittingChildWithOutsiderReward_apply_original]
-  simp only [hmap]
-  simp only [quittingChildWithOutsiderOriginalEmbedding_none, outside]
+  simpa only [quittingChildWithOutsiderOriginalEmbedding_none, outside] using
+    quittingChildWithOutsiderReward_childCoalition_image table (· = 3) outside A hA none
 
 private theorem joinedOutsideImage
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -58,29 +54,15 @@ private theorem joinedOutsideImage
         cappedClockJoinedCoalition_nonempty A⟩ none =
       table ⟨insert 3 (A.image (fun who : Child => who.1)),
         Finset.insert_nonempty 3 _⟩ 3 := by
-  have hmap : (cappedClockChildCoalition A).map
-      (quittingChildWithOutsiderOriginalEmbedding (· = 3) outside) =
-      A.image (fun who : Child => who.1) :=
-    (quittingChildWithOutsiderOriginalEmbedding_childCoalition (· = 3) outside A).trans
-      (Finset.map_eq_image _ A)
-  have hjoined : (cappedClockJoinedCoalition A).map
-      (quittingChildWithOutsiderOriginalEmbedding (· = 3) outside) =
-      insert 3 (A.image (fun who : Child => who.1)) := by
-    rw [cappedClockJoinedCoalition, Finset.map_insert,
-      quittingChildWithOutsiderOriginalEmbedding_none]
-    change insert 3 ((cappedClockChildCoalition A).map
-      (quittingChildWithOutsiderOriginalEmbedding (· = 3) outside)) = _
-    exact congrArg (insert 3) hmap
-  simp only [childReward, quittingChildWithOutsiderReward_apply_original]
-  simp only [hjoined]
-  simp only [quittingChildWithOutsiderOriginalEmbedding_none, outside]
+  simpa only [quittingChildWithOutsiderOriginalEmbedding_none, outside] using
+    quittingChildWithOutsiderReward_joinedCoalition_image table (· = 3) outside A none
 
 private theorem outsideSoloImage
     (table : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)) :
     childReward table ⟨{none}, Finset.singleton_nonempty none⟩ none =
       table ⟨{3}, Finset.singleton_nonempty 3⟩ 3 := by
-  simp only [childReward, quittingChildWithOutsiderReward_apply_original,
-    Finset.map_singleton, quittingChildWithOutsiderOriginalEmbedding_none, outside]
+  simpa only [quittingChildWithOutsiderOriginalEmbedding_none, outside] using
+    quittingChildWithOutsiderReward_singleton_original table (· = 3) outside none none
 
 private theorem withdrawalGain_zero_eq (index : Fin 7) :
     patientWithdrawalGainFloor (childReward reward) (child 0)

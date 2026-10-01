@@ -125,3 +125,65 @@ theorem rawChild_joining_base
   simp
 
 end GameTheory.QuittingRawChildSource
+
+namespace GameTheory
+
+variable {α : Type} [DecidableEq α]
+
+/-- Actual singleton rewards pulled back from original source coordinates. -/
+theorem quittingChildWithOutsiderReward_singleton_original
+    (reward : {S : Finset α // S.Nonempty} → Payoff α)
+    (deleted : α → Prop) [DecidablePred deleted] (outside : {who : α // deleted who})
+    (owner who : Option (QuittingChildPlayer deleted)) :
+    quittingChildWithOutsiderReward reward deleted outside
+        ⟨{owner}, Finset.singleton_nonempty owner⟩ who =
+      reward ⟨{quittingChildWithOutsiderOriginalEmbedding deleted outside owner},
+        Finset.singleton_nonempty _⟩
+        (quittingChildWithOutsiderOriginalEmbedding deleted outside who) := by
+  simpa only [Finset.map_singleton] using
+    quittingChildWithOutsiderReward_apply_original reward deleted outside
+      ⟨{owner}, Finset.singleton_nonempty owner⟩ who
+
+/-- The actual child coalition is the image of its literal source-player values. -/
+theorem quittingChildWithOutsiderReward_childCoalition_image
+    (reward : {S : Finset α // S.Nonempty} → Payoff α)
+    (deleted : α → Prop) [DecidablePred deleted] (outside : {who : α // deleted who})
+    (A : Finset (QuittingChildPlayer deleted)) (hA : A.Nonempty)
+    (who : Option (QuittingChildPlayer deleted)) :
+    quittingChildWithOutsiderReward reward deleted outside
+        ⟨cappedClockChildCoalition A, cappedClockChildCoalition_nonempty hA⟩ who =
+      reward ⟨A.image (fun player => player.1), hA.image (fun player => player.1)⟩
+        (quittingChildWithOutsiderOriginalEmbedding deleted outside who) := by
+  have hmap : (cappedClockChildCoalition A).map
+      (quittingChildWithOutsiderOriginalEmbedding deleted outside) =
+      A.image (fun player => player.1) :=
+    (quittingChildWithOutsiderOriginalEmbedding_childCoalition
+      deleted outside A).trans (Finset.map_eq_image _ A)
+  simpa only [hmap] using quittingChildWithOutsiderReward_apply_original reward
+    deleted outside ⟨cappedClockChildCoalition A, cappedClockChildCoalition_nonempty hA⟩ who
+
+/-- Joining the outsider inserts its actual source-player value in that same image. -/
+theorem quittingChildWithOutsiderReward_joinedCoalition_image
+    (reward : {S : Finset α // S.Nonempty} → Payoff α)
+    (deleted : α → Prop) [DecidablePred deleted] (outside : {who : α // deleted who})
+    (A : Finset (QuittingChildPlayer deleted)) (who : Option (QuittingChildPlayer deleted)) :
+    quittingChildWithOutsiderReward reward deleted outside
+        ⟨cappedClockJoinedCoalition A, cappedClockJoinedCoalition_nonempty A⟩ who =
+      reward ⟨insert outside.1 (A.image (fun player => player.1)),
+        Finset.insert_nonempty _ _⟩
+        (quittingChildWithOutsiderOriginalEmbedding deleted outside who) := by
+  have hmap : (cappedClockChildCoalition A).map
+      (quittingChildWithOutsiderOriginalEmbedding deleted outside) =
+      A.image (fun player => player.1) :=
+    (quittingChildWithOutsiderOriginalEmbedding_childCoalition
+      deleted outside A).trans (Finset.map_eq_image _ A)
+  have hjoined : (cappedClockJoinedCoalition A).map
+      (quittingChildWithOutsiderOriginalEmbedding deleted outside) =
+      insert outside.1 (A.image (fun player => player.1)) := by
+    rw [cappedClockJoinedCoalition, Finset.map_insert,
+      quittingChildWithOutsiderOriginalEmbedding_none]
+    exact congrArg (insert outside.1) hmap
+  simpa only [hjoined] using quittingChildWithOutsiderReward_apply_original reward
+    deleted outside ⟨cappedClockJoinedCoalition A, cappedClockJoinedCoalition_nonempty A⟩ who
+
+end GameTheory

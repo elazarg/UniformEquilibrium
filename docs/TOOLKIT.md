@@ -2937,6 +2937,35 @@ are literal source calculations, not supplied matrix or partition certificates.
 retains the center's actual one-date hazards `(1 / 2, 2 / 5, 1, 0)` and Never
 tail at payoff `(0, -1, -2 / 5, 7 / 10)`. The same profile works for all
 accuracies; its full cap and every positive finite and Never reply are checked.
+`StrictDeadlineWithdrawal.outsideEvaluatedDebt_le_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalNeighborhood.lean`)
+gives outsider debt at most player zero's child debt plus twice player two's
+for every actual child profile and every nonnegative antitone clock evaluation
+throughout the full sixty-coordinate radius-`1 / 512` reward ball. Fresh
+zero-or-passive floors retain the displayed weights; maximum debt amplifies
+by at most three. Its fixed-target consumer obtains the child equilibrium
+internally and retains the actual quiet lift.
+`StrictDeadlineWithdrawal.degree_response_and_uniformPayoff_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalFullScope.lean`)
+combines independent degree-one, response-partition exclusion and UE
+conclusions for that same changed table. UE follows from the deadline
+certificate, not from degree one. Its ambient singleton-min-map degree
+statement covers every bounded open neighborhood containing the origin.
+`StrictDeadlineWithdrawal.actualValue_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalOneDateProfile.lean`)
+retains the literal hazards `(1 / 2, 1 / 3, 1, 0)` followed by Never, at
+actual payoff `(2 / 3, -9 / 16, -11 / 48, 23 / 16)`. The complete behavioral
+cap equals that payoff, and the same profile uniformizes at every accuracy.
+The sure player's Never payoff `-17 / 24` differs from every positive finite
+deadline payoff `-35 / 48`; the negative singleton correction is retained.
+`StrictDeadlineWithdrawal.every_proper_child_split_exclusions_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalAdvancingExclusions.lean`)
+excludes every proper child's full advancing-only certificate throughout the
+same reward ball. Children containing player zero also fail F/J-only; the
+others fail the genuine Never row and have strictly negative child singletons.
+The latter statement blocks the positive-singleton relaxation without claiming
+F/J infeasibility. One obstructing outsider is produced per child. These
+are certificate obstructions, not failures of equilibrium existence.
 Finite pure-time replies against perpetual continuation pay the actual
 singleton reward; Never pays zero. Their shared owner is
 `quittingTerminalPayoff_alwaysContinueProfile_update_pureTime_some`

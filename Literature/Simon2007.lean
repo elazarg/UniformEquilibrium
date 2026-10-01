@@ -4,6 +4,7 @@ import MathUE.Probability.MarkovPathRestart
 import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
+import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Probability.FinitePathLawAdapter
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -16562,6 +16563,84 @@ theorem epsilonRow_iff_productionSupportApproxNash
         ← forcedContinuePayoff_eq_production G tail row who] at hbound
       linarith
 
+/-- The paper row's canonical simplex coordinates vary continuously, including
+the pure Continue and pure Quit faces. -/
+theorem continuous_quitRow_simplex (G : QuittingGame) :
+    Continuous (fun row : QuitRow G =>
+      GameTheory.quittingSimplexOfRoot (productionRootOfQuitRow G row)) := by
+  classical
+  apply continuous_pi
+  intro who
+  rw [(Convexity.StdSimplex.isEmbedding_toFun_comp_weights ℝ Bool).continuous_iff]
+  change Continuous (fun row : QuitRow G =>
+    fun action : Bool => (productionRootOfQuitRow G row who action).toReal)
+  apply continuous_pi
+  intro action
+  have hcoordinate : Continuous (fun row : QuitRow G => (row who : ℝ)) :=
+    continuous_subtype_val.comp (continuous_apply who)
+  cases action with
+  | false =>
+    simp only [productionRootOfQuitRow_false_toReal]
+    exact (continuous_const : Continuous (fun _ : QuitRow G => (1 : ℝ))).sub hcoordinate
+  | true =>
+    simpa only [productionRootOfQuitRow_true_toReal] using hcoordinate
+
+/-- The actual paper support-local equilibrium graph is closed at every
+error. This is the preimage of the production simplex graph, not the
+different endpoint-approximate-Nash condition. -/
+theorem isClosed_epsilonRow_graph (G : QuittingGame) (error : ℝ) :
+    IsClosed {point : Payoff G.Player × QuitRow G |
+      point.2 ∈ EpsilonRow G error point.1} := by
+  classical
+  let data : Payoff G.Player × QuitRow G →
+      Payoff G.Player × GameTheory.QuittingRootSimplex G.Player :=
+    fun point => (point.1,
+      GameTheory.quittingSimplexOfRoot (productionRootOfQuitRow G point.2))
+  have hdata : Continuous data :=
+    continuous_fst.prodMk ((continuous_quitRow_simplex G).comp continuous_snd)
+  have hequal : {point : Payoff G.Player × QuitRow G |
+      point.2 ∈ EpsilonRow G error point.1} =
+      data ⁻¹' {point : Payoff G.Player × GameTheory.QuittingRootSimplex G.Player |
+        GameTheory.IsQuittingSimplexRootSupportApproxNash
+          G.reward point.1 error point.2} := by
+    ext point
+    change point.2 ∈ EpsilonRow G error point.1 ↔
+      GameTheory.IsQuittingSimplexRootSupportApproxNash G.reward point.1 error
+        (GameTheory.quittingSimplexOfRoot (productionRootOfQuitRow G point.2))
+    rw [GameTheory.isQuittingSimplexRootSupportApproxNash_iff,
+      GameTheory.quittingRootOfSimplex_simplexOfRoot]
+    exact epsilonRow_iff_productionSupportApproxNash G error point.1 point.2
+  rw [hequal]
+  exact (GameTheory.isClosed_isQuittingSimplexRootSupportApproxNash
+    G.reward error).preimage hdata
+
+/-- The actual payoff correspondence has compact graph over each compact
+continuation carrier. Its row witnesses are not supplied separately. -/
+theorem isCompact_fRow_graph_over_compact
+    (G : QuittingGame) (error : ℝ) (carrier : Set (Payoff G.Player))
+    (hcarrier : IsCompact carrier) :
+    IsCompact {pair : Payoff G.Player × Payoff G.Player |
+      pair.1 ∈ carrier ∧ pair.2 ∈ FRow G error pair.1} := by
+  let source : Set (Payoff G.Player × QuitRow G) :=
+    (carrier ×ˢ Set.univ) ∩ {point | point.2 ∈ EpsilonRow G error point.1}
+  have hsource : IsCompact source :=
+    (hcarrier.prod isCompact_univ).inter_right (isClosed_epsilonRow_graph G error)
+  let output : Payoff G.Player × QuitRow G → Payoff G.Player × Payoff G.Player :=
+    fun point => (point.1, QuittingOneStagePayoff G point.1 point.2)
+  have houtput : Continuous output :=
+    continuous_fst.prodMk (continuous_pi (continuous_quittingOneStagePayoff G))
+  have hequal : {pair : Payoff G.Player × Payoff G.Player |
+      pair.1 ∈ carrier ∧ pair.2 ∈ FRow G error pair.1} = output '' source := by
+    ext pair
+    constructor
+    · rintro ⟨hfirst, row, hrow, hpayoff⟩
+      refine ⟨(pair.1, row), ⟨⟨hfirst, Set.mem_univ row⟩, hrow⟩, ?_⟩
+      exact Prod.ext rfl hpayoff
+    · rintro ⟨point, hpoint, rfl⟩
+      exact ⟨hpoint.1.1, point.2, hpoint.2, rfl⟩
+  rw [hequal]
+  exact hsource.image houtput
+
 /-- Paper individual rationality is production Simon rationality. -/
 theorem isRational_iff_production
     (G : QuittingGame) [DecidableEq G.Player]
@@ -18739,6 +18818,22 @@ Unbounded variation of an infinite orbit uses finite partial sums, not a real `t
 -/
 def HasUnboundedVariation {N : Type} [Fintype N] (x : ℕ → Payoff N) : Prop :=
   ∀ B : ℝ, ∃ k, B ≤ ∑ i ∈ Finset.range k, ‖x (i + 1) - x i‖
+
+/-- The nonconvergence implication used in Theorem 4, Case 1. Bounded
+partial total variation would make the payoff sequence Cauchy and convergent. -/
+theorem hasUnboundedVariation_of_no_limit
+    {N : Type} [Fintype N] (point : ℕ → Payoff N)
+    (hnoLimit : ¬∃ limit : Payoff N, Tendsto point atTop (𝓝 limit)) :
+    HasUnboundedVariation point := by
+  by_contra hbounded
+  unfold HasUnboundedVariation at hbounded
+  push Not at hbounded
+  obtain ⟨bound, hbound⟩ := hbounded
+  have hsum : Summable (fun time => ‖point (time + 1) - point time‖) :=
+    summable_of_sum_range_le (fun _ => norm_nonneg _) (fun time => (hbound time).le)
+  have hdist : Summable (fun time => dist (point time) (point (time + 1))) :=
+    hsum.congr (fun time => by rw [dist_eq_norm, norm_sub_rev])
+  exact hnoLimit (cauchySeq_tendsto_of_complete (cauchySeq_of_summable_dist hdist))
 
 /-- Removing a finite prefix preserves unbounded total variation. -/
 theorem HasUnboundedVariation.tail {N : Type} [Fintype N]
@@ -21078,6 +21173,64 @@ def InfiniteUnrestrictedOrbitCondition (G : QuittingGame) : Prop :=
   ∀ δ : ℝ, 0 < δ → ∃ x : ℕ → Payoff G.Player,
     IsInfiniteOrbit (FRow G δ) x ∧ HasUnboundedVariation x
 
+/-- The rational-tail construction in Corollary 2 needs only all-normal
+players and actual unrestricted orbit families, not the five-way equivalence. -/
+theorem InfiniteUnrestrictedOrbitCondition.toInfiniteOrbitCondition
+    (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (h : InfiniteUnrestrictedOrbitCondition G) : InfiniteOrbitCondition G := by
+  intro ε hε
+  rcases exists_quittingPayoffDifferenceBound G with ⟨M, hM⟩
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  let a : ℝ := min (ε / 3) (1 / 2)
+  have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
+  have ha1 : a ≤ 1 := le_trans (min_le_right _ _) (by norm_num)
+  have h3a : 3 * a ≤ ε := by
+    have := min_le_left (ε / 3) (1 / 2)
+    linarith
+  let δ : ℝ := a ^ 2 / (2 * M)
+  have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hMpos)
+  have hδε : δ ≤ ε := by
+    rw [div_le_iff₀ (mul_pos (by norm_num) hMpos)]
+    have haHalf := min_le_right (ε / 3) (1 / 2)
+    have haEps := min_le_left (ε / 3) (1 / 2)
+    nlinarith [sq_nonneg a, hM.1]
+  rcases h δ hδ with ⟨x, horbit, hvariation⟩
+  have heventual : ∀ n : G.Player, ∃ cutoff, ∀ i, cutoff ≤ i →
+      MinMaxQuit G n - 3 * a ≤ x i n := by
+    intro n
+    apply eventually_ge_of_drift_below hδ
+    intro i
+    exact lemma6_quantitative G hM hnormal ha ha1 (horbit i) n
+  choose cutoff hcutoff using heventual
+  let start := ∑ n, cutoff n
+  have hcutoffStart : ∀ n, cutoff n ≤ start := by
+    intro n
+    exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i)) (Finset.mem_univ n)
+  let y : ℕ → Payoff G.Player := fun i => x (start + i)
+  refine ⟨y, ?_, ?_, ?_⟩
+  · intro i
+    apply FRow.mono G hδε
+    simpa [y, Nat.add_assoc] using horbit (start + i)
+  · intro i n
+    have hfloor := hcutoff n (start + i)
+      ((hcutoffStart n).trans (Nat.le_add_right start i))
+    dsimp [y]
+    linarith
+  · exact hvariation.tail start
+
+/-- Actual unrestricted orbit families yield approximate equilibria in an
+all-normal game. The instant branch is handled by its own producer; otherwise
+the existing near-feasible return and cyclic-orbit compiler applies. -/
+theorem InfiniteUnrestrictedOrbitCondition.hasQuitApproximateEquilibria
+    (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (h : InfiniteUnrestrictedOrbitCondition G) : HasQuitApproximateEquilibria G := by
+  classical
+  by_cases hinstant : HasInstantApproximateEquilibria G
+  · exact hinstant.hasQuitApproximateEquilibria G
+  · have hinfinite := h.toInfiniteOrbitCondition G hnormal
+    have hnear := hinfinite.toFiniteNearOrbitCondition G
+    exact (hnear.toCyclicOrbitCondition G hinstant).hasQuitApproximateEquilibria G
+
 /-- The checked deduction of Corollary 2 from the five-way equivalence and Lemma 6. -/
 theorem corollary2_of_equivalentFive (G : QuittingGame)
     (hnormal : ∀ n, IsNormalPlayer G n)
@@ -21091,46 +21244,7 @@ theorem corollary2_of_equivalentFive (G : QuittingGame)
     rcases hEquiv.mp hequilibrium δ hδ with ⟨x, horbit, _hrational, hvariation⟩
     exact ⟨x, horbit, hvariation⟩
   · intro hunrestricted
-    apply hEquiv.mpr
-    intro ε hε
-    rcases exists_quittingPayoffDifferenceBound G with ⟨M, hM⟩
-    have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
-    let a : ℝ := min (ε / 3) (1 / 2)
-    have ha : 0 < a := lt_min (div_pos hε (by norm_num)) (by norm_num)
-    have ha1 : a ≤ 1 := le_trans (min_le_right _ _) (by norm_num)
-    have h3a : 3 * a ≤ ε := by
-      have := min_le_left (ε / 3) (1 / 2)
-      linarith
-    let δ : ℝ := a ^ 2 / (2 * M)
-    have hδ : 0 < δ := div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hMpos)
-    have hδε : δ ≤ ε := by
-      rw [div_le_iff₀ (mul_pos (by norm_num) hMpos)]
-      have haHalf := min_le_right (ε / 3) (1 / 2)
-      have haEps := min_le_left (ε / 3) (1 / 2)
-      nlinarith [sq_nonneg a, hM.1]
-    rcases hunrestricted δ hδ with ⟨x, horbit, hvariation⟩
-    have heventual : ∀ n : G.Player, ∃ cutoff, ∀ i, cutoff ≤ i →
-        MinMaxQuit G n - 3 * a ≤ x i n := by
-      intro n
-      apply eventually_ge_of_drift_below hδ
-      intro i
-      exact lemma6_quantitative G hM hnormal ha ha1 (horbit i) n
-    choose cutoff hcutoff using heventual
-    let start := ∑ n, cutoff n
-    have hcutoffStart : ∀ n, cutoff n ≤ start := by
-      intro n
-      exact Finset.single_le_sum (fun i _ => Nat.zero_le (cutoff i)) (Finset.mem_univ n)
-    let y : ℕ → Payoff G.Player := fun i => x (start + i)
-    refine ⟨y, ?_, ?_, ?_⟩
-    · intro i
-      apply FRow.mono G hδε
-      simpa [y, Nat.add_assoc] using horbit (start + i)
-    · intro i n
-      have hfloor := hcutoff n (start + i)
-        ((hcutoffStart n).trans (Nat.le_add_right start i))
-      dsimp [y]
-      linarith
-    · exact hvariation.tail start
+    exact hunrestricted.hasQuitApproximateEquilibria G hnormal
 
 /-- Corollary 2 as printed in 2007. -/
 theorem corollary2 (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
@@ -22352,6 +22466,47 @@ def EscapeBand (G : QuittingGame) (ε : ℝ) : Set (Payoff G.Player) :=
   {x | (∀ n, SoloPayoff G n ≤ x n) ∧
     ∃ j, x j ≤ SoloPayoff G j + ε}
 
+/-- Closedness and the literal distance-one feasible-neighborhood condition
+already make the escape game's actual carrier compact. -/
+theorem EscapeWitness.isCompact {G : QuittingGame} (witness : EscapeWitness G) :
+    IsCompact witness.Q := by
+  classical
+  apply (GameTheory.isCompact_quittingFeasibleClosedNeighborhood
+    G.reward 1).of_isClosed_subset witness.Q_closed
+  intro point hpoint
+  exact witness.nearFeasible point hpoint
+
+/-- The finite union of the solo-payoff coordinate halfspaces is closed. -/
+theorem isClosed_WSet (G : QuittingGame) : IsClosed (WSet G) := by
+  rw [show WSet G = ⋃ who : G.Player, {point | point who ≤ SoloPayoff G who} by
+    ext point
+    simp only [WSet, Set.mem_ofPred_eq, Set.mem_iUnion]]
+  exact isClosed_iUnion_of_finite fun who =>
+    isClosed_le (continuous_apply who) continuous_const
+
+/-- The source band is closed for every accuracy, without a sign restriction
+on that accuracy. -/
+theorem isClosed_escapeBand (G : QuittingGame) (accuracy : ℝ) :
+    IsClosed (EscapeBand G accuracy) := by
+  rw [show EscapeBand G accuracy =
+      (⋂ who : G.Player, {point | SoloPayoff G who ≤ point who}) ∩
+        ⋃ who : G.Player, {point | point who ≤ SoloPayoff G who + accuracy} by
+    ext point
+    simp only [EscapeBand, Set.mem_ofPred_eq, Set.mem_inter_iff,
+      Set.mem_iInter, Set.mem_iUnion]]
+  exact (isClosed_iInter fun who =>
+    isClosed_le continuous_const (continuous_apply who)).inter
+      (isClosed_iUnion_of_finite fun who =>
+        isClosed_le (continuous_apply who) continuous_const)
+
+/-- The actual carrier in Theorem 4, Cases 1--3, is compact by the displayed
+escape-witness fields. No separate compact-carrier premise is needed. -/
+theorem EscapeWitness.isCompact_caseCarrier
+    {G : QuittingGame} (witness : EscapeWitness G) (accuracy : ℝ) :
+    IsCompact (witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) :=
+  witness.isCompact.inter_right
+    ((isClosed_WSet G).union (isClosed_escapeBand G accuracy))
+
 /-- A one-stage row in which only `j` may quit, with probability at most `δ`. -/
 def IsSmallSoloRow (G : QuittingGame) (δ : ℝ) (j : G.Player)
     (p : QuitRow G) : Prop :=
@@ -23263,6 +23418,152 @@ theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε :
     refine ⟨k + l, c, hc0.trans hz0, hcorbit, hcband, ?_⟩
     rw [hclast]
     exact hlastCritical
+
+/-- The compactness exercise in Theorem 4, Case 3: finite actual payoff
+orbits of every length in one compact carrier, all starting at the same
+point, yield one infinite actual orbit with that exact start. -/
+theorem exists_infinite_fRow_orbit_of_finite_orbits
+    (G : QuittingGame) (error : ℝ) (carrier : Set (Payoff G.Player))
+    (hcarrier : IsCompact carrier) (start : Payoff G.Player)
+    (hfinite : ∀ length : ℕ, ∃ point : Fin (length + 1) → Payoff G.Player,
+      point 0 = start ∧ IsFiniteOrbit (FRow G error) point ∧
+        ∀ time, point time ∈ carrier) :
+    ∃ point : ℕ → Payoff G.Player,
+      point 0 = start ∧ IsInfiniteOrbit (FRow G error) point ∧
+        ∀ time, point time ∈ carrier := by
+  classical
+  have hstart : start ∈ carrier := by
+    obtain ⟨point, hzero, _, hpoint⟩ := hfinite 0
+    simpa only [hzero] using hpoint 0
+  let box : ℕ → Set (Payoff G.Player)
+    | 0 => {start}
+    | _ + 1 => carrier
+  let relation : ℕ → Payoff G.Player → Payoff G.Player → Prop :=
+    fun _ first second => second ∈ FRow G error first
+  have hbox : ∀ time, IsCompact (box time) := by
+    intro time
+    cases time with
+    | zero => exact isCompact_singleton
+    | succ time => exact hcarrier
+  let graph : Set (Payoff G.Player × Payoff G.Player) :=
+    {pair | pair.1 ∈ carrier ∧ pair.2 ∈ carrier ∧ pair.2 ∈ FRow G error pair.1}
+  have hgraphClosed : IsClosed graph := by
+    have hclosed := (isCompact_fRow_graph_over_compact G error carrier hcarrier).isClosed
+      |>.inter (hcarrier.isClosed.preimage continuous_snd)
+    convert hclosed using 1
+    ext pair
+    simp only [graph, Set.mem_inter_iff, Set.mem_preimage, Set.mem_ofPred_eq]
+    tauto
+  have hgraph : ∀ time, IsClosed
+      {pair : Payoff G.Player × Payoff G.Player |
+        pair.1 ∈ box time ∧ pair.2 ∈ box (time + 1) ∧
+          relation time pair.1 pair.2} := by
+    intro time
+    cases time with
+    | zero =>
+      have hequal : {pair : Payoff G.Player × Payoff G.Player |
+          pair.1 ∈ box 0 ∧ pair.2 ∈ box (0 + 1) ∧ relation 0 pair.1 pair.2} =
+          {pair | pair.1 = start} ∩ graph := by
+        ext pair
+        simp only [box, relation, graph, Set.mem_singleton_iff,
+          Set.mem_inter_iff, Set.mem_ofPred_eq]
+        constructor
+        · rintro ⟨hfirst, hsecond, hedge⟩
+          exact ⟨hfirst, hfirst.symm ▸ hstart, hsecond, hedge⟩
+        · rintro ⟨hfirst, _, hsecond, hedge⟩
+          exact ⟨hfirst, hsecond, hedge⟩
+      rw [hequal]
+      exact (isClosed_eq continuous_fst continuous_const).inter hgraphClosed
+    | succ time =>
+      simpa only [box, relation, graph] using hgraphClosed
+  have hprefix : ∀ horizon,
+      (Math.Topology.compactDependentFinitePrefixSolutionSet
+        (Point := fun _ => Payoff G.Player) box relation horizon).Nonempty := by
+    intro horizon
+    obtain ⟨point, hzero, hedge, hpoint⟩ := hfinite horizon
+    let value : ℕ → Payoff G.Player := fun time =>
+      point ⟨min time horizon, Nat.lt_succ_of_le (min_le_right _ _)⟩
+    refine ⟨value, ?_, ?_⟩
+    · intro time
+      cases time with
+      | zero =>
+        change value 0 = start
+        have hindex : (⟨min 0 horizon,
+            Nat.lt_succ_of_le (min_le_right _ _)⟩ : Fin (horizon + 1)) = 0 := by
+          apply Fin.ext
+          exact Nat.zero_min horizon
+        simpa only [value, hindex] using hzero
+      | succ time => exact hpoint _
+    · intro time
+      have hleft : (⟨min (time : ℕ) horizon,
+          Nat.lt_succ_of_le (min_le_right _ _)⟩ : Fin (horizon + 1)) =
+          time.castSucc := by
+        apply Fin.ext
+        exact Nat.min_eq_left (Nat.le_of_lt time.isLt)
+      have hright : (⟨min ((time : ℕ) + 1) horizon,
+          Nat.lt_succ_of_le (min_le_right _ _)⟩ : Fin (horizon + 1)) =
+          time.succ := by
+        apply Fin.ext
+        exact Nat.min_eq_left (Nat.succ_le_of_lt time.isLt)
+      change value ((time : ℕ) + 1) ∈ FRow G error (value time)
+      simpa only [value, hleft, hright] using hedge time
+  obtain ⟨point, hpoint, hedge⟩ :=
+    Math.Topology.exists_dependentInfiniteChain_of_finitePrefixes
+      (Point := fun _ => Payoff G.Player) box relation hbox hgraph hprefix
+  have hzero : point 0 = start := hpoint 0
+  refine ⟨point, hzero, hedge, ?_⟩
+  intro time
+  cases time with
+  | zero => simpa only [hzero] using hstart
+  | succ time => exact hpoint (time + 1)
+
+/-- The literal no-infinite-orbit alternative in Theorem 4, Case 3: some
+finite length has no orbit remaining in the compact carrier from this start.
+This does not yet supply the subsequent connected-component argument. -/
+theorem exists_finiteLength_without_carrierOrbit_of_no_infinite
+    (G : QuittingGame) (carrier : Set (Payoff G.Player))
+    (hcarrier : IsCompact carrier) (start : Payoff G.Player)
+    (hnoInfinite : ¬∃ point : ℕ → Payoff G.Player,
+      point 0 = start ∧ IsInfiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ carrier) :
+    ∃ length : ℕ, ¬∃ point : Fin (length + 1) → Payoff G.Player,
+      point 0 = start ∧ IsFiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ carrier := by
+  by_contra hnone
+  push Not at hnone
+  exact hnoInfinite
+    (exists_infinite_fRow_orbit_of_finite_orbits G 0 carrier hcarrier start hnone)
+
+/-- The literal compact-carrier alternative in Theorem 4, Case 3, with
+compactness discharged from the actual escape witness. -/
+theorem exists_finiteLength_without_escapeOrbit_of_no_infinite
+    (G : QuittingGame) (witness : EscapeWitness G) (accuracy : ℝ)
+    (start : Payoff G.Player)
+    (hnoInfinite : ¬∃ point : ℕ → Payoff G.Player,
+      point 0 = start ∧ IsInfiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) :
+    ∃ length : ℕ, ¬∃ point : Fin (length + 1) → Payoff G.Player,
+      point 0 = start ∧ IsFiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy) :=
+  exists_finiteLength_without_carrierOrbit_of_no_infinite
+    G _ (witness.isCompact_caseCarrier accuracy) start hnoInfinite
+
+/-- Theorem 4, Case 1, reaches the actual approximate-equilibrium conclusion:
+one nonconvergent exact payoff orbit suffices in an all-normal game. The
+escape-witness and carrier hypotheses are unnecessary for this implication. -/
+theorem hasQuitApproximateEquilibria_of_nonconvergent_exact_orbit
+    (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (point : ℕ → Payoff G.Player) (horbit : IsInfiniteOrbit (FRow G 0) point)
+    (hnoLimit : ¬∃ limit : Payoff G.Player, Tendsto point atTop (𝓝 limit)) :
+    HasQuitApproximateEquilibria G := by
+  have hvariation : HasUnboundedVariation point :=
+    hasUnboundedVariation_of_no_limit point hnoLimit
+  have hfamily : InfiniteUnrestrictedOrbitCondition G := by
+    intro error herror
+    refine ⟨point, ?_, hvariation⟩
+    intro time
+    exact FRow.mono G herror.le _ (horbit time)
+  exact hfamily.hasQuitApproximateEquilibria G hnormal
 
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :
