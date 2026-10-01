@@ -36,7 +36,9 @@ import MathUE.SignedFourCycleWeights
 import MathUE.SignedFourCycleStrictOpenness
 import MathUE.LinearProgramming.PositiveEntries
 import MathUE.LinearProgramming.PositiveInverseOpenness
+import MathUE.LinearProgramming.PositiveInverseQuantitativePerturbation
 import MathUE.LinearProgramming.PositiveInverseR0
+import MathUE.LinearProgramming.RowSwapR0Restriction
 import MathUE.LinearProgramming.ThreeCycleInverseFormulas
 import MathUE.LinearProgramming.ThreeCyclePathRigidity
 import MathUE.LinearProgramming.NonnegativeInverseApproximation
@@ -205,6 +207,7 @@ import MathUE.Interval.PolynomialLipschitz
 import MathUE.Interval.RationalPolynomialDerivativeApproximation
 import MathUE.Interval.RationalPolynomialSmoothDerivativeApproximation
 import MathUE.Interval.RationalInterval
+import MathUE.Interval.RationalCubeGrid
 import MathUE.Interval.UnitIntervalClip
 import MathUE.Interval.RationalLowerBoxSearch
 import MathUE.Interval.RationalPolynomial
@@ -377,6 +380,7 @@ import MathUE.Polynomial.SignDiagramReconstruction
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.TensorBernsteinQuadratic
+import MathUE.Polynomial.TensorBernsteinQuadraticPerturbation
 import MathUE.Polynomial.TensorBernsteinQuadraticSign
 import MathUE.Polynomial.MvPolynomialFDeriv
 import MathUE.Polynomial.TensorBernsteinDifferences

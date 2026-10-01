@@ -1370,6 +1370,15 @@ are stated in
 with the packet's literal two-face guards. The strategic module also states
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
 under those source conditions.
+`quittingCrossedSingletonMatrix_degree_eq_one_of_sourceGuards_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseR0Restriction.lean`)
+gives the separate necessary restriction when the original singleton matrix
+is R0, selected reciprocal entries are positive, and selected external entries
+are strictly negative. The actual row-swapped matrix is then R0 without any
+inverse-positivity assumption; source guards and absence of a UE target force
+its degree to be one. The generic finite-index row-swap result resides in
+`MathUE/LinearProgramming/RowSwapR0Restriction.lean`. The source adapter passes
+a silent named check. Degree one does not imply absence of UE.
 `exists_isAlgebraic_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_sourceGuards`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAlgebraicStrategic.lean`)
 adds algebraic hazards and algebraic actual payoff for rational rewards and
@@ -1380,6 +1389,37 @@ payoff all refer to that same selected root and value; zero and upper hazard
 faces are retained. The finite sign-formula encoding is in
 `UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRationalFormula.lean`.
 This is algebraic existence, not executable root isolation or rational search.
+`rationalQuittingStationaryRegretAccepts_eq_true_iff`
+(`UniformEquilibrium/Quitting/Stationary/RationalPayoffCap.lean`)
+identifies the executable rational product/sum/quotient/max test with
+deleted-opponent contraction and the actual stationary terminal Nash condition
+against every behavioral deviation. Its payoff and cap formulas are jointly
+continuous on the contracting part of the closed hazard cube, including zero
+and sure hazards
+(`UniformEquilibrium/Quitting/Stationary/HazardPayoffCap.lean`).
+`rationalQuittingStationaryBoundedSearch_eventually_succeeds_of_sourceGuards`
+(`UniformEquilibrium/Quitting/Stationary/RationalGridSearch.lean`)
+proves success at every sufficiently large finite search budget from the literal
+rational guarded source and R0/nonunit-degree hypotheses. The first successful
+budget selector returns an actual contracting stationary profile satisfying
+the requested full behavioral regret bound. It requires only accuracy, not a
+prescribed payoff or a selected real root; no complexity bound is asserted.
+The source ceiling may be real; rationality is required only for the reward
+table and requested accuracy, not for this auxiliary source parameter.
+These rational-search modules pass silent targeted checks.
+`exists_rationalQuittingSearchFiniteCensor_of_sourceGuards`,
+`exists_rationalQuittingSearchFiniteCensor_of_strictRawUnit`, and
+`exists_rationalQuittingSearchFiniteCensor_of_halfStrictRaw`
+(`UniformEquilibrium/Quitting/Stationary/RationalSearchFiniteCensor.lean`)
+compose that actual selector with approximate-Nash censoring. The source
+conditions supply search success internally. At every positive rational
+accuracy, the resulting independent date/Never laws retain exact geometric
+atoms, Never mass and the full censored semantic pair, with the requested
+terminal regret and payoff error at most one sixth of accuracy relative to
+this selected stationary value. The actual deleted-survival rate determines
+the logarithmic cutoff and signed finite-horizon bounds. The module passes
+a silent named check. Its selected value may change with accuracy; it does
+not search for a prescribed target or assert an executable logarithmic cutoff.
 `exists_guardedCrossed_stationaryTerminalNash_uniformPayoff_of_strictRawUnit`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRawProducer.lean`)
 closes the strict unit-ceiling reward-table branch: the literal lower ranking
@@ -1412,6 +1452,17 @@ matrix/lower-guard approximations are derived from the literal reward table.
 (`UniformEquilibrium/Quitting/Stationary/StationaryTerminalPayoffSelection.lean`)
 provides the reusable stationary fixed-target selection step. Generic affine
 Bernoulli and quadratic tensor Bernstein algebra resides in `MathUE`.
+`exists_stationary_uniformPayoff_witnesses_of_weakHalfPolynomialGuards`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseWeakPolynomialProducer.lean`)
+extends the half-ceiling boundary result to the actual weak polynomial face
+guards, without finite reward-ranking or Bernstein-coefficient assumptions.
+The literal perturbation produces strict lower and upper faces; the original
+weak lower face derives the external singleton signs and nonnegative inverse
+derives reciprocity. Fresh nearby equilibria transfer to the original signed
+game and the existing selector fixes one target before accuracy. The theorem
+retains actual contracting stationary witnesses for terminal approximation and
+all sufficiently long finite horizons. Its named check is silent; exact boundary
+stationary attainment is not asserted.
 `exists_uniformPayoff_of_oneSidedWeakUnitRawGuards`
 (`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitProducer.lean`)
 proves a matrix-free Fin4 class from twelve weak owner lower comparisons
@@ -1441,8 +1492,30 @@ every relabeling of that test.
 `unitCeiling_block_injective_of_responseInvariant`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePartitionSeparation.lean`)
 use distinct all-half residuals to exclude every nondiscrete block map.
-The source's full reward neighborhoods, child-LP comparisons, and rational
-algebraic-root and accuracy-only search adapters remain separate.
+`halfCeiling_fullRewardBall_stationaryTerminalNash_uniformPayoff` and
+`unitCeiling_fullRewardBall_stationaryTerminalNash_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFullRewardNeighborhood.lean`)
+produce fresh actual contracting stationary equilibria and fixed UE targets
+throughout the full sixty-coordinate reward balls of radii `1 / 100` and
+`1 / 1000`, respectively. No singleton coordinate or symmetry is fixed.
+The inverse calculation uses the ordinary entrywise reward metric and derives
+positive determinant and positive actual inverse for each new table; the half
+coefficient-error factors are derived from its actual reward residual.
+`unitCeiling_block_injective_of_dist_lt_responseInvariant`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePartitionNeighborhood.lean`)
+excludes every nondiscrete response quotient throughout the unit ball. Both
+modules pass silent named checks. The algebraic-root, accuracy-only rational
+search, and child-LP comparisons have the stated producers and checks above
+and below; they are not a complete packet seal.
+`unitCeiling_not_reindexed_weakHalfRawGuards_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseWeakHalfNeighborhoodSeparation.lean`)
+excludes the weak half-ceiling raw test under every relabeling throughout the
+unit ball, using actual lower-ranking and upper-face witnesses.
+`joining_zero_gain_eq_two` and `profile_not_exact_terminalNash`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseUnguardedRootCounterexample.lean`)
+give the literal crossed fixed root whose original player's behavioral
+Quit-now deviation gains two. These modules pass silent named checks.
+The example refutes unguarded fixed-point transfer, not UE existence.
 The quotient RI route does not apply to the crossed map.
 
 `halfCeiling_every_proper_child_raw_test_fails` and
@@ -1484,6 +1557,12 @@ regret at most `3 * M * rho^N`, delivery error at most `M * rho^N`, and signed
 horizon errors with additional `2 * M * (N + 1) / H` and
 `M * (N + 1) / H`, respectively. Here `rho` is the maximum deleted-opponent
 survival, not a sum of marginal tails. The empty-player case is included.
+`exists_stationaryFiniteCensorTimingProfile_of_approximateNash` in the same
+file generalizes this construction to a source with terminal Nash error
+`error`. Censoring adds `3 * M * rho^N` to that error, with unchanged delivery
+and horizon corrections, on the same actual independent finite laws and
+semantic pair. The exact-Nash theorem delegates with error zero. The generalized
+module and its logarithmic-cutoff consumers pass a silent targeted check.
 `exists_halfCeilingFiniteCensorTimingProfile`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseFiniteCensor.lean`)
 constructs these laws from the actual half-ceiling root, with

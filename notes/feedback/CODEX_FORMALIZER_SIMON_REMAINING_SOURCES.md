@@ -123,6 +123,32 @@ with the preceding construction. Both declarations passed the full silent
 build and separate standard-axiom checks. The graph-to-quitting-orbit and
 Lemma 4.5 assembly remain Lean work.
 
+## Section 5 source components
+
+`section5_abnormalSolo_pseudoEquilibrium` (`Literature/Simon2012.lean`)
+constructs the literal small constant solo-quitting profile under the source's
+additional no-harm singleton comparisons. Its prescribed payoff is the actual
+owner's singleton vector, every other player has the requested full behavioral
+regret bound, and the abnormal owner strictly improves by Never, whose payoff
+is zero. This is not an equilibrium of the whole game.
+`soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy` and
+`section5ModifiedC_outside_normalPieces_exists_two_low_coordinates` in that
+file prove the printed three-accuracy separation and retain the actual
+intersection of two distinct abnormal-player pieces. All three declarations
+pass the silent named module check and separate transitive checks using only
+the three standard axioms. They do not construct the Section 5 boundary
+homotopy or correspondence and do not supply the Section 4 zero-quitter bound.
+
+The published Section 5, pages 194--195, specifies the retained normal-player
+pieces and abnormal-pair intersections. It asks for an artificial modification
+of the homotopy and correspondence near the boundary outside the normal pieces,
+with the structure parameter depending on the minimum abnormal-player gap.
+It does not give a formula for that modification, the parameter choice, or
+the required eventual escape from its artificial edges. Completing this
+source adapter requires those constructions and their compatibility and
+Question 1 checks. The printed description alone is not such an adapter;
+the checked geometry and solo-profile components above do not supply one.
+
 ## Section 4 cutoff and coordinate drift
 
 Simon (2012), printed page 191, makes the cutoff vanish at distance at least

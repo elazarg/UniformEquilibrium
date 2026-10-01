@@ -74,6 +74,23 @@ theorem isεAsymptoticNash_soloStationary_exact
         reward hwho hazard]
     exact max_le (hinactive who hwho) le_rfl
 
+/-- The literal Never deviation of the sole quitter leaves everyone continuing. -/
+theorem quittingSoloStationaryProfile_update_owner_never
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (owner : ι) (hazard : PMF Bool) :
+    Function.update
+        (quittingStationaryProfile reward (quittingSoloStationaryRoot owner hazard))
+        owner (quittingAlwaysContinueStrategy reward owner) =
+      quittingAlwaysContinueProfile reward := by
+  funext player time history
+  by_cases hplayer : player = owner
+  · subst player
+    simp [quittingAlwaysContinueStrategy, quittingAlwaysContinueProfile,
+      StochasticGame.stationaryBehaviorProfile]
+  · simp [quittingStationaryProfile, quittingSoloStationaryRoot,
+      quittingAlwaysContinueProfile, hplayer, StochasticGame.stationaryBehaviorProfile]
+    rfl
+
 /-- The exact terminal-Nash property of a positive-hazard owner-solo root
 forces both parts of the scalar certification test.  Never supplies the
 owner inequality, while quitting immediately supplies each inactive-player
@@ -95,22 +112,7 @@ theorem soloStationary_exact_conditions_of_isεAsymptoticNash
   constructor
   · have hnever := hnash owner
       (quittingAlwaysContinueStrategy reward owner)
-    have hprofiles :
-        Function.update
-            (quittingStationaryProfile reward
-              (quittingSoloStationaryRoot owner hazard)) owner
-              (quittingAlwaysContinueStrategy reward owner) =
-          quittingAlwaysContinueProfile reward := by
-      funext player time history
-      by_cases hplayer : player = owner
-      · subst player
-        simp [quittingAlwaysContinueStrategy,
-          quittingAlwaysContinueProfile,
-          StochasticGame.stationaryBehaviorProfile]
-      · simp [quittingStationaryProfile, quittingSoloStationaryRoot,
-          quittingAlwaysContinueProfile, hplayer,
-          StochasticGame.stationaryBehaviorProfile]
-        rfl
+    have hprofiles := quittingSoloStationaryProfile_update_owner_never reward owner hazard
     rw [hprofiles, quittingTerminalPayoff_quittingAlwaysContinue,
       quittingTerminalPayoff_soloStationary reward owner owner hazard
         hpositive,

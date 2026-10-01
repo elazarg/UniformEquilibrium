@@ -171,6 +171,51 @@ theorem isQuittingZeroSolo_or_exists_nonnegative_noHarmSingleton_of_acyclic
           hedge ⟨hne, hlt⟩
         exact le_of_not_gt hnot
 
+/-- Against an owner-solo stationary root, the outsider's full behavioral regret
+is bounded by the pair premium. No sign condition on the owner's solo payoff is needed. -/
+theorem quittingTerminalPayoff_update_solo_other_le_pairPremium
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    {owner other : ι} (hne : other ≠ owner)
+    {q : ℝ} (hq0 : 0 < q) (hq1 : q ≤ 1)
+    (hnoHarm : quittingSoloReward reward other other ≤
+      quittingSoloReward reward owner other)
+    (deviation : (quittingGame reward).BehaviorStrategy other) :
+    quittingTerminalPayoff reward
+        (Function.update
+          (quittingStationaryProfile reward
+            (quittingSoloStationaryRoot owner (quittingHazardCoin q hq0.le hq1)))
+          other deviation) other ≤
+      quittingSoloReward reward owner other + q * quittingSoloPairPremium reward owner := by
+  let hazard := quittingHazardCoin q hq0.le hq1
+  have hpositive : 0 < (hazard true).toReal := by
+    simpa [hazard] using hq0
+  have hcap := quittingTerminalPayoff_update_stationary_le_unilateralCap
+    reward (quittingSoloStationaryRoot owner hazard) other deviation
+    (quittingStationaryFixedOpponentsContinueMass_solo_other_lt_one
+      hne hazard hpositive)
+  apply hcap.trans
+  rw [quittingStationaryUnilateralCap_solo_other reward hne hazard hpositive]
+  apply max_le
+  · rw [quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix reward hne hazard]
+    have htrue : (hazard true).toReal = q := by simp [hazard]
+    have hfalse : (hazard false).toReal = 1 - q := by simp [hazard]
+    rw [htrue, hfalse]
+    have hcontinue : 0 ≤ 1 - q := sub_nonneg.mpr hq1
+    have hpremium := quittingSingletonCollisionReward_sub_soloReward_le_pairPremium reward hne
+    calc
+      (1 - q) * quittingSoloReward reward other other +
+            q * quittingSingletonCollisionReward reward owner other ≤
+          (1 - q) * quittingSoloReward reward owner other +
+            q * quittingSingletonCollisionReward reward owner other := by
+        gcongr
+      _ = quittingSoloReward reward owner other +
+          q * (quittingSingletonCollisionReward reward owner other -
+            quittingSoloReward reward owner other) := by ring
+      _ ≤ quittingSoloReward reward owner other +
+          q * quittingSoloPairPremium reward owner := by gcongr
+  · exact le_add_of_nonneg_right
+      (mul_nonneg hq0.le (quittingSoloPairPremium_nonneg reward owner))
+
 /-- Quantitative diffuse escape from a player sink.  Only the owner quits,
 with live-date probability `q`; the profile controls every unilateral
 behavioral deviation with error `q * quittingSoloPairPremium`. -/
@@ -204,36 +249,8 @@ theorem isεAsymptoticNash_soloStationary_le_pairPremium
       apply max_le
       · exact add_nonneg howner herror
       · exact le_add_of_nonneg_right herror)
-  · have hcap :=
-      quittingTerminalPayoff_update_stationary_le_unilateralCap
-        reward (quittingSoloStationaryRoot owner hazard) who deviation
-        (quittingStationaryFixedOpponentsContinueMass_solo_other_lt_one
-          hwho hazard hpositive)
-    apply hcap.trans
-    rw [quittingStationaryUnilateralCap_solo_other reward hwho hazard hpositive]
-    apply max_le
-    · rw [quittingStationaryFixedOpponentsQuitValue_solo_other_eq_mix
-        reward hwho hazard]
-      have htrue : (hazard true).toReal = q := by simp [hazard]
-      have hfalse : (hazard false).toReal = 1 - q := by simp [hazard]
-      rw [htrue, hfalse]
-      have hcontinue : 0 ≤ 1 - q := sub_nonneg.mpr hq1
-      have hpremiumBound :=
-        quittingSingletonCollisionReward_sub_soloReward_le_pairPremium
-          reward hwho
-      calc
-        (1 - q) * quittingSoloReward reward who who +
-              q * quittingSingletonCollisionReward reward owner who ≤
-            (1 - q) * quittingSoloReward reward owner who +
-              q * quittingSingletonCollisionReward reward owner who := by
-          gcongr
-          exact hnoHarm who hwho
-        _ = quittingSoloReward reward owner who +
-              q * (quittingSingletonCollisionReward reward owner who -
-                quittingSoloReward reward owner who) := by ring
-        _ ≤ quittingSoloReward reward owner who + q * premium := by
-          gcongr
-    · exact le_add_of_nonneg_right herror
+  · exact quittingTerminalPayoff_update_solo_other_le_pairPremium
+      reward hwho hq0 hq1 (hnoHarm who hwho) deviation
 
 /-- Literal maximum all-behavior exploitability obeys the same `q J` bound. -/
 theorem terminalExploitability_soloStationary_le_pairPremium

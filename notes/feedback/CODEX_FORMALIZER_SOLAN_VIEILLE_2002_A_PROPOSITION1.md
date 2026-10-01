@@ -44,6 +44,10 @@ The Literature adapters `proposition1_twoPlayer`, `proposition1_zeroSolo`,
 Case 1 retains weak inactive-player comparisons; Case 4 includes simplex
 vertices and nonvertices. Both geometric cases retain the source normalization
 that each own-singleton reward is one.
+The name `proposition1_zeroSolo` refers to the nonpositive-own-singleton
+predicate: every own-singleton reward is at most zero, not necessarily equal
+to zero. Its actual all-Continue stationary source works for any finite player
+count. This case is already covered and needs no separate proof or alias.
 
 `proposition1_of_singletonArcCycle` uses
 `singletonArcCycle_isTerminalNash_and_hasValue`

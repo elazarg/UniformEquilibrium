@@ -13,6 +13,8 @@ import UniformEquilibrium.Quitting.Boundary.Repair.FixedTailUniformAbsorption
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticEndpointDefectPolarity
 import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationaryRepair
 import UniformEquilibrium.Quitting.PayoffProcess.TailStepSelector
+import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemption
+import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 
 /-!
 # Robert Samuel Simon, *A Topological Approach to Quitting Games* (2012)
@@ -14281,6 +14283,17 @@ theorem abnormalGap_pos (G : QuittingGame) {j : G.Player}
     (habnormal : IsAbnormalPlayer G j) : 0 < AbnormalGap G j := by
   exact sub_pos.mpr (lt_of_not_ge habnormal)
 
+/-- The minimum abnormal gap is no larger than each actual abnormal player's gap. -/
+theorem minimumAbnormalGap_le_gap (G : QuittingGame) {j : G.Player}
+    (habnormal : IsAbnormalPlayer G j) :
+    MinimumAbnormalGap G ≤ AbnormalGap G j := by
+  unfold MinimumAbnormalGap
+  apply csInf_le
+  · refine ⟨0, ?_⟩
+    rintro ν ⟨k, hk, rfl⟩
+    exact (abnormalGap_pos G hk).le
+  · exact ⟨j, habnormal, rfl⟩
+
 /-- Under the Section 5 hypothesis, the finite minimum abnormal gap is
 attained by an abnormal player. -/
 theorem minimumAbnormalGap_mem (G : QuittingGame)
@@ -14319,6 +14332,17 @@ theorem exists_section5Accuracy (G : QuittingGame)
   refine ⟨MinimumAbnormalGap G / 6, habnormal, by positivity, ?_⟩
   linarith
 
+/-- The printed Section 5 accuracy restriction separates every abnormal solo
+payoff from its min--max floor by more than three accuracies. -/
+theorem soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy
+    (G : QuittingGame) {ε : ℝ} (hε : IsSection5Accuracy G ε)
+    {j : G.Player} (habnormal : IsAbnormalPlayer G j) :
+    SoloPayoff G j + 3 * ε < MinMaxQuit G j := by
+  have hgap := minimumAbnormalGap_le_gap G habnormal
+  have haccuracy := hε.2.2
+  unfold AbnormalGap at hgap
+  linarith
+
 /--
 The modified compact set proposed in Section 5:
 `(⋃_{j normal} C_j) ∪ (⋃_{k ≠ l abnormal} (C_k ∩ C_l))`.
@@ -14349,6 +14373,30 @@ theorem section5ModifiedC_eq_retainedPieces (G : QuittingGame) (R : ℝ) :
     · obtain ⟨pair, hpair⟩ := Set.mem_iUnion.mp hx
       exact Or.inr ⟨pair.val.1, pair.val.2, pair.property.1,
         pair.property.2.1, pair.property.2.2, hpair⟩
+
+/-- Outside the retained normal pieces, a point of the literal Section 5 domain
+lies in a distinct abnormal-pair intersection. Both corresponding coordinates
+are below their min--max floors by more than three accuracies. This is a domain
+separation statement, not an orbit or modified-homotopy construction. -/
+theorem section5ModifiedC_outside_normalPieces_exists_two_low_coordinates
+    (G : QuittingGame) (R : ℝ) {ε : ℝ} (hε : IsSection5Accuracy G ε)
+    {x : Payoff G.Player} (hx : x ∈ Section5ModifiedC G R)
+    (houtside : x ∉ ⋃ j : {j : G.Player // IsNormalPlayer G j},
+      TruncatedPiece G R j.val) :
+    ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+      x ∈ TruncatedPiece G R k ∩ TruncatedPiece G R l ∧
+      x k + 3 * ε < MinMaxQuit G k ∧ x l + 3 * ε < MinMaxQuit G l := by
+  rcases hx with ⟨j, hj, hpiece⟩ | ⟨k, l, hne, hk, hl, hpair⟩
+  · exact (houtside (Set.mem_iUnion.mpr ⟨⟨j, hj⟩, hpiece⟩)).elim
+  · refine ⟨k, l, hne, hk, hl, hpair, ?_, ?_⟩
+    · have hsolo : x k ≤ SoloPayoff G k := hpair.1.1
+      have hseparation :=
+        soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy G hε hk
+      linarith
+    · have hsolo : x l ≤ SoloPayoff G l := hpair.2.1
+      have hseparation :=
+        soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy G hε hl
+      linarith
 
 /-- The actual Section 5 modified domain is compact, with no normal-player
 or geometric slack assumptions needed for compactness. -/
@@ -14545,6 +14593,76 @@ theorem lemma5_1 (G : QuittingGame) (j : G.Player)
     SoloPayoff G j < 0 ∧ ∀ i, i ≠ j →
       G.reward ⟨{i}, Finset.singleton_nonempty i⟩ j ≥ MinMaxQuit G j := by
   exact Literature.Simon2007.lemma3 G j habnormal
+
+open GameTheory in
+/-- Printed p.194: if an abnormal player's singleton payoff weakly dominates
+each other player's own singleton payoff, a sufficiently small constant solo
+rate is an approximate equilibrium for every other player. The owner instead
+strictly improves by Never. The singleton comparisons are the source's explicit
+additional hypothesis; they are not inferred from minmax or normality. -/
+theorem section5_abnormalSolo_pseudoEquilibrium (G : QuittingGame)
+    [DecidableEq G.Player] (j : G.Player)
+    (habnormal : IsAbnormalPlayer G j)
+    (hnoHarm : ∀ i, i ≠ j → SoloPayoff G i ≤
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i)
+    {ε : ℝ} (hε : 0 < ε) :
+    ∃ δ : ℝ, ∃ hδ : 0 < δ, ∃ hδ1 : δ ≤ 1,
+      let hazard := quittingHazardCoin δ hδ.le hδ1
+      let profile := quittingStationaryProfile G.reward (quittingSoloStationaryRoot j hazard)
+      quittingTerminalPayoff G.reward profile =
+          G.reward ⟨{j}, Finset.singleton_nonempty j⟩ ∧
+        (∀ i, i ≠ j → ∀ deviation : (quittingGame G.reward).BehaviorStrategy i,
+          quittingTerminalPayoff G.reward (Function.update profile i deviation) i ≤
+            quittingTerminalPayoff G.reward profile i + ε) ∧
+        quittingTerminalPayoff G.reward
+          (Function.update profile j (quittingAlwaysContinueStrategy G.reward j)) j = 0 ∧
+        quittingTerminalPayoff G.reward profile j <
+          quittingTerminalPayoff G.reward
+            (Function.update profile j (quittingAlwaysContinueStrategy G.reward j)) j := by
+  classical
+  let premium := quittingSoloPairPremium G.reward j
+  let δ := min (1 / 2 : ℝ) (ε / (2 * (premium + 1)))
+  have hpremium : 0 ≤ premium := quittingSoloPairPremium_nonneg G.reward j
+  have hdenominator : 0 < 2 * (premium + 1) := by positivity
+  have hδ : 0 < δ := by
+    dsimp only [δ]
+    exact lt_min (by norm_num) (div_pos hε hdenominator)
+  have hδ1 : δ ≤ 1 := (min_le_left _ _).trans (by norm_num)
+  have hscaled : δ * (premium + 1) ≤ ε / 2 := by
+    calc
+      δ * (premium + 1) ≤
+          (ε / (2 * (premium + 1))) * (premium + 1) := by
+        exact mul_le_mul_of_nonneg_right (min_le_right _ _) (by positivity)
+      _ = ε / 2 := by field_simp
+  have herror : δ * premium ≤ ε := by
+    calc
+      δ * premium ≤ δ * (premium + 1) :=
+        mul_le_mul_of_nonneg_left (by linarith) hδ.le
+      _ ≤ ε / 2 := hscaled
+      _ ≤ ε := by linarith
+  let hazard := quittingHazardCoin δ hδ.le hδ1
+  let profile := quittingStationaryProfile G.reward (quittingSoloStationaryRoot j hazard)
+  have hpositive : 0 < (hazard true).toReal := by simpa [hazard] using hδ
+  have hpayoff : quittingTerminalPayoff G.reward profile =
+      G.reward ⟨{j}, Finset.singleton_nonempty j⟩ := by
+    funext i
+    exact quittingTerminalPayoff_soloStationary G.reward j i hazard hpositive
+  have hnever : quittingTerminalPayoff G.reward
+      (Function.update profile j (quittingAlwaysContinueStrategy G.reward j)) j = 0 := by
+    rw [quittingSoloStationaryProfile_update_owner_never,
+      quittingTerminalPayoff_quittingAlwaysContinue]
+  refine ⟨δ, hδ, hδ1, hpayoff, ?_, hnever, ?_⟩
+  · intro i hi deviation
+    have hbase : quittingSoloReward G.reward i i ≤ quittingSoloReward G.reward j i :=
+      hnoHarm i hi
+    have hbound := quittingTerminalPayoff_update_solo_other_le_pairPremium
+      G.reward hi hδ hδ1 hbase deviation
+    rw [hpayoff]
+    apply hbound.trans
+    simpa only [premium, quittingSoloReward, add_comm] using
+      (add_le_add_left herror (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i))
+  · rw [hpayoff, hnever]
+    exact (lemma5_1 G j habnormal).1
 
 /--
 The unnumbered claim in Section 5: an affirmative answer to Question 1 still

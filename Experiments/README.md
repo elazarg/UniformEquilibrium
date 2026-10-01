@@ -9,8 +9,10 @@ belong in Research or an integrated lane.
 An experiment result records its tracked executable source, exact reproduction
 command, assumptions, limitations, and compact evidence. A checked-in payload
 whose generator is unavailable instead has a deterministic integrity checker;
-its owning experiment record states the provenance loss. Experiments may import
-Research; Research must not import this directory.
+its owning experiment record states the provenance loss. Experiments consume
+integrated interfaces: a Research interface must be promoted to MathUE or
+UniformEquilibrium before an experiment imports it. Research must not import
+this directory.
 
 - `Base/` is the registered standard-library suite. Run it with
   `python Experiments/Base/run_all.py`.
