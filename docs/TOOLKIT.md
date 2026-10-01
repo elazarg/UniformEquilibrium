@@ -2778,6 +2778,26 @@ positive-hazard or Never witness for the nonpositive security floor.
 give an exact rational hazard/value optimizer and rationality of the canonical
 security value for rational reward tables. The optimizer may have hazard zero;
 this is not attainment of positive terminal security by a zero-hazard law.
+`exists_deadlineWithdrawalSecurity_positive_rational_approximation` and
+`exists_rational_deadlineWithdrawalSecurityRestartLaw_terminal_floor`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalSecurityHazard.lean`)
+produce a positive rational hazard for arbitrary real rewards and positive
+real error. The same actual post-deadline geometric law has rational atoms,
+no Never mass, and terminal payoff at least the canonical LP value minus
+error against every future opponent tuple. The law is chosen before those
+tuples. This approximation does not require rational rewards or a positive
+optimizer; it does not assert exact positive-value attainment or finite support.
+`DeadlineSecurityPairExamples.zeroSecurity_half_evaluated_guarantee` and
+`DeadlineSecurityPairExamples.positiveSecurity_first_restart_date_payoff`
+(`UniformEquilibrium/Quitting/Examples/DeadlineSecurityPairExamples.lean`)
+instantiate complete two-player child reward tables with a quiet extra
+outsider. Own/passive/joint rewards `(0,-1,1)` improve the zero-based floor
+from minus one to zero, secured by the same literal half-hazard law for every
+nonnegative antitone evaluation. Rewards `(1,1,0)` have LP value one only
+at hazard zero. Each positive geometric law secures `1-h`, attained by the
+actual first possible opponent date; that same law pays one against opponent
+Never, whereas the actual all-Never tuple pays zero. No nonattainment claim
+for all private plans or positive all-evaluation security is made.
 The generic `exists_nonnegative_rational_solution`
 (`MathUE/LinearProgramming/RationalFeasibility.lean`) rationalizes every real
 feasible finite weak rational row system, including empty indices and equality
@@ -2966,6 +2986,19 @@ others fail the genuine Never row and have strictly negative child singletons.
 The latter statement blocks the positive-singleton relaxation without claiming
 F/J infeasibility. One obstructing outsider is produced per child. These
 are certificate obstructions, not failures of equilibrium existence.
+`StrictDeadlineWithdrawal.exists_actualCompletion_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalCompletionRegion.lean`)
+allows arbitrary signed values in all thirty-three child-recipient
+nonsingleton coordinates while fixing all sixteen singleton entries.
+It produces eleven actual outsider-recipient coordinates and a fixed UE
+target, using internally computed child floors and the existing quiet-lift
+producer. `StrictDeadlineWithdrawal.completionRegion_open_convex_nonempty`
+in that file gives a nonempty open convex passing region in those eleven
+coordinates for each fixed child vector; membership is exactly strict
+N/F/J feasibility for the displayed weights. The coordinate chart is
+injective and covers the entire fixed-singleton reward fiber. The region
+is not asserted convex in all forty-four coordinates, contained in the
+small reward ball, or equal to every possible outsider completion.
 Finite pure-time replies against perpetual continuation pay the actual
 singleton reward; Never pays zero. Their shared owner is
 `quittingTerminalPayoff_alwaysContinueProfile_update_pureTime_some`

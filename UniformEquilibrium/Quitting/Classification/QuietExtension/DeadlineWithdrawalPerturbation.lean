@@ -36,6 +36,34 @@ theorem le_deadlineWithdrawalZeroFloor_iff
     · obtain ⟨B, _, rfl⟩ := Finset.mem_image.mp hentry
       exact hpassive B.1 B.2.1 B.2.2
 
+/-- The actual zero floor depends only on its player's reward recipient slice. -/
+theorem deadlineWithdrawalZeroFloor_congr_recipient
+    (reward other : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) (who : ι)
+    (hagrees : ∀ terminal, reward terminal (some who) = other terminal (some who)) :
+    deadlineWithdrawalZeroFloor reward who = deadlineWithdrawalZeroFloor other who := by
+  apply le_antisymm
+  · apply (le_deadlineWithdrawalZeroFloor_iff other who _).mpr
+    exact ⟨deadlineWithdrawalZeroFloor_le_zero reward who, fun B hB hnot => by
+      rw [← hagrees]
+      exact deadlineWithdrawalZeroFloor_le_passiveReward reward who B hB hnot⟩
+  · apply (le_deadlineWithdrawalZeroFloor_iff reward who _).mpr
+    exact ⟨deadlineWithdrawalZeroFloor_le_zero other who, fun B hB hnot => by
+      rw [hagrees]
+      exact deadlineWithdrawalZeroFloor_le_passiveReward other who B hB hnot⟩
+
+/-- Withdrawal gains retain the same literal values when that recipient slice agrees. -/
+theorem deadlineWithdrawalGainFloor_congr_recipient
+    (reward other : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) (who : ι)
+    (hagrees : ∀ terminal, reward terminal (some who) = other terminal (some who))
+    (A : Finset ι) (hA : A.Nonempty) :
+    deadlineWithdrawalGainFloor reward who A hA =
+      deadlineWithdrawalGainFloor other who A hA := by
+  unfold deadlineWithdrawalGainFloor
+  split_ifs
+  · rw [hagrees, hagrees]
+  · rw [deadlineWithdrawalZeroFloor_congr_recipient reward other who hagrees, hagrees]
+  · rfl
+
 /-- Truncation is a literal equality of the two actual finite passive minima. -/
 theorem deadlineWithdrawalZeroFloor_eq_min_patientWithdrawalFloor
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) (who : ι) :

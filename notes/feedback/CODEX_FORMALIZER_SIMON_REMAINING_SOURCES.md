@@ -53,6 +53,29 @@ The full Theorem 4 still needs the remaining alternatives and their source
 construction. Both Simon modules pass silent named checks; separate transitive
 axiom checks of the new declarations use only the three standard axioms.
 
+## The convergent-orbit alternative
+
+`isRational_zero_of_exactOrbit_tendsto` and
+`exists_fixedRow_of_exactOrbit_tendsto` (`Literature/Simon2007.lean`) prove
+zero-error rationality and an actual fixed one-stage row at the limit of
+one convergent exact orbit in an all-normal game. The limit and orbit are
+the same in both conclusions; no row sequence or favorable fixed point is
+supplied. The actual compact payoff-row graph produces the fixed row.
+
+`hasQuitApproximateEquilibria_or_exactOrbit_limit_ge_solo` in the same file
+gives approximate equilibria or the coordinatewise singleton-payoff lower
+bounds at that same limit. Generated and instant branches are consumed by
+their actual equilibrium producers. Only the remaining branch uses compact
+motion to force the fixed row to be all-Continue.
+`hasQuitApproximateEquilibria_or_escapeOrbit_limit_mem_band` then puts the
+same limit in the actual escape witness's set and boundary band, retaining
+the orbit's carrier and allowing accuracy zero.
+
+These declarations pass silent named checks of both Simon modules and a
+separate transitive standard-axiom check. They do not produce an escape
+orbit, supply the initial solo-move variation charge, or prove the remaining
+component-lifting case of Theorem 4. No fixed uniform payoff is asserted.
+
 ## Extended orbits
 
 `ExtendedOrbitCondition.hasQuitApproximateEquilibria`

@@ -23565,6 +23565,147 @@ theorem hasQuitApproximateEquilibria_of_nonconvergent_exact_orbit
     exact FRow.mono G herror.le _ (horbit time)
   exact hfamily.hasQuitApproximateEquilibria G hnormal
 
+/-- A convergent exact payoff orbit has a rational limit in an all-normal
+game. The quantitative Lemma 6 drift is applied at arbitrarily small scales. -/
+theorem isRational_zero_of_exactOrbit_tendsto
+    (G : QuittingGame) (hnormal : ∀ who, IsNormalPlayer G who)
+    (point : ℕ → Payoff G.Player) (horbit : IsInfiniteOrbit (FRow G 0) point)
+    (limit : Payoff G.Player) (hlimit : Tendsto point atTop (𝓝 limit)) :
+    IsRational G 0 limit := by
+  intro who
+  change MinMaxQuit G who - 0 ≤ limit who
+  rw [sub_zero]
+  refine le_of_forall_pos_le_add fun accuracy haccuracy => ?_
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  let a : ℝ := min (accuracy / 3) 1
+  have ha : 0 < a := lt_min (div_pos haccuracy (by norm_num)) zero_lt_one
+  have ha1 : a ≤ 1 := min_le_right _ _
+  have h3a : 3 * a ≤ accuracy := by
+    have := min_le_left (accuracy / 3) 1
+    dsimp only [a]
+    linarith
+  let step : ℝ := a ^ 2 / (2 * M)
+  have hstep : 0 < step :=
+    div_pos (sq_pos_of_pos ha) (mul_pos (by norm_num) hMpos)
+  obtain ⟨cutoff, hcutoff⟩ :=
+    eventually_ge_of_drift_below
+      (u := fun time => point time who) (threshold := MinMaxQuit G who - 3 * a)
+      hstep (fun time =>
+      lemma6_quantitative G hM hnormal ha ha1
+        (FRow.mono G hstep.le _ (horbit time)) who)
+  have hfloor : MinMaxQuit G who - 3 * a ≤ limit who :=
+    ge_of_tendsto (((continuous_apply who).tendsto limit).comp hlimit)
+      (Filter.eventually_atTop.2 ⟨cutoff, hcutoff⟩)
+  linarith
+
+/-- Closedness of the actual compact payoff graph retains a fixed-point row
+at the limit of an exact orbit. No convergent sequence of supplied rows is needed. -/
+theorem exists_fixedRow_of_exactOrbit_tendsto
+    (G : QuittingGame) (point : ℕ → Payoff G.Player)
+    (horbit : IsInfiniteOrbit (FRow G 0) point) (limit : Payoff G.Player)
+    (hlimit : Tendsto point atTop (𝓝 limit)) :
+    ∃ row : QuitRow G, row ∈ EpsilonRow G 0 limit ∧
+      QuittingOneStagePayoff G limit row = limit := by
+  let carrier : Set (Payoff G.Player) := insert limit (range point)
+  have hgraph :=
+    (isCompact_fRow_graph_over_compact G 0 carrier hlimit.isCompact_insert_range).isClosed
+  have hpair : Tendsto (fun time => (point time, point (time + 1)))
+      atTop (𝓝 (limit, limit)) :=
+    hlimit.prodMk_nhds (hlimit.comp (tendsto_add_atTop_nat 1))
+  have hmem : (limit, limit) ∈
+      {pair : Payoff G.Player × Payoff G.Player |
+        pair.1 ∈ carrier ∧ pair.2 ∈ FRow G 0 pair.1} :=
+    hgraph.mem_of_tendsto hpair (Filter.Eventually.of_forall fun time =>
+      ⟨Set.mem_insert_of_mem _ ⟨time, rfl⟩, horbit time⟩)
+  exact hmem.2
+
+/-- The motion exclusion in Theorem 4, Case 2, using the corrected source
+branch: the limit lies above every solo floor. The motion rate is produced
+internally on the actual singleton limit carrier. -/
+theorem exactOrbit_limit_ge_solo_of_not_branches
+    (G : QuittingGame) (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (point : ℕ → Payoff G.Player) (horbit : IsInfiniteOrbit (FRow G 0) point)
+    (limit : Payoff G.Player) (hlimit : Tendsto point atTop (𝓝 limit)) :
+    ∀ who, SoloPayoff G who ≤ limit who := by
+  classical
+  have hrational := isRational_zero_of_exactOrbit_tendsto
+    G hnormal point horbit limit hlimit
+  obtain ⟨row, hrow, hfixed⟩ :=
+    exists_fixedRow_of_exactOrbit_tendsto G point horbit limit hlimit
+  obtain ⟨rate, hrate, _hrateOne, hmotion⟩ :=
+    exists_compactMotionParameter_of_not_branches G hgenerated hinstant
+      {limit} isCompact_singleton
+  have hbound := (hmotion limit (Set.mem_singleton limit) row
+    (IsRational.mono G hrate.le hrational)
+    (EpsilonRow.mono G hrate.le limit hrow)).1
+  rw [hfixed, sub_self, norm_zero] at hbound
+  have hq : QuitProbability G row = 0 := by
+    have hnonneg := (quitProbability_mem_Icc G row).1
+    nlinarith
+  let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+  have hzero : row = zeroRow := by
+    funext who
+    apply Subtype.ext
+    exact le_antisymm
+      ((quitRow_coord_le_quitProbability G row who).trans_eq hq) (row who).property.1
+  intro who
+  have hsupport := hrow.2 who (by rw [hzero]; norm_num [zeroRow])
+  rw [hzero] at hsupport
+  have hcontinue : ForcedContinuePayoff G limit zeroRow who = limit who := by
+    rw [ForcedContinuePayoff, show zeroRow.replace G who 0 = zeroRow from
+      zeroRow.replace_self G who]
+    exact congrFun (quittingOneStagePayoff_zero G limit) who
+  have hquit : ForcedQuitPayoff G zeroRow who = SoloPayoff G who := by
+    rw [ForcedQuitPayoff, show zeroRow.replace G who 1 = SoloQuitRow G who from
+      QuitRow.zero_replace_one G who, quittingOneStagePayoff_soloQuitRow]
+    rfl
+  rw [hcontinue, hquit, sub_zero] at hsupport
+  exact hsupport
+
+/-- Without branch exclusions, the same actual Case 2 limit yields this
+literal alternative: actual approximate equilibria, or every solo floor is
+respected. Generated and instant branches use their checked profile producers. -/
+theorem hasQuitApproximateEquilibria_or_exactOrbit_limit_ge_solo
+    (G : QuittingGame) (hnormal : ∀ who, IsNormalPlayer G who)
+    (point : ℕ → Payoff G.Player) (horbit : IsInfiniteOrbit (FRow G 0) point)
+    (limit : Payoff G.Player) (hlimit : Tendsto point atTop (𝓝 limit)) :
+    HasQuitApproximateEquilibria G ∨ ∀ who, SoloPayoff G who ≤ limit who := by
+  classical
+  by_cases hgenerated : HasStationarilyGeneratedApproximateEquilibria G
+  · exact Or.inl (hgenerated.hasQuitApproximateEquilibria G)
+  by_cases hinstant : HasInstantApproximateEquilibria G
+  · exact Or.inl (hinstant.hasQuitApproximateEquilibria G)
+  exact Or.inr (exactOrbit_limit_ge_solo_of_not_branches
+    G hnormal hgenerated hinstant point horbit limit hlimit)
+
+/-- The convergent source orbit in the actual escape carrier either already
+supplies approximate equilibria through a generated/instant branch, or its
+limit is in the literal band and in the same closed escape carrier. -/
+theorem hasQuitApproximateEquilibria_or_escapeOrbit_limit_mem_band
+    (G : QuittingGame) (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who) (accuracy : ℝ) (haccuracy : 0 ≤ accuracy)
+    (point : ℕ → Payoff G.Player) (horbit : IsInfiniteOrbit (FRow G 0) point)
+    (hstay : ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy))
+    (limit : Payoff G.Player) (hlimit : Tendsto point atTop (𝓝 limit)) :
+    HasQuitApproximateEquilibria G ∨ limit ∈ witness.Q ∩ EscapeBand G accuracy := by
+  rcases hasQuitApproximateEquilibria_or_exactOrbit_limit_ge_solo
+      G hnormal point horbit limit hlimit with hequilibrium | hfloor
+  · exact Or.inl hequilibrium
+  have hQ : limit ∈ witness.Q :=
+    witness.Q_closed.mem_of_tendsto hlimit
+      (Filter.Eventually.of_forall fun time => (hstay time).1)
+  have hcase : limit ∈ WSet G ∪ EscapeBand G accuracy :=
+    ((isClosed_WSet G).union (isClosed_escapeBand G accuracy)).mem_of_tendsto hlimit
+      (Filter.Eventually.of_forall fun time => (hstay time).2)
+  refine Or.inr ⟨hQ, ?_⟩
+  rcases hcase with hW | hband
+  · obtain ⟨who, hwho⟩ := hW
+    exact ⟨hfloor, who, hwho.trans (le_add_of_nonneg_right haccuracy)⟩
+  · exact hband
+
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :
     HasQuitApproximateEquilibria G := by
