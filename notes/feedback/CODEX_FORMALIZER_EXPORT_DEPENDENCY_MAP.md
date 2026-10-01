@@ -100,9 +100,9 @@ The complete packet contains the following remaining dependencies:
 | Section 7, finite-law enumeration | A reviewed draft starts from actual terminal approximate-equilibrium existence and finite-menu full-cap approximation, then proves rational density and target-free search termination with the existing exact payoff/full-cap evaluator. It includes zero-length calendars, unsupported gap dates, late replies and Never. The draft reuses the canonical joint-prefix continuity and literal timing-profile/root-word identity through narrow owners. It awaits Lean checks and the low-player/quiet-extension consumers. This is not the stationary search and does not compute a specified real target. |
 | Sections 8.1--8.4, exact boundary examples | `patient_horizon_three_bound_fails` (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalFiniteHorizonBoundary.lean`) and `patient_discounted_bound_fails` (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalDiscountedBoundary.lean`) pass the full build. They retain the same actual child profile and quiet lift, complete behavioral caps, and respectively actual stage averages and the packet's discounted clock-law evaluation. The two incomparable raw cones and omitted-Never counterexample remain reviewed drafts. Raw certificate infeasibility is not equilibrium nonexistence. |
 | Section 8.5, sparse-calendar missed reply | Already matched by `displayed_replyValues`, `behaviorDeviationPayoffCap_false_eq_half`, and `behaviorCap_sub_sparseTestedReplyCap_eq_half` (`UniformEquilibrium/Quitting/Examples/SparseCalendarReplyGap.lean`). The existing module also handles the actual third Never-player extension. Reuse it; no second proof is needed. |
-| Section 9, strict patient class | Check the literal table and row margins, all fourteen advancing-only child obstructions, the full sixty-coordinate radius `1 / 100`, and the actual exact equilibrium and complete response values. |
+| Section 9, strict patient class | All literal rows and margins, all fourteen robust advancing-only full/F-J certificate obstructions, the full sixty-coordinate radius `1 / 100` with fresh floors, and the actual exact equilibrium/full response values pass silent named checks. `StrictPatientWithdrawal.degree_response_and_uniformPayoff_of_dist_lt` (`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalFullScope.lean`) combines the same actual-table class conclusions; `StrictPatientWithdrawal.actualValue_uniformPayoff` (`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalOneDateProfile.lean`) retains one literal profile for every accuracy. |
 | Section 10, strict deadline class | Check the translated literal table with Never still zero, its row margins and all proper-child obstructions, the full sixty-coordinate radius `1 / 512`, actual exact equilibrium and distinct late/Never values, and the thirty-three arbitrary child-recipient collision coordinates with an open completion region. |
-| Section 11, degree and partition comparisons | Reuse the canonical positive-inverse matrix and ambient degree interfaces for both centers and neighborhoods. Check the literal stationary-residual witnesses excluding every nondiscrete response-invariant partition. These are class comparisons, not a new cap verifier. |
+| Section 11, degree and partition comparisons | The patient center and full radius `1 / 100` comparisons pass silent named checks: exact determinant/inverse and strict inverse-distance bound, intrinsic degree one on every bounded open origin neighborhood, and injectivity for every response-invariant block map. UE uses the independent patient-row producer. The deadline center/neighborhood comparisons remain separate. |
 
 The core fixed-target compilers already retain actual quiet profiles and obtain
 the proper Fin4 child's payoff internally. They must be reused for the strict
@@ -191,6 +191,46 @@ These are proposed follow-ups, not new checked conclusions or packet seals.
   weakened. Equality of actual stopping-law tuples transports evaluated
   payoffs and caps; terminal semantic-pair equality alone does not record
   dates and cannot justify that transport.
+
+Further source-based mining identifies these small adapters, none implemented
+by the mining pass:
+
+- `QuittingThreePlayerStrategyClass.of_card_le_three`
+  (`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`)
+  and the raw quiet-lift debt bounds should retain a parent stationary-or-small-hazard
+  strategy alternative, with an independent requested hazard budget. Deleted
+  players remain literal Always Continue. The stationary alternative need not
+  have small hazards, and fixed-target selection retaining that budget is a
+  separate refinement.
+- `exists_rational_minPrimalOptimal`
+  (`MathUE/LinearProgramming/RationalOptimization.lean`) can optimize the
+  certificate's amplification, not just find feasible rational weights.
+  Patient amplification uses the sum of both response weights; deadline
+  amplification uses their pointwise maximum, represented by epigraph
+  variables. A feasible raw system and factor at least one give feasibility
+  and the objective lower bound. Exact rational primal and dual optimizers
+  would certify optimality, not provide an executable solver or certify an
+  arbitrary game.
+- `quittingResponseInvariantOnUnitCube_iff_finite_coefficients`
+  (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPolynomial.lean`)
+  can expose response invariance as the kernel of one finite linear map of
+  reward coordinates, hence a closed linear subspace. The centered permutation
+  identity already needs only one recipient's additive row offset; a
+  subgroup-orbit adapter need not expand the coalition sums again.
+- `exists_quittingQuotientResponse_ambient_quadratic_bound`
+  (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientEstimates.lean`)
+  can drop its response-invariance and representative hypotheses by applying
+  the analytic remainder theorem to the already general quotient derivative.
+  Strategic decoding still needs response invariance; this is only an
+  analytic API strengthening.
+- `halfCeilingValue_weighted_strictly_above_singleton`
+  (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePayoffExclusions.lean`)
+  holds for every nonzero nonnegative weight at one same actual Nash payoff.
+  It therefore also defeats profile-dependent normalized exclusion weights.
+  The existing raw-calendar/actual-payoff equivalence should give the
+  corresponding raw exclusion counterexamples without new payoff calculations.
+  That exact equivalence preserves payoff only, not full caps; approximate
+  equilibrium calendars instead use the existing full-profile approximation.
 
 The whole-R0 degree proposal can use `r0Margin_pos_iff_isR0Matrix`
 (`MathUE/LinearProgramming/R0Margin.lean`), the intrinsic origin-degree bridge,

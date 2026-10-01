@@ -130,14 +130,15 @@ tail's points, counts, stitches and unbounded variation. It does not require
 an all-edge small-step bound. The actual cutoff vanishes on every required
 edge in the rational half-payoff box.
 
-`theorem4_1_of_zeroQuitterContinuationUpperBound` in the same file assembles
-Theorem 4.1 from an affirmative answer to Question 1 and the explicit
-`Section4ZeroQuitterContinuationUpperBound` proposition. The latter is the
-remaining zero-quitting-player upper bound used by Lemma 4.5. The proof
-handles the instant and stationarily generated branches and cardinalities
-at most two, and transfers nonsingular perturbations back to the original
-normal game. Both declarations pass the silent named build and separate
-standard-axiom checks. The unconditional paper claim remains open in Lean.
+`theorem4_1` in the same file proves Theorem 4.1 under its stated affirmative
+answer to Question 1, without an additional continuation-bound premise.
+The proof handles the instant and stationarily generated branches and
+cardinalities at most two, then transfers nonsingular perturbations back to
+the original normal game. `lemma4_5` supplies the actual graph hypotheses
+using an internally derived compact continuation bound and a smaller positive
+common step scale. Both declarations pass the silent named build and separate
+transitive checks with only the three standard axioms. Question 1 itself is
+not proved, and the conclusion does not select a fixed uniform payoff target.
 
 ## Section 5 source components
 
@@ -303,13 +304,15 @@ initial diagonal, frontier fixing, terminal-diagonal exclusion, and actual
 fiber contractibility, and boundary-piece escape have component proofs.
 `truncatedW_eq_iUnion_fin` in the same file supplies the
 finite-index union; positive piece count follows from the player-count
-hypothesis. `lemma4_5_of_zeroQuitterContinuationUpperBound` in the same
-Literature file assembles all seven conditions, including small-step
-containment at the scale used for boundary-piece escape. It explicitly
-assumes the missing zero-quitting upper-coordinate bound from Lemma 4.4.
-Its targeted and full default builds are silent, and its separate axiom check reports only
-`propext`, `Classical.choice`, and `Quot.sound`. The unconditional literal
-`lemma4_5` remains open.
+hypothesis. `lemma4_5` in the same Literature file assembles all seven
+conditions. `isCompact_phi_preimage_truncatedW` and
+`exists_uniform_continuationBound_survivalSlack_of_phi_mem_truncatedW`
+derive a finite bound for every actual inverse point over the truncated
+domain. The common Question 1 step scale can therefore be decreased without
+changing the inverse, cutoff, homotopy or graphs. Small-step containment and
+boundary-piece escape hold at that same decreased scale. No part of the open
+numerical `lemma4_4` is assumed. The named build is silent and the separate
+transitive axiom check reports only `propext`, `Classical.choice`, and `Quot.sound`.
 
 `isCompact_gluedNeighborhood_of_section3Constants`
 (`Literature/Simon2012.lean`) proves compactness of the actual neighborhood.
@@ -389,8 +392,8 @@ The recurrent-coordinate consequence for an unbounded extended orbit
 staying in the half-payoff box is the theorem above. Producing or retaining
 that box is supplied by the checked near-feasible tail and invariant above;
 it does not supply the all-edge small-step premise.
-The remaining positive-cutoff branches and their assembly remain to be
-formalized.
+The positive-cutoff branches are assembled in `lemma4_5` at its internally
+chosen smaller common step scale.
 
 `section4_terminal_mem_fRow_of_cutoff_eq_zero` in the same file puts every
 zero-cutoff terminal endpoint in the ordinary one-stage payoff correspondence.
@@ -433,9 +436,10 @@ the quitting probability; terminal interpolation multiplies this lower bound
 by one minus the cutoff. Their private proofs in the same file passed a
 silent named build and a separate transitive standard-axiom check. The
 coefficient estimate and common-scale contradiction are proved inside
-`lemma4_5_of_zeroQuitterContinuationUpperBound`, under its explicit
-zero-quitting upper-coordinate premise. The distance bound used there is
-`4 * R * card G.Player`, sufficient for the paper's common scale.
+`lemma4_5`, using the compact inverse bound. The actual inverse-point distance
+is bounded by `(R + 1 + B) * card G.Player`, where compactness supplies `B > 0`
+internally. Decreasing the existential Question 1 step scale closes this
+branch without the printed zero-quitter upper-coordinate estimate.
 
 `lemma4_4` in the same Literature file is still open in its full stated form.
 Its supported positive-quitting-coordinate bound is proved.
@@ -457,12 +461,11 @@ the supported-coordinate estimate proves it. The current
 `lemma4_5` assumes an ω cutoff; the corrected δ statement of `lemma4_3` does
 not by itself establish a δ version of `lemma4_5`.
 
-For `theorem4_1`, `exists_nonsingularPerturbation` in the same file already
-constructs the perturbation and preserves normality. The standalone
-extended-orbit-to-equilibrium direction, reward transfer, and the preceding
-joined-graph localization and half-box results are also proved. The remaining
-work is the source-required cutoff elimination and assembly through
-Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
+`theorem4_1` uses `exists_nonsingularPerturbation` to preserve normality, the
+actual Section 4 orbit localization and cutoff elimination, and the
+unrestricted orbit-to-equilibrium consumer. The same profiles transfer back
+to the original game. Its only external conclusion premise is
+`Question1Affirmative`; it does not cover the abnormal-player branch.
 
 ### Remaining Simon (2012) declarations
 
@@ -472,22 +475,6 @@ Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
   supplies both bounds when the player quits with positive probability. The
   missing premise is the upper bound `z.1.1 j ≤ R + 1` for a zero-quitting
   player under the theorem's full standing hypotheses.
-- `lemma4_5` (`Literature/Simon2012.lean`):
-  `lemma4_5_of_zeroQuitterContinuationUpperBound` proves all seven
-  `Question1Hypotheses` conditions at the same `Section4Omega`, including
-  the positive-cutoff, large-quitting, outside-box branch. Its only added
-  source premise is the zero-quitting upper-coordinate bound above;
-  it does not use the unfinished `lemma4_4` or `lemma4_5` proofs.
-  Supplying that bound remains necessary for the literal unconditional lemma.
-- `theorem4_1` (`Literature/Simon2012.lean`): a completed `lemma4_5` would let
-  `Question1Affirmative` supply unbounded `Section4J` orbits. The checked
-  `exists_unbounded_section4J_tail_in_halfPayoffBox`,
-  `gluedFiber_subset_fRow_of_mem_halfPayoffBox`,
-  `ExtendedUnrestrictedOrbitCondition.hasQuitApproximateEquilibria`, and
-  `allNormal_quitApproximateEquilibria_of_nonsingular_case` provide the
-  localization, quitting, and perturbation interfaces. The remaining Lean
-  adapter must convert the actual small-step graph orbit through those
-  interfaces; it also depends on the open `lemma4_5` field.
 - `question1_affirmative_implies_all_quitting_games`
   (`Literature/Simon2012.lean`): `lemma5_1`, `minimumAbnormalGap_pos`,
   `exists_section5Accuracy`, and the actual `Section5ModifiedC` supply the
@@ -502,7 +489,19 @@ Lemma 4.5, followed by the existing quitting-orbit and perturbation consumers.
   Question 1 hypotheses. Those source constructions remain; the all-normal
   `theorem4_1` does not cover this abnormal-player branch.
 
-No remaining `sorry` has a source-complete proof obtainable solely by
+For the abnormal-player branch, the printed final paragraph specifies that
+the homotopy and glue must change near the new artificial frontier and that
+the structure parameter must depend on the minimum abnormal gap. It gives no
+formula for those modifications or their compatible orbit transport. The
+next source construction must fix the whole modified frontier, preserve the
+contractible local fibers and both common-step properties, and ensure that
+an unbounded selected orbit yields an actual quitting-correspondence tail.
+The checked local reciprocal singleton directions alone do not specify this
+joint construction. An independent proof of the same all-game Question 1
+consumer would also close the declaration; no particular interpolation
+formula is required by the result-level interface.
+
+Neither remaining `sorry` has a source-complete proof obtainable solely by
 assembling the currently checked declarations.
 
 ## Markov variation

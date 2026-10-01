@@ -49,7 +49,8 @@ theorem singletonMatrix_change_operatorNorm_le_six_mul
       simp [Finset.card_erase_of_mem (Finset.mem_univ row)]
       ring
 
-private theorem sourceSingletonMatrix_neighborhood
+/-- The same literal singleton matrix controls every full reward-table center realizing it. -/
+theorem sourceSingletonMatrix_neighborhood
     (center other : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (hcenter : quittingSingletonMatrix center = sourceSingletonMatrix)
     (error : ℝ) (herror : error < 1 / 100)

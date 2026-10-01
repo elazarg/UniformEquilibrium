@@ -7827,6 +7827,60 @@ theorem isCompact_truncatedW (G : QuittingGame) (R : ℝ) :
   rw [truncatedW_eq_iUnion]
   exact isCompact_iUnion fun j => isCompact_truncatedPiece G R j
 
+/-- The actual `Phi` inverse image of the literal truncated domain is compact.
+This uses the constructed continuous inverse from Lemma 3.2, not an assumed
+properness certificate or a bound on the continuation coordinates. -/
+theorem isCompact_phi_preimage_truncatedW (G : QuittingGame) (M d R : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
+    IsCompact (Phi G M d ⁻¹' TruncatedW G R) := by
+  obtain ⟨_hsurjective, ⟨inverse⟩⟩ := lemma3_2 G M d hM hd hd1
+  have hequal : Phi G M d ⁻¹' TruncatedW G R = inverse.inv '' TruncatedW G R := by
+    ext z
+    constructor
+    · intro hz
+      exact ⟨Phi G M d z, hz, inverse.leftInverse z⟩
+    · rintro ⟨a, ha, rfl⟩
+      change Phi G M d (inverse.inv a) ∈ TruncatedW G R
+      simpa only [inverse.rightInverse a] using ha
+  rw [hequal]
+  exact (isCompact_truncatedW G R).image inverse.continuousInv
+
+/-- On the literal truncated `Phi` domain, one finite continuation bound and
+one positive joint-survival slack hold simultaneously for every actual graph
+point. The bounds are selected from the actual compact inverse image.
+This qualitative result does not assert the printed `R + 1` bound of Lemma 4.4
+and does not replace the literal `Section4Omega` estimate in Lemma 4.5. -/
+theorem exists_uniform_continuationBound_survivalSlack_of_phi_mem_truncatedW
+    (G : QuittingGame) (M d R : ℝ)
+    (hM : IsSimonPayoffScale G M) (hd : 0 < d) (hd1 : d ≤ 1) :
+    ∃ B > 0, ∃ η > 0, ∀ z : EZeroTilde G,
+      Phi G M d z ∈ TruncatedW G R →
+        (∀ j, |z.1.1 j| ≤ B) ∧ η ≤ 1 - QuitProbability G z.1.2 := by
+  classical
+  let K : Set (EZeroTilde G) := Phi G M d ⁻¹' TruncatedW G R
+  have hK : IsCompact K := isCompact_phi_preimage_truncatedW G M d R hM hd hd1
+  have hcontinuation : Continuous (fun z : EZeroTilde G => z.1.1) :=
+    continuous_fst.comp continuous_subtype_val
+  obtain ⟨bound, hbound⟩ := hK.exists_bound_of_continuousOn hcontinuation.continuousOn
+  let B : ℝ := max 1 bound
+  have hB : 0 < B := lt_of_lt_of_le zero_lt_one (le_max_left _ _)
+  have hcoordinates : ∀ z ∈ K, ∀ j, |z.1.1 j| ≤ B := by
+    intro z hz j
+    calc
+      |z.1.1 j| = ‖z.1.1 j‖ := (Real.norm_eq_abs _).symm
+      _ ≤ ‖z.1.1‖ := norm_le_pi_norm _ j
+      _ ≤ bound := hbound z hz
+      _ ≤ B := le_max_right _ _
+  let survival : EZeroTilde G → ℝ := fun z => 1 - QuitProbability G z.1.2
+  have hsurvival : Continuous survival :=
+    continuous_const.sub (continuous_quitProbability_comp G
+      (fun z : EZeroTilde G => z.1.2) (continuous_snd.comp continuous_subtype_val))
+  obtain ⟨η, hη, hsurvivalBound⟩ := hK.exists_forall_le' hsurvival.continuousOn
+    (fun z _hz => sub_pos.mpr z.2.2)
+  refine ⟨B, hB, η, hη, ?_⟩
+  intro z hz
+  exact ⟨hcoordinates z hz, hsurvivalBound z hz⟩
+
 /-- The lower boundary is compact, even when it is empty. -/
 theorem isCompact_lowerBoundary (G : QuittingGame) (R : ℝ) :
     IsCompact (LowerBoundary G R) := by
@@ -14466,11 +14520,14 @@ theorem lemma4_4 (G : QuittingGame) (M d ρ ξ R : ℝ)
     hplayers hM hd hd1 hmotion hconstants z ha⟩
   sorry
 
-/-- Conditional completion of Lemma 4.5. The only additional source premise
-is Lemma 4.4's upper bound for a zero-quitting continuation coordinate.
-All supported-coordinate and lower bounds, the other containment branches,
-and every remaining Question 1 property use independent checked proofs. -/
-theorem lemma4_5_of_zeroQuitterContinuationUpperBound
+/-- Lemma 4.5: the actual Section 4 construction satisfies Question 1. Compactness of
+the constructed `Phi` inverse image supplies the finite continuation bound.
+Only the existential common step scale is decreased; the inverse, cutoff,
+homotopy, local graph and full graph remain the literal source data. No
+zero-quitter `R + 1` bound is required. In Property (6), Case 5, the printed
+phrase `λ ≥ 1/2` means `1 - λ ≥ 1/2`, as the preceding sentence proves
+`λ ≤ 1/2` and the terminal interpolation uses the latter coefficient. -/
+theorem lemma4_5
     (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
     (hplayers : HasAtLeastThreePlayers G)
     (hM : IsSimonPayoffScale G M)
@@ -14479,15 +14536,14 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
     (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
     (hinstant : ¬HasInstantApproximateEquilibria G)
     (hmotion : IsStructureMotionParameter G M ρ)
+    (_hnonsingular : HasNonsingularSingletonDifferences G)
     (hη : Corollary4_1Statement G η)
     (hconstants : AreSection3Constants G M d ρ ξ R)
     (inverse : PhiInverseData G M d)
     (cutoff : Payoff G.Player → UnitInterval)
     (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
     (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
-    (hδ : δ = Section4Delta G M ε)
-    (hzeroUpper : ∀ z : EZeroTilde G, Phi G M d z ∈ TruncatedW G R →
-      ∀ j, (z.1.2 j : ℝ) = 0 → z.1.1 j ≤ R + 1) :
+    (hδ : δ = Section4Delta G M ε) :
     Question1Hypotheses
       (TruncatedW G R)
       (fun j : Fin (Fintype.card G.Player) =>
@@ -14504,26 +14560,14 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
     exact_mod_cast hplayers
   have hNpos : 0 < N := by linarith
   have hMpos : 0 < M := zero_lt_one.trans_le hM.1
-  have hρpos : 0 < ρ := hmotion.2.1
   have hNM : 3 ≤ N * M := by
     nlinarith [mul_le_mul hN hM.1 (by norm_num) hNpos.le]
-  obtain ⟨hξpos, _, hR⟩ := section3Constants_radius_bound
+  obtain ⟨_hξpos, _hξone, hR⟩ := section3Constants_radius_bound
     G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
   have hR1 : 1 ≤ R := by
     change 10 * N * M ≤ R at hR
     nlinarith
   have hRpos : 0 < R := zero_lt_one.trans_le hR1
-  have hratioPos : 0 ≤ ρ / (2 * N * M) := by positivity
-  have hratioOne : ρ / (2 * N * M) ≤ 1 := by
-    rw [div_le_one (by positivity : 0 < 2 * N * M)]
-    nlinarith [hmotion.2.2.1, hNM]
-  have hpowOne : (ρ / (2 * N * M)) ^ Fintype.card G.Player ≤ 1 :=
-    pow_le_one₀ hratioPos hratioOne
-  have hξSmall : ξ ≤ 1 / 20 := by
-    have hbound := hconstants.2.1
-    change ξ ≤ (1 / 20 : ℝ) *
-      (ρ / (2 * N * M)) ^ Fintype.card G.Player at hbound
-    linarith
   have hδpositive :=
     (section4Delta_mem_Ioc G M ρ ε hplayers hM hmotion hε hερ).1
   have hωpositive :=
@@ -14532,22 +14576,29 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
   have hboundary : (LowerBoundary G R).Nonempty :=
     lowerBoundary_nonempty_of_section3Constants
       G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants
+  obtain ⟨B, hB, _survivalSlack, _hSurvivalSlack, hcompactBounds⟩ :=
+    exists_uniform_continuationBound_survivalSlack_of_phi_mem_truncatedW G M d R hM hd hd1
   have hbetaBounds (a : Payoff G.Player) (ha : a ∈ TruncatedW G R) :
-      ∀ j, |(inverse.inv a).1.1 j| ≤ R + 1 := by
+      ∀ j, |(inverse.inv a).1.1 j| ≤ B := by
     have hphi : Phi G M d (inverse.inv a) ∈ TruncatedW G R := by
       rw [inverse.rightInverse a]
       exact ha
-    have hlower := continuationCoordinate_ge_neg_half_radius_of_mem_truncatedW
-      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants (inverse.inv a) hphi
-    have hsupported := supportedContinuation_abs_le_half_radius
-      G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants (inverse.inv a) hphi
-    intro j
-    by_cases hzero : ((inverse.inv a).1.2 j : ℝ) = 0
-    · apply abs_le.mpr
-      exact ⟨by linarith [hlower j], hzeroUpper (inverse.inv a) hphi j hzero⟩
-    · have hpositive : 0 < ((inverse.inv a).1.2 j : ℝ) :=
-        lt_of_le_of_ne ((inverse.inv a).1.2 j).property.1 (Ne.symm hzero)
-      exact (hsupported j hpositive).trans (by linarith)
+    exact (hcompactBounds (inverse.inv a) hphi).1
+  let D : ℝ := (R + 1 + B) * N
+  have hDpositive : 0 < D := by dsimp only [D]; positivity
+  let coefficient : ℝ := ε / (4 * D)
+  let threshold : ℝ := ε * d / (40 * N ^ 2 * M)
+  let lower : ℝ := coefficient * (2 * M / 3 * threshold)
+  have hcoefficientPositive : 0 < coefficient := by
+    dsimp only [coefficient]; positivity
+  have hthresholdPositive : 0 < threshold := by
+    dsimp only [threshold]; positivity
+  have hlowerPositive : 0 < lower := by dsimp only [lower]; positivity
+  let scale : ℝ := min (Section4Omega G M d ρ ξ R ε) (lower / 2)
+  have hscalePositive : 0 < scale := lt_min hωpositive (by positivity)
+  have hscalePrinted : scale ≤ Section4Omega G M d ρ ξ R ε := min_le_left _ _
+  have hscaleLower : scale < lower :=
+    (min_le_right _ _).trans_lt (half_lt_self hlowerPositive)
   have houtsideStep
       (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
       (hcutoffPos : 0 < (cutoff a : ℝ))
@@ -14555,103 +14606,80 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
       (hxNotBox : ¬InClosedPayoffBox M (Section4X G inverse cutoff a))
       (hqLarge : ε * d / (40 * N ^ 2 * M) ≤
         QuitProbability G (inverse.inv a).1.2) :
-      Section4Omega G M d ρ ξ R ε <
+      scale <
         EuclideanDist (Section4X G inverse cutoff a)
           (Section4Y G inverse cutoff a) := by
     let t : ℝ := 1 - (cutoff a : ℝ)
-    let coefficient : ℝ := ε / (16 * R * N)
-    let threshold : ℝ := ε * d / (40 * N ^ 2 * M)
-    let lower : ℝ := coefficient * (2 * M / 3 * threshold)
-    let factor : ℝ := 12 * ξ * ρ / (5 * M ^ 2)
     have ht : 0 ≤ t := sub_nonneg.mpr (cutoff a).property.2
-    have hdistance : EuclideanDist a (inverse.inv a).1.1 ≤ 4 * R * N := by
+    have hdistance : EuclideanDist a (inverse.inv a).1.1 ≤ D := by
       calc
         EuclideanDist a (inverse.inv a).1.1 ≤
             ∑ j, |a j - (inverse.inv a).1.1 j| := euclideanDist_le_sum_abs _ _
-        _ ≤ ∑ _j : G.Player, 4 * R := by
+        _ ≤ ∑ _j : G.Player, (R + 1 + B) := by
           apply Finset.sum_le_sum
           intro j _
           have haAbs : |a j| ≤ R + 1 := abs_le.mpr (ha.2 j)
           have hbAbs := hbetaBounds a ha j
           exact (abs_sub _ _).trans (by linarith)
-        _ = 4 * R * N := by
-          simpa only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, N]
-            using mul_comm (Fintype.card G.Player : ℝ) (4 * R)
+        _ = D := by
+          simp only [Finset.sum_const, Finset.card_univ, nsmul_eq_mul, D, N]
+          ring
     have hxMap : Section4X G inverse cutoff a =
         AffineMap.lineMap a (inverse.inv a).1.1 t := by
       simp only [Section4X, AffineMap.lineMap_apply_module, t, sub_sub_cancel]
     have hbaseDistance : EuclideanDist (Section4X G inverse cutoff a) a ≤
-        t * (4 * R * N) := by
+        t * D := by
       calc
         EuclideanDist (Section4X G inverse cutoff a) a =
             EuclideanDist a (Section4X G inverse cutoff a) := euclideanDist_comm _ _
         _ = t * EuclideanDist a (inverse.inv a).1.1 := by
           rw [hxMap]
           exact euclideanDist_lineMap_eq_mul _ _ ht
-        _ ≤ t * (4 * R * N) := mul_le_mul_of_nonneg_left hdistance ht
+        _ ≤ t * D := mul_le_mul_of_nonneg_left hdistance ht
     have hseparation := epsilon_div_four_lt_section4X_baseDistance
       G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants inverse cutoff
         hcutoff hε hερ a hcutoffPos hxNotLower
     have hcoefficient : coefficient < t := by
       dsimp only [coefficient]
-      rw [div_lt_iff₀ (by positivity : 0 < 16 * R * N)]
+      rw [div_lt_iff₀ (by positivity : 0 < 4 * D)]
       nlinarith [hseparation.trans_le hbaseDistance]
-    have hthresholdPos : 0 < threshold := by dsimp only [threshold]; positivity
     have hqNonneg : 0 ≤ QuitProbability G (inverse.inv a).1.2 :=
       (quitProbability_mem_Icc G (inverse.inv a).1.2).1
-    have hlowerPos : 0 < lower := by
-      dsimp only [lower, coefficient]
-      positivity
-    have hξρ : ξ * ρ ≤ 1 / 20 :=
-      (mul_le_of_le_one_right hξpos.le hmotion.2.2.1).trans hξSmall
-    have hfactorLt : factor < 1 := by
-      dsimp only [factor]
-      rw [div_lt_one (by positivity : 0 < 5 * M ^ 2)]
-      nlinarith [hM.1, sq_nonneg (M - 1)]
-    have hωfactor : Section4Omega G M d ρ ξ R ε = lower * factor := by
-      dsimp only [Section4Omega, Section4Delta, lower, coefficient, threshold, factor, N]
-      field_simp [ne_of_gt hMpos, ne_of_gt hNpos, ne_of_gt hRpos]
-      ring
-    have hωlower : Section4Omega G M d ρ ξ R ε < lower := by
-      rw [hωfactor]
-      exact (mul_lt_mul_of_pos_left hfactorLt hlowerPos).trans_eq (mul_one lower)
     have hscaled : lower ≤ t *
         (2 * M / 3 * QuitProbability G (inverse.inv a).1.2) := by
-      have hcoefficientNonneg : 0 ≤ coefficient := by
-        dsimp only [coefficient]
-        positivity
       have hthresholdScaled := mul_le_mul_of_nonneg_left hqLarge
         (by positivity : 0 ≤ 2 * M / 3)
-      have hfirst := mul_le_mul_of_nonneg_left hthresholdScaled hcoefficientNonneg
+      have hfirst := mul_le_mul_of_nonneg_left hthresholdScaled hcoefficientPositive.le
       have hsecond := mul_le_mul_of_nonneg_right hcoefficient.le
         (by positivity : 0 ≤ 2 * M / 3 *
           QuitProbability G (inverse.inv a).1.2)
       exact hfirst.trans hsecond
-    exact hωlower.trans_le (hscaled.trans
+    exact hscaleLower.trans_le (hscaled.trans
       (one_sub_cutoff_mul_two_thirds_scale_mul_quitProbability_le_terminalStep
         G hM inverse cutoff a hxNotBox))
   have hterminalStep
       (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
       (hstep : EuclideanDist (Section4X G inverse cutoff a)
-        (Section4Y G inverse cutoff a) < Section4Omega G M d ρ ξ R ε) :
+        (Section4Y G inverse cutoff a) < scale) :
       (Section4X G inverse cutoff a, Section4Y G inverse cutoff a) ∈
         correspondenceGraph (GluedFiber G R ε (Section4Delta G M ε)) := by
+    have hstepPrinted := hstep.trans_le hscalePrinted
     by_cases hzero : (cutoff a : ℝ) = 0
     · exact section4_terminal_mem_gluedGraph_of_zero_cutoff_smallStep
         G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants
-          inverse cutoff hε hερ a ha hzero hstep
+          inverse cutoff hε hερ a ha hzero hstepPrinted
     · have hpositive : 0 < (cutoff a : ℝ) :=
         lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hzero)
       by_cases hsmall : QuitProbability G (inverse.inv a).1.2 <
           ε * d / (40 * N ^ 2 * M)
       · exact section4_terminal_mem_gluedGraph_of_positive_cutoff_small_quit
           G M d ρ ξ R ε (Section4Delta G M ε) hplayers hM hd hd1 hmotion
-            hconstants inverse cutoff hcutoff hε hερ a hpositive hsmall hstep
+            hconstants inverse cutoff hcutoff hε hερ a hpositive hsmall hstepPrinted
       · by_cases hbox : InClosedPayoffBox M (Section4X G inverse cutoff a)
         · exact section4_terminal_mem_gluedGraph_of_bounded_positive_cutoff_smallStep
             G M d ρ ξ R ε (Section4Delta G M ε) hplayers hM hd hd1 hnormal
               hgenerated hinstant hmotion hconstants inverse cutoff hcutoff
-                hε hερ a ha hpositive hbox hstep
+                hε hερ a ha hpositive hbox hstepPrinted
         · by_cases hlower : Section4X G inverse cutoff a ∈ LowerNeighborhood G R ε
           · exact section4Y_mem_gluedFiber_of_section4X_mem_lowerNeighborhood
               G inverse cutoff R ε (Section4Delta G M ε) a hlower
@@ -14677,7 +14705,7 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
       (Section4Delta G M ε) hδpositive.le hboundary,
     homotopyTerminalImage_subset_section4J G inverse cutoff R ε (Section4Delta G M ε),
     gluedGraph_subset_section4J G inverse cutoff R ε (Section4Delta G M ε),
-    Section4Omega G M d ρ ξ R ε, hωpositive, ?_, ?_⟩
+    scale, hscalePositive, ?_, ?_⟩
   · intro j
     exact truncatedPieces_areFullDimensionalCompactConvexPolytopes
       G M d ρ ξ R hplayers hM hd hd1 hmotion hconstants _
@@ -14694,45 +14722,12 @@ theorem lemma4_5_of_zeroQuitterContinuationUpperBound
       exact hterminalStep a ha hstep
     · exact hglued
   · intro point hpoint j hpiece hdistance
-    exact gluedFiber_piece_escape_at_section4Omega
-      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants hε hερ
-        point hpoint ((Fintype.equivFin G.Player).symm j) hpiece hdistance
-
-/--
-Lemma 4.5. The statement retains all seven conditions. Standalone proofs supply
-the terminal-diagonal condition, contractibility of every glued fiber, and both
-branches of Property (7) at the common Section 4 scale. The remaining assembly
-requires Property (6)'s small-step inclusion, including the global part of
-Lemma 4.4 used by its argument. In Property (6), Case 5, the printed final phrase
-“`λ ≥ 1/2`” must be read as “`1-λ ≥ 1/2`”: the preceding sentence proves
-`λ ≤ 1/2`, and `y = λx + (1-λ)f(x,p)` needs the latter coefficient on the
-strict drift.
--/
-theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
-    (hplayers : HasAtLeastThreePlayers G)
-    (hM : IsSimonPayoffScale G M)
-    (hd : 0 < d) (hd1 : d ≤ 1)
-    (hnormal : ∀ n, IsNormalPlayer G n)
-    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
-    (hmotion : IsStructureMotionParameter G M ρ)
-    (hnonsingular : HasNonsingularSingletonDifferences G)
-    (hη : Corollary4_1Statement G η)
-    (hconstants : AreSection3Constants G M d ρ ξ R)
-    (inverse : PhiInverseData G M d)
-    (cutoff : Payoff G.Player → UnitInterval)
-    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
-    (hε : 0 < ε) (hεη : ε < η / 3) (hερ : ε < ρ / 3)
-    (hδ : δ = Section4Delta G M ε) :
-    Question1Hypotheses
-      (TruncatedW G R)
-      (fun j : Fin (Fintype.card G.Player) =>
-        TruncatedPiece G R ((Fintype.equivFin G.Player).symm j))
-      (Section4H G inverse cutoff)
-      (GluedNeighborhood G R ε)
-      (correspondenceGraph (GluedFiber G R ε δ))
-      (Section4J G inverse cutoff R ε δ) := by
-  sorry
+    obtain ⟨target, htarget, hdecrease, hlength, hsegment⟩ :=
+      gluedFiber_piece_escape_at_section4Omega
+        G M d ρ ξ R ε hplayers hM hd hd1 hnormal hmotion hconstants hε hερ
+          point hpoint ((Fintype.equivFin G.Player).symm j) hpiece
+            (hdistance.trans hscalePrinted)
+    exact ⟨target, htarget, hdecrease, hscalePrinted.trans hlength, hsegment⟩
 
 /-! ### 4.5. Application of Question 1 -/
 
@@ -14864,9 +14859,8 @@ stationarily generated and instant alternatives are retained literally.
 The remaining branch constructs the actual Question 1 data at arbitrarily
 small source errors, then uses the unrestricted orbit-to-equilibrium
 consumer rather than the open forward direction of Theorem 2.3. -/
-private theorem nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitterUpper
+private theorem nonsingular_hasQuitApproximateEquilibria_of_question1
     (hquestion : Question1Affirmative)
-    (hzeroUpper : Section4ZeroQuitterContinuationUpperBound)
     (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
     (hnonsingular : HasNonsingularSingletonDifferences G) :
     HasQuitApproximateEquilibria G := by
@@ -14889,8 +14883,6 @@ private theorem nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitte
           exists_section3Constants G M 1 ρ hM zero_lt_one hmotion
         obtain ⟨η, hη⟩ := corollary4_1 G hnonsingular
         obtain ⟨_hsurjective, ⟨inverse⟩⟩ := lemma3_2 G M 1 hM zero_lt_one le_rfl
-        have hupper := hzeroUpper G M 1 ρ ξ R hplayers hM zero_lt_one le_rfl
-          hnormal hgenerated hinstant hmotion hconstants
         have hunrestricted : ExtendedUnrestrictedOrbitCondition G := by
           intro accuracy haccuracy
           let ε := min accuracy (min (η / 6) (ρ / 6))
@@ -14908,10 +14900,10 @@ private theorem nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitte
           have hωpositive := (section4Omega_mem_Ioc G M 1 ρ ξ R ε
             hplayers hM zero_lt_one le_rfl hmotion hconstants hε hερ).1
           obtain ⟨cutoff, hcutoff⟩ := exists_section4Cutoff G R hωpositive
-          have hhypotheses := lemma4_5_of_zeroQuitterContinuationUpperBound
+          have hhypotheses := lemma4_5
             G M 1 ρ ξ R η ε (Section4Delta G M ε) hplayers hM zero_lt_one le_rfl
-              hnormal hgenerated hinstant hmotion hη hconstants inverse cutoff
-                hcutoff hε hεη hερ rfl hupper
+              hnormal hgenerated hinstant hmotion hnonsingular hη hconstants inverse cutoff
+                hcutoff hε hεη hερ rfl
           have hgraph : IsCompact
               (Section4J G inverse cutoff R ε (Section4Delta G M ε)) :=
             Math.Topology.SimonViability.QuestionOneHypotheses.fullGraph_compact hhypotheses
@@ -14934,30 +14926,18 @@ private theorem nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitte
             (fun point => FRow.mono G hεaccuracy point) hordinaryVariation⟩
         exact hunrestricted.hasQuitApproximateEquilibria G hnormal
 
-/-- Conditional completion of Theorem 4.1. The only added source premise
-is the named zero-quitter upper bound required by the literal Lemma 4.5
-construction. Normality-preserving nonsingular perturbation transfers the
-result back to the original game. This does not replace the unconditional
-paper claim below or assert an affirmation of Question 1. -/
-theorem theorem4_1_of_zeroQuitterContinuationUpperBound
-    (hquestion : Question1Affirmative)
-    (hzeroUpper : Section4ZeroQuitterContinuationUpperBound) :
-    ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
-      HasQuitApproximateEquilibria G := by
-  exact allNormal_quitApproximateEquilibria_of_nonsingular_case
-    (nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitterUpper
-      hquestion hzeroUpper)
-
 /--
-Theorem 4.1. The conditional theorem above assembles the actual Section 4
-construction, unrestricted orbit transport, and nonsingular perturbation
-transfer. The zero-quitter continuation upper bound remains to be proved;
-the unconditional paper claim is retained here.
+Theorem 4.1. An affirmative answer to Question 1 implies approximate
+equilibria in every all-normal quitting game. The actual Section 4 graphs use
+a compact-inverse common-step recalibration, followed by the checked
+unrestricted orbit transport and normality-preserving nonsingular
+perturbation transfer. The literal numerical Lemma 4.4 remains separate.
 -/
 theorem theorem4_1 (hquestion : Question1Affirmative) :
     ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
       HasQuitApproximateEquilibria G := by
-  sorry
+  exact allNormal_quitApproximateEquilibria_of_nonsingular_case
+    (nonsingular_hasQuitApproximateEquilibria_of_question1 hquestion)
 
 /-! ## 5. Conclusion: abnormal players -/
 

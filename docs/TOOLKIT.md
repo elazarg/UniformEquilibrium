@@ -2912,6 +2912,37 @@ wrappers retain the literal quiet lifts as uniform witnesses. Their Fin4
 consumers also retain this constraint while obtaining the child target from
 low-cardinality existence. Outsiders therefore prescribe Never in each selected
 uniform profile, not merely in a sequence of terminal approximants.
+`StrictPatientWithdrawal.outsideDebt_le_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalNeighborhood.lean`)
+proves, for every actual child profile throughout the full sixty-coordinate
+radius-`1 / 100` reward ball, outsider debt at most half player zero's child
+debt plus three times player two's. The same displayed weights use freshly
+computed floors, and full exploitability amplifies by at most `7 / 2`.
+`StrictPatientWithdrawal.every_proper_child_no_certificates_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalAdvancingExclusions.lean`)
+excludes both full and Never-omitting advancing-only certificates for all
+fourteen proper nonempty children, using actual joining-row witnesses.
+This is certificate separation, not equilibrium nonexistence.
+`StrictPatientWithdrawal.degree_response_and_uniformPayoff_of_dist_lt`
+(`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalFullScope.lean`)
+derives degree one, injectivity of every response-invariant block map, and a
+uniform-equilibrium payoff for the same changed table at the same radius.
+The UE producer consumes the patient rows, not the degree conclusion.
+`StrictPatientWithdrawal.ambientDegree_one_of_dist_lt` in that file also
+states intrinsic singleton-min-map degree one on every bounded open
+neighborhood of the origin. The underlying inverse and residual witnesses
+are literal source calculations, not supplied matrix or partition certificates.
+`StrictPatientWithdrawal.actualValue_uniformPayoff`
+(`UniformEquilibrium/Quitting/Examples/StrictPatientWithdrawalOneDateProfile.lean`)
+retains the center's actual one-date hazards `(1 / 2, 2 / 5, 1, 0)` and Never
+tail at payoff `(0, -1, -2 / 5, 7 / 10)`. The same profile works for all
+accuracies; its full cap and every positive finite and Never reply are checked.
+Finite pure-time replies against perpetual continuation pay the actual
+singleton reward; Never pays zero. Their shared owner is
+`quittingTerminalPayoff_alwaysContinueProfile_update_pureTime_some`
+and `quittingTerminalPayoff_alwaysContinueProfile_update_pureTime_none`
+(`UniformEquilibrium/Quitting/Root/AlwaysContinuePureTimeReplies.lean`), reused
+by these examples and the diagnostic cap computations.
 `quittingLiftDeletedProfile_outsideTerminalDebt_le_of_oneOutsiderBound`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/TerminalOneOutsiderTransport.lean`)
 owns the common exact deletion/reindex transport. This internal consumer

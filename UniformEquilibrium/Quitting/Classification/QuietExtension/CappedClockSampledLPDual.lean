@@ -152,6 +152,18 @@ theorem quittingChildWithOutsiderReward_apply_original
   rfl
 
 omit [Fintype ι] in
+/-- Mapping an actual displayed child coalition back gives its original subtype image. -/
+theorem quittingChildWithOutsiderOriginalEmbedding_childCoalition
+    (deleted : ι → Prop) [DecidablePred deleted] (outside : {who : ι // deleted who})
+    (coalition : Finset (QuittingChildPlayer deleted)) :
+    (cappedClockChildCoalition coalition).map
+        (quittingChildWithOutsiderOriginalEmbedding deleted outside) =
+      coalition.map (Function.Embedding.subtype (p := fun who => ¬ deleted who)) := by
+  unfold cappedClockChildCoalition
+  rw [Finset.map_map]
+  congr 1
+
+omit [Fintype ι] in
 /-- The canonical deletion/reindex adapter retains a raw reward-coordinate bound. -/
 theorem abs_quittingChildWithOutsiderReward_sub_le
     (reward other : {A : Finset ι // A.Nonempty} → Payoff ι)

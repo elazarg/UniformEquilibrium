@@ -6,6 +6,7 @@ Authors: GameTheory contributors
 
 import UniformEquilibrium.Diagnostics.Quitting.AllContinuePrefixSemantics
 import UniformEquilibrium.Quitting.Root.OneDateNeverNashDebt
+import UniformEquilibrium.Quitting.Root.AlwaysContinuePureTimeReplies
 
 /-
 Exact pure-time deviation values of a padded one-date profile.
@@ -187,8 +188,7 @@ theorem oneDateProductAllContinuePrefix_alwaysContinueProfile
     quittingRootThenContinuationProfile reward quittingAllContinueRoot
         (quittingAlwaysContinueProfile reward) =
       quittingAlwaysContinueProfile reward := by
-  funext who time hist
-  cases time <;> rfl
+  exact quittingRootThenAlwaysContinueProfile_eq reward
 
 /-- Never quitting is exactly what perpetual continuation already prescribes. -/
 theorem oneDateProductUpdate_alwaysContinueProfile_pureTime_none
@@ -196,9 +196,7 @@ theorem oneDateProductUpdate_alwaysContinueProfile_pureTime_none
     Function.update (quittingAlwaysContinueProfile reward) who
         (quittingPureTimeBehaviorStrategy reward who none) =
       quittingAlwaysContinueProfile reward := by
-  rw [show quittingPureTimeBehaviorStrategy reward who none =
-    quittingAlwaysContinueProfile reward who from rfl]
-  exact Function.update_eq_self who _
+  exact quittingAlwaysContinueProfile_update_pureTime_none reward who
 
 omit [DecidableEq ι] in
 /-- Perpetual continuation prescribes the zero payoff vector. -/
@@ -216,21 +214,7 @@ theorem oneDateProductPureTimeDeviationPayoff_alwaysContinueProfile_some
     quittingPureTimeDeviationPayoff reward
         (quittingAlwaysContinueProfile reward) who (some q) =
       reward (quittingSingletonTerminal who) who := by
-  induction q with
-  | zero =>
-      have hzero := quittingPureTimeDeviationPayoff_allContinuePrefix_zero
-        reward (quittingAlwaysContinueProfile reward) who
-      rwa [oneDateProductAllContinuePrefix_alwaysContinueProfile] at hzero
-  | succ q ih =>
-      have hshift := quittingPureTimeDeviationPayoff_allContinuePrefix_shift
-        reward (quittingAlwaysContinueProfile reward) who (some q)
-      rw [oneDateProductAllContinuePrefix_alwaysContinueProfile] at hshift
-      have hstep : quittingPureTimeDeviationPayoff reward
-          (quittingAlwaysContinueProfile reward) who (some (q + 1)) =
-        quittingPureTimeDeviationPayoff reward
-          (quittingAlwaysContinueProfile reward) who (some q) := hshift
-      rw [hstep]
-      exact ih
+  exact quittingTerminalPayoff_alwaysContinueProfile_update_pureTime_some reward who q
 
 /-! ## The unpadded one-date profile -/
 
