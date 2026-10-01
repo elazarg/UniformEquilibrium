@@ -659,6 +659,8 @@ import MathUE.LinearProgramming.R0Degree
 import MathUE.LinearProgramming.R0AmbientDegree
 import MathUE.LinearProgramming.R0AmbientOffsetDegree
 import MathUE.LinearProgramming.R0MinMapCoercivity
+import MathUE.LinearProgramming.RationalFeasibility
+import MathUE.LinearProgramming.RationalOptimization
 import MathUE.LinearProgramming.R0DegreeSum
 import MathUE.LinearProgramming.RootDegreeSum
 import MathUE.Topology.SignedSimplexLabelBoundary

@@ -1207,6 +1207,17 @@ turn equality of the actual stationary residual within each block of a
 partition into the exact singleton-matrix relation `Γ E = E A`. The same
 module defines a continuous clipped quotient response map and proves its
 coordinatewise fixed-point sign conditions.
+`quittingResponseInvariantOnUnitCube_iff_forall_ambient`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientIdentity.lean`)
+extends that literal cube identity to every signed block vector.
+`quittingResponseInvariantOnUnitCube_iff_finite_coefficients`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPolynomial.lean`)
+identifies it with finitely many coefficient equalities. Their monomial indices
+depend only on the block map and coalition bases; each coefficient is a displayed
+linear combination of actual reward entries. Exact polynomial evaluation is
+proved for the canonical displacement on the whole ambient space. No root,
+degree, regularity or nonempty-block hypothesis is added. This finite encoding
+does not assert executable decision for arbitrary real reward tables.
 `exists_nonzero_quittingQuotientStationaryClippedMap_fixedPoint`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientDegreeEscape.lean`)
 computes the actual quotient map's local degree from the raw R0 quotient
@@ -1346,6 +1357,18 @@ Never payoff; no terminal-only additive translation is used. The generic
 terminal-payoff and Nash pullback lemmas reside in
 `UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`.
 Literature wrappers delegate to these production proofs, not conversely.
+
+`QuittingThreePlayerStrategyClass.of_card_le_three`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`)
+gives the same strategy-class conclusion for every reward sign and every finite
+player type of cardinality at most three. The existing stationary LCP gate
+handles its stationary arm. In the remaining standard-Q arm, the nonempty
+normal core must contain all three players; canonical matrix transport and
+the directed-cycle classification produce an actual small-hazard cycle without
+own-singleton positivity. The literal Literature `proposition1` delegates to
+this theorem and passes its separate standard-axiom check. Neither the
+strategy-class statement nor this assembly computes a fixed payoff target
+or asserts the paper's distinct printed subdivision rates.
 
 `QuittingThreePlayerStrategyClass.of_homogeneousMatrixBranch` and
 `of_not_standardQMatrixSide`
@@ -2749,6 +2772,19 @@ necessity theorem for an arbitrary behavioral-debt bound.
 construct the finite reward-table LP value and approximate it with a positive
 hazard, including when the optimizer is zero. The same module selects a
 positive-hazard or Never witness for the nonpositive security floor.
+`exists_rational_deadlineWithdrawalSecurity_optimizer` and
+`isRationalReal_deadlineWithdrawalSecurityValue`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalWithdrawalSecurityLP.lean`)
+give an exact rational hazard/value optimizer and rationality of the canonical
+security value for rational reward tables. The optimizer may have hazard zero;
+this is not attainment of positive terminal security by a zero-hazard law.
+The generic `exists_nonnegative_rational_solution`
+(`MathUE/LinearProgramming/RationalFeasibility.lean`) rationalizes every real
+feasible finite weak rational row system, including empty indices and equality
+endpoints. `exists_rational_minPrimalOptimal`
+(`MathUE/LinearProgramming/RationalOptimization.lean`) supplies rational primal
+and dual optimizers with exact zero gap when such an LP is feasible and bounded.
+These are existence theorems, not executable optimizer or complexity claims.
 `deadlineWithdrawalSecurityRestartLaw_terminal_floor`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityPayoff.lean`)
 proves the actual post-deadline geometric private law's terminal payoff floor
@@ -2847,6 +2883,17 @@ extends each specified child target to one fixed parent payoff.
 constructs the child target from low-cardinality existence. These are raw
 reward-certificate classes, not a theorem that every Fin4 table passes.
 They make no finite-evaluation claim for the favorable patient Never floor.
+`exists_rational_patientWithdrawalRewardCertificate`,
+`exists_rational_deadlineWithdrawalRewardCertificate`,
+`exists_rational_deadlineSecurityRewardCertificate`,
+`exists_rational_deadlineSecurityTerminalRewardCertificate`,
+`exists_rational_cappedClockParentRewardCertificate`, and
+`exists_rational_cappedClockParentFutureJoinCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalWithdrawalWeights.lean`)
+replace real feasible weights by exact rational nonnegative weights for their
+respective literal reward-row systems when all reward entries are rational.
+Zero weights, boundary floors and equality rows are retained. Feasible weights
+remain an input; these adapters do not certify every game or perform a search.
 `patient_horizon_three_bound_fails`
 (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalFiniteHorizonBoundary.lean`)
 exhibits a passing terminal patient certificate whose actual horizon-three

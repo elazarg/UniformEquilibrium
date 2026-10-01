@@ -12,6 +12,7 @@ import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
 import UniformEquilibrium.Quitting.Classification.TwoPlayer.Existence
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazard
 import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazardTransport
+import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazardAllSigns
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.WeakInversePassiveRowSmallHazard
 
 /-!
@@ -42,8 +43,8 @@ abbrev StationaryOrSmallQuitEquilibrium
 
 /-- Literal **Proposition 1**: every quitting game with at most three players
 has a terminal `ε`-equilibrium in one of the two source strategy classes.
-All reward signs are retained. The complete strategy-class producer remains
-unformalized; ordinary uniform-payoff existence does not supply this claim.
+All reward signs are retained. The production proof assembles actual stationary
+roots and actual small-hazard root sequences; it does not use ordinary UE existence.
 The paper imposes no global positivity or normalization assumption here:
 its positive-own-singleton restriction appears later in Section 2.2 only. -/
 def Proposition1Claim : Prop :=
@@ -52,7 +53,9 @@ def Proposition1Claim : Prop :=
     ∀ ε : ℝ, 0 < ε → StationaryOrSmallQuitEquilibrium reward ε
 
 theorem proposition1 : Proposition1Claim := by
-  sorry
+  intro n hn reward accuracy haccuracy
+  exact QuittingThreePlayerStrategyClass.of_card_le_three reward
+    (by simpa using hn) haccuracy
 
 /-- The all-Continue branch is covered for arbitrary player counts when
 every own-singleton reward is nonpositive. -/
@@ -836,16 +839,17 @@ profiles does not constrain the payoff targets of all other profiles.
 
 The named-statement inventory of the author-hosted journal PDF is:
 
-- Section 2: Proposition 1 is stated with the literal strategy-class
-  disjunction and left as `sorry`. The two-player, zero-solo, supplied-rate solo,
+- Section 2: Proposition 1 is proved with the literal strategy-class
+  disjunction and unrestricted reward signs. The two-player, zero-solo, supplied-rate solo,
   normalized Case 1 and balanced Case 4 adapters retain actual stationary roots.
   The complete normalized three-player disjunction assembles the existing finite
   singleton alternative, including degenerate supports, and the original analytic
   germ. Infeasible Case 2 yields an exact stationary endpoint. Feasible mixtures
   give a stationary complementary root or a concrete subdivided cyclic root.
   This does not formalize the source's constrained-map proof of Case 0 or its
-  triangle description. The three-player nonpositive/mixed-sign own-singleton
-  producer needed for the unrestricted Proposition 1 remains unformalized here.
+  triangle description. The signed-three-player remainder is assembled from the
+  stationary LCP gate and the full-core directed-cycle classification, retaining
+  actual stationary roots or actual root sequences with uniformly small hazards.
   Positive coordinate scaling and player/cardinality transports retain the actual
   selected roots and preserve zero Never payoff; no additive terminal translation is used.
 - Section 3.1: Proposition 2 and Lemma 4 are proved above; Lemma 4 delegates

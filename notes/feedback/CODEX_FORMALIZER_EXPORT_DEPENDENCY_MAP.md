@@ -28,7 +28,7 @@ The crossed-response packet is retired unchanged to
 
 | First missing theorem or adapter | Packets grouped at that boundary | Checked production foothold |
 | --- | --- | --- |
-| Response-invariance detection, source algebra and literal fixtures | `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` | The signed paired centered-row UE class, paired/full matrix calculations, ambient total/local/annular degree, signed quadratic bounds, homogeneous lift and quotient no-UE restrictions pass named checks. `exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`) retains the produced Bellman value as the fixed target, requiring normality only for negative singleton-block owners. Finite coefficient detection, block splitting, coordinate freedom, and algebraic and boundary fixtures remain separate obligations. |
+| Quotient source algebra and literal fixtures | `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` | The signed paired centered-row UE class, paired/full matrix calculations, ambient total/local/annular degree, signed quadratic bounds, homogeneous lift and quotient no-UE restrictions pass named checks. `exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`) retains the produced Bellman value as the fixed target, requiring normality only for negative singleton-block owners. Exact finite coefficient detection also passes its named check; block splitting, coordinate freedom, and algebraic and boundary fixtures remain separate obligations. |
 | Evaluated cancellation and packet refinements | `WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS` | Ordinary deadline, evaluated-security deadline, terminal-security deadline and patient fixed-target extensions are checked. Patient terminal necessity and the shared-witness deadline refactor pass targeted checks. The patient full-debt comparison uses the sum of its two response weights, and the terminal patient Never floor is not the evaluated zero-based floor. All four extensions consume raw reward certificates and preserve the actual quiet lift; none supplies certificates for arbitrary Fin4 tables. Evaluated cancellation, Never relaxations, rational enumeration, and strict examples/neighborhoods remain. |
 | Actual quantile rigidity and robust unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. The center data and capped-clock certificate infeasibility are also integrated. The packet's universal positive parent-plus-child exploitability floor still needs its actual quantile-rigidity sequence, all four restriction estimates including the adjacent-date atom move, and the reward-neighborhood transfer. Capped-clock infeasibility does not prove this stronger unchanged-child obstruction. |
 | Full two-branch rational weak-subset selector and single-pivot secant source | `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS`, `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS`, `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION`, `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | `exists_strictDeficitExactSuffix_allTerminalNash` (`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixNash.lean`) closes the single common-depth infinite all-suffix exact Nash conclusion under nonnegative singleton rewards. The existing executable rational weak-subset selector assumes strict preemption of all designated owners; its full stationary-exit/charged-step two-branch selector remains separate. The single-pivot secant/tilted common-calendar source is also separate; finite-calendar payoff compression does not preserve caps. |
@@ -37,7 +37,8 @@ The crossed-response packet is retired unchanged to
 
 ## Next source-complete Lean tasks with broad reuse
 
-1. Continue the quotient's finite response-invariance tests and source algebra.
+1. Continue the quotient's source algebra and literal fixtures. The finite
+   response-invariance coefficient test is checked and should be reused.
    The degree identity
    already covers the entire nonzero root set without finiteness or regularity.
    Reuse the checked ambient and signed quadratic interfaces rather than
@@ -95,7 +96,7 @@ The complete packet contains the following remaining dependencies:
 | --- | --- |
 | Section 3.2, evaluated cancellation | The operation, deterministic comparison, expectation, full behavioral debt, family and fixed-target consumers are drafted and independently reviewed, not yet checked by Lean. They use the zero-based floor and the sum of response weights. |
 | Section 6, omitted Never row | The explicit residual times actual joint-Never, positive-singleton charge, and fixed-target consumers for all five variants are drafted and independently reviewed, not yet checked by Lean. These relaxations are terminal; they do not inherit all-evaluation protection from the unrelaxed deadline theorem. |
-| Section 7, rational feasibility | Formalize rational witnesses for the finite weight systems and the security LP, retaining equality endpoints and a possible zero-hazard optimum. Executable stationary-root search does not supply these witnesses. |
+| Section 7, rational feasibility | The generic weak-row rational feasibility and exact primal/dual optimization theorems, actual rational security optimizer/value, and rational weights for all six literal certificate variants pass the named `RationalWithdrawalWeights` dependency-closure check. Equality endpoints, zero weights, empty indices and a possible zero-hazard optimum are retained. These are existence theorems, not executable search. |
 | Section 7, finite-law enumeration | A reviewed draft starts from actual terminal approximate-equilibrium existence and finite-menu full-cap approximation, then proves rational density and target-free search termination with the existing exact payoff/full-cap evaluator. It includes zero-length calendars, unsupported gap dates, late replies and Never. The draft reuses the canonical joint-prefix continuity and literal timing-profile/root-word identity through narrow owners. It awaits Lean checks and the low-player/quiet-extension consumers. This is not the stationary search and does not compute a specified real target. |
 | Sections 8.1--8.4, exact boundary examples | `patient_horizon_three_bound_fails` (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalFiniteHorizonBoundary.lean`) and `patient_discounted_bound_fails` (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalDiscountedBoundary.lean`) pass the full build. They retain the same actual child profile and quiet lift, complete behavioral caps, and respectively actual stage averages and the packet's discounted clock-law evaluation. The two incomparable raw cones and omitted-Never counterexample remain reviewed drafts. Raw certificate infeasibility is not equilibrium nonexistence. |
 | Section 8.5, sparse-calendar missed reply | Already matched by `displayed_replyValues`, `behaviorDeviationPayoffCap_false_eq_half`, and `behaviorCap_sub_sparseTestedReplyCap_eq_half` (`UniformEquilibrium/Quitting/Examples/SparseCalendarReplyGap.lean`). The existing module also handles the actual third Never-player extension. Reuse it; no second proof is needed. |
@@ -169,6 +170,37 @@ These are proposed follow-ups, not new checked conclusions or packet seals.
   of fixing its singleton matrix exactly. This is relative openness within
   the centered response-invariant class, not openness under arbitrary
   symmetry-breaking perturbations.
+- Immediate opponent screening should strengthen same-profile uniformization
+  to exact Nash at every finite horizon, without singleton-sign assumptions.
+  The proposed source condition is zero stationary all-Continue mass for
+  every player's deleted opponents, as supplied by at least two sure quitters.
+  Every unilateral response then absorbs at date zero, so prescribed payoff
+  and full cap should scale by the evaluation's date-zero weight. Reuse
+  `quittingBehaviorEvaluatedDeviationPayoffCap_eq_pureTime`
+  (`UniformEquilibrium/Quitting/Paths/EvaluatedPureTimeCap.lean`) and the actual
+  finite-stage identity. This is not proved here and does not apply to a
+  single negative sure owner whose Never response removes the screening.
+- `lcpResidual_quittingBlockLift_zero`
+  (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientHomogeneous.lean`)
+  should extend to block-constant offsets. The corresponding feasibility iff
+  concerns lifted points only; it would not identify all full-game LCP
+  solutions with quotient solutions or equate full and quotient degrees.
+- Public bounded-evaluation payoff and cap bounds need only an evaluation
+  between zero and one, as the pure-time envelope already proves. The older
+  antitone bounds retain the sharper date-zero factor and should not be
+  weakened. Equality of actual stopping-law tuples transports evaluated
+  payoffs and caps; terminal semantic-pair equality alone does not record
+  dates and cannot justify that transport.
+
+The whole-R0 degree proposal can use `r0Margin_pos_iff_isR0Matrix`
+(`MathUE/LinearProgramming/R0Margin.lean`), the intrinsic origin-degree bridge,
+and `ambientDegree_homotopy`
+(`MathUE/Topology/AmbientDegreeHomotopyNormalization.lean`). It need not retain
+the strict principal-support inventory used by existing stronger neighborhood
+theorems. The cofinal selection proposal can expose the strict subsequence
+already constructed by terminal target selection, requiring an actual selected
+index beyond any requested bound. No common target across different games or
+uniform weak-boundary calendar complexity follows from these proposals.
 
 The crossed packet's algebraic source and accuracy-only rational search are
 checked. The first encodes the literal bounded nonzero fixed-point conditions
@@ -247,10 +279,14 @@ constructs the stationary-or-small-hazard strategy alternative for three
 players with unit own singleton payoffs. Positive scaling and arbitrary
 player-type transports are checked in
 `UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`:
-cardinality at most two permits all reward signs; cardinality three requires
-positive own singleton rewards. The paper's unrestricted
-Proposition 1 still needs the remaining three-player sign cases;
-small-player UE existence alone does not establish that source statement.
+these scoped transports retain their sign hypotheses. The unrestricted
+`QuittingThreePlayerStrategyClass.of_card_le_three`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`)
+now passes its named check and assembles the remaining signed three-player
+cases from the stationary LCP gate and full normal-core directed-cycle
+classification. The literal Literature `proposition1` and its separate
+standard-axiom check pass. This retains actual stationary roots or actual
+uniformly small-hazard sequences, not merely small-player UE existence.
 
 ## Shared stationary-witness follow-up
 
@@ -280,7 +316,7 @@ The remaining claims are broader than the examples and coordinate count alone.
 
 | Source claim | Remaining obligation |
 | --- | --- |
-| Section 1, raw response identity | `quittingResponseInvariantOnUnitCube_iff_forall_ambient` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientIdentity.lean`) passes its named check, extending the literal cube identity to all signed block vectors by analytic uniqueness. Finite linear reward-coefficient tests remain; the block row-sum adapter is already available. |
+| Section 1, raw response identity | `quittingResponseInvariantOnUnitCube_iff_forall_ambient` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientIdentity.lean`) and `quittingResponseInvariantOnUnitCube_iff_finite_coefficients` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPolynomial.lean`) pass named checks. The latter uses reward-independent finite monomial sets and coefficients linear in actual reward entries, retaining arbitrary finite players and zero block dimension. No executable arbitrary-real decision is asserted. |
 | Sections 3 and 4.2--4.4 | Whole-signed ambient quadratic remainder, literal total-box degree one, origin coordinate-box degree kappa, and entire-nonzero annulus degree one minus kappa pass named checks in `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientEstimates.lean` and `UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientDegree.lean`. Zero dimension and nonisolated roots are retained. The paired literal value-two specialization remains. |
 | Theorem B, sign and no-singleton-block branches | Retain the produced block-constant root, actual terminal payoff, exact terminal Nash and uniformity of that same profile in one public conclusion. |
 | Theorem B, normality branch | Matched by the targeted-checked singleton-normality completion, retaining the actual root payoff as fixed target. Normality is needed only for negative singleton-block owners. |
