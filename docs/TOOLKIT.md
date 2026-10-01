@@ -859,6 +859,27 @@ integer with this ambient construction on every bounded open neighborhood
 of the origin. The bounded-offset total-degree comparison, including the
 literal offset minus one, is in `MathUE/LinearProgramming/R0AmbientOffsetDegree.lean`.
 
+`Math.exists_compact_connected_fixedPoint_continuation`
+(`MathUE/Topology/ConnectedFixedPointContinuation.lean`) produces an actual
+compact connected subset of the fixed-point graph of a jointly continuous
+interval-parameterized self-map of a nonempty compact convex set in a
+finite-dimensional real normed space. The subset meets both endpoint fibers;
+neither a spanning component nor isolated fixed points are supplied. Dimension
+zero and compact convex sets with empty interior are allowed. Its component
+separation owner is `Math.exists_isClopen_separator_of_no_common_component`
+(`MathUE/Topology/CompactComponentSeparation.lean`). This is interval
+continuation, not continuation over every connected compact parameter space
+or an actual finite-game Nash decoder.
+
+`Math.Probability.FiniteStoppingSimplex.stop_eq_conditional` and
+`Math.Probability.FiniteStoppingSimplex.continuousOn_stop`
+(`MathUE/Probability/FiniteStoppingSimplexReconstruction.lean`) expose the
+canonical finite-simplex stopping law and conditional hazard. Finite and
+Never atoms are preserved exactly, including empty calendars and exhausted
+prefixes. Hazard continuity and strict upper bounds require positive Never
+mass; continuity on the whole simplex is not asserted. The construction
+reuses the canonical stopping-law reconstruction, not a second hazard engine.
+
 The construction
 `BoxComplementarityProblem.localDegree`
 (`MathUE/Topology/BoxComplementarityStabilizedLocalDegree.lean`) gives an

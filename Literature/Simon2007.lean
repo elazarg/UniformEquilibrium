@@ -7,6 +7,7 @@ import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Probability.FinitePathLawAdapter
+import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
 import UniformEquilibrium.Quitting.Classification.Existence.NoHarmSingletonGenerated
 import UniformEquilibrium.Quitting.Classification.CompactContinuationMotion
@@ -21631,6 +21632,61 @@ theorem KohlbergMertensStatement :
 
 /-- A behavioral profile in the `k`-stage quitting game `Γ_x^k`. -/
 abbrev RepeatedQuitProfile (G : QuittingGame) (k : ℕ) := Fin k → QuitRow G
+
+/-- Mixed timer actions in the paper's normal-form encoding:
+a date below k, or Continue on every date. -/
+abbrev RepeatedTimerSimplex (G : QuittingGame) (k : ℕ) :=
+  G.Player → Convexity.StdSimplex ℝ (Option (Fin k))
+
+/-- The paper's conditional timer decoder, using the canonical exact
+stopping-law reconstruction. Exhausted prefixes are assigned hazard zero. -/
+def repeatedTimerQuitProfile (G : QuittingGame) (k : ℕ)
+    (simplex : RepeatedTimerSimplex G k) : RepeatedQuitProfile G k :=
+  fun time who =>
+    let hazard := Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
+      (Math.Probability.FiniteStoppingSimplex.law (simplex who))
+    ⟨hazard.stop time.val, hazard.stop_nonneg time.val, hazard.stop_le_one time.val⟩
+
+/-- The actual decoder has the printed cumulative-prefix quotient. -/
+theorem repeatedTimerQuitProfile_eq_conditional
+    (G : QuittingGame) (k : ℕ) (simplex : RepeatedTimerSimplex G k)
+    (time : Fin k) (who : G.Player) :
+    (repeatedTimerQuitProfile G k simplex time who : ℝ) =
+      if (1 - ∑ date ∈ Finset.range time.val,
+        Math.Probability.FiniteStoppingSimplex.mass (simplex who) date) = 0 then 0
+      else (simplex who).weights (some time) /
+        (1 - ∑ date ∈ Finset.range time.val,
+          Math.Probability.FiniteStoppingSimplex.mass (simplex who) date) := by
+  change (Math.Probability.DiscreteHazard.StoppingLaw.toScalarHazard
+    (Math.Probability.FiniteStoppingSimplex.law (simplex who))).stop time.val = _
+  rw [Math.Probability.FiniteStoppingSimplex.stop_eq_conditional]
+  simp only [Math.Probability.FiniteStoppingSimplex.mass, time.isLt, dite_eq_left, Fin.eta]
+  rfl
+
+/-- Positive Continue-on-every-date mass prevents sure quitting in every decoded row. -/
+theorem repeatedTimerQuitProfile_lt_one_of_none_pos
+    (G : QuittingGame) (k : ℕ) (simplex : RepeatedTimerSimplex G k)
+    (hnone : ∀ who, 0 < (simplex who).weights none) :
+    ∀ time who, (repeatedTimerQuitProfile G k simplex time who : ℝ) < 1 := by
+  intro time who
+  exact Math.Probability.FiniteStoppingSimplex.stop_lt_one
+    (simplex who) (hnone who) time.val
+
+/-- The source conditional decoder is continuous on its actual
+positive-survival domain, including zero individual date weights.
+This is not yet the normal-form Nash-to-behavioral Nash transport. -/
+theorem continuousOn_repeatedTimerQuitProfile
+    (G : QuittingGame) (k : ℕ) :
+    ContinuousOn (repeatedTimerQuitProfile G k)
+      {simplex : RepeatedTimerSimplex G k |
+        ∀ who, 0 < (simplex who).weights none} := by
+  apply continuousOn_pi.mpr
+  intro time
+  apply continuousOn_pi.mpr
+  intro who
+  apply Topology.IsInducing.subtypeVal.continuousOn_iff.mpr
+  exact (Math.Probability.FiniteStoppingSimplex.continuousOn_stop time.val).comp
+    (continuous_apply who).continuousOn (fun simplex hsimplex => hsimplex who)
 
 /-- The recursive expected payoff `f^k(x,p)` of the `k`-stage quitting game. -/
 def RepeatedPayoff (G : QuittingGame) :

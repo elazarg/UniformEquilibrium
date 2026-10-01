@@ -421,6 +421,7 @@ import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FiniteProductFlowKinematics
 import MathUE.Probability.FiniteProductFlowTwoStateRegression
 import MathUE.Probability.FiniteReachableClosedClass
+import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import MathUE.Probability.FiniteWeightVariation
 import MathUE.Probability.FirstStoppingCoalitionRelabel
 import MathUE.Probability.FrozenEndpointTransport
@@ -623,6 +624,7 @@ import MathUE.Topology.BoxComplementaritySpernerSubdivisionPrism
 import MathUE.Topology.BoxComplementarityStabilizedLocalDegree
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
+import MathUE.Topology.CompactComponentSeparation
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactExecutableTraceGrammar
@@ -634,6 +636,7 @@ import MathUE.Topology.CompactRankedOutcome
 import MathUE.Topology.CompactRobustMoat
 import MathUE.Topology.CompactSerialRelation
 import MathUE.Topology.CompactSurjectiveInverseLimit
+import MathUE.Topology.ConnectedFixedPointContinuation
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.ExtendedOrbit

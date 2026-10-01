@@ -104,6 +104,33 @@ equilibrium graph and its crossing/return construction. Nonempty fibers,
 a compact graph or the checked orbit-image identities do not supply that
 component. This is recorded as missing Lean work, not an open game theorem.
 
+## Connected continuation and the timer decoder
+
+`Math.exists_compact_connected_fixedPoint_continuation`
+(`MathUE/Topology/ConnectedFixedPointContinuation.lean`) now produces a
+compact connected fixed-point set meeting both endpoint fibers for a
+continuous interval family on a nonempty compact convex finite-dimensional
+carrier. Its source data contains no selected spanning component, regularity
+or interior assumption. This supplies the generic interval theorem needed
+by the literal three-segment Case 3 parameter path. It does not prove the
+stronger arbitrary-connected-compact-parameter statement of Lemma 8.
+
+`repeatedTimerQuitProfile_eq_conditional` and
+`continuousOn_repeatedTimerQuitProfile` (`Literature/Simon2007.lean`) reuse
+the exact finite-simplex stopping-law reconstruction, preserving finite and
+Never masses. The denominator is the whole earlier finite prefix; at an
+exhausted prefix the hazard is zero. Positive Never mass supplies the
+decoder's continuity and strictly subunit hazards. Empty calendars and
+zero finite-date weights remain allowed.
+
+The remaining source adapter is the actual finite timer game with arbitrary
+terminal continuation vector, its joint parameterized Nash map, and exact
+Nash-to-repeated-equilibrium transport. The existing zero-tail finite timing
+game cannot replace that source unchanged. The no-sure-quit hypothesis must
+then supply positive denominators on the selected Nash graph. Component
+continuation through this decoder and the crossing/return construction are
+separate from the checked payoff-image and orbit compactness results.
+
 ## Extended orbits
 
 `ExtendedOrbitCondition.hasQuitApproximateEquilibria`

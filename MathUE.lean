@@ -516,6 +516,7 @@ import MathUE.Probability.StitchedMartingale
 import MathUE.Probability.StoppingLawCapBandRedistribution
 import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Probability.StoppingLawReconstruction
+import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
 import MathUE.Probability.SurvivalAmplification
@@ -574,6 +575,8 @@ import MathUE.SurvivalWeightedObstructionAction
 import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactOrbitOccupation
 import MathUE.Topology.CompactBudgetedPrefixRelation
+import MathUE.Topology.CompactComponentSeparation
+import MathUE.Topology.ConnectedFixedPointContinuation
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactExecutableTraceGrammar
