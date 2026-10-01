@@ -107,9 +107,11 @@ variation charge. Generated and instant exclusions are explicit.
 
 Both Simon modules pass silent named checks; separate transitive axiom
 checks of these declarations use only the three standard axioms. The
-actual interval component source described below now supplies the Case 3
-three-segment path. Its crossing/return construction remains missing Lean
-work; no full escape-game theorem is claimed.
+actual interval component source described below supplies the Case 3
+three-segment path. The literal backward word, charged critical return and
+first-segment source-row realization are also checked; frontier selection
+retains the global parameter described below. No full escape-game theorem
+is claimed.
 
 ## Connected continuation and the timer decoder
 
@@ -168,11 +170,51 @@ forces the large endpoint to be all-Continue only under the literal global
 `IsUniformRho` premise from the old printed Lemma 5. Its row-uniqueness
 proof uses only the survival half of that premise, not the motion half.
 The corrected compact-carrier motion/survival producer does not discharge
-the unbounded-tail premise. The arbitrary-connected-compact-parameter Lemma 8 and the
-Case 3 crossing/return construction also remain unproved. The canonical timer
+the unbounded-tail premise. The arbitrary-connected-compact-parameter Lemma 8 and
+the remaining Case 3 branch assembly are separate obligations. The canonical timer
 owner and both Simon modules pass silent named builds. Separate transitive
 axiom checks of these new timer, floor and component declarations use only
 the three standard axioms.
+
+## Literal backward words, crossing frontiers and critical returns
+
+`repeatedBackwardPayoffOrbit_isFiniteOrbit` (`Literature/Simon2007.lean`)
+retains the actual finite equilibrium profile and its original continuation
+parameter. Internally produced no-sure bounds give positive reach, and the
+initial Nash inequalities imply exact one-stage rows along that same backward
+word. The complete word map is continuous; unreachable suffix equilibrium
+is not assumed.
+
+`EscapeWitness.exists_caseThreeUnionFrontier_of_uniformRho` and
+`EscapeWitness.exists_caseThreeUpperWallOrbit_of_uniformRho` in the same file
+select an actual frontier point in the connected equilibrium set. The selected
+parameter lies in the first quarter of the literal three-segment path. Every
+payoff coordinate is at least its singleton plus the chosen accuracy, with
+equality for one coordinate. The exact backward word remains in the original
+escape carrier and band. These two declarations retain `IsUniformRho`; they
+do not produce the high-continuation survival bound.
+
+`EscapeWitness.exists_criticalFiniteReturn_with_coordinateCharge` in the same
+file constructs a restricted return from each actual start in the escape
+band to a critical point. Its variation is at least the selected coordinate's
+drop to its singleton payoff. It requires all-normal players and failure of
+the stationarily generated branch, but no global parameter.
+
+`exists_smallSoloRow_payoff_of_mem_segment`,
+`smallSoloSuccessor_segment_subset_restricted`, and
+`EscapeWitness.smallSoloSuccessor_segment_subset`
+(`Literature/Simon2007.lean`) realize every point of the first path segment
+by scaling the actual initial solo row at the original critical continuation.
+The same row proves restricted-correspondence membership at the printed scale
+and keeps the entire segment in the same escape carrier. This localization
+does not assume the global parameter or infer convexity from its endpoints.
+The Simon (2007) named check and a separate transitive standard-axiom check
+of these declarations pass.
+
+Both Simon modules pass silent named checks. Separate transitive axiom checks
+of the gap, word, frontier, upper-wall and first-segment declarations use only `propext`,
+`Quot.sound` and `Classical.choice`. Full orbit concatenation and the remaining
+escape-game alternatives are not established by these components alone.
 
 ## High-continuation uniqueness: literal Lemma 9
 
@@ -730,7 +772,7 @@ nearest checked dependencies and unresolved inputs:
 | `KohlbergMertensStatement` | `MatrixEquilibriumGraph` and `MatrixNorm` express the matrix-game target. | The external Kohlberg–Mertens homotopy theorem in the stated straight/proper form; no checked homotopy construction is present. |
 | `lemma8` | `repeatedF_eq_iterate_of_no_sure_quit` identifies the repeated payoff correspondence; `exists_compact_connected_repeatedEquilibria_along_continuous_path` constructs actual connected equilibrium sets spanning continuous interval paths under no-sure. | The stronger lifting statement over arbitrary connected compact `D`; the checked interval continuation theorem does not establish this statement. |
 | `lemma9` | `lemma9_of_uniformRho` proves high-tail all-Continue uniqueness from the old printed global parameter; `exists_largeRepeatedAllContinueThreshold_of_uniformRho` lifts that conditional result to all finite repeated lengths. | An actual proof under the printed escape/no-stationary/no-instant standing assumptions. The corrected-source construction needs a high-tail producer under no-stationarily-generated/no-instant, not merely a compact survival bound. |
-| `theorem4` | Actual critical paths, charged initial solo moves and `EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant` supply the literal three-segment equilibrium-component source. | The actual high-continuation all-Continue uniqueness source, the full crossing/return construction, and remaining branch assembly. The supplied global-`IsUniformRho` consumer is not that source; neither the component nor the critical-point orbit alone is an equilibrium of the original infinite game. |
+| `theorem4` | Actual critical paths, charged solo moves, interval equilibrium components, exact backward words and charged critical returns are checked. `EscapeWitness.exists_caseThreeUpperWallOrbit_of_uniformRho` supplies the selected first-segment word under the global parameter. | The actual high-continuation all-Continue uniqueness source, full orbit concatenation and remaining branch assembly. The global-`IsUniformRho` consumer is not that source; these finite components alone are not an equilibrium of the original infinite game. |
 
 The matching 2012 structure statements still depend on the corresponding
 open 2007 declarations. The conditional global-parameter helper does not

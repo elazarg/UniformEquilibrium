@@ -6,6 +6,7 @@ Authors: UniformEquilibrium contributors
 
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
 import UniformEquilibrium.Quitting.Root.LiteralPrefixDeviationTransport
+import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 import UniformEquilibrium.Quitting.Classification.Existence.UniformPayoffTerminalSemanticCarrier
 
 /-! # Actual finite-word tail extraction and semantic splicing
@@ -106,6 +107,52 @@ theorem quittingFiniteRootWordPayoff_sub_eq_jointSurvival_mul
       unfold quittingLiteralRootStackJointSurvival at ih
       simp only [quittingLiteralRootStackJointSurvival, List.map_cons, List.prod_cons]
       linear_combination quittingStationaryContinueMass root * ih
+
+omit [DecidableEq ι] in
+/-- A finite chronological word moves a bounded formal tail by at most twice
+the bound times its actual absorption probability. -/
+theorem abs_quittingFiniteRootWordPayoff_sub_tail_le_two_mul_absorption
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (roots : List (ι → PMF Bool)) (tail : Payoff ι) (who : ι) (bound : ℝ)
+    (hreward : ∀ terminal player, |reward terminal player| ≤ bound)
+    (htail : |tail who| ≤ bound) :
+    |quittingFiniteRootWordPayoff reward roots tail who - tail who| ≤
+      2 * bound * (1 - quittingLiteralRootStackJointSurvival roots) := by
+  induction roots with
+  | nil => simp [quittingFiniteRootWordPayoff, quittingLiteralRootStackJointSurvival]
+  | cons root roots ih =>
+      let suffix := quittingFiniteRootWordPayoff reward roots tail
+      have hroot := abs_quittingRootSuccessorPayoff_sub_tail_le_two_mul_absorptionMass
+        reward tail root who bound hreward htail
+      have hcontinue := quittingStationaryContinueMass_nonneg root
+      have hprefix :
+          quittingRootSuccessorPayoff reward suffix root who -
+              quittingRootSuccessorPayoff reward tail root who =
+            quittingStationaryContinueMass root * (suffix who - tail who) := by
+        simp only [quittingRootSuccessorPayoff,
+          quittingRootExpectedPayoff_eq_absorbingContribution_add]
+        ring
+      change |quittingRootSuccessorPayoff reward suffix root who - tail who| ≤ _
+      calc
+        |quittingRootSuccessorPayoff reward suffix root who - tail who| =
+            |(quittingRootSuccessorPayoff reward suffix root who -
+                quittingRootSuccessorPayoff reward tail root who) +
+              (quittingRootSuccessorPayoff reward tail root who - tail who)| := by
+          congr 1
+          ring
+        _ ≤ |quittingRootSuccessorPayoff reward suffix root who -
+              quittingRootSuccessorPayoff reward tail root who| +
+            |quittingRootSuccessorPayoff reward tail root who - tail who| := abs_add_le _ _
+        _ ≤ quittingStationaryContinueMass root *
+              (2 * bound * (1 - quittingLiteralRootStackJointSurvival roots)) +
+            2 * bound * quittingRootAbsorptionMass root := by
+          apply add_le_add _ hroot
+          rw [hprefix, abs_mul, abs_of_nonneg hcontinue]
+          exact mul_le_mul_of_nonneg_left ih hcontinue
+        _ = 2 * bound * (1 - quittingLiteralRootStackJointSurvival (root :: roots)) := by
+          simp only [quittingRootAbsorptionMass, quittingLiteralRootStackJointSurvival,
+            List.map_cons, List.prod_cons]
+          ring
 
 /-- Positive joint reach extracts the actual arbitrary behavioral tail with
 the sharp divided Nash error. -/

@@ -212,6 +212,17 @@ payoff. `exists_strictDeficitExactSuffix_payoffDiagonal`
 is the source-derived common-depth payoff and row limit. The finite-word
 uniform-payoff result above does not require the singleton-sign assumption.
 
+`exists_strictDeficitExactSuffix_sameProfile_quantitativeUniform`
+(`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixHorizon.lean`)
+retains that same diagonal, both limit families, Bellman values and every
+literal suffix. The row absorption floor `A = gap/(4*M+gap)` gives prescribed
+delivery error at most `M/(A*H)` at each positive horizon. Full behavioral
+regret is bounded by that error plus `M` times the actual opponent live-tail
+Cesàro error, with its Never mass subtracted. No opponent-only geometric
+absorption is assumed. The same profile and actual suffix payoff work at
+every positive accuracy. The quantitative join passes its silent named
+check, the full default build and exhaustive production axiom audit.
+
 `HasQuittingFiniteWordNonconcentratedGroupExclusion`
 (`UniformEquilibrium/Quitting/Paths/GroupExclusionFiniteWords.lean`)
 requires one fixed concentration bound and permits a different probability
@@ -447,6 +458,97 @@ retains those same roots, phase and date bounds while proving their actual
 unrestricted terminal approximate-Nash guarantee. The module also transports
 real finite-word and actual-profile weak-subset hypotheses to the rational
 selector; it does not decide these hypotheses.
+
+`rationalFiniteSourceChargedWord_spec`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalChargedSourceStep.lean`)
+computes an auxiliary rational root from the actual current word and its
+charged cap margin. Its absorption and total-defect bounds give a uniform
+positive debt expenditure at a fixed working accuracy. No selected root or
+favorable cap vector is supplied.
+`executableRationalPayoffDebtThresholdWord_ledger`,
+`executableRationalPayoffDebtThresholdWord_endpoint`, and
+`executableRationalPayoffDebtThresholdWord_finiteLaws`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalPayoffDebtThresholdBlock.lean`)
+instead stop solo prefixes at the first actual payoff/debt hit. They retain
+the exact old word, all-prefix debt nonincrease, the logarithmic date bound
+and the same word's independent rational finite/Never laws and full semantic
+pair. A nonterminal hit supplies the next actual charged source. Failure of
+the positive-column test is not treated as strict preemption.
+`rationalPositiveSingletonColumnExitWord_debt_and_delivery`
+(`UniformEquilibrium/Quitting/Paths/RationalPositiveSingletonColumnSource.lean`)
+computes a fresh finite solo exit from the actual reward table, with total
+debt and delivery bounds to its actual singleton-column target. Only the
+selected owner's singleton must be nonnegative; outsiders may have signed
+rewards. The working-rate variant retains the original requested exit
+accuracy separately. These branch owners pass silent named builds.
+`executableRationalWeakSubsetStage_spec`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalWeakSubsetStage.lean`)
+combines them on the actual renewed source and proves termination and a
+fixed-level date bound. It also passes its silent named check. The dyadic
+aggregation now passes its separate silent named check:
+`executableRationalWeakSubsetDyadicSelection_length_le_absolute`
+(`UniformEquilibrium/Quitting/Paths/ExecutableRationalWeakSubsetDyadicSelection.lean`)
+bounds dates by `1000000 * (n + (M / accuracy)^2 * log(16*n*M/accuracy))`.
+The same computed word has full terminal debt at most the requested accuracy
+and exactly realizing independent finite/Never laws. It runs the initial
+M-stage even at equal debt and retains a positive-column exit at the original
+accuracy through every later level. Only designated owners need nonnegative
+singleton rewards; exclusion is required only for rational finite words.
+`exists_uniformEquilibriumPayoff_of_rationalFiniteWordOwnerExclusionOn`
+(in the same module) feeds these profiles to the fixed-target consumer.
+The fixed real target is not computed. These modules also pass the full silent
+default build and exhaustive production axiom audit.
+
+`quittingSelectedOwnerExactWordDebt_reciprocal`,
+`executableRationalSelectedOwnerDebt_reciprocal`, and
+`executableRationalSelectedOwnerWord_actualDebt_reciprocal`
+(`UniformEquilibrium/Quitting/Paths/SelectedOwnerReciprocalEnvelope.lean`)
+pass their silent named check. They expose the reciprocal envelope for the
+existing real and computed rational renewals at every phase, retaining zero
+initial debt and the actual complete-response debt of the same rational word.
+The respective constants are `(32*M + 6*initialDebt)/3` and
+`(128*M + 24*initialDebt)/3`; no successful phase or replacement source is input.
+
+`executableRationalWeakExclusionTwoBranchWord_finiteLaws`
+(`UniformEquilibrium/Quitting/Paths/RationalWeakExclusionTwoBranchSelection.lean`)
+tests preemption internally, then chooses the actual rational solo exit or
+the existing selected-owner renewal. Every positive rational accuracy is
+allowed, including zero initial debt and accuracy above the reward bound.
+Its all-preempted branch retains the reciprocal phase and logarithmic date
+bounds. The exact independent finite/Never laws realize the computed word's
+whole payoff/cap pair, not a replacement payoff-only profile.
+`executableRationalWeakExclusionTwoBranchWord_finFour_menu_and_latePivot`
+(`UniformEquilibrium/Quitting/Paths/FinFourRationalWeakExclusionFiniteMenu.lean`)
+controls both menu and late-pivot errors on these same laws when the own
+singleton vector is `(1,0,0,0)`. The real-table counterpart is
+`exists_finFour_finiteWordMenu_errors_le_of_weakExclusion`
+(`UniformEquilibrium/Quitting/Paths/FinFourWeakExclusionFiniteMenu.lean`);
+it selects a real word internally with no preemption or rationality premise.
+Both retain full terminal Nash and signed finite-horizon delivery and regret
+bounds. These modules pass silent named checks, the full default build and
+exhaustive production axiom audit.
+
+`UniformEquilibrium/Quitting/Examples/CapThresholdFinFour.lean`,
+`UniformEquilibrium/Quitting/Examples/CapThresholdFinThree.lean`, and
+`UniformEquilibrium/Quitting/Examples/CapThresholdInitialSkip.lean` pass
+silent named checks. They retain the literal reward tables and old source
+words. The first two identify the first cap hits at 59 and 30 and the exact
+through-hit full-debt ledgers; the signed second example has increasing debt.
+The third takes the initial below-singleton skip branch and retains its
+zero-debt auxiliary prefix of the original source. None exhibits a positive
+semantic minimum or permits affine cap extrapolation beyond the first hit.
+
+`exists_owner_payoffMargin_le_actualSingletonSurplusEnvelope`,
+`exists_minimumTerminalSemanticDebt_le_sqrt_actualEnvelope_nonnegativeSingleton`, and
+`exists_minimumTerminalSemanticDebt_le_sqrt_actualEnvelope_finFour`
+(`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticActualPayoffEnvelope.lean`)
+pass their silent named check. The envelope is literally the nonnegative part
+of the supremum, over actual behavioral profiles, of their minimum singleton
+surplus. Its boundedness and each actual owner witness are proved internally.
+The minimizing semantic pair is also selected internally. The signed Fin4
+facade has no singleton-sign restriction; the general finite-player facade
+requires nonnegative singleton rewards. Neither accepts a favorable envelope
+or a payoff realizer, nor bounds the debt of an arbitrary carrier point.
 
 `exists_finiteWord_debtSum_le_of_weakExclusion_allPreempted`
 (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakExclusionDescent.lean`)
@@ -2974,6 +3076,20 @@ for different outsiders and requiring a positive actual child singleton.
 The Fin4 wrapper constructs the child target internally. An outsider-only
 terminal reward shift keeps Never zero and carries an explicit joint-Never
 correction; it is not arbitrary-profile strategic equivalence.
+
+`quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`)
+uses an actual absorbing stationary child equilibrium instead of a positive
+singleton pivot. Actual absorption derives zero joint-Never mass; every
+outsider may use a different one of the five F/J certificate kinds. The same
+quiet parent profile is exact full-behavioral terminal Nash, its actual payoff
+is one fixed uniform-equilibrium target, and retained coordinates equal the
+child payoff. Signed rewards and empty outsider sets are allowed. The endpoint
+facade `quietLift_fixedTarget_of_withdrawalFutureJoin_stationaryEndpoint` in
+the same file retains the actual Bellman, endpoint and Never-boundary premises.
+These terminal-only adapters do not produce a child equilibrium or assert
+all-evaluation domination. The named module passes a silent targeted build;
+the new integration closure remains subject to the full build.
 
 `exists_rational_patientWithdrawalRewardCertificate`,
 `exists_rational_deadlineWithdrawalRewardCertificate`,

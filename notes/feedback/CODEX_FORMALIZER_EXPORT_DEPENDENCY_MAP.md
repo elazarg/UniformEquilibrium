@@ -8,6 +8,13 @@ already have their main conclusion in production. The table identifies first
 dependencies, not complete packet coverage. The claim inventories below
 record broader retirement obligations after reading those packets in full.
 
+Source-audit caveat: `math/SOURCES.md` and `math/GOAL.md` still describe
+Literature as unbuilt. The current default build includes its library;
+intentional open paper claims remain marked by `sorry`. Root `AGENTS.md`
+and each exact declaration govern the status, including separate transitive
+axiom checks for Literature proofs. The conference navigation files were
+not edited here.
+
 Retired packets pass complete-claim review, the full silent default build,
 the exhaustive axiom audit, and repository script gates. Pending packets
 remain where their inventories list missing conclusions or verification.
@@ -30,12 +37,18 @@ default build, exhaustive production axiom audit, script gates and actual
 executable smoke tests. It is retired unchanged to
 `math/formalized/WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`, with SHA-256
 `3e89c60d59766effbbc8851786fc3c6b57ede8f1a2bf24fb3591e3ac243f402f`.
+The cap-threshold packet also passes complete-claim review, the full silent
+default build, exhaustive production axiom audit and all repository script
+gates. It is retired unchanged to
+`math/formalized/FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION.md`,
+with SHA-256
+`b884b8848472a5aabafbec2b900362254d0b138f84170cb9ce9223a8358630a7`.
 
 | First missing theorem or adapter | Packets grouped at that boundary | Checked production foothold |
 | --- | --- | --- |
 | Quotient source algebra and literal fixtures | `STATIONARY_RESPONSE_QUOTIENT_DEGREE_ESCAPE` | The signed paired centered-row UE class, paired/full matrix calculations, ambient total/local/annular degree, signed quadratic bounds, homogeneous lift and quotient no-UE restrictions pass named checks. `exists_stationaryBellmanRoot_uniformPayoff_of_responseInvariant_singletonNormality` (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientNormalCompletion.lean`) retains the produced Bellman value as the fixed target, requiring normality only for negative singleton-block owners. Exact finite coefficient detection also passes its named check; same-profile quantitative refinements, subgroup-orbit adapters, coordinate freedom, and algebraic and boundary fixtures remain separate obligations. |
 | Actual quantile rigidity and robust unchanged-child obstruction | `ADAPTIVE_CHILD_EQUILIBRIUM_EXTENSION_NO_GO` | `AdaptiveChildCenter.profile_exactTerminalNash` and `AdaptiveChildCenter.target_isUniformEquilibriumPayoff` (`UniformEquilibrium/Quitting/Examples/AdaptiveChildCenter.lean`) prove the center's positive equilibrium. The center data and capped-clock certificate infeasibility are also integrated. The packet's universal positive parent-plus-child exploitability floor still needs its actual quantile-rigidity sequence, all four restriction estimates including the adjacent-date atom move, and the reward-neighborhood transfer. Capped-clock infeasibility does not prove this stronger unchanged-child obstruction. |
-| Rational weak-subset dispatch, reward-uniform payoff threshold and single-pivot secant source | `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS`, `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS`, `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION`, `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | `exists_strictDeficitExactSuffix_allTerminalNash` (`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixNash.lean`) closes the single common-depth infinite all-suffix exact Nash conclusion under nonnegative singleton rewards. `exists_finiteWord_debtSum_le_of_weakSubsetExclusion` (`UniformEquilibrium/Quitting/Paths/FiniteWordWeakSubsetSelection.lean`) already dispatches the real-valued preempted and unpreempted branches. The executable rational selected-owner interface still assumes all designated owners are strictly preempted. `exists_literal_capThreshold_block_debtSum_le_quadraticDrop` (`UniformEquilibrium/Quitting/Paths/FiniteSoloCapThresholdDescent.lean`) and `executableRationalCapThresholdBlock_length_and_debtSum_le` (`UniformEquilibrium/Quitting/Paths/ExecutableRationalCapThresholdBlock.lean`) already provide cap-threshold blocks. The stronger reward-uniform payoff-threshold algorithm, rational two-branch integration and single-pivot secant/tilted common-calendar source remain separate. Finite-calendar payoff compression does not preserve caps. |
+| Literal selector consumers and fixtures, and single-pivot secant source | `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS`, `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS`, `SINGLE_PIVOT_SECANT_COLLAR_AND_STRICT_PRESSURE` | The real weak-subset dispatcher, rational two-branch selector, actual payoff-threshold block, terminating stage, reward-uniform dyadic selection and same-source quantitative all-suffix Nash consumer pass the full integration gate. The rational selector does not require every designated owner to be preempted. The cap packet is retired, including its same-word menu joins and all three literal regressions. The payoff packets additionally require their literal accepted-source joins and complete fixtures; the single-pivot secant/tilted common-calendar source is separate. Finite-calendar payoff compression does not preserve caps. |
 | New screened-minimum/fiber algebra and source transport | `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR`, `MEMBERSHIP_STRETCH_AND_SINGLETON_FIBER_SOURCE_REDUCTION`, `THREE_SURE_MINIMA_REQUIRE_OPPOSED_MEMBERSHIP_REVERSALS` | `minimumTerminalSemantic_maximumDebt_allPlayersTie` (`UniformEquilibrium/Diagnostics/Quitting/PositiveMaximumDebtMinimum.lean`), `minimumTerminalSemantic_exploitabilitySingletonMargin` (`UniformEquilibrium/Diagnostics/Quitting/TerminalSemanticPlateauDynamicCostate.lean`), and `exists_twoSureProductRoot_realizing_jointCarrierPoint_of_strictMargin` (`UniformEquilibrium/Diagnostics/Quitting/ZeroSingletonBehavioralLawProductBase.lean`) provide minimum and actual-source interfaces. The first new steps differ: degree-six screened-root nonvanishing, four-coordinate singleton stretch, and signed affine-row comparison, respectively. None may assume a selected counterexample fiber or hazard as a certificate field. |
 | Full exact-root potential restriction and shape arguments | `REFLECTION_AND_MULTIAFFINE_POTENTIAL_EXCLUSIONS`, `QUITTING_POTENTIAL_SHAPE_EXCLUSIONS` | `quittingGame_not_exists_uniformEquilibriumPayoff_iff_noSureRoot_and_rationalPotential` (`UniformEquilibrium/Quitting/Projective/PolynomialForwardCertificateCharacterization.lean`) and the robust charged relation supply the existing conditional certificate interface. The first missing reusable step is the full-exact-edge restriction with collision-adjusted singleton probes; reflection, quasiconvexity, curvature, and degree exclusions then diverge. These are necessary-shape reductions, not a polynomial producer or a solved-game class. |
 
@@ -49,17 +62,15 @@ executable smoke tests. It is retired unchanged to
    constructing another degree adapter. Algebraic original-game equilibrium
    selection and accuracy-only rational search are distinct checked tools;
    neither computes a previously prescribed real target.
-2. Reuse the real-valued weak-subset dispatch and existing real/rational
-   cap-threshold blocks. Complete the rational two-branch integration and
-   the reward-uniform payoff-threshold algorithm, preserving the actual
-   source/profile chronology. Cap-threshold stopping and payoff-threshold
-   stopping are different predicates. The strict-deficit infinite all-suffix
-   theorem does not need to be reproved. The single-pivot source remains a
-   different counterexample-side task.
+2. Reuse the checked real and rational selectors, stage, dyadic bound and
+   quantitative all-suffix consumer. Complete the literal source joins and
+   fixtures listed below, then their full integration gates. Cap-threshold
+   stopping and payoff-threshold stopping are different predicates. The
+   single-pivot secant source remains a different counterexample-side task.
 
 ### Shared finite-selector construction
 
-The first missing reusable step takes an actual rational finite source word,
+The checked shared construction takes an actual rational finite source word,
 a positive reward bound and working accuracy, and tests its actual cap margins.
 In the charged branch, the canonical rational auxiliary-root selector must
 produce the root internally. The existing below-singleton absorption bound
@@ -78,9 +89,86 @@ payoff thresholds. Charged steps and these blocks precede the dyadic stage
 and raw-predicate consumers; no minimum semantic pair is substituted for the
 actual finite source.
 
-These are implementation requirements from the exported proofs, not new
-checked conclusions. The real-valued qualitative dispatch and existing
+The branch, stage and dyadic declarations below implement these requirements
+and pass named checks. The real-valued qualitative dispatcher and existing
 cap-threshold blocks remain their canonical owners.
+
+### Distinct completion obligations for the three selector packets
+
+The shared source construction does not close these packets by itself.
+Complete-claim review separates their remaining obligations:
+
+- `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION` already has
+  the real and rational first-cap blocks, quadratic minimum collar,
+  square-root payoff envelope and table-dependent preempted selector. Its
+  rational unpreempted exit, prescribed two-branch dispatcher, rational
+  same-word menu and all three actual-source regressions pass named checks.
+  The real same-word menu join and full integration gate also pass. This packet
+  does not require the reward-uniform dyadic bound from the other two packets.
+- `FINITE_CALENDAR_PAYOFF_EXCLUSION_RAW_TABLE_TESTS` has its exact payoff
+  calendar realization, raw polynomial recognition and all seven boundary
+  examples. Its selection section also requires the shared rational
+  payoff-threshold stage and dyadic date bound, the specified unpreempted
+  exit, and the same-source quantitative suffix and accepted-source joins.
+  It does not require the other packet's determinant-table fixture.
+- `PAYOFF_EXCLUSION_ACTUAL_SELECTORS_AND_EXACT_SUFFIX_LIMITS` requires those
+  shared stage, dyadic and same-source suffix results. Its separate literal
+  obligations are the determinant-attaining laws, the complete reward-bound-21
+  table and its exact root/comparison statements, the first-payoff-hit-155
+  regression, and the signed two-player family with no exact terminal Nash.
+  Approximate or uniform equilibrium existence is not negated by that last
+  example.
+
+The positive-column rational exits, actual charged source step, generic
+real payoff-threshold ledger and rational payoff-threshold block pass silent
+named builds. The fixed-level stage also passes its silent named check,
+including actual source renewal, internally proved termination and its date
+bound. The dyadic aggregation passes its separate silent named check,
+including the absolute reward-uniform date bound, actual same-word full debt,
+exact independent finite/Never laws and fixed-payoff existence from rational
+finite-word exclusion. The reciprocal rates of the existing real/rational
+renewals also pass their separate named check, including zero initial debt
+and the actual full behavioral debt of the same computed word.
+The same-source quantitative suffix join also passes its named check in
+`UniformEquilibrium/Quitting/Paths/StrictDeficitExactSuffixHorizon.lean`:
+it retains both original diagonal limit families, every exact-Nash suffix,
+the prescribed horizon bound, full reply error and the same-profile fixed
+payoff target. The rational unpreempted exit passes its named check and
+silent bounded runtime tests, including zero and one-player boundaries.
+The literal actual-payoff supremum envelope also passes its named check,
+including internally selected minimizers for nonnegative singleton tables
+and arbitrary signed Fin4 tables. All three cap-threshold regressions pass
+their named checks, including the signed first-hit-30 debt increase.
+The prescribed rational preemption dispatcher and both rational and real
+same-word menu joins also pass their named checks. The real join needs no
+preemption or rationality premise. The shared constructions pass the full
+integration gate. The cap packet is retired after complete-claim review;
+the other two packets retain their literal-source obligations and are not
+retired on the strength of these shared constructions alone.
+
+## Complete-claim audit: cap-threshold packet
+
+All useful claims in `FINITE_CAP_THRESHOLD_BLOCKS_AND_WEAK_EXCLUSION_SELECTION`
+are covered by checked production declarations. Complete-claim review and
+independent review of the real same-word menu found no outstanding objection.
+The full silent default build, exhaustive permitted-axiom audit, repository
+script gates and the unpreempted exit's bounded runtime checks pass.
+
+| Packet output | Canonical owners |
+| --- | --- |
+| Actual full-cap prefix, auxiliary defect budget and absorption floors | `TerminalDebtPrefix`, `TerminalSemanticPair`, `AuxiliaryNashDefectBudget`, `BelowSingletonRootAbsorption` |
+| Real T1 and rational T1q, retained old source and first-hit ledger | `TerminalSemanticSoloCapThreshold`, `FiniteSoloCapThresholdDescent`, `ExecutableRationalCapThresholdBlock` |
+| T2 at every positive minimizing pair; arbitrary signed Fin4; actual-payoff supremum envelope | `TerminalSemanticPreemptedOwnerQuadraticMargin`, `TerminalSemanticActualPayoffEnvelope` |
+| Both actual rational selection branches, zero debt and every positive accuracy; reciprocal renewal and T3 dates | `RationalUnpreemptedSoloExit`, `RationalWeakExclusionTwoBranchSelection`, `SelectedOwnerReciprocalEnvelope`, `ExecutableRationalSelectedOwnerRates` |
+| Same real/rational word, independent finite/Never laws, full pair, menu/pivot errors and horizons | `LiteralFiniteWordMenuRealization`, `FinFourWeakExclusionFiniteMenu`, `FinFourRationalWeakExclusionFiniteMenu` |
+| One fixed target before accuracy | `FiniteWordWeakExclusionSelection`, `ExecutableRationalWeakSubsetDyadicSelection`, `TerminalUniformPayoffSelection` |
+| Literal first cap hits at 59 and 30, signed debt increase, and below-singleton skip | `CapThresholdFinFour`, `CapThresholdFinThree`, `CapThresholdInitialSkip`, `CapThresholdRegressionCommon` |
+
+These module names identify the owners in the corresponding production
+subtrees; exact public declarations are recorded in `docs/TOOLKIT.md`.
+The packet does not assert weak exclusion for arbitrary Fin4, renewable debt
+decrease when the cap margin exceeds total debt, realization of every carrier
+point, cap attainment, arithmetic complexity, or computation of a fixed target.
 
 ## Complete-claim audit: guarded crossed-response packet
 
@@ -124,6 +212,17 @@ complexity bound follows from these class-specific and bounded checks.
 proves both raw-cone separations on the same child subset and player labels.
 The two reward tables need not have identical restricted child payoffs.
 These are raw-certificate exclusions, not no-equilibrium results.
+
+An additional checked consequence not stated in the withdrawal packet is
+`quietLift_fixedTarget_of_withdrawalFutureJoin_absorbingStationary`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalAbsorbingStationaryChild.lean`).
+For an actual absorbing stationary child that is exact Nash against complete
+behavioral deviations, any number of quiet outsiders with the five F/J
+certificate kinds preserve that same exact equilibrium. The lifted profile's
+actual payoff is one fixed UE target agreeing with every child coordinate.
+Absorption internally removes the joint-Never residual; no positive singleton
+pivot or singleton-sign premise is needed. This does not produce such a child
+for an arbitrary table or assert an all-evaluation comparison.
 
 | Source claims | Implementation boundary |
 | --- | --- |

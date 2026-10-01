@@ -15,10 +15,6 @@ open Math.ProbabilityMassFunction
 
 variable {players : ℕ}
 
-/-- A prescribed-payoff/full-cap pair represented entirely over the rationals. -/
-abbrev RationalQuittingSemanticPair (players : ℕ) :=
-  (Fin players → ℚ) × (Fin players → ℚ)
-
 /-- Exact rational total debt of a rational semantic pair. -/
 def rationalQuittingSemanticDebtSum
     (pair : RationalQuittingSemanticPair players) : ℚ :=
@@ -41,6 +37,23 @@ def RationalQuittingSemanticPair.toReal
     (pair : RationalQuittingSemanticPair players) :
     QuittingTerminalSemanticPair (Fin players) :=
   (fun who => (pair.1 who : ℝ), fun who => (pair.2 who : ℝ))
+
+/-- The coordinatewise rational cast loses no prescribed-payoff or cap data,
+including at the empty player type. -/
+theorem RationalQuittingSemanticPair.toReal_injective :
+    Function.Injective (RationalQuittingSemanticPair.toReal (players := players)) := by
+  intro first second hequal
+  apply Prod.ext
+  · funext who
+    have h := congrArg (fun pair : QuittingTerminalSemanticPair (Fin players) =>
+      pair.1 who) hequal
+    change (first.1 who : ℝ) = (second.1 who : ℝ) at h
+    exact_mod_cast h
+  · funext who
+    have h := congrArg (fun pair : QuittingTerminalSemanticPair (Fin players) =>
+      pair.2 who) hequal
+    change (first.2 who : ℝ) = (second.2 who : ℝ) at h
+    exact_mod_cast h
 
 theorem quittingTerminalSemanticDebtSum_rational_eq_cast
     (pair : RationalQuittingSemanticPair players) :

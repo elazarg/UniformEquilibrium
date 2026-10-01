@@ -7,10 +7,12 @@ import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.AnalyticQuadraticRemainder
 import MathUE.Analysis.PositiveHomogeneousCoercivity
+import MathUE.Analysis.GeometricCesaroError
 import MathUE.FiniteContinuousIntervalSelection
 import MathUE.FinVariableCycle
 import MathUE.RationalArcSubdivision
 import MathUE.RationalCalendarSearch
+import MathUE.DyadicChargedCalendarBound
 import MathUE.PowerCutoffLogBound
 import MathUE.RationalPowerCutoffLogBound
 import MathUE.EventuallyPositiveLastZero

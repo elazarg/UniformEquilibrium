@@ -6,6 +6,7 @@ Released under the MIT license as described in the file LICENSE.
 import UniformEquilibrium.Diagnostics.FiniteMixedNashSupport
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPreemptedOwnerQuadraticMargin
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPayoffEnvelope
+import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticActualPayoffEnvelope
 import UniformEquilibrium.Diagnostics.Quitting.PositiveMaximumDebtMinimum
 import UniformEquilibrium.Diagnostics.Quitting.ScreenedMembershipDebt
 import UniformEquilibrium.Diagnostics.Quitting.MembershipStretch

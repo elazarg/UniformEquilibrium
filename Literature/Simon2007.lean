@@ -6,6 +6,7 @@ import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.CompactFiniteChargedReturn
+import MathUE.Topology.ExtendedOrbit
 import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -22980,19 +22981,19 @@ def SameRepeatedEquilibriumComponent (G : QuittingGame) (k : ℕ)
       z.1 ∈ D ∧ z.2 ∈ RepeatedEquilibriumCorrespondence G k z.1
 
 open Classical in
-/-- The actual equilibrium graph over any continuous payoff path contains
-a compact connected set meeting both endpoint fibers. The source no-sure
-hypothesis is used only for continuity of the conditional timer decoder. -/
-theorem exists_compact_connected_repeatedEquilibria_along_continuous_path
+/-- Retain the actual interval parameter in one compact connected subset
+of the repeated-equilibrium graph. Positive Never mass is derived only after
+Nash transport, and supplies continuous decoding of the SAME fixed points. -/
+theorem exists_compact_connected_repeatedEquilibria_along_continuous_path_with_parameter
     (G : QuittingGame) (k : ℕ) (path : C(unitInterval, Payoff G.Player))
     (hnoSure : ∀ x ∈ Set.range path, ∀ p ∈ RepeatedEquilibriumCorrespondence G k x,
       ∀ time who, (p time who : ℝ) < 1) :
-    ∃ component : Set (Payoff G.Player × RepeatedQuitProfile G k),
+    ∃ component : Set (unitInterval × RepeatedQuitProfile G k),
       IsCompact component ∧ _root_.IsConnected component ∧
-      (∀ point ∈ component, point.1 ∈ Set.range path ∧
-        point.2 ∈ RepeatedEquilibriumCorrespondence G k point.1) ∧
-      (∃ p, (path 0, p) ∈ component) ∧
-      (∃ p, (path 1, p) ∈ component) := by
+      (∀ point ∈ component,
+        point.2 ∈ RepeatedEquilibriumCorrespondence G k (path point.1)) ∧
+      (∃ p, (0, p) ∈ component) ∧
+      (∃ p, (1, p) ∈ component) := by
   let family : C(unitInterval × RepeatedTimerSimplex G k, RepeatedTimerSimplex G k) :=
     ⟨fun point => (RepeatedTimerGame G k (path point.1)).nashMapOnMixedSimplex point.2,
       (continuous_repeatedTimerGame_nashMap G k).comp
@@ -23015,21 +23016,51 @@ theorem exists_compact_connected_repeatedEquilibria_along_continuous_path
     exact hnoSure (path point.1) ⟨point.1, rfl⟩
       (repeatedTimerQuitProfile G k point.2) (hequilibrium point hpoint) time who
   let decode := fun point : unitInterval × RepeatedTimerSimplex G k =>
-    (path point.1, repeatedTimerQuitProfile G k point.2)
+    (point.1, repeatedTimerQuitProfile G k point.2)
   have hdecode : ContinuousOn decode component :=
-    (path.continuous.comp continuous_fst).continuousOn.prodMk
+    continuous_fst.continuousOn.prodMk
       ((continuousOn_repeatedTimerQuitProfile G k).comp continuous_snd.continuousOn
         (fun point hpoint => hnone point hpoint))
   refine ⟨decode '' component, hcompact.image_of_continuousOn hdecode,
     hconnected.image decode hdecode, ?_, ?_, ?_⟩
   · rintro point ⟨source, hsource, rfl⟩
-    exact ⟨⟨source.1, rfl⟩, hequilibrium source hsource⟩
+    exact hequilibrium source hsource
   · obtain ⟨simplex, hsimplex⟩ := hzero
     exact ⟨repeatedTimerQuitProfile G k simplex,
       ⟨(0, simplex), hsimplex, rfl⟩⟩
   · obtain ⟨simplex, hsimplex⟩ := hone
     exact ⟨repeatedTimerQuitProfile G k simplex,
       ⟨(1, simplex), hsimplex, rfl⟩⟩
+
+open Classical in
+/-- The actual equilibrium graph over any continuous payoff path contains
+a compact connected set meeting both endpoint fibers. This projects the
+retained-parameter component, with no second continuation construction. -/
+theorem exists_compact_connected_repeatedEquilibria_along_continuous_path
+    (G : QuittingGame) (k : ℕ) (path : C(unitInterval, Payoff G.Player))
+    (hnoSure : ∀ x ∈ Set.range path, ∀ p ∈ RepeatedEquilibriumCorrespondence G k x,
+      ∀ time who, (p time who : ℝ) < 1) :
+    ∃ component : Set (Payoff G.Player × RepeatedQuitProfile G k),
+      IsCompact component ∧ _root_.IsConnected component ∧
+      (∀ point ∈ component, point.1 ∈ Set.range path ∧
+        point.2 ∈ RepeatedEquilibriumCorrespondence G k point.1) ∧
+      (∃ p, (path 0, p) ∈ component) ∧
+      (∃ p, (path 1, p) ∈ component) := by
+  obtain ⟨component, hcompact, hconnected, hgraph, hzero, hone⟩ :=
+    exists_compact_connected_repeatedEquilibria_along_continuous_path_with_parameter
+      G k path hnoSure
+  let project := fun point : unitInterval × RepeatedQuitProfile G k =>
+    (path point.1, point.2)
+  have hproject : Continuous project :=
+    (path.continuous.comp continuous_fst).prodMk continuous_snd
+  refine ⟨project '' component, hcompact.image hproject,
+    hconnected.image project hproject.continuousOn, ?_, ?_, ?_⟩
+  · rintro point ⟨source, hsource, rfl⟩
+    exact ⟨⟨source.1, rfl⟩, hgraph source hsource⟩
+  · obtain ⟨profile, hprofile⟩ := hzero
+    exact ⟨profile, ⟨(0, profile), hprofile, rfl⟩⟩
+  · obtain ⟨profile, hprofile⟩ := hone
+    exact ⟨profile, ⟨(1, profile), hprofile, rfl⟩⟩
 
 open Classical in
 /-- Literal endpoint-component consumer for a continuous path. This does not
@@ -24542,7 +24573,8 @@ theorem EscapeWitness.exists_caseThreeIntermediatePoints
         ∃ intermediate : Payoff G.Player,
           PayoffSegment G critical intermediate ⊆ witness.Q ∧
           (∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B) ∧
-          (∃ who, intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
+          (∃ who, critical who = SoloPayoff G who ∧
+            intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
           ∃ c : ℝ, 0 < c ∧
             ∀ point ∈ PayoffSegment G intermediate (fun _ => B),
               (∀ who, SoloPayoff G who + c ≤ point who) ∧
@@ -24647,7 +24679,7 @@ theorem EscapeWitness.exists_caseThreeIntermediatePoints
     · linarith [hle.trans (min_le_left _ _)]
     · linarith [hle.trans (min_le_right _ _)]
   refine ⟨intermediate, hretained, fun who => ⟨hstrict who, hupper who⟩,
-    ⟨owner, hsmall⟩, c, hc, ?_⟩
+    ⟨owner, hownerEq, hsmall⟩, c, hc, ?_⟩
   rintro point ⟨a, b, ha, hb, hab, rfl⟩
   have hpointFloor : ∀ who,
       SoloPayoff G who + c ≤ (a • intermediate + b • (fun _ : G.Player => B)) who := by
@@ -24771,10 +24803,12 @@ theorem isRational_smallSoloSuccessor_of_frontier
 
 open Classical in
 /-- At one internally derived scale, the actual source three-segment path
-has endpoint equilibria in the same component. The intermediate point and
+has one actual compact connected equilibrium component retaining its
+original parameter. The intermediate point and
 large bound are selected before accuracy and the initial small-solo row.
-No no-sure, component, top profile, or return certificate is supplied. -/
-theorem EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant
+No no-sure, component, top profile, or return certificate is supplied.
+The SAME decoded profiles retain their internally derived no-sure inequalities. -/
+theorem EscapeWitness.exists_caseThreeIntervalComponents_of_not_instant
     {G : QuittingGame} (witness : EscapeWitness G)
     (hnormal : ∀ who, IsNormalPlayer G who)
     (hinstant : ¬HasInstantApproximateEquilibria G)
@@ -24787,7 +24821,8 @@ theorem EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant
           ∃ intermediate : Payoff G.Player,
             PayoffSegment G critical intermediate ⊆ witness.Q ∧
             (∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B) ∧
-            (∃ who, intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
+            (∃ who, critical who = SoloPayoff G who ∧
+              intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
             ∃ c : ℝ, 0 < c ∧
               (∀ point ∈ PayoffSegment G intermediate (fun _ => B),
                 (∀ who, SoloPayoff G who + c ≤ point who) ∧
@@ -24799,13 +24834,14 @@ theorem EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant
                       (accuracy / (10 * M * Fintype.card G.Player)) owner row →
                     let next := QuittingOneStagePayoff G critical row
                     next ∈ witness.Q ∧ ∀ k : ℕ,
-                      ∃ pnext ∈ RepeatedEquilibriumCorrespondence G k next,
-                        ∃ ptop ∈ RepeatedEquilibriumCorrespondence G k (fun _ => B),
-                          SameRepeatedEquilibriumComponent G k
-                            ((PayoffSegment G next critical ∪
-                              PayoffSegment G critical intermediate) ∪
-                              PayoffSegment G intermediate (fun _ => B))
-                            (next, pnext) ((fun _ => B), ptop) := by
+                      ∃ component : Set (unitInterval × RepeatedQuitProfile G k),
+                        IsCompact component ∧ _root_.IsConnected component ∧
+                        (∀ point ∈ component, point.2 ∈
+                          RepeatedEquilibriumCorrespondence G k
+                            (caseThreePayoffPath G next critical intermediate B point.1)) ∧
+                        (∀ point ∈ component, ∀ time who, (point.2 time who : ℝ) < 1) ∧
+                        (∃ pnext, (0, pnext) ∈ component) ∧
+                        (∃ ptop, (1, ptop) ∈ component) := by
   obtain ⟨rawScale, hrawScale, hnoSure⟩ :=
     exists_scale_without_finiteSureQuitter_of_not_instant G hinstant
   let eta := min rawScale (witness.ebar / 2)
@@ -24858,10 +24894,97 @@ theorem EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant
     · exact IsRational.segment_subset G hnextRational hcriticalRational hpoint
     · exact IsRational.segment_subset G hcriticalRational hintermediateRational hpoint
     · exact IsRational.segment_subset G hintermediateRational htopRational hpoint
-  exact caseThreePayoffPath_equilibrium_endpoints_sameComponent
-    G k next critical intermediate B (fun point hpoint profile hprofile =>
-      hnoSure k point (IsRational.mono G hetaRaw (hpathRational point hpoint))
-        profile hprofile)
+  let path : C(unitInterval, Payoff G.Player) :=
+    (caseThreePayoffPath G next critical intermediate B).toContinuousMap
+  have hpathPoint (time : unitInterval) : IsRational G eta (path time) := by
+    apply hpathRational
+    rw [← caseThreePayoffPath_range]
+    exact ⟨time, rfl⟩
+  have hpathNoSure : ∀ point ∈ Set.range path,
+      ∀ profile ∈ RepeatedEquilibriumCorrespondence G k point,
+        ∀ time who, (profile time who : ℝ) < 1 := by
+    rintro point ⟨parameter, rfl⟩ profile hprofile
+    exact hnoSure k (path parameter)
+      (IsRational.mono G hetaRaw (hpathPoint parameter)) profile hprofile
+  obtain ⟨component, hcompact, hconnected, hgraph, hzero, hone⟩ :=
+    exists_compact_connected_repeatedEquilibria_along_continuous_path_with_parameter
+      G k path hpathNoSure
+  refine ⟨component, hcompact, hconnected, hgraph, ?_, hzero, hone⟩
+  intro point hpoint
+  exact hpathNoSure (path point.1) ⟨point.1, rfl⟩ point.2 (hgraph point hpoint)
+
+open Classical in
+/-- At one internally derived scale, the actual source three-segment path
+has endpoint equilibria in the same component. The intermediate point and
+large bound are selected before accuracy and the initial small-solo row.
+No no-sure, component, top profile, or return certificate is supplied. -/
+theorem EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M) (lowerBound : ℝ) :
+    ∃ eta : ℝ, 0 < eta ∧ eta < witness.ebar ∧
+      ∃ B : ℝ, 0 < B ∧ lowerBound < B ∧
+        (∀ A who, G.reward A who + 2 < B) ∧
+        (∀ point ∈ witness.Q, ∀ who, point who < B) ∧
+        ∀ critical ∈ witness.Q ∩ frontier (WSet G),
+          ∃ intermediate : Payoff G.Player,
+            PayoffSegment G critical intermediate ⊆ witness.Q ∧
+            (∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B) ∧
+            (∃ who, critical who = SoloPayoff G who ∧
+              intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
+            ∃ c : ℝ, 0 < c ∧
+              (∀ point ∈ PayoffSegment G intermediate (fun _ => B),
+                (∀ who, SoloPayoff G who + c ≤ point who) ∧
+                (∀ bad ∈ WSet G, c ≤ ‖point - bad‖)) ∧
+              ∀ accuracy : ℝ, 0 < accuracy → accuracy ≤ eta →
+                ∀ owner : G.Player, critical owner = SoloPayoff G owner →
+                  ∀ row : QuitRow G,
+                    IsSmallSoloRow G
+                      (accuracy / (10 * M * Fintype.card G.Player)) owner row →
+                    let next := QuittingOneStagePayoff G critical row
+                    next ∈ witness.Q ∧ ∀ k : ℕ,
+                      ∃ pnext ∈ RepeatedEquilibriumCorrespondence G k next,
+                        ∃ ptop ∈ RepeatedEquilibriumCorrespondence G k (fun _ => B),
+                          SameRepeatedEquilibriumComponent G k
+                            ((PayoffSegment G next critical ∪
+                              PayoffSegment G critical intermediate) ∪
+                              PayoffSegment G intermediate (fun _ => B))
+                            (next, pnext) ((fun _ => B), ptop) := by
+  obtain ⟨eta, heta, hetaEscape, B, hB, hrequested, hreward, hbound, hsource⟩ :=
+    witness.exists_caseThreeIntervalComponents_of_not_instant
+      hnormal hinstant hM lowerBound
+  refine ⟨eta, heta, hetaEscape, B, hB, hrequested, hreward, hbound, ?_⟩
+  intro critical hcritical
+  obtain ⟨intermediate, hsegment, hcoordinates, hsmallCoordinate, c, hc, hseparation,
+    hcomponent⟩ := hsource critical hcritical
+  refine ⟨intermediate, hsegment, hcoordinates, hsmallCoordinate, c, hc, hseparation, ?_⟩
+  intro accuracy haccuracy haccuracyEta owner howner row hsmall
+  let next := QuittingOneStagePayoff G critical row
+  obtain ⟨hnext, hcomponents⟩ :=
+    hcomponent accuracy haccuracy haccuracyEta owner howner row hsmall
+  refine ⟨hnext, ?_⟩
+  intro k
+  obtain ⟨component, _, hconnected, hgraph, _, ⟨pnext, hpnext⟩, ⟨ptop, hptop⟩⟩ :=
+    hcomponents k
+  let path := caseThreePayoffPath G next critical intermediate B
+  let project := fun point : unitInterval × RepeatedQuitProfile G k =>
+    (path point.1, point.2)
+  have hproject : Continuous project := (path.continuous.comp continuous_fst).prodMk continuous_snd
+  have hnextNash : pnext ∈ RepeatedEquilibriumCorrespondence G k next := by
+    simpa only [Path.source] using hgraph (0, pnext) hpnext
+  have htopNash : ptop ∈ RepeatedEquilibriumCorrespondence G k (fun _ => B) := by
+    simpa only [Path.target] using hgraph (1, ptop) hptop
+  refine ⟨pnext, hnextNash, ptop, htopNash, project '' component,
+    hconnected.image project hproject.continuousOn, ?_, ?_, ?_⟩
+  · exact ⟨(0, pnext), hpnext, by
+      simp only [project, Path.source]
+      rfl⟩
+  · exact ⟨(1, ptop), hptop, by simp only [project, Path.target]⟩
+  · rintro point ⟨source, hsource, rfl⟩
+    refine ⟨?_, hgraph source hsource⟩
+    rw [← caseThreePayoffPath_range]
+    exact ⟨source.1, rfl⟩
 
 open Classical in
 /-- The checked Lemma 9 threshold also forces every finite repeated
@@ -24922,6 +25045,1678 @@ theorem exists_largeRepeatedAllContinueThreshold_of_uniformRho
       rw [← p.appendLast_init_last G, hinitZero, hlast]
       funext time who
       simp [RepeatedQuitProfile.appendLast, Fin.snoc]
+
+/-- The paper's finite survival is the joint survival of the same actual
+chronological product-root word. -/
+theorem repeatedSurvivalProbability_eq_wordJointSurvival
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G k) :
+    RepeatedSurvivalProbability G k profile =
+      GameTheory.quittingLiteralRootStackJointSurvival
+        (List.ofFn fun time => productionRootOfQuitRow G (profile time)) := by
+  induction k with
+  | zero =>
+      simp [RepeatedSurvivalProbability, GameTheory.quittingLiteralRootStackJointSurvival]
+  | succ k ih =>
+      have hfirst : GameTheory.quittingStationaryContinueMass
+          (productionRootOfQuitRow G (profile 0)) = 1 - QuitProbability G (profile 0) := by
+        simp only [GameTheory.quittingStationaryContinueMass_eq_prod_continueProbability,
+          productionRootOfQuitRow_false_toReal, QuitProbability]
+        ring
+      simp only [RepeatedSurvivalProbability, List.ofFn_succ,
+        GameTheory.quittingLiteralRootStackJointSurvival, List.map_cons, List.prod_cons]
+      rw [hfirst]
+      exact congrArg (fun survival => (1 - QuitProbability G (profile 0)) * survival)
+        (ih (fun time => profile time.succ))
+
+/-- Actual probability of absorption during the finite timer calendar. -/
+def RepeatedQuitProbability (G : QuittingGame) (k : ℕ)
+    (profile : RepeatedQuitProfile G k) : ℝ :=
+  1 - RepeatedSurvivalProbability G k profile
+
+theorem repeatedQuitProbability_mem_Icc
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G k) :
+    RepeatedQuitProbability G k profile ∈ Set.Icc (0 : ℝ) 1 := by
+  rw [RepeatedQuitProbability, repeatedSurvivalProbability_eq_wordJointSurvival]
+  constructor
+  · exact sub_nonneg.mpr (GameTheory.quittingLiteralRootStackJointSurvival_le_one _)
+  · linarith [GameTheory.quittingLiteralRootStackJointSurvival_nonneg
+      (List.ofFn fun time => productionRootOfQuitRow G (profile time))]
+
+/-- The source finite-game payoff obeys the canonical finite-word
+absorption estimate, without a Nash or positive-survival premise. -/
+theorem abs_repeatedPayoff_sub_terminal_le_two_mul_quitProbability
+    (G : QuittingGame) (k : ℕ) (terminal : Payoff G.Player)
+    (profile : RepeatedQuitProfile G k) (who : G.Player) (bound : ℝ)
+    (hreward : ∀ coalition player, |G.reward coalition player| ≤ bound)
+    (hterminal : |terminal who| ≤ bound) :
+    |RepeatedPayoff G k terminal profile who - terminal who| ≤
+      2 * bound * RepeatedQuitProbability G k profile := by
+  classical
+  rw [repeatedPayoff_eq_wordPayoff, RepeatedQuitProbability,
+    repeatedSurvivalProbability_eq_wordJointSurvival]
+  exact GameTheory.abs_quittingFiniteRootWordPayoff_sub_tail_le_two_mul_absorption
+    G.reward _ terminal who bound hreward hterminal
+
+/-- Every point of the segment back from a small-solo successor is the
+payoff of an actual scaled solo row at the SAME original continuation.
+This is the first edge used before the selected backward word in Case 3. -/
+theorem exists_smallSoloRow_payoff_of_mem_segment
+    (G : QuittingGame) (critical : Payoff G.Player) (owner : G.Player)
+    {delta : ℝ} (row : QuitRow G) (hsmall : IsSmallSoloRow G delta owner row)
+    (point : Payoff G.Player)
+    (hpoint : point ∈ PayoffSegment G (QuittingOneStagePayoff G critical row) critical) :
+    ∃ scaledRow : QuitRow G, IsSmallSoloRow G delta owner scaledRow ∧
+      point = QuittingOneStagePayoff G critical scaledRow := by
+  classical
+  have hrow : row = soloProbabilityRow G owner (row owner) := by
+    funext who
+    by_cases hwho : who = owner
+    · subst who
+      simp [soloProbabilityRow, QuitRow.replace]
+    · apply Subtype.ext
+      simp only [soloProbabilityRow, QuitRow.replace, hwho, ite_false]
+      exact hsmall.2 who hwho
+  rw [PayoffSegment, segment_eq_image] at hpoint
+  obtain ⟨time, htime, rfl⟩ := hpoint
+  let probability : Set.Icc (0 : ℝ) 1 :=
+    ⟨(1 - time) * (row owner : ℝ), by
+      constructor
+      · exact mul_nonneg (sub_nonneg.mpr htime.2) (row owner).property.1
+      · nlinarith [(row owner).property.1, (row owner).property.2, htime.1, htime.2]⟩
+  let scaledRow := soloProbabilityRow G owner probability
+  have hprobability : (probability : ℝ) ≤ (row owner : ℝ) := by
+    dsimp only [probability]
+    nlinarith [(row owner).property.1, htime.1]
+  have hscaled : IsSmallSoloRow G delta owner scaledRow := by
+    constructor
+    · simpa only [scaledRow, soloProbabilityRow, QuitRow.replace, ite_true] using
+        hprobability.trans hsmall.1
+    · intro who hwho
+      simp [scaledRow, soloProbabilityRow, QuitRow.replace, hwho]
+  have hformula : QuittingOneStagePayoff G critical row =
+      fun who => (row owner : ℝ) * G.reward ⟨{owner}, Finset.singleton_nonempty owner⟩ who +
+        (1 - (row owner : ℝ)) * critical who := by
+    calc
+      QuittingOneStagePayoff G critical row =
+          QuittingOneStagePayoff G critical (soloProbabilityRow G owner (row owner)) :=
+        congrArg (QuittingOneStagePayoff G critical) hrow
+      _ = _ := quittingOneStagePayoff_soloProbabilityRow G critical owner (row owner)
+  have hpoint :
+      (1 - time) • QuittingOneStagePayoff G critical row + time • critical =
+        QuittingOneStagePayoff G critical scaledRow := by
+    rw [hformula]
+    dsimp only [scaledRow]
+    rw [quittingOneStagePayoff_soloProbabilityRow]
+    funext who
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    dsimp only [probability]
+    ring
+  exact ⟨scaledRow, hscaled, hpoint⟩
+
+/-- The same scaled row realizes a restricted-correspondence edge from the
+original band point. The segment's endpoint may be either endpoint or interior. -/
+theorem smallSoloSuccessor_segment_subset_restricted
+    (G : QuittingGame) {delta accuracy : ℝ} (critical : Payoff G.Player)
+    (owner : G.Player) (row : QuitRow G)
+    (hband : critical ∈ EscapeBand G accuracy)
+    (howner : critical owner ≤ SoloPayoff G owner + accuracy)
+    (hsmall : IsSmallSoloRow G delta owner row) :
+    PayoffSegment G (QuittingOneStagePayoff G critical row) critical ⊆
+      RestrictedEscapeCorrespondence G delta accuracy critical := by
+  intro point hpoint
+  obtain ⟨scaledRow, hscaled, hpayoff⟩ :=
+    exists_smallSoloRow_payoff_of_mem_segment G critical owner row hsmall point hpoint
+  exact Or.inr ⟨owner, scaledRow, hband, howner, hscaled, hpayoff⟩
+
+/-- At the actual critical source, every first-segment continuation is a
+single restricted edge from that original point, at the SAME printed scale. -/
+theorem smallSoloSuccessor_segment_subset_restricted_of_frontier
+    (G : QuittingGame) {M accuracy : ℝ} (haccuracy : 0 ≤ accuracy)
+    (critical : Payoff G.Player) (hcritical : critical ∈ frontier (WSet G))
+    (owner : G.Player) (howner : critical owner = SoloPayoff G owner)
+    (row : QuitRow G)
+    (hsmall : IsSmallSoloRow G
+      (accuracy / (10 * M * Fintype.card G.Player)) owner row) :
+    PayoffSegment G (QuittingOneStagePayoff G critical row) critical ⊆
+      RestrictedEscapeCorrespondence G
+        (accuracy / (10 * M * Fintype.card G.Player)) accuracy critical := by
+  have hownerBound : critical owner ≤ SoloPayoff G owner + accuracy := by
+    rw [howner]
+    exact le_add_of_nonneg_right haccuracy
+  have hband : critical ∈ EscapeBand G accuracy :=
+    ⟨solo_le_of_mem_frontier_WSet G critical hcritical, owner, hownerBound⟩
+  exact smallSoloSuccessor_segment_subset_restricted
+    G critical owner row hband hownerBound hsmall
+
+/-- Scaling the actual initial solo row retains the entire first segment
+in Q. Membership of its endpoints alone would not imply this conclusion. -/
+theorem EscapeWitness.smallSoloSuccessor_segment_subset
+    {G : QuittingGame} (witness : EscapeWitness G)
+    {M accuracy : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (haccuracy : 0 < accuracy) (haccuracyEscape : accuracy < witness.ebar)
+    (critical : Payoff G.Player) (hcritical : critical ∈ witness.Q ∩ frontier (WSet G))
+    (owner : G.Player) (howner : critical owner = SoloPayoff G owner)
+    (row : QuitRow G)
+    (hsmall : IsSmallSoloRow G
+      (accuracy / (10 * M * Fintype.card G.Player)) owner row) :
+    PayoffSegment G (QuittingOneStagePayoff G critical row) critical ⊆ witness.Q := by
+  intro point hpoint
+  have hedge := smallSoloSuccessor_segment_subset_restricted_of_frontier
+    G haccuracy.le critical hcritical.2 owner howner row hsmall hpoint
+  have hrow := restrictedEscapeCorrespondence_subset G hM haccuracy critical hedge
+  exact witness.closedUnder critical hcritical.1 point
+    (FRow.mono G haccuracyEscape.le critical hrow)
+
+private theorem repeatedPayoff_allContinue (G : QuittingGame) (k : ℕ)
+    (terminal : Payoff G.Player) :
+    RepeatedPayoff G k terminal (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) = terminal := by
+  induction k with
+  | zero => rfl
+  | succ k ih =>
+      simp only [RepeatedPayoff]
+      rw [ih, quittingOneStagePayoff_zero]
+
+/-- Actual finite repeated equilibria on Q outside W either literally
+Continue at every date, or end strictly above every escape floor. Motion
+and no-sure bounds are produced internally from the excluded branches. -/
+theorem EscapeWitness.repeatedEquilibrium_allContinue_or_above_escapeFloor
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∀ k : ℕ, ∀ terminal ∈ witness.Q \ WSet G,
+      ∀ profile ∈ RepeatedEquilibriumCorrespondence G k terminal,
+        profile = (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) ∨
+          ∀ who, SoloPayoff G who + witness.ebar < RepeatedPayoff G k terminal profile who := by
+  classical
+  obtain ⟨scale, hscale, hnoSure⟩ :=
+    exists_scale_without_finiteSureQuitter_of_not_instant G hinstant
+  obtain ⟨rate, hrate, _hrateOne, hmotion⟩ :=
+    exists_compactMotionParameter_of_not_branches G hgenerated hinstant
+      witness.Q witness.isCompact
+  have hrational (terminal : Payoff G.Player) (hterminal : terminal ∉ WSet G)
+      (error : ℝ) (herror : 0 ≤ error) : IsRational G error terminal := by
+    intro who
+    have hfloor : SoloPayoff G who < terminal who := by
+      by_contra hfloor
+      exact hterminal ⟨who, le_of_not_gt hfloor⟩
+    exact (sub_le_self _ herror).trans ((hnormal who).trans hfloor.le)
+  intro k
+  induction k with
+  | zero =>
+      intro terminal hterminal profile _hprofile
+      left
+      funext time
+      exact Fin.elim0 time
+  | succ k ih =>
+      intro terminal hterminal profile hprofile
+      let lastRow := profile (Fin.last k)
+      let next := QuittingOneStagePayoff G terminal lastRow
+      have hlast : lastRow ∈ EpsilonRow G 0 terminal :=
+        RepeatedEquilibriumCorrespondence.last_mem_epsilonRow_zero G terminal profile hprofile
+          (hnoSure (k + 1) terminal (hrational terminal hterminal.2 scale hscale.le)
+            profile hprofile)
+      have hnextF : next ∈ FRow G 0 terminal := ⟨lastRow, hlast, rfl⟩
+      have hnextQ : next ∈ witness.Q := witness.closedUnder terminal hterminal.1 next
+        ⟨lastRow, EpsilonRow.mono G witness.ebar_positive.le terminal hlast, rfl⟩
+      have hinit := RepeatedEquilibriumCorrespondence.init G terminal profile hprofile
+      change Fin.init profile ∈ RepeatedEquilibriumCorrespondence G k next at hinit
+      have hpayoff : RepeatedPayoff G (k + 1) terminal profile =
+          RepeatedPayoff G k next (Fin.init profile) := by
+        calc
+          RepeatedPayoff G (k + 1) terminal profile =
+              RepeatedPayoff G (k + 1) terminal
+                (RepeatedQuitProfile.appendLast G (Fin.init profile) lastRow) :=
+            congrArg (RepeatedPayoff G (k + 1) terminal) (profile.appendLast_init_last G).symm
+          _ = _ := repeatedPayoff_appendLast G k terminal (Fin.init profile) lastRow
+      by_cases hfixed : next = terminal
+      · have hbound := (hmotion terminal hterminal.1 lastRow
+          (hrational terminal hterminal.2 rate hrate.le)
+          (EpsilonRow.mono G hrate.le terminal hlast)).1
+        change rate * QuitProbability G lastRow ≤ ‖terminal - next‖ at hbound
+        rw [hfixed, sub_self, norm_zero] at hbound
+        have hquit : QuitProbability G lastRow = 0 := by
+          nlinarith [(quitProbability_mem_Icc G lastRow).1]
+        have hzero : lastRow = fun _ => (0 : Set.Icc (0 : ℝ) 1) := by
+          funext who
+          apply Subtype.ext
+          exact le_antisymm
+            ((quitRow_coord_le_quitProbability G lastRow who).trans_eq hquit)
+            (lastRow who).property.1
+        rw [hfixed] at hinit
+        rcases ih terminal hterminal (Fin.init profile) hinit with hcontinue | hexit
+        · left
+          calc
+            profile = RepeatedQuitProfile.appendLast G (Fin.init profile) lastRow :=
+              (profile.appendLast_init_last G).symm
+            _ = _ := by
+              rw [hcontinue, hzero]
+              funext time who
+              simp [RepeatedQuitProfile.appendLast, Fin.snoc]
+        · right
+          rw [hpayoff, hfixed]
+          exact hexit
+      · have hescape := witness.strictEscape terminal hterminal next hnextF hfixed
+        have hnextNotW : next ∉ WSet G := by
+          rintro ⟨who, hwho⟩
+          linarith [hescape who, witness.ebar_positive]
+        rcases ih next ⟨hnextQ, hnextNotW⟩ (Fin.init profile) hinit with hcontinue | hexit
+        · right
+          rw [hpayoff, hcontinue, repeatedPayoff_allContinue]
+          exact hescape
+        · right
+          rw [hpayoff]
+          exact hexit
+
+/-- On the source middle segment, its low coordinate forces a uniform
+positive finite absorption rate for every non-all-Continue equilibrium.
+The explicit bound covers rewards AND the formal terminal vector; no
+reward-only bound is silently applied to the large top continuation. -/
+theorem EscapeWitness.repeatedEquilibrium_allContinue_or_quitProbability_gt
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (k : ℕ) (terminal : Payoff G.Player) (hterminal : terminal ∈ witness.Q \ WSet G)
+    (profile : RepeatedQuitProfile G k)
+    (hprofile : profile ∈ RepeatedEquilibriumCorrespondence G k terminal)
+    (bound : ℝ) (hreward : ∀ coalition player, |G.reward coalition player| ≤ bound)
+    (hbounded : ∀ who, |terminal who| ≤ bound)
+    (hlow : ∃ who, terminal who ≤ SoloPayoff G who + witness.ebar / 2) :
+    profile = (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) ∨
+      witness.ebar / (4 * bound) < RepeatedQuitProbability G k profile := by
+  rcases witness.repeatedEquilibrium_allContinue_or_above_escapeFloor
+      hnormal hgenerated hinstant k terminal hterminal profile hprofile with hcontinue | hexit
+  · exact Or.inl hcontinue
+  · right
+    obtain ⟨who, hwho⟩ := hlow
+    have hdisplacement := abs_repeatedPayoff_sub_terminal_le_two_mul_quitProbability
+      G k terminal profile who bound hreward (hbounded who)
+    have hgap : witness.ebar / 2 <
+        2 * bound * RepeatedQuitProbability G k profile := by
+      have habs := le_abs_self (RepeatedPayoff G k terminal profile who - terminal who)
+      linarith [hexit who]
+    have hboundNonneg : 0 ≤ bound := (abs_nonneg _).trans (hbounded who)
+    have hupper := mul_le_mul_of_nonneg_left
+      (repeatedQuitProbability_mem_Icc G k profile).2
+      (by linarith : 0 ≤ 2 * bound)
+    rw [mul_one] at hupper
+    have hboundPositive : 0 < bound := by linarith [witness.ebar_positive]
+    apply (div_lt_iff₀ (mul_pos (by norm_num : (0 : ℝ) < 4) hboundPositive)).mpr
+    nlinarith
+
+/-- The actual one-row absorption statistic is continuous on the closed row cube. -/
+theorem continuous_quitProbability (G : QuittingGame) :
+    Continuous (QuitProbability G) := by
+  classical
+  unfold QuitProbability
+  fun_prop
+
+private theorem continuous_quittingOneStagePayoffPair (G : QuittingGame) :
+    Continuous (fun data : Payoff G.Player × QuitRow G =>
+      QuittingOneStagePayoff G data.1 data.2) :=
+  continuous_pi fun who => continuous_quittingOneStagePayoff G who
+
+/-- Joint continuity of the literal repeated payoff, including arbitrary formal tails. -/
+theorem continuous_repeatedPayoff (G : QuittingGame) (k : ℕ) :
+    Continuous (fun data : Payoff G.Player × RepeatedQuitProfile G k =>
+      RepeatedPayoff G k data.1 data.2) := by
+  induction k with
+  | zero =>
+      simpa only [RepeatedPayoff] using
+        (continuous_fst : Continuous fun data : Payoff G.Player × RepeatedQuitProfile G 0 =>
+          data.1)
+  | succ k ih =>
+      have htail : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+          (data.1, fun time : Fin k => data.2 time.succ)) :=
+        continuous_fst.prodMk (continuous_pi fun time =>
+          (continuous_apply time.succ).comp continuous_snd)
+      have hfirst : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) => data.2 0) :=
+        (continuous_apply 0).comp continuous_snd
+      have hinput : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+          (RepeatedPayoff G k data.1 (fun time => data.2 time.succ), data.2 0)) :=
+        (ih.comp htail).prodMk hfirst
+      have hstep :
+          (fun data : Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+            RepeatedPayoff G (k + 1) data.1 data.2) =
+          (fun pair : Payoff G.Player × QuitRow G =>
+            QuittingOneStagePayoff G pair.1 pair.2) ∘
+          (fun data : Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+            (RepeatedPayoff G k data.1 (fun time => data.2 time.succ), data.2 0)) := rfl
+      rw [hstep]
+      exact (continuous_quittingOneStagePayoffPair G).comp hinput
+
+/-- The same profile's finite survival is continuous, also for an empty calendar. -/
+theorem continuous_repeatedSurvivalProbability (G : QuittingGame) (k : ℕ) :
+    Continuous (RepeatedSurvivalProbability G k) := by
+  induction k with
+  | zero =>
+      exact continuous_const
+  | succ k ih =>
+      have htail : Continuous (fun profile : RepeatedQuitProfile G (k + 1) =>
+          fun time : Fin k => profile time.succ) :=
+        continuous_pi fun time => continuous_apply time.succ
+      change Continuous (fun profile : RepeatedQuitProfile G (k + 1) =>
+        (1 - QuitProbability G (profile 0)) *
+          RepeatedSurvivalProbability G k (fun time => profile time.succ))
+      exact (continuous_const.sub
+        ((continuous_quitProbability G).comp (continuous_apply 0))).mul (ih.comp htail)
+
+/-- The actual finite absorption statistic is continuous on the closed profile cube. -/
+theorem continuous_repeatedQuitProbability (G : QuittingGame) (k : ℕ) :
+    Continuous (RepeatedQuitProbability G k) :=
+  continuous_const.sub (continuous_repeatedSurvivalProbability G k)
+
+/-- The literal finite survival remains in the probability interval. -/
+theorem repeatedSurvivalProbability_mem_Icc
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G k) :
+    RepeatedSurvivalProbability G k profile ∈ Set.Icc (0 : ℝ) 1 := by
+  rw [repeatedSurvivalProbability_eq_wordJointSurvival]
+  exact ⟨GameTheory.quittingLiteralRootStackJointSurvival_nonneg _,
+    GameTheory.quittingLiteralRootStackJointSurvival_le_one _⟩
+
+/-- Appending the actual last row multiplies the same profile's survival. -/
+theorem repeatedSurvivalProbability_appendLast
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G k) (row : QuitRow G) :
+    RepeatedSurvivalProbability G (k + 1) (profile.appendLast G row) =
+      RepeatedSurvivalProbability G k profile * (1 - QuitProbability G row) := by
+  induction k with
+  | zero =>
+      have hrow : profile.appendLast G row 0 = row := by
+        rw [show (0 : Fin 1) = Fin.last 0 by rfl]
+        exact profile.appendLast_last G row
+      change (1 - QuitProbability G (profile.appendLast G row 0)) * 1 =
+        1 * (1 - QuitProbability G row)
+      rw [hrow]
+      ring
+  | succ k ih =>
+      change (1 - QuitProbability G (profile.appendLast G row 0)) *
+          RepeatedSurvivalProbability G (k + 1)
+            (fun time => profile.appendLast G row time.succ) =
+        ((1 - QuitProbability G (profile 0)) *
+          RepeatedSurvivalProbability G k (fun time => profile time.succ)) *
+            (1 - QuitProbability G row)
+      rw [RepeatedQuitProfile.appendLast_zero, RepeatedQuitProfile.appendLast_tail, ih]
+      ring
+
+/-- One last row's absorption is bounded by the actual whole calendar's absorption. -/
+theorem quitProbability_last_le_repeatedQuitProbability
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G (k + 1)) :
+    QuitProbability G (profile (Fin.last k)) ≤
+      RepeatedQuitProbability G (k + 1) profile := by
+  have hsurvival := repeatedSurvivalProbability_appendLast
+    G k (Fin.init profile) (profile (Fin.last k))
+  rw [RepeatedQuitProfile.appendLast_init_last] at hsurvival
+  have hinit := repeatedSurvivalProbability_mem_Icc G k (Fin.init profile)
+  have hrow := quitProbability_mem_Icc G (profile (Fin.last k))
+  have hproduct := mul_le_mul_of_nonneg_right hinit.2 (sub_nonneg.mpr hrow.2)
+  rw [one_mul] at hproduct
+  unfold RepeatedQuitProbability
+  rw [hsurvival]
+  linarith
+
+/-- Removing a last row cannot increase the actual finite absorption statistic. -/
+theorem repeatedQuitProbability_init_le
+    (G : QuittingGame) (k : ℕ) (profile : RepeatedQuitProfile G (k + 1)) :
+    RepeatedQuitProbability G k (Fin.init profile) ≤
+      RepeatedQuitProbability G (k + 1) profile := by
+  have hsurvival := repeatedSurvivalProbability_appendLast
+    G k (Fin.init profile) (profile (Fin.last k))
+  rw [RepeatedQuitProfile.appendLast_init_last] at hsurvival
+  have hinit := repeatedSurvivalProbability_mem_Icc G k (Fin.init profile)
+  have hrow := quitProbability_mem_Icc G (profile (Fin.last k))
+  have hproduct := mul_le_mul_of_nonneg_left (sub_le_self 1 hrow.1) hinit.1
+  rw [mul_one] at hproduct
+  unfold RepeatedQuitProbability
+  rw [hsurvival]
+  linarith
+
+open Classical in
+/-- Uniform endpoint stability internally produces an absorption neighborhood
+where an exact row above every solo floor must literally Continue.
+The formal continuation is bounded; no printed reward-only c/M estimate is used. -/
+theorem exists_smallAbsorption_exactRow_eq_allContinue_above_solo
+    (G : QuittingGame) (bound separation : ℝ) (hseparation : 0 < separation) :
+    ∃ radius : ℝ, 0 < radius ∧
+      ∀ terminal : Payoff G.Player, ‖terminal‖ ≤ bound →
+        (∀ who, SoloPayoff G who + separation ≤ terminal who) →
+        ∀ row ∈ EpsilonRow G 0 terminal, QuitProbability G row < radius →
+          row = fun _ => (0 : Set.Icc (0 : ℝ) 1) := by
+  obtain ⟨radius, hradius, hstable⟩ :=
+    exists_endpointPayoff_stability_radius G (M := bound) (e := separation / 3)
+      (div_pos hseparation (by norm_num))
+  refine ⟨radius, hradius, ?_⟩
+  intro terminal hbound hfloor row hrow hsmall
+  let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+  have hdist : dist row zeroRow < radius := by
+    apply (dist_pi_lt_iff hradius).mpr
+    intro who
+    rw [Subtype.dist_eq, Real.dist_eq]
+    change |(row who : ℝ) - 0| < radius
+    rw [sub_zero, abs_of_nonneg (row who).property.1]
+    exact (quitRow_coord_le_quitProbability G row who).trans_lt hsmall
+  obtain ⟨hquit, hcontinue⟩ := hstable terminal hbound zeroRow row hdist
+  funext who
+  apply Subtype.ext
+  change (row who : ℝ) = 0
+  by_contra hnot
+  have hpositive : 0 < (row who : ℝ) :=
+    lt_of_le_of_ne (row who).property.1 (Ne.symm hnot)
+  have hzeroContinue : ForcedContinuePayoff G terminal zeroRow who = terminal who := by
+    rw [ForcedContinuePayoff, show zeroRow.replace G who 0 = zeroRow from
+      zeroRow.replace_self G who]
+    exact congrFun (quittingOneStagePayoff_zero G terminal) who
+  have hzeroQuit : ForcedQuitPayoff G zeroRow who = SoloPayoff G who := by
+    rw [ForcedQuitPayoff, show zeroRow.replace G who 1 = SoloQuitRow G who from
+      QuitRow.zero_replace_one G who, quittingOneStagePayoff_soloQuitRow]
+    rfl
+  have hquitUpper := (abs_lt.mp (hquit who)).2
+  have hcontinueLower := (abs_lt.mp (hcontinue who)).1
+  rw [hzeroQuit] at hquitUpper
+  rw [hzeroContinue] at hcontinueLower
+  have hsupport := hrow.1 who hpositive
+  rw [sub_zero] at hsupport
+  linarith [hfloor who]
+
+open Classical in
+/-- At every finite length, a non-all-Continue exact equilibrium above all
+solo floors has an internally selected positive absorption gap. The same
+gap works on the whole bounded terminal set. Failure of the instant branch
+supplies no-sure and positive reach; neither is assumed for the selected profile. -/
+theorem exists_repeatedEquilibrium_absorption_gap_above_solo
+    (G : QuittingGame) (hnormal : ∀ who, IsNormalPlayer G who)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (bound separation : ℝ) (hseparation : 0 < separation) :
+    ∃ radius : ℝ, 0 < radius ∧ ∀ k : ℕ, ∀ terminal : Payoff G.Player,
+      ‖terminal‖ ≤ bound →
+      (∀ who, SoloPayoff G who + separation ≤ terminal who) →
+      ∀ profile ∈ RepeatedEquilibriumCorrespondence G k terminal,
+        profile = (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) ∨
+          radius ≤ RepeatedQuitProbability G k profile := by
+  obtain ⟨radius, hradius, hrowZero⟩ :=
+    exists_smallAbsorption_exactRow_eq_allContinue_above_solo
+      G bound separation hseparation
+  obtain ⟨scale, hscale, hnoSure⟩ :=
+    exists_scale_without_finiteSureQuitter_of_not_instant G hinstant
+  have hsmallZero : ∀ k : ℕ, ∀ terminal : Payoff G.Player,
+      ∀ profile : RepeatedQuitProfile G k,
+        ‖terminal‖ ≤ bound →
+        (∀ who, SoloPayoff G who + separation ≤ terminal who) →
+        profile ∈ RepeatedEquilibriumCorrespondence G k terminal →
+        (∀ time who, (profile time who : ℝ) < 1) →
+        RepeatedQuitProbability G k profile < radius →
+          profile = fun _ _ => (0 : Set.Icc (0 : ℝ) 1) := by
+    intro k
+    induction k with
+    | zero =>
+        intro terminal profile _hbound _hfloor _hequilibrium _hnoSure _hsmall
+        funext time
+        exact Fin.elim0 time
+    | succ k ih =>
+        intro terminal profile hbound hfloor hequilibrium hprofileNoSure hsmall
+        have hlast := RepeatedEquilibriumCorrespondence.last_mem_epsilonRow_zero
+          G terminal profile hequilibrium hprofileNoSure
+        have hlastZero : profile (Fin.last k) =
+            fun _ => (0 : Set.Icc (0 : ℝ) 1) :=
+          hrowZero terminal hbound hfloor (profile (Fin.last k)) hlast
+            ((quitProbability_last_le_repeatedQuitProbability G k profile).trans_lt hsmall)
+        have hinit := RepeatedEquilibriumCorrespondence.init G terminal profile hequilibrium
+        rw [hlastZero, quittingOneStagePayoff_zero] at hinit
+        have hinitZero := ih terminal (Fin.init profile) hbound hfloor hinit
+          (fun time who => hprofileNoSure time.castSucc who)
+          ((repeatedQuitProbability_init_le G k profile).trans_lt hsmall)
+        calc
+          profile = RepeatedQuitProfile.appendLast G (Fin.init profile) (profile (Fin.last k)) :=
+            (profile.appendLast_init_last G).symm
+          _ = _ := by
+            rw [hinitZero, hlastZero]
+            funext time
+            refine Fin.lastCases ?_ (fun previous => ?_) time
+            · rw [RepeatedQuitProfile.appendLast_last]
+            · rw [RepeatedQuitProfile.appendLast_castSucc]
+  refine ⟨radius, hradius, ?_⟩
+  intro k terminal hbound hfloor profile hequilibrium
+  by_cases hsmall : RepeatedQuitProbability G k profile < radius
+  · left
+    have hrational : IsRational G scale terminal := by
+      intro who
+      exact (sub_le_self _ hscale.le).trans
+        ((hnormal who).trans
+          ((le_add_of_nonneg_right hseparation.le).trans (hfloor who)))
+    exact hsmallZero k terminal profile hbound hfloor hequilibrium
+      (hnoSure k terminal hrational profile hequilibrium) hsmall
+  · exact Or.inr (le_of_not_gt hsmall)
+
+
+open Classical in
+/-- On the literal final source segment, the formal-tail bound and the
+positive absorption gap are both selected internally. Only the endpoint
+coordinate clearance is supplied; the actual source geometry produces it. -/
+theorem exists_repeatedEquilibrium_absorption_gap_on_finalSegment
+    (G : QuittingGame) (hnormal : ∀ who, IsNormalPlayer G who)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (intermediate : Payoff G.Player) (B separation : ℝ)
+    (hseparation : 0 < separation)
+    (hclearance : ∀ who, SoloPayoff G who + separation ≤ intermediate who)
+    (hupper : ∀ who, intermediate who ≤ B) :
+    ∃ radius : ℝ, 0 < radius ∧ ∀ k : ℕ,
+      ∀ terminal ∈ PayoffSegment G intermediate (fun _ => B),
+        ∀ profile ∈ RepeatedEquilibriumCorrespondence G k terminal,
+          profile = (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) ∨
+            radius ≤ RepeatedQuitProbability G k profile := by
+  let top : Payoff G.Player := fun _ => B
+  let bound := max ‖intermediate‖ ‖top‖
+  have hleft : intermediate ∈ Metric.closedBall (0 : Payoff G.Player) bound := by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    exact le_max_left _ _
+  have hright : top ∈ Metric.closedBall (0 : Payoff G.Player) bound := by
+    rw [Metric.mem_closedBall, dist_zero_right]
+    exact le_max_right _ _
+  have hbounded : PayoffSegment G intermediate top ⊆
+      Metric.closedBall (0 : Payoff G.Player) bound := by
+    change segment ℝ intermediate top ⊆ Metric.closedBall 0 bound
+    exact (convex_closedBall (0 : Payoff G.Player) bound).segment_subset hleft hright
+  obtain ⟨radius, hradius, hgap⟩ :=
+    exists_repeatedEquilibrium_absorption_gap_above_solo
+      G hnormal hinstant bound separation hseparation
+  refine ⟨radius, hradius, ?_⟩
+  intro k terminal hterminal profile hequilibrium
+  have hbound : ‖terminal‖ ≤ bound := by
+    have hball := hbounded hterminal
+    simpa only [Metric.mem_closedBall, dist_zero_right] using hball
+  have hfloor : ∀ who, SoloPayoff G who + separation ≤ terminal who := by
+    rw [PayoffSegment, segment_eq_image] at hterminal
+    obtain ⟨time, htime, rfl⟩ := hterminal
+    intro who
+    change SoloPayoff G who + separation ≤
+      (1 - time) * intermediate who + time * B
+    have hincrease := mul_nonneg htime.1 (sub_nonneg.mpr (hupper who))
+    nlinarith [hclearance who]
+  exact hgap k terminal hbound hfloor profile hequilibrium
+
+/-- The same finite timer profile, read in backward payoff order. Its
+first point is the formal continuation and its rows are the actual profile
+in reverse chronological order; no orbit or equilibrium is selected here. -/
+def repeatedBackwardPayoffOrbit (G : QuittingGame) :
+    (k : ℕ) → Payoff G.Player → RepeatedQuitProfile G k →
+      Fin (k + 1) → Payoff G.Player
+  | 0, terminal, _ => fun _ => terminal
+  | k + 1, terminal, profile =>
+      Fin.cons (α := fun _ : Fin (k + 2) => Payoff G.Player) terminal
+        (repeatedBackwardPayoffOrbit G k
+          (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile))
+
+/-- The extracted actual word begins at its original formal continuation. -/
+@[simp]
+theorem repeatedBackwardPayoffOrbit_zero (G : QuittingGame) (k : ℕ)
+    (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k) :
+    repeatedBackwardPayoffOrbit G k terminal profile 0 = terminal := by
+  cases k with
+  | zero => rfl
+  | succ k => rfl
+
+/-- Its final point is the payoff of that very same finite profile. -/
+theorem repeatedBackwardPayoffOrbit_last (G : QuittingGame) (k : ℕ)
+    (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k) :
+    repeatedBackwardPayoffOrbit G k terminal profile (Fin.last k) =
+      RepeatedPayoff G k terminal profile := by
+  induction k generalizing terminal with
+  | zero => rfl
+  | succ k ih =>
+      change repeatedBackwardPayoffOrbit G k
+        (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile)
+          (Fin.last k) = RepeatedPayoff G (k + 1) terminal profile
+      rw [ih]
+      have hpay := repeatedPayoff_appendLast G k terminal (Fin.init profile)
+        (profile (Fin.last k))
+      rw [profile.appendLast_init_last G] at hpay
+      exact hpay.symm
+
+/-- Every payoff update uses the literal reverse-indexed row of the
+original finite timer profile, not a new realization of its payoff. -/
+theorem repeatedBackwardPayoffOrbit_step (G : QuittingGame) (k : ℕ)
+    (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k) (time : Fin k) :
+    repeatedBackwardPayoffOrbit G k terminal profile time.succ =
+      QuittingOneStagePayoff G
+        (repeatedBackwardPayoffOrbit G k terminal profile time.castSucc)
+        (profile time.rev) := by
+  induction k generalizing terminal with
+  | zero => exact Fin.elim0 time
+  | succ k ih =>
+      refine Fin.cases ?_ (fun previous => ?_) time
+      · rw [Fin.castSucc_zero, Fin.rev_zero, repeatedBackwardPayoffOrbit_zero]
+        change repeatedBackwardPayoffOrbit G k
+          (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile) 0 =
+            QuittingOneStagePayoff G terminal (profile (Fin.last k))
+        exact repeatedBackwardPayoffOrbit_zero G k _ _
+      · change repeatedBackwardPayoffOrbit G k
+            (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile)
+              previous.succ =
+          QuittingOneStagePayoff G
+            (repeatedBackwardPayoffOrbit G k
+              (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile)
+                previous.castSucc)
+            (profile previous.succ.rev)
+        rw [Fin.rev_succ]
+        exact ih _ (Fin.init profile) previous
+
+/-- The literal reached payoff word varies continuously with the original
+formal tail and the same finite profile, including the empty calendar. -/
+theorem continuous_repeatedBackwardPayoffOrbit (G : QuittingGame) (k : ℕ) :
+    Continuous (fun data : Payoff G.Player × RepeatedQuitProfile G k =>
+      repeatedBackwardPayoffOrbit G k data.1 data.2) := by
+  induction k with
+  | zero =>
+      apply continuous_pi
+      intro time
+      exact continuous_fst
+  | succ k ih =>
+      have hrow : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+            data.2 (Fin.last k)) :=
+        (continuous_apply (Fin.last k)).comp continuous_snd
+      have hinput : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+            (data.1, data.2 (Fin.last k))) := continuous_fst.prodMk hrow
+      have hpay : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+            QuittingOneStagePayoff G data.1 (data.2 (Fin.last k))) := by
+        have hequal :
+            (fun data : Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+              QuittingOneStagePayoff G data.1 (data.2 (Fin.last k))) =
+            (fun pair : Payoff G.Player × QuitRow G =>
+              QuittingOneStagePayoff G pair.1 pair.2) ∘
+            (fun data : Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+              (data.1, data.2 (Fin.last k))) := rfl
+        rw [hequal]
+        exact (continuous_quittingOneStagePayoffPair G).comp hinput
+      have hinit : Continuous (fun data :
+          Payoff G.Player × RepeatedQuitProfile G (k + 1) => Fin.init data.2) :=
+        continuous_pi fun time => (continuous_apply time.castSucc).comp continuous_snd
+      change Continuous (fun data : Payoff G.Player × RepeatedQuitProfile G (k + 1) =>
+        Fin.cons (α := fun _ : Fin (k + 2) => Payoff G.Player) data.1
+          (repeatedBackwardPayoffOrbit G k
+            (QuittingOneStagePayoff G data.1 (data.2 (Fin.last k))) (Fin.init data.2)))
+      exact Continuous.finCons (n := k + 1)
+        (A := fun _ : Fin (k + 2) => Payoff G.Player)
+        continuous_fst (ih.comp (hpay.prodMk hinit))
+
+/-- Retaining the interval point and the original profile while adding its
+actual reached word is a continuous graph map. Thus the checked interval
+component can be transported without losing its source parameter or laws. -/
+theorem continuous_repeatedBackwardPayoffOrbit_along_path (G : QuittingGame) (k : ℕ)
+    (path : C(unitInterval, Payoff G.Player)) :
+    Continuous (fun source : unitInterval × RepeatedQuitProfile G k =>
+      (source, repeatedBackwardPayoffOrbit G k (path source.1) source.2)) :=
+  continuous_id.prodMk ((continuous_repeatedBackwardPayoffOrbit G k).comp
+    ((path.continuous.comp continuous_fst).prodMk continuous_snd))
+
+/-- Positive reach at the actual dates suffices to turn this particular
+initial-game Nash profile into its literal backward `F₀` word. No
+unreachable-subgame equilibrium assertion is used. -/
+theorem repeatedBackwardPayoffOrbit_isFiniteOrbit (G : QuittingGame) (k : ℕ)
+    (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k)
+    (hprofile : profile ∈ RepeatedEquilibriumCorrespondence G k terminal)
+    (hnoSure : ∀ time who, (profile time who : ℝ) < 1) :
+    IsFiniteOrbit (FRow G 0) (repeatedBackwardPayoffOrbit G k terminal profile) := by
+  induction k generalizing terminal with
+  | zero =>
+      intro time
+      exact Fin.elim0 time
+  | succ k ih =>
+      have hlast := RepeatedEquilibriumCorrespondence.last_mem_epsilonRow_zero
+        G terminal profile hprofile hnoSure
+      have hinit := RepeatedEquilibriumCorrespondence.init G terminal profile hprofile
+      have hinitNoSure : ∀ time who, ((Fin.init profile) time who : ℝ) < 1 :=
+        fun time who => hnoSure time.castSucc who
+      have htail := ih
+        (QuittingOneStagePayoff G terminal (profile (Fin.last k)))
+        (Fin.init profile) hinit hinitNoSure
+      intro time
+      refine Fin.cases ?_ (fun previous => ?_) time
+      · change repeatedBackwardPayoffOrbit G k
+            (QuittingOneStagePayoff G terminal (profile (Fin.last k))) (Fin.init profile) 0 ∈
+          FRow G 0 terminal
+        rw [repeatedBackwardPayoffOrbit_zero]
+        exact ⟨profile (Fin.last k), hlast, rfl⟩
+      · exact htail previous
+
+/-- Failure of the actual instant branch supplies the no-sure condition
+and one common terminal floor before all lengths, terminals and selected
+equilibria. The extracted word retains the actual profile at every date. -/
+theorem exists_scale_repeatedBackwardPayoffOrbit_isFiniteOrbit_of_not_instant
+    (G : QuittingGame) (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ eta : ℝ, 0 < eta ∧ ∀ k terminal, IsRational G eta terminal →
+      ∀ profile ∈ RepeatedEquilibriumCorrespondence G k terminal,
+        IsFiniteOrbit (FRow G 0)
+          (repeatedBackwardPayoffOrbit G k terminal profile) := by
+  obtain ⟨eta, heta, hnoSure⟩ :=
+    exists_scale_without_finiteSureQuitter_of_not_instant G hinstant
+  refine ⟨eta, heta, ?_⟩
+  intro k terminal hterminal profile hprofile
+  exact repeatedBackwardPayoffOrbit_isFiniteOrbit G k terminal profile hprofile
+    (hnoSure k terminal hterminal profile hprofile)
+
+/-- All points of an actual finite exact word stay in the same escape
+carrier once its formal continuation is there. -/
+theorem EscapeWitness.repeatedBackwardPayoffOrbit_mem
+    {G : QuittingGame} (witness : EscapeWitness G) (k : ℕ)
+    (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k)
+    (hterminal : terminal ∈ witness.Q)
+    (horbit : IsFiniteOrbit (FRow G 0)
+      (repeatedBackwardPayoffOrbit G k terminal profile)) :
+    ∀ time, repeatedBackwardPayoffOrbit G k terminal profile time ∈ witness.Q := by
+  intro time
+  induction time using Fin.induction with
+  | zero => simpa only [repeatedBackwardPayoffOrbit_zero] using hterminal
+  | succ previous ih =>
+      exact witness.closedUnder _ ih _
+        (FRow.mono G witness.ebar_positive.le _ (horbit previous))
+
+/-- An exact word in Q cannot leave `W ∪ T` and then return to it. This
+is the literal strict-escape property, not convexity of Q or a chosen
+favorable return. The band accuracy may be signed. -/
+theorem EscapeWitness.finiteOrbit_mem_escapeCarrier_of_last_mem
+    {G : QuittingGame} (witness : EscapeWitness G) {length : ℕ}
+    {accuracy : ℝ} (haccuracy : accuracy < witness.ebar)
+    (point : Fin (length + 1) → Payoff G.Player)
+    (horbit : IsFiniteOrbit (FRow G 0) point)
+    (hcarrier : ∀ time, point time ∈ witness.Q)
+    (hlast : point (Fin.last length) ∈ WSet G ∪ EscapeBand G accuracy) :
+    ∀ time, point time ∈ WSet G ∪ EscapeBand G accuracy := by
+  intro time
+  induction time using Fin.reverseInduction with
+  | last => exact hlast
+  | cast previous ih =>
+      by_contra hbefore
+      have hnotW : point previous.castSucc ∉ WSet G :=
+        fun hmem => hbefore (Or.inl hmem)
+      by_cases hequal : point previous.succ = point previous.castSucc
+      · exact hbefore (hequal ▸ ih)
+      · have habove := witness.strictEscape (point previous.castSucc)
+          ⟨hcarrier previous.castSucc, hnotW⟩ (point previous.succ)
+          (horbit previous) hequal
+        rcases ih with hW | hBand
+        · obtain ⟨who, hwho⟩ := hW
+          have hstrict := habove who
+          have hpositive := witness.ebar_positive
+          linarith
+        · obtain ⟨who, hwho⟩ := hBand.2
+          have hstrict := habove who
+          linarith
+
+/-- The finite-length Case 3 exclusion concerns every actual equilibrium
+at the same start, not merely an independently chosen F-zero orbit. -/
+theorem EscapeWitness.repeatedPayoff_not_mem_escapeCarrier_of_no_finiteOrbit
+    {G : QuittingGame} (witness : EscapeWitness G) (k : ℕ)
+    (accuracy : ℝ) (haccuracy : accuracy < witness.ebar)
+    (terminal : Payoff G.Player) (hterminal : terminal ∈ witness.Q)
+    (hnoOrbit : ¬∃ point : Fin (k + 1) → Payoff G.Player,
+      point 0 = terminal ∧ IsFiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy))
+    (profile : RepeatedQuitProfile G k)
+    (hprofile : profile ∈ RepeatedEquilibriumCorrespondence G k terminal)
+    (hnoSure : ∀ time who, (profile time who : ℝ) < 1) :
+    RepeatedPayoff G k terminal profile ∉ WSet G ∪ EscapeBand G accuracy := by
+  intro hend
+  let point := repeatedBackwardPayoffOrbit G k terminal profile
+  have horbit : IsFiniteOrbit (FRow G 0) point :=
+    repeatedBackwardPayoffOrbit_isFiniteOrbit G k terminal profile hprofile hnoSure
+  have hcarrier : ∀ time, point time ∈ witness.Q :=
+    witness.repeatedBackwardPayoffOrbit_mem k terminal profile hterminal horbit
+  have hlast : point (Fin.last k) ∈ WSet G ∪ EscapeBand G accuracy := by
+    simpa only [point, repeatedBackwardPayoffOrbit_last] using hend
+  have hstay := witness.finiteOrbit_mem_escapeCarrier_of_last_mem
+    haccuracy point horbit hcarrier hlast
+  exact hnoOrbit ⟨point, repeatedBackwardPayoffOrbit_zero G k terminal profile,
+    horbit, fun time => ⟨hcarrier time, hstay time⟩⟩
+
+/-- The actual Case 3 compactness alternative chooses a calendar length
+before every selected equilibrium at the original same start. Its payoff
+then lies outside the escape carrier. No favorable payoff is supplied. -/
+theorem EscapeWitness.exists_length_repeatedPayoff_outside_escapeCarrier_of_no_infinite
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ eta : ℝ, 0 < eta ∧ ∀ accuracy, accuracy < witness.ebar →
+      ∀ terminal ∈ witness.Q, IsRational G eta terminal →
+        (¬∃ point : ℕ → Payoff G.Player, point 0 = terminal ∧
+          IsInfiniteOrbit (FRow G 0) point ∧
+            ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) →
+        ∃ k, ∀ profile ∈ RepeatedEquilibriumCorrespondence G k terminal,
+          RepeatedPayoff G k terminal profile ∉ WSet G ∪ EscapeBand G accuracy := by
+  obtain ⟨eta, heta, hnoSure⟩ :=
+    exists_scale_without_finiteSureQuitter_of_not_instant G hinstant
+  refine ⟨eta, heta, ?_⟩
+  intro accuracy haccuracy terminal hterminal hrational hnoInfinite
+  obtain ⟨k, hnoFinite⟩ :=
+    exists_finiteLength_without_escapeOrbit_of_no_infinite
+      G witness accuracy terminal hnoInfinite
+  refine ⟨k, ?_⟩
+  intro profile hprofile
+  exact witness.repeatedPayoff_not_mem_escapeCarrier_of_no_finiteOrbit
+    k accuracy haccuracy terminal hterminal hnoFinite profile hprofile
+      (hnoSure k terminal hrational profile hprofile)
+
+/-- Telescoping the actual coordinate drops bounds the return charge by
+the same finite word's variation. -/
+private theorem finiteOrbit_coordinate_drop_le_variation
+    (G : QuittingGame) {length : ℕ}
+    (point : Fin (length + 1) → Payoff G.Player) (who : G.Player) :
+    point 0 who - point (Fin.last length) who ≤ FiniteOrbitVariation point := by
+  rw [← Math.Topology.finiteOrbitPotentialDrop_sum (fun value : Payoff G.Player =>
+    value who) point]
+  apply Finset.sum_le_sum
+  intro time _
+  have hnorm := norm_le_pi_norm (point time.succ - point time.castSucc) who
+  rw [Pi.sub_apply, Real.norm_eq_abs] at hnorm
+  exact (le_abs_self _).trans (by
+    simpa only [abs_sub_comm] using hnorm)
+
+/-- The published small-solo return produces an actual critical endpoint
+and its coordinate charge from every point in the band. A later crossing
+with all coordinates at least solo plus accuracy therefore has that
+variation charge; no crossing or charge is assumed by this producer. -/
+theorem EscapeWitness.exists_criticalFiniteReturn_with_coordinateCharge
+    {G : QuittingGame} (witness : EscapeWitness G) {bound accuracy : ℝ}
+    (hbound : IsQuittingPayoffDifferenceBound G bound)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (haccuracy : 0 < accuracy) (haccuracyOne : accuracy < 1)
+    (haccuracyEscape : accuracy < witness.ebar) :
+    let delta := accuracy / (10 * bound * Fintype.card G.Player)
+    ∀ start ∈ witness.Q ∩ EscapeBand G accuracy,
+      ∃ (length : ℕ) (point : Fin (length + 1) → Payoff G.Player) (owner : G.Player),
+        point 0 = start ∧
+        IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy) point ∧
+        (∀ time, point time ∈ witness.Q ∩ EscapeBand G accuracy) ∧
+        IsCriticalPoint G (point (Fin.last length)) ∧
+        point (Fin.last length) owner = SoloPayoff G owner ∧
+        start owner - SoloPayoff G owner ≤ FiniteOrbitVariation point ∧
+        ((∀ who, SoloPayoff G who + accuracy ≤ start who) →
+          accuracy ≤ FiniteOrbitVariation point) := by
+  dsimp only
+  intro start hstart
+  have hcross := everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated
+    G hgenerated
+  obtain ⟨length, point, hzero, hstep, hband, hcritical⟩ :=
+    exists_criticalFiniteOrbit_of_crossHarm G hbound hnormal hcross haccuracy
+      haccuracyOne start hstart.2
+  have hsubset : ∀ value,
+      RestrictedEscapeCorrespondence G
+        (accuracy / (10 * bound * Fintype.card G.Player)) accuracy value ⊆
+          FRow G accuracy value :=
+    fun value => restrictedEscapeCorrespondence_subset G hbound haccuracy value
+  have hcarrier : ∀ time, point time ∈ witness.Q := by
+    intro time
+    induction time using Fin.induction with
+    | zero => simpa only [hzero] using hstart.1
+    | succ previous ih =>
+        exact witness.closedUnder _ ih _
+          (FRow.mono G haccuracyEscape.le _
+            (hsubset _ (hstep previous)))
+  have hcriticalLast : IsCriticalPoint G (point (Fin.last length)) := hcritical
+  obtain ⟨owner, _other, _hne, howner, _hother, _hharm⟩ := hcriticalLast.2
+  have hcharge : start owner - SoloPayoff G owner ≤ FiniteOrbitVariation point := by
+    simpa only [hzero, howner] using finiteOrbit_coordinate_drop_le_variation G point owner
+  refine ⟨length, point, owner, hzero, hstep,
+    fun time => ⟨hcarrier time, hband time⟩, hcriticalLast, howner, hcharge, ?_⟩
+  intro hfloor
+  linarith [hfloor owner]
+
+/-- The critical seam of the literal nested `Path.trans` occurs at one
+quarter, not one third. This is the SAME source path, without reparameterizing it. -/
+theorem caseThreePayoffPath_quarter (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) :
+    caseThreePayoffPath G next critical intermediate B
+      ⟨1 / 4, by norm_num⟩ = critical := by
+  rw [← Path.extend_apply _ (by norm_num : (1 / 4 : ℝ) ∈ Set.Icc 0 1)]
+  unfold caseThreePayoffPath
+  rw [Path.extend_trans_of_le_half _ _ (by norm_num)]
+  norm_num only [mul_one_div]
+  rw [Path.extend_trans_of_le_half _ _ (by norm_num)]
+  norm_num only [mul_one_div]
+  exact Path.extend_one _
+
+/-- The intermediate seam of the SAME nested source path occurs at one half. -/
+theorem caseThreePayoffPath_half (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) :
+    caseThreePayoffPath G next critical intermediate B
+      ⟨1 / 2, by norm_num⟩ = intermediate := by
+  rw [← Path.extend_apply _ (by norm_num : (1 / 2 : ℝ) ∈ Set.Icc 0 1)]
+  unfold caseThreePayoffPath
+  rw [Path.extend_trans_of_le_half _ _ (by norm_num)]
+  norm_num only [mul_one_div]
+  exact Path.extend_one _
+
+/-- The source O₁ on the original interval-times-profile space. The strict
+parameter comparison uses the literal critical seam at one quarter. -/
+def caseThreeSmallAbsorptionOpen (G : QuittingGame) (k : ℕ) (threshold : ℝ) :
+    Set (unitInterval × RepeatedQuitProfile G k) :=
+  {point | (1 / 4 : ℝ) < point.1 ∧
+    RepeatedQuitProbability G k point.2 < threshold}
+
+/-- The source O₂ uses the SAME finite profile and its actual payoff at its
+original formal tail. The intermediate seam is one half. -/
+def caseThreeLowPayoffOpen (G : QuittingGame) (k : ℕ)
+    (next critical intermediate : Payoff G.Player) (B accuracy : ℝ) :
+    Set (unitInterval × RepeatedQuitProfile G k) :=
+  {point | (point.1 : ℝ) < 1 / 2 ∧ ∃ who,
+    RepeatedPayoff G k
+      (caseThreePayoffPath G next critical intermediate B point.1) point.2 who <
+        SoloPayoff G who + accuracy}
+
+/-- Literal union O₁ ∪ O₂, still on the original interval parameter rather
+than an assumed order on the image of a possibly noninjective path. -/
+def caseThreeCrossingOpen (G : QuittingGame) (k : ℕ)
+    (next critical intermediate : Payoff G.Player) (B accuracy threshold : ℝ) :
+    Set (unitInterval × RepeatedQuitProfile G k) :=
+  caseThreeSmallAbsorptionOpen G k threshold ∪
+    caseThreeLowPayoffOpen G k next critical intermediate B accuracy
+
+theorem isOpen_caseThreeCrossingOpen (G : QuittingGame) (k : ℕ)
+    (next critical intermediate : Payoff G.Player) (B accuracy threshold : ℝ) :
+    IsOpen (caseThreeCrossingOpen G k next critical intermediate B accuracy threshold) := by
+  let path := caseThreePayoffPath G next critical intermediate B
+  have hparameter : Continuous (fun point : unitInterval × RepeatedQuitProfile G k =>
+      (point.1 : ℝ)) := continuous_subtype_val.comp continuous_fst
+  have habsorption : Continuous (fun point : unitInterval × RepeatedQuitProfile G k =>
+      RepeatedQuitProbability G k point.2) :=
+    (continuous_repeatedQuitProbability G k).comp continuous_snd
+  have hpayoff (who : G.Player) : Continuous (fun point :
+      unitInterval × RepeatedQuitProfile G k =>
+        RepeatedPayoff G k (path point.1) point.2 who) :=
+    ((continuous_apply who).comp (continuous_repeatedPayoff G k)).comp
+      ((path.continuous.comp continuous_fst).prodMk continuous_snd)
+  have hlow : IsOpen {point : unitInterval × RepeatedQuitProfile G k |
+      ∃ who, RepeatedPayoff G k (path point.1) point.2 who <
+        SoloPayoff G who + accuracy} := by
+    have hequal : {point : unitInterval × RepeatedQuitProfile G k |
+        ∃ who, RepeatedPayoff G k (path point.1) point.2 who <
+          SoloPayoff G who + accuracy} =
+        ⋃ who : G.Player, {point : unitInterval × RepeatedQuitProfile G k |
+          RepeatedPayoff G k (path point.1) point.2 who <
+            SoloPayoff G who + accuracy} := by
+      ext point
+      simp only [Set.mem_ofPred, Set.mem_iUnion]
+    rw [hequal]
+    exact isOpen_iUnion fun who : G.Player => isOpen_lt (hpayoff who) continuous_const
+  have hfirst : IsOpen (caseThreeSmallAbsorptionOpen G k threshold) :=
+    (isOpen_lt continuous_const hparameter).inter
+      (isOpen_lt habsorption continuous_const)
+  have hsecond : IsOpen
+      (caseThreeLowPayoffOpen G k next critical intermediate B accuracy) :=
+    (isOpen_lt hparameter continuous_const).inter hlow
+  exact hfirst.union hsecond
+
+/-- The finite empty-or-Continue profile has exactly zero absorption. -/
+theorem repeatedQuitProbability_allContinue (G : QuittingGame) (k : ℕ) :
+    RepeatedQuitProbability G k
+      (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) = 0 := by
+  have hsurvival : RepeatedSurvivalProbability G k
+      (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) = 1 := by
+    induction k with
+    | zero => rfl
+    | succ k ih =>
+      simp only [RepeatedSurvivalProbability]
+      rw [ih]
+      simp [QuitProbability]
+  simp only [RepeatedQuitProbability, hsurvival, sub_self]
+
+open Classical in
+/-- The literal Case 3 source produces a point of the O₁/O₂ frontier on its
+SAME retained interval component. The actual no-infinite alternative supplies
+the bottom departure; global uniform-rho supplies the top all-Continue profile
+internally. This is a frontier producer, not its first-segment/upper-wall
+classification, a return construction, or unconditional Theorem 4. -/
+theorem EscapeWitness.exists_caseThreeUnionFrontier_of_uniformRho
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    {rho : ℝ} (hrho : IsUniformRho G rho) :
+    ∃ eta : ℝ, 0 < eta ∧ eta < witness.ebar ∧
+      ∃ B : ℝ, 0 < B ∧
+        (∀ A who, G.reward A who + 2 < B) ∧
+        (∀ point ∈ witness.Q, ∀ who, point who < B) ∧
+        ∀ critical ∈ witness.Q ∩ frontier (WSet G),
+          ∃ intermediate : Payoff G.Player,
+            PayoffSegment G critical intermediate ⊆ witness.Q ∧
+            (∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B) ∧
+            (∃ who, critical who = SoloPayoff G who ∧
+              intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
+            ∃ c : ℝ, 0 < c ∧
+              (∀ point ∈ PayoffSegment G intermediate (fun _ => B),
+                (∀ who, SoloPayoff G who + c ≤ point who) ∧
+                (∀ bad ∈ WSet G, c ≤ ‖point - bad‖)) ∧
+              ∀ accuracy : ℝ, 0 < accuracy → accuracy ≤ eta →
+                ∀ owner : G.Player, critical owner = SoloPayoff G owner →
+                  ∀ row : QuitRow G,
+                    IsSmallSoloRow G
+                      (accuracy / (10 * M * Fintype.card G.Player)) owner row →
+                    let next := QuittingOneStagePayoff G critical row
+                    (¬∃ point : ℕ → Payoff G.Player, point 0 = next ∧
+                      IsInfiniteOrbit (FRow G 0) point ∧ ∀ time,
+                        point time ∈ witness.Q ∩
+                          (WSet G ∪ EscapeBand G accuracy)) →
+                    ∀ threshold : ℝ, 0 < threshold →
+                      ∃ (k : ℕ) (component : Set (unitInterval × RepeatedQuitProfile G k))
+                        (source : unitInterval × RepeatedQuitProfile G k),
+                        IsCompact component ∧ _root_.IsConnected component ∧
+                        (∀ point ∈ component, point.2 ∈
+                          RepeatedEquilibriumCorrespondence G k
+                            (caseThreePayoffPath G next critical intermediate B point.1)) ∧
+                        (∀ point ∈ component, ∀ time who,
+                          (point.2 time who : ℝ) < 1) ∧
+                        (∃ pnext, (0, pnext) ∈ component ∧
+                          RepeatedPayoff G k next pnext ∉
+                            WSet G ∪ EscapeBand G accuracy) ∧
+                        (1, (fun _ _ => (0 : Set.Icc (0 : ℝ) 1))) ∈ component ∧
+                        source ∈ component ∩ frontier
+                          (caseThreeCrossingOpen G k
+                            next critical intermediate B accuracy threshold) ∧
+                        IsFiniteOrbit (FRow G 0)
+                          (repeatedBackwardPayoffOrbit G k
+                            (caseThreePayoffPath G next critical intermediate B source.1)
+                            source.2) := by
+  obtain ⟨topThreshold, _, htop⟩ :=
+    exists_largeRepeatedAllContinueThreshold_of_uniformRho
+      G ⟨hnormal, ⟨witness⟩⟩ hinstant hrho
+  obtain ⟨sourceScale, hsourceScale, hsourceEscape,
+    B, hB, hrequested, hreward, hbound, hsource⟩ :=
+    witness.exists_caseThreeIntervalComponents_of_not_instant
+      hnormal hinstant hM topThreshold
+  obtain ⟨departureScale, hdepartureScale, hdeparture⟩ :=
+    witness.exists_length_repeatedPayoff_outside_escapeCarrier_of_no_infinite hinstant
+  let eta := min sourceScale departureScale
+  have heta : 0 < eta := lt_min hsourceScale hdepartureScale
+  have hetaSource : eta ≤ sourceScale := min_le_left _ _
+  have hetaDeparture : eta ≤ departureScale := min_le_right _ _
+  have hetaEscape : eta < witness.ebar := hetaSource.trans_lt hsourceEscape
+  refine ⟨eta, heta, hetaEscape, B, hB, hreward, hbound, ?_⟩
+  intro critical hcritical
+  obtain ⟨intermediate, hsegment, hcoordinates, hsmallCoordinate,
+    c, hc, hseparation, hcomponents⟩ := hsource critical hcritical
+  refine ⟨intermediate, hsegment, hcoordinates, hsmallCoordinate,
+    c, hc, hseparation, ?_⟩
+  intro accuracy haccuracy haccuracyEta owner howner row hsmall
+  let next := QuittingOneStagePayoff G critical row
+  dsimp only
+  intro hnoInfinite threshold hthreshold
+  obtain ⟨hnext, hcomponent⟩ := hcomponents accuracy haccuracy
+    (haccuracyEta.trans hetaSource) owner howner row hsmall
+  have hnextRational : IsRational G departureScale next :=
+    IsRational.mono G (haccuracyEta.trans hetaDeparture)
+      (isRational_smallSoloSuccessor_of_frontier G hnormal hM critical
+        hcritical.2 accuracy owner row hsmall)
+  obtain ⟨k, houtside⟩ := hdeparture accuracy
+    (haccuracyEta.trans_lt hetaEscape) next hnext hnextRational hnoInfinite
+  obtain ⟨component, hcompact, hconnected, hgraph, hnoSure,
+    ⟨pnext, hpnext⟩, ⟨ptop, hptop⟩⟩ := hcomponent k
+  let path := caseThreePayoffPath G next critical intermediate B
+  have hnextNash : pnext ∈ RepeatedEquilibriumCorrespondence G k next := by
+    simpa only [Path.source] using hgraph (0, pnext) hpnext
+  have htopNash : ptop ∈ RepeatedEquilibriumCorrespondence G k (fun _ => B) := by
+    simpa only [Path.target] using hgraph (1, ptop) hptop
+  have htopZero : ptop = (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) :=
+    htop (fun _ => B) (fun _ => hrequested.le) k ptop htopNash
+  have htopMember : (1, (fun _ _ => (0 : Set.Icc (0 : ℝ) 1))) ∈ component := by
+    simpa only [htopZero] using hptop
+  let opened := caseThreeCrossingOpen G k
+    next critical intermediate B accuracy threshold
+  have hopen : IsOpen opened :=
+    isOpen_caseThreeCrossingOpen G k next critical intermediate B accuracy threshold
+  have hbottomOutside : (0, pnext) ∉ opened := by
+    intro hmem
+    change (0, pnext) ∈ caseThreeSmallAbsorptionOpen G k threshold ∪
+      caseThreeLowPayoffOpen G k next critical intermediate B accuracy at hmem
+    rcases hmem with hfirst | hsecond
+    · have htime := hfirst.1
+      norm_num at htime
+    · obtain ⟨who, hlow⟩ := hsecond.2
+      have hpayoffOutside := houtside pnext hnextNash
+      have hfloor : ∀ player, SoloPayoff G player ≤ RepeatedPayoff G k next pnext player := by
+        intro player
+        by_contra hnot
+        exact hpayoffOutside (Or.inl ⟨player, (lt_of_not_ge hnot).le⟩)
+      have hlowStrict : RepeatedPayoff G k next pnext who < SoloPayoff G who + accuracy := by
+        simpa only [Path.source] using hlow
+      have hlow' : RepeatedPayoff G k next pnext who ≤ SoloPayoff G who + accuracy :=
+        hlowStrict.le
+      exact hpayoffOutside (Or.inr ⟨hfloor, who, hlow'⟩)
+  have htopInside : (1, (fun _ _ => (0 : Set.Icc (0 : ℝ) 1))) ∈ opened := by
+    apply Or.inl
+    change (1 / 4 : ℝ) < 1 ∧
+      RepeatedQuitProbability G k
+        (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) < threshold
+    refine ⟨by norm_num, ?_⟩
+    rw [repeatedQuitProbability_allContinue]
+    exact hthreshold
+  have hfrontier : (component ∩ frontier opened).Nonempty := by
+    by_contra hnone
+    have hclosure : closure opened ∩ component ⊆ opened := by
+      intro point hpoint
+      by_contra hnot
+      have hboundary : point ∈ frontier opened := by
+        rw [hopen.frontier_eq]
+        exact ⟨hpoint.1, hnot⟩
+      exact hnone ⟨point, hpoint.2, hboundary⟩
+    have hsubset := hconnected.isPreconnected.subset_of_closure_inter_subset
+      hopen ⟨(1, (fun _ _ => (0 : Set.Icc (0 : ℝ) 1))), htopMember, htopInside⟩ hclosure
+    exact hbottomOutside (hsubset hpnext)
+  obtain ⟨source, hsourcePoint⟩ := hfrontier
+  refine ⟨k, component, source, hcompact, hconnected, hgraph, hnoSure,
+    ⟨pnext, hpnext, houtside pnext hnextNash⟩, htopMember, hsourcePoint, ?_⟩
+  exact repeatedBackwardPayoffOrbit_isFiniteOrbit G k (path source.1) source.2
+    (hgraph source hsourcePoint.1) (hnoSure source hsourcePoint.1)
+
+/-- On the first part of the literal path, its actual parameter is four times
+the original interval parameter. -/
+theorem caseThreePayoffPath_first_eq (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) (time : unitInterval)
+    (htime : (time : ℝ) ≤ 1 / 4) :
+    caseThreePayoffPath G next critical intermediate B time =
+      (1 - 4 * (time : ℝ)) • next + (4 * (time : ℝ)) • critical := by
+  rw [← Path.extend_apply _ time.property]
+  unfold caseThreePayoffPath
+  rw [Path.extend_trans_of_le_half _ _ (by linarith)]
+  rw [Path.extend_trans_of_le_half _ _ (by linarith)]
+  have hindex : 2 * (2 * (time : ℝ)) = 4 * (time : ℝ) := by ring
+  rw [hindex, Path.extend_apply _ (by
+    constructor
+    · linarith [time.property.1]
+    · linarith)]
+  rw [Path.segment_apply, AffineMap.lineMap_apply_module]
+
+/-- The first segment is retained as a genuine whole segment, not an
+endpoint-only assertion or an alternative parametrization. -/
+theorem caseThreePayoffPath_mem_first (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) (time : unitInterval)
+    (htime : (time : ℝ) ≤ 1 / 4) :
+    caseThreePayoffPath G next critical intermediate B time ∈
+      PayoffSegment G next critical := by
+  rw [caseThreePayoffPath_first_eq G next critical intermediate B time htime]
+  exact ⟨1 - 4 * (time : ℝ), 4 * (time : ℝ),
+    by linarith, by linarith [time.property.1], by ring, rfl⟩
+
+/-- The actual middle parameter is four times the original parameter minus one. -/
+theorem caseThreePayoffPath_middle_eq (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) (time : unitInterval)
+    (hlower : (1 / 4 : ℝ) ≤ time) (hupper : (time : ℝ) ≤ 1 / 2) :
+    caseThreePayoffPath G next critical intermediate B time =
+      (1 - (4 * (time : ℝ) - 1)) • critical +
+        (4 * (time : ℝ) - 1) • intermediate := by
+  rw [← Path.extend_apply _ time.property]
+  unfold caseThreePayoffPath
+  rw [Path.extend_trans_of_le_half _ _ hupper]
+  rw [Path.extend_trans_of_half_le _ _ (by linarith)]
+  have hindex : 2 * (2 * (time : ℝ)) - 1 = 4 * (time : ℝ) - 1 := by ring
+  rw [hindex, Path.extend_apply _ (by
+    constructor
+    · linarith
+    · linarith)]
+  rw [Path.segment_apply, AffineMap.lineMap_apply_module]
+
+/-- The actual final part of the original path stays on the literal final segment. -/
+theorem caseThreePayoffPath_mem_final (G : QuittingGame)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) (time : unitInterval)
+    (htime : (1 / 2 : ℝ) ≤ time) :
+    caseThreePayoffPath G next critical intermediate B time ∈
+      PayoffSegment G intermediate (fun _ => B) := by
+  rw [← Path.extend_apply _ time.property]
+  unfold caseThreePayoffPath
+  rw [Path.extend_trans_of_half_le _ _ htime]
+  rw [Path.extend_apply _ (by
+    constructor
+    · linarith
+    · linarith [time.property.2])]
+  rw [Path.segment_apply, AffineMap.lineMap_apply_module]
+  exact ⟨1 - (2 * (time : ℝ) - 1), 2 * (time : ℝ) - 1,
+    by linarith [time.property.2], by linarith, by ring, rfl⟩
+
+/-- The SAME coordinate chosen by the actual source geometry controls every
+middle-segment formal tail, and positive middle time places it outside W. -/
+theorem EscapeWitness.caseThreePayoffPath_middle_properties
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (next critical intermediate : Payoff G.Player) (B : ℝ)
+    (hcritical : critical ∈ frontier (WSet G))
+    (hsegment : PayoffSegment G critical intermediate ⊆ witness.Q)
+    (hcoordinates : ∀ who, SoloPayoff G who < intermediate who)
+    (hlow : ∃ who, critical who = SoloPayoff G who ∧
+      intermediate who < SoloPayoff G who + witness.ebar / 2)
+    (time : unitInterval) (hlower : (1 / 4 : ℝ) < time)
+    (hupper : (time : ℝ) ≤ 1 / 2) :
+    caseThreePayoffPath G next critical intermediate B time ∈ witness.Q \ WSet G ∧
+      ∃ who, caseThreePayoffPath G next critical intermediate B time who ≤
+        SoloPayoff G who + witness.ebar / 2 := by
+  let weight := 4 * (time : ℝ) - 1
+  have hweight : 0 < weight := by dsimp only [weight]; linarith
+  have hweightOne : weight ≤ 1 := by dsimp only [weight]; linarith
+  have hformula := caseThreePayoffPath_middle_eq G next critical intermediate B
+    time hlower.le hupper
+  have hpointSegment : caseThreePayoffPath G next critical intermediate B time ∈
+      PayoffSegment G critical intermediate := by
+    rw [hformula]
+    exact ⟨1 - weight, weight, by linarith, hweight.le, by ring, rfl⟩
+  have hfloor := solo_le_of_mem_frontier_WSet G critical hcritical
+  have hstrict : ∀ who, SoloPayoff G who <
+      caseThreePayoffPath G next critical intermediate B time who := by
+    intro who
+    have hfirst := mul_nonneg (by linarith : 0 ≤ 1 - weight)
+      (sub_nonneg.mpr (hfloor who))
+    have hsecond := mul_pos hweight (sub_pos.mpr (hcoordinates who))
+    rw [hformula]
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    change SoloPayoff G who < (1 - weight) * critical who + weight * intermediate who
+    nlinarith
+  refine ⟨⟨hsegment hpointSegment, ?_⟩, ?_⟩
+  · rintro ⟨who, hwho⟩
+    exact (not_le.mpr (hstrict who)) hwho
+  · obtain ⟨who, hzero, hsmall⟩ := hlow
+    have hscaled := mul_le_mul_of_nonneg_right hweightOne
+      (sub_nonneg.mpr (hcoordinates who).le)
+    refine ⟨who, ?_⟩
+    rw [hformula]
+    simp only [Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+    change (1 - weight) * critical who + weight * intermediate who ≤ _
+    rw [hzero]
+    nlinarith
+
+/-- Weak closed inequalities satisfied by the frontier of the literal union.
+Finite-player closedness retains the actual low-payoff coordinate. -/
+theorem caseThreeCrossingFrontier_weakBounds (G : QuittingGame) (k : ℕ)
+    (next critical intermediate : Payoff G.Player) (B accuracy threshold : ℝ)
+    (source : unitInterval × RepeatedQuitProfile G k)
+    (hsource : source ∈ frontier
+      (caseThreeCrossingOpen G k next critical intermediate B accuracy threshold)) :
+    source ∉ caseThreeCrossingOpen G k next critical intermediate B accuracy threshold ∧
+      (((1 / 4 : ℝ) ≤ source.1 ∧
+          RepeatedQuitProbability G k source.2 ≤ threshold) ∨
+        ((source.1 : ℝ) ≤ 1 / 2 ∧ ∃ who,
+          RepeatedPayoff G k
+            (caseThreePayoffPath G next critical intermediate B source.1) source.2 who ≤
+              SoloPayoff G who + accuracy)) := by
+  let path := caseThreePayoffPath G next critical intermediate B
+  have hparameter : Continuous (fun point : unitInterval × RepeatedQuitProfile G k =>
+      (point.1 : ℝ)) := continuous_subtype_val.comp continuous_fst
+  have hquit : Continuous (fun point : unitInterval × RepeatedQuitProfile G k =>
+      RepeatedQuitProbability G k point.2) :=
+    (continuous_repeatedQuitProbability G k).comp continuous_snd
+  have hpayoff (who : G.Player) : Continuous (fun point :
+      unitInterval × RepeatedQuitProfile G k =>
+        RepeatedPayoff G k (path point.1) point.2 who) :=
+    ((continuous_apply who).comp (continuous_repeatedPayoff G k)).comp
+      ((path.continuous.comp continuous_fst).prodMk continuous_snd)
+  have hfirstClosed : IsClosed {point : unitInterval × RepeatedQuitProfile G k |
+      (1 / 4 : ℝ) ≤ point.1 ∧ RepeatedQuitProbability G k point.2 ≤ threshold} :=
+    (isClosed_le continuous_const hparameter).inter (isClosed_le hquit continuous_const)
+  have hlowClosed : IsClosed {point : unitInterval × RepeatedQuitProfile G k |
+      ∃ who, RepeatedPayoff G k (path point.1) point.2 who ≤
+        SoloPayoff G who + accuracy} := by
+    have hequal : {point : unitInterval × RepeatedQuitProfile G k |
+        ∃ who, RepeatedPayoff G k (path point.1) point.2 who ≤
+          SoloPayoff G who + accuracy} =
+        ⋃ who : G.Player, {point : unitInterval × RepeatedQuitProfile G k |
+          RepeatedPayoff G k (path point.1) point.2 who ≤
+            SoloPayoff G who + accuracy} := by
+      ext point
+      simp only [Set.mem_ofPred, Set.mem_iUnion]
+    rw [hequal]
+    exact isClosed_iUnion_of_finite fun who : G.Player =>
+      isClosed_le (hpayoff who) continuous_const
+  have hsecondClosed : IsClosed {point : unitInterval × RepeatedQuitProfile G k |
+      (point.1 : ℝ) ≤ 1 / 2 ∧ ∃ who,
+        RepeatedPayoff G k (path point.1) point.2 who ≤ SoloPayoff G who + accuracy} :=
+    (isClosed_le hparameter continuous_const).inter hlowClosed
+  have hfirstClosure : closure (caseThreeSmallAbsorptionOpen G k threshold) ⊆
+      {point : unitInterval × RepeatedQuitProfile G k |
+        (1 / 4 : ℝ) ≤ point.1 ∧ RepeatedQuitProbability G k point.2 ≤ threshold} :=
+    closure_minimal (fun point hpoint => ⟨hpoint.1.le, hpoint.2.le⟩) hfirstClosed
+  have hsecondClosure : closure
+      (caseThreeLowPayoffOpen G k next critical intermediate B accuracy) ⊆
+      {point : unitInterval × RepeatedQuitProfile G k |
+        (point.1 : ℝ) ≤ 1 / 2 ∧ ∃ who,
+          RepeatedPayoff G k (path point.1) point.2 who ≤ SoloPayoff G who + accuracy} :=
+    closure_minimal (by
+      intro point hpoint
+      obtain ⟨who, hwho⟩ := hpoint.2
+      exact ⟨hpoint.1.le, who, hwho.le⟩) hsecondClosed
+  rw [(isOpen_caseThreeCrossingOpen G k
+    next critical intermediate B accuracy threshold).frontier_eq] at hsource
+  refine ⟨hsource.2, ?_⟩
+  have hclosure := hsource.1
+  change source ∈ closure (caseThreeSmallAbsorptionOpen G k threshold ∪
+    caseThreeLowPayoffOpen G k next critical intermediate B accuracy) at hclosure
+  rw [closure_union] at hclosure
+  exact hclosure.elim (fun hpoint => Or.inl (hfirstClosure hpoint))
+    (fun hpoint => Or.inr (hsecondClosure hpoint))
+
+/-- One positive threshold is selected from the actual final-segment gap,
+middle-segment gap, and common formal-tail/reward displacement bound, before
+all finite lengths and their actual frontier equilibria. -/
+theorem EscapeWitness.exists_caseThreeUpperWallThreshold
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (next critical intermediate : Payoff G.Player) (B accuracy bound separation : ℝ)
+    (hcritical : critical ∈ frontier (WSet G))
+    (hsegment : PayoffSegment G critical intermediate ⊆ witness.Q)
+    (hcoordinates : ∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B)
+    (hlow : ∃ who, critical who = SoloPayoff G who ∧
+      intermediate who < SoloPayoff G who + witness.ebar / 2)
+    (hseparation : 0 < separation)
+    (hclearance : ∀ who, SoloPayoff G who + separation ≤ intermediate who)
+    (haccuracy : 0 < accuracy) (haccuracyEscape : accuracy < witness.ebar)
+    (hbound : 0 < bound)
+    (hreward : ∀ coalition who, |G.reward coalition who| ≤ bound)
+    (hpathBound : ∀ time who,
+      |caseThreePayoffPath G next critical intermediate B time who| ≤ bound) :
+    ∃ threshold : ℝ, 0 < threshold ∧ ∀ k : ℕ,
+      ∀ source : unitInterval × RepeatedQuitProfile G k,
+        source.2 ∈ RepeatedEquilibriumCorrespondence G k
+          (caseThreePayoffPath G next critical intermediate B source.1) →
+        source ∈ frontier (caseThreeCrossingOpen G k
+          next critical intermediate B accuracy threshold) →
+        (source.1 : ℝ) ≤ 1 / 4 ∧
+          (∀ who, SoloPayoff G who + accuracy ≤ RepeatedPayoff G k
+            (caseThreePayoffPath G next critical intermediate B source.1) source.2 who) ∧
+          (∃ who, RepeatedPayoff G k
+            (caseThreePayoffPath G next critical intermediate B source.1) source.2 who =
+              SoloPayoff G who + accuracy) := by
+  obtain ⟨radius, hradius, hfinalGap⟩ :=
+    exists_repeatedEquilibrium_absorption_gap_on_finalSegment
+      G hnormal hinstant intermediate B separation hseparation hclearance
+      (fun who => (hcoordinates who).2.le)
+  have hmiddle : 0 < witness.ebar / (4 * bound) :=
+    div_pos witness.ebar_positive (by positivity)
+  have hmovement : 0 < accuracy / (2 * bound) := div_pos haccuracy (by positivity)
+  let threshold := min (min (witness.ebar / (4 * bound)) radius)
+    (accuracy / (2 * bound)) / 2
+  have hthreshold : 0 < threshold := half_pos (lt_min (lt_min hmiddle hradius) hmovement)
+  have hthresholdMiddle : threshold < witness.ebar / (4 * bound) := by
+    have hle := (min_le_left
+      (min (witness.ebar / (4 * bound)) radius) (accuracy / (2 * bound))).trans
+      (min_le_left (witness.ebar / (4 * bound)) radius)
+    dsimp only [threshold]
+    linarith
+  have hthresholdFinal : threshold < radius := by
+    have hle := (min_le_left
+      (min (witness.ebar / (4 * bound)) radius) (accuracy / (2 * bound))).trans
+      (min_le_right (witness.ebar / (4 * bound)) radius)
+    dsimp only [threshold]
+    linarith
+  have hthresholdMovement : 2 * bound * threshold < accuracy := by
+    have hle := min_le_right
+      (min (witness.ebar / (4 * bound)) radius) (accuracy / (2 * bound))
+    have hsmall : threshold < accuracy / (2 * bound) := by
+      dsimp only [threshold]
+      linarith
+    simpa only [mul_comm] using
+      (lt_div_iff₀ (by positivity : 0 < 2 * bound)).mp hsmall
+  refine ⟨threshold, hthreshold, ?_⟩
+  intro k source hprofile hfrontier
+  obtain ⟨hnotOpened, hweak⟩ := caseThreeCrossingFrontier_weakBounds
+    G k next critical intermediate B accuracy threshold source hfrontier
+  have hnonzero (htime : (1 / 4 : ℝ) < source.1) :
+      source.2 ≠ (fun _ _ => (0 : Set.Icc (0 : ℝ) 1)) := by
+    intro hzero
+    apply hnotOpened
+    apply Or.inl
+    refine ⟨htime, ?_⟩
+    rw [hzero, repeatedQuitProbability_allContinue]
+    exact hthreshold
+  have hmiddleProperties (hlower : (1 / 4 : ℝ) < source.1)
+      (hupper : (source.1 : ℝ) ≤ 1 / 2) :
+      (∀ who, SoloPayoff G who + witness.ebar < RepeatedPayoff G k
+        (caseThreePayoffPath G next critical intermediate B source.1) source.2 who) ∧
+        witness.ebar / (4 * bound) < RepeatedQuitProbability G k source.2 := by
+    obtain ⟨hterminal, hterminalLow⟩ := witness.caseThreePayoffPath_middle_properties
+      next critical intermediate B hcritical hsegment
+      (fun who => (hcoordinates who).1) hlow source.1 hlower hupper
+    have hexit := witness.repeatedEquilibrium_allContinue_or_above_escapeFloor
+      hnormal hgenerated hinstant k _ hterminal source.2 hprofile
+    have hquit := witness.repeatedEquilibrium_allContinue_or_quitProbability_gt
+      hnormal hgenerated hinstant k _ hterminal source.2 hprofile bound
+      hreward (hpathBound source.1) hterminalLow
+    exact ⟨hexit.resolve_left (hnonzero hlower), hquit.resolve_left (hnonzero hlower)⟩
+  have hfirst : (source.1 : ℝ) ≤ 1 / 4 := by
+    by_contra hnot
+    have htime : (1 / 4 : ℝ) < source.1 := lt_of_not_ge hnot
+    rcases hweak with hsmall | hlowPayoff
+    · by_cases hfinal : (1 / 2 : ℝ) ≤ source.1
+      · have hterminal := caseThreePayoffPath_mem_final
+          G next critical intermediate B source.1 hfinal
+        have hgap := (hfinalGap k _ hterminal source.2 hprofile).resolve_left (hnonzero htime)
+        linarith
+      · have hgap := (hmiddleProperties htime (lt_of_not_ge hfinal).le).2
+        linarith
+    · obtain ⟨who, hwho⟩ := hlowPayoff.2
+      have hfloor := (hmiddleProperties htime hlowPayoff.1).1 who
+      linarith
+  have hfloor : ∀ who, SoloPayoff G who + accuracy ≤ RepeatedPayoff G k
+      (caseThreePayoffPath G next critical intermediate B source.1) source.2 who := by
+    intro who
+    by_contra hnot
+    apply hnotOpened
+    exact Or.inr ⟨by linarith, who, lt_of_not_ge hnot⟩
+  refine ⟨hfirst, hfloor, ?_⟩
+  rcases hweak with hsmall | hlowPayoff
+  · have hquarter : source.1 = (⟨1 / 4, by norm_num⟩ : unitInterval) :=
+      Subtype.ext (by linarith)
+    have hterminal : caseThreePayoffPath G next critical intermediate B source.1 =
+        critical := by
+      rw [hquarter, caseThreePayoffPath_quarter]
+    obtain ⟨who, hzero, _⟩ := hlow
+    have hmove := abs_repeatedPayoff_sub_terminal_le_two_mul_quitProbability
+      G k (caseThreePayoffPath G next critical intermediate B source.1)
+      source.2 who bound hreward (hpathBound source.1 who)
+    have hcoordinate := le_abs_self (RepeatedPayoff G k
+      (caseThreePayoffPath G next critical intermediate B source.1) source.2 who -
+        caseThreePayoffPath G next critical intermediate B source.1 who)
+    have hscaled := mul_le_mul_of_nonneg_left hsmall.2
+      (by positivity : 0 ≤ 2 * bound)
+    have hwall := hfloor who
+    rw [hterminal] at hmove hcoordinate hwall
+    rw [hzero] at hmove hcoordinate
+    exfalso
+    linarith
+  · obtain ⟨who, hwho⟩ := hlowPayoff.2
+    exact ⟨who, le_antisymm hwho (hfloor who)⟩
+
+/-- A common positive bound on rewards AND the whole actual three-segment
+formal-tail path is selected internally, without a reward-only substitution. -/
+theorem exists_caseThreePayoffPathBound (G : QuittingGame)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    (next critical intermediate : Payoff G.Player) (B : ℝ) :
+    ∃ bound : ℝ, 0 < bound ∧
+      (∀ coalition who, |G.reward coalition who| ≤ bound) ∧
+      (∀ time who,
+        |caseThreePayoffPath G next critical intermediate B time who| ≤ bound) := by
+  let top : Payoff G.Player := fun _ => B
+  let pathBound := max ‖next‖ (max ‖critical‖ (max ‖intermediate‖ ‖top‖))
+  let bound := max M pathBound + 1
+  have hMbound : M ≤ bound := by dsimp only [bound]; linarith [le_max_left M pathBound]
+  have hbound : 0 < bound := lt_of_lt_of_le (lt_of_lt_of_le zero_lt_one hM.1) hMbound
+  have hnext : ‖next‖ ≤ bound := by
+    have hle := (le_max_left ‖next‖ (max ‖critical‖ (max ‖intermediate‖ ‖top‖))).trans
+      (le_max_right M pathBound)
+    dsimp only [pathBound, bound] at *
+    linarith
+  have hcritical : ‖critical‖ ≤ bound := by
+    have hle := (le_max_left ‖critical‖ (max ‖intermediate‖ ‖top‖)).trans
+      (le_max_right ‖next‖ (max ‖critical‖ (max ‖intermediate‖ ‖top‖)))
+    have hmax := le_max_right M pathBound
+    dsimp only [pathBound, bound] at *
+    linarith
+  have hintermediate : ‖intermediate‖ ≤ bound := by
+    have hle := ((le_max_left ‖intermediate‖ ‖top‖).trans
+      (le_max_right ‖critical‖ (max ‖intermediate‖ ‖top‖))).trans
+      (le_max_right ‖next‖ (max ‖critical‖ (max ‖intermediate‖ ‖top‖)))
+    have hmax := le_max_right M pathBound
+    dsimp only [pathBound, bound] at *
+    linarith
+  have htop : ‖top‖ ≤ bound := by
+    have hle := ((le_max_right ‖intermediate‖ ‖top‖).trans
+      (le_max_right ‖critical‖ (max ‖intermediate‖ ‖top‖))).trans
+      (le_max_right ‖next‖ (max ‖critical‖ (max ‖intermediate‖ ‖top‖)))
+    have hmax := le_max_right M pathBound
+    dsimp only [pathBound, bound] at *
+    linarith
+  have hball (point : Payoff G.Player) (hpoint : ‖point‖ ≤ bound) :
+      point ∈ Metric.closedBall (0 : Payoff G.Player) bound := by
+    rwa [Metric.mem_closedBall, dist_zero_right]
+  have hconvex := convex_closedBall (0 : Payoff G.Player) bound
+  have hfirst := hconvex.segment_subset (hball next hnext) (hball critical hcritical)
+  have hmiddle := hconvex.segment_subset (hball critical hcritical)
+    (hball intermediate hintermediate)
+  have hfinal := hconvex.segment_subset (hball intermediate hintermediate) (hball top htop)
+  refine ⟨bound, hbound, fun coalition who => (hM.2.2 coalition who).le.trans hMbound, ?_⟩
+  intro time who
+  have hrange : caseThreePayoffPath G next critical intermediate B time ∈
+      (PayoffSegment G next critical ∪ PayoffSegment G critical intermediate) ∪
+        PayoffSegment G intermediate (fun _ => B) := by
+    rw [← caseThreePayoffPath_range]
+    exact ⟨time, rfl⟩
+  have hpoint : caseThreePayoffPath G next critical intermediate B time ∈
+      Metric.closedBall (0 : Payoff G.Player) bound := by
+    rcases hrange with (hpoint | hpoint) | hpoint
+    · exact hfirst hpoint
+    · exact hmiddle hpoint
+    · exact hfinal hpoint
+  have hnorm : ‖caseThreePayoffPath G next critical intermediate B time‖ ≤ bound := by
+    simpa only [Metric.mem_closedBall, dist_zero_right] using hpoint
+  have hcoordinate : |caseThreePayoffPath G next critical intermediate B time who| ≤
+      ‖caseThreePayoffPath G next critical intermediate B time‖ := by
+    simpa only [Real.norm_eq_abs] using
+      norm_le_pi_norm (caseThreePayoffPath G next critical intermediate B time) who
+  exact hcoordinate.trans hnorm
+
+open Classical in
+/-- The produced frontier point is identified on the literal first segment
+and its actual payoff lies on the upper accuracy wall. The SAME original
+interval component, profile, formal tail and backward payoff word are retained.
+The threshold uses internally produced gaps and a common reward/formal-tail
+bound. Global uniform-rho remains the source of the actual large endpoint;
+this does not seal unconditional Case 3 or an infinite charged-return assembly. -/
+theorem EscapeWitness.exists_caseThreeUpperWallOrbit_of_uniformRho
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    {rho : ℝ} (hrho : IsUniformRho G rho) :
+    ∃ eta : ℝ, 0 < eta ∧ eta < witness.ebar ∧
+      ∃ B : ℝ, 0 < B ∧
+        (∀ A who, G.reward A who + 2 < B) ∧
+        (∀ point ∈ witness.Q, ∀ who, point who < B) ∧
+        ∀ critical ∈ witness.Q ∩ frontier (WSet G),
+          ∃ intermediate : Payoff G.Player,
+            PayoffSegment G critical intermediate ⊆ witness.Q ∧
+            (∀ who, SoloPayoff G who < intermediate who ∧ intermediate who < B) ∧
+            (∃ who, critical who = SoloPayoff G who ∧
+              intermediate who < SoloPayoff G who + witness.ebar / 2) ∧
+            ∃ c : ℝ, 0 < c ∧
+              (∀ point ∈ PayoffSegment G intermediate (fun _ => B),
+                (∀ who, SoloPayoff G who + c ≤ point who) ∧
+                (∀ bad ∈ WSet G, c ≤ ‖point - bad‖)) ∧
+              ∀ accuracy : ℝ, 0 < accuracy → accuracy ≤ eta →
+                ∀ owner : G.Player, critical owner = SoloPayoff G owner →
+                  ∀ row : QuitRow G,
+                    IsSmallSoloRow G
+                      (accuracy / (10 * M * Fintype.card G.Player)) owner row →
+                    let next := QuittingOneStagePayoff G critical row
+                    (¬∃ point : ℕ → Payoff G.Player, point 0 = next ∧
+                      IsInfiniteOrbit (FRow G 0) point ∧ ∀ time,
+                        point time ∈ witness.Q ∩
+                          (WSet G ∪ EscapeBand G accuracy)) →
+                    ∃ threshold : ℝ, 0 < threshold ∧
+                      ∃ (k : ℕ) (component : Set (unitInterval × RepeatedQuitProfile G k))
+                        (source : unitInterval × RepeatedQuitProfile G k),
+                        IsCompact component ∧ _root_.IsConnected component ∧
+                        (∀ point ∈ component, point.2 ∈
+                          RepeatedEquilibriumCorrespondence G k
+                            (caseThreePayoffPath G next critical intermediate B point.1)) ∧
+                        (∀ point ∈ component, ∀ time who,
+                          (point.2 time who : ℝ) < 1) ∧
+                        (∃ pnext, (0, pnext) ∈ component ∧
+                          RepeatedPayoff G k next pnext ∉
+                            WSet G ∪ EscapeBand G accuracy) ∧
+                        (1, (fun _ _ => (0 : Set.Icc (0 : ℝ) 1))) ∈ component ∧
+                        source ∈ component ∩ frontier
+                          (caseThreeCrossingOpen G k
+                            next critical intermediate B accuracy threshold) ∧
+                        (source.1 : ℝ) ≤ 1 / 4 ∧
+                        caseThreePayoffPath G next critical intermediate B source.1 ∈
+                          PayoffSegment G next critical ∧
+                        (∀ who, SoloPayoff G who + accuracy ≤ RepeatedPayoff G k
+                          (caseThreePayoffPath G next critical intermediate B source.1)
+                          source.2 who) ∧
+                        (∃ who, RepeatedPayoff G k
+                          (caseThreePayoffPath G next critical intermediate B source.1)
+                          source.2 who = SoloPayoff G who + accuracy) ∧
+                        IsFiniteOrbit (FRow G 0)
+                          (repeatedBackwardPayoffOrbit G k
+                            (caseThreePayoffPath G next critical intermediate B source.1)
+                            source.2) ∧
+                        (∀ time, repeatedBackwardPayoffOrbit G k
+                          (caseThreePayoffPath G next critical intermediate B source.1)
+                          source.2 time ∈ witness.Q ∩
+                            (WSet G ∪ EscapeBand G accuracy)) := by
+  obtain ⟨eta, heta, hetaEscape, B, hB, hreward, hbound, hsource⟩ :=
+    witness.exists_caseThreeUnionFrontier_of_uniformRho hnormal hinstant hM hrho
+  refine ⟨eta, heta, hetaEscape, B, hB, hreward, hbound, ?_⟩
+  intro critical hcritical
+  obtain ⟨intermediate, hsegment, hcoordinates, hlow, separation, hseparation,
+    hclearance, hfrontiers⟩ := hsource critical hcritical
+  refine ⟨intermediate, hsegment, hcoordinates, hlow, separation, hseparation,
+    hclearance, ?_⟩
+  intro accuracy haccuracy haccuracyEta owner howner row hsmall
+  let next := QuittingOneStagePayoff G critical row
+  dsimp only
+  intro hnoInfinite
+  have haccuracyEscape : accuracy < witness.ebar := haccuracyEta.trans_lt hetaEscape
+  obtain ⟨bound, hboundPositive, hrewardBound, hpathBound⟩ :=
+    exists_caseThreePayoffPathBound G hM next critical intermediate B
+  have hintermediateClearance : ∀ who,
+      SoloPayoff G who + separation ≤ intermediate who :=
+    (hclearance intermediate (left_mem_segment ℝ intermediate (fun _ => B))).1
+  obtain ⟨threshold, hthreshold, hidentify⟩ := witness.exists_caseThreeUpperWallThreshold
+    hnormal hgenerated hinstant next critical intermediate B accuracy bound separation
+    hcritical.2 hsegment hcoordinates hlow hseparation hintermediateClearance
+    haccuracy haccuracyEscape hboundPositive hrewardBound hpathBound
+  obtain ⟨k, component, source, hcompact, hconnected, hgraph, hnoSure,
+    hbottom, htop, hsourcePoint, horbit⟩ :=
+    hfrontiers accuracy haccuracy haccuracyEta owner howner row hsmall
+      hnoInfinite threshold hthreshold
+  obtain ⟨hfirst, hfloor, hwall⟩ := hidentify k source
+    (hgraph source hsourcePoint.1) hsourcePoint.2
+  have hformalSegment := caseThreePayoffPath_mem_first
+    G next critical intermediate B source.1 hfirst
+  have hformalQ : caseThreePayoffPath G next critical intermediate B source.1 ∈
+      witness.Q :=
+    witness.smallSoloSuccessor_segment_subset hM haccuracy haccuracyEscape
+      critical hcritical owner howner row hsmall hformalSegment
+  have hwordQ := witness.repeatedBackwardPayoffOrbit_mem k
+    (caseThreePayoffPath G next critical intermediate B source.1) source.2 hformalQ horbit
+  have hendBand : RepeatedPayoff G k
+      (caseThreePayoffPath G next critical intermediate B source.1) source.2 ∈
+        EscapeBand G accuracy := by
+    refine ⟨fun who => (le_add_of_nonneg_right haccuracy.le).trans (hfloor who), ?_⟩
+    obtain ⟨who, hwho⟩ := hwall
+    exact ⟨who, hwho.le⟩
+  have hlast : repeatedBackwardPayoffOrbit G k
+      (caseThreePayoffPath G next critical intermediate B source.1) source.2 (Fin.last k) ∈
+        WSet G ∪ EscapeBand G accuracy := by
+    rw [repeatedBackwardPayoffOrbit_last]
+    exact Or.inr hendBand
+  have hwordCarrier := witness.finiteOrbit_mem_escapeCarrier_of_last_mem
+    haccuracyEscape _ horbit hwordQ hlast
+  exact ⟨threshold, hthreshold, k, component, source, hcompact, hconnected, hgraph, hnoSure,
+    hbottom, htop, hsourcePoint, hfirst, hformalSegment, hfloor, hwall, horbit,
+    fun time => ⟨hwordQ time, hwordCarrier time⟩⟩
 
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :

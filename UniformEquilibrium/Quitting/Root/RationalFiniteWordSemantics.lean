@@ -12,6 +12,10 @@ open _root_.Math.Probability Math.ProbabilityMassFunction Math.PMFProduct
 
 variable {players : ℕ}
 
+/-- A prescribed-payoff/full-cap pair represented entirely over the rationals. -/
+abbrev RationalQuittingSemanticPair (players : ℕ) :=
+  (Fin players → ℚ) × (Fin players → ℚ)
+
 /-- A rational product root, including the proofs needed to compile each
 coordinate to an actual Boolean probability law. -/
 structure RationalQuittingRoot (players : ℕ) where
@@ -94,7 +98,7 @@ def rationalQuittingFiniteWordCap
 /-- Terminal payoff/cap boundary supplied by Always Continue. -/
 def rationalQuittingAlwaysContinueBoundary
     (reward : RationalQuittingReward players) :
-    (Fin players → ℚ) × (Fin players → ℚ) :=
+    RationalQuittingSemanticPair players :=
   (0, fun who => max 0 (reward (quittingSingletonTerminal who) who))
 
 /-- Fully executable payoff/cap pair for a rational finite word followed by
@@ -102,7 +106,7 @@ Always Continue. -/
 def rationalQuittingFiniteWordSemanticPair
     (reward : RationalQuittingReward players)
     (roots : List (RationalQuittingRoot players)) :
-    (Fin players → ℚ) × (Fin players → ℚ) :=
+    RationalQuittingSemanticPair players :=
   (rationalQuittingFiniteWordPayoff reward roots 0,
     fun who => rationalQuittingFiniteWordCap reward roots who
       (max 0 (reward (quittingSingletonTerminal who) who)))

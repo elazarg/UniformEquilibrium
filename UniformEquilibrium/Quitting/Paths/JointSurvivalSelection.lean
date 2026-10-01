@@ -77,6 +77,32 @@ theorem abs_pathDifference_le_jointSurvival_mul
             quittingJointSurvivalWeight_add, hone]
           ring_nf
 
+/-- The actual joint survival of every window is bounded by the geometric
+clock from the same rowwise absorption floor. No opponent clock is substituted. -/
+theorem quittingJointSurvivalWeight_le_pow_of_absorption_lower
+    (roots : ℕ → ι → PMF Bool) {charge : ℝ}
+    (hlower : ∀ time, charge ≤ quittingRootAbsorptionMass (roots time))
+    (start fuel : ℕ) :
+    quittingJointSurvivalWeight roots start fuel ≤ (1 - charge) ^ fuel := by
+  classical
+  have hfactor : ∀ time,
+      quittingStationaryContinueMass (roots time) ≤ 1 - charge := by
+    intro time
+    have hl := hlower time
+    unfold quittingRootAbsorptionMass at hl
+    linarith
+  rw [quittingJointSurvivalWeight_eq_prod]
+  calc
+    (∏ offset ∈ Finset.range fuel,
+        quittingStationaryContinueMass (roots (start + offset))) ≤
+        ∏ _offset ∈ Finset.range fuel, (1 - charge) := by
+      apply Finset.prod_le_prod₀
+      · intro offset _
+        exact quittingStationaryContinueMass_nonneg (roots (start + offset))
+      · intro offset _
+        exact hfactor (start + offset)
+    _ = (1 - charge) ^ fuel := by simp
+
 /-- A positive lower bound on every one-stage absorption probability makes
 joint survival geometric from every starting time. -/
 theorem tendsto_zero_quittingJointSurvivalWeight_of_absorption_lower
@@ -93,31 +119,9 @@ theorem tendsto_zero_quittingJointSurvivalWeight_of_absorption_lower
     linarith [quittingStationaryContinueMass_nonneg (roots start)]
   have hrho0 : 0 ≤ 1 - charge := by linarith
   have hrho1 : 1 - charge < 1 := by linarith
-  have hfactor : ∀ time,
-      quittingStationaryContinueMass (roots time) ≤ 1 - charge := by
-    intro time
-    have hl := hlower time
-    unfold quittingRootAbsorptionMass at hl
-    linarith
-  have hbound : ∀ fuel,
-      quittingJointSurvivalWeight roots start fuel ≤
-        (1 - charge) ^ fuel := by
-    intro fuel
-    rw [quittingJointSurvivalWeight_eq_prod]
-    calc
-      (∏ offset ∈ Finset.range fuel,
-          quittingStationaryContinueMass (roots (start + offset))) ≤
-        ∏ _offset ∈ Finset.range fuel, (1 - charge) := by
-          apply Finset.prod_le_prod₀
-          · intro offset _
-            exact quittingStationaryContinueMass_nonneg
-              (roots (start + offset))
-          · intro offset _
-            exact hfactor (start + offset)
-      _ = (1 - charge) ^ fuel := by simp
   apply squeeze_zero
   · exact quittingJointSurvivalWeight_nonneg roots start
-  · exact hbound
+  · exact quittingJointSurvivalWeight_le_pow_of_absorption_lower roots hlower start
   · exact tendsto_pow_atTop_nhds_zero_of_lt_one hrho0 hrho1
 
 /-- Uniformly bounded exact Bellman values are uniquely selected by the

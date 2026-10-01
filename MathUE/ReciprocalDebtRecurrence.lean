@@ -135,6 +135,32 @@ theorem sequence_le_reciprocal_of_variable_quadratic_step
         have hinverse := one_div_lt_one_div_of_lt hnextTarget hstrict
         exact (not_lt_of_ge hinvNext) hinverse
 
+/-- Fixed quadratic descent has the literal reciprocal envelope, including a
+zero initial value. This delegates to the variable-denominator theorem. -/
+theorem sequence_le_reciprocal_of_fixed_quadratic_step
+    {K : Type*} [Field K] [LinearOrder K] [IsStrictOrderedRing K]
+    (value : ℕ → K) {scale : K} (hscale : 0 < scale)
+    (hnonneg : ∀ time, 0 ≤ value time) (hantitone : Antitone value)
+    (hstep : ∀ time, 0 < value time →
+      value (time + 1) ≤ value time - value time ^ 2 / scale) :
+    ∀ time, value time ≤ scale * value 0 / (scale + time * value 0) := by
+  by_cases hinitial : 0 < value 0
+  · have hvariable : ∀ time, 0 < value time →
+        value (time + 1) ≤ value time - value time ^ 2 / (scale + 1 * value time) := by
+      intro time hpositive
+      apply (hstep time hpositive).trans
+      apply sub_le_sub_left
+      apply div_le_div_of_nonneg_left (sq_nonneg _) hscale
+      simpa only [one_mul] using le_add_of_nonneg_right (hnonneg time)
+    simpa only [sub_self, zero_mul, add_zero] using
+      sequence_le_reciprocal_of_variable_quadratic_step value scale 1 (value 0)
+        hscale.le le_rfl hinitial (by simpa using hscale) le_rfl
+        hnonneg hantitone hvariable
+  · have hzero : value 0 = 0 := le_antisymm (le_of_not_gt hinitial) (hnonneg 0)
+    intro time
+    simpa only [hzero, mul_zero, add_zero, zero_div] using
+      hantitone (Nat.zero_le time)
+
 /-- A positive sequence over an ordered field with a natural ceiling crosses
 a positive threshold under fixed quadratic descent. -/
 theorem exists_index_le_ceil_of_quadratic_descent
