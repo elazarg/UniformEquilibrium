@@ -5,6 +5,8 @@ import MathUE.PairedPhasePolynomialRoots
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
+import MathUE.Analysis.AnalyticQuadraticRemainder
+import MathUE.Analysis.PositiveHomogeneousCoercivity
 import MathUE.FiniteContinuousIntervalSelection
 import MathUE.FinVariableCycle
 import MathUE.RationalArcSubdivision
@@ -48,6 +50,7 @@ import MathUE.LinearProgramming.PivotRepairStoppingLaw
 import MathUE.LinearProgramming.PivotRepairMassOfStoppingLaw
 import MathUE.ProbabilityMassFunction.ExactLateFiniteCensor
 import MathUE.ProbabilityMassFunction.FiniteSumExpectation
+import MathUE.ProbabilityMassFunction.ProductEventExpectation
 import MathUE.ProbabilityMassFunction.IndicatorExpectation
 import MathUE.ProbabilityMassFunction.SupportExpectationEquality
 import MathUE.ProbabilityMassFunction.GeometricPivotFiniteCensor
@@ -380,6 +383,7 @@ import MathUE.Polynomial.SignDiagramReconstruction
 import MathUE.Polynomial.NonnegativeCertificate
 import MathUE.Polynomial.TensorBernstein
 import MathUE.Polynomial.TensorBernsteinQuadratic
+import MathUE.Polynomial.TensorBernsteinQuadraticCoefficients
 import MathUE.Polynomial.TensorBernsteinQuadraticPerturbation
 import MathUE.Polynomial.TensorBernsteinQuadraticSign
 import MathUE.Polynomial.MvPolynomialFDeriv
@@ -619,6 +623,7 @@ import MathUE.Topology.BoxComplementarityRectangularChartIndependence
 import MathUE.Topology.AmbientDegree
 import MathUE.Topology.AmbientDegreeHomotopyNormalization
 import MathUE.Topology.AmbientDegreeProperties
+import MathUE.Topology.AmbientDegreeSelfMapNormalization
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex
 import MathUE.Topology.BoxComplementarityCubicalSperner
@@ -653,6 +658,7 @@ import MathUE.LinearProgramming.CommonChartLocalDegree
 import MathUE.LinearProgramming.R0Degree
 import MathUE.LinearProgramming.R0AmbientDegree
 import MathUE.LinearProgramming.R0AmbientOffsetDegree
+import MathUE.LinearProgramming.R0MinMapCoercivity
 import MathUE.LinearProgramming.R0DegreeSum
 import MathUE.LinearProgramming.RootDegreeSum
 import MathUE.Topology.SignedSimplexLabelBoundary

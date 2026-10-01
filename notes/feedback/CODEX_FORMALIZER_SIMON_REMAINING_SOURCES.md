@@ -120,8 +120,24 @@ the payoff scale from the feasible set. It does not require compactness,
 unbounded variation, normality, or Lemma 4.4.
 `exists_unbounded_section4J_tail_in_halfPayoffBox` combines this invariant
 with the preceding construction. Both declarations passed the full silent
-build and separate standard-axiom checks. The graph-to-quitting-orbit and
-Lemma 4.5 assembly remain Lean work.
+build and separate standard-axiom checks.
+
+`exists_unbounded_fRow_extendedOrbit_of_unbounded_section4J_orbit`
+(`Literature/Simon2012.lean`) constructs an unrestricted extended orbit of
+the ordinary quitting correspondence from an unbounded orbit in the actual
+Section 4 graph. The construction selects a rational start and keeps the
+tail's points, counts, stitches and unbounded variation. It does not require
+an all-edge small-step bound. The actual cutoff vanishes on every required
+edge in the rational half-payoff box.
+
+`theorem4_1_of_zeroQuitterContinuationUpperBound` in the same file assembles
+Theorem 4.1 from an affirmative answer to Question 1 and the explicit
+`Section4ZeroQuitterContinuationUpperBound` proposition. The latter is the
+remaining zero-quitting-player upper bound used by Lemma 4.5. The proof
+handles the instant and stationarily generated branches and cardinalities
+at most two, and transfers nonsingular perturbations back to the original
+normal game. Both declarations pass the silent named build and separate
+standard-axiom checks. The unconditional paper claim remains open in Lean.
 
 ## Section 5 source components
 
@@ -138,6 +154,16 @@ intersection of two distinct abnormal-player pieces. All three declarations
 pass the silent named module check and separate transitive checks using only
 the three standard axioms. They do not construct the Section 5 boundary
 homotopy or correspondence and do not supply the Section 4 zero-quitter bound.
+
+`section5ArtificialBoundary_exists_two_low_coordinates` and
+`section5ArtificialNeighborhood_at_gap_sixth` (`Literature/Simon2012.lean`)
+give the closed artificial-boundary carrier and an actual metric neighborhood
+disjoint from the rational region, at one sixth of the minimum abnormal-player
+gap. `section5ArtificialBoundary_exists_reciprocal_solo_drift` supplies the
+two reciprocal local directions using actual solo-segment payoffs in the
+lower glue. These statements pass the silent named build and separate
+standard-axiom checks. They are components of the requested modification,
+not the modified homotopy and correspondence or their orbit-escape proof.
 
 The published Section 5, pages 194--195, specifies the retained normal-player
 pieces and abnormal-pair intersections. It asks for an artificial modification

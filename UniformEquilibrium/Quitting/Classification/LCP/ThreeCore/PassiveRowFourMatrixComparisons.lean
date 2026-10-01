@@ -7,7 +7,7 @@ Authors: GameTheory contributors
 import UniformEquilibrium.Quitting.Classification.LCP.ThreeCore.PassiveRowFourDegreeNeighborhood
 import UniformEquilibrium.Quitting.Classification.LCP.ElementaryMatrixObstructions
 import UniformEquilibrium.Quitting.Cycles.SignedFourCycleRewardAdapter
-import UniformEquilibrium.Quitting.Root.PlayerReindex
+import UniformEquilibrium.Quitting.Classification.LCP.QuittingRewardReindex
 import MathUE.LinearProgramming.Tournament
 
 /-!
@@ -167,8 +167,7 @@ private theorem singletonMatrix_rewardReindex
     (reward : PassiveRowFourFixture.Reward) (order : Equiv.Perm (Fin 4)) :
     quittingSingletonMatrix (quittingRewardReindex order reward) =
       reindexMatrix order (quittingSingletonMatrix reward) := by
-  ext row column
-  simp [quittingSingletonMatrix, quittingRewardReindex, quittingCoalitionEquiv, reindexMatrix]
+  exact quittingSingletonMatrix_rewardReindex order reward
 
 /-- No relabeling of any reward completion of the fixture supplies the named
 signed-four-cycle singleton data. Own singleton and nonsingleton rewards are free. -/

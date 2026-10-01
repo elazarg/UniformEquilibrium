@@ -1217,6 +1217,22 @@ selects the entire nonzero fixed-point set and computes its total normalized
 degree in the explicit global chart. The statement includes closed-ball
 origin isolation and does not assume finitely many, regular, or isolated
 nonzero roots. It does not identify this integer with ambient Brouwer degree.
+`quittingQuotientFixedPointField_ambientDegree_omega_eq_one`,
+`exists_quittingQuotientOriginBox_ambientDegree_eq_r0Degree`, and
+`exists_quittingQuotientOmegaAnnulus_ambientDegree_eq_one_sub_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientDegree.lean`)
+give the intrinsic total degree on `(-1,2)^k`, a constructed origin coordinate
+box with radius below one half, and the literal annulus degree `1 - kappa`.
+The annulus zero set is exactly the entire nonzero fixed-point set, including
+upper-face and nonisolated roots. The total box uses the larger enclosing
+chart; the old chart is used only near the origin. These degree statements
+concern the actual selected-representative field and need no response-invariance
+premise; decoding to all original players retains that premise.
+`exists_quittingQuotientResponse_ambient_quadratic_bound`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientAmbientEstimates.lean`)
+projects the signed full-player quadratic bound through the block lift and
+recipient projection, using the exact singleton-matrix intertwining identity.
+Both modules pass silent named checks, including their dimension-zero scope.
 `exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientBellman.lean`)
 decodes positive absorption and the original players' Nash–Bellman equations.
@@ -1235,6 +1251,21 @@ sole-owner branch uses the existing solo punishment compiler. The same module pr
 for arbitrary signed four-player rewards, deriving normality under a
 same-table no-UE assumption and discharging that assumption. No punishment
 plan is supplied to the raw-table theorem.
+
+`isStandardLCPSolution_quittingBlockLift_zero` and
+`isR0Matrix_quittingResponseQuotientMatrix_of_singleton`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientHomogeneous.lean`)
+transport homogeneous complementarity through the actual block lift and
+derive quotient R0 from full singleton R0. The vector need not lie in the
+hazard cube. `finFour_responseQuotient_r0Degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourResponseQuotientCriterion.lean`)
+derives both quotient R0 and degree one from absence of original-game UE.
+The same file's
+`finFour_exists_uniformEquilibriumPayoff_of_responseQuotient_nonnegative_inverse`
+therefore needs only response invariance, negative quotient determinant and
+entrywise nonnegative inverse. R0, normality, a selected root and a computed
+degree are not supplied; zero inverse entries remain allowed. These statements
+pass their silent named check. The quotient is not a smaller quitting game.
 
 `IsPairedCenteredCompletion` and
 `exists_uniformEquilibriumPayoff_of_pairedCenteredCompletion`
@@ -1474,6 +1505,17 @@ Fin4 punishment-normality reduction supplies UE existence for arbitrary
 singleton signs. This latter branch does not assert stationary attainment
 or prescribe the UE target. The polynomial-face variant is
 `exists_uniformPayoff_of_oneSidedWeakUnitGuards` in the same file.
+`stationaryTerminalNash_or_sureSolo_everyHorizon_of_oneSidedWeakUnitRawGuards`
+(`UniformEquilibrium/Quitting/Stationary/OneSidedWeakUnitFiniteHorizon.lean`)
+strengthens the nonnegative-owner case: the original stationary sure-solo
+profile itself is exact behavioral Nash at every horizon, including zero,
+and delivers the singleton target within `M / H` at positive horizons.
+The raw producer derives all no-join comparisons internally.
+`quittingFiniteHorizonDeviationCap_sureSolo_eq`
+(`UniformEquilibrium/Quitting/Stationary/SureSoloFiniteHorizon.lean`)
+owns the reusable same-profile theorem for every finite player type; the
+displayed owner supplies nonemptiness internally. This does not strengthen
+the negative sole-owner punishment branch to stationary attainment.
 `halfCeilingValue_uniformPayoff` and `unitCeilingValue_uniformPayoff`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseExactRoots.lean`)
 check both literal tables' displayed roots, Bellman values, exact unrestricted
@@ -1518,6 +1560,67 @@ Quit-now deviation gains two. These modules pass silent named checks.
 The example refutes unguarded fixed-point transfer, not UE existence.
 The quotient RI route does not apply to the crossed map.
 
+`quittingCrossedFixedPointField_ambientDegree_omega_eq_one` and
+`exists_quittingCrossedFixedPointField_ambientDegree_ball_eq_r0Degree`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientNormalizations.lean`)
+give the literal total-box and origin-ball normalizations. The total box uses
+a larger enclosing chart; its closure need not fit inside the old chart.
+`exists_quittingCrossedResponse_quadratic_bound` and
+`exists_quittingCrossedSingleton_minMap_margin`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseAmbientEstimates.lean`)
+produce the second-order displacement bound on a signed ambient ball and
+the global homogeneous complementarity margin. The shared bounds are
+`exists_ambient_quittingDisplacement_singleton_bound`
+(`UniformEquilibrium/Quitting/Stationary/DiscountedAmbientQuadraticRemainder.lean`)
+and `exists_pos_mul_norm_le_lcpMinMap_zero`
+(`MathUE/LinearProgramming/R0MinMapCoercivity.lean`). They do not restrict
+the local estimate to nonnegative hazards or require nonempty coordinates.
+
+`quittingHalfFirstCoefficient_reward_l1_norm` and
+`quittingHalfSecondCoefficient_reward_l1_norm`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseHalfCoefficientNorms.lean`)
+state the exact reward-coordinate norms of all eighteen Bernstein coefficients;
+the same module proves coefficient uniqueness. Recipient-row translations
+preserve the actual singleton matrix, zero-discount displacement and crossed
+guards (`UniformEquilibrium/Quitting/Stationary/RewardRowTranslation.lean`,
+`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseRowTranslation.lean`).
+Never still has payoff zero, so arbitrary-profile strategic equivalence is
+not asserted.
+
+`halfPolyhedralReward_covers_fixedSingletonMatrix`,
+`halfPolyhedralReward_strictRawGuards_iff`, and
+`nonempty_halfSelectedPolyhedralRegion`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseSelectedPolyhedron.lean`)
+describe the selected-recipient slice by exactly forty-two strict affine
+constraints. For arbitrary own singleton values the slice is nonempty, open
+and convex. The twenty-two outsider-recipient nonsingleton coordinates are
+independently free. This relative polyhedral description is distinct from
+the full sixty-coordinate reward neighborhoods above.
+
+`halfCeiling_lowerMargin_minimum`, `unitCeiling_joiningMargin_minimum`, and
+`halfCeiling_upperCoefficient_maximum`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseLiteralMargins.lean`)
+give attained margins and the literal joining arrays. The six displayed
+partition witnesses have exact actual residual gaps in
+`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePartitionWitnesses.lean`.
+`crossedSourceSingletonPartition_failed_count`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseSingletonPartitionCount.lean`)
+counts eight failures among the fourteen canonical nondiscrete maps. Passing
+this necessary derivative test does not imply response invariance.
+`halfCeiling_literalToggleGap_one`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseToggleWitnesses.lean`)
+supplies all fifteen source-supported membership toggles used by the
+deterministic-clock counterresponses.
+
+`halfCeiling_exists_uniformPayoff_strictly_above_singletons`
+(`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponsePayoffExclusions.lean`)
+retains one actual target with strict coordinate surplus and every nonzero
+nonnegative weighted surplus. `not_halfWeakRawGuards_reindex_of_no_uniformPayoff`
+and `not_oneSidedWeakUnitRawGuards_reindex_of_no_uniformPayoff`
+(`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponseNoUERestrictions.lean`)
+give all-label contrapositives under the respective source hypotheses.
+They do not assert that some passing pair exists for every Fin4 reward table.
+
 `halfCeiling_every_proper_child_raw_test_fails` and
 `unitCeiling_three_player_child_no_certificates`
 (`UniformEquilibrium/Quitting/Examples/GuardedCrossedResponseChildLP.lean`)
@@ -1537,6 +1640,12 @@ distance below `1 / 1000`. The exact weighted-error factors are `36`, `4`,
 `254`, and `28`. This is a full reward-coordinate perturbation, not a
 fixed-singleton or symmetric subspace. The half table's zero-column duals
 do not assert robust exclusion.
+
+The original-coalition source identities for these child rows are owned by
+`rawChild_future_delta` and `rawChild_joining_delta`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockOriginalCoalitionRows.lean`).
+They apply to every finite original player type and its actual child-plus-one
+restriction, rather than a separately supplied restricted table.
 
 `isHorizonNash_stationary_of_terminalNash_and_opponentGap`
 (`UniformEquilibrium/Quitting/Stationary/FiniteHorizonRate.lean`)
@@ -2738,6 +2847,17 @@ extends each specified child target to one fixed parent payoff.
 constructs the child target from low-cardinality existence. These are raw
 reward-certificate classes, not a theorem that every Fin4 table passes.
 They make no finite-evaluation claim for the favorable patient Never floor.
+`patient_horizon_three_bound_fails`
+(`UniformEquilibrium/Quitting/Examples/PatientWithdrawalFiniteHorizonBoundary.lean`)
+exhibits a passing terminal patient certificate whose actual horizon-three
+outsider debt is `2 / 3`, exceeding the weighted child debt `1 / 3`.
+`patient_discounted_bound_fails`
+(`UniformEquilibrium/Quitting/Examples/PatientWithdrawalDiscountedBoundary.lean`)
+uses the same actual child profile and Never lift. For every `0 < d < 1`,
+the outsider's evaluated debt `d` exceeds the weighted child debt
+`max (d - d^2) (d^2)`. The evaluation is the packet's clock weight `d^(t+1)`;
+no separate discounted stage-series identity is asserted. Both comparisons
+use unrestricted behavioral caps, not a retained finite response menu.
 `exists_uniformPayoffWitnesses_eq_on_child_of_patientWithdrawalFamily`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFixedTarget.lean`)
 and the corresponding ordinary, truncated-security, and terminal-security
@@ -2793,6 +2913,22 @@ nonnegative nonincreasing evaluations give finite bounds from the reward table.
 The terminal specializations are proved equal to the existing terminal payoff
 and deviation cap. This interface does not by itself identify an evaluation
 with the existing finite-horizon stage-payoff semantics.
+
+`quittingBehaviorEvaluatedDeviationPayoffCap_eq_pureTime`
+(`UniformEquilibrium/Quitting/Paths/EvaluatedPureTimeCap.lean`) gives the exact
+unrestricted behavioral envelope over all dates and Never for every actual
+clock evaluation between zero and one. Monotonicity is not required. Its
+replacement-payoff identity disintegrates the deviator's actual private law;
+the reward table supplies the bound used to take the supremum.
+`quittingFiniteAveragePayoff_eq_stoppingLawEvaluatedPayoff`
+(`UniformEquilibrium/Quitting/Paths/FiniteHorizonStoppingLawPayoff.lean`)
+identifies actual finite-stage averages with the first-Quit evaluation
+`(H - t - 1) / H`, with truncated natural subtraction and Never equal to zero.
+`quittingFiniteHorizonDeviationCap_eq_pureTime`
+(`UniformEquilibrium/Quitting/Paths/FiniteHorizonPureTimeCap.lean`) consequently
+exhausts the actual finite-horizon behavioral cap with every pure date and
+Never, including horizon zero. This is a stage-payoff identity, not only
+a comparison of clock experiments.
 
 `outsideBehaviorEvaluatedDeviationDebt_le_weighted_childDebt`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/CappedClockEvaluatedFullBehavioralCap.lean`)

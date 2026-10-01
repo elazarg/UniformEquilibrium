@@ -1,4 +1,4 @@
-import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockSampledLPDual
+import UniformEquilibrium.Quitting.Classification.QuietExtension.CappedClockOriginalCoalitionRows
 import UniformEquilibrium.Quitting.Examples.GuardedCrossedResponseTables
 
 /-!
@@ -17,51 +17,16 @@ namespace GameTheory.GuardedCrossedResponseExamples
 
 open scoped BigOperators
 
-abbrev RawChild (child : Finset (Fin 4)) := QuittingChildPlayer (· ∉ child)
+abbrev RawChild (child : Finset (Fin 4)) := QuittingRawChildSource.RawChild child
 
 /-- The actual child-plus-one-outsider table, not a separately supplied fixture. -/
 abbrev rawChildReward
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
     (child : Finset (Fin 4)) (outside : {who : Fin 4 // who ∉ child}) :=
-  quittingChildWithOutsiderReward reward (· ∉ child) outside
+  QuittingRawChildSource.rawChildReward reward child outside
 
-private def rawChildCoalition (child coalition : Finset (Fin 4)) : Finset (RawChild child) :=
-  Finset.univ.filter (fun who => who.1 ∈ coalition)
-
-private theorem rawChildCoalition_original_map
-    (child coalition : Finset (Fin 4)) (outside : {who : Fin 4 // who ∉ child})
-    (hsubset : coalition ⊆ child) :
-    (cappedClockChildCoalition (rawChildCoalition child coalition)).map
-      (quittingChildWithOutsiderOriginalEmbedding (· ∉ child) outside) = coalition := by
-  ext player
-  simp only [cappedClockChildCoalition, Finset.mem_map, rawChildCoalition,
-    Finset.mem_filter, Finset.mem_univ, true_and]
-  constructor
-  · rintro ⟨_, ⟨who, hwho, rfl⟩, heq⟩
-    have hvalue : who.1 = player := by
-      change who.1 = player at heq
-      exact heq
-    simpa only [hvalue] using hwho
-  · intro hplayer
-    let who : RawChild child := ⟨player, not_not.mpr (hsubset hplayer)⟩
-    exact ⟨some who, ⟨who, hplayer, rfl⟩, rfl⟩
-
-private theorem rawChildReward_eq_original_weight
-    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (child : Finset (Fin 4)) (outside : {who : Fin 4 // who ∉ child})
-    (terminal : {A : Finset (Option (RawChild child)) // A.Nonempty})
-    (original : Finset (Fin 4))
-    (hmap : terminal.1.map
-      (quittingChildWithOutsiderOriginalEmbedding (· ∉ child) outside) = original)
-    (who : Option (RawChild child)) :
-    rawChildReward reward child outside terminal who =
-      weightOfReward reward original
-        (quittingChildWithOutsiderOriginalEmbedding (· ∉ child) outside who) := by
-  have hnonempty : original.Nonempty := hmap ▸ Finset.map_nonempty.mpr terminal.2
-  rw [rawChildReward, quittingChildWithOutsiderReward_apply_original]
-  simp only [weightOfReward, dite_eq_left hnonempty]
-  congr 1
-  exact Subtype.ext hmap
+private abbrev rawChildCoalition (child coalition : Finset (Fin 4)) :=
+  QuittingRawChildSource.rawChildCoalition child coalition
 
 private theorem rawChild_future_delta
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -70,12 +35,8 @@ private theorem rawChild_future_delta
     (who : RawChild child) :
     cappedClockExactLPDelta (rawChildReward reward child outside)
       (.future ⟨rawChildCoalition child coalition, hcoalition⟩) who =
-      weightOfReward reward {who.1} who.1 - weightOfReward reward coalition who.1 := by
-  dsimp only [cappedClockExactLPDelta]
-  rw [rawChildReward_eq_original_weight reward child outside _ {who.1} (by simp),
-    rawChildReward_eq_original_weight reward child outside _ coalition
-      (rawChildCoalition_original_map child coalition outside hsubset)]
-  simp
+      weightOfReward reward {who.1} who.1 - weightOfReward reward coalition who.1 :=
+  QuittingRawChildSource.rawChild_future_delta reward child coalition outside hsubset hcoalition who
 
 private theorem rawChild_future_base
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -83,12 +44,8 @@ private theorem rawChild_future_base
     (hsubset : coalition ⊆ child) (hcoalition : (rawChildCoalition child coalition).Nonempty) :
     cappedClockExactLPBase (rawChildReward reward child outside)
       (.future ⟨rawChildCoalition child coalition, hcoalition⟩) =
-      weightOfReward reward {outside.1} outside.1 - weightOfReward reward coalition outside.1 := by
-  dsimp only [cappedClockExactLPBase]
-  rw [rawChildReward_eq_original_weight reward child outside _ {outside.1} (by simp),
-    rawChildReward_eq_original_weight reward child outside _ coalition
-      (rawChildCoalition_original_map child coalition outside hsubset)]
-  simp
+      weightOfReward reward {outside.1} outside.1 - weightOfReward reward coalition outside.1 :=
+  QuittingRawChildSource.rawChild_future_base reward child coalition outside hsubset hcoalition
 
 private theorem rawChild_joining_delta
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -98,16 +55,8 @@ private theorem rawChild_joining_delta
     cappedClockExactLPDelta (rawChildReward reward child outside)
       (.joining ⟨rawChildCoalition child coalition, hcoalition⟩) who =
       weightOfReward reward (insert who.1 coalition) who.1 -
-        weightOfReward reward coalition who.1 := by
-  dsimp only [cappedClockExactLPDelta]
-  rw [rawChildReward_eq_original_weight reward child outside _ (insert who.1 coalition) (by
-    simp only [cappedClockChildCoalition, Finset.map_insert]
-    change insert who.1 ((cappedClockChildCoalition (rawChildCoalition child coalition)).map
-      (quittingChildWithOutsiderOriginalEmbedding (· ∉ child) outside)) = insert who.1 coalition
-    exact congrArg (insert who.1) (rawChildCoalition_original_map child coalition outside hsubset)),
-    rawChildReward_eq_original_weight reward child outside _ coalition
-      (rawChildCoalition_original_map child coalition outside hsubset)]
-  simp
+        weightOfReward reward coalition who.1 :=
+  QuittingRawChildSource.rawChild_joining_delta reward child coalition outside hsubset hcoalition who
 
 private theorem rawChild_joining_base
     (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
@@ -116,16 +65,8 @@ private theorem rawChild_joining_base
     cappedClockExactLPBase (rawChildReward reward child outside)
       (.joining ⟨rawChildCoalition child coalition, hcoalition⟩) =
       weightOfReward reward (insert outside.1 coalition) outside.1 -
-        weightOfReward reward coalition outside.1 := by
-  dsimp only [cappedClockExactLPBase]
-  rw [rawChildReward_eq_original_weight reward child outside _ (insert outside.1 coalition) (by
-    simp only [cappedClockJoinedCoalition, Finset.map_insert,
-      quittingChildWithOutsiderOriginalEmbedding_none]
-    exact congrArg (insert outside.1)
-      (rawChildCoalition_original_map child coalition outside hsubset)),
-    rawChildReward_eq_original_weight reward child outside _ coalition
-      (rawChildCoalition_original_map child coalition outside hsubset)]
-  simp
+        weightOfReward reward coalition outside.1 :=
+  QuittingRawChildSource.rawChild_joining_base reward child coalition outside hsubset hcoalition
 
 def halfDualChild : Fin 7 → Finset (Fin 4) :=
   ![{0}, {0, 1}, {0, 2}, {0, 1, 2}, {0, 3}, {0, 1, 3}, {0, 2, 3}]
@@ -298,7 +239,8 @@ theorem halfCeiling_child_missing_zero_no_rewardCertificate
       rintro heq
       exact who.2 (by simpa only [heq] using hzero)
     simp only [Finset.univ_unique, Finset.sum_singleton, one_mul, cappedClockExactLPDelta]
-    rw [rawChildReward, quittingChildWithOutsiderReward_apply_original]
+    rw [rawChildReward, QuittingRawChildSource.rawChildReward,
+      quittingChildWithOutsiderReward_apply_original]
     simpa using (halfCeiling_ownSingleton_zero_of_ne_zero who.1 hne).le
   · norm_num [rawChildReward, cappedClockExactLPBase,
       quittingChildWithOutsiderReward_apply_original, halfCeilingReward, coalitionCode]

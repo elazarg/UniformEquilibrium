@@ -15,6 +15,7 @@ import UniformEquilibrium.Quitting.Classification.Existence.QuietWindowStationar
 import UniformEquilibrium.Quitting.PayoffProcess.TailStepSelector
 import UniformEquilibrium.Quitting.Classification.Existence.AcyclicSoloPreemption
 import UniformEquilibrium.Quitting.Punishment.OwnerSoloCertification
+import UniformEquilibrium.Quitting.Classification.ThreePlayer.StationaryOrSmallHazardTransport
 
 /-!
 # Robert Samuel Simon, *A Topological Approach to Quitting Games* (2012)
@@ -13949,6 +13950,498 @@ theorem exists_samePoints_fRow_extendedOrbit_of_section4J_smallSteps
   }
   exact ⟨transported, rfl, rfl, rfl, Iff.rfl⟩
 
+/-- In the rational half-box, a terminal edge cannot have positive cutoff.
+This is the cutoff elimination in the proof of Theorem 4.1; it uses neither
+the small-step premise nor the open zero-quitter bound of Lemma 4.4. -/
+theorem section4_cutoff_eq_zero_of_mem_halfPayoffBox_targetBox
+    (G : QuittingGame) (M d ρ ξ R ε : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (a : Payoff G.Player) (ha : a ∈ TruncatedW G R)
+    (hxbox : InClosedPayoffBox (M / 2) (Section4X G inverse cutoff a))
+    (hxtarget : StructureTargetBox G M ρ (Section4X G inverse cutoff a)) :
+    (cutoff a : ℝ) = 0 := by
+  by_contra hzero
+  have hpositive : 0 < (cutoff a : ℝ) :=
+    lt_of_le_of_ne (cutoff a).property.1 (Ne.symm hzero)
+  have hxhalf : ∀ j, -M / 2 ≤ Section4X G inverse cutoff a j ∧
+      Section4X G inverse cutoff a j ≤ M / 2 := by
+    intro j
+    simpa only [neg_div] using hxbox j
+  have hxNotLower := not_mem_lowerNeighborhood_of_mem_halfPayoffBox
+    G M d ρ ξ R ε hplayers hM hd hd1 hmotion hconstants hερ
+      (Section4X G inverse cutoff a) hxhalf
+  have hxfull : InClosedPayoffBox M (Section4X G inverse cutoff a) := by
+    intro j
+    constructor <;> nlinarith [hM.1, (hxbox j).1, (hxbox j).2]
+  obtain ⟨_hcutoffHalf, low, hlow, _hdrift⟩ :=
+    exists_coordinate_terminal_drift_of_bounded_positive_cutoff
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ a ha
+          hpositive hxNotLower hxfull
+  exact (not_lt_of_ge (hxtarget low).1) hlow
+
+/-- Every unrestricted Section 4 edge in the rational half-box is an
+ordinary quitting-correspondence edge. Positive cutoff is excluded by the
+actual terminal-image drift, rather than by requiring a small step. -/
+theorem section4J_mem_fRow_of_mem_halfPayoffBox_targetBox
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    {x y : Payoff G.Player}
+    (hxy : (x, y) ∈ Section4J G inverse cutoff R ε δ)
+    (hxbox : InClosedPayoffBox (M / 2) x)
+    (hxtarget : StructureTargetBox G M ρ x) :
+    y ∈ FRow G ε x := by
+  rcases hxy with hterminal | hglue
+  · obtain ⟨a, ha, hpair⟩ := hterminal
+    rw [section4H_one] at hpair
+    have hx : Section4X G inverse cutoff a = x := congrArg Prod.fst hpair
+    have hy : Section4Y G inverse cutoff a = y := congrArg Prod.snd hpair
+    have hzero := section4_cutoff_eq_zero_of_mem_halfPayoffBox_targetBox
+      G M d ρ ξ R ε hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ a ha
+          (by simpa only [hx] using hxbox) (by simpa only [hx] using hxtarget)
+    have hxcontinuation : x = (inverse.inv a).1.1 := by
+      rw [← hx]
+      simp only [Section4X, hzero, zero_smul, sub_zero, one_smul, zero_add]
+    refine ⟨(inverse.inv a).1.2, ?_, ?_⟩
+    · rw [hxcontinuation]
+      exact EpsilonRow.mono G hε.le _ (inverse.inv a).2.1
+    · simpa only [Section4Y, Section4Z, hzero, zero_smul, sub_zero,
+        one_smul, zero_add, hx] using hy
+  · have hxhalf : ∀ j, -M / 2 ≤ x j ∧ x j ≤ M / 2 := by
+      intro j
+      simpa only [neg_div] using hxbox j
+    exact gluedFiber_subset_fRow_of_mem_halfPayoffBox
+      G M d ρ ξ R ε δ hplayers hM hd hd1 hmotion hconstants hε hερ hδ
+        x hxhalf hglue
+
+/-- The rational half-box is forward invariant for the actual Section 4
+graph. The floor/drift dichotomy preserves the weaker half-rho floor,
+including at infinite stitches, without any small-step restriction. -/
+theorem extendedOrbitStaysIn_rationalHalfPayoffBox_of_rationalStart
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hxbox : InClosedPayoffBox (M / 2) (orbit.point 0 0))
+    (hxtarget : StructureTargetBox G M ρ (orbit.point 0 0)) :
+    ExtendedOrbitStaysIn orbit
+      (ClosedCoordinateCube (M / 2) ∩ {x | StructureTargetBox G M ρ x}) := by
+  have htargetClosed : IsClosed {x : Payoff G.Player | StructureTargetBox G M ρ x} := by
+    have heq : {x : Payoff G.Player | StructureTargetBox G M ρ x} =
+        ⋂ j, {x : Payoff G.Player | MinMaxQuit G j - ρ / 2 ≤ x j ∧ x j ≤ M} := by
+      ext x
+      simp only [StructureTargetBox, Set.mem_ofPred_eq, Set.mem_iInter]
+    rw [heq]
+    exact isClosed_iInter fun j =>
+      (isClosed_le continuous_const (continuous_apply j)).inter
+        (isClosed_le (continuous_apply j) continuous_const)
+  apply extendedOrbitStaysIn_of_closed_forwardInvariant orbit _
+    ((isClosed_closedCoordinateCube (M / 2)).inter htargetClosed) _ ⟨hxbox, hxtarget⟩
+  intro x hx y hxy
+  change (x, y) ∈ Section4J G inverse cutoff R ε δ at hxy
+  obtain ⟨z, hz, t, hy⟩ :=
+    section4J_target_mem_lowerGlueFiber G inverse cutoff R ε δ hxy
+  have hzthird := feasible_mem_closedCoordinateCube_third G M hM hz
+  have hzhalf : z ∈ ClosedCoordinateCube (M / 2) := by
+    intro j
+    constructor <;> nlinarith [hM.1, (hzthird j).1, (hzthird j).2]
+  have hyhalf : y ∈ ClosedCoordinateCube (M / 2) := by
+    have hline := (convex_closedCoordinateCube (M / 2)).lineMap_mem hx.1 hzhalf t.property
+    have hyline : y = AffineMap.lineMap x z (t : ℝ) := by
+      simpa only [AffineMap.lineMap_apply_module] using hy
+    simpa only [hyline] using hline
+  refine ⟨hyhalf, ?_⟩
+  intro j
+  have hedge := section4J_coordinate_floor_or_drift_of_mem_halfPayoffBox
+    G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+      hmotion hconstants inverse cutoff hcutoff hε hερ hδ hxy hx.1 j
+  constructor
+  · by_cases hfloor : MinMaxQuit G j - ρ / 3 ≤ x j
+    · have hpreserved := hedge.1 hfloor
+      linarith [hmotion.2.1]
+    · have hraised := hedge.2 (lt_of_not_ge hfloor)
+      have hMpos : 0 < M := zero_lt_one.trans_le hM.1
+      have hdrift : 0 ≤ ρ ^ 2 / (1000 * M) := by positivity
+      linarith [(hx.2 j).1]
+  · nlinarith [hM.1, (hyhalf j).2]
+
+/-- Keep the very same extended orbit after a rational half-box start.
+Only its edge-membership proofs change. The explicit initial rationality
+premise must still be produced when applying Question 1 to Theorem 4.1. -/
+theorem exists_samePoints_fRow_extendedOrbit_of_section4J_rationalStart
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hxbox : InClosedPayoffBox (M / 2) (orbit.point 0 0))
+    (hxtarget : StructureTargetBox G M ρ (orbit.point 0 0)) :
+    ∃ transported : ExtendedOrbitData (FRow G ε),
+      transported.segmentCount = orbit.segmentCount ∧
+      transported.segmentLength = orbit.segmentLength ∧
+      transported.point = orbit.point ∧
+      (HasUnboundedExtendedVariation transported ↔ HasUnboundedExtendedVariation orbit) := by
+  have hstay := extendedOrbitStaysIn_rationalHalfPayoffBox_of_rationalStart
+    G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+      hmotion hconstants inverse cutoff hcutoff hε hερ hδ orbit hxbox hxtarget
+  let transported : ExtendedOrbitData (FRow G ε) := {
+    segmentCount := orbit.segmentCount
+    segmentCountPositive := orbit.segmentCountPositive
+    segmentLength := orbit.segmentLength
+    segmentLengthPositive := orbit.segmentLengthPositive
+    point := orbit.point
+    step := by
+      intro segment hactive index hnext
+      have hindex : SegmentIndex (orbit.segmentLength segment) index := by
+        intro length hlength
+        exact lt_trans (Nat.lt_succ_self index) (hnext length hlength)
+      have hsource := hstay segment hactive index hindex
+      exact section4J_mem_fRow_of_mem_halfPayoffBox_targetBox
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+          hmotion hconstants inverse cutoff hcutoff hε hερ hδ
+            (orbit.step segment hactive index hnext) hsource.1 hsource.2
+    finiteStitch := orbit.finiteStitch
+    infiniteStitch := orbit.infiniteStitch
+  }
+  exact ⟨transported, rfl, rfl, rfl, Iff.rfl⟩
+
+/-- The canonical generic extended-orbit record, read in the paper's
+record with unchanged counts, lengths, points and stitches. -/
+private def literatureExtendedOrbitOfMath
+    {X : Type} [TopologicalSpace X] {relation : Correspondence X X}
+    (generic : Math.Topology.ExtendedOrbitData relation) :
+    ExtendedOrbitData relation := by
+  exact {
+    segmentCount := generic.segmentCount
+    segmentCountPositive := generic.segmentCountPositive
+    segmentLength := generic.segmentLength
+    segmentLengthPositive := by
+      intro segment hactive length hlength
+      apply generic.segmentLengthPositive segment _ length hlength
+      simpa only [Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+        using hactive
+    point := generic.point
+    step := by
+      intro segment hactive index hindex
+      apply generic.step segment _ index _
+      · simpa only [Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+          using hactive
+      · simpa only [Literature.Simon2007.SegmentIndex, Math.Topology.SegmentIndex]
+          using hindex
+    finiteStitch := by
+      intro segment hactive length hlength
+      apply generic.finiteStitch segment _ length hlength
+      simpa only [Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+        using hactive
+    infiniteStitch := by
+      intro segment hactive hlength
+      apply generic.infiniteStitch segment _ hlength
+      simpa only [Literature.Simon2007.ActiveSegment, Math.Topology.ActiveSegment]
+        using hactive
+  }
+
+/-- View the canonical generic one-infinite-segment orbit in the paper's
+record. No new segment or stitch construction is used. -/
+private def literatureExtendedOrbitOfInfiniteOrbit
+    {X : Type} [TopologicalSpace X] {relation : Correspondence X X}
+    (point : ℕ → X) (hstep : IsInfiniteOrbit relation point) :
+    ExtendedOrbitData relation :=
+  literatureExtendedOrbitOfMath
+    (Math.Topology.ExtendedOrbitData.ofInfiniteOrbit point hstep)
+
+/-- A point within `ρ/6` of the progressive cluster of an unbounded boxed
+orbit satisfies the rational target-box floor used in Theorem 4.1. The
+cluster remains attached to this very orbit. -/
+private theorem structureTargetBox_of_near_progressiveCluster
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hbox : ExtendedOrbitStaysIn orbit (ClosedCoordinateCube (M / 2)))
+    (hvariation : HasUnboundedExtendedVariation orbit)
+    {limit : Payoff G.Player}
+    (hcluster : IsExtendedOrbitClusterPoint orbit limit)
+    {point : Payoff G.Player}
+    (hpoint : InClosedPayoffBox (M / 2) point)
+    (hnear : EuclideanDist point limit ≤ ρ / 6) :
+    StructureTargetBox G M ρ point := by
+  intro j
+  have hfloor := section4J_floor_le_coordinate_of_unbounded_extended_orbit
+    G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+      hmotion hconstants inverse cutoff hcutoff hε hερ hδ orbit
+        (fun segment index hactive hindex => hbox segment hactive index hindex)
+          hvariation hcluster j
+  have hcoordinate := (abs_coordinate_sub_le_euclideanDist point limit j).trans hnear
+  constructor
+  · linarith [(abs_le.mp hcoordinate).1]
+  · nlinarith [hM.1, (hpoint j).2]
+
+/-- From an unbounded Section 4 orbit already in the half-box, select a
+rational start without changing its actual graph. If a segment is unbounded,
+its one-segment orbit is truncated at a finite point index. Otherwise bounded
+predecessor segments are removed. The displayed alternatives retain the
+original segment/point provenance, counts and lengths. No small-step orbit
+or Lemma 4.4 continuation bound is supplied as an assumption. -/
+theorem exists_rationalStart_unbounded_section4J_tail_of_mem_halfPayoffBox
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hbox : ExtendedOrbitStaysIn orbit (ClosedCoordinateCube (M / 2)))
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ tail : ExtendedOrbitData
+        (graphCorrespondence (Section4J G inverse cutoff R ε δ)),
+      HasUnboundedExtendedVariation tail ∧
+      InClosedPayoffBox (M / 2) (tail.point 0 0) ∧
+      StructureTargetBox G M ρ (tail.point 0 0) ∧
+      ((∃ segment start, ActiveSegment orbit.segmentCount segment ∧
+          orbit.segmentLength segment = none ∧
+          tail.segmentCount = some 1 ∧ tail.segmentLength = (fun _ => none) ∧
+          tail.point 0 = (fun index => orbit.point segment (start + index))) ∨
+        ∃ start, ActiveSegment orbit.segmentCount start ∧
+          tail.segmentCount = orbit.segmentCount.map (fun count => count - start) ∧
+          tail.segmentLength = (fun segment => orbit.segmentLength (start + segment)) ∧
+          tail.point = (fun segment index => orbit.point (start + segment) index)) := by
+  classical
+  have hρsixth : 0 < ρ / 6 := by linarith [hmotion.2.1]
+  by_cases hunboundedSegment : ∃ segment,
+      ActiveSegment orbit.segmentCount segment ∧
+        ¬HasBoundedSegmentVariation orbit segment
+  · obtain ⟨segment, hactive, hunbounded⟩ := hunboundedSegment
+    obtain ⟨hlength, hsegmentVariation⟩ :=
+      hasUnboundedVariation_of_not_boundedSegmentVariation orbit segment hactive hunbounded
+    have hsegmentOrbit : IsInfiniteOrbit
+        (graphCorrespondence (Section4J G inverse cutoff R ε δ))
+        (orbit.point segment) := by
+      intro index
+      exact orbit.step segment hactive index (by simp [SegmentIndex, hlength])
+    let single := literatureExtendedOrbitOfInfiniteOrbit (orbit.point segment) hsegmentOrbit
+    have hsingleVariation : HasUnboundedExtendedVariation single := by
+      intro bound
+      obtain ⟨points, hpoints⟩ := hsegmentVariation bound
+      refine ⟨1, points, ?_⟩
+      have hsegmentMath : Math.Topology.IsInfiniteOrbit
+          (graphCorrespondence (Section4J G inverse cutoff R ε δ))
+          (orbit.point segment) := by
+        intro index
+        exact hsegmentOrbit index
+      change bound ≤
+        (Math.Topology.ExtendedOrbitData.ofInfiniteOrbit
+          (orbit.point segment) hsegmentMath).prefixVariationWith
+            (fun first next => EuclideanDist next first) 1 points
+      rw [Math.Topology.ExtendedOrbitData.prefixVariationWith_ofInfiniteOrbit
+        (orbit.point segment) hsegmentMath]
+      exact hpoints
+    have hsingleBox : ExtendedOrbitStaysIn single (ClosedCoordinateCube (M / 2)) := by
+      intro _segment _hactive index _hindex
+      exact hbox segment hactive index (by simp [SegmentIndex, hlength])
+    obtain ⟨limit, _hlimitGraph, subsequence, hsubsequence, htendsto⟩ :=
+      Literature.Simon2012.ExtendedOrbitData.exists_tendsto_subsequence_of_infinite_segment
+        orbit segment hactive hlength hgraph
+    have hcluster : IsExtendedOrbitClusterPoint single limit := by
+      refine ⟨fun _ => 0, subsequence, ?_, ?_, htendsto, Or.inr ?_⟩
+      · intro rank
+        simp [single, literatureExtendedOrbitOfInfiniteOrbit,
+          literatureExtendedOrbitOfMath, Math.Topology.ExtendedOrbitData.ofInfiniteOrbit,
+          ActiveSegment]
+      · intro rank
+        simp [single, literatureExtendedOrbitOfInfiniteOrbit,
+          literatureExtendedOrbitOfMath, Math.Topology.ExtendedOrbitData.ofInfiniteOrbit,
+          SegmentIndex]
+      · refine ⟨1, rfl, Nat.zero_lt_one, ?_, hsubsequence.tendsto_atTop⟩
+        exact Filter.Eventually.of_forall (fun _ => rfl)
+    have hdistanceTendsto : Tendsto
+        (fun rank => EuclideanDist (orbit.point segment (subsequence rank)) limit)
+        atTop (nhds 0) := by
+      have hcontinuous : Continuous (fun x : Payoff G.Player => EuclideanDist x limit) := by
+        unfold EuclideanDist EuclideanNorm
+        fun_prop
+      have hzero : EuclideanDist limit limit = 0 := by
+        simp [EuclideanDist, EuclideanNorm]
+      rw [← hzero]
+      exact hcontinuous.continuousAt.tendsto.comp htendsto
+    obtain ⟨rank, hrank⟩ :=
+      ((tendsto_order.1 hdistanceTendsto).2 (ρ / 6) hρsixth).exists
+    let tail := ExtendedOrbitData.dropFirstInfinitePrefix single (subsequence rank) rfl
+    have htailBox : InClosedPayoffBox (M / 2) (tail.point 0 0) := by
+      change InClosedPayoffBox (M / 2)
+        (orbit.point segment (subsequence rank + 0))
+      exact hbox segment hactive _ (by simp [SegmentIndex, hlength])
+    have htarget : StructureTargetBox G M ρ (tail.point 0 0) := by
+      apply structureTargetBox_of_near_progressiveCluster
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+          hmotion hconstants inverse cutoff hcutoff hε hερ hδ single
+            hsingleBox hsingleVariation hcluster htailBox
+      simpa only [tail, ExtendedOrbitData.dropFirstInfinitePrefix, single,
+        literatureExtendedOrbitOfInfiniteOrbit, literatureExtendedOrbitOfMath,
+        Math.Topology.ExtendedOrbitData.ofInfiniteOrbit, Nat.add_zero] using hrank.le
+    refine ⟨tail, ?_, htailBox, htarget, Or.inl ?_⟩
+    · exact ExtendedOrbitData.dropFirstInfinitePrefix_extended_unbounded
+        single (subsequence rank) rfl hsingleVariation
+    · exact ⟨segment, subsequence rank, hactive, hlength, rfl, rfl, rfl⟩
+  · push Not at hunboundedSegment
+    have hallBounded : ∀ segment, ActiveSegment orbit.segmentCount segment →
+        HasBoundedSegmentVariation orbit segment := by
+      intro segment hactive
+      exact hunboundedSegment segment hactive
+    have hcount : orbit.segmentCount = none :=
+      segmentCount_eq_none_of_all_segments_bounded orbit hallBounded hvariation
+    have hactive : ∀ segment, ActiveSegment orbit.segmentCount segment := by
+      intro segment
+      simp [ActiveSegment, hcount]
+    obtain ⟨limit, _hlimitCarrier, subsequence, hsubsequence, htendsto⟩ :=
+      literatureExtendedOrbit_exists_tendsto_segmentStart_subsequence hgraph orbit hcount
+    have hcluster : IsExtendedOrbitClusterPoint orbit limit := by
+      refine ⟨subsequence, fun _ => 0, ?_, ?_, htendsto,
+        Or.inl ⟨hcount, hsubsequence.tendsto_atTop⟩⟩
+      · exact fun rank => hactive (subsequence rank)
+      · intro rank length hlength
+        exact orbit.segmentLengthPositive (subsequence rank)
+          (hactive (subsequence rank)) length hlength
+    have hdistanceTendsto : Tendsto
+        (fun rank => EuclideanDist (orbit.point (subsequence rank) 0) limit)
+        atTop (nhds 0) := by
+      have hcontinuous : Continuous (fun x : Payoff G.Player => EuclideanDist x limit) := by
+        unfold EuclideanDist EuclideanNorm
+        fun_prop
+      have hzero : EuclideanDist limit limit = 0 := by
+        simp [EuclideanDist, EuclideanNorm]
+      rw [← hzero]
+      exact hcontinuous.continuousAt.tendsto.comp htendsto
+    obtain ⟨rank, hrank⟩ :=
+      ((tendsto_order.1 hdistanceTendsto).2 (ρ / 6) hρsixth).exists
+    let tail := ExtendedOrbitData.dropSegments orbit (subsequence rank)
+      (hactive (subsequence rank))
+    have htailBox : InClosedPayoffBox (M / 2) (tail.point 0 0) := by
+      change InClosedPayoffBox (M / 2) (orbit.point (subsequence rank + 0) 0)
+      exact hbox (subsequence rank + 0) (hactive _) 0 (by
+        intro length hlength
+        exact orbit.segmentLengthPositive _ (hactive _) length hlength)
+    have htarget : StructureTargetBox G M ρ (tail.point 0 0) := by
+      apply structureTargetBox_of_near_progressiveCluster
+        G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+          hmotion hconstants inverse cutoff hcutoff hε hερ hδ orbit
+            hbox hvariation hcluster htailBox
+      simpa only [tail, ExtendedOrbitData.dropSegments_point, Nat.add_zero] using hrank.le
+    refine ⟨tail, ?_, htailBox, htarget, Or.inr ?_⟩
+    · apply ExtendedOrbitData.dropSegments_unbounded_of_bounded_prefix
+        orbit (subsequence rank) (hactive _) _ hvariation
+      intro segment _hprevious
+      exact hallBounded segment (hactive segment)
+    · exact ⟨subsequence rank, hactive _, rfl, rfl, rfl⟩
+
+/-- The unrestricted Section 4 orbit supplied by Question 1 yields an
+ordinary quitting orbit of unbounded Euclidean variation. This consumes the
+checked half-box localization, correlated progressive-cluster extraction,
+and cutoff elimination, not a stronger version of Question 1. The actual
+Question 1 hypotheses still require their separate source construction. -/
+theorem exists_unbounded_fRow_extendedOrbit_of_unbounded_section4J_orbit
+    (G : QuittingGame) (M d ρ ξ R ε δ : ℝ)
+    (hplayers : HasAtLeastThreePlayers G)
+    (hM : IsSimonPayoffScale G M)
+    (hd : 0 < d) (hd1 : d ≤ 1)
+    (hnormal : ∀ n, IsNormalPlayer G n)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (hmotion : IsStructureMotionParameter G M ρ)
+    (hconstants : AreSection3Constants G M d ρ ξ R)
+    (inverse : PhiInverseData G M d)
+    (cutoff : Payoff G.Player → UnitInterval)
+    (hcutoff : IsSection4Cutoff G R (Section4Omega G M d ρ ξ R ε) cutoff)
+    (hε : 0 < ε) (hερ : ε < ρ / 3)
+    (hδ : δ = Section4Delta G M ε)
+    (hgraph : IsCompact (Section4J G inverse cutoff R ε δ))
+    (orbit : ExtendedOrbitData
+      (graphCorrespondence (Section4J G inverse cutoff R ε δ)))
+    (hvariation : HasUnboundedExtendedVariation orbit) :
+    ∃ ordinary : ExtendedOrbitData (FRow G ε), HasUnboundedExtendedVariation ordinary := by
+  have hMsixth : 0 < M / 6 := by linarith [hM.1]
+  obtain ⟨boxed, hboxedVariation, _hboxedNear, hboxedBox⟩ :=
+    exists_unbounded_section4J_tail_in_halfPayoffBox
+      G M hM inverse cutoff R ε δ (M / 6) hMsixth le_rfl hgraph orbit hvariation
+  obtain ⟨tail, htailVariation, htailBox, htailTarget, _hprovenance⟩ :=
+    exists_rationalStart_unbounded_section4J_tail_of_mem_halfPayoffBox
+      G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ hδ hgraph
+          boxed hboxedBox hboxedVariation
+  obtain ⟨ordinary, _hcount, _hlength, _hpoint, hvariationIff⟩ :=
+    exists_samePoints_fRow_extendedOrbit_of_section4J_rationalStart
+      G M d ρ ξ R ε δ hplayers hM hd hd1 hnormal hgenerated hinstant
+        hmotion hconstants inverse cutoff hcutoff hε hερ hδ tail htailBox htailTarget
+  exact ⟨ordinary, hvariationIff.mpr htailVariation⟩
+
 /--
 Lemma 4.4's boundedness of the continuation coordinate `β`, with the
 standing Section 3 assumptions and the `d,ρ,ξ,R` relations made explicit.
@@ -14243,13 +14736,223 @@ theorem lemma4_5 (G : QuittingGame) (M d ρ ξ R η ε δ : ℝ)
 
 /-! ### 4.5. Application of Question 1 -/
 
+/-- The exact remaining zero-quitter upper-coordinate clause of Lemma 4.4,
+under its standing hypotheses. This proposition supplies no orbit,
+equilibrium, homotopy or Question 1 conclusion. -/
+def Section4ZeroQuitterContinuationUpperBound : Prop :=
+  ∀ (G : QuittingGame) (M d ρ ξ R : ℝ),
+    HasAtLeastThreePlayers G → IsSimonPayoffScale G M → 0 < d → d ≤ 1 →
+    (∀ n, IsNormalPlayer G n) →
+    ¬HasStationarilyGeneratedApproximateEquilibria G →
+    ¬HasInstantApproximateEquilibria G →
+    IsStructureMotionParameter G M ρ → AreSection3Constants G M d ρ ξ R →
+    ∀ z : EZeroTilde G, Phi G M d z ∈ TruncatedW G R →
+      ∀ j, (z.1.2 j : ℝ) = 0 → z.1.1 j ≤ R + 1
+
+private theorem exists_simonPayoffScale (G : QuittingGame) :
+    ∃ M, IsSimonPayoffScale G M := by
+  obtain ⟨B, hB⟩ := Literature.Simon2007.exists_quittingPayoffDifferenceBound G
+  refine ⟨3 * B, ?_, ?_, ?_⟩
+  · linarith [hB.1]
+  · intro terminal who
+    have hentry := hB.2.2 terminal who
+    linarith
+  · intro first second who
+    have hdifference := hB.2.1 first second who
+    linarith
+
+/-- Uniformize the checked compact-motion result on a fixed enclosing
+continuation rectangle and decrease it together with the corrected
+distance-one feasible parameter. The existing no-instant producer then
+supplies the sure-row exclusion at the common scale. -/
+private theorem exists_structureMotionParameter_of_not_branches
+    (G : QuittingGame) (M : ℝ)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ ρ, IsStructureMotionParameter G M ρ := by
+  obtain ⟨rate, hrate⟩ := lemma2_1_part2 G hgenerated hinstant
+  let region : Set (Payoff G.Player) := Set.Icc
+    (fun j => MinMaxQuit G j - 1)
+    (fun _ => 2 * (Fintype.card G.Player : ℝ) * M)
+  obtain ⟨compactRate, hcompactPositive, _hcompactOne, hcompact⟩ :=
+    lemma2_1_part2_compact G hgenerated hinstant region isCompact_Icc
+  let baseRate := min rate compactRate
+  have hbasePositive : 0 < baseRate := lt_min hrate.1 hcompactPositive
+  have hbaseRate : baseRate ≤ rate := min_le_left _ _
+  have hbaseCompact : baseRate ≤ compactRate := min_le_right _ _
+  have hbaseOne : baseRate ≤ 1 := hbaseRate.trans hrate.2.1
+  have hcorrected : SatisfiesCorrectedLemma2_1Parameter G baseRate := by
+    refine ⟨hbasePositive, hbaseOne, ?_⟩
+    intro tail row hnear hrational hrow
+    have hrationalRate : IsRational G rate tail := by
+      intro j
+      linarith [hrational j]
+    have hrowRate := EpsilonRow.mono G hbaseRate tail hrow
+    obtain ⟨hmotion, hsurvival⟩ := hrate.2.2 tail row hnear hrationalRate hrowRate
+    have hquit : 0 ≤ QuitProbability G row := (quitProbability_mem_Icc G row).1
+    refine ⟨?_, ?_⟩
+    · exact (mul_le_mul_of_nonneg_right hbaseRate hquit).trans hmotion
+    · linarith
+  have hglobal : ∀ tail : Payoff G.Player,
+      (∀ j, MinMaxQuit G j - baseRate ≤ tail j ∧
+        tail j ≤ 2 * (Fintype.card G.Player : ℝ) * M) →
+      ∀ row, row ∈ EpsilonRow G baseRate tail →
+        baseRate * QuitProbability G row ≤
+          EuclideanDist tail (QuittingOneStagePayoff G tail row) := by
+    intro tail htail row hrow
+    have hregion : tail ∈ region := by
+      constructor
+      · intro j
+        linarith [(htail j).1]
+      · exact fun j => (htail j).2
+    have hrationalCompact : IsRational G compactRate tail := by
+      intro j
+      linarith [(htail j).1]
+    have hrowCompact := EpsilonRow.mono G hbaseCompact tail hrow
+    have hmotion := (hcompact tail hregion row hrationalCompact hrowCompact).1
+    have hquit : 0 ≤ QuitProbability G row := (quitProbability_mem_Icc G row).1
+    exact (mul_le_mul_of_nonneg_right hbaseCompact hquit).trans hmotion
+  exact exists_structureMotionParameter_of_base G M baseRate hinstant
+    hbasePositive hbaseOne hcorrected hglobal
+
+/-- Read the literal Question 1 conclusion through the paper/generic
+record identification. Only the symmetric Euclidean edge-cost convention
+changes; no small-step or rationality premise is added. -/
+private theorem question1Conclusion_exists_unbounded_literatureOrbit
+    {N : Type} [Fintype N] {graph : Set (Payoff N × Payoff N)}
+    (hconclusion : Question1Conclusion graph) :
+    ∃ orbit : ExtendedOrbitData (graphCorrespondence graph),
+      HasUnboundedExtendedVariation orbit := by
+  classical
+  obtain ⟨generic, hvariation⟩ := hconclusion
+  let orbit := literatureExtendedOrbitOfMath generic
+  refine ⟨orbit, ?_⟩
+  intro bound
+  obtain ⟨segments, points, hlarge⟩ := hvariation bound
+  refine ⟨segments, points, ?_⟩
+  change bound ≤ generic.prefixVariationWith
+    (fun first next => EuclideanDist next first) segments points
+  calc
+    bound ≤ generic.prefixVariationWith
+        Math.Topology.SimonViability.euclideanDist segments points := hlarge
+    _ = generic.prefixVariationWith
+        (fun first next => EuclideanDist next first) segments points := by
+      unfold Math.Topology.ExtendedOrbitData.prefixVariationWith
+      apply Finset.sum_congr rfl
+      intro segment _hsegment
+      apply Finset.sum_congr rfl
+      intro index _hindex
+      split_ifs
+      · exact euclideanDist_comm _ _
+      · rfl
+
+private theorem hasQuitApproximateEquilibria_of_card_le_two
+    (G : QuittingGame) (hcard : Fintype.card G.Player ≤ 2) :
+    HasQuitApproximateEquilibria G := by
+  classical
+  intro accuracy haccuracy
+  obtain ⟨root, hnash⟩ :=
+    GameTheory.QuittingThreePlayerStrategyClass.exists_stationaryTerminalNash_of_card_le_two
+      G.reward hcard haccuracy
+  have hrootNash :=
+    GameTheory.isεQuittingRootSequenceNash_profileLiveRoot_of_isεAsymptoticNash
+      G.reward (GameTheory.quittingStationaryProfile G.reward root) hnash
+  exact ⟨_, isQuitEpsilonEquilibrium_of_isεQuittingRootSequenceNash G hrootNash⟩
+
+/-- The nonsingular case in the printed Theorem 4.1 proof. The solved
+stationarily generated and instant alternatives are retained literally.
+The remaining branch constructs the actual Question 1 data at arbitrarily
+small source errors, then uses the unrestricted orbit-to-equilibrium
+consumer rather than the open forward direction of Theorem 2.3. -/
+private theorem nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitterUpper
+    (hquestion : Question1Affirmative)
+    (hzeroUpper : Section4ZeroQuitterContinuationUpperBound)
+    (G : QuittingGame) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hnonsingular : HasNonsingularSingletonDifferences G) :
+    HasQuitApproximateEquilibria G := by
+  classical
+  by_cases hgenerated : HasStationarilyGeneratedApproximateEquilibria G
+  · exact (show Literature.Simon2007.HasStationarilyGeneratedApproximateEquilibria G from
+      hgenerated).hasQuitApproximateEquilibria G
+  · by_cases hinstant : HasInstantApproximateEquilibria G
+    · exact Literature.Simon2007.HasInstantApproximateEquilibria.hasQuitApproximateEquilibria G
+        ((instantApproximateEquilibria_iff_simon2007 G).mp hinstant)
+    · by_cases hsmall : Fintype.card G.Player ≤ 2
+      · exact hasQuitApproximateEquilibria_of_card_le_two G hsmall
+      · have hplayers : HasAtLeastThreePlayers G := by
+          change 3 ≤ Fintype.card G.Player
+          omega
+        obtain ⟨M, hM⟩ := exists_simonPayoffScale G
+        obtain ⟨ρ, hmotion⟩ :=
+          exists_structureMotionParameter_of_not_branches G M hgenerated hinstant
+        obtain ⟨ξ, R, hconstants⟩ :=
+          exists_section3Constants G M 1 ρ hM zero_lt_one hmotion
+        obtain ⟨η, hη⟩ := corollary4_1 G hnonsingular
+        obtain ⟨_hsurjective, ⟨inverse⟩⟩ := lemma3_2 G M 1 hM zero_lt_one le_rfl
+        have hupper := hzeroUpper G M 1 ρ ξ R hplayers hM zero_lt_one le_rfl
+          hnormal hgenerated hinstant hmotion hconstants
+        have hunrestricted : ExtendedUnrestrictedOrbitCondition G := by
+          intro accuracy haccuracy
+          let ε := min accuracy (min (η / 6) (ρ / 6))
+          have hε : 0 < ε := lt_min haccuracy
+            (lt_min (by linarith [hη.1]) (by linarith [hmotion.2.1]))
+          have hεaccuracy : ε ≤ accuracy := min_le_left _ _
+          have hεη : ε < η / 3 := by
+            have hbound : ε ≤ η / 6 :=
+              (min_le_right _ _).trans (min_le_left _ _)
+            linarith [hη.1]
+          have hερ : ε < ρ / 3 := by
+            have hbound : ε ≤ ρ / 6 :=
+              (min_le_right _ _).trans (min_le_right _ _)
+            linarith [hmotion.2.1]
+          have hωpositive := (section4Omega_mem_Ioc G M 1 ρ ξ R ε
+            hplayers hM zero_lt_one le_rfl hmotion hconstants hε hερ).1
+          obtain ⟨cutoff, hcutoff⟩ := exists_section4Cutoff G R hωpositive
+          have hhypotheses := lemma4_5_of_zeroQuitterContinuationUpperBound
+            G M 1 ρ ξ R η ε (Section4Delta G M ε) hplayers hM zero_lt_one le_rfl
+              hnormal hgenerated hinstant hmotion hη hconstants inverse cutoff
+                hcutoff hε hεη hερ rfl hupper
+          have hgraph : IsCompact
+              (Section4J G inverse cutoff R ε (Section4Delta G M ε)) :=
+            Math.Topology.SimonViability.QuestionOneHypotheses.fullGraph_compact hhypotheses
+          have hconclusion := hquestion G.Player (Fintype.card G.Player)
+            (TruncatedW G R)
+            (fun j => TruncatedPiece G R ((Fintype.equivFin G.Player).symm j))
+            (Section4H G inverse cutoff) (GluedNeighborhood G R ε)
+            (correspondenceGraph (GluedFiber G R ε (Section4Delta G M ε)))
+            (Section4J G inverse cutoff R ε (Section4Delta G M ε)) hhypotheses
+          obtain ⟨graphOrbit, hgraphVariation⟩ :=
+            question1Conclusion_exists_unbounded_literatureOrbit hconclusion
+          obtain ⟨ordinary, hordinaryVariation⟩ :=
+            exists_unbounded_fRow_extendedOrbit_of_unbounded_section4J_orbit
+              G M 1 ρ ξ R ε (Section4Delta G M ε) hplayers hM zero_lt_one le_rfl
+                hnormal hgenerated hinstant hmotion hconstants inverse cutoff
+                  hcutoff hε hερ rfl hgraph graphOrbit hgraphVariation
+          let enlarged := ExtendedOrbitData.mono ordinary (fun point =>
+            FRow.mono G hεaccuracy point)
+          exact ⟨enlarged, ExtendedOrbitData.mono_unbounded ordinary
+            (fun point => FRow.mono G hεaccuracy point) hordinaryVariation⟩
+        exact hunrestricted.hasQuitApproximateEquilibria G hnormal
+
+/-- Conditional completion of Theorem 4.1. The only added source premise
+is the named zero-quitter upper bound required by the literal Lemma 4.5
+construction. Normality-preserving nonsingular perturbation transfers the
+result back to the original game. This does not replace the unconditional
+paper claim below or assert an affirmation of Question 1. -/
+theorem theorem4_1_of_zeroQuitterContinuationUpperBound
+    (hquestion : Question1Affirmative)
+    (hzeroUpper : Section4ZeroQuitterContinuationUpperBound) :
+    ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
+      HasQuitApproximateEquilibria G := by
+  exact allNormal_quitApproximateEquilibria_of_nonsingular_case
+    (nonsingular_hasQuitApproximateEquilibria_of_question1_zeroQuitterUpper
+      hquestion hzeroUpper)
+
 /--
-Theorem 4.1.  The perturbation transfer to the original reward, the exclusion
-of the lower glue on the half payoff box, and the extended-orbit/equilibrium
-implication of Theorem 2.3 are proved separately.  Feasible-cluster tail
-localization and whole-tail half-payoff-box containment are also proved below
-the Section 4 graph construction.  The remaining graph-to-orbit assembly,
-including the open part of Lemma 4.5, is incomplete.
+Theorem 4.1. The conditional theorem above assembles the actual Section 4
+construction, unrestricted orbit transport, and nonsingular perturbation
+transfer. The zero-quitter continuation upper bound remains to be proved;
+the unconditional paper claim is retained here.
 -/
 theorem theorem4_1 (hquestion : Question1Affirmative) :
     ∀ G : QuittingGame, (∀ n, IsNormalPlayer G n) →
@@ -14663,6 +15366,258 @@ theorem section5_abnormalSolo_pseudoEquilibrium (G : QuittingGame)
       (add_le_add_left herror (G.reward ⟨{j}, Finset.singleton_nonempty j⟩ i))
   · rw [hpayoff, hnever]
     exact (lemma5_1 G j habnormal).1
+
+/-- The singleton pieces retained for normal players in the Section 5 domain. -/
+def Section5NormalRegion (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
+  ⋃ j : {j : G.Player // IsNormalPlayer G j}, TruncatedPiece G R j.val
+
+/-- The literal abnormal-pair part of the modified domain. -/
+def Section5AbnormalPairRegion (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
+  ⋃ pair : {pair : G.Player × G.Player //
+      pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2},
+    TruncatedPiece G R pair.val.1 ∩ TruncatedPiece G R pair.val.2
+
+/-- The closed locus around which p.195 requests the artificial modification.
+This is a boundary set, not a supplied or constructed homotopy. -/
+def Section5ArtificialBoundary (G : QuittingGame) (R : ℝ) : Set (Payoff G.Player) :=
+  closure (frontier (Section5ModifiedC G R) \ Section5NormalRegion G R)
+
+/-- The abnormal-pair union is compact even when it is empty. -/
+theorem isCompact_section5AbnormalPairRegion (G : QuittingGame) (R : ℝ) :
+    IsCompact (Section5AbnormalPairRegion G R) := by
+  classical
+  exact isCompact_iUnion fun pair : {pair : G.Player × G.Player //
+      pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2} =>
+    (isCompact_truncatedPiece G R pair.val.1).inter
+      (isCompact_truncatedPiece G R pair.val.2)
+
+/-- Taking the closed artificial locus does not introduce points outside the
+actual abnormal-pair union. -/
+theorem section5ArtificialBoundary_subset_abnormalPairRegion
+    (G : QuittingGame) (R : ℝ) :
+    Section5ArtificialBoundary G R ⊆ Section5AbnormalPairRegion G R := by
+  apply closure_minimal _ (isCompact_section5AbnormalPairRegion G R).isClosed
+  rintro point ⟨hfrontier, hnormal⟩
+  have hdomain : point ∈ Section5ModifiedC G R := by
+    exact (isCompact_section5ModifiedC G R).isClosed.closure_eq ▸
+      frontier_subset_closure hfrontier
+  rw [section5ModifiedC_eq_retainedPieces] at hdomain
+  exact hdomain.resolve_left hnormal
+
+/-- Every point of the closed artificial locus belongs to the modified domain. -/
+theorem section5ArtificialBoundary_subset_modifiedC (G : QuittingGame) (R : ℝ) :
+    Section5ArtificialBoundary G R ⊆ Section5ModifiedC G R := by
+  intro point hpoint
+  rw [section5ModifiedC_eq_retainedPieces]
+  exact Or.inr (section5ArtificialBoundary_subset_abnormalPairRegion G R hpoint)
+
+/-- The artificial boundary is compact without a nonemptiness assumption. -/
+theorem isCompact_section5ArtificialBoundary (G : QuittingGame) (R : ℝ) :
+    IsCompact (Section5ArtificialBoundary G R) :=
+  (isCompact_section5ModifiedC G R).of_isClosed_subset isClosed_closure
+    (section5ArtificialBoundary_subset_modifiedC G R)
+
+/-- Even closure points of the artificial locus have two actual low abnormal
+coordinates. Thus the quantitative separation survives closing the locus. -/
+theorem section5ArtificialBoundary_exists_two_low_coordinates
+    (G : QuittingGame) (R : ℝ) {ε : ℝ} (hε : IsSection5Accuracy G ε)
+    {point : Payoff G.Player} (hpoint : point ∈ Section5ArtificialBoundary G R) :
+    ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+      point ∈ TruncatedPiece G R k ∩ TruncatedPiece G R l ∧
+      point k + 3 * ε < MinMaxQuit G k ∧ point l + 3 * ε < MinMaxQuit G l := by
+  obtain ⟨pair, hpair⟩ := Set.mem_iUnion.mp
+    (section5ArtificialBoundary_subset_abnormalPairRegion G R hpoint)
+  refine ⟨pair.val.1, pair.val.2, pair.property.1,
+    pair.property.2.1, pair.property.2.2, hpair, ?_, ?_⟩
+  · have hsolo : point pair.val.1 ≤ SoloPayoff G pair.val.1 := hpair.1.1
+    have hgap := soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy
+      G hε pair.property.2.1
+    linarith
+  · have hsolo : point pair.val.2 ≤ SoloPayoff G pair.val.2 := hpair.2.1
+    have hgap := soloPayoff_add_three_mul_lt_minMaxQuit_of_section5Accuracy
+      G hε pair.property.2.2
+    linarith
+
+/-- An explicit gap-dependent open neighborhood of the artificial boundary.
+It is not claimed to be a modified Question 1 correspondence. -/
+def Section5ArtificialNeighborhood (G : QuittingGame) (ε : ℝ) :
+    Set (Payoff G.Player) :=
+  {point | ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+    point k + 2 * ε < MinMaxQuit G k ∧ point l + 2 * ε < MinMaxQuit G l}
+
+/-- The explicit two-coordinate gap neighborhood is genuinely open. -/
+theorem isOpen_section5ArtificialNeighborhood (G : QuittingGame) (ε : ℝ) :
+    IsOpen (Section5ArtificialNeighborhood G ε) := by
+  classical
+  have heq : Section5ArtificialNeighborhood G ε =
+      ⋃ pair : {pair : G.Player × G.Player //
+          pair.1 ≠ pair.2 ∧ IsAbnormalPlayer G pair.1 ∧ IsAbnormalPlayer G pair.2},
+        {point : Payoff G.Player | point pair.val.1 + 2 * ε < MinMaxQuit G pair.val.1} ∩
+          {point : Payoff G.Player | point pair.val.2 + 2 * ε < MinMaxQuit G pair.val.2} := by
+    ext point
+    constructor
+    · rintro ⟨k, l, hne, hk, hl, hgapk, hgapl⟩
+      exact Set.mem_iUnion.mpr ⟨⟨(k, l), hne, hk, hl⟩, hgapk, hgapl⟩
+    · intro hpoint
+      obtain ⟨pair, hpair⟩ := Set.mem_iUnion.mp hpoint
+      exact ⟨pair.val.1, pair.val.2, pair.property.1,
+        pair.property.2.1, pair.property.2.2, hpair.1, hpair.2⟩
+  rw [heq]
+  apply isOpen_iUnion
+  intro pair
+  exact (isOpen_lt ((continuous_apply pair.val.1).add continuous_const)
+    continuous_const).inter
+      (isOpen_lt ((continuous_apply pair.val.2).add continuous_const) continuous_const)
+
+/-- The artificial locus lies inside the explicit open neighborhood. -/
+theorem section5ArtificialBoundary_subset_neighborhood
+    (G : QuittingGame) (R : ℝ) {ε : ℝ} (hε : IsSection5Accuracy G ε) :
+    Section5ArtificialBoundary G R ⊆ Section5ArtificialNeighborhood G ε := by
+  intro point hpoint
+  obtain ⟨k, l, hne, hk, hl, _, hgapk, hgapl⟩ :=
+    section5ArtificialBoundary_exists_two_low_coordinates G R hε hpoint
+  refine ⟨k, l, hne, hk, hl, ?_, ?_⟩ <;> linarith [hε.2.1]
+
+/-- An actual Euclidean collar of width `ε` around the closed artificial locus
+is contained in the two-coordinate gap neighborhood. -/
+theorem mem_section5ArtificialNeighborhood_of_dist_lt
+    (G : QuittingGame) (R : ℝ) {ε : ℝ} (hε : IsSection5Accuracy G ε)
+    {point boundary : Payoff G.Player}
+    (hboundary : boundary ∈ Section5ArtificialBoundary G R)
+    (hdist : EuclideanDist point boundary < ε) :
+    point ∈ Section5ArtificialNeighborhood G ε := by
+  obtain ⟨k, l, hne, hk, hl, _, hgapk, hgapl⟩ :=
+    section5ArtificialBoundary_exists_two_low_coordinates G R hε hboundary
+  have hkdist := (abs_coordinate_sub_le_euclideanDist point boundary k).trans_lt hdist
+  have hldist := (abs_coordinate_sub_le_euclideanDist point boundary l).trans_lt hdist
+  refine ⟨k, l, hne, hk, hl, ?_, ?_⟩
+  · have hkupper := (abs_lt.mp hkdist).2
+    linarith
+  · have hlupper := (abs_lt.mp hldist).2
+    linarith
+
+/-- The artificial collar is disjoint from the accuracy-rational payoff region.
+This local separation does not imply escape for orbits of an unspecified glue. -/
+theorem not_isRational_of_mem_section5ArtificialNeighborhood
+    (G : QuittingGame) {ε : ℝ} (hε : 0 < ε) {point : Payoff G.Player}
+    (hpoint : point ∈ Section5ArtificialNeighborhood G ε) : ¬IsRational G ε point := by
+  obtain ⟨k, _, _, _, _, hgapk, _⟩ := hpoint
+  intro hrational
+  have hfloor := hrational k
+  linarith
+
+/-- The game itself supplies a positive gap-dependent collar scale, without a
+supplied homotopy, strategic bound, or favorable continuation vector. -/
+theorem section5ArtificialNeighborhood_at_gap_sixth (G : QuittingGame) (R : ℝ)
+    (habnormal : HasAbnormalPlayer G) :
+    let ε := MinimumAbnormalGap G / 6
+    0 < ε ∧ IsOpen (Section5ArtificialNeighborhood G ε) ∧
+      Section5ArtificialBoundary G R ⊆ Section5ArtificialNeighborhood G ε ∧
+      ∀ point ∈ Section5ArtificialNeighborhood G ε, ¬IsRational G ε point := by
+  have hgap := minimumAbnormalGap_pos G habnormal
+  have hε : IsSection5Accuracy G (MinimumAbnormalGap G / 6) :=
+    ⟨habnormal, by positivity, by linarith⟩
+  exact ⟨hε.2.1, isOpen_section5ArtificialNeighborhood G _,
+    section5ArtificialBoundary_subset_neighborhood G R hε,
+    fun _ hpoint => not_isRational_of_mem_section5ArtificialNeighborhood G hε.2.1 hpoint⟩
+
+/-- The actual singleton-response segment, with its source reward as endpoint.
+No invariance of the modified domain or frontier is asserted. -/
+def Section5SoloSegment (G : QuittingGame) (j : G.Player)
+    (point : Payoff G.Player) (t : UnitInterval) : Payoff G.Player :=
+  (1 - (t : ℝ)) • point + (t : ℝ) • G.reward ⟨{j}, Finset.singleton_nonempty j⟩
+
+/-- These segments depend continuously on the source point and local time. -/
+theorem continuous_section5SoloSegment (G : QuittingGame) (j : G.Player) :
+    Continuous (fun pair : Payoff G.Player × UnitInterval =>
+      Section5SoloSegment G j pair.1 pair.2) := by
+  unfold Section5SoloSegment
+  fun_prop
+
+/-- Each segment starts at the actual continuation point. -/
+theorem section5SoloSegment_zero (G : QuittingGame) (j : G.Player)
+    (point : Payoff G.Player) : Section5SoloSegment G j point 0 = point := by
+  change (1 - (0 : ℝ)) • point +
+    (0 : ℝ) • G.reward ⟨{j}, Finset.singleton_nonempty j⟩ = point
+  simp only [sub_zero, one_smul, zero_smul, add_zero]
+
+/-- Each segment ends at the actual singleton terminal reward. -/
+theorem section5SoloSegment_one (G : QuittingGame) (j : G.Player)
+    (point : Payoff G.Player) :
+    Section5SoloSegment G j point 1 = G.reward ⟨{j}, Finset.singleton_nonempty j⟩ := by
+  change (1 - (1 : ℝ)) • point +
+    (1 : ℝ) • G.reward ⟨{j}, Finset.singleton_nonempty j⟩ = _
+  simp only [sub_self, zero_smul, one_smul, zero_add]
+
+/-- The segment is the actual one-stage payoff for the solo probability row,
+not merely an affine surrogate for that payoff. -/
+theorem section5SoloSegment_eq_quittingOneStagePayoff (G : QuittingGame)
+    (j : G.Player) (point : Payoff G.Player) (t : UnitInterval) :
+    Section5SoloSegment G j point t =
+      QuittingOneStagePayoff G point (QuitRow.replace G (zeroQuitRow G) j t) := by
+  classical
+  funext who
+  rw [quittingOneStagePayoff_replace_affine_coord]
+  have hzero : zeroQuitRow G = fun _ : G.Player => (0 : Set.Icc (0 : ℝ) 1) := rfl
+  rw [hzero, QuitRow.zero_replace_one, QuitRow.replace_self,
+    quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+  simp only [Section5SoloSegment, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  ring
+
+/-- The actual singleton-response segment already belongs to the canonical
+contractible lower-glue fiber at its continuation point. -/
+theorem section5SoloSegment_mem_lowerGlueFiber (G : QuittingGame) (j : G.Player)
+    (point : Payoff G.Player) (t : UnitInterval) :
+    Section5SoloSegment G j point t ∈ LowerGlueFiber G point := by
+  refine ⟨G.reward ⟨{j}, Finset.singleton_nonempty j⟩, ?_, t, rfl⟩
+  exact subset_convexHull ℝ _
+    (Or.inl ⟨⟨{j}, Finset.singleton_nonempty j⟩, rfl⟩)
+
+/-- At a source below its solo floor, the quitting owner's coordinate cannot
+decrease along the actual singleton segment. -/
+theorem le_section5SoloSegment_own (G : QuittingGame) (j : G.Player)
+    {point : Payoff G.Player} (hpoint : point j ≤ SoloPayoff G j) (t : UnitInterval) :
+    point j ≤ Section5SoloSegment G j point t j := by
+  have hmul := mul_nonneg t.property.1 (sub_nonneg.mpr hpoint)
+  simp only [Section5SoloSegment, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  unfold SoloPayoff at hmul
+  nlinarith
+
+/-- Another abnormal player's min--max gap gives strict actual coordinate
+drift along the owner's singleton segment for every positive local time. -/
+theorem lt_section5SoloSegment_other_of_gap (G : QuittingGame)
+    (owner observer : G.Player) (hne : owner ≠ observer)
+    (habnormal : IsAbnormalPlayer G observer) {ε : ℝ} {point : Payoff G.Player}
+    (hgap : point observer + 3 * ε < MinMaxQuit G observer)
+    (t : UnitInterval) (ht : 0 < (t : ℝ)) :
+    point observer + 3 * ε * (t : ℝ) <
+      Section5SoloSegment G owner point t observer := by
+  have hreward := (lemma5_1 G observer habnormal).2 owner hne
+  have hscaled := mul_lt_mul_of_pos_left (hgap.trans_le hreward) ht
+  simp only [Section5SoloSegment, Pi.add_apply, Pi.smul_apply, smul_eq_mul]
+  nlinarith
+
+/-- The closed artificial locus supplies actual reciprocal solo responses:
+each response leaves its own low coordinate nondecreasing and strictly raises
+the other abnormal coordinate. This is not a boundary-fixed homotopy or an
+unbounded-variation orbit theorem. -/
+theorem section5ArtificialBoundary_exists_reciprocal_solo_drift
+    (G : QuittingGame) (R : ℝ) {ε : ℝ} (hε : IsSection5Accuracy G ε)
+    {point : Payoff G.Player} (hpoint : point ∈ Section5ArtificialBoundary G R) :
+    ∃ k l, k ≠ l ∧ IsAbnormalPlayer G k ∧ IsAbnormalPlayer G l ∧
+      ∀ t : UnitInterval, 0 < (t : ℝ) →
+        point k ≤ Section5SoloSegment G k point t k ∧
+        point l + 3 * ε * (t : ℝ) < Section5SoloSegment G k point t l ∧
+        point l ≤ Section5SoloSegment G l point t l ∧
+        point k + 3 * ε * (t : ℝ) < Section5SoloSegment G l point t k := by
+  obtain ⟨k, l, hne, hk, hl, hpair, hgapk, hgapl⟩ :=
+    section5ArtificialBoundary_exists_two_low_coordinates G R hε hpoint
+  refine ⟨k, l, hne, hk, hl, ?_⟩
+  intro t ht
+  exact ⟨le_section5SoloSegment_own G k hpair.1.1 t,
+    lt_section5SoloSegment_other_of_gap G k l hne hl hgapl t ht,
+    le_section5SoloSegment_own G l hpair.2.1 t,
+    lt_section5SoloSegment_other_of_gap G l k hne.symm hk hgapk t ht⟩
 
 /--
 The unnumbered claim in Section 5: an affirmative answer to Question 1 still
