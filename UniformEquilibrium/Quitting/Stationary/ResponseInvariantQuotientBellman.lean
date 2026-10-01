@@ -39,28 +39,24 @@ theorem quittingRootAbsorptionMass_mul_endpointDifference_stationary
   nlinarith [congrArg
     (fun value => value * continueMassExcl (hazardOfRoot root) who) h]
 
-/-- A nonzero quotient clipped fixed point yields an absorbing stationary
-Nash-Bellman root of the original game, with the actual repeated payoff.
+/-- Every nonzero quotient fixed point decodes to the original independent
+stationary root with exactly its block-lifted hazards and actual payoff.
 This does not assert the Never-response boundary inequality. -/
-theorem exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one
+theorem exists_original_stationaryBellmanRoot_of_nonzero_quotientFixedPoint
     (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
     (block : ι → Fin k) (representative : Fin k → ι)
     (hrepresentative : ∀ coordinate, block (representative coordinate) = coordinate)
     (hresponse : QuittingResponseInvariantOnUnitCube reward block)
-    (hR0 : IsR0Matrix
-      (quittingResponseQuotientMatrix reward block representative))
-    (hdegree : r0Degree (quittingResponseQuotientMatrix reward block representative)
-      hR0 ≠ 1) :
+    (point : Fin k → ℝ) (hpointNe : point ≠ 0)
+    (hfixed : quittingQuotientStationaryClippedMap reward block representative point = point) :
     ∃ root : ι → PMF Bool, ∃ value : Payoff ι,
+      hazardOfRoot root = quittingBlockLift block point ∧
       0 < quittingRootAbsorptionMass root ∧
       value = quittingTerminalPayoff reward (quittingStationaryProfile reward root) ∧
       value = quittingRootSuccessorPayoff reward value root ∧
       IsεQuittingRootNash reward value 0 root ∧
       ∀ first second, block first = block second →
         hazardOfRoot root first = hazardOfRoot root second := by
-  obtain ⟨point, hpointNe, hfixed⟩ :=
-    exists_nonzero_quittingQuotientStationaryClippedMap_fixedPoint
-      reward block representative hrepresentative hR0 hdegree
   have hcube := quittingQuotientStationaryClippedMap_mem_unitCube
     reward block representative point
   rw [hfixed] at hcube
@@ -138,11 +134,37 @@ theorem exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one
         have hzeroDiff : quittingRootEndpointDifference reward value root who = 0 := by
           nlinarith [hcases.2.1 hpos hlt]
         simp [hzeroDiff]
-  refine ⟨root, value, hpositive, rfl, hbellman,
+  refine ⟨root, value, hrootHazard, hpositive, rfl, hbellman,
     (isZeroQuittingRootEndpointNash_iff_isZeroQuittingRootNash
       reward value root).mp hendpoint, ?_⟩
   intro first second hblock
   rw [hrootHazard]
   simp only [hazard, quittingBlockLift, hblock]
+
+/-- The degree escape produces an absorbing original stationary Bellman root.
+The nonzero-root decoder above owns the actual payoff and individual Nash proof. -/
+theorem exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (block : ι → Fin k) (representative : Fin k → ι)
+    (hrepresentative : ∀ coordinate, block (representative coordinate) = coordinate)
+    (hresponse : QuittingResponseInvariantOnUnitCube reward block)
+    (hR0 : IsR0Matrix
+      (quittingResponseQuotientMatrix reward block representative))
+    (hdegree : r0Degree (quittingResponseQuotientMatrix reward block representative)
+      hR0 ≠ 1) :
+    ∃ root : ι → PMF Bool, ∃ value : Payoff ι,
+      0 < quittingRootAbsorptionMass root ∧
+      value = quittingTerminalPayoff reward (quittingStationaryProfile reward root) ∧
+      value = quittingRootSuccessorPayoff reward value root ∧
+      IsεQuittingRootNash reward value 0 root ∧
+      ∀ first second, block first = block second →
+        hazardOfRoot root first = hazardOfRoot root second := by
+  obtain ⟨point, hpointNe, hfixed⟩ :=
+    exists_nonzero_quittingQuotientStationaryClippedMap_fixedPoint
+      reward block representative hrepresentative hR0 hdegree
+  obtain ⟨root, value, _hhazard, hdata⟩ :=
+    exists_original_stationaryBellmanRoot_of_nonzero_quotientFixedPoint
+      reward block representative hrepresentative hresponse point hpointNe hfixed
+  exact ⟨root, value, hdata⟩
 
 end GameTheory

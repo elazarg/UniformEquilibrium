@@ -11,7 +11,9 @@ Its assumption matches `exists_scale_without_sure_quitter_of_not_instant`
 (`Literature/Simon2007.lean`): one positive support-error scale excludes sure
 quitters at every continuation above the fixed minmax floor. The question
 asks whether that source implies all-Continue uniqueness above one common
-threshold. No global survival bound or answer to that implication is assumed.
+threshold. It supplies neither a global survival bound nor an answer to that
+implication. The conditional escape consumer below retains that global bound
+as an explicit hypothesis.
 
 ## Corrected Lemma 5
 
@@ -57,8 +59,9 @@ for all-normal games. One actual nonconvergent exact orbit supplies every
 positive-error orbit family; the existing rational-tail, finite-return and
 cyclic-profile producers give actual approximate equilibria. No escape carrier,
 equilibrium component, five-way equivalence, or unfinished Lemma 5 is used.
-The full Theorem 4 still needs the remaining alternatives and their source
-construction. Both Simon modules pass silent named checks; separate transitive
+The conditional escape consumer below assembles the remaining alternatives
+under the explicit global parameter; the literal Theorem 4 remains open.
+Both Simon modules pass silent named checks; separate transitive
 axiom checks of the new declarations use only the three standard axioms.
 
 ## The convergent-orbit alternative
@@ -80,9 +83,9 @@ same limit in the actual escape witness's set and boundary band, retaining
 the orbit's carrier and allowing accuracy zero.
 
 These declarations pass silent named checks of both Simon modules and a
-separate transitive standard-axiom check. They do not produce an escape
-orbit, supply the initial solo-move variation charge, or prove the remaining
-component-lifting case of Theorem 4. No fixed uniform payoff is asserted.
+separate transitive standard-axiom check. The actual charged return and renewal
+consumers below use them without replacing the original orbit or its limit.
+No fixed uniform payoff is asserted.
 
 ## Actual critical paths and charged initial moves
 
@@ -121,8 +124,28 @@ compact connected fixed-point set meeting both endpoint fibers for a
 continuous interval family on a nonempty compact convex finite-dimensional
 carrier. Its source data contains no selected spanning component, regularity
 or interior assumption. This supplies the generic interval theorem needed
-by the literal three-segment Case 3 parameter path. It does not prove the
-stronger arbitrary-connected-compact-parameter statement of Lemma 8.
+by the literal three-segment Case 3 parameter path.
+
+`Math.exists_compact_connected_fixedPoint_graph_over_connected_set`
+(`MathUE/Topology/CompactConnectedFixedPointGraph.lean`) extends that owner
+to any compact preconnected parameter set in a locally path-connected metric
+space, for a globally continuous family. The parameter set itself need not
+be path connected. Component separation and compact-fiber closed projection
+supply a neighborhood path; the final compact connected fixed graph lies over
+the original set, not merely over that path. The product-simplex adapter is
+`GameTheory.exists_compact_connected_mixedSimplex_graph_over_connected_set`
+(`UniformEquilibrium/ProofView/Concepts/Existence/MixedSimplexConnectedParameter.lean`).
+
+`exists_compact_connected_repeatedEquilibria_over_connected_set` and literal
+`lemma8` (`Literature/Simon2007.lean`) apply this to the actual global timer
+Nash map. Under the displayed no-sure-quitting condition, positive Never mass
+supplies continuous decoding of those same selected fixed points. They retain
+the original compact connected continuation set and both endpoint fibers;
+neither a path inside that set nor a homology witness is supplied. The literal
+standing `1 ≤ k` premise remains; the underlying producer also covers `k = 0`.
+The generic, simplex and literal Simon declarations pass silent named checks.
+Their separate transitive axiom checks use only `propext`, `Quot.sound` and
+`Classical.choice`.
 
 `repeatedTimerQuitProfile_eq_conditional` and
 `continuousOn_repeatedTimerQuitProfile` (`Literature/Simon2007.lean`) reuse
@@ -170,8 +193,9 @@ forces the large endpoint to be all-Continue only under the literal global
 `IsUniformRho` premise from the old printed Lemma 5. Its row-uniqueness
 proof uses only the survival half of that premise, not the motion half.
 The corrected compact-carrier motion/survival producer does not discharge
-the unbounded-tail premise. The arbitrary-connected-compact-parameter Lemma 8 and
-the remaining Case 3 branch assembly are separate obligations. The canonical timer
+the unbounded-tail premise. The conditional actual-source renewal below uses
+this global premise explicitly; it does not discharge literal Lemma 9.
+The canonical timer
 owner and both Simon modules pass silent named builds. Separate transitive
 axiom checks of these new timer, floor and component declarations use only
 the three standard axioms.
@@ -211,10 +235,47 @@ does not assume the global parameter or infer convexity from its endpoints.
 The Simon (2007) named check and a separate transitive standard-axiom check
 of these declarations pass.
 
-Both Simon modules pass silent named checks. Separate transitive axiom checks
-of the gap, word, frontier, upper-wall and first-segment declarations use only `propext`,
-`Quot.sound` and `Classical.choice`. Full orbit concatenation and the remaining
-escape-game alternatives are not established by these components alone.
+`EscapeWitness.exists_caseThreeChargedExcursion_of_uniformRho`
+(`Literature/Simon2007.lean`) joins the literal initial edge, backward word
+and internally produced finite critical return with exact retained variation.
+It retains the explicit global parameter. The same file's
+`EscapeWitness.exists_chargedCriticalInfiniteSegmentReturns_of_not_branches`
+handles every actual exact infinite orbit from the produced successor:
+nonconvergence supplies approximate equilibria; convergence retains that same
+orbit, its actual limit, charged initial edge and internally produced finite
+critical return. This second join does not need the global parameter.
+Both joins pass the named Simon builds and transitive standard-axiom checks.
+
+`exists_renewedExtendedOrbit_of_charged_twoSegment_returns`
+(`MathUE/Topology/PairedSegmentRenewal.lean`) selects local finite or
+convergent-infinite two-segment returns recursively and produces one extended
+orbit with unbounded rectangular variation. Every selected segment and stitch
+is retained. The local-existence premise remains explicit: this generic theorem
+does not supply Simon's game-specific return source. Its named build and
+transitive standard-axiom check pass.
+
+`EscapeWitness.exists_chargedCriticalTwoSegmentReturns_of_uniformRho`
+(`Literature/Simon2007.lean`) supplies that actual source for all-normal escape
+witnesses under explicit `IsUniformRho`. One bound, motion rate and small-error
+scale precede every critical restart. Generated and instant branches already
+produce approximate equilibria. Otherwise each restart receives an actual
+finite excursion or the original convergent infinite segment with its actual
+finite return, retaining every point, stitch and a common positive variation
+charge. Nonconvergent exact orbits are consumed by their equilibrium producer.
+
+`EscapeWitness.hasQuitApproximateEquilibria_of_uniformRho` in the same file
+recursively stitches those source-produced blocks into one actual extended
+orbit with unbounded rectangular variation. Rationality comes from the actual
+critical seed and restricted-correspondence invariant. The checked
+`ExtendedOrbitCondition.hasQuitApproximateEquilibria` consumes that same orbit.
+The hypotheses are an actual `EscapeWitness`, all-normal players, and global
+`IsUniformRho`; no favorable return, selected orbit or charge certificate is
+supplied. This completes the conditional source assembly, not literal Theorem 4
+under its weaker standing assumptions and not a fixed uniform payoff target.
+
+Both Simon modules and the renewal consumers pass silent named checks.
+Separate transitive axiom checks use only `propext`, `Quot.sound` and
+`Classical.choice`.
 
 ## High-continuation uniqueness: literal Lemma 9
 
@@ -770,9 +831,8 @@ nearest checked dependencies and unresolved inputs:
 | `theorem3` | `CyclicOrbitCondition.hasQuitApproximateEquilibria`, `FiniteNearOrbitCondition.toCyclicOrbitCondition`, and `CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho` assemble the other edges. | Its local `HasQuitApproximateEquilibria → CyclicOrbitCondition` hole, as well as the open printed `lemma5` it invokes. The checked `hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction` requires a separate extraction premise and corrected motion. |
 | `theorem3_corrected_2012` | `CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion` and the same orbit compilers cover the non-forward edges; `Literature.Simon2012.theorem2_1` only transports this very declaration to Euclidean norm. | `lemma5_corrected_2012` plus `HasCorrectedFirstCrossingPathExtraction` (or an equivalent equilibrium-to-cyclic proof). The conditional checked first-crossing compiler does not construct its extraction premise. |
 | `KohlbergMertensStatement` | `MatrixEquilibriumGraph` and `MatrixNorm` express the matrix-game target. | The external Kohlberg–Mertens homotopy theorem in the stated straight/proper form; no checked homotopy construction is present. |
-| `lemma8` | `repeatedF_eq_iterate_of_no_sure_quit` identifies the repeated payoff correspondence; `exists_compact_connected_repeatedEquilibria_along_continuous_path` constructs actual connected equilibrium sets spanning continuous interval paths under no-sure. | The stronger lifting statement over arbitrary connected compact `D`; the checked interval continuation theorem does not establish this statement. |
 | `lemma9` | `lemma9_of_uniformRho` proves high-tail all-Continue uniqueness from the old printed global parameter; `exists_largeRepeatedAllContinueThreshold_of_uniformRho` lifts that conditional result to all finite repeated lengths. | An actual proof under the printed escape/no-stationary/no-instant standing assumptions. The corrected-source construction needs a high-tail producer under no-stationarily-generated/no-instant, not merely a compact survival bound. |
-| `theorem4` | Actual critical paths, charged solo moves, interval equilibrium components, exact backward words and charged critical returns are checked. `EscapeWitness.exists_caseThreeUpperWallOrbit_of_uniformRho` supplies the selected first-segment word under the global parameter. | The actual high-continuation all-Continue uniqueness source, full orbit concatenation and remaining branch assembly. The global-`IsUniformRho` consumer is not that source; these finite components alone are not an equilibrium of the original infinite game. |
+| `theorem4` | `EscapeWitness.hasQuitApproximateEquilibria_of_uniformRho` constructs actual local returns, their stitched extended orbit and approximate equilibria for all-normal escape witnesses under explicit global `IsUniformRho`. | The actual high-continuation uniqueness source under the literal weaker standing assumptions; the conditional global-parameter consumer does not supply it. |
 
 The matching 2012 structure statements still depend on the corresponding
 open 2007 declarations. The conditional global-parameter helper does not

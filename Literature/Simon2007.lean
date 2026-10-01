@@ -7,6 +7,9 @@ import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.CompactFiniteChargedReturn
 import MathUE.Topology.ExtendedOrbit
+import MathUE.Topology.FiniteOrbitAppend
+import MathUE.Topology.PairedSegmentRenewal
+import MathUE.Topology.TwoSegmentOrbitBlocks
 import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -20,6 +23,7 @@ import UniformEquilibrium.Quitting.Root.HazardProfileBridge
 import UniformEquilibrium.Quitting.Terminal.ContinuationFiniteTimingGame
 import UniformEquilibrium.Quitting.Punishment.FiniteWordPunishmentFloor
 import UniformEquilibrium.ProofView.Concepts.Existence.MixedSimplexContinuation
+import UniformEquilibrium.ProofView.Concepts.Existence.MixedSimplexConnectedParameter
 
 /-!
 # Robert Samuel Simon, *The structure of non-zero-sum stochastic games* (2007)
@@ -23079,18 +23083,73 @@ theorem repeatedEquilibrium_endpoints_sameComponent_of_no_sure_quit
     component, hconnected, hpx, hpy, hgraph⟩
 
 
+/-- The globally defined timer-game Nash map supplies connected continuation
+over an arbitrary compact preconnected payoff set. No path inside the set or
+homological spanning witness is an input. -/
+theorem exists_compact_connected_repeatedEquilibria_over_connected_set
+    (G : QuittingGame) (k : ℕ) (D : Set (Payoff G.Player))
+    (hDcompact : IsCompact D) (hD : _root_.IsPreconnected D)
+    (hnoSure : ∀ z ∈ D, ∀ p ∈ RepeatedEquilibriumCorrespondence G k z,
+      ∀ time who, (p time who : ℝ) < 1)
+    (x : Payoff G.Player) (hx : x ∈ D) (y : Payoff G.Player) (hy : y ∈ D) :
+    ∃ component : Set (Payoff G.Player × RepeatedQuitProfile G k),
+      IsCompact component ∧ _root_.IsConnected component ∧
+      (∀ point ∈ component,
+        point.1 ∈ D ∧ point.2 ∈ RepeatedEquilibriumCorrespondence G k point.1) ∧
+      (∃ p, (x, p) ∈ component) ∧ (∃ p, (y, p) ∈ component) := by
+  classical
+  let family : C(Payoff G.Player × RepeatedTimerSimplex G k, RepeatedTimerSimplex G k) :=
+    ⟨fun point => (RepeatedTimerGame G k point.1).nashMapOnMixedSimplex point.2,
+      continuous_repeatedTimerGame_nashMap G k⟩
+  obtain ⟨component, hcompact, hconnected, hfixed, hfirst, hlast⟩ :=
+    GameTheory.exists_compact_connected_mixedSimplex_graph_over_connected_set
+      family D hDcompact hD x hx y hy
+  have hequilibrium (point : Payoff G.Player × RepeatedTimerSimplex G k)
+      (hpoint : point ∈ component) :
+      repeatedTimerQuitProfile G k point.2 ∈
+        RepeatedEquilibriumCorrespondence G k point.1 :=
+    repeatedTimer_fixedPoint_implies_repeatedEquilibrium G k
+      point.1 point.2 (hfixed point hpoint).2
+  have hnone (point : Payoff G.Player × RepeatedTimerSimplex G k)
+      (hpoint : point ∈ component) : ∀ who, 0 < (point.2 who).weights none := by
+    intro who
+    apply (Math.Probability.FiniteStoppingSimplex.none_pos_iff_stop_lt_one
+      (point.2 who)).mpr
+    intro time
+    exact hnoSure point.1 (hfixed point hpoint).1
+      (repeatedTimerQuitProfile G k point.2) (hequilibrium point hpoint) time who
+  let decode := fun point : Payoff G.Player × RepeatedTimerSimplex G k =>
+    (point.1, repeatedTimerQuitProfile G k point.2)
+  have hdecode : ContinuousOn decode component :=
+    continuous_fst.continuousOn.prodMk
+      ((continuousOn_repeatedTimerQuitProfile G k).comp continuous_snd.continuousOn
+        (fun point hpoint => hnone point hpoint))
+  refine ⟨decode '' component, hcompact.image_of_continuousOn hdecode,
+    hconnected.image decode hdecode, ?_, ?_, ?_⟩
+  · rintro point ⟨source, hsource, rfl⟩
+    exact ⟨(hfixed source hsource).1, hequilibrium source hsource⟩
+  · obtain ⟨simplex, hsimplex⟩ := hfirst
+    exact ⟨repeatedTimerQuitProfile G k simplex, ⟨(x, simplex), hsimplex, rfl⟩⟩
+  · obtain ⟨simplex, hsimplex⟩ := hlast
+    exact ⟨repeatedTimerQuitProfile G k simplex, ⟨(y, simplex), hsimplex, rfl⟩⟩
+
 /--
 Lemma 8, with the printed endpoint typo repaired.  The paper prints `(x,pʸ)` at the
 second endpoint, but membership and the proof require `(y,pʸ)`, which is stated here.
 -/
-theorem lemma8 (G : QuittingGame) {k : ℕ} (hk : 1 ≤ k)
+theorem lemma8 (G : QuittingGame) {k : ℕ} (_hk : 1 ≤ k)
     (D : Set (Payoff G.Player)) (hD : _root_.IsConnected D ∧ IsCompact D)
     (hnoSure : ∀ z ∈ D, ∀ p ∈ RepeatedEquilibriumCorrespondence G k z,
       ∀ i n, (p i n : ℝ) < 1) :
     ∀ x ∈ D, ∀ y ∈ D, ∃ px ∈ RepeatedEquilibriumCorrespondence G k x,
       ∃ py ∈ RepeatedEquilibriumCorrespondence G k y,
         SameRepeatedEquilibriumComponent G k D (x, px) (y, py) := by
-  sorry
+  intro x hx y hy
+  obtain ⟨component, _hcompact, hconnected, hgraph, ⟨px, hpx⟩, ⟨py, hpy⟩⟩ :=
+    exists_compact_connected_repeatedEquilibria_over_connected_set
+      G k D hD.2 hD.1.isPreconnected hnoSure x hx y hy
+  exact ⟨px, (hgraph _ hpx).2, py, (hgraph _ hpy).2,
+    component, hconnected, hpx, hpy, hgraph⟩
 
 /-! ### 5.5. Escape games have approximate equilibria -/
 
@@ -23492,6 +23551,102 @@ theorem extendedOrbitStaysIn_of_closedCore
   intro j hj i hi
   exact segment_mem j hj (segment_start j hj) i hi
 
+/-- The approximate rational region is closed, without any escape-game hypothesis. -/
+theorem isClosed_rationalRegion (G : QuittingGame) (ε : ℝ) :
+    IsClosed {r | IsRational G ε r} := by
+  have heq : {r | IsRational G ε r} =
+      ⋂ n, {r | MinMaxQuit G n - ε ≤ r n} := by
+    ext r
+    simp [IsRational]
+  rw [heq]
+  exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
+
+/-- The actual restricted correspondence preserves approximate rationality at the
+printed small-step scale. No stationary exclusion or global survival parameter is needed. -/
+theorem restrictedEscapeCorrespondence_preserves_rational
+    (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M)
+    (hnormal : ∀ n, IsNormalPlayer G n) (hε : 0 < ε) (hε1 : ε < 1) :
+    ∀ r ∈ {r | IsRational G ε r},
+      RestrictedEscapeCorrespondence G (ε / (10 * M * Fintype.card G.Player)) ε r ⊆
+        {r | IsRational G ε r} := by
+  classical
+  let δ := ε / (10 * M * Fintype.card G.Player)
+  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
+    exact_mod_cast Fintype.card_pos
+  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
+  have hδsmall : 2 * M * δ ≤ ε := by
+    dsimp [δ]
+    rw [div_eq_mul_inv]
+    field_simp
+    nlinarith
+  intro r hr s hs
+  rcases hs with hs | ⟨j, p, hrband, hrj, hp, rfl⟩
+  · let a : ℝ := ε / 3
+    have ha0 : 0 < a := div_pos hε (by norm_num)
+    have ha1 : a ≤ 1 := by dsimp [a]; linarith
+    have herror0 : 0 ≤ a ^ 2 / (2 * M) := by positivity
+    have hstep : s ∈ FRow G (a ^ 2 / (2 * M)) r :=
+      FRow.mono G herror0 r hs
+    intro n
+    have hrA : r n ≥ MinMaxQuit G n - 3 * a := by
+      dsimp [a]
+      convert hr n using 1
+      all_goals ring
+    have hpreserve := (lemma6_quantitative G hM hnormal ha0 ha1 hstep n).1
+      hrA
+    dsimp [a] at hpreserve
+    convert hpreserve using 1
+    all_goals ring
+  · let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+    have hpFromZero : p = zeroRow.replace G j (p j) := by
+      funext k
+      by_cases hkj : k = j
+      · subst k
+        simp [QuitRow.replace]
+      · apply Subtype.ext
+        simp only [QuitRow.replace, hkj, ite_false, zeroRow]
+        exact (hp.2 k hkj)
+    have hzeroJ : zeroRow.replace G j 0 = zeroRow := zeroRow.replace_self G j
+    intro n
+    have hformula : QuittingOneStagePayoff G r p n =
+        (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n +
+          (1 - (p j : ℝ)) * r n := by
+      rw [hpFromZero]
+      rw [quittingOneStagePayoff_replace_affine_coord]
+      rw [QuitRow.zero_replace_one, hzeroJ]
+      rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+      simp [QuitRow.replace]
+    rw [hformula]
+    have hrewards : -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n :=
+      neg_le_of_abs_le (le_of_lt (hM.2.2 _ n))
+    have hrminmax : MinMaxQuit G n ≤ r n := (hnormal n).trans (hrband.1 n)
+    have hminmaxM : MinMaxQuit G n ≤ M := by
+      exact (hnormal n).trans (le_trans (le_abs_self _)
+        (le_of_lt (hM.2.2 ⟨{n}, Finset.singleton_nonempty n⟩ n)))
+    have hweightedReward := mul_le_mul_of_nonneg_left hrewards (p j).property.1
+    have hweightedContinuation := mul_le_mul_of_nonneg_left hrminmax
+      (sub_nonneg.mpr (p j).property.2)
+    have hpδ : (p j : ℝ) ≤ δ := hp.1
+    have hscaled : 2 * M * (p j : ℝ) ≤ ε := by
+      exact (mul_le_mul_of_nonneg_left hpδ (by positivity : 0 ≤ 2 * M)).trans hδsmall
+    nlinarith [mul_nonneg (p j).property.1 (sub_nonneg.mpr hminmaxM)]
+
+/-- Closed rationality survives finite stitches and actual infinite-segment limits
+for the same restricted correspondence and printed small-step scale. -/
+theorem extendedRestrictedOrbit_stays_rational
+    (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M)
+    (hnormal : ∀ n, IsNormalPlayer G n) (hε : 0 < ε) (hε1 : ε < 1)
+    (x : ExtendedOrbitData
+      (RestrictedEscapeCorrespondence G (ε / (10 * M * Fintype.card G.Player)) ε))
+    (hx : x.point 0 0 ∈ {r | IsRational G ε r}) :
+    ExtendedOrbitStaysIn x {r | IsRational G ε r} :=
+  extendedOrbitStaysIn_of_closed_forwardInvariant x _
+    (isClosed_rationalRegion G ε)
+    (restrictedEscapeCorrespondence_preserves_rational G hM hnormal hε hε1) hx
+
 /--
 Lemma 10.  For `δ=ε/(10M|N|)`, `Ḽ_δ ⊆ F_ε`; extended restricted orbits
 preserve the `ε`-rational region, `Q`, and `Q \ (W ∪ T)` as stated.
@@ -23499,8 +23654,8 @@ preserve the `ε`-rational region, `Q`, and `Q \ (W ∪ T)` as stated.
 theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
     (hM : IsQuittingPayoffDifferenceBound G M) (hρ : IsUniformRho G ρ)
     (hnormal : ∀ n, IsNormalPlayer G n)
-    (hstationary : ¬HasStationaryApproximateEquilibria G)
-    (hinstant : ¬HasInstantApproximateEquilibria G)
+    (_hstationary : ¬HasStationaryApproximateEquilibria G)
+    (_hinstant : ¬HasInstantApproximateEquilibria G)
     (hε : 0 < ε) (hεe : ε < E.ebar) (hερ : ε < ρ) :
     let δ := ε / (10 * M * Fintype.card G.Player)
     (∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x) ∧
@@ -23514,80 +23669,9 @@ theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
         ExtendedOrbitStaysIn x (E.Q \ (WSet G ∪ EscapeBand G ε)) := by
   classical
   let δ := ε / (10 * M * Fintype.card G.Player)
-  have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
-  have hMpositive : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
   have hε1 : ε < 1 := lt_of_lt_of_le hερ hρ.2.1
-  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
-    exact_mod_cast Fintype.card_pos
-  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
-  have hδ0 : 0 < δ := div_pos hε hdenominator
-  have hδsmall : 2 * M * δ ≤ ε := by
-    dsimp [δ]
-    rw [div_eq_mul_inv]
-    field_simp
-    nlinarith
   have hsubset : ∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x := by
     exact restrictedEscapeCorrespondence_subset G hM hε
-  have hrationalClosed : IsClosed {r | IsRational G ε r} := by
-    have heq : {r | IsRational G ε r} =
-        ⋂ n, {r | MinMaxQuit G n - ε ≤ r n} := by
-      ext r
-      simp [IsRational]
-    rw [heq]
-    exact isClosed_iInter fun n => isClosed_le continuous_const (continuous_apply n)
-  have hrationalForward : ∀ r ∈ {r | IsRational G ε r},
-      RestrictedEscapeCorrespondence G δ ε r ⊆ {r | IsRational G ε r} := by
-    intro r hr s hs
-    rcases hs with hs | ⟨j, p, hrband, hrj, hp, rfl⟩
-    · let a : ℝ := ε / 3
-      have ha0 : 0 < a := div_pos hε (by norm_num)
-      have ha1 : a ≤ 1 := by dsimp [a]; linarith
-      have herror0 : 0 ≤ a ^ 2 / (2 * M) := by positivity
-      have hstep : s ∈ FRow G (a ^ 2 / (2 * M)) r :=
-        FRow.mono G herror0 r hs
-      intro n
-      have hrA : r n ≥ MinMaxQuit G n - 3 * a := by
-        dsimp [a]
-        convert hr n using 1
-        all_goals ring
-      have hpreserve := (lemma6 G hM hnormal hstationary hinstant ha0 ha1 hstep n).1
-        hrA
-      dsimp [a] at hpreserve
-      convert hpreserve using 1
-      all_goals ring
-    · let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
-      have hpFromZero : p = zeroRow.replace G j (p j) := by
-        funext k
-        by_cases hkj : k = j
-        · subst k
-          simp [QuitRow.replace]
-        · apply Subtype.ext
-          simp only [QuitRow.replace, hkj, ite_false, zeroRow]
-          exact (hp.2 k hkj)
-      have hzeroJ : zeroRow.replace G j 0 = zeroRow := zeroRow.replace_self G j
-      intro n
-      have hformula : QuittingOneStagePayoff G r p n =
-          (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n +
-            (1 - (p j : ℝ)) * r n := by
-        rw [hpFromZero]
-        rw [quittingOneStagePayoff_replace_affine_coord]
-        rw [QuitRow.zero_replace_one, hzeroJ]
-        rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
-        simp [QuitRow.replace]
-      rw [hformula]
-      have hrewards : -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ n :=
-        neg_le_of_abs_le (le_of_lt (hM.2.2 _ n))
-      have hrminmax : MinMaxQuit G n ≤ r n := (hnormal n).trans (hrband.1 n)
-      have hminmaxM : MinMaxQuit G n ≤ M := by
-        exact (hnormal n).trans (le_trans (le_abs_self _)
-          (le_of_lt (hM.2.2 ⟨{n}, Finset.singleton_nonempty n⟩ n)))
-      have hweightedReward := mul_le_mul_of_nonneg_left hrewards (p j).property.1
-      have hweightedContinuation := mul_le_mul_of_nonneg_left hrminmax
-        (sub_nonneg.mpr (p j).property.2)
-      have hpδ : (p j : ℝ) ≤ δ := hp.1
-      have hscaled : 2 * M * (p j : ℝ) ≤ ε := by
-        exact (mul_le_mul_of_nonneg_left hpδ (by positivity : 0 ≤ 2 * M)).trans hδsmall
-      nlinarith [mul_nonneg (p j).property.1 (sub_nonneg.mpr hminmaxM)]
   have hQForward : ∀ r ∈ E.Q,
       RestrictedEscapeCorrespondence G δ ε r ⊆ E.Q := by
     intro r hr s hs
@@ -23646,8 +23730,7 @@ theorem lemma10 (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
   dsimp only
   refine ⟨hsubset, ?_, ?_, ?_⟩
   · intro x hx
-    exact extendedOrbitStaysIn_of_closed_forwardInvariant x _ hrationalClosed
-      hrationalForward hx
+    exact extendedRestrictedOrbit_stays_rational G hM hnormal hε hε1 x hx
   · intro x hx
     exact extendedOrbitStaysIn_of_closed_forwardInvariant x E.Q E.Q_closed hQForward hx
   · intro x hx
@@ -23866,83 +23949,9 @@ private theorem exists_appendFiniteOrbit {X : Type} {F : Correspondence X X}
     ∃ c : Fin (k + l + 1) → X, c 0 = z 0 ∧ IsFiniteOrbit F c ∧
       (∀ i, c i ∈ A) ∧ c ⟨k + l, Nat.lt_succ_self (k + l)⟩ =
         w ⟨l, Nat.lt_succ_self l⟩ := by
-  let c : Fin (k + l + 1) → X := fun i =>
-    if h : (i : ℕ) ≤ k then z ⟨i, by omega⟩ else w ⟨(i : ℕ) - k, by omega⟩
-  refine ⟨c, ?_, ?_, ?_, ?_⟩
-  · simp [c]
-  · intro i
-    by_cases hik : (i : ℕ) < k
-    · let iz : Fin k := ⟨i, hik⟩
-      have hsource : c i.castSucc = z iz.castSucc := by
-        dsimp only [c]
-        simp only [Fin.val_castSucc]
-        rw [dite_eq_left hik.le]
-        apply congrArg z
-        apply Fin.ext
-        rfl
-      have htarget : c i.succ = z iz.succ := by
-        dsimp only [c]
-        simp only [Fin.val_succ]
-        rw [dite_eq_left (Nat.succ_le_iff.mpr hik)]
-        apply congrArg z
-        apply Fin.ext
-        rfl
-      rw [hsource, htarget]
-      exact hz iz
-    · have hki : k ≤ (i : ℕ) := Nat.le_of_not_gt hik
-      by_cases hieq : (i : ℕ) = k
-      · have hl0 : 0 < l := by omega
-        let iw : Fin l := ⟨0, hl0⟩
-        have hsource : c i.castSucc = z ⟨k, Nat.lt_succ_self k⟩ := by
-          dsimp only [c]
-          simp only [Fin.val_castSucc]
-          rw [dite_eq_left (hieq.le)]
-          apply congrArg z
-          exact Fin.ext hieq
-        have htarget : c i.succ = w iw.succ := by
-          dsimp only [c]
-          simp only [Fin.val_succ]
-          rw [dite_eq_right (by omega)]
-          apply congrArg w
-          apply Fin.ext
-          dsimp only [iw]
-          simp only [Fin.val_succ]
-          omega
-        rw [hsource, htarget, hstitch]
-        exact hw iw
-      · have hkiStrict : k < (i : ℕ) := hki.lt_of_ne (Ne.symm hieq)
-        let iw : Fin l := ⟨(i : ℕ) - k, by omega⟩
-        have hsource : c i.castSucc = w iw.castSucc := by
-          dsimp only [c]
-          simp only [Fin.val_castSucc]
-          rw [dite_eq_right (by omega)]
-          apply congrArg w
-          apply Fin.ext
-          rfl
-        have htarget : c i.succ = w iw.succ := by
-          dsimp only [c]
-          simp only [Fin.val_succ]
-          rw [dite_eq_right (by omega)]
-          apply congrArg w
-          apply Fin.ext
-          dsimp only [iw]
-          simp only [Fin.val_succ]
-          omega
-        rw [hsource, htarget]
-        exact hw iw
-  · intro i
-    by_cases hi : (i : ℕ) ≤ k
-    · simpa only [c, dite_eq_left hi] using hzA ⟨i, by omega⟩
-    · simpa only [c, dite_eq_right hi] using hwA ⟨(i : ℕ) - k, by omega⟩
-  · by_cases hl : l = 0
-    · subst l
-      simpa [c] using hstitch
-    · have hl0 : 0 < l := Nat.pos_of_ne_zero hl
-      dsimp only [c]
-      rw [dite_eq_right (by omega)]
-      apply congrArg w
-      apply Fin.ext
-      simp
+  obtain ⟨c, hzero, horbit, hcarrier, hlast, _, _⟩ :=
+    Math.Topology.exists_appendFiniteOrbit_with_embeddings z w hz hw hstitch hzA hwA
+  exact ⟨c, hzero, horbit, hcarrier, hlast⟩
 
 /-- A point weakly above every solo payoff and equal to one lies on `∂W`. -/
 theorem mem_frontier_WSet_of (G : QuittingGame) (x : Payoff G.Player)
@@ -26717,6 +26726,612 @@ theorem EscapeWitness.exists_caseThreeUpperWallOrbit_of_uniformRho
   exact ⟨threshold, hthreshold, k, component, source, hcompact, hconnected, hgraph, hnoSure,
     hbottom, htop, hsourcePoint, hfirst, hformalSegment, hfloor, hwall, horbit,
     fun time => ⟨hwordQ time, hwordCarrier time⟩⟩
+
+/-- The finite Case 3 stitch from the actual selected first-segment timer word.
+The crossing word remains explicit source data supplied by the preceding
+upper-wall producer; this theorem does not produce it or remove global rho.
+The return is selected internally, and both original subwords and their exact
+variation are retained, including zero-edge timer and return words. -/
+theorem EscapeWitness.exists_caseThreeChargedFiniteExcursion
+    {G : QuittingGame} (witness : EscapeWitness G) {M accuracy : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (haccuracy : 0 < accuracy) (haccuracyOne : accuracy < 1)
+    (haccuracyEscape : accuracy < witness.ebar)
+    (critical : Payoff G.Player) (hcritical : critical ∈ witness.Q ∩ frontier (WSet G))
+    (owner : G.Player) (howner : critical owner = SoloPayoff G owner)
+    (row : QuitRow G)
+    (hsmall : IsSmallSoloRow G
+      (accuracy / (10 * M * Fintype.card G.Player)) owner row)
+    (k : ℕ) (terminal : Payoff G.Player) (profile : RepeatedQuitProfile G k)
+    (hterminal : terminal ∈
+      PayoffSegment G (QuittingOneStagePayoff G critical row) critical)
+    (hword : IsFiniteOrbit (FRow G 0)
+      (repeatedBackwardPayoffOrbit G k terminal profile))
+    (hcarrier : ∀ time, repeatedBackwardPayoffOrbit G k terminal profile time ∈
+      witness.Q ∩ (WSet G ∪ EscapeBand G accuracy))
+    (hfloor : ∀ who, SoloPayoff G who + accuracy ≤ RepeatedPayoff G k terminal profile who)
+    (hwall : ∃ who, RepeatedPayoff G k terminal profile who = SoloPayoff G who + accuracy) :
+    let delta := accuracy / (10 * M * Fintype.card G.Player)
+    ∃ (length : ℕ) (returnWord : Fin (length + 1) → Payoff G.Player)
+      (point : Fin (k + 1 + length + 1) → Payoff G.Player),
+      returnWord 0 = RepeatedPayoff G k terminal profile ∧
+      IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy) returnWord ∧
+      (∀ time, returnWord time ∈ witness.Q ∩ EscapeBand G accuracy) ∧
+      IsCriticalPoint G (returnWord (Fin.last length)) ∧
+      point 0 = critical ∧
+      IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy) point ∧
+      (∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) ∧
+      point (Fin.last (k + 1 + length)) = returnWord (Fin.last length) ∧
+      (∀ time : Fin (k + 1 + 1), point ⟨time, by omega⟩ =
+        Fin.cons (α := fun _ : Fin (k + 1 + 1) => Payoff G.Player)
+          critical (repeatedBackwardPayoffOrbit G k terminal profile) time) ∧
+      (∀ time : Fin (length + 1), point ⟨k + 1 + time, by omega⟩ = returnWord time) ∧
+      FiniteOrbitVariation point =
+        ‖terminal - critical‖ +
+          FiniteOrbitVariation (repeatedBackwardPayoffOrbit G k terminal profile) +
+          FiniteOrbitVariation returnWord ∧
+      accuracy ≤ FiniteOrbitVariation returnWord ∧
+      accuracy ≤ FiniteOrbitVariation point := by
+  dsimp only
+  let delta := accuracy / (10 * M * Fintype.card G.Player)
+  let backward := repeatedBackwardPayoffOrbit G k terminal profile
+  let first : Fin (k + 1 + 1) → Payoff G.Player :=
+    Fin.cons (α := fun _ : Fin (k + 1 + 1) => Payoff G.Player) critical backward
+  have hedge : terminal ∈ RestrictedEscapeCorrespondence G delta accuracy critical :=
+    smallSoloSuccessor_segment_subset_restricted_of_frontier
+      G haccuracy.le critical hcritical.2 owner howner row hsmall hterminal
+  have hfirstOrbit : IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy)
+      first := by
+    intro time
+    refine Fin.cases ?_ (fun previous => ?_) time
+    · simpa only [first, Fin.castSucc_zero, Fin.cons_zero, Fin.cons_succ,
+        backward, repeatedBackwardPayoffOrbit_zero] using hedge
+    · have hstep : backward previous.succ ∈
+          RestrictedEscapeCorrespondence G delta accuracy (backward previous.castSucc) :=
+        Or.inl (hword previous)
+      simpa only [first, ← Fin.succ_castSucc, Fin.cons_succ] using hstep
+  have hcriticalBand : critical ∈ EscapeBand G accuracy := by
+    refine ⟨solo_le_of_mem_frontier_WSet G critical hcritical.2, owner, ?_⟩
+    rw [howner]
+    exact le_add_of_nonneg_right haccuracy.le
+  have hfirstCarrier : ∀ time, first time ∈
+      witness.Q ∩ (WSet G ∪ EscapeBand G accuracy) := by
+    intro time
+    refine Fin.cases ?_ (fun previous => ?_) time
+    · exact ⟨hcritical.1, Or.inr hcriticalBand⟩
+    · exact hcarrier previous
+  have hfirstLast : first (Fin.last (k + 1)) = RepeatedPayoff G k terminal profile := by
+    change backward (Fin.last k) = _
+    exact repeatedBackwardPayoffOrbit_last G k terminal profile
+  have hendBand : RepeatedPayoff G k terminal profile ∈ EscapeBand G accuracy := by
+    refine ⟨fun who => (le_add_of_nonneg_right haccuracy.le).trans (hfloor who), ?_⟩
+    obtain ⟨who, hwho⟩ := hwall
+    exact ⟨who, hwho.le⟩
+  have hendQ : RepeatedPayoff G k terminal profile ∈ witness.Q := by
+    rw [← repeatedBackwardPayoffOrbit_last G k terminal profile]
+    exact (hcarrier (Fin.last k)).1
+  obtain ⟨length, returnWord, _returnOwner, hreturnZero, hreturnOrbit, hreturnCarrier,
+    hreturnCritical, _hreturnOwner, _hcoordinateCharge, hreturnCharge⟩ :=
+    witness.exists_criticalFiniteReturn_with_coordinateCharge hM hnormal hgenerated
+      haccuracy haccuracyOne haccuracyEscape
+      (RepeatedPayoff G k terminal profile) ⟨hendQ, hendBand⟩
+  have hstitch : first (Fin.last (k + 1)) = returnWord 0 :=
+    hfirstLast.trans hreturnZero.symm
+  obtain ⟨point, hzero, horbit, hpointCarrier, hlast, hleft, hright⟩ :=
+    Math.Topology.exists_appendFiniteOrbit_with_embeddings first returnWord
+      hfirstOrbit hreturnOrbit hstitch hfirstCarrier
+      (fun time => ⟨(hreturnCarrier time).1, Or.inr (hreturnCarrier time).2⟩)
+  have hvariation : FiniteOrbitVariation point =
+      FiniteOrbitVariation first + FiniteOrbitVariation returnWord :=
+    Math.Topology.finiteOrbitVariationWith_append_of_embeddings
+      (fun first next : Payoff G.Player => ‖next - first‖)
+      first returnWord point hleft hright
+  have hfirstVariation : FiniteOrbitVariation first =
+      ‖terminal - critical‖ + FiniteOrbitVariation backward := by
+    rw [FiniteOrbitVariation, Fin.sum_univ_succ]
+    simp only [first, Fin.castSucc_zero, Fin.cons_zero, Fin.cons_succ,
+      ← Fin.succ_castSucc, backward, repeatedBackwardPayoffOrbit_zero]
+    rfl
+  have hcharge := hreturnCharge hfloor
+  have hfirstNonneg : 0 ≤ FiniteOrbitVariation first := by
+    exact Finset.sum_nonneg fun _ _ => norm_nonneg _
+  refine ⟨length, returnWord, point, hreturnZero, hreturnOrbit, hreturnCarrier,
+    hreturnCritical, hzero, horbit, hpointCarrier, hlast, hleft, hright, ?_,
+    hcharge, ?_⟩
+  · rw [hvariation, hfirstVariation]
+  · rw [hvariation]
+    linarith
+
+/-- Compose the actual conditional upper-wall producer with the finite stitch.
+No favorable crossing or return is supplied. Global uniform rho remains an
+explicit premise of the existing large-endpoint source; this is only the
+finite Case 3 excursion, not unbounded iteration or Theorem 4. -/
+theorem EscapeWitness.exists_caseThreeChargedExcursion_of_uniformRho
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G)
+    {M : ℝ} (hM : IsQuittingPayoffDifferenceBound G M)
+    {rho : ℝ} (hrho : IsUniformRho G rho) :
+    ∃ eta : ℝ, 0 < eta ∧ eta < 1 ∧ eta < witness.ebar ∧
+      ∀ critical ∈ witness.Q ∩ frontier (WSet G),
+        ∀ accuracy : ℝ, 0 < accuracy → accuracy ≤ eta →
+          ∀ owner : G.Player, critical owner = SoloPayoff G owner →
+            ∀ row : QuitRow G,
+              IsSmallSoloRow G
+                (accuracy / (10 * M * Fintype.card G.Player)) owner row →
+              (¬∃ point : ℕ → Payoff G.Player,
+                point 0 = QuittingOneStagePayoff G critical row ∧
+                IsInfiniteOrbit (FRow G 0) point ∧ ∀ time,
+                  point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) →
+              ∃ (length : ℕ) (point : Fin (length + 1) → Payoff G.Player),
+                point 0 = critical ∧
+                IsFiniteOrbit (RestrictedEscapeCorrespondence G
+                  (accuracy / (10 * M * Fintype.card G.Player)) accuracy) point ∧
+                (∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) ∧
+                IsCriticalPoint G (point (Fin.last length)) ∧
+                accuracy ≤ FiniteOrbitVariation point := by
+  obtain ⟨eta, heta, hetaEscape, B, _hB, _hreward, _hbound, hsource⟩ :=
+    witness.exists_caseThreeUpperWallOrbit_of_uniformRho
+      hnormal hgenerated hinstant hM hrho
+  refine ⟨min eta (1 / 2), lt_min heta (by norm_num), ?_,
+    (min_le_left _ _).trans_lt hetaEscape, ?_⟩
+  · exact (min_le_right _ _).trans_lt (by norm_num)
+  · intro critical hcritical accuracy haccuracy haccuracySmall owner howner row hsmall hnoInfinite
+    have haccuracyEta : accuracy ≤ eta := haccuracySmall.trans (min_le_left _ _)
+    have haccuracyOne : accuracy < 1 :=
+      (haccuracySmall.trans (min_le_right _ _)).trans_lt (by norm_num)
+    have haccuracyEscape : accuracy < witness.ebar := haccuracyEta.trans_lt hetaEscape
+    obtain ⟨intermediate, _hsegment, _hcoordinates, _hlow, _separation, _hseparation,
+      _hclearance, hcrossing⟩ := hsource critical hcritical
+    obtain ⟨_threshold, _hthreshold, k, _component, source, _hcompact, _hconnected,
+      _hgraph, _hnoSure, _hbottom, _htop, _hsourcePoint, _hfirst,
+      hformalSegment, hfloor, hwall, hword, hcarrier⟩ :=
+      hcrossing accuracy haccuracy haccuracyEta owner howner row hsmall hnoInfinite
+    obtain ⟨length, returnWord, point, _hreturnZero, _hreturnOrbit, _hreturnCarrier,
+      hreturnCritical, hzero, horbit, hpointCarrier, hlast, _hleft, _hright,
+      _hvariation, _hreturnCharge, hcharge⟩ :=
+      witness.exists_caseThreeChargedFiniteExcursion hM hnormal hgenerated
+        haccuracy haccuracyOne haccuracyEscape critical hcritical owner howner row hsmall
+        k (caseThreePayoffPath G (QuittingOneStagePayoff G critical row)
+          critical intermediate B source.1) source.2 hformalSegment hword hcarrier hfloor hwall
+    refine ⟨k + 1 + length, point, hzero, horbit, hpointCarrier, ?_, hcharge⟩
+    rw [hlast]
+    exact hreturnCritical
+
+/-- The actual critical edge followed by the unchanged infinite source orbit.
+The original orbit is retained at every strictly positive index. -/
+def criticalPrefixOrbit (G : QuittingGame) (critical : Payoff G.Player)
+    (point : ℕ → Payoff G.Player) : ℕ → Payoff G.Player
+  | 0 => critical
+  | time + 1 => point time
+
+@[simp] theorem criticalPrefixOrbit_zero (G : QuittingGame) (critical : Payoff G.Player)
+    (point : ℕ → Payoff G.Player) : criticalPrefixOrbit G critical point 0 = critical :=
+  rfl
+
+@[simp] theorem criticalPrefixOrbit_succ (G : QuittingGame) (critical : Payoff G.Player)
+    (point : ℕ → Payoff G.Player) (time : ℕ) :
+    criticalPrefixOrbit G critical point (time + 1) = point time :=
+  rfl
+
+/-- Prefixing the literal critical edge retains its variation exactly,
+rather than replacing the infinite source word by another orbit. -/
+theorem criticalPrefixOrbit_variation (G : QuittingGame) (critical : Payoff G.Player)
+    (point : ℕ → Payoff G.Player) (steps : ℕ) :
+    (∑ time ∈ Finset.range (steps + 1),
+      ‖criticalPrefixOrbit G critical point (time + 1) -
+        criticalPrefixOrbit G critical point time‖) =
+      ‖point 0 - critical‖ +
+        ∑ time ∈ Finset.range steps, ‖point (time + 1) - point time‖ := by
+  rw [Finset.sum_range_succ']
+  simp only [criticalPrefixOrbit_succ, criticalPrefixOrbit_zero]
+  exact add_comm _ _
+
+/-- Prefixing one actual edge does not change the limit of the source orbit. -/
+theorem criticalPrefixOrbit_tendsto (G : QuittingGame) (critical : Payoff G.Player)
+    (point : ℕ → Payoff G.Player) (limit : Payoff G.Player)
+    (hlimit : Tendsto point atTop (𝓝 limit)) :
+    Tendsto (criticalPrefixOrbit G critical point) atTop (𝓝 limit) :=
+  (tendsto_add_atTop_iff_nat 1).mp (by
+    simpa only [criticalPrefixOrbit_succ] using hlimit)
+
+/-- Theorem 4, Cases 1 and 2, joined to the actual small-solo return.
+The bound and positive motion rate are selected before every critical start
+and accuracy. For every exact source orbit from the literal reached point,
+either the checked nonconvergent/generated/instant branch supplies approximate
+equilibria, or the SAME convergent orbit, its charged initial edge, and an
+internally produced finite return are retained. This is one segment and return,
+not the cumulative unbounded extended orbit or the complete escape theorem. -/
+theorem EscapeWitness.exists_chargedCriticalInfiniteSegmentReturns_of_not_branches
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M ∧
+      ∃ rate : ℝ, 0 < rate ∧ rate < 1 ∧
+        ∀ critical ∈ witness.Q, IsCriticalPoint G critical →
+          ∃ owner other : G.Player, owner ≠ other ∧
+            critical owner = SoloPayoff G owner ∧ critical other = SoloPayoff G other ∧
+            G.reward ⟨{owner}, Finset.singleton_nonempty owner⟩ other < SoloPayoff G other ∧
+            ∀ accuracy : ℝ, 0 < accuracy → accuracy < witness.ebar → accuracy < rate →
+              let delta := accuracy / (10 * M * Fintype.card G.Player)
+              ∃ probability : Set.Icc (0 : ℝ) 1, (probability : ℝ) = delta ∧
+                let row := QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1))
+                  owner probability
+                let next := QuittingOneStagePayoff G critical row
+                (row owner : ℝ) = delta ∧
+                  (∀ who, who ≠ owner → (row who : ℝ) = 0) ∧
+                  QuitProbability G row = delta ∧
+                  next owner = critical owner ∧ next other < critical other ∧
+                  next ∈ witness.Q ∩ WSet G ∧
+                  next ∈ RestrictedEscapeCorrespondence G delta accuracy critical ∧
+                  row ∈ EpsilonRow G accuracy critical ∧
+                  rate * delta ≤ ‖next - critical‖ ∧
+                  ∀ point : ℕ → Payoff G.Player, point 0 = next →
+                    IsInfiniteOrbit (FRow G 0) point →
+                    (∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) →
+                    HasQuitApproximateEquilibria G ∨
+                      ∃ (limit : Payoff G.Player) (length : ℕ)
+                        (returnWord : Fin (length + 1) → Payoff G.Player)
+                        (returnOwner : G.Player),
+                        Tendsto point atTop (𝓝 limit) ∧
+                        IsInfiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy)
+                          (criticalPrefixOrbit G critical point) ∧
+                        (∀ time, criticalPrefixOrbit G critical point time ∈
+                          witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) ∧
+                        returnWord 0 = limit ∧
+                        Tendsto (criticalPrefixOrbit G critical point)
+                          atTop (𝓝 (returnWord 0)) ∧
+                        IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy)
+                          returnWord ∧
+                        (∀ time, returnWord time ∈ witness.Q ∩ EscapeBand G accuracy) ∧
+                        IsCriticalPoint G (returnWord (Fin.last length)) ∧
+                        returnWord (Fin.last length) returnOwner = SoloPayoff G returnOwner ∧
+                        limit returnOwner - SoloPayoff G returnOwner ≤
+                          FiniteOrbitVariation returnWord ∧
+                        (∀ steps : ℕ, rate * delta ≤
+                          ∑ time ∈ Finset.range (steps + 1),
+                            ‖criticalPrefixOrbit G critical point (time + 1) -
+                              criticalPrefixOrbit G critical point time‖) := by
+  classical
+  obtain ⟨M, hM, rate, hrate, hrateOne, hsource⟩ :=
+    exists_chargedCriticalSoloMoves_of_not_branches G witness hnormal hgenerated hinstant
+  refine ⟨M, hM, rate, hrate, hrateOne, ?_⟩
+  intro critical hcriticalQ hcritical
+  obtain ⟨owner, other, hne, howner, hother, hcross, hsource⟩ :=
+    hsource critical hcriticalQ hcritical
+  refine ⟨owner, other, hne, howner, hother, hcross, ?_⟩
+  intro accuracy haccuracy haccuracyEscape haccuracyRate
+  dsimp only
+  let delta := accuracy / (10 * M * Fintype.card G.Player)
+  obtain ⟨probability, hprobability, hrowOwner, hrowOther, hquitProbability,
+    hnextOwner, hnextOther, hnext, hrestricted, hrow, hcharge⟩ :=
+    hsource accuracy haccuracy haccuracyEscape haccuracyRate
+  refine ⟨probability, hprobability, hrowOwner, hrowOther, hquitProbability,
+    hnextOwner, hnextOther, hnext, hrestricted, hrow, hcharge, ?_⟩
+  intro point hzero horbit hstay
+  by_cases hconverges : ∃ limit : Payoff G.Player, Tendsto point atTop (𝓝 limit)
+  · obtain ⟨limit, hlimit⟩ := hconverges
+    rcases hasQuitApproximateEquilibria_or_escapeOrbit_limit_mem_band
+        G witness hnormal accuracy haccuracy.le point horbit hstay limit hlimit with
+      hequilibrium | hlimitBand
+    · exact Or.inl hequilibrium
+    · have haccuracyOne : accuracy < 1 := haccuracyRate.trans hrateOne
+      obtain ⟨length, returnWord, returnOwner, hreturnZero, hreturnOrbit,
+        hreturnCarrier, hreturnCritical, hreturnOwner, hreturnCharge, _hstrongCharge⟩ :=
+        witness.exists_criticalFiniteReturn_with_coordinateCharge
+          hM hnormal hgenerated haccuracy haccuracyOne haccuracyEscape limit hlimitBand
+      have hprefixOrbit : IsInfiniteOrbit
+          (RestrictedEscapeCorrespondence G delta accuracy)
+          (criticalPrefixOrbit G critical point) := by
+        intro time
+        cases time with
+        | zero =>
+            simpa only [criticalPrefixOrbit_zero, criticalPrefixOrbit_succ, hzero]
+              using hrestricted
+        | succ time => exact Or.inl (horbit time)
+      have hprefixCarrier : ∀ time, criticalPrefixOrbit G critical point time ∈
+          witness.Q ∩ (WSet G ∪ EscapeBand G accuracy) := by
+        intro time
+        cases time with
+        | zero =>
+            exact ⟨hcriticalQ, Or.inl ((isClosed_WSet G).frontier_subset hcritical.1)⟩
+        | succ time => exact hstay time
+      have hstitch : Tendsto (criticalPrefixOrbit G critical point)
+          atTop (𝓝 (returnWord 0)) := by
+        rw [hreturnZero]
+        exact criticalPrefixOrbit_tendsto G critical point limit hlimit
+      refine Or.inr ⟨limit, length, returnWord, returnOwner, hlimit, hprefixOrbit,
+        hprefixCarrier, hreturnZero, hstitch, hreturnOrbit, hreturnCarrier,
+        hreturnCritical, hreturnOwner, hreturnCharge, ?_⟩
+      intro steps
+      rw [criticalPrefixOrbit_variation G critical point steps, hzero]
+      exact hcharge.trans (le_add_of_nonneg_right
+        (Finset.sum_nonneg fun time _ => norm_nonneg (point (time + 1) - point time)))
+  · exact Or.inl
+      (hasQuitApproximateEquilibria_of_nonconvergent_exact_orbit G hnormal point horbit
+        hconverges)
+
+/-- The paper-local segment grammar is identified fieldwise with the
+source-neutral extended-orbit owner. No words or stitches are reconstructed. -/
+def ExtendedOrbitData.ofGeneric {X : Type} [TopologicalSpace X]
+    {F : Correspondence X X} (orbit : Math.Topology.ExtendedOrbitData F) :
+    ExtendedOrbitData F where
+  segmentCount := orbit.segmentCount
+  segmentCountPositive := orbit.segmentCountPositive
+  segmentLength := orbit.segmentLength
+  segmentLengthPositive := orbit.segmentLengthPositive
+  point := orbit.point
+  step := orbit.step
+  finiteStitch := orbit.finiteStitch
+  infiniteStitch := orbit.infiniteStitch
+
+/-- The field-preserving bridge retains exactly the original norm-cost
+rectangular variation, not merely an upper or lower estimate. -/
+theorem hasUnboundedExtendedVariation_ofGeneric_iff
+    {N : Type} [Fintype N] {F : Correspondence (Payoff N) (Payoff N)}
+    (orbit : Math.Topology.ExtendedOrbitData F) :
+    HasUnboundedExtendedVariation (ExtendedOrbitData.ofGeneric orbit) ↔
+      Math.Topology.HasUnboundedExtendedVariationWith
+        (fun first next => ‖next - first‖) orbit := Iff.rfl
+
+/-- Actual local renewal blocks from the printed alternatives. A single
+bound and rate are chosen before one common small accuracy. Every critical
+restart gets two literal segments and a common positive charge, unless an
+existing actual branch already supplies approximate equilibria. Global uniform
+rho remains explicit for the Case 3 high-continuation source. -/
+theorem EscapeWitness.exists_chargedCriticalTwoSegmentReturns_of_uniformRho
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    {rho : ℝ} (hrho : IsUniformRho G rho) :
+    HasQuitApproximateEquilibria G ∨
+      ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M ∧
+        ∃ rate : ℝ, 0 < rate ∧ rate < 1 ∧
+          ∃ eta : ℝ, 0 < eta ∧ eta < rate ∧ eta < 1 ∧ eta < witness.ebar ∧
+            ∀ accuracy : ℝ, 0 < accuracy → accuracy ≤ eta →
+              let delta := accuracy / (10 * M * Fintype.card G.Player)
+              let charge := min accuracy (rate * delta)
+              0 < charge ∧
+                ∀ critical ∈ witness.Q, IsCriticalPoint G critical →
+                  ∃ (block : Math.Topology.ExtendedOrbitData
+                    (RestrictedEscapeCorrespondence G delta accuracy)) (length : ℕ),
+                    block.segmentCount = some 2 ∧ block.segmentLength 1 = some length ∧
+                    block.point 0 0 = critical ∧
+                    (∀ segment, Math.Topology.ActiveSegment block.segmentCount segment →
+                      ∀ index, Math.Topology.SegmentIndex (block.segmentLength segment) index →
+                        block.point segment index ∈
+                          witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)) ∧
+                    block.point 1 (length - 1) ∈
+                      witness.Q ∩ {point | IsCriticalPoint G point} ∧
+                    ∃ points, charge ≤ block.prefixVariationWith
+                      (fun first next => ‖next - first‖) 2 points := by
+  classical
+  by_cases hequilibrium : HasQuitApproximateEquilibria G
+  · exact Or.inl hequilibrium
+  have hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G :=
+    fun h => hequilibrium (h.hasQuitApproximateEquilibria G)
+  have hinstant : ¬HasInstantApproximateEquilibria G :=
+    fun h => hequilibrium (h.hasQuitApproximateEquilibria G)
+  obtain ⟨M, hM, rate, hrate, hrateOne, hsource⟩ :=
+    witness.exists_chargedCriticalInfiniteSegmentReturns_of_not_branches
+      hnormal hgenerated hinstant
+  obtain ⟨caseEta, hcaseEta, _hcaseEtaOne, hcaseEtaEscape, hfiniteSource⟩ :=
+    witness.exists_caseThreeChargedExcursion_of_uniformRho
+      hnormal hgenerated hinstant hM hrho
+  let eta := min (rate / 2) caseEta
+  have heta : 0 < eta := lt_min (div_pos hrate (by norm_num)) hcaseEta
+  have hetaRate : eta < rate :=
+    (min_le_left _ _).trans_lt (by linarith)
+  have hetaOne : eta < 1 := hetaRate.trans hrateOne
+  have hetaEscape : eta < witness.ebar :=
+    (min_le_right _ _).trans_lt hcaseEtaEscape
+  refine Or.inr ⟨M, hM, rate, hrate, hrateOne, eta, heta, hetaRate,
+    hetaOne, hetaEscape, ?_⟩
+  intro accuracy haccuracy haccuracySmall
+  dsimp only
+  let delta := accuracy / (10 * M * Fintype.card G.Player)
+  let cost : Payoff G.Player → Payoff G.Player → ℝ := fun first next => ‖next - first‖
+  have hcost : ∀ first next, 0 ≤ cost first next := fun _ _ => norm_nonneg _
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcard : (0 : ℝ) < Fintype.card G.Player := by exact_mod_cast Fintype.card_pos
+  have hdelta : 0 < delta := div_pos haccuracy (by positivity)
+  have hcharge : 0 < min accuracy (rate * delta) :=
+    lt_min haccuracy (mul_pos hrate hdelta)
+  refine ⟨hcharge, ?_⟩
+  intro critical hcriticalQ hcritical
+  obtain ⟨owner, _other, _hne, howner, _hother, _hcross, hsource⟩ :=
+    hsource critical hcriticalQ hcritical
+  have haccuracyRate : accuracy < rate := haccuracySmall.trans_lt hetaRate
+  have haccuracyEscape : accuracy < witness.ebar := haccuracySmall.trans_lt hetaEscape
+  obtain ⟨probability, _hprobability, hrowOwner, hrowOther, _hquitProbability,
+    _hnextOwner, _hnextOther, _hnext, _hrestricted, _hrow, _hcharge, hconsume⟩ :=
+    hsource accuracy haccuracy haccuracyEscape haccuracyRate
+  let row := QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1)) owner probability
+  let next := QuittingOneStagePayoff G critical row
+  by_cases hinfinite : ∃ point : ℕ → Payoff G.Player,
+      point 0 = next ∧ IsInfiniteOrbit (FRow G 0) point ∧
+        ∀ time, point time ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)
+  · obtain ⟨point, hzero, horbit, hstay⟩ := hinfinite
+    rcases hconsume point hzero horbit hstay with hequilibrium' | hreturn
+    · exact False.elim (hequilibrium hequilibrium')
+    · obtain ⟨_limit, length, returnWord, _returnOwner, _hlimit, hprefixOrbit,
+        hprefixCarrier, _hreturnZero, hstitch, hreturnOrbit, hreturnCarrier,
+        hreturnCritical, _hreturnOwner, _hreturnCharge, hprefixCharge⟩ := hreturn
+      let first := criticalPrefixOrbit G critical point
+      have hpositive : ∀ total, (none : Option ℕ) = some total → 0 < total := by
+        intro total htotal
+        cases htotal
+      have hfirst : ∀ index, Math.Topology.SegmentIndex none (index + 1) →
+          first (index + 1) ∈ RestrictedEscapeCorrespondence G delta accuracy (first index) :=
+        fun index _ => hprefixOrbit index
+      have hfinite : ∀ total, (none : Option ℕ) = some total →
+          first (total - 1) = returnWord 0 := by
+        intro total htotal
+        cases htotal
+      have hinfiniteStitch : (none : Option ℕ) = none →
+          Tendsto first atTop (𝓝 (returnWord 0)) := fun _ => hstitch
+      let block := Math.Topology.ExtendedOrbitData.ofSegmentThenFinite
+        none first hpositive hfirst returnWord hreturnOrbit hfinite hinfiniteStitch
+      have hcarrier : ∀ segment, Math.Topology.ActiveSegment block.segmentCount segment →
+          ∀ index, Math.Topology.SegmentIndex (block.segmentLength segment) index →
+            block.point segment index ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy) :=
+        Math.Topology.ExtendedOrbitData.ofSegmentThenFinite_stays
+          none first hpositive hfirst returnWord hreturnOrbit hfinite hinfiniteStitch _
+          (fun index _ => hprefixCarrier index)
+          (fun index => ⟨(hreturnCarrier index).1, Or.inr (hreturnCarrier index).2⟩)
+      have hlast : block.point 1 (length + 1 - 1) = returnWord (Fin.last length) := by
+        exact Math.Topology.finiteOrbitNatWord_last returnWord
+      refine ⟨block, length + 1, rfl, rfl, rfl, hcarrier, ?_, 1, ?_⟩
+      · rw [hlast]
+        exact ⟨(hreturnCarrier (Fin.last length)).1, hreturnCritical⟩
+      · have hfirstCharge : rate * delta ≤
+            ∑ index ∈ Finset.range 1,
+              if Math.Topology.SegmentIndex none (index + 1)
+              then cost (first index) (first (index + 1)) else 0 := by
+          simpa [Math.Topology.SegmentIndex, cost, first, delta,
+            criticalPrefixOrbit] using hprefixCharge 0
+        exact (min_le_right accuracy (rate * delta)).trans (hfirstCharge.trans
+          (Math.Topology.ExtendedOrbitData.prefixVariationWith_ofSegmentThenFinite_ge_first
+            none first hpositive hfirst returnWord hreturnOrbit hfinite hinfiniteStitch
+            cost hcost 1))
+  · have hsmall : IsSmallSoloRow G delta owner row := ⟨hrowOwner.le, hrowOther⟩
+    have haccuracyCase : accuracy ≤ caseEta :=
+      haccuracySmall.trans (min_le_right _ _)
+    obtain ⟨length, word, hwordZero, hwordOrbit, hwordCarrier, hwordCritical, hwordCharge⟩ :=
+      hfiniteSource critical ⟨hcriticalQ, hcritical.1⟩ accuracy haccuracy haccuracyCase
+        owner howner row hsmall hinfinite
+    let first := Math.Topology.finiteOrbitNatWord word
+    let endpointWord : Fin 1 → Payoff G.Player := fun _ => word (Fin.last length)
+    have hpositive : ∀ total, some (length + 1) = some total → 0 < total := by
+      intro total htotal
+      cases htotal
+      exact Nat.zero_lt_succ length
+    have hfirst : ∀ index, Math.Topology.SegmentIndex (some (length + 1)) (index + 1) →
+        first (index + 1) ∈ RestrictedEscapeCorrespondence G delta accuracy (first index) :=
+      Math.Topology.finiteOrbitNatWord_segmentStep word hwordOrbit
+    have hendpoint : Math.Topology.IsFiniteOrbit
+        (RestrictedEscapeCorrespondence G delta accuracy) endpointWord := by
+      intro index
+      exact Fin.elim0 index
+    have hfinite : ∀ total, some (length + 1) = some total →
+        first (total - 1) = endpointWord 0 := by
+      intro total htotal
+      cases htotal
+      exact Math.Topology.finiteOrbitNatWord_last word
+    have hinfiniteStitch : some (length + 1) = (none : Option ℕ) →
+        Tendsto first atTop (𝓝 (endpointWord 0)) := by
+      intro hnone
+      cases hnone
+    let block := Math.Topology.ExtendedOrbitData.ofSegmentThenFinite
+      (some (length + 1)) first hpositive hfirst endpointWord hendpoint hfinite hinfiniteStitch
+    have hcarrier : ∀ segment, Math.Topology.ActiveSegment block.segmentCount segment →
+        ∀ index, Math.Topology.SegmentIndex (block.segmentLength segment) index →
+          block.point segment index ∈ witness.Q ∩ (WSet G ∪ EscapeBand G accuracy) :=
+      Math.Topology.ExtendedOrbitData.ofSegmentThenFinite_stays
+        (some (length + 1)) first hpositive hfirst endpointWord hendpoint hfinite hinfiniteStitch _
+        (fun index _ => Math.Topology.finiteOrbitNatWord_stays word _ hwordCarrier index)
+        (fun _ => hwordCarrier (Fin.last length))
+    have hblockZero : block.point 0 0 = critical := by
+      exact (Math.Topology.finiteOrbitNatWord_zero word).trans hwordZero
+    have hlast : block.point 1 (1 - 1) = word (Fin.last length) := rfl
+    refine ⟨block, 1, rfl, rfl, hblockZero, hcarrier, ?_, length, ?_⟩
+    · rw [hlast]
+      exact ⟨(hwordCarrier (Fin.last length)).1, hwordCritical⟩
+    · have hfirstPaid :=
+        Math.Topology.ExtendedOrbitData.prefixVariationWith_ofSegmentThenFinite_ge_first
+          (some (length + 1)) first hpositive hfirst endpointWord hendpoint hfinite
+          hinfiniteStitch cost hcost length
+      dsimp only [first] at hfirstPaid
+      rw [Math.Topology.finiteOrbitNatWord_segmentPrefix_variation word cost] at hfirstPaid
+      have hvariation : Math.Topology.finiteOrbitVariationWith cost word =
+          FiniteOrbitVariation word := rfl
+      rw [hvariation] at hfirstPaid
+      exact (min_le_left accuracy (rate * delta)).trans (hwordCharge.trans hfirstPaid)
+
+/-- Conditional completion of the printed renewed-orbit argument. The
+global uniform-rho high-continuation premise is RETAINED explicitly; it is
+not derived from compact motion. All local returns, recursive segments,
+rationality, and unbounded variation come from actual source producers. -/
+theorem EscapeWitness.hasQuitApproximateEquilibria_of_uniformRho
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    {rho : ℝ} (hrho : IsUniformRho G rho) :
+    HasQuitApproximateEquilibria G := by
+  classical
+  by_cases hequilibrium : HasQuitApproximateEquilibria G
+  · exact hequilibrium
+  have hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G :=
+    fun h => hequilibrium (h.hasQuitApproximateEquilibria G)
+  rcases witness.exists_chargedCriticalTwoSegmentReturns_of_uniformRho hnormal hrho with
+    hequilibrium' | hreturns
+  · exact hequilibrium'
+  · obtain ⟨M, hM, rate, _hrate, _hrateOne, eta, heta, _hetaRate, hetaOne,
+      hetaEscape, hlocalSource⟩ := hreturns
+    obtain ⟨_seedM, _hseedM, _seedStart, _hseedStart, hseedSource⟩ :=
+      witness.exists_criticalFiniteOrbits_of_not_stationarilyGenerated hnormal hgenerated
+    have hextended : ExtendedOrbitCondition G := by
+      intro requested hrequested
+      let accuracy := min requested eta
+      have haccuracy : 0 < accuracy := lt_min hrequested heta
+      have haccuracyEta : accuracy ≤ eta := min_le_right _ _
+      have haccuracyRequested : accuracy ≤ requested := min_le_left _ _
+      have haccuracyOne : accuracy < 1 := haccuracyEta.trans_lt hetaOne
+      have haccuracyEscape : accuracy < witness.ebar := haccuracyEta.trans_lt hetaEscape
+      let delta := accuracy / (10 * M * Fintype.card G.Player)
+      let charge := min accuracy (rate * delta)
+      obtain ⟨hcharge, hlocal⟩ := hlocalSource accuracy haccuracy haccuracyEta
+      obtain ⟨seedLength, seedWord, _hseedZero, _hseedOrbit, hseedCarrier, hseedCritical⟩ :=
+        hseedSource accuracy haccuracy haccuracyOne haccuracyEscape
+      let seed := seedWord (Fin.last seedLength)
+      have hseed : seed ∈ witness.Q ∩ {point | IsCriticalPoint G point} :=
+        ⟨(hseedCarrier (Fin.last seedLength)).1, hseedCritical⟩
+      let carrier := witness.Q ∩ (WSet G ∪ EscapeBand G accuracy)
+      let restart := witness.Q ∩ {point | IsCriticalPoint G point}
+      have hlocal' : ∀ start ∈ restart,
+          ∃ (block : Math.Topology.ExtendedOrbitData
+            (RestrictedEscapeCorrespondence G delta accuracy)) (length : ℕ),
+            block.segmentCount = some 2 ∧ block.segmentLength 1 = some length ∧
+            block.point 0 0 = start ∧
+            (∀ segment, Math.Topology.ActiveSegment block.segmentCount segment → ∀ index,
+              Math.Topology.SegmentIndex (block.segmentLength segment) index →
+                block.point segment index ∈ carrier) ∧
+            block.point 1 (length - 1) ∈ restart ∧
+            ∃ points, charge ≤ block.prefixVariationWith
+              (fun first next => ‖next - first‖) 2 points :=
+        fun start hstart => hlocal start hstart.1 hstart.2
+      obtain ⟨renewed, _hcount, hzero, _hcarrier, hvariation⟩ :=
+        Math.Topology.exists_renewedExtendedOrbit_of_charged_twoSegment_returns
+          carrier restart (fun first next => ‖next - first‖)
+          (fun _ _ => norm_nonneg _) charge hcharge hlocal' seed hseed
+      let restricted := ExtendedOrbitData.ofGeneric renewed
+      have hseedRational : IsRational G accuracy seed := by
+        apply IsRational.mono G haccuracy.le
+        intro who
+        have hfloor := solo_le_of_mem_frontier_WSet G seed hseed.2.1 who
+        simpa only [sub_zero] using (hnormal who).trans hfloor
+      have hzeroRational : IsRational G accuracy (restricted.point 0 0) := by
+        change IsRational G accuracy (renewed.point 0 0)
+        rw [hzero]
+        exact hseedRational
+      have hrational : ExtendedOrbitStaysIn restricted {point | IsRational G accuracy point} :=
+        extendedRestrictedOrbit_stays_rational G hM hnormal haccuracy haccuracyOne
+          restricted hzeroRational
+      have hsubset : ∀ point,
+          RestrictedEscapeCorrespondence G delta accuracy point ⊆ FRow G requested point :=
+        fun point value hvalue => FRow.mono G haccuracyRequested point
+          (restrictedEscapeCorrespondence_subset G hM haccuracy point hvalue)
+      let requestedOrbit :=
+        ExtendedOrbitData.ofGeneric (renewed.mapRelation hsubset)
+      refine ⟨requestedOrbit, ?_, ?_⟩
+      · intro segment hsegment index hindex
+        exact IsRational.mono G haccuracyRequested
+          (hrational segment hsegment index hindex)
+      · apply (hasUnboundedExtendedVariation_ofGeneric_iff _).mpr
+        exact hvariation
+    exact hextended.hasQuitApproximateEquilibria G
 
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :

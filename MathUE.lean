@@ -264,6 +264,7 @@ import MathUE.LinearProgramming.FinFourIntegralTournament
 import MathUE.LinearProgramming.FiniteSolutions
 import MathUE.LinearProgramming.FiniteSupportDegree
 import MathUE.LinearProgramming.NonnegativeInverseDegree
+import MathUE.LinearProgramming.Examples.SwapTwoNonnegativeInverse
 import MathUE.LinearProgramming.Examples.CycleFourNonnegativeInverse
 import MathUE.LinearProgramming.Examples.PositiveInverseFourMatrices
 import MathUE.LinearProgramming.Examples.NegativeDegreeFourMatrix
@@ -581,6 +582,7 @@ import MathUE.Topology.CompactOrbitOccupation
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactComponentSeparation
 import MathUE.Topology.ConnectedFixedPointContinuation
+import MathUE.Topology.CompactConnectedFixedPointGraph
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactExecutableTraceGrammar
@@ -594,9 +596,12 @@ import MathUE.Topology.CompactSurjectiveInverseLimit
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.ExtendedOrbit
+import MathUE.Topology.PairedSegmentRenewal
+import MathUE.Topology.TwoSegmentOrbitBlocks
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
+import MathUE.Topology.FiniteOrbitAppend
 import MathUE.Topology.FiniteUnitCubeFrontier
 import MathUE.Topology.GraphDirectedCompactPullback
 import MathUE.Topology.GraphDirectedFullShiftDensity

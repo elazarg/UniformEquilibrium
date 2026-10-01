@@ -509,6 +509,14 @@ initial debt and the actual complete-response debt of the same rational word.
 The respective constants are `(32*M + 6*initialDebt)/3` and
 `(128*M + 24*initialDebt)/3`; no successful phase or replacement source is input.
 
+`quittingGroupExclusionExactWordDebt_half_raw_reciprocal` and
+`executableRationalGroupExclusionDebt_half_raw_reciprocal`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarHalfGroupExclusionRates.lean`)
+retain the actual exact and executable words from raw group exclusion at cap
+one half. Their constants are `32*M + 3*initialDebt` and
+`128*M + 15*initialDebt`, respectively, including zero initial debt. They
+compose the existing recurrence owners; no favorable word is supplied.
+
 `executableRationalWeakExclusionTwoBranchWord_finiteLaws`
 (`UniformEquilibrium/Quitting/Paths/RationalWeakExclusionTwoBranchSelection.lean`)
 tests preemption internally, then chooses the actual rational solo exit or
@@ -605,6 +613,38 @@ the strict-preemption and canonical-singleton hypotheses. That same
 witness satisfies the explicit length bound, full terminal Nash bound,
 both canonical menu inequalities, and every positive-horizon Nash bound.
 The menu realization does not reselect the word or discard its rate.
+
+`exists_finFour_selectedWord_pivotRepairMinimizer_of_rawPayoffExclusion`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarSelectedWordPivotRepair.lean`)
+internally selects one real word from accepted strict, group, or weak-subset
+exclusion, then produces the canonical pivot-repair optimizer for that word's
+same nonpivot laws. Its optimum is at most the word's full total debt, which
+is strictly below the requested error. Every marginal law and the full
+payoff/cap pair are retained. The pivot is arbitrary; an unused padded date
+handles an empty word without changing its laws. No claim that an arbitrary
+pivot replacement preserves outsider debt is made.
+
+`CrossMassDeterminantFixture.exact_word_pair` and
+`exactValue_isUniformEquilibriumPayoff`
+(`UniformEquilibrium/Quitting/Examples/CrossMassDeterminantFixture.lean`)
+retain the literal fifteen-row reward-bound-21 table and actual payoff and
+complete cap `(53/33,-20/11,2/3,14/11)`. Its strict-deficit and group-exclusion
+failures, raw unit-level comparisons and correlated-hull separator failure
+are separate checked statements; a correlated lottery is not an independent
+strategy law. `CrossMassPayoffThresholdRegression.executable_index_eq`
+(`UniformEquilibrium/Quitting/Examples/CrossMassPayoffThresholdRegression.lean`)
+proves the first actual payoff/debt crossing is exactly 155 for the original
+two-row source tail. Its final 158-date word has zero full debt. This is not
+a first-cap-crossing assertion or a reset to a zero continuation.
+`TwoPairCrossMassSharpProfiles.actual_determinant_eq`
+(`UniformEquilibrium/Quitting/Paths/TwoPairCrossMassSharpProfiles.lean`)
+attains the determinant and square-root mass boundaries with actual independent
+laws, including both closed parameter endpoints. The all-Never boundary is
+handled separately. `SignedTwoPlayerExactNashNonattainment.not_exact_terminal_nash`
+(`UniformEquilibrium/Quitting/Examples/SignedTwoPlayerExactNashNonattainment.lean`)
+excludes exact terminal Nash for every parameter strictly between zero and one
+and every behavioral profile; it does not exclude approximate or uniform
+equilibrium. These additions pass silent named checks.
 
 `exists_sparseFiniteStoppingLawMixture_wholePayoff_eq`
 (`UniformEquilibrium/Quitting/Paths/SparseWholePayoffFiniteMixture.lean`)
@@ -754,6 +794,33 @@ search returns the first positive denominator; group search starts at two.
 Each result supplies the exact raw predicate at its reciprocal, and `none`
 is equivalent to failure of the corresponding exclusion property. The proof
 gives termination and minimality, not an a priori denominator bound.
+Literal accepted-source joins are
+in `UniformEquilibrium/Quitting/Paths/FiniteCalendarAcceptedSelectorSources.lean`:
+`rationalFiniteWordOwnerExclusion_and_signs_of_rawWeakSubsetDecision` supplies
+the designated signs and actual rational-word source from Boolean acceptance;
+the strict and group reciprocal joins retain the returned denominator and
+its exact raw predicate. These joins pass silent named checks.
+`executableRationalFiniteCalendarRawWeakSubsetSelection_finiteLaws_and_bound`
+(`UniformEquilibrium/Quitting/Paths/RationalFiniteCalendarWeakSubsetSelection.lean`)
+retains the computed word, exact independent finite/Never laws, full payoff/cap
+pair and absolute date bound from the literal raw-calendar source.
+`exists_finFour_finiteWord_exactLaws_of_rawPayoffExclusion`
+(`UniformEquilibrium/Quitting/Paths/FinFourRawPayoffExclusionFiniteLaws.lean`)
+selects an actual real word internally from any of the three accepted raw tests
+and realizes that same word's laws and full pair with strict debt below error.
+Its fixed-target corollary does not compute the target. These modules pass
+silent named checks; their full integration gate remains pending.
+`exists_finiteCalendarRawStrict_sameProfile_quantitativeUniform`
+(`UniformEquilibrium/Quitting/Paths/FiniteCalendarStrictDeficitSuffixHorizon.lean`)
+internally supplies the common positive raw margin and retains both original
+diagonal families, all exact-Nash suffixes and their same-profile uniform
+targets. This exact-suffix conclusion requires all own singletons nonnegative.
+`exists_actualGroupExclusion_of_nonnegativeWeightChamber`
+(`UniformEquilibrium/Diagnostics/Quitting/NonnegativeWeightChamberGroupExclusionSource.lean`)
+normalizes the same fixed table weight; two positive coordinates make its cap
+strictly below one. It needs only the weighted singleton sign, not individual
+singleton signs. Both modules pass silent named checks.
+
 `UniformEquilibrium/Quitting/Paths/FiniteCalendarStrictDeficitGroupWeakImplications.lean`
 proves strict deficit implies group exclusion, deriving the required distinct
 players from the deficit assumption itself. With nonnegative own singletons,
@@ -1370,6 +1437,19 @@ Both modules pass silent named checks, including their dimension-zero scope.
 `exists_original_stationaryBellmanRoot_of_quotientDegree_ne_one`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientBellman.lean`)
 decodes positive absorption and the original players' Nash–Bellman equations.
+`stationaryBellmanCertificate_of_nonzero_quotientFixedPoint` and
+`terminalNash_and_sameProfileUniform_of_nonzero_quotientFixedPoint_singletonSign`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientSameProfile.lean`)
+decode every actual nonzero quotient fixed point, not just a root selected by
+degree. Under nonnegative own-singleton rewards only for singleton-block owners,
+the very same stationary profile is exact terminal Nash and uniform at its
+actual payoff. The no-singleton-block specialization permits all reward signs.
+`boundary_and_sameProfileUniform_of_nonzero_quotientFixedPoint_soloQuitterInfeasibility`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientSoloQuitterInfeasibility.lean`)
+replaces those signs by infeasibility of the original opponents-only joining
+inequalities for every negative singleton-block owner and every hazard in
+`(0,1]`. It derives the Never-aware boundary condition internally; a supplied
+cap or selected favorable root is not an input.
 `exists_uniformEquilibriumPayoff_of_responseInvariant_singletonSign`
 (`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientStrategic.lean`)
 consumes this root when singleton-block owners have nonnegative singleton
@@ -1401,6 +1481,16 @@ entrywise nonnegative inverse. R0, normality, a selected root and a computed
 degree are not supplied; zero inverse entries remain allowed. These statements
 pass their silent named check. The quotient is not a smaller quitting game.
 
+`responseInvariant_of_reward_subgroup_automorphisms`
+(`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPlayerOrbits.lean`)
+constructs canonical orbit blocks and representatives for any subgroup of
+literal full-reward-table automorphisms and proves their response invariance.
+`finFour_orbitResponseQuotient_isR0_of_no_uniformPayoff` and
+`finFour_orbitResponseQuotient_degree_eq_one_of_no_uniformPayoff`
+(`UniformEquilibrium/Diagnostics/Quitting/FinFourOrbitResponseQuotientCriterion.lean`)
+apply the same-table obstruction to each such subgroup. The source retains
+all coalition rewards; singleton-only symmetry is not assumed sufficient.
+
 `IsPairedCenteredCompletion` and
 `exists_uniformEquilibriumPayoff_of_pairedCenteredCompletion`
 (`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientClass.lean`)
@@ -1409,10 +1499,37 @@ invariance. Its quotient matrix has R0 degree minus one, while the full
 singleton matrix has degree plus one
 (`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientMatrix.lean`).
 The class theorem permits signed nonsingleton rewards and supplies no strategy
-as an input. An explicit member and the packet's dimension and fixture claims
-are not yet formalized. The reusable permutation covariance of the stationary
-residual is in
-`UniformEquilibrium/Quitting/Stationary/ResponseInvariantQuotientPermutation.lean`.
+as an input. `exists_stationaryTerminalNash_sameProfileUniform_of_pairedCenteredCompletion`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientSameProfile.lean`)
+retains one exact stationary profile and its actual fixed payoff at every
+accuracy when only singleton owners 2 and 3 have nonnegative own rewards.
+`exists_omegaAnnulus_ambientDegree_eq_two_of_pairedSingletonMatrix`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientAnnulus.lean`)
+gives intrinsic degree two on exactly the entire nonzero quotient fixed fiber.
+Its separate negative-one LCP statement has the unique root `(1,1,1)`.
+Degree two is not a count of stationary roots. The class's coordinate freedom,
+algebraic member and full-dimensional persistence remain separate obligations.
+
+`NegativeSoloStationaryBoundary.exploitability_positive` and
+`exploitability_boundary`
+(`UniformEquilibrium/Quitting/Examples/NegativeSoloStationaryBoundary.lean`)
+give the actual full exploitability `3h/2` at positive rates and `1/2` at
+the zero-rate endpoint. The literal Bellman/Nash endpoint therefore does not
+imply exact terminal Nash. The same example proves punishment value `-1/2`
+and feasibility of the canonical solo joining system exactly when `h ≥ 1/4`.
+It does not refute approximate or uniform equilibrium.
+`PairedAdditiveStationaryBoundary.upperFaceRoot_terminalNash_sameProfileUniform`
+and `upperFaceRoot_completeCap_eq_payoff`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedAdditiveStationaryBoundary.lean`)
+retain actual strategies and complete caps on both entire upper faces of
+the singular quotient, including proper-support endpoints. Its nonzero fixed
+fiber is infinite, while the entire-fiber annulus degree is one.
+`Math.LinearProgramming.SwapTwoNonnegativeInverse.isStandardLCPSolution_neg_one_iff`
+and `not_isR0Matrix`
+(`MathUE/LinearProgramming/Examples/SwapTwoNonnegativeInverse.lean`)
+give a negative-determinant nonnegative-inverse matrix with a unique
+inhomogeneous solution but a nonzero homogeneous solution. No R0 degree is
+assigned to that matrix. These three boundary examples pass targeted checks.
 
 `PairedCollisionReward.exists_uniformEquilibriumPayoff`
 (`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCollisionRewardExistence.lean`)
@@ -1490,17 +1607,9 @@ compiler accepts arbitrary own-singleton signs. This strategy-class result
 does not select a fixed payoff target before accuracy.
 Literature wrappers delegate to these production proofs, not conversely.
 
-`QuittingThreePlayerStrategyClass.of_card_le_three`
-(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`)
-gives the same strategy-class conclusion for every reward sign and every finite
-player type of cardinality at most three. The existing stationary LCP gate
-handles its stationary arm. In the remaining standard-Q arm, the nonempty
-normal core must contain all three players; canonical matrix transport and
-the directed-cycle classification produce an actual small-hazard cycle without
-own-singleton positivity. The literal Literature `proposition1` delegates to
-this theorem and passes its separate standard-axiom check. Neither the
-strategy-class statement nor this assembly computes a fixed payoff target
-or asserts the paper's distinct printed subdivision rates.
+The literal Literature `proposition1` delegates to this theorem and passes its
+separate standard-axiom check. The paper's distinct printed subdivision rates
+are not asserted by this assembly.
 
 `QuittingThreePlayerStrategyClass.of_homogeneousMatrixBranch` and
 `of_not_standardQMatrixSide`
@@ -1508,9 +1617,8 @@ or asserts the paper's distinct printed subdivision rates.
 reuse the actual stationary-root families from the existing LCP producers.
 They allow arbitrary finite player types and reward signs under their explicit
 matrix hypotheses. `stationaryAlternative_or_standardQMatrixSide` retains the
-remaining nonhomogeneous standard-Q side as an alternative; it does not claim
-that signs alone exclude that side or that unrestricted Literature
-Proposition 1 is complete.
+remaining nonhomogeneous standard-Q side as an alternative; signs alone do not
+exclude that side.
 
 `quittingCrossedClippedMap` and `quittingCrossedResponse_derivative_apply`
 (`UniformEquilibrium/Quitting/Stationary/GuardedCrossedResponse.lean`), with
