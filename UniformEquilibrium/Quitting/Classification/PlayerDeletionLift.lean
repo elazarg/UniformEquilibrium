@@ -45,6 +45,9 @@ noncomputable section
 
 namespace GameTheory
 
+/-- The surviving players of a deletion predicate. -/
+abbrev QuittingChildPlayer {ι : Type} (deleted : ι → Prop) := {who : ι // ¬ deleted who}
+
 open StochasticGame Filter _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]

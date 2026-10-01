@@ -1,5 +1,5 @@
 import UniformEquilibrium.Quitting.Terminal.SinglePivotFiniteMenuSource
-import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingRecursion
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineTimingRecursion
 import UniformEquilibrium.Quitting.Paths.SureExitSet
 
 noncomputable section

@@ -30,7 +30,7 @@ open GameTheory.Math.Probability
 
 namespace GameTheory
 
-open Filter _root_.Math.Probability Set
+open Filter _root_.Math.Probability _root_.Set
 open scoped Topology
 
 variable {iota : Type} [Fintype iota] [DecidableEq iota]

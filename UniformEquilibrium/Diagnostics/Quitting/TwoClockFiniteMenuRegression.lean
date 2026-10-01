@@ -4,7 +4,7 @@ import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineNashExistence
 import UniformEquilibrium.Quitting.Punishment.FiniteMenuPunishmentRecursion
 import UniformEquilibrium.Quitting.Classification.OnePlayer.FiniteMenuPunishment
 import UniformEquilibrium.Quitting.Punishment.FinitePureReplyPunishment
-import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingRecursion
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineTimingRecursion
 import UniformEquilibrium.Quitting.Paths.StoppingLawOperationalDistance
 
 noncomputable section

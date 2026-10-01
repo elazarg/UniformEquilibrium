@@ -590,13 +590,13 @@ end  -- [Fintype Outcome] game-side closure
 
 section  -- Fixed-point and existence theorems
 
-/-- A fixed point of `nashMapOnMixedSimplex` yields a mixed Nash equilibrium
-    under bounded utilities. -/
-theorem mixed_nash_exists_of_nashMapOnMixedSimplex_fixed_point_of_bounded
+/-- The actual PMF profile at a simplex fixed point is Nash. This retains
+that same point for downstream connected-component transports. -/
+theorem isNash_profileFromMixedSimplex_of_fixedPoint_of_bounded
     {C : ι → ℝ} (hbd : ∀ who ω, |G.utility ω who| ≤ C who)
-    (hfix : ∃ x, Function.IsFixedPt (G.nashMapOnMixedSimplex) x) :
-    ∃ σ : ∀ i, PMF (G.Strategy i), G.mixedExtension.IsNash σ := by
-  rcases hfix with ⟨x, hfx⟩
+    (x : MixedSimplex ι (fun who => G.Strategy who))
+    (hfx : Function.IsFixedPt (G.nashMapOnMixedSimplex) x) :
+    G.mixedExtension.IsNash (G.profileFromMixedSimplex x) := by
   let w : ∀ j, G.Strategy j → ℝ := fun j a => (x j).weights a
   have hw_nn : ∀ j a, 0 ≤ w j a := by
     intro j a
@@ -607,9 +607,28 @@ theorem mixed_nash_exists_of_nashMapOnMixedSimplex_fixed_point_of_bounded
   have hfp_weights : G.nashMap w hw_nn hw_sum = w := by
     funext who a
     exact congrArg (fun point => point.weights a) (congr_fun hfx who)
-  exact ⟨G.profileFromWeights w hw_nn hw_sum,
-    G.nash_fp_is_nash_of_bounded _
-      hbd (G.nashMap_fp_identity w hw_nn hw_sum hfp_weights)⟩
+  exact G.nash_fp_is_nash_of_bounded _
+    hbd (G.nashMap_fp_identity w hw_nn hw_sum hfp_weights)
+
+/-- Finite outcomes provide the bound internally while retaining the same
+actual profile at the selected fixed point. -/
+theorem isNash_profileFromMixedSimplex_of_fixedPoint [Finite G.Outcome]
+    (x : MixedSimplex ι (fun who => G.Strategy who))
+    (hfx : Function.IsFixedPt (G.nashMapOnMixedSimplex) x) :
+    G.mixedExtension.IsNash (G.profileFromMixedSimplex x) := by
+  choose C hbd using fun who =>
+    Math.Probability.exists_abs_bound_of_finite (fun outcome => G.utility outcome who)
+  exact G.isNash_profileFromMixedSimplex_of_fixedPoint_of_bounded hbd x hfx
+
+/-- A fixed point of `nashMapOnMixedSimplex` yields a mixed Nash equilibrium
+    under bounded utilities. -/
+theorem mixed_nash_exists_of_nashMapOnMixedSimplex_fixed_point_of_bounded
+    {C : ι → ℝ} (hbd : ∀ who ω, |G.utility ω who| ≤ C who)
+    (hfix : ∃ x, Function.IsFixedPt (G.nashMapOnMixedSimplex) x) :
+    ∃ σ : ∀ i, PMF (G.Strategy i), G.mixedExtension.IsNash σ := by
+  obtain ⟨x, hfx⟩ := hfix
+  exact ⟨G.profileFromMixedSimplex x,
+    G.isNash_profileFromMixedSimplex_of_fixedPoint_of_bounded hbd x hfx⟩
 
 /-- Finite-outcome wrapper: a fixed point of `nashMapOnMixedSimplex` yields a
     mixed Nash equilibrium. -/

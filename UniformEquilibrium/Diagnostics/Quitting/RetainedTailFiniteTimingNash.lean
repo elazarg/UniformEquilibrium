@@ -8,6 +8,7 @@ import UniformEquilibrium.Diagnostics.Quitting.StoppingLaw.ContinuePrefixAtomAcc
 import UniformEquilibrium.Diagnostics.Quitting.TerminalCapNashChronology
 import UniformEquilibrium.Diagnostics.Quitting.TerminalSemanticPositiveSlopeRectangle
 import UniformEquilibrium.Quitting.Paths.SurvivalWeightedSuffixRegret
+import UniformEquilibrium.Quitting.Terminal.RetainedTailFiniteTimingWord
 
 /-!
 # Finite timing Nash grafts over an arbitrary retained tail
@@ -36,15 +37,6 @@ namespace GameTheory
 open _root_.Math.Probability
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-/-- The behavioral realization of a finite timing word followed by a literal
-retained tail. -/
-def quittingRetainedTailFiniteTimingGraft
-    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
-    (roots : List (ι → PMF Bool))
-    (tail : (quittingGame reward).BehaviorProfile) :
-    (quittingGame reward).BehaviorProfile :=
-  quittingLiteralRootStackProfile reward roots tail
 
 /-- The prescribed timing action which Continues through the whole finite
 word and then resumes the retained tail. -/

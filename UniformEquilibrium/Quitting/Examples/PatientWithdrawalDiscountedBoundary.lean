@@ -1,10 +1,11 @@
 import UniformEquilibrium.Quitting.Examples.PatientWithdrawalFiniteHorizonBoundary
 import UniformEquilibrium.Quitting.Paths.EvaluatedPureTimeCap
+import UniformEquilibrium.Quitting.Paths.DiscountedStoppingLawPayoff
 
 /-! # A patient certificate with a literal discounted-law violation
 
-This is the packet's clock-law evaluation d^(t+1), not an identification with
-an independently defined discounted stage series. The actual child profile,
+This uses the canonical clock-law evaluation d^(t+1), whose actual-history
+stage-series identification is owned by DiscountedStoppingLawPayoff. The actual child profile,
 its canonical Never lift, and the complete behavioral response class are the
 same as in the horizon-three example. The patient certificate remains terminal-only.
 -/
@@ -20,8 +21,8 @@ open PatientWithdrawalFiniteHorizonBoundary
 private local instance : Nonempty Survivor := ⟨⟨some 0, by simp⟩⟩
 
 /-- Absorption at date t is evaluated with weight d^(t+1); Never has weight zero. -/
-def discountEvaluation (d : ℝ) : WithTop ℕ → ℝ :=
-  WithTop.recTopCoe 0 (fun time => d ^ (time + 1))
+abbrev discountEvaluation (d : ℝ) : WithTop ℕ → ℝ :=
+  quittingDiscountedEvaluation d
 
 @[simp] theorem discountEvaluation_top (d : ℝ) : discountEvaluation d ⊤ = 0 := rfl
 
@@ -29,31 +30,16 @@ def discountEvaluation (d : ℝ) : WithTop ℕ → ℝ :=
     discountEvaluation d time = d ^ (time + 1) := rfl
 
 theorem discountEvaluation_nonneg (d : ℝ) (hd : 0 ≤ d) (clock : WithTop ℕ) :
-    0 ≤ discountEvaluation d clock := by
-  induction clock using WithTop.recTopCoe with
-  | top => exact le_rfl
-  | coe time => exact pow_nonneg hd _
+    0 ≤ discountEvaluation d clock :=
+  quittingDiscountedEvaluation_nonneg d hd clock
 
 theorem discountEvaluation_le_one (d : ℝ) (hd : 0 ≤ d) (hdone : d ≤ 1)
-    (clock : WithTop ℕ) : discountEvaluation d clock ≤ 1 := by
-  induction clock using WithTop.recTopCoe with
-  | top => norm_num
-  | coe time => exact pow_le_one₀ hd hdone
+    (clock : WithTop ℕ) : discountEvaluation d clock ≤ 1 :=
+  quittingDiscountedEvaluation_le_one d hd hdone clock
 
 theorem discountEvaluation_antitone (d : ℝ) (hd : 0 ≤ d) (hdone : d ≤ 1) :
-    Antitone (discountEvaluation d) := by
-  intro first second hle
-  induction first using WithTop.recTopCoe with
-  | top =>
-      have hsecond : second = ⊤ := top_le_iff.mp hle
-      subst second
-      exact le_rfl
-  | coe first =>
-      induction second using WithTop.recTopCoe with
-      | top => exact pow_nonneg hd _
-      | coe second =>
-          exact pow_le_pow_of_le_one hd hdone
-            (Nat.add_le_add_right (WithTop.coe_le_coe.mp hle) 1)
+    Antitone (discountEvaluation d) :=
+  quittingDiscountedEvaluation_antitone d hd hdone
 
 private def reply (d : ℝ) (who : Player) (choice : Option ℕ) : ℝ :=
   quittingStoppingLawEvaluatedPayoff reward (discountEvaluation d)
@@ -173,8 +159,9 @@ theorem child_discounted_debt (d : ℝ) (hd : 0 < d) (hdone : d < 1) :
   congr 1
   ring
 
-/-- For every 0<d<1 the actual outsider debt exceeds the patient weighted child debt.
-This is not a failure of terminal protection or a discounted stage-series theorem. -/
+/-- For every 0<d<1 the outsider law debt exceeds the patient weighted child debt.
+The literal stage-series restatement is in PatientWithdrawalDiscountedStageBoundary.
+This is not a failure of terminal protection. -/
 theorem patient_discounted_bound_fails (d : ℝ) (hd : 0 < d) (hdone : d < 1) :
     (∑ i : Child, (certificate.advanceWeight i + certificate.withdrawalWeight i) *
       (quittingBehaviorEvaluatedDeviationPayoffCap (quittingDeleteReward reward (· = none))

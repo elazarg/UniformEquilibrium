@@ -27,7 +27,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set
+open Filter _root_.Set
 open QuittingSureSetOwnerRepair
 
 variable {reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4)}

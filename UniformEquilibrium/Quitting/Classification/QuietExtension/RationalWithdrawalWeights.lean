@@ -1,4 +1,5 @@
 import MathUE.LinearProgramming.RationalFeasibility
+import UniformEquilibrium.Quitting.Classification.QuietExtension.WithdrawalResponseCoefficients
 import UniformEquilibrium.Quitting.Classification.QuietExtension.PatientWithdrawalRaw
 import UniformEquilibrium.Quitting.Classification.QuietExtension.RationalWithdrawalSecurityLP
 import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalSecurityMixedRaw
@@ -20,43 +21,12 @@ namespace GameTheory
 
 open scoped BigOperators
 
-private abbrev WithdrawalResponseRow (ι : Type) :=
-  Option (Bool × {coalition : Finset ι // coalition.Nonempty})
-
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-omit [Fintype ι] in
-private def withdrawalAdvanceCoefficient
-    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) :
-    WithdrawalResponseRow ι → ι → ℝ
-  | none, i => reward ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i)
-  | some (false, coalition), i =>
-      reward ⟨{some i}, Finset.singleton_nonempty (some i)⟩ (some i) -
-        reward ⟨cappedClockChildCoalition coalition.1,
-          cappedClockChildCoalition_nonempty coalition.2⟩ (some i)
-  | some (true, coalition), i =>
-      reward ⟨cappedClockChildCoalition (insert i coalition.1),
-          cappedClockChildCoalition_nonempty (Finset.insert_nonempty i coalition.1)⟩
-          (some i) -
-        reward ⟨cappedClockChildCoalition coalition.1,
-          cappedClockChildCoalition_nonempty coalition.2⟩ (some i)
-
-omit [Fintype ι] in
-private def withdrawalOutsideCoefficient
-    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ) :
-    WithdrawalResponseRow ι → ℝ
-  | none => reward ⟨{none}, Finset.singleton_nonempty none⟩ none
-  | some (false, coalition) =>
-      reward ⟨{none}, Finset.singleton_nonempty none⟩ none -
-        reward ⟨cappedClockChildCoalition coalition.1,
-          cappedClockChildCoalition_nonempty coalition.2⟩ none
-  | some (true, coalition) =>
-      reward ⟨cappedClockJoinedCoalition coalition.1,
-          cappedClockJoinedCoalition_nonempty coalition.1⟩ none -
-        reward ⟨cappedClockChildCoalition coalition.1,
-          cappedClockChildCoalition_nonempty coalition.2⟩ none
-
-private theorem exists_rational_responseWeights
+/-- Exact weak-row rationalization shared by withdrawal and cancellation.
+The retract coefficients are supplied finite rational reward expressions,
+not strategic caps or optimization certificates. -/
+theorem exists_rational_withdrawalResponseWeights
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (hrational : ∀ coalition who, Math.IsRationalReal (reward coalition who))
     (withdrawal : WithdrawalResponseRow ι → ι → ℝ)
@@ -146,7 +116,7 @@ theorem isRationalReal_patientWithdrawalFloor
   · obtain ⟨coalition, _, rfl⟩ := Finset.mem_image.mp hpassive
     exact hrational _ _
 
-private theorem rational_deadlineGain
+theorem isRationalReal_deadlineWithdrawalGainFloor
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (hrational : ∀ coalition who, Math.IsRationalReal (reward coalition who))
     (i : ι) (A : Finset ι) (hA : A.Nonempty) :
@@ -159,7 +129,8 @@ private theorem rational_deadlineGain
       (hrational _ _)
   · exact Math.IsRationalReal.zero
 
-private theorem rational_restartGain
+/-- An actual singleton restart-floor gain is rational when its reward and floor are. -/
+theorem isRationalReal_deadlineSecurityGainFloorWithRestart
     (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
     (hrational : ∀ coalition who, Math.IsRationalReal (reward coalition who))
     (floor : ℝ) (hfloor : Math.IsRationalReal floor)
@@ -167,7 +138,7 @@ private theorem rational_restartGain
     Math.IsRationalReal (deadlineSecurityGainFloorWithRestart reward floor i A hA) := by
   classical
   unfold deadlineSecurityGainFloorWithRestart
-  apply (rational_deadlineGain reward hrational i A hA).add
+  apply (isRationalReal_deadlineWithdrawalGainFloor reward hrational i A hA).add
   split_ifs
   · exact hfloor.sub (isRationalReal_deadlineWithdrawalZeroFloor reward hrational i)
   · exact Math.IsRationalReal.zero
@@ -189,7 +160,7 @@ theorem exists_rational_patientWithdrawalRewardCertificate
     cases row with
     | none => exact isRationalReal_patientWithdrawalOwnNeverAlternative reward hrational i
     | some pair =>
-        exact rational_restartGain reward hrational _
+        exact isRationalReal_deadlineSecurityGainFloorWithRestart reward hrational _
           (isRationalReal_patientWithdrawalFloor reward hrational i) i pair.2.1 pair.2.2
   obtain ⟨realCertificate⟩ := hfeasible
   have hreal : ∃ advance retract : ι → ℝ, (∀ i, 0 ≤ advance i) ∧
@@ -209,7 +180,7 @@ theorem exists_rational_patientWithdrawalRewardCertificate
         · exact realCertificate.future_row coalition.1 coalition.2
         · exact realCertificate.join_row coalition.1 coalition.2
   obtain ⟨advance, retract, hadvance, hretract, hrows⟩ :=
-    exists_rational_responseWeights reward hrational withdrawal hwithdrawal hreal
+    exists_rational_withdrawalResponseWeights reward hrational withdrawal hwithdrawal hreal
   let certificate : PatientWithdrawalRewardCertificate reward :=
     { advanceWeight := fun i => (advance i : ℝ)
       withdrawalWeight := fun i => (retract i : ℝ)
@@ -278,7 +249,7 @@ private theorem exists_rational_deadlineRows
         · simpa [withdrawal] using hfuture coalition.1 coalition.2
         · exact hjoin coalition.1 coalition.2
   obtain ⟨advance, retract, ha, hr, hrows⟩ :=
-    exists_rational_responseWeights reward hrational withdrawal hwithdrawal hreal
+    exists_rational_withdrawalResponseWeights reward hrational withdrawal hwithdrawal hreal
   refine ⟨advance, retract, ha, hr, ?_, ?_, ?_⟩
   · simpa [withdrawal, withdrawalOutsideCoefficient,
       withdrawalAdvanceCoefficient] using hrows none
@@ -298,7 +269,7 @@ theorem exists_rational_deadlineWithdrawalRewardCertificate
   obtain ⟨realCertificate⟩ := hfeasible
   obtain ⟨advance, retract, ha, hr, hnever, hfuture, hjoin⟩ :=
     exists_rational_deadlineRows reward hrational (deadlineWithdrawalGainFloor reward)
-      (rational_deadlineGain reward hrational)
+      (isRationalReal_deadlineWithdrawalGainFloor reward hrational)
       ⟨realCertificate.advanceWeight, realCertificate.withdrawalWeight,
         realCertificate.advanceWeight_nonneg, realCertificate.withdrawalWeight_nonneg,
         realCertificate.never_row, realCertificate.future_row, realCertificate.join_row⟩
@@ -331,7 +302,7 @@ theorem exists_rational_deadlineSecurityRewardCertificate
   have hgain : ∀ i A hA,
       Math.IsRationalReal (deadlineSecurityGainFloor reward i A hA) := by
     intro i A hA
-    exact rational_restartGain reward hrational _
+    exact isRationalReal_deadlineSecurityGainFloorWithRestart reward hrational _
       ((isRationalReal_deadlineWithdrawalSecurityFloor reward hrational i).min
         Math.IsRationalReal.zero) i A hA
   obtain ⟨realCertificate⟩ := hfeasible
@@ -378,7 +349,7 @@ theorem exists_rational_cappedClockParentRewardCertificate
             mul_zero, add_zero, sub_le_iff_le_add] using
             realCertificate.join_row coalition.1 coalition.2
   obtain ⟨advance, retract, ha, hr, hrows⟩ :=
-    exists_rational_responseWeights reward hrational (fun _ _ => 0)
+    exists_rational_withdrawalResponseWeights reward hrational (fun _ _ => 0)
       (fun _ _ => Math.IsRationalReal.zero) hreal
   let certificate : CappedClockParentRewardCertificate reward :=
     { weight := fun i => (advance i : ℝ)
@@ -447,7 +418,7 @@ theorem exists_rational_deadlineSecurityTerminalRewardCertificate
       (deadlineSecurityGainFloorWithRestart reward
         (deadlineWithdrawalSecurityFloor reward i) i A hA) := by
     intro i A hA
-    exact rational_restartGain reward hrational _
+    exact isRationalReal_deadlineSecurityGainFloorWithRestart reward hrational _
       (isRationalReal_deadlineWithdrawalSecurityFloor reward hrational i) i A hA
   obtain ⟨realCertificate⟩ := hfeasible
   obtain ⟨advance, retract, ha, hr, hnever, hfuture, hjoin⟩ :=

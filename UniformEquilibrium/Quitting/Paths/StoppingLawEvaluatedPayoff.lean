@@ -44,6 +44,18 @@ def quittingPureClockEvaluatedPayoff
   | none => 0
   | some A => evaluation (quittingEarliestStoppingValue times) * reward A who
 
+omit [DecidableEq ι] in
+/-- Evaluation multiplies the actual first-outcome terminal reward; joint
+Never remains zero regardless of the supplied evaluation at infinity. -/
+theorem quittingPureClockEvaluatedPayoff_eq_evaluation_mul_terminalPayoff
+    (reward : {A : Finset ι // A.Nonempty} → ι → ℝ)
+    (evaluation : WithTop ℕ → ℝ) (times : ι → Option ℕ) (who : ι) :
+    quittingPureClockEvaluatedPayoff reward evaluation times who =
+      evaluation (quittingEarliestStoppingValue times) *
+        quittingPureClockTerminalPayoff reward times who := by
+  unfold quittingPureClockEvaluatedPayoff quittingPureClockTerminalPayoff
+  cases quittingFirstStoppingOutcome times <;> simp
+
 /-- Expected evaluated payoff of independent complete stopping laws. -/
 def quittingStoppingLawEvaluatedPayoff
     (reward : {A : Finset ι // A.Nonempty} → ι → ℝ)
@@ -101,6 +113,28 @@ theorem abs_quittingPureClockEvaluatedPayoff_le
         (evaluation_antitone bot_le)
         (abs_reward_le_quittingRewardBound reward outcome who)
         (abs_nonneg _) (evaluation_nonneg _)
+
+omit [DecidableEq ι] in
+/-- The difference of two actual evaluated clock payoffs is uniformly bounded. -/
+theorem abs_quittingPureClockEvaluatedPayoff_sub_le
+    (reward : {A : Finset ι // A.Nonempty} → ι → ℝ)
+    (evaluation : WithTop ℕ → ℝ)
+    (evaluation_nonneg : ∀ clock, 0 ≤ evaluation clock)
+    (evaluation_antitone : Antitone evaluation)
+    (first second : ι → Option ℕ) (who : ι) :
+    |quittingPureClockEvaluatedPayoff reward evaluation first who -
+        quittingPureClockEvaluatedPayoff reward evaluation second who| ≤
+      2 * (evaluation 0 * quittingRewardBound reward) := by
+  calc
+    |_ - _| ≤ |quittingPureClockEvaluatedPayoff reward evaluation first who| +
+        |quittingPureClockEvaluatedPayoff reward evaluation second who| := abs_sub _ _
+    _ ≤ evaluation 0 * quittingRewardBound reward +
+        evaluation 0 * quittingRewardBound reward := add_le_add
+      (abs_quittingPureClockEvaluatedPayoff_le reward evaluation
+        evaluation_nonneg evaluation_antitone first who)
+      (abs_quittingPureClockEvaluatedPayoff_le reward evaluation
+        evaluation_nonneg evaluation_antitone second who)
+    _ = _ := by ring
 
 omit [DecidableEq ι] in
 /-- The same uniform bound after integrating independent stopping laws. -/

@@ -11,9 +11,6 @@ open StochasticGame
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
 
-/-- The surviving child of a deletion predicate. -/
-abbrev QuittingChildPlayer (deleted : ι → Prop) := {who : ι // ¬ deleted who}
-
 /-- Retain the child and one displayed outsider, deleting every other outsider. -/
 abbrev QuittingChildWithOutsiderPlayer (deleted : ι → Prop) (outside : ι) :=
   {who : ι // ¬ (deleted who ∧ who ≠ outside)}

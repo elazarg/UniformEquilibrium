@@ -1364,8 +1364,7 @@ accuracy. Deviations are unrestricted behavioral replacements. Weak and
 degenerate singleton supports are included. The infeasible-mixture branch
 produces an exact stationary terminal equilibrium; the feasible branch reuses
 the singleton alternative and explicit cyclic arcs. This source conclusion
-does not quantify a fixed payoff target or prove the unrestricted all-sign
-three-player source. Positive scaling and player-cardinality
+does not quantify a fixed payoff target. Positive scaling and player-cardinality
 transports are supplied by
 `QuittingThreePlayerStrategyClass.of_card_le_three_of_positiveSolo_when_three`
 (`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardTransport.lean`).
@@ -1377,6 +1376,16 @@ for arbitrary reward signs. Multiplicative coordinate scaling preserves zero
 Never payoff; no terminal-only additive translation is used. The generic
 terminal-payoff and Nash pullback lemmas reside in
 `UniformEquilibrium/Quitting/Classification/PlayerReindex.lean`.
+`QuittingThreePlayerStrategyClass.of_card_le_three`
+(`UniformEquilibrium/Quitting/Classification/ThreePlayer/StationaryOrSmallHazardAllSigns.lean`)
+removes the sign restriction: every reward table on at most three players has,
+at each positive accuracy, a stationary terminal approximate equilibrium or
+a profile whose every date/player Quit hazard is at most that accuracy.
+The terminal Nash inequalities cover unrestricted behavioral deviations.
+On the remaining three-player standard-Q branch, the actual normalized
+singleton matrix produces a strict directed cycle; the existing cycle
+compiler accepts arbitrary own-singleton signs. This strategy-class result
+does not select a fixed payoff target before accuracy.
 Literature wrappers delegate to these production proofs, not conversely.
 
 `QuittingThreePlayerStrategyClass.of_card_le_three`
@@ -2924,6 +2933,48 @@ extends each specified child target to one fixed parent payoff.
 constructs the child target from low-cardinality existence. These are raw
 reward-certificate classes, not a theorem that every Fin4 table passes.
 They make no finite-evaluation claim for the favorable patient Never floor.
+
+`cancellationStoppingClock` and
+`cancellationPrivateReplacement_childProduct`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CancellationWithdrawal.lean`)
+retain earlier own clocks and cancel clocks at or after a finite private
+replica deadline to Never; a Never deadline is the identity. The resulting
+replacement law is an actual independent product with unchanged opponents.
+`cancellationWithdrawal_quietLift_outsideBehaviorDebt_le_weighted_childDebt`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CancellationWithdrawalFullBehavioralDebt.lean`)
+bounds every complete outsider deviation at every nonnegative antitone
+evaluation, for any actual child profile under its raw cancellation N/F/J
+certificate. The coefficients are the SUM of advancing and cancellation
+weights. Its floor is zero-based, not the patient late-own-quit alternative.
+`exists_uniformPayoffWitnesses_eq_on_child_of_cancellationWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CancellationWithdrawalFixedTarget.lean`)
+retains actual quiet lifts at one fixed parent target agreeing with the
+specified child target. The corresponding Fin4 source consumer
+`quittingGame_exists_uniformPayoffWitnesses_of_finFour_cancellationWithdrawalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/CancellationWithdrawalFinFourExistence.lean`)
+produces that child target internally for a nonempty proper child and raw
+certificates for every outsider; it does not assume a favorable profile.
+
+`withdrawalFutureJoin_quietLift_outsideDebt_le_add_neverExcess`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinDebt.lean`)
+covers the patient, ordinary deadline, evaluated-security, terminal-security
+and cancellation F/J-only systems. It retains the explicit positive-part
+Never-row residual times the ACTUAL child joint-Never mass. Patient and
+cancellation use summed response weights; the other three use their maximum.
+The patient residual also retains its late-own-quit Never bonus.
+`withdrawalFutureJoin_quietLift_outsideDebt_le_of_positiveSingleton` in the
+same file charges residual divided by one actual positive child singleton
+to that pivot's terminal debt. Zero joint-Never mass removes the residual
+without a singleton-sign assumption. All these relaxations are TERMINAL-only.
+`exists_uniformPayoffWitnesses_eq_on_child_of_withdrawalFutureJoinFamily` and
+`quittingGame_exists_uniformPayoffWitnesses_of_finFour_withdrawalFutureJoinFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/WithdrawalFutureJoinFixedTarget.lean`)
+preserve actual quiet lifts and the fixed target, allowing different kinds
+for different outsiders and requiring a positive actual child singleton.
+The Fin4 wrapper constructs the child target internally. An outsider-only
+terminal reward shift keeps Never zero and carries an explicit joint-Never
+correction; it is not arbitrary-profile strategic equivalence.
+
 `exists_rational_patientWithdrawalRewardCertificate`,
 `exists_rational_deadlineWithdrawalRewardCertificate`,
 `exists_rational_deadlineSecurityRewardCertificate`,
@@ -2935,6 +2986,79 @@ replace real feasible weights by exact rational nonnegative weights for their
 respective literal reward-row systems when all reward entries are rational.
 Zero weights, boundary floors and equality rows are retained. Feasible weights
 remain an input; these adapters do not certify every game or perform a search.
+`exists_rational_cancellationWithdrawalRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalCancellationWithdrawalWeights.lean`)
+and `exists_rational_withdrawalFutureJoinRewardCertificate`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalWithdrawalFutureJoinWeights.lean`)
+supply the cancellation and all-five-kind F/J-only rational counterparts.
+They retain weak equality rows, zero weights and empty indices, rationalizing
+actual table-derived floors and gains rather than assuming a rational optimum
+for an arbitrary real table.
+
+`selectNonnegativeRationalFeasible` and `selectRationalPrimalDual`
+(`MathUE/LinearProgramming/ExecutableRationalSelection.lean`)
+are executable exact rational selectors. The weak-row selector first tests
+zero; the primal/dual selector first tests zero-primal/zero-or-unit-dual
+candidates. Accepted candidates satisfy the same exact tests; other cases
+retain the canonical encodable exhaustive fallback.
+Their real feasibility and boundedness proofs are erased, not runtime witnesses;
+the latter selector tests actual primal/dual feasibility and exact zero gap.
+`ExecutableWithdrawal.securityValue_cast`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/ExecutableWithdrawalSecurity.lean`)
+identifies the computed rational security LP value with the actual real value,
+including zero-hazard optima. `ExecutableWithdrawal.advancingWeights`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/ExecutableAdvancingWeights.lean`)
+computes advancing-only source weights without withdrawal columns.
+`ExecutableWithdrawal.fullWeights` and `ExecutableWithdrawal.futureJoinWeights`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/ExecutableWithdrawalWeights.lean`)
+compute weights from the actual rational reward coefficients for all five
+kinds; a real raw feasibility proof supplies no selected weights or cap.
+`ExecutableWithdrawal.fullAmplification_cast` and
+`ExecutableWithdrawal.futureJoinAmplification_cast`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/ExecutableWithdrawalSourceAmplification.lean`)
+retain the exact sum-versus-max debt rule, patient Never bonus, residual and
+positive-singleton correction in a computed rational source multiplier K.
+K is fixed before the requested accuracy.
+
+`rationalQuittingFiniteWordBoundedSearch_eventually_succeeds_of_terminalApproximation`
+(`UniformEquilibrium/Quitting/Root/RationalFiniteWordSearch.lean`)
+derives termination from actual approximate terminal-equilibrium existence,
+using full-cap finite-calendar approximation and rational density. The
+low-player producer `rationalQuittingFiniteWordSearchOfCardLeThree_finiteLaws`
+(`UniformEquilibrium/Quitting/Root/RationalLowPlayerFiniteWordSearch.lean`)
+obtains that existence internally, including zero players and zero-length
+words. The exact evaluator keeps gap-date and late replies and Never;
+it is not a stationary-only test or a prescribed-target oracle.
+`ExecutableWithdrawal.fullWord_finiteLaws` and
+`ExecutableWithdrawal.futureJoinWord_finiteLaws`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/ExecutableWithdrawalQuietFiniteWords.lean`)
+start with an actual rational parent table, decidable deletion, a nonempty
+child labeled by at most three players, nonempty outsiders and raw feasible
+certificates. They compute K before accuracy and select the CHILD word at
+the exact rational accuracy/K. The parent laws keep the same child dates
+and every exact rational child atom, and every outsider law is literally
+Never. Parent terminal debt is strictly below the requested accuracy for
+every complete behavioral deviation. The F/J-only version requires an actual
+positive child singleton for its pivot correction. These accuracy-only word
+selectors compute neither a fixed real UE target nor a complexity bound;
+they do not decide infeasibility or certify every reward table.
+`exists_rationalWithdrawalFutureJoin_quietFiniteWordLaws`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/RationalWithdrawalFutureJoinQuietFiniteWords.lean`)
+also retains all five kinds' exact rational weights and one rational K before
+every accuracy, then the same child word and parent laws. This existential
+rational wrapper is distinct from the computed source weights/K frontend.
+
+`WithdrawalBoundaryExamples.patientOnly_no_deadlineCertificate` and
+`WithdrawalBoundaryExamples.deadlineOnly_no_patientCertificate`
+(`UniformEquilibrium/Quitting/Examples/WithdrawalRawIncomparability.lean`)
+separate the two raw cones using complete literal reward tables and actual
+passing certificates. The patient-only table also excludes both security
+deadline variants. These raw compiler obstructions are not no-UE claims.
+`WithdrawalBoundaryExamples.patient_deadline_incomparable_on_fixed_twoPlayerChild`
+in the same file puts both separations on the same two-player child subset
+inside the same three-player label type. It also excludes both security
+variants on the padded patient-only table. The two restricted child reward
+tables need not coincide; no strategic padding equivalence is asserted.
 `patient_horizon_three_bound_fails`
 (`UniformEquilibrium/Quitting/Examples/PatientWithdrawalFiniteHorizonBoundary.lean`)
 exhibits a passing terminal patient certificate whose actual horizon-three
@@ -2944,8 +3068,28 @@ outsider debt is `2 / 3`, exceeding the weighted child debt `1 / 3`.
 uses the same actual child profile and Never lift. For every `0 < d < 1`,
 the outsider's evaluated debt `d` exceeds the weighted child debt
 `max (d - d^2) (d^2)`. The evaluation is the packet's clock weight `d^(t+1)`;
-no separate discounted stage-series identity is asserted. Both comparisons
-use unrestricted behavioral caps, not a retained finite response menu.
+the semantic discounted stage bridge below identifies that weight with
+the standard normalized stage-series evaluation. Both comparisons use
+unrestricted behavioral caps, not a retained finite response menu.
+`quittingDiscountedPayoff_eq_stoppingLawEvaluatedPayoff` and
+`quittingDiscountedPayoff_update_eq_behaviorEvaluatedPayoff`
+(`UniformEquilibrium/Quitting/Paths/DiscountedStoppingLawPayoff.lean`)
+identify the ACTUAL normalized discounted expected stage series with
+first-absorption evaluation `d^(t+1)` for every profile and complete unilateral
+update when `0 ≤ d < 1`, on a finite nonempty player set. Signed rewards and
+joint Never remain literal. `quittingDiscountedDeviationDebt_eq_behaviorEvaluatedDebt`
+(`UniformEquilibrium/Quitting/Paths/DiscountedBehavioralCap.lean`)
+retains the supremum over ALL behavioral replacements.
+`patient_discounted_stage_bound_fails`
+(`UniformEquilibrium/Quitting/Examples/PatientWithdrawalDiscountedStageBoundary.lean`)
+therefore states the same strict failure for actual normalized discounted
+stage payoffs and complete discounted debt for every `0 < d < 1`.
+`WithdrawalBoundaryExamples.neverResidual_outsideDebt_eq_residual_times_childJointNever`
+(`UniformEquilibrium/Quitting/Examples/WithdrawalNeverBoundary.lean`)
+uses the canonical actual one-child profile with zero child rewards: all five F/J kinds
+pass with zero weights, child debt is zero, child joint-Never is one, and
+both the exact outside debt and residual equal one. No positive child
+singleton exists. Dropping the residual is false; this is not a no-UE claim.
 `exists_uniformPayoffWitnesses_eq_on_child_of_patientWithdrawalFamily`
 (`UniformEquilibrium/Quitting/Classification/QuietExtension/PatientWithdrawalFixedTarget.lean`)
 and the corresponding ordinary, truncated-security, and terminal-security

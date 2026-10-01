@@ -22,12 +22,7 @@ private theorem expect_sub_of_abs_bounds {Ω : Type*} (law : PMF Ω)
     (hg : ∀ sample, |g sample| ≤ D) :
     expect law (fun sample => f sample - g sample) =
       expect law f - expect law g := by
-  change expect law (fun sample => f sample + -g sample) = _
-  rw [expect_add_of_summable]
-  · rw [expect_neg]
-    ring
-  · exact expect_summable_of_bounded law f hf
-  · simpa [mul_neg] using (expect_summable_of_bounded law g hg).neg
+  exact _root_.Math.Probability.expect_sub_of_abs_bounds law f g hf hg
 
 /-- One legal private mixed response realizes the expectation of the
 weighted advance and withdrawal gains, with coefficient `max(a,b)`. -/

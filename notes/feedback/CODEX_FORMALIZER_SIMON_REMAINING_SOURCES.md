@@ -5,6 +5,14 @@ in the repository does not by itself identify a gap in the paper. Specific
 source questions and refuted intermediate claims are distinguished where
 they arise.
 
+The large-continuation uniqueness dependency is stated without Lean terminology
+in `math/questions/SIMON_LARGE_CONTINUATION_ALL_CONTINUE_UNIQUENESS.md`.
+Its assumption matches `exists_scale_without_sure_quitter_of_not_instant`
+(`Literature/Simon2007.lean`): one positive support-error scale excludes sure
+quitters at every continuation above the fixed minmax floor. The question
+asks whether that source implies all-Continue uniqueness above one common
+threshold. No global survival bound or answer to that implication is assumed.
+
 ## Corrected Lemma 5
 
 `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated`
@@ -99,10 +107,9 @@ variation charge. Generated and instant exclusions are explicit.
 
 Both Simon modules pass silent named checks; separate transitive axiom
 checks of these declarations use only the three standard axioms. The
-remaining Case 3 source needs a connected component of the actual repeated
-equilibrium graph and its crossing/return construction. Nonempty fibers,
-a compact graph or the checked orbit-image identities do not supply that
-component. This is recorded as missing Lean work, not an open game theorem.
+actual interval component source described below now supplies the Case 3
+three-segment path. Its crossing/return construction remains missing Lean
+work; no full escape-game theorem is claimed.
 
 ## Connected continuation and the timer decoder
 
@@ -123,13 +130,82 @@ exhausted prefix the hazard is zero. Positive Never mass supplies the
 decoder's continuity and strictly subunit hazards. Empty calendars and
 zero finite-date weights remain allowed.
 
-The remaining source adapter is the actual finite timer game with arbitrary
-terminal continuation vector, its joint parameterized Nash map, and exact
-Nash-to-repeated-equilibrium transport. The existing zero-tail finite timing
-game cannot replace that source unchanged. The no-sure-quit hypothesis must
-then supply positive denominators on the selected Nash graph. Component
-continuation through this decoder and the crossing/return construction are
-separate from the checked payoff-image and orbit compactness results.
+`quittingContinuationFiniteTimingGame_mixedEU_eq_wordPayoff_of_laws` and
+`continuous_quittingContinuationFiniteTimingNashMap`
+(`UniformEquilibrium/Quitting/Terminal/ContinuationFiniteTimingGame.lean`)
+give the actual finite timer game with arbitrary formal terminal continuation
+vector, its exact independent-law payoff and its jointly continuous Nash map.
+The formal vector is delivered only when every timer chooses Never; it is not
+assumed attainable in the original quitting game. Empty calendars are allowed.
+
+`repeatedTimerGame_realizes_unilateralRepeatedDeviation` and
+`repeatedTimerGame_isNash_implies_repeatedEquilibrium`
+(`Literature/Simon2007.lean`) transport deviations while retaining the same
+original independent opponent laws. They establish the initial repeated-game
+Nash inequalities, not sequential perfection at unreachable suffixes.
+`exists_repeatedTimerReply_ge_minmax_sub` produces a finite timer reply
+attaining at least the minmax floor minus a nonnegative terminal tolerance,
+when that player's formal terminal coordinate meets the same floor.
+`exists_scale_without_finiteSureQuitter_of_not_instant` uses that floor and
+failure of the actual instant branch to obtain one positive scale with no
+sure quitter at any date of any corresponding rational-terminal equilibrium.
+Only after Nash-to-correspondence membership is proved does
+`repeatedTimer_none_pos_of_isNash_of_no_sure_quit` derive positive Never
+mass and hence the decoder's positive denominators and continuity.
+
+`exists_compact_connected_repeatedEquilibria_along_continuous_path` in the
+same file constructs a compact connected subset of the actual repeated
+equilibrium graph meeting both endpoint fibers of a continuous interval path.
+`EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant`
+applies it to the literal small-solo successor, critical point, intermediate
+point and large constant vector. Normality and failure of the instant branch
+supply path rationality and no-sure internally. The scale and large bound are
+selected before the critical point, accuracy and small-solo row; neither a
+favorable component nor a top equilibrium is supplied.
+
+`exists_largeRepeatedAllContinueThreshold_of_uniformRho` in the same file
+forces the large endpoint to be all-Continue only under the literal global
+`IsUniformRho` premise from the old printed Lemma 5. Its row-uniqueness
+proof uses only the survival half of that premise, not the motion half.
+The corrected compact-carrier motion/survival producer does not discharge
+the unbounded-tail premise. The arbitrary-connected-compact-parameter Lemma 8 and the
+Case 3 crossing/return construction also remain unproved. The canonical timer
+owner and both Simon modules pass silent named builds. Separate transitive
+axiom checks of these new timer, floor and component declarations use only
+the three standard axioms.
+
+## High-continuation uniqueness: literal Lemma 9
+
+`lemma9` (`Literature/Simon2007.lean`) records the printed Section 5.5
+statement under its standing assumptions: an escape game with neither
+**stationary** nor instant approximate equilibria. It remains open. The
+conclusion is one positive threshold above which every continuation vector's
+exact one-stage equilibrium set consists only of all-Continue. There is no
+supplied global parameter in this source statement.
+
+`lemma9_of_uniformRho` in the same file proves that conclusion conditionally
+on the old printed global parameter; it is not a proof of `lemma9`.
+Simon (2012), printed pages 184--185, changes the excluded branch to
+**stationarily generated** approximate equilibria and restricts both uniform
+estimates to a fixed compact continuation carrier. The original and corrected
+branch assumptions are not silently identified.
+
+The corrected escape construction still needs an actual high-continuation
+uniqueness producer under the generated/instant branch exclusions.
+`exists_normalizedMotionLowerBound_of_not_branches`
+(`UniformEquilibrium/Quitting/Classification/SimonFiniteOrbit/NormalizedMotionStationaryPrefixProducer.lean`)
+already supplies a global normalized-motion lower bound, but it supplies no
+uniform positive Continue mass. That survival bound is presently
+`exists_pos_uniformContinueMass_on_compact_of_noSure`
+(`UniformEquilibrium/Quitting/Classification/CompactContinuationMotion.lean`),
+whose continuation carrier is fixed and compact.
+
+Including an already chosen top vector in a compact path gives a path-dependent
+rate; it does not justify enlarging that vector beyond the rate's inverse
+threshold afterward. The needed result is high-tail uniqueness itself, not
+an assumed favorable top or a circular choice of a larger top from its own
+compact-carrier rate. This is a precise missing source/formalization dependency,
+not a counterexample to Lemma 9 or the escape-game theorem.
 
 ## Extended orbits
 
@@ -639,7 +715,7 @@ questions, and the checked trace and advantage comparisons, are recorded in
 
 ## Remaining Simon (2007) declarations
 
-The ten live `sorry` occurrences in `Literature/Simon2007.lean` have these
+The open proof declarations in `Literature/Simon2007.lean` have these
 nearest checked dependencies and unresolved inputs:
 
 | Declaration | Checked boundary | Missing input |
@@ -647,14 +723,15 @@ nearest checked dependencies and unresolved inputs:
 | `ApproximateEquilibriaImplyPerfect` | `EpsilonSelfPerfect.mono` only transports a supplied perfection witness across tolerances. | Simon [16]'s equilibrium-to-perfection construction for the actual stochastic-game law; no checked witness extractor supplies the common good set and local action inequalities. |
 | `theorem1` | `EpsilonViable.mono` and the paper's `CumulativeAdvantage`/`AdvantageCrossingEvent` are available. | The behavioral-profile patching and payoff estimate from self-perfection, viability, and the crossing-event bound to the stated equilibrium constant. |
 | `lemma2` | `MarkovSemantics.finiteExpectedVariation_eq_production` and `MarkovSemantics.expectedMarkovVariation_le_of_finiteProductionBound` give the cylinder-law adapter and exact finite-horizon reduction. | The global state-count finite-horizon variation inequality; the proposed single-state renewal bound is false, as noted above. |
-| `lemma5` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` apply under the *corrected* stronger branch exclusion and restricted carrier. | The printed 2007 hypotheses and unrestricted global motion conclusion are not supplied by those results. The 2012 correction changes both; this is not a Lean transport task. |
+| `lemma5` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` apply under the *corrected* stronger branch exclusion and restricted carrier. | The printed 2007 branch hypotheses and combined global motion/survival conclusion are not supplied by those results. Global normalized motion is available under the corrected branch exclusions, but does not supply global survival. |
 | `lemma5_corrected_2012` | `everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated` and `exists_correctedUniformMotionAt_of_not_branches` prove its harm and motion/survival clauses. `Literature.Simon2012.lemma2_1_part1`, `lemma2_1_part2`, and `lemma2_1` reuse this declaration. | The positive-normal-player clause under failure of the instant and stationarily generated branches, exactly the source obligation in “Corrected Lemma 5” above. The 2012 theorems cannot be imported back to discharge it. |
 | `theorem3` | `CyclicOrbitCondition.hasQuitApproximateEquilibria`, `FiniteNearOrbitCondition.toCyclicOrbitCondition`, and `CyclicOrbitCondition.toInfiniteOrbitCondition_of_uniformRho` assemble the other edges. | Its local `HasQuitApproximateEquilibria → CyclicOrbitCondition` hole, as well as the open printed `lemma5` it invokes. The checked `hasQuitApproximateEquilibria_imp_cyclicOrbitCondition_of_firstCrossingExtraction` requires a separate extraction premise and corrected motion. |
 | `theorem3_corrected_2012` | `CyclicOrbitCondition.toInfiniteOrbitCondition_of_corrected_motion` and the same orbit compilers cover the non-forward edges; `Literature.Simon2012.theorem2_1` only transports this very declaration to Euclidean norm. | `lemma5_corrected_2012` plus `HasCorrectedFirstCrossingPathExtraction` (or an equivalent equilibrium-to-cyclic proof). The conditional checked first-crossing compiler does not construct its extraction premise. |
 | `KohlbergMertensStatement` | `MatrixEquilibriumGraph` and `MatrixNorm` express the matrix-game target. | The external Kohlberg–Mertens homotopy theorem in the stated straight/proper form; no checked homotopy construction is present. |
-| `lemma8` | `repeatedF_eq_iterate_of_no_sure_quit` identifies the repeated payoff correspondence under the no-sure-quit premise. | A connected-component lifting argument for the repeated-equilibrium graph over connected compact `D`, using the matrix-equilibrium topology (including the open Kohlberg–Mertens input), not just payoff-set equality. |
-| `theorem4` | `lemma10` preserves the restricted escape region and `lemma11_of_crossHarm` reaches a critical point by a finite restricted orbit under its explicit motion/cross-harm inputs. | The final critical-point-to-approximate-equilibrium assembly, including the requisite equilibrium-component/topological step and discharge of the corrected Lemma 5 inputs. The checked critical-point orbit alone is not an equilibrium. |
+| `lemma8` | `repeatedF_eq_iterate_of_no_sure_quit` identifies the repeated payoff correspondence; `exists_compact_connected_repeatedEquilibria_along_continuous_path` constructs actual connected equilibrium sets spanning continuous interval paths under no-sure. | The stronger lifting statement over arbitrary connected compact `D`; the checked interval continuation theorem does not establish this statement. |
+| `lemma9` | `lemma9_of_uniformRho` proves high-tail all-Continue uniqueness from the old printed global parameter; `exists_largeRepeatedAllContinueThreshold_of_uniformRho` lifts that conditional result to all finite repeated lengths. | An actual proof under the printed escape/no-stationary/no-instant standing assumptions. The corrected-source construction needs a high-tail producer under no-stationarily-generated/no-instant, not merely a compact survival bound. |
+| `theorem4` | Actual critical paths, charged initial solo moves and `EscapeWitness.exists_caseThreeEquilibriumComponents_of_not_instant` supply the literal three-segment equilibrium-component source. | The actual high-continuation all-Continue uniqueness source, the full crossing/return construction, and remaining branch assembly. The supplied global-`IsUniformRho` consumer is not that source; neither the component nor the critical-point orbit alone is an equilibrium of the original infinite game. |
 
-None of these ten is currently a source-complete theorem awaiting only a
-non-circular Lean transport: the apparently matching 2012 statements depend
-on the corresponding open 2007 declarations.
+The matching 2012 structure statements still depend on the corresponding
+open 2007 declarations. The conditional global-parameter helper does not
+discharge the literal Lemma 9 statement.

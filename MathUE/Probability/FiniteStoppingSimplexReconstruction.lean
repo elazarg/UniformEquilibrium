@@ -135,6 +135,53 @@ theorem stop_lt_one
   rw [StoppingLaw.survival_succ, finiteMass_eq_mass] at hnext
   linarith
 
+/-- At the exact finite deadline, survival is the retained Never atom. -/
+theorem survival_deadline_eq_none
+    (simplex : Convexity.StdSimplex ℝ (Option (Fin deadline))) :
+    StoppingLaw.survival (law simplex) deadline = simplex.weights none := by
+  have htotal := StoppingLaw.none_add_tsum_finiteMass (law simplex)
+  have hsum :
+      (∑' time, StoppingLaw.finiteMass (law simplex) time) =
+        ∑ time ∈ Finset.range deadline, StoppingLaw.finiteMass (law simplex) time := by
+    apply tsum_eq_sum
+    intro time htime
+    have hlate : ¬time < deadline := by simpa only [Finset.mem_range] using htime
+    rw [finiteMass_eq_mass]
+    simp [mass, hlate]
+  rw [hsum, law_none_toReal] at htotal
+  unfold StoppingLaw.survival
+  linarith
+
+/-- The canonical decoder is literally quiet at and after its finite deadline. -/
+theorem stop_eq_zero_of_le
+    (simplex : Convexity.StdSimplex ℝ (Option (Fin deadline)))
+    {time : ℕ} (htime : deadline ≤ time) :
+    (StoppingLaw.toScalarHazard (law simplex)).stop time = 0 := by
+  have hmass : StoppingLaw.finiteMass (law simplex) time = 0 := by
+    rw [finiteMass_eq_mass]
+    exact dite_eq_right (Nat.not_lt_of_ge htime)
+  simp only [StoppingLaw.toScalarHazard, hmass, zero_div, ite_self]
+
+/-- No decoded finite row quits surely exactly when the Never atom is positive. -/
+theorem none_pos_iff_stop_lt_one
+    (simplex : Convexity.StdSimplex ℝ (Option (Fin deadline))) :
+    0 < simplex.weights none ↔
+      ∀ time : Fin deadline, (StoppingLaw.toScalarHazard (law simplex)).stop time.val < 1 := by
+  constructor
+  · intro hnone time
+    exact stop_lt_one simplex hnone time.val
+  · intro hstop
+    have hproduct :
+        0 < ∏ time ∈ Finset.range deadline,
+          (1 - (StoppingLaw.toScalarHazard (law simplex)).stop time) :=
+      Finset.prod_pos fun time htime => sub_pos.mpr
+        (hstop ⟨time, Finset.mem_range.mp htime⟩)
+    have hsurvival :
+        0 < (StoppingLaw.toScalarHazard (law simplex)).survival 0 deadline := by
+      simpa only [ScalarHazard.survival, Math.survivalProduct, Nat.zero_add] using hproduct
+    simpa only [StoppingLaw.toScalarHazard_survival, survival_deadline_eq_none]
+      using hsurvival
+
 private theorem continuous_weight (action : Option (Fin deadline)) :
     Continuous (fun simplex : Convexity.StdSimplex ℝ (Option (Fin deadline)) =>
       simplex.weights action) :=

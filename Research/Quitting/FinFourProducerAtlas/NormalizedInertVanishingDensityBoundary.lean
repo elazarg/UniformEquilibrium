@@ -22,7 +22,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set _root_.Math.Probability Math.PMFProduct
+open Filter _root_.Set _root_.Math.Probability Math.PMFProduct
 open scoped Topology
 
 variable

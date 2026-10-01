@@ -27,18 +27,8 @@ private theorem abs_deadlineEvaluatedGain_le
     |quittingPureClockEvaluatedPayoff reward evaluation first who -
         quittingPureClockEvaluatedPayoff reward evaluation second who| ≤
       2 * (evaluation 0 * quittingRewardBound reward) := by
-  calc
-    |_ - _| ≤
-        |quittingPureClockEvaluatedPayoff reward evaluation first who| +
-          |quittingPureClockEvaluatedPayoff reward evaluation second who| :=
-      abs_sub _ _
-    _ ≤ evaluation 0 * quittingRewardBound reward +
-        evaluation 0 * quittingRewardBound reward := add_le_add
-      (abs_quittingPureClockEvaluatedPayoff_le reward evaluation
-        evaluation_nonneg evaluation_antitone first who)
-      (abs_quittingPureClockEvaluatedPayoff_le reward evaluation
-        evaluation_nonneg evaluation_antitone second who)
-    _ = _ := by ring
+  exact abs_quittingPureClockEvaluatedPayoff_sub_le reward evaluation
+    evaluation_nonneg evaluation_antitone first second who
 
 /-- The literal deterministic a/b comparison integrates over any coupled
 clock law; independence is only needed later to identify legal marginals. -/

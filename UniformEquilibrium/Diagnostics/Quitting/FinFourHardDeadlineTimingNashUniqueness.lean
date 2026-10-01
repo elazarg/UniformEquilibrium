@@ -5,7 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Diagnostics.Quitting.FinFourHardDeadlineTimingNashBarrier
-import UniformEquilibrium.Diagnostics.Quitting.FiniteDeadlineTimingRecursion
+import UniformEquilibrium.Quitting.Terminal.FiniteDeadlineTimingRecursion
 import UniformEquilibrium.Diagnostics.FiniteMixedNashSupport
 
 /-!

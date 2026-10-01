@@ -1,5 +1,5 @@
 import MathUE.LinearProgramming.RationalOptimization
-import UniformEquilibrium.Quitting.Classification.QuietExtension.DeadlineWithdrawalSecurityLP
+import UniformEquilibrium.Quitting.Classification.QuietExtension.WithdrawalSecurityStandardForm
 
 /-!
 # Rational stationary-security LPs
@@ -16,16 +16,6 @@ namespace GameTheory
 open scoped BigOperators
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
-
-omit [Fintype ι] in
-private theorem securityRow_affine
-    (reward : {A : Finset (Option ι) // A.Nonempty} → Option ι → ℝ)
-    (i : ι) (hazard : ℝ) (row : Option {A : Finset ι // A.Nonempty ∧ i ∉ A}) :
-    deadlineWithdrawalSecurityRow reward i hazard row =
-      deadlineWithdrawalSecurityRow reward i 0 row +
-        (deadlineWithdrawalSecurityRow reward i 1 row -
-          deadlineWithdrawalSecurityRow reward i 0 row) * hazard := by
-  cases row <;> dsimp [deadlineWithdrawalSecurityRow] <;> ring
 
 /-- The actual finite security LP has a rational optimizer, including boundary hazards. -/
 theorem exists_rational_deadlineWithdrawalSecurity_optimizer
@@ -48,57 +38,20 @@ theorem exists_rational_deadlineWithdrawalSecurity_optimizer
     | some row => -base row
   let objective : Fin 3 → ℝ := ![0, -1, 1]
   let encode := fun hazard value : ℝ => ![hazard, max value 0, max (-value) 0]
-  have hvalue (value : ℝ) : max value 0 - max (-value) 0 = value := by
-    by_cases h : 0 ≤ value
-    · rw [max_eq_left h, max_eq_right (neg_nonpos.mpr h)]
-      simp
-    · rw [max_eq_right (le_of_not_ge h),
-        max_eq_left (neg_nonneg.mpr (le_of_not_ge h))]
-      ring
+  have hvalue (value : ℝ) : max value 0 - max (-value) 0 = value :=
+    max_zero_sub_max_neg_zero_eq_self value
   have hprimal (point : Fin 3 → ℝ) :
       Math.LinearProgramming.MinPrimalFeasible matrix rhs point ↔
         (∀ coordinate, 0 ≤ point coordinate) ∧
-          DeadlineWithdrawalSecurityFeasible reward i (point 0) (point 1 - point 2) := by
-    constructor
-    · rintro ⟨hnonneg, hrows⟩
-      refine ⟨hnonneg, ⟨hnonneg 0, ?_⟩, ?_⟩
-      · have h := hrows none
-        simp [matrix, rhs, Math.LinearProgramming.rowEval, Fin.sum_univ_succ] at h
-        linarith
-      · intro row
-        have h := hrows (some row)
-        simp [matrix, rhs, Math.LinearProgramming.rowEval, Fin.sum_univ_succ] at h
-        rw [securityRow_affine]
-        change point 1 - point 2 ≤ base row + slope row * point 0
-        linarith
-    · rintro ⟨hnonneg, hinterval, hrows⟩
-      refine ⟨hnonneg, ?_⟩
-      intro row
-      cases row with
-      | none =>
-          simp [matrix, rhs, Math.LinearProgramming.rowEval, Fin.sum_univ_succ]
-          linarith [hinterval.2]
-      | some row =>
-          have h := hrows row
-          rw [securityRow_affine] at h
-          change point 1 - point 2 ≤ base row + slope row * point 0 at h
-          simp [matrix, rhs, Math.LinearProgramming.rowEval, Fin.sum_univ_succ]
-          linarith
+          DeadlineWithdrawalSecurityFeasible reward i (point 0) (point 1 - point 2) :=
+    WithdrawalSecurityStandardForm.primal_iff reward i point
   have hencode (hazard value : ℝ)
       (h : DeadlineWithdrawalSecurityFeasible reward i hazard value) :
-      Math.LinearProgramming.MinPrimalFeasible matrix rhs (encode hazard value) := by
-    apply (hprimal _).mpr
-    constructor
-    · intro coordinate
-      fin_cases coordinate
-      · exact h.1.1
-      · exact le_max_right _ _
-      · exact le_max_right _ _
-    · simpa [encode, hvalue] using h
+      Math.LinearProgramming.MinPrimalFeasible matrix rhs (encode hazard value) :=
+    WithdrawalSecurityStandardForm.encode_feasible reward i hazard value h
   have hobjective (point : Fin 3 → ℝ) :
-      Math.LinearProgramming.minPrimalValue objective point = -(point 1 - point 2) := by
-    simp [Math.LinearProgramming.minPrimalValue, Math.LinearProgramming.dot,
-      objective, Fin.sum_univ_succ, sub_eq_add_neg, add_comm]
+      Math.LinearProgramming.minPrimalValue objective point = -(point 1 - point 2) :=
+    WithdrawalSecurityStandardForm.objective_eq point
   have hrowRational (hazard : ℝ) (hhazard : hazard = 0 ∨ hazard = 1)
       (row : Option {A : Finset ι // A.Nonempty ∧ i ∉ A}) :
       Math.IsRationalReal (deadlineWithdrawalSecurityRow reward i hazard row) := by
@@ -144,12 +97,8 @@ theorem exists_rational_deadlineWithdrawalSecurity_optimizer
   obtain ⟨hazard, hfeasible, _⟩ := deadlineWithdrawalSecurityValue_spec reward i
   have hbounded : ∃ lower : ℝ,
       ∀ point, Math.LinearProgramming.MinPrimalFeasible matrix rhs point →
-        lower ≤ Math.LinearProgramming.minPrimalValue objective point := by
-    refine ⟨-deadlineWithdrawalSecurityRow reward i 0 none, ?_⟩
-    intro point hpoint
-    have h := ((hprimal point).mp hpoint).2.2 none
-    rw [hobjective]
-    simpa [deadlineWithdrawalSecurityRow] using neg_le_neg h
+        lower ≤ Math.LinearProgramming.minPrimalValue objective point :=
+    WithdrawalSecurityStandardForm.bounded reward i
   obtain ⟨point, dual, hpoint, hdual, hgap, hoptimal⟩ :=
     Math.LinearProgramming.exists_rational_minPrimalOptimal matrix rhs objective
       hmatrix hrhs hobj ⟨_, hencode _ _ hfeasible⟩ hbounded

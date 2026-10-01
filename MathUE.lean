@@ -517,6 +517,8 @@ import MathUE.Probability.StoppingLawCapBandRedistribution
 import MathUE.Probability.PrefixFreeSubstochasticMass
 import MathUE.Probability.StoppingLawReconstruction
 import MathUE.Probability.FiniteStoppingSimplexReconstruction
+import MathUE.LinearProgramming.ExecutableRationalSelection
+import MathUE.RealSeries.DiscountedExitWeight
 import MathUE.Probability.SublinearLedger
 import MathUE.Probability.SupportedMovingKernelEpochAccount
 import MathUE.Probability.SurvivalAmplification

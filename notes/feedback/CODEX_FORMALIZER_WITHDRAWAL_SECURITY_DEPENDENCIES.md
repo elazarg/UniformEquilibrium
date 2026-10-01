@@ -1,6 +1,6 @@
-# Deadline withdrawal security: checked chain and remaining producers
+# Deadline withdrawal security: actual laws and debt comparison
 
-Scope: Section 5 of `math/exports/WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`.
+Scope: Section 5 of `math/formalized/WITHDRAWAL_AND_DEADLINE_QUIET_EXTENSIONS.md`.
 The security LP, actual restart law, all-evaluation nonpositive floor, mixed
 atom-restart response, and full behavioral-debt comparison are checked. The
 ordinary and all-evaluation security Fin4 class implications now construct
@@ -168,5 +168,15 @@ construct the child target and prove four-player existence for every nonempty
 proper child under the respective raw certificate family. The certificates
 are finite inequalities defining these classes; no theorem asserts their
 existence for every reward table. Positive terminal `gamma` remains distinct
-from the all-evaluation floor and needs its own family and fixed-target
-extension consumers.
+from the all-evaluation floor. Its separate family consumer is
+`quittingLiftDeletedProfile_debt_of_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFamily.lean`).
+`exists_uniformPayoffWitnesses_eq_on_child_of_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFixedTarget.lean`)
+preserves every specified child target and constructs actual quiet witnesses
+at one fixed agreeing parent target. The raw-row four-player producer
+`quittingGame_exists_uniformPayoffWitnesses_of_finFour_deadlineSecurityTerminalFamily`
+(`UniformEquilibrium/Quitting/Classification/QuietExtension/DeadlineWithdrawalSecurityTerminalFinFourExistence.lean`)
+obtains the target from the actual nonempty proper child internally. These
+terminal consumers do not assert an all-evaluation positive security floor
+or attainment of `gamma` by one restart law.

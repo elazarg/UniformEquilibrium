@@ -67,53 +67,12 @@ theorem quittingLiftDeletedProfile_outsideEvaluatedDebt_le_of_deadlineWithdrawal
             (quittingDeleteReward reward deleted) evaluation profile who -
           quittingBehaviorEvaluatedPayoff
             (quittingDeleteReward reward deleted) evaluation profile who) := by
-  let optionReward := quittingChildWithOutsiderReward reward deleted outside
-  let childProfile :=
-    quittingChildWithOutsiderChildProfile reward deleted outside profile
-  let optionProfile := quittingLiftDeletedProfile optionReward (· = none) childProfile
-  have hoption :=
-    deadlineWithdrawal_quietLift_outsideBehaviorDebt_le_weighted_childDebt
-      optionReward certificate evaluation evaluation_nonneg evaluation_antitone
-      childProfile
-  have hnone := quittingBehaviorEvaluatedDeviationDebt_childWithOutsider_none
-    deleted reward outside evaluation profile
-  have hsame := quittingBehaviorEvaluatedDeviationDebt_childWithOutsiderFullProfile
-    deleted reward outside evaluation profile outside.1
-  rw [← hsame, ← hnone]
-  calc
-    quittingBehaviorEvaluatedDeviationPayoffCap optionReward evaluation
-          optionProfile none -
-        quittingBehaviorEvaluatedPayoff optionReward evaluation
-          optionProfile none ≤
-      ∑ who, certificate.debtWeight who *
-        (quittingBehaviorEvaluatedDeviationPayoffCap
-            (quittingDeleteReward optionReward (· = none)) evaluation
-            childProfile ⟨some who, Option.some_ne_none who⟩ -
-          quittingBehaviorEvaluatedPayoff
-            (quittingDeleteReward optionReward (· = none)) evaluation
-            childProfile ⟨some who, Option.some_ne_none who⟩) := by
-      simpa only [optionReward, optionProfile, childProfile] using hoption
-    _ = _ := by
-      apply Finset.sum_congr rfl
-      intro who _
-      dsimp only [optionReward, childProfile]
-      change certificate.debtWeight who *
-        (quittingBehaviorEvaluatedDeviationPayoffCap
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
-            evaluation
-            (quittingChildWithOutsiderChildProfile
-              reward deleted outside profile)
-            (quittingChildSomeEquiv deleted who) -
-          quittingBehaviorEvaluatedPayoff
-            (quittingDeleteReward
-              (quittingChildWithOutsiderReward reward deleted outside) (· = none))
-            evaluation
-            (quittingChildWithOutsiderChildProfile
-              reward deleted outside profile)
-            (quittingChildSomeEquiv deleted who)) = _
-      rw [quittingBehaviorEvaluatedDeviationPayoffCap_childWithOutsiderChildProfile,
-        quittingBehaviorEvaluatedPayoff_childWithOutsiderChildProfile]
+  exact quittingLiftDeletedProfile_outsideEvaluatedDebt_le_of_oneOutsiderBound
+    deleted reward outside certificate.debtWeight evaluation
+    (fun childProfile =>
+      deadlineWithdrawal_quietLift_outsideBehaviorDebt_le_weighted_childDebt
+        (quittingChildWithOutsiderReward reward deleted outside) certificate
+        evaluation evaluation_nonneg evaluation_antitone childProfile) profile
 
 /-- Every child debt is unchanged, and all outsider debts satisfy their own
 deadline-withdrawal weighted bound simultaneously for the same full lift. -/

@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Stationary.MinMax
+import UniformEquilibrium.Quitting.Punishment.FiniteWordPunishmentFloor
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanFactory
 import UniformEquilibrium.Quitting.Bellman.Finite.NashBellmanClockReduction
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
@@ -82,106 +83,15 @@ theorem quittingPunishmentValue_le_rootSuccessorPayoff_of_tail_ge
     (hnash : IsεQuittingRootNash reward tail 0 root) :
     quittingPunishmentValue reward who ≤
       quittingRootSuccessorPayoff reward tail root who := by
-  let c := quittingStationaryFixedOpponentsContinueMass root who
-  have hc0 : 0 ≤ c := quittingStationaryFixedOpponentsContinueMass_nonneg root who
-  have hc1 : c ≤ 1 := quittingStationaryFixedOpponentsContinueMass_le_one root who
-  have hquit := quittingRootQuitPayoff_le_successor_of_isZeroNash
-    reward tail root who hnash
-  have hcontinue := quittingRootContinuePayoff_le_successor_of_isZeroNash
-    reward tail root who hnash
-  by_cases hdeg : c = 1
-  · have hcap := quittingPunishmentValue_le_stationaryUnilateralCap
-      reward who root
-    rw [quittingStationaryUnilateralCap_of_fixedOpponentsContinueMass_eq_one
-      reward (root := root) (who := who) hdeg] at hcap
-    rcases (le_max_iff.mp hcap) with hsolo | hzero
-    · have hagree :=
-        eq_pureSetRoot_empty_of_fixedOpponentsContinueMass_eq_one
-          (root := root) (who := who) hdeg
-      have hupdate : Function.update root who (PMF.pure true) =
-          quittingPureSetRoot ({who} : Finset ι) := by
-        funext player
-        by_cases hp : player = who
-        · subst player
-          simp [quittingPureSetRoot, quittingSetAction]
-        · simpa [Function.update_of_ne hp, quittingPureSetRoot,
-            quittingSetAction, hp] using
-            hagree player hp
-      have hquitEq :
-          quittingRootQuitPayoff reward tail root who =
-            quittingSetReward reward ({who} : Finset ι) who := by
-        unfold quittingRootQuitPayoff
-        rw [hupdate]
-        have hsure : QuittingRootHasSureQuitter
-            (quittingPureSetRoot ({who} : Finset ι)) := by
-          refine ⟨who, ?_⟩
-          simp [quittingPureSetRoot, quittingSetAction]
-        calc
-          quittingRootExpectedPayoff reward tail
-              (quittingPureSetRoot ({who} : Finset ι)) who =
-              quittingRootExpectedPayoff reward 0
-                (quittingPureSetRoot ({who} : Finset ι)) who :=
-            quittingRootExpectedPayoff_eq_of_hasSureQuitter
-              reward _ hsure tail 0 who
-          _ = quittingSetReward reward ({who} : Finset ι) who :=
-            quittingRootAbsorbingContribution_pureSetRoot reward _ who
-      rw [hquitEq] at hquit
-      exact hsolo.trans hquit
-    · have hagree :=
-        eq_pureSetRoot_empty_of_fixedOpponentsContinueMass_eq_one
-          (root := root) (who := who) hdeg
-      have hupdate : Function.update root who (PMF.pure false) =
-          (quittingAllContinueRoot : ι → PMF Bool) := by
-        funext player
-        by_cases hp : player = who
-        · subst player
-          simp [quittingAllContinueRoot]
-        · simpa [Function.update_of_ne hp, quittingPureSetRoot,
-            quittingSetAction, quittingAllContinueRoot] using hagree player hp
-      have hcontinueEq :
-          quittingRootContinuePayoff reward tail root who = tail who := by
-        unfold quittingRootContinuePayoff
-        rw [hupdate]
-        exact congrFun
-          (quittingRootSuccessorPayoff_allContinueRoot_eq reward tail) who
-      rw [hcontinueEq] at hcontinue
-      exact htail.trans hcontinue
-  · have hc : c < 1 := lt_of_le_of_ne hc1 hdeg
-    have hcap := quittingPunishmentValue_le_stationaryUnilateralCap
-      reward who root
-    rw [quittingStationaryUnilateralCap_eq_max_div] at hcap
-    rcases (le_max_iff.mp hcap) with hq | hw
-    · have hquitEq :
-          quittingRootQuitPayoff reward tail root who =
-            quittingStationaryFixedOpponentsQuitValue reward root who := by
-        simpa [quittingStationaryFixedOpponentsQuitValue] using
-          (quittingRootQuitPayoff_eq_fixedOpponentsQuitValue
-            reward (fun _ => root) who tail 0)
-      rw [hquitEq] at hquit
-      exact hq.trans hquit
-    · have hden : 0 < 1 - c := sub_pos.mpr hc
-      have hmul :
-          quittingPunishmentValue reward who * (1 - c) ≤
-            quittingStationaryFixedOpponentsContinueReward reward root who :=
-        (le_div_iff₀ hden).mp hw
-      have hctail : c * quittingPunishmentValue reward who ≤ c * tail who :=
-        mul_le_mul_of_nonneg_left htail hc0
-      have hbellman :
-          quittingPunishmentValue reward who ≤
-            quittingStationaryFixedOpponentsContinueReward reward root who +
-              c * tail who := by
-        nlinarith
-      have hcontinueEq :
-          quittingRootContinuePayoff reward tail root who =
-            quittingStationaryFixedOpponentsContinueReward reward root who +
-              c * tail who := by
-        simpa [c, quittingStationaryFixedOpponentsContinueReward,
-          quittingStationaryFixedOpponentsContinueMass] using
-          (quittingRootContinuePayoff_eq_fixedOpponents
-            reward (fun _ => root) who tail 0)
-      rw [hcontinueEq] at hcontinue
-      exact hbellman.trans hcontinue
-
+  have hfloor : quittingPunishmentValue reward who ≤
+      max (quittingRootQuitPayoff reward tail root who)
+        (quittingRootContinuePayoff reward tail root who) := by
+    simpa only [sub_zero] using
+      quittingPunishmentValue_sub_le_rootEndpointMax reward tail root who 0
+        le_rfl (by simpa only [sub_zero] using htail)
+  exact hfloor.trans (max_le
+    (quittingRootQuitPayoff_le_successor_of_isZeroNash reward tail root who hnash)
+    (quittingRootContinuePayoff_le_successor_of_isZeroNash reward tail root who hnash))
 /-- The punishment vector, with a harmless simplex coordinate, as a point of
 the canonical compact Nash--Bellman box. -/
 def quittingPunishmentFloorAnchor

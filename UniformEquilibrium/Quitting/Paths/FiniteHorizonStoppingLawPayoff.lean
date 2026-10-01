@@ -182,7 +182,8 @@ theorem expect_quittingClockFirstEvent
     rw [expect_stoppingLawTailIndicator,
       stoppingLawSurvival_quittingBehaviorStoppingLaw]
 
-private theorem pureClock_payoff_timeSlice
+/-- One literal first-exit date slice, shared by finite and discounted stage laws. -/
+theorem quittingPureClockPayoff_timeSlice
     (reward : {A : Finset ι // A.Nonempty} → Payoff ι)
     (times : ι → Option ℕ) (who : ι) (time : ℕ) :
     (∑ terminal : {A : Finset ι // A.Nonempty},
@@ -211,7 +212,7 @@ private theorem pureClock_finiteHorizon_decomposition
             (if QuittingClockFirstEvent time terminal times then 1 else 0) *
               reward terminal who := by
   classical
-  simp_rw [pureClock_payoff_timeSlice]
+  simp_rw [quittingPureClockPayoff_timeSlice]
   induction hearliest : quittingEarliestStoppingValue times using WithTop.recTopCoe with
   | top =>
       have houtcome : quittingFirstStoppingOutcome times = none := by

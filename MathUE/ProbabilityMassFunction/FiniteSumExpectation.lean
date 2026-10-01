@@ -38,4 +38,16 @@ theorem expect_finset_sum_of_bounded
             exact Finset.sum_le_sum fun j hj => hbound j
               (Finset.mem_insert_of_mem hj) ω
 
+/-- Bounded real observables commute with subtraction under an arbitrary PMF.
+The sample space need not be finite. -/
+theorem expect_sub_of_abs_bounds
+    {Ω : Type*} (law : PMF Ω) (f g : Ω → ℝ) {C D : ℝ}
+    (hf : ∀ sample, |f sample| ≤ C) (hg : ∀ sample, |g sample| ≤ D) :
+    expect law (fun sample => f sample - g sample) = expect law f - expect law g := by
+  change expect law (fun sample => f sample + -g sample) = _
+  rw [expect_add_of_summable]
+  · simp only [expect_neg, sub_eq_add_neg]
+  · exact expect_summable_of_bounded law f hf
+  · simpa only [mul_neg] using (expect_summable_of_bounded law g hg).neg
+
 end Math.Probability

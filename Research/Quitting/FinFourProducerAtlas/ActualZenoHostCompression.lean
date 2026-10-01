@@ -26,7 +26,7 @@ noncomputable section
 
 namespace GameTheory
 
-open Filter Set _root_.Math.Probability
+open Filter _root_.Set _root_.Math.Probability
 open scoped Topology
 
 variable
