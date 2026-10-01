@@ -76,6 +76,34 @@ separate transitive standard-axiom check. They do not produce an escape
 orbit, supply the initial solo-move variation charge, or prove the remaining
 component-lifting case of Theorem 4. No fixed uniform payoff is asserted.
 
+## Actual critical paths and charged initial moves
+
+`EscapeWitness.exists_criticalFiniteOrbits_of_not_stationarilyGenerated`
+(`Literature/Simon2007.lean`) selects one actual boundary start and payoff
+bound before accuracy. In an all-normal game without the generated branch,
+every sufficiently small positive accuracy gives a finite restricted orbit
+from that same start to an actual critical point. Every path point remains
+in the same escape carrier and band. Cross-harm is produced internally;
+neither a critical point, motion bound nor favorable component is supplied.
+The underlying `exists_criticalFiniteOrbit_of_crossHarm` removes the old
+construction's unused escape-carrier and uniform-motion assumptions.
+
+`exists_chargedCriticalSoloMoves_of_not_branches` in the same file produces
+the literal initial solo move at each actual critical point. A payoff bound
+and compact-carrier motion rate precede all starts and accuracies; the
+critical labels precede accuracy. The chosen probability is exactly
+accuracy divided by ten times the payoff bound and player count. The same
+actual row preserves its owner's coordinate, strictly decreases the harmed
+coordinate, stays in the carrier, and pays the rate-times-probability
+variation charge. Generated and instant exclusions are explicit.
+
+Both Simon modules pass silent named checks; separate transitive axiom
+checks of these declarations use only the three standard axioms. The
+remaining Case 3 source needs a connected component of the actual repeated
+equilibrium graph and its crossing/return construction. Nonempty fibers,
+a compact graph or the checked orbit-image identities do not supply that
+component. This is recorded as missing Lean work, not an open game theorem.
+
 ## Extended orbits
 
 `ExtendedOrbitCondition.hasQuitApproximateEquilibria`

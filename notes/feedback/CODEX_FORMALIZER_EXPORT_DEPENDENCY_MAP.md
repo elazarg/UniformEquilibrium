@@ -114,6 +114,28 @@ class conclusions, rather than replaced by a supplied equilibrium or a second
 uniformization argument. Completing cancellation alone does not retire this
 packet: Sections 7--11 contain independent claims.
 
+### Class connections identified for small followup adapters
+
+These are implementation tasks inferred from checked owners, not additional
+checked public theorems or packet seals.
+
+- Expose the exact singleton matrix of every deadline completion, not only
+  the small reward ball. `StrictDeadlineWithdrawal.completionReward_singleton`
+  (`UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalCoordinateCompletion.lean`)
+  fixes all sixteen singleton coordinates. The existing matrix and ambient
+  degree owners can therefore be reused for arbitrary values in all forty-four
+  collision coordinates. This does not globalize the small-ball response
+  exclusions or infer UE from degree; UE still uses the passing completion region.
+- Expose rationality of the explicit `feasibleOutside` section in
+  `UniformEquilibrium/Quitting/Examples/StrictDeadlineWithdrawalCompletionRegion.lean`
+  from rational child parameters. Finite floor/gain arithmetic supplies this;
+  no LP search or continuous equilibrium-payoff selection is needed.
+- Specialize the deadline all-evaluation comparison to the actual finite-horizon
+  evaluation. The existing exact payoff and full-cap bridges retain the same
+  profile and horizon, so no terminal approximation error should be introduced.
+  The evaluation's antitonicity needs a discoverable lemma. This specialization
+  does not apply to patient or terminal-only omitted-Never comparisons.
+
 ## Screened-root source dependencies
 
 `GENERIC_SCREENED_ROOT_EXCLUSION_AND_SINGLETON_MASS_COLLAR` needs its

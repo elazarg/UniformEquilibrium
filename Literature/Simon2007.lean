@@ -22522,11 +22522,15 @@ def RestrictedEscapeCorrespondence (G : QuittingGame) (δ ε : ℝ) :
     x ∈ EscapeBand G ε ∧ x j ≤ SoloPayoff G j + ε ∧
       IsSmallSoloRow G δ j p ∧ y = QuittingOneStagePayoff G x p}
 
-/-- The added small solo-quitting moves satisfy the paper's `ε` endpoint conditions. -/
-theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
-    (hM : IsQuittingPayoffDifferenceBound G M) (hε : 0 < ε) :
-    let δ := ε / (10 * M * Fintype.card G.Player)
-    ∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x := by
+/-- The actual row, not merely its payoff image, satisfies the source
+small-solo endpoint inequalities. This owns the row proof used by the
+restricted escape correspondence. -/
+theorem smallSoloRow_mem_epsilonRow (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hε : 0 < ε)
+    (x : Payoff G.Player) (j : G.Player) (p : QuitRow G)
+    (hxband : x ∈ EscapeBand G ε) (hxj : x j ≤ SoloPayoff G j + ε)
+    (hp : IsSmallSoloRow G (ε / (10 * M * Fintype.card G.Player)) j p) :
+    p ∈ EpsilonRow G ε x := by
   classical
   let δ := ε / (10 * M * Fintype.card G.Player)
   have hM0 : 0 ≤ M := hM.1.trans' zero_le_one
@@ -22540,118 +22544,124 @@ theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
     rw [div_eq_mul_inv]
     field_simp
     nlinarith
+  let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
+  have hpZero : p.replace G j 0 = zeroRow := by
+    funext k
+    by_cases hkj : k = j
+    · subst k
+      simp [QuitRow.replace, zeroRow]
+    · apply Subtype.ext
+      simp only [QuitRow.replace, hkj, ite_false, zeroRow]
+      exact hp.2 k hkj
+  have hpOne : p.replace G j 1 = SoloQuitRow G j := by
+    funext k
+    by_cases hkj : k = j
+    · subst k
+      simp [QuitRow.replace, SoloQuitRow]
+    · apply Subtype.ext
+      simp only [QuitRow.replace, hkj, ite_false, SoloQuitRow]
+      exact hp.2 k hkj
+  have hpFromZero : p = zeroRow.replace G j (p j) := by
+    funext k
+    by_cases hkj : k = j
+    · subst k
+      simp [QuitRow.replace]
+    · apply Subtype.ext
+      simp only [QuitRow.replace, hkj, ite_false, zeroRow]
+      exact hp.2 k hkj
+  constructor
+  · intro k hkpositive
+    by_cases hkj : k = j
+    · subst k
+      have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
+        rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
+        rfl
+      have hcontinue : ForcedContinuePayoff G x p j = x j := by
+        rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
+      rw [hquit, hcontinue]
+      linarith
+    · have hpk : (p k : ℝ) = 0 := hp.2 k hkj
+      linarith
+  · intro k hkcontinue
+    by_cases hkj : k = j
+    · subst k
+      have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
+        rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
+        rfl
+      have hcontinue : ForcedContinuePayoff G x p j = x j := by
+        rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
+      rw [hquit, hcontinue]
+      exact le_trans (by linarith : SoloPayoff G j - ε ≤ SoloPayoff G j)
+        (hxband.1 j)
+    · have hpk : p k = (0 : Set.Icc (0 : ℝ) 1) := by
+        apply Subtype.ext
+        exact hp.2 k hkj
+      have hpContinue : p.replace G k 0 = p := by
+        rw [← hpk]
+        exact p.replace_self G k
+      let baseQuit : QuitRow G := zeroRow.replace G k 1
+      have hpQuit : p.replace G k 1 = baseQuit.replace G j (p j) := by
+        calc
+          _ = (zeroRow.replace G j (p j)).replace G k 1 :=
+            congrArg (fun row => row.replace G k 1) hpFromZero
+          _ = _ := zeroRow.replace_comm G (Ne.symm hkj) (p j) 1
+      have hbaseQuit : baseQuit = SoloQuitRow G k := by
+        exact QuitRow.zero_replace_one G k
+      have hzeroJ : zeroRow.replace G j 0 = zeroRow := by
+        exact zeroRow.replace_self G j
+      have hcontinueAffine : ForcedContinuePayoff G x p k =
+          (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
+            (1 - (p j : ℝ)) * x k := by
+        rw [ForcedContinuePayoff, hpContinue, hpFromZero]
+        rw [quittingOneStagePayoff_replace_affine_coord]
+        rw [QuitRow.zero_replace_one, hzeroJ]
+        rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
+        simp [QuitRow.replace]
+      let bothQuit : QuitRow G := baseQuit.replace G j 1
+      have hbaseZero : baseQuit.replace G j 0 = baseQuit := by
+        have hbasej : baseQuit j = (0 : Set.Icc (0 : ℝ) 1) := by
+          simp [baseQuit, zeroRow, QuitRow.replace, Ne.symm hkj]
+        rw [← hbasej]
+        exact baseQuit.replace_self G j
+      have hquitAffine : ForcedQuitPayoff G p k =
+          (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
+            (1 - (p j : ℝ)) * SoloPayoff G k := by
+        rw [ForcedQuitPayoff, hpQuit]
+        rw [quittingOneStagePayoff_replace_affine_coord]
+        rw [hbaseZero, hbaseQuit, quittingOneStagePayoff_soloQuitRow]
+        rfl
+      have hsoloBound :
+          -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k :=
+        neg_le_of_abs_le (le_of_lt (hM.2.2 _ k))
+      have hbothReward := quittingRewardPart_mem_Icc G bothQuit k hM0
+        (fun A => le_of_lt (hM.2.2 A k))
+      have hbothQuitProbability : QuitProbability G bothQuit = 1 := by
+        exact quitProbability_replace_one G baseQuit j
+      have hbothBound : QuittingOneStagePayoff G 0 bothQuit k ≤ M := by
+        simpa [QuittingOneStagePayoff, hbothQuitProbability] using hbothReward.2
+      have hxsolo : SoloPayoff G k ≤ x k := hxband.1 k
+      have hpj0 : 0 ≤ (p j : ℝ) := (p j).property.1
+      have hpjδ : (p j : ℝ) ≤ δ := hp.1
+      rw [hcontinueAffine, hquitAffine]
+      have hweighted :
+          (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
+              (1 - (p j : ℝ)) * SoloPayoff G k - ε ≤
+            (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
+              (1 - (p j : ℝ)) * x k := by
+        nlinarith [mul_nonneg (sub_nonneg.mpr (p j).property.2)
+          (sub_nonneg.mpr hxsolo)]
+      exact hweighted
+
+/-- The added small solo-quitting moves satisfy the paper's `ε` endpoint conditions. -/
+theorem restrictedEscapeCorrespondence_subset (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hε : 0 < ε) :
+    let δ := ε / (10 * M * Fintype.card G.Player)
+    ∀ x, RestrictedEscapeCorrespondence G δ ε x ⊆ FRow G ε x := by
   dsimp only
   intro x y hy
   rcases hy with hy | ⟨j, p, hxband, hxj, hp, rfl⟩
-  · exact FRow.mono G (show (0 : ℝ) ≤ ε from le_of_lt hε) x hy
-  · refine ⟨p, ?_, rfl⟩
-    let zeroRow : QuitRow G := fun _ => (0 : Set.Icc (0 : ℝ) 1)
-    have hpZero : p.replace G j 0 = zeroRow := by
-      funext k
-      by_cases hkj : k = j
-      · subst k
-        simp [QuitRow.replace, zeroRow]
-      · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, ite_false, zeroRow]
-        exact hp.2 k hkj
-    have hpOne : p.replace G j 1 = SoloQuitRow G j := by
-      funext k
-      by_cases hkj : k = j
-      · subst k
-        simp [QuitRow.replace, SoloQuitRow]
-      · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, ite_false, SoloQuitRow]
-        exact hp.2 k hkj
-    have hpFromZero : p = zeroRow.replace G j (p j) := by
-      funext k
-      by_cases hkj : k = j
-      · subst k
-        simp [QuitRow.replace]
-      · apply Subtype.ext
-        simp only [QuitRow.replace, hkj, ite_false, zeroRow]
-        exact hp.2 k hkj
-    constructor
-    · intro k hkpositive
-      by_cases hkj : k = j
-      · subst k
-        have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
-          rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
-          rfl
-        have hcontinue : ForcedContinuePayoff G x p j = x j := by
-          rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
-        rw [hquit, hcontinue]
-        linarith
-      · have hpk : (p k : ℝ) = 0 := hp.2 k hkj
-        linarith
-    · intro k hkcontinue
-      by_cases hkj : k = j
-      · subst k
-        have hquit : ForcedQuitPayoff G p j = SoloPayoff G j := by
-          rw [ForcedQuitPayoff, hpOne, quittingOneStagePayoff_soloQuitRow]
-          rfl
-        have hcontinue : ForcedContinuePayoff G x p j = x j := by
-          rw [ForcedContinuePayoff, hpZero, quittingOneStagePayoff_zero]
-        rw [hquit, hcontinue]
-        exact le_trans (by linarith : SoloPayoff G j - ε ≤ SoloPayoff G j)
-          (hxband.1 j)
-      · have hpk : p k = (0 : Set.Icc (0 : ℝ) 1) := by
-          apply Subtype.ext
-          exact hp.2 k hkj
-        have hpContinue : p.replace G k 0 = p := by
-          rw [← hpk]
-          exact p.replace_self G k
-        let baseQuit : QuitRow G := zeroRow.replace G k 1
-        have hpQuit : p.replace G k 1 = baseQuit.replace G j (p j) := by
-          calc
-            _ = (zeroRow.replace G j (p j)).replace G k 1 :=
-              congrArg (fun row => row.replace G k 1) hpFromZero
-            _ = _ := zeroRow.replace_comm G (Ne.symm hkj) (p j) 1
-        have hbaseQuit : baseQuit = SoloQuitRow G k := by
-          exact QuitRow.zero_replace_one G k
-        have hzeroJ : zeroRow.replace G j 0 = zeroRow := by
-          exact zeroRow.replace_self G j
-        have hcontinueAffine : ForcedContinuePayoff G x p k =
-            (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
-              (1 - (p j : ℝ)) * x k := by
-          rw [ForcedContinuePayoff, hpContinue, hpFromZero]
-          rw [quittingOneStagePayoff_replace_affine_coord]
-          rw [QuitRow.zero_replace_one, hzeroJ]
-          rw [quittingOneStagePayoff_soloQuitRow, quittingOneStagePayoff_zero]
-          simp [QuitRow.replace]
-        let bothQuit : QuitRow G := baseQuit.replace G j 1
-        have hbaseZero : baseQuit.replace G j 0 = baseQuit := by
-          have hbasej : baseQuit j = (0 : Set.Icc (0 : ℝ) 1) := by
-            simp [baseQuit, zeroRow, QuitRow.replace, Ne.symm hkj]
-          rw [← hbasej]
-          exact baseQuit.replace_self G j
-        have hquitAffine : ForcedQuitPayoff G p k =
-            (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
-              (1 - (p j : ℝ)) * SoloPayoff G k := by
-          rw [ForcedQuitPayoff, hpQuit]
-          rw [quittingOneStagePayoff_replace_affine_coord]
-          rw [hbaseZero, hbaseQuit, quittingOneStagePayoff_soloQuitRow]
-          rfl
-        have hsoloBound :
-            -M ≤ G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k :=
-          neg_le_of_abs_le (le_of_lt (hM.2.2 _ k))
-        have hbothReward := quittingRewardPart_mem_Icc G bothQuit k hM0
-          (fun A => le_of_lt (hM.2.2 A k))
-        have hbothQuitProbability : QuitProbability G bothQuit = 1 := by
-          exact quitProbability_replace_one G baseQuit j
-        have hbothBound : QuittingOneStagePayoff G 0 bothQuit k ≤ M := by
-          simpa [QuittingOneStagePayoff, hbothQuitProbability] using hbothReward.2
-        have hxsolo : SoloPayoff G k ≤ x k := hxband.1 k
-        have hpj0 : 0 ≤ (p j : ℝ) := (p j).property.1
-        have hpjδ : (p j : ℝ) ≤ δ := hp.1
-        rw [hcontinueAffine, hquitAffine]
-        have hweighted :
-            (p j : ℝ) * QuittingOneStagePayoff G 0 bothQuit k +
-                (1 - (p j : ℝ)) * SoloPayoff G k - ε ≤
-              (p j : ℝ) * G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k +
-                (1 - (p j : ℝ)) * x k := by
-          nlinarith [mul_nonneg (sub_nonneg.mpr (p j).property.2)
-            (sub_nonneg.mpr hxsolo)]
-        exact hweighted
+  · exact FRow.mono G hε.le x hy
+  · exact ⟨p, smallSoloRow_mem_epsilonRow G hM hε x j p hxband hxj hp, rfl⟩
 
 /--
 The checked content of Lemma 9, conditional on the uniform parameter claimed by the
@@ -23319,15 +23329,12 @@ def IsCriticalPoint (G : QuittingGame) (x : Payoff G.Player) : Prop :=
     x k = SoloPayoff G k ∧
     G.reward ⟨{j}, Finset.singleton_nonempty j⟩ k < SoloPayoff G k
 
-/--
-The checked orbit construction in Lemma 11, conditional on its cross-harm input from the
-corrected Lemma 5.
--/
-theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
-    (hM : IsQuittingPayoffDifferenceBound G M)
-    (hρ : IsUniformRho G ρ) (hnormal : ∀ n, IsNormalPlayer G n)
-    (hcross : EveryNormalSoloQuitterHarmsNormal G) (hε : 0 < ε)
-    (_hεe : ε < E.ebar) (hερ : ε < ρ) :
+/-- The actual small-solo construction reaches a critical point while
+remaining in the source band. The only size condition needed by the
+construction is accuracy below one; no escape carrier or motion rate is used. -/
+theorem exists_criticalFiniteOrbit_of_crossHarm (G : QuittingGame) {M ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hcross : EveryNormalSoloQuitterHarmsNormal G) (hε : 0 < ε) (hε1 : ε < 1) :
     let δ := ε / (10 * M * Fintype.card G.Player)
     ∀ x ∈ EscapeBand G ε, ∃ (k : ℕ)
       (z : Fin (k + 1) → Payoff G.Player), z 0 = x ∧
@@ -23350,7 +23357,6 @@ theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε :
         _ ≤ 10 * M * Fintype.card G.Player :=
           mul_le_mul_of_nonneg_left hcard (by positivity)
     linarith
-  have hε1 : ε < 1 := hερ.trans_le hρ.2.1
   have hdelta1 : delta < 1 := by
     dsimp [delta]
     exact (div_lt_one hdenominator).2 (hε1.trans hdenominatorOne)
@@ -23418,6 +23424,22 @@ theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε :
     refine ⟨k + l, c, hc0.trans hz0, hcorbit, hcband, ?_⟩
     rw [hclast]
     exact hlastCritical
+
+/-- Lemma 11 in the paper's standing escape-game context. The actual
+construction delegates to its stronger band-local statement. -/
+theorem lemma11_of_crossHarm (G : QuittingGame) (E : EscapeWitness G) {M ρ ε : ℝ}
+    (hM : IsQuittingPayoffDifferenceBound G M)
+    (hρ : IsUniformRho G ρ) (hnormal : ∀ n, IsNormalPlayer G n)
+    (hcross : EveryNormalSoloQuitterHarmsNormal G) (hε : 0 < ε)
+    (_hεe : ε < E.ebar) (hερ : ε < ρ) :
+    let δ := ε / (10 * M * Fintype.card G.Player)
+    ∀ x ∈ EscapeBand G ε, ∃ (k : ℕ)
+      (z : Fin (k + 1) → Payoff G.Player), z 0 = x ∧
+        IsFiniteOrbit (RestrictedEscapeCorrespondence G δ ε) z ∧
+        (∀ i, z i ∈ EscapeBand G ε) ∧
+        IsCriticalPoint G (z ⟨k, Nat.lt_succ_self k⟩) :=
+  exists_criticalFiniteOrbit_of_crossHarm G hM hnormal hcross hε
+    (hερ.trans_le hρ.2.1)
 
 /-- The compactness exercise in Theorem 4, Case 3: finite actual payoff
 orbits of every length in one compact carrier, all starting at the same
@@ -23705,6 +23727,174 @@ theorem hasQuitApproximateEquilibria_or_escapeOrbit_limit_mem_band
   · obtain ⟨who, hwho⟩ := hW
     exact ⟨hfloor, who, hwho.trans (le_add_of_nonneg_right haccuracy)⟩
   · exact hband
+
+/-- Every point of the source frontier is weakly above every solo payoff.
+A strict coordinate violation would place it in the open interior of W. -/
+theorem solo_le_of_mem_frontier_WSet
+    (G : QuittingGame) (point : Payoff G.Player)
+    (hfrontier : point ∈ frontier (WSet G)) :
+    ∀ who, SoloPayoff G who ≤ point who := by
+  intro who
+  by_contra hfloor
+  have hstrict : point who < SoloPayoff G who := lt_of_not_ge hfloor
+  have hopen : IsOpen {value : Payoff G.Player | value who < SoloPayoff G who} :=
+    isOpen_lt (continuous_apply who) continuous_const
+  have hneighborhood : WSet G ∈ 𝓝 point :=
+    Filter.mem_of_superset (hopen.mem_nhds hstrict) (fun value hvalue =>
+      ⟨who, hvalue.le⟩)
+  have hnotInterior : point ∉ interior (WSet G) := by
+    rw [frontier] at hfrontier
+    exact hfrontier.2
+  exact hnotInterior (mem_interior_iff_mem_nhds.mpr hneighborhood)
+
+/-- The literal initial move in Theorem 4. A payoff bound and compact-carrier
+motion rate are produced before the accuracy and the critical start. The
+critical labels are fixed before accuracy; the actual row uses only the
+selected owner with hazard delta = accuracy/(10*M*card Player). -/
+theorem exists_chargedCriticalSoloMoves_of_not_branches
+    (G : QuittingGame) (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G)
+    (hinstant : ¬HasInstantApproximateEquilibria G) :
+    ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M ∧
+      ∃ rate : ℝ, 0 < rate ∧ rate < 1 ∧
+        ∀ point ∈ witness.Q, IsCriticalPoint G point →
+          ∃ owner other : G.Player, owner ≠ other ∧
+            point owner = SoloPayoff G owner ∧ point other = SoloPayoff G other ∧
+            G.reward ⟨{owner}, Finset.singleton_nonempty owner⟩ other < SoloPayoff G other ∧
+            ∀ accuracy : ℝ, 0 < accuracy → accuracy < witness.ebar → accuracy < rate →
+              let delta := accuracy / (10 * M * Fintype.card G.Player)
+              ∃ probability : Set.Icc (0 : ℝ) 1, (probability : ℝ) = delta ∧
+                let row := QuitRow.replace G (fun _ => (0 : Set.Icc (0 : ℝ) 1))
+                  owner probability
+                let next := QuittingOneStagePayoff G point row
+                (row owner : ℝ) = delta ∧
+                  (∀ who, who ≠ owner → (row who : ℝ) = 0) ∧
+                  QuitProbability G row = delta ∧
+                  next owner = point owner ∧ next other < point other ∧
+                  next ∈ witness.Q ∩ WSet G ∧
+                  next ∈ RestrictedEscapeCorrespondence G delta accuracy point ∧
+                  row ∈ EpsilonRow G accuracy point ∧
+                  rate * delta ≤ ‖next - point‖ := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  obtain ⟨rate, hrate, hrateOne, hmotion⟩ :=
+    exists_compactMotionParameter_of_not_branches
+      G hgenerated hinstant witness.Q witness.isCompact
+  refine ⟨M, hM, rate, hrate, hrateOne, ?_⟩
+  intro point hpoint hcritical
+  have hfloor := solo_le_of_mem_frontier_WSet G point hcritical.1
+  have hrational : IsRational G 0 point := by
+    intro who
+    simpa only [sub_zero] using (hnormal who).trans (hfloor who)
+  obtain ⟨owner, other, hne, howner, hother, hcross⟩ := hcritical.2
+  refine ⟨owner, other, hne, howner, hother, hcross, ?_⟩
+  intro accuracy haccuracy haccuracyEscape haccuracyRate
+  let delta : ℝ := accuracy / (10 * M * Fintype.card G.Player)
+  have hMpos : 0 < M := lt_of_lt_of_le zero_lt_one hM.1
+  have hcard : (1 : ℝ) ≤ Fintype.card G.Player := by
+    exact_mod_cast Fintype.card_pos
+  have hdenominator : 0 < 10 * M * (Fintype.card G.Player : ℝ) := by positivity
+  have hproduct : (1 : ℝ) ≤ M * Fintype.card G.Player := by
+    simpa only [one_mul] using mul_le_mul hM.1 hcard (by norm_num) hMpos.le
+  have hdenominatorOne : 1 ≤ 10 * M * (Fintype.card G.Player : ℝ) := by
+    nlinarith
+  have hdelta : 0 < delta := div_pos haccuracy hdenominator
+  have hdeltaAccuracy : delta ≤ accuracy := div_le_self haccuracy.le hdenominatorOne
+  have hdeltaOne : delta < 1 := hdeltaAccuracy.trans_lt (haccuracyRate.trans hrateOne)
+  let probability : Set.Icc (0 : ℝ) 1 := ⟨delta, hdelta.le, hdeltaOne.le⟩
+  let row : QuitRow G := QuitRow.replace G
+    (fun _ => (0 : Set.Icc (0 : ℝ) 1)) owner probability
+  let next : Payoff G.Player := QuittingOneStagePayoff G point row
+  have hrowOwner : (row owner : ℝ) = delta := by simp [row, QuitRow.replace, probability]
+  have hrowOther : ∀ who, who ≠ owner → (row who : ℝ) = 0 := by
+    intro who hwho
+    simp [row, QuitRow.replace, hwho]
+  have hownerUpper : point owner ≤ SoloPayoff G owner + accuracy := by
+    rw [howner]
+    exact le_add_of_nonneg_right haccuracy.le
+  have hband : point ∈ EscapeBand G accuracy := ⟨hfloor, owner, hownerUpper⟩
+  have hsmall : IsSmallSoloRow G delta owner row :=
+    ⟨hrowOwner.le, hrowOther⟩
+  have hrow : row ∈ EpsilonRow G accuracy point :=
+    smallSoloRow_mem_epsilonRow G hM haccuracy point owner row hband hownerUpper hsmall
+  have hrestricted : next ∈ RestrictedEscapeCorrespondence G delta accuracy point :=
+    Or.inr ⟨owner, row, hband, hownerUpper, hsmall, rfl⟩
+  have hq : QuitProbability G row = delta :=
+    quitProbability_allContinue_replace G owner probability
+  have hformula : next = fun who =>
+      delta * G.reward ⟨{owner}, Finset.singleton_nonempty owner⟩ who +
+        (1 - delta) * point who :=
+    quittingOneStagePayoff_soloProbabilityRow G point owner probability
+  have hnextOwner : next owner = point owner := by
+    rw [congrFun hformula owner]
+    change delta * SoloPayoff G owner + (1 - delta) * point owner = point owner
+    rw [howner]
+    ring
+  have hnextOther : next other < point other := by
+    rw [congrFun hformula other, hother]
+    nlinarith [mul_pos hdelta (sub_pos.mpr hcross)]
+  have hnextQ : next ∈ witness.Q := witness.closedUnder point hpoint next
+    ⟨row, EpsilonRow.mono G haccuracyEscape.le point hrow, rfl⟩
+  have hnextW : next ∈ WSet G := ⟨other, (hnextOther.trans_eq hother).le⟩
+  have hcharge := (hmotion point hpoint row
+    (IsRational.mono G hrate.le hrational)
+    (EpsilonRow.mono G haccuracyRate.le point hrow)).1
+  rw [hq] at hcharge
+  refine ⟨probability, rfl, hrowOwner, hrowOther, hq,
+    hnextOwner, hnextOther, ⟨hnextQ, hnextW⟩, hrestricted, hrow, ?_⟩
+  exact hcharge.trans_eq (norm_sub_rev point next)
+
+/-- One actual boundary start and payoff bound are selected before accuracy.
+Failure of the corrected stationary branch supplies cross-harm internally.
+For every sufficiently small positive accuracy, the selected start reaches
+an actual critical point by a finite restricted orbit, with every point in
+the same escape carrier and source band. No equilibrium component is assumed. -/
+theorem EscapeWitness.exists_criticalFiniteOrbits_of_not_stationarilyGenerated
+    {G : QuittingGame} (witness : EscapeWitness G)
+    (hnormal : ∀ who, IsNormalPlayer G who)
+    (hgenerated : ¬HasStationarilyGeneratedApproximateEquilibria G) :
+    ∃ M : ℝ, IsQuittingPayoffDifferenceBound G M ∧
+      ∃ start : Payoff G.Player, start ∈ witness.Q ∩ frontier (WSet G) ∧
+        ∀ accuracy : ℝ, 0 < accuracy → accuracy < 1 → accuracy < witness.ebar →
+          let delta := accuracy / (10 * M * Fintype.card G.Player)
+          ∃ (length : ℕ) (point : Fin (length + 1) → Payoff G.Player),
+            point 0 = start ∧
+            IsFiniteOrbit (RestrictedEscapeCorrespondence G delta accuracy) point ∧
+            (∀ time, point time ∈ witness.Q ∩ EscapeBand G accuracy) ∧
+            IsCriticalPoint G (point ⟨length, Nat.lt_succ_self length⟩) := by
+  classical
+  obtain ⟨M, hM⟩ := exists_quittingPayoffDifferenceBound G
+  obtain ⟨start, hstart⟩ := witness.meetsBoundary
+  have hfloor := solo_le_of_mem_frontier_WSet G start hstart.2
+  have hstartW : start ∈ WSet G := by
+    have hclosure : start ∈ closure (WSet G) := frontier_subset_closure hstart.2
+    simpa only [(isClosed_WSet G).closure_eq] using hclosure
+  have hcross := everyNormalSoloQuitterHarmsNormal_of_not_stationarilyGenerated
+    G hgenerated
+  refine ⟨M, hM, start, hstart, ?_⟩
+  intro accuracy haccuracy haccuracyOne haccuracyEscape
+  let delta := accuracy / (10 * M * Fintype.card G.Player)
+  have hstartBand : start ∈ EscapeBand G accuracy := by
+    refine ⟨hfloor, ?_⟩
+    obtain ⟨who, hwho⟩ := hstartW
+    exact ⟨who, hwho.trans (le_add_of_nonneg_right haccuracy.le)⟩
+  obtain ⟨length, point, hzero, hstep, hband, hcritical⟩ :=
+    exists_criticalFiniteOrbit_of_crossHarm G hM hnormal hcross haccuracy
+      haccuracyOne start hstartBand
+  have hsubset : ∀ value,
+      RestrictedEscapeCorrespondence G delta accuracy value ⊆ FRow G accuracy value :=
+    restrictedEscapeCorrespondence_subset G hM haccuracy
+  have hcarrier : ∀ time, point time ∈ witness.Q := by
+    intro time
+    induction time using Fin.induction with
+    | zero => simpa only [hzero] using hstart.1
+    | succ time ih =>
+        exact witness.closedUnder (point time.castSucc) ih (point time.succ)
+          (FRow.mono G haccuracyEscape.le (point time.castSucc)
+            (hsubset (point time.castSucc) (hstep time)))
+  exact ⟨length, point, hzero, hstep, fun time => ⟨hcarrier time, hband time⟩,
+    hcritical⟩
 
 /-- Theorem 4.  Every escape game has approximate equilibria. -/
 theorem theorem4 (G : QuittingGame) (h : IsEscapeGame G) :
