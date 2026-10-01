@@ -1,6 +1,7 @@
 import UniformEquilibrium.Quitting.Projective.AbsorptionWeightedForwardPacket
 import UniformEquilibrium.Quitting.Root.AbsorptionWeightedRootPurification
 import UniformEquilibrium.Quitting.Root.EndpointOpponentStability
+import UniformEquilibrium.Quitting.Root.BoundedEndpoint
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.Lasso
 
@@ -15,17 +16,6 @@ open _root_.Math.Probability
 /-- The coordinate box used by the exact repaired packet. -/
 def quittingForwardPacketCoordinateBox (B : ℝ) : Set (Payoff (Fin 4)) :=
   {value | ∀ player, |value player| ≤ B}
-
-private theorem abs_quittingRootSuccessorPayoff_le_bound
-    (reward : {S : Finset (Fin 4) // S.Nonempty} → Payoff (Fin 4))
-    (tail : Payoff (Fin 4)) (root : Fin 4 → PMF Bool) (player : Fin 4)
-    {B : ℝ} (hreward : ∀ terminal who, |reward terminal who| ≤ B)
-    (htail : ∀ who, |tail who| ≤ B) :
-    |quittingRootSuccessorPayoff reward tail root player| ≤ B := by
-  unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
-  apply abs_expect_le_of_abs_le
-  intro action
-  exact abs_quittingRootPayoff_le reward tail hreward htail action player
 
 /-- Purify every packet row using its original annotation and threshold `Bρ`. -/
 def QuittingAbsorptionWeightedForwardPacket.purifiedRoots

@@ -1507,8 +1507,26 @@ accuracy when only singleton owners 2 and 3 have nonnegative own rewards.
 (`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientAnnulus.lean`)
 gives intrinsic degree two on exactly the entire nonzero quotient fixed fiber.
 Its separate negative-one LCP statement has the unique root `(1,1,1)`.
-Degree two is not a count of stationary roots. The class's coordinate freedom,
-algebraic member and full-dimensional persistence remain separate obligations.
+Degree two is not a count of stationary roots.
+`pairedCompletionReward_injective` and
+`isPairedCenteredCompletion_iff_exists_coordinates`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientCoordinates.lean`)
+give the exact class chart: thirty-three independent nonsingleton entries and
+four arbitrary signed own-singleton levels, with reconstruction and an actual
+uniform-payoff consumer for every chart input.
+`pairedAsymmetricCompletionReward_properties`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedResponseQuotientAsymmetry.lean`)
+changes one nonsingleton reward entry, preserves the class and singleton rows,
+and destroys full-table player-swap covariance.
+`PairedCubicStationaryExample.exists_local_stationary_branch`
+(`UniformEquilibrium/Quitting/Examples/BlockPair/PairedCubicLocalPersistenceStrategic.lean`)
+produces an open neighborhood of the literal cubic table over all sixty reward
+coordinates. Each table has one exact stationary equilibrium and its own fixed
+uniform payoff target before accuracy. No common target across tables or
+numerical neighborhood radius is asserted. The raw, canonical and normalized
+tables also have checked reward-class attachments and no deterministic terminal
+equilibrium, including Never and arbitrary later quitting dates. These results
+pass the full integration gate; the class chart is not an open full-table neighborhood.
 
 `NegativeSoloStationaryBoundary.exploitability_positive` and
 `exploitability_boundary`
@@ -2244,6 +2262,43 @@ full edge space are compact; source, target, and absorption charge are
 continuous. No punishment floor, support-local condition, or selected-root
 restriction is imposed. A finite capacity bound is not supplied by this
 definition or its topological properties.
+
+`isQuittingFullExactRootPotential_add_one_of_robust_add_two`
+(`UniformEquilibrium/Quitting/Projective/ExactRootPotentialRestriction.lean`)
+restricts the same robust potential to every exact Nash root in the smaller
+box, for every nonnegative tolerance. The collision-adjusted actual singleton
+roots in `UniformEquilibrium/Quitting/Root/CollisionAdjustedSingletonProbe.lean`
+preserve binding upper coordinates and produce exact source Nash and the
+literal successor at all sufficiently small positive rates.
+`IsQuittingFullExactRootPotential.singletonFace_drift`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialFaceDrift.lean`)
+gives unit directional drift at every singleton lower face, including upper-face
+intersections. `IsQuittingFullExactRootPotential.minimum_above_singleton` and
+`IsQuittingFullExactRootPotential.exists_minima_strict_gap`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialMinimum.lean`)
+put every full-box minimum strictly above every own singleton and produce an
+attained strict value gap from the lower boundary. The location theorem needs
+only a derivative at that minimum; the attained-gap theorem additionally uses
+continuity and regularity on the stated boxes. These results pass the full
+integration gate for signed rewards and arbitrary finite player sets, with nonemptiness
+required for the boundary gap. They constrain a supplied potential; they do
+not construct one or prove uniform-payoff existence.
+
+`lowerBoxBoundary_minimum_partial_signs` and
+`lowerBoxBoundary_minimum_derivative_toward_strictLower_pos`
+(`MathUE/Analysis/LowerBoxBoundaryMinimum.lean`) retain the lower-face,
+interior-coordinate and upper-face derivative signs at a boundary minimum,
+and strict positive drift toward every strictly lower boxed target.
+`IsQuittingFullExactRootPotential.not_quasiconvex`
+(`UniformEquilibrium/Quitting/Projective/FullExactRootPotentialQuasiconvexExclusion.lean`)
+excludes quasiconvexity on the upper singleton rectangle without a matrix
+assumption. It permits signed rewards and arbitrary finite nonempty players.
+The same file's
+`exists_positive_quittingRobustEdge_potential_violation_of_quasiconvex`
+internally produces a rejecting edge at every nonnegative tolerance, retaining
+the same table, potential, exact Nash root and literal successor. Positive
+absorption is a conclusion, not additional source data. These declarations
+pass the full integration gate; they do not supply a potential producer.
 
 The literal conversions in
 `UniformEquilibrium/Quitting/Projective/RobustChargedRelationPacketAdapter.lean`

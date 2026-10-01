@@ -5,6 +5,10 @@ import MathUE.PairedPhasePolynomialRoots
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.GeometricMinimumRecurrence
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
+import MathUE.Analysis.LowerBoxBoundaryMinimum
+import MathUE.Analysis.QuasiconvexLowerBoxBoundary
+import MathUE.Analysis.CollisionAdjustedDrift
+import MathUE.RealSeries.NormalizedGeometricComparison
 import MathUE.Analysis.AnalyticQuadraticRemainder
 import MathUE.Analysis.PositiveHomogeneousCoercivity
 import MathUE.Analysis.GeometricCesaroError
@@ -635,6 +639,9 @@ import MathUE.Topology.BoxComplementarityRectangularChartIndependence
 import MathUE.Topology.AmbientDegree
 import MathUE.Topology.AmbientDegreeHomotopyNormalization
 import MathUE.Topology.AmbientDegreeProperties
+import MathUE.Topology.BoundaryFixingSurjectivity
+import MathUE.Topology.CompactConvexHull
+import MathUE.Topology.FarthestPointContactHull
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityCenteredMatrixLocalIndex

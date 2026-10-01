@@ -14,14 +14,17 @@ import MathUE.AffineRecurrenceFiniteUnroll
 import MathUE.AffineRecurrenceInfiniteUnroll
 import MathUE.AlgebraicSelection
 import MathUE.Analysis.AnalyticQuadraticRemainder
+import MathUE.Analysis.CollisionAdjustedDrift
 import MathUE.Analysis.CompactSubtypeZeroExtension
 import MathUE.Analysis.CoordinateSecantEstimate
 import MathUE.Analysis.DerivativeDifferenceMeanValue
 import MathUE.Analysis.GeometricCesaroError
+import MathUE.Analysis.LowerBoxBoundaryMinimum
 import MathUE.Analysis.LowerBoxBoundarySmoothDrift
 import MathUE.Analysis.OneSidedCapacitySmoothing
 import MathUE.Analysis.PositiveHomogeneousCoercivity
 import MathUE.Analysis.PositiveWeightedApproximation
+import MathUE.Analysis.QuasiconvexLowerBoxBoundary
 import MathUE.Analysis.SummableTailAverage
 import MathUE.AnalyticConeDichotomy
 import MathUE.AnalyticConeLift
@@ -564,6 +567,7 @@ import MathUE.RealQuantifierElimination.SemialgebraicPresentation
 import MathUE.RealQuantifierElimination.SignDiagramProducer
 import MathUE.RealQuantifierElimination.UnivariateCompilation
 import MathUE.RealSeries.DiscountedExitWeight
+import MathUE.RealSeries.NormalizedGeometricComparison
 import MathUE.ReciprocalDebtRecurrence
 import MathUE.RegularPolynomialCurveSelection
 import MathUE.Reindex
@@ -596,6 +600,7 @@ import MathUE.Topology.AmbientDegree
 import MathUE.Topology.AmbientDegreeHomotopyNormalization
 import MathUE.Topology.AmbientDegreeProperties
 import MathUE.Topology.AmbientDegreeSelfMapNormalization
+import MathUE.Topology.BoundaryFixingSurjectivity
 import MathUE.Topology.BoxComplementarityAffineLocalIndex
 import MathUE.Topology.BoxComplementarityAmbientExtension
 import MathUE.Topology.BoxComplementarityAmbientMapAdapter
@@ -631,6 +636,7 @@ import MathUE.Topology.CalibrationSliceCompactness
 import MathUE.Topology.CompactBudgetedPrefixRelation
 import MathUE.Topology.CompactComponentSeparation
 import MathUE.Topology.CompactConnectedFixedPointGraph
+import MathUE.Topology.CompactConvexHull
 import MathUE.Topology.CompactDependentFinitePrefixRelation
 import MathUE.Topology.CompactEdgeBudgetedPrefixRelation
 import MathUE.Topology.CompactExecutableTraceGrammar
@@ -646,6 +652,7 @@ import MathUE.Topology.ConnectedFixedPointContinuation
 import MathUE.Topology.CountableObservation
 import MathUE.Topology.CountableObservationRegularity
 import MathUE.Topology.ExtendedOrbit
+import MathUE.Topology.FarthestPointContactHull
 import MathUE.Topology.FiniteLabelLiminfExtraction
 import MathUE.Topology.FiniteLabelSubsequence
 import MathUE.Topology.FiniteLimitDecomposition
@@ -2235,6 +2242,7 @@ import UniformEquilibrium.Quitting.Cycles.ConditionedSingletonStrategicPurificat
 import UniformEquilibrium.Quitting.Cycles.ConditionedSlackThreshold
 import UniformEquilibrium.Quitting.Cycles.ConditionedSoloExtraction
 import UniformEquilibrium.Quitting.Cycles.ConditionedTangentSeam
+import UniformEquilibrium.Quitting.Cycles.ConstantRootSurvival
 import UniformEquilibrium.Quitting.Cycles.CycleIsolatedCoordinate
 import UniformEquilibrium.Quitting.Cycles.CycleMismatchContraction
 import UniformEquilibrium.Quitting.Cycles.CyclicFiniteMenu
@@ -2461,8 +2469,16 @@ import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardHoriz
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardPeriodic
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardStationary
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCollisionRewardTable
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicActiveJacobian
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicDeterministicObstruction
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicLocalPersistence
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicLocalPersistenceStrategic
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicRewardClasses
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedCubicStationaryExample
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientAnnulus
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientAsymmetry
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientClass
+import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientCoordinates
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientMatrix
 import UniformEquilibrium.Quitting.Examples.BlockPair.PairedResponseQuotientSameProfile
 import UniformEquilibrium.Quitting.Examples.BlockPair.PredecessorCharts
@@ -2606,6 +2622,7 @@ import UniformEquilibrium.Quitting.Paths.ActualPrefixAllContinueLimit
 import UniformEquilibrium.Quitting.Paths.ActualPrefixPayoffLimit
 import UniformEquilibrium.Quitting.Paths.ActualReversePrefixMarkedSuffix
 import UniformEquilibrium.Quitting.Paths.AlmostSureOpponentUniformization
+import UniformEquilibrium.Quitting.Paths.AlwaysContinueEvaluatedReplies
 import UniformEquilibrium.Quitting.Paths.AnchoredJoinPromotion
 import UniformEquilibrium.Quitting.Paths.BehaviorFirstStoppingPairLaw
 import UniformEquilibrium.Quitting.Paths.BehaviorStoppingLaw
@@ -2619,6 +2636,7 @@ import UniformEquilibrium.Quitting.Paths.CapPumpSecondPersistentLabelBoundary
 import UniformEquilibrium.Quitting.Paths.CommonStoppingCalendarRetiming
 import UniformEquilibrium.Quitting.Paths.CounterfactualStoppingLaw
 import UniformEquilibrium.Quitting.Paths.DiscountedBehavioralCap
+import UniformEquilibrium.Quitting.Paths.DiscountedLiveTailRate
 import UniformEquilibrium.Quitting.Paths.DiscountedStoppingLawPayoff
 import UniformEquilibrium.Quitting.Paths.EarliestPositiveStageAbsorption
 import UniformEquilibrium.Quitting.Paths.EvaluatedPureTimeCap
@@ -2803,6 +2821,7 @@ import UniformEquilibrium.Quitting.Projective.Boundary.All
 import UniformEquilibrium.Quitting.Projective.Boundary.PacketTargetSemantics
 import UniformEquilibrium.Quitting.Projective.Boundary.TargetMismatchRegression
 import UniformEquilibrium.Quitting.Projective.CumulativeChargeNearReturn
+import UniformEquilibrium.Quitting.Projective.ExactRootPotentialRestriction
 import UniformEquilibrium.Quitting.Projective.FiniteForwardPacketRewardBoxReduction
 import UniformEquilibrium.Quitting.Projective.FiniteForwardProjectiveLasso
 import UniformEquilibrium.Quitting.Projective.FixedBoxForwardCharacterization
@@ -2812,6 +2831,9 @@ import UniformEquilibrium.Quitting.Projective.FloorRobustChargedRelation
 import UniformEquilibrium.Quitting.Projective.FloorRobustChargedRelationTranslation
 import UniformEquilibrium.Quitting.Projective.FloorRobustPolynomialSeparator
 import UniformEquilibrium.Quitting.Projective.ForwardBlockSingleSeam
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialFaceDrift
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialMinimum
+import UniformEquilibrium.Quitting.Projective.FullExactRootPotentialQuasiconvexExclusion
 import UniformEquilibrium.Quitting.Projective.Lasso
 import UniformEquilibrium.Quitting.Projective.LassoAll
 import UniformEquilibrium.Quitting.Projective.LassoWeighted
@@ -2870,6 +2892,7 @@ import UniformEquilibrium.Quitting.Punishment.SinglePivotUniformPayoff
 import UniformEquilibrium.Quitting.Punishment.SingletonCapBindingCollision
 import UniformEquilibrium.Quitting.Punishment.SoloCycleCompletion
 import UniformEquilibrium.Quitting.Punishment.SoloFloorCompletion
+import UniformEquilibrium.Quitting.Punishment.SoloPunishmentPrefix
 import UniformEquilibrium.Quitting.Punishment.SoloQuitterEquilibrium
 import UniformEquilibrium.Quitting.Punishment.ZeroSoloDisjunct
 import UniformEquilibrium.Quitting.RewardBound
@@ -2884,6 +2907,7 @@ import UniformEquilibrium.Quitting.Root.CapChildDeadlineAbsorption
 import UniformEquilibrium.Quitting.Root.CapNashRootStack
 import UniformEquilibrium.Quitting.Root.CofinalImmediateQuitCapDisplacementLimit
 import UniformEquilibrium.Quitting.Root.CoherentPureTimeCapClock
+import UniformEquilibrium.Quitting.Root.CollisionAdjustedSingletonProbe
 import UniformEquilibrium.Quitting.Root.CommonPrefixCapStability
 import UniformEquilibrium.Quitting.Root.CoordinateMarginalMixture
 import UniformEquilibrium.Quitting.Root.CopiedCapResidualDebt
@@ -2972,6 +2996,7 @@ import UniformEquilibrium.Quitting.Root.SinglePivotFiniteBellmanTransport
 import UniformEquilibrium.Quitting.Root.SinglePivotNormalization
 import UniformEquilibrium.Quitting.Root.SingletonBoundaryExactRoot
 import UniformEquilibrium.Quitting.Root.SingletonGapSemanticDebtDescent
+import UniformEquilibrium.Quitting.Root.SingletonRootEndpoints
 import UniformEquilibrium.Quitting.Root.StationaryTailSplice
 import UniformEquilibrium.Quitting.Root.StrictAllContinueBasinLinearAbsorptionDefect
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
@@ -3011,6 +3036,7 @@ import UniformEquilibrium.Quitting.Stationary.DiscountedClippedScaling
 import UniformEquilibrium.Quitting.Stationary.DiscountedDisplacement
 import UniformEquilibrium.Quitting.Stationary.DiscountedQuadraticRemainder
 import UniformEquilibrium.Quitting.Stationary.DiscountedR0Localization
+import UniformEquilibrium.Quitting.Stationary.DiscountedRate
 import UniformEquilibrium.Quitting.Stationary.DiscountedUniformScaling
 import UniformEquilibrium.Quitting.Stationary.EndpointCompiler
 import UniformEquilibrium.Quitting.Stationary.FaceNumerator
@@ -3103,6 +3129,7 @@ import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalance
 import UniformEquilibrium.Quitting.Stationary.SignedInfluenceCycleBalanceRegression
 import UniformEquilibrium.Quitting.Stationary.SingletonStationaryRoot
 import UniformEquilibrium.Quitting.Stationary.SnellCap
+import UniformEquilibrium.Quitting.Stationary.SoloDiscountedRate
 import UniformEquilibrium.Quitting.Stationary.StationaryTerminalPayoffSelection
 import UniformEquilibrium.Quitting.Stationary.StationaryUniformPayoffWitnessSelection
 import UniformEquilibrium.Quitting.Stationary.StrictEndpointSelection

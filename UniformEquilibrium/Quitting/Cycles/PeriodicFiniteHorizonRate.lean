@@ -140,6 +140,32 @@ theorem abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro
       rw [← Finset.mul_sum]
       ring
 
+/-- Both signs of the finite-horizon boundary error use the SAME original
+opponent clock after every complete behavioral replacement. -/
+theorem abs_finiteAveragePayoff_update_sub_terminal_le_opponentLiveCesaro
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (profile : (quittingGame reward).BehaviorProfile)
+    (player : ι) (deviation : (quittingGame reward).BehaviorStrategy player)
+    (horizon : ℕ) (hhorizon : 0 < horizon)
+    (bound : ℝ)
+    (hreward : ∀ terminal, |reward terminal player| ≤ bound) :
+    |(quittingGame reward).finiteAveragePayoff none horizon
+        (Function.update profile player deviation) player -
+      quittingTerminalPayoff reward (Function.update profile player deviation) player| ≤
+      bound * quittingOpponentLiveCesaro reward profile player horizon := by
+  have hbound : 0 ≤ bound :=
+    (abs_nonneg _).trans (hreward (quittingSingletonTerminal player))
+  have herror := abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro reward
+    (Function.update profile player deviation) player horizon hhorizon bound hbound hreward
+  have hsame : quittingOpponentOnlyProfile reward
+      (Function.update profile player deviation) player =
+        quittingOpponentOnlyProfile reward profile player := by
+    unfold quittingOpponentOnlyProfile
+    exact Function.update_idem _ _ _
+  unfold quittingOpponentLiveCesaro at herror ⊢
+  rw [hsame] at herror
+  exact herror
+
 /-- The standard unilateral finite-horizon comparison written with the
 shared opponent-live Cesàro clock. -/
 theorem finiteAveragePayoff_update_le_terminal_add_opponentLiveCesaro'

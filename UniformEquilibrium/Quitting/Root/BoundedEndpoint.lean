@@ -5,6 +5,7 @@ Authors: GameTheory contributors
 -/
 
 import UniformEquilibrium.Quitting.Root.SuccessorCertificate
+import UniformEquilibrium.ProofView.Concepts.Stochastic.Models.Quitting.RootPerturbation
 
 /-!
 # Bounded one-root endpoint estimates
@@ -21,6 +22,20 @@ namespace GameTheory
 open StochasticGame _root_.Math.Probability Math.PMFProduct
 
 variable {ι : Type} [Fintype ι] [DecidableEq ι]
+
+omit [DecidableEq ι] in
+/-- A product expectation retains the same coordinate box as its terminal
+rewards and continuation annotation. No realization of the tail is required. -/
+theorem abs_quittingRootSuccessorPayoff_le_bound
+    (reward : {S : Finset ι // S.Nonempty} → Payoff ι)
+    (tail : Payoff ι) (root : ι → PMF Bool) (who : ι)
+    {B : ℝ} (hreward : ∀ terminal player, |reward terminal player| ≤ B)
+    (htail : ∀ player, |tail player| ≤ B) :
+    |quittingRootSuccessorPayoff reward tail root who| ≤ B := by
+  unfold quittingRootSuccessorPayoff quittingRootExpectedPayoff
+  apply abs_expect_le_of_abs_le
+  intro action
+  exact abs_quittingRootPayoff_le reward tail hreward htail action who
 
 omit [DecidableEq ι] in
 /-- The one-stage absorbing contribution is bounded by the reward bound times

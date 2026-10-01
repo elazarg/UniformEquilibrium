@@ -313,18 +313,9 @@ theorem finiteAverage_deviation_error_le
       bound * ((period : ℝ) / (1 - (99 / 100 : ℝ) ^ (Fintype.card ι - 1))) /
         (horizon : ℝ) := by
   have hbound : 0 ≤ bound := (abs_nonneg _).trans (hreward (quittingSingletonTerminal player))
-  have herror := abs_finiteAveragePayoff_sub_terminal_le_opponentLiveCesaro reward
-    (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
-      player deviation) player horizon hhorizon bound hbound hreward
-  have hsame : quittingOpponentOnlyProfile reward
-      (Function.update (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
-        player deviation) player =
-      quittingOpponentOnlyProfile reward
-        (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial) player := by
-    unfold quittingOpponentOnlyProfile
-    exact Function.update_idem _ _ _
-  unfold quittingOpponentLiveCesaro at herror
-  rw [hsame] at herror
+  have herror := abs_finiteAveragePayoff_update_sub_terminal_le_opponentLiveCesaro reward
+    (quittingCyclicBehaviorProfile reward (cycle schedule q hq) initial)
+      player deviation horizon hhorizon bound hreward
   have hclock := mul_le_mul_of_nonneg_left
     (opponentLiveCesaro_le_geometric reward schedule q hq hinterior initial player horizon) hbound
   exact herror.trans (by simpa only [mul_div_assoc, quittingOpponentLiveCesaro] using hclock)

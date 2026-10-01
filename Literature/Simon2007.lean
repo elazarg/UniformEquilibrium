@@ -10,6 +10,7 @@ import MathUE.Topology.ExtendedOrbit
 import MathUE.Topology.FiniteOrbitAppend
 import MathUE.Topology.PairedSegmentRenewal
 import MathUE.Topology.TwoSegmentOrbitBlocks
+import MathUE.Topology.BoundaryFixingSurjectivity
 import MathUE.Probability.FinitePathLawAdapter
 import MathUE.Probability.FiniteStoppingSimplexReconstruction
 import UniformEquilibrium.Quitting.Classification.Existence.StationarilyGeneratedBranch
@@ -21514,6 +21515,16 @@ def BrouwerSpanningIllustration (n : ℕ) : Prop :=
     Continuous f →
     (∀ x : Metric.closedBall (0 : Fin n → ℝ) 1,
       ‖(x : Fin n → ℝ)‖ = 1 → f x = x) → Function.Surjective f
+
+/-- The Section 5.2 disk-surjectivity illustration follows from the existing
+intrinsic degree normalization and homotopy, without a supplied homology theory. -/
+theorem brouwerSpanningIllustration (n : ℕ) : BrouwerSpanningIllustration n := by
+  intro field hfield hfix
+  apply Math.Topology.surjective_closedBall_selfMap_of_eq_on_sphere
+    (0 : Fin n → ℝ) 1 field hfield
+  intro point hpoint
+  apply hfix point
+  simpa only [dist_zero_right] using hpoint
 
 /-- The first-coordinate correspondence carried by the image of a disk map into a product. -/
 def FirstImageCorrespondence {n : ℕ}

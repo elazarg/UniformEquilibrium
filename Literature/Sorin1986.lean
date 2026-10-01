@@ -1,9 +1,11 @@
 import Mathlib
+import MathUE.Topology.FarthestPointContactHull
 import GameTheory.Analysis.Payoff
 import GameTheory.Repeated.Trigger
 import MathUE.ProbabilityMassFunction.Simplex
 import MathUE.PMFProduct.Bool
 import MathUE.BanachLimit
+import MathUE.AbelCesaro
 import MathUE.FixedRatioConvexity
 import MathUE.FiniteEmpiricalConvexity
 import UniformEquilibrium.Certificates.Public.FiniteHorizonProfileLawTransfer
@@ -3583,6 +3585,136 @@ private theorem FiniteStageGame.stageEUAt_update_trigger_le
     (G.vanishingPunishments time who) (deviation time history)).trans
       (G.vanishingPunishments_spec time who).le
 
+/-! The first realized mismatch under a full behavioral deviation is still
+attributable to that deviator. This is a support theorem for the actual
+stochastic history law, not a pure-strategy replacement of its deviations. -/
+
+private theorem FiniteStageGame.firstMismatch_of_mem_support_trigger_update
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (punishment : ℕ → ∀ culprit, G.MixedOpponentProfile culprit)
+    (who : G.Player) (deviation : G.BehaviorStrategy who) :
+    ∀ time (history : G.repeatedGame.Hist time),
+      history ∈ (G.repeatedGame.histDist
+        (Function.update (G.triggerBehaviorProfile path punishment) who deviation)
+        PUnit.unit time).support →
+      (∀ k, (history.1 k).2 = path k) ∨
+        ∃ first : Fin time,
+          (history.1 first).2 ≠ path first ∧
+          (∀ k : Fin time, k.val < first.val → (history.1 k).2 = path k) ∧
+          ∀ other, other ≠ who →
+            (history.1 first).2 other = path first other := by
+  intro time
+  induction time with
+  | zero =>
+      intro history _hsupport
+      exact Or.inl (fun k ↦ Fin.elim0 k)
+  | succ time ih =>
+      intro history hsupport
+      obtain ⟨previous, hprevious, action, haction, nextState, _hnextState, rfl⟩ :=
+        (G.repeatedGame.mem_support_histDist_succ _ PUnit.unit time history).mp
+          hsupport
+      rcases ih previous hprevious with hpath | ⟨first, hmismatch, hbefore, hother⟩
+      · by_cases hequal : action = path time
+        · left
+          intro k
+          refine Fin.lastCases ?_ (fun earlier ↦ ?_) k
+          · simpa only [Fin.snoc_last, Fin.val_last] using hequal
+          · simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hpath earlier
+        · right
+          refine ⟨Fin.last time, ?_, ?_, ?_⟩
+          · simpa only [Fin.snoc_last, Fin.val_last] using hequal
+          · intro k hk
+            refine Fin.lastCases ?_ (fun earlier ↦ ?_) k hk
+            · intro himpossible
+              exact False.elim (Nat.lt_irrefl time himpossible)
+            · intro _hearlier
+              simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hpath earlier
+          · intro other hne
+            let current : G.MixedProfile := fun player ↦
+              (Function.update (G.triggerBehaviorProfile path punishment)
+                who deviation) player time previous
+            have hpure : current other = PMF.pure (path time other) := by
+              dsimp only [current]
+              rw [Function.update_of_ne hne]
+              unfold FiniteStageGame.triggerBehaviorProfile
+                KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile
+                KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy
+              exact G.triggerMonitoredProfile_of_onPath path punishment other
+                (KernelGame.RealizedActionRepeatedAdapter.actionHistory G.kernel previous)
+                hpath
+            have hcurrent :
+                Function.update current other (PMF.pure (path time other)) = current :=
+              Function.update_eq_self_iff.mpr hpure.symm
+            have hdraw : action ∈ (Math.PMFProduct.pmfPi
+                (Function.update current other (PMF.pure (path time other)))).support := by
+              rw [hcurrent]
+              exact haction
+            have hcoordinate := Math.PMFProduct.eq_of_mem_support_pmfPi_update_pure
+              current other (path time other) hdraw
+            simpa only [Fin.snoc_last, Fin.val_last] using hcoordinate
+      · right
+        refine ⟨first.castSucc, ?_, ?_, ?_⟩
+        · simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hmismatch
+        · intro k hk
+          refine Fin.lastCases ?_ (fun earlier ↦ ?_) k hk
+          · intro himpossible
+            exact False.elim (Nat.not_lt_of_ge first.isLt.le himpossible)
+          · intro hearlier
+            simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using
+              hbefore earlier hearlier
+        · intro other hne
+          simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hother other hne
+
+/-- Every feasible individually rational target has an actual stochastic
+trigger implementation with exact Banach delivery. After its first mismatch,
+every supported history under every complete unilateral behavioral replacement
+has its current mixed payoff capped by the target plus the vanishing punishment
+error. This local source theorem alone does not assert Banach Nash optimality. -/
+theorem exists_banachTrigger_delivery_and_firstMismatchPunishment
+    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+    (htarget : target ∈ G.individuallyRationalPayoffs) :
+    ∃ (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile),
+      Tendsto (fun step ↦ ((step + 1 : ℕ) : ℝ)⁻¹ •
+        ∑ time ∈ Finset.range (step + 1), G.payoff (path time))
+        atTop (nhds target) ∧
+      G.banachPayoff L profile = target ∧
+      (∀ (time : ℕ) (history : G.repeatedGame.Hist time),
+        (∀ k, (history.1 k).2 = path k) →
+        ∀ player, profile player time history = PMF.pure (path time player)) ∧
+      ∀ (who : G.Player) (deviation : G.BehaviorStrategy who)
+        (time : ℕ) (history : G.repeatedGame.Hist time),
+        history ∈ (G.repeatedGame.histDist (Function.update profile who deviation)
+          PUnit.unit time).support →
+        (¬ ∀ k, (history.1 k).2 = path k) →
+        G.repeatedGame.stageEUAt (Function.update profile who deviation) history who ≤
+          target who + (time + 1 : ℝ)⁻¹ := by
+  obtain ⟨path, hpath⟩ :=
+    MathUE.exists_sequence_tendsto_average_of_mem_convexHull_range
+      (fun action : (∀ player, G.Action player) ↦ G.payoff action) htarget.1
+  let profile := G.triggerBehaviorProfile path G.vanishingPunishments
+  refine ⟨path, profile, hpath,
+    G.banachPayoff_triggerBehaviorProfile_eq L path G.vanishingPunishments
+      target hpath, ?_, ?_⟩
+  · intro time history hplayed player
+    dsimp only [profile, FiniteStageGame.triggerBehaviorProfile,
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorProfile,
+      KernelGame.RealizedActionRepeatedAdapter.toBehaviorStrategy]
+    exact G.triggerMonitoredProfile_of_onPath path G.vanishingPunishments player
+      (KernelGame.RealizedActionRepeatedAdapter.actionHistory G.kernel history) hplayed
+  intro who deviation time history hsupport hnotPath
+  obtain ⟨first, hmismatch, hbefore, hother⟩ :=
+    (G.firstMismatch_of_mem_support_trigger_update path G.vanishingPunishments
+      who deviation time history hsupport).resolve_left hnotPath
+  have hstatus : G.publicTriggerStatus path history = some who :=
+    G.publicTriggerStatus_eq_some_of_first path who history first.isLt hmismatch
+      (fun earlier hearlier ↦ hbefore ⟨earlier, hearlier.trans first.isLt⟩ hearlier)
+      hother
+  have hcap := G.stageEUAt_update_trigger_le path who deviation history hstatus
+  apply hcap.trans
+  change G.individualRationalLevel who + (time + 1 : ℝ)⁻¹ ≤
+    target who + (time + 1 : ℝ)⁻¹
+  exact add_le_add (htarget.2 who) le_rfl
+
 private theorem stageEUAt_securityDeviation_ge
     (G : FiniteStageGame) (profile : G.BehaviorProfile)
     (who : G.Player) {time : ℕ} (history : G.repeatedGame.Hist time) :
@@ -3718,11 +3850,359 @@ theorem banachEquilibriumPayoffs_subset_individuallyRationalPayoffs
         _ = G.banachPayoff L deviatingProfile who := rfl
     exact hdeviation.trans (hnash who deviation)
 
+section BanachTriggerComparison
+
+open scoped Classical
+open _root_.Math.Probability
+
+private def triggerOnPath (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
+    (history : G.repeatedGame.Hist time) : Prop :=
+  ∀ k, (history.1 k).2 = path k
+
+private def triggerPathIndicator (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
+    (history : G.repeatedGame.Hist time) : ℝ :=
+  if triggerOnPath G path history then 1 else 0
+
+private def triggerPathSurvival (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (time : ℕ) : ℝ :=
+  expect (G.repeatedGame.histDist profile PUnit.unit time)
+    (triggerPathIndicator G path)
+
+private def triggerNextPathProbability (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile)
+    {time : ℕ} (history : G.repeatedGame.Hist time) : ℝ :=
+  if triggerOnPath G path history then
+    expect (G.repeatedGame.stageActionDist profile history)
+      (fun action => if action = path time then 1 else 0)
+  else 0
+
+private theorem triggerOnPath_snoc_iff (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
+    (history : G.repeatedGame.Hist time) (action : G.repeatedGame.JointAct)
+    (nextState : G.repeatedGame.State) :
+    triggerOnPath G path
+        ((Fin.snoc history.1 (history.2, action), nextState) :
+          G.repeatedGame.Hist (time + 1)) ↔
+      triggerOnPath G path history ∧ action = path time := by
+  constructor
+  · intro hnext
+    refine ⟨fun k => ?_, ?_⟩
+    · simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hnext k.castSucc
+    · simpa only [Fin.snoc_last, Fin.val_last] using hnext (Fin.last time)
+  · rintro ⟨hprevious, haction⟩
+    intro k
+    refine Fin.lastCases ?_ (fun earlier => ?_) k
+    · simpa only [Fin.snoc_last, Fin.val_last] using haction
+    · simpa only [Fin.snoc_castSucc, Fin.val_castSucc] using hprevious earlier
+
+private theorem triggerPathIndicator_snoc (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) {time : ℕ}
+    (history : G.repeatedGame.Hist time) (action : G.repeatedGame.JointAct)
+    (nextState : G.repeatedGame.State) :
+    triggerPathIndicator G path
+        ((Fin.snoc history.1 (history.2, action), nextState) :
+          G.repeatedGame.Hist (time + 1)) =
+      if triggerOnPath G path history then
+        (if action = path time then 1 else 0) else 0 := by
+  simp only [triggerPathIndicator]
+  rw [triggerOnPath_snoc_iff G path history action nextState]
+  by_cases hprevious : triggerOnPath G path history
+  · simp only [hprevious, true_and, ite_true]
+  · simp only [hprevious, false_and, ite_false]
+
+private theorem triggerNextPathProbability_bounds (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile)
+    {time : ℕ} (history : G.repeatedGame.Hist time) :
+    0 ≤ triggerNextPathProbability G path profile history ∧
+      triggerNextPathProbability G path profile history ≤
+        triggerPathIndicator G path history := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  by_cases hpath : triggerOnPath G path history
+  · simp only [triggerNextPathProbability, triggerPathIndicator, hpath, ite_true]
+    constructor
+    · exact expect_nonneg _ _ (fun _ => by split_ifs <;> norm_num)
+    · calc
+        _ ≤ expect (G.repeatedGame.stageActionDist profile history) (fun _ => 1) :=
+          expect_mono _ _ _ (fun _ => by split_ifs <;> norm_num)
+        _ = 1 := expect_const _ _
+  · simp only [triggerNextPathProbability, triggerPathIndicator, hpath, ite_false,
+      le_refl, and_self]
+
+private theorem triggerPathSurvival_bounds (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (time : ℕ) :
+    0 ≤ triggerPathSurvival G path profile time ∧
+      triggerPathSurvival G path profile time ≤ 1 := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  constructor
+  · exact expect_nonneg _ _ (fun _ => by
+      unfold triggerPathIndicator
+      split_ifs <;> norm_num)
+  · unfold triggerPathSurvival
+    calc
+      _ ≤ expect (G.repeatedGame.histDist profile PUnit.unit time) (fun _ => 1) := by
+        apply expect_mono
+        intro history
+        unfold triggerPathIndicator
+        split_ifs <;> norm_num
+      _ = 1 := expect_const _ _
+
+private theorem triggerPathSurvival_succ (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (time : ℕ) :
+    triggerPathSurvival G path profile (time + 1) =
+      expect (G.repeatedGame.histDist profile PUnit.unit time)
+        (triggerNextPathProbability G path profile) := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  unfold triggerPathSurvival
+  rw [G.repeatedGame.histDist_succ, expect_bind]
+  congr 1
+  funext history
+  rw [expect_bind]
+  have htransition (action : G.repeatedGame.JointAct) :
+      expect ((G.repeatedGame.transition history.2 action).bind fun nextState =>
+        PMF.pure ((Fin.snoc history.1 (history.2, action), nextState) :
+          G.repeatedGame.Hist (time + 1))) (triggerPathIndicator G path) =
+        if triggerOnPath G path history then
+          (if action = path time then 1 else 0) else 0 := by
+    rw [expect_bind]
+    simp only [expect_pure]
+    exact triggerPathIndicator_snoc G path history action PUnit.unit
+  simp_rw [htransition]
+  by_cases hpath : triggerOnPath G path history
+  · simp only [triggerNextPathProbability, hpath, ite_true]
+  · simp only [triggerNextPathProbability, hpath, ite_false, expect_const]
+
+private theorem triggerPathSurvival_antitone_step (G : FiniteStageGame)
+    (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (time : ℕ) :
+    triggerPathSurvival G path profile (time + 1) ≤
+      triggerPathSurvival G path profile time := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  rw [triggerPathSurvival_succ]
+  exact expect_mono _ _ _ (fun history =>
+    (triggerNextPathProbability_bounds G path profile history).2)
+
+/-- The deviation's possible first-mismatch gain is charged to the actual
+decrease of no-mismatch survival, not to every subsequent punishment stage. -/
+private theorem trigger_expectedStagePayoff_le_survivalBlend
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (who : G.Player) (target bound : ℝ)
+    (hbound : ∀ action, |G.payoff action who| ≤ bound)
+    (hafter : ∀ time (history : G.repeatedGame.Hist time),
+      history ∈ (G.repeatedGame.histDist profile PUnit.unit time).support →
+      ¬ triggerOnPath G path history →
+      G.repeatedGame.stageEUAt profile history who ≤
+        target + vanishingPunishmentError time)
+    (time : ℕ) :
+    G.repeatedGame.expectedStagePayoff profile PUnit.unit time who ≤
+      triggerPathSurvival G path profile time * G.payoff (path time) who +
+        (1 - triggerPathSurvival G path profile time) * target +
+        vanishingPunishmentError time + 2 * bound *
+          (triggerPathSurvival G path profile time -
+            triggerPathSurvival G path profile (time + 1)) := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  have hpoint (history : G.repeatedGame.Hist time)
+      (hsupport : history ∈ (G.repeatedGame.histDist profile PUnit.unit time).support) :
+      G.repeatedGame.stageEUAt profile history who ≤
+        G.payoff (path time) who * triggerPathIndicator G path history +
+        (target + vanishingPunishmentError time) *
+          (1 - triggerPathIndicator G path history) +
+        2 * bound * (triggerPathIndicator G path history -
+          triggerNextPathProbability G path profile history) := by
+    by_cases hpath : triggerOnPath G path history
+    · have haction (action : G.repeatedGame.JointAct) :
+          G.payoff action who ≤ G.payoff (path time) who +
+            2 * bound * (1 - (if action = path time then 1 else 0)) := by
+        by_cases hequal : action = path time
+        · subst action
+          simp only [ite_true, sub_self, mul_zero, add_zero, le_refl]
+        · rw [ite_eq_right hequal]
+          have hcurrent := (abs_le.mp (hbound action)).2
+          have hreference := (abs_le.mp (hbound (path time))).1
+          linarith
+      have hmean := expect_mono (G.repeatedGame.stageActionDist profile history)
+        (fun action => G.payoff action who) _ haction
+      simp only [expect_add, expect_const_mul, expect_sub, expect_const] at hmean
+      have hstage : G.repeatedGame.stageEUAt profile history who =
+          expect (G.repeatedGame.stageActionDist profile history)
+            (fun action => G.payoff action who) := by
+        unfold StochasticGame.stageEUAt
+        change expect (G.repeatedGame.stageActionDist profile history)
+          (fun action => G.kernel.eu action who) = _
+        simp only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU]
+      rw [hstage]
+      simpa [triggerPathIndicator, triggerNextPathProbability, hpath] using hmean
+    · simpa [triggerPathIndicator, triggerNextPathProbability, hpath] using
+        hafter time history hsupport hpath
+  have hexpect := Math.ProbabilityMassFunction.expect_mono_on_support
+    (G.repeatedGame.histDist profile PUnit.unit time) _ _ hpoint
+  simp only [expect_add, expect_const_mul, expect_sub, expect_const] at hexpect
+  change G.repeatedGame.expectedStagePayoff profile PUnit.unit time who ≤
+    G.payoff (path time) who * triggerPathSurvival G path profile time +
+      (target + vanishingPunishmentError time) *
+        (1 - triggerPathSurvival G path profile time) + 2 * bound *
+        (triggerPathSurvival G path profile time -
+          expect (G.repeatedGame.histDist profile PUnit.unit time)
+            (triggerNextPathProbability G path profile)) at hexpect
+  rw [← triggerPathSurvival_succ] at hexpect
+  have hsurvival := (triggerPathSurvival_bounds G path profile time).1
+  have herror : 0 ≤ vanishingPunishmentError time :=
+    (vanishingPunishmentError_pos time).le
+  nlinarith [mul_nonneg hsurvival herror]
+
+private theorem trigger_finitePayoff_le_survivalBlend
+    (G : FiniteStageGame) (path : ℕ → (∀ player, G.Action player))
+    (profile : G.BehaviorProfile) (who : G.Player) (target bound : ℝ)
+    (hbound : ∀ action, |G.payoff action who| ≤ bound)
+    (hafter : ∀ time (history : G.repeatedGame.Hist time),
+      history ∈ (G.repeatedGame.histDist profile PUnit.unit time).support →
+      ¬ triggerOnPath G path history →
+      G.repeatedGame.stageEUAt profile history who ≤
+        target + vanishingPunishmentError time)
+    (step : ℕ) :
+    G.finitePayoff (step + 1) profile who ≤
+      survivalBlendAverage (fun time => G.payoff (path time) who)
+        (triggerPathSurvival G path profile) target step +
+      ((step + 1 : ℕ) : ℝ)⁻¹ *
+        ∑ time ∈ Finset.range (step + 1), vanishingPunishmentError time +
+      2 * bound * ((step + 1 : ℕ) : ℝ)⁻¹ := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  have hbound0 : 0 ≤ bound :=
+    (abs_nonneg (G.payoff (path 0) who)).trans (hbound (path 0))
+  have hsum := Finset.sum_le_sum (s := Finset.range (step + 1)) (fun time _ =>
+    trigger_expectedStagePayoff_le_survivalBlend G path profile who target bound
+      hbound hafter time)
+  have hscaled := mul_le_mul_of_nonneg_left hsum
+    (show 0 ≤ ((step + 1 : ℕ) : ℝ)⁻¹ by positivity)
+  have htelescope :
+      ∑ time ∈ Finset.range (step + 1),
+        2 * bound * (triggerPathSurvival G path profile time -
+          triggerPathSurvival G path profile (time + 1)) =
+      2 * bound * (triggerPathSurvival G path profile 0 -
+        triggerPathSurvival G path profile (step + 1)) := by
+    rw [← Finset.mul_sum, Finset.sum_range_sub']
+  have hcharge :
+      2 * bound * (triggerPathSurvival G path profile 0 -
+        triggerPathSurvival G path profile (step + 1)) ≤ 2 * bound := by
+    have hstart := (triggerPathSurvival_bounds G path profile 0).2
+    have hlast := (triggerPathSurvival_bounds G path profile (step + 1)).1
+    exact mul_le_of_le_one_right (by positivity) (by linarith)
+  unfold FiniteStageGame.finitePayoff
+  rw [G.repeatedGame.finiteAveragePayoff_eq_sum_expectedStagePayoff]
+  unfold survivalBlendAverage
+  simp only [Finset.sum_add_distrib]
+  simp only [Finset.sum_add_distrib, htelescope] at hscaled
+  have hscaledCharge := mul_le_mul_of_nonneg_left hcharge
+    (show 0 ≤ ((step + 1 : ℕ) : ℝ)⁻¹ by positivity)
+  nlinarith [hscaled, hscaledCharge]
+
+private theorem trigger_banachPayoff_le_of_punishment
+    (G : FiniteStageGame) (L : BanachLimit)
+    (path : ℕ → (∀ player, G.Action player)) (profile : G.BehaviorProfile)
+    (who : G.Player) (target : ℝ)
+    (haverage : Tendsto (fun step => ((step + 1 : ℕ) : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range (step + 1), G.payoff (path time) who)
+      atTop (nhds target))
+    (hafter : ∀ time (history : G.repeatedGame.Hist time),
+      history ∈ (G.repeatedGame.histDist profile PUnit.unit time).support →
+      ¬ triggerOnPath G path history →
+      G.repeatedGame.stageEUAt profile history who ≤
+        target + vanishingPunishmentError time) :
+    G.banachPayoff L profile who ≤ target := by
+  let (player : G.Player) : Finite (G.repeatedGame.Act player) :=
+    @Finite.of_fintype _ (G.finiteAction player)
+  let : Finite G.repeatedGame.State := inferInstanceAs (Finite PUnit)
+  obtain ⟨bound, hbound⟩ := exists_abs_bound_of_finite (fun action => G.payoff action who)
+  have hbound0 : 0 ≤ bound :=
+    (abs_nonneg (G.payoff (path 0) who)).trans (hbound (path 0))
+  have hbounded : IsBoundedSequence (fun step =>
+      G.finitePayoff (step + 1) profile who) := by
+    refine ⟨bound, fun step => ?_⟩
+    apply G.repeatedGame.abs_finiteAveragePayoff_le hbound0
+    intro state action
+    change |G.kernel.eu action who| ≤ bound
+    simpa only [FiniteStageGame.kernel, KernelGame.eu_ofPureEU] using hbound action
+  have herrorAverage : Tendsto (fun step : ℕ => ((step + 1 : ℕ) : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range (step + 1), vanishingPunishmentError time)
+      atTop (nhds 0) :=
+    tendsto_vanishingPunishmentError.cesaro.comp (tendsto_add_atTop_nat 1)
+  have hfirstCharge : Tendsto (fun step : ℕ =>
+      2 * bound * ((step + 1 : ℕ) : ℝ)⁻¹) atTop (nhds 0) := by
+    simpa only [one_div, Nat.cast_add, Nat.cast_one, mul_zero] using
+      (tendsto_one_div_add_atTop_nhds_zero_nat (𝕜 := ℝ)).const_mul (2 * bound)
+  have htotalError : Tendsto (fun step : ℕ => ((step + 1 : ℕ) : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range (step + 1), vanishingPunishmentError time +
+      2 * bound * ((step + 1 : ℕ) : ℝ)⁻¹) atTop (nhds 0) := by
+    simpa only [zero_add] using herrorAverage.add hfirstCharge
+  change L.eval (fun step => G.finitePayoff (step + 1) profile who) ≤ target
+  apply L.eval_le_of_eventually_le_add hbounded
+  intro error herror
+  have hhalf : 0 < error / 2 := half_pos herror
+  have hblend := eventually_survivalBlendAverage_le_add
+    (fun time => hbound (path time)) haverage le_rfl
+    (fun time => (triggerPathSurvival_bounds G path profile time).1)
+    (fun time => (triggerPathSurvival_bounds G path profile time).2)
+    (triggerPathSurvival_antitone_step G path profile) hhalf
+  have hsmall : ∀ᶠ step in atTop,
+      ((step + 1 : ℕ) : ℝ)⁻¹ *
+        ∑ time ∈ Finset.range (step + 1), vanishingPunishmentError time +
+        2 * bound * ((step + 1 : ℕ) : ℝ)⁻¹ < error / 2 := by
+    exact (tendsto_order.1 htotalError).2 _ hhalf
+  filter_upwards [hblend, hsmall] with step hblendStep hsmallStep
+  have hfinite := trigger_finitePayoff_le_survivalBlend G path profile who
+    target bound hbound hafter step
+  linarith
+
+end BanachTriggerComparison
+
+/-- Every feasible individually rational target is delivered by an actual
+behavioral Banach Nash profile, with the full unilateral behavioral quantifier. -/
+theorem exists_banachNash_of_mem_individuallyRationalPayoffs
+    (G : FiniteStageGame) (L : BanachLimit) (target : Payoff G.Player)
+    (htarget : target ∈ G.individuallyRationalPayoffs) :
+    ∃ profile : G.BehaviorProfile,
+      G.IsBanachNash L profile ∧ G.banachPayoff L profile = target := by
+  obtain ⟨path, profile, haverage, hdelivery, _hpurity, hpunishment⟩ :=
+    exists_banachTrigger_delivery_and_firstMismatchPunishment G L target htarget
+  refine ⟨profile, ?_, hdelivery⟩
+  intro who deviation
+  have hcoordinate := (continuous_apply who).tendsto target |>.comp haverage
+  change Tendsto (fun step =>
+    (((step + 1 : ℕ) : ℝ)⁻¹ •
+      ∑ time ∈ Finset.range (step + 1), G.payoff (path time)) who)
+    atTop (nhds (target who)) at hcoordinate
+  have haverageWho : Tendsto (fun step => ((step + 1 : ℕ) : ℝ)⁻¹ *
+      ∑ time ∈ Finset.range (step + 1), G.payoff (path time) who)
+      atTop (nhds (target who)) := by
+    simpa only [Pi.smul_apply, Finset.sum_apply, smul_eq_mul] using hcoordinate
+  have hcap := trigger_banachPayoff_le_of_punishment G L path
+    (Function.update profile who deviation) who (target who) haverageWho
+    (hpunishment who deviation)
+  simpa only [hdelivery] using hcap
+
 /-! The Banach-limit Folk theorem is the unconditional second clause of
 Property (4).  The reverse inclusion is its trigger-strategy construction. -/
 theorem property_4_banach (G : FiniteStageGame) (L : BanachLimit) :
     G.banachEquilibriumPayoffs L = G.individuallyRationalPayoffs := by
-  sorry
+  apply Set.Subset.antisymm
+  · exact banachEquilibriumPayoffs_subset_individuallyRationalPayoffs G L
+  · intro target htarget
+    exact exists_banachNash_of_mem_individuallyRationalPayoffs G L target htarget
 
 /-! The vanishing-discount clause of Property (4), equivalently Lemma 2, is
 stated with the paper's added-in-proof correction: `Δ` must be full
@@ -9430,23 +9910,29 @@ theorem proposition_9 (G : FiniteStageGame)
     P ⊆ G.finiteFeasiblePayoffs (n.1 + m.1) := by
   sorry
 
-/-- Distance from a point to a nonempty set, used only in Lemma 10. -/
-noncomputable def distanceToSet {X : Type} [PseudoMetricSpace X]
-    (x : X) (S : Set X) : ℝ :=
-  sInf ((fun y => dist x y) '' S)
+/-- Euclidean distance from a payoff vector to a nonempty set. The paper's
+closest-point argument uses the inner-product norm, not the Pi sup norm. -/
+noncomputable def distanceToSet {ι : Type} [Fintype ι]
+    (x : Payoff ι) (S : Set (Payoff ι)) : ℝ :=
+  Metric.infDist ((EuclideanSpace.equiv ι ℝ).symm x)
+    ((EuclideanSpace.equiv ι ℝ).symm '' S)
 
-/-- A point maximizing distance to `K` over `P`. -/
-def IsFarthestPoint {X : Type} [PseudoMetricSpace X]
-    (z : X) (P K : Set X) : Prop :=
+/-- The Euclidean closed ball in payoff coordinates, without changing their
+global metric or installing a competing norm instance. -/
+def euclideanPayoffClosedBall {ι : Type} [Fintype ι]
+    (x : Payoff ι) (radius : ℝ) : Set (Payoff ι) :=
+  (EuclideanSpace.equiv ι ℝ).symm ⁻¹'
+    Metric.closedBall ((EuclideanSpace.equiv ι ℝ).symm x) radius
+
+/-- A point maximizing the paper's Euclidean distance to `K` over `P`. -/
+def IsFarthestPoint {ι : Type} [Fintype ι]
+    (z : Payoff ι) (P K : Set (Payoff ι)) : Prop :=
   z ∈ P ∧ K.Nonempty ∧ ∀ x ∈ P, distanceToSet x K ≤ distanceToSet z K
 
-/-! **Lemma 10, pages 153--154.**  This is the separating-
-hyperplane step inside Proposition 9.  Its induction hypothesis puts the
-boundary of the face `P`, relative to `affineSpan P`, in `K`.  Using
-ambient `frontier P` would make every lower-dimensional face equal its
-frontier and collapse the induction.  The remaining missing ingredient is
-the finite-dimensional closest-point/separation argument at this relative
-level. -/
+/-! **Lemma 10, pages 153--154.** The boundary of the face is relative to
+its affine span. Both the distance maximization and the contact ball use the
+Euclidean metric of the published closest-point and squared-distance proof.
+The ordinary payoff-coordinate sup metric is unchanged everywhere else. -/
 theorem lemma_10 {ι : Type} [Fintype ι]
     (P K : Set (Payoff ι)) (z : Payoff ι)
     (hP : Convex ℝ P) (hPcompact : IsCompact P)
@@ -9454,8 +9940,34 @@ theorem lemma_10 {ι : Type} [Fintype ι]
     (hfrontier : relativeFrontier P ⊆ K)
     (hz : IsFarthestPoint z P K) :
     z ∈ convexHull ℝ
-      (Metric.closedBall z (distanceToSet z K) ∩ K) := by
-  sorry
+      (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) := by
+  let e : Payoff ι ≃L[ℝ] EuclideanSpace ℝ ι := (EuclideanSpace.equiv ι ℝ).symm
+  have hfrontier' : intrinsicFrontier ℝ (e '' P) ⊆ e '' K := by
+    change intrinsicFrontier ℝ (e.toLinearEquiv.toAffineEquiv '' P) ⊆ e '' K
+    rw [e.toLinearEquiv.toAffineEquiv.intrinsicFrontier_image]
+    exact Set.image_mono (show intrinsicFrontier ℝ P ⊆ K from hfrontier)
+  have hmax : ∀ x ∈ e '' P,
+      Metric.infDist x (e '' K) ≤ Metric.infDist (e z) (e '' K) := by
+    rintro x ⟨original, horiginal, rfl⟩
+    exact hz.2.2 original horiginal
+  have h := Math.Topology.mem_convexHull_contacts_of_farthestPoint
+    (e '' P) (e '' K) (e z) (hP.linear_image e.toLinearMap)
+    (hPcompact.image e.continuous) (hK.image e.continuous) (Set.image_mono hKP)
+    hfrontier' (Set.mem_image_of_mem e hz.1) (hz.2.1.image e) hmax
+  have hcontacts : e '' (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K) =
+      Metric.closedBall (e z) (Metric.infDist (e z) (e '' K)) ∩ e '' K := by
+    ext point
+    constructor
+    · rintro ⟨original, ⟨hball, hmember⟩, rfl⟩
+      exact ⟨hball, Set.mem_image_of_mem e hmember⟩
+    · rintro ⟨hball, original, hmember, rfl⟩
+      exact ⟨original, ⟨hball, hmember⟩, rfl⟩
+  rw [← hcontacts] at h
+  change e.toLinearMap z ∈ convexHull ℝ
+    (e.toLinearMap '' (euclideanPayoffClosedBall z (distanceToSet z K) ∩ K)) at h
+  rw [← e.toLinearMap.image_convexHull] at h
+  obtain ⟨original, horiginal, hequal⟩ := h
+  exact e.injective hequal ▸ horiginal
 
 /-! Proposition 11 is the paper's two-player winding-number argument.  The
 current library has no theorem that the separately affine image of two compact
